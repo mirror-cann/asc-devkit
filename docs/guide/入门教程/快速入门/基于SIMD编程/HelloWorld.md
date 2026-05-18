@@ -8,36 +8,27 @@
 -   主函数实现：在主函数中，完成环境初始化、申请资源、通过 `<<<>>>` 调用核函数以及释放资源等操作。完整的代码流程和逻辑可以通过代码注释查看。
 
 ```cpp
-// Host侧应用程序需要包含的头文件
-#include "acl/acl.h"
-// Kernel侧需要包含的头文件
-#include "kernel_operator.h"
-__global__ __vector__ void hello_world()
-{
-    AscendC::printf("[Block (%lu/%lu)]: Hello World!!!\n", AscendC::GetBlockIdx(), AscendC::GetBlockNum());
-}
+  // Host侧应用程序需要包含的头文件
+  #include "acl/acl.h"
+  // Kernel侧 printf需要包含的头文件
+  #include "debug/asc_printf.h"
 
-int32_t main(int argc, char const *argv[])
-{
-    // 初始化
-    aclInit(nullptr);
-    // 运行管理资源申请
-    int32_t deviceId = 0;
-    aclrtSetDevice(deviceId);
-    aclrtStream stream = nullptr;
-    aclrtCreateStream(&stream);
+  __global__ __vector__ void hello_world()
+  {
+    printf("Hello World!!!\n");
+  }
 
-    // 设置参与计算的核数为8（核数可根据实际需求设置）
-    constexpr uint32_t numBlocks = 8;
-    // 使用内核调用符<<<>>>调用核函数
-    hello_world<<<numBlocks, nullptr, stream>>>();
-    aclrtSynchronizeStream(stream);
-    // 释放资源并去初始化
-    aclrtDestroyStream(stream);
-    aclrtResetDevice(deviceId);
-    aclFinalize();
+  int main(int argc, char const* argv[])
+  {
+    aclrtSetDevice(0); // 运行管理资源申请。
+    // 1. 使用内核调用符<<<numBlock, dynUBufSize, stream>>>调用核函数。
+    // 2. numBlock：8表示参与计算的核数为8（核数可根据实际需求设置）。
+    // 3. dynUBufSize: 0表示不使用Unified Buffer的动态内存。
+    // 4. stream: nullptr表示使用默认stream。
+    hello_world<<<8, 0, nullptr>>>();
+    aclrtSynchronizeDevice(); // 等待核函数执行完成
     return 0;
-}
+  }
 ```
 
 完成代码实现后，可以通过以下两种方式对上述代码进行编译：
@@ -66,14 +57,14 @@ int32_t main(int argc, char const *argv[])
     set(CMAKE_ASC_ARCHITECTURES "dav-2201" CACHE STRING "NPU architecture: dav-2201, dav-3510")
     # find_package(ASC)是CMake中用于查找和配置Ascend C编译工具链的命令
     find_package(ASC REQUIRED)
-    # 指定项目支持的语言包括ASC和CXX，ASC表示支持使用毕昇编译器对Ascend C编程语言进行编译
-    project(kernel_samples LANGUAGES ASC CXX)
+    # 指定项目支持的语言包括ASC，ASC表示支持使用毕昇编译器对Ascend C编程语言进行编译
+    project(kernel_samples LANGUAGES ASC)
     add_executable(demo
         hello_world.asc
     )
     # 通过编译选项设置NPU架构
     target_compile_options(demo PRIVATE
-        $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES}>
+        --npu-arch=${CMAKE_ASC_ARCHITECTURES}
     )
     ```
 
@@ -88,12 +79,12 @@ int32_t main(int argc, char const *argv[])
 运行结果如下。本样例共调度8个核，打印了核号和"Hello World!!!"等信息。
 
 ```
-[Block (0/8)]: Hello World!!!
-[Block (1/8)]: Hello World!!!
-[Block (2/8)]: Hello World!!!
-[Block (3/8)]: Hello World!!!
-[Block (4/8)]: Hello World!!!
-[Block (5/8)]: Hello World!!!
-[Block (6/8)]: Hello World!!!
-[Block (7/8)]: Hello World!!!
+  [AIV Block 0/8] Hello World!!!
+  [AIV Block 1/8] Hello World!!!
+  [AIV Block 2/8] Hello World!!!
+  [AIV Block 3/8] Hello World!!!
+  [AIV Block 4/8] Hello World!!!
+  [AIV Block 5/8] Hello World!!!
+  [AIV Block 6/8] Hello World!!!
+  [AIV Block 7/8] Hello World!!!
 ```
