@@ -125,7 +125,7 @@ if(PRODUCT_SIDE STREQUAL "host")
     )
 
     install(TARGETS mc2_compat
-        LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR} OPTIONAL
+        DESTINATION "${CMAKE_SYSTEM_PROCESSOR}-linux/lib64" COMPONENT asc-devkit
     )
 
     target_sources(mc2_compat PRIVATE

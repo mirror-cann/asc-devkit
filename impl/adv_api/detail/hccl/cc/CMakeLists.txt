@@ -80,51 +80,40 @@ if(ENABLE_CUSTOM)
     # 添加自定义算子工程
     add_subdirectory(${CUSTOM_OPS_PATH})
 
-elseif(BUILD_OPEN_PROJECT)
+else()
     include(${HCCL_CC_DIR}/cmake/config.cmake)
     include(${HCCL_CC_DIR}/cmake/func.cmake)
     add_subdirectory(src)
 
-    if(DEVICE_MODE)
-        set(CCL_KERNEL_TAR_DIR ${CMAKE_SOURCE_DIR}/build_device/ccl_kernel_tar_pkg/)
-        if(KERNEL_MODE)
-            set(CCL_KERNEL_TAR_LIBS
-                ${CCL_KERNEL_TAR_DIR}/aicpu_kernels_device/libmc2_server.so
-                ${CCL_KERNEL_TAR_DIR}/aicpu_kernels_device/libmc2_kernel_compat.so
-            )
-            pack_targets_and_files(
-                OUTPUT_TARGET "generate_device_aicpu_package"
-                OUTPUT "mc2_server.tar.gz"
-                FILES ${CCL_KERNEL_TAR_LIBS}
-                MANIFEST "bin_hash.cfg"
-                TAR_ROOT_DIR "aicpu_kernels_device"
-            )
-            add_dependencies(generate_device_aicpu_package mc2_server)
-            sign_file(
-                INPUT "mc2_server.tar.gz"
-                CONFIG "${HCCL_CC_DIR}/scripts/sign/hccl_check_cfg.xml"
-                RESULT_VAR "mc2_server_sign_file"
-                DEPENDS generate_device_aicpu_package
-            )
-            add_dependencies(sign_mc2_server generate_device_aicpu_package)
-        endif()
-    endif()
-
-    if (PRODUCT_SIDE STREQUAL "host")
-        install(FILES ${CMAKE_BINARY_DIR}/device_build/signatures/mc2_server.tar.gz
+    if(DEVICE_MODE AND KERNEL_MODE)
+        pack_targets_and_files(
+            OUTPUT_TARGET "generate_device_aicpu_package"
+            OUTPUT "mc2_server.tar.gz"
+            TARGETS mc2_server mc2_kernel_compat
+            MANIFEST "bin_hash.cfg"
+            TAR_ROOT_DIR "aicpu_kernels_device"
+        )
+        sign_file(
+            INPUT "mc2_server.tar.gz"
+            CONFIG "${HCCL_CC_DIR}/scripts/sign/hccl_check_cfg.xml"
+            RESULT_VAR "mc2_server_sign_file"
+            DEPENDS generate_device_aicpu_package
+        )
+        install(FILES ${CMAKE_BINARY_DIR}/signatures/mc2_server.tar.gz
             DESTINATION opp/built-in/op_impl/aicpu/kernel
             COMPONENT asc-devkit
         )
     endif()
 
-    set(HCCL_HEAD
-        ${HCCL_CC_INCLUDE_DIR}/hccl.h
-        ${HCCL_CC_INCLUDE_DIR}/hccl_mc2.h
-    )
-
-    install(FILES
-        ${HCCL_HEAD}
-        COMPONENT asc-devkit
-        DESTINATION ${INSTALL_INCLUDE_DIR}/hccl/ OPTIONAL
-    )
+    if(PRODUCT_SIDE STREQUAL "host")
+        set(HCCL_HEAD
+            ${HCCL_CC_INCLUDE_DIR}/hccl.h
+            ${HCCL_CC_INCLUDE_DIR}/hccl_mc2.h
+        )
+        install(FILES
+            ${HCCL_HEAD}
+            DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/hccl
+            COMPONENT asc-devkit
+        )
+    endif()
 endif()

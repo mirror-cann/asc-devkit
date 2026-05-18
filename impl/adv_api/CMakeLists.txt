@@ -116,15 +116,6 @@ endif()
 
 if (BUILD_OPEN_PROJECT AND ENABLE_BUILD_DEVICE)
     add_subdirectory(detail/hccl/cc)
-
-    set(HCCL_CC_BUILD_DIR ${CMAKE_BINARY_DIR}/impl/adv_api/detail/hccl/cc)
-    install(FILES "${HCCL_CC_BUILD_DIR}/src/libmc2_client.so" "${HCCL_CC_BUILD_DIR}/src/common/hcomm_dlsym/libmc2_compat.so"
-        DESTINATION "${CMAKE_SYSTEM_PROCESSOR}-linux/lib64" COMPONENT asc-devkit OPTIONAL)
-    install(FILES "${HCCL_CC_BUILD_DIR}/src/libmc2_server.json"
-        DESTINATION "opp/built-in/op_impl/aicpu/config" COMPONENT asc-devkit OPTIONAL)
-
-    install(FILES "${HCCL_CC_BUILD_DIR}/include/hccl.h" "${HCCL_CC_BUILD_DIR}/include/hccl_mc2.h"
-        DESTINATION "${CMAKE_SYSTEM_PROCESSOR}-linux/include/hccl" COMPONENT asc-devkit OPTIONAL)
 endif()
 
 if(NOT BUILD_OPEN_PROJECT)

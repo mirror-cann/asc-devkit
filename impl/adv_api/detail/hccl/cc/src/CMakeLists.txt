@@ -7,16 +7,7 @@
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
 # ----------------------------------------------------------------------------------------------------------
-cmake_minimum_required(VERSION 3.16.0)
-
-if(BUILD_OPEN_PROJECT)
-    message(STATUS "open TOP_DIR = ${TOP_DIR}")
-    set(OPS_BASE_DIR ${HCCL_CC_DIR})
-else()
-    message(STATUS "close TOP_DIR = ${TOP_DIR}")
-    set(OPS_BASE_DIR ${TOP_DIR}/hccl/)
-    set(INSTALL_AICPU_KERNEL_JSON_DIR ${INSTALL_LIBRARY_DIR})
-endif()
+set(OPS_BASE_DIR ${HCCL_CC_DIR})
 
 set(INCLUDE_LIST
     ${HCCL_CC_INCLUDE_DIR}
@@ -146,85 +137,45 @@ set(INCLUDE_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/ops/batch_send_recv/selector
 )
 
-if(BUILD_OPEN_PROJECT)
-    list(APPEND INCLUDE_LIST
-        ${ASCEND_CANN_PACKAGE_PATH}/include
-        ${ASCEND_CANN_PACKAGE_PATH}/include/acl
+list(APPEND INCLUDE_LIST
+    ${ASCEND_CANN_PACKAGE_PATH}/include
+    ${ASCEND_CANN_PACKAGE_PATH}/include/acl
 
-        # hcomm头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/hccl
-        ${ASCEND_CANN_PACKAGE_PATH}/include/hcomm
+    # hcomm头文件
+    ${ASCEND_CANN_PACKAGE_PATH}/include/hccl
+    ${ASCEND_CANN_PACKAGE_PATH}/include/hcomm
 
-        # runtime头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/
-        ${ASCEND_CANN_PACKAGE_PATH}/include/base/
-        ${ASCEND_CANN_PACKAGE_PATH}/include/driver/
-        ${ASCEND_CANN_PACKAGE_PATH}/include/dump/
-        ${ASCEND_CANN_PACKAGE_PATH}/include/external/
-        ${ASCEND_CANN_PACKAGE_PATH}/include/platform/
+    # runtime头文件
+    ${ASCEND_CANN_PACKAGE_PATH}/include/
+    ${ASCEND_CANN_PACKAGE_PATH}/include/base/
+    ${ASCEND_CANN_PACKAGE_PATH}/include/driver/
+    ${ASCEND_CANN_PACKAGE_PATH}/include/dump/
+    ${ASCEND_CANN_PACKAGE_PATH}/include/external/
+    ${ASCEND_CANN_PACKAGE_PATH}/include/platform/
 
-        # driver头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/driver/
+    # driver头文件
+    ${ASCEND_CANN_PACKAGE_PATH}/include/driver/
 
-        # mmpa头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/mmpa/
+    # mmpa头文件
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/mmpa/
 
-        # driver头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/driver/
+    # driver头文件
+    ${ASCEND_CANN_PACKAGE_PATH}/include/driver/
 
-        # 包间接口
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/hccl
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/hcomm/ccu
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/runtime/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/aicpu/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/runtime/runtime/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/profiling/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/base/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/dump/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/trace/
-    )
-else()
-    list(APPEND INCLUDE_LIST
-        ${TOP_DIR}/inc
-        ${TOP_DIR}/inc/aicpu/tsd
-        ${TOP_DIR}/inc/driver
-        ${TOP_DIR}/inc/external
-        ${TOP_DIR}/inc/external/acl
-        ${TOP_DIR}/inc/aicpu/
-        ${TOP_DIR}/inc/aicpu/aicpu_schedule/aicpu_sharder
-        ${TOP_DIR}/abl/qos/qosmng
-        ${TOP_DIR}/abl/atrace/inc/utrace
-        ${TOP_DIR}/abl/msprof/inc
-        ${TOP_DIR}/abl/libc_sec/include
-        ${TOP_DIR}/inc/aicpu/common
-        ${TOP_DIR}/ace/csruntime/inc/tsch
-        ${TOP_DIR}/asl/hss/inc
-        ${TOP_DIR}/asl/hss/inc/pub
-        ${TOP_DIR}/asl/hss/common/hash_table
-        ${TOP_DIR}/metadef
-        ${TOP_DIR}/metadef/pkg_inc
-        ${TOP_DIR}/metadef/inc
-        ${TOP_DIR}/metadef/inc/common
-        ${TOP_DIR}/metadef/inc/external
-        ${TOP_DIR}/runtime/include/external
-        ${TOP_DIR}/runtime/include/external/acl
-        ${TOP_DIR}/runtime/pkg_inc/base
-        ${TOP_DIR}/runtime/pkg_inc/mmpa
+    # 包间接口
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/hccl
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/hcomm/ccu
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/runtime/
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/aicpu/
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/runtime/runtime/
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/profiling/
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/base/
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/dump/
+    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/trace/
+)
 
-        ${TOP_DIR}/open_source/json/include
-
-        ${TOP_DIR}/hcomm/inc
-        ${TOP_DIR}/hcomm/inc/hccl
-        ${TOP_DIR}/hcomm/pkg_inc
-        ${TOP_DIR}/hcomm/pkg_inc/hccl
-        ${TOP_DIR}/hcomm/pkg_inc/hcomm/ccu
-        ${TOP_DIR}/hcomm/include
-        ${TOP_DIR}/hcomm/include/hccl
-    )
-endif()
-
-if((DEVICE_MODE AND BUILD_OPEN_PROJECT) OR (NOT BUILD_OPEN_PROJECT))
+if(PRODUCT_SIDE STREQUAL "device")
     add_library(mc2_server SHARED
         ${CMAKE_CURRENT_SOURCE_DIR}/common/utils.cc
         # ${CMAKE_CURRENT_SOURCE_DIR}/common/adapter_acl.cc
@@ -381,8 +332,6 @@ if((DEVICE_MODE AND BUILD_OPEN_PROJECT) OR (NOT BUILD_OPEN_PROJECT))
         mc2_kernel_compat
         -Wl,--no-as-needed
     )
-
-    add_dependencies(mc2_server mc2_kernel_compat)
 endif()
 
 add_definitions(-DORION_MODE)
@@ -392,14 +341,13 @@ if(NOT KERNEL_MODE AND PRODUCT_SIDE STREQUAL "host")
 
     # 基于ini生成json文件
     SET(HCCL_CMAKE_DIR ${HCCL_CC_DIR}/cmake/)
-    message(STATUS "HCCL_CMAKE_DIR = ${HCCL_CMAKE_DIR}")
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/libmc2_server.json
         COMMAND ${HI_PYTHON} ${HCCL_CMAKE_DIR}/scripts/parser_ini.py ${CMAKE_CURRENT_SOURCE_DIR}/ops/scatter/mc2_server.ini ${CMAKE_CURRENT_BINARY_DIR}/libmc2_server.json
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
     add_custom_target(aicpu_kernel_json DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/libmc2_server.json)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libmc2_server.json
-        DESTINATION ${INSTALL_AICPU_KERNEL_JSON_DIR} OPTIONAL
+        DESTINATION "opp/built-in/op_impl/aicpu/config" COMPONENT asc-devkit
     )
     add_dependencies(mc2_client aicpu_kernel_json)
 
@@ -492,7 +440,7 @@ if(NOT KERNEL_MODE AND PRODUCT_SIDE STREQUAL "host")
     endif()
 
     install(TARGETS mc2_client
-        LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR} OPTIONAL
+        DESTINATION "${CMAKE_SYSTEM_PROCESSOR}-linux/lib64" COMPONENT asc-devkit
     )
 endif()
 
@@ -504,23 +452,4 @@ endif()
 
 if(DEVICE_MODE AND KERNEL_MODE)
     add_subdirectory(aicpu_kfc EXCLUDE_FROM_ALL)
-
-    set(CCL_KERNEL_TAR_DIR ${CMAKE_SOURCE_DIR}/build_device/ccl_kernel_tar_pkg/aicpu_kernels_device)
-    add_custom_command(
-        TARGET mc2_server
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CCL_KERNEL_TAR_DIR}
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:mc2_server> ${CCL_KERNEL_TAR_DIR}
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:mc2_kernel_compat> ${CCL_KERNEL_TAR_DIR}
-        COMMENT "Copying libmc2_server.so&libmc2_kernel_compat.so to ${CCL_KERNEL_TAR_DIR}"
-    )
-
-    set(AICPU_CUSTOM_DIR ${CMAKE_SOURCE_DIR}/build_device/aicpu_custom/)
-    add_custom_command(
-        TARGET mc2_server
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${AICPU_CUSTOM_DIR}
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:mc2_server> ${AICPU_CUSTOM_DIR}/libmc2_server.so
-        COMMENT "Copying libmc2_server.so to ${AICPU_CUSTOM_DIR}/libmc2_server.so"
-    )
 endif()
