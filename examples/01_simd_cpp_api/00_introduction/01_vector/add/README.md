@@ -1,8 +1,8 @@
-# 静态Tensor编程Add样例
+# Add样例
 
 ## 概述
 
-本样例基于静态Tensor编程模型实现Add向量加法，通过LocalMemAllocator接口完成内存管理，通过SetFlag和WaitFlag接口完成同步管理，通过Double Buffer技术完成流水优化。
+本样例展示了Ascend C向量加法的基本用法。
 
 ## 支持的产品
 
@@ -14,45 +14,59 @@
 
 ```
 ├── add
-│   ├── scripts
-│   │   ├── gen_data.py         // 输入数据和真值数据生成脚本文件
-│   │   └── verify_result.py    // 真值对比文件
-│   ├── CMakeLists.txt          // 编译工程文件
-│   ├── data_utils.h            // 数据读入写出函数
-│   └── add.asc                 // Ascend C样例实现，使用LocalMemAllocator简化代码 & 调用样例
+│   ├── CMakeLists.txt      // 编译工程文件
+│   ├── add.asc             // Ascend C样例实现 & 调用样例
 ```
 
 ## 样例描述
 
 - 样例功能：  
-  Add计算公式：
-
-  ```python
+  Add样例实现了两个数据相加，返回相加结果的功能。对应的数学表达式为：  
+  ```
   z = x + y
   ```
+
 - 样例规格：
   <table>
   <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">Add</td></tr>
   <tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-  <tr><td align="center">x</td><td align="center">[72, 4096]</td><td align="center">float</td><td align="center">ND</td></tr>
-  <tr><td align="center">y</td><td align="center">[72, 4096]</td><td align="center">float</td><td align="center">ND</td></tr>
-  <tr><td rowspan="1" align="center">样例输出</td><td align="center">z</td><td align="center">[72, 4096]</td><td align="center">float</td><td align="center">ND</td></tr>
+  <tr><td align="center">x</td><td align="center">[8, 2048]</td><td align="center">float</td><td align="center">ND</td></tr>
+  <tr><td align="center">y</td><td align="center">[8, 2048]</td><td align="center">float</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">样例输出</td><td align="center">z</td><td align="center">[8, 2048]</td><td align="center">float</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">add_custom</td></tr>
   </table>
 
 - 样例实现：
-
   - Kernel实现  
-    CopyIn将Global Memory上的输入数据搬运到Local Memory，Compute对输入数据执行加法操作，CopyOut将计算结果搬运至Global Memory。
+    本样例使用8个核完成计算，每个核处理2048个元素。计算偏移量为：
+    ```
+    block_idx * blockLength
+    ```
 
-  - 调用实现  
-    使用内核调用符<<<>>>调用核函数。
+    Add样例的实现流程分为3个步骤：
+
+    **第一步：搬运数据到UB（Unified Buffer）**
+    
+    将GM（Global Memory）上的输入x和y搬运到UB（Unified Buffer）上的xLocal、yLocal中。
+    
+    **第二步：执行向量加法**
+    
+    对xLocal、yLocal执行加法操作，计算结果存储在UB（Unified Buffer）上的zLocal中。
+    
+    **第三步：搬运结果到GM（Global Memory）**
+    
+    将输出数据从zLocal搬运至GM（Global Memory）上的输出z中。
+
+- 调用实现  
+  使用内核调用符<<<>>>调用核函数。
 
 ## 编译运行
 
 在本样例根目录下执行如下步骤，编译并执行样例。
+
 - 配置环境变量  
   请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，选择对应配置环境变量的命令。
+  
   - 默认路径，root用户安装CANN软件包
     ```bash
     source /usr/local/Ascend/cann/set_env.sh
@@ -70,18 +84,15 @@
 
 - 样例执行
   ```bash
-  mkdir -p build && cd build;                                               # 创建并进入build目录
-  cmake -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j;                      # 编译工程（默认npu模式）
-  python3 ../scripts/gen_data.py                                            # 生成测试输入数据
-  ./demo                                                                    # 执行编译生成的可执行程序，执行样例
-  python3 ../scripts/verify_result.py output/output.bin output/golden.bin   # 验证输出结果是否正确，确认算法逻辑正确
+  mkdir -p build && cd build;      # 创建并进入build目录
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j;    # 编译工程，默认npu模式
+  ./demo                           # 执行样例
   ```
-
-  使用 CPU调试 或 NPU仿真 模式时，添加 `-DCMAKE_ASC_RUN_MODE=cpu` 或 `-DCMAKE_ASC_RUN_MODE=sim` 参数即可。
-
-  示例如下：
+  
+  使用 NPU仿真 模式时，添加 `-DCMAKE_ASC_RUN_MODE=sim` 参数即可。
+  
+  示例如：
   ```bash
-  cmake -DCMAKE_ASC_RUN_MODE=cpu -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j; # cpu调试模式
   cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j; # NPU仿真模式
   ```
 
@@ -89,10 +100,10 @@
 
 - 编译选项说明
 
-| 选项 | 可选值 | 说明 |
-|------|--------|------|
-| `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`cpu`、`sim` | 运行模式：NPU 运行、CPU调试、NPU仿真 |
-| `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU 架构：dav-2201 对应 Atlas A2 训练系列产品/Atlas A2 推理系列产品和Atlas A3 训练系列产品/Atlas A3 推理系列产品，dav-3510 对应 Ascend 950PR/Ascend 950DT |
+  | 选项 | 可选值 | 说明 |
+  |------|--------|------|
+  | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`sim` | 运行模式：NPU运行、NPU仿真 |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU架构：dav-2201对应Atlas A2/A3系列，dav-3510对应Ascend 950PR/950DT |
 
 - 执行结果  
   执行结果如下，说明精度对比成功。
