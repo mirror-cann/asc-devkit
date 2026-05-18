@@ -26,6 +26,15 @@ target_link_libraries(demo PRIVATE
 
 message(STATUS "[INFO] SCENARIO_NUM is ${SCENARIO_NUM}")
 
+if(NOT DEFINED SCENARIO_NUM)
+    message(FATAL_ERROR "SCENARIO_NUM is not set. Please specify -DSCENARIO_NUM=1/2/3/4/5/6/7")
+endif()
+
+set(VALID_SCENARIOS 1 2 3 4 5 6 7)
+if(NOT SCENARIO_NUM IN_LIST VALID_SCENARIOS)
+    message(FATAL_ERROR "SCENARIO_NUM must be 1,2,3,4,5,6,7 got: ${SCENARIO_NUM}")
+endif()
+
 target_compile_definitions(demo PRIVATE
     SCENARIO_NUM=${SCENARIO_NUM}
 )
