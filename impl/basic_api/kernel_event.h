@@ -73,6 +73,7 @@ enum class HardEvent : uint8_t {
     FIX_FIX,
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003))
     FIX_V,
+    V_FIX,
 #endif
     MAX,
 };
@@ -1020,6 +1021,9 @@ __aicore__ inline void SetFlagImpl(int32_t eventID)
         case HardEvent::FIX_V:
             SetFlagInternal<PIPE_FIX, PIPE_V>(e);
             break;
+        case HardEvent::V_FIX:
+            SetFlagInternal<PIPE_V, PIPE_FIX>(e);
+            break;
 #endif
         case HardEvent::MAX:
             break;
@@ -1144,6 +1148,9 @@ __aicore__ inline void WaitFlagImpl(const HardEvent event, int32_t eventID)
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 5102))
         case HardEvent::FIX_V:
             WaitFlagInternal<PIPE_FIX, PIPE_V>(e);
+            break;
+        case HardEvent::V_FIX:
+            WaitFlagInternal<PIPE_V, PIPE_FIX>(e);
             break;
 #endif
         case HardEvent::MTE3_MTE2:
