@@ -100,13 +100,13 @@ public:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long meta_group_rank() const;
 
     template <typename T>
-    __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl(T var, unsigned int src_rank) const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl(T var, int src_rank) const;
 
     template <typename T>
-    __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl_up(T var, int delta) const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl_up(T var, unsigned int delta) const;
 
     template <typename T>
-    __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl_down(T var, int delta) const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl_down(T var, unsigned int delta) const;
 
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline int any(int predicate) const;
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline int all(int predicate) const;
@@ -172,7 +172,7 @@ public:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl_down(T var, unsigned int delta) const;
 
     template <typename T>
-    __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl_xor(T var, unsigned int delta) const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl_xor(T var, unsigned int lane_mask) const;
 
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline int any(int predicate) const;
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline int all(int predicate) const;

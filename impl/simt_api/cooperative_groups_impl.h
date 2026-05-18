@@ -32,7 +32,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void __trap_internal()
     *((uint8_t*)-1) = 0;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int __fns_internal(unsigned int mask, unsigned base, int offset)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int __fns_internal(unsigned int mask, unsigned int base, int offset)
 {
     unsigned int temp_mask = mask;
     int temp_offset = offset;
@@ -282,26 +282,26 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long coalesced_group::meta_g
 }
 
 template <typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl(T var, unsigned int src_rank) const
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl(T var, int src_rank) const
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
         "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
-    unsigned int lane = src_rank % static_cast<unsigned int>(num_threads());
+    int lane = src_rank % static_cast<int>(num_threads());
     if (num_threads() != warpSize) {
-        lane = __fns_internal(_tiled_info.mask, 0, static_cast<int>(src_rank + 1));
+        lane = __fns_internal(_tiled_info.mask, 0, src_rank + 1);
     }
-    return asc_shfl(var, static_cast<int32_t>(lane), warpSize);
+    return asc_shfl(var, lane, warpSize);
 }
 
 template <typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl_up(T var, int delta) const
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl_up(T var, unsigned int delta) const
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
         "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
     if (num_threads() == warpSize) {
-        return asc_shfl_up(var, static_cast<uint32_t>(delta), warpSize);
+        return asc_shfl_up(var, delta, warpSize);
     }
 
     int lane = static_cast<int>(__fns_internal(_tiled_info.mask, laneid(), -(delta + 1)));
@@ -313,13 +313,13 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl_up(T var, int delt
 }
 
 template <typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl_down(T var, int delta) const
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl_down(T var, unsigned int delta) const
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
         "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
     if (num_threads() == warpSize) {
-        return asc_shfl_down(var, static_cast<uint32_t>(delta), warpSize);
+        return asc_shfl_down(var, delta, warpSize);
     }
 
     int lane = static_cast<int>(__fns_internal(_tiled_info.mask, laneid(), delta + 1));
@@ -418,12 +418,12 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl_down(
 
 template <unsigned int Size>
 template <typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl_xor(T var, unsigned int delta) const
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl_xor(T var, unsigned int lane_mask) const
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
         "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
-    return asc_shfl_xor(var, delta, static_cast<int32_t>(numThreads));
+    return asc_shfl_xor(var, static_cast<int32_t>(lane_mask), static_cast<int32_t>(numThreads));
 }
 
 template <unsigned int Size>
