@@ -14,6 +14,7 @@
 
 ```
 ├── fixpipe_l0c2gm
+│   ├── figures                        // 图示
 │   ├── scripts
 │   │   ├── gen_data.py                // 输入数据和真值数据生成脚本
 │   │   └── verify_result.py           // 验证输出数据和真值数据是否一致的验证脚本
@@ -162,7 +163,7 @@
   | 选项 | 可选值 | 说明 |
   |------|--------|------|
   | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`sim` | 运行模式：NPU 运行、NPU仿真 |
-  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU 架构，dav-2201 对应 Atlas A2 训练系列产品/Atlas A2 推理系列产品和Atlas A3 训练系列产品/Atlas A3 推理系列产品，dav-3510 对应 Ascend 950PR/Ascend 950DT |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU 架构：dav-2201 对应 Atlas A2 训练系列产品/Atlas A2 推理系列产品和Atlas A3 训练系列产品/Atlas A3 推理系列产品，dav-3510 对应 Ascend 950PR/Ascend 950DT |
   | `SCENARIO_NUM` | 1-7 | 场景编号 |
 
   执行结果如下，说明精度对比成功。
