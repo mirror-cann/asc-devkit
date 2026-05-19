@@ -23,7 +23,7 @@
 ```
 
 ## 算子描述
-  MatmulLeakyRelu算子通过将矩阵乘加（Matmul）与LeakyRelu激活函数计算实现，具体功能描述可参考[MatmulLeakyRelu算子详情](../../00_introduction/03_fusion_operation/matmul_leakyrelu/README.md)章节。
+  MatmulLeakyRelu算子通过将矩阵乘加（Matmul）与LeakyRelu激活函数计算实现，具体功能描述可参考[MatmulLeakyRelu算子详情](../../00_introduction/03_fusion_operation/matmul_leakyrelu_basic_api/README.md)章节。
 
 
 ## 编译运行

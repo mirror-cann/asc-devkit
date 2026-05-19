@@ -10,7 +10,7 @@
 ## 目录结构介绍
 ```
 ├── mmad
-│   ├── img                         // 本文中的插图文件
+│   ├── figures                     // 本文中的插图文件
 │   ├── scripts
 │   │   ├── gen_data.py             // 输入数据和真值数据生成脚本
 │   │   └── verify_result.py        // 验证输出数据和真值数据是否一致的验证脚本
@@ -135,7 +135,7 @@
 - 实现：使用`Mmad`实现矩阵乘法运算，不传入biasTensor通过参数：`mmadParams.cmatrixInitVal = false、mmadParams.cmatrixSource = true`，设置C矩阵初始值来源于C2
 - 说明：int8_t类型输入，B矩阵不转置场景下，N轴向2 * 16对齐，填充了全部是无效数据的32 * 16的分形。如下图1所示，如果设置`mmadParams.n = N`，就会导致读入编号为3、7的分形，同时又没能将包含有效数据的编号为9、10的分形读入。因此需要设置：`mmadParams.n = CeilAlign(N, BLOCK_CUBE * fractalNum)`，此时会读入全部分型，虽然矩阵计算结果中包含了无效数据参与计算的结果，但是在Fixpipe指令搬出数据时通过设置`fixpipeParams.nSize = N`来保证无效数据参与计算的结果不会被搬出。
 <p align="center">
-  <img src="img/mmad_s8_L0B_转置.png" width="700">
+  <img src="figures/mmad_s8_L0B_转置.png" width="700">
 </p>
 <p align="center">
 图1：int8_t类型，B不转置，N轴实际对齐要求与Mmad指令默认不一致
@@ -153,7 +153,7 @@
 - 实现：使用`Mmad`实现矩阵乘法运算，传入biasTensor，该场景下`mmadParams.cmatrixSource`参数无效
 - 说明：float类型输入，A矩阵转置场景下，需要使用`mmadParams.kDirectionAlign`来解决K轴实际向`CeilAlign(K, 8*2)`对齐，与Mmad指令默认要求对齐到`CeilAlign(K, 8)`不一的问题。该场景下该参数设置为真，K轴对齐到`CeilAlign(K, 16)`，矩阵计算单元从L0A读取数据会跳过填充的无效数据，其余场景下该参数默认为flase，K轴仍向`CeilAlign(K, 8)`对齐，如下图2所示：
 <p align="center">
-  <img src="img/mmad_f32_L0A_转置.png" width="1100">
+  <img src="figures/mmad_f32_L0A_转置.png" width="1100">
 </p>
 <p align="center">
 图2：float类型，A转置，K轴实际对齐与Mmad指令默认要求不一致
@@ -173,13 +173,13 @@
 
 需要注意的是当Mmad指令执行时，矩阵计算单元会从L0A/L0B连续读入多个分形参与矩阵乘计算，读入分形的数量根据MmadParams结构体的成员变量m、n、k的取值以及Mmad指令对L0A/L0B上A矩阵和B矩阵各个轴的对齐要求来计算的。以输入为b16类型为例：Mmad指令是按照A矩阵分形为[16,16]、B矩阵分形为[16,16]来连续读入分形的，也就是说矩阵计算单元从L0A/L0B连续读入的分形总数目分别为：2x5=10、5x3=15，写入到L0C的分形总数为2x3=6。如下图所示，图3表示Atlas A3 训练系列产品/Atlas A3 推理系列产品和Atlas A2 训练系列产品/Atlas A2 推理系列产品，图4表示Ascend 950PR/Ascend 950DT，两者在L0A上的数据排布不一致，前者为Zz，后者则是Nz。
 <p align="center">
-  <img src="img/mmad_f16_A3.png" width="900">
+  <img src="figures/mmad_f16_A3.png" width="900">
 </p>
 <p align="center">
 图3：bfloat16类型，L0A上Zz排布，Mmad数据排布示意图
 </p>
 <p align="center">
-  <img src="img/mmad_f16_A5.png" width="900">
+  <img src="figures/mmad_f16_A5.png" width="900">
 </p>
 <p align="center">
 图4：bfloat16类型，L0A上Nz排布，Mmad数据排布示意图

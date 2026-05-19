@@ -34,6 +34,7 @@
 │       └── verify_result.py    // 真值对比文件
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
+│   ├── figures                 // 图示
 │   └── matmul_ibshareAB.asc    // Ascend C样例实现 & 调用样例
 ```
 
@@ -43,8 +44,8 @@
   调用Matmul高阶API时开启A、B矩阵的IBShare功能，计算过程中同一AIC对应的两个AIV在每次迭代时用到的A、B矩阵在L1 Buffer上的数据一致。
 
   A矩阵与B矩阵均使能IBShare时，不对k列进行切分计算；均未使能IBSHARE时，按照k列进行切分计算。通过对比两种场景的运行时间，可以得出该特性的性能提升。
-  使能AB矩阵ibshare场景的数据处理说明图示(A矩阵和B矩阵不切分处理)：![alt text](./pictures/matmul_ABshare.png)  
-  不使能AB矩阵ibshareAB场景的数据处理说明图示(A矩阵和B矩阵切分处理)：![alt text](./pictures/matmul_noABshare.png)  
+  使能AB矩阵ibshare场景的数据处理说明图示(A矩阵和B矩阵不切分处理)：![alt text](./figures/matmul_ABshare.png)  
+  不使能AB矩阵ibshareAB场景的数据处理说明图示(A矩阵和B矩阵切分处理)：![alt text](./figures/matmul_noABshare.png)  
 
 
 - 样例规格：  

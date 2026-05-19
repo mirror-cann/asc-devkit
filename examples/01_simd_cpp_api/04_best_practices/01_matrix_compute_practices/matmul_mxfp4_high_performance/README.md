@@ -20,6 +20,7 @@
 │   │   └── verify_result.py    // 真值对比文件
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
+│   ├── figures                 // 图示
 │   ├── matmul_mx.asc           // Ascend C样例实现（包含2个优化case）
 │   └── matmul_mx.h             // 样例头文件（静态Tiling模板与kernel实现）
 ```
@@ -53,18 +54,18 @@ $$
 | scaleB | 右量化系数矩阵 | [256, 8192] | `fp8_e8m0_t` | `ND` | B 矩阵的缩放因子矩阵，B矩阵 K 方向每 32 个元素共享一个缩放因子 |
 | C | 输出 | [8192, 8192] | `bfloat16_t` | `ND` | 计算结果 |
 
-  <img src="figure/MxMatmul.png">
+  <img src="figures/MxMatmul.png">
 
 #### 四路输入说明
 
 - 样例中 `sK = ceil(K / 64) * 2`，当 `K=8192` 时，`sK=256`
 - 因此 `scaleA` 形状为 `[M, sK] = [8192, 256]`，`scaleB` 形状为 `[sK, N] = [256, 8192]`
 - `scale` 的 ND 需要特别说明：`scaleA` 按常规 row-major `[M, sK]` 写入；`scaleB` 的写盘顺序等价于 `[sK/2, N, 2]`，即先在 K 方向连续 `2 Byte`，再沿 N 方向推进，四路输入的 `ND` 排布如下图所示：
-  <img src="figure/NDformat.png">
+  <img src="figures/NDformat.png">
 
 - 四路输入的搬运如下图所示：
 
-  <img src="figure/InputOfMxMatmul.png">
+  <img src="figures/InputOfMxMatmul.png">
 
 ## 样例实现
 

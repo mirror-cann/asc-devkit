@@ -14,7 +14,7 @@
 
 ```
 ├── mmad_gemv
-│   ├── img                         // 本文中的插图文件
+│   ├── figures                     // 本文中的插图文件
 │   ├── scripts
 │   │   ├── gen_data.py             // 输入数据和真值数据生成脚本
 │   │   └── verify_result.py        // 验证输出数据和真值数据是否一致的验证脚本
@@ -33,7 +33,7 @@ GEMV模式是指Mmad计算中M=1，形状为(1, K)的左矩阵A与形状为(K, N
 
   将A矩阵从A1搬运到A2时，1 * 256的向量被当作16 * 16的矩阵进行处理，调用LoadData接口一次完成16 * 16分形大小的矩阵搬运。B矩阵的搬运以及矩阵乘计算跟基础场景相同，如下图1所示。
   <p align="center">
-  <img src="img/开启gemv.png" width="1100">
+  <img src="figures/开启gemv.png" width="1100">
   </p>
   <p align="center">
   图1：GEMV模式，Mmad计算示意图
@@ -43,7 +43,7 @@ GEMV模式是指Mmad计算中M=1，形状为(1, K)的左矩阵A与形状为(K, N
 
   将A矩阵从A1搬运到A2时，1 * 256的向量被当作非对齐矩阵数据进行处理，将M方向对齐到16后进行搬运。调用LoadData接口每次搬运16 * 16分形大小的矩阵，一共搬运CeilDiv(K, 16)=16次，导致搬运数据量增加，性能相较于GEMV模式差，如下图2所示。
   <p align="center">
-  <img src="img/关闭gemv.png" width="1100">
+  <img src="figures/关闭gemv.png" width="1100">
   </p>
   <p align="center">
   图2：非GEMV模式，Mmad计算示意图

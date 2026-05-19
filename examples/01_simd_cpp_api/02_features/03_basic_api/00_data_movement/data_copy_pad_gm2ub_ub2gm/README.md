@@ -21,6 +21,7 @@
 │   │   └── verify_result.py    // 验证输出数据和真值数据是否一致的验证脚本
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
+│   ├── figures                 // 图示
 │   └── data_copy_pad.asc       // Ascend C样例实现 & 调用样例
 ```
 
@@ -74,11 +75,11 @@
 
 **图 1**  源操作数搬运场景示例
 
-<img src="figure/datacopypad1.png" width="80%">
+<img src="figures/datacopypad1.png" width="80%">
 
 **图 2**  目的操作数Compact模式搬运场景示例
 
-<img src="figure/datacopypad2.png">
+<img src="figures/datacopypad2.png">
 
 **场景5：使用SetLoopModePara使能loop mode（Normal模式） ----此场景仅在 Ascend 950PR/Ascend 950DT产品支持**
 - 输入shape：[1, 320]，如图 1所示
@@ -92,7 +93,7 @@
 
 **图 3**  目的操作数Normal模式搬运场景示例
 
-<img src="figure/datacopypad3.png">
+<img src="figures/datacopypad3.png">
 
 **场景6：使用SetLoopModePara使能loop mode（Normal模式）进行五维数据搬运 ----此场景仅在 Ascend 950PR/Ascend 950DT产品支持**
 - 输入shape：[2, 4, 3, 128, 126]，五维数据

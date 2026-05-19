@@ -24,7 +24,7 @@
   CPU Debug功能支持对CPU执行过程中的运行状态进行调试，主要通过GDB工具实现。GDB调试支持设置断点、查看寄存器和内存状态、单步执行、查看调用栈等常用调试操作。
 
 - 算子介绍：  
-  Add算子具体功能描述可参考[Add算子详情](../../00_introduction/01_vector/basic_api_tque_add/README.md)章节。
+  Add算子具体功能描述可参考[Add算子详情](../../00_introduction/01_vector/add_tpipe_tque/README.md)章节。
 
 ## 编译运行
 

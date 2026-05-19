@@ -23,7 +23,7 @@
 ```
 
 ## 算子描述
-  MatmulLeakyRelu算子通过将矩阵乘加（Matmul）与LeakyRelu激活函数计算实现，具体功能描述可参考[MatmulLeakyRelu算子详情](../../../00_introduction/03_fusion_operation/matmul_leakyrelu/README.md)章节。
+  MatmulLeakyRelu算子通过将矩阵乘加（Matmul）与LeakyRelu激活函数计算实现，具体功能描述可参考[MatmulLeakyRelu算子详情](../../../00_introduction/03_fusion_operation/matmul_leakyrelu_basic_api/README.md)章节。
 
 ## msProf工具介绍
 msProf工具是单算子性能分析工具。包含msprof op和msprof op simulator两种使用方式。该工具协助用户定位算子内存、算子代码以及算子指令的异常，实现全方位的算子调优。当前支持基于不同运行模式（上板或仿真）和不同文件形式（可执行文件或算子二进制.o文件）进行性能数据的采集和自动解析。
