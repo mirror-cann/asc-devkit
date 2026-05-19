@@ -26,16 +26,16 @@ protected:\
 };\
 \
 void mock##c_api_name##cce_name##_##data_type(__cb__ data_type* dst, __cbuf__ data_type* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride,\
-    uint16_t dst_stride, bool addrmode, uint16_t dst_frac_stride, uint16_t src_frac_stride)\
+    uint16_t dst_gap, bool addrmode, uint16_t dst_frac_gap, uint16_t src_frac_gap)\
 {\
     EXPECT_EQ(dst, reinterpret_cast<data_type*>(11));\
     EXPECT_EQ(src, reinterpret_cast<data_type*>(22));\
     EXPECT_EQ(index_id, static_cast<uint16_t>(33));\
     EXPECT_EQ(repeat, static_cast<uint8_t>(44));\
     EXPECT_EQ(src_stride, static_cast<uint16_t>(55));\
-    EXPECT_EQ(dst_stride, static_cast<uint16_t>(66));\
-    EXPECT_EQ(dst_frac_stride, static_cast<uint16_t>(77));\
-    EXPECT_EQ(src_frac_stride, static_cast<uint16_t>(88));\
+    EXPECT_EQ(dst_gap, static_cast<uint16_t>(66));\
+    EXPECT_EQ(dst_frac_gap, static_cast<uint16_t>(77));\
+    EXPECT_EQ(src_frac_gap, static_cast<uint16_t>(88));\
 }\
 \
 TEST_F(TestCubeDatamove##c_api_name##cce_name##data_type##CApi, c_api_name##_Succ)\
@@ -46,14 +46,14 @@ TEST_F(TestCubeDatamove##c_api_name##cce_name##data_type##CApi, c_api_name##_Suc
     uint16_t index_id = static_cast<uint16_t>(33);\
     uint8_t repeat = static_cast<uint8_t>(44);\
     uint16_t src_stride = static_cast<uint16_t>(55);\
-    uint16_t dst_stride = static_cast<uint16_t>(66);\
-    uint16_t dst_frac_stride = static_cast<uint16_t>(77);\
-    uint16_t src_frac_stride = static_cast<uint16_t>(88);\
+    uint16_t dst_gap = static_cast<uint16_t>(66);\
+    uint16_t dst_frac_gap = static_cast<uint16_t>(77);\
+    uint16_t src_frac_gap = static_cast<uint16_t>(88);\
 \   
     MOCKER_CPP(cce_name, void(data_type*, data_type*, uint16_t, uint8_t, uint16_t, uint16_t, bool, uint16_t, uint16_t))\
         .times(1)\
         .will(invoke(mock##c_api_name##cce_name##_##data_type));\
-    c_api_name(dst, src, index_id, repeat, src_stride, dst_stride, dst_frac_stride, src_frac_stride);\
+    c_api_name(dst, src, index_id, repeat, src_stride, dst_gap, dst_frac_gap, src_frac_gap);\
     GlobalMockObject::verify();\
 }
 
