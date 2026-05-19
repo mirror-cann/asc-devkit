@@ -40,7 +40,7 @@
 
     - **参数配置阶段**
       8. `aclrtKernelArgsInit` — 初始化核函数参数句柄
-      9. `aclrtKernelArgsAppend` — 逐个追加参数（核函数为 `GM_ADDR x, GM_ADDR y, GM_ADDR z`，对应传入三个 Device 内存指针）
+      9. `aclrtKernelArgsAppend` — 逐个追加参数（核函数为 `__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z`，对应传入三个 Device 内存指针）
       10. `aclrtKernelArgsFinalize` — 完成参数配置
 
     - **执行阶段**

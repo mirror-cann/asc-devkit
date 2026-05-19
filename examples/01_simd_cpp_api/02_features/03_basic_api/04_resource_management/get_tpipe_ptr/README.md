@@ -32,14 +32,14 @@
   class KernelAdd {
       // 没有TPipe成员变量
 
-      __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, uint32_t totalLength, uint32_t tileNum)
+      __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, uint32_t totalLength, uint32_t tileNum)
       {
           // 调用GetTPipePtr获取TPipe指针并使用
           GetTPipePtr()->InitBuffer(inQueueX, BUFFER_NUM, this->tileLength * sizeof(float));
       }
   };
 
-  __global__ __vector__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z, AddCustomTilingData tiling)
+  __global__ __vector__ void add_custom(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, AddCustomTilingData tiling)
   {
       // 不用显式传入TPipe指针
       KernelAdd op;
@@ -54,14 +54,14 @@
   class KernelAdd {
       AscendC::TPipe* pipe;  // 需要TPipe指针成员变量
 
-      __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, uint32_t totalLength, uint32_t tileNum, AscendC::TPipe* pipeIn)
+      __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, uint32_t totalLength, uint32_t tileNum, AscendC::TPipe* pipeIn)
       {
           pipe = pipeIn;
           pipe->InitBuffer(inQueueX, BUFFER_NUM, this->tileLength * sizeof(float));
       }
   };
 
-  __global__ __vector__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z, AddCustomTilingData tiling)
+  __global__ __vector__ void add_custom(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, AddCustomTilingData tiling)
   {
       // 需要显式传入TPipe指针
       AscendC::TPipe pipe;

@@ -72,14 +72,14 @@ public:
     {
         blockIdx = AscendC::GetBlockIdx(); // 获取当前工作的核ID
     }
-    __aicore__ inline void InitAIC(GM_ADDR A, GM_ADDR B, GM_ADDR C)
+    __aicore__ inline void InitAIC(__gm__ uint8_t* A, __gm__ uint8_t* B, __gm__ uint8_t* C)
     {
         ACUBEGM.SetGlobalBuffer((__gm__ half*)A + A_BLOCKS_LENGTH * AscendC::GetBlockIdx(), A_BLOCKS_LENGTH);
         BCUBEGM.SetGlobalBuffer((__gm__ half*)B + B_BLOCKS_LENGTH * AscendC::GetBlockIdx(), B_BLOCKS_LENGTH);
         CCUBEGM.SetGlobalBuffer((__gm__ float*)C, C_AIC_BLOCKS_LENGTH);
     }
 
-    __aicore__ inline void InitAIV(GM_ADDR a, GM_ADDR b, GM_ADDR A, GM_ADDR B, GM_ADDR C)
+    __aicore__ inline void InitAIV(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* A, __gm__ uint8_t* B, __gm__ uint8_t* C)
     {
         aGM.SetGlobalBuffer((__gm__ uint8_t*)a + A_BLOCKS_LENGTH * (AscendC::GetBlockIdx() / 2), A_BLOCKS_LENGTH);
         bGM.SetGlobalBuffer((__gm__ uint8_t*)b + B_BLOCKS_LENGTH * (AscendC::GetBlockIdx() / 2), B_BLOCKS_LENGTH);
@@ -285,7 +285,7 @@ private:
 class KernelCrossCoreSetFlag {
 public:
     __aicore__ inline KernelCrossCoreSetFlag() {}
-    __aicore__ inline void Init(GM_ADDR initialData, GM_ADDR atomicResult, uint32_t totalLength)
+    __aicore__ inline void Init(__gm__ uint8_t* initialData, __gm__ uint8_t* atomicResult, uint32_t totalLength)
     {
         this->blockLength = totalLength;
         initialDataGm.SetGlobalBuffer((__gm__ float*)initialData, this->blockLength);

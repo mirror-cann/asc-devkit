@@ -72,7 +72,7 @@ struct MatmulProblemShape {
 };
 
 template <typename TilingType>
-__aicore__ inline void CopyTiling(TilingType* tiling, GM_ADDR tilingGM)
+__aicore__ inline void CopyTiling(TilingType* tiling, __gm__ uint8_t* tilingGM)
 {
     uint32_t* ptr = reinterpret_cast<uint32_t*>(tiling);
     auto tiling32 = reinterpret_cast<__gm__ uint32_t*>(tilingGM);
@@ -86,7 +86,7 @@ class MatmulKernel {
 public:
     static constexpr auto MatmulConfig = isMdl ? CFG_MDL : CFG_NORM;
     __aicore__ inline MatmulKernel(){};
-    __aicore__ inline void Init(GM_ADDR a, GM_ADDR b, GM_ADDR bias, GM_ADDR c, const TCubeTiling& tiling);
+    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, const TCubeTiling& tiling);
     __aicore__ inline void Process(AscendC::TPipe* pipe);
 
     AscendC::Matmul<AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType>,
@@ -107,8 +107,8 @@ private:
 };
 
 template <typename AType, typename BType, typename CType, typename BiasType, bool isMdl>
-__aicore__ inline void MatmulKernel<AType, BType, CType, BiasType, isMdl>::Init(GM_ADDR a, GM_ADDR b, GM_ADDR bias,
-                                                                                GM_ADDR c, const TCubeTiling& tiling)
+__aicore__ inline void MatmulKernel<AType, BType, CType, BiasType, isMdl>::Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias,
+                                                                                __gm__ uint8_t* c, const TCubeTiling& tiling)
 {
     this->tiling = tiling;
     aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ AType*>(a), tiling.M * tiling.Ka);
@@ -174,7 +174,7 @@ template <typename AType, typename BType, typename CType, typename BiasType>
 class MatmulKernelL2Cache {
 public:
     __aicore__ inline MatmulKernelL2Cache(){};
-    __aicore__ inline void Init(GM_ADDR a, GM_ADDR b, GM_ADDR bias, GM_ADDR c, const TCubeTiling& tiling);
+    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, const TCubeTiling& tiling);
     __aicore__ inline void Process(AscendC::TPipe* pipe);
 
     static constexpr auto MatmulConfig = CFG_MDL;
@@ -198,8 +198,8 @@ private:
 };
 
 template <typename AType, typename BType, typename CType, typename BiasType>
-__aicore__ inline void MatmulKernelL2Cache<AType, BType, CType, BiasType>::Init(GM_ADDR a, GM_ADDR b, GM_ADDR bias,
-                                                                                 GM_ADDR c, const TCubeTiling& tiling)
+__aicore__ inline void MatmulKernelL2Cache<AType, BType, CType, BiasType>::Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias,
+                                                                                 __gm__ uint8_t* c, const TCubeTiling& tiling)
 {
     this->tiling = tiling;
     aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ AType*>(a), tiling.M * tiling.Ka);
@@ -280,7 +280,7 @@ template <typename AType, typename BType, typename CType, typename BiasType, boo
 class MatmulKernelMdlL2CacheConstant {
 public:
     __aicore__ inline MatmulKernelMdlL2CacheConstant(){};
-    __aicore__ inline void Init(GM_ADDR a, GM_ADDR b, GM_ADDR bias, GM_ADDR c, GM_ADDR tiling);
+    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, __gm__ uint8_t* tiling);
     __aicore__ inline void Process(AscendC::TPipe* pipe);
 
     using A_TYPE = AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType>;
@@ -306,8 +306,8 @@ private:
 
 template <typename AType, typename BType, typename CType, typename BiasType, bool useUnitFlag>
 __aicore__ inline void
-MatmulKernelMdlL2CacheConstant<AType, BType, CType, BiasType, useUnitFlag>::Init(GM_ADDR a, GM_ADDR b, GM_ADDR bias,
-                                                                                   GM_ADDR c, GM_ADDR tiling)
+MatmulKernelMdlL2CacheConstant<AType, BType, CType, BiasType, useUnitFlag>::Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias,
+                                                                                   __gm__ uint8_t* c, __gm__ uint8_t* tiling)
 {
     CopyTiling(&shapes, tiling);
     if (AscendC::GetBlockIdx() >= shapes.usedCoreNum) {

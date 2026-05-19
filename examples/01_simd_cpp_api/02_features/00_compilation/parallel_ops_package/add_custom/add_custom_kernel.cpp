@@ -15,7 +15,7 @@ constexpr int32_t BUFFER_NUM = 2; // tensor num for each queue
 class KernelAdd {
 public:
     __aicore__ inline KernelAdd() {}
-    __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, uint32_t totalLength, uint32_t tileNum, 
+    __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, uint32_t totalLength, uint32_t tileNum, 
         AscendC::TPipe* pipeIn)
     {
         this->pipe = pipeIn;
@@ -79,7 +79,7 @@ private:
     uint32_t tileLength;
 };
 
-extern "C" __global__ __aicore__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z, GM_ADDR workspace, GM_ADDR tiling)
+extern "C" __global__ __aicore__ void add_custom(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, __gm__ uint8_t* workspace, __gm__ uint8_t* tiling)
 {
     REGISTER_TILING_DEFAULT(AddCustomTilingData);
     GET_TILING_DATA(tilingData, tiling);

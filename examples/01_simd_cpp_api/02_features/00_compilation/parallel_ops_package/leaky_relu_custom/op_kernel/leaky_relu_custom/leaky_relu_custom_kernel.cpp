@@ -16,7 +16,7 @@ constexpr int32_t BUFFER_NUM = 2; // tensor num for each queue
 class KernelLeakyRelu {
 public:
     __aicore__ inline KernelLeakyRelu() {}
-    __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, uint32_t totalLength, uint32_t tileNum, float negativeSlope, AscendC::TPipe* pipeIn)
+    __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, uint32_t totalLength, uint32_t tileNum, float negativeSlope, AscendC::TPipe* pipeIn)
     {
         ascendc_assert(tileNum != 0, "tileNum can not be zero.\n");
         this->pipe = pipeIn;
@@ -97,7 +97,7 @@ private:
     float negativeSlope;
 };
 
-extern "C" __global__ __aicore__ void leaky_relu_custom(GM_ADDR x, GM_ADDR y, GM_ADDR workspace, GM_ADDR tiling)
+extern "C" __global__ __aicore__ void leaky_relu_custom(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* workspace, __gm__ uint8_t* tiling)
 {
     REGISTER_TILING_DEFAULT(LeakyReluCustomTilingData);
     GET_TILING_DATA(tiling_data, tiling);

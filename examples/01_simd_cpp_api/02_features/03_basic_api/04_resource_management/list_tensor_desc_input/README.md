@@ -68,8 +68,8 @@
 
     ```cpp
     AscendC::ListTensorDesc keyListTensorDescInit((__gm__ void*)srcList);
-    GM_ADDR x = (__gm__ uint8_t*)keyListTensorDescInit.GetDataPtr<__gm__ uint8_t>(0);
-    GM_ADDR y = (__gm__ uint8_t*)keyListTensorDescInit.GetDataPtr<__gm__ uint8_t>(1);
+    __gm__ uint8_t* x = (__gm__ uint8_t*)keyListTensorDescInit.GetDataPtr<__gm__ uint8_t>(0);
+    __gm__ uint8_t* y = (__gm__ uint8_t*)keyListTensorDescInit.GetDataPtr<__gm__ uint8_t>(1);
     ```
 
   - 调用实现
