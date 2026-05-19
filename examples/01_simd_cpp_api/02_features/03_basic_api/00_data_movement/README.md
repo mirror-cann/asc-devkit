@@ -21,3 +21,4 @@
 | [gather_ld_reg](./gather_ld_reg)　　　　　　　　　　　　 | 本样例演示使用Gather接口实现离散数据搬入，包含高维Gather（源为LocalTensor）和Reg::GatherB（按DataBlock收集）两种场景　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　|
 | [scatter_st_reg](./scatter_st_reg)　　　　　　　　　　　 | 本样例演示使用Reg::Scatter接口实现离散数据搬出（按元素分散到UB）　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　|
 | [auxscalar_reg](./auxscalar_reg)　　　　　　　　　　　　　　　　 | 本样例演示使用AuxScalar方式从UB读取多个标量数据参与计算|
+| [move_reg](./move_reg)　　　　　　　　　　　　　　　　　　　　　　 | 本样例基于Reg编程接口实现UB(Unified Buffer)对RegTensor的数据搬入搬出操作　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　|

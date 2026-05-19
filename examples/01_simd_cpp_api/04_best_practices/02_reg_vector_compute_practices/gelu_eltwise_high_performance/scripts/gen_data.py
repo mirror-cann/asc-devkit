@@ -2,7 +2,7 @@
 # coding=utf-8
 
 # ----------------------------------------------------------------------------------------------------------
-# Copyright (c) 2025 Huawei Technologies Co., Ltd.
+# Copyright (c) 2026 Huawei Technologies Co., Ltd.
 # This program is free software, you can redistribute it and/or modify it under the terms and conditions of
 # CANN Open Software License Agreement Version 2.0 (the "License").
 # Please refer to the License for details. You may not use this file except in compliance with the License.
@@ -16,18 +16,20 @@ import os
 import numpy as np
 
 
-def data_copy_pad_compact():
-    src = np.ones([1024]).astype(np.float32)
-    dst = np.ones([1024]).astype(np.float32)
-    dst = dst + 1
-    return src, dst
-
-
 def gen_golden_data_simple():
+    input_x = np.random.uniform(-10, 10, [8192, 8192]).astype(np.float32)
+    # 公式
+    # GELU(x) ≈ x / (1 + e^(-2 · √(2/π) · (x + 0.044715 · x³)))
+    # 其中，-2 · √(2/π) ≈ -1.595769
+    coeff = -1.595769
+    exponent = coeff * (input_x + 0.044715 * (input_x ** 3))
+    gelu = input_x / (1 + np.exp(exponent))
+    # Element-wise计算
+    golden = np.exp(-0.5 * (gelu + 1) * (gelu + 1) + 2)
+
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    src, golden = data_copy_pad_compact()
-    src.tofile("./input/input.bin")
+    input_x.tofile("./input/input_x.bin")
     golden.tofile("./output/golden.bin")
 
 
