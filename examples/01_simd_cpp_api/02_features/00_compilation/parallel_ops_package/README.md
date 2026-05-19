@@ -21,33 +21,17 @@
 
 > 注意: 本样例中涉及多个算子示例，请以各个算子示例实际支持的产品型号为准。
 
-## 目录结构
+## 目录结构介绍
 
-```text
-parallel_ops_package
-├── CMakeLists.txt
-├── README.md
-├── add_custom
-│   ├── CMakeLists.txt
-│   ├── add_custom_host.cpp
-│   ├── add_custom_kernel.cpp
-│   └── add_custom_tiling.h
-└── leaky_relu_custom
-    ├── CMakeLists.txt
-    ├── framework
-    │   ├── CMakeLists.txt
-    │   └── onnx_plugin
-    │       ├── CMakeLists.txt
-    │       └── leaky_relu_custom_plugin.cc
-    ├── op_host
-    │   ├── CMakeLists.txt
-    │   └── leaky_relu_custom
-    │       └── leaky_relu_custom_host.cpp
-    └── op_kernel
-        ├── CMakeLists.txt
-        └── leaky_relu_custom
-            ├── leaky_relu_custom_kernel.cpp
-            └── leaky_relu_custom_tiling.h
+```
+├── parallel_ops_package
+│   ├── CMakeLists.txt              // 顶层编译工程文件（并行构建多个算子包）
+│   ├── add_custom                  // Add算子工程目录
+│   └── leaky_relu_custom           // LeakyRelu算子工程目录
+│       ├── CMakeLists.txt          // LeakyRelu算子编译工程文件
+│       ├── framework               // 框架适配插件目录
+│       ├── op_host                 // Host侧算子实现目录
+│       └── op_kernel               // Kernel侧算子实现目录
 ```
 
 ## 样例描述

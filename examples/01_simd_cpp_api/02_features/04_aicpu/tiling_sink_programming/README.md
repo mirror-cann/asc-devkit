@@ -14,7 +14,7 @@
 
 ```
 ├── tiling_sink_programming
-│   └── test_add_custom_tiling_sink.py
+│   └── test_add_custom_tiling_sink.py   // PyTorch图模式下Tiling下沉调用测试脚本
 ```
 
 ## 代码实现介绍

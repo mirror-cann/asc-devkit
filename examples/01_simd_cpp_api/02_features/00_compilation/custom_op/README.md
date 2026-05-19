@@ -18,42 +18,24 @@
 ## 目录结构介绍
 
 ```
-├── CMakeLists.txt
-├── framework
-│   ├── CMakeLists.txt
-│   ├── onnx_plugin
-│   │   ├── CMakeLists.txt
-│   │   └── leaky_relu_custom_plugin.cc
-│   └── tf_plugin
-│       ├── CMakeLists.txt
-│       └── tensorflow_add_custom_plugin.cc
-├── op_host
-│   ├── CMakeLists.txt
-│   ├── add_custom
-│   │   └── add_custom_host.cpp
-│   ├── add_custom_template
-│   │   └── add_custom_template.cpp
-│   ├── add_custom_tiling_sink
-│   │   ├── add_custom_tiling_sink.cpp
-│   │   ├── add_custom_tiling_sink_tiling.cpp
-│   │   └── add_custom_tiling_sink_tiling.h
-│   └── leaky_relu_custom
-│       └── leaky_relu_custom_host.cpp
-└── op_kernel
-    ├── CMakeLists.txt
-    ├── add_custom
-    │   ├── add_custom_kernel.cpp
-    │   └── add_custom_tiling.h
-    ├── add_custom_template
-    │   ├── add_custom_template.cpp
-    │   ├── add_custom_template_tiling.h
-    │   └── tiling_key_add_custom_template.h
-    ├── add_custom_tiling_sink
-    │   ├── add_custom_tiling_sink_kernel.cpp
-    │   └── add_custom_tiling_sink_tiling_struct.h
-    └── leaky_relu_custom
-        ├── leaky_relu_custom_kernel.cpp
-        └── leaky_relu_custom_tiling.h
+├── custom_op
+│   ├── CMakeLists.txt               // 顶层编译工程文件
+│   ├── framework                    // 框架适配插件目录
+│   │   ├── CMakeLists.txt           // 框架适配编译工程文件
+│   │   ├── onnx_plugin              // ONNX框架适配插件
+│   │   └── tf_plugin                // TensorFlow框架适配插件
+│   ├── op_host                      // Host侧算子实现目录
+│   │   ├── CMakeLists.txt           // Host侧编译工程文件
+│   │   ├── add_custom               // Add算子Host实现
+│   │   ├── add_custom_template      // Add模板算子Host实现
+│   │   ├── add_custom_tiling_sink   // Add Tiling下沉算子Host实现
+│   │   └── leaky_relu_custom        // LeakyRelu算子Host实现
+│   └── op_kernel                    // Kernel侧算子实现目录
+│       ├── CMakeLists.txt           // Kernel侧编译工程文件
+│       ├── add_custom               // Add算子Kernel实现
+│       ├── add_custom_template      // Add模板算子Kernel实现
+│       ├── add_custom_tiling_sink   // Add Tiling下沉算子Kernel实现
+│       └── leaky_relu_custom        // LeakyRelu算子Kernel实现
 ```
 
 ## 样例描述

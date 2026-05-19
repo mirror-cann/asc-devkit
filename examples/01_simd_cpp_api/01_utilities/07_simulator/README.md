@@ -14,12 +14,12 @@
 
 ```
 ├── 07_simulator
-│   ├── CMakeLists.txt          # 编译工程文件
-│   ├── data_utils.h            # 数据读入写出函数
-│   ├── matmul_leakyrelu.asc    # Ascend C算子实现与调用样例
-│   └── scripts
-│       ├── gen_data.py         # 输入数据和真值数据生成脚本
-│       └── verify_result.py    # 真值比对脚本
+│   ├── CMakeLists.txt          // 编译工程文件
+│   ├── data_utils.h            // 数据读入写出函数
+│   ├── matmul_leakyrelu.asc    // Ascend C算子实现与调用样例
+│   └── scripts                 // 数据生成与结果校验脚本目录
+│       ├── gen_data.py         // 输入数据和真值数据生成脚本
+│       └── verify_result.py    // 真值比对脚本
 ```
 
 ## 算子描述

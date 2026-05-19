@@ -14,7 +14,7 @@
 
 ```
 ├── tensorflow_builtin
-│   └── run_add_custom.py
+│   └── run_add_custom.py       // TensorFlow调用脚本（映射到内置AddV2算子）
 ```
 
 ## 代码实现介绍

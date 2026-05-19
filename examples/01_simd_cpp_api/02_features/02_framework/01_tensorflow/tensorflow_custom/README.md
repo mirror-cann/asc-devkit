@@ -14,9 +14,9 @@
 
 ```
 ├── tensorflow_custom
-│   ├── CMakeLists.txt
-│   ├── custom_assign_add_custom.cc
-│   └── run_add_custom_tf.py
+│   ├── CMakeLists.txt                // 编译工程文件
+│   ├── custom_assign_add_custom.cc   // TensorFlow自定义算子实现
+│   └── run_add_custom_tf.py          // TensorFlow调用脚本（映射到自定义AddCustom算子）
 ```
 
 ## 代码实现介绍
