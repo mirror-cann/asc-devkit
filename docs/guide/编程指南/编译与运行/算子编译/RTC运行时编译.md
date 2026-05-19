@@ -4,9 +4,11 @@ RTC是Ascend C运行时编译库，通过[aclrtc](https://gitcode.com/cann/asc-d
 
 运行时编译库提供以下核心接口：
 -   aclrtcCreateProg：根据输入参数（字符串形式表达的Ascend C源代码等）创建aclrtcProg程序实例。
+-   aclrtcAddNameExpr（可选）：注册需要导出的核函数名表达式，支持模板参数（如 "Kernel::add_custom\<float\>"），非模板核函数可跳过。
 -   aclrtcCompileProg：编译给定的程序，支持用户自定义编译选项，比如指定NPU架构版本号：--npu-arch=dav-2201。支持的编译选项可以参考[《毕昇编译器用户指南》](https://www.hiascend.com/document/redirect/CannCommunityBiSheng)。
 -   aclrtcGetBinDataSize：获取编译后的Device侧二进制数据的大小。
 -   aclrtcGetBinData：获取编译后的Device侧二进制数据。
+-   aclrtcGetLoweredName（可选）：获取核函数编译后的mangled name，用于后续通过aclrtBinaryGetFunction查找核函数句柄，非模板核函数可跳过。
 -   aclrtcDestroyProg：在编译和执行过程结束后，销毁给定的程序。
 
 编译完成后需要调用如下接口完成（仅列出核心接口）Kernel加载与执行。完整流程和详细接口说明请参考[《Runtime运行时API》](https://hiascend.com/document/redirect/CannCommunityRuntimeApi)中的“Kernel加载与执行”章节。
@@ -107,3 +109,18 @@ int main(int argc, char *argv[])
 ```
 g++ rtc_hello_world.cpp -I${ASCEND_HOME_PATH}/include -L${ASCEND_HOME_PATH}/lib64 -lascendcl -lacl_rtc -o main
 ```
+
+对于非模板核函数（如`hello_world`），编译器可自动导出符号，无需额外操作。  
+当核函数为模板函数时，编译器无法自动确定需要导出的特化实例，需要通过`aclrtcAddNameExpr`手动注册需要导出的核函数名（含模板参数）；编译后通过`aclrtcGetLoweredName`获取mangled name，用于后续`aclrtBinaryGetFunction`查找句柄。
+
+```c++
+// 注册需要导出的核函数名（含模板参数）
+const char* kernelNameExpr = "Kernel::add_custom<float>";
+aclrtcAddNameExpr(prog, kernelNameExpr);
+// ... 编译流程aclrtcCompileProg ...
+// 获取编译后的mangled name
+const char* manglingName = "";
+aclrtcGetLoweredName(prog, kernelNameExpr, &manglingName);
+```
+
+完整样例请参考：[rtc_template_add](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/06_aclrtc/rtc_template_add/README.md)。

@@ -9,3 +9,4 @@
 |  目录名称                                                   |  功能描述                                              |
 | ------------------------------------------------------------ | ---------------------------------------------------- |
 |[rtc_hello_world](./rtc_hello_world)| 本样例介绍了使用aclrtc接口实现HelloWorld核函数的调用。|
+|[rtc_template_add](./rtc_template_add)| 基于 Aclrtc 运行时编译 + LocalMemAllocator（静态 Tensor）实现 Add |
