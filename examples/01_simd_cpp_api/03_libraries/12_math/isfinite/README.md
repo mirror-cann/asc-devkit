@@ -44,7 +44,7 @@
   $$
   IsFinite(x) =
   \begin{cases}
-  fasle, & x = \pm\inf \text{ or } x = \text{nan} \\
+  false, & x = \pm\inf \text{ or } x = \text{nan} \\
   true, & x \ne \pm\inf \text{ and } x \ne \text{nan}
   \end{cases}
   $$
