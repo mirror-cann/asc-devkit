@@ -1,4 +1,4 @@
-# pattern_transformation样例
+# pattern_transformation兼容性样例
 
 ## 概述
 

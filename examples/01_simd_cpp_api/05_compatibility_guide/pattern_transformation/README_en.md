@@ -1,4 +1,4 @@
-# pattern_transformation Sample
+# pattern_transformation Compatibility Sample
 
 ## Overview
 

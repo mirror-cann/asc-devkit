@@ -145,7 +145,7 @@
     **兼容方案**：
 
     -   [NPU架构版本2201](../../../编程指南/语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)的接口参数boundaryValue设置为0时与3510架构版本等价。
-    -   如果需要在L1 Buffer上循环读取操作数，需要将对应的Load3D接口手动拆分成多条指令，手动绕回。
+    -   如果需要在L1 Buffer上循环读取操作数，需要将对应的Load3D接口手动拆分成多条指令，手动绕回。具体代码可参考[SetLoadDataBoundary兼容性样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_compatibility_guide/set_loaddata_boundary)。
 
     ![](../../../figures/ZN-88.png)
 
@@ -154,88 +154,98 @@
     1.  将矩阵A从GM搬运到L1 Buffer。
 
         ```
-        __aicore__ inline void CopyGmToA1Nd2Nz()
+        __aicore__ inline void CopyGmToA1Nd2Nz(AscendC::LocalTensor<T>& leftMatrix)
         {
-            AscendC::LocalTensor<T> leftMatrix = qidA1_.template AllocTensor<T>();
             AscendC::Nd2NzParams nd2nzParams;
             ...
-            AscendC::DataCopy(leftMatrix, aGlobal_, nd2nzParams);
-            ...
+            AscendC::DataCopy(leftMatrix, aGlobal, nd2nzParams);
         }
         ```
 
     2.  将矩阵B从GM搬运到L1 Buffer。
 
         ```
-        __aicore__ inline void CopyGmToB1Nd2Nz()
+        __aicore__ inline void CopyGmToB1Nd2Nz(AscendC::LocalTensor<U>& rightMatrix)
         {
-            AscendC::LocalTensor<U> rightMatrix = qidB1_.template AllocTensor<U>();
             AscendC::Nd2NzParams nd2nzParams;
             ...
-            AscendC::DataCopy(rightMatrix, bGlobal_, nd2nzParams);
-            ...
+            AscendC::DataCopy(rightMatrix, bGlobal, nd2nzParams);
         }
         ```
 
     3.  将矩阵A从L1 Buffer搬运到L0A Buffer。
 
         ```
-        __aicore__ inline void Load3DA1ToL0A()
-        {
-            auto leftMatrix = qidA1_.template DeQue<T>();
-            AscendC::LocalTensor<T> a2 = qidA2_.AllocTensor<T>();
-            ...
-            AscendC::LoadData3DParamsV2Pro loadData3dParamsPro;
-            ...
-            // 多次调用LoadData进行手动绕回
-            AscendC::LoadData(a2, leftMatrix, loadData3dParamsPro);
-            AscendC::LocalTensor<T> a3 = a2[256];
-            AscendC::LoadData(a3, leftMatrix, loadData3dParamsPro);
-            AscendC::LocalTensor<T> a4 = a2[512];
-            AscendC::LoadData(a4,  leftMatrix, loadData3dParamsPro);
-            AscendC::LocalTensor<T> a5 = a2[768];
-            AscendC::LoadData(a5,  leftMatrix, loadData3dParamsPro);
-            ...
-        }
+            __aicore__ inline void Load3DA1ToL0A(AscendC::LocalTensor<T>& leftMatrix, AscendC::LocalTensor<T>& a2)
+            {
+                AscendC::LoadData3DParamsV2Pro loadData3dParamsPro;
+                ...
+        #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201)
+                ...
+                AscendC::SetLoadDataRepeat({0, 1, 0});
+                AscendC::SetLoadDataBoundary(1024);
+                AscendC::LoadData(a2, leftMatrix, loadData3dParamsPro);
+        #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
+                uint16_t dstStride = AscendC::DivCeil(M / 2, 16);
+                ...
+                AscendC::SetLoadDataRepeatWithStride({0, 1, 0, dstStride});
+                // 多次调用LoadData进行手动绕回
+                AscendC::LoadData(a2, leftMatrix, loadData3dParamsPro);
+                AscendC::LocalTensor<T> a3 = a2[256];
+                AscendC::LoadData(a3, leftMatrix, loadData3dParamsPro);
+                AscendC::LocalTensor<T> a4 = a2[512];
+                AscendC::LoadData(a4, leftMatrix, loadData3dParamsPro);
+                AscendC::LocalTensor<T> a5 = a2[768];
+                AscendC::LoadData(a5, leftMatrix, loadData3dParamsPro);
+        #endif
+            }
         ```
 
     4.  将矩阵B从L1 Buffer搬运到L0B Buffer。
 
         ```
-        __aicore__ inline void Load3DB1ToL0B()
-        {
-            ...
-            AscendC::SetLoadDataRepeat({0, 1, 0, dstStride});
-            ...
-        }
+            __aicore__ inline void Load3DB1ToL0B(AscendC::LocalTensor<U>& rightMatrix, AscendC::LocalTensor<U>& b2)
+            {
+                AscendC::LoadData3DParamsV2<U> loadData3dParams;
+                ...
+                uint8_t padList[AscendC::PAD_SIZE] = {0, 0, 0, 0};
+                static constexpr AscendC::IsResetLoad3dConfig LOAD3D_CONFIG = {false, false};
+                AscendC::SetFmatrix(N, 1, padList, AscendC::FmatrixMode::FMATRIX_LEFT);
+        #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201)
+                AscendC::SetLoadDataRepeat({0, 1, 0});
+                AscendC::SetLoadDataBoundary(0);
+                AscendC::SetLoadDataPaddingValue(0);
+                AscendC::LoadData<U, LOAD3D_CONFIG>(b2, rightMatrix, loadData3dParams);
+        #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
+                uint16_t dstStride = AscendC::DivCeil(N, 16);6
+                AscendC::SetLoadDataRepeatWithStride({0, 1, 0, dstStride});
+                AscendC::SetLoadDataPaddingValue(0);
+                AscendC::LoadDataWithStride<U, LOAD3D_CONFIG>(b2, rightMatrix, loadData3dParams);
+        #endif
+            }
         ```
 
     5.  矩阵计算。
 
         ```
-        __aicore__ inline void Compute()
+        __aicore__ inline void Compute(AscendC::LocalTensor<T>& a2, AscendC::LocalTensor<U>& b2,
+                                    AscendC::LocalTensor<V>& co1Local)
         {
             AscendC::MmadParams mmadParams;
             ...
-            auto co1Local = qidCO1_.AllocTensor<V>();
-            auto a2 = qidA2_.DeQue<T>();
-            auto b2 = qidB2_.DeQue<U>();
             AscendC::Mmad(co1Local, a2, b2, mmadParams);
-            ...
         }
         ```
 
     6.  将矩阵C从L0C Buffer搬运到GM。
 
         ```
-        __aicore__ inline void CopyL0CToGm(const AscendC::GlobalTensor<S>& gm)
+        __aicore__ inline void CopyL0CToGm(AscendC::LocalTensor<V>& co1Local, const AscendC::GlobalTensor<S>& gm)
         {
-            auto co1Local = qidCO1_.DeQue<V>();
-            AscendC::FixpipeParamsV220 fixpipeParams(nLength, static_cast<uint16_t>(mLength),
-                                            AscendC::DivCeil(mLength, AscendC::BLOCK_CUBE) * AscendC::BLOCK_CUBE, static_cast<uint16_t>(nLength), 0);
+            AscendC::FixpipeParamsV220 fixpipeParams(N, static_cast<uint16_t>(M),
+                                            AscendC::DivCeil(M, AscendC::BLOCK_CUBE) * AscendC::BLOCK_CUBE, static_cast<uint16_t>(N), 0);
             ...
             AscendC::Fixpipe<S, V, AscendC::CFG_ROW_MAJOR>(gm, co1Local, fixpipeParams);
-            qidCO1_.FreeTensor(co1Local);
         }
         ```
 
@@ -245,62 +255,54 @@
 
     **说明**：相较于2201架构版本，3510架构版本的Cube计算单元不支持int4b\_t。相关的基础API有LoadData、Mmad和LoadDataWithTranspose，这些接口不再支持int4b\_t。
 
-    **兼容方案**：算子侧通过编写CV融合算子在Vector Core进行int4b\_t到int8\_t的Cast转换，再通过UB搬运到L1后进行Mmad计算。图层面可以在该算子前增加Cast节点进行int4b\_t到int8\_t的转换。
+    **兼容方案**：算子侧通过编写CV融合算子在Vector Core进行int4b\_t到int8\_t的Cast转换，再通过UB搬运到L1后进行Mmad计算。具体代码可参考[int4数据类型下Matmul兼容性样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_compatibility_guide/matmul_s4)。图层面可以在该算子前增加Cast节点进行int4b\_t到int8\_t的转换。
 
     1.  在Vector Core进行int4b\_t到int8\_t的Cast转换，转换后的数据保存到新的GM空间中。
 
         ```
         __aicore__ inline void Unzip(AscendC::GlobalTensor<int8_t>& dstGlobalTensor,
-                                     AscendC::GlobalTensor<int8_t>& srcGlobalTensor, uint32_t count,
-                                     AscendC::TQue<AscendC::TPosition::VECIN, 1>& q1,
-                                     AscendC::TQue<AscendC::TPosition::VECOUT, 1>& q2,
-                                     AscendC::TQue<AscendC::TPosition::VECOUT, 1>& q3)
+            AscendC::GlobalTensor<int8_t>& srcGlobalTensor, uint32_t count)
         {
-            AscendC::LocalTensor<int8_t> srcLocalTensor = q1.AllocTensor<int8_t>();
-            AscendC::LocalTensor<half> tmpTensor = q2.AllocTensor<half>();
-            AscendC::LocalTensor<int8_t> dstLocalTensor = q3.AllocTensor<int8_t>();
+            AscendC::LocalTensor<int8_t> srcLocalTensor = inQueueSrc.AllocTensor<int8_t>();
             AscendC::DataCopy(srcLocalTensor, srcGlobalTensor, count);
-            AscendC::LocalTensor<AscendC::int4b_t> int4SrcLocalTensor = srcLocalTensor.ReinterpretCast<AscendC::int4b_t>();
-            uint32_t mask = count / sizeof(half);
-            AscendC::SetFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
-            AscendC::WaitFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
+            inQueueSrc.EnQue(srcLocalTensor);
+
+            srcLocalTensor = inQueueSrc.DeQue<int8_t>();
+            AscendC::LocalTensor<half> tmpTensor = tmpQueue.AllocTensor<half>();
+            AscendC::LocalTensor<int8_t> dstLocalTensor = outQueueDst.AllocTensor<int8_t>();
+            AscendC::LocalTensor<AscendC::int4b_t> int4SrcLocalTensor =
+                srcLocalTensor.ReinterpretCast<AscendC::int4b_t>();
             AscendC::Cast<half, AscendC::int4b_t>(tmpTensor, int4SrcLocalTensor, AscendC::RoundMode::CAST_NONE, count * 2);
             AscendC::Cast<int8_t, half>(dstLocalTensor, tmpTensor, AscendC::RoundMode::CAST_CEIL, count * 2);
-            AscendC::SetFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID1);
-            AscendC::WaitFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID1);
+            outQueueDst.EnQue<int8_t>(dstLocalTensor);
+            inQueueSrc.FreeTensor(srcLocalTensor);
+            tmpQueue.FreeTensor(tmpTensor);
+
+            dstLocalTensor = outQueueDst.DeQue<int8_t>();
             AscendC::DataCopy(dstGlobalTensor, dstLocalTensor, count * 2);
-            q1.FreeTensor(srcLocalTensor);
-            q2.FreeTensor(tmpTensor);
-            q3.FreeTensor(dstLocalTensor);
+            outQueueDst.FreeTensor(dstLocalTensor);
         }
         ```
 
     2.  进行int8\_t数据类型的矩阵计算。
 
         ```
-        template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE>
-        __aicore__ inline void MatMulKernel(AscendC::GlobalTensor<int8_t>& aGlobal, AscendC::GlobalTensor<int8_t>& bGlobal,
-                                            AscendC::GlobalTensor<int32_t>& cGlobal, GM_ADDR tilingGM, GM_ADDR workspaceGM,
-                                            int32_t isTransposeAIn, int32_t isTransposeBIn, AscendC::TPipe& que)
+        __aicore__ inline void RunMatmul()
         {
-            using A_T = typename A_TYPE::T;
-            using B_T = typename B_TYPE::T;
-            using C_T = typename C_TYPE::T;
-            using BiasT = typename BIAS_TYPE::T;
             ...
             int offsetA = 0;
             int offsetB = 0;
             int offsetC = 0;
-            int offsetBias = 0;
             ...
             auto gmA = aGlobal[offsetA];
             auto gmB = bGlobal[offsetB];
             auto gmC = cGlobal[offsetC];
+
             AscendC::MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_MDL> mm;
             mm.SetSubBlockIdx(0);
-            mm.Init(&tiling, &que);
-            mm.SetTensorA(gmA, isTransposeA);
-            mm.SetTensorB(gmB, isTransposeB);
+            mm.Init(&tiling, pipe);
+            mm.SetTensorA(gmA, false);
+            mm.SetTensorB(gmB, false);
             mm.IterateAll(gmC);
         }
         ```
@@ -309,7 +311,7 @@
 
     **说明**：涉及的API有LoadData、Mmad和LoadDataWithTranspose。
 
-    -   2201架构版本，参与矩阵乘计算（A \* B = C）时， ABC矩阵的数据排布格式分别为ZZ，ZN，NZ。A、B、C矩阵分别位于L0A Buffer、L0B Buffer、L0C Buffer。
+    -   2201架构版本，参与矩阵乘计算（A \* B = C）时， ABC矩阵的数据排布格式分别为Zz，Zn，Nz。A、B、C矩阵分别位于L0A Buffer、L0B Buffer、L0C Buffer。
 
         矩阵A：每个分形矩阵内部是行主序，分形矩阵之间是行主序。分形Shape为16 x \(32B/sizeof\(AType\)\)，大小为512Byte。
 
@@ -319,7 +321,7 @@
 
         ![](../../../figures/ZN-89.png)
 
-    -   3510架构版本，参与矩阵乘计算（A \* B = C）时， ABC矩阵的数据排布格式分别为NZ，ZN，NZ。
+    -   3510架构版本，参与矩阵乘计算（A \* B = C）时， ABC矩阵的数据排布格式分别为Nz，Zn，Nz。
 
         矩阵A：每个分形矩阵内部是行主序，分形矩阵之间是列主序。其Shape为16 x \(32B/sizeof\(AType\)\)，大小为512Byte。
 
@@ -329,7 +331,7 @@
 
         ![](../../../figures/ZN-90.png)
 
-    **兼容方案**：非L0A Buffer切分的场景兼容2201版本，L0A Buffer切分的场景需要根据新的分形重新适配。
+    **兼容方案**：非L0A Buffer切分的场景兼容2201版本，L0A Buffer切分的场景需要根据新的分形重新适配。具体代码可参考[pattern_transformation兼容性样例](https://gitcode.com/cann/asc-devkit/tree/c6dc78cfbccfb1a8f910ed4b6845bfacde5d2d9f/examples/01_simd_cpp_api/05_compatibility_guide/pattern_transformation)。
 
     在2201架构中，矩阵计算要求左矩阵为ZZ分形（3510中为NZ），右矩阵为ZN分形，由于L1 Buffer的数据分形为NZ，所以2201架构下将左矩阵从L1 Buffer搬运到L0A Buffer需要额外做NZ分形到ZZ分形的转换，3510架构下则不用转换分形。
 
@@ -338,33 +340,35 @@
     分形变化带来的变动主要体现在L1 Buffer到L0A Buffer的搬运过程，以下代码片段进行展示：
 
     ```
-    __aicore__ inline void SplitA()
-    {
-        int srcOffset = 0;
-        int dstOffset = 0;
-        AscendC::LocalTensor<half> a1Local = inQueueA1.DeQue<half>();
-        AscendC::LocalTensor<half> a2Local = inQueueA2.AllocTensor<half>();
-        // 2201架构下LoadData时做Nz2Zz的分形转换
-        // for (int i = 0; i < mBlocks; ++i) {
-        //     AscendC::LoadData2DParams loadDataParams;
-        //     loadDataParams.repeatTimes = kBlocks; //  kBlocks表示列方向上有几个宽为16的half类型矩阵
-        //     loadDataParams.srcStride = mBlocks; //  mBlocks表示行方向上有几个高为16的half类型矩阵
-        //     loadDataParams.ifTranspose = false;
-        //     AscendC::LoadData(a2Local[dstOffset], a1Local[srcOffset], loadDataParams);
-        //     srcOffset += 16 * 16;
-        //     dstOffset += k * 16;
-        // }
-        // 3510架构下LoadData时不需要做Nz2Zz的分形转换，对应搬运参数需要修改
-        AscendC::LoadData2DParams loadDataParams;
-        loadDataParams.repeatTimes = m * k / 512; // 小z矩阵的个数 
-        loadDataParams.srcStride = 1; // 小z矩阵之间的间隔
-        loadDataParams.dstGap = 0;
-        loadDataParams.ifTranspose = false;
-        AscendC::LoadData(a2Local, a1Local, loadDataParams);
-        
-        inQueueA2.EnQue<half>(a2Local);
-        inQueueA1.FreeTensor(a1Local);
-    }
+        __aicore__ inline void DataLoadA(AscendC::LocalTensor<T> a1, AscendC::LocalTensor<T> a2)
+        {
+    #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201)
+            constexpr uint32_t mBlocks = M / CUBE_BLOCK;
+            constexpr uint32_t kBlocks = K * sizeof(T) / C0_SIZE;
+            int srcOffset = 0;
+            int dstOffset = 0;
+            for (uint32_t i = 0; i < mBlocks; ++i) {
+                AscendC::LoadData2DParams loadDataParams;
+                loadDataParams.repeatTimes = kBlocks;
+                loadDataParams.srcStride = mBlocks;
+                loadDataParams.ifTranspose = false;
+                AscendC::LoadData(a2[dstOffset], a1[srcOffset], loadDataParams);
+                srcOffset += CUBE_BLOCK * CUBE_BLOCK;
+                dstOffset += K * CUBE_BLOCK;
+            }
+    #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
+            AscendC::LoadData2DParamsV2 loadDataParams;
+            loadDataParams.mStartPosition = 0;
+            loadDataParams.kStartPosition = 0;
+            loadDataParams.mStep = AscendC::DivCeil(M, CUBE_BLOCK);
+            loadDataParams.kStep = AscendC::DivCeil(K * sizeof(T), C0_SIZE);
+            loadDataParams.srcStride = AscendC::DivCeil(M, CUBE_BLOCK);
+            loadDataParams.dstStride = AscendC::DivCeil(M, CUBE_BLOCK);
+            loadDataParams.sid = 0;
+            loadDataParams.ifTranspose = false;
+            AscendC::LoadData(a2, a1, loadDataParams);
+    #endif
+        }
     ```
 
 -   **3510架构版本硬件架构删除4：2结构化稀疏功能。**<a name="li69092585134"></a>
