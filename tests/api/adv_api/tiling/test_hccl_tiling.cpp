@@ -56,7 +56,11 @@ TEST_F(TestHcclTiling, Mc2CcTilingConfig_normal)
     reduceType = 0;
     EXPECT_EQ(ccTilingConfig.SetReduceType(reduceType), EXIT_SUCCESS);
     uint8_t stepSize = 1;
-    EXPECT_EQ(ccTilingConfig.SetStepSize(stepSize), EXIT_SUCCESS);
+    if (platform_ascendc::PlatformAscendCManager::GetInstance()->GetCurNpuArch() == NpuArch::DAV_2201) {
+        EXPECT_EQ(ccTilingConfig.SetStepSize(stepSize), EXIT_SUCCESS);
+    } else {
+        EXPECT_EQ(ccTilingConfig.SetStepSize(stepSize), EXIT_FAILURE);
+    }
     uint8_t skipLocalRankCopy = 1;
     EXPECT_EQ(ccTilingConfig.SetSkipLocalRankCopy(skipLocalRankCopy), EXIT_SUCCESS);
     uint8_t skipBufferWindowCopy = 1;

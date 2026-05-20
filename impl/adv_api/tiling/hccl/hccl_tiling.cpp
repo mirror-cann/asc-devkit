@@ -12,6 +12,8 @@
  * \file hccl_tiling.cpp
  * \brief
  */
+
+#include "tiling/platform/platform_ascendc.h"
 #include "include/adv_api/hccl/hccl_tiling.h"
 #include "include/adv_api/hccl/hccl_common.h"
 #include "securec.h"
@@ -235,10 +237,20 @@ uint32_t Mc2CcTilingConfig::SetReduceType(uint32_t reduceType, uint8_t dstDataTy
     return EXIT_SUCCESS;
 }
 
+
 uint32_t Mc2CcTilingConfig::SetStepSize(uint8_t stepSize)
 {
-    impl_.stepSize_ = stepSize;
-    return EXIT_SUCCESS;
+
+    auto ascendcPlatform = platform_ascendc::PlatformAscendCManager::GetInstance();
+    auto npuArch = ascendcPlatform->GetCurNpuArch();
+
+    if (npuArch == NpuArch::DAV_2201) {
+        // This API is only supported on Atlas A3
+        impl_.stepSize_ = stepSize;
+        return EXIT_SUCCESS;
+    } else {
+        return EXIT_FAILURE;
+    }
 }
 
 uint32_t Mc2CcTilingConfig::SetSkipLocalRankCopy(uint8_t skipLocalRankCopy)
