@@ -12,7 +12,7 @@ cmake_minimum_required(VERSION 3.16.0)
 include(cmake/fetch_cann_cmake.cmake)
 project(asc-devkit)
 
-init_cann_project()
+init_cann_project(PREPEND_MODULE_PATH)
 option(BUILD_OPEN_PROJECT "Build open asc-devkit lib project" ON)
 
 set(CMAKE_C_FLAGS_RELEASE "")

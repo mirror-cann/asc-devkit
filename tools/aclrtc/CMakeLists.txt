@@ -37,7 +37,7 @@ target_link_directories(acl_rtc PRIVATE
 target_link_libraries(acl_rtc PRIVATE
     $<BUILD_INTERFACE:intf_pub_cxx17>
     dl
-    static_c_sec
+    c_sec_static
 )
 
 target_compile_options(acl_rtc PRIVATE

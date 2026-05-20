@@ -14,14 +14,15 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
   ${CMAKE_MODULE_PATH}
 )
-message(STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
 
-find_cann_package(unified_dlog MODULE REQUIRED)
-find_cann_package(securec MODULE REQUIRED)
-find_cann_package(mmpa MODULE REQUIRED)
-find_cann_package(metadef MODULE REQUIRED)
-find_cann_package(platform MODULE REQUIRED)
+find_cann_package(unified_dlog REQUIRED)
+find_cann_package(securec REQUIRED)
+find_cann_package(mmpa REQUIRED)
+find_cann_package(metadef REQUIRED)
+find_cann_package(platform REQUIRED)
+find_cann_package(error_manager REQUIRED)
 
 if(ENABLE_TEST)
-  find_package(pvmodel MODULE REQUIRED)
+  find_cann_package(graph REQUIRED)
+  find_cann_package(pvmodel REQUIRED)
 endif()

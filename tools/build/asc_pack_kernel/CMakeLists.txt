@@ -2,7 +2,7 @@ add_executable(ascendc_pack_kernel ascendc_pack_kernel.c $<TARGET_OBJECTS:elf_to
 
 target_link_libraries(ascendc_pack_kernel PRIVATE
     $<BUILD_INTERFACE:intf_pub>
-    static_c_sec
+    c_sec_static
 )
 
 target_compile_options(ascendc_pack_kernel PRIVATE
