@@ -23,6 +23,7 @@
 #include "kernel_utils.h"
 #include "kernel_tensor.h"
 #include "kernel_struct_mm.h"
+#include "kernel_base_types.h"
 namespace AscendC {
 
 [[deprecated(
@@ -149,6 +150,36 @@ __aicore__ static inline int64_t GetCtrlSprImpl()
     value &= ((uint64_t(1) << (endBit - startBit + 1)) - 1);
     return value;
 }
+
+namespace Internal {
+template <SaturationMode mode>
+__aicore__ inline constexpr int8_t GetSaturationModeBit()
+{
+    // FLOAT => bit 48; CAST => bit 59
+    if constexpr(mode == SaturationMode::FLOAT) {
+        return 48;
+    } else {
+        return 59;
+    }
+}
+
+template <SaturationMode mode>
+__aicore__ static inline void SetSaturationFlagImpl(bool enableSat)
+{
+    constexpr int8_t sprBit = GetSaturationModeBit<mode>();
+    int64_t ctrlValue = get_ctrl();
+    uint64_t value = enableSat ? (sbitset0(ctrlValue, sprBit)) : sbitset1(ctrlValue, sprBit);  // bit=0 means saturate
+    set_ctrl(value);
+}
+
+template <SaturationMode mode>
+__aicore__ static inline bool GetSaturationFlagImpl()
+{
+    constexpr int8_t sprBit = GetSaturationModeBit<mode>();
+    int64_t value = (get_ctrl() >> sprBit) & 1;   // current value is bit value. value=0 means saturate=true
+    return !value;
+}
+} // namespace Internal
 
 } // namespace AscendC
 #endif // ASCENDC_MODULE_OPERATOR_COMMON_IMPL_H

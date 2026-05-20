@@ -19,9 +19,27 @@ void CtrlSprKernel()
 {
     int64_t initValue = GetCtrlSpr<startBit, endBit>();
     EXPECT_EQ(initValue, 0x00);
+    bool res = GetSaturationFlag<SaturationMode::FLOAT>();
+    EXPECT_EQ(res, true);
+
     SetCtrlSpr<startBit, endBit>(1);
     initValue = GetCtrlSpr<startBit, endBit>();
     EXPECT_EQ(initValue, 0x01);
+    res = GetSaturationFlag<SaturationMode::FLOAT>();
+    EXPECT_EQ(res, false);
+
+    SetSaturationFlag<SaturationMode::FLOAT>(true);
+    initValue = GetCtrlSpr<startBit, endBit>();
+    EXPECT_EQ(initValue, 0x00);
+    res = GetSaturationFlag<SaturationMode::FLOAT>();
+    EXPECT_EQ(res, true);
+
+    SetSaturationFlag<SaturationMode::CAST>(false);
+    res = GetSaturationFlag<SaturationMode::CAST>();
+    EXPECT_EQ(res, false);
+    SetSaturationFlag<SaturationMode::CAST>(true);
+    res = GetSaturationFlag<SaturationMode::CAST>();
+    EXPECT_EQ(res, true);
 }
 
 struct CtrlSprTestParams {
@@ -39,10 +57,10 @@ protected:
     }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_AXPY, CtrlSprTestsuite,
+INSTANTIATE_TEST_CASE_P(TEST_CTRL_SPR, CtrlSprTestsuite,
     ::testing::Values(CtrlSprTestParams {CtrlSprKernel<48, 48> }));
 
-TEST_P(CtrlSprTestsuite, AxpyTestCase)
+TEST_P(CtrlSprTestsuite, CtrlSprTestCase)
 {
     auto param = GetParam();
     param.calFunc();

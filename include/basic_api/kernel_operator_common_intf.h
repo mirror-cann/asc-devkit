@@ -23,6 +23,7 @@
 #include "kernel_macros.h"
 #include "kernel_tensor.h"
 #include "kernel_struct_mm.h"
+#include "kernel_base_types.h"
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include <cstdint>
@@ -79,6 +80,15 @@ template <int8_t startBit, int8_t endBit>
 __aicore__ static inline void ResetCtrlSpr();
 #endif
 #endif
+
+#if (__NPU_ARCH__ == 2201)
+template <SaturationMode mode>
+__aicore__ inline void SetSaturationFlag(bool enableSat);
+
+template <SaturationMode mode>
+__aicore__ inline bool GetSaturationFlag();
+#endif
+
 }  // namespace AscendC
 
 #include "../../impl/basic_api/kernel_operator_common_intf_impl.h"

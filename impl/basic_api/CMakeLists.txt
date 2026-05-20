@@ -144,6 +144,7 @@ install(CODE "file(CREATE_LINK ../basic_api/kernel_type.h \${CMAKE_INSTALL_PREFI
 install(CODE "file(CREATE_LINK ../basic_api/kernel_basic_intf.h \${CMAKE_INSTALL_PREFIX}/${INSTALL_LIBRARY_DIR}/asc/include/interface/kernel_basic_intf.h SYMBOLIC)" COMPONENT asc-devkit)
 install(CODE "file(CREATE_LINK ../basic_api/kernel_cube_intf.h \${CMAKE_INSTALL_PREFIX}/${INSTALL_LIBRARY_DIR}/asc/include/interface/kernel_cube_intf.h SYMBOLIC)" COMPONENT asc-devkit)
 install(CODE "file(CREATE_LINK ../basic_api/kernel_vec_intf.h \${CMAKE_INSTALL_PREFIX}/${INSTALL_LIBRARY_DIR}/asc/include/interface/kernel_vec_intf.h SYMBOLIC)" COMPONENT asc-devkit)
+install(CODE "file(CREATE_LINK ../basic_api/kernel_base_types.h \${CMAKE_INSTALL_PREFIX}/${INSTALL_LIBRARY_DIR}/asc/include/interface/kernel_base_types.h SYMBOLIC)" COMPONENT asc-devkit)
 
 # 2 ascendc/include/basic_api
 if(NOT BUILD_OPEN_PROJECT)

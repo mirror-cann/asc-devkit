@@ -213,6 +213,21 @@ __aicore__ static inline void ResetCtrlSpr(){
 }
 #endif
 #endif
+
+#if (__NPU_ARCH__ == 2201)
+template <SaturationMode mode>
+__aicore__ inline void SetSaturationFlag(bool enableSat)
+{
+    Internal::SetSaturationFlagImpl<mode>(enableSat);
+}
+
+template <SaturationMode mode>
+__aicore__ inline bool GetSaturationFlag()
+{
+    return Internal::GetSaturationFlagImpl<mode>();
+}
+#endif
+
 } // namespace AscendC
 #endif // ASCENDC_MODULE_OPERATOR_COMMON_INTERFACE_IMPL_H
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_COMMON_INTF_IMPL_H__)
