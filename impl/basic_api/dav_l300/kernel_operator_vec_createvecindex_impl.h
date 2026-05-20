@@ -125,7 +125,6 @@ __aicore__ inline void CreateVecIndexCalc(LocalTensor<T> dstLocal, const T first
     uint32_t sreg = (uint32_t)calCount;
     uint32_t sregLower = (uint32_t)(VECTOR_REG_WIDTH / sizeof(T));
     uint16_t repeatTimes = CeilDivision(calCount, sregLower);
-    int64_t addLength = static_cast<int64_t>(sregLower);
 
     __VEC_SCOPE__
     {
@@ -135,7 +134,7 @@ __aicore__ inline void CreateVecIndexCalc(LocalTensor<T> dstLocal, const T first
         DataCopy(dstLocalAddr, vreg0, 0, preg);
         for (uint16_t i = 1; i < (uint16_t)repeatTimes; ++i) {
             preg = CreatePredicate<T>(sreg);
-            Adds(vreg0, vreg0, addLength, preg);
+            Adds(vreg0, vreg0, sregLower, preg);
             DataCopy(dstLocalAddr, vreg0, i * sregLower, preg);
         }
     }
