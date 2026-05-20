@@ -1,11 +1,13 @@
-# Memory Access Practices Sample Introduction
+# Memory Access Practices Example Introduction
 
 ## Overview
-Optimization samples based on data copy API usage, introducing methods to reduce invalid data copy and reduce data copy instruction count through the <<<>>> direct call implementation.
 
-## Sample List
-| Directory Name | Description |
-| --- | --- |
-| [bank_conflict](./bank_conflict) | Bank conflict performance optimization samples based on Ascend C. |
-| [gm_address_conflict](./gm_address_conflict) | This sample introduces the impact of same-address conflicts and two solutions, providing kernel direct call methods. |
-| [optimize_datacopy](./optimize_datacopy) | Optimization samples based on data copy API usage, introducing methods to reduce invalid data copy and reduce data copy instruction count through the <<<>>> direct call implementation. |
+This section contains optimization examples based on data transfer APIs. Through the `<<<>>>` direct call implementation, it introduces methods such as reducing invalid data transfers and reducing the number of transfer instructions.
+
+## Example List
+
+|  Directory Name                                                   |  Description                                              |
+| ------------------------------------------------------------ | ---------------------------------------------------- |
+| [bank_conflict](./bank_conflict) | Bank conflict performance optimization example based on Ascend C. |
+| [gm_address_conflict](./gm_address_conflict) | This example introduces the impact of same-address conflicts and two solutions, and provides kernel direct call methods. |
+| [optimize_datacopy](./optimize_datacopy) | Optimization example based on data transfer API usage. Through the `<<<>>>` direct call implementation, it introduces methods such as reducing invalid data transfers and reducing the number of transfer instructions. |

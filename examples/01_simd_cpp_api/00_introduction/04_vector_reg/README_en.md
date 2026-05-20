@@ -1,11 +1,11 @@
-# RegBase Sample Introduction
+# RegBase Example Introduction
 
 ## Overview
 
-This sample introduces Vector computation functionality of RegBase programming.
+This example introduces the Vector computation functionality of RegBase programming.
 
-## Sample List
+## Example List
 
-| Directory Name | Function Description |
-| -------------- | -------------------- |
-| [vector_add](./vector_add) | Add sample based on Reg programming interface |
+|  Directory Name                                                   |  Function Description                                              |
+| ------------------------------------------------------------ | ---------------------------------------------------- |
+| [add](./add) | Add example based on Reg programming interface |
