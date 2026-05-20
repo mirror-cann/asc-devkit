@@ -152,6 +152,7 @@ constexpr uint64_t ALIGN_64_BYTE = 64;
 constexpr uint64_t CCU_MEMSLICE_SIZE = 4096; // CCU MS size, MC2 is not aware of it
 constexpr uint8_t CCU_MSG_CKE_INIT_VALUE = 0;
 constexpr uint8_t CCU_MSG_CKE_SET_VALUE = 1;
+constexpr uint64_t CCU_MAX_COMM_DATA = 268435456; // 256 * 1024 * 1024
 
 struct CCUMsg {
     GM_ADDR xnData; // Msg is converted to CCU register value
@@ -162,8 +163,8 @@ struct CCUMsg {
 
 struct CCUMsgExt { // AllToAllv HcclMsgExt trans for ccu
     uint64_t sendSize;
+    uint64_t loopNum = UINT64_MAX - 1;
     uint64_t sendOffset;
-    uint64_t recvSize;
     uint64_t recvOffset;
 };
 

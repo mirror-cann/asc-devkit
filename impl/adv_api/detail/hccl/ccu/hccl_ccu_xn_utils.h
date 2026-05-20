@@ -80,12 +80,12 @@ __aicore__ inline void AssembleHcclMsgExtForCCU(
 
     for (uint32_t i = 0U; i < ccuParam.rankNum; ++i) {
         ccuMsgExt[i].sendSize = allToAllVParam->sendCounts[i] * dataSize;
-        ccuMsgExt[i].recvSize = allToAllVParam->recvCounts[i] * dataSize;
         ccuMsgExt[i].sendOffset = allToAllVParam->sdispls[i] * dataSize + ccuMsgExt[i].sendSize * ccuParam.repeatIndex;
-        ccuMsgExt[i].recvOffset = allToAllVParam->rdispls[i] * dataSize + ccuMsgExt[i].recvSize * ccuParam.repeatIndex;
+        ccuMsgExt[i].recvOffset = allToAllVParam->rdispls[i] * dataSize +
+            (allToAllVParam->recvCounts[i] * dataSize) * ccuParam.repeatIndex;
         KERNEL_LOG(
-            KERNEL_INFO, "ApiClient ccuMsgExt rankIndex:%u, sendSize:%d, recvSize:%d, sendOffset:%d, recvOffset:%d", i,
-            ccuMsgExt[i].sendSize, ccuMsgExt[i].recvSize, ccuMsgExt[i].sendOffset, ccuMsgExt[i].recvOffset);
+            KERNEL_INFO, "ApiClient ccuMsgExt rankIndex:%u, sendSize:%d, sendOffset:%d, recvOffset:%d", i,
+            ccuMsgExt[i].sendSize, ccuMsgExt[i].sendOffset, ccuMsgExt[i].recvOffset);
     }
 
     uint32_t tmpCnt = (sizeof(CCUMsgExt) * ccuParam.rankNum) / MAX_DCCI_CNT;
