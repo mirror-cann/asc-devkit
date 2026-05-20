@@ -62,6 +62,7 @@ This example introduces the kernel function direct call method for the Add opera
 ## Build and Run
 
 Execute the following steps in the root directory of this example to build and run the operator.
+
 - Configure Environment Variables
   Select the appropriate environment variable configuration command based on the [installation method](../../../../../docs/en/quick_start.md#prepare&install) of the CANN development kit package on your current environment.
   - Default path, CANN software package installed by root user
@@ -79,15 +80,33 @@ Execute the following steps in the root directory of this example to build and r
     source ${install_path}/cann/set_env.sh
     ```
 
-- Example Execution
+- Run the Example
+
   ```bash
   mkdir -p build && cd build;   # Create and enter build directory
-  cmake ..;make -j;             # Build project
+  cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201;make -j; # Default npu mode
   python3 ../scripts/gen_data.py   # Generate test input data
   ./demo                        # Execute the compiled executable program to run the example
   python3 ../scripts/verify_result.py output/output.bin output/golden.bin   # Verify output result correctness, confirm algorithm logic is correct
   ```
-  The execution result is as follows, indicating successful accuracy comparison.
+
+  When using CPU debug or NPU simulation mode, add the `-DCMAKE_ASC_RUN_MODE=cpu` or `-DCMAKE_ASC_RUN_MODE=sim` parameter.
+
+  For example:
+  ```bash
+  cmake -DCMAKE_ASC_RUN_MODE=cpu -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j; # CPU debug mode
+  cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j; # NPU simulation mode
+  ```
+
+  > **Note:** Before switching build modes, you need to clear the cmake cache. You can execute `rm CMakeCache.txt` in the build directory and then run cmake again.
+
+- Build Options
+  | Option | Available Values | Description |
+  |--------|------------------|-------------|
+  | `CMAKE_ASC_RUN_MODE` | `npu` (default), `cpu`, `sim` | Run mode: NPU run, CPU debug, NPU simulation |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201` (default), `dav-3510` | NPU architecture: dav-2201 corresponds to Atlas A2/A3 series, dav-3510 corresponds to Ascend 950PR/Ascend 950DT |
+
+  The following execution result indicates that the precision comparison passed.
   ```bash
   test pass!
   ```
