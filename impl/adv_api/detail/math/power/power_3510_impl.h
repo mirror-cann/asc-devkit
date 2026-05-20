@@ -821,6 +821,24 @@ __simd_callee__ inline void ProcessSpecialCaseForPowI(
         Reg::MaskAnd(condMask, cmpMask1, cmpMask2, mask);
         Reg::Duplicate(tmpRReg, 0, mask);
         Reg::Select(dstReg, tmpRReg, dstReg, condMask);
+
+        /*
+         * special case 3:
+         * else if (base = -1 && exp < 0) {
+         *    exp & 1 == 1 ? r = -1 : r = 1
+         * }
+         */
+        Reg::MaskXor(mask, mask, condMask, mask);
+        Reg::CompareScalar<T, CMPMODE::EQ>(cmpMask1, baseReg, -1, mask);
+        Reg::CompareScalar<T, CMPMODE::LT>(cmpMask2, expReg, 0, mask);
+        Reg::MaskAnd(condMask, cmpMask1, cmpMask2, mask);
+        Reg::RegTensor<T> tmpOneReg, tmpNegOneReg;
+        Reg::Duplicate(tmpOneReg, 1, mask);
+        Reg::Duplicate(tmpNegOneReg, -1, mask);
+        Reg::And(tmpRReg, expReg, tmpOneReg, condMask);
+        Reg::CompareScalar<T, CMPMODE::EQ>(cmpMask1, tmpRReg, 1, condMask);
+        Reg::Select(tmpRReg, tmpNegOneReg, tmpOneReg, cmpMask1);
+        Reg::Select(dstReg, tmpRReg, dstReg, condMask);
     }
 }
 
