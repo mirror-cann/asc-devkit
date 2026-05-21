@@ -10,6 +10,8 @@
 
 cmake_minimum_required(VERSION 3.16)
 
+set(CMAKE_ASC_ARCHITECTURES "dav-3510" CACHE STRING "NPU architecture")
+
 find_package(ASC REQUIRED)
 
 project(kernel_samples LANGUAGES ASC CXX)
@@ -18,12 +20,12 @@ add_executable(c_api_add_example
     c_api_add.asc
 )
 
-# ======================================================================================
-# NPU 编译选项配置
-#
-# 说明：
-#   - 需根据实际部署的 NPU 硬件架构选择对应的 `npu-arch` 参数。
-# ======================================================================================
+if(CMAKE_ASC_ARCHITECTURES STREQUAL "dav-3510")
+    message(STATUS "Building for dav-3510")
+else()
+    message(FATAL_ERROR "${CMAKE_ASC_ARCHITECTURES} is not yet supported for this example")
+endif()
+
 target_compile_options(c_api_add_example PRIVATE
-    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=dav-3510>
+    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES}>
 )
