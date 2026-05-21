@@ -16,44 +16,9 @@
 | `demo/simt/basic_scatter` | SIMT Scatter 样例 |
 | `demo/simt/matrix_transpose` | SIMT MatrixTranspose 访存优化样例 |
 
-## 2. 下载代码
-
-进入工作目录。这里的`<代码存放目录>`表示用户自选的代码存放目录：
-
-```bash
-export WORK_DIR="<代码存放目录>"
-cd ${WORK_DIR}
-```
-
-克隆 `exp/kadc` 分支：
-
-```bash
-git clone --branch exp/kadc --single-branch https://gitcode.com/cann/asc-devkit.git asc-devkit
-```
-
-确认分支和提交：
-
-```bash
-cd asc-devkit
-export ASC_DEVKIT_ROOT="$(pwd)"
-git rev-parse --abbrev-ref HEAD
-git rev-parse HEAD
-```
-
-本次验证输出：
-
-```text
-exp/kadc
-a894b8c8c75e71fe0076e8218f4912c7260eed0a
-```
+## 2. 查看代码
 
 查看 `demo/simt` 下的样例：
-
-```bash
-find demo/simt -mindepth 1 -maxdepth 1 -type d | sort
-```
-
-输出：
 
 ```text
 demo/simt/basic_scatter
@@ -62,24 +27,12 @@ demo/simt/matrix_transpose
 
 ## 3. 配置 CANN 环境
 
-每次打开新终端后，先设置仓代码根路径并配置CANN环境：
+每次打开新终端后，先设置配置CANN环境：
 
 ```bash
-export ASC_DEVKIT_ROOT="<asc-devkit代码仓根路径>"
 source /usr/local/Ascend/cann/set_env.sh
 ```
 
-可检查 `cmake` 是否可用：
-
-```bash
-which cmake
-```
-
-本次验证输出：
-
-```text
-/usr/bin/cmake
-```
 
 ## 4. 运行 basic_scatter 样例
 
