@@ -11,7 +11,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(rtc_template_add LANGUAGES CXX)
 
-# 注意：Aclrtc 仅支持 NPU 模式，不支持 cpu/sim 调试模式
+# 注意：Aclrtc仅支持NPU模式，不支持cpu/sim调试模式
 set(CMAKE_ASC_ARCHITECTURES "dav-2201" CACHE STRING "NPU architecture: dav-2201, dav-3510")
 
 add_executable(main rtc_template_add.cpp)

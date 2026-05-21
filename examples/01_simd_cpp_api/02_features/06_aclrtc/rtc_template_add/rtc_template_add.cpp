@@ -41,12 +41,12 @@ public:
 
         AscendC::DataCopy(xLocal, xGm, TOTAL_LENGTH);
         AscendC::DataCopy(yLocal, yGm, TOTAL_LENGTH);
-        // MTE2 → V 同步：确保 DataCopy 完成后再计算
+        // MTE2→V同步：确保DataCopy完成后再计算
         AscendC::SetFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
         AscendC::WaitFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
 
         AscendC::Add(zLocal, xLocal, yLocal, TOTAL_LENGTH);
-        // V → MTE3 同步：确保 Add 完成后再将结果拷出
+        // V→MTE3同步：确保Add完成后再将结果拷出
         AscendC::SetFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
         AscendC::WaitFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
 
@@ -147,7 +147,7 @@ __vector__ __global__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z)
     CHECK_ACL(aclrtSynchronizeStream(stream));
     CHECK_ACL(aclrtMemcpy(zHost, outputByteSize, zDevice, outputByteSize, ACL_MEMCPY_DEVICE_TO_HOST));
 
-    // 精度校验（C++ 内完成，无需 Python 脚本）
+    // 精度校验（C++内完成，无需Python脚本）
     if (VerifyResult(zHost, golden, dataLen)) {
         printf("test pass!\n");
     } else {
