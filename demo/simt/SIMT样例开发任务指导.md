@@ -57,58 +57,20 @@ experiment/simt_experiment/basic_gather_<姓名拼音>
 `-- README.md
 ```
 
-可以先复制`basic_scatter`作为起点，再按Gather语义改写。
+可以先复制`experiment/simt_experiment/experiment_gather`作为起点，再按Gather语义改写。
 
-```bash
-mkdir -p experiment/simt_experiment
-cp -r demo/simt/basic_scatter experiment/simt_experiment/basic_gather_<姓名拼音>
-cd experiment/simt_experiment/basic_gather_<姓名拼音>
-mv scatter.asc gather.asc
-```
-
-随后将`CMakeLists.txt`中的目标名和源文件名从`scatter`改为`gather`。
 
 ### 核函数改写要点
 
-保留`basic_scatter`中的ACL初始化、Device内存申请、Host到Device拷贝、Kernel启动、Device到Host拷贝和结果校验流程，主要改写Device侧计算逻辑。
 
-Scatter核函数原逻辑：
-
-```cpp
-output[index[i]] = input[i];
-```
-
-Gather核函数目标逻辑：
+实现Gather核函数逻辑：
 
 ```cpp
-type_idx gather_index = index[i];
-if (gather_index >= 0 && static_cast<uint32_t>(gather_index) < input_length) {
-    output[i] = input[static_cast<uint32_t>(gather_index)];
+if (gather_index < input_length) {
+    // TODO 
 }
 ```
-
-建议接口规格如下：
-
-```cpp
-template <typename type_data, typename type_idx>
-__global__ __launch_bounds__(MAX_THREAD_COUNT) void gather_custom(
-    type_data* output,
-    const type_data* input,
-    const type_idx* index,
-    uint32_t output_length,
-    uint32_t input_length)
-```
-
-其中`output_length`应等于`index`长度；`input_length`用于检查`index[i]`是否越界。
-
-### Host侧改写要点
-
-需要重点修改以下函数或逻辑：
-
-- 参数检查：要求`input`非空、`index`非空、`output_length == index.size()`，并检查所有`index[i]`在`[0, input_length)`范围内。
-- 数据构造：构造一个长度为`input_length`的`input`，构造一个长度为`output_length`的`index`。
-- Golden计算：CPU侧按`golden[i] = input[index[i]]`生成期望结果。
-- 打印信息：输出`input_length`和`output_length`，并打印输出结果和Golden结果。
+提示： output[idx] = input[gather_index];
 
 ### 验收标准
 
@@ -137,13 +99,30 @@ make -j
 
 参考`basic_scatter`样例，将样例改造成SIMD&SIMT混合编程。该任务的重点不是改变Scatter算法，而是理解SIMT编程和SIMD&SIMT混合编程的差异。
 
-建议先复制`basic_scatter`作为起点，再在新目录中进行SIMD&SIMT混合编程改造，避免直接修改原始样例。
+`experiment/simt_experiment/scatter_2_fusion_experiment`已经修改了大部分内容，可复制这个样例模板，再在新目录中进行SIMD&SIMT混合编程改造，避免直接修改原始样例。
 
 ```bash
-mkdir -p experiment/simt_experiment
-cp -r demo/simt/basic_scatter experiment/simt_experiment/mixed_scatter_<姓名拼音>
-cd experiment/simt_experiment/mixed_scatter_<姓名拼音>
+cp -r experiment/simt_experiment/scatter_2_fusion_experiment experiment/simt_experiment/fusion_scatter_<姓名拼音>
+cd experiment/simt_experiment/fusion_scatter_<姓名拼音>
 ```
+
+### 任务修改点
+
+- 修改`asc_vf_call`调用SIMT_VF函数的第一个参数(配置启动先线程数)：
+```
+{
+    asc_vf_call<scatter_simt_vf>(//TODO, output, input, index, input_length, output_length);
+}
+```
+提示： 这里的入参配置为dim3(MAX_THREAD_COUNT)
+
+- 修改`<<<>>>`调用入参，配置启动的核数
+```
+scatter_custom<<< // TODO >>>(output_device, input_device, index_device, input_length, output_length);
+```
+提示： 混合编程下，<<<>>>与SIMD编程一致， 入参分别为 numBlocks, dyn_ubuf_size, stream
+
+### 更多信息
 
 当前`basic_scatter`使用的是SIMT编程：
 
@@ -158,7 +137,7 @@ SIMD&SIMT混合编程中，SIMT逻辑通常拆为两层：
 - `__simt_vf__`函数：承载SIMT线程级计算逻辑。
 - `__global__ __vector__` SIMD&SIMT混合编程入口函数：作为Device侧入口，通过`asc_vf_call`调用SIMT VF。
 
-### 改造思路
+### 整体改造思路
 
 1. 保留Host侧ACL流程、输入输出数据构造和结果校验。
 2. 将原`scatter_custom`中的线程级计算逻辑移动到SIMT VF函数中。
