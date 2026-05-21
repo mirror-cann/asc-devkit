@@ -200,7 +200,7 @@ check_help_combinations() {
   local has_cov=false
   local has_pkg=false
 
-  for arg in "${arg[@]}"; do
+  for arg in "${args[@]}"; do
     case "$arg" in
       -t|--test) has_test=true ;;
       --adv_test) test_part="adv_test" ;;
@@ -225,8 +225,8 @@ check_help_combinations() {
     log "[ERROR] --pkg cannot be used with test(-t, --test, --$test_part)."
     return 1
   fi
-  if [[ "$has_cov" == "true" && ("$has_test" == "true" || -n "$test_part") ]]; then
-    log "[ERROR] --cov must be used with test(-t, --test, --$test_part)."
+  if [[ "$has_cov" == "true" && "$has_test" != "true" && -z "$test_part" ]]; then
+    log "[ERROR] --cov must be used with test(-t, --test) or a test part option."
     return 1
   fi
   return 0
@@ -245,6 +245,9 @@ check_param_with_help() {
   seen=()
   for arg in "$@"; do
     arg="${arg%%=*}"
+    if [[ "$arg" =~ ^-j[0-9]+$ ]]; then
+      arg="-j"
+    fi
     if [[ " ${seen[@]} " =~ " $arg " ]]; then
       log "[ERROR] $arg can only be input one."
       exit 1
