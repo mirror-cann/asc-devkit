@@ -8,6 +8,7 @@
 * See LICENSE in the root of the software repository for the full text of the License.
 */
 #include "acl/acl_rt.h"
+#include <cstdlib>
 
 int aclrtMemcpy(void *dst, size_t destMax, const void *src, size_t count, aclrtMemcpyKind kind)
 {
@@ -117,6 +118,24 @@ aclError aclrtFree(void *devPtr)
     if (devPtr == nullptr) {
         return 1;
     }
+    return ACL_ERROR_NONE;
+}
+
+aclError aclrtMallocHost(void **hostPtr, size_t size)
+{
+    if (hostPtr == nullptr || size == 0) {
+        return 1;
+    }
+    *hostPtr = std::malloc(size);
+    return *hostPtr == nullptr ? 1 : ACL_ERROR_NONE;
+}
+
+aclError aclrtFreeHost(void *hostPtr)
+{
+    if (hostPtr == nullptr) {
+        return 1;
+    }
+    std::free(hostPtr);
     return ACL_ERROR_NONE;
 }
 

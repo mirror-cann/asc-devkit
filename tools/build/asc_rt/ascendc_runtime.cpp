@@ -729,30 +729,55 @@ typedef struct {
 
 uint32_t AscendCFunctionGetMetaInfoKtype(const rtFuncHandle funcHandle, unsigned int *kernelType)
 {
-    uint64_t data;
-    const rtError_t rtErr = rtFunctionGetMetaInfo(funcHandle, RT_FUNCTION_TYPE_KERNEL_TYPE, &data, sizeof(unsigned int));
+    size_t size;
+    rtError_t rtErr = rtFunctionGetMetaInfoSize(funcHandle, RT_FUNCTION_TYPE_KERNEL_TYPE, &size);
+    if (rtErr != 0) {
+        ASCENDLOGE(" get function meta info size failed, runtime result = %d\n", rtErr);
+        return rtErr;
+    }
+    void* data = nullptr;
+    aclError res = aclrtMallocHost(&data, size);
+    if (res != ACL_SUCCESS) {
+        ASCENDLOGE("malloc failed, runtime result = %d\n", res);
+        return res;
+    }
+    rtErr = rtFunctionGetMetaInfo(funcHandle, RT_FUNCTION_TYPE_KERNEL_TYPE, data, size);
     if (rtErr != 0) {
         ASCENDLOGE(" get function meta info ktype failed, runtime result = %d\n", rtErr);
+        aclrtFreeHost(data);
         return rtErr;
     }
     AscendCFunMetaKType* metaKtype = reinterpret_cast<AscendCFunMetaKType*>(data);
     *kernelType = metaKtype->ktype;
+    aclrtFreeHost(data);
     return 0;
 }
 
 uint32_t AscendCFunctionGetMetaInfoCoreRation(const rtFuncHandle funcHandle, unsigned short *aicRation,
     unsigned short *aivRation)
 {
-    uint64_t data;
-    const rtError_t rtErr = rtFunctionGetMetaInfo(funcHandle, RT_FUNCTION_TYPE_MIX_TASK_RATION, &data,
-        sizeof(unsigned int));
+    size_t size;
+    rtError_t rtErr = rtFunctionGetMetaInfoSize(funcHandle, RT_FUNCTION_TYPE_MIX_TASK_RATION, &size);
+    if (rtErr != 0) {
+        ASCENDLOGE("get function meta info core ration size failed, runtime result = %d\n", rtErr);
+        return rtErr;
+    }
+    void* data = nullptr;
+    aclError res = aclrtMallocHost(&data, size);
+    if (res != ACL_SUCCESS) {
+        ASCENDLOGE("malloc failed, runtime result = %d\n", res);
+        return res;
+    }
+    rtErr = rtFunctionGetMetaInfo(funcHandle, RT_FUNCTION_TYPE_MIX_TASK_RATION, data, size);
     if (rtErr != 0) {
         ASCENDLOGE(" get function meta info core ration failed, runtime result = %d\n", rtErr);
+        aclrtFreeHost(data);
         return rtErr;
     }
     AscendCFunMetaMixCoreType* mixration = reinterpret_cast<AscendCFunMetaMixCoreType*>(data);
     *aicRation = mixration->taskRation0;
     *aivRation = mixration->taskRation1;
+    aclrtFreeHost(data);
     return 0;
 }
 

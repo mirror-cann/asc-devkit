@@ -83,3 +83,11 @@ rtError_t rtFunctionGetMetaInfo(const rtFuncHandle funcHandle, const rtFunctionM
 {
     return 0;
 }
+
+rtError_t rtFunctionGetMetaInfoSize(const rtFuncHandle funcHandle, const rtFunctionMetaType type, size_t *size)
+{
+    if (size != nullptr) {
+        *size = sizeof(unsigned int);
+    }
+    return 0;
+}
