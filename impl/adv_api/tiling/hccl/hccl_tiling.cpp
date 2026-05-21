@@ -237,8 +237,16 @@ uint32_t Mc2CcTilingConfig::SetReduceType(uint32_t reduceType, uint8_t dstDataTy
 
 uint32_t Mc2CcTilingConfig::SetStepSize(uint8_t stepSize)
 {
-    impl_.stepSize_ = stepSize;
-    return EXIT_SUCCESS;
+    auto ascendcPlatform = platform_ascendc::PlatformAscendCManager::GetInstance();
+    auto npuArch = ascendcPlatform->GetCurNpuArch();
+
+    if (npuArch == NpuArch::DAV_2201) {
+        // This API is only supported on Atlas A3
+        impl_.stepSize_ = stepSize;
+        return EXIT_SUCCESS;
+    } else {
+        return EXIT_FAILURE;
+    }
 }
 
 uint32_t Mc2CcTilingConfig::SetSkipLocalRankCopy(uint8_t skipLocalRankCopy)
