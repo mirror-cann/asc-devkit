@@ -51,7 +51,7 @@ protected:
         para.unitFlag = 0;                                                                                          \
         para.cmatrixInitVal = true;                                                                                 \
                                                                                                                     \
-        auto mmadAtom = MakeMmad<MmadOperation, MmadTraitDefault>().with(para);                                 \
+        auto mmadAtom = MakeMmad(MmadOperation{}, MmadTraitDefault{}).with(para);                                 \
         Mmad(mmadAtom, l0cTensor, l0aTensor, l0bTensor);                                                          \
         Mmad(mmadAtom, l0cTensor, l0cTensor, l0bTensor);                                                          \
         Mmad(mmadAtom, l0cTensor, l0aTensor, l0bTensor);                                                          \

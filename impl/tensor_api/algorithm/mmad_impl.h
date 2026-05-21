@@ -44,13 +44,13 @@ __aicore__ inline void Mmad(
 }
 
 template <typename MmadOperationType>
-__aicore__ inline constexpr auto MakeMmad()
+__aicore__ inline constexpr auto MakeMmad(const MmadOperationType& mmadOperation)
 {
     return MmadAtom<MmadTraits<MmadOperationType>>{};
 }
 
 template <typename MmadOperationType, typename MmadTraitType>
-__aicore__ inline constexpr auto MakeMmad()
+__aicore__ inline constexpr auto MakeMmad(const MmadOperationType& mmadOperation, const MmadTraitType& mmadTrait)
 {
     return MmadAtom<MmadTraits<MmadOperationType, MmadTraitType>>{};
 }

@@ -48,7 +48,7 @@ void RunCopyCallPaths(const DstTensor& dst, const SrcTensor& src)
 {
     using namespace AscendC::Te;
 
-    auto atom = MakeCopy<CopyOp, Trait>();
+    auto atom = MakeCopy(CopyOp{}, Trait{});
     atom.Call(dst, src);
 
     CopyAtom<CopyTraits<CopyOp, Trait>>{}.Call(dst, src);
@@ -216,7 +216,7 @@ private:
         auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), gmALayout);                      \
         auto l1ATensor = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), l1ALayout);                \
         auto l1ATensorGolden = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden)), l1ALayout);    \
-        auto atomCopy = MakeCopy<CopyGM2L1, CopyGM2L1TraitDefault>();                                                \
+        auto atomCopy = MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{});                                                \
         InitializeData<T>();                                                                                           \
         atomCopy.Call(l1ATensor, gmA);                                                                                 \
         DataCopyGm2L1Sim(l1ATensorGolden, gmA);                                                                        \
@@ -229,7 +229,7 @@ private:
         auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), gmALayout);                      \
         auto l1ATensor = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), l1ALayout);                \
         auto l1ATensorGolden = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden)), l1ALayout);    \
-        auto atomCopy = MakeCopy<CopyGM2L1, CopyGM2L1TraitDefault>();                                                \
+        auto atomCopy = MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{});                                                \
         InitializeData<T>();                                                                                           \
         auto coord = makeCoord;                                                                                        \
         DataCopyGm2L1Sim(l1ATensorGolden, gmA, coord);                                                                 \

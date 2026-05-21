@@ -52,16 +52,19 @@ __aicore__ inline void Mmad(
     const BiasTensor& bias);
 
 /**
- * @brief Construct a MmadAtom from the matrix multiplication operation type.
+ * @brief Construct a MmadAtom from the matrix multiplication operation object.
+ * @param mmadOperation : Matrix multiplication operation object.
  */
 template <typename MmadOperationType>
-__aicore__ inline constexpr auto MakeMmad();
+__aicore__ inline constexpr auto MakeMmad(const MmadOperationType& mmadOperation);
 
 /**
- * @brief Construct a MmadAtom from the matrix multiplication operation type and trait type.
+ * @brief Construct a MmadAtom from the matrix multiplication operation object and trait object.
+ * @param mmadOperation : Matrix multiplication operation object.
+ * @param mmadTrait : Matrix multiplication trait object.
  */
 template <typename MmadOperationType, typename MmadTraitType>
-__aicore__ inline constexpr auto MakeMmad();
+__aicore__ inline constexpr auto MakeMmad(const MmadOperationType& mmadOperation, const MmadTraitType& mmadTrait);
 
 }
 }

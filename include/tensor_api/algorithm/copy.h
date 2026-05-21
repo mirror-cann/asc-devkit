@@ -48,16 +48,19 @@ __aicore__ inline void Copy(const CopyAtom<AtomType>& atomCopy, const DstTensor&
     const QuantParam& quant);
 
 /**
- * @brief Construct a CopyAtom from the copy operation type.
+ * @brief Construct a CopyAtom from the copy operation object.
+ * @param copyOperation : Copy operation object.
  */
 template <typename CopyOperationType>
-__aicore__ inline constexpr auto MakeCopy();
+__aicore__ inline constexpr auto MakeCopy(const CopyOperationType& copyOperation);
 
 /**
- * @brief Construct a CopyAtom from the copy operation type and trait type.
+ * @brief Construct a CopyAtom from the copy operation object and trait object.
+ * @param copyOperation : Copy operation object.
+ * @param copyTrait : Copy trait object.
  */
 template <typename CopyOperationType, typename CopyTraitType>
-__aicore__ inline constexpr auto MakeCopy();
+__aicore__ inline constexpr auto MakeCopy(const CopyOperationType& copyOperation, const CopyTraitType& copyTrait);
 
 }
 }
