@@ -182,7 +182,7 @@
   python3 ../scripts/verify_result.py output/output.bin output/golden.bin        # 验证输出结果是否正确，确认算法逻辑正确
   ```
 
-  使用CPU调试或NPU仿真模式时，添加`-DCMAKE_ASC_RUN_MODE=cpu`或`-DCMAKE_ASC_RUN_MODE=sim`参数即可。示例如下：
+  使用NPU仿真模式时，添加`-DCMAKE_ASC_RUN_MODE=sim`参数即可。示例如下：
   ```bash
   cmake -DSCENARIO_NUM=${SCENARIO} -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j; # NPU仿真模式
   ```
@@ -195,8 +195,8 @@
 
   | 参数 | 说明 | 可选值 | 默认值 |
   |------|------|--------|--------|
-  | CMAKE_ASC_RUN_MODE | 运行模式 | npu, cpu, sim | npu |
-  | CMAKE_ASC_ARCHITECTURES | NPU硬件架构 | dav-2201, dav-3510 | dav-3510 |
+  | CMAKE_ASC_RUN_MODE | 运行模式 | npu, sim | npu |
+  | CMAKE_ASC_ARCHITECTURES | NPU硬件架构 | dav-3510 | dav-3510 |
 
 - 执行结果
 
