@@ -24,5 +24,6 @@
 | [select](./select)　　　　　　 | 本样例基于Reg编程接口实现Select运算，根据掩码在两个向量之间选取元素　　　　                                                                     |
 | [squeeze](./squeeze)　　　　　　 | 本样例基于Reg编程接口实现Squeeze运算，将向量压缩为标量　　　　                                                                           |
 | [subnormal](./subnormal)　　　　　　 | 本样例基于Reg编程接口实现Div运算，演示支持subnormal与不支持subnormal计算结果差异　　　　                                                       |
+| [trait](./trait)　　　　　　 | 本样例基于Reg编程接口实现Div运算，使用int64_t类型数据，演示单核情况下RegTensor位2倍宽数据处理性能优势　　　　         |
 | [truncate](./truncate)　　　　 | 本样例基于Reg编程接口实现Truncate运算，将浮点数截断到整数位　　　　　　　　　　　　　　　　　　                                                          |
 | [histogram](./histogram)　　　　　　　　　　　　　　　　　　　　| 本样例基于Reg编程接口实现Histogram运算，对输入数据进行直方图统计计算　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 |
