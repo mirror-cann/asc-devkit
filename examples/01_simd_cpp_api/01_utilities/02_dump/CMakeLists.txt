@@ -17,14 +17,7 @@ find_package(ASC REQUIRED)
 project(utils_debug LANGUAGES ASC CXX)
 
 add_executable(demo
-    mmad_custom_dump.asc
-)
-
-target_link_libraries(demo PRIVATE
-    tiling_api
-    register
-    platform
-    m
+    dump.asc
 )
 
 target_compile_options(demo PRIVATE

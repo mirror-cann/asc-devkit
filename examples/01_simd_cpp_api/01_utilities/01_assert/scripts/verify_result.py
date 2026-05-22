@@ -2,7 +2,7 @@
 # coding=utf-8
 
 # ----------------------------------------------------------------------------------------------------------
-# Copyright (c) 2025 Huawei Technologies Co., Ltd.
+# Copyright (c) 2026 Huawei Technologies Co., Ltd.
 # This program is free software, you can redistribute it and/or modify it under the terms and conditions of
 # CANN Open Software License Agreement Version 2.0 (the "License").
 # Please refer to the License for details. You may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@ import sys
 import numpy as np
 
 
-RELATIVE_TOL = 1e-6
-ABSOLUTE_TOL = 1e-9
+RELATIVE_TOL = 1e-3
+ABSOLUTE_TOL = 1e-4
 ERROR_TOL = 1e-4
 
 
 def verify_result(output, golden):
-    output = np.fromfile(output, dtype=np.float32).reshape(-1)
-    golden = np.fromfile(golden, dtype=np.float32).reshape(-1)
+    output = np.fromfile(output, dtype=np.float16).reshape(-1)
+    golden = np.fromfile(golden, dtype=np.float16).reshape(-1)
     different_element_results = np.isclose(output,
                                            golden,
                                            rtol=RELATIVE_TOL,

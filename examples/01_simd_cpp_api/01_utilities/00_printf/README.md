@@ -26,9 +26,9 @@
 
 - 样例功能：
 
-  通过高阶API实现Matmul计算，添加printf接口实现格式化输出功能。
+  使用静态Tensor编程模式实现矩阵乘法，展示printf接口的基本使用方法。
 
-  Matmul的计算公式为：
+  矩阵乘法的计算公式为：
 
   ```
   C = A * B
@@ -36,7 +36,7 @@
 
 - 样例规格：
 
-  样例参数为：M = 512, N = 1024, K = 512，shape信息如下表所示：
+  样例参数为：M = 256, N = 256, K = 64，shape信息如下表所示：
   <table>
   <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">Matmul</td></tr>
   </tr>
@@ -45,10 +45,21 @@
   <tr><td align="center">b</td><td align="center">[K, N]</td><td align="center">half</td><td align="center">ND</td></tr>
   </tr>
   </tr>
-  <tr><td rowspan="1" align="center">样例输出</td><td align="center">c</td><td align="center">[M, N]</td><td align="center">float</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">样例输出</td><td align="center">c</td><td align="center">[M, N]</td><td align="center">half</td><td align="center">ND</td></tr>
   </tr>
-  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">matmul_custom</td></tr>
+  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">mmad_custom</td></tr>
   </table>
+
+- printf接口支持格式：
+
+  | 格式符 | 说明 | 示例 |
+  |--------|------|------|
+  | `%p` | 指针打印 | `AscendC::printf("pointer %p\n", ptr);` |
+  | `%d` | 整型/bool打印 | `AscendC::printf("value is %d\n", 10);` |
+  | `%u` | 无符号整型打印 | `AscendC::printf("idx is %u\n", idx);` |
+  | `%x` | 十六进制打印 | `AscendC::printf("value is %x\n", 255);` |
+  | `%f` | 浮点型打印(half/float) | `AscendC::printf("half %f\n", val);` |
+  | `%s` | 字符串打印 | `AscendC::printf("name %s\n", "test");` |
 
 - 调用实现
 

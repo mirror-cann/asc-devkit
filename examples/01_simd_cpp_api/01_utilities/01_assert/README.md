@@ -1,8 +1,8 @@
-# Assert接口功能
+# Assert接口功能说明
 
 ## 概述
 
-本样例介绍assert断言功能，如果assert的内部条件判断不为真，则会输出assert条件，并将输入信息打印。
+本样例介绍ascendc_assert断言接口使用方法，如果assert的条件判断不为真，则会输出错误信息并终止程序执行。
 
 ## 支持的产品
 
@@ -26,8 +26,9 @@
 
 - 样例功能：
 
-  本样例通过高阶API实现Matmul计算，添加assert断言功能，请注意，assert接口对运行性能有影响。
-  Matmul计算公式为：
+  使用静态Tensor编程模式实现矩阵乘法，展示ascendc_assert接口的基本使用方法。
+
+  矩阵乘法的计算公式为：
 
   ```
   C = A * B
@@ -35,7 +36,7 @@
 
 - 样例规格：
 
-  样例参数为M = 512, N = 1024, K = 512，规格如下表所示：
+  样例参数为：M = 256, N = 256, K = 64，shape信息如下表所示：
   <table>
   <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">Matmul</td></tr>
   </tr>
@@ -44,14 +45,25 @@
   <tr><td align="center">b</td><td align="center">[K, N]</td><td align="center">half</td><td align="center">ND</td></tr>
   </tr>
   </tr>
-  <tr><td rowspan="1" align="center">样例输出</td><td align="center">c</td><td align="center">[M, N]</td><td align="center">float</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">样例输出</td><td align="center">c</td><td align="center">[M, N]</td><td align="center">half</td><td align="center">ND</td></tr>
   </tr>
-  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">matmul_custom</td></tr>
+  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">mmad_custom</td></tr>
   </table>
 
-  - 调用实现
+- ascendc_assert接口用法：
 
-    使用内核调用符<<<>>>调用核函数。
+  | 用法 | 示例 |
+  |------|------|
+  | 基本断言 | `ascendc_assert(condition, "message.\n");` |
+  | 带参数断言 | `ascendc_assert(value > 0, "Value %d must be positive.\n", value);` |
+  | 参数对齐检查 | `ascendc_assert(size % 16 == 0, "Size %u must align to 16.\n", size);` |
+  | 范围检查 | `ascendc_assert(idx < max, "Index %u exceeds max %u.\n", idx, max);` |
+
+  注意：ascendc_assert接口对运行性能有影响，建议仅在调试阶段使用。
+
+- 调用实现
+
+  使用内核调用符<<<>>>调用核函数。
 
 ## 编译运行
 
@@ -89,7 +101,7 @@
 | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU 架构：dav-2201 对应 Atlas A2 训练系列产品/Atlas A2 推理系列产品和Atlas A3 训练系列产品/Atlas A3 推理系列产品，dav-3510 对应 Ascend 950PR/Ascend 950DT |
 
 - 执行结果
-  执行结果如下，说明精度对比成功。
+  最终执行结果如下，说明精度对比成功。
   ```bash
   test pass!
   ```
