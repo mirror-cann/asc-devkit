@@ -192,11 +192,11 @@
 
 ## 调用示例<a name="section11276201527"></a>
 
-完整使用样例请参见[Scatter样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_compatibility_guide/scatter_950)。
+完整使用样例请参见[Scatter兼容性样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_compatibility_guide/scatter)。
 
 ```
-uint32_t m_elementCount = 128;
-AscendC::Scatter(dstLocal, srcLocal, dstOffsetLocal, (uint32_t)0, m_elementCount); // dstOffsetLocal 用于存储源操作数的每个元素在dst中对应的地址偏移
+uint32_t COUNT = 128;
+AscendC::Scatter(dstLocal, srcLocal, dstOffsetLocal, (uint32_t)0, COUNT); // dstOffsetLocal 用于存储源操作数的每个元素在dst中对应的地址偏移
 ```
 
 结果示例：
