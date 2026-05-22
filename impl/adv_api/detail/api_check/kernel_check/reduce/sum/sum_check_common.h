@@ -168,8 +168,8 @@ public:
         this->checkSumParams.template CheckSumParamsSrcTensorSize<T>(srcTensor);
         this->checkSumParams.template CheckSumParamsTmpBufferSize<T>(sharedTmpBuffer, sumParams);
 
-        this->checkSumParams.CheckSumParamsBasicBlock<false>(ARG_AND_STRING(isBasicBlock));
-        this->checkSumParams.CheckSumParamsReduceDim<false>(ARG_AND_STRING(reduceDim));
+        this->checkSumParams.template CheckSumParamsBasicBlock<false>(ARG_AND_STRING(isBasicBlock));
+        this->checkSumParams.template CheckSumParamsReduceDim<false>(ARG_AND_STRING(reduceDim));
         ReuseSourceCheckFuncBasicClass::IsReuseSourceVerifyingParameters<false>(ARG_AND_STRING(isReuseSource));
 
         SingleTensorCheckFuncBasicClass::TPositionVerifyingParameters(
