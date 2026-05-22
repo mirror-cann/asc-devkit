@@ -14,6 +14,7 @@
 ├── matrix_transpose
 │   ├── CMakeLists.txt         // 编译工程文件
 │   ├── matrix_transpose.asc   // 矩阵转置样例实现
+│   ├── figures                // README中的图片资源
 │   └── README.md
 ```
 
@@ -66,7 +67,7 @@ int tile_col = threadIdx.x % TILE_DIM;
 
 下图给出了一个更直观的映射示意。左侧表示1024×1024的矩阵被划分为32×32个tile。右侧表示其中一个block需要处理的一个tile，其大小为32×32。
 
-<img src="./figure/blockMapping.png" width="60%">
+<img src="./figures/blockMapping.png" width="60%">
 
 以图中绿色元素为例，可以直接用kernel里的内置变量来推导它在GM中的input坐标。
 
@@ -129,7 +130,7 @@ int index_in = input_col + width * input_row;
 
 下图展示了Case 0的数据流，其中标红展示了一个Warp在读取GM和写入GM时处理的元素。对于同一个Warp的线程会读取GM输入中tile的一行元素，写回到GM输出中tile的一列。在读取GM输入时，相邻线程访问的元素地址连续，为连续读，在写回到输出时，相邻线程却被拆散到输出矩阵的不同行上，为不连续写。因此，这一版的核心问题是转置后的写回地址不再连续，这通常会显著影响整体吞吐。
 
-<img src="./figure/case0.png" width="60%">
+<img src="./figures/case0.png" width="60%">
 
 **关键代码**：
 
@@ -166,7 +167,7 @@ output[index_out] = input[index_in];
 
 下图展示了Case 1的数据流，其中标红和标黄的元素展示了一个Warp的线程在读取GM和写入GM时处理的元素。读取GM输入时，整个tile会按照GM的排布搬到UB，在写入GM输出时一个Warp的线程会读取UB上的一列元素写回到其对应的转置后的位置。
 
-<img src="./figure/case1.png" width="60%">
+<img src="./figures/case1.png" width="60%">
 
 与Case 0不同的是，Case 0中线程是“直接把输入元素写到转置后的GM位置”，所以相邻线程会被打散到输出矩阵的不同行上，而Case 1中，线程先把数据放到UB里，把原来不连续的全局写访问转移到UB内的不连续读。因此，这一版的核心收益是：虽然增加了一次UB读写和一次同步，但换来了GM侧“读连续、写也连续”的访问模式，整体耗时通常会明显低于Case 0。
 
@@ -259,14 +260,15 @@ output[index_out] = tile[tile_col][tile_row];
   ```bash
   SCENARIO_NUM=0                       # 选择执行场景，可选0-1
   mkdir -p build && cd build;          # 创建并进入build目录
-  cmake -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j;  # 编译工程
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j;  # 编译工程
   ./demo                               # 执行样例
   ```
 
-- 编译选项说明
+  编译选项说明
 
   | 选项             | 可选值      | 说明              |
   | ---------------- | ----------- | ----------------- |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
   | `SCENARIO_NUM` | `0`-`1` | 样例类型，默认为0 |
 
   执行结果如下，说明精度对比成功。

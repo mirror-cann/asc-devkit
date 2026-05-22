@@ -10,12 +10,13 @@
 ## 支持的CANN软件版本
 - \>= CANN 9.0.0
 
-## 目录结构
+## 目录结构介绍
+
 ```text
 ├── general_gather
-│   ├── CMakeLists.txt         # cmake编译文件
-│   ├── gather_v2.asc          # SIMT实现gather_v2调用样例
-│   ├── gather.asc             # SIMT实现gather调用样例
+│   ├── CMakeLists.txt         // cmake编译文件
+│   ├── gather_v2.asc          // SIMT实现gather_v2调用样例
+│   ├── gather.asc             // SIMT实现gather调用样例
 │   └── README.md
 ```
 
@@ -146,12 +147,20 @@
     ```
 
 - 样例执行
+
   ```bash
   mkdir -p build && cd build;   # 创建并进入build目录
-  cmake ..; make -j;            # 编译工程
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..; make -j;   # 编译工程
   ./gather                      # 执行样例
-  ./gather_v2
+  ./gather_v2                   # 执行样例
   ```
+
+  编译选项说明
+
+  | 选项 | 可选值 | 说明 |
+  |------|--------|------|
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
+
   执行结果如下，说明精度对比成功：
   ```text
   [Success] Case accuracy is verification passed.
