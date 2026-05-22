@@ -42,7 +42,7 @@ add_subdirectory(impl)
 add_subdirectory(tools)
 add_subdirectory(cmake)
 
-# set(ASCEND_INSTALL_PATH "${ASCEND_CANN_PACKAGE_PATH}")
+
 include(version.cmake)
 if(BUILD_OPEN_PROJECT)
     check_cann_pkg_build_deps("asc-devkit")

@@ -119,7 +119,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message(STATUS "framework KERNEL_MODE=${KERNEL_MODE}")
 message(STATUS "framework BUILD_OPEN_PROJECT=${BUILD_OPEN_PROJECT}")
-message(STATUS "framework ASCEND_CANN_PACKAGE_PATH=${ASCEND_CANN_PACKAGE_PATH}")
+
 
 set(ORION_HEAD_LIST)
 FILE(GLOB_RECURSE sources_list LIST_DIRECTORIES TRUE ${HCCL_V2_CODE_ROOT})
@@ -576,7 +576,6 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         ${HCCL_BASE_DIR}/platform/common/unique
         ${HCCL_BASE_DIR}/platform/common/unfold_cache
 
-        ${ASCEND_CANN_PACKAGE_PATH}/devlib/device/ # c_sec、mmpa、unified_dlog动态库搜索路径
 
         ${RDMA_CORE_INCLUDE_DIR}
         ${HCCL_BASE_DIR}/platform/
@@ -604,31 +603,6 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         ${HCCL_BASE_DIR}/framework/device/inc
         ${HCCL_BASE_DIR}/framework/device/framework
 
-        # runtime头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/
-
-        # mmpa头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/acl/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/mmpa/
-
-        # 包间接口
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/aicpu/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/aicpu/common/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/runtime/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/runtime/runtime
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/profiling/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/base/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/dump/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/trace/
-
-        # driver头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/driver
-
-        # ascendc
-        ${ASCEND_CANN_PACKAGE_PATH}/include/ascendc/highlevel_api/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/asc/hccl/internal/
-        ${ASCEND_CANN_PACKAGE_PATH}/include/ascendc/
 
         ${HCCL_HCOMM_HEADER_DIR}/externel_depends/tsch/
         ${RDMA_CORE_INCLUDE_DIR}
@@ -649,9 +623,7 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
     target_include_directories(ccl_kernel PRIVATE
         ${CCL_KERNEL_INCLUDE_LIST}
     )
-    target_link_directories(ccl_kernel PRIVATE
-        ${HCCL_PRODUCT_LIB_DIRS}
-    )
+
 
     target_include_directories(ccl_kernel PRIVATE ${ORION_HEAD_LIST})
     if(TARGET json)
@@ -674,6 +646,7 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
                 ${CCL_KERNEL_INCLUDE_LIST}
                 ${ORION_HEAD_LIST}
             )
+            target_link_libraries(${target_name} PRIVATE ascend_hal c_sec unified_dlog runtime_headers)
             if(TARGET json)
                 target_link_libraries(${target_name} PRIVATE json)
                 add_dependencies(${target_name} json)
@@ -706,12 +679,12 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
             ${CCL_KERNEL_INCLUDE_LIST}
             ${ORION_HEAD_LIST}
         )
-        target_link_directories(mc2_server PRIVATE
-            ${HCCL_DEVICE_LIB_DIRS}
-        )
+
         target_link_libraries(mc2_server PRIVATE
             -Wl,--no-as-needed
-            ${ASCEND_CANN_PACKAGE_PATH}/devlib/device/libascend_hal.so
+            ascend_hal
+            c_sec
+            unified_dlog
             mc2_server_ccl_kernel_stub
             ${HCCL_C_SEC_LINK}
             ${HCCL_UNIFIED_DLOG_LINK}
@@ -889,6 +862,9 @@ if(NOT BUILD_OPEN_PROJECT)
         -ldl
         -lpthread
         ofed_headers
+        ascend_hal
+        c_sec
+        unified_dlog
     )
 
     install(TARGETS  ccl_kernel
@@ -941,16 +917,7 @@ if(BUILD_OPEN_PROJECT AND KERNEL_MODE)
         target_compile_definitions(ccl_kernel PRIVATE
             OPEN_BUILD_PROJECT
             -D_GLIBCXX_USE_CXX11_ABI=1) # 链接ascendalog需要LOG_CPP，链接slog不需要
-        # set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--allow-multiple-definition")
-        message(STATUS "framework CMAKE_HOST_SYSTEM_PROCESSOR=${CMAKE_HOST_SYSTEM_PROCESSOR}")
-        if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "x86_64")
-            message(STATUS "Host is x86_64")
-            set(ASCEND_CANN_PACKAGE_ENV_PATH ${ASCEND_CANN_PACKAGE_PATH}/x86_64-linux)
-        elseif(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "aarch64")
-            message(STATUS "Host is ARM64")
-            set(ASCEND_CANN_PACKAGE_ENV_PATH ${ASCEND_CANN_PACKAGE_PATH}/aarch64-linux)
-        endif()
-        message(STATUS "framework ASCEND_CANN_PACKAGE_ENV_PATH=${ASCEND_CANN_PACKAGE_ENV_PATH}")
+ 
         set(CCL_KERNEL_PLF_PATH
             -Wl,--whole-archive
             ccl_kernel_plf_a
@@ -963,6 +930,8 @@ if(BUILD_OPEN_PROJECT AND KERNEL_MODE)
         target_link_libraries(ccl_kernel PRIVATE
             -Wl,--no-as-needed
             ascend_hal
+            c_sec
+            unified_dlog
             ${HCCL_C_SEC_LINK}
             ${HCCL_MMPA_LINK}
             ${CCL_KERNEL_PLF_PATH}
@@ -981,9 +950,6 @@ if(BUILD_OPEN_PROJECT AND KERNEL_MODE)
             DESTINATION ${INSTALL_CCL_KERNEL_JSON_DIR} OPTIONAL
         )
 
-        target_link_directories(ccl_kernel PRIVATE
-            ${HCCL_DEVICE_LIB_DIRS} # c_sec、mmpa、unified_dlog动态库搜索路径
-        )
     endif()
 endif()
 
@@ -1047,10 +1013,9 @@ if(DEVICE_MODE AND KERNEL_MODE)
         ${CCL_KERNEL_INCLUDE_LIST}
         ${ORION_HEAD_LIST}
     )
-    target_link_directories(aicpu_custom PRIVATE
-        ${HCCL_DEVICE_LIB_DIRS}
-    )
-    target_link_libraries(aicpu_custom PRIVATE ${AICPU_CUSTOM_LINK_LIBRARIES})
+
+    target_link_libraries(aicpu_custom PRIVATE ${AICPU_CUSTOM_LINK_LIBRARIES} ascend_hal c_sec unified_dlog)
+
     add_dependencies(aicpu_custom ccl_kernel ccl_kernel_plf_a aicpu_custom_json)
     set_target_properties(aicpu_custom PROPERTIES
         OUTPUT_NAME aicpu_custom

@@ -16,16 +16,6 @@ if(BUILD_OPEN_PROJECT)
         ${HCCL_CC_INCLUDE_DIR}/hcomm/pkg_inc
         ${CMAKE_CURRENT_SOURCE_DIR}/..
 
-        ${ASCEND_CANN_PACKAGE_PATH}/include
-        ${ASCEND_CANN_PACKAGE_PATH}/include/acl
-
-        # hcomm头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/hccl
-
-        # 包间接口
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/hccl
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/base/
     )
 else()
     set(INCLUDE_LIST
@@ -107,6 +97,7 @@ if(PRODUCT_SIDE STREQUAL "host")
 
     if(BUILD_OPEN_PROJECT)
         target_link_libraries(mc2_compat PRIVATE
+            $<BUILD_INTERFACE:c_sec_headers>
             -Wl,--no-as-needed
             unified_dlog
             -Wl,--no-as-needed
@@ -119,10 +110,6 @@ if(PRODUCT_SIDE STREQUAL "host")
             -Wl,--no-as-needed
         )
     endif()
-
-    target_link_directories(mc2_compat PRIVATE
-        ${ASCEND_CANN_PACKAGE_PATH}/lib64
-    )
 
     install(TARGETS mc2_compat
         DESTINATION "${CMAKE_SYSTEM_PROCESSOR}-linux/lib64" COMPONENT asc-devkit
@@ -163,7 +150,8 @@ if((DEVICE_MODE AND BUILD_OPEN_PROJECT) OR (NOT BUILD_OPEN_PROJECT))
         $<$<CONFIG:Release>:-s>
     )
 
-    target_link_directories(mc2_kernel_compat PRIVATE
- 	    ${ASCEND_CANN_PACKAGE_PATH}/devlib/device
+    target_link_libraries(mc2_kernel_compat PRIVATE
+ 	    $<BUILD_INTERFACE:slog_headers>
+ 	    $<BUILD_INTERFACE:c_sec_headers>
  	)
 endif()

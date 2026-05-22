@@ -25,6 +25,12 @@ find_cann_package(aicpu_sharder REQUIRED)
 find_cann_package(tilingdata_base REQUIRED OBJECTS)
 find_cann_package(metadef REQUIRED)
 find_cann_package(unified_dlog REQUIRED)
+find_cann_package(ascend_hal REQUIRED)
+find_cann_package(securec REQUIRED)
+find_cann_package(runtime REQUIRED)
+find_cann_package(mmpa REQUIRED)
+find_cann_package(acl_rt REQUIRED)
+find_cann_package(atrace REQUIRED)
 
 include(${ASCENDC_DIR}/impl/adv_api/gen_kernel_tiling.cmake)
 

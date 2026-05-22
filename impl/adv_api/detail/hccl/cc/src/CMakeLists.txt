@@ -137,43 +137,6 @@ set(INCLUDE_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/ops/batch_send_recv/selector
 )
 
-list(APPEND INCLUDE_LIST
-    ${ASCEND_CANN_PACKAGE_PATH}/include
-    ${ASCEND_CANN_PACKAGE_PATH}/include/acl
-
-    # hcomm头文件
-    ${ASCEND_CANN_PACKAGE_PATH}/include/hccl
-    ${ASCEND_CANN_PACKAGE_PATH}/include/hcomm
-
-    # runtime头文件
-    ${ASCEND_CANN_PACKAGE_PATH}/include/
-    ${ASCEND_CANN_PACKAGE_PATH}/include/base/
-    ${ASCEND_CANN_PACKAGE_PATH}/include/driver/
-    ${ASCEND_CANN_PACKAGE_PATH}/include/dump/
-    ${ASCEND_CANN_PACKAGE_PATH}/include/external/
-    ${ASCEND_CANN_PACKAGE_PATH}/include/platform/
-
-    # driver头文件
-    ${ASCEND_CANN_PACKAGE_PATH}/include/driver/
-
-    # mmpa头文件
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/mmpa/
-
-    # driver头文件
-    ${ASCEND_CANN_PACKAGE_PATH}/include/driver/
-
-    # 包间接口
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/hccl
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/hcomm/ccu
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/runtime/
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/aicpu/
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/runtime/runtime/
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/profiling/
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/base/
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/dump/
-    ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/trace/
-)
 
 if(PRODUCT_SIDE STREQUAL "device")
     add_library(mc2_server SHARED
@@ -323,14 +286,12 @@ if(PRODUCT_SIDE STREQUAL "device")
         MC2_SERVER_ONLY
     )
 
-    target_link_directories(mc2_server PRIVATE
- 	    ${ASCEND_CANN_PACKAGE_PATH}/devlib/device
- 	)
-
     target_link_libraries(mc2_server PRIVATE
         -Wl,--no-as-needed
         mc2_kernel_compat
         -Wl,--no-as-needed
+        mmpa
+        acl_rt_headers
     )
 endif()
 
@@ -390,9 +351,12 @@ if(NOT KERNEL_MODE AND PRODUCT_SIDE STREQUAL "host")
         $<$<CONFIG:Release>:-s>
     )
 
-    target_link_directories(mc2_client PRIVATE
-        ${ASCEND_CANN_PACKAGE_PATH}/lib64
+    target_link_libraries(mc2_client PRIVATE
+        $<BUILD_INTERFACE:runtime_headers>
+        $<BUILD_INTERFACE:error_manager_headers>
+        acl_rt
     )
+
 
     add_dependencies(mc2_client mc2_compat)
 

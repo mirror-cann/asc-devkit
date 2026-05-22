@@ -170,24 +170,6 @@ if(BUILD_OPEN_PROJECT)
         ${HCCL_BASE_DIR}/platform/hccp/inc/network
         ${RDMA_CORE_INCLUDE_DIR}
 
-        # runtime头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/
-
-        # mmpa头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/mmpa/
-
-        # 包间接口
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/aicpu/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/aicpu/common/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/runtime/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/profiling/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/base/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/dump/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/trace/
-
-        # driver头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/driver
 
         # 临时依赖头文件，待删除
         ${HCCL_HCOMM_HEADER_DIR}/externel_depends/tsch/
@@ -210,24 +192,6 @@ if(BUILD_OPEN_PROJECT)
         ${HCCL_BASE_DIR}/platform/hccp/inc/network
         ${RDMA_CORE_INCLUDE_DIR}
 
-        # runtime头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/
-
-        # mmpa头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/mmpa/
-
-        # driver头文件
-        ${ASCEND_CANN_PACKAGE_PATH}/include/driver
-
-        # 包间接口
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/aicpu/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/aicpu/common/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/runtime/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/profiling/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/base/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/dump/
-        ${ASCEND_CANN_PACKAGE_PATH}/pkg_inc/trace/
 
         # 临时依赖头文件，待删除
         ${HCCL_HCOMM_HEADER_DIR}/externel_depends/tsch/
@@ -236,23 +200,6 @@ if(BUILD_OPEN_PROJECT)
         ${THIRD_PARTY_NLOHMANN_PATH}
     )
 
-    if(PRODUCT_SIDE STREQUAL "device")
-        target_link_directories(ccl_kernel_plf PRIVATE
-            ${HCCL_DEVICE_LIB_DIRS} # c_sec、mmpa、unified_dlog动态库搜索路径
-        )
-
-        target_link_directories(ccl_kernel_plf_a PRIVATE
-            ${HCCL_DEVICE_LIB_DIRS} # c_sec、mmpa、unified_dlog动态库搜索路径
-        )
-    else()
-        target_link_directories(ccl_kernel_plf PRIVATE
-            ${HCCL_HOST_LIB_DIRS}
-        )
-
-        target_link_directories(ccl_kernel_plf_a PRIVATE
-            ${HCCL_HOST_LIB_DIRS}
-        )
-    endif()
 endif()
 
 if(TARGET json)
@@ -358,6 +305,12 @@ if(BUILD_OPEN_PROJECT)
         -lrt
         -ldl
         -lpthread
+        ascend_hal
+        c_sec
+        unified_dlog
+        $<BUILD_INTERFACE:runtime_headers>
+        $<BUILD_INTERFACE:atrace_headers>
+        $<BUILD_INTERFACE:mmpa_headers>
     )
 
     target_link_libraries(ccl_kernel_plf_a
@@ -369,6 +322,12 @@ if(BUILD_OPEN_PROJECT)
         -lrt
         -ldl
         -lpthread
+        ascend_hal
+        c_sec
+        unified_dlog
+        $<BUILD_INTERFACE:runtime_headers>
+        $<BUILD_INTERFACE:atrace_headers>
+        $<BUILD_INTERFACE:mmpa_headers>
     )
 endif()
 
