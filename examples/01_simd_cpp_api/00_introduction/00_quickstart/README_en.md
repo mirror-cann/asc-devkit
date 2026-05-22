@@ -6,6 +6,6 @@ Introduces the kernel function direct invocation method based on Ascend C, demon
 
 ## Sample List
 
-| Directory Name | Description |
-| -------------- | ----------- |
-| [hello_world](./hello_world) | HelloWorld sample kernel function direct invocation method based on Ascend C |
+| Directory Name | Description | Supported Products |
+| -------------- | ----------- | --- |
+| [hello_world](./hello_world) |  HelloWorld sample kernel function direct invocation method based on Ascend C | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |

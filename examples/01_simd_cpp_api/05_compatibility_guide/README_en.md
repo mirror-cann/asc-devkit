@@ -8,11 +8,11 @@ This section uses the `<<<>>>` kernel call operator to complete the basic flow o
 
 ## Example List
 
-|  Directory Name  |  Description  |
-| -------------------------------------------------- | ---------------------------------------------------- |
-| [data_copy_l1togm](./data_copy_l1togm) | This example demonstrates the end-to-end flow of transferring L1 data to GM. |
-| [fill](./fill) | This example shows how to use the Fill interface to initialize L0A Buffer and L0B Buffer. |
-| [matmul_s4](./matmul_s4) | This example demonstrates the end-to-end implementation of int4 matrix multiplication computation. |
-| [pattern_transformation](./pattern_transformation) | This example demonstrates the fractal transformation logic for L1 Buffer -> L0A Buffer pathway based on the basic mmad example. |
-| [scatter](./scatter) | This example demonstrates the scatter function, which can scatter the input tensor to the result tensor based on the input tensor and destination address offset tensor. |
-| [set_loaddata_boundary](./set_loaddata_boundary) | This example implements the setting of L1 Buffer boundary values. |
+| Directory Name | Description | Supported Products |
+| -------------------------------------------------- | ---------------------------------------------------- | --- |
+| [data_copy_l1togm](./data_copy_l1togm) |  This example demonstrates the end-to-end flow of transferring L1 data to GM. | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |
+| [fill](./fill) |  This example shows how to use the Fill interface to initialize L0A Buffer and L0B Buffer. | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |
+| [matmul_s4](./matmul_s4) |  This example demonstrates the end-to-end implementation of int4 matrix multiplication computation. | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |
+| [pattern_transformation](./pattern_transformation) |  This example demonstrates the fractal transformation logic for L1 Buffer -> L0A Buffer pathway based on the basic mmad example. | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |
+| [scatter](./scatter) |  This example demonstrates the scatter function, which can scatter the input tensor to the result tensor based on the input tensor and destination address offset tensor. | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |
+| [set_loaddata_boundary](./set_loaddata_boundary) |  This example implements the setting of L1 Buffer boundary values. | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |

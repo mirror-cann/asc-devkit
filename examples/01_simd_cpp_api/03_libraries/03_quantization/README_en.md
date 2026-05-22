@@ -6,8 +6,8 @@ This example set introduces typical usage of different features of quantization 
 
 ## Example List
 
-| Directory Name | Description |
-| --------------- | ----------- |
-| [antiquant](./antiquant) | This example demonstrates implementing the antiquant operator using the AntiQuant high-level API. The example performs pseudo-quantization computation element-wise |
-| [dequant](./dequant) | This example introduces implementing the Dequant single operator using the Dequant high-level API based on the Kernel direct call operator project, performing dequantization computation element-wise, for example, dequantizing int32_t data type to half/float and other data types |
-| [quant](./quant) | This example introduces implementing the QuantCustom single operator using the Quant high-level API based on the Kernel direct call operator project, performing quantization computation element-wise, for example, quantizing half/float data type to int8_t data type |
+| Directory Name | Description | Supported Products |
+| --------------- | ----------- | --- |
+| [antiquant](./antiquant) |  This example demonstrates implementing the antiquant operator using the AntiQuant high-level API. The example performs pseudo-quantization computation element-wise | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |
+| [dequant](./dequant) |  This example introduces implementing the Dequant single operator using the Dequant high-level API based on the Kernel direct call operator project, performing dequantization computation element-wise, for example, dequantizing int32_t data type to half/float and other data types | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |
+| [quant](./quant) |  This example introduces implementing the QuantCustom single operator using the Quant high-level API based on the Kernel direct call operator project, performing quantization computation element-wise, for example, quantizing half/float data type to int8_t data type | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |

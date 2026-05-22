@@ -6,7 +6,7 @@ This sample demonstrates the implementation methods for custom operators in the 
 
 ## Sample List
 
-| Directory Name | Description |
-| -------------- | ----------- |
-| [tensorflow_builtin](./tensorflow_builtin/) | This sample demonstrates mapping Ascend C custom operators to TensorFlow built-in operators and invoking them through TensorFlow |
-| [tensorflow_custom](./tensorflow_custom/) | This sample demonstrates mapping Ascend C custom operators to TensorFlow custom operators and invoking them through TensorFlow |
+| Directory Name | Description | Supported Products |
+| -------------- | ----------- | --- |
+| [tensorflow_builtin](./tensorflow_builtin) |  This sample demonstrates mapping Ascend C custom operators to TensorFlow built-in operators and invoking them through TensorFlow | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |
+| [tensorflow_custom](./tensorflow_custom) |  This sample demonstrates mapping Ascend C custom operators to TensorFlow custom operators and invoking them through TensorFlow | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |

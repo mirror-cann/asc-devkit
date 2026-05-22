@@ -6,6 +6,6 @@ This sample demonstrates the usage of the msSanitizer debugging tool based on Mi
 
 ## Sample List
 
-| Directory Name | Description |
-| -------------- | ----------- |
-| [msSanitizer](./msSanitizer) | This sample implements an Add example using the Ascend C programming language, demonstrating the abnormal scenarios that the msSanitizer tool can detect and intercept during sample development |
+| Directory Name | Description | Supported Products |
+| -------------- | ----------- | --- |
+| [msSanitizer](./msSanitizer) |  This sample implements an Add example using the Ascend C programming language, demonstrating the abnormal scenarios that the msSanitizer tool can detect and intercept during sample development | Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |

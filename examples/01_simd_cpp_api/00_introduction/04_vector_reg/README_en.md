@@ -6,6 +6,6 @@ This example introduces the Vector computation functionality of RegBase programm
 
 ## Example List
 
-|  Directory Name                                                   |  Function Description                                              |
-| ------------------------------------------------------------ | ---------------------------------------------------- |
-| [add](./add) | Add example based on Reg programming interface |
+| Directory Name | Function Description | Supported Products |
+| ------------------------------------------------------------ | ---------------------------------------------------- | --- |
+| [add](./add) |  Add example based on Reg programming interface | Ascend 950PR/Ascend 950DT |

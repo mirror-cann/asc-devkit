@@ -6,7 +6,7 @@
 
 ## 样例列表
 
-|  目录名称                                                   |  功能描述                                              |
-| ------------------------------------------------------------ | ---------------------------------------------------- |
-| [matmul](./matmul) | 基于静态Tensor编程范式实现矩阵乘计算 |
-| [matmul_high_level_api](./matmul_high_level_api) | 基于Matmul高阶API实现矩阵乘计算 |
+| 目录名称 | 功能描述 | 支持的产品 |
+| ------------------------------------------------------------ | ---------------------------------------------------- | --- |
+| [matmul](./matmul) |  基于静态Tensor编程范式实现矩阵乘计算 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [matmul_high_level_api](./matmul_high_level_api) |  基于Matmul高阶API实现矩阵乘计算 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |

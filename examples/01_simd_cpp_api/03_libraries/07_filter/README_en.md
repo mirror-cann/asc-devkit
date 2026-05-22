@@ -6,7 +6,7 @@ This example set introduces typical usage of different features of data filter o
 
 ## Example List
 
-|  Directory Name                                                   |  Description                                              |
-| ------------------------------------------------------------ | ---------------------------------------------------- |
-| [dropout](./dropout) | This example demonstrates how to call the DropOut high-level API to implement the dropout operator, providing the functionality to filter SrcTensor (source operand, input Tensor) based on MaskTensor to obtain DstTensor (destination operand, output Tensor) |
-| [select](./select) | This example is based on the Kernel direct call operator project and demonstrates how to call the Select high-level API to implement the SelectCustom single operator, mainly demonstrating the usage of the Select high-level API in the Kernel direct call project |
+| Directory Name | Description | Supported Products |
+| ------------------------------------------------------------ | ---------------------------------------------------- | --- |
+| [dropout](./dropout) |  This example demonstrates how to call the DropOut high-level API to implement the dropout operator, providing the functionality to filter SrcTensor (source operand, input Tensor) based on MaskTensor to obtain DstTensor (destination operand, output Tensor) | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |
+| [select](./select) |  This example is based on the Kernel direct call operator project and demonstrates how to call the Select high-level API to implement the SelectCustom single operator, mainly demonstrating the usage of the Select high-level API in the Kernel direct call project | Ascend 950PR/Ascend 950DT<br>Atlas A3 Training Series Products/Atlas A3 Inference Series Products<br>Atlas A2 Training Series Products/Atlas A2 Inference Series Products |
