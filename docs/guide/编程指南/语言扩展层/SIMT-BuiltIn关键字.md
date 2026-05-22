@@ -106,29 +106,44 @@
 
 当前提供了以下仅在Device上可用的dim3结构的内置变量：
 
--   blockDim<a name="li076017381191"></a>
-
-    内置全局变量，在核函数中可以直接使用，用于获取线程块中配置的线程的三维层次结构，即启动VF时配置的dim3结构体实例值。blockDim.x，blockDim.y，blockDim.z分别表示线程块中三个维度的线程数。
-
 -   gridDim<a name="li20760123812911"></a>
 
     内置全局变量，只能在核函数中使用，表示整个计算任务在各个维度上分别由多少个线程块构成。各个维度上线程块关系需满足gridDim.x * gridDim.y * gridDim.z <= 65535。
+
+-   blockDim<a name="li076017381191"></a>
+
+    内置全局变量，在核函数中可以直接使用，用于获取线程块中配置的线程的三维层次结构，即启动VF时配置的dim3结构体实例值。blockDim.x，blockDim.y，blockDim.z分别表示线程块中三个维度的线程数。
 
 -   blockIdx<a name="li1676053814914"></a>
 
     内置全局变量，只能在核函数中使用，用于获取块索引。表示当前线程所在的线程块在整个网格中的位置坐标。
 
-    -   blockIdx.x的范围是0到gridDim.x - 1。
-    -   blockIdx.y的范围是0到gridDim.y - 1，目前只能返回0。
-    -   blockIdx.z的范围是0到gridDim.z - 1，目前只能返回0。
+    -   blockIdx.x的范围是[0, gridDim.x - 1]。
+    -   blockIdx.y的范围是[0, gridDim.y - 1]。
+    -   blockIdx.z的范围是[0, gridDim.z - 1]。
 
 -   threadIdx<a name="li7760123814919"></a>
 
     内置全局变量，在核函数中可以直接使用，用于获取当前线程在线程块内部的索引。threadIdx.x，threadIdx.y，threadIdx.z分别表示当前线程在3个维度的索引，threadIdx.x的范围为\[0, blockDim.x\)，threadIdx.y的范围为\[0, blockDim.y\)，threadIdx.z的范围为\[0, blockDim.z\)。线程块内线程的索引与线程ID对应关系如下：
 
-    -   对于一维线程块，其线程ID为threadIdx.x。
-    -   对于二维线程块，其线程ID为（threadIdx.x + threadIdx.y \* blockDim.x）。
-    -   对于三维线程块，其线程ID为（threadIdx.x + threadIdx.y \* blockDim.x + threadIdx.z \* blockDim.x \* blockDim.y）。
+    -   对于一维线程块，其线程ID为blockIdx.x \* blockDim.x + threadIdx.x。
+
+        ![](../../figures/线程ID图示-1.png)
+
+    -   对于二维线程块，其线程ID为二维结构，其计算公式为：
+
+        ```
+        threadID.x = blockIdx.x * blockDim.x + threadIdx.x；
+        threadID.y = blockIdx.y * blockDim.y + threadIdx.y；
+        ```
+
+    -   对于三维线程块，其线程ID为三维结构，其计算公式为：
+
+        ```
+        threadID.x = blockIdx.x * blockDim.x + threadIdx.x；
+        threadID.y = blockIdx.y * blockDim.y + threadIdx.y；
+        threadID.z = blockIdx.z * blockDim.z + threadIdx.z；
+        ```
 
 当前提供了以下仅在Device上可用的int类型的内置变量：
 
