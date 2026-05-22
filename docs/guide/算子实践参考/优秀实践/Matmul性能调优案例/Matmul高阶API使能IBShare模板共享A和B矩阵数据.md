@@ -45,7 +45,7 @@
 </tbody>
 </table>
 
-开启IBShare和未开启IBShare的完整样例请参考[A、B矩阵均使能IBShare样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_ibshareAB)。
+开启IBShare和未开启IBShare的完整样例请参考[A、B矩阵均使能IBShare样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_ibshareAB)。
 
 ## 获取性能数据<a name="section4647105095111"></a>
 

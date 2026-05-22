@@ -69,7 +69,7 @@
 
 ## 设计优化方案<a name="section33901368431"></a>
 
-使能MTE2 Preload功能：在创建Matmul对象时，开启doMTE2Preload开关。使能MTE2 Preload的完整样例请参考[M方向预加载Matmul算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_preload)。具体步骤如下：
+使能MTE2 Preload功能：在创建Matmul对象时，开启doMTE2Preload开关。使能MTE2 Preload的完整样例请参考[M方向预加载Matmul算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_preload)。具体步骤如下：
 
 1.  配置MDL模板参数，将其中的doMTE2Preload参数设置为2，使能N方向Preload功能。
 

@@ -4,7 +4,7 @@
 
 ## 入门示例<a name="section727365944014"></a>
 
-以下是一个使用毕昇编译器编译的SIMT编程实现的Add算子入门示例。该示例展示了如何编写源文件add.asc以及具体的编译命令。通过这个示例，您可以了解如何使用毕昇编译器进行SIMT算子编译。完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/00_introduction/01_add)。
+以下是一个使用毕昇编译器编译的SIMT编程实现的Add算子入门示例。该示例展示了如何编写源文件add.asc以及具体的编译命令。通过这个示例，您可以了解如何使用毕昇编译器进行SIMT算子编译。完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/03_simt_api/00_introduction/01_add)。
 
 1.  包含头文件。
 

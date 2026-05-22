@@ -64,7 +64,7 @@ SIMT线程层次结构为：
 -   线程块数：64
 -   单个线程块中线程数：1024
 
-完整样例请参考[SIMD与SIMT混合编程使用UB提高内存访问效率](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_best_practices/03_fusion_compute_practices/simt_gather_with_ub)。
+完整样例请参考[SIMD与SIMT混合编程使用UB提高内存访问效率](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/04_best_practices/03_fusion_compute_practices/simt_gather_with_ub)。
 
 【反例】
 

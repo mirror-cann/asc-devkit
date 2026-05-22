@@ -4,7 +4,7 @@
 
 ## 入门示例<a name="section17595637204517"></a>
 
-以下是一个使用毕昇编译器编译静态Shape的add\_custom算子入门示例。该示例展示了如何编写源文件add\_custom.asc以及具体的编译命令。通过这个示例，您可以了解如何使用毕昇编译器进行算子编译。完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/00_introduction/01_vector/basic_api_tque_add)。
+以下是一个使用毕昇编译器编译静态Shape的add\_custom算子入门示例。该示例展示了如何编写源文件add\_custom.asc以及具体的编译命令。通过这个示例，您可以了解如何使用毕昇编译器进行算子编译。完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/00_introduction/01_vector/basic_api_tque_add)。
 
 1.  包含头文件。
 

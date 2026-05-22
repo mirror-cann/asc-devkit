@@ -12,7 +12,7 @@
 ![](../../../figures/开发Ascend-C算子的基本流程.png "开发Ascend-C算子的基本流程")
 
 >[!NOTE]说明
->- 请点击[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/00_introduction/01_vector/basic_api_tque_add)获取样例代码。
+>- 请点击[LINK](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/00_introduction/01_vector/basic_api_tque_add)获取样例代码。
 >- 使用本教程只需要您具有一定的C/C++基础，在此基础上，如果您已经对Ascend C编程模型有一定的了解，您可以在实际操作的过程中加深对理论的理解；如果您还没有开始了解Ascend C编程模型，也无需担心，您可以先尝试跑通教程中的样例，参考教程最后的[指引](#zh-cn_topic_0000001565030288_section128349412384)进行进一步的学习。
 
 ## 环境准备<a name="zh-cn_topic_0000001565030288_zh-cn_topic_0000001552186366_section412999115218"></a>
@@ -132,7 +132,7 @@
 
 ## 核函数开发<a name="zh-cn_topic_0000001565030288_zh-cn_topic_0000001552186366_section822273613219"></a>
 
-完成环境准备和初步的算子分析后，即可开始Ascend C核函数的开发。开发之前请先从[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/00_introduction/01_vector/basic_api_tque_add)获取样例代码，以下样例代码在add\_custom.asc中实现。
+完成环境准备和初步的算子分析后，即可开始Ascend C核函数的开发。开发之前请先从[LINK](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/00_introduction/01_vector/basic_api_tque_add)获取样例代码，以下样例代码在add\_custom.asc中实现。
 
 本样例中使用多核并行计算，即把数据进行分片，分配到多个核上进行处理。Ascend C核函数是在一个核上的处理函数，所以只处理部分数据。分配方案是：假设共启用8个核，数据整体长度为8 \* 2048个元素，平均分配到8个核上运行，每个核上处理的数据大小为2048个元素。对于单核上的处理数据，也可以进行数据切块，实现对数据的流水并行处理。
 

@@ -81,7 +81,7 @@
 **图 2**  使能IBShare模板的Matmul流水示意图<a name="fig10881182610139"></a>  
 ![](../../../figures/使能IBShare模板的Matmul流水示意图.png "使能IBShare模板的Matmul流水示意图")
 
-Matmul API使能IBShare模板共享B矩阵的完整样例请参考[仅B矩阵使能IBShare样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_ibshareB)。使能IBShare功能的主要步骤如下：
+Matmul API使能IBShare模板共享B矩阵的完整样例请参考[仅B矩阵使能IBShare样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_ibshareB)。使能IBShare功能的主要步骤如下：
 
 1.  创建Matmul对象。
 

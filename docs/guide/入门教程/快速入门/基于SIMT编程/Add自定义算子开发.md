@@ -12,7 +12,7 @@
 ![](../../../figures/开发Ascend-C算子的基本流程-0.png "开发Ascend-C算子的基本流程-0")
 
 >[!NOTE]说明 
->-   请点击[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/00_introduction/01_add)获取样例代码。
+>-   请点击[LINK](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/03_simt_api/00_introduction/01_add)获取样例代码。
 >-   使用本教程只需要您具有一定的C/C++基础，在此基础上，如果您已经对Ascend C  SIMT编程模型有一定的了解，您可以在实际操作的过程中加深对理论的理解；如果您还没有开始了解Ascend C  SIMT编程模型，也无需担心，您可以先尝试跑通教程中的样例，参考教程最后的[指引](#section2099191619557)进行进一步的学习。
 
 ## 环境准备<a name="zh-cn_topic_0000001565030288_zh-cn_topic_0000001552186366_section412999115218"></a>

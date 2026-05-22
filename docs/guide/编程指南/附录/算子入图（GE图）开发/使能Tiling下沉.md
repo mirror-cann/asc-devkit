@@ -10,7 +10,7 @@
 >    - Atlas A2 训练系列产品/Atlas A2 推理系列产品
 >    - Atlas 350 加速卡，暂不支持
 
-自定义算子使能Tiling下沉的步骤如下，完整样例请参考[Tiling下沉算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/00_compilation/custom_op)。
+自定义算子使能Tiling下沉的步骤如下，完整样例请参考[Tiling下沉算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/02_features/00_compilation/custom_op)。
 
 Tiling下沉场景下，算子工程的op\_host目录结构如下，Tiling实现文件需单独放在在一个cpp文件中，示例中为add\_custom\_tiling\_sink\_tiling.cpp。
 

@@ -90,7 +90,7 @@ Tiling参数如下：
 **图 2**  使能Tiling常量化的Matmul计算流程示意图<a name="fig146371949194314"></a>  
 ![](../../../figures/使能Tiling常量化的Matmul计算流程示意图.png "使能Tiling常量化的Matmul计算流程示意图")
 
-Matmul API使能Tiling全量常量化的完整样例请参考[Matmul Tiling常量化的算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_constant_tiling)。使能Tiling全量常量化功能的步骤如下：
+Matmul API使能Tiling全量常量化的完整样例请参考[Matmul Tiling常量化的算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_constant_tiling)。使能Tiling全量常量化功能的步骤如下：
 
 1.  调用获取MatmulConfig模板的接口GetMMConfig时，使用常数值设置MatmulShapeParams，得到带有常量化参数的自定义MatmulConfig模板CUSTOM\_CFG。
 

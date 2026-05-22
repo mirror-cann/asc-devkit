@@ -109,7 +109,7 @@ Tiling参数如下：
 **图 2**  纯Cube模式的Matmul流程示意图<a name="fig20558182319127"></a>  
 ![](../../../figures/纯Cube模式的Matmul流程示意图.png "纯Cube模式的Matmul流程示意图")
 
-Matmul API使能纯Cube模式的完整样例请参考[纯Cube模式的Matmul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul)。使能纯Cube模式的主要步骤如下：
+Matmul API使能纯Cube模式的完整样例请参考[纯Cube模式的Matmul样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul)。使能纯Cube模式的主要步骤如下：
 
 1.  Kernel侧，在定义Matmul对象的代码中，包含matmul\_intf.h头文件前设置ASCENDC\_CUBE\_ONLY宏。
 

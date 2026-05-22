@@ -72,7 +72,7 @@
 **图 1**  开启多核切K<a name="fig194841921104410"></a>  
 ![](../../../figures/开启多核切K.png "开启多核切K")
 
-使能多核切K功能的方式为：在GetTiling接口前调用EnableMultiCoreSplitK接口，使能多核切K，并在Kernel实现中，对C矩阵的Global Memory地址清零后开启AtomicAdd。使能多核切K的完整样例请参考[多核切K场景的算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_splitk)。具体步骤如下：
+使能多核切K功能的方式为：在GetTiling接口前调用EnableMultiCoreSplitK接口，使能多核切K，并在Kernel实现中，对C矩阵的Global Memory地址清零后开启AtomicAdd。使能多核切K的完整样例请参考[多核切K场景的算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_splitk)。具体步骤如下：
 
 -   Tiling实现
 

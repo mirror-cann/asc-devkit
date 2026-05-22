@@ -24,7 +24,7 @@
 
 ## 调用示例<a name="zh-cn_topic_0000002264134832_section15486294368"></a>
 
-完整的算子样例请参考[matmul\_channelsplit算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_channelsplit_output)。
+完整的算子样例请参考[matmul\_channelsplit算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_channelsplit_output)。
 
 ```
 // 指定获取和修改的MatmulConfig模板

@@ -87,7 +87,7 @@
 **图 2**  开启UnitFlag功能<a name="fig58335714416"></a>  
 ![](../../../figures/开启UnitFlag功能.png "开启UnitFlag功能")
 
-Matmul API使能UnitFlag功能的完整样例请参考[使能UnitFlag功能和MDL模板的Mamtul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_unitflag)。使能UnitFlag功能的主要步骤如下：
+Matmul API使能UnitFlag功能的完整样例请参考[使能UnitFlag功能和MDL模板的Mamtul样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_unitflag)。使能UnitFlag功能的主要步骤如下：
 
 1.  自定义MatmulConfig模板参数，将其中的enUnitFlag参数设置为true，使能UnitFlag功能。
 

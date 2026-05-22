@@ -1,6 +1,6 @@
 # TBuf的使用<a name="ZH-CN_TOPIC_0000002500548088"></a>
 
-在大多数算子开发时，核函数计算过程需要使用临时内存来存储运算的中间结果，这些中间结果以临时变量表示，临时变量占用的内存可以使用TBuf数据结构来管理，具体介绍请参考[TBuf](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta1/API/ascendcopapi/atlasascendc_api_07_0160.html)。下文将以输入的数据类型为bfloat16\_t、在单核上运行的Add算子为例，介绍TBuf的使用方式。本样例中介绍的算子完整代码请参见[使用临时内存的Add算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/04_resource_management/tmp_buffer)。
+在大多数算子开发时，核函数计算过程需要使用临时内存来存储运算的中间结果，这些中间结果以临时变量表示，临时变量占用的内存可以使用TBuf数据结构来管理，具体介绍请参考[TBuf](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta1/API/ascendcopapi/atlasascendc_api_07_0160.html)。下文将以输入的数据类型为bfloat16\_t、在单核上运行的Add算子为例，介绍TBuf的使用方式。本样例中介绍的算子完整代码请参见[使用临时内存的Add算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.1/examples/01_simd_cpp_api/02_features/03_basic_api/04_resource_management/tmp_buffer)。
 
 在Atlas A2 训练系列产品/Atlas 800I A2 推理产品上，[Add](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta1/API/ascendcopapi/atlasascendc_api_07_0035.html)接口不支持对数据类型bfloat16\_t的源操作数进行求和计算。因此，需要先将算子输入的数据类型转换成Add接口支持的数据类型，再进行计算。为保证计算精度，调用[Cast](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta1/API/ascendcopapi/atlasascendc_api_07_0073.html)接口将输入bfloat16\_t类型转换为float类型，再进行Add计算，并在计算结束后将float类型转换回bfloat16\_t类型。
 
