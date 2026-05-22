@@ -14,7 +14,6 @@
  */
 #ifndef IMPL_STD_MIN_H
 #define IMPL_STD_MIN_H
-#include "../type_traits/is_same.h"
 
 namespace AscendC {
 namespace Std {

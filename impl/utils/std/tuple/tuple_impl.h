@@ -22,7 +22,7 @@
 #include "../utility/forward.h"
 #include "../type_traits/decay.h"
 #include "../type_traits/enable_if.h"
-#include "../type_traits/integral_constant.h"
+#include "../type_traits/Int.h"
 #include "../type_traits/is_same.h"
 #include "../type_traits/remove_const.h"
 #include "../type_traits/remove_cv.h"

@@ -223,3 +223,35 @@ TEST(IntegralConstantTest, RuntimeUsage) {
     }
     EXPECT_EQ(sum, 6); // 0+1+2+3=6
 }
+
+TEST(IntegralConstantTest, IntNamedBinaryFunctions) {
+    using namespace AscendC::Std;
+    using MaxType = decltype(max(_3{}, _7{}));
+    using MinType = decltype(min(_3{}, _7{}));
+    using DivideType = decltype(divide(Int<12>{}, _3{}));
+    using CeilDivisionType = decltype(ceil_division(_10{}, _4{}));
+    using CeilAlignType = decltype(ceil_align(_10{}, _4{}));
+
+    EXPECT_TRUE((is_same_v<MaxType, _7>));
+    EXPECT_TRUE((is_same_v<MinType, _3>));
+    EXPECT_TRUE((is_same_v<DivideType, _4>));
+    EXPECT_TRUE((is_same_v<CeilDivisionType, _3>));
+    EXPECT_TRUE((is_same_v<CeilAlignType, Int<12>>));
+
+    EXPECT_EQ(max(_3{}, _7{}), 7);
+    EXPECT_EQ(min(_3{}, _7{}), 3);
+    EXPECT_EQ(divide(Int<12>{}, _3{}), 4);
+    EXPECT_EQ(ceil_division(_10{}, _4{}), 3);
+    EXPECT_EQ(ceil_align(_10{}, _4{}), 12);
+
+    EXPECT_EQ(max(_3{}, 5U), 5U);
+    EXPECT_EQ(max(5U, _3{}), 5U);
+    EXPECT_EQ(min(_3{}, 5U), 3U);
+    EXPECT_EQ(min(5U, _3{}), 3U);
+    EXPECT_EQ(divide(Int<12>{}, 3U), 4U);
+    EXPECT_EQ(divide(12U, _3{}), 4U);
+    EXPECT_EQ(ceil_division(_10{}, 4U), 3U);
+    EXPECT_EQ(ceil_division(10U, _4{}), 3U);
+    EXPECT_EQ(ceil_align(_10{}, 4U), 12U);
+    EXPECT_EQ(ceil_align(10U, _4{}), 12U);
+}
