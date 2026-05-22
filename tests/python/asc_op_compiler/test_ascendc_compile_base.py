@@ -238,6 +238,22 @@ class TestAscendCCompileBase(unittest.TestCase):
                     self.assertEqual(compile_option_tuple.compile_options[0], "-D__ASCENDC_SUPERKERNEL_EARLY_START_V2")
                     self.assertEqual(compile_option_tuple.compile_options[1], "-D__ASCENDC_ENABLE_SET_NEXT_TASK_START")
 
+        # aclgraph sub combine path records flags through global storage, not legacy macros.
+        global_var_storage.global_storage_reset()
+        with asc_op_compile_base.common.context.op_context.OpContext() as ctx:
+            with buildcfg.build_config():
+                with mock.patch.object(asc_op_compile_base.common.context.get_context(), 'get_addition',\
+                    return_value=True):
+                    compile_option_tuple = CompileOptionTuple([], [])
+                    compile_info = CompileInfo()
+                    compile_info.super_kernel_early_start_set_flag = True
+                    compile_info.super_kernel_early_start_wait_flag = True
+                    gen_sub_super_kernel_early_start_compile_options(compile_option_tuple, compile_info)
+                    self.assertEqual(len(compile_option_tuple.compile_options), 0)
+                    self.assertTrue(global_var_storage.get_variable("ascendc_sub_super_kernel_early_start_set_flag"))
+                    self.assertTrue(global_var_storage.get_variable("ascendc_sub_super_kernel_early_start_wait_flag"))
+        global_var_storage.global_storage_reset()
+
         # super_kernel_sub_info assert
         with asc_op_compile_base.common.context.op_context.OpContext() as ctx:
             with buildcfg.build_config():

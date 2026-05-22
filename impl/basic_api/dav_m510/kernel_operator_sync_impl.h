@@ -126,6 +126,18 @@ __aicore__ inline uint16_t GetffstMsg(uint16_t mode, uint16_t flagId)
     return (0x1 + ((mode & 0x3) << SYNC_MODE_SHIFT_VALUE) + ((flagId & 0xf) << SYNC_FLAG_SHIFT_VALUE));
 }
 
+template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
+__aicore__ inline void SetNextTaskStartImpl()
+{
+    ASCENDC_REPORT_NOT_SUPPORT(false, "SetNextTaskStart");
+}
+
+template<int8_t earlyStartConfig = -1, bool FORCE = false>
+__aicore__ inline void WaitPreTaskEndImpl()
+{
+    ASCENDC_REPORT_NOT_SUPPORT(false, "WaitPreTaskEnd");
+}
+
 __aicore__ inline uint8_t GetIntraFlagId(uint8_t instID, uint8_t eventType, uint8_t subBlockId)
 {
     return (instID + eventType + subBlockId * INTRA_NUM);

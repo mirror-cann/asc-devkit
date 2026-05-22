@@ -42,12 +42,13 @@ namespace AscendC {
  * @brief：In SuperKernel fusion mode, set wait flag between two operators
  */
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ != 1001) && (__NPU_ARCH__ != 2002)
-template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX>
+template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
 #else
-template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3>
+template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3, bool FORCE = false>
 #endif
 __aicore__ inline void SetNextTaskStart();
 
+template<bool FORCE = false>
 __aicore__ inline void WaitPreTaskEnd();
 
 __aicore__ inline void InitSocState();

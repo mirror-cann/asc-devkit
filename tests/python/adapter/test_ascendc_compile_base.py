@@ -59,7 +59,7 @@ class TestAscendCCompileBase(unittest.TestCase):
 
     def test_gen_file_header(self):
         file_header = gen_file_header(KernelMetaType.KERNEL_TYPE_AIV_ONLY, 1)
-        self.assertIn("__DAV_C220_VEC__", file_header)
+        self.assertIn("__NPU_ARCH__ == 2201", file_header)
 
    
 
@@ -104,7 +104,7 @@ class TestAscendCCompileBase(unittest.TestCase):
 
         compile_option_tuple = CompileOptionTuple([], [])
         tiling_info = TilingInfo()
-        tiling_info.block_dim = 10
+        tiling_info.block_num = 10
         sp_add_sub_op_block_num_macro(compile_option_tuple, tiling_info)
         self.assertEqual(len(compile_option_tuple.compile_options), 1)
         self.assertIn("-D__SUPER_KERNEL_STATIC_BLOCK_NUM__=10", compile_option_tuple.compile_options)
@@ -238,6 +238,22 @@ class TestAscendCCompileBase(unittest.TestCase):
                     self.assertEqual(len(compile_option_tuple.compile_options), 3)
                     self.assertEqual(compile_option_tuple.compile_options[0], "-D__ASCENDC_SUPERKERNEL_EARLY_START_V2")
                     self.assertEqual(compile_option_tuple.compile_options[1], "-D__ASCENDC_ENABLE_SET_NEXT_TASK_START")
+
+        # aclgraph sub combine path records flags through global storage, not legacy macros.
+        global_var_storage.global_storage_reset()
+        with tbe.common.context.op_context.OpContext() as ctx:
+            with buildcfg.build_config():
+                with mock.patch.object(tbe.common.context.get_context(), 'get_addition',\
+                    return_value=True):
+                    compile_option_tuple = CompileOptionTuple([], [])
+                    compile_info = CompileInfo()
+                    compile_info.super_kernel_early_start_set_flag = True
+                    compile_info.super_kernel_early_start_wait_flag = True
+                    gen_sub_super_kernel_early_start_compile_options(compile_option_tuple, compile_info)
+                    self.assertEqual(len(compile_option_tuple.compile_options), 0)
+                    self.assertTrue(global_var_storage.get_variable("ascendc_sub_super_kernel_early_start_set_flag"))
+                    self.assertTrue(global_var_storage.get_variable("ascendc_sub_super_kernel_early_start_wait_flag"))
+        global_var_storage.global_storage_reset()
 
         # super_kernel_sub_info assert
         with tbe.common.context.op_context.OpContext() as ctx:

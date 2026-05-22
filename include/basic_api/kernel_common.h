@@ -64,9 +64,7 @@ template <auto funcPtr, typename... Args> __aicore__ inline void asc_vf_call(Arg
 }
 
 #if __NPU_ARCH__ == 2201 || (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
-#if defined(__ASCENDC_SUPERKERNEL_EARLY_START_V1) || defined(__ASCENDC_SUPERKERNEL_EARLY_START_V2)
 __BLOCK_LOCAL__ __inline__ uint32_t g_super_kernel_early_start_config;
-#endif
 
 #ifdef SPLIT_CORE_CUBE
 __BLOCK_LOCAL__ __inline__ AscendC::TPipe* g_cubeTPipePtr;

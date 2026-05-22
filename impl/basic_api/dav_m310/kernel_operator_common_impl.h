@@ -55,13 +55,13 @@ __aicore__ inline GM_ADDR GetUserWorkspace(GM_ADDR workspace)
 #endif
 }
 
-template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX>
+template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
 __aicore__ inline void SetNextTaskStartImpl()
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "unsupported SetNextTaskStart on current device"); });
 }
 
-template<int8_t earlyStartConfig = -1>
+template<int8_t earlyStartConfig = -1, bool FORCE = false>
 __aicore__ inline void WaitPreTaskEndImpl()
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "unsupported WaitPreTaskEnd on current device"); });

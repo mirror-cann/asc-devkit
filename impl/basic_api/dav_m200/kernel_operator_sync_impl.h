@@ -94,13 +94,13 @@ __aicore__ inline void SoftSyncAllImpl(__gm__ int32_t* gmWorkspaceAddr, __ubuf__
     __sync_all_stub(usedCores, isAIVOnly);
 }
 
-template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3>
+template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3, bool FORCE = false>
 __aicore__ inline void SetNextTaskStartImpl()
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "SetNextTaskStart");
 }
 
-template<int8_t earlyStartConfig = -1>
+template<int8_t earlyStartConfig = -1, bool FORCE = false>
 __aicore__ inline void WaitPreTaskEndImpl()
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "WaitPreTaskEnd");

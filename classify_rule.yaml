@@ -52,6 +52,7 @@ asc-devkit:
       - impl/adv_api/detail/hcomm/impl/platform_v310/hcomm_aiv_def.h
       - impl/basic_api/dav_c100/kernel_operator_dump_tensor_impl.h
       - impl/basic_api/dav_m310/kernel_operator_dump_tensor_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_common_impl.h
       - impl/basic_api/dav_m200/kernel_operator_dump_tensor_impl.h
       - impl/basic_api/dav_c220/kernel_operator_dump_tensor_impl.h
       - impl/c_api/instr_impl/npu_arch_2201/debug_impl/printf_impl.h

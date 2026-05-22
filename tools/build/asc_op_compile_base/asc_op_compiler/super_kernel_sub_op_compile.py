@@ -88,8 +88,11 @@ def gen_gm_get_set_value_dcci_compile_options(compile_option_tuple, compile_info
 
 
 def gen_sub_super_kernel_early_start_compile_options(compile_option_tuple, compile_info):
-    # For aclgraph+sk workflow (super_kernel_sub_combine), disable early start mode
     if get_context().get_addition("super_kernel_sub_combine") is True:
+        if compile_info.super_kernel_early_start_set_flag:
+            global_var_storage.set_variable("ascendc_sub_super_kernel_early_start_set_flag", True)
+        if compile_info.super_kernel_early_start_wait_flag:
+            global_var_storage.set_variable("ascendc_sub_super_kernel_early_start_wait_flag", True)
         return
     early_start_mode = compile_info.super_kernel_info["sp_options"].get('early-start', \
         SuperKernelEarlyStartMode.EarlyStartEnableV2)

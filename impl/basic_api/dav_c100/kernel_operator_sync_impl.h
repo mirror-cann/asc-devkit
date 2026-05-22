@@ -93,13 +93,13 @@ __aicore__ inline void SoftSyncAllImpl(__gm__ int32_t* gmWorkspaceAddr, __ubuf__
     }
 }
 
-template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3>
+template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3, bool FORCE = false>
 __aicore__ inline void SetNextTaskStartImpl()
 {
     ASSERT(0 && "unsupported SetNextTaskStart on current device");
 }
 
-template<int8_t earlyStartConfig = -1>
+template<int8_t earlyStartConfig = -1, bool FORCE = false>
 __aicore__ inline void WaitPreTaskEndImpl()
 {
     ASSERT(0 && "unsupported WaitPreTaskEnd on current device");
