@@ -183,8 +183,7 @@ __aicore__ inline void Compute(int32_t progress)
     AscendC::LocalTensor<T> broadcastTmpTensor = tmpBuf2.Get<T>();
     uint32_t dstShape[] = {this->tileLength / this->coef, this->coef};
     uint32_t srcShape[] = {this->tileLength / this->coef, 1};
-    AscendC::BroadCast<T, 2, 1>(broadcastTmpTensor, yLocal, dstShape, srcShape);
+    AscendC::Broadcast<T, 2, 1>(broadcastTmpTensor, yLocal, dstShape, srcShape);
     ...
 }
 ```
-
