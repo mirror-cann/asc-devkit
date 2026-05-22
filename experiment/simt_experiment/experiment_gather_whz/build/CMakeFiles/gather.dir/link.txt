@@ -1,0 +1,1 @@
+/usr/local/Ascend/cann-9.1.0/bin/bisheng CMakeFiles/gather.dir/gather.asc.o -o gather  -lm -lplatform -ltiling_api -ldl 
