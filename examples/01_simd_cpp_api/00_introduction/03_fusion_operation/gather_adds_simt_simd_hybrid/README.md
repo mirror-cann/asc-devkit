@@ -10,14 +10,15 @@
 ## 支持的CANN软件版本
 - \>= CANN 9.0.0-beta.2
 
-## 目录结构
-```
+## 目录结构介绍
+
+```text
 ├── gather_adds_simt_simd_hybrid
 │   ├── scripts
-│   │   ├── gen_data.py         # 输入数据和真值数据生成脚本
-│   │   └── verify_result.py    # 真值对比文件
-│   ├── CMakeLists.txt          # cmake编译文件
-│   ├── gather_and_adds.asc     # Ascend C样例实现 & 调用样例
+│   │   ├── gen_data.py         // 输入数据和真值数据生成脚本
+│   │   └── verify_result.py    // 真值对比文件
+│   ├── CMakeLists.txt          // cmake编译文件
+│   ├── gather_and_adds.asc     // Ascend C样例实现 & 调用样例
 │   └── README.md
 ```
 
@@ -95,6 +96,7 @@
     ```
 
 - 样例执行
+
   ```bash
   mkdir -p build && cd build;                                               # 创建并进入build目录
   cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j;                      # 编译工程（默认npu模式）
@@ -106,6 +108,7 @@
   使用 NPU仿真 模式时，添加 `-DCMAKE_ASC_RUN_MODE=sim` 参数即可。
 
   示例如下：
+
   ```bash
   cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j; # NPU仿真模式
   ```
@@ -117,7 +120,7 @@
 | 选项 | 可选值 | 说明 |
 |------|--------|------|
 | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`sim` | 运行模式：NPU 运行、NPU仿真 |
-| `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：dav-3510 对应 Ascend 950PR/Ascend 950DT |
+| `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
 
 - 执行结果  
   执行结果如下，说明精度对比成功。

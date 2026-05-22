@@ -12,13 +12,13 @@
 ## 支持的CANN软件版本
 - \>= CANN 9.0.0-beta.2
 
-## 目录结构
+## 目录结构介绍
 
-```
-├── 14_simt_and_simd_floor_mod
-│   ├── CMakeLists.txt         # cmake编译文件
-│   ├── floor_mod.asc    # Ascend C算子实现 & 调用样例
-|   └── README.md
+```text
+├── simt_and_simd_floor_mod
+│   ├── CMakeLists.txt         // cmake编译文件
+│   ├── floor_mod.asc          // Ascend C算子实现 & 调用样例
+│   └── README.md
 ```
 
 ## 算子描述
@@ -115,11 +115,31 @@
     ```
     
 - 样例执行
+
   ```bash
   mkdir -p build && cd build;   # 创建并进入build目录
-  cmake ..; make -j;            # 编译工程
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..; make -j;   # 编译工程
   ./demo                        # 执行样例
   ```
+
+  使用NPU仿真模式时，添加 `-DRUN_MODE=sim` 和 `-DSOC_VERSION=${SOC_VERSION}` 参数即可。其中，`${SOC_VERSION}` 为实际NPU型号，可通过 `npu-smi info` 命令进行查询，如 `Ascend950PR_9599`。
+
+  示例如下：
+
+  ```bash
+  cmake -DRUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSOC_VERSION=${SOC_VERSION} ..; make -j;   # NPU仿真模式
+  ```
+
+  > **注意：** 切换编译模式前需清理 cmake 缓存，可在 build 目录下执行 `rm CMakeCache.txt` 后重新 cmake。
+
+  编译选项说明
+
+  | 选项 | 可选值 | 说明 |
+  |------|--------|------|
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
+  | `RUN_MODE` | `npu`（默认）、`sim` | 运行模式：NPU运行、NPU仿真 |
+  | `SOC_VERSION` | 实际NPU型号 | NPU仿真库路径中的SOC版本，可通过 `npu-smi info` 命令查询 |
+
   执行结果如下，说明精度对比成功。
   ```
   [Success] Case accuracy is verification passed.

@@ -40,12 +40,22 @@
     ```
 
 - 样例执行
+
   ```bash
   mkdir -p build && cd build;   # 创建并进入build目录
-  cmake ..;make -j;             # 编译工程
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j;                      # 编译工程
   ./demo                        # 执行样例
   ```
-  执行后有如下打印，说明执行成功。
+  
+  编译选项说明
+
+  | 选项 | 可选值 | 说明 |
+  |------|--------|------|
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
+
+- 执行结果
+  执行结果如下，说明执行成功。
+
   ```bash
   [blockIdx (0/2)][threadIdx (2/32)]: Hello World!
   [blockIdx (0/2)][threadIdx (1/32)]: Hello World!

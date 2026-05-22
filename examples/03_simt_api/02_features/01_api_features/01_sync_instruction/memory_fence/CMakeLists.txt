@@ -16,6 +16,7 @@ find_package(ASC REQUIRED)
 project(kernel_samples LANGUAGES ASC CXX)
 
 set(SCENARIO_NUM "1" CACHE STRING "Scene number (1-2)")
+set(CMAKE_ASC_ARCHITECTURES "dav-3510" CACHE STRING "NPU ARCH, e.g. dav-3510")
 
 if(SCENARIO_NUM EQUAL 1)
     set(SCENARIO_SRC sync_barrier.asc)
@@ -34,5 +35,5 @@ add_executable(demo
 #   - 需根据实际部署的 NPU 硬件架构选择对应的 `npu-arch` 参数。
 # ======================================================================================
 target_compile_options(demo PRIVATE
-    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=dav-3510 --enable-simt>
+    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES} --enable-simt>
 )

@@ -14,7 +14,7 @@
 ├── matrix_transpose
 │   ├── CMakeLists.txt         // 编译工程文件
 │   ├── matrix_transpose.asc   // 矩阵转置样例实现
-│   ├── figures                // 图示
+│   ├── figures                // README中的图片资源
 │   └── README.md
 ```
 
@@ -260,14 +260,15 @@ output[index_out] = tile[tile_col][tile_row];
   ```bash
   SCENARIO_NUM=0                       # 选择执行场景，可选0-1
   mkdir -p build && cd build;          # 创建并进入build目录
-  cmake -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j;  # 编译工程
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j;  # 编译工程
   ./demo                               # 执行样例
   ```
 
-- 编译选项说明
+  编译选项说明
 
   | 选项             | 可选值      | 说明              |
   | ---------------- | ----------- | ----------------- |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
   | `SCENARIO_NUM` | `0`-`1` | 样例类型，默认为0 |
 
   执行结果如下，说明精度对比成功。

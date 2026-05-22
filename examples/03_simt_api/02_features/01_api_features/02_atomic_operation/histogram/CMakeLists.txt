@@ -15,8 +15,10 @@ find_package(ASC REQUIRED)
 project(histogram LANGUAGES ASC CXX)
 
 add_executable(histogram
-        histogram.asc
+    histogram.asc
 )
+
+set(CMAKE_ASC_ARCHITECTURES "dav-3510" CACHE STRING "NPU ARCH, e.g. dav-3510")
 
 # ======================================================================================
 # NPU 编译选项配置
@@ -25,7 +27,7 @@ add_executable(histogram
 #   - 需根据实际部署的 NPU 硬件架构选择对应的 `npu-arch` 参数。
 # ======================================================================================
 target_compile_options(histogram PRIVATE
-    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=dav-3510 --enable-simt>
+    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES} --enable-simt>
 )
 
 target_link_libraries(histogram PRIVATE
