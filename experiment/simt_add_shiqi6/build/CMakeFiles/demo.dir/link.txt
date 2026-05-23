@@ -1,0 +1,1 @@
+/usr/local/Ascend/cann-9.1.0/bin/bisheng CMakeFiles/demo.dir/add.asc.o -o demo 

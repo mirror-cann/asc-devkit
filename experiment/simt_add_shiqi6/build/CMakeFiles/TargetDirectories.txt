@@ -1,0 +1,3 @@
+/home/asc-devkit/experiment/simt_add_shiqi6/build/CMakeFiles/demo.dir
+/home/asc-devkit/experiment/simt_add_shiqi6/build/CMakeFiles/edit_cache.dir
+/home/asc-devkit/experiment/simt_add_shiqi6/build/CMakeFiles/rebuild_cache.dir
