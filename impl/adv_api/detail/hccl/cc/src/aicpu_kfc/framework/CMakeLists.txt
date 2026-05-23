@@ -131,7 +131,7 @@ foreach (dir ${sources_list})
 endforeach()
 
 if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
-    add_library(ccl_kernel  SHARED)
+    add_library(asc_ccl_kernel  SHARED)
 
     set(CCL_KERNEL_SRC_LIST
         ${HCCL_BASE_DIR}/algorithm/impl/alg_env_config.cc
@@ -450,11 +450,11 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         ${HCCL_BASE_DIR}/framework/communicator/impl/independent_op/hccl_independent_rank_graph.cc
         ${HCCL_BASE_DIR}/framework/communicator/impl/one_sided_service/i_hccl_one_sided_service.cc
     )
-    target_sources(ccl_kernel PRIVATE
+    target_sources(asc_ccl_kernel PRIVATE
         ${CCL_KERNEL_SRC_LIST}
     )
 
-    target_compile_options(ccl_kernel PRIVATE
+    target_compile_options(asc_ccl_kernel PRIVATE
         -Wfloat-equal
         -Wall
         -fno-common
@@ -465,14 +465,14 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         -std=c++14
     )
 
-    target_link_options(ccl_kernel PRIVATE
+    target_link_options(asc_ccl_kernel PRIVATE
     -Wl,-z,relro
     -Wl,-z,now
     -Wl,-z,noexecstack
     -s
 )
     
-    target_compile_definitions(ccl_kernel PRIVATE
+    target_compile_definitions(asc_ccl_kernel PRIVATE
         HCCD
         CCL_KERNEL_AICPU
     )
@@ -620,15 +620,15 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         ${HCCL_BASE_DIR}/framework/next/coll_comms/dfx
     )
 
-    target_include_directories(ccl_kernel PRIVATE
+    target_include_directories(asc_ccl_kernel PRIVATE
         ${CCL_KERNEL_INCLUDE_LIST}
     )
 
 
-    target_include_directories(ccl_kernel PRIVATE ${ORION_HEAD_LIST})
+    target_include_directories(asc_ccl_kernel PRIVATE ${ORION_HEAD_LIST})
     if(TARGET json)
-        target_link_libraries(ccl_kernel PRIVATE json)
-        add_dependencies(ccl_kernel json)
+        target_link_libraries(asc_ccl_kernel PRIVATE json)
+        add_dependencies(asc_ccl_kernel json)
     endif()
 
     function(add_mc2_server_ccl_object target_name)
@@ -636,11 +636,11 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
             add_library(${target_name} OBJECT ${ARGN})
             set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE ON)
             target_compile_definitions(${target_name} PRIVATE
-                $<TARGET_PROPERTY:ccl_kernel,COMPILE_DEFINITIONS>
+                $<TARGET_PROPERTY:asc_ccl_kernel,COMPILE_DEFINITIONS>
                 MC2_SERVER_ONLY
             )
             target_compile_options(${target_name} PRIVATE
-                $<TARGET_PROPERTY:ccl_kernel,COMPILE_OPTIONS>
+                $<TARGET_PROPERTY:asc_ccl_kernel,COMPILE_OPTIONS>
             )
             target_include_directories(${target_name} PRIVATE
                 ${CCL_KERNEL_INCLUDE_LIST}
@@ -664,16 +664,16 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         add_library(mc2_server_ccl_kernel_stub SHARED
             ${MC2_SERVER_CCL_KERNEL_STUB_SRC})
         set_target_properties(mc2_server_ccl_kernel_stub PROPERTIES
-            OUTPUT_NAME ccl_kernel
+            OUTPUT_NAME asc_ccl_kernel
             LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mc2_server_link_stub)
         target_link_options(mc2_server_ccl_kernel_stub PRIVATE
             -Wl,-soname,libccl_kernel.so)
 
         target_compile_definitions(mc2_server PRIVATE
-            $<TARGET_PROPERTY:ccl_kernel,COMPILE_DEFINITIONS>
+            $<TARGET_PROPERTY:asc_ccl_kernel,COMPILE_DEFINITIONS>
         )
         target_compile_options(mc2_server PRIVATE
-            $<TARGET_PROPERTY:ccl_kernel,COMPILE_OPTIONS>
+            $<TARGET_PROPERTY:asc_ccl_kernel,COMPILE_OPTIONS>
         )
         target_include_directories(mc2_server PRIVATE
             ${CCL_KERNEL_INCLUDE_LIST}
@@ -688,8 +688,8 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
             mc2_server_ccl_kernel_stub
             ${HCCL_C_SEC_LINK}
             ${HCCL_UNIFIED_DLOG_LINK}
-            ccl_kernel_plf
-            ccl_kernel_plf_a
+            asc_ccl_kernel_plf
+            asc_ccl_kernel_plf_a
             ${HCCL_MMPA_LINK}
             -Wl,--as-needed
             -lrt
@@ -713,17 +713,17 @@ if(NOT BUILD_OPEN_PROJECT)
     FILE(GLOB_RECURSE sources_list LIST_DIRECTORIES TRUE ${TOP_DIR}/ace/comop/hccl/orion/*)
     foreach (dir ${sources_list})
         IF ((IS_DIRECTORY ${dir}))
-            target_include_directories(ccl_kernel PRIVATE ${dir})
+            target_include_directories(asc_ccl_kernel PRIVATE ${dir})
         endif()
     endforeach()
 
     FILE(GLOB_RECURSE open_dir_list LIST_DIRECTORIES TRUE ${TOP_DIR}/ace/comop/hccl/whole/hccl_next/*)
     foreach (dir ${open_dir_list})
         IF ((IS_DIRECTORY ${dir}))
-            target_include_directories(ccl_kernel PRIVATE ${dir})
+            target_include_directories(asc_ccl_kernel PRIVATE ${dir})
         endif()
     endforeach()
-    target_include_directories(ccl_kernel PRIVATE
+    target_include_directories(asc_ccl_kernel PRIVATE
         ${HCCL_HCOMM_HEADER_DIR}/hccl
         ${HCCL_BASE_DIR}/pub_inc
         ${HCCL_BASE_DIR}/pub_inc/inner
@@ -844,18 +844,18 @@ if(NOT BUILD_OPEN_PROJECT)
             ${HCCL_BASE_DIR}/framework/communicator/impl/independent_op/resource/engine
         )
     endif()
-    target_link_libraries(ccl_kernel PRIVATE
+    target_link_libraries(asc_ccl_kernel PRIVATE
         $<BUILD_INTERFACE:intf_pub_cxx14>
         $<BUILD_INTERFACE:mmpa_headers>
         $<BUILD_INTERFACE:msprof_headers>
         $<BUILD_INTERFACE:slog_headers>
-        $<BUILD_INTERFACE:hccl_headers>
+        $<BUILD_INTERFACE:asc_hccl_headers>
         $<BUILD_INTERFACE:npu_runtime_headers>
         $<BUILD_INTERFACE:atrace_headers>
         $<BUILD_INTERFACE:kernel_tiling_headers>
         -Wl,--no-as-needed
         ${HCCL_C_SEC_LINK}
-        ccl_kernel_plf
+        asc_ccl_kernel_plf
         ${HCCL_MMPA_LINK}
         -Wl,--as-needed
         -lrt
@@ -867,7 +867,7 @@ if(NOT BUILD_OPEN_PROJECT)
         unified_dlog
     )
 
-    install(TARGETS  ccl_kernel
+    install(TARGETS  asc_ccl_kernel
         LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}  OPTIONAL
     )
 endif()
@@ -883,20 +883,20 @@ add_subdirectory(next)
 if(NOT KERNEL_MODE)
     SET(HCCL_CMAKE_DIR ${HCCL_CC_DIR}/cmake/)
     message(STATUS "HCCL_CMAKE_DIR = ${HCCL_CMAKE_DIR}")
-    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ccl_kernel.json
-        COMMAND ${HI_PYTHON} ${HCCL_CMAKE_DIR}/scripts/parser_ini.py ${CMAKE_CURRENT_SOURCE_DIR}/device/framework/ccl_kernel.ini ${CMAKE_CURRENT_BINARY_DIR}/ccl_kernel.json
+    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/asc_ccl_kernel.json
+        COMMAND ${HI_PYTHON} ${HCCL_CMAKE_DIR}/scripts/parser_ini.py ${CMAKE_CURRENT_SOURCE_DIR}/device/framework/asc_ccl_kernel.ini ${CMAKE_CURRENT_BINARY_DIR}/asc_ccl_kernel.json
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
-    add_custom_target(ccl_kernel_json DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ccl_kernel.json)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ccl_kernel.json
+    add_custom_target(ccl_kernel_json DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/asc_ccl_kernel.json)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/asc_ccl_kernel.json
         DESTINATION ${INSTALL_CCL_KERNEL_JSON_DIR} OPTIONAL
     )
 
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json
-        COMMAND ${HI_PYTHON} ${HCCL_CMAKE_DIR}/scripts/parser_ini.py ${CMAKE_CURRENT_SOURCE_DIR}/device/framework/aicpu_custom.ini ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json
+        COMMAND ${HI_PYTHON} ${HCCL_CMAKE_DIR}/scripts/parser_ini.py ${CMAKE_CURRENT_SOURCE_DIR}/device/framework/asc_aicpu_custom.ini ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
-    add_custom_target(aicpu_custom_json DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json)
+    add_custom_target(asc_aicpu_custom_json DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json
         DESTINATION ${INSTALL_CCL_KERNEL_JSON_DIR} OPTIONAL
     )
@@ -914,20 +914,20 @@ endif()
 if(BUILD_OPEN_PROJECT AND KERNEL_MODE)
     if(BUILD_OPEN_PROJECT)
         set(CMAKE_CXX_FLAGS "")
-        target_compile_definitions(ccl_kernel PRIVATE
+        target_compile_definitions(asc_ccl_kernel PRIVATE
             OPEN_BUILD_PROJECT
             -D_GLIBCXX_USE_CXX11_ABI=1) # 链接ascendalog需要LOG_CPP，链接slog不需要
  
         set(CCL_KERNEL_PLF_PATH
             -Wl,--whole-archive
-            ccl_kernel_plf_a
+            asc_ccl_kernel_plf_a
             -Wl,--no-whole-archive
             -Wl,-Bsymbolic
         )
         if(FULL_MODE)
-            set(CCL_KERNEL_PLF_PATH ccl_kernel_plf)
+            set(CCL_KERNEL_PLF_PATH asc_ccl_kernel_plf)
         endif()
-        target_link_libraries(ccl_kernel PRIVATE
+        target_link_libraries(asc_ccl_kernel PRIVATE
             -Wl,--no-as-needed
             ascend_hal
             c_sec
@@ -942,10 +942,10 @@ if(BUILD_OPEN_PROJECT AND KERNEL_MODE)
         )
 
         add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json
-            COMMAND ${HI_PYTHON} ${HCCL_CC_DIR}/cmake/scripts/parser_ini.py ${HCCL_BASE_DIR}/../src/framework/device/framework/aicpu_custom.ini ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json
+            COMMAND ${HI_PYTHON} ${HCCL_CC_DIR}/cmake/scripts/parser_ini.py ${HCCL_BASE_DIR}/../src/framework/device/framework/asc_aicpu_custom.ini ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
-        add_custom_target(aicpu_custom_json DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json)
+        add_custom_target(asc_aicpu_custom_json DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json
             DESTINATION ${INSTALL_CCL_KERNEL_JSON_DIR} OPTIONAL
         )
@@ -956,11 +956,11 @@ endif()
 if(DEVICE_MODE AND KERNEL_MODE)
     set(CCL_KERNEL_TAR_DIR ${CMAKE_SOURCE_DIR}/build_device/ccl_kernel_tar_pkg/aicpu_kernels_device)
     add_custom_command(
-        TARGET ccl_kernel
+        TARGET asc_ccl_kernel
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CCL_KERNEL_TAR_DIR}
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ccl_kernel> ${CCL_KERNEL_TAR_DIR}
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ccl_kernel_plf> ${CCL_KERNEL_TAR_DIR}
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:asc_ccl_kernel> ${CCL_KERNEL_TAR_DIR}
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:asc_ccl_kernel_plf> ${CCL_KERNEL_TAR_DIR}
         COMMAND chmod 750 ${CCL_KERNEL_TAR_DIR}/lib*
         COMMENT "Copying libccl_kernel_plf.so libccl_kernel.so to ${CCL_KERNEL_TAR_DIR}"
     )
@@ -977,7 +977,7 @@ if(DEVICE_MODE AND KERNEL_MODE)
         ${HCCL_C_SEC_LINK}
         ${HCCL_MMPA_LINK}
         -Wl,--whole-archive
-        ccl_kernel_plf_a
+        asc_ccl_kernel_plf_a
         -Wl,--no-whole-archive
         -Wl,--as-needed
         -lrt
@@ -985,14 +985,14 @@ if(DEVICE_MODE AND KERNEL_MODE)
         -lpthread
     )
 
-    add_library(aicpu_custom SHARED)
-    get_target_property(CCL_KERNEL_ALL_SOURCES ccl_kernel SOURCES)
+    add_library(asc_aicpu_custom SHARED)
+    get_target_property(CCL_KERNEL_ALL_SOURCES asc_ccl_kernel SOURCES)
     if(CCL_KERNEL_ALL_SOURCES)
         list(REMOVE_DUPLICATES CCL_KERNEL_ALL_SOURCES)
-        target_sources(aicpu_custom PRIVATE ${CCL_KERNEL_ALL_SOURCES})
+        target_sources(asc_aicpu_custom PRIVATE ${CCL_KERNEL_ALL_SOURCES})
     endif()
-    target_compile_definitions(aicpu_custom PRIVATE ${AICPU_CUSTOM_COMPILE_DEFINITIONS})
-    target_compile_options(aicpu_custom PRIVATE
+    target_compile_definitions(asc_aicpu_custom PRIVATE ${AICPU_CUSTOM_COMPILE_DEFINITIONS})
+    target_compile_options(asc_aicpu_custom PRIVATE
         -Werror
         -Wfloat-equal
         -Wall
@@ -1003,26 +1003,26 @@ if(DEVICE_MODE AND KERNEL_MODE)
         -O3
         -std=c++14
     )
-    target_link_options(aicpu_custom PRIVATE
+    target_link_options(asc_aicpu_custom PRIVATE
         -Wl,-z,relro
         -Wl,-z,now
         -Wl,-z,noexecstack
         -s
     )
-    target_include_directories(aicpu_custom PRIVATE
+    target_include_directories(asc_aicpu_custom PRIVATE
         ${CCL_KERNEL_INCLUDE_LIST}
         ${ORION_HEAD_LIST}
     )
 
-    target_link_libraries(aicpu_custom PRIVATE ${AICPU_CUSTOM_LINK_LIBRARIES} ascend_hal c_sec unified_dlog)
+    target_link_libraries(asc_aicpu_custom PRIVATE ${AICPU_CUSTOM_LINK_LIBRARIES} ascend_hal c_sec unified_dlog)
 
-    add_dependencies(aicpu_custom ccl_kernel ccl_kernel_plf_a aicpu_custom_json)
-    set_target_properties(aicpu_custom PROPERTIES
-        OUTPUT_NAME aicpu_custom
+    add_dependencies(asc_aicpu_custom asc_ccl_kernel asc_ccl_kernel_plf_a asc_aicpu_custom_json)
+    set_target_properties(asc_aicpu_custom PROPERTIES
+        OUTPUT_NAME asc_aicpu_custom
         PREFIX "lib"
         SUFFIX ".so"
     )
-    install(TARGETS aicpu_custom
+    install(TARGETS asc_aicpu_custom
         LIBRARY DESTINATION ${INSTALL_CCL_KERNEL_JSON_DIR} OPTIONAL
     )
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libaicpu_custom.json

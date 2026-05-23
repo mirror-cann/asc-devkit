@@ -7,7 +7,7 @@
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
 # ----------------------------------------------------------------------------------------------------------
-target_sources(ccl_kernel PRIVATE aicpu_kfc_interface.cc)
+target_sources(asc_ccl_kernel PRIVATE aicpu_kfc_interface.cc)
 
 if(TARGET mc2_server)
     add_library(mc2_server_kernel_entry OBJECT mc2_server_kernel_entry.cc)
@@ -15,14 +15,14 @@ if(TARGET mc2_server)
         POSITION_INDEPENDENT_CODE ON
     )
     target_compile_definitions(mc2_server_kernel_entry PRIVATE
-        $<TARGET_PROPERTY:ccl_kernel,COMPILE_DEFINITIONS>
+        $<TARGET_PROPERTY:asc_ccl_kernel,COMPILE_DEFINITIONS>
         MC2_SERVER_ONLY
     )
     target_compile_options(mc2_server_kernel_entry PRIVATE
-        $<TARGET_PROPERTY:ccl_kernel,COMPILE_OPTIONS>
+        $<TARGET_PROPERTY:asc_ccl_kernel,COMPILE_OPTIONS>
     )
     target_include_directories(mc2_server_kernel_entry PRIVATE
-        $<TARGET_PROPERTY:ccl_kernel,INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:asc_ccl_kernel,INCLUDE_DIRECTORIES>
     )
     target_link_libraries(mc2_server_kernel_entry PRIVATE
         $<BUILD_INTERFACE:acl_rt_headers>

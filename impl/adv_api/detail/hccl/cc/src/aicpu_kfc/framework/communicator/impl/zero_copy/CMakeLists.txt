@@ -18,8 +18,7 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         zero_copy_address_mgr_device.cc
     )
 
-    target_sources(ccl_kernel PRIVATE
+    target_sources(asc_ccl_kernel PRIVATE
         ${src_list_device}
     )
 endif()
-

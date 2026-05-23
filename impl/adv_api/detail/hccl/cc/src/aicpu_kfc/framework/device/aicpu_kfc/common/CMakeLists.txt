@@ -12,7 +12,7 @@ set(src_list
     aicpu_kfc_utils.cc
 )
 
-target_sources(ccl_kernel PRIVATE
+target_sources(asc_ccl_kernel PRIVATE
     ${src_list}
 )
 

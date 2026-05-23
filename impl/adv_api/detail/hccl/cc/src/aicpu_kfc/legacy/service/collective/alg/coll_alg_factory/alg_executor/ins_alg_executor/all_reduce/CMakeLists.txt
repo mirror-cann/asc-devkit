@@ -8,7 +8,7 @@
 # See LICENSE in the root of the software repository for the full text of the License.
 # ----------------------------------------------------------------------------------------------------------
 if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
-target_sources(ccl_kernel PRIVATE
+target_sources(asc_ccl_kernel PRIVATE
         ins_all_reduce_parallel_executor.cc
         ins_all_reduce_sole_executor.cc
         ins_v2_all_reduce_sole_executor.cc

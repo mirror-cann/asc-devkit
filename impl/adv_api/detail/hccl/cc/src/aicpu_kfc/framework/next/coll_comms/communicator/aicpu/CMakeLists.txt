@@ -16,10 +16,10 @@ set(src_list
 )
 
 if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
-    target_include_directories(ccl_kernel PRIVATE
+    target_include_directories(asc_ccl_kernel PRIVATE
         ${HCCL_BASE_DIR}/framework/next/coll_comms/communicator/ns_recovery/aicpu
     )
-    target_sources(ccl_kernel PRIVATE
+    target_sources(asc_ccl_kernel PRIVATE
         ${src_list}
     )
 endif()

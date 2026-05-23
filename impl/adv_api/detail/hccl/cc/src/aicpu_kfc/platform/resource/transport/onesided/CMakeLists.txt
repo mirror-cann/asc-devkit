@@ -18,10 +18,10 @@ set(kernel_src_list
     transport_mem.cc
 )
 
-target_sources(ccl_kernel_plf PRIVATE
+target_sources(asc_ccl_kernel_plf PRIVATE
     ${kernel_src_list}
 )
 
-target_sources(ccl_kernel_plf_a PRIVATE
+target_sources(asc_ccl_kernel_plf_a PRIVATE
     ${kernel_src_list}
 )

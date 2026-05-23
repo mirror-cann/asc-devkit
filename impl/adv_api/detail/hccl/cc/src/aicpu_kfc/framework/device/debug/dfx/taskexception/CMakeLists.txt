@@ -11,6 +11,6 @@ set(src_list
     task_exception.cc
 )
 
-target_sources(ccl_kernel PRIVATE
+target_sources(asc_ccl_kernel PRIVATE
     ${src_list}
 )

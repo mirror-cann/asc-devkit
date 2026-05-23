@@ -17,6 +17,6 @@ set(src_list
     aicpu_alltoall.cc
 )
 
-target_sources(ccl_kernel PRIVATE
+target_sources(asc_ccl_kernel PRIVATE
     ${src_list}
 )

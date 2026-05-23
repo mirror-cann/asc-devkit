@@ -15,12 +15,12 @@ set(src_list
     mem_mapping_manager.cc
 )
 
-target_sources(ccl_kernel_plf PRIVATE
+target_sources(asc_ccl_kernel_plf PRIVATE
     ${src_list}
     mem_mapping_manager_device.cc
 )
 
-target_sources(ccl_kernel_plf_a  PRIVATE
+target_sources(asc_ccl_kernel_plf_a  PRIVATE
     ${src_list}
     mem_mapping_manager_device.cc
 )

@@ -13,10 +13,10 @@ set(src_list
     hccl_dispatcher_ctx.cc
 )
  
-target_sources(ccl_kernel_plf PRIVATE
+target_sources(asc_ccl_kernel_plf PRIVATE
     ${src_list}
 )
 
-target_sources(ccl_kernel_plf_a  PRIVATE
+target_sources(asc_ccl_kernel_plf_a  PRIVATE
     ${src_list}
 )

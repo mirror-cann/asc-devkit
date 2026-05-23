@@ -11,7 +11,7 @@ add_subdirectory(daemon)
 add_subdirectory(one_sided_component)
 
 if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
-target_sources(ccl_kernel PRIVATE
+target_sources(asc_ccl_kernel PRIVATE
     communicator_impl_lite_manager.cc
     communicator_impl_lite.cc
     kernel_entrance.cc

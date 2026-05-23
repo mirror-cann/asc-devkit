@@ -17,4 +17,4 @@ set(srcs
     aicpu_kfc_prof.cc
 )
 
-target_sources(ccl_kernel PRIVATE ${srcs})
+target_sources(asc_ccl_kernel PRIVATE ${srcs})

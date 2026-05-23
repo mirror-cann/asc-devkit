@@ -15,7 +15,7 @@ add_subdirectory(primitive)
 add_subdirectory(alg)
 
 if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
-target_sources(ccl_kernel PRIVATE
+target_sources(asc_ccl_kernel PRIVATE
         coll_operator.cc
         coll_operator_check.cc
 )

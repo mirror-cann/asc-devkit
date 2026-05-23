@@ -164,7 +164,7 @@ HcclResult TransportDirectNpu::LoadAICPUKernel(void)
 #ifndef CCL_KERNEL
     std::string jsonPath;
     CHK_RET(GetKernelFilePath(jsonPath));
-    jsonPath += "ccl_kernel.json";
+    jsonPath += "asc_ccl_kernel.json";
     HcclResult ret = LoadBinaryFromFile(jsonPath.c_str(), ACL_RT_BINARY_LOAD_OPT_CPU_KERNEL_MODE, 0, binHandle_);
     CHK_PRT_RET(ret != HCCL_SUCCESS,
         HCCL_ERROR("[LoadAICPUKernel]errNo[0x%016llx]load aicpu file fail, path[%s] optionType[%u]"
