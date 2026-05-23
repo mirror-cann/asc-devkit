@@ -291,7 +291,8 @@ if(PRODUCT_SIDE STREQUAL "device")
         mc2_kernel_compat
         -Wl,--no-as-needed
         mmpa
-        acl_rt_headers
+        $<BUILD_INTERFACE:acl_rt_headers>
+        $<BUILD_INTERFACE:error_manager_headers>
     )
 endif()
 

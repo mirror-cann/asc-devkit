@@ -98,7 +98,9 @@ if(PRODUCT_SIDE STREQUAL "host")
     if(BUILD_OPEN_PROJECT)
         target_link_libraries(mc2_compat PRIVATE
             $<BUILD_INTERFACE:c_sec_headers>
+            $<BUILD_INTERFACE:acl_rt_headers>
             -Wl,--no-as-needed
+            acl_rt
             unified_dlog
             -Wl,--no-as-needed
         )
@@ -153,5 +155,6 @@ if((DEVICE_MODE AND BUILD_OPEN_PROJECT) OR (NOT BUILD_OPEN_PROJECT))
     target_link_libraries(mc2_kernel_compat PRIVATE
  	    $<BUILD_INTERFACE:slog_headers>
  	    $<BUILD_INTERFACE:c_sec_headers>
+ 	    $<BUILD_INTERFACE:acl_rt_headers>
  	)
 endif()

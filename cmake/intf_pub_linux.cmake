@@ -19,7 +19,7 @@ target_compile_options(intf_pub INTERFACE
   -Wall
   -fPIC
   $<IF:$<VERSION_GREATER:${CMAKE_C_COMPILER_VERSION},4.8.5>,-fstack-protector-strong,-fstack-protector-all>
-  $<$<COMPILE_LANGUAGE:CXX>:-std=c++14>
+  $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>
 )
 target_compile_definitions(intf_pub INTERFACE
   _GLIBCXX_USE_CXX11_ABI=0

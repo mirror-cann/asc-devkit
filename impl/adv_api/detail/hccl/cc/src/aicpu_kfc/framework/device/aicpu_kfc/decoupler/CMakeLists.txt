@@ -119,6 +119,10 @@ target_include_directories(ccl_kernel_decoupler_open BEFORE PRIVATE
     $<TARGET_PROPERTY:ccl_kernel,INCLUDE_DIRECTORIES>
 )
 
+target_link_libraries(ccl_kernel_decoupler_open PRIVATE
+    $<BUILD_INTERFACE:acl_rt_headers>
+)
+
 add_library(ccl_kernel_decoupler_open_exec OBJECT ${open_exec_src_list})
 set_target_properties(ccl_kernel_decoupler_open_exec PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
@@ -162,7 +166,7 @@ target_include_directories(ccl_kernel_decoupler_open_exec BEFORE PRIVATE
     ${HCCL_BASE_DIR}/platform/hccp/external_depends/inc/log
 )
 
-target_link_libraries(ccl_kernel_decoupler_open_exec PRIVATE c_sec unified_dlog)
+target_link_libraries(ccl_kernel_decoupler_open_exec PRIVATE c_sec unified_dlog acl_rt_headers)
 
 add_library(ccl_kernel_decoupler_open_exec_impl OBJECT ${open_exec_impl_src_list})
 set_target_properties(ccl_kernel_decoupler_open_exec_impl PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -255,6 +259,12 @@ if(TARGET mc2_server)
         ${HCCL_BASE_DIR}/legacy/unified_platform/resource/stream/aicpu
 
         $<TARGET_PROPERTY:ccl_kernel,INCLUDE_DIRECTORIES>
+    )
+
+    target_link_libraries(mc2_server_decoupler PRIVATE
+        $<BUILD_INTERFACE:acl_rt_headers>
+        $<BUILD_INTERFACE:ascend_hal_headers>
+        $<BUILD_INTERFACE:metadef_headers>
     )
 
     target_sources(mc2_server PRIVATE

@@ -24,6 +24,11 @@ if(TARGET mc2_server)
     target_include_directories(mc2_server_kernel_entry PRIVATE
         $<TARGET_PROPERTY:ccl_kernel,INCLUDE_DIRECTORIES>
     )
+    target_link_libraries(mc2_server_kernel_entry PRIVATE
+        $<BUILD_INTERFACE:acl_rt_headers>
+        $<BUILD_INTERFACE:ascend_hal_headers>
+        $<BUILD_INTERFACE:runtime_headers>
+    )
     target_sources(mc2_server PRIVATE
         $<TARGET_OBJECTS:mc2_server_kernel_entry>
     )

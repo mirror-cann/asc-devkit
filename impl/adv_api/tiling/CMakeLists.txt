@@ -193,7 +193,8 @@ target_link_libraries(
           $<$<STREQUAL:${PRODUCT_SIDE},host>:exe_graph>
           $<$<STREQUAL:${PRODUCT_SIDE},host>:register>
   PUBLIC $<BUILD_INTERFACE:kernel_tiling_headers>
-         $<$<STREQUAL:${PRODUCT_SIDE},host>:metadef_headers> tiling_api_headers)
+         $<BUILD_INTERFACE:metadef_headers> tiling_api_headers
+         )
 
 if(BUILD_OPEN_PROJECT)
   set(ASCENDC_API_ADV_INSTALL_DIR ${INSTALL_LIBRARY_DIR}/lib64)

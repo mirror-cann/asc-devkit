@@ -35,6 +35,7 @@ endif()
 target_link_libraries(op_build PRIVATE
   $<BUILD_INTERFACE:intf_pub>
   $<BUILD_INTERFACE:mmpa_headers>
+  $<BUILD_INTERFACE:c_sec_headers>
   metadef_headers
   metadef
   opp_registry

@@ -23,6 +23,24 @@ endif()
 
 include(gen_kernel_tiling.cmake)
 
+add_library(asc_host_headers INTERFACE)
+target_include_directories(
+  asc_host_headers
+  INTERFACE $<BUILD_INTERFACE:${ASCENDC_DIR}/include/adv_api/hccl/internal>
+)
+
+add_library(asc_kernel_headers INTERFACE)
+target_include_directories(
+  asc_kernel_headers
+  INTERFACE $<BUILD_INTERFACE:${ASCENDC_DIR}>
+            $<BUILD_INTERFACE:${ASCENDC_DIR}/include>
+            $<BUILD_INTERFACE:${ASCENDC_DIR}/include/basic_api>
+            $<BUILD_INTERFACE:${ASCENDC_DIR}/include/simt_api>
+            $<BUILD_INTERFACE:${ASCENDC_DIR}/impl>
+            $<BUILD_INTERFACE:${ASCENDC_DIR}/impl/basic_api>
+            $<BUILD_INTERFACE:${ASCENDC_DIR}/impl/simt_api>
+)
+
 add_library(kernel_tiling_headers INTERFACE)
 add_dependencies(kernel_tiling_headers gen_kernel_tiling)
 if(NOT BUILD_OPEN_PROJECT)

@@ -646,7 +646,7 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
                 ${CCL_KERNEL_INCLUDE_LIST}
                 ${ORION_HEAD_LIST}
             )
-            target_link_libraries(${target_name} PRIVATE ascend_hal c_sec unified_dlog runtime_headers)
+            target_link_libraries(${target_name} PRIVATE ascend_hal c_sec unified_dlog runtime_headers acl_rt_headers)
             if(TARGET json)
                 target_link_libraries(${target_name} PRIVATE json)
                 add_dependencies(${target_name} json)

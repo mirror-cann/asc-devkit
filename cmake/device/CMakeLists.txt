@@ -31,6 +31,7 @@ find_cann_package(runtime REQUIRED)
 find_cann_package(mmpa REQUIRED)
 find_cann_package(acl_rt REQUIRED)
 find_cann_package(atrace REQUIRED)
+find_cann_package(error_manager REQUIRED)
 
 include(${ASCENDC_DIR}/impl/adv_api/gen_kernel_tiling.cmake)
 

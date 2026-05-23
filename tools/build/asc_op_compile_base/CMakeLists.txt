@@ -40,6 +40,8 @@ target_link_libraries(asc_platform PRIVATE
   mmpa
   unified_dlog
   error_manager
+  $<BUILD_INTERFACE:c_sec_headers>
+  $<BUILD_INTERFACE:metadef_headers>
 )
 target_compile_options(asc_platform PRIVATE 
   -fPIC

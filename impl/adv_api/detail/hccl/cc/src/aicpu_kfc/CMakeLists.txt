@@ -311,6 +311,8 @@ if(BUILD_OPEN_PROJECT)
         $<BUILD_INTERFACE:runtime_headers>
         $<BUILD_INTERFACE:atrace_headers>
         $<BUILD_INTERFACE:mmpa_headers>
+        $<BUILD_INTERFACE:acl_rt_headers>
+        $<BUILD_INTERFACE:ascend_hal_headers>
     )
 
     target_link_libraries(ccl_kernel_plf_a
@@ -328,6 +330,8 @@ if(BUILD_OPEN_PROJECT)
         $<BUILD_INTERFACE:runtime_headers>
         $<BUILD_INTERFACE:atrace_headers>
         $<BUILD_INTERFACE:mmpa_headers>
+        $<BUILD_INTERFACE:acl_rt_headers>
+        $<BUILD_INTERFACE:ascend_hal_headers>
     )
 endif()
 
