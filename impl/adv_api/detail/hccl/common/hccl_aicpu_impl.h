@@ -228,7 +228,7 @@ HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::WaitFinishCntFromGm(ui
 #if !defined(UT_TEST)
     while (true) {
         HCCL_CHECK_RESTART(hcclMsgArea_, return finishGM->cnt);
-        FlushDataCache(globalHcclMsgArea, finishGM);
+        FlushDataCacheAicpu(globalHcclMsgArea, finishGM);
         if ((debugMode_ == HCCL_ONLY_COMPUTE) || (finishGM->cnt >= expectedCnt)) {
             break;
         }
