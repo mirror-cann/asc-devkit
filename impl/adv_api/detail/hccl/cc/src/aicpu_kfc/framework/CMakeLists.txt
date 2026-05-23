@@ -664,10 +664,22 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         add_library(mc2_server_ccl_kernel_stub SHARED
             ${MC2_SERVER_CCL_KERNEL_STUB_SRC})
         set_target_properties(mc2_server_ccl_kernel_stub PROPERTIES
-            OUTPUT_NAME asc_ccl_kernel
+            OUTPUT_NAME ccl_kernel
             LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mc2_server_link_stub)
         target_link_options(mc2_server_ccl_kernel_stub PRIVATE
             -Wl,-soname,libccl_kernel.so)
+
+        set(MC2_SERVER_CCL_KERNEL_PLF_STUB_SRC
+            ${CMAKE_CURRENT_BINARY_DIR}/mc2_server_ccl_kernel_plf_stub.cc)
+        file(WRITE ${MC2_SERVER_CCL_KERNEL_PLF_STUB_SRC}
+            "extern \"C\" void __mc2_ccl_kernel_plf_stub(void) {}\n")
+        add_library(mc2_server_ccl_kernel_plf_stub SHARED
+            ${MC2_SERVER_CCL_KERNEL_PLF_STUB_SRC})
+        set_target_properties(mc2_server_ccl_kernel_plf_stub PROPERTIES
+            OUTPUT_NAME ccl_kernel_plf
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mc2_server_link_stub)
+        target_link_options(mc2_server_ccl_kernel_plf_stub PRIVATE
+            -Wl,-soname,libccl_kernel_plf.so)
 
         target_compile_definitions(mc2_server PRIVATE
             $<TARGET_PROPERTY:asc_ccl_kernel,COMPILE_DEFINITIONS>
@@ -688,8 +700,7 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
             mc2_server_ccl_kernel_stub
             ${HCCL_C_SEC_LINK}
             ${HCCL_UNIFIED_DLOG_LINK}
-            asc_ccl_kernel_plf
-            asc_ccl_kernel_plf_a
+            mc2_server_ccl_kernel_plf_stub
             ${HCCL_MMPA_LINK}
             -Wl,--as-needed
             -lrt
