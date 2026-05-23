@@ -1,3 +1,0 @@
-/home/asc-devkit/demo/simt/basic_scatter/build/CMakeFiles/scatter.dir
-/home/asc-devkit/demo/simt/basic_scatter/build/CMakeFiles/edit_cache.dir
-/home/asc-devkit/demo/simt/basic_scatter/build/CMakeFiles/rebuild_cache.dir

@@ -1,2 +1,0 @@
-Device_id,OP Type,Core Type,Count,Total Time(us),Min Time(us),Avg Time(us),Max Time(us),Ratio(%)
-0,_Z14scatter_customIfiEvPT_PKS0_PKT0_jj,AI_CORE,1,5.795,5.795,5.795,5.795,100

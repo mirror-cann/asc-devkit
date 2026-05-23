@@ -1,3 +1,0 @@
-/home/tmp/asc-devkit/experiment/simt_experiment/fusion_scatter_lxn/build/CMakeFiles/scatter.dir
-/home/tmp/asc-devkit/experiment/simt_experiment/fusion_scatter_lxn/build/CMakeFiles/edit_cache.dir
-/home/tmp/asc-devkit/experiment/simt_experiment/fusion_scatter_lxn/build/CMakeFiles/rebuild_cache.dir
