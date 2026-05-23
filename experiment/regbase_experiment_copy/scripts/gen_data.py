@@ -23,9 +23,7 @@ def gen_golden_data_simple():
     # 其中，-2 · √(2/π) ≈ -1.595769
     coeff = -1.595769
     # exponent = coeff * (input_x + 0.044715 * (input_x ** 3))
-    exponent = np.atanh(input_x)
-    golden = input_x / (1 + np.exp(exponent))
-
+    golden = np.atanh(input_x)
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
     input_x.tofile("./input/input_x.bin")
