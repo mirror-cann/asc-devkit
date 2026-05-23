@@ -528,7 +528,6 @@
             -   [GetBlockIdx](SIMD-API/基础API/系统变量访问/GetBlockIdx.md)
             -   [GetDataBlockSizeInBytes](SIMD-API/基础API/系统变量访问/GetDataBlockSizeInBytes.md)
             -   [GetArchVersion](SIMD-API/基础API/系统变量访问/GetArchVersion.md)
-            -   [InitSocState](SIMD-API/基础API/系统变量访问/InitSocState.md)
             -   [GetProgramCounter\(ISASI\)](SIMD-API/基础API/系统变量访问/GetProgramCounter(ISASI).md)
             -   [GetSubBlockNum\(ISASI\)](SIMD-API/基础API/系统变量访问/GetSubBlockNum(ISASI).md)
             -   [GetSubBlockIdx\(ISASI\)](SIMD-API/基础API/系统变量访问/GetSubBlockIdx(ISASI).md)
@@ -614,13 +613,19 @@
                 -   [SignalingNaN](SIMD-API/基础API/工具函数/NumericLimits/SignalingNaN.md)
                 -   [DeNormMin](SIMD-API/基础API/工具函数/NumericLimits/DeNormMin.md)
 
-            -   [Async](SIMD-API/基础API/工具函数/Async.md)
+            
             -   [GetTaskRatio](SIMD-API/基础API/工具函数/GetTaskRatio.md)
             -   [GetUBSizeInBytes](SIMD-API/基础API/工具函数/GetUBSizeInBytes.md)
             -   [GetRuntimeUBSize](SIMD-API/基础API/工具函数/GetRuntimeUBSize.md)
             -   [GetVecLen](SIMD-API/基础API/工具函数/GetVecLen.md)
             -   [CeilDivision](SIMD-API/基础API/工具函数/CeilDivision.md)
             -   [GetSsbufBaseAddr](SIMD-API/基础API/工具函数/GetSsbufBaseAddr.md)
+        
+        -   [工具接口](SIMD-API/基础API/工具接口/工具接口.md)
+            -   [执行模式](SIMD-API/基础API/工具接口/执行模式/执行模式.md)
+                -   [Async](SIMD-API/基础API/工具接口/执行模式/Async.md)
+            -   [系统初始化](SIMD-API/基础API/工具接口/系统初始化/系统初始化.md)
+                -   [InitSocState](SIMD-API/基础API/工具接口/系统初始化/InitSocState.md)
 
         -   [Kernel Tiling](SIMD-API/基础API/Kernel-Tiling/Kernel-Tiling.md)
             -   [GET\_TILING\_DATA](SIMD-API/基础API/Kernel-Tiling/GET_TILING_DATA.md)
