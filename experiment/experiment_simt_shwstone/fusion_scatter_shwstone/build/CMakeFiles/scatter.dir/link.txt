@@ -1,0 +1,1 @@
+/usr/local/Ascend/cann-9.1.0/bin/bisheng CMakeFiles/scatter.dir/scatter.asc.o -o scatter  -lm -lplatform -ltiling_api -ldl 

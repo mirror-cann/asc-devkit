@@ -1,0 +1,3 @@
+/home/asc-devkit/experiment/fusion_scatter_shwstone/build/CMakeFiles/scatter.dir
+/home/asc-devkit/experiment/fusion_scatter_shwstone/build/CMakeFiles/edit_cache.dir
+/home/asc-devkit/experiment/fusion_scatter_shwstone/build/CMakeFiles/rebuild_cache.dir

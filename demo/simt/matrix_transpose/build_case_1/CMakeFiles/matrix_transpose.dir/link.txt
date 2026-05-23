@@ -1,0 +1,1 @@
+/usr/local/Ascend/cann-9.1.0/bin/bisheng CMakeFiles/matrix_transpose.dir/matrix_transpose.asc.o -o matrix_transpose 

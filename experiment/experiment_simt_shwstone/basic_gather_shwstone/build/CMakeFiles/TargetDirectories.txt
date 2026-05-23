@@ -1,0 +1,3 @@
+/home/asc-devkit/experiment/basic_gather_shwstone/build/CMakeFiles/gather.dir
+/home/asc-devkit/experiment/basic_gather_shwstone/build/CMakeFiles/edit_cache.dir
+/home/asc-devkit/experiment/basic_gather_shwstone/build/CMakeFiles/rebuild_cache.dir

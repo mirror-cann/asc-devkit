@@ -11,3 +11,4 @@ third_party/
 openssl-device-src/
 openssl-host-src/
 build_device/
+**/build/

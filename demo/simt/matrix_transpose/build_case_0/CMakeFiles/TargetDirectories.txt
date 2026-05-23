@@ -1,0 +1,3 @@
+/home/asc-devkit/demo/simt/matrix_transpose/build_case_0/CMakeFiles/matrix_transpose.dir
+/home/asc-devkit/demo/simt/matrix_transpose/build_case_0/CMakeFiles/edit_cache.dir
+/home/asc-devkit/demo/simt/matrix_transpose/build_case_0/CMakeFiles/rebuild_cache.dir
