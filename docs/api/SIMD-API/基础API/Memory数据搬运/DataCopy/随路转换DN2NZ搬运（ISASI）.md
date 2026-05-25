@@ -133,22 +133,22 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 </tr>
 <tr id="row2968131992515"><td class="cellrowborder" valign="top" width="15%" headers="mcps1.2.3.1.1 "><p id="p102019313485"><a name="p102019313485"></a><a name="p102019313485"></a>nValue</p>
 </td>
-<td class="cellrowborder" valign="top" width="85%" headers="mcps1.2.3.1.2 "><p id="p11299126114913"><a name="p11299126114913"></a><a name="p11299126114913"></a>DN矩阵的行数，取值范围：nValue∈[0, 16384]。</p>
+<td class="cellrowborder" valign="top" width="85%" headers="mcps1.2.3.1.2 "><p id="p11299126114913"><a name="p11299126114913"></a><a name="p11299126114913"></a>DN矩阵的列数，取值范围：nValue∈[0, 16384]。</p>
 </td>
 </tr>
 <tr id="row1589112062510"><td class="cellrowborder" valign="top" width="15%" headers="mcps1.2.3.1.1 "><p id="p1397111514816"><a name="p1397111514816"></a><a name="p1397111514816"></a>dValue</p>
 </td>
-<td class="cellrowborder" valign="top" width="85%" headers="mcps1.2.3.1.2 "><p id="p144493191478"><a name="p144493191478"></a><a name="p144493191478"></a>DN矩阵的列数，取值范围：dValue∈[0,  2^32-1]。</p>
+<td class="cellrowborder" valign="top" width="85%" headers="mcps1.2.3.1.2 "><p id="p144493191478"><a name="p144493191478"></a><a name="p144493191478"></a>DN矩阵的行数，取值范围：dValue∈[0,  2^21-1]。</p>
 </td>
 </tr>
 <tr id="row3593192082512"><td class="cellrowborder" valign="top" width="15%" headers="mcps1.2.3.1.1 "><p id="p1217581074813"><a name="p1217581074813"></a><a name="p1217581074813"></a>srcDnMatrixStride</p>
 </td>
-<td class="cellrowborder" valign="top" width="85%" headers="mcps1.2.3.1.2 "><p id="p1445013195477"><a name="p1445013195477"></a><a name="p1445013195477"></a>源操作数相邻DN矩阵起始地址间的偏移，取值范围：srcDNMatrixStride∈[0,  2^64-1]，单位为元素。</p>
+<td class="cellrowborder" valign="top" width="85%" headers="mcps1.2.3.1.2 "><p id="p1445013195477"><a name="p1445013195477"></a><a name="p1445013195477"></a>源操作数相邻DN矩阵起始地址间的偏移，取值范围：srcDNMatrixStride∈[0,  2^40-1]，单位为元素。</p>
 </td>
 </tr>
 <tr id="row1185111015588"><td class="cellrowborder" valign="top" width="15%" headers="mcps1.2.3.1.1 "><p id="p180672644819"><a name="p180672644819"></a><a name="p180672644819"></a>srcDValue</p>
 </td>
-<td class="cellrowborder" valign="top" width="85%" headers="mcps1.2.3.1.2 "><p id="p128531313134818"><a name="p128531313134818"></a><a name="p128531313134818"></a>源操作数同一DN矩阵的相邻行起始地址间的偏移，取值范围：srcDValue∈[1,  2^64-1]，单位为元素。</p>
+<td class="cellrowborder" valign="top" width="85%" headers="mcps1.2.3.1.2 "><p id="p128531313134818"><a name="p128531313134818"></a><a name="p128531313134818"></a>源操作数同一DN矩阵的相邻行起始地址间的偏移，取值范围：srcDValue∈[1,  2^40-1]，单位为元素。</p>
 </td>
 </tr>
 <tr id="row1585714414415"><td class="cellrowborder" valign="top" width="15%" headers="mcps1.2.3.1.1 "><p id="p101497513422"><a name="p101497513422"></a><a name="p101497513422"></a>dstNzC0Stride</p>
@@ -163,7 +163,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 </tr>
 <tr id="row57391832114112"><td class="cellrowborder" valign="top" width="15%" headers="mcps1.2.3.1.1 "><p id="p3149175204211"><a name="p3149175204211"></a><a name="p3149175204211"></a>dstNzMatrixStride</p>
 </td>
-<td class="cellrowborder" valign="top" width="85%" headers="mcps1.2.3.1.2 "><p id="p01491753428"><a name="p01491753428"></a><a name="p01491753428"></a>目的NZ矩阵中，相邻NZ矩阵起始地址间的偏移，取值范围：dstNzMatrixStride∈[1,  2^32-1]，单位为元素。</p>
+<td class="cellrowborder" valign="top" width="85%" headers="mcps1.2.3.1.2 "><p id="p01491753428"><a name="p01491753428"></a><a name="p01491753428"></a>目的NZ矩阵中，相邻NZ矩阵起始地址间的偏移，取值范围：dstNzMatrixStride∈[0,  65535]，单位为元素。</p>
 </td>
 </tr>
 </tbody>
@@ -171,16 +171,16 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 DN2NZ转换示意图如下，样例中参数设置值和解释说明如下（以half数据类型为例）：
 
--   dnNum = 2，表示传输DN矩阵的数目为2。
--   nValue = 8，DN矩阵的列数，也就是矩阵的宽度为8。
--   dValue = 24，DN矩阵的行数，也就是矩阵的高度为24个元素。
--   srcDnMatrixStride = 96，表达相邻DN矩阵起始地址间的偏移，即：A1与C1之间的间隔，为6个DataBlock，6 \* 16 = 96个元素。
--   srcDValue = 48, 表示一行的所含元素个数，即为3个DataBlock, 3 \* 16 = 48个元素。
--   dstNzC0Stride = 6。DN转换到NZ格式后，源操作数中的一列会转换为目的操作数的多列，例如src中A1和A2为1列，dst中A1和A2被分为2列。多列数据起始地址之间的偏移就是A1和A2在dst中的偏移，偏移为6个datablock。
--   dstNzNStride = 2，表达dst中第x个目的DN矩阵和第x+1个目的DN矩阵的起点的偏移，即A1与B1之间的间隔，即为2个DataBlock。
--   dstNzMatrixStride = 64，表达dst中第x个目的ND矩阵和第x+1个目的ND矩阵的起点的偏移，即A1和C1之间的距离，即为4个DataBlock，4 \* 16 = 64个元素。
+-   dnNum = 2，表示搬运的ND矩阵的数量为2。
+-   nValue = 8，一个DN矩阵的列数。
+-   dValue = 23，一个DN矩阵的行数。当dValue \* sizeof\(T\)不满足32B对齐时，在目的矩阵中会补0对齐到32B。
+-   srcDnMatrixStride  = 500，表示相邻DN矩阵起始地址的偏移，每行16个元素，共25行，偏移为16 \* 25= 400个元素。
+-   srcDValue = 16，表示源矩阵一行的所含元素个数，即16个half数据类型的元素。
+-   dstNzC0Stride = 37，NZ矩阵中相邻Z矩阵起始地址的偏移，偏移为37个C0\_SIZE。
+-   dstNzNStride = 2，表示NZ矩阵中相邻行起始地址的偏移。
+-   dstNzMatrixStride = 320，相邻NZ矩阵起始地址的偏移，每行16个元素，共20行，偏移为16 \* 20 = 320个元素。
 
-![](../../../../figures/绘图1.png)
+![](../../../../figures/gm2l1_dn2nz.png)
 
 ## 通路说明<a name="section631mcpsimp"></a>
 
