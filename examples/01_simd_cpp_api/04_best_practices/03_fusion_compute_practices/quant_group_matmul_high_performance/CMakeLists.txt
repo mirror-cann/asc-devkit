@@ -11,6 +11,13 @@
 
 cmake_minimum_required(VERSION 3.16)
 
+set(CMAKE_ASC_RUN_MODE "npu" CACHE STRING "Run mode: npu, sim")
+set(CMAKE_ASC_ARCHITECTURES "dav-2201" CACHE STRING "NPU architecture: dav-2201, dav-3510")
+set(SCENARIO_NUM 0 CACHE STRING "Case type to compile (0-2)")
+if(NOT SCENARIO_NUM MATCHES "^[0-2]$")
+    message(FATAL_ERROR "Unsupported SCENARIO_NUM=${SCENARIO_NUM}, only 0, 1 and 2 are supported")
+endif()
+
 find_package(ASC REQUIRED)
 
 project(kernel_samples LANGUAGES ASC CXX)
@@ -19,6 +26,14 @@ add_executable(demo
     quant_group_matmul_custom.asc
 )
 
+if(CMAKE_ASC_ARCHITECTURES STREQUAL "dav-2201")
+    set(NPU_ARCH_ID 2201)
+elseif(CMAKE_ASC_ARCHITECTURES STREQUAL "dav-3510")
+    set(NPU_ARCH_ID 3510)
+else()
+    message(FATAL_ERROR "Unsupported CMAKE_ASC_ARCHITECTURES=${CMAKE_ASC_ARCHITECTURES}, only dav-2201 and dav-3510 are supported")
+endif()
+
 target_link_libraries(demo PRIVATE
     tiling_api
     register
@@ -26,14 +41,13 @@ target_link_libraries(demo PRIVATE
     m
     dl
 )
+message(STATUS "[INFO] SCENARIO_NUM is ${SCENARIO_NUM}")
 
-# ======================================================================================
-# NPU 编译选项配置
-#
-# 说明：
-#   - 需根据实际部署的 NPU 硬件架构选择对应的 `npu-arch` 参数。
-# ======================================================================================
+target_compile_definitions(demo PRIVATE
+    NPU_ARCH=${NPU_ARCH_ID}
+    SCENARIO_NUM=${SCENARIO_NUM}
+)
+
 target_compile_options(demo PRIVATE
-    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=dav-2201>
-    # $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=dav-3510>
+    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES}>
 )
