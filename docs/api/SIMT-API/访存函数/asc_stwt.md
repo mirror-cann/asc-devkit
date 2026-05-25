@@ -31,7 +31,7 @@ inline void asc_stwt(long long int* address, long long int val)
 ```
 
 ```
-inline void asc_stwt(_unsigned long long int* address, unsigned long long int val)
+inline void asc_stwt(unsigned long long int* address, unsigned long long int val)
 ```
 
 ```
