@@ -7,11 +7,6 @@
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
 # ----------------------------------------------------------------------------------------------------------
-if(BUILD_WITH_INSTALLED_DEPENDENCY_CANN_PKG)
-    set(CMAKE_C_COMPILER ${ASCEND_CANN_PACKAGE_PATH}/toolkit/toolchain/hcc/bin/aarch64-target-linux-gnu-gcc)
-    set(CMAKE_CXX_COMPILER ${ASCEND_CANN_PACKAGE_PATH}/toolkit/toolchain/hcc/bin/aarch64-target-linux-gnu-g++)
-endif()
-
 add_library(aicpu_api STATIC aicpu_dump.cpp)
 
 target_compile_options(aicpu_api PRIVATE
@@ -45,12 +40,10 @@ target_compile_definitions(aicpu_api PRIVATE
 )
 
 install(TARGETS aicpu_api
-    LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}/lib64/device/lib64 ${INSTALL_OPTIONAL} COMPONENT asc-devkit
-    ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}/lib64/device/lib64 ${INSTALL_OPTIONAL} COMPONENT asc-devkit
-    RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR}/lib64/device/lib64 ${INSTALL_OPTIONAL} COMPONENT asc-devkit
+    DESTINATION ${CMAKE_HOST_SYSTEM_PROCESSOR}-linux/lib64/device/lib64 ${INSTALL_OPTIONAL} COMPONENT asc-devkit
 )
 
 install(FILES
     ${ASCENDC_DIR}/include/aicpu_api/aicpu_api.h
-    DESTINATION ${INSTALL_LIBRARY_DIR}/asc/include/aicpu_api ${INSTALL_OPTIONAL} COMPONENT asc-devkit
+    DESTINATION ${CMAKE_HOST_SYSTEM_PROCESSOR}-linux/asc/include/aicpu_api ${INSTALL_OPTIONAL} COMPONENT asc-devkit
 )
