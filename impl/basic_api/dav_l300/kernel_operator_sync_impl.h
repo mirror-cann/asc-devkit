@@ -28,13 +28,13 @@ namespace AscendC {
 template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
 __aicore__ inline void SetNextTaskStartImpl()
 {
-    return;
+    ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "unsupported SetNextTaskStartImpl!"); });
 }
 
 template<int8_t earlyStartConfig = -1, bool FORCE = false>
 __aicore__ inline void WaitPreTaskEndImpl()
 {
-    return;
+    ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "unsupported WaitPreTaskEndImpl!"); });
 }
 
 template<bool isAIVOnly = true>

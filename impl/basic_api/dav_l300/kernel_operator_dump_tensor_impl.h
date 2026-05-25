@@ -146,19 +146,17 @@ __aicore__ inline void DumpTensorLocal2GMImpl(const LocalTensor<T>& tensor, uint
     // set the head struct value
     if (position == 0) {
         ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "dump tensor only support dump tensor from local to gm"); });
-        return;
     }
 
     T data;
     uint8_t core = GetDumpBlockIdx();
     if (core >= DUMP_CORE_COUNT) {
-        return;
+        ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "unsupported DumpTensorLocal2GMImpl!"); });
     }
     uint32_t offset = dumpSize * sizeof(T);
 
     if (offset % ONE_BLK_SIZE != 0) {
         ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "dump size is %u, which must be 32B aligned", offset); });
-        return;
     }
 
     uint64_t dumpWorkspaceStart = reinterpret_cast<uint64_t>(g_dumpWorkspaceReserved) - DUMP_WORKSPACE_SIZE;
@@ -468,7 +466,7 @@ __aicore__ inline void WriteScalar(__gm__ uint8_t* paramAddr, uint32_t paramIdx,
 
 __aicore__ inline void SetParam(__gm__ uint8_t* paramAddr, uint32_t paramIdx, uint32_t& offset)
 {
-    return;
+    ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "unsupported SetParam!"); });
 }
 
 template <typename... Args>
