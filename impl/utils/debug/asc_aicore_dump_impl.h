@@ -146,6 +146,30 @@ __aicore__ inline void asc_dump_l1buf(__cbuf__ T* input, uint32_t desc, uint32_t
     }
     set_ctrl(ctrlValue);
 }
+
+template<typename T>
+__aicore__ inline void asc_dump(__gm__ T* input, uint32_t desc, uint32_t dump_size)
+{
+    asc_dump_gm(input, desc, dump_size);
+}
+
+template<typename T>
+__aicore__ inline void asc_dump(__ubuf__ T* input, uint32_t desc, uint32_t dump_size)
+{
+    asc_dump_ubuf(input, desc, dump_size);
+}
+
+template<typename T>
+__aicore__ inline void asc_dump(__cc__ T* input, uint32_t desc, uint32_t dump_size)
+{
+    asc_dump_cbuf(input, desc, dump_size);
+}
+
+template<typename T>
+__aicore__ inline void asc_dump(__cbuf__ T* input, uint32_t desc, uint32_t dump_size)
+{
+    asc_dump_l1buf(input, desc, dump_size);
+}
 } // namespace __asc_aicore
 #else
 #include "kernel_log.h"
@@ -169,6 +193,11 @@ __aicore__ inline void asc_dump_cbuf(__cc__ T* input, uint32_t desc, uint32_t du
 template<typename T>
 __aicore__ inline void asc_dump_l1buf(__cbuf__ T* input, uint32_t desc, uint32_t dump_size) {
     ASCENDC_ASSERT((false), "asc_dump_l1buf is not supported in cpu mode.");
+}
+
+template<typename T>
+__aicore__ inline void asc_dump(T* input, uint32_t desc, uint32_t dump_size) {
+    ASCENDC_ASSERT((false), "asc_dump is not supported in cpu mode.");
 }
 } // namespace __asc_aicore
 
