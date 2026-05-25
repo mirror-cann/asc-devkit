@@ -29,7 +29,7 @@ TEST_F(Tensor_Api_Tensor_Slice, TestLocalTensorSliceByShape)
         12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
         24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
         36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47};
-    auto layout = MakeFrameLayout<ScaleANDLayoutPtn, LayoutTraitDefault<float, 2>>(6, 8);
+    auto layout = MakeFrameLayout<ScaleANDLayoutPtn>(6, 8);
     auto tensor = MakeTensor(MakeMemPtr<Location::GM>(data), layout);
     auto sliced = Slice(tensor, MakeCoord(1, 2), MakeShape(3, 3));
 
@@ -47,9 +47,9 @@ TEST_F(Tensor_Api_Tensor_Slice, TestLocalTensorSliceByLayout)
         12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
         24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
         36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47};
-    auto layout = MakeFrameLayout<ScaleANDLayoutPtn, LayoutTraitDefault<float, 2>>(6, 8);
+    auto layout = MakeFrameLayout<ScaleANDLayoutPtn>(6, 8);
     auto tensor = MakeTensor(MakeMemPtr<Location::GM>(data), layout);
-    auto infoLayout = MakeFrameLayout<ScaleANDLayoutPtn, LayoutTraitDefault<float, 2>>(2, 4);
+    auto infoLayout = MakeFrameLayout<ScaleANDLayoutPtn>(2, 4);
     auto sliced = Slice(tensor, MakeCoord(MakeCoord(0, 1), MakeCoord(0, 2)), infoLayout);
 
     EXPECT_EQ(sliced[MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0))], 10);

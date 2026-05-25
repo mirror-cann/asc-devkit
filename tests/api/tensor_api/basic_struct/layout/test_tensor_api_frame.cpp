@@ -88,10 +88,10 @@ TEST_F(Tensor_Api_Frame_Layout, NDAndDNGroupTraitWithTypeAndC0Element)
 {
     using namespace AscendC::Te;
 
-    auto ndLayout = MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<float, 16>>(8, 16);
-    auto dnLayout = MakeFrameLayout<DNLayoutPtn, LayoutTraitDefault<float, 16>>(8, 16);
-    auto ndExtLayout = MakeFrameLayout<NDExtLayoutPtn, LayoutTraitDefault<float, 16>>(8, 16);
-    auto dnExtLayout = MakeFrameLayout<DNExtLayoutPtn, LayoutTraitDefault<float, 16>>(8, 16);
+    auto ndLayout = MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<float>>(8, 16);
+    auto dnLayout = MakeFrameLayout<DNLayoutPtn, LayoutTraitDefault<float>>(8, 16);
+    auto ndExtLayout = MakeFrameLayout<NDExtLayoutPtn, LayoutTraitDefault<float>>(8, 16);
+    auto dnExtLayout = MakeFrameLayout<DNExtLayoutPtn, LayoutTraitDefault<float>>(8, 16);
 
     EXPECT_EQ(AscendC::Std::get<0>(GetShape(ndLayout)), 8);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape(ndLayout)), 16);
@@ -118,10 +118,10 @@ TEST_F(Tensor_Api_Frame_Layout, NDAndDNGroupIntegralConstantTrait)
 {
     using namespace AscendC::Te;
 
-    auto ndLayout = MakeFrameLayout<NDLayoutPtn, AscendC::Std::Int<16>>(8, 16);
-    auto dnLayout = MakeFrameLayout<DNLayoutPtn, AscendC::Std::Int<16>>(8, 16);
-    auto ndExtLayout = MakeFrameLayout<NDExtLayoutPtn, AscendC::Std::Int<16>>(8, 16);
-    auto dnExtLayout = MakeFrameLayout<DNExtLayoutPtn, AscendC::Std::Int<16>>(8, 16);
+    auto ndLayout = MakeFrameLayout<NDLayoutPtn, AscendC::Std::_16>(8, 16);
+    auto dnLayout = MakeFrameLayout<DNLayoutPtn, AscendC::Std::_16>(8, 16);
+    auto ndExtLayout = MakeFrameLayout<NDExtLayoutPtn, AscendC::Std::_16>(8, 16);
+    auto dnExtLayout = MakeFrameLayout<DNExtLayoutPtn, AscendC::Std::_16>(8, 16);
 
     EXPECT_EQ(AscendC::Std::get<0>(GetShape(ndLayout)), 8);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape(ndLayout)), 16);
@@ -149,10 +149,10 @@ TEST_F(Tensor_Api_Frame_Layout, ScaleGroupTraitWithTypeAndC0Element)
 {
     using namespace AscendC::Te;
 
-    auto andLayout = MakeFrameLayout<ScaleANDLayoutPtn, LayoutTraitScale<fp8_e8m0_t, 2>>(32, 16);
-    auto adnLayout = MakeFrameLayout<ScaleADNLayoutPtn, LayoutTraitScale<fp8_e8m0_t, 2>>(32, 16);
-    auto bndLayout = MakeFrameLayout<ScaleBNDLayoutPtn, LayoutTraitScale<fp8_e8m0_t, 2>>(16, 32);
-    auto bdnLayout = MakeFrameLayout<ScaleBDNLayoutPtn, LayoutTraitScale<fp8_e8m0_t, 2>>(16, 32);
+    auto andLayout = MakeFrameLayout<ScaleANDLayoutPtn>(32, 16);
+    auto adnLayout = MakeFrameLayout<ScaleADNLayoutPtn>(32, 16);
+    auto bndLayout = MakeFrameLayout<ScaleBNDLayoutPtn>(16, 32);
+    auto bdnLayout = MakeFrameLayout<ScaleBDNLayoutPtn>(16, 32);
 
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(andLayout)), 32);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(andLayout)), 16);
@@ -171,10 +171,10 @@ TEST_F(Tensor_Api_Frame_Layout, ScaleGroupIntegralConstantTrait)
 {
     using namespace AscendC::Te;
 
-    auto andLayout = MakeFrameLayout<ScaleANDLayoutPtn, AscendC::Std::Int<2>>(32, 16);
-    auto adnLayout = MakeFrameLayout<ScaleADNLayoutPtn, AscendC::Std::Int<2>>(32, 16);
-    auto bndLayout = MakeFrameLayout<ScaleBNDLayoutPtn, AscendC::Std::Int<2>>(16, 32);
-    auto bdnLayout = MakeFrameLayout<ScaleBDNLayoutPtn, AscendC::Std::Int<2>>(16, 32);
+    auto andLayout = MakeFrameLayout<ScaleANDLayoutPtn>(32, 16);
+    auto adnLayout = MakeFrameLayout<ScaleADNLayoutPtn>(32, 16);
+    auto bndLayout = MakeFrameLayout<ScaleBNDLayoutPtn>(16, 32);
+    auto bdnLayout = MakeFrameLayout<ScaleBDNLayoutPtn>(16, 32);
 
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(andLayout)), 32);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(andLayout)), 16);
@@ -196,7 +196,7 @@ TEST_F(Tensor_Api_Frame_Layout, OtherGroupDefaultTrait)
     auto nzLayout = MakeFrameLayout<NZLayoutPtn>(32, 64);
     auto znLayout = MakeFrameLayout<ZNLayoutPtn>(32, 64);
     auto zzLayout = MakeFrameLayout<ZZLayoutPtn>(32, 64);
-    auto nnLayout = MakeFrameLayout<NNLayoutPtn, LayoutTraitScale<>>(16, 32);
+    auto nnLayout = MakeFrameLayout<NNLayoutPtn, LayoutTrait<fp8_e8m0_t, _2>>(16, 32);
 
     EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(nzLayout)), 16);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(nzLayout)), 2);
@@ -226,7 +226,69 @@ TEST_F(Tensor_Api_Frame_Layout, OtherGroupTraitWithType)
     auto nzLayout = MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float>>(32, 64);
     auto znLayout = MakeFrameLayout<ZNLayoutPtn, LayoutTraitDefault<float>>(32, 64);
     auto zzLayout = MakeFrameLayout<ZZLayoutPtn, LayoutTraitDefault<float>>(32, 64);
-    auto nnLayout = MakeFrameLayout<NNLayoutPtn, LayoutTraitScale<fp8_e8m0_t>>(16, 32);
+    auto nnLayout = MakeFrameLayout<NNLayoutPtn>(16, 32);
+
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(nzLayout)), 16);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(nzLayout)), 2);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(nzLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(nzLayout)), 8);
+
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(znLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(znLayout)), 4);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(znLayout)), 16);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(znLayout)), 4);
+
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(zzLayout)), 16);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(zzLayout)), 2);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(zzLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(zzLayout)), 8);
+
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(nnLayout)), 2);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(nnLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(nnLayout)), 16);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(nnLayout)), 2);
+}
+
+
+TEST_F(Tensor_Api_Frame_Layout, OtherGroupWithDataType)
+{
+    using namespace AscendC::Te;
+
+    auto nzLayout = MakeFrameLayout<NZLayoutPtn, float>(32, 64);
+    auto znLayout = MakeFrameLayout<ZNLayoutPtn, float>(32, 64);
+    auto zzLayout = MakeFrameLayout<ZZLayoutPtn, float>(32, 64);
+    auto nnLayout = MakeFrameLayout<NNLayoutPtn>(16, 32);
+
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(nzLayout)), 16);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(nzLayout)), 2);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(nzLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(nzLayout)), 8);
+
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(znLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(znLayout)), 4);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(znLayout)), 16);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(znLayout)), 4);
+
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(zzLayout)), 16);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(zzLayout)), 2);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(zzLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(zzLayout)), 8);
+
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(nnLayout)), 2);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(nnLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(nnLayout)), 16);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(nnLayout)), 2);
+}
+
+
+TEST_F(Tensor_Api_Frame_Layout, OtherGroupWithC0Element)
+{
+    using namespace AscendC::Te;
+
+    auto nzLayout = MakeFrameLayout<NZLayoutPtn, 8>(32, 64);
+    auto znLayout = MakeFrameLayout<ZNLayoutPtn, 8>(32, 64);
+    auto zzLayout = MakeFrameLayout<ZZLayoutPtn, 8>(32, 64);
+    auto nnLayout = MakeFrameLayout<NNLayoutPtn, 2>(16, 32);
 
     EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(nzLayout)), 16);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(nzLayout)), 2);
@@ -253,25 +315,25 @@ TEST_F(Tensor_Api_Frame_Layout, OtherGroupTraitWithTypeAndC0Element)
 {
     using namespace AscendC::Te;
 
-    auto nzLayout = MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, 16>>(32, 64);
-    auto znLayout = MakeFrameLayout<ZNLayoutPtn, LayoutTraitDefault<float, 16>>(32, 64);
-    auto zzLayout = MakeFrameLayout<ZZLayoutPtn, LayoutTraitDefault<float, 16>>(32, 64);
-    auto nnLayout = MakeFrameLayout<NNLayoutPtn, LayoutTraitScale<fp8_e8m0_t, 2>>(16, 32);
+    auto nzLayout = MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float>>(32, 64);
+    auto znLayout = MakeFrameLayout<ZNLayoutPtn, LayoutTraitDefault<float>>(32, 64);
+    auto zzLayout = MakeFrameLayout<ZZLayoutPtn, LayoutTraitDefault<float>>(32, 64);
+    auto nnLayout = MakeFrameLayout<NNLayoutPtn>(16, 32);
 
     EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(nzLayout)), 16);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(nzLayout)), 2);
-    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(nzLayout)), 16);
-    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(nzLayout)), 4);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(nzLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(nzLayout)), 8);
 
-    EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(znLayout)), 16);
-    EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(znLayout)), 2);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(znLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(znLayout)), 4);
     EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(znLayout)), 16);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(znLayout)), 4);
 
     EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(zzLayout)), 16);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(zzLayout)), 2);
-    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(zzLayout)), 16);
-    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(zzLayout)), 4);
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(zzLayout)), 8);
+    EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(zzLayout)), 8);
 
     EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(nnLayout)), 2);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(nnLayout)), 8);
@@ -283,10 +345,10 @@ TEST_F(Tensor_Api_Frame_Layout, OtherGroupIntegralConstantTrait)
 {
     using namespace AscendC::Te;
 
-    auto nzLayout = MakeFrameLayout<NZLayoutPtn, AscendC::Std::Int<16>>(32, 64);
-    auto znLayout = MakeFrameLayout<ZNLayoutPtn, AscendC::Std::Int<16>>(32, 64);
-    auto zzLayout = MakeFrameLayout<ZZLayoutPtn, AscendC::Std::Int<16>>(32, 64);
-    auto nnLayout = MakeFrameLayout<NNLayoutPtn, AscendC::Std::Int<2>>(16, 32);
+    auto nzLayout = MakeFrameLayout<NZLayoutPtn, AscendC::Std::_16>(32, 64);
+    auto znLayout = MakeFrameLayout<ZNLayoutPtn, AscendC::Std::_16>(32, 64);
+    auto zzLayout = MakeFrameLayout<ZZLayoutPtn, AscendC::Std::_16>(32, 64);
+    auto nnLayout = MakeFrameLayout<NNLayoutPtn, AscendC::Std::_2>(16, 32);
 
     EXPECT_EQ(AscendC::Std::get<0>(GetShape<0>(nzLayout)), 16);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<0>(nzLayout)), 2);

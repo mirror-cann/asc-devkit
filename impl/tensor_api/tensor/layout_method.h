@@ -44,15 +44,6 @@ __aicore__ inline constexpr Stride<Ts...> MakeStride(const Ts&... ts)
 }
 
 template <typename... Ts>
-__aicore__ inline constexpr Tile<Ts...> MakeTile(const Ts&... ts)
-{
-    static_assert(sizeof...(Ts) > 0, "MakeTile requires at least one argument.");
-    static_assert(!HasZeroIntegralConstant<Ts...>::value,
-        "MakeShape does not accept Int<0> arguments.");
-    return {ts...};
-}
-
-template <typename... Ts>
 __aicore__ inline constexpr Coord<Ts...> MakeCoord(const Ts&... ts)
 {
     static_assert(sizeof...(Ts) > 0, "MakeCoord requires at least one argument.");
@@ -74,7 +65,7 @@ template <size_t I, typename Row, typename Col>
 struct StrideRowElem {
     __aicore__ static inline constexpr auto value(const Row& row, const Col& col) {
         if constexpr (I == 0) {
-            return Std::Int<1>{};
+            return _1{};
         } else {
             return Std::get<I - 1>(row) * Std::get<I - 1>(col) *
                 StrideRowElem<I - 1, Row, Col>::value(row, col);
@@ -125,7 +116,7 @@ struct FlatStrideElem {
         constexpr size_t N = Std::tuple_size_v<ShapeType>;
         static_assert(N > 0, "ShapeType must not be empty");
         if constexpr (I == N - 1) {
-            return Std::Int<1>{};
+            return _1{};
         } else {
             return FlatStrideElem<I + 1, ShapeType>::value(shape) * Std::get<I + 1>(shape);
         }
@@ -187,7 +178,7 @@ __aicore__ inline constexpr auto GetStride(LayoutType& layout)
 struct CoshapeSum {
     template <typename... Args>
     __aicore__ inline constexpr auto operator()(const Args&... args) const {
-        return (Std::Int<0>{} + ... + args);
+        return (_0{} + ... + args);
     }
 };
 
@@ -198,7 +189,7 @@ struct CoshapeCompute {
             static_assert(Std::tuple_size_v<T> == Std::tuple_size_v<U>, "Mismatched ranks");
             return TransformApply(shape, stride, CoshapeCompute{}, CoshapeSum{});
         } else {
-            auto m1Shape = shape - Std::Int<1>{};
+            auto m1Shape = shape - _1{};
             auto absStride = stride < 0 ? -stride : stride;
             return m1Shape * absStride;
         }
@@ -212,7 +203,7 @@ __aicore__ inline constexpr auto Coshape(const LayoutType& layout)
     auto shape = GetShape<Is...>(layout);
     auto stride = GetStride<Is...>(layout);
     auto coCoord = CoshapeCompute{}(shape, stride);
-    return coCoord + Std::Int<1>{};
+    return coCoord + _1{};
 }
 
 template <size_t... Is, typename LayoutType,

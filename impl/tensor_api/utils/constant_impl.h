@@ -27,6 +27,29 @@
 
 namespace AscendC {
 namespace Te {
+using Std::Int;
+using Std::_0;
+using Std::_1;
+using Std::_2;
+using Std::_3;
+using Std::_4;
+using Std::_5;
+using Std::_6;
+using Std::_7;
+using Std::_8;
+using Std::_9;
+using Std::_10;
+using Std::_16;
+using Std::_24;
+using Std::_32;
+using Std::_64;
+using Std::_128;
+using Std::_256;
+using Std::_512;
+using Std::_1024;
+using Std::_2048;
+using Std::_4096;
+
 constexpr size_t TWO_DIM_DATA = 2;
 constexpr size_t FOUR_DIM_DATA = 4;
 constexpr size_t FRACTAL_FIXED = 16;
@@ -75,11 +98,6 @@ namespace Location {
     struct SSBUF {};
 }
 
-template <typename... Ts>
-struct HasZeroIntegralConstant : Std::bool_constant<
-    (... || Std::is_same_v<Std::remove_cvref_t<Ts>, Std::Int<0>>)> {};
-
-    
 template <typename T>
 struct IsHardware {
 private:
@@ -98,6 +116,10 @@ public:
 template <typename T>
 constexpr bool IsHardwareV = IsHardware<T>::value;
 
+template <typename... Ts>
+struct HasZeroIntegralConstant : Std::bool_constant<
+    (... || Std::is_same_v<Std::remove_cvref_t<Ts>, Std::Int<0>>)> {};
+    
 template <typename TupleType>
 using tuple_sequence = Std::make_index_sequence<Std::tuple_size_v<Std::remove_cvref_t<TupleType>>>;
 
@@ -146,6 +168,11 @@ struct CheckAllSame<A> { static constexpr bool value = false; };
 
 template <typename A, typename... BList>
 constexpr bool IsOneOfAttrV = CheckAllSame<A, BList...>::value;
+
+template <typename DataType>
+inline constexpr bool IsDataType = IsOneOfAttrV<Std::remove_cvref_t<DataType>, hifloat8_t, bfloat16_t, fp4x2_e1m2_t, fp4x2_e2m1_t, 
+                                                fp8_e5m2_t, fp8_e4m3fn_t, fp8_e8m0_t> || Std::is_integral_v<Std::remove_cvref_t<DataType>> 
+                                                || Std::is_floating_point_v<Std::remove_cvref_t<DataType>>;
 
 template <typename DataType>
 inline constexpr bool IsB4Type = IsOneOfAttrV<DataType, fp4x2_e1m2_t, fp4x2_e2m1_t>;

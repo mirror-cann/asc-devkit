@@ -25,15 +25,11 @@ TEST_F(Tensor_Api_Pointer_Offset, TestMakeMemPtrByteOffset)
 {
     using namespace AscendC::Te;
 
-    struct FloatPtrTrait {
-    using type = float;
-    };
-
     constexpr uint64_t byteOffset = 128;
 
     auto ubPtr = MakeMemPtr<Location::UB, float>(byteOffset);
-    auto l1Ptr = MakeMemPtr<Location::L1, FloatPtrTrait>(byteOffset);
-    auto l0cPtr = MakeMemPtr<Location::L0C, FloatPtrTrait>(byteOffset);
+    auto l1Ptr = MakeMemPtr<Location::L1, float>(byteOffset);
+    auto l0cPtr = MakeMemPtr<Location::L0C, float>(byteOffset);
 
     EXPECT_EQ(ubPtr.Get(), reinterpret_cast<__ubuf__ float*>(0 + byteOffset));
     EXPECT_EQ(l1Ptr.Get(), reinterpret_cast<__cbuf__ float*>(0 + byteOffset));

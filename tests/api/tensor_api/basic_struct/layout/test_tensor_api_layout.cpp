@@ -70,7 +70,6 @@ TEST_F(Tensor_Api_Layout_Struct, TestMakeTuple)
 
     auto shape = MakeShape(2, 3, 4);
     auto stride = MakeStride(12, 4, 1);
-    auto tile = MakeTile(8, 16);
     auto coord = MakeCoord(1, 2, 3);
 
     EXPECT_EQ(AscendC::Std::get<0>(shape), 2);
@@ -81,9 +80,6 @@ TEST_F(Tensor_Api_Layout_Struct, TestMakeTuple)
     EXPECT_EQ(AscendC::Std::get<1>(stride), 4);
     EXPECT_EQ(AscendC::Std::get<2>(stride), 1);
 
-    EXPECT_EQ(AscendC::Std::get<0>(tile), 8);
-    EXPECT_EQ(AscendC::Std::get<1>(tile), 16);
-
     EXPECT_EQ(AscendC::Std::get<0>(coord), 1);
     EXPECT_EQ(AscendC::Std::get<1>(coord), 2);
     EXPECT_EQ(AscendC::Std::get<2>(coord), 3);
@@ -93,9 +89,9 @@ TEST_F(Tensor_Api_Layout_Struct, TestMakeIntTuple)
 {
     using namespace AscendC::Te;
 
-    auto shape = MakeShape(AscendC::Std::Int<4>{}, AscendC::Std::Int<5>{});
-    auto stride = MakeStride(AscendC::Std::Int<5>{}, AscendC::Std::Int<1>{});
-    auto coord = MakeCoord(AscendC::Std::Int<1>{}, AscendC::Std::Int<3>{});
+    auto shape = MakeShape(AscendC::Std::_4{}, AscendC::Std::_5{});
+    auto stride = MakeStride(AscendC::Std::_5{}, AscendC::Std::_1{});
+    auto coord = MakeCoord(AscendC::Std::_1{}, AscendC::Std::_3{});
 
     EXPECT_EQ(AscendC::Std::get<0>(shape).value, 4);
     EXPECT_EQ(AscendC::Std::get<1>(shape).value, 5);

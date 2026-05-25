@@ -76,8 +76,8 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyGM2L1RoutesToCubeArchCopy)
     __gm__ float src[m * n] = {0};
     __cbuf__ float dst[m * n] = {0};
 
-    auto gmTensor = MakeTensorAt<Location::GM>(src, MakeFrameLayout<NDExtLayoutPtn, LayoutTraitDefault<float>>(m, n));
-    auto l1Tensor = MakeTensorAt<Location::L1>(dst, MakeFrameLayout<DNExtLayoutPtn, LayoutTraitDefault<float>>(m, n));
+    auto gmTensor = MakeTensorAt<Location::GM>(src, MakeFrameLayout<NDExtLayoutPtn>(m, n));
+    auto l1Tensor = MakeTensorAt<Location::L1>(dst, MakeFrameLayout<NDExtLayoutPtn>(m, n));
 
     RunCopyCallPaths<CopyGM2L1, CopyGM2L1TraitDefault>(l1Tensor, gmTensor);
     RunCopyWithPaths<CopyGM2L1, CopyGM2L1TraitDefault>(l1Tensor, gmTensor);
@@ -244,11 +244,13 @@ private:
     template <typename T>                                                                                              \
     constexpr auto Make##NAME = [](auto row, auto col) {                                                               \
         constexpr size_t C0 = IsB4Type<T> ? 64 : 32 / sizeof(T);                                                               \
-        return MakeFrameLayout<NAME##LayoutPtn, LayoutTraitDefault<T, C0>>(row, col);                                  \
+        return MakeFrameLayout<NAME##LayoutPtn, LayoutTrait<T, Int<C0>>>(row, col);                                  \
     };
 
 MAKE_LAYOUT_FUNC(NDExt)
 MAKE_LAYOUT_FUNC(DNExt)
+MAKE_LAYOUT_FUNC(ND)
+MAKE_LAYOUT_FUNC(DN)
 MAKE_LAYOUT_FUNC(NZ)
 MAKE_LAYOUT_FUNC(ZN)
 #undef MAKE_LAYOUT_FUNC
@@ -256,7 +258,7 @@ MAKE_LAYOUT_FUNC(ZN)
 #define MAKE_LAYOUT_FUNC(NAME)                                                                                         \
     template <typename T>                                                                                              \
     constexpr auto Make##NAME =                                                                                        \
-        [](auto row, auto col) { return MakeFrameLayout<NAME##LayoutPtn, LayoutTraitDefault<T, 2>>(row, col); };
+        [](auto row, auto col) { return MakeFrameLayout<NAME##LayoutPtn, LayoutTrait<T, _2>>(row, col); };
 
 MAKE_LAYOUT_FUNC(ZZ)
 MAKE_LAYOUT_FUNC(NN)
@@ -285,6 +287,16 @@ TEST_GM2L1(uint64_t, ND2ND, MakeNDExt<T>(17, 18), MakeNDExt<T>(19, 32))
 TEST_GM2L1(fp8_e4m3fn_t, ND2ND, MakeNDExt<T>(17, 18), MakeNDExt<T>(19, 32))
 TEST_GM2L1(fp8_e5m2_t, ND2ND, MakeNDExt<T>(17, 18), MakeNDExt<T>(19, 32))
 TEST_GM2L1(hifloat8_t, ND2ND, MakeNDExt<T>(17, 18), MakeNDExt<T>(19, 32))
+
+// MakeND
+TEST_GM2L1(fp4x2_e2m1_t, NDLayout2NDLayout, MakeND<T>(17, 18), MakeND<T>(19, 64))
+TEST_GM2L1(fp4x2_e1m2_t, NDLayout2NDLayout, MakeND<T>(17, 18), MakeND<T>(19, 64))
+TEST_GM2L1(half, NDLayout2NDLayout, MakeND<T>(17, 18), MakeND<T>(19, 32))
+TEST_GM2L1(float, NDLayout2NDLayout, MakeND<T>(17, 18), MakeND<T>(19, 32))
+TEST_GM2L1(uint8_t, NDLayout2NDLayout, MakeND<T>(17, 18), MakeND<T>(19, 32))
+TEST_GM2L1(uint16_t, NDLayout2NDLayout, MakeND<T>(17, 18), MakeND<T>(19, 32))
+TEST_GM2L1(uint32_t, NDLayout2NDLayout, MakeND<T>(17, 18), MakeND<T>(19, 32))
+TEST_GM2L1(uint64_t, NDLayout2NDLayout, MakeND<T>(17, 18), MakeND<T>(19, 32))
 
 // continuous case
 // 1 dim case. src/dst col or row shape is 1
@@ -328,33 +340,33 @@ TEST_GM2L1(uint64_t, ND2ND1Dim, MakeNDExt<T>(10, 30), MakeNDExt<T>(10, 30))
 TEST_GM2L1(uint64_t, ND2ND1Dim, MakeNDExt<T>(10, 30), MakeNDExt<T>(35, 30))
 
 // src shape include Int<1>()
-TEST_GM2L1(fp4x2_e2m1_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 34), MakeNDExt<T>(1, 38))
-TEST_GM2L1(fp4x2_e1m2_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 34), MakeNDExt<T>(1, 38))
-TEST_GM2L1(half, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(bfloat16_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(float, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(int8_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(uint8_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(int16_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(uint16_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(int32_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(uint32_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(int64_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(uint64_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(fp8_e4m3fn_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(fp8_e5m2_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
-TEST_GM2L1(hifloat8_t, ND2ND1DimInt, MakeNDExt<T>(Std::Int<1>(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(fp4x2_e2m1_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 34), MakeNDExt<T>(1, 38))
+TEST_GM2L1(fp4x2_e1m2_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 34), MakeNDExt<T>(1, 38))
+TEST_GM2L1(half, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(bfloat16_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(float, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(int8_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(uint8_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(int16_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(uint16_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(int32_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(uint32_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(int64_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(uint64_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(fp8_e4m3fn_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(fp8_e5m2_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
+TEST_GM2L1(hifloat8_t, ND2ND1DimInt, MakeNDExt<T>(Std::_1(), 17), MakeNDExt<T>(1, 19))
 
-TEST_GM2L1(fp4x2_e2m1_t, ND2ND1DimInt, MakeNDExt<T>(34, Std::Int<1>()), MakeNDExt<T>(38, 1))
-TEST_GM2L1(fp4x2_e2m1_t, ND2ND1DimInt, MakeNDExt<T>(34, Std::Int<1>()), MakeNDExt<T>(38, Std::Int<1>()))
-TEST_GM2L1(uint8_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::Int<1>()), MakeNDExt<T>(19, 1))
-TEST_GM2L1(uint8_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::Int<1>()), MakeNDExt<T>(19, Std::Int<1>()))
-TEST_GM2L1(uint16_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::Int<1>()), MakeNDExt<T>(19, 1))
-TEST_GM2L1(uint16_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::Int<1>()), MakeNDExt<T>(19, Std::Int<1>()))
-TEST_GM2L1(float, ND2ND1DimInt, MakeNDExt<T>(17, Std::Int<1>()), MakeNDExt<T>(19, 1))
-TEST_GM2L1(float, ND2ND1DimInt, MakeNDExt<T>(17, Std::Int<1>()), MakeNDExt<T>(19, Std::Int<1>()))
-TEST_GM2L1(uint64_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::Int<1>()), MakeNDExt<T>(19, 1))
-TEST_GM2L1(uint64_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::Int<1>()), MakeNDExt<T>(19, Std::Int<1>()))
+TEST_GM2L1(fp4x2_e2m1_t, ND2ND1DimInt, MakeNDExt<T>(34, Std::_1()), MakeNDExt<T>(38, 1))
+TEST_GM2L1(fp4x2_e2m1_t, ND2ND1DimInt, MakeNDExt<T>(34, Std::_1()), MakeNDExt<T>(38, Std::_1()))
+TEST_GM2L1(uint8_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::_1()), MakeNDExt<T>(19, 1))
+TEST_GM2L1(uint8_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::_1()), MakeNDExt<T>(19, Std::_1()))
+TEST_GM2L1(uint16_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::_1()), MakeNDExt<T>(19, 1))
+TEST_GM2L1(uint16_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::_1()), MakeNDExt<T>(19, Std::_1()))
+TEST_GM2L1(float, ND2ND1DimInt, MakeNDExt<T>(17, Std::_1()), MakeNDExt<T>(19, 1))
+TEST_GM2L1(float, ND2ND1DimInt, MakeNDExt<T>(17, Std::_1()), MakeNDExt<T>(19, Std::_1()))
+TEST_GM2L1(uint64_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::_1()), MakeNDExt<T>(19, 1))
+TEST_GM2L1(uint64_t, ND2ND1DimInt, MakeNDExt<T>(17, Std::_1()), MakeNDExt<T>(19, Std::_1()))
 
 // non continuous case, the dst col stride of ND layout needs to be aligned with C0_SIZE(32B)
 TEST_GM2L1_COORD(fp4x2_e2m1_t, ND2ND, MakeNDExt<T>(33, 40), MakeNDExt<T>(19, 64), MakeCoord(10, 10))
@@ -463,6 +475,15 @@ TEST_GM2L1(uint8_t, ND2Nz, MakeNDExt<T>(48, 48), MakeNZ<T>(69, 70))
 TEST_GM2L1(uint16_t, ND2Nz, MakeNDExt<T>(48, 48), MakeNZ<T>(69, 70))
 TEST_GM2L1(uint32_t, ND2Nz, MakeNDExt<T>(48, 48), MakeNZ<T>(69, 70))
 
+// MakeND
+TEST_GM2L1(fp4x2_e2m1_t, NDLayout2Nz, MakeND<T>(18, 18), MakeNZ<T>(19, 20))
+TEST_GM2L1(fp4x2_e1m2_t, NDLayout2Nz, MakeND<T>(18, 18), MakeNZ<T>(19, 20))
+TEST_GM2L1(half, NDLayout2Nz, MakeND<T>(18, 17), MakeNZ<T>(19, 18))
+TEST_GM2L1(float, NDLayout2Nz, MakeND<T>(18, 17), MakeNZ<T>(19, 18))
+TEST_GM2L1(uint8_t, NDLayout2Nz, MakeND<T>(18, 9), MakeNZ<T>(19, 10))
+TEST_GM2L1(uint16_t, NDLayout2Nz, MakeND<T>(18, 9), MakeNZ<T>(19, 10))
+TEST_GM2L1(uint32_t, NDLayout2Nz, MakeND<T>(18, 9), MakeNZ<T>(19, 10))
+
 TEST_GM2L1_COORD(fp4x2_e2m1_t, ND2Nz, MakeNDExt<T>(33, 26), MakeNZ<T>(19, 18), MakeCoord(0, 0))
 TEST_GM2L1_COORD(uint8_t, ND2Nz, MakeNDExt<T>(33, 25), MakeNZ<T>(19, 18), MakeCoord(0, 0))
 TEST_GM2L1_COORD(uint16_t, ND2Nz, MakeNDExt<T>(33, 25), MakeNZ<T>(19, 18), MakeCoord(0, 0))
@@ -562,6 +583,15 @@ TEST_GM2L1(uint8_t, ND2Zn, MakeNDExt<T>(48, 48), MakeZN<T>(69, 70))
 TEST_GM2L1(uint16_t, ND2Zn, MakeNDExt<T>(48, 48), MakeZN<T>(69, 70))
 TEST_GM2L1(uint32_t, ND2Zn, MakeNDExt<T>(48, 48), MakeZN<T>(69, 70))
 
+// MakeND
+TEST_GM2L1(fp8_e4m3fn_t, NDLayout2Zn, MakeND<T>(18, 9), MakeZN<T>(19, 10))
+TEST_GM2L1(fp8_e5m2_t, NDLayout2Zn, MakeND<T>(18, 9), MakeZN<T>(19, 10))
+TEST_GM2L1(half, NDLayout2Zn, MakeND<T>(18, 17), MakeZN<T>(19, 18))
+TEST_GM2L1(float, NDLayout2Zn, MakeND<T>(18, 17), MakeZN<T>(19, 18))
+TEST_GM2L1(uint8_t, NDLayout2Zn, MakeND<T>(18, 9), MakeZN<T>(19, 10))
+TEST_GM2L1(uint16_t, NDLayout2Zn, MakeND<T>(18, 9), MakeZN<T>(19, 10))
+TEST_GM2L1(uint32_t, NDLayout2Zn, MakeND<T>(18, 9), MakeZN<T>(19, 10))
+
 TEST_GM2L1_COORD(half, ND2Zn, MakeNDExt<T>(18, 17), MakeZN<T>(39, 48), MakeCoord(0, 0))
 TEST_GM2L1_COORD(uint8_t, ND2Zn, MakeNDExt<T>(33, 25), MakeZN<T>(19, 18), MakeCoord(0, 0))
 TEST_GM2L1_COORD(uint8_t, ND2Zn, MakeNDExt<T>(33, 25), MakeZN<T>(19, 18), MakeCoord(10, 10))
@@ -645,6 +675,15 @@ TEST_GM2L1(uint32_t, DN2Nz, MakeDNExt<T>(38, 38), MakeNZ<T>(69, 70))
 TEST_GM2L1(uint8_t, DN2Nz, MakeDNExt<T>(48, 48), MakeNZ<T>(69, 70))
 TEST_GM2L1(uint16_t, DN2Nz, MakeDNExt<T>(48, 48), MakeNZ<T>(69, 70))
 TEST_GM2L1(uint32_t, DN2Nz, MakeDNExt<T>(48, 48), MakeNZ<T>(69, 70))
+
+// MakeDN
+TEST_GM2L1(fp8_e4m3fn_t, DNLayout2Nz, MakeDN<T>(18, 9), MakeNZ<T>(19, 10))
+TEST_GM2L1(fp8_e5m2_t, DNLayout2Nz, MakeDN<T>(18, 9), MakeNZ<T>(19, 10))
+TEST_GM2L1(half, DNLayout2Nz, MakeDN<T>(18, 17), MakeNZ<T>(19, 18))
+TEST_GM2L1(float, DNLayout2Nz, MakeDN<T>(18, 17), MakeNZ<T>(19, 18))
+TEST_GM2L1(uint8_t, DNLayout2Nz, MakeDN<T>(18, 9), MakeNZ<T>(19, 10))
+TEST_GM2L1(uint16_t, DNLayout2Nz, MakeDN<T>(18, 9), MakeNZ<T>(19, 10))
+TEST_GM2L1(uint32_t, DNLayout2Nz, MakeDN<T>(18, 9), MakeNZ<T>(19, 10))
 
 TEST_GM2L1_COORD(half, DN2Nz, MakeDNExt<T>(18, 17), MakeNZ<T>(39, 48), MakeCoord(0, 0))
 TEST_GM2L1_COORD(uint8_t, DN2Nz, MakeDNExt<T>(33, 25), MakeNZ<T>(19, 18), MakeCoord(0, 0))
@@ -731,6 +770,15 @@ TEST_GM2L1(uint32_t, DN2Zn, MakeDNExt<T>(38, 38), MakeZN<T>(69, 70))
 TEST_GM2L1(uint8_t, DN2Zn, MakeDNExt<T>(48, 48), MakeZN<T>(69, 70))
 TEST_GM2L1(uint16_t, DN2Zn, MakeDNExt<T>(48, 48), MakeZN<T>(69, 70))
 TEST_GM2L1(uint32_t, DN2Zn, MakeDNExt<T>(48, 48), MakeZN<T>(69, 70))
+
+// MakeDN
+TEST_GM2L1(fp4x2_e1m2_t, DNLayout2Zn, MakeDN<T>(18, 9), MakeZN<T>(20, 10))
+TEST_GM2L1(fp4x2_e2m1_t, DNLayout2Zn, MakeDN<T>(18, 9), MakeZN<T>(20, 10))
+TEST_GM2L1(half, DNLayout2Zn, MakeDN<T>(18, 17), MakeZN<T>(19, 18))
+TEST_GM2L1(float, DNLayout2Zn, MakeDN<T>(18, 17), MakeZN<T>(19, 18))
+TEST_GM2L1(uint8_t, DNLayout2Zn, MakeDN<T>(18, 9), MakeZN<T>(19, 10))
+TEST_GM2L1(uint16_t, DNLayout2Zn, MakeDN<T>(18, 9), MakeZN<T>(19, 10))
+TEST_GM2L1(uint32_t, DNLayout2Zn, MakeDN<T>(18, 9), MakeZN<T>(19, 10))
 
 TEST_GM2L1_COORD(fp4x2_e2m1_t, DN2Zn, MakeDNExt<T>(18, 17), MakeZN<T>(40, 48), MakeCoord(0, 0))
 TEST_GM2L1_COORD(fp4x2_e2m1_t, DN2Zn, MakeDNExt<T>(34, 25), MakeZN<T>(20, 18), MakeCoord(0, 0))
@@ -1196,6 +1244,20 @@ TEST_GM2L1_COORD(fp8_e8m0_t, ScaleBNnNn, MakeNN<T>(20, 20), MakeNN<T>(20, 20), M
 TEST_GM2L1_COORD(fp8_e8m0_t, ScaleBNnNn, MakeNN<T>(68, 68), MakeNN<T>(64, 64), MakeCoord(2, 16))
 TEST_GM2L1_COORD(fp8_e8m0_t, ScaleBNnNn, MakeNN<T>(34, 34), MakeNN<T>(32, 32), MakeCoord(2, 16))
 
+template <typename Info1, typename Info2, size_t dim, typename Layout>
+auto GetSimLayoutElement(const Layout& layout)
+{
+    if constexpr (Layout::depth == 2) {
+        if constexpr (dim == 0) {
+            return 1U;
+        } else {
+            return GetElement<Info1, Info2>(layout);
+        }
+    } else {
+        return GetElement<Info1, Info2, dim>(layout);
+    }
+}
+
 // PrintTensor
 template <typename T>
 void PrintTensor(const T& src)
@@ -1203,10 +1265,10 @@ void PrintTensor(const T& src)
     using LayoutPtn = GetLayoutPattern<typename T::layoutType>;
     using srcType = typename T::elementType;
     auto srcLayout = src.Layout();
-    uint32_t M0 = GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(srcLayout);
-    uint32_t N0 = GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(srcLayout);
-    uint32_t M1 = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
-    uint32_t N1 = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
+    uint32_t M0 = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Row, 0>(srcLayout);
+    uint32_t N0 = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Column, 0>(srcLayout);
+    uint32_t M1 = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
+    uint32_t N1 = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
     if constexpr (Std::is_same_v<srcType, fp8_e8m0_t> && Std::is_same_v<LayoutPtn, ScaleANDLayoutPtn>) {
         std::cout << "ScaleAND";
     } else if constexpr (Std::is_same_v<srcType, fp8_e8m0_t> && Std::is_same_v<LayoutPtn, ScaleADNLayoutPtn>) {
@@ -1215,9 +1277,9 @@ void PrintTensor(const T& src)
         std::cout << "ScaleAND";
     } else if constexpr (Std::is_same_v<srcType, fp8_e8m0_t> && Std::is_same_v<LayoutPtn, ScaleBDNLayoutPtn>) {
         std::cout << "ScaleBDN";
-    } else if constexpr (Std::is_same_v<LayoutPtn, NDExtLayoutPtn>) {
+    } else if constexpr (Std::is_same_v<LayoutPtn, NDExtLayoutPtn> || Std::is_same_v<LayoutPtn, NDLayoutPtn>) {
         std::cout << "ND";
-    } else if constexpr (Std::is_same_v<LayoutPtn, DNExtLayoutPtn>) {
+    } else if constexpr (Std::is_same_v<LayoutPtn, DNExtLayoutPtn> || Std::is_same_v<LayoutPtn, DNLayoutPtn>) {
         std::cout << "DN";
     } else if constexpr (Std::is_same_v<LayoutPtn, NZLayoutPtn>) {
         std::cout << "NZ";
@@ -1230,7 +1292,23 @@ void PrintTensor(const T& src)
     } else {
         std::cout << "UnknownLayout";
     }
-    if (M0 == 1 && N0 == 1) { // for 2D layout, print in 2D format
+    if constexpr (T::layoutType::depth == 2) {
+        std::cout << " Layout Result (2D) (" << M1 << ", " << N1 << "): " << std::endl;
+        for (int i = 0; i < M1; i++) {
+            std::cout << i << ":\t";
+            for (int j = 0; j < N1; j++) {
+                auto dataAddr = &(src[MakeCoord(i, j)]);
+                if constexpr (sizeof(srcType) == 1) {
+                    std::cout << static_cast<uint32_t>(*(reinterpret_cast<uint8_t*>(dataAddr))) << "\t";
+                } else if constexpr (Std::is_same_v<srcType, half>) {
+                    std::cout << *(reinterpret_cast<uint16_t*>(dataAddr)) << "\t";
+                } else {
+                    std::cout << *dataAddr << "\t";
+                }
+            }
+            std::cout << std::endl;
+        }
+    } else if (M0 == 1 && N0 == 1) { // for 2D layout, print in 2D format
         std::cout << " Layout Result (2D) (" << M1 << ", " << N1 << "): " << std::endl;
         for (int i = 0; i < M1; i++) {
             std::cout << i << ":\t";
@@ -1332,22 +1410,22 @@ void SimND2ND(const T& dst, const U& src)
 {
     using DstLayoutPtn = GetLayoutPattern<typename T::layoutType>;
     using SrcLayoutPtn = GetLayoutPattern<typename U::layoutType>;
-    static_assert(Std::is_same_v<DstLayoutPtn, NDExtLayoutPtn>);
-    static_assert(Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn>);
+    static_assert(Std::is_same_v<DstLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<DstLayoutPtn, NDLayoutPtn>);
+    static_assert(Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>);
     using srcType = typename U::elementType;
     static_assert(std::is_same_v<srcType, typename T::elementType>, "src and dst element types must be the same");
     auto dstLayout = dst.Layout();
     auto srcLayout = src.Layout();
-    uint32_t M = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
-    uint32_t N = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
+    uint32_t M = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
+    uint32_t N = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
 
-    auto srcRowStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout);
-    auto srcColStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
-    auto dstRowStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstLayout);
+    auto srcRowStride = GetSimLayoutElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout);
+    auto srcColStride = GetSimLayoutElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
+    auto dstRowStride = GetSimLayoutElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstLayout);
 
     uint32_t c0Elements = C0_SIZE<srcType> / sizeof(srcType);
-    uint32_t M1 = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(dstLayout);
-    uint32_t N1 = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(dstLayout);
+    uint32_t M1 = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Row, 1>(dstLayout);
+    uint32_t N1 = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Column, 1>(dstLayout);
 
     uint32_t dataLen = M * N;
     uint32_t alignN = (dataLen + c0Elements - 1) / c0Elements * c0Elements;
@@ -1392,15 +1470,15 @@ void SimND2Nz(const T& dst, const U& src)
     using DstLayoutPtn = GetLayoutPattern<typename T::layoutType>;
     using SrcLayoutPtn = GetLayoutPattern<typename U::layoutType>;
     static_assert(Std::is_same_v<DstLayoutPtn, NZLayoutPtn>);
-    static_assert(Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn>);
+    static_assert(Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>);
     using srcType = typename U::elementType;
     static_assert(std::is_same_v<srcType, typename T::elementType>, "src and dst element types must be the same");
     auto dstLayout = dst.Layout();
     auto srcLayout = src.Layout();
-    auto M = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
-    auto N = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
-    auto srcSM1 = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout);
-    auto srcSN1 = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
+    auto M = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
+    auto N = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
+    auto srcSM1 = GetSimLayoutElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout);
+    auto srcSN1 = GetSimLayoutElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
 
     if (IsB4Type<srcType>) {
         EXPECT_TRUE(N % 2 == 0) << "For b4 type, col shape must be even for ND format, but got N: " << N;
@@ -1439,16 +1517,16 @@ void SimND2Zn(const T& dst, const U& src)
     using DstLayoutPtn = GetLayoutPattern<typename T::layoutType>;
     using SrcLayoutPtn = GetLayoutPattern<typename U::layoutType>;
     static_assert(Std::is_same_v<DstLayoutPtn, ZNLayoutPtn>);
-    static_assert(Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn>);
+    static_assert(Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>);
     using srcType = typename U::elementType;
     static_assert(std::is_same_v<srcType, typename T::elementType>, "src and dst element types must be the same");
     auto dstLayout = dst.Layout();
     auto srcLayout = src.Layout();
-    auto M = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
-    auto N = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
+    auto M = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
+    auto N = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
 
-    auto srcColStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
-    auto srcRowStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout);
+    auto srcColStride = GetSimLayoutElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
+    auto srcRowStride = GetSimLayoutElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout);
 
     uint32_t c0Elements = C0_SIZE<srcType> / sizeof(srcType);
     uint32_t M0 = GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(dstLayout);
@@ -1483,16 +1561,16 @@ void SimDN2Nz(const T& dst, const U& src)
     using DstLayoutPtn = GetLayoutPattern<typename T::layoutType>;
     using SrcLayoutPtn = GetLayoutPattern<typename U::layoutType>;
     static_assert(Std::is_same_v<DstLayoutPtn, NZLayoutPtn>);
-    static_assert(Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn>);
+    static_assert(Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, DNLayoutPtn>);
     using srcType = typename U::elementType;
     static_assert(!IsB4Type<srcType>, "DN2NZ does not support b4 type");
     static_assert(std::is_same_v<srcType, typename T::elementType>, "src and dst element types must be the same");
     auto dstLayout = dst.Layout();
     auto srcLayout = src.Layout();
-    auto M = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
-    auto N = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
+    auto M = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
+    auto N = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
 
-    auto srcColStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
+    auto srcColStride = GetSimLayoutElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
 
     uint32_t c0Elements = C0_SIZE<srcType> / sizeof(srcType);
     uint32_t M0 = GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(dstLayout);
@@ -1525,15 +1603,15 @@ void SimDN2Zn(const T& dst, const U& src)
     using DstLayoutPtn = GetLayoutPattern<typename T::layoutType>;
     using SrcLayoutPtn = GetLayoutPattern<typename U::layoutType>;
     static_assert(Std::is_same_v<DstLayoutPtn, ZNLayoutPtn>);
-    static_assert(Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn>);
+    static_assert(Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, DNLayoutPtn>);
     using srcType = typename U::elementType;
     static_assert(std::is_same_v<srcType, typename T::elementType>, "src and dst element types must be the same");
     auto dstLayout = dst.Layout();
     auto srcLayout = src.Layout();
-    auto M = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
-    auto N = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
+    auto M = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
+    auto N = GetSimLayoutElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
 
-    auto srcColStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
+    auto srcColStride = GetSimLayoutElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
     if (IsB4Type<srcType>) {
         EXPECT_TRUE(M % 2 == 0) << "For b4 type, col shape must be even for ND format, but got M: " << M;
         EXPECT_TRUE(srcColStride % 2 == 0)
@@ -1931,15 +2009,20 @@ void DataCopyGm2L1Sim(const T& dst, const U& src)
     using DstLayoutPtn = GetLayoutPattern<typename T::layoutType>;
     using SrcLayoutPtn = GetLayoutPattern<typename U::layoutType>;
 
-    if constexpr (Std::is_same_v<DstLayoutPtn, NDExtLayoutPtn> && Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn>) {
+    if constexpr ((Std::is_same_v<DstLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<DstLayoutPtn, NDLayoutPtn>) &&
+                  (Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>)) {
         SimND2ND(dst, src);
-    } else if constexpr (Std::is_same_v<DstLayoutPtn, NZLayoutPtn> && Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn>) {
+    } else if constexpr (Std::is_same_v<DstLayoutPtn, NZLayoutPtn> &&
+                         (Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>)) {
         SimND2Nz(dst, src);
-    } else if constexpr (Std::is_same_v<DstLayoutPtn, ZNLayoutPtn> && Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn>) {
+    } else if constexpr (Std::is_same_v<DstLayoutPtn, ZNLayoutPtn> &&
+                         (Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>)) {
         SimND2Zn(dst, src);
-    } else if constexpr (Std::is_same_v<DstLayoutPtn, NZLayoutPtn> && Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn>) {
+    } else if constexpr (Std::is_same_v<DstLayoutPtn, NZLayoutPtn> &&
+                         (Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, DNLayoutPtn>)) {
         SimDN2Nz(dst, src);
-    } else if constexpr (Std::is_same_v<DstLayoutPtn, ZNLayoutPtn> && Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn>) {
+    } else if constexpr (Std::is_same_v<DstLayoutPtn, ZNLayoutPtn> &&
+                         (Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, DNLayoutPtn>)) {
         SimDN2Zn(dst, src);
     } else if constexpr (Std::is_same_v<DstLayoutPtn, NZLayoutPtn> && Std::is_same_v<SrcLayoutPtn, NZLayoutPtn>) {
         SimNz2Nz(dst, src);

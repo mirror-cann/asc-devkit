@@ -20,7 +20,7 @@ protected:
     void TearDown() {}
 };
 
-TEST_F(Tensor_Api_Engine, TestViewEngineCacheMode)
+TEST_F(Tensor_Api_Engine, TestViewEngineBeginAndOffset)
 {
     using namespace AscendC::Te;
 
@@ -30,12 +30,7 @@ TEST_F(Tensor_Api_Engine, TestViewEngineCacheMode)
     ViewEngine<decltype(ptr)> engine(ptr);
     EXPECT_EQ(engine.Begin(), ptr);
     EXPECT_EQ(engine.Begin()[1], 2);
-    EXPECT_EQ(engine.GetCacheMode(), static_cast<uint8_t>(CacheMode::CACHE_MODE_NORMAL));
-
-    engine.SetCacheMode(CacheMode::CACHE_MODE_DISABLE);
-    EXPECT_EQ(engine.GetCacheMode(), static_cast<uint8_t>(CacheMode::CACHE_MODE_DISABLE));
     EXPECT_EQ((engine + 2).Begin(), ptr + 2);
-    EXPECT_EQ((engine + 2).GetCacheMode(), static_cast<uint8_t>(CacheMode::CACHE_MODE_DISABLE));
 }
 
 TEST_F(Tensor_Api_Engine, TestConstViewEngine)
