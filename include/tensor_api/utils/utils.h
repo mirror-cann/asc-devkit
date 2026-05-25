@@ -90,7 +90,7 @@ struct FixpipeTrait {
 struct FixpipeParams {
    __aicore__ constexpr FixpipeParams() {};
 
-   __aicore__ constexpr FixpipeParams(uint8_t unitFlagIn, bool subBlockIdIn) : unitFlag(unitFlagIn), subBlockId(subBlockIdIn) {};
+   __aicore__ constexpr FixpipeParams(uint8_t unitFlagIn, bool subBlockIdIn = false) : unitFlag(unitFlagIn), subBlockId(subBlockIdIn) {};
     
     uint8_t unitFlag = 0;
 
