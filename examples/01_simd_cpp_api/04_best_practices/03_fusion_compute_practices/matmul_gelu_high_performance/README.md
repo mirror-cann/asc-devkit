@@ -19,6 +19,7 @@
 │   │   └── verify_result.py    // 真值对比文件
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
+│   ├── figures                 // 图示
 │   └── mmad_gelu.asc           // Ascend C样例实现
 ```
 
@@ -299,7 +300,7 @@ uint32_t nIterIdx = logicCoreId / mIter;
 
 下图展示了Scenario 1（CV融合-GM中转）场景下AIC和AIV的流水并行执行过程。AIC侧完成Matmul计算后通过Fixpipe将结果写入GM，AIV侧从GM读取数据完成GELU计算，两者按(baseM × baseN)块粒度流水并行：
 
-![Scenario1 CV融合-GM中转流水并行](figure/CVParallell_L0C_GM_UB.png)
+![Scenario1 CV融合-GM中转流水并行](figures/CVParallell_L0C_GM_UB.png)
 
 > **备注：** 流水图基于产品线CANN包msopprof工具上板获取，获取命令：`msprof op --aic-metrics=PipeUtilization`
 
@@ -319,7 +320,7 @@ uint32_t nIterIdx = logicCoreId / mIter;
 
 下图展示了Scenario 2（CV融合-UB直通）场景下AIC和AIV的流水并行执行过程。AIC侧完成Matmul计算后通过Fixpipe将结果直接写入UB（不经过GM中转），AIV侧直接在UB上进行GELU计算，省去了GM→UB的MTE2搬运开销：
 
-![Scenario2 CV融合-UB直通流水并行](figure/CVParallell_L0C_UB.png)
+![Scenario2 CV融合-UB直通流水并行](figures/CVParallell_L0C_UB.png)
 
 
 ## 编译运行

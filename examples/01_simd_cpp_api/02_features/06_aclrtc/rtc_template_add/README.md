@@ -18,7 +18,7 @@
 ├── rtc_template_add
 │   ├── CMakeLists.txt                   // 编译工程文件
 │   ├── data_utils.h                     // 数据生成、精度校验工具函数+CHECK_ACL宏
-│   └── rtc_template_add.cpp      // Host侧代码（含RTC核函数源码字符串）
+│   └── rtc_template_add.cpp             // Host侧代码（含RTC核函数源码字符串）
 ```
 
 ## 样例描述

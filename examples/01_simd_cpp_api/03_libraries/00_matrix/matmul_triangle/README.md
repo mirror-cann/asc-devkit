@@ -8,8 +8,7 @@ TrianUpperMatmulPolicy（上三角模板策略）和TrianLowerMatmulPolicy（下
 ## 目录结构介绍
 ```
 ├── matmul_triangle
-│   ├── figures
-│   │   └── matmul_triangle.png // 样例原理图
+│   ├── figures                 // 图示
 │   ├── scripts
 │   │   ├── gen_data.py         // 输入数据和真值数据生成脚本文件
 │   │   └── verify_result.py    // 真值对比文件

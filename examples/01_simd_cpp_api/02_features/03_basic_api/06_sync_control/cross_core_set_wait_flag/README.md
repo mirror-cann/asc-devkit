@@ -38,11 +38,11 @@
 ```
 ├── cross_core_set_wait_flag
 │   ├── scripts
-│   │   ├── gen_data.py         // 输入数据和真值数据生成脚本
-│   │   └── verify_result.py    // 验证输出数据和真值数据是否一致的验证脚本
-│   ├── CMakeLists.txt          // 编译工程文件
-│   ├── data_utils.h            // 数据读入写出函数
-│   ├── figures                 // 图示
+│   │   ├── gen_data.py              // 输入数据和真值数据生成脚本
+│   │   └── verify_result.py         // 验证输出数据和真值数据是否一致的验证脚本
+│   ├── CMakeLists.txt               // 编译工程文件
+│   ├── data_utils.h                 // 数据读入写出函数
+│   ├── figures                      // 图示
 │   ├── cross_core_set_wait_flag.h   // Ascend C样例实现
 │   └── cross_core_set_wait_flag.asc // 调用样例以及结果校验
 ```

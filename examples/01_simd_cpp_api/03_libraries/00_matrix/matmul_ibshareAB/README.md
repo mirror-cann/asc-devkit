@@ -29,9 +29,9 @@
 
 ```
 ├── matmul_ibshareAB
-│   └── scripts
-│       ├── gen_data.py         // 输入数据和真值数据生成脚本文件
-│       └── verify_result.py    // 真值对比文件
+│   ├── scripts
+│   │   ├── gen_data.py         // 输入数据和真值数据生成脚本文件
+│   │   └── verify_result.py    // 真值对比文件
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
 │   ├── figures                 // 图示

@@ -12,12 +12,12 @@ Matmul样例M方向或者N方向切分输入的矩阵，将矩阵切分成多块
 ## 目录结构介绍
 ```
 ├── matmul_l2cache
-│   └── scripts
-│       ├── gen_data.py         // 输入数据和真值数据生成脚本文件
-│       └── verify_result.py    // 真值对比文件
+│   ├── scripts
+│   │   ├── gen_data.py         // 输入数据和真值数据生成脚本文件
+│   │   └── verify_result.py    // 真值对比文件
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
-|   ├── l2_cache_optimizer.h    // L2Cache切分算法实现函数
+│   ├── l2_cache_optimizer.h    // L2Cache切分算法实现函数
 │   └── matmul_l2cache.asc      // Ascend C样例实现 & 调用样例
 ```
 ## 样例描述
