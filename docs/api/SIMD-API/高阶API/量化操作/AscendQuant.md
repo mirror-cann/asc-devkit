@@ -853,7 +853,7 @@ struct AscendQuantParam {
     AscendC::AscendQuant<srcType>(dstLocal, srcLocal, sharedTmpBuffer, scaleLocal, offsetLocal, scaleCount, offsetCount, calCount);
     
     // dstTensor非固定数据类型
-    AscendC::AscendQuant<srcType>(dstLocal, srcLocal, scaleLocal, offsetLocal, scaleCount, offsetCount, calCount);
+    AscendC::AscendQuant<dstType, srcType>(dstLocal, srcLocal, scaleLocal, offsetLocal, scaleCount, offsetCount, calCount);
     ```
 
     结果示例如下：
