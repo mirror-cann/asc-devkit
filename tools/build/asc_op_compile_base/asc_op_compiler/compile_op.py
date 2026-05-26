@@ -1255,9 +1255,6 @@ def compile_op_common_part(cce_file: str, origin_func_name: str, op_info: OpInfo
         compile_info_origin = copy.deepcopy(compile_info)
         compile_option_tuple_origin = copy.deepcopy(compile_option_tuple)
 
-    # dump function determins how kernel wrapper will be, must be handle early
-    handle_dump_options(compile_info, compile_option_tuple)
-
     # get super kernel option to compile info when enable super kernel
     handle_sk_codegen_options(compile_info, infered_info_from_ifile)
 
@@ -1282,7 +1279,6 @@ def compile_op_common_part(cce_file: str, origin_func_name: str, op_info: OpInfo
         DFXSectionGenerator().update_is_support(op_info)
         compile_info_origin.dst_file = os.path.join(kernel_meta_dir, op_info.kernel_name + "_norm.o")
 
-        handle_dump_options(compile_info_origin, compile_option_tuple_origin)
         handle_sk_codegen_options(compile_info_origin, infered_info_from_ifile)
         workspace_idx = gen_op_stub_kernel_func(compile_info_origin, op_info, compile_option_tuple_origin, tiling_info,
                                                 distinct_tag, kernel_meta_dir)
@@ -1412,18 +1408,6 @@ def compile_op_with_customized_config(cce_file: str, origin_func_name: str, op_i
 
     compile_op_common_part(cce_file, origin_func_name, op_info, compile_option_tuple, infered_info_from_ifile,
                             extend_options)
-
-
-def handle_dump_options(compile_info: CompileInfo, compile_option_tuple):
-    # dump ktype handle
-    compile_info.raw_tiling_key_kernel_type = copy.deepcopy(compile_info.tiling_key_kernel_type)
-
-    # dump or acc or timestamp or recognize_simtvf will need extra workspace
-    ascendc_enable_dump_workspace = ("-DASCENDC_DUMP=0" not in compile_option_tuple.compile_options) or \
-        (global_var_storage.get_variable("ascendc_time_stamp_compile_options") is True) or \
-        "-DASCENDC_ACC_DUMP" in compile_option_tuple.compile_options or \
-        (global_var_storage.get_variable("ascendc_recognize_simtvf") is True)
-    global_var_storage.set_variable("ascendc_enable_dump_workspace", ascendc_enable_dump_workspace)
 
 
 def _compile_single_tiling(tiling_key, compile_info, tiling_info, compile_option_tuple):
