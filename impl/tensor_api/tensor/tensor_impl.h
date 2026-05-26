@@ -35,22 +35,20 @@ class GlobalTensor;
 template <typename T>
 class LocalTensor;
 
-namespace Te {
-
 template <typename EngineType, typename LayoutType>
 struct TensorAttribute {};
 
-template <typename T>
-struct BaseTensor {};
+namespace Te {
 
-template <typename LocationType, typename TensorType>
+template <typename LocationType, typename EngineType, typename LayoutType>
 struct MakeTensorResult {
     using type = typename Std::conditional<Std::is_same_v<LocationType, Location::GM>,
-        AscendC::GlobalTensor<TensorType>, AscendC::LocalTensor<TensorType>>::type;
+        AscendC::GlobalTensor<TensorAttribute<EngineType, LayoutType>>,
+        AscendC::LocalTensor<TensorAttribute<EngineType, LayoutType>>>::type;
 };
 
 template <typename EngineType, typename LayoutType>
-struct BaseTensor<TensorAttribute<EngineType, LayoutType>> {
+struct BaseTensor {
     using iterator = typename EngineType::iterator;
     using valueType = typename EngineType::valueType;
     using elementType = typename EngineType::elementType;
@@ -158,8 +156,7 @@ private:
         const SliceEngine& sliceEngine, const SliceLayout& sliceLayout)
     {
         using Location = GetMemLocation<SliceEngine>;
-        using AttrTensor = TensorAttribute<SliceEngine, SliceLayout>;
-        using ResultTensor = typename MakeTensorResult<Location, AttrTensor>::type;
+        using ResultTensor = typename MakeTensorResult<Location, SliceEngine, SliceLayout>::type;
         return ResultTensor{sliceEngine, sliceLayout};
     }
 
@@ -190,15 +187,13 @@ template <typename Arg0, typename... Args>
             using Engine = ViewEngine<Arg0>;
             if constexpr (sizeof...(Args) == 1 && (IsLayoutV<Args> && ...)) {
                 using Layout = typename Std::tuple_element<0, Std::tuple<Args...>>::type;
-                using AttrTensor = TensorAttribute<Engine, Layout>;
                 using Location = GetMemLocation<Engine>;
-                using ResultTensor = typename MakeTensorResult<Location, AttrTensor>::type;
+                using ResultTensor = typename MakeTensorResult<Location, Engine, Layout>::type;
                 return ResultTensor{Engine{arg0}, args...};
             } else {
                 using Layout = decltype(MakeLayout(args...));
-                using AttrTensor = TensorAttribute<Engine, Layout>;
                 using Location = GetMemLocation<Engine>;
-                using ResultTensor = typename MakeTensorResult<Location, AttrTensor>::type;
+                using ResultTensor = typename MakeTensorResult<Location, Engine, Layout>::type;
                 return ResultTensor{Engine{arg0}, MakeLayout(args...)};
             }
         }
@@ -218,9 +213,9 @@ __aicore__ inline constexpr auto MakeTensor(const Iterator& iter, const Args&...
 } // namespace Te
 
 template <typename EngineType, typename LayoutType>
-struct GlobalTensor<Te::TensorAttribute<EngineType, LayoutType>>
-    : public Te::BaseTensor<Te::TensorAttribute<EngineType, LayoutType>> {
-    using TensorApiBase = Te::BaseTensor<Te::TensorAttribute<EngineType, LayoutType>>;
+struct GlobalTensor<TensorAttribute<EngineType, LayoutType>>
+    : public Te::BaseTensor<EngineType, LayoutType> {
+    using TensorApiBase = Te::BaseTensor<EngineType, LayoutType>;
 
     using TensorApiBase::TensorApiBase;
 
@@ -232,9 +227,9 @@ struct GlobalTensor<Te::TensorAttribute<EngineType, LayoutType>>
 };
 
 template <typename EngineType, typename LayoutType>
-struct LocalTensor<Te::TensorAttribute<EngineType, LayoutType>>
-    : public Te::BaseTensor<Te::TensorAttribute<EngineType, LayoutType>> {
-    using TensorApiBase = Te::BaseTensor<Te::TensorAttribute<EngineType, LayoutType>>;
+struct LocalTensor<TensorAttribute<EngineType, LayoutType>>
+    : public Te::BaseTensor<EngineType, LayoutType> {
+    using TensorApiBase = Te::BaseTensor<EngineType, LayoutType>;
 
     using TensorApiBase::TensorApiBase;
 

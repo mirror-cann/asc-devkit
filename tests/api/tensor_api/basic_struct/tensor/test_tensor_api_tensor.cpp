@@ -12,10 +12,6 @@
 #include "tensor_api/stub/cce_stub.h"
 #include "include/tensor_api/tensor.h"
 
-#define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
-#include "impl/tensor_api/arch/utils/is_format.h"
-#undef ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
-
 class Tensor_Api_Tensor_Struct : public testing::Test {
 protected:
     static void SetUpTestCase() {}
@@ -30,7 +26,7 @@ template <typename T>
 struct IsTensorApiGlobalTensor : AscendC::Std::false_type {};
 
 template <typename Engine, typename Layout>
-struct IsTensorApiGlobalTensor<AscendC::GlobalTensor<AscendC::Te::TensorAttribute<Engine, Layout>>>
+struct IsTensorApiGlobalTensor<AscendC::GlobalTensor<AscendC::TensorAttribute<Engine, Layout>>>
     : AscendC::Std::true_type {};
 
 template <typename T>
@@ -41,7 +37,7 @@ template <typename T>
 struct IsTensorApiLocalTensor : AscendC::Std::false_type {};
 
 template <typename Engine, typename Layout>
-struct IsTensorApiLocalTensor<AscendC::LocalTensor<AscendC::Te::TensorAttribute<Engine, Layout>>>
+struct IsTensorApiLocalTensor<AscendC::LocalTensor<AscendC::TensorAttribute<Engine, Layout>>>
     : AscendC::Std::true_type {};
 
 template <typename T>
