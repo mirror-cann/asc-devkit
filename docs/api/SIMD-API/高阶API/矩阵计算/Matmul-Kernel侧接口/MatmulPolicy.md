@@ -254,7 +254,7 @@
     
     AscendC::Matmul<aType, bType, cType, biasType, CFG_MDL, MatmulCallBackFunc<nullptr, nullptr, nullptr>, AscendC::Impl::Detail::NBuffer33MatmulPolicy> mm; 
     
-    // 常规Matmul计算，最后输出下三角形式的结果
+    // 使用NBuffer33逻辑进行Matmul计算，最后输结果
     TPipe pipe;
     TCubeTiling tiling;
     REGIST_MATMUL_OBJ(&pipe, GetSysWorkSpacePtr(), mm, &tiling);
