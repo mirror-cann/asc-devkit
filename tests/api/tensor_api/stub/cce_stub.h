@@ -13,6 +13,32 @@
 #include <cstdint>
 #include "stub_fun.h"
 
+using float8_e4m3_t = fp8_e4m3fn_t;
+using float8_e5m2_t = fp8_e5m2_t;
+using float4_e1m2x2_t = fp4x2_e1m2_t;
+using float4_e2m1x2_t = fp4x2_e2m1_t;
+
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ != 3510)
+    using vector_uint8_t = uint8_t;
+    using vector_uint16_t = uint8_t;
+    using vector_uint32_t = uint8_t;
+    using vector_uint64_t = uint8_t;
+    using vector_int8_t = uint8_t;
+    using vector_int16_t = uint8_t;
+    using vector_int32_t = uint8_t;
+    using vector_int64_t = uint8_t;
+    using vector_bfloat16_t = uint8_t;
+    using vector_half = uint8_t;
+    using vector_float = uint8_t;
+    using vector_hifloat8_t = uint8_t;
+    using vector_fp8_e4m3fn_t = uint8_t;
+    using vector_fp8_e5m2_t = uint8_t;
+    using vector_fp8_e8m0_t = uint8_t;
+    using vector_int4x2_t = uint8_t;
+    using vector_fp4x2_e2m1_t = uint8_t;
+    using vector_fp4x2_e1m2_t = uint8_t;
+#endif
+
 static bool is_mock_copy_matrix_cc_to_gm = false;	 
 static uint16_t n_size_global = 0;	 
 static uint16_t m_size_global = 0;	 
@@ -74,11 +100,6 @@ void vsts(vector_f4e1m2x2 src0, vector_f4e1m2x2 src1, __ubuf__ fp4x2_e1m2_t* bas
 
 void vcgadd(vector_u32 & dst, vector_u16 src, vector_bool pg, int32_t mode);
 void vcgadd(vector_s32 & dst, vector_s16 src, vector_bool pg, int32_t mode);
-
-using float8_e4m3_t = fp8_e4m3fn_t;
-using float8_e5m2_t = fp8_e5m2_t;
-using float4_e1m2x2_t = fp4x2_e1m2_t;
-using float4_e2m1x2_t = fp4x2_e2m1_t;
 
 // ==========copy_matrix_cc_to_cbuf_s4===========
 inline void copy_matrix_cc_to_cbuf_s4(__cbuf__ void *dst_addr, __cc__ float *src_addr, uint8_t sid, uint16_t n_size, uint16_t m_size,
