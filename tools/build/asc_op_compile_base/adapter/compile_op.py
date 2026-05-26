@@ -1344,6 +1344,7 @@ def compile_op_common_part(cce_file: str, origin_func_name: str, op_info: OpInfo
         # reset sk opt
         global_var_storage.set_variable("ascendc_enable_super_kernel", False)
         global_var_storage.set_variable("ascendc_sk_sub_combine_norm_workflow", True)
+        DFXSectionGenerator().dfx_info_reset(op_info)
         DFXSectionGenerator().update_is_support(op_info)
         compile_info_origin.dst_file = os.path.join(kernel_meta_dir, op_info.kernel_name + "_norm.o")
 
