@@ -285,15 +285,15 @@ add_executable(demo
 **表1 常用的CMAKE配置变量说明**
 | 变量名称 | 配置说明 |
 |--|--|
-| CMAKE_BUILD_TYPE | 编译模式选项，可配置为：”Release”，Release版本，不包含调试信息，编译最终发布的版本。”Debug”，Debug版本，包含调试信息，便于开发者开发和调试。配置其他值时CMake会发出警告，但不中止构建。 |
+| CMAKE_BUILD_TYPE | 编译模式选项，可配置为：Release或Debug。Release版本，不包含调试信息，编译最终发布的版本。Debug版本，包含调试信息，便于开发者开发和调试。配置其他值时CMake会发出警告，但不中止构建。 |
 | CMAKE_ASC_COMPILER | 指定Ascend C的编译器路径，默认由CMake自动探测。路径不存在时配置阶段报错终止。 |
 | CMAKE_ASC_SOURCE_FILE_EXTENSIONS | ASC源文件扩展名列表，默认为asc。 |
 | CMAKE_ASC_STANDARD | 指定编译使用的C++标准版本，默认值为17。设置低于17的值时CMake会发出警告。 |
 | CMAKE_ASC_ARCHITECTURES | 指定目标NPU架构版本，取值为`dav-<arch-version>`（如dav-2201、dav-3510）。NPU运行模式下，CMake会自动将该值以`--npu-arch=<value>`注入编译命令。 |
 | CMAKE_ASC_RUN_MODE | 指定算子运行模式，支持npu（默认，在NPU设备上运行）、cpu（CPU调试模式）、sim（仿真模式）。不同模式下CMake会自动调整链接库和编译选项。 |
-| CMAKE_ASC_FLAGS | 为所有构建类型（Debug, Release等）添加的通用编译选项。 |
-| CMAKE_ASC_FLAGS\_DEBUG | 专用于 Debug 构建的编译选项，默认为`-O0 -g`。 |
-| CMAKE_ASC_FLAGS\_RELEASE | 专用于 Release 构建的编译选项，默认为`-O3 -DNDEBUG`。 |
+| CMAKE_ASC_FLAGS | 为所有构建类型（Debug，Release等）添加的通用编译选项。 |
+| CMAKE_ASC_FLAGS\_DEBUG | 专用于Debug构建的编译选项，默认为`-O0 -g`。 |
+| CMAKE_ASC_FLAGS\_RELEASE | 专用于Release构建的编译选项，默认为`-O3 -DNDEBUG`。 |
 | CMAKE_ASC_COMPILER_LAUNCHER | 编译命令的前置启动器（如ccache、distcc），未设置时直接调用编译器。 |
 | CMAKE_ASC_LINKER_LAUNCHER | 链接命令的前置启动器，未设置时直接执行链接。 |
 | CMAKE_ASC_COMPILER_AR | 静态库归档工具，默认使用系统ar工具。设置后，静态库的归档命令将使用该工具替代默认ar。 |
