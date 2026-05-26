@@ -50,6 +50,7 @@
         <path value="$(TARGET_ENV)/ascendc/include"/>
         <path value="$(TARGET_ENV)/ascendc/include/basic_api"/>
         <path value="$(TARGET_ENV)/ascendc/include/c_api"/>
+        <path value="$(TARGET_ENV)/ascendc/include/tensor_api"/>
         <path value="$(TARGET_ENV)/ascendc/include/highlevel_api"/>
         <path value="$(TARGET_ENV)/ascendc/include/highlevel_api/kernel_tiling"/>
         <path value="$(TARGET_ENV)/ascendc/include/highlevel_api/utils"/>
@@ -97,6 +98,7 @@
         <file value="basic_api" install_mod="550" entity="true"/>
         <file value="simt_api" install_mod="550" entity="true"/>
         <file value="c_api" install_mod="550" entity="true"/>
+        <file value="tensor_api" install_mod="550" entity="true"/>
     </file_info>
     <file_info copy_type="delivery" src_path="lib/host/asc/impl/adv_api" dst_path="$(TARGET_ENV)/asc/impl/adv_api" install_path="$(TARGET_ENV)/asc/impl/adv_api" install_type="all">
         <file value="detail" install_softlink="$(TARGET_ENV)/ascendc/include/highlevel_api/impl" install_mod="550" entity="true"/>
@@ -114,6 +116,7 @@
         <file value="aicpu_api" install_softlink="$(TARGET_ENV)/ascendc/include/aicpu_api;$(TARGET_ENV)/include/ascendc/aicpu_api" install_mod="550" entity="true"/>
         <file value="simt_api" install_mod="550" entity="true"/>
         <file value="c_api" install_mod="550" entity="true"/>
+        <file value="tensor_api" install_mod="550" entity="true"/>
         <file value="tiling" install_mod="550"/>
         <file value="adv_api" install_mod="550" entity="true"/>
         <file value="utils" install_softlink="$(TARGET_ENV)/tikcpp/tikcfw/include/utils;$(TARGET_ENV)/include/ascendc/include/utils" install_mod="550" entity="true"/>

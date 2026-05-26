@@ -256,6 +256,8 @@ if(NOT BUILD_OPEN_PROJECT)
         DESTINATION ${INSTALL_INCLUDE_DIR}/asc/impl
         DIRECTORY ${ASCENDC_DIR}/impl/c_api
         DESTINATION ${INSTALL_INCLUDE_DIR}/asc/impl
+        DIRECTORY ${ASCENDC_DIR}/impl/tensor_api
+        DESTINATION ${INSTALL_INCLUDE_DIR}/asc/impl
 
         DIRECTORY ${ASCENDC_DIR}/include/basic_api
         DESTINATION ${INSTALL_INCLUDE_DIR}/asc/include
@@ -264,6 +266,8 @@ if(NOT BUILD_OPEN_PROJECT)
         FILES ${ASCENDC_DIR}/include/kernel_operator.h
         DESTINATION ${INSTALL_INCLUDE_DIR}/asc/include
         DIRECTORY ${ASCENDC_DIR}/include/c_api
+        DESTINATION ${INSTALL_INCLUDE_DIR}/asc/include
+        DIRECTORY ${ASCENDC_DIR}/include/tensor_api
         DESTINATION ${INSTALL_INCLUDE_DIR}/asc/include
 
         FILES ${ASCENDC_DIR}/include/utils/tiling/platform/platform_ascendc.h
