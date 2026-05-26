@@ -171,7 +171,7 @@ Matmul Tiling API分为Matmul单核Tiling接口、多核Tiling接口和BatchMatm
 </tr>
 <tr id="row285815120401"><td class="cellrowborder" valign="top" width="30.75%" headers="mcps1.2.3.1.1 "><p id="p176051831144520"><a name="p176051831144520"></a><a name="p176051831144520"></a>SetMadType</p>
 </td>
-<td class="cellrowborder" valign="top" width="69.25%" headers="mcps1.2.3.1.2 "><p id="p186053312458"><a name="p186053312458"></a><a name="p186053312458"></a>设置是否使能HF32模式。<strong id="b161112357918"><a name="b161112357918"></a><a name="b161112357918"></a>当前版本暂不支持。</strong></p>
+<td class="cellrowborder" valign="top" width="69.25%" headers="mcps1.2.3.1.2 "><p id="p186053312458"><a name="p186053312458"></a><a name="p186053312458"></a>设置是否开启HF32模式。<strong id="b161112357918"><a name="b161112357918"></a><a name="b161112357918"></a>当前版本暂不支持。</strong></p>
 </td>
 </tr>
 <tr id="row59632538401"><td class="cellrowborder" valign="top" width="30.75%" headers="mcps1.2.3.1.1 "><p id="p76061431144511"><a name="p76061431144511"></a><a name="p76061431144511"></a>SetSplitRange</p>
@@ -186,7 +186,7 @@ Matmul Tiling API分为Matmul单核Tiling接口、多核Tiling接口和BatchMatm
 </tr>
 <tr id="row11980195524010"><td class="cellrowborder" valign="top" width="30.75%" headers="mcps1.2.3.1.1 "><p id="p3606113144512"><a name="p3606113144512"></a><a name="p3606113144512"></a>SetDoubleBuffer</p>
 </td>
-<td class="cellrowborder" valign="top" width="69.25%" headers="mcps1.2.3.1.2 "><p id="p3606231164512"><a name="p3606231164512"></a><a name="p3606231164512"></a>设置A/B/C/Bias是否使能double buffer功能，以及是否需要做ND2NZ或者NZ2ND的转换。<strong id="b1948724017223"><a name="b1948724017223"></a><a name="b1948724017223"></a>该接口为预留接口，当前版本暂不支持。</strong></p>
+<td class="cellrowborder" valign="top" width="69.25%" headers="mcps1.2.3.1.2 "><p id="p3606231164512"><a name="p3606231164512"></a><a name="p3606231164512"></a>设置A/B/C/Bias是否开启double buffer功能，以及是否需要做ND2NZ或者NZ2ND的转换。<strong id="b1948724017223"><a name="b1948724017223"></a><a name="b1948724017223"></a>该接口为预留接口，当前版本暂不支持。</strong></p>
 </td>
 </tr>
 <tr id="row1577115235456"><td class="cellrowborder" valign="top" width="30.75%" headers="mcps1.2.3.1.1 "><p id="p15606931194513"><a name="p15606931194513"></a><a name="p15606931194513"></a>GetBaseM</p>
@@ -253,12 +253,12 @@ Matmul Tiling API分为Matmul单核Tiling接口、多核Tiling接口和BatchMatm
 </tr>
 <tr id="row1395374761814"><td class="cellrowborder" valign="top" width="18.17%" headers="mcps1.2.3.1.1 "><p id="p1095420479183"><a name="p1095420479183"></a><a name="p1095420479183"></a>SetSplitK</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.83%" headers="mcps1.2.3.1.2 "><p id="p1295454715187"><a name="p1295454715187"></a><a name="p1295454715187"></a>多核场景，使能切K轴。建议使用EnableMultiCoreSplitK接口。</p>
+<td class="cellrowborder" valign="top" width="81.83%" headers="mcps1.2.3.1.2 "><p id="p1295454715187"><a name="p1295454715187"></a><a name="p1295454715187"></a>多核场景，开启切K轴。建议使用EnableMultiCoreSplitK接口。</p>
 </td>
 </tr>
 <tr id="row1697272115918"><td class="cellrowborder" valign="top" width="18.17%" headers="mcps1.2.3.1.1 "><p id="p17972322593"><a name="p17972322593"></a><a name="p17972322593"></a>EnableMultiCoreSplitK</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.83%" headers="mcps1.2.3.1.2 "><p id="p129721922595"><a name="p129721922595"></a><a name="p129721922595"></a>多核场景，使能切K轴。</p>
+<td class="cellrowborder" valign="top" width="81.83%" headers="mcps1.2.3.1.2 "><p id="p129721922595"><a name="p129721922595"></a><a name="p129721922595"></a>多核场景，开启切K轴。</p>
 </td>
 </tr>
 </tbody>
@@ -300,4 +300,3 @@ Matmul Tiling API分为Matmul单核Tiling接口、多核Tiling接口和BatchMatm
     ```
     #include "lib/matmul/bmm_tiling.h"
     ```
-

@@ -207,7 +207,7 @@ def softmax_grad(grad, src, isFront = None):
 </td>
 <td class="cellrowborder" valign="top" width="8.07%" headers="mcps1.2.4.1.2 "><p id="p1896113710445"><a name="p1896113710445"></a><a name="p1896113710445"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="74.16%" headers="mcps1.2.4.1.3 "><p id="p196115794419"><a name="p196115794419"></a><a name="p196115794419"></a>是否使能isFront计算，若为True，dstTensor的last轴长度必须固定32Byte。</p>
+<td class="cellrowborder" valign="top" width="74.16%" headers="mcps1.2.4.1.3 "><p id="p196115794419"><a name="p196115794419"></a><a name="p196115794419"></a>是否启用isFront计算，若为True，dstTensor的last轴长度必须固定32Byte。</p>
 </td>
 </tr>
 </tbody>
@@ -248,7 +248,7 @@ AscendC::SoftMaxShapeInfo softmaxInfo(
     /* 原始非尾轴长度的乘积      */ oriSrcM, 
     /* 原始尾轴长度              */ oriSrcK
 );
-bool isFront = false;  // 不使能isFront计算
+bool isFront = false;  // 不启用isFront计算
 
 // 通过sharedTmpBuffer入参传入临时空间
 AscendC::SoftmaxGrad<T>(dstLocal, gradLocal, srcLocal, sharedTmpBuffer, softmaxTiling, isFront, softmaxInfo);
@@ -282,4 +282,3 @@ AscendC::SoftmaxGrad<T>(dstLocal, gradLocal, srcLocal, softmaxTiling, isFront, s
  [ -143.     -142.     -140.     -138.     -136.     -134.     -132.     -130.   ]
  [-1078.    -1076.    -1066.    -1056.    -1036.     -996.     -976.     -936.   ]]
 ```
-

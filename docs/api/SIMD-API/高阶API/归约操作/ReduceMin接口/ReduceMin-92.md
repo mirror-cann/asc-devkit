@@ -107,7 +107,7 @@
 </tr>
 <tr id="row9756719122620"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p1682112447268"><a name="p1682112447268"></a><a name="p1682112447268"></a>isReuseSource</p>
 </td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p2322650204211"><a name="p2322650204211"></a><a name="p2322650204211"></a>是否允许修改源操作数，默认值为false。如果开发者允许源操作数被改写，可以使能该参数，使能后能够节省部分内存空间。</p>
+<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p2322650204211"><a name="p2322650204211"></a><a name="p2322650204211"></a>是否允许修改源操作数，默认值为false。如果开发者允许源操作数被改写，可以启用该参数，启用后能够节省部分内存空间。</p>
 <p id="p183225504424"><a name="p183225504424"></a><a name="p183225504424"></a>设置为<strong id="b732214507424"><a name="b732214507424"></a><a name="b732214507424"></a>true</strong>，则本接口内部计算时<strong id="b5322165017429"><a name="b5322165017429"></a><a name="b5322165017429"></a>复用</strong>src的内存空间，节省内存空间；设置为<strong id="b2322350134218"><a name="b2322350134218"></a><a name="b2322350134218"></a>false</strong>，则本接口内部计算时<strong id="b6322175013421"><a name="b6322175013421"></a><a name="b6322175013421"></a>不复用</strong>src的内存空间。</p>
 <p id="p62891018544"><a name="p62891018544"></a><a name="p62891018544"></a>isReuseSource的使用样例请参考<a href="../../数学计算/更多样例-83.md#section639165323915">更多样例</a>。</p>
 </td>
@@ -210,4 +210,3 @@ AscendC::ReduceMin<float, AscendC::Pattern::Reduce::AR, isReuse>(dstLocal, srcLo
 输入shape：(2,8)
 输出数据(dst): [-1.0 -9.0]
 ```
-

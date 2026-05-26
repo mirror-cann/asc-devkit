@@ -263,7 +263,7 @@
 -   该接口不支持量化模式，即不支持SetQuantScalar、SetQuantVector接口。
 -   BSNGD场景，不支持一次计算多行SD，需要算子程序中循环计算，即\(ALayoutInfoN \* ALayoutInfoG\) / batchA、\(BLayoutInfoN \* BLayoutInfoG\) / batchB均为整数。
 -   **异步模式**不支持IterateBatch搬运到UB上。
--   当使能MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
+-   当开启MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
 -   Ascend 950PR/Ascend 950DT上，不支持A、B矩阵内存逻辑位置为TPosition::VECOUT的输入；输出至VECIN的函数原型当前只支持BSNGD Layout格式。
 -   Atlas 推理系列产品AI Core上，只支持NORMAL  Layout格式。
 -   Atlas 推理系列产品AI Core上，不支持A、B矩阵内存逻辑位置为TPosition::TSCM的输入。
@@ -334,4 +334,3 @@
         mm1.IterateBatch(gm_c[batchOffsetC], batchA, batchB, false);
     }
     ```
-

@@ -99,13 +99,13 @@
 </tr>
 <tr id="row9756719122620"><td class="cellrowborder" valign="top" width="19.32%" headers="mcps1.2.3.1.1 "><p id="p1682112447268"><a name="p1682112447268"></a><a name="p1682112447268"></a>highPrecision</p>
 </td>
-<td class="cellrowborder" valign="top" width="80.67999999999999%" headers="mcps1.2.3.1.2 "><p id="p09283510319"><a name="p09283510319"></a><a name="p09283510319"></a>是否使能高精度模式，以提升运算准确度。默认值为false，表示不使能高精度模式。</p>
-<p id="p1931605362120"><a name="p1931605362120"></a><a name="p1931605362120"></a>注意：高精度模式只在half数据类型下使能后生效，该参数的取值不影响float数据类型下的接口精度和性能。</p>
+<td class="cellrowborder" valign="top" width="80.67999999999999%" headers="mcps1.2.3.1.2 "><p id="p09283510319"><a name="p09283510319"></a><a name="p09283510319"></a>是否开启高精度模式，以提升运算准确度。默认值为false，表示不开启高精度模式。</p>
+<p id="p1931605362120"><a name="p1931605362120"></a><a name="p1931605362120"></a>注意：高精度模式只在half数据类型下开启后生效，该参数的取值不影响float数据类型下的接口精度和性能。</p>
 </td>
 </tr>
 <tr id="row9184124919159"><td class="cellrowborder" valign="top" width="19.32%" headers="mcps1.2.3.1.1 "><p id="p11692440141619"><a name="p11692440141619"></a><a name="p11692440141619"></a>highPerformance</p>
 </td>
-<td class="cellrowborder" valign="top" width="80.67999999999999%" headers="mcps1.2.3.1.2 "><p id="p58813365307"><a name="p58813365307"></a><a name="p58813365307"></a>是否使能高性能模式，以提升运算效率。默认值为false，表示不使能高性能模式。</p>
+<td class="cellrowborder" valign="top" width="80.67999999999999%" headers="mcps1.2.3.1.2 "><p id="p58813365307"><a name="p58813365307"></a><a name="p58813365307"></a>是否开启高性能模式，以提升运算效率。默认值为false，表示不开启高性能模式。</p>
 <p id="p56391717122216"><a name="p56391717122216"></a><a name="p56391717122216"></a>注意：开启高性能模式相比于默认不开启高精度和高性能模式会有精度下降，同时开启高精度和高性能模式相比于仅开启高性能模式可能会有性能下降。针对<span id="ph7639151712218"><a name="ph7639151712218"></a><a name="ph7639151712218"></a>Ascend 950PR/Ascend 950DT</span>，该参数保留但不生效，取值为true或者false，接口的精度和性能没有区别。</p>
 </td>
 </tr>
@@ -199,4 +199,3 @@ AscendC::Gelu<srcType, false>(dstLocal, srcLocal, sharedTmpBuffer, 32);
   0.04107666  0.14428711  0.26782227  0.40942383  0.56689453  0.7363281   0.9135742   1.0966797
   1.2822266   1.4677734   1.6533203   1.8349609   2.0136719   2.1914062   2.3632812   2.5390625 ]
 ```
-

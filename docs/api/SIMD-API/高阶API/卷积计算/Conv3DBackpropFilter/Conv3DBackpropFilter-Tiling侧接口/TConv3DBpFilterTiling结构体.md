@@ -155,27 +155,27 @@ TConv3DBpFilterTiling结构体包含Conv3dBackpropFilter算子规格信息及Til
 </tr>
 <tr id="row26817511331"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.3.1.1 "><p id="p149613576341"><a name="p149613576341"></a><a name="p149613576341"></a>al0Pbuffer</p>
 </td>
-<td class="cellrowborder" valign="top" width="83.55%" headers="mcps1.2.3.1.2 "><p id="p17496757173413"><a name="p17496757173413"></a><a name="p17496757173413"></a>1表示不使能DoubleBuffer，2表示使能DoubleBuffer。</p>
+<td class="cellrowborder" valign="top" width="83.55%" headers="mcps1.2.3.1.2 "><p id="p17496757173413"><a name="p17496757173413"></a><a name="p17496757173413"></a>1表示不开启DoubleBuffer，2表示开启DoubleBuffer。</p>
 </td>
 </tr>
 <tr id="row169010814332"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.3.1.1 "><p id="p74977574342"><a name="p74977574342"></a><a name="p74977574342"></a>bl0Pbuffer</p>
 </td>
-<td class="cellrowborder" valign="top" width="83.55%" headers="mcps1.2.3.1.2 "><p id="p749775753419"><a name="p749775753419"></a><a name="p749775753419"></a>1表示不使能DoubleBuffer，2表示使能DoubleBuffer。</p>
+<td class="cellrowborder" valign="top" width="83.55%" headers="mcps1.2.3.1.2 "><p id="p749775753419"><a name="p749775753419"></a><a name="p749775753419"></a>1表示不开启DoubleBuffer，2表示开启DoubleBuffer。</p>
 </td>
 </tr>
 <tr id="row4541141043319"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.3.1.1 "><p id="p15497165710343"><a name="p15497165710343"></a><a name="p15497165710343"></a>cl0Pbuffer</p>
 </td>
-<td class="cellrowborder" valign="top" width="83.55%" headers="mcps1.2.3.1.2 "><p id="p1549718572342"><a name="p1549718572342"></a><a name="p1549718572342"></a>1表示不使能DoubleBuffer，2表示使能DoubleBuffer。</p>
+<td class="cellrowborder" valign="top" width="83.55%" headers="mcps1.2.3.1.2 "><p id="p1549718572342"><a name="p1549718572342"></a><a name="p1549718572342"></a>1表示不开启DoubleBuffer，2表示开启DoubleBuffer。</p>
 </td>
 </tr>
 <tr id="row413919139332"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.3.1.1 "><p id="p6497115714340"><a name="p6497115714340"></a><a name="p6497115714340"></a>al1Pbuffer</p>
 </td>
-<td class="cellrowborder" valign="top" width="83.55%" headers="mcps1.2.3.1.2 "><p id="p104975571346"><a name="p104975571346"></a><a name="p104975571346"></a>1表示不使能DoubleBuffer，2表示使能DoubleBuffer。</p>
+<td class="cellrowborder" valign="top" width="83.55%" headers="mcps1.2.3.1.2 "><p id="p104975571346"><a name="p104975571346"></a><a name="p104975571346"></a>1表示不开启DoubleBuffer，2表示开启DoubleBuffer。</p>
 </td>
 </tr>
 <tr id="row91968226333"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.3.1.1 "><p id="p2497135713417"><a name="p2497135713417"></a><a name="p2497135713417"></a>bl1Pbuffer</p>
 </td>
-<td class="cellrowborder" valign="top" width="83.55%" headers="mcps1.2.3.1.2 "><p id="p1497185793417"><a name="p1497185793417"></a><a name="p1497185793417"></a>1表示不使能DoubleBuffer，2表示使能DoubleBuffer。</p>
+<td class="cellrowborder" valign="top" width="83.55%" headers="mcps1.2.3.1.2 "><p id="p1497185793417"><a name="p1497185793417"></a><a name="p1497185793417"></a>1表示不开启DoubleBuffer，2表示开启DoubleBuffer。</p>
 </td>
 </tr>
 <tr id="row1262711919174"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.3.1.1 "><p id="p88643512333"><a name="p88643512333"></a><a name="p88643512333"></a>baseM</p>
@@ -295,4 +295,3 @@ TConv3DBpFilterTiling结构体包含Conv3dBackpropFilter算子规格信息及Til
 </tr>
 </tbody>
 </table>
-

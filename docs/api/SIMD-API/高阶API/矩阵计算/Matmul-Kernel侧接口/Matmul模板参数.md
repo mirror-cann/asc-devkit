@@ -61,10 +61,10 @@
 
 创建Matmul对象时需要传入：
 
--   A、B、C、Bias的参数类型信息， 类型信息通过MatmulType来定义，包括：内存逻辑位置、数据格式、数据类型、是否转置、数据排布和是否使能L1复用。
--   MatmulConfig信息（可选），用于配置Matmul模板信息以及相关的配置参数。不配置默认使能Norm模板。
+-   A、B、C、Bias的参数类型信息， 类型信息通过MatmulType来定义，包括：内存逻辑位置、数据格式、数据类型、是否转置、数据排布和是否开启L1复用。
+-   MatmulConfig信息（可选），用于配置Matmul模板信息以及相关的配置参数。不配置默认使用Norm模板。
 
-    针对Atlas 200I/500 A2 推理产品，当前只支持使能默认的Norm模板。
+    针对Atlas 200I/500 A2 推理产品，当前只支持使用默认的Norm模板。
 
 -   MatmulCallBackFunc回调函数信息（可选），用于配置左右矩阵从GM拷贝到A1/B1、计算结果从CO1拷贝到GM的自定义函数。当前支持如下产品型号：
 
@@ -76,7 +76,7 @@
 
     Kirin X90
 
--   MatmulPolicy信息（可选），用于配置Matmul可拓展模块策略。不配置使能默认模板策略。当前支持如下产品型号：
+-   MatmulPolicy信息（可选），用于配置Matmul可拓展模块策略。不配置使用默认模板策略。当前支持如下产品型号：
 
     Ascend 950PR/Ascend 950DT
 
@@ -110,7 +110,7 @@ using Matmul = AscendC::MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, MM
         MatmulApiStaticTiling结构体中包括一组常量化Tiling参数和MatmulConfig结构。这种类型参数的定义方式为，通过调用[MatmulConfig](MatmulConfig.md)章节中介绍的获取模板的接口，指定\(singleM, singleN, singleK, baseM, baseN, baseK\)参数，获取自定义模板；将该模板传入[GetMatmulApiTiling](GetMatmulApiTiling.md)接口，得到常量化的参数。这种常量化的方式将得到MatmulApiStaticTiling结构体中定义的一组常量化参数，可以优化Matmul计算中的Scalar计算。当前支持定义为MatmulApiStaticTiling常量化的Tiling参数的模板有：Norm、IBShare、MDL模板。MxMatmul场景支持定义为MatmulApiStaticTiling常量化的Tiling参数的模板有：Norm、MDL模板。
 
 -   MM\_CB（可选），用于支持不同的搬入搬出需求，实现定制化的搬入搬出功能。具体内容见[MatmulCallBackFunc](MatmulCallBackFunc.md)。
--   MATMUL\_POLICY\_DEFAULT\_OF\(MatmulPolicy\)（可选），用于配置Matmul可拓展模块的策略。当前支持不配置该参数（使能默认模板策略）或者配置1个MatmulPolicy参数。
+-   MATMUL\_POLICY\_DEFAULT\_OF\(MatmulPolicy\)（可选），用于配置Matmul可拓展模块的策略。当前支持不配置该参数（使用默认模板策略）或者配置1个MatmulPolicy参数。
 
     MATMUL\_POLICY\_DEFAULT\_OF定义如下，用于简化MATMUL\_POLICY的类型声明。该模板参数的详细使用方式请参考[MatmulPolicy](MatmulPolicy.md)。
 
@@ -193,12 +193,11 @@ typedef AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float> biasT
 // 使用MDL模板，创建Matmul实例
 AscendC::Matmul<aType, bType, cType, biasType, CFG_MDL> mm1; 
 
-AscendC::MatmulConfig mmConfig{false/*不使能Norm模板*/, true/*使能BasicBlock模板*/, false/*不使能MDL模板*/, 128/*Matmul计算时base块M轴长度*/, 128/*Matmul计算时base块N轴长度*/, 64/*Matmul计算时base块K轴长度*/};
-mmConfig.enUnitFlag = false; // 不使能UnitFlag功能
+AscendC::MatmulConfig mmConfig{false/*不开启Norm模板*/, true/*开启BasicBlock模板*/, false/*不开启MDL模板*/, 128/*Matmul计算时base块M轴长度*/, 128/*Matmul计算时base块N轴长度*/, 64/*Matmul计算时base块K轴长度*/};
+mmConfig.enUnitFlag = false; // 不开启UnitFlag功能
 // 使用自定义的mmConfig，创建Matmul实例
 AscendC::Matmul<aType, bType, cType, biasType, mmConfig> mm2;
 
 // 使用NORM模板、自定义的mmConfig和自定义的回调函数，创建Matmul实例
 AscendC::Matmul<aType, bType, cType, biasType, CFG_NORM, AscendC::MatmulCallBackFunc<DataCopyOut, CopyA1, CopyB1>> mm3;
 ```
-

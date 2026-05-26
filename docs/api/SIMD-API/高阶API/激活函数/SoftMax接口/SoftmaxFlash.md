@@ -63,7 +63,7 @@
 
 Softmax增强版本，除了可以对输入tensor做SoftmaxFlash计算，还可以根据上一次Softmax计算的sum和max来更新本次的Softmax计算结果。last轴切轴的情况，每次计算的reduce结果并非是全轴的，需要根据上一次Softmax计算的sum和max来更新本次的Softmax计算结果，可以使用该增强接口。不支持NZ格式。
 
-当前仅支持传入shape为ND格式，内部的reduce过程都是按last轴进行。不使能update时，该接口等同于[SoftMax](SoftMax.md)。
+当前仅支持传入shape为ND格式，内部的reduce过程都是按last轴进行。不开启update时，该接口等同于[SoftMax](SoftMax.md)。
 
 为方便理解，通过Python脚本实现的方式，表达其计算公式如下，其中src、inmax、 insum、update为输入，dst、x\_sum、x\_max、exp\_max为输出。
 
@@ -148,7 +148,7 @@ def softmax_flash(src, inmax=None, insum=None, update=None):
 </tr>
 <tr id="row9184124919159"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p11692440141619"><a name="p11692440141619"></a><a name="p11692440141619"></a>isBasicBlock</p>
 </td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p5203192942015"><a name="p5203192942015"></a><a name="p5203192942015"></a>srcTensor和dstTensor的shape信息和Tiling切分策略满足基本块要求的情况下，可以使能该参数用于提升性能，默认不使能。是否满足基本块的要求，可以采用如下两种方式之一判断：</p>
+<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p5203192942015"><a name="p5203192942015"></a><a name="p5203192942015"></a>srcTensor和dstTensor的shape信息和Tiling切分策略满足基本块要求的情况下，可以启用该参数用于提升性能，默认不启用。是否满足基本块的要求，可以采用如下两种方式之一判断：</p>
 <a name="ul353295811167"></a><a name="ul353295811167"></a><ul id="ul353295811167"><li>srcTensor和dstTensor的shape信息[m,n]需要满足如下条件：<a name="ul09181366549"></a><a name="ul09181366549"></a><ul id="ul09181366549"><li>尾轴长度n小于2048并且大于等于256/sizeof(T)（即half场景下n最小为128，float场景下n最小为64），同时n是64的倍数；</li><li>非尾轴长度的乘积m为8的倍数。</li></ul>
 </li></ul>
 <a name="ul14203192932019"></a><a name="ul14203192932019"></a><ul id="ul14203192932019"><li>在Tiling实现中，通过调用<a href="IsBasicBlockInSoftMax.md">IsBasicBlockInSoftMax</a>判断Tiling切分策略是否满足基本块的切分要求。</li></ul>
@@ -256,7 +256,7 @@ def softmax_flash(src, inmax=None, insum=None, update=None):
 </td>
 <td class="cellrowborder" valign="top" width="8.08%" headers="mcps1.2.4.1.2 "><p id="p748114382285"><a name="p748114382285"></a><a name="p748114382285"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="74.15%" headers="mcps1.2.4.1.3 "><p id="p1048119384289"><a name="p1048119384289"></a><a name="p1048119384289"></a>是否使能update算法。</p>
+<td class="cellrowborder" valign="top" width="74.15%" headers="mcps1.2.4.1.3 "><p id="p1048119384289"><a name="p1048119384289"></a><a name="p1048119384289"></a>是否启用update算法。</p>
 </td>
 </tr>
 <tr id="row869173524410"><td class="cellrowborder" valign="top" width="17.77%" headers="mcps1.2.4.1.1 "><p id="p0734515621"><a name="p0734515621"></a><a name="p0734515621"></a>softmaxShapeInfo</p>
@@ -397,4 +397,3 @@ extern "C" __global__ __aicore__ void softmax_flash_kernel_half(GM_ADDR srcGm, G
     op.Process();
 }
 ```
-

@@ -25,7 +25,7 @@ A、B、C矩阵的Layout类型都为NORMAL时，不支持[batchMode](https://git
 完整的算子样例请参考[BatchMatmul复用Bias算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.2/examples/01_simd_cpp_api/03_libraries/00_matrix/batch_matmul_bias_reuse)。
 
 ```
-// 自定义MatmulConfig参数，将其中的isBiasBatch参数设置为false，使能BatchMatmul的Bias复用功能。
+// 自定义MatmulConfig参数，将其中的isBiasBatch参数设置为false，开启BatchMatmul的Bias复用功能。
 constexpr MatmulConfigMode configMode = MatmulConfigMode::CONFIG_NORM;
 constexpr MatmulBatchParams batchParams = {
   false, BatchMode::BATCH_LESS_THAN_L1, false /* isBiasBatch */

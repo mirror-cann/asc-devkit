@@ -95,7 +95,7 @@ bool GetRmsNormTilingInfo(const ge::Shape& srcShape, const ge::Shape& originSrcS
 </td>
 <td class="cellrowborder" valign="top" width="9.68%" headers="mcps1.2.4.1.2 "><p id="p179731611469"><a name="p179731611469"></a><a name="p179731611469"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="72.55%" headers="mcps1.2.4.1.3 "><p id="p89734618463"><a name="p89734618463"></a><a name="p89734618463"></a>是否要使能基本块计算，与kernel侧接口一致，默认false。</p>
+<td class="cellrowborder" valign="top" width="72.55%" headers="mcps1.2.4.1.3 "><p id="p89734618463"><a name="p89734618463"></a><a name="p89734618463"></a>是否要开启基本块计算，与kernel侧接口一致，默认false。</p>
 </td>
 </tr>
 </tbody>
@@ -151,7 +151,7 @@ bool GetRmsNormTilingInfo(const ge::Shape& srcShape, const ge::Shape& originSrcS
 </td>
 <td class="cellrowborder" valign="top" width="9.69%" headers="mcps1.2.4.1.2 "><p id="p09741163468"><a name="p09741163468"></a><a name="p09741163468"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="72.54%" headers="mcps1.2.4.1.3 "><p id="p69741862460"><a name="p69741862460"></a><a name="p69741862460"></a>是否要使能基本块计算，与kernel侧接口一致，默认false。若使能基本块，则需要保证originSrcShape的H也是32B对齐。</p>
+<td class="cellrowborder" valign="top" width="72.54%" headers="mcps1.2.4.1.3 "><p id="p69741862460"><a name="p69741862460"></a><a name="p69741862460"></a>是否要开启基本块计算，与kernel侧接口一致，默认false。若开启基本块，则需要保证originSrcShape的H也是32B对齐。</p>
 </td>
 </tr>
 </tbody>
@@ -229,4 +229,3 @@ bool GetRmsNormTilingInfo(const ge::Shape& srcShape, const ge::Shape& originSrcS
         }
     }
     ```
-

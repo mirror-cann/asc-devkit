@@ -95,7 +95,7 @@ __aicore__ inline void SetSparseIndex(const GlobalTensor<uint8_t>& indexGlobal)
 ## 调用示例<a name="section1665082013318"></a>
 
 ```
-#define ASCENDC_CUBE_ONLY // 使能纯Cube模式(只有矩阵计算)
+#define ASCENDC_CUBE_ONLY // 开启纯Cube模式(只有矩阵计算)
 REGIST_MATMUL_OBJ(&pipe, GetSysWorkSpacePtr(), mm, &tiling);
 mm.SetTensorA(gm_a);
 mm.SetTensorB(gm_b);
@@ -103,4 +103,3 @@ mm.SetSparseIndex(gm_index); //设置索引矩阵
 mm.SetBias(gm_bias);  
 mm.IterateAll(gm_c);
 ```
-

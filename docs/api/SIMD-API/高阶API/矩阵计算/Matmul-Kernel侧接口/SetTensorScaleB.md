@@ -120,7 +120,7 @@ __aicore__ inline void SetTensorScaleB(const LocalTensor<ScaleT>& rightMatrix, b
 ## 约束说明<a name="section633mcpsimp"></a>
 
 -   传入的scaleB地址空间大小必须不小于[singleCoreK](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md)\*[singleCoreN](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md)/32。
--   当使能MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
+-   当开启MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
 
 ## 调用示例<a name="section1665082013318"></a>
 
@@ -136,4 +136,3 @@ if (tiling.isBias) {
 mm.IterateAll(gm_c);
 mm.End();
 ```
-

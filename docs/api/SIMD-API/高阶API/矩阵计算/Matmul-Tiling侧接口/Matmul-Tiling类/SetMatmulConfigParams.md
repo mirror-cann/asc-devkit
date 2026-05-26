@@ -39,8 +39,8 @@ void SetMatmulConfigParams(const MatmulConfigParams& configParams)
 </td>
 <td class="cellrowborder" valign="top" width="9.19%" headers="mcps1.2.4.1.2 "><p id="p7933731135920"><a name="p7933731135920"></a><a name="p7933731135920"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p7775104382514"><a name="p7775104382514"></a><a name="p7775104382514"></a>配置是否使能L1缓存UB计算块；参考使能场景：MTE3和MTE2流水串行较多的场景。</p>
-<a name="ul1675991252812"></a><a name="ul1675991252812"></a><ul id="ul1675991252812"><li>false：不使能L1缓存UB计算块，默认值为false</li><li>true：使能L1缓存UB计算块</li></ul>
+<td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p7775104382514"><a name="p7775104382514"></a><a name="p7775104382514"></a>配置是否开启L1缓存UB计算块；推荐开启场景：MTE3和MTE2流水串行较多的场景。</p>
+<a name="ul1675991252812"></a><a name="ul1675991252812"></a><ul id="ul1675991252812"><li>false：不开启L1缓存UB计算块，默认值为false</li><li>true：开启L1缓存UB计算块</li></ul>
 <p id="p1951511917499"><a name="p1951511917499"></a><a name="p1951511917499"></a><span id="ph18226181418532"><a name="ph18226181418532"></a><a name="ph18226181418532"></a><term id="zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span>不支持该参数。</p>
 <p id="p1351581904918"><a name="p1351581904918"></a><a name="p1351581904918"></a><span id="ph1292674871116"><a name="ph1292674871116"></a><a name="ph1292674871116"></a><term id="zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span>不支持该参数。</p>
 <p id="p7515219144919"><a name="p7515219144919"></a><a name="p7515219144919"></a><span id="ph51651141116"><a name="ph51651141116"></a><a name="ph51651141116"></a><term id="zh-cn_topic_0000001312391781_term1964153212227"><a name="zh-cn_topic_0000001312391781_term1964153212227"></a><a name="zh-cn_topic_0000001312391781_term1964153212227"></a>Atlas 推理系列产品</term>AI Core</span>支持该参数。</p>
@@ -69,7 +69,7 @@ void SetMatmulConfigParams(const MatmulConfigParams& configParams)
 </td>
 <td class="cellrowborder" valign="top" width="9.19%" headers="mcps1.2.4.1.2 "><p id="p759985634919"><a name="p759985634919"></a><a name="p759985634919"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p1781153815011"><a name="p1781153815011"></a><a name="p1781153815011"></a>是否使能ND2NZ。</p>
+<td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p1781153815011"><a name="p1781153815011"></a><a name="p1781153815011"></a>是否开启ND2NZ。</p>
 </td>
 </tr>
 <tr id="row137121245182714"><td class="cellrowborder" valign="top" width="17.82%" headers="mcps1.2.4.1.1 "><p id="p1971217453272"><a name="p1971217453272"></a><a name="p1971217453272"></a>configParams</p>
@@ -119,8 +119,8 @@ struct MatmulConfigParams
 </tr>
 <tr id="row6780947191919"><td class="cellrowborder" valign="top" width="16.61%" headers="mcps1.2.3.1.1 "><p id="p1934033512213"><a name="p1934033512213"></a><a name="p1934033512213"></a>enableL1CacheUB</p>
 </td>
-<td class="cellrowborder" valign="top" width="83.39%" headers="mcps1.2.3.1.2 "><p id="p1836962183616"><a name="p1836962183616"></a><a name="p1836962183616"></a>配置是否使能L1缓存UB计算块；参考使能场景：MTE3和MTE2流水串行较多的场景。</p>
-<a name="ul736962123618"></a><a name="ul736962123618"></a><ul id="ul736962123618"><li>false：不使能L1缓存UB计算块，默认值为false</li><li>true：使能L1缓存UB计算块</li></ul>
+<td class="cellrowborder" valign="top" width="83.39%" headers="mcps1.2.3.1.2 "><p id="p1836962183616"><a name="p1836962183616"></a><a name="p1836962183616"></a>配置是否开启L1缓存UB计算块；推荐开启场景：MTE3和MTE2流水串行较多的场景。</p>
+<a name="ul736962123618"></a><a name="ul736962123618"></a><ul id="ul736962123618"><li>false：不开启L1缓存UB计算块，默认值为false</li><li>true：开启L1缓存UB计算块</li></ul>
 </td>
 </tr>
 <tr id="row1078074711194"><td class="cellrowborder" valign="top" width="16.61%" headers="mcps1.2.3.1.1 "><p id="p334033518217"><a name="p334033518217"></a><a name="p334033518217"></a>scheduleType</p>
@@ -139,7 +139,7 @@ struct MatmulConfigParams
 </tr>
 <tr id="row1158214231986"><td class="cellrowborder" valign="top" width="16.61%" headers="mcps1.2.3.1.1 "><p id="p48862519810"><a name="p48862519810"></a><a name="p48862519810"></a>enVecND2NZ</p>
 </td>
-<td class="cellrowborder" valign="top" width="83.39%" headers="mcps1.2.3.1.2 "><p id="p1689192520817"><a name="p1689192520817"></a><a name="p1689192520817"></a>是否使能ND2NZ</p>
+<td class="cellrowborder" valign="top" width="83.39%" headers="mcps1.2.3.1.2 "><p id="p1689192520817"><a name="p1689192520817"></a><a name="p1689192520817"></a>是否开启ND2NZ</p>
 </td>
 </tr>
 </tbody>
@@ -173,4 +173,3 @@ tiling.SetMatmulConfigParams(0);  // 额外设置
 optiling::TCubeTiling tilingData;   
 int ret = tiling.GetTiling(tilingData);
 ```
-

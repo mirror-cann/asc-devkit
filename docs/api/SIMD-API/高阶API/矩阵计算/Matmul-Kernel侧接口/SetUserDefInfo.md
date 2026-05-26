@@ -54,7 +54,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-使能模板参数<u>[MatmulCallBackFunc](MatmulCallBackFunc.md)</u>（自定义回调函数）时，设置算子tiling地址，用于回调函数使用，该接口仅需调用一次。
+启用模板参数<u>[MatmulCallBackFunc](MatmulCallBackFunc.md)</u>（自定义回调函数）时，设置算子tiling地址，用于回调函数使用，该接口仅需调用一次。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -92,7 +92,7 @@ __aicore__ inline void SetUserDefInfo(const uint64_t tilingPtr)
 ## 约束说明<a name="section633mcpsimp"></a>
 
 -   若回调函数中需要使用tilingPtr参数时，必须调用此接口；若回调函数不使用tilingPtr参数，无需调用此接口。
--   当使能MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
+-   当开启MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
 
 ## 调用示例<a name="section1665082013318"></a>
 
@@ -115,4 +115,3 @@ mm.SetTensorA(gmA);
 mm.SetTensorB(gmB);
 mm.IterateAll();
 ```
-

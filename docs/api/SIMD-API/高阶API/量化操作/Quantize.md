@@ -386,7 +386,7 @@ Quantize与[AscendQuant](AscendQuant.md)的功能类似，Quantize在PER\_TENSOR
     constexpr static QuantizePolicy tokenPolicy = QuantizePolicy::PER_TOKEN;
     constexpr static QuantizePolicy channelPolicy = QuantizePolicy::PER_CHANNEL;
     constexpr static QuantizePolicy groupPolicy = QuantizePolicy::PER_GROUP;
-    // 此处以PER_TOKEN模式为例，使能offset，舍入模式为CAST_ROUND；kDim仅PER_GROUP场景有效，表示group计算方向为n方向
+    // 此处以PER_TOKEN模式为例，启用offset，舍入模式为CAST_ROUND；kDim仅PER_GROUP场景有效，表示group计算方向为n方向
     constexpr static QuantizeConfig config = {tokenPolicy, true, RoundMode::CAST_ROUND, 1};
     QuantizeParams params;
     // m,n为外部传入参数，表示srcLocal实际参与的m、n方向的元素个数
@@ -401,7 +401,7 @@ Quantize与[AscendQuant](AscendQuant.md)的功能类似，Quantize在PER\_TENSOR
 
     ```
     constexpr static QuantizePolicy tensorPolicy = QuantizePolicy::PER_TENSOR;
-    // 使能offset，舍入模式为CAST_ROUND
+    // 启用offset，舍入模式为CAST_ROUND
     constexpr static QuantizeConfig config = {tensorPolicy, true, RoundMode::CAST_ROUND, -1};
     QuantizeParams params;
     // m,n为外部传入参数，表示srcLocal实际参与的m、n方向的元素个数
@@ -428,4 +428,3 @@ Quantize与[AscendQuant](AscendQuant.md)的功能类似，Quantize在PER\_TENSOR
 输出数据（dstLocal）: 
 [-4, 3, -3, -3, -1, -5, 2, 4, 5, 1, -3, 1, ... 2]
 ```
-
