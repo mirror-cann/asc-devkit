@@ -10,7 +10,7 @@
 #include "broadcast_auto_selector.h"
 #include "selector_registry.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 SelectorStatus BroadcastAutoSelector::SelectCcuMsAlgo(const TopoInfoWithNetLayerDetails* topoInfo, const OpParam &opParam,
                                                     const std::map<HcclCMDType, std::vector<HcclAlgoType>> &configAlgMap,
                                                     std::string &selectAlgName) const

@@ -30,7 +30,7 @@ using NHRStepInfo = struct NHRStepInfo {
     }
 };
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class CcuKernelArgReduceScatterNhrMutilJettyMem2Mem1D : public hcomm::CcuKernelArg {
 public:
     explicit CcuKernelArgReduceScatterNhrMutilJettyMem2Mem1D(uint64_t dimSize, uint32_t rankId, uint16_t portNum,
@@ -149,5 +149,5 @@ private:
     CcuRep::Variable flag_; // 用于判断是否是第一次循环
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 #endif // HCCLV2_CCU_KERNEL_REDUCE_SCATTER_NHR_1D_MUTIL_JETTY_MEM2MEM_H

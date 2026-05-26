@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_REDUCE_OP
-#define OPS_HCCL_SRC_OPS_REDUCE_OP
+#ifndef MC2_OPS_HCCL_SRC_OPS_REDUCE_OP
+#define MC2_OPS_HCCL_SRC_OPS_REDUCE_OP
 
 #include <string>
 #include <memory>
@@ -30,7 +30,7 @@ HcclResult HcclReduce(void *sendBuf, void *recvBuf, uint64_t count, HcclDataType
 }
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult ReduceOutPlace(void *sendBuf, void *recvBuf, uint64_t count, HcclDataType dataType, HcclReduceOp op,
     uint32_t root, HcclComm comm, aclrtStream stream, const std::string &tag);
 
@@ -42,6 +42,6 @@ HcclResult GetAlgResReduce(HcclComm comm, OpParam &param, std::shared_ptr<InsCol
     AlgResourceCtx **resCtx, aclrtNotify *notifies);
 HcclResult ReduceEntryLog(void *sendBuf, void *recvBuf, uint64_t count, HcclDataType dataType, HcclReduceOp op,
     uint32_t root, aclrtStream stream, const std::string &tag, const std::string &opName);
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif

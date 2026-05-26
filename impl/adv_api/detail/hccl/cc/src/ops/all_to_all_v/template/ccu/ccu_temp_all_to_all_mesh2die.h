@@ -13,7 +13,7 @@
 #include "utils.h"
 #include "ccu_alg_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 using RankId = u32;
 using RankGroup = std::vector<RankId>;
@@ -42,6 +42,6 @@ private:
     std::map<uint32_t, std::vector<HcclChannelDesc>> channels_; // key is DieId
     std::map<uint32_t, RankGroup> rankGroup_;
 };
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 
 #endif // HCCL_CCU_TEMP_ALLTOALL_MESH_2DIE_H

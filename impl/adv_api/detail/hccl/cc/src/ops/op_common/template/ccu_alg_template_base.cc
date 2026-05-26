@@ -10,7 +10,7 @@
 #include "ccu_alg_template_base.h"
 #include "log.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 CcuAlgTemplateBase::CcuAlgTemplateBase()
 {
 }
@@ -210,4 +210,4 @@ HcclResult CcuAlgTemplateBase::GetToken(const BuffInfo &buffinfo, uint64_t &toke
     return HCCL_E_PTR;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

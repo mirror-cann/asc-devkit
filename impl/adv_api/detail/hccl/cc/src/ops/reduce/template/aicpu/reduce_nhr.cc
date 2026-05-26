@@ -9,7 +9,7 @@
 */
 #include "reduce_nhr.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 ReduceNHR::ReduceNHR(const OpParam &param,
     const u32 rankId,  // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)
@@ -413,4 +413,4 @@ u64 ReduceNHR::GetThreadNum() const
     return 1;
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

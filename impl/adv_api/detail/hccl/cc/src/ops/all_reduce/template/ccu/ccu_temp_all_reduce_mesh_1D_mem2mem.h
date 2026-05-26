@@ -12,7 +12,7 @@
 #include "ccu_alg_template_base.h"
 #include "utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class CcuTempAllReduceMeshMem2Mem1D : public CcuAlgTemplateBase {
 public:
     explicit CcuTempAllReduceMeshMem2Mem1D(const OpParam& param, 
@@ -40,6 +40,6 @@ private:
     uint32_t mySubCommRank_ = 0;
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // HCCLV2_CCU_TEMP_ALL_REDUCE_MESH_1D_MEM2MEM_H_

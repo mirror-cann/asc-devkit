@@ -9,7 +9,7 @@
 */
 #include "aicpu/ins_temp_broadcast_mesh_1D_two_shot.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempBroadcastMesh1DTwoShot::InsTempBroadcastMesh1DTwoShot(
     const OpParam& param, const u32 rankId, // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)

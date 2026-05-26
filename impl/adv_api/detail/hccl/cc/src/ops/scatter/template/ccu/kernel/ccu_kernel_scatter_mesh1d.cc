@@ -10,7 +10,7 @@
 #include "ccu_kernel_scatter_mesh1d.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr uint16_t OUTPUT_XN_ID = 0;
@@ -276,4 +276,4 @@ std::vector<uint64_t> CcuKernelScatterMesh1D::GeneArgs(const CcuTaskArg &arg)
     return taskArgs;
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

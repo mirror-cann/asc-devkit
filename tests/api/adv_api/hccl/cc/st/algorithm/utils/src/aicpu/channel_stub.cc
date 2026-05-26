@@ -11,7 +11,7 @@
 #include "channel.h"
 #include <algorithm>
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 namespace {
 CommProtocol SelectLocalProtocol(const OpParam &param)
 {
@@ -159,4 +159,4 @@ HcclResult CalcLevel2ChannelRequest(const OpParam &param, const TopoInfo *topoIn
 {
     return CalcLevel1ChannelRequest(param, topoInfo, algHierarchyInfo, algType, channels);
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

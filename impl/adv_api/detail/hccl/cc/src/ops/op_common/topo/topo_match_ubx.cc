@@ -9,7 +9,7 @@
 */
 #include "topo_match_ubx.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 TopoMatchUBX::TopoMatchUBX()
     : TopoMatchBase()
 {
@@ -166,4 +166,4 @@ HcclResult TopoMatchUBX::MatchTopo(const HcclComm comm, TopoInfoWithNetLayerDeta
 #endif
     return HcclResult::HCCL_SUCCESS;
 }
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

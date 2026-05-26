@@ -16,7 +16,7 @@
 #include "ccu_kernel_scatter_nhr1d_mem2mem.h"
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr uint32_t NUM_CONTROL_THREADS = 2;
 template <typename AlgTopoMatch, typename InsAlgTemplate0, typename InsAlgTemplate1>
 InsV2ScatterParallelExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgTemplate1>::InsV2ScatterParallelExecutor()
@@ -473,4 +473,4 @@ REGISTER_EXECUTOR_BY_TWO_TEMPS(HcclCMDType::HCCL_CMD_SCATTER, InsScatterParallel
 REGISTER_EXECUTOR_BY_TWO_TEMPS(HcclCMDType::HCCL_CMD_SCATTER, CcuScatterParallelMesh1DNHR, InsV2ScatterParallelExecutor,
     TopoMatchMultilevel, CcuTempScatterMesh1D, CcuTempScatterNHR1DMem2Mem);
 #endif
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

@@ -11,7 +11,7 @@
 #include "alg_data_trans_wrapper.h"
 #include "template_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempAllReduceAicpuReduceNHR::InsTempAllReduceAicpuReduceNHR(const OpParam &param,
     const u32 rankId,  // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)
@@ -266,4 +266,4 @@ u32 InsTempAllReduceAicpuReduceNHR::GetAlgRank(u32 rank) const
     return static_cast<u32>(std::distance(subCommRanks_[0].begin(), iter));
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

@@ -17,9 +17,9 @@
 #include "coll_alg_v2_exec_registry.h"
 
 namespace {
-ops_hccl::OpParam *AsOpenOpParam(std::vector<uint8_t> &opParam)
+mc2_ops_hccl::OpParam *AsOpenOpParam(std::vector<uint8_t> &opParam)
 {
-    return reinterpret_cast<ops_hccl::OpParam *>(opParam.data());
+    return reinterpret_cast<mc2_ops_hccl::OpParam *>(opParam.data());
 }
 
 u64 GetDataTypeSize(HcclDataType dataType)
@@ -52,14 +52,14 @@ u64 GetDataTypeSize(HcclDataType dataType)
     }
 }
 
-HcclResult RestoreVarDataAlltoAllV(ops_hccl::OpParam &param, const ops_hccl::AlgResourceCtxSerializable &resCtx)
+HcclResult RestoreVarDataAlltoAllV(mc2_ops_hccl::OpParam &param, const mc2_ops_hccl::AlgResourceCtxSerializable &resCtx)
 {
     u64 rankSize = resCtx.topoInfo.userRankSize;
-    CHK_PRT_RET(param.varMemSize != ops_hccl::ALL_TO_ALL_V_VECTOR_NUM * rankSize * sizeof(u64),
+    CHK_PRT_RET(param.varMemSize != mc2_ops_hccl::ALL_TO_ALL_V_VECTOR_NUM * rankSize * sizeof(u64),
         HCCL_ERROR("[RestoreVarDataAlltoAllV] param.varMemSize [%llu] is invalid,"
                    " ALL_TO_ALL_V_VECTOR_NUM is [%u], rankSize is [%u], sizeof(u64) is [%u],",
             param.varMemSize,
-            ops_hccl::ALL_TO_ALL_V_VECTOR_NUM,
+            mc2_ops_hccl::ALL_TO_ALL_V_VECTOR_NUM,
             rankSize,
             sizeof(u64)),
         HCCL_E_PARA);
@@ -67,7 +67,7 @@ HcclResult RestoreVarDataAlltoAllV(ops_hccl::OpParam &param, const ops_hccl::Alg
     HCCL_INFO("[RestoreVarDataAlltoAllV] param.varMemSize [%llu],"
                 " ALL_TO_ALL_V_VECTOR_NUM is [%u], rankSize is [%u], sizeof(u64) is [%u],",
         param.varMemSize,
-        ops_hccl::ALL_TO_ALL_V_VECTOR_NUM,
+        mc2_ops_hccl::ALL_TO_ALL_V_VECTOR_NUM,
         rankSize,
         sizeof(u64));
     for (uint32_t i = 0; i < rankSize; i++) {
@@ -84,7 +84,7 @@ HcclResult RestoreVarDataAlltoAllV(ops_hccl::OpParam &param, const ops_hccl::Alg
     constexpr u64 RECV_DISPL_IDX = 3;
 
     u64 *data = reinterpret_cast<u64 *>(param.varData);
-    for (u64 i = 0; i < ops_hccl::ALL_TO_ALL_V_VECTOR_NUM * rankSize; i++) {
+    for (u64 i = 0; i < mc2_ops_hccl::ALL_TO_ALL_V_VECTOR_NUM * rankSize; i++) {
         u64 val = i / rankSize;
         switch(val) {
             case SEND_COUNT_IDX:
@@ -107,7 +107,7 @@ HcclResult RestoreVarDataAlltoAllV(ops_hccl::OpParam &param, const ops_hccl::Alg
     return HCCL_SUCCESS;
 }
 
-HcclResult RestoreVarDataIfNeeded(ops_hccl::OpParam &param, const ops_hccl::AlgResourceCtxSerializable &resCtx)
+HcclResult RestoreVarDataIfNeeded(mc2_ops_hccl::OpParam &param, const mc2_ops_hccl::AlgResourceCtxSerializable &resCtx)
 {
     HcclResult ret = HCCL_SUCCESS;
     if (param.opType == HCCL_CMD_ALLTOALLV || param.opType == HCCL_CMD_ALLTOALL) {
@@ -123,10 +123,10 @@ HcclResult LaunchOpenOpParamDataImpl(std::vector<uint8_t> &opParam)
     CHK_PTR_NULL(param);
     HCCL_INFO("[MC2_OPEN_DIAG][LaunchOpenOpParamDataImpl] file[%s:%d], opParamSize %zu, "
               "sizeof(OpParam) %zu, varMemSizeOffset %zu, varMemSize %llu, opType %u, algName[%s].",
-              __FILE__, __LINE__, opParam.size(), sizeof(ops_hccl::OpParam),
-              offsetof(ops_hccl::OpParam, varMemSize), static_cast<unsigned long long>(param->varMemSize),
+              __FILE__, __LINE__, opParam.size(), sizeof(mc2_ops_hccl::OpParam),
+              offsetof(mc2_ops_hccl::OpParam, varMemSize), static_cast<unsigned long long>(param->varMemSize),
               static_cast<u32>(param->opType), param->algName);
-    ops_hccl::AlgResourceCtxSerializable resCtx;
+    mc2_ops_hccl::AlgResourceCtxSerializable resCtx;
 
     char *ctx = static_cast<char *>(param->resCtx);
     std::vector<char> seq(ctx, ctx + param->ctxSize);
@@ -173,7 +173,7 @@ HcclResult LaunchOpenOpParamDataImpl(std::vector<uint8_t> &opParam)
 
     CHK_RET(RestoreVarDataIfNeeded(*param, resCtx));
 
-    auto executor = ops_hccl::CollAlgExecRegistryV2::Instance().GetAlgExec(param->opType, std::string(param->algName));
+    auto executor = mc2_ops_hccl::CollAlgExecRegistryV2::Instance().GetAlgExec(param->opType, std::string(param->algName));
     CHK_SMART_PTR_NULL(executor);
 
     HcclResult ret = executor->Orchestrate(*param, resCtx);

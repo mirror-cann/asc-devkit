@@ -12,7 +12,7 @@
 
 #include "auto_selector_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
     class SendAutoSelector : public AutoSelectorBase {
     public:
         SelectorStatus SelectAicpuAlgo(
@@ -23,6 +23,6 @@ namespace ops_hccl {
             const std::map<HcclCMDType, std::vector<HcclAlgoType> > &configAlgMap,
             std::string &selectAlgName) const override;
     };
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // #ifndef HCCL_SEND_AUTO_SELECTOR

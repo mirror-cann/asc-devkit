@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_REDUCE_SCATTER_OP
-#define OPS_HCCL_SRC_OPS_REDUCE_SCATTER_OP
+#ifndef MC2_OPS_HCCL_SRC_OPS_REDUCE_SCATTER_OP
+#define MC2_OPS_HCCL_SRC_OPS_REDUCE_SCATTER_OP
 
 #include <string>
 #include <memory>
@@ -34,7 +34,7 @@ HcclResult HcclReduceScatterGraphMode(void *sendBuf, void *recvBuf, uint64_t rec
 }
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult ReduceScatterOutPlace(OpParam &param, void *sendBuf, void *recvBuf, uint64_t recvCount, HcclDataType dataType,
     HcclReduceOp op, HcclComm comm, aclrtStream stream, u32 userRankSize);
 

@@ -16,7 +16,7 @@
 #include "ccu_kernel.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr u32 DIE_NUM = 2;
  
@@ -116,4 +116,4 @@ u64 CcuTempAllReduceMesh1DMem2Mem2DieOneShot::CalcScratchMultiple(BufferType inB
     (void)outBuffType;
     return templateRankSize_;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

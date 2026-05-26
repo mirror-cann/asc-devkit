@@ -13,7 +13,7 @@
 #include "channel.h"
 #include "alg_v2_template_register.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempAllGatherNHRDPUInter::InsTempAllGatherNHRDPUInter(const OpParam& param, const uint32_t rankId,
     const std::vector<std::vector<uint32_t>> &subCommRanks)
     : InsAlgTemplateBase(param, rankId, subCommRanks) {}

@@ -10,7 +10,7 @@
 #include "alg_template_register.h"
 #include "scatter_ring.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 ScatterRing::ScatterRing()
     : AlgTemplateBase(), interRank_(0), interRankSize_(0)
 {

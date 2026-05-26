@@ -20,7 +20,7 @@
 #include "sal.h"
 #include "dtype_common.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 static std::mutex g_algEnvConfigMutex;
 static thread_local AlgEnvConfig g_algEnvConfig;
@@ -985,4 +985,4 @@ bool RunIndependentOpExpansion(DevType deviceType)
     }
     return false;
 }
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

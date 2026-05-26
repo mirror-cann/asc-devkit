@@ -16,7 +16,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 using RankId = u32;
 
@@ -92,6 +92,6 @@ private:
     // 在本地的搬运完成标记
     hcomm::CcuRep::CompletedEvent event_;
 };
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // HCCLV2_CCU_KERNEL_ALL_TO_ALL_MESH_2DIE_H_

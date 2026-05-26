@@ -16,7 +16,7 @@
 #include <string>
 
 using namespace std;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 extern "C" unsigned int LaunchAicpuKernel(OpParam *param);
 
 HcclResult HcclBatchSendRecv(HcclSendRecvItem *sendRecvInfo, uint32_t itemNum, HcclComm comm, aclrtStream stream)
@@ -70,7 +70,7 @@ HcclResult HcclBatchSendRecv(HcclSendRecvItem *sendRecvInfo, uint32_t itemNum, H
     return HCCL_SUCCESS;
 }
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult CheckBatchSendRecvInputPara(const HcclComm &comm, const HcclSendRecvItem *sendRecvInfo, const aclrtStream stream)
 {
     // 入参合法性校验

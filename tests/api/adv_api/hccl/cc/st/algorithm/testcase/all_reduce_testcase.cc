@@ -20,7 +20,7 @@
 #include "alg_env_config.h"
 
 using namespace HcclSim;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 
 constexpr u64 AR_AICPU_1D_SMALL_DATA_SIZE = 8 * 1024 * 1024;
 constexpr u64 AR_AICPU_1D_MAX_DATA_SIZE = 32 * 1024 * 1024;

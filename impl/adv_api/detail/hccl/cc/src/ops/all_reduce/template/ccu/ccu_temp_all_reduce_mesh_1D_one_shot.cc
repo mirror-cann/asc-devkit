@@ -14,7 +14,7 @@
 #include "hccl_ccu_res.h"
 #include "ccu_assist_pub.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempAllReduceMesh1DOneShot::CcuTempAllReduceMesh1DOneShot(const OpParam& param, const u32 rankId,
                                                              const std::vector<std::vector<u32>> &subCommRanks)

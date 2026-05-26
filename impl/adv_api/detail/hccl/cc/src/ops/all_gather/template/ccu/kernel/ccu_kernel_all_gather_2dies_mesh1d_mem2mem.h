@@ -18,7 +18,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class CcuKernelArgAllGather2DiesMeshMem2Mem1D : public hcomm::CcuKernelArg {
 public:
     explicit CcuKernelArgAllGather2DiesMeshMem2Mem1D(uint64_t dimSize, uint32_t rankId,
@@ -91,6 +91,6 @@ private:
     GroupOpSize localGoSize_;
 };
 
-}//namespace ops_hccl
+}//namespace mc2_ops_hccl
 
 #endif//HCCL_CCU_KERNEL_ALLGATHER_2DIES_MESH_1D_MEM2MEM_H

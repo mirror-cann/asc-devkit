@@ -17,7 +17,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class CcuKernelArgAllReduceMesh1D : public CcuKernelArg {
 public:
     explicit CcuKernelArgAllReduceMesh1D(const std::vector<uint64_t> &dSize, uint32_t rId, const OpParam &opParam,

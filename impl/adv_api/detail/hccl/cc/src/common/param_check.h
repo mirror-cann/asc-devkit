@@ -7,14 +7,14 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_COMMON_PARAM_CHECK
-#define OPS_HCCL_SRC_COMMON_PARAM_CHECK
+#ifndef MC2_OPS_HCCL_SRC_COMMON_PARAM_CHECK
+#define MC2_OPS_HCCL_SRC_COMMON_PARAM_CHECK
 
 #include <hccl/hccl_types.h>
 #include <hccl/hccl_res.h>
 #include "hccl/base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult HcomCheckGroupName(const char *group);
 
 HcclResult HcomCheckOpParam(const char *tag, const u64 count, const HcclDataType dataType, const char *group,

@@ -60,7 +60,7 @@ HcclResult HcclCalcOpResOnlineGraphMode(OpParamGraphMode *opParam, u64 *opMemSiz
     ResResponseGraphMode resResponse = {0, 0, 0, 0};
     HCCL_INFO("Start to calc op resource online.");
     // aicpu引擎计算资源
-    ops_hccl::HcclCalcAicpuResOffline(&resResponse);
+    mc2_ops_hccl::HcclCalcAicpuResOffline(&resResponse);
 
     // 其他引擎补充在下面
 
@@ -86,7 +86,7 @@ HcclResult HcclCalcOpResOfflineGraphMode(OpParamGraphMode *opParam, u64 *opMemSi
     ResResponseGraphMode resResponse = {0, 0, 0, 0};
     HCCL_INFO("Start to calc op resource offline.");
     // aicpu引擎计算资源
-    ops_hccl::HcclCalcAicpuResOffline(&resResponse);
+    mc2_ops_hccl::HcclCalcAicpuResOffline(&resResponse);
 
     // 其他引擎补充在下面
 
@@ -99,7 +99,7 @@ HcclResult HcclCalcOpResOfflineGraphMode(OpParamGraphMode *opParam, u64 *opMemSi
     return HCCL_SUCCESS;
 }
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult HcclCalcAicpuResOffline(ResResponseGraphMode *resResponse)
 {
     if (resResponse == nullptr) {
@@ -125,4 +125,4 @@ HcclResult CheckCalcResInputGraphMode(const OpParamGraphMode *opParam, const u64
     CHK_PTR_NULL(aivCoreNum);
     return HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

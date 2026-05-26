@@ -9,7 +9,7 @@
 */
 #include "ins_temp_all_reduce_nhr.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 InsTempAllReduceNHR::InsTempAllReduceNHR(const OpParam& param, const u32 rankId,
     const std::vector<std::vector<u32>> &subCommRanks) : InsAlgTemplateBase(param, rankId, subCommRanks){}
@@ -386,4 +386,4 @@ u32 InsTempAllReduceNHR::GetNHRStepNum() const
     return nSteps;
 }
 
-}  // ops_hccl
+}  // mc2_ops_hccl

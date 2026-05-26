@@ -10,7 +10,7 @@
 #include "all_reduce_auto_selector.h"
 #include "selector_registry.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr u64 RS_MAX_DATA_SIZE = 16 * 1024 * 1024;
 constexpr u64 AR_ONESHOT_1D_MAX_DATA_SIZE = 16 * 1024;
 constexpr u64 AR_M2M_1D_MAX_DATA_SIZE = 16 * 1024 * 1024;
@@ -425,4 +425,4 @@ SelectorStatus AllReduceAutoSelector::SelectDPUAlgo(const TopoInfoWithNetLayerDe
 }
 
 REGISTER_SELECTOR_BY_OPTYPE(HcclCMDType::HCCL_CMD_ALLREDUCE, 18, AllReduceAutoSelector);
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

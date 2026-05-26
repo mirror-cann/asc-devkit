@@ -17,7 +17,7 @@
 #include "executor_v2_base.h"
 #include "coll_alg_v2_exec_registry.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
     class InsSendExecutor : public InsCollAlgBase {
     public:
         std::string Describe() const override;
@@ -48,6 +48,6 @@ namespace ops_hccl {
         // 一次搬运最大数据个数
         u64 maxLoopTransCount_;
     };
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif  // #ifndef HCCL_INS_SEND_EXECUTOR_H

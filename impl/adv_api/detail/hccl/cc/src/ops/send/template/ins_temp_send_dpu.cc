@@ -9,7 +9,7 @@
 */
 #include "ins_temp_send_dpu.h"
 
-namespace ops_hccl
+namespace mc2_ops_hccl
 {
     InsTempSendDpu::InsTempSendDpu()
     {
@@ -195,4 +195,4 @@ namespace ops_hccl
     }
 
     REGISTER_TEMPLATE_V2("InsTempSendDpu", InsTempSendDpu);
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

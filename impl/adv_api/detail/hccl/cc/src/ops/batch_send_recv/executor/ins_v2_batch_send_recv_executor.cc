@@ -11,7 +11,7 @@
 #include "alg_data_trans_wrapper.h"
 #include "ins_v2_batch_send_recv_executor.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsV2BatchSendRecvExecutor::InsV2BatchSendRecvExecutor()
 {
 }

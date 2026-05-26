@@ -17,7 +17,7 @@
 #include "ccu_kernel_alg_base.h"
 #include "ins_temp_all_reduce_nhr.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuKernelArgReduceNHR1D : public hcomm::CcuKernelArg {
 public:
@@ -151,5 +151,5 @@ private:
     CcuRep::RemoteAddr remoteDst_;
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 #endif // HCCLV2_CCU_KERNEL_REDUCE_NHR_1D_MEM2MEM_H

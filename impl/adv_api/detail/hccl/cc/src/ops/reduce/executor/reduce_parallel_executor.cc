@@ -19,7 +19,7 @@
 #include "ccu_temp_reduce_mesh_1D_mem2mem.h"
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template <typename AlgTopoMatch, typename AlgTemplate0, typename AlgTemplate1>
 ReduceParallelExecutor<AlgTopoMatch, AlgTemplate0, AlgTemplate1>::ReduceParallelExecutor()
@@ -475,4 +475,4 @@ REGISTER_EXECUTOR_BY_TWO_TEMPS(HcclCMDType::HCCL_CMD_REDUCE, ReduceParallelMesh1
 REGISTER_EXECUTOR_BY_TWO_TEMPS(HcclCMDType::HCCL_CMD_REDUCE, CcuReduceParallelMesh1DNHR, ReduceParallelExecutor,
     TopoMatchMultilevel, CcuTempReduceMesh1DMem2Mem, CcuTempReduceNHR1DMem2Mem);
 #endif
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

@@ -17,7 +17,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuKernelArgAllToAllMesh1DMultiJetty : public hcomm::CcuKernelArg {
 public:
@@ -115,5 +115,5 @@ private:
     bool loadFromMem_ = false;
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 #endif // HCCLV2_CCU_KERNEL_REDUCE_SCATTER_MESH_1D_MEM2MEM_H

@@ -16,7 +16,7 @@
 
 constexpr u32 JETTY_NUM = 4;
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempAllGatherNHR1DMultiJettyMem2Mem::CcuTempAllGatherNHR1DMultiJettyMem2Mem(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -229,4 +229,4 @@ HcclResult CcuTempAllGatherNHR1DMultiJettyMem2Mem::GetRes(AlgResourceRequest &re
     resourceRequest.notifyNumPerThread.assign(resourceRequest.slaveThreadNum, 1);
     return HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

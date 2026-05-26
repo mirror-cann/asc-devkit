@@ -16,7 +16,7 @@
 #include "hccl/base.h"
 #include "alg_type.h"
 #include "hccl_common.h"
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr u32 MAX_LEN_OF_DIGIT_ENV = 10; // 数字环境变量最大长度
 

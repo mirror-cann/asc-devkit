@@ -10,7 +10,7 @@
 #include "ins_send_executor.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
     std::string InsSendExecutor::Describe() const {
         return "Instruction based Send Executor.";
     }
@@ -174,4 +174,4 @@ namespace ops_hccl {
     }
 
     REGISTER_EXECUTOR_IMPL(HcclCMDType::HCCL_CMD_SEND, InsSend, InsSendExecutor);
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

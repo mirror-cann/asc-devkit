@@ -15,7 +15,7 @@
 #include "alg_param.h"
 #include "template_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult SendWrite(const DataInfo &sendInfo);
 HcclResult RecvWrite(const DataInfo &recvInfo);

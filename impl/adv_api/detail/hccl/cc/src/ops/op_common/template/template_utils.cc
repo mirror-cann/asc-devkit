@@ -8,7 +8,7 @@
 * See LICENSE in the root of the software repository for the full text of the License.
 */
 #include "template_utils.h"
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult GetAlgRank(const u32 virtRank, const std::vector<u32> &rankIds, u32 &algRank)
 {

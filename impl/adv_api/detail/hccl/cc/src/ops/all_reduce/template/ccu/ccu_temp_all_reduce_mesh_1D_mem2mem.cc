@@ -13,7 +13,7 @@
 #include "ccu_temp_all_reduce_mesh_1D_mem2mem.h"
 #include "ccu_kernel_all_reduce_mesh1d_mem2mem.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempAllReduceMeshMem2Mem1D::CcuTempAllReduceMeshMem2Mem1D(const OpParam& param, 
                                                 const u32 rankId, // 传通信域的rankId，userRank
@@ -161,4 +161,4 @@ HcclResult CcuTempAllReduceMeshMem2Mem1D::KernelRun(const OpParam& param, const 
     return HcclResult::HCCL_SUCCESS;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

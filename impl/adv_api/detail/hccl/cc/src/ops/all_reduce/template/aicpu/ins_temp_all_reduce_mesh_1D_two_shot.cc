@@ -9,7 +9,7 @@
 */
 #include "ins_temp_all_reduce_mesh_1D_two_shot.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 InsTempAllReduceMesh1DTwoShot::InsTempAllReduceMesh1DTwoShot(const OpParam& param, const u32 rankId,
     const std::vector<std::vector<u32>> &subCommRanks) : InsAlgTemplateBase(param, rankId, subCommRanks){}
@@ -403,4 +403,4 @@ HcclResult InsTempAllReduceMesh1DTwoShot::PostSync(const std::vector<ThreadHandl
     return HcclResult::HCCL_SUCCESS;
 }
 
-}  // ops_hccl
+}  // mc2_ops_hccl

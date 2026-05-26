@@ -9,7 +9,7 @@
 */
 #include "alg_type.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template<typename keyType>
 std::string GetAlgoString(const std::map<keyType, std::string>& levelMap, keyType key) {

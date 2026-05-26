@@ -45,7 +45,7 @@ using NHRStepInfo = struct NHRStepInfoDef {
     }
 };
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuKernelArgAllReduceNhrMem2Mem1DMultiJetty : public hcomm::CcuKernelArg {
 public:
@@ -172,5 +172,5 @@ private:
     std::vector<hcomm::CcuRep::CompletedEvent> events_;
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 #endif // HCCLV2_CCU_KERNEL_REDUCE_SCATTER_MESH_1D_MEM2MEM_H

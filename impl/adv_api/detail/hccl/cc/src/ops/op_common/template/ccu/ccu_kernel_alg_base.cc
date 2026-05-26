@@ -10,7 +10,7 @@
 #include "ccu_kernel_alg_base.h"
 #include "ccu_kernel_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 HcclResult CcuKernelAlgBase::LocalReduceNb(const std::vector<CcuRep::CcuBuf> &bufs, uint32_t count, HcclDataType dataType,

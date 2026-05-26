@@ -10,7 +10,7 @@
 #include <numeric>
 #include "scatter_ring_executor.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 ScatterRingExecutor::ScatterRingExecutor() : ScatterExecutorBase()
 {

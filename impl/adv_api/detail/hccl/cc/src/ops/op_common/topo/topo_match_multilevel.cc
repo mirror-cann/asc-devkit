@@ -9,7 +9,7 @@
 */
 #include "topo_match_multilevel.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 TopoMatchMultilevel::TopoMatchMultilevel()
     : TopoMatchBase()
 {
@@ -237,4 +237,4 @@ HcclResult TopoMatchMultilevel::MatchTopo(const HcclComm comm, TopoInfoWithNetLa
     return HcclResult::HCCL_SUCCESS;
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

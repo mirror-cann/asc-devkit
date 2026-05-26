@@ -14,7 +14,7 @@
 #include "alg_data_trans_wrapper.h"
 #include "kernel/ccu_kernel_all_to_all_v_mesh2die.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempAlltoAllVMesh2Die::CcuTempAlltoAllVMesh2Die(const OpParam &param, RankId rankId,
     const std::vector<std::vector<u32>> &subCommRanks)
@@ -153,4 +153,4 @@ HcclResult CcuTempAlltoAllVMesh2Die::KernelRun(const OpParam &param, const Templ
     return HcclResult::HCCL_SUCCESS;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

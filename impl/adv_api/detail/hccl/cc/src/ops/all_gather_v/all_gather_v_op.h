@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_ALL_GATHER_V_OP
-#define OPS_HCCL_SRC_OPS_ALL_GATHER_V_OP
+#ifndef MC2_OPS_HCCL_SRC_OPS_ALL_GATHER_V_OP
+#define MC2_OPS_HCCL_SRC_OPS_ALL_GATHER_V_OP
 
 #include <string>
 #include <memory>
@@ -35,7 +35,7 @@ HcclResult HcclAllGatherVGraphMode(void *sendBuf, void *recvBuf, uint64_t sendCo
 }
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult AllGatherVOutPlace(void *sendBuf, void *recvBuf, uint64_t sendCount, const void *recvCounts,
     const void *recvDispls, HcclDataType dataType, HcclComm comm, aclrtStream stream, const std::string &tag);
 HcclResult AllGatherVEntryLog(void *sendBuf, void *recvBuf, uint64_t sendCount, const void *recvCounts, const void *recvDispls,
@@ -56,5 +56,5 @@ std::string GetSupportDataTypeAGV();
 
 HcclResult CalcBaseTopoInfoAllGatherV(HcclComm comm, OpParam &param, TopoInfoWithNetLayerDetails **topoInfo);
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 #endif

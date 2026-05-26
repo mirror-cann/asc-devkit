@@ -9,7 +9,7 @@
 */
 #include "ins_temp_dpu_alltoall_mesh.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 InsTempDpuAlltoAllMesh::InsTempDpuAlltoAllMesh() {}
 InsTempDpuAlltoAllMesh::InsTempDpuAlltoAllMesh(const OpParam &param, const u32 rankId,
@@ -532,4 +532,4 @@ HcclResult InsTempDpuAlltoAllMesh::DPUKernelRun(const TemplateDataParams &tempAl
     return HCCL_SUCCESS;
 }
 REGISTER_TEMPLATE_V2("InsTempDpuAlltoAllMesh", InsTempDpuAlltoAllMesh);
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

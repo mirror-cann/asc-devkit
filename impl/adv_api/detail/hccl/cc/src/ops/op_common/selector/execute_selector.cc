@@ -11,7 +11,7 @@
 #include "auto_selector_base.h"
 #include "selector_registry.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 ExecuteSelector::ExecuteSelector()
 {

@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_INC_COLL_ALG_PARAM
-#define OPS_HCCL_SRC_OPS_INC_COLL_ALG_PARAM
+#ifndef MC2_OPS_HCCL_SRC_OPS_INC_COLL_ALG_PARAM
+#define MC2_OPS_HCCL_SRC_OPS_INC_COLL_ALG_PARAM
 
 #include <string>
 #include <vector>
@@ -26,7 +26,7 @@
 #include "../../../common/binary_stream.h"
 #include "hccl_ccu_res.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr uint64_t UB_MAX_DATA_SIZE = 256*1024*1024; // Byte, UB协议一次传输的最大size
 

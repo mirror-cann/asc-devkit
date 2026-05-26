@@ -10,7 +10,7 @@
 #include "dpu_alg_data_trans_wrapper.h"
 #include "hcomm_primitives.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr u32 DPU_TIMEOUT = 180000;
 
 HcclResult SendRecvWrite(const SendRecvInfo &sendRecvInfo)
@@ -92,4 +92,4 @@ HcclResult RecvWrite(const DataInfo &recvInfo)
 #endif
     return HCCL_SUCCESS;
 }
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

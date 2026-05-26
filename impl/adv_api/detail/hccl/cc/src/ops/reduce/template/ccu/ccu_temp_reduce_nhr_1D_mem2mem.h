@@ -14,7 +14,7 @@
 #include "utils.h"
 #include "ins_temp_all_reduce_nhr.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempReduceNHR1DMem2Mem : public CcuAlgTemplateBase {
 public:
@@ -58,6 +58,6 @@ private:
     HcclResult CalcSliceInfoAllReduce(const u64 dataSize, RankSliceInfo &sliceInfoVec) const;    
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 
 #endif// HCCL_CCU_TEMP_REDUCE_NHR_1D_MEM2MEM_H

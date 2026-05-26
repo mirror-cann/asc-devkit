@@ -9,7 +9,7 @@
 */
 #include "ccu_kernel_reduce_scatter_mesh1d.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int INPUT_XN_ID  = 0;
@@ -133,4 +133,4 @@ std::vector<uint64_t> CcuKernelReduceScatterMesh1D::GeneArgs(const CcuTaskArg &a
                inputAddr, outputAddr, offset, sliceSize);
     return {inputAddr, outputAddr, tokenInfo, offset, goSize[0], goSize[1], goSize[2], goSize[3]};
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

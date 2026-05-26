@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_ALL_TO_ALL_V_OP_H
-#define OPS_HCCL_SRC_OPS_ALL_TO_ALL_V_OP_H
+#ifndef MC2_OPS_HCCL_SRC_OPS_ALL_TO_ALL_V_OP_H
+#define MC2_OPS_HCCL_SRC_OPS_ALL_TO_ALL_V_OP_H
 
 #include <string>
 #include <memory>
@@ -42,7 +42,7 @@ HcclResult HcclAlltoAllVCGraphMode(const void *sendBuf, const void *sendCountMat
 }
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr u64 SEND_COUNT_IDX = 0;
 constexpr u64 RECV_COUNT_IDX = 1;
 constexpr u64 SEND_DISPL_IDX = 2;

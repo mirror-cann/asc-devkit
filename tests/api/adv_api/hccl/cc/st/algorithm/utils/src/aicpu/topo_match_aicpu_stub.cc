@@ -14,7 +14,7 @@
 
 #include <algorithm>
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 namespace {
 constexpr u32 NET_LAYER0 = 0;
 constexpr u32 NET_LAYER1 = 1;
@@ -270,4 +270,4 @@ HcclResult TopoMatchUBX::MatchTopo(const HcclComm comm, TopoInfoWithNetLayerDeta
     }
     return HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

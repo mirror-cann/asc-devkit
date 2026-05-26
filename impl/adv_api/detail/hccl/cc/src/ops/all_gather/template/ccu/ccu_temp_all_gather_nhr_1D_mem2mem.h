@@ -28,7 +28,7 @@ using NHRStepInfo = struct NHRStepInfoDef {
     }
 };
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class CcuTempAllGatherNHR1DMem2Mem : public CcuAlgTemplateBase {
 public:
     explicit CcuTempAllGatherNHR1DMem2Mem(const OpParam& param, 
@@ -63,6 +63,6 @@ private:
                                  uint64_t& die1Size) const;
 };
  
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
  
 #endif // HCCL_CCU_TEMP_ALL_GATHER_NHR_1D

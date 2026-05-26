@@ -19,7 +19,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 using NHRStepInfo = struct NHRStepInfo {
@@ -163,6 +163,6 @@ private:
     CcuRep::RemoteAddr  remoteDst_;
     CcuRep::Variable    isRepeatIter_; // 用于判断是否是第一次循环
 };
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // HCCL_CCU_KERNEL_REDUCE_SCATTER_NHR_1D

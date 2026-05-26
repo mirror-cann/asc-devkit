@@ -19,7 +19,7 @@
 #include "alg_env_config.h"
 
 using namespace HcclSim;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 
 class ST_ALL_GATHER_V_TEST : public ::testing::Test {
 protected:

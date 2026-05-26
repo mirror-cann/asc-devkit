@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_ALL_GATHER_OP
-#define OPS_HCCL_SRC_OPS_ALL_GATHER_OP
+#ifndef MC2_OPS_HCCL_SRC_OPS_ALL_GATHER_OP
+#define MC2_OPS_HCCL_SRC_OPS_ALL_GATHER_OP
 
 #include <string>
 #include "hccl.h"
@@ -29,7 +29,7 @@ HcclResult HcclAllGatherGraphMode(void *sendBuf, void *recvBuf, uint64_t sendCou
 }
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult AllGatherOutPlace(void *sendBuf, void *recvBuf, uint64_t sendCount, HcclDataType dataType, HcclComm comm,
                              aclrtStream stream, const std::string &tag);
 HcclResult AllGatherOutPlaceGraphMode(void *sendBuf, void *recvBuf, uint64_t sendCount, HcclDataType dataType, HcclComm comm,

@@ -10,7 +10,7 @@
 #include "reduce_scatter_auto_selector.h"
 #include "selector_registry.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr u32 MAX_RANK_NUM_FOR_CONCURRENT_ALGO = 4;
 constexpr u64 RS_AICPU_1D_MAX_DATA_SIZE = 16 * 1024 * 1024;
 
@@ -339,4 +339,4 @@ SelectorStatus ReduceScatterAutoSelector::SelectMeshAlgoAicpuForMesh1DClos(const
 }
 
 REGISTER_SELECTOR_BY_OPTYPE(HcclCMDType::HCCL_CMD_REDUCE_SCATTER, 18, ReduceScatterAutoSelector);
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

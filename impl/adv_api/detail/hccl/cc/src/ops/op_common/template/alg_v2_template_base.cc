@@ -9,7 +9,7 @@
 */
 #include "alg_v2_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 InsAlgTemplateBase::InsAlgTemplateBase(
     const OpParam &param, const u32 rankId, // 传通信域的rankId，userRank

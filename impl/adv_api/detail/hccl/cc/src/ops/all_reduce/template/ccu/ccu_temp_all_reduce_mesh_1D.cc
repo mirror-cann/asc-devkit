@@ -14,7 +14,7 @@
 #include "kernel/ccu_kernel_all_reduce_mesh1d.h"
 #include <set>
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempAllReduceMesh1D::CcuTempAllReduceMesh1D(const OpParam& param, 
                                                 const u32 rankId,

@@ -22,7 +22,7 @@ constexpr s32 DEVICE_PER_MODULE = 8;
 constexpr uint32_t NET_LAYER_NUM_TWO = 2;
 constexpr uint32_t NET_LAYER_NUM_THREE = 3;
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 u32 CalGCD(u32 a, u32 b)
 {

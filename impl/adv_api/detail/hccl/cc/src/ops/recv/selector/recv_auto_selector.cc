@@ -10,7 +10,7 @@
 #include "recv_auto_selector.h"
 #include "selector_registry.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
     SelectorStatus RecvAutoSelector::SelectAicpuAlgo(
         const TopoInfoWithNetLayerDetails *topoInfo, const OpParam &opParam, const std::map<HcclCMDType, std::vector<HcclAlgoType> > &configAlgMap,
         std::string &selectAlgName) const {
@@ -32,4 +32,4 @@ namespace ops_hccl {
     }
 
     REGISTER_SELECTOR_BY_OPTYPE(HcclCMDType::HCCL_CMD_RECEIVE, 18, RecvAutoSelector);
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

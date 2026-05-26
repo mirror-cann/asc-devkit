@@ -12,7 +12,7 @@
 
 #include "alg_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class ScatterRingDirect : public AlgTemplateBase {
 public:
     explicit ScatterRingDirect();

@@ -15,7 +15,7 @@
 #include "ccu_temp_all_to_all_mesh2die.h"
 #include "ccu_kernel_all_to_all_mesh2die.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 CcuTempAllToAllMesh2Die::CcuTempAllToAllMesh2Die(const OpParam &param, RankId rankId,
     const std::vector<std::vector<u32>> &subCommRanks)
     : CcuAlgTemplateBase(param, rankId, subCommRanks)
@@ -140,4 +140,4 @@ HcclResult CcuTempAllToAllMesh2Die::KernelRun(const OpParam &param, const Templa
     HCCL_INFO("[CcuTempAllToAllMesh2Die] Template Run for all steps Ends.");
     return HcclResult::HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

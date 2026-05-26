@@ -13,7 +13,7 @@
 #include "ins_temp_allgather_nhr_dpu_inter.h"
 #include "ins_temp_allgather_mesh_1D_intra.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template <typename AlgTopoMatch, typename InsAlgTemplate0, typename InsAlgTemplate1, typename InsAlgTemplate2,
     typename InsAlgTemplate3>
@@ -453,4 +453,4 @@ u64 InsV2BroadcastSequenceExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgTemplate
 REGISTER_EXECUTOR_BY_FOUR_TEMPS(HcclCMDType::HCCL_CMD_BROADCAST, InsBroadcastSequenceMeshNhrDPU, InsV2BroadcastSequenceExecutor,
     TopoMatchMultilevel, InsTempScatterMesh1DIntra, InsTempScatterNHRDPUInter, InsTempAllGatherNHRDPUInter,
     InsTempAllGatherMesh1DIntra);
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

@@ -13,7 +13,7 @@
 #include "log.h"
 #include "ccu_kernel.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 /* hccl仓CcuKernel基类，提供group高阶操作接口 */

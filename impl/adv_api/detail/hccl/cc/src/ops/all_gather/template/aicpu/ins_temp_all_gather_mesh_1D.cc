@@ -10,7 +10,7 @@
 #include "ins_temp_all_gather_mesh_1D.h"
 #include "alg_data_trans_wrapper.h"
 #include "template_utils.h"
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempAllGatherMesh1D::InsTempAllGatherMesh1D(const OpParam &param, const u32 rankId,
                                                const std::vector<std::vector<u32>> &subCommRanks)
     : InsAlgTemplateBase(param, rankId, subCommRanks)
@@ -293,4 +293,4 @@ void InsTempAllGatherMesh1D::GetNotifyIdxSubToMain(std::vector<u32> &notifyIdxSu
     }
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

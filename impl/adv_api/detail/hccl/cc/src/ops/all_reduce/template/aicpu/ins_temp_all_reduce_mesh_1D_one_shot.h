@@ -14,7 +14,7 @@
 #include "executor_base.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class InsTempAllReduceMesh1DOneShot : public InsAlgTemplateBase {
 public:
@@ -55,6 +55,6 @@ private:
     u64 count_{0};
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // HCCLV2_INS_TEMP_ALL_REDUCE_MESH_1D_ONE_SHOT

@@ -11,7 +11,7 @@
 
 #define NET_NUM 2
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempAlltoAllVMesh1D::InsTempAlltoAllVMesh1D(
     const OpParam& param, const u32 rankId, // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)

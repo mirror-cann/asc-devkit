@@ -10,7 +10,7 @@
 #include "ins_temp_all_reduce_mesh_1D_one_shot.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempAllReduceMesh1DOneShot::InsTempAllReduceMesh1DOneShot(
     const OpParam& param, const u32 rankId, // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)

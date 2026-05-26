@@ -12,7 +12,7 @@
 
 #include "auto_selector_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class ReduceAutoSelector : public AutoSelectorBase {
 private:
@@ -36,5 +36,5 @@ private:
                                 std::vector<HcclAlgoType>> &configAlgMap, std::string &selectAlgName) const;
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 #endif

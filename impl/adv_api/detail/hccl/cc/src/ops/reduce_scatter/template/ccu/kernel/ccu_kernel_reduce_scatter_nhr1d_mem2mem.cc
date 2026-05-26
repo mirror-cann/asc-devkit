@@ -10,7 +10,7 @@
 #include "ccu_kernel_reduce_scatter_nhr1d_mem2mem.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 // 按信号功能划分notify的bit
 constexpr uint16_t INPUT_XN_ID      = 0;
@@ -302,4 +302,4 @@ std::vector<uint64_t> CcuKernelReduceScatterNHR1DMem2Mem::GeneArgs(const CcuTask
             die1LastSliceSize,  inputSliceStride,   currentRankSliceOutputOffset,
             inputRepeatStride,  outputRepeatStride, repeatNumVar};
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

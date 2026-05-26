@@ -10,7 +10,7 @@
 #include "config_log.h"
 #include "mmpa_api.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 static u64 g_debugConfig = 0ULL;
 
@@ -60,4 +60,4 @@ HcclResult InitDebugConfigByEnv()
     return HCCL_SUCCESS;
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

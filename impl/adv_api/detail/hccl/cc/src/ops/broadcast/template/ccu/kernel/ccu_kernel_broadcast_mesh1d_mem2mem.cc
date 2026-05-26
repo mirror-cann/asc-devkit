@@ -10,7 +10,7 @@
 #include "ccu_kernel_broadcast_mesh1d_mem2mem.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int INPUT_XN_ID  = 0;
@@ -336,4 +336,4 @@ std::vector<uint64_t> CcuKernelBroadcastMesh1DMem2Mem::GeneArgs(const CcuTaskArg
     return taskArgs;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

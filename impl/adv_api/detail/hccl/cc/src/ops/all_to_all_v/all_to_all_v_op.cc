@@ -16,7 +16,7 @@
 #include <string>
 
 using namespace std;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 extern "C" unsigned int LaunchAicpuKernel(OpParam *param);
 
 HcclResult HcclAlltoAll(const void *sendBuf, uint64_t sendCount, HcclDataType sendType, const void *recvBuf,
@@ -357,7 +357,7 @@ HcclResult HcclAlltoAllVCGraphMode(const void *sendBuf, const void *sendCountMat
     return HCCL_SUCCESS;
 }
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult GenResPack(const char* tag, void** streams, const size_t streamCount,
     void* scratchMemAddr, const uint64_t scratchMemSize, ResPackGraphMode &resPack)

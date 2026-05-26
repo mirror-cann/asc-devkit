@@ -16,7 +16,7 @@
 
 
 using namespace std;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 extern "C" unsigned int LaunchAicpuKernel(OpParam *param);
 
 
@@ -100,7 +100,7 @@ HcclResult HcclAllGatherGraphMode(void *sendBuf, void *recvBuf, uint64_t sendCou
 
     return HCCL_SUCCESS;
 }
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult AllGatherInitAndCheck(HcclComm comm, void *sendBuf, void *recvBuf, uint64_t sendCount, HcclDataType dataType, aclrtStream stream, std::string &opTag)
 {
@@ -237,4 +237,4 @@ HcclResult AllGatherEntryLog(void *sendBuf, void *recvBuf, uint64_t sendCount, H
     }
     return HCCL_SUCCESS;
 }
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

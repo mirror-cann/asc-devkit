@@ -9,7 +9,7 @@
 */
 #include "ccu_kernel_reduce_nhr1d_mem2mem.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr uint16_t OUTPUT_XN_ID                   = 1;
@@ -412,4 +412,4 @@ std::vector<uint64_t> CcuKernelReduceNHR1DMem2Mem::GeneArgs(const CcuTaskArg &ar
             die1LastSliceSize};
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

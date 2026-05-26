@@ -14,7 +14,7 @@
 #include "ccu_temp_reduce_nhr_1D_mem2mem.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempReduceNHR1DMem2Mem::CcuTempReduceNHR1DMem2Mem(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -415,4 +415,4 @@ u64 CcuTempReduceNHR1DMem2Mem::CalcScratchMultiple(BufferType inBuffType, Buffer
     return 0;
 }
 
-} // namespace ops_hccl 
+} // namespace mc2_ops_hccl 

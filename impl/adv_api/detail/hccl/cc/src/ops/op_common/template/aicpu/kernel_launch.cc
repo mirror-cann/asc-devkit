@@ -23,7 +23,7 @@
 #include <shared_mutex>
 #include <atomic>
 
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 namespace {
     //统计缓存信息
     struct CacheStats {
@@ -240,7 +240,7 @@ extern "C" __attribute__((visibility("default"))) unsigned int HcclLaunchAicpuKe
         }
 
         if (HcommIsSupportHcommRegOpTaskException() &&
-            HcommRegOpTaskException(param->commName, ops_hccl::GetScatterOpInfo) != HCCL_SUCCESS) {
+            HcommRegOpTaskException(param->commName, mc2_ops_hccl::GetScatterOpInfo) != HCCL_SUCCESS) {
             HCCL_ERROR(
                 "%s HcommRegOpTaskException fail, commName[%s], algTag[%s]", __func__, param->commName, param->algTag);
             return 1;
@@ -282,14 +282,14 @@ extern "C" __attribute__((visibility("default"))) unsigned int HcclLaunchAicpuKe
         // 还原变长指针
         HcclResult ret = HCCL_SUCCESS;
         if (param->opType == HCCL_CMD_BATCH_SEND_RECV) {
-            ret = ops_hccl::RestoreVarDataBatchSendRecv(*param);
+            ret = mc2_ops_hccl::RestoreVarDataBatchSendRecv(*param);
         } else if (param->opType == HCCL_CMD_ALLTOALLV || param->opType == HCCL_CMD_ALLTOALLVC ||
                    param->opType == HCCL_CMD_ALLTOALL) {
-            ret = ops_hccl::RestoreVarDataAlltoAllV(*param, resCtx);
+            ret = mc2_ops_hccl::RestoreVarDataAlltoAllV(*param, resCtx);
         } else if (param->opType == HCCL_CMD_REDUCE_SCATTER_V) {
-            ret = ops_hccl::RestoreVarDataReduceScatterV(*param, resCtx);
+            ret = mc2_ops_hccl::RestoreVarDataReduceScatterV(*param, resCtx);
         } else if (param->opType == HCCL_CMD_ALLGATHER_V) {
-            ret = ops_hccl::RestoreVarDataAllGatherV(*param, resCtx);
+            ret = mc2_ops_hccl::RestoreVarDataAllGatherV(*param, resCtx);
         }
         if (ret != HCCL_SUCCESS) {
             HCCL_ERROR("failed to restore optype [%d] data and counts.", param->opType);
@@ -461,7 +461,7 @@ extern "C" __attribute__((visibility("default"))) unsigned int HcclLaunchAicpuKe
     return 0;
 }
 
-HcclResult ops_hccl::RestoreVarDataBatchSendRecv(OpParam &param)
+HcclResult mc2_ops_hccl::RestoreVarDataBatchSendRecv(OpParam &param)
 {
     u64 sendRecvItemSize = static_cast<u64>(sizeof(HcclSendRecvItem));
     u64 itemNum = static_cast<u64>(param.batchSendRecvDataDes.itemNum);
@@ -477,7 +477,7 @@ HcclResult ops_hccl::RestoreVarDataBatchSendRecv(OpParam &param)
     return HCCL_SUCCESS;
 }
 
-HcclResult ops_hccl::RestoreVarDataAlltoAllV(OpParam &param, const AlgResourceCtxSerializable &resCtx)
+HcclResult mc2_ops_hccl::RestoreVarDataAlltoAllV(OpParam &param, const AlgResourceCtxSerializable &resCtx)
 {
     u64 rankSize = resCtx.topoInfo.userRankSize;
     CHK_PRT_RET(param.varMemSize != ALL_TO_ALL_V_VECTOR_NUM * rankSize * sizeof(u64),
@@ -503,7 +503,7 @@ HcclResult ops_hccl::RestoreVarDataAlltoAllV(OpParam &param, const AlgResourceCt
     return HCCL_SUCCESS;
 }
 
-HcclResult ops_hccl::RestoreVarDataReduceScatterV(OpParam &param, const AlgResourceCtxSerializable &resCtx)
+HcclResult mc2_ops_hccl::RestoreVarDataReduceScatterV(OpParam &param, const AlgResourceCtxSerializable &resCtx)
 {
     u64 rankSize = resCtx.topoInfo.userRankSize;
     HCCL_INFO("rankSize:%u", rankSize);
@@ -522,7 +522,7 @@ HcclResult ops_hccl::RestoreVarDataReduceScatterV(OpParam &param, const AlgResou
     return HCCL_SUCCESS;
 }
 
-HcclResult ops_hccl::RestoreVarDataAllGatherV(OpParam &param, const AlgResourceCtxSerializable &resCtx)
+HcclResult mc2_ops_hccl::RestoreVarDataAllGatherV(OpParam &param, const AlgResourceCtxSerializable &resCtx)
 {
     u64 rankSize = resCtx.topoInfo.userRankSize;
     HCCL_INFO("rankSize:%u", rankSize);

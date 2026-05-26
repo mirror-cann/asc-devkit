@@ -9,7 +9,7 @@
 */
 #include "alg_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 AlgTemplateBase::AlgTemplateBase()
     : slices_(slicesDummy_), count_(0), dataBytes_(0), dataType_(HCCL_DATA_TYPE_RESERVED),
       reductionOp_(HCCL_REDUCE_RESERVED), root_(INVALID_VALUE_RANKID),

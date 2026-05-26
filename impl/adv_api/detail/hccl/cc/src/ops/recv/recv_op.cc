@@ -15,7 +15,7 @@
 #include <string>
 
 using namespace std;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 
 extern "C" unsigned int LaunchAicpuKernel(OpParam *param);
 
@@ -107,7 +107,7 @@ HcclResult HcclRecvGraphMode(
     return HcclResult::HCCL_SUCCESS;
 }
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
     HcclResult GetAndCheckRecvPara(
         const HcclComm comm, const void *recvBuf, const uint64_t count, const HcclDataType dataType,
         const uint32_t srcRank, u32 &rankSize, u32 &userRank, std::string &tag)
@@ -225,4 +225,4 @@ namespace ops_hccl {
         }
         return HCCL_SUCCESS;
     }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

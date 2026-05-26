@@ -12,7 +12,7 @@
 
 #include "alg_v2_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult SendWrite(const DataInfo &sendInfo, const ThreadHandle &thread);
 

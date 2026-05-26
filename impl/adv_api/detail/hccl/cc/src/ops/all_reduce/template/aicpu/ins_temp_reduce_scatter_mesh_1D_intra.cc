@@ -9,7 +9,7 @@
 */
 #include "ins_temp_reduce_scatter_mesh_1D_intra.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempReduceScatterMesh1DIntra::InsTempReduceScatterMesh1DIntra(const OpParam &param,
     const u32 rankId,  // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)
@@ -259,4 +259,4 @@ HcclResult InsTempReduceScatterMesh1DIntra::GetRes(AlgResourceRequest& resourceR
     return HCCL_SUCCESS;
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

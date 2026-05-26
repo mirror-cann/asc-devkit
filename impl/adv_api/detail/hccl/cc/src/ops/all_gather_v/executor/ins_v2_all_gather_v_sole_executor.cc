@@ -14,7 +14,7 @@
 #ifndef AICPU_COMPILE
 #include "ccu_temp_all_gather_v_mesh_1D_mem2mem.h"
 #endif
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template <typename AlgTopoMatch, typename InsAlgTemplate>
 InsV2AllGatherVSoleExecutor<AlgTopoMatch, InsAlgTemplate>::InsV2AllGatherVSoleExecutor()
@@ -194,4 +194,4 @@ REGISTER_EXEC_V2(HcclCMDType::HCCL_CMD_ALLGATHER_V, InsAllGatherVMesh1D, InsV2Al
 REGISTER_EXEC_V2(HcclCMDType::HCCL_CMD_ALLGATHER_V, CcuAllGatherVMesh1D, InsV2AllGatherVSoleExecutor, TopoMatch1D,
     CcuTempAllGatherVMesh1DMem2Mem);
 #endif
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

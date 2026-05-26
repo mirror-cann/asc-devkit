@@ -10,7 +10,7 @@
 #include "ccu_kernel_alg_base.h"
 #include "ccu_kernel_reduce_scatter_v_mesh1d_mem2mem.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 // bit序号，每种信号用一个bit
@@ -235,4 +235,4 @@ std::vector<uint64_t> CcuKernelReduceScatterVMesh1DMem2Mem::GeneArgs(const CcuTa
     return taskArgs;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

@@ -12,7 +12,7 @@
 
 #include "auto_selector_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class AllReduceAutoSelector : public AutoSelectorBase {
 private:
@@ -44,5 +44,5 @@ private:
         u64 dataSize) const;
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 #endif

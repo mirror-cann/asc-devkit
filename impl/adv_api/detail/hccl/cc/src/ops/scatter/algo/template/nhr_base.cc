@@ -10,7 +10,7 @@
 #include <algorithm>
 #include "nhr_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 NHRBase::NHRBase()
     : AlgTemplateBase()
 {
@@ -101,4 +101,4 @@ u32 NHRBase::GetStepNumInterServer(u32 rankSize) const
 
     return nSteps;
 }
-}   // ~~ namespace ops_hccl
+}   // ~~ namespace mc2_ops_hccl

@@ -16,7 +16,7 @@
 #include "ccu_kernel_scatter_nhr1d_mem2mem.h"
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 template <typename AlgTopoMatch, typename InsAlgTemplate>
 InsV2ScatterSoleExecutor<AlgTopoMatch, InsAlgTemplate>::InsV2ScatterSoleExecutor()
 {}
@@ -156,4 +156,4 @@ REGISTER_EXEC_V2(HcclCMDType::HCCL_CMD_SCATTER, InsScatterNHR, InsV2ScatterSoleE
 REGISTER_EXEC_V2(HcclCMDType::HCCL_CMD_SCATTER, CcuScatterMesh1D, InsV2ScatterSoleExecutor, TopoMatch1D, CcuTempScatterMesh1D);
 REGISTER_EXEC_V2(HcclCMDType::HCCL_CMD_SCATTER, CcuScatterNHRMem2Mem1D, InsV2ScatterSoleExecutor, TopoMatch1D, CcuTempScatterNHR1DMem2Mem);
 #endif
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

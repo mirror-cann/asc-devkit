@@ -10,7 +10,7 @@
 #include "ccu_kernel_alg_base.h"
 #include "ccu_kernel_all_reduce_mesh1d_mem2mem_2die_oneshot.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
  
 constexpr int INPUT_XN_ID        = 0;
@@ -449,4 +449,4 @@ std::vector<uint64_t> CcuKernelAllReduceMesh1DMem2Mem2DieOneShot::GeneArgs(const
                localReduceSliceOffset0, localReduceSliceOffset1);
     return taskArgs;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

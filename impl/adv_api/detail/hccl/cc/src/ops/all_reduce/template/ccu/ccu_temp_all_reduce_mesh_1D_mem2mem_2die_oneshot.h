@@ -14,7 +14,7 @@
 #include "utils.h"
 #include "ccu_alg_template_base.h"
  
-namespace ops_hccl {
+namespace mc2_ops_hccl {
  
 class CcuTempAllReduceMesh1DMem2Mem2DieOneShot : public CcuAlgTemplateBase {
 public:
@@ -43,6 +43,6 @@ private:
     uint32_t mySubCommRank_ = 0; // 本卡在子通信域的rankId
 };
  
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
  
 #endif// HCCL_CCU_TEMP_ALL_REDUCE_MESH_1D_MEM2MEM_2DIE_ONESHOT_H

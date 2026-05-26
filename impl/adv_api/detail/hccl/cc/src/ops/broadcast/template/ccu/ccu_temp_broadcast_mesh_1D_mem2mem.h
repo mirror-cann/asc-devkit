@@ -13,7 +13,7 @@
 #include "ccu_alg_template_base.h"
 #include "utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempBroadcastMesh1DMem2Mem : public CcuAlgTemplateBase {
 public:
@@ -43,6 +43,6 @@ private:
     u32 subCommRootId_  = 0;
     u32 root_ = 0;
 };
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 
 #endif// HCCL_CCU_TEMP_BROADCAST_MESH_1D_MEM2MEM_H

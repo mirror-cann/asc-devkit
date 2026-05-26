@@ -15,7 +15,7 @@
 #include "executor_base.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class InsTempAllReduceAicpuReduceNHR : public InsAlgTemplateBase {
 public:
@@ -65,6 +65,6 @@ private:
     RankSliceInfo sliceInfoVec_;
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif  // AICPU_ALLREDUCE_AICPU_REDUCE_NHR_H

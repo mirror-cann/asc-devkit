@@ -17,7 +17,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuKernelArgAllReduceMeshMem2Mem1D : public hcomm::CcuKernelArg {
 public:
@@ -132,6 +132,6 @@ private:
         HcclReduceOp opType);
     const std::string LOOP_BLOCK_TAG{"_local_copy_reduce_loop_"};
 };
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // HCCLV2_CCU_CONTEXT_ALL_REDUCE_MESH_1D_H_

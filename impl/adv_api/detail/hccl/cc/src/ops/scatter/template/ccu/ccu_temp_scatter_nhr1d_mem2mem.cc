@@ -15,7 +15,7 @@
 #include "alg_data_trans_wrapper.h"
 #include <iostream>
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempScatterNHR1DMem2Mem::CcuTempScatterNHR1DMem2Mem(const OpParam &param, const u32 rankId,
                                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -352,4 +352,4 @@ HcclResult CcuTempScatterNHR1DMem2Mem::GetRes(AlgResourceRequest& resourceReques
     return HCCL_SUCCESS;
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

@@ -16,7 +16,7 @@
 #include "hccl_alloc_ctx_res.h"
 #include "op_common.h"
 
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 
 constexpr uint32_t ALG_CONFIG_SIZE = 128;
 struct HcclOpArgs {

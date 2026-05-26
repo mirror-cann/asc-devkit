@@ -25,7 +25,7 @@
 #include "topo_match_base.h"
 #include "topo_match_1d.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template <typename AlgTopoMatch, typename InsAlgTemplate0, typename InsAlgTemplate1, typename InsAlgTemplate2, typename InsAlgTemplate3>
 class InsAllReduceParallelExecutor : public InsCollAlgBase {
@@ -147,6 +147,6 @@ private:
 
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // INS_ALL_REDUCE_PARALLEL_EXECUTOR

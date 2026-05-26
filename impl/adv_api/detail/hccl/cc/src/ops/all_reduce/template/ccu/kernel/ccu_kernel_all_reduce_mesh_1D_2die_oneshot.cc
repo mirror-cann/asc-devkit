@@ -11,7 +11,7 @@
 #include "ccu_kernel_alg_base.h"
 #include "ccu_kernel.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int INPUT_XN_ID    = 0;
@@ -439,4 +439,4 @@ std::vector<uint64_t> CcuKernelAllreduceMesh1D2DieOneShot::GeneArgs(const CcuTas
 
     return taskArgs;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

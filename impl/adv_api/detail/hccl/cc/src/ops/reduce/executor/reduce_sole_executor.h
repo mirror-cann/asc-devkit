@@ -13,7 +13,7 @@
 #include "executor_common_ops.h"
 #include "topo_match_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 template <typename AlgTopoMatch, typename AlgTemplate>
 class ReduceSoleExecutor : public InsCollAlgBase {
 public:
@@ -37,6 +37,6 @@ protected:
     std::vector<std::map<u32, std::vector<ChannelInfo>>> remoteRankToChannelInfo_;
     std::vector<ThreadHandle> threads_;
 };
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif

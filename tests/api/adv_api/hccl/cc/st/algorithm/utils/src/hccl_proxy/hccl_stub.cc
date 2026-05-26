@@ -29,7 +29,7 @@
 #include "hccl_comm.h"
 #include "hccl_res_expt.h"
 
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 using namespace HcclSim;
 
 #ifdef __cplusplus

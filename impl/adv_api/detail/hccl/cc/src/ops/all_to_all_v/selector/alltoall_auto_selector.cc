@@ -10,7 +10,7 @@
 #include "alltoall_auto_selector.h"
 #include "selector_registry.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr uint32_t INDEX_0 = 0;
 constexpr uint32_t INDEX_1 = 1;
 constexpr uint32_t INDEX_2 = 2;

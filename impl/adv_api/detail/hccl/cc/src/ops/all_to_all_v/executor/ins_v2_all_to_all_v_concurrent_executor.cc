@@ -15,7 +15,7 @@
 #endif
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr uint32_t CONST_0 = 0;
 constexpr uint32_t CONST_1 = 1;
 constexpr uint32_t CONST_2 = 2;

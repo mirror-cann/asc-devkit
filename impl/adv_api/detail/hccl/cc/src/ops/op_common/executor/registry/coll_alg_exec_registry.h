@@ -16,7 +16,7 @@
 #include <mutex>
 #include "executor_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 using CollExecCreator = std::function<ExecutorBase *()>;
 

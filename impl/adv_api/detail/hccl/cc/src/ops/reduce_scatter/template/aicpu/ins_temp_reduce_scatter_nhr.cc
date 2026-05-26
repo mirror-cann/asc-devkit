@@ -9,7 +9,7 @@
 */
 #include "ins_temp_reduce_scatter_nhr.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempReduceScatterNHR::InsTempReduceScatterNHR(
     const OpParam& param, const u32 rankId, // 传通信域的u32，userRank
     const std::vector<std::vector<u32>> &subCommRanks)

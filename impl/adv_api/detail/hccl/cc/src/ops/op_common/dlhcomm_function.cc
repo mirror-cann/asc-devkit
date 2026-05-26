@@ -10,7 +10,7 @@
 #include "dlhcomm_function.h"
 #include "log.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 DlHcommFunction &DlHcommFunction::GetInstance()
 {
     static DlHcommFunction hcclDlHcommFunction;

@@ -17,7 +17,7 @@
 #include "ccu/ccu_temp_all_to_all_mesh1d_multi_jetty.h"
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace std;
 constexpr uint32_t CONCURRENT_NUM = 2;
 constexpr uint32_t CONST_0 = 0;

@@ -17,7 +17,7 @@
 #include "executor_v2_base.h"
 
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 using CollExecCreatorV2 = std::function<InsCollAlgBase *()>;
 

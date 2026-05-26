@@ -9,7 +9,7 @@
 */
 #include "topo_match_1d.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 TopoMatch1D::TopoMatch1D()
 {
 }

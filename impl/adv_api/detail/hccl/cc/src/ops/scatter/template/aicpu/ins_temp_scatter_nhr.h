@@ -14,7 +14,7 @@
 #include "executor_base.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class InsTempScatterNHR : public InsAlgTemplateBase {
 public:
     explicit InsTempScatterNHR(const OpParam& param, const u32 rankId, // 传通信域的rankId，userRank
@@ -57,6 +57,6 @@ private:
     u64 count_{0};
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif  // OPEN_HCCL_INS_TEMP_SCATTER_NHR_H

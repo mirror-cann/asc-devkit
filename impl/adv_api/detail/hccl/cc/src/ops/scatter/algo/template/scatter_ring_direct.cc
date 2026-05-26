@@ -10,7 +10,7 @@
 #include "alg_template_register.h"
 #include "scatter_ring_direct.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 ScatterRingDirect::ScatterRingDirect()
     : AlgTemplateBase()
 {

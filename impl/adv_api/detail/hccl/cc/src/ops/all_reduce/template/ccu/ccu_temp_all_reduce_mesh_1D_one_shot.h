@@ -14,7 +14,7 @@
 #include "ccu_alg_template_base.h"
 #include "utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempAllReduceMesh1DOneShot : public CcuAlgTemplateBase {
 public:

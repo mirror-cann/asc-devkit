@@ -7,14 +7,14 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_CHANNEL_REQUEST
-#define OPS_HCCL_SRC_OPS_CHANNEL_REQUEST
+#ifndef MC2_OPS_HCCL_SRC_OPS_CHANNEL_REQUEST
+#define MC2_OPS_HCCL_SRC_OPS_CHANNEL_REQUEST
 
 #include <set>
 #include <vector>
 #include "hccl/base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr u32 HCCL_RANK_SIZE_EQ_ONE = 1;
 

@@ -19,7 +19,7 @@
 #include "alg_param.h"
 #include "ccu_kernel_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuKernelArgAllReduceMesh1DOneShot : public hcomm::CcuKernelArg {
 public:

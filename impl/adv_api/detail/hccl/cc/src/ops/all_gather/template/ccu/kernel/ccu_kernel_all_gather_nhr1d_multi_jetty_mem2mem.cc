@@ -10,7 +10,7 @@
 #include "ccu_kernel_all_gather_nhr1d_multi_jetty_mem2mem.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr uint16_t OUTPUT_XN_ID       = 1;
 constexpr uint16_t TOKEN_XN_ID        = 2;

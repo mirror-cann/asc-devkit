@@ -14,7 +14,7 @@
 #include "utils.h"
 #include "ccu_kernel_all_reduce_nhr_mem2mem_1D_multi_jetty.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempAllReduceNhrMem2Mem1DMultiJetty : public CcuAlgTemplateBase {
 public:
@@ -50,5 +50,5 @@ private:
     uint32_t portNum_{0}; // 端口数量
     std::map<u32, u32> subCommRankMap_; // 全局rank号映射到自通信域rank号
 };
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 #endif// HCCL_CCU_TEMP_ALL_REDUCE_NHR_MEM2MEM_1D_MULTY_JETTY_H

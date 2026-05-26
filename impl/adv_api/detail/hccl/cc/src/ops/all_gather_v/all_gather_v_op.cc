@@ -15,7 +15,7 @@
 #include <string>
 
 using namespace std;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 extern "C" unsigned int LaunchAicpuKernel(OpParam *param);
 
 HcclResult HcclAllGatherV(void *sendBuf, uint64_t sendCount, void *recvBuf, const void *recvCounts,
@@ -120,7 +120,7 @@ HcclResult HcclAllGatherVGraphMode(void *sendBuf, void *recvBuf, uint64_t sendCo
  	return HCCL_SUCCESS;
 }
  	
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult CheckAllGatherVInputPara(const HcclComm comm, const void* sendBuf, const void* recvBuf)
 {
     // 入参合法性校验
@@ -291,4 +291,4 @@ HcclResult AllGatherVOutPlaceGraphMode(void *sendBuf, void *recvBuf, uint64_t se
  	return HCCL_SUCCESS;
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

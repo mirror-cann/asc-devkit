@@ -10,7 +10,7 @@
 #include "ins_v2_send_sole_executor.h"
 #include "ins_temp_send_dpu.h"
 
-namespace ops_hccl
+namespace mc2_ops_hccl
 {
     template <typename InsAlgTemplate>
     InsV2SendSoleExecutor<InsAlgTemplate>::InsV2SendSoleExecutor()
@@ -146,4 +146,4 @@ namespace ops_hccl
     }
 
     REGISTER_EXECUTOR_IMPL_NO_TOPOMATCH(HcclCMDType::HCCL_CMD_SEND, InsSendDPU, InsV2SendSoleExecutor, InsTempSendDpu);
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

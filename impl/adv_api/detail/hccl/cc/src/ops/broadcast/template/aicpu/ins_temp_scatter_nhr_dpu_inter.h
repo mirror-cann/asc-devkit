@@ -18,7 +18,7 @@
 #include "alg_data_trans_wrapper.h"
 #include "dpu_alg_data_trans_wrapper.h"
  
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class InsTempScatterNHRDPUInter : public InsAlgTemplateBase {
 public:
@@ -66,6 +66,6 @@ private:
     u64 dataTypeSize_{0};
 };
  
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
  
 #endif  // OPEN_HCCL_INS_TEMP_SCATTER_NHR_H

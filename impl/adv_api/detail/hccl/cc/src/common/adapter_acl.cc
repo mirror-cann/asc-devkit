@@ -13,7 +13,7 @@
 #include "mmpa_api.h"
 #include "dtype_common.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult haclrtGetDeviceIndexByPhyId(u32 devicePhyId, u32 &deviceLogicId)
 {
 #ifndef AICPU_COMPILE

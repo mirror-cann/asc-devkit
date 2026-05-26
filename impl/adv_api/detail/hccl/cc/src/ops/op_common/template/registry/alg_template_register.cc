@@ -9,7 +9,7 @@
 */
 #include "alg_template_register.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 AlgTemplateRegistry &AlgTemplateRegistry::Instance()
 {

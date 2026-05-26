@@ -13,7 +13,7 @@
 #include "ccu_assist_pub.h"
 #include "ccu_kernel_all_reduce_nhr1d_mem2mem.h"
 #include "alg_data_trans_wrapper.h"
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempAllReduceNHRMem2Mem1D::CcuTempAllReduceNHRMem2Mem1D(const OpParam& param, 
                                                 const u32 rankId, // 传通信域的rankId，userRank
@@ -336,4 +336,4 @@ HcclResult CcuTempAllReduceNHRMem2Mem1D::GetAllGatherStepInfo(u32 step, u32 nSte
     return HcclResult::HCCL_SUCCESS;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

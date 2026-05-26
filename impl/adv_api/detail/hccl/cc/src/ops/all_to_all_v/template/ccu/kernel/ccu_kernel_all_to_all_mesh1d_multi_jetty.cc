@@ -10,7 +10,7 @@
 #include "ccu_kernel_all_to_all_mesh1d_multi_jetty.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int INPUT_XN_ID   = 0;
@@ -264,4 +264,4 @@ HcclResult CcuKernelAllToAllMesh1DMultiJetty::Algorithm()
     return HcclResult::HCCL_SUCCESS;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

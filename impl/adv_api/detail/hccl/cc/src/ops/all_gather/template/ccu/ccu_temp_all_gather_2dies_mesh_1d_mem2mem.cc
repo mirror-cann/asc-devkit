@@ -13,7 +13,7 @@
 #include "ccu_kernel_all_gather_2dies_mesh1d_mem2mem.h"
 #include "ccu_temp_all_gather_2dies_mesh_1d_mem2mem.h"
 #include "alg_data_trans_wrapper.h"
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 #define ALL_GATHER_2DIES_M2M_THREAD_NUM 2
 CcuTempAllGather2DiesMeshMem2Mem1D::CcuTempAllGather2DiesMeshMem2Mem1D(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -136,4 +136,4 @@ HcclResult CcuTempAllGather2DiesMeshMem2Mem1D::GetRes(AlgResourceRequest& resour
     return HCCL_SUCCESS;
 }
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl

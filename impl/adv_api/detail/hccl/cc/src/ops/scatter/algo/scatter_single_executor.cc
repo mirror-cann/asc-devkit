@@ -9,7 +9,7 @@
 */
 #include "scatter_single_executor.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 ScatterSingleExecutor::ScatterSingleExecutor() : ScatterExecutorBase()
 {
     desc_.level1SupportedAlgos = {

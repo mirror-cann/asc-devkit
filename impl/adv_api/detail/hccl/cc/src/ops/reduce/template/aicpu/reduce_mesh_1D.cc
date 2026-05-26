@@ -10,7 +10,7 @@
 #include <numeric>
 #include "reduce_mesh_1D.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 ReduceMesh1D::ReduceMesh1D(const OpParam &param,
     const u32 rankId,  // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)
@@ -275,4 +275,4 @@ u64 ReduceMesh1D::GetThreadNum() const
     return templateRankSize_;
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

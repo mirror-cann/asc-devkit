@@ -13,7 +13,7 @@
 #include "ccu_kernel_all_gather_2dies_mesh_1D.h"
 #include "ccu_temp_all_gather_2dies_mesh_1D.h"
 #include "alg_data_trans_wrapper.h"
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr u32 ALL_GATHER_DIE_NUM = 2;
 CcuTempAllGather2DiesMesh1D::CcuTempAllGather2DiesMesh1D(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -150,4 +150,4 @@ HcclResult CcuTempAllGather2DiesMesh1D::GetRes(AlgResourceRequest& resourceReque
     return HCCL_SUCCESS;
 }
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl

@@ -13,7 +13,7 @@
 #include "ccu_kernel_broadcast_mesh1d.h"
 #include "ccu/ccu_temp_broadcast_mesh_1D.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempBroadcastMesh1D::CcuTempBroadcastMesh1D(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -84,4 +84,4 @@ HcclResult CcuTempBroadcastMesh1D::KernelRun(const OpParam& param,
 
     return HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

@@ -21,7 +21,7 @@
 #include "dpu_alg_data_trans_wrapper.h"
 #include "hccl_res.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class InsTempRecvDpu : public InsAlgTemplateBase {
 public:
@@ -59,6 +59,6 @@ private:
     ThreadHandle thread_;      // 只涉及一个thread
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 // #endif  //OPEN_HCCL_INS_TEMP_RECV_DPU
 #endif

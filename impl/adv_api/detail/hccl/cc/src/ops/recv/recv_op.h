@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_RECV_OP
-#define OPS_HCCL_SRC_OPS_RECV_OP
+#ifndef MC2_OPS_HCCL_SRC_OPS_RECV_OP
+#define MC2_OPS_HCCL_SRC_OPS_RECV_OP
 
 #include <string>
 #include "alg_param.h"
@@ -27,7 +27,7 @@ HcclResult HcclRecvGraphMode(
 }
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
     HcclResult GetAndCheckRecvPara(
         const HcclComm comm, const void *recvBuf, const uint64_t count, const HcclDataType dataType,
         const uint32_t srcRank, u32 &rankSize, u32 &userRank, std::string &tag);
@@ -42,6 +42,6 @@ namespace ops_hccl {
     HcclResult RecvEntryLog(void *recvBuf, uint64_t count, HcclDataType dataType, uint32_t srcRank,
         aclrtStream stream, const std::string &tag, const std::string &opName);
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
-#endif // ifndef OPS_HCCL_SRC_OPS_RECV_OP
+#endif // ifndef MC2_OPS_HCCL_SRC_OPS_RECV_OP

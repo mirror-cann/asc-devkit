@@ -19,7 +19,7 @@
 #include "ccu_kernel_alg_base.h"
 #include "template_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 using NHRStepInfo = struct NHRStepInfo {
@@ -244,5 +244,5 @@ private:
     CcuRep::CompletedEvent event_;
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 #endif  // HCCL_CCU_KERNEL_SCATTER_NHR_1D_MEM2MEM_H

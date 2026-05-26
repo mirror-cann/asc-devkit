@@ -10,7 +10,7 @@
 #include "batch_send_recv_auto_selector.h"
 #include "selector_registry.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 SelectorStatus BatchSendRecvAutoSelector::SelectAicpuAlgo(const TopoInfoWithNetLayerDetails* topoInfo,
                                                       const OpParam &opParam,
@@ -31,4 +31,4 @@ SelectorStatus BatchSendRecvAutoSelector::SelectAicpuAlgo(const TopoInfoWithNetL
 }
 
 REGISTER_SELECTOR_BY_OPTYPE(HcclCMDType::HCCL_CMD_BATCH_SEND_RECV, 18, BatchSendRecvAutoSelector);
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

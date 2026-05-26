@@ -17,7 +17,7 @@
 
 #include "log.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class BinaryStream {
 public:
@@ -167,6 +167,6 @@ private:
     std::stringstream stream;
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // HCCL_SERIALIZATION

@@ -14,7 +14,7 @@
 #include "alg_param.h"
 #include "ccu_alg_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempAllToAllVMesh1DMultiJetty : public CcuAlgTemplateBase {
 public:
@@ -46,6 +46,6 @@ private:
     CommTopo priorityTopo_ = CommTopo::COMM_TOPO_1DMESH;
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 
 #endif// HCCL_CCU_TEMP_ALL_TO_ALL_V_MESH_1D_MULTI_JETTY_H_

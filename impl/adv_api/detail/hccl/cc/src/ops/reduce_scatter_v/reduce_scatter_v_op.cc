@@ -16,7 +16,7 @@
 #include <string>
 
 using namespace std;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 extern "C" unsigned int LaunchAicpuKernel(OpParam *param);
 
 // 代码入口
@@ -138,7 +138,7 @@ HcclResult HcclReduceScatterVGraphMode(void *sendBuf,  const void *sendCounts, c
 
 
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult CheckReduceScatterVInputParam(
     const HcclComm comm, const void *sendBuf, const void *recvBuf, uint64_t recvCount,
     const void *sendCounts, const void *sendDispls, const aclrtStream stream)

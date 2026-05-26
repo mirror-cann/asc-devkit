@@ -15,7 +15,7 @@
 #include "ccu_temp_reduce_scatter_mesh_1D_2die_mem2mem.h"
 #include "alg_data_trans_wrapper.h"
  
-namespace ops_hccl {
+namespace mc2_ops_hccl {
  
 constexpr u32 DIE_NUM = 2;
 constexpr u32 UDIE0 = 0;
@@ -158,4 +158,4 @@ u64 CcuTempReduceScatterMeshMem2Mem1D2Die::CalcScratchMultiple(BufferType inBuff
     (void)outBuffType;
     return templateRankSize_;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

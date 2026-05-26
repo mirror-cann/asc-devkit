@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_TOPO
-#define OPS_HCCL_SRC_OPS_TOPO
+#ifndef MC2_OPS_HCCL_SRC_OPS_TOPO
+#define MC2_OPS_HCCL_SRC_OPS_TOPO
 
 #include <hccl/hccl_types.h>
 #include "hccl/base.h"
@@ -17,7 +17,7 @@
 #include "hccl_rank_graph.h"
 #include "hccl_res.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult CalcGeneralTopoInfoForA2(const HcclComm comm, const TopoInfo* topoInfo, AlgHierarchyInfo& algHierarchyInfo);
 HcclResult CalcGeneralTopoInfoForA3(const HcclComm comm, const TopoInfo* topoInfo, AlgHierarchyInfo& algHierarchyInfo);
@@ -31,4 +31,3 @@ u32 CalGCD(std::vector<u32> &nums);
 }
 
 #endif
-

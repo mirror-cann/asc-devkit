@@ -15,7 +15,7 @@
 
 #include "auto_selector_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class SelectorRegistry {
 public:
@@ -49,6 +49,6 @@ private:
     REGISTER_SELECTOR_BY_OPTYPE_HELPER(ctr, optype, priority, name, selector)
 
 #define REGISTER_SELECTOR_BY_OPTYPE(optype, priority, selector)              \
-    REGISTER_SELECTOR_BY_OPTYPE_HELPER_1(__COUNTER__, optype, priority, selector, selector)// namespace ops_hccl
+    REGISTER_SELECTOR_BY_OPTYPE_HELPER_1(__COUNTER__, optype, priority, selector, selector)// namespace mc2_ops_hccl
 
 #endif

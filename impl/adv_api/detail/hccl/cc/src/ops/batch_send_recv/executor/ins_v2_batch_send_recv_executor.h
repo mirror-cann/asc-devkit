@@ -19,7 +19,7 @@
 #include "coll_alg_v2_exec_registry.h"
 #include "template_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class InsV2BatchSendRecvExecutor : public InsCollAlgBase {
 public:
     explicit InsV2BatchSendRecvExecutor();
@@ -83,5 +83,5 @@ private:
     std::deque<const HcclSendRecvItem*> sendDeque_;
     std::deque<const HcclSendRecvItem*> recvDeque_;
 };
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 #endif

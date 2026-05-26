@@ -13,7 +13,7 @@
 #include "utils.h"
 #include "ccu_alg_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 using RankId = u32;
 
@@ -49,6 +49,6 @@ private:
     A2ASendRecvInfo localSendRecvInfo_;
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // HCCL_CCU_TEMP_ALLTOALLV_MESH_2DIE_H

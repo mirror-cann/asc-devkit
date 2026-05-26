@@ -20,7 +20,7 @@
 #include <random>
 
 using namespace HcclSim;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 
 class ST_BATCH_SEND_RECV_TEST : public ::testing::Test {
 protected:

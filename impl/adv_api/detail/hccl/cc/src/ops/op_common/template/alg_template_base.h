@@ -17,7 +17,7 @@
 #include "alg_param.h"
 #include "utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr s32 HCCL_EXEC_STAGE_NOT_SET = -1;
 constexpr s32 HCCL_EXEC_STEP_NOT_SET = -1;

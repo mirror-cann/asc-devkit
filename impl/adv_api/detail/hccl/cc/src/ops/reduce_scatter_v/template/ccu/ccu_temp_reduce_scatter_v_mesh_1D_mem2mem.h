@@ -12,7 +12,7 @@
 
 #include "ccu_alg_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempReduceScatterVMesh1DMem2Mem : public CcuAlgTemplateBase {
 public:
@@ -44,6 +44,6 @@ private:
     uint32_t mySubCommRank_ = 0;
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 
 #endif// HCCL_CCU_TEMP_REDUCE_SCATTER_V_MESH_1D_MEM2MEM_H

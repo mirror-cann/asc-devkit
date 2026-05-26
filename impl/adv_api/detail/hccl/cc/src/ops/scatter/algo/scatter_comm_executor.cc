@@ -10,7 +10,7 @@
 #include "scatter_comm_executor.h"
 #include "config_log.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 ScatterCommExecutor::ScatterCommExecutor() : ScatterExecutorBase()
 {
     desc_.level1SupportedAlgos = {

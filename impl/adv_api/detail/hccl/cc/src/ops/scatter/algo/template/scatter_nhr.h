@@ -13,7 +13,7 @@
 #include "alg_template_base.h"
 #include "nhr_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class ScatterNHR : public NHRBase {
 public:
     explicit ScatterNHR();

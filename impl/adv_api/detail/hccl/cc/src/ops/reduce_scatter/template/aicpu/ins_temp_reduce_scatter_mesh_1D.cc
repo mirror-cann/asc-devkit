@@ -9,7 +9,7 @@
 */
 #include "aicpu/ins_temp_reduce_scatter_mesh_1D.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempReduceScatterMesh1D::InsTempReduceScatterMesh1D(
     const OpParam& param, const u32 rankId, // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)

@@ -15,7 +15,7 @@
 #include "kernel/ccu_kernel_all_to_all_v_mesh1d.h"
 #include "ccu_temp_all_to_all_v_mesh_1D.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempAlltoAllVMesh1D::CcuTempAlltoAllVMesh1D(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -175,4 +175,4 @@ u64 CcuTempAlltoAllVMesh1D::CalcScratchMultiple(BufferType inBuffType, BufferTyp
     (void)outBuffType;
     return tempRankSize_;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

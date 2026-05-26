@@ -23,7 +23,7 @@
 #include "ccu_temp_all_reduce_nhr_mem2mem_1D_multi_jetty.h"
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template <typename AlgTopoMatch, typename InsAlgTemplate>
 InsV2AllReduceSoleExecutor<AlgTopoMatch, InsAlgTemplate>::InsV2AllReduceSoleExecutor()
@@ -193,4 +193,4 @@ REGISTER_EXEC_V2(HcclCMDType::HCCL_CMD_ALLREDUCE, CcuAllReduceMesh1DMem2Mem2DieO
 REGISTER_EXEC_V2(HcclCMDType::HCCL_CMD_ALLREDUCE, CcuAllReduceNHR1DMem2MemMultiJetty, InsV2AllReduceSoleExecutor, TopoMatch1D,
     CcuTempAllReduceNhrMem2Mem1DMultiJetty);
 #endif
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

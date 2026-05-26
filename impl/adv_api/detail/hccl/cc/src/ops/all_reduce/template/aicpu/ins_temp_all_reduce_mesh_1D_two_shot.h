@@ -14,7 +14,7 @@
 #include "executor_base.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 struct SplitSliceInfo {
     u64 offset{0};
@@ -77,6 +77,6 @@ private:
     std::vector<u32> rankList_;
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif  // INS_TEMP_ALL_REDUCE_1D_MESH_TWO_SHOT

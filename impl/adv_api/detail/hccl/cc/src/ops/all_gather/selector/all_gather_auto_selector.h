@@ -12,7 +12,7 @@
 
 #include "auto_selector_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class AllGatherAutoSelector : public AutoSelectorBase {
 private:
@@ -39,5 +39,5 @@ private:
                                    std::string &selectAlgName) const override;
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 #endif

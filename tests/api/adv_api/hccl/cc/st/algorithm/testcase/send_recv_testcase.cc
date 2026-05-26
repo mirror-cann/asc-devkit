@@ -20,7 +20,7 @@
 #include "alg_env_config.h"
 
 using namespace HcclSim;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 
 class ST_SEND_RECV_TEST : public ::testing::Test {
 protected:

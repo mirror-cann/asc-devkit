@@ -16,7 +16,7 @@
 #include "executor_base.h"
 #include "alg_data_trans_wrapper.h"
  
-namespace ops_hccl {
+namespace mc2_ops_hccl {
  
 class InsTempScatterMesh1DIntra : public InsAlgTemplateBase {
 public:

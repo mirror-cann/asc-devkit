@@ -13,7 +13,7 @@
 #include "utils.h"
 #include "ccu_alg_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class CcuTempAllGather2DiesMeshMem2Mem1D : public CcuAlgTemplateBase {
 public:
     explicit  CcuTempAllGather2DiesMeshMem2Mem1D(const OpParam& param, 
@@ -41,6 +41,6 @@ private:
     uint32_t mySubCommRank_ = 0;
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 
 #endif

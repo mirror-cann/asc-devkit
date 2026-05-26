@@ -10,7 +10,7 @@
 #include "alg_template_register.h"
 #include "scatter_nhr.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 ScatterNHR::ScatterNHR()
     : NHRBase(), interRank_(0), interRankSize_(0)
 {

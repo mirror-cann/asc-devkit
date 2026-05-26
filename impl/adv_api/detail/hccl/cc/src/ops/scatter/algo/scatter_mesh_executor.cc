@@ -9,7 +9,7 @@
 */
 #include "scatter_mesh_executor.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 ScatterMeshExecutor::ScatterMeshExecutor() : ScatterExecutorBase()
 {
     desc_.level1SupportedAlgos = {

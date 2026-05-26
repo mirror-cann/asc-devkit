@@ -9,7 +9,7 @@
 */
 #include "ccu_kernel_all_reduce_mesh1d_one_shot.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr int INPUT_XN_ID  = 0;
 constexpr int TOKEN_XN_ID  = 2;

@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_REDUCE_SCATTER_OP
-#define OPS_HCCL_SRC_OPS_REDUCE_SCATTER_OP
+#ifndef MC2_OPS_HCCL_SRC_OPS_REDUCE_SCATTER_OP
+#define MC2_OPS_HCCL_SRC_OPS_REDUCE_SCATTER_OP
 
 #include <string>
 #include <memory>
@@ -31,7 +31,7 @@ HcclResult HcclBroadcastGraphMode(void *buf, uint64_t count, HcclDataType dataTy
 }
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult BroadcastOutPlace(void *buf, uint64_t count, HcclDataType dataType, uint32_t root, HcclComm comm, aclrtStream stream, const std::string &tag);
 HcclResult BroadcastOutPlaceGraphMode(void *buf, uint64_t count, HcclDataType dataType, uint32_t root, HcclComm comm, aclrtStream stream, const std::string &tag,
                              const ResPackGraphMode &resPack);

@@ -10,7 +10,7 @@
 #include <cstdint>
 #include "ccu_kernel_all_gather_2dies_mesh_1D.h"
 #include "ccu_kernel_alg_base.h"
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int OUTPUT_XN_ID = 1;

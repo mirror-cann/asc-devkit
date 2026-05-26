@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_SEND_OP
-#define OPS_HCCL_SRC_OPS_SEND_OP
+#ifndef MC2_OPS_HCCL_SRC_OPS_SEND_OP
+#define MC2_OPS_HCCL_SRC_OPS_SEND_OP
 
 #include <string>
 
@@ -28,7 +28,7 @@ HcclResult HcclSendGraphMode(
 }
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
     HcclResult GetAndCheckSendPara(
         const HcclComm comm, const void *sendBuf, const uint64_t count, const HcclDataType dataType,
         const uint32_t destRank, u32 &rankSize, u32 &userRank, std::string &opTag);
@@ -42,7 +42,7 @@ namespace ops_hccl {
         const OpMode &opMode, const std::string &tag, const ResPackGraphMode &resPack = ResPackGraphMode());
     HcclResult SendEntryLog(void *sendBuf, uint64_t count, HcclDataType dataType, uint32_t destRank,
         aclrtStream stream, const std::string &tag, const std::string &opName);
-    } // namespace ops_hccl
+    } // namespace mc2_ops_hccl
 
-// ifndef OPS_HCCL_SRC_OPS_SEND_OP
+// ifndef MC2_OPS_HCCL_SRC_OPS_SEND_OP
 #endif

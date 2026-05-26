@@ -13,7 +13,7 @@
 #include "utils.h"
 #include "ccu_alg_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using RankId = u32;
 using RankGroup = std::vector<RankId>;
 
@@ -45,6 +45,6 @@ private:
     uint32_t mySubCommRank_ = 0;
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 
 #endif

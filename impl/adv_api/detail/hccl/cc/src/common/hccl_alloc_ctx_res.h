@@ -21,10 +21,10 @@
 
 #include <vector>
 
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 
 // Forward declarations for types that might not be fully defined
-namespace ops_hccl {
+namespace mc2_ops_hccl {
     struct OpParam;
     struct TopoInfoWithNetLayerDetails;
     struct AlgResourceCtxSerializable;

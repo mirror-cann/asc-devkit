@@ -13,7 +13,7 @@
 #include "utils.h"
 #include "ins_temp_all_reduce_nhr.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempAllReduceNHRMem2Mem1D : public CcuAlgTemplateBase {
 public:
@@ -47,6 +47,6 @@ private:
     std::map<u32, std::vector<HcclChannelDesc>> rankIdToChannelDesc_;
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif

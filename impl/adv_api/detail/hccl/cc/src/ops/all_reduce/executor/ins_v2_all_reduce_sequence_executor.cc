@@ -13,7 +13,7 @@
 #include "ins_temp_all_gather_nhr_dpu_inter.h"
 #include "ins_temp_all_gather_mesh_1D_intra.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 // ! 已经编码完成
 template <typename AlgTopoMatch, typename InsAlgTemplate0, typename InsAlgTemplate1, typename InsAlgTemplate2,
     typename InsAlgTemplate3>

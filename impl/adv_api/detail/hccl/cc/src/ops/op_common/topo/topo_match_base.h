@@ -17,7 +17,7 @@
 #include "hccl_comm.h"
 #include "alg_param.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr int RANK_SIZE_TWO   = 2;
 constexpr int RANK_SIZE_THREE = 3;
 constexpr int RANK_SIZE_FOUR  = 4;
@@ -62,6 +62,6 @@ public:
                                  AlgHierarchyInfoForAllLevel& algHierarchyInfo);
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // !HCCLV2_TOPO_MATCH_BASE

@@ -84,11 +84,11 @@ HcclResult IsDevice950(bool &isDevice950)
 
 HcclResult GetMainThreadFromOpParam(const std::vector<uint8_t> &baseOpParam, ThreadHandle &mainThread)
 {
-    CHK_PRT_RET(baseOpParam.size() < sizeof(ops_hccl::OpParam),
+    CHK_PRT_RET(baseOpParam.size() < sizeof(mc2_ops_hccl::OpParam),
                 HCCL_ERROR("Base op param size %zu is smaller than OpParam size %zu.",
-                           baseOpParam.size(), sizeof(ops_hccl::OpParam)),
+                           baseOpParam.size(), sizeof(mc2_ops_hccl::OpParam)),
                 HCCL_E_PARA);
-    const auto *param = reinterpret_cast<const ops_hccl::OpParam *>(baseOpParam.data());
+    const auto *param = reinterpret_cast<const mc2_ops_hccl::OpParam *>(baseOpParam.data());
     CHK_PTR_NULL(param);
     CHK_PRT_RET(param->resCtx == nullptr || param->ctxSize == 0U,
                 HCCL_ERROR("Invalid open op res ctx, resCtx[%p], ctxSize[%llu].", param->resCtx, param->ctxSize),
@@ -96,7 +96,7 @@ HcclResult GetMainThreadFromOpParam(const std::vector<uint8_t> &baseOpParam, Thr
 
     auto *ctx = static_cast<char *>(param->resCtx);
     std::vector<char> seq(ctx, ctx + param->ctxSize);
-    ops_hccl::AlgResourceCtxSerializable resCtx;
+    mc2_ops_hccl::AlgResourceCtxSerializable resCtx;
     resCtx.DeSerialize(seq);
     CHK_PRT_RET(resCtx.threads.empty() || resCtx.threads[0] == 0U,
                 HCCL_ERROR("Invalid open op resource ctx threads, thread num %zu.", resCtx.threads.size()),
@@ -121,13 +121,13 @@ HcclResult GetNextThreadAndStream(const ServerExecCtx &execCtx, hccl::Thread *&t
 
 void LogOpenOpParamBrief(const char *stage, const std::vector<uint8_t> &opParam)
 {
-    if (opParam.size() < sizeof(ops_hccl::OpParam)) {
+    if (opParam.size() < sizeof(mc2_ops_hccl::OpParam)) {
         HCCL_INFO("[MC2_OPEN_DIAG][%s] opParamSize %zu is smaller than OpParam size %zu.",
-                  stage, opParam.size(), sizeof(ops_hccl::OpParam));
+                  stage, opParam.size(), sizeof(mc2_ops_hccl::OpParam));
         return;
     }
 
-    const auto *param = reinterpret_cast<const ops_hccl::OpParam *>(opParam.data());
+    const auto *param = reinterpret_cast<const mc2_ops_hccl::OpParam *>(opParam.data());
     HCCL_INFO("[MC2_OPEN_DIAG][%s] opParamSize %zu, opType %u, algName[%s], inputPtr %p, outputPtr %p, "
               "resCtx %p, ctxSize %llu, stream %p.",
               stage, opParam.size(), static_cast<u32>(param->opType), param->algName,
@@ -373,11 +373,11 @@ HcclResult CommKfcAicpuServer::FormatOpParamFromMsg(
         CHK_PTR_NULL(execCtx.mainStream);
         stream = execCtx.mainStream->ptr();
     } else {
-        CHK_PRT_RET(execCtx.baseOpParam.size() < sizeof(ops_hccl::OpParam),
+        CHK_PRT_RET(execCtx.baseOpParam.size() < sizeof(mc2_ops_hccl::OpParam),
                     HCCL_ERROR("Base op param size %zu is smaller than OpParam size %zu.",
-                               execCtx.baseOpParam.size(), sizeof(ops_hccl::OpParam)),
+                               execCtx.baseOpParam.size(), sizeof(mc2_ops_hccl::OpParam)),
                     HCCL_E_PARA);
-        const auto *baseParam = reinterpret_cast<const ops_hccl::OpParam *>(execCtx.baseOpParam.data());
+        const auto *baseParam = reinterpret_cast<const mc2_ops_hccl::OpParam *>(execCtx.baseOpParam.data());
         CHK_PTR_NULL(baseParam);
         stream = baseParam->stream;
     }

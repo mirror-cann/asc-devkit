@@ -11,7 +11,7 @@
 #include "ins_temp_reduce_scatter_mesh_1D.h"
 #include "ins_temp_reduce_scatter_mesh_1d_dpu.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 // 序列执行器需要的层级数
 constexpr u32 SEQUENCE_EXECUTOR_LEVEL_NUM = 2;

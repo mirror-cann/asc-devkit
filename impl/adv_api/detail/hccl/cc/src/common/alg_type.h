@@ -7,13 +7,13 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_COMMON_ALG_TYPE
-#define OPS_HCCL_SRC_COMMON_ALG_TYPE
+#ifndef MC2_OPS_HCCL_SRC_COMMON_ALG_TYPE
+#define MC2_OPS_HCCL_SRC_COMMON_ALG_TYPE
 
 #include <string>
 #include <map>
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 // HCCL通信算法类型
 enum class HcclAlgoType {

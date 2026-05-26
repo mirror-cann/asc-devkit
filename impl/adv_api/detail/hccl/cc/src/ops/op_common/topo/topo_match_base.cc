@@ -9,7 +9,7 @@
 */
 #include "topo_match_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 TopoMatchBase::TopoMatchBase()
 {
 }
@@ -27,4 +27,4 @@ HcclResult TopoMatchBase::MatchTopo(const HcclComm comm, TopoInfoWithNetLayerDet
     return HcclResult::HCCL_E_INTERNAL;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

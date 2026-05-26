@@ -11,7 +11,7 @@
 #include "alg_data_trans_wrapper.h"
 #include "template_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempAllGatherNHR::InsTempAllGatherNHR(const OpParam &param, const u32 rankId,
                                          const std::vector<std::vector<u32>> &subCommRanks)
     : InsAlgTemplateBase(param, rankId, subCommRanks)

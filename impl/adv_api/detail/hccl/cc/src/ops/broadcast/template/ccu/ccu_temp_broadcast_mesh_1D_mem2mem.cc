@@ -13,7 +13,7 @@
 #include "ccu_kernel_broadcast_mesh1d_mem2mem.h"
 #include "ccu/ccu_temp_broadcast_mesh_1D_mem2mem.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempBroadcastMesh1DMem2Mem::CcuTempBroadcastMesh1DMem2Mem(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -128,4 +128,4 @@ HcclResult CcuTempBroadcastMesh1DMem2Mem::GetRes(AlgResourceRequest& resourceReq
 
     return HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

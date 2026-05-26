@@ -13,7 +13,7 @@
 #include "ccu_kernel_scatter_mesh1d.h"
 #include "ccu_temp_scatter_mesh1d.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempScatterMesh1D::CcuTempScatterMesh1D(const OpParam &param, const u32 rankId,
                                                          const std::vector<std::vector<u32>> &subCommRanks)
@@ -137,4 +137,4 @@ HcclResult CcuTempScatterMesh1D::GetRes(AlgResourceRequest& resourceRequest) con
 
     return HCCL_SUCCESS;
 }
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

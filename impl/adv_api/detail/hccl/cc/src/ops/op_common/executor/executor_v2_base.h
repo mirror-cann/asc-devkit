@@ -22,7 +22,7 @@
 #include "executor_base.h"
 #include "template_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class InsCollAlgBase {
 public:

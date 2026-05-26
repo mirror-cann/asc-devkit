@@ -27,7 +27,7 @@ constexpr uint32_t NET_LAYER_NUM_THREE = 3;
 constexpr u32 DEVICE_NO_HCCS_LINK_COUNT = 2; // 设备没有与自身和通过同一SIO链路连接的companion设备的HCCS_SW链路
 constexpr u32 TOPO_INST_NUM_MESH_1D_CLOS = 2; // MESH_1D_CLOS拓扑类型的实例数量
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult InitRankInfo(HcclComm comm, TopoInfo* topoInfo)
 {

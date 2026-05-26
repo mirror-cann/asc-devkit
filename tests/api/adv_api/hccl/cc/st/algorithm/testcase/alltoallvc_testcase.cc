@@ -19,7 +19,7 @@
 #include "alg_env_config.h"
 
 using namespace HcclSim;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 namespace checker {
 class ST_ALLTOALLVC_TEST : public ::testing::Test {
 protected:

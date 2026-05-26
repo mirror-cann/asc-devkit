@@ -18,7 +18,7 @@
 #include "ccu_temp_reduce_scatter_nhr_1D_multi_jetty_mem2mem.h"
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 // 并行执行器中两个 template 算法所需的 notify 数量
 constexpr u32 TEMPLATE_NOTIFY_NUM = 2;

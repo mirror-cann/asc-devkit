@@ -9,7 +9,7 @@
 */
 #include "ins_temp_reduce_scatter_mesh_1D_meshchunk.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempReduceScatterMesh1DMeshChunk::InsTempReduceScatterMesh1DMeshChunk(
     const OpParam& param, const u32 rankId, // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)

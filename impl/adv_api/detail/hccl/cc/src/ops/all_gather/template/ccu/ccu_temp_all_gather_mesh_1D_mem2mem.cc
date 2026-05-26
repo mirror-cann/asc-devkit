@@ -13,7 +13,7 @@
 #include "ccu_kernel_all_gather_mesh1d_mem2mem.h"
 #include "ccu_temp_all_gather_mesh_1D_mem2mem.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempAllGatherMesh1DMem2Mem::CcuTempAllGatherMesh1DMem2Mem(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -138,4 +138,4 @@ HcclResult CcuTempAllGatherMesh1DMem2Mem::GetRes(AlgResourceRequest& resourceReq
     resourceRequest.notifyNumOnMainThread = 0;
     return HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

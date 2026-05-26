@@ -14,7 +14,7 @@
 #include "executor_base.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 struct NHRStepInfo {
     u32 step = 0;
@@ -85,6 +85,6 @@ private:
     std::vector<u32> rankList_;
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif  // INS_TEMP_ALL_REDUCE_NHR

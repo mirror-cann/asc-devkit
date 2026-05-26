@@ -9,7 +9,7 @@
 */
 #include "ins_temp_reduce_scatter_mesh_1D_dpu_inter.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempReduceScatterMesh1dDpuInter::InsTempReduceScatterMesh1dDpuInter()
 {
 }

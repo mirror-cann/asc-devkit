@@ -11,7 +11,7 @@
 #include "ins_temp_reduce_scatter_v_mesh_1D.h"
 #include "ccu_temp_reduce_scatter_v_mesh_1D_mem2mem.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template <typename AlgTopoMatch, typename InsAlgTemplate>
 InsV2ReduceScatterVSoleExecutor<AlgTopoMatch, InsAlgTemplate>::InsV2ReduceScatterVSoleExecutor()

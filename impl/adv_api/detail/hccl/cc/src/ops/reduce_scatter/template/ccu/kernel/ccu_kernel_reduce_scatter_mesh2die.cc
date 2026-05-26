@@ -9,7 +9,7 @@
 */
  #include "ccu_kernel_reduce_scatter_mesh2die.h"
 
- namespace ops_hccl {
+ namespace mc2_ops_hccl {
 
 constexpr int CKE_IDX_0   = 0;
 constexpr int INPUT_XN_ID = 0;
@@ -189,4 +189,4 @@ std::vector<uint64_t> CcuKernelReduceScatterMesh2Die::GeneArgs(const CcuTaskArg 
     }
     return taskArgs;
 }
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl

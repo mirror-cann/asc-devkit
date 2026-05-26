@@ -14,7 +14,7 @@
 #include "utils.h"
 #include "ccu_kernel_all_gather_nhr1d_multi_jetty_mem2mem.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempAllGatherNHR1DMultiJettyMem2Mem : public CcuAlgTemplateBase {
 public:
@@ -56,6 +56,6 @@ private:
     uint32_t tempRankSize_ = 0;
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // HCCL_CCU_TEMP_ALL_GATHER_NHR_1D_MULTIJETTY_MEM2MEM_H

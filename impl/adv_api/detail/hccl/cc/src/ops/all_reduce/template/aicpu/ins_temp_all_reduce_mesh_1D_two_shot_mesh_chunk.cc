@@ -9,7 +9,7 @@
 */
 #include "ins_temp_all_reduce_mesh_1D_two_shot_mesh_chunk.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 InsTempAllReduceMesh1DTwoShotMeshChunk::InsTempAllReduceMesh1DTwoShotMeshChunk(const OpParam& param, const u32 rankId,
     const std::vector<std::vector<u32>> &subCommRanks) : InsAlgTemplateBase(param, rankId, subCommRanks){}
@@ -390,4 +390,4 @@ void InsTempAllReduceMesh1DTwoShotMeshChunk::NotifyIdxSubToMainInAG(std::vector<
     }
 }
 
-} // ops_hccla
+} // MC2_OPS_HCCLa

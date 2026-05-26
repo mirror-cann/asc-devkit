@@ -10,7 +10,7 @@
 #include "ccu_kernel_scatter_nhr1d_mem2mem.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 // XN ID定义：用于标识不同类型的变量
@@ -558,4 +558,4 @@ std::vector<uint64_t> CcuKernelScatterNHR1DMem2Mem::GeneArgs(const CcuTaskArg &a
         isSliceSizeZero};
 }
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

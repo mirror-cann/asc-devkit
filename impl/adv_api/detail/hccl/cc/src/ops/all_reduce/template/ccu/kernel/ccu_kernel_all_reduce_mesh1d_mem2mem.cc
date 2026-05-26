@@ -12,7 +12,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 constexpr int INPUT_XN_ID   = 0;
 constexpr int OUTPUT_XN_ID  = 1;
@@ -181,7 +181,7 @@ void CcuKernelAllReduceMeshMem2Mem1D::ReduceLoopGroup(CcuRep::LocalAddr outDstOr
 
     if (expansionNum != 1) {
         CcuRep::Variable tmp = CreateVariable();
-        tmp = ops_hccl::GetExpansionParam(expansionNum);
+        tmp = mc2_ops_hccl::GetExpansionParam(expansionNum);
         dst.token += tmp;
     }
 
@@ -189,7 +189,7 @@ void CcuKernelAllReduceMeshMem2Mem1D::ReduceLoopGroup(CcuRep::LocalAddr outDstOr
     CCU_IF(goSize.loopParam != 0)                   // goSize1
     {
         CcuRep::Variable loopParam = CreateVariable();
-        loopParam = ops_hccl::GetLoopParam(0, moConfig.memSlice * moConfig.loopCount, 0);
+        loopParam = mc2_ops_hccl::GetLoopParam(0, moConfig.memSlice * moConfig.loopCount, 0);
         loopParam += goSize.loopParam;
 
         CcuRep::Variable sliceSize = CreateVariable();
@@ -199,9 +199,9 @@ void CcuKernelAllReduceMeshMem2Mem1D::ReduceLoopGroup(CcuRep::LocalAddr outDstOr
         auto lc = Loop(GetLoopBlockTag(loopType, 0))(dst, src, scratch, sliceSize, sliceSizeExpansion);
 
         CcuRep::Variable paraCfg = CreateVariable();
-        paraCfg = ops_hccl::GetParallelParam(moConfig.loopCount - 1, 0, 1);
+        paraCfg = mc2_ops_hccl::GetParallelParam(moConfig.loopCount - 1, 0, 1);
         CcuRep::Variable offsetCfg = CreateVariable();
-        offsetCfg = ops_hccl::GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
+        offsetCfg = mc2_ops_hccl::GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
 
         LoopGroup({lc}, {loopParam}, paraCfg, offsetCfg);
     }
@@ -240,11 +240,11 @@ void CcuKernelAllReduceMeshMem2Mem1D::ReduceLoopGroup(CcuRep::LocalAddr outDstOr
         auto lc1 = Loop(GetLoopBlockTag(loopType, 1))(dst, src, scratch, sliceSize, sliceSizeExpansion);
 
         CcuRep::Variable loopCfg0 = CreateVariable();
-        loopCfg0 = ops_hccl::GetLoopParam(0, 0, 1);
+        loopCfg0 = mc2_ops_hccl::GetLoopParam(0, 0, 1);
         CcuRep::Variable loopCfg1 = CreateVariable();
-        loopCfg1 = ops_hccl::GetLoopParam(0, 0, 1);
+        loopCfg1 = mc2_ops_hccl::GetLoopParam(0, 0, 1);
         CcuRep::Variable offsetCfg = CreateVariable();
-        offsetCfg = ops_hccl::GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
+        offsetCfg = mc2_ops_hccl::GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
 
         LoopGroup({lc0, lc1}, {loopCfg0, loopCfg1}, goSize.parallelParam, offsetCfg);
     }
@@ -447,4 +447,4 @@ std::vector<uint64_t> CcuKernelAllReduceMeshMem2Mem1D::GeneArgs(const CcuTaskArg
 
     return taskArgs;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

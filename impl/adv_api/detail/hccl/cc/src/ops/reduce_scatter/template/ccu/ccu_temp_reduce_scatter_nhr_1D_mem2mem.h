@@ -14,7 +14,7 @@
 #include "ccu_alg_template_base.h"
 #include "ccu_kernel_reduce_scatter_nhr1d_mem2mem.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class CcuTempReduceScatterNHR1DMem2Mem : public CcuAlgTemplateBase {
 public:
     CcuTempReduceScatterNHR1DMem2Mem() = default;
@@ -52,6 +52,6 @@ private:
                                  uint64_t& die1Size) const;
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // HCCL_CCU_TEMP_REDUCE_SCATTER_NHR_1D

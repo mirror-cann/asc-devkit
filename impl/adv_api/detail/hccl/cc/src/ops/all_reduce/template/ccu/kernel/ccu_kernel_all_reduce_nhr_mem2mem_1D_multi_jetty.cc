@@ -13,7 +13,7 @@
 
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int BIT_NUM_PER_CKE = 16; // 一个CKE可以处理16个信号类型
@@ -516,4 +516,4 @@ std::vector<uint64_t> CcuKernelAllReduceNhr1DMem2MemMultiJetty::GeneArgs(const C
     return taskArgs;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

@@ -11,7 +11,7 @@
 #include "all_gather_v_auto_selector.h"
 #include "selector_registry.h"
  
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr u64 AG_2D_SMALL_DATA_SIZE = 1024 * 1024;
  
 SelectorStatus AllGatherVAutoSelector::SelectCcuMsAlgo(
@@ -78,4 +78,4 @@ SelectorStatus AllGatherVAutoSelector::SelectAivAlgo(
  
 REGISTER_SELECTOR_BY_OPTYPE(HcclCMDType::HCCL_CMD_ALLGATHER_V, 18, AllGatherVAutoSelector);
  
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

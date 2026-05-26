@@ -10,7 +10,7 @@
 #include <pthread.h>
 #include "hcomm_device_dlsym.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 void CompatSymInit(void)
 {
     HcommDeviceDlInit(); // 增加强制依赖

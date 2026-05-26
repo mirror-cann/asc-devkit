@@ -10,7 +10,7 @@
 #include "ccu_kernel_reduce_mesh1d_mem2mem.h"
 #include "ccu_kernel_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int INPUT_XN_ID    = 0;
@@ -377,4 +377,4 @@ std::vector<uint64_t> CcuKernelReduceMesh1DMem2Mem::GeneArgs(const CcuTaskArg &a
     return taskArgs;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

@@ -13,7 +13,7 @@
 #include "utils.h"
 #include "ccu_alg_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempScatterMesh1D : public CcuAlgTemplateBase {
 public:
@@ -44,6 +44,6 @@ private:
     uint32_t subCommRootId_ = 0;
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif  // HCCL_CCU_TEMP_SCATTER_MESH_1D__H

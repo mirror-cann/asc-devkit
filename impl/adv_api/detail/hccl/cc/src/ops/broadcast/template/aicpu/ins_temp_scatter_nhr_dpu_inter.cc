@@ -11,7 +11,7 @@
 #include "ins_temp_scatter_nhr_dpu_inter.h"
 
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempScatterNHRDPUInter::InsTempScatterNHRDPUInter(const OpParam& param, const u32 rankId, // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)
     : InsAlgTemplateBase(param, rankId, subCommRanks)
@@ -439,4 +439,4 @@ HcclResult InsTempScatterNHRDPUInter::BatchSR(AicpuNHRStepInfo &stepInfo, const 
 
 REGISTER_TEMPLATE_V2("InsTempScatterNHRDPUInter", InsTempScatterNHRDPUInter);
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

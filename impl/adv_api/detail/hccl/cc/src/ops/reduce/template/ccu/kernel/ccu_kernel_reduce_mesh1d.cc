@@ -9,7 +9,7 @@
 */
 #include "ccu_kernel_reduce_mesh1d.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int INPUT_XN_ID  = 0;
@@ -232,4 +232,4 @@ std::vector<uint64_t> CcuKernelReduceMesh1D::GeneArgs(const CcuTaskArg &arg)
     return taskArgs;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

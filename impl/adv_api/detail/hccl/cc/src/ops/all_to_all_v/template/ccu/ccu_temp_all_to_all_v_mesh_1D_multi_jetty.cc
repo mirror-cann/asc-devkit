@@ -14,7 +14,7 @@
 #include "ccu_temp_all_to_all_v_mesh_1D_multi_jetty.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr uint32_t CONST_1 = 1;
 constexpr uint32_t CONST_4 = 4;
 
@@ -112,4 +112,4 @@ HcclResult CcuTempAllToAllVMesh1DMultiJetty::SetJettyNums(std::vector<uint32_t>&
     }
     return HcclResult::HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

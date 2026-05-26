@@ -21,7 +21,7 @@
 #include "alg_data_trans_wrapper.h"
 #include "dpu_alg_data_trans_wrapper.h"
 #include "hccl_res.h"
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 const u32 MAX_RANK_NUM_PER_SERVER = 8;
 const u64 CCLBUF_SPLIT_PARTS = 2;
 
@@ -76,6 +76,6 @@ private:
     std::vector<ThreadHandle> threads_;
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif  // INS_TEMP_DPU_ALLTOALL_MESH_H

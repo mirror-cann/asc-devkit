@@ -18,7 +18,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
  
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
  
 class CcuKernelArgReduceScatterMeshMem2Mem1D2Die : public CcuKernelArg {
@@ -137,5 +137,5 @@ private:
     uint32_t myRankIdx_{0};
 };
  
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 #endif // HCCL_CCU_KERNEL_REDUCE_SCATTER_MESH_1D_DUO_MEM2MEM_H

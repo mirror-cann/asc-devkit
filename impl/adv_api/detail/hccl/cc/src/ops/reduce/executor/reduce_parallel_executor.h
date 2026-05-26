@@ -13,7 +13,7 @@
 #include "executor_common_ops.h"
 #include "topo_match_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 template <typename AlgTopoMatch, typename AlgTemplate0, typename AlgTemplate1>
 class ReduceParallelExecutor : public InsCollAlgBase {
 public:
@@ -67,6 +67,6 @@ private:
     std::map<u32, std::vector<ChannelInfo>> intraLinkMap_;
     std::map<u32, std::vector<ChannelInfo>> interLinkMap_;
 };
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif

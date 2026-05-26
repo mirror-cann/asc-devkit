@@ -7,12 +7,12 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_AICPU_KERNEL_LAUNCH_H
-#define OPS_HCCL_AICPU_KERNEL_LAUNCH_H
+#ifndef MC2_OPS_HCCL_AICPU_KERNEL_LAUNCH_H
+#define MC2_OPS_HCCL_AICPU_KERNEL_LAUNCH_H
 
 #include "alg_param.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult RestoreVarDataBatchSendRecv(OpParam &param);
 
@@ -22,5 +22,5 @@ HcclResult RestoreVarDataReduceScatterV(OpParam &param, const AlgResourceCtxSeri
 
 HcclResult RestoreVarDataAllGatherV(OpParam &param, const AlgResourceCtxSerializable &resCtx);
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 #endif

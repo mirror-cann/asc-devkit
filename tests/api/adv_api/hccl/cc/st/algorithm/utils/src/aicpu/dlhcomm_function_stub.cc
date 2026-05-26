@@ -10,7 +10,7 @@
 
 #include "dlhcomm_function.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 DlHcommFunction &DlHcommFunction::GetInstance()
 {
     static DlHcommFunction hcclDlHcommFunction;
@@ -30,4 +30,4 @@ HcclResult DlHcommFunction::DlHcommFunctionInit()
 {
     return DlHcommFunctionInterInit();
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

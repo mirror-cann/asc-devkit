@@ -14,7 +14,7 @@
 #include "kernel/ccu_kernel_all_to_all_mesh1d_multi_jetty.h"
 #include "ccu_temp_all_to_all_mesh1d_multi_jetty.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr uint32_t STUB_JETTY_NUM = 4;
 CcuTempAllToAllMesh1dMultiJetty::CcuTempAllToAllMesh1dMultiJetty(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -128,4 +128,4 @@ u64 CcuTempAllToAllMesh1dMultiJetty::CalcScratchMultiple(BufferType inBuffType, 
     return 0;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

@@ -9,7 +9,7 @@
 */
 #include "ccu_kernel_all_to_all_v_mesh2die.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr int OUTPUT_XN_ID = 1;
 constexpr int TOKEN_XN_ID  = 2;

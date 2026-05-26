@@ -14,7 +14,7 @@
 #include "alg_param.h"
 #include "auto_selector_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 class ExecuteSelector {
 public:
     ExecuteSelector();

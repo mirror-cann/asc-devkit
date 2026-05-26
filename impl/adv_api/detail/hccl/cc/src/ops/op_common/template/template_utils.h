@@ -19,7 +19,7 @@
 #include "binary_stream.h"
 
 HcclResult __attribute__((weak)) HcommThreadJoin(ThreadHandle thread, uint32_t timeout);
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 # define UINT32_MAX     (4294967295U)
 constexpr u32 INVALID_U32 = UINT32_MAX;

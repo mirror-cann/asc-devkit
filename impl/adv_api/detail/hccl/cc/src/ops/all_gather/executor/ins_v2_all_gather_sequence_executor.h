@@ -15,7 +15,7 @@
 #include "executor_v2_base.h"
 #include "alg_v2_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 template <typename AlgTopoMatch, typename InsAlgTemplate0, typename InsAlgTemplate1>
 class InsV2AllGatherSequenceExecutor : public InsCollAlgBase {
 public:

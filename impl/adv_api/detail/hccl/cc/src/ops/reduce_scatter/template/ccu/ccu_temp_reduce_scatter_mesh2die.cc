@@ -15,7 +15,7 @@
 #include "ccu_temp_reduce_scatter_mesh2die.h"
 #include "ccu_kernel_reduce_scatter_mesh2die.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 CcuTempReduceScatterMesh2Die::CcuTempReduceScatterMesh2Die(const OpParam &param, RankId rankId,
     const std::vector<std::vector<u32>> &subCommRanks)
     : CcuAlgTemplateBase(param, rankId, subCommRanks)
@@ -149,4 +149,4 @@ HcclResult CcuTempReduceScatterMesh2Die::KernelRun(const OpParam &param, const T
     HCCL_INFO("[CcuTempReduceScatterMesh2Die] Template Run for all steps Ends.");
     return HcclResult::HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

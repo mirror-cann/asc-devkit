@@ -10,7 +10,7 @@
 #include "executor_v2_base.h"
 #include "adapter_error_manager_pub.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 InsCollAlgBase::InsCollAlgBase()
 {

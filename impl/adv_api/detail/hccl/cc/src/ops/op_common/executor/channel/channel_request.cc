@@ -15,7 +15,7 @@
 #include "hccl/base.h"
 #include "log.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult CalcRingChannelConnect(u32 rank, u32 rankSize, u32 root, std::set<u32> &connectRanks)
 {

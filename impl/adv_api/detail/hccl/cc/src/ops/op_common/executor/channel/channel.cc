@@ -18,7 +18,7 @@
 #include "topo_host.h"
 #include "alg_env_config.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult CalcLevel0ChannelRequest(const OpParam& param, const TopoInfo* topoInfo, AlgHierarchyInfo& algHierarchyInfo,
     const AlgType& algType, std::vector<HcclChannelDesc> &channels)
 {

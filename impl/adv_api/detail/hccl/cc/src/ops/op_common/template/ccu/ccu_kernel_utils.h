@@ -16,7 +16,7 @@
 #include "ccu_kernel.h"
 
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr uint16_t LOC_CPY_LOOP_NUM = 8;
 constexpr uint64_t UB_MAX_TRANS_SIZE = 256 * 1024 * 1024;  // UB单次最大传输量256*1024*1024 Byte

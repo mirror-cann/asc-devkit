@@ -14,7 +14,7 @@
 #include "hccl/base.h"
 #include "alg_param.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 struct ScatterOpInfo {
     char algTag[ALG_TAG_LENGTH]; // 保存资源的key值，和算法绑定

@@ -14,7 +14,7 @@
 #include <iostream>
 #include "ccu_kernel_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr int COMM_LEVEL_SIZE_1 = 1;
 constexpr int COMM_LEVEL_SIZE_2 = 2;

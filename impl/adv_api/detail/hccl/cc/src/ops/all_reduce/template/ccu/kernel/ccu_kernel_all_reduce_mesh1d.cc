@@ -10,7 +10,7 @@
 #include "ccu_kernel_alg_base.h"
 #include "ccu_kernel_all_reduce_mesh1d.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int INPUT_XN_ID  = 0;

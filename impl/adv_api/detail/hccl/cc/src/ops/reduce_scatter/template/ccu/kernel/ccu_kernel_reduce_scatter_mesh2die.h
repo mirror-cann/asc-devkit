@@ -16,7 +16,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 using RankId = u32;
 
@@ -103,6 +103,6 @@ private:
     GroupOpSize rmtReduceGoSize_;
     std::vector<ChannelHandle> channels_;
 };
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 
 #endif // HCCLV2_CCU_KERNEL_REDUCE_SCATTER_MESH_2Die_H_

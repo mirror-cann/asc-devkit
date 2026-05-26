@@ -14,7 +14,7 @@
 #include "dtype_common.h"
 #include "hccl_types.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 aclrtBinHandle g_binKernelHandle = reinterpret_cast<aclrtBinHandle>(0x1);
 

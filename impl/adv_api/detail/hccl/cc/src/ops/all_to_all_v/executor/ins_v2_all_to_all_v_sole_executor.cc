@@ -21,7 +21,7 @@
 #define CONST_ONE 1
 #define CONST_TWO 2
 #define CONST_THREE 3
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template <typename AlgTopoMatch, typename InsAlgTemplate>
 InsV2AlltoAllVSoleExecutor<AlgTopoMatch, InsAlgTemplate>::InsV2AlltoAllVSoleExecutor()

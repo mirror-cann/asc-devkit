@@ -17,7 +17,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 using NHRStepInfo = struct NHRStepInfoDef {
     u32 step = 0;
@@ -161,5 +161,5 @@ private:
     hcomm::CcuRep::LocalAddr localDst_;
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 #endif // HCCLV2_CCU_KERNEL_ALL_GATHER_MESH_1D_H

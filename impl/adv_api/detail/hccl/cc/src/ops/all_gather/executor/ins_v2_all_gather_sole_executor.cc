@@ -21,7 +21,7 @@
 #endif
 #include "topo_match_ubx.h"
 #include <cstddef>
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template <typename AlgTopoMatch, typename InsAlgTemplate>
 InsV2AllGatherSoleExecutor<AlgTopoMatch, InsAlgTemplate>::InsV2AllGatherSoleExecutor()
@@ -212,4 +212,4 @@ REGISTER_EXEC_V2(HcclCMDType::HCCL_CMD_ALLGATHER, CcuAllGatherNHR1DMem2MemUBX, I
 REGISTER_EXEC_V2(HcclCMDType::HCCL_CMD_ALLGATHER, CcuAllGatherMesh1DMem2MemUBX, InsV2AllGatherSoleExecutor, TopoMatchUBX,
                  CcuTempAllGatherMesh1DMem2Mem);
 #endif
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

@@ -15,7 +15,7 @@
 #include "log.h"
 #include "alg_param.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult CreateScatter(OpParam *param, ScatterOpInfo *opInfo)
 {
     CHK_PTR_NULL(param);

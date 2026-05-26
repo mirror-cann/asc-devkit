@@ -15,7 +15,7 @@
 #include "alg_data_trans_wrapper.h"
 
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 
 class InsTempBroadcastMesh1DTwoShot : public InsAlgTemplateBase {

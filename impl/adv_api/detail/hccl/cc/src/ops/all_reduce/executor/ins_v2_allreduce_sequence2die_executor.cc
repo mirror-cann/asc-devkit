@@ -17,7 +17,7 @@
 #include "ccu_temp_reduce_scatter_mesh2die.h"
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template <typename AlgTopoMatch, typename InsAlgTemplate0, typename InsAlgTemplate1>
 InsV2AllReduceSequence2DieExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgTemplate1>::InsV2AllReduceSequence2DieExecutor()

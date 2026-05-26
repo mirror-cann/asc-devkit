@@ -12,7 +12,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 HcclResult HcclCreateOpParamGraphMode(OpParamGraphMode **opParam);
 HcclResult HcclDestroyOpParamGraphMode(OpParamGraphMode *opParam);
 HcclResult HcclSetOpParamGraphModeOpType(OpParamGraphMode *opParam, const char *opType);
@@ -22,8 +22,8 @@ HcclResult HcclCalcOpResOfflineGraphMode(OpParamGraphMode *opParam, u64 *opMemSi
 #ifdef __cplusplus
 }
 #endif
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 HcclResult CheckCalcResInputGraphMode(const OpParamGraphMode *opParam, const u64 *opMemSize, const u32 *streamNum, const u32 *taskNum, const u32 *aivCoreNum);
 HcclResult HcclCalcAicpuResOffline(ResResponseGraphMode *resResponse);
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

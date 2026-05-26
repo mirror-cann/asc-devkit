@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_OP_COMMON
-#define OPS_HCCL_OP_COMMON
+#ifndef MC2_OPS_HCCL_OP_COMMON
+#define MC2_OPS_HCCL_OP_COMMON
 
 #include <string>
 #include <memory>
@@ -28,7 +28,7 @@ extern "C" {
 }
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult HcclExecOp(HcclComm comm, OpParam &param, std::unique_ptr<TopoInfoWithNetLayerDetails> &topoInfo, std::string &algName, const ResPackGraphMode &resPack = ResPackGraphMode());
 
@@ -139,6 +139,6 @@ HcclResult HcclGetRemoteBuff(HcclComm comm, ChannelHandle channel, const char *m
 
 HcclResult LogHcclExit(const std::string &opName, const char *tag, HcclUs startut);
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif

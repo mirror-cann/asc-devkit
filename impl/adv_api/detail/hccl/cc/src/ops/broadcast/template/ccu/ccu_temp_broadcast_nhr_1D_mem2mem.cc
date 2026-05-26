@@ -13,7 +13,7 @@
 #include "ccu/ccu_temp_broadcast_nhr_1D_mem2mem.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempBroadcastNHR1DMem2Mem::CcuTempBroadcastNHR1DMem2Mem(const OpParam& param, const u32 rankId,
                                                                    const std::vector<std::vector<u32>>& subCommRanks)
@@ -407,4 +407,4 @@ HcclResult CcuTempBroadcastNHR1DMem2Mem::GetRes(AlgResourceRequest& resourceRequ
 
     return HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

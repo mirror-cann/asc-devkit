@@ -10,7 +10,7 @@
 #include "ins_v2_recv_sole_executor.h"
 #include "ins_temp_recv_dpu.h"
 
-namespace ops_hccl
+namespace mc2_ops_hccl
 {
     template <typename InsAlgTemplate>
     InsV2RecvSoleExecutor<InsAlgTemplate>::InsV2RecvSoleExecutor()
@@ -149,4 +149,4 @@ namespace ops_hccl
     }
 
     REGISTER_EXECUTOR_IMPL_NO_TOPOMATCH(HcclCMDType::HCCL_CMD_RECEIVE, InsRecvDPU, InsV2RecvSoleExecutor, InsTempRecvDpu);
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

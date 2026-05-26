@@ -12,7 +12,7 @@
 
 #include "log.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr u64 HCCL_ALG = 0x1ULL << 0;
 constexpr u64 HCCL_TASK = 0x1ULL << 1;
 constexpr u64 HCCL_RES = 0x1ULL << 2;
@@ -24,7 +24,7 @@ HcclResult InitDebugConfigByEnv();
 
 // config要求传入宏名字作为日志打印关键字，不可以传入其他变量或常量
 #define HCCL_CONFIG_INFO(config, format,...) do {                                             \
-    if (UNLIKELY(ops_hccl::GetDebugConfig() & config)) {                        \
+    if (UNLIKELY(mc2_ops_hccl::GetDebugConfig() & config)) {                        \
         const char* configName = #config;                                                     \
         LOG_FUNC((static_cast<u32>(HCCL)) | RUN_LOG_MASK, HCCL_LOG_INFO, "[%s:%d] [%u] [%s]: " format,            \
             __FILE__, __LINE__, syscall(SYS_gettid), configName, ##__VA_ARGS__);              \
@@ -34,7 +34,7 @@ HcclResult InitDebugConfigByEnv();
 } while(0)
 
 #define HCCL_CONFIG_DEBUG(config, format,...) do {                                            \
-    if (UNLIKELY(ops_hccl::GetDebugConfig() & config)) {                        \
+    if (UNLIKELY(mc2_ops_hccl::GetDebugConfig() & config)) {                        \
         const char* configName = #config;                                                     \
         LOG_FUNC((static_cast<u32>(HCCL)) | RUN_LOG_MASK, HCCL_LOG_INFO, "[%s:%d] [%u] [%s]: " format,            \
             __FILE__, __LINE__, syscall(SYS_gettid), configName, ##__VA_ARGS__);              \
@@ -43,5 +43,5 @@ HcclResult InitDebugConfigByEnv();
     }                                                                                         \
 } while(0)
 
-}   // namespace ops_hccl
+}   // namespace mc2_ops_hccl
 #endif

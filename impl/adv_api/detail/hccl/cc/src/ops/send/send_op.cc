@@ -15,7 +15,7 @@
 #include <string>
 
 using namespace std;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 
 extern "C" unsigned int LaunchAicpuKernel(OpParam *param);
 
@@ -108,7 +108,7 @@ HcclResult HcclSendGraphMode(
     return HcclResult::HCCL_SUCCESS;
 }
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
     HcclResult GetAndCheckSendPara(
         const HcclComm comm, const void *sendBuf, const uint64_t count, const HcclDataType dataType,
         const uint32_t destRank, u32 &rankSize, u32 &userRank, std::string &tag)
@@ -227,4 +227,4 @@ HcclResult SendEntryLog(void *sendBuf, uint64_t count, HcclDataType dataType, ui
     return HCCL_SUCCESS;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

@@ -10,7 +10,7 @@
 #include "ins_temp_all_gather_v_mesh_1D.h"
 #include "alg_data_trans_wrapper.h"
 #include "template_utils.h"
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempAllGatherVMesh1D::InsTempAllGatherVMesh1D(const OpParam &param, const u32 rankId,  // 传通信域的rankId，userRank
                                                const std::vector<std::vector<u32>> &subCommRanks)
     : InsAlgTemplateBase(param, rankId, subCommRanks)
@@ -260,4 +260,4 @@ void InsTempAllGatherVMesh1D::GetNotifyIdxSubToMain(std::vector<u32> &notifyIdxS
     }
 }
  
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

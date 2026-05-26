@@ -11,7 +11,7 @@
 #include "ccu_kernel_reduce_scatter_mesh1d_2die_mem2mem.h"
 #include "ccu_kernel_alg_base.h"
  
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
  
 constexpr int INPUT_XN_ID        = 0;
@@ -253,12 +253,12 @@ void CcuKernelReduceScatterMesh1D2DieMem2Mem::CreateReduceLoop(uint32_t size)
     constexpr uint32_t LOOP_NUM = 16;
     AllocGoResource(LOOP_NUM);
  
-    std::string loopType = ops_hccl::GetReduceTypeStr(dataType_, reduceOp_);
+    std::string loopType = mc2_ops_hccl::GetReduceTypeStr(dataType_, reduceOp_);
     if (registeredLoop.find(loopType) != registeredLoop.end()) {
         return;
     }
  
-    uint32_t expansionNum = ops_hccl::GetReduceExpansionNum(reduceOp_, dataType_, outputDataType_);
+    uint32_t expansionNum = mc2_ops_hccl::GetReduceExpansionNum(reduceOp_, dataType_, outputDataType_);
     uint32_t usedBufNum   = size > expansionNum ? size : expansionNum;
  
     for (int32_t index = 0; index < 2; index++) { // 需要实例化2个Loop
@@ -309,13 +309,13 @@ void CcuKernelReduceScatterMesh1D2DieMem2Mem::ReduceLoopGroup(CcuRep::LocalAddr 
  
     CreateReduceLoop(size);
  
-    std::string loopType = ops_hccl::GetReduceTypeStr(dataType_, reduceOp_);
-    uint32_t         expansionNum = ops_hccl::GetReduceExpansionNum(reduceOp_, dataType_, outputDataType_);
+    std::string loopType = mc2_ops_hccl::GetReduceTypeStr(dataType_, reduceOp_);
+    uint32_t         expansionNum = mc2_ops_hccl::GetReduceExpansionNum(reduceOp_, dataType_, outputDataType_);
     CcuRep::Variable sliceSizeExpansion = CreateVariable();
  
     if (expansionNum != 1) {
         CcuRep::Variable tmp = CreateVariable();
-        tmp = ops_hccl::GetExpansionParam(expansionNum);
+        tmp = mc2_ops_hccl::GetExpansionParam(expansionNum);
         dst.token += tmp;
     }
  
@@ -323,7 +323,7 @@ void CcuKernelReduceScatterMesh1D2DieMem2Mem::ReduceLoopGroup(CcuRep::LocalAddr 
     CCU_IF(sliceGoSize_.loopParam != 0)                   // goSize1
     {
         CcuRep::Variable loopParam = CreateVariable();
-        loopParam = ops_hccl::GetLoopParam(0, moConfig.memSlice * moConfig.loopCount, 0);
+        loopParam = mc2_ops_hccl::GetLoopParam(0, moConfig.memSlice * moConfig.loopCount, 0);
         loopParam += sliceGoSize_.loopParam;
  
         CcuRep::Variable sliceSize = CreateVariable();
@@ -333,9 +333,9 @@ void CcuKernelReduceScatterMesh1D2DieMem2Mem::ReduceLoopGroup(CcuRep::LocalAddr 
         auto lc = Loop(GetLoopBlockTag(loopType, 0))(dst, scratch, sliceSize, sliceSizeExpansion);
  
         CcuRep::Variable paraCfg = CreateVariable();
-        paraCfg = ops_hccl::GetParallelParam(moConfig.loopCount - 1, 0, 1);
+        paraCfg = mc2_ops_hccl::GetParallelParam(moConfig.loopCount - 1, 0, 1);
         CcuRep::Variable offsetCfg = CreateVariable();
-        offsetCfg = ops_hccl::GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
+        offsetCfg = mc2_ops_hccl::GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
  
         LoopGroup({lc}, {loopParam}, paraCfg, offsetCfg);
     }
@@ -374,11 +374,11 @@ void CcuKernelReduceScatterMesh1D2DieMem2Mem::ReduceLoopGroup(CcuRep::LocalAddr 
         auto lc1 = Loop(GetLoopBlockTag(loopType, 1))(dst, scratch, sliceSize, sliceSizeExpansion);
  
         CcuRep::Variable loopCfg0 = CreateVariable();
-        loopCfg0 = ops_hccl::GetLoopParam(0, 0, 1);
+        loopCfg0 = mc2_ops_hccl::GetLoopParam(0, 0, 1);
         CcuRep::Variable loopCfg1 = CreateVariable();
-        loopCfg1 = ops_hccl::GetLoopParam(0, 0, 1);
+        loopCfg1 = mc2_ops_hccl::GetLoopParam(0, 0, 1);
         CcuRep::Variable offsetCfg = CreateVariable();
-        offsetCfg = ops_hccl::GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
+        offsetCfg = mc2_ops_hccl::GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
  
         LoopGroup({lc0, lc1}, {loopCfg0, loopCfg1}, sliceGoSize_.parallelParam, offsetCfg);
     }

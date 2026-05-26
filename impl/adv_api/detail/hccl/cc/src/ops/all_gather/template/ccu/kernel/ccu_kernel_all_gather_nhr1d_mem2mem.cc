@@ -9,7 +9,7 @@
 */
 #include "ccu_kernel_all_gather_nhr1d_mem2mem.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr uint16_t OUTPUT_XN_ID    = 0;
@@ -315,4 +315,4 @@ std::vector<uint64_t> CcuKernelAllGatherNHR1DMem2Mem::GeneArgs(const CcuTaskArg 
             outputRepeatStride, isInputOutputEqual, die0LastSize, die1LastSize};
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

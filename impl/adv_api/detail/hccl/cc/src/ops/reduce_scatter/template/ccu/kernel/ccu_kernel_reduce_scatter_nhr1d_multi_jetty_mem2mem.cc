@@ -10,7 +10,7 @@
 #include "ccu_kernel_reduce_scatter_nhr1d_multi_jetty_mem2mem.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int INPUT_XN_ID   = 0;
@@ -354,4 +354,4 @@ std::vector<uint64_t> CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::GeneArgs(con
     return taskArgs;
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

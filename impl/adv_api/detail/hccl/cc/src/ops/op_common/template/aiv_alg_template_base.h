@@ -17,7 +17,7 @@
 #include "alg_param.h"
 #include "template_utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr uint64_t TOPO_LEN_Y_OFFSET = 8;
 constexpr uint64_t TOPO_LEN_Z_OFFSET = 16;
 constexpr uint64_t MAX_DIM_NUM = 3;

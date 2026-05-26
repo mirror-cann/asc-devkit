@@ -7,8 +7,8 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
-#ifndef OPS_HCCL_SRC_OPS_TOPO_HOST
-#define OPS_HCCL_SRC_OPS_TOPO_HOST
+#ifndef MC2_OPS_HCCL_SRC_OPS_TOPO_HOST
+#define MC2_OPS_HCCL_SRC_OPS_TOPO_HOST
 
 #include <hccl/hccl_types.h>
 #include "hccl/base.h"
@@ -17,7 +17,7 @@
 #include "hccl_rank_graph.h"
 #include "hccl_res.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr u32 BIG_CLOS_RANGE = 8;
 constexpr s32 DEVICE_PER_MODULE_A2 = 8;

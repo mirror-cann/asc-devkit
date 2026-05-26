@@ -12,7 +12,7 @@
 
 #include "executor_common_ops.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 template <typename AlgTopoMatch, typename InsAlgTemplate>
 class InsV2AllGatherSoleExecutor : public InsCollAlgBase {
 public:

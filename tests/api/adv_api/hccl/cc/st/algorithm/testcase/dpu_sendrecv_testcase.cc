@@ -38,7 +38,7 @@ constexpr uint32_t DATATYPE_SIZE_TABLE[HCCL_DATA_TYPE_RESERVED] = {sizeof(int8_t
     1};
 
 using namespace HcclSim;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 
 class DPU_SEND_RECV_TEST : public ::testing::Test {
 protected:

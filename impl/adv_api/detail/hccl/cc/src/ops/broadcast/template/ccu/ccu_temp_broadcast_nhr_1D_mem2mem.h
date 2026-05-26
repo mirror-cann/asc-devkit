@@ -14,7 +14,7 @@
 #include "ccu_kernel_broadcast_nhr1d_mem2mem.h"
 #include "utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempBroadcastNHR1DMem2Mem : public CcuAlgTemplateBase {
 public:
@@ -56,6 +56,6 @@ private:
     u32 root_ = 0;
     std::map<u32, std::vector<HcclChannelDesc>> rankIdToChannelDesc_;
 };
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 
 #endif// HCCL_CCU_TEMP_BROADCAST_NHR_1D_MEM2MEM_H

@@ -10,7 +10,7 @@
 #include "ccu_kernel_all_gather_mesh1d.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 constexpr int OUTPUT_XN_ID = 1;
@@ -158,4 +158,4 @@ std::vector<uint64_t> CcuKernelAllGatherMesh1D::GeneArgs(const CcuTaskArg &arg)
     return {inputAddr, outputAddr, token, offset, goSize[0], goSize[1], goSize[2], goSize[3]};
 }
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

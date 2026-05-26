@@ -14,7 +14,7 @@
 #include "executor_v2_base.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class InsTempReduceScatterNHR : public InsAlgTemplateBase {
 public:

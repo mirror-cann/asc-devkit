@@ -16,7 +16,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 using NHRStepInfo = struct NHRStepInfoDef {
     uint32_t step = 0;
@@ -159,5 +159,5 @@ private:
     GroupOpSize groupOpSize_;
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 #endif // HCCLV2_CCU_KERNEL_ALL_GATHER_NHR_1D_MULTIJETTY_MEM2MEM_H

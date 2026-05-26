@@ -17,7 +17,7 @@
 #include "ccu_kernel_utils.h"
 #include "ccu_kernel_alg_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 class CcuKernelArgBroadcastMesh1DMem2Mem : public CcuKernelArg {
@@ -122,5 +122,5 @@ private:
     CcuRep::CompletedEvent event_;
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 #endif // HCCLV2_CCU_KERNEL_BROADCAST_MESH_1D_MEM2MEM_H

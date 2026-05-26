@@ -13,7 +13,7 @@
 #include "ccu_alg_template_base.h"
 #include "utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class CcuTempBroadcastMesh1D : public CcuAlgTemplateBase {
 public:
@@ -36,6 +36,6 @@ public:
                          const TemplateDataParams& templateDataParams,
                          TemplateResource& templateResource) override;
 };
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 
 #endif// HCCL_CCU_TEMP_BROADCAST_MESH_1D_H

@@ -13,7 +13,7 @@
 #include "ccu_kernel_reduce_mesh1d.h"
 #include "ccu_temp_reduce_mesh_1D.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempReduceMesh1D::CcuTempReduceMesh1D(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>> &subCommRanks)
@@ -99,4 +99,4 @@ HcclResult CcuTempReduceMesh1D::KernelRun(const OpParam& param,
     return HcclResult::HCCL_SUCCESS;
 }
 
-} // namespace ops_hccl 
+} // namespace mc2_ops_hccl 

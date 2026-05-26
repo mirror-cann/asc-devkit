@@ -14,7 +14,7 @@
 #include "ccu_kernel_all_reduce_mesh_1D_2die_oneshot.h"
 #include "ccu_temp_all_reduce_mesh_1D_2die_oneshot.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr u32 ALL_REDUCE_DIE_NUM = 2;
 
 CcuTempAllreduceMesh1D2DieOneShot::CcuTempAllreduceMesh1D2DieOneShot(const OpParam& param, const u32 rankId,
@@ -153,4 +153,4 @@ u64 CcuTempAllreduceMesh1D2DieOneShot::CalcScratchMultiple(BufferType inBuffType
     (void)outBuffType;
     return ALL_REDUCE_DIE_NUM;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

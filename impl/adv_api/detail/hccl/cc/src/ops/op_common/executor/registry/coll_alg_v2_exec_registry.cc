@@ -9,7 +9,7 @@
 */
 #include "coll_alg_v2_exec_registry.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CollAlgExecRegistryV2 &CollAlgExecRegistryV2::Instance()
 {

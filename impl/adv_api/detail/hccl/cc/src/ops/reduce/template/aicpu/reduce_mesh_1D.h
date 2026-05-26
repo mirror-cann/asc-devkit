@@ -14,7 +14,7 @@
 #include "executor_base.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class ReduceMesh1D : public InsAlgTemplateBase {
 public:
@@ -63,6 +63,6 @@ private:
     std::vector<u32> notifyIdxSubToMain_;
 };
 
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif  // OPEN_HCCL_INS_TEMP_REDUCE_MESH_H

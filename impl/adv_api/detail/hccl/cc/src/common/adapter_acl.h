@@ -17,7 +17,7 @@
 #include "acl_rt.h"
 #include "workflow.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 #define ACLCHECK(cmd)                                                                                           \
     do {                                                                                                        \

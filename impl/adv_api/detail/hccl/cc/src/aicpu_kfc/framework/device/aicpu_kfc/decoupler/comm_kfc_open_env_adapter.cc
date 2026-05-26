@@ -9,7 +9,7 @@
 */
 #include "externalinput_pub.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 const u32 &GetExternalInputIntraRoceSwitch()
 {
     return ::GetExternalInputIntraRoceSwitch();
@@ -19,4 +19,4 @@ const bool &GetExternalInputInterHccsDisable()
 {
     return ::GetExternalInputInterHccsDisable();
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

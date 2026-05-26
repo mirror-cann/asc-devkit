@@ -22,7 +22,7 @@
 #include "executor_v2_base.h"
 #include "coll_alg_v2_exec_registry.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 template <typename InsAlgTemplate>
 class InsV2RecvSoleExecutor : public InsCollAlgBase {
 public:
@@ -46,6 +46,6 @@ protected:
     ThreadHandle thread_;  // 只涉及一个thread
     std::vector<std::map<u32, std::vector<ChannelInfo>>> remoteRankToChannelInfo_;
 };
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl
 
 #endif

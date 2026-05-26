@@ -17,7 +17,7 @@
 #include "coll_alg_v2_exec_registry.h"
 #include "topo_match_1d.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
     class InsRecvExecutor : public InsCollAlgBase {
     public:
         std::string Describe() const override;
@@ -49,6 +49,6 @@ namespace ops_hccl {
         // 一次搬运最大数据个数
         u64 maxLoopTransCount_;
     };
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif  // HCCL_INS_RECV_EXECUTOR_H

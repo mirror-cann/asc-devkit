@@ -15,7 +15,7 @@
 #include "ccu_assist_pub.h"
 #include "alg_template_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 constexpr u32 PORT_NUM = 4;
 
 CcuTempAllReduceNhrMem2Mem1DMultiJetty::CcuTempAllReduceNhrMem2Mem1DMultiJetty(const OpParam& param,
@@ -278,4 +278,4 @@ HcclResult CcuTempAllReduceNhrMem2Mem1DMultiJetty::GetRes(AlgResourceRequest& re
 
     return HcclResult::HCCL_SUCCESS;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

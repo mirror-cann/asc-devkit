@@ -18,7 +18,7 @@
 #include "ccu_kernel_alg_base.h"
 #include "../ccu_temp_all_to_all_v_mesh_1D.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 using namespace hcomm;
 
 class CcuKernelArgAlltoAllVMesh1D : public hcomm::CcuKernelArg {
@@ -127,5 +127,5 @@ private:
     void CalcGroupSrcDst();
 };
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl
 #endif // HCCL_CCU_KERNEL_ALL_TO_ALL_MESH_1D_H

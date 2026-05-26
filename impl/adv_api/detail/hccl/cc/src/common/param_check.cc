@@ -12,7 +12,7 @@
 #include "hccl_common.h"
 #include "adapter_error_manager_pub.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclResult HcomCheckGroupName(const char *group)
 {

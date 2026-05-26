@@ -11,7 +11,7 @@
 #include "mmpa_api.h"
 #include "log.h"
 #include "adapter_acl.h"
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 aclrtBinHandle g_binKernelHandle = nullptr;
 

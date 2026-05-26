@@ -9,7 +9,7 @@
 */
 #include "ins_temp_broadcast_nhr.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 InsTempBroadcastNHR::InsTempBroadcastNHR(
     const OpParam& param, const u32 rankId, // 传通信域的rankId，userRank
     const std::vector<std::vector<u32>> &subCommRanks)

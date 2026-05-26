@@ -21,7 +21,7 @@
 #include "workflow.h"
 #include "sal.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 // 节点间RDMA发送数据单个WQE支持的最大数据量
 const u64 RDMA_SEND_MAX_SIZE = 0x80000000;

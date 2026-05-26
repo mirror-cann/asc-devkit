@@ -9,7 +9,7 @@
 */
 #include "utils.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 HcclMem HcclMemRange(HcclMem inMem, u64 offset, u64 size)
 {

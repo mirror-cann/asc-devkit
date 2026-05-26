@@ -14,7 +14,7 @@
 #include "ccu_temp_reduce_scatter_nhr_1D_multi_jetty_mem2mem.h"
 #include "ccu_kernel_reduce_scatter_nhr1d_multi_jetty_mem2mem.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 CcuTempReduceScatterNhrMultiJettyMem2Mem1D::CcuTempReduceScatterNhrMultiJettyMem2Mem1D(const OpParam& param, const u32 rankId,
                                        const std::vector<std::vector<u32>>& subCommRanks)
@@ -225,4 +225,4 @@ u64 CcuTempReduceScatterNhrMultiJettyMem2Mem1D::GetThreadNum() const
 {
     return 1;
 }
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl

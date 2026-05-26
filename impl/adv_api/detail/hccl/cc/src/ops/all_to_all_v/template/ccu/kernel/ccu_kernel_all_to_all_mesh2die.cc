@@ -9,7 +9,7 @@
 */
 #include "ccu_kernel_all_to_all_mesh2die.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr int CKE_IDX_0   = 0;
 
@@ -210,4 +210,4 @@ std::vector<uint64_t> CcuKernelAllToAllMesh2Die::GeneArgs(const CcuTaskArg &arg)
     return taskArgs;
 }
 
-}// namespace ops_hccl
+}// namespace mc2_ops_hccl

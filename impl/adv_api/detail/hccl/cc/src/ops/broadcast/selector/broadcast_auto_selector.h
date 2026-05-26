@@ -12,7 +12,7 @@
 
 #include "auto_selector_base.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class BroadcastAutoSelector : public AutoSelectorBase {
 private:

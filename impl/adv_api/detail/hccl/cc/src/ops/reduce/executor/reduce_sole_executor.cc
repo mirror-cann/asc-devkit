@@ -18,7 +18,7 @@
 #include "ccu_temp_reduce_nhr_1D_mem2mem.h"
 #endif
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 template <typename AlgTopoMatch, typename AlgTemplate>
 ReduceSoleExecutor<AlgTopoMatch, AlgTemplate>::ReduceSoleExecutor()
@@ -180,4 +180,4 @@ REGISTER_EXEC_V2(HcclCMDType::HCCL_CMD_REDUCE, CcuReduceMesh1D, ReduceSoleExecut
 REGISTER_EXEC_V2(
     HcclCMDType::HCCL_CMD_REDUCE, CcuReduceNHR1DMem2Mem, ReduceSoleExecutor, TopoMatch1D, CcuTempReduceNHR1DMem2Mem);
 #endif
-}  // namespace ops_hccl
+}  // namespace mc2_ops_hccl

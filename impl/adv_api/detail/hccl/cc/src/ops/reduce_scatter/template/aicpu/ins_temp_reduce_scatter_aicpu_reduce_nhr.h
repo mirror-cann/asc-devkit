@@ -15,7 +15,7 @@
 #include "executor_v2_base.h"
 #include "alg_data_trans_wrapper.h"
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 class InsTempReduceScatterAicpuReduceNHR : public InsAlgTemplateBase {
 public:
@@ -54,6 +54,6 @@ private:
     std::map<u32, std::vector<ChannelInfo>> channels_;
 };
 
-} // namespace ops_hccl
+} // namespace mc2_ops_hccl
 
 #endif // INS_TEMP_REDUCE_SCATTER_AICPU_REDUCE_NHR_H

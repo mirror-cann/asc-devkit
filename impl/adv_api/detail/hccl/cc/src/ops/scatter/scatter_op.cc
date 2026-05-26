@@ -22,7 +22,7 @@
 #include <string>
 
 using namespace std;
-using namespace ops_hccl;
+using namespace mc2_ops_hccl;
 constexpr uint32_t ROOTINFO_INDENTIFIER_MAX_LENGTH = 128;
 extern "C" unsigned int LaunchAicpuKernel(OpParam *param);
 
@@ -110,7 +110,7 @@ HcclResult HcclScatter(void *sendBuf, void *recvBuf, uint64_t recvCount,
     return HCCL_SUCCESS;
 }
 
-namespace ops_hccl {
+namespace mc2_ops_hccl {
 
 constexpr u32 DEVICE_EIGHT = 8;
 constexpr u32 DEVICE_FOUR = 4;
