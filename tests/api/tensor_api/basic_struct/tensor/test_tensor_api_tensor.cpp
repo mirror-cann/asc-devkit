@@ -226,8 +226,8 @@ TEST_F(Tensor_Api_Tensor_Struct, LocalTensorHasNoSetL2CacheHintMethod)
     __ubuf__ float ubData[size] = {0};
     __cbuf__ float l1Data[size] = {0};
 
-    auto ubTensor = MakeTensor(MakeMemPtr<Location::UB>(ubData), MakeShape(8, 16));
-    auto l1Tensor = MakeTensor(MakeMemPtr<Location::L1>(l1Data), MakeShape(8, 16));
+    auto ubTensor = MakeTensor(MakeMemPtr<Location::UB>(ubData), MakeLayout(MakeShape(8, 16)));
+    auto l1Tensor = MakeTensor(MakeMemPtr<Location::L1>(l1Data), MakeLayout(MakeShape(8, 16)));
 
     static_assert(IsTensorApiLocalTensorV<decltype(ubTensor)>);
     static_assert(IsTensorApiLocalTensorV<decltype(l1Tensor)>);
@@ -235,7 +235,7 @@ TEST_F(Tensor_Api_Tensor_Struct, LocalTensorHasNoSetL2CacheHintMethod)
     static_assert(!IsTensorApiGlobalTensorV<decltype(l1Tensor)>);
 
     __gm__ float gmData[size] = {0};
-    auto gmTensor = MakeTensor(MakeMemPtr(gmData), MakeShape(8, 16));
+    auto gmTensor = MakeTensor(MakeMemPtr(gmData), MakeLayout(MakeShape(8, 16)));
     static_assert(IsTensorApiGlobalTensorV<decltype(gmTensor)>);
     gmTensor.SetL2CacheHint(CacheMode::CACHE_MODE_DISABLE);
 
