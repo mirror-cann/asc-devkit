@@ -146,23 +146,32 @@ install_deps() {
 # 3. 安装 mdparser 依赖 (Python)
 # ============================================================
 install_mdparser_deps() {
-    log "检查 cmarkgfm (Python)..."
+    log "检查 Python 依赖 (cmarkgfm, pygments)..."
 
-    if python3 -c "import cmarkgfm" &>/dev/null; then
-        log "cmarkgfm 已安装"
+    local missing=0
+    if ! python3 -c "import cmarkgfm" &>/dev/null; then missing=1; fi
+    if ! python3 -c "import pygments" &>/dev/null; then missing=1; fi
+
+    if [ "$missing" -eq 0 ]; then
+        log "Python 依赖已满足"
         return 0
     fi
 
-    log "安装 cmarkgfm..."
+    log "安装 Python 依赖..."
+    cd "$SCRIPT_DIR"
+
+    local pip_cmd=""
     if command -v pip3 &>/dev/null; then
-        pip3 install cmarkgfm --break-system-packages -i https://mirrors.huaweicloud.com/repository/pypi/simple 2>&1 | tee -a "$LOG_FILE"
+        pip_cmd="pip3"
     elif command -v pip &>/dev/null; then
-        pip install cmarkgfm --break-system-packages -i https://mirrors.huaweicloud.com/repository/pypi/simple 2>&1 | tee -a "$LOG_FILE"
+        pip_cmd="pip"
     else
-        err "未找到 pip，请手动安装 cmarkgfm: pip install cmarkgfm"
+        err "未找到 pip，请手动安装: pip install -r requirements.txt"
         exit 1
     fi
-    log "cmarkgfm 安装完成"
+
+    $pip_cmd install -r requirements.txt --break-system-packages -i https://mirrors.huaweicloud.com/repository/pypi/simple 2>&1 | tee -a "$LOG_FILE"
+    log "Python 依赖安装完成"
 }
 
 # ============================================================
