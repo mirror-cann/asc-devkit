@@ -338,12 +338,13 @@ __aicore__ inline void DumpTensorLocal2GMImpl(const LocalTensor<T>& src, uint32_
         if (position == Hardware::UB) {
             __asc_aicore::asc_dump_ubuf((__ubuf__ T*)src.GetPhyAddr(), desc, dumpSize);
         } else if (position == Hardware::L1) {
-            return; // L1 to GM dump not support
-        } else if (position == Hardware::L0C) {
-            if ASCEND_IS_NOT_AIC {
-                return;
+            if ASCEND_IS_AIC {
+                __asc_aicore::asc_dump_l1buf((__cbuf__ T*)src.GetPhyAddr(), desc, dumpSize);
             }
-            __asc_aicore::asc_dump_cbuf((__cc__ T*)src.GetPhyAddr(), desc, dumpSize);
+        } else if (position == Hardware::L0C) {
+            if ASCEND_IS_AIC {
+                __asc_aicore::asc_dump_cbuf((__cc__ T*)src.GetPhyAddr(), desc, dumpSize);
+            }
         } else {
             ASCENDC_ASSERT((false),
                     { KERNEL_LOG(KERNEL_ERROR, "dump tensor only support dump tensor from local to gm"); });

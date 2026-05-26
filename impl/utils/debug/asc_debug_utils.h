@@ -137,16 +137,17 @@ __aicore__ inline void sync_all()
     sync_all_impl();
 }
 
-__aicore__ inline void mem_copy_gm_to_gm(__gm__ uint8_t* dst, __gm__ const uint8_t* src, const uint32_t& len)
+__aicore__ inline uint32_t mem_copy_gm_to_gm(__gm__ uint8_t* dst, __gm__ const uint8_t* src, const uint32_t& len)
 {
     if (dst == nullptr || src == nullptr)
     {
-        return;
+        return 1;
     }
     for (uint32_t i = 0; i < len; i++) {
         *(dst + i) = *(src + i);
     }
     asc_entire_dcci((__gm__ uint64_t*)dst);
+    return 0;
 }
 
 __aicore__ __gm__ inline DebugBlockHeadInfo* get_block_info()

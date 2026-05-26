@@ -89,7 +89,8 @@ struct DebugBlockHeadInfo {
     uint16_t flag = 0U;          // 0: simd, 1: simt
     uint32_t rsv = 0U;           // reserve
     uint64_t ringBufAddr = 0U;   // start addr of fifo buff
-    uint32_t resvMem[6];        // reserved
+    uint64_t debugBusAddr = 0U;  // debug-bus base addr for L1/L0A/L0B dump
+    uint32_t resvMem[4];         // reserved
 };
 
 struct DebugBlockWriteInfo {
@@ -126,7 +127,7 @@ struct DumpTensorTlv {
     uint32_t dataType = 0U;          // Data type: int32_t/half/...
     uint32_t desc = 0U;              // Usr id
     uint32_t bufferId = 0U;          // 0
-    uint16_t position = 0U;          // Position GM,UB,L1,L0C
+    uint16_t position = 0U;          // Position GM, UB, L1, L0A, L0B, L0C
     uint16_t blockIdx = 0U;          // blockIdx
     uint32_t dim = 0U;               // shape dim
     uint32_t shape[8];              // dim <= 8
