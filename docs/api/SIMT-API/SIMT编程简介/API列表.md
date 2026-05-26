@@ -761,7 +761,7 @@
 | 接口名 | 功能描述 |
 | --- | --- |
 | [tiled_partition](../协作组/tiled_partition.md) | 将一个线程组划分为多个更小、固定大小的子组。 |
-| [binary_partition](../协作组/binary_partition.md) | 根据一个标签（0或1）将父组划分为两个字组。 |
+| [binary_partition](../协作组/binary_partition.md) | 根据一个标签（0或1）将父组划分为两个子组。 |
 
 **表 28**  thread_block接口
 

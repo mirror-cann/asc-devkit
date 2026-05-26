@@ -14,7 +14,7 @@
 
 ## 功能说明
 
-判断`thread_block_tile`组内每个活跃线程的输入是否为0。
+判断`thread_block_tile`组内每个线程的输入是否非零。
 
 ## 函数原型
 
@@ -32,7 +32,7 @@ unsigned int ballot(int predicate) const
 
 ## 返回值说明
 
-32bit的无符号整数：若`thread_block_tile`组内活跃线程输入的`predicate`不为0，则返回值中与线程rank对应的bit位为1，否则为0。
+32bit的无符号整数：若`thread_block_tile`组内线程输入的`predicate`不为0，则返回值中与线程rank对应的bit位为1，否则为0。
 
 ## 约束说明
 

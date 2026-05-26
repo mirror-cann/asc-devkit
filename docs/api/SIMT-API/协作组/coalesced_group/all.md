@@ -14,7 +14,7 @@
 
 ## 功能说明
 
-判断是否`coalesced_group`组内所有活跃线程的输入均不为0。
+判断是否`coalesced_group`组内所有线程的输入均不为0。
 
 ## 函数原型
 
@@ -32,7 +32,7 @@ int all(int predicate) const
 
 ## 返回值说明
 
-当`coalesced_group`组内所有活跃线程的输入均不为0，返回1，否则返回0。
+当`coalesced_group`组内所有线程的输入均不为0，返回1，否则返回0。
 
 ## 约束说明
 

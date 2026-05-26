@@ -14,7 +14,7 @@
 
 ## 功能说明
 
-判断`thread_block_tile`组内所有活跃线程的输入是否均不为0。
+判断`thread_block_tile`组内所有线程的输入是否均不为0。
 
 ## 函数原型
 
@@ -32,7 +32,7 @@ int all(int predicate) const
 
 ## 返回值说明
 
-`thread_block_tile`组内所有活跃线程的输入均不为0，返回1，否则返回0。
+`thread_block_tile`组内所有线程的输入均不为0，返回1，否则返回0。
 
 ## 约束说明
 

@@ -32,7 +32,7 @@ int any(int predicate) const
 
 ## 返回值说明
 
-`thread_block_tile`组内所有活跃线程的输入均为0，返回0，否则返回1。
+`thread_block_tile`组内所有线程的输入均为0，返回0，否则返回1。
 
 ## 约束说明
 
