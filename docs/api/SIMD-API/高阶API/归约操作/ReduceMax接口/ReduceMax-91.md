@@ -199,7 +199,7 @@
     ```
     uint32_t shape[] = { 2, 8 };
     constexpr bool isReuse = true;
-    AscendC::ReduceMax<float, AscendC::Pattern::Reduce::AR, isReuse>(dstLocal, srcLocal, tmp, shape, true); // tmp为传入的临时空间大小，shape为srcLocal输入的shape， true表示 地址是否32B对齐
+    AscendC::ReduceMax<float, AscendC::Pattern::Reduce::AR, isReuse>(dstLocal, srcLocal, tmp, shape, true); // tmp为传入的临时缓存Tensor，shape为srcLocal输入的shape， true表示 地址是否32B对齐
     ```
 
     结果示例如下：
@@ -234,4 +234,3 @@
     原始输入shape：(2,5)
     输出数据(dst): [4.0 2.0]
     ```
-

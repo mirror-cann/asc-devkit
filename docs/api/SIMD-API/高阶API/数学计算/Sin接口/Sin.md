@@ -143,11 +143,11 @@ Sin\(x\)的泰勒展开式为：
 ```
 struct SinConfig {
   SinAlgo algo = SinAlgo::POLYNOMIAL_APPROXIMATION;
-}
+};
 enum class SinAlgo {
-  POLYNOMIAL_APPROXIMATION = 0;
-  RADIAN_REDUCTION;
-}
+  POLYNOMIAL_APPROXIMATION = 0,
+  RADIAN_REDUCTION
+};
 ```
 
 **表 2**  参数说明
@@ -243,4 +243,3 @@ AscendC::Sin<half, false, config>(dstLocal, srcLocal, sharedTmpBuffer, 512);
 输出数据(dstLocal): 
 [-0.54889839 -0.55703507 -0.56672889 ... 0. 0.57474768 0.56672889 0.55703507]
 ```
-

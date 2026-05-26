@@ -492,7 +492,7 @@ AscendC::TopK<T, isInitIndex, isHasfinish, isReuseSrc, AscendC::TopKMode::TOPK_N
 ```
 
 ```
-/ dstLocalValue：保存已排序出的k个值
+// dstLocalValue：保存已排序出的k个值
 // dstLocalIndex：保存已排序出的k个值对应的索引
 // srcLocal：保存待排序的值
 // srcLocalIndex：保存待排序的值对应的索引
@@ -583,7 +583,7 @@ AscendC::TopK<T, isInitIndex, isHasfinish, isReuseSrc, AscendC::TopKMode::TOPK_N
 ```
 
 ```
-/ dstLocalValue：保存已排序出的k个值
+// dstLocalValue：保存已排序出的k个值
 // dstLocalIndex：保存已排序出的k个值对应的索引
 // srcLocal：保存待排序的值
 // srcLocalIndex：保存待排序的值对应的索引

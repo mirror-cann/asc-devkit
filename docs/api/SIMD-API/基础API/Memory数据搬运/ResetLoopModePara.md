@@ -105,8 +105,7 @@ AscendC::SetLoopModePara(loopParam2Ub, DataCopyMVType::OUT_TO_UB);
 AscendC::DataCopyPad<int8_t, PaddingMode::Compact>(srcLocal, srcGlobal, copyParams, padParams); // 从GM->VECIN搬运 48 * 2 * 2 * 2 = 384Bytes
 AscendC::ResetLoopModePara(DataCopyMVType::OUT_TO_UB);
 AscendC::LoopModeParams loopParam2Gm {2, 2, 128, 96, 288, 192};
-AscendC::SetLoopModePara(loopParams2Gm, DataCopyMVType::UB_TO_OUT);
+AscendC::SetLoopModePara(loopParam2Gm, DataCopyMVType::UB_TO_OUT);
 DataCopyPad<T, PaddingMode::Compact>(dstGlobal, srcLocal, copyParams);
 AscendC::ResetLoopModePara(DataCopyMVType::UB_TO_OUT);
 ```
-
