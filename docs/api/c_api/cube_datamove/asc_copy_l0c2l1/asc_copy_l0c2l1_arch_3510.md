@@ -77,7 +77,7 @@ __aicore__ inline void asc_copy_l0c2l1(__cbuf__ void *dst, __cc__ int32_t *src, 
 | src_stride       | 输入    | 源NZ矩阵中相邻Z排布的起始地址偏移，取值范围：[0, 65535]，单位：C0_Size（16*sizeof(T)，T为src的数据类型）。                                                          |
 | l2_cache_ctl | 输入 | 配置数据在L2 Cache中的管理策略。取值说明如下：  <br>&bull; 0：DISABLE模式，适用于仅需访问一次的数据。 <br>&bull; 1：NORMAL模式，适用于重用模式未知或不极端的数据。 <br>&bull; 2：LAST模式，适用于高频重复访问的数据。 <br>&bull; 4：PERSISTENT模式，适用于需要长期驻留在缓存中的数据。 |
 | clip_relu_pre    | 输入    | 预处理阶段使能clip_relu，需搭配normal relu（归一化的relu函数）一起使用且需要使能量化功能。                                                                        |
-| uint_flag_mode   | 输入    | 与unit_flag参数相关，取值如下：<br/>&bull;0 保留值；<br/>&bull;2 使能unit_flag，硬件执行完指令之后，不会设置寄存器；<br/>&bull;3 使能unit_flag，硬件执行完指令后，会将unit_flag关闭。 |
+| unit_flag_mode   | 输入    | 与unit_flag参数相关，取值如下：<br/>&bull;0 保留值；<br/>&bull;2 使能unit_flag，硬件执行完指令之后，不会设置寄存器；<br/>&bull;3 使能unit_flag，硬件执行完指令后，会将unit_flag关闭。 |
 | quant_pre        | 输入    | 预处理阶段量化参数。取值见[功能说明](./asc_copy_l0c2l1_arch_3510.md#功能说明)。                                                                        |
 | relu_pre         | 输入    | 预处理阶段使能relu。                                                                                                                     |
 | channel_split    | 输入    | 是否使能通道拆分的功能，默认false，不使能该功能。仅在src和dst都为float时才能使能通道拆分，且不能同时使能channel_split和NZ2ND功能。                                               |
@@ -109,8 +109,25 @@ PIPE_FIX
 ## 调用示例
 
 ```cpp
-uint64_t quant_pre = DEQF16;
-uint64_t quant_post = VQS162B8_POST;
 // dst src分别对应目的操作数的输出地址和源操作数的输入地址
+__cbuf__ int32_t dst[total_length];
+__cc__ int32_t src[total_length];
+// 其余入参均已默认数值传入
+uint16_t n_size = 16;
+uint16_t m_size = 16;
+uint16_t dst_stride = 8;
+uint16_t src_stride = 8;
+uint8_t clip_relu_pre = 0;
+uint8_t unit_flag_mode = 0;
+uint64_t quant_pre = DEQF16;
+uint8_t relu_pre = 0;
+bool channel_split = false;
+bool nz2nd_en = false;
+uint64_t quant_post = VQS162B8_POST;
+uint8_t relu_post = 0;
+bool clip_relu_post = false;
+uint8_t eltwise_op = 0;
+uint8_t eltwise_antq_cfg = 0;
+bool c0_pad_en = false;
 asc_copy_l0c2l1(dst, src, n_size, m_size, dst_stride, src_stride, clip_relu_pre, unit_flag_mode, quant_pre, relu_pre, channel_split, nz2nd_en, quant_post, relu_post, clip_relu_post, eltwise_op, eltwise_antq_cfg, c0_pad_en);
 ```
