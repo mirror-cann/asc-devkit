@@ -459,10 +459,6 @@ __aicore__ inline void CheckWelfordFinalizePara(const WelfordFinalizePara& para)
             KERNEL_ERROR, "abLength is %u, not equal to the sum of headCountLength %u and tailCountLength %u.",
             para.abLength, para.headCountLength, para.tailCountLength);
     });
-    if (para.tailCount == 0) {
-        ans = para.tailCountLength != 0;
-        ASCENDC_ASSERT(ans, { KERNEL_LOG(KERNEL_ERROR, "tailCountLength cannot be zero when tailCount is zero."); });
-    }
 }
 
 template <bool isReuseSource = false, const WelfordFinalizeConfig& config = WFFINALIZE_DEFAULT_CFG>

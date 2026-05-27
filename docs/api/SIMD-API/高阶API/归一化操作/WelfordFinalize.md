@@ -261,7 +261,10 @@ struct WelfordFinalizePara {
 -   接口参数para.abLength的取值必须为32/sizeof\(float\)的整数倍。
 -   接口参数para.headCountLength与para.tailCountLength的和必须等于参数para.abLength。
 -   接口处理逻辑以参数para中设置的具体参数值为准，不依赖源操作数的shape信息。
--   接口参数para.tailCount为0时，禁止配置para.tailCountLength为非0值。
+-   对于以下芯片版本，接口参数para.tailCount为0时，禁止配置para.tailCountLength为非0值。
+    - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+    - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+    - Atlas 推理系列产品AI Core
 -   不支持源操作数与目的操作数地址重叠。
 -   不支持sharedTmpBuffer与源操作数和目的操作数地址重叠。
 
