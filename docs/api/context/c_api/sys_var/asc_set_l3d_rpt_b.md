@@ -45,7 +45,7 @@ PIPE_S
 
 ## 约束说明
 
-- 需要配合接口[asc_copy_l12l0a](../cube_datamove/asc_copy_l12l0a.md)、[asc_copy_l12l0b](../cube_datamove/asc_copy_l12l0b.md)使用。
+- 需要配合接口[asc_copy_l12l0a](../cube_datamove/asc_copy_l12l0a/asc_copy_l12l0a_arch_3510.md)、[asc_copy_l12l0b](../cube_datamove/asc_copy_l12l0a/asc_copy_l12l0a_arch_3510.md)使用。
 
 ## 调用示例
 
