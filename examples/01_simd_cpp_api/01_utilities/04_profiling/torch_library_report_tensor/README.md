@@ -1,8 +1,8 @@
-# torch.library调用集成Profiling上报Shape信息
+# torch.library调用集成Profiling记录Shape信息
 
 ## 概述
 
-本样例展示基于torch.library调用方式，如何在Profiling采集性能数据时，上报算子的Shape信息，辅助用户进行算子性能分析。
+本样例展示在`torch.library`自定义算子调用方式下，如何让`msprof`结果中显示算子的输入输出Shape、数据类型和Format信息。
 
 ## 支持的产品
 
@@ -16,14 +16,16 @@
 ├── torch_library_report_tensor
 │   ├── CMakeLists.txt           // 编译工程文件
 │   ├── add_custom_test.py       // PyTorch调用脚本
-│   ├── add_custom.asc           // 集成Profiling采集Shape信息
+│   ├── add_custom.asc           // torch.library算子注册、Profiling上报和Add Kernel实现
+│   ├── README.md                // 中文说明文档
+│   ├── README_en.md             // 英文说明文档
 ```
 
 ## 样例描述
 
 - 样例功能
 
-  以Add计算为例，计算公式为：
+  样例注册名为`ascendc_ops::ascendc_add`的PyTorch自定义算子。Python脚本输入两个`[8, 2048]`、`float16`、`ND`格式的NPU Tensor，调用自定义算子完成Add计算，并通过CPU结果校验精度。计算公式为：
 
   ```
   z = x + y
@@ -31,35 +33,68 @@
 
 - 样例规格
 
-  <table border="2" align="center">
+  <table border="2">
   <caption>表1：AddCustom样例规格描述</caption>
   <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">AddCustom</td></tr>
-  </tr>
-  <tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-  <tr><td align="center">x</td><td align="center">[8, 2048]</td><td align="center">half</td><td align="center">ND</td></tr>
-  <tr><td align="center">y</td><td align="center">[8, 2048]</td><td align="center">half</td><td align="center">ND</td></tr>
-  </tr>
-  </tr>
-  <tr><td rowspan="1" align="center">样例输出</td><td align="center">z</td><td align="center">[8, 2048]</td><td align="center">half</td><td align="center">ND</td></tr>
-  </tr>
+  <tr><td align="center"></td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
+  <tr><td align="center">样例输入</td><td align="center">x</td><td align="center">[8, 2048]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td align="center">样例输入</td><td align="center">y</td><td align="center">[8, 2048]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td align="center">样例输出</td><td align="center">z</td><td align="center">[8, 2048]</td><td align="center">half</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">add_custom</td></tr>
   </table>
 
 - 样例实现
 
-  本样例在`add_custom.asc`中定义了一个名为`ascendc_ops`的命名空间，并在其中注册了`ascendc_add`函数，在 `<<<>>>` 前后调用`aclprofRangePushEx` 和 `aclprofRangePop` 上报Shape信息到Profiling。
+  本样例的实现分为三个部分：
 
-  样例信息上报需要构造 `aclprofEventAttributes` 结构体，包含版本、大小、类型和tensor信息，其中 `messageType` 固定MESSAGE_TYPE_TENSOR_INFO类型为0，`aclprofTensorInfo` 为上报的tensor信息。`opNameId`、`opTypeId` 字段通过 `aclprofStr2Id` 接口转化样例名、样例类型获取，每包数据 `tensorNum` 不超过5，超过5请分成多包数据上报，`tensors` 为 `aclprofTensor` 结构，从样例的 `at::Tensor` 获取。
+  1. `torch.library`算子注册
+
+     `add_custom.asc`中定义了`ascendc_ops`命名空间，并通过`TORCH_LIBRARY`和`TORCH_LIBRARY_IMPL`注册`ascendc_add`。Python侧可以通过如下方式调用：
+
+     ```python
+     torch.ops.ascendc_ops.ascendc_add(x.npu(), y.npu())
+     ```
+
+  2. Profiling Shape信息记录
+
+     `ascendc_add`函数在下发Kernel前构造Profiling元信息，并通过`aclprofRangePushEx`传递给`msprof`。Kernel下发完成后调用`aclprofRangePop`结束本次Profiling范围。
+
+     这样做的目的是让`msprof`在生成`op_summary_*.csv`时，能够在当前自定义算子记录中展示输入输出Tensor信息，例如：
+
+     ```text
+     Input Shapes: "8,2048;8,2048"
+     Input Data Types: FLOAT16;FLOAT16
+     Input Formats: ND;ND
+     Output Shapes: "8,2048"
+     Output Data Types: FLOAT16
+     Output Formats: ND
+     ```
+
+     上报信息由以下结构组成：
+
+     - `aclprofTensor`：描述单个Tensor，包括输入/输出类型、Format、数据类型、Shape维度和Shape值。
+     - `aclprofTensorInfo`：描述一次算子调用，包括算子名称、算子类型、block数量、stream以及输入输出Tensor数组。
+     - `aclprofEventAttributes`：`aclprofRangePushEx`使用的外层消息结构，用于携带`aclprofTensorInfo`。
+
+     代码中的`INPUT(x)`和`OUTPUT(z)`宏用于从PyTorch `at::Tensor`中提取Format、数据类型和Shape信息；`INIT_ACL_PROF_TENSOR_INFO`宏用于把算子信息和Tensor信息组装成`aclprofTensorInfo`。
+
+  3. Add Kernel实现
+
+     Device侧`add_custom` Kernel采用静态Tensor编程方式实现最小Add计算。Kernel模板参数只包含固定Shape：`<8, 2048>`；Kernel启动时通过`<<<blockNum, nullptr, stream>>>`传入block数量，Kernel内部通过`AscendC::GetBlockNum()`计算每个block处理的数据长度。
+
+     本样例Kernel仅支持`[8, 2048]`、`float16`输入。如果输入Shape不符合要求，Host侧会通过`TORCH_CHECK`报错。
 
 - Python测试脚本
 
-  在`add_custom_test.py`调用脚本中，通过`torch.ops.load_library`加载生成的自定义样例库，调用注册的`ascendc_add`函数。
+  在`add_custom_test.py`调用脚本中，通过`torch.ops.load_library`加载生成的自定义动态库，调用注册的`ascendc_add`函数，并将NPU计算结果与CPU的`torch.add`结果进行比对。
 
 ## 编译运行
 
 - 安装PyTorch以及Ascend Extension for PyTorch插件
 
   请参考[pytorch: Ascend Extension for PyTorch](https://gitcode.com/Ascend/pytorch)开源代码仓或[Ascend Extension for PyTorch昇腾社区](https://hiascend.com/document/redirect/Pytorch-index)的安装说明，选取支持的`Python`版本配套发行版，完成`torch`和`torch-npu`的安装。
+  
+  > torch_npu 的版本为 26.0.0 。
 
 - 安装前置依赖
 
@@ -95,7 +130,7 @@
   ```bash
   mkdir -p build; cd build
   cmake -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..; make -j
-  msprof --application="python3 ../add_custom_test.py" --output="../result"
+  msprof --application="python3 ../torch_library_report_tensor.py" --output="../result"
   ```
 
 - 编译选项说明
@@ -105,7 +140,7 @@
 | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU 架构：dav-2201 对应 Atlas A2 训练系列产品/Atlas A2 推理系列产品和Atlas A3 训练系列产品/Atlas A3 推理系列产品，dav-3510 对应 Ascend 950PR/Ascend 950DT |
 
 - 执行结果
-  执行结果如下，说明数据上报成功，其中DIR_NAME和PATH分别为落盘文件名和数据存放目录。
+  执行结果如下，说明Profiling数据采集和解析成功，其中DIR_NAME和PATH分别为落盘文件名和数据存放目录。
 
   ```bash
   [INFO] Query all data in ${DIR_NAME} done.
@@ -132,9 +167,9 @@
     </tr>
     <tr>
       <td align="center">...</td>
-      <td align="center">_Z10add_customPhS_S_j</td>
-      <td align="center">_Z10add_customPhS_S_j</td>
-      <td align="center">"8,2048;8:2048"</td>
+      <td align="center">xxx</td>
+      <td align="center">xxx</td>
+      <td align="center">"8,2048;8,2048"</td>
       <td align="center">FLOAT16;FLOAT16</td>
       <td align="center">ND;ND</td>
       <td align="center">"8,2048"</td>

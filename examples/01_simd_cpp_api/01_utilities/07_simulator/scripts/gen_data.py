@@ -17,11 +17,11 @@ import numpy as np
 
 
 def gen_golden_data():
-    m = 1024
-    n = 640
-    k = 256
-    input_a = np.random.randint(1, 10, [m, k]).astype(np.float16)
-    input_b = np.random.randint(1, 10, [k, n]).astype(np.float16)
+    m = 512
+    n = 16
+    k = 128
+    input_a = np.random.randint(1, 10, [m, k]).astype(np.float32)
+    input_b = np.random.randint(1, 10, [k, n]).astype(np.float32)
     input_bias = np.random.randint(1, 10, [n]).astype(np.float32)
     alpha = 0.001
     golden = (np.matmul(input_a.astype(np.float32), input_b.astype(np.float32)) + input_bias).astype(np.float32)

@@ -255,7 +255,7 @@ run_test_case() {
             run_with_params "${code_path}" "${example_name}" "" "" "add" 2>&1 | tee "${log_path}/${case_name}.log"
             ;;
         03_cpudebug)
-            run_cpu_mode "${code_path}" "${example_name}" "add" 2>&1 | tee "${log_path}/${case_name}.log"
+            run_cpu_mode "${code_path}" "${example_name}" "cpu_debug" 2>&1 | tee "${log_path}/${case_name}.log"
             ;;
         msProf)
             run_msprof "${code_path}" "${example_name}" 2>&1 | tee "${log_path}/${case_name}.log"

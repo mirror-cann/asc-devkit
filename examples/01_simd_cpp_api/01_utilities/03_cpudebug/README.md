@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例通过Ascend C编程语言实现了Add算子的CPU Debug调测。
+本样例以 Add 计算为载体，重点演示 Ascend C CPU Debug 功能的使用流程，包括 CPU 域编译、可执行程序运行、通过 GDB 进入调试模式，以及在核函数中设置断点、单步执行和查看变量。样例用于帮助开发者在不依赖 NPU 运行的情况下，对 Ascend C 核函数逻辑进行本地调试和问题定位。
 
 ## 支持的产品
 
@@ -15,7 +15,7 @@
 ```
 ├── 03_cpudebug
 │   ├── CMakeLists.txt          // 编译工程文件
-│   └── add.asc                 // Ascend C算子实现 & 调用样例
+│   └── cpu_debug.asc           // Ascend C样例实现 & 调用样例
 ```
 
 ## 样例描述
@@ -23,8 +23,18 @@
 - CPU Debug介绍：  
   CPU Debug功能支持对CPU执行过程中的运行状态进行调试，主要通过GDB工具实现。GDB调试支持设置断点、查看寄存器和内存状态、单步执行、查看调用栈等常用调试操作。
 
-- 算子介绍：  
-  Add算子具体功能描述可参考[Add算子详情](../../00_introduction/01_vector/add_tpipe_tque/README.md)章节。
+- 样例介绍：  
+  本样例的Add实现与[Add基础样例](../../00_introduction/01_vector/add/README.md)保持一致，默认使用`float`类型。每个block处理`2048`个数据，流程为`DataCopy`输入到UB、执行`Add`、再将结果`DataCopy`回GM。
+
+  为了使能CPU Debug，本样例在定义`ASCENDC_CPU_DEBUG`宏时包含`cpu_debug_launch.h`头文件。
+
+  ```cpp
+  #ifdef ASCENDC_CPU_DEBUG
+  #include "cpu_debug_launch.h"
+  #endif
+  ```
+
+  `cpu_debug_launch.h`提供CPU域下的核函数启动支持，使样例可以通过CPU Debug方式运行并配合GDB调试。
 
 ## 编译运行
 
@@ -50,7 +60,7 @@
   ```bash
   mkdir -p build && cd build;
   cmake -DCMAKE_ASC_RUN_MODE=cpu -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j;
-  ./add
+  ./cpu_debug
   ```
   请根据实际测试的 NPU 硬件架构选择对应的 `CMAKE_ASC_ARCHITECTURES` 参数
   - 编译选项说明
@@ -65,9 +75,9 @@
   [Success] Case accuracy is verification passed.
   ```
 - 进入gdb模式调试  
-  编译生成的CPU域可执行程序支持通过gdb进行调试。gdb支持设置断点、查看寄存器和内存状态、单步执行、查看调用栈等常用调试操作。在上述指令中"./add"前加入"gdb --args"，再次执行指令即可进入gdb模式。
+  编译生成的CPU域可执行程序支持通过gdb进行调试。gdb支持设置断点、查看寄存器和内存状态、单步执行、查看调用栈等常用调试操作。在上述指令中"./cpu_debug"前加入"gdb --args"，再次执行指令即可进入gdb模式。
   ```bash
-  gdb --args ./add
+  gdb --args ./cpu_debug
   ```
   CPU Debug通过为每个核函数启动单独的子进程来模拟NPU的执行逻辑，因此使用gdb调试时，需要设置`follow-fork-mode`让gdb跟踪子进程，才能在核函数内部断点调试。进入gdb后，先设置跟踪子进程模式：
 
@@ -79,7 +89,7 @@
 
   ```text
   # 在核函数入口处设置断点
-  (gdb) break Compute
+  (gdb) break add_custom
 
   # 运行程序
   (gdb) run

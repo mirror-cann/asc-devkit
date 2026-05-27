@@ -16,11 +16,7 @@ find_package(ASC REQUIRED)
 project(kernel_samples LANGUAGES ASC CXX)
 
 add_executable(demo
-    add_custom.asc
-)
-
-target_link_libraries(demo PRIVATE
-    dl
+    ms_sanitizer.asc
 )
 
 target_compile_options(demo PRIVATE

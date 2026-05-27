@@ -46,7 +46,7 @@ set(PROFILING_INCLUDE_DIRS
 set(TORCH_NPU_LIBRARIES ${TORCH_NPU_PATH}/lib)
 
 add_library(ascendc_ops_profiling SHARED
-    add_custom.asc
+    torch_library_report_tensor.asc
 )
 
 target_include_directories(ascendc_ops_profiling PRIVATE
