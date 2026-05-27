@@ -14,14 +14,14 @@
 #include "c_api/asc_simd.h"
 
 template <typename DST_DTYPE, typename SRC_DTYPE>
-__aicore__ inline void copy_matrix_cbuf_to_cc_stub(__cc__ DST_DTYPE* dst, __cbuf__ SRC_DTYPE* src, uint16_t nBurst, uint16_t lenBurst, 
-                                                    uint16_t srcStride, uint16_t dstStride) {
+__aicore__ inline void copy_matrix_cbuf_to_cc_stub(__cc__ DST_DTYPE* dst, __cbuf__ SRC_DTYPE* src, uint16_t nBurst, uint16_t lenBurst,
+                                                    uint16_t srcGap, uint16_t dstGap) {
     EXPECT_EQ(dst, reinterpret_cast<__cc__ DST_DTYPE *>(11));
     EXPECT_EQ(src, reinterpret_cast<__cbuf__ SRC_DTYPE *>(22));
     EXPECT_EQ(nBurst, static_cast<uint16_t>(33));
     EXPECT_EQ(lenBurst, static_cast<uint16_t>(44));
-    EXPECT_EQ(srcStride, static_cast<uint16_t>(55));
-    EXPECT_EQ(dstStride, static_cast<uint16_t>(66));
+    EXPECT_EQ(srcGap, static_cast<uint16_t>(55));
+    EXPECT_EQ(dstGap, static_cast<uint16_t>(66));
 }
 
 class TEST_COPY_L1_TO_L0C : public testing::Test {
@@ -48,10 +48,10 @@ TEST_F(TEST_COPY_L1_TO_L0C, TEST_COPY_L1_TO_L0C_##src_dtype##dst_dtype)         
                                                                                                 \
     uint16_t nBurst = static_cast<uint16_t>(33);                                                \
     uint16_t lenBurst = static_cast<uint16_t>(44);                                              \
-    uint16_t srcStride = static_cast<uint16_t>(55);                                             \
-    uint16_t dstStride = static_cast<uint16_t>(66);                                             \
+    uint16_t srcGap = static_cast<uint16_t>(55);                                             \
+    uint16_t dstGap = static_cast<uint16_t>(66);                                             \
                                                                                                 \
-    asc_copy_l12l0c(dst, src, nBurst, lenBurst, srcStride, dstStride);                        \
+    asc_copy_l12l0c(dst, src, nBurst, lenBurst, srcGap, dstGap);                        \
     GlobalMockObject::verify();                                                                 \
 }                                                                                               \
                                                                                                 \
@@ -67,10 +67,10 @@ TEST_F(TEST_COPY_L1_TO_L0C, TEST_COPY_L1_TO_L0C_SYNC_##src_dtype##dst_dtype)    
                                                                                                 \
     uint16_t nBurst = static_cast<uint16_t>(33);                                                \
     uint16_t lenBurst = static_cast<uint16_t>(44);                                              \
-    uint16_t srcStride = static_cast<uint16_t>(55);                                             \
-    uint16_t dstStride = static_cast<uint16_t>(66);                                             \
+    uint16_t srcGap = static_cast<uint16_t>(55);                                             \
+    uint16_t dstGap = static_cast<uint16_t>(66);                                             \
                                                                                                 \
-    asc_copy_l12l0c_sync(dst, src, nBurst, lenBurst, srcStride, dstStride);                        \
+    asc_copy_l12l0c_sync(dst, src, nBurst, lenBurst, srcGap, dstGap);                        \
     GlobalMockObject::verify();                                                                 \
 }                                                                                               \
 

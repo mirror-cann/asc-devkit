@@ -20,17 +20,17 @@
 #include "instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 __aicore__ inline void asc_copy_l12gm_impl(__gm__ void* dst, __cbuf__ void* src, uint16_t n_burst, uint16_t len_burst, 
-                                            uint16_t src_stride, uint16_t dst_stride)
+                                            uint16_t src_gap, uint16_t dst_gap)
 {
     if ASC_IS_AIC {
-        copy_cbuf_to_gm(dst, src, 0, n_burst, len_burst, src_stride, dst_stride);
+        copy_cbuf_to_gm(dst, src, 0, n_burst, len_burst, src_gap, dst_gap);
     }
 }
 
 __aicore__ inline void asc_copy_l12gm_sync_impl(__gm__ void* dst, __cbuf__ void* src, uint16_t n_burst, uint16_t len_burst, 
-                                                uint16_t src_stride, uint16_t dst_stride)
+                                                uint16_t src_gap, uint16_t dst_gap)
 {
-    asc_copy_l12gm_impl(dst, src, n_burst, len_burst, src_stride, dst_stride);
+    asc_copy_l12gm_impl(dst, src, n_burst, len_burst, src_gap, dst_gap);
     asc_sync_post_process();
 }
 #endif

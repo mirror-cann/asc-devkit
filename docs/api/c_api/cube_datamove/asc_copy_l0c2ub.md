@@ -251,7 +251,7 @@ quant_post可选量化模式分别为：
 | src_addr              | 输入    | 源操作数（矢量）的起始地址。                                                                                                                   |
 | n_size           | 输入    | 源NZ矩阵在N方向上的大小。<br/>&bull; 不使能NZ2ND功能，取值范围：[1, 4095]；<br/>&bull; 使能NZ2ND功能，取值范围：[1, 4095]。                                        |
 | m_size           | 输入    | 源NZ矩阵在M方向上的大小。<br/>&bull; 不使能NZ2ND功能，取值范围：[1, 65535]；<br/>&bull; 使能NZ2ND功能，取值范围：[1, 8192]。                                       |
-| loop_dst_stride       | 输入    | 目的相邻ND矩阵起始地址之间的偏移。                                                                                                               |
+| loop_dst_stride       | 输入    | <br> - 不使能NZ2ND功能,目的NZ矩阵中相邻Z排布的起始地址偏移，取值不为0， 单位：element。<br> - 使能NZ2ND/NZ2DN功能,目的ND矩阵每一行中的元素个数，取值不为0 ，单位：element。                |
 | loop_src_stride       | 输入    | 源NZ矩阵中相邻Z排布的起始地址偏移，取值范围：[0, 65535]，单位：C0_Size（16*sizeof(T)，T为src_addr的数据类型）。                                                          |
 | dual_dst_ctl | 输入 | 双目的控制参数。 |
 | sub_blockid | 输入 | 子块ID。 |

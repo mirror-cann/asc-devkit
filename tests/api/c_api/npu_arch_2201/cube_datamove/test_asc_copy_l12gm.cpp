@@ -13,15 +13,15 @@
 #include "c_api/stub/cce_stub.h"
 #include "c_api/asc_simd.h"
 
-__aicore__ inline void copy_cbuf_to_gm_stub(__gm__ void* dst, __cbuf__ void* src, uint8_t sid, uint16_t nBurst, uint16_t lenBurst, 
-                                            uint16_t srcStride, uint16_t dstStride) {
+__aicore__ inline void copy_cbuf_to_gm_stub(__gm__ void* dst, __cbuf__ void* src, uint8_t sid, uint16_t nBurst, uint16_t lenBurst,
+                                            uint16_t srcGap, uint16_t dstGap) {
     EXPECT_EQ(dst, reinterpret_cast<__gm__ void *>(11));
     EXPECT_EQ(src, reinterpret_cast<__cbuf__ void *>(22));
     EXPECT_EQ(sid, static_cast<uint8_t>(0));
     EXPECT_EQ(nBurst, static_cast<uint16_t>(33));
     EXPECT_EQ(lenBurst, static_cast<uint16_t>(44));
-    EXPECT_EQ(srcStride, static_cast<uint16_t>(55));
-    EXPECT_EQ(dstStride, static_cast<uint16_t>(66));
+    EXPECT_EQ(srcGap, static_cast<uint16_t>(55));
+    EXPECT_EQ(dstGap, static_cast<uint16_t>(66));
 }
 
 class TEST_COPY_L1_TO_GM : public testing::Test {
@@ -46,10 +46,10 @@ TEST_F(TEST_COPY_L1_TO_GM, TEST_COPY_L1_TO_GM)
 
     uint16_t nBurst = static_cast<uint16_t>(33);
     uint16_t lenBurst = static_cast<uint16_t>(44);
-    uint16_t srcStride = static_cast<uint16_t>(55);
-    uint16_t dstStride = static_cast<uint16_t>(66);
+    uint16_t srcGap = static_cast<uint16_t>(55);
+    uint16_t dstGap = static_cast<uint16_t>(66);
 
-    asc_copy_l12gm(dst, src, nBurst, lenBurst, srcStride, dstStride);
+    asc_copy_l12gm(dst, src, nBurst, lenBurst, srcGap, dstGap);
     GlobalMockObject::verify();
 }
 
@@ -65,9 +65,9 @@ TEST_F(TEST_COPY_L1_TO_GM, TEST_COPY_L1_TO_GM_SYNC)
 
     uint16_t nBurst = static_cast<uint16_t>(33);
     uint16_t lenBurst = static_cast<uint16_t>(44);
-    uint16_t srcStride = static_cast<uint16_t>(55);
-    uint16_t dstStride = static_cast<uint16_t>(66);
+    uint16_t srcGap = static_cast<uint16_t>(55);
+    uint16_t dstGap = static_cast<uint16_t>(66);
 
-    asc_copy_l12gm_sync(dst, src, nBurst, lenBurst, srcStride, dstStride);
+    asc_copy_l12gm_sync(dst, src, nBurst, lenBurst, srcGap, dstGap);
     GlobalMockObject::verify();
 }
