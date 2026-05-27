@@ -27,8 +27,7 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
     ```
     // 传initTiling地址的调用方式，推荐使用该方式
     GET_TILING_DATA_WITH_STRUCT(AllGatherCustomTilingData, tilingData, tilingGM); // AllGatherCustomTilingData为对应算子头文件定义的结构体
-    
-    Hccl hccl;
+
     Hccl<HcclServerType::HCCL_SERVER_TYPE_CCU> hccl; // 通过模板入参的方式选择硬件类型，默认AICPU，可以指定CCU
     GM_ADDR contextGM = GetHcclContext<0>();  // AscendC自定义算子kernel中，通过此方式获取HCCL context
     
@@ -199,8 +198,8 @@ extern "C" __global__ __aicore__ void reduce_scatter_custom(GM_ADDR xGM, GM_ADDR
 	    // 执行其他计算逻辑 ....
 			
 	    // 更新ReduceScatter的收发地址
-	    sendBuf += tileLen * sizeOf(float32);
-	    recvBuf += tileLen * sizeOf(float32);
+	    sendBuf += tileLen * sizeof(float);
+	    recvBuf += tileLen * sizeof(float);
 	}
         AscendC::SyncAll<true>();  // 全AIV核同步，防止0核执行过快，提前调用hccl.Finalize()接口，导致其他核Wait卡死   
         hccl.Finalize();
@@ -264,4 +263,3 @@ extern "C" __global__ __aicore__ void reduce_scatter_custom(GM_ADDR xGM, GM_ADDR
 </table>
 
 提示：调试含有HCCL高阶API的算子时，在算子编译工程中增加编译选项-DASCENDC\_DEBUG，可以使能异常场景拦截的能力，具体内容请参考并使用[assert接口](../../../基础API/调试接口/异常检测/assert.md)。
-
