@@ -5,6 +5,5 @@
 ## 样例列表
 | 目录名称 | 功能描述 | 支持的产品 |
 | ------------------------------------------------------------ | ---------------------------------------------------- | --- |
-| [bank_conflict](./bank_conflict) |  基于Ascend C的bank冲突性能优化样例。 |  |
-| [gm_address_conflict](./gm_address_conflict) |  本样例介绍了同地址冲突的影响以及两种解决方法，并提供核函数直调方法。 | Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
-| [optimize_datacopy](./optimize_datacopy) |  基于搬运类API使用的优化样例，通过<<<>>>直调的实现方式，介绍了减少无效数据搬运、减少搬运指令数量等方法。 |  |
+| [bank_conflict_nd2nz](./bank_conflict_nd2nz) |  本样例介绍 Atlas A2/A3 系列产品和 Ascend 950PR/Ascend 950DT 上，ND 矩阵转换为 NZ 布局时通过调整 UB 内写步长规避 bank 冲突的实现，并提供核函数直调方法。 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [data_copy](./data_copy) |  本样例介绍Global Memory到UB、Global Memory到L1的数据搬运实践，对比分块粒度、非对齐数据搬运、L2Cache复用和同地址访问冲突规避对DataCopy/DataCopyPad性能的影响。 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |

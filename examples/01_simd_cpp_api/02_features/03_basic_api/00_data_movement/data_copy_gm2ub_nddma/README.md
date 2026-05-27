@@ -27,42 +27,42 @@
 <table border="2">
 <caption>表1：场景配置对照表</caption>
 <tr><th>scenarioNum</th><th>输入Shape</th><th>输出Shape</th><th>数据类型</th><th>说明</th></tr>
-<tr><td>1</td><td>[16, 32]</td><td>[32, 64]</td><td>float32</td><td>Padding场景</td></td>
+<tr><td>1</td><td>[16, 32]</td><td>[32, 64]</td><td>float</td><td>Padding场景</td></tr>
 <tr><td>2</td><td>[28, 15]</td><td>[32, 32]</td><td>float</td><td>Padding场景，使能最近值填充方式</td></tr>
-<tr><td>3</td><td>[16, 64]</td><td>[64, 16]</td><td>float32</td><td>Transpose场景</td></tr>
-<tr><td>4</td><td>[1, 16]</td><td>[3, 16]</td><td>float32</td><td>BroadCast场景</td></tr>
-<tr><td>5</td><td>[32, 64]</td><td>[16, 16]</td><td>float32</td><td>Slice场景</td></tr>
+<tr><td>3</td><td>[16, 64]</td><td>[64, 16]</td><td>float</td><td>Transpose场景</td></tr>
+<tr><td>4</td><td>[1, 16]</td><td>[3, 16]</td><td>float</td><td>BroadCast场景</td></tr>
+<tr><td>5</td><td>[32, 64]</td><td>[16, 16]</td><td>float</td><td>Slice场景</td></tr>
 </table>
 
 ### 场景详细说明
 
 **场景1：Padding场景**
-- 输入：[16, 32]个float32元素
-- 输出：[32, 64]个float32元素
+- 输入：[16, 32]个float元素
+- 输出：[32, 64]个float元素
 - 参数配置：NdDmaLoopInfo={{1, 32}, {1, 64}, {32, 16}, {15, 13}, {17, 3}}，paddingValue=0
 - 说明：将GM上[16, 32]的数据搬运至UB并Padding为[32, 64]，左Padding 15，上Padding 13，右Padding 17，下Padding 3，Padding值填充为0
 
 **场景2：Padding场景，使能最近值填充方式**
-- 输入：[28, 15]个float32元素
-- 输出：[32, 32]个float32元素
+- 输入：[28, 15]个float元素
+- 输出：[32, 32]个float元素
 - 参数配置：NdDmaLoopInfo={{1, 15}, {1, 32}, {15, 28}, {11, 3}, {6, 1}}，isNearestValueMode=true
 - 说明：将GM上[28, 15]的数据搬运至UB并Padding为[32, 32]，使能最近值填充模式，Padding位置填充边界数据而非0
 
 **场景3：Transpose场景**
-- 输入：[16, 64]个float32元素
-- 输出：[64, 16]个float32元素
+- 输入：[16, 64]个float元素
+- 输出：[64, 16]个float元素
 - 参数配置：NdDmaLoopInfo={{1, 64}, {16, 1}, {64, 16}, {0, 0}, {0, 0}}
 - 说明：将GM上[16, 64]的数据搬运至UB并转置为[64, 16]，通过配置stride实现行列互换
 
 **场景4：BroadCast场景**
-- 输入：[1, 16]个float32元素
-- 输出：[3, 16]个float32元素
+- 输入：[1, 16]个float元素
+- 输出：[3, 16]个float元素
 - 参数配置：NdDmaLoopInfo={{1, 0}, {1, 16}, {16, 3}, {0, 0}, {0, 0}}
 - 说明：将GM上[1, 16]的数据搬运至UB并广播为[3, 16]，通过配置stride为0实现行数据复制
 
 **场景5：Slice场景**
-- 输入：[32, 64]个float32元素
-- 输出：[16, 16]个float32元素
+- 输入：[32, 64]个float元素
+- 输出：[16, 16]个float元素
 - 参数配置：NdDmaLoopInfo={{1, 64}, {1, 16}, {16, 16}, {0, 0}, {0, 0}}
 - 说明：将GM上[32, 64]的数据搬运至UB并截取为[16, 16]，通过配置搬运数据量实现最终数据切片
 
@@ -100,12 +100,12 @@
   python3 ../scripts/verify_result.py output/output.bin output/golden.bin  # 验证输出结果是否正确
   ```
 
-  使用CPU调试时，添加`-DCMAKE_ASC_RUN_MODE=cpu`参数即可。
+  使用CPU调试或NPU仿真模式时，添加`-DCMAKE_ASC_RUN_MODE=cpu`或`-DCMAKE_ASC_RUN_MODE=sim`参数即可。
   
   示例如：
-
   ```bash
   cmake -DSCENARIO_NUM=$SCENARIO_NUM -DCMAKE_ASC_RUN_MODE=cpu -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j; # cpu调试模式
+  cmake -DSCENARIO_NUM=$SCENARIO_NUM -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j; # NPU仿真模式
   ```
 
   > **注意：** 切换编译模式前需清理 cmake 缓存，可在 build 目录下执行 `rm CMakeCache.txt` 后重新 cmake。

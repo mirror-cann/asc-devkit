@@ -13,15 +13,52 @@
  * \file data_utils.h
  * \brief
  */
-
 #ifndef DATA_UTILS_H
 #define DATA_UTILS_H
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <fstream>
 
+#include <cassert>
+#include <cstdio>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "acl/acl.h"
+
+typedef enum {
+    DT_UNDEFINED = -1,
+    FLOAT = 0,
+    HALF = 1,
+    INT8_T = 2,
+    INT32_T = 3,
+    UINT8_T = 4,
+    INT16_T = 6,
+    UINT16_T = 7,
+    UINT32_T = 8,
+    INT64_T = 9,
+    UINT64_T = 10,
+    DOUBLE = 11,
+    BOOL = 12,
+    STRING = 13,
+    COMPLEX64 = 16,
+    COMPLEX128 = 17,
+    BF16 = 27
+} printDataType;
+
+#define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
+#define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
+#define CHECK_ACL(x)                                                                        \
+    do {                                                                                    \
+        aclError __ret = x;                                                                 \
+        if (__ret != ACL_ERROR_NONE) {                                                      \
+            std::cerr << __FILE__ << ":" << __LINE__ << " aclError:" << __ret << std::endl; \
+        }                                                                                   \
+    } while (0);
 
 /**
  * @brief Read data from file
@@ -70,33 +107,4 @@ bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_
     return true;
 }
 
-/**
- * @brief Write data to file
- * @param [in] filePath: file path
- * @param [in] buffer: data to write to file
- * @param [in] size: size to write
- * @return write result
- */
-bool WriteFile(const std::string &filePath, const void *buffer, size_t size)
-{
-    if (buffer == nullptr) {
-        ERROR_LOG("Write file failed. buffer is nullptr");
-        return false;
-    }
-
-    int fd = open(filePath.c_str(), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWRITE);
-    if (fd < 0) {
-        ERROR_LOG("Open file failed. path = %s", filePath.c_str());
-        return false;
-    }
-
-    size_t writeSize = write(fd, buffer, size);
-    (void)close(fd);
-    if (writeSize != size) {
-        ERROR_LOG("Write file Failed.");
-        return false;
-    }
-
-    return true;
-}
 #endif // DATA_UTILS_H
