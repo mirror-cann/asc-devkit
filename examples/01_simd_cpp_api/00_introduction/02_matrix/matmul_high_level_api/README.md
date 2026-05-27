@@ -25,29 +25,74 @@
 ## 样例描述
 
 - 样例功能：
-  Matmul计算公式：
+  本样例使用Ascend C Matmul高阶API实现矩阵乘法。Matmul高阶API会封装矩阵计算过程中的数据搬运、Cube计算调度、基础流水同步等细节，开发者主要需要完成矩阵规格配置、tiling生成、输入输出Tensor设置和结果写回。
+
+  矩阵乘法的计算公式如下：
   $$
   C = A * B
   $$
+  其中，A矩阵形状为`[M, K]`，B矩阵形状为`[K, N]`，输出C矩阵形状为`[M, N]`。C矩阵中每个元素`C[m, n]`都是A矩阵第`m`行与B矩阵第`n`列在K轴方向逐元素相乘后累加得到的结果。
+
 - 样例规格：
-  本样例参数M = 512, N = 1024, K = 512，输入规格如下表所示：
-<table>
-<tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">Matmul</td></tr>
-<tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-<tr><td align="center">A</td><td align="center">[M, K]</td><td align="center">half</td><td align="center">ND</td></tr>
-<tr><td align="center">B</td><td align="center">[K, N]</td><td align="center">half</td><td align="center">ND</td></tr>
-<tr><td rowspan="1" align="center">样例输出</td><td align="center">C</td><td align="center">[M, N]</td><td align="center">float</td><td align="center">ND</td></tr>
-<tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">matmul_custom</td></tr>
-</table>
+  本样例参数`M = 512, N = 16, K = 128`。代码中A矩阵K轴使用`Ka`表示，B矩阵K轴使用`Kb`表示，本样例`Ka = Kb = K = 128`。输入A、B矩阵均为`half`类型、`ND`格式，输出C矩阵为`float`类型、`ND`格式。输入输出规格如下表所示：
+  <table>
+  <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">Matmul</td></tr>
+  <tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
+  <tr><td align="center">A</td><td align="center">[M, K]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td align="center">B</td><td align="center">[K, N]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">样例输出</td><td align="center">C</td><td align="center">[M, N]</td><td align="center">float</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">matmul_custom</td></tr>
+  </table>
+
+  样例为纯Cube矩阵计算场景，固定按2个Cube核生成tiling：
+  - `GenerateTiling`中调用`tilingApi.SetDim(2)`，表示本样例希望使用2个Cube核参与计算。
+  - `SetAType`、`SetBType`、`SetCType`设置Host侧tiling看到的矩阵位置、格式和数据类型，这些配置需要和Kernel侧`MatmulType`模板参数保持一致。
+  - `tilingApi.GetTiling(tilingData)`根据矩阵形状、数据类型、核数和平台资源生成`TCubeTiling`，其中包含`usedCoreNum`、`singleCoreM/N/K`、`baseM/N/K`等参数。
+  - Kernel侧通过`ASCENDC_CUBE_ONLY`和`__cube__`指定纯Cube执行路径，`REGIST_MATMUL_OBJ`在Cube侧本地初始化Matmul对象，不走MIX场景的KFC通信。
+  - Host侧使用`tiling.usedCoreNum`作为`numBlocks`启动核函数，启动核数与实际参与计算的Cube核数保持一致。
+  - 在本样例规格下，tiling结果会把`M = 512`按2个核均分，每个核处理`singleCoreM = M / 2 = 256`，`singleCoreN = N = 16`，`singleCoreKa = singleCoreKb = K = 128`。
 
 - 样例实现：
-  - 实现流程
-    - 通过GenerateTiling实现host侧的Tiling计算
-    - 通过CalcGMOffset完成分核计算
-    - 通过IterateAll接口完成矩阵乘计算
+  - Tiling生成流程
+    - `GenerateTiling`中固定设置矩阵规格：`M = 512`、`N = 16`、`K = 128`。
+    - 创建`matmul_tiling::MultiCoreMatmulTiling`对象`tilingApi`，用于生成多核Matmul所需的tiling参数。
+    - `SetDim(2)`表示多核Matmul tiling计算时可使用2个Cube核。纯Cube矩阵计算场景下，`GetTiling`会在该核数约束内生成实际使用核数`usedCoreNum`。
+    - `SetAType`、`SetBType`、`SetCType`分别设置A、B、C矩阵的数据来源位置、数据格式和数据类型。本样例A/B/C都在GM中，格式均为ND，A/B为`float16`且不转置，C为`float`。这些信息需要和Kernel侧`MatmulType`模板参数、`SetTensorA`/`SetTensorB`的转置参数保持一致。
+    - `SetOrgShape(M, N, K)`设置原始完整矩阵形状，`SetShape(M, N, K)`设置本次实际参与Matmul计算的`m/n/k`。本样例计算完整矩阵乘，没有局部矩阵或脏数据列，因此两者都设置为`M/N/K`。
+    - `EnableBias(false)`表示本样例不带bias。
+    - `SetBufferSpace(-1, -1, -1)`设置Matmul可使用的L1/L0C/UB空间大小。传入`-1`表示使用当前AI处理器对应buffer的默认大小，由tiling接口据此选择base块和搬运策略。
+    - `GetTiling(tilingData)`生成最终tiling结果。如果返回`-1`表示tiling计算失败，tiling结果不可继续使用。Host侧生成`TCubeTiling`后作为Kernel参数直接传入。
+
+  - Kernel侧整体思路
+    - `matmul_custom`是一个`__global__ __cube__`核函数，运行在Cube计算单元上。
+    - Kernel入参中的`tiling`类型为`AscendC::tiling::TCubeTiling`，由Host侧生成后作为Kernel参数直接传入。Kernel侧通过该参数控制分核、base块大小和Matmul内部buffer使用。
+    - 创建`GlobalTensor`对象`aGlobal`、`bGlobal`、`cGlobal`，分别表示GM中的A、B、C矩阵。`GlobalTensor`只描述GM上的地址和元素个数，真正的数据搬运、L1/L0切分由Matmul高阶API结合tiling完成。
+    - 创建高阶API对象`mm`。`MatmulType`模板参数描述A/B/C矩阵在Kernel侧的位置、格式和数据类型，本样例均为GM、ND格式，A/B为`half`，C为`float`。
+    - Host侧通过`GetLibApiWorkSpaceSize()`获取系统workspace大小，申请`workspaceDevice`后作为Kernel参数`workspace`传入。
+    - 通过`REGIST_MATMUL_OBJ(&pipe, workspace, mm, &tiling)`注册Matmul对象。由于代码在包含`lib/matmul_intf.h`前定义了`ASCENDC_CUBE_ONLY`，纯Cube场景下注册过程会在Cube侧本地初始化Matmul对象，不走MIX场景的KFC server/client通信路径。
+    - Host侧以`numBlocks = tiling.usedCoreNum`启动Kernel，启动的Block均参与实际计算。
+    - 调用`mm.SetOrgShape(tiling.M, tiling.N, tiling.Ka, tiling.Kb)`设置原始完整矩阵形状，单位为元素。该接口需要在`SetTensorA`、`SetTensorB`之前调用。
+    - 调用`mm.SetTensorA(aGlobal[GetBlockIdx() * tiling.Ka * tiling.singleCoreM], false)`设置当前核要读取的A矩阵起始地址。第0个核从A矩阵第0行开始读取，第1个核从A矩阵第256行开始读取。第二个参数`false`表示不转置。
+    - 调用`mm.SetTensorB(bGlobal[0], false)`设置B矩阵起始地址。两个核都需要完整的B矩阵参与计算，所以B矩阵地址都从首地址开始，第二个参数`false`表示不转置。
+    - 调用`mm.IterateAll(cGlobal[GetBlockIdx() * tiling.singleCoreM * tiling.N])`执行当前核负责的全部Matmul计算，并将结果写回C矩阵对应偏移位置。未显式指定模板参数时使用默认同步模式，接口返回时当前`IterateAll`计算已完成。
+    - 调用`mm.End()`结束当前Matmul对象的使用并释放内部计算资源。后续如果还有其他Matmul对象，调用`End`可避免多个Matmul对象之间的资源冲突。
+
+  - 分核和地址偏移说明
+    - 本样例固定2核，tiling结果按M轴切分：`M = 512`、`singleCoreM = 256`，因此输出C矩阵被分成上下两块。
+    - `GetBlockIdx()`表示当前核号。第0个核处理C矩阵第0到255行，第1个核处理C矩阵第256到511行。
+    - A矩阵形状为`[512, 128]`，每一行长度为`tiling.Ka = 128`，所以A矩阵偏移为`GetBlockIdx() * tiling.Ka * tiling.singleCoreM`。
+    - B矩阵形状为`[128, 16]`，对应代码中的`[Kb, N]`。两个核分别计算C矩阵的不同行，但每个输出元素都需要完整K轴累加，因此两个核都从`bGlobal[0]`读取完整B矩阵。
+    - C矩阵形状为`[512, 16]`，每一行长度为`tiling.N = 16`，所以C矩阵写回偏移为`GetBlockIdx() * tiling.singleCoreM * tiling.N`。
+    - 由于M轴正好被2个核均分，没有不足`singleCoreM`的最后一块，因此代码中没有尾块变量，也没有调用`SetTail`。
 
   - 调用实现
-    使用内核调用符<<<>>>调用核函数。
+    使用内核调用符`<<<>>>`调用核函数。纯Cube场景下调用时`numBlocks`来自`tiling.usedCoreNum`，运行时参数依次传入Device侧A矩阵地址、B矩阵地址、C矩阵地址、workspace地址和Host侧生成的tiling数据。
+
+  - 同步接口说明
+    - `SetFlag` 用于在生产者流水完成当前任务后写入同步事件。
+    - `WaitFlag` 用于让消费者流水等待对应同步事件。
+    - `HardEvent` 描述同步方向，例如 `MTE2_MTE1` 表示 MTE2 流水和 MTE1 流水之间的同步关系。
+    - `EVENT_ID0` 用于标识当前同步事件。本样例三处同步按顺序执行并复用 `EVENT_ID0`。
 
 ## 编译运行
 
@@ -90,8 +135,8 @@
 - 编译选项说明
   | 选项 | 可选值 | 说明 |
   |------|--------|------|
-  | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`cpu`、`sim` | 运行模式：NPU 运行、CPU调试、NPU仿真 |
-  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU 架构：dav-2201 对应 Atlas A2 训练系列产品/Atlas A2 推理系列产品和Atlas A3 训练系列产品/Atlas A3 推理系列产品，dav-3510 对应 Ascend 950PR/Ascend 950DT |
+  | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`sim` | 运行模式：NPU 运行、NPU仿真 |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU 架构：Ascend 950PR/Ascend 950DT，Atlas A3 训练系列产品/Atlas A3 推理系列产品，Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 
 - 执行结果
   执行结果如下，说明精度对比成功。

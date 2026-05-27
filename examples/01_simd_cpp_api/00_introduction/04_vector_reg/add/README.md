@@ -1,7 +1,7 @@
 # 基于RegBase编程add样例
 
 ## 概述
-本样例基于Reg编程接口实现Add计算，采用4核并行模式处理数据。
+本样例基于RegBase编程范式实现向量自加计算，计算逻辑为`y = x + x`。样例先将输入数据从GM（Global Memory）搬运到UB（Unified Buffer），再通过VF函数调用RegBase接口完成寄存器级别的Add计算，最后将结果从UB写回GM。
 
 ## 支持的产品
 - Ascend 950PR/Ascend 950DT
@@ -19,7 +19,7 @@
 
 ## 样例描述
 - 样例功能：  
-  本样例基于RegBase编程范式实现向量自加操作，调用Reg::LoadAlign、Reg::Add、Reg::StoreAlign等接口完成寄存器级别的向量计算。
+  本样例基于RegBase编程范式实现向量自加操作。输入`x`为`float`类型二维数据，输出`y`与输入shape一致，每个输出元素满足`y[i] = x[i] + x[i]`。样例采用4核并行处理，输入总长度为`512 * 512`个`float`元素，每个核处理`totalLength / 4`个连续元素，展示GM/UB数据搬运、VF函数调用、RegBase寄存器计算和流水同步的基本流程。
 - 样例规格：
   <table>
   <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="3" align="center">AIV样例</td></tr>
@@ -31,12 +31,17 @@
 
 - 样例实现：
   - Kernel实现
-    - 调用DataCopy基础API，将数据从GM（Global Memory）搬运到UB（Unified Buffer）
-    - 通过asc_vf_call调用AddVF函数，实现向量自加计算
-    - 调用DataCopy基础API，将结果从UB（Unified Buffer）搬运至GM（Global Memory）
+    - 通过`GetBlockIdx`获取当前核的block索引，并计算当前核处理的数据偏移`coreOffset`。
+    - 使用`GlobalTensor`绑定输入、输出GM地址。
+    - 使用`LocalMemAllocator<Hardware::UB>`申请当前核使用的UB缓存。
+    - 调用`DataCopy`将当前核负责的数据从GM搬运到UB。
+    - 使用`SetFlag<HardEvent::MTE2_V>`和`WaitFlag<HardEvent::MTE2_V>`保证GM到UB搬运完成后再开始Vector计算。
+    - 通过`asc_vf_call`调用`AddVF`函数，在VF函数内完成`LoadAlign -> Add -> StoreAlign`的寄存器计算流程。
+    - 使用`SetFlag<HardEvent::V_MTE3>`和`WaitFlag<HardEvent::V_MTE3>`保证Vector计算完成后再将UB结果搬运回GM。
+    - 调用`DataCopy`将结果从UB搬运至GM。
 
   - 调用实现  
-    使用内核调用符<<<>>>调用核函数。
+    使用内核调用符`<<<>>>`启动`vector_add`核函数。
 
 ## 编译运行
 
@@ -82,7 +87,7 @@
 | 选项 | 可选值 | 说明 |
 |------|--------|------|
 | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`cpu`、`sim` | 运行模式：NPU 运行、CPU调试、NPU仿真 |
-| `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：dav-3510 对应 Ascend 950PR/Ascend 950DT |
+| `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：Ascend 950PR/Ascend 950DT |
 
 - 执行结果  
   执行结果如下，说明精度对比成功。

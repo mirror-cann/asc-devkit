@@ -42,7 +42,6 @@ target_link_directories(demo PRIVATE
 )
 
 target_link_libraries(demo PRIVATE 
-    m
     $<BUILD_INTERFACE:$<$<STREQUAL:${CMAKE_ASC_RUN_MODE},sim>:runtime_camodel>>
     $<BUILD_INTERFACE:$<$<STREQUAL:${CMAKE_ASC_RUN_MODE},sim>:npu_drv>>
     $<BUILD_INTERFACE:$<$<STREQUAL:${CMAKE_ASC_RUN_MODE},cpu>:cpudebug_acl_stub>>
