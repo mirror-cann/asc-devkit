@@ -49,17 +49,11 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-获取MrgSort已经处理过的队列里的Region Proposal个数，并依次存储在四个出参中。
+头文件路径为：`"basic_api/kernel_operator_proposal_intf.h"`
 
-本接口和MrgSort相关指令的配合关系如下：
+<cann-filter npu-type="950,A3,910b,310b">
 
--   配合[MrgSort4指令](MrgSort4.md)使用，获取MrgSort4指令处理过的队列里的Region Proposal个数。使用时，需要将MrgSort4中的MrgSort4Info.ifExhaustedSuspension参数配置为true，该配置模式下某条队列耗尽后，MrgSort4指令即停止。
-
-    以上说明适用于如下型号：
-
-    Atlas 推理系列产品AI Core
-
--   配合[MrgSort指令](MrgSort.md)使用，获取MrgSort指令处理过的队列里的Region Proposal个数。使用时，需要将MrgSort中的MrgSort4Info.ifExhaustedSuspension参数配置为true，该配置模式下某条队列耗尽后，MrgSort指令即停止。
+- GetMrgSortResult接口需与[MrgSort](MrgSort.md)接口配合使用。当MrgSort接口中的ifExhaustedSuspension参数设置为true时，若某个输入队列中的数据耗尽，MrgSort会停止执行。此时，可调用GetMrgSortResult接口来获取4个队列里已经处理过的数据个数。
 
     以上说明适用于如下型号：
 
@@ -71,69 +65,50 @@
 
     Atlas 200I/500 A2 推理产品
 
+</cann-filter>
+
+<cann-filter npu-type="310p">
+
+- 获取MrgSort已经处理过的队列里的Region Proposal个数，并依次存储在四个出参中。
+
+    配合[MrgSort4指令](MrgSort4.md)使用，获取MrgSort4指令处理过的队列里的Region Proposal个数。使用时，需要将MrgSort4中的MrgSort4Info.ifExhaustedSuspension参数配置为true，该配置模式下某条队列耗尽后，MrgSort4指令即停止。
+
+    以上说明适用于如下型号：
+
+    Atlas 推理系列产品AI Core
+
+</cann-filter>
+
 ## 函数原型<a name="section620mcpsimp"></a>
 
-```
+```cpp
 __aicore__ inline void GetMrgSortResult(uint16_t &mrgSortList1, uint16_t &mrgSortList2, uint16_t &mrgSortList3, uint16_t &mrgSortList4)
 ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
-<a name="zh-cn_topic_0235751031_table33761356"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="10.05%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0235751031_p16609919"><a name="zh-cn_topic_0235751031_p16609919"></a><a name="zh-cn_topic_0235751031_p16609919"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="71.41%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0235751031_p59995477"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row42461942101815"><td class="cellrowborder" valign="top" width="18.54%" headers="mcps1.2.4.1.1 "><p id="p479605232211"><a name="p479605232211"></a><a name="p479605232211"></a>mrgSortList1</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p1579635215228"><a name="p1579635215228"></a><a name="p1579635215228"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.41%" headers="mcps1.2.4.1.3 "><p id="p6745143393911"><a name="p6745143393911"></a><a name="p6745143393911"></a>类型为uint16_t，表示MrgSort第一个队列里已经处理过的Region Proposal个数。</p>
-</td>
-</tr>
-<tr id="row1441613274210"><td class="cellrowborder" valign="top" width="18.54%" headers="mcps1.2.4.1.1 "><p id="p14168210429"><a name="p14168210429"></a><a name="p14168210429"></a>mrgSortList2</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p19130457111014"><a name="p19130457111014"></a><a name="p19130457111014"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.41%" headers="mcps1.2.4.1.3 "><p id="p54166204211"><a name="p54166204211"></a><a name="p54166204211"></a>类型为uint16_t，表示MrgSort第二个队列里已经处理过的Region Proposal个数。</p>
-</td>
-</tr>
-<tr id="row470666124311"><td class="cellrowborder" valign="top" width="18.54%" headers="mcps1.2.4.1.1 "><p id="p67071617430"><a name="p67071617430"></a><a name="p67071617430"></a>mrgSortList3</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p23611588108"><a name="p23611588108"></a><a name="p23611588108"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.41%" headers="mcps1.2.4.1.3 "><p id="p13852181720542"><a name="p13852181720542"></a><a name="p13852181720542"></a>类型为uint16_t，表示MrgSort第三个队列里已经处理过的Region Proposal个数。</p>
-</td>
-</tr>
-<tr id="row59924436234"><td class="cellrowborder" valign="top" width="18.54%" headers="mcps1.2.4.1.1 "><p id="p59928437239"><a name="p59928437239"></a><a name="p59928437239"></a>mrgSortList4</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p85228148413"><a name="p85228148413"></a><a name="p85228148413"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.41%" headers="mcps1.2.4.1.3 "><p id="p19921543132312"><a name="p19921543132312"></a><a name="p19921543132312"></a>类型为uint16_t，表示MrgSort第四个队列里已经处理过的Region Proposal个数。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 输入/输出 | 描述 |
+|:---|:---|:---|
+| mrgSortList1 | 输出 | 类型为uint16\_t，表示MrgSort第一个队列里已经处理过的Region Proposal个数。 |
+| mrgSortList2 | 输出 | 类型为uint16\_t，表示MrgSort第二个队列里已经处理过的Region Proposal个数。 |
+| mrgSortList3 | 输出 | 类型为uint16\_t，表示MrgSort第三个队列里已经处理过的Region Proposal个数。 |
+| mrgSortList4 | 输出 | 类型为uint16\_t，表示MrgSort第四个队列里已经处理过的Region Proposal个数。 |
 
-## 返回值说明<a name="section640mcpsimp"></a>
+## 约束说明<a name="section837496171220"></a>
 
-无
+<cann-filter npu-type="A3,910b">
 
-## 约束说明<a name="section633mcpsimp"></a>
+- 需与MrgSort接口配合使用，且MrgSort接口中的ifExhaustedSuspension参数必须设置为true。
 
-无
+</cann-filter>
 
 ## 调用示例<a name="section837496171220"></a>
 
--   配合[MrgSort指令](MrgSort.md)使用示例。
+- 配合[MrgSort指令](MrgSort.md)使用示例。
 
-    ```
+    ```cpp
     
     uint16_t elementLengths[4] = { 0 };
     uint32_t sortedNum[4] = { 0 };
@@ -161,8 +136,9 @@ __aicore__ inline void GetMrgSortResult(uint16_t &mrgSortList1, uint16_t &mrgSor
 
     输出示例:
 
-    ```
-    srcList： [  1.   2.   3.   4.   5.   6.   7.   8.   9.  10.  11.  12.  13.  14.
+    ```cpp
+    srcList: 
+     [1.   2.   3.   4.   5.   6.   7.   8.   9.  10.  11.  12.  13.  14.
       15.  16.  17.  18.  19.  20.  21.  22.  23.  24.  25.  26.  27.  28.
       29.  30.  31.  32.  33.  34.  35.  36.  37.  38.  39.  40.  41.  42.
       43.  44.  45.  46.  47.  48.  49.  50.  51.  52.  53.  54.  55.  56.
@@ -199,9 +175,9 @@ __aicore__ inline void GetMrgSortResult(uint16_t &mrgSortList1, uint16_t &mrgSor
        2.   0.   1.   0.]
     ```
 
--   配合[MrgSort4指令](MrgSort4.md)使用示例。
+- 配合[MrgSort4指令](MrgSort4.md)使用示例。
 
-    ```
+    ```cpp
     uint16_t elementLengths[4] = { 0 };
     uint32_t sortedNum[4] = { 0 };
     elementLengths[0] = 32;
@@ -225,4 +201,3 @@ __aicore__ inline void GetMrgSortResult(uint16_t &mrgSortList1, uint16_t &mrgSor
     uint16_t mrgRes4 = 0;
     AscendC::GetMrgSortResult(mrgRes1, mrgRes2, mrgRes3, mrgRes4);
     ```
-

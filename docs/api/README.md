@@ -131,6 +131,16 @@
                 -   [Gemm（废弃）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/Gemm（废弃）.md)
 
         -   [Memory矢量计算](SIMD-API/基础API/Memory矢量计算/Memory矢量计算.md)
+            -   [SIMD计算说明](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/SIMD计算说明.md)
+                -   [概述](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/概述.md)
+                -   [连续计算](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/连续计算.md)
+                -   [高维切分](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/高维切分.md)
+                -   [掩码](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/掩码/掩码.md)
+                    -   [概述](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/掩码/概述.md)
+                    -   [通用说明](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/掩码/通用说明.md)
+                    -   [接口内设置Mask](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/掩码/接口内设置Mask.md)
+                    -   [接口外设置Mask](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/掩码/接口外设置Mask.md)
+
             -   [基础算术](SIMD-API/基础API/Memory矢量计算/基础算术/基础算术.md)
                 -   [Exp](SIMD-API/基础API/Memory矢量计算/基础算术/Exp.md)
                 -   [Ln](SIMD-API/基础API/Memory矢量计算/基础算术/Ln.md)
