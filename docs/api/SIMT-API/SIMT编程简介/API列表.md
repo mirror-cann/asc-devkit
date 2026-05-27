@@ -218,8 +218,11 @@
 | [__float22half2_rn](../数学函数/half类型/half类型精度转换函数/__float22half2_rn.md) | 将float2类型数据遵循CAST_RINT模式转换为half2类型，返回转换后的half2类型数据。 |
 | [__low2half](../数学函数/half类型/half类型精度转换函数/__low2half.md) | 返回输入数据的低16位。 |
 | [__low2half2](../数学函数/half类型/half类型精度转换函数/__low2half2.md) | 将输入数据的低16位填充到half2并返回。 |
+| [__low2float](../数学函数/half类型/half类型精度转换函数/__low2float.md) | 将输入数据的低16位转换为浮点数并返回结果。 |
+| [__lowhigh2highlow](../数学函数/half类型/half类型精度转换函数/__lowhigh2highlow.md) | 将输入数据的高低16位进行交换并返回。 |
 | [__high2half](../数学函数/half类型/half类型精度转换函数/__high2half.md) | 提取输入half2的高16位，并返回 |
 | [__high2half2](../数学函数/half类型/half类型精度转换函数/__high2half2.md) | 将输入数据的的高16位填充到half2并返回结果。 |
+| [__high2float](../数学函数/half类型/half类型精度转换函数/__high2float.md) | 将输入数据的高16位转换为float类型并返回结果。 |
 | [__highs2half2](../数学函数/half类型/half类型精度转换函数/__highs2half2.md) | 分别提取两个half2输入的高16位，并填充到half2中。返回填充后的数据。 |
 | [__lows2half2](../数学函数/half类型/half类型精度转换函数/__lows2half2.md) | 分别提取两个half2输入的低16位，并填充到half2中。返回填充后的数据。 |
 | [__halves2half2](../数学函数/half类型/half类型精度转换函数/__halves2half2.md) | 将输入的数据分别填充为half2前后两个分量，返回填充后数据。 |
@@ -610,7 +613,7 @@
 | [fmodf](../数学函数/float类型数学库函数/fmodf.md) | 获取输入数据x除以y的余数。求余数时，商取x除以y浮点数结果的整数部分。 |
 | [remainderf](../数学函数/float类型数学库函数/remainderf.md) | 获取输入数据x除以y的余数。求余数时，商取最接近x除以y浮点数结果的整数，当x除以y的浮点数结果与左右最接近的整数距离相等时，商取偶数。 |
 | [copysignf](../数学函数/float类型数学库函数/copysignf.md) | 获取由第一个输入x的数值部分和第二个输入y的符号部分拼接得到的浮点数。 |
-| [nearbyIntf](../数学函数/float类型数学库函数/nearbyintf.md) | 获取与输入浮点数最接近的整数，输入浮点数与左右整数的距离相等时，返回偶数。 |
+| [nearbyintf](../数学函数/float类型数学库函数/nearbyintf.md) | 获取与输入浮点数最接近的整数，输入浮点数与左右整数的距离相等时，返回偶数。 |
 | [nextafterf](../数学函数/float类型数学库函数/nextafterf.md) | 如果y大于x，返回比x大的下一个可表示的浮点值，即浮点数二进制最低位加1。<br><br>如果y小于x，返回比x小的下一个可表示的浮点值，即浮点数二进制最低位减1。<br><br>如果y等于x，返回x。 |
 | [scalbnf](../数学函数/float类型数学库函数/scalbnf.md) | 获取输入数据x与2的n次方的乘积。 |
 | [scalblnf](../数学函数/float类型数学库函数/scalblnf.md) | 获取输入数据x与2的n次方的乘积。 |

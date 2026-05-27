@@ -58,7 +58,7 @@ inline float scalblnf(float x, int64_t n)
 -   SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) void KernelScalbn(float* dst, float* x, int64_t* n)
+    __global__ __launch_bounds__(1024) void KernelScalblnf(float* dst, float* x, int64_t* n)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = scalblnf(x[idx], n[idx]);
@@ -68,10 +68,9 @@ inline float scalblnf(float x, int64_t n)
 -   SIMD与SIMT混合编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(1024) inline void KernelScalbn(__gm__ float* dst, __gm__ float* x, __gm__ int64_t* n)
+    __simt_vf__ __launch_bounds__(1024) inline void KernelScalblnf(__gm__ float* dst, __gm__ float* x, __gm__ int64_t* n)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = scalblnf(x[idx], n[idx]);
     }
     ```
-

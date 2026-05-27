@@ -57,7 +57,7 @@ inline float log2f(float x)
 -   SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) inline void KernelLog2(float* dst, float* x)
+    __global__ __launch_bounds__(1024) void KernelLog2(float* dst, float* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = log2f(x[idx]);
@@ -73,4 +73,3 @@ inline float log2f(float x)
         dst[idx] = log2f(x[idx]);
     }
     ```
-

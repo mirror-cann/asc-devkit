@@ -51,7 +51,7 @@ inline float __ll2float_rz(const long long int x)
 -   SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) inline void kernel__ll2float_rz(float* dst, int64_t* x)
+    __global__ __launch_bounds__(1024) void kernel__ll2float_rz(float* dst, int64_t* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = __ll2float_rz(x[idx]);
@@ -67,4 +67,3 @@ inline float __ll2float_rz(const long long int x)
         dst[idx] = __ll2float_rz(x[idx]);
     }
     ```
-

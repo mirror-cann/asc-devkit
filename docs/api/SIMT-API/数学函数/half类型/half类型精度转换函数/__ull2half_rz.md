@@ -19,7 +19,7 @@
 ## 函数原型
 
 ```
-inline half __ull2half_rz(const unsigned long long int x))
+inline half __ull2half_rz(const unsigned long long int x)
 ```
 
 ## 参数说明
@@ -51,7 +51,7 @@ inline half __ull2half_rz(const unsigned long long int x))
 -   SIMT编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(1024) void kernel__ull2half_rz(half* dst, uint64_t* x)
+    __global__ __launch_bounds__(1024) void kernel__ull2half_rz(half* dst, uint64_t* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = __ull2half_rz(x[idx]);
@@ -61,10 +61,9 @@ inline half __ull2half_rz(const unsigned long long int x))
 -   SIMD与SIMT混合编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) inline void kernel__ull2half_rz(__gm__ half* dst, __gm__ uint64_t* x)
+    __simt_vf__ __launch_bounds__(1024) inline void kernel__ull2half_rz(__gm__ half* dst, __gm__ uint64_t* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = __ull2half_rz(x[idx]);
     }
     ```
-

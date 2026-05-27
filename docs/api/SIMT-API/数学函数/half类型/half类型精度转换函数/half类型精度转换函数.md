@@ -188,9 +188,15 @@
 
 -   **[\_\_low2half2](__low2half2.md)**
 
+-   **[\_\_low2float](__low2float.md)**
+
+-   **[\_\_lowhigh2highlow](__lowhigh2highlow.md)**
+
 -   **[\_\_high2half](__high2half.md)**
 
 -   **[\_\_high2half2](__high2half2.md)**
+
+-   **[\_\_high2float](__high2float.md)**
 
 -   **[\_\_highs2half2](__highs2half2.md)**
 
@@ -201,4 +207,3 @@
 -   **[\_\_half22float2](__half22float2.md)**
 
 -   **[\_\_ushort\_as\_half](__ushort_as_half.md)**
-

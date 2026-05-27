@@ -55,7 +55,7 @@ inline long long int __bfloat162ll_rz(const bfloat16_t x)
 -   SIMT编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(1024) void kernel__bfloat162ll_rz(int64_t* dst, bfloat16_t* x)
+    __global__ __launch_bounds__(1024) void kernel__bfloat162ll_rz(int64_t* dst, bfloat16_t* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = __bfloat162ll_rz(x[idx]);
@@ -71,4 +71,3 @@ inline long long int __bfloat162ll_rz(const bfloat16_t x)
         dst[idx] = __bfloat162ll_rz(x[idx]);
     }
     ```
-

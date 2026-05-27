@@ -63,7 +63,7 @@ inline half __hmin(half x, half y)
 -   SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) inline void KernelMin(half* dst, half* x, half* y)
+    __global__ __launch_bounds__(1024) void KernelMin(half* dst, half* x, half* y)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = __hmin(x[idx], y[idx]);
@@ -79,4 +79,3 @@ inline half __hmin(half x, half y)
         dst[idx] = __hmin(x[idx], y[idx]);
     }
     ```
-

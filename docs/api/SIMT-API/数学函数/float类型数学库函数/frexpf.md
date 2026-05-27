@@ -58,10 +58,10 @@ inline float frexpf(float x, int *exp)
 -   SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) inline void KernelFrexp(float* dst1, int* dst2, float* x)
+    __global__ __launch_bounds__(1024) void KernelFrexp(float* dst1, int* dst2, float* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
-        dst1[idx] = frexpf(x[idx], dts2 + idx);
+        dst1[idx] = frexpf(x[idx], dst2 + idx);
     }
     ```
 
@@ -73,7 +73,6 @@ inline float frexpf(float x, int *exp)
     __simt_vf__ __launch_bounds__(1024) inline void KernelFrexp(__gm__ float* dst1, __gm__ int* dst2, __gm__ float* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
-        dst1[idx] = frexpf(x[idx], dts2 + idx);
+        dst1[idx] = frexpf(x[idx], dst2 + idx);
     }
     ```
-

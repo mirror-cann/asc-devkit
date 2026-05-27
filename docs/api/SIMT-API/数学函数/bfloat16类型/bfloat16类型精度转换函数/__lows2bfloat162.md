@@ -19,7 +19,7 @@
 ## 函数原型
 
 ```
-inline inline bfloat16x2_t __lows2bfloat162(const bfloat16x2_t x, const bfloat16x2_t y)
+inline bfloat16x2_t __lows2bfloat162(const bfloat16x2_t x, const bfloat16x2_t y)
 ```
 
 ## 参数说明
@@ -85,4 +85,3 @@ inline inline bfloat16x2_t __lows2bfloat162(const bfloat16x2_t x, const bfloat16
         asc_vf_call<simt_lows2bfloat162>(dim3(1024), (__gm__ bfloat16x2_t*)input1, (__gm__ bfloat16x2_t*)input2, (__gm__ bfloat16x2_t*)output, input_total_length);
     }
     ```
-

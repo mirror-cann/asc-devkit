@@ -19,7 +19,7 @@
 ## 函数原型
 
 ```
-inline float __half2half_rn(const half x)
+inline half __half2half_rn(const half x)
 ```
 
 ## 参数说明
@@ -67,4 +67,3 @@ inline float __half2half_rn(const half x)
         dst[idx] = __half2half_rn(x[idx]);
     }
     ```
-

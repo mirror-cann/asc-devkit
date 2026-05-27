@@ -61,10 +61,9 @@ __global__ __launch_bounds__(1024) void kernel__float2float_rz(float* dst, float
 -   SIMD与SIMT混合编程场景：
 
 ```
-__global__ __launch_bounds__(1024) inline void kernel__float2float_rz(__gm__ float* dst, __gm__ float* x)
+__simt_vf__ __launch_bounds__(1024) inline void kernel__float2float_rz(__gm__ float* dst, __gm__ float* x)
 {
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
     dst[idx] = __float2float_rz(x[idx]);
 }
 ```
-

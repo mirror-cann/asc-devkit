@@ -19,7 +19,7 @@
 ## 函数原型
 
 ```
-__asc_fp8x2_storage_t __asc_cvt_float2_to_fp8x2(const float2 x, const __asc_saturation_t saturate, const __asc_fp8_interpretation_t fp8_interpretation)
+inline __asc_fp8x2_storage_t __asc_cvt_float2_to_fp8x2(const float2 x, const __asc_saturation_t saturate, const __asc_fp8_interpretation_t fp8_interpretation)
 ```
 
 ## 参数说明
@@ -74,4 +74,3 @@ SIMT编程场景当前不支持使用该接口。
         asc_vf_call<simt_asc_cvt_float2_to_fp8x2>(dim3(1024), (__gm__ float2*)input, output, input_total_length);
     }
     ```
-

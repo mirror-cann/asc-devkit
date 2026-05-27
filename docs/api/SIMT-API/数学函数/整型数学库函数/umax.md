@@ -54,7 +54,7 @@ inline unsigned int umax(const unsigned int x, const unsigned int y)
 -   SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) void KernelUmax(unsigned int* dst, unsigned int* out, unsigned int* x)
+    __global__ __launch_bounds__(1024) void KernelUmax(unsigned int* dst, unsigned int* x, unsigned int* y)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = umax(x[idx], y[idx]);
@@ -64,10 +64,9 @@ inline unsigned int umax(const unsigned int x, const unsigned int y)
 -   SIMD与SIMT混合编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(1024) inline void KernelUmax(__gm__ unsigned int* dst, __gm__ unsigned int* out, __gm__ unsigned int* x)
+    __simt_vf__ __launch_bounds__(1024) inline void KernelUmax(__gm__ unsigned int* dst, __gm__ unsigned int* x, __gm__ unsigned int* y)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = umax(x[idx], y[idx]);
     }
     ```
-

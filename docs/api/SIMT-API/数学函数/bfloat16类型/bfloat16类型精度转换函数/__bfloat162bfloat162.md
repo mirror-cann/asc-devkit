@@ -60,7 +60,7 @@ inline bfloat16x2_t __bfloat162bfloat162(const bfloat16_t x)
         }
         output[idx] = __bfloat162bfloat162(input[idx]);
     }
-    __global__ __launch_bounds__(1024) void cast_kernel(bfloat16_t* input, float16_t* output, uint32_t input_total_length)
+    __global__ __launch_bounds__(1024) void cast_kernel(bfloat16_t* input, bfloat16_t* output, uint32_t input_total_length)
     {
         simt_bfloat162bfloat162(input, (bfloat16x2_t*)output, input_total_length);
     }
@@ -83,4 +83,3 @@ inline bfloat16x2_t __bfloat162bfloat162(const bfloat16_t x)
         asc_vf_call<simt_bfloat162bfloat162>(dim3(1024), input, (__gm__ bfloat16x2_t*)output, input_total_length);
     }
     ```
-

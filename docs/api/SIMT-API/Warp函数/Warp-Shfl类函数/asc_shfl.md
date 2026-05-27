@@ -113,7 +113,7 @@ Warp内指定线程的var值。
 -   SIMD与SIMT混合编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(1024) void KernelShfl(__gm__ int32_t* dst)
+    __simt_vf__ __launch_bounds__(1024) inline void KernelShfl(__gm__ int32_t* dst)
     {
         // asc_vf_call参数：dim3{1024, 1, 1}
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
@@ -123,4 +123,3 @@ Warp内指定线程的var值。
         dst[idx] = result;
     }
     ```
-

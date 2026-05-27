@@ -55,7 +55,7 @@ inline long long int __float2ll_rna(const float x)
 -   SIMT编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(1024) void kernel__float2ll_rna(int64_t* dst, float* x)
+    __global__ __launch_bounds__(1024) void kernel__float2ll_rna(int64_t* dst, float* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = __float2ll_rna(x[idx]);
@@ -71,4 +71,3 @@ inline long long int __float2ll_rna(const float x)
         dst[idx] = __float2ll_rna(x[idx]);
     }
     ```
-
