@@ -42,21 +42,35 @@
 
 ### 样例实现
 
-#### Kernel实现
+### Kernel实现
 
 核函数源码以字符串形式嵌入Host代码中，通过LocalMemAllocator接口完成内存管理，通过SetFlag/WaitFlag接口完成事件同步，实现数据搬运、计算和结果搬出的完整流程。
 
-#### 调用实现
+### 调用实现
 
-调用aclrtc接口系列在运行时编译并执行核函数，完整链路分为两大阶段：
+调用aclrtc接口系列在运行时编译并执行核函数，完整链路如下：
 
-##### 编译
-
-通过aclrtc接口将核函数源码字符串编译为deviceELF二进制。
-
+#### 编译阶段
 1. `aclrtcCreateProg` — 创建编译程序对象，传入核函数源码字符串
-2. `aclrtcCompileProg` — 执行运行时编译，通过options传入`--npu-arch`指定NPU架构
-3. `aclrtcGetBinDataSize`/`aclrtcGetBinData` — 获取编译产物的二进制大小及数据（deviceELF）
+2. `aclrtcAddNameExpr` — 注册需要导出的核函数名（含模板参数，如`Kernel::add_custom<float>`）
+3. `aclrtcCompileProg` — 执行运行时编译，通过options传入`--npu-arch`指定NPU架构
+4. `aclrtcGetBinDataSize`/`aclrtcGetBinData` — 获取编译产物的二进制大小及数据（deviceELF）
+5. `aclrtcGetLoweredName` — 获取核函数编译后的mangledname，用于后续查找
+
+#### 加载阶段
+1. `aclrtBinaryLoadFromData` — 将编译产物的二进制加载到设备（通过`ACL_RT_BINARY_MAGIC_ELF_AICORE`标记为AICore可执行）
+2. `aclrtBinaryGetFunction` — 从加载的二进制中获取核函数句柄（`funcHandle`）
+
+#### 参数配置阶段
+1. `aclrtKernelArgsInit` — 初始化核函数参数句柄
+2. `aclrtKernelArgsAppend` — 逐个追加参数（核函数为`GM_ADDR x, GM_ADDR y, GM_ADDR z`，对应传入三个Device内存指针）
+3. `aclrtKernelArgsFinalize` — 完成参数配置
+
+#### 执行阶段
+1. `aclrtLaunchKernelWithConfig` — 启动核函数，指定block数量、stream等执行配置
+
+#### 资源清理
+1. `aclrtcDestroyProg` — 销毁编译程序对象
 
 对于模板核函数（如本样例），还需：
 
