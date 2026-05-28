@@ -2,7 +2,7 @@
 
 ## 案例介绍<a name="section1618932742516"></a>
 
-本案例介绍[InsertHashTable算子](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/03_best_practices/00_simt_insert_hash_table)，展示基于SIMT实现的大规模线程并发访问Global Memory内存的算子实践。
+本案例介绍[InsertHashTable算子](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/02_features/01_api_features/00_memory_asscess/00_simt_insert_hash_table)，展示基于SIMT实现的大规模线程并发访问Global Memory内存的算子实践。
 
 ## 背景知识<a name="section111061628366"></a>
 
