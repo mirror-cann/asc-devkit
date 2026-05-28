@@ -7,7 +7,7 @@
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
 # ----------------------------------------------------------------------------------------------------------
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src/ SRC)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/ SRC)
 
 add_library(acl_rtc SHARED
     ${SRC}
@@ -15,7 +15,10 @@ add_library(acl_rtc SHARED
 
 if(BUILD_OPEN_PROJECT)
     target_include_directories(acl_rtc PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include/aclrtc
+        ${ASCEND_CANN_PACKAGE_PATH}/include
+        ${ASCEND_CANN_PACKAGE_PATH}/include/acl
+        ${ASCEND_CANN_PACKAGE_PATH}/include/pkg_inc/base/
         ${CCEC_PATH}/../include
     )
     target_link_libraries(acl_rtc PRIVATE
@@ -23,7 +26,7 @@ if(BUILD_OPEN_PROJECT)
     )
 else()
     target_include_directories(acl_rtc PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include/aclrtc
         ${TOP_DIR}/runtime/include/external
  	    ${TOP_DIR}/runtime/include/external/acl
         ${CCEC_PATH}/../include
@@ -66,6 +69,6 @@ install(TARGETS acl_rtc
     RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR}/lib64 ${INSTALL_OPTIONAL} COMPONENT asc-devkit
 )
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/acl_rt_compile.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../include/aclrtc/acl_rt_compile.h
     DESTINATION ${INSTALL_LIBRARY_DIR}/include/acl COMPONENT asc-devkit
 )
