@@ -9,7 +9,7 @@
 
 ## 功能说明
 
-将L0A Buffer的Local Memory初始化为某一具体数值。
+将value的二进制值赋值给dst，对L0A Buffer的Local Memory进行初始化。
 
 ## 函数原型
 
@@ -73,13 +73,27 @@ PIPE_MTE1
 
 - dst的起始地址需要512字节对齐。
 - 操作数地址重叠约束请参考[通用地址重叠约束](../general_instruction.md#通用地址重叠约束)。
+- 若dst和value的数据类型不相同，则需要根据dst的数据类型对value的值进行转换，具体请参考调用示例。
 
 ## 调用示例
 
 ```cpp
-constexpr uint64_t total_length = 128;    // total_length指参与搬运的数据总长度
-half value = 1;
-__ca__ half dst[total_length];
-asc_fill_value_config config;    // 使用默认配置
-asc_fill_l0a(dst, value, config);    // 将dst中的元素按照config配置初始化为1
+constexpr uint64_t total_length = 256;    // total_length指参与搬运的数据总长度
+asc_fill_value_config config;
+
+// dst和value数据类型不相同
+__ca__ float dst0[total_length];
+uint32_t value0 = 0x3F800000;  // float类型的1的二进制表示为0x3F800000
+config.repeat = 1;
+config.blk_num = total_length * sizeof(float) / 512;
+config.dst_gap = 0;
+asc_fill_l0a(dst0, value0, config);    // 将dst0中256个float类型的元素初始化为1
+
+// dst和value数据类型相同
+__ca__ half dst1[total_length];
+half value1 = 1;  // 不用做二进制转换，直接填1即可
+config.repeat = 1;
+config.blk_num = total_length * sizeof(half) / 512;
+config.dst_gap = 0;
+asc_fill_l0a(dst1, value1, config);    // 将dst1中256个half类型的元素初始化为1
 ```
