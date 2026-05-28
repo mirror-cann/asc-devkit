@@ -61,7 +61,7 @@
 | m_size               | 输入    | 源NZ矩阵在M方向上的大小。<br/>&bull; 不使能NZ2ND功能，取值范围：[1, 65535]；<br/>&bull; 使能NZ2ND功能，取值范围：[1, 8192]。                                       |
 | dst_stride           | 输入    | <br> - 不使能NZ2ND功能,目的NZ矩阵中相邻Z排布的起始地址偏移，取值不为0， 单位：element。<br> - 使能NZ2ND/NZ2DN功能,目的ND矩阵每一行中的元素个数，取值不为0 ，单位：element。   |
 | src_stride           | 输入    | 源NZ矩阵中相邻Z排布的起始地址偏移，取值范围：[0, 65535]， 单位：C0_Size(16*sizeof(T), T为src的数据类型)。  |
-| uint_flag_mode       | 输入    | 与unit_flag参数相关，取值如下：<br/>&bull;0 保留值；<br/>&bull;2 使能unit_flag，硬件执行完指令之后，不会设置寄存器；<br/>&bull;3 使能unit_flag，硬件执行完指令后，会将unit_flag关闭。 |
+| unit_flag_mode       | 输入    | 与unit_flag参数相关，取值如下：<br/>&bull;0 保留值；<br/>&bull;2 使能unit_flag，硬件执行完指令之后，不会设置寄存器；<br/>&bull;3 使能unit_flag，硬件执行完指令后，会将unit_flag关闭。 |
 | quant_pre            | 输入    | 量化参数。取值见[功能说明](./asc_copy_l0c2l1_arch_2201.md#功能说明)。                                                                             |
 | relu_pre             | 输入    | 使能relu。                                                                                                                          |
 | enable_channel_split | 输入    | 是否使能通道拆分的功能，默认false，不使能该功能。仅在src和dst都为float时才能使能通道拆分，且不能同时使能channel_split和NZ2ND功能。                                               |
