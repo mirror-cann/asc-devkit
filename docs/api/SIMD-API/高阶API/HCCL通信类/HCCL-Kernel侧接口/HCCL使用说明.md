@@ -28,7 +28,7 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
     // 传initTiling地址的调用方式，推荐使用该方式
     GET_TILING_DATA_WITH_STRUCT(AllGatherCustomTilingData, tilingData, tilingGM); // AllGatherCustomTilingData为对应算子头文件定义的结构体
 
-    Hccl<HcclServerType::HCCL_SERVER_TYPE_CCU> hccl; // 通过模板入参的方式选择硬件类型，默认AICPU，可以指定CCU
+    Hccl<HcclServerType::HCCL_SERVER_TYPE_AICPU> hccl; // 通过模板入参的方式选择硬件类型
     GM_ADDR contextGM = GetHcclContext<0>();  // AscendC自定义算子kernel中，通过此方式获取HCCL context
     
     hccl.InitV2(contextGM, &tilingData);
