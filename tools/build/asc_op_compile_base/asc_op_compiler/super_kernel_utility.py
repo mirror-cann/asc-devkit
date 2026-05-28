@@ -86,9 +86,14 @@ def check_exist_instrinsic_when_super_kernel(dst_i_file):
     if len_result_symbol_list != 0:
         result_str += f'ERROR({len_result_symbol_list}): '
         for i, result in enumerate(result_symbol_list):
-            replacement = _FORBIDDEN_API_REPLACEMENT.get(result, '')
-            result_str += f"Use of {result} is not allowed in SuperKernel"\
-                          f", please use {replacement} instead (op: {path_list[i]}"\
+            apis = list(dict.fromkeys([a.strip() for a in result.split(',')]))
+            replacements = list(dict.fromkeys(
+                [_FORBIDDEN_API_REPLACEMENT.get(api, '') for api in apis if _FORBIDDEN_API_REPLACEMENT.get(api, '')]
+            ))
+            apis_str = ' or '.join(apis)
+            replacements_str = ' and '.join(replacements)
+            result_str += f"Use of {apis_str} {'are' if len(apis) > 1 else 'is'} not allowed in SuperKernel"\
+                          f", please use {replacements_str} instead (op: {path_list[i]}"\
                           f", line: {line_result[i]})"
             if i != len_result_symbol_list - 1:
                 result_str += '\n'
