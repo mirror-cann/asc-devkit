@@ -90,7 +90,7 @@ def gen_gm_get_set_value_dcci_compile_options(compile_option_tuple, compile_info
 def gen_sub_super_kernel_early_start_compile_options(compile_option_tuple, compile_info):
     if get_context().get_addition("super_kernel_sub_combine") is True:
         sp_options = compile_info.super_kernel_info.get("sp_options", {})
-        if sp_options.get('early-start', '0') == '1':
+        if sp_options.get('early-start', '0') == '1' and sp_options.get('debug-sync-all', '0') != '1':
             if compile_info.super_kernel_early_start_set_flag or compile_info.super_kernel_early_start_wait_flag:
                 compile_option_tuple.compile_options.append("-D__ASCENDC_SUPERKERNEL_EARLY_START_V3")
             if compile_info.super_kernel_early_start_set_flag:

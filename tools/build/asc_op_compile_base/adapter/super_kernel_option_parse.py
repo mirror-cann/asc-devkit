@@ -178,6 +178,7 @@ def setup_super_kernel_option_parsers_aclgraph() -> ParserFactory:
 
     # register validation
     factory.register(BinaryParser('early-start'))
+    factory.register(BinaryParser('debug-sync-all'))
     factory.register(NonEmptyParser('dcci-before-kernel-start'))
     factory.register(NonEmptyParser('dcci-after-kernel-end'))
     factory.register(NonEmptyParser('dcci-disable-on-kernel'))

@@ -103,7 +103,11 @@ class TestCompileUtility(unittest.TestCase):
             ctx.add_addition("super_kernel_sub_combine", True)
             res = parse_super_kernel_options(
                 "early_start=1:dcci_before_kernel_start=MatMul.*:stream_fusion=1:debug_sync_all=1")
-        self.assertEqual(res, {"early-start": "1", "dcci-before-kernel-start": "MatMul.*"})
+        self.assertEqual(res, {
+            "early-start": "1",
+            "dcci-before-kernel-start": "MatMul.*",
+            "debug-sync-all": "1"
+        })
 
     def test_aclgraph_options_reject_non_binary_early_start(self):
         with OpContext() as ctx:
