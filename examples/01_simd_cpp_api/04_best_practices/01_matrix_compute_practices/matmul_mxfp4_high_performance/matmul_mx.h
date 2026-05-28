@@ -9,7 +9,7 @@
  */
 
 /* !
- * \file matmul.h
+ * \file matmul_mx.h
  * \brief Header file for matmul_mx case1~case2 implementation
  */
 

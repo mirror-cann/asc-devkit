@@ -11,7 +11,7 @@
 
 /* !
  * \file kernel_args.h
- * \brief
+ * \brief AICPU 与 AICore 内核共享的 Tiling/参数结构体定义
  */
 
 #pragma once

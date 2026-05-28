@@ -64,30 +64,26 @@ msProf工具是单算子性能分析工具，包含`msprof op`和`msprof op simu
 
 在本样例根目录下执行如下步骤，编译并执行样例。
 
-- 配置环境变量
-
+- 配置环境变量  
   请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，选择对应配置环境变量的命令。
 
   > 💡 使用 msProf 工具需安装 CANN 商用/社区版，详细信息可参考[msOpProf工具安装指南](https://www.hiascend.com/document/detail/zh/canncommercial/900/devaids/optool/docs/zh/install_guide/msopprof_install_guide.md)。
 
 
-  默认路径，root用户安装CANN软件包：
+  - 默认路径，root用户安装CANN软件包
+    ```bash
+    source /usr/local/Ascend/cann/set_env.sh
+    ```
 
-  ```bash
-  source /usr/local/Ascend/cann/set_env.sh
-  ```
+  - 默认路径，非root用户安装CANN软件包
+    ```bash
+    source $HOME/Ascend/cann/set_env.sh
+    ```
 
-  默认路径，非root用户安装CANN软件包：
-
-  ```bash
-  source $HOME/Ascend/cann/set_env.sh
-  ```
-
-  指定路径`install_path`安装CANN软件包：
-
-  ```bash
-  source ${install_path}/cann/set_env.sh
-  ```
+  - 指定路径install_path，安装CANN软件包
+    ```bash
+    source ${install_path}/cann/set_env.sh
+    ```
 
 - 样例执行
 
