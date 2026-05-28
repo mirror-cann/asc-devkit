@@ -12,7 +12,7 @@
 | Atlas 推理系列产品Vector Core | x |
 | Atlas 训练系列产品 | x |
 
-## 函数功能
+## 功能说明
 
 `coalesced_group`不提供默认的构造函数，用户使用`coalesced_threads`函数创建`coalesced_group`对象。
 

@@ -12,7 +12,7 @@
 | Atlas 推理系列产品Vector Core | x |
 | Atlas 训练系列产品 | x |
 
-## 函数功能
+## 功能说明
 
 获取当前线程所属线程块内的线程总数，与接口[num_threads](num_threads.md)功能相同。
 
@@ -28,7 +28,7 @@ static unsigned int size()
 
 ## 返回值说明
 
-获取当前线程所属线程块内的线程总数。
+当前线程所属线程块内的线程总数。
 
 ## 约束说明
 

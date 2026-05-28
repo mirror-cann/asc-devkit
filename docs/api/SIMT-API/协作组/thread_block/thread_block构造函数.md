@@ -12,7 +12,7 @@
 | Atlas 推理系列产品Vector Core | x |
 | Atlas 训练系列产品 | x |
 
-## 函数功能
+## 功能说明
 
 `thread_block`不提供默认的构造函数，用户使用`this_thread_block`函数获取当前线程所属的`thread_block`对象。
 

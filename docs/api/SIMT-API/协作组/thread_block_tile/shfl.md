@@ -31,7 +31,7 @@ T shfl(T var, int src_rank) const
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | var | 输入 | 线程用于交换的输入操作数。支持的数据类型为：half、int32_t、uint32_t、float、half2、int64_t、uint64_t。 |
-| src_rank | 输入 | 期望获取的var值所在的线程在组内的排名。 |
+| src_rank | 输入 | 期望获取的`var`值所在的线程在组内的排名。当`src_rank`大于等于组内线程数时，获取`src_rank % Size`对应rank线程的`var`值。 |
 
 ## 返回值说明
 
@@ -43,7 +43,7 @@ T shfl(T var, int src_rank) const
 
 ## 调用示例
 
-示例代码中以4个线程为一组划分线程块，获取组内排名为2的线程输入的var值。
+示例代码中以4个线程为一组划分线程块，获取组内排名为2的线程输入的`var`值。
 
 **图 1**   shfl接口返回结果示意图  
 ![](../../../figures/thread_block_tile_shfl.png "thread_block_tile_shfl")

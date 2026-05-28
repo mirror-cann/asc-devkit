@@ -18,7 +18,7 @@
 
 ## 函数原型
 
-```C++
+```c++
 int all(int predicate) const
 ```
 

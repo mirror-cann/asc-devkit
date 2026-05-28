@@ -7,7 +7,7 @@
 
 ## Public成员函数
 
-```C++
+```c++
 void sync() const;
 unsigned long long num_threads() const;
 unsigned long long thread_rank() const;
@@ -20,7 +20,7 @@ T shfl_up(T var, unsigned int delta) const;
 template <typename T>
 T shfl_down(T var, unsigned int delta) const;
 template <typename T>
-T shfl_xor(T var, unsigned int delta) const;
+T shfl_xor(T var, unsigned int lane_mask) const;
 int any(int predicate) const;
 int all(int predicate) const;
 unsigned int ballot(int predicate) const;

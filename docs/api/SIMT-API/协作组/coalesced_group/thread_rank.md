@@ -38,7 +38,7 @@ unsigned long long thread_rank() const
 
 示例代码中的条件分支将一个warp中所有线程id是偶数的线程组成`coalesced_group`协作组，组内各线程`thread_rank`接口返回结果如下图所示。
 
-**图 1**  coalesced_group组内个线程rank  
+**图 1**  coalesced_group组内各线程rank  
 ![](../../../figures/coalesced_group_rank.png "coalesced_group_rank")
 
 - SIMT编程场景：

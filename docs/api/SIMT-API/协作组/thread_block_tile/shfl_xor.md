@@ -38,11 +38,11 @@ T shfl_xor(T var, unsigned int lane_mask) const
 
 ## 约束说明
 
-无
+`lane_mask`必须小于`thread_block_tile`组内线程数。
 
 ## 调用示例
 
-以4个线程为一组划分线程块，获取协作组内当前线程向后偏移delta的线程输入的var值。
+以4个线程为一组划分线程块，获取组内当前线程rank与`lane_mask`按位异或后对应rank线程输入的`var`值。
 
 **图 1**  shfl_xor接口返回结果示意图  
 ![](../../../figures/thread_block_tile_shfl_xor.png "thread_block_tile_shfl_xor")
@@ -74,4 +74,3 @@ T shfl_xor(T var, unsigned int lane_mask) const
         ...
     }
     ```
-

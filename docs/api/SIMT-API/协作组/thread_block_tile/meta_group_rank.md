@@ -18,7 +18,7 @@
 
 ## 函数原型
 
-```C++
+```c++
 unsigned long long meta_group_rank() const
 ```
 

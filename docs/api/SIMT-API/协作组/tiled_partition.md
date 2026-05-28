@@ -14,24 +14,24 @@
 
 ## 功能说明
 
-`tiled_partition`API用于将一个线程组划分为多个更小、固定大小的子组，以便线程在以更精细的粒度上进行协作。提供模板和非模板两个版本的接口，分别用于编译时确定划分大小以及运行时确定划分大小的场景。
+`tiled_partition` API用于将一个线程组划分为多个更小、固定大小的子组，以便线程在以更精细的粒度上进行协作。提供模板和非模板两个版本的接口，分别用于编译时确定划分大小以及运行时确定划分大小的场景。
 
 ## 函数原型
 
-```C++
+```c++
 template <unsigned int Size, typename ParentT>
 thread_block_tile<Size, ParentT> tiled_partition(const ParentT& g)
 ```
 
-```C++
+```c++
 thread_group tiled_partition(const thread_group& parent, unsigned int tilesz)
 ```
 
-```C++
+```c++
 thread_group tiled_partition(const thread_block& parent, unsigned int tilesz)
 ```
 
-```C++
+```c++
 coalesced_group tiled_partition(const coalesced_group& parent, unsigned int tilesz)
 ```
 
@@ -57,8 +57,8 @@ coalesced_group tiled_partition(const coalesced_group& parent, unsigned int tile
 
 ## 约束说明
 
-- Size 必须为$2^n$，且小于32，且小于父组的线程数。
-- 对于模板版本的接口，父类中的线程数必须能被Size整除。
+- `Size`必须是$2^n$，并且必须小于等于32（warpSize），当前可选值范围：1、2、4、8、16、32。
+- 对于模板版本的接口，父组中的线程数必须能被`Size`整除。并且如果父组是`thread_block_tile`，则`Size`必须小于父组大小。
 
 ## 调用示例
 

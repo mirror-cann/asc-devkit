@@ -16,7 +16,7 @@
 
 ## 函数原型
 
-```C++
+```c++
 template <unsigned int Size, typename ParentT>
 thread_block_tile<Size, ParentT> tiled_partition(const ParentT& g)
 ```
@@ -49,7 +49,7 @@ thread_block_tile<Size, ParentT> tiled_partition(const ParentT& g)
         ...
         thread_block block = this_thread_block();
         thread_block_tile<32> tile32 = tiled_partition<32>(block);              // 按照32个线程为一组划分thread_block
-        auto tile32 = tiled_partition<32>(block);                               // 建议使用auto管理返回对象
+        auto tile32_auto = tiled_partition<32>(block);                          // 建议使用auto管理返回对象
         thread_block_tile<4, thread_block> tile4 = tiled_partition<4>(block);   // 按照4个线程为一组划分thread_block，对象类型中保留父组信息
         ...
     }
@@ -64,7 +64,7 @@ thread_block_tile<Size, ParentT> tiled_partition(const ParentT& g)
         ...
         thread_block block = this_thread_block();
         thread_block_tile<32> tile32 = tiled_partition<32>(block);              // 按照32个线程为一组划分thread_block
-        auto tile32 = tiled_partition<32>(block);                               // 建议使用auto管理返回对象
+        auto tile32_auto = tiled_partition<32>(block);                          // 建议使用auto管理返回对象
         thread_block_tile<4, thread_block> tile4 = tiled_partition<4>(block);   // 按照4个线程为一组划分thread_block，对象类型中保留父组信息
         ...
     }

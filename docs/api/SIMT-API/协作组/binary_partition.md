@@ -14,17 +14,17 @@
 
 ## 功能说明
 
-`binary_partition`API用于根据一个标签（0或1）将父组划分为两个子组，标签相同的线程会被分配到同一组中。
+`binary_partition` API用于根据一个标签（0或1）将父组划分为两个子组，标签相同的线程会被分配到同一组中。
 
 ## 函数原型
 
-```C++
+```c++
 coalesced_group binary_partition(const coalesced_group& g, bool pred)
 ```
 
-```C++
-template <unsigned int Size>
-coalesced_group binary_partition(const thread_block_tile<Size>& g, bool pred)
+```c++
+template <unsigned int Size, typename ParentT>
+coalesced_group binary_partition(const thread_block_tile<Size, ParentT>& g, bool pred)
 ```
 
 ## 参数说明

@@ -30,11 +30,11 @@ T shfl_down(T var, unsigned int delta) const
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | var | 输入 | 线程用于交换的输入操作数。支持的数据类型为：half、int32_t、uint32_t、float、half2、int64_t、uint64_t。 |
-| delta | 输入 | 期望获取的var值所在线程在组内相对当前线程的向后偏移值。 |
+| delta | 输入 | 期望获取的`var`值所在线程在组内相对当前线程的向后偏移值。 |
 
 ## 返回值说明
 
-`coalesced_group`组内当前线程向后偏移`delta`线程输入的var值。
+`coalesced_group`组内当前线程向后偏移`delta`的线程输入的`var`值。若偏移后超出组范围，返回当前线程输入的`var`值。
 
 ## 约束说明
 
