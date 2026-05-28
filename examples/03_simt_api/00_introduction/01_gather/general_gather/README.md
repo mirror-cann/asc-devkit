@@ -5,9 +5,11 @@
 本样例基于Ascend C SIMT编程方式实现支持泛化shape的Gather算子，包括基础版gather和增强版gather_v2。gather算子从二维输入张量中采集指定索引的行数据，gather_v2算子支持从多维输入张量中按指定维度收集数据，并支持batch_dims批量处理模式。样例展示了泛化场景下离散内存访问类算子的开发方法。
 
 ## 支持的产品
+
 - Ascend 950PR/Ascend 950DT
 
 ## 支持的CANN软件版本
+
 - \>= CANN 9.0.0
 
 ## 目录结构介绍
@@ -21,10 +23,12 @@
 ```
 
 ## 算子描述
+
 ### 1. gather算子
 
 - 算子功能：   
   gather算子实现了从形状为M * N的二维输入张量input中获取指定索引的m行数据的功能，这m行的行索引由输入index指定。算子输出output第i行数据的计算公式为：
+
   ```text
   output[i] = input[index[i]]
   ```
@@ -52,10 +56,12 @@
   使用内核调用符<<<>>>调用核函数。
 
 ### 2. gather_v2算子
+
 - 算子功能：   
   gather_v2算子实现了从多维输入张量input中按照指定维度axis收集数据的功能，indices张量指定了要收集的索引位置。支持batch_dims批量处理模式，让不同的batch使用不同的索引集合。
 - 处理流程：   
   例如输入张量input的shape为(2, 2, 3, 2)，索引张量indices的shape为(2, 2)：
+
   ```text
   input:
    [[[[ 1,  2],
@@ -79,9 +85,11 @@
    [[1, 2],
     [0, 1]]
   ```
+
   axis=2, batch_dims=1表明收集维度为2，并且每个batch下使用不同的索引：
   - batch=0: output[0, :, :, :] = input[0, :, [1, 2], :]，即从input[0]的维度2上收集indices[0]对应的切片
   - batch=1: output[1, :, :, :] = input[1, :, [0, 1], :]，即从input[1]的维度2上收集indices[1]对应的切片
+
   ```text
   output:
    [[[[ 3,  4],
@@ -96,7 +104,7 @@
      [[19, 20],
       [21, 22]]]]
   ```
- 
+
 - 算子规格：
   <table>
   <tr><td rowspan="1" align="center">算子类型(OpType)</td><td colspan="4" align="center">gather_v2</td></tr>
@@ -128,20 +136,25 @@
   使用内核调用符<<<>>>调用核函数。
 
 ## 编译运行
+
 在本样例根目录下执行如下步骤，编译并执行算子。
+
 - 配置环境变量   
   请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，选择对应配置环境变量的命令。
   - 默认路径，root用户安装CANN软件包
+
     ```bash
     source /usr/local/Ascend/cann/set_env.sh
     ```
 
   - 默认路径，非root用户安装CANN软件包
+
     ```bash
     source $HOME/Ascend/cann/set_env.sh
     ```
 
   - 指定路径install_path，安装CANN软件包
+
     ```bash
     source ${install_path}/cann/set_env.sh
     ```
@@ -162,6 +175,7 @@
   | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
 
   执行结果如下，说明精度对比成功：
+
   ```text
   [Success] Case accuracy is verification passed.
   ```

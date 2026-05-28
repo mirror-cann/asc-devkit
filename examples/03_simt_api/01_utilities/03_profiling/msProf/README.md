@@ -21,7 +21,7 @@
 ```
 
 ## 算子描述
-  gather算子实现了从形状为100000 * 128的二维向量中获取指定索引的12288行数据的功能，具体功能描述可参考[Gather算子详情](../../../02_features/00_resource_management/basic_gather/README.md)章节。
+  gather算子实现了从形状为100000 * 128的二维向量中获取指定索引的12288行数据的功能，具体功能描述可参考[Gather算子详情](../../../00_introduction/01_gather/basic_gather/gather_2d/README.md)章节。
 
 ## msProf工具介绍
 msProf工具是单算子性能分析工具。包含msprof op和msprof op simulator两种使用方式。该工具协助用户定位算子内存、算子代码以及算子指令的异常，实现全方位的算子调优。当前支持基于不同运行模式（上板或仿真）和不同文件形式（可执行文件或算子二进制.o文件）进行性能数据的采集和自动解析。
