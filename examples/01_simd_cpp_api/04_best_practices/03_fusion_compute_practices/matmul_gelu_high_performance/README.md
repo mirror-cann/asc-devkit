@@ -301,8 +301,7 @@ uint32_t nIterIdx = logicCoreId / mIter;
 下图展示了Scenario 1（CV融合-GM中转）场景下AIC和AIV的流水并行执行过程。AIC侧完成Matmul计算后通过Fixpipe将结果写入GM，AIV侧从GM读取数据完成GELU计算，两者按(baseM × baseN)块粒度流水并行：
 
 ![Scenario1 CV融合-GM中转流水并行](figures/CVParallell_L0C_GM_UB.png)
-
-> **备注：** 流水图基于产品线CANN包msopprof工具上板获取，获取命令：`msprof op --aic-metrics=PipeUtilization`
+> 💡 使用 msProf 工具需安装 CANN 商用/社区版，详细信息可参考[msOpProf工具安装指南](https://www.hiascend.com/document/detail/zh/canncommercial/900/devaids/optool/docs/zh/install_guide/msopprof_install_guide.md)。流水图基于msprof工具上板获取，获取命令：`msprof op --aic-metrics=PipeTimeline ./demo`
 
 **MTE2时间显著减少的原因：**
 
