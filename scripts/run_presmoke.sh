@@ -38,6 +38,7 @@ fi
 
 # 示例列表
 EXAMPLE_LIST=(
+    devkit_dir_check
     01_simd_cpp_api/00_introduction/01_vector/add
     01_simd_cpp_api/00_introduction/01_vector/add_tpipe_tque
     01_simd_cpp_api/00_introduction/02_matrix/matmul_high_level_api
@@ -86,6 +87,14 @@ format_duration() {
         }
         print s
     }'
+}
+
+# devkit_dir_check执行函数
+run_check() {
+    local base_path=$1
+    
+    cd "${base_path}/" || return 1
+    bash devkit_dir_check.sh 
 }
 
 # 标准执行函数（cmake + make + gen_data + demo + verify）
@@ -236,6 +245,9 @@ run_test_case() {
     echo ${case_name} >> ${log_path}/../devkit_cases.txt
     # 根据用例名称选择执行函数
     case "${case_name}" in
+        devkit_dir_check)
+            run_check "${SCRIPT_DIR}" 2>&1 | tee "${log_path}/${case_name}.log"
+            ;;
         matmul_a2b2_share)
             run_two_outputs "${code_path}" "${example_name}" 2>&1 | tee "${log_path}/${case_name}.log"
             ;;
@@ -348,7 +360,7 @@ main() {
             continue
         fi
         
-        prf=$(grep -E "test pass|passed|\[Block \(5\/6\)\]: OUTPUT = 24" "${log_file}" || true)
+        prf=$(grep -E "check pass|test pass|passed|\[Block \(5\/6\)\]: OUTPUT = 24" "${log_file}" || true)
         if [ -n "$prf" ]; then
             echo "${line} pass" >> result_devkit.txt
             ((total_passed++)) || true
