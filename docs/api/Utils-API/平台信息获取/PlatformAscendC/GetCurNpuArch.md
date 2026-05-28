@@ -18,50 +18,15 @@ NpuArch GetCurNpuArch(void) const
 
 当前硬件平台架构号的枚举类。该枚举类和AI处理器型号的对应关系请通过CANN软件安装后文件存储路径下include/platform/soc\_spec.h头文件获取。
 
-<a name="table739123016439"></a>
-<table><thead align="left"><tr id="row142010303433"><th class="cellrowborder" valign="top" width="38.84%" id="mcps1.1.3.1.1"><p id="zh-cn_topic_0000002433359052_p1883113061818"><a name="zh-cn_topic_0000002433359052_p1883113061818"></a><a name="zh-cn_topic_0000002433359052_p1883113061818"></a>产品</p>
-</th>
-<th class="cellrowborder" valign="top" width="61.160000000000004%" id="mcps1.1.3.1.2"><p id="p842043019436"><a name="p842043019436"></a><a name="p842043019436"></a>NPU_ARCH</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row642023094317"><td class="cellrowborder" valign="top" width="38.84%" headers="mcps1.1.3.1.1 "><p id="p1595910763613"><a name="p1595910763613"></a><a name="p1595910763613"></a><span id="ph1595918753613"><a name="ph1595918753613"></a><a name="ph1595918753613"></a>Ascend 950PR/Ascend 950DT</span></p>
-</td>
-<td class="cellrowborder" valign="top" width="61.160000000000004%" headers="mcps1.1.3.1.2 "><p id="p1642015301431"><a name="p1642015301431"></a><a name="p1642015301431"></a>DAV_3510</p>
-</td>
-</tr>
-<tr id="row44202030164317"><td class="cellrowborder" valign="top" width="38.84%" headers="mcps1.1.3.1.1 "><p id="p13959117193618"><a name="p13959117193618"></a><a name="p13959117193618"></a><span id="ph9959117173614"><a name="ph9959117173614"></a><a name="ph9959117173614"></a><term id="zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" valign="top" width="61.160000000000004%" headers="mcps1.1.3.1.2 "><p id="p142063024310"><a name="p142063024310"></a><a name="p142063024310"></a>DAV_2201</p>
-</td>
-</tr>
-<tr id="row842063015431"><td class="cellrowborder" valign="top" width="38.84%" headers="mcps1.1.3.1.1 "><p id="p7959157163619"><a name="p7959157163619"></a><a name="p7959157163619"></a><span id="ph1995997193619"><a name="ph1995997193619"></a><a name="ph1995997193619"></a><term id="zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" valign="top" width="61.160000000000004%" headers="mcps1.1.3.1.2 "><p id="p164204303431"><a name="p164204303431"></a><a name="p164204303431"></a>DAV_2201</p>
-</td>
-</tr>
-<tr id="row18420430134319"><td class="cellrowborder" valign="top" width="38.84%" headers="mcps1.1.3.1.1 "><p id="p595947173615"><a name="p595947173615"></a><a name="p595947173615"></a><span id="ph995910783620"><a name="ph995910783620"></a><a name="ph995910783620"></a><term id="zh-cn_topic_0000001312391781_term354143892110"><a name="zh-cn_topic_0000001312391781_term354143892110"></a><a name="zh-cn_topic_0000001312391781_term354143892110"></a>Atlas 200I/500 A2 推理产品</term></span></p>
-</td>
-<td class="cellrowborder" valign="top" width="61.160000000000004%" headers="mcps1.1.3.1.2 "><p id="p9420143014317"><a name="p9420143014317"></a><a name="p9420143014317"></a>DAV_3002</p>
-</td>
-</tr>
-<tr id="row14201130114316"><td class="cellrowborder" valign="top" width="38.84%" headers="mcps1.1.3.1.1 "><p id="p1898493283210"><a name="p1898493283210"></a><a name="p1898493283210"></a><span id="ph1498417326325"><a name="ph1498417326325"></a><a name="ph1498417326325"></a><term id="zh-cn_topic_0000001312391781_term1964153212227"><a name="zh-cn_topic_0000001312391781_term1964153212227"></a><a name="zh-cn_topic_0000001312391781_term1964153212227"></a>Atlas 推理系列产品</term>AI Core</span></p>
-</td>
-<td class="cellrowborder" valign="top" width="61.160000000000004%" headers="mcps1.1.3.1.2 "><p id="p3420143044315"><a name="p3420143044315"></a><a name="p3420143044315"></a>DAV_2002</p>
-</td>
-</tr>
-<tr id="row84206302438"><td class="cellrowborder" valign="top" width="38.84%" headers="mcps1.1.3.1.1 "><p id="p8192738133217"><a name="p8192738133217"></a><a name="p8192738133217"></a><span id="ph1119217385324"><a name="ph1119217385324"></a><a name="ph1119217385324"></a><term id="zh-cn_topic_0000001312391781_term1463893615224"><a name="zh-cn_topic_0000001312391781_term1463893615224"></a><a name="zh-cn_topic_0000001312391781_term1463893615224"></a>Atlas 推理系列产品</term>Vector Core</span></p>
-</td>
-<td class="cellrowborder" valign="top" width="61.160000000000004%" headers="mcps1.1.3.1.2 "><p id="p04205303433"><a name="p04205303433"></a><a name="p04205303433"></a>DAV_2002</p>
-</td>
-</tr>
-<tr id="row12420330104318"><td class="cellrowborder" valign="top" width="38.84%" headers="mcps1.1.3.1.1 "><p id="p29601972368"><a name="p29601972368"></a><a name="p29601972368"></a><span id="ph8960167193611"><a name="ph8960167193611"></a><a name="ph8960167193611"></a><term id="zh-cn_topic_0000001312391781_term71949488213"><a name="zh-cn_topic_0000001312391781_term71949488213"></a><a name="zh-cn_topic_0000001312391781_term71949488213"></a>Atlas 训练系列产品</term></span></p>
-</td>
-<td class="cellrowborder" valign="top" width="61.160000000000004%" headers="mcps1.1.3.1.2 "><p id="p6420133054314"><a name="p6420133054314"></a><a name="p6420133054314"></a>DAV_1001</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 产品 | \_\_NPU\_ARCH\_\_ |
+|------|------------------|
+| Ascend 950PR/Ascend 950DT | DAV\_3510 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | DAV\_2201 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | DAV\_2201 |
+| Atlas 200I/500 A2 推理产品 | DAV\_3002 |
+| Atlas 推理系列产品AI Core | DAV\_2002 |
+| Atlas 推理系列产品Vector Core | DAV\_2002 |
+| Atlas 训练系列产品 | DAV\_1001 |
 
 ## 约束说明<a name="zh-cn_topic_0000001664705472_zh-cn_topic_0000001442758437_section19165124931511"></a>
 
