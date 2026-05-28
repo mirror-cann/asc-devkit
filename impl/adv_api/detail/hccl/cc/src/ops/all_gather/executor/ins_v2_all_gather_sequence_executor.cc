@@ -80,6 +80,8 @@ HcclResult InsV2AllGatherSequenceExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgT
     dataCount_ = param.DataDes.count;
     dataTypeSize_ =  SIZE_TABLE[param.DataDes.dataType];
     dataSize_ = dataCount_ * dataTypeSize_;
+    strideCount_ = param.DataDes.strideCount;
+    HCCL_DEBUG("[InsV2AllGatherSequenceExecutor][Orchestrate] strideCount[%lu]", strideCount_);
     dataType_ = param.DataDes.dataType;
     reduceOp_ = param.reduceType;
     algHierarchyInfo_ = resCtx.algHierarchyInfo;
@@ -143,6 +145,7 @@ HcclResult InsV2AllGatherSequenceExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgT
     // 计算loopTimes
     u64 loopTimes = dataCount_ / maxCountPerLoop + static_cast<u64>(dataCount_ % maxCountPerLoop != 0);
     u64 processedDataCount = 0;
+    const u64 rankStrideBytes = (strideCount_ == 0) ? dataSize_ : strideCount_ * dataTypeSize_;
     for (u64 loop = 0; loop < loopTimes; loop++) {
         u64 currDataCount = (loop == loopTimes - 1) ? dataCount_ - processedDataCount : maxCountPerLoop;
 
@@ -150,14 +153,14 @@ HcclResult InsV2AllGatherSequenceExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgT
         interTempDataParams.count = currDataCount;
         interTempDataParams.buffInfo.inBuffBaseOff = processedDataCount * dataTypeSize_;
         u64 rankIdxInLevel0 = myRank_ % rankSizeLevel0_;
-        interTempDataParams.buffInfo.outBuffBaseOff = rankIdxInLevel0 * dataSize_ + processedDataCount * dataTypeSize_;
+        interTempDataParams.buffInfo.outBuffBaseOff = rankIdxInLevel0 * rankStrideBytes + processedDataCount * dataTypeSize_;
         interTempDataParams.buffInfo.hcclBuffBaseOff = 0;
 
         interTempDataParams.sliceSize = currDataCount * dataTypeSize_;
         interTempDataParams.tailSize = interTempDataParams.sliceSize;
         // 这里的stride当成传统意义上的stride间隔
         interTempDataParams.inputSliceStride = 0;
-        interTempDataParams.outputSliceStride = dataSize_ * rankSizeLevel0_;
+        interTempDataParams.outputSliceStride = rankStrideBytes * rankSizeLevel0_;
 
         interTempDataParams.repeatNum = 1;
         interTempDataParams.inputRepeatStride = 0;
@@ -183,12 +186,12 @@ HcclResult InsV2AllGatherSequenceExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgT
         intraTempDataParams.sliceSize = currDataCount * dataTypeSize_;
         intraTempDataParams.tailSize = intraTempDataParams.sliceSize;
         // 这里的stride当成传统意义上的stride间隔
-        intraTempDataParams.inputSliceStride = dataSize_;
-        intraTempDataParams.outputSliceStride = dataSize_;
+        intraTempDataParams.inputSliceStride = rankStrideBytes;
+        intraTempDataParams.outputSliceStride = rankStrideBytes;
 
         intraTempDataParams.repeatNum = rankSizeLevel1_;
-        intraTempDataParams.inputRepeatStride = dataSize_ * rankSizeLevel0_;
-        intraTempDataParams.outputRepeatStride = dataSize_ * rankSizeLevel0_;
+        intraTempDataParams.inputRepeatStride = rankStrideBytes * rankSizeLevel0_;
+        intraTempDataParams.outputRepeatStride = rankStrideBytes * rankSizeLevel0_;
 
         HCCL_INFO("[InsV2AllGatherSequenceExecutor] loop[%llu] intraTempDataParams.inputSliceStride[%llu] "
             "intraTempDataParams.outputSliceStride[%llu] intraTempDataParams.sliceSize[%llu] "

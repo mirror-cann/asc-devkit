@@ -122,15 +122,16 @@ void InsV2AllGatherParallelExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgTemplat
     tempAlgParamsIntra0.buffInfo.inputSize = param.inputSize;
     tempAlgParamsIntra0.buffInfo.outputSize = param.outputSize;
 
+    const u64 rankStrideBytes = (strideCount_ == 0) ? dataSize_ : strideCount_ * dataTypeSize_;
     tempAlgParamsIntra0.buffInfo.inBuffBaseOff = dataOffset;
-    tempAlgParamsIntra0.buffInfo.outBuffBaseOff = rankIdxLevel1_ * rankSizeLevel0_ * dataSize_ + dataOffset;
+    tempAlgParamsIntra0.buffInfo.outBuffBaseOff = rankIdxLevel1_ * rankSizeLevel0_ * rankStrideBytes + dataOffset;
     tempAlgParamsIntra0.buffInfo.hcclBuffBaseOff = scratchOffset;
     tempAlgParamsIntra0.sliceSize = dataCountPerLoopAixs0 * dataTypeSize_;
     tempAlgParamsIntra0.count = dataCountPerLoopAixs0;
     tempAlgParamsIntra0.tailSize = tempAlgParamsIntra0.sliceSize;
 
     tempAlgParamsIntra0.inputSliceStride = 0;
-    tempAlgParamsIntra0.outputSliceStride = dataSize_;
+    tempAlgParamsIntra0.outputSliceStride = rankStrideBytes;
     tempAlgParamsIntra0.repeatNum = 1;
     tempAlgParamsIntra0.inputRepeatStride = 0;
     tempAlgParamsIntra0.outputRepeatStride = 0;
@@ -166,11 +167,12 @@ void InsV2AllGatherParallelExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgTemplat
     tempAlgParamsInter0.count = dataCountPerLoopAixs0;
     tempAlgParamsInter0.tailSize = tempAlgParamsInter0.sliceSize;
 
-    tempAlgParamsInter0.inputSliceStride = dataSize_ * rankSizeLevel0_;
-    tempAlgParamsInter0.outputSliceStride = dataSize_ * rankSizeLevel0_;
+    const u64 rankStrideBytes = (strideCount_ == 0) ? dataSize_ : strideCount_ * dataTypeSize_;
+    tempAlgParamsInter0.inputSliceStride = rankStrideBytes * rankSizeLevel0_;
+    tempAlgParamsInter0.outputSliceStride = rankStrideBytes * rankSizeLevel0_;
     tempAlgParamsInter0.repeatNum = rankSizeLevel0_;
-    tempAlgParamsInter0.inputRepeatStride = dataSize_;
-    tempAlgParamsInter0.outputRepeatStride = dataSize_;
+    tempAlgParamsInter0.inputRepeatStride = rankStrideBytes;
+    tempAlgParamsInter0.outputRepeatStride = rankStrideBytes;
     tempAlgParamsInter0.enableRemoteMemAccess = param.opMode == OpMode::OFFLOAD;
     HCCL_DEBUG("[InsV2AllGatherParallelExecutor][GenTemplateAlgParamsInter0] rank[%u] inBuffBaseOff[%llu] "
                "outBuffBaseOff[%llu] scratchBuffBaseOff[%llu] sliceSize[%llu] outputSliceStride[%llu] "
@@ -189,20 +191,22 @@ void InsV2AllGatherParallelExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgTemplat
     tempAlgParamsInter1.buffInfo.inputPtr = param.inputPtr;
     tempAlgParamsInter1.buffInfo.outputPtr = param.outputPtr;
     tempAlgParamsInter1.buffInfo.hcclBuff = resCtx.cclMem;
+    const u64 rankStrideBytes = (strideCount_ == 0) ? dataSize_ : strideCount_ * dataTypeSize_;
     tempAlgParamsInter1.buffInfo.inBuffBaseOff = dataOffset;
-    tempAlgParamsInter1.buffInfo.outBuffBaseOff = rankIdxLevel0_ * dataSize_ + dataOffset;
+    tempAlgParamsInter1.buffInfo.outBuffBaseOff = rankIdxLevel0_ * rankStrideBytes + dataOffset;
     tempAlgParamsInter1.buffInfo.hcclBuffBaseOff = scratchOffset;
     tempAlgParamsInter1.buffInfo.inBuffType = BufferType::INPUT;
     tempAlgParamsInter1.buffInfo.outBuffType = BufferType::OUTPUT;
     tempAlgParamsInter1.buffInfo.hcclBuffType = BufferType::HCCL_BUFFER;
     tempAlgParamsInter1.buffInfo.inputSize = param.inputSize;
     tempAlgParamsInter1.buffInfo.outputSize = param.outputSize;
+
     tempAlgParamsInter1.sliceSize = dataCountPerLoopAixs1 * dataTypeSize_;
     tempAlgParamsInter1.count = dataCountPerLoopAixs1;
     tempAlgParamsInter1.tailSize = tempAlgParamsInter1.sliceSize;
 
     tempAlgParamsInter1.inputSliceStride = 0;
-    tempAlgParamsInter1.outputSliceStride = dataSize_ * rankSizeLevel0_;
+    tempAlgParamsInter1.outputSliceStride = rankStrideBytes * rankSizeLevel0_;
     tempAlgParamsInter1.repeatNum = 1;
     tempAlgParamsInter1.inputRepeatStride = 0;
     tempAlgParamsInter1.outputRepeatStride = 0;
@@ -235,11 +239,12 @@ void InsV2AllGatherParallelExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgTemplat
     tempAlgParamsIntra1.count = dataCountPerLoopAixs1;
     tempAlgParamsIntra1.tailSize = tempAlgParamsIntra1.sliceSize;
 
-    tempAlgParamsIntra1.inputSliceStride = dataSize_;
-    tempAlgParamsIntra1.outputSliceStride = dataSize_;
+    const u64 rankStrideBytes = (strideCount_ == 0) ? dataSize_ : strideCount_ * dataTypeSize_;
+    tempAlgParamsIntra1.inputSliceStride = rankStrideBytes;
+    tempAlgParamsIntra1.outputSliceStride = rankStrideBytes;
     tempAlgParamsIntra1.repeatNum = rankSizeLevel1_;
-    tempAlgParamsIntra1.inputRepeatStride = dataSize_ * rankSizeLevel0_;
-    tempAlgParamsIntra1.outputRepeatStride = dataSize_ * rankSizeLevel0_;
+    tempAlgParamsIntra1.inputRepeatStride = rankStrideBytes * rankSizeLevel0_;
+    tempAlgParamsIntra1.outputRepeatStride = rankStrideBytes * rankSizeLevel0_;
     tempAlgParamsIntra1.enableRemoteMemAccess = param.opMode == OpMode::OFFLOAD;
     HCCL_DEBUG("[InsV2AllGatherParallelExecutor][GenTemplateAlgParamsIntra1] rank[%u] inBuffBaseOff[%llu] "
                "outBuffBaseOff[%llu] scratchBuffBaseOff[%llu] sliceSize[%llu] outputSliceStride[%llu] "
@@ -280,6 +285,8 @@ HcclResult InsV2AllGatherParallelExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgT
     dataType_ = param.DataDes.dataType;
     dataTypeSize_ = DATATYPE_SIZE_TABLE[param.DataDes.dataType];
     dataSize_ = dataCount_ * dataTypeSize_;
+    strideCount_ = param.DataDes.strideCount;
+    HCCL_DEBUG("[InsV2AllGatherParallelExecutor][Orchestrate] strideCount[%lu]", strideCount_);
 
     if(resCtx.topoInfo.level0Topo == Level0Shape::MESH_1D_CLOS) {
         intraHierarchyInfo_ = {resCtx.algHierarchyInfo.infos[0][0]};

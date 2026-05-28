@@ -138,7 +138,7 @@ void InsV2AllGatherConcurrentExecutor<AlgTopoMatch, InsAlgTemplate0, InsAlgTempl
     tempAlgParams.buffInfo.hcclBuffBaseOff = scratchOffset;
 
     tempAlgParams.inputSliceStride = 0;
-    tempAlgParams.outputSliceStride = dataSize_;
+    tempAlgParams.outputSliceStride = (strideCount_ == 0) ? dataSize_ : strideCount_ * dataTypeSize_;
     tempAlgParams.repeatNum = 1;
     tempAlgParams.inputRepeatStride = 0;
     tempAlgParams.outputRepeatStride = 0;
@@ -206,7 +206,9 @@ HcclResult InsV2AllGatherConcurrentExecutor<AlgTopoMatch, InsAlgTemplate0, InsAl
     dataType_ = param.DataDes.dataType;
     dataTypeSize_ = DATATYPE_SIZE_TABLE[param.DataDes.dataType];
     dataSize_ = dataCount_ * dataTypeSize_;
-     
+    strideCount_ = param.DataDes.strideCount;
+    HCCL_DEBUG("[InsV2AllGatherConcurrentExecutor][Orchestrate] strideCount[%lu]", strideCount_);
+
     // 拆分algHierarchyInfo
     std::vector<std::vector<u32>> temp0HierarchyInfo = {algHierarchyInfo_.infos[0][0]};
     std::vector<std::vector<u32>> temp1HierarchyInfo = {algHierarchyInfo_.infos[0][1]};
