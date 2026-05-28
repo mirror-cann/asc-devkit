@@ -141,7 +141,7 @@ struct LayoutTraitDefault;
 
 template <typename T>
 struct GetLayoutInfo {
-    using type = Std::tuple<DefaultPtn, LayoutTraitDefault<uint16_t, 32 / sizeof(uint16_t)>>;
+    using type = Std::tuple<Std::ignore_t, Std::ignore_t>;
 };
 
 template <typename T, typename U, typename LayoutPattern, typename TraitType>
