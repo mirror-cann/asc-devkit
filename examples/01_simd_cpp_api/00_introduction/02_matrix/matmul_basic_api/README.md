@@ -13,13 +13,13 @@
 ## 目录结构介绍
 
 ```
-├── matmul
+├── matmul_basic_api
 │   ├── scripts
 │   │   ├── gen_data.py         // 输入数据和真值数据生成脚本文件
 │   │   └── verify_result.py    // 真值对比文件
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
-│   └── matmul.asc              // Ascend C样例实现 & 调用样例
+│   └── matmul_basic_api.asc    // Ascend C样例实现 & 调用样例
 ```
 
 ## 样例描述
@@ -35,7 +35,6 @@
   本样例参数`M = 256, N = 256, K = 64`，输入输出均为`half`类型、`ND`格式。样例启动2个核完成计算，每个核负责输出矩阵C在M轴方向的128行、N轴方向的全部256列：
   - 第0个核计算C矩阵的第`0~127`行。
   - 第1个核计算C矩阵的第`128~255`行。
-  - B矩阵会被两个核共同读取，因为两个核都需要完整的K轴和N轴数据。
 
   输入输出规格如下表所示：
   <table>
@@ -50,7 +49,7 @@
 - 样例实现：
   - Kernel侧整体思路
     - `mmad_custom`是一个`__global__ __cube__`核函数，表示该函数运行在AI Core的Cube计算单元上，主要用于矩阵计算。
-    - 样例使用静态Tensor编程方式，通过`LocalMemAllocator`创建`LocalTensor`。例如，A矩阵从L1到L0A分别使用`A1`、`A2`位置，B矩阵从L1到L0B分别使用`B1`、`B2`位置，矩阵乘结果先写入`CO1`位置。
+    - 样例使用静态Tensor编程方式，通过`LocalMemAllocator`创建`LocalTensor`。
     - `CUBE_BLOCK = 16`表示half数据类型分形为`16 x 16`，代码中按`16 x 16`的分形为单位进行`LoadData`搬运。
 
   - Kernel侧详细流程
@@ -75,12 +74,6 @@
     - 调用`Fixpipe`将L0C中的`float`累加结果转换为`half`并搬运回GM中的C矩阵输出位置。
     - 最后调用`PipeBarrier<PIPE_ALL>()`，确保当前核内相关流水任务完成。
 
-  - 同步接口说明
-    - `SetFlag`用于在生产者流水完成当前任务后写入同步事件。
-    - `WaitFlag`用于让消费者流水等待对应同步事件。
-    - `HardEvent`描述同步方向，例如`MTE2_MTE1`表示MTE2流水和MTE1流水之间的同步关系。
-    - `EVENT_ID0`用于标识当前同步事件。本样例三处同步按顺序执行并复用`EVENT_ID0`。
-
   - 调用实现  
     使用内核调用符`<<<>>>`调用核函数。调用时模板参数传入矩阵规格、单核计算量和基础Tile大小，运行时参数传入Device侧A、B、C矩阵地址。
 
@@ -88,7 +81,7 @@
 
   以下结构体均以花括号`{}`方式传参，各字段含义如下（字段顺序与API文档保持一致，实际struct声明中部分字段顺序可能不同）：
 
-  **`AscendC::Nd2NzParams`** — `DataCopy`接口使用，描述ND→NZ格式转换参数：
+  **`AscendC::Nd2NzParams`** — `DataCopy`接口使用，描述ND→Nz格式转换参数：
   ```cpp
   struct Nd2NzParams {
       int32_t  ndNum;              // 传输ND矩阵的数目，[0, 4095]
@@ -96,14 +89,14 @@
       int32_t  dValue;             // ND矩阵的列数，[0, 65535]
       int32_t  srcNdMatrixStride;  // 相邻ND矩阵起始地址偏移，单位：元素，[0, 65535]
       int32_t  srcDValue;          // 同一ND矩阵相邻行偏移，单位：元素，[1, 65535]
-      uint16_t dstNzC0Stride;      // 目的NZ中同源行转换后多行相邻偏移，单位：C0_SIZE(32B)，[1, 16384]
-      uint16_t dstNzNStride;       // 目的NZ中Z型矩阵相邻行偏移，单位：C0_SIZE(32B)，[1, 16384]
-      int32_t  dstNzMatrixStride;  // 目的NZ中相邻NZ矩阵起始地址偏移，单位：元素，[1, 65535]
+      uint16_t dstNzC0Stride;      // 目的Nz中同源行转换后多行相邻偏移，单位：C0_SIZE(32B)，[1, 16384]
+      uint16_t dstNzNStride;       // 目的Nz中Z型矩阵相邻行偏移，单位：C0_SIZE(32B)，[1, 16384]
+      int32_t  dstNzMatrixStride;  // 目的Nz中相邻Nz矩阵起始地址偏移，单位：元素，[1, 65535]
   };
   ```
-  例如搬运A矩阵时`{1, baseM, baseK, 0, K, baseM, 1, 0}`，将baseM×baseK的ND数据转为NZ格式。
+  例如搬运A矩阵时`{1, baseM, baseK, 0, K, baseM, 1, 0}`，将baseM×baseK的ND数据转为Nz格式。
 
-  **`AscendC::LoadData2DParams`** — `LoadData`接口使用，描述L1到L0A/L0B的数据搬运参数：
+  **`AscendC::LoadData2DParams`** — `LoadData`接口使用，描述Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas A3 训练系列产品/Atlas A3 推理系列产品中A矩阵L1到L0A和B矩阵L1到L0B的数据搬运参数：
   ```cpp
   struct LoadData2DParams {
       int32_t startIndex;   // 分形矩阵ID（0为第1个），单位：512B，[0, 65535]
@@ -115,9 +108,23 @@
       bool    addrMode;     // 地址更新方式，false=递增，true=递减，默认false
   };
   ```
-  例如：dav-2201架构L0A上的排布格式为Zz，搬运A矩阵时`{0, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, 0, 0, false, 0}`；<br>
-  dav-3510架构L0A上的排布格式为Nz，搬运A矩阵时`{0, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, 0, (baseM / CUBE_BLOCK - 1), false, 0}`；<br>
+  例如：Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas A3 训练系列产品/Atlas A3 推理系列产品中，L0A上的排布格式为Zz，搬运A矩阵时`{0, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, 0, 0, false, 0}`；<br>
   搬运B矩阵时`ifTranspose=true`，完成Nz到Zn的转置搬运。
+
+  **`AscendC::LoadData2DParamsV2`** — `LoadData`接口使用，描述Ascend 950PR/Ascend 950DT产品中A矩阵L1到L0A和B矩阵L1到L0B的数据搬运参数：
+  ```cpp
+  struct LoadData2DParamsV2 {
+      uint32_t mStartPosition;  // M方向起始位置，单位：512B
+      uint32_t kStartPosition;  // K方向起始位置，单位：512B
+      uint16_t mStep;           // M方向搬运分形数
+      uint16_t kStep;           // K方向搬运分形数
+      int32_t  srcStride;       // 源端相邻K方向分形间隔，单位：512B
+      uint16_t dstStride;       // 目的端相邻K方向分形间隔，单位：512B
+      bool     ifTranspose;     // 是否转置每个分形，默认false
+      uint8_t  sid;             // 预留，配置为0
+  };
+  ```
+  Ascend 950PR/Ascend 950DT产品中，L0A上的排布格式为Nz，搬运A矩阵时使用`{0, 0, baseM / CUBE_BLOCK, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, baseM / CUBE_BLOCK, false, 0}`，一次完成A矩阵Nz到Nz搬运；搬运B矩阵时使用`{0, 0, baseK / CUBE_BLOCK, baseN / CUBE_BLOCK, baseK / CUBE_BLOCK, baseN / CUBE_BLOCK, true, 0}`，一次完成B矩阵Nz到Zn搬运。
 
   **`AscendC::MmadParams`** — `Mmad`接口使用，描述矩阵乘参数：
   ```cpp
@@ -135,15 +142,15 @@
   **`AscendC::FixpipeParamsV220`** — `Fixpipe`接口使用，描述L0C到GM的数据搬运和精度转换参数：
   ```cpp
   struct FixpipeParamsV220 {
-      int32_t     nSize;        // 源NZ矩阵N方向大小，[1, 4095]
-      uint16_t    mSize;        // 源NZ矩阵M方向大小（NZ2ND时[1, 8192]）
-      uint16_t    srcStride;    // 源NZ相邻Z排布起始偏移，单位：C0_SIZE，[0, 65535]
-      int32_t     dstStride;    // NZ2ND时目的ND矩阵每行元素数，单位：element
+      int32_t     nSize;        // 源Nz矩阵N方向大小，[1, 4095]
+      uint16_t    mSize;        // 源Nz矩阵M方向大小（Nz2ND时[1, 8192]）
+      uint16_t    srcStride;    // 源Nz相邻Z排布起始偏移，单位：C0_SIZE，[0, 65535]
+      int32_t     dstStride;    // Nz2ND时目的ND矩阵每行元素数，单位：element
       bool        reluEn;       // 是否使能ReLU
       QuantMode_t quantPre;     // 量化模式，F322F16表示float→half
       uint64_t    deqScalar;    // scalar量化参数，单个scale值
-      int32_t     ndNum;        // 源NZ矩阵数目，[1, 65535]
-      int32_t     srcNdStride;  // 不同NZ矩阵起始地址间隔，单位：16×C0_SIZE，[1, 512]
+      int32_t     ndNum;        // 源Nz矩阵数目，[1, 65535]
+      int32_t     srcNdStride;  // 不同Nz矩阵起始地址间隔，单位：16×C0_SIZE，[1, 512]
       int32_t     dstNdStride;  // 目的相邻ND矩阵偏移，单位：element，[1, 65535]
       int32_t     unitFlag;     // Mmad与Fixpipe并行控制
   };

@@ -8,6 +8,6 @@
 
 | 目录名称 | 功能描述 | 支持的产品 |
 | ------------------------------------------------------------ | ---------------------------------------------------- | --- |
-| [matmul_leakyrelu_high_level_api](./matmul_leakyrelu_high_level_api) |  基于高阶API实现Matmul矩阵乘与LeakyRelu激活函数计算融合 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [matmul_leakyrelu_advanced_api](./matmul_leakyrelu_advanced_api) |  基于高阶API实现Matmul矩阵乘与LeakyRelu激活函数计算融合 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [matmul_leakyrelu_basic_api](./matmul_leakyrelu_basic_api) |  基于基础API实现Matmul矩阵乘与LeakyRelu激活函数计算融合 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [gather_adds_simt_simd_hybrid](./gather_adds_simt_simd_hybrid) |  基于SIMT和SIMD实现Gather和Adds融合计算 | Ascend 950PR/Ascend 950DT |

@@ -19,7 +19,7 @@
 │   │   └── verify_result.py        // 验证输出数据和真值数据是否一致的验证脚本
 │   ├── CMakeLists.txt              // 编译工程文件
 │   ├── data_utils.h                // 数据读入写出函数
-│   └── add.asc                     // Ascend C样例实现，tque管理内存 & 调用样例
+│   └── add_tpipe_tque.asc          // Ascend C样例实现，tque管理内存 & 调用样例
 ```
 
 ## 样例描述
@@ -51,7 +51,7 @@
 
 - 样例实现：
   - Kernel实现  
-    `add.asc` 中的核函数入口 `add_custom` 接收 `totalLength`，并在核函数内部根据 `GetBlockNum()` 计算每个核要处理的 `blockLength`，再用 `GetBlockIdx()` 计算当前核在 GM 中对应的数据起点。之后，核函数直接完成输入数据搬入 UB 并入队、出队后执行 `Add`、结果写回 GM 的完整流程。
+    `add_tpipe_tque.asc` 中的核函数入口 `add_custom` 接收 `totalLength`，并在核函数内部根据 `GetBlockNum()` 计算每个核要处理的 `blockLength`，再用 `GetBlockIdx()` 计算当前核在 GM 中对应的数据起点。之后，核函数直接完成输入数据搬入 UB 并入队、出队后执行 `Add`、结果写回 GM 的完整流程。
 
   - 核入口实现
     `add_custom` 负责创建 `TPipe`、`TQue` 和 `GlobalTensor` 对象，并按顺序执行搬入、计算、搬出处理链路。

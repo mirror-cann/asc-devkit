@@ -41,8 +41,8 @@ EXAMPLE_LIST=(
     devkit_dir_check
     01_simd_cpp_api/00_introduction/01_vector/add
     01_simd_cpp_api/00_introduction/01_vector/add_tpipe_tque
-    01_simd_cpp_api/00_introduction/02_matrix/matmul_high_level_api
-    01_simd_cpp_api/00_introduction/03_fusion_operation/matmul_leakyrelu_high_level_api
+    01_simd_cpp_api/00_introduction/02_matrix/matmul_advanced_api
+    01_simd_cpp_api/00_introduction/03_fusion_operation/matmul_leakyrelu_advanced_api
     01_simd_cpp_api/01_utilities/03_cpudebug
     01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/batch_matmul
     01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/load_data_l12l0

@@ -9,4 +9,4 @@
 | 目录名称 | 功能描述 | 支持的产品 |
 | ------------------------------------------------------------ | ---------------------------------------------------- | --- |
 | [add](./add) |  基于Reg编程接口的Add样例 | Ascend 950PR/Ascend 950DT |
-| [gelu](./gelu) | 基于 LocalMemoryAllocator 和 RegBase/VF 融合的 GELU 计算实现 | Ascend 950PR/Ascend 950DT |
+| [gelu](./gelu) | 基于 LocalMemAllocator 和 RegBase/VF 融合的 GELU 计算实现 | Ascend 950PR/Ascend 950DT |

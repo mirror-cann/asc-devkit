@@ -18,7 +18,7 @@ import numpy as np
 
 def gen_golden_data():
     m = 512
-    n = 16
+    n = 512
     k = 128
     x1_gm = np.random.randint(1, 10, [m, k]).astype(np.float16)
     x2_gm = np.random.randint(1, 10, [k, n]).astype(np.float16)

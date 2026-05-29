@@ -18,7 +18,7 @@ find_package(ASC REQUIRED)
 project(kernel_samples LANGUAGES ASC CXX)
 
 add_executable(demo
-    add.asc
+    add_tpipe_tque.asc
 )
 
 target_compile_options(demo PRIVATE

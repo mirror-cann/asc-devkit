@@ -1214,6 +1214,16 @@ AscendC::Fixpipe<U, U, AscendC::CFG_ROW_MAJOR>(cGM, c1Local, fixpipeParams);
     ```bash
     source ${install_path}/cann/set_env.sh
     ```
+- 安装Python依赖
+
+  本样例的`gen_data.py`脚本需要使用`ml_dtypes`生成FP8输入数据，使用`en_dtypes`生成FP4输入数据。建议安装如下版本：
+
+  ```bash
+  python3 -m pip install ml_dtypes==0.2.0 en_dtypes==0.0.4
+  ```
+
+  如果未安装上述依赖，脚本无法正确生成FP4/FP8类型的输入数据和真值数据，可能导致精度校验失败。
+
 - 样例执行
 
   ```bash

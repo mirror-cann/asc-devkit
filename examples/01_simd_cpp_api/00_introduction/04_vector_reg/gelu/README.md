@@ -31,7 +31,7 @@ GELU 是神经网络中常用的激活函数。本样例演示如何使用 Ascen
 Gelu 近似公式计算为：
 
 $$
-GELU(x) \approx 0.5 \cdot x \cdot \left(1 + \tanh\left(\sqrt{\frac{2}{\pi}} \cdot \left(x + 0.044715 \cdot x^3\right)\right)\right) \
+GELU(x) \approx 0.5 \cdot x \cdot \left(1 + \tanh\left(\sqrt{\frac{2}{\pi}} \cdot \left(x + 0.044715 \cdot x^3\right)\right)\right)
 $$
 
 对公式进行简化，采用如下方式展开为具体的向量运算步骤：

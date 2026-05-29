@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# coding=utf-8
+
 # ----------------------------------------------------------------------------------------------------------
 # Copyright (c) 2025 Huawei Technologies Co., Ltd.
 # This program is free software, you can redistribute it and/or modify it under the terms and conditions of
@@ -9,26 +12,27 @@
 # ----------------------------------------------------------------------------------------------------------
 
 
-cmake_minimum_required(VERSION 3.16)
+import os
+import numpy as np
 
-set(CMAKE_ASC_ARCHITECTURES "dav-2201" CACHE STRING "NPU architecture: dav-2201, dav-3510")
 
-find_package(ASC REQUIRED)
+def gen_golden_data():
+    m = 512
+    n = 128
+    k = 128
+    input_a = np.random.randint(1, 10, [m, k]).astype(np.float16)
+    input_b = np.random.randint(1, 10, [k, n]).astype(np.float16)
+    input_bias = np.random.randint(1, 10, [n]).astype(np.float32)
+    alpha = 0.001
+    golden = (np.matmul(input_a.astype(np.float32), input_b.astype(np.float32)) + input_bias).astype(np.float32)
+    golden = np.where(golden >= 0, golden, golden * alpha)
+    os.makedirs("input", exist_ok=True)
+    os.makedirs("output", exist_ok=True)
+    input_a.tofile("./input/x1_gm.bin")
+    input_b.tofile("./input/x2_gm.bin")
+    input_bias.tofile("./input/bias.bin")
+    golden.tofile("./output/golden.bin")
 
-project(kernel_samples LANGUAGES ASC CXX)
 
-add_executable(demo
-    matmul.asc
-)
-
-target_link_libraries(demo PRIVATE
-    tiling_api
-    register
-    platform
-    m
-    dl
-)
-
-target_compile_options(demo PRIVATE
-    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES}>
-)
+if __name__ == "__main__":
+    gen_golden_data()

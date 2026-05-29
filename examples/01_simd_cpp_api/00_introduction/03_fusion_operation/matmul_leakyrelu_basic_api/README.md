@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例基于静态Tensor编程模式实现Matmul和LeakyRelu融合计算，展示Cube单元和Vector单元协同计算的编程模式。硬件Cube:Vector核数比例为1:2，Cube核完成矩阵乘计算，Vector核完成LeakyRelu激活计算。
+本样例基于静态Tensor编程模式实现Matmul和LeakyRelu融合计算，展示Cube单元和Vector单元协同计算的编程模式。Cube核完成矩阵乘计算，Vector核完成LeakyRelu激活计算。
 
 ## 支持的产品
 
@@ -43,27 +43,24 @@
   其中，A为左矩阵，形状为[M, K]；B为右矩阵，形状为[K, N]；C为输出矩阵，形状为[M, N]。
 
 - 样例规格：
-  本样例参数M = 256, K = 64, N = 256，调用2个Cube核和4个Vector核完成计算，输入规格如下表所示：
+  本样例参数M = 512, K = 128, N = 128，调用2个Cube核和4个Vector核完成计算，输入规格如下表所示：
 
   <table>
   <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">Matmul+LeakyRelu融合</td></tr>
   <tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-  <tr><td align="center">A（左矩阵）</td><td align="center">[256, 64]</td><td align="center">half</td><td align="center">ND</td></tr>
-  <tr><td align="center">B（右矩阵）</td><td align="center">[64, 256]</td><td align="center">half</td><td align="center">ND</td></tr>
-  <tr><td rowspan="1" align="center">样例输出</td><td align="center">C</td><td align="center">[256, 256]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td align="center">A（左矩阵）</td><td align="center">[512, 128]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td align="center">B（右矩阵）</td><td align="center">[128, 128]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">样例输出</td><td align="center">C</td><td align="center">[512, 128]</td><td align="center">half</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">mmad_vec_custom</td></tr>
   </table>
 
   **分核逻辑**：
 
-  输出矩阵C按M方向分块，共分为2个分块，每个分块由1个Cube核完成Matmul计算，每个Cube核的计算结果由2个Vector核协同完成LeakyRelu计算。
-  分核参数说明：
-  - M方向分块数：M / singleCoreM = 256 / 128 = 2
-  - N方向分块数：N / singleCoreN = 256 / 256 = 1
+  输出矩阵C按M方向分为2个分块，N方向不分块，使用2个Cube核完成Matmul计算；每个Cube核对应2个Vector核，因此使用4个Vector核完成LeakyRelu计算。每个Cube核产生一个baseM×baseN结果块，对应2个Vector核各处理baseM/2×baseN的数据。
+  - M方向分块数：M / singleCoreM = 512 / 256 = 2
+  - N方向分块数：N / singleCoreN = 128 / 128 = 1
   - 总Cube核数：2 × 1 = 2
-  - 总Vector核数：2 × 2 = 4（Cube:Vector = 1:2）
-  - 每个Cube核负责singleCoreM\*singleCoreN的Matmul计算，每次计算产生baseM\*baseN的结果
-  - 每个Vector核负责singleCoreM/2*singleCoreN的计算，每次计算产生baseM/2\*baseN的结果
+  - 总Vector核数：2 × 2 = 4
 
 - 样例实现：
   - **整体计算流程**：
@@ -91,19 +88,22 @@
       > - Ascend 950PR/Ascend 950DT产品：L0A的分型为Nz
       > - Atlas A2/A3系列产品：L0A的分型为Zz
 
+
       **2）核间同步**
-        ```
-        Cube核产生计算结果 -> CrossCoreSetFlag -> Vector核等待(CrossCoreWaitFlag)
-        ```
 
-        **Vector核（1个cube核的结果结果传递给2个vector核完成计算）：LeakyRelu激活**
-        ```
-        GM(C:ND,half) -> UB(VECCALC,half) -> UB(VECCALC,half) -> GM(C:ND,half)
-                      │                   │                   │
-                  DataCopyPad          LeakyRelu          DataCopyPad
-            MTE2搬运（baseM/2×baseN）    VEC计算            MTE3写出
+      ```
+      Cube核:  Fixpipe -> GM(C:ND,half)
+                          │
+                          │ CrossCoreSetFlag / CrossCoreWaitFlag
+                          ▼
+      Vector核: GM(C:ND,half) -> UB(VECCALC,half) -> UB(VECCALC,half) -> GM(C:ND,half)
+                            │                   │                   │
+                        DataCopyPad          LeakyRelu          DataCopyPad
+                  MTE2搬运（baseM/2×baseN）    VEC计算            MTE3写出
+      ```
 
-        ```
+      **Vector核（1个Cube核的结果由2个Vector核处理）：LeakyRelu激活**<br>
+      上图中，Vector核需要等待对应Cube核完成结果写回后，再读取GM中的Matmul结果并执行LeakyRelu激活。
 
       **3）流程详解**：
 
@@ -124,29 +124,20 @@
           - **UB计算**：使用`LeakyRelu`执行激活计算，负值部分乘以0.001
           - **UB → GM**：使用`DataCopyPad`将结果写回GM，完成融合计算
 
-      4. **核数比例**：
-          - Cube:Vector核数比例为1:2，每个Cube核产生baseM×baseN的结果
-          - 2个Vector核各处理baseM/2×baseN的数据，共同完成一个Matmul块的激活计算
-
-- **Cube与Vector协同机制**：
-  - **核数比例**：Cube:Vector核数比例为1:2，每个Cube核的计算结果由2个Vector核协同完成LeakyRelu计算
-  - **核间同步**：Cube核完成Matmul计算后，通过CrossCoreSetFlag通知Vector核开始计算；Vector核通过CrossCoreWaitFlag等待Cube核完成
-  - **数据切分**：每个Vector核处理baseM/2 × baseN大小的数据，两个Vector核共同处理一个baseM × baseN的Matmul结果块
-
   - **约束条件**：
     1. baseM/baseK/baseN满足16对齐
     2. baseM/baseK/baseN能被singleCoreM/singleCoreK/singleCoreN整除
     3. singleCoreM/singleCoreK/singleCoreN能被M/K/N整除，不支持非整切场景
     4. Vector核数是Cube核数的2倍
 
-    - **调用实现**：
-      核调用符`__mix__(1, 2)`实现Cube和Vector核的协同调用，其中参数(1, 2)表示Cube:Vector核数比例为1:2。
+  - **调用实现**：
+    核调用符`__mix__(1, 2)`实现Cube和Vector核的协同调用，其中参数`(1, 2)`表示Cube:Vector核数比例为1:2。
 
 - **接口参数说明**
 
   以下结构体均以花括号`{}`方式传参，各字段含义如下（字段顺序与API文档保持一致，实际struct声明中部分字段顺序可能不同）：
 
-  **`AscendC::Nd2NzParams`** — `DataCopy`接口使用，描述ND→NZ格式转换参数：
+  **`AscendC::Nd2NzParams`** — `DataCopy`接口使用，描述ND→Nz格式转换参数：
   ```cpp
   struct Nd2NzParams {
       int32_t  ndNum;              // 传输ND矩阵的数目，[0, 4095]
@@ -154,14 +145,14 @@
       int32_t  dValue;             // ND矩阵的列数，[0, 65535]
       int32_t  srcNdMatrixStride;  // 相邻ND矩阵起始地址偏移，单位：元素，[0, 65535]
       int32_t  srcDValue;          // 同一ND矩阵相邻行偏移，单位：元素，[1, 65535]
-      uint16_t dstNzC0Stride;      // 目的NZ中同源行转换后多行相邻偏移，单位：C0_SIZE(32B)，[1, 16384]
-      uint16_t dstNzNStride;       // 目的NZ中Z型矩阵相邻行偏移，单位：C0_SIZE(32B)，[1, 16384]
-      int32_t  dstNzMatrixStride;  // 目的NZ中相邻NZ矩阵起始地址偏移，单位：元素，[1, 65535]
+      uint16_t dstNzC0Stride;      // 目的Nz中同源行转换后多行相邻偏移，单位：C0_SIZE(32B)，[1, 16384]
+      uint16_t dstNzNStride;       // 目的Nz中Z型矩阵相邻行偏移，单位：C0_SIZE(32B)，[1, 16384]
+      int32_t  dstNzMatrixStride;  // 目的Nz中相邻Nz矩阵起始地址偏移，单位：元素，[1, 65535]
   };
   ```
-  例如搬运A矩阵时`{1, baseM, baseK, 0, K, baseM, 1, 0}`，将baseM×baseK的ND数据转为NZ格式。
+  例如搬运A矩阵时`{1, baseM, baseK, 0, K, baseM, 1, 0}`，将baseM×baseK的ND数据转为Nz格式。
 
-  **`AscendC::LoadData2DParams`** — `LoadData`接口使用，描述L1到L0A/L0B的数据搬运参数：
+  **`AscendC::LoadData2DParams`** — `LoadData`接口使用，描述Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas A3 训练系列产品/Atlas A3 推理系列产品中A矩阵L1到L0A和B矩阵L1到L0B的数据搬运参数：
   ```cpp
   struct LoadData2DParams {
       int32_t startIndex;   // 分形矩阵ID（0为第1个），单位：512B，[0, 65535]
@@ -173,9 +164,23 @@
       bool    addrMode;     // 地址更新方式，false=递增，true=递减，默认false
   };
   ```
-  例如：dav-2201架构L0A上的排布格式为Zz，搬运A矩阵时`{0, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, 0, 0, false, 0}`；<br>
-  dav-3510架构L0A上的排布格式为Nz，搬运A矩阵时`{0, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, 0, (baseM / CUBE_BLOCK - 1), false, 0}`；<br>
+  例如：Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas A3 训练系列产品/Atlas A3 推理系列产品中，L0A上的排布格式为Zz，搬运A矩阵时`{0, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, 0, 0, false, 0}`；<br>
   搬运B矩阵时`ifTranspose=true`，完成Nz到Zn的转置搬运。
+
+  **`AscendC::LoadData2DParamsV2`** — `LoadData`接口使用，描述Ascend 950PR/Ascend 950DT产品中A矩阵L1到L0A和B矩阵L1到L0B的数据搬运参数：
+  ```cpp
+  struct LoadData2DParamsV2 {
+      uint32_t mStartPosition;  // M方向起始位置，单位：512B
+      uint32_t kStartPosition;  // K方向起始位置，单位：512B
+      uint16_t mStep;           // M方向搬运分形数
+      uint16_t kStep;           // K方向搬运分形数
+      int32_t  srcStride;       // 源端相邻K方向分形间隔，单位：512B
+      uint16_t dstStride;       // 目的端相邻K方向分形间隔，单位：512B
+      bool     ifTranspose;     // 是否转置每个分形，默认false
+      uint8_t  sid;             // 预留，配置为0
+  };
+  ```
+  Ascend 950PR/Ascend 950DT产品中，L0A上的排布格式为Nz，搬运A矩阵时使用`{0, 0, baseM / CUBE_BLOCK, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, baseM / CUBE_BLOCK, false, 0}`，一次完成A矩阵Nz到Nz搬运；搬运B矩阵时使用`{0, 0, baseK / CUBE_BLOCK, baseN / CUBE_BLOCK, baseK / CUBE_BLOCK, baseN / CUBE_BLOCK, true, 0}`，一次完成B矩阵Nz到Zn搬运。
 
   **`AscendC::MmadParams`** — `Mmad`接口使用，描述矩阵乘参数：
   ```cpp
@@ -193,15 +198,15 @@
   **`AscendC::FixpipeParamsV220`** — `Fixpipe`接口使用，描述L0C到GM的数据搬运和精度转换参数：
   ```cpp
   struct FixpipeParamsV220 {
-      int32_t     nSize;        // 源NZ矩阵N方向大小，[1, 4095]
-      uint16_t    mSize;        // 源NZ矩阵M方向大小（NZ2ND时[1, 8192]）
-      uint16_t    srcStride;    // 源NZ相邻Z排布起始偏移，单位：C0_SIZE，[0, 65535]
-      int32_t     dstStride;    // NZ2ND时目的ND矩阵每行元素数，单位：element
+      int32_t     nSize;        // 源Nz矩阵N方向大小，[1, 4095]
+      uint16_t    mSize;        // 源Nz矩阵M方向大小（Nz2ND时[1, 8192]）
+      uint16_t    srcStride;    // 源Nz相邻Z排布起始偏移，单位：C0_SIZE，[0, 65535]
+      int32_t     dstStride;    // Nz2ND时目的ND矩阵每行元素数，单位：element
       bool        reluEn;       // 是否使能ReLU
       QuantMode_t quantPre;     // 量化模式，F322F16表示float→half
       uint64_t    deqScalar;    // scalar量化参数，单个scale值
-      int32_t     ndNum;        // 源NZ矩阵数目，[1, 65535]
-      int32_t     srcNdStride;  // 不同NZ矩阵起始地址间隔，单位：16×C0_SIZE，[1, 512]
+      int32_t     ndNum;        // 源Nz矩阵数目，[1, 65535]
+      int32_t     srcNdStride;  // 不同Nz矩阵起始地址间隔，单位：16×C0_SIZE，[1, 512]
       int32_t     dstNdStride;  // 目的相邻ND矩阵偏移，单位：element，[1, 65535]
       int32_t     unitFlag;     // Mmad与Fixpipe并行控制
   };
