@@ -72,7 +72,7 @@ static __aicore__ inline void Unlock(MutexID id)
 <tbody><tr id="row865704865817"><td class="cellrowborder" valign="top" width="18.29%" headers="mcps1.2.3.1.1 "><p id="p8657048165815"><a name="p8657048165815"></a><a name="p8657048165815"></a>pipe</p>
 </td>
 <td class="cellrowborder" valign="top" width="81.71000000000001%" headers="mcps1.2.3.1.2 "><p id="p1465784819589"><a name="p1465784819589"></a><a name="p1465784819589"></a>模板参数，表示流水类别。</p>
-<p id="p66571048135814"><a name="p66571048135814"></a><a name="p66571048135814"></a>支持的流水参考<a href="../同步控制简介.md#section1272612276459">硬件流水类型</a>。</p>
+<p id="p66571048135814"><a name="p66571048135814"></a><a name="p66571048135814"></a>支持的流水参考<a href="../核内同步能力概述.md#section1272612276459">硬件流水类型</a>。</p>
 </td>
 </tr>
 </tbody>

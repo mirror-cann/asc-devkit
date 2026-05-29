@@ -49,43 +49,24 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-初始化GM共享内存的值，完成初始化后才可以调用[WaitPreBlock](WaitPreBlock.md)和[NotifyNextBlock](NotifyNextBlock.md)。
+头文件路径为：`"basic_api/kernel_operator_determine_compute_sync_intf.h"`。
+
+InitDetermineComputeWorkspace是基于核间顺序执行的确定性计算的初始化配置接口，能够初始化GM共享内存的值，完成初始化后才可以调用[WaitPreBlock](WaitPreBlock.md)和[NotifyNextBlock](NotifyNextBlock.md)。以上三个接口共同完成基于核间顺序执行的确定性计算，确定性计算的具体含义请参考[确定性计算](../../原子操作/关键特性说明.md)。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
-```
+```cpp
 __aicore__ inline void InitDetermineComputeWorkspace(GlobalTensor<int32_t>& gmWorkspace, LocalTensor<int32_t>& ubWorkspace)
 ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  接口参数说明
+**表 1** 接口参数说明
 
-<a name="table62161631132810"></a>
-<table><thead align="left"><tr id="row12216103118284"><th class="cellrowborder" valign="top" width="13.661366136613662%" id="mcps1.2.4.1.1"><p id="p1421643114288"><a name="p1421643114288"></a><a name="p1421643114288"></a>参数名称</p>
-</th>
-<th class="cellrowborder" valign="top" width="12.591259125912593%" id="mcps1.2.4.1.2"><p id="p82165310285"><a name="p82165310285"></a><a name="p82165310285"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="73.74737473747375%" id="mcps1.2.4.1.3"><p id="p1121663111288"><a name="p1121663111288"></a><a name="p1121663111288"></a>含义</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row82161131182810"><td class="cellrowborder" valign="top" width="13.661366136613662%" headers="mcps1.2.4.1.1 "><p id="p1337919301805"><a name="p1337919301805"></a><a name="p1337919301805"></a>gmWorkspace</p>
-</td>
-<td class="cellrowborder" valign="top" width="12.591259125912593%" headers="mcps1.2.4.1.2 "><p id="p9912194814245"><a name="p9912194814245"></a><a name="p9912194814245"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="73.74737473747375%" headers="mcps1.2.4.1.3 "><p id="p6538259172913"><a name="p6538259172913"></a><a name="p6538259172913"></a>临时空间，初始化核间同步的共享内存，类型为GlobalTensor。</p>
-</td>
-</tr>
-<tr id="row5216163192815"><td class="cellrowborder" valign="top" width="13.661366136613662%" headers="mcps1.2.4.1.1 "><p id="p133787301508"><a name="p133787301508"></a><a name="p133787301508"></a>ubWorkspace</p>
-</td>
-<td class="cellrowborder" valign="top" width="12.591259125912593%" headers="mcps1.2.4.1.2 "><p id="p194361632141412"><a name="p194361632141412"></a><a name="p194361632141412"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="73.74737473747375%" headers="mcps1.2.4.1.3 "><p id="p3809641112411"><a name="p3809641112411"></a><a name="p3809641112411"></a>临时空间，用于操作gmWorkspace，类型为LocalTensor。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名称 | 输入/输出 | 含义 |
+| :--- | :--- | :--- |
+| gmWorkspace | 输入 | 临时空间，初始化核间同步的共享内存，类型为GlobalTensor。 |
+| ubWorkspace | 输入 | 临时空间，用于操作gmWorkspace，类型为LocalTensor。 |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -93,37 +74,32 @@ __aicore__ inline void InitDetermineComputeWorkspace(GlobalTensor<int32_t>& gmWo
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
--   gmWorkspace申请的空间最少要求为：blockNum \* 32Bytes；ubWorkspace申请的空间最少要求为：blockNum \* 32 + 32Bytes；其中blockNum为调用的核数，可调用[GetBlockNum](../../系统变量访问/GetBlockNum.md)获取。
--   使用该接口进行多核控制时，算子调用时指定的逻辑numBlocks必须保证不大于实际运行该算子的AI处理器核数，否则框架进行多轮调度时会插入异常同步，导致Kernel“卡死”现象。
+- gmWorkspace申请的空间最少要求为：GetBlockNum()*32Bytes，ubWorkspace申请的空间最少要求为：GetBlockNum()*32+32Bytes。
+- 与IBSet/SyncAll不同，该接口输入参数gmWorkspace缓存的值不需要初始化为0。
+- 使用该接口进行多核控制时，算子调用时指定的逻辑AI Core核数numBlocks必须保证不大于实际运行该算子的AI处理器核数，否则框架进行多轮调度时会插入异常同步，导致Kernel“卡死”现象。
 
 ## 调用示例<a name="section177231425115410"></a>
 
-如下示例模拟8个核进行数据处理，使用确定性计算接口保证核间运行顺序，进行原子累加。如需运行，请参考[核间顺序同步样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/06_sync_control/sequential_block_sync)实现完整的代码。
+```cpp
+    // 初始化GM共享内存的同步状态，必须在核函数开始时首先调用。
+    AscendC::InitDetermineComputeWorkspace(gmWorkspace, ubWorkspace);
 
-```
-// m_gmWorkspace为初始化核间同步的共享内存，类型为GlobalTensor；ubWorkspace为操作m_gmWorkspace的临时空间，类型为LocalTensor
-int64_t m_tileCount = 256 * sizeof(int32_t); // 参与计算的元素总数所占的空间，单位为bytes
-// 初始化GM共享内存的值
-AscendC::InitDetermineComputeWorkspace(m_gmWorkspace, ubWorkspace);
-// copy in
-// srcLocal为int32_t类型的LocalTensor，m_srcGlobal为int32_t的GlobalTensor
-AscendC::DataCopy(srcLocal, m_srcGlobal[m_tileCount], m_tileCount);
-// copy out
-// 调用WaitPreBlock读GM地址中的值，确认是否需要继续等待
-AscendC::WaitPreBlock(m_gmWorkspace, ubWorkspace);
-// 开启原子累加
-AscendC::SetAtomicAdd<int32_t>();
-// m_dstGlobal为int32_t的GlobalTensor
-AscendC::DataCopy(m_dstGlobal[m_tileCount], srcLocal, m_tileCount);
-AscendC::DisableDmaAtomic();
-// 调用NotifyNextBlock写GM地址，通知下一个核当前核的操作已完成，下一个核可以进行操作
-AscendC::NotifyNextBlock(m_gmWorkspace, ubWorkspace);
-```
+    for(int64_t i = 0; i < tileNum; i++) {
+        AscendC::LocalTensor<T> srcLocal = que.AllocTensor<T>();
+        AscendC::DataCopy(srcLocal, srcGlobal[i * tileCount], tileCount);
 
-```
-//每个核的输入数据为: 
-[1,1,1,1,1,...,1] // 256个1
-//最终输出数据:
-[8,8,8,8,8,...,8] // 256个8
+        // 等待前序核（blockIdx-1）完成操作。
+        AscendC::WaitPreBlock(gmWorkspace, ubWorkspace);
+        
+        // 开启原子累加。
+        AscendC::SetAtomicAdd<T>();
+        AscendC::DataCopy(dstGlobal[i * tileCount], srcLocal, tileCount);
+        AscendC::DisableDmaAtomic();
+        
+        // 通知后序核（blockIdx+1）当前核已完成。
+        AscendC::NotifyNextBlock(gmWorkspace, ubWorkspace);
+        que.FreeTensor(srcLocal);
+    }
 ```
 
+完整样例请参考[sequential\_block\_sync示例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/06_sync_control/sequential_block_sync)。

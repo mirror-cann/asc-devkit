@@ -92,7 +92,7 @@ __aicore__ inline void Fill(GlobalTensor<T>& gmWorkspaceAddr, const uint64_t siz
 </td>
 <td class="cellrowborder" valign="top" width="12.591259125912593%" headers="mcps1.2.4.1.2 "><p id="p144841743122315"><a name="p144841743122315"></a><a name="p144841743122315"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="73.74737473747375%" headers="mcps1.2.4.1.3 "><p id="p1483143162317"><a name="p1483143162317"></a><a name="p1483143162317"></a>gmWorkspaceAddr为用户定义的全局Global空间，是需要被初始化的空间，类型为GlobalTensor。GlobalTensor数据结构的定义请参考<a href="../../基础数据结构/GlobalTensor/GlobalTensor.md">GlobalTensor</a>。</p>
+<td class="cellrowborder" valign="top" width="73.74737473747375%" headers="mcps1.2.4.1.3 "><p id="p1483143162317"><a name="p1483143162317"></a><a name="p1483143162317"></a>gmWorkspaceAddr为用户定义的全局空间，是需要被初始化的空间，类型为GlobalTensor。GlobalTensor数据结构的定义请参考<a href="../../基础数据结构/GlobalTensor/GlobalTensor.md">GlobalTensor</a>。</p>
 </td>
 </tr>
 <tr id="row5216163192815"><td class="cellrowborder" valign="top" width="13.661366136613662%" headers="mcps1.2.4.1.1 "><p id="p164821543202310"><a name="p164821543202310"></a><a name="p164821543202310"></a>size</p>
@@ -158,4 +158,3 @@ AscendC::Fill(zGm, INIT_SIZE, (float)(AscendC::GetBlockIdx()));
  6. 6. 6. ... 6. 6. 6.
  7. 7. 7. ... 7. 7. 7.]
 ```
-

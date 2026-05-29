@@ -124,4 +124,3 @@ AscendC::WaitPreTaskEnd();
 AscendC::DataCopy(src0Local, src0Global, 512);
 inQueueSrc0.EnQue(src0Local);;
 ```
-

@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例在确定性计算场景下，基于InitDetermineComputeWorkspace、WaitPreBlock和NotifyNextBlock三个接口实现核间顺序同步。**这三个接口必须组合使用**，能够确保多个AIV核严格按照blockIdx的升序顺序执行，适用于要求确定性计算的场景。本样例模拟8个核进行数据处理，使用确定性计算接口保证核间运行顺序，进行原子累加，确保计算结果的确定性。
+本样例在确定性计算场景下，基于InitDetermineComputeWorkspace、WaitPreBlock和NotifyNextBlock三个接口实现核间顺序同步。**这三个接口必须组合使用**，能够确保多个AIV核严格按照blockIdx的升序执行，适用于要求确定性计算的场景。本样例模拟8个核进行数据处理，使用确定性计算接口保证核间运行顺序，进行原子累加，确保计算结果的确定性。
 
 > **注意：** 本样例仅适用于基于TPipe和TQue的编程模式。
 
@@ -26,7 +26,7 @@
 
 ## 样例功能描述
 
-本样例通过8个核协同工作，每个核处理256个float数据。使用InitDetermineComputeWorkspace初始化GM共享内存的同步状态，然后通过WaitPreBlock和NotifyNextBlock确保核间按照blockIdx升序顺序执行。每个核将输入数据分两次tile（每次128个元素）通过原子累加写入输出缓冲区，保证计算结果的确定性。
+本样例通过8个核协同工作，每个核处理256个float数据。使用InitDetermineComputeWorkspace初始化GM共享内存的同步状态，然后通过WaitPreBlock和NotifyNextBlock确保核间按照blockIdx升序执行。每个核将输入数据分两次tile（每次128个元素）通过原子累加写入输出缓冲区，保证计算结果的确定性。
 
 ### 样例规格
 

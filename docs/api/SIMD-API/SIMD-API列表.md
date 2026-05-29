@@ -570,12 +570,12 @@
 </tr>
 <tr id="row1821272513168"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p1190314213216"><a name="p1190314213216"></a><a name="p1190314213216"></a><a href="基础API/同步控制/核间同步/IBSet.md">IBSet</a></p>
 </td>
-<td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p15692228145311"><a name="p15692228145311"></a><a name="p15692228145311"></a>当不同核之间操作同一块全局内存且可能存在读后写、写后读以及写后写等数据依赖问题时，通过调用该函数来插入同步语句来避免上述数据依赖时可能出现的数据读写错误问题。调用IBSet设置某一个核的标志位，与IBWait成对出现配合使用，表示核之间的同步等待指令，等待某一个核操作完成。</p>
+<td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p15692228145311"><a name="p15692228145311"></a><a name="p15692228145311"></a>当不同核之间操作同一块全局内存且可能存在读后写、写后读以及写后写等数据依赖问题时，通过调用该函数来插入同步语句来避免上述数据依赖时可能出现的数据读写错误问题。调用IBSet设置某一个核的标志位，与IBWait成对使用，表示核之间的同步等待指令，等待某一个核操作完成。</p>
 </td>
 </tr>
 <tr id="row121219258161"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p13903164214324"><a name="p13903164214324"></a><a name="p13903164214324"></a><a href="基础API/同步控制/核间同步/IBWait.md">IBWait</a></p>
 </td>
-<td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p27141049175319"><a name="p27141049175319"></a><a name="p27141049175319"></a>当不同核之间操作同一块全局内存且可能存在读后写、写后读以及写后写等数据依赖问题时，通过调用该函数来插入同步语句来避免上述数据依赖时可能出现的数据读写错误问题。IBWait与IBSet成对出现配合使用，表示核之间的同步等待指令，等待某一个核操作完成。</p>
+<td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p27141049175319"><a name="p27141049175319"></a><a name="p27141049175319"></a>当不同核之间操作同一块全局内存且可能存在读后写、写后读以及写后写等数据依赖问题时，通过调用该函数来插入同步语句来避免上述数据依赖时可能出现的数据读写错误问题。IBWait与IBSet成对使用，表示核之间的同步等待指令，等待某一个核操作完成。</p>
 </td>
 </tr>
 <tr id="row1121220254168"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p8904942143216"><a name="p8904942143216"></a><a name="p8904942143216"></a><a href="基础API/同步控制/核间同步/SyncAll.md">SyncAll</a></p>
@@ -1228,7 +1228,7 @@
 </tr>
 <tr id="row13905175871"><td class="cellrowborder" rowspan="3" valign="top" width="12.379999999999999%" headers="mcps1.2.4.1.1 "><p id="p123688281178"><a name="p123688281178"></a><a name="p123688281178"></a>同步控制</p>
 </td>
-<td class="cellrowborder" valign="top" width="27.63%" headers="mcps1.2.4.1.2 "><p id="p99126441977"><a name="p99126441977"></a><a name="p99126441977"></a><a href="基础API/同步控制/核内同步/Mutex（ISASI）/Mutex（ISASI）.md">Mutex</a></p>
+<td class="cellrowborder" valign="top" width="27.63%" headers="mcps1.2.4.1.2 "><p id="p99126441977"><a name="p99126441977"></a><a name="p99126441977"></a><a href="基础API/同步控制/核内同步/Mutex(ISASI)/Mutex(ISASI).md">Mutex</a></p>
 </td>
 <td class="cellrowborder" valign="top" width="59.99%" headers="mcps1.2.4.1.3 "><p id="p1190519517715"><a name="p1190519517715"></a><a name="p1190519517715"></a><span id="ph1520973121010"><a name="ph1520973121010"></a><a name="ph1520973121010"></a>Mutex用于核内异步流水指令之间的同步处理，其功能类似于传统CPU中的锁机制。通过锁定指定流水再释放流水来完成流水间的同步依赖。每个锁有固定的一个MutexID，该ID可通过用户自定义（范围为0-27）或者通过<a href="基础API/同步控制/核内同步/AllocMutexID-(ISASI).md">AllocMutexID/ReleaseMutexID</a>进行申请释放。</span></p>
 </td>

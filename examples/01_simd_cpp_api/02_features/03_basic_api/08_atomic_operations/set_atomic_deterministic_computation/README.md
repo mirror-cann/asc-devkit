@@ -184,7 +184,7 @@ if (GetBlockIdx == 0) {
     <td style="padding: 8px;">方案1支持指定部分AIV参与同步，并可控制各AIV的执行顺序。</td>
   </tr>
   <tr>
-    <td style="padding: 8px;">方案2： 通过InitDetermineComputeWorkspace、NotifyNextBlock 和 WaitPreBlock三个接口配合使用，确保所有AIV核按照blockIdx升序顺序执行，可参考样例中SCENARIO_NUM=4的分支(待支持)。</td>
+    <td style="padding: 8px;">方案2： 通过InitDetermineComputeWorkspace、NotifyNextBlock 和 WaitPreBlock三个接口配合使用，确保所有AIV核按照blockIdx升序执行。</td>
     <td style="padding: 8px;">方案2要求所有AIV必须参与同步，且执行顺序固定为blockIdx升序。</td>
   </tr>
   <tr>

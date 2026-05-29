@@ -279,7 +279,7 @@ if ASCEND_IS_AIV {
 ```
 (2) GetBlockIdx(获取当前核的index)在AIC和AIV的取值范围不同，其取值与算子设置的逻辑核数和一个AI Core中的AIC与AIV的比例有关。本样例中设置NUM_BLOCKS=8、AIC与AIV的比例为1:2，因此GetBlockIdx在AIC和AIV的取值范围分别为0-7和0-15。
 
-(3) 样例采用静态tensor编程范式需要手动插入核内同步。另外，静态Tensor编程方式中需要开发者手动调用InitSocState()接口初始化全局状态寄存器。
+(3) 样例采用静态Tensor编程范式需要手动插入核内同步。另外，静态Tensor编程方式中需要开发者手动调用InitSocState()接口初始化全局状态寄存器。
 
 #### 3.2 纯Vector计算场景
 (1) 在使用 CrossCoreSetFlag 与 CrossCoreWaitFlag 核间同步接口时，即使是纯 Vector 计算场景，核函数也不能使用__vector__ 修饰符。
@@ -292,7 +292,7 @@ if ASCEND_IS_AIV {
 ```
  (2) 模式 1 要求参与同步的 2个AIV 必须属于同一个AI Core，否则程序会卡死。本样例中，参与同步的两个AIV的 GetBlockIdx=2、3 同属第 2 个 AI Core(下标从 1 开始)；若将GetBlockIdx改为 3 和 4(分别属于两个不同的AI Core)，程序将卡死。
 
- (3) 样例采用静态tensor编程范式需要手动插入核内同步。另外，静态Tensor编程方式中需要开发者手动调用InitSocState()接口初始化全局状态寄存器。
+ (3) 样例采用静态Tensor编程范式需要手动插入核内同步。另外，静态Tensor编程方式中需要开发者手动调用InitSocState()接口初始化全局状态寄存器。
 
 ## 编译运行
 

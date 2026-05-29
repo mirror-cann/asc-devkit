@@ -132,12 +132,12 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
 </thead>
 <tbody><tr id="zh-cn_topic_0000001429830437_row1835857145817"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.3.1.1 "><p id="p11864712175417"><a name="p11864712175417"></a><a name="p11864712175417"></a>AIV_PIPE</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.3.1.2 "><p id="p13502115305410"><a name="p13502115305410"></a><a name="p13502115305410"></a>SetNextTaskStart之后运行的指令，如果位于AIV上的AIV_PIPE流水，可以与后序算子并行。AIV_PIPE的取值范围为PIPE_MTE2、PIPE_MTE3、PIPE_S、PIPE_V，流水类型介绍可参考<a href="../核内同步/同步控制简介.md#section1272612276459">硬件流水类型</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.3.1.2 "><p id="p13502115305410"><a name="p13502115305410"></a><a name="p13502115305410"></a>SetNextTaskStart之后运行的指令，如果位于AIV上的AIV_PIPE流水，可以与后序算子并行。AIV_PIPE的取值范围为PIPE_MTE2、PIPE_MTE3、PIPE_S、PIPE_V，流水类型介绍可参考<a href="../核内同步/核内同步能力概述.md#section1272612276459">硬件流水类型</a>。</p>
 </td>
 </tr>
 <tr id="row168561422132317"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.3.1.1 "><p id="p14624101795415"><a name="p14624101795415"></a><a name="p14624101795415"></a>AIC_PIPE</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.3.1.2 "><p id="p1170619208225"><a name="p1170619208225"></a><a name="p1170619208225"></a>SetNextTaskStart之后运行的指令，如果位于AIC上的AIC_PIPE流水，可以与后序算子并行。AIC_PIPE的取值范围为PIPE_MTE1、PIPE_MTE2、PIPE_MTE3、PIPE_FIX、PIPE_M，流水类型介绍可参考<a href="../核内同步/同步控制简介.md#section1272612276459">硬件流水类型</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.3.1.2 "><p id="p1170619208225"><a name="p1170619208225"></a><a name="p1170619208225"></a>SetNextTaskStart之后运行的指令，如果位于AIC上的AIC_PIPE流水，可以与后序算子并行。AIC_PIPE的取值范围为PIPE_MTE1、PIPE_MTE2、PIPE_MTE3、PIPE_FIX、PIPE_M，流水类型介绍可参考<a href="../核内同步/核内同步能力概述.md#section1272612276459">硬件流水类型</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -166,4 +166,3 @@ AscendC::DataCopy(dstGlobal, dstLocal, 512);
 AscendC::SetNextTaskStart();
 outQueueDst.FreeTensor(dstLocal);
 ```
-

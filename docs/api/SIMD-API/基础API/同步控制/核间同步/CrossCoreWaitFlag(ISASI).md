@@ -49,11 +49,13 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-面向分离模式的核间同步控制接口。该接口和[CrossCoreSetFlag](CrossCoreSetFlag(ISASI).md)接口配合使用。具体使用方法请参考[CrossCoreSetFlag](CrossCoreSetFlag(ISASI).md)。
+头文件路径为：`"basic_api/kernel_operator_block_sync_intf.h"`。
+
+在核间同步场景中，CrossCoreSetFlag接口和CrossCoreWaitFlag接口配对工作，具体功能请参考[CrossCoreSetFlag](CrossCoreSetFlag(ISASI).md)。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
-```
+```cpp
 template <uint8_t modeId = 0, pipe_t pipe = PIPE_S>
 __aicore__ inline void CrossCoreWaitFlag(uint16_t flagId)
 ```
@@ -62,55 +64,16 @@ __aicore__ inline void CrossCoreWaitFlag(uint16_t flagId)
 
 **表 1**  模板参数说明
 
-<a name="table4835205712588"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000001429830437_row118356578583"><th class="cellrowborder" valign="top" width="18.6%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001429830437_p48354572582"><a name="zh-cn_topic_0000001429830437_p48354572582"></a><a name="zh-cn_topic_0000001429830437_p48354572582"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="81.39999999999999%" id="mcps1.2.3.1.2"><p id="zh-cn_topic_0000001429830437_p583535795817"><a name="zh-cn_topic_0000001429830437_p583535795817"></a><a name="zh-cn_topic_0000001429830437_p583535795817"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000001429830437_row1835857145817"><td class="cellrowborder" valign="top" width="18.6%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000001429830437_p5835457165816"><a name="zh-cn_topic_0000001429830437_p5835457165816"></a><a name="zh-cn_topic_0000001429830437_p5835457165816"></a>modeId</p>
-</td>
-<td class="cellrowborder" valign="top" width="81.39999999999999%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000001429830437_p168351657155818"><a name="zh-cn_topic_0000001429830437_p168351657155818"></a><a name="zh-cn_topic_0000001429830437_p168351657155818"></a>核间同步的模式，取值如下：</p>
-<a name="ul335269516"></a><a name="ul335269516"></a><ul id="ul335269516"><li>模式0：AI Core核间的同步控制。</li><li>模式1：AI Core内部，Vector核（AIV）之间的同步控制。</li><li>模式2：AI Core内部，Cube核（AIC）与Vector核（AIV）之间的同步控制。</li><li>模式4：AI Core内部，AIC与AIV之间的同步控制。AIV0与AIV1可单独触发AIC等待。</li></ul>
-</td>
-</tr>
-<tr id="row168561422132317"><td class="cellrowborder" valign="top" width="18.6%" headers="mcps1.2.3.1.1 "><p id="p1162623072316"><a name="p1162623072316"></a><a name="p1162623072316"></a>pipe</p>
-</td>
-<td class="cellrowborder" valign="top" width="81.39999999999999%" headers="mcps1.2.3.1.2 "><p id="p13626330102311"><a name="p13626330102311"></a><a name="p13626330102311"></a>设置这条指令所在的流水类型，流水类型可参考<a href="../核内同步/同步控制简介.md#section1272612276459">硬件流水类型</a>。</p>
-<p id="p8834141517517"><a name="p8834141517517"></a><a name="p8834141517517"></a>特别地，PIPE_S流水类型仅<span id="ph1572119291978"><a name="ph1572119291978"></a><a name="ph1572119291978"></a>Ascend 950PR/Ascend 950DT</span>支持。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 描述 |
+| --- | --- |
+| modeId | 核间同步的模式，支持的取值如下：<br>&bull; 模式0：AI Core核间的同步控制（所有AIC之间或者所有AIV之间）。<br>&bull; 模式1：AI Core内部，Vector核（AIV）之间的同步控制。<br>&bull; 模式2：AI Core内部，Cube核（AIC）与所有Vector核（AIV）之间的同步控制。<br>&bull; 模式4：AI Core内部，AIC与单个AIV之间的同步控制。AIV0与AIV1可单独触发AIC等待。<br>各个模式支持的对应Kernel类型请参照表3。 |
+| pipe | 设置这条指令所在的流水类型，支持的流水类型请参考[约束说明](#section633mcpsimp) 。|
 
 **表 2**  参数说明
 
-<a name="zh-cn_topic_0235751031_table33761356"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="10.05%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0235751031_p16609919"><a name="zh-cn_topic_0235751031_p16609919"></a><a name="zh-cn_topic_0235751031_p16609919"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="71.41%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0235751031_p59995477"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row42461942101815"><td class="cellrowborder" valign="top" width="18.54%" headers="mcps1.2.4.1.1 "><p id="p479605232211"><a name="p479605232211"></a><a name="p479605232211"></a>flagId</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p1579635215228"><a name="p1579635215228"></a><a name="p1579635215228"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.41%" headers="mcps1.2.4.1.3 "><p id="p10993195419912"><a name="p10993195419912"></a><a name="p10993195419912"></a>核间同步的标记。</p>
-<p id="p3301156999"><a name="p3301156999"></a><a name="p3301156999"></a><span id="ph1930145610914"><a name="ph1930145610914"></a><a name="ph1930145610914"></a><term id="zh-cn_topic_0000001312391781_term11962195213215_1"><a name="zh-cn_topic_0000001312391781_term11962195213215_1"></a><a name="zh-cn_topic_0000001312391781_term11962195213215_1"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811_1"><a name="zh-cn_topic_0000001312391781_term184716139811_1"></a><a name="zh-cn_topic_0000001312391781_term184716139811_1"></a>Atlas A2 推理系列产品</term></span>，取值范围是0-10。</p>
-<p id="p19301456896"><a name="p19301456896"></a><a name="p19301456896"></a><span id="ph14307561397"><a name="ph14307561397"></a><a name="ph14307561397"></a><term id="zh-cn_topic_0000001312391781_term1253731311225_1"><a name="zh-cn_topic_0000001312391781_term1253731311225_1"></a><a name="zh-cn_topic_0000001312391781_term1253731311225_1"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115_1"><a name="zh-cn_topic_0000001312391781_term131434243115_1"></a><a name="zh-cn_topic_0000001312391781_term131434243115_1"></a>Atlas A3 推理系列产品</term></span>，取值范围是0-10。</p>
-<p id="p193019567919"><a name="p193019567919"></a><a name="p193019567919"></a><span id="ph9301256291"><a name="ph9301256291"></a><a name="ph9301256291"></a>Ascend 950PR/Ascend 950DT</span>，取值范围如下：</p>
-<p id="p4858107124612"><a name="p4858107124612"></a><a name="p4858107124612"></a>AIV0发起的flagId 0-10的CrossCoreSetFlag操作对应AIC CrossCoreWaitFlag中flagId 0-10的操作。</p>
-<p id="p1685813713461"><a name="p1685813713461"></a><a name="p1685813713461"></a>AIV1发起的flagId 0-10的CrossCoreSetFlag操作对应AIC CrossCoreWaitFlag中flagId 16-26的操作。</p>
-<p id="p4858974461"><a name="p4858974461"></a><a name="p4858974461"></a>AIC发起的flagId 0-10的CrossCoreSetFlag操作对应AIV0 CrossCoreWaitFlag中flagId 0-10的操作。</p>
-<p id="p1785837134610"><a name="p1785837134610"></a><a name="p1785837134610"></a>AIC发起的flagId 16-26的CrossCoreSetFlag操作对应AIV1 CrossCoreWaitFlag中flagId 0-10的操作。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| flagId | 输入 | 核间同步的标记。<br><cann-filter npu-type="950">&bull; Ascend 950PR/Ascend 950DT，取值范围如下：<br>&nbsp;&nbsp;&bull; AIV0发起的flagId 0-10的CrossCoreSetFlag操作对应AIC CrossCoreWaitFlag中flagId 0-10的操作。<br>&nbsp;&nbsp;&bull; AIV1发起的flagId 0-10的CrossCoreSetFlag操作对应AIC CrossCoreWaitFlag中flagId 16-26的操作。<br>&nbsp;&nbsp;&bull; AIC发起的flagId 0-10的CrossCoreSetFlag操作对应AIV0 CrossCoreWaitFlag中flagId 0-10的操作。<br>&nbsp;&nbsp;&bull; AIC发起的flagId 16-26的CrossCoreSetFlag操作对应AIV1 CrossCoreWaitFlag中flagId 0-10的操作。</cann-filter><br><cann-filter npu-type="A3">&bull; Atlas A3 训练系列产品/Atlas A3 推理系列产品，取值范围是0-10。</cann-filter><br><cann-filter npu-type="910b">&bull; Atlas A2 训练系列产品/Atlas A2 推理系列产品，取值范围是0-10。</cann-filter> |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -118,24 +81,92 @@ __aicore__ inline void CrossCoreWaitFlag(uint16_t flagId)
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
--   使用该同步接口时，需要按照如下规则[设置Kernel类型](../../Kernel-Tiling/设置Kernel类型.md)：
-    -   在纯Vector/Cube场景下，需设置Kernel类型为KERNEL\_TYPE\_MIX\_AIV\_1\_0或KERNEL\_TYPE\_MIX\_AIC\_1\_0。
-    -   对于Vector和Cube混合场景，需根据实际情况灵活配置Kernel类型。
+- 不同产品版本下，CrossCoreWaitFlag接口对核间同步模式和流水类型的配置支持情况如下：
+<cann-filter npu-type="950">
 
--   CrossCoreWaitFlag必须与[CrossCoreSetFlag](CrossCoreSetFlag(ISASI).md)接口配合使用，避免计算核一直处于阻塞阶段。
--   如果执行CrossCoreWaitFlag时该flagId的计数器的值为0，则CrossCoreWaitFlag之后的所有指令都将被阻塞，直到该flagId的计数器的值不为0。同一个flagId的计数器最多设置15次。
--   使用该接口模式0时，建议开启batchmode模式，使算子独占全部所需核资源，否则可能因满足以下条件导致死锁：
+    - Ascend 950PR/Ascend 950DT，硬件支持配置核间同步模式和流水类型，传入该接口的模板参数modeId和pipe生效。此时，支持的流水类型为：PIPE_V、PIPE_M、PIPE_MTE1、PIPE_MTE2、PIPE_MTE3、PIPE_FIX、PIPE_S、PIPE_ALL。
+</cann-filter>
+<cann-filter npu-type="A3">
+    - Atlas A3 训练系列产品/Atlas A3 推理系列产品，硬件不支持配置核间同步模式和流水类型，传入该接口的模板参数modeId和pipe不生效。
+</cann-filter>
+<cann-filter npu-type="910b">
+    - Atlas A2 训练系列产品/Atlas A2 推理系列产品，硬件不支持配置核间同步模式和流水类型，传入该接口的模板参数modeId和pipe不生效。
+</cann-filter>
+- 由于当Kernel类型为KERNEL_TYPE_AIC_ONLY或 KERNEL_TYPE_AIV_ONLY时，硬件不会开启调度模块，也就无法正常进行核间同步，因此不同的同步模式配置[Kernel类型](../../Kernel-Tiling/设置Kernel类型.md)或[函数修饰符](../../../../../guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#section1074418132518)的情况如不：
+    - 在纯Vector/Cube场景下（模式0或模式1），建议设置Kernel类型为KERNEL\_TYPE\_MIX\_AIV\_1\_0或KERNEL\_TYPE\_MIX\_AIC\_1\_0，其它支持的Kernel类型请参考表3。
+    - 对于Vector和Cube混合场景（模式2），需根据AI Core中AIC和AIV的比例灵活配置Kernel类型，不同模式支持的函数修饰符和Kernel类型请参照表3。
 
-    -   多流并发场景（≥2条执行流）。
-    -   ≥2个算子并发执行。
-    -   所有并发算子的核数总和超过物理核数。
-    -   ≥2个并发算子使用了核间同步功能。
+        **表 3**  模式与支持的Kernel类型配置
+
+        | 模式 | 支持的函数修饰符 | 支持的Kernel类型配置 |
+        | --- | --- | --- |
+        | 0 | \_\_mix\_\_(0, 1)，\_\_mix\_\_(1, 0)， \_\_mix\_\_(1, 1)，\_\_mix\_\_(1, 2) | KERNEL\_TYPE\_MIX\_AIV\_1\_0， KERNEL\_TYPE\_MIX\_AIC\_1\_0，KERNEL\_TYPE\_MIX\_AIC\_1\_1， KERNEL\_TYPE\_MIX\_AIC\_1\_2 |
+        | 1 | \_\_mix\_\_(1, 1)，\_\_mix\_\_(1, 2) | KERNEL\_TYPE\_MIX\_AIC\_1\_1， KERNEL\_TYPE\_MIX\_AIC\_1\_2 |
+        | 2 | \_\_mix\_\_(1, 1)，\_\_mix\_\_(1, 2) | KERNEL\_TYPE\_MIX\_AIC\_1\_1， KERNEL\_TYPE\_MIX\_AIC\_1\_2 |
+
+- CrossCoreWaitFlag必须与[CrossCoreSetFlag](CrossCoreSetFlag(ISASI).md)接口配合使用，避免计算核一直处于阻塞阶段。
+
+- 接口使用模式0、1、2，需要避免flagId使用冲突：
+    - Matmul高阶API内部实现中使用了CrossCoreSetFlag进行核间同步控制，所以不建议开发者同时使用CrossCoreSetFlag和Matmul高阶API，否则会有flagId冲突的风险。Matmul高阶API内部占用的flagId范围与定义的Matmul对象数目相关，假设定义了N个Matmul对象数目，Matmul高阶API内部占用的flagId范围为\[0, 2 \* N - 1\]。Matmul最多支持定义4个对象，此时flagId占用范围为\[0,7\]。
+
+    - SyncAll硬件同步接口内部实现中使用了CrossCoreSetFlag进行核间同步控制，所以不建议开发者同时使用CrossCoreSetFlag和SyncAll硬件同步接口，否则会有flagID冲突的风险。SyncAll硬件同步接口flagId占用范围为\[11-14\]。
+
+- flagId相关的约束：
+    - 对于模式0、1、2，每个AIC和每个AIV都各自有16个flagId，支持的取值范围为0-15。如果flagId的值超出该范围，则会取截取最低位4bit为准。
+    - 每个flagId有个对应计数器，当调用[CrossCoreWaitFlag](CrossCoreWaitFlag(ISASI).md)时，若计数器值为0则会阻塞后续指令下发，已下发指令可正常执行；当调度模块感知到核间同步（CrossCoreSetFlag）全部完成后，会将对应CrossCoreWaitFlag的计数器的值增加1。此时，计数器值为非0，阻塞解除，并且将对应计数器的值减去1进行还原。具体执行逻辑与细节可以参考[关键特性说明](关键特性说明.md#ZH-CN_TOPIC_0000002586300741)。flagId对应的计数器计数范围为0-15。如果计数器的值超出该范围，则会异常报错，中断流程。
+    - 模式0、1、2下，如果多个模式同时共用同一个flagId，CrossCoreWaitFlag无法区分具体是哪一个模式，会导致行为与预期不符。
+
+        如图1所示，AIC 1的flagId 0同时用于模式2（AIV执行CrossCoreSetFlag）和模式0（所有AIC）的核间同步。AIC 1调用CrossCoreWaitFlag时，读取flagId=0的计数器，此时计数器的值变化可能来自模式0或模式2的同步完成。AIC 1无法分辨具体是哪个模式，只能感知到计数器值变化后解除阻塞。
+
+        **图 1**  错误示范（连续使用CrossCoreWaitFlag等待不同模式）<a name="zh-cn_topic_0000002547028479_fig208671330144620"></a>  
+        ![](../../../../figures/cross_wait_flag_multi_mode_error.png)
+
+- 使用该接口模式0时，建议开启batchmode模式，使算子独占全部所需核资源，否则可能因满足以下条件导致死锁：
+
+    - 多流并发场景（≥2条执行流）。
+    - ≥2个算子并发执行。
+    - 所有并发算子的核数总和超过物理核数。
+    - ≥2个并发算子使用了核间同步功能。
 
     具体而言，在多流场景下，某条流的核间同步算子虽分配到n个物理核，但可能仅有n-m个核先被调度执行，而其余m个核因被其他流的核间同步算子抢占而尚未启动。先启动的n-m个核执行到核间同步时等待剩余m核完成，而剩余m核因被其他流的核间同步算子占用而无法释放，形成死锁。
 
-    Kernel直调场景下通过[\_\_schedmode\_\_\(mode\)](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md)限定符来设置batchmode模式；工程化算子开发场景下，通过TilingContext的SetScheduleMode接口来设置batchmode模式，具体请参考《基础数据结构和接口》。
+    Kernel直调场景下通过[\_\_schedmode\_\_\(mode\)](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md)限定符来设置batchmode模式；工程化算子开发场景下，通过TilingContext的SetScheduleMode接口来设置batchmode模式，具体请参考[《基础数据结构和接口》](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/900beta2/API/basicdataapi/atlasopapi_07_00001.html)。
 
 ## 调用示例<a name="section837496171220"></a>
 
-请参考[调用示例](CrossCoreSetFlag(ISASI).md#section837496171220)。
+**表3**  样例描述
 
+| SCENARIO_NUM取值 | 业务场景 | 使用的同步模式 |
+| --- | --- | --- |
+| 0 | 纯Vector计算场景（16个AIV） | mode0（AIV全核同步） |
+| 1 | 纯Vector计算场景（2个AIV） | mode1 |
+| 2 | Cube与Vector融合计算场景 | mode2（AIC等AIV）、mode2（AIV等AIC）、mode0（AIC全核同步） |
+
+如上表所示，当SCENARIO_NUM取不同值时，会分别演示纯Vector计算场景和Cube与Vector融合计算场景下三种同步模式的具体使用方法，下面展示了纯Vector计算场景的部分调用代码：
+
+```cpp
+    AscendC::Muls(xLocal, xLocal, float(AscendC::GetBlockIdx()), this->blockLength);
+    AscendC::SetFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
+    AscendC::WaitFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
+
+    // UB到GM搬运启用原子累加：搬运至atomicResult的数据与原值累加后覆盖原值。
+    AscendC::SetAtomicAdd<float>();
+    // DataCopy属于PIPE_MTE3流水操作。
+    AscendC::DataCopy(atomicResultGm, xLocal, this->blockLength);
+    // 当本AIV完成前置PIPE_MTE3(DataCopy)流水操作后，通知其他AIV核，本AIV已经完成。
+    AscendC::CrossCoreSetFlag<0, PIPE_MTE3>(0);
+    // 阻塞本AIV继续往下执行指令，直到其他AIV全部都完成PIPE_MTE3流水操作，才解除阻塞往下执行。
+    AscendC::CrossCoreWaitFlag(0);
+    // 关闭原子累加。
+    AscendC::SetAtomicNone();
+
+    if (AscendC::GetBlockIdx() == 0) {
+        AscendC::DataCopy(yLocal, atomicResultGm, this->blockLength);
+        AscendC::SetFlag<AscendC::HardEvent::MTE2_MTE3>(EVENT_ID0);
+        AscendC::WaitFlag<AscendC::HardEvent::MTE2_MTE3>(EVENT_ID0);
+        AscendC::DataCopy(atomicResultGm, yLocal, this->blockLength);
+        return;
+    }
+```
+
+完整样例请参考[CrossCoreSetFlag和CrossCoreWaitFlag核间同步样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/06_sync_control/cross_core_set_wait_flag)。

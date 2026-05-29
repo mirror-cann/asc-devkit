@@ -15,7 +15,7 @@
 ## 编程范式<a name="section1486516584319"></a>
 
 -   AI Core包括多种内存单元，比如用于矢量计算的Unified Buffer和用于矩阵计算的L1 Buffer、L0A Buffer、L0B Buffer、L0C Buffer等内存资源。开发者完全自主管理AI Core上的所有内存资源，创建Tensor分配地址时管理内存大小、内存复用关系并确保分配的地址有效性。
--   AI Core包括多种[指令流水类型](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/同步控制简介.md)，比如Vector/Cube/Scalar计算流水，MTE1、MTE2、MTE3搬运流水等，每条流水并行执行，它们之间的依赖关系通过[同步事件](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/SetFlag-WaitFlag(ISASI).md)来协调。开发者调用Ascend C提供的搬运或者计算类API编写算子并根据数据依赖关系插入对应的同步事件，以达成最优性能。
+-   AI Core包括多种[指令流水类型](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核内同步/核内同步能力概述.md)，比如Vector/Cube/Scalar计算流水，MTE1、MTE2、MTE3搬运流水等，每条流水并行执行，它们之间的依赖关系通过[同步事件](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/SetFlag-WaitFlag(ISASI).md)来协调。开发者调用Ascend C提供的搬运或者计算类API编写算子并根据数据依赖关系插入对应的同步事件，以达成最优性能。
 
 下图是一个典型矢量算子的示意图，开发者首先根据业务计算量进行数据分块处理，之后根据核内的数据依赖关系完成同步事件的插入：
 
