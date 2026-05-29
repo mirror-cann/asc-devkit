@@ -10,29 +10,29 @@
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
 #warning                                                                                                               \
-    "impl/tensor_api/arch/cube/gm_to_l1/npu_arch_3510/gm_to_l1/dn2nz.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
+    "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/nd2nz.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
 
 /*!
- * \file dn2nz.h
+ * \file nd2nz.h
  * \brief
  */
-#ifndef IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_NPU_ARCH_3510_GM_TO_L1_DN2NZ_H
-#define IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_NPU_ARCH_3510_GM_TO_L1_DN2NZ_H
+#ifndef IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_ND2NZ_H
+#define IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_ND2NZ_H
 
-#include "impl/tensor_api/arch/cube/gm_to_l1/npu_arch_3510/instruction.h"
+#include "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/instruction.h"
 
 namespace AscendC {
 namespace Te {
 
-class CopyGmToCbufMultiDN2Nz {
+class CopyGmToCbufMultiND2Nz {
 public:
     template <const CopyGM2L1Trait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src)
     {
-        DataCopyImpl<trait, T, U>(dst, src);
+        DataCopyImpl<trait>(dst, src);
     }
 
 private:
@@ -40,7 +40,7 @@ private:
     __aicore__ inline static constexpr void CheckTemplate()
     {
         CheckLayoutPattern<U, T>();
-        CheckDataTypeFor3510::CheckGm2L1DataType<T, U>();
+        CheckDataTypeFor3510::CheckGm2L1Fp4DataType<T, U>();
     }
 
     template <const CopyGM2L1Trait& trait, typename T, typename U>
@@ -52,42 +52,42 @@ private:
         auto dstLayout = dst.Layout();
         auto srcLayout = src.Layout();
 
-        uint16_t srcRowShape;
-        uint32_t srcColShape;
-        uint32_t srcColStride;
-        if constexpr (IsSatisfiedPtnFormatV<U, DNLayoutPtn>) {
-            srcRowShape = GetElement<AttrInfo::Shape, AttrInfo::Row>(srcLayout);
-            srcColShape = GetElement<AttrInfo::Shape, AttrInfo::Column>(srcLayout);
-            srcColStride = GetElement<AttrInfo::Stride, AttrInfo::Column>(srcLayout);
+        uint16_t ndNum = 1;
+        uint16_t nValue;
+        uint32_t dValue;
+        uint32_t srcRowStride;
+        if constexpr (IsSatisfiedPtnFormatV<U, NDLayoutPtn>) {
+            nValue = GetElement<AttrInfo::Shape, AttrInfo::Row>(srcLayout);
+            dValue = GetElement<AttrInfo::Shape, AttrInfo::Column>(srcLayout);
+            srcRowStride = GetElement<AttrInfo::Stride, AttrInfo::Row>(srcLayout);
         } else {
-            srcRowShape = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
-            srcColShape = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
-            srcColStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
+            nValue = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
+            dValue = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
+            srcRowStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout);
         }
-        uint16_t dstBColStride =
-            GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstLayout);
+        auto dstColumnStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstLayout);
+        if constexpr (IsB4Type<type>) {
+            // move fp4 as b8, need to be divided by 2
+            dValue = dValue >> 1;
+            srcRowStride = srcRowStride >> 1;
+        }
 
-        uint16_t dnNum = 1;
-        uint16_t nValue = srcRowShape;
-        uint32_t dValue = srcColShape;
-        uint64_t srcDnMatrixStride = 0;
-        uint64_t srcDValue = srcColStride;
-
-        uint16_t dstNzC0Stride = dstBColStride / C0_ELEMENT<type>;
+        uint64_t srcNdMatrixStride = 0;
+        uint64_t srcDValue = srcRowStride;
+        uint16_t dstNzC0Stride = dstColumnStride / C0_ELEMENT<type>;
         uint16_t dstNzNStride = 1;
         uint32_t dstNzMatrixStride = 0;
 
         uint64_t loop1SrcStride = srcDValue * sizeof(type);
-        uint64_t loop4SrcStride = srcDnMatrixStride * sizeof(type);
+        uint64_t loop4SrcStride = srcNdMatrixStride * sizeof(type);
 
         uint16_t loop2DstStride = dstNzNStride;  // loop2_dst_stride = dst_nz_n_stride
         uint16_t loop3DstStride = dstNzC0Stride; // loop3_dst_stride = dst_nz_c0_Stride
         // loop4_dst_stride: dst_nz_matrix_stride * size_of_dst_type / C0_size
         uint16_t loop4DstStride = static_cast<uint16_t>(dstNzMatrixStride / C0_ELEMENT<type>);
-
         uint8_t cacheMode = src.Engine().GetCacheMode();
 
-        CopyGmToCbufMultiDn2nzInstr::DataCopy(dst, src, dnNum, loop2DstStride, loop3DstStride, loop4DstStride,
+        CopyGmToCbufMultiNd2nzInstr::DataCopy(dst, src, ndNum, loop2DstStride, loop3DstStride, loop4DstStride,
                                               loop1SrcStride, cacheMode, nValue, dValue, loop4SrcStride, false);
     }
 };

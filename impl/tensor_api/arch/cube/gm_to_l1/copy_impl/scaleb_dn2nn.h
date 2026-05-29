@@ -10,24 +10,24 @@
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
 #warning                                                                                                               \
-    "impl/tensor_api/arch/cube/gm_to_l1/npu_arch_3510/gm_to_l1/scalea_dn2zz.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
+    "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/scaleb_dn2nn.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
 
 /*!
- * \file scalea_dn2zz.h
+ * \file scaleb_dn2nn.h
  * \brief
  */
-#ifndef IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_NPU_ARCH_3510_GM_TO_L1_SCALEA_DN2ZZ_H
-#define IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_NPU_ARCH_3510_GM_TO_L1_SCALEA_DN2ZZ_H
+#ifndef IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_SCALEB_DN2NN_H
+#define IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_SCALEB_DN2NN_H
 
-#include "impl/tensor_api/arch/cube/gm_to_l1/npu_arch_3510/instruction.h"
+#include "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/instruction.h"
 
 namespace AscendC {
 namespace Te {
 
-class CopyGmToCbufScaleADN2Zz {
+class CopyGmToCbufScaleBDN2Nn {
 public:
     template <const CopyGM2L1Trait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src)
@@ -54,35 +54,34 @@ private:
 
         uint32_t srcRowShape;
         uint32_t srcColShape;
-        uint32_t srcColStride;
+        uint16_t srcBColStride;
         if constexpr (IsSatisfiedPtnFormatV<U, DNLayoutPtn>) {
             srcRowShape = GetElement<AttrInfo::Shape, AttrInfo::Row>(srcLayout);
             srcColShape = GetElement<AttrInfo::Shape, AttrInfo::Column>(srcLayout);
-            srcColStride = GetElement<AttrInfo::Stride, AttrInfo::Column>(srcLayout);
+            srcBColStride = GetElement<AttrInfo::Stride, AttrInfo::Column>(srcLayout);
         } else {
             srcRowShape = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
             srcColShape = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
-            srcColStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
+            srcBColStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
         }
-        uint16_t dstBRowStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstLayout);
+        uint16_t dstBColStride =
+            GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstLayout);
 
-        uint16_t ndNum = 1;
-        uint16_t nValue = srcColShape;
-        uint32_t dValue = srcRowShape;
-        uint64_t srcNdMatrixStride = 0;
-        uint16_t dstNzC0Stride = dstBRowStride * sizeof(type) / C0_SIZE<>;
+        uint16_t dnNum = 1;
+        uint16_t nValue = srcRowShape >> 1; // use b16 for DN2NZ, so nValue = srcRowShape / 2
+        uint16_t dValue = srcColShape;
         uint16_t dstNzNStride = 1;
 
-        uint64_t loop1SrcStride = srcColStride * sizeof(type);
-        uint64_t loop4SrcStride = srcNdMatrixStride * sizeof(type);
+        uint64_t loop1SrcStride = srcBColStride * sizeof(type);
 
-        uint16_t loop2DstStride = dstNzNStride;  // loop2_dst_stride = dst_nz_n_stride
-        uint16_t loop3DstStride = dstNzC0Stride; // loop3_dst_stride = dst_nz_c0_Stride
+        uint16_t loop2DstStride = dstNzNStride;                             // loop2_dst_stride = dst_nz_n_stride
+        uint16_t loop3DstStride = dstBColStride * sizeof(type) / C0_SIZE<>; // loop3_dst_stride = dst_nz_c0_Stride
+        uint16_t loop4DstStride = 0;
         uint8_t cacheMode = src.Engine().GetCacheMode();
         // fp8 scale use b16 for movement
-        CopyGmToCbufMultiNd2nzInstr::CopyGmToCbufMultiNd2nz(
-            (__cbuf__ half*)(dst.Data().Get()), (__gm__ half*)(src.Data().Get()), ndNum, loop2DstStride, loop3DstStride,
-            0, loop1SrcStride, cacheMode, nValue, dValue, loop4SrcStride, false);
+        CopyGmToCbufMultiDn2nzInstr::CopyGmToCbufMultiDn2nz(
+            (__cbuf__ half*)(dst.Data().Get()), (__gm__ half*)(src.Data().Get()), dnNum, loop2DstStride, loop3DstStride,
+            loop4DstStride, loop1SrcStride, cacheMode, nValue, dValue, 0, false);
     }
 };
 

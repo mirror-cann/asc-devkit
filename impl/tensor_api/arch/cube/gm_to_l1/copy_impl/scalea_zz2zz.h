@@ -10,24 +10,24 @@
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
 #warning                                                                                                               \
-    "impl/tensor_api/arch/cube/gm_to_l1/npu_arch_3510/gm_to_l1/scaleb_nn2nn.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
+    "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/scalea_zz2zz.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
 
 /*!
- * \file scaleb_nn2nn.h
+ * \file scalea_zz2zz.h
  * \brief
  */
-#ifndef IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_NPU_ARCH_3510_GM_TO_L1_SCALEB_NN2NN_H
-#define IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_NPU_ARCH_3510_GM_TO_L1_SCALEB_NN2NN_H
+#ifndef IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_SCALEA_ZZ2ZZ_H
+#define IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_SCALEA_ZZ2ZZ_H
 
-#include "impl/tensor_api/arch/cube/gm_to_l1/npu_arch_3510/instruction.h"
+#include "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/instruction.h"
 
 namespace AscendC {
 namespace Te {
 
-class CopyGmToCbufScaleBNn2Nn {
+class CopyGmToCbufScaleAZz2Zz {
 public:
     template <const CopyGM2L1Trait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src)
@@ -52,22 +52,24 @@ private:
         auto dstLayout = dst.Layout();
         auto srcLayout = src.Layout();
 
-        auto srcShapeColB = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
-        auto srcShapeColS = GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(srcLayout);
-        auto srcShapeRowB = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
-        auto srcStrideColB = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout);
-        auto srcStrideColS = GetElement<AttrInfo::Stride, AttrInfo::Column, 0>(srcLayout);
+        auto srcShapeRowsB = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
+        auto srcShapeRowsS = GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(srcLayout);
+        auto srcShapeColumns = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
+        auto srcStrideRowsB = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout);
+        auto srcStrideRowsS = GetElement<AttrInfo::Stride, AttrInfo::Row, 0>(srcLayout);
 
-        auto dstStrideColB = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstLayout);
+        auto dstShapeColumns = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(dstLayout);
+        auto dstStrideRows = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstLayout);
 
         uint8_t cacheMode = src.Engine().GetCacheMode();
 
         // lprp mode, dst_stride % C0_SIZE should be 0
         // multi rows copy, dst non-contiguous case
-        uint32_t blockCount = srcShapeColB;
-        uint32_t blockLen = srcShapeRowB * sizeof(type) * srcShapeColS * srcStrideColS;
-        uint64_t srcStride = srcStrideColB * sizeof(type);
-        uint32_t dstStride = dstStrideColB * sizeof(type);
+
+        uint32_t blockCount = srcShapeRowsB;
+        uint32_t blockLen = srcShapeColumns * sizeof(type) * srcShapeRowsS * srcStrideRowsS;
+        uint64_t srcStride = srcStrideRowsB * sizeof(type);
+        uint32_t dstStride = dstStrideRows * sizeof(type);
 
         uint8_t leftPaddingCnt = 0;
         uint8_t rightPaddingCnt = 0;

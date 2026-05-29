@@ -10,7 +10,7 @@
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
 #warning                                                                                                               \
-    "impl/tensor_api/arch/cube/gm_to_l1/npu_arch_3510/instruction.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
+    "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/instruction.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
@@ -19,8 +19,8 @@
  * \file instruction.h
  * \brief
  */
-#ifndef IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_NPU_ARCH_3510_INSTRUCTION_H
-#define IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_NPU_ARCH_3510_INSTRUCTION_H
+#ifndef IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_INSTRUCTION_H
+#define IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_INSTRUCTION_H
 
 #include "impl/tensor_api/tensor/pointer_pattern.h"
 #include "impl/tensor_api/tensor/tensor_impl.h"
@@ -34,9 +34,7 @@ struct CopyGM2L1Trait {};
 template <typename T>
 __aicore__ inline void SetMTE2NzPara(const T& para)
 {
-    if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-        asc_set_gm2l1_nz_para(para);
-    }
+    asc_set_gm2l1_nz_para(para);
 }
 
 class CopyGmToCbufAlignV2Base {
@@ -66,10 +64,8 @@ public:
             return;
         }
 
-        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-            asc_copy_gm2l1_align(dst, src, blockCount, blockLen, leftPaddingCnt, rightPaddingCnt, true,
-                                     cacheMode, srcStride, dstStride);
-        }
+        asc_copy_gm2l1_align(dst, src, blockCount, blockLen, leftPaddingCnt, rightPaddingCnt, true,
+                                 cacheMode, srcStride, dstStride);
     }
 };
 
@@ -98,15 +94,13 @@ public:
         if ASCEND_IS_AIV {
             return;
         }
-        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-            uint64_t mte2NzPara = static_cast<uint64_t>(loop4DstStride) << 48; // MTE2_NZ_PARA[63:48]
-            mte2NzPara |= static_cast<uint64_t>(loop3DstStride) << 32;         // MTE2_NZ_PARA[47:32]
-            mte2NzPara |= static_cast<uint64_t>(loop2DstStride) << 16;         // MTE2_NZ_PARA[31:16]
-            mte2NzPara |= static_cast<uint64_t>(ndNum);                        // MTE2_NZ_PARA[15:0]
-            SetMTE2NzPara(mte2NzPara); // CCE: store parameters for ND2NZ DMA instructions
-            asc_copy_gm2l1_nd2nz(dst, src, loop1SrcStride, cacheMode, nValue, dValue, loop4SrcStride,
-                                        enableSmallC0);
-        }
+        uint64_t mte2NzPara = static_cast<uint64_t>(loop4DstStride) << 48; // MTE2_NZ_PARA[63:48]
+        mte2NzPara |= static_cast<uint64_t>(loop3DstStride) << 32;         // MTE2_NZ_PARA[47:32]
+        mte2NzPara |= static_cast<uint64_t>(loop2DstStride) << 16;         // MTE2_NZ_PARA[31:16]
+        mte2NzPara |= static_cast<uint64_t>(ndNum);                        // MTE2_NZ_PARA[15:0]
+        SetMTE2NzPara(mte2NzPara); // CCE: store parameters for ND2NZ DMA instructions
+        asc_copy_gm2l1_nd2nz(dst, src, loop1SrcStride, cacheMode, nValue, dValue, loop4SrcStride,
+                                    enableSmallC0);
     }
 };
 
@@ -136,22 +130,20 @@ public:
             return;
         }
 
-        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-            uint64_t mte2NzPara = static_cast<uint64_t>(loop4DstStride) << 48; // MTE2_NZ_PARA[63:48]
-            mte2NzPara |= static_cast<uint64_t>(loop3DstStride) << 32;         // MTE2_NZ_PARA[47:32]
-            mte2NzPara |= static_cast<uint64_t>(loop2DstStride) << 16;         // MTE2_NZ_PARA[31:16]
-            mte2NzPara |= static_cast<uint64_t>(dnNum);                        // MTE2_NZ_PARA[15:0]
-            SetMTE2NzPara(mte2NzPara); // CCE: store parameters for DN2NZ DMA instructions
-            asc_copy_gm2l1_dn2nz(dst, src, loop1SrcStride, cacheMode, nValue, dValue, loop4SrcStride,
-                                        enableSmallC0);
-        }
+        uint64_t mte2NzPara = static_cast<uint64_t>(loop4DstStride) << 48; // MTE2_NZ_PARA[63:48]
+        mte2NzPara |= static_cast<uint64_t>(loop3DstStride) << 32;         // MTE2_NZ_PARA[47:32]
+        mte2NzPara |= static_cast<uint64_t>(loop2DstStride) << 16;         // MTE2_NZ_PARA[31:16]
+        mte2NzPara |= static_cast<uint64_t>(dnNum);                        // MTE2_NZ_PARA[15:0]
+        SetMTE2NzPara(mte2NzPara); // CCE: store parameters for DN2NZ DMA instructions
+        asc_copy_gm2l1_dn2nz(dst, src, loop1SrcStride, cacheMode, nValue, dValue, loop4SrcStride,
+                                    enableSmallC0);
     }
 };
 
 } // namespace Te
 } // namespace AscendC
 
-#endif // IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_NPU_ARCH_3510_INSTRUCTION_H
+#endif // IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_INSTRUCTION_H
 
 #if defined(UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC)
 #undef ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
