@@ -97,7 +97,6 @@ __aicore__ inline void SetAtomicMin()
 ```
 #include "kernel_operator.h"
 
-uint32_t size = 256;
 constexpr uint32_t SIZE = 256;
 __aicore__ inline void CopyIn()
 {
@@ -126,4 +125,3 @@ Src0: [1,1,1,1,1,...,1] // 256个1
 Src1: [2,2,2,2,2,...,2] // 256个2
 最终输出数据: [1,1,1,1,1,...,1] // 256个1
 ```
-

@@ -429,7 +429,7 @@
     // indexLocal：索引数据
     // sortTmpLocal：临时空间
     // 待排序元素数量
-    uint32_t elementCount = 128;
+    uint32_t m_elementCount = 128;
     // 迭代次数，每次迭代完成32个元素的排序
     uint32_t m_sortRepeatTimes = m_elementCount / 32;
     uint32_t m_extractRepeatTimes = m_elementCount / 32;
@@ -465,7 +465,7 @@
     Atlas 推理系列产品AI Core
 
     ```
-    uint32_t elementCount = 64;
+    uint32_t m_elementCount = 64;
     uint32_t m_sortRepeatTimes = m_elementCount / 16;
     uint32_t m_extractRepeatTimes = m_elementCount / 16;
     AscendC::Concat(concatLocal, valueLocal, concatTmpLocal, m_concatRepeatTimes);
@@ -514,4 +514,3 @@
         输出数据（dstIndexGm）:
         [1023 1022 ... 2 1 0]
         ```
-

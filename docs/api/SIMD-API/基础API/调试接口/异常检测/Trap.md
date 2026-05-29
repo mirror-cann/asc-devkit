@@ -89,7 +89,6 @@ constexpr int32_t count = 512;    // 参与计算的元素个数
 if (src1Local[0] == 0) {    // 如果除数为0，则报异常
     AscendC::Trap();
 } else {
-    AscendC::Divs(dstLocal, src0Local, src1Local[0], 512);
+    AscendC::Divs(dstLocal, src0Local, src1Local[0], count);
 }
 ```
-

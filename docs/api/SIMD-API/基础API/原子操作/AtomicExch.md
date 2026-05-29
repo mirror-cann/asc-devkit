@@ -124,7 +124,7 @@ dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), dataSize);
 
 LocalTensor<T> dstLocal = inQueueX.AllocTensor<T>();
 uint32_t value = 2;
-uint32_t a = AscendC::AtomicExch(reinterpret_cast<__gm__ uint32_t *>(dstGm), values);
+uint32_t a = AscendC::AtomicExch(reinterpret_cast<__gm__ uint32_t *>(dstGm), value);
 // 先执行完原子操作之后才能进行搬运操作，有数据依赖
 event_t eventIdSToMte2 = static_cast<event_t>(GetTPipePtr()->AllocEventID<HardEvent::S_MTE2>());
 // 手动插入MTE2等待Scalar的同步
@@ -148,4 +148,3 @@ DataCopy(dstLocal, dstGlobal, dataSize);
 原子计算后GM数据dst: [2,1,1,1,1,...,1] 
 返回值 a: 2
 ```
-

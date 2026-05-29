@@ -143,7 +143,7 @@ struct BitwiseNotConfig {
 ```
 AscendC::LocalTensor<uint32_t> dst, src;
 uint32_t count = 512; // 参与计算的元素个数
-AscendC::BitwiseNot(dst, src, 512);
+AscendC::BitwiseNot(dst, src, count);
 ```
 
 结果示例如下：
@@ -154,4 +154,3 @@ AscendC::BitwiseNot(dst, src, 512);
 输出数据（dst）:
 [-92, -49, 70, -113, -65, 106, -75, 120, 102, 49, -113, 22, -16, ... 73]
 ```
-

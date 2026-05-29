@@ -351,7 +351,7 @@
     // repeatTime = 4，一次迭代计算64个数，共计算256个数
     // dstBlkStride, src0BlkStride, src1BlkStride = 1，单次迭代内数据连续读取和写入
     // dstRepStride = 8，src0RepStride, src1RepStride = 4，相邻迭代间数据连续读取和写入
-    AscendC::MulAddDst(dstLocal, src0Local, src1Local, 64, 4, { 1, 1, 1, 8, 4, 4 });
+    AscendC::MulAddDst(dstLocal, src0Local, src1Local, mask, 4, { 1, 1, 1, 8, 4, 4 });
     ```
 
 -   高维切分计算接口样例-mask逐bit模式（源操作数的数据类型为half、目的操作数的数据类型为float）
@@ -555,4 +555,3 @@
  -7.68586426e+02  2.29329517e+03 -1.70910608e+03 -2.80956885e+03
   3.86657227e+03  4.07690765e+02  8.78310547e+02  1.32684253e+03]
 ```
-

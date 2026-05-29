@@ -144,7 +144,7 @@ struct BitwiseOrConfig {
 AscendC::LocalTensor<uint32_t> src0, src1;
 AscendC::LocalTensor<uint32_t> dst;
 uint32_t count = 512; // 参与计算的元素个数
-AscendC::BitwiseOr(dst, src0, src1, 512);
+AscendC::BitwiseOr(dst, src0, src1, count);
 ```
 
 结果示例如下：
@@ -157,4 +157,3 @@ AscendC::BitwiseOr(dst, src0, src1, 512);
 输入数据（dst）:
 [-47, -3, 127, -49, ... -97]
 ```
-
