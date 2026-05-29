@@ -1,6 +1,6 @@
 # LocalTensor简介<a name="ZH-CN_TOPIC_0000002364805793"></a>
 
-LocalTensor用于存放AI Core中Local Memory（内部存储）的数据，支持逻辑位置[TPosition](../../其他数据类型/TPosition.md)为VECIN、VECOUT、VECCALC、A1、A2、B1、B2、CO1、CO2。
+LocalTensor表达AI Core中Local Memory（内部存储）内的L1/L0A/L0B/L0C Buffer及Unified Buffer中的数据。
 
 ## 需要包含的头文件<a name="zh-cn_topic_0000002213064918_section78885814919"></a>
 

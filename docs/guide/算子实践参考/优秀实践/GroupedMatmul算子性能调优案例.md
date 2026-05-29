@@ -216,13 +216,13 @@ for i in range(g):
 
     Vector计算在等Cube计算输出的数据，Cube侧需要等Vector计算完释放workspace以存放下一轮的计算结果，当前为了让Cube、Vector计算流水并行，workspace使用了两份空间：
 
-    ![](../../figures/zh-cn_image_0000002085556446.png)
+    ![](../../figures/1_zh-cn_image_0000002085556446.png)
 
     因为Vector和Cube计算存在使用一份workspace进行数据传递的场景，存在数据依赖，所以会有等待的间隔。
 
     可以采用4份workspace进行优化：
 
-    ![](../../figures/zh-cn_image_0000002121156181.png)
+    ![](../../figures/2_zh-cn_image_0000002121156181.png)
 
     优化后，总耗时由154.2us下降为131.8us。指令流水图显示Vector、Cube计算各自间隙明显减小。
 
