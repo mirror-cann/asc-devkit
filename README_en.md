@@ -26,7 +26,7 @@
 - Fusion compilation and <<<>>> invocation support [CPU mode](https://gitcode.com/cann/asc-tools/pull/138) and [SIM simulation mode](https://gitcode.com/cann/asc-devkit/blob/master/cmake/asc/asc_modules/CMakeASCInformation.cmake).
 ### 📖 Documentation
 - Added 90+ [Reg programming interface API](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Reg矢量计算/Reg矢量计算.md) documentation. Reg vector computation API is developed for RegBase architecture, allowing users to directly operate registers involved in Vector computation on the chip for greater flexibility and better performance.
-- Added SIMT [quick start](docs/guide/入门教程/快速入门/基于SIMT编程/Add自定义算子开发.md), [programming model](docs/guide/编程指南/编程模型/AI-Core-SIMT编程/抽象硬件架构.md), and [operator implementation](docs/guide/算子实践参考/SIMT算子实现/基础知识.md) introductions.
+- Added SIMT [quick start](docs/guide/入门教程/快速入门/基于SIMT编程/Gather算子快速入门.md), [programming model](docs/guide/编程指南/编程模型/AI-Core-SIMT编程/抽象硬件架构.md), and [operator implementation](docs/guide/算子实践参考/SIMT算子实现/基础知识.md) introductions.
 - Added SIMD and SIMT [hybrid programming model](docs/guide/编程指南/高级编程/高级AI-Core编程模型/SIMD与SIMT混合编程.md), [operator implementation](docs/guide/算子实践参考/SIMD与SIMT混合算子实现/基础知识.md), and [performance optimization](docs/guide/算子实践参考/SIMD与SIMT混合算子性能优化/内存访问/使用Unified-Buffer提升内存访问效率.md) introductions.
 - Added [SIMT API](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMT-API/SIMT-API.md) documentation section.
 - Added [compatibility migration guide](docs/guide/跨代迁移兼容性指南/Ascend-C-API兼容策略.md) (220x architecture version migration to 351x architecture version).
