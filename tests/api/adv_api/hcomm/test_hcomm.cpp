@@ -28,7 +28,7 @@ Channel GetChannel()
     channel.sqNum = 1;
     std::unique_ptr<SqContext> sqContext(new SqContext());
     channel.sqContextAddr = sqContext.get();
-    channel.sqContextAddr->type = 0; // RDMA
+    channel.sqContextAddr->type = SQ_CONTEXT_TYPE_ROCE; // RDMA
     channel.sqContextAddr->ctx.rdmaSqContext.qpn = 1;
 
     // 分配实际内存
@@ -54,13 +54,13 @@ Channel GetChannel()
     channel.remoteBufferNum = 1;
     std::unique_ptr<ProtectionInfo> remoteBuffer(new ProtectionInfo());
     channel.remoteBufferAddr = remoteBuffer.get();
-    channel.remoteBufferAddr->type = 0; // RDMA
+    channel.remoteBufferAddr->type = PROTECTION_TYPE_ROCE;
     channel.remoteBufferAddr->pti.rdmaMemProtectionInfo.rkey = 123456;
 
     channel.localBufferNum = 1;
     std::unique_ptr<ProtectionInfo> localBuffer(new ProtectionInfo());
     channel.localBufferAddr = localBuffer.get();
-    channel.localBufferAddr->type = 0; // RDMA
+    channel.localBufferAddr->type = PROTECTION_TYPE_ROCE;
     channel.localBufferAddr->pti.rdmaMemProtectionInfo.lkey = 654321;
 
     return channel;
@@ -88,9 +88,9 @@ TEST_F(HcommCommonTestSuite, Aiv_Read)
     Channel channel = GetChannel();
 
     Hcomm hcomm;
-    ChannelHandle channelHandle = reinterpret_cast<ChannelHandle>(&channel);
+    ChannelPtr channelPtr = reinterpret_cast<ChannelPtr>(&channel);
     HcommHandle handleId =
-        hcomm.Read(channelHandle, reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1);
+        hcomm.ReadNbi(channelPtr, reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1);
     EXPECT_EQ(handleId, 0);
 }
 
@@ -99,8 +99,8 @@ TEST_F(HcommCommonTestSuite, Aiv_Write)
     Channel channel = GetChannel();
 
     Hcomm hcomm;
-    ChannelHandle channelHandle = reinterpret_cast<ChannelHandle>(&channel);
+    ChannelPtr channelPtr = reinterpret_cast<ChannelPtr>(&channel);
     HcommHandle handleId =
-        hcomm.Write(channelHandle, reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1);
+        hcomm.WriteNbi(channelPtr, reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1);
     EXPECT_EQ(handleId, 0);
 }

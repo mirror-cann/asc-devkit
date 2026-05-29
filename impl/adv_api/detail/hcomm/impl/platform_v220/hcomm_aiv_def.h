@@ -23,22 +23,38 @@
 #ifndef IMPL_ADV_API_DETAIL_HCOMM_IMPL_PLATFORM_V220_HCOMM_AIV_DEF_H
 #define IMPL_ADV_API_DETAIL_HCOMM_IMPL_PLATFORM_V220_HCOMM_AIV_DEF_H
 
+#include "../../common/hcomm_inner_def.h"
+
 namespace AscendC {
 
 enum class HCOMM_OP_TYPE : uint32_t { WRITE = 3U, READ = 5U };
 
 template <>
-class HcommImpl<CommEngine::AIV, CommProtocol::ROCE> {
+class HcommImpl<CommProtocol::ROCE, CommEngine::AIV> {
 public:
     __aicore__ inline HcommImpl();
 
     __aicore__ inline ~HcommImpl();
 
-    template <bool commit = true, pipe_t commitPipe = PIPE_MTE3, pipe_t reqPipe = PIPE_MTE3>
-    __aicore__ inline HcommHandle Write(ChannelHandle channelHandle, GM_ADDR dst, GM_ADDR src, uint64_t len);
+    __aicore__ inline int32_t Init(__ubuf__ uint8_t* buff, uint32_t len)
+    {
+        (void)buff;
+        (void)len;
+        return HCOMM_SUCCESS;
+    }
 
-    template <bool commit = true, pipe_t commitPipe = PIPE_MTE3, pipe_t reqPipe = PIPE_MTE3>
-    __aicore__ inline HcommHandle Read(ChannelHandle channelHandle, GM_ADDR dst, GM_ADDR src, uint64_t len);
+    template <bool commit = true, pipe_t commitPipe = PIPE_MTE3, pipe_t reqPipe = PIPE_MTE3,
+        auto const &config = URMA_DEFAULT_CFG>
+    __aicore__ inline HcommHandle WriteNbi(ChannelPtr channelPtr, GM_ADDR dst, GM_ADDR src, uint64_t len);
+
+    template <bool commit = true, pipe_t commitPipe = PIPE_MTE3, pipe_t reqPipe = PIPE_MTE3,
+        auto const &config = URMA_DEFAULT_CFG>
+    __aicore__ inline HcommHandle ReadNbi(ChannelPtr channelPtr, GM_ADDR dst, GM_ADDR src, uint64_t len);
+
+    template <bool commit = true, pipe_t commitPipe = PIPE_MTE3, pipe_t reqPipe = PIPE_MTE3,
+        auto const &config = URMA_DEFAULT_CFG>
+    __aicore__ inline HcommHandle WriteWithNotifyNbi(ChannelPtr channelPtr, GM_ADDR dst, GM_ADDR src,
+        uint64_t len, GM_ADDR notifyAddr, uint64_t notifyVal);
 
     template <pipe_t pipe = PIPE_MTE3>
     __aicore__ inline int32_t Commit(HcommHandle handleId)
@@ -53,7 +69,7 @@ public:
     }
 
 private:
-    __aicore__ inline void PostSend(ChannelHandle channelHandle, GM_ADDR dst, GM_ADDR src, uint64_t len, bool isRead);
+    __aicore__ inline void PostSend(ChannelPtr channelPtr, GM_ADDR dst, GM_ADDR src, uint64_t len, bool isRead);
 
     __aicore__ inline void doorBell(__gm__ Channel* channelPtr, uint64_t curHead);
 

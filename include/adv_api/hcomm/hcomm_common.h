@@ -19,7 +19,7 @@
 
 namespace AscendC {
 using HcommHandle = int32_t;
-using ChannelHandle = uint64_t;
+using ChannelPtr = uint64_t;
 
 enum class CommEngine {
     AIV = 0,

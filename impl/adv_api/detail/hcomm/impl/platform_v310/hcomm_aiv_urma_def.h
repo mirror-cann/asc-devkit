@@ -9,31 +9,49 @@
  */
 
 /*!
- * \file hcomm_aiv_def.h
- * \brief Hcomm AIV definition for V310
+ * \file hcomm_aiv_urma_def.h
+ * \brief Hcomm AIV URMA definition for V310
  */
 
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #pragma message( \
-    "impl/adv_api/detail/hcomm/impl/platform_v310/hcomm_aiv_def.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"adv_api/activation/simplesoftmax.h\"\" and use public functions or variables defined in interface headers files.")
+    "impl/adv_api/detail/hcomm/impl/platform_v310/hcomm_aiv_urma_def.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use public interface headers.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
-#define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_HCOMM_AIV_DEF_H__
+#define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_HCOMM_AIV_URMA_DEF_H__
 #endif
 
-#ifndef IMPL_ADV_API_DETAIL_HCOMM_IMPL_PLATFORM_V310_HCOMM_AIV_DEF_H
-#define IMPL_ADV_API_DETAIL_HCOMM_IMPL_PLATFORM_V310_HCOMM_AIV_DEF_H
+#ifndef IMPL_ADV_API_DETAIL_HCOMM_IMPL_PLATFORM_V310_HCOMM_AIV_URMA_DEF_H
+#define IMPL_ADV_API_DETAIL_HCOMM_IMPL_PLATFORM_V310_HCOMM_AIV_URMA_DEF_H
 
 #include "../../common/hcomm_inner_def.h"
 
 namespace AscendC {
-constexpr uint32_t HCOMM_TMP_BUF_SIZE = 224;
-constexpr uint32_t ROCE_SQ_DOORBELL_TYPE = 2;
-constexpr uint32_t ROCE_INIT_SQ_DB_SGIT_IDX = 1;
 
-enum class HCOMM_OP_TYPE : uint32_t { WRITE = 4U, READ = 8U };
+constexpr uint32_t HCOMM_URMA_MAX_RETRY_TIMES = 1000000;
+constexpr uint32_t HCOMM_URMA_DEFAULT_QP_IDX = 0;
+constexpr uint32_t HCOMM_URMA_TMP_BUF_SIZE = 512;
+constexpr uint32_t HCOMM_URMA_WQE_U32_NUM = 32;
+constexpr uint32_t HCOMM_URMA_CQE_U32_NUM = 16;
+
+enum class HcommUrmaOpCode : uint32_t {
+    SEND = 0U,
+    SEND_WITH_IMM,
+    SEND_WITH_INV,
+    WRITE,
+    WRITE_WITH_IMM,
+    WRITE_WITH_NOTIFY,
+    READ,
+    CAS,
+    ATOMIC_SWAP,
+    ATOMIC_STORE,
+    ATOMIC_LOAD,
+    FAA = 0xBU,
+    WRITE_WITH_REDUCE = 0x10U,
+    NOP = 0x11U,
+};
 
 template <>
-class HcommImpl<CommProtocol::ROCE, CommEngine::AIV> {
+class HcommImpl<CommProtocol::URMA, CommEngine::AIV> {
 public:
     __aicore__ inline HcommImpl();
     __aicore__ inline ~HcommImpl();
@@ -54,21 +72,23 @@ public:
     __aicore__ inline int32_t Wait(HcommHandle handleId);
 
 private:
-    template <bool commit = true, pipe_t commitPipe = PIPE_MTE3, pipe_t reqPipe = PIPE_MTE3>
-    __aicore__ inline HcommHandle Operate(
-        ChannelPtr channel, GM_ADDR dst, GM_ADDR src, uint64_t len, uint32_t opType);
+    template <bool commit = true, pipe_t commitPipe = PIPE_MTE3, pipe_t reqPipe = PIPE_MTE3,
+        HcommUrmaOpCode opCode = HcommUrmaOpCode::WRITE, auto const &config = URMA_DEFAULT_CFG>
+    __aicore__ inline HcommHandle PostSend(
+        ChannelPtr channel, GM_ADDR dst, GM_ADDR src, uint64_t len, GM_ADDR notifyAddr = nullptr,
+        uint64_t notifyVal = 0);
+    __aicore__ inline void PollCqWhenSqOverflow(
+        ChannelPtr channel, const SqContext& sqCtx, const CqContext& cqCtx, uint32_t sqHead);
+    __aicore__ inline uint32_t PollCq(ChannelPtr channel, uint32_t expectTail);
     template <bool isWait>
     __aicore__ inline bool JudgeHandleId(HcommHandle handleId);
 
 private:
-    TPipe pipe_;
-    TBuf<TPosition::VECOUT> hcommBuf_;
     LocalTensor<uint32_t> wqeItem_;
     LocalTensor<uint32_t> cqeItem_;
     LocalTensor<uint32_t> sqPI_;
     LocalTensor<uint32_t> sqCI_;
     LocalTensor<uint32_t> cqCI_;
-    LocalTensor<uint32_t> doorBell_;
     ChannelPtr channelList_[HCOMM_MAX_HANDLE_ID] = {0};
     bool handleCommitList_[HCOMM_MAX_HANDLE_ID] = {0};
     bool handleWaitList_[HCOMM_MAX_HANDLE_ID] = {0};
@@ -77,7 +97,7 @@ private:
 } // namespace AscendC
 
 #endif
-#if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_HCOMM_AIV_DEF_H__)
+#if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_HCOMM_AIV_URMA_DEF_H__)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
-#undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_HCOMM_AIV_DEF_H__
+#undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_HCOMM_AIV_URMA_DEF_H__
 #endif

@@ -367,6 +367,7 @@ file(GLOB ASCENDC_TEST_ascend950pr_9599_AIV_CASE_SRC_FILES
     # hccl
     hccl/test_hccl_aicpu_950.cpp
     hcomm/test_hcomm_950.cpp
+    hcomm/test_hcomm_urma_950.cpp
 )
 
 # ascend310B1 test cases
