@@ -55,9 +55,8 @@ set(CMAKE_ASC_FLAGS_INIT "$ENV{ASCFLAGS} ${CMAKE_ASC_FLAGS_INIT}")
 # Materialize CMAKE_ASC_FLAGS and CMAKE_ASC_FLAGS_<CONFIG> as cache STRINGs.
 cmake_initialize_per_config_variable(CMAKE_ASC_FLAGS "Flags used by the ASC compiler")
 
-# Auto-inject --npu-arch=<arch> for NPU mode.
-if(CMAKE_ASC_ARCHITECTURES AND
-   (NOT CMAKE_ASC_RUN_MODE OR CMAKE_ASC_RUN_MODE STREQUAL "npu"))
+# Auto-inject --npu-arch=<arch>.
+if(CMAKE_ASC_ARCHITECTURES)
     string(APPEND CMAKE_ASC_FLAGS " --npu-arch=${CMAKE_ASC_ARCHITECTURES}")
 endif()
 
@@ -208,7 +207,7 @@ if(CMAKE_ASC_RUN_MODE STREQUAL "cpu")
 -isystem$ENV{ASCEND_HOME_PATH}/asc/include/tiling -isystem$ENV{ASCEND_HOME_PATH}/asc/include/utils")
 
         # 添加编译选项
-        string(APPEND CMAKE_ASC_FLAGS "-g -D_GLIBCXX_USE_CXX11_ABI=0 -DASCENDC_DEBUG=1 -D__NPU_ARCH__=${_SHORT_NPU_ARCH} --run-mode=cpu ${ASC_CPU_SYSTEM_INCLUDE_OPTIONS}")
+        string(APPEND CMAKE_ASC_FLAGS " -g -D_GLIBCXX_USE_CXX11_ABI=0 -DASCENDC_DEBUG=1 -D__NPU_ARCH__=${_SHORT_NPU_ARCH} --run-mode=cpu ${ASC_CPU_SYSTEM_INCLUDE_OPTIONS}")
 
         # 配置链接选项
         string(APPEND CMAKE_ASC_LINK_FLAGS "--run-mode=cpu -Wl,--disable-new-dtags")
