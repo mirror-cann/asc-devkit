@@ -46,8 +46,12 @@ public:
 private:
     HcclResult RunALLtoALL(const std::map<u32, std::vector<ChannelInfo>> &channels,
         const std::vector<ThreadHandle> &threads, const TemplateDataParams &tempAlgParams, const u32 myAlgRank);
-    HcclResult PreCopy(const std::vector<u32> &commRanks, const std::map<u32, std::vector<ChannelInfo>> &channels,
-        const std::vector<ThreadHandle> &threads, const TemplateDataParams &tempAlgParams, const u32 myAlgRank);
+    HcclResult PreCopy(const TemplateDataParams &tempAlgParams, const ThreadHandle &thread,
+        const u32 myRankCclBuffIdx, const u32 remoteRank, const u64 &sendSize,
+        const u64 &sendCount, const u64 &sendOffset) const;
+    HcclResult PreCopyByLoop(const std::vector<u32> &commRanks,
+        const std::map<u32, std::vector<ChannelInfo>> &channels, const std::vector<ThreadHandle> &threads,
+        const TemplateDataParams &tempAlgParams, const u32 myAlgRank);
     HcclResult PostCopy(const TemplateDataParams &tempAlgParams, const ThreadHandle &thread,
         const u32 myRankCclBuffIdx, const u32 remoteRank, const u64 &recvSize,
         const u64 &recvCount, const u64 &recvOffset) const;
@@ -57,16 +61,18 @@ private:
     u32 CalcCommLoops() const;
     void CalcCclBuffIdx(u32 remoteRank, u32 &myRankCclBuffIdx, u32 &remoteCclBuffIdx) const;
     HcclResult RunSendRecvByLoop(const std::vector<u32> &commRanks, const TemplateDataParams &tempAlgParams,
-        const std::map<u32, std::vector<ChannelInfo>> &channels, const std::vector<ThreadHandle> &threads);
-    HcclResult RunSendRecvByChannel(const TemplateDataParams &tempAlgParams,
+        const std::map<u32, std::vector<ChannelInfo>> &channels, const std::vector<ThreadHandle> &threads,
+        const u32 roundIdx, const u32 commLoops);
+    HcclResult RunSendRecvByChannel(const TemplateDataParams &tempAlgParams, const u32 roundIdx,
         const std::vector<ChannelInfo> &curChannels, const u32 remoteRank,
-        const std::vector<ThreadHandle> &threads, u32 &queIdx) const;
+        const std::vector<ThreadHandle> &threads, const u32 commLoops) const;
     HcclResult RunSendRecv(const TemplateDataParams &tempAlgParams,
         const SendRecvInfo &sendRecvInfo, const DataInfo &sendInfo, const DataInfo &recvInfo,
         const ThreadHandle& thread, const u32 channelId) const;
-    HcclResult CalcDataSplitByPortGroup(const u64 totalDataCount, const u64 dataTypeSize,
-        const std::vector<ChannelInfo> &channels, std::vector<u64> &elemCountOut,
-        std::vector<u64> &sizeOut, std::vector<u64> &elemOffset) const;
+    HcclResult PreSyncInterThreadsPerRank(const ThreadHandle &mainThreadCurRank,
+        const std::vector<ThreadHandle> &subThreadsCurRank) const;
+    HcclResult PostSyncInterThreadsPerRank(const ThreadHandle &mainThreadCurRank,
+        const std::vector<ThreadHandle> &subThreadsCurRank) const;
 
     u64 dataTypeSize_{0};
     bool isDmaRead_{false};
