@@ -293,6 +293,8 @@ __aicore__ static inline void CheckLoadData2dParams(const LoadData2DParams& load
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckValueRange<uint8_t>(loadDataParams.repeatTimes, 1, UINT8_MAX, "loadDataParams.repeatTimes",
         "LoadData with LoadData2DParams");
+    CheckValueRange<uint8_t>(loadDataParams.sid, 0, MAX_LOAD2D_SID, "loadDataParams.sid",
+        "LoadData with LoadData2DParams");
 #endif
     // Only when A1->A2 / B1->B2 + dtype B16
     if (loadDataParams.ifTranspose) {
