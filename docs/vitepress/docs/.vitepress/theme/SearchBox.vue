@@ -9,7 +9,7 @@ const showResults = ref(false)
 const selectedIndex = ref(-1)
 
 function getDirInfo(url) {
-  const parts = url.replace(/\/$/, '').split('/').filter(Boolean)
+  const parts = url.replace(/\/$/, '').split('/').filter(Boolean).map(decodeURIComponent)
   if (parts.length <= 1) return []
   const routePrefixes = ['api', 'guide']
   let start = routePrefixes.includes(parts[0]) ? 1 : 0
@@ -17,37 +17,22 @@ function getDirInfo(url) {
 }
 
 let pagefindReady = false
-let pagefindPromise = null
 
-function initPagefind() {
-  if (pagefindReady) return
-  if (pagefindPromise) return pagefindPromise
-  pagefindPromise = new Promise((resolve) => {
-    try {
-      const script = document.createElement('script')
-      script.src = '/pagefind/pagefind.js'
-      script.onload = async () => {
-        try {
-          if (window.Pagefind) {
-            await window.Pagefind.init()
-            pagefindReady = true
-          }
-        } catch {}
-        resolve()
-      }
-      script.onerror = () => resolve()
-      document.head.appendChild(script)
-    } catch { resolve() }
-  })
-  return pagefindPromise
-}
-
-function debounce(fn, delay) {
-  let timer
-  return (...args) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => fn(...args), delay)
+async function ensurePagefind() {
+  if (window.__pagefind__?.search) {
+    pagefindReady = true
+    return true
   }
+  let elapsed = 0
+  while (elapsed < 5000) {
+    await new Promise(r => setTimeout(r, 100))
+    elapsed += 100
+    if (window.__pagefind__?.search) {
+      pagefindReady = true
+      return true
+    }
+  }
+  return false
 }
 
 async function doSearch(q) {
@@ -56,12 +41,12 @@ async function doSearch(q) {
     return
   }
   if (!pagefindReady) {
-    await initPagefind()
-    if (!pagefindReady) return
+    const ready = await ensurePagefind()
+    if (!ready) return
   }
   loading.value = true
   try {
-    const search = await window.Pagefind.search(q.trim())
+    const search = await window.__pagefind__.search(q.trim())
     const mapped = []
     for (const r of search.results.slice(0, 24)) {
       const data = await r.data()
@@ -79,6 +64,14 @@ async function doSearch(q) {
     results.value = []
   } finally {
     loading.value = false
+  }
+}
+
+function debounce(fn, delay) {
+  let timer
+  return (...args) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => fn(...args), delay)
   }
 }
 
@@ -116,7 +109,6 @@ function onClickOutside(e) {
 
 onMounted(() => {
   document.addEventListener('click', onClickOutside)
-  initPagefind()
 })
 
 onUnmounted(() => {

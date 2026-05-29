@@ -16,39 +16,85 @@ function getFilterVersion() {
 }
 
 function filterContentByVersion(content, version) {
-  const htmlBlockRegex = /<p>\s*CANNFILTER_DIV_(\w+)_OPEN\s*<\/p>([\s\S]*?)<p>\s*CANNFILTER_DIV_\1_CLOSE\s*<\/p>/g
-  const plainBlockRegex = /CANNFILTER_DIV_(\w+)_OPEN[ \t]*\n?([\s\S]*?)CANNFILTER_DIV_\1_CLOSE/g
+  const htmlBlockRegex = /<p>\s*CANNFILTER_DIV_([A-Za-z0-9_,]+)_OPEN\s*<\/p>([\s\S]*?)<p>\s*CANNFILTER_DIV_\1_CLOSE\s*<\/p>/g
+  const plainBlockRegex = /CANNFILTER_DIV_([A-Za-z0-9_,]+)_OPEN[ \t]*\n?([\s\S]*?)CANNFILTER_DIV_\1_CLOSE/g
+
+  content = filterCannFilterTags(content, version)
 
   if (version === 'all') {
     content = content.replace(htmlBlockRegex, '$2')
     content = content.replace(plainBlockRegex, '$2')
-    return content
+  } else {
+    content = content.replace(htmlBlockRegex, (match, ver, inner) => ver === version ? inner : '')
+    content = content.replace(plainBlockRegex, (match, ver, inner) => ver === version ? inner : '')
   }
 
-  content = content.replace(htmlBlockRegex, (match, ver, inner) => ver === version ? inner : '')
-  content = content.replace(plainBlockRegex, (match, ver, inner) => ver === version ? inner : '')
+  content = content.replace(/<term\b[^>]*>([\s\S]*?)<\/term>/gi, '$1')
+  content = content.replace(/<ph\b[^>]*>([\s\S]*?)<\/ph>/gi, '$1')
+  content = content.replace(/<__gm__\b[^>]*>([\s\S]*?)<\/__gm__>/gi, '$1')
+  content = content.replace(/<__ubuf__\b[^>]*>([\s\S]*?)<\/__ubuf__>/gi, '$1')
   return content
 }
 
-function getSidebarLinks() {
+function filterCannFilterTags(src, version) {
+  const tagRegex = /<(\/?)(cann-filter)((?:\s[^>]*)?)>/gi
+  const stack = []
+  const parts = []
+  let lastIdx = 0
+  let match
+  while ((match = tagRegex.exec(src)) !== null) {
+    const pos = match.index
+    const isClose = match[1] === '/'
+    const attrs = match[3]
+    const before = src.slice(lastIdx, pos)
+    const suppress = stack.length > 0 && stack[stack.length - 1]
+
+    if (isClose) {
+      if (stack.length > 0) {
+        stack.pop()
+      }
+      if (!suppress) {
+        const curSuppress = stack.length > 0 && stack[stack.length - 1]
+        if (!curSuppress) parts.push(before)
+      }
+      lastIdx = pos + match[0].length
+    } else {
+      if (!suppress) parts.push(before)
+      const attrMatch = attrs.match(/npu[_-]type\s*=\s*"([^"]+)"/i)
+      if (attrMatch && version !== 'all') {
+        const types = attrMatch[1].split(',').map(s => s.trim())
+        const include = types.includes(version)
+        stack.push(!include)
+      } else {
+        stack.push(false)
+      }
+      lastIdx = pos + match[0].length
+    }
+  }
+  parts.push(src.slice(lastIdx))
+  const result = parts.join('')
+  return result.replace(/<\/?cann-filter\b[^>]*>/gi, '')
+}
+
+async function fetchManifest() {
+  try {
+    const resp = await fetch('/api-source/manifest.json')
+    if (!resp.ok) return null
+    return await resp.json()
+  } catch {
+    return null
+  }
+}
+
+function getSidebarHrefs() {
   if (typeof document === 'undefined') return []
   const links = document.querySelectorAll('.VPSidebar a[href^="/api/"]')
   const hrefs = [...links].map(a => a.getAttribute('href'))
   return [...new Set(hrefs)]
 }
 
-function hrefToSourcePath(href) {
-  const relative = href.replace(/^\/api\//, '').replace(/\/$/, '')
-  return '/api-source/' + relative + '.md'
-}
-
-async function checkExists(url) {
-  try {
-    const resp = await fetch(url, { method: 'HEAD' })
-    return resp.ok
-  } catch {
-    return false
-  }
+function sidebarHrefToRelPath(href) {
+  return href.replace(/^\/api\//, '').replace(/\.html$/, '').replace(/\/$/, '') + '.md'
 }
 
 function timestamp() {
@@ -76,40 +122,50 @@ function downloadBlob(blob, filename) {
 async function handleDownload() {
   const version = getFilterVersion()
   const versionLabel = version === 'all' ? 'all' : ('v' + version)
-  const hrefs = getSidebarLinks()
-
-  if (hrefs.length === 0) {
-    return
-  }
 
   loading.value = true
 
   try {
-    const sourcePaths = []
-    const batchSize = 30
+    const manifest = await fetchManifest()
+    if (!manifest || Object.keys(manifest).length === 0) {
+      console.error('No source files found in manifest')
+      return
+    }
 
-    for (let i = 0; i < hrefs.length; i += batchSize) {
-      const batch = hrefs.slice(i, i + batchSize)
-      const results = await Promise.all(batch.map(async (href) => {
-        const path = hrefToSourcePath(href)
-        const ok = await checkExists(path)
-        return ok ? path : null
-      }))
-      sourcePaths.push(...results.filter(Boolean))
+    const sidebarHrefs = getSidebarHrefs()
+    if (sidebarHrefs.length === 0) {
+      console.error('No sidebar links found')
+      return
+    }
+
+    const fileEntries = []
+    for (const href of sidebarHrefs) {
+      const relPath = sidebarHrefToRelPath(href)
+      const decoded = decodeURIComponent(relPath).replace(/\\/g, '/')
+      const hash = manifest[decoded]
+      if (hash) {
+        fileEntries.push({ relPath: decoded, hash })
+      }
+    }
+
+    if (fileEntries.length === 0) {
+      console.error('No matching source files found')
+      return
     }
 
     const zip = new JSZip()
+    const batchSize = 30
 
-    for (let i = 0; i < sourcePaths.length; i += batchSize) {
-      const batch = sourcePaths.slice(i, i + batchSize)
-      const results = await Promise.all(batch.map(async (sp) => {
+    for (let i = 0; i < fileEntries.length; i += batchSize) {
+      const batch = fileEntries.slice(i, i + batchSize)
+      const results = await Promise.all(batch.map(async ({ relPath, hash }) => {
         try {
-          const resp = await fetch(sp)
+          const url = '/api-source/files/' + hash + '.md'
+          const resp = await fetch(url)
           if (!resp.ok) return null
           let content = await resp.text()
           content = filterContentByVersion(content, version)
-          const filename = sp.replace(/^\/api-source\//, '')
-          return { filename, content }
+          return { filename: relPath, content }
         } catch {
           return null
         }

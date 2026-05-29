@@ -11,6 +11,15 @@ import type { SearchConfig } from './type'
 import { formatPagefindResult } from './search'
 import { formatShowDate } from './utils'
 
+if (typeof window !== 'undefined' && !window.__pagefind__) {
+  import('/pagefind/pagefind.js').then(m => {
+    if (!window.__pagefind__) {
+      window.__pagefind__ = m
+      m.init()
+    }
+  }).catch(() => {})
+}
+
 const searchResult = ref<{ route: string; meta: Record<string, any> }[]>([])
 const searchConfig: SearchConfig = _searchConfig
 
@@ -126,7 +135,7 @@ watch(
           return
         }
         const pagefindResults = await Promise.all(
-          pagefindSearchResult.results.map((v: any) => v.data())
+          pagefindSearchResult.results.slice(0, 30).map((v: any) => v.data())
         )
         const formattedResults = pagefindResults
           .map((r) => {
@@ -235,7 +244,7 @@ function stripExt(url: string) {
 }
 
 function breadcrumb(url: string) {
-  const segments = stripExt(url).replace(/\/$/, '').split('/').filter(Boolean)
+  const segments = stripExt(url).replace(/\/$/, '').split('/').filter(Boolean).map(decodeURIComponent)
   if (segments.length <= 1) return ''
   const topLevels = ['api', 'guide', 'zh', 'en']
   let start = topLevels.includes(segments[0]) ? 1 : 0

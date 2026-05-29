@@ -1,18 +1,15 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ */
 
 const fs = require('fs')
 const path = require('path')
+const crypto = require('crypto')
 
-const apiDir = path.resolve(__dirname, '..', 'docs', 'api')
-const outDir = path.resolve(__dirname, '..', 'docs', 'public', 'api-source')
+const root = path.resolve(__dirname, '..')
+const repoRoot = path.resolve(root, '..', '..')
+const apiDir = path.resolve(repoRoot, 'docs', 'api')
+const outDir = path.resolve(root, 'docs', 'public', 'api-source')
 
 function walkDir(dir, entries) {
   const list = fs.readdirSync(dir)
@@ -27,6 +24,10 @@ function walkDir(dir, entries) {
   }
 }
 
+function hashPath(str) {
+  return crypto.createHash('md5').update(str).digest('hex')
+}
+
 if (!fs.existsSync(apiDir)) {
   console.error('api dir not found:', apiDir)
   process.exit(1)
@@ -37,11 +38,17 @@ fs.mkdirSync(outDir, { recursive: true })
 const files = []
 walkDir(apiDir, files)
 
+const flatDir = path.join(outDir, 'files')
+fs.mkdirSync(flatDir, { recursive: true })
+
+const manifest = {}
 for (const src of files) {
-  const rel = path.relative(apiDir, src)
-  const dest = path.join(outDir, rel)
-  fs.mkdirSync(path.dirname(dest), { recursive: true })
+  const rel = path.relative(apiDir, src).replace(/\\/g, '/')
+  const hash = hashPath(rel)
+  manifest[rel] = hash
+  const dest = path.join(flatDir, hash + '.md')
   fs.copyFileSync(src, dest)
 }
 
-console.log(`copied ${files.length} .md files to docs/public/api-source/`)
+fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf-8')
+console.log(`copied ${files.length} .md files to docs/public/api-source/files/`)
