@@ -30,30 +30,30 @@ void InitDebugConfigByValue(u64 config);
 #define HCCL_CONFIG_INFO(config, format,...) do {                                             \
     if (UNLIKELY(hccl::GetDebugConfig() & config)) {                        \
         const char* configName = #config;                                                     \
-        LOG_FUNC((static_cast<u32>(HCCL)) | RUN_LOG_MASK, HCCL_LOG_INFO, "[%s:%d] [%u] [%s]: " format,            \
+        LOG_FUNC(ASCENDC_MC2_RUN_LOG_MASK, DLOG_INFO, "[%s:%d] [%u] [%s]: " format,            \
             __FILE__, __LINE__, syscall(SYS_gettid), configName, ##__VA_ARGS__);              \
     } else if (UNLIKELY(HcclCheckLogLevel(HCCL_LOG_INFO))) {                                  \
-        HCCL_LOG_PRINT(HCCL, HCCL_LOG_INFO, format, ##__VA_ARGS__);                           \
+        HCCL_LOG_PRINT(ASCENDC_MC2_DLOG_MODULE, HCCL_LOG_INFO, format, ##__VA_ARGS__);                           \
     }                                                                                         \
 } while(0)
 
 #define HCCL_CONFIG_DEBUG(config, format,...) do {                                            \
     if (UNLIKELY(hccl::GetDebugConfig() & config)) {                        \
         const char* configName = #config;                                                     \
-        LOG_FUNC((static_cast<u32>(HCCL)) | RUN_LOG_MASK, HCCL_LOG_INFO, "[%s:%d] [%u] [%s]: " format,            \
+        LOG_FUNC(ASCENDC_MC2_RUN_LOG_MASK, DLOG_INFO, "[%s:%d] [%u] [%s]: " format,            \
             __FILE__, __LINE__, syscall(SYS_gettid), configName, ##__VA_ARGS__);              \
     } else if (UNLIKELY(HcclCheckLogLevel(HCCL_LOG_DEBUG))) {                                 \
-        HCCL_LOG_PRINT(HCCL, HCCL_LOG_DEBUG, format, ##__VA_ARGS__);                          \
+        HCCL_LOG_PRINT(ASCENDC_MC2_DLOG_MODULE, HCCL_LOG_DEBUG, format, ##__VA_ARGS__);                          \
     }                                                                                         \
 } while(0)
 
 // opEntry HCCL_ENTRY_LOG_ENABLE环境变量，用于增加算子kernel展开信息
 #define HCCL_ENTRY_INFO(opEntry, format,...) do {                                             \
     if (UNLIKELY(opEntry)) {                                                                  \
-        LOG_FUNC((static_cast<u32>(HCCL)) | RUN_LOG_MASK, HCCL_LOG_INFO, "[%s:%d] [%u]: " format,            \
+        LOG_FUNC(ASCENDC_MC2_RUN_LOG_MASK, DLOG_INFO, "[%s:%d] [%u]: " format,            \
             __FILE__, __LINE__, syscall(SYS_gettid), ##__VA_ARGS__);              \
     } else if (UNLIKELY(HcclCheckLogLevel(HCCL_LOG_INFO))) {                                  \
-        HCCL_LOG_PRINT(HCCL, HCCL_LOG_INFO, format, ##__VA_ARGS__);                           \
+        HCCL_LOG_PRINT(ASCENDC_MC2_DLOG_MODULE, HCCL_LOG_INFO, format, ##__VA_ARGS__);                           \
     }                                                                                         \
 } while(0)
 

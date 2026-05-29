@@ -47,7 +47,10 @@ void DlogRecord(int32_t moduleId, int32_t level, const char *fmt, ...) __attribu
     DlogRecord(module, level, fmt, ##__VA_ARGS__); \
 } while (0)
 
-bool HcclCheckLogLevel(int logType, int moduleId = HCCL);
+#define ASCENDC_MC2_DLOG_MODULE (static_cast<int32_t>(ASCENDCKERNEL))
+#define ASCENDC_MC2_RUN_LOG_MASK (ASCENDC_MC2_DLOG_MODULE | static_cast<int32_t>(RUN_LOG_MASK))
+
+bool HcclCheckLogLevel(int logType, int moduleId = ASCENDC_MC2_DLOG_MODULE);
 
 void SetErrToWarnSwitch(bool flag); // 设置True时修改日志级别：ERROR -> RUN_WARNING，设置False恢复日志级别
 
@@ -58,7 +61,7 @@ bool IsErrorToWarn();
 #define HCCL_LOG_WARN  DLOG_WARN
 #define HCCL_LOG_ERROR DLOG_ERROR
 
-#define HCCL_LOG_MASK (static_cast<int32_t>(HCCL) | static_cast<int32_t>(RUN_LOG_MASK))
+#define HCCL_LOG_MASK ASCENDC_MC2_RUN_LOG_MASK
 
 #define HCCL_LOG_PRINT(moduleId, logType, format, ...) do { \
     LOG_FUNC(moduleId, logType, "[%s:%d] [%u]" format, __FILE__, __LINE__, syscall(SYS_gettid), ##__VA_ARGS__); \
@@ -66,16 +69,16 @@ bool IsErrorToWarn();
 
 #define HCCL_ERROR_LOG_PRINT(format, ...) do { \
     if (IsErrorToWarn()) { \
-        LOG_FUNC(HCCL_LOG_MASK, HCCL_LOG_WARN, "[%s:%d] [%u]ErrToWarn: " format, \
+        LOG_FUNC(ASCENDC_MC2_RUN_LOG_MASK, DLOG_WARN, "[%s:%d] [%u]ErrToWarn: " format, \
                  __FILE__, __LINE__, syscall(SYS_gettid), ##__VA_ARGS__); \
     } else { \
-        LOG_FUNC(HCCL, HCCL_LOG_ERROR, "[%s:%d] [%u]" format, \
+        LOG_FUNC(ASCENDC_MC2_DLOG_MODULE, DLOG_ERROR, "[%s:%d] [%u]" format, \
                  __FILE__, __LINE__, syscall(SYS_gettid), ##__VA_ARGS__); \
     } \
 } while(0)
 
 #define HCCL_RUN_LOG_PRINT(format, ...) do { \
-    LOG_FUNC(HCCL_LOG_MASK, HCCL_LOG_INFO, "[%s:%d] [%u]" format, \
+    LOG_FUNC(ASCENDC_MC2_RUN_LOG_MASK, DLOG_INFO, "[%s:%d] [%u]" format, \
              __FILE__, __LINE__, syscall(SYS_gettid), ##__VA_ARGS__); \
 } while(0)
 
@@ -86,19 +89,19 @@ const u64 HCCL_MODULE_ID = 5;
 /* 预定义日志宏, 便于使用 */
 #define HCCL_DEBUG(format, ...) do { \
     if (UNLIKELY(HcclCheckLogLevel(HCCL_LOG_DEBUG))) { \
-        HCCL_LOG_PRINT(HCCL, HCCL_LOG_DEBUG, format, ##__VA_ARGS__); \
+        HCCL_LOG_PRINT(ASCENDC_MC2_DLOG_MODULE, HCCL_LOG_DEBUG, format, ##__VA_ARGS__); \
     } \
 } while(0)
 
 #define HCCL_INFO(format, ...) do { \
     if (UNLIKELY(HcclCheckLogLevel(HCCL_LOG_INFO))) { \
-        HCCL_LOG_PRINT(HCCL, HCCL_LOG_INFO, format, ##__VA_ARGS__); \
+        HCCL_LOG_PRINT(ASCENDC_MC2_DLOG_MODULE, HCCL_LOG_INFO, format, ##__VA_ARGS__); \
     } \
 } while(0)
 
 #define HCCL_WARNING(format, ...) do { \
     if (UNLIKELY(HcclCheckLogLevel(HCCL_LOG_WARN))) { \
-        HCCL_LOG_PRINT(HCCL, HCCL_LOG_WARN, format, ##__VA_ARGS__); \
+        HCCL_LOG_PRINT(ASCENDC_MC2_DLOG_MODULE, HCCL_LOG_WARN, format, ##__VA_ARGS__); \
     } \
 } while(0)
 
@@ -117,7 +120,7 @@ const u64 HCCL_MODULE_ID = 5;
 
 #define HCCL_RUN_WARNING(format, ...) do { \
     if (LIKELY(HcclCheckLogLevel(HCCL_LOG_WARN, HCCL_LOG_MASK))) { \
-        HCCL_LOG_PRINT(HCCL_LOG_MASK, HCCL_LOG_WARN, format, ##__VA_ARGS__); \
+        HCCL_LOG_PRINT(ASCENDC_MC2_RUN_LOG_MASK, HCCL_LOG_WARN, format, ##__VA_ARGS__); \
     } \
 } while(0)
 

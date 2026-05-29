@@ -1538,7 +1538,7 @@ u32 AicpuKfcProcess::AicpuRpcResInit(HccCommResParamTask *commParam)
     AicpuSqeContext::InitSqeContext();
     memset_s(ctx, sizeof(AicpuComContext), 0, sizeof(AicpuComContext));
     s32 enableEvent = 0;
-    ctx->logLevel = dlog_getlevel(HCCL, &enableEvent);
+    ctx->logLevel = dlog_getlevel(ASCENDC_MC2_DLOG_MODULE, &enableEvent);
     ctx->rankId = commParam->rankId;
     ctx->rankNum = commParam->rankNum;
     ctx->windowSize = commParam->winSize;
