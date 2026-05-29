@@ -18,7 +18,7 @@ find_package(ASC REQUIRED)
 project(kernel_samples LANGUAGES ASC CXX)
 
 add_executable(demo
-    arithmetic.asc
+    element_wise_arithmetic.asc
 )
 
 target_compile_options(demo PRIVATE

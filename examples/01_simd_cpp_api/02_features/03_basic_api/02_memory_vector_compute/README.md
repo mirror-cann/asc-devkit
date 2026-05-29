@@ -8,7 +8,7 @@
 
 | 目录名称 | 功能描述 | 支持的产品 |
 |----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------| --- |
-| [arithmetic](./arithmetic) |  本样例基于LeakyRelu展示了基础算术类接口的使用方法 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [element_wise_arithmetic](./element_wise_arithmetic) |  本样例基于LeakyRelu展示了基础算术类接口的使用方法 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [block_reduce_min_max_sum](./block_reduce_min_max_sum) |  本样例基于BlockReduceMax/BlockReduceMin/BlockReduceSum实现归约计算 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [cast](./cast) |  本样例基于Cast实现源操作数和目的操作数Tensor的数据类型及精度转换 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [compare](./compare) |  本样例基于Compare、Compares接口完成多场景下的数据比较功能，实现逐元素大小比较。 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
