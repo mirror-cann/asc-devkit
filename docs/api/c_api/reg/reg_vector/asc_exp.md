@@ -4,7 +4,7 @@
 
 | 产品     | 是否支持 |
 | ----------- | :----: |
-| Ascend 950PR/Ascend 950DT | √    |
+| Ascend 950PR/Ascend 950DT | √ |
 
 ## 功能说明
 
@@ -47,6 +47,6 @@ PIPE_V
 ```cpp
 vector_half dst;
 vector_half src;
-vector_bool mask;
+vector_bool mask = asc_create_mask_b16(PAT_ALL);
 asc_exp(dst, src, mask);
 ```

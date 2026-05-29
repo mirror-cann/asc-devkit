@@ -1,4 +1,4 @@
-# asc_repeat_reduce_min
+# asc_get_reduce_min_cnt
 
 ## 产品支持情况
 

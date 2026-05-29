@@ -62,7 +62,7 @@ PIPE_MTE3
 ## 调用示例
 
 ```cpp
-// total_length指参与搬运的数据总个数。dst是外部输入的half类型的GM内存。
+// total_length指参与搬运的数据总长度。dst是外部输入的half类型的GM内存。
 constexpr uint64_t total_length = 128;
 __ubuf__ half src[total_length];
 asc_copy_ub2gm(dst, src, total_length * sizeof(half));

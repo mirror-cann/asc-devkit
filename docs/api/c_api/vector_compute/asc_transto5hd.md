@@ -6,7 +6,7 @@
 | :------------ | :------------: |
 | <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> | √ |
 | <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> | √ |
-|<cann-filter npu_type = "950"> Ascend 950PR/Ascend 950DT | √ </cann-filter>|
+| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
 
 ## 功能说明
 
@@ -76,7 +76,7 @@ PIPE_V
 ## 调用示例
 
 ```cpp
-示例一：
+// 示例一：
 constexpr uint64_t total_length = 256;    // total_length指参与计算的数据长度
 __ubuf__ half src[total_length];
 __ubuf__ half dst[total_length];
@@ -131,7 +131,7 @@ asc_set_va_reg(VA3, src_list + VA_REG_ARRAY_LEN);
 
 asc_transto5hd_b16(VA0, VA2, repeat, dst_stride, src_stride);
 
-示例二：
+// 示例二：
 constexpr uint64_t total_length = 2 * 32 * 16 * 16;    // total_length指参与计算的数据长度
 __ubuf__ half src[total_length];
 __ubuf__ half dst[total_length];

@@ -21,7 +21,7 @@
 计算公式如下:
 
 $$
-dst_i = (src_i*scale)+offset
+dst_i = (src_i * scale) + offset
 $$
 
 ## 函数原型
@@ -89,6 +89,6 @@ float scale = 1.0;        // 量化参数为1
 int16_t offset = 0;       // 不带偏移
 bool sign_mode = true;    // 量化结果带符号（dst为int8_t类型）
 asc_set_deq_scale(scale, offset, sign_mode);    // 计算公式为dst = src
-asc_deq_int162b8_h(dst, src, total_length);    // 将src转换为int8_t类型并存放在dst每个DataBlock的下半块
-asc_deq_int162b8_l(dst, src, total_length);    // 将src转换为int8_t类型并存放在dst每个DataBlock的上半块
+asc_deq_int162b8_h(dst, src, total_length);    // 将src转换为int8_t类型并存放在dst每个DataBlock的上半块
+asc_deq_int162b8_l(dst, src, total_length);    // 将src转换为int8_t类型并存放在dst每个DataBlock的下半块
 ```

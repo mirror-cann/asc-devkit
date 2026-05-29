@@ -4,7 +4,7 @@
 
 | 产品 | 是否支持 |
 | :-----------| :------: |
-|<cann-filter npu_type = "950"> Ascend 950PR/Ascend 950DT | √</cann-filter> |
+| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
 
 ## 功能说明
 
@@ -25,6 +25,7 @@ __aicore__ inline void asc_set_l3d_rpt_b(uint64_t config)
 | config | 输入 | 用于设置接口asc_copy_l12l0a、asc_copy_l12l0b的2D格式搬运repeat参数。比特位说明参考表2。 |
 
 表2 常用重复控制寄存器比特位说明
+
 |L3D_RPT_B比特位    |功能|
 | :-------     | :---- |
 | L3D_RPT_B[15:0]    | 表示重复步长    | 

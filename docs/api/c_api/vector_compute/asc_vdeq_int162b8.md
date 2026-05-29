@@ -1,23 +1,22 @@
-
-# asc_vdeq_int162b8_h
+# asc_vdeq_int162b8
 
 ## 产品支持情况
 
 | 产品     | 是否支持 |
 | ----------- |:----:|
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √    |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √    |
+| <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> | √    |
+| <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> | √    |
 
 ## 功能说明
 
-将int16_t类型转化为int8_t或uint8_t类型，并将数据存放在每个DataBlock的上半块或下半块。使用该接口前需要调用asc_set_deqscale设置量化参数。
+将int16_t类型转化为int8_t或uint8_t类型，并将数据存放在每个DataBlock的上半块或下半块。使用该接口前需要调用asc_set_deq_scale设置量化参数。
 
 - asc_vdeq_int162b8_h：将数据存放在每个DataBlock的上半块。
 - asc_vdeq_int162b8_l：将数据存放在每个DataBlock的下半块。
 计算公式如下:
 
 $$
-dst_i = (src_i*scale_j)+offset_j
+dst_i = (src_i * scale_j) + offset_j
 $$
 
 ## 函数原型

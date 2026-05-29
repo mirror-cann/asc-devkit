@@ -23,9 +23,9 @@ union asc_l13d_fmatrix_config {
 
 |字段名|字段含义|
 |----------|----------|
-| l1_height | Feature map的height，取值范围：l1_height∈[1, 32767]。 |
-| l1_width | Feature map的width，取值范围：l1_width∈[1, 32767]。 |
-| padding_left_size | 左侧填充的大小，取值范围：padding_left_size ∈[0, 255] 。|
-| padding_right_size | 右侧填充的大小，取值范围：padding_right_size ∈[0, 255] 。|
-| padding_top_size | 上侧填充的大小，取值范围：padding_top_size ∈[0, 255] 。|
-| padding_bottom_size | 下侧填充的大小，取值范围：padding_bottom_size ∈[0, 255] 。|
+| l1_height | Feature map的height，取值范围：[1, 32767]。 |
+| l1_width | Feature map的width，取值范围：[1, 32767]。 |
+| padding_left_size | 左侧填充的大小，取值范围：[0, 255]。 |
+| padding_right_size | 右侧填充的大小，取值范围：[0, 255]。 |
+| padding_top_size | 上侧填充的大小，取值范围：[0, 255]。 |
+| padding_bottom_size | 下侧填充的大小，取值范围：[0, 255]。 |

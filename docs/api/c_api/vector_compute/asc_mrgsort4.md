@@ -4,9 +4,9 @@
 
 |产品|是否支持|
 | :------------ | :------------: |
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ |
-|<cann-filter npu_type = "950"> Ascend 950PR/Ascend 950DT | √ </cann-filter>|
+| <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> | √ |
+| <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> | √ |
+| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
 
 ## 功能说明
 
@@ -30,7 +30,7 @@ asc_mrgsort4处理的数据一般是经过asc_bitsort指令处理后的数据，
     __aicore__ inline void asc_mrgsort4(__ubuf__ float* dst, __ubuf__ float* src[ASC_C_API_MRGSORT_ELEMENT_LEN], uint8_t repeat, uint16_t element_length_0, uint16_t element_length_1, uint16_t element_length_2, uint16_t element_length_3, bool if_exhausted_suspension, uint8_t valid_bit)
     ```
 
-    <cann-filter npu_type = "950">
+    <cann-filter npu_type="950">
 
     ```cpp
     // 如下原型仅支持Ascend 950PR/Ascend 950DT
@@ -47,7 +47,7 @@ asc_mrgsort4处理的数据一般是经过asc_bitsort指令处理后的数据，
     __aicore__ inline void asc_mrgsort4_sync(__ubuf__ float* dst, __ubuf__ float* src[ASC_C_API_MRGSORT_ELEMENT_LEN], uint8_t repeat, uint16_t element_length_0, uint16_t element_length_1, uint16_t element_length_2, uint16_t element_length_3, bool if_exhausted_suspension, uint8_t valid_bit)
     ```
 
-    <cann-filter npu_type = "950">
+    <cann-filter npu_type="950">
 
     ```cpp
     // 如下原型仅支持Ascend 950PR/Ascend 950DT

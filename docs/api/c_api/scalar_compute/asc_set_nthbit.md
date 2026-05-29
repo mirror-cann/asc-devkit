@@ -4,9 +4,9 @@
 
 | 产品 | 是否支持 |
 | :-----------| :------: |
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 |    √    |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 |    √    |
-|<cann-filter npu_type = "950"> Ascend 950PR/Ascend 950DT | √ </cann-filter>|
+| <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> |    √    |
+| <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> |    √    |
+| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
 
 ## 功能说明
 
@@ -24,6 +24,7 @@ __aicore__ inline uint64_t asc_set_nthbit(uint64_t bits, int64_t idx)
 | :----- | :------- | :------- |
 | bits | 输入 | 输入数据。 |
 | idx | 输入 | 位索引，表示需要设置为1的位的位置。 |
+
 ## 返回值说明
 
 修改后的uint64_t整数。
@@ -40,6 +41,6 @@ PIPE_S
 
 ```cpp
 uint64_t bits = 0x0;
-int64_t  idx = 0x2;
+int64_t idx = 0x2;
 uint64_t res = asc_set_nthbit(bits, idx); //结果res = 0x4
 ```

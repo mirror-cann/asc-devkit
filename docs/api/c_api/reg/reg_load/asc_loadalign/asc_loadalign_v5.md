@@ -4,7 +4,7 @@
 
 | 产品     | 是否支持 |
 | ----------- | :----: |
-| Ascend 950PR/Ascend 950DT | √    |
+| Ascend 950PR/Ascend 950DT | √ |
 
 ## 功能说明
 
@@ -79,7 +79,7 @@ PIPE_V
 
 ```cpp
 // asc_loadalign
-__ubuf__ int8_t src;
+__ubuf__ int8_t* src;
 vector_int8_t dst;
 uint16_t block_stride;
 uint16_t repeat_stride;
@@ -87,7 +87,7 @@ vector_bool mask = asc_create_mask_b8(PAT_ALL);
 asc_loadalign(dst, src, block_stride, repeat_stride, mask);
 
 // asc_loadalign_postupdate
-__ubuf__ int8_t src;
+__ubuf__ int8_t* src;
 vector_int8_t dst;
 uint16_t block_stride;
 uint16_t repeat_stride;

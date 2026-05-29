@@ -4,8 +4,8 @@
 
 | 产品     | 是否支持 |
 | ----------- | :----: |
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √    |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √    |
+| <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> | √    |
+| <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> | √    |
 
 ## 功能说明
 
@@ -29,7 +29,7 @@ $$
 - 高维切分计算
 
   ```cpp
-  _aicore__ inline void asc_max_scalar(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t value, uint8_t repeat, uint16_t dst_block_stride, uint16_t src_block_stride, uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
+  __aicore__ inline void asc_max_scalar(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t value, uint8_t repeat, uint16_t dst_block_stride, uint16_t src_block_stride, uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
   __aicore__ inline void asc_max_scalar(__ubuf__ half* dst, __ubuf__ half* src, half value, uint8_t repeat, uint16_t dst_block_stride, uint16_t src_block_stride, uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
   __aicore__ inline void asc_max_scalar(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t value, uint8_t repeat, uint16_t dst_block_stride, uint16_t src_block_stride, uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
   __aicore__ inline void asc_max_scalar(__ubuf__ float* dst, __ubuf__ float* src, float value, uint8_t repeat, uint16_t dst_block_stride, uint16_t src_block_stride, uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
@@ -75,7 +75,7 @@ PIPE_V
 
 ```cpp
 constexpr int total_length = 256; //total_length 指参与计算的数据长度
-half value = 10;
+half value = 3;
 __ubuf__ half src[total_length];
 __ubuf__ half dst[total_length];
 asc_max_scalar(dst, src, value, total_length);

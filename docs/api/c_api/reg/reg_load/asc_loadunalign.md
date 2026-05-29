@@ -64,5 +64,6 @@ vector_load_unalign ureg;
 __ubuf__ half* src = (__ubuf__ half*)asc_get_phy_buf_addr(0);
 uint32_t offset = 5;
 asc_loadunalign_pre(ureg, src + offset);
+vector_half dst;
 asc_loadunalign(dst, ureg, src + offset);
 ```

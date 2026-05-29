@@ -4,8 +4,8 @@
 
 | 产品     | 是否支持 |
 | ----------- |:----:|
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √    |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √    |
+| <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> |    √     |
+| <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> |    √     |
 
 ## 功能说明
 
@@ -84,13 +84,13 @@
 
 ## 流水类型
 
-PIPE_MTE2
+PIPE_MTE3
 
 ## 约束说明
 
 - dst的起始地址要求按照对应数据类型所占字节数对齐。
 - src的起始地址要求32字节对齐。
-- 如果需要执行多条asc_copy_ub2gm_align指令，且asc_copy_ub2gm_align指令的目的地址存在重叠，需要插入同步指令，保证多个asc_copy_ub2gm指令的串行化，防止出现异常数据。
+- 如果需要执行多条asc_copy_ub2gm_align指令，且asc_copy_ub2gm_align指令的目的地址存在重叠，需要插入同步指令，保证多个asc_copy_ub2gm_align指令的串行化，防止出现异常数据。
 - left_padding_num、right_padding_num的字节数均不能超过32Bytes。
 
 ## 调用示例

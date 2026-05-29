@@ -4,7 +4,7 @@
 
 | 产品     | 是否支持 |
 | ----------- | :----: |
-| Ascend 950PR/Ascend 950DT | √    |
+| Ascend 950PR/Ascend 950DT | √ |
 
 ## 功能说明
 
@@ -165,7 +165,7 @@ __simd_callee__ inline void asc_loadalign_deintlv_postupdate(vector_int4x2_t& ds
 | dst       | 输出    | 目的操作数（矢量数据寄存器）。            |
 | dst0       | 输出    | 目的操作数（矢量数据寄存器）。            |
 | dst1       | 输出    | 目的操作数（矢量数据寄存器）。            |
-| src | 输入    | 源操作数（矢量）的起始地址。            |
+| src | 输入/输出    | 源操作数（矢量）的起始地址。            |
 | offset | 输入    | 地址偏移量。       |
 
 矢量数据寄存器的详细说明请参见[reg数据类型定义.md](../../reg数据类型定义.md)。

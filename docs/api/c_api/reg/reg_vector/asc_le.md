@@ -4,7 +4,7 @@
 
 |产品|是否支持|
 | :------------ | :------------: |
-| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
+| Ascend 950PR/Ascend 950DT | √ |
 
 ## 功能说明
 
@@ -50,7 +50,7 @@ PIPE_V
 ## 调用示例
 
 ```cpp
-vector_bool& dst;
+vector_bool dst;
 vector_int8_t src0;
 vector_int8_t src1;
 vector_bool mask = asc_create_mask_b8(PAT_ALL);

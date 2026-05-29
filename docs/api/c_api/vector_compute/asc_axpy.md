@@ -12,7 +12,7 @@
 源操作数src中每个元素与标量value求积后和目的操作数dst中的对应元素相加计算公式如下:
 
 $$
-dst = src * value + dst
+dst_i = src_i * value + dst_i
 $$
 
 ## 函数原型

@@ -28,7 +28,7 @@
 // asc_ge(vcmp) half
 __aicore__ inline void asc_ge_impl(__ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat, uint8_t dst_block_stride,
                                    uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride,
-                                   int8_t src0_repeat_stride, int8_t src1_repeat_stride)
+                                   uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
     if ASC_IS_AIV {
         vcmp_ge(src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
@@ -38,7 +38,7 @@ __aicore__ inline void asc_ge_impl(__ubuf__ half* src0, __ubuf__ half* src1, uin
 
 __aicore__ inline void asc_ge_sync_impl(__ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat,
                                         uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride,
-                                        uint8_t dst_repeat_stride, int8_t src0_repeat_stride, int8_t src1_repeat_stride)
+                                        uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
     asc_ge_impl(src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
                 src0_repeat_stride, src1_repeat_stride);
@@ -48,7 +48,7 @@ __aicore__ inline void asc_ge_sync_impl(__ubuf__ half* src0, __ubuf__ half* src1
 // asc_ge(vcmp) float
 __aicore__ inline void asc_ge_impl(__ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat, uint8_t dst_block_stride,
                                    uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride,
-                                   int8_t src0_repeat_stride, int8_t src1_repeat_stride)
+                                   uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
     if ASC_IS_AIV {
         vcmp_ge(src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
@@ -58,7 +58,7 @@ __aicore__ inline void asc_ge_impl(__ubuf__ float* src0, __ubuf__ float* src1, u
 
 __aicore__ inline void asc_ge_sync_impl(__ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat,
                                         uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride,
-                                        uint8_t dst_repeat_stride, int8_t src0_repeat_stride, int8_t src1_repeat_stride)
+                                        uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
     asc_ge_impl(src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
                 src0_repeat_stride, src1_repeat_stride);
@@ -68,7 +68,7 @@ __aicore__ inline void asc_ge_sync_impl(__ubuf__ float* src0, __ubuf__ float* sr
 // asc_ge(vcmpv) half
 __aicore__ inline void asc_ge_impl(__ubuf__ uint8_t* dst, __ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat,
                                    uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride,
-                                   uint8_t dst_repeat_stride, int8_t src0_repeat_stride, int8_t src1_repeat_stride)
+                                   uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
     if ASC_IS_AIV {
         vcmpv_ge(dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
@@ -78,7 +78,7 @@ __aicore__ inline void asc_ge_impl(__ubuf__ uint8_t* dst, __ubuf__ half* src0, _
 
 __aicore__ inline void asc_ge_sync_impl(__ubuf__ uint8_t* dst, __ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat,
                                         uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride,
-                                        uint8_t dst_repeat_stride, int8_t src0_repeat_stride, int8_t src1_repeat_stride)
+                                        uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
     asc_ge_impl(dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
                 src0_repeat_stride, src1_repeat_stride);
@@ -88,7 +88,7 @@ __aicore__ inline void asc_ge_sync_impl(__ubuf__ uint8_t* dst, __ubuf__ half* sr
 // asc_ge(vcmpv) float
 __aicore__ inline void asc_ge_impl(__ubuf__ uint8_t* dst, __ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat,
                                    uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride,
-                                   uint8_t dst_repeat_stride, int8_t src0_repeat_stride, int8_t src1_repeat_stride)
+                                   uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
     if ASC_IS_AIV {
         vcmpv_ge(dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
@@ -98,8 +98,8 @@ __aicore__ inline void asc_ge_impl(__ubuf__ uint8_t* dst, __ubuf__ float* src0, 
 
 __aicore__ inline void asc_ge_sync_impl(__ubuf__ uint8_t* dst, __ubuf__ float* src0, __ubuf__ float* src1,
                                         uint8_t repeat, uint8_t dst_block_stride, uint8_t src0_block_stride,
-                                        uint8_t src1_block_stride, uint8_t dst_repeat_stride, int8_t src0_repeat_stride,
-                                        int8_t src1_repeat_stride)
+                                        uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride,
+                                        uint8_t src1_repeat_stride)
 {
     asc_ge_impl(dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
                 src0_repeat_stride, src1_repeat_stride);

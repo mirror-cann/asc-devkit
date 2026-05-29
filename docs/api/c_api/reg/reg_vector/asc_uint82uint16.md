@@ -4,20 +4,20 @@
 
 | 产品     | 是否支持 |
 | ----------- | :----: |
-| Ascend 950PR/Ascend 950DT | √    |
+| Ascend 950PR/Ascend 950DT | √ |
 
 ## 功能说明
 
 将vector_uint8_t类型的源操作数以256B为单位分为两部分，读取其中一部分元素，将其转换成vector_uint16_t类型并写入目的操作数。
 
-- asc_uint82uint16：将源操作数的上半部分写入目的操作数。
-
-- asc_uint82uint16_v2：将源操作数的下半部分写入目的操作数。
+由于源操作数与目的操作数类型位宽比为1:2，读取数据时需要将一个VL大小的数据分为两部分，根据不同接口选取索引0或者索引1。
 
 ## 函数原型
 
 ```cpp
+// 选取索引0的位置
 __simd_callee__ inline void asc_uint82uint16(vector_uint16_t& dst, vector_uint8_t src, vector_bool mask)
+// 选取索引1的位置
 __simd_callee__ inline void asc_uint82uint16_v2(vector_uint16_t& dst, vector_uint8_t src, vector_bool mask)
 ```
 

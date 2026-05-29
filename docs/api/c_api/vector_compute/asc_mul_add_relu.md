@@ -4,15 +4,15 @@
 
 | 产品          | 是否支持|
 | :-----------------------| :-----:|
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 |   √   |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 |   √   |
+| <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> |   √   |
+| <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> |   √   |
 
 ## 功能说明
 
 按元素将src0和dst相乘并加上src1，再进行Relu计算（结果和0对比取较大值），最终结果存放进dst中。计算公式如下：
 
 $$
-dst_i  = Relu((src0_i * dst_i) + src1_i)
+dst_i = relu((src0_i * dst_i) + src1_i)
 $$
 
 ## 函数原型

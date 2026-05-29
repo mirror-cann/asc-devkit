@@ -24,9 +24,9 @@ __aicore__ inline void asc_set_deq_scale(half scale)
 |参数名|输入/输出|描述|
 | ------------ | ------------ | ------------ |
 |tmp|输入|一块临时内存区域，用于存储一组大小为16的量化参数。|
-|scale_arr|输出|float数组类型，大小为16，用于存储一组量化参数。|
-|offset_arr|输出|int16_t数组类型，大小为16，用于存储一组量化参数。|
-|sign_mode_arr|输出|bool数组类型，大小为16，用于存储一组量化参数。|
+|scale_arr|输入|float数组类型，大小为16，用于存储一组量化参数。|
+|offset_arr|输入|int16_t数组类型，大小为16，用于存储一组量化参数。|
+|sign_mode_arr|输入|bool数组类型，大小为16，用于存储一组量化参数。|
 |scale（half）|输入|量化参数，half类型。适用于cast_deq等接口的int32_t转化为half的场景。|
 |scale（float）|输入|量化参数，float类型。设置DEQSCALE寄存器的值。|
 |offset|输入|量化参数，int16_t类型，只有前9位有效。|

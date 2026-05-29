@@ -64,7 +64,7 @@ PIPE_V
 ## 调用示例
 
 ```cpp
-//total_length指参与搬运的数据总长度。
+// total_length指参与搬运的数据总长度。
 constexpr uint64_t total_length = 128;
 __ubuf__ half src[total_length];
 __ubuf__ half dst[total_length];

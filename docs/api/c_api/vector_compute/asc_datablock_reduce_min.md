@@ -4,12 +4,12 @@
 
 | 产品   | 是否支持 |
 | ------------|:----:|
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √    |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √    |
+| <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> | √    |
+| <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> | √    |
 
 ## 功能说明
 
-执行数据块内的求最大值规约（Reduce Min）操作。
+执行数据块内的求最小值规约（Reduce Min）操作。
 
 ## 函数原型
 

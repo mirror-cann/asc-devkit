@@ -4,7 +4,7 @@
 
 | 产品         | 是否支持 |
 | :-----------------------| :-----:|
-| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
+| Ascend 950PR/Ascend 950DT | √ |
 
 ## 功能说明
 
@@ -147,7 +147,7 @@ __simd_callee__ inline void asc_loadalign_brc_v2(vector_uint32_t& dst, __ubuf__ 
 __simd_callee__ inline void asc_loadalign_brc_v2(vector_int32_t& dst, __ubuf__ int32_t* src, iter_reg offset)
 __simd_callee__ inline void asc_loadalign_brc_v2(vector_float& dst, __ubuf__ float* src, iter_reg offset)
 __simd_callee__ inline void asc_loadalign_brc_v2(vector_int4x2_t& dst, __ubuf__ int4b_t* src, iter_reg offset)
-/// BRCV3搬入模式
+// BRCV3搬入模式
 __simd_callee__ inline void asc_loadalign_brc_v3(vector_uint16_t& dst, __ubuf__ uint16_t* src, iter_reg offset)
 __simd_callee__ inline void asc_loadalign_brc_v3(vector_int16_t& dst, __ubuf__ int16_t* src, iter_reg offset)
 __simd_callee__ inline void asc_loadalign_brc_v3(vector_bfloat16_t& dst, __ubuf__ bfloat16_t* src, iter_reg offset)
@@ -186,5 +186,6 @@ PIPE_V
 ```cpp
 __ubuf__ half* src = (__ubuf__ half*)asc_get_phy_buf_addr(0);
 iter_reg offset = 0x10;
+vector_half dst;
 asc_loadalign(dst, src, offset);
 ```

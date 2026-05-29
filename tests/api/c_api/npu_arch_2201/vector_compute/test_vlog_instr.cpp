@@ -8,8 +8,8 @@
 * See LICENSE in the root of the software repository for the full text of the License.
 */
 
-#include "../utils/test_unary_normal_instr_utils.h"
+#include "../utils/test_unary_instr_utils.h"
 
 // ==========asc_log(half/float)==========
-TEST_VECTOR_COMPUTE_UNARY_NORMAL_INSTR(Log, asc_log, vln, half);
-TEST_VECTOR_COMPUTE_UNARY_NORMAL_INSTR(Log, asc_log, vln, float);
+TEST_VECTOR_COMPUTE_UNARY_INSTR(Log, asc_log, vln, half);
+TEST_VECTOR_COMPUTE_UNARY_INSTR(Log, asc_log, vln, float);

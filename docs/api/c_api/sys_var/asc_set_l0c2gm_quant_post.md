@@ -4,7 +4,7 @@
 
 | 产品 | 是否支持 |
 | :-----------| :------: |
-| Ascend 950PR/Ascend 950DT |    √     |
+| <term>Ascend 950PR/Ascend 950DT</term> |    √     |
 
 ## 功能说明
 
@@ -52,7 +52,7 @@ const uint64_t MASK_BIT9 = 0x200;
 const uint64_t MASK_31_13 = 0xFFFFE000;
 
 uint64_t field_8_0 = 0x1AB;
-uint64_t bit9 =1;
+uint64_t bit_9 = 1;
 uint64_t field_31_13 = 0x000EF;
 
 uint64_t config = 0;

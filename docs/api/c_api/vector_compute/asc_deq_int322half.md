@@ -12,7 +12,7 @@
 
 对输入的int32_t类型的数据按元素做量化并转换为half类型。计算公式如下：
 $$
-dst[i] = Cast(src[i] * scale)
+dst_i = Cast(src_i * scale)
 $$
 其中的scale可通过[asc_set_deq_scale](asc_set_deq_scale.md)设置。
 

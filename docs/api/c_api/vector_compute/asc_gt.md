@@ -4,8 +4,8 @@
 
 | 产品     | 是否支持 |
 | ----------- |:----:|
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √    |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √    |
+| <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> | √    |
+| <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> | √    |
 
 ## 功能说明
 
@@ -62,7 +62,6 @@ $$
 | dst | 输出 | 目的操作数（矢量）的起始地址。 |
 | src0 | 输入 | 源操作数（矢量）的起始地址。 |
 | src1 | 输入 | 源操作数（矢量）的起始地址。 |
-| count | 输入 | 参与计算的元素个数。 |
 | repeat | 输入 | 迭代次数。 |
 | dst_block_stride | 输入 | 目的操作数单次迭代内不同DataBlock间地址步长。 |
 | src0_block_stride | 输入 | 源操作数0单次迭代内不同DataBlock间地址步长。 |

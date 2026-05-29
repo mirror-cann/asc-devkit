@@ -4,7 +4,7 @@
 
 | 产品 | 是否支持 |
 | :-----------| :------: |
-|<cann-filter npu_type = "950"> Ascend 950PR/Ascend 950DT | √</cann-filter> |
+| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
 
 ## 功能说明
 
@@ -26,6 +26,7 @@ __aicore__ inline void asc_set_l0c2gm_channel_para(uint64_t config)
 | config | 输入 | 设置的寄存器值。常用通道步长寄存器比特位说明参考表2。 |
 
 表2 常用通道步长寄存器比特位说明
+
 |CHANNEL_PARA比特位    |功能|
 | :-------     | :---- |
 | CHANNEL_PARA[48-0]    |  保留位，设置无效  | 

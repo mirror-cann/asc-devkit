@@ -4,7 +4,7 @@
 
 | 产品     | 是否支持 |
 | ----------- | :----: |
-| Ascend 950PR/Ascend 950DT | √    |
+| Ascend 950PR/Ascend 950DT | √ |
 
 ## 功能说明
 
@@ -80,7 +80,7 @@ PIPE_V
 ## 调用示例
 
 ```cpp
-vector_half dst;
-vector_half src;
+vector_load_unalign dst;
+__ubuf__ int8_t* src;
 asc_loadunalign_pre(dst, src);
 ```

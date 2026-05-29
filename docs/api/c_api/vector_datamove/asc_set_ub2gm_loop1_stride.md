@@ -4,7 +4,7 @@
 
 | 产品         | 是否支持 |
 | :-----------------------| :-----:|
-| Ascend 950PR/Ascend 950DT | √ |
+| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
 
 ## 功能说明
 
@@ -31,23 +31,23 @@ __aicore__ inline void asc_set_ub2gm_loop1_stride(uint64_t loop1_src_stride, uin
 
 无
 
+## 流水类型
+
+PIPE_S
+
 ## 约束说明
 
 每次设置循环相关参数后，需要进行寄存器的复位（循环次数设置为1），否则会影响下一次搬运的使用。
-
-## 流水类型
-
-PIPE_V
 
 ## 调用示例
 
 ```cpp
 uint32_t loop1_size = 2;
-uint32_t loop2_size =2;
+uint32_t loop2_size = 2;
 uint64_t loop1_src_stride = 96;
 uint64_t loop1_dst_stride = 128;
-uint32_t loop2_src_stride = 196;
-uint32_t loop2_dst_stride = 288;
+uint64_t loop2_src_stride = 192;
+uint64_t loop2_dst_stride = 288;
 asc_set_ub2gm_loop_size(loop1_size, loop2_size);
 asc_set_ub2gm_loop1_stride(loop1_src_stride, loop1_dst_stride);
 asc_set_ub2gm_loop2_stride(loop2_src_stride, loop2_dst_stride);

@@ -4,7 +4,7 @@
 
 |产品   | 是否支持 |
 | ------------|:----:|
-| Ascend 950PR/Ascend 950DT | √    |
+| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
 
 ## 功能说明
 
@@ -24,8 +24,8 @@ __aicore__ inline void asc_set_gm2ub_loop_size(uint64_t loop1_size, uint64_t loo
 
 |参数名|输入/输出|描述|
 |------------|------------|-----------|
-| loop1_size     | 输入     | 内层循环的循环次数，取值范围为[0,2^21]。|
-| loop2_size     | 输入     | 外层循环的循环次数，取值范围为[0,2^21]。|
+| loop1_size     | 输入     | 内层循环的循环次数，取值范围为[0, 2^21)。|
+| loop2_size     | 输入     | 外层循环的循环次数，取值范围为[0, 2^21)。|
 
 ## 返回值说明
 

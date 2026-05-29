@@ -1,9 +1,10 @@
 # asc_float2int32
+
 ## 产品支持情况
 
 | 产品     | 是否支持 |
 | ----------- | :----: |
-| Ascend 950PR/Ascend 950DT | √ |
+| <term>Ascend 950PR/Ascend 950DT</term> | √ |
 
 ## 功能说明
 

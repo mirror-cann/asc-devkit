@@ -12,7 +12,7 @@
 Ge（greater than or equal to），逐元素比较src0 >= src1是否成立，成立则输出结果为1，否则输出结果为0，每个元素的比较结果占一个bit。计算公式如下：
 
 $$
-dst = scr0 >= scr1
+dst = src0 >= src1
 $$
 
 ## 函数原型
@@ -21,18 +21,18 @@ $$
     ```c++
     // 比较结果存入寄存器
     __aicore__ inline void asc_ge(__ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat, uint8_t dst_block_stride,
-        uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, int8_t src0_repeat_stride,
-        int8_t src1_repeat_stride);
+        uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride,
+        uint8_t src1_repeat_stride);
     __aicore__ inline void asc_ge(__ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat, uint8_t dst_block_stride,
-        uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, int8_t src0_repeat_stride,
-        int8_t src1_repeat_stride);
+        uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride,
+        uint8_t src1_repeat_stride);
     // 比较结果存入dst
     __aicore__ inline void asc_ge(__ubuf__ uint8_t* dst, __ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat, 
         uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, 
-        int8_t src0_repeat_stride, int8_t src1_repeat_stride);
+        uint8_t src0_repeat_stride, uint8_t src1_repeat_stride);
     __aicore__ inline void asc_ge(__ubuf__ uint8_t* dst, __ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat, 
         uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, 
-        int8_t src0_repeat_stride, int8_t src1_repeat_stride);
+        uint8_t src0_repeat_stride, uint8_t src1_repeat_stride);
     ```
 
 - 同步计算
@@ -40,18 +40,18 @@ $$
     ```c++
     // 比较结果存入寄存器
     __aicore__ inline void asc_ge_sync(__ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat, uint8_t dst_block_stride, 
-        uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, int8_t src0_repeat_stride, 
-        int8_t src1_repeat_stride);
+        uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, 
+        uint8_t src1_repeat_stride);
     __aicore__ inline void asc_ge_sync(__ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat, uint8_t dst_block_stride, 
-        uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, int8_t src0_repeat_stride, 
-        int8_t src1_repeat_stride);
+        uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, 
+        uint8_t src1_repeat_stride);
     // 比较结果存入dst
     __aicore__ inline void asc_ge_sync(__ubuf__ uint8_t* dst, __ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat, 
         uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, 
-        int8_t src0_repeat_stride, int8_t src1_repeat_stride);
+        uint8_t src0_repeat_stride, uint8_t src1_repeat_stride);
     __aicore__ inline void asc_ge_sync(__ubuf__ uint8_t* dst, __ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat, 
         uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, 
-        int8_t src0_repeat_stride, int8_t src1_repeat_stride);
+        uint8_t src0_repeat_stride, uint8_t src1_repeat_stride);
     ```
 
 ## 参数说明
@@ -60,7 +60,6 @@ $$
 |:----------| :-----|:----------------------------------|
 | dst       | 输出 | 目的操作数（矢量）的起始地址。                   |
 | src0、src1 | 输入 | 源操作数（矢量）的起始地址。                    |
-| count     | 输入 | 参与计算的元素个数。                        |
 | repeat | 输入 | 迭代次数。                       |
 | dst_block_stride | 输入 | 目的操作数单次迭代内不同DataBlock间地址步长。 |
 | src0_block_stride | 输入 | 源操作数0单次迭代内不同DataBlock间地址步长。 |

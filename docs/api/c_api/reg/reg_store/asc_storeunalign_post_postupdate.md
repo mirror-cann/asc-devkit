@@ -52,7 +52,7 @@ __simd_callee__ inline void asc_storeunalign_post_postupdate(__ubuf__  int64_t*&
 | :----- | :------- | :------- |
 | dst | 输出 | 目的操作数（矢量）的起始地址。 |
 | src | 输入 | 非对齐寄存器，用于保存非对齐数据，长度32B。 |
-| offset | 输入 | 目的操作数结束地址的偏移，类型为地址寄存器，单位为元素个数。 |
+| offset | 输入 | 目的操作数结束地址的偏移，单位为元素个数。 |
 
 非对齐寄存器和地址寄存器的详细说明请参见[reg数据类型定义.md](../reg数据类型定义.md)。
 
@@ -88,5 +88,5 @@ for (uint32_t i = 0; i < repeat; i++) {
 // dst结束地址为520，但此时dst已经自增到了520，所以offset要配置为0
 int32_t offset = repeat * count;
 // ureg[0:2] 写入 dst[126:128]（即UB[512:520]）
-asc_storeunalign_post(dst, ureg, offset);
+asc_storeunalign_post_postupdate(dst, ureg, offset);
 ```

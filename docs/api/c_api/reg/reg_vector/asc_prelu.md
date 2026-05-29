@@ -4,14 +4,14 @@
 
 | 产品                  | 是否支持  |
 |:-------------------------| :------: |
-| Ascend 950PR/Ascend 950DT | √    |
+| Ascend 950PR/Ascend 950DT | √ |
 
 ## 功能说明
 
 源操作数src0大于0的情况下直接将src0写入目的操作数dst，否则将src0 * src1的结果写入dst。计算公式如下：
 
 $$
-dst = (src0 > 0) ? src0 : src0 * src1
+dst_i = (src0_i > 0) ? src0_i : src0_i * src1_i
 $$
 
 ## 函数原型

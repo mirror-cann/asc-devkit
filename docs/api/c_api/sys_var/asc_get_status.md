@@ -4,9 +4,9 @@
 
 | 产品     | 是否支持 |
 | ----------- |:----:|
-|<cann-filter npu_type = "950"> Ascend 950PR/Ascend 950DT | √</cann-filter> |
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √    |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √    |
+| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
+| <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> |    √     |
+| <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> |    √     |
 
 ## 功能说明
 
@@ -37,7 +37,7 @@ __aicore__ inline int64_t asc_get_status()
 | 13 | 标量指令输入为NaN/INF。 |
 | 14 | 向量指令输入为NaN/INF。 |
 | 15 | CUBE指令输入为NaN/INF。 |
-| 61 | 数据搬运类指令指令输入为NaN/INF |
+| 61 | 数据搬运类指令输入为NaN/INF |
 | 其它bit位 | 保留位。 |
 
 ## 流水类型

@@ -4,7 +4,7 @@
 
 | 产品     | 是否支持 |
 | ----------- | :----: |
-| <term>Ascend 950PR/Ascend 950DT</term> | √ |
+| Ascend 950PR/Ascend 950DT | √ |
 
 ## 功能说明
 

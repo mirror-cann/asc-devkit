@@ -71,7 +71,7 @@ PIPE_V
 
 
 ```cpp
-// 示例计算256个half的最大值和索引，分2次迭代完成，计算结果为2组求和的值
+// 示例计算256个half的最大值，分2次迭代完成，计算结果为2组求和的值
 constexpr uint32_t total_length = 256;
 __ubuf__ half src[total_length];
 constexpr uint32_t dst_length = 2;

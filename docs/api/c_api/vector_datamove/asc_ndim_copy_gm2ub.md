@@ -4,7 +4,7 @@
 
 | 产品 | 是否支持  |
 | :----------------------- | :------: |
-| Ascend 950PR/Ascend 950DT | √ |
+| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
 
 ## 功能说明
 
@@ -14,15 +14,15 @@
 表1 Stride配置涉及的所有参数及其传入接口，其中i表示第i维，可取值[0,4]
 | 参数 | 传入接口 | 描述 |
 | :--- | :------- | :--- |
-| loopi_size | 本接口 | 表示每个维度内，处理的元素个数（不包含Padding元素）。<br> 单位为元素个数，取值范围为[0, 2^20-1]。 |
+| loopi_size | 本接口 | 表示每个维度内，处理的元素个数（不包含Padding元素）。<br> 单位为元素个数，取值范围为[1, 2^20-1]。 |
 | loopi_src_stride | [asc_set_ndim_loopi_stride](./asc_set_ndim_loop_stride.md) | 表示每个维度内，该源操作数元素与下一个元素间的间隔。<br> 单位为元素个数，取值范围为[0, 2^40-1]。 |
-| loopi_dst_stride | [asc_set_ndim_loopi_stride](./asc_set_ndim_loop_stride.md) | 表示每个维度内，该目的操作数元素与下一个元素间的间隔。<br> 单位为元素个数，取值范围为[0, 2^40-1]。 |
+| loopi_dst_stride | [asc_set_ndim_loopi_stride](./asc_set_ndim_loop_stride.md) | 表示每个维度内，该目的操作数元素与下一个元素间的间隔。<br> 单位为元素个数，取值范围为[0, 2^20-1]。 |
 
-表2 Padding配置涉及的所有参数及其传入接口其中i表示第i维，可取值[0,4]
+表2 Padding配置涉及的所有参数及其传入接口，其中i表示第i维，可取值[0,4]
 | 参数 | 传入接口 | 描述 |
 | :--- | :------- | :--- |
-| padding_mode | 本接口 | 表示Padding值填取方式，类型为bool。<br>&bull; True：使能常数填充方式，即所有Padding值为固定值pad_value。<br>&bull; False：使能最近值填充方式，即左右Padding值会选取当前维度最左或最右的值进行填充。 |
-| pad_value | [asc_set_ndim_pad_value](./asc_set_ndim_pad_value.md) | 当padding_mode为True时，该值将作为Padding的填充固定值。当padding_mode为False时，该值不生效。 |
+| padding_mode | 本接口 | 表示Padding值填取方式，类型为bool。<br>&bull; true：使能常数填充方式，即所有Padding值为固定值pad_value。<br>&bull; false：使能最近值填充方式，即左右Padding值会选取当前维度最左或最右的值进行填充。 |
+| pad_value | [asc_set_ndim_pad_value](./asc_set_ndim_pad_value.md) | 当padding_mode为true时，该值将作为Padding的填充固定值。当padding_mode为false时，该值不生效。 |
 | loopi_lp_count | <br>&bull; 0维：本接口 <br>&bull; 1至4维：[asc_set_ndim_pad_count](./asc_set_ndim_pad_count.md) | 表示每个维度内，左侧需要补齐的元素个数。<br> 单位为元素个数，取值范围为[0, 255]。 |
 | loopi_rp_count | <br>&bull; 0维：本接口 <br>&bull; 1至4维：[asc_set_ndim_pad_count](./asc_set_ndim_pad_count.md) | 表示每个维度内，右侧需要补齐的元素个数。<br> 单位为元素个数，取值范围为[0, 255]。 |
 
@@ -65,7 +65,7 @@ __aicore__ inline void asc_ndim_copy_gm2ub(__ubuf__ float* dst, __gm__ float* sr
 
 ## 参数说明
 
-参数说明
+表1 参数说明
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :--- | :--- |
 | dst | 输出 | 目的UB地址。 |
@@ -77,7 +77,7 @@ __aicore__ inline void asc_ndim_copy_gm2ub(__ubuf__ float* dst, __gm__ float* sr
 | loop4_size | 输入 | 表示4维处理的元素个数（不包含Padding元素）。<br> 单位为元素个数，取值范围为[1, 2^20-1]。 |
 | loop0_lp_count | 输入 | 表示0维左侧需要补齐的元素个数。<br> 单位为元素个数，取值范围为[0, 255]。 |
 | loop0_rp_count | 输入 | 表示0维右侧需要补齐的元素个数。<br> 单位为元素个数，取值范围为[0, 255]。 |
-| padding_mode | 输入 | 表示Padding值填取方式。<br>&bull; True：使能常数填充方式，即所有Padding值为固定值pad_value。<br>&bull; False：使能最近值填充方式，即左右Padding值会选取当前维度最左或最右的值进行填充。 |
+| padding_mode | 输入 | 表示Padding值填取方式。<br>&bull; true：使能常数填充方式，即所有Padding值为固定值pad_value。<br>&bull; false：使能最近值填充方式，即左右Padding值会选取当前维度最左或最右的值进行填充。 |
 | cache_mode | 输入 | L2 cache模式。 |
 
 ## 返回值说明
@@ -102,7 +102,7 @@ PIPE_MTE2
 ![ ](../figures/asc_ndim_copy_gm2ub典型使用场景：2D_Padding场景，使能固定值填充方式.png)
 
 ```cpp
-//total_length指参与搬运的数据总长度。src是外部输入的half类型的GM内存。
+// total_length指参与搬运的数据总长度。src是外部输入的half类型的GM内存。
 constexpr uint64_t total_length = 54;
 __ubuf__ half dst[total_length];
 
@@ -122,7 +122,7 @@ uint64_t loop2_dst_stride = 0;
 uint64_t loop3_dst_stride = 0;
 uint64_t loop4_dst_stride = 0;
 
-bool padding_mode = false;
+bool padding_mode = true;
 half pad_value = 88.0;
 uint8_t loop0_lp_count = 2;
 uint8_t loop1_lp_count = 2;

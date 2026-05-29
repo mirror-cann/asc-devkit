@@ -4,16 +4,16 @@
 
 | 产品         | 是否支持 |
 | :-----------------------| :-----:|
-| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
+| Ascend 950PR/Ascend 950DT | √ |
 
-### 功能说明
+## 功能说明
 
 按元素取绝对值，i为元素索引。计算公式如下：
 $$
 dst_i = |src_i|
 $$
 
-### 函数原型
+## 函数原型
 
   ```cpp
   __simd_callee__ inline void asc_abs(vector_int8_t& dst, vector_int8_t src, vector_bool mask)
@@ -23,7 +23,7 @@ $$
   __simd_callee__ inline void asc_abs(vector_float& dst, vector_float src, vector_bool mask)
   ```
 
-### 参数说明
+## 参数说明
 
 | 参数名  | 输入/输出 | 描述 |
 | :----- | :------- | :------- |
@@ -33,19 +33,19 @@ $$
 
 矢量数据寄存器和掩码寄存器的详细说明请参见[reg数据类型定义.md](../reg数据类型定义.md)。
 
-### 返回值说明
+## 返回值说明
 
 无
 
-### 流水类型
+## 流水类型
 
 PIPE_V
 
-### 约束说明
+## 约束说明
 
 无
 
-### 调用示例
+## 调用示例
 
 ```cpp
 vector_int8_t dst;

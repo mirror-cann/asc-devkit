@@ -145,11 +145,12 @@ PIPE_V
 
 - 从矢量数据寄存器连续对齐搬出到UB的场景
   ```cpp
-  __ubuf__ half* src = (__ubuf__ half*)asc_get_phy_buf_addr(0);
+  __ubuf__ half* dst_align32b = (__ubuf__ half*)asc_get_phy_buf_addr(0);
+  vector_half src;
   vector_bool mask = asc_create_mask_b16(PAT_ALL);
   uint32_t offset = 128;
   iter_reg addr_reg = asc_create_iter_reg_b16(offset);
-  asc_storealign(dst, src, addr_reg, mask)
+  asc_storealign(dst_align32b, src, addr_reg, mask);
   ```
 - 从掩码寄存器连续对齐搬出到UB的场景
   ```cpp

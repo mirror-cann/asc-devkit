@@ -83,7 +83,7 @@ PIPE_V
 
 ```cpp
 constexpr uint64_t total_length = 128;    // total_length指参与计算的数据长度
-int16_t value = 1;
+int32_t value = 1;
 __ubuf__ int16_t src[total_length];
 __ubuf__ int16_t dst[total_length];
 asc_shiftright(dst, src, value, total_length);    // 对src中的每个元素做算术右移一位，并存放到dst中

@@ -4,7 +4,7 @@
 
 |产品|是否支持|
 | :------------ | :------------: |
-| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
+| Ascend 950PR/Ascend 950DT | √ |
 
 ## 功能说明
 
@@ -45,7 +45,7 @@ PIPE_V
 uint32_t value = 127;
 vector_bool mask = asc_create_mask_b32(PAT_ALL);
 // 一共127个元素需要进行计算，即需要2个VL
-for (int32_t i = 0; i < 2; i++>) {
+for (int32_t i = 0; i < 2; i++) {
   mask = asc_update_mask_b32(value);
   // 使用mask进行一个VL的计算
 }

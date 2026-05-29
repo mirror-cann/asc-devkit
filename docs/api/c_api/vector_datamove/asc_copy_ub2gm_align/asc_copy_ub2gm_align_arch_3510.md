@@ -47,23 +47,23 @@ __aicore__ inline void asc_copy_ub2gm_align(__gm__ float* dst, __ubuf__ float* s
 
 ## 流水类型
 
-PIPE_MTE2
+PIPE_MTE3
 
 ## 约束说明
 
 - dst的起始地址要求按照对应数据类型所占字节数对齐。
 - src的起始地址要求32字节对齐。
-- 如果需要执行多条asc_copy_ub2gm_align指令，且asc_copy_ub2gm_align指令的目的地址存在重叠，需要插入同步指令（[asc_sync_notify](../../sync/asc_sync_notify.md)和[asc_sync_wait](../../sync/asc_sync_wait.md)），保证多个asc_copy_ub2gm指令的串行化，防止出现异常数据。
+- 如果需要执行多条asc_copy_ub2gm_align指令，且asc_copy_ub2gm_align指令的目的地址存在重叠，需要插入同步指令（[asc_sync_notify](../../sync/asc_sync_notify.md)和[asc_sync_wait](../../sync/asc_sync_wait.md)），保证多个asc_copy_ub2gm_align指令的串行化，防止出现异常数据。
 
 ## 调用示例
 
 ```cpp
 uint32_t loop1_size = 2;
-uint32_t loop2_size =2;
+uint32_t loop2_size = 2;
 uint64_t loop1_src_stride = 96;
 uint64_t loop1_dst_stride = 128;
-uint32_t loop2_src_stride = 196;
-uint32_t loop2_dst_stride = 288;
+uint64_t loop2_src_stride = 192;
+uint64_t loop2_dst_stride = 288;
 asc_set_ub2gm_loop_size(loop1_size, loop2_size);
 asc_set_ub2gm_loop1_stride(loop1_src_stride, loop1_dst_stride);
 asc_set_ub2gm_loop2_stride(loop2_src_stride, loop2_dst_stride);

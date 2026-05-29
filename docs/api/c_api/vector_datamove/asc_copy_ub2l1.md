@@ -4,11 +4,11 @@
 
 | 产品                                           | 是否支持  |
 |:---------------------------------------------| :------: |
-|<cann-filter npu_type = "950"> Ascend 950PR/Ascend 950DT | √</cann-filter> |
+| <cann-filter npu_type="950"><term>Ascend 950PR/Ascend 950DT</term>  | √ </cann-filter>|
 
 ## 功能说明
 
-将数据从Unified Buffer (UB) 搬运到 搬运到L1 Buffer。
+将数据从Unified Buffer (UB) 搬运到L1 Buffer。
 
 ## 函数原型
 
@@ -24,7 +24,7 @@ __aicore__ inline void asc_copy_ub2l1(__cbuf__ void* dst, __ubuf__ void* src, ui
 __aicore__ inline void asc_copy_ub2l1(__cbuf__ void* dst, __ubuf__ void* src, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
 ```
 
-- 同步计算
+- 同步搬运
 
 ```c++
 __aicore__ inline void asc_copy_ub2l1_sync(__cbuf__ void* dst, __ubuf__ void* src, uint32_t size)
@@ -60,7 +60,7 @@ PIPE_MTE3
 ## 调用示例
 
 ```cpp
-// total_length指参与搬运的数据总个数。dst是外部输入的half类型的GM内存。
+// total_length指参与搬运的数据总长度。dst是外部输入的L1 Buffer内存。
 constexpr uint64_t total_length = 128;
 __ubuf__ half src[total_length];
 asc_copy_ub2l1(dst, src, total_length * sizeof(half));
