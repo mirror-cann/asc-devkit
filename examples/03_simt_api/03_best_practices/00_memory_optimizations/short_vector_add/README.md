@@ -15,12 +15,13 @@
 - Ascend 950PR/Ascend 950DT
 
 ## 支持的CANN软件版本
+
 - \> CANN 9.0.0
 
 ## 目录结构介绍
 
 ```
-02_short_vector_add
+short_vector_add
 │   ├── scripts/             // 测试脚本目录
 │   │   ├── gen_data.py      // 生成测试输入和golden数据
 │   │   └── verify_result.py // 验证输出结果
@@ -201,31 +202,35 @@ __global__ void add2(T* x, T* y, T* z, uint64_t size)
 
 | 优化手段 | 核心原理              | 适用场景                                                                                        |
 |:-----|:------------------|:--------------------------------------------------------------------------------------------|
-| 短向量  | 底层指令支持一次完成两个数据的计算 | half/bfloat16_t类型元素进行[基本运算](../../../../docs/guide/编程指南/语言扩展层/SIMT-BuiltIn关键字.md#运算符) |
+| 短向量  | 底层指令支持一次完成两个数据的计算 | half/bfloat16_t类型元素进行[基本运算](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/%E8%AF%AD%E8%A8%80%E6%89%A9%E5%B1%95%E5%B1%82/SIMT-BuiltIn%E5%85%B3%E9%94%AE%E5%AD%97.md#运算符) |
 
 ---
 
 ## 编译运行
 
 - 配置环境变量
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../docs/quick_start.md#prepare&install)，选择对应配置环境变量的命令。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，选择对应配置环境变量的命令。
 
     - 默认路径，root用户安装CANN软件包
+
       ```bash
       source /usr/local/Ascend/cann/set_env.sh
       ```
 
     - 默认路径，非root用户安装CANN软件包
+
       ```bash
       source $HOME/Ascend/cann/set_env.sh
       ```
 
     - 指定路径install_path，安装CANN软件包
+
       ```bash
       source ${install_path}/cann/set_env.sh
       ```
 
 - 样例执行
+
   ```bash
   # 场景2：使用half2类型
   SCENARIO_NUM=2
@@ -239,6 +244,7 @@ __global__ void add2(T* x, T* y, T* z, uint64_t size)
   使用NPU仿真模式时，添加`-DCMAKE_ASC_RUN_MODE=sim` 参数即可。
 
   示例如下：
+
   ```bash
   cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j;   # NPU仿真模式
   ```
@@ -255,6 +261,7 @@ __global__ void add2(T* x, T* y, T* z, uint64_t size)
 
 - 执行结果  
   执行结果如下，说明精度对比成功。
+
   ```bash
   test pass!
   ```
@@ -281,6 +288,7 @@ msprof op ./demo   # 分析case的性能
 ├──ResourceConflictRatio.csv  # UB上的 bank group、bank conflict和资源冲突率在所有指令中的占比
 └──visualize_data.bin         # MindStudio Insight呈现文件
 ```
+
 查看具体的性能分析结果：
 
 ```
