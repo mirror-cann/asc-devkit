@@ -217,7 +217,20 @@ __aicore__ inline uint32_t mem_copy_ub_to_gm_impl(__gm__ T* dst, __ubuf__ T* src
 } // namespace __asc_aicore
 
 namespace __asc_simd_vf {
-template <AscendC::Hardware hardware, typename T, typename U>
+enum class DumpTensorPosition : uint16_t {
+    GM = 0,
+    UB,
+    L1,
+    L0A,
+    L0B,
+    L0C,
+    BIAS,
+    FIXBUF,
+    REG,
+    MAX
+};
+
+template <DumpTensorPosition dumpPosition, typename T, typename U>
 __simd_callee__ inline void set_dump_tlv_info_vf(U& src, __ubuf__ DumpTensorTlv* dump_tlv,
     uint32_t align_dump_len, uint32_t desc, uint32_t dump_size, uint16_t block_idx)
 {
@@ -228,7 +241,7 @@ __simd_callee__ inline void set_dump_tlv_info_vf(U& src, __ubuf__ DumpTensorTlv*
     dump_tlv->desc = desc;
     dump_tlv->blockIdx = block_idx;  // set in aicore
     dump_tlv->bufferId = static_cast<uint32_t>(0U);
-    dump_tlv->position = static_cast<uint16_t>(hardware);
+    dump_tlv->position = static_cast<uint16_t>(dumpPosition);
     dump_tlv->dim = static_cast<uint32_t>(0U);
     for (uint32_t i = 0; i < 8; ++i) {
         dump_tlv->shape[i] = static_cast<uint32_t>(0U);
@@ -237,7 +250,7 @@ __simd_callee__ inline void set_dump_tlv_info_vf(U& src, __ubuf__ DumpTensorTlv*
     dump_tlv->dumpSize = dump_size * sizeof(T);
 }
 
-template <AscendC::Hardware hardware, typename T, typename U>
+template <typename T, typename U>
 __simd_callee__ inline void set_dump_tlv_data_vf(U& src, __ubuf__ DumpTensorTlv* dump_tlv,
     uint32_t align_dump_len, uint32_t dump_size)
 {
@@ -249,7 +262,7 @@ __simd_callee__ inline void set_dump_tlv_data_vf(U& src, __ubuf__ DumpTensorTlv*
     }
 }
 
-template <AscendC::Hardware hardware, typename T, typename U>
+template <typename T, typename U>
 __simd_callee__ inline void set_dump_tlv_data_reg(U& src, __ubuf__ DumpTensorTlv* dump_tlv,
     uint32_t align_dump_len, uint32_t dump_size)
 {
@@ -262,7 +275,7 @@ __simd_callee__ inline void set_dump_tlv_data_reg(U& src, __ubuf__ DumpTensorTlv
     vstas(ureg, (__ubuf__ uint32_t*&)dump_dst_addr, count * 2, POST_UPDATE);
 }
 
-template <AscendC::Hardware hardware, typename T, typename U>
+template <DumpTensorPosition dumpPosition, typename T, typename U>
 __simd_callee__ inline void asc_dump_impl_reg(U& src, uint32_t desc, uint32_t dump_size)
 {
     __ubuf__ BlockVFBufInfo *block_info = get_printf_ubuf_addr(0);
@@ -273,15 +286,15 @@ __simd_callee__ inline void asc_dump_impl_reg(U& src, uint32_t desc, uint32_t du
 
     __ubuf__ DumpTensorTlv* dump_tlv =
         (__ubuf__ DumpTensorTlv*)((__ubuf__ uint8_t*)(block_info->buffer) + block_info->writeLen);
-    set_dump_tlv_info_vf<hardware, T>(src, dump_tlv, align_dump_len, desc, dump_size, block_info->blockIdx);
-    set_dump_tlv_data_reg<hardware, T>(src, dump_tlv, align_dump_len, dump_size);
+    set_dump_tlv_info_vf<dumpPosition, T>(src, dump_tlv, align_dump_len, desc, dump_size, block_info->blockIdx);
+    set_dump_tlv_data_reg<T>(src, dump_tlv, align_dump_len, dump_size);
 
     block_info->magic = ASCENDC_SIMD_VF_MAGIC_NUMBER;
     block_info->writeLen += tlv_len;
     block_info->pidx += 1;
 }
 
-template <AscendC::Hardware hardware, typename T, typename U>
+template <DumpTensorPosition dumpPosition, typename T, typename U>
 __simd_callee__ inline void asc_dump_impl(U& src, uint32_t desc, uint32_t dump_size)
 {
     __ubuf__ BlockVFBufInfo *block_info = get_printf_ubuf_addr(0);
@@ -292,8 +305,8 @@ __simd_callee__ inline void asc_dump_impl(U& src, uint32_t desc, uint32_t dump_s
 
     __ubuf__ DumpTensorTlv* dump_tlv =
         (__ubuf__ DumpTensorTlv*)((__ubuf__ uint8_t*)(block_info->buffer) + block_info->writeLen);
-    set_dump_tlv_info_vf<hardware, T>(src, dump_tlv, align_dump_len, desc, dump_size, block_info->blockIdx);
-    set_dump_tlv_data_vf<hardware, T>(src, dump_tlv, align_dump_len, dump_size);
+    set_dump_tlv_info_vf<dumpPosition, T>(src, dump_tlv, align_dump_len, desc, dump_size, block_info->blockIdx);
+    set_dump_tlv_data_vf<T>(src, dump_tlv, align_dump_len, dump_size);
 
     block_info->magic = ASCENDC_SIMD_VF_MAGIC_NUMBER;
     block_info->writeLen += tlv_len;
@@ -304,27 +317,27 @@ template <typename T, typename U>
 __simd_callee__ inline void asc_dump_reg(U& input, uint32_t desc, uint32_t dump_size)
 {
     enable_asc_diagnostics();
-    asc_dump_impl_reg<AscendC::Hardware::UB, T>(input, desc, dump_size);
+    asc_dump_impl_reg<DumpTensorPosition::REG, T>(input, desc, dump_size);
 }
 
 template <typename T>
 __simd_callee__ inline void asc_dump_ubuf(__ubuf__ T* input, uint32_t desc, uint32_t dump_size) {
     enable_asc_diagnostics();
-    asc_dump_impl<AscendC::Hardware::UB, T>(input, desc, dump_size);
+    asc_dump_impl<DumpTensorPosition::UB, T>(input, desc, dump_size);
 }
 
 template <typename T, typename U>
 __simd_callee__ inline void asc_dump(U& input, uint32_t desc, uint32_t dump_size)
 {
     enable_asc_diagnostics();
-    asc_dump_impl_reg<AscendC::Hardware::UB, T>(input, desc, dump_size);
+    asc_dump_impl_reg<DumpTensorPosition::REG, T>(input, desc, dump_size);
 }
 
 template <typename T>
 __simd_callee__ inline void asc_dump(__ubuf__ T* input, uint32_t desc, uint32_t dump_size)
 {
     enable_asc_diagnostics();
-    asc_dump_impl<AscendC::Hardware::UB, T>(input, desc, dump_size);
+    asc_dump_impl<DumpTensorPosition::UB, T>(input, desc, dump_size);
 }
 } // namespace __asc_simd_vf
 
@@ -333,4 +346,4 @@ __simd_callee__ inline void asc_dump(__ubuf__ T* input, uint32_t desc, uint32_t 
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_ASC_AICORE_DUMP_UTILS__
 #endif
 
-#endif // IMPL_UTILS_DEBUG_NPU_ARCH_2002_ASC_AICORE_PRINTF_UTILS_H
+#endif // IMPL_UTILS_DEBUG_NPU_ARCH_3510_ASC_AICORE_DUMP_UTILS_H

@@ -12,11 +12,30 @@
 #include <mockcpp/mockcpp.hpp>
 #include <vector>
 #include "kernel_operator.h"
+
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510) && !defined(ASCENDC_CPU_DEBUG)
+#include "impl/utils/debug/npu_arch_3510/asc_aicore_dump_utils.h"
+#define ASCENDC_TEST_HAS_SIMD_VF_DUMP_POSITION 1
+#endif
 // #include "api_check/kernel_cpu_check.h"
 
 using namespace AscendC;
 
 int32_t RaiseStubForDumpTensor(int32_t input);
+
+#if defined(ASCENDC_TEST_HAS_SIMD_VF_DUMP_POSITION)
+namespace {
+constexpr uint16_t TEST_SIMD_VF_BLOCK_IDX = 3;
+constexpr uint32_t TEST_SIMD_VF_DUMP_DESC = 630;
+constexpr uint32_t TEST_SIMD_VF_DUMP_SIZE = 1;
+
+__asc_simd_vf::DumpTensorTlv* GetSimdVfDumpTlv(BlockVFBufInfo& blockInfo)
+{
+    __asc_simd_vf::get_printf_ubuf_addr(reinterpret_cast<uint64_t>(&blockInfo), TEST_SIMD_VF_BLOCK_IDX);
+    return reinterpret_cast<__asc_simd_vf::DumpTensorTlv*>(blockInfo.buffer);
+}
+}
+#endif
 
 struct TestDumpTensorParams {
     uint32_t dataSize;
@@ -169,3 +188,32 @@ TEST_F(TestDumpTensorSuite, InitDumpNullStartAddrReturns)
 
     EXPECT_EQ(AscendC::g_dumpWorkspaceReserved, nullptr);
 }
+
+#if defined(ASCENDC_TEST_HAS_SIMD_VF_DUMP_POSITION)
+TEST_F(TestDumpTensorSuite, AscDumpUbufWritesUbPosition)
+{
+    BlockVFBufInfo blockInfo;
+    auto* dumpTlv = GetSimdVfDumpTlv(blockInfo);
+    uint32_t input[TEST_SIMD_VF_DUMP_SIZE] = {0};
+
+    __asc_simd_vf::asc_dump_ubuf<uint32_t>(
+        reinterpret_cast<__ubuf__ uint32_t*>(input), TEST_SIMD_VF_DUMP_DESC, TEST_SIMD_VF_DUMP_SIZE);
+
+    EXPECT_EQ(dumpTlv->position, static_cast<uint16_t>(__asc_simd_vf::DumpTensorPosition::UB));
+    EXPECT_EQ(dumpTlv->desc, TEST_SIMD_VF_DUMP_DESC);
+    EXPECT_EQ(dumpTlv->blockIdx, TEST_SIMD_VF_BLOCK_IDX);
+}
+
+TEST_F(TestDumpTensorSuite, AscDumpRegWritesRegPosition)
+{
+    BlockVFBufInfo blockInfo;
+    auto* dumpTlv = GetSimdVfDumpTlv(blockInfo);
+    vector_u32 input = {};
+
+    __asc_simd_vf::asc_dump_reg<uint32_t>(input, TEST_SIMD_VF_DUMP_DESC, TEST_SIMD_VF_DUMP_SIZE);
+
+    EXPECT_EQ(dumpTlv->position, static_cast<uint16_t>(__asc_simd_vf::DumpTensorPosition::REG));
+    EXPECT_EQ(dumpTlv->desc, TEST_SIMD_VF_DUMP_DESC);
+    EXPECT_EQ(dumpTlv->blockIdx, TEST_SIMD_VF_BLOCK_IDX);
+}
+#endif
