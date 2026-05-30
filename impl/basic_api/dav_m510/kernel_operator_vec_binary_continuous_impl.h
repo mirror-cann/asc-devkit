@@ -614,7 +614,7 @@ __aicore__ inline void AddDeqReluImpl(__ubuf__ half *dst, __ubuf__ int32_t *src0
             Reg::Add<int32_t>(src0Reg, src0Reg, src1Reg, preg);
             Reg::Cast<float, int32_t, CastParam::s322floatCastTrait>(tmpReg, src0Reg, preg);
             Reg::Muls<float>(tmpReg, tmpReg, static_cast<float>(DEQ_SHIFT_RIGHT_17_BIT), preg);
-            Reg::Muls<float>(tmpReg, tmpReg, static_cast<float>(g_deqValue), preg);
+            Reg::Muls<float>(tmpReg, tmpReg, static_cast<float>(Internal::g_deqValue), preg);
             Reg::Muls<float>(tmpReg, tmpReg, static_cast<float>(DEQ_SHIFT_LEFT_17_BIT), preg);
             Reg::Maxs<float>(tmpReg, tmpReg, scalarValue, preg);
             Reg::Cast<half, float, CastParam::float2halfCastTrait>(dstReg, tmpReg, preg);

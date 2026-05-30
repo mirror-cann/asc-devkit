@@ -394,12 +394,12 @@ namespace RegAddDeqRelu {
 template <typename T, typename RegT, typename RegU>
 __aicore__ inline void AddDeqRelu(RegU &dstReg, RegT &srcReg0, RegT &srcReg1, Reg::MaskReg &mask)
 {
-    // max(float(srcReg0 + srcReg1) * (1/131072) * g_deqValue * 131072, 0)
+    // max(float(srcReg0 + srcReg1) * (1/131072) * Internal::g_deqValue * 131072, 0)
     Reg::RegTensor<float> tmpReg;
     Reg::Add(srcReg0, srcReg0, srcReg1, mask);
     Reg::Cast<float, int32_t, CastParam::s322floatCastTrait>(tmpReg, srcReg0, mask);
     Reg::Muls(tmpReg, tmpReg, static_cast<float>(DEQ_SHIFT_RIGHT_17_BIT), mask);
-    Reg::Muls(tmpReg, tmpReg, static_cast<float>(g_deqValue), mask);
+    Reg::Muls(tmpReg, tmpReg, static_cast<float>(Internal::g_deqValue), mask);
     Reg::Muls(tmpReg, tmpReg, static_cast<float>(DEQ_SHIFT_LEFT_17_BIT), mask);
     Reg::Maxs(tmpReg, tmpReg, (T)0, mask);
     Reg::Cast<half, float, CastParam::float2halfCastTrait>(dstReg, tmpReg, mask);

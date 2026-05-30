@@ -32,7 +32,7 @@
 #include "kernel_scalar_convert.h"
 
 namespace AscendC {
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
 namespace Internal {
 __BLOCK_LOCAL__ extern __inline__ half g_deqValue;
 }
@@ -49,6 +49,33 @@ public:
         return DEFAULT_C0_SIZE;
     }
 
+    __aicore__ static inline void InitCoupledArchSpr()
+    {
+    #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 5102)
+        set_padding(static_cast<uint64_t>(0));
+        set_vector_mask(static_cast<uint64_t>(-1), static_cast<uint64_t>(-1));
+        uint64_t loopSizePara = (1uL << 21) | 1uL;
+        set_loop_size_ubtoout(loopSizePara);
+        set_loop_size_outtoub(loopSizePara);
+        set_st_atomic_cfg(0b00100100);
+    #endif
+    }
+
+    __aicore__ static inline void InitSplitArchSpr()
+    {
+    #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
+        if ASCEND_IS_AIC {
+            set_padding(static_cast<uint64_t>(0));
+        } else {
+            set_vector_mask(static_cast<uint64_t>(-1), static_cast<uint64_t>(-1));
+            uint64_t loopSizePara = (1uL << 21) | 1uL;
+            set_loop_size_ubtoout(loopSizePara);
+            set_loop_size_outtoub(loopSizePara);
+        }
+        set_st_atomic_cfg(0b00100100);
+    #endif
+    }
+
     __aicore__ static inline void InitSocStateImpl()
     {
     #if defined(__NPU_ARCH__) && (((__NPU_ARCH__ == 3113)))
@@ -63,25 +90,20 @@ public:
         } else {
             set_vector_mask(static_cast<uint64_t>(-1), static_cast<uint64_t>(-1));
         }
-    #elif __NPU_ARCH__ == 3510
+    #elif (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
         set_mask_norm();
         Internal::g_deqValue = static_cast<half>(1);
         uint64_t prevCtrl = get_ctrl() & 0x1000000000000;
         uint64_t val = 0x1000000000000008 | prevCtrl;
         set_ctrl(val);
-        if ASCEND_IS_AIC {
-            set_padding(static_cast<uint64_t>(0));
-        } else {
-            set_vector_mask(static_cast<uint64_t>(-1), static_cast<uint64_t>(-1));
-            uint64_t loopSizePara = (1uL << 21) | 1uL;
-            set_loop_size_ubtoout(loopSizePara);
-            set_loop_size_outtoub(loopSizePara);
-        }
+        #if (__NPU_ARCH__ == 5102)
+            InitCoupledArchSpr();
+        #else
+            InitSplitArchSpr();
+        #endif
         set_st_atomic_cfg(0b00100100);
     #elif __NPU_ARCH__ == 3002
         set_padding(static_cast<uint64_t>(0));
-    #elif (__NPU_ARCH__ == 5102)
-        set_vector_mask(static_cast<uint64_t>(-1), static_cast<uint64_t>(-1));
     #endif
     }
 
