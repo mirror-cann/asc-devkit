@@ -225,6 +225,78 @@ int32_t AscShflStub(int32_t var, int32_t src_lane, int32_t width)
     EXPECT_EQ(width, 32);
     return 42;
 }
+
+class TestTiledGroup : public tiled_group {
+public:
+    TestTiledGroup(unsigned int numThreads, unsigned int mask, unsigned int metaRank = 0u, unsigned int metaSize = 1u)
+        : tiled_group(numThreads)
+    {
+        _tiled_info.mask = mask;
+        _tiled_info.meta_group_rank = metaRank;
+        _tiled_info.meta_group_size = metaSize;
+    }
+};
+
+int32_t AscShflModuloStub(int32_t var, int32_t src_lane, int32_t width)
+{
+    EXPECT_EQ(var, 11);
+    EXPECT_EQ(src_lane, 3);
+    EXPECT_EQ(width, 32);
+    return 77;
+}
+
+int32_t AscTileShflStub(int32_t var, int32_t src_lane, int32_t width)
+{
+    EXPECT_EQ(var, 13);
+    EXPECT_EQ(src_lane, 7);
+    EXPECT_EQ(width, 4);
+    return 31;
+}
+
+int32_t AscTileShflUpStub(int32_t var, uint32_t delta, int32_t width)
+{
+    EXPECT_EQ(var, 13);
+    EXPECT_EQ(delta, 5u);
+    EXPECT_EQ(width, 4);
+    return 32;
+}
+
+int32_t AscTileShflDownStub(int32_t var, uint32_t delta, int32_t width)
+{
+    EXPECT_EQ(var, 13);
+    EXPECT_EQ(delta, 5u);
+    EXPECT_EQ(width, 4);
+    return 33;
+}
+
+int32_t AscTileShflXorStub(int32_t var, int32_t lane_mask, int32_t width)
+{
+    EXPECT_EQ(var, 13);
+    EXPECT_EQ(lane_mask, 7);
+    EXPECT_EQ(width, 4);
+    return 34;
+}
+}
+
+TEST_F(CooperativeGroupsTestsuite, TiledGroupPropertiesTest)
+{
+    TestTiledGroup tiled(6u, 0x0000003Fu, 2u, 5u);
+    EXPECT_EQ(tiled.get_type(), group_type::tiled_group_type);
+    EXPECT_EQ(tiled.num_threads(), 6ull);
+    EXPECT_EQ(tiled.size(), 6ull);
+    EXPECT_EQ(tiled.thread_rank(), static_cast<unsigned long long>(__popc(0x0000003F & lanemask_lt())));
+    tiled.sync();
+}
+
+TEST_F(CooperativeGroupsTestsuite, ThreadGroupBaseClassTiledGroupDispatchTest)
+{
+    TestTiledGroup tiled(6u, 0x0000003Fu);
+    thread_group& tg = tiled;
+    EXPECT_EQ(tg.get_type(), group_type::tiled_group_type);
+    EXPECT_EQ(tg.size(), 6ull);
+    EXPECT_EQ(tg.num_threads(), 6ull);
+    EXPECT_EQ(tg.thread_rank(), tiled.thread_rank());
+    tg.sync();
 }
 
 TEST_F(CooperativeGroupsTestsuite, CoalescedGroupShflInt32Test)
@@ -236,6 +308,19 @@ TEST_F(CooperativeGroupsTestsuite, CoalescedGroupShflInt32Test)
     coalesced_group cg(0x1FFFFFFF);
     int32_t result = cg.shfl(7, 2);
     EXPECT_EQ(result, 42);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, CoalescedGroupShflSrcRankModuloTest)
+{
+    MOCKER_CPP(asc_shfl, int32_t(int32_t, int32_t, int32_t))
+        .times(1)
+        .will(invoke(AscShflModuloStub));
+
+    coalesced_group cg(0x0000000F);
+    int32_t result = cg.shfl(11, 7);
+    EXPECT_EQ(result, 77);
 
     GlobalMockObject::verify();
 }
@@ -261,6 +346,94 @@ TEST_F(CooperativeGroupsTestsuite, CoalescedGroupMetaGroupSizeRankTest)
 TEST_F(CooperativeGroupsTestsuite, CoalescedThreadsTypeTest)
 {
     EXPECT_EQ(coalesced_group(0xFFFFFFFF).get_type(), group_type::coalesced_group_type);
+}
+
+TEST_F(CooperativeGroupsTestsuite, CoalescedThreadsUsesActiveMaskTest)
+{
+    MOCKER_CPP(__activemask, uint32_t(void)).times(1).will(returnValue(0x0000000Fu));
+
+    coalesced_group cg = coalesced_threads();
+    EXPECT_EQ(cg.get_type(), group_type::coalesced_group_type);
+    EXPECT_EQ(cg.num_threads(), 4ull);
+    EXPECT_EQ(cg.size(), 4ull);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, CoalescedGroupVoteFunctionsUseMaskedBallotTest)
+{
+    MOCKER_CPP(__ballot, int32_t(int32_t)).times(3).will(returnValue(0x0000000F));
+
+    coalesced_group cg(0x0000000F);
+    EXPECT_EQ(cg.any(1), 1);
+    EXPECT_EQ(cg.all(1), 1);
+    EXPECT_EQ(cg.ballot(1), 0x0000000Fu);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, CoalescedGroupVoteFunctionsIgnoreOutsideMaskTest)
+{
+    MOCKER_CPP(__ballot, int32_t(int32_t)).times(2).will(returnValue(0x00000010));
+
+    coalesced_group cg(0x0000000F);
+    EXPECT_EQ(cg.any(1), 0);
+    EXPECT_EQ(cg.all(1), 0);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, CoalescedGroupBallotPacksSparseMaskTest)
+{
+    MOCKER_CPP(__ballot, int32_t(int32_t)).times(1).will(returnValue(0x00000011));
+
+    coalesced_group cg(0x00000055);
+    EXPECT_EQ(cg.ballot(1), 0x5u);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, BinaryPartitionCoalescedGroupAllSamePredTest)
+{
+    MOCKER_CPP(__ballot, int32_t(int32_t)).times(1).will(returnValue(0x0000000F));
+
+    coalesced_group cg(0x0000000F);
+    coalesced_group result = binary_partition(cg, true);
+    EXPECT_EQ(result.get_type(), group_type::coalesced_group_type);
+    EXPECT_EQ(result.get_mask(), 0x0000000Fu);
+    EXPECT_EQ(result.meta_group_rank(), 0ull);
+    EXPECT_EQ(result.meta_group_size(), 1ull);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, BinaryPartitionCoalescedGroupSplitTest)
+{
+    MOCKER_CPP(__ballot, int32_t(int32_t)).times(1).will(returnValue(0x00000005));
+
+    coalesced_group cg(0x0000000F);
+    coalesced_group result = binary_partition(cg, true);
+    EXPECT_EQ(result.get_type(), group_type::coalesced_group_type);
+    EXPECT_EQ(result.get_mask(), 0x00000005u);
+    EXPECT_EQ(result.meta_group_rank(), 1ull);
+    EXPECT_EQ(result.meta_group_size(), 2ull);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, BinaryPartitionThreadBlockTileUsesTileMaskTest)
+{
+    MOCKER_CPP(__ballot, int32_t(int32_t)).times(1).will(returnValue(0x00000005));
+
+    thread_block tb = this_thread_block();
+    auto tile4 = tiled_partition<4>(tb);
+    coalesced_group result = binary_partition(tile4, true);
+    EXPECT_EQ(result.get_type(), group_type::coalesced_group_type);
+    EXPECT_EQ(result.get_mask(), 0x00000005u);
+    EXPECT_EQ(result.meta_group_rank(), 1ull);
+    EXPECT_EQ(result.meta_group_size(), 2ull);
+
+    GlobalMockObject::verify();
 }
 
 TEST_F(CooperativeGroupsTestsuite, DISABLED_CoalescedGroupShflInt32Test)
@@ -433,6 +606,18 @@ TEST_F(CooperativeGroupsTestsuite, ThreadBlockTileBaseThreadRankTest)
     EXPECT_GE(rank, 0ull);
 }
 
+TEST_F(CooperativeGroupsTestsuite, ValidThreadBlockTileSizeTraitsTest)
+{
+    EXPECT_TRUE(_is_valid_thread_block_tile_size<1>::value);
+    EXPECT_TRUE(_is_valid_thread_block_tile_size<2>::value);
+    EXPECT_TRUE(_is_valid_thread_block_tile_size<4>::value);
+    EXPECT_TRUE(_is_valid_thread_block_tile_size<8>::value);
+    EXPECT_TRUE(_is_valid_thread_block_tile_size<16>::value);
+    EXPECT_TRUE(_is_valid_thread_block_tile_size<32>::value);
+    EXPECT_FALSE(_is_valid_thread_block_tile_size<3>::value);
+    EXPECT_FALSE(_is_valid_thread_block_tile_size<64>::value);
+}
+
 TEST_F(CooperativeGroupsTestsuite, ThreadBlockTileBaseBuildMaskTest)
 {
     EXPECT_EQ(thread_block_tile_base<32>::build_mask(), 0xFFFFFFFFu);
@@ -447,6 +632,58 @@ TEST_F(CooperativeGroupsTestsuite, ThreadBlockTileBaseSyncTest)
 {
     thread_block_tile_base<32> tbtb;
     tbtb.sync();
+}
+
+TEST_F(CooperativeGroupsTestsuite, ThreadBlockTileBaseShflPassesSrcRankAndWidthTest)
+{
+    MOCKER_CPP(asc_shfl, int32_t(int32_t, int32_t, int32_t)).times(1).will(invoke(AscTileShflStub));
+
+    thread_block_tile_base<4> tile;
+    EXPECT_EQ(tile.shfl(13, 7), 31);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, ThreadBlockTileBaseShflUpPassesDeltaAndWidthTest)
+{
+    MOCKER_CPP(asc_shfl_up, int32_t(int32_t, uint32_t, int32_t)).times(1).will(invoke(AscTileShflUpStub));
+
+    thread_block_tile_base<4> tile;
+    EXPECT_EQ(tile.shfl_up(13, 5), 32);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, ThreadBlockTileBaseShflDownPassesDeltaAndWidthTest)
+{
+    MOCKER_CPP(asc_shfl_down, int32_t(int32_t, uint32_t, int32_t)).times(1).will(invoke(AscTileShflDownStub));
+
+    thread_block_tile_base<4> tile;
+    EXPECT_EQ(tile.shfl_down(13, 5), 33);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, ThreadBlockTileBaseShflXorPassesLaneMaskAndWidthTest)
+{
+    MOCKER_CPP(asc_shfl_xor, int32_t(int32_t, int32_t, int32_t)).times(1).will(invoke(AscTileShflXorStub));
+
+    thread_block_tile_base<4> tile;
+    EXPECT_EQ(tile.shfl_xor(13, 7), 34);
+
+    GlobalMockObject::verify();
+}
+
+TEST_F(CooperativeGroupsTestsuite, ThreadBlockTileBaseVoteFunctionsUseTileMaskTest)
+{
+    MOCKER_CPP(__ballot, int32_t(int32_t)).times(3).will(returnValue(0x0000000F));
+
+    thread_block_tile_base<4> tile;
+    EXPECT_EQ(tile.any(1), 1);
+    EXPECT_EQ(tile.all(1), 1);
+    EXPECT_EQ(tile.ballot(1), 0x0000000Fu);
+
+    GlobalMockObject::verify();
 }
 
 TEST_F(CooperativeGroupsTestsuite, DISABLED_ThreadBlockTileBaseShflInt32Test)
@@ -573,7 +810,7 @@ TEST_F(CooperativeGroupsTestsuite, TiledPartitionThreadGroupTest)
 {
     thread_block tb = this_thread_block();
     thread_group tg = tiled_partition(tb, 4);
-    EXPECT_EQ(tg.get_type(), group_type::coalesced_group_type);
+    EXPECT_EQ(tg.get_type(), group_type::tiled_group_type);
 }
 
 TEST_F(CooperativeGroupsTestsuite, TiledPartitionThreadGroupMetadataTest)
@@ -581,7 +818,7 @@ TEST_F(CooperativeGroupsTestsuite, TiledPartitionThreadGroupMetadataTest)
     SimtDimGuard guard(cce::dim3(10u, 1u, 1u), cce::dim3(9u, 0u, 0u));
     thread_block tb = this_thread_block();
     thread_group tg = tiled_partition(tb, 4);
-    EXPECT_EQ(tg.get_type(), group_type::coalesced_group_type);
+    EXPECT_EQ(tg.get_type(), group_type::tiled_group_type);
     EXPECT_TRUE(tg._tiled_info.is_tiled);
     EXPECT_EQ(tg._tiled_info.num_threads, 2u);
     EXPECT_EQ(tg._tiled_info.meta_group_rank, 2u);
@@ -614,16 +851,16 @@ TEST_F(CooperativeGroupsTestsuite, TiledPartitionAlreadyTiledCoalescedGroupTest)
     thread_block tb = this_thread_block();
     thread_group parent = tiled_partition(tb, 8);
 
-    EXPECT_EQ(parent.get_type(), group_type::coalesced_group_type);
+    EXPECT_EQ(parent.get_type(), group_type::tiled_group_type);
     EXPECT_TRUE(parent._tiled_info.is_tiled);
     EXPECT_EQ(parent.num_threads(), 6ull);
 
     thread_group result = tiled_partition(parent, 4);
-    EXPECT_EQ(result.get_type(), group_type::coalesced_group_type);
+    EXPECT_EQ(result.get_type(), group_type::tiled_group_type);
     EXPECT_TRUE(result._tiled_info.is_tiled);
     EXPECT_EQ(result.num_threads(), 2ull);
     EXPECT_EQ(result._tiled_info.meta_group_rank, 1u);
-    EXPECT_EQ(result._tiled_info.meta_group_size, 1u);
+    EXPECT_EQ(result._tiled_info.meta_group_size, 2u);
 }
 
 TEST_F(CooperativeGroupsTestsuite, SupportTypeSimtInternelTest)
@@ -692,6 +929,23 @@ TEST_F(CooperativeGroupsTestsuite, ThreadBlockTileConversionTest)
     EXPECT_EQ(tile_void.size(), 4ull);
 }
 
+TEST_F(CooperativeGroupsTestsuite, NestedThreadBlockTileConversionTest)
+{
+    thread_block tb = this_thread_block();
+    auto tile32 = tiled_partition<32>(tb);
+    auto tile16 = tiled_partition<16>(tile32);
+    auto tile8 = tiled_partition<8>(tile16);
+    thread_block_tile<16, void> tile16Void = tile16;
+    thread_block_tile<8, void> tile8Void = tile8;
+
+    EXPECT_EQ(tile16.size(), 16ull);
+    EXPECT_EQ(tile8.size(), 8ull);
+    EXPECT_EQ(tile16Void.size(), 16ull);
+    EXPECT_EQ(tile8Void.size(), 8ull);
+    EXPECT_EQ(tile16.meta_group_size(), 2u);
+    EXPECT_EQ(tile8.meta_group_size(), 2u);
+}
+
 TEST_F(CooperativeGroupsTestsuite, ThreadGroupBaseClassThreadBlockTest)
 {
     thread_block tb = this_thread_block();
@@ -708,11 +962,12 @@ TEST_F(CooperativeGroupsTestsuite, ThreadGroupBaseClassThreadBlockTest)
 
 TEST_F(CooperativeGroupsTestsuite, ThreadGroupBaseClassTiledGroupDefaultDispatchTest)
 {
-    thread_group tg(group_type::tiled_group_type);
+    TestTiledGroup tiled(4u, 0x0000000Fu);
+    thread_group& tg = tiled;
     EXPECT_EQ(tg.get_type(), group_type::tiled_group_type);
-    EXPECT_EQ(tg.size(), 0ull);
-    EXPECT_EQ(tg.num_threads(), 0ull);
-    EXPECT_EQ(tg.thread_rank(), 0ull);
+    EXPECT_EQ(tg.size(), 4ull);
+    EXPECT_EQ(tg.num_threads(), 4ull);
+    EXPECT_EQ(tg.thread_rank(), tiled.thread_rank());
     tg.sync();
 }
 
@@ -778,7 +1033,7 @@ TEST_F(CooperativeGroupsTestsuite, ThreadGroupFromTiledPartitionGetTypeTest)
 {
     thread_block tb = this_thread_block();
     thread_group tg = tiled_partition(tb, 4);
-    EXPECT_EQ(tg.get_type(), group_type::coalesced_group_type);
+    EXPECT_EQ(tg.get_type(), group_type::tiled_group_type);
 }
 
 TEST_F(CooperativeGroupsTestsuite, DISABLED_CoalescedThreadsTest)

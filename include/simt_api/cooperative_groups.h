@@ -23,6 +23,7 @@
 namespace cooperative_groups {
 
 class _coalesced_group_data_access;
+class thread_block;
 
 enum class group_type : unsigned int {
     thread_block_type,
@@ -54,10 +55,29 @@ protected:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_group(group_type type);
 };
 
+class tiled_group : public thread_group {
+    friend class thread_block;
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_group tiled_partition(
+        const thread_group& parent, unsigned int tilesz);
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_group tiled_partition(
+        const thread_block& parent, unsigned int tilesz);
+
+public:
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline void sync() const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long num_threads() const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long size() const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long thread_rank() const;
+
+protected:
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline tiled_group(unsigned int num_threads);
+};
+
 class thread_block : public thread_group {
     friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block this_thread_block();
-    friend __SIMT_DEVICE_FUNCTIONS_DECL__ thread_group tiled_partition(const thread_group& parent, unsigned int tilesz);
-    friend __SIMT_DEVICE_FUNCTIONS_DECL__ thread_group tiled_partition(const thread_block& parent, unsigned int tilesz);
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_group tiled_partition(
+        const thread_group& parent, unsigned int tilesz);
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_group tiled_partition(
+        const thread_block& parent, unsigned int tilesz);
 
 public:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline static void sync();
@@ -79,17 +99,25 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block this_thread_block();
 template <unsigned int Size, typename ParentT>
 class thread_block_tile;
 
+template <unsigned int Size, typename ParentT>
+class _static_parent_thread_block_tile_base {
+public:
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int meta_group_rank() const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int meta_group_size() const;
+};
+
 class coalesced_group : public thread_group {
-    friend __SIMT_DEVICE_FUNCTIONS_DECL__ coalesced_group coalesced_threads();
-    friend __SIMT_DEVICE_FUNCTIONS_DECL__ thread_group tiled_partition(const thread_group& parent, unsigned int tilesz);
-    friend __SIMT_DEVICE_FUNCTIONS_DECL__ coalesced_group
-    tiled_partition(const coalesced_group& parent, unsigned int tilesz);
-    friend __SIMT_DEVICE_FUNCTIONS_DECL__ coalesced_group binary_partition(const coalesced_group& g, bool pred);
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline coalesced_group coalesced_threads();
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_group tiled_partition(
+        const thread_group& parent, unsigned int tilesz);
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline coalesced_group tiled_partition(
+        const coalesced_group& parent, unsigned int tilesz);
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline coalesced_group binary_partition(const coalesced_group& g, bool pred);
     friend class _coalesced_group_data_access;
 
     template <unsigned int Size, typename ParentT>
-    friend __SIMT_DEVICE_FUNCTIONS_DECL__ coalesced_group
-    binary_partition(const thread_block_tile<Size, ParentT>& g, bool pred);
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline coalesced_group binary_partition(
+        const thread_block_tile<Size, ParentT>& g, bool pred);
 
 public:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline void sync() const;
@@ -147,12 +175,19 @@ template <>
 struct tile_helpers<1> : public _tile_helpers<32, 0x00000001, 0x00, 0> {};  // thread_block_tile<1> config
 
 template <unsigned int Size>
+struct _is_valid_thread_block_tile_size {
+    static constexpr bool value = Size == 1 || Size == 2 || Size == 4 || Size == 8 || Size == 16 || Size == 32;
+};
+
+template <unsigned int Size>
 class thread_block_tile_base {
+    static_assert(_is_valid_thread_block_tile_size<Size>::value, "Size must be one of 1/2/4/8/16/32");
+
     using th = tile_helpers<Size>;
     static constexpr unsigned int numThreads = Size;
 
     template <unsigned int Sz, typename ParentT>
-    __SIMT_DEVICE_FUNCTIONS_DECL__ friend coalesced_group binary_partition(
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline friend coalesced_group binary_partition(
         const thread_block_tile<Sz, ParentT>& g, bool pred);
     friend class _coalesced_group_data_access;
 
@@ -184,31 +219,30 @@ protected:
 };
 
 template <unsigned int Size, typename ParentT = void>
-class thread_block_tile_impl : public thread_block_tile_base<Size> {
+class thread_block_tile_impl : public thread_block_tile_base<Size>,
+                               public _static_parent_thread_block_tile_base<Size, ParentT> {
 public:
     using thread_block_tile_base<Size>::thread_rank;
     using thread_block_tile_base<Size>::num_threads;
     using thread_block_tile_base<Size>::size;
-    __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned int meta_group_rank() const;
-    __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned int meta_group_size() const;
 
 protected:
-    __SIMT_DEVICE_FUNCTIONS_DECL__ thread_block_tile_impl();
-    __SIMT_DEVICE_FUNCTIONS_DECL__ thread_block_tile_impl(unsigned int, unsigned int);
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile_impl();
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile_impl(unsigned int, unsigned int);
 };
 
 template <unsigned int Size>
-class thread_block_tile_impl<Size, void> : public thread_block_tile_base<Size>, public thread_group {
+class thread_block_tile_impl<Size, void> : public thread_block_tile_base<Size>, public tiled_group {
 public:
     using thread_block_tile_base<Size>::sync;
-    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long size() const;
-    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long num_threads() const;
-    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long thread_rank() const;
-    __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned int meta_group_rank() const;
-    __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned int meta_group_size() const;
+    using thread_block_tile_base<Size>::thread_rank;
+    using thread_block_tile_base<Size>::num_threads;
+    using thread_block_tile_base<Size>::size;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int meta_group_rank() const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int meta_group_size() const;
 
 protected:
-    __SIMT_DEVICE_FUNCTIONS_DECL__ thread_block_tile_impl(
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile_impl(
         unsigned int meta_group_rank = 0, unsigned int meta_group_size = 1);
 };
 
@@ -216,7 +250,7 @@ template <unsigned int Size, typename ParentT = void>
 class thread_block_tile : public thread_block_tile_impl<Size, ParentT> {
 public:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile(const ParentT& g);
-    __SIMT_DEVICE_FUNCTIONS_DECL__ operator thread_block_tile<Size, void>() const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline operator thread_block_tile<Size, void>() const;
 };
 
 template <unsigned int Size>
@@ -238,7 +272,7 @@ struct tiled_partition_impl;
 
 template <unsigned int Size>
 struct tiled_partition_impl<Size, thread_block> : public thread_block_tile<Size, thread_block> {
-    __SIMT_DEVICE_FUNCTIONS_DECL__ tiled_partition_impl(const thread_block& g);
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline tiled_partition_impl(const thread_block& g);
 };
 
 template <unsigned int Size, unsigned int ParentSize, typename GrandParent>
