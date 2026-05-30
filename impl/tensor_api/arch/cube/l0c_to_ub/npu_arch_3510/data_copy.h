@@ -52,7 +52,7 @@ public:
     {
         constexpr QuantMode_t quantPre = GetQuantMode<trait.roundMode, T, U>();
         CheckTemplate<trait, quantPre, T, U>();
-        CheckDataTypeFor3510::CheckL0C2UbDataType<quantPre, T, U>();
+        CheckDataType::CheckL0C2UbDataType<quantPre, T, U>();
         SetRegisterImpl<T, U>(dst, src);
         DataCopyImpl<trait, quantPre, T, U>(dst, src, params);
     }

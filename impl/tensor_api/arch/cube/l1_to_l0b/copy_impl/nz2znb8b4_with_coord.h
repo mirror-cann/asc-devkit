@@ -39,7 +39,7 @@ private:
     __aicore__ inline static constexpr void CheckTemplate()
     {
         CheckLayoutPattern<T, U>();
-        CheckDataTypeFor3510::CheckL12L0BDataType<T, U>();
+        CheckDataType::CheckL12L0BDataType<T, U>();
     }
 
     template <const CopyL12L0BTrait& trait, typename T, typename U>

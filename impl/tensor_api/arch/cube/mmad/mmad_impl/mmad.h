@@ -40,14 +40,14 @@ private:
     __aicore__ inline static constexpr void CheckTemplateForNormal()
     {
         CheckLayoutPattern<T, U, S>();
-        CheckDataTypeFor3510::CheckMmadDataType<T, U, S>();
+        CheckDataType::CheckMmadDataType<T, U, S>();
     }
 
     template <const MmadTrait& trait, typename T, typename U, typename S>
     __aicore__ inline static constexpr void CheckTemplateForMx()
     {
         CheckLayoutPattern<T, U, S>();
-        CheckDataTypeFor3510::CheckMxMmadDataType<T, U, S>();
+        CheckDataType::CheckMxMmadDataType<T, U, S>();
     }
 
     template <const MmadTrait& trait, typename T, typename U, typename S, typename Params>

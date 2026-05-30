@@ -22,7 +22,7 @@
 #ifndef IMPL_TENSOR_API_ARCH_UTILS_ARCH_UTILS_H
 #define IMPL_TENSOR_API_ARCH_UTILS_ARCH_UTILS_H
 
-#include "impl/tensor_api/arch/utils/check_data_type_3510.h"
+#include "impl/tensor_api/arch/utils/check_data_type.h"
 #include "impl/tensor_api/arch/utils/check_format.h"
 #include "impl/tensor_api/arch/utils/is_format.h"
 
