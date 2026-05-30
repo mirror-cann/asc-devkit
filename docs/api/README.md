@@ -1379,8 +1379,6 @@
 
     -   [协作组](SIMT-API/协作组/协作组.md)
         -   [协作组简介](SIMT-API/协作组/协作组简介.md)
-        -   [tiled_partition](SIMT-API/协作组/tiled_partition.md)
-        -   [binary_partition](SIMT-API/协作组/binary_partition.md)
         -   [thread_block](SIMT-API/协作组/thread_block/thread_block.md)
             -   [thread_block简介](SIMT-API/协作组/thread_block/thread_block简介.md)
             -   [thread_block构造函数](SIMT-API/协作组/thread_block/thread_block构造函数.md)
@@ -1423,6 +1421,8 @@
             -   [ballot](SIMT-API/协作组/thread_block_tile/ballot.md)
             -   [any](SIMT-API/协作组/thread_block_tile/any.md)
             -   [all](SIMT-API/协作组/thread_block_tile/all.md)
+        -   [tiled_partition](SIMT-API/协作组/tiled_partition.md)
+        -   [binary_partition](SIMT-API/协作组/binary_partition.md)
 
     -   [同步与内存栅栏](SIMT-API/同步与内存栅栏/同步与内存栅栏.md)
         -   [同步接口](SIMT-API/同步与内存栅栏/同步接口/同步接口.md)

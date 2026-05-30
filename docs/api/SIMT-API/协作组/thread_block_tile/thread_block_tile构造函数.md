@@ -12,6 +12,8 @@
 | Atlas 推理系列产品Vector Core | x |
 | Atlas 训练系列产品 | x |
 
+## 功能说明
+
 `thread_block_tile`不提供默认构造函数，可通过`tiled_partition`接口从另一个协作组中划分得到。
 
 ## 函数原型
@@ -23,7 +25,7 @@ thread_block_tile<Size, ParentT> tiled_partition(const ParentT& g)
 
 ## 参数说明
 
-**表 1**  模板版本参数说明
+**表 1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

@@ -759,14 +759,7 @@
 
 ## 协作组
 
-**表 27**  协作组划分接口
-
-| 接口名 | 功能描述 |
-| --- | --- |
-| [tiled_partition](../协作组/tiled_partition.md) | 将一个线程组按指定大小划分为多个子组。 |
-| [binary_partition](../协作组/binary_partition.md) | 根据一个标签（0或1）将父组划分为两个子组。 |
-
-**表 28**  thread_block接口
+**表 27**  thread_block接口
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -780,7 +773,7 @@
 | [group_dim](../协作组/thread_block/group_dim.md) | 获取线程块的维度。 |
 | [dim_threads](../协作组/thread_block/dim_threads.md) | 获取线程块内线程的三维维度。 |
 
-**表 29**  coalesced_group接口
+**表 28**  coalesced_group接口
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -798,7 +791,7 @@
 | [any](../协作组/coalesced_group/any.md) | 判断是否有组内线程的输入不为0。 |
 | [all](../协作组/coalesced_group/all.md) | 判断是否所有组内线程的输入均不为0。 |
 
-**表 30**  thread_block_tile接口
+**表 29**  thread_block_tile接口
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -816,3 +809,10 @@
 | [ballot](../协作组/thread_block_tile/ballot.md) | 判断组内每个活跃线程的输入是否非零。 |
 | [any](../协作组/thread_block_tile/any.md) | 判断是否有组内线程的输入不为0。 |
 | [all](../协作组/thread_block_tile/all.md) | 判断是否所有组内线程的输入均不为0。 |
+
+**表 30**  协作组划分接口
+
+| 接口名 | 功能描述 |
+| --- | --- |
+| [tiled_partition](../协作组/tiled_partition.md) | 将一个线程组按指定大小划分为多个子组。 |
+| [binary_partition](../协作组/binary_partition.md) | 根据一个标签（0或1）将父组划分为两个子组。 |
