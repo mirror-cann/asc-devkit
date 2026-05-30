@@ -747,7 +747,7 @@ __aicore__ inline void RlsBufInternal(uint8_t bufId) {
 __aicore__ constexpr pipe_t GetPipeByPos(TPosition pos, TPosition altPos)
 {
     if (pos == TPosition::GM) {
-        return altPos == TPosition::GM ? PIPE_MTE2 : PIPE_MTE3;
+        return altPos == TPosition::VECIN ? PIPE_MTE2 : PIPE_MTE3;
     } else if (pos == TPosition::VECIN) {
         return altPos == TPosition::GM ? PIPE_V : PIPE_MTE2;
     } else if (pos == TPosition::VECCALC) {

@@ -202,8 +202,9 @@ __aicore__ inline __sync_alias__ bool TQueBind<src, dst, depth, mask>::EnQue(TBu
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 5102)
     if constexpr(UseBufIdSync<TQueBind<src, dst, depth, mask>>()) {
-        GetBuffImpl<srcPipe, true>(ptr->bufId);
-        ReleaseBuffImpl<srcPipe, true>(ptr->bufId);
+        constexpr pipe_t srcUserPipe = GetPipeByPos(srcUserPos, dstUserPos);
+        GetBuffImpl<srcUserPipe, true>(ptr->bufId);
+        ReleaseBuffImpl<srcUserPipe, true>(ptr->bufId);
     } else
 #endif
     {
@@ -443,8 +444,9 @@ __aicore__ inline __sync_alias__ TBufHandle TQueBind<src, dst, depth, mask>::DeQ
     // when src and dst both ub, should insert pipe v barrier
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 5102)
     if constexpr(UseBufIdSync<TQueBind<src, dst, depth, mask>>()) {
-        GetBuffImpl<dstPipe, false>(ptr->bufId);
-        ReleaseBuffImpl<dstPipe, false>(ptr->bufId);
+        constexpr pipe_t dstUserPipe = GetPipeByPos(dstUserPos, srcUserPos);
+        GetBuffImpl<dstUserPipe, false>(ptr->bufId);
+        ReleaseBuffImpl<dstUserPipe, false>(ptr->bufId);
     } else
 #endif
     {
