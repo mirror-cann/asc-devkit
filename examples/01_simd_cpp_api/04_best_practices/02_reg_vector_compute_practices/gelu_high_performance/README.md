@@ -151,7 +151,7 @@ $$
 | 字段名 | 字段含义 |
 |:---|:---|
 |Task Duration(μs)|Task整体耗时，包含调度到加速器的时间、加速器上的执行时间以及响应结束时间。|
-|aiv_time(μs)|Task在AI Vector Core上的理论执行时间。|
+|aiv_time(μs)|Task在AI Vector Core上的执行时间。|
 |aiv_vec_time(μs)|vec类型指令（向量类运算指令）耗时。|
 |aiv_vec_ratio|vec类型指令（向量类运算指令）的cycle数在total cycle数中的占用比。|
 |aiv_scalar_time(μs)|scalar类型指令（标量类运算指令）耗时。|
