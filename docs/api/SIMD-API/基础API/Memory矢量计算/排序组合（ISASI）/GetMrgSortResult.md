@@ -57,13 +57,13 @@
 
     以上说明适用于如下型号：
 
-    Ascend 950PR/Ascend 950DT
+    <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT<br></cann-filter>
 
-    Atlas A3 训练系列产品/Atlas A3 推理系列产品
+    <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品<br></cann-filter>
 
-    Atlas A2 训练系列产品/Atlas A2 推理系列产品
+    <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品<br></cann-filter>
 
-    Atlas 200I/500 A2 推理产品
+    <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品<br></cann-filter>
 
 </cann-filter>
 
@@ -98,11 +98,7 @@ __aicore__ inline void GetMrgSortResult(uint16_t &mrgSortList1, uint16_t &mrgSor
 
 ## 约束说明<a name="section837496171220"></a>
 
-<cann-filter npu-type="A3,910b">
-
-- 需与MrgSort接口配合使用，且MrgSort接口中的ifExhaustedSuspension参数必须设置为true。
-
-</cann-filter>
+无
 
 ## 调用示例<a name="section837496171220"></a>
 

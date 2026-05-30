@@ -19,11 +19,9 @@
     **图 1**  接口外设置Mask，Counter模式前n个数据计算示例  
     ![](../../../../../figures/external_counter_first_n.png)<a id="图1-接口外设置Mask-counter模式前n个数据计算示例"></a>
 
-    完整样例参考[Mask样例](https://gitcode.com/cann/asc-devkit/pull/810)。
-
 - **高维切分：连续计算**
 
-    在[Counter计算模式](概述.md#mask-mode)中，Mask寄存器中的值只有低32bit有效，被当做参与计算的元素数量。同时高维切分矢量计算接口的repeatTime参数会被忽略，由系统内部根据元素数量自动计算。
+    在[Counter计算模式](概述.md#mask-mode)中，Mask寄存器中的值只有低64bit有效，被当做参与计算的元素数量。同时高维切分矢量计算接口的repeatTime参数会被忽略，由系统内部根据元素数量自动计算。
 
     调用示例：
 
@@ -86,4 +84,4 @@
 
 > [!NOTE]说明
 > 
-> 当数据类型为half（操作数为16位）时，每次迭代内能够处理的元素个数mask∈\[1, 128\]。当mask \> 128时，仍按一次repeat（128元素）执行，不支持超过128元素的mask控制。
+> 当数据类型为half（操作数为16位）时，每次迭代内能够处理的元素个数mask∈\[1, 128\]。当mask\>128时，仍按一次repeat（128元素）执行，不支持超过128元素的mask控制。
