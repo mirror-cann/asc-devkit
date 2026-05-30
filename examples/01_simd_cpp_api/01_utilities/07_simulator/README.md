@@ -132,8 +132,3 @@ OPPROF_{timestamp}_XXX/
 - **MindStudio Insight**：打开`visualize_data.bin`或`trace.json`进行可视化呈现。
 
   更多详细内容可以查看msProf工具使用方式，[MindStudio工具调优（msProf）快速入门](https://www.hiascend.com/document/detail/zh/canncommercial/900/devaids/optool/docs/zh/quick_start/msopprof_quick_start.md)。
-- **Chrome浏览器**：在地址栏输入`chrome://tracing`，将`trace.json`文件拖到空白处打开，可以看到如下的流水图。
-
-  <img src="figures/trace.png" width="100%">
-
-  图中左侧展示了当前所在的核及其内部的流水线。在本示例中，共启动了一个 Cube Core 和两个 Vec Core。右侧不同颜色的色块分别标注了对应时间段内，各流水线所执行的指令。

@@ -20,3 +20,7 @@ project(kernel_samples LANGUAGES ASC)
 add_executable(demo
     hello_world.asc
 )
+
+target_compile_options(demo PRIVATE
+    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES}>
+)

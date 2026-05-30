@@ -24,6 +24,7 @@ target_link_libraries(demo PRIVATE
     register
     platform
     m
+    dl
 )
 
 target_compile_options(demo PRIVATE
