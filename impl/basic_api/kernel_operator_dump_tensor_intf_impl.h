@@ -20,7 +20,7 @@
 #ifndef ASCENDC_MODULE_OPERATOR_DUMP_TENSOR_INTERFACE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_DUMP_TENSOR_INTERFACE_IMPL_H
 #include "kernel_tensor.h"
-#if __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 2002
+#if __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 5102
 #include "impl/utils/debug/asc_debug_utils.h"
 #include "impl/utils/debug/asc_aicore_printf_impl.h"
 #endif
@@ -142,7 +142,7 @@ __aicore__ inline void DumpAccChkPoint(const GlobalTensor<T> &input, uint32_t in
 }
 
 // only 51, 71, 82 supports printf/assert. the other code is left to avoid errors in test cases.
-#if __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 2002
+#if __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 5102
 template <class... Args>
 __aicore__ inline void printf(__gm__ const char* fmt, Args&&... args)
 {

@@ -25,6 +25,8 @@
 #include "impl/utils/debug/npu_arch_2201/asc_aicore_dump_utils.h"
 #elif __NPU_ARCH__ == 3510
 #include "impl/utils/debug/npu_arch_3510/asc_aicore_dump_utils.h"
+#elif __NPU_ARCH__ == 5102
+#include "impl/utils/debug/npu_arch_5102/asc_aicore_dump_utils.h"
 #endif
 
 namespace __asc_aicore {

@@ -30,6 +30,8 @@ inline __gm__ uint8_t* __gm__ g_sysPrintFifoSpace = nullptr;
 #include "impl/utils/debug/npu_arch_2201/asc_debug_utils_impl.h"
 #elif __NPU_ARCH__ == 3510
 #include "impl/utils/debug/npu_arch_3510/asc_debug_utils_impl.h"
+#elif __NPU_ARCH__ == 5102
+#include "impl/utils/debug/npu_arch_5102/asc_debug_utils_impl.h"
 #else
 #include "impl/utils/debug/asc_debug_utils_impl_stub.h"
 #endif
@@ -51,8 +53,13 @@ __aicore__ inline void enable_asc_diagnostics()
 __aicore__ inline void enable_asc_assert()
 {
 #if (!defined(ASCENDC_DUMP) || (ASCENDC_DUMP != 0)) || defined(ASCENDC_TIME_STAMP_ON)
+#if (__NPU_ARCH__ == 5102)
+    static const struct AscTlv __asc_assert_meta_section__ __attribute__ ((used, section (".ascend.meta"))) =
+    {4, 4, 1};
+#else
     static const struct AscTlv __asc_assert_meta_section__ __attribute__ ((used, section (".ascend.meta"))) =
     {4, 4, 5};
+#endif
 #endif // defined(ASCENDC_DUMP) || defined(ASCENDC_TIME_STAMP_ON)
 }
 
