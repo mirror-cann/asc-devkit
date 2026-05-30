@@ -67,7 +67,7 @@
 AscendC::DumpTensor(srcLocal, 5, dataLen);
 ```
 
-> [!CAUTION]注意 
+> [!CAUTION]注意
 >DumpTensor接口打印功能会对算子实际运行的性能带来一定影响，通常在调测阶段使用。开发者可以按需通过设置ASCENDC\_DUMP=0来关闭打印功能。
 
 打印示例如下：
@@ -185,7 +185,7 @@ DumpTensor: desc=5, addr=0, data_type=float16, position=UB, dump_size=32
 
 -   该功能仅用于NPU上板调试。
 -   暂不支持算子入图场景的打印。
--   当前仅支持打印存储位置为Unified Buffer/L1 Buffer/L0C Buffer/Global Memory的Tensor信息。针对Ascend 950PR/Ascend 950DT，不支持打印L1 Buffer上的Tensor信息。
+-   当前仅支持打印存储位置为Unified Buffer/L1 Buffer/L0C Buffer/Global Memory的Tensor信息。针对Ascend 950PR/Ascend 950DT，在使用该接口打印L1 Tensor数据时，HDK版本需要至少升级到25.7.0以上。
 -   操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md#section796754519912)。
 -   单次调用DumpTensor打印的数据总量不可超过1MB（还包括少量框架需要的头尾信息，通常可忽略）。使用时应注意，如果超出这个限制，则数据不会被打印。
 -   在计算数据量时，若Dump的总长度未对齐，需要考虑padding数据的影响。当进行非对齐Dump时，如果实际Dump的元素长度不满足32字节对齐，系统会在其末尾自动补充一定数量的padding数据，以满足对齐要求。例如，Tensor1中用户需要Dump的元素长度为30字节，系统会在其后添加2字节的padding，使总长度对齐到32字节。但在实际解析时，仍只解析原始的30字节数据，padding部分不会被使用。
@@ -251,11 +251,11 @@ DumpTensor: desc=5, addr=0, data_type=float16, position=UB, dump_size=32
     uint32_t array[] = {static_cast<uint32_t>(8), static_cast<uint32_t>(8)};
     AscendC::ShapeInfo shapeInfo(2, array);       // dim为2， shape为(8,8)
     AscendC::DumpTensor(x, 2, 64, shapeInfo);     // dump x的64个元素，且解析按照shapeInfo的(8,8)排列
-    
+
     uint32_t array1[] = {static_cast<uint32_t>(7), static_cast<uint32_t>(8)};
     AscendC::ShapeInfo shapeInfo1(2, array1); // dim为2， shape为(7,8)
     AscendC::DumpTensor(x1, 3, 64, shapeInfo1); // 当Shape尺寸小于等于dumpSize元素个数时， 按照ShapeInfo打印元素，多出的Dump数据不展示
-    
+
     uint32_t array2[] = {static_cast<uint32_t>(9), static_cast<uint32_t>(8)};
     AscendC::ShapeInfo shapeInfo2(2, array2); // dim为2， shape为(9,8)
     AscendC::DumpTensor(x2, 4, 64, shapeInfo2); // 当Shape尺寸大于dumpSize元素个数时， 按照ShapeInfo打印元素，不足的Dump数据用"-"展示

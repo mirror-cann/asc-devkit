@@ -138,6 +138,7 @@
     -   [附录](编程指南/附录/show_kernel_debug_data工具.md)
         -   [show_kernel_debug_data工具](编程指南/附录/show_kernel_debug_data工具.md)
         -   [msobjdump工具](编程指南/附录/msobjdump工具.md)
+        -   [optype_collector工具](编程指南/附录/optype_collector工具.md)
         -   [基于样例工程完成Kernel直调](编程指南/附录/基于样例工程完成Kernel直调.md)
         -   [简易自定义算子工程](编程指南/附录/简易自定义算子工程.md)
         -   [常用操作](编程指南/附录/常用操作/如何开发动态输入算子.md)
