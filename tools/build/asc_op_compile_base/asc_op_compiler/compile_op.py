@@ -1301,6 +1301,9 @@ def compile_op_common_part(cce_file: str, origin_func_name: str, op_info: OpInfo
         compile_info_origin = copy.deepcopy(compile_info)
         compile_option_tuple_origin = copy.deepcopy(compile_option_tuple)
 
+    # dump ktype handle
+    compile_info.raw_tiling_key_kernel_type = copy.deepcopy(compile_info.tiling_key_kernel_type)
+    
     # get super kernel option to compile info when enable super kernel
     handle_sk_codegen_options(compile_info, infered_info_from_ifile)
 
@@ -1326,6 +1329,8 @@ def compile_op_common_part(cce_file: str, origin_func_name: str, op_info: OpInfo
         DFXSectionGenerator().update_is_support(op_info)
         compile_info_origin.dst_file = os.path.join(kernel_meta_dir, op_info.kernel_name + "_norm.o")
 
+        # dump ktype handle
+        compile_info.raw_tiling_key_kernel_type = copy.deepcopy(compile_info_origin.tiling_key_kernel_type)
         handle_sk_codegen_options(compile_info_origin, infered_info_from_ifile)
         workspace_idx = gen_op_stub_kernel_func(compile_info_origin, op_info, compile_option_tuple_origin, tiling_info,
                                                 distinct_tag, kernel_meta_dir)
