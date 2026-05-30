@@ -93,6 +93,17 @@
             -   [BroadCastVecToMM\(ISASI\)](SIMD-API/基础API/Memory数据搬运/BroadCastVecToMM(ISASI).md)
 
         -   [矩阵计算（ISASI）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算（ISASI）.md)
+            -   [概述](SIMD-API/基础API/矩阵计算（ISASI）/概述/概述.md)
+                -   [矩阵计算单元](SIMD-API/基础API/矩阵计算（ISASI）/概述/矩阵计算单元.md)
+                -   [矩阵计算流程](SIMD-API/基础API/矩阵计算（ISASI）/概述/矩阵计算流程.md)
+            -   [矩阵计算分形介绍](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算分形介绍/矩阵计算分形介绍.md)
+                -   [背景与核心概念](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算分形介绍/背景与核心概念.md)
+                -   [关键分形格式详解](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算分形介绍/关键分形格式详解.md)
+                <cann-filter npu-type="910b,A3,A5">
+
+                -   [辅助矩阵分形格式详解](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算分形介绍/辅助矩阵分形格式详解.md)
+
+                </cann-filter>
             -   [数据搬运](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/数据搬运.md)
                 -   [Fill](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/Fill.md)
                 -   [LoadData](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadData/LoadData.md)
@@ -130,7 +141,6 @@
                 -   [SetHF32TransMode](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/SetHF32TransMode.md)
                 -   [Conv2D（废弃）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/Conv2D（废弃）.md)
                 -   [Gemm（废弃）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/Gemm（废弃）.md)
-
         -   [Memory矢量计算](SIMD-API/基础API/Memory矢量计算/Memory矢量计算.md)
             -   [SIMD计算说明](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/SIMD计算说明.md)
                 -   [概述](SIMD-API/基础API/Memory矢量计算/SIMD计算说明/概述.md)
