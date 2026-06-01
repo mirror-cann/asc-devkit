@@ -97,7 +97,7 @@
 <tr id="zh-cn_topic_0000001698360521_row9756719122620"><td class="cellrowborder" valign="top" width="19.38%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000001698360521_p1682112447268"><a name="zh-cn_topic_0000001698360521_p1682112447268"></a><a name="zh-cn_topic_0000001698360521_p1682112447268"></a>isReuseSource</p>
 </td>
 <td class="cellrowborder" valign="top" width="80.62%" headers="mcps1.2.3.1.2 "><p id="p165511311158"><a name="p165511311158"></a><a name="p165511311158"></a>是否允许修改源操作数，默认值为false。该参数仅在输入的数据类型为float时生效。</p>
-<p id="p843911117182"><a name="p843911117182"></a><a name="p843911117182"></a>true：开发者允许源操作数被改写，可以使能该参数，使能后本接口内部计算时<strong id="b68501198557"><a name="b68501198557"></a><a name="b68501198557"></a>复用</strong>srcTensor的内存空间，节省部分内存空间；</p>
+<p id="p843911117182"><a name="p843911117182"></a><a name="p843911117182"></a>true：开发者允许源操作数被改写，可以设置该参数取值为true开启，开启后本接口内部计算时<strong id="b68501198557"><a name="b68501198557"></a><a name="b68501198557"></a>复用</strong>srcTensor的内存空间，节省部分内存空间；</p>
 <p id="p15439181121812"><a name="p15439181121812"></a><a name="p15439181121812"></a>false：本接口内部计算时<strong id="b2850191935517"><a name="b2850191935517"></a><a name="b2850191935517"></a>不复用</strong>srcTensor的内存空间。</p>
 <p id="zh-cn_topic_0000001698360521_p62891018544"><a name="zh-cn_topic_0000001698360521_p62891018544"></a><a name="zh-cn_topic_0000001698360521_p62891018544"></a>isReuseSource的使用样例请参考<a href="../更多样例-83.md#section639165323915">更多样例</a>。</p>
 </td>
@@ -181,4 +181,3 @@ AscendC::Digamma<float, false>(dstLocal, srcLocal, sharedTmpBuffer, 1024);
 输入数据(srcLocal): [5.3675685 0.26528683 -2.872628 ... 2.9387941 9.001339]
 输出数据(dstLocal): [1.5843406 -3.978809 -6.2081366 ... 0.8983184 2.1407988]
 ```
-

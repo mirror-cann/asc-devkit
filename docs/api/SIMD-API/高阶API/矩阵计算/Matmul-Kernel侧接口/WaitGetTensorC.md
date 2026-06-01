@@ -67,7 +67,7 @@ __aicore__ inline void WaitGetTensorC()
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-当使能MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
+当开启MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
 
 ## 调用示例<a name="section1665082013318"></a>
 
@@ -81,4 +81,3 @@ for (int i = 0; i < singleCoreM/baseM * singleCoreN/baseN; ++i) {
     // Vector 操作 
 }
 ```
-

@@ -2,7 +2,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-设置A/B/C/Bias是否使能double buffer功能，以及是否需要做ND2NZ或者NZ2ND的转换，主要用于Tiling函数内部调优。
+设置A/B/C/Bias是否开启double buffer功能，以及是否需要做ND2NZ或者NZ2ND的转换，主要用于Tiling函数内部调优。
 
 **该接口为预留接口，当前版本暂不支持。**
 
@@ -77,4 +77,3 @@ int32_t SetDoubleBuffer(bool a, bool b, bool c, bool bias, bool transND2NZ = tru
 ## 约束说明<a name="section633mcpsimp"></a>
 
 无
-

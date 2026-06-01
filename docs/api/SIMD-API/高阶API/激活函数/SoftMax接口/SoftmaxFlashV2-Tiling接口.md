@@ -67,22 +67,22 @@
 </td>
 <td class="cellrowborder" valign="top" width="7.5200000000000005%" headers="mcps1.2.4.1.2 "><p id="p133351331174320"><a name="p133351331174320"></a><a name="p133351331174320"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p193354319434"><a name="p193354319434"></a><a name="p193354319434"></a>是否使能刷新功能，和kernel侧SoftmaxFlashV2接口一致。</p>
+<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p193354319434"><a name="p193354319434"></a><a name="p193354319434"></a>是否开启刷新功能，和kernel侧SoftmaxFlashV2接口一致。</p>
 </td>
 </tr>
 <tr id="row491844913479"><td class="cellrowborder" valign="top" width="16.89%" headers="mcps1.2.4.1.1 "><p id="p109181249174717"><a name="p109181249174717"></a><a name="p109181249174717"></a>isBasicBlock</p>
 </td>
 <td class="cellrowborder" valign="top" width="7.5200000000000005%" headers="mcps1.2.4.1.2 "><p id="p491818497475"><a name="p491818497475"></a><a name="p491818497475"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p15918249174715"><a name="p15918249174715"></a><a name="p15918249174715"></a>是否要使能基本块计算。isBasicBlock参数可以通过<a href="IsBasicBlockInSoftMax.md">isBasicBlockInSoftmax</a>接口获取，与kernel侧接口的模板参数保持一致，默认false。注意，若kernel侧API使能模板参数SoftmaxConfig，即shape常量化场景，isBasicBlock参数必须通过接口<a href="IsBasicBlockInSoftMax.md">isBasicBlockInSoftmax</a>获取。</p>
+<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p15918249174715"><a name="p15918249174715"></a><a name="p15918249174715"></a>是否要开启基本块计算。isBasicBlock参数可以通过<a href="IsBasicBlockInSoftMax.md">isBasicBlockInSoftmax</a>接口获取，与kernel侧接口的模板参数保持一致，默认false。注意，若kernel侧API启用模板参数SoftmaxConfig，即shape常量化场景，isBasicBlock参数必须通过接口<a href="IsBasicBlockInSoftMax.md">isBasicBlockInSoftmax</a>获取。</p>
 </td>
 </tr>
 <tr id="row107377241771"><td class="cellrowborder" valign="top" width="16.89%" headers="mcps1.2.4.1.1 "><p id="p173720247716"><a name="p173720247716"></a><a name="p173720247716"></a>isFlashOutputBrc</p>
 </td>
 <td class="cellrowborder" valign="top" width="7.5200000000000005%" headers="mcps1.2.4.1.2 "><p id="p1173713249719"><a name="p1173713249719"></a><a name="p1173713249719"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p1573173910474"><a name="p1573173910474"></a><a name="p1573173910474"></a>是否使能输出shape的非拓展模式。非拓展模式为不对输出数据做Broadcast，输出shape为(m, 1)。参数取值如下：</p>
-<a name="ul1849914210477"></a><a name="ul1849914210477"></a><ul id="ul1849914210477"><li>false：不使能非拓展模式，默认值。输出为float数据类型时，shape为(m，8)；输出为half数据类型时，shape为(m, 16)。</li><li>true：使能非拓展模式，输出的shape均为(m, 1)。该参数取值为true时，<a href="SoftmaxFlashV2.md">kernel接口</a>的模板参数SoftmaxConfig中的mode必须配置为SoftmaxMode::SOFTMAX_OUTPUT_WITHOUT_BRC。</li></ul>
+<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p1573173910474"><a name="p1573173910474"></a><a name="p1573173910474"></a>是否开启输出shape的非拓展模式。非拓展模式为不对输出数据做Broadcast，输出shape为(m, 1)。参数取值如下：</p>
+<a name="ul1849914210477"></a><a name="ul1849914210477"></a><ul id="ul1849914210477"><li>false：不开启非拓展模式，默认值。输出为float数据类型时，shape为(m，8)；输出为half数据类型时，shape为(m, 16)。</li><li>true：开启非拓展模式，输出的shape均为(m, 1)。该参数取值为true时，<a href="SoftmaxFlashV2.md">kernel接口</a>的模板参数SoftmaxConfig中的mode必须配置为SoftmaxMode::SOFTMAX_OUTPUT_WITHOUT_BRC。</li></ul>
 </td>
 </tr>
 </tbody>
@@ -132,22 +132,22 @@
 </td>
 <td class="cellrowborder" valign="top" width="7.5200000000000005%" headers="mcps1.2.4.1.2 "><p id="p691934984720"><a name="p691934984720"></a><a name="p691934984720"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p129191249194710"><a name="p129191249194710"></a><a name="p129191249194710"></a>是否使能刷新功能，和kernel侧SoftmaxFlashV2接口一致。</p>
+<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p129191249194710"><a name="p129191249194710"></a><a name="p129191249194710"></a>是否开启刷新功能，和kernel侧SoftmaxFlashV2接口一致。</p>
 </td>
 </tr>
 <tr id="row421355213184"><td class="cellrowborder" valign="top" width="16.89%" headers="mcps1.2.4.1.1 "><p id="p19213105261810"><a name="p19213105261810"></a><a name="p19213105261810"></a>isBasicBlock</p>
 </td>
 <td class="cellrowborder" valign="top" width="7.5200000000000005%" headers="mcps1.2.4.1.2 "><p id="p3818165512612"><a name="p3818165512612"></a><a name="p3818165512612"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p17904192117242"><a name="p17904192117242"></a><a name="p17904192117242"></a>是否要使能基本块计算。isBasicBlock参数可以通过<a href="IsBasicBlockInSoftMax.md">isBasicBlockInSoftmax</a>接口获取，与kernel侧接口的模板参数保持一致，默认false。注意，若kernel侧API使能模板参数SoftmaxConfig，即shape常量化场景，isBasicBlock参数必须通过接口<a href="IsBasicBlockInSoftMax.md">isBasicBlockInSoftmax</a>获取。</p>
+<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p17904192117242"><a name="p17904192117242"></a><a name="p17904192117242"></a>是否要开启基本块计算。isBasicBlock参数可以通过<a href="IsBasicBlockInSoftMax.md">isBasicBlockInSoftmax</a>接口获取，与kernel侧接口的模板参数保持一致，默认false。注意，若kernel侧API启用模板参数SoftmaxConfig，即shape常量化场景，isBasicBlock参数必须通过接口<a href="IsBasicBlockInSoftMax.md">isBasicBlockInSoftmax</a>获取。</p>
 </td>
 </tr>
 <tr id="row1511574012815"><td class="cellrowborder" valign="top" width="16.89%" headers="mcps1.2.4.1.1 "><p id="p202614411488"><a name="p202614411488"></a><a name="p202614411488"></a>isFlashOutputBrc</p>
 </td>
 <td class="cellrowborder" valign="top" width="7.5200000000000005%" headers="mcps1.2.4.1.2 "><p id="p1261741281"><a name="p1261741281"></a><a name="p1261741281"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p105860413511"><a name="p105860413511"></a><a name="p105860413511"></a>是否使能输出shape的非拓展模式。非拓展模式为不对输出数据做Broadcast，输出shape为(m, 1)。参数取值如下：</p>
-<a name="ul1758616413519"></a><a name="ul1758616413519"></a><ul id="ul1758616413519"><li>false：不使能非拓展模式，默认值。输出为float数据类型时，shape为(m，8)；输出为half数据类型时，shape为(m, 16)。</li><li>true：使能非拓展模式，输出的shape均为(m, 1)。该参数取值为true时，<a href="SoftmaxFlashV2.md">kernel接口</a>的模板参数SoftmaxConfig中的mode必须配置为SoftmaxMode::SOFTMAX_OUTPUT_WITHOUT_BRC。</li></ul>
+<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p105860413511"><a name="p105860413511"></a><a name="p105860413511"></a>是否开启输出shape的非拓展模式。非拓展模式为不对输出数据做Broadcast，输出shape为(m, 1)。参数取值如下：</p>
+<a name="ul1758616413519"></a><a name="ul1758616413519"></a><ul id="ul1758616413519"><li>false：不开启非拓展模式，默认值。输出为float数据类型时，shape为(m，8)；输出为half数据类型时，shape为(m, 16)。</li><li>true：开启非拓展模式，输出的shape均为(m, 1)。该参数取值为true时，<a href="SoftmaxFlashV2.md">kernel接口</a>的模板参数SoftmaxConfig中的mode必须配置为SoftmaxMode::SOFTMAX_OUTPUT_WITHOUT_BRC。</li></ul>
 </td>
 </tr>
 <tr id="row1691912494475"><td class="cellrowborder" valign="top" width="16.89%" headers="mcps1.2.4.1.1 "><p id="p2091918491472"><a name="p2091918491472"></a><a name="p2091918491472"></a>softmaxFlashTiling</p>
@@ -169,4 +169,3 @@ GetSoftMaxFlashV2MaxTmpSize返回SoftmaxFlashV2接口能完成计算所需最大
 ## 约束说明<a name="section92611953111217"></a>
 
 无
-

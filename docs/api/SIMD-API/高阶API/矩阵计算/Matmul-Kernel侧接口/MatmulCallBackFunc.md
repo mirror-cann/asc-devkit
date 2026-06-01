@@ -122,7 +122,7 @@ struct DataCopyOutParams {
     uint16_t srcStride;//源tensor相邻连续数据片段间隔
     uint32_t dstStride; // 目的tensor相邻连续数据片段间隔
     uint16_t oriNSize; // NZ转ND时，源tensorN方向大小
-    bool enUnitFlag; // 是否使能UnitFlag
+    bool enUnitFlag; // 是否开启UnitFlag
     uint64_t quantScalar; // 量化场景下量化Scalar的值
     uint64_t cbufWorkspaceAddr; //量化场景下量化Tensor地址
 }
@@ -155,4 +155,3 @@ if (tiling.isBias) {
 mm.IterateAll();
 mm.End();
 ```
-

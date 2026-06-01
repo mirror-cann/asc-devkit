@@ -116,7 +116,7 @@ __aicore__ inline void SetBias(const LocalTensor<BiasT>& inputBias)
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
--   在Matmul Tiling计算中，必须配置TCubeTiling结构中的[isBias](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md#p2051215216314)参数为1，即使能Bias后，才能调用本接口设置Bias矩阵。
+-   在Matmul Tiling计算中，必须配置TCubeTiling结构中的[isBias](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md#p2051215216314)参数为1，即启用Bias后，才能调用本接口设置Bias矩阵。
 -   传入的Bias地址空间大小需要保证不小于singleN。
 -   对于Ascend 950PR/Ascend 950DT，Bias矩阵的内存逻辑位置为TSCM且数据类型为float或int32\_t时，Bias矩阵的LocalTensor空间必须64字节对齐。
 
@@ -132,4 +132,3 @@ if (tiling.isBias) {
 mm.IterateAll(gm_c);
 mm.End();
 ```
-

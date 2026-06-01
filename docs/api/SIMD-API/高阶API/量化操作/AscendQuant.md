@@ -362,8 +362,8 @@ PER\_TOKEN/PER\_GROUP场景的计算逻辑如下：
 </td>
 <td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p1744211392255"><a name="p1744211392255"></a><a name="p1744211392255"></a>结构体模板参数，此参数可选配，AscendQuantConfig类型，定义如下方代码所示，其中参数的含义如下。</p>
 <a name="ul1882194222413"></a><a name="ul1882194222413"></a><ul id="ul1882194222413"><li>calcCount：实际计算数据元素个数。calcCount∈[0, srcTensor.GetSize()]，在调用带有scaleCount入参的接口时，calcCount若取非零值则必须是scaleCount的整数倍。</li><li>offsetCount：实际量化参数元素个数。offsetCount∈[0, offsetTensor.GetSize()]，offsetCount与scaleCount的取值必须相等，要求是32的整数倍。若调用的接口不含offsetCount入参，取值为0即可。</li><li>scaleCount：实际量化参数元素个数。scaleCount∈[0, scaleTensor.GetSize()]，要求是32的整数倍。若调用的接口不含scaleCount入参，取值为0即可。</li><li>workLocalSize：临时缓存sharedTmpBuffer的大小，sharedTmpBuffer的大小/workLocalSize的获取方式请参考<a href="GetAscendQuantMaxMinTmpSize.md">GetAscendQuantMaxMinTmpSize</a>。该参数取值不能大于sharedTmpBuffer的大小。若调用的接口不含sharedTmpBuffer入参，取值为0即可。</li></ul>
-<p id="p1189143944315"><a name="p1189143944315"></a><a name="p1189143944315"></a>当上述参数的取值满足如下任一种场景，将使能参数常量化，即编译过程中使用常量化的相关参数，从而减少Scalar计算。</p>
-<a name="ul12991368432"></a><a name="ul12991368432"></a><ul id="ul12991368432"><li>若调用的接口不含scaleCount入参，calcCount和workLocalSize取值为非0时，使能参数常量化。</li><li>若调用的接口带有scaleCount入参，scaleCount、calcCount和workLocalSize取值为非0时，使能参数常量化。</li></ul>
+<p id="p1189143944315"><a name="p1189143944315"></a><a name="p1189143944315"></a>当上述参数的取值满足如下任一种场景，将开启参数常量化，即编译过程中使用常量化的相关参数，从而减少Scalar计算。</p>
+<a name="ul12991368432"></a><a name="ul12991368432"></a><ul id="ul12991368432"><li>若调用的接口不含scaleCount入参，calcCount和workLocalSize取值为非0时，开启参数常量化。</li><li>若调用的接口带有scaleCount入参，scaleCount、calcCount和workLocalSize取值为非0时，开启参数常量化。</li></ul>
 </td>
 </tr>
 </tbody>
@@ -873,7 +873,7 @@ PER\_TOKEN/PER\_GROUP场景调用示例如下。
     // 注意m,n需从外部传入
     constexpr static bool isReuseSource = false;
     constexpr static AscendQuantConfig config = {has_offset, 1};
-    constexpr static AscendQuantPolicy policy = AscendQuantPolicy::PER_TOKEN; // 可修改枚举值以使能PER_GROUP
+    constexpr static AscendQuantPolicy policy = AscendQuantPolicy::PER_TOKEN; // 可修改枚举值以开启PER_GROUP
     LocalTensor<uint8_t> sharedTmpBuffer = inQueue.AllocTensor<uint8_t>();
     AscendQuantParam para;
     para.m = m;
@@ -888,7 +888,7 @@ PER\_TOKEN/PER\_GROUP场景调用示例如下。
     // 注意m,n需从外部传入
     constexpr static bool isReuseSource = false;
     constexpr static AscendQuantConfig config = {has_offset, 1, RoundMode::CAST_ROUND};
-    constexpr static AscendQuantPolicy policy = AscendQuantPolicy::PER_TOKEN; // 可修改枚举值以使能PER_GROUP
+    constexpr static AscendQuantPolicy policy = AscendQuantPolicy::PER_TOKEN; // 可修改枚举值以开启PER_GROUP
     LocalTensor<uint8_t> sharedTmpBuffer = inQueue.AllocTensor<uint8_t>();
     AscendQuantParam para;
     para.m = m;
@@ -896,4 +896,3 @@ PER\_TOKEN/PER\_GROUP场景调用示例如下。
     para.calCount = calCount;
     AscendQuant<dstType, srcType, scaleType, isReuseSource, config, policy>(dstLocal, srcLocal, sharedTmpBuffer, scaleLocal, offsetLocal, para);
     ```
-

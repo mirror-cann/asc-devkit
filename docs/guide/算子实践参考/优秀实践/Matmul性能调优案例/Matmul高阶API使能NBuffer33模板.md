@@ -1,14 +1,14 @@
-# Matmul高阶API使能NBuffer33模板<a name="ZH-CN_TOPIC_0000002327075450"></a>
+# Matmul高阶API开启NBuffer33模板<a name="ZH-CN_TOPIC_0000002327075450"></a>
 
 ## 案例介绍<a name="section17413194624510"></a>
 
-本案例呈现了在矩阵乘算子场景中，使用Matmul高阶API进行矩阵乘法计算，使能NBuffer33模板对算子性能的提升效果**。**NBuffer33模板的实现为单核计算的A矩阵切分为3x3个基本块，该3x3个A矩阵的基本块全载和保持在L1 Buffer中，每次与3x1个B矩阵的基本块计算矩阵乘，同时DoubleBuffer并行搬入下次计算所需的3x1个B矩阵基本块，直到singleCoreN方向的矩阵乘计算完成。针对MTE2 Bound场景，通过NBuffer33算法的切分数据方式，错开搬运流水，减少单次搬运的数据量，平衡MTE2和FixPipe的数据流量，让两者带宽均匀分布。NBuffer33模板的详细介绍请参考[MatmulPolicy](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulPolicy.md)。
+本案例呈现了在矩阵乘算子场景中，使用Matmul高阶API进行矩阵乘法计算，开启NBuffer33模板对算子性能的提升效果**。**NBuffer33模板的实现为单核计算的A矩阵切分为3x3个基本块，该3x3个A矩阵的基本块全载和保持在L1 Buffer中，每次与3x1个B矩阵的基本块计算矩阵乘，同时DoubleBuffer并行搬入下次计算所需的3x1个B矩阵基本块，直到singleCoreN方向的矩阵乘计算完成。针对MTE2 Bound场景，通过NBuffer33算法的切分数据方式，错开搬运流水，减少单次搬运的数据量，平衡MTE2和FixPipe的数据流量，让两者带宽均匀分布。NBuffer33模板的详细介绍请参考[MatmulPolicy](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulPolicy.md)。
 
--   使能NBuffer33模板的适用场景
+-   开启NBuffer33模板的适用场景
 
-    MTE2 Bound的场景，Tiling参数满足约束条件时，可以使能NBuffer33模板。
+    MTE2 Bound的场景，Tiling参数满足约束条件时，可以开启NBuffer33模板。
 
--   使能NBuffer33模板的约束条件
+-   开启NBuffer33模板的约束条件
     -   仅支持MatmulConfig为MDL模板。
     -   A矩阵、B矩阵的内存逻辑位置只支持TPosition::GM。
     -   仅支持纯Cube模式（只有矩阵计算），暂不支持MIX模式（包含矩阵计算和矢量计算）。
@@ -52,7 +52,7 @@
 </tbody>
 </table>
 
-当前案例使用的AI处理器共24个核，算子中使能高阶API Matmul的纯Cube模式，使用MDL模板，Tiling参数如下：
+当前案例使用的AI处理器共24个核，算子中开启高阶API Matmul的纯Cube模式，使用MDL模板，Tiling参数如下：
 
 -   原始shape：M=256, N=512, K=192。
 -   单核shape：singleCoreM=256，singleCoreN=256，singleCoreK=192。
@@ -73,7 +73,7 @@
 
 ## 设计优化方案<a name="section33901368431"></a>
 
-使能NBuffer33模板：在GetTiling接口前，调用SetMatmulConfigParams接口开启NBuffer33模式，使获取的Tiling满足要求；Kernel侧在创建Matmul对象时使能NBuffer33模板。使能NBuffer33模板的完整样例请参考[使能NBuffer33模板策略的样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_nbuffer33)。具体步骤如下：
+开启NBuffer33模板：在GetTiling接口前，调用SetMatmulConfigParams接口开启NBuffer33模式，使获取的Tiling满足要求；Kernel侧在创建Matmul对象时开启NBuffer33模板。开启NBuffer33模板的完整样例请参考[开启NBuffer33模板策略的样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_nbuffer33)。具体步骤如下：
 
 -   Tiling实现
 
@@ -114,5 +114,4 @@
 
 ## 总结<a name="section8281219125011"></a>
 
-MTE2 Bound的场景，Tiling参数满足stepM、stepKa、stepKb小于等于3的条件时，可以考虑使能NBuffer33模板，切分矩阵将搬运流水错开， 减少单次搬运的数据量，平衡MTE2和FixPipe的数据流量。
-
+MTE2 Bound的场景，Tiling参数满足stepM、stepKa、stepKb小于等于3的条件时，可以考虑开启NBuffer33模板，切分矩阵将搬运流水错开， 减少单次搬运的数据量，平衡MTE2和FixPipe的数据流量。

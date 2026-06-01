@@ -661,7 +661,7 @@ PER\_TOKEN/PER\_GROUP场景调用示例如下。
 // 注意m,n需从外部传入
 constexpr static bool isReuseSource = false;
 constexpr static AscendDeQuantConfig config = {has_offset, -1};
-constexpr static AscendDeQuantPolicy policy = AscendDeQuantPolicy::PER_TOKEN; // 可修改枚举值以使能PER_GROUP
+constexpr static AscendDeQuantPolicy policy = AscendDeQuantPolicy::PER_TOKEN; // 可修改枚举值以开启PER_GROUP
 AscendDeQuantParam para;
 para.m = m;
 para.n = n;

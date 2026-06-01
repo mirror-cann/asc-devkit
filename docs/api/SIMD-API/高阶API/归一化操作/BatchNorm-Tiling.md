@@ -115,7 +115,7 @@ bool GetBatchNormNDTilingInfo(const ge::Shape& srcShape, const ge::Shape& origin
 </td>
 <td class="cellrowborder" valign="top" width="9.69%" headers="mcps1.2.4.1.2 "><p id="p1871012153180"><a name="p1871012153180"></a><a name="p1871012153180"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="72.54%" headers="mcps1.2.4.1.3 "><p id="p5766412163619"><a name="p5766412163619"></a><a name="p5766412163619"></a>是否使能基本块，与BatchNorm接口一致。</p>
+<td class="cellrowborder" valign="top" width="72.54%" headers="mcps1.2.4.1.3 "><p id="p5766412163619"><a name="p5766412163619"></a><a name="p5766412163619"></a>是否开启基本块，与BatchNorm接口一致。</p>
 </td>
 </tr>
 </tbody>
@@ -178,7 +178,7 @@ bool GetBatchNormNDTilingInfo(const ge::Shape& srcShape, const ge::Shape& origin
 </td>
 <td class="cellrowborder" valign="top" width="10.76107610761076%" headers="mcps1.1.4.1.2 "><p id="p49920461166"><a name="p49920461166"></a><a name="p49920461166"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="69.60696069606959%" headers="mcps1.1.4.1.3 "><p id="p179921246191610"><a name="p179921246191610"></a><a name="p179921246191610"></a>是否使能基本块，与BatchNorm接口一致。</p>
+<td class="cellrowborder" valign="top" width="69.60696069606959%" headers="mcps1.1.4.1.3 "><p id="p179921246191610"><a name="p179921246191610"></a><a name="p179921246191610"></a>是否开启基本块，与BatchNorm接口一致。</p>
 </td>
 </tr>
 </tbody>
@@ -257,4 +257,3 @@ bool GetBatchNormNDTilingInfo(const ge::Shape& srcShape, const ge::Shape& origin
         }
     }
     ```
-

@@ -2,7 +2,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-多核场景，通过该接口使能切K轴。不调用该接口的情况下，默认不切K轴。在GetTiling接口调用前使用。
+多核场景，通过该接口开启切K轴。不调用该接口的情况下，默认不切K轴。在GetTiling接口调用前使用。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -27,8 +27,8 @@ void EnableMultiCoreSplitK(bool flag)
 </td>
 <td class="cellrowborder" valign="top" width="12.02%" headers="mcps1.2.4.1.2 "><p id="p893343112595"><a name="p893343112595"></a><a name="p893343112595"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p0406703116"><a name="p0406703116"></a><a name="p0406703116"></a>是否使能切K轴。</p>
-<a name="ul43816319114"></a><a name="ul43816319114"></a><ul id="ul43816319114"><li>true：使能切K轴</li><li>false：不使能切K轴</li></ul>
+<td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p0406703116"><a name="p0406703116"></a><a name="p0406703116"></a>是否开启切K轴。</p>
+<a name="ul43816319114"></a><a name="ul43816319114"></a><ul id="ul43816319114"><li>true：开启切K轴</li><li>false：不开启切K轴</li></ul>
 </td>
 </tr>
 </tbody>
@@ -50,6 +50,5 @@ void EnableMultiCoreSplitK(bool flag)
 auto ascendcPlatform = platform_ascendc::PlatformAscendC(context->GetPlatformInfo());
 matmul_tiling::MultiCoreMatmulTiling tiling(ascendcPlatform);  
 
-tiling.EnableMultiCoreSplitK(true);  // 使能切K轴
+tiling.EnableMultiCoreSplitK(true);  // 开启切K轴
 ```
-

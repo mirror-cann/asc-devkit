@@ -1,4 +1,4 @@
-# Matmul高阶API使能IBShare模板共享A和B矩阵数据<a name="ZH-CN_TOPIC_0000002088668238"></a>
+# Matmul高阶API开启IBShare模板共享A和B矩阵数据<a name="ZH-CN_TOPIC_0000002088668238"></a>
 
 ## 案例介绍<a name="section144912211504"></a>
 
@@ -45,7 +45,7 @@
 </tbody>
 </table>
 
-开启IBShare和未开启IBShare的完整样例请参考[A、B矩阵均使能IBShare样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_ibshareAB)。
+开启IBShare和未开启IBShare的完整样例请参考[A、B矩阵均开启IBShare样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_ibshareAB)。
 
 ## 获取性能数据<a name="section4647105095111"></a>
 

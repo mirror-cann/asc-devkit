@@ -112,7 +112,7 @@
 
 -   MatmulPolicy（默认模板策略）
 
-    使能Matmul API的默认实现策略。
+    启用Matmul API的默认实现策略。
 
 -   TrianUpperMatmulPolicy（上三角模板策略）
 

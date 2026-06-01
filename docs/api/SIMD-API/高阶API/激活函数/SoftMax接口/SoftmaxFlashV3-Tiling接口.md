@@ -79,7 +79,7 @@
 </td>
 <td class="cellrowborder" valign="top" width="7.5200000000000005%" headers="mcps1.2.4.1.2 "><p id="p133351331174320"><a name="p133351331174320"></a><a name="p133351331174320"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p193354319434"><a name="p193354319434"></a><a name="p193354319434"></a>是否使能SoftMaxFlashV3 update为true的公式计算。该参数取值与SoftmaxFlashV3 Kernel接口的模板参数isUpdate保持一致。</p>
+<td class="cellrowborder" valign="top" width="75.59%" headers="mcps1.2.4.1.3 "><p id="p193354319434"><a name="p193354319434"></a><a name="p193354319434"></a>是否开启SoftMaxFlashV3 update为true的公式计算。该参数取值与SoftmaxFlashV3 Kernel接口的模板参数isUpdate保持一致。</p>
 </td>
 </tr>
 <tr id="row491844913479"><td class="cellrowborder" valign="top" width="16.89%" headers="mcps1.2.4.1.1 "><p id="p109181249174717"><a name="p109181249174717"></a><a name="p109181249174717"></a>isBasicBlock</p>
@@ -135,7 +135,7 @@
 </td>
 <td class="cellrowborder" valign="top" width="6.92%" headers="mcps1.2.4.1.2 "><p id="p691934984720"><a name="p691934984720"></a><a name="p691934984720"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="69.05%" headers="mcps1.2.4.1.3 "><p id="p1342071787"><a name="p1342071787"></a><a name="p1342071787"></a>是否使能SoftMaxFlashV3 update为true的公式计算。与SoftmaxFlashV3 Kernel接口的模板参数isUpdate保持一致。</p>
+<td class="cellrowborder" valign="top" width="69.05%" headers="mcps1.2.4.1.3 "><p id="p1342071787"><a name="p1342071787"></a><a name="p1342071787"></a>是否开启SoftMaxFlashV3 update为true的公式计算。与SoftmaxFlashV3 Kernel接口的模板参数isUpdate保持一致。</p>
 </td>
 </tr>
 <tr id="row421355213184"><td class="cellrowborder" valign="top" width="24.03%" headers="mcps1.2.4.1.1 "><p id="p19213105261810"><a name="p19213105261810"></a><a name="p19213105261810"></a>isBasicBlock</p>
@@ -162,4 +162,3 @@
 ## 约束说明<a name="section92611953111217"></a>
 
 无
-

@@ -4,11 +4,11 @@
 
 本案例对Matmul算子进行性能分析和优化。Matmul算子实现的功能是矩阵乘法，其中主要包含数据搬入和搬出流水，Cube计算流水。
 
-以矩阵维度M = 4096，N = 5120，K = 4096，输入数据类型half，输出数据类型float，输出格式是ND为例，性能验证平台为Atlas A2 训练系列产品/Atlas A2 推理系列产品，介绍针对Matmul算子的优化手段，包括优化分核逻辑、优化基本块、使能大包搬运。
+以矩阵维度M = 4096，N = 5120，K = 4096，输入数据类型half，输出数据类型float，输出格式是ND为例，性能验证平台为Atlas A2 训练系列产品/Atlas A2 推理系列产品，介绍针对Matmul算子的优化手段，包括优化分核逻辑、优化基本块、开启大包搬运。
 
--   分核逻辑：开启尽量多的Cube核使能并行计算。
+-   分核逻辑：开启尽量多的Cube核实现并行计算。
 -   优化基本块，选择最优的baseM、baseN、baseK参数，其中baseM、baseN、baseK为Matmul Tiling中的参数。
--   使能大包搬运：从GM搬运数据到L1时，对于A矩阵，一次搬入depthA1个基本块，基本块大小为baseM \* baseK，对于B矩阵，一次搬入depthB1个基本块，基本块大小为baseN \* baseK。使能大包搬运后，一次搬入的数据量变大，从而提升MTE2搬运效率。
+-   开启大包搬运：从GM搬运数据到L1时，对于A矩阵，一次搬入depthA1个基本块，基本块大小为baseM \* baseK，对于B矩阵，一次搬入depthB1个基本块，基本块大小为baseN \* baseK。开启大包搬运后，一次搬入的数据量变大，从而提升MTE2搬运效率。
 
 ## 获取性能数据<a name="section327528143615"></a>
 
@@ -24,7 +24,7 @@
 -   Profiling数据的Block Dim可见分核未分满，考虑分核逻辑的优化。设CurrentCore是未优化前分核的Cube核数，MaxCore为最大Cube核数，当开启全部核并行做当前shape数据量的计算时，预估性能收益为MaxCore / CurrentCore的倍数。
 -   优化基本块切分，将影响搬运数据的效率，算子搬运的总数据量为搬运的左矩阵和右矩阵数据量之和。在Matmul计算K方向不能全载的场景下，根据矩阵乘法的算法，搬运左矩阵的次数为N / baseN，搬运右矩阵的次数为M / baseM，即搬运总数据量totalCnt = \(N / baseN\) \* M \* K + \(M / baseM\) \* K \* N。预估性能收益为搬运数据量的比值，优化前搬运数据量totalCnt0/优化后搬运数据量totalCnt1，化简后结果为\(1 / baseM0 + 1 / baseN0\) / \(1 / baseM1 + 1 / baseN1\)，其中，baseM0, baseN0为优化前基本块参数，baseM1, baseN1为优化后基本块参数。
 
--   使能大包搬运后，指令条数变化、地址对齐等因素会影响性能，按照经验预估，对于MTE2为性能瓶颈的场景，会有20%以上的MTE2性能收益。
+-   开启大包搬运后，指令条数变化、地址对齐等因素会影响性能，按照经验预估，对于MTE2为性能瓶颈的场景，会有20%以上的MTE2性能收益。
 
 ## 设计优化方案<a name="section12959175753610"></a>
 
@@ -131,14 +131,14 @@
     tilingApi.SetFixSplit(baseM, baseN, -1);
     ```
 
-    使能这组基本块后，MTE2耗时（对应aic\_mte2\_time）从2452us降低到808us，MTE2性能提升3倍。
+    使用这组基本块后，MTE2耗时（对应aic\_mte2\_time）从2452us降低到808us，MTE2性能提升3倍。
 
     **图 3**  优化基本块后Profiling数据<a name="fig1012052281415"></a>  
     ![](../../../figures/优化基本块后Profiling数据.png "优化基本块后Profiling数据")
 
--   优化点三：使能大包搬运
+-   优化点三：开启大包搬运
 
-    当前带宽利用率为：totalSize / mte2Time = totalCnt \* dtype / mte2Time，代入数据计算为2491GB/s。未使能大包搬运的情况下，矩阵从GM搬运到L1一次只搬运1个基本块。通过模板参数使能大包搬运，一次搬运多个基本块，提高MTE2带宽利用率。
+    当前带宽利用率为：totalSize / mte2Time = totalCnt \* dtype / mte2Time，代入数据计算为2491GB/s。未开启大包搬运的情况下，矩阵从GM搬运到L1一次只搬运1个基本块。通过模板参数开启大包搬运，一次搬运多个基本块，提高MTE2带宽利用率。
 
     ```
      // 原始matmul对象定义:
@@ -147,7 +147,7 @@
              AscendC::MatmulType<TPosition::GM, CubeFormat::ND, C_T>,
              AscendC::MatmulType<TPosition::GM, CubeFormat::ND, BiasT>>>
           mm;
-     // 通过在定义matmul对象的模板参数里加上CFG_MDL参数使能大包搬运功能：
+     // 通过在定义matmul对象的模板参数里加上CFG_MDL参数开启大包搬运功能：
       Matmul<AscendC::MatmulType<TPosition::GM, CubeFormat::ND, A_T>,
              AscendC::MatmulType<TPosition::GM, CubeFormat::ND, B_T>,
              AscendC::MatmulType<TPosition::GM, CubeFormat::ND, C_T>,
@@ -155,10 +155,10 @@
           mm;
     ```
 
-    从下图可以看到，使能大包搬运后，MTE2耗时从808us下降到591us，带宽利用率代入数据计算为3406GB/s，利用率提升36%+，Cube利用率达到80%+。
+    从下图可以看到，开启大包搬运后，MTE2耗时从808us下降到591us，带宽利用率代入数据计算为3406GB/s，利用率提升36%+，Cube利用率达到80%+。
 
-    **图 4**  使能大包搬运后Profiling数据<a name="fig13648142015171"></a>  
-    ![](../../../figures/使能大包搬运后Profiling数据.png "使能大包搬运后Profiling数据")
+    **图 4**  开启大包搬运后Profiling数据<a name="fig13648142015171"></a>  
+    ![](../../../figures/使能大包搬运后Profiling数据.png "开启大包搬运后Profiling数据")
 
 ## 验证优化方案性能收益<a name="section225561133715"></a>
 
@@ -168,5 +168,4 @@
 
 ## 总结<a name="section7965192813710"></a>
 
-优化点一和优化点二的适用场景，需要shape足够大，数据量足够多，才能分满核和使能最优的基本块。大shape场景下，MTE2 Bound算子可参考此案例的优化手段。
-
+优化点一和优化点二的适用场景，需要shape足够大，数据量足够多，才能分满核和开启最优的基本块。大shape场景下，MTE2 Bound算子可参考此案例的优化手段。

@@ -107,7 +107,7 @@
 </tr>
 <tr id="row9756719122620"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p1682112447268"><a name="p1682112447268"></a><a name="p1682112447268"></a>isBasicBlock</p>
 </td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p1626481084910"><a name="p1626481084910"></a><a name="p1626481084910"></a>srcTensor和dstTensor的shape信息和Tiling切分策略满足基本块要求的情况下，可以使能该参数用于提升性能，默认不使能。基本块要求srcTensor和dstTensor的shape需要满足如下条件：</p>
+<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p1626481084910"><a name="p1626481084910"></a><a name="p1626481084910"></a>srcTensor和dstTensor的shape信息和Tiling切分策略满足基本块要求的情况下，可以设置该参数取值为true，开启该参数，用于提升性能，默认不开启。基本块要求srcTensor和dstTensor的shape需要满足如下条件：</p>
 <a name="ul1426419106495"></a><a name="ul1426419106495"></a><ul id="ul1426419106495"><li>last轴即H的长度为64的倍数，但小于2048；</li><li>非last轴长度（B*S）为8的倍数。</li></ul>
 </td>
 </tr>
@@ -214,4 +214,3 @@ AscendC::RmsNorm<dataType, isBasicBlock>(dstLocal, srcLocal, gammaLocal, epsilon
 [ 0.          0.11359233  0.4543693   1.022331    1.8174772   2.8398082   4.089324    5.566024    
   7.269909    9.200979   11.359233   13.744672   16.357296   19.197104   22.264095   25.558275 ]
 ```
-

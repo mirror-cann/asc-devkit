@@ -153,7 +153,7 @@ def softmax_flash_3(src, height, width, loopCnt, alpha, baseK, inmax=None, insum
 </tr>
 <tr id="row1783875017236"><td class="cellrowborder" valign="top" width="19.37%" headers="mcps1.2.3.1.1 "><p id="p1838850172311"><a name="p1838850172311"></a><a name="p1838850172311"></a>isUpdate</p>
 </td>
-<td class="cellrowborder" valign="top" width="80.63%" headers="mcps1.2.3.1.2 "><p id="p1983816503234"><a name="p1983816503234"></a><a name="p1983816503234"></a>是否使能update为true的计算。</p>
+<td class="cellrowborder" valign="top" width="80.63%" headers="mcps1.2.3.1.2 "><p id="p1983816503234"><a name="p1983816503234"></a><a name="p1983816503234"></a>是否开启update为true的计算。</p>
 </td>
 </tr>
 <tr id="row9756719122620"><td class="cellrowborder" valign="top" width="19.37%" headers="mcps1.2.3.1.1 "><p id="p1682112447268"><a name="p1682112447268"></a><a name="p1682112447268"></a>isReuseSource</p>
@@ -390,4 +390,3 @@ AscendC::SoftmaxFlashV3<T, U, true>(dstLocal, meanLocal, expSumLocal, maxLocal, 
  [0.00472  0.00472  0.00472  ... 1.       1.       1.      ]
  [0.004684 0.004684 0.004684 ... 1.       1.       1.      ]]
 ```
-

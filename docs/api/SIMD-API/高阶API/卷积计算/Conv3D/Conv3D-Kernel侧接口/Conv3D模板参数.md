@@ -52,7 +52,7 @@
 创建Conv3D对象时需要传入：
 
 -   Input、Weight、Output和Bias（可选）的参数类型信息， 类型信息通过[ConvType](Conv3D使用说明.md#table19081115275)来定义，包括：内存逻辑位置、数据格式、数据类型。
--   Conv3dParam信息（可选），用于使能不同场景的性能优化模板。**当前暂不支持使用。**
+-   Conv3dParam信息（可选），用于开启不同场景的性能优化模板。**当前暂不支持使用。**
 
 ## 函数原型<a name="section079519516019"></a>
 
@@ -106,7 +106,7 @@ using Conv3D = Conv3dIntfExt<Config<ConvApi::ConvDataType<INPUT_TYPE, WEIGHT_TYP
 </td>
 <td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.4.1.2 "><p id="p98751421121411"><a name="p98751421121411"></a><a name="p98751421121411"></a>可选输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="59.18%" headers="mcps1.2.4.1.3 "><p id="p148751821131416"><a name="p148751821131416"></a><a name="p148751821131416"></a>ConvParam类型模板参数，用于使能不同场景的性能优化模板，<strong id="b1547928121812"><a name="b1547928121812"></a><a name="b1547928121812"></a>当前版本只支持基础模板，不使能性能优化。</strong></p>
+<td class="cellrowborder" valign="top" width="59.18%" headers="mcps1.2.4.1.3 "><p id="p148751821131416"><a name="p148751821131416"></a><a name="p148751821131416"></a>ConvParam类型模板参数，用于开启不同场景的性能优化模板，<strong id="b1547928121812"><a name="b1547928121812"></a><a name="b1547928121812"></a>当前版本只支持基础模板，不开启性能优化。</strong></p>
 </td>
 </tr>
 </tbody>
@@ -131,8 +131,7 @@ using outputType = ConvApi::ConvType<AscendC::TPosition::GM, ConvFormat::NDC1HWC
 using biasType = ConvApi::ConvType<AscendC::TPosition::GM, ConvFormat::ND, float>; // 可选参数，如果不带Bias场景，可以不传
 struct ConvCustom : public ConvApi::ConvParam {
     __aicore__ inline ConvCustom(){};
-}; // 可选参数，当前版本只支持基础模板，不使能性能优化，可以不传
+}; // 可选参数，当前版本只支持基础模板，不开启性能优化，可以不传
 
 Conv3dApi::Conv3D<inputType, weightType, outputType, biasType, ConvCustom> conv3dApi;
 ```
-

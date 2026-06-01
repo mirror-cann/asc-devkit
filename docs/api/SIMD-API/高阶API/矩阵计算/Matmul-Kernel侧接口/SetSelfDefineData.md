@@ -54,7 +54,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-使能模板参数[MatmulCallBackFunc](Matmul模板参数.md#li865693716209)（自定义回调函数）时，设置需要的计算数据或在GM上存储的数据地址等信息，用于回调函数使用。复用同一个Matmul对象时，可以多次调用本接口重新设置对应数据信息。
+启用模板参数[MatmulCallBackFunc](Matmul模板参数.md#li865693716209)（自定义回调函数）时，设置需要的计算数据或在GM上存储的数据地址等信息，用于回调函数使用。复用同一个Matmul对象时，可以多次调用本接口重新设置对应数据信息。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -102,7 +102,7 @@ Kirin X90产品不支持SetSelfDefineData\(T dataPtr\)接口原型。
 ## 约束说明<a name="section633mcpsimp"></a>
 
 -   若回调函数中需要使用dataPtr参数时，必须调用此接口；若回调函数不使用dataPtr参数，无需调用此接口。
--   当使能MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
+-   当开启MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
 -   本接口必须在SetTensorA接口、SetTensorB接口之前调用。
 
 ## 调用示例<a name="section1665082013318"></a>
@@ -127,4 +127,3 @@ mm.SetTensorA(gmA);
 mm.SetTensorB(gmB);
 mm.IterateAll();
 ```
-

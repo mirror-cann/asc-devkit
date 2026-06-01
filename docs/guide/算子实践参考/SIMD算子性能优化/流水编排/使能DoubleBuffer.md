@@ -1,4 +1,4 @@
-# 使能DoubleBuffer<a name="ZH-CN_TOPIC_0000001893038945"></a>
+# 开启DoubleBuffer<a name="ZH-CN_TOPIC_0000001893038945"></a>
 
 【优先级】中
 
@@ -9,14 +9,14 @@
 **图 1**  数据搬运与Vector计算过程<a name="fig994415385460"></a>  
 ![](../../../figures/数据搬运与Vector计算过程-54.png "数据搬运与Vector计算过程-54")
 
-**图 2**  未使能DoubleBuffer的流水图<a name="fig101953515215"></a>  
-![](../../../figures/未使能DoubleBuffer的流水图.png "未使能DoubleBuffer的流水图")
+**图 2**  未开启DoubleBuffer的流水图<a name="fig101953515215"></a>  
+![](../../../figures/未使能DoubleBuffer的流水图.png "未开启DoubleBuffer的流水图")
 
 在此过程中，数据搬运与Vector计算串行执行，Vector计算单元不可避免存在资源闲置问题，假设CopyIn、Compute、CopyOut三阶段分别耗时相同均为_t_，则Vector的利用率仅为1/3，等待时间过长，Vector利用率严重不足。
 
-为减少Vector等待时间，使能DoubleBuffer机制将待处理的数据一分为二，例如Tensor1、Tensor2。如[图3](#fig189541246194710)所示，当Vector单元对Tensor1中数据进行Compute计算时，Tensor2数据流可以执行CopyIn的过程；而当Vector切换到计算Tensor2时，Tensor1数据流可以执行CopyOut的过程。由此，数据的进出搬运和Vector计算实现并行执行，Vector闲置问题得以有效缓解。
+为减少Vector等待时间，开启DoubleBuffer机制将待处理的数据一分为二，例如Tensor1、Tensor2。如[图3](#fig189541246194710)所示，当Vector单元对Tensor1中数据进行Compute计算时，Tensor2数据流可以执行CopyIn的过程；而当Vector切换到计算Tensor2时，Tensor1数据流可以执行CopyOut的过程。由此，数据的进出搬运和Vector计算实现并行执行，Vector闲置问题得以有效缓解。
 
-总体来说，DoubleBuffer是基于MTE指令队列与Vector指令队列的独立性和可并行性，通过将数据搬运与Vector计算并行执行以隐藏大部分的数据搬运时间，并降低Vector指令的等待时间，最终提高Vector单元的利用效率。通过为队列申请内存时设置内存块的个数为2，使能DoubleBuffer，实现数据并行，简单代码示例如下：
+总体来说，DoubleBuffer是基于MTE指令队列与Vector指令队列的独立性和可并行性，通过将数据搬运与Vector计算并行执行以隐藏大部分的数据搬运时间，并降低Vector指令的等待时间，最终提高Vector单元的利用效率。通过为队列申请内存时设置内存块的个数为2，开启DoubleBuffer，实现数据并行，简单代码示例如下：
 
 ```
 pipe.InitBuffer(inQueueX, 2, 256);
@@ -25,8 +25,8 @@ pipe.InitBuffer(inQueueX, 2, 256);
 **图 3**  DoubleBuffer机制<a name="fig189541246194710"></a>  
 ![](../../../figures/DoubleBuffer机制-55.png "DoubleBuffer机制-55")
 
-**图 4**  使能DoubleBuffer的流水图<a name="fig166411527185118"></a>  
-![](../../../figures/使能DoubleBuffer的流水图.png "使能DoubleBuffer的流水图")
+**图 4**  开启DoubleBuffer的流水图<a name="fig166411527185118"></a>  
+![](../../../figures/使能DoubleBuffer的流水图.png "开启DoubleBuffer的流水图")
 
 **需要注意：**
 
@@ -45,7 +45,7 @@ __aicore__ inline void Init(__gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, __gm
     src0Global.SetGlobalBuffer((__gm__ half*)src0Gm);
     src1Global.SetGlobalBuffer((__gm__ half*)src1Gm);
     dstGlobal.SetGlobalBuffer((__gm__ half*)dstGm);
-    // 不使能DoubleBuffer,占用的物理空间是1 * sizeSrc0 * sizeof(half)
+    // 不开启DoubleBuffer,占用的物理空间是1 * sizeSrc0 * sizeof(half)
     // 3个InitBuffer执行后总空间为1 * (sizeSrc0 * sizeof(half) + sizeSrc1 * sizeof(half) + sizeDst0 * sizeof(half)) 
     pipe.InitBuffer(inQueueSrc0, 1, sizeSrc0 * sizeof(half));
     pipe.InitBuffer(inQueueSrc1, 1, sizeSrc1 * sizeof(half));
@@ -70,7 +70,7 @@ __aicore__ inline void Init(__gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, __gm
     src0Global.SetGlobalBuffer((__gm__ half*)src0Gm);
     src1Global.SetGlobalBuffer((__gm__ half*)src1Gm);
     dstGlobal.SetGlobalBuffer((__gm__ half*)dstGm);
-    // InitBuffer中使用2表示使能DoubleBuffer,占用的物理空间是2 * sizeSrc0 * sizeof(half)
+    // InitBuffer中使用2表示开启DoubleBuffer,占用的物理空间是2 * sizeSrc0 * sizeof(half)
     // 3个InitBuffer执行后总空间为2 * (sizeSrc0 * sizeof(half) + sizeSrc1 * sizeof(half) + sizeDst0 * sizeof(half)) 
     pipe.InitBuffer(inQueueSrc0, 2, sizeSrc0 * sizeof(half));
     pipe.InitBuffer(inQueueSrc1, 2, sizeSrc1 * sizeof(half));
@@ -86,4 +86,3 @@ __aicore__ inline void Process()
     }
 }
 ```
-

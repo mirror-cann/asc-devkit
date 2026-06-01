@@ -1,14 +1,14 @@
-# Matmul高阶API使能MTE2 Preload<a name="ZH-CN_TOPIC_0000002360914053"></a>
+# Matmul高阶API开启MTE2 Preload<a name="ZH-CN_TOPIC_0000002360914053"></a>
 
 ## 案例介绍<a name="section17413194624510"></a>
 
-本案例呈现了在矩阵乘算子场景中，使用Matmul高阶API进行矩阵乘法计算，使能MTE2 Preload对算子性能的提升效果**。**通过MatmulConfig中的doMTE2Preload参数开启矩阵M或N方向的预加载功能，预加载即在MTE2间隙提前加载A矩阵/B矩阵数据，开启预加载功能后，可以减少MTE2间隙，提升算子性能。doMTE2Preload参数的详细介绍请参考[MatmulConfig](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulConfig.md)。
+本案例呈现了在矩阵乘算子场景中，使用Matmul高阶API进行矩阵乘法计算，开启MTE2 Preload对算子性能的提升效果**。**通过MatmulConfig中的doMTE2Preload参数开启矩阵M或N方向的预加载功能，预加载即在MTE2间隙提前加载A矩阵/B矩阵数据，开启预加载功能后，可以减少MTE2间隙，提升算子性能。doMTE2Preload参数的详细介绍请参考[MatmulConfig](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulConfig.md)。
 
--   使能MTE2 Preload的适用场景
+-   开启MTE2 Preload的适用场景
 
     MTE2流水间隙较大，且M或N数值较大时。
 
--   使能MTE2 Preload的约束条件
+-   开启MTE2 Preload的约束条件
     -   仅在使用MDL模板和SpecialMDL模板时，MTE2 Preload有效。
     -   开启M或N方向预加载功能时，需保证K方向数据全载，且M或N方向开启DoubleBuffer。
     -   K方向数据全载的条件是singleK <= baseK \* stepK。
@@ -51,7 +51,7 @@
 </tbody>
 </table>
 
-当前案例使用的AI处理器共24个核，算子中使能高阶API Matmul的纯Cube模式。使用MDL模板，Tiling参数如下：
+当前案例使用的AI处理器共24个核，算子中开启高阶API Matmul的纯Cube模式。使用MDL模板，Tiling参数如下：
 
 -   原始shape：M=128, N= 24576, K=512。
 -   单核shape：singleCoreM=128，singleCoreN=1024，singleCoreK=512。
@@ -69,9 +69,9 @@
 
 ## 设计优化方案<a name="section33901368431"></a>
 
-使能MTE2 Preload功能：在创建Matmul对象时，开启doMTE2Preload开关。使能MTE2 Preload的完整样例请参考[M方向预加载Matmul算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_preload)。具体步骤如下：
+开启MTE2 Preload功能：在创建Matmul对象时，开启doMTE2Preload开关。开启MTE2 Preload的完整样例请参考[M方向预加载Matmul算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_preload)。具体步骤如下：
 
-1.  配置MDL模板参数，将其中的doMTE2Preload参数设置为2，使能N方向Preload功能。
+1.  配置MDL模板参数，将其中的doMTE2Preload参数设置为2，开启N方向Preload功能。
 
     ```
      // preloadMode = 2
@@ -94,5 +94,4 @@
 
 ## 总结<a name="section8281219125011"></a>
 
-当MTE2流水间隙较大，且M或N数值较大时，可以考虑使能MTE2 Preload功能，提前加载A矩阵或B矩阵数据。
-
+当MTE2流水间隙较大，且M或N数值较大时，可以考虑开启MTE2 Preload功能，提前加载A矩阵或B矩阵数据。

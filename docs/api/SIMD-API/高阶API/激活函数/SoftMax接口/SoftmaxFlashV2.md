@@ -98,7 +98,7 @@ def softmax_flash_2(src, inmax=None, insum=None, update=None):
 **图 1**  SoftmaxFlashV2算法框图<a name="fig137619450117"></a>  
 ![](../../../../figures/SoftmaxFlashV2算法框图.png "SoftmaxFlashV2算法框图")
 
-计算过程根据isUpdate是否使能分为两个分支处理，均在Vector上进行。
+计算过程根据isUpdate是否开启分为两个分支处理，均在Vector上进行。
 
 -   当isUpdate为False时，分为如下几步：
     1.  reducemax步骤：对输入x的每一行数据求最大值得到\[m, 1\]，计算结果会保存到一个临时空间temp中；
@@ -208,7 +208,7 @@ def softmax_flash_2(src, inmax=None, insum=None, update=None):
 </tr>
 <tr id="row1783875017236"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p1838850172311"><a name="p1838850172311"></a><a name="p1838850172311"></a>isUpdate</p>
 </td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p1983816503234"><a name="p1983816503234"></a><a name="p1983816503234"></a>是否使能update部分中的计算。</p>
+<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p1983816503234"><a name="p1983816503234"></a><a name="p1983816503234"></a>是否开启update部分中的计算。</p>
 </td>
 </tr>
 <tr id="row9756719122620"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p1682112447268"><a name="p1682112447268"></a><a name="p1682112447268"></a>isReuseSource</p>
@@ -218,7 +218,7 @@ def softmax_flash_2(src, inmax=None, insum=None, update=None):
 </tr>
 <tr id="row9184124919159"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p11692440141619"><a name="p11692440141619"></a><a name="p11692440141619"></a>isBasicBlock</p>
 </td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p74171158258"><a name="p74171158258"></a><a name="p74171158258"></a>srcTensor和dstTensor的shape信息和Tiling切分策略满足基本块要求的情况下，可以使能该参数用于提升性能，默认不使能。是否满足基本块的要求，可以采用如下两种方式之一判断：</p>
+<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p74171158258"><a name="p74171158258"></a><a name="p74171158258"></a>srcTensor和dstTensor的shape信息和Tiling切分策略满足基本块要求的情况下，可以设置为true开启该参数用于提升性能，默认为false表示不开启。是否满足基本块的要求，可以采用如下两种方式之一判断：</p>
 <a name="ul353295811167"></a><a name="ul353295811167"></a><ul id="ul353295811167"><li>srcTensor和dstTensor的shape信息[m,n]需要满足如下条件：<a name="ul09181366549"></a><a name="ul09181366549"></a><ul id="ul09181366549"><li>尾轴长度n小于2048并且大于等于256/sizeof(T)（即half场景下n最小为128，float场景下n最小为64），同时n是64的倍数；</li><li>非尾轴长度的乘积m为8的倍数。</li></ul>
 </li></ul>
 <a name="ul1941711152254"></a><a name="ul1941711152254"></a><ul id="ul1941711152254"><li>在Tiling实现中，通过调用<a href="IsBasicBlockInSoftMax.md">IsBasicBlockInSoftMax</a>判断Tiling切分策略是否满足基本块的切分要求。</li></ul>
@@ -411,7 +411,7 @@ struct SoftMaxShapeInfo {
 
 -   srcK对齐
 
-    本样例中输入srcTensor和输出dstTensor的shape大小为\[320,64\]，输入inSumTensor、inMaxTensor的shape大小为\[320,16\]，输出expMaxTensor的shape大小为\[320,16\]，数据类型均为half，输入输出的数据排布格式为ND，srcTensor和dstTensor空间不复用，不使能基本块，isUpdate为true。
+    本样例中输入srcTensor和输出dstTensor的shape大小为\[320,64\]，输入inSumTensor、inMaxTensor的shape大小为\[320,16\]，输出expMaxTensor的shape大小为\[320,16\]，数据类型均为half，输入输出的数据排布格式为ND，srcTensor和dstTensor空间不复用，不开启基本块，isUpdate为true。
 
     ```
     // dstLocal: 存放SoftMax计算结果的Tensor
@@ -534,4 +534,3 @@ struct SoftMaxShapeInfo {
      [0.01538  0.01538  0.01538  ... 0.01637  0.01637  0.01637 ]
      [0.01538  0.01538  0.01538  ... 0.01637  0.01637  0.01637 ]]
     ```
-

@@ -1,17 +1,17 @@
-# Matmul高阶API使能UnitFlag<a name="ZH-CN_TOPIC_0000002353876489"></a>
+# Matmul高阶API开启UnitFlag<a name="ZH-CN_TOPIC_0000002353876489"></a>
 
 ## 案例介绍<a name="section17413194624510"></a>
 
-本案例呈现了在矩阵乘算子场景中，使用Matmul高阶API进行矩阵乘法计算，使能UnitFlag功能对算子性能的提升效果。UnitFlag功能为AIC核中MMAD计算指令和FIXPIPE数据搬运指令提供了基于内存访问的细粒度同步，使计算与搬运流水并行。使能UnitFlag功能的方式为将MatmulConfig中的enUnitFlag参数设置为true。enUnitFlag参数的详细介绍请参考[MatmulConfig](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulConfig.md)。
+本案例呈现了在矩阵乘算子场景中，使用Matmul高阶API进行矩阵乘法计算，开启UnitFlag功能对算子性能的提升效果。UnitFlag功能为AIC核中MMAD计算指令和FIXPIPE数据搬运指令提供了基于内存访问的细粒度同步，使计算与搬运流水并行。开启UnitFlag功能的方式为将MatmulConfig中的enUnitFlag参数设置为true。enUnitFlag参数的详细介绍请参考[MatmulConfig](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulConfig.md)。
 
--   使能UnitFlag的适用场景
+-   开启UnitFlag的适用场景
 
-    算子的MMAD流水和FIXPIPE流水之间串行执行，FIXPIPE等待MMAD计算完成才搬出结果，这个指令同步等待的时间在算子整体执行耗时中占比较高。这种场景可以使能UnitFlag功能，以获得MMAD和FIXPIPE流水并行的性能收益。如果算子原本的MMAD、FIXPIPE流水可以被其他流水掩盖（比如MTE2 Bound），这时使能UnitFlag功能总体收益很小。
+    算子的MMAD流水和FIXPIPE流水之间串行执行，FIXPIPE等待MMAD计算完成才搬出结果，这个指令同步等待的时间在算子整体执行耗时中占比较高。这种场景可以开启UnitFlag功能，以获得MMAD和FIXPIPE流水并行的性能收益。如果算子原本的MMAD、FIXPIPE流水可以被其他流水掩盖（比如MTE2 Bound），这时开启UnitFlag功能总体收益很小。
 
--   使能UnitFlag的约束条件
+-   开启UnitFlag的约束条件
     -   UnitFlag功能仅支持Norm、IBShare、MDL三个模板。
-    -   使能UnitFlag功能时，不支持算子内同时存在CO1\(L0C\)搬出到Global Memory和A1\(L1\)搬出到Global Memory的两种流水。
-    -   使能UnitFlag功能时，若同时使能[L0C累加](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Iterate.md)功能，不支持多次[Iterate](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Iterate.md)计算、一次[GetTensorC](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GetTensorC.md)输出。
+    -   开启UnitFlag功能时，不支持算子内同时存在CO1\(L0C\)搬出到Global Memory和A1\(L1\)搬出到Global Memory的两种流水。
+    -   开启UnitFlag功能时，若同时开启[L0C累加](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Iterate.md)功能，不支持多次[Iterate](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Iterate.md)计算、一次[GetTensorC](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GetTensorC.md)输出。
 
 本案例的算子规格如下：
 
@@ -87,9 +87,9 @@
 **图 2**  开启UnitFlag功能<a name="fig58335714416"></a>  
 ![](../../../figures/开启UnitFlag功能.png "开启UnitFlag功能")
 
-Matmul API使能UnitFlag功能的完整样例请参考[使能UnitFlag功能和MDL模板的Mamtul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_unitflag)。使能UnitFlag功能的主要步骤如下：
+Matmul API开启UnitFlag功能的完整样例请参考[开启UnitFlag功能和MDL模板的Mamtul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_unitflag)。开启UnitFlag功能的主要步骤如下：
 
-1.  自定义MatmulConfig模板参数，将其中的enUnitFlag参数设置为true，使能UnitFlag功能。
+1.  自定义MatmulConfig模板参数，将其中的enUnitFlag参数设置为true，开启UnitFlag功能。
 
     ```
     __aicore__ inline constexpr MatmulConfig GetCustomMDLCFG()
@@ -123,4 +123,4 @@ Matmul API使能UnitFlag功能的完整样例请参考[使能UnitFlag功能和MD
 
 ## 总结<a name="section8281219125011"></a>
 
-在算子的MMAD计算流水和FIXPIPE数据搬出流水串行且未被其他流水掩盖（比如MTE2 Bound）时，考虑使能UnitFlag功能，实现MMAD计算流水和FIXPIPE数据搬出流水的流水并行，提升算子性能。
+在算子的MMAD计算流水和FIXPIPE数据搬出流水串行且未被其他流水掩盖（比如MTE2 Bound）时，考虑开启UnitFlag功能，实现MMAD计算流水和FIXPIPE数据搬出流水的流水并行，提升算子性能。

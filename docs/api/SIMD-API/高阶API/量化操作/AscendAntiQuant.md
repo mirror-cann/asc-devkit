@@ -62,13 +62,13 @@
 按元素做伪量化计算，比如将int8\_t数据类型伪量化为half数据类型，计算公式如下：
 
 -   PER\_CHANNEL场景（按通道量化）
-    -   不使能输入转置
+    -   不开启输入转置
 
         groupSize = src.shape\[0\] / offset.shape\[0\]
 
         **dst\[i\]\[j\] = scale\[i / groupSize\]\[j\] \* \(src\[i\]\[j\] + offset\[i / groupSize\]\[j\]\)**
 
-    -   使能输入转置
+    -   开启输入转置
 
         groupSize = src.shape\[1\] / offset.shape\[1\]
 
@@ -103,11 +103,11 @@
 
             isTranspose为True表示src，scale，dst都是转置的矩阵。
 
-            -   不使能输入转置（isTranspose=False）
+            -   不开启输入转置（isTranspose=False）
 
                 **dst\[i\]\[j\] = scale\[i / groupSize\]\[j\] \* src\[i\]\[j\]**
 
-            -   使能输入转置（isTranspose=True）
+            -   开启输入转置（isTranspose=True）
 
                 **dst\[i\]\[j\] = scale\[i\]\[j / groupSize\] \* src\[i\]\[j\]**
 
@@ -269,7 +269,7 @@ PER\_TOKEN/PER\_GROUP b8/float4场景的计算逻辑如下：
 </tr>
 <tr id="row9756719122620"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p1682112447268"><a name="p1682112447268"></a><a name="p1682112447268"></a>isTranspose</p>
 </td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p89797304326"><a name="p89797304326"></a><a name="p89797304326"></a>是否使能输入数据转置。</p>
+<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p89797304326"><a name="p89797304326"></a><a name="p89797304326"></a>是否开启输入数据转置。</p>
 </td>
 </tr>
 </tbody>
@@ -303,7 +303,7 @@ PER\_TOKEN/PER\_GROUP b8/float4场景的计算逻辑如下：
 </td>
 <td class="cellrowborder" valign="top" width="80.74%" headers="mcps1.2.3.1.2 "><p id="p13892754135017"><a name="p13892754135017"></a><a name="p13892754135017"></a>量化接口配置参数，定义如下方代码所示，其中参数的含义如下。</p>
 <a name="ul558513317417"></a><a name="ul558513317417"></a><ul id="ul558513317417"><li>hasOffset：量化参数offset是否参与计算。<a name="ul186211135517"></a><a name="ul186211135517"></a><ul id="ul186211135517"><li>True：表示offset参数参与计算。</li><li>False：表示offset参数不参与计算。</li></ul>
-</li><li>isTranspose：表示是否使能输入src转置。<a name="ul156001433171912"></a><a name="ul156001433171912"></a><ul id="ul156001433171912"><li>True：表示输入src转置。</li><li>False：表示输入src不转置。</li></ul>
+</li><li>isTranspose：表示是否开启输入src转置。<a name="ul156001433171912"></a><a name="ul156001433171912"></a><ul id="ul156001433171912"><li>True：表示输入src转置。</li><li>False：表示输入src不转置。</li></ul>
 </li><li>kDim：group的计算方向，即k方向。仅在PER_GROUP场景有效，支持的取值如下。<a name="ul980613301459"></a><a name="ul980613301459"></a><ul id="ul980613301459"><li>0：k轴是第0轴，即m方向为group的计算方向；</li><li>1：k轴是第1轴，即n方向为group的计算方向。</li></ul>
 </li></ul>
 </td>
@@ -709,4 +709,3 @@ para.n = n;
 para.calCount = calCount;
 AscendAntiQuant<dstType, srcType, scaleType, config, policy>(dstLocal, srcLocal, scaleLocal, offsetLocal, para);
 ```
-

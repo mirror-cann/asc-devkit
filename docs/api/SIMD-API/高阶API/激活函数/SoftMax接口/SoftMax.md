@@ -179,7 +179,7 @@ def softmax(src):
 </tr>
 <tr id="row9184124919159"><td class="cellrowborder" valign="top" width="19.38%" headers="mcps1.2.3.1.1 "><p id="p11692440141619"><a name="p11692440141619"></a><a name="p11692440141619"></a>isBasicBlock</p>
 </td>
-<td class="cellrowborder" valign="top" width="80.62%" headers="mcps1.2.3.1.2 "><p id="p1153245821619"><a name="p1153245821619"></a><a name="p1153245821619"></a>srcTensor和dstTensor的shape信息和Tiling切分策略满足基本块要求的情况下，可以使能该参数用于提升性能，默认不使能。是否满足基本块的要求，可以采用如下两种方式之一判断：</p>
+<td class="cellrowborder" valign="top" width="80.62%" headers="mcps1.2.3.1.2 "><p id="p1153245821619"><a name="p1153245821619"></a><a name="p1153245821619"></a>srcTensor和dstTensor的shape信息和Tiling切分策略满足基本块要求的情况下，可以开启该参数用于提升性能，默认不开启。是否满足基本块的要求，可以采用如下两种方式之一判断：</p>
 <a name="ul353295811167"></a><a name="ul353295811167"></a><ul id="ul353295811167"><li>srcTensor和dstTensor的shape信息[m,n]需要满足如下条件：<a name="ul09181366549"></a><a name="ul09181366549"></a><ul id="ul09181366549"><li>尾轴长度n小于2048并且大于等于256/sizeof(T)（即half场景下n最小为128，float场景下n最小为64），同时n是64的倍数；</li><li>非尾轴长度的乘积m为8的倍数。</li></ul>
 </li><li>在Tiling实现中，通过调用<a href="IsBasicBlockInSoftMax.md">IsBasicBlockInSoftMax</a>判断Tiling切分策略是否满足基本块的切分要求。</li></ul>
 <p id="p353205814166"><a name="p353205814166"></a><a name="p353205814166"></a>针对<span id="ph45321658191619"><a name="ph45321658191619"></a><a name="ph45321658191619"></a><term id="zh-cn_topic_0000001312391781_term354143892110_1"><a name="zh-cn_topic_0000001312391781_term354143892110_1"></a><a name="zh-cn_topic_0000001312391781_term354143892110_1"></a>Atlas 200I/500 A2 推理产品</term></span>，该参数为预留参数，暂未启用，为后续的功能扩展做保留，保持默认值即可。</p>
@@ -396,4 +396,3 @@ AscendC::SoftMax<T>(dstLocal, sumTempLocal, maxTempLocal, srcLocal, softmaxTilin
  [0.00095032 0.00156681 0.00425903 0.01157725 0.03147022 0.08554492 0.2325352  0.63209623]
  [0.         0.         0.         0.         0.         0.         0.         1.        ]]
 ```
-
