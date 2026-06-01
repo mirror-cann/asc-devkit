@@ -55,7 +55,7 @@
   <tr><td align="left">y (矩阵B，转置存储)</td><td align="left">[N, K]</td><td align="left">int8_t</td><td align="left">DN</td></tr>
   <tr><td align="left">quant</td><td align="left">[N]</td><td align="left">uint64_t</td><td align="left">ND</td></tr>
   <tr><td rowspan="1" align="left">样例输出</td><td align="left">z (矩阵C)</td><td align="left">[M, N]</td><td align="left">half</td><td align="left">ND</td></tr>
-  <tr><td rowspan="1" align="left">核函数名</td><td colspan="4" align="left">mmad_tensor_api</td></tr>
+  <tr><td rowspan="1" align="left">核函数名</td><td colspan="4" align="left">mmad_quant_custom</td></tr>
   </table>
 
   编译期模板参数默认值：

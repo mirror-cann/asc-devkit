@@ -77,7 +77,7 @@
   <tr><td align="left">bias</td><td align="left">[N]</td><td align="left">float</td><td align="left">ND</td></tr>
   <tr><td align="left">tiling</td><td align="left">MatmulTiling结构体</td><td align="left">int32_t</td><td align="left">ND</td></tr>
   <tr><td rowspan="1" align="left">样例输出</td><td align="left">c (矩阵C)</td><td align="left">[M, N]</td><td align="left">float</td><td align="left">ND</td></tr>
-  <tr><td rowspan="1" align="left">核函数名</td><td colspan="4" align="left">dynamic_matmul_with_bias</td></tr>
+  <tr><td rowspan="1" align="left">核函数名</td><td colspan="4" align="left">copy_in_tensor_api</td></tr>
   </table>
 
   **场景1：AB不转置，float**
@@ -91,7 +91,7 @@
   <tr><td align="left">bias</td><td align="left">[N]</td><td align="left">float</td><td align="left">ND</td></tr>
   <tr><td align="left">tiling</td><td align="left">MatmulTiling结构体</td><td align="left">int32_t</td><td align="left">ND</td></tr>
   <tr><td rowspan="1" align="left">样例输出</td><td align="left">c (矩阵C)</td><td align="left">[M, N]</td><td align="left">float</td><td align="left">ND</td></tr>
-  <tr><td rowspan="1" align="left">核函数名</td><td colspan="4" align="left">dynamic_matmul_with_bias</td></tr>
+  <tr><td rowspan="1" align="left">核函数名</td><td colspan="4" align="left">copy_in_tensor_api</td></tr>
   </table>
 
   **场景2：AB转置，half**
@@ -105,7 +105,7 @@
   <tr><td align="left">bias</td><td align="left">[N]</td><td align="left">float</td><td align="left">ND</td></tr>
   <tr><td align="left">tiling</td><td align="left">MatmulTiling结构体</td><td align="left">int32_t</td><td align="left">ND</td></tr>
   <tr><td rowspan="1" align="left">样例输出</td><td align="left">c (矩阵C)</td><td align="left">[M, N]</td><td align="left">float</td><td align="left">ND</td></tr>
-  <tr><td rowspan="1" align="left">核函数名</td><td colspan="4" align="left">dynamic_matmul_with_bias</td></tr>
+  <tr><td rowspan="1" align="left">核函数名</td><td colspan="4" align="left">copy_in_tensor_api</td></tr>
   </table>
 
   **场景3：AB转置，float**
@@ -119,7 +119,7 @@
   <tr><td align="left">bias</td><td align="left">[N]</td><td align="left">float</td><td align="left">ND</td></tr>
   <tr><td align="left">tiling</td><td align="left">MatmulTiling结构体</td><td align="left">int32_t</td><td align="left">ND</td></tr>
   <tr><td rowspan="1" align="left">样例输出</td><td align="left">c (矩阵C)</td><td align="left">[M, N]</td><td align="left">float</td><td align="left">ND</td></tr>
-  <tr><td rowspan="1" align="left">核函数名</td><td colspan="4" align="left">dynamic_matmul_with_bias</td></tr>
+  <tr><td rowspan="1" align="left">核函数名</td><td colspan="4" align="left">copy_in_tensor_api</td></tr>
   </table>
 
   编译期模板参数默认值：
