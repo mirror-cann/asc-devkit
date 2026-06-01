@@ -1,22 +1,21 @@
 /*
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  *\file kernel_operator_mm_bitmode_intf.h
  *\brief
-*/
+ */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_MM_BITMODE_INTF_H__
 #endif
-
 
 #ifndef ASCENDC_MODULE_OPERATOR_MM_BITMODE_INTERFACE_H
 #define ASCENDC_MODULE_OPERATOR_MM_BITMODE_INTERFACE_H
@@ -29,7 +28,7 @@ namespace AscendC {
 class Load2DBitModeParam {
 public:
     __aicore__ inline Load2DBitModeParam();
-    __aicore__ inline Load2DBitModeParam(const LoadData2DParamsV2 &loadData2DParams_);
+    __aicore__ inline Load2DBitModeParam(const LoadData2DParamsV2& loadData2DParams_);
     __aicore__ inline void SetMStartPosition(uint32_t mStartPosition_);
     __aicore__ inline void SetKStartPosition(uint32_t kStartPosition_);
     __aicore__ inline void SetMStep(uint16_t mStep_);
@@ -37,12 +36,8 @@ public:
     __aicore__ inline void SetSrcStride(int32_t srcStride_);
     __aicore__ inline void SetDstStride(uint16_t dstStride_);
     __aicore__ inline void SetIfTranspose(bool ifTranspose_);
-    __aicore__ inline void SetConfig0(uint64_t config0_) {
-        config0 = config0_;
-    };
-    __aicore__ inline void SetConfig1(uint64_t config1_) {
-        config1 = config1_;
-    };
+    __aicore__ inline void SetConfig0(uint64_t config0_) { config0 = config0_; };
+    __aicore__ inline void SetConfig1(uint64_t config1_) { config1 = config1_; };
 
     __aicore__ inline uint32_t GetMStartPosition() const;
     __aicore__ inline uint32_t GetKStartPosition() const;
@@ -50,15 +45,9 @@ public:
     __aicore__ inline uint16_t GetKStep() const;
     __aicore__ inline int32_t GetSrcStride() const;
     __aicore__ inline uint16_t GetDstStride() const;
-    __aicore__ inline uint64_t GetIfTranspose() const {
-        return ifTranspose;
-    };
-    __aicore__ inline uint64_t GetConfig0() const {
-        return config0;
-    };
-    __aicore__ inline uint64_t GetConfig1() const {
-        return config1;
-    };
+    __aicore__ inline uint64_t GetIfTranspose() const { return ifTranspose; };
+    __aicore__ inline uint64_t GetConfig0() const { return config0; };
+    __aicore__ inline uint64_t GetConfig1() const { return config1; };
 
 private:
     union {
@@ -76,7 +65,7 @@ class Load3DBitModeParam {
 public:
     __aicore__ inline Load3DBitModeParam();
     template <typename T>
-    __aicore__ inline Load3DBitModeParam(const LoadData3DParamsV2<T> &loadData3DParams_);
+    __aicore__ inline Load3DBitModeParam(const LoadData3DParamsV2<T>& loadData3DParams_);
     __aicore__ inline void SetKExtension(uint16_t kStep_);
     __aicore__ inline void SetMExtension(uint16_t mStep_);
     __aicore__ inline void SetKStartPt(uint16_t kPos_);
@@ -92,12 +81,8 @@ public:
     __aicore__ inline void SetTranspose(bool transpose_);
     __aicore__ inline void SetFMatrixCtrl(bool fmatrixCtrl_);
     __aicore__ inline void SetChannelSize(uint16_t sizeChannel_);
-    __aicore__ inline void SetConfig0(uint64_t config0_) {
-        config0 = config0_;
-    };
-    __aicore__ inline void SetConfig1(uint64_t config1_) {
-        config1 = config1_;
-    };
+    __aicore__ inline void SetConfig0(uint64_t config0_) { config0 = config0_; };
+    __aicore__ inline void SetConfig1(uint64_t config1_) { config1 = config1_; };
 
     __aicore__ inline uint16_t GetKExtension() const;
     __aicore__ inline uint16_t GetMExtension() const;
@@ -114,12 +99,8 @@ public:
     __aicore__ inline bool GetTranspose() const;
     __aicore__ inline bool GetFMatrixCtrl() const;
     __aicore__ inline uint16_t GetChannelSize() const;
-    __aicore__ inline uint64_t GetConfig0() const {
-        return config0;
-    };
-    __aicore__ inline uint64_t GetConfig1() const {
-        return config1;
-    };
+    __aicore__ inline uint64_t GetConfig0() const { return config0; };
+    __aicore__ inline uint64_t GetConfig1() const { return config1; };
 
 private:
     union {
@@ -136,16 +117,12 @@ class SetFMatrixBitModeParams {
 public:
     __aicore__ inline SetFMatrixBitModeParams();
     template <typename T>
-    __aicore__ inline SetFMatrixBitModeParams(const LoadData3DParamsV2<T> &loadData3DParams_);
+    __aicore__ inline SetFMatrixBitModeParams(const LoadData3DParamsV2<T>& loadData3DParams_);
     __aicore__ inline void SetL1H(uint16_t l1H_);
     __aicore__ inline void SetL1W(uint16_t l1W_);
     __aicore__ inline void SetPadList(const uint8_t padList_[4]);
-    __aicore__ inline void SetConfig0(uint64_t config0_) {
-        config0 = config0_;
-    };
-    __aicore__ inline uint64_t GetConfig0() const {
-        return config0;
-    };
+    __aicore__ inline void SetConfig0(uint64_t config0_) { config0 = config0_; };
+    __aicore__ inline uint64_t GetConfig0() const { return config0; };
 
 private:
     union {
@@ -158,7 +135,7 @@ private:
 class MmadBitModeParams {
 public:
     __aicore__ inline MmadBitModeParams();
-    __aicore__ inline MmadBitModeParams(const MmadParams &mmadParams_);
+    __aicore__ inline MmadBitModeParams(const MmadParams& mmadParams_);
     __aicore__ inline void SetM(uint16_t m_);
     __aicore__ inline void SetK(uint16_t k_);
     __aicore__ inline void SetN(uint16_t n_);
@@ -166,10 +143,8 @@ public:
     __aicore__ inline void SetDisableGemv(bool disableGemv_);
     __aicore__ inline void SetCmatrixSource(bool cmatrixSource_);
     __aicore__ inline void SetCmatrixInitVal(bool cmatrixInitVal_);
-    __aicore__ inline void SetConfig0(uint64_t config0_) {
-        config0 = config0_;
-    };
-    
+    __aicore__ inline void SetConfig0(uint64_t config0_) { config0 = config0_; };
+
     __aicore__ inline uint16_t GetM() const;
     __aicore__ inline uint16_t GetK() const;
     __aicore__ inline uint16_t GetN() const;
@@ -177,9 +152,7 @@ public:
     __aicore__ inline bool GetDisableGemv() const;
     __aicore__ inline bool GetCmatrixSource() const;
     __aicore__ inline bool GetCmatrixInitVal() const;
-    __aicore__ inline uint64_t GetConfig0() const {
-        return config0;
-    };
+    __aicore__ inline uint64_t GetConfig0() const { return config0; };
 
 private:
     union {
@@ -188,7 +161,7 @@ private:
     };
 };
 #endif
-}  // namespace AscendC
+} // namespace AscendC
 
 #include "../../impl/basic_api/kernel_operator_mm_bitmode_intf_impl.h"
 

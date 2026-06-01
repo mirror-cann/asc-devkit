@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_mm_intf.h
@@ -38,15 +38,9 @@
 
 namespace AscendC {
 
-enum class HF32Mode {
-    ENABLE,
-    DISABLE
-};
+enum class HF32Mode { ENABLE, DISABLE };
 
-enum class HF32TransMode {
-    NEAREST_ZERO,
-    NEAREST_EVEN
-};
+enum class HF32TransMode { NEAREST_ZERO, NEAREST_EVEN };
 
 /* **************************************************************************************************
  * LoadData 2d                                             *
@@ -64,12 +58,12 @@ enum class HF32TransMode {
  * @param [in] loadDataParams.ifTranspose enable parameters of transpose function
  */
 template <typename T>
-__aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LoadData2DParams& loadDataParams);
+__aicore__ inline void LoadData(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData2DParams& loadDataParams);
 
 template <typename T>
-__aicore__ inline __inout_pipe__(MTE2) void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>& src,
-    const LoadData2DParams& loadDataParams);
+__aicore__ inline __inout_pipe__(MTE2) void LoadData(
+    const LocalTensor<T>& dst, const GlobalTensor<T>& src, const LoadData2DParams& loadDataParams);
 
 /* **************************************************************************************************
  * LoadData 2dV2                                             *
@@ -89,24 +83,25 @@ __aicore__ inline __inout_pipe__(MTE2) void LoadData(const LocalTensor<T>& dst, 
  * @param [in] loadDataParams.ifTranspose enable parameters of transpose function
  */
 template <typename T>
-__aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LoadData2DParamsV2& loadDataParams);
+__aicore__ inline void LoadData(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData2DParamsV2& loadDataParams);
 
 template <typename T>
-__aicore__ inline __inout_pipe__(MTE2) void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>& src,
-    const LoadData2DParamsV2& loadDataParams);
+__aicore__ inline __inout_pipe__(MTE2) void LoadData(
+    const LocalTensor<T>& dst, const GlobalTensor<T>& src, const LoadData2DParamsV2& loadDataParams);
 
 #if (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
 template <typename T, typename U = T>
-__aicore__ inline void LoadData(const LocalTensor<U>& dst, const LocalTensor<T>& src,
-    const LocalTensor<fp8_e8m0_t>& srcMx, const LoadData2DParamsV2& loadDataParams,
-    const LoadData2DMxParams& loadMxDataParams);
+__aicore__ inline void LoadData(
+    const LocalTensor<U>& dst, const LocalTensor<T>& src, const LocalTensor<fp8_e8m0_t>& srcMx,
+    const LoadData2DParamsV2& loadDataParams, const LoadData2DMxParams& loadMxDataParams);
 #endif
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 5102)
 template <typename T, typename U>
-__aicore__ inline __inout_pipe__(MTE2) void LoadData(const LocalTensor<T>& dst, const GlobalTensor<U>& src,
-    const LoadData2DParamsV2& loadDataParams, const Nd2NzParamsV2& nd2nzParams)
+__aicore__ inline __inout_pipe__(MTE2) void LoadData(
+    const LocalTensor<T>& dst, const GlobalTensor<U>& src, const LoadData2DParamsV2& loadDataParams,
+    const Nd2NzParamsV2& nd2nzParams)
 {
     LoadDataImpl(dst, src, loadDataParams, nd2nzParams);
 }
@@ -140,10 +135,11 @@ __aicore__ inline __inout_pipe__(MTE2) void LoadData(const LocalTensor<T>& dst, 
  * @param [in] loadDataParams.cSize judge whether to turn on optimization
  * @param [in] loadDataParams.padValue Value of Pad filling value
  */
-template <typename T, const IsResetLoad3dConfig &defaultConfig = IS_RESER_LOAD3D_DEFAULT_CONFIG,
-    typename U = PrimT<T>, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type = true>
-__aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LoadData3DParamsV1<U>& loadDataParams);
+template <
+    typename T, const IsResetLoad3dConfig& defaultConfig = IS_RESER_LOAD3D_DEFAULT_CONFIG, typename U = PrimT<T>,
+    typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type = true>
+__aicore__ inline void LoadData(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData3DParamsV1<U>& loadDataParams);
 
 /* **************************************************************************************************
  * LoadData 3dv2                                             *
@@ -172,22 +168,24 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
  * @param [in] loadDataParams.enSmallK Whether to enable the small k feature
  * @param [in] loadDataParams.padValue Value of Pad filling value
  */
-template <typename T, const IsResetLoad3dConfig &defaultConfig = IS_RESER_LOAD3D_DEFAULT_CONFIG,
-    typename U = PrimT<T>, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type = true>
-__aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LoadData3DParamsV2<U>& loadDataParams);
+template <
+    typename T, const IsResetLoad3dConfig& defaultConfig = IS_RESER_LOAD3D_DEFAULT_CONFIG, typename U = PrimT<T>,
+    typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type = true>
+__aicore__ inline void LoadData(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData3DParamsV2<U>& loadDataParams);
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-template <typename T, const IsResetLoad3dConfig &defaultConfig = IS_RESER_LOAD3D_DEFAULT_CONFIG,
-    typename U = PrimT<T>, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type = true>
-__aicore__ inline void LoadDataWithStride(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LoadData3DParamsV2<U>& loadDataParams);
+template <
+    typename T, const IsResetLoad3dConfig& defaultConfig = IS_RESER_LOAD3D_DEFAULT_CONFIG, typename U = PrimT<T>,
+    typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type = true>
+__aicore__ inline void LoadDataWithStride(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData3DParamsV2<U>& loadDataParams);
 #endif
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
 template <TPosition DstPos, TPosition SrcPos, typename T>
-__aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const Load3DBitModeParam& loadDataParams);
+__aicore__ inline void LoadData(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const Load3DBitModeParam& loadDataParams);
 #endif
 /* **************************************************************************************************
  * LoadData 3dv2Pro                                             *
@@ -217,13 +215,13 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
  * @param [in] loadDataParams.padValue Value of Pad filling value
  */
 template <typename T>
-__aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LoadData3DParamsV2Pro& loadDataParams);
+__aicore__ inline void LoadData(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData3DParamsV2Pro& loadDataParams);
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
 template <TPosition DstPos, TPosition SrcPos, typename T>
-__aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const Load2DBitModeParam& loadDataParams);
+__aicore__ inline void LoadData(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const Load2DBitModeParam& loadDataParams);
 #endif
 /* **************************************************************************************************
  * LoadDataWithTranspose                                             *
@@ -241,8 +239,8 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
  * @param [in] loadDataParams.dstFracGap dst fractal gap in unit of one 512byte fractal
  */
 template <typename T>
-__aicore__ inline void LoadDataWithTranspose(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LoadData2dTransposeParams& loadDataParams);
+__aicore__ inline void LoadDataWithTranspose(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData2dTransposeParams& loadDataParams);
 
 /*
  * @ingroup DataLoad
@@ -258,8 +256,8 @@ __aicore__ inline void LoadDataWithTranspose(const LocalTensor<T>& dst, const Lo
  * @param [in] loadDataParams.srcFracGap dst fractal gap in unit of one 512byte fractal
  */
 template <typename T>
-__aicore__ inline void LoadDataWithTranspose(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LoadData2dTransposeParamsV2& loadDataParams);
+__aicore__ inline void LoadDataWithTranspose(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData2dTransposeParamsV2& loadDataParams);
 
 /* **************************************************************************************************
  * Mmad                                             *
@@ -282,39 +280,83 @@ __aicore__ inline void LoadDataWithTranspose(const LocalTensor<T>& dst, const Lo
  */
 
 template <typename T, typename U, typename S>
-__aicore__ inline void Mmad(const LocalTensor<T>& dst, const LocalTensor<U>& fm,
-    const LocalTensor<S>& filter, const MmadParams& mmadParams);
+__aicore__ inline void Mmad(
+    const LocalTensor<T>& dst, const LocalTensor<U>& fm, const LocalTensor<S>& filter, const MmadParams& mmadParams);
 
 template <typename T, typename U, typename S, typename V>
-__aicore__ inline void Mmad(const LocalTensor<T>& dst, const LocalTensor<U>& fm,
-    const LocalTensor<S>& filter, const LocalTensor<V>& bias, const MmadParams& mmadParams);
+__aicore__ inline void Mmad(
+    const LocalTensor<T>& dst, const LocalTensor<U>& fm, const LocalTensor<S>& filter, const LocalTensor<V>& bias,
+    const MmadParams& mmadParams);
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
 template <typename T, typename U, typename S>
-__aicore__ inline void Mmad(const LocalTensor<T>& dst, const LocalTensor<U>& fm,
-    const LocalTensor<S>& filter, const MmadBitModeParams& mmadParams);
+__aicore__ inline void Mmad(
+    const LocalTensor<T>& dst, const LocalTensor<U>& fm, const LocalTensor<S>& filter,
+    const MmadBitModeParams& mmadParams);
 
 template <typename T, typename U, typename S, typename V>
-__aicore__ inline void Mmad(const LocalTensor<T>& dst, const LocalTensor<U>& fm,
-    const LocalTensor<S>& filter, const LocalTensor<V>& bias, MmadBitModeParams& mmadParams);
+__aicore__ inline void Mmad(
+    const LocalTensor<T>& dst, const LocalTensor<U>& fm, const LocalTensor<S>& filter, const LocalTensor<V>& bias,
+    MmadBitModeParams& mmadParams);
+
+/* **************************************************************************************************
+ * MmadMx                                                                                           *
+ * **************************************************************************************************/
+/*
+ * @ingroup MmadMx
+ * @brief Matrix multiplication and addition in microscaling scenario
+ * @param [out] dst output LocalTensor
+ * @param [in] fm input LocalTensor
+ * @param [in] filter input LocalTensor
+ * @param [in] mmadParams.m Left matrix row number
+ * @param [in] mmadParams.n right matrix column number
+ * @param [in] mmadParams.k Left matrix column number m
+ * @param [in] mmadParams.unitFlag whether enable unit flag
+ * @param [in] mmadParams.kDirectionAlign is the indicator for alignment in L0A/L0B in the K direction
+ * @param [in] mmadParams.cmatrixSource indicates the C matrix source, 1: the C matrix is in bias table buffer, 0: the C
+ * matrix is in L0C
+ * @param [in] mmadParams.cmatrixInitVal indicates the initial matrix, 1: the number in C matrix is 0, 0：use the real
+ * number in C matrix
+ */
+template <typename T, typename U, typename S>
+__aicore__ inline void MmadMx(
+    const LocalTensor<T>& dst, const LocalTensor<U>& fm, const LocalTensor<S>& filter, const MmadParams& mmadParams);
+
+template <typename T, typename U, typename S, typename V>
+__aicore__ inline void MmadMx(
+    const LocalTensor<T>& dst, const LocalTensor<U>& fm, const LocalTensor<S>& filter, const LocalTensor<V>& bias,
+    const MmadParams& mmadParams);
+
+template <typename T, typename U, typename S>
+__aicore__ inline void MmadMx(
+    const LocalTensor<T>& dst, const LocalTensor<U>& fm, const LocalTensor<S>& filter,
+    const MmadBitModeParams& mmadParams);
+
+template <typename T, typename U, typename S, typename V>
+__aicore__ inline void MmadMx(
+    const LocalTensor<T>& dst, const LocalTensor<U>& fm, const LocalTensor<S>& filter, const LocalTensor<V>& bias,
+    const MmadBitModeParams& mmadParams);
 #endif
 
 #if __NPU_ARCH__ == 2201
-template <typename T = int32_t, typename U = int8_t,
+template <
+    typename T = int32_t, typename U = int8_t,
     typename Std::enable_if<Std::is_same<PrimT<T>, int32_t>::value, bool>::type = true,
     typename Std::enable_if<Std::is_same<PrimT<U>, int8_t>::value, bool>::type = true>
-__aicore__ inline void MmadWithSparse(const LocalTensor<T>& dst, const LocalTensor<U>& fm,
-    const LocalTensor<U>& filter, const MmadParams& mmadParams);
+__aicore__ inline void MmadWithSparse(
+    const LocalTensor<T>& dst, const LocalTensor<U>& fm, const LocalTensor<U>& filter, const MmadParams& mmadParams);
 
-template <typename T = int8_t, typename U = uint8_t,
+template <
+    typename T = int8_t, typename U = uint8_t,
     typename Std::enable_if<Std::is_same<PrimT<T>, int8_t>::value, bool>::type = true,
     typename Std::enable_if<Std::is_same<PrimT<U>, uint8_t>::value, bool>::type = true>
-__aicore__ inline void LoadDataWithSparse(const LocalTensor<T> &dst, const LocalTensor<T> &src,
-    const LocalTensor<U> &idx, const LoadData2dParams &loadDataParam);
+__aicore__ inline void LoadDataWithSparse(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LocalTensor<U>& idx,
+    const LoadData2dParams& loadDataParam);
 #endif
 
 #if __NPU_ARCH__ == 2002
-template <typename T = int8_t, typename Std::enable_if<Std::is_same<PrimT<T>, int8_t>::value, bool>::type = true> 
+template <typename T = int8_t, typename Std::enable_if<Std::is_same<PrimT<T>, int8_t>::value, bool>::type = true>
 __aicore__ inline void LoadUnzipIndex(const GlobalTensor<T>& src, uint32_t numOfIndexTabEntry);
 #endif
 
@@ -322,9 +364,9 @@ __aicore__ inline void LoadUnzipIndex(const GlobalTensor<T>& src, uint32_t numOf
  * BroadCastVecToMM                                             *
  * ************************************************************************************************* */
 template <typename T, typename U>
-__aicore__ inline __inout_pipe__(V) void BroadCastVecToMM(const LocalTensor<T> &dst,
-    const LocalTensor<U> &src, const int32_t blockCount, const uint8_t blockLen, const uint8_t srcGap,
-    const uint8_t dstGap);
+__aicore__ inline __inout_pipe__(V) void BroadCastVecToMM(
+    const LocalTensor<T>& dst, const LocalTensor<U>& src, const int32_t blockCount, const uint8_t blockLen,
+    const uint8_t srcGap, const uint8_t dstGap);
 
 /* **************************************************************************************************
  * Fill                                             *
@@ -338,17 +380,15 @@ __aicore__ inline __inout_pipe__(V) void BroadCastVecToMM(const LocalTensor<T> &
  * @param [in] InitConstValueParams.dstGap interval between the previous tail and the next block head
  * @param [in] InitConstValueParams.initValue initialize Value
  */
-template <typename T, typename U = PrimT<T>,
-    typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type = true>
-__aicore__ inline void Fill(const LocalTensor<T> &dst,
-    const InitConstValueParams<U> &initConstValueParams);
-    
+template <
+    typename T, typename U = PrimT<T>, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type = true>
+__aicore__ inline void Fill(const LocalTensor<T>& dst, const InitConstValueParams<U>& initConstValueParams);
+
 // InitConstValue has been updated, please use Fill instead.
-template <typename T, typename U = PrimT<T>,
-    typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type = true>
-__aicore__ inline void InitConstValue(const LocalTensor<T> &dst,
-    const InitConstValueParams<U> &initConstValueParams);
-    
+template <
+    typename T, typename U = PrimT<T>, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type = true>
+__aicore__ inline void InitConstValue(const LocalTensor<T>& dst, const InitConstValueParams<U>& initConstValueParams);
+
 /* **************************************************************************************************
  * SetLoadDataPaddingValue                                             *
  * ************************************************************************************************* */
@@ -370,12 +410,10 @@ __aicore__ inline void SetLoadDataPaddingValue(const T padValue);
  * @param [in]l1W operand width
  * @param [in]padList padding list
  */
-__aicore__ inline void SetFmatrix(uint16_t l1H, uint16_t l1W,
-    const uint8_t padList[4], const FmatrixMode &fmatrixMode);
+__aicore__ inline void SetFmatrix(uint16_t l1H, uint16_t l1W, const uint8_t padList[4], const FmatrixMode& fmatrixMode);
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-__aicore__ inline void SetFmatrix(const SetFMatrixBitModeParams& param,
-    const FmatrixMode &fmatrixMode);
+__aicore__ inline void SetFmatrix(const SetFMatrixBitModeParams& param, const FmatrixMode& fmatrixMode);
 #endif
 /* **************************************************************************************************
  * SetLoadDataBoundary                                             *
@@ -471,7 +509,6 @@ __aicore__ inline void SetMMRowMajor();
  * @note This function sets the CUBE output to column major format (N direction first, then M direction)
  */
 __aicore__ inline void SetMMColumnMajor();
-
 
 /*
  * @brief Sets the priority direction (M or N) for Mmad/MmadWithSparse computation
