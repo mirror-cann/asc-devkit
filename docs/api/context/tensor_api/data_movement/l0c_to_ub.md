@@ -10,11 +10,11 @@
 
 头文件为：`#include "tensor_api/tensor.h"`
 
-Tensor API通过`Copy`接口统一执行不同通路数据搬运。该接口用于将L0C Buffer中的矩阵计算结果搬运到Unified Buffer。L0C Buffer中的数据通常为`Mmad`的输出，数据格式为NZ。搬运到Unified Buffer时，接口会根据目的张量格式自动选择NZ到ND、NZ到DN或NZ到NZ的随路格式转换。
+Tensor API通过`Copy`接口统一执行不同通路数据搬运。该接口用于将L0C Buffer中的矩阵计算结果搬运到Unified Buffer。L0C Buffer中的数据通常为`Mmad`的输出，数据格式为`NZ`。搬运到Unified Buffer时，接口会根据目的张量格式自动选择`NZ`到`ND`、`NZ`到`DN`或`NZ`到`NZ`的随路格式转换。
 
-L0C Buffer到Unified Buffer搬运支持不量化输出、float到half或bfloat16_t的直接转换输出，以及配合标量或张量量化参数的随路量化输出。随路Relu、双目的模式和舍入方式通过`CopyL0C2UBTrait`配置；Mmad与Fixpipe细粒度并行相关的`unitFlag`通过`FixpipeParams`配置。
+L0C Buffer到Unified Buffer搬运支持不量化输出、float到half或bfloat16_t的直接转换输出，以及配合标量或张量量化参数的随路量化输出。随路Relu、双目的模式和舍入方式通过`CopyL0C2UBTrait`配置；`Mmad`与`Fixpipe`细粒度并行相关的`unitFlag`通过`FixpipeParams`配置。
 
-随路量化、随路Relu、随路格式转换、随路通道拆分以及随路通道合并的有效组合、中间数据类型和数据路径如下图所示。图中的F32到F16、F32到BF16为非量化模式，仅进行cast；其余路径为随路scalar或tensor量化模式。针对Ascend 950PR/Ascend 950DT，还支持NZ2DN随路格式转换。
+随路量化、随路Relu、随路格式转换、随路通道拆分以及随路通道合并的有效组合、中间数据类型和数据路径如下图所示。图中的F32到F16、F32到BF16为非量化模式，仅进行cast；其余路径为不量化、随路scalar或tensor量化模式。针对Ascend 950PR/Ascend 950DT，还支持NZ2DN随路格式转换。
 
 **图1** L0C2UB流程图
 
@@ -59,10 +59,10 @@ __aicore__ inline constexpr auto MakeCopy(const CopyOperationType& copyOperation
 |参数名|输入/输出|描述|
 |--------|--------|--------|
 |`atomCopy`|输入|搬运原子对象，可由`MakeCopy(CopyL0C2UB{})`或`MakeCopy(CopyL0C2UB{}, CopyL0C2UBTraitDefault{})`构造。|
-|`dst`|输出|目的张量，存储位置为`Location::UB`。数据格式支持`ND`、`DN`和`NZ`。目的格式为ND时使能NZ2ND，目的格式为DN时使能NZ2DN，目的格式为NZ时执行NZ2NZ。|
+|`dst`|输出|目的张量，存储位置为`Location::UB`。数据格式支持`ND`、`DN`和`NZ`。|
 |`src`|输入|源张量，存储位置为`Location::L0C`，数据格式为`NZ`，通常为`Mmad`的计算结果。|
 |`quant`|输入|可选量化参数。传入`uint64_t`时表示scalar量化参数；传入张量时表示tensor量化参数，张量位于L1 Buffer，元素类型为`uint64_t`。|
-|`fixpipeParams`|输入|可选搬运参数，类型为`FixpipeParams`，通过`MakeCopy(CopyL0C2UB{}).with(fixpipeParams)`绑定到atom。未绑定时使用默认值。|
+|`fixpipeParams`|输入|可选搬运参数，类型为`FixpipeParams`，通过`atomCopy`的`with`接口绑定到搬运原子对象，未绑定时使用默认值。|
 
 **表2** `MakeCopy`接口参数说明
 
@@ -88,7 +88,7 @@ struct CopyL0C2UBTrait {
 |--------|--------|--------|
 |`roundMode`|`RoundMode::DEFAULT`|舍入模式。`RoundMode::HYBRID`仅在源类型为`float`、目的类型为`hifloat8_t`的量化输出场景支持。|
 |`enableRelu`|`false`|是否使能随路Relu。|
-|`enableChannelSplit`|`false`|是否使能F32 Channel Split。|
+|`enableChannelSplit`|`false`|是否使能输出数据通道拆分。|
 |`dualDstCtl`|`DUAL_DST_DISABLE`|双目标模式控制，取值包括`DUAL_DST_DISABLE`、`DUAL_DST_SPLIT_M`、`DUAL_DST_SPLIT_N`。详细说明参见[L0C Buffer到Unified Buffer双目标模式](l0c_to_ub_dual_dst.md)。|
 
 使用自定义trait的示例：
@@ -120,7 +120,7 @@ struct FixpipeParams {
 
 |成员|默认值|描述|
 |--------|--------|--------|
-|`unitFlag`|`0`|控制Mmad指令和Fixpipe指令的细粒度并行。`0`表示不使能；`2`表示使能且执行后不复位单元标记位；`3`表示使能且执行后复位单元标记位。使能时，`MmadParams`和`FixpipeParams`中的`unitFlag`需要配套设置为`2`或`3`。|
+|`unitFlag`|`0`|控制`Mmad`指令和`Fixpipe`指令的细粒度并行。`0`表示不使能；`2`表示使能且执行后不复位单元标记位；`3`表示使能且执行后复位单元标记位。使能时，`MmadParams`和`FixpipeParams`中的`unitFlag`需要配套设置为`2`或`3`。|
 |`subBlockId`|`false`|在启用单目标模式时指示目标UB的编号。|
 
 ## 数据类型
@@ -301,15 +301,13 @@ __aicore__ inline void asc_copy_l0c2ub(__ubuf__ void* dst_addr, __cc__ int32_t* 
 
 ## 约束说明
 
-- 源L0C Buffer NZ地址要求64字节对齐。目的Unified Buffer地址要求32字节对齐。
-- 当搬运的M方向大小、N方向大小为0时，底层搬运指令不会执行。
-- N方向大小取值范围为`[0, 4095]`。目的矩阵为NZ输出时，通常要求N方向大小为16的倍数。
+- 源矩阵`NZ`格式，地址要求64字节对齐。目的矩阵地址要求32字节对齐。
+- 目的矩阵为NZ输出时，通常要求N方向大小为16的倍数。
 - tensor量化参数张量应位于L1 Buffer，元素类型为`uint64_t`，地址要求32字节对齐。详细约束参见[随路量化](quant_pre.md)。
-- 目的地址写入区域不能重叠。若目的地址存在重叠写入，硬件不保证写入顺序。
 - 使能`unitFlag`时，需要配合`Mmad`同时使能。
 - 使用`RoundMode::HYBRID`时，源类型必须为`float`，目的类型必须为`hifloat8_t`。
 - 目的布局为`NZ`时，不支持`dualDstCtl`设置为`DUAL_DST_SPLIT_N`。双目标模式详细约束参见[L0C Buffer到Unified Buffer双目标模式](l0c_to_ub_dual_dst.md)。
-- Channel Merge为硬件自动使能，不能通过参数配置。详细约束参见[Int8/Int4 Channel Merge](int8_int4_channel_merge.md)。
+- 通道合并特性硬件自动使能，不能通过参数配置。详细约束参见[Int8/Int4 Channel Merge](int8_int4_channel_merge.md)。
 
 ## 关键特性
 

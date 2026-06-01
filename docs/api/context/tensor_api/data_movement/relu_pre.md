@@ -52,4 +52,3 @@ Copy(atom, ub, l0c);
 - `enableRelu`为编译期trait配置，默认不使能。
 - 量化和Relu参数不能为INF、NaN或非规格化数。
 - 当前Tensor API不支持随路PRelu。
-- 使能随路Relu时，目的地址写入区域不能重叠。若目的地址存在重叠写入，硬件不保证写入顺序。

@@ -72,7 +72,5 @@ M方向切分示例：
 
 - 双目标模式仅支持L0C Buffer到Unified Buffer通路。
 - 双目标模式支持普通搬运模式NZ2NZ和NZ2ND搬运场景。
-- 双目标模式不支持随路功能场景。
 - 按M维度拆分时，M必须为2的倍数。
 - 按N维度拆分时，N必须为32的倍数。
-- 目的格式为`NZ`时，不支持`dualDstCtl`设置为`DUAL_DST_SPLIT_N`。

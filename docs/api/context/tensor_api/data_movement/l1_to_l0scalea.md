@@ -10,15 +10,15 @@
 
 头文件为：`#include "tensor_api/tensor.h"`
 
-Tensor API通过`Copy`接口统一执行不同通路数据搬运。该接口用于将L1 Buffer中的MX ScaleA数据搬运到L0ScaleA Buffer。ScaleA数据在L0ScaleA Buffer上的首地址由左矩阵A在L0A Buffer的首地址的1/16推导出来。
+Tensor API通过`Copy`接口统一执行不同通路数据搬运。该接口用于将L1 Buffer中的左矩阵缩放数据搬运到L0ScaleA Buffer。左矩阵缩放数据在L0ScaleA Buffer上的首地址由左矩阵在L0A Buffer的首地址的1/16推导出来。
 
-该通路的数据类型固定为`fp8_e8m0_t`。ScaleA、ScaleB的分形排布和缩放计算关系可参考下图，其中ScaleA对应小Z大Z的MX scale排布：
+该通路的数据类型固定为`fp8_e8m0_t`。左矩阵和右矩阵的缩放数据的分形排布和缩放计算关系可参考下图，其中左矩阵缩放数据是`ZZ`的数据格式：
 
-![ScaleA和ScaleB缩放示意图](../figures/zh-cn_image_0000002549011155.png)
+![左矩阵和右矩阵缩放数据缩放示意图](../figures/zh-cn_image_0000002549011155.png)
 
 ## 函数原型
 
-- 执行搬运。
+- 执行L1 Buffer到L0ScaleA Buffer的数据搬运。
 
     ```cpp
     template <typename AtomType, typename DstTensor, typename SrcTensor>
@@ -95,15 +95,16 @@ __aicore__ inline void CopyL1ToL0ScaleAExample()
 {
     constexpr uint32_t m = 16;
     constexpr uint32_t k = 32;
+    constexpr uint32_t scaleK = k / 16;
 
-    __cbuf__ fp8_e8m0_t l1Buf[m * k] = {0};
-    __ca__ fp8_e8m0_t l0ABuf[m * k] = {0};
+    __cbuf__ fp8_e8m0_t l1Buf[m * scaleK];
+    __ca__ fp8_e5m2_t l0ABuf[m * k];
 
-    auto l1Tensor = MakeTensor(MakeMemPtr(l1Buf), MakeFrameLayout<ZZLayoutPtn, _2>(m, k));
+    auto l1Tensor = MakeTensor(MakeMemPtr(l1Buf), MakeFrameLayout<ZZLayoutPtn, _2>(m, scaleK));
 
-    // ScaleA地址由L0A Buffer基地址按1/16地址编码换算得到。
+    // ScaleA地址由左矩阵的L0A Buffer地址按1/16地址编码换算得到。
     auto l0ScaleAPtr = MakeMemPtr<Location::L0ScaleA, fp8_e8m0_t>(reinterpret_cast<uint64_t>(l0ABuf) / 16);
-    auto l0ScaleATensor = MakeTensor(l0ScaleAPtr, MakeFrameLayout<ZZLayoutPtn, _2>(m, k));
+    auto l0ScaleATensor = MakeTensor(l0ScaleAPtr, MakeFrameLayout<ZZLayoutPtn, _2>(m, scaleK));
 
     auto copyAtom = MakeCopy(CopyL12L0ScaleA{}, CopyL12L0ScaleATraitDefault{});
     Copy(copyAtom, l0ScaleATensor, l1Tensor);

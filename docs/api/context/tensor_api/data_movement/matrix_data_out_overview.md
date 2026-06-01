@@ -4,12 +4,12 @@
 
 针对Ascend 950PR/Ascend 950DT：
 
-**图1** 矩阵计算搬出整体流程图<a name="zh-cn_topic_0000002542682989_fig7998719163213"></a>
-![](../figures/fixpipe_overall_flowchart-66.png "fixpipe整体流程图-66")
+**图1** 矩阵计算搬出整体流程图
+
+![fixpipe整体流程图](../figures/fixpipe_overall_flowchart-66.png)
+
 
 **表1** **数据通路与存储层级**
-
-<a name="zh-cn_topic_0000002542682989_table135162019133315"></a>
 
 |源位置|源地址对齐要求|目的位置|目的地址对齐要求|格式转换|典型应用场景|
 |--------|--------|--------|--------|--------|--------|
