@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件为：`#include "tensor_api/tensor.h"`
+头文件为：`#include "tensor_api/tensor.h"`。
 
 Tensor API通过`Copy`接口统一执行不同通路数据搬运。该接口用于将Global Memory中的数据搬运到L1 Buffer。`Copy`接口根据源张量和目的张量的存储位置、数据类型和Layout选择具体搬运实现。搬运块数、搬运长度、源/目的侧步长以及格式转换相关信息由Tensor Layout推导，用户不需要在`Copy`调用中额外传入搬运参数。
 
@@ -52,11 +52,11 @@ Global Memory到L1 Buffer通路使用`CopyGM2L1{}`作为`copyOperation`，使用
 
 | 参数名 | 描述 |
 | :--- | :--- |
-| `AtomType` | `CopyAtom`的模板参数，由`MakeCopy(CopyGM2L1{})`或`MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{})`推导得到。 |
-| `DstTensor` | 目的张量类型。Global Memory到L1 Buffer搬运时需为Tensor API Tensor类型，存储位置为`Location::L1`。 |
-| `SrcTensor` | 源张量类型。Global Memory到L1 Buffer搬运时需为Tensor API Tensor类型，存储位置为`Location::GM`。 |
-| `CopyOperationType` | 搬运操作对象类型。Global Memory到L1 Buffer搬运取`CopyGM2L1`。 |
-| `CopyTraitType` | 搬运trait对象类型。Global Memory到L1 Buffer默认取`CopyGM2L1TraitDefault`。 |
+| AtomType | `CopyAtom`的模板参数，由`MakeCopy(CopyGM2L1{})`或`MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{})`推导得到。 |
+| DstTensor | 目的张量类型。Global Memory到L1 Buffer搬运时需为Tensor API Tensor类型，存储位置为`Location::L1`。 |
+| SrcTensor | 源张量类型。Global Memory到L1 Buffer搬运时需为Tensor API Tensor类型，存储位置为`Location::GM`。 |
+| CopyOperationType | 搬运操作对象类型。Global Memory到L1 Buffer搬运取`CopyGM2L1`。 |
+| CopyTraitType | 搬运trait对象类型。Global Memory到L1 Buffer默认取`CopyGM2L1TraitDefault`。 |
 
 **函数参数说明**
 
@@ -64,16 +64,16 @@ Global Memory到L1 Buffer通路使用`CopyGM2L1{}`作为`copyOperation`，使用
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
-| `atomCopy` | 输入 | 搬运原子对象。Global Memory到L1 Buffer搬运可通过`MakeCopy(CopyGM2L1{})`或`MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{})`构造。 |
-| `dst` | 输出 | 目的张量，存储位置为`Location::L1`。 |
-| `src` | 输入 | 源张量，存储位置为`Location::GM`。 |
+| atomCopy | 输入 | 搬运原子对象。Global Memory到L1 Buffer搬运可通过`MakeCopy(CopyGM2L1{})`或`MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{})`构造。 |
+| dst | 输出 | 目的张量，存储位置为`Location::L1`。 |
+| src | 输入 | 源张量，存储位置为`Location::GM`。 |
 
 **表2** `MakeCopy`接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
-| `copyOperation` | 输入 | 搬运操作对象。Global Memory到L1 Buffer搬运取`CopyGM2L1{}`。 |
-| `copyTrait` | 输入 | 搬运trait对象。Global Memory到L1 Buffer默认取`CopyGM2L1TraitDefault{}`。 |
+| copyOperation | 输入 | 搬运操作对象。Global Memory到L1 Buffer搬运取`CopyGM2L1{}`。 |
+| copyTrait | 输入 | 搬运trait对象。Global Memory到L1 Buffer默认取`CopyGM2L1TraitDefault{}`。 |
 
 ## 返回值说明
 
@@ -99,133 +99,12 @@ Global Memory到L1 Buffer通路使用`CopyGM2L1{}`作为`copyOperation`，使用
 | ScaleBDN | NN | fp8_e8m0_t |
 | NN | NN | fp8_e8m0_t |
 
-## API映射关系
-
-与built-in接口映射关系：
-
-连续数据搬入和高维切分数据搬入接口是在built-in接口`asc_copy_gm2l1_align`的基础上进行抽象封装实现的，其对应的底层built-in接口为：
-
-```cpp
-__aicore__ inline void asc_copy_gm2l1_align(__cbuf__ bfloat16_t* dst, __gm__ bfloat16_t* src,
-    uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count, uint8_t right_padding_count,
-    bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-__aicore__ inline void asc_copy_gm2l1_align(__cbuf__ half* dst, __gm__ half* src,
-    uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count, uint8_t right_padding_count,
-    bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-__aicore__ inline void asc_copy_gm2l1_align(__cbuf__ float* dst, __gm__ float* src,
-    uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count, uint8_t right_padding_count,
-    bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-__aicore__ inline void asc_copy_gm2l1_align(__cbuf__ hifloat8_t* dst, __gm__ hifloat8_t* src,
-    uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count, uint8_t right_padding_count,
-    bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-__aicore__ inline void asc_copy_gm2l1_align(__cbuf__ int16_t* dst, __gm__ int16_t* src,
-    uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count, uint8_t right_padding_count,
-    bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-__aicore__ inline void asc_copy_gm2l1_align(__cbuf__ int32_t* dst, __gm__ int32_t* src,
-    uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count, uint8_t right_padding_count,
-    bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-__aicore__ inline void asc_copy_gm2l1_align(__cbuf__ int8_t* dst, __gm__ int8_t* src,
-    uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count, uint8_t right_padding_count,
-    bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-__aicore__ inline void asc_copy_gm2l1_align(__cbuf__ uint16_t* dst, __gm__ uint16_t* src,
-    uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count, uint8_t right_padding_count,
-    bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-__aicore__ inline void asc_copy_gm2l1_align(__cbuf__ uint32_t* dst, __gm__ uint32_t* src,
-    uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count, uint8_t right_padding_count,
-    bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-__aicore__ inline void asc_copy_gm2l1_align(__cbuf__ uint8_t* dst, __gm__ uint8_t* src,
-    uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count, uint8_t right_padding_count,
-    bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-
-ND2NZ随路格式转换搬入接口是在built-in接口`asc_copy_gm2l1_nd2nz`的基础上进行抽象封装实现的，其对应的底层built-in接口为：
-
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ bfloat16_t* dst, __gm__ bfloat16_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ float8_e4m3_t* dst, __gm__ float8_e4m3_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ float8_e5m2_t* dst, __gm__ float8_e5m2_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ half* dst, __gm__ half* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ float* dst, __gm__ float* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ hifloat8_t* dst, __gm__ hifloat8_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ int16_t* dst, __gm__ int16_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ int32_t* dst, __gm__ int32_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ int8_t* dst, __gm__ int8_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ uint16_t* dst, __gm__ uint16_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ uint32_t* dst, __gm__ uint32_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_nd2nz(__cbuf__ uint8_t* dst, __gm__ uint8_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-```
-
-DN2NZ随路格式转换搬入接口是在built-in接口`asc_copy_gm2l1_dn2nz`的基础上进行抽象封装实现的，其对应的底层built-in接口为：
-
-```cpp
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ bfloat16_t* dst, __gm__ bfloat16_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ float8_e4m3_t* dst, __gm__ float8_e4m3_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ float8_e5m2_t* dst, __gm__ float8_e5m2_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ half* dst, __gm__ half* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ float* dst, __gm__ float* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ hifloat8_t* dst, __gm__ hifloat8_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ int16_t* dst, __gm__ int16_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ int32_t* dst, __gm__ int32_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ int8_t* dst, __gm__ int8_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ uint16_t* dst, __gm__ uint16_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ uint32_t* dst, __gm__ uint32_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-__aicore__ inline void asc_copy_gm2l1_dn2nz(__cbuf__ uint8_t* dst, __gm__ uint8_t* src,
-    uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-    uint64_t loop4_src_stride, bool smallc0_en);
-```
-
-Scale数据搬入根据Layout组合复用上述底层API映射：`ZZ`到`ZZ`、`NN`到`NN`等格式保持场景映射到`asc_copy_gm2l1_align`；`ScaleAND`到`ZZ`、`ScaleADN`到`ZZ`、`ScaleBND`到`NN`、`ScaleBDN`到`NN`格式转换场景映射到`asc_copy_gm2l1_nd2nz`或`asc_copy_gm2l1_dn2nz`。
-
 ## 约束说明
 
 - 位于Global Memory的源地址必须1B对齐，位于L1 Buffer的目的地址必须32B对齐。
 - 数据连续搬运场景中，搬运字节数需要32B对齐。若未对齐，搬运量会向下取整到32B对齐。
 - 高维切分搬运场景中，搬运长度、源步长和目的步长均按32B对齐。
-- 当输入数据是b4类型时，按b8类型搬运粒度处理。
+- 当输入数据是b4类型时，按b8类型搬运粒度处理，Layout推导参数需要满足对应粒度约束。
 
 ## 关键特性说明
 

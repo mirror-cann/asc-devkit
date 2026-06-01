@@ -26,33 +26,33 @@ L0C Buffer到Global Memory搬运支持不量化输出、float到half或bfloat16_
 
 - 执行L0C Buffer到Global Buffer的非量化搬运。
 
-```cpp
-template <typename AtomType, typename DstTensor, typename SrcTensor>
-__aicore__ inline void Copy(const CopyAtom<AtomType>& atomCopy, const DstTensor& dst, const SrcTensor& src)
-```
+    ```cpp
+    template <typename AtomType, typename DstTensor, typename SrcTensor>
+    __aicore__ inline void Copy(const CopyAtom<AtomType>& atomCopy, const DstTensor& dst, const SrcTensor& src)
+    ```
 
 - 执行L0C Buffer到Global Buffer的量化搬运。
 
-```cpp
-template <typename AtomType, typename DstTensor, typename SrcTensor, typename QuantParam,
-    Std::enable_if_t<IsCopyQuantParamV<QuantParam>, int> Enable>
-__aicore__ inline void Copy(const CopyAtom<AtomType>& atomCopy, const DstTensor& dst, const SrcTensor& src,
-    const QuantParam& quant)
-```
+    ```cpp
+    template <typename AtomType, typename DstTensor, typename SrcTensor, typename QuantParam,
+        Std::enable_if_t<IsCopyQuantParamV<QuantParam>, int> Enable>
+    __aicore__ inline void Copy(const CopyAtom<AtomType>& atomCopy, const DstTensor& dst, const SrcTensor& src,
+        const QuantParam& quant)
+    ```
 
 - 使用默认trait构造搬运原子对象。
 
-```cpp
-template <typename CopyOperationType>
-__aicore__ inline constexpr auto MakeCopy(const CopyOperationType& copyOperation)
-```
+    ```cpp
+    template <typename CopyOperationType>
+    __aicore__ inline constexpr auto MakeCopy(const CopyOperationType& copyOperation)
+    ```
 
 - 使用指定trait构造搬运原子对象。
 
-```cpp
-template <typename CopyOperationType, typename CopyTraitType>
-__aicore__ inline constexpr auto MakeCopy(const CopyOperationType& copyOperation, const CopyTraitType& copyTrait)
-```
+    ```cpp
+    template <typename CopyOperationType, typename CopyTraitType>
+    __aicore__ inline constexpr auto MakeCopy(const CopyOperationType& copyOperation, const CopyTraitType& copyTrait)
+    ```
 
 ## 参数说明
 
@@ -60,18 +60,18 @@ __aicore__ inline constexpr auto MakeCopy(const CopyOperationType& copyOperation
 
 |参数名|输入/输出|描述|
 |--------|--------|--------|
-|`atomCopy`|输入|搬运原子对象，可由`MakeCopy(CopyL0C2GM{})`或`MakeCopy(CopyL0C2GM{}, CopyL0C2GMTraitDefault{})`构造。|
-|`dst`|输出|目的张量，存储位置为`Location::GM`。支持`ND`、`DN`和`NZ`数据格式。|
-|`src`|输入|源张量，存储位置为`Location::L0C`，数据格式为`NZ`，通常为`Mmad`的计算结果。|
-|`quant`|输入|可选量化参数。传入`uint64_t`时表示scalar量化参数；传入张量时表示tensor量化参数，张量位于L1 Buffer，元素类型为`uint64_t`。|
-|`fixpipeParams`|输入|可选搬运参数，类型为`FixpipeParams`，通过`atomCopy`的`with`接口绑定到搬运原子对象，未绑定时使用默认值。|
+|atomCopy|输入|搬运原子对象，可由`MakeCopy(CopyL0C2GM{})`或`MakeCopy(CopyL0C2GM{}, CopyL0C2GMTraitDefault{})`构造。|
+|dst|输出|目的张量，存储位置为`Location::GM`。支持`ND`、`DN`和`NZ`数据格式。|
+|src|输入|源张量，存储位置为`Location::L0C`，数据格式为`NZ`，通常为`Mmad`的计算结果。|
+|quant|输入|可选量化参数。传入`uint64_t`时表示scalar量化参数；传入张量时表示tensor量化参数，张量位于L1 Buffer，元素类型为`uint64_t`。|
+|fixpipeParams|输入|可选搬运参数，类型为`FixpipeParams`，通过`atomCopy`的`with`接口绑定到搬运原子对象，未绑定时使用默认值。|
 
 **表2** `MakeCopy`接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
-| `copyOperation` | 输入 | 搬运操作对象。L0C Buffer到Global Memory搬运采用`CopyL0C2GM{}`。 |
-| `copyTrait` | 输入 | 搬运静态特性对象。L0C Buffer到Global Memory搬运默认取`CopyL0C2GMTraitDefault{}`。 |
+| copyOperation | 输入 | 搬运操作对象。L0C Buffer到Global Memory搬运采用`CopyL0C2GM{}`。 |
+| copyTrait | 输入 | 搬运静态特性对象。L0C Buffer到Global Memory搬运默认采用`CopyL0C2GMTraitDefault{}`。 |
 
 ### CopyL0C2GMTrait说明
 
@@ -87,9 +87,9 @@ struct CopyL0C2GMTrait {
 
 |成员|默认值|描述|
 |--------|--------|--------|
-|`roundMode`|`RoundMode::DEFAULT`|舍入模式。`RoundMode::HYBRID`仅在源类型为`float`、目的类型为`hifloat8_t`的量化输出场景支持。|
-|`enableRelu`|`false`|是否使能随路Relu。|
-|`enableChannelSplit`|`false`|是否使能输出数据通道拆分。只支持NZ格式且源类型和目的类型均为`float`的场景。|
+|roundMode|`RoundMode::DEFAULT`|舍入模式。`RoundMode::HYBRID`仅在源类型为`float`、目的类型为`hifloat8_t`的量化输出场景支持。|
+|enableRelu|`false`|是否使能随路Relu。|
+|enableChannelSplit|`false`|是否使能输出数据通道拆分。只支持NZ格式且源类型和目的类型均为`float`的场景。|
 
 使用自定义trait的示例：
 
@@ -119,8 +119,8 @@ struct FixpipeParams {
 
 |成员|默认值|描述|
 |--------|--------|--------|
-|`unitFlag`|`0`|控制Mmad指令和Fixpipe指令的细粒度并行。`0`表示不使能；`2`表示使能且执行后不复位单元标记位；`3`表示使能且执行后复位单元标记位。开启时，`MmadParams`和`FixpipeParams`中的`unitFlag`需要配套设置为`2`或`3`。|
-|`subBlockId`|`false`|在启用单目标模式时指示目标UB的编号，L0C Buffer到Global Memory数据搬运时该参数无效。|
+|unitFlag|`0`|控制Mmad指令和Fixpipe指令的细粒度并行。`0`表示不使能；`2`表示使能且执行后不复位单元标记位；`3`表示使能且执行后复位单元标记位。开启时，`MmadParams`和`FixpipeParams`中的`unitFlag`需要配套设置为`2`或`3`。|
+|subBlockId|`false`|在启用单目标模式时指示目标UB的编号，L0C Buffer到Global Memory数据搬运时该参数无效。|
 
 ## 数据类型
 
@@ -144,159 +144,6 @@ L0C Buffer到Global Memory搬运根据是否传入量化参数自动选择量化
 ## 返回值说明
 
 `Copy`无返回值。`MakeCopy`返回`CopyAtom`对象。
-
-## API映射关系
-
-与built-in接口映射关系：
-
-L0C Buffer到Global Memory搬运接口是在built-in接口`asc_copy_l0c2gm`的基础上进行抽象封装实现的，其对应的底层built-in接口为：
-
-```cpp
-__aicore__ inline void asc_copy_l0c2gm(__gm__ bfloat16_t* dst_addr, __cc__ float* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ half* dst_addr, __cc__ float* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ float8_e4m3_t* dst_addr, __cc__ float* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ float8_e5m2_t* dst_addr, __cc__ float* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ hifloat8_t* dst_addr, __cc__ float* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ int8_t* dst_addr, __cc__ float* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ uint8_t* dst_addr, __cc__ float* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ float* dst_addr, __cc__ float* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ bfloat16_t* dst_addr, __cc__ int32_t* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ half* dst_addr, __cc__ int32_t* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ float8_e4m3_t* dst_addr, __cc__ int32_t* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ float8_e5m2_t* dst_addr, __cc__ int32_t* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ hifloat8_t* dst_addr, __cc__ int32_t* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ int8_t* dst_addr, __cc__ int32_t* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ uint8_t* dst_addr, __cc__ int32_t* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ int32_t* dst_addr, __cc__ int32_t* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ void* dst_addr, __cc__ float* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-__aicore__ inline void asc_copy_l0c2gm(__gm__ void* dst_addr, __cc__ int32_t* src_addr,
-    uint16_t n_size, uint16_t m_size,
-    uint32_t loop_dst_stride, uint16_t loop_src_stride,
-    uint8_t l2_cache_ctl, uint8_t clip_relu_pre, uint8_t unit_flag_ctl,
-    uint64_t quant_pre, uint8_t relu_pre, bool split_en,
-    bool NZ2ND_en, uint64_t quant_post, uint8_t relu_post,
-    bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-    bool C0_pad_en, bool broadcast_en, bool NZ2DN_en);
-```
 
 ## 约束说明
 
