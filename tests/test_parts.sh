@@ -85,8 +85,6 @@ basic_test_three_targets=(
     ascendc_ut_c_api_ascend910B1_AIV
     ascendc_ut_c_api_ascend950pr_9599_AIC
     ascendc_ut_c_api_ascend950pr_9599_AIV
-    ascendc_ut_tensor_api_NPU_ARCH_2201_AIC
-    ascendc_ut_tensor_api_NPU_ARCH_2201_AIV
     ascendc_ut_tensor_api_NPU_ARCH_3510_AIC
     ascendc_ut_tensor_api_NPU_ARCH_3510_AIV
     ascendc_ut_basic_api_ascend950pr_9599_AIC

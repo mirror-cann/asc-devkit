@@ -27,8 +27,8 @@
 namespace AscendC {
 namespace Te {
 
-constexpr uint32_t MAIN_LOOP_N_SIZE_3510 = 512;
-constexpr uint32_t CBURST_NUM_3510 = MAIN_LOOP_N_SIZE_3510 / BLOCK_CUBE;
+constexpr uint32_t MAIN_LOOP_N_SIZE = 512;
+constexpr uint32_t CBURST_NUM = MAIN_LOOP_N_SIZE / BLOCK_CUBE;
 
 constexpr FixpipeParams DEFAULT_FIXPIPE_PARAMS = FixpipeParams{};
 
@@ -159,17 +159,14 @@ private:
         if ASCEND_IS_AIV {
             return;
         }
-        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-            asc_set_l0c_copy_prequant(quant);
-        }
+        
+        asc_set_l0c_copy_prequant(quant);
     }
 
     template <typename T>
     __aicore__ inline static void SetLoop3Para(uint32_t num, uint32_t dstStride, uint32_t srcStride)
     {
-        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-            asc_set_l0c2gm_nz2nd(static_cast<T>(num), static_cast<T>(srcStride), static_cast<T>(dstStride));
-        }
+        asc_set_l0c2gm_nz2nd(static_cast<T>(num), static_cast<T>(srcStride), static_cast<T>(dstStride));
     }
 
     template <typename T>
@@ -178,11 +175,10 @@ private:
         if ASCEND_IS_AIV {
             return;
         }
-        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-            T channelPara = 0;
-            channelPara |= static_cast<T>(srcNZC0Stride) << SHIFT_CHANNEL_C0_STRIDE;
-            asc_set_l0c2gm_channel_para(channelPara);
-        }
+
+        T channelPara = 0;
+        channelPara |= static_cast<T>(srcNZC0Stride) << SHIFT_CHANNEL_C0_STRIDE;
+        asc_set_l0c2gm_channel_para(channelPara);
     }
 };
 
@@ -192,9 +188,7 @@ __aicore__ inline auto AllocFbTempBuf(const uint16_t& /* calNSize */)
         return 0UL;
     }
     uint64_t deqTensorTempBuf = 0;
-    if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-        deqTensorTempBuf = reinterpret_cast<uint64_t>(asc_get_phy_buf_addr(0));
-    }
+    deqTensorTempBuf = reinterpret_cast<uint64_t>(asc_get_phy_buf_addr(0));
     return deqTensorTempBuf;
 }
 
@@ -204,10 +198,9 @@ __aicore__ inline void SetFpc(const __fbuf__ T* deqTensorTempBuf)
     if ASCEND_IS_AIV {
         return;
     }
-    if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-        uint64_t deqTensorAddr = (reinterpret_cast<uint64_t>(deqTensorTempBuf) >> 7) << 8;
-        asc_set_l0c_copy_prequant(deqTensorAddr);
-    }
+   
+    uint64_t deqTensorAddr = (reinterpret_cast<uint64_t>(deqTensorTempBuf) >> 7) << 8;
+    asc_set_l0c_copy_prequant(deqTensorAddr);
 }
 
 __aicore__ inline void InsertSync()
@@ -215,9 +208,8 @@ __aicore__ inline void InsertSync()
     if ASCEND_IS_AIV {
         return;
     }
-    if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-        asc_sync_pipe(PIPE_FIX);
-    }
+   
+    asc_sync_pipe(PIPE_FIX);
 }
 
 

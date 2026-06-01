@@ -10,7 +10,7 @@
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
 #warning                                                                                                               \
-    "impl/tensor_api/arch/cube/l0c_to_gm/npu_arch_3510/instruction.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
+    "impl/tensor_api/arch/cube/l0c_to_gm/copy_impl/instruction.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
@@ -19,8 +19,8 @@
  * \file instruction.h
  * \brief
  */
-#ifndef IMPL_TENSOR_API_ARCH_CUBE_L0C_TO_GM_NPU_ARCH_3510_INSTRUCTION_H
-#define IMPL_TENSOR_API_ARCH_CUBE_L0C_TO_GM_NPU_ARCH_3510_INSTRUCTION_H
+#ifndef IMPL_TENSOR_API_ARCH_CUBE_L0C_TO_GM_COPY_IMPL_INSTRUCTION_H
+#define IMPL_TENSOR_API_ARCH_CUBE_L0C_TO_GM_COPY_IMPL_INSTRUCTION_H
 
 #include "impl/tensor_api/arch/utils/arch_utils.h"
 
@@ -43,19 +43,18 @@ private:
         if ASCEND_IS_AIV {
             return;
         }
-        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
-            asc_copy_l0c2gm(dst, src, static_cast<uint16_t>(nSize), static_cast<uint16_t>(mSize), dstStride,
-                            static_cast<uint16_t>(srcStride), cacheMode, 0, unitFlag, static_cast<uint64_t>(quantPre),
-                            static_cast<uint8_t>(reluEn), isChannelSplit, nz2ndEn,
-                            static_cast<uint64_t>(QuantMode_post::NoConv), 0, false, 0, false, false, false, nz2dnEn);
-        }
+
+        asc_copy_l0c2gm(dst, src, static_cast<uint16_t>(nSize), static_cast<uint16_t>(mSize), dstStride,
+                        static_cast<uint16_t>(srcStride), cacheMode, 0, unitFlag, static_cast<uint64_t>(quantPre),
+                        static_cast<uint8_t>(reluEn), isChannelSplit, nz2ndEn,
+                        static_cast<uint64_t>(QuantMode_post::NoConv), 0, false, 0, false, false, false, nz2dnEn);
     }
 };
 
 } // namespace Te
 } // namespace AscendC
 
-#endif // IMPL_TENSOR_API_ARCH_CUBE_L0C_TO_GM_NPU_ARCH_3510_INSTRUCTION_H
+#endif // IMPL_TENSOR_API_ARCH_CUBE_L0C_TO_GM_COPY_IMPL_INSTRUCTION_H
 
 #if defined(UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC)
 #undef ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
