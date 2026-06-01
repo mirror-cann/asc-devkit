@@ -300,9 +300,6 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
     } else {
         if constexpr (AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
             scale = Internal::g_deqValue;
-            event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-            SetFlag<HardEvent::S_V>(eventIdSToV);
-            WaitFlag<HardEvent::S_V>(eventIdSToV);
         }
         CastIntrinsicsImplVF<DST_TYPE, SRC_TYPE, roundMode>(dst, src, calCount, scale);
     }
@@ -1765,9 +1762,6 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
         } else {
             if constexpr (AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
                 scale = Internal::g_deqValue;
-                event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-                SetFlag<HardEvent::S_V>(eventIdSToV);
-                WaitFlag<HardEvent::S_V>(eventIdSToV);
             }
             CastIntrinsicsImplCounterVF<DST_TYPE, SRC_TYPE, roundMode, isSetMask>(
                 dst, src, mask[0], maskBuf, repeatTime, repeatParams, scale);
@@ -1792,9 +1786,6 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
             }
             if constexpr (AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
                 scale = Internal::g_deqValue;
-                event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-                SetFlag<HardEvent::S_V>(eventIdSToV);
-                WaitFlag<HardEvent::S_V>(eventIdSToV);
             }
             CastIntrinsicsImplVF2<DST_TYPE, SRC_TYPE, roundMode>(
                 dst, src, maskArrayStruct, repeatTime, repeatParams, scale);
@@ -2052,9 +2043,6 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
         } else {
             if constexpr (AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
                 scale = Internal::g_deqValue;
-                event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-                SetFlag<HardEvent::S_V>(eventIdSToV);
-                WaitFlag<HardEvent::S_V>(eventIdSToV);
             }
             CastIntrinsicsImplCounterVF<DST_TYPE, SRC_TYPE, roundMode, isSetMask>(
                 dst, src, mask, maskBuf, repeatTime, repeatParams, scale);
@@ -2066,9 +2054,6 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
         } else {
             if constexpr (AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
                 scale = Internal::g_deqValue;
-                event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-                SetFlag<HardEvent::S_V>(eventIdSToV);
-                WaitFlag<HardEvent::S_V>(eventIdSToV);
             }
             CastIntrinsicsImplVF1<DST_TYPE, SRC_TYPE, roundMode, isSetMask>(
                 dst, src, mask, repeatTime, repeatParams, scale);
@@ -2373,15 +2358,9 @@ __aicore__ inline void CastDeqImpl(__ubuf__ U *dst, __ubuf__ T *src, const uint3
         ", src:int32_t dst:half.");
     if constexpr (IsSameType<T, int32_t>::value) {
         half scale = Internal::g_deqValue;
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        SetFlag<HardEvent::S_V>(eventIdSToV);
-        WaitFlag<HardEvent::S_V>(eventIdSToV);
         CastDeqS322f16ImplVF<U, T>(dst, src, calCount, scale);
     } else {
         uint64_t deqScale = Internal::g_deqScale;
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        SetFlag<HardEvent::S_V>(eventIdSToV);
-        WaitFlag<HardEvent::S_V>(eventIdSToV);
         if constexpr (isVecDeq) {
             CastVecDeqImplVF<U, T, halfBlock>(dst, src, calCount, deqScale);
         } else {
@@ -2604,9 +2583,6 @@ __aicore__ inline void CastDeqImpl(
     }
     if constexpr (IsSameType<T, int32_t>::value) {
         half scale = Internal::g_deqValue;
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        SetFlag<HardEvent::S_V>(eventIdSToV);
-        WaitFlag<HardEvent::S_V>(eventIdSToV);
         if (isCounterMode) {
             CastDeqS322f16Level0ImplVF<U, T, true, true, isSetMask>(
                 dst, src, mask[0], tempBuf, repeatTime, repeatParams, scale);
@@ -2616,9 +2592,6 @@ __aicore__ inline void CastDeqImpl(
         }
     } else {
         uint64_t deqScale = Internal::g_deqScale;
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        SetFlag<HardEvent::S_V>(eventIdSToV);
-        WaitFlag<HardEvent::S_V>(eventIdSToV);
         bool signMode = GetCastDeqSignMode(deqScale);
         if (isCounterMode) {
             if constexpr (isVecDeq) {
@@ -2662,9 +2635,6 @@ __aicore__ inline void CastDeqImpl(
     __ubuf__ uint64_t *tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 4);
     if constexpr (IsSameType<T, int32_t>::value) {
         half scale = Internal::g_deqValue;
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        SetFlag<HardEvent::S_V>(eventIdSToV);
-        WaitFlag<HardEvent::S_V>(eventIdSToV);
         if (isCounterMode) {
             CastDeqS322f16Level0ImplVF<U, T, true, false, isSetMask>(
                 dst, src, mask, tempBuf, repeatTime, repeatParams, scale);
@@ -2674,9 +2644,6 @@ __aicore__ inline void CastDeqImpl(
         }
     } else {
         uint64_t deqScale = Internal::g_deqScale;
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        SetFlag<HardEvent::S_V>(eventIdSToV);
-        WaitFlag<HardEvent::S_V>(eventIdSToV);
         bool signMode = GetCastDeqSignMode(deqScale);
         if (isCounterMode) {
             if constexpr (isVecDeq) {
@@ -2941,17 +2908,11 @@ __aicore__ inline uint64_t MakeDeqScaleConfig(float scale, int16_t offset, bool 
 
 __aicore__ inline void SetDeqScaleImpl(float scale, int16_t offset, bool signMode)
 {
-    event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
-    SetFlag<HardEvent::V_S>(eventIdVToS);
-    WaitFlag<HardEvent::V_S>(eventIdVToS);
     Internal::g_deqScale = MakeDeqScaleConfig(scale, offset, signMode);
 }
 
 template <typename T> __aicore__ inline void SetDeqScaleImpl(const LocalTensor<T> &vdeqTensor, const VdeqInfo &vdeqInfo)
 {
-    event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
-    SetFlag<HardEvent::V_S>(eventIdVToS);
-    WaitFlag<HardEvent::V_S>(eventIdVToS);
     for (uint8_t i = 0; i < VDEQ_TENSOR_SIZE; ++i) {
         float scale = vdeqInfo.vdeqScale[i];
         int16_t offset = vdeqInfo.vdeqOffset[i];
@@ -2963,9 +2924,6 @@ template <typename T> __aicore__ inline void SetDeqScaleImpl(const LocalTensor<T
 
 template <typename T> __aicore__ inline void SetDeqScaleImpl(T config)
 {
-    event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
-    SetFlag<HardEvent::V_S>(eventIdVToS);
-    WaitFlag<HardEvent::V_S>(eventIdVToS);
     Internal::g_deqValue = config;
 }
 // Truncate::Level2

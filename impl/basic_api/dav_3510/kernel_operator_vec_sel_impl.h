@@ -123,9 +123,6 @@ __aicore__ inline void SelectCal(
         "current data type is not supported!");
     bool isCounterMode = Internal::IsCounterMode();
     __ubuf__ uint64_t *tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 2);
-    event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
-    SetFlag<HardEvent::V_S>(eventIdVToS);
-    WaitFlag<HardEvent::V_S>(eventIdVToS);
     if constexpr (selMode == SELMODE::VSEL_CMPMASK_SPR) {
         if constexpr (sizeof(T) == 2) {
             (*(__ubuf__ uint64_t *)((__ubuf__ uint64_t *)tempBuf)) = Internal::g_cmpMaskLow;
@@ -144,9 +141,6 @@ __aicore__ inline void SelectCal(
     }
     else if constexpr (selMode == SELMODE::VSEL_TENSOR_TENSOR_MODE) {
         uint64_t selAddr = Internal::g_cmpMaskLow;
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        SetFlag<HardEvent::S_V>(eventIdSToV);
-        WaitFlag<HardEvent::S_V>(eventIdSToV);
         if (isCounterMode) {
             SelectWithoutMaskMode2ImplVF<T, true>(dst, src0, src1, tempBuf, selAddr, repeat, repeatParams);
         } else {
@@ -207,9 +201,6 @@ __aicore__ inline void SelectCal(
     static_assert(SupportType<U, uint8_t, uint16_t, uint32_t, uint64_t>(), "current data type is not supported!");
     bool isCounterMode = Internal::IsCounterMode();
     T scalar = *reinterpret_cast<T*>(&Internal::g_cmpMaskLow);
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-    SetFlag<HardEvent::S_V>(eventIdSToV);
-    WaitFlag<HardEvent::S_V>(eventIdSToV);
     if (isCounterMode) {
         __ubuf__ uint64_t *tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 2);
         SelectWithoutMaskMode1ImplVF<T, U, true>(dst, sel, src0, scalar, tempBuf, repeat, repeatParams);
