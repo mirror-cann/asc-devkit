@@ -67,7 +67,7 @@ __aicore__ inline void Duplicate(const LocalTensor<T>& dst, const T& scalarValue
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Duplicate", NamedTensor(dst, "dst"));
-    CheckMaskValue<T, isSetMask>(mask, "Duplicate");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Duplicate");
 #endif
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecDupInfo(dst, mask, repeatTime, dstBlockStride, dstRepeatStride, isSetMask, "Duplicate");
@@ -89,7 +89,7 @@ __aicore__ inline void Duplicate(const LocalTensor<T>& dst, const T& scalarValue
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Duplicate", NamedTensor(dst, "dst"));
-    CheckMaskArray<T, isSetMask>(mask, "Duplicate");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Duplicate");
 #endif
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecDupInfo(dst, mask[0], mask[1], repeatTime, dstBlockStride, dstRepeatStride, isSetMask, "Duplicate");

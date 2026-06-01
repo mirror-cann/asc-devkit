@@ -96,7 +96,7 @@ __aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& s
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Gather", NamedTensor(dst, "dst"), NamedTensor(src, "src"), NamedTensor(srcOffset, "srcOffset"));
-    CheckMaskValue<PrimType>(mask, "Gather");
+    CheckMaskRepeat<PrimType>(mask, repeatTime, "Gather");
     // srcBaseOffset should not exceed the size of src tensor
     CheckValueRange<uint32_t>(srcBaseOffset, 0, src.GetSize() * sizeof(PrimType) - 1, "srcBaseOffset", "Gather");
     // srcBaseOffset should be aligned with src dtype
@@ -133,7 +133,7 @@ __aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& s
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Gather", NamedTensor(dst, "dst"), NamedTensor(src, "src"), NamedTensor(srcOffset, "srcOffset"));
-    CheckMaskArray<PrimType>(mask, "Gather");
+    CheckMaskRepeat<PrimType>(mask, repeatTime, "Gather");
     // srcBaseOffset should not exceed the size of src tensor
     CheckValueRange<uint32_t>(srcBaseOffset, 0, src.GetSize() * sizeof(PrimType) - 1, "srcBaseOffset", "Gather");
     // srcBaseOffset should be aligned with src dtype

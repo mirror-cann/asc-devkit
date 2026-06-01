@@ -35,16 +35,6 @@ enum class MaskMode : uint8_t {
 template <typename T, MaskMode mode>
 __aicore__ static inline void SetVectorMaskImpl(const uint64_t maskHigh, const uint64_t maskLow)
 {
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 5102) ||   \
-    (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3510))
-#if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    if constexpr (sizeof(PrimT<T>) >= sizeof(int32_t)) {
-        ASCENDC_ASSERT((maskHigh == 0ULL), { KERNEL_LOG(KERNEL_ERROR, "maskHigh must be 0 for type b32 and b64"); });
-    }
-    ASCENDC_ASSERT(((maskLow != 0ULL) || (maskHigh != 0ULL)),
-                   { KERNEL_LOG(KERNEL_ERROR, "maskLow and maskHigh can not be zero at the same time"); });
-#endif
-#endif
     if ASCEND_IS_NOT_AIC {
         set_vector_mask(maskHigh, maskLow);
     }

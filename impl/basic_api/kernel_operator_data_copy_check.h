@@ -87,8 +87,10 @@ __aicore__ inline void CheckBasicDataCopyMixedTypeSupport(const __gm__ char* api
 
 __aicore__ inline void CheckDataCopyParamsCommon(const DataCopyParams& intriParams, const __gm__ char* apiName)
 {
-    CheckValueRange<uint16_t>(intriParams.blockCount, 1, UINT12_MAX, "blockCount", apiName);
-    CheckValueRange<uint16_t>(intriParams.blockLen, 1, UINT16_MAX, "blockLen", apiName);
+    CheckValueRange<uint16_t>(intriParams.blockCount, 0, UINT12_MAX, "blockCount", apiName);
+    CheckValueRange<uint16_t>(intriParams.blockLen, 0, UINT16_MAX, "blockLen", apiName);
+    ReportNopWarning<uint16_t>(intriParams.blockCount, "repeatParams.blockCount", apiName);
+    ReportNopWarning<uint16_t>(intriParams.blockLen, "repeatParams.blockLen", apiName);
 }
 
 __aicore__ inline void CheckDataCopyLocalRoute(const Hardware srcHwPos, const Hardware dstHwPos, const TPosition srcPos,
@@ -197,6 +199,10 @@ __aicore__ inline void CheckNd2NzParamsCommon(const Nd2NzParams& intriParams, co
     CheckValueRange<decltype(intriParams.dstNzC0Stride)>(intriParams.dstNzC0Stride, 1, 16384, "dstNzC0Stride", apiName);
     CheckValueRange<decltype(intriParams.dstNzNStride)>(intriParams.dstNzNStride, 1, 16384, "dstNzNStride", apiName);
     CheckValueRange<decltype(intriParams.dstNzMatrixStride)>(intriParams.dstNzMatrixStride, 0, 65535, "dstNzMatrixStride", apiName);
+
+    ReportNopWarning<uint16_t>(intriParams.ndNum, "intriParams.ndNum", apiName);
+    ReportNopWarning<uint16_t>(intriParams.nValue, "intriParams.nValue", apiName);
+    ReportNopWarning<uint16_t>(intriParams.dValue, "intriParams.dValue", apiName);
 }
 
 __aicore__ inline void CheckNz2NdParamsCommon(const Nz2NdParamsFull& intriParams, const __gm__ char* apiName)
@@ -288,6 +294,9 @@ __aicore__ inline void CheckDataCopyPadParamsCommon(const DataCopyParams& dataCo
     CheckValueRange<uint16_t>(dataCopyParams.blockCount, 0, UINT12_MAX, "blockCount", apiName);
     CheckValueRange<uint32_t>(static_cast<uint32_t>(dataCopyParams.blockLen), 0, dataCopyPadBlkLenLimit, "blockLen",
         apiName);
+    ReportNopWarning<uint16_t>(dataCopyParams.blockCount, "dataCopyParams.blockCount", apiName);
+    ReportNopWarning<uint16_t>(dataCopyParams.blockLen, "dataCopyParams.blockLen", apiName);
+
     if (isGmToUb) {
         ASCENDC_DEBUG_ASSERT((dataCopyParams.blockLen % sizeof(PrimT<T>) == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "Failed to check DataCopyParams.blockLen value in %s, it must be divisible by %u, current "
@@ -302,6 +311,9 @@ __aicore__ inline void CheckDataCopyPadParamsCommon(const DataCopyExtParams& dat
     constexpr uint32_t dataCopyPadBlkLenLimit = 2097151;
     CheckValueRange<uint16_t>(dataCopyParams.blockCount, 0, UINT12_MAX, "blockCount", apiName);
     CheckValueRange<uint32_t>(dataCopyParams.blockLen, 0, dataCopyPadBlkLenLimit, "blockLen", apiName);
+    ReportNopWarning<uint16_t>(dataCopyParams.blockCount, "dataCopyParams.blockCount", apiName);
+    ReportNopWarning<uint32_t>(dataCopyParams.blockLen, "dataCopyParams.blockLen", apiName);
+
     if (isGmToUb) {
         ASCENDC_DEBUG_ASSERT((dataCopyParams.blockLen % sizeof(PrimT<T>) == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "Failed to check DataCopyExtParams.blockLen value in %s, it must be divisible by %u, current "

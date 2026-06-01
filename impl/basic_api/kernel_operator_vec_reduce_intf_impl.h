@@ -60,6 +60,7 @@ __aicore__ inline void CheckReduceBaseParams(const LocalTensor<T>& dst, const Lo
     ASCENDC_DEBUG_ASSERT((SupportType<PrimType, half, float>()), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
         "Failed to check dtype in %s, current api support dtype combination is "
         "src and dst both: half / float.\n", apiName));
+    ReportNopWarning<int32_t>(repeatTime, "repeatTime", apiName);
     CheckValueRange<int32_t>(repeatTime, 0, 255, "repeatTime", apiName);
     CheckTensorPhyPosition<Hardware::UB>(dst, "dst", "VECIN / VECCALC / VECOUT", apiName);
     CheckTensorPhyPosition<Hardware::UB>(src, "src", "VECIN / VECCALC / VECOUT", apiName);
@@ -85,6 +86,7 @@ __aicore__ inline void CheckReduceRepeatCommonParams(const LocalTensor<T>& dst, 
 {
 #if __NPU_ARCH__ == 3510
     CheckValueRange<int32_t>(repeatTime, 0, 255, "repeatTime", apiName);
+    ReportNopWarning<int32_t>(repeatTime, "repeatTime", apiName);
     CheckTensorPhyPosition<Hardware::UB>(dst, "dst", "VECIN / VECCALC / VECOUT", apiName);
     CheckTensorPhyPosition<Hardware::UB>(src, "src", "VECIN / VECCALC / VECOUT", apiName);
     CheckTensorAlignment(src, ONE_BLK_SIZE, "src", apiName);
@@ -111,6 +113,7 @@ __aicore__ inline void CheckReduceRepeatCommonParams(const LocalTensor<T>& dst, 
 {
 #if __NPU_ARCH__ == 3510
     CheckValueRange<int32_t>(repeatTime, 0, 255, "repeatTime", apiName);
+    ReportNopWarning<int32_t>(repeatTime, "repeatTime", apiName);
     CheckTensorPhyPosition<Hardware::UB>(dst, "dst", "VECIN / VECCALC / VECOUT", apiName);
     CheckTensorPhyPosition<Hardware::UB>(src, "src", "VECIN / VECCALC / VECOUT", apiName);
     CheckTensorAlignment(src, ONE_BLK_SIZE, "src", apiName);
@@ -145,7 +148,7 @@ __aicore__ inline void ReduceDataBlockCommon(const LocalTensor<T>& dst, const Lo
     // BlockReduceMax/Min/Sum is same in CheckFunVecReduceOther，
     // it need to be replace with 'ReduceDataBlock' after the update in cpudebug
     if (!CheckFunVecReduceOther(dst, src, repeatTime, mask, dstRepStride, srcBlkStride, srcRepStride, "BlockReduceMax")) {
-        ASCENDC_REPORT_CHECK_ERROR("ReduceDataBlock", 
+        ASCENDC_REPORT_CHECK_ERROR("ReduceDataBlock",
             (Std::is_same_v<MaskType, int32_t> ? KernelFuncType::MASK_COUNT_MODE : KernelFuncType::MASK_BIT_MODE));
     }
 #endif
@@ -177,6 +180,7 @@ __aicore__ inline void ReducePairElemCommon(const LocalTensor<T>& dst, const Loc
         "Failed to check dtype in ReducePairElem, current api support dtype combination is "
         "src and dst both: half / float.\n"));
     CheckValueRange<int32_t>(repeatTime, 0, 255, "repeatTime", "ReducePairElem");
+    ReportNopWarning<int32_t>(repeatTime, "repeatTime", "ReducePairElem");
     CheckVectorTensor("ReducePairElem", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
     if constexpr (Std::is_same_v<MaskType, int32_t>) {
         CheckMaskValue<SrcPrimType, isSetMask>(mask, "ReducePairElem");
@@ -187,7 +191,7 @@ __aicore__ inline void ReducePairElemCommon(const LocalTensor<T>& dst, const Loc
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
     if (!CheckFunVecReduceOther(dst, src, repeatTime, mask, dstRepStride, srcBlkStride, srcRepStride, "PairReduceSum")) {
-        ASCENDC_REPORT_CHECK_ERROR("ReducePairElem", 
+        ASCENDC_REPORT_CHECK_ERROR("ReducePairElem",
             (Std::is_same_v<MaskType, int32_t> ? KernelFuncType::MASK_COUNT_MODE : KernelFuncType::MASK_BIT_MODE));
     }
 #endif
@@ -207,7 +211,7 @@ __aicore__ inline void CheckReduceRepeatSumParams(const LocalTensor<T>& dst, con
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
     if (!CheckFunVecReduceOther(dst, src, repeatTime, mask, dstRepStride, srcBlkStride, srcRepStride, "WholeReduceSum")) {
-        ASCENDC_REPORT_CHECK_ERROR("ReduceRepeat", 
+        ASCENDC_REPORT_CHECK_ERROR("ReduceRepeat",
             (Std::is_same_v<MaskType, int32_t> ? KernelFuncType::MASK_COUNT_MODE : KernelFuncType::MASK_BIT_MODE));
     }
 #endif
@@ -226,7 +230,7 @@ __aicore__ inline void CheckReduceRepeatMaxMinParams(const LocalTensor<T>& dst, 
     MaskSetter::Instance().SetMask(isSetMask);
     if (!CheckFunVecReduceOtherWhl(dst, src, repeatTime, mask, dstRepStride, srcBlkStride, srcRepStride,
         order, "WholeReduceMax")) {
-        ASCENDC_REPORT_CHECK_ERROR("ReduceRepeat", 
+        ASCENDC_REPORT_CHECK_ERROR("ReduceRepeat",
             (Std::is_same_v<MaskType, int32_t> ? KernelFuncType::MASK_COUNT_MODE : KernelFuncType::MASK_BIT_MODE));
     }
 #endif
@@ -234,7 +238,7 @@ __aicore__ inline void CheckReduceRepeatMaxMinParams(const LocalTensor<T>& dst, 
     MaskSetter::Instance().SetMask(isSetMask);
     if (!CheckFunVecReduceOther(dst, src, repeatTime, mask, dstRepStride, srcBlkStride, srcRepStride,
         "WholeReduceMax")) {
-        ASCENDC_REPORT_CHECK_ERROR("ReduceRepeat", 
+        ASCENDC_REPORT_CHECK_ERROR("ReduceRepeat",
             (Std::is_same_v<MaskType, int32_t> ? KernelFuncType::MASK_COUNT_MODE : KernelFuncType::MASK_BIT_MODE));
     }
 #endif
@@ -502,6 +506,7 @@ __aicore__ inline void RepeatReduceSum(const LocalTensor<T>& dst, const LocalTen
         "Failed to check dtype in RepeatReduceSum, current api support dtype combination is "
         "src and dst both: half / float.\n"));
     CheckValueRange<int32_t>(repeatTime, 0, 255, "repeatTime", "RepeatReduceSum");
+    ReportNopWarning<int32_t>(repeatTime, "repeatTime", "RepeatReduceSum");
     CheckTensorPhyPosition<Hardware::UB>(dst, "dst", "VECIN / VECCALC / VECOUT", "RepeatReduceSum");
     CheckTensorPhyPosition<Hardware::UB>(src, "src", "VECIN / VECCALC / VECOUT", "RepeatReduceSum");
     CheckTensorAlignment(src, ONE_BLK_SIZE, "src", "RepeatReduceSum");

@@ -657,9 +657,10 @@ __aicore__ inline void LoadDataWithSparseImpl(
     CheckTensorPhyPosition<Hardware::L0B>(dst, "dst", "B2", "LoadDataWithSparse");
     CheckTensorPhyPosition<Hardware::L1>(src, "src", "B1", "LoadDataWithSparse");
     CheckTensorPhyPosition<Hardware::L1>(idx, "idx", "B1", "LoadDataWithSparse");
-    CheckTensorAlignment(dst, VALUE_512, "dst", "LoadDataWithSparse");    // 512B align
-    CheckTensorAlignment(src, ONE_BLK_SIZE, "src", "LoadDataWithSparse"); // 32B align
-    CheckTensorAlignment(idx, ONE_BLK_SIZE, "idx", "LoadDataWithSparse"); // 32B align
+    CheckTensorAlignment(dst, VALUE_512, "dst", "LoadDataWithSparse");        // 512B align
+    CheckTensorAlignment(src, ONE_BLK_SIZE, "src", "LoadDataWithSparse");     // 32B align
+    CheckTensorAlignment(idx, ONE_BLK_SIZE, "idx", "LoadDataWithSparse");     // 32B align
+    ReportNopWarning<uint8_t>(loadDataParam.repeatTimes, "loadDataParam.repeatTimes", "LoadDataWithSparse");
 #endif
     LoadDataWithSparseCal(dst, src, idx, loadDataParam);
 }

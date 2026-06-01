@@ -68,7 +68,7 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Adds", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<T, isSetMask>(mask, "Adds");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Adds");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -90,7 +90,7 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Adds", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<PrimType, isSetMask>(mask, "Adds");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "Adds");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -111,7 +111,7 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Adds", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<T, isSetMask>(mask, "Adds");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Adds");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -133,7 +133,7 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Adds", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<PrimType, isSetMask>(mask, "Adds");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "Adds");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -221,7 +221,7 @@ __aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Muls", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<T, isSetMask>(mask, "Muls");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Muls");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -243,7 +243,7 @@ __aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Muls", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<PrimType, isSetMask>(mask, "Muls");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "Muls");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -264,7 +264,7 @@ __aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Muls", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<T, isSetMask>(mask, "Muls");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Muls");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -286,7 +286,7 @@ __aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Muls", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<PrimType, isSetMask>(mask, "Muls");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "Muls");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -374,7 +374,7 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Maxs", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<T, isSetMask>(mask, "Maxs");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Maxs");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -396,7 +396,7 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Maxs", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<PrimType, isSetMask>(mask, "Maxs");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "Maxs");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -417,7 +417,7 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Maxs", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<T, isSetMask>(mask, "Maxs");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Maxs");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -439,7 +439,7 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Maxs", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<PrimType, isSetMask>(mask, "Maxs");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "Maxs");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -527,7 +527,7 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Mins", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<T, isSetMask>(mask, "Mins");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Mins");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -549,7 +549,7 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Mins", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<PrimType, isSetMask>(mask, "Mins");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "Mins");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -570,7 +570,7 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Mins", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<T, isSetMask>(mask, "Mins");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Mins");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -592,7 +592,7 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Mins", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<PrimType, isSetMask>(mask, "Mins");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "Mins");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -680,7 +680,7 @@ __aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftLeft", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<T, isSetMask>(mask, "ShiftLeft");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "ShiftLeft");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -702,7 +702,7 @@ __aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftLeft", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<PrimType, isSetMask>(mask, "ShiftLeft");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "ShiftLeft");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -723,7 +723,7 @@ __aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftLeft", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<T, isSetMask>(mask, "ShiftLeft");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "ShiftLeft");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -745,7 +745,7 @@ __aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftLeft", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<PrimType, isSetMask>(mask, "ShiftLeft");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "ShiftLeft");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -833,7 +833,7 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftRight", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<T, isSetMask>(mask, "ShiftRight");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "ShiftRight");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -855,7 +855,7 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftRight", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<PrimType, isSetMask>(mask, "ShiftRight");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "ShiftRight");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -876,7 +876,7 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftRight", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<T, isSetMask>(mask, "ShiftRight");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "ShiftRight");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -898,7 +898,7 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftRight", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<PrimType, isSetMask>(mask, "ShiftRight");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "ShiftRight");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -986,7 +986,7 @@ __aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("LeakyRelu", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<T, isSetMask>(mask, "LeakyRelu");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "LeakyRelu");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1008,7 +1008,7 @@ __aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("LeakyRelu", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskArray<PrimType, isSetMask>(mask, "LeakyRelu");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "LeakyRelu");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1029,7 +1029,7 @@ __aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("LeakyRelu", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<T, isSetMask>(mask, "LeakyRelu");
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "LeakyRelu");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1051,7 +1051,7 @@ __aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("LeakyRelu", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskValue<PrimType, isSetMask>(mask, "LeakyRelu");
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "LeakyRelu");
 #endif
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);

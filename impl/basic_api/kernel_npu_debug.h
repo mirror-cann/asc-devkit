@@ -78,6 +78,13 @@ __aicore__ inline __gm__ const char* GetTPositionName(TPosition pos)
     }
 }
 
+template <typename T>
+__aicore__ inline void ReportNopWarning(T param, const __gm__ char* paramName, const __gm__ char* apiName)
+{
+    ASCENDC_DEBUG_WARNING((param != 0), KERNEL_LOG_INTERNAL(KERNEL_WARN,
+        "The value of %s in %s equals 0, which makes %s equivalent to a NOP.\n", paramName, apiName, apiName));
+}
+
 __aicore__ inline void ReportNotSupport(bool isSupported, const __gm__ char* apiName)
 {
     ASCENDC_DEBUG_ASSERT((isSupported), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "%s is not supported on current device.\n",
@@ -174,6 +181,8 @@ __aicore__ inline void CheckMaskArray(const uint64_t mask[], const __gm__ char* 
     ASCENDC_DEBUG_ASSERT(!(IsMaskNorm() && mask[0] ==0 && mask[1] == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to "
         "check mask[] value in %s, when in norm mode, mask cannot be both 0 on current platform.\n", apiName));
 #endif
+    ASCENDC_DEBUG_WARNING((!(mask[0] == 0 && mask[1] == 0)), KERNEL_LOG_INTERNAL(KERNEL_WARN,
+        "The value of mask[] in %s equals [0, 0], which makes %s equivalent to a NOP.\n", apiName, apiName));
     if constexpr (sizeof(T) == 8) {
         // norm and counter both need mask[0] in range [0, UINT32_MAX]
         ASCENDC_DEBUG_ASSERT((mask[0] <= UINT32_MAX), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check mask[] value "
@@ -191,6 +200,8 @@ __aicore__ inline void CheckMaskValue(const MaskType mask, const __gm__ char* ap
     if constexpr(!isSetMask) {
         return;   // when isSetMask = false, use previous mask. Thus no need for check.
     }
+
+    ReportNopWarning<MaskType>(mask, "mask", apiName);
 
     if (!IsMaskNorm()) {
         if constexpr (SupportType<MaskType, int32_t>()) {
@@ -214,6 +225,28 @@ __aicore__ inline void CheckMaskValue(const MaskType mask, const __gm__ char* ap
     } else if constexpr (sizeof(T) == 8) {
         CheckValueRange<MaskType>(mask, 0, ONE_REPEAT_BYTE_SIZE / sizeof(T), "mask when sizeof(T) == 8" , apiName);
     }
+}
+
+__aicore__ inline void CheckRepeatValue(const uint8_t repeatTime, const __gm__ char* apiName)
+{
+    if ASCEND_IS_AIC {
+        return;   // AIC does not need to check mask
+    }
+    ReportNopWarning<uint8_t>(repeatTime, "repeatTime", apiName);
+}
+
+template <typename T, bool isSetMask = true>
+__aicore__ inline void CheckMaskRepeat(const uint64_t mask[], const uint8_t repeatTime, const __gm__ char* apiName)
+{
+    CheckMaskArray<T, isSetMask>(mask, apiName);
+    CheckRepeatValue(repeatTime, apiName);
+}
+
+template <typename T, bool isSetMask = true>
+__aicore__ inline void CheckMaskRepeat(const uint64_t mask, const uint8_t repeatTime, const __gm__ char* apiName)
+{
+    CheckMaskValue<T, isSetMask, uint64_t>(mask, apiName);
+    CheckRepeatValue(repeatTime, apiName);
 }
 
 __aicore__ inline void CheckCalcount(const int32_t calcount, const __gm__ char* paramName, const __gm__ char* apiName)

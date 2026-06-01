@@ -66,6 +66,9 @@ __aicore__ inline void CheckMmadParamsCommon(const MmadParams& mmadParams, const
     ASCENDC_DEBUG_ASSERT((mmadParams.unitFlag == 0 || mmadParams.unitFlag == 2 || mmadParams.unitFlag == 3),
         KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check unitFlag value in %s, supported values are 0, 2, and 3.\n",
         apiName));
+    ReportNopWarning<uint16_t>(mmadParams.m, "mmadParams.m", apiName);
+    ReportNopWarning<uint16_t>(mmadParams.n, "mmadParams.n", apiName);
+    ReportNopWarning<uint16_t>(mmadParams.k, "mmadParams.k", apiName);
 }
 
 template <typename T, typename U, typename S>
@@ -150,9 +153,9 @@ template <typename T, typename U, const FixpipeConfig& config>
 __aicore__ inline void CheckFixpipeParamsV220Common(const FixpipeParamsV220& intriParams, const __gm__ char* apiName)
 {
     if (intriParams.isChannelSplit) {
-        ASCENDC_DEBUG_ASSERT((intriParams.nSize >= 1 && intriParams.nSize <= UINT12_MAX &&
+        ASCENDC_DEBUG_ASSERT((intriParams.nSize >= 0 && intriParams.nSize <= UINT12_MAX &&
             intriParams.nSize % 8 == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check nSize value in %s, "
-            "when isChannelSplit is true, its valid range is 1 ~ 4095 and must be divisible by 8, current value "
+            "when isChannelSplit is true, its valid range is 0 ~ 4095 and must be divisible by 8, current value "
             "is %u.\n", apiName, intriParams.nSize));
         ASCENDC_DEBUG_ASSERT((IsSameType<PrimT<T>, float>::value && IsSameType<PrimT<U>, float>::value),
             KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check isChannelSplit value in %s, isChannelSplit can be "
@@ -161,22 +164,24 @@ __aicore__ inline void CheckFixpipeParamsV220Common(const FixpipeParamsV220& int
             "Failed to check isChannelSplit value in %s, isChannelSplit and NZ2ND cannot be enabled at the same "
             "time.\n", apiName));
     } else if constexpr (config.format == CO2Layout::ROW_MAJOR) {
-        CheckValueRange<uint16_t>(intriParams.nSize, 1, UINT12_MAX, "nSize", apiName);
+        CheckValueRange<uint16_t>(intriParams.nSize, 0, UINT12_MAX, "nSize", apiName);
     } else {
-        ASCENDC_DEBUG_ASSERT((intriParams.nSize >= 1 && intriParams.nSize <= UINT12_MAX &&
+        ASCENDC_DEBUG_ASSERT((intriParams.nSize >= 0 && intriParams.nSize <= UINT12_MAX &&
             intriParams.nSize % 16 == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check nSize value in %s, "
-            "when isChannelSplit is false and format is NZ, its valid range is 1 ~ 4095 and must be divisible by 16, "
+            "when isChannelSplit is false and format is NZ, its valid range is 0 ~ 4095 and must be divisible by 16, "
             "current value is %u.\n", apiName, intriParams.nSize));
     }
+    ReportNopWarning<uint16_t>(intriParams.nSize, "intriParams.nSize", apiName);
 
     constexpr uint16_t maxMSize = config.format == CO2Layout::ROW_MAJOR ? 8192 : UINT16_MAX;
-    CheckValueRange<uint16_t>(intriParams.mSize, 1, maxMSize, "mSize", apiName);
+    CheckValueRange<uint16_t>(intriParams.mSize, 0, maxMSize, "mSize", apiName);
+    ReportNopWarning<uint16_t>(intriParams.mSize, "intriParams.mSize", apiName);
+
     ASCENDC_DEBUG_ASSERT((intriParams.dstStride != 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
         "Failed to check dstStride value in %s, its valid range is 1 ~ 4294967295, current value is %u.\n", apiName,
         intriParams.dstStride));
+    ReportNopWarning<uint16_t>(intriParams.ndNum, "intriParams.ndNum", apiName);
 
-    ASCENDC_DEBUG_WARNING((intriParams.ndNum != 0), KERNEL_LOG_INTERNAL(KERNEL_WARN,
-        "FixpipeParamsV220.ndNum is 0 in %s, the instruction will not be executed.\n", apiName));
     if (intriParams.ndNum > 1) {
         CheckValueRange<uint16_t>(intriParams.srcNdStride, 1, VALUE_512, "srcNdStride", apiName);
         CheckValueRange<uint16_t>(intriParams.dstNdStride, 1, UINT16_MAX, "dstNdStride", apiName);
@@ -291,11 +296,13 @@ template <typename T>
 __aicore__ static inline void CheckLoadData2dParams(const LoadData2DParams& loadDataParams, bool checkTranspose)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
-    CheckValueRange<uint8_t>(loadDataParams.repeatTimes, 1, UINT8_MAX, "loadDataParams.repeatTimes",
-        "LoadData with LoadData2DParams");
+    // MAX_LOAD2D_SID is valid only when debug mode
     CheckValueRange<uint8_t>(loadDataParams.sid, 0, MAX_LOAD2D_SID, "loadDataParams.sid",
         "LoadData with LoadData2DParams");
 #endif
+    ReportNopWarning<uint8_t>(loadDataParams.repeatTimes, "loadDataParams.repeatTimes",
+        "LoadData with LoadData2DParams");
+
     // Only when A1->A2 / B1->B2 + dtype B16
     if (loadDataParams.ifTranspose) {
         if (checkTranspose) {
@@ -349,8 +356,8 @@ __aicore__ static inline void CheckLoadData3dParams(const uint16_t srcHeight, co
     const uint8_t srcWStride, const uint8_t srcHStride)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
-    CheckValueRange<uint16_t>(srcHeight, MIN_LOAD3D_L1, MAX_LOAD3D_L1, "l1H", "LoadData with LoadData3DParams");
-    CheckValueRange<uint16_t>(srcWidth, MIN_LOAD3D_L1, MAX_LOAD3D_L1, "l1W", "LoadData with LoadData3DParams");
+    CheckValueRange<uint16_t>(srcHeight, 0, MAX_LOAD3D_L1, "l1H", "LoadData with LoadData3DParams");
+    CheckValueRange<uint16_t>(srcWidth, 0, MAX_LOAD3D_L1, "l1W", "LoadData with LoadData3DParams");
     CheckValueRange<uint8_t>(srcWStride, static_cast<uint8_t>(MIN_LOAD3D_STRIDE),
         static_cast<uint8_t>(MAX_LOAD3D_STRIDE), "strideW", "LoadData with LoadData3DParams");
     CheckValueRange<uint8_t>(srcHStride, static_cast<uint8_t>(MIN_LOAD3D_STRIDE),
@@ -391,22 +398,26 @@ __aicore__ inline void CheckLoadData3dv1Params(const LoadData3DParamsV1<U>& load
 template <typename U>
 __aicore__ inline void CheckLoadData3dv2Params(const LoadData3DParamsV2<U>& loadDataParams)
 {
-    CheckValueRange<uint16_t>(loadDataParams.kExtension, static_cast<uint16_t>(MIN_LOAD3D_EXTENSION),
-        static_cast<uint16_t>(MAX_LOAD3D_EXTENSION), "kExtension", "LoadData with LoadData3DParamsV2");
-    CheckValueRange<uint16_t>(loadDataParams.mExtension, static_cast<uint16_t>(MIN_LOAD3D_EXTENSION),
-        static_cast<uint16_t>(MAX_LOAD3D_EXTENSION), "mExtension", "LoadData with LoadData3DParamsV2");
-    CheckValueRange<uint16_t>(loadDataParams.kStartPt, static_cast<uint16_t>(MIN_LOAD3D_START_PT),
-        static_cast<uint16_t>(MAX_LOAD3D_START_PT), "kStartPt", "LoadData with LoadData3DParamsV2");
-    CheckValueRange<uint16_t>(loadDataParams.mStartPt, static_cast<uint16_t>(MIN_LOAD3D_START_PT),
-        static_cast<uint16_t>(MAX_LOAD3D_START_PT), "mStartPt", "LoadData with LoadData3DParamsV2");
-    CheckValueRange<uint8_t>(loadDataParams.filterW, static_cast<uint8_t>(MIN_LOAD3D_FILTER),
-        static_cast<uint8_t>(MAX_LOAD3D_FILTER), "filterW", "LoadData with LoadData3DParamsV2");
-    CheckValueRange<uint8_t>(loadDataParams.filterH, static_cast<uint8_t>(MIN_LOAD3D_FILTER),
-        static_cast<uint8_t>(MAX_LOAD3D_FILTER), "filterH", "LoadData with LoadData3DParamsV2");
     CheckValueRange<uint8_t>(loadDataParams.dilationFilterW, static_cast<uint8_t>(MIN_LOAD3D_DILATION_FILTER),
         static_cast<uint8_t>(MAX_LOAD3D_FILTER), "dilationFilterW", "LoadData with LoadData3DParamsV2");
     CheckValueRange<uint8_t>(loadDataParams.dilationFilterH, static_cast<uint8_t>(MIN_LOAD3D_DILATION_FILTER),
         static_cast<uint8_t>(MAX_LOAD3D_FILTER), "dilationFilterH", "LoadData with LoadData3DParamsV2");
+
+    ReportNopWarning<uint16_t>(loadDataParams.kExtension, "loadDataParams.kExtension",
+        "LoadData with LoadData3DParamsV2");
+    ReportNopWarning<uint16_t>(loadDataParams.mExtension, "loadDataParams.mExtension",
+        "LoadData with LoadData3DParamsV2");
+    ReportNopWarning<uint16_t>(loadDataParams.channelSize, "loadDataParams.channelSize",
+        "LoadData with LoadData3DParamsV2");
+    ReportNopWarning<uint16_t>(loadDataParams.l1H, "loadDataParams.l1H", "LoadData with LoadData3DParamsV2");
+    ReportNopWarning<uint16_t>(loadDataParams.l1W, "loadDataParams.l1W", "LoadData with LoadData3DParamsV2");
+
+    ASCENDC_DEBUG_WARNING((!(loadDataParams.filterW == 0 && loadDataParams.filterSizeW == false)),
+        KERNEL_LOG_INTERNAL(KERNEL_WARN, "In LoadData with LoadData3DParamsV2, loadDataParams.filterW = 0 and "
+        "loadDataParams.filterSizeW == false, which makes LoadData with LoadData3DParamsV2 equivalent to a NOP.\n"));
+    ASCENDC_DEBUG_WARNING((!(loadDataParams.filterH == 0 && loadDataParams.filterSizeH == false)),
+        KERNEL_LOG_INTERNAL(KERNEL_WARN, "In LoadData with LoadData3DParamsV2, loadDataParams.filterH = 0 and "
+        "loadDataParams.filterSizeH == false, which makes LoadData with LoadData3DParamsV2 equivalent to a NOP.\n"));
 }
 #endif
 
