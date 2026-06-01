@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例以FloorMod计算为例，介绍SIMD与SIMT混合编程场景下的性能调优方法。样例展示直接使用SIMT访问GM、使用SIMD RegBase计算、使用SIMT访问UB但线程映射不连续，以及调整线程映射实现Warp内访存合并后的性能差异。
+本样例以FloorMod计算为例，介绍SIMD与SIMT混合编程场景下的性能调优方法。样例展示直接使用SIMT访问GM、使用SIMD RegBase计算、使用SIMT访问UB但线程映射不连续，以及调整线程映射使Warp内相邻线程连续访问UB后的性能差异。
 
 **优化路径**：
 
@@ -16,6 +16,10 @@
 ## 支持的产品
 
 - Ascend 950PR/Ascend 950DT
+
+## 支持的CANN软件版本
+
+- \> CANN 9.0.0
 
 ## 目录结构介绍
 
@@ -271,13 +275,19 @@ __aicore__ inline void CopyOut(uint32_t tileIdx, uint32_t count, AscendC::LocalT
 
 **原理说明**：
 
-Case 2的索引方式为 `index = tid * elems_per_thread + i`，其中 `elems_per_thread = 8`。从单个线程看，它会连续处理8个元素；但SIMT **访存合并**关注的是同一条访存指令上Warp内相邻线程访问的地址是否连续。一个Warp内的相邻线程通常同时发起访存请求。若这些线程访问的地址连续，硬件更容易合并访问请求，从而提高访存效率；若相邻线程访问的地址跨行或离散分布，则难以形成访存合并。
+Case 2的索引方式为 `index = tid * elems_per_thread + i`，其中 `elems_per_thread = 8`。从单个线程看，它会连续处理8个元素；
 
-![访存合并示意图](./figures/memory_coalescing.png)
+Ascend 950PR/950DT的UB划分为16个bank、组织为8个bank group，每个bank每行为32B（连续每32B落到下一个bank），向量计算单元每拍可从每个bank group读/写一行（32B）。Warp内的32个线程同拍执行同一条指令、各自寻址。
+
+在Case 2中，相邻线程 `tid` 与 `tid+1` 在同一轮迭代 `i` 下访问的元素相差 `elems_per_thread = 8`，即字节地址相差 `8 * sizeof(int32) = 32B`，恰好为一条bank行的跨度。这意味着相邻线程分别落在**不同的bank行**上，硬件无法用一次行读取（32B）同时服务多个线程，相同数量的数据需要更多拍才能取完，UB访问被拉长。
+
+<div align="center">
+  <img src="./figures/ubBank.png" alt="Ascend 950PR ubBanks示意图" width="600">
+</div>
 
 **下一步优化方向**：
 
-Case 2虽然用SIMT改善了FloorMod的计算表达，但非连续UB访问把MTE2搬运时间显著拉长，导致端到端性能反而比纯SIMD RegBase实现更差。下一步将在保留 DataCopy连续搬运和SIMT计算表达的基础上，调整线程到数据的映射关系，把“每个线程处理一整段连续数据”改成“同一轮迭代中Warp内相邻线程访问连续元素”，实现SIMT**访存合并**。
+Case 2虽然用SIMT改善了FloorMod的计算表达，但非连续UB访问把MTE2搬运时间显著拉长，导致端到端性能反而比纯SIMD RegBase实现更差。下一步将在保留 DataCopy连续搬运和SIMT计算表达的基础上，调整线程到数据的映射关系，把“每个线程处理一整段连续数据”改成“同一轮迭代中Warp内相邻线程访问连续元素”，使相邻线程落入同一条32B bank行，由一次行读取同时服务多个线程，提升UB访问效率。
 
 ### Case 3：SIMT连续访问UB
 
@@ -331,7 +341,7 @@ __aicore__ inline void CopyOut(uint32_t tileIdx, uint32_t count, AscendC::LocalT
 
 - 相比Case 2，Case 3仍然使用DataCopy完成GM->UB/UB->GM连续搬运，但把线程映射调整为Warp内相邻线程访问相邻元素，`Task Duration` 从 **542.492μs** 降到 **457.402μs**，端到端耗时下降 **15.7%**。
 - 相比Case 1，Case 3的 `Task Duration` 下降 **14.0%**。
-- `aiv_vec_time` 从Case 2的 **507.571μs** 降到 **319.948μs**，下降 **37.0%**，说明连续访问显著减少了SIMT非连续UB访问带来的DCache/UB访问开销，计算侧效率明显提升。
+- `aiv_vec_time` 从Case 2的 **507.571μs** 降到 **319.948μs**，下降 **37.0%**。Case 3让Warp内相邻线程访问相邻元素，32个相邻线程落入连续的几条32B bank行，每条行一次读取即可同时服务该行内的多个线程，UB访问被合并、所需拍数减少；
 - `aiv_mte2_time` 从Case 2的 **534.293μs** 降到 **437.758μs**，下降 **18.1%**，说明连续访问已经缓解了SIMT计算阶段对MTE2的UB资源干扰；但 `aiv_mte2_ratio` 仍达到 **0.959**，说明当前主要瓶颈已经转移到MTE2搬运通路。
 
 ## 性能对比总结
@@ -344,10 +354,8 @@ __aicore__ inline void CopyOut(uint32_t tileIdx, uint32_t count, AscendC::LocalT
 |:---|:---|:---:|---:|---:|---:|---:|---:|---:|---:|:---|
 | 0 | SIMT直接访问GM | 64 | 867.222 | 863.175 | 0.996 | 0.005 | 0.000 | 0.003 | 0.000 | SIMT直接访问GM |
 | 1 | SIMD RegBase | 64 | 532.144 | 523.082 | 0.985 | 237.127 | 0.446 | 55.417 | 0.104 | Vec bound |
-| 2 | SIMT非连续访问UB | 64 | 542.492 | 507.571 | 0.937 | 534.293 | 0.986 | 41.851 | 0.077 | 无法访存合并 |
+| 2 | SIMT非连续访问UB | 64 | 542.492 | 507.571 | 0.937 | 534.293 | 0.986 | 41.851 | 0.077 | 跨bank行访问UB |
 | 3 | SIMT连续访问UB | 64 | **457.402** | **319.948** | 0.701 | 437.758 | 0.959 | 110.623 | 0.242 | MTE2 bound |
-
-> 💡 上表数据由 `msprof` 工具统计得到。MTE2耗时在对应 `aiv_mte2_ratio` 达到0.8（80%）以上时更具参考意义。
 
 ### 优化要点总结
 
@@ -355,7 +363,7 @@ __aicore__ inline void CopyOut(uint32_t tileIdx, uint32_t count, AscendC::LocalT
 |:---|:---|:---|
 | 使用SIMD处理连续数据搬运 | SIMT直接访问GM时，访问粒度和缓存路径可能导致带宽利用率低；先用DataCopy连续搬入UB，再由SIMT访问UB，可提升访问效率 | Case 3相比Case 0端到端耗时下降47.3% |
 | 使用SIMT处理分支判断 | 对带条件修正的逐元素计算，SIMD RegBase需要用多条Compare/Select/Mask指令表达分支，依赖链较长；SIMT可在线程内直接表达 `%` 和条件判断，减少向量掩码拼接分支逻辑的开销 | Case 2相比Case 1的 `aiv_vec_time` 下降3.0%；在连续访问后，Case 3相比Case 2的 `aiv_vec_time` 下降37.0% |
-| 调整线程映射实现访存合并 | 同一Warp内相邻线程在同一条访存指令上访问连续地址，通常比“单个线程内部连续”更重要 | Case 3将 `tid*8+i` 改为 `tid+i*1024` 形态，相比Case 2端到端耗时下降15.7% |
+| 调整线程映射使Warp内连续访问UB | UB按16 bank/8 bank group组织、每bank行32B，硬件每拍每个bank group读/写一行；让同一Warp内相邻线程访问相邻元素、落入同一条32B bank行，可由一次行读取同时服务多个线程，比“单个线程内部连续、相邻线程跨32B行”更高效 | Case 3将 `tid*8+i` 改为 `tid+i*1024` 形态，相比Case 2端到端耗时下降15.7% |
 
 ---
 
@@ -417,7 +425,7 @@ __aicore__ inline void CopyOut(uint32_t tileIdx, uint32_t count, AscendC::LocalT
 
 - 执行结果
 
-  正常情况下，结果校验应输出如下信息：
+  执行结果如下，说明精度对比成功。
   ```bash
   test pass!
   ```

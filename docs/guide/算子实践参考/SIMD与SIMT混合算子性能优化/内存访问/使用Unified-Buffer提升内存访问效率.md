@@ -6,176 +6,138 @@
 
 【优先级】高
 
-【描述】SIMT访问Global Memory的粒度为128B，在随机访问Global Memory中的数据时，访存效率较低。当所需访问的数据量远小于最大可用Unified Buffer空间（256KB - 系统预留8KB - 最小Dcache 32KB）时，可以使用SIMD搬运接口将数据从Global Memory搬运到Unified Buffer，使SIMT编程能够直接从Unified Buffer读取数据，从而提高内存访问效率，提升算子的整体性能。
+【描述】SIMT线程直接访问Global Memory时，访存请求会经过GM访问路径，数据搬运和线程计算耦合在同一段SIMT逻辑中，容易降低整体访存效率。当单次处理的数据量可放入最大可用Unified Buffer空间（256KB - 系统预留8KB - 最小Dcache 32KB）时，可以使用SIMD搬运接口将数据从Global Memory连续搬运到Unified Buffer，使SIMT编程直接访问Unified Buffer中的数据，从而提高内存访问效率，提升算子的整体性能。
 
-【样例介绍】以SIMD与SIMT混合编程方式实现的gather算子为例，该算子从长度为8192的一维向量中获取指定索引的65536个数据。通过将输入数据预先搬运到Unified Buffer中，提高离散内存访问的效率，从而提升算子的整体性能。
+【样例介绍】以SIMD与SIMT混合编程方式实现的floor\_mod算子为例。该算子输入x和y的shape均为\[8192, 8192\]，数据类型为int32，输出z的shape为\[8192, 8192\]。完整样例请参考[SIMT与SIMD混合编程高性能优化样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_best_practices/03_fusion_compute_practices/simt_and_simd_high_performance)。
 
-**表 1**  算子规格
+**表 1**  样例规格
 
-<a name="table336121125718"></a>
-<table><thead align="left"><tr id="row153611165711"><th class="cellrowborder" valign="top" width="20%" id="mcps1.2.6.1.1"><p id="p136120185710"><a name="p136120185710"></a><a name="p136120185710"></a>名称</p>
-</th>
-<th class="cellrowborder" valign="top" width="20%" id="mcps1.2.6.1.2"><p id="p1323211157579"><a name="p1323211157579"></a><a name="p1323211157579"></a>name</p>
-</th>
-<th class="cellrowborder" valign="top" width="20%" id="mcps1.2.6.1.3"><p id="p182321715105719"><a name="p182321715105719"></a><a name="p182321715105719"></a>shape</p>
-</th>
-<th class="cellrowborder" valign="top" width="20%" id="mcps1.2.6.1.4"><p id="p3233415135710"><a name="p3233415135710"></a><a name="p3233415135710"></a>data type</p>
-</th>
-<th class="cellrowborder" valign="top" width="20%" id="mcps1.2.6.1.5"><p id="p1523341515715"><a name="p1523341515715"></a><a name="p1523341515715"></a>format</p>
-</th>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>name</th>
+<th>shape</th>
+<th>data type</th>
+<th>format</th>
 </tr>
 </thead>
-<tbody><tr id="row163625113578"><td class="cellrowborder" rowspan="2" valign="top" width="20%" headers="mcps1.2.6.1.1 "><p id="p8423914575"><a name="p8423914575"></a><a name="p8423914575"></a>算子输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="20%" headers="mcps1.2.6.1.2 "><p id="p1387892665716"><a name="p1387892665716"></a><a name="p1387892665716"></a>input</p>
-</td>
-<td class="cellrowborder" valign="top" width="20%" headers="mcps1.2.6.1.3 "><p id="p11878726195716"><a name="p11878726195716"></a><a name="p11878726195716"></a>8192</p>
-</td>
-<td class="cellrowborder" valign="top" width="20%" headers="mcps1.2.6.1.4 "><p id="p1287822610573"><a name="p1287822610573"></a><a name="p1287822610573"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" width="20%" headers="mcps1.2.6.1.5 "><p id="p48783266570"><a name="p48783266570"></a><a name="p48783266570"></a>ND</p>
-</td>
+<tbody>
+<tr>
+<td rowspan="2">算子输入</td>
+<td>x</td>
+<td>[8192, 8192]</td>
+<td>int32</td>
+<td>ND</td>
 </tr>
-<tr id="row133621117575"><td class="cellrowborder" valign="top" headers="mcps1.2.6.1.1 "><p id="p787812612573"><a name="p787812612573"></a><a name="p787812612573"></a>index</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.6.1.2 "><p id="p1187842645716"><a name="p1187842645716"></a><a name="p1187842645716"></a>65536</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.6.1.3 "><p id="p128789266579"><a name="p128789266579"></a><a name="p128789266579"></a>uint32_t</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.6.1.4 "><p id="p3878152615711"><a name="p3878152615711"></a><a name="p3878152615711"></a>ND</p>
-</td>
+<tr>
+<td>y</td>
+<td>[8192, 8192]</td>
+<td>int32</td>
+<td>ND</td>
 </tr>
-<tr id="row13621016571"><td class="cellrowborder" valign="top" width="20%" headers="mcps1.2.6.1.1 "><p id="p536291185717"><a name="p536291185717"></a><a name="p536291185717"></a>算子输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="20%" headers="mcps1.2.6.1.2 "><p id="p2087802613572"><a name="p2087802613572"></a><a name="p2087802613572"></a>output</p>
-</td>
-<td class="cellrowborder" valign="top" width="20%" headers="mcps1.2.6.1.3 "><p id="p48785261571"><a name="p48785261571"></a><a name="p48785261571"></a>65536</p>
-</td>
-<td class="cellrowborder" valign="top" width="20%" headers="mcps1.2.6.1.4 "><p id="p128781326125711"><a name="p128781326125711"></a><a name="p128781326125711"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" width="20%" headers="mcps1.2.6.1.5 "><p id="p18785262574"><a name="p18785262574"></a><a name="p18785262574"></a>ND</p>
-</td>
+<tr>
+<td>算子输出</td>
+<td>z</td>
+<td>[8192, 8192]</td>
+<td>int32</td>
+<td>ND</td>
 </tr>
 </tbody>
 </table>
 
 SIMT线程层次结构为：
 
--   线程块数：64
--   单个线程块中线程数：1024
-
-完整样例请参考[SIMD与SIMT混合编程使用UB提高内存访问效率](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_best_practices/03_fusion_compute_practices/simt_gather_with_ub)。
+-   Kernel启动核数：64
+-   单次SIMT VF调用线程数：1024
 
 【反例】
 
-SIMT随机访问Global Memory上的input数据，触发数据加载到Dcache，随机访存效率低，代码如下。
+SIMT直接访问Global Memory上的x、y和z数据，对应样例中的场景0（SCENARIO\_NUM=0）。该场景未通过DataCopy完成GM与UB之间的数据搬运，SIMT线程直接从GM读取输入并将结果写回GM，代码如下。
 
-```
-namespace {
-    constexpr uint32_t THREAD_COUNT = 1024;
-    constexpr uint32_t INPUT_SIZE = 8192;
-    constexpr uint32_t INDEX_SIZE = 65536;
+```cpp
+template <typename T>
+__simt_vf__ inline void floor_mod_simt_gm_contiguous(
+    __gm__ T* x, __gm__ T* y, __gm__ T* z, uint32_t inputTotalLength)
+{
+    for (uint32_t index = static_cast<uint32_t>(threadIdx.x); index < inputTotalLength;
+         index += static_cast<uint32_t>(blockDim.x)) {
+        T yValue = y[index];
+        const auto rem = x[index] % yValue;
+        bool signsDiffer = ((rem < 0) != (yValue < 0));
+        if (signsDiffer && (rem != 0)) {
+            z[index] = rem + yValue;
+        } else {
+            z[index] = rem;
+        }
+    }
 }
 
-__simt_vf__ __launch_bounds__(THREAD_COUNT) inline void simt_gather(
-    __gm__ float* input,
-    __gm__ uint32_t* index,
-    __gm__ float* output)
+__aicore__ inline void ProcessGmSimt()
 {
-    int32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
-
-    if (idx >= INDEX_SIZE) {
-        return;
-    }
-
-    uint32_t gather_idx = index[idx];
-    if (gather_idx > INPUT_SIZE) {
-        return;
-    }
-
-    output[idx] = input[gather_idx];
-}
-
-
-__global__ __vector__ void gather_kernel(__gm__ float* input, __gm__ uint32_t* index, __gm__ float* output)
-{
-    asc_vf_call<simt_gather>(dim3(THREAD_COUNT), input, index, output);
+    asc_vf_call<floor_mod_simt_gm_contiguous<T>>(
+        dim3(THREAD_COUNT), const_cast<__gm__ T*>(xGm.GetPhyAddr()),
+        const_cast<__gm__ T*>(yGm.GetPhyAddr()), const_cast<__gm__ T*>(zGm.GetPhyAddr()),
+        DataLenPerCore);
 }
 ```
 
 【正例】
 
-使用SIMD接口将数据从Global Memory搬运到Unified Buffer，基于SIMT编程方式直接从Unified Buffer读取数据，访存效率远高于读取Global Memory上的数据，代码如下。
+使用SIMD接口DataCopy将x和y从Global Memory连续搬运到Unified Buffer，基于SIMT编程方式直接从Unified Buffer读取数据并写入Unified Buffer，再通过DataCopy将结果写回Global Memory，对应样例中的场景3（SCENARIO\_NUM=3）。代码如下。
 
-```
-namespace {
-    constexpr uint32_t THREAD_COUNT = 1024;
-    constexpr uint32_t INPUT_SIZE = 8192;
-    constexpr uint32_t INDEX_SIZE = 65536;
+```cpp
+__aicore__ inline void CopyIn(
+    uint32_t tileIdx, uint32_t count, AscendC::LocalTensor<T>& xLocal, AscendC::LocalTensor<T>& yLocal)
+{
+    uint32_t tileOffset = tileIdx * TileLength;
+    AscendC::DataCopy(xLocal, xGm[tileOffset], count);
+    AscendC::DataCopy(yLocal, yGm[tileOffset], count);
 }
 
-__simt_vf__ __launch_bounds__(THREAD_COUNT) inline void simt_gather(
-    __ubuf__ float* input,
-    __gm__ uint32_t* index,
-    __gm__ float* output)
+template <typename T>
+__simt_vf__ inline void floor_mod_simt_contiguous(
+    __ubuf__ T* x, __ubuf__ T* y, __ubuf__ T* z, uint32_t inputTotalLength)
 {
-    int32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
-
-    if (idx >= INDEX_SIZE) {
-        return;
+    for (uint32_t index = static_cast<uint32_t>(threadIdx.x); index < inputTotalLength;
+         index += static_cast<uint32_t>(blockDim.x)) {
+        T yValue = y[index];
+        const auto rem = x[index] % yValue;
+        bool signsDiffer = ((rem < 0) != (yValue < 0));
+        if (signsDiffer && (rem != 0)) {
+            z[index] = rem + yValue;
+        } else {
+            z[index] = rem;
+        }
     }
-
-    uint32_t gather_idx = index[idx];
-    if (gather_idx >= INPUT_SIZE) {
-        return;
-    }
-
-    output[idx] = input[gather_idx];
 }
 
-
-__global__ __vector__ void gather_kernel(__gm__ float* input, __gm__ uint32_t* index, __gm__ float* output)
+__aicore__ inline void Compute(
+    uint32_t count, AscendC::LocalTensor<T>& xLocal, AscendC::LocalTensor<T>& yLocal,
+    AscendC::LocalTensor<T>& zLocal)
 {
-    __ubuf__ float input_buf[INPUT_SIZE];
-    uint32_t blk_length = INPUT_SIZE * sizeof(float);
-    asc_copy_gm2ub_align(input_buf, input, 1, blk_length, 0, 0, false, 0, 0, 0);
+    __ubuf__ T* xAddr = (__ubuf__ T*)xLocal.GetPhyAddr();
+    __ubuf__ T* yAddr = (__ubuf__ T*)yLocal.GetPhyAddr();
+    __ubuf__ T* zAddr = (__ubuf__ T*)zLocal.GetPhyAddr();
 
-    if ASC_IS_AIV {
-        asc_sync_notify(PIPE_MTE2, PIPE_V, EVENT_ID0);
-        asc_sync_wait(PIPE_MTE2, PIPE_V, EVENT_ID0);
-    }
+    asc_vf_call<floor_mod_simt_contiguous<T>>(dim3(THREAD_COUNT), xAddr, yAddr, zAddr, count);
+    AscendC::DataSyncBarrier<AscendC::MemDsbT::UB>();
+}
 
-    asc_vf_call<simt_gather>(dim3(THREAD_COUNT), input_buf, index, output);
+__aicore__ inline void CopyOut(uint32_t tileIdx, uint32_t count, AscendC::LocalTensor<T>& zLocal)
+{
+    uint32_t tileOffset = tileIdx * TileLength;
+    AscendC::DataCopy(zGm[tileOffset], zLocal, count);
 }
 ```
 
 【性能对比】
 
-下图为反例的流水图，线程中有两条SIMT\_LDG指令，对应表示从Global Memory上加载数据，其中第二条指令占用区间分布不均，指令启动时间差异明显，同一个线程块中随机访问输入数据input，单次访存加载128B数据，而针对单精度浮点数，实际有效数据仅为4B，导致访存效率低。
+场景0和场景3的性能对比如下。
 
-**图 1**  反例指令流水图（仿真数据）<a name="fig1771716554412"></a>  
-![](../../../figures/反例指令流水图（仿真数据）.png "反例指令流水图（仿真数据）")
+| 场景 | 实现方式 | 核数 | Task Duration\(μs\) | aiv\_vec\_time\(μs\) | aiv\_mte2\_time\(μs\) | aiv\_mte3\_time\(μs\) |
+|:---|:---|:---:|---:|---:|---:|---:|
+| 场景0 | SIMT直接访问GM | 64 | 867.222 | 863.175 | 0.005 | 0.003 |
+| 场景3 | SIMT连续访问UB | 64 | 457.402 | 319.948 | 437.758 | 110.623 |
 
-下图为反例的内存负载分析图，L2 Cache到Dcache数据传输带宽为10.04GB/s。
-
-**图 2**  反例内存负载分析（上板数据）<a name="fig14500206121615"></a>  
-![](../../../figures/反例内存负载分析（上板数据）.png "反例内存负载分析（上板数据）")
-
-下图为正例的流水图，只有一条占用大区间的SIMT\_LDG指令，MTE2流水新增搬运指令MOV\_SRC\_TO\_DST\_ALIGNv2。
-
-**图 3**  正例指令流水图（仿真数据）<a name="fig419412567501"></a>  
-![](../../../figures/正例指令流水图（仿真数据）.png "正例指令流水图（仿真数据）")
-
-下图为正例的内存负载分析图，L2 Cache到Dcache数据传输带宽降低为1.61GB/s，L2 Cache到Unified Buffer数据传输带宽提升至12.93GB/s。
-
-**图 4**  正例内存负载分析（上板数据）<a name="fig2368628165417"></a>  
-![](../../../figures/正例内存负载分析（上板数据）.png "正例内存负载分析（上板数据）")
-
-对比算子运行时间，反例约为4.56us，正例约为3.57us，整体性能提升约21.71%。
-
-**图 5**  反例算子运行时间（上板数据）<a name="fig207642436475"></a>  
-![](../../../figures/反例算子运行时间（上板数据）.png "反例算子运行时间（上板数据）")
-
-**图 6**  正例算子运行时间（上板数据）<a name="fig1387010585528"></a>  
-![](../../../figures/正例算子运行时间（上板数据）.png "正例算子运行时间（上板数据）")
-
+场景0中，aiv\_mte2\_time和aiv\_mte3\_time接近0，说明数据读写没有走GM到UB、UB到GM的DataCopy搬运路径，耗时主要集中在SIMT直接访问GM和计算过程上。场景3中，输入和输出通过DataCopy在GM与UB之间连续搬运，SIMT线程直接访问UB完成计算，Task Duration从867.222μs降低至457.402μs，端到端耗时下降约47.3%。
