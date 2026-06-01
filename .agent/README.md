@@ -15,6 +15,8 @@
 |------|------|------|
 | `asc-api-ut-gen` | 生成或补齐 `tests/api/` 下的 AscendC API UT | `skills/asc-api-ut-gen/SKILL.md` |
 | `asc-npu-arch` | 维护芯片、架构、`SocVersion`、`__NPU_ARCH__` 和 dtype 事实 | `skills/asc-npu-arch/SKILL.md` |
+| `public-skills` | 从 `https://gitcode.com/cann-agent/skills.git` 安装或更新公共远程 skill | `skills/public-skills/SKILL.md` |
+| `gitcode-pr` | 通过公共远程 skill 处理 GitCode PR、评论、讨论和变更查询 | `skills/gitcode-pr/SKILL.md` |
 
 当前 `.agent` 不维护设计文档生成、API 实现生成、示例工程生成等 skill。
 
@@ -42,7 +44,17 @@
 
 ### 默认使用
 
-仓内默认不需要手动安装。客户端直接读取对应兼容入口即可：
+仓内本地维护 `asc-api-ut-gen`、`asc-npu-arch` 和 `public-skills`。`gitcode-pr` 等公共通用 skill
+使用 `skills/public-skills/scripts/install-public-skills.sh` 从 `cann-agent/skills` 安装到
+`.agent/skills/_remote/`，并通过 `skills/gitcode-pr -> _remote/gitcode-pr` 这类一级软链暴露给客户端。
+
+更新公共通用 skill：
+
+```bash
+bash .agent/skills/public-skills/scripts/install-public-skills.sh
+```
+
+客户端直接读取对应兼容入口：
 
 ```text
 .opencode/skills -> ../.agent/skills
@@ -91,6 +103,9 @@ bash .agent/tests/skills/asc-npu-arch/test.sh
 ### 维护边界
 
 - `.agent/skills` 是本仓 skill 的唯一事实来源。
+- 公共通用 skill 的本仓事实源是 `skills/public-skills` 的安装脚本；不要在本仓重新实现
+  `gitcode-pr`、`gitcode-issue`、`api-doc-generator` 或 `gitcode-pipeline`。
+- `skills/_remote/` 是远程缓存目录，`skills/gitcode-pr` 等一级入口应是指向 `_remote/<skill>` 的软链。
 - 不直接编辑 `.opencode/skills`、`.claude/skills` 或 `.codex/skills`；它们都通过软链访问 `.agent/skills`。
 - `.opencode`、`.claude`、`.codex` 的根路径应保持为真实目录；根目录软链可能触发沙箱只读保留路径校验失败。
 - 当前 `asc-api-ut-gen` skill 忽略 Tensor API，不维护 `include/experimental/tensor_api/`、`impl/experimental/tensor_api/`、`tests/api/tensor_api/` 的生成规则。
