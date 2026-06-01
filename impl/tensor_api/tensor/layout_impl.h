@@ -62,35 +62,101 @@ __aicore__ inline decltype(auto) MakeCoordLayout(const Coord& coord, const Layou
     return MakePatternLayout<PatternType, TraitType>(coordShape, layout.Stride());
 }
 
+template <typename LayoutType, typename ShapeType>
+__aicore__ inline decltype(auto) MakeSlicePatternLayout(const LayoutType& layout, const ShapeType& shape)
+{
+    using TraitType = GetLayoutTrait<LayoutType>;
+    using PatternType = GetLayoutPattern<LayoutType>;
+    return MakePatternLayout<PatternType, TraitType>(shape, layout.Stride());
+}
+
+template <typename Coord, typename LayoutType, typename SliceShape>
+__aicore__ inline decltype(auto) MakeTwoDimSliceLayout(
+    const Coord& coord, const LayoutType& layout, const SliceShape& sliceShape)
+{
+    static_assert(NestingDepthV<SliceShape> == TWO_DIM_DATA,
+        "SliceShape must be Two Dim when layout is Two Dim");
+    auto srcRow = Get<0>(layout.Shape()) - Get<0>(coord);
+    auto srcCol = Get<1>(layout.Shape()) - Get<1>(coord);
+    auto realRow = Std::min(srcRow, Get<0>(sliceShape));
+    auto realCol = Std::min(srcCol, Get<1>(sliceShape));
+    return MakeSlicePatternLayout(layout, MakeShape(realRow, realCol));
+}
+
+template <typename Coord, typename LayoutType, typename SliceShape>
+__aicore__ inline decltype(auto) MakeThreeDimSliceLayout(
+    const Coord& coord, const LayoutType& layout, const SliceShape& sliceShape)
+{
+    static_assert(NestingDepthV<SliceShape> == THREE_DIM_DATA,
+        "SliceShape must be Three Dim when layout is Three Dim");
+    auto srcBatch = Get<0>(layout.Shape()) - Get<0>(coord);
+    auto srcRow = Get<1, 0>(layout.Shape()) - Get<1, 0>(coord);
+    auto srcCol = Get<1, 1>(layout.Shape()) - Get<1, 1>(coord);
+    auto realBatch = Std::min(srcBatch, Get<0>(sliceShape));
+    auto realRow = Std::min(srcRow, Get<1, 0>(sliceShape));
+    auto realCol = Std::min(srcCol, Get<1, 1>(sliceShape));
+    return MakeSlicePatternLayout(layout, MakeShape(realBatch, MakeShape(realRow, realCol)));
+}
+
+template <typename Coord, typename LayoutType, typename SliceShape>
+__aicore__ inline decltype(auto) MakeFourDimSliceLayout(
+    const Coord& coord, const LayoutType& layout, const SliceShape& sliceShape)
+{
+    static_assert(NestingDepthV<SliceShape> == TWO_DIM_DATA,
+        "SliceShape must be Two Dim when layout is Four Dim");
+    auto innerRow = Get<0, 0>(layout.Shape());
+    auto innerCol = Get<1, 0>(layout.Shape());
+
+    auto srcRow = innerRow * Get<0, 1>(layout.Shape()) - Get<0>(coord);
+    auto srcCol = innerCol * Get<1, 1>(layout.Shape()) - Get<1>(coord);
+
+    auto realRow = Std::min(srcRow, Get<0>(sliceShape));
+    auto realCol = Std::min(srcCol, Get<1>(sliceShape));
+    return MakeSlicePatternLayout(layout, MakeFractalShape(MakeShape(realRow, realCol),
+        MakeShape(innerRow, innerCol)));
+}
+
+template <typename Coord, typename LayoutType, typename SliceShape>
+__aicore__ inline decltype(auto) MakeFiveDimSliceLayout(
+    const Coord& coord, const LayoutType& layout, const SliceShape& sliceShape)
+{
+    static_assert(NestingDepthV<SliceShape> == THREE_DIM_DATA,
+        "SliceShape must be Three Dim when layout is Five Dim");
+    auto innerRow = Get<1, 0, 0>(layout.Shape());
+    auto innerCol = Get<1, 1, 0>(layout.Shape());
+
+    auto srcBatch = Get<0>(layout.Shape()) - Get<0>(coord);
+    auto srcRow = innerRow * Get<1, 0, 1>(layout.Shape()) - Get<1, 0>(coord);
+    auto srcCol = innerCol * Get<1, 1, 1>(layout.Shape()) - Get<1, 1>(coord);
+
+    auto realBatch = Std::min(srcBatch, Get<0>(sliceShape));
+    auto realRow = Std::min(srcRow, Get<1, 0>(sliceShape));
+    auto realCol = Std::min(srcCol, Get<1, 1>(sliceShape));
+    auto fractalShape = MakeFractalShape(MakeShape(realRow, realCol), MakeShape(innerRow, innerCol));
+    return MakeSlicePatternLayout(layout, MakeShape(realBatch, fractalShape));
+}
+
 template <typename Coord, typename LayoutType, typename SliceShape, Std::enable_if_t<!IsLayoutV<SliceShape>, int> = 0>
 __aicore__ inline decltype(auto) MakeSliceLayout(const Coord& coord, const LayoutType& layout, const SliceShape& sliceShape) 
 {
     static_assert(IsLayoutV<LayoutType>, "LayoutType must be Layout");
-    static_assert(Std::is_tuple_v<SliceShape>,"SliceShape must be a tuple");
-    static_assert(NestingDepthV<SliceShape> == TWO_DIM_DATA, "Only Support Two Dim SliceShape");
+    static_assert(Std::is_tuple_v<SliceShape>, "SliceShape must be a tuple");
+    static_assert(NestingDepthV<SliceShape> == TWO_DIM_DATA || NestingDepthV<SliceShape> == THREE_DIM_DATA,
+        "Only Support Two Dim or Three Dim SliceShape");
     using OriginShape = Std::remove_cvref_t<decltype(layout.Shape())>;
-    if constexpr (NestingDepthV<SliceShape> == NestingDepthV<OriginShape>	 
-        && Std::tuple_size_v<SliceShape> == Std::tuple_size_v<OriginShape>) {
-        auto srcRow = Std::get<0>(layout.Shape()) - Std::get<0>(coord);
-        auto srcCol = Std::get<1>(layout.Shape()) - Std::get<1>(coord);
-        auto realRow = Std::min(srcRow, Std::get<0>(sliceShape));	 
-        auto realCol = Std::min(srcCol, Std::get<1>(sliceShape));
-        using TraitType = GetLayoutTrait<LayoutType>;
-        using PatternType = GetLayoutPattern<LayoutType>;
-        return MakePatternLayout<PatternType, TraitType>(MakeShape(realRow, realCol), layout.Stride());	 
+    constexpr auto originShapeDepth = NestingDepthV<OriginShape>;
+    if constexpr (originShapeDepth == TWO_DIM_DATA) {
+        return MakeTwoDimSliceLayout(coord, layout, sliceShape);
+    } else if constexpr (originShapeDepth == THREE_DIM_DATA) {
+        return MakeThreeDimSliceLayout(coord, layout, sliceShape);
+    } else if constexpr (originShapeDepth == FOUR_DIM_DATA) {
+        return MakeFourDimSliceLayout(coord, layout, sliceShape);
+    } else if constexpr (originShapeDepth == FIVE_DIM_DATA) {
+        return MakeFiveDimSliceLayout(coord, layout, sliceShape);
     } else {
-        static_assert(NestingDepthV<OriginShape> == FOUR_DIM_DATA, "Only Support Four Dim Layout");
-        auto innerRow = Std::get<0>(GetShape<0>(layout));
-        auto innerCol = Std::get<0>(GetShape<1>(layout));
-
-        auto srcRow = innerRow * Std::get<1>(GetShape<0>(layout)) - Std::get<0>(coord);
-        auto srcCol = innerCol * Std::get<1>(GetShape<1>(layout)) - Std::get<1>(coord);
-
-        auto realRow = Std::min(srcRow, Std::get<0>(sliceShape));	 
-        auto realCol = Std::min(srcCol, Std::get<1>(sliceShape));
-        using TraitType = GetLayoutTrait<LayoutType>;
-        using PatternType = GetLayoutPattern<LayoutType>;
-        return MakePatternLayout<PatternType, TraitType>(MakeFractalShape(MakeShape(realRow, realCol), MakeShape(innerRow, innerCol)), layout.Stride());
+        static_assert(originShapeDepth == TWO_DIM_DATA || originShapeDepth == THREE_DIM_DATA ||
+            originShapeDepth == FOUR_DIM_DATA || originShapeDepth == FIVE_DIM_DATA,
+            "Only Support Two Dim, Three Dim, Four Dim, or Five Dim Layout");
     }
 }
 

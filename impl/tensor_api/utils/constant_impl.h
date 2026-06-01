@@ -51,7 +51,9 @@ using _2048 = Std::Int<2048>;
 using _4096 = Std::Int<4096>;
 
 constexpr size_t TWO_DIM_DATA = 2;
+constexpr size_t THREE_DIM_DATA = 3;
 constexpr size_t FOUR_DIM_DATA = 4;
+constexpr size_t FIVE_DIM_DATA = 5;
 constexpr size_t FRACTAL_FIXED = 16;
 constexpr size_t MX_SCALE_K0 = 2;
 constexpr uint32_t BLOCK_CUBE = 16;
