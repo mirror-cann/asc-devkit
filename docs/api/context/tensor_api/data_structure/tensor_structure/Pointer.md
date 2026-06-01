@@ -30,12 +30,17 @@ struct Pointer {
 ## 调用示例
 
 ```cpp
+constexpr int32_t size = 256;
+__gm__ float gmData[size];
+__ubuf__ float ubData[size];
+__cbuf__ float L1Data[size];
+
 // 创建Global Memory指针
-auto gmPtr = AscendC::MakeGMmemPtr(gmTensor);
+auto gmPtr = AscendC::MakeMemPtr(gmData);
 
 // 创建Unified Buffer指针
-auto ubPtr = AscendC::MakeUBmemPtr(ubTensor);
+auto ubPtr = AscendC::MakeMemPtr(ubData);
 
 // 创建L1 Buffer指针
-auto l1Ptr = AscendC::MakeL1memPtr(l1Tensor);
+auto l1Ptr = AscendC::MakeMemPtr(L1Data);
 ```

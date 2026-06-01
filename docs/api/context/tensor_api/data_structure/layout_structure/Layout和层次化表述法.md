@@ -34,7 +34,7 @@ Shape用于表达Tensor形状，Stride则用于区分不同的排布方式。
 
 图中展示了两层矩阵：内层矩阵为内部用灰色线包裹的矩阵，外层矩阵为将内层矩阵视为一个元素时，用黑色线包裹的矩阵。
 
-Shape的第一个元素描述行方向的形状，(2, 3)表示内层矩阵和外层矩阵的行数分别为2和3；Shape的第二个元素描述列方向的形状，(2, 4)表示内层矩阵和外层矩阵的列数分别为2和4。
+Shape的第一个元素描述行方向的形状，（2，3）表示内层矩阵和外层矩阵的行数分别为2和3；Shape的第二个元素描述列方向的形状，（2，4）表示内层矩阵和外层矩阵的列数分别为2和4。
 
 Stride中的每个元素与Shape中的元素对应，表示该对应维度下，相邻元素首地址在内存地址上的间隔。图片中用箭头表示了每个维度相邻元素的首地址间隔。
 
@@ -50,16 +50,18 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
 
 - NZ Layout
 
-    NZ Layout格式的ShapeRow0、ShapeColumn0为固定值。内层分形的Shape为16 * (32Byte / sizeof(T))，StrideRow0、StrideColumn0也为固定值，即内层分形按行优先方式连续存储。外层分形按Z字形组织，因此StrideRow1需要满足按整块对齐的要求。
+    NZ Layout格式的ShapeRow0、ShapeColumn0为固定值。内层分形的Shape为16 * (32Byte / sizeof(T))，StrideRow0、StrideColumn0也为固定值，即内层分形按Z字形组织，外层分形按N字形组织，因此StrideColumn1需要满足按整块对齐的要求。
 
     ```cpp
     Layout = ((Shape) : (Stride))
     Shape = ((_16{}, ShapeRow1), (_32{} / sizeof(T), ShapeColumn1))
     Stride = ((_32{} / sizeof(T), StrideRow1), (_1{}, StrideColumn1))
-    // StrideRow1应满足：
-    // (StrideRow1 - ShapeRow0 * ShapeColumn0) % ShapeColumn0 == 0
+    // StrideColumn1应满足：
+    // StrideColumn1 % (ShapeRow0 * ShapeColumn0) == 0
     ```
-
+    **图4** NZ Layout  
+    ![NZ-格式](../../figures/Nz-格式.png)
+    
     下面是一个连续的NZ Layout示例，其中C0_ELEMENT = _32{} / sizeof(T)。
 
     ```cpp
@@ -70,15 +72,18 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
 
 - ZN Layout
 
-    ZN Layout格式的ShapeRow0、ShapeColumn0为固定值。内层分形的Shape为(32Byte / sizeof(T)) * 16，StrideRow0、StrideColumn0也为固定值，即内层分形按列优先方式连续存储。外层分形按N字形组织，因此StrideRow1需要满足按整块对齐的要求。
+    ZN Layout格式的ShapeRow0、ShapeColumn0为固定值。内层分形的Shape为（32Byte / sizeof(T)） * 16，StrideRow0、StrideColumn0也为固定值，即内层分形按N字形组织，外层分形按字形组织，因此StrideRow1需要满足按整块对齐的要求。
 
     ```cpp
     Layout = ((Shape) : (Stride))
     Shape = ((C0_ELEMENT, ShapeRow1), (_16{}, ShapeColumn1))
     Stride = ((_1{}, StrideRow1), (C0_ELEMENT, StrideColumn1))
     // StrideRow1应满足：
-    // (StrideRow1 - ShapeRow0 * ShapeColumn0) % ShapeColumn0 == 0
+    // StrideRow1 % (ShapeRow0 * ShapeColumn0) == 0
     ```
+
+    **图5** ZN Layout  
+    ![ZN-格式](../../figures/Zn-格式(以half类型为例).png)
 
     下面是一个连续的ZN Layout示例，其中C0_ELEMENT = _32{} / sizeof(T)。
 
@@ -98,6 +103,9 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
     Stride = ((_0{}, _1{}), (_0{}, StrideColumn1))
     ```
 
+    **图6** DNExt Layout
+    ![DNExt Layout](../../figures/列优先排布.png)
+
     下面是一个连续的DNExt Layout示例。
 
     ```cpp
@@ -115,6 +123,9 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
     Shape = ((_1{}, ShapeRow1), (_1{}, ShapeColumn1))
     Stride = ((_0{}, StrideRow1), (_0{}, _1{}))
     ```
+
+    **图7** NDExt Layout
+    ![NDExt Layout](../../figures/行优先排布.png)
 
     下面是一个连续的NDExt Layout示例。
 
@@ -162,7 +173,7 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
 
 - ZZ Layout
 
-    ZZ Layout格式的ShapeRow0、ShapeColumn0为固定值。内层分形的Shape与NZ Layout一致，StrideRow0、StrideColumn0也为固定值，即内层分形按行优先方式连续存储。外层分形同样按Z字形组织，因此列方向连续，行方向跨度由整行分形块数决定。
+    ZZ Layout格式的ShapeRow0、ShapeColumn0为固定值。内层分形的Shape与NZ Layout一致，StrideRow0、StrideColumn0也为固定值，即内层分形按Z字形组织，外层分形同样按Z字形组织，因此列方向连续，行方向跨度由整行分形块数决定。
 
     ```cpp
     Layout = ((Shape) : (Stride))
@@ -180,7 +191,7 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
 
 - NN Layout
 
-    NN Layout格式的ShapeRow0、ShapeColumn0为固定值，仅用于fp8_e8m0_t场景。内层分形固定为2 * 16，StrideRow0、StrideColumn0也为固定值，即内层分形按列优先方式连续存储。外层分形继续按N字形组织。
+    NN Layout格式的ShapeRow0、ShapeColumn0为固定值，仅用于fp8_e8m0_t场景。内层分形固定为2 * 16，StrideRow0、StrideColumn0也为固定值，即内层分形按N字形组织。外层分形同样按N字形组织。
 
     ```cpp
     Layout = ((Shape) : (Stride))
@@ -198,7 +209,7 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
 
 - ScaleAND Layout
 
-    ScaleAND Layout格式的ShapeRow0、ShapeColumn0为固定值，仅支持fp8_e8m0_t的scaleA数据，且要求C0_ELEMENT == 2。其物理布局与连续的NDExt Layout一致，即内层固定为1 * 1，外层按行优先方式连续存储，但语义上用于描述scaleA的ND形式输入。
+    ScaleAND Layout格式的ShapeRow0、ShapeColumn0为固定值，仅支持fp8_e8m0_t的scaleA数据，且要求C0_ELEMENT == 2。其物理布局与连续的NDExt Layout一致，即内层固定为1 * 1，外层按行优先方式连续存储，语义上用于描述scaleA不转置的场景。
 
     ```cpp
     Layout = ((Shape) : (Stride))
@@ -216,7 +227,7 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
 
 - ScaleADN Layout
 
-    ScaleADN Layout格式的ShapeRow0、ShapeColumn0为固定值，仅支持fp8_e8m0_t的scaleA数据，且要求C0_ELEMENT == 2。其列方向内层分形固定为2，行方向内层固定为1，外层按DN方式组织。
+    ScaleADN Layout格式的ShapeRow0、ShapeColumn0为固定值，仅支持fp8_e8m0_t的scaleA数据，且要求C0_ELEMENT == 2。其列方向内层分形固定为2，行方向内层固定为1，外层按列优先方式组织。语义上用于描述scaleA转置的场景。
 
     ```cpp
     Layout = ((Shape) : (Stride))
@@ -234,7 +245,7 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
 
 - ScaleBND Layout
 
-    ScaleBND Layout格式的ShapeRow0、ShapeColumn0为固定值，仅支持fp8_e8m0_t的scaleB数据，且要求C0_ELEMENT == 2。其行方向内层分形固定为2，列方向内层固定为1，外层按ND方式组织。
+    ScaleBND Layout格式的ShapeRow0、ShapeColumn0为固定值，仅支持fp8_e8m0_t的scaleB数据，且要求C0_ELEMENT == 2。其行方向内层分形固定为2，列方向内层固定为1，外层按行优先方式组织。语义上用于描述scaleB转置的场景。
 
     ```cpp
     Layout = ((Shape) : (Stride))
@@ -252,7 +263,7 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
 
 - ScaleBDN Layout
 
-    ScaleBDN Layout格式的ShapeRow0、ShapeColumn0为固定值，仅支持fp8_e8m0_t的scaleB数据，且要求C0_ELEMENT == 2。其物理布局与连续的DNExt Layout一致，即内层固定为1 * 1，外层按列优先方式连续存储，但语义上用于描述scaleB的DN形式输入。
+    ScaleBDN Layout格式的ShapeRow0、ShapeColumn0为固定值，仅支持fp8_e8m0_t的scaleB数据，且要求C0_ELEMENT == 2。其物理布局与连续的DNExt Layout一致，即内层固定为1 * 1，外层按列优先方式连续存储，语义上用于描述scaleB不转置的场景。
 
     ```cpp
     Layout = ((Shape) : (Stride))
@@ -268,14 +279,24 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
     Stride = ((_0{}, _1{}), (_0{}, row))
     ```
 
-## 数据结构表
+MX scaleA要求在矩阵GM上按照ScaleAND Layout或ScaleADN Layout格式排布，在L1上需满足满足按行读取需求，即按照ZZ Layout格式排布。如下图所示，若GM上scaleA矩阵为ScaleAND或者ScaleADN分形排布，搬运到L1后分形为ZZ排布。
+
+**图8** scaleA矩阵在不同位置上的排布格式
+![scaleA矩阵在不同位置上的排布格式](../../figures/scaleA矩阵在不同位置上的排布格式.png)
+
+MX scaleA要求在矩阵GM上按照ScaleAND Layout或ScaleADN Layout格式排布，在L1上需满足满足按列读取需求，即按照ZZ Layout格式排布。如下图所示，若GM上scaleB矩阵为ScaleBND或者ScaleBDN分形排布，搬运到L1后分形为NN排布。
+
+**图9** scaleB矩阵在不同位置上的排布格式
+![scaleB矩阵在不同位置上的排布格式](../../figures/scaleB矩阵在不同位置上的排布格式.png)
+
+## Layout分形结构数据表
 
 每种分形对应的Layout格式如下表所示，其中T指的是支持的数据类型中除fp8_e8m0_t之外的数据类型，C0_ELEMENT = _32{} / sizeof(T)；特殊情况下当T为fp4x2_e2m1_t或fp4x2_e1m2_t时，C0_ELEMENT = _64{}。
 
 | LayoutFormatPattern | 类型 | ShapeRow0 | ShapeRow1 | ShapeColumn0 | ShapeColumn1 | StrideRow0 | StrideRow1 | StrideColumn0 | StrideColumn1 |
 |-------------|------|-----------|-----------|--------------|--------------|------------|------------|---------------|---------------|
 | NZLayoutPtn | T | _16{} | ceil_div(row, _16{}) | C0_ELEMENT | ceil_div(column, C0_ELEMENT) | C0_ELEMENT | C0_ELEMENT * _16{} | _1{} | C0_ELEMENT * ceil_align(row, _16{}) |
-| ZNLayoutPtnZn | T | C0_ELEMENT | ceil_div(row, C0_ELEMENT) | _16{} | ceil_div(column, _16{}) | _1{} | C0_ELEMENT * ceil_align(column, _16{}) | C0_ELEMENT | C0_ELEMENT * _16{} |
+| ZNLayoutPtn | T | C0_ELEMENT | ceil_div(row, C0_ELEMENT) | _16{} | ceil_div(column, _16{}) | _1{} | C0_ELEMENT * ceil_align(column, _16{}) | C0_ELEMENT | C0_ELEMENT * _16{} |
 | DNExtLayoutPtn | T | _1{} | row | _1{} | column | _0{} | _1{} | _0{} | row |
 | NDExtLayoutPtn | T | _1{} | row | _1{} | column | _0{} | column | _0{} | _1{} |
 | DNLayoutPtn | T | row | - | column | - | _1{} | - | row | - |

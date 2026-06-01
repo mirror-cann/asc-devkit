@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件为：#include "tensor_api/tensor.h"
+需要包含的头文件为：#include "tensor_api/tensor.h"。
 
 Cosize表示Layout陪域的大小，陪域（codomain）的跨度大小，即逻辑坐标经Layout映射为一维索引后，所有可能索引值所处区间的长度。Cosize和Coshape在扁平与嵌套Layout场景下等价。
 

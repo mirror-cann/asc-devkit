@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件为：#include "tensor_api/tensor.h"
+需要包含的头文件为：#include "tensor_api/tensor.h"。
 
 构造Coord对象，用于定义张量的坐标。
 

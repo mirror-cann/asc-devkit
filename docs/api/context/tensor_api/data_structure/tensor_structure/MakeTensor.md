@@ -8,14 +8,14 @@
 
 ## 功能说明
 
-头文件为：#include "tensor_api/tensor.h"
+需要包含的头文件为：#include "tensor_api/tensor.h"。
 
 MakeTensor负责将内存指针适配器（由[MakeMemPtr](./MakeMemPtr.md)生成）与布局对象（由[MakeFrameLayout](../layout_structure/MakeFrameLayout.md)/[MakeLayout](../layout_structure/MakeFrameLayout.md)生成）绑定，生成带有完整类型信息的LocalTensor对象。
 
 `MakeTensor`内部会根据第一个参数的类型自动判断：
 
 - 第一个参数是否是一个已具备解引用能力的迭代器。若是，则作为Engine（内存引擎）使用。
-- 后续参数会被处理为Layout：
+- 后续参数会被处理为Layout。
 
 生成的LocalTensor对象可直接传入Copy（数据搬运）和Mmad（矩阵计算）接口，编译器会根据其Engine中的物理位置标记和Layout中的布局模式，自动选择底层硬件指令。
 
@@ -48,8 +48,8 @@ __aicore__ inline constexpr auto MakeTensor(const Iterator& iter, const Args&...
   // 示例1：使用指针和Layout创建张量
   constexpr int tileNum = 4;
   __cbuf__ half dataPtr[tileNum]; // 初始化
-  auto ptr = MakeL1memPtr(dataPtr);
-  auto layout = MakeNzLayout<half>(32, 32);
+  auto ptr = MakeMemPtr(dataPtr);
+  auto layout = MakeFrameLayout<NZLayoutPtn, half>(32, 32);
   auto tensor = MakeTensor(ptr, layout);
   
   // 示例2：使用指针和形状创建张量（自动计算步幅）

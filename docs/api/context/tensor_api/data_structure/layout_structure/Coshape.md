@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件为：#include "tensor_api/tensor.h"
+需要包含的头文件为：#include "tensor_api/tensor.h"。
 
 Coshape表示Layout陪域（codomain）区间的标量大小，即逻辑坐标映射到一维索引后，所有可能的索引值构成的区间大小。其计算公式为：
 
@@ -41,7 +41,7 @@ __aicore__ inline constexpr auto Coshape(const Layout<Shape, Stride>& layout)
 
 ## 返回值说明
 
-返回Layout的陪域(codomain)的形状。
+返回Layout的陪域（codomain）的形状。
 
 ## 约束说明
 

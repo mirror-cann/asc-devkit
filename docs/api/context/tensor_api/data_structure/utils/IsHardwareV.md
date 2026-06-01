@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件为：#include "tensor_api/tensor.h"
+需要包含的头文件为：#include "tensor_api/tensor.h"。
 
 IsHardwareV用于判断一个类型是否为Tensor API中定义的硬件存储位置类型。
 

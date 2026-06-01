@@ -1,13 +1,13 @@
 # Tensor API手册资料目录导览
 
 - **[基础数据结构](data_structure_directory.md)**
-    - **[Layout数据结构](data_structure/layout_structure/layout_structure_directory.md)**
+    - **[Layout数据结构](data_structure/layout_structure/layout_structure.md)**
         - **[Layout和层次化表述法](<data_structure/layout_structure/Layout和层次化表述法.md>)**
         - **[Layout](data_structure/layout_structure/Layout.md)**
         - **[Shape](data_structure/layout_structure/Shape.md)**
         - **[Stride](data_structure/layout_structure/Stride.md)**
         - **[Coord](data_structure/layout_structure/Coord.md)**
-    - **[Layout相关接口](data_structure/layout_structure/layout_structure_api.md)**
+    - **[Layout相关接口](data_structure/layout_structure/layout_structure.md)**
         - **[MakeLayout](data_structure/layout_structure/MakeLayout.md)**
         - **[MakeFrameLayout](data_structure/layout_structure/MakeFrameLayout.md)**
         - **[MakeShape](data_structure/layout_structure/MakeShape.md)**
@@ -22,15 +22,15 @@
         - **[Coshape](data_structure/layout_structure/Coshape.md)**
         - **[Cosize](data_structure/layout_structure/Cosize.md)**
         - **[Rank](data_structure/layout_structure/Rank.md)**
-    - **[Tensor数据结构](data_structure/tensor_structure/tensor_structure_directory.md)**
+    - **[Tensor数据结构](data_structure/tensor_structure/tensor_structure.md)**
         - **[Tensor](data_structure/tensor_structure/Tensor.md)**
         - **[Pointer](data_structure/tensor_structure/Pointer.md)**
         - **[ViewEngine](data_structure/tensor_structure/ViewEngine.md)**
-    - **[Tensor相关接口](data_structure/tensor_structure/tensor_structure_api.md)**
+    - **[Tensor相关接口](data_structure/tensor_structure/tensor_structure.mdd)**
         - **[MakeTensor](data_structure/tensor_structure/MakeTensor.md)**
         - **[MakeMemPtr](data_structure/tensor_structure/MakeMemPtr.md)**
         - **[Slice](data_structure/tensor_structure/Slice.md)**
-    - **[工具函数](data_structure/utils/tool_functions.md)**
+    - **[工具函数](data_structure/utils/utils.md)**
         - **[GetLayoutPattern](data_structure/utils/GetLayoutPattern.md)**
         - **[GetLayoutTrait](data_structure/utils/GetLayoutTrait.md)**
         - **[IsAttrTensorV](data_structure/utils/IsAttrTensorV.md)**

@@ -34,14 +34,14 @@ Tensor API的接口调用一般遵循以下四个步骤：
 
 ### 数据结构和列表
 
-- [Layout](Layout和层次化表述法.md)：张量的内存排布描述，由Shape（形状）和Stride（步长）组成。支持层次化表达，可描述多重分形格式。
+- [Layout](./data_structure/layout_structure/Layout和层次化表述法.md)：张量的内存排布描述，由Shape（形状）和Stride（步长）组成。支持层次化表达，可描述多重分形格式。
 - [Shape](./data_structure/layout_structure/Shape.md)：张量的维度大小描述。
 - [Stride](./data_structure/layout_structure/Stride.md)：张量的维度步长描述。
 - [Coord](./data_structure/layout_structure/Coord.md)：张量的多维坐标描述。
 - [Tensor](./data_structure/tensor_structure/Tensor.md)：包含指向张量位置的指针和用于访问其元素的Layout。
 
-完整接口列表请参考[Tensor API列表](tensor_api_list.md)。
+完整接口目录请参考[Tensor API手册资料目录导览](tensor_api.md)。
 
 ### 测试和样例
 
-本仓库提供[测试用例](../../../../tests/api/tensor_api) 以及[示例代码](../../../../examples/01_simd_cpp_api/02_features/05_tensor_api)，方便快速了解功能用法并进行验证。
+本仓库提供[测试用例](../../../../tests/api/tensor_api) 以及[示例代码1](../../../../examples/01_simd_cpp_api/00_introduction/02_matrix/matmul_tensor_api)，[示例代码2](../../../../examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/mmad_tensor_api),[示例代码3](../../../../examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/copy_in_tensor_api),[示例代码4](../../../../examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/copy_out_tensor_api),[示例代码5](../../../../examples/01_simd_cpp_api/04_best_practices/01_matrix_compute_practices/matmul_mxfp4_tensor_api_high_performance)方便快速了解功能用法并进行验证。

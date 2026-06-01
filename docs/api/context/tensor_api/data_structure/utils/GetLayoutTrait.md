@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件为：#include "tensor_api/tensor.h"
+需要包含的头文件为：#include "tensor_api/tensor.h"。
 
 GetLayoutTrait用于从Layout类型中提取其LayoutTrait类型信息。
 

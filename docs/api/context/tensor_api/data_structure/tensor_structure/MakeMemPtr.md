@@ -8,17 +8,44 @@
 
 ## 功能说明
 
-头文件为：#include "tensor_api/tensor.h"
+需要包含的头文件为：#include "tensor_api/tensor.h"。
 
-`MakeMemPtr`用于构造带物理存储位置标记和数据类型信息的内存指针适配器HardwareMemPtr。支持的物理位置如[表](#支持的物理位置)所示。
+MakeMemPtr用于构造带物理存储位置标记和数据类型信息的内存指针适配器HardwareMemPtr。支持的物理位置如[表](#支持的物理位置)所示。
 
-`MakeMemPtr`提供三种调用形式：
+MakeMemPtr提供三种调用形式：
 
 1. 指定物理位置和数据类型，根据原始地址构造指针。
 2. 指定物理位置，从已有迭代器或指针适配器构造新指针。
 3. 从已有迭代器或指针适配器中自动推导物理位置。
 
-## 支持的物理位置
+## 函数原型
+
+    - 指定物理位置和数据类型，根据原始地址构造：
+
+    ```cpp
+    template <typename Hardware, typename DataType, typename Addr,
+        EnableMakePtrByTrait<Hardware, Addr> Enable>
+    __aicore__ inline constexpr auto MakeMemPtr(Addr addr)
+    ```
+
+    - 指定物理位置，从已有迭代器构造：
+
+    ```cpp
+    template <typename Hardware, typename Iterator,
+        EnableMakeHardwarePtr<Hardware, Iterator> Enable>
+    __aicore__ inline constexpr auto MakeMemPtr(Iterator iterator)
+    ```
+
+    - 从已有迭代器中自动推导物理位置：
+
+    ```cpp
+    template <typename Iterator, EnableMakePtrByIter<Iterator> Enable>
+    __aicore__ inline constexpr auto MakeMemPtr(Iterator iterator)
+    ```
+
+## 参数说明
+
+**表 1** 支持的物理位置
 
 | Location | 说明 | 用途 |
 | :--- | :--- | :--- |
@@ -33,34 +60,7 @@
 | Location::BIAS | BiasTable Buffer | 偏置表缓存，带偏置矩阵计算的偏置存放区 |
 | Location::FIXBUF | Fixpipe Buffer | Fixpipe输出缓存，L0C到GM/UB的中转区 |
 
-## 函数原型
-
-- 指定物理位置和数据类型，根据原始地址构造：
-
-```cpp
-template <typename Hardware, typename DataType, typename Addr,
-    EnableMakePtrByTrait<Hardware, Addr> Enable>
-__aicore__ inline constexpr auto MakeMemPtr(Addr addr)
-```
-
-- 指定物理位置，从已有迭代器构造：
-
-```cpp
-template <typename Hardware, typename Iterator,
-    EnableMakeHardwarePtr<Hardware, Iterator> Enable>
-__aicore__ inline constexpr auto MakeMemPtr(Iterator iterator)
-```
-
-- 从已有迭代器中自动推导物理位置：
-
-```cpp
-template <typename Iterator, EnableMakePtrByIter<Iterator> Enable>
-__aicore__ inline constexpr auto MakeMemPtr(Iterator iterator)
-```
-
-## 参数说明
-
-**表 1** 模板参数说明
+**表 2** 模板参数说明
 
 | 参数名 | 类型 | 描述 |
 | :--- | :---: | :--- |
@@ -69,7 +69,7 @@ __aicore__ inline constexpr auto MakeMemPtr(Iterator iterator)
 | Addr | 输入 | 原始地址类型。 |
 | Iterator | 输入 | 迭代器类型或已有指针适配器类型。 |
 
-**表 2** 参数说明
+**表 3** 参数说明
 
 | 参数名 | 类型 | 描述 |
 | :--- | :---: | :--- |
@@ -78,15 +78,15 @@ __aicore__ inline constexpr auto MakeMemPtr(Iterator iterator)
 
 ## 返回值说明
 
-返回`HardwareMemPtr<PtrPattern, Pointer>`类型的指针适配器对象，其中：
+返回HardwareMemPtr<PtrPattern, Pointer>类型的指针适配器对象，其中：
 
-- `PtrPattern`表示指定或推导得到的物理位置；
-- `Pointer`表示对应地址空间下的指针类型，例如`__gm__ float*`、`__cbuf__ half*`等。
+- PtrPattern表示指定或推导得到的物理位置；
+- Pointer表示对应地址空间下的指针类型，例如__gm__ float*、__cbuf__ half*等。
 
 ## 约束说明
 
-- 指定`Hardware`时，必须是受支持的物理位置类型。
-- `Iterator`需要满足对应构造路径的模板约束。
+- 指定Hardware时，必须是受支持的物理位置类型。
+- Iterator需要满足对应构造路径的模板约束。
 - 自动推导形式要求输入对象本身已经带有可识别的硬件位置信息。
 
 ## 调用示例

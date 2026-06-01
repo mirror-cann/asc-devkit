@@ -8,9 +8,9 @@
 
 ## 功能说明
 
-头文件为：#include "tensor_api/tensor.h"
+需要包含的头文件为：#include "tensor_api/tensor.h"。
 
-Tensor用于将内存访问引擎Engine与布局Layout绑定起来。Engine描述物理存储位置和访问方式，Layout描述数据的形状和布局。Tensor分为GlobalTensor和LaocalTensoe两种，其中GlobalTensor用来存放Global Memory（外部存储）的全局数据，LocalTensor用于存放AI Core中Local Memory（内部存储）的数据。二者的公共接口由BaseTensor<TensorAttribute<EngineType, LayoutType>>提供。
+Tensor用于将内存访问引擎Engine与布局Layout绑定起来。Engine描述物理存储位置和访问方式，Layout描述数据的形状和布局。Tensor分为GlobalTensor和LocalTensoe两种，其中GlobalTensor用来存放Global Memory（外部存储）的全局数据，LocalTensor用于存放AI Core中Local Memory（内部存储）的数据。二者的公共接口由BaseTensor<TensorAttribute<EngineType, LayoutType>>提供。
 
 ## 原型定义
 
@@ -100,7 +100,7 @@ struct LocalTensor<TensorAttribute<EngineType, LayoutType>>
 
 Tensor相关类型本身为类型定义，不直接返回值。
 
-通过MakeTensor(...)构造张量时：若存放Global Memory（外部存储）的全局数据，则返回GlobalTensor，存放AI Core中Local Memory（内部存储）的数据返回LocalTensor。
+通过MakeTensor（...）构造张量时：若存放Global Memory（外部存储）的全局数据，则返回GlobalTensor，存放AI Core中Local Memory（内部存储）的数据返回LocalTensor。
 
 ## 成员函数
 
@@ -273,7 +273,7 @@ Tensor相关类型本身为类型定义，不直接返回值。
   | coord | 输入 | 多维逻辑坐标。 |
 
 - 约束说明
-    仅__gm__, __ubuf__地址空间支持使用该接口，AICore上的地址空间(__ca__, __cb__, __cc__, __cbuf__)不具备标量直接访问能力。
+    仅__gm__, __ubuf__地址空间支持使用该接口，AICore上的地址空间（__ca__，__cb__，__cc__，__cbuf__）不具备标量直接访问能力。
 
 - 返回值说明
 

@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件为：#include "tensor_api/tensor.h"
+需要包含的头文件为：#include "tensor_api/tensor.h"。
 
 MakeLayout用于根据Shape和Stride构造Layout对象，描述数据张量在逻辑维度上的形状以及各维对应的步长信息。
 

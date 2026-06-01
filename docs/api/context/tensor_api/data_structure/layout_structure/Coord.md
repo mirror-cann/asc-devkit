@@ -5,7 +5,7 @@ Coord用于定义张量的坐标，用于访问张量中特定位置的元素。
 ## 需要包含的头文件
 
 ```cpp
-#include "tensor_api/tensor.h
+#include "tensor_api/tensor.h"
 ```
 
 ## 原型定义
@@ -23,4 +23,4 @@ using Coord = Std::tuple<Coords...>;
 
 ## API映射关系
 
-Coord通过[MakeCoord](MakeCoord.md)函数创建，可通过[Crd2Idx](Crd2Idx.md)函数进行多维坐标到线性坐标的转换，可作为参数传入到Layout的[operator()](Layout.md)和[Slice](Layout.md)成员函数以及[Slice](Slice.md)接口中进行张量的偏移的切片操作。
+Coord通过[MakeCoord](MakeCoord.md)函数创建，可通过[Crd2Idx](../../../Crd2Idx.md)函数进行多维坐标到线性坐标的转换，可作为参数传入到Layout的[operator()](Layout.md)和[Slice](Layout.md)成员函数以及[Slice](../tensor_structure/Slice.md)接口中进行张量的偏移的切片操作。
