@@ -63,7 +63,7 @@ __aicore__ inline int64_t asc_get_ctrl()
     return asc_get_ctrl_impl();
 }
 
-__aicore__ inline int64_t asc_get_vf_len()
+__aicore__ inline constexpr int64_t asc_get_vf_len()
 {
     return asc_get_vf_len_impl();
 }

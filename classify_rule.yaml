@@ -68,6 +68,7 @@ asc-devkit:
       - impl/c_api/instr_impl/npu_arch_3510/sync_impl.h
       - impl/c_api/instr_impl/npu_arch_2201/vector_compute_impl/asc_transto5hd_impl.h
       - impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_transto5hd_impl.h
+      - impl/c_api/instr_impl/npu_arch_3510/sys_var_impl/asc_get_vf_len_impl.h
       - impl/basic_api/dav_c310/kernel_operator_determine_compute_sync_impl.h
       - impl/experimental/tensor_api/algorithm/gemm_impl.h
       - impl/experimental/tensor_api/atom/cube_datamove/cube_datamove_impl.h

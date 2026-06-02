@@ -69,7 +69,7 @@ __aicore__ inline void asc_set_ffts_base_addr(uint64_t config);
 
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
 
-__aicore__ inline int64_t asc_get_vf_len();
+__aicore__ inline constexpr int64_t asc_get_vf_len();
 
 __aicore__ inline uint64_t asc_get_phy_buf_addr(uint64_t offset);
 

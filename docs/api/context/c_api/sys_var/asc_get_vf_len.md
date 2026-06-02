@@ -13,7 +13,7 @@
 ## 函数原型
 
 ```cpp
-__aicore__ inline int64_t asc_get_vf_len()
+__aicore__ inline constexpr int64_t asc_get_vf_len()
 ```
 
 ## 参数说明
