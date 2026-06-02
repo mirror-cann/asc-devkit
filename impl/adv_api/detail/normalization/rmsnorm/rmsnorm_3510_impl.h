@@ -67,7 +67,7 @@ __simd_callee__ inline void ComputeSum(
     Reg::MaskReg maskFull = Reg::CreateMask<float, Reg::MaskPattern::ALL>();
     Reg::MaskReg maskOne = Reg::CreateMask<float, Reg::MaskPattern::VL1>();
     Reg::MaskReg maskReg = Reg::UpdateMask<float>(tailCount);
-    for (uint16_t bsIdx = 0; bsIdx < bsLength; bsIdx++) {
+    for (uint16_t bsIdx = 0; bsIdx < static_cast<uint16_t>(bsLength); bsIdx++) {
         Reg::Duplicate(dstReg, static_cast<float>(0), maskFull);
         for (uint16_t i = 0; i < mainRepeatTime; i++) {
             LoadDataWithT(srcLocal, srcReg, maskFull, bsIdx * hLength + i * oneRepSize);
@@ -109,7 +109,7 @@ __simd_callee__ inline void ComputeY(
     uint32_t tailCount = oriHLength % oneRepSize;
     uint16_t tailRepeatTime = static_cast<uint16_t>(CeilDivision(tailCount, oneRepSize));
     Reg::MaskReg maskReg = Reg::UpdateMask<float>(tailCount);
-    for (uint16_t bsIdx = 0; bsIdx < bsLength; bsIdx++) {
+    for (uint16_t bsIdx = 0; bsIdx < static_cast<uint16_t>(bsLength); bsIdx++) {
         for (uint16_t i = 0; i < mainRepeatTime; i++) {
             LoadDataWithT(srcLocal, srcReg, maskFull, bsIdx * hLength + i * oneRepSize);
             LoadDataWithT(gammaLocal, gammaReg, maskFull, i * oneRepSize);
