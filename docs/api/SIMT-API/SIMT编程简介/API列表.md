@@ -30,7 +30,7 @@
 | [asc_atomic_dec](../原子操作/asc_atomic_dec.md) | 对Unified Buffer或Global Memory上address的数值进行原子减1操作，如果address上的数值等于0或大于指定数值val，则对address赋值为val，否则将address上数值减1。 |
 | [asc_atomic_cas](../原子操作/asc_atomic_cas.md) | 对Unified Buffer或Global Memory上address的数值进行原子比较赋值操作，如果address上的数值等于指定数值compare，则对address赋值为指定数值val，否则address的数值不变。 |
 | [asc_atomic_and](../原子操作/asc_atomic_and.md) | 对Unified Buffer或Global Memory上address的数值与指定数值val进行原子与（&）操作，即将address数值与（&）val的结果赋值到Unified Buffer或Global Memory上。 |
-| [asc_atomic_or](../原子操作/asc_atomic_or.md) | 对Unified Buffer或Global Memory上address的数值与指定数值val进行原子或（|）操作，即将address数值或（|）val的结果赋值到Unified Buffer或Global Memory上。 |
+| [asc_atomic_or](../原子操作/asc_atomic_or.md) | 对Unified Buffer或Global Memory上address的数值与指定数值val进行原子或（\|）操作，即将address数值或（\|）val的结果赋值到Unified Buffer或Global Memory上。 |
 | [asc_atomic_xor](../原子操作/asc_atomic_xor.md) | 对Unified Buffer或Global Memory上address的数值与指定数值val进行原子异或（^）操作，即将address数值异或（^）val的结果赋值到Unified Buffer或Global Memory上。 |
 
 ## Warp函数
