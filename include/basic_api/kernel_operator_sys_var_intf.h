@@ -55,29 +55,40 @@ __aicore__ inline void Trap();
 
 __aicore__ inline int64_t GetSystemCycle();
 
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
 template <SpecialPurposeReg spr>
 __aicore__ inline int64_t GetSpr();
 
 template <SpecialPurposeReg spr>
 __aicore__ inline void ClearSpr();
-#endif
 
+
+__aicore__ inline constexpr uint32_t GetUBSizeInBytes()
+{
 #if defined(__NPU_ARCH__) &&                                                                                    \
     ((__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) ||    \
      (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3510))
-__aicore__ inline constexpr uint32_t GetUBSizeInBytes()
-{
     return TOTAL_UB_SIZE;
+#else
+    return 0;
+#endif
 }
 
 __aicore__ inline constexpr uint32_t GetVecLen()
 {
+#if defined(__NPU_ARCH__) &&                                                                                    \
+    ((__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) ||    \
+     (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3510))
     return VECTOR_REG_WIDTH;
+#else
+    return 0;
+#endif
 }
 
 __aicore__ inline uint32_t GetRuntimeUBSize()
 {
+#if defined(__NPU_ARCH__) &&                                                                                    \
+    ((__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) ||    \
+     (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3510))
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     return TOTAL_UB_SIZE;
 #else
@@ -95,20 +106,27 @@ __aicore__ inline uint32_t GetRuntimeUBSize()
     return TOTAL_UB_SIZE;
 #endif
 #endif
+#else
+    return 0;
+#endif
 }
- 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510) 
+
 __aicore__ inline __ssbuf__ void* GetSsbufBaseAddr(){
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
 #if ASCENDC_CPU_DEBUG
     return reinterpret_cast<__ssbuf__ void*>(ConstDefiner::Instance().cpuSSbuf);
 #else
     return (__ssbuf__ void*)0;
 #endif
+#else
+    return (__ssbuf__ void*)0;
+#endif
 }
-#endif
-#endif
 } // namespace AscendC
+
+#if defined(__NPU_ARCH__)
 #include "../../impl/basic_api/kernel_operator_sys_var_intf_impl.h"
+#endif
 #endif // ASCENDC_MODULE_OPERATOR_SYS_VAR_INTERFACE_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_SYS_VAR_INTF_H__)

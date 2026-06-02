@@ -51,7 +51,9 @@ __aicore__ inline void WaitPreBlock(GlobalTensor<int32_t>& gmWorkspace, LocalTen
 __aicore__ inline void NotifyNextBlock(GlobalTensor<int32_t>& gmWorkspace, LocalTensor<int32_t>& ubWorkspace);
 } // namespace AscendC
 
+#if defined(__NPU_ARCH__)
 #include "../../impl/basic_api/kernel_operator_determine_compute_sync_intf_impl.h"
+#endif
 #endif // ASCENDC_MODULE_OPERATOR_DETERMINE_COMPUTE_SYNC_INTF_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_DETERMINE_COMPUTE_SYNC_INTF_H__)

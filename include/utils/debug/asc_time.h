@@ -44,13 +44,11 @@ __aicore__ inline void asc_prof_stop();
 
 __aicore__ inline uint64_t clock(void);
 
-#if __NPU_ARCH__ == 3510
 template<pipe_t pipe = PIPE_S>
 __aicore__ inline void asc_mark_stamp(uint16_t idx);
 
 template<pipe_t pipe = PIPE_S, uint16_t idx>
 __aicore__ inline void asc_mark_stamp();
-#endif
 }   // namespace __asc_aicore
 
 #define TRACE_START(...) TRACE_START_IMPL(__VA_ARGS__)

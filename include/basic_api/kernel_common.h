@@ -127,7 +127,6 @@ __aicore__ inline void ResetMask()
     ResetMaskImpl();
 }
 
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
 using MutexID = uint8_t;
 
 class Mutex {
@@ -135,22 +134,27 @@ public:
     template <pipe_t pipe>
     static __aicore__ inline void Lock(MutexID id)
     {
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
         ASCENDC_ASSERT((id <= MAX_MUTEXID),
             { KERNEL_LOG(KERNEL_ERROR, "For Mutex::Lock current id is %u, max MutexID is %u", id, MAX_MUTEXID); });
         GetBufInternal<pipe, 0>(id);
+#endif
     }
 
     template <pipe_t pipe>
     static __aicore__ inline void Unlock(MutexID id)
     {
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
         ASCENDC_ASSERT((id <= MAX_MUTEXID),
             { KERNEL_LOG(KERNEL_ERROR, "For Mutex::Unlock current id is %u, max MutexID is %u", id, MAX_MUTEXID); });
         RlsBufInternal<pipe, 0>(id);
+#endif
     }
 };
 
 __aicore__ inline MutexID AllocMutexID()
 {
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
     MutexID id = static_cast<uint8_t>(sff0(Internal::g_bufId));
     Internal::g_bufId = sbitset1(Internal::g_bufId, id);
     ASCENDC_ASSERT((id <= MAX_MUTEXID), {
@@ -158,18 +162,22 @@ __aicore__ inline MutexID AllocMutexID()
                    static_cast<uint32_t>(MAX_MUTEXID));
     });
     return id;
+#else
+    return 0;
+#endif
 }
 
 __aicore__ inline void ReleaseMutexID(MutexID id)
 {
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
     ASCENDC_ASSERT((id < MAX_MUTEXID), {
         KERNEL_LOG(KERNEL_ERROR, "current id is %d, which should be larger than or equals to 0, and smaller than %d",
             static_cast<int32_t>(id), MAX_MUTEXID);
     });
     Internal::g_bufId = sbitset0(Internal::g_bufId, id);
+#endif
 }
 
-#endif
 
 __aicore__ inline void SetMaskCount()
 {
@@ -199,23 +207,28 @@ __aicore__ inline __gm__ uint8_t* __gm__ GetHcclContext(void)
     return g_hcclContextReserved[index];
 }
 
-#if defined(__NPU_ARCH__) &&                                                            \
-    ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 3002) ||      \
-     (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
+
 template <typename T, typename U>
 __aicore__ inline void SetAippFunctions(const GlobalTensor<T>& src0, AippInputFormat format, AippParams<U> config)
 {
+#if defined(__NPU_ARCH__) &&                                                            \
+    ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 3002) ||      \
+     (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
     SetAippFunctionsImpl<PrimT<T>, U>(const_cast<__gm__ PrimT<T>*>(src0.GetPhyAddr()), format, config);
+#endif
 }
 
 template <typename T, typename U>
 __aicore__ inline void SetAippFunctions(const GlobalTensor<T>& src0, const GlobalTensor<T>& src1,
                                         AippInputFormat format, AippParams<U> config)
 {
+#if defined(__NPU_ARCH__) &&                                                            \
+    ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 3002) ||      \
+     (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
     SetAippFunctionsImpl<PrimT<T>, U>(const_cast<__gm__ PrimT<T>*>(src0.GetPhyAddr()),
                                       const_cast<__gm__ PrimT<T>*>(src1.GetPhyAddr()), format, config);
-}
 #endif // (__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 3002)
+}
 } // namespace AscendC
 
 [[deprecated("NOTICE: SetDumpWorkSpacePtr has been deprecated and will be removed in the next version. "

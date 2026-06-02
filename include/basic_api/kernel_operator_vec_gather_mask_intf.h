@@ -42,8 +42,9 @@ __aicore__ inline void GatherMask(const LocalTensor<T>& dst, const LocalTensor<T
     uint64_t& rsvdCnt);
 #pragma end_pipe
 } // namespace AscendC
-
+#if defined(__NPU_ARCH__)
 #include "../../impl/basic_api/kernel_operator_vec_gather_mask_intf_impl.h"
+#endif
 #endif // ASCENDC_MODULE_OPERATOR_VEC_REDUCEV2_INTERFACE_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_GATHER_MASK_INTF_H__)

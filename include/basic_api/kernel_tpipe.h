@@ -496,7 +496,9 @@ template <TPosition pos, int32_t depth = 1, auto mask = 0>
 using TSCM = TQueBind<pos, TPosition::TSCM, depth, mask>;
 } // namespace AscendC
 
+#if defined(__NPU_ARCH__)
 #include "../../impl/basic_api/kernel_tpipe_impl.h"
+#endif
 #endif // ASCENDC_KERNEL_QUEUE_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_TPIPE_H__)

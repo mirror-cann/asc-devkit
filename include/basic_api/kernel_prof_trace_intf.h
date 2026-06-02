@@ -34,7 +34,9 @@ __aicore__ inline void MetricsProfStart();
 __aicore__ inline void MetricsProfStop();
 } // namespace AscendC
 
+#if defined(__NPU_ARCH__)
 #include "../../impl/basic_api/kernel_prof_trace_intf_impl.h"
+#endif
 #endif // ASCENDC_MODULE_KERNEL_PROF_TRACE_INTERFACE_H
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_PROF_TRACE_INTF_H__)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__

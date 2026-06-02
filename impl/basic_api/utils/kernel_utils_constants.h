@@ -180,6 +180,8 @@ const uint32_t TOTAL_L1_SIZE = 512 * 1024;
 const uint32_t TOTAL_L0C_SIZE = 64 * 1024;
 const uint32_t VECTOR_REG_WIDTH = 256;
 const uint32_t ONE_BLOCK_SIZE = 32;
+#else
+const uint32_t VECTOR_REG_WIDTH = 256;
 #endif
 
 #if !defined(__NPU_HOST__) && !defined(__ASCC_HOST__)

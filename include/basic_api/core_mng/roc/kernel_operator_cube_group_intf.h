@@ -23,7 +23,6 @@
 
 #include "kernel_macros.h"
 #include "utils/kernel_utils_macros.h"
-#if __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510
 #if __NPU_ARCH__ == 2201
 #include "dav_c220/core_mng/roc/kernel_operator_cube_group_info.h"
 #elif __NPU_ARCH__ == 3510
@@ -161,7 +160,6 @@ template <int groupID, class MatmulApiType, template <class, class> class CallBa
 __aicore__ inline CubeResGroupHandle<CubeMsgType> CreateCubeResGroup(
     KfcWorkspace &desc, uint8_t blockStart, uint8_t blockSize, uint8_t msgQueueSize, GM_ADDR tiling);
 }  // namespace AscendC
-#endif
 
 #endif
 

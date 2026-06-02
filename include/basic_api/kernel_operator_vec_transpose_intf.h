@@ -74,7 +74,9 @@ __aicore__ inline __check_sync_alias__ __in_pipe__(S) __out_pipe__(V) void Trans
     const TransDataTo5HDParams& nchwconvParams);
 } // namespace AscendC
 
+#if defined(__NPU_ARCH__)
 #include "../../impl/basic_api/kernel_operator_vec_transpose_intf_impl.h"
+#endif
 #endif // ASCENDC_MODULE_OPERATOR_VEC_TRANSPOSE_INTERFACE_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_TRANSPOSE_INTF_H__)
