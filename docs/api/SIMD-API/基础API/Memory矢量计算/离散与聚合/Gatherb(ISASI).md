@@ -49,13 +49,35 @@
 
 ## 功能说明<a name="section17600329101418"></a>
 
-给定一个输入的张量和一个地址偏移张量，本接口根据偏移地址按照DataBlock的粒度将输入张量收集到结果张量中。
+头文件路径为："basic\_api/kernel\_operator\_vec\_gather\_intf\_impl.h"。
 
-![](../../../../figures/repeat-times-36.png)
+Gatherb接口接受输入张量（src）、DataBlock偏移张量（offset），根据索引位置将输入张量按DataBlock（32字节）收集到结果张量（dst）中。
+
+接口计算原理和参考伪代码如下：
+
+```python
+import numpy as np
+
+def Gatherb(dst, src, offset, repeatTime, repeatParams):
+    inputType = np.dtype("uint16")
+    outputType = np.dtype("uint16")
+    oneDataBlockSize = 32;
+    if repeatParams.dstBlkStride == 0:
+        repeatParams.dstBlkStride = 1
+    for i in range(repeatTime): 
+        for j in range(8):
+            srcBlockStartIndex = offset[i * 8 + j] // inputType.itemsize
+            srcBlockEndIndex = srcBlockStartIndex + oneDataBlockSize // inputType.itemsize
+            dstBlockStartIndex = (i * oneDataBlockSize * repeatParams.dstRepStride + j * oneDataBlockSize * repeatParams.dstBlkStride) // outputType.itemsize
+            dstBlockEndIndex = (i * oneDataBlockSize * repeatParams.dstRepStride + j * oneDataBlockSize * repeatParams.dstBlkStride + oneDataBlockSize) // outputType.itemsize
+            dst[dstBlockStartIndex : dstBlockEndIndex] = src[srcBlockStartIndex : srcBlockEndIndex]
+```
+
+完整示例请参考：[Gatherb真值计算](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/02_memory_vector_compute/gather)。
 
 ## 函数原型<a name="section15660625202219"></a>
 
-```
+```cpp
 template <typename T>
 __aicore__ inline void Gatherb(const LocalTensor<T>& dst, const LocalTensor<T>& src, const LocalTensor<uint32_t>& offset, const uint8_t repeatTime, const GatherRepeatParams& repeatParams)
 ```
@@ -64,138 +86,54 @@ __aicore__ inline void Gatherb(const LocalTensor<T>& dst, const LocalTensor<T>& 
 
 **表 1**  模板参数说明
 
-<a name="table4835205712588"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000001429830437_row118356578583"><th class="cellrowborder" valign="top" width="14.729999999999999%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001429830437_p48354572582"><a name="zh-cn_topic_0000001429830437_p48354572582"></a><a name="zh-cn_topic_0000001429830437_p48354572582"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="85.27%" id="mcps1.2.3.1.2"><p id="zh-cn_topic_0000001429830437_p583535795817"><a name="zh-cn_topic_0000001429830437_p583535795817"></a><a name="zh-cn_topic_0000001429830437_p583535795817"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000001429830437_row1835857145817"><td class="cellrowborder" valign="top" width="14.729999999999999%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000001429830437_p5835457165816"><a name="zh-cn_topic_0000001429830437_p5835457165816"></a><a name="zh-cn_topic_0000001429830437_p5835457165816"></a>T</p>
-</td>
-<td class="cellrowborder" valign="top" width="85.27%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000001429830437_p168351657155818"><a name="zh-cn_topic_0000001429830437_p168351657155818"></a><a name="zh-cn_topic_0000001429830437_p168351657155818"></a>操作数数据类型。</p>
-<p id="p8391415163219"><a name="p8391415163219"></a><a name="p8391415163219"></a><span id="ph13391315113210"><a name="ph13391315113210"></a><a name="ph13391315113210"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：int8_t/uint8_t/int16_t/uint16_t/int32_t/uint32_t/half/float/bfloat16_t/uint64_t/int64_t</p>
-<p id="p83911715133216"><a name="p83911715133216"></a><a name="p83911715133216"></a><span id="ph739117153324"><a name="ph739117153324"></a><a name="ph739117153324"></a><term id="zh-cn_topic_0000001312391781_term1253731311225_1"><a name="zh-cn_topic_0000001312391781_term1253731311225_1"></a><a name="zh-cn_topic_0000001312391781_term1253731311225_1"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115_1"><a name="zh-cn_topic_0000001312391781_term131434243115_1"></a><a name="zh-cn_topic_0000001312391781_term131434243115_1"></a>Atlas A3 推理系列产品</term></span>，支持的数据类型为：uint16_t/uint32_t</p>
-<p id="p15391121513321"><a name="p15391121513321"></a><a name="p15391121513321"></a><span id="ph539111563220"><a name="ph539111563220"></a><a name="ph539111563220"></a><term id="zh-cn_topic_0000001312391781_term11962195213215_1"><a name="zh-cn_topic_0000001312391781_term11962195213215_1"></a><a name="zh-cn_topic_0000001312391781_term11962195213215_1"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811_1"><a name="zh-cn_topic_0000001312391781_term184716139811_1"></a><a name="zh-cn_topic_0000001312391781_term184716139811_1"></a>Atlas A2 推理系列产品</term></span>，支持的数据类型为：uint16_t/uint32_t</p>
-<p id="p839114154325"><a name="p839114154325"></a><a name="p839114154325"></a><span id="ph183911515113211"><a name="ph183911515113211"></a><a name="ph183911515113211"></a><term id="zh-cn_topic_0000001312391781_term354143892110_1"><a name="zh-cn_topic_0000001312391781_term354143892110_1"></a><a name="zh-cn_topic_0000001312391781_term354143892110_1"></a>Atlas 200I/500 A2 推理产品</term></span>，支持的数据类型为：int8_t/uint8_t/int16_t/uint16_t/half/float/int32_t/uint32_t/bfloat16_t/int64_t</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 描述 |
+| :----- | :--- |
+| T | 操作数数据类型。 |
 
 **表 2**  参数说明
 
-<a name="table917mcpsimp"></a>
-<table><thead align="left"><tr id="row923mcpsimp"><th class="cellrowborder" valign="top" width="15.02%" id="mcps1.2.4.1.1"><p id="p925mcpsimp"><a name="p925mcpsimp"></a><a name="p925mcpsimp"></a>参数名称</p>
-</th>
-<th class="cellrowborder" valign="top" width="10%" id="mcps1.2.4.1.2"><p id="p927mcpsimp"><a name="p927mcpsimp"></a><a name="p927mcpsimp"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="74.98%" id="mcps1.2.4.1.3"><p id="p929mcpsimp"><a name="p929mcpsimp"></a><a name="p929mcpsimp"></a>含义</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row930mcpsimp"><td class="cellrowborder" valign="top" width="15.02%" headers="mcps1.2.4.1.1 "><p id="p2925016172518"><a name="p2925016172518"></a><a name="p2925016172518"></a>dst</p>
-</td>
-<td class="cellrowborder" valign="top" width="10%" headers="mcps1.2.4.1.2 "><p id="p199251416112517"><a name="p199251416112517"></a><a name="p199251416112517"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="74.98%" headers="mcps1.2.4.1.3 "><p id="p12471855121311"><a name="p12471855121311"></a><a name="p12471855121311"></a>目的操作数。</p>
-<p id="p5945720195112"><a name="p5945720195112"></a><a name="p5945720195112"></a><span id="zh-cn_topic_0000001530181537_ph173308471594"><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><span id="zh-cn_topic_0000001530181537_ph9902231466"><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816"><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a>类型为<a href="../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-<p id="p78204190123"><a name="p78204190123"></a><a name="p78204190123"></a><span id="ph1479701815419"><a name="ph1479701815419"></a><a name="ph1479701815419"></a>LocalTensor的起始地址需要32字节对齐。</span></p>
-</td>
-</tr>
-<tr id="row937mcpsimp"><td class="cellrowborder" valign="top" width="15.02%" headers="mcps1.2.4.1.1 "><p id="p3926171610253"><a name="p3926171610253"></a><a name="p3926171610253"></a>src</p>
-</td>
-<td class="cellrowborder" valign="top" width="10%" headers="mcps1.2.4.1.2 "><p id="p4926121682518"><a name="p4926121682518"></a><a name="p4926121682518"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="74.98%" headers="mcps1.2.4.1.3 "><p id="p142923151419"><a name="p142923151419"></a><a name="p142923151419"></a>源操作数。</p>
-<p id="p15547145121412"><a name="p15547145121412"></a><a name="p15547145121412"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_1"><a name="zh-cn_topic_0000001530181537_ph173308471594_1"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_1"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_1"><a name="zh-cn_topic_0000001530181537_ph9902231466_1"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_1"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_1"><a name="zh-cn_topic_0000001530181537_ph1782115034816_1"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_1"></a>类型为<a href="../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-<p id="p086691541612"><a name="p086691541612"></a><a name="p086691541612"></a><span id="ph12866151511161"><a name="ph12866151511161"></a><a name="ph12866151511161"></a>LocalTensor的起始地址需要32字节对齐。</span></p>
-<p id="p1484485824312"><a name="p1484485824312"></a><a name="p1484485824312"></a>源操作数的数据类型需要与目的操作数保持一致。</p>
-</td>
-</tr>
-<tr id="row18516194102416"><td class="cellrowborder" valign="top" width="15.02%" headers="mcps1.2.4.1.1 "><p id="p85164422415"><a name="p85164422415"></a><a name="p85164422415"></a>offset</p>
-</td>
-<td class="cellrowborder" valign="top" width="10%" headers="mcps1.2.4.1.2 "><p id="p10516104162418"><a name="p10516104162418"></a><a name="p10516104162418"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="74.98%" headers="mcps1.2.4.1.3 "><p id="p7545916142117"><a name="p7545916142117"></a><a name="p7545916142117"></a>每个datablock在源操作数中对应的地址偏移。</p>
-<p id="p15812123272020"><a name="p15812123272020"></a><a name="p15812123272020"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_2"><a name="zh-cn_topic_0000001530181537_ph173308471594_2"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_2"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_2"><a name="zh-cn_topic_0000001530181537_ph9902231466_2"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_2"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_2"><a name="zh-cn_topic_0000001530181537_ph1782115034816_2"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_2"></a>类型为<a href="../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-<p id="p18431833185"><a name="p18431833185"></a><a name="p18431833185"></a><span id="ph359873013185"><a name="ph359873013185"></a><a name="ph359873013185"></a>LocalTensor的起始地址需要32字节对齐。</span></p>
-<p id="p1331252141512"><a name="p1331252141512"></a><a name="p1331252141512"></a>该偏移量是相对于src的基地址而言的。每个元素值要大于等于0，单位为字节；且需要保证偏移后的地址满足32字节对齐。</p>
-</td>
-</tr>
-<tr id="row4736114341415"><td class="cellrowborder" valign="top" width="15.02%" headers="mcps1.2.4.1.1 "><p id="p47360437147"><a name="p47360437147"></a><a name="p47360437147"></a>repeatTime</p>
-</td>
-<td class="cellrowborder" valign="top" width="10%" headers="mcps1.2.4.1.2 "><p id="p773619438142"><a name="p773619438142"></a><a name="p773619438142"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="74.98%" headers="mcps1.2.4.1.3 "><p id="p13484943122219"><a name="p13484943122219"></a><a name="p13484943122219"></a>重复迭代次数，每次迭代完成8个datablock的数据收集，数据范围：repeatTime∈（0,255]。</p>
-</td>
-</tr>
-<tr id="row20730549195712"><td class="cellrowborder" valign="top" width="15.02%" headers="mcps1.2.4.1.1 "><p id="p1473034913577"><a name="p1473034913577"></a><a name="p1473034913577"></a>repeatParams</p>
-</td>
-<td class="cellrowborder" valign="top" width="10%" headers="mcps1.2.4.1.2 "><p id="p9730649125711"><a name="p9730649125711"></a><a name="p9730649125711"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="74.98%" headers="mcps1.2.4.1.3 "><p id="p13186514145119"><a name="p13186514145119"></a><a name="p13186514145119"></a>用于控制指令迭代的相关参数。</p>
-<p id="p271423619448"><a name="p271423619448"></a><a name="p271423619448"></a>类型为GatherRepeatParams，具体定义可参考<span id="ph156517114113"><a name="ph156517114113"></a><a name="ph156517114113"></a>${INSTALL_DIR}</span>/include/ascendc/basic_api/interface/kernel_struct_gather.h。<span id="ph206514115119"><a name="ph206514115119"></a><a name="ph206514115119"></a>${INSTALL_DIR}</span>请替换为CANN软件安装后文件存储路径。</p>
-<p id="p197301549165720"><a name="p197301549165720"></a><a name="p197301549165720"></a>其中dstBlkStride、dstRepStride支持用户配置，参数说明参考<a href="Gatherb(ISASI).md#table2166248155314">表3</a>。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名称 | 输入/输出 | 含义 |
+| :------- | :-------- | :--- |
+| dst | 输出 | 目的操作数，<br><br>类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT(存储位置为Unified Buffer)。<br><br>LocalTensor的起始地址需要按照32字节对齐。 |
+| src | 输入 | 源操作数，类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT(存储位置为Unified Buffer)。<br><br>LocalTensor的起始地址需要按照32字节对齐。 |
+| offset | 输入 | 每个DataBlock在源操作数中对应的地址偏移，类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT(存储位置为Unified Buffer)。<br><br>LocalTensor的起始地址需要按照32字节对齐。<br><br>该偏移量是相对于src的基地址而言的。每个元素值要大于等于0，单位为字节，取值要求如下：<br>•取值应保证src元素类型位宽对齐。<br>•偏移地址后需要32字节对齐。<br>•偏移地址后不能超出UB大小数据的范围。<br>•地址偏移的取值范围：不能超出uint32_t的范围。 |
+| repeatTime | 输入 | 指令迭代次数，每次迭代完成8个DataBlock的数据收集，取值范围：repeatTime∈[0,255]。<br><br>**注：repeatTime = 0表示不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。** |
+| repeatParams | 输入 | 用于控制指令迭代的相关参数。<br><br>GatherRepeatParams参数说明请参考[表3](#table3)。 |
 
-**表 3**  GatherRepeatParams结构体参数说明
+**表 3**  GatherRepeatParams结构体内参数说明<a id="table3"></a>
 
-<a name="table2166248155314"></a>
-<table><thead align="left"><tr id="row5166144885316"><th class="cellrowborder" valign="top" width="14.510000000000002%" id="mcps1.2.3.1.1"><p id="p1116674814535"><a name="p1116674814535"></a><a name="p1116674814535"></a>参数名称</p>
-</th>
-<th class="cellrowborder" valign="top" width="85.49%" id="mcps1.2.3.1.2"><p id="p216614815538"><a name="p216614815538"></a><a name="p216614815538"></a>含义</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1716618489531"><td class="cellrowborder" valign="top" width="14.510000000000002%" headers="mcps1.2.3.1.1 "><p id="p199988584557"><a name="p199988584557"></a><a name="p199988584557"></a>dstBlkStride</p>
-</td>
-<td class="cellrowborder" valign="top" width="85.49%" headers="mcps1.2.3.1.2 "><p id="p69921747165514"><a name="p69921747165514"></a><a name="p69921747165514"></a>单次迭代内，矢量目的操作数不同datablock间的地址步长。</p>
-</td>
-</tr>
-<tr id="row18688164155717"><td class="cellrowborder" valign="top" width="14.510000000000002%" headers="mcps1.2.3.1.1 "><p id="p489432135811"><a name="p489432135811"></a><a name="p489432135811"></a>dstRepStride</p>
-</td>
-<td class="cellrowborder" valign="top" width="85.49%" headers="mcps1.2.3.1.2 "><p id="p1568874112576"><a name="p1568874112576"></a><a name="p1568874112576"></a>相邻迭代间，矢量目的操作数相同datablock间的地址步长。</p>
-</td>
-</tr>
-<tr id="row416744895313"><td class="cellrowborder" valign="top" width="14.510000000000002%" headers="mcps1.2.3.1.1 "><p id="p332710615819"><a name="p332710615819"></a><a name="p332710615819"></a>blockNumber</p>
-</td>
-<td class="cellrowborder" rowspan="7" valign="top" width="85.49%" headers="mcps1.2.3.1.2 "><p id="p1601381273"><a name="p1601381273"></a><a name="p1601381273"></a>预留参数。为后续的功能做保留，开发者暂时无需关注，使用默认值即可。</p>
-</td>
-</tr>
-<tr id="row516717487537"><td class="cellrowborder" valign="top" headers="mcps1.2.3.1.1 "><p id="p953516579556"><a name="p953516579556"></a><a name="p953516579556"></a>src0BlkStride</p>
-</td>
-</tr>
-<tr id="row191689487531"><td class="cellrowborder" valign="top" headers="mcps1.2.3.1.1 "><p id="p7880131485719"><a name="p7880131485719"></a><a name="p7880131485719"></a>src1BlkStride</p>
-</td>
-</tr>
-<tr id="row9168148155312"><td class="cellrowborder" valign="top" headers="mcps1.2.3.1.1 "><p id="p3513164125610"><a name="p3513164125610"></a><a name="p3513164125610"></a>src0RepStride</p>
-</td>
-</tr>
-<tr id="row1045731112566"><td class="cellrowborder" valign="top" headers="mcps1.2.3.1.1 "><p id="p1345718114561"><a name="p1345718114561"></a><a name="p1345718114561"></a>src1RepStride</p>
-</td>
-</tr>
-<tr id="row1824291417569"><td class="cellrowborder" valign="top" headers="mcps1.2.3.1.1 "><p id="p359183495619"><a name="p359183495619"></a><a name="p359183495619"></a>repeatStrideMode</p>
-</td>
-</tr>
-<tr id="row1946916160567"><td class="cellrowborder" valign="top" headers="mcps1.2.3.1.1 "><p id="p15634427135614"><a name="p15634427135614"></a><a name="p15634427135614"></a>strideSizeMode</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名称 | 含义 |
+| :------- | :--- |
+| dstBlkStride | 单次迭代内，矢量目的操作数不同DataBlock间地址步长，单位为DataBlock。<br><br>**注**：当dstBlkStride值为0时，默认按照1来处理。 |
+| dstRepStride | 相邻迭代间，矢量目的操作数相同DataBlock地址步长，单位为DataBlock。 |
+| blockNumber | **注**：预留的扩展参数，当前因后续架构升级，该参数已废弃，不对其进行业务处理。 |
+| src0BlkStride | **注**：预留的扩展参数，当前因后续架构升级，该参数已废弃，不对其进行业务处理。 |
+| src1BlkStride | **注**：预留的扩展参数，当前因后续架构升级，该参数已废弃，不对其进行业务处理。 |
+| src0RepStride | **注**：预留的扩展参数，当前因后续架构升级，该参数已废弃，不对其进行业务处理。 |
+| src1RepStride | **注**：预留的扩展参数，当前因后续架构升级，该参数已废弃，不对其进行业务处理。 |
+| repeatStrideMode | **注**：预留的扩展参数，当前因后续架构升级，该参数已废弃，不对其进行业务处理。 |
+| strideSizeMode | **注**：预留的扩展参数，当前因后续架构升级，该参数已废弃，不对其进行业务处理。 |
+
+## 数据类型
+
+<cann-filter npu-type="950">Ascend 950PR/Ascend 950DT，支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
+
+<cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的数据类型为：uint16_t、uint32_t。</cann-filter>
+
+<cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的数据类型为：uint16_t、uint32_t。</cann-filter>
+
+<cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品，支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t。</cann-filter>
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-无
+- 操作数地址对齐要求请参见[Unified Buffer地址对齐约束](../../../通用说明和约束.md#section796754519912)。
+- 不支持源操作数与目的操作数使用同一块内存地址。
 
 ## 调用示例<a name="section11276201527"></a>
 
 完整使用样例请参见[Gather类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/02_memory_vector_compute/gather)场景四。
 
-```
+```cpp
 uint32_t bufferLen = 128;
 AscendC::GatherRepeatParams params{1, 8};
 uint8_t repeatTime = bufferLen * sizeof(uint16_t) / 256;
@@ -204,7 +142,7 @@ AscendC::Gatherb<uint16_t>(y_buf, x_buf, offset_buf, repeatTime, params); // rep
 
 结果示例：
 
-```
+```plain
 输入数据(offsetLocal): [224 192 160 128 96 64 32 0]
 输入数据(srcLocal): [0 1 2 3 4 5 6 7 ... 120 121 122 123 124 125 126 127]
 输出数据(dstGlobal):[
@@ -214,4 +152,3 @@ AscendC::Gatherb<uint16_t>(y_buf, x_buf, offset_buf, repeatTime, params); // rep
 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 ]
 ```
-

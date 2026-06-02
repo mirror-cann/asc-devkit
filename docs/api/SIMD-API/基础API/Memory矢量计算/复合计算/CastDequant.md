@@ -51,7 +51,7 @@
 
 对输入做量化并进行精度转换。不同的数据类型，转换公式不同。
 
--   在输入类型为int16\_t的情况下，对int16\_t类型的输入做量化并进行精度转换，得到int8\_t/uint8\_t类型的数据。使用该接口前需要调用[SetDeqScale](../量化设置/SetDeqScale.md)设置scale、offset、signMode等量化参数。
+-   在输入类型为int16\_t的情况下，对int16\_t类型的输入做量化并进行精度转换，得到int8\_t/uint8\_t类型的数据。使用该接口前需要调用[SetDeqScale](../类型转换/寄存器配置说明/SetDeqScale.md)设置scale、offset、signMode等量化参数。
 
     通过模板参数isVecDeq控制是否选择向量量化模式。
 
@@ -63,7 +63,7 @@
 
         ![](../../../../figures/zh-cn_formulaimage_0000002392388081.png)
 
--   在输入类型为int32\_t的情况下，对int32\_t类型的输入做量化并进行精度转换，得到half类型的数据。使用该接口前需要调用[SetDeqScale](../量化设置/SetDeqScale.md)设置scale参数。
+-   在输入类型为int32\_t的情况下，对int32\_t类型的输入做量化并进行精度转换，得到half类型的数据。使用该接口前需要调用[SetDeqScale](../类型转换/寄存器配置说明/SetDeqScale.md)设置scale参数。
 
     .![](../../../../figures/zh-cn_formulaimage_0000002534630339.png)
 
@@ -288,4 +288,3 @@
   0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10 89  3 39 94 23 89 16
  23 60 71 42 46 58 65 90]
 ```
-

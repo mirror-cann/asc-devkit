@@ -222,6 +222,8 @@
                 -   [GatherMask](SIMD-API/基础API/Memory矢量计算/比较与选择/GatherMask.md)
 
             -   [类型转换](SIMD-API/基础API/Memory矢量计算/类型转换/类型转换.md)
+                -   [寄存器配置说明](SIMD-API/基础API/Memory矢量计算/类型转换/寄存器配置说明/寄存器配置说明.md)
+                    -   [SetDeqScale](SIMD-API/基础API/Memory矢量计算/类型转换/寄存器配置说明/SetDeqScale.md)
                 -   [Cast](SIMD-API/基础API/Memory矢量计算/类型转换/Cast.md)
                 -   [Truncate\(ISASI\)](SIMD-API/基础API/Memory矢量计算/类型转换/Truncate(ISASI).md)
 
@@ -240,9 +242,9 @@
                 -   [GetReduceRepeatSumSpr\(ISASI\)](SIMD-API/基础API/Memory矢量计算/归约计算/GetReduceRepeatSumSpr(ISASI).md)
                 -   [GetReduceRepeatMaxMinSpr\(ISASI\)](SIMD-API/基础API/Memory矢量计算/归约计算/GetReduceRepeatMaxMinSpr(ISASI).md)
 
-            -   [数据转换](SIMD-API/基础API/Memory矢量计算/数据转换/数据转换.md)
-                -   [Transpose](SIMD-API/基础API/Memory矢量计算/数据转换/Transpose.md)
-                -   [TransDataTo5HD](SIMD-API/基础API/Memory矢量计算/数据转换/TransDataTo5HD.md)
+            -   [数据排布转换](SIMD-API/基础API/Memory矢量计算/数据排布转换/数据排布转换.md)
+                -   [Transpose](SIMD-API/基础API/Memory矢量计算/数据排布转换/Transpose.md)
+                -   [TransDataTo5HD](SIMD-API/基础API/Memory矢量计算/数据排布转换/TransDataTo5HD.md)
 
             -   [数据填充](SIMD-API/基础API/Memory矢量计算/数据填充/数据填充.md)
                 -   [Duplicate](SIMD-API/基础API/Memory矢量计算/数据填充/Duplicate.md)
@@ -269,9 +271,6 @@
                 -   [SetMaskNorm](SIMD-API/基础API/Memory矢量计算/掩码操作/SetMaskNorm.md)
                 -   [SetVectorMask](SIMD-API/基础API/Memory矢量计算/掩码操作/SetVectorMask.md)
                 -   [ResetMask](SIMD-API/基础API/Memory矢量计算/掩码操作/ResetMask.md)
-
-            -   [量化设置](SIMD-API/基础API/Memory矢量计算/量化设置/量化设置.md)
-                -   [SetDeqScale](SIMD-API/基础API/Memory矢量计算/量化设置/SetDeqScale.md)
 
             -   [数据重排（ISASI）](SIMD-API/基础API/Memory矢量计算/数据重排（ISASI）/数据重排（ISASI）.md)
                 -   [Interleave](SIMD-API/基础API/Memory矢量计算/数据重排（ISASI）/Interleave.md)

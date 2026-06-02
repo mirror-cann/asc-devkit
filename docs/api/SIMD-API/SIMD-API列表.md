@@ -367,14 +367,14 @@
 <td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1481215214350"><a name="p1481215214350"></a><a name="p1481215214350"></a>每个repeat内所有数据求和。和<a href="基础API/Memory矢量计算/归约计算/WholeReduceSum.md">WholeReduceSum</a>接口相比，不支持mask逐bit模式。建议使用功能更全面的<a href="基础API/Memory矢量计算/归约计算/WholeReduceSum.md">WholeReduceSum</a>接口。</p>
 </td>
 </tr>
-<tr id="row109261892541"><td class="cellrowborder" rowspan="2" valign="top" width="15.590000000000002%" headers="mcps1.2.4.1.1 "><p id="p629093119547"><a name="p629093119547"></a><a name="p629093119547"></a>数据转换</p>
+<tr id="row109261892541"><td class="cellrowborder" rowspan="2" valign="top" width="15.590000000000002%" headers="mcps1.2.4.1.1 "><p id="p629093119547"><a name="p629093119547"></a><a name="p629093119547"></a>数据排布转换</p>
 </td>
-<td class="cellrowborder" valign="top" width="24.64%" headers="mcps1.2.4.1.2 "><p id="p42901731145414"><a name="p42901731145414"></a><a name="p42901731145414"></a><a href="基础API/Memory矢量计算/数据转换/Transpose.md">Transpose</a></p>
+<td class="cellrowborder" valign="top" width="24.64%" headers="mcps1.2.4.1.2 "><p id="p42901731145414"><a name="p42901731145414"></a><a name="p42901731145414"></a><a href="基础API/Memory矢量计算/数据排布转换/Transpose.md">Transpose</a></p>
 </td>
 <td class="cellrowborder" valign="top" width="59.77%" headers="mcps1.2.4.1.3 "><p id="p1429010318547"><a name="p1429010318547"></a><a name="p1429010318547"></a>可实现16*16的二维矩阵数据块的转置和[N,C,H,W]与[N,H,W,C]互相转换。</p>
 </td>
 </tr>
-<tr id="row476616718548"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p629033110540"><a name="p629033110540"></a><a name="p629033110540"></a><a href="基础API/Memory矢量计算/数据转换/TransDataTo5HD.md">TransDataTo5HD</a></p>
+<tr id="row476616718548"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p629033110540"><a name="p629033110540"></a><a name="p629033110540"></a><a href="基础API/Memory矢量计算/数据排布转换/TransDataTo5HD.md">TransDataTo5HD</a></p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p162901631125410"><a name="p162901631125410"></a><a name="p162901631125410"></a>数据格式转换，一般用于将NCHW格式转换成NC1HWC0格式。特别的，也可以用于二维矩阵数据块的转置。</p>
 </td>
@@ -423,13 +423,6 @@
 <tr id="row15756339433"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p3324039144317"><a name="p3324039144317"></a><a name="p3324039144317"></a><a href="基础API/Memory矢量计算/掩码操作/ResetMask.md">ResetMask</a></p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p57533324312"><a name="p57533324312"></a><a name="p57533324312"></a>恢复mask的值为默认值（全1），表示矢量计算中每次迭代内的所有元素都将参与运算。</p>
-</td>
-</tr>
-<tr id="row743516194407"><td class="cellrowborder" valign="top" width="15.590000000000002%" headers="mcps1.2.4.1.1 "><p id="p23240390438"><a name="p23240390438"></a><a name="p23240390438"></a>量化设置</p>
-</td>
-<td class="cellrowborder" valign="top" width="24.64%" headers="mcps1.2.4.1.2 "><p id="p10324173918436"><a name="p10324173918436"></a><a name="p10324173918436"></a><a href="基础API/Memory矢量计算/量化设置/SetDeqScale.md">SetDeqScale</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="59.77%" headers="mcps1.2.4.1.3 "><p id="p1238122924318"><a name="p1238122924318"></a><a name="p1238122924318"></a>设置DEQSCALE寄存器的值。</p>
 </td>
 </tr>
 </tbody>

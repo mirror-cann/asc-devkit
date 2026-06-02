@@ -57,7 +57,7 @@ Deq的计算公式如下：
 
 ![](../../../../figures/zh-cn_formulaimage_0000001863112121.png)
 
-如上公式先除以2^17再乘以2^17用于防止x乘以DeqScale出现溢出情况；公式中DeqScale需要通过SetDeqScale进行设置，具体可参考[SetDeqScale](../量化设置/SetDeqScale.md)。
+如上公式先除以2^17再乘以2^17用于防止x乘以DeqScale出现溢出情况；公式中DeqScale需要通过SetDeqScale进行设置，具体可参考[SetDeqScale](../类型转换/寄存器配置说明/SetDeqScale.md)。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -263,4 +263,3 @@ Deq的计算公式如下：
 输入数据src1Local：[19 33 34 50 42  2 97 93 99 ...]
 输出数据dstLocal：[8.9 6.9 7.7 10.4 7.0 5.1 12.4 17.5 19.4 ...]
 ```
-
