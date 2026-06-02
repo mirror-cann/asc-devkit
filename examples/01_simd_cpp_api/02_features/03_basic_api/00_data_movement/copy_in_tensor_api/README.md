@@ -8,6 +8,12 @@
 
 - Ascend 950PR/Ascend 950DT
 
+## 支持的CANN软件版本
+
+- \> CANN 9.1.0
+
+> **说明：** 该样例依赖尚未正式发布的CANN特性，请使用最新的CANN master包。
+
 ## 目录结构介绍
 
 ```text
@@ -149,24 +155,12 @@
 在本样例根目录下执行如下步骤，编译并执行样例。
 
 - 配置环境变量
-  请根据当前环境上CANN开发套件包的[安装方式](./../../../../../../docs/quick_start.md#prepare&install)，选择对应配置环境变量的命令，**当前仅支持使用[CANN master](./../../../../../../docs/quick_start.md#下载-cann-master)**。
-  - 默认路径，root用户安装CANN软件包
+  请根据当前环境上CANN开发套件包的[安装方式](./../../../../../../docs/quick_start.md#prepare&install)，配置环境变量。，**当前仅支持使用[CANN master](./../../../../../../docs/quick_start.md#下载-cann-master)**。
+  ```bash
+  source ${install_path}/cann/set_env.sh
+  ```
 
-    ```bash
-    source /usr/local/Ascend/cann/set_env.sh
-    ```
-
-  - 默认路径，非root用户安装CANN软件包
-
-    ```bash
-    source $HOME/Ascend/cann/set_env.sh
-    ```
-
-  - 指定路径install_path，安装CANN软件包
-
-    ```bash
-    source ${install_path}/cann/set_env.sh
-    ```
+  > **说明：** `${install_path}` 为CANN包安装目录，未指定安装目录时默认安装至 `/usr/local/Ascend` 下。
 
 - 样例执行
   以场景0（AB不转置，half）为例：
@@ -195,7 +189,7 @@
   | 参数 | 说明 | 可选值 | 默认值 |
   | :--- | :--- | :--- | :--- |
   | CMAKE_ASC_RUN_MODE | 运行模式 | npu, sim | npu |
-  | CMAKE_ASC_ARCHITECTURES | NPU硬件架构 | dav-3510 | dav-3510 |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：dav-3510 对应 Ascend 950PR/Ascend 950DT |
 
 - 执行结果
 

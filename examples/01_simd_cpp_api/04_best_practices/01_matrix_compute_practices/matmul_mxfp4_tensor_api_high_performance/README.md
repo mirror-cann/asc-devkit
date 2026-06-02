@@ -8,6 +8,12 @@
 
 - Ascend 950PR / Ascend 950DT
 
+## 支持的CANN软件版本
+
+- \> CANN 9.1.0
+
+> **说明：** 该样例依赖尚未正式发布的CANN特性，请使用最新的CANN master包。
+
 ## 目录结构
 
 ```text
@@ -455,6 +461,8 @@ python3 -m pip install ml_dtypes==0.2.0 en_dtypes==0.0.4
   ```
 
 ### 样例执行
+
+在本样例目录下执行如下命令。
 
 ```bash
 mkdir -p build && cd build;  # 创建并进入 build 目录
