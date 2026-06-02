@@ -13,6 +13,7 @@ include(cmake/fetch_cann_cmake.cmake)
 project(asc-devkit)
 
 init_cann_project(PREPEND_MODULE_PATH)
+add_cann_target_options()
 option(BUILD_OPEN_PROJECT "Build open asc-devkit lib project" ON)
 
 set(CMAKE_C_FLAGS_RELEASE "")
@@ -34,7 +35,6 @@ if(BUILD_OPEN_PROJECT)
   include(cmake/config.cmake)
   include(cmake/func.cmake)
   set(INSTALL_LIBRARY_DIR ${CMAKE_SYSTEM_PROCESSOR}-linux)
-  include(cmake/intf_pub_linux.cmake)
   include(cmake/dependencies.cmake)
 endif()
 

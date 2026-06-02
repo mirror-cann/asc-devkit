@@ -13,6 +13,7 @@ include(../fetch_cann_cmake.cmake)
 project(ascendc_tiling_api)
 
 init_cann_project(PRODUCT_SIDE "device" PREPEND_MODULE_PATH)
+add_cann_target_options()
 
 set(HI_PYTHON "python3" CACHE STRING "python executor")
 set(ASCENDC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)

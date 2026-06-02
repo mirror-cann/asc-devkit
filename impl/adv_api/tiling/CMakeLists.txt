@@ -170,8 +170,6 @@ target_compile_options(
           -O2
           $<$<STREQUAL:${PRODUCT_SIDE},device>:-fPIC>
           $<$<STREQUAL:${PRODUCT_SIDE},device>:-fstack-protector-strong>
-          $<$<STREQUAL:${PRODUCT_SIDE},device>:-fstack-protector-all>
-          $<$<STREQUAL:${PRODUCT_SIDE},device>:-std=c++11>
           $<$<STREQUAL:${PRODUCT_SIDE},device>:-fvisibility-inlines-hidden>
           $<$<STREQUAL:${PRODUCT_SIDE},device>:-DASCEND_IS_AICPU>
           $<$<STREQUAL:${PRODUCT_SIDE},device>:-fvisibility=hidden>)
