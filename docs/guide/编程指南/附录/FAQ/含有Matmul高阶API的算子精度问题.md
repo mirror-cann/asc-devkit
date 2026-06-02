@@ -77,7 +77,7 @@
 
 2.  **Matmul Tiling是否有修改，修改是否合理**
 
-    一般含有Matmul的算子Tiling实现中，通过调用[GetTiling](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GetTiling.md)接口获取Matmul Tiling，其数据类型为[TCubeTiling](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md)结构体，这时这组Tiling值是合法的。某些情况下，用户自定义了一组TCubeTiling参数值，或者，基于[GetTiling](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GetTiling.md)接口返回的TCubeTiling，自行修改了其中的部分值，这样的修改需要满足参数间的制约条件。
+    一般含有Matmul的算子Tiling实现中，通过调用[GetTiling](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Tiling侧接口/Matmul-Tiling类/GetTiling.md)接口获取Matmul Tiling，其数据类型为[TCubeTiling](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md)结构体，这时这组Tiling值是合法的。某些情况下，用户自定义了一组TCubeTiling参数值，或者，基于[GetTiling](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Tiling侧接口/Matmul-Tiling类/GetTiling.md)接口返回的TCubeTiling，自行修改了其中的部分值，这样的修改需要满足参数间的制约条件。
 
     为获取所有Tiling参数值，需要打印Tiling参数相关的日志。设置日志环境变量，获取MatmulTiling参数值。设置环境变量的命令如下：
 
@@ -568,13 +568,13 @@
 
     -   案例1：未遵循接口约束条件
 
-        在Matmul MDL模板下，调用[IterateBatch](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/IterateBatch.md)接口，导致算子执行失败。这是由于不满足该接口的约束条件，IterateBatch接口仅支持Norm模板。
+        在Matmul MDL模板下，调用[IterateBatch](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/IterateBatch.md)接口，导致算子执行失败。这是由于不满足该接口的约束条件，IterateBatch接口仅支持Norm模板。
 
         此类问题，应仔细阅读Matmul各接口中的约束条件，并排查算子实现使用的相关接口，是否满足对应接口的约束条件。
 
     -   案例2：未遵循模板约束条件
 
-        在开启[doMTE2Preload](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulConfig.md)预加载模板时，若K方向非全载，不满足模板约束条件，则会导致精度比对失败。
+        在使能[doMTE2Preload](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulConfig.md)预加载模板时，若K方向非全载，不满足模板约束条件，则会导致精度比对失败。
 
         除了满足函数接口约束条件外，也需要满足模板参数相应的约束条件，排查模板参数的使用。
 

@@ -45,6 +45,7 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
     ![](../../../../figures/图1-AI-Core内部并行计算架构抽象示意图-35.png)
 
 -   在子Kernel中调用[GetBlockNum](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/系统变量访问/GetBlockNum.md)接口获取核数时，无论是否融合SuperKernel，获取的核数保持不变，不受SuperKernel启动核数的影响。因此，在使用该接口时，开发者无需特别关注SuperKernel的启动核数，使用方法和开发普通算子时一样。
+
 -   在SuperKernel场景下，如下Ascend C API在算子编译过程中适配了SuperKernel，子算子需要严格按照Ascend C提供的API进行编程，从而无需感知是否使能SuperKernel。例如在获取核数和索引时，不能调用block_idx、block_num等底层变量和相关API，必须使用下表中的Ascend C API：
 
     | API列表 | 功能描述 |

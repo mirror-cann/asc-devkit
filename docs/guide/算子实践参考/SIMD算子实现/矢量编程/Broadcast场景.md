@@ -141,7 +141,7 @@ __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, AddCustomTilingData
 }
 ```
 
-由于数据是向coef对齐的，在数据拷贝的过程中可能会出现地址不满足32字节对齐的场景，因此CopyIn函数、CopyOut函数中使用[DataCopyPad](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/DataCopyPad(ISASI).md)进行数据拷贝。
+由于数据是向coef对齐的，在数据拷贝的过程中可能会出现地址不满足32字节对齐的场景，因此CopyIn函数、CopyOut函数中使用[DataCopyPad](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory数据搬运/DataCopyPad(ISASI).md)进行数据拷贝。
 
 CopyIn函数实现代码如下：
 
