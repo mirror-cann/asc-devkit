@@ -17,7 +17,7 @@
 ## 目录结构介绍
 
 ```
-├── msProf
+├── msprof
 │   ├── CMakeLists.txt       // 编译工程文件
 │   ├── msprof.asc           // Ascend C样例实现和Host侧调用样例
 │   └── README.md            // 样例说明

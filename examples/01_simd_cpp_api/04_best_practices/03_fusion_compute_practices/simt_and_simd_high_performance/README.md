@@ -411,7 +411,7 @@ __aicore__ inline void CopyOut(uint32_t tileIdx, uint32_t count, AscendC::LocalT
 
   | 选项 | 可选值 | 说明 |
   |:---|:---|:---|
-  | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`sim` | 运行模式：NPU仿真、NPU运行 |
+  | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`sim` | 运行模式：NPU运行、NPU仿真 |
   | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU架构，对应 Ascend 950PR/Ascend 950DT |
   | `SCENARIO_NUM` | `0`、`1`、`2`、`3` | Case编号：0=SIMT直接访问GM，1=SIMD RegBase，2=SIMT非连续访问，3=SIMT连续访问 |
 
