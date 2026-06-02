@@ -23,6 +23,7 @@
 #define IMPL_MATH_CLAMP_CLAMP_C310_IMPL_H
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
+#include "include/adv_api/math/clamp_utils.h"
 #include "../../common/check.h"
 
 #ifdef ASCENDC_CPU_DEBUG
@@ -110,11 +111,6 @@ __aicore__ inline void ClampMinImpl(
 /* **************************************************************************************************
  * Clamp                                           *
  * ************************************************************************************************* */
-struct ClampConfig {
-    bool isReuseSource;
-};
-constexpr ClampConfig DEFAULT_CLAMP_CONFIG = {false};
-
 template <typename T, typename RegT, const Reg::RegTrait& Trait = Reg::RegTraitNumOne>
 __simd_vf__ inline void ClampImplTensorScalarVF(
     __ubuf__ T* dst, __ubuf__ T* src, __ubuf__ T* min, const T max, uint16_t repeatTime, uint32_t count,

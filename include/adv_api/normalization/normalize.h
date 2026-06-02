@@ -21,8 +21,8 @@
 #ifndef LIB_NORMALIZATION_NORMALIZE_H
 #define LIB_NORMALIZATION_NORMALIZE_H
 #include "include/adv_api/normalization/normalize_utils.h"
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
+#include "../../../impl/adv_api/detail/normalization/normalize/normalize_config.h"
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201)
 #include "../../../impl/adv_api/detail/normalization/normalize/normalize_common_impl.h"
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
@@ -57,8 +57,10 @@ __aicore__ inline void Normalize(const LocalTensor<T>& output, const LocalTensor
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     NormalizeImpl<U, T, isReuseSource, config>(output, outputRstd, inputMean, inputVariance, inputX, gamma, beta,
         sharedTmpBuffer, epsilon, para);
+#endif
 }
 
 /*!
@@ -85,12 +87,13 @@ __aicore__ inline void Normalize(const LocalTensor<T>& output, const LocalTensor
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     NormalizeImpl<U, T, isReuseSource, config>(output, outputRstd, inputMean, inputVariance, inputX, gamma, beta,
         epsilon, para);
+#endif
 }
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_NORMALIZATION_NORMALIZE_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_NORMALIZE_H__)

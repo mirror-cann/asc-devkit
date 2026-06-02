@@ -25,8 +25,6 @@
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
 #include "../../../impl/adv_api/detail/normalization/rmsnorm/rmsnorm_3510_impl.h"
 #endif
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || \
-    __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
 namespace AscendC {
 #pragma begin_pipe(V)
 /*!
@@ -52,7 +50,10 @@ __aicore__ inline void RmsNorm(const LocalTensor<T>& dstLocal, const LocalTensor
     }
     ASCENDC_ASSERT((IsSameType<T, half>::value || IsSameType<T, float>::value),
         { KERNEL_LOG(KERNEL_ERROR, "RmsNorm only support data type: float/half"); });
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || \
+    __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     RmsNormAPI::RmsNormImpl<T, isBasicBlock>(dstLocal, srcLocal, gammaLocal, sharedTmpBuffer, epsilon, tiling);
+#endif
 }
 
 /*!
@@ -78,11 +79,13 @@ __aicore__ inline void RmsNorm(const LocalTensor<T>& dstLocal, const LocalTensor
     LocalTensor<uint8_t> stackBufer;
     bool ret = PopStackBuffer<uint8_t, TPosition::LCM>(stackBufer);
     ASCENDC_ASSERT((ret), { KERNEL_LOG(KERNEL_ERROR, "RmsNorm failed to apply for tmp buffer!"); });
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || \
+    __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     RmsNorm<T, isBasicBlock>(dstLocal, srcLocal, gammaLocal, stackBufer, epsilon, tiling);
+#endif
 }
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_NORMALIZATION_RMSNORM_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_RMSNORM_H__)

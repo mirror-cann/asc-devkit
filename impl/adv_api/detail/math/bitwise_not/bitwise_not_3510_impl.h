@@ -22,16 +22,13 @@
 #ifndef IMPL_MATH_BITWISE_NOT_BITWISE_NOT_C310_IMPL_H
 #define IMPL_MATH_BITWISE_NOT_BITWISE_NOT_C310_IMPL_H
 #include "kernel_basic_intf.h"
+#include "include/adv_api/math/bitwise_not_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/bitwise_not/bitwise_not_check.h"
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 
 namespace AscendC {
-struct BitwiseNotConfig {
-    bool isReuseSource;
-};
-constexpr BitwiseNotConfig DEFAULT_BITWISE_NOT_CONFIG = {false};
 template <typename T, typename RegT, const Reg::RegTrait& Trait = Reg::RegTraitNumOne>
 __simd_vf__ inline void BitwiseNotCompute(
     __ubuf__ T* dst, __ubuf__ T* src, uint32_t count, uint16_t repeatTime, uint32_t oneRepElm, uint32_t offset)

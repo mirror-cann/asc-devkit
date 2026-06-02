@@ -25,17 +25,13 @@
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
 #include "../logical_template/logical_template.h"
+#include "include/adv_api/math/logical_and_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/logical_and/logical_and_check.h"
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 
 namespace AscendC {
-struct LogicalAndConfig {
-    bool isReuseSource;
-};
-constexpr LogicalAndConfig DEFAULT_LOGICAL_AND_CONFIG = {false};
-
 template <const LogicalAndConfig& config = DEFAULT_LOGICAL_AND_CONFIG, typename T, typename U>
 __aicore__ inline void LogicalAndImpl(
     const LocalTensor<T>& dst, const LocalTensor<U>& src0, const LocalTensor<U>& src1, const uint32_t count)

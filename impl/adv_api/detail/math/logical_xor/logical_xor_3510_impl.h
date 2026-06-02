@@ -22,6 +22,7 @@
 #ifndef IMPL_MATH_LOGICAL_XOR_LOGICAL_XOR_C310_IMPL_H
 #define IMPL_MATH_LOGICAL_XOR_LOGICAL_XOR_C310_IMPL_H
 #include "kernel_basic_intf.h"
+#include "include/adv_api/math/logical_xor_utils.h"
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../logical_template/logical_template.h"
 #ifdef ASCENDC_CPU_DEBUG
@@ -29,10 +30,6 @@
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 namespace AscendC {
-struct LogicalXorConfig {
-    bool isReuseSource;
-};
-constexpr LogicalXorConfig DEFAULT_LOGICAL_XOR_CONFIG = {false};
 template <const LogicalXorConfig& config = DEFAULT_LOGICAL_XOR_CONFIG, typename T, typename U>
 __aicore__ inline void LogicalXorImpl(
     const LocalTensor<T>& dst, const LocalTensor<U>& src0, const LocalTensor<U>& src1, uint32_t count)

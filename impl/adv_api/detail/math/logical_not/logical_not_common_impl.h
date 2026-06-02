@@ -24,17 +24,13 @@
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
+#include "include/adv_api/math/logical_not_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/logical_not/logical_not_check.h"
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 
 namespace AscendC {
-struct LogicalNotConfig {
-    bool isReuseSource;
-};
-constexpr LogicalNotConfig DEFAULT_LOGICAL_NOT_CONFIG = {false};
-
 template <typename T, typename U, typename RegT, typename RegU, const Reg::RegTrait& Trait = Reg::RegTraitNumOne>
 __simd_vf__ inline void LogicalNotVF(
     __ubuf__ T* dst, __ubuf__ U* src, uint16_t repeatTime, uint32_t count, uint32_t oneRepElm)

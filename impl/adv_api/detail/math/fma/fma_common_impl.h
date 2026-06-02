@@ -23,6 +23,7 @@
 #define IMPL_MATH_FMA_FMA_COMMON_IMPL_H
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
+#include "include/adv_api/math/fma_utils.h"
 #include "../../common/check.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/fma/fma_check.h"
@@ -30,11 +31,6 @@
 #include "../../api_check/kernel_api_check.h"
 
 namespace AscendC {
-struct FmaConfig {
-    bool isReuseSource;
-};
-constexpr FmaConfig DEFAULT_FMA_CONFIG = {false};
-
 template <typename T>
 __simd_vf__ inline void FmaImplVF(
     __ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ T* src1, __ubuf__ T* src2, uint32_t count, uint16_t repeatTimes)

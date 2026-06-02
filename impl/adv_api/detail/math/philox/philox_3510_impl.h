@@ -23,6 +23,7 @@
 #define IMPL_MATH_PHILOX_PHILOX_C310_IMPL_H
 #include <cstdint>
 #include "kernel_basic_intf.h"
+#include "include/adv_api/math/philox_utils.h"
 namespace AscendC {
 namespace PhiloxInternal {
 // philox algorithm constant
@@ -48,20 +49,9 @@ constexpr uint32_t EXP_MASK = static_cast<uint32_t>(127) << 23u; // 7 bit exp
 } // namespace PhiloxInternal
 
 // 64 bit key and 128-bit counter, little endian
-constexpr uint16_t PHILOX_KEY_SIZE = 2;
-constexpr uint16_t PHILOX_COUNTER_SIZE = 4;
 struct philoxStruct {
     uint32_t philoxKey[PHILOX_KEY_SIZE] = {0};
     uint32_t philoxCounter[PHILOX_COUNTER_SIZE] = {0};
-};
-
-using PhiloxKey = uint32_t[PHILOX_KEY_SIZE];
-using PhiloxCounter = uint32_t[PHILOX_COUNTER_SIZE];
-
-struct PhiloxRandomParams {
-    uint32_t stride;
-    uint32_t row;
-    uint32_t column;
 };
 
 __simd_callee__ inline void AddWith128Bits(

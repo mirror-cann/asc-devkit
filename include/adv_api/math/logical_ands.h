@@ -22,9 +22,12 @@
 #ifndef LIB_MATH_LOGICAL_ANDS_H
 #define LIB_MATH_LOGICAL_ANDS_H
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
+#include "logical_ands_utils.h"
+
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/math/logical_ands/logical_ands_common_impl.h"
+#endif
 
 namespace AscendC {
 #pragma begin_pipe(V)
@@ -38,12 +41,13 @@ namespace AscendC {
 template <const LogicalAndsConfig& config = DEFAULT_LOGICAL_ANDS_CONFIG, typename T, typename U, typename S>
 __aicore__ inline void LogicalAnds(const LocalTensor<T>& dst, const U& src0, const S& src1, const uint32_t count)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     LogicalAndsImpl<config, T, U, S>(dst, src0, src1, count);
+#endif
 }
 
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_MATH_LOGICAL_ANDS_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_LOGICAL_ANDS_H__)

@@ -26,20 +26,6 @@
 #include "include/adv_api/quantization/ascend_dequant_utils.h"
 
 namespace AscendC {
-struct AscendDeQuantConfig {
-    bool hasOffset;
-    int32_t kDim = 1;
-};
-
-enum class AscendDeQuantPolicy : int32_t { PER_TOKEN, PER_GROUP, PER_CHANNEL_PER_GROUP, PER_TOKEN_PER_GROUP };
-
-struct AscendDeQuantParam {
-    uint32_t m;
-    uint32_t n;
-    uint32_t calCount;
-    uint32_t groupSize = 0;
-};
-
 } // namespace AscendC
 #endif // LIB_ASCEND_ANTIQUANT_IMPL_ASCEND_ANTIQUANT_COMMON_H
 

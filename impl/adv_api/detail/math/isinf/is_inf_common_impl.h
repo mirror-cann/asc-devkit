@@ -24,6 +24,7 @@
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
+#include "include/adv_api/math/is_inf_utils.h"
 
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/isinf/is_inf_check.h"
@@ -31,11 +32,6 @@
 #include "../../api_check/kernel_api_check.h"
 
 namespace AscendC {
-struct IsInfConfig {
-    bool isReuseSource;
-};
-constexpr IsInfConfig DEFAULT_IS_INF_CONFIG = {false};
-
 template <typename T, typename U>
 __simd_vf__ inline void IsInfImplVF(__ubuf__ T* dst, __ubuf__ U* src, uint32_t count, uint16_t repeatTimes)
 {

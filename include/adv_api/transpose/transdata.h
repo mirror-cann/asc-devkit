@@ -15,12 +15,13 @@
 
 #ifndef LIB_TRANSPOSE_TRANSDATA_H
 #define LIB_TRANSPOSE_TRANSDATA_H
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "transdata_common.h"
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
 #include "kernel_pop_stack_buffer.h"
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/transpose/transdata/transdata_impl.h"
+#endif
 #if ASCENDC_CPU_DEBUG
 #include "kernel_log.h"
 #include <type_traits>
@@ -32,7 +33,9 @@ template <const TransDataConfig& config, typename T, typename U, typename S>
 __aicore__ inline void TransData(const LocalTensor<T>& dstTensor, const LocalTensor<T>& srcTensor,
     const LocalTensor<uint8_t>& sharedTmpBuffer, const TransDataParams<U, S>& params)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     Internal::TransDataImpl<config, T, U, S>(dstTensor, srcTensor, sharedTmpBuffer, params);
+#endif
 }
 
 template <const TransDataConfig& config, typename T, typename U, typename S>
@@ -43,14 +46,15 @@ __aicore__ inline void TransData(const LocalTensor<T>& dstTensor, const LocalTen
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     LocalTensor<uint8_t> tmp;
     const bool ret = PopStackBuffer<uint8_t, TPosition::LCM>(tmp);
     ASCENDC_ASSERT((ret), { KERNEL_LOG(KERNEL_ERROR, "PopStackBuffer Error!"); });
 
     TransData<config, T, U, S>(dstTensor, srcTensor, tmp, params);
+#endif
 }
 } // namespace AscendC
-#endif
 #endif // LIB_TRANSPOSE_TRANSDATA_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_TRANSDATA_H__)

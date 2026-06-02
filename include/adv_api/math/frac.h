@@ -21,12 +21,15 @@
 
 #ifndef LIB_MATH_FRAC_H
 #define LIB_MATH_FRAC_H
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
+
 #include "kernel_tensor.h"
+
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/math/frac/frac_3510_impl.h"
 #else
 #include "../../../impl/adv_api/detail/math/frac/frac_common_impl.h"
+#endif
 #endif
 
 namespace AscendC {
@@ -53,7 +56,9 @@ __aicore__ inline void Frac(const LocalTensor<T>& dstTensor, const LocalTensor<T
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     FracImpl<T, isReuseSource>(dstTensor, srcTensor, sharedTmpBuffer, calCount);
+#endif
 }
 
 /*!
@@ -105,11 +110,12 @@ __aicore__ inline void Frac(const LocalTensor<T>& dstTensor, const LocalTensor<T
 template <typename T, bool isReuseSource = false>
 __aicore__ inline void Frac(const LocalTensor<T>& dstTensor, const LocalTensor<T>& srcTensor, const uint32_t calCount)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     FracImpl<T, isReuseSource>(dstTensor, srcTensor, calCount);
+#endif
 }
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_MATH_FRAC_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_FRAC_H__)

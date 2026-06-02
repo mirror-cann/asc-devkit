@@ -28,6 +28,7 @@
     __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
 #include "../../../impl/adv_api/detail/activation/softmax/softmax_common.h"
 #include "../../../impl/adv_api/detail/activation/softmax/softmax_base_impl.h"
+#endif
 #pragma begin_pipe(V)
 
 namespace AscendC {
@@ -55,10 +56,13 @@ __aicore__ inline void SoftMax(const LocalTensor<T>& dstTensor, const LocalTenso
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002 || __NPU_ARCH__ == 5102 || \
+    __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     TRACE_START(TraceId::SoftMax);
     SoftMaxImpl<T, T, isReuseSource, isBasicBlock, isDataFormatNZ, config>(dstTensor, sumTensor, maxTensor, srcTensor, tiling,
         softmaxShapeInfo);
     TRACE_STOP(TraceId::SoftMax);
+#endif
 }
 
 /*!
@@ -84,10 +88,13 @@ __aicore__ inline void SoftMax(const LocalTensor<half>& dstTensor, const LocalTe
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002 || __NPU_ARCH__ == 5102 || \
+    __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     TRACE_START(TraceId::SoftMax);
     SoftMaxImpl<half, float, isReuseSource, isBasicBlock, isDataFormatNZ, config>(dstTensor, sumTensor, maxTensor, srcTensor, tiling,
         softmaxShapeInfo);
     TRACE_STOP(TraceId::SoftMax);
+#endif
 }
 
 /*!
@@ -109,9 +116,12 @@ __aicore__ inline void SoftMax(const LocalTensor<T>& dstTensor, const LocalTenso
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002 || __NPU_ARCH__ == 5102 || \
+    __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     TRACE_START(TraceId::SoftMax);
     SoftMaxImpl<T, isReuseSource, isBasicBlock, config>(dstTensor, srcTensor, tiling, softmaxShapeInfo);
     TRACE_STOP(TraceId::SoftMax);
+#endif
 }
 
 /*!
@@ -136,10 +146,13 @@ __aicore__ inline void SoftMax(const LocalTensor<T>& dstTensor, const LocalTenso
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002 || __NPU_ARCH__ == 5102 || \
+    __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     TRACE_START(TraceId::SoftMax);
     SoftMaxImpl<T, isReuseSource, isBasicBlock, config>(dstTensor, srcTensor, sharedTmpBuffer, tiling,
         softmaxShapeInfo);
     TRACE_STOP(TraceId::SoftMax);
+#endif
 }
 
 /*!
@@ -168,10 +181,13 @@ __aicore__ inline void SoftMax(const LocalTensor<T>& dstTensor, const LocalTenso
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002 || __NPU_ARCH__ == 5102 || \
+    __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     TRACE_START(TraceId::SoftMax);
     SoftMaxImpl<T, T, isReuseSource, isBasicBlock, isDataFormatNZ,config>(dstTensor, sumTensor, maxTensor, srcTensor, sharedTmpBuffer,
         tiling, softmaxShapeInfo);
     TRACE_STOP(TraceId::SoftMax);
+#endif
 }
 
 /*!
@@ -200,10 +216,13 @@ __aicore__ inline void SoftMax(const LocalTensor<half>& dstTensor, const LocalTe
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002 || __NPU_ARCH__ == 5102 || \
+    __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     TRACE_START(TraceId::SoftMax);
     SoftMaxImpl<half, float, isReuseSource, isBasicBlock, isDataFormatNZ, config>(dstTensor, sumTensor, maxTensor, srcTensor,
         sharedTmpBuffer, tiling, softmaxShapeInfo);
     TRACE_STOP(TraceId::SoftMax);
+#endif
 }
 
 /*!
@@ -225,12 +244,16 @@ __aicore__ inline bool AdjustSoftMaxRes(const LocalTensor<T1>& softMaxRes, const
     if ASCEND_IS_AIC {
         return false;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002 || __NPU_ARCH__ == 5102 || \
+    __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     return AdjustSoftMaxResImpl<T1, T2, isDataFormatNZ, stepSizeMode>(softMaxRes, maxTensor, from, to, softmaxShapeInfo);
+#else
+    return false;
+#endif
 }
 } // namespace AscendC
 
 #pragma end_pipe
-#endif
 #endif // LIB_SOFTMAX_SOFTMAX_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_SOFTMAX_H__)

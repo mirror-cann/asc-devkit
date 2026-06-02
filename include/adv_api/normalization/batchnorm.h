@@ -30,7 +30,6 @@
 #elif defined(__NPU_ARCH__) && __NPU_ARCH__ == 3510
 #include "../../../impl/adv_api/detail/normalization/batchnorm/batchnorm_3510_impl.h"
 #endif
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510)
 namespace AscendC {
 #pragma begin_pipe(V)
 /* **************************************************************************************************
@@ -59,8 +58,10 @@ __aicore__ inline void BatchNorm(const LocalTensor<T>& output, const LocalTensor
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510)
     BatchNormAPI::BatchNormImpl<T, isReuseSource, isBasicBlock>(output, outputMean, outputVariance, inputX, gamm, beta,
         sharedTmpBuffer, epsilon, tiling);
+#endif
 }
 
 template <typename T, bool isReuseSource = false, bool isBasicBlock = false>
@@ -71,12 +72,13 @@ __aicore__ inline void BatchNorm(const LocalTensor<T>& output, const LocalTensor
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510)
     BatchNormAPI::BatchNormImpl<T, isReuseSource, isBasicBlock>(output, outputMean, outputVariance, inputX, gamm, beta,
         epsilon, tiling);
+#endif
 }
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_NORMALIZATION_BATCHNORM_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_BATCHNORM_H__)

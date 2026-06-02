@@ -23,11 +23,12 @@
 #ifndef LIB_QUANTIZATION_QUANTIZE_H
 #define LIB_QUANTIZATION_QUANTIZE_H
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
 #include "include/adv_api/quantization/quantize_utils.h"
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/common/check.h"
 #include "../../../impl/adv_api/detail/quantization/quantize/quantize_impl.h"
+#endif
 namespace AscendC {
 #pragma begin_pipe(V)
 
@@ -49,7 +50,9 @@ template <const QuantizeConfig& config, typename DstT, typename SrcT, typename S
 __aicore__ inline void Quantize(const LocalTensor<DstT>& dstTensor, const LocalTensor<SrcT>& srcTensor,
     const ScaleT& scale, const OffsetT& offset, const QuantizeParams& params)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     QuantizeImpl<config, DstT, SrcT, ScaleT, OffsetT>(dstTensor, srcTensor, scale, offset, params);
+#endif
 }
 
 /*!
@@ -75,13 +78,14 @@ template <const QuantizeConfig& config, typename DstT, typename SrcT, typename S
 __aicore__ inline void Quantize(const LocalTensor<DstT>& dstTensor, const LocalTensor<SrcT>& srcTensor,
     const LocalTensor<uint8_t>& sharedTmpBuffer, const ScaleT& scale, const OffsetT& offset, const QuantizeParams& params)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     CheckTensorPosition(sharedTmpBuffer, "sharedTmpBuffer", "VECIN, VECOUT, VECCALC");
     QuantizeImpl<config, DstT, SrcT, ScaleT, OffsetT>(dstTensor, srcTensor, scale, offset, params);
+#endif
 }
 
 #pragma end_pipe
 }  // namespace AscendC
-#endif  // defined(__NPU_ARCH__) && __NPU_ARCH__ == 3510
 #endif  // LIB_QUANTIZATION_QUANTIZE_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_QUANTIZE_H__)

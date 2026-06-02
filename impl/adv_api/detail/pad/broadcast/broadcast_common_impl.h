@@ -25,6 +25,7 @@
 #include "kernel_basic_intf.h"
 #include "kernel_tensor.h"
 #include "broadcast_common_utils.h"
+#include "include/adv_api/pad/broadcast_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/pad/broadcast/broadcast_check.h"
 #endif // ASCENDC_CPU_DEBUG
@@ -47,19 +48,6 @@ constexpr uint32_t HALF_ONE_BLK_SIZE = 16;
 
 #if defined(__NPU_ARCH__) && \
     (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
-struct BroadcastTiling {
-    uint32_t oriRank;
-    uint32_t rank;
-    uint32_t dstSize;
-    uint32_t srcSize;
-    uint32_t loopNum = 0;
-    uint32_t oriSrcShape[9];
-    uint32_t oriDstShape[9];
-    uint32_t dstShape[9];
-    uint32_t dstStride[9];
-    uint32_t srcStride[10];
-};
-
 template <typename T, int constRank = -1, uint32_t* constDstShape = nullptr, uint32_t* constSrcShape = nullptr>
 __aicore__ inline void GetBroadcastTilingInfoImpl(
     uint32_t rank, const uint32_t* dstShape, const uint32_t* srcShape, bool srcInnerPad, BroadcastTiling& tiling)

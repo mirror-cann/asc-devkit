@@ -20,14 +20,13 @@
 
 #ifndef LIB_MATH_KERNEL_OPERATOR_ACOS_INTF_H
 #define LIB_MATH_KERNEL_OPERATOR_ACOS_INTF_H
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201)
+
 #include "acos.h"
 
 namespace AscendC {
 [[deprecated(__FILE__ " is deprecated, please use acos.h instead!")]] typedef void AcosDeprecatedHeader;
 using LibAcosInterface = AcosDeprecatedHeader;
 } // namespace AscendC
-#endif
 
 #endif // LIB_MATH_KERNEL_OPERATOR_ACOS_INTF_H
 

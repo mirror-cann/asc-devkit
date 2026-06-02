@@ -24,7 +24,7 @@
 #include "include/adv_api/math/sin_utils.h"
 
 namespace AscendC {
-constexpr SinConfig defaultSinConfig = {SinAlgo::POLYNOMIAL_APPROXIMATION};
+
 }
 
 #endif // IMPL_MATH_SIN_SIN_COMMON_UTILS_H

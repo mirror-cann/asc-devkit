@@ -25,16 +25,12 @@
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
 #include "../logical_template/logical_template.h"
+#include "include/adv_api/math/logical_or_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/logical_or/logical_or_check.h"
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 namespace AscendC {
-struct LogicalOrConfig {
-    bool isReuseSource;
-};
-constexpr LogicalOrConfig DEFAULT_LOGICAL_OR_CONFIG = {false};
-
 template <const LogicalOrConfig& config = DEFAULT_LOGICAL_OR_CONFIG, typename T, typename U>
 __aicore__ inline void LogicalOrImpl(
     const LocalTensor<T>& dst, const LocalTensor<U>& src0, const LocalTensor<U>& src1, const uint32_t count)

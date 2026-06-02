@@ -22,14 +22,11 @@
 #define LIB_MATH_KERNEL_OPERATOR_LOG_INTF_H
 #include "log.h"
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
-
 namespace AscendC {
 [[deprecated(__FILE__ " is deprecated, please use log.h instead!")]] typedef void LogDeprecatedHeader;
 using LibLogInterface = LogDeprecatedHeader;
 }  // namespace AscendC
 
-#endif
 #endif  // LIB_MATH_KERNEL_OPERATOR_LOG_INTF_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_LOG_INTF_H__)

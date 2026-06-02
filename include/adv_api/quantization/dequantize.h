@@ -21,11 +21,13 @@
 #ifndef LIB_QUANTIZATION_DEQUANTIZE_H
 #define LIB_QUANTIZATION_DEQUANTIZE_H
 #include "kernel_tensor.h"
+#include "../../../impl/adv_api/detail/quantization/dequantize/dequantize_common.h"
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/quantization/dequantize/dequantize_impl.h"
+#endif
 namespace AscendC {
 #pragma begin_pipe(V)
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 /*!
  * \ingroup Dequantize
  * \brief For DequantizeParams {m, n, groupSize}, m means src tensor has m rows, each row has n num;
@@ -53,7 +55,9 @@ __aicore__ inline void Dequantize(const LocalTensor<DstT>& dstTensor, const Loca
     const ScaleT& scale, const OffsetT& offset, const LocalTensor<uint8_t>& sharedTmpBuffer,
     const DequantizeParams& params)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     DequantizeImpl<config>(dstTensor, srcTensor, scale, offset, sharedTmpBuffer, params);
+#endif
 }
 
 /*!
@@ -77,9 +81,10 @@ template <const DequantizeConfig& config, typename DstT, typename SrcT, typename
 __aicore__ inline void Dequantize(const LocalTensor<DstT>& dstTensor, const LocalTensor<SrcT>& srcTensor,
     const ScaleT& scale, const OffsetT& offset, const DequantizeParams& params)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     DequantizeImpl<config>(dstTensor, srcTensor, scale, offset, params); 
-}
 #endif
+}
 #pragma end_pipe
 } // namespace AscendC
 #endif // LIB_QUANTIZATION_DEQUANTIZE_H

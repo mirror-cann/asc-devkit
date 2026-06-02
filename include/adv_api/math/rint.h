@@ -22,9 +22,12 @@
 #ifndef LIB_MATH_RINT_H
 #define LIB_MATH_RINT_H
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
+#include "rint_utils.h"
+
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/math/rint/rint_common_impl.h"
+#endif
 
 namespace AscendC {
 #pragma begin_pipe(V)
@@ -39,7 +42,9 @@ template <const RintConfig& config = DEFAULT_RINT_CONFIG, typename T>
 __aicore__ inline void Rint(const LocalTensor<T>& dst, const LocalTensor<T>& src,
     const LocalTensor<uint8_t>& sharedTmpBuffer, const uint32_t count)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     RintImpl<config, T>(dst, src, sharedTmpBuffer, count);
+#endif
 }
 
 /* !
@@ -52,12 +57,13 @@ __aicore__ inline void Rint(const LocalTensor<T>& dst, const LocalTensor<T>& src
 template <const RintConfig& config = DEFAULT_RINT_CONFIG, typename T>
 __aicore__ inline void Rint(const LocalTensor<T>& dst, const LocalTensor<T>& src, const uint32_t count)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     RintImpl<config, T>(dst, src, count);
+#endif
 }
 
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_MATH_RINT_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_RINT_H__)

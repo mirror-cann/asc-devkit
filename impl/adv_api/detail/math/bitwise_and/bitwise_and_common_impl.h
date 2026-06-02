@@ -24,17 +24,13 @@
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
+#include "include/adv_api/math/bitwise_and_utils.h"
 #include "../bitwise_template/bitwise_template.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/bitwise_and/bitwise_and_check.h"
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 namespace AscendC {
-struct BitwiseAndConfig {
-    bool isReuseSource;
-};
-constexpr BitwiseAndConfig DEFAULT_BITWISE_AND_CONFIG = {false};
-
 template <const BitwiseAndConfig& config = DEFAULT_BITWISE_AND_CONFIG, typename T>
 __aicore__ inline void BitwiseAndImpl(
     const LocalTensor<T>& dst, const LocalTensor<T>& src0, const LocalTensor<T>& src1, const uint32_t count)

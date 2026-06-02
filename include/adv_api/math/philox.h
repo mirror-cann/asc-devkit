@@ -20,32 +20,37 @@
 #ifndef LIB_MATH_PHILOX_H
 #define LIB_MATH_PHILOX_H
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
+#include "philox_utils.h"
+
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/math/philox/philox_3510_impl.h"
+#endif
 
 namespace AscendC {
-
 #pragma begin_pipe(V)
 
 template <uint16_t Rounds = 7, typename T>
 __aicore__ inline void PhiloxRandom(
     const LocalTensor<T>& dstLocal, const PhiloxKey& philoxKey, const PhiloxCounter& philoxCounter, uint16_t count)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     PhiloxRandomImpl<Rounds>(dstLocal, philoxKey, philoxCounter, count);
+#endif
 }
 
 template <uint16_t Rounds = 7, typename T>
 __aicore__ inline void PhiloxRandom(const LocalTensor<T>& dstLocal, const PhiloxKey& philoxKey,
     const PhiloxCounter& philoxCounter, const PhiloxRandomParams& params)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     PhiloxRandomImpl<Rounds>(dstLocal, philoxKey, philoxCounter, params);
+#endif
 }
 
 #pragma end_pipe
 }  // namespace AscendC
 
-#endif
 #endif // LIB_MATH_PHILOX_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_PHILOX_H__)

@@ -22,9 +22,12 @@
 #ifndef LIB_MATH_SINCOS_H
 #define LIB_MATH_SINCOS_H
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
+#include "sincos_utils.h"
+
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/math/sincos/sincos_3510_impl.h"
+#endif
 
 namespace AscendC {
 #pragma begin_pipe(V)
@@ -40,7 +43,9 @@ template <const SinCosConfig& config = DEFAULT_SINCOS_CONFIG, typename T>
 __aicore__ inline void SinCos(const LocalTensor<T>& dst0, const LocalTensor<T>& dst1, 
     const LocalTensor<T>& src, const LocalTensor<uint8_t>& sharedTmpBuffer, const uint32_t count)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     SinCosRadianReductionImpl<config, T>(dst0, dst1, src, sharedTmpBuffer, count);
+#endif
 }
 
 /* !
@@ -55,12 +60,13 @@ template <const SinCosConfig& config = DEFAULT_SINCOS_CONFIG, typename T>
 __aicore__ inline void SinCos(const LocalTensor<T>& dst0, const LocalTensor<T>& dst1, 
     const LocalTensor<T>& src, const uint32_t count)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     SinCosRadianReductionImpl<config, T>(dst0, dst1, src, count);
+#endif
 }
 
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_MATH_SINCOS_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_SINCOS_H__)

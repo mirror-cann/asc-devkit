@@ -22,9 +22,13 @@
 #ifndef LIB_MATH_BITWISE_XOR_H
 #define LIB_MATH_BITWISE_XOR_H
 
+#include "kernel_tensor.h"
+#include "bitwise_xor_utils.h"
+
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/math/bitwise_xor/bitwise_xor_3510_impl.h"
-#include "kernel_tensor.h"
+#endif
+
 namespace AscendC {
 #pragma begin_pipe(V)
 /*!
@@ -38,12 +42,13 @@ template <const BitwiseXorConfig& config = DEFAULT_BITWISE_XOR_CONFIG, typename 
 __aicore__ inline void BitwiseXor(const LocalTensor<T>& dst, const LocalTensor<T>& src0, const LocalTensor<T>& src1,
                                  const uint32_t count)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     BitwiseXorImpl<config, T>(dst, src0, src1, count);
+#endif
 }
 
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_MATH_BITWISE_XOR_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_BITWISE_XOR_H__)

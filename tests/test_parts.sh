@@ -122,4 +122,6 @@ arm_test_targets=(
     ascendc_run_all_host_header_checks
     ascendc_run_all_host_header_checks_npu
     ascendc_run_all_host_header_checks_npu_single
+    adv_api_run_all_host_header_checks_npu
+    adv_api_run_all_host_header_checks_npu_single
 )

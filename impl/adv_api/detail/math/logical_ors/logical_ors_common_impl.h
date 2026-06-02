@@ -25,18 +25,13 @@
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
 #include "../logical_template/logical_template.h"
+#include "include/adv_api/math/logical_ors_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/logical_ors/logical_ors_check.h"
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 
 namespace AscendC {
-struct LogicalOrsConfig {
-    bool isReuseSource;
-    int8_t scalarTensorIndex;
-};
-constexpr LogicalOrsConfig DEFAULT_LOGICAL_ORS_CONFIG = {false, 1};
-
 template <const LogicalOrsConfig& config = DEFAULT_LOGICAL_ORS_CONFIG, typename T, typename U, typename S>
 __aicore__ inline void LogicalOrsImpl(const LocalTensor<T>& dst, const U& src0, const S& src1, const uint32_t count)
 {

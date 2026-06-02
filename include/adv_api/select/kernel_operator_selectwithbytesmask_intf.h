@@ -20,8 +20,6 @@
 
 #ifndef LIB_SELECT_KERNEL_OPERATOR_SELECT_WITH_BYTES_MASK_INTF_H
 #define LIB_SELECT_KERNEL_OPERATOR_SELECT_WITH_BYTES_MASK_INTF_H
-#if (defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || \
-    __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113))
 #include "selectwithbytesmask.h"
 
 namespace AscendC {
@@ -29,7 +27,6 @@ namespace AscendC {
     " is deprecated, please use sekectwithbytesmask.h instead!")]] typedef void SelectWithBytesMaskDeprecatedHeader;
 using AscendCModuleSelectWithBytesMaskInterface = SelectWithBytesMaskDeprecatedHeader;
 } // namespace AscendC
-#endif
 #endif // LIB_SELECT_KERNEL_OPERATOR_SELECT_WITH_BYTES_MASK_INTF_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_SELECTWITHBYTESMASK_INTF_H__)

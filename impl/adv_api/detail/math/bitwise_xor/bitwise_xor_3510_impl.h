@@ -23,16 +23,13 @@
 #define IMPL_MATH_BITWISE_XOR_BITWISE_XOR_C310_IMPL_H
 #include "../bitwise_template/bitwise_template.h"
 #include "kernel_basic_intf.h"
+#include "include/adv_api/math/bitwise_xor_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/bitwise_xor/bitwise_xor_check.h"
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 
 namespace AscendC {
-struct BitwiseXorConfig {
-    bool isReuseSource;
-};
-constexpr BitwiseXorConfig DEFAULT_BITWISE_XOR_CONFIG = {false};
 template <const BitwiseXorConfig& config, typename T>
 __aicore__ inline void BitwiseXorImpl(
     const LocalTensor<T>& dst, const LocalTensor<T>& src0, const LocalTensor<T>& src1, const uint32_t count)

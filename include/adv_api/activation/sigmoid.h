@@ -21,11 +21,12 @@
 
 #ifndef LIB_SIGMOID_SIGMOID_H
 #define LIB_SIGMOID_SIGMOID_H
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 1001 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201 || \
-    __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
 
 #include "kernel_tensor.h"
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 1001 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201 || \
+    __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
 #include "../../../impl/adv_api/detail/activation/sigmoid/sigmoid_common_impl.h"
+#endif
 namespace AscendC {
 #pragma begin_pipe(V)
 /*!
@@ -47,7 +48,10 @@ template <typename T, bool isReuseSource = false>
 __aicore__ inline void Sigmoid(const LocalTensor<T>& dstTensor, const LocalTensor<T>& srcTensor,
     const LocalTensor<uint8_t>& sharedTmpBuffer, const uint32_t calCount)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 1001 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201 || \
+    __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     SigmoidImpl<T, isReuseSource>(dstTensor, srcTensor, sharedTmpBuffer, calCount);
+#endif
 }
 
 /*!
@@ -64,7 +68,10 @@ template <typename T, bool isReuseSource = false>
 __aicore__ inline void Sigmoid(const LocalTensor<T>& dstTensor, const LocalTensor<T>& srcTensor,
     const uint32_t calCount)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 1001 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201 || \
+    __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     SigmoidImpl<T, isReuseSource>(dstTensor, srcTensor, calCount);
+#endif
 }
 
 /*!
@@ -106,7 +113,6 @@ __aicore__ inline void Sigmoid(const LocalTensor<T>& dstTensor, const LocalTenso
 
 #pragma end_pipe
 }  // namespace AscendC
-#endif
 #endif  // LIB_SIGMOID_SIGMOID_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_SIGMOID_H__)

@@ -24,17 +24,10 @@
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
 #include "kernel_pop_stack_buffer.h"
+#include "include/adv_api/math/atan_utils.h"
 #include "../../common/common.h"
 
 namespace AscendC {
-enum class AtanAlgo { TAYLOR_EXPANSION = 0, POLYNOMIAL_APPROXIMATION };
-
-struct AtanConfig {
-    AtanAlgo algo = AtanAlgo::TAYLOR_EXPANSION;
-};
-
-constexpr AtanConfig defaultAtanConfig = {AtanAlgo::TAYLOR_EXPANSION};
-
 namespace Internal {
 constexpr float ATAN_FP16_MAX = 32768;                 // 2^15
 constexpr float ATAN_FP16_MIN = 3.0517578125e-05;      // 2^-15

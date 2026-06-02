@@ -21,15 +21,14 @@
 #ifndef LIB_NORMALIZATION_LAYERNORMGRAD_H
 #define LIB_NORMALIZATION_LAYERNORMGRAD_H
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
 #include "include/adv_api/normalization/layernormgrad_utils.h"
+#include "kernel_tiling/kernel_tiling.h"
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201)
 #include "../../../impl/adv_api/detail/normalization/layernormgrad/layernormgrad_common_impl.h"
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/normalization/layernormgrad/regbase/3510/layernormgrad_3510_impl.h"
 #endif
-#include "kernel_tiling/kernel_tiling.h"
 
 namespace AscendC {
 #pragma begin_pipe(V)
@@ -67,8 +66,10 @@ __aicore__ inline void LayerNormGrad(const LocalTensor<T>& outputPdX, const Loca
     const LocalTensor<T>& inputMean, const LocalTensor<T>& inputGamma, LocalTensor<uint8_t>& sharedTmpBuffer, T epsilon,
     LayerNormGradTiling& tiling, const LayerNormGradShapeInfo& shapeInfo = {})
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     LayerNormGradImpl<T, isReuseSource>(outputPdX, resForGamma, inputDy, inputX, inputVariance, inputMean, inputGamma,
         sharedTmpBuffer, epsilon, tiling, shapeInfo);
+#endif
 }
 /* !
  * \brief layernormgrad intf function
@@ -92,12 +93,13 @@ __aicore__ inline void LayerNormGrad(const LocalTensor<T>& outputPdX, const Loca
     const LocalTensor<T>& inputMean, const LocalTensor<T>& inputGamma, T epsilon, LayerNormGradTiling& tiling,
     const LayerNormGradShapeInfo& shapeInfo = {})
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     LayerNormGradImpl<T, isReuseSource>(outputPdX, resForGamma, inputDy, inputX, inputVariance, inputMean, inputGamma,
         epsilon, tiling, shapeInfo);
+#endif
 }
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_NORMALIZATION_LAYERNORMGRAD_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_LAYERNORMGRAD_H__)

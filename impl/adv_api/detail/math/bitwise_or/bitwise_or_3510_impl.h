@@ -23,16 +23,13 @@
 #define IMPL_MATH_BITWISE_OR_BITWISE_OR_C310_IMPL_H
 #include "../bitwise_template/bitwise_template.h"
 #include "kernel_basic_intf.h"
+#include "include/adv_api/math/bitwise_or_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/bitwise_or/bitwise_or_check.h"
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 
 namespace AscendC {
-struct BitwiseOrConfig {
-    bool isReuseSource;
-};
-constexpr BitwiseOrConfig DEFAULT_BITWISE_OR_CONFIG = {false};
 template <const BitwiseOrConfig& config, typename T>
 __aicore__ inline void BitwiseOrImpl(
     const LocalTensor<T>& dst, const LocalTensor<T>& src0, const LocalTensor<T>& src1, const uint32_t count)

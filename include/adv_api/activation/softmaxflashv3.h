@@ -26,6 +26,7 @@
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/activation/softmax/softmax_common.h"
 #include "../../../impl/adv_api/detail/activation/softmax/softmax_flashv3_base_impl.h"
+#endif
 
 #pragma begin_pipe(V)
 namespace AscendC {
@@ -71,10 +72,12 @@ __aicore__ inline void SoftmaxFlashV3(const LocalTensor<T>& dstTensor, const Loc
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002 || __NPU_ARCH__ == 5102)
     TRACE_START(TraceId::SoftmaxFlashV3);
     SoftmaxFlashV3Impl<T, U, isUpdate, isReuseSource, isBasicBlock, isDataFormatNZ, config>(dstTensor, meanTensor, expSumTensor,
         maxTensor, srcTensor, expMaxTensor, inMeanTensor, inExpSumTensor, inMaxTensor, tiling, params);
     TRACE_STOP(TraceId::SoftmaxFlashV3);
+#endif
 }
 
 /*!
@@ -120,14 +123,15 @@ __aicore__ inline void SoftmaxFlashV3(const LocalTensor<T>& dstTensor, const Loc
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002 || __NPU_ARCH__ == 5102)
     TRACE_START(TraceId::SoftmaxFlashV3);
     SoftmaxFlashV3Impl<T, U, isUpdate, isReuseSource, isBasicBlock, isDataFormatNZ, config>(dstTensor, meanTensor, expSumTensor,
         maxTensor, srcTensor, expMaxTensor, inMeanTensor, inExpSumTensor, inMaxTensor, sharedTmpBuffer, tiling, params);
     TRACE_STOP(TraceId::SoftmaxFlashV3);
+#endif
 }
 } // namespace AscendC
 #pragma end_pipe
-#endif
 #endif // LIB_SOFTMAX_SoftmaxFlashV3_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_SOFTMAXFLASHV3_H__)

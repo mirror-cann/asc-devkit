@@ -32,9 +32,8 @@
 #endif
 
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || \
-    __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
 #pragma begin_pipe(V)
+
 namespace AscendC {
 /*!
  * \ingroup Sign
@@ -50,7 +49,10 @@ template <typename T, bool isReuseSource = false>
 __aicore__ inline void Sign(const LocalTensor<T>& dstTensor, const LocalTensor<T>& srcTensor,
     const LocalTensor<uint8_t>& sharedTmpBuffer, const uint32_t calCount)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || \
+    __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     SignCompute<T, isReuseSource>(dstTensor, srcTensor, sharedTmpBuffer, calCount);
+#endif
 }
 
 /*!
@@ -87,7 +89,10 @@ __aicore__ inline void Sign(const LocalTensor<T>& dstTensor, const LocalTensor<T
     }
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || \
+    __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     SignCompute<T, isReuseSource>(dstTensor, srcTensor, calCount);
+#endif
 #else
     // Using the Stack Space to Allocate sharedTmpBuffer
     LocalTensor<uint8_t> sharedTmpBuffer;
@@ -112,7 +117,6 @@ __aicore__ inline void Sign(const LocalTensor<T>& dstTensor, const LocalTensor<T
 }
 }  // namespace AscendC
 #pragma end_pipe
-#endif
 
 #endif  // LIB_MATH_SIGN_H
 

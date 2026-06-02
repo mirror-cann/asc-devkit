@@ -21,14 +21,13 @@
 #ifndef LIB_NORMALIZATION_WELFORDFINALIZE_H
 #define LIB_NORMALIZATION_WELFORDFINALIZE_H
 #include "include/adv_api/normalization/welfordfinalize_utils.h"
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
+#include "kernel_tensor.h"
+#include "kernel_tiling/kernel_tiling.h"
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201)
 #include "../../../impl/adv_api/detail/normalization/welfordfinalize/welfordfinalize_common_impl.h"
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/normalization/welfordfinalize/welfordfinalize_3510_impl.h"
 #endif
-#include "kernel_tensor.h"
-#include "kernel_tiling/kernel_tiling.h"
 namespace AscendC
 {
 #pragma begin_pipe(V)
@@ -123,7 +122,7 @@ __aicore__ inline void WelfordFinalize(const LocalTensor<float>& outputMean, con
     }
     WelfordFinalizeImpl<isReuseSource>(outputMean, outputVariance, inputMean, inputVariance, counts, para);
 }
-#elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
+#else
 /*!
  * \brief Calculate the final mean and variance using the Welford algorithm.
  *
@@ -144,8 +143,10 @@ __aicore__ inline void WelfordFinalize(const LocalTensor<float>& outputMean, con
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     WelfordFinalizeImpl<isReuseSource, config>(
         outputMean, outputVariance, inputMean, inputVariance, sharedTmpBuffer, para);
+#endif
 }
 /*!
  * \brief Calculate the final mean and variance using the Welford algorithm.
@@ -168,8 +169,10 @@ __aicore__ inline void WelfordFinalize(const LocalTensor<float>& outputMean, con
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     WelfordFinalizeImpl<isReuseSource, config>(
         outputMean, outputVariance, inputMean, inputVariance, counts, sharedTmpBuffer, para);
+#endif
 }
 
 /*!
@@ -190,7 +193,9 @@ __aicore__ inline void WelfordFinalize(const LocalTensor<float>& outputMean, con
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     WelfordFinalizeImpl<isReuseSource, config>(outputMean, outputVariance, inputMean, inputVariance, para);
+#endif
 }
 
 /*!
@@ -213,12 +218,13 @@ __aicore__ inline void WelfordFinalize(const LocalTensor<float>& outputMean, con
     if ASCEND_IS_AIC {
         return;
     }
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     WelfordFinalizeImpl<isReuseSource, config>(outputMean, outputVariance, inputMean, inputVariance, counts, para);
+#endif
 }
 #endif
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_NORMALIZATION_WELFORDFINALIZE_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_WELFORDFINALIZE_H__)

@@ -23,16 +23,13 @@
 #define LIB_MATH_SINCOS_SINCOS_C310_IMPL_H
 #include "kernel_basic_intf.h"
 #include "kernel_tensor.h"
+#include "include/adv_api/math/sincos_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/sincos/sincos_check.h"
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 
 namespace AscendC {
-struct SinCosConfig {
-    bool isReuseSource;
-};
-constexpr SinCosConfig DEFAULT_SINCOS_CONFIG = {false};
 namespace SinCosImpl {
 
 constexpr Reg::CastTrait castTraitF16F32 = {

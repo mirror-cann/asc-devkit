@@ -30,6 +30,8 @@ enum class CosAlgo {
 struct CosConfig {
     CosAlgo algo = CosAlgo::POLYNOMIAL_APPROXIMATION;
 };
+
+constexpr CosConfig defaultCosConfig;
 }; // namespace AscendC
 #endif // LIB_MATH_COS_UTILS_H
 

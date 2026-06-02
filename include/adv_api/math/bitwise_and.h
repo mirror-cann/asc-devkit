@@ -22,9 +22,12 @@
 #ifndef LIB_MATH_BITWISE_AND_H
 #define LIB_MATH_BITWISE_AND_H
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "kernel_tensor.h"
+#include "bitwise_and_utils.h"
+
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 #include "../../../impl/adv_api/detail/math/bitwise_and/bitwise_and_common_impl.h"
+#endif
 
 namespace AscendC {
 #pragma begin_pipe(V)
@@ -39,12 +42,13 @@ template <const BitwiseAndConfig& config = DEFAULT_BITWISE_AND_CONFIG, typename 
 __aicore__ inline void BitwiseAnd(const LocalTensor<T>& dst, const LocalTensor<T>& src0,
     const LocalTensor<T>& src1, const uint32_t count)
 {
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
     BitwiseAndImpl<config, T>(dst, src0, src1, count);
+#endif
 }
 
 #pragma end_pipe
 } // namespace AscendC
-#endif
 #endif // LIB_MATH_BITWISE_AND_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_BITWISE_AND_H__)
