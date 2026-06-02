@@ -20,7 +20,7 @@
     add_ops_compile_options(PowerCustom OPTIONS -mllvm -cce-aicore-jump-expand=true)
     ```
 
-    add\_ops\_compile\_options的具体使用方法请参考[支持自定义编译选项](../工程化算子开发/算子包编译/算子工程编译.md#section7321165972311)。
+    add\_ops\_compile\_options的具体使用方法请参考[支持自定义编译选项](../../高级编程/高级特性/Aclnn算子工程化开发/算子包编译/算子工程编译.md#section7321165972311)。
 
 2.  重新编译该算子。正常编译无报错。
 

@@ -33,7 +33,7 @@
 
     cpu表示开启CPU域编译，dav-后为NPU架构版本号，请根据实际情况参考[对应关系表](../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)进行填写。
 
-    其他CMakeLists.txt项目配置[通过CMake编译](../../编译与运行/AI-Core-SIMD编译/通过CMake编译.md)进行编写。
+    其他CMakeLists.txt项目配置[通过CMake编译](../../编译与运行/算子编译/AI-Core算子编译基本用法.md#ZH-CN_TOPIC_0000002428982142)进行编写。
 
 >[!NOTE] 说明 
 >为了实现CPU域与NPU域代码归一，框架在CPU域中仅对部分acl接口进行适配，开发者在使用CPU域调测功能时，仅支持使用如下acl接口，并且不支持用户自行链接**ascendcl库**：

@@ -56,7 +56,7 @@ int32_t main(int argc, char const *argv[])
 
 $\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。以root用户安装为例，安装后文件默认存储路径为：/usr/local/Ascend/cann。
 
-各产品型号对应的架构版本号请通过[对应关系表](../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)进行查询。
+各产品型号对应的架构版本号请通过[对应关系表](../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)进行查询。
 
 ```
 $bisheng -O2 hello_world.aicpu --cce-aicpu-L${INSTALL_DIR}/lib64/device/lib64 --cce-aicpu-laicpu_api -I${INSTALL_DIR}/include/ascendc/aicpu_api -c -o hello_world.aicpu.o
@@ -215,7 +215,7 @@ target_compile_options(demo PRIVATE
 )
 ```
 
-各产品型号对应的架构版本号请通过[对应关系表](../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)进行查询。
+各产品型号对应的架构版本号请通过[对应关系表](../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)进行查询。
 
 如果需要CMake编译编译生成动态库、静态库，下面提供了更详细具体的编译示例：
 
