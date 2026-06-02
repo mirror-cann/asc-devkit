@@ -134,7 +134,7 @@ public:
     {
         if constexpr (PhyPosIsUB(INPUT_TYPE::pos)) {
             if constexpr (IS_INTRA_BLOCK) {
-                return CeilAlign<int32_t>(GetSingleHeight<IS_TRANS, true>(), BLOCK_CUBE);
+                return CeilAlign<int32_t>(GetSingleHeight<IS_TRANS, true>(), (int32_t)BLOCK_CUBE);
             } else {
                 return GetSingleHeight<IS_TRANS, false>();
             }
@@ -241,7 +241,7 @@ private:
     __aicore__ inline int32_t GetBaseHeightAlign() const
     {
         if constexpr (IsSameTypeV<SrcT, float>) {
-            return Align(GetBaseHeight(), BLOCK_CUBE);
+            return Align(GetBaseHeight(), (int32_t)BLOCK_CUBE);
         } else if constexpr (IsNeedC0Align<SrcT>() && INPUT_TYPE::isTrans) {
             return Align(GetBaseHeight(), c0Size_);
         } else {
@@ -252,7 +252,7 @@ private:
     __aicore__ inline int32_t GetBaseWidthAlign() const
     {
         if constexpr (IsSameTypeV<SrcT, float> && INPUT_TYPE::isTrans) {
-            return Align(GetBaseWidth(), BLOCK_CUBE);
+            return Align(GetBaseWidth(), (int32_t)BLOCK_CUBE);
         } else if constexpr (IsTypeOneOfV<SrcT, float> || IsNeedC0Align<SrcT>()) {
             return Align(GetBaseWidth(), c0Size_);
         } else {
@@ -264,17 +264,17 @@ private:
     {
         int32_t orgHeightAlign = (IsNeedC0Align<SrcT>() && INPUT_TYPE::isTrans) ?
                                      Align<int32_t>(GetOrgHeight(), c0Size_) :
-                                     Align<int32_t>(GetOrgHeight(), BLOCK_CUBE);
+                                     Align<int32_t>(GetOrgHeight(), (int32_t)BLOCK_CUBE);
         int32_t orgWidthAlign = (IsTypeOneOfV<SrcT, float> || IsNeedC0Align<SrcT>()) ?
                                     Align<int32_t>(GetOrgWidth(), c0Size_) :
-                                    Align<int32_t>(GetOrgWidth(), BLOCK_CUBE);
+                                    Align<int32_t>(GetOrgWidth(), (int32_t)BLOCK_CUBE);
         if constexpr (HasScalePosition<INPUT_TYPE>::value) {
             if constexpr (INPUT_TYPE::isTrans) {
                 orgHeightAlign = CeilAlign(GetOrgHeight<INPUT_TYPE::isTrans>(), MX_BASEK_FACTOR);
                 const auto& tiling = MATMUL_MODULE(MatmulShapeTiling)->GetTiling();
                 orgWidthAlign = CeilAlign(GetOrgWidth<INPUT_TYPE::isTrans>(), c0Size_);
             } else {
-                orgHeightAlign = CeilAlign(GetOrgHeight<INPUT_TYPE::isTrans>(), BLOCK_CUBE);
+                orgHeightAlign = CeilAlign(GetOrgHeight<INPUT_TYPE::isTrans>(), (int32_t)BLOCK_CUBE);
                 orgWidthAlign = CeilAlign(GetOrgWidth<INPUT_TYPE::isTrans>(), MX_BASEK_FACTOR);
             }
         }
@@ -399,7 +399,7 @@ public:
     {
         if constexpr (PhyPosIsUB(INPUT_TYPE::pos)) {
             if constexpr (IS_INTRA_BLOCK) {
-                return CeilAlign<int32_t>(GetSingleHeight<IS_TRANS, true>(), BLOCK_CUBE);
+                return CeilAlign<int32_t>(GetSingleHeight<IS_TRANS, true>(), (int32_t)BLOCK_CUBE);
             } else {
                 return GetSingleHeight<IS_TRANS, false>();
             }
@@ -501,13 +501,13 @@ private:
     __aicore__ inline int32_t GetOrgSizeAlign()
     {
         int32_t orgHeightAlign = (IsNeedC0Align<SrcT>()) ? Align<int32_t>(GetOrgHeight(), c0Size_) :
-                                                           Align<int32_t>(GetOrgHeight(), BLOCK_CUBE);
+                                                           Align<int32_t>(GetOrgHeight(), (int32_t)BLOCK_CUBE);
         int32_t orgWidthAlign = (IsSameTypeV<SrcT, float> || (IsNeedC0Align<SrcT>() && !INPUT_TYPE::isTrans)) ?
                                     Align<int32_t>(GetOrgWidth(), c0Size_) :
-                                    Align<int32_t>(GetOrgWidth(), BLOCK_CUBE);
+                                    Align<int32_t>(GetOrgWidth(), (int32_t)BLOCK_CUBE);
         if constexpr (HasScalePosition<INPUT_TYPE>::value) {
             if constexpr (INPUT_TYPE::isTrans) {
-                orgHeightAlign = CeilAlign(GetOrgHeight<INPUT_TYPE::isTrans>(), BLOCK_CUBE);
+                orgHeightAlign = CeilAlign(GetOrgHeight<INPUT_TYPE::isTrans>(), (int32_t)BLOCK_CUBE);
                 orgWidthAlign = CeilAlign(GetOrgWidth<INPUT_TYPE::isTrans>(), MX_BASEK_FACTOR);
             } else {
                 orgHeightAlign = CeilAlign(GetOrgHeight<INPUT_TYPE::isTrans>(), MX_BASEK_FACTOR);
@@ -520,7 +520,7 @@ private:
     __aicore__ inline int32_t GetBaseHeightAlign() const
     {
         if constexpr (IsSameTypeV<SrcT, float> && !INPUT_TYPE::isTrans) {
-            return Align(GetBaseHeight(), BLOCK_CUBE);
+            return Align(GetBaseHeight(), (int32_t)BLOCK_CUBE);
         } else if constexpr (IsNeedC0Align<SrcT>()) {
             return Align(GetBaseHeight(), c0Size_);
         } else {
