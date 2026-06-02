@@ -54,7 +54,7 @@ target_link_libraries(ascendc_ut_aclrtc PRIVATE
     c_sec
     dl
     -Wl,--as-needed
-    gtest
+    GTest::gtest
 )
 
 run_llt_test(

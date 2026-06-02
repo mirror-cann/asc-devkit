@@ -112,6 +112,7 @@ if (NOT EXISTS "${CMAKE_INSTALL_PREFIX}/mockcpp/lib/libmockcpp.a")
             ExternalProject_Add(mockcpp
                 URL ${REQ_URL}
                 URL_HASH SHA256=73ab0a8b6d1052361c2cebd85e022c0396f928d2e077bf132790ae3be766f603
+                DEPENDS third_party_boost
                 DOWNLOAD_DIR ${MOCKCPP_DOWNLOAD_PATH}
                 SOURCE_DIR ${MOCKCPP_SRC_PATH}
                 TLS_VERIFY OFF

@@ -13,6 +13,6 @@ endif()
 set(GENERATE_CPP_COV ${CMAKE_CURRENT_LIST_DIR}/scripts/generate_cpp_cov.sh)
 
 find_package(Python3 COMPONENTS Interpreter)
-include(${ASCENDC_DIR}/cmake/third_party/gtest.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/third_party/boost.cmake)
+add_cann_third_party(gtest)
+add_cann_third_party(boost)
 include(${CMAKE_CURRENT_LIST_DIR}/third_party/mockcpp.cmake)
