@@ -26,7 +26,7 @@
         - **[Tensor](data_structure/tensor_structure/Tensor.md)**
         - **[Pointer](data_structure/tensor_structure/Pointer.md)**
         - **[ViewEngine](data_structure/tensor_structure/ViewEngine.md)**
-    - **[Tensor相关接口](data_structure/tensor_structure/tensor_structure.mdd)**
+    - **[Tensor相关接口](data_structure/tensor_structure/tensor_structure.md)**
         - **[MakeTensor](data_structure/tensor_structure/MakeTensor.md)**
         - **[MakeMemPtr](data_structure/tensor_structure/MakeMemPtr.md)**
         - **[Slice](data_structure/tensor_structure/Slice.md)**

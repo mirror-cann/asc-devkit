@@ -50,7 +50,7 @@ __aicore__ inline constexpr auto MakeLayout(const ShapeType& shape)
 
 ## 约束说明
 
-构造的Layout类型不含有LayoutPattern和LayoutTrait信息，需要通过[MakePatternLayout](../layout_structure/MakePatternLayout.md)造带有完整类型信息的Layout对象。
+构造的Layout类型不含有LayoutPattern和LayoutTrait信息，需要通过[MakePatternLayout](../layout_structure/MakePatternLayout.md)构造带有完整类型信息的Layout对象。
 
 ## 调用示例
 

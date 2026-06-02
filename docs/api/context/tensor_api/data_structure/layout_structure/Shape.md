@@ -23,4 +23,4 @@ using Shape = Std::tuple<Shapes...>;
 
 ## API映射关系
 
-Shape通过[MakeShape](MakeShape.md)函数创建，通过[GetShape](GetShape.md)函数和Layout的成员[Shape](Layout.md)获取获取。
+Shape通过[MakeShape](MakeShape.md)函数创建，通过[GetShape](GetShape.md)函数和Layout的成员[Shape](Layout.md)获取。

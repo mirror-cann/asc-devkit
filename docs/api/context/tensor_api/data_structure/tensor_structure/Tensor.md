@@ -10,7 +10,7 @@
 
 需要包含的头文件为：#include "tensor_api/tensor.h"。
 
-Tensor用于将内存访问引擎Engine与布局Layout绑定起来。Engine描述物理存储位置和访问方式，Layout描述数据的形状和布局。Tensor分为GlobalTensor和LocalTensoe两种，其中GlobalTensor用来存放Global Memory（外部存储）的全局数据，LocalTensor用于存放AI Core中Local Memory（内部存储）的数据。二者的公共接口由BaseTensor<TensorAttribute<EngineType, LayoutType>>提供。
+Tensor用于将内存访问引擎Engine与布局Layout绑定起来。Engine描述物理存储位置和访问方式，Layout描述数据的形状和布局。Tensor分为GlobalTensor和LocalTensor两种，其中GlobalTensor用来存放Global Memory（外部存储）的全局数据，LocalTensor用于存放AI Core中Local Memory（内部存储）的数据。二者的公共接口由BaseTensor<TensorAttribute<EngineType, LayoutType>>提供。
 
 ## 原型定义
 
