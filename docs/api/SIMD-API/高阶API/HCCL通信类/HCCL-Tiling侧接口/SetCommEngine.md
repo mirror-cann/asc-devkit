@@ -27,7 +27,7 @@ uint32_t SetCommEngine(uint8_t commEngine)
 </td>
 <td class="cellrowborder" valign="top" width="12.02%" headers="mcps1.2.4.1.2 "><p id="p137362417119"><a name="p137362417119"></a><a name="p137362417119"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p1185113931411"><a name="p1185113931411"></a><a name="p1185113931411"></a>通信引擎。uint8_t类型，该参数的取值范围请参考：《HCCL集合通信库接口》&gt;HCCL API (C)&gt;数据类型&gt;HcclCommConfig中的<span>hcclOpExpansionMode参数取值说明</span>。</p>
+<td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p1185113931411"><a name="p1185113931411"></a><a name="p1185113931411"></a>通信引擎。uint8_t类型，该参数的取值范围请参考：<a href="https://gitcode.com/cann/hcomm/blob/master/docs/zh/api_ref/comm_mgr_c/data_type_definition/HcclCommConfig.md#参数说明">HcclCommConfig</a>中的hcclOpExpansionMode参数的取值说明。</p>
 </td>
 </tr>
 </tbody>
@@ -57,4 +57,3 @@ static ge::graphStatus AllToAllVCustomTilingFunc(gert::TilingContext *context)
     return ge::GRAPH_SUCCESS;
 }
 ```
-

@@ -81,7 +81,7 @@ Mc2CcTilingConfig(const std::string &groupName, uint32_t opType, const std::stri
 </td>
 <td class="cellrowborder" valign="top" width="12.04%" headers="mcps1.2.4.1.2 "><p id="p225525917513"><a name="p225525917513"></a><a name="p225525917513"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p225575910518"><a name="p225575910518"></a><a name="p225575910518"></a>通信引擎。uint8_t类型，该参数的取值范围请参考：《HCCL集合通信库接口》&gt;HCCL API (C)&gt;数据类型&gt;HcclCommConfig中的<span>hcclOpExpansionMode参数取值说明</span>。</p>
+<td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p225575910518"><a name="p225575910518"></a><a name="p225575910518"></a>通信引擎。uint8_t类型，该参数的取值范围请参考：<a href="https://gitcode.com/cann/hcomm/blob/master/docs/zh/api_ref/comm_mgr_c/data_type_definition/HcclCommConfig.md#参数说明">HcclCommConfig</a>中的hcclOpExpansionMode参数的取值说明。</p>
 </td>
 </tr>
 </tbody>
@@ -152,4 +152,3 @@ AscendC::Mc2CcTilingConfig mc2CcTilingConfig(groupName, opType, algConfig, reduc
 mc2CcTilingConfig.GetTiling(tiling->mc2InitTiling);  // tiling为算子组装的TilingData结构体
 mc2CcTilingConfig.GetTiling(tiling->reduceScatterTiling);
 ```
-
