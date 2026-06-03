@@ -1301,22 +1301,50 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 ## 调用示例<a name="section642mcpsimp"></a>
 
 ```
-__simd_vf__ inline void CastVF(__ubuf__ int16_t* dstAddr, __ubuf__ float* srcAddr, uint32_t count, uint32_t srcRepeatSize, uint32_t dstRepeatSize, uint16_t repeatTimes)
+// 场景1：位宽小转大，以half->int32_t为例
+__simd_vf__ inline void CastVFF162S32(__ubuf__ half* xAddr, __ubuf__ int32_t* yAddr,
+    uint32_t repeatTimes, uint32_t oneRepeatSize)
 {
-    // castTrait 类变量时需要加static
-    static constexpr AscendC::Reg::CastTrait castTrait = 
-    {AscendC::Reg::RegLayout::ZERO, AscendC::Reg::SatMode::NO_SAT,AscendC::Reg::MaskMergeMode::ZEROING,AscendC::RoundMode::CAST_RINT};
-   
-   
-    
-    AscendC::Reg::RegTensor<float> srcReg;
-    AscendC::Reg::RegTensor<int16_t> dstReg;
-    AscendC::Reg::MaskReg mask;
-    for (uint16_t i = 0; i < repeatTimes; i++) {
-        AscendC::Reg::LoadAlign(srcReg, srcAddr + i * srcRepeatSize);
-        mask = AscendC::Reg::UpdateMask<float>(count);
-        AscendC::Reg::Cast<int16_t, float, castTrait>(dstReg, srcReg, mask);
-        AscendC::Reg::StoreAlign(dstAddr + i * dstRepeatSize, dstReg, mask);
+    AscendC::Reg::MaskReg mask = AscendC::Reg::CreateMask<int32_t, AscendC::Reg::MaskPattern::ALL>();
+    AscendC::Reg::RegTensor<half> xReg;
+    AscendC::Reg::RegTensor<int32_t> yReg;
+    static constexpr AscendC::Reg::CastTrait castTrait = {
+        AscendC::Reg::RegLayout::ZERO,
+        AscendC::Reg::SatMode::UNKNOWN,
+        AscendC::Reg::MaskMergeMode::ZEROING,
+        AscendC::RoundMode::CAST_FLOOR
+    };
+    for (uint16_t i = 0; i < repeatTimes; ++i) {
+        // 搬入时采用解压缩模式，加载VL/2长度数据，unpack到VL长度
+        AscendC::Reg::LoadAlign<half, AscendC::Reg::PostLiteral::POST_MODE_UPDATE,
+            AscendC::Reg::LoadDist::DIST_UNPACK_B16>(xReg, xAddr, oneRepeatSize);
+        // 计算公式为：y[i] = floor(x[i*2])
+        AscendC::Reg::Cast<int32_t, half, castTrait>(yReg, xReg, mask);
+        AscendC::Reg::StoreAlign<int32_t, AscendC::Reg::PostLiteral::POST_MODE_UPDATE>(
+            yAddr, yReg, oneRepeatSize, mask);
+    }
+}
+
+// 场景2：位宽大转小，以float->int16_t为例
+__simd_vf__ inline void CastVFF322S16(__ubuf__ float* xAddr, __ubuf__ int16_t* yAddr,
+    uint32_t repeatTimes, uint32_t oneRepeatSize)
+{
+    AscendC::Reg::MaskReg mask = AscendC::Reg::CreateMask<float, AscendC::Reg::MaskPattern::ALL>();
+    AscendC::Reg::RegTensor<float> xReg;
+    AscendC::Reg::RegTensor<int16_t> yReg;
+    static constexpr AscendC::Reg::CastTrait castTrait = {
+        AscendC::Reg::RegLayout::ZERO,
+        AscendC::Reg::SatMode::SAT,
+        AscendC::Reg::MaskMergeMode::ZEROING,
+        AscendC::RoundMode::CAST_ROUND
+    };
+    for (uint16_t i = 0; i < repeatTimes; ++i) {
+        AscendC::Reg::LoadAlign<float, AscendC::Reg::PostLiteral::POST_MODE_UPDATE>(xReg, xAddr, oneRepeatSize);
+        // 计算公式为：y[i*2] = round(x[i])
+        AscendC::Reg::Cast<int16_t, float, castTrait>(yReg, xReg, mask);
+        // 搬出时采用压缩模式，以b32格式的低半部分bit数据连续储存于yAddr，即依次搬运y[i*2]的数据至UB
+        AscendC::Reg::StoreAlign<int16_t, AscendC::Reg::PostLiteral::POST_MODE_UPDATE,
+            AscendC::Reg::StoreDist::DIST_PACK_B32>(yAddr, yReg, oneRepeatSize, mask);
     }
 }
 ```
