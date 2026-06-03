@@ -154,4 +154,27 @@ void BuildA5SqeCCoreNotifyRecord(u32 streamId, u32 taskId, u64 writeAddr, u64 va
         writeAddr, valueAddr, streamId, taskId,
         sqe->ldrImm, sqe->llwi1, sqe->lhwi1, sqe->sw, sqe->nop[0]);
 }
+
+void BuildA5SqeRdmaDbSend(u32 streamId, u32 taskId, u64 dbAddr, u64 dbValue, uint8_t * const sqeIn)
+{
+    Rt91095StarsWriteValueSqe *sqe = (Rt91095StarsWriteValueSqe *)sqeIn;
+    SetSqeHeaderTaskFields(sqe, taskId);
+    sqe->header.type = static_cast<uint8_t>(Rt91095StarsSqeType::RT_91095_SQE_TYPE_WRITE_VALUE);
+
+    sqe->kernelCredit = RT_STARS_DEFAULT_KERNEL_CREDIT;
+    sqe->header.rtStreamId = streamId;
+    sqe->header.taskId = taskId;
+
+    sqe->writeAddrLow = dbAddr & MASK_32_BIT;
+    sqe->writeAddrHigh = (dbAddr >> UINT32_BIT_NUM) & MASK_17_BIT;
+
+    sqe->awsize = RtStarsWriteValueSizeType::RT_STARS_WRITE_VALUE_SIZE_TYPE_64BIT;
+    sqe->writeValuePart[0] = static_cast<uint32_t>(dbValue & MASK_32_BIT);
+    sqe->writeValuePart[1] = static_cast<uint32_t>((dbValue >> UINT32_BIT_NUM) & MASK_32_BIT);
+
+    sqe->va = 0U;
+
+    HCCL_INFO("[SQE]RdmaDbSend streamId %u, taskId %u, dbAddr %p, dbValue %llu",
+        streamId, taskId, dbAddr, dbValue);
+}
 } // namespace Hccl

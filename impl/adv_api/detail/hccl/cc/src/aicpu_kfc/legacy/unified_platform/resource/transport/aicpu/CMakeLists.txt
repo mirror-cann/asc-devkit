@@ -12,5 +12,6 @@ target_sources(asc_ccl_kernel PRIVATE
         mem_transport_lite.cc
         ub_transport_lite_impl.cc
         p2p_transport_lite_impl.cc
+        roce_transport_lite_impl.cc
 )
 endif()

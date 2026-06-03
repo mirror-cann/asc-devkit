@@ -18,6 +18,7 @@
 #include "thread.h"
 #include "local_notify.h"
 #include "ub_transport_lite_impl.h"
+#include "p2p_transport_lite_impl.h"
 #include "task_exception.h"
 #include "aicpu_launch_manager.h"
 #include "channel_param.h"
@@ -28,6 +29,7 @@
 #include "error_message_v2.h"
 #include "kfc.h"
 #include "aicpu_hdc.h"
+#include "roce_transport_lite_impl.h"
 #include "hccl/hccl_types.h"
 
 using namespace hccl;
@@ -83,6 +85,8 @@ private:
     std::vector<std::unique_ptr<LocalNotify>> notifys_;
     // A5 独立算子
     std::unordered_map<ChannelHandle, std::unique_ptr<Hccl::UbTransportLiteImpl>> ubTransportMap_;
+    std::unordered_map<ChannelHandle, std::unique_ptr<Hccl::P2PTransportLiteImpl>> p2pTransportMap_;
+    std::unordered_map<ChannelHandle, std::unique_ptr<Hccl::RoceTransportLiteImpl>> roceTransportMap_;
 
     // N秒快恢相关
     hccl::NsRecoveryLitePtr nsRecoveryLitePtr_{nullptr};
