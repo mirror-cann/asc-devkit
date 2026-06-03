@@ -26,7 +26,7 @@
 #include "hcomm_inner_def.h"
 
 namespace AscendC {
-template <CommProtocol commProtocol, CommEngine commEngine>
+template <CommProtocol commProtocol>
 class HcommImpl {
 public:
     __aicore__ inline HcommImpl(){};
@@ -35,41 +35,49 @@ public:
     {
         (void)buff;
         (void)len;
-        return HCOMM_SUCCESS;
+        return HCOMM_FAILED;
     }
 
-    template <bool commit = true, pipe_t commitPipe = PIPE_MTE3, pipe_t reqPipe = PIPE_MTE3,
-        auto const &config = URMA_DEFAULT_CFG>
-    __aicore__ inline HcommHandle WriteNbi(ChannelPtr channelPtr, GM_ADDR dst, GM_ADDR src, uint64_t len)
+    template <typename T>
+    __aicore__ inline int32_t Init(const LocalTensor<T>& buff, uint32_t len)
     {
-        return -1;
+        (void)buff;
+        (void)len;
+        return HCOMM_FAILED;
     }
 
-    template <bool commit = true, pipe_t commitPipe = PIPE_MTE3, pipe_t reqPipe = PIPE_MTE3,
+    template <bool commit = true, pipe_t commitPipe = PIPE_S, pipe_t reqPipe = PIPE_MTE3,
         auto const &config = URMA_DEFAULT_CFG>
-    __aicore__ inline HcommHandle ReadNbi(ChannelPtr channelPtr, GM_ADDR dst, GM_ADDR src, uint64_t len)
+    __aicore__ inline int32_t WriteNbi(ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len)
     {
-        return -1;
+        return HCOMM_FAILED;
     }
 
-    template <bool commit = true, pipe_t commitPipe = PIPE_MTE3, pipe_t reqPipe = PIPE_MTE3,
+    template <bool commit = true, pipe_t commitPipe = PIPE_S, pipe_t reqPipe = PIPE_MTE3,
         auto const &config = URMA_DEFAULT_CFG>
-    __aicore__ inline HcommHandle WriteWithNotifyNbi(ChannelPtr channelPtr, GM_ADDR dst, GM_ADDR src,
+    __aicore__ inline int32_t ReadNbi(ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len)
+    {
+        return HCOMM_FAILED;
+    }
+
+    template <bool commit = true, pipe_t commitPipe = PIPE_S, pipe_t reqPipe = PIPE_MTE3,
+        auto const &config = URMA_DEFAULT_CFG>
+    __aicore__ inline int32_t WriteWithNotifyNbi(ChannelHandle channel, GM_ADDR dst, GM_ADDR src,
         uint64_t len, GM_ADDR notifyAddr, uint64_t notifyVal)
     {
-        return -1;
+        return HCOMM_FAILED;
+    }
+
+    template <pipe_t pipe = PIPE_S>
+    __aicore__ inline int32_t Commit(ChannelHandle channel)
+    {
+        return HCOMM_FAILED;
     }
 
     template <pipe_t pipe = PIPE_MTE3>
-    __aicore__ inline int32_t Commit(HcommHandle handleId)
+    __aicore__ inline int32_t Drain(ChannelHandle channel)
     {
-        return -1;
-    }
-
-    template <pipe_t pipe = PIPE_MTE3>
-    __aicore__ inline int32_t Wait(HcommHandle handleId)
-    {
-        return -1;
+        return HCOMM_FAILED;
     }
 };
 } // namespace AscendC

@@ -26,7 +26,7 @@ Channel GetChannel()
 
     // 为 SQ 相关字段分配内存并设置
     channel.sqNum = 1;
-    std::unique_ptr<SqContext> sqContext(new SqContext());
+    std::unique_ptr<ChannelSqContext> sqContext(new ChannelSqContext());
     channel.sqContextAddr = sqContext.get();
     channel.sqContextAddr->type = SQ_CONTEXT_TYPE_ROCE; // RDMA
     channel.sqContextAddr->ctx.rdmaSqContext.qpn = 1;
@@ -52,13 +52,13 @@ Channel GetChannel()
 
     // 为 Buffer 相关字段分配内存并设置
     channel.remoteBufferNum = 1;
-    std::unique_ptr<ProtectionInfo> remoteBuffer(new ProtectionInfo());
+    std::unique_ptr<ChannelProtectionInfo> remoteBuffer(new ChannelProtectionInfo());
     channel.remoteBufferAddr = remoteBuffer.get();
     channel.remoteBufferAddr->type = PROTECTION_TYPE_ROCE;
     channel.remoteBufferAddr->pti.rdmaMemProtectionInfo.rkey = 123456;
 
     channel.localBufferNum = 1;
-    std::unique_ptr<ProtectionInfo> localBuffer(new ProtectionInfo());
+    std::unique_ptr<ChannelProtectionInfo> localBuffer(new ChannelProtectionInfo());
     channel.localBufferAddr = localBuffer.get();
     channel.localBufferAddr->type = PROTECTION_TYPE_ROCE;
     channel.localBufferAddr->pti.rdmaMemProtectionInfo.lkey = 654321;
@@ -87,20 +87,20 @@ TEST_F(HcommCommonTestSuite, Aiv_Read)
 {
     Channel channel = GetChannel();
 
-    Hcomm hcomm;
-    ChannelPtr channelPtr = reinterpret_cast<ChannelPtr>(&channel);
-    HcommHandle handleId =
-        hcomm.ReadNbi(channelPtr, reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1);
-    EXPECT_EQ(handleId, 0);
+    Hcomm<COMM_PROTOCOL_ROCE> hcomm;
+    ChannelHandle channelHandle = reinterpret_cast<ChannelHandle>(&channel);
+    int32_t ret =
+        hcomm.ReadNbi(channelHandle, reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1);
+    EXPECT_EQ(ret, 0);
 }
 
 TEST_F(HcommCommonTestSuite, Aiv_Write)
 {
     Channel channel = GetChannel();
 
-    Hcomm hcomm;
-    ChannelPtr channelPtr = reinterpret_cast<ChannelPtr>(&channel);
-    HcommHandle handleId =
-        hcomm.WriteNbi(channelPtr, reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1);
-    EXPECT_EQ(handleId, 0);
+    Hcomm<COMM_PROTOCOL_ROCE> hcomm;
+    ChannelHandle channelHandle = reinterpret_cast<ChannelHandle>(&channel);
+    int32_t ret =
+        hcomm.WriteNbi(channelHandle, reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1);
+    EXPECT_EQ(ret, 0);
 }

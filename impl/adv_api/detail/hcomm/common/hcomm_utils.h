@@ -62,7 +62,7 @@ __aicore__ inline int32_t HcommFindBufferIdx(
 {
     if (bufferAddr == nullptr) {
         KERNEL_LOG(KERNEL_ERROR, "HcommFindBufferIdx failed with null bufferAddr, bufferNum=%u", bufferNum);
-        return HCOMM_INVALID_HANDLE_ID;
+        return HCOMM_FAILED;
     }
     uint64_t targetAddr = reinterpret_cast<uint64_t>(addr);
     for (uint32_t i = 0; i < bufferNum; i++) {
@@ -81,7 +81,7 @@ __aicore__ inline int32_t HcommFindBufferIdx(
     }
     KERNEL_LOG(KERNEL_ERROR, "HcommFindBufferIdx failed addr=%llu len=%llu bufferNum=%u",
         static_cast<unsigned long long>(targetAddr), static_cast<unsigned long long>(len), bufferNum);
-    return HCOMM_INVALID_HANDLE_ID;
+    return HCOMM_FAILED;
 }
 
 __aicore__ inline void CacheWriteThrough(__gm__ uint8_t* sourceAddr, uint64_t length)

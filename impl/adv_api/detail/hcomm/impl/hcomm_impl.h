@@ -32,49 +32,56 @@
 
 namespace AscendC {
 
-template <CommProtocol commProtocol, CommEngine commEngine>
-__aicore__ inline int32_t Hcomm<commProtocol, commEngine>::Init(__ubuf__ uint8_t* buff, uint32_t len)
+template <CommProtocol commProtocol>
+__aicore__ inline int32_t Hcomm<commProtocol>::Init(__ubuf__ uint8_t* buff, uint32_t len)
 {
     return impl_.Init(buff, len);
 }
 
-template <CommProtocol commProtocol, CommEngine commEngine>
-template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const &config>
-__aicore__ inline HcommHandle Hcomm<commProtocol, commEngine>::WriteNbi(
-    ChannelPtr channelPtr, GM_ADDR dst, GM_ADDR src, uint64_t len)
+template <CommProtocol commProtocol>
+template <typename T>
+__aicore__ inline int32_t Hcomm<commProtocol>::Init(const LocalTensor<T>& buff, uint32_t len)
 {
-    return impl_.template WriteNbi<commit, commitPipe, reqPipe, config>(channelPtr, dst, src, len);
+    return impl_.Init(buff, len);
 }
 
-template <CommProtocol commProtocol, CommEngine commEngine>
+template <CommProtocol commProtocol>
 template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const &config>
-__aicore__ inline HcommHandle Hcomm<commProtocol, commEngine>::WriteWithNotifyNbi(
-    ChannelPtr channelPtr, GM_ADDR dst, GM_ADDR src, uint64_t len, GM_ADDR notifyAddr, uint64_t notifyVal)
+__aicore__ inline int32_t Hcomm<commProtocol>::WriteNbi(
+    ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len)
+{
+    return impl_.template WriteNbi<commit, commitPipe, reqPipe, config>(channel, dst, src, len);
+}
+
+template <CommProtocol commProtocol>
+template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const &config>
+__aicore__ inline int32_t Hcomm<commProtocol>::WriteWithNotifyNbi(
+    ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len, GM_ADDR notifyAddr, uint64_t notifyVal)
 {
     return impl_.template WriteWithNotifyNbi<commit, commitPipe, reqPipe, config>(
-        channelPtr, dst, src, len, notifyAddr, notifyVal);
+        channel, dst, src, len, notifyAddr, notifyVal);
 }
 
-template <CommProtocol commProtocol, CommEngine commEngine>
+template <CommProtocol commProtocol>
 template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const &config>
-__aicore__ inline HcommHandle Hcomm<commProtocol, commEngine>::ReadNbi(
-    ChannelPtr channelPtr, GM_ADDR dst, GM_ADDR src, uint64_t len)
+__aicore__ inline int32_t Hcomm<commProtocol>::ReadNbi(
+    ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len)
 {
-    return impl_.template ReadNbi<commit, commitPipe, reqPipe, config>(channelPtr, dst, src, len);
+    return impl_.template ReadNbi<commit, commitPipe, reqPipe, config>(channel, dst, src, len);
 }
 
-template <CommProtocol commProtocol, CommEngine commEngine>
+template <CommProtocol commProtocol>
 template <pipe_t pipe>
-__aicore__ inline int32_t Hcomm<commProtocol, commEngine>::Commit(HcommHandle handleId)
+__aicore__ inline int32_t Hcomm<commProtocol>::Commit(ChannelHandle channel)
 {
-    return impl_.template Commit<pipe>(handleId);
+    return impl_.template Commit<pipe>(channel);
 }
 
-template <CommProtocol commProtocol, CommEngine commEngine>
+template <CommProtocol commProtocol>
 template <pipe_t pipe>
-__aicore__ inline int32_t Hcomm<commProtocol, commEngine>::Wait(HcommHandle handleId)
+__aicore__ inline int32_t Hcomm<commProtocol>::Drain(ChannelHandle channel)
 {
-    return impl_.template Wait<pipe>(handleId);
+    return impl_.template Drain<pipe>(channel);
 }
 } // namespace AscendC
 
