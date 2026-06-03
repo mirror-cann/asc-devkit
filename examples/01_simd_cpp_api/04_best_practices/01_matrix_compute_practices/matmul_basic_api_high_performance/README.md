@@ -141,12 +141,12 @@ nd2nzParams.dValue = baseK * stepKa;  // 大包包含 stepKa 个 baseM * baseK
 
 ```cpp
 // 初始化：预置反向同步 flag，防止首次 WaitFlag 死锁
-AscendC::SetFlag<AscendC::HardEvent::MTE1_MTE2>(0);  // A1 Ping 可写
-AscendC::SetFlag<AscendC::HardEvent::MTE1_MTE2>(1);  // A1 Pong 可写
-AscendC::SetFlag<AscendC::HardEvent::MTE1_MTE2>(2);  // B1 Ping 可写
-AscendC::SetFlag<AscendC::HardEvent::MTE1_MTE2>(3);  // B1 Pong 可写
-AscendC::SetFlag<AscendC::HardEvent::M_MTE1>(0);     // L0 Ping 可写
-AscendC::SetFlag<AscendC::HardEvent::M_MTE1>(1);     // L0 Pong 可写
+AscendC::SetFlag<AscendC::HardEvent::MTE1_MTE2>(EVENT_ID0);  // A1 Ping 可写
+AscendC::SetFlag<AscendC::HardEvent::MTE1_MTE2>(EVENT_ID1);  // A1 Pong 可写
+AscendC::SetFlag<AscendC::HardEvent::MTE1_MTE2>(EVENT_ID2);  // B1 Ping 可写
+AscendC::SetFlag<AscendC::HardEvent::MTE1_MTE2>(EVENT_ID3);  // B1 Pong 可写
+AscendC::SetFlag<AscendC::HardEvent::M_MTE1>(EVENT_ID0);     // L0 Ping 可写
+AscendC::SetFlag<AscendC::HardEvent::M_MTE1>(EVENT_ID1);     // L0 Pong 可写
 ```
 
 **大包粒度的正向同步**：DataLoad 从 L1 大包中按K方向逐个base块读取数据，只需在读取大包首个base块时等待数据就绪，后续base块与首个在同一个大包内，无需重复等待：
@@ -368,7 +368,7 @@ $$cube\_time = \frac{M \times N \times K}{16 \times 16 \times 16 \times core\_nu
 
 Cube 计算耗时误差：
 
-$$误差 = \frac{aic\_mac\_time - cube\_time}{cube\_time} = \frac{3082.158 - 3022.92}{3022.92} = 1.95\%$$
+$$误差 = \frac{aic\_mac\_time - cube\_time}{cube\_time} = \frac{3082.158 - 3022.92}{3022.92} = 1.96\%$$
 
 **Ascend 950PR 芯片**：样例参数 M=N=K=8192，baseM=256，baseN=256，baseK=64，该处理器主频为 1.65GHz，每 cycle 处理 16×16×16 次乘加运算。
 
