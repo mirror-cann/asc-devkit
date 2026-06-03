@@ -33,26 +33,6 @@ public:
     template<typename T, typename U>
     __simd_vf__ inline static void Run(__ubuf__ T* dst, __ubuf__ U* src, uint16_t repeat, uint16_t oneRepSize, uint32_t dataSize)
     {
-        using VectorTypeTransform = TupleMap<
-            Std::tuple<uint8_t,        vector_uint8_t>,
-            Std::tuple<uint16_t,       vector_uint16_t>,
-            Std::tuple<uint32_t,       vector_uint32_t>,
-            Std::tuple<uint64_t,       vector_uint64_t>,
-            Std::tuple<int8_t,         vector_int8_t>,
-            Std::tuple<int16_t,        vector_int16_t>,
-            Std::tuple<int32_t,        vector_int32_t>,
-            Std::tuple<int64_t,        vector_int64_t>,
-            Std::tuple<bfloat16_t,     vector_bfloat16_t>,
-            Std::tuple<half,           vector_half>,
-            Std::tuple<float,          vector_float>,
-            Std::tuple<hifloat8_t,     vector_hifloat8_t>,
-            Std::tuple<fp8_e4m3fn_t,   vector_fp8_e4m3fn_t>,
-            Std::tuple<fp8_e5m2_t,     vector_fp8_e5m2_t>,
-            Std::tuple<fp8_e8m0_t,     vector_fp8_e8m0_t>,
-            Std::tuple<int4x2_t,       vector_int4x2_t>,
-            Std::tuple<fp4x2_e2m1_t,   vector_fp4x2_e2m1_t>,
-            Std::tuple<fp4x2_e1m2_t,   vector_fp4x2_e1m2_t>>;
-
         using DstRegType = typename VectorTypeTransform::template Get<T>;
         using SrcRegType = typename VectorTypeTransform::template Get<U>;
         using greaterType = Std::conditional_t<(sizeof(T) > sizeof(U)), T, U>;
