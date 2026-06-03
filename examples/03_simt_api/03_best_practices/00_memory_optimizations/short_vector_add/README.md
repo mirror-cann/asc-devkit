@@ -91,8 +91,8 @@ __global__ void add(T* x, T* y, T* z, uint64_t size)
 
 **样例配置**：
 
-- blockNum: 64
-- threadNumPerBlock: 1024
+- blocks_per_grid: 64
+- threads_per_block: 1024
 - 总线程数: 65536
 - 每线程处理元素数: 32
 
@@ -150,8 +150,8 @@ __global__ void add2(T* x, T* y, T* z, uint64_t size)
 
 **样例配置**：
 
-- blockNum: 64
-- threadNumPerBlock: 1024
+- blocks_per_grid: 64
+- threads_per_block: 1024
 - 总线程数: 65536
 - 每线程处理half2元素数: 16
 

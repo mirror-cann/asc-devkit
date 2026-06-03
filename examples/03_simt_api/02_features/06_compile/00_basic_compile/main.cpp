@@ -21,7 +21,7 @@
 
 extern void run_gather_custom(float* input, int32_t* index, float* output,
                                  uint32_t input_total_length, uint32_t index_total_length,
-                                 uint32_t block_num, uint32_t thread_num_per_block, uint32_t dyn_ubuf_size,
+                                 uint32_t blocks_per_grid, uint32_t threads_per_block, uint32_t dyn_ubuf_size,
                                  aclrtStream stream);
 
 std::vector<float> gather_1d(std::vector<float>& input, std::vector<int32_t>& index)
@@ -38,11 +38,11 @@ std::vector<float> gather_1d(std::vector<float>& input, std::vector<int32_t>& in
     size_t index_total_byte_size = index_total_length * sizeof(int32_t);
     size_t output_total_byte_size = index_total_length * sizeof(float);
 
-    uint32_t thread_num_per_block = 2048;
-    uint32_t block_num = (index_total_length + thread_num_per_block - 1) / thread_num_per_block;
+    uint32_t threads_per_block = 2048;
+    uint32_t blocks_per_grid = (index_total_length + threads_per_block - 1) / threads_per_block;
 
-    std::cout << "[INFO] Block number is " << block_num << "." << std::endl;
-    std::cout << "[INFO] Thread number in a block is " << thread_num_per_block << "." << std::endl;
+    std::cout << "[INFO] Block number is " << blocks_per_grid << "." << std::endl;
+    std::cout << "[INFO] Thread number in a block is " << threads_per_block << "." << std::endl;
 
     int32_t device_id = 0;
     aclrtStream stream = nullptr;
@@ -68,7 +68,7 @@ std::vector<float> gather_1d(std::vector<float>& input, std::vector<int32_t>& in
 
     uint32_t dyn_ubuf_size = 0;
     run_gather_custom(input_device, index_device, output_device, input_total_length, index_total_length,
-                         block_num, thread_num_per_block, dyn_ubuf_size, stream);
+                         blocks_per_grid, threads_per_block, dyn_ubuf_size, stream);
 
     aclrtSynchronizeStream(stream);
     aclrtMemcpy(output_host, output_total_byte_size, output_device, output_total_byte_size, ACL_MEMCPY_DEVICE_TO_HOST);
