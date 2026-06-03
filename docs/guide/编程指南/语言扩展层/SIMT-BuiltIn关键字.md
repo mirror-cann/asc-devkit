@@ -90,7 +90,7 @@
 
     动态内存的实际内存大小需要在核函数启动时配置，具体内容请参考[核函数配置](#section97005415463)。
 
-## 内置变量<a name="section13165113520576"></a>
+## 内置结构体<a name="section18310741094123"></a>
 
 -   dim3<a name="li1136665405"></a>
 
@@ -103,6 +103,9 @@
     dim3(x, y); // 创建二维结构，dimz为默认值1
     dim3(x, y, z); // 创建三维结构
     ```
+
+## 内置变量<a name="section13165113520576"></a>
+
 
 当前提供了以下仅在Device上可用的dim3结构的内置变量：
 
@@ -995,17 +998,17 @@ res[idx] = x[idx] > y[idx] ? x[idx] : y[idx];
 
 ## 核函数配置<a name="section97005415463"></a>
 
-在调用\_\_global\_\_限定符修饰的函数时必须指定执行配置。执行配置通过在函数名后带括号的参数列表之间插入，形如：
+在调用\_\_global\_\_限定符修饰的函数时必须指定执行配置。执行配置通过在函数名和带括号的参数列表之间插入如下形式的表达式来指定：
 
 ```
-<<<grid_dim, block_dim, dynamic_mem_size, stream>>>
+<<<blocks_per_grid, threads_per_block, dyn_ubuf_size, stream>>>
 ```
 
 其中：
 
--   grid\_dim：int或dim3类型，用于指定网格（grid）的维度与规模，grid\_dim.x \* grid\_dim.y \* grid\_dim.z等于启动的线程块总数。
--   block\_dim：int或dim3类型，用于指定每个线程块（block）的维度与规模，block\_dim.x \* block\_dim.y \* block\_dim.z等于每个线程块包含的线程数。
--   dynamic\_mem\_size：size\_t类型，该参数指定除静态分配的内存外，本次调用为每个线程块动态分配的共享内存字节数。
+-   blocks\_per\_grid：int或dim3类型，用于指定网格（grid）的维度与规模，blocks\_per\_grid.x \* blocks\_per\_grid.y \* blocks\_per\_grid.z等于启动的线程块总数。
+-   threads\_per\_block：int或dim3类型，用于指定每个线程块（block）的维度与规模，threads\_per\_block.x \* threads\_per\_block.y \* threads\_per\_block.z等于每个线程块包含的线程数，需要小于等于\_\_launch\_bounds\_\_配置。
+-   dyn\_ubuf\_size：size\_t类型，用于指定每个线程块动态分配的共享内存大小，单位为字节。这部分内存供数组使用，具体用法请参考[共享内存](../编程模型/AI-Core-SIMT编程/内存层级.md#共享内存unified-buffer)中的“动态申请”方式。
 -   stream：aclrtStream类型指针，指定关联的流，用于维护异步操作的执行顺序。
 
 以下示例展示了内核函数的声明与调用方式。
@@ -1014,10 +1017,10 @@ res[idx] = x[idx] > y[idx] ? x[idx] : y[idx];
 // 声明
 __global__ void add_custom(float* x, float* y, float* z, uint64_t total_length);
 // 调用
-add_custom<<<block_num, thread_num_per_block, dyn_ubuf_size, stream>>>(x, y, z, 1024);
+add_custom<<<blocks_per_grid, threads_per_block, dyn_ubuf_size, stream>>>(x, y, z, 1024);
 ```
 
-在执行函数之前，会先对上述配置参数进行校验。如果grid\_dim或block\_dim超出设备的最大允许规模，或dynamic\_smem\_bytes超过分配静态内存后剩余的可用共享内存，该函数将会执行失败。
+在执行函数之前，会先对上述配置参数进行校验。如果blocks\_per\_grid或threads\_per\_block超出设备的最大允许规模，或dyn\_ubuf\_size超过分配静态内存后剩余的可用共享内存，该函数将会执行失败。
 
 一个核函数所使用的寄存器数量会显著影响常驻线程束的数量。核函数使用的寄存器数量通过 \_\_launch\_bounds\_\_\(\) 限定符或 \_\_maxnreg\_\_\(\) 限定符指定。
 
