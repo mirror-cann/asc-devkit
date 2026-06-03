@@ -1,8 +1,4 @@
-# Example Execution Verification
-
-After developers implement custom operators based on Ascend C SIMT programming, they can verify operator functionality through single operator invocation. This code repository provides some operator implementations and their invocation examples, as shown below.
-
-## Example List
+# Example List
 |  Directory Name                                                   |  Description                                              |
 | ------------------------------------- | ------------------------------------- |
 | [00_introduction](./00_introduction) | Simple examples based on Ascend C SIMT programming, implementing custom operators through Ascend C programming language, providing corresponding <<<>>> direct invocation implementations, suitable for beginners |

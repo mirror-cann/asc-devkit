@@ -1,17 +1,20 @@
-# 样例运行验证
+# Ascend C样例
 
-开发者调用Ascend C API实现自定义算子后，可通过单算子调用的方式验证算子功能。本代码仓提供部分算子实现及其调用样例，具体如下。
+本目录提供Ascend C不同编程方式的使用样例，覆盖基础调用、调试工具、功能特性、API类库和性能实践等内容。
 
 ## 样例列表
-|  目录名称                                                   |  功能描述                                              |
-| ------------------------------------------------------------ | ---------------------------------------------------- |
-| [01_simd_cpp_api](./01_simd_cpp_api) | 基于Ascend C的SIMD API样例，通过<<<>>>直调的实现方式，介绍了SIMD API的使用方法 |
-| [02_simd_c_api](./02_simd_c_api) | 基于Ascend C的C_API样例，通过C_API的实现方式，介绍了C_API的使用方法 |
-| [03_simt_api](./03_simt_api) | 基于Ascend C SIMT编程的算子样例，通过<<<>>>直调的实现方式，介绍了SIMT的使用方法 |
+
+| 目录名称 | 内容说明 |
+| --- | --- |
+| [01_simd_cpp_api](./01_simd_cpp_api) | Ascend C C++ API样例，覆盖入门、工具、功能特性、API类库、最佳实践和兼容性参考 |
+| [02_simd_c_api](./02_simd_c_api) | Ascend C C API样例，覆盖基础调用、工具能力和接口特性 |
+| [03_simt_api](./03_simt_api) | Ascend C SIMT编程样例，覆盖入门、调试工具、核心特性和实践参考 |
+
 ## npu-arch编译选项说明
 
-开发者需根据实际的执行环境，修改具体样例目录下CMakeLists.txt文件中的--npu-arch编译选项，参考下表中的对应关系，修改为环境对应的npu-arch参数值。
-| 产品型号 |  npu-arch参数 |
+开发者需根据实际执行环境，修改具体样例目录下CMakeLists.txt文件中的--npu-arch编译选项。产品型号与npu-arch参数的对应关系如下。
+
+| 产品型号 | npu-arch参数 |
 | ---- | ---- |
 | Ascend 950PR/Ascend 950DT | --npu-arch=dav-3510 |
 | Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 | --npu-arch=dav-2201 |
