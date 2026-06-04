@@ -18,9 +18,9 @@ import numpy as np
 
 
 def gen_golden_data_gather_scenario1():
-    """场景1：Gather接口 - 从RegTensor按索引收集元素"""
+    """场景1：Gather接口 - 从UB地址按索引收集元素"""
     total_length = 128
-    src_length = total_length * 8
+    src_length = 1024
     data_type = np.float16
     x = np.random.uniform(0, 1, [1, src_length]).astype(data_type)
     index = np.random.randint(0, src_length, [1, total_length]).astype(np.uint16)
@@ -35,7 +35,7 @@ def gen_golden_data_gather_scenario1():
 def gen_golden_data_gatherb_scenario2():
     """场景2：GatherB接口 - 按32字节DataBlock随机收集"""
     total_length = 128
-    src_length = total_length * 8
+    src_length = 1024
     data_type = np.float16
     elements_per_block = 32 // np.dtype(data_type).itemsize
     num_output_blocks = total_length // elements_per_block
