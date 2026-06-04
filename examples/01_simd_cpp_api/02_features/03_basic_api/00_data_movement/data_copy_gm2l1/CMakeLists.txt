@@ -30,6 +30,10 @@ target_link_libraries(demo PRIVATE)
 #   4 - 输入格式ND，输入数据类型half，使能bias
 #   5 - 输入格式ND，输入数据类型half，使能Vector量化
 set(SCENARIO_NUM "1" CACHE STRING "Scene number (1-5)")
+if(NOT SCENARIO_NUM MATCHES "^[1-5]$")
+    message(FATAL_ERROR "SCENARIO_NUM must be 1, 2, 3, 4, or 5, but got ${SCENARIO_NUM}")
+endif()
+
 if(SCENARIO_NUM EQUAL 3 AND CMAKE_ASC_ARCHITECTURES STREQUAL "dav-2201")
     message(FATAL_ERROR "When SCENARIO_NUM=3, only CMAKE_ASC_ARCHITECTURES=dav-3510 is supported.")
 endif()
