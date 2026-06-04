@@ -37,7 +37,7 @@
     - [Ascend C算子的调用方式](https://www.hiascend.com/zh/developer/techArticles/20240523-1)
   - 概念原理
     - [Ascend C非对齐数据的处理方案](https://www.hiascend.com/zh/developer/techArticles/20250627-1)
-    - [深度理解多核并行/流水计算/dobule buffer技术](https://www.hiascend.com/zh/developer/techArticles/20230807-1)
+    - [深度理解多核并行/流水计算/double buffer技术](https://www.hiascend.com/zh/developer/techArticles/20230807-1)
   - 问题案例
     - [Ascend C算子开发常见问题案例](https://www.hiascend.com/zh/developer/techArticles/20240106-1) 
     - [含有Matmul高阶API的算子精度问题定位](https://www.hiascend.com/zh/developer/techArticles/20250107-1)
