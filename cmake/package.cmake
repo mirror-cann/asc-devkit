@@ -47,7 +47,7 @@ set(SCRIPTS_FILES
     ${CANN_CMAKE_DIR}/scripts/install/common_interface.csh
     ${CANN_CMAKE_DIR}/scripts/install/common_interface.fish
     ${CANN_CMAKE_DIR}/scripts/install/version_compatiable.inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/scripts/package/common/py/merge_binary_info_config.py
+    ${CANN_CMAKE_DIR}/scripts/package/merge_binary_info_config.py
 )
 
 install(FILES ${SCRIPTS_FILES}
