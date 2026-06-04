@@ -13,6 +13,9 @@
 namespace mc2_ops_hccl {
 constexpr u32 MAX_RANK_NUM_FOR_CONCURRENT_ALGO = 4;
 constexpr u64 RS_AICPU_1D_MAX_DATA_SIZE = 16 * 1024 * 1024;
+constexpr u64 RS_AICPU_1D_MIN_DATA_SIZE = 4 * 1024 * 1024;
+constexpr u64 RS_AICPU_1D_TWO_LEVER_DATA_SIZE_THRESHOLD = 1536 * 1024 * 1024;
+constexpr u64 RS_AICPU_SEQUENCE_SIZE_THRESHOLD = 1 * 1024 * 1024 * 1024;
 
 SelectorStatus ReduceScatterAutoSelector::SelectCcuMsAlgo(const TopoInfoWithNetLayerDetails* topoInfo, const OpParam &opParam,
                                                     const std::map<HcclCMDType, std::vector<HcclAlgoType>> &configAlgMap,
@@ -206,6 +209,8 @@ SelectorStatus ReduceScatterAutoSelector::SelectAicpuAlgo(const TopoInfoWithNetL
 {
     HCCL_DEBUG("[ReduceScatterAutoSelector][%s] start, topoInfo levelNum[%u]", __func__, topoInfo->topoLevelNums);
     (void)configAlgMap;
+    u64 perDataSize = DATATYPE_SIZE_TABLE[opParam.DataDes.dataType];
+    u64 dataSize = opParam.DataDes.count * perDataSize;
     if (topoInfo->topoLevelNums > 1) {
         if (Is64BitDataType(opParam.DataDes.dataType) || opParam.reduceType == HcclReduceOp::HCCL_REDUCE_PROD) {
             selectAlgName = "InsReduceScatterAicpuReduceNHR";
@@ -215,7 +220,12 @@ SelectorStatus ReduceScatterAutoSelector::SelectAicpuAlgo(const TopoInfoWithNetL
         } else if (topoInfo->Level0Nhr) {
             selectAlgName = "InsReduceScatterNHR"; // InsReduceScatterParallelNHRNHR备用
         } else if (topoInfo->netLayerDetails.localNetInsSizeOfLayer.at(0) > 1 && topoInfo->level0Topo == Level0Shape::MESH_1D) {
-            selectAlgName = "InsReduceScatterParallelMesh1DNHR";
+            if (dataSize > RS_AICPU_1D_MIN_DATA_SIZE) {
+                selectAlgName = (dataSize * topoInfo->userRankSize > RS_AICPU_SEQUENCE_SIZE_THRESHOLD) ?
+                    "InsReduceScatterSequenceMesh1DNhr" : "InsReduceScatterParallelMesh1DNHR";
+            } else {
+                selectAlgName = "InsReduceScatterNHR";
+            }
         } else if (topoInfo->netLayerDetails.localNetInsSizeOfLayer.at(0) == 1 || topoInfo->level0Topo == Level0Shape::CLOS) {
             selectAlgName = "InsReduceScatterNHR"; // InsReduceScatterParallelNHRNHR备用
         } else {
@@ -246,10 +256,20 @@ SelectorStatus ReduceScatterAutoSelector::SelectMeshAlgoAicpu(const TopoInfoWith
         if (Is64BitDataType(opParam.DataDes.dataType) || opParam.reduceType == HcclReduceOp::HCCL_REDUCE_PROD) {
             selectAlgName = "InsReduceScatterMesh1D";
         } else {
-            if (dataSize * ratio > RS_AICPU_1D_MAX_DATA_SIZE) {
-                selectAlgName = "InsReduceScatterMesh1DMeshChunk";
+            if (IsTwoLevelNetLayer(topoInfo)) {
+                if (dataSize * topoInfo->userRankSize > RS_AICPU_1D_TWO_LEVER_DATA_SIZE_THRESHOLD) {
+                    selectAlgName = "InsReduceScatterMesh1DZAxisDetour";
+                } else if (dataSize * ratio > RS_AICPU_1D_MAX_DATA_SIZE) {
+                    selectAlgName = "InsReduceScatterMesh1DMeshChunk";
+                } else {
+                    selectAlgName = "InsReduceScatterMesh1D";
+                }
             } else {
-                selectAlgName = "InsReduceScatterMesh1D";
+                if (dataSize * ratio > RS_AICPU_1D_MAX_DATA_SIZE) {
+                    selectAlgName = "InsReduceScatterMesh1DMeshChunk";
+                } else {
+                    selectAlgName = "InsReduceScatterMesh1D";
+                }
             }
         }
     } else if (topoInfo->level0Topo == Level0Shape::CLOS) {
@@ -312,12 +332,21 @@ SelectorStatus ReduceScatterAutoSelector::SelectMeshAlgoAicpuForMesh1DClos(const
                                                                            const OpParam &opParam, u64 dataSize, double ratio,
                                                                            bool isClosNumMultipleOfMeshNum, std::string &selectAlgName) const
 {
-    if (IsLayerAllConnetedWithTopo(topoInfo, 0, CommTopo::COMM_TOPO_1DMESH)) {
+    if (topoInfo->level0PcieMix) {
+        // PCIE mixed topology uses the parallel AICPU executor in this scope.
+        if (IsLayerAllConnetedWithTopo(topoInfo, 0, CommTopo::COMM_TOPO_1DMESH)) {
+            selectAlgName = "InsReduceScatterMesh1D";
+        } else if (Is64BitDataType(opParam.DataDes.dataType) || opParam.reduceType == HcclReduceOp::HCCL_REDUCE_PROD) {
+            selectAlgName = "InsReduceScatterAicpuReduceNHR";
+        } else {
+            selectAlgName = "InsReduceScatterParallelMesh1DNHRPcie";
+        }
+    } else if (IsLayerAllConnetedWithTopo(topoInfo, 0, CommTopo::COMM_TOPO_1DMESH)) {
         // MESH_1D 即可链接所有卡， 使用 MESH_1D 算法
         if (Is64BitDataType(opParam.DataDes.dataType) || opParam.reduceType == HcclReduceOp::HCCL_REDUCE_PROD) {
             selectAlgName = "InsReduceScatterMesh1D";
         } else if (!IsSmallData(dataSize)) {
-            selectAlgName = "InsReduceScatterConcurrentMeshNHR";
+            selectAlgName = "InsReduceScatterMesh1D";
         } else {
             if (dataSize * ratio > RS_AICPU_1D_MAX_DATA_SIZE) {
                 selectAlgName = "InsReduceScatterMesh1DMeshChunk";
@@ -325,14 +354,12 @@ SelectorStatus ReduceScatterAutoSelector::SelectMeshAlgoAicpuForMesh1DClos(const
                 selectAlgName = "InsReduceScatterMesh1D";
             }
         }
+    } else if (Is64BitDataType(opParam.DataDes.dataType) || opParam.reduceType == HcclReduceOp::HCCL_REDUCE_PROD) {
+        selectAlgName = "InsReduceScatterAicpuReduceNHR";
     } else if (isClosNumMultipleOfMeshNum && !IsSmallData(dataSize)) {
-        selectAlgName = "InsReduceScatterParallelMesh1DNHR";
+        selectAlgName = "InsReduceScatterParallelMesh1DNHRUBX";
     } else {
-        if (Is64BitDataType(opParam.DataDes.dataType) || opParam.reduceType == HcclReduceOp::HCCL_REDUCE_PROD) {
-            selectAlgName = "InsReduceScatterAicpuReduceNHR";
-        } else {
-            selectAlgName = "InsReduceScatterNHR";
-        }
+        selectAlgName = "InsReduceScatterNHR";
     }
     HCCL_DEBUG("[%s] Algo match [%s]", __func__, selectAlgName.c_str());
     return SelectorStatus::MATCH;
