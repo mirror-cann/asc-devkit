@@ -33,42 +33,42 @@
   **调用GetTPipePtr接口**
 
   ```cpp
-    __aicore__ inline void InitTPipe()
-    {
-        AscendC::TPipe pipe;
-    }
+  template <uint32_t totalLength, uint32_t tileNum>
+  __aicore__ inline void Process(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z)
+  {
+      // 没有TPipe变量
+      // ...
+      // 调用GetTPipePtr获取TPipe指针并使用
+      GetTPipePtr()->InitBuffer(inQueueX, BUFFER_NUM, tileLength * sizeof(float));
+  }
 
-    template <uint32_t totalLength, uint32_t tileNum>
-    __global__ __vector__ void get_tpipe_ptr_custom(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z)
-    {
-        // 不用显式传入TPipe指针，且没有TPipe变量
-        InitTPipe();
-        // ...
-        // 调用GetTPipePtr获取TPipe指针并使用
-        GetTPipePtr()->InitBuffer(inQueueX, BUFFER_NUM, tileLength * sizeof(float));
-    }
+  template <uint32_t totalLength, uint32_t tileNum>
+  __global__ __vector__ void get_tpipe_ptr_custom(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z)
+  {
+      AscendC::TPipe pipe;
+      // 不用显式传入TPipe指针
+      Process<totalLength, tileNum>(x, y, z);
+  }
   ```
 
   **不调用GetTPipePtr接口（核函数显式传入TPipe指针）**
 
   ```cpp
-  class KernelAdd {
-      AscendC::TPipe* pipe;  // 需要TPipe指针成员变量
-
-      __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, uint32_t totalLength, uint32_t tileNum, AscendC::TPipe* pipeIn)
-      {
-          pipe = pipeIn;
-          pipe->InitBuffer(inQueueX, BUFFER_NUM, this->tileLength * sizeof(float));
-      }
-  };
-
-  __global__ __vector__ void add_custom(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, AddCustomTilingData tiling)
+  template <uint32_t totalLength, uint32_t tileNum>
+  __aicore__ inline void Process(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, AscendC::TPipe* pipe)
   {
-      // 需要显式传入TPipe指针
+      // 需要TPipe指针入参
+      // ...
+      // 使用传入的TPipe指针
+      pipe->InitBuffer(inQueueX, BUFFER_NUM, tileLength * sizeof(float));
+  }
+
+  template <uint32_t totalLength, uint32_t tileNum>
+  __global__ __vector__ void get_tpipe_ptr_custom(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z)
+  {
       AscendC::TPipe pipe;
-      KernelAdd op;
-      op.Init(x, y, z, tiling.totalLength, tiling.tileNum, &pipe);
-      op.Process();
+      // 需要显式传入TPipe指针
+      Process<totalLength, tileNum>(x, y, z, &pipe);
   }
   ```
 
