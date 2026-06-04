@@ -49,179 +49,117 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
+头文件路径为："basic\_api/kernel\_operator\_vec\_mulcast\_intf.h"。
+
 按元素求积，并根据源操作数和目的操作数Tensor的数据类型进行精度转换。计算公式如下:
 
-![](../../../../figures/zh-cn_formulaimage_0000002305882314.png)
+$$
+dst_i = conv(src0_i * src1_i)
+$$
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
--   tensor前n个数据计算
+- tensor前n个数据计算
 
+  ```cpp
+  template <typename T, typename U>
+  __aicore__ inline void MulCast(const LocalTensor<T> &dst, const LocalTensor<U> &src0, const LocalTensor<U> &src1, uint32_t count)
+  ```
+
+- tensor高维切分计算
+  - mask逐bit模式
+
+    ```cpp
+    template <typename T, typename U, bool isSetMask = true>
+    __aicore__ inline void MulCast(const LocalTensor<T> &dst, const LocalTensor<U> &src0, const LocalTensor<U> src1, uint64_t mask[], const uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
     ```
-    template <typename T, typename U>
-    __aicore__ inline void MulCast(const LocalTensor<T> &dst, const LocalTensor<U> &src0, const LocalTensor<U> &src1, uint32_t count)
+
+  - mask连续模式
+
+    ```cpp
+    template <typename T, typename U, bool isSetMask = true>
+    __aicore__ inline void MulCast(const LocalTensor<T> &dst, const LocalTensor<U> &src0, const LocalTensor<U> src1, uint64_t mask, const uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
     ```
-
--   tensor高维切分计算
-    -   mask逐bit模式
-
-        ```
-        template <typename T, typename U, bool isSetMask = true>
-        __aicore__ inline void MulCast(const LocalTensor<T> &dst, const LocalTensor<U> &src0, const LocalTensor<U> &src1, uint64_t mask[], const uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
-        ```
-
-    -   mask连续模式
-
-        ```
-        template <typename T, typename U, bool isSetMask = true>
-        __aicore__ inline void MulCast(const LocalTensor<T> &dst, const LocalTensor<U> &src0, const LocalTensor<U> &src1, uint64_t mask, const uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
-        ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表**  模板参数说明
 
-<a name="table4835205712588"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000001429830437_row118356578583"><th class="cellrowborder" valign="top" width="16.43%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001429830437_p48354572582"><a name="zh-cn_topic_0000001429830437_p48354572582"></a><a name="zh-cn_topic_0000001429830437_p48354572582"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="83.57%" id="mcps1.2.3.1.2"><p id="zh-cn_topic_0000001429830437_p583535795817"><a name="zh-cn_topic_0000001429830437_p583535795817"></a><a name="zh-cn_topic_0000001429830437_p583535795817"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000001429830437_row1835857145817"><td class="cellrowborder" valign="top" width="16.43%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000001429830437_p5835457165816"><a name="zh-cn_topic_0000001429830437_p5835457165816"></a><a name="zh-cn_topic_0000001429830437_p5835457165816"></a>T</p>
-</td>
-<td class="cellrowborder" valign="top" width="83.57%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000001429830437_p168351657155818"><a name="zh-cn_topic_0000001429830437_p168351657155818"></a><a name="zh-cn_topic_0000001429830437_p168351657155818"></a>目的操作数数据类型。不同数据类型对应的精度转换规则见<a href="#table235404962912">表3</a>。</p>
-<p id="p111441252181220"><a name="p111441252181220"></a><a name="p111441252181220"></a><span id="ph16145165211129"><a name="ph16145165211129"></a><a name="ph16145165211129"></a><term id="zh-cn_topic_0000001312391781_term1964153212227_1"><a name="zh-cn_topic_0000001312391781_term1964153212227_1"></a><a name="zh-cn_topic_0000001312391781_term1964153212227_1"></a>Atlas 推理系列产品</term>AI Core</span>，支持的数据类型为：int8_t、uint8_t。</p>
-<p id="p510942615591"><a name="p510942615591"></a><a name="p510942615591"></a><span id="ph1215792313251"><a name="ph1215792313251"></a><a name="ph1215792313251"></a><term id="zh-cn_topic_0000001312391781_term11962195213215_1"><a name="zh-cn_topic_0000001312391781_term11962195213215_1"></a><a name="zh-cn_topic_0000001312391781_term11962195213215_1"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811_1"><a name="zh-cn_topic_0000001312391781_term184716139811_1"></a><a name="zh-cn_topic_0000001312391781_term184716139811_1"></a>Atlas A2 推理系列产品</term></span>，支持的数据类型为：int8_t、uint8_t。</p>
-<p id="p1623213019548"><a name="p1623213019548"></a><a name="p1623213019548"></a><span id="ph173282029548"><a name="ph173282029548"></a><a name="ph173282029548"></a><term id="zh-cn_topic_0000001312391781_term354143892110_1"><a name="zh-cn_topic_0000001312391781_term354143892110_1"></a><a name="zh-cn_topic_0000001312391781_term354143892110_1"></a>Atlas 200I/500 A2 推理产品</term></span>， 支持的数据类型为：int8_t、uint8_t。</p>
-<p id="p451112532228"><a name="p451112532228"></a><a name="p451112532228"></a><span id="ph2272194216543"><a name="ph2272194216543"></a><a name="ph2272194216543"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：int8_t、uint8_t、int32_t、float。</p>
-</td>
-</tr>
-<tr id="row1648615377"><td class="cellrowborder" valign="top" width="16.43%" headers="mcps1.2.3.1.1 "><p id="p1212015191874"><a name="p1212015191874"></a><a name="p1212015191874"></a>U</p>
-</td>
-<td class="cellrowborder" valign="top" width="83.57%" headers="mcps1.2.3.1.2 "><p id="p1912061914715"><a name="p1912061914715"></a><a name="p1912061914715"></a>源操作数数据类型。</p>
-<p id="p232284308"><a name="p232284308"></a><a name="p232284308"></a><span id="ph16321823019"><a name="ph16321823019"></a><a name="ph16321823019"></a><term id="zh-cn_topic_0000001312391781_term1964153212227_2"><a name="zh-cn_topic_0000001312391781_term1964153212227_2"></a><a name="zh-cn_topic_0000001312391781_term1964153212227_2"></a>Atlas 推理系列产品</term>AI Core</span>，支持的数据类型为：half。</p>
-<p id="p76317231599"><a name="p76317231599"></a><a name="p76317231599"></a><span id="ph8541113314210"><a name="ph8541113314210"></a><a name="ph8541113314210"></a><term id="zh-cn_topic_0000001312391781_term11962195213215_2"><a name="zh-cn_topic_0000001312391781_term11962195213215_2"></a><a name="zh-cn_topic_0000001312391781_term11962195213215_2"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811_2"><a name="zh-cn_topic_0000001312391781_term184716139811_2"></a><a name="zh-cn_topic_0000001312391781_term184716139811_2"></a>Atlas A2 推理系列产品</term></span>，支持的数据类型为：half。</p>
-<p id="p1229510437530"><a name="p1229510437530"></a><a name="p1229510437530"></a><span id="ph983860144910"><a name="ph983860144910"></a><a name="ph983860144910"></a><term id="zh-cn_topic_0000001312391781_term354143892110_2"><a name="zh-cn_topic_0000001312391781_term354143892110_2"></a><a name="zh-cn_topic_0000001312391781_term354143892110_2"></a>Atlas 200I/500 A2 推理产品</term></span>，支持的数据类型为：half。</p>
-<p id="p03061533154516"><a name="p03061533154516"></a><a name="p03061533154516"></a><span id="ph1989533114515"><a name="ph1989533114515"></a><a name="ph1989533114515"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：half、int64_t。</p>
-</td>
-</tr>
-<tr id="row488741712611"><td class="cellrowborder" valign="top" width="16.43%" headers="mcps1.2.3.1.1 "><p id="p18887617560"><a name="p18887617560"></a><a name="p18887617560"></a>isSetMask</p>
-</td>
-<td class="cellrowborder" valign="top" width="83.57%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000001429830437_p77520541653"><a name="zh-cn_topic_0000001429830437_p77520541653"></a><a name="zh-cn_topic_0000001429830437_p77520541653"></a>是否在接口内部设置mask。</p>
-<a name="zh-cn_topic_0000001429830437_ul1163765616511"></a><a name="zh-cn_topic_0000001429830437_ul1163765616511"></a><ul id="zh-cn_topic_0000001429830437_ul1163765616511"><li>true，表示在接口内部设置mask。</li><li>false，表示在接口外部设置mask，开发者需要使用<a href="../掩码操作/SetVectorMask.md">SetVectorMask</a>接口设置mask值。这种模式下，接口入参中的mask值设置为占位符MASK_PLACEHOLDER，用于占位，无实际含义。</li></ul>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 描述 |
+| :----- | :--- |
+| T | 目的操作数数据类型。 |
+| U | 源操作数数据类型。 |
+| isSetMask | 是否在接口内部设置mask。<br>• true，表示在接口内部设置mask。<br>• false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，接口入参中的mask值设置为占位符MASK_PLACEHOLDER。 |
 
-**表 2**  参数说明
+**表**  参数说明
 
-<a name="zh-cn_topic_0235751031_table33761356"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="16.49%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="11.92%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0235751031_p16609919"><a name="zh-cn_topic_0235751031_p16609919"></a><a name="zh-cn_topic_0235751031_p16609919"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="71.59%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0235751031_p59995477"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row42461942101815"><td class="cellrowborder" valign="top" width="16.49%" headers="mcps1.2.4.1.1 "><p id="p284425844311"><a name="p284425844311"></a><a name="p284425844311"></a>dst</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.92%" headers="mcps1.2.4.1.2 "><p id="p158449584436"><a name="p158449584436"></a><a name="p158449584436"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.59%" headers="mcps1.2.4.1.3 "><p id="p3142455111215"><a name="p3142455111215"></a><a name="p3142455111215"></a>目的操作数。</p>
-<p id="p5945720195112"><a name="p5945720195112"></a><a name="p5945720195112"></a><span id="zh-cn_topic_0000001530181537_ph173308471594"><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><span id="zh-cn_topic_0000001530181537_ph9902231466"><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816"><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a>类型为<a href="../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-<p id="p183722220315"><a name="p183722220315"></a><a name="p183722220315"></a><span id="ph1479701815419"><a name="ph1479701815419"></a><a name="ph1479701815419"></a>LocalTensor的起始地址需要32字节对齐。</span></p>
-</td>
-</tr>
-<tr id="row2137145181815"><td class="cellrowborder" valign="top" width="16.49%" headers="mcps1.2.4.1.1 "><p id="p6844125874315"><a name="p6844125874315"></a><a name="p6844125874315"></a>src0、src1</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.92%" headers="mcps1.2.4.1.2 "><p id="p128442058144312"><a name="p128442058144312"></a><a name="p128442058144312"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.59%" headers="mcps1.2.4.1.3 "><p id="p168861511132"><a name="p168861511132"></a><a name="p168861511132"></a>源操作数。</p>
-<p id="p159019410132"><a name="p159019410132"></a><a name="p159019410132"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_1"><a name="zh-cn_topic_0000001530181537_ph173308471594_1"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_1"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_1"><a name="zh-cn_topic_0000001530181537_ph9902231466_1"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_1"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_1"><a name="zh-cn_topic_0000001530181537_ph1782115034816_1"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_1"></a>类型为<a href="../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-<p id="p1116611257318"><a name="p1116611257318"></a><a name="p1116611257318"></a><span id="ph154094267310"><a name="ph154094267310"></a><a name="ph154094267310"></a>LocalTensor的起始地址需要32字节对齐。</span></p>
-</td>
-</tr>
-<tr id="row145351353165910"><td class="cellrowborder" valign="top" width="16.49%" headers="mcps1.2.4.1.1 "><p id="p92349596594"><a name="p92349596594"></a><a name="p92349596594"></a>count</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.92%" headers="mcps1.2.4.1.2 "><p id="p14234145912596"><a name="p14234145912596"></a><a name="p14234145912596"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.59%" headers="mcps1.2.4.1.3 "><p id="p11234135935917"><a name="p11234135935917"></a><a name="p11234135935917"></a>参与计算的元素个数。</p>
-</td>
-</tr>
-<tr id="row19615183817191"><td class="cellrowborder" valign="top" width="16.49%" headers="mcps1.2.4.1.1 "><p id="p2554141321313"><a name="p2554141321313"></a><a name="p2554141321313"></a>mask[]/mask</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.92%" headers="mcps1.2.4.1.2 "><p id="p484514581433"><a name="p484514581433"></a><a name="p484514581433"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.59%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0000001530181537_p0554313181312"><a name="zh-cn_topic_0000001530181537_p0554313181312"></a><a name="zh-cn_topic_0000001530181537_p0554313181312"></a><span id="zh-cn_topic_0000001530181537_ph793119540147"><a name="zh-cn_topic_0000001530181537_ph793119540147"></a><a name="zh-cn_topic_0000001530181537_ph793119540147"></a><span id="zh-cn_topic_0000001530181537_ph199431319161515"><a name="zh-cn_topic_0000001530181537_ph199431319161515"></a><a name="zh-cn_topic_0000001530181537_ph199431319161515"></a><a href="https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/C++类库API/基础API/接口分类说明/高维切分API.md" target="_blank" rel="noopener noreferrer">mask</a></span>用于控制每次迭代内参与计算的元素。</span></p>
-<a name="zh-cn_topic_0000001530181537_ul1255411133132"></a><a name="zh-cn_topic_0000001530181537_ul1255411133132"></a><ul id="zh-cn_topic_0000001530181537_ul1255411133132"><li>逐bit模式：可以按位控制哪些元素参与计算，bit位的值为1表示参与计算，0表示不参与。<p id="zh-cn_topic_0000001530181537_p121114581013"><a name="zh-cn_topic_0000001530181537_p121114581013"></a><a name="zh-cn_topic_0000001530181537_p121114581013"></a>mask为数组形式，数组长度和数组元素的取值范围和操作数的数据类型有关。当操作数为16位时，数组长度为2，mask[0]、mask[1]∈[0, 2<sup id="zh-cn_topic_0000001530181537_sup1411059101"><a name="zh-cn_topic_0000001530181537_sup1411059101"></a><a name="zh-cn_topic_0000001530181537_sup1411059101"></a>64</sup>-1]并且不同时为0；当操作数为32位时，数组长度为1，mask[0]∈(0, 2<sup id="zh-cn_topic_0000001530181537_sup1711155161017"><a name="zh-cn_topic_0000001530181537_sup1711155161017"></a><a name="zh-cn_topic_0000001530181537_sup1711155161017"></a>64</sup>-1]；当操作数为64位时，数组长度为1，mask[0]∈(0, 2<sup id="zh-cn_topic_0000001530181537_sup181195111019"><a name="zh-cn_topic_0000001530181537_sup181195111019"></a><a name="zh-cn_topic_0000001530181537_sup181195111019"></a>32</sup>-1]。</p>
-<p id="zh-cn_topic_0000001530181537_p711354105"><a name="zh-cn_topic_0000001530181537_p711354105"></a><a name="zh-cn_topic_0000001530181537_p711354105"></a>例如，mask=[8, 0]，8=0b1000，表示仅第4个元素参与计算。</p>
-</li></ul>
-<a name="zh-cn_topic_0000001530181537_ul18554121313135"></a><a name="zh-cn_topic_0000001530181537_ul18554121313135"></a><ul id="zh-cn_topic_0000001530181537_ul18554121313135"><li>连续模式：表示前面连续的多少个元素参与计算。取值范围和操作数的数据类型有关，数据类型不同，每次迭代内能够处理的元素个数最大值不同。当操作数为16位时，mask∈[1, 128]；当操作数为32位时，mask∈[1, 64]；当操作数为64位时，mask∈[1, 32]。</li></ul>
-</td>
-</tr>
-<tr id="row250163914199"><td class="cellrowborder" valign="top" width="16.49%" headers="mcps1.2.4.1.1 "><p id="p98451586430"><a name="p98451586430"></a><a name="p98451586430"></a>repeatTime</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.92%" headers="mcps1.2.4.1.2 "><p id="p20845205894317"><a name="p20845205894317"></a><a name="p20845205894317"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.59%" headers="mcps1.2.4.1.3 "><p id="p11786857142420"><a name="p11786857142420"></a><a name="p11786857142420"></a>重复迭代次数。矢量计算单元，每次读取连续的256Bytes数据进行计算，为完成对输入数据的处理，必须通过多次迭代（repeat）才能完成所有数据的读取与计算。repeatTime表示迭代的次数。</p>
-<p id="p297669192514"><a name="p297669192514"></a><a name="p297669192514"></a>关于该参数的具体描述请参考<span id="zh-cn_topic_0000001530181537_ph43961850144019"><a name="zh-cn_topic_0000001530181537_ph43961850144019"></a><a name="zh-cn_topic_0000001530181537_ph43961850144019"></a><a href="https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/C++类库API/基础API/接口分类说明/高维切分API.md" target="_blank" rel="noopener noreferrer">高维切分API</a></span>。</p>
-</td>
-</tr>
-<tr id="row041413392198"><td class="cellrowborder" valign="top" width="16.49%" headers="mcps1.2.4.1.1 "><p id="p5568184184410"><a name="p5568184184410"></a><a name="p5568184184410"></a>repeatParams</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.92%" headers="mcps1.2.4.1.2 "><p id="p165681410447"><a name="p165681410447"></a><a name="p165681410447"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.59%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0000001429830437_p12596185919348"><a name="zh-cn_topic_0000001429830437_p12596185919348"></a><a name="zh-cn_topic_0000001429830437_p12596185919348"></a>控制操作数地址步长的参数。<a href="../../../其他数据类型/BinaryRepeatParams.md">BinaryRepeatParams</a>类型，包含操作数相邻迭代间相同datablock的地址步长，操作数同一迭代内不同datablock的地址步长等参数。</p>
-<p id="zh-cn_topic_0000001429830437_p1156819418442"><a name="zh-cn_topic_0000001429830437_p1156819418442"></a><a name="zh-cn_topic_0000001429830437_p1156819418442"></a>相邻迭代间的地址步长参数说明请参考<span id="zh-cn_topic_0000001429830437_zh-cn_topic_0000001487959374_ph18976413195617"><a name="zh-cn_topic_0000001429830437_zh-cn_topic_0000001487959374_ph18976413195617"></a><a name="zh-cn_topic_0000001429830437_zh-cn_topic_0000001487959374_ph18976413195617"></a><a href="https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/C++类库API/基础API/接口分类说明/高维切分API.md" target="_blank" rel="noopener noreferrer">repeatStride</a></span>；同一迭代内DataBlock的地址步长参数说明请参考<span id="zh-cn_topic_0000001429830437_zh-cn_topic_0000001487959374_ph19976131385613"><a name="zh-cn_topic_0000001429830437_zh-cn_topic_0000001487959374_ph19976131385613"></a><a name="zh-cn_topic_0000001429830437_zh-cn_topic_0000001487959374_ph19976131385613"></a><a href="https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/C++类库API/基础API/接口分类说明/高维切分API.md" target="_blank" rel="noopener noreferrer">dataBlockStride</a></span>。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 输入/输出 | 描述 |
+| :----- | :-------- | :--- |
+| dst | 输出 | 目的操作数。<br>类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br>LocalTensor的起始地址需要32字节对齐。 |
+| src0、src1 | 输入 | 源操作数。<br>类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT。<br>LocalTensor的起始地址需要32字节对齐。 |
+| count | 输入 | 参与计算的元素个数。<br>**注：参数取值范围和操作数的数据类型有关，数据类型不同，能够处理的元素个数最大值不同，最大处理的数据量不能超过UB大小限制。** |
+| mask[]/mask | 输入 | mask用于控制每次迭代内参与计算的元素。<br>设置详见[掩码操作](../SIMD计算说明/掩码/掩码.md)。 |
+| repeatTime | 输入 | 重复迭代次数。<br>矢量计算单元，每次读取连续的256Bytes数据进行计算，为完成对输入数据的处理，必须通过多次迭代（repeat）才能完成所有数据的读取与计算。repeatTime表示迭代的次数。<br>关于该参数的具体描述请参考[高维切分](../SIMD计算说明/高维切分.md)。 |
+| repeatParams | 输入 | 控制操作数地址步长的参数。[BinaryRepeatParams](../../../其他数据类型/BinaryRepeatParams.md)类型，包含操作数相邻迭代间相同datablock的地址步长，操作数同一迭代内不同datablock的地址步长等参数。<br>相邻迭代间的地址步长参数说明请参考[repeatStride](../SIMD计算说明/高维切分.md)；同一迭代内DataBlock的地址步长参数说明请参考[dataBlockStride](../SIMD计算说明/高维切分.md)。 |
 
-**表 3**  精度转换规则
+## 数据类型
 
-<a name="table235404962912"></a>
-<table><thead align="left"><tr id="row935554942920"><th class="cellrowborder" valign="top" width="12.171217121712171%" id="mcps1.2.4.1.1"><p id="p13355144922911"><a name="p13355144922911"></a><a name="p13355144922911"></a>源操作数的数据类型</p>
-</th>
-<th class="cellrowborder" valign="top" width="12.48124812481248%" id="mcps1.2.4.1.2"><p id="p135514913299"><a name="p135514913299"></a><a name="p135514913299"></a>目的操作数的数据类型</p>
-</th>
-<th class="cellrowborder" valign="top" width="75.34753475347534%" id="mcps1.2.4.1.3"><p id="p7113121774314"><a name="p7113121774314"></a><a name="p7113121774314"></a>类型转换模式介绍</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1891194251311"><td class="cellrowborder" valign="top" width="12.171217121712171%" headers="mcps1.2.4.1.1 "><p id="p4911114221313"><a name="p4911114221313"></a><a name="p4911114221313"></a>half</p>
-</td>
-<td class="cellrowborder" valign="top" width="12.48124812481248%" headers="mcps1.2.4.1.2 "><p id="p1491174211318"><a name="p1491174211318"></a><a name="p1491174211318"></a>int8_t</p>
-</td>
-<td class="cellrowborder" valign="top" width="75.34753475347534%" headers="mcps1.2.4.1.3 "><p id="p1791154217138"><a name="p1791154217138"></a><a name="p1791154217138"></a>将源操作数按照CAST_NONE模式取整，以int8_t格式（溢出默认按照饱和处理）存入目的操作数中。</p>
-</td>
-</tr>
-<tr id="row148919416152"><td class="cellrowborder" valign="top" width="12.171217121712171%" headers="mcps1.2.4.1.1 "><p id="p5894471517"><a name="p5894471517"></a><a name="p5894471517"></a>half</p>
-</td>
-<td class="cellrowborder" valign="top" width="12.48124812481248%" headers="mcps1.2.4.1.2 "><p id="p389445152"><a name="p389445152"></a><a name="p389445152"></a>uint8_t</p>
-</td>
-<td class="cellrowborder" valign="top" width="75.34753475347534%" headers="mcps1.2.4.1.3 "><p id="p3903539191515"><a name="p3903539191515"></a><a name="p3903539191515"></a>将源操作数按照CAST_NONE模式取整，以uint8_t格式（溢出默认按照饱和处理）存入目的操作数中。</p>
-</td>
-</tr>
-<tr id="row184704305481"><td class="cellrowborder" valign="top" width="12.171217121712171%" headers="mcps1.2.4.1.1 "><p id="p1230575204517"><a name="p1230575204517"></a><a name="p1230575204517"></a>int64_t</p>
-</td>
-<td class="cellrowborder" valign="top" width="12.48124812481248%" headers="mcps1.2.4.1.2 "><p id="p13305125104512"><a name="p13305125104512"></a><a name="p13305125104512"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" width="75.34753475347534%" headers="mcps1.2.4.1.3 "><p id="p143057534511"><a name="p143057534511"></a><a name="p143057534511"></a>将源操作数按照CAST_NONE模式取整，以float格式（溢出默认按照饱和处理）存入目的操作数中。</p>
-</td>
-</tr>
-<tr id="row3470130174810"><td class="cellrowborder" valign="top" width="12.171217121712171%" headers="mcps1.2.4.1.1 "><p id="p0174088458"><a name="p0174088458"></a><a name="p0174088458"></a>int64_t</p>
-</td>
-<td class="cellrowborder" valign="top" width="12.48124812481248%" headers="mcps1.2.4.1.2 "><p id="p19174138174515"><a name="p19174138174515"></a><a name="p19174138174515"></a>int32_t</p>
-</td>
-<td class="cellrowborder" valign="top" width="75.34753475347534%" headers="mcps1.2.4.1.3 "><p id="p101741384456"><a name="p101741384456"></a><a name="p101741384456"></a>将源操作数按照CAST_NONE模式取到int32_t所能表示的数，以int32_t格式（溢出默认按照饱和处理）存入目的操作数中。</p>
-</td>
-</tr>
-</tbody>
-</table>
+<cann-filter npu-type="950">
+
+**表**  Ascend 950PR/Ascend 950DT数据类型组合情况
+
+| src0、src1数据类型 | dst数据类型 |
+| :----------------- | :---------- |
+| half               | int8_t      |
+| half               | uint8_t     |
+| int64_t            | float       |
+| int64_t            | int32_t     |
+
+</cann-filter>
+
+<cann-filter npu-type="A3">
+
+**表**  Atlas A3 训练系列产品/Atlas A3 推理系列产品数据类型组合情况
+
+| src0、src1数据类型 | dst数据类型 |
+| :----------------- | :---------- |
+| half               | int8_t      |
+| half               | uint8_t     |
+
+</cann-filter>
+
+<cann-filter npu-type="910b">
+
+**表**  Atlas A2 训练系列产品/Atlas A2 推理系列产品数据类型组合情况
+
+| src0、src1数据类型 | dst数据类型 |
+| :----------------- | :---------- |
+| half               | int8_t      |
+| half               | uint8_t     |
+
+</cann-filter>
+
+<cann-filter npu-type="310b">
+
+**表**  Atlas 200I/500 A2 推理产品数据类型组合情况
+
+| src0、src1数据类型 | dst数据类型 |
+| :----------------- | :---------- |
+| half               | int8_t      |
+| half               | uint8_t     |
+
+</cann-filter>
+
+<cann-filter npu-type="310p">
+
+**表**  Atlas 推理系列产品AI Core数据类型组合情况
+
+| src0、src1数据类型 | dst数据类型 |
+| :----------------- | :---------- |
+| half               | int8_t      |
+| half               | uint8_t     |
+
+</cann-filter>
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -229,43 +167,46 @@
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-针对Ascend 950PR/Ascend 950DT，int64\_t数据类型仅支持tensor前n个数据计算接口。
+- 地址对齐约束参考[地址对齐约束](../../../通用说明和约束.md#section796754519912)。
+- 操作数地址重叠约束请参考[地址重叠约束](../../../通用说明和约束.md#section668772811100)。
+- 使用tensor高维切分计算接口时，一个迭代处理的源操作数元素个数需要和目的操作数保持一致，而一次计算最多输入128个half类型数据，因此目的操作数最多输出128个b8类型数据，所以每次迭代输出到前4个datablock，srcRepStride需要设置为8，dstRepStride则设置为4。
+- 本指令涉及精度转换，转换规则参考[精度转换规则](../../数据结构/precision_conversion.md)。
+- <cann-filter npu-type="950">针对Ascend 950PR/Ascend 950DT，int64\_t数据类型仅支持tensor前n个数据计算接口。</cann-filter>
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
--   tensor高维切分计算样例-mask连续模式
+- tensor高维切分计算样例-mask连续模式。
 
-    ```
-    uint64_t mask = 128;
-    // repeatTime = 4，一次迭代计算128个数，共计算512个数
-    // dstBlkStride, src0BlkStride, src1BlkStride = 1，单次迭代内数据连续读取和写入
-    // dstRepStride = 4，相邻迭代间数据连续写入
-    // src0RepStride, src1RepStride = 8，相邻迭代间数据连续读取
-    AscendC::MulCast(dstLocal, src0, src1Local, mask, repeatTime, repeatParams);
-    ```
+  ```cpp
+  uint64_t mask = 128;
+  // repeatTime = 4，一次迭代计算128个数，共计算512个数
+  // dstBlkStride, src0BlkStride, src1BlkStride = 1，单次迭代内数据连续读取和写入
+  // dstRepStride = 4，相邻迭代间数据连续写入
+  // src0RepStride, src1RepStride = 8，相邻迭代间数据连续读取
+  AscendC::MulCast(dstLocal, src0, src1Local, mask, repeatTime, repeatParams);
+  ```
 
--   tensor高维切分计算样例-mask逐bit模式
+- tensor高维切分计算样例-mask逐bit模式。
 
-    ```
-    uint64_t mask[2] = { UINT64_MAX, UINT64_MAX }; 
-    // repeatTime = 4，一次迭代计算128个数，共计算512个数
-    // dstBlkStride, src0BlkStride, src1BlkStride = 1，单次迭代内数据连续读取和写入
-    // dstRepStride = 4，相邻迭代间数据连续写入
-    // src0RepStride, src1RepStride = 8，相邻迭代间数据连续读取
-    AscendC::MulCast(dstLocal, src0, src1Local, mask, repeatTime, repeatParams);
-    ```
+  ```cpp
+  uint64_t mask[2] = { UINT64_MAX, UINT64_MAX }; 
+  // repeatTime = 4，一次迭代计算128个数，共计算512个数
+  // dstBlkStride, src0BlkStride, src1BlkStride = 1，单次迭代内数据连续读取和写入
+  // dstRepStride = 4，相邻迭代间数据连续写入
+  // src0RepStride, src1RepStride = 8，相邻迭代间数据连续读取
+  AscendC::MulCast(dstLocal, src0, src1Local, mask, repeatTime, repeatParams);
+  ```
 
--   tensor前n个数据计算样例
+- tensor前n个数据计算样例。
 
-    ```
-    AscendC::MulCast(dstLocal, src0, src1Local, 512);
-    ```
+  ```cpp
+  AscendC::MulCast(dstLocal, src0, src1Local, 512);
+  ```
 
 结果示例如下：
 
-```
+```plain
 输入数据src0: [1 -2 3 ... -6]
 输入数据src1Local: [1 3 -4 ... 5]
 输出数据dstLocal: [1 -6 -12 ... -30]
 ```
-
