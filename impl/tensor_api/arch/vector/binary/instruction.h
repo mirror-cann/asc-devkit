@@ -71,7 +71,9 @@ class Sub {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_sub(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_sub(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -79,7 +81,9 @@ class And {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_and(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_and(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -87,7 +91,9 @@ class Select {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_select(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_select(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -95,7 +101,9 @@ class AbsSub {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_abs_sub(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_abs_sub(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -103,7 +111,9 @@ class Min {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_min(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_min(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -111,7 +121,9 @@ class Max {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_max(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_max(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -119,7 +131,9 @@ class Or {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_or(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_or(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -127,7 +141,9 @@ class Mul {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_mul(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_mul(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -135,7 +151,9 @@ class ExpSubEven {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_exp_sub(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_exp_sub(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -143,7 +161,9 @@ class ExpSubOdd {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_exp_sub_v2(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_exp_sub_v2(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -151,7 +171,9 @@ class ShiftLeft {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_shiftleft(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_shiftleft(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -159,7 +181,9 @@ class ShiftRight {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_shiftright(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_shiftright(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -167,7 +191,9 @@ class Div {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_div(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_div(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -175,7 +201,9 @@ class Xor {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_xor(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_xor(dst, src0, src1, mask);
+        }
     }
 };
 
@@ -183,7 +211,9 @@ class Prelu {
 public:
     template <typename T>
     __simd_callee__ inline static void Run(T& dst, T src0, T src1, vector_bool mask) {
-        asc_prelu(dst, src0, src1, mask);
+        if constexpr (CURRENT_ARCH_VERSION == ArchVersion::V3510) {
+            asc_prelu(dst, src0, src1, mask);
+        }
     }
 };
 
