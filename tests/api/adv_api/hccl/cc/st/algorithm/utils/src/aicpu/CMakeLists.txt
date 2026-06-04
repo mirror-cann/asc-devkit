@@ -42,32 +42,6 @@ set(INCLUDE_LIST
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/template/ccu
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/template/ccu/kernel
 
-    ${HCCL_DEV_BASE}/src/ops/broadcast
-    ${HCCL_DEV_BASE}/src/ops/broadcast/executor
-    ${HCCL_DEV_BASE}/src/ops/broadcast/selector
-    ${HCCL_DEV_BASE}/src/ops/broadcast/template
-    ${HCCL_DEV_BASE}/src/ops/broadcast/template/aicpu
-    ${HCCL_DEV_BASE}/src/ops/broadcast/template/ccu
-    ${HCCL_DEV_BASE}/src/ops/broadcast/template/ccu/kernel
-    ${HCCL_DEV_BASE}/src/ops/broadcast/template/aiv
-
-    ${HCCL_DEV_BASE}/src/ops/reduce_scatter_v
-    ${HCCL_DEV_BASE}/src/ops/reduce_scatter_v/executor
-    ${HCCL_DEV_BASE}/src/ops/reduce_scatter_v/selector
-    ${HCCL_DEV_BASE}/src/ops/reduce_scatter_v/template
-    ${HCCL_DEV_BASE}/src/ops/reduce_scatter_v/template/aicpu
-
-    ${HCCL_DEV_BASE}/src/ops/scatter
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/template
-    ${HCCL_DEV_BASE}/src/ops/scatter/executor
-    ${HCCL_DEV_BASE}/src/ops/scatter/selector
-    ${HCCL_DEV_BASE}/src/ops/scatter/template
-    ${HCCL_DEV_BASE}/src/ops/scatter/template/aicpu
-    ${HCCL_DEV_BASE}/src/ops/scatter/template/ccu
-    ${HCCL_DEV_BASE}/src/ops/scatter/template/ccu/kernel
-    ${HCCL_DEV_BASE}/src/ops/scatter/template/aiv
-
     ${HCCL_DEV_BASE}/src/ops/all_gather
     ${HCCL_DEV_BASE}/src/ops/all_gather/executor
     ${HCCL_DEV_BASE}/src/ops/all_gather/selector
@@ -76,49 +50,6 @@ set(INCLUDE_LIST
     ${HCCL_DEV_BASE}/src/ops/all_gather/template/ccu
     ${HCCL_DEV_BASE}/src/ops/all_gather/template/aiv
 
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/executor
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/selector
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/template
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/template/aicpu
-
-    ${HCCL_DEV_BASE}/src/ops/all_to_all_v
-    ${HCCL_DEV_BASE}/src/ops/all_to_all_v/executor
-    ${HCCL_DEV_BASE}/src/ops/all_to_all_v/selector
-    ${HCCL_DEV_BASE}/src/ops/all_to_all_v/template
-    ${HCCL_DEV_BASE}/src/ops/all_to_all_v/template/aicpu
-    ${HCCL_DEV_BASE}/src/ops/all_to_all_v/template/ccu
-    ${HCCL_DEV_BASE}/src/ops/all_to_all_v/template/aiv
-
-    ${HCCL_DEV_BASE}/src/ops/all_reduce
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/executor
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/selector
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/ccu
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aiv
-
-    ${HCCL_DEV_BASE}/src/ops/send
-    ${HCCL_DEV_BASE}/src/ops/send/executor
-    ${HCCL_DEV_BASE}/src/ops/send/selector
-    ${HCCL_DEV_BASE}/src/ops/send/template
-
-    ${HCCL_DEV_BASE}/src/ops/recv
-    ${HCCL_DEV_BASE}/src/ops/recv/executor
-    ${HCCL_DEV_BASE}/src/ops/recv/selector
-    ${HCCL_DEV_BASE}/src/ops/recv/template
-
-    ${HCCL_DEV_BASE}/src/ops/reduce
-    ${HCCL_DEV_BASE}/src/ops/reduce/executor
-    ${HCCL_DEV_BASE}/src/ops/reduce/selector
-    ${HCCL_DEV_BASE}/src/ops/reduce/template
-    ${HCCL_DEV_BASE}/src/ops/reduce/template/aicpu
-    ${HCCL_DEV_BASE}/src/ops/reduce/template/ccu
-    ${HCCL_DEV_BASE}/src/ops/reduce/template/aiv
-
-    ${HCCL_DEV_BASE}/src/ops/batch_send_recv
-    ${HCCL_DEV_BASE}/src/ops/batch_send_recv/executor
-    ${HCCL_DEV_BASE}/src/ops/batch_send_recv/selector
     ${HCCL_DEV_BASE}/src/common/hcomm_dlsym
 )
 
@@ -127,10 +58,7 @@ list(APPEND INCLUDE_LIST
 )
 
 add_library(${HCCL_CHECKER_SELECTOR_TARGET} STATIC
-    ${HCCL_DEV_BASE}/src/ops/scatter/selector/scatter_auto_selector.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/selector/all_reduce_auto_selector.cc
     ${HCCL_DEV_BASE}/src/ops/all_gather/selector/all_gather_auto_selector.cc
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/selector/all_gather_v_auto_selector.cc
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/selector/reduce_scatter_auto_selector.cc
 )
 
@@ -152,11 +80,6 @@ target_compile_definitions(${HCCL_CHECKER_SELECTOR_TARGET} PRIVATE
 )
 
 add_library(${HCCL_CHECKER_EXECUTOR_TARGET} STATIC
-    ${HCCL_DEV_BASE}/src/ops/scatter/executor/ins_v2_scatter_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/executor/ins_v2_scatter_parallel_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/template/aicpu/ins_temp_scatter_mesh_1D.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/template/aicpu/ins_temp_scatter_nhr.cc
-
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/executor/ins_v2_reduce_scatter_sole_executor.cc
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/executor/ins_reduce_scatter_parallel_executor.cc
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/executor/ins_v2_reduce_scatter_sequence_executor.cc
@@ -172,22 +95,6 @@ add_library(${HCCL_CHECKER_EXECUTOR_TARGET} STATIC
     ${HCCL_DEV_BASE}/src/ops/all_gather/template/aicpu/ins_temp_all_gather_mesh_1D.cc
     ${HCCL_DEV_BASE}/src/ops/all_gather/template/aicpu/ins_temp_all_gather_nhr.cc
     ${HCCL_DEV_BASE}/src/ops/all_gather/template/aicpu/ins_temp_all_gather_nhr_dpu.cc
-
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/executor/ins_v2_all_gather_v_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/template/aicpu/ins_temp_all_gather_v_mesh_1D.cc
-
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/executor/ins_v2_all_reduce_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/executor/ins_v2_all_reduce_parallel_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/executor/ins_v2_all_reduce_sequence_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_reduce_mesh_1D_one_shot.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_reduce_mesh_1D_two_shot.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_reduce_nhr.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_reduce_aicpu_reduce_nhr.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_reduce_mesh_1D_two_shot_mesh_chunk.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_gather_mesh_1D_intra.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_gather_nhr_dpu_inter.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_reduce_scatter_mesh_1D_dpu_inter.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_reduce_scatter_mesh_1D_intra.cc
 )
 
 target_include_directories(${HCCL_CHECKER_EXECUTOR_TARGET} PRIVATE
@@ -237,23 +144,6 @@ add_library(${HCCL_CHECKER_KERNEL_TARGET} STATIC
     ${HCCL_DEV_BASE}/src/ops/op_common/topo/topo_match_base.cc
     topo_match_aicpu_stub.cc
 
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/scatter_comm_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/scatter_executor_base.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/scatter_mesh_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/scatter_ring_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/scatter_single_executor.cc
-
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/template/nhr_base.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/template/scatter_mesh.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/template/scatter_nb.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/template/scatter_nhr.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/template/scatter_ring_direct.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/algo/template/scatter_ring.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/executor/ins_v2_scatter_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/executor/ins_v2_scatter_parallel_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/template/aicpu/ins_temp_scatter_mesh_1D.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/template/aicpu/ins_temp_scatter_nhr.cc
-
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/executor/ins_v2_reduce_scatter_sole_executor.cc
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/executor/ins_reduce_scatter_parallel_executor.cc
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/executor/ins_v2_reduce_scatter_sequence_executor.cc
@@ -267,48 +157,6 @@ add_library(${HCCL_CHECKER_KERNEL_TARGET} STATIC
     ${HCCL_DEV_BASE}/src/ops/all_gather/template/aicpu/ins_temp_all_gather_nhr.cc
     ${HCCL_DEV_BASE}/src/ops/all_gather/executor/ins_v2_all_gather_sequence_executor.cc
     ${HCCL_DEV_BASE}/src/ops/all_gather/template/aicpu/ins_temp_all_gather_nhr_dpu.cc
-
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_gather_mesh_1D_intra.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_gather_nhr_dpu_inter.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_reduce_scatter_mesh_1D_dpu_inter.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_reduce_scatter_mesh_1D_intra.cc
-
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/executor/ins_v2_all_gather_v_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/template/aicpu/ins_temp_all_gather_v_mesh_1D.cc
-
-    ${HCCL_DEV_BASE}/src/ops/all_to_all_v/executor/ins_v2_all_to_all_v_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/all_to_all_v/template/aicpu/ins_temp_all_to_all_v_mesh_1D.cc
-    ${HCCL_DEV_BASE}/src/ops/all_to_all_v/template/aicpu/ins_temp_dpu_alltoall_mesh.cc
-
-    ${HCCL_DEV_BASE}/src/ops/send/executor/ins_v2_send_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/send/executor/ins_send_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/send/template/ins_temp_send_dpu.cc
-
-    ${HCCL_DEV_BASE}/src/ops/recv/executor/ins_v2_recv_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/recv/executor/ins_recv_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/recv/template/ins_temp_recv_dpu.cc
-
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/executor/ins_v2_all_reduce_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/executor/ins_v2_all_reduce_parallel_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/executor/ins_v2_all_reduce_sequence_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_reduce_mesh_1D_one_shot.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_reduce_mesh_1D_two_shot.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_reduce_nhr.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_reduce_aicpu_reduce_nhr.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/template/aicpu/ins_temp_all_reduce_mesh_1D_two_shot_mesh_chunk.cc
-
-    ${HCCL_DEV_BASE}/src/ops/broadcast/executor/ins_v2_broadcast_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/broadcast/executor/ins_v2_broadcast_parallel_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/broadcast/template/aicpu/ins_temp_broadcast_mesh_1D_two_shot.cc
-    ${HCCL_DEV_BASE}/src/ops/broadcast/template/aicpu/ins_temp_broadcast_nhr.cc
-
-    ${HCCL_DEV_BASE}/src/ops/batch_send_recv/executor/ins_v2_batch_send_recv_executor.cc
-
-    ${HCCL_DEV_BASE}/src/ops/reduce/executor/reduce_sole_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/reduce/executor/reduce_parallel_executor.cc
-    ${HCCL_DEV_BASE}/src/ops/reduce/template/aicpu/reduce_mesh_1D.cc
-    ${HCCL_DEV_BASE}/src/ops/reduce/template/aicpu/reduce_nhr.cc
-    ${HCCL_DEV_BASE}/src/ops/reduce/template/aicpu/reduce_aicpu_reduce_nhr.cc
 )
 
 target_sources(${HCCL_CHECKER_KERNEL_TARGET} PRIVATE
@@ -320,14 +168,8 @@ target_sources(${HCCL_CHECKER_KERNEL_TARGET} PRIVATE
     ${HCCL_DEV_BASE}/src/ops/op_common/selector/auto_selector_base.cc
     ${HCCL_DEV_BASE}/src/ops/op_common/selector/selector_registry.cc
     ${HCCL_DEV_BASE}/src/ops/op_common/selector/execute_selector.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/scatter_op.cc
-    ${HCCL_DEV_BASE}/src/ops/scatter/selector/scatter_auto_selector.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/all_reduce_op.cc
-    ${HCCL_DEV_BASE}/src/ops/all_reduce/selector/all_reduce_auto_selector.cc
     ${HCCL_DEV_BASE}/src/ops/all_gather/all_gather_op.cc
     ${HCCL_DEV_BASE}/src/ops/all_gather/selector/all_gather_auto_selector.cc
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/all_gather_v_op.cc
-    ${HCCL_DEV_BASE}/src/ops/all_gather_v/selector/all_gather_v_auto_selector.cc
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/reduce_scatter_op.cc
     ${HCCL_DEV_BASE}/src/ops/reduce_scatter/selector/reduce_scatter_auto_selector.cc
 )

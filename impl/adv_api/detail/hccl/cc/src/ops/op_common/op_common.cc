@@ -40,6 +40,7 @@
 #include "hccl_rank_graph_dl.h"
 #include "rt.h"
 #include "dlhcomm_function.h"
+#include "cann_host_bridge.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -295,11 +296,22 @@ HcclResult HcclExecOp(HcclComm comm, OpParam &param,
         return HCCL_E_INTERNAL;
     }
 
-    std::unique_ptr<InsCollAlgBase> executor = CollAlgExecRegistryV2::Instance().GetAlgExec(param.opType, algName);
-    CHK_PRT_RET(
-        executor.get() == nullptr, HCCL_ERROR("Fail to find executor for algName[%s]", algName.c_str()), HCCL_E_PARA);
-    HCCL_INFO("[asc][AlgoExecute][HcclExecOp] executor resolved, opType[%d], algName[%s], executor[%p].",
-        param.opType, algName.c_str(), executor.get());
+    bool useCannResCtx =
+        (param.engine == COMM_ENGINE_AICPU_TS || param.engine == COMM_ENGINE_AICPU) &&
+        (param.opType == HcclCMDType::HCCL_CMD_ALLTOALL ||
+         param.opType == HcclCMDType::HCCL_CMD_ALLTOALLV ||
+         param.opType == HcclCMDType::HCCL_CMD_ALLREDUCE);
+
+    std::unique_ptr<InsCollAlgBase> executor = nullptr;
+    if (useCannResCtx) {
+        executor = GetAlgExecViaCann(param.opType, algName);
+    } else {
+        executor = CollAlgExecRegistryV2::Instance().GetAlgExec(param.opType, algName);
+    }
+    CHK_PRT_RET(executor.get() == nullptr,
+        HCCL_ERROR("Fail to find executor for algName[%s]", algName.c_str()), HCCL_E_PARA);
+    HCCL_INFO("[asc][AlgoExecute][HcclExecOp] executor resolved, opType[%d], algName[%s], executor[%p], "
+        "useCannResCtx[%d].", param.opType, algName.c_str(), executor.get(), useCannResCtx);
 
     // 资源结构体
     std::unique_ptr<AlgResourceCtxSerializable> resCtxHost = std::make_unique<AlgResourceCtxSerializable>();

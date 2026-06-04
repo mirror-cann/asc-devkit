@@ -15,6 +15,7 @@
 #include "log.h"
 #include "alg_param.h"
 #include "coll_alg_v2_exec_registry.h"
+#include "cann_dispatch_bridge.h"
 
 namespace {
 mc2_ops_hccl::OpParam *AsOpenOpParam(std::vector<uint8_t> &opParam)
@@ -162,16 +163,28 @@ HcclResult LaunchOpenOpParamDataImpl(std::vector<uint8_t> &opParam)
     const u64 outputBegin = reinterpret_cast<u64>(param->outputPtr);
     HCCL_INFO("[MC2_OPEN_DIAG][LaunchRange] userRank %u, userRankSize %u, dataTypeSize %llu, inputBytes %llu, "
               "rankStrideCount %llu, rankStrideBytes %llu, outputSpanCount %llu, outputBytes %llu, "
-              "inputRange [%#llx, %#llx), outputSpan [%#llx, %#llx), outputSpanRankScaled %u.",
+              "inputRange [%#llx, %#llx), outputSpan [%#llx, %#llx), outputSpanRankScaled %u, engine %u.",
               resCtx.topoInfo.userRank, resCtx.topoInfo.userRankSize,
               static_cast<unsigned long long>(dataTypeSize), static_cast<unsigned long long>(inputBytes),
               static_cast<unsigned long long>(rankStrideCount), static_cast<unsigned long long>(rankStrideBytes),
               static_cast<unsigned long long>(outputSpanCount), static_cast<unsigned long long>(outputBytes),
               static_cast<unsigned long long>(inputBegin),
               static_cast<unsigned long long>(inputBegin + inputBytes), static_cast<unsigned long long>(outputBegin),
-              static_cast<unsigned long long>(outputBegin + outputBytes), isAllGather);
+              static_cast<unsigned long long>(outputBegin + outputBytes), isAllGather, static_cast<u32>(param->engine));
 
     CHK_RET(RestoreVarDataIfNeeded(*param, resCtx));
+
+    const bool useCannBridge = (param->opType == HCCL_CMD_ALLTOALL ||
+                                param->opType == HCCL_CMD_ALLTOALLV ||
+                                param->opType == HCCL_CMD_ALLREDUCE);
+    if (useCannBridge) {
+        HcclResult cannRet = mc2_ops_hccl::LaunchViaCann(*param, resCtx);
+        CHK_PRT_RET(cannRet != HCCL_SUCCESS,
+            HCCL_ERROR("[CannBridge] dispatch failed (ret=%d), opType=%u algName[%s]",
+                       static_cast<int>(cannRet), static_cast<u32>(param->opType), param->algName),
+            cannRet);
+        return HCCL_SUCCESS;
+    }
 
     auto executor = mc2_ops_hccl::CollAlgExecRegistryV2::Instance().GetAlgExec(param->opType, std::string(param->algName));
     CHK_SMART_PTR_NULL(executor);

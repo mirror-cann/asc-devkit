@@ -15,6 +15,7 @@ add_subdirectory(topo)
 set(src_list
     ${CMAKE_CURRENT_SOURCE_DIR}/op_common.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/dlhcomm_function.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/cann_host_bridge.cc
 )
 
 target_sources(mc2_client PRIVATE
