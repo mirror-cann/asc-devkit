@@ -1,4 +1,4 @@
-# 基于gather算子的SIMT assert断言功能实现样例
+# SIMT assert断言功能实现样例
 
 ## 概述
 

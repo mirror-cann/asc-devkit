@@ -1,4 +1,4 @@
-# 基于gather算子的SIMT printf功能实现样例
+# SIMT printf功能实现样例
 
 ## 概述
 

@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例以查表法计算sin值为例，介绍Ascend C SIMT编程方式下的数据缓存优化思路。样例包含1个基线版本以及1个优化版本，基线版本中所有数据使用默认方式加载，输入、输出和sin表数据共同竞争DCache空间；优化版本为不同类型的数据指定不同的的缓存策略，确保频繁访问的sin查找表常驻DCache，减少Global Memory访问次数，展示SIMT编程方式下数据缓存优化的调优路径。
+本样例以查表法计算sin值为例，介绍Ascend C SIMT编程方式下的数据缓存优化思路。样例包含1个基线版本以及1个优化版本，基线版本中所有数据使用默认方式加载，输入、输出和sin表数据共同竞争DCache空间；优化版本为不同类型的数据指定不同的缓存策略，确保频繁访问的sin查找表常驻DCache，减少Global Memory访问次数，展示SIMT编程方式下数据缓存优化的调优路径。
 
 ## 支持的产品
 
@@ -100,7 +100,7 @@
 
 **核心实现**：
 - 直接读取`input[idx]`和`sin_table[n]` / `sin_table[n+1]`的数据
-- 使用线性差值进行计算数据结果
+- 使用线性插值进行计算得到数据结果
 - 线程直接写回`output[idx]`
 - 所有数据访问使用默认方式加载，`input`、`sin_table`和`output`数据共同竞争DCache空间
 
@@ -128,11 +128,11 @@ output[idx] = sign * (low_val + frac * (high_val - low_val));
 
 Case 0的Task Duration为56.82us，DCache Read GM为5064次，作为基线版本。
 
-Case0的场景中，加载input，output时会把数据缓存在DCache上，替换Dcache中某个缓存数据，假设sin2的数据被替换掉了，当后续某个线程计算时需要sin2的数据，就会出现cache miss，需要从GM重新加载。此外，被缓存到DCache上的input和output数据实际上不会再被使用，不需要缓存，不应该占用DCache空间。
+Case0的场景中，加载input，output时会把数据缓存在DCache上，替换DCache中某个缓存数据，假设sin2的数据被替换掉了，当后续某个线程计算时需要sin2的数据，就会出现cache miss，需要从GM重新加载。此外，被缓存到DCache上的input和output数据实际上不会再被使用，不需要缓存，不应该占用DCache空间。
 
 <img src="./figures/DCache访问优化.png" width="80%">
 
-优化方向：加载input，output的时不需要缓存DCache上，保证table数据常驻DCache，后续在使用sin2数据的时，可以直接从DCache加载，不需要GM重新加载数据。
+优化方向：加载input，output时不需要缓存在DCache上，保证table数据常驻DCache，后续在使用sin2数据时，可以直接从DCache加载，不需要从GM重新加载数据。
 
 ---
 

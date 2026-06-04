@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例基于Gather算子，演示了将Host + Device混合.asc文件中的Device代码拆分到**多个.asc文件**的单独编译流程。单独编译的代码结构与调用关系如下图1所示，其中 `func.asc` 为**纯Device侧计算函数**（定义 `func_a` 函数并通过 extern 暴露供跨文件调用），`kernel.asc` 为**Host + Device混合文件**（含Kernel定义、<<<>>>内核调用，通过extern调用gather_compute中的计算函数），`.cpp` 为纯Host侧代码（通过extern调用kernel.asc暴露的 <<<>>> 内核启动函数）。
+本样例基于Gather算子，演示了将Host + Device混合.asc文件中的Device代码拆分到**多个.asc文件**的单独编译流程。单独编译的代码结构与调用关系如下图1所示，其中 `func.asc` 为**Device侧执行函数**（定义 `func_a` 函数并通过 extern 暴露供跨文件调用），`kernel.asc` 为**Host + Device混合文件**（含Kernel定义、<<<>>>内核调用，通过extern调用func.asc中的Device侧执行函数），`.cpp` 为纯Host侧代码（通过extern调用kernel.asc暴露的 <<<>>> 内核启动函数）。
 
 <p align="center">
   <img src="./figures/separate_compile.png" width="50%">
