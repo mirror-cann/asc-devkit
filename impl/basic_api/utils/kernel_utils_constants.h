@@ -350,9 +350,30 @@ const uint64_t LOAD_STRIDE_H = 8;
 
 namespace Internal {
 constexpr int32_t TSCM_CROSS_SYNC_ID_MAX = 11;
-}
-
 #if (defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1) || defined(ASCENDC_DEBUG)
+// load2d param size
+constexpr int32_t ASC_MAX_LOAD2D_SID = 15;
+
+// load3dv1 param size
+constexpr int32_t ASC_MAX_LOAD3D_L1 = 32767;
+constexpr int32_t ASC_MIN_LOAD3D_C1_IDX = 0;
+constexpr int32_t ASC_MAX_LOAD3D_C1_IDX = 4095;
+constexpr int32_t ASC_MIN_LOAD3D_LEFT_TOP = -255;
+constexpr int32_t ASC_MAX_LOAD3D_LEFT_TOP = 32767;
+constexpr int32_t ASC_MIN_LOAD3D_STRIDE = 1;
+constexpr int32_t ASC_MAX_LOAD3D_STRIDE = 63;
+constexpr int32_t ASC_MAX_LOAD3D_FILTER = 255;
+constexpr int32_t ASC_MIN_LOAD3D_FILTER = 1;
+constexpr int32_t ASC_MIN_LOAD3D_FETCH_FILTER = 0;
+constexpr int32_t ASC_MAX_LOAD3D_FETCH_FILTER = 254;
+constexpr int32_t ASC_MIN_LOAD3D_DILATION_FILTER = 1;
+constexpr int32_t ASC_MAX_LOAD3D_JUMP_STRIDE = 127;
+constexpr int32_t ASC_MIN_LOAD3D_JUMP_STRIDE = 1;
+constexpr int32_t ASC_MIN_LOAD3D_REPEAT_TIMES = 1;
+#endif
+} // namespace Internal
+
+#if (defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1)
 // param check size
 const int32_t MAX_BLOCK_COUNT = 4095;
 const int32_t MIN_BLOCK_COUNT = 1;
