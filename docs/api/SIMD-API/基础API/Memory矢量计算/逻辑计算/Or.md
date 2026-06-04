@@ -233,7 +233,7 @@ $dst_i = src0_i | src1_i$
 
     <cann-filter npu-type="310b">
 
-    - CPU报错提示不支持该数据类型。上述说明适用于：
+    - CPU告警提示不支持该数据类型。上述说明适用于：
       - Atlas 200I/500 A2 推理产品。
 
     </cann-filter>
