@@ -1,53 +1,16 @@
-# LayerNormGrad<a name="ZH-CN_TOPIC_0000001575083838"></a>
+# LayerNormGrad
 
-## 产品支持情况<a name="section1586581915393"></a>
+## 产品支持情况
 
-<a name="table169596713360"></a>
-<table><thead align="left"><tr id="row129590715369"><th class="cellrowborder" valign="top" width="57.99999999999999%" id="mcps1.1.3.1.1"><p id="p17959971362"><a name="p17959971362"></a><a name="p17959971362"></a><span id="ph895914718367"><a name="ph895914718367"></a><a name="ph895914718367"></a>产品</span></p>
-</th>
-<th class="cellrowborder" align="center" valign="top" width="42%" id="mcps1.1.3.1.2"><p id="p89594763612"><a name="p89594763612"></a><a name="p89594763612"></a>是否支持</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row18959673369"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1595910763613"><a name="p1595910763613"></a><a name="p1595910763613"></a><span id="ph1595918753613"><a name="ph1595918753613"></a><a name="ph1595918753613"></a>Ascend 950PR/Ascend 950DT</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1695957133611"><a name="p1695957133611"></a><a name="p1695957133611"></a>√</p>
-</td>
-</tr>
-<tr id="row18959157103612"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p13959117193618"><a name="p13959117193618"></a><a name="p13959117193618"></a><span id="ph9959117173614"><a name="ph9959117173614"></a><a name="ph9959117173614"></a><term id="zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1095914793613"><a name="p1095914793613"></a><a name="p1095914793613"></a>√</p>
-</td>
-</tr>
-<tr id="row89591478362"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p7959157163619"><a name="p7959157163619"></a><a name="p7959157163619"></a><span id="ph1995997193619"><a name="ph1995997193619"></a><a name="ph1995997193619"></a><term id="zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p149598793615"><a name="p149598793615"></a><a name="p149598793615"></a>√</p>
-</td>
-</tr>
-<tr id="row99591673368"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p595947173615"><a name="p595947173615"></a><a name="p595947173615"></a><span id="ph995910783620"><a name="ph995910783620"></a><a name="ph995910783620"></a><term id="zh-cn_topic_0000001312391781_term354143892110"><a name="zh-cn_topic_0000001312391781_term354143892110"></a><a name="zh-cn_topic_0000001312391781_term354143892110"></a>Atlas 200I/500 A2 推理产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p59606716367"><a name="p59606716367"></a><a name="p59606716367"></a>x</p>
-</td>
-</tr>
-<tr id="row1196047183615"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1898493283210"><a name="p1898493283210"></a><a name="p1898493283210"></a><span id="ph1498417326325"><a name="ph1498417326325"></a><a name="ph1498417326325"></a><term id="zh-cn_topic_0000001312391781_term1964153212227"><a name="zh-cn_topic_0000001312391781_term1964153212227"></a><a name="zh-cn_topic_0000001312391781_term1964153212227"></a>Atlas 推理系列产品</term>AI Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1680812310331"><a name="p1680812310331"></a><a name="p1680812310331"></a>√</p>
-</td>
-</tr>
-<tr id="row041413315316"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p8192738133217"><a name="p8192738133217"></a><a name="p8192738133217"></a><span id="ph1119217385324"><a name="ph1119217385324"></a><a name="ph1119217385324"></a><term id="zh-cn_topic_0000001312391781_term1463893615224"><a name="zh-cn_topic_0000001312391781_term1463893615224"></a><a name="zh-cn_topic_0000001312391781_term1463893615224"></a>Atlas 推理系列产品</term>Vector Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p124151433133113"><a name="p124151433133113"></a><a name="p124151433133113"></a>x</p>
-</td>
-</tr>
-<tr id="row69603716362"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p29601972368"><a name="p29601972368"></a><a name="p29601972368"></a><span id="ph8960167193611"><a name="ph8960167193611"></a><a name="ph8960167193611"></a><term id="zh-cn_topic_0000001312391781_term71949488213"><a name="zh-cn_topic_0000001312391781_term71949488213"></a><a name="zh-cn_topic_0000001312391781_term71949488213"></a>Atlas 训练系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p096010715361"><a name="p096010715361"></a><a name="p096010715361"></a>x</p>
-</td>
-</tr>
-</tbody>
-</table>
+- Ascend 950PR/Ascend 950DT：支持
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+- Atlas 200I/500 A2 推理产品：不支持
+- Atlas 推理系列产品AI Core：支持
+- Atlas 推理系列产品Vector Core：不支持
+- Atlas 训练系列产品：不支持
 
-## 功能说明<a name="section618mcpsimp"></a>
+## 功能说明
 
 LayerNormGrad是一个函数，用于计算LayerNorm的反向传播梯度。该接口单独使用会输出x、resForGamma；也可以和LayerNormGradBeta配合使用，输出的resForGamma传递给LayerNormGradBeta， LayerNormGradBeta接口会输出gamma和beta，配合使用时就可以同时得到x、Gamma、beta。
 
@@ -61,11 +24,11 @@ pd_x(BSH) = pd_xl * np.power((data_variance + EPSILON), (-0.5)) + pd_var * (2.0 
 res_for_gamma(BSH) = (data_x - data_mean) * np.power((data_variance + EPSILON), (-0.5))
 ```
 
-## 实现原理<a name="section13229175017585"></a>
+## 实现原理
 
 以float类型，ND格式，输入为inputDy\[B, S, H\], inputX\[B, S, H\], inputVariance\[B, S\], inputMean\[B, S\], inputGamma\[H\]为例，描述LayerNormGrad高阶API内部算法框图，如下图所示。
 
-**图 1**  LayerNormGrad算法框图<a name="fig386485443713"></a>  
+**图 1**  LayerNormGrad算法框图  
 ![](../../../figures/LayerNormGrad算法框图.png "LayerNormGrad算法框图")
 
 计算过程分为如下几步，均在Vector上进行：
@@ -76,7 +39,7 @@ res_for_gamma(BSH) = (data_x - data_mean) * np.power((data_variance + EPSILON), 
 4.  ComputePdMean：实现公式np.sum\(\(\(-1.0\) \* x1Tensor \* np.power\(\(inputVariance + EPSILON\), \(-0.5\)\)\)\) + pd\_var \* \(1.0 / H\) \* np.sum\(\(\(-2.0\) \* \(x2Tensor\)\)\)的计算，power方法通过Sqrt, Div两条基础API组合实现，结果存储至pdMeanTensor。同时，利用中间计算结果，根据公式x2Tensor \* np.power\(\(inputVariance + EPSILON\), \(-0.5\)\)，计算出resForGamma的结果；
 5.  ComputePdX步骤：实现公式x1Tensor \* np.power\(\(inputVariance + EPSILON\), \(-0.5\)\) + pd\_var\*\(2.0 / H\)\*\(x2Tensor\) + pd\_mean\*\(1.0 / H\)的计算，结果存入outputPdX。
 
-## 函数原型<a name="section1834111321944"></a>
+## 函数原型
 
 由于该接口的内部实现中涉及复杂的计算，需要额外的临时空间来存储计算过程中的中间变量。临时空间大小BufferSize的获取方法：通过[LayerNormGrad Tiling](LayerNormGrad-Tiling.md)中提供的GetLayerNormGradMaxMinTmpSize接口获取所需最大和最小临时空间大小，最小空间可以保证功能正确，最大空间用于提升性能。
 
@@ -100,131 +63,30 @@ res_for_gamma(BSH) = (data_x - data_mean) * np.power((data_variance + EPSILON), 
 
     该方式下开发者无需申请，但是需要预留临时空间的大小。
 
-## 参数说明<a name="section622mcpsimp"></a>
+## 参数说明
 
 **表 1**  模板参数说明
 
-<a name="table575571914269"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000001574764914_row18755131942614"><th class="cellrowborder" valign="top" width="19.39%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001574764914_p675519193268"><a name="zh-cn_topic_0000001574764914_p675519193268"></a><a name="zh-cn_topic_0000001574764914_p675519193268"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="80.61%" id="mcps1.2.3.1.2"><p id="zh-cn_topic_0000001574764914_p375511918267"><a name="zh-cn_topic_0000001574764914_p375511918267"></a><a name="zh-cn_topic_0000001574764914_p375511918267"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000001574764914_row14755141911264"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000001574764914_p47551198266"><a name="zh-cn_topic_0000001574764914_p47551198266"></a><a name="zh-cn_topic_0000001574764914_p47551198266"></a>T</p>
-</td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000001574764914_p125969172719"><a name="zh-cn_topic_0000001574764914_p125969172719"></a><a name="zh-cn_topic_0000001574764914_p125969172719"></a>操作数的数据类型。支持的数据类型为：half、float。</p>
-</td>
-</tr>
-<tr id="zh-cn_topic_0000001574764914_row9756719122620"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000001574764914_p1682112447268"><a name="zh-cn_topic_0000001574764914_p1682112447268"></a><a name="zh-cn_topic_0000001574764914_p1682112447268"></a>isReuseSource</p>
-</td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000001574764914_p1275717613718"><a name="zh-cn_topic_0000001574764914_p1275717613718"></a><a name="zh-cn_topic_0000001574764914_p1275717613718"></a>是否允许修改源操作数，默认值为false。如果开发者允许源操作数被改写，可以设置该参数取值为true开启，开启后能够节省部分内存空间。</p>
-<p id="zh-cn_topic_0000001574764914_p175786163713"><a name="zh-cn_topic_0000001574764914_p175786163713"></a><a name="zh-cn_topic_0000001574764914_p175786163713"></a>设置为<strong id="zh-cn_topic_0000001574764914_b575706193714"><a name="zh-cn_topic_0000001574764914_b575706193714"></a><a name="zh-cn_topic_0000001574764914_b575706193714"></a>true</strong>，则本接口内部计算时<strong id="zh-cn_topic_0000001574764914_b147578614378"><a name="zh-cn_topic_0000001574764914_b147578614378"></a><a name="zh-cn_topic_0000001574764914_b147578614378"></a>复用</strong>inputX的内存空间，节省内存空间；设置为<strong id="zh-cn_topic_0000001574764914_b475717616379"><a name="zh-cn_topic_0000001574764914_b475717616379"></a><a name="zh-cn_topic_0000001574764914_b475717616379"></a>false</strong>，则本接口内部计算时<strong id="zh-cn_topic_0000001574764914_b157575653719"><a name="zh-cn_topic_0000001574764914_b157575653719"></a><a name="zh-cn_topic_0000001574764914_b157575653719"></a>不复用</strong>inputX的内存空间。</p>
-<p id="zh-cn_topic_0000001574764914_p177571162377"><a name="zh-cn_topic_0000001574764914_p177571162377"></a><a name="zh-cn_topic_0000001574764914_p177571162377"></a>对于float数据类型输入支持开启该参数，half数据类型输入不支持开启该参数。</p>
-<p id="zh-cn_topic_0000001574764914_p62891018544"><a name="zh-cn_topic_0000001574764914_p62891018544"></a><a name="zh-cn_topic_0000001574764914_p62891018544"></a>isReuseSource的使用样例请参考<a href="../数学计算/更多样例-83.md#section639165323915">更多样例</a>。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 描述 |
+| --- | --- |
+| T | 操作数的数据类型。支持的数据类型为：half、float。 |
+| isReuseSource | 是否允许修改源操作数，默认值为false。如果开发者允许源操作数被改写，可以设置该参数取值为true开启，开启后能够节省部分内存空间。<br><br>设置为true，则本接口内部计算时复用inputX的内存空间，节省内存空间；设置为false，则本接口内部计算时不复用inputX的内存空间。<br><br>对于float数据类型输入支持开启该参数，half数据类型输入不支持开启该参数。<br><br>isReuseSource的使用样例请参考[更多样例](../数学计算/更多样例-83.md#section639165323915)。 |
 
 **表 2**  接口参数说明
 
-<a name="table12251635103118"></a>
-<table><thead align="left"><tr id="row147393513315"><th class="cellrowborder" valign="top" width="19.515151515151516%" id="mcps1.2.4.1.1"><p id="p107353563110"><a name="p107353563110"></a><a name="p107353563110"></a>参数名称</p>
-</th>
-<th class="cellrowborder" valign="top" width="17.898989898989896%" id="mcps1.2.4.1.2"><p id="p1773133533118"><a name="p1773133533118"></a><a name="p1773133533118"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.58585858585859%" id="mcps1.2.4.1.3"><p id="p1873235143119"><a name="p1873235143119"></a><a name="p1873235143119"></a>含义</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row10734355318"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p1739358317"><a name="p1739358317"></a><a name="p1739358317"></a>outputPdX</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p13731535143111"><a name="p13731535143111"></a><a name="p13731535143111"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p446091145118"><a name="p446091145118"></a><a name="p446091145118"></a>目的操作数，shape为[B, S, H]，LocalTensor数据结构的定义请参考<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>。尾轴长度需要32B对齐。</p>
-<p id="p16911647191712"><a name="p16911647191712"></a><a name="p16911647191712"></a><span id="zh-cn_topic_0000001530181537_ph173308471594"><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><span id="zh-cn_topic_0000001530181537_ph9902231466"><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816"><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row57393553110"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p073935123115"><a name="p073935123115"></a><a name="p073935123115"></a>resForGamma</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p157319358315"><a name="p157319358315"></a><a name="p157319358315"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p2543123391815"><a name="p2543123391815"></a><a name="p2543123391815"></a>目的操作数，shape为[B, S, H]，LocalTensor数据结构的定义请参考<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>。尾轴长度需要32B对齐。</p>
-<p id="p1667364612223"><a name="p1667364612223"></a><a name="p1667364612223"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_1"><a name="zh-cn_topic_0000001530181537_ph173308471594_1"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_1"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_1"><a name="zh-cn_topic_0000001530181537_ph9902231466_1"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_1"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_1"><a name="zh-cn_topic_0000001530181537_ph1782115034816_1"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_1"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row273203510317"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p17333515314"><a name="p17333515314"></a><a name="p17333515314"></a>inputDy</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p373103543120"><a name="p373103543120"></a><a name="p373103543120"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p4705122819612"><a name="p4705122819612"></a><a name="p4705122819612"></a>源操作数，shape为[B, S, H]，LocalTensor数据结构的定义请参考<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>。inputDy的数据类型需要与目的操作数保持一致，尾轴长度需要32B对齐。</p>
-<p id="p8158135011227"><a name="p8158135011227"></a><a name="p8158135011227"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_2"><a name="zh-cn_topic_0000001530181537_ph173308471594_2"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_2"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_2"><a name="zh-cn_topic_0000001530181537_ph9902231466_2"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_2"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_2"><a name="zh-cn_topic_0000001530181537_ph1782115034816_2"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_2"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row9731035103113"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p10730352311"><a name="p10730352311"></a><a name="p10730352311"></a>inputX</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p7731235183110"><a name="p7731235183110"></a><a name="p7731235183110"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p83698388549"><a name="p83698388549"></a><a name="p83698388549"></a>源操作数，shape为[B, S, H]，LocalTensor数据结构的定义请参考<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>。inputX的数据类型需要与目的操作数保持一致，尾轴长度需要32B对齐。</p>
-<p id="p15292175272210"><a name="p15292175272210"></a><a name="p15292175272210"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_3"><a name="zh-cn_topic_0000001530181537_ph173308471594_3"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_3"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_3"><a name="zh-cn_topic_0000001530181537_ph9902231466_3"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_3"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_3"><a name="zh-cn_topic_0000001530181537_ph1782115034816_3"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_3"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row1373935103114"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p1074435103110"><a name="p1074435103110"></a><a name="p1074435103110"></a>inputVariance</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p274143533119"><a name="p274143533119"></a><a name="p274143533119"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p315716230193"><a name="p315716230193"></a><a name="p315716230193"></a>方差，shape为[B, S]，LocalTensor数据结构的定义请参考<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>。inputVariance的数据类型需要与目的操作数保持一致，尾轴长度需要32B对齐。需提前调用<a href="LayerNorm.md">LayerNorm</a>接口获取方差。</p>
-<p id="p199741055102215"><a name="p199741055102215"></a><a name="p199741055102215"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_4"><a name="zh-cn_topic_0000001530181537_ph173308471594_4"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_4"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_4"><a name="zh-cn_topic_0000001530181537_ph9902231466_4"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_4"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_4"><a name="zh-cn_topic_0000001530181537_ph1782115034816_4"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_4"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row374133563113"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p3741535183115"><a name="p3741535183115"></a><a name="p3741535183115"></a>inputMean</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p574183543112"><a name="p574183543112"></a><a name="p574183543112"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p19979182613198"><a name="p19979182613198"></a><a name="p19979182613198"></a>均值，shape为[B, S]，LocalTensor数据结构的定义请参考<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>。inputMean的数据类型需要与目的操作数保持一致，尾轴长度需要32B对齐。需提前调用<a href="LayerNorm.md">LayerNorm</a>接口获取均值。</p>
-<p id="p10414135892213"><a name="p10414135892213"></a><a name="p10414135892213"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_5"><a name="zh-cn_topic_0000001530181537_ph173308471594_5"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_5"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_5"><a name="zh-cn_topic_0000001530181537_ph9902231466_5"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_5"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_5"><a name="zh-cn_topic_0000001530181537_ph1782115034816_5"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_5"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row1741335203110"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p874143523113"><a name="p874143523113"></a><a name="p874143523113"></a>inputGamma</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p57411353318"><a name="p57411353318"></a><a name="p57411353318"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p11621739151312"><a name="p11621739151312"></a><a name="p11621739151312"></a>源操作数，shape为[H]，LocalTensor数据结构的定义请参考<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>。inputGamma的数据类型需要与目的操作数保持一致，尾轴长度需要32B对齐。</p>
-<p id="p850112112313"><a name="p850112112313"></a><a name="p850112112313"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_6"><a name="zh-cn_topic_0000001530181537_ph173308471594_6"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_6"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_6"><a name="zh-cn_topic_0000001530181537_ph9902231466_6"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_6"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_6"><a name="zh-cn_topic_0000001530181537_ph1782115034816_6"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_6"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row1984913418518"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p215910345451"><a name="p215910345451"></a><a name="p215910345451"></a>sharedTmpBuffer</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p20159183474511"><a name="p20159183474511"></a><a name="p20159183474511"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p47801866195"><a name="p47801866195"></a><a name="p47801866195"></a>共享缓冲区，用于存放API内部计算产生的临时数据。该方式开发者可以自行管理sharedTmpBuffer内存空间，并在接口调用完成后，复用该部分内存，内存不会反复申请释放，灵活性较高，内存利用率也较高。共享缓冲区大小的获取方式请参考<a href="LayerNormGrad-Tiling.md">LayerNormGrad Tiling</a>。</p>
-<p id="p167809613199"><a name="p167809613199"></a><a name="p167809613199"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_7"><a name="zh-cn_topic_0000001530181537_ph173308471594_7"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_7"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_7"><a name="zh-cn_topic_0000001530181537_ph9902231466_7"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_7"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_7"><a name="zh-cn_topic_0000001530181537_ph1782115034816_7"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_7"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row197416350316"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p5746352312"><a name="p5746352312"></a><a name="p5746352312"></a>epsilon</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p1874935103113"><a name="p1874935103113"></a><a name="p1874935103113"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p77415357313"><a name="p77415357313"></a><a name="p77415357313"></a>防除零的权重系数。</p>
-</td>
-</tr>
-<tr id="row197433517318"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p1674193543111"><a name="p1674193543111"></a><a name="p1674193543111"></a>tiling</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p147412358314"><a name="p147412358314"></a><a name="p147412358314"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p8555165810134"><a name="p8555165810134"></a><a name="p8555165810134"></a>LayerNormGrad计算所需Tiling信息。</p>
-</td>
-</tr>
-<tr id="row20781113045518"><td class="cellrowborder" valign="top" width="19.515151515151516%" headers="mcps1.2.4.1.1 "><p id="p878253055512"><a name="p878253055512"></a><a name="p878253055512"></a>shapeInfo</p>
-</td>
-<td class="cellrowborder" valign="top" width="17.898989898989896%" headers="mcps1.2.4.1.2 "><p id="p6782830195514"><a name="p6782830195514"></a><a name="p6782830195514"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="62.58585858585859%" headers="mcps1.2.4.1.3 "><p id="p77829307554"><a name="p77829307554"></a><a name="p77829307554"></a>表示LayerNormGrad各个输入的数据排布格式Format。默认值表示输入的Format为ND。支持的取值为DataFormat::ND。LayerNormGradShapeInfo类型，具体定义如下方代码所示。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名称 | 输入/输出 | 含义 |
+| --- | --- | --- |
+| outputPdX | 输出 | 目的操作数，shape为[B, S, H]，LocalTensor数据结构的定义请参考[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)。尾轴长度需要32B对齐。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| resForGamma | 输出 | 目的操作数，shape为[B, S, H]，LocalTensor数据结构的定义请参考[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)。尾轴长度需要32B对齐。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| inputDy | 输入 | 源操作数，shape为[B, S, H]，LocalTensor数据结构的定义请参考[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)。inputDy的数据类型需要与目的操作数保持一致，尾轴长度需要32B对齐。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| inputX | 输入 | 源操作数，shape为[B, S, H]，LocalTensor数据结构的定义请参考[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)。inputX的数据类型需要与目的操作数保持一致，尾轴长度需要32B对齐。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| inputVariance | 输入 | 方差，shape为[B, S]，LocalTensor数据结构的定义请参考[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)。inputVariance的数据类型需要与目的操作数保持一致，尾轴长度需要32B对齐。需提前调用[LayerNorm](LayerNorm.md)接口获取方差。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| inputMean | 输入 | 均值，shape为[B, S]，LocalTensor数据结构的定义请参考[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)。inputMean的数据类型需要与目的操作数保持一致，尾轴长度需要32B对齐。需提前调用[LayerNorm](LayerNorm.md)接口获取均值。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| inputGamma | 输入 | 源操作数，shape为[H]，LocalTensor数据结构的定义请参考[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)。inputGamma的数据类型需要与目的操作数保持一致，尾轴长度需要32B对齐。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| sharedTmpBuffer | 输入 | 共享缓冲区，用于存放API内部计算产生的临时数据。该方式开发者可以自行管理sharedTmpBuffer内存空间，并在接口调用完成后，复用该部分内存，内存不会反复申请释放，灵活性较高，内存利用率也较高。共享缓冲区大小的获取方式请参考[LayerNormGrad Tiling](LayerNormGrad-Tiling.md)。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| epsilon | 输入 | 防除零的权重系数。 |
+| tiling | 输入 | LayerNormGrad计算所需Tiling信息。 |
+| shapeInfo | 输入 | 表示LayerNormGrad各个输入的数据排布格式Format。默认值表示输入的Format为ND。支持的取值为DataFormat::ND。LayerNormGradShapeInfo类型，具体定义如下方代码所示。 |
 
 ```
 struct LayerNormGradShapeInfo {
@@ -232,11 +94,11 @@ struct LayerNormGradShapeInfo {
 };
 ```
 
-## 返回值说明<a name="section5468191312484"></a>
+## 返回值说明
 
 无
 
-## 约束说明<a name="section633mcpsimp"></a>
+## 约束说明
 
 -   操作数地址对齐要求请参见[通用地址对齐约束](../../通用说明和约束.md#section796754519912)。
 -   源操作数和目的操作数的Tensor空间可以复用。
@@ -244,7 +106,7 @@ struct LayerNormGradShapeInfo {
 -   输入数据不满足对齐要求时，开发者需要进行补齐，补齐的数据应设置为0，防止出现异常值从而影响网络计算。
 -   不支持对尾轴H轴的切分。
 
-## 调用示例<a name="section642mcpsimp"></a>
+## 调用示例
 
 本样例中，输入inputX和inputDy的shape为\[2, 32, 16\]，inputVariance和inputMean的shape为\[2, 32\]，inputGamma的shape为\[16\]。输出outputPdX和resForGamma的shape为\[2, 32, 16\]。数据排布均为ND格式，数据类型均为float，不复用源操作数的内存空间。
 
@@ -280,7 +142,7 @@ AscendC::LayerNormGrad<float, isReuseSource>(
 示例结果如下：
 
 ```
-输入数据(inputDy, shape:[1, 8, 8]): 
+输入数据(inputDy, shape:[1, 8, 8]):
 [  0.  1.  2.  3.  4.  5.  6.  7.
    8.  9. 10. 11. 12. 13. 14. 15.
   16. 17. 18. 19. 20. 21. 22. 23.
@@ -289,7 +151,7 @@ AscendC::LayerNormGrad<float, isReuseSource>(
   40. 41. 42. 43. 44. 45. 46. 47.
   48. 49. 50. 51. 52. 53. 54. 55.
   56. 57. 58. 59. 60. 61. 62. 63. ]
-输入数据(inputX, shape:[1, 8, 8]): 
+输入数据(inputX, shape:[1, 8, 8]):
 [  0.  1.  2.  3.  4.  5.  6.  7.
    8.  9. 10. 11. 12. 13. 14. 15.
   16. 17. 18. 19. 20. 21. 22. 23.
@@ -298,14 +160,14 @@ AscendC::LayerNormGrad<float, isReuseSource>(
   40. 41. 42. 43. 44. 45. 46. 47.
   48. 49. 50. 51. 52. 53. 54. 55.
   56. 57. 58. 59. 60. 61. 62. 63. ]
-输入数据(inputMean, shape:[8]): 
+输入数据(inputMean, shape:[8]):
 [ 3.5 11.5 19.5 27.5 35.5 43.5 51.5 59.5 ]
-输入数据(inputVariance, shape:[8]): 
+输入数据(inputVariance, shape:[8]):
 [ 5.25 5.25 5.25 5.25 5.25 5.25 5.25 5.25 ]
-输入数据(inputGamma, shape:[8]): 
+输入数据(inputGamma, shape:[8]):
 [ 0. 1. 2. 3. 4. 5. 6. 7. ]
-输出数据(outputPdX): 
+输出数据(outputPdX):
 [ 3.0548172 0.4362857 -1.3093826 -2.182187 -2.1821284 -1.309207 0.4365778 3.0552254 3.0545845 0.4361186 -1.3094826 -2.1822214 -2.1820965 -1.3091087 0.4367447 3.055458 3.0543518 0.4359522 -1.3095818 -2.1822548 -2.182064 -1.3090096 0.43690872 3.055687 3.054119 0.43578815 -1.309679 -2.1822853 -2.182026 -1.3089066 0.437088 3.0559235 3.0538864 0.43562222 -1.3097801 -2.1823158 -2.1819916 -1.3088074 0.43724823 3.05616 3.0536423 0.4354477 -1.3098869 -2.1823578 -2.181961 -1.3087158 0.43740845 3.0563965 3.0534134 0.43528175 -1.3099861 -2.1823883 -2.1819305 -1.308609 0.43756104 3.0566254 3.0531921 0.43511963 -1.3100777 -2.1824188 -2.1818848 -1.3085022 0.43774414 3.0568542 ]
-输出数据(resForGamma): 
+输出数据(resForGamma):
 [ -1.5275106 -1.091079 -0.6546474 -0.21821581 0.21821581 0.6546474 1.091079 1.5275106 -1.5275106 -1.091079 -0.6546474 -0.21821581 0.21821581 0.6546474 1.091079 1.5275106 -1.5275106 -1.091079 -0.6546474 -0.21821581 0.21821581 0.6546474 1.091079 1.5275106 -1.5275106 -1.091079 -0.6546474 -0.21821581 0.21821581 0.6546474 1.091079 1.5275106 -1.5275106 -1.091079 -0.6546474 -0.21821581 0.21821581 0.6546474 1.091079 1.5275106 -1.5275106 -1.091079 -0.6546474 -0.21821581 0.21821581 0.6546474 1.091079 1.5275106 -1.5275106 -1.091079 -0.6546474 -0.21821581 0.21821581 0.6546474 1.091079 1.5275106 -1.5275106 -1.091079 -0.6546474 -0.21821581 0.21821581 0.6546474 1.091079 1.5275106 ]
 ```
