@@ -1,0 +1,390 @@
+# 线程块数量配置与vf调用优化样例
+
+## 概述
+
+本样例以Gather计算为例，介绍Ascend C SIMD与SIMT混合编程场景下的线程块数量配置和vf函数调用优化思路。样例包含4个Case（16个场景），从空壳核函数调度开销到不同数据量下的线程块数量配置优化。
+
+## 支持的产品
+
+- Ascend 950PR/Ascend 950DT
+
+## 支持的CANN软件版本
+
+- \> CANN 9.0.0
+
+## 目录结构介绍
+
+```text
+├── simt_and_simd_grid_dim_config
+│   ├── figures                // README中的图片资源
+│   ├── CMakeLists.txt         // 编译工程文件
+│   ├── grid_config.asc        // Ascend C算子实现 & 调用样例
+│   └── README.md
+```
+
+## 样例描述
+
+- 计算公式：
+
+  $$output[i][j] = input[index[i][j]]$$
+
+  - input为输入张量，数据类型为float，形状因Case不同而异：Case 0/1/2为[2200000]，Case 3为[20000]
+  - index为索引张量，数据类型为uint32，形状因Case不同而异：Case 0/1/2为[1024, 2048]，Case 3为[8, 2048]，索引范围为[0, input_total_length)
+  - output为输出张量，数据类型为float，形状与index相同
+  - 计算过程：根据index[i][j]索引从input中采集对应位置的数据，写入output[i][j]位置
+
+- 样例规格：
+
+  <table>
+  <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">Gather</td></tr>
+  <tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
+  <tr><td align="center">input</td><td align="center">[2200000]/[20000]</td><td align="center">float</td><td align="center">ND</td></tr>
+  <tr><td align="center">index</td><td align="center">[1024,2048]/[8,2048]</td><td align="center">uint32</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">样例输出</td><td align="center">output</td><td align="center">[1024,2048]/[8,2048]</td><td align="center">float</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">empty_kernel / gather_kernel</td></tr>
+  </table>
+
+## 样例实现
+
+### Case实现说明
+
+本样例通过编译宏`SCENARIO_NUM`控制16个测试场景并归为4类Case，从空壳核函数调度开销，再到vf调用次数、大shape和小shape下的配置选择。
+
+| Case   | SCENARIO_NUM           | Shape                      | 核函数                                  | 对比目的                                  |
+| ------ | ---------------------- | --------------------------------- | --------------------------------------- | ----------------------------------------- |
+| Case 0 | 1-5     | [1024, 2048]           | empty_kernel                            | 线程块数量设置1 / 32 / 64 / 128 / 1024，对比不同线程块数量的调度开销 |
+| Case 1 | 6-8              | [1024, 2048]              | empty_kernel                            | 线程块数量设置32 / 64 / 1024，对比1次vf调用和2次vf调用的调度开销        |
+| Case 2 | 9-11            | [1024, 2048]      | gather_kernel                      | 大shape下，线程块数量设置1024 / 64 / 32，对比性能差异 |
+| Case 3 | 12-16 | [8, 2048] | gather_kernel | 小shape下，线程块数量设置4 / 8 / 16 / 32 / 64，线程数量按每核处理数分配，对比性能差异 |
+
+### 性能指标说明
+
+| 指标                | 说明                                                                                      |
+| ------------------- | ----------------------------------------------------------------------------------------- |
+| Task Duration(us)   | Task整体耗时，包含调度到加速器的时间、加速器上的执行时间以及响应结束时间                  |
+
+### Case 0: 空核函数调度开销（SCENARIO_NUM=1-5）
+
+**样例目标**：
+
+通过调用空壳核函数，体现不同线程块数量配置下的Task固定启动开销。
+
+**核心实现**：
+
+- 核函数`empty_kernel`仅调用空壳vf函数`simt_empty`，函数体内无实际计算逻辑，用于隔离测试不同线程块数量配置带来的开销
+- 通过`SCENARIO_NUM=1~5`控制五种线程块数量配置：1 / 32 / 64 / 128 / 1024，线程数量固定2048，每次调用1次vf
+
+**关键代码**：
+
+```cpp
+__simt_vf__ __launch_bounds__(THREAD_NUM) inline void simt_empty(...)
+{}
+
+__global__ __vector__ void empty_kernel(...)
+{
+    for (uint32_t vf_idx = 0; vf_idx < vf_call_times; vf_idx++) {
+        asc_vf_call<simt_empty>(dim3(THREAD_NUM), ...);
+    }
+}
+```
+
+**性能数据**：
+
+| SCENARIO_NUM | 线程块个数 | Task Duration(us) |
+| :----------: | :-------: | :---------------: |
+| 1 | 1 | 3.933 |
+| 2 | 32 | 4.413 |
+| 3 | 64 | 4.602 |
+| 4 | 128 | 5.269 |
+| 5 | 1024 | 13.687 |
+
+**分析**：
+
+- 1→32→64→128：Task Duration从3.933us升到5.269us，调度开销逐步增长
+- 128→1024：Task Duration从5.269us陡增到13.687us，调度开销随线程块数量增加而显著增长
+
+**结论**：
+
+调度开销随线程块数量增加而增长，线程块数量越多，Task的固定启动开销越大
+
+---
+
+### Case 1: vf调用次数对头开销的影响（SCENARIO_NUM=6-8）
+
+**样例目标**：
+
+在Case 0的基础上，对比1次和2次vf调用对Task Duration的影响，展示vf调用次数和调度头开销的关系。
+
+**核心实现**：
+
+- 与Case 0使用相同的空壳核函数`empty_kernel`，唯一变化是将vf调用次数从1次增加到2次，通过配置vf_call_times来控制vf调用次数
+- 通过`SCENARIO_NUM=6-8`分别启动32、64、1024个线程块，每次调用2次vf
+
+**性能数据**：
+
+| SCENARIO_NUM | 线程块个数 | vf调用次数 | Task Duration(us) |
+| :----------: | :-------: | :--------: | :---------------: |
+| 6 | 32 | 2 | 4.503 |
+| 7 | 64 | 2 | 4.869 |
+| 8 | 1024 | 2 | 14.982 |
+
+**与Case 0对比**：
+
+| 对比 | 线程块个数 | vf次数变化 | Task Duration变化 | 增幅 |
+| ---- | :-------: | :--------: | :---------------: | :--: |
+| SCENARIO_NUM=2→6 | 32 | 1→2 | 4.413 → 4.503 | +2.0% |
+| SCENARIO_NUM=3→7 | 64 | 1→2 | 4.602 → 4.869 | +5.8% |
+| SCENARIO_NUM=5→8 | 1024 | 1→2 | 13.687 → 14.982 | +9.5% |
+
+性能数据如下图所示：
+
+<img src="figures/fig_case01_scheduling.png" alt="Case 0/1 调度开销：线程块数量与vf调用次数" width="600" />
+
+**分析**：
+
+- 32核和64核下，1次→2次vf调用耗时增长约2.0%和5.8%，涨幅较小
+- 1024核下，1次→2次vf调用耗时增长约9.5%，涨幅较大
+
+**结论**：
+
+vf调用也存在调度开销，应尽量调用1次vf处理完所有数据
+
+---
+
+### Case 2: 大shape Gather配置不同线程块数量性能对比（SCENARIO_NUM=9-11）
+
+**样例目标**：
+
+对比同一大shape下执行Gather计算，配置不同线程块数量的性能差异。
+
+**核心实现**：
+
+- 三个场景均使用核函数`gather_kernel`，差异在于线程块个数和每个线程处理的数据量
+- input形状为[2200000]，index和output形状为[1024, 2048]
+- Gather算子计算逻辑较简单，主要受访存带宽影响，属于Memory Bound类型。本样例整体计算量较小，占用寄存器较少，因此每个线程块的线程数可配置为2048
+- `vf_loop_times = rows_per_block / thread_num`：rows_per_block为每核处理元素数，thread_num为线程数，每个线程以for循环方式处理本block负责的全部元素
+
+**关键代码**：
+
+```cpp
+// simt_gather: SIMT vf函数 —— 以blockDim.x为步长做for循环
+__simt_vf__ __launch_bounds__(THREAD_NUM) inline void simt_gather(..., uint32_t index_start, uint32_t vf_loop_times)
+{
+    for (uint32_t vf_idx = 0; vf_idx < vf_loop_times; vf_idx++) {
+        uint32_t idx = threadIdx.x + index_start + vf_idx * blockDim.x;
+        uint32_t gather_idx = index[idx];
+        output[idx] = input[gather_idx];
+    }
+}
+
+// gather_kernel: 核函数计算每个block的起始索引后调用simt_gather
+__global__ __vector__ void gather_kernel(..., uint32_t vf_loop_times)
+{
+    uint32_t rows_per_block = index_total_length / gridDim.x;
+    uint32_t index_start = blockIdx.x * rows_per_block;
+    asc_vf_call<simt_gather>(dim3(thread_num), ..., index_start, vf_loop_times);
+}
+```
+
+#### 逻辑核与物理核
+
+在SIMT核函数启动时，内核调用符<<<>>>中第一个入参配置决定本次任务要启动多少个线程块。对于本样例可以把线程块数量理解为要启动的**逻辑核数量**。
+
+这些逻辑核最终要落到硬件实际存在的Vector Core上执行，因此需要引入两个概念：
+
+- **逻辑核**：启动的线程块数量，是软件侧希望启动的并行任务数
+- **物理核**：硬件实际拥有的Vector Core数量，需要通过[aclrtGetDeviceInfo](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta1/API/runtimeapi/aclcppdevg_03_1867.html)在运行期查询获取（本样例环境为64），代码示例如下：
+  ```cpp
+  int32_t device_id = 0;
+  int64_t physical_aiv_core_num = 0;
+  aclError ret = aclrtGetDeviceInfo(
+      static_cast<uint32_t>(device_id),
+      ACL_DEV_ATTR_VECTOR_CORE_NUM,
+      &physical_aiv_core_num);
+  if (ret == ACL_SUCCESS) {
+      printf("Physical AIV (Vector Core) num: %ld\n", physical_aiv_core_num);
+  }
+  ```
+
+两者的关系会影响调度开销：当逻辑核数 ≤ 物理核数时，所有逻辑核可以一次占满物理核并行执行；当逻辑核数 > 物理核数时，超出的逻辑核必须等待前面的逻辑核执行完、让出物理核后才能被调度，等待开销会随超出的逻辑核数量增加而上升。
+
+**性能数据**：
+
+| SCENARIO_NUM | 线程块个数 | 每核处理元素数 | 每线程处理元素数(vf_call_times) | Task Duration(us) |
+| :----------: | :-------: | :-------: | :-------: | :---------------: |
+| 9 | 1024 | 2048 | 1 | 78.533 |
+| **10** | **64** | **32768** | **16** | **62.649** |
+| 11 | 32 | 65536 | 32 | 113.609 |
+
+性能数据如下图所示：
+
+<img src="figures/fig_case2_large.png" alt="Case 2 Task Duration 随线程块数量变化" width="600" />
+
+**分析**：
+
+- **`线程块数量=64`相比`线程块数量=1024`，Task Duration从78.533us降低到62.649us，耗时下降约20.2%，性能提升约26%**。线程块数量从1024降到64，启动和调度的线程块数量显著减少，调度开销大幅降低
+- **`线程块数量=64`相比`线程块数量=32`，Task Duration从113.609us降低到62.649us，耗时下降约45.2%，性能提升约82%**。同样的单线程多数据写法下，`线程块数量=64`具备更高的并行度；虽然线程块数量增加会带来更多启动和调度开销，但这部分开销小于并行度提升带来的收益，因此整体耗时更低
+- 受硬件资源限制，实际可并行执行的物理核数量存在上限。由于一个物理核同一时刻只能驻留并执行一个线程块，当`线程块数量=1024`时，超出物理核数量的线程块需要等待前序线程块执行完成后再调度，额外的启动和调度固定开销会明显增加；当`线程块数量=32`时，只使用了一半物理核，空闲物理核较多，并行度不足，单线程块工作量翻倍
+
+**结论**：
+
+大shape下应优先让线程块数量匹配实际物理核数。本样例中`线程块数量=64`既避免了`线程块数量=1024`带来的大量线程块调度开销，又避免了`线程块数量=32`并行度不足，因此是Case 2中的最优配置
+
+---
+
+### Case 3: 小shape Gather配置不同线程块数量与线程数量性能对比（SCENARIO_NUM=12-16）
+
+**样例目标**：
+
+对比同一小shape下执行Gather计算，配置不同线程块数量与线程数量的性能差异。
+
+**核心实现**：
+
+- 五个场景均使用核函数`gather_kernel`
+- input形状为[20000]，index和output形状为[8, 2048]
+- SCENARIO_NUM=12-13设置4 / 8核，线程数量固定2048（每核处理元素数≥2048）
+- SCENARIO_NUM=14-16设置16 / 32 / 物理核数，线程数量直接按每核处理元素数分配（1024 / 512 / 256），消除空转线程
+
+**性能数据**：
+
+| SCENARIO_NUM | 线程块个数 | 线程数量 | 每核处理元素数 | 每线程处理元素数(vf_call_times) | Task Duration(us) |
+| :----------: | :-------: | :-------: | :-------: | :-------: | :---------------: |
+| 12 | 4 | 2048 | 4096 | 2 | 9.989 |
+| 13 | 8 | 2048 | 2048 | 1 | 8.755 |
+| **14** | **16** | **1024** | **1024** | **1** | **7.832** |
+| 15 | 32 | 512 | 512 | 1 | 7.959 |
+| 16 | 64 | 256 | 256 | 1 | 8.820 |
+
+性能数据如下图所示：
+
+<img src="figures/fig_case3_small_griddim.png" alt="Case 3 Task Duration 随线程块数量变化" width="600" />
+
+**分析**：
+
+- 折线呈"先降后升"的谷形，**最优线程块数量 = 16（物理核数的1/4）**，并非打满64核
+- 线程块数量从4依次增加到8、16时，Task Duration持续下降（9.989 → 8.755 → 7.832），并行收益持续提高
+- 16→32：线程块数量翻倍，Task Duration从7.832us升到7.959us，**耗时增加约1.6%**。此时每核工作量已较小，新增核数带来的调度开销开始接近并行收益
+- 32→64（物理核）：线程块数量继续增加，Task Duration从7.959us升到8.820us，**耗时增加约10.8%**。小shape下每核任务量较小（256/512元素），增加线程块数量带来的调度开销反超并行收益
+- 与Case 2对照：同样的kernel，shape小到一定程度后最优线程块数量从64降到16，说明"最优线程块数量"随shape缩小而变化，必须实测
+
+**结论**：
+
+小shape无法直接沿用"使用全部物理核"的经验，必须参考本Case的方式设置多档线程块数量实测
+
+---
+
+## 性能对比总结
+
+### Ascend 950PR性能数据
+
+**调度开销随线程块数量变化（Case 0）**：
+
+| SCENARIO_NUM | 线程块个数 | Task Duration(us) |
+| ------------ | --------- | ----------------- |
+| 1 | 1 | 3.933 |
+| 2 | 32 | 4.413 |
+| 3 | 64 | 4.602 |
+| 4 | 128 | 5.269 |
+| 5 | 1024 | 13.687 |
+
+- 调度开销随线程块数量增加而增长
+
+**vf调用次数对头开销的影响（Case 1）**：
+
+| 对比 | 线程块个数 | vf次数 | Task Duration(us) | 增幅 |
+| ---- | --------- | ------ | ----------------- | ---- |
+| SCENARIO_NUM=2→6 | 32 | 1→2 | 4.413 → 4.503 | +2.0% |
+| SCENARIO_NUM=3→7 | 64 | 1→2 | 4.602 → 4.869 | +5.8% |
+| SCENARIO_NUM=5→8 | 1024 | 1→2 | 13.687 → 14.982 | +9.5% |
+
+- vf调用也存在调度开销
+
+**大shape的最优线程块数量（Case 2）**：
+
+| SCENARIO_NUM | 线程块个数 | 每核处理元素数 | Task Duration(us) |
+| :----------: | :-------: | :-------: | :---------------: |
+| 9 | 1024 | 2048 | 78.533 |
+| **10** | **64** | **32768** | **62.649** |
+| 11 | 32 | 65536 | 113.609 |
+
+- 最优线程块数量为 **64**（等于物理核数）；`线程块数量=64`既避免了`线程块数量=1024`带来的大量线程块调度开销，又避免了`线程块数量=32`并行度不足
+
+**小shape的最优线程块数量（Case 3）**：
+
+| SCENARIO_NUM | 线程块个数 | 线程数量 | 每核处理元素数 | Task Duration(us) |
+| :----------: | :-------: | :-------: | :-------: | :---------------: |
+| 12 | 4 | 2048 | 4096 | 9.989 |
+| 13 | 8 | 2048 | 2048 | 8.755 |
+| **14** | **16** | **1024** | **1024** | **7.832** |
+| 15 | 32 | 512 | 512 | 7.959 |
+| 16 | 64 | 256 | 256 | 8.820 |
+
+- 最优线程块数量在 **16**（物理核数的1/4），不是打满的64核；14→15→16 耗时持续增加
+
+## 调优建议
+
+1. **大shape需优先匹配物理核数**：受硬件资源限制，实际可并行执行的物理核数量存在上限。线程块数量应尽量等于物理核数，避免线程块数量过多（排队等待、调度开销累积）或过少（并行度不足、单线程块工作量重）。
+2. **小shape需实测线程块数量性能**：小shape下每核工作量较小，启动更多线程块带来的调度头开销会反超收益，最优线程块数量不一定是最大物理核数。可参考Case 3通过分档测试寻找最优线程块数量。
+
+## 编译运行
+
+在本样例根目录下执行如下步骤，编译并执行样例。
+
+- 配置环境变量
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  ```bash
+  source ${install_path}/cann/set_env.sh
+  ```
+
+  > **说明：** `${install_path}` 为CANN包安装目录，未指定安装目录时默认安装至 `/usr/local/Ascend` 下。
+
+- 样例执行
+
+  在本样例目录下执行如下命令。
+  ```bash
+  SCENARIO_NUM=1                       # 选择执行场景，可选1-16
+  mkdir -p build && cd build;          # 创建并进入build目录
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j;  # 编译工程
+  ./grid_config                        # 执行样例
+  ```
+
+  编译选项说明
+
+  | 选项             | 可选值      | 说明              |
+  | ---------------- | ----------- | ----------------- |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
+  | `SCENARIO_NUM` | `1`-`16` | 样例类型，默认为1 |
+
+  执行结果如下，说明精度对比成功。
+
+  ```text
+  [Success] Case accuracy is verification passed.
+  ```
+
+## 性能分析
+
+使用 `msprof` 工具获取详细性能数据：
+
+```bash
+msprof ./grid_config   # 分析性能
+```
+
+当前目录下会生成PROF_前缀的文件夹，`mindstudio_profiler_output`目录保存Host和各个Device的性能数据汇总，性能数据分析推荐查看该目录下文件
+
+```bash
+PROF_xxxx_XXXXXX
+├── device_{id}
+└── host
+└── mindstudio_profiler_log
+└── mindstudio_profiler_output    # 保存Host和各个Device的性能数据汇总
+    ├── msprof_*.json
+    ├── xx_*.csv
+    └── README.txt
+```
+
+查看具体的性能分析结果：
+
+```bash
+# 查看Task Duration 以及各项数据
+cat ./PROF_*/mindstudio_profiler_output/op_summary_*.csv
+```
