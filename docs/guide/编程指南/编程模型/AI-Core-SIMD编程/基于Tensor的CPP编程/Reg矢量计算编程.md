@@ -1,202 +1,340 @@
-# Reg矢量计算编程<a name="ZH-CN_TOPIC_0000002509863891"></a>
+# Reg矢量计算编程<a name="ZH-CN_TOPIC_0000002509863892"></a>
 
-## 简介<a name="section1825793122916"></a>
+本文介绍如何使用基础API（C++模板接口）编写Reg矢量计算代码。基础API与[Reg矢量计算编程（语言扩展C API）](../基于指针的C语言编程/Reg矢量计算编程.md)描述的是同一套Reg矢量硬件能力，功能语义一致，主要区别在于API命名、类型表达和可配置参数的表达方式。
 
-Reg矢量计算API是面向RegBase架构开发的API，用户可以通过该API直接对芯片中涉及Vector计算的寄存器进行操作，实现更大的灵活性和更好的性能。Reg矢量计算API与基础API功能相似，但与基础API输入和输出数据必须为LocalTensor不同，Reg矢量计算API的输入或输出数据均为Reg矢量计算寄存器。对于计算类API，其功能是从给定的寄存器获取数据，进行计算，并将结果保存在给定的寄存器。对于搬运类API，其功能是实现UB和寄存器的数据搬运。由此可见，Reg矢量计算API相较于基础API，将数据搬运和Reg计算过程交给用户自主控制，从而实现更大的开发自由度。
+Reg矢量编程的硬件原理、内存层级、VF函数执行域、流水线同步、Hardware Loop、VF融合等与API接口命名无关的内容，请参见[Reg矢量计算编程（语言扩展C API）](../基于指针的C语言编程/Reg矢量计算编程.md)。本文只说明基础API的接口定位、模板参数、数据类型体系、API分类和典型调用方式。
 
-## Regbase编程模型<a name="section1977234218287"></a>
+## 基础API定位<a name="section_part1"></a>
 
-基于寄存器（Regbase）的编程模型支持用户编写和调用Vector Funtion（向量函数）。这些函数使用\_\_simd\_vf\_\_标记，并被发送到硬件中的向量运算单元执行。在simd vf函数内部，通过Reg矢量计算API实现计算操作，其内存层级与编程架构如[图1](#fig597318712265)所示。
+基础API Reg矢量计算接口位于`AscendC::Reg`命名空间，是语言扩展C API的C++模板化封装。基础API并不改变Reg矢量计算的编程模型：仍然需要在`__aicore__`域通过`asc_vf_call`进入`__simd_vf__`函数，并在VF函数内完成`Load` -> `Compute` -> `Store`。
 
-在SIMD Vector的内存架构中，最靠近Vector计算单元的是VF Reg，它是SIMD的私有内存，包含多种类型的Reg矢量计算寄存器，用于存放并行处理的多个数据元素。单核内所有的VF Reg寄存器共享一个本地内存资源UB。SIMD架构不支持从全局内存（Global Memory）加载数据到Reg矢量计算寄存器，先将数据从全局内存GM搬运至Unified Buffer，再通过显式的Load/Store指令，由Unified Buffer加载到Reg矢量计算寄存器中。
+基础API的主要特点如下：
 
-**图 1**  SIMD Reg矢量计算内存层级<a name="fig597318712265"></a>  
-![](../../../../figures/SIMD-Reg矢量计算内存层级1.png "SIMD-Reg矢量计算内存层级")
+- 使用C++类型表达寄存器对象，例如`RegTensor<T>`、`MaskReg`、`AddrReg`、`UnalignRegForLoad`、`UnalignRegForStore` ,对应关系参考[数据对象与寄存器类型](#section_part4)。
+- 使用模板参数表达数据类型、搬运模式、PostUpdate模式等配置。
+- 多数接口可通过参数自动推导寄存器类型。
+- 搬运接口可以与`LocalTensor`衔接，可以支持不操作UB地址，也可以外层`__aicore__`代码从`LocalTensor::GetPhyAddr()`获取UB物理地址，再传入VF函数内的Reg搬运接口。
+- 部分计算接口提供`MaskMergeMode`模板参数，用于控制未被mask选中的元素如何写入目的寄存器。
 
-SIMD Reg矢量计算编程架构中，通过发出指令到Reg矢量计算执行单元，执行单元从Registers读取数据，进行计算，计算结果写回Registers。DMA搬运单元负责在Registers和Local Memory之间搬运数据。
+> 📌 **提示**：
+>
+> 1. 基础API和C API功能一致。若需要理解“为什么需要Reg矢量编程”“寄存器与UB/GM的关系”“哪些场景需要同步”等模型性内容，请直接阅读C API版本文档。
+>
+> 2. 搬运接口支持`LocalTensor`参数，在后续版本提供，暂未支持。
 
-**图 2**  SIMD Reg矢量计算编程架构<a name="fig116711840123520"></a>  
-![](../../../../figures/抽象硬件架构NPU架构版本3510.png "SIMD-Reg矢量计算编程架构")
+## 与C API的对应关系<a name="section_part2"></a>
 
-## Regbase和Membase编程调用层级<a name="section61258392540"></a>
+基础API与C API的核心差异是表达形式不同。
 
-在Membase架构中，基础API调用框架API或直接调用编译器BuiltIn API实现功能，而高阶API则通过调用基础API来实现功能。在Regbase架构中新增Reg矢量计算API，用户在算子实现中可以直接调用该API，高阶API和基础API也可以调用该API来实现功能，Reg矢量计算API则是直接调用编译器BuiltIn API实现功能。
+| 维度 | 基础API（C++模板） | C API（语言扩展） |
+| --- | --- | --- |
+| 命名空间/前缀 | `AscendC::Reg::*` | `asc_*` |
+| 命名风格 | `LoadAlign`、`StoreUnAlignPost` | `asc_loadalign`、`asc_storeunalign_post` |
+| 矢量数据寄存器 | `RegTensor<T>` | `vector_float`、`vector_half`、`vector_int32_t`等 |
+| 掩码寄存器 | `MaskReg` | `vector_bool` |
+| 地址寄存器 | `AddrReg` | `iter_reg` |
+| 非对齐搬入/搬出寄存器 | `UnalignRegForLoad` / `UnalignRegForStore` | `vector_load_unalign` / `vector_store_unalign` |
+| 数据类型选择 | 模板参数`T`，通常可由参数推导 | 类型名或接口后缀，例如`_b8`、`_b16`、`_b32` |
+| PostUpdate | `PostLiteral`模板参数 | 接口名后缀，例如`_postupdate` |
+| Mask合并模式 | `MaskMergeMode`模板参数 | 暂不支持 |
 
-在Regbase架构中，中间结果可暂存在寄存器中，无需数据搬出到Local Memory的开销；在Membase架构中，所有操作均基于内存进行，这意味着每次计算都需要从Local Memory加载数据，计算完成后将结果搬回Local Memory，中间计算结果都需要暂存在Local Memory上。
+常见API映射如下：
 
-在Regbase架构中，寄存器容纳的最大数据长度为VL（Vector Length），由于寄存器容量的限制，每次只能处理VL长度的数据。因此，需要对数据进行切分，每次从Local Memory搬运VL长度的数据到寄存器中进行计算，计算完成后将结果搬回Local Memory。而在Membase架构中，则能够直接处理完整长度的LocalTensor，无需进行数据切分，从而简化了数据处理流程。
+| 功能 | 基础API | C API |
+| --- | --- | --- |
+| 创建全量mask | `CreateMask<T, MaskPattern::ALL>()` | `asc_create_mask_b*()` |
+| 更新尾块mask | `UpdateMask<T>(count)` | `asc_update_mask_b*()` |
+| 创建地址寄存器 | `CreateAddrReg<T>(...)` | `asc_create_iter_reg_b*()` |
+| 通用搬入/搬出 | `Load` / `Store` | `asc_load` / `asc_store` |
+| 对齐搬入/搬出 | `LoadAlign` / `StoreAlign` | `asc_loadalign` / `asc_storealign` |
+| 非对齐搬入 | `LoadUnAlignPre` + `LoadUnAlign` | `asc_loadunalign_pre` + `asc_loadunalign` |
+| 非对齐搬出 | `StoreUnAlign` + `StoreUnAlignPost` | `asc_storeunalign` + `asc_storeunalign_post` |
+| 流水线同步 | `LocalMemBar<src, dst>()` | `asc_mem_bar(...)` |
 
-![](../../../../figures/API-调用.png)
+## 模板参数体系<a name="section_part3"></a>
 
-## Reg矢量计算调用层次<a name="section1048755114224"></a>
+基础API把C API中“后缀、枚举、特殊接口名”表达的能力统一收敛到模板参数中。常见模板参数如下。
 
--    核函数，使用\_\_global\_\_  \_\_aicore\_\_标识的为核函数，是Device侧的入口函数，Host侧可以通过<<<...\>\>\>语法进行调用。
--   \_\_aicore\_\_函数，使用\_\_aicore\_\_标识该函数在Device侧执行。 核函数内可以调用\_\_aicore\_\_函数。
--   simd vf函数，使用\_\_simd\_vf\_\_标记，能被核函数通过simd vf函数调用。simd vf函数内只能调用\_\_simd\_callee\_\_函数和constexpr aicore。
--   \_\_simd\_callee\_\_子函数，在simd vf函数内可以调用子函数，并且这些子函数有可能需要返回值或者通过引用传参，这类子函数通过\_\_simd\_callee\_\_标识。\_\_simd\_callee\_\_函数内只能调用\_\_simd\_callee\_\_函数和constexpr aicore函数。
+| 模板参数 | 作用 | 典型取值/类型 | 常见接口 |
+| --- | --- | --- | --- |
+| `T` | 数据类型 | `float`、`half`、`int32_t`等 | `RegTensor<T>`、`LoadAlign<T>`、`Add<T>` |
+| `PostLiteral` | 搬运后是否更新UB地址 | `POST_MODE_NORMAL`、`POST_MODE_UPDATE` | `LoadAlign`、`StoreAlign`、`LoadUnAlign`、`StoreUnAlign` |
+| `LoadDist` | 搬入模式 | `DIST_NORM`、broadcast类取值等 | `LoadAlign` |
+| `StoreDist` | 搬出模式 | 正常搬出、首元素搬出、pack类取值等 | `StoreAlign` |
+| `MaskMergeMode` | mask未选中元素处理方式 | `ZEROING`、`MERGING` | 部分计算接口，例如Add |
+| 计算模式枚举 | 指定算法或计算变体 | 例如`ReduceType`、`PairReduce`等 | 规约、复合计算等 |
 
-具体的调用关系图如下：
+### 数据类型模板参数
 
-![](../../../../figures/reg_calculation_call_hierarchy.png)
+基础API使用`RegTensor<T>`表达矢量数据寄存器。`T`决定寄存器内元素解释方式，寄存器宽度仍由硬件VL决定。例如在VL为256B时，`RegTensor<float>`可表示64个`float`元素，`RegTensor<half>`可表示128个`half`元素。
 
-以下为唯一合法函数调用链：
+```cpp
+AscendC::Reg::RegTensor<float> srcReg;
+AscendC::Reg::RegTensor<float> dstReg;
 
-![](../../../../figures/simd_vf.png)
-
-Regbase编程模型中允许定义simd vf函数，并且通过\_\_simd\_vf\_\_来进行标记，这种设计方案有如下优点：
-
--   \_\_aicore\_\_和\_\_simd\_vf\_\_代码隔离清晰，编译器可以对编译器BuiltIn API的使用范围是否合法做检测。
--   对函数调用做完善的检查报错，比如在\_\_simd\_vf\_\_内调用\_\_aicore\_\_函数或者simt函数等错误用法。
--   使用\_\_simd\_vf\_\_函数编程，用户可以控制某些优化选项（如多个simd vf函数融合）只针对特定函数生效，或针对特定函数关闭某些优化。
-
-本示例中，在\_\_aicore\_\_函数Compute中调用了VF函数AddVF进行向量加法操作。
-
+AscendC::Reg::LoadAlign(srcReg, srcAddr);
+AscendC::Reg::Add(dstReg, srcReg, srcReg, mask);
 ```
-template <typename T> 
-__aicore__ inline void Compute()      
-{  
-     //申请输出队列并读取输入结果
-     ...
-     //调用simd vf函数
-     asc_vf_call<AddVF<T>>(dstAddr, src0Addr, src1Addr, count, oneRepeatSize, repeatTimes);
-     //写入结果到输出队列并释放输入队列的内存
-     ...
+
+当接口参数已经包含`RegTensor<T>`时，模板参数`T`通常可由编译器推导；当使用特定模式、转换接口或需要消除歧义时，可以显式填写。
+
+### 搬运模式模板参数
+
+基础API使用`LoadDist`、`StoreDist`、`PostLiteral`等模板参数表达搬运模式。
+
+```cpp
+// 对齐搬入，使用LoadDist模板参数
+AscendC::Reg::LoadAlign<float, AscendC::Reg::LoadDist::DIST_BRC_B32>(srcReg, srcAddr);
+
+// PostUpdate对齐搬入，接口执行后更新srcAddr。
+AscendC::Reg::LoadAlign<float, AscendC::Reg::PostLiteral::POST_MODE_UPDATE>(srcReg, srcAddr, stride);
+
+// 对齐搬出，使用StoreDist模板参数
+AscendC::Reg::StoreAlign<float, AscendC::Reg::StoreDist::DIST_FIRST_ELEMENT_B32>(dstAddr, dstReg, mask);
+```
+
+### MaskMergeMode模板参数
+
+部分Reg计算接口提供`MaskMergeMode`模板参数，用于描述mask未选中元素在目的寄存器中的处理方式：
+
+- `MaskMergeMode::ZEROING`：mask未选中的元素在`dstReg`中置零。
+- `MaskMergeMode::MERGING`：mask未选中的元素保留`dstReg`原值。
+
+```cpp
+AscendC::Reg::Add<T, AscendC::Reg::MaskMergeMode::ZEROING>(dstReg, src0Reg, src1Reg, mask);
+
+AscendC::Reg::Add<T, AscendC::Reg::MaskMergeMode::MERGING>(dstReg, src0Reg, src1Reg, mask);
+```
+
+> 📌 **提示**：`MaskMergeMode`只有部分接口形态支持，由软件仿真实现。实际使用时应以单个API文档中的函数原型和参数说明为准。对于不需要保留未选中元素旧值的场景，使用默认的`ZEROING`语义。
+
+## 数据对象与寄存器类型<a name="section_part4"></a>
+
+基础API使用C++类型表达Reg矢量编程中的寄存器资源。
+
+| 寄存器分类 | 基础API类型 | 用途 |
+| --- | --- | --- |
+| 矢量数据寄存器 | `RegTensor<T, regTrait>` | 保存VL或多VL长度的矢量数据，是计算接口的主要源/目的操作数 |
+| 掩码寄存器 | `MaskReg` | 控制哪些元素参与计算，也可承载比较、逻辑等结果 |
+| 地址寄存器 | `AddrReg` | 保存UB访问偏移，适合固定stride、多维索引等搬运场景 |
+| 搬入非对齐寄存器 | `UnalignRegForLoad` | 连续非对齐搬入的临时缓存 |
+| 搬出非对齐寄存器 | `UnalignRegForStore` | 连续非对齐搬出的临时缓存 |
+
+`RegTensor`和`MaskReg`等寄存器对象只能作为整体使用，不能按C++数组方式访问其中某个元素。相关硬件含义、宽度、mask bit对应关系请参考[Reg矢量计算编程（语言扩展C API）](../基于指针的C语言编程/Reg矢量计算编程.md)中“寄存器类型与申请”章节。
+
+### 与LocalTensor衔接
+
+Reg矢量搬运接口实际访问的是UB地址。基于Tensor的Cpp编程中，外层通常使用`LocalTensor`管理UB数据。
+
+```cpp
+template <typename T>
+__aicore__ inline void Compute()
+{
+    AscendC::LocalTensor<T> dst = ubAllocator.Alloc<T, TILE_LENGTH>();
+    // 参数计算等
+    ......
+    asc_vf_call<AddVF<T>>(dst, src0, src1, oneRepeatSize, repeatTimes);
+    // 尾处理
+    ......
 }
 ```
 
-## Reg矢量计算寄存器<a name="section1910719438134"></a>
+这种写法使基础API 能够与`__aicore__`中`LocalTensor`流程衔接。
 
-Reg矢量计算API操作的基础数据类型介绍如下，具体API请参考[Reg矢量计算](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Reg矢量计算/Reg矢量计算.md)。
+> 📌 **提示**：使用LocalTensor作为VF函数参数时，不能使用引用LocalTensor &。因为在`__aicore__`和`__simd_vf__`是两个相互隔离的执行域，无法通过跨执行域通过引用访问。
 
--   **RegTensor**
+## 特性描述<a name="section_part5"></a>
 
-    矢量数据寄存器，Reg矢量计算基本存储单元，用于矢量计算。RegTensor的位宽是VL（Vector Length），可存储VL/sizeof\(T\)的数据（T表示数据类型）。
+### 寄存器构造类
 
--   **MaskReg**
+#### Mask创建
 
-    掩码寄存器，用于矢量计算中选择参与计算的元素。MaskReg的位宽是VL/8。
+[`CreateMask`](../../../../../api/SIMD-API/基础API/Reg矢量计算/寄存器数据类型/MaskReg.md)用于创建固定模式的`MaskReg`，[`UpdateMask`](../../../../../api/SIMD-API/基础API/Reg矢量计算/寄存器数据类型/MaskReg.md)用于根据剩余元素数生成尾块mask。
 
--   **UnalignRegForLoad & UnalignRegForStore**
+```cpp
+AscendC::Reg::MaskReg fullMask = AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::ALL>();
 
-    非对齐寄存器，作为缓冲区，用来优化UB和RegTensor之间的连续非对齐地址访问的开销。在读非对齐地址前，UnalignReg应该通过LoadUnAlignPre初始化，然后再使用LoadUnAlign。在写非对齐地址时，先使用StoreUnAlign，再使用StoreUnAlignPost进行后处理。
+AscendC::Reg::MaskReg mask = AscendC::Reg::UpdateMask<T>(remainCount);
+```
 
--   **AddrReg**
+`UpdateMask<T>(remainCount)`适合放在VF循环中进行尾块处理。其语义与C API中的`asc_update_mask_b*`一致。
 
-    地址寄存器，用于存储地址偏移量的寄存器。AddrReg通过CreateAddrReg初始化，然后在循环之中使用AddrReg存储地址偏移量。AddrReg在每层循环中根据所设置的stride进行自增。
+#### 地址寄存器创建
 
-    本示例中的AddVF函数通过Reg矢量计算API的add接口实现两组数据的相加操作，实现高效、灵活的向量计算。通过设置MaskReg掩码寄存器，根据实际有效数据长度count生成掩码mask，控制参与运算的数据元素的数量。通过LoadAlign/StoreAlign接口，实现UB和Reg矢量计算寄存器之间的数据搬运。
+[`CreateAddrReg`](../../../../../api/SIMD-API/基础API/Reg矢量计算/寄存器数据类型/AddrReg.md)用于创建保存UB偏移量的`AddrReg`，最多支持四层循环跳转。
 
-    本示例为连续对齐搬入搬出场景，使用到的寄存器类型为RegTensor、MaskReg和AddrReg。
-
-    ```
-    template<typename T>
-    __simd_vf__ inline void AddVF(__ubuf__ T* dstAddr, __ubuf__  T* src0Addr, __ubuf__ T* src1Addr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
-    {
-        AscendC::Reg::RegTensor<T> srcReg0;
-        AscendC::Reg::RegTensor<T> srcReg1;
-        AscendC::Reg::RegTensor<T> dstReg;
-        AscendC::Reg::MaskReg mask;
-        AscendC::Reg::AddrReg aReg;
-        for (uint16_t i = 0; i < repeatTimes; ++i) {
-            aReg = AscendC::Reg::CreateAddrReg<T>(i, oneRepeatSize);
-            mask = AscendC::Reg::UpdateMask<T>(count);
-            AscendC::Reg::LoadAlign(srcReg0, src0Addr, aReg);
-            AscendC::Reg::LoadAlign(srcReg1, src1Addr, aReg);
-            AscendC::Reg::Add(dstReg, srcReg0, srcReg1, mask);
-            AscendC::Reg::StoreAlign(dstAddr, dstReg, aReg, mask);
+```cpp
+AscendC::Reg::AddrReg aReg;
+for(uint16_t i = 0;i < extent1; i++){
+    for(uint16_t j = 0;j < extent2; j++){
+        for(uint16_t k = 0;k < extent3; k++){
+            for(uint16_t m = 0;m < extent4; m++){
+                aReg = AscendC::Reg::CreateAddrReg(i, const1, j, const2, k, const3, m, const4);
+                AscendC::Reg::LoadAlign(srcReg, srcAddr, aReg);
+            }
         }
     }
-    ```
-
-    本示例为连续非对齐搬入搬出场景，使用到的寄存器类型为RegTensor、MaskReg、AddrReg以及UnalignRegForLoad和UnalignRegForStore。
-
-    ```
-    template <typename T>
-    __simd_vf__ inline void LoadUnAlignVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t oneRepeatSize, uint16_t repeatTimes)
-    {
-        AscendC::Reg::RegTensor<T> srcReg;
-        AscendC::Reg::UnalignRegForLoad ureg0;
-        AscendC::Reg::UnalignRegForStore ureg1;
-        AscendC::Reg::AddrReg aReg;
-        for (uint16_t i = 0; i < repeatTimes; ++i) {
-            aReg = AscendC::Reg::CreateAddrReg<T>(i, oneRepeatSize);
-            AscendC::Reg::LoadUnAlignPre(ureg0, srcAddr, aReg);
-            AscendC::Reg::LoadUnAlign(srcReg, ureg0, srcAddr, aReg, 0);
-            AscendC::Reg::StoreUnAlign(dstAddr, srcReg, ureg1, aReg);
-        }
-        AscendC::Reg::StoreUnAlignPost(dstAddr, ureg1, aReg);
-    }
-    ```
-
-## 流水线同步控制<a name="section1633824511379"></a>
-
-在SIMD的VF函数的编写中，有时候需要将不同的值根据循环写入到同一个地址中，或者目标dst和源src是同一个地址，这就涉及到不同流水的同步指令。SIMD VF函数内不同流水线之间的同步指令使用LocalMemBar来表示。该同步指令指定src源流水线和dst目的流水线，如下图所示，目的流水线将等待源流水线上所有指令完成才进行执行。写读场景下，当写指令使用的寄存器和读指令使用的寄存器相同时，可以触发寄存器保序，指令将会按照代码顺序执行，不需要插入同步指令，而当写指令使用的寄存器和读指令使用的的寄存器不同时，如果要确保两条指令顺序执行，则需要插入同步指令，写写场景同理。
-
-![](../../../../figures/同步流水.png)
-
-函数原型：
-
-```
-template <MemType src, MemType dst> 
-__simd_callee__ inline void LocalMemBar()
+}
 ```
 
-## 如何使用Reg矢量计算API<a name="section1227863453815"></a>
+### 数据搬运类
 
-基于寄存器的编程模型是指每次循环将一个VL长度的数据从从LocalTensor通过数据搬运指令加载到寄存器中，进行复杂的数学计算Compute后搬出到LocalTensor中，所有的计算逻辑均在寄存器中完成，从而减少LocalTensor间的数据搬运，大大提升了整体性能，具体流程如下所示：
+#### 通用搬运
 
-![](../../../../figures/微指令编程流程图.png)
+`Load` / `Store`不要求用户区分UB地址是否32B对齐，适合希望统一处理对齐和非对齐地址的场景。
 
-以AddVF函数为例，首先定义三个矢量数据寄存器srcReg0、srcReg1和dstReg以及掩码寄存器mask，每次将一个VL长度的数据使用数据搬运函数从src0、src1搬入到数据寄存器srcReg0、srcReg1中，地址偏移是src0Addr+ i \* oneRepeatSize、src1Addr + i \* oneRepeatSize，然后调用Add函数，将结果存入到dstReg中（dstReg= srcReg0 + srcReg1\)，mask表示参与Add计算的元素个数，最后调用数据搬运函数将结果从dstReg中搬出到dst。
-
-Add的原型定义如下：
-
-```
-template <typename T = DefaultType, MaskMergeMode mode = MaskMergeMode::ZEROING, typename U>
-__simd_callee__ inline void Add(U& dstReg, U& srcReg0, U& srcReg1, MaskReg& mask)
+```cpp
+AscendC::Reg::Load(srcReg, srcAddr);
+AscendC::Reg::Store(dstAddr, dstReg);
+AscendC::Reg::Store(dstAddr, dstReg, count);
 ```
 
-其中模板参数T表示操作数数据类型，MaskMergeMode表示mask未筛选的元素在dst中置零或者保留原值，UpdateMask函数用于更新参与计算的mask元素，每次循环都会消耗一个VL长度的元素。LoadAlign和StoreAlign函数用于数据的搬入搬出，LoadAlign\(srcReg0, src0Addr + i \* oneRepeatSize\)表示数据从LocalTensor搬入到srcReg0寄存器，起始地址是src0Addr + i \* oneRepeatSize，StoreAlign\(dstAddr+ i \* oneRepeatSize, dstReg,  mask\)表示将dstReg搬出到LocalTensor，目标地址是dstAddr + i \* oneRepatSize, mask表示有多少元素参与搬出。
+通用搬运是软件封装，性能敏感且地址满足对齐条件时，优先使用对齐搬运。
 
-## Reg矢量计算编程示例<a name="section13119114173116"></a>
+#### 对齐搬运
 
-以Add函数为例，宏函数AddVF使用\_\_simd\_vf\_\_标记，这样的函数也被称为**SIMD VF**函数。AddVF包含6个参数。dstAddr表示输出数据，src0Addr和src1Addr表示输入数据。\_\_ubuf\_\_ 类型表示用于矢量计算的Local Memory（Unified Buffer），是LocalTensor实际存储的物理位置。count表示输入数据参与计算的元素个数，repeatTimes表示循环次数，oneRepeatSize表示每次循环参与的数据量。Add函数首先计算每次能搬入到寄存器中的数据量oneRepeatSize和循环次数repeatTimes，然后使用GetPhyAddr获取输入数据和输出数据的UB地址，并通过asc\_vf\_call<AddVF<T\>\>调用AddVF宏函数进行计算。
+[`LoadAlign`](../../../../../api/SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续对齐搬入.md) / [`StoreAlign`](../../../../../api/SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续对齐搬出.md) 适用于UB地址满足对齐要求的连续搬入/搬出，是Reg矢量编程中最常见的搬运接口。在搬运时可以按照内置的功能随路进行数据排布等操作，具体功能以对应API章节为准。
 
+```cpp
+AscendC::Reg::LoadAlign(srcReg, srcAddr);
+AscendC::Reg::StoreAlign(dstAddr, dstReg, mask);
 ```
-// SIMD函数
+
+#### 非对齐搬运
+
+连续非对齐搬入由[`LoadUnAlignPre`](../../../../../api/SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续非对齐搬入.md)和[`LoadUnAlign`](../../../../../api/SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续非对齐搬入.md)组合使用；连续非对齐搬出由[`StoreUnAlign`](../../../../../api/SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续非对齐搬出.md)和[`StoreUnAlignPost`](../../../../../api/SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续非对齐搬出.md)组合使用。
+
+```cpp
+AscendC::Reg::UnalignRegForLoad loadUreg;
+AscendC::Reg::UnalignRegForStore storeUreg;
+
+AscendC::Reg::LoadUnAlignPre(loadUreg, srcAddr);
+for (uint16_t i = 0; i < repeatTimes; ++i) {
+    AscendC::Reg::LoadUnAlign(srcReg, loadUreg, srcAddr, postUpdateStride);
+    // Reg计算
+    ...
+    AscendC::Reg::StoreUnAlign(dstAddr, dstReg, storeUreg, postUpdateStride);
+}
+AscendC::Reg::StoreUnAlignPost(dstAddr, storeUreg, 0);
+```
+
+### 矢量计算类
+
+矢量计算接口直接操作`RegTensor<T>`或`MaskReg`，通常带有`MaskReg mask`控制有效元素。
+
+####  `RegTensor<T>`与`RegTensor<T>`计算
+
+基础算术接口完成寄存器之间的逐元素计算，标量算术接口完成寄存器与标量的逐元素计算。
+
+```cpp
+AscendC::Reg::Add(dstReg, src0Reg, src1Reg, mask);
+AscendC::Reg::Mul(dstReg, src0Reg, src1Reg, mask);
+AscendC::Reg::Adds(dstReg, srcReg, scalarValue, mask);
+AscendC::Reg::Muls(dstReg, srcReg, scalarValue, mask);
+```
+
+####  `MaskReg`计算
+
+逻辑接口可操作`RegTensor`或`MaskReg`；比较接口通常输出比较结果，选择接口按mask在两个源操作数之间选择。
+
+```cpp
+AscendC::Reg::And(dstMaskReg, src0MaskReg, src1MaskReg, mask);
+AscendC::Reg::Compare(cmpMaskReg, src0Reg, src1Reg, mask);
+AscendC::Reg::Select(dstReg, src0Reg, src1Reg, cmpMaskReg, mask);
+```
+
+这些接口往往有更多模板参数或限制条件，建议在具体使用时查看对应API页面。
+
+### 同步控制类
+
+基础API使用[`LocalMemBar`](../../../../../api/SIMD-API/基础API/Reg矢量计算/同步控制/LocalMemBar.md)表达VF内部对UB访问流水线的同步约束。
+
+```cpp
+AscendC::Reg::Store(dstAddr, dstReg);
+AscendC::Reg::LocalMemBar<AscendC::Reg::MemType::VEC_STORE,
+                          AscendC::Reg::MemType::VEC_LOAD>();
+AscendC::Reg::Load(srcReg, dstAddr);
+```
+
+何时需要同步与API命名无关，判断规则请参考[Reg矢量计算编程（语言扩展C API）](../基于指针的C语言编程/Reg矢量计算编程.md)中的“流水线同步”章节。
+
+## 编程示例<a name="section_part6"></a>
+
+下面示例展示基础API的典型调用方式。外层`__aicore__`函数仍负责`LocalTensor`管理，VF函数内使用Reg基础API完成搬入、计算和搬出。
+
+```cpp
 template <typename T>
-__simd_vf__ inline void AddVF(
-    __ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf__ T* src1Addr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
+__simd_vf__ inline void AddVFv1(AscendC::LocalTensor<T> dst,
+                              AscendC::LocalTensor<T> src0,
+                              AscendC::LocalTensor<T> src1,
+                              uint32_t oneRepeatSize,
+                              uint16_t repeatTimes)
 {
     AscendC::Reg::RegTensor<T> src0Reg;
     AscendC::Reg::RegTensor<T> src1Reg;
     AscendC::Reg::RegTensor<T> dstReg;
-    AscendC::Reg::MaskReg mask;
-    for (uint16_t i = 0; i < repeatTimes; i++) {
-        mask = AscendC::Reg::UpdateMask<T>(count);
-        AscendC::Reg::LoadAlign(src0Reg, src0Addr + i * oneRepeatSize);
-        AscendC::Reg::LoadAlign(src1Reg, src1Addr + i * oneRepeatSize);
+    AscendC::Reg::MaskReg mask =
+        AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::ALL>();
+
+    for (uint16_t i = 0; i < repeatTimes; ++i) {
+        uint32_t offset = i * oneRepeatSize;
+        AscendC::Reg::LoadAlign(src0Reg, src0 + offset);
+        AscendC::Reg::LoadAlign(src1Reg, src1 + offset);
         AscendC::Reg::Add(dstReg, src0Reg, src1Reg, mask);
-        AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, mask);
+        AscendC::Reg::StoreAlign(dst + offset, dstReg, mask);
+    }
+}
+
+template <typename T>
+__simd_vf__ inline void AddVFv2(__ubuf__ float* dstAddr,
+                                __ubuf__ float* src0Addr,
+                                __ubuf__ float* src1Addr,
+                                uint32_t oneRepeatSize,
+                                uint16_t repeatTimes)
+{
+    AscendC::Reg::RegTensor<T> src0Reg;
+    AscendC::Reg::RegTensor<T> src1Reg;
+    AscendC::Reg::RegTensor<T> dstReg;
+    AscendC::Reg::MaskReg mask =
+        AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::ALL>();
+
+    for (uint16_t i = 0; i < repeatTimes; ++i) {
+        uint32_t offset = i * oneRepeatSize;
+        AscendC::Reg::LoadAlign(src0Reg, src0Addr + offset);
+        AscendC::Reg::LoadAlign(src1Reg, src1Addr + offset);
+        AscendC::Reg::Add(dstReg, src0Reg, src1Reg, mask);
+        AscendC::Reg::StoreAlign(dstAddr + offset, dstReg, mask);
     }
 }
 
 template <typename T>
 __aicore__ inline void Compute()
 {
-    AscendC::LocalTensor<T> dst = outQueueZ.AllocTensor<T>();
-    AscendC::LocalTensor<T> src0 = inQueueX.DeQue<T>();
-    AscendC::LocalTensor<T> src1 = inQueueY.DeQue<T>();
-    constexpr uint32_t oneRepeatSize = AscendC::GetVecLen() / sizeof(T);
-    uint32_t count = 512;
-    // 向上取整，计算循环次数
-    uint16_t repeatTimes = AscendC::CeilDivision(count, oneRepeatSize);
+    AscendC::LocalTensor<T> dst = ubAllocator.Alloc<T, TILE_LENGTH>();
+
+    constexpr uint32_t oneRepeatSize = 256 / sizeof(T);
+    uint16_t repeatTimes = TILE_LENGTH / oneRepeatSize;
+	// 使用LocalTensor作为参数
+    asc_vf_call<AddVFv1<T>>(dst, src0, src1, oneRepeatSize, repeatTimes);
+    
     __ubuf__ T* dstAddr = (__ubuf__ T*)dst.GetPhyAddr();
     __ubuf__ T* src0Addr = (__ubuf__ T*)src0.GetPhyAddr();
     __ubuf__ T* src1Addr = (__ubuf__ T*)src1.GetPhyAddr();
-    asc_vf_call<AddVF<T>>(dstAddr, src0Addr, src1Addr, count, oneRepeatSize, repeatTimes);
-    outQueueZ.EnQue(dst);
-    inQueueX.FreeTensor(src0);
-    inQueueY.FreeTensor(src1);
+    // 使用UB地址作为参数
+    asc_vf_call<AddVFv2<T>>(dstAddr, src0Addr, src1Addr, oneRepeatSize, repeatTimes);
 }
 ```
+
+如果需要处理尾块，可以在VF循环中使用`UpdateMask<T>`：
+
+```cpp
+uint32_t remainCount = count;
+for (uint16_t i = 0; i < repeatTimes; ++i) {
+    AscendC::Reg::MaskReg mask = AscendC::Reg::UpdateMask<T>(remainCount);
+    // Load / Compute / Store
+}
+```
+
+## 小结<a name="section_part7"></a>
+
+基础API与C API描述的是同一套Reg矢量计算能力，两者的编程模型和硬件语义保持一致。基础API的差异主要体现在接口表达方式上：它通过`AscendC::Reg::*`命名空间组织接口，使用C++寄存器类型描述VF内部的数据对象，并通过模板参数承载数据类型、搬运模式、计算模式等配置。与`LocalTensor`衔接时，可以在`__aicore__`函数中直接将`LocalTensor`作为参数传入VF函数，也可以通过`LocalTensor::GetPhyAddr()`取得UB地址后传入VF函数，再在VF函数内部使用Reg搬运接口完成访问。
