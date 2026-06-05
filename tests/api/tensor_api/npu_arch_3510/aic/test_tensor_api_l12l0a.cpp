@@ -59,6 +59,10 @@ void RunCopyWithPaths(const DstTensor& dst, const SrcTensor& src)
     Copy(atom, dst, src);
 }
 
+__ca__ float* gBatchDstBase = nullptr;
+__cbuf__ float* gBatchSrcBase = nullptr;
+uint32_t gBatchCallIndex = 0;
+
 } // namespace
 
 TEST_F(Tensor_Api_Cube_Copy_3510, CopyL12L0ARoutesToCubeArchCopy)
@@ -88,6 +92,53 @@ void load_cbuf_to_ca_stub(__ca__ T* dst, __cbuf__ T* src,
     EXPECT_EQ(mStep, M_STEP);
     EXPECT_EQ(kStep, K_STEP);
     EXPECT_EQ(transposed, transpose);
+}
+
+template<typename T, int M_STEP, int K_STEP, int SRC_STRIDE, int DST_STRIDE>
+void load_cbuf_to_ca_batch_stub(__ca__ T* dst, __cbuf__ T* src,
+                                uint16_t mStartPosition, uint16_t kStartPosition,
+                                uint8_t mStep, uint8_t kStep,
+                                int16_t srcStride, uint16_t dstStride,
+                                bool transposed) {
+    EXPECT_EQ(dst, gBatchDstBase);
+    EXPECT_EQ(src, gBatchSrcBase);
+    EXPECT_EQ(mStartPosition, 0);
+    EXPECT_EQ(kStartPosition, 0);
+    EXPECT_EQ(mStep, M_STEP);
+    EXPECT_EQ(kStep, K_STEP);
+    EXPECT_EQ(srcStride, SRC_STRIDE);
+    EXPECT_EQ(dstStride, DST_STRIDE);
+    EXPECT_FALSE(transposed);
+    ++gBatchCallIndex;
+}
+
+TEST_F(Tensor_Api_Cube_Copy_3510, CopyL12L0ABatchNz2Nz)
+{
+    using namespace AscendC::Te;
+
+    constexpr uint32_t batch = 2;
+    constexpr uint32_t m = 32;
+    constexpr uint32_t n = 32;
+    __cbuf__ float src[batch * m * n] = {0};
+    __ca__ float dst[batch * m * n] = {0};
+
+    auto batchLayout = MakeFrameLayout<NZLayoutPtn, float>(batch, m, n);
+    auto l1Tensor = MakeTensorAt<Location::L1>(src, batchLayout);
+    auto l0aTensor = MakeTensorAt<Location::L0A>(dst, batchLayout);
+
+    gBatchDstBase = dst;
+    gBatchSrcBase = src;
+    gBatchCallIndex = 0;
+
+    MOCKER_CPP(load_cbuf_to_ca,
+        void(__ca__ float*, __cbuf__ float*, uint16_t, uint16_t, uint8_t, uint8_t, int16_t, uint16_t, bool))
+        .times(1)
+        .will(invoke(&load_cbuf_to_ca_batch_stub<float, 8, 2, 8, 8>));
+
+    Copy(CopyAtom<CopyTraits<CopyL12L0A, CopyL12L0ATraitDefault>>{}, l0aTensor, l1Tensor);
+
+    EXPECT_EQ(gBatchCallIndex, 1);
+    mockcpp::GlobalMockObject::verify();
 }
 
 #define MAKE_LAYOUT_TYPE(fmt) fmt##LayoutPtn

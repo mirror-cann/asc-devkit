@@ -64,7 +64,7 @@ TEST_F(Tensor_Api_Cube_Copy_L12L0ScaleA_3510, CopyL12L0ScaleARoutesToCubeArchCop
     constexpr uint32_t m = 16;
     constexpr uint32_t n = 32;
     __cbuf__ fp8_e8m0_t src[m * n] = {0};
-    __ca__ fp8_e8m0_t dst[m * n];
+    __ca__ fp8_e8m0_t dst[m * n] = {0};
 
     auto l1Tensor = MakeTensor(MakeMemPtr<Location::L1>(src), MakeFrameLayout<ZZLayoutPtn, AscendC::Std::Int<2>>(m, n));
     auto dstPtr = MakeMemPtr<Location::L0ScaleA, fp8_e8m0_t>((reinterpret_cast<uint64_t>(dst)) / 16);
