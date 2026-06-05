@@ -34,6 +34,11 @@ template <ReduceType type = ReduceType::SUM, typename T = DefaultType,
           MaskMergeMode mode = MaskMergeMode::ZEROING, typename U>
 __simd_callee__ inline void ReduceDataBlock(U& dstReg, U srcReg, MaskReg mask);
 
+template <ReduceType type = ReduceType::SUM, typename T = DefaultType,
+          typename U = DefaultType, MaskMergeMode mode = MaskMergeMode::ZEROING,
+          typename S, typename V>
+__simd_callee__ inline void ReduceDataBlock(S& dstReg, V srcReg, MaskReg mask);
+
 template <PairReduce type = PairReduce::SUM, typename T = DefaultType,
           MaskMergeMode mode = MaskMergeMode::ZEROING, typename U>
 __simd_callee__ inline void PairReduceElem(U& dstReg, U srcReg, MaskReg mask);
