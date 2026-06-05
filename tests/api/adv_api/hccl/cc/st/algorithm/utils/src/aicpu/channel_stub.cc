@@ -79,6 +79,20 @@ HcclResult CalcChannelRequestMesh1D(HcclComm comm, const OpParam &param,
     return BuildFullyConnectedRequests(param, topoInfo->userRank, subcommInfo[COMM_LEVEL0], channels);
 }
 
+HcclResult CalcChannelRequestMesh1DLevel0(HcclComm comm, const OpParam &param,
+    const TopoInfoWithNetLayerDetails *topoInfo, const std::vector<std::vector<u32>> &subcommInfo,
+    std::vector<HcclChannelDesc> &channels)
+{
+    return CalcChannelRequestMesh1D(comm, param, topoInfo, subcommInfo, channels);
+}
+
+HcclResult CalcChannelRequestMesh1DLevel1(HcclComm comm, const OpParam &param,
+    const TopoInfoWithNetLayerDetails *topoInfo, const std::vector<std::vector<u32>> &subcommInfo,
+    std::vector<HcclChannelDesc> &channels)
+{
+    return CalcChannelRequestMesh1D(comm, param, topoInfo, subcommInfo, channels);
+}
+
 HcclResult CalcChannelRequestNhr(HcclComm comm, const OpParam &param,
     const TopoInfoWithNetLayerDetails *topoInfo, const std::vector<std::vector<u32>> &subcommInfo,
     std::vector<HcclChannelDesc> &channels)

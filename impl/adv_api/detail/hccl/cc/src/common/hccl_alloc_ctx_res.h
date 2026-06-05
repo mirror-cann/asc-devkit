@@ -18,8 +18,10 @@
 #include "hccl_res_expt.h"
 #include "load_kernel.h"
 #include "coll_alg_v2_exec_registry.h"
+#include "cann_host_bridge.h"
 
 #include <vector>
+#include <memory>
 
 using namespace mc2_ops_hccl;
 
@@ -441,8 +443,14 @@ HcclResult InitOpParamByTiling(HcclComm comm, void *stream, const std::string &t
 {
     opParam.opType = static_cast<HcclCMDType>(ccTiling->opType);
     opParam.stream = reinterpret_cast<aclrtStream>(stream);
+    opParam.engine = static_cast<CommEngine>(ccTiling->commEngine);
     CHK_RET(HcclGetCommName(comm, opParam.commName));
     CHK_RET(PrepareOpParams(comm, tag, ccTiling, opParam));
+    if (opParam.opType == HcclCMDType::HCCL_CMD_ALLTOALL) {
+        opParam.all2AllVDataDes.sendType = static_cast<HcclDataType>(ccTiling->srcDataType);
+        // sendCounts指向的host侧数组由调用方(GetOpParam)持有并填充，此处保持nullptr，
+        // 避免将数值当作指针使用导致后续解引用非法地址。
+    }
     return HCCL_SUCCESS;
 }
 
@@ -500,7 +508,14 @@ HcclResult HandleSingleRankAndCommMode(HcclComm comm, OpParam &opParam, bool &sk
 HcclResult GetOpParamResCtx(HcclComm comm, const std::string &algName, OpParam &opParam,
     TopoInfoWithNetLayerDetails *topoInfo, void **resCtxOut)
 {
-    std::unique_ptr<InsCollAlgBase> executor = CollAlgExecRegistryV2::Instance().GetAlgExec(opParam.opType, algName);
+    bool useCannResCtx = UseCannBridge(opParam);
+
+    std::unique_ptr<InsCollAlgBase> executor = nullptr;
+    if (useCannResCtx) {
+        executor = GetAlgExecViaCann(opParam.opType, algName);
+    } else {
+        executor = CollAlgExecRegistryV2::Instance().GetAlgExec(opParam.opType, algName);
+    }
     CHK_PRT_RET(executor.get() == nullptr,
         HCCL_ERROR("Fail to find executor for algName[%s]", algName.c_str()), HCCL_E_PARA);
 
@@ -522,6 +537,19 @@ HcclResult GetOpParam(HcclComm comm, void* stream, const std::string &tag, const
 {
     CHK_RET(InitOpParamByTiling(comm, stream, tag, ccTiling, opParam));
 
+    // ALLTOALL场景下sendCounts需指向host侧真实数组，且必须在整个GetOpParam调用链
+    // (含SelectAlgAndPrepareEngine、GetOpParamResCtx中的GetAlgExecViaCann)期间保持存活。
+    // 该数组持有在本函数栈帧，覆盖opParam的全部使用范围。
+    constexpr uint64_t ALLTOALL_DEFAULT_SEND_COUNTS = 200ULL * 1024 * 1024;
+    std::vector<uint64_t> sendCounts;
+    void *origSendCounts = opParam.all2AllVDataDes.sendCounts;
+    if (opParam.opType == HcclCMDType::HCCL_CMD_ALLTOALL) {
+        uint32_t userRankSize = 0;
+        CHK_RET(HcclGetRankSize(comm, &userRankSize));
+        sendCounts.assign(userRankSize, ALLTOALL_DEFAULT_SEND_COUNTS);
+        opParam.all2AllVDataDes.sendCounts = reinterpret_cast<void *>(sendCounts.data());
+    }
+
     std::string algName;
     std::unique_ptr<TopoInfoWithNetLayerDetails> topoInfo = std::make_unique<TopoInfoWithNetLayerDetails>();
     CHK_RET(SelectAlgAndPrepareEngine(comm, opParam, algName, topoInfo));
@@ -533,11 +561,15 @@ HcclResult GetOpParam(HcclComm comm, void* stream, const std::string &tag, const
     bool skipGetRes = false;
     CHK_RET(HandleSingleRankAndCommMode(comm, opParam, skipGetRes));
     if (skipGetRes) {
+        opParam.all2AllVDataDes.sendCounts = origSendCounts;
         return HCCL_SUCCESS;
     }
 
     void *resCtxSequence = nullptr;
     CHK_RET(GetOpParamResCtx(comm, algName, opParam, topoInfo.get(), &resCtxSequence));
+    // GetOpParamResCtx执行结束，sendCounts的临时host数组已不再需要，
+    // 将指向恢复为原值(大概率为nullptr)，避免遗留指向本函数栈内vector的悬空指针。
+    opParam.all2AllVDataDes.sendCounts = origSendCounts;
     return HCCL_SUCCESS;
 }
 

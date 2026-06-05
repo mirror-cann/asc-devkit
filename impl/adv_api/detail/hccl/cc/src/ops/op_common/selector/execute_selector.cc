@@ -10,6 +10,7 @@
 #include "execute_selector.h"
 #include "auto_selector_base.h"
 #include "selector_registry.h"
+#include "cann_host_bridge.h"
 
 namespace mc2_ops_hccl {
 
@@ -23,6 +24,13 @@ HcclResult ExecuteSelector::Run(OpParam &opParam, TopoInfoWithNetLayerDetails* t
     HCCL_INFO("[asc][AlgoSelect][ExecuteSelector::Run] start, opType[%d], opExecuteConfig[%d], engine[%d], "
         "isMc2[%d], commName[%s], tag[%s].", opParam.opType, opParam.opExecuteConfig, opParam.engine,
         opParam.isMc2, opParam.commName, opParam.tag);
+
+    if (UseCannBridge(opParam)) {
+        HCCL_INFO("[asc][AlgoSelect][ExecuteSelector::Run] before SelectViaCann, opType[%d], "
+            "opExecuteConfig[%d], engine[%d].", opParam.opType, opParam.opExecuteConfig, opParam.engine);
+        return SelectViaCann(opParam, topoInfo, selectAlgName);
+    }
+
     std::map<u32, AutoSelectorBase *> selectors = SelectorRegistry::Global()->GetAllSelectors();
 
     if (opParam.isMc2) {

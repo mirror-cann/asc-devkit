@@ -22,6 +22,7 @@ set(open_src_list
 
 set(open_exec_src_list
     ${CMAKE_CURRENT_SOURCE_DIR}/comm_kfc_open_kernel_executor.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/cann_dispatch_bridge.cc
 )
 
 set(open_exec_impl_src_list
@@ -58,23 +59,6 @@ set(open_exec_impl_src_list
     ${OPEN_HCCL_SRC_ROOT}/ops/all_gather/template/aicpu/ins_temp_all_gather_mesh_1D.cc
     ${OPEN_HCCL_SRC_ROOT}/ops/all_gather/template/aicpu/ins_temp_all_gather_nhr.cc
     ${OPEN_HCCL_SRC_ROOT}/ops/all_gather/template/aicpu/ins_temp_all_gather_nhr_dpu.cc
-
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_to_all_v/executor/ins_v2_all_to_all_v_sole_executor.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_to_all_v/template/aicpu/ins_temp_all_to_all_v_mesh_1D.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_to_all_v/template/aicpu/ins_temp_dpu_alltoall_mesh.cc
-
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/executor/ins_v2_all_reduce_sole_executor.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/executor/ins_v2_all_reduce_parallel_executor.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/executor/ins_v2_all_reduce_sequence_executor.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/template/aicpu/ins_temp_all_reduce_mesh_1D_one_shot.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/template/aicpu/ins_temp_all_reduce_mesh_1D_two_shot.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/template/aicpu/ins_temp_all_reduce_nhr.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/template/aicpu/ins_temp_all_reduce_aicpu_reduce_nhr.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/template/aicpu/ins_temp_all_reduce_mesh_1D_two_shot_mesh_chunk.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/template/aicpu/ins_temp_reduce_scatter_mesh_1D_intra.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/template/aicpu/ins_temp_reduce_scatter_mesh_1D_dpu_inter.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/template/aicpu/ins_temp_all_gather_mesh_1D_intra.cc
-    ${OPEN_HCCL_SRC_ROOT}/ops/all_reduce/template/aicpu/ins_temp_all_gather_nhr_dpu_inter.cc
 )
 
 add_library(ccl_kernel_decoupler OBJECT ${src_list})

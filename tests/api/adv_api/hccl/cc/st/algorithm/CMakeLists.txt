@@ -74,24 +74,6 @@ set(HCCL_CHECKER_COMMON_INCLUDE_LIST
     ${HCCL_CC_SRC_DIR}/ops/reduce_scatter/template/aiv
     ${HCCL_CC_SRC_DIR}/ops/reduce_scatter/template/ccu
     ${HCCL_CC_SRC_DIR}/ops/reduce_scatter/template/ccu/kernel
-    ${HCCL_CC_SRC_DIR}/ops/broadcast
-    ${HCCL_CC_SRC_DIR}/ops/broadcast/executor
-    ${HCCL_CC_SRC_DIR}/ops/broadcast/selector
-    ${HCCL_CC_SRC_DIR}/ops/broadcast/template
-    ${HCCL_CC_SRC_DIR}/ops/broadcast/template/aicpu
-    ${HCCL_CC_SRC_DIR}/ops/broadcast/template/aiv
-    ${HCCL_CC_SRC_DIR}/ops/broadcast/template/ccu
-    ${HCCL_CC_SRC_DIR}/ops/broadcast/template/ccu/kernel
-    ${HCCL_CC_SRC_DIR}/ops/scatter
-    ${HCCL_CC_SRC_DIR}/ops/scatter/algo
-    ${HCCL_CC_SRC_DIR}/ops/scatter/algo/template
-    ${HCCL_CC_SRC_DIR}/ops/scatter/executor
-    ${HCCL_CC_SRC_DIR}/ops/scatter/selector
-    ${HCCL_CC_SRC_DIR}/ops/scatter/template
-    ${HCCL_CC_SRC_DIR}/ops/scatter/template/aicpu
-    ${HCCL_CC_SRC_DIR}/ops/scatter/template/aiv
-    ${HCCL_CC_SRC_DIR}/ops/scatter/template/ccu
-    ${HCCL_CC_SRC_DIR}/ops/scatter/template/ccu/kernel
     ${HCCL_CC_SRC_DIR}/ops/all_gather
     ${HCCL_CC_SRC_DIR}/ops/all_gather/executor
     ${HCCL_CC_SRC_DIR}/ops/all_gather/selector
@@ -100,48 +82,6 @@ set(HCCL_CHECKER_COMMON_INCLUDE_LIST
     ${HCCL_CC_SRC_DIR}/ops/all_gather/template/aiv
     ${HCCL_CC_SRC_DIR}/ops/all_gather/template/ccu
     ${HCCL_CC_SRC_DIR}/ops/all_gather/template/ccu/kernel
-    ${HCCL_CC_SRC_DIR}/ops/all_gather_v
-    ${HCCL_CC_SRC_DIR}/ops/all_gather_v/executor
-    ${HCCL_CC_SRC_DIR}/ops/all_gather_v/selector
-    ${HCCL_CC_SRC_DIR}/ops/all_gather_v/template
-    ${HCCL_CC_SRC_DIR}/ops/all_gather_v/template/aicpu
-    ${HCCL_CC_SRC_DIR}/ops/all_gather_v/template/ccu
-    ${HCCL_CC_SRC_DIR}/ops/all_gather_v/template/ccu/kernel
-    ${HCCL_CC_SRC_DIR}/ops/all_to_all_v
-    ${HCCL_CC_SRC_DIR}/ops/all_to_all_v/executor
-    ${HCCL_CC_SRC_DIR}/ops/all_to_all_v/selector
-    ${HCCL_CC_SRC_DIR}/ops/all_to_all_v/template
-    ${HCCL_CC_SRC_DIR}/ops/all_to_all_v/template/aicpu
-    ${HCCL_CC_SRC_DIR}/ops/all_to_all_v/template/aiv
-    ${HCCL_CC_SRC_DIR}/ops/all_to_all_v/template/ccu
-    ${HCCL_CC_SRC_DIR}/ops/all_to_all_v/template/ccu/kernel
-    ${HCCL_CC_SRC_DIR}/ops/all_reduce
-    ${HCCL_CC_SRC_DIR}/ops/all_reduce/executor
-    ${HCCL_CC_SRC_DIR}/ops/all_reduce/selector
-    ${HCCL_CC_SRC_DIR}/ops/all_reduce/template
-    ${HCCL_CC_SRC_DIR}/ops/all_reduce/template/aicpu
-    ${HCCL_CC_SRC_DIR}/ops/all_reduce/template/aiv
-    ${HCCL_CC_SRC_DIR}/ops/all_reduce/template/ccu
-    ${HCCL_CC_SRC_DIR}/ops/all_reduce/template/ccu/kernel
-    ${HCCL_CC_SRC_DIR}/ops/send
-    ${HCCL_CC_SRC_DIR}/ops/send/executor
-    ${HCCL_CC_SRC_DIR}/ops/send/selector
-    ${HCCL_CC_SRC_DIR}/ops/send/template
-    ${HCCL_CC_SRC_DIR}/ops/recv
-    ${HCCL_CC_SRC_DIR}/ops/recv/executor
-    ${HCCL_CC_SRC_DIR}/ops/recv/selector
-    ${HCCL_CC_SRC_DIR}/ops/recv/template
-    ${HCCL_CC_SRC_DIR}/ops/reduce
-    ${HCCL_CC_SRC_DIR}/ops/reduce/executor
-    ${HCCL_CC_SRC_DIR}/ops/reduce/selector
-    ${HCCL_CC_SRC_DIR}/ops/reduce/template
-    ${HCCL_CC_SRC_DIR}/ops/reduce/template/aicpu
-    ${HCCL_CC_SRC_DIR}/ops/reduce/template/aiv
-    ${HCCL_CC_SRC_DIR}/ops/reduce/template/ccu
-    ${HCCL_CC_SRC_DIR}/ops/reduce/template/ccu/kernel
-    ${HCCL_CC_SRC_DIR}/ops/batch_send_recv
-    ${HCCL_CC_SRC_DIR}/ops/batch_send_recv/executor
-    ${HCCL_CC_SRC_DIR}/ops/batch_send_recv/selector
     ${UTILS_DIR}/sim_world
     ${UTILS_DIR}/common/utils
     ${UTILS_DIR}/common/exception
