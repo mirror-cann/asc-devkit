@@ -535,13 +535,6 @@ struct TransformParams&lt;CO2Layout::COLUMN_MAJOR&gt; {
 <td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p129892914147"><a name="p129892914147"></a><a name="p129892914147"></a>是否使能通道拆分的功能。默认为false，不使能该功能。仅在src和dst都为float时才能使能通道拆分，且不能同时使能ChannelSplit和NZ2ND功能。</p>
 </td>
 </tr>
-<tr id="row724265382414"><td class="cellrowborder" valign="top" width="14.19%" headers="mcps1.2.4.1.1 "><p id="p112431553152417"><a name="p112431553152417"></a><a name="p112431553152417"></a>vectorRelu</p>
-</td>
-<td class="cellrowborder" valign="top" width="9.16%" headers="mcps1.2.4.1.2 "><p id="p17243453182414"><a name="p17243453182414"></a><a name="p17243453182414"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p72431753182415"><a name="p72431753182415"></a><a name="p72431753182415"></a>vector relu参数，参与计算vector relu的tensor的地址。支持的数据类型为uint64_t。</p>
-</td>
-</tr>
 </tbody>
 </table>
 
