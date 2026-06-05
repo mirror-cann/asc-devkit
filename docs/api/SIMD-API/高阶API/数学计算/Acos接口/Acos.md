@@ -9,8 +9,12 @@
 - Atlas 推理系列产品AI Core：支持
 - Atlas 推理系列产品Vector Core：不支持
 - Atlas 训练系列产品：不支持
+<!-- npu="x90" id1 -->
 - Kirin X90：支持
+<!-- end id1 -->
+<!-- npu="9030" id2 -->
 - Kirin 9030：支持
+<!-- end id2 -->
 
 ## 功能说明
 
@@ -105,4 +109,3 @@ AscendC::Acos(dstLocal, srcLocal, sharedTmpBuffer, 512);
 输入数据(srcLocal): [0.000000 0.001000 0.002000 ...  0.252000 0.253000 -1.000000 1.000000]
 输出数据(dstLocal): [1.570796 1.569796 1.568796  ...  1.316050 1.315016 3.141593 0.000000]
 ```
-

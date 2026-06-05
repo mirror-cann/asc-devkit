@@ -9,8 +9,12 @@
 - Atlas 推理系列产品AI Core：支持
 - Atlas 推理系列产品Vector Core：不支持
 - Atlas 训练系列产品：不支持
+<!-- npu="x90" id1 -->
 - Kirin X90：支持
+<!-- end id1 -->
+<!-- npu="9030" id2 -->
 - Kirin 9030：支持
+<!-- end id2 -->
 
 ## 功能说明
 
@@ -112,4 +116,3 @@ AscendC::Sinh(dstLocal, srcLocal, sharedTmpBuffer, 512);
 输入数据(srcLocal): [-2.56  -2.55  -2.54  ...  2.53  2.54  2.55]
 输出数据(dstLocal): [-6.434  -6.37  -6.293  ...  6.234  6.293  6.37]
 ```
-
