@@ -2489,3 +2489,53 @@ CAPTURE_GM_TO_L1_IMPL(half);
 CAPTURE_GM_TO_L1_IMPL(uint16_t);
 CAPTURE_GM_TO_L1_IMPL(float);
 CAPTURE_GM_TO_L1_IMPL(uint32_t);
+
+// =========================================================================
+// Batch ND2ND (gm_to_l1)
+//
+// Layout (B, (M, N)) with strides (sB, (sM, sN)). Per-matrix internal
+// compactness is assumed (sM == N). MakeBatchPatternLayout always emits
+// sB == M*N, so the compact-fold branch fires:
+//   blockCount = 1, blockLen = B*M*N*sizeof(T), srcStride = 0, dstStride = blockLen
+// (MakeBatchNDExt is provided by the file-scope MAKE_BATCH_LAYOUT_FUNC macro above.)
+// =========================================================================
+
+#define EXPECT_GM2L1_BATCH_LAST_CALL(expectBlockCount, expectBlockLen, expectSrcStride, expectDstStride) \
+    do {                                                                                                  \
+        ASSERT_FALSE(gGm2L1AlignV2Captures.empty());                                                      \
+        const auto& last = gGm2L1AlignV2Captures.back();                                                  \
+        EXPECT_EQ(last.blockCount, static_cast<uint32_t>(expectBlockCount));                              \
+        EXPECT_EQ(last.blockLen, static_cast<uint32_t>(expectBlockLen));                                  \
+        EXPECT_EQ(last.srcStride, static_cast<uint64_t>(expectSrcStride));                                \
+        EXPECT_EQ(last.dstStride, static_cast<uint32_t>(expectDstStride));                                \
+    } while (0)
+
+TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ND2ND_Compact_FoldsToSingleBlock)
+{
+    using T = float;
+    constexpr uint32_t B = 4;
+    constexpr uint32_t M = 8;
+    constexpr uint32_t N = 16;
+    auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), MakeBatchNDExt<T>(B, M, N));
+    auto l1A = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), MakeBatchNDExt<T>(B, M, N));
+
+    MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{}).Call(l1A, gmA);
+
+    constexpr uint32_t expectBlockLen = B * M * N * sizeof(T);
+    EXPECT_GM2L1_BATCH_LAST_CALL(1, expectBlockLen, 0, expectBlockLen);
+}
+
+TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ND2ND_Compact_HalfType)
+{
+    using T = half;
+    constexpr uint32_t B = 2;
+    constexpr uint32_t M = 16;
+    constexpr uint32_t N = 32;
+    auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), MakeBatchNDExt<T>(B, M, N));
+    auto l1A = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), MakeBatchNDExt<T>(B, M, N));
+
+    MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{}).Call(l1A, gmA);
+
+    constexpr uint32_t expectBlockLen = B * M * N * sizeof(T);
+    EXPECT_GM2L1_BATCH_LAST_CALL(1, expectBlockLen, 0, expectBlockLen);
+}

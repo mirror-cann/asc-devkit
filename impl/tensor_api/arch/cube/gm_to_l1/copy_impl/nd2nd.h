@@ -32,7 +32,14 @@ public:
     template <const CopyGM2L1Trait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src)
     {
-        DataCopyImpl<trait, T, U>(dst, src);
+        // Batch layouts carry a leading B axis: (B, (row, col)) -> depth 3,
+        // (B, ((1, row), (1, col))) -> depth 5. Non-batch layouts are depth 2/4.
+        constexpr auto gmDepth = NestingDepthV<decltype(src.Layout().Shape())>;
+        if constexpr (gmDepth == THREE_DIM_DATA || gmDepth == FIVE_DIM_DATA) {
+            BatchDataCopyImpl<trait, T, U>(dst, src);
+        } else {
+            DataCopyImpl<trait, T, U>(dst, src);
+        }
     }
 
 private:
@@ -96,6 +103,72 @@ private:
             srcStride = 0;
             dstStride = blockLen;
         }
+        if constexpr (IsB4Type<type>) {
+            // move fp4 as b8, need to be divided by 2
+            blockLen = blockLen >> 1;
+            srcStride = srcStride >> 1;
+            dstStride = dstStride >> 1;
+        }
+        CopyGmToCbufAlignV2Base::DataCopy(dst, src, blockCount, blockLen, 0, 0, cacheMode, srcStride, dstStride);
+    }
+
+    // Batch case: layout is (B, (M, N)) with strides (sB, (sM, sN)). Per-matrix internal
+    // compactness is assumed (sM == N), so a single matrix can be moved as one blockLen-sized block.
+    // Four DataCopy params are derived directly from the batched layout:
+    //   - GetElement<Shape, Row/Column> on the batched layout returns sub-matrix M/N (the
+    //     SelectRowColTuples helper in is_format.h handles batch-axis stripping).
+    //   - Get<0>(Shape/Stride) returns the batch size and per-matrix start-to-start stride.
+    //   - When batches are also contiguous (srcBatchStride == M*N && dstBatchStride == M*N),
+    //     fold the B blocks into a single B*M*N block; otherwise emit B blocks, one per matrix.
+    template <const CopyGM2L1Trait& trait, typename T, typename U>
+    __aicore__ inline static void BatchDataCopyImpl(const T& dst, const U& src)
+    {
+        CheckTemplate<trait, T, U>();
+
+        using type = typename U::elementType;
+        auto srcLayout = src.Layout();
+        auto dstLayout = dst.Layout();
+
+        uint32_t batchSize = Get<0>(srcLayout.Shape());
+        uint64_t srcBatchStride = Get<0>(srcLayout.Stride());
+        uint32_t dstBatchStride = Get<0>(dstLayout.Stride());
+
+        // Strip the leading B axis before calling GetElement, otherwise the dim=0/1 split below
+        // would read the batch axis as row/column.
+        auto srcInner = Te::Get<1>(srcLayout);
+
+        uint32_t srcShapeRows;
+        uint32_t srcShapeColumns;
+        if constexpr (IsSatisfiedPtnFormatV<T, NDLayoutPtn>) {
+            srcShapeRows = GetElement<AttrInfo::Shape, AttrInfo::Row>(srcInner);
+            srcShapeColumns = GetElement<AttrInfo::Shape, AttrInfo::Column>(srcInner);
+        } else {
+            srcShapeRows = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcInner);
+            srcShapeColumns = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcInner);
+        }
+
+        uint32_t matrixElems = srcShapeRows * srcShapeColumns;
+        uint8_t cacheMode = src.Engine().GetCacheMode();
+
+        uint32_t blockCount;
+        uint32_t blockLen;
+        uint64_t srcStride;
+        uint32_t dstStride;
+
+        if (srcBatchStride == matrixElems && dstBatchStride == matrixElems) {
+            // batches are contiguous on both sides: fold to one B*M*N block.
+            blockCount = 1;
+            blockLen = batchSize * matrixElems * sizeof(type);
+            srcStride = 0;
+            dstStride = blockLen;
+        } else {
+            // batch-strided: B blocks, stride = per-matrix start-to-start in bytes.
+            blockCount = batchSize;
+            blockLen = matrixElems * sizeof(type);
+            srcStride = srcBatchStride * sizeof(type);
+            dstStride = dstBatchStride * sizeof(type);
+        }
+
         if constexpr (IsB4Type<type>) {
             // move fp4 as b8, need to be divided by 2
             blockLen = blockLen >> 1;

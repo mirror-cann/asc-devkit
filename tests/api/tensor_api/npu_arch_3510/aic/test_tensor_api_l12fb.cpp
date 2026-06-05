@@ -161,3 +161,46 @@ __aicore__ inline void copy_cbuf_to_fbuf_stub(__fbuf__ void* dst, __cbuf__ void*
     }
 
 DATA_COPY_TEST_L12FB_ND2ND(uint64_t, 1, 64, 1, 64)
+
+// =========================================================================
+// Batch ND2ND (l1_to_fb)
+//
+// Layout (B, (M, N)) constructed via MakeBatchPatternLayout always emits
+// sB == M*N, so the compact-fold branch fires:
+//   blockCount = 1
+//   blockLen   = ceil_align(B*M*N*sizeof(srcType), 128) / 64
+//   srcStride  = 0
+//   dstStride  = 0
+// =========================================================================
+template <typename DTYPE, int B, int M, int N>
+__aicore__ inline void copy_cbuf_to_fbuf_batch_compact_stub(__fbuf__ void* dst, __cbuf__ void* src,
+                                                            uint16_t blockCount, uint16_t blockLen,
+                                                            uint16_t srcStride, uint16_t dstStride)
+{
+    EXPECT_EQ(blockCount, 1);
+    EXPECT_EQ(blockLen, TestCeilDivision(B * M * N * sizeof(DTYPE), TEST_C2PIPE2GM_UNIT));
+    EXPECT_EQ(srcStride, 0);
+    EXPECT_EQ(dstStride, 0);
+}
+
+#define DATA_COPY_TEST_L12FB_BATCH_ND2ND_COMPACT(DTYPE, B, M, N)                                                       \
+    TEST_F(Tensor_Api_Cube_Copy_3510, TEST_TENSOR_API_DATACOPY_L12FB_BATCH_ND2ND_##DTYPE##_##B##x##M##x##N)            \
+    {                                                                                                                  \
+        using namespace AscendC::Te;                                                                                   \
+        MOCKER_CPP(copy_cbuf_to_fbuf, void(__fbuf__ void*, __cbuf__ void*, uint16_t, uint16_t, uint16_t, uint16_t))    \
+            .times(1)                                                                                                  \
+            .will(invoke(&copy_cbuf_to_fbuf_batch_compact_stub<DTYPE, B, M, N>));                                      \
+        __cbuf__ DTYPE srcData[B * M * N];                                                                             \
+        __fbuf__ DTYPE dstData[B * M * N];                                                                             \
+        auto srcLayout = MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<DTYPE>>(                                      \
+            static_cast<uint32_t>(B), static_cast<uint32_t>(M), static_cast<uint32_t>(N));                             \
+        auto dstLayout = MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<DTYPE>>(                                      \
+            static_cast<uint32_t>(B), static_cast<uint32_t>(M), static_cast<uint32_t>(N));                             \
+        auto srcTensor = MakeTensor(MakeMemPtr<Location::L1>(srcData), srcLayout);                                     \
+        auto dstTensor = MakeTensor(MakeMemPtr<Location::FIXBUF>(dstData), dstLayout);                                 \
+        Copy(CopyAtom<CopyTraits<CopyL12FB, CopyL12FBTraitDefault>>{}, dstTensor, srcTensor);                          \
+        GlobalMockObject::verify();                                                                                    \
+    }
+
+DATA_COPY_TEST_L12FB_BATCH_ND2ND_COMPACT(uint64_t, 2, 4, 64)
+DATA_COPY_TEST_L12FB_BATCH_ND2ND_COMPACT(uint64_t, 4, 1, 64)

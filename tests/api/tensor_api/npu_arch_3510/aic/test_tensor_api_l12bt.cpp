@@ -209,3 +209,90 @@ DATA_COPY_TEST_L12BIAS_ND2ND(int32_t, 1, 64, 1, 64)
 
 DATA_COPY_TEST_L12BIAS_TWO_TYPE_ND2ND(bfloat16_t, 1, 64, float, 1, 64)
 DATA_COPY_TEST_L12BIAS_TWO_TYPE_ND2ND(half, 1, 64, float, 1, 64)
+
+// =========================================================================
+// Batch ND2ND (l1_to_bt)
+//
+// Layout (B, (M, N)) constructed via MakeBatchPatternLayout always emits
+// sB == M*N, so the compact-fold branch fires:
+//   convControl = 0 (same-type) or 1 (half->float)
+//   blockCount  = 1
+//   blockLen    = ceil_division(B*M*N, C0_ELEMENT<srcType>), rounded up to 2 for fp32/int32
+//   srcStride   = 0
+//   dstStride   = 0
+// =========================================================================
+template <typename DTYPE, int B, int M, int N>
+__aicore__ inline void copy_cbuf_to_bt_batch_compact_stub(uint64_t dst, __cbuf__ DTYPE* src,
+                                                          uint16_t convControl, uint16_t blockCount,
+                                                          uint16_t blockLen, uint16_t srcStride,
+                                                          uint16_t dstStride)
+{
+    EXPECT_EQ(convControl, 0);
+    EXPECT_EQ(blockCount, 1);
+    uint16_t expectBlockLen = TestCeilDivision(B * M * N * sizeof(DTYPE), TEST_C0_SIZE);
+    if constexpr (std::is_same_v<DTYPE, float> || std::is_same_v<DTYPE, int32_t>) {
+        expectBlockLen = (expectBlockLen + 1) & ~1;
+    }
+    EXPECT_EQ(blockLen, expectBlockLen);
+    EXPECT_EQ(srcStride, 0);
+    EXPECT_EQ(dstStride, 0);
+}
+
+#define DATA_COPY_TEST_L12BIAS_BATCH_ND2ND_COMPACT(DTYPE, B, M, N)                                                     \
+    TEST_F(Tensor_Api_Cube_Copy_3510, TEST_TENSOR_API_DATACOPY_L12BIAS_BATCH_ND2ND_##DTYPE##_##B##x##M##x##N)          \
+    {                                                                                                                  \
+        using namespace AscendC::Te;                                                                                   \
+        MOCKER_CPP(copy_cbuf_to_bt,                                                                                    \
+                   void(uint64_t, __cbuf__ DTYPE*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t))                  \
+            .times(1)                                                                                                  \
+            .will(invoke(&copy_cbuf_to_bt_batch_compact_stub<DTYPE, B, M, N>));                                        \
+        __cbuf__ DTYPE srcData[B * M * N];                                                                             \
+        __biasbuf__ DTYPE dstData[B * M * N];                                                                          \
+        auto srcLayout = MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<DTYPE>>(                                      \
+            static_cast<uint32_t>(B), static_cast<uint32_t>(M), static_cast<uint32_t>(N));                             \
+        auto dstLayout = MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<DTYPE>>(                                      \
+            static_cast<uint32_t>(B), static_cast<uint32_t>(M), static_cast<uint32_t>(N));                             \
+        auto srcTensor = MakeTensor(MakeMemPtr<Location::L1>(srcData), srcLayout);                                     \
+        auto dstTensor = MakeTensor(MakeMemPtr<Location::BIAS>(dstData), dstLayout);                                   \
+        Copy(CopyAtom<CopyTraits<CopyL12BT, CopyL12BTTraitDefault>>{}, dstTensor, srcTensor);                          \
+        GlobalMockObject::verify();                                                                                    \
+    }
+
+DATA_COPY_TEST_L12BIAS_BATCH_ND2ND_COMPACT(float, 2, 4, 64)
+DATA_COPY_TEST_L12BIAS_BATCH_ND2ND_COMPACT(int32_t, 2, 4, 64)
+DATA_COPY_TEST_L12BIAS_BATCH_ND2ND_COMPACT(float, 4, 1, 64)
+
+// half -> float convControl = 1 path
+template <int B, int M, int N>
+__aicore__ inline void copy_cbuf_to_bt_batch_compact_half2float_stub(uint64_t dst, __cbuf__ half* src,
+                                                                     uint16_t convControl,
+                                                                     uint16_t blockCount, uint16_t blockLen,
+                                                                     uint16_t srcStride, uint16_t dstStride)
+{
+    EXPECT_EQ(convControl, 1);
+    EXPECT_EQ(blockCount, 1);
+    EXPECT_EQ(blockLen, TestCeilDivision(B * M * N * sizeof(half), TEST_C0_SIZE));
+    EXPECT_EQ(srcStride, 0);
+    EXPECT_EQ(dstStride, 0);
+}
+
+#define DATA_COPY_TEST_L12BIAS_BATCH_ND2ND_HALF2FLOAT(B, M, N)                                                         \
+    TEST_F(Tensor_Api_Cube_Copy_3510, TEST_TENSOR_API_DATACOPY_L12BIAS_BATCH_ND2ND_half2float_##B##x##M##x##N)         \
+    {                                                                                                                  \
+        using namespace AscendC::Te;                                                                                   \
+        MOCKER_CPP(copy_cbuf_to_bt, void(uint64_t, __cbuf__ half*, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t))  \
+            .times(1)                                                                                                  \
+            .will(invoke(&copy_cbuf_to_bt_batch_compact_half2float_stub<B, M, N>));                                    \
+        __cbuf__ half srcData[B * M * N];                                                                              \
+        __biasbuf__ float dstData[B * M * N];                                                                          \
+        auto srcLayout = MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<half>>(                                       \
+            static_cast<uint32_t>(B), static_cast<uint32_t>(M), static_cast<uint32_t>(N));                             \
+        auto dstLayout = MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<float>>(                                      \
+            static_cast<uint32_t>(B), static_cast<uint32_t>(M), static_cast<uint32_t>(N));                             \
+        auto srcTensor = MakeTensor(MakeMemPtr<Location::L1>(srcData), srcLayout);                                     \
+        auto dstTensor = MakeTensor(MakeMemPtr<Location::BIAS>(dstData), dstLayout);                                   \
+        Copy(CopyAtom<CopyTraits<CopyL12BT, CopyL12BTTraitDefault>>{}, dstTensor, srcTensor);                          \
+        GlobalMockObject::verify();                                                                                    \
+    }
+
+DATA_COPY_TEST_L12BIAS_BATCH_ND2ND_HALF2FLOAT(2, 4, 64)
