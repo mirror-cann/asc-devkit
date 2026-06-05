@@ -1,17 +1,5 @@
 # RegLayout<a name="ZH-CN_TOPIC_0000002523863827"></a>
 
-源操作数与目的操作数类型位宽不同时，可以分为两种情况：
-
-1.  源操作数与目的操作数位宽比为1:2或2:1。
-2.  源操作数与目的操作数位宽比为1:4或4:1。
-
-该数据结构是为了在两种情况中决定读或写的位置，在情景1下，可以将一个256B大小的[RegTensor](../寄存器数据类型/RegTensor.md)分为两部分，对于每一字节，其索引为下标i%2；在情景2下，可以将一个256B大小的RegTensor分为四部分，对于每一字节，其索引为下标i%4。RegLayout的取值如下：
-
--   RegLayout::ZERO，写入索引0的位置
--   RegLayout::ONE，写入索引1的位置
--   RegLayout::TWO，写入索引2的位置
--   RegLayout::THREE，写入索引3的位置
-
 ```
 enum class RegLayout {
     UNKNOWN = -1,
@@ -22,9 +10,29 @@ enum class RegLayout {
 };
 ```
 
-![](../../../../figures/RegLayout.png)
+源操作数与目的操作数类型位宽不同时，可以分为四种情况，用户可以根据实际场景选择对应的RegLayout，其中，mask的有效情况均以输入数据位宽为准。
 
-如图所示，RegLayout::ZERO/RegLayout::ONE这2种模式仅在位宽比值1:2或2:1的情况下可以使用，例如float32转int16, 位宽比为2比1。例如，对于位宽为2:1的数据类型转换，可以通过RegLayout选定写入数据的位置。当选择RegLayout::ZERO时，数据写入索引为0的位置，当选择RegLayout::ONE时，数据写入索引为1的位置。
+-   源操作数与目的操作数位宽比为1:2。
 
-RegLayout::ZERO/RegLayout::ONE/RegLayout::TWO/RegLayout::THREE这4种模式仅在位宽比值1比4或4比1的情况下可以使用，例如float32转int8,位宽比为4比1。例如，对于位宽为4:1的数据类型转换，当选择RegLayout::ZERO时，数据写入索引为0的位置；当选择RegLayout::ONE时，数据写入索引为1的位置；当选择RegLayout::TWO时，数据写入索引为2的位置；当选择RegLayout::THREE时，数据写入索引为3的位置。
+    例如，ExpSub接口输入数据类型为half\(b16\)，输出数据类型为float\(b32\)时，mask每2位有效，RegLayout确定源操作数中，每2个half类型数据参与计算的数据的位置。
+
+    ![](../../../../figures/reglayout_1_2.png)
+
+-   源操作数与目的操作数位宽比为2:1。
+
+    例如，Cast接口输入数据类型为float\(b32\)，输出数据类型为half\(b16\)，mask每4位有效，RegLayout确定目的操作数中，每2个half类型数据有效数据的位置。
+
+    ![](../../../../figures/reglayout_2_1.png)
+
+-   源操作数与目的操作数位宽比为1:4。
+
+    例如，Cast接口输入数据类型为int8\_t\(b8\)，输出数据类型为int32\_t\(b32\)，mask每1位有效，RegLayout确定源操作数中，每4个int8\_t类型数据参与计算的数据的位置。
+
+    ![](../../../../figures/reglayout_1_4.png)
+
+-   源操作数与目的操作数位宽比为4:1。
+
+    例如，Cast接口输入数据类型为int32\_t\(b32\)，输出数据类型为uint8\_t\(b8\)，mask每4位有效，RegLayout确定目的操作数中，每4个uint8\_t类型数据有效数据的位置。
+
+    ![](../../../../figures/reglayout_4_1.png)
 
