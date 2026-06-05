@@ -657,5 +657,5 @@ Ascend C为SIMT编程、SIMD与SIMT混合编程提供了布尔、整形、浮点
 // 声明
 __global__ __vector__ void add_custom(float* x, float* y, float* z);
 // 调用
-add_custom<<<numBlocks, dynUBufSize, stream>>>(x, y, z, 1024);
+add_custom<<<numBlocks, dynUBufSize, stream>>>(x, y, z);
 ```
