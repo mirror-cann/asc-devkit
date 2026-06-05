@@ -14,7 +14,6 @@
 
 import sys
 import numpy as np
-import ml_dtypes
 
 RELATIVE_TOL = 1e-3
 ABSOLUTE_TOL = 1e-3

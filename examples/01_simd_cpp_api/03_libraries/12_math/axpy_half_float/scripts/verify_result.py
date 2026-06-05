@@ -14,7 +14,6 @@
 
 import sys
 import numpy as np
-import tensorflow as tf
 
 
 relative_tol = 1e-3

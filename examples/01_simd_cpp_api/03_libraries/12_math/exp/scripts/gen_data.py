@@ -13,7 +13,6 @@
 
 
 import os
-import sys
 import numpy as np
 
 def taylor_exp(src, n):

@@ -13,7 +13,6 @@
 
 
 import os
-import argparse
 import numpy as np
 np.random.seed(9)
 

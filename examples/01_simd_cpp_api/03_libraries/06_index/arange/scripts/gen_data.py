@@ -14,7 +14,6 @@
 
 import os
 import numpy as np
-import argparse
 
 
 def gen_golden_data_simple():

@@ -17,7 +17,6 @@ from __future__ import division
 from __future__ import print_function
 
 # Imports
-import logging
 import tensorflow as tf
 import numpy as np
 

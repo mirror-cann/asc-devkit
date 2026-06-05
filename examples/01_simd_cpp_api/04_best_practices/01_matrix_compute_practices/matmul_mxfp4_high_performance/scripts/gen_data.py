@@ -16,7 +16,6 @@ import os
 import numpy as np
 import ml_dtypes
 import en_dtypes
-import math
 
 bfloat16 = ml_dtypes.bfloat16
 fp4_e1m2x2 = en_dtypes.float4_e1m2

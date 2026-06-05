@@ -12,7 +12,6 @@
 # ----------------------------------------------------------------------------------------------------------
 
 import os
-import argparse
 import copy
 import struct
 import numpy as np

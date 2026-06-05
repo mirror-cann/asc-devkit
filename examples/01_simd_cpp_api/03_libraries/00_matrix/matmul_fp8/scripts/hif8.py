@@ -14,7 +14,6 @@ from collections import namedtuple
 import logging
 import math
 import struct
-import time
 from multiprocessing import Process, Queue
 import numpy as np
 
