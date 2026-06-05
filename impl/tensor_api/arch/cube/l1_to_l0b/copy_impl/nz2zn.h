@@ -31,7 +31,15 @@ class LoadDataL12L0BNZ2ZN {
 public:
     template <const CopyL12L0BTrait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src) {
-        LoadDataImpl<trait, T, U>(dst, src);
+        if constexpr (T::layoutType::depth == FIVE_DIM_DATA) {
+            BatchLoadDataImpl<trait, T, U>(dst, src);
+        } else if constexpr (T::layoutType::depth == FOUR_DIM_DATA) {
+            LoadDataImpl<trait, T, U>(dst, src);
+        } else {
+            static_assert(T::layoutType::depth == FOUR_DIM_DATA || T::layoutType::depth == FIVE_DIM_DATA,
+                "LoadDataL12L0BZN2ZN only supports the plain fractal layout "
+                "((col0,col1),(row0,row1)) or the batch layout (B,((col0,col1),(row0,row1))).");
+        }
     }
 
 private:
@@ -60,6 +68,32 @@ private:
         auto srcStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout) / STRIDE_UNIT;
         auto dstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstLayout) / STRIDE_UNIT;
         LoadCbufToCb::LoadData<true>(dst, src, mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride);
+    }
+
+    template <const CopyL12L0BTrait& trait, typename T, typename U>
+    __aicore__ inline static void BatchLoadDataImpl(const T& dst, const U& src)
+    {
+        CheckDataType::CheckL12L0BDataType<T, U>();
+        using DstType = typename T::elementType;
+        auto dstLayout = dst.Layout();
+        auto srcLayout = src.Layout();
+        auto dstNoBatchLayout = RemoveBatchDim(dstLayout);
+        auto srcNoBatchLayout = RemoveBatchDim(srcLayout);
+        uint16_t mStartPosition = 0;
+        uint16_t kStartPosition = 0;
+        auto mStep = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(dstNoBatchLayout);
+        auto kStep = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(dstNoBatchLayout);
+        // Nz -> Zn
+        constexpr uint32_t STRIDE_UNIT = C0_ELEMENT<DstType> * FRACTAL_FIXED;
+        auto srcStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcNoBatchLayout) / STRIDE_UNIT;
+        auto dstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstNoBatchLayout) / STRIDE_UNIT;
+        auto batchNum = Get<0>(dstLayout.Shape());
+        for (uint32_t i = 0; i < batchNum; ++i) {
+            LoadCbufToCb::LoadData<true>(
+                dst(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))), 
+                src(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))), 
+                mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride);
+        }
     }
 };
 } // namespace Te
