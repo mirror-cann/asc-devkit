@@ -159,7 +159,7 @@ TransDataTo5HD接口数据格式转换，一般用于将NCHW格式转换成[NC1H
   - dstRepStride：设置为0，让目的操作数的有效起始位置为dstList的起始位置。
 
   ```cpp
-  AscendC::TransDataTomorrowHDParams transParams;
+  AscendC::TransDataTomorrowHDParams transDataParams;
   transDataParams.dstHighHalf = true; // 只对int8_t、uint8_t的入参有效，从srcLocalList的高半位读取数据
   transDataParams.srcHighHalf = true; // 只对int8_t、uint8_t的入参有效，写入dstLocalList的高半位
   transDataParams.repeatTimes = 1;    // 重复迭代次数，每次repeat处理16个DataBlock
@@ -224,7 +224,7 @@ TransDataTo5HD接口数据格式转换，一般用于将NCHW格式转换成[NC1H
   constexpr uint32_t loopCount = N * C /NCHW_CONV_ADDR_LIST_SIZE; // 4
   // 设置转换参数：NCHW → NC1HWC0
   AscendC::TransDataTo5HDParams transParams;
-  transParams.repeatTImes = 16;  // hSize * wSize / elems_per_block 处理整个HW平面需要的repeat次数
+  transParams.repeatTimes = 16;  // hSize * wSize / elems_per_block 处理整个HW平面需要的repeat次数
   transParams.dstRepStride = 16; // 循环间dstList间隔NCHW_CONV_ADDR_LIST_SIZE个DataBlock
   transParams.srcRepStride = 1;  // 循环间同一HW平面srcList连续
   // 循环处理数据

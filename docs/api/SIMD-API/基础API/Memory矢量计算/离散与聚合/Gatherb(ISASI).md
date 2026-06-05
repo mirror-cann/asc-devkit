@@ -49,7 +49,7 @@
 
 ## 功能说明<a name="section17600329101418"></a>
 
-头文件路径为："basic\_api/kernel\_operator\_vec\_gather\_intf\_impl.h"。
+头文件路径为："basic\_api/kernel\_operator\_vec\_gather\_intf.h"。
 
 Gatherb接口接受输入张量（src）、DataBlock偏移张量（offset），根据索引位置将输入张量按DataBlock（32字节）收集到结果张量（dst）中。
 

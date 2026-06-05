@@ -49,7 +49,7 @@
 
 ## 功能说明<a name="section17600329101418"></a>
 
-头文件路径为："basic\_api/kernel\_operator\_vec\_gather\_intf\_impl.h"。
+头文件路径为："basic\_api/kernel\_operator\_vec\_gather\_intf.h"。
 
 Gather接口接受输入张量（src）、地址偏移张量（srcOffset）和基地址（srcBaseAddr），根据基地址和地址偏移量确定输入张量的索引，将输入张量中对应元素收集到结果张量（dst）中。
 

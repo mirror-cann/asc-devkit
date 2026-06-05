@@ -101,11 +101,30 @@
 | ------ | --------- | ---- |
 | dst    |  输出     | 目的操作数。<br>类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT。 |
 | src | 输入 | 源操作数。<br>类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT。|
-| roundMode | 输入 | 精度转换处理模式，类型是RoundMode。<br>RoundMode为枚举类型，用以控制精度转换处理模式，可参考[精度转换规则](../../数据结构/precision_conversion.md)，枚举类型具体定义为：<pre>enum class RoundMode {<br>    CAST_NONE = 0,  // 在转换有精度损失时表示CAST_RINT模式，不涉及精度损失时表示不舍入<br>    CAST_RINT,      // rint，四舍六入五成双舍入<br>    CAST_FLOOR,     // floor，向负无穷舍入<br>    CAST_CEIL,      // ceil，向正无穷舍入<br>    CAST_ROUND,     // round，四舍五入舍入<br>    CAST_TRUNC,     // trunc，向零舍入<br>    CAST_ODD,       // Von Neumann rounding，最近邻奇数舍入<br>};</pre> |
+| roundMode | 输入 | 精度转换处理模式，类型是RoundMode。<br>RoundMode为枚举类型，用以控制精度转换处理模式，可参考[精度转换规则](../../数据结构/precision_conversion.md)。RoundMode取值说明请参考[RoundMode取值说明](#roundmode取值说明)。 |
 | count | 输入 | 参与计算的元素个数。<br>**注：参数取值范围和操作数的数据类型有关，数据类型不同，能够处理的元素个数最大值不同，最大处理的数据量不能超过UB大小限制。** |
 | mask/mask[] | 输入 | mask用于控制每次迭代内参与计算的元素。<br>注意：数据类型转换的mask会按照输入和输出类型中sizeof(dtype)较大的来筛选。<br>设置详见[掩码操作](../SIMD计算说明/掩码/概述.md)。 |
 | repeatTime | 输入| 重复迭代次数。<br>矢量计算单元，每次读取连续的256Bytes数据进行计算，为完成对输入数据的处理，必须通过多次迭代（repeat）才能完成所有数据的读取与计算。repeatTime表示迭代的次数。<br>关于该参数的具体描述请参考[高维切分](../SIMD计算说明/高维切分.md)。 |
 | repeatParams | 输入 | 控制操作数地址步长的参数。[UnaryRepeatParams](../../../其他数据类型/UnaryRepeatParams.md)类型，包含操作数相邻迭代间相同DataBlock的地址步长，操作数同一迭代内不同DataBlock的地址步长等参数。<br>相邻迭代间的地址步长参数说明请参考[repeatStride](../SIMD计算说明/高维切分.md)；同一迭代内DataBlock的地址步长参数说明请参考[dataBlockStride](../SIMD计算说明/高维切分.md)。 |
+
+### RoundMode取值说明
+
+枚举类型具体定义为：
+
+```cpp
+enum class RoundMode {
+  CAST_NONE = 0,  // 在转换有精度损失时表示CAST_RINT模式，不涉及精度损失时表示不舍入
+  CAST_RINT,      // rint，四舍六入五成双舍入
+  CAST_FLOOR,     // floor，向负无穷舍入
+  CAST_CEIL,      // ceil，向正无穷舍入
+  CAST_ROUND,     // round，四舍五入舍入
+  CAST_TRUNC,     // trunc，向零舍入
+  CAST_ODD,       // Von Neumann rounding，最近邻奇数舍入
+  CAST_HYBRID,    // hybrid，目前特指输出结果是hifloat8_t数据时，会用到的一种随机舍入
+};
+```
+
+**注**：仅在支持hifloat8_t数据类型的硬件平台，才支持CAST_HYBRID转换模式。
 
 ## 数据类型
 
@@ -470,7 +489,7 @@
 
 ## 更多样例
 
-更多地，您可以参考以下样例，了解如何使用Cast指令的tensor高维切分计算接口，进行更灵活的操作、实现更高级的功能。
+您可以参考以下样例，了解如何使用Cast指令的tensor高维切分计算接口，进行更灵活的操作、实现更高级的功能。
 
 通过tensor高维切分计算接口中的mask连续模式，实现数据非连续计算。
 
@@ -479,7 +498,7 @@ uint64_t mask = 32;  // 每个迭代内只计算前32个数
 AscendC::Cast(dstLocal, srcLocal, AscendC::RoundMode::CAST_CEIL, mask, 8, { 1, 1, 8, 4 });
 ```
 
-结果示例如下：
+结果示例如下，输出数据中每个迭代的前32个数以外的数据是未初始化数据：
 
 ```plain
 输入数据(srcLocal): 
