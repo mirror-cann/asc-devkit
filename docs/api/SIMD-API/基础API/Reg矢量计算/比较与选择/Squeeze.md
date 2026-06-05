@@ -155,4 +155,3 @@ __simd_vf__ inline void SqueezeVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint
      AscendC::Reg::StoreUnAlignPost(dstAddr, ureg);
 }
 ```
-

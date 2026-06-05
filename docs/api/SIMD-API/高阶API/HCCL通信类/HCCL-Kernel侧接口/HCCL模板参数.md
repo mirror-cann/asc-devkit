@@ -112,7 +112,7 @@ HCCL_SERVER_TYPE_END  // 预留参数，不支持使用
 
 ## 调用示例<a name="section11493459173619"></a>
 
-通过如下传入模板参数config的方式创建Hccl类对象，指定HCCL客户端仅在AIV的10号核上发送通信消息给服务端，替代通过调用[GetBlockIdx](../../../基础API/系统变量访问/GetBlockIdx.md)接口的方式指定运行的核。
+通过如下传入模板参数config的方式创建Hccl类对象，指定HCCL客户端仅在AIV的10号核上发送通信消息给服务端，替代通过调用[GetBlockIdx](../../../基础API/工具接口/系统资源与变量/GetBlockIdx.md)接口的方式指定运行的核。
 
 ```
 static constexpr HcclServerConfig HCCL_CFG = {CoreType::ON_AIV, 10};

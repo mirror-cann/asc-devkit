@@ -49,7 +49,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-获取通信域内卡的数量。该接口默认在所有核上工作，用户也可以在调用前通过[GetBlockIdx](../../../基础API/系统变量访问/GetBlockIdx.md)指定其在某一个核上运行。
+获取通信域内卡的数量。该接口默认在所有核上工作，用户也可以在调用前通过[GetBlockIdx](../../../基础API/工具接口/系统资源与变量/GetBlockIdx.md)指定其在某一个核上运行。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 

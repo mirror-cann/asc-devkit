@@ -94,7 +94,7 @@
 -   读取Global Memory的数据，但该数据可能在外部被其余核修改，此时需要使用DataCacheCleanAndInvalid接口，直接访问Global Memory，获取最新数据；
 
 -   用户通过Scalar单元写Global Memory的数据，希望立刻写出，也需要使用DataCacheCleanAndInvalid接口。
--   针对Ascend 950PR/Ascend 950DT，原子操作过程中，如果希望改变后续数据的饱和模式，需要先使用DataCacheCleanAndInvalid接口将Cache Line中现存的数据立刻写出，再调用[SetCtrlSpr](../系统变量访问/SetCtrlSpr(ISASI).md)设置后续数据的饱和模式。
+-   针对Ascend 950PR/Ascend 950DT，原子操作过程中，如果希望改变后续数据的饱和模式，需要先使用DataCacheCleanAndInvalid接口将Cache Line中现存的数据立刻写出，再调用[SetCtrlSpr](../特殊寄存器访问/SetCtrlSpr(ISASI).md)设置后续数据的饱和模式。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 

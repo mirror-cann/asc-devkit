@@ -49,7 +49,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-阻塞AI Core，非[细粒度通信](Iterate-99.md)时，等待handleId对应的通信任务完成，[细粒度通信](Iterate-99.md)时，等待handleId对应的[步长](../HCCL-Tiling侧接口/SetStepSize.md)长度的子通信任务完成。handleId调用Wait接口的顺序，须和Prepare接口一致。该接口默认在所有核上工作，用户也可以在调用前通过[GetBlockIdx](../../../基础API/系统变量访问/GetBlockIdx.md)指定其在某一个核上运行。
+阻塞AI Core，非[细粒度通信](Iterate-99.md)时，等待handleId对应的通信任务完成，[细粒度通信](Iterate-99.md)时，等待handleId对应的[步长](../HCCL-Tiling侧接口/SetStepSize.md)长度的子通信任务完成。handleId调用Wait接口的顺序，须和Prepare接口一致。该接口默认在所有核上工作，用户也可以在调用前通过[GetBlockIdx](../../../基础API/工具接口/系统资源与变量/GetBlockIdx.md)指定其在某一个核上运行。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 

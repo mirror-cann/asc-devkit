@@ -53,7 +53,7 @@
 
 -   descId：用户自定义标识符，用于区分不同打点位置。
 -   rsv：保留值，默认为0，无需关注。
--   timeStamp：当前系统cycle数，用于计算时间差，时间换算规则可参考[GetSystemCycle\(ISASI\)](../../SIMD-API/基础API/系统变量访问/GetSystemCycle(ISASI).md)。
+-   timeStamp：当前系统cycle数，用于计算时间差，时间换算规则可参考[GetSystemCycle\(ISASI\)](../../SIMD-API/基础API/工具接口/系统资源与变量/GetSystemCycle(ISASI).md)。
 -   pcPtr：pc指针数值，若无特殊需求，用户无需关注。
 -   entry：算子开始执行的cycle数，若无特殊需求，用户无需关注。
 
@@ -120,4 +120,3 @@ opType=AddCustom, DumpHead: AIV-0, CoreType=AIV, block dim=8, total_block_num=8,
 ...// 一些框架内部的打点信息
 descId is 11, rsv is 0, timeStamp is 815603975350485, pcPtr is 19792358553124, entry is 815603975328116.
 ```
-
