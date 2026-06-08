@@ -27,6 +27,48 @@
 
 namespace AscendC {
 
+__aicore__ inline uint32_t HtoNL(uint32_t x)
+{
+    constexpr uint32_t byte0Mask = 0x000000ffU;
+    constexpr uint32_t byte1Mask = 0x0000ff00U;
+    constexpr uint32_t byte2Mask = 0x00ff0000U;
+    constexpr uint32_t byte3Mask = 0xff000000U;
+    constexpr uint32_t byteShift = 8;
+    constexpr uint32_t wordShift = 24;
+
+    return (((x & byte3Mask) >> wordShift) | ((x & byte2Mask) >> byteShift) | ((x & byte1Mask) << byteShift) |
+        ((x & byte0Mask) << wordShift));
+}
+
+__aicore__ inline uint64_t HtoNLL(uint64_t x)
+{
+    constexpr uint64_t byte0Mask = 0x00000000000000ffU;
+    constexpr uint64_t byte1Mask = 0x000000000000ff00U;
+    constexpr uint64_t byte2Mask = 0x0000000000ff0000U;
+    constexpr uint64_t byte3Mask = 0x00000000ff000000U;
+    constexpr uint64_t byte4Mask = 0x000000ff00000000U;
+    constexpr uint64_t byte5Mask = 0x0000ff0000000000U;
+    constexpr uint64_t byte6Mask = 0x00ff000000000000U;
+    constexpr uint64_t byte7Mask = 0xff00000000000000U;
+
+    constexpr uint64_t shift8 = 8;
+    constexpr uint64_t shift24 = 24;
+    constexpr uint64_t shift40 = 40;
+    constexpr uint64_t shift56 = 56;
+
+    return (((x & byte0Mask) << shift56) | ((x & byte1Mask) << shift40) |
+            ((x & byte2Mask) << shift24) | ((x & byte3Mask) << shift8) |
+            ((x & byte4Mask) >> shift8) | ((x & byte5Mask) >> shift24) |
+            ((x & byte6Mask) >> shift40) | ((x & byte7Mask) >> shift56));
+}
+
+template<HardEvent event>
+__aicore__ inline void SyncAction()
+{
+    TEventID eventID = GetTPipePtr()->FetchEventID(event);
+    SetFlag<event>(eventID);
+    WaitFlag<event>(eventID);
+}
 __aicore__ inline __ubuf__ uint8_t* AlignAddrTo32Bytes(__ubuf__ uint8_t* buff)
 {
     uintptr_t addr = reinterpret_cast<uintptr_t>(buff);
@@ -61,7 +103,7 @@ __aicore__ inline int32_t HcommFindBufferIdx(
     RegedBufferEntity* bufferAddr, uint32_t bufferNum, GM_ADDR addr, uint64_t len)
 {
     if (bufferAddr == nullptr) {
-        KERNEL_LOG(KERNEL_ERROR, "HcommFindBufferIdx failed with null bufferAddr, bufferNum=%u", bufferNum);
+        KERNEL_LOG(KERNEL_ERROR, "HcommFindBufferIdx failed with null bufferAddr, bufferNum=%u\n", bufferNum);
         return HCOMM_FAILED;
     }
     uint64_t targetAddr = reinterpret_cast<uint64_t>(addr);
@@ -73,25 +115,29 @@ __aicore__ inline int32_t HcommFindBufferIdx(
         }
         uint64_t offset = targetAddr - baseAddr;
         if (offset <= bufferSize && len <= bufferSize - offset) {
-            KERNEL_LOG(KERNEL_INFO, "HcommFindBufferIdx hit idx=%u addr=%llu len=%llu base=%llu size=%llu ", i,
-                static_cast<unsigned long long>(targetAddr), static_cast<unsigned long long>(len),
-                static_cast<unsigned long long>(baseAddr), static_cast<unsigned long long>(bufferSize));
+            KERNEL_LOG(KERNEL_INFO, "HcommFindBufferIdx hit idx=%u addr=%llu len=%llu base=%llu size=%llu\n", i,
+                static_cast<uint64_t>(targetAddr), static_cast<uint64_t>(len),
+                static_cast<uint64_t>(baseAddr), static_cast<uint64_t>(bufferSize));
             return static_cast<int32_t>(i);
         }
     }
-    KERNEL_LOG(KERNEL_ERROR, "HcommFindBufferIdx failed addr=%llu len=%llu bufferNum=%u",
-        static_cast<unsigned long long>(targetAddr), static_cast<unsigned long long>(len), bufferNum);
+    KERNEL_LOG(KERNEL_ERROR, "HcommFindBufferIdx failed addr=%llu len=%llu bufferNum=%u\n",
+        static_cast<uint64_t>(targetAddr), static_cast<uint64_t>(len), bufferNum);
     return HCOMM_FAILED;
 }
 
-__aicore__ inline void CacheWriteThrough(__gm__ uint8_t* sourceAddr, uint64_t length)
+template <typename T>
+__aicore__ inline void CacheWriteThrough(__gm__ T* sourceAddr, uint64_t length)
 {
-    __gm__ uint8_t* start = (__gm__ uint8_t*)((uint64_t)sourceAddr / CACHE_LINE_SIZE * CACHE_LINE_SIZE);
-    __gm__ uint8_t* end = (__gm__ uint8_t*)(((uint64_t)sourceAddr + length) / CACHE_LINE_SIZE * CACHE_LINE_SIZE);
-    GlobalTensor<uint8_t> global;
+    if (length == 0) {
+        return;
+    }
+    __gm__ T* start = (__gm__ T*)((uint64_t)sourceAddr / CACHE_LINE_SIZE * CACHE_LINE_SIZE);
+    __gm__ T* end = (__gm__ T*)(((uint64_t)sourceAddr + length) / CACHE_LINE_SIZE * CACHE_LINE_SIZE);
+    GlobalTensor<T> global;
     global.SetGlobalBuffer(start);
-    for (uint32_t i = 0; i < end - start; i += CACHE_LINE_SIZE) {
-        DataCacheCleanAndInvalid<uint8_t, CacheLine::SINGLE_CACHE_LINE, DcciDst::CACHELINE_OUT>(global[i]);
+    for (uint32_t i = 0; i <= end - start; i += CACHE_LINE_SIZE) {
+        DataCacheCleanAndInvalid<T, CacheLine::SINGLE_CACHE_LINE, DcciDst::CACHELINE_OUT>(global[i]);
     }
 }
 } // namespace AscendC

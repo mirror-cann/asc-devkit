@@ -23,7 +23,7 @@
 #ifndef IMPL_ADV_API_DETAIL_HCOMM_IMPL_HCOMM_V310_IMPL_H
 #define IMPL_ADV_API_DETAIL_HCOMM_IMPL_HCOMM_V310_IMPL_H
 
-#include "platform_v310/hcomm_aiv_def.h"
+#include "platform_v310/hcomm_aiv_roce_def.h"
 #include "platform_v310/hcomm_aiv_urma_def.h"
 
 #endif

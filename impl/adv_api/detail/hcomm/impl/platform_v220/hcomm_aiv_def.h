@@ -71,10 +71,9 @@ public:
 private:
     __aicore__ inline void PostSend(ChannelHandle channelHandle, GM_ADDR dst, GM_ADDR src, uint64_t len, bool isRead);
 
-    __aicore__ inline void doorBell(__gm__ Channel* channel, uint64_t curHead);
+    __aicore__ inline void doorBell(__gm__ ChannelEntity* channel, uint64_t curHead);
 
 private:
-    TPipe pipe_;
     LocalTensor<uint64_t> ubLocal_;
     LocalTensor<uint32_t> ubLocalHead_;
 };
