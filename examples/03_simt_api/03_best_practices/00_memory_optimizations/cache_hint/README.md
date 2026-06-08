@@ -58,7 +58,7 @@
 | Case   | 实现特点                                                                 | 使用的核函数                     | 优化特性                |
 |--------|----------------------------------------------------------------------|----------------------------|---------------------|
 | Case 0 | 所有数据使用默认方式加载，输入、输出和sin表数据共同竞争DCache空间                                | sin_table_lookup_baseline  | 基线版本，无缓存优化          |
-| Case 1 | 输入数据`x`直接从GM加载，输入数据`sin_table`为热点数据，优先从DCache加载，减少对GM的加载，输出数据直接写出到GM | sin_table_lookup_optimized | 数据缓存优化，sin表常驻DCache |
+| Case 1 | 输入数据`x`直接从GM加载，查找表`sin_table`为热点数据，优先从DCache加载，减少对GM的访问，输出数据直接写出到GM | sin_table_lookup_optimized | 数据缓存优化，sin表常驻DCache |
 
 #### 1. 数据加载特点
 
@@ -70,11 +70,11 @@
 | sin_table | 32KB  | 数据被反复访问，属于热点数据    |
 | output    | 256KB | 每个元素仅写入一次，写入后不再读取 |
 
-默认情况下，加载的数据会在DCache中保存。在计算过程中，部分热点数据会被多个线程中多次使用，但另一部分数据在计算的过程中仅使用一次，这类数据不需要进行缓存，不应让这类数据与热点数据竞争DCache空间
+默认情况下，加载的数据会在DCache中保存。在计算过程中，部分热点数据会被多个线程多次使用，但另一部分数据在计算的过程中仅使用一次，这类数据不需要进行缓存，不应让这类数据与热点数据竞争DCache空间
 
 - **`asc_ldcg`**：加载数据时从Global Memory加载，适用于仅遍历一次的输入数据，减少其对DCache空间的占用
 - **`asc_ldca`**：加载数据时优先从DCache加载，适用于需要频繁访问的热点数据（如查找表），确保热点数据常驻DCache，减少从Global Memory重新加载的次数
-- **`asc_stcg`**：存储数据时直接缓存到Global Memory空间，适用于数据写到GM后不会再被使用，不需要使用Cache缓存，避免输出数据占用DCache空间影响热点数据的缓存
+- **`asc_stcg`**：存储数据时直接写入Global Memory空间，适用于数据写到GM后不会再被使用，不需要使用Cache缓存，避免输出数据占用DCache空间影响热点数据的缓存
 - input数据通过`asc_ldcg`直接从GM加载，不缓存到DCache
 - sin_table数据通过`asc_ldca`优先从DCache加载，确保常驻DCache
 - output数据通过`asc_stcg`直接写入GM，不经过DCache缓存
@@ -113,8 +113,12 @@ float x = input[idx];
 float index_float = x * static_cast<float>(table_length) / PI;
 uint32_t n = static_cast<uint32_t>(floorf(index_float));
 float frac = index_float - static_cast<float>(n);
-float low_val = sin_table[n];
-float high_val = sin_table[n + 1];
+float high_val = 0.0f;
+if (n + 1 >= table_length) {
+    high_val = sin_table[0];
+} else {
+    high_val = sin_table[n + 1];
+}
 output[idx] = sign * (low_val + frac * (high_val - low_val));
 ```
 
@@ -128,11 +132,11 @@ output[idx] = sign * (low_val + frac * (high_val - low_val));
 
 Case 0的Task Duration为56.82us，DCache Read GM为5064次，作为基线版本。
 
-Case0的场景中，加载input，output时会把数据缓存在DCache上，替换DCache中某个缓存数据，假设sin2的数据被替换掉了，当后续某个线程计算时需要sin2的数据，就会出现cache miss，需要从GM重新加载。此外，被缓存到DCache上的input和output数据实际上不会再被使用，不需要缓存，不应该占用DCache空间。
+Case 0的场景中，加载input，output时会把数据缓存在DCache上，替换DCache中某个缓存数据，假设sin_table中索引2对应的数据被替换掉了，当后续某个线程计算时需要sin_table中索引2对应数据时，就会出现cache miss，需要从GM重新加载。此外，被缓存到DCache上的input和output数据实际上不会再被使用，不需要缓存，不应该占用DCache空间。
 
-<img src="./figures/DCache访问优化.png" width="80%">
+<img src="./figures/DCache默认加载.png" width="80%">
 
-优化方向：加载input，output时不需要缓存在DCache上，保证table数据常驻DCache，后续在使用sin2数据时，可以直接从DCache加载，不需要从GM重新加载数据。
+优化方向：加载input，output时不需要缓存在DCache上，保证table数据常驻DCache，后续在使用sin_table中索引2对应数据时，可以直接从DCache加载，不需要从GM重新加载数据。
 
 ---
 
@@ -153,14 +157,19 @@ float index_float = x * static_cast<float>(table_length) / PI;
 uint32_t n = static_cast<uint32_t>(floorf(index_float));
 float frac = index_float - static_cast<float>(n);
 float low_val = asc_ldca(&sin_table[n]);
-float high_val = asc_ldca(&sin_table[n + 1]);
+float high_val = 0.0f;
+if (n + 1 >= table_length) {
+    high_val = asc_ldca(&sin_table[0]);
+} else {
+    high_val = asc_ldca(&sin_table[n + 1]);
+}
 float y = sign * (low_val + frac * (high_val - low_val));
 asc_stcg(&output[idx], y);
 ```
 
 **性能数据**：
 
-| Task Duration(us) | DCache Read GM(次) | DCache Read Vector(次) | DCache Write Vector(次) |
+| Task Duration(us) | DCache Read GM | DCache Read Vector | DCache Write Vector |
 |:-----------------:|:-----------------:|:---------------------:|:----------------------:|
 |      50.895       |       3531        |         2048          |          6144          |
 
@@ -208,7 +217,7 @@ asc_stcg(&output[idx], y);
   在本样例目录下执行如下命令。
 
   ```bash
-  SCENARIO_NUM=1                       # 选择执行场景，可选1-2
+  SCENARIO_NUM=0                       # 选择执行场景，可选0-1
   mkdir -p build && cd build;          # 创建并进入build目录
   cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j;  # 编译工程
   ./data_cache_hint                    # 执行样例
@@ -219,7 +228,7 @@ asc_stcg(&output[idx], y);
   | 选项                        | 可选值        | 说明                                                |
   |---------------------------|------------|---------------------------------------------------|
   | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
-  | `SCENARIO_NUM`            | `1`-`2`    | 样例类型，默认为1                                         |
+  | `SCENARIO_NUM`            | `0`-`1`    | 样例类型，默认为0，0:基线版本，1：数据缓存优化版本                 |
 
   执行结果如下，说明精度对比成功。
 

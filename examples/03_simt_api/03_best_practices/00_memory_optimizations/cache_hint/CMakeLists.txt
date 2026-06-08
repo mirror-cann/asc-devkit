@@ -12,7 +12,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-set(SCENARIO_NUM 1 CACHE STRING "Case type to run (1-2)")
+set(SCENARIO_NUM 0 CACHE STRING "Case type to run (0-1)")
 set(CMAKE_ASC_ARCHITECTURES "dav-3510" CACHE STRING "NPU ARCH, e.g. dav-3510")
 
 find_package(ASC REQUIRED)
