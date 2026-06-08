@@ -1,63 +1,18 @@
-# AscendAntiQuant<a name="ZH-CN_TOPIC_0000001737061570"></a>
+# AscendAntiQuant
 
-## 产品支持情况<a name="section1586581915393"></a>
+## 产品支持情况
 
-<a name="table169596713360"></a>
-<table><thead align="left"><tr id="row129590715369"><th class="cellrowborder" valign="top" width="57.99999999999999%" id="mcps1.1.3.1.1"><p id="p17959971362"><a name="p17959971362"></a><a name="p17959971362"></a><span id="ph895914718367"><a name="ph895914718367"></a><a name="ph895914718367"></a>产品</span></p>
-</th>
-<th class="cellrowborder" align="center" valign="top" width="42%" id="mcps1.1.3.1.2"><p id="p89594763612"><a name="p89594763612"></a><a name="p89594763612"></a>是否支持</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row18959673369"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1595910763613"><a name="p1595910763613"></a><a name="p1595910763613"></a><span id="ph1595918753613"><a name="ph1595918753613"></a><a name="ph1595918753613"></a>Ascend 950PR/Ascend 950DT</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1695957133611"><a name="p1695957133611"></a><a name="p1695957133611"></a>√</p>
-</td>
-</tr>
-<tr id="row18959157103612"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p13959117193618"><a name="p13959117193618"></a><a name="p13959117193618"></a><span id="ph9959117173614"><a name="ph9959117173614"></a><a name="ph9959117173614"></a><term id="zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1095914793613"><a name="p1095914793613"></a><a name="p1095914793613"></a>√</p>
-</td>
-</tr>
-<tr id="row89591478362"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p7959157163619"><a name="p7959157163619"></a><a name="p7959157163619"></a><span id="ph1995997193619"><a name="ph1995997193619"></a><a name="ph1995997193619"></a><term id="zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p149598793615"><a name="p149598793615"></a><a name="p149598793615"></a>√</p>
-</td>
-</tr>
-<tr id="row99591673368"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p595947173615"><a name="p595947173615"></a><a name="p595947173615"></a><span id="ph995910783620"><a name="ph995910783620"></a><a name="ph995910783620"></a><term id="zh-cn_topic_0000001312391781_term354143892110"><a name="zh-cn_topic_0000001312391781_term354143892110"></a><a name="zh-cn_topic_0000001312391781_term354143892110"></a>Atlas 200I/500 A2 推理产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p59606716367"><a name="p59606716367"></a><a name="p59606716367"></a>x</p>
-</td>
-</tr>
-<tr id="row1196047183615"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1898493283210"><a name="p1898493283210"></a><a name="p1898493283210"></a><span id="ph1498417326325"><a name="ph1498417326325"></a><a name="ph1498417326325"></a><term id="zh-cn_topic_0000001312391781_term1964153212227"><a name="zh-cn_topic_0000001312391781_term1964153212227"></a><a name="zh-cn_topic_0000001312391781_term1964153212227"></a>Atlas 推理系列产品</term>AI Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1680812310331"><a name="p1680812310331"></a><a name="p1680812310331"></a>√</p>
-</td>
-</tr>
-<tr id="row041413315316"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p8192738133217"><a name="p8192738133217"></a><a name="p8192738133217"></a><span id="ph1119217385324"><a name="ph1119217385324"></a><a name="ph1119217385324"></a><term id="zh-cn_topic_0000001312391781_term1463893615224"><a name="zh-cn_topic_0000001312391781_term1463893615224"></a><a name="zh-cn_topic_0000001312391781_term1463893615224"></a>Atlas 推理系列产品</term>Vector Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p124151433133113"><a name="p124151433133113"></a><a name="p124151433133113"></a>x</p>
-</td>
-</tr>
-<tr id="row69603716362"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p29601972368"><a name="p29601972368"></a><a name="p29601972368"></a><span id="ph8960167193611"><a name="ph8960167193611"></a><a name="ph8960167193611"></a><term id="zh-cn_topic_0000001312391781_term71949488213"><a name="zh-cn_topic_0000001312391781_term71949488213"></a><a name="zh-cn_topic_0000001312391781_term71949488213"></a>Atlas 训练系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p096010715361"><a name="p096010715361"></a><a name="p096010715361"></a>x</p>
-</td>
-</tr>
-<tr id="row765963474613"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p871618304717"><a name="p871618304717"></a><a name="p871618304717"></a><span id="ph16312182412620"><a name="ph16312182412620"></a><a name="ph16312182412620"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p107166301277"><a name="p107166301277"></a><a name="p107166301277"></a>√</p>
-</td>
-</tr>
-<tr id="row9139137164615"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1561151152419"><a name="p1561151152419"></a><a name="p1561151152419"></a><span id="ph161181115246"><a name="ph161181115246"></a><a name="ph161181115246"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p86113110246"><a name="p86113110246"></a><a name="p86113110246"></a>√</p>
-</td>
-</tr>
-</tbody>
-</table>
+- Ascend 950PR/Ascend 950DT：支持
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+- Atlas 200I/500 A2 推理产品：不支持
+- Atlas 推理系列产品AI Core：支持
+- Atlas 推理系列产品Vector Core：不支持
+- Atlas 训练系列产品：不支持
+- Kirin X90：支持
+- Kirin 9030：支持
 
-## 功能说明<a name="section618mcpsimp"></a>
+## 功能说明
 
 按元素做伪量化计算，比如将int8\_t数据类型伪量化为half数据类型，计算公式如下：
 
@@ -123,9 +78,9 @@
 
             ![](../../../figures/zh-cn_formulaimage_0000002106474749.png)
 
-## 实现原理<a name="section13229175017585"></a>
+## 实现原理
 
-**图 1**  AscendAntiQuant算法框图<a name="fig18399121215208"></a>  
+**图 1**  AscendAntiQuant算法框图  
 ![](../../../figures/AscendAntiQuant算法框图.png "AscendAntiQuant算法框图")
 
 如上图所示，为AscendAntiQuant的典型场景算法框图，计算过程分为如下几步，均在Vector上进行：
@@ -134,7 +89,7 @@
 2.  计算offset：当offset为向量时做Add计算，当offset为scalar时做Adds计算；
 3.  计算scale：当scale为向量时做Mul计算，当scale为scalar时做Muls计算。
 
-**图 2**  isTranspose为False且输出为bfloat16的AscendAntiQuant算法框图<a name="fig20930182422019"></a>  
+**图 2**  isTranspose为False且输出为bfloat16的AscendAntiQuant算法框图  
 ![](../../../figures/isTranspose为False且输出为bfloat16的AscendAntiQuant算法框图.png "isTranspose为False且输出为bfloat16的AscendAntiQuant算法框图")
 
 在Atlas A2 训练系列产品/Atlas A2 推理系列产品上，当输出为bfloat16时，计算过程分为如下几步：
@@ -146,7 +101,7 @@
 5.  计算scale：当输入的scale为向量时用tmp2做Mul计算，为scalar时做Muls计算；
 6.  dst精度转换：将tmp1转换为bf16类型。
 
-**图 3**  AscendAntiQuant PER\_TOKEN/PER\_GROUP算法框图<a name="fig585016572279"></a>  
+**图 3**  AscendAntiQuant PER\_TOKEN/PER\_GROUP算法框图  
 ![](../../../figures/AscendAntiQuant-PER_TOKEN-PER_GROUP算法框图.png "AscendAntiQuant-PER_TOKEN-PER_GROUP算法框图")
 
 PER\_TOKEN/PER\_GROUP b8/float4场景的计算逻辑如下：
@@ -156,7 +111,7 @@ PER\_TOKEN/PER\_GROUP b8/float4场景的计算逻辑如下：
 3.  计算：对类型转换后的数据做加乘操作；
 4.  精度转换：将上述加乘操作得到的计算结果转换成dstT类型，得到最终输出。
 
-## 函数原型<a name="section620mcpsimp"></a>
+## 函数原型
 
 -   通过sharedTmpBuffer入参传入临时空间
     -   PER\_CHANNEL场景（按通道量化）
@@ -246,76 +201,25 @@ PER\_TOKEN/PER\_GROUP b8/float4场景的计算逻辑如下：
 
 接口框架申请的方式，开发者需要预留临时空间；通过sharedTmpBuffer传入的情况，开发者需要为sharedTmpBuffer申请空间。临时空间大小BufferSize的获取方式如下：通过[GetAscendAntiQuantMaxMinTmpSize](GetAscendAntiQuantMaxMinTmpSize.md)中提供的接口获取需要预留空间的范围大小。
 
-## 参数说明<a name="section622mcpsimp"></a>
+## 参数说明
 
 **表 1**  模板参数说明
 
-<a name="table575571914269"></a>
-<table><thead align="left"><tr id="row18755131942614"><th class="cellrowborder" valign="top" width="19.39%" id="mcps1.2.3.1.1"><p id="p675519193268"><a name="p675519193268"></a><a name="p675519193268"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="80.61%" id="mcps1.2.3.1.2"><p id="p375511918267"><a name="p375511918267"></a><a name="p375511918267"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row14755141911264"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p47551198266"><a name="p47551198266"></a><a name="p47551198266"></a>InputDataType</p>
-</td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p125969172719"><a name="p125969172719"></a><a name="p125969172719"></a>输入的数据类型。</p>
-</td>
-</tr>
-<tr id="row6356241194912"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p157510160329"><a name="p157510160329"></a><a name="p157510160329"></a>OutputDataType</p>
-</td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p2882344183215"><a name="p2882344183215"></a><a name="p2882344183215"></a>输出的数据类型。</p>
-</td>
-</tr>
-<tr id="row9756719122620"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p1682112447268"><a name="p1682112447268"></a><a name="p1682112447268"></a>isTranspose</p>
-</td>
-<td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p89797304326"><a name="p89797304326"></a><a name="p89797304326"></a>是否开启输入数据转置。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 描述 |
+| --- | --- |
+| InputDataType | 输入的数据类型。 |
+| OutputDataType | 输出的数据类型。 |
+| isTranspose | 是否开启输入数据转置。 |
 
 **表 2**  PER\_TOKEN/PER\_GROUP b8/float4场景模板参数说明
 
-<a name="table589125485010"></a>
-<table><thead align="left"><tr id="row489125425015"><th class="cellrowborder" valign="top" width="19.259999999999998%" id="mcps1.2.3.1.1"><p id="p6891105420508"><a name="p6891105420508"></a><a name="p6891105420508"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="80.74%" id="mcps1.2.3.1.2"><p id="p17891145445014"><a name="p17891145445014"></a><a name="p17891145445014"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1589195475011"><td class="cellrowborder" valign="top" width="19.259999999999998%" headers="mcps1.2.3.1.1 "><p id="p188911054155015"><a name="p188911054155015"></a><a name="p188911054155015"></a>dstT</p>
-</td>
-<td class="cellrowborder" valign="top" width="80.74%" headers="mcps1.2.3.1.2 "><p id="p2182948165115"><a name="p2182948165115"></a><a name="p2182948165115"></a>目的操作数的数据类型。</p>
-</td>
-</tr>
-<tr id="row1891165475020"><td class="cellrowborder" valign="top" width="19.259999999999998%" headers="mcps1.2.3.1.1 "><p id="p68921754135010"><a name="p68921754135010"></a><a name="p68921754135010"></a>srcT</p>
-</td>
-<td class="cellrowborder" valign="top" width="80.74%" headers="mcps1.2.3.1.2 "><p id="p5182154805113"><a name="p5182154805113"></a><a name="p5182154805113"></a>源操作数的数据类型。</p>
-</td>
-</tr>
-<tr id="row789235465020"><td class="cellrowborder" valign="top" width="19.259999999999998%" headers="mcps1.2.3.1.1 "><p id="p5892135418509"><a name="p5892135418509"></a><a name="p5892135418509"></a>scaleT</p>
-</td>
-<td class="cellrowborder" valign="top" width="80.74%" headers="mcps1.2.3.1.2 "><p id="p2892165465019"><a name="p2892165465019"></a><a name="p2892165465019"></a>缩放因子scale参数的数据类型。</p>
-</td>
-</tr>
-<tr id="row089212543508"><td class="cellrowborder" valign="top" width="19.259999999999998%" headers="mcps1.2.3.1.1 "><p id="p15892165425015"><a name="p15892165425015"></a><a name="p15892165425015"></a>config</p>
-</td>
-<td class="cellrowborder" valign="top" width="80.74%" headers="mcps1.2.3.1.2 "><p id="p13892754135017"><a name="p13892754135017"></a><a name="p13892754135017"></a>量化接口配置参数，定义如下方代码所示，其中参数的含义如下。</p>
-<a name="ul558513317417"></a><a name="ul558513317417"></a><ul id="ul558513317417"><li>hasOffset：量化参数offset是否参与计算。<a name="ul186211135517"></a><a name="ul186211135517"></a><ul id="ul186211135517"><li>True：表示offset参数参与计算。</li><li>False：表示offset参数不参与计算。</li></ul>
-</li><li>isTranspose：表示是否开启输入src转置。<a name="ul156001433171912"></a><a name="ul156001433171912"></a><ul id="ul156001433171912"><li>True：表示输入src转置。</li><li>False：表示输入src不转置。</li></ul>
-</li><li>kDim：group的计算方向，即k方向。仅在PER_GROUP场景有效，支持的取值如下。<a name="ul980613301459"></a><a name="ul980613301459"></a><ul id="ul980613301459"><li>0：k轴是第0轴，即m方向为group的计算方向；</li><li>1：k轴是第1轴，即n方向为group的计算方向。</li></ul>
-</li></ul>
-</td>
-</tr>
-<tr id="row13892205418504"><td class="cellrowborder" valign="top" width="19.259999999999998%" headers="mcps1.2.3.1.1 "><p id="p10892554165011"><a name="p10892554165011"></a><a name="p10892554165011"></a>policy</p>
-</td>
-<td class="cellrowborder" valign="top" width="80.74%" headers="mcps1.2.3.1.2 "><p id="p10892185420508"><a name="p10892185420508"></a><a name="p10892185420508"></a>量化策略配置参数，枚举类型，可取值如下：</p>
-<a name="ul334134215569"></a><a name="ul334134215569"></a><ul id="ul334134215569"><li>PER_TENSOR：预留参数，暂不支持。</li><li>PER_CHANNEL：预留参数，暂不支持。</li><li>PER_TOKEN：配置为PER_TOKEN场景。</li><li>PER_GROUP：配置为PER_GROUP场景。</li><li>PER_CHANNEL_PER_GROUP：预留参数，暂不支持。</li><li>PER_TOKEN_PER_GROUP：预留参数，暂不支持。</li></ul>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 描述 |
+| --- | --- |
+| dstT | 目的操作数的数据类型。 |
+| srcT | 源操作数的数据类型。 |
+| scaleT | 缩放因子scale参数的数据类型。 |
+| config | 量化接口配置参数，定义如下方代码所示，其中参数的含义如下。<br>hasOffset：量化参数offset是否参与计算。True：表示offset参数参与计算。False：表示offset参数不参与计算。<br>isTranspose：表示是否开启输入src转置。True：表示输入src转置。False：表示输入src不转置。<br>kDim：group的计算方向，即k方向。仅在PER_GROUP场景有效，支持的取值如下。0：k轴是第0轴，即m方向为group的计算方向；1：k轴是第1轴，即n方向为group的计算方向。 |
+| policy | 量化策略配置参数，枚举类型，可取值如下：<br>PER_TENSOR：预留参数，暂不支持。<br>PER_CHANNEL：预留参数，暂不支持。<br>PER_TOKEN：配置为PER_TOKEN场景。<br>PER_GROUP：配置为PER_GROUP场景。<br>PER_CHANNEL_PER_GROUP：预留参数，暂不支持。<br>PER_TOKEN_PER_GROUP：预留参数，暂不支持。 |
 
 ```
 struct AscendAntiQuantConfig {
@@ -327,185 +231,37 @@ struct AscendAntiQuantConfig {
 
 **表 3**  PER\_TOKEN/PER\_GROUP b8/float4场景支持的数据类型组合
 
-<a name="table158181847102411"></a>
-<table><thead align="left"><tr id="row381964718248"><th class="cellrowborder" valign="top" width="30.683068306830684%" id="mcps1.2.4.1.1"><p id="p1681934711240"><a name="p1681934711240"></a><a name="p1681934711240"></a>srcDtype</p>
-</th>
-<th class="cellrowborder" valign="top" width="33.17331733173317%" id="mcps1.2.4.1.2"><p id="p4819184792415"><a name="p4819184792415"></a><a name="p4819184792415"></a>scaleDtype/offsetDtype</p>
-</th>
-<th class="cellrowborder" valign="top" width="36.14361436143614%" id="mcps1.2.4.1.3"><p id="p48194471241"><a name="p48194471241"></a><a name="p48194471241"></a>dstDtype</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1881954718248"><td class="cellrowborder" rowspan="5" valign="top" width="30.683068306830684%" headers="mcps1.2.4.1.1 "><p id="p6329646165012"><a name="p6329646165012"></a><a name="p6329646165012"></a>int8_t</p>
-</td>
-<td class="cellrowborder" valign="top" width="33.17331733173317%" headers="mcps1.2.4.1.2 "><p id="p1881984712245"><a name="p1881984712245"></a><a name="p1881984712245"></a>half</p>
-</td>
-<td class="cellrowborder" valign="top" width="36.14361436143614%" headers="mcps1.2.4.1.3 "><p id="p15414132419508"><a name="p15414132419508"></a><a name="p15414132419508"></a>half</p>
-</td>
-</tr>
-<tr id="row2819164722415"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p2819104711244"><a name="p2819104711244"></a><a name="p2819104711244"></a>bfloat16_t</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p341462445013"><a name="p341462445013"></a><a name="p341462445013"></a>bfloat16_t</p>
-</td>
-</tr>
-<tr id="row2819184711242"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p178191447122415"><a name="p178191447122415"></a><a name="p178191447122415"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p13414324155014"><a name="p13414324155014"></a><a name="p13414324155014"></a>float</p>
-</td>
-</tr>
-<tr id="row1481954718242"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p98190478243"><a name="p98190478243"></a><a name="p98190478243"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p64142247502"><a name="p64142247502"></a><a name="p64142247502"></a>half</p>
-</td>
-</tr>
-<tr id="row9819747132418"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p148191847132412"><a name="p148191847132412"></a><a name="p148191847132412"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p64141624175010"><a name="p64141624175010"></a><a name="p64141624175010"></a>bfloat16_t</p>
-</td>
-</tr>
-<tr id="row1181904702416"><td class="cellrowborder" rowspan="5" valign="top" width="30.683068306830684%" headers="mcps1.2.4.1.1 "><p id="p1978211567503"><a name="p1978211567503"></a><a name="p1978211567503"></a>hifloat8_t</p>
-</td>
-<td class="cellrowborder" valign="top" width="33.17331733173317%" headers="mcps1.2.4.1.2 "><p id="p2974122902715"><a name="p2974122902715"></a><a name="p2974122902715"></a>half</p>
-</td>
-<td class="cellrowborder" valign="top" width="36.14361436143614%" headers="mcps1.2.4.1.3 "><p id="p1414112412505"><a name="p1414112412505"></a><a name="p1414112412505"></a>half</p>
-</td>
-</tr>
-<tr id="row12819174742414"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p12974329192720"><a name="p12974329192720"></a><a name="p12974329192720"></a>bfloat16_t</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1241502411507"><a name="p1241502411507"></a><a name="p1241502411507"></a>bfloat16_t</p>
-</td>
-</tr>
-<tr id="row12820134710244"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p19974132972710"><a name="p19974132972710"></a><a name="p19974132972710"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p84151624115010"><a name="p84151624115010"></a><a name="p84151624115010"></a>float</p>
-</td>
-</tr>
-<tr id="row1382034714246"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p119742029112718"><a name="p119742029112718"></a><a name="p119742029112718"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1941512410504"><a name="p1941512410504"></a><a name="p1941512410504"></a>half</p>
-</td>
-</tr>
-<tr id="row16820147142414"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p2097432917271"><a name="p2097432917271"></a><a name="p2097432917271"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p14415192420507"><a name="p14415192420507"></a><a name="p14415192420507"></a>bfloat16_t</p>
-</td>
-</tr>
-<tr id="row6820144717249"><td class="cellrowborder" rowspan="5" valign="top" width="30.683068306830684%" headers="mcps1.2.4.1.1 "><p id="p1666914411278"><a name="p1666914411278"></a><a name="p1666914411278"></a>fp8_e5m2_t/fp8_e4m3fn_t</p>
-<p id="p20886140149"><a name="p20886140149"></a><a name="p20886140149"></a></p>
-<p id="p108861471410"><a name="p108861471410"></a><a name="p108861471410"></a></p>
-<p id="p12886642148"><a name="p12886642148"></a><a name="p12886642148"></a></p>
-<p id="p488613421414"><a name="p488613421414"></a><a name="p488613421414"></a></p>
-</td>
-<td class="cellrowborder" valign="top" width="33.17331733173317%" headers="mcps1.2.4.1.2 "><p id="p18669164419276"><a name="p18669164419276"></a><a name="p18669164419276"></a>half</p>
-</td>
-<td class="cellrowborder" valign="top" width="36.14361436143614%" headers="mcps1.2.4.1.3 "><p id="p144151924185019"><a name="p144151924185019"></a><a name="p144151924185019"></a>half</p>
-</td>
-</tr>
-<tr id="row38201547172420"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p0669154418274"><a name="p0669154418274"></a><a name="p0669154418274"></a>bfloat16_t</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p241562417509"><a name="p241562417509"></a><a name="p241562417509"></a>bfloat16_t</p>
-</td>
-</tr>
-<tr id="row138201347102416"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p46699449270"><a name="p46699449270"></a><a name="p46699449270"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p10415112416508"><a name="p10415112416508"></a><a name="p10415112416508"></a>float</p>
-</td>
-</tr>
-<tr id="row1882010471247"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1669184415276"><a name="p1669184415276"></a><a name="p1669184415276"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p941592465012"><a name="p941592465012"></a><a name="p941592465012"></a>half</p>
-</td>
-</tr>
-<tr id="row188202475248"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p176691449279"><a name="p176691449279"></a><a name="p176691449279"></a>float</p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p241614246509"><a name="p241614246509"></a><a name="p241614246509"></a>bfloat16_t</p>
-</td>
-</tr>
-<tr id="row9149111019142"><td class="cellrowborder" rowspan="2" valign="top" width="30.683068306830684%" headers="mcps1.2.4.1.1 "><p id="p18231111621415"><a name="p18231111621415"></a><a name="p18231111621415"></a>fp4x2_e1m2_t/fp4x2_e2m1_t</p>
-<p id="p17289125144216"><a name="p17289125144216"></a><a name="p17289125144216"></a>（当前均只支持PER_GROUP场景）</p>
-</td>
-<td class="cellrowborder" rowspan="2" valign="top" width="33.17331733173317%" headers="mcps1.2.4.1.2 "><p id="p109091731111414"><a name="p109091731111414"></a><a name="p109091731111414"></a>fp8_e8m0_t</p>
-</td>
-<td class="cellrowborder" valign="top" width="36.14361436143614%" headers="mcps1.2.4.1.3 "><p id="p1314911011145"><a name="p1314911011145"></a><a name="p1314911011145"></a>half</p>
-</td>
-</tr>
-<tr id="row1972181219144"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p37211512111416"><a name="p37211512111416"></a><a name="p37211512111416"></a>bfloat16_t</p>
-</td>
-</tr>
-</tbody>
-</table>
+| srcDtype | scaleDtype/offsetDtype | dstDtype |
+| --- | --- | --- |
+| int8_t | half | half |
+| int8_t | bfloat16_t | bfloat16_t |
+| int8_t | float | float |
+| int8_t | float | half |
+| int8_t | float | bfloat16_t |
+| hifloat8_t | half | half |
+| hifloat8_t | bfloat16_t | bfloat16_t |
+| hifloat8_t | float | float |
+| hifloat8_t | float | half |
+| hifloat8_t | float | bfloat16_t |
+| fp8_e5m2_t/fp8_e4m3fn_t | half | half |
+| fp8_e5m2_t/fp8_e4m3fn_t | bfloat16_t | bfloat16_t |
+| fp8_e5m2_t/fp8_e4m3fn_t | float | float |
+| fp8_e5m2_t/fp8_e4m3fn_t | float | half |
+| fp8_e5m2_t/fp8_e4m3fn_t | float | bfloat16_t |
+| fp4x2_e1m2_t/fp4x2_e2m1_t<br><br>（当前均只支持PER_GROUP场景） | fp8_e8m0_t | half |
+| fp4x2_e1m2_t/fp4x2_e2m1_t<br><br>（当前均只支持PER_GROUP场景） | fp8_e8m0_t | bfloat16_t |
 
 **表 4**  接口参数说明
 
-<a name="table44731299481"></a>
-<table><thead align="left"><tr id="row247482914489"><th class="cellrowborder" valign="top" width="16.45%" id="mcps1.2.4.1.1"><p id="p147413295483"><a name="p147413295483"></a><a name="p147413295483"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="11.31%" id="mcps1.2.4.1.2"><p id="p1147432994819"><a name="p1147432994819"></a><a name="p1147432994819"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="72.24000000000001%" id="mcps1.2.4.1.3"><p id="p74749297483"><a name="p74749297483"></a><a name="p74749297483"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row12474329104814"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.4.1.1 "><p id="p1047411294482"><a name="p1047411294482"></a><a name="p1047411294482"></a>dst</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.31%" headers="mcps1.2.4.1.2 "><p id="p047412984813"><a name="p047412984813"></a><a name="p047412984813"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.24000000000001%" headers="mcps1.2.4.1.3 "><p id="p3989161814016"><a name="p3989161814016"></a><a name="p3989161814016"></a>目的操作数。不同型号支持的数据类型请参考<a href="#li117871685514">dst支持的数据类型</a>。</p>
-<p id="p1747492917489"><a name="p1747492917489"></a><a name="p1747492917489"></a><span id="zh-cn_topic_0000001530181537_ph173308471594"><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><span id="zh-cn_topic_0000001530181537_ph9902231466"><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816"><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row18474729124817"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.4.1.1 "><p id="p54741029164810"><a name="p54741029164810"></a><a name="p54741029164810"></a>src</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.31%" headers="mcps1.2.4.1.2 "><p id="p144741829194814"><a name="p144741829194814"></a><a name="p144741829194814"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.24000000000001%" headers="mcps1.2.4.1.3 "><p id="p6914123244017"><a name="p6914123244017"></a><a name="p6914123244017"></a>源操作数。不同型号支持的数据类型请参考<a href="#li13336025165520">src支持的数据类型</a>。</p>
-<p id="p1493334184019"><a name="p1493334184019"></a><a name="p1493334184019"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_1"><a name="zh-cn_topic_0000001530181537_ph173308471594_1"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_1"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_1"><a name="zh-cn_topic_0000001530181537_ph9902231466_1"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_1"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_1"><a name="zh-cn_topic_0000001530181537_ph1782115034816_1"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_1"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row2891175273813"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.4.1.1 "><p id="p118911521386"><a name="p118911521386"></a><a name="p118911521386"></a>offset</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.31%" headers="mcps1.2.4.1.2 "><p id="p78911552113812"><a name="p78911552113812"></a><a name="p78911552113812"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.24000000000001%" headers="mcps1.2.4.1.3 "><p id="p1237485874015"><a name="p1237485874015"></a><a name="p1237485874015"></a>输入数据反量化时的偏移量。不同型号支持的数据类型请参考<a href="#li5382122225718">offset支持的数据类型</a>。</p>
-<p id="p6374105824017"><a name="p6374105824017"></a><a name="p6374105824017"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_2"><a name="zh-cn_topic_0000001530181537_ph173308471594_2"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_2"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_2"><a name="zh-cn_topic_0000001530181537_ph9902231466_2"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_2"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_2"><a name="zh-cn_topic_0000001530181537_ph1782115034816_2"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_2"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row617218172310"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.4.1.1 "><p id="p16660132211315"><a name="p16660132211315"></a><a name="p16660132211315"></a>scale</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.31%" headers="mcps1.2.4.1.2 "><p id="p156601822153115"><a name="p156601822153115"></a><a name="p156601822153115"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.24000000000001%" headers="mcps1.2.4.1.3 "><p id="p6660152253112"><a name="p6660152253112"></a><a name="p6660152253112"></a>输入数据反量化时的缩放因子。不同型号支持的数据类型请参考<a href="#li103341450906">scale支持的数据类型</a>。</p>
-<p id="p76604221311"><a name="p76604221311"></a><a name="p76604221311"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_3"><a name="zh-cn_topic_0000001530181537_ph173308471594_3"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_3"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_3"><a name="zh-cn_topic_0000001530181537_ph9902231466_3"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_3"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_3"><a name="zh-cn_topic_0000001530181537_ph1782115034816_3"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_3"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row1747412296483"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.4.1.1 "><p id="p74741029204817"><a name="p74741029204817"></a><a name="p74741029204817"></a>sharedTmpBuffer</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.31%" headers="mcps1.2.4.1.2 "><p id="p1747452954810"><a name="p1747452954810"></a><a name="p1747452954810"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.24000000000001%" headers="mcps1.2.4.1.3 "><p id="p191160465422"><a name="p191160465422"></a><a name="p191160465422"></a>临时缓存。</p>
-<p id="p979635010404"><a name="p979635010404"></a><a name="p979635010404"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_4"><a name="zh-cn_topic_0000001530181537_ph173308471594_4"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_4"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_4"><a name="zh-cn_topic_0000001530181537_ph9902231466_4"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_4"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_4"><a name="zh-cn_topic_0000001530181537_ph1782115034816_4"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_4"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-<p id="p5881016172817"><a name="p5881016172817"></a><a name="p5881016172817"></a>临时空间大小BufferSize的获取方式请参考<a href="GetAscendAntiQuantMaxMinTmpSize.md">GetAscendAntiQuantMaxMinTmpSize</a>。</p>
-</td>
-</tr>
-<tr id="row13807993916"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.4.1.1 "><p id="p338118913918"><a name="p338118913918"></a><a name="p338118913918"></a>k</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.31%" headers="mcps1.2.4.1.2 "><p id="p1516416464400"><a name="p1516416464400"></a><a name="p1516416464400"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.24000000000001%" headers="mcps1.2.4.1.3 "><p id="p6828105324810"><a name="p6828105324810"></a><a name="p6828105324810"></a>isTranspose为true时，src的shape为[N,K]；isTranspose为false时，src的shape为[K,N]。</p>
-<p id="p461124514213"><a name="p461124514213"></a><a name="p461124514213"></a>参数k对应其中的K值。</p>
-</td>
-</tr>
-<tr id="row16581165711547"><td class="cellrowborder" valign="top" width="16.45%" headers="mcps1.2.4.1.1 "><p id="p105824579541"><a name="p105824579541"></a><a name="p105824579541"></a>shapeInfo</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.31%" headers="mcps1.2.4.1.2 "><p id="p258225710542"><a name="p258225710542"></a><a name="p258225710542"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.24000000000001%" headers="mcps1.2.4.1.3 "><p id="p180617329136"><a name="p180617329136"></a><a name="p180617329136"></a>设置参数offset和scale的shape信息，仅PER_CHANNEL场景（按通道量化）需要配置。</p>
-<p id="p151661918101414"><a name="p151661918101414"></a><a name="p151661918101414"></a>可选参数。在PER_CHANNEL场景，如果未传入该参数或者结构体中数据设置为0，将从offset和scale的<a href="../../其他数据类型/ShapeInfo.md">ShapeInfo</a>中获取offset和scale的shape信息。</p>
-<p id="p9967159937"><a name="p9967159937"></a><a name="p9967159937"></a>AntiQuantShapeInfo类型，定义如下方代码所示。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| dst | 输出 | 目的操作数。不同型号支持的数据类型请参考[dst支持的数据类型](#li117871685514)。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| src | 输入 | 源操作数。不同型号支持的数据类型请参考[src支持的数据类型](#li13336025165520)。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| offset | 输入 | 输入数据反量化时的偏移量。不同型号支持的数据类型请参考[offset支持的数据类型](#li5382122225718)。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| scale | 输入 | 输入数据反量化时的缩放因子。不同型号支持的数据类型请参考[scale支持的数据类型](#li103341450906)。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| sharedTmpBuffer | 输入 | 临时缓存。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>临时空间大小BufferSize的获取方式请参考[GetAscendAntiQuantMaxMinTmpSize](GetAscendAntiQuantMaxMinTmpSize.md)。 |
+| k | 输入 | isTranspose为true时，src的shape为[N,K]；isTranspose为false时，src的shape为[K,N]。<br><br>参数k对应其中的K值。 |
+| shapeInfo | 输入 | 设置参数offset和scale的shape信息，仅PER_CHANNEL场景（按通道量化）需要配置。<br><br>可选参数。在PER_CHANNEL场景，如果未传入该参数或者结构体中数据设置为0，将从offset和scale的[ShapeInfo](../../其他数据类型/ShapeInfo.md)中获取offset和scale的shape信息。<br><br>AntiQuantShapeInfo类型，定义如下方代码所示。 |
 
 ```
 struct AntiQuantShapeInfo {
@@ -518,66 +274,14 @@ struct AntiQuantShapeInfo {
 
 **表 5**  PER\_TOKEN/PER\_GROUP b8/float4场景接口参数说明
 
-<a name="table1735215113117"></a>
-<table><thead align="left"><tr id="row435295114110"><th class="cellrowborder" valign="top" width="16.661666166616662%" id="mcps1.2.4.1.1"><p id="p1735225111115"><a name="p1735225111115"></a><a name="p1735225111115"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="10.99109910991099%" id="mcps1.2.4.1.2"><p id="p18352115112119"><a name="p18352115112119"></a><a name="p18352115112119"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="72.34723472347235%" id="mcps1.2.4.1.3"><p id="p1135235110113"><a name="p1135235110113"></a><a name="p1135235110113"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row193524511719"><td class="cellrowborder" valign="top" width="16.661666166616662%" headers="mcps1.2.4.1.1 "><p id="p15352951716"><a name="p15352951716"></a><a name="p15352951716"></a>dstTensor</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.99109910991099%" headers="mcps1.2.4.1.2 "><p id="p1635214511319"><a name="p1635214511319"></a><a name="p1635214511319"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.34723472347235%" headers="mcps1.2.4.1.3 "><p id="p18204795410"><a name="p18204795410"></a><a name="p18204795410"></a>目的操作数。支持的数据类型为：half、bfloat16_t、float。</p>
-<p id="p320416920413"><a name="p320416920413"></a><a name="p320416920413"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_5"><a name="zh-cn_topic_0000001530181537_ph173308471594_5"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_5"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_5"><a name="zh-cn_topic_0000001530181537_ph9902231466_5"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_5"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_5"><a name="zh-cn_topic_0000001530181537_ph1782115034816_5"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_5"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row123522518116"><td class="cellrowborder" valign="top" width="16.661666166616662%" headers="mcps1.2.4.1.1 "><p id="p63525511816"><a name="p63525511816"></a><a name="p63525511816"></a>srcTensor</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.99109910991099%" headers="mcps1.2.4.1.2 "><p id="p14352105115117"><a name="p14352105115117"></a><a name="p14352105115117"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.34723472347235%" headers="mcps1.2.4.1.3 "><p id="p1320459948"><a name="p1320459948"></a><a name="p1320459948"></a>源操作数。支持的数据类型为：int8_t、fp8_e4m3fn_t、fp8_e5m2_t、hifloat8_t、fp4x2_e1m2_t、fp4x2_e2m1_t。注意，对于fp4x2_e1m2_t、fp4x2_e2m1_t数据类型，仅在PER_GROUP场景下支持。</p>
-<p id="p82041993416"><a name="p82041993416"></a><a name="p82041993416"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_6"><a name="zh-cn_topic_0000001530181537_ph173308471594_6"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_6"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_6"><a name="zh-cn_topic_0000001530181537_ph9902231466_6"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_6"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_6"><a name="zh-cn_topic_0000001530181537_ph1782115034816_6"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_6"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row735217510112"><td class="cellrowborder" valign="top" width="16.661666166616662%" headers="mcps1.2.4.1.1 "><p id="p135215512117"><a name="p135215512117"></a><a name="p135215512117"></a>sharedTmpBuffer</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.99109910991099%" headers="mcps1.2.4.1.2 "><p id="p1635245114114"><a name="p1635245114114"></a><a name="p1635245114114"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.34723472347235%" headers="mcps1.2.4.1.3 "><p id="p6205129543"><a name="p6205129543"></a><a name="p6205129543"></a>临时缓存。支持的数据类型为：uint8_t。</p>
-<p id="p1120549049"><a name="p1120549049"></a><a name="p1120549049"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_7"><a name="zh-cn_topic_0000001530181537_ph173308471594_7"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_7"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_7"><a name="zh-cn_topic_0000001530181537_ph9902231466_7"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_7"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_7"><a name="zh-cn_topic_0000001530181537_ph1782115034816_7"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_7"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-<p id="p62051192418"><a name="p62051192418"></a><a name="p62051192418"></a>临时空间大小BufferSize的获取方式请参考<a href="GetAscendQuantMaxMinTmpSize.md">GetAscendQuantMaxMinTmpSize</a>。</p>
-</td>
-</tr>
-<tr id="row1235211516111"><td class="cellrowborder" valign="top" width="16.661666166616662%" headers="mcps1.2.4.1.1 "><p id="p5352185119112"><a name="p5352185119112"></a><a name="p5352185119112"></a>scaleTensor</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.99109910991099%" headers="mcps1.2.4.1.2 "><p id="p153521051117"><a name="p153521051117"></a><a name="p153521051117"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.34723472347235%" headers="mcps1.2.4.1.3 "><p id="p6205796411"><a name="p6205796411"></a><a name="p6205796411"></a>量化参数scale。支持的数据类型为：half、float、bfloat16_t、fp8_e8m0_t。</p>
-<p id="p1205119748"><a name="p1205119748"></a><a name="p1205119748"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_8"><a name="zh-cn_topic_0000001530181537_ph173308471594_8"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_8"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_8"><a name="zh-cn_topic_0000001530181537_ph9902231466_8"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_8"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_8"><a name="zh-cn_topic_0000001530181537_ph1782115034816_8"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_8"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row135285114116"><td class="cellrowborder" valign="top" width="16.661666166616662%" headers="mcps1.2.4.1.1 "><p id="p1352175111110"><a name="p1352175111110"></a><a name="p1352175111110"></a>offsetTensor</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.99109910991099%" headers="mcps1.2.4.1.2 "><p id="p33537511216"><a name="p33537511216"></a><a name="p33537511216"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.34723472347235%" headers="mcps1.2.4.1.3 "><p id="p132061398413"><a name="p132061398413"></a><a name="p132061398413"></a>量化参数offset。支持的数据类型和scaleTensor保持一致。对于float4场景，offsetTensor不生效。</p>
-<p id="p020689945"><a name="p020689945"></a><a name="p020689945"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_9"><a name="zh-cn_topic_0000001530181537_ph173308471594_9"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_9"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_9"><a name="zh-cn_topic_0000001530181537_ph9902231466_9"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_9"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_9"><a name="zh-cn_topic_0000001530181537_ph1782115034816_9"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_9"></a>类型为<a href="../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-</td>
-</tr>
-<tr id="row1235316511515"><td class="cellrowborder" valign="top" width="16.661666166616662%" headers="mcps1.2.4.1.1 "><p id="p13533516110"><a name="p13533516110"></a><a name="p13533516110"></a>para</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.99109910991099%" headers="mcps1.2.4.1.2 "><p id="p17353115110118"><a name="p17353115110118"></a><a name="p17353115110118"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="72.34723472347235%" headers="mcps1.2.4.1.3 "><p id="p535310512112"><a name="p535310512112"></a><a name="p535310512112"></a>量化接口的参数，AscendAntiQuantParam类型，具体定义如下方代码所示，其中参数的含义如下。</p>
-<a name="ul162019226375"></a><a name="ul162019226375"></a><ul id="ul162019226375"><li>m：m方向元素个数。</li><li>n：n方向元素个数。n值对应的数据大小需满足32B对齐的要求，即shape最后一维为n的输入输出均需要满足该维度上32B对齐的要求。</li><li>calCount:参与计算的元素个数。calCount必须是n的整数倍。</li><li>groupSize：PER_GROUP场景有效，表示groupSize行/列数据共用一个scale/offset。groupSize的取值必须大于0且是32的整倍数。</li></ul>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| dstTensor | 输出 | 目的操作数。支持的数据类型为：half、bfloat16_t、float。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| srcTensor | 输入 | 源操作数。支持的数据类型为：int8_t、fp8_e4m3fn_t、fp8_e5m2_t、hifloat8_t、fp4x2_e1m2_t、fp4x2_e2m1_t。注意，对于fp4x2_e1m2_t、fp4x2_e2m1_t数据类型，仅在PER_GROUP场景下支持。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| sharedTmpBuffer | 输入 | 临时缓存。支持的数据类型为：uint8_t。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>临时空间大小BufferSize的获取方式请参考[GetAscendQuantMaxMinTmpSize](GetAscendQuantMaxMinTmpSize.md)。 |
+| scaleTensor | 输入 | 量化参数scale。支持的数据类型为：half、float、bfloat16_t、fp8_e8m0_t。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| offsetTensor | 输入 | 量化参数offset。支持的数据类型和scaleTensor保持一致。对于float4场景，offsetTensor不生效。<br><br>类型为[LocalTensor](../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| para | 输入 | 量化接口的参数，AscendAntiQuantParam类型，具体定义如下方代码所示，其中参数的含义如下。<br>m：m方向元素个数。<br>n：n方向元素个数。n值对应的数据大小需满足32B对齐的要求，即shape最后一维为n的输入输出均需要满足该维度上32B对齐的要求。<br>calCount：参与计算的元素个数。calCount必须是n的整数倍。<br>groupSize：PER_GROUP场景有效，表示groupSize行/列数据共用一个scale/offset。groupSize的取值必须大于0且是32的整倍数。 |
 
 ```
 struct AscendAntiQuantParam {
@@ -588,11 +292,11 @@ struct AscendAntiQuantParam {
 }
 ```
 
-## 返回值说明<a name="section38228281712"></a>
+## 返回值说明
 
 无
 
-## 约束说明<a name="section633mcpsimp"></a>
+## 约束说明
 
 -   **不支持源操作数与目的操作数地址重叠。**
 -   操作数地址对齐要求请参见[通用地址对齐约束](../../通用说明和约束.md#section796754519912)。
@@ -601,7 +305,7 @@ struct AscendAntiQuantParam {
 -   调用接口前，确保输入数据的size正确，offset和scale的size和shape正确。
 -   PER\_TOKEN/PER\_GROUP b8/float4场景仅在Ascend 950PR/Ascend 950DT上支持。
 -   PER\_TOKEN/PER\_GROUP b8/float4场景，连续计算方向（即n方向）的数据量要求32B对齐。
--   <a name="li117871685514"></a>非PER\_TOKEN/PER\_GROUP b8/float4场景dst支持的数据类型
+-   非PER\_TOKEN/PER\_GROUP b8/float4场景dst支持的数据类型<a id="li117871685514"></a>
 
     Ascend 950PR/Ascend 950DT，支持的数据类型为：half、bfloat16\_t。
 
@@ -615,7 +319,7 @@ struct AscendAntiQuantParam {
 
     Kirin 9030，支持的数据类型为：half。
 
--   <a name="li13336025165520"></a>非PER\_TOKEN/PER\_GROUP b8/float4场景src支持的数据类型
+-   非PER\_TOKEN/PER\_GROUP b8/float4场景src支持的数据类型<a id="li13336025165520"></a>
 
     Ascend 950PR/Ascend 950DT，PER\_CHANNEL和PER\_TENSOR场景下支持的数据类型为：int8\_t、fp8\_e4m3fn\_t、fp8\_e5m2\_t、hifloat8\_t，PER\_GROUP float4场景下支持的数据类型为：fp4x2\_e2m1\_t、fp4x2\_e1m2\_t。
 
@@ -629,7 +333,7 @@ struct AscendAntiQuantParam {
 
     Kirin 9030，支持的数据类型为：int8\_t。
 
--   <a name="li5382122225718"></a>非PER\_TOKEN/PER\_GROUP b8/float4场景offset支持的数据类型
+-   非PER\_TOKEN/PER\_GROUP b8/float4场景offset支持的数据类型<a id="li5382122225718"></a>
 
     Ascend 950PR/Ascend 950DT，支持的数据类型为：half、bfloat16\_t。
 
@@ -643,7 +347,7 @@ struct AscendAntiQuantParam {
 
     Kirin 9030，支持的数据类型为：half。
 
--   <a name="li103341450906"></a>非PER\_TOKEN/PER\_GROUP b8/float4场景scale支持的数据类型
+-   非PER\_TOKEN/PER\_GROUP b8/float4场景scale支持的数据类型<a id="li103341450906"></a>
 
     Ascend 950PR/Ascend 950DT，PER\_CHANNEL和PER\_TENSOR场景下支持的数据类型为：half、bfloat16\_t。PER\_GROUP float4场景下支持的数据类型为：fp8\_e8m0\_t。
 
@@ -657,7 +361,7 @@ struct AscendAntiQuantParam {
 
     Kirin 9030，支持的数据类型为：half。
 
-## 调用示例<a name="section642mcpsimp"></a>
+## 调用示例
 
 ```
 // dstLocal：结果张量
@@ -674,20 +378,20 @@ AscendC::AscendAntiQuant<InputType, OutType, false>(dstLocal, srcLocal, offsetLo
 结果示例如下：
 
 ```
-输入数据src（shape为[2,64]，非转置场景）:  
+输入数据src（shape为[2,64]，非转置场景）:
 [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
-offset（shape为[1,64]）:  
+offset（shape为[1,64]）:
 [2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2.
  2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2.
  2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2. 2.]
-scale（shape为[1,64]）:  
+scale（shape为[1,64]）:
 [3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3.
  3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3.
  3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3. 3.]
-输出数据dstLocal（shape为[2,64]）:  
+输出数据dstLocal（shape为[2,64]）:
 [9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9.
  9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9.
  9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9. 9.
