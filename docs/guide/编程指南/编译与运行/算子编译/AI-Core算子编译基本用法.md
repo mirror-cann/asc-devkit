@@ -62,7 +62,7 @@ AI Core SIMD的基本编译流程如下：Host代码使用Host编译器编译成
 
 - 动态库编译
    ```shell
-  bisheng -shared example.asc -o libexample.so --npu-arch=dav-xxxx
+  bisheng -shared example.asc -o libexample.so --npu-arch=dav-xxxx -fPIC
   ```
 
 - 静态库编译
@@ -86,7 +86,7 @@ AI Core SIMT的基本编译流程如下：Host代码使用Host编译器编译成
 |-|-|-|
 |异构编译| bisheng <source_file>.asc -o \<output_file\> --npu-arch=dav-\<npu architecture\> | bisheng <source_file>.asc -o <output_file> --npu-arch=dav-\<npu architecture\> **--enable-simt**|
 |独立编译|bisheng **-dc** <source_file>.asc -o \<output_file\>**.o** --npu-arch=dav-\<npu architecture\>| bisheng **-dc** <source_file>.asc -o <output_file>**.o** --npu-arch=dav-\<npu architecture\> **--enable-simt**|
-|动态库编译|bisheng **-shared** <source_file>.asc -o \<output_file\>**.so** --npu-arch=dav-\<npu architecture\>| bisheng **-shared** <source_file>.asc -o <output_file>**.so** --npu-arch=dav-\<npu architecture\> **--enable-simt**|
+|动态库编译|bisheng **-shared** <source_file>.asc -o \<output_file\>**.so** --npu-arch=dav-\<npu architecture\> **-fPIC**| bisheng **-shared** <source_file>.asc -o <output_file>**.so** --npu-arch=dav-\<npu architecture\> **--enable-simt** **-fPIC**|
 |静态库编译|bisheng **-lib** <source_file>.asc -o \<output_file\>**.a** --npu-arch=dav-\<npu architecture\>| bisheng **-lib** <source_file>.asc -o <output_file>**.a** --npu-arch=dav-\<npu architecture\> **--enable-simt**|
 
 
