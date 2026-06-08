@@ -63,5 +63,6 @@ target_include_directories(
 add_library(asc_host_headers INTERFACE)
 target_include_directories(
   asc_host_headers
-  INTERFACE $<BUILD_INTERFACE:${ASCENDC_DIR}/include/adv_api/hccl/internal>
+  INTERFACE $<BUILD_INTERFACE:${ASCENDC_DIR}/include/utils>
+            $<BUILD_INTERFACE:${ASCENDC_DIR}/include/adv_api/hccl/internal>
 )
