@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_transpose_intf_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_operator_vec_transpose_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_vec_transpose_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+        "impl/basic_api/kernel_operator_vec_transpose_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_vec_transpose_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_TRANSPOSE_INTF_IMPL_H__
 #endif
@@ -55,19 +56,35 @@ template <typename T>
 __aicore__ inline void CheckTransDataTo5HDParams(const TransDataTo5HDParams& nchwconvParams)
 {
     using PrimType = PrimT<T>;
-    ASCENDC_DEBUG_ASSERT((SupportType<PrimType, int8_t, uint8_t, int16_t, uint16_t, half, int32_t, uint32_t, float>()),
-        KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check dtype in TransDataTo5HD, current api support dtype is "
-        "int8_t / uint8_t / int16_t / uint16_t / half / int32_t / uint32_t / float.\n"));
+
+#if (__NPU_ARCH__ == 3102 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
+    ASCENDC_DEBUG_ASSERT(
+        (SupportType<PrimType, int8_t, uint8_t, int16_t, uint16_t, half, bfloat16_t, int32_t, uint32_t, float>()),
+        KERNEL_LOG_INTERNAL(
+            KERNEL_ERROR, "Failed to check dtype in TransDataTo5HD, current api support dtype is "
+                          "int8_t / uint8_t / int16_t / uint16_t / half / bfloat16_t / int32_t / uint32_t / float.\n"));
+#else
+    ASCENDC_DEBUG_ASSERT(
+        (SupportType<PrimType, int8_t, uint8_t, int16_t, uint16_t, half, int32_t, uint32_t, float>()),
+        KERNEL_LOG_INTERNAL(
+            KERNEL_ERROR, "Failed to check dtype in TransDataTo5HD, current api support dtype is "
+                          "int8_t / uint8_t / int16_t / uint16_t / half / int32_t / uint32_t / float.\n"));
+#endif
     // dstHighHalf/srcHighHalf only valid for int8_t/uint8_t
     if constexpr (!SupportType<PrimType, int8_t, uint8_t>()) {
-        ASCENDC_DEBUG_ASSERT((nchwconvParams.dstHighHalf == false),
-            KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check dstHighHalf in TransDataTo5HD with TransDataTo5HDParams, "
-            "dstHighHalf is only valid for int8_t / uint8_t dtype.\n"));
-        ASCENDC_DEBUG_ASSERT((nchwconvParams.srcHighHalf == false),
-            KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check srcHighHalf in TransDataTo5HD with TransDataTo5HDParams, "
-            "srcHighHalf is only valid for int8_t / uint8_t dtype.\n"));
+        ASCENDC_DEBUG_ASSERT(
+            (nchwconvParams.dstHighHalf == false),
+            KERNEL_LOG_INTERNAL(
+                KERNEL_ERROR, "Failed to check dstHighHalf in TransDataTo5HD with TransDataTo5HDParams, "
+                              "dstHighHalf is only valid for int8_t / uint8_t dtype.\n"));
+        ASCENDC_DEBUG_ASSERT(
+            (nchwconvParams.srcHighHalf == false),
+            KERNEL_LOG_INTERNAL(
+                KERNEL_ERROR, "Failed to check srcHighHalf in TransDataTo5HD with TransDataTo5HDParams, "
+                              "srcHighHalf is only valid for int8_t / uint8_t dtype.\n"));
     }
-    CheckValueRange<int32_t>(nchwconvParams.repeatTimes, 0, 255, "repeatTimes", "TransDataTo5HD with TransDataTo5HDParams");
+    CheckValueRange<int32_t>(
+        nchwconvParams.repeatTimes, 0, 255, "repeatTimes", "TransDataTo5HD with TransDataTo5HDParams");
 }
 
 /* **************************************************************************************************
@@ -79,14 +96,17 @@ __aicore__ inline void CheckTransDataTo5HDParams(const TransDataTo5HDParams& nch
  * @param [out] dst output LocalTensor
  * @param [in] src input LocalTensor
  */
-template <typename T> __aicore__ inline void Transpose(const LocalTensor<T>& dst, const LocalTensor<T>& src)
+template <typename T>
+__aicore__ inline void Transpose(const LocalTensor<T>& dst, const LocalTensor<T>& src)
 {
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecTransposeInfo(dst, src, "Transpose");
 #endif
-    ASCENDC_ASSERT((SupportType<PrimT<T>, int16_t, uint16_t, half>()),
-        {KERNEL_LOG(KERNEL_ERROR, "Failed to check dtype in Transpose, current api support dtype combination is "
-        "src and dst both: int16_t, uint16_t, half");});
+    ASCENDC_ASSERT((SupportType<PrimT<T>, int16_t, uint16_t, half>()), {
+        KERNEL_LOG(
+            KERNEL_ERROR, "Failed to check dtype in Transpose, current api support dtype combination is "
+                          "src and dst both: int16_t, uint16_t, half");
+    });
 #if ASCENDC_CPU_DEBUG
     if (!CheckFunTranspose(dst, src, "Transpose")) {
         ASCENDC_REPORT_CHECK_ERROR("Transpose", KernelFuncType::NONE_MODE);
@@ -110,7 +130,8 @@ template <typename T> __aicore__ inline void Transpose(const LocalTensor<T>& dst
  * @param [in] nchwconvParams.srcRepStride src repeat stride
  */
 template <typename T>
-__aicore__ inline void TransDataTo5HD(const LocalTensor<T> (&dstList)[NCHW_CONV_ADDR_LIST_SIZE],
+__aicore__ inline void TransDataTo5HD(
+    const LocalTensor<T> (&dstList)[NCHW_CONV_ADDR_LIST_SIZE],
     const LocalTensor<T> (&srcList)[NCHW_CONV_ADDR_LIST_SIZE], const TransDataTo5HDParams& nchwconvParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -139,8 +160,9 @@ __aicore__ inline void TransDataTo5HD(const LocalTensor<T> (&dstList)[NCHW_CONV_
 }
 
 template <typename T>
-__aicore__ inline void TransDataTo5HD(uint64_t dstList[NCHW_CONV_ADDR_LIST_SIZE],
-    uint64_t srcList[NCHW_CONV_ADDR_LIST_SIZE], const TransDataTo5HDParams& nchwconvParams)
+__aicore__ inline void TransDataTo5HD(
+    uint64_t dstList[NCHW_CONV_ADDR_LIST_SIZE], uint64_t srcList[NCHW_CONV_ADDR_LIST_SIZE],
+    const TransDataTo5HDParams& nchwconvParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckTransDataTo5HDParams<T>(nchwconvParams);
@@ -151,24 +173,29 @@ __aicore__ inline void TransDataTo5HD(uint64_t dstList[NCHW_CONV_ADDR_LIST_SIZE]
 #endif
 #if ASCENDC_CPU_DEBUG
     for (int8_t i = 0; i < NCHW_CONV_ADDR_LIST_SIZE; i++) {
-        uint64_t dstAddr = (uint8_t *)dstList[i] -
-                           (uint8_t*)(GetTPipePtr()->GetBaseAddr(int8_t(AscendC::TPosition(TPosition::VECIN))));
-        uint64_t srcAddr = (uint8_t *)srcList[i] -
-                           (uint8_t*)(GetTPipePtr()->GetBaseAddr(int8_t(AscendC::TPosition(TPosition::VECIN))));
-        ASCENDC_DEBUG_ASSERT((dstAddr % ONE_BLK_SIZE == 0),
-            KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check dst tensor address list alignment in TransDataTo5HD, "
-            "it should be 32B aligned.\n"));
-        ASCENDC_DEBUG_ASSERT((srcAddr % ONE_BLK_SIZE == 0),
-            KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check src tensor address list alignment in TransDataTo5HD, "
-            "it should be 32B aligned.\n"));
+        uint64_t dstAddr =
+            (uint8_t*)dstList[i] - (uint8_t*)(GetTPipePtr()->GetBaseAddr(int8_t(AscendC::TPosition(TPosition::VECIN))));
+        uint64_t srcAddr =
+            (uint8_t*)srcList[i] - (uint8_t*)(GetTPipePtr()->GetBaseAddr(int8_t(AscendC::TPosition(TPosition::VECIN))));
+        ASCENDC_DEBUG_ASSERT(
+            (dstAddr % ONE_BLK_SIZE == 0),
+            KERNEL_LOG_INTERNAL(
+                KERNEL_ERROR, "Failed to check dst tensor address list alignment in TransDataTo5HD, "
+                              "it should be 32B aligned.\n"));
+        ASCENDC_DEBUG_ASSERT(
+            (srcAddr % ONE_BLK_SIZE == 0),
+            KERNEL_LOG_INTERNAL(
+                KERNEL_ERROR, "Failed to check src tensor address list alignment in TransDataTo5HD, "
+                              "it should be 32B aligned.\n"));
     }
 #endif
     TransDataTo5HDImpl<T>(dstList, srcList, nchwconvParams);
 }
 
 template <typename T>
-__aicore__ inline void Transpose(const LocalTensor<T> &dst, const LocalTensor<T> &src,
-    const LocalTensor<uint8_t> &sharedTmpBuffer, const TransposeParamsExt &transposeParams)
+__aicore__ inline void Transpose(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LocalTensor<uint8_t>& sharedTmpBuffer,
+    const TransposeParamsExt& transposeParams)
 {
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecTransposeTempInfo(dst, src, sharedTmpBuffer, "Transpose");
@@ -181,30 +208,41 @@ __aicore__ inline void Transpose(const LocalTensor<T> &dst, const LocalTensor<T>
     if ((transposeParams.transposeType == TransposeType::TRANSPOSE_ND2ND_B16) &&
         (transposeParams.hSize == NCHW_CONV_ADDR_LIST_SIZE) && (transposeParams.wSize == NCHW_CONV_ADDR_LIST_SIZE)) {
 #if (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
-        ASCENDC_ASSERT((SupportType<PrimT<T>, int16_t, uint16_t, half>()),
-            {KERNEL_LOG(KERNEL_ERROR, "Failed to check dtype in Transpose when transposeType is TRANSPOSE_ND2ND_B16, "
-            "current api support dtype combination is src and dst both: int16_t, uint16_t, half");});
+        ASCENDC_ASSERT((SupportType<PrimT<T>, int16_t, uint16_t, half>()), {
+            KERNEL_LOG(
+                KERNEL_ERROR, "Failed to check dtype in Transpose when transposeType is TRANSPOSE_ND2ND_B16, "
+                              "current api support dtype combination is src and dst both: int16_t, uint16_t, half");
+        });
 #else
-        ASCENDC_ASSERT((SupportType<PrimT<T>, uint16_t>()),
-            {KERNEL_LOG(KERNEL_ERROR, "Failed to check dtype in Transpose when transposeType is TRANSPOSE_ND2ND_B16, "
-            "current api support dtype combination is src and dst both: uint16_t");});
+        ASCENDC_ASSERT((SupportType<PrimT<T>, uint16_t>()), {
+            KERNEL_LOG(
+                KERNEL_ERROR, "Failed to check dtype in Transpose when transposeType is TRANSPOSE_ND2ND_B16, "
+                              "current api support dtype combination is src and dst both: uint16_t");
+        });
 #endif
-        TransposeImpl((__ubuf__ PrimT<T> *)dst.GetPhyAddr(), (__ubuf__ PrimT<T> *)src.GetPhyAddr());
-    } else if (transposeParams.transposeType == TransposeType::TRANSPOSE_NCHW2NHWC ||
+        TransposeImpl((__ubuf__ PrimT<T>*)dst.GetPhyAddr(), (__ubuf__ PrimT<T>*)src.GetPhyAddr());
+    } else if (
+        transposeParams.transposeType == TransposeType::TRANSPOSE_NCHW2NHWC ||
         transposeParams.transposeType == TransposeType::TRANSPOSE_NHWC2NCHW) {
         if (transposeParams.cSize == 1) {
             struct DataCopyParams repeatParams;
             repeatParams.blockLen = transposeParams.nSize * transposeParams.cSize * transposeParams.hSize *
-                transposeParams.wSize / AscendCUtils::GetC0Count(sizeof(PrimT<T>));
-            TransposeUB2UBImpl((__ubuf__ PrimT<T> *)dst.GetPhyAddr(), (__ubuf__ PrimT<T> *)src.GetPhyAddr(), repeatParams);
+                                    transposeParams.wSize / AscendCUtils::GetC0Count(sizeof(PrimT<T>));
+            TransposeUB2UBImpl(
+                (__ubuf__ PrimT<T>*)dst.GetPhyAddr(), (__ubuf__ PrimT<T>*)src.GetPhyAddr(), repeatParams);
         } else {
 #if ASCENDC_CPU_DEBUG
-            uint32_t imageSize = transposeParams.hSize * transposeParams.wSize;  // uint16 * uint16
+            uint32_t imageSize = transposeParams.hSize * transposeParams.wSize; // uint16 * uint16
             ASCENDC_CHECK_VALUE_RANGE(transposeParams.cSize, 0, UINT12_MAX, "cSize", "Transpose");
             ASCENDC_CHECK_VALUE_RANGE(imageSize, 0, UINT12_MAX, "hSize * wSize", "Transpose");
-            ASCENDC_ASSERT(((imageSize * sizeof(PrimT<T>)) % ONE_BLK_SIZE == 0), {KERNEL_LOG(KERNEL_ERROR, "Failed to check "
-                "hSize, wSize value in Transpose when transposeType is TRANSPOSE_NCHW2NHWC / TRANSPOSE_NHWC2NCHW, "
-                "hSize * wSize * sizeof(T) should be 32B aligned, current value is %lu.", imageSize * sizeof(PrimT<T>));});
+            ASCENDC_ASSERT(((imageSize * sizeof(PrimT<T>)) % ONE_BLK_SIZE == 0), {
+                KERNEL_LOG(
+                    KERNEL_ERROR,
+                    "Failed to check "
+                    "hSize, wSize value in Transpose when transposeType is TRANSPOSE_NCHW2NHWC / TRANSPOSE_NHWC2NCHW, "
+                    "hSize * wSize * sizeof(T) should be 32B aligned, current value is %lu.",
+                    imageSize * sizeof(PrimT<T>));
+            });
 #endif
             Transpose4DImpl(dst, src, sharedTmpBuffer, transposeParams);
         }
@@ -212,8 +250,8 @@ __aicore__ inline void Transpose(const LocalTensor<T> &dst, const LocalTensor<T>
 }
 #pragma end_pipe
 template <typename T>
-__aicore__ inline __in_pipe__(S) __out_pipe__(V) void TransDataTo5HD(const LocalTensor<uint64_t> &dst,
-    const LocalTensor<uint64_t> &src, const TransDataTo5HDParams &nchwconvParams)
+__aicore__ inline __in_pipe__(S) __out_pipe__(V) void TransDataTo5HD(
+    const LocalTensor<uint64_t>& dst, const LocalTensor<uint64_t>& src, const TransDataTo5HDParams& nchwconvParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckTransDataTo5HDParams<T>(nchwconvParams);
@@ -239,18 +277,19 @@ __aicore__ inline __in_pipe__(S) __out_pipe__(V) void TransDataTo5HD(const Local
     constexpr uint64_t vaBit2 = 32;
     constexpr uint64_t vaBit3 = 48;
 
-    for (uint32_t i = 0; i < vaRegSize; i++)
-    {
-        uint64_t dstAddrConfig = (((dst.GetValue(vaRegSize * i) >> vaAddr) & vaMask) |
-                                  (((dst.GetValue(vaRegSize * i + vaOne) >> vaAddr) & vaMask) << vaBit1) |
-                                  (((dst.GetValue(vaRegSize * i + vaTwo) >> vaAddr) & vaMask) << vaBit2) |
-                                  (((dst.GetValue(vaRegSize * i + vaThree) >> vaAddr) & vaMask) << vaBit3));
+    for (uint32_t i = 0; i < vaRegSize; i++) {
+        uint64_t dstAddrConfig =
+            (((dst.GetValue(vaRegSize * i) >> vaAddr) & vaMask) |
+             (((dst.GetValue(vaRegSize * i + vaOne) >> vaAddr) & vaMask) << vaBit1) |
+             (((dst.GetValue(vaRegSize * i + vaTwo) >> vaAddr) & vaMask) << vaBit2) |
+             (((dst.GetValue(vaRegSize * i + vaThree) >> vaAddr) & vaMask) << vaBit3));
         dst.SetValue(i, dstAddrConfig);
 
-        uint64_t srcAddrConfig = (((src.GetValue(vaRegSize * i) >> vaAddr) & vaMask) |
-                                  (((src.GetValue(vaRegSize * i + vaOne) >> vaAddr) & vaMask) << vaBit1) |
-                                  (((src.GetValue(vaRegSize * i + vaTwo) >> vaAddr) & vaMask) << vaBit2) |
-                                  (((src.GetValue(vaRegSize * i + vaThree) >> vaAddr) & vaMask) << vaBit3));
+        uint64_t srcAddrConfig =
+            (((src.GetValue(vaRegSize * i) >> vaAddr) & vaMask) |
+             (((src.GetValue(vaRegSize * i + vaOne) >> vaAddr) & vaMask) << vaBit1) |
+             (((src.GetValue(vaRegSize * i + vaTwo) >> vaAddr) & vaMask) << vaBit2) |
+             (((src.GetValue(vaRegSize * i + vaThree) >> vaAddr) & vaMask) << vaBit3));
         src.SetValue(i, srcAddrConfig);
     }
 
