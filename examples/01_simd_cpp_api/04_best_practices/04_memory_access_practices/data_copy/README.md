@@ -447,7 +447,6 @@ for (uint32_t mBlockIdx = 0; mBlockIdx < fullMBlockCount; mBlockIdx++) {
   ```bash
   msprof ./demo
   msprof --ai-core=on --aic-metrics=L2Cache ./demo    # L2Cache 相关场景使用
-  msprof op simulator ./demo                          # 仿真模式使用
   ```
 
   采集后会在当前目录生成 `PROF_` 前缀目录，性能汇总文件位于 `mindstudio_profiler_output` 目录下。
