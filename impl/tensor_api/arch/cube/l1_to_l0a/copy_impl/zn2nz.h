@@ -31,7 +31,15 @@ class LoadDataL12L0AZN2NZ {
 public:
     template <const CopyL12L0ATrait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src) {
-        LoadDataImpl<trait, T, U>(dst, src);
+        if constexpr (T::layoutType::depth == FIVE_DIM_DATA) {
+            BatchLoadDataImpl<trait, T, U>(dst, src);
+        } else if constexpr (T::layoutType::depth == FOUR_DIM_DATA) {
+            LoadDataImpl<trait, T, U>(dst, src);
+        } else {
+            static_assert(T::layoutType::depth == FOUR_DIM_DATA || T::layoutType::depth == FIVE_DIM_DATA,
+                "LoadDataL12L0ANZ2NZ only supports the plain fractal layout "
+                "((row0,row1),(col0,col1)) or the batch layout (B,((row0,row1),(col0,col1))).");
+        }
     }
 
 private:
@@ -60,6 +68,35 @@ private:
         auto srcStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout) / STRIDE_UNIT;
         auto dstStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstLayout) / STRIDE_UNIT;
         LoadCbufToCa::LoadData<true>(dst, src, mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride);
+    }
+
+    template <const CopyL12L0ATrait& trait, typename T, typename U>
+    __aicore__ inline static void BatchLoadDataImpl(const T& dst, const U& src)
+    {
+        CheckTemplate<trait, T, U>();
+        using DstType = typename T::elementType;
+        auto dstLayout = dst.Layout();
+        auto srcLayout = src.Layout();
+        auto dstNoBatchLayout = RemoveBatchDim(dstLayout);
+        auto srcNoBatchLayout = RemoveBatchDim(srcLayout);
+        uint16_t mStartPosition = 0;
+        uint16_t kStartPosition = 0;
+        auto mStep = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcNoBatchLayout) *
+                GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(srcNoBatchLayout) / FRACTAL_FIXED;
+        auto kStep = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(dstNoBatchLayout) *
+                GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(dstNoBatchLayout) / C0_ELEMENT<DstType>;
+        // Zn -> Nz
+        constexpr uint32_t STRIDE_UNIT = C0_ELEMENT<DstType> * FRACTAL_FIXED;
+        auto srcStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcNoBatchLayout) / STRIDE_UNIT;
+        auto dstStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstNoBatchLayout) / STRIDE_UNIT;
+        auto batchNum = Get<0>(dstLayout.Shape());
+        for (uint32_t i = 0; i< batchNum; ++i) {
+            LoadCbufToCa::LoadData<true>(
+                dst(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))), 
+                src(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))), 
+                mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride);
+        }
+        
     }
 };
 } // namespace Te
