@@ -74,6 +74,7 @@ constexpr const char* OP_ACLNN_SOC_INFO =
     "    SOC_VERSION_ASCEND910_96 = 13,\n"
     "    SOC_VERSION_KIRINX90 = 14,\n"
     "    SOC_VERSION_KIRIN9030 = 15,\n"
+    "    SOC_VERSION_ASCEND350 = 16,\n"
     "    SOC_VERSION_INVALID = 99\n"
     "};\n";// NOTE: Always add new SOC versions at the end of this enum.
 constexpr const char* OP_ACLNN_NNOPBASE_ATTR_DTYPE_INFO = 
@@ -177,7 +178,8 @@ const std::map<std::string, std::string> SOC_SUPPORT_MAP = {
     { "mc62", "SOC_VERSION_MC62CM12A" },
     { "ascend910_96", "SOC_VERSION_ASCEND910_96"},
     { "kirinx90", "SOC_VERSION_KIRINX90"},
-    { "kirin9030", "SOC_VERSION_KIRIN9030"}
+    { "kirin9030", "SOC_VERSION_KIRIN9030"},
+ 	{ "ascend350", "SOC_VERSION_ASCEND350" }
 };
 
 const std::map<int, std::string> DTYPE_SUPPORT_MAP = {

@@ -2555,7 +2555,8 @@ ComputeIntensitySmallShape MatmulTilingAlgorithm::CalcComputeIntensitySmallShape
 MultiCoreScenario MatmulTilingAlgorithm::GetMultiCoreScenario(const MatmulRunParas& params) const
 {
     if (tilingIns_->socVersion != platform_ascendc::SocVersion::ASCEND910B &&
-        tilingIns_->socVersion != platform_ascendc::SocVersion::ASCEND950) {
+        tilingIns_->socVersion != platform_ascendc::SocVersion::ASCEND950 &&
+ 	    tilingIns_->socVersion != platform_ascendc::SocVersion::ASCEND350) {
         return MultiCoreScenario::OTHERS;
     }
     if (tilingIns_->enableSplitK_ || tilingIns_->singleM != -1 || tilingIns_->singleN != -1) {

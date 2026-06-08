@@ -39,6 +39,7 @@ enum class SocVersion {
     ASCEND310P,     // Ascend310P1, Ascend310P3
     ASCEND310B,     // Ascend310B1, Ascend310B2, Ascend310B3, Ascend310B4
     ASCEND950,   // ASCEND950, __DAV_C310__
+    ASCEND350,      // ASCEND350, __DAV_C310__
     RESERVED_VERSION = 99999
 };
 
@@ -268,6 +269,7 @@ ContextBuilder &ContextBuilder::AddPlatformInfo(const char *customSocVersion)
         {"Ascend910_93", SocVersion::ASCEND910B},
         {"Ascend310B", SocVersion::ASCEND310B},
         {"Ascend950", SocVersion::ASCEND950},
+        {"Ascend350", SocVersion::ASCEND350},
     };
     const static std::string labelVersion = "version";
     const static std::string labelShortSocVersion = "Short_SoC_version";

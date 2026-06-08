@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 enum class ElfType { ELF_TYPE_ELF = 0, ELF_TYPE_AIVEC, ELF_TYPE_AICUBE, ELF_TYPE_MAX };
-enum class SocVersion { UNKNOWN, ASCEND310P, ASCEND910B, ASCEND950 };
+enum class SocVersion { UNKNOWN, ASCEND310P, ASCEND910B, ASCEND950, ASCEND350 };
 
 typedef enum KernelType : unsigned int {
     K_TYPE_AICORE = 1,
@@ -66,8 +66,8 @@ constexpr size_t ASCENDC_KERNEL_ID = 69;
 
 #define PROF_TASK_TIME 0x00000002ULL  // dynamic profiling hwts log
 
-bool AscendCheckSoC950Version(const char *socVersion) {
-    const char* prefix = "ascend950";
+bool AscendCheckSoC950Version(const char *socVersion, const char* prefix)
+{
     size_t prefixLen = strlen(prefix);
     return strncmp(socVersion, prefix, prefixLen) == 0;
 }
@@ -156,7 +156,10 @@ bool AscendCheckSoCVersion(const char *socVersion, char *errMsg)
         lowerCurSocVersion += std::tolower(c);
     }
     // ascend950
-    if (AscendCheckSoC950Version(lowerCurSocVersion.c_str())) {
+    const char* prefix950 = "ascend950";
+    const char* prefix350 = "ascend350";
+    if (AscendCheckSoC950Version(lowerCurSocVersion.c_str(), prefix950) ||
+        AscendCheckSoC950Version(lowerCurSocVersion.c_str(), prefix350)) {
         return true;
     }
 
@@ -217,6 +220,9 @@ static SocVersion GetSocVersion() {
     if (std::strncmp(socName, "Ascend950", sizeof("Ascend950") - 1) == 0) {
         return SocVersion::ASCEND950;
     }
+    if (std::strncmp(socName, "Ascend350", sizeof("Ascend350") - 1) == 0) {
+        return SocVersion::ASCEND350;
+    }
     ASCENDLOGE("unsupport soc name: %s\n", socName);
     return SocVersion::UNKNOWN;
 }
@@ -237,10 +243,11 @@ int32_t AscendLaunchKernelWithHostArgs(void* funcHandle,
             return 1;
         }
     }
-    if (currentSoc == SocVersion::ASCEND910B || (currentSoc == SocVersion::ASCEND950 && ubufDynamicSize == 0)) {
+    if (currentSoc == SocVersion::ASCEND910B ||((currentSoc == SocVersion::ASCEND950 ||
+        currentSoc == SocVersion::ASCEND350) && ubufDynamicSize == 0)) {
         return aclrtLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, nullptr, hostArgs, argsSize, nullptr, 0);
     }
-    if (currentSoc == SocVersion::ASCEND950 && ubufDynamicSize !=0) {
+    if ((currentSoc == SocVersion::ASCEND950 || currentSoc == SocVersion::ASCEND350) && ubufDynamicSize !=0) {
         constexpr uint32_t attrLen = 1;
         aclrtLaunchKernelAttrValue attrValue{};
         attrValue.dynUBufSize = ubufDynamicSize;

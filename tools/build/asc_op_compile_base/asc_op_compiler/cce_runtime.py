@@ -197,7 +197,8 @@ def _add_kernel_magic(short_soc_version: str,
     if short_soc_version in ["Ascend610", "BS9SX1A", "Ascend610B", "Ascend310P"] and \
             aicore_type == "VectorCore":
         title_dict = {"magic": "RT_DEV_BINARY_MAGIC_ELF_AIVEC"}
-    elif short_soc_version in ["Ascend910B", "Ascend910_93", "Ascend950", "MC62", "MC32DM11A"]:
+    elif short_soc_version in ["Ascend910B", "Ascend910_93", "Ascend950", "MC62", \
+                               "MC32DM11A", "Ascend350"]:
         title_dict = _get_kernel_magic_asecnd_910B(aicore_type, mix, compatible_needed,
                                                    mix_type_info)
     elif short_soc_version == "Ascend310B" or short_soc_version == "AS31XM1":

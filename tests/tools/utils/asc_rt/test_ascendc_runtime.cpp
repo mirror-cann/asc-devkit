@@ -603,6 +603,20 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_950_without_dynamic_
     }, ::testing::ExitedWithCode(0), "");
 }
 
+TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_350) {
+    void* funcHandle = nullptr;
+    uint32_t numBlocks = 1;
+    void* stream = nullptr;
+    void* hostArgs = nullptr;
+    size_t argsSize = 0;
+    uint32_t ubufDynamicSize = 512;
+    EXPECT_EXIT({
+        MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend350"));
+        int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
+        exit(ret == 0 ? 0 : 1);
+    }, ::testing::ExitedWithCode(0), "");
+}
+
 TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtype) {
     void* funcHandle = nullptr;
     unsigned int kernelType = 5;

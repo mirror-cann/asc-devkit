@@ -57,7 +57,7 @@ if (NOT DEFINED ASCEND_COMPUTE_UNIT)
     set(ASCEND_COMPUTE_UNIT ascend910b CACHE STRING "")
 endif()
 
-set(ASC_VALID_SOC_LIST ascend310b ascend310p ascend610 ascend910 ascend910b ascend910_93 ascend950 bs9sx1a bs9sx2a ascend610lite mc61am21a mc62 ascend910_96 kirinx90 kirin9030 mc32dm11a)
+set(ASC_VALID_SOC_LIST ascend310b ascend310p ascend610 ascend910 ascend910b ascend910_93 ascend950 bs9sx1a bs9sx2a ascend610lite mc61am21a mc62 ascend910_96 kirinx90 kirin9030 mc32dm11a ascend350)
 
 foreach(soc_version ${ASCEND_COMPUTE_UNIT})
     list(FIND ASC_VALID_SOC_LIST "${soc_version}" _SOC_INDEX)

@@ -30,6 +30,7 @@ const std::set<std::string> VALID_SOC_SET = {
     "ascend610",
     "ascend610lite",
     "ascend950",
+    "ascend350",
     "ascend910_93",
     "ascend910",
     "ascend910b",

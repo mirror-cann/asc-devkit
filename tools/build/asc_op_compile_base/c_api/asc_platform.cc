@@ -471,7 +471,7 @@ bool CceConfBase::SetOptionalCoreType(const std::string& key) {//COVER
         MC62DM23AB,       MC62CM12AA,       MC62DM22AA,       MC62CM12AC,       MC62DM22AC,       MC62CM12AD, 
         MC62DM22AD,       MC62CM12AE,       MC62DM22AE,       MC62CM12AF,       MC62DM22AF,       MC62CM12AB,
         MC62DM22AB,       KirinX90,         Kirin9030,
-        MC32DM11AA, MC32DM11AB, MC32DM11AC,
+        MC32DM11AA, MC32DM11AB, MC32DM11AC, Ascend350_354f,   Ascend350_355e,
     };
     if (soc_vector_core.find(this->target_opti_compilation_infos_.GetSocVersion()) ==
         soc_vector_core.end()) {

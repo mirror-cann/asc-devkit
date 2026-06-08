@@ -112,6 +112,8 @@ const std::unordered_map<std::string, std::vector<platformconf::DPLATFORM>> soc_
       {Ascend950DT_9576, {platformconf::DPLATFORM::ASCEND_950}},
       {Ascend950DT_9577, {platformconf::DPLATFORM::ASCEND_950}},
       {Ascend950DT_9578, {platformconf::DPLATFORM::ASCEND_950}},
+      {Ascend350_354f, {platformconf::DPLATFORM::ASCEND_350}},
+      {Ascend350_355e, {platformconf::DPLATFORM::ASCEND_350}},
       {MC62CM12AA, {platformconf::DPLATFORM::MC62}},
       {MC62DM22AA, {platformconf::DPLATFORM::MC62}},
       {MC62CM13AA, {platformconf::DPLATFORM::MC62}},
