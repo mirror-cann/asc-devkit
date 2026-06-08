@@ -90,20 +90,18 @@ __aicore__ inline void asc_mark_stamp()
 ## 约束说明<a name="zh-cn_topic_0000002000280437_zh-cn_topic_0000001997078721_section43265506459"></a>
 
 -   idx取值范围为\[0,4095\]。为方便从打点图中找到对应的代码，建议不要重复使用相同的idx。
--   如果在循环中增加了一个MarkStamp指令，每次执行到指令时都会输出一个打点，且idx是相同的。
--   如果开发者在两个相邻的VF分别打标记，由于编译器可能会对VF A和VF B做融合，MarkStamp1和MarkStamp2则会被优化掉，不会输出打点。
+-   如果在循环中增加了一个asc_mark_stamp指令，每次执行到指令时都会输出一个打点，且idx是相同的。
+-   如果开发者在两个相邻的VF分别打标记，由于编译器可能会对VF A和VF B做融合，asc_mark_stamp1和asc_mark_stamp2则会被优化掉，不会输出打点。
 
 ## 调用示例<a name="zh-cn_topic_0000002000280437_zh-cn_topic_0000001997078721_section82241477610"></a>
 
 ```
 mte2_opt();
-mte1_opt();
 //在算子执行开始处打点
-asc_mark_stamp<CUBE, 0>();
+asc_mark_stamp<PIPE_V, 0>();
 //执行核心计算
-cube_opt();
+vector_opt();
 //在算子执行结束处打点
-asc_mark_stamp<CUBE, 1>();
+asc_mark_stamp<PIPE_V, 1>();
 mte3_opt();
 ```
-

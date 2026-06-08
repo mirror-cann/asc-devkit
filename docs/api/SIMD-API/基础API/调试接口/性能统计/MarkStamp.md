@@ -99,13 +99,11 @@ __aicore__ inline void MarkStamp(uint16_t index)
 
 ```
 mte2_opt();
-mte1_opt();
 //在算子执行开始处打点
-MarkStamp<CUBE, 0>();
+MarkStamp<PIPE_V, 0>();
 //执行核心计算
-cube_opt();
+vector_opt();
 //在算子执行结束处打点
-MarkStamp<CUBE, 1>();
+MarkStamp<PIPE_V, 1>();
 mte3_opt();
 ```
-
