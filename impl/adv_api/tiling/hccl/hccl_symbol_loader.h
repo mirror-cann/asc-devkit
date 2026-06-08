@@ -17,6 +17,8 @@
 #include <unordered_map>
 #include <string>
 #include <mutex>
+#include <climits>
+#include <cstdlib>
 #include <dlfcn.h>
 #include "../../detail/host_log.h"
 
@@ -30,7 +32,7 @@ public:
     }
 
     template <typename FuncPtr>
-    FuncPtr Load(const std::string& soName, const std::string& funcName)
+    FuncPtr Load(const std::string& soName, const std::string& funcName, const std::string& pathName)
     {
         std::lock_guard<std::mutex> lock(mtx_);
 
@@ -42,7 +44,13 @@ public:
         }
 
         if (libMap_.find(soName) == libMap_.end()) {
-            libMap_[soName] = dlopen(soName.c_str(), RTLD_LAZY | RTLD_LOCAL);
+            std::string soPath = pathName + soName;
+            char realPath[PATH_MAX] = {0};
+            if (realpath(soPath.c_str(), realPath) == nullptr) {
+                TILING_LOG_WARNING("Invalid so path %s, it is not a real existing path.", soPath.c_str());
+                return nullptr;
+            }
+            libMap_[soName] = dlopen(realPath, RTLD_LAZY | RTLD_LOCAL);
         }
 
         if (libMap_[soName] == nullptr) {

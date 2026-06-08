@@ -63,8 +63,12 @@ void PrintMc2CcTiling(const Mc2CcTilingInner& tiling)
 
 uint32_t SetDevType(Mc2InitTilingInner* tilingInner)
 {
+    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    ASCENDC_HOST_ASSERT((homePath != nullptr || homePath[0] =='\0'), return EXIT_FAILURE, "ASCEND_HOME_PATH is not set or empty.");
+    std::string pathName(homePath);
+    pathName += "/lib64/";
     auto getSocVerFunc =
-        HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>("libruntime.so", "rtGetSocVersion");
+        HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>("libruntime.so", "rtGetSocVersion", pathName);
     ASCENDC_HOST_ASSERT(getSocVerFunc != nullptr, return EXIT_FAILURE, "Failed to get soc version.");
     char socVersion[50];
     getSocVerFunc(socVersion, sizeof(socVersion));

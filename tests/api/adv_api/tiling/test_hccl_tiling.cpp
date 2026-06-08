@@ -18,6 +18,7 @@
 #include "include/adv_api/hccl/hccl_tiling.h"
 #include "include/adv_api/hccl/hccl_common.h"
 #include "tiling/platform/platform_ascendc.h"
+#include "impl/adv_api/tiling/hccl/hccl_symbol_loader.h"
 using namespace ge;
 using namespace std;
 using namespace optiling;
@@ -168,4 +169,106 @@ TEST_F(TestHcclTiling, Mc2CcTilingConfig_multiTiling)
         EXPECT_EQ(ccTilingConfig.GetTiling(ccTilingInner), EXIT_SUCCESS);
     }
     EXPECT_NE(ccTilingConfig.GetTiling(ccTilingInner), EXIT_SUCCESS);
+}
+
+// ============================================================================
+// 以下用例覆盖 commit aaa3d79e5 的改动:
+// 修复 hccl_tiling.cpp 中不安全的动态库加载。
+//   1. HcclSymbolLoader::Load 新增 pathName 参数,通过 realpath 校验 so 的真实
+//      路径后再 dlopen,非法/不存在的路径返回 nullptr。
+//   2. SetDevType 通过 ASCEND_HOME_PATH 环境变量拼接 /lib64/ 作为加载路径。
+// ============================================================================
+
+class TestHcclSymbolLoader : public testing::Test {
+protected:
+    static void SetUpTestCase() {}
+    static void TearDownTestCase() {}
+    // 保存并在用例结束后恢复 ASCEND_HOME_PATH,避免污染其他用例。
+    void SetUp() override
+    {
+        const char *env = std::getenv("ASCEND_HOME_PATH");
+        hasOldEnv_ = (env != nullptr);
+        if (hasOldEnv_) {
+            oldEnv_ = env;
+        }
+    }
+    void TearDown() override
+    {
+        if (hasOldEnv_) {
+            setenv("ASCEND_HOME_PATH", oldEnv_.c_str(), 1);
+        } else {
+            unsetenv("ASCEND_HOME_PATH");
+        }
+    }
+
+    bool hasOldEnv_ = false;
+    std::string oldEnv_;
+};
+
+// Load 在 pathName 为合法目录、so 真实存在时,能够成功加载到符号。
+TEST_F(TestHcclSymbolLoader, Load_validPath_success)
+{
+    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    ASSERT_NE(homePath, nullptr);
+    std::string pathName = std::string(homePath) + "/lib64/";
+
+    auto func = HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>(
+        "libruntime.so", "rtGetSocVersion", pathName);
+    EXPECT_NE(func, nullptr);
+}
+
+// Load 命中缓存:同一 so + func 第二次加载走 symbolMap_ 缓存分支,返回相同指针。
+TEST_F(TestHcclSymbolLoader, Load_cached_returnsSamePointer)
+{
+    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    ASSERT_NE(homePath, nullptr);
+    std::string pathName = std::string(homePath) + "/lib64/";
+
+    auto func1 = HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>(
+        "libruntime.so", "rtGetSocVersion", pathName);
+    auto func2 = HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>(
+        "libruntime.so", "rtGetSocVersion", pathName);
+    EXPECT_NE(func1, nullptr);
+    EXPECT_EQ(func1, func2);
+}
+
+// Load 的核心安全修复:pathName 拼接出的 so 路径不存在时,realpath 失败,返回 nullptr。
+TEST_F(TestHcclSymbolLoader, Load_invalidPath_returnsNull)
+{
+    std::string pathName = "/path/that/does/not/exist/";
+    auto func = HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>(
+        "libruntime_not_exist.so", "rtGetSocVersion", pathName);
+    EXPECT_EQ(func, nullptr);
+}
+
+// Load 的路径校验同样拦截空路径形式的不安全加载。
+TEST_F(TestHcclSymbolLoader, Load_emptyPath_returnsNull)
+{
+    std::string pathName = "";
+    auto func = HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>(
+        "libruntime_not_exist.so", "rtGetSocVersion", pathName);
+    EXPECT_EQ(func, nullptr);
+}
+
+// so 存在但符号不存在时,dlsym 失败返回 nullptr。
+TEST_F(TestHcclSymbolLoader, Load_invalidSymbol_returnsNull)
+{
+    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    ASSERT_NE(homePath, nullptr);
+    std::string pathName = std::string(homePath) + "/lib64/";
+
+    auto func = HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>(
+        "libruntime.so", "rtSymbolDefinitelyNotExist", pathName);
+    EXPECT_EQ(func, nullptr);
+}
+
+// SetDevType 经由 GetTiling(Mc2InitTiling) 调用:ASCEND_HOME_PATH 已正确设置时成功。
+TEST_F(TestHcclSymbolLoader, GetInitTiling_withValidAscendHome_success)
+{
+    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    ASSERT_NE(homePath, nullptr);
+
+    ::Mc2InitTiling initTilingInner;
+    Mc2CcTilingConfig ccTilingConfig("test", 1, "fullmesh", 1);
+    EXPECT_EQ(ccTilingConfig.GetTiling(initTilingInner), EXIT_SUCCESS);
 }
