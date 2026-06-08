@@ -65,7 +65,7 @@
 
 ```
 template <typename T>
-__aicore__ inline void Brcb(const LocalTensor<T>& dst, const LocalTensor<T>& src0, const uint8_t repeatTime, const BrcbRepeatParams& repeatParams)
+__aicore__ inline void Brcb(const LocalTensor<T>& dst, const LocalTensor<T>& src, const uint8_t repeatTime, const BrcbRepeatParams& repeatParams)
 ```
 
 ## 参数说明<a name="section1619484392111"></a>
@@ -113,7 +113,7 @@ __aicore__ inline void Brcb(const LocalTensor<T>& dst, const LocalTensor<T>& src
 <p id="p18731942115012"><a name="p18731942115012"></a><a name="p18731942115012"></a><span id="ph1479701815419"><a name="ph1479701815419"></a><a name="ph1479701815419"></a>LocalTensor的起始地址需要32字节对齐。</span></p>
 </td>
 </tr>
-<tr id="row937mcpsimp"><td class="cellrowborder" valign="top" width="15.02%" headers="mcps1.2.4.1.1 "><p id="p3926171610253"><a name="p3926171610253"></a><a name="p3926171610253"></a>src0</p>
+<tr id="row937mcpsimp"><td class="cellrowborder" valign="top" width="15.02%" headers="mcps1.2.4.1.1 "><p id="p3926171610253"><a name="p3926171610253"></a><a name="p3926171610253"></a>src</p>
 </td>
 <td class="cellrowborder" valign="top" width="10%" headers="mcps1.2.4.1.2 "><p id="p4926121682518"><a name="p4926121682518"></a><a name="p4926121682518"></a>输入</p>
 </td>
@@ -121,7 +121,7 @@ __aicore__ inline void Brcb(const LocalTensor<T>& dst, const LocalTensor<T>& src
 <p id="p915110209501"><a name="p915110209501"></a><a name="p915110209501"></a><span id="zh-cn_topic_0000001530181537_ph173308471594_1"><a name="zh-cn_topic_0000001530181537_ph173308471594_1"></a><a name="zh-cn_topic_0000001530181537_ph173308471594_1"></a><span id="zh-cn_topic_0000001530181537_ph9902231466_1"><a name="zh-cn_topic_0000001530181537_ph9902231466_1"></a><a name="zh-cn_topic_0000001530181537_ph9902231466_1"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816_1"><a name="zh-cn_topic_0000001530181537_ph1782115034816_1"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816_1"></a>类型为<a href="../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
 <p id="p315318445501"><a name="p315318445501"></a><a name="p315318445501"></a><span id="ph154891144115013"><a name="ph154891144115013"></a><a name="ph154891144115013"></a>LocalTensor的起始地址需要32字节对齐。</span></p>
 <p id="p49261616142516"><a name="p49261616142516"></a><a name="p49261616142516"></a>数据类型和dst保持一致。</p>
-<p id="p2285105462817"><a name="p2285105462817"></a><a name="p2285105462817"></a>每一次迭代读取src0中的8个元素，所以src0的元素个数不小于8 * repeatTime。</p>
+<p id="p2285105462817"><a name="p2285105462817"></a><a name="p2285105462817"></a>每一次迭代读取src中的8个元素，所以src的元素个数不小于8 * repeatTime。</p>
 </td>
 </tr>
 <tr id="row4736114341415"><td class="cellrowborder" valign="top" width="15.02%" headers="mcps1.2.4.1.1 "><p id="p47360437147"><a name="p47360437147"></a><a name="p47360437147"></a>repeatTime</p>
@@ -155,7 +155,7 @@ __aicore__ inline void Brcb(const LocalTensor<T>& dst, const LocalTensor<T>& src
 <tbody><tr id="row340910561569"><td class="cellrowborder" valign="top" width="14.680000000000001%" headers="mcps1.2.3.1.1 "><p id="p1340945612566"><a name="p1340945612566"></a><a name="p1340945612566"></a>dstBlkStride</p>
 </td>
 <td class="cellrowborder" valign="top" width="85.32%" headers="mcps1.2.3.1.2 "><p id="p4409145615568"><a name="p4409145615568"></a><a name="p4409145615568"></a>单次迭代内，矢量目的操作数不同datablock间地址步长。</p>
-<p id="p182381591911"><a name="p182381591911"></a><a name="p182381591911"></a><strong id="b11171111151913"><a name="b11171111151913"></a><a name="b11171111151913"></a>注意事项:</strong>当dstBlkStride值为0时，默认按照1来处理。</p>
+<p id="p182381591911"><a name="p182381591911"></a><a name="p182381591911"></a><strong id="b11171111151913"><a name="b11171111151913"></a><a name="b11171111151913"></a>注意事项:</strong>dstBlkStride不支持设置为0，若设置成0可能产生未定义行为。</p>
 </td>
 </tr>
 <tr id="row154091456105618"><td class="cellrowborder" valign="top" width="14.680000000000001%" headers="mcps1.2.3.1.1 "><p id="p04091656105618"><a name="p04091656105618"></a><a name="p04091656105618"></a>dstRepStride</p>
@@ -165,7 +165,7 @@ __aicore__ inline void Brcb(const LocalTensor<T>& dst, const LocalTensor<T>& src
 </tr>
 <tr id="row725663554310"><td class="cellrowborder" valign="top" width="14.680000000000001%" headers="mcps1.2.3.1.1 "><p id="p1115375683913"><a name="p1115375683913"></a><a name="p1115375683913"></a>blockNumber</p>
 </td>
-<td class="cellrowborder" rowspan="7" valign="top" width="85.32%" headers="mcps1.2.3.1.2 "><p id="p1601381273"><a name="p1601381273"></a><a name="p1601381273"></a>预留参数。为后续的功能做保留，开发者暂时无需关注，使用默认值即可。</p>
+<td class="cellrowborder" rowspan="7" valign="top" width="85.32%" headers="mcps1.2.3.1.2 "><p id="p1601381273"><a name="p1601381273"></a><a name="p1601381273"></a>预留的扩展参数，当前因后续架构升级，该参数已废弃，不对其进行业务处理。</p>
 </td>
 </tr>
 <tr id="row15587123719438"><td class="cellrowborder" valign="top" headers="mcps1.2.3.1.1 "><p id="p17440724164219"><a name="p17440724164219"></a><a name="p17440724164219"></a>src0BlkStride</p>
@@ -197,7 +197,7 @@ __aicore__ inline void Brcb(const LocalTensor<T>& dst, const LocalTensor<T>& src
 
 -   操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md#section796754519912)。
 
--   不支持src0与dst为同一块内存地址。
+-   不支持src与dst为同一块内存地址。
 -   针对Atlas 推理系列产品AI Core，使用时需要预留8K的Unified Buffer空间，作为接口的临时数据存放区。
 
 ## 调用示例<a name="section11276201527"></a>
@@ -205,11 +205,11 @@ __aicore__ inline void Brcb(const LocalTensor<T>& dst, const LocalTensor<T>& src
 本样例中只展示Compute流程中的部分代码。如果您需要运行样例代码，请将该代码段拷贝并替换[Brcb样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/02_memory_vector_compute/brcb)完整样例模板中Compute函数的部分代码即可。
 
 ```
-// repeatTime = 4, 128 elements one repeat, 512 elements total
+// repeatTime = 2, 128 elements one repeat, 512 elements total
 // srcLocal数据类型为half，dstLocal数据类型为half
 // dstBlkStride = 1, no gap between blocks in one repeat
 // dstRepStride = 8, no gap between repeats 
-AscendC::Brcb(dstLocal, srcLocal, 4, {1,8});
+AscendC::Brcb(dstLocal, srcLocal, 2, {1,8});
 ```
 
 结果示例如下：
@@ -222,4 +222,3 @@ AscendC::Brcb(dstLocal, srcLocal, 4, {1,8});
 进行Brcb计算后，输出数据(dstLocal):
 [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 ... 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16]
 ```
-
