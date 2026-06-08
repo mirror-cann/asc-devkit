@@ -4,15 +4,13 @@
 
 本样例基于静态Tensor编程范式，通过 L1/L0 双缓冲机制、大包搬运、细粒度流水同步、UnitFlag、L2Cache等多种优化手段，实现高性能矩阵乘法运算。本样例基于基础API实现，与高阶API版本所使用的优化方法相同，样例目标为基于静态Tensor编程范式展示调优实现细节。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

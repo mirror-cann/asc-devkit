@@ -3,12 +3,11 @@
 ## 概述
 本样例基于RegBase编程范式实现向量自加计算，计算逻辑为`y = x + x`。样例先将输入数据从GM（Global Memory）搬运到UB（Unified Buffer），再通过VF函数调用RegBase接口完成寄存器级别的Add计算，最后将结果从UB写回GM。
 
-## 支持的产品
-- Ascend 950PR/Ascend 950DT
+## 本样例支持的产品及CANN软件版本
 
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
 
 ## 目录结构介绍
 ```

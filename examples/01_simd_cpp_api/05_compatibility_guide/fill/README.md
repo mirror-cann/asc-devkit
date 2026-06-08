@@ -7,15 +7,13 @@
 - 在Atlas A2/A3 系列产品中，可以直接使用Fill接口进行L0A/L0B Buffer的初始化。
 - 但在Ascend 950PR/Ascend 950DT平台中，由于删除了L0A Buffer/L0B Buffer初始化的相关硬件指令，因此无法直接使用Fill接口进行L0A/L0B Buffer的初始化，需要先对L1 Buffer初始化，再将初始化数据搬入L0A/L0B中，来间接完成L0A/L0B Buffer的初始化。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

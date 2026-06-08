@@ -2,69 +2,13 @@
 ## 概述
 多核切K场景下的Matmul样例，将输入矩阵沿K轴切分后分配到多核上并行处理。适用多核Matmul，且输入矩阵的M、N较小，无法在M、N方向多核切分的场景。
 
-## 支持的产品
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-## 目录结构介绍
-```
-├── matmul_splitk
-│   ├── scripts
-│   │   ├── gen_data.py         // 输入数据和真值数据生成脚本文件
-│   │   └── verify_result.py    // 真值对比文件
-│   ├── CMakeLists.txt          // 编译工程文件
-│   ├── data_utils.h            // 数据读入写出函数
-│   └── matmul_splitk.asc       // Ascend C样例实现 & 调用样例
-```
-## 样例描述
-- 样例功能：  
-  本样例通过调用Matmul Tiling API时调用EnableMultiCoreSplitK使能多核切K，获取多核切K的tiling计算参数，将单次Iterate计算分配到多个核进行。在Kernel实现中，先将输出Global Memory清零，随后开启AtomicAdd累加，待同一次Iterate计算分配到多个的核的计算完成后，结果累加至输出Global Memory上。
+## 本样例支持的产品及CANN软件版本
 
-- 约束条件
-  - 使能多核切K的场景，获取C矩阵结果时仅支持输出到Global Memory。
-  - 使能多核切K的场景，需在Kernel侧代码中首次将C矩阵分片的结果写入Global Memory之前，先清零Global Memory，随后在获取C矩阵分片的结果时，再开启AtomicAdd累加。  
-    如果不预先清零Global Memory，可能会因为累加Global Memory中的原始无效数据而产生精度问题。
-  - 使能多核切K的场景，不支持开启Bias。
-
-- 样例规格：  
-  本样例中：M = 16, N = 16, K = 1024。
-  <table>
-  <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="5" align="center">Matmul</td></tr>
-  </tr>
-  <tr><td rowspan="4" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td><td align="center">isTrans</td></tr>
-  <tr><td align="center">a</td><td align="center">[M, K]</td><td align="center">half</td><td align="center">ND</td><td align="center">false</td></tr>
-  <tr><td align="center">b</td><td align="center">[K, N]</td><td align="center">half</td><td align="center">ND</td><td align="center">false</td></tr>
-  <tr><td align="center">bias</td><td align="center">[1, N]</td><td align="center">float</td><td align="center">ND</td><td align="center">-</td></tr>
-  </tr>
-  </tr>
-  <tr><td rowspan="1" align="center">样例输出</td><td align="center">c</td><td align="center">[M, N]</td><td align="center">float</td><td align="center">ND</td><td align="center">-</td></tr>
-  </tr>
-  <tr><td rowspan="1" align="center">核函数名</td><td colspan="5" align="center">matmul_splitk_custom</td></tr>
-  </table>
-- 样例实现： 
-  - Kernel关键步骤  
-    - 对C矩阵的输出Global Memory地址清零。
-      ```cpp
-      Fill(cGlobal, tiling.M * tiling.N, (cType)0);
-      ```
-    - 开启AtomicAdd累加，完成矩阵乘操作。
-      ```cpp
-      uint8_t enAtomic = 1; // set AtomicAdd
-      matmulObj.IterateAll(cGlobal, enAtomic);
-      ```
-
-  - Tiling关键步骤
-    - 设置A、B、C、Bias的参数类型信息；M、N、Ka、Kb形状信息等，调用EnableMultiCoreSplitK使能多核切K。
-      ```cpp
-      cubeTiling->EnableMultiCoreSplitK(true);
-      ```
-
-  - 调用实现  
-    使用内核调用符<<<>>>调用核函数。
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 编译运行
 在本样例根目录下执行如下步骤，编译并执行样例。

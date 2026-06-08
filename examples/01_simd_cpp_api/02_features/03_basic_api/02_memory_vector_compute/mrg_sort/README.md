@@ -4,15 +4,13 @@
 
 本样例在排序场景下，基于Sort32与MrgSort实现多路归并排序功能。首先调用Sort32将数据并行地预处理为多个有序子序列（每32个元素为一组进行降序排序，形成以(score, index)交替结构存储的有序队列）；随后调用MrgSort，将这些子序列合并为一个全局有序的结果。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

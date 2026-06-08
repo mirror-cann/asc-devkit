@@ -2,14 +2,13 @@
 ## 概述
 M/N轴方向的流水并行的Matmul样例。该功能的应用场景为输入矩阵的K很小，但M或N很大的场景，即singleCoreK<=baseK，但singleCoreM远大于baseM或singleCoreN远大于baseN。使能M/N方向流水并行功能可能会带来性能收益。
 
-## 支持的产品
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
+## 本样例支持的产品及CANN软件版本
 
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构
 ```

@@ -4,15 +4,13 @@
 
 本样例基于Kernel直调样例工程，介绍了在一个核函数中连续调用WelfordUpdate和WelfordFinalize高阶API，实现完整的Welford在线算法。Welford是一种在线计算均值和方差的方法，可以在单次数据遍历中逐步计算均值和方差，减少访存次数，提高计算性能。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

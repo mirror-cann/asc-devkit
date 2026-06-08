@@ -8,13 +8,11 @@
 - Case 1: 多核 MDL 常量化 tiling（scaleA/B 与 A/B 同步搬运）
 - Case 2: 多核 MDL 常量化 tiling（在**GM→L1搬运中**，scaleA/B 相对 A/B 按照倍数多倍搬运，`mxTypePara`）
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR / Ascend 950DT
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.1.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
 
 ## 目录结构介绍
 

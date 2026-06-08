@@ -3,12 +3,11 @@
 ## 概述
 本样例基于Reg编程接口实现Squeeze运算，主要调用Squeeze接口和StoreUnAlign/StoreUnAlignPost接口。
 
-## 支持的产品
-- Ascend 950PR/Ascend 950DT
+## 本样例支持的产品及CANN软件版本
 
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
 
 ## 目录结构介绍
 ```

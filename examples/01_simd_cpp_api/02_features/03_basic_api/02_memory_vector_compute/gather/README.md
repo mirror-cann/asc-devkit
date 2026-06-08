@@ -4,15 +4,13 @@
 
 本样例基于GatherMask、Gather、Gatherb等接口完成多种场景模式下的数据选择功能，包括内置固定模式、用户自定义模式、张量偏移模式、DataBlock偏移模式，实现从源操作数中选取元素写入目的操作数。样例支持通过编译参数切换不同场景，便于开发者理解Gather类接口的使用方法和实现差异。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

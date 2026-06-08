@@ -2,78 +2,13 @@
 ## 概述
 批量处理Matmul计算时，每个Batch复用同一个Bias矩阵的Matmul样例。
 
-## 支持的产品
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-## 目录结构介绍
-```
-├── batch_matmul_bias_reuse
-│   ├── scripts
-│   │   ├── gen_data.py                          // 输入数据和真值数据生成脚本文件
-│   │   └── verify_result.py                     // 真值对比文件
-│   ├── CMakeLists.txt                           // 编译工程文件
-│   ├── data_utils.h                             // 数据读入写出函数
-│   └── batch_matmul_bias_reuse.asc              // Ascend C样例实现 & 调用样例
-```
-## 样例描述
-- 样例功能：  
-  BatchMatmul样例，批量处理3组Matmul计算，每组对NORMAL格式的A、B矩阵分别做矩阵乘和加bias偏置。通过配置MatmulConfig的isBiasBatch参数，使能每次Matmul计算时复用同一个Bias矩阵。
-  
-  NORMAL格式具体可参考[IterateBatch](../../../../../docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/IterateBatch.md)中对该数据排布的介绍。
+## 本样例支持的产品及CANN软件版本
 
-- 约束条件
-  - 输入和输出的Layout类型都为NORMAL时，不支持BatchMode为SINGLE_LARGE_THAN_L1的场景。
-
-- 样例规格：  
-  本样例中：BatchNum = 3, M = 32, N = 256, K = 64。
-  <table>
-  <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="6" align="center">Matmul</td></tr>
-  </tr>
-  <tr><td rowspan="4" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td><td align="center">isTrans</td><td align="center">layout</td></tr>
-  <tr><td align="center">a</td><td align="center">[BatchNum, M, K]</td><td align="center">half</td><td align="center">ND</td><td align="center">false</td><td align="center">NORMAL</td></tr>
-  <tr><td align="center">b</td><td align="center">[BatchNum, K, N]</td><td align="center">half</td><td align="center">ND</td><td align="center">false</td><td align="center">NORMAL</td></tr>
-  <tr><td align="center">bias</td><td align="center">[BatchNum, 1, N]</td><td align="center">float</td><td align="center">ND</td><td align="center">-</td><td align="center">-</td></tr>
-  </tr>
-  </tr>
-  <tr><td rowspan="1" align="center">样例输出</td><td align="center">c</td><td align="center">[BatchNum, M, N]</td><td align="center">float</td><td align="center">ND</td><td align="center">-</td><td align="center">NORMAL</td></tr>
-  </tr>
-  <tr><td rowspan="1" align="center">核函数名</td><td colspan="6" align="center">batch_matmul_bias_reuse_custom</td></tr>
-  </table>
-- 样例实现： 
-  - Kernel关键步骤
-    - 创建Matmul对象时，自定义MatmulConfig参数，将其中的isBiasBatch参数设置为false，使能BatchMatmul的Bias复用功能，获得自定义的使用NORM模板的Matmul对象。
-      ```cpp
-      constexpr MatmulConfigMode configMode = MatmulConfigMode::CONFIG_NORM;
-      constexpr MatmulBatchParams batchParams = {
-        false, BatchMode::BATCH_LESS_THAN_L1, false /* isBiasBatch */
-      };
-      constexpr MatmulConfig CFG_MM = GetMMConfig<configMode>(batchParams);
-
-      AscendC::Matmul<AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType, isTransA, LayoutMode::NORMAL>,
-                  AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BType, isTransB, LayoutMode::NORMAL>,
-                  AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, CType, false, LayoutMode::NORMAL>,
-                  AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BiasType>, CFG_MM>
-      matmulObj;
-      ```
-    - 完成多batch矩阵乘操作。
-      ```cpp
-      matmulObj.IterateBatch(cGlobal, BatchNum, BatchNum, false);
-      ```
-
-  - Tiling关键步骤
-    - 调用SetBatchInfoForNormal、SetBatchNum设置A/B/C的Layout轴信息和最大BatchNum数。
-      ```cpp
-      tilingApi.SetBatchInfoForNormal(BatchNum, BatchNum, M, N, K);
-      tilingApi.SetBatchNum(BatchNum);
-      ```
-
-  - 调用实现  
-    使用内核调用符<<<>>>调用核函数。
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 编译运行
 在本样例根目录下执行如下步骤，编译并执行样例。

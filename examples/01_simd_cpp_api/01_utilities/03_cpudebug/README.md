@@ -4,12 +4,14 @@
 
 本样例以 Add 计算为载体，重点演示 Ascend C CPU Debug 功能的使用流程，包括 CPU 域编译、可执行程序运行、通过 GDB 进入调试模式，以及在核函数中设置断点、单步执行和查看变量。样例用于帮助开发者在不依赖 NPU 运行的情况下，对 Ascend C 核函数逻辑进行本地调试和问题定位。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
- 
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
+
 ## 目录结构介绍
 
 ```
@@ -17,10 +19,6 @@
 │   ├── CMakeLists.txt          // 编译工程文件
 │   └── cpu_debug.asc           // Ascend C样例实现 & 调用样例
 ```
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
 
 ## 样例描述
 

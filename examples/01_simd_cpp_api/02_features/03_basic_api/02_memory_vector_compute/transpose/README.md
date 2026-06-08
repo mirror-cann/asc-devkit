@@ -4,15 +4,13 @@
 
 本样例基于Transpose、TransDataTo5HD接口实现数据转置功能，详细介绍该功能在普通转置、增强转置和5HD格式转换三种场景下的使用方法，主要覆盖三类数据转换需求：（1）实现16*16的二维矩阵数据块转置，（2）完成[N,C,H,W]与[N,H,W,C]四维矩阵格式的互相转换，（3）NCHW格式转换成NC1HWC0格式。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

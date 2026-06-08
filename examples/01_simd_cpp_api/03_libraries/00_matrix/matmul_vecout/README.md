@@ -3,12 +3,11 @@
 ## 概述
 使用用户自定义VECOUT的输入的Matmul样例，开发者可以自主管理Unified Buffer以高效利用硬件资源。
 
-## 支持的产品
-- Ascend 950PR/Ascend 950DT
+## 本样例支持的产品及CANN软件版本
 
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
 
 ## 目录结构介绍
 ```

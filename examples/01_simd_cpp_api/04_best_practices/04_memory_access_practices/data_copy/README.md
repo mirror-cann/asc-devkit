@@ -4,15 +4,13 @@
 
 本样例展示 Global Memory 到 UB、Global Memory 到 L1 的数据搬运实践。样例不包含计算逻辑，重点用于观察 MTE2 搬运行为，以及分块粒度、非对齐数据搬运、L2Cache 复用、同地址访问冲突规避对数据搬运性能的影响，对比 DataCopy/DataCopyPad 在不同搬运模式下的性能表现。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

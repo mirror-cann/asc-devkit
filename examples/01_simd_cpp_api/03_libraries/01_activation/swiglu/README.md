@@ -4,15 +4,13 @@
 
 本样例在大语言模型和混合专家(MoE)场景下，基于SwiGLU高阶API对两个输入Tensor按元素做SwiGLU计算。SwiGLU是采用Swish作为激活函数的GLU变体，计算公式为 dst_i = src0_i ⊗ Swish(src1_i)，其中 Swish(x) = x/(1+e^(-βx))。该API常用于LLM中的门控前馈网络(FFN)，支持float/half/bfloat16_t等数据类型。本样例使用float数据类型，输入Tensor元素个数为32，beta值为1，完成SwiGLU激活计算。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

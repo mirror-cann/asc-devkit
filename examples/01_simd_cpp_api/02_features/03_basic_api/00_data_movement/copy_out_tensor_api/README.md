@@ -4,13 +4,11 @@
 
 本样例基于Tensor API编程方式实现带Bias的动态Shape矩阵乘法运算，展示了Copy Out接口（L0C到GM、L0C到UB）和Mmad（矩阵乘加）等Tensor API的使用方法。通过编译时参数`SCENARIO_NUM`选择不同的回写模式，Shape参数通过`MatmulTiling`结构体在运行时动态传入。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-
-## 支持的CANN软件版本
-
-- \> CANN 9.1.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | > CANN 9.1.0 |
 
 > **说明：** 该样例依赖尚未正式发布的CANN特性，请使用最新的CANN master包。
 

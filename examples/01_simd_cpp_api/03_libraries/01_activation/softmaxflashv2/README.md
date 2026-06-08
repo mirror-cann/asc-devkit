@@ -4,15 +4,13 @@
 
 本样例在大语言模型注意力机制场景下，基于SoftmaxFlashV2高阶API实现softmaxflashv2单算子。该API是SoftmaxFlash增强版本，对应FlashAttention-2算法，支持update模式（增量计算），常用于大语言模型中的注意力机制计算和长序列分块处理场景。本样例使用float数据类型，输入Tensor shape为[960, 960]，完成SoftmaxFlashV2注意力计算。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

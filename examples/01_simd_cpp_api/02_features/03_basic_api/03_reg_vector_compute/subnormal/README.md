@@ -4,13 +4,11 @@
 
 本样例演示了在Ascend C Reg矢量计算中，Div操作在Subnormal模式开启或关闭情况下的行为差异。通过两种不同的Div精度算法配置（PRECISION_1ULP_FTZ_FALSE和PRECISION_1ULP_FTZ_TRUE），展示是否支持Subnormal浮点数对计算结果的影响。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
 
 ## 目录结构介绍
 

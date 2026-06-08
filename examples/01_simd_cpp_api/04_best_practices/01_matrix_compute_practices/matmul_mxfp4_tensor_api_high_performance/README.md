@@ -4,13 +4,11 @@
 
 本样例介绍如何基于 Ascend C Tensor API 和静态 Tensor 编程方式，通过 L1/L0 双缓冲机制、大包搬运、细粒度流水同步等多种优化手段，实现一个高性能的 MxFP4 Matmul kernel。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR / Ascend 950DT
-
-## 支持的CANN软件版本
-
-- \> CANN 9.1.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | > CANN 9.1.0 |
 
 > **说明：** 该样例依赖尚未正式发布的CANN特性，请使用最新的CANN master包。
 

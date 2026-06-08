@@ -6,13 +6,11 @@
 
 以左量化系数矩阵scaleA K方向多倍缓存，且倍数为scaleFactorK为例：在数据从GM搬运到A1（L1 Buffer）的MTE2搬运过程中，A矩阵一次性搬运stepM * stepK个base块，而scaleA矩阵则一次搬运stepM * (scaleFactorK * stepK)个base块并缓存保持在A1中。后续Iterate计算时，scaleA矩阵缓存数据依次与A矩阵中不同的数据完成广播乘法运算。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.1.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
 
 ## 目录结构介绍
 ```

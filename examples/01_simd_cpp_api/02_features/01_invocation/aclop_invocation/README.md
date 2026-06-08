@@ -4,18 +4,15 @@
 
 本样例基于示例自定义算子工程，介绍了`aclopExecuteV2`单算子模型的方式执行固定shape算子。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-本样例支持如下产品型号：
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-- Atlas 200I/500 A2 推理产品
-- Atlas 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
+| Atlas 200I/500 A2 推理产品 | >= CANN 9.0.0 |
+| Atlas 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

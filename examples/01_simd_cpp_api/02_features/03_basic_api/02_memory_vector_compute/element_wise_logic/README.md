@@ -4,15 +4,13 @@
 
 本样例基于And、Ors、ShiftLeft、ShiftRight接口实现按位逻辑运算功能。And接口对两个源操作数进行按位与运算。Ors接口对矢量内每个元素和标量间做或操作。ShiftLeft接口对源操作数进行左移操作（tensor形式）。ShiftRight接口对源操作数进行右移操作（scalar形式）。样例支持通过编译参数切换不同场景，便于开发者理解这些接口的使用方法和实现差异。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

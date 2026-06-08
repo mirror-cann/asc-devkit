@@ -4,15 +4,13 @@
 
 本样例在多分类任务场景下，基于LogSoftMax高阶API对输入Tensor做LogSoftmax计算。该API常用于多分类任务的输出层，与交叉熵损失函数配合使用，其数值稳定性优于直接计算log(softmax(x))。计算过程包括：对last轴求行最大值、用输入减去最大值后求exp、最后将exp结果按行归一化并做log10计算。本样例使用float数据类型，输入Tensor shape为[128, 128]，完成LogSoftmax激活计算。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

@@ -4,13 +4,11 @@
 
 本样例演示了在Ascend C Reg矢量计算中，寄存器数据类型RegTensor、MaskReg模板参数regTrait的使用方法，通过两种不同的regTrait配置（RegTraitNumOne和RegTraitNumTwo），在寄存器层级执行除法运算。通过比较两种配置下的实现，展示对计算性能和资源使用的影响。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
 
 ## 目录结构介绍
 

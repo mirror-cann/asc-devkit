@@ -4,15 +4,13 @@
 
 本样例在数据填充场景下，基于Brcb API实现广播复制功能，将输入Tensor的数据复制填充到输出Tensor的多个DataBlock中。Brcb API支持每次从输入Tensor中取8个元素，分别填充到输出Tensor的8个DataBlock（每个DataBlock为32字节）中，每个元素对应一个DataBlock，实现高效的数据广播操作。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

@@ -2,14 +2,13 @@
 ## 概述
 实现矩阵向量乘GEMV（General Matrix-Vector multiplication）的Matmul样例。在Matmul计算中M=1，形状为（1，K）的左矩阵A与形状为（K, N）的右矩阵B进行矩阵乘运算的场景，通过在Tiling侧与Kernel侧设置A矩阵的数据格式为VECTOR，开启GEMV模式。
 
-## 支持的产品
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
+## 本样例支持的产品及CANN软件版本
 
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构
 ```

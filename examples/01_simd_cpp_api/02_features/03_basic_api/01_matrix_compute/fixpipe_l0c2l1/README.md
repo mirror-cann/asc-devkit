@@ -8,15 +8,13 @@
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品、Atlas A2 训练系列产品/Atlas A2 推理系列产品在L0C到L1通路下仅支持输出格式为Nz，且不支持输出数据类型为float，必须量化为其他数据类型。
 - Ascend 950PR/Ascend 950DT不支持将数据从L1直接搬运到GM，因此，本样例中从L0C搬运到L1上的结果矩阵将作为下一次矩阵乘的输入，再进行一次矩阵计算并将结果输出到GM。（Atlas A2/A3系列产品支持将数据从L1直接搬运到GM，本样例中选择直接搬出）
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

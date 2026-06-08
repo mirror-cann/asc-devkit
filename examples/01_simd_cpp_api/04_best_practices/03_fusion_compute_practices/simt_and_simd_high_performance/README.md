@@ -13,13 +13,11 @@
 | Case 2 | 2 | SIMT非连续访问UB | 基于SIMD DataCopy接口将GM连续搬运到UB，SIMT每个线程处理一段连续元素，但Warp内相邻线程访问不连续。 |
 | Case 3 | 3 | SIMT连续访问UB | 基于SIMD DataCopy接口将GM连续搬运到UB，调整SIMT线程映射，使Warp内相邻线程访问连续地址。 |
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-
-## 支持的CANN软件版本
-
-- \> CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | > CANN 9.0.0 |
 
 ## 目录结构介绍
 

@@ -8,15 +8,13 @@
 > - **FasterGelu**：GELU 的加速版本，适用于对性能要求更高的场景。将 `gelu.asc` 中 `AscendC::Gelu` 替换为 `AscendC::FasterGelu`。
 > - **FasterGeluV2**：GELU 的进一步优化版本，能降低算力需求。将 `gelu.asc` 中 `AscendC::Gelu` 替换为 `AscendC::FasterGeluV2`。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 

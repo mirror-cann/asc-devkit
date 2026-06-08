@@ -3,14 +3,13 @@
 ## 概述
 多核非对齐切分，即多核切分尾块的实际计算量小于tiling中对应参数的Matmul样例。该场景下M，N，K中的某维度无法整除singleCoreM, singleCoreN, singleCoreK，需要在不改变原有Tiling的情况下，在Kernel侧调用SetTail接口重新设置本次Matmul计算的singleCoreM/singleCoreN/singleCoreK。
 
-## 支持的产品
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
+## 本样例支持的产品及CANN软件版本
 
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 ```

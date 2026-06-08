@@ -4,13 +4,11 @@
 
 本样例演示Mutex::Lock、Mutex::Unlock、AllocMutexID和ReleaseMutexID核内流水线同步接口的使用方法。样例首先通过AllocMutexID从框架获取MutexID，然后使用Mutex::Lock和Mutex::Unlock锁定指定流水再释放流水来实现PIPE_MTE2、PIPE_V和PIPE_MTE3异步流水之间的同步依赖。样例实现数据搬入、加法计算、数据搬出三个任务，使用双缓冲和Mutex锁机制实现流水线同步控制，最后使用ReleaseMutexID释放MutexID。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
 
 ## 目录结构介绍
 

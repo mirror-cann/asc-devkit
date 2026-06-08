@@ -1,63 +1,13 @@
 # Matmul 输出Channel拆分功能直调样例
 ## 概述
 矩阵乘输出Channel拆分功能的Matmul样例。当Matmul计算结果C矩阵的格式为NZ时，C矩阵采用分形存储，若C矩阵数据类型为float，默认情况下分形大小为16 * 16。Channel拆分功能可以将该场景下C矩阵的每个16 * 16分形切分为16 * 8的分形，使C矩阵按照16 * 8的分形进行存储。
-## 支持的产品
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-## 目录结构介绍
-```
-├── matmul_channelsplit_output
-│   ├── scripts
-│   │   ├── gen_data.py                  // 输入数据和真值数据生成脚本文件
-│   │   └── verify_result.py             // 真值对比文件
-│   ├── CMakeLists.txt                   // 编译工程文件
-│   ├── data_utils.h                     // 数据读入写出函数
-│   └── matmul_channelsplit_output.asc   // Ascend C样例实现 & 调用样例
-```
-## 样例描述
-- 样例功能：  
-  Matmul样例调用Matmul API计算时，通过配置MatmulConfig中的isEnableChannelSplit参数为true，使能矩阵乘输出的Channel拆分功能，对输入的A、B矩阵做矩阵乘和加bias偏置。
+## 本样例支持的产品及CANN软件版本
 
-- 样例规格：  
-  本样例中：M = 64, N = 7680, K = 64。
-  <table>
-  <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="5" align="center">Matmul</td></tr>
-  </tr>
-  <tr><td rowspan="4" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td><td align="center">isTrans</td></tr>
-  <tr><td align="center">a</td><td align="center">[M, K]</td><td align="center">half</td><td align="center">ND</td><td align="center">flase</td></tr>
-  <tr><td align="center">b</td><td align="center">[K, N]</td><td align="center">half</td><td align="center">ND</td><td align="center">flase</td></tr>
-  <tr><td align="center">bias</td><td align="center">[1, N]</td><td align="center">float</td><td align="center">ND</td><td align="center">-</td></tr>
-  </tr>
-  </tr>
-  <tr><td rowspan="1" align="center">样例输出</td><td align="center">c</td><td align="center">[M, N]</td><td align="center">float</td><td align="center">ND</td><td align="center">-</td></tr>
-  </tr>
-  <tr><td rowspan="1" align="center">核函数名</td><td colspan="5" align="center">matmul_channelsplit_output_custom</td></tr>
-  </table>
-- 样例实现： 
-  - Kernel关键步骤
-    - 创建Matmul对象时，自定义MatmulConfig参数，将其中的isEnableChannelSplit参数设置为true，使能矩阵乘输出的Channel拆分功能，获得自定义的使用Norm模板的Matmul对象。
-      ```cpp
-      __aicore__ inline constexpr MatmulConfig GetCustomNORMCFG()
-      {
-          auto mmCfg = CFG_NORM;
-          mmCfg.isEnableChannelSplit = true;
-          return mmCfg;
-      }
-      constexpr static MatmulConfig CUSTOM_CFG_NORM = GetCustomNORMCFG();
-      AscendC::Matmul<AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType>,
-                      AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BType>,
-                      AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::NZ, CType>,
-                      AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BiasType>, CUSTOM_CFG_NORM>
-          matmulObj;
-      ```
-  
-  - 调用实现  
-    使用内核调用符<<<>>>调用核函数。
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 编译运行
 在本样例根目录下执行如下步骤，编译并执行样例。

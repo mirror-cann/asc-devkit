@@ -3,12 +3,11 @@
 ## 概述
 本样例基于BroadCastVecToMM实现数据广播搬运，将位于UB（Unified Buffer）上数据进行广播并搬运到L0C Buffer。
 
-## 支持的产品
-- Atlas 推理系列产品AI Core
+## 本样例支持的产品及CANN软件版本
 
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Atlas 推理系列产品AI Core | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 ```

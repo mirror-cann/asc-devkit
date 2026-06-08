@@ -5,12 +5,11 @@
 - `Duplicate(dstReg, scalarValue, mask)` 接口将一个标量值复制多次并填充到向量中
 - `Duplicate(dstReg, srcReg, mask)` 接口将源RegTensor的第一个元素复制多次并填充到向量中
 
-## 支持的产品
-- Ascend 950PR/Ascend 950DT
+## 本样例支持的产品及CANN软件版本
 
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
 
 ## 目录结构介绍
 ```

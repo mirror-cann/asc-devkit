@@ -4,15 +4,13 @@
 
 本样例在数据填充场景下，基于CreateVecIndex API实现创建指定起始值的向量索引功能，用于生成连续的整数序列。CreateVecIndex API支持从指定起始值开始，创建连续递增的索引向量，常用于需要生成序列索引的场景，例如为数组元素生成下标、创建步长序列等。
 
-## 支持的产品
+## 本样例支持的产品及CANN软件版本
 
-- Ascend 950PR/Ascend 950DT
-- Atlas A3 训练系列产品/Atlas A3 推理系列产品
-- Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-## 支持的CANN软件版本
-
-- \>= CANN 9.0.0
+| 产品 | CANN软件版本 |
+|------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
 ## 目录结构介绍
 
