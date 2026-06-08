@@ -149,7 +149,6 @@ public:
                 positionHardMap.at(AscendC::TPosition(this->address_.logicPos))) +
                 bufferOffset;
             this->address_.dataLen = bufferSize * INT4_BIT_NUM / ONE_BYTE_BIT_SIZE;
-
         } else {
             ASCENDC_DEBUG_ASSERT((bufferOffset % ONE_BLK_SIZE == 0),
             KERNEL_LOG_INTERNAL(KERNEL_ERROR, "bufferOffset is %u, which should be 32Bytes aligned", bufferOffset));
@@ -201,7 +200,6 @@ public:
         if constexpr (IsSameType<PrimType, int4b_t>::value) {
             address_ = address_ + offset / INT4_TWO;
             oriAddress_ = oriAddress_ + offset / INT4_TWO;
-
         } else {
             address_ = address_ + offset;
             oriAddress_ = oriAddress_ + offset;

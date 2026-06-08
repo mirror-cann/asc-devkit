@@ -97,8 +97,6 @@ __aicore__ inline void LoadData(
     const LoadData2DParamsV2& loadDataParams, const LoadData2DMxParams& loadMxDataParams);
 #endif
 
-
-
 /* **************************************************************************************************
  * LoadData 3dv1                                             *
  * ************************************************************************************************* */
