@@ -92,7 +92,7 @@ __aicore__ inline void CrossCoreSetFlag(uint16_t flagId)
 | 参数名 | 描述 |
 | --- | --- |
 | modeId | 核间同步的模式，支持的取值如下：<br>&bull; 模式0：AI Core核间的同步控制（所有AIC之间或者所有AIV之间）。<br>&bull; 模式1：AI Core内部，Vector核（AIV）之间的同步控制。<br>&bull; 模式2：AI Core内部，Cube核（AIC）与所有Vector核（AIV）之间的同步控制。<br>&bull; 模式4：AI Core内部，AIC与单个AIV之间的同步控制。AIV0与AIV1可单独触发AIC等待。<br>各个模式支持的对应Kernel类型请参照表3。 |
-| pipe | 设置这条指令所在的流水类型。支持的流水类型为PIPE_V、PIPE_M、PIPE_MTE1、PIPE_MTE2、PIPE_MTE3、PIPE_FIX。<cann-filter npu-type="950"><br>针对Ascend 950PR/Ascend 950DT，新增支持以下流水类型：PIPE_ALL和PIPE_S。</cann-filter> |
+| pipe | 设置这条指令所在的流水类型。支持的流水类型为PIPE_V、PIPE_M、PIPE_MTE1、PIPE_MTE2、PIPE_MTE3、PIPE_FIX，不支持PIPE_S和PIPE_ALL。<cann-filter npu-type="950"><br>针对Ascend 950PR/Ascend 950DT，模式4相较其他三种模式额外支持PIPE_S流水类型。</cann-filter> |
 
 **表 2**  参数说明
 
@@ -128,7 +128,7 @@ __aicore__ inline void CrossCoreSetFlag(uint16_t flagId)
     - 对于模式0、1、2，每个AIC和每个AIV都各自有16个flagId，支持的取值范围为0-15。如果flagId的值超出该范围，则会取截取最低位4bit为准。
     - 每个flagId都对应一个计数器，当调用[CrossCoreWaitFlag](CrossCoreWaitFlag(ISASI).md)时，若计数器值为0则会阻塞后续指令下发，已下发指令可正常执行；当调度模块感知到所有参与同步的核（具体包含哪些核与设置的核间同步模式有关）完成（调用了CrossCoreSetFlag）同步后，会将与设置的flagId对应的计数器的值增加1。此时，计数器值为非0，阻塞解除，并且将对应计数器的值减去1进行还原。具体执行逻辑与细节可以参考[关键特性说明](关键特性说明.md#ZH-CN_TOPIC_0000002586300741)。每一个计数器计数范围为0-15。如果调用CrossCoreWaitFlag的次数过多，计数器的值超出该范围，则会异常报错，中断流程。
 - 模式0、1、2下，同一个flagId用于不同核间同步模式的约束：
-    - 对于同一个核上的操作，若需将同一flagId用于不同的核间同步模式，必须在模式切换前确保前一个模式下的所有同步操作已完成——即与该flagId关联的CrossCoreSetFlag调用及其配对的CrossCoreWaitFlag调用均执行完毕。否则，未完成的同步操作可能导致系统出现未定义行为。
+    - 同一核上，若同一个flagId需用于不同核间同步模式，须在模式切换前完成前一个模式的所有同步操作——即确保该flagId关联的所有CrossCoreSetFlag与配套CrossCoreWaitFlag调用均已执行完毕。
     - 对于不同的核，可以直接将同一flagId用于不同的核间同步模式，具体包括以下2种场景：
         - 多个AI Core之间，使用flagId=0同步所有的AIC（模式0）；单个AI Core内，使用flagId=0同步所有AIV（模式1）。
         - 单个AI Core内，使用flagId=0同步所有AIV（模式1）；另一个AI Core内，使用flagId=0同步AIC与所有AIV（模式2）。
@@ -158,7 +158,7 @@ __aicore__ inline void CrossCoreSetFlag(uint16_t flagId)
     AscendC::SetFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
     AscendC::WaitFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
 
-    // UB到GM搬运启用原子累加：搬运至atomicResult的数据与原值累加后覆盖原值。
+    // UB到GM搬运启用原子累加。
     AscendC::SetAtomicAdd<float>();
     // DataCopy属于PIPE_MTE3流水操作。
     AscendC::DataCopy(atomicResultGm, xLocal, this->blockLength);

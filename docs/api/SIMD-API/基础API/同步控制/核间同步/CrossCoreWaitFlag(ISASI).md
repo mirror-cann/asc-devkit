@@ -67,7 +67,7 @@ __aicore__ inline void CrossCoreWaitFlag(uint16_t flagId)
 | 参数名 | 描述 |
 | --- | --- |
 | modeId | 核间同步的模式，支持的取值如下：<br>&bull; 模式0：AI Core核间的同步控制（所有AIC之间或者所有AIV之间）。<br>&bull; 模式1：AI Core内部，Vector核（AIV）之间的同步控制。<br>&bull; 模式2：AI Core内部，Cube核（AIC）与所有Vector核（AIV）之间的同步控制。<br>&bull; 模式4：AI Core内部，AIC与单个AIV之间的同步控制。AIV0与AIV1可单独触发AIC等待。<br>各个模式支持的对应Kernel类型请参照表3。 |
-| pipe | 设置这条指令所在的流水类型，支持的流水类型请参考[约束说明](#section633mcpsimp) 。|
+| pipe | 设置这条指令所在的流水类型。模式0、1、2支持的流水类型为PIPE_V、PIPE_M、PIPE_MTE1、PIPE_MTE2、PIPE_MTE3、PIPE_FIX，不支持PIPE_S和PIPE_ALL。<cann-filter npu-type="950"><br>针对Ascend 950PR/Ascend 950DT，模式4相较其他三种模式额外支持PIPE_S流水类型。</cann-filter> |
 
 **表 2**  参数说明
 
@@ -83,8 +83,7 @@ __aicore__ inline void CrossCoreWaitFlag(uint16_t flagId)
 
 - 不同产品版本下，CrossCoreWaitFlag接口对核间同步模式和流水类型的配置支持情况如下：
 <cann-filter npu-type="950">
-
-    - Ascend 950PR/Ascend 950DT，硬件支持配置核间同步模式和流水类型，传入该接口的模板参数modeId和pipe生效。此时，支持的流水类型为：PIPE_V、PIPE_M、PIPE_MTE1、PIPE_MTE2、PIPE_MTE3、PIPE_FIX、PIPE_S、PIPE_ALL。
+    - Ascend 950PR/Ascend 950DT，硬件支持配置核间同步模式和流水类型，模板参数modeId和pipe生效。模式0、1、2支持的流水类型为PIPE_V、PIPE_M、PIPE_MTE1、PIPE_MTE2、PIPE_MTE3、PIPE_FIX；模式4相较其他三种模式额外支持PIPE_S流水类型。
 </cann-filter>
 <cann-filter npu-type="A3">
     - Atlas A3 训练系列产品/Atlas A3 推理系列产品，硬件不支持配置核间同步模式和流水类型，传入该接口的模板参数modeId和pipe不生效。
@@ -114,15 +113,12 @@ __aicore__ inline void CrossCoreWaitFlag(uint16_t flagId)
 - flagId相关的约束：
     - 对于模式0、1、2，每个AIC和每个AIV都各自有16个flagId，支持的取值范围为0-15。如果flagId的值超出该范围，则会取截取最低位4bit为准。
     - 每个flagId有个对应计数器，当调用[CrossCoreWaitFlag](CrossCoreWaitFlag(ISASI).md)时，若计数器值为0则会阻塞后续指令下发，已下发指令可正常执行；当调度模块感知到核间同步（CrossCoreSetFlag）全部完成后，会将对应CrossCoreWaitFlag的计数器的值增加1。此时，计数器值为非0，阻塞解除，并且将对应计数器的值减去1进行还原。具体执行逻辑与细节可以参考[关键特性说明](关键特性说明.md#ZH-CN_TOPIC_0000002586300741)。flagId对应的计数器计数范围为0-15。如果计数器的值超出该范围，则会异常报错，中断流程。
-    - 模式0、1、2下，如果多个模式同时共用同一个flagId，CrossCoreWaitFlag无法区分具体是哪一个模式，会导致行为与预期不符。
-
-        如图1所示，AIC 1的flagId 0同时用于模式2（AIV执行CrossCoreSetFlag）和模式0（所有AIC）的核间同步。AIC 1调用CrossCoreWaitFlag时，读取flagId=0的计数器，此时计数器的值变化可能来自模式0或模式2的同步完成。AIC 1无法分辨具体是哪个模式，只能感知到计数器值变化后解除阻塞。
-
-        **图 1**  错误示范（连续使用CrossCoreWaitFlag等待不同模式）<a name="zh-cn_topic_0000002547028479_fig208671330144620"></a>  
-        ![](../../../../figures/cross_wait_flag_multi_mode_error.png)
-
+- 模式0、1、2下，同一个flagId用于不同核间同步模式的约束：
+    - 同一核上，若同一个flagId需用于不同核间同步模式，须在模式切换前完成前一个模式的所有同步操作——即确保该flagId关联的所有CrossCoreSetFlag与配套CrossCoreWaitFlag调用均已执行完毕。
+    - 对于不同的核，可以直接将同一flagId用于不同的核间同步模式，具体包括以下2种场景：
+        - 多个AI Core之间，使用flagId=0同步所有的AIC（模式0）；单个AI Core内，使用flagId=0同步所有AIV（模式1）。
+        - 单个AI Core内，使用flagId=0同步所有AIV（模式1）；另一个AI Core内，使用flagId=0同步AIC与所有AIV（模式2）。
 - 使用该接口模式0时，建议开启batchmode模式，使算子独占全部所需核资源，否则可能因满足以下条件导致死锁：
-
     - 多流并发场景（≥2条执行流）。
     - ≥2个算子并发执行。
     - 所有并发算子的核数总和超过物理核数。
@@ -149,7 +145,7 @@ __aicore__ inline void CrossCoreWaitFlag(uint16_t flagId)
     AscendC::SetFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
     AscendC::WaitFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
 
-    // UB到GM搬运启用原子累加：搬运至atomicResult的数据与原值累加后覆盖原值。
+    // UB到GM搬运启用原子累加。
     AscendC::SetAtomicAdd<float>();
     // DataCopy属于PIPE_MTE3流水操作。
     AscendC::DataCopy(atomicResultGm, xLocal, this->blockLength);
