@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例以矩阵转置为例，介绍Ascend C SIMD与SIMT混合编程场景下的访存合并优化思路。样例包含2个kernel版本，从直接索引转置开始，再通过UB中转调整数据写回方式，使GM读写更接近连续访问，从而展示混合编程下矩阵转置的全局访存优化方法。
+本样例以矩阵转置为例，介绍Ascend C SIMD与SIMT混合编程场景下的访存合并优化思路。样例包含2个Case版本，从直接索引转置开始，再通过UB中转调整数据写回方式，使GM读写更接近连续访问，从而展示混合编程下矩阵转置的全局访存优化方法。
 
 ## 本样例支持的产品及CANN软件版本
 
@@ -13,7 +13,7 @@
 ## 目录结构介绍
 
 ```text
-├── matrix_transpose
+├── simt_and_simd_matrix_transpose
 │   ├── CMakeLists.txt         // 编译工程文件
 │   ├── matrix_transpose.asc   // 矩阵转置样例实现
 │   ├── figures                // README中的图片资源
@@ -36,19 +36,19 @@
   <tr><td rowspan="2" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
   <tr><td align="center">input</td><td align="center">[1024,1024]</td><td align="center">float</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">样例输出</td><td align="center">output</td><td align="center">[1024,1024]</td><td align="center">float</td><td align="center">ND</td></tr>
-  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">transpose_naive_kernel / transpose_coalesced_kernel</td></tr>
+  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">transpose_kernel</td></tr>
   </table>
 
 ## 样例实现
 
 ### Case实现说明
 
-本样例通过两个独立的kernel实现不同的访存策略，每个kernel对应特定的Case版本。
+本样例通过调用不同的SIMT VF函数实现不同的访存策略，每个SIMT VF函数对应特定的Case版本。
 
-| Case   | 实现特点                                           | 使用的核函数               | 优化特性              |
+| Case   | 实现特点                                           | 调用的SIMT VF函数               | 优化特性              |
 | ------ | -------------------------------------------------- | -------------------------- | --------------------- |
-| Case 0 | 直接按照转置公式计算输出坐标，GM连续读、非连续写   | transpose_naive_kernel     | 直接索引转置版本      |
-| Case 1 | 通过UB暂存tile并交换读写方向，GM读写更接近连续访问 | transpose_coalesced_kernel | UB中转 + 全局访存合并 |
+| Case 0 | 直接按照转置公式计算输出坐标，GM连续读、非连续写   | simt_transpose_naive     | 直接索引转置版本      |
+| Case 1 | 通过UB暂存tile并交换读写方向，GM读写更接近连续访问 | simt_transpose_coalesced | UB中转 + 全局访存合并 |
 
 #### 线程块布局
 
