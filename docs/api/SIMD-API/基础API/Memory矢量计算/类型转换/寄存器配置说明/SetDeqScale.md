@@ -65,7 +65,7 @@
 
 ## 函数原型<a name="zh-cn_topic_0000002563051145_section21861260618"></a>
 
-- 用于AddDeqRelu、Cast、CastDequant的s322f16场景。
+- 用于AddDeqRelu、Cast、CastDequant的s322f16场景。<a id="func1"></a>
 
   ```cpp
   __aicore__ inline void SetDeqScale(half scale)

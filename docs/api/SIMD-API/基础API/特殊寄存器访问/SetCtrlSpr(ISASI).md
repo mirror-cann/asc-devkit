@@ -42,7 +42,7 @@ __aicore__ static inline void SetCtrlSpr(int64_t value)
 
 <cann-filter npu-type="950">
 
-**表 3** Ascend 950PR/Ascend 950DT常用CTRL寄存器比特位说明
+**表 3** Ascend 950PR/Ascend 950DT常用CTRL寄存器比特位说明<a id="tab-950"></a>
 
 | CTRL寄存器比特位 | 功能 | 默认值 | 配合使用的API |
 | --- | --- | --- | --- |
