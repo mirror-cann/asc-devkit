@@ -11,7 +11,10 @@
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} plugin_srcs)
 
-set(NLOHMANN_JSON_URL "https://gitcode.com/cann-src-third-party/json/releases/download/v3.11.3/include.zip")
+set(NLOHMANN_JSON_URL
+    "https://gitcode.com/cann-src-third-party/json/releases/download/v3.11.3/include.zip"
+    CACHE STRING "URL or file:// path to nlohmann/json include.zip"
+)
 set(NLOHMANN_JSON_DIR "${CMAKE_CURRENT_BINARY_DIR}/third_party/json")
 set(NLOHMANN_JSON_ARCHIVE "${NLOHMANN_JSON_DIR}/include.zip")
 set(NLOHMANN_JSON_HEADER "${NLOHMANN_JSON_DIR}/include/nlohmann/json.hpp")

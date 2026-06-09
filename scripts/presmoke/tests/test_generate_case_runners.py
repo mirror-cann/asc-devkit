@@ -1,0 +1,365 @@
+from __future__ import annotations
+
+import json
+import re
+import unittest
+import subprocess
+import tempfile
+from pathlib import Path
+
+from presmoke.generate_case_runners import (
+    ARCH_OVERRIDES,
+    apply_case_overrides,
+    command_env_prefix,
+    explicit_skip_reason,
+    is_atc_prerequisite_command,
+    quote_env_value,
+    render_runner,
+    requires_custom_op_package,
+    RunnerRenderSpec,
+)
+from presmoke.model import Command, ExampleSpec
+
+
+def render_runner_from_parts(
+    rel: str,
+    build_cmds: list[Command],
+    run_cmds: list[Command],
+    verify_cmds: list[Command],
+    custom_op_dependency: bool = False,
+    custom_op_package_case: bool = False,
+) -> str:
+    return render_runner(
+        RunnerRenderSpec(
+            rel=rel,
+            build_cmds=build_cmds,
+            run_cmds=run_cmds,
+            verify_cmds=verify_cmds,
+            custom_op_dependency=custom_op_dependency,
+            custom_op_package_case=custom_op_package_case,
+        )
+    )
+
+
+class GenerateCaseRunnersTest(unittest.TestCase):
+    def expected_archs_from_supported_products(self, readme: Path) -> list[str]:
+        text = readme.read_text(encoding="utf-8", errors="ignore")
+        lines = text.splitlines()
+        start = None
+        for idx, line in enumerate(lines):
+            if re.match(r"^#+\s*(支持的产品|支持产品)\s*$", line.strip()):
+                start = idx + 1
+                break
+        if start is None:
+            return []
+        end = len(lines)
+        for idx in range(start, len(lines)):
+            if re.match(r"^##+\s+", lines[idx].strip()):
+                end = idx
+                break
+        support = "\n".join(lines[start:end])
+        archs = []
+        if re.search(r"Ascend\s*950|950PR|950DT|dav-3510", support, re.IGNORECASE):
+            archs.append("dav-3510")
+        if re.search(r"Atlas\s*A[23]|Atlas\s*200I/500\s*A2|Atlas\s*200I|Atlas\s*500\s*A2|dav-2201", support, re.IGNORECASE):
+            archs.append("dav-2201")
+        return archs
+
+    def test_manifest_archs_match_readme_supported_products(self) -> None:
+        project_root = Path(__file__).resolve().parents[3]
+        manifest = json.loads((project_root / "scripts/presmoke/reports/case_runner_manifest.json").read_text(encoding="utf-8"))
+        mismatches = []
+        for item in manifest:
+            readme = project_root / "examples" / item["case"] / "README.md"
+            if not readme.exists():
+                continue
+            expected = self.expected_archs_from_supported_products(readme)
+            if expected and sorted(item.get("supported_archs")) != sorted(expected):
+                mismatches.append((item["case"], expected, item.get("supported_archs")))
+        self.assertEqual(mismatches, [])
+
+    def test_manifest_modes_include_readme_cpu_support(self) -> None:
+        project_root = Path(__file__).resolve().parents[3]
+        examples_root = project_root / "examples"
+        manifest = {
+            item["case"]: item
+            for item in json.loads((project_root / "scripts/presmoke/reports/case_runner_manifest.json").read_text(encoding="utf-8"))
+        }
+        missing = []
+        for readme in examples_root.rglob("README.md"):
+            text = readme.read_text(encoding="utf-8", errors="ignore")
+            if "CMAKE_ASC_RUN_MODE=cpu" not in text:
+                continue
+            rel_path = readme.parent.relative_to(examples_root).as_posix()
+            item = manifest.get(rel_path)
+            if not item or "cpu" not in item.get("supported_modes", []):
+                missing.append(rel_path)
+
+        self.assertEqual(missing, [])
+
+    def test_atc_prerequisite_python_stays_in_build_before_atc(self) -> None:
+        commands = [
+            Command("python3 ../leaky_relu.py", "run"),
+            Command("atc --model=./leaky_relu.onnx --soc_version=${soc_version}", "shell"),
+            Command("cmake ..", "cmake"),
+            Command("make -j", "make"),
+            Command("./execute_leaky_relu_op", "run"),
+        ]
+        build_cmds = [
+            command
+            for command in commands
+            if command.kind in {"cmake", "make", "gen_data", "shell"} or is_atc_prerequisite_command(command, commands)
+        ]
+        run_cmds = [command for command in commands if command.kind in {"run", "package_run"} and command not in build_cmds]
+        script = render_runner_from_parts("x", build_cmds, run_cmds, [])
+        self.assertLess(script.index("python3 ../leaky_relu.py"), script.index("atc --model=./leaky_relu.onnx"))
+        self.assertLess(script.index("atc --model=./leaky_relu.onnx"), script.index("cmake .."))
+        self.assertLess(script.index("cmake .."), script.index("make -j"))
+        self.assertIn("./execute_leaky_relu_op", script)
+
+    def test_cmake_build_command_is_not_treated_as_configure(self) -> None:
+        script = render_runner_from_parts(
+            "x",
+            [Command("cmake -S . -B build", "cmake"), Command("cmake --build build -j", "cmake")],
+            [],
+            [],
+        )
+        self.assertIn("cmake -S . -B build -DCMAKE_ASC_ARCHITECTURES", script)
+        self.assertIn("cmake --build build -j'", script)
+        self.assertNotIn("cmake --build build -j -DCMAKE_ASC_ARCHITECTURES", script)
+
+    def test_msprof_application_with_parent_python_runs_from_build_dir(self) -> None:
+        script = render_runner_from_parts(
+            "x",
+            [],
+            [Command('msprof --application="python3 ../torch_library_report_tensor.py" --output="../result"', "run")],
+            [],
+        )
+        self.assertIn('(cd "$BUILD_DIR" && soc_version=$SOC_VERSION bash -lc', script)
+        self.assertIn('python3 ../torch_library_report_tensor.py', script)
+        self.assertNotIn('(cd "$CASE_DIR" && soc_version=$SOC_VERSION bash -lc', script)
+
+    def test_env_value_references_are_not_single_quoted(self) -> None:
+        self.assertEqual(quote_env_value("$ARCH"), "$ARCH")
+        self.assertEqual(quote_env_value("$SOC_VERSION"), "$SOC_VERSION")
+        self.assertEqual(quote_env_value("$SCENARIO"), "$SCENARIO")
+        self.assertEqual(quote_env_value("${SCENARIO}"), "${SCENARIO}")
+        self.assertEqual(quote_env_value("plain value"), "'plain value'")
+
+    def test_arch_env_assignment_uses_runtime_arch(self) -> None:
+        prefix = command_env_prefix(Command("cmake ..", "cmake", {"ASC_ARCH": "dav-2201"}))
+        self.assertIn("ASC_ARCH=$ARCH", prefix)
+        self.assertNotIn("ASC_ARCH=dav-2201", prefix)
+
+    def test_manual_npu_arch_option_uses_runtime_arch(self) -> None:
+        script = render_runner_from_parts(
+            "x",
+            [Command("bisheng kernel.asc -o kernel.o --npu-arch=dav-2201", "shell")],
+            [Command("./demo", "run")],
+            [],
+        )
+        self.assertIn("--npu-arch=$ARCH", script)
+        self.assertNotIn("--npu-arch=dav-2201", script)
+
+    def test_custom_op_dependent_runner_installs_package_before_build(self) -> None:
+        script = render_runner_from_parts(
+            "x",
+            [Command("cmake ..", "cmake")],
+            [Command("./demo", "run")],
+            [],
+            custom_op_dependency=True,
+        )
+        self.assertLess(script.index("presmoke_ensure_custom_op_package"), script.index("cmake .."))
+
+    def test_custom_op_provider_runner_uses_locked_installer_in_run_step(self) -> None:
+        script = render_runner_from_parts(
+            "01_simd_cpp_api/02_features/00_compilation/custom_op",
+            [Command(":", "build")],
+            [Command(":", "run")],
+            [],
+            custom_op_dependency=True,
+            custom_op_package_case=True,
+        )
+        self.assertEqual(script.count("presmoke_ensure_custom_op_package"), 2)
+
+    def test_dependency_and_tensorflow_skip_rules(self) -> None:
+        self.assertTrue(requires_custom_op_package("01_simd_cpp_api/02_features/00_compilation/custom_op"))
+        self.assertTrue(requires_custom_op_package("01_simd_cpp_api/02_features/01_invocation/aclnn_invocation"))
+        self.assertTrue(requires_custom_op_package("01_simd_cpp_api/02_features/02_framework/02_onnx/onnx_plugin"))
+        self.assertTrue(requires_custom_op_package("01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_custom"))
+        self.assertIn("TensorFlow 2.6.5", explicit_skip_reason("01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_custom"))
+
+    def test_matmul_fp8_is_950_only(self) -> None:
+        self.assertEqual(
+            ARCH_OVERRIDES["01_simd_cpp_api/03_libraries/00_matrix/matmul_fp8"],
+            ["dav-3510"],
+        )
+
+    def test_custom_op_provider_cases_support_910b_and_950(self) -> None:
+        expected = ["dav-2201", "dav-3510"]
+        self.assertEqual(
+            ARCH_OVERRIDES["01_simd_cpp_api/02_features/00_compilation/custom_op_static_lib"],
+            expected,
+        )
+        self.assertEqual(
+            ARCH_OVERRIDES["01_simd_cpp_api/02_features/00_compilation/custom_op"],
+            expected,
+        )
+
+    def test_custom_op_dependent_cases_support_910b_and_950(self) -> None:
+        expected = ["dav-2201", "dav-3510"]
+        for rel_path in [
+            "01_simd_cpp_api/02_features/01_invocation/aclnn_invocation",
+            "01_simd_cpp_api/02_features/01_invocation/aclop_invocation",
+            "01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_builtin",
+            "01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_custom",
+            "01_simd_cpp_api/02_features/02_framework/02_onnx/onnx_plugin",
+            "01_simd_cpp_api/02_features/04_aicpu/tiling_sink_programming",
+        ]:
+            self.assertEqual(ARCH_OVERRIDES[rel_path], expected)
+
+    def test_arch_overrides_are_applied_before_planning(self) -> None:
+        spec = ExampleSpec(
+            Path("examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_fp8"),
+            "01_simd_cpp_api/03_libraries/00_matrix/matmul_fp8",
+            [Command("cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201", "cmake")],
+            ["dav-2201", "dav-3510"],
+            ["npu"],
+            "readme",
+        )
+        apply_case_overrides([spec])
+        self.assertEqual(spec.archs, ["dav-3510"])
+
+    def test_rendered_runner_delegates_common_boilerplate_to_case_common(self) -> None:
+        script = render_runner_from_parts(
+            "01_simd_cpp_api/00_introduction/00_quickstart/hello_world",
+            [Command("cmake ..", "cmake"), Command("make -j", "make")],
+            [Command("./demo", "run")],
+            [],
+        )
+
+        self.assertIn("presmoke_case_init", script)
+        self.assertIn("_case_entry.sh", script)
+        self.assertIn("case_build()", script)
+        self.assertIn("case_run()", script)
+        self.assertIn("case_verify()", script)
+        self.assertIn('presmoke_case_main "$@"', script)
+        self.assertNotIn("COMMON_SH", script)
+        self.assertNotIn("SEARCH_DIR", script)
+        self.assertNotIn('CASE_DIR="$(presmoke_case_root "$CASE_REL")"', script)
+        self.assertNotIn('ACTION="${1:-all}"', script)
+        self.assertNotIn('case "$ACTION" in', script)
+
+    def test_skip_runner_clean_still_removes_build_directory(self) -> None:
+        project_root = Path(__file__).resolve().parents[3]
+        runner = project_root / "scripts/presmoke/cases/01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_builtin/run.sh"
+        build_dir = project_root / "examples/01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_builtin/build_npu"
+
+        with tempfile.TemporaryDirectory(dir=project_root) as tmp:
+            marker = build_dir / "presmoke_clean_marker"
+            build_dir.mkdir(parents=True, exist_ok=True)
+            marker.write_text("stale", encoding="utf-8")
+            env = {"PRESMOKE_PROJECT_ROOT": str(project_root), **dict(__import__("os").environ)}
+
+            result = subprocess.run(["bash", str(runner), "clean"], cwd=tmp, env=env, text=True, capture_output=True)
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(build_dir.exists())
+
+    def test_case_common_maps_950_arch_to_supported_soc_version(self) -> None:
+        project_root = Path(__file__).resolve().parents[3]
+        case_common = project_root / "scripts/presmoke/case_common.sh"
+
+        result = subprocess.run(
+            ["bash", "-c", f"source {case_common}; presmoke_soc_version dav-3510"],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.strip(), "Ascend950PR_9599")
+
+    def test_custom_op_stamp_requires_installed_files_to_be_complete(self) -> None:
+        project_root = Path(__file__).resolve().parents[3]
+        case_common = project_root / "scripts/presmoke/case_common.sh"
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            custom_op = root / "examples/01_simd_cpp_api/02_features/00_compilation/custom_op"
+            state = root / ".presmoke_state"
+            custom_op.mkdir(parents=True)
+            state.mkdir()
+            (state / "custom_op_dav-2201_npu.installed").write_text("stale", encoding="utf-8")
+            opp = root / "opp"
+            build_dynamic = custom_op / "build_npu/op_kernel/ascendc_kernels/binary/dynamic/add_custom"
+            build_dynamic.mkdir(parents=True)
+            (build_dynamic / "add_custom_tiling.h").write_text("header", encoding="utf-8")
+            vendor_dynamic = opp / "vendors/customize/op_impl/ai_core/tbe/customize_impl/dynamic"
+            vendor_dynamic.mkdir(parents=True)
+            (vendor_dynamic / "add_custom.py").write_text("", encoding="utf-8")
+            (vendor_dynamic / "add_custom_tiling_sink.py").write_text("", encoding="utf-8")
+            add_custom_dynamic = opp / "vendors/add_custom/op_impl/ai_core/tbe/add_custom_impl/dynamic"
+            add_custom_dynamic.mkdir(parents=True)
+            (add_custom_dynamic / "add_custom.py").write_text("", encoding="utf-8")
+            (add_custom_dynamic / "add_custom_kernel.cpp").write_text("", encoding="utf-8")
+            vendor_api = opp / "vendors/customize/op_api"
+            (vendor_api / "include").mkdir(parents=True)
+            (vendor_api / "lib").mkdir(parents=True)
+            (vendor_api / "include/aclnn_add_custom.h").write_text("", encoding="utf-8")
+            (vendor_api / "include/aclnn_add_custom_tiling_sink.h").write_text("", encoding="utf-8")
+            (vendor_api / "lib/libcust_opapi.so").write_text("", encoding="utf-8")
+            vendor_framework = opp / "vendors/customize/framework/onnx"
+            vendor_framework.mkdir(parents=True)
+            (vendor_framework / "libcust_onnx_parsers.so").write_text("", encoding="utf-8")
+            vendor_master = opp / "vendors/customize/op_impl/ai_core/tbe/op_master_device/lib"
+            vendor_master.mkdir(parents=True)
+            (vendor_master / "libcust_opmaster.so").write_text("", encoding="utf-8")
+
+            script = f"""
+set -euo pipefail
+source {case_common}
+export PRESMOKE_PROJECT_ROOT={root}
+export PRESMOKE_STATE_DIR={state}
+export ASCEND_OPP_PATH={opp}
+export PRESMOKE_ARCH=dav-2201
+export PRESMOKE_MODE=npu
+presmoke_run_command() {{
+    if [[ "$1" == "make" ]]; then
+        cat > custom_opp_test.run <<'RUN'
+#!/usr/bin/env bash
+set -euo pipefail
+vendor="$ASCEND_OPP_PATH/vendors/customize"
+mkdir -p "$vendor/op_impl/ai_core/tbe/customize_impl/dynamic"
+mkdir -p "$vendor/op_api/include" "$vendor/op_api/lib"
+mkdir -p "$vendor/framework/onnx" "$vendor/op_impl/ai_core/tbe/op_master_device/lib"
+touch "$vendor/op_impl/ai_core/tbe/customize_impl/dynamic/add_custom.py"
+touch "$vendor/op_impl/ai_core/tbe/customize_impl/dynamic/add_custom_tiling_sink.py"
+touch "$vendor/op_api/include/aclnn_add_custom.h"
+touch "$vendor/op_api/include/aclnn_add_custom_tiling_sink.h"
+touch "$vendor/op_api/lib/libcust_opapi.so"
+touch "$vendor/framework/onnx/libcust_onnx_parsers.so"
+touch "$vendor/op_impl/ai_core/tbe/op_master_device/lib/libcust_opmaster.so"
+RUN
+        chmod +x custom_opp_test.run
+        return 0
+    fi
+    if [[ "$1" == "./custom_opp_test.run" ]]; then
+        "$@"
+        return
+    fi
+    return 0
+}}
+presmoke_ensure_custom_op_package
+"""
+
+            result = subprocess.run(["bash", "-c", script], text=True, capture_output=True, check=False)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("custom_op package already installed", result.stderr)
+            self.assertTrue((opp / "vendors/customize/op_impl/ai_core/tbe/customize_impl/dynamic/add_custom_tiling_sink.py").exists())
+            self.assertTrue((add_custom_dynamic / "add_custom_tiling.h").exists())
+
+
+if __name__ == "__main__":
+    unittest.main()

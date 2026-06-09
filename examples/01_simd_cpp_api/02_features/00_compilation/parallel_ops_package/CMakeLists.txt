@@ -14,11 +14,20 @@ project(parallel_ops_package_proj)
 include(ExternalProject)
 
 set(INSTALL_TARGET "package")
+set(NLOHMANN_JSON_URL
+    "https://gitcode.com/cann-src-third-party/json/releases/download/v3.11.3/include.zip"
+    CACHE STRING "URL or file:// path to nlohmann/json include.zip"
+)
 
 set(ADD_CUSTOM_ASCEND_COMPUTE_UNIT ascend910 ascend310p ascend310b ascend910b ascend950)
 set(LEAKY_RELU_ASCEND_COMPUTE_UNIT ascend910b)
 
 function(add_parallel_vendor_project target_name source_dir vendor_name compute_units)
+    set(extra_cmake_args)
+    if("${target_name}" STREQUAL "leaky_relu_custom")
+        list(APPEND extra_cmake_args "-DNLOHMANN_JSON_URL=${NLOHMANN_JSON_URL}")
+    endif()
+
     ExternalProject_Add(${target_name}
         SOURCE_DIR ${source_dir}
         CMAKE_CACHE_ARGS
@@ -26,6 +35,7 @@ function(add_parallel_vendor_project target_name source_dir vendor_name compute_
         CMAKE_ARGS
             -Dvendor_name=${vendor_name}
             -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/${target_name}
+            ${extra_cmake_args}
         BUILD_COMMAND
             ${CMAKE_COMMAND} --build <BINARY_DIR> --target binary
         COMMAND

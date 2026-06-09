@@ -17,6 +17,7 @@ DIR_LIST=(
     "/usr/local/Ascend/cann/asc/|./monitor_snapshot_2.txt"
 )
 RESULT_CHECK="./result_check.txt"
+rm -f "$RESULT_CHECK"
 
 # 遍历监控每个目录
 for item in "${DIR_LIST[@]}"; do

@@ -6,8 +6,11 @@ output
 __pycache__/
 /examples/**/build/
 AGENTS.md
+CLAUDE.md
 oat_reports/
+presmoke_reports/
 log/
+.DS_Store
 third_party/
 openssl-device-src/
 openssl-host-src/

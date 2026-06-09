@@ -40,7 +40,7 @@
 - 安装onnx
 
   ```bash
-  pip3 install onnx==1.12.0
+  pip3 install onnx==1.16.0
   ```
 
 - 配置环境变量
