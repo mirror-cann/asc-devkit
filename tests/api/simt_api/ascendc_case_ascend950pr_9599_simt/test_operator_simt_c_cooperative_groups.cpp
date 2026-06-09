@@ -214,7 +214,7 @@ TEST_F(CooperativeGroupsTestsuite, CoalescedGroupThreadRankTest)
 TEST_F(CooperativeGroupsTestsuite, CoalescedGroupThreadRankUsesMaskAndLaneMaskTest)
 {
     coalesced_group cg(0x00000055);
-    EXPECT_EQ(cg.thread_rank(), static_cast<unsigned long long>(__popc(0x00000055 & lanemask_lt())));
+    EXPECT_EQ(cg.thread_rank(), static_cast<unsigned long long>(__popc(0x00000055 & static_cast<unsigned int>(lanemask_lt()))));
 }
 
 namespace {
@@ -284,7 +284,7 @@ TEST_F(CooperativeGroupsTestsuite, TiledGroupPropertiesTest)
     EXPECT_EQ(tiled.get_type(), group_type::tiled_group_type);
     EXPECT_EQ(tiled.num_threads(), 6ull);
     EXPECT_EQ(tiled.size(), 6ull);
-    EXPECT_EQ(tiled.thread_rank(), static_cast<unsigned long long>(__popc(0x0000003F & lanemask_lt())));
+    EXPECT_EQ(tiled.thread_rank(), static_cast<unsigned long long>(__popc(0x0000003F & static_cast<unsigned int>(lanemask_lt()))));
     tiled.sync();
 }
 
@@ -1019,7 +1019,7 @@ TEST_F(CooperativeGroupsTestsuite, ThreadGroupFromTiledPartitionThreadRankTest)
     thread_block tb = this_thread_block();
     thread_group tg = tiled_partition(tb, 4);
     unsigned long long rank = tg.thread_rank();
-    EXPECT_EQ(rank, static_cast<unsigned long long>(__popc(tg._tiled_info.mask & lanemask_lt())));
+    EXPECT_EQ(rank, static_cast<unsigned long long>(__popc(tg._tiled_info.mask & static_cast<unsigned int>(lanemask_lt()))));
 }
 
 TEST_F(CooperativeGroupsTestsuite, ThreadGroupFromTiledPartitionSyncTest)

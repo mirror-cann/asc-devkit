@@ -23,8 +23,14 @@ int32_t asc_get_block_idx();
 
 int32_t asc_get_block_num();
 
-int32_t laneid();
+static int32_t laneid()
+{
+    return 0;
+}
 
-uint32_t lanemask_lt();
+static int32_t lanemask_lt()
+{
+    return 0xFFFFFFFF;
+}
 
 #endif

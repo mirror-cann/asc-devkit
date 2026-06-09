@@ -1873,6 +1873,14 @@
             -   [asc\_reduce\_max](SIMT-API/Warp函数/Warp-Reduce类函数/asc_reduce_max.md)
             -   [asc\_reduce\_min](SIMT-API/Warp函数/Warp-Reduce类函数/asc_reduce_min.md)
 
+        -   [LaneID类函数](SIMT-API/Warp函数/Lane-ID类函数/Lane-ID类函数.md)
+            -   [laneid](SIMT-API/Warp函数/Lane-ID类函数/laneid.md)
+            -   [lanemask_eq](SIMT-API/Warp函数/Lane-ID类函数/lanemask_eq.md)
+            -   [lanemask_le](SIMT-API/Warp函数/Lane-ID类函数/lanemask_le.md)
+            -   [lanemask_lt](SIMT-API/Warp函数/Lane-ID类函数/lanemask_lt.md)
+            -   [lanemask_ge](SIMT-API/Warp函数/Lane-ID类函数/lanemask_ge.md)
+            -   [lanemask_gt](SIMT-API/Warp函数/Lane-ID类函数/lanemask_gt.md)
+
     -   [数学函数](SIMT-API/数学函数/数学函数.md)
         -   [fp8类型](SIMT-API/数学函数/fp8类型/fp8类型.md)
             -   [fp8数据类型简介](SIMT-API/数学函数/fp8类型/fp8数据类型简介.md)
