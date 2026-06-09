@@ -1,4 +1,4 @@
-# Conv3DBackpropFilter Tiling使用说明<a name="ZH-CN_TOPIC_0000002103020073"></a>
+# Conv3DBackpropFilter Tiling使用说明
 
 Ascend C提供一组Conv3DBackpropFilter Tiling API，方便用户获取Conv3DBackpropFilter Kernel计算时所需的Tiling参数。用户只需要传入Input/GradOutput/GradWeight的Position位置、Format格式和DType数据类型及相关参数等信息，调用API接口，即可获取[Init](../Conv3DBackpropFilter-Kernel侧接口/Init-120.md)中TConv3DBpFilterTiling结构体中的相关参数。
 
@@ -35,7 +35,7 @@ conv3dBpDwTiling.SetDilation(dilationD, dilationH, dilationW);
 int ret = conv3dBpDwTiling.GetTiling(tilingData);    // 如果 ret = -1, 获取tiling 结果失败
 ```
 
-## 需要包含的头文件<a name="section1682364117469"></a>
+## 需要包含的头文件
 
 ```
 #include "lib/conv_backprop/conv3d_bp_filter_tiling.h"
