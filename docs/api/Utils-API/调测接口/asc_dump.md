@@ -172,7 +172,6 @@ __simd_callee__ inline void asc_dump(__ubuf__ T* input, uint32_t desc, uint32_t 
 
 -   使用该接口时，在每个核上dump的数据总量不能超过1M，请开发者自行控制打印的内容数据量，超出则不会打印。
 -   在计算数据量时，若dump的总长度未对齐，需要考虑padding数据的影响。当进行非对齐dump时，如果实际dump的元素长度不满足32字节对齐，系统会自动在其末尾补充一定数量的padding数据，以满足对齐要求。
--   如果要正常使用dump功能，需要在kernel核函数外定义如下宏定义："\#define ASCENDC\_DUMP 1"。
 
 ## 调用示例<a name="zh-cn_topic_0000002000280437_zh-cn_topic_0000001997078721_section82241477610"></a>
 
