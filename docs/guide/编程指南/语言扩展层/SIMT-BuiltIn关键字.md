@@ -122,15 +122,15 @@
 <a name="table114921244133211"></a>
 | 类型 | 数据类型 | 描述 | Size（bit） | 取值范围 |
 | --- | --- | --- | --- | --- |
-| 布尔型 | bool | 全0代表false，否则代表true。 | 8 | true, flase |
-| 整形 | uint8_t | unsigned char | 8 | [0, 255] |
-| 整形 | int8_t | signed char | 8 | [-128, 127] |
-| 整形 | uint16_t | unsigned short | 16 | [0, 65535] |
-| 整形 | int16_t | signed short | 16 | [-32768, 32767] |
-| 整形 | uint32_t | unsigned int | 32 | [0, 4294967295] |
-| 整形 | int32_t | signed int | 32 | [-2147483648, 2147483647] |
-| 整形 | uint64_t | unsigned long | 64 | [0,18446744073709551615] |
-| 整形 | int64_t | signed long | 64 | [-9223372036854775808, 9223372036854775807] |
+| 布尔型 | bool | 全0代表false，否则代表true。 | 8 | true, false |
+| 整型 | uint8_t | unsigned char | 8 | [0, 255] |
+| 整型 | int8_t | signed char | 8 | [-128, 127] |
+| 整型 | uint16_t | unsigned short | 16 | [0, 65535] |
+| 整型 | int16_t | signed short | 16 | [-32768, 32767] |
+| 整型 | uint32_t | unsigned int | 32 | [0, 4294967295] |
+| 整型 | int32_t | signed int | 32 | [-2147483648, 2147483647] |
+| 整型 | uint64_t | unsigned long | 64 | [0,18446744073709551615] |
+| 整型 | int64_t | signed long | 64 | [-9223372036854775808, 9223372036854775807] |
 | 浮点型 | float8_e4m3_t | 符号位宽1，指数位宽4，尾数位宽3 | 8 | [2<sup>6</sup> - 2<sup>9</sup>, 2<sup>9</sup> - 2<sup>6</sup>] |
 | 浮点型 | float8_e5m2_t | 符号位宽1，指数位宽5，尾数位宽2 | 8 | [2<sup>13</sup> - 2<sup>16</sup>, 2<sup>16</sup> - 2<sup>13</sup>] |
 | 浮点型 | hifloat8_t | 符号位宽1，点域位宽2，指数与尾数位宽由点域编码决定 | 8 | 点域编码决定数据精度与取值范围 |
@@ -304,7 +304,7 @@ add_custom<<<blocks_per_grid, threads_per_block, dyn_ubuf_size, stream>>>(x, y, 
 
 为了支持底层性能调优，应用程序可以通过在\_\_global\_\_函数定义中使用 \_\_maxnreg\_\_\(\)限定符，用于向编译器传递性能调优意图。该限定符直接限制单个线程在一个线程块内最多可分配的寄存器数量。
 
--   \_\_maxnreg\_\_\(N\) <a name="li23861114619"></a>
+-   \_\_maxnreg\_\_\(N\) <a name="section_maxnreg"></a>
 
     函数标记宏，在核函数上可选配置，用于在编译期指定单个线程在一个线程块内最多可分配的寄存器数量。
 

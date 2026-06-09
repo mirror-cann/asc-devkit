@@ -8,7 +8,7 @@ SIMT编程模式下提供以下访存函数：
 
 - **`asc_ldcg`**：加载数据时从Global Memory加载，适用于仅遍历一次的输入数据，减少其对DCache空间的占用。
 - **`asc_ldca`**：加载数据时优先从DCache加载，适用于需要频繁访问的热点数据（如查找表），确保热点数据常驻DCache，减少从Global Memory重新加载的次数。
-- **`asc_stcg`**：存储数据时直接缓存到Global Memory空间，适用于数据写到GM后不会再被使用，不需要使用Cache缓存，避免输出数据占用DCache空间影响热点数据的缓存。
+- **`asc_stcg`**：存储数据时直接写入Global Memory，不经过DCache缓存，适用于数据写到GM后不会再被使用，不需要使用Cache缓存，避免输出数据占用DCache空间影响热点数据的缓存。
 
 【样例介绍】以[sin查表算子](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/03_best_practices/00_memory_optimizations/cache_hint)为例，使用查表法计算sin值，通过线性插值提高精度。输入数据长度为65536（256KB），sin查找表长度为8192（32KB）。算法实现中，每个线程根据输入值计算查找表索引，根据索引从sin表中读取对应位置及其后续位置的数据，通过线性插值得到结果。其中每个输入数据仅访问一次，属于非热点数据；sin查找表会被反复访问，属于热点数据。
 
