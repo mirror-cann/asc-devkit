@@ -72,15 +72,14 @@ __aicore__ inline void LoadData2DL12L0ACal(__ca__ T* dst, __cbuf__ T* src, const
     if ASCEND_IS_AIC {
         uint16_t mStartPosition = 0;
         uint16_t kStartPosition = loadDataParam.startIndex;
-        uint8_t mStep = loadDataParam.srcStride;
         uint8_t kStep = loadDataParam.repeatTimes;
         int16_t srcStride = static_cast<int16_t>(loadDataParam.srcStride);
         uint16_t dstStride = loadDataParam.dstGap + 1;
 
         if (loadDataParam.ifTranspose) {
-            load_cbuf_to_ca(dst, src, mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride, 1);
+            load_cbuf_to_ca(dst, src, mStartPosition, kStartPosition, 1, kStep, srcStride, dstStride, 1);
         } else {
-            load_cbuf_to_ca(dst, src, mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride, 0);
+            load_cbuf_to_ca(dst, src, mStartPosition, kStartPosition, 1, kStep, srcStride, dstStride, 0);
         }
     }
 }
@@ -95,18 +94,14 @@ __aicore__ inline void LoadData2DL12L0BCal(__cb__ T* dst, __cbuf__ T* src, const
     if ASCEND_IS_AIC {
         uint16_t mStartPosition = 0;
         uint16_t kStartPosition = loadDataParam.startIndex;
-        uint8_t mStep = loadDataParam.srcStride;
         uint8_t kStep = loadDataParam.repeatTimes;
         int16_t srcStride = static_cast<int16_t>(loadDataParam.srcStride);
         uint16_t dstStride = loadDataParam.dstGap + 1;
 
         if (loadDataParam.ifTranspose) {
-            for (uint8_t i = 0; i < kStep; i++) {
-                load_cbuf_to_cb(
-                    dst + i * VALUE_512 / sizeof(T) * dstStride, src, mStartPosition, i, 1, 1, srcStride, dstStride, 1);
-            }
+            load_cbuf_to_cb(dst, src, mStartPosition, kStartPosition, 1, kStep, srcStride, dstStride, 1);
         } else {
-            load_cbuf_to_cb(dst, src, mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride, 0);
+            load_cbuf_to_cb(dst, src, mStartPosition, kStartPosition, 1, kStep, srcStride, dstStride, 0);
         }
     }
 }
