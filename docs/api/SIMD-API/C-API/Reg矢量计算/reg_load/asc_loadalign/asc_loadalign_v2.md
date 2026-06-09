@@ -39,6 +39,7 @@ __simd_callee__ inline void asc_loadalign(vector_uint32_t& dst, __ubuf__ uint32_
 __simd_callee__ inline void asc_loadalign(vector_int32_t& dst, __ubuf__ int32_t* src, iter_reg offset)
 __simd_callee__ inline void asc_loadalign(vector_int64_t& dst, __ubuf__ int64_t* src, iter_reg offset)
 __simd_callee__ inline void asc_loadalign(vector_uint64_t& dst, __ubuf__ uint64_t* src, iter_reg offset)
+__simd_callee__ inline void asc_loadalign(vector_half& dst, __ubuf__ half* src, iter_reg offset)
 __simd_callee__ inline void asc_loadalign(vector_float& dst, __ubuf__ float* src, iter_reg offset)
 __simd_callee__ inline void asc_loadalign(vector_int4x2_t& dst, __ubuf__ int4b_t* src, iter_reg offset)
 // BRC搬入模式

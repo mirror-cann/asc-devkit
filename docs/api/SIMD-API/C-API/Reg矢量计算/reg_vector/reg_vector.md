@@ -86,7 +86,7 @@
 
 - **[asc_gt_scalar](asc_gt_scalar.md)**
 
-- **[asc_half2bf16](asc_half2bf16.md)**
+- **[asc_half2bfloat16](asc_half2bfloat16.md)**
 
 - **[asc_half2float](asc_half2float.md)**
 

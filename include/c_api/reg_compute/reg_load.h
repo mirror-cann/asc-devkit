@@ -1363,6 +1363,8 @@ __simd_callee__ inline void asc_loadalign(vector_int64_t& dst, __ubuf__ int64_t*
 
 __simd_callee__ inline void asc_loadalign(vector_uint64_t& dst, __ubuf__ uint64_t* src, iter_reg offset);
 
+__simd_callee__ inline void asc_loadalign(vector_half& dst, __ubuf__ half* src, iter_reg offset);
+
 __simd_callee__ inline void asc_loadalign(vector_float& dst, __ubuf__ float* src, iter_reg offset);
 
 __simd_callee__ inline void asc_loadalign_brc(vector_fp4x2_e1m2_t& dst, __ubuf__ fp4x2_e1m2_t* src, iter_reg offset);
