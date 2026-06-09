@@ -1,8 +1,8 @@
-# 基于Tensor_API实现的Copy Out Tensor样例
+# 基于Tensor API实现的Copy Out Tensor样例
 
 ## 概述
 
-本样例基于Tensor_API编程方式实现带Bias的动态Shape矩阵乘法运算，展示了Copy Out接口（L0C到GM、L0C到UB）和Mmad（矩阵乘加）等Tensor API的使用方法。通过编译时参数`SCENARIO_NUM`选择不同的回写模式，Shape参数通过`MatmulTiling`结构体在运行时动态传入。
+本样例基于Tensor API编程方式实现带Bias的动态Shape矩阵乘法运算，展示了Copy Out接口（L0C Buffer到Global Memory、L0C Buffer到UB）和Mmad（矩阵乘加）等Tensor API的使用方法。通过编译时参数`SCENARIO_NUM`选择不同的回写模式，Shape参数通过`MatmulTiling`结构体在运行时动态传入。
 
 ## 支持的产品
 
@@ -10,7 +10,7 @@
 
 ## 目录结构介绍
 
-```
+```text
 ├── copy_out_tensor_api
 │   └── scripts
 │       ├── gen_data.py                    // 输入数据和真值数据生成脚本文件
@@ -24,11 +24,11 @@
 ## 样例描述
 
 - 样例功能：
-  本样例实现了带Bias的动态Shape多核Matmul功能，通过Copy接口完成L0C到GM或L0C到UB的数据搬运，通过Mmad接口完成矩阵乘加计算。
+  本样例实现了带Bias的动态Shape多核Matmul功能，通过Copy接口完成L0C Buffer到Global Memory或L0C Buffer到UB的数据搬运，通过Mmad接口完成矩阵乘加计算。
 
   1、动态Matmul功能
 
-  本样例实现了多核Matmul功能。Shape参数（M、N、K、singleCoreM、singleCoreN、singleCoreK）通过`MatmulTiling`结构体在运行时动态传入kernel。`BASE_M`、`BASE_N`、`BASE_K`和`STEP_M`、`STEP_N`、`STEP_K`作为编译期模板参数，决定了L0/L1级buffer的分配大小。
+  本样例实现了多核Matmul功能。Shape参数（M、N、K、singleCoreM、singleCoreN、singleCoreK）通过`MatmulTiling`结构体在运行时动态传入kernel。`BASE_M`、`BASE_N`、`BASE_K`和`STEP_M`、`STEP_N`、`STEP_K`作为编译期模板参数，决定了L0 Buffer/L1 Buffer的分配大小。
 
   2、Bias功能
 
@@ -40,13 +40,13 @@
 
   | SCENARIO_NUM | 回写模式 | 回写路径 | 说明 |
   |:---:|:---:|:---:|:---|
-  | 0 | 普通模式 | L0C -> GM | 使用`CopyL0C2GM`直接将计算结果写回GM |
-  | 1 | unitFlag模式 | L0C -> GM | 在`CopyL0C2GM`中显式使能`unitFlag` |
-  | 2 | UB搬运模式M拆分 | L0C -> UB -> GM | `CopyL0C2UB`采用`DUAL_DST_SPLIT_M`，由AIV按M维拆分回写 |
-  | 3 | UB搬运模式N拆分 | L0C -> UB -> GM | `CopyL0C2UB`采用`DUAL_DST_SPLIT_N`，由AIV按N维拆分回写 |
+  | 0 | 普通模式 | L0C->GM | 使用`CopyL0C2GM`直接将计算结果写回Global Memory |
+  | 1 | unitFlag模式 | L0C->GM | 在`CopyL0C2GM`中显式使能`unitFlag` |
+  | 2 | UB搬运模式M拆分 | L0C->UB->GM | `CopyL0C2UB`采用`DUAL_DST_SPLIT_M`，由AIV按M维拆分回写 |
+  | 3 | UB搬运模式N拆分 | L0C->UB->GM | `CopyL0C2UB`采用`DUAL_DST_SPLIT_N`，由AIV按N维拆分回写 |
 
-  - 普通模式（SCENARIO_NUM=0/1）：L0C结果直接搬运到GM，场景1额外使能`unitFlag`
-  - UB搬运模式（SCENARIO_NUM=2/3）：L0C结果先搬到UB，再由AIV侧写回GM
+  - 普通模式（SCENARIO_NUM=0/1）：L0C Buffer结果直接搬运到Global Memory，场景1额外使能`unitFlag`
+  - UB搬运模式（SCENARIO_NUM=2/3）：L0C Buffer结果先搬到UB，再由AIV侧写回Global Memory
 
   注：A/B矩阵在所有场景下数据类型均为half，C矩阵和Bias在所有场景下数据类型均为float。
 
@@ -64,7 +64,7 @@
   ```
 
 - 样例规格：
-  在核函数直调样例中，样例默认支持的shape为：M = 1024, N = 1024, K = 256。
+  在核函数直调样例中，样例默认支持的shape为：M=1024、N=1024、K=256。
 
   **场景0：普通模式，L0C -> GM**
   <table border="2" align="center">
@@ -125,9 +125,9 @@
   | BASE_M  | 128    | M维度基础分块大小        |
   | BASE_N  | 128    | N维度基础分块大小        |
   | BASE_K  | 64     | K维度基础分块大小        |
-  | STEP_M  | 1      | M维度L1缓存步进          |
-  | STEP_N  | 1      | N维度L1缓存步进          |
-  | STEP_K  | 4      | K维度L1缓存步进          |
+  | STEP_M  | 1      | M维度L1 Buffer缓存步进   |
+  | STEP_N  | 1      | N维度L1 Buffer缓存步进   |
+  | STEP_K  | 4      | K维度L1 Buffer缓存步进   |
 
   运行时动态参数默认值：
 
@@ -146,24 +146,28 @@
 - 配置环境变量  
   请根据当前环境上CANN开发套件包的[安装方式](./../../../../../../docs/quick_start.md#prepare&install)，选择对应配置环境变量的命令。
   - 默认路径，root用户安装CANN软件包
+
     ```bash
     source /usr/local/Ascend/cann/set_env.sh
     ```
 
   - 默认路径，非root用户安装CANN软件包
+
     ```bash
     source $HOME/Ascend/cann/set_env.sh
     ```
 
   - 指定路径install_path，安装CANN软件包
+
     ```bash
     source ${install_path}/cann/set_env.sh
     ```
 
-- 软连接配置  
-  由于当前tensor_api样例只用于功能展示，相关源码未随标准CANN软件包发布。
+- 软链接配置  
+  由于当前Tensor API样例只用于功能展示，相关源码未随标准CANN软件包发布。
   
-  如需编译运行该样例，需要先将tensor_api相关源码通过软连接挂在到CANN安装路径下。
+  如需编译运行该样例，需要先将Tensor API相关源码通过软链接挂载到CANN安装路径下。
+
   ```bash
   cd ${install_path}/cann/asc/impl
   ln -s ${code_path}/impl/tensor_api  # ${code_path}表示本地代码下载路径
@@ -172,7 +176,8 @@
   ```
 
 - 样例执行  
-  以场景0（普通模式，L0C -> GM）为例：
+  以场景0（普通模式，L0C->GM）为例：
+
   ```bash
   SCENARIO=0
   mkdir -p build && cd build;                                                    # 创建并进入build目录
@@ -183,24 +188,28 @@
   ```
 
   使用NPU仿真模式时，添加`-DCMAKE_ASC_RUN_MODE=sim`参数即可。示例如下：
+
   ```bash
   cmake -DSCENARIO_NUM=${SCENARIO} -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j; # NPU仿真模式
   ```
 
-  > **注意：** 切换编译模式前需清理cmake缓存，可在build目录下执行`rm CMakeCache.txt`后重新cmake。
+  > **注意：** 切换编译模式前需清理CMake缓存，可在build目录下执行`rm CMakeCache.txt`后重新执行CMake。
 
   编译其他场景时，修改`SCENARIO`变量即可，例如编译场景2（UB搬运模式M拆分）时设置`SCENARIO=2`。
 
 - 编译选项说明
 
+  **表 8**  编译选项说明
+
   | 参数 | 说明 | 可选值 | 默认值 |
   |------|------|--------|--------|
-  | CMAKE_ASC_RUN_MODE | 运行模式 | npu, sim | npu |
+  | CMAKE_ASC_RUN_MODE | 运行模式 | `npu`、`sim` | `npu` |
   | CMAKE_ASC_ARCHITECTURES | NPU硬件架构 | dav-3510 | dav-3510 |
 
 - 执行结果
 
   执行结果如下，说明精度对比成功。
+
   ```bash
   test pass!
   ```

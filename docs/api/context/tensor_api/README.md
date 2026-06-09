@@ -8,7 +8,9 @@ Tensor API当前仅支持Ascend 950PR/Ascend 950DT。
 
 ## Tensor API架构
 
-<img class="eddx" id="image292993463310" src="figures/tensor_api_arch.png">
+**图 1**  Tensor API架构图
+
+![](figures/tensor_api_arch.png)
 
 Tensor API 采用了分层设计，各层分别承担数据表达、操作封装和指令调用三类不同职责。
 Tensor层：聚合Engine和Layout，提供坐标访问、切片等用户接口。

@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件为：`#include "tensor_api/tensor.h"`
+头文件路径为：`"tensor_api/tensor.h"`。
 
 Tensor API通过`Copy`接口统一执行不同通路数据搬运。该接口用于将L0C Buffer中的矩阵计算结果搬运到Unified Buffer。L0C Buffer中的数据通常为`Mmad`的输出，数据格式为`NZ`。搬运到Unified Buffer时，接口会根据目的张量格式自动选择`NZ`到`ND`、`NZ`到`DN`或`NZ`到`NZ`的随路格式转换。
 
@@ -16,9 +16,9 @@ L0C Buffer到Unified Buffer搬运支持不量化输出、float到half或bfloat16
 
 随路量化、随路Relu、随路格式转换、随路通道拆分以及随路通道合并的有效组合、中间数据类型和数据路径如下图所示。图中的F32到F16、F32到BF16为非量化模式，仅进行cast；其余路径为不量化、随路scalar或tensor量化模式。针对Ascend 950PR/Ascend 950DT，还支持NZ2DN随路格式转换。
 
-**图1** L0C2UB流程图
+**图 1**  L0C2UB流程图
 
-![](../figures/l0c2ub_flowchart.png "L0C2UB流程图")
+![](../figures/l0c2ub_flowchart.png)
 
 ## 函数原型
 

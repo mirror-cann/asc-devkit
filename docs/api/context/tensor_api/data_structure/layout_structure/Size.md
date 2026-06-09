@@ -6,7 +6,7 @@
 | ----------- |:----:|
 |Ascend 950PR/Ascend 950DT|√|
 
-## 功能概述
+## 功能说明
 
 用于返回Layout的有效元素个数。
 
@@ -17,7 +17,7 @@ template <size_t... Is, typename Shape, typename Stride>
 __aicore__ inline constexpr auto Size(const Layout<Shape, Stride>& layout);
 ```
 
-### 参数说明
+## 参数说明
 
 **表 1** 模板参数说明
 
@@ -33,15 +33,15 @@ __aicore__ inline constexpr auto Size(const Layout<Shape, Stride>& layout);
 |--------|------|------|
 | layout | 输入 | 用于描述张量的布局。 |
 
-### 返回值
+## 返回值说明
 
 返回Layout的有效元素个数。
 
-### 约束说明
+## 约束说明
 
 Is...必须为有效范围内的索引。
 
-### 示例代码
+## 调用示例
 
    ```cpp
   using namespace AscendC::Te;

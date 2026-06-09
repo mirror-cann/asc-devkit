@@ -2,7 +2,7 @@
 
 - **[基础数据结构](data_structure_directory.md)**
     - **[Layout数据结构](data_structure/layout_structure/layout_structure.md)**
-        - **[Layout和层次化表述法](<data_structure/layout_structure/Layout和层次化表述法.md>)**
+        - **[Layout和层次化表述法](data_structure/layout_structure/Layout和层次化表述法.md)**
         - **[Layout](data_structure/layout_structure/Layout.md)**
         - **[Shape](data_structure/layout_structure/Shape.md)**
         - **[Stride](data_structure/layout_structure/Stride.md)**
@@ -40,9 +40,9 @@
 - **[矩阵计算](matrix_computation_directory.md)**
     - **[矩阵计算的搬入](data_movement/matrix_data_in_directory.md)**
         - **[总体说明](data_movement/matrix_data_in_overview.md)**
-        - **[矩阵数据搬入至L1 Buffer](<data_movement/matrix_data_in_l1_directory.md>)**
+        - **[矩阵数据搬入至L1 Buffer](data_movement/matrix_data_in_l1_directory.md)**
             - **[Global Memory到L1 Buffer数据搬运](data_movement/gm_to_l1.md)**
-        - **[矩阵数据搬入至L0 Buffer](<data_movement/matrix_data_in_l0_directory.md>)**
+        - **[矩阵数据搬入至L0 Buffer](data_movement/matrix_data_in_l0_directory.md)**
             - **[L1 Buffer到L0A Buffer数据搬运](data_movement/l1_to_l0a.md)**
             - **[L1 Buffer到L0B Buffer数据搬运](data_movement/l1_to_l0b.md)**
             - **[L1 Buffer到L0ScaleA Buffer数据搬运](data_movement/l1_to_l0scalea.md)**
@@ -55,7 +55,7 @@
         - **[总体说明](data_movement/matrix_data_out_overview.md)**
         - **[L0C Buffer到Global Memory数据搬运](data_movement/l0c_to_gm.md)**
         - **[L0C Buffer到Unified Buffer数据搬运](data_movement/l0c_to_ub.md)**
-        - **[关键特性说明](data_movement/matrix_data_out_key_fratures_directory.md)**
+        - **[关键特性说明](data_movement/matrix_data_out_key_features_directory.md)**
             - **[随路量化](data_movement/quant_pre.md)**
             - **[随路Relu](data_movement/relu_pre.md)**
             - **[F32 Channel Split](data_movement/f32_channel_split.md)**

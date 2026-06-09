@@ -8,11 +8,11 @@
 
 ## 功能说明
 
-需要包含的头文件为：#include "tensor_api/tensor.h"。
+头文件路径为：`"tensor_api/tensor.h"`。
 
 IsAttrTensorV用于判断一个类型是否为带Engine, Layout属性的张量[Tensor](../tensor_structure/Tensor.md)类型。
 
-## 原型定义
+## 函数原型
 
 ```cpp
 template <typename T>

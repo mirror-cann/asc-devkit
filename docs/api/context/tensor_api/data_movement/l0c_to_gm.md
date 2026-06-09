@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件为：`#include "tensor_api/tensor.h"`
+头文件路径为：`"tensor_api/tensor.h"`。
 
 Tensor API通过`Copy`接口统一执行不同通路数据搬运。该接口用于将L0C Buffer中的矩阵计算结果搬运到Global Memory。L0C Buffer中的数据通常为`Mmad`的输出，数据格式为`NZ`。搬运到Global Memory时，接口会根据目的张量布局自动选择`NZ`到`ND`、`NZ`到`DN`或`NZ`到`NZ`的随路格式转换。
 
@@ -18,20 +18,20 @@ L0C Buffer到Global Memory搬运支持不量化输出、float到half或bfloat16_
 
 针对Ascend 950PR/Ascend 950DT：
 
-**图1** L0C2GM流程图
+**图 1**  L0C2GM流程图
 
-![](../figures/l0c2gm_flowchart-68.png "L0C2GM流程图-68")
+![](../figures/l0c2gm_flowchart-68.png)
 
 ## 函数原型
 
-- 执行L0C Buffer到Global Buffer的非量化搬运。
+- 执行L0C Buffer到Global Memory的非量化搬运。
 
     ```cpp
     template <typename AtomType, typename DstTensor, typename SrcTensor>
     __aicore__ inline void Copy(const CopyAtom<AtomType>& atomCopy, const DstTensor& dst, const SrcTensor& src)
     ```
 
-- 执行L0C Buffer到Global Buffer的量化搬运。
+- 执行L0C Buffer到Global Memory的量化搬运。
 
     ```cpp
     template <typename AtomType, typename DstTensor, typename SrcTensor, typename QuantParam,

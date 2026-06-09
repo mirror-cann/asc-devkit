@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-需要包含的头文件为：#include "tensor_api/tensor.h"。
+头文件路径为：`"tensor_api/tensor.h"`。
 
 MakeTensor负责将内存指针（由[MakeMemPtr](./MakeMemPtr.md)生成）与布局对象（由[MakeFrameLayout](../layout_structure/MakeFrameLayout.md)/[MakeLayout](../layout_structure/MakeLayout.md)生成）绑定，生成带有完整类型信息的Tensor对象。
 
@@ -33,6 +33,11 @@ __aicore__ inline constexpr auto MakeTensor(const Iterator& iter, const Args&...
 ## 返回值说明
 
 - 返回GlobalTensor<TensorAttribute<Engine, Layout>>或LocalTensor<TensorAttribute<Engine, Layout>>类型的张量对象，具体由Engine绑定的内存位置决定。
+
+## 约束说明
+
+- `iter`必须为有效的Tensor API内存指针或视图引擎对象。
+- 传入的Layout信息需要与底层内存空间、数据类型和目标接口约束匹配。
 
 ## 调用示例
 

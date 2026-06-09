@@ -1,7 +1,7 @@
 # 基础数据结构
 
 - **Layout相关基础数据结构**
-    - **[Layout和层次化表述法](<layout_structure/Layout和层次化表述法.md>)**
+    - **[Layout和层次化表述法](layout_structure/Layout和层次化表述法.md)**
     - **[Layout](layout_structure/Layout.md)**
     - **[Shape](layout_structure/Shape.md)**
     - **[Stride](layout_structure/Stride.md)**

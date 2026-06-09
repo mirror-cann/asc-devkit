@@ -3,7 +3,7 @@
 - **[总体说明](matrix_data_out_overview.md)**
 - **[L0C Buffer到Global Memory数据搬运](l0c_to_gm.md)**
 - **[L0C Buffer到Unified Buffer数据搬运](l0c_to_ub.md)**
-- **[关键特性说明](matrix_data_out_key_fratures_directory.md)**
+- **[关键特性说明](matrix_data_out_key_features_directory.md)**
     - **[随路量化](quant_pre.md)**
     - **[随路Relu](relu_pre.md)**
     - **[F32 Channel Split](f32_channel_split.md)**

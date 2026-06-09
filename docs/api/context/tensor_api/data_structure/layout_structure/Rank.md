@@ -17,7 +17,7 @@ template <size_t... Is, typename Shape, typename Stride>
 __aicore__ inline constexpr auto Rank(const Layout<Shape, Stride>& layout);
 ```
 
-### 参数说明
+## 参数说明
 
 **表 1** 模板参数说明
   | 参数名 | 类型 | 描述 |
@@ -31,11 +31,15 @@ __aicore__ inline constexpr auto Rank(const Layout<Shape, Stride>& layout);
 |--------|------|------|
 | layout | 输入 | Layout用于描述张量的布局。 |
 
-### 返回值
+## 返回值说明
 
 返回Layout的秩，即返回Layout布局的Shape或其子结构的元组（tuple）维度的个数。
 
-### 示例代码
+## 约束说明
+
+Is...必须为有效范围内的索引。
+
+## 调用示例
 
    ```cpp
   using namespace AscendC::Te;

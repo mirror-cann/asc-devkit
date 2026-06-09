@@ -29,13 +29,13 @@
   C = A * B
   $$
 - 样例规格：
-  本样例参数M = 512, N = 1024, K = 512，调用16个核完成计算，输入规格如下表所示：
+  本样例参数M=512、N=1024、K=512，调用16个核完成计算，输入规格如下表所示：
   <table>
   <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">Matmul</td></tr>
   <tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-  <tr><td align="center">A</td><td align="center">[M, K]</td><td align="center">float16</td><td align="center">ND</td></tr>
-  <tr><td align="center">B</td><td align="center">[K, N]</td><td align="center">float16</td><td align="center">ND</td></tr>
-  <tr><td rowspan="1" align="center">样例输出</td><td align="center">C</td><td align="center">[M, N]</td><td align="center">float16</td><td align="center">ND</td></tr>
+  <tr><td align="center">A</td><td align="center">[M, K]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td align="center">B</td><td align="center">[K, N]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">样例输出</td><td align="center">C</td><td align="center">[M, N]</td><td align="center">half</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">matmul_custom</td></tr>
   </table>
 
@@ -44,22 +44,22 @@
     <table>
     <tr><th align="left">步骤</th><th align="left">Tensor API操作</th><th align="left">功能</th><th align="left">布局转换</th></tr>
     <tr><td align="left">1</td><td align="left">常量化Tiling参数</td><td align="left">通过模板参数传入kernel</td><td align="left">不涉及</td></tr>
-    <tr><td align="left">2</td><td align="left">MakeTensor + Slice</td><td align="left">创建GM张量并切片获取当前核处理的数据块</td><td align="left">ND格式</td></tr>
+    <tr><td align="left">2</td><td align="left">MakeTensor + Slice</td><td align="left">创建Global Memory张量并切片获取当前核处理的数据块</td><td align="left">ND格式</td></tr>
     <tr><td align="left">3</td><td align="left">Copy(CopyGM2L1)</td><td align="left">将A矩阵和B矩阵数据从GM搬运到L1</td><td align="left">GM->L1A: ND->NZ<br>GM->L1B: ND->NZ</td></tr>
     <tr><td align="left">4</td><td align="left">Copy(CopyL12L0A/B)</td><td align="left">将数据从L1搬运到L0A和L0B</td><td align="left">L1->L0A: NZ->NZ<br>L1->L0B: NZ->ZN</td></tr>
     <tr><td align="left">5</td><td align="left">Mmad</td><td align="left">完成矩阵乘加计算</td><td align="left">矩阵乘结果为NZ格式</td></tr>
-    <tr><td align="left">6</td><td align="left">Copy(CopyL0C2GM)</td><td align="left">将L0C中的计算结果搬运到GM</td><td align="left">NZ->ND格式转换</td></tr>
+    <tr><td align="left">6</td><td align="left">Copy(CopyL0C2GM)</td><td align="left">将L0C Buffer中的计算结果搬运到Global Memory</td><td align="left">NZ->ND格式转换</td></tr>
     </table>
 
   - Tensor API核心接口：
     1. **张量创建接口**：使用MakeTensor + MakeMemPtr + MakeFrameLayout创建各级张量
-       - GM张量：NDExtLayoutPtn布局（ND格式扩展）
-       - L1/L0张量：NZLayoutPtn/ZNLayoutPtn布局（适配cube计算单元）
+       - Global Memory张量：NDExtLayoutPtn布局（ND格式扩展）
+       - L1 Buffer/L0 Buffer张量：NZLayoutPtn/ZNLayoutPtn布局（适配cube计算单元）
 
     2. **数据搬运接口**：使用Copy + CopyAtom抽象
-       - CopyGM2L1：GM到L1的数据搬运，自动处理ND→NZ格式转换
-       - CopyL12L0A/B：L1到L0A/L0B的数据搬运
-       - CopyL0C2GM：L0C到GM的数据搬运，自动处理NZ→ND格式转换
+       - CopyGM2L1：Global Memory到L1 Buffer的数据搬运，自动处理ND→NZ格式转换
+       - CopyL12L0A/B：L1 Buffer到L0A Buffer/L0B Buffer的数据搬运
+       - CopyL0C2GM：L0C Buffer到Global Memory的数据搬运，自动处理NZ→ND格式转换
 
     3. **矩阵乘接口**：使用Mmad + MmadAtom抽象
        - 自动管理累加控制（cmatrixInitVal参数）
@@ -78,9 +78,9 @@
 | 特性 | 本样例实现 |
 |------|------------|
 | 内存管理 | 使用数组方式分配内存，自动管理偏移 |
-| 张量表示 | 使用张量对象直接描述GM、L1、L0数据 |
+| 张量表示 | 使用张量对象直接描述Global Memory、L1 Buffer、L0 Buffer数据 |
 | 数据搬运 | 使用Copy完成跨层搬运 |
-| 格式转换 | 依赖布局模式自动完成 NZ / ZN 转换 |
+| 格式转换 | 依赖布局模式自动完成NZ/ZN转换 |
 | 分核逻辑 | 使用Slice获取当前核处理的数据块 |
 | 计算接口 | 使用Mmad完成矩阵乘加 |
 
@@ -118,7 +118,7 @@
   python3 ../scripts/verify_result.py output/output.bin output/golden.bin   # 验证输出结果是否正确，确认算法逻辑正确
   ```
 
-  使用NPU仿真 模式时，添加`-DCMAKE_ASC_RUN_MODE=sim`参数即可。
+  使用NPU仿真模式时，添加`-DCMAKE_ASC_RUN_MODE=sim`参数即可。
 
   示例如下：
 
@@ -126,13 +126,13 @@
   cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j; # NPU仿真模式
   ```
 
-  > **注意：** 切换编译模式前需清理 cmake 缓存，可在 build 目录下执行`rm CMakeCache.txt`后重新cmake。
+  > **注意：** 切换编译模式前需清理CMake缓存，可在build目录下执行`rm CMakeCache.txt`后重新执行CMake。
 
 - 编译选项说明
 
   | 选项 | 可选值 | 说明 |
   |------|--------|------|
-  | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`sim` | 运行模式：NPU 运行、NPU仿真 |
+  | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`sim` | 运行模式：NPU运行、NPU仿真 |
 
   > **说明：** 本样例仅支持dav-3510架构（对应 Ascend 950PR/Ascend 950DT）。
 

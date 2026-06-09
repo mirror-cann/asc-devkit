@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件为：`#include "tensor_api/tensor.h"`。
+头文件路径为：`"tensor_api/tensor.h"`。
 
 Tensor API通过`Copy`接口统一执行不同通路数据搬运。该接口用于将Global Memory中的数据搬运到L1 Buffer。`Copy`接口根据源张量和目的张量的存储位置、数据类型和Layout选择具体搬运实现。搬运块数、搬运长度、源/目的侧步长以及格式转换相关信息由Tensor Layout推导，用户不需要在`Copy`调用中额外传入搬运参数。
 
@@ -75,10 +75,6 @@ Global Memory到L1 Buffer通路使用`CopyGM2L1{}`作为`copyOperation`，使用
 | copyOperation | 输入 | 搬运操作对象。Global Memory到L1 Buffer搬运取`CopyGM2L1{}`。 |
 | copyTrait | 输入 | 搬运trait对象。Global Memory到L1 Buffer默认取`CopyGM2L1TraitDefault{}`。 |
 
-## 返回值说明
-
-`Copy`无返回值。`MakeCopy`返回`CopyAtom`对象。
-
 ## 数据类型
 
 源张量和目的张量的数据类型需要保持一致。
@@ -98,6 +94,10 @@ Global Memory到L1 Buffer通路使用`CopyGM2L1{}`作为`copyOperation`，使用
 | ScaleBND | NN | fp8_e8m0_t |
 | ScaleBDN | NN | fp8_e8m0_t |
 | NN | NN | fp8_e8m0_t |
+
+## 返回值说明
+
+`Copy`无返回值。`MakeCopy`返回`CopyAtom`对象。
 
 ## 约束说明
 

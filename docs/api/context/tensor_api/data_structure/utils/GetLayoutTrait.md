@@ -8,11 +8,11 @@
 
 ## 功能说明
 
-需要包含的头文件为：#include "tensor_api/tensor.h"。
+头文件路径为：`"tensor_api/tensor.h"`。
 
 GetLayoutTrait用于从Layout类型中提取其LayoutTrait类型信息。
 
-## 原型定义
+## 函数原型
 
 ```cpp
 template <typename T>

@@ -6,7 +6,9 @@
 
 **图1** 矩阵计算搬出整体流程图
 
-![fixpipe整体流程图](../figures/fixpipe_overall_flowchart-66.png)
+**图 1**  Fixpipe整体流程图
+
+![](../figures/fixpipe_overall_flowchart-66.png)
 
 
 **表1** **数据通路与存储层级**

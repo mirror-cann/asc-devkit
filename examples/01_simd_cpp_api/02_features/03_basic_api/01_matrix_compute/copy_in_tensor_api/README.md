@@ -1,8 +1,8 @@
-# 基于Tensor_API实现的Copy接口与Matmul带Bias样例
+# 基于Tensor API实现的Copy接口与Matmul带Bias样例
 
 ## 概述
 
-本样例基于Tensor_API编程方式实现带Bias的动态Shape矩阵乘法运算，展示了Copy（GM到L1，L1到L0）的转置和非转置场景和Mmad（矩阵乘加）等Tensor API的使用方法。支持通过编译时参数SCENARIO_NUM选择转置模式和数据类型，Shape参数通过MatmulTiling结构体在运行时动态传入。
+本样例基于Tensor API编程方式实现带Bias的动态Shape矩阵乘法运算，展示了Copy（Global Memory到L1 Buffer，L1 Buffer到L0 Buffer）的转置和非转置场景和Mmad（矩阵乘加）等Tensor API的使用方法。支持通过编译时参数SCENARIO_NUM选择转置模式和数据类型，Shape参数通过MatmulTiling结构体在运行时动态传入。
 
 ## 支持的产品
 
@@ -10,7 +10,7 @@
 
 ## 目录结构介绍
 
-```
+```text
 ├── copy_in_tensor_api
 │   └── scripts
 │       ├── gen_data.py                    // 输入数据和真值数据生成脚本文件
@@ -24,11 +24,11 @@
 ## 样例描述
 
 - 样例功能：
-  本样例实现了带Bias的动态Shape多核Matmul功能，通过Copy接口完成GM到L1，L1到L0的数据搬运，通过Mmad接口完成矩阵乘加计算。
+  本样例实现了带Bias的动态Shape多核Matmul功能，通过Copy接口完成Global Memory到L1 Buffer、L1 Buffer到L0 Buffer的数据搬运，通过Mmad接口完成矩阵乘加计算。
 
   1、动态Matmul功能
 
-  本样例实现了多核Matmul功能。Shape参数（M、N、K、singleCoreM、singleCoreN、singleCoreK）通过MatmulTiling结构体在运行时动态传入kernel。baseM、baseN、baseK和stepM、stepN、stepK作为编译期模板参数，决定了L0/L1级buffer的分配大小。
+  本样例实现了多核Matmul功能。Shape参数（M、N、K、singleCoreM、singleCoreN、singleCoreK）通过MatmulTiling结构体在运行时动态传入kernel。baseM、baseN、baseK和stepM、stepN、stepK作为编译期模板参数，决定了L0 Buffer/L1 Buffer的分配大小。
 
   2、Bias功能
 
@@ -38,15 +38,17 @@
 
   通过编译时宏参数SCENARIO_NUM选择不同的转置模式和数据类型组合：
 
-  | SCENARIO_NUM | 转置模式 | A/B数据类型 | GM布局 | L1布局 | 说明 |
+  **表 1**  多场景配置表
+
+  | SCENARIO_NUM | 转置模式 | A/B数据类型 | Global Memory布局 | L1 Buffer布局 | 说明 |
   |:---:|:---:|:---:|:---:|:---:|:---|
   | 0 | AB不转置 | half | ND | NZ | AB矩阵均不转置，数据类型为half |
   | 1 | AB不转置 | float | ND | NZ | AB矩阵均不转置，数据类型为float |
   | 2 | AB转置 | half | DN | ZN | AB矩阵均转置存储，数据类型为half |
   | 3 | AB转置 | float | DN | ZN | AB矩阵均转置存储，数据类型为float |
 
-  - 不转置模式（SCENARIO_NUM=0/1）：矩阵A和矩阵B在GM和L1中均为ND/NZ布局，数据按行优先存储
-  - 转置模式（SCENARIO_NUM=2/3）：矩阵A和矩阵B在GM和L1中均为DN/ZN布局，数据转置后存储
+  - 不转置模式（SCENARIO_NUM=0/1）：矩阵A和矩阵B在Global Memory和L1 Buffer中均为ND/NZ布局，数据按行优先存储
+  - 转置模式（SCENARIO_NUM=2/3）：矩阵A和矩阵B在Global Memory和L1 Buffer中均为DN/ZN布局，数据转置后存储
 
   注：C矩阵和Bias在所有场景下数据类型均为float。
 
@@ -64,7 +66,7 @@
   ```
 
 - 样例规格：
-  在核函数直调样例中，样例默认支持的shape为：M = 1024, N = 1024, K = 256。
+  在核函数直调样例中，样例默认支持的shape为：M=1024、N=1024、K=256。
 
   **场景0：AB不转置，half**
   <table border="2" align="center">
@@ -125,9 +127,9 @@
   | BASE_M  | 128    | M维度基础分块大小        |
   | BASE_N  | 128    | N维度基础分块大小        |
   | BASE_K  | 64     | K维度基础分块大小        |
-  | STEP_M  | 1      | M维度L1缓存步进          |
-  | STEP_N  | 1      | N维度L1缓存步进          |
-  | STEP_K  | 4      | K维度L1缓存步进          |
+  | STEP_M  | 1      | M维度L1 Buffer缓存步进   |
+  | STEP_N  | 1      | N维度L1 Buffer缓存步进   |
+  | STEP_K  | 4      | K维度L1 Buffer缓存步进   |
 
   运行时动态参数默认值：
 
@@ -146,24 +148,28 @@
 - 配置环境变量  
   请根据当前环境上CANN开发套件包的[安装方式](./../../../../../../docs/quick_start.md#prepare&install)，选择对应配置环境变量的命令。
   - 默认路径，root用户安装CANN软件包
+
     ```bash
     source /usr/local/Ascend/cann/set_env.sh
     ```
 
   - 默认路径，非root用户安装CANN软件包
+
     ```bash
     source $HOME/Ascend/cann/set_env.sh
     ```
 
   - 指定路径install_path，安装CANN软件包
+
     ```bash
     source ${install_path}/cann/set_env.sh
     ```
 
-- 软连接配置  
-  由于当前tensor_api样例只用于功能展示，相关源码未随标准CANN软件包发布。
+- 软链接配置  
+  由于当前Tensor API样例只用于功能展示，相关源码未随标准CANN软件包发布。
   
-  如需编译运行该样例，需要先将tensor_api相关源码通过软连接挂在到CANN安装路径下。
+  如需编译运行该样例，需要先将Tensor API相关源码通过软链接挂载到CANN安装路径下。
+
   ```bash
   cd ${install_path}/cann/asc/impl
   ln -s ${code_path}/impl/tensor_api  # ${code_path}表示本地代码下载路径
@@ -173,6 +179,7 @@
 
 - 样例执行  
   以场景0（AB不转置，half）为例：
+
   ```bash
   SCENARIO=0
   mkdir -p build && cd build;                                                    # 创建并进入build目录
@@ -183,11 +190,12 @@
   ```
 
   使用NPU仿真模式时，添加`-DCMAKE_ASC_RUN_MODE=sim`参数即可。示例如下：
+
   ```bash
   cmake -DSCENARIO_NUM=${SCENARIO} -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j; # NPU仿真模式
   ```
 
-  > **注意：** 切换编译模式前需清理cmake缓存，可在build目录下执行`rm CMakeCache.txt`后重新cmake。
+  > **注意：** 切换编译模式前需清理CMake缓存，可在build目录下执行`rm CMakeCache.txt`后重新执行CMake。
 
   编译其他场景时，修改`SCENARIO`变量即可，例如编译场景2（AB转置，half）时设置`SCENARIO=2`，并同步传给`gen_data.py`。
 
@@ -195,12 +203,13 @@
 
   | 参数 | 说明 | 可选值 | 默认值 |
   |------|------|--------|--------|
-  | CMAKE_ASC_RUN_MODE | 运行模式 | npu, sim | npu |
+  | CMAKE_ASC_RUN_MODE | 运行模式 | `npu`、`sim` | `npu` |
   | CMAKE_ASC_ARCHITECTURES | NPU硬件架构 | dav-3510 | dav-3510 |
 
 - 执行结果
 
   执行结果如下，说明精度对比成功。
+
   ```bash
   test pass!
   ```
