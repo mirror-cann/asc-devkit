@@ -71,7 +71,7 @@
 
     ASCEND\_IS\_AIV和ASCEND\_IS\_AIC是通过C++宏实现的条件判断语句，用于在\_\_aicore\_\_修饰的函数中实现代码的条件编译。基于分离模式（AIC核和AIV核分离）开发融合算子时，算子逻辑中同时涉及AIV核和AIC核的处理逻辑，并需要进行核间同步，此时需要通过ASCEND\_IS\_AIV/ ASCEND\_IS\_AIC进行AIV和AIC核代码的隔离。
 
-    >[!NOTE]说明 
+    >[!NOTE]说明
     >当使用高阶API Matmul时，其内部已通过REGIST\_MATMUL\_OBJ宏方式实现了AIV与AIC核代码的隔离，用户无需再使用该宏进行处理。
 
     以MatmulNzCustom算子为例，该算子在分离模式下需要分别在AIV核和AIC核上实现不同的逻辑。具体而言，AIV核负责将矩阵数据搬入Unified Buffer，完成数据的重排（将矩阵数据转换为NZ格式），并将其写入Global Memory。而AIC核则直接从Global Memory读取已经重排好的NZ格式数据，并执行矩阵乘法（Matmul）计算。由于AIV核和AIC核的代码逻辑不同，需要通过ASCEND\_IS\_AIV和ASCEND\_IS\_AIC宏进行代码隔离，确保在编译时分别生成适用于AIV核和AIC核的代码。
@@ -121,7 +121,7 @@
 
     基于分离模式开发非融合算子时，在只有矩阵计算的算子场景下，可以通过设置ASCENDC\_CUBE\_ONLY，开启纯Cube模式完成Matmul计算，减少消息通信的性能开销，提升算子性能。
 
-    >[!CAUTION]注意 
+    >[!CAUTION]注意
     >ASCENDC\_CUBE\_ONLY宏必须在\#include "lib/matmul\_intf.h"之前设置。
 
     以matmul\_custom算子为例，高阶API Matmul默认使用MIX模式，即用户从AIV侧发起消息，通过消息通信框架中转消息后，在AIC侧执行Matmul计算。这套消息处理机制会带来额外的Scalar性能开销。相较于MIX模式，纯Cube模式可以直接跳过消息通信框架，完成Matmul计算，提升算子性能。
@@ -131,7 +131,7 @@
     ```
     #define ASCENDC_CUBE_ONLY
     #include "lib/matmul_intf.h"
-    
+
     using A_TYPE = AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType>;
     using B_TYPE = AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BType>;
     using C_TYPE = AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, CType>;
@@ -162,7 +162,7 @@
     // Only callable from device functions with same kind
     // of execution space
     __aicore__ void bar() {}
-    
+
     // Define a kernel function execute on AI Core device
     __global__ __aicore__ void foo() {
       bar(); // OK.
@@ -181,16 +181,16 @@
 
     ```
     __aicore__ int f() {}
-    
+
     // defines a host side function
     int foo() {}
-    
+
     // defines a host side function
     __host__ int bar() {
       f();     // Error.
       foo();   // OK.
     }
-    
+
     // Error.
     __global__ __host__ void kfunc() {}
     ```
@@ -208,9 +208,9 @@
     ```
     // Define a AI CPU kernel function in AI CPU device file
     __aicpu__ void foo() {} // Error, single __aicpu__ identifier without _global__
-    __global__ void foo() {} // Error, single __global__ identifier without __aicpu__ 
+    __global__ void foo() {} // Error, single __global__ identifier without __aicpu__
     __global__ __aicpu__  void foo() {} // Error, return type is void
-    __global__ __aicpu__  int foo(void *a) {} // OK 
+    __global__ __aicpu__  int foo(void *a) {} // OK
     __global__ __aicpu__  int foo(int a) {} // Error, input param is not pointer
     __global__ __aicpu__  int foo(void *a, void *b) {} // Error, input param num is not one
     ```
@@ -270,13 +270,13 @@
      __schedmode__(1) __global__ __mix__(1, 2) void OP1() // OP1使用了SyncAll接口，且存在多流并发的可能，需要设置batch mode（mode 1）
     {
         AscendC::SyncAll();
-        ....    
+        ....
     }
      __schedmode__(1) __global__ __mix__(1, 2) void OP2() // OP2使用了SyncAll接口，且存在多流并发的可能，需要设置batch mode（mode 1）
     {
         AscendC::SyncAll();
-        ....    
-    } 
+        ....
+    }
     __schedmode__(0) __global__ __vector__ void OP3() {...} // OP3没有使用SyncAll接口，可以设置为normal mode(mode 0)，按照正常规则执行算子。
     or
     __global__ __vector__ void OP3() {...} // 不设置__schedmode__，默认为normal mode。
@@ -418,7 +418,7 @@ __ubuf__ __gm__ int i;
 __ubuf__ int * __gm__ ptr;
 ```
 
->[!NOTE]说明 
+>[!NOTE]说明
 >**重要**：不同地址空间指针的大小可能不同。例如，不能认为 sizeof\(\_\_gm\_\_ int \*\)总是等于sizeof\(\_\_ubuf\_\_ int \*\)，譬如编译器或许可能在某些系统上以32bit存储\_\_ubuf\_\_指针。
 
 -   **private地址空间**
@@ -426,16 +426,16 @@ __ubuf__ int * __gm__ ptr;
     private地址空间是大多数变量的默认地址空间，特别是局部变量。
 
     ```
-    // m is in a specific kernel parameter address space, 
+    // m is in a specific kernel parameter address space,
     // it's physical location is implementation determined.
     __global__ __vector__ void foo(int m) {
       // OK. i is an int variable allocated in private address space
       int i;
     }
-    
+
     __aicore__ void bar(int k) { //OK. k is in private address space
       // OK. i is an int variable allocated in private address space
-      int i; 
+      int i;
     }
     ```
 
@@ -445,12 +445,12 @@ __ubuf__ int * __gm__ ptr;
 
     ```
     __gm__ int *var; // var point to an array of int elements
-    
+
     typedef struct {
         float a[3];
         int b[2];
     } foo_t;
-    
+
     __gm__ foo_t *info; // info point to an array of foo_t elements
     ```
 
@@ -473,17 +473,17 @@ __ubuf__ int * __gm__ ptr;
     class ObjTy{
       ObjTy(){...}
       void print(){...}
-    
+
     private:
       int a;
       int b;
     };
-    
-    __global__ __aicore__ 
+
+    __global__ __aicore__
     void foo(__ca__ int * ptr) { // Error. Cannot have __ca__
                                  // qualifier in kernel arguments
       // OK
-      __ca__ int *ptr; 
+      __ca__ int *ptr;
     }
     ```
 
@@ -597,34 +597,6 @@ __ubuf__ int * __gm__ ptr;
 例如，在Atlas 推理系列产品中，当启用KERNEL_TYPE_MIX_VECTOR_CORE时，算子会同时运行在AI Core和Vector Core上。此时，block_idx在这两种核心上都是从0开始计数，用户无法直接通过block_idx来切分数据和控制多核逻辑。而GetBlockIdx在Vector Core上对block_idx增加偏移量（AI Core的block_num），从而保证返回的值能够正确反映多核环境下的实际逻辑。
 
 在Mix场景（使用`__mix__`函数执行空间限定符）下，Vector核（AIV）的逻辑位置需要通过block_idx和sub_block_idx共同确定：`logic_idx = block_idx * sub_block_num + sub_block_idx`。其中block_idx标识当前组合在整个grid中的位置，sub_block_idx标识当前AIV在组合内的位置。开发者应使用GetBlockIdx和GetSubBlockIdx API组合获取完整的逻辑位置信息，而非直接使用内置变量。
-
-## SIMD与SIMT混合编程场景<a name="section952111671314"></a>
-
-SIMD与SIMT混合编程场景中，SIMT VF的入口函数使用\_\_simt\_vf\_\_进行标识，通过在SIMD的\_\_aicore\_\_函数中使用[asc\_vf\_call](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMT-API/SIMD与SIMT混合编程简介/扩展语法/核函数配置-147.md)调用SIMT入口函数。被SIMT VF入口函数调用的函数使用\_\_simt\_callee\_\_进行标识。
-
--   \_\_simt\_vf\_\_ <a name="li611618392141"></a>
-
-    函数标记宏，用于标记SIMT VF入口函数，函数无返回值。使用asc\_vf\_call接口调用SIMT VF入口函数，启动VF子任务。
-
-    ```
-    __simt_vf__ inline void KernelAdd(__gm__ float* x, __gm__ float* y, __gm__ float* z)
-    ```
-
-    \_\_simt\_vf\_\_标记的SIMT VF函数支持的参数类型如下。\_\_simt\_vf\_\_的使用示例请参考[编程示例](../高级编程/高级AI-Core编程模型/SIMD与SIMT混合编程.md#section776244992018)。
-
-    -   指针类型：\_\_ubuf\_\_ \*、\_\_gm\_\_ \*；
-    -   标量类型：bool、int8\_t、uint8\_t、int16\_t、uint16\_t、half、bfloat16、int32\_t、uint32\_t、float、int64\_t、uint64\_t。
-
--   \_\_simt\_callee\_\_
-
-    函数标记宏，用于标记SIMT VF非入口函数，函数可以有返回值，允许被SIMT VF入口函数或其他非入口函数调用。
-
-    ```
-    __simt_callee__ inline float add(float x, float y)
-    ```
-
-Ascend C为SIMT编程、SIMD与SIMT混合编程提供了布尔、整形、浮点型的标量数据类型和短向量数据类型，提供了用于表达线程块、线程网格三维信息的内置变量。 关于内置数据格式的详细说明请参见[内置数据类型](SIMT-BuiltIn关键字.md#section1835494915576)，内置变量请参见[内置变量](SIMT-BuiltIn关键字.md#section13165113520576)。
-
 
 ## 核函数配置<a name="section97005415463"></a>
 
