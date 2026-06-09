@@ -95,6 +95,12 @@ file(
   ../pad/broadcast.h
   ${ASCENDC_INSTALL_BASE_PATH}/asc/include/adv_api/broadcast/broadcast.h
   SYMBOLIC)
+# broadcast_utils.h
+file(
+    CREATE_LINK
+    ../pad/broadcast_utils.h
+    ${ASCENDC_INSTALL_BASE_PATH}/asc/include/adv_api/broadcast/broadcast_utils.h
+    SYMBOLIC)
 
 # deepnorm
 file(MAKE_DIRECTORY
