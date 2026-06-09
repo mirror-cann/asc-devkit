@@ -12,7 +12,9 @@
 #include "kernel_operator.h"
 #include "add_custom_template_tiling.h"
 #include "tiling_key_add_custom_template.h"
-constexpr int32_t BUFFER_NUM = 2;  // tensor num for each queue
+
+constexpr int32_t BUFFER_NUM = 2;
+constexpr int32_t CALCULATE_SIZE = 2048;
 
 template <class dtypeX, class dtypeY, class dtypeZ>
 class KernelAdd {
@@ -30,59 +32,67 @@ public:
         xGm.SetGlobalBuffer((__gm__ dtypeX *)x + this->blockLength * AscendC::GetBlockIdx(), this->blockLength);
         yGm.SetGlobalBuffer((__gm__ dtypeY *)y + this->blockLength * AscendC::GetBlockIdx(), this->blockLength);
         zGm.SetGlobalBuffer((__gm__ dtypeZ *)z + this->blockLength * AscendC::GetBlockIdx(), this->blockLength);
-        pipe.InitBuffer(inQueueX, BUFFER_NUM, this->tileLength * sizeof(dtypeX));
-        pipe.InitBuffer(inQueueY, BUFFER_NUM, this->tileLength * sizeof(dtypeY));
-        pipe.InitBuffer(outQueueZ, BUFFER_NUM, this->tileLength * sizeof(dtypeZ));
     }
     __aicore__ inline void Process1()
     {
-        CopyIn(0);
-        Compute(0);
-        CopyOut(0);
+        AscendC::LocalMemAllocator<AscendC::Hardware::UB> ubAllocator;
+        AscendC::LocalTensor<dtypeX> xLocal = ubAllocator.Alloc<dtypeX, CALCULATE_SIZE>();
+        AscendC::LocalTensor<dtypeY> yLocal = ubAllocator.Alloc<dtypeY, CALCULATE_SIZE>();
+        AscendC::LocalTensor<dtypeZ> zLocal = ubAllocator.Alloc<dtypeZ, CALCULATE_SIZE>();
+
+        AscendC::DataCopy(xLocal, xGm[0], this->tileLength);
+        AscendC::DataCopy(yLocal, yGm[0], this->tileLength);
+
+        AscendC::SetFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
+        AscendC::WaitFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
+
+        AscendC::Add(zLocal, xLocal, yLocal, this->tileLength);
+
+        AscendC::SetFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
+        AscendC::WaitFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
+
+        AscendC::DataCopy(zGm[0], zLocal, this->tileLength);
     }
 
     __aicore__ inline void Process2()
     {
         int32_t loopCount = this->tileNum * BUFFER_NUM;
+
+        AscendC::LocalMemAllocator<AscendC::Hardware::UB> ubAllocator;
+        AscendC::LocalTensor<dtypeX> xLocal = ubAllocator.Alloc<dtypeX, CALCULATE_SIZE>();
+        AscendC::LocalTensor<dtypeY> yLocal = ubAllocator.Alloc<dtypeY, CALCULATE_SIZE>();
+        AscendC::LocalTensor<dtypeZ> zLocal = ubAllocator.Alloc<dtypeZ, CALCULATE_SIZE>();
+
+        AscendC::SetFlag<AscendC::HardEvent::V_MTE2>(EVENT_ID0);
+        AscendC::SetFlag<AscendC::HardEvent::MTE3_V>(EVENT_ID0);
+
         for (int32_t i = 0; i < loopCount; i++) {
-            CopyIn(i);
-            Compute(i);
-            CopyOut(i);
+            AscendC::WaitFlag<AscendC::HardEvent::V_MTE2>(EVENT_ID0);
+
+            AscendC::DataCopy(xLocal, xGm[i * this->tileLength], this->tileLength);
+            AscendC::DataCopy(yLocal, yGm[i * this->tileLength], this->tileLength);
+
+            AscendC::SetFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
+            AscendC::WaitFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
+
+            AscendC::WaitFlag<AscendC::HardEvent::MTE3_V>(EVENT_ID0);
+
+            AscendC::Add(zLocal, xLocal, yLocal, this->tileLength);
+
+            AscendC::SetFlag<AscendC::HardEvent::V_MTE2>(EVENT_ID0);
+            AscendC::SetFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
+            AscendC::WaitFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
+
+            AscendC::DataCopy(zGm[i * this->tileLength], zLocal, this->tileLength);
+
+            AscendC::SetFlag<AscendC::HardEvent::MTE3_V>(EVENT_ID0);
         }
+
+        AscendC::WaitFlag<AscendC::HardEvent::V_MTE2>(EVENT_ID0);
+        AscendC::WaitFlag<AscendC::HardEvent::MTE3_V>(EVENT_ID0);
     }
 
 private:
-    __aicore__ inline void CopyIn(int32_t progress)
-    {
-        AscendC::LocalTensor<dtypeX> xLocal = inQueueX.AllocTensor<dtypeX>();
-        AscendC::LocalTensor<dtypeY> yLocal = inQueueY.AllocTensor<dtypeY>();
-        AscendC::DataCopy(xLocal, xGm[progress * this->tileLength], this->tileLength);
-        AscendC::DataCopy(yLocal, yGm[progress * this->tileLength], this->tileLength);
-        inQueueX.EnQue(xLocal);
-        inQueueY.EnQue(yLocal);
-    }
-    __aicore__ inline void Compute(int32_t progress)
-    {
-        AscendC::LocalTensor<dtypeX> xLocal = inQueueX.DeQue<dtypeX>();
-        AscendC::LocalTensor<dtypeY> yLocal = inQueueY.DeQue<dtypeY>();
-        AscendC::LocalTensor<dtypeZ> zLocal = outQueueZ.AllocTensor<dtypeZ>();
-        AscendC::Add(zLocal, xLocal, yLocal, this->tileLength);
-        outQueueZ.EnQue<dtypeZ>(zLocal);
-        inQueueX.FreeTensor(xLocal);
-        inQueueY.FreeTensor(yLocal);
-    }
-    __aicore__ inline void CopyOut(int32_t progress)
-    {
-        AscendC::LocalTensor<dtypeZ> zLocal = outQueueZ.DeQue<dtypeZ>();
-        AscendC::DataCopy(zGm[progress * this->tileLength], zLocal, this->tileLength);
-        outQueueZ.FreeTensor(zLocal);
-    }
-
-private:
-    AscendC::TPipe pipe;
-    AscendC::TQue<AscendC::TPosition::VECIN, BUFFER_NUM> inQueueX;
-    AscendC::TQue<AscendC::TPosition::VECIN, BUFFER_NUM> inQueueY;
-    AscendC::TQue<AscendC::TPosition::VECOUT, BUFFER_NUM> outQueueZ;
     AscendC::GlobalTensor<dtypeX> xGm;
     AscendC::GlobalTensor<dtypeY> yGm;
     AscendC::GlobalTensor<dtypeZ> zGm;
@@ -94,8 +104,11 @@ private:
 template <typename D_T_X, typename D_T_Y, typename D_T_Z, int TILE_NUM, int IS_SPLIT>
  __global__ __aicore__ void add_custom_template(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, __gm__ uint8_t* workspace, __gm__ uint8_t* tiling)
 {
+    AscendC::InitSocState();
+
     REGISTER_TILING_DEFAULT(TilingDataTemplate);
     GET_TILING_DATA_WITH_STRUCT(TilingDataTemplate, tiling_data, tiling);
+
     KernelAdd<D_T_X, D_T_Y, D_T_Z> op;
     op.Init(x, y, z, tiling_data.totalLength, TILE_NUM);
 
@@ -106,4 +119,6 @@ template <typename D_T_X, typename D_T_Y, typename D_T_Z, int TILE_NUM, int IS_S
         AscendC::printf("Kernel launched with dtype=float and IS_SPLIT=1, total length is %u.\n", tiling_data.totalLength);
         op.Process2();
     }
+
+    AscendC::PipeBarrier<PIPE_ALL>();
 }
