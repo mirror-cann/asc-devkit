@@ -22,7 +22,7 @@
 #ifndef IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_DN2NZ_H
 #define IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_DN2NZ_H
 
-#include "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/instruction.h"
+#include "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/copy_common.h"
 
 namespace AscendC {
 namespace Te {
@@ -32,17 +32,9 @@ public:
     template <const CopyGM2L1Trait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src)
     {
-        // Batch layouts carry a leading B axis: (B, (row, col)) -> depth 3,
-        // (B, ((1, row), (1, col))) -> depth 5. Non-batch layouts are depth 2/4.
-        constexpr auto srcDepth = NestingDepthV<decltype(src.Layout().Shape())>;
-        if constexpr (srcDepth == THREE_DIM_DATA || srcDepth == FIVE_DIM_DATA) {
-            BatchDataCopyImpl<trait, T, U>(dst, src);
-        } else {
-            DataCopyImpl<trait, T, U>(dst, src);
-        }
+        RunGmToL1Batched<trait, CopyGmToCbufMultiDN2Nz, T, U>(dst, src);
     }
 
-private:
     template <const CopyGM2L1Trait& trait, typename T, typename U>
     __aicore__ inline static constexpr void CheckTemplate()
     {
@@ -93,31 +85,6 @@ private:
 
         CopyGmToCbufMultiDn2nzInstr::DataCopy(dst, src, dnNum, loop2DstStride, loop3DstStride, loop4DstStride,
                                               loop1SrcStride, cacheMode, nValue, dValue, loop4SrcStride, false);
-    }
-
-    template <const CopyGM2L1Trait& trait, typename T, typename U>
-    __aicore__ inline static void DataCopyImpl(const T& dst, const U& src)
-    {
-        CheckTemplate<trait, T, U>();
-        EmitCopy(dst, src, src.Layout(), dst.Layout(), 1, 0, 0);
-    }
-
-    // Batch case: strip the leading B axis, then reuse the single-matrix path on the sub-layouts.
-    // Per-batch GM stride (Get<0> of src stride) covers both contiguous (bmk) and non-contiguous
-    // (mbk) memory; per-batch L1 stride (Get<0> of dst stride) is the aligned NZ matrix size.
-    template <const CopyGM2L1Trait& trait, typename T, typename U>
-    __aicore__ inline static void BatchDataCopyImpl(const T& dst, const U& src)
-    {
-        CheckTemplate<trait, T, U>();
-        auto srcLayout = src.Layout();
-        auto dstLayout = dst.Layout();
-
-        uint16_t dnNum = Get<0>(srcLayout.Shape());
-        uint64_t srcDnMatrixStride = Get<0>(srcLayout.Stride());
-        uint32_t dstNzMatrixStride = Get<0>(dstLayout.Stride());
-
-        EmitCopy(dst, src, Te::Get<1>(srcLayout), Te::Get<1>(dstLayout), dnNum, srcDnMatrixStride,
-                 dstNzMatrixStride);
     }
 };
 
