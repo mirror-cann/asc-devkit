@@ -103,7 +103,23 @@
 
                 -   [辅助矩阵分形格式详解](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算分形介绍/辅助矩阵分形格式详解.md)
 
-                </cann-filter>
+            </cann-filter>
+            
+            -   [矩阵计算的搬入](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/总体说明.md)
+                -   [总体说明](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/总体说明.md)
+                -   [矩阵计算输入搬运约束](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵计算输入搬运约束.md)
+                -   [L1 Buffer/L0A Buffer/L0B Buffer内存结构介绍](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/L1-L0A-B内存结构介绍.md)
+                -   [辅助配置接口](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/辅助配置接口.md)
+                    -   [Fill](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/Fill.md)
+                    -   [SetFmatrix](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetFmatrix.md)
+                    -   [SetFmatrixBitMode](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetFmatrixBitMode.md)
+                    -   [SetLoadDataBoundary](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetLoadDataBoundary.md)
+                    -   [SetLoadDataRepeat](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetLoadDataRepeat.md)
+                    -   [SetLoadDataPaddingValue](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetLoadDataPaddingValue.md)
+                    -   [LoadDataUnzip](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/LoadDataUnzip.md)
+                    -   [LoadImageToLocal](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/LoadImageToLocal.md)
+                    -   [LoadUnzipIndex](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/LoadUnzipIndex.md)
+                    -   [SetAippFunctions](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetAippFunctions.md)
             -   [数据搬运](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/数据搬运.md)
                 -   [Fill](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/Fill.md)
                 -   [LoadData](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadData/LoadData.md)
