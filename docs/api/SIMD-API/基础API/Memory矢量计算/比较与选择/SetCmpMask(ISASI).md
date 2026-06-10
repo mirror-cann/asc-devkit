@@ -49,23 +49,25 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-为[Select](Select.md)不传入mask参数的接口设置比较寄存器。配合不同的selMode传入不同的数据。
+头文件路径为：`"basic_api/kernel_operator_vec_cmpsel_intf.h"`。
 
--   模式0（SELMODE::VSEL\_CMPMASK\_SPR）
+设置比较寄存器的值，配合不传入mask参数的[Select](Select.md)接口使用，根据不同的selMode传入不同的数据。
+
+- 模式0（SELMODE::VSEL\_CMPMASK\_SPR）
 
     SetCmpMask中传入selMask LocalTensor。
 
--   模式1（SELMODE::VSEL\_TENSOR\_SCALAR\_MODE）
+- 模式1（SELMODE::VSEL\_TENSOR\_SCALAR\_MODE）
 
     SetCmpMask中传入src1 LocalTensor。
 
--   模式2（SELMODE::VSEL\_TENSOR\_TENSOR\_MODE）
+- 模式2（SELMODE::VSEL\_TENSOR\_TENSOR\_MODE）
 
     SetCmpMask中传入LocalTensor，LocalTensor中存放的是selMask的地址。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
-```
+```cpp
 template <typename T>
 __aicore__ inline void SetCmpMask(const LocalTensor<T>& src)
 ```
@@ -74,42 +76,19 @@ __aicore__ inline void SetCmpMask(const LocalTensor<T>& src)
 
 **表 1**  模板参数说明
 
-<a name="table4835205712588"></a>
-<table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="9.969999999999999%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="90.03%" id="mcps1.2.3.1.2"><p id="p583535795817"><a name="p583535795817"></a><a name="p583535795817"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row11492616168"><td class="cellrowborder" valign="top" width="9.969999999999999%" headers="mcps1.2.3.1.1 "><p id="p19933113132715"><a name="p19933113132715"></a><a name="p19933113132715"></a>T</p>
-</td>
-<td class="cellrowborder" valign="top" width="90.03%" headers="mcps1.2.3.1.2 "><p id="p593343122716"><a name="p593343122716"></a><a name="p593343122716"></a>操作数的数据类型。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 描述 |
+| --- | --- |
+| T | 操作数的数据类型。 |
 
 **表 2**  参数说明
 
-<a name="zh-cn_topic_0235751031_table33761356"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="9.85%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="11.450000000000001%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0235751031_p16609919"><a name="zh-cn_topic_0235751031_p16609919"></a><a name="zh-cn_topic_0235751031_p16609919"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="78.7%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0235751031_p59995477"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row42461942101815"><td class="cellrowborder" valign="top" width="9.85%" headers="mcps1.2.4.1.1 "><p id="p479605232211"><a name="p479605232211"></a><a name="p479605232211"></a>src</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.450000000000001%" headers="mcps1.2.4.1.2 "><p id="p1579635215228"><a name="p1579635215228"></a><a name="p1579635215228"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="78.7%" headers="mcps1.2.4.1.3 "><p id="p5945720195112"><a name="p5945720195112"></a><a name="p5945720195112"></a><span id="zh-cn_topic_0000001530181537_ph173308471594"><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><span id="zh-cn_topic_0000001530181537_ph9902231466"><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816"><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a>类型为<a href="../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
-<p id="p82871514192410"><a name="p82871514192410"></a><a name="p82871514192410"></a>LocalTensor的起始地址需要16字节对齐。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| src | 输入 | 类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br>LocalTensor的起始地址需要16字节对齐。 |
+
+## 数据类型
+
+支持数据类型为：b8、b16、b32、b64。
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -121,9 +100,9 @@ __aicore__ inline void SetCmpMask(const LocalTensor<T>& src)
 
 ## 调用示例<a name="section837496171220"></a>
 
--   当selMode为模式0或模式2时：
+- 当selMode为模式0或模式2时：
 
-    ```
+    ```cpp
     uint32_t dataSize = 256;
     uint32_t selDataSize = 8;
     TPipe pipe;
@@ -142,13 +121,13 @@ __aicore__ inline void SetCmpMask(const LocalTensor<T>& src)
     uint8_t repeat = 4;
     uint32_t mask = 64;
     AscendC::BinaryRepeatParams repeatParams = { 1, 1, 1, 8, 8, 8 };
-    
+
     // selMode为模式0（SELMODE::VSEL_CMPMASK_SPR）
     AscendC::SetCmpMask(sel);
     AscendC::PipeBarrier<PIPE_V>();
     AscendC::SetVectorMask<float>(mask);
     AscendC::Select<float, AscendC::SELMODE::VSEL_CMPMASK_SPR>(dst, src0, src1, repeat, repeatParams);
-    
+
     // selMode为模式2（SELMODE::VSEL_TENSOR_TENSOR_MODE）
     AscendC::LocalTensor<int32_t> tempBuf;
     #if defined(ASCENDC_CPU_DEBUG) && (ASCENDC_CPU_DEBUG == 1)  // cpu调试
@@ -168,9 +147,9 @@ __aicore__ inline void SetCmpMask(const LocalTensor<T>& src)
     AscendC::Select<float, AscendC::SELMODE::VSEL_TENSOR_TENSOR_MODE>(dst, src0, src1, repeat, repeatParams);
     ```
 
--   当selMode为模式1时：
+- 当selMode为模式1时：
 
-    ```
+    ```cpp
     uint32_t dataSize = 256;
     uint32_t selDataSize = 8;
     TPipe pipe;
@@ -186,18 +165,17 @@ __aicore__ inline void SetCmpMask(const LocalTensor<T>& src)
     AscendC::LocalTensor<uint8_t> sel = inQueueSel.AllocTensor<uint8_t>();
     AscendC::LocalTensor<float> src0 = inQueueX.AllocTensor<float>();
     AscendC::LocalTensor<float> tmpScalar = inQueueY.AllocTensor<float>();
-    
+
     uint8_t repeat = 4;
     uint32_t mask = 64;
     AscendC::BinaryRepeatParams repeatParams = { 1, 1, 1, 8, 8, 8 };
-    
+
     // selMode为模式1（SELMODE::VSEL_TENSOR_SCALAR_MODE）
     AscendC::SetVectorMask<uint32_t>(32);
-    AscendC::Duplicate<float, false>(tmpScalar, static_cast<float>(1.0), MASK_PLACEHOLDER, 1, 1, 8);
+    AscendC::Duplicate<float, false>(tmpScalar, static_cast<float>(1.0), AscendC::MASK_PLACEHOLDER, 1, 1, 8);
     AscendC::PipeBarrier<PIPE_V>();
     AscendC::SetCmpMask(tmpScalar);
     AscendC::PipeBarrier<PIPE_V>();
     AscendC::SetVectorMask<float>(mask);
     AscendC::Select(dst, sel, src0, repeat, repeatParams);
     ```
-
