@@ -1,53 +1,16 @@
-# BatchWrite<a name="ZH-CN_TOPIC_0000002232461441"></a>
+# BatchWrite
 
-## 产品支持情况<a name="section1586581915393"></a>
+## 产品支持情况
 
-<a name="table169596713360"></a>
-<table><thead align="left"><tr id="row129590715369"><th class="cellrowborder" valign="top" width="57.99999999999999%" id="mcps1.1.3.1.1"><p id="p17959971362"><a name="p17959971362"></a><a name="p17959971362"></a><span id="ph895914718367"><a name="ph895914718367"></a><a name="ph895914718367"></a>产品</span></p>
-</th>
-<th class="cellrowborder" align="center" valign="top" width="42%" id="mcps1.1.3.1.2"><p id="p89594763612"><a name="p89594763612"></a><a name="p89594763612"></a>是否支持</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row18959673369"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1595910763613"><a name="p1595910763613"></a><a name="p1595910763613"></a><span id="ph1595918753613"><a name="ph1595918753613"></a><a name="ph1595918753613"></a>Ascend 950PR/Ascend 950DT</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1695957133611"><a name="p1695957133611"></a><a name="p1695957133611"></a>x</p>
-</td>
-</tr>
-<tr id="row18959157103612"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p13959117193618"><a name="p13959117193618"></a><a name="p13959117193618"></a><span id="ph9959117173614"><a name="ph9959117173614"></a><a name="ph9959117173614"></a><term id="zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1095914793613"><a name="p1095914793613"></a><a name="p1095914793613"></a>√</p>
-</td>
-</tr>
-<tr id="row89591478362"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p7959157163619"><a name="p7959157163619"></a><a name="p7959157163619"></a><span id="ph1995997193619"><a name="ph1995997193619"></a><a name="ph1995997193619"></a><term id="zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p149598793615"><a name="p149598793615"></a><a name="p149598793615"></a>√</p>
-</td>
-</tr>
-<tr id="row99591673368"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p595947173615"><a name="p595947173615"></a><a name="p595947173615"></a><span id="ph995910783620"><a name="ph995910783620"></a><a name="ph995910783620"></a><term id="zh-cn_topic_0000001312391781_term354143892110"><a name="zh-cn_topic_0000001312391781_term354143892110"></a><a name="zh-cn_topic_0000001312391781_term354143892110"></a>Atlas 200I/500 A2 推理产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p59606716367"><a name="p59606716367"></a><a name="p59606716367"></a>x</p>
-</td>
-</tr>
-<tr id="row1196047183615"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1898493283210"><a name="p1898493283210"></a><a name="p1898493283210"></a><span id="ph1498417326325"><a name="ph1498417326325"></a><a name="ph1498417326325"></a><term id="zh-cn_topic_0000001312391781_term1964153212227"><a name="zh-cn_topic_0000001312391781_term1964153212227"></a><a name="zh-cn_topic_0000001312391781_term1964153212227"></a>Atlas 推理系列产品</term>AI Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1680812310331"><a name="p1680812310331"></a><a name="p1680812310331"></a>x</p>
-</td>
-</tr>
-<tr id="row041413315316"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p8192738133217"><a name="p8192738133217"></a><a name="p8192738133217"></a><span id="ph1119217385324"><a name="ph1119217385324"></a><a name="ph1119217385324"></a><term id="zh-cn_topic_0000001312391781_term1463893615224"><a name="zh-cn_topic_0000001312391781_term1463893615224"></a><a name="zh-cn_topic_0000001312391781_term1463893615224"></a>Atlas 推理系列产品</term>Vector Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p124151433133113"><a name="p124151433133113"></a><a name="p124151433133113"></a>x</p>
-</td>
-</tr>
-<tr id="row69603716362"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p29601972368"><a name="p29601972368"></a><a name="p29601972368"></a><span id="ph8960167193611"><a name="ph8960167193611"></a><a name="ph8960167193611"></a><term id="zh-cn_topic_0000001312391781_term71949488213"><a name="zh-cn_topic_0000001312391781_term71949488213"></a><a name="zh-cn_topic_0000001312391781_term71949488213"></a>Atlas 训练系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p096010715361"><a name="p096010715361"></a><a name="p096010715361"></a>x</p>
-</td>
-</tr>
-</tbody>
-</table>
+- Ascend 950PR/Ascend 950DT：不支持
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+- Atlas 200I/500 A2 推理产品：不支持
+- Atlas 推理系列产品AI Core：不支持
+- Atlas 推理系列产品Vector Core：不支持
+- Atlas 训练系列产品：不支持
 
-## 功能说明<a name="section618mcpsimp"></a>
+## 功能说明
 
 集合通信BatchWrite的任务下发接口，返回该任务的标识handleId给用户。BatchWrite实现了一种点对点通信，这是一种直接传输数据的通信模式，能够同时将多份数据发送到不同的Global Memory地址上。
 
@@ -55,58 +18,35 @@
 
 对于Atlas A2 训练系列产品/Atlas A2 推理系列产品，BatchWrite通信必须在不同昇腾AI Server（通常是8卡或16卡的昇腾NPU设备组成的服务器形态的统称）之间进行。
 
-**图 1**  BatchWrite示意图<a name="fig5325133243120"></a>  
+**图 1**  BatchWrite示意图  
 ![](../../../../figures/BatchWrite示意图.png "BatchWrite示意图")
 
-## 函数原型<a name="section620mcpsimp"></a>
+## 函数原型
 
 ```
 template <bool commit = false>
 __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum, uint16_t queueID = 0U)
 ```
 
-## 参数说明<a name="section622mcpsimp"></a>
+## 参数说明
 
 **表 1**  模板参数说明
 
-<a name="table149053404318"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000001952285369_zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="17.77%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001952285369_zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0000001952285369_zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0000001952285369_zh-cn_topic_0235751031_p20917673"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="11.799999999999999%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0000001952285369_zh-cn_topic_0235751031_p16609919"><a name="zh-cn_topic_0000001952285369_zh-cn_topic_0235751031_p16609919"></a><a name="zh-cn_topic_0000001952285369_zh-cn_topic_0235751031_p16609919"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="70.43%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0000001952285369_zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0000001952285369_zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0000001952285369_zh-cn_topic_0235751031_p59995477"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000001952285369_row42461942101815"><td class="cellrowborder" valign="top" width="17.77%" headers="mcps1.2.4.1.1 "><p id="zh-cn_topic_0000001952285369_p163481714145518"><a name="zh-cn_topic_0000001952285369_p163481714145518"></a><a name="zh-cn_topic_0000001952285369_p163481714145518"></a>commit</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.799999999999999%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001952285369_p33487148556"><a name="zh-cn_topic_0000001952285369_p33487148556"></a><a name="zh-cn_topic_0000001952285369_p33487148556"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="70.43%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0000001952285369_p186182538493"><a name="zh-cn_topic_0000001952285369_p186182538493"></a><a name="zh-cn_topic_0000001952285369_p186182538493"></a>bool类型。参数取值如下：</p>
-<a name="zh-cn_topic_0000001952285369_ul77246714401"></a><a name="zh-cn_topic_0000001952285369_ul77246714401"></a><ul id="zh-cn_topic_0000001952285369_ul77246714401"><li>true：在调用Prepare接口时，Commit同步通知服务端可以执行该通信任务。</li><li>false：在调用Prepare接口时，不通知服务端执行该通信任务。</li></ul>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| commit | 输入 | bool类型。参数取值如下：<br>true：在调用Prepare接口时，Commit同步通知服务端可以执行该通信任务。<br>false：在调用Prepare接口时，不通知服务端执行该通信任务。 |
 
 **表 2**  接口参数说明
 
-<a name="table180119381514"></a>
-<table><thead align="left"><tr id="row148011835158"><th class="cellrowborder" valign="top" width="17.77%" id="mcps1.2.4.1.1"><p id="p1280114381517"><a name="p1280114381517"></a><a name="p1280114381517"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="11.799999999999999%" id="mcps1.2.4.1.2"><p id="p380111321517"><a name="p380111321517"></a><a name="p380111321517"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="70.43%" id="mcps1.2.4.1.3"><p id="p28014351520"><a name="p28014351520"></a><a name="p28014351520"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row17761811191614"><td class="cellrowborder" valign="top" width="17.77%" headers="mcps1.2.4.1.1 "><p id="p167771011181619"><a name="p167771011181619"></a><a name="p167771011181619"></a>batchWriteInfo</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.799999999999999%" headers="mcps1.2.4.1.2 "><p id="p377721181614"><a name="p377721181614"></a><a name="p377721181614"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="70.43%" headers="mcps1.2.4.1.3 "><p id="p1477711161611"><a name="p1477711161611"></a><a name="p1477711161611"></a>通信任务信息的Global Memory地址。一组通信数据的相关信息必须按指定的格式保存，在执行通信任务时，可以同时指定多组通信任务信息，执行通信任务时批量发送数据。</p>
-<p id="p19970202662712"><a name="p19970202662712"></a><a name="p19970202662712"></a>对于<span id="ph14970726132716"><a name="ph14970726132716"></a><a name="ph14970726132716"></a><term id="zh-cn_topic_0000001312391781_term1253731311225_2"><a name="zh-cn_topic_0000001312391781_term1253731311225_2"></a><a name="zh-cn_topic_0000001312391781_term1253731311225_2"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115_2"><a name="zh-cn_topic_0000001312391781_term131434243115_2"></a><a name="zh-cn_topic_0000001312391781_term131434243115_2"></a>Atlas A3 推理系列产品</term></span>，格式如下：</p>
-<a name="screen591113334197"></a><a name="screen591113334197"></a><pre class="screen" codetype="Cpp" id="screen591113334197">struct BatchWriteItem {
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| batchWriteInfo | 输入 | 通信任务信息的Global Memory地址。一组通信数据的相关信息必须按指定的格式保存，在执行通信任务时，可以同时指定多组通信任务信息，执行通信任务时批量发送数据。结构体定义如下代码所示。<br><br>对于Atlas A3 训练系列产品/Atlas A3 推理系列产品：<br>type：预留参数，取值为0。<br>res1[5]：预留参数，无需填写该值。<br>length：待拷贝数据的长度。<br>srcAddrLow：待拷贝数据的源地址低32位。<br>srcAddrHigh：待拷贝数据的源地址高32位。<br>dstAddrLow：待拷贝数据的目的地址低32位。<br>dstAddrHigh：待拷贝数据的目的地址高32位。<br>res2[4]：预留参数，无需填写该值。<br><br>对于Atlas A2 训练系列产品/Atlas A2 推理系列产品：<br>localBuf：本端发送数据的window地址。<br>remoteBuf：对端接收数据的window地址。<br>count：该通信任务发送的数据个数。<br>dataType：该通信任务发送的数据类型，支持的类型可参考[HcclDataType参数说明](HCCL使用说明.md#table116710585514)。<br>remoteRankId：该通信任务发送数据的目的卡卡号。 |
+| itemNum | 输入 | 批量任务的个数。该参数取值必须与batchWriteInfo中通信任务信息的组数一致。<br><br>对于Atlas A3 训练系列产品/Atlas A3 推理系列产品，该参数取值不能大于等于2048。 |
+| queueID | 输入 | 指定当前通信所在的队列ID，默认值为0。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，该参数仅支持取值为0。 |
+
+```
+// Atlas A3 训练系列产品/Atlas A3 推理系列产品
+struct BatchWriteItem {
     uint64_t type;
     uint32_t res1[5];
     uint32_t length;
@@ -115,43 +55,23 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
     uint32_t dstAddrLow;
     uint32_t dstAddrHigh;
     uint32_t res2[4];
-};</pre>
-<a name="ul12670114202714"></a><a name="ul12670114202714"></a><ul id="ul12670114202714"><li>type：预留参数，取值为0。</li><li>res1[5]：预留参数，无需填写该值。</li><li>length：待拷贝数据的长度。</li><li>srcAddrLow：待拷贝数据的源地址低32位。</li><li>srcAddrHigh：待拷贝数据的源地址高32位。</li><li>dstAddrLow：待拷贝数据的目的地址低32位。</li><li>dstAddrHigh：待拷贝数据的目的地址高32位。</li><li>res2[4]：预留参数，无需填写该值。</li></ul>
-<p id="p13941419111720"><a name="p13941419111720"></a><a name="p13941419111720"></a>对于<span id="ph10669162119173"><a name="ph10669162119173"></a><a name="ph10669162119173"></a><term id="zh-cn_topic_0000001312391781_term11962195213215_2"><a name="zh-cn_topic_0000001312391781_term11962195213215_2"></a><a name="zh-cn_topic_0000001312391781_term11962195213215_2"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811_2"><a name="zh-cn_topic_0000001312391781_term184716139811_2"></a><a name="zh-cn_topic_0000001312391781_term184716139811_2"></a>Atlas A2 推理系列产品</term></span>，格式如下：</p>
-<a name="screen1341446497"></a><a name="screen1341446497"></a><pre class="screen" codetype="Cpp" id="screen1341446497">struct BatchWriteItem {
+};
+
+// Atlas A2 训练系列产品/Atlas A2 推理系列产品
+struct BatchWriteItem {
     uint64_t localBuf;
     uint64_t remoteBuf;
     uint64_t count;
     uint32_t dataType;
     uint32_t remoteRankId;
-};</pre>
-<a name="ul174831651195413"></a><a name="ul174831651195413"></a><ul id="ul174831651195413"><li>localBuf：本端发送数据的window地址。</li><li>remoteBuf：对端接收数据的window地址。</li><li>count：该通信任务发送的数据个数。</li><li>dataType：该通信任务发送的数据类型，支持的类型可参考<a href="HCCL使用说明.md#table116710585514">HcclDataType参数说明</a>。</li><li>remoteRankId：该通信任务发送数据的目的卡卡号。</li></ul>
-</td>
-</tr>
-<tr id="row98411158123817"><td class="cellrowborder" valign="top" width="17.77%" headers="mcps1.2.4.1.1 "><p id="p78421658173815"><a name="p78421658173815"></a><a name="p78421658173815"></a>itemNum</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.799999999999999%" headers="mcps1.2.4.1.2 "><p id="p19487144113910"><a name="p19487144113910"></a><a name="p19487144113910"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="70.43%" headers="mcps1.2.4.1.3 "><p id="p1779721603916"><a name="p1779721603916"></a><a name="p1779721603916"></a>批量任务的个数。该参数取值必须与batchWriteInfo中通信任务信息的组数一致。</p>
-<p id="p54981043644"><a name="p54981043644"></a><a name="p54981043644"></a>对于<span id="ph1017970536"><a name="ph1017970536"></a><a name="ph1017970536"></a><term id="zh-cn_topic_0000001312391781_term1253731311225_3"><a name="zh-cn_topic_0000001312391781_term1253731311225_3"></a><a name="zh-cn_topic_0000001312391781_term1253731311225_3"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115_3"><a name="zh-cn_topic_0000001312391781_term131434243115_3"></a><a name="zh-cn_topic_0000001312391781_term131434243115_3"></a>Atlas A3 推理系列产品</term></span>，该参数取值不能大于等于2048。</p>
-</td>
-</tr>
-<tr id="row1391619475216"><td class="cellrowborder" valign="top" width="17.77%" headers="mcps1.2.4.1.1 "><p id="p8916154155216"><a name="p8916154155216"></a><a name="p8916154155216"></a>queueID</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.799999999999999%" headers="mcps1.2.4.1.2 "><p id="p39161649523"><a name="p39161649523"></a><a name="p39161649523"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="70.43%" headers="mcps1.2.4.1.3 "><p id="p1063215143103"><a name="p1063215143103"></a><a name="p1063215143103"></a>指定当前通信所在的队列ID，默认值为0。</p>
-<p id="p241975291020"><a name="p241975291020"></a><a name="p241975291020"></a><span id="ph275355221010"><a name="ph275355221010"></a><a name="ph275355221010"></a><term id="zh-cn_topic_0000001312391781_term11962195213215_3"><a name="zh-cn_topic_0000001312391781_term11962195213215_3"></a><a name="zh-cn_topic_0000001312391781_term11962195213215_3"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811_3"><a name="zh-cn_topic_0000001312391781_term184716139811_3"></a><a name="zh-cn_topic_0000001312391781_term184716139811_3"></a>Atlas A2 推理系列产品</term></span>，该参数仅支持取值为0。</p>
-</td>
-</tr>
-</tbody>
-</table>
+};
+```
 
-## 返回值说明<a name="section640mcpsimp"></a>
+## 返回值说明
 
 返回该任务的标识handleId，handleId大于等于0。调用失败时，返回 -1。
 
-## 约束说明<a name="section633mcpsimp"></a>
+## 约束说明
 
 -   调用本接口前确保已调用过[InitV2](InitV2.md)和[SetCcTilingV2](SetCcTilingV2.md)接口。
 -   若HCCL对象的[config模板参数](HCCL模板参数.md#table884518212555)未指定下发通信任务的核，该接口只能在AIC核或者AIV核两者之一上调用。若HCCL对象的[config模板参数](HCCL模板参数.md#table884518212555)中指定了下发通信任务的核，则该接口可以在AIC核和AIV核上同时调用，接口内部会根据指定的核的类型，只在AIC核、AIV核二者之一下发该通信任务。
@@ -159,7 +79,7 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
 -   对于Atlas A2 训练系列产品/Atlas A2 推理系列产品，当前接口仅支持不同AI Server间的通信，同时通信任务信息中指定的目的卡号不能是本卡号。
 -   通信任务信息写入batchWriteInfo前，必须通过调用[DataCacheCleanAndInvalid](../../../基础API/缓存控制/DataCacheCleanAndInvalid.md)接口，保证预期的数据成功刷新到Global Memory上。
 
-## 调用示例<a name="section1665082013318"></a>
+## 调用示例
 
 -   不同AI Server之间的点对点通信
 
@@ -171,10 +91,10 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
         uint64_t remoteBuf;    // 对端接收数据的window地址
         uint64_t count;        // 发送的数据个数
         uint32_t dataType;     // 发送的数据类型
-        uint32_t remoteRankId; // 发送数据的目的卡号 
+        uint32_t remoteRankId; // 发送数据的目的卡号
     }; // 按接口的约定定义格式
-    
-    extern "C" __global__ __aicore__ void BatchWrite_custom(GM_ADDR inputGM, GM_ADDR workspace, GM_ADDR tilingGM) 
+
+    extern "C" __global__ __aicore__ void BatchWrite_custom(GM_ADDR inputGM, GM_ADDR workspace, GM_ADDR tilingGM)
     {
         GM_ADDR userWS = GetUserWorkspace(workspace);
         if (userWS == nullptr) {
@@ -183,14 +103,14 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
         REGISTER_TILING_DEFAULT(BatchWriteCustomTilingData); // BatchWriteCustomTilingData为对应算子头文件定义的结构体
         GET_TILING_DATA_WITH_STRUCT(BatchWriteCustomTilingData, tilingData, tilingGM);
         GM_ADDR contextGM = AscendC::GetHcclContext<0>();
-    
+
         if constexpr (g_coreType == AscendC::AIV) {
             Hccl hccl;
             hccl.InitV2(contextGM, &tilingData);
             hccl.SetCcTilingV2(offsetof(BatchWriteCustomTilingData, mc2CcTiling));
-    
+
             __gm__ BatchWriteItem *sendInfo = reinterpret_cast<__gm__ BatchWriteItem *>(workspace);
-            
+
             // 需要提前将待发送的数据从inputGM搬运到localBuf所填的window地址上
             sendInfo->localBuf = hccl.GetWindowsOutAddr(hccl.GetRankId());
             // 对端的接收地址也要是window地址，接收端需要考虑是否搬运到输出或者workspace上
@@ -198,22 +118,22 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
             sendInfo->count = 16U;
             sendInfo->dataType = HcclDataType::HCCL_DATA_TYPE_FP16;
             sendInfo->remoteRankId = 2U;
-            
+
             // 可以组装多个通信任务，实现批量发送
             (sendInfo + 1)->localBuf = hccl.GetWindowsOutAddr(hccl.GetRankId());
             (sendInfo + 1)->remoteBuf = hccl.GetWindowsInAddr(3U);
             (sendInfo + 1)->count = 32U;
             (sendInfo + 1)->dataType = HcclDataType::HCCL_DATA_TYPE_BFP16;
             (sendInfo + 1)->remoteRankId = 3U;
-             
+
             // 确保cache中的数据已刷新到GM地址上
             GlobalTensor<int64_t> tempTensor;
             tempTensor.SetGlobalBuffer((__gm__ int64_t *)sendInfo);
             DataCacheCleanAndInvalid<int64_t, CacheLine::SINGLE_CACHE_LINE, DcciDst::CACHELINE_OUT>(tempTensor);
-    
+
             auto handleId = hccl.BatchWrite<true>(sendInfo, 2U);
             // wait仅表示本端发送完毕，对端是否接收到数据需要在对端判断
-            hccl.Wait(handleId);    
+            hccl.Wait(handleId);
             AscendC::SyncAll();
             hccl.Finalize();
         }
@@ -232,8 +152,8 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
         context->SetAicpuBlockDim(5U);
         context->SetBlockDim(coreNum);
         context->SetTilingKey(1000);
-    
-        // 省略无关代码 
+
+        // 省略无关代码
         SdmaBatchWriteCustomTilingData *tiling = context->GetTilingData<SdmaBatchWriteCustomTilingData>();
         AscendC::Mc2CcTilingConfig mc2CcTilingConfig(groupName, 18, "BatchWrite=level0:fullmesh", 0);
         mc2CcTilingConfig.GetTiling(tiling->mc2InitTiling);
@@ -257,8 +177,8 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
         uint32_t dstAddrHigh;
         uint32_t res2[4];
     }; // 按接口的约定定义格式
-    
-    extern "C" __global__ __aicore__ void BatchWrite_custom(GM_ADDR inputGM, GM_ADDR outputGM1, GM_ADDR outputGM2, GM_ADDR tilingGM) 
+
+    extern "C" __global__ __aicore__ void BatchWrite_custom(GM_ADDR inputGM, GM_ADDR outputGM1, GM_ADDR outputGM2, GM_ADDR tilingGM)
     {
         GM_ADDR userWS = GetUserWorkspace(workspace);
         if (userWS == nullptr) {
@@ -267,21 +187,21 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
         REGISTER_TILING_DEFAULT(BatchWriteCustomTilingData); // BatchWriteCustomTilingData为对应算子头文件定义的结构体
         GET_TILING_DATA_WITH_STRUCT(BatchWriteCustomTilingData, tilingData, tilingGM);
         GM_ADDR contextGM = AscendC::GetHcclContext<0>();
-    
+
         if constexpr (g_coreType == AscendC::AIV) {
             Hccl hccl;
             hccl.InitV2(contextGM, &tilingData);
             hccl.SetCcTilingV2(offsetof(BatchWriteCustomTilingData, mc2CcTiling));
-    
+
             __gm__ BatchWriteItem *sendInfo = reinterpret_cast<__gm__ BatchWriteItem *>(inputGM);
-            
+
             sendInfo->type = 0UL;
             sendInfo->length = 64U;
             sendInfo->srcAddrLow = static_cast<uint32_t>((uint64_t)(inputGM) & 0xFFFFFFFF);
             sendInfo->srcAddrHigh = static_cast<uint32_t>(((uint64_t)(inputGM) >> 32) & 0xFFFFFFFF);
             sendInfo->dstAddrLow = static_cast<uint32_t>((uint64_t)(outputGM1) & 0xFFFFFFFF);
             sendInfo->dstAddrHigh = static_cast<uint32_t>(((uint64_t)(outputGM1) >> 32) & 0xFFFFFFFF);
-            
+
             // 可以组装多个通信任务，实现批量发送
             (sendInfo + 1)->type = 0UL;
             (sendInfo + 1)->length = 64U;
@@ -289,24 +209,24 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
             (sendInfo + 1)->srcAddrHigh = static_cast<uint32_t>(((uint64_t)(inputGM) >> 32) & 0xFFFFFFFF);
             (sendInfo + 1)->dstAddrLow = static_cast<uint32_t>((uint64_t)(outputGM2) & 0xFFFFFFFF);
             (sendInfo + 1)->dstAddrHigh = static_cast<uint32_t>(((uint64_t)(outputGM2) >> 32) & 0xFFFFFFFF);
-             
+
             // 确保cache中的数据已刷新到GM地址上
             GlobalTensor<int64_t> tempTensor;
             tempTensor.SetGlobalBuffer((__gm__ int64_t *)sendInfo);
             DataCacheCleanAndInvalid<int64_t, CacheLine::SINGLE_CACHE_LINE, DcciDst::CACHELINE_OUT>(tempTensor);
-            
+
             // 分别将两次拷贝部署在队列0、队列1上
             auto handleId0 = hccl.BatchWrite<true>(sendInfo, 1U, 0U);
             auto handleId1 = hccl.BatchWrite<true>(sendInfo, 1U, 1U);
-    
+
             // 在所有队列上阻塞BatchWrite通信任务，所有队列将等到通信任务全部完成后再继续往下执行，实现所有队列的同步
             const uint16_t queueNum = hccl.GetQueueNum();
             for (uint16_t i = 0U; i < queueNum; ++i) {
                 hccl.QueueBarrier<ScopeType::ALL>(i);
             }
-    
+
             // Finalize可以无需等待服务端的通信任务全部完成即可退出，尽早释放AIV核心资源
-            hccl.Finalize<false>();  
+            hccl.Finalize<false>();
             AscendC::SyncAll();
         }
     }
@@ -326,8 +246,8 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
         context->SetAicpuBlockDim(4U);
         context->SetBlockDim(coreNum);
         context->SetTilingKey(1000);
-    
-        // 省略无关代码 
+
+        // 省略无关代码
         SdmaBatchWriteCustomTilingData *tiling = context->GetTilingData<SdmaBatchWriteCustomTilingData>();
         AscendC::Mc2CcTilingConfig mc2CcTilingConfig(groupName, 18, "BatchWrite=level0:fullmesh", 0);
         mc2CcTilingConfig.SetCommBlockNum(24U);
@@ -337,4 +257,3 @@ __aicore__ inline HcclHandle BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum
         return ge::GRAPH_SUCCESS;
     }
     ```
-

@@ -1,52 +1,52 @@
-# HCCL Kernel侧接口<a name="ZH-CN_TOPIC_0000001924245472"></a>
+# HCCL Kernel侧接口
 
--   **[HCCL使用说明](HCCL使用说明.md)**  
+-   **[HCCL使用说明](HCCL使用说明.md)**
 
--   **[HCCL模板参数](HCCL模板参数.md)**  
+-   **[HCCL模板参数](HCCL模板参数.md)**
 
--   **[InitV2](InitV2.md)**  
+-   **[InitV2](InitV2.md)**
 
--   **[SetCcTilingV2](SetCcTilingV2.md)**  
+-   **[SetCcTilingV2](SetCcTilingV2.md)**
 
--   **[AllReduce](AllReduce.md)**  
+-   **[AllReduce](AllReduce.md)**
 
--   **[AllGather](AllGather.md)**  
+-   **[AllGather](AllGather.md)**
 
--   **[ReduceScatter](ReduceScatter.md)**  
+-   **[ReduceScatter](ReduceScatter.md)**
 
--   **[AlltoAll](AlltoAll.md)**  
+-   **[AlltoAll](AlltoAll.md)**
 
--   **[AlltoAllV](AlltoAllV.md)**  
+-   **[AlltoAllV](AlltoAllV.md)**
 
--   **[AlltoAllvWrite](AlltoAllvWrite.md)**  
+-   **[AlltoAllvWrite](AlltoAllvWrite.md)**
 
--   **[BatchWrite](BatchWrite.md)**  
+-   **[BatchWrite](BatchWrite.md)**
 
--   **[Commit](Commit.md)**  
+-   **[Commit](Commit.md)**
 
--   **[Wait](Wait-98.md)**  
+-   **[Wait](Wait-98.md)**
 
--   **[Iterate](Iterate-99.md)**  
+-   **[Iterate](Iterate-99.md)**
 
--   **[Query](Query.md)**  
+-   **[Query](Query.md)**
 
--   **[InterHcclGroupSync](InterHcclGroupSync.md)**  
+-   **[InterHcclGroupSync](InterHcclGroupSync.md)**
 
--   **[Finalize](Finalize.md)**  
+-   **[Finalize](Finalize.md)**
 
--   **[GetWindowsInAddr](GetWindowsInAddr.md)**  
+-   **[GetWindowsInAddr](GetWindowsInAddr.md)**
 
--   **[GetWindowsOutAddr](GetWindowsOutAddr.md)**  
+-   **[GetWindowsOutAddr](GetWindowsOutAddr.md)**
 
--   **[GetRankId](GetRankId.md)**  
+-   **[GetRankId](GetRankId.md)**
 
--   **[GetRankDim](GetRankDim.md)**  
+-   **[GetRankDim](GetRankDim.md)**
 
--   **[QueueBarrier](QueueBarrier.md)**  
+-   **[QueueBarrier](QueueBarrier.md)**
 
--   **[GetQueueNum](GetQueueNum.md)**  
+-   **[GetQueueNum](GetQueueNum.md)**
 
--   **[Init（废弃）](Init（废弃）.md)**  
+-   **[Init（废弃）](Init（废弃）.md)**
 
--   **[SetCcTiling（废弃）](SetCcTiling（废弃）.md)**  
+-   **[SetCcTiling（废弃）](SetCcTiling（废弃）.md)**
 

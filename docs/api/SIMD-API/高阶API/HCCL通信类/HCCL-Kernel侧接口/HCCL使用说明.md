@@ -1,4 +1,4 @@
-# HCCL使用说明<a name="ZH-CN_TOPIC_0000001924877040"></a>
+# HCCL使用说明
 
 Ascend C提供一组HCCL通信类高阶API，方便算子Kernel开发用户在AI Core侧灵活管理通算融合算子中计算与通信任务的执行顺序。
 
@@ -11,13 +11,13 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
 
 当后续无通信任务时，调用[Finalize](Finalize.md)接口，通知服务端后续无通信任务，执行结束后退出，客户端检测并等待最后一个通信任务执行结束。以上介绍的AI Core下发HCCL通信任务的机制如下图所示。
 
-**图 1**  AI Core下发HCCL通信任务机制<a name="fig137781871132"></a>  
+**图 1**  AI Core下发HCCL通信任务机制  
 ![](../../../../figures/AI-Core下发HCCL通信任务机制.png "AI-Core下发HCCL通信任务机制")
 
-**图 2** Ascend 950PR/Ascend 950DT  AI Core下发HCCL通信任务机制<a name="fig1188495685117"></a>  
+**图 2** Ascend 950PR/Ascend 950DT  AI Core下发HCCL通信任务机制  
 ![](../../../../figures/Ascend-950PR-Ascend-950DT-AI-Core下发HCCL通信任务机制.png "Ascend-950PR-Ascend-950DT-AI-Core下发HCCL通信任务机制")
 
-> [!CAUTION]注意 
+> [!CAUTION]注意
 >对于Atlas A3 训练系列产品/Atlas A3 推理系列产品，在AI CPU作为服务端的场景中，HCCL通信API的功能依赖开放AI CPU用户态下发调度任务，存在一定的安全风险，用户需要自行确保AI Core自定义算子的安全可靠，防止恶意攻击行为。
 
 实现AI Core下发一个通信任务的具体步骤如下：
@@ -30,7 +30,7 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
 
     Hccl<HcclServerType::HCCL_SERVER_TYPE_AICPU> hccl; // 通过模板入参的方式选择硬件类型
     GM_ADDR contextGM = GetHcclContext<0>();  // AscendC自定义算子kernel中，通过此方式获取HCCL context
-    
+
     hccl.InitV2(contextGM, &tilingData);
     ```
 
@@ -43,10 +43,10 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
     ```
     // 传initTiling地址的调用方式
     GET_TILING_DATA_WITH_STRUCT(AllGatherCustomTilingData, tilingData, tilingGM);
-    
+
     Hccl hccl;
     GM_ADDR contextGM = GetHcclContext<0>();  // AscendC自定义算子kernel中，通过此方式获取HCCL context
-    
+
     hccl.InitV2(contextGM, &tilingData);
     if (SetCcTilingV2(offsetof(AllGatherCustomTilingData, mc2CcTiling)) != HCCL_SUCCESS) {
       return;
@@ -56,7 +56,7 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
 3.  用户通过对应的Prepare接口异步下发对应类型的通信任务，并获取到该任务的标识handleId，服务端接收到后开始通信任务的展开和下发，示例如下。
 
     ```
-    auto handleId = hccl.ReduceScatter<false>(aGM, cGM, recvCount, 
+    auto handleId = hccl.ReduceScatter<false>(aGM, cGM, recvCount,
                                               AscendC::HCCL_DATA_TYPE_FP16,
                                               HCCL_REDUCE_SUM, strideCount, 1);
     // 对于Prepare接口，在调试时可增加异常值校验和PRINTF打印
@@ -71,63 +71,49 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
     **表 1**  HcclDataType参数说明
 
     <a name="table116710585514"></a>
-    <table><thead align="left"><tr id="row76712575513"><th class="cellrowborder" valign="top" width="17.119999999999997%" id="mcps1.2.3.1.1"><p id="p56745145515"><a name="p56745145515"></a><a name="p56745145515"></a>数据类型</p>
-    </th>
-    <th class="cellrowborder" valign="top" width="82.88%" id="mcps1.2.3.1.2"><p id="p6673595518"><a name="p6673595518"></a><a name="p6673595518"></a>说明</p>
-    </th>
-    </tr>
-    </thead>
-    <tbody><tr id="row1567195165519"><td class="cellrowborder" valign="top" width="17.119999999999997%" headers="mcps1.2.3.1.1 "><p id="p156815535516"><a name="p156815535516"></a><a name="p156815535516"></a>HcclDataType</p>
-    </td>
-    <td class="cellrowborder" valign="top" width="82.88%" headers="mcps1.2.3.1.2 "><p id="p868105165518"><a name="p868105165518"></a><a name="p868105165518"></a>HCCL任务的数据类型。</p>
-    <a name="screen1335615365568"></a><a name="screen1335615365568"></a><pre class="screen" codetype="Cpp" id="screen1335615365568">enum HcclDataType {
-    HCCL_DATA_TYPE_INT8 = 0,   /* int8 */
-    HCCL_DATA_TYPE_INT16 = 1,  /* int16 */
-    HCCL_DATA_TYPE_INT32 = 2,  /* int32 */
-    HCCL_DATA_TYPE_FP16 = 3,   /* half或float16 */
-    HCCL_DATA_TYPE_FP32 = 4,   /* float */
-    HCCL_DATA_TYPE_INT64 = 5,  /* int64 */
-    HCCL_DATA_TYPE_UINT64 = 6, /* uint64 */
-    HCCL_DATA_TYPE_UINT8 = 7,  /* uint8 */
-    HCCL_DATA_TYPE_UINT16 = 8, /* uint16 */
-    HCCL_DATA_TYPE_UINT32 = 9, /* uint32 */
-    HCCL_DATA_TYPE_FP64 = 10,  /* float64 */
-    HCCL_DATA_TYPE_BFP16 = 11, /* bfloat16 */
-    HCCL_DATA_TYPE_INT128 = 12, /* int128 预留类型，暂不支持 */
-    HCCL_DATA_TYPE_HIF8 = 14,  /* hif8 */
-    HCCL_DATA_TYPE_FP8E4M3 = 15,  /* fp8e4m3 */
-    HCCL_DATA_TYPE_FP8E5M2 = 16,  /* fp8e5m2 */
-    HCCL_DATA_TYPE_FP8E8M0 = 17,  /* fp8e8m0 */
-    HCCL_DATA_TYPE_RESERVED    /* reserved */
-    }</pre>
-    </td>
-    </tr>
-    </tbody>
-    </table>
+    | 数据类型 | 说明 |
+    | --- | --- |
+    | HcclDataType | HCCL任务的数据类型。HcclDataType为枚举类型，定义如下代码所示。<br>    HCCL_DATA_TYPE_INT8：int8 <br>    HCCL_DATA_TYPE_INT16：int16 <br>    HCCL_DATA_TYPE_INT32：int32 <br>    HCCL_DATA_TYPE_FP16： half或float16 <br>    HCCL_DATA_TYPE_FP32： float <br>    HCCL_DATA_TYPE_INT64：int64 <br>    HCCL_DATA_TYPE_UINT64：uint64 <br>    HCCL_DATA_TYPE_UINT8：uint8 <br>    HCCL_DATA_TYPE_UINT16：uint16 <br>    HCCL_DATA_TYPE_UINT32：uint32 <br>    HCCL_DATA_TYPE_FP64：float64 <br>    HCCL_DATA_TYPE_BFP16：bfloat16 <br>    HCCL_DATA_TYPE_INT128：int128，预留类型，暂不支持 <br>    HCCL_DATA_TYPE_HIF8：hif8 <br>    HCCL_DATA_TYPE_FP8E4M3：fp8e4m3 <br>    HCCL_DATA_TYPE_FP8E5M2：fp8e5m2 <br>    HCCL_DATA_TYPE_FP8E8M0：fp8e8m0 <br>    HCCL_DATA_TYPE_RESERVED：暂不支持使用  |
+
+    ```
+    enum HcclDataType {
+        HCCL_DATA_TYPE_INT8 = 0,   /* int8 */
+        HCCL_DATA_TYPE_INT16 = 1,  /* int16 */
+        HCCL_DATA_TYPE_INT32 = 2,  /* int32 */
+        HCCL_DATA_TYPE_FP16 = 3,   /* half或float16 */
+        HCCL_DATA_TYPE_FP32 = 4,   /* float */
+        HCCL_DATA_TYPE_INT64 = 5,  /* int64 */
+        HCCL_DATA_TYPE_UINT64 = 6, /* uint64 */
+        HCCL_DATA_TYPE_UINT8 = 7,  /* uint8 */
+        HCCL_DATA_TYPE_UINT16 = 8, /* uint16 */
+        HCCL_DATA_TYPE_UINT32 = 9, /* uint32 */
+        HCCL_DATA_TYPE_FP64 = 10,  /* float64 */
+        HCCL_DATA_TYPE_BFP16 = 11, /* bfloat16 */
+        HCCL_DATA_TYPE_INT128 = 12, /* int128 预留类型，暂不支持 */
+        HCCL_DATA_TYPE_HIF8 = 14,  /* hif8 */
+        HCCL_DATA_TYPE_FP8E4M3 = 15,  /* fp8e4m3 */
+        HCCL_DATA_TYPE_FP8E5M2 = 16,  /* fp8e5m2 */
+        HCCL_DATA_TYPE_FP8E8M0 = 17,  /* fp8e8m0 */
+        HCCL_DATA_TYPE_RESERVED    /* reserved */
+    };
+    ```
 
     **表 2**  HcclReduceOp参数说明
 
     <a name="table2469980529"></a>
-    <table><thead align="left"><tr id="row194691183522"><th class="cellrowborder" valign="top" width="17.119999999999997%" id="mcps1.2.3.1.1"><p id="p34692815210"><a name="p34692815210"></a><a name="p34692815210"></a>数据类型</p>
-    </th>
-    <th class="cellrowborder" valign="top" width="82.88%" id="mcps1.2.3.1.2"><p id="p194691389528"><a name="p194691389528"></a><a name="p194691389528"></a>说明</p>
-    </th>
-    </tr>
-    </thead>
-    <tbody><tr id="row4469388522"><td class="cellrowborder" valign="top" width="17.119999999999997%" headers="mcps1.2.3.1.1 "><p id="p2046988195218"><a name="p2046988195218"></a><a name="p2046988195218"></a>HcclReduceOp</p>
-    </td>
-    <td class="cellrowborder" valign="top" width="82.88%" headers="mcps1.2.3.1.2 "><p id="p1046928165216"><a name="p1046928165216"></a><a name="p1046928165216"></a>Reduce操作类型。</p>
-    <a name="screen117584394535"></a><a name="screen117584394535"></a><pre class="screen" codetype="Cpp" id="screen117584394535">enum HcclReduceOp {
-    HCCL_REDUCE_SUM = 0,  /* sum */
-    HCCL_REDUCE_PROD = 1, /* prod */
-    HCCL_REDUCE_MAX = 2,  /* max */
-    HCCL_REDUCE_MIN = 3,  /* min */
-    HCCL_REDUCE_RESERVED  /* reserved */
-    }</pre>
-    </td>
-    </tr>
-    </tbody>
-    </table>
+    | 数据类型 | 说明 |
+    | --- | --- |
+    | HcclReduceOp | Reduce操作类型。HcclReduceOp为枚举类型，定义如下代码所示。<br> HCCL_REDUCE_SUM：sum <br>    HCCL_REDUCE_PROD：prod <br>    HCCL_REDUCE_MAX：max <br>    HCCL_REDUCE_MIN：min <br>    HCCL_REDUCE_RESERVED：暂不支持使用 |
+
+    ```
+    enum HcclReduceOp {
+        HCCL_REDUCE_SUM = 0,  /* sum */
+        HCCL_REDUCE_PROD = 1, /* prod */
+        HCCL_REDUCE_MAX = 2,  /* max */
+        HCCL_REDUCE_MIN = 3,  /* min */
+        HCCL_REDUCE_RESERVED  /* reserved */
+    }
+    ```
 
 4.  用户调用[Commit](Commit.md)接口通知服务端执行handleId对应的通信任务。
 
@@ -145,7 +131,7 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
     //	PRINTF("[ERROR] call Wait for handleId[%d] failed.", handleId);
     //	return;
     // }
-    
+
     // 调用核间同步接口，防止部分核执行较快退出，触发Hccl析构，影响执行较慢的核
     // 开发者可根据实际的业务场景，选择调用[SyncAll](../../../基础API/同步控制/核间同步/SyncAll.md)、[CrossCoreSetFlag(ISASI)](../../../基础API/同步控制/核间同步/CrossCoreSetFlag(ISASI).md)、[CrossCoreWaitFlag(ISASI)](../../../基础API/同步控制/核间同步/CrossCoreWaitFlag(ISASI).md)接口，保证全部核的任务完成后再退出执行
     ```
@@ -166,7 +152,7 @@ if (g_coreType == AIV) {
 }
 ```
 
-基于以上对单个通信任务下发的了解，介绍Prepare接口中repeat参数的灵活使用方式。一次Prepare接口的调用对应一个handleId，Prepare接口中的参数repeat代表这次Prepare的通信任务次数，该值必须和针对该handleId调用Commit接口的次数、Wait接口的次数一致。以[图2 ReduceScatter通信示例](#fig19780192164210)进行说明，假设共4张卡，每张卡上源数据首先按照rankId均匀分成4份，每份数据被切分成3份，最终被切分后的每份数据的个数为TileLen，每次ReduceScatter通信仅通信一组切分数据（如图中数据0-0、1-0、2-0、3-0为一组切分数据），因此需要做3次ReduceScatter操作，全部数据才能通信完。
+基于以上对单个通信任务下发的了解，介绍Prepare接口中repeat参数的灵活使用方式。一次Prepare接口的调用对应一个handleId，Prepare接口中的参数repeat代表这次Prepare的通信任务次数，该值必须和针对该handleId调用Commit接口的次数、Wait接口的次数一致。以[图3 ReduceScatter通信示例](#fig19780192164210)进行说明，假设共4张卡，每张卡上源数据首先按照rankId均匀分成4份，每份数据被切分成3份，最终被切分后的每份数据的个数为TileLen，每次ReduceScatter通信仅通信一组切分数据（如图中数据0-0、1-0、2-0、3-0为一组切分数据），因此需要做3次ReduceScatter操作，全部数据才能通信完。
 
 这种场景下，可以调用3次repeat参数为1的ReduceScatter接口，下发3个通信任务，同时更新每个ReduceScatter任务的收发地址，得到3个任务的handleId，每个handleId任务调用1次Commit和Wait接口，对应代码片段如下。
 
@@ -184,7 +170,7 @@ extern "C" __global__ __aicore__ void reduce_scatter_custom(GM_ADDR xGM, GM_ADDR
 
     Hccl hccl;
     GM_ADDR contextGM = AscendC::GetHcclContext<0>();  // AscendC自定义算子kernel中，通过此方式获取HCCL context
-    if (AscendC::g_coreType == AIV) {  // 指定AIV核通信   
+    if (AscendC::g_coreType == AIV) {  // 指定AIV核通信
         hccl.InitV2(contextGM, &tilingData);
         auto ret = hccl.SetCcTilingV2(offsetof(ReduceScatterCustomTilingData, reduceScatterCcTiling));
         if (ret != HCCL_SUCCESS) {
@@ -196,12 +182,12 @@ extern "C" __global__ __aicore__ void reduce_scatter_custom(GM_ADDR xGM, GM_ADDR
 	    hccl.Commit(handleId);
 	    auto ret = hccl.Wait(handleId);
 	    // 执行其他计算逻辑 ....
-			
+
 	    // 更新ReduceScatter的收发地址
 	    sendBuf += tileLen * sizeof(float);
 	    recvBuf += tileLen * sizeof(float);
 	}
-        AscendC::SyncAll<true>();  // 全AIV核同步，防止0核执行过快，提前调用hccl.Finalize()接口，导致其他核Wait卡死   
+        AscendC::SyncAll<true>();  // 全AIV核同步，防止0核执行过快，提前调用hccl.Finalize()接口，导致其他核Wait卡死
         hccl.Finalize();
     }
 }
@@ -223,20 +209,20 @@ extern "C" __global__ __aicore__ void reduce_scatter_custom(GM_ADDR xGM, GM_ADDR
 
     Hccl hccl;
     GM_ADDR contextGM = AscendC::GetHcclContext<0>();  // AscendC自定义算子kernel中，通过此方式获取HCCL context
-    if (AscendC::g_coreType == AIV) {  // 指定AIV核通信   
+    if (AscendC::g_coreType == AIV) {  // 指定AIV核通信
         hccl.InitV2(contextGM, &tilingData);
         auto ret = hccl.SetCcTilingV2(offsetof(ReduceScatterCustomTilingData, reduceScatterCcTiling));
         if (ret != HCCL_SUCCESS) {
           return;
         }
-		
+
 	auto handleId = hccl.ReduceScatter(sendBuf, recvBuf, tileLen, HcclDataType::HCCL_DATA_TYPE_FP32, HcclReduceOp::HCCL_REDUCE_SUM, strideCount, tileCnt); //具体参数参见ReduceScatter接口说明
 	for (int i = 0; i < tileCnt; ++i) {
 	    hccl.Commit(handleId);
 	    auto ret = hccl.Wait(handleId);
 	    // 执行其他计算逻辑 ....
 	}
-        AscendC::SyncAll<true>();  // 全AIV核同步，防止0核执行过快，提前调用hccl.Finalize()接口，导致其他核Wait卡死   
+        AscendC::SyncAll<true>();  // 全AIV核同步，防止0核执行过快，提前调用hccl.Finalize()接口，导致其他核Wait卡死
         hccl.Finalize();
     }
 }
@@ -247,19 +233,8 @@ extern "C" __global__ __aicore__ void reduce_scatter_custom(GM_ADDR xGM, GM_ADDR
 
 **表 3**  MC2\_BUFFER\_LOCATION参数说明
 
-<a name="table13911194913533"></a>
-<table><thead align="left"><tr id="row189111149145319"><th class="cellrowborder" valign="top" width="17.119999999999997%" id="mcps1.2.3.1.1"><p id="p11911349105311"><a name="p11911349105311"></a><a name="p11911349105311"></a>数据类型</p>
-</th>
-<th class="cellrowborder" valign="top" width="82.88%" id="mcps1.2.3.1.2"><p id="p1291154915319"><a name="p1291154915319"></a><a name="p1291154915319"></a>说明</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row20911849125316"><td class="cellrowborder" valign="top" width="17.119999999999997%" headers="mcps1.2.3.1.1 "><p id="p291104915532"><a name="p291104915532"></a><a name="p291104915532"></a>MC2_BUFFER_LOCATION</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.88%" headers="mcps1.2.3.1.2 "><p id="p1191118497539"><a name="p1191118497539"></a><a name="p1191118497539"></a>预留参数。计算和通信中间结果的Buffer存放位置。用户在Tiling侧可设置该字段。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 数据类型 | 说明 |
+| --- | --- |
+| MC2_BUFFER_LOCATION | 预留参数。计算和通信中间结果的Buffer存放位置。用户在Tiling侧可设置该字段。 |
 
 提示：调试含有HCCL高阶API的算子时，在算子编译工程中增加编译选项-DASCENDC\_DEBUG，可以开启异常场景拦截的能力，具体内容请参考并使用[assert接口](../../../基础API/调试接口/异常检测/assert.md)。

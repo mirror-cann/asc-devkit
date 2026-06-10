@@ -1,98 +1,46 @@
-# SetCcTilingV2<a name="ZH-CN_TOPIC_0000002401066073"></a>
+# SetCcTilingV2
 
-## 产品支持情况<a name="section1586581915393"></a>
+## 产品支持情况
 
-<a name="table169596713360"></a>
-<table><thead align="left"><tr id="row129590715369"><th class="cellrowborder" valign="top" width="57.99999999999999%" id="mcps1.1.3.1.1"><p id="p17959971362"><a name="p17959971362"></a><a name="p17959971362"></a><span id="ph895914718367"><a name="ph895914718367"></a><a name="ph895914718367"></a>产品</span></p>
-</th>
-<th class="cellrowborder" align="center" valign="top" width="42%" id="mcps1.1.3.1.2"><p id="p89594763612"><a name="p89594763612"></a><a name="p89594763612"></a>是否支持</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row18959673369"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1595910763613"><a name="p1595910763613"></a><a name="p1595910763613"></a><span id="ph1595918753613"><a name="ph1595918753613"></a><a name="ph1595918753613"></a>Ascend 950PR/Ascend 950DT</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1695957133611"><a name="p1695957133611"></a><a name="p1695957133611"></a>√</p>
-</td>
-</tr>
-<tr id="row18959157103612"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p13959117193618"><a name="p13959117193618"></a><a name="p13959117193618"></a><span id="ph9959117173614"><a name="ph9959117173614"></a><a name="ph9959117173614"></a><term id="zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1095914793613"><a name="p1095914793613"></a><a name="p1095914793613"></a>√</p>
-</td>
-</tr>
-<tr id="row89591478362"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p7959157163619"><a name="p7959157163619"></a><a name="p7959157163619"></a><span id="ph1995997193619"><a name="ph1995997193619"></a><a name="ph1995997193619"></a><term id="zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p149598793615"><a name="p149598793615"></a><a name="p149598793615"></a>√</p>
-</td>
-</tr>
-<tr id="row99591673368"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p595947173615"><a name="p595947173615"></a><a name="p595947173615"></a><span id="ph995910783620"><a name="ph995910783620"></a><a name="ph995910783620"></a><term id="zh-cn_topic_0000001312391781_term354143892110"><a name="zh-cn_topic_0000001312391781_term354143892110"></a><a name="zh-cn_topic_0000001312391781_term354143892110"></a>Atlas 200I/500 A2 推理产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p59606716367"><a name="p59606716367"></a><a name="p59606716367"></a>x</p>
-</td>
-</tr>
-<tr id="row1196047183615"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1898493283210"><a name="p1898493283210"></a><a name="p1898493283210"></a><span id="ph1498417326325"><a name="ph1498417326325"></a><a name="ph1498417326325"></a><term id="zh-cn_topic_0000001312391781_term1964153212227"><a name="zh-cn_topic_0000001312391781_term1964153212227"></a><a name="zh-cn_topic_0000001312391781_term1964153212227"></a>Atlas 推理系列产品</term>AI Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1680812310331"><a name="p1680812310331"></a><a name="p1680812310331"></a>x</p>
-</td>
-</tr>
-<tr id="row041413315316"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p8192738133217"><a name="p8192738133217"></a><a name="p8192738133217"></a><span id="ph1119217385324"><a name="ph1119217385324"></a><a name="ph1119217385324"></a><term id="zh-cn_topic_0000001312391781_term1463893615224"><a name="zh-cn_topic_0000001312391781_term1463893615224"></a><a name="zh-cn_topic_0000001312391781_term1463893615224"></a>Atlas 推理系列产品</term>Vector Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p124151433133113"><a name="p124151433133113"></a><a name="p124151433133113"></a>x</p>
-</td>
-</tr>
-<tr id="row69603716362"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p29601972368"><a name="p29601972368"></a><a name="p29601972368"></a><span id="ph8960167193611"><a name="ph8960167193611"></a><a name="ph8960167193611"></a><term id="zh-cn_topic_0000001312391781_term71949488213"><a name="zh-cn_topic_0000001312391781_term71949488213"></a><a name="zh-cn_topic_0000001312391781_term71949488213"></a>Atlas 训练系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p096010715361"><a name="p096010715361"></a><a name="p096010715361"></a>x</p>
-</td>
-</tr>
-</tbody>
-</table>
+- Ascend 950PR/Ascend 950DT：支持
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+- Atlas 200I/500 A2 推理产品：不支持
+- Atlas 推理系列产品AI Core：不支持
+- Atlas 推理系列产品Vector Core：不支持
+- Atlas 训练系列产品：不支持
 
-## 功能说明<a name="section1769414212182"></a>
+## 功能说明
 
 用于设置HCCL客户端中某个通信算法配置的TilingData地址。
 
-## 函数原型<a name="section14969112112188"></a>
+## 函数原型
 
 ```
 __aicore__ inline int32_t SetCcTilingV2(uint64_t offset)
 ```
 
-## 参数说明<a name="section12546122891815"></a>
+## 参数说明
 
 **表 1**  接口参数说明
 
-<a name="table11541249132419"></a>
-<table><thead align="left"><tr id="row81541849152411"><th class="cellrowborder" valign="top" width="15.981598159815983%" id="mcps1.2.4.1.1"><p id="p715444932416"><a name="p715444932416"></a><a name="p715444932416"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="19.801980198019802%" id="mcps1.2.4.1.2"><p id="p1115410497248"><a name="p1115410497248"></a><a name="p1115410497248"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="64.2164216421642%" id="mcps1.2.4.1.3"><p id="p41549495249"><a name="p41549495249"></a><a name="p41549495249"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row11541349102415"><td class="cellrowborder" valign="top" width="15.981598159815983%" headers="mcps1.2.4.1.1 "><p id="p1615414972415"><a name="p1615414972415"></a><a name="p1615414972415"></a>offset</p>
-</td>
-<td class="cellrowborder" valign="top" width="19.801980198019802%" headers="mcps1.2.4.1.2 "><p id="p1615434911249"><a name="p1615434911249"></a><a name="p1615434911249"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="64.2164216421642%" headers="mcps1.2.4.1.3 "><p id="p11154194915243"><a name="p11154194915243"></a><a name="p11154194915243"></a>通信算法配置<a href="../HCCL-Tiling侧接口/TilingData结构体.md#table678914014562">Mc2CcTiling</a>参数地址相对于<a href="../HCCL-Tiling侧接口/TilingData结构体.md#table4835205712588">Mc2InitTiling</a>起始地址的偏移。<a href="../HCCL-Tiling侧接口/TilingData结构体.md#table678914014562">Mc2CcTiling</a>在Host侧计算得出，具体请参考<a href="../HCCL-Tiling侧接口/TilingData结构体.md#table678914014562">表2 Mc2CcTiling参数说明</a>，由框架传递到Kernel函数中使用。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| offset | 输入 | 通信算法配置[Mc2CcTiling](../HCCL-Tiling侧接口/TilingData结构体.md#table678914014562)参数地址相对于[Mc2InitTiling](../HCCL-Tiling侧接口/TilingData结构体.md#table4835205712588)起始地址的偏移。[Mc2CcTiling](../HCCL-Tiling侧接口/TilingData结构体.md#table678914014562)在Host侧计算得出，具体请参考[表2 Mc2CcTiling参数说明](../HCCL-Tiling侧接口/TilingData结构体.md#table678914014562)，由框架传递到Kernel函数中使用。 |
 
-## 返回值说明<a name="section641993511814"></a>
+## 返回值说明
 
 -   HCCL\_SUCCESS，表示成功。
 -   HCCL\_FAILED，表示失败。
 
-## 约束说明<a name="section15931595196"></a>
+## 约束说明
 
 -   若调用本接口，必须保证[InitV2](InitV2.md)在本接口前被调用。
 -   Tiling参数相同的同一种通信算法在调用Prepare接口前，只需要调用一次本接口，请参考调用示例：[类型不同、Tiling参数不同的通信](#li71505119260)。
 -   对于同一种通信算法，如果Tiling参数不同，重复调用本接口会覆盖之前的Tiling参数地址，因此需要在调用Prepare接口后再调用本接口设置新的Tiling参数。请参考调用示例：[类型相同、Tiling参数不同的通信](#li1163031215116)。
 -   若调用本接口，必须使用标准C++语法定义TilingData结构体的开发方式。
 
-## 调用示例<a name="section7544820141919"></a>
+## 调用示例
 
 -   用户自定义TilingData结构体：
 
@@ -112,11 +60,11 @@ __aicore__ inline int32_t SetCcTilingV2(uint64_t offset)
     extern "C" __global__ __aicore__ void userKernel(GM_ADDR aGM, GM_ADDR workspaceGM, GM_ADDR tilingGM) {
         REGISTER_TILING_DEFAULT(UserCustomTilingData);
         GET_TILING_DATA_WITH_STRUCT(UserCustomTilingData, tilingData, tilingGM);
-    
+
         Hccl hccl;
         GM_ADDR contextGM = AscendC::GetHcclContext<0>();
         hccl.InitV2(contextGM, &tilingData);
-    
+
         // 在下发任务之前，通过SetCcTilingV2设置对应的tiling
         if (hccl.SetCcTilingV2(offsetof(UserCustomTilingData, allGatherTiling)) != HCCL_SUCCESS ||
             hccl.SetCcTilingV2(offsetof(UserCustomTilingData, allReduceTiling1)) != HCCL_SUCCESS) {
@@ -124,10 +72,10 @@ __aicore__ inline int32_t SetCcTilingV2(uint64_t offset)
         }
         const auto agHandleId = hccl.AllGather<true>(sendBuf, recvBuf, dataCount, HcclDataType::HCCL_DATA_TYPE_FP16);
         hccl.Wait(agHandleId);
-    
+
         const auto arHandleId = hccl.AllReduce<true>(sendBuf, recvBuf, dataCount, HcclDataType::HCCL_DATA_TYPE_FP16, HcclReduceOp::HCCL_REDUCE_SUM);
         hccl.Wait(arHandleId);
-    
+
         hccl.Finalize();
     }
     ```
@@ -138,25 +86,25 @@ __aicore__ inline int32_t SetCcTilingV2(uint64_t offset)
     extern "C" __global__ __aicore__ void userKernel(GM_ADDR aGM, GM_ADDR workspaceGM, GM_ADDR tilingGM) {
         REGISTER_TILING_DEFAULT(UserCustomTilingData);
         GET_TILING_DATA_WITH_STRUCT(UserCustomTilingData, tilingData, tilingGM);
-    
+
         Hccl hccl;
         GM_ADDR contextGM = AscendC::GetHcclContext<0>();
         hccl.InitV2(contextGM, &tilingData);
-    
+
         // 在下发通信任务之前，通过SetCcTilingV2设置对应的Tiling参数地址
         if (hccl.SetCcTilingV2(offsetof(UserCustomTilingData, allReduceTiling1)) != HCCL_SUCCESS) {
             return;
         }
         const auto arHandleId1 = hccl.AllReduce<true>(sendBuf, recvBuf, dataCount, HcclDataType::HCCL_DATA_TYPE_FP16, HcclReduceOp::HCCL_REDUCE_SUM);
         hccl.Wait(arHandleId1);
-        
+
         // 第二次AllReduce的Tiling参数与第一次不同，在第一次Prepare之后再调用SetCcTilingV2
         if (hccl.SetCcTilingV2(offsetof(UserCustomTilingData, allReduceTiling2)) != HCCL_SUCCESS) {
             return;
         }
         const auto arHandleId2 = hccl.AllReduce<true>(sendBuf, recvBuf, dataCount, HcclDataType::HCCL_DATA_TYPE_FP16, HcclReduceOp::HCCL_REDUCE_SUM);
         hccl.Wait(arHandleId2);
-    
+
         hccl.Finalize();
     }
     ```
