@@ -1336,725 +1336,182 @@
 </tbody>
 </table>
 
-## 高阶API<a name="section3317105813235"></a>
+## 高阶API
 
 **表 14**  数学计算API列表
 
-<a name="table6328746161212"></a>
-<table><thead align="left"><tr id="row18328114610121"><th class="cellrowborder" valign="top" width="37.71%" id="mcps1.2.3.1.1"><p id="p173281846121219"><a name="p173281846121219"></a><a name="p173281846121219"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.29%" id="mcps1.2.3.1.2"><p id="p232844620126"><a name="p232844620126"></a><a name="p232844620126"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row7328204651217"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p2032844612121"><a name="p2032844612121"></a><a name="p2032844612121"></a><a href="高阶API/数学计算/Acos接口/Acos.md">Acos</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p17328164651218"><a name="p17328164651218"></a><a name="p17328164651218"></a>按元素做反余弦函数计算。</p>
-</td>
-</tr>
-<tr id="row19328124671211"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p17328204661218"><a name="p17328204661218"></a><a name="p17328204661218"></a><a href="高阶API/数学计算/Acosh接口/Acosh.md">Acosh</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p83298462120"><a name="p83298462120"></a><a name="p83298462120"></a>按元素做双曲反余弦函数计算。</p>
-</td>
-</tr>
-<tr id="row11329946171211"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p63297464128"><a name="p63297464128"></a><a name="p63297464128"></a><a href="高阶API/数学计算/Asin接口/Asin.md">Asin</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p20329114641219"><a name="p20329114641219"></a><a name="p20329114641219"></a>按元素做反正弦函数计算。</p>
-</td>
-</tr>
-<tr id="row1632954617129"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p3329546101216"><a name="p3329546101216"></a><a name="p3329546101216"></a><a href="高阶API/数学计算/Asinh接口/Asinh.md">Asinh</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p932994611216"><a name="p932994611216"></a><a name="p932994611216"></a>按元素做反双曲正弦函数计算。</p>
-</td>
-</tr>
-<tr id="row1329646131216"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p10329184619129"><a name="p10329184619129"></a><a name="p10329184619129"></a><a href="高阶API/数学计算/Atan接口/Atan.md">Atan</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p232904617122"><a name="p232904617122"></a><a name="p232904617122"></a>按元素做三角函数反正切运算。</p>
-</td>
-</tr>
-<tr id="row1932944621219"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1032944641214"><a name="p1032944641214"></a><a name="p1032944641214"></a><a href="高阶API/数学计算/Atanh接口/Atanh.md">Atanh</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1532914614126"><a name="p1532914614126"></a><a name="p1532914614126"></a>按元素做反双曲正切余弦函数计算。</p>
-</td>
-</tr>
-<tr id="row18329194631210"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1032984631216"><a name="p1032984631216"></a><a name="p1032984631216"></a><a href="高阶API/数学计算/Axpy接口/Axpy-80.md">Axpy</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p8329114612121"><a name="p8329114612121"></a><a name="p8329114612121"></a>源操作数中每个元素与标量求积后和目的操作数中的对应元素相加。</p>
-</td>
-</tr>
-<tr id="row732916466122"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1732974619121"><a name="p1732974619121"></a><a name="p1732974619121"></a><a href="高阶API/数学计算/Ceil接口/Ceil.md">Ceil</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1432924610129"><a name="p1432924610129"></a><a name="p1432924610129"></a>获取大于或等于x的最小的整数值，即向正无穷取整操作。</p>
-</td>
-</tr>
-<tr id="row232994671216"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p19329124613120"><a name="p19329124613120"></a><a name="p19329124613120"></a><a href="高阶API/数学计算/Clamp接口/ClampMax.md">ClampMax</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p14329104681213"><a name="p14329104681213"></a><a name="p14329104681213"></a>将srcTensor中大于scalar的数替换为scalar，小于等于scalar的数保持不变，作为dstTensor输出。</p>
-</td>
-</tr>
-<tr id="row53290468122"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p193291646111212"><a name="p193291646111212"></a><a name="p193291646111212"></a><a href="高阶API/数学计算/Clamp接口/ClampMin.md">ClampMin</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1132984620124"><a name="p1132984620124"></a><a name="p1132984620124"></a>将srcTensor中小于scalar的数替换为scalar，大于等于scalar的数保持不变，作为dstTensor输出。</p>
-</td>
-</tr>
-<tr id="row12329154631216"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1329174651218"><a name="p1329174651218"></a><a name="p1329174651218"></a><a href="高阶API/数学计算/Cos接口/Cos.md">Cos</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p13291946101211"><a name="p13291946101211"></a><a name="p13291946101211"></a>按元素做三角函数余弦运算。</p>
-</td>
-</tr>
-<tr id="row1232914611214"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p53307467120"><a name="p53307467120"></a><a name="p53307467120"></a><a href="高阶API/数学计算/Cosh接口/Cosh.md">Cosh</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p433011461121"><a name="p433011461121"></a><a name="p433011461121"></a>按元素做双曲余弦函数计算。</p>
-</td>
-</tr>
-<tr id="row4330174681219"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p5330194616123"><a name="p5330194616123"></a><a name="p5330194616123"></a><a href="高阶API/数学计算/CumSum接口/CumSum.md">CumSum</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p133303469127"><a name="p133303469127"></a><a name="p133303469127"></a>对数据按行依次累加或按列依次累加。</p>
-</td>
-</tr>
-<tr id="row193305461120"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1433044616123"><a name="p1433044616123"></a><a name="p1433044616123"></a><a href="高阶API/数学计算/Digamma接口/Digamma.md">Digamma</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p333019462124"><a name="p333019462124"></a><a name="p333019462124"></a>按元素计算x的gamma函数的对数导数。</p>
-</td>
-</tr>
-<tr id="row16330546131210"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1233020469127"><a name="p1233020469127"></a><a name="p1233020469127"></a><a href="高阶API/数学计算/Erf接口/Erf.md">Erf</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1933044631210"><a name="p1933044631210"></a><a name="p1933044631210"></a>按元素做误差函数计算，也称为高斯误差函数。</p>
-</td>
-</tr>
-<tr id="row1033010465120"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p11330194610124"><a name="p11330194610124"></a><a name="p11330194610124"></a><a href="高阶API/数学计算/Erfc接口/Erfc.md">Erfc</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p13330204601215"><a name="p13330204601215"></a><a name="p13330204601215"></a>返回输入x的互补误差函数结果，积分区间为x到无穷大。</p>
-</td>
-</tr>
-<tr id="row13330144611210"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p43301046151212"><a name="p43301046151212"></a><a name="p43301046151212"></a><a href="高阶API/数学计算/Exp接口/Exp-81.md">Exp</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p6330246201220"><a name="p6330246201220"></a><a name="p6330246201220"></a>按元素取自然指数。</p>
-</td>
-</tr>
-<tr id="row16330174651218"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p6330154610126"><a name="p6330154610126"></a><a name="p6330154610126"></a><a href="高阶API/数学计算/Floor接口/Floor.md">Floor</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1033024691219"><a name="p1033024691219"></a><a name="p1033024691219"></a>获取小于或等于x的最小的整数值，即向负无穷取整操作。</p>
-</td>
-</tr>
-<tr id="row17640143823614"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p10640163883615"><a name="p10640163883615"></a><a name="p10640163883615"></a><a href="高阶API/数学计算/Fmod接口/Fmod.md">Fmod</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p136406388366"><a name="p136406388366"></a><a name="p136406388366"></a>按元素计算两个浮点数相除后的余数。</p>
-</td>
-</tr>
-<tr id="row173301946181212"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p333014681217"><a name="p333014681217"></a><a name="p333014681217"></a><a href="高阶API/数学计算/Frac接口/Frac.md">Frac</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1033044671220"><a name="p1033044671220"></a><a name="p1033044671220"></a>按元素做取小数计算。</p>
-</td>
-</tr>
-<tr id="row186161953141515"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p2712596154"><a name="p2712596154"></a><a name="p2712596154"></a><a href="高阶API/数学计算/Hypot接口/Hypot.md">Hypot</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p071135951519"><a name="p071135951519"></a><a name="p071135951519"></a>按元素计算两个浮点数平方和的平方根。</p>
-</td>
-</tr>
-<tr id="row12981425163519"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p19981202553511"><a name="p19981202553511"></a><a name="p19981202553511"></a><a href="高阶API/数学计算/IsFinite接口/IsFinite.md">IsFinite</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p11981225203513"><a name="p11981225203513"></a><a name="p11981225203513"></a><span>按元素判断输入的浮点数是否</span>非NAN、非&plusmn;INF。</p>
-</td>
-</tr>
-<tr id="row83303464127"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p8330144611210"><a name="p8330144611210"></a><a name="p8330144611210"></a><a href="高阶API/数学计算/Lgamma接口/Lgamma.md">Lgamma</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1133044651217"><a name="p1133044651217"></a><a name="p1133044651217"></a>按元素计算x的gamma函数的绝对值并求自然对数。</p>
-</td>
-</tr>
-<tr id="row033124619126"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p4331114613128"><a name="p4331114613128"></a><a name="p4331114613128"></a><a href="高阶API/数学计算/Log接口/Log-79.md">Log</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p5331204620122"><a name="p5331204620122"></a><a name="p5331204620122"></a>按元素以e、2、10为底做对数运算。</p>
-</td>
-</tr>
-<tr id="row7331194661216"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p7331114617127"><a name="p7331114617127"></a><a name="p7331114617127"></a><a href="高阶API/数学计算/Power接口/Power.md">Power</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p183314461122"><a name="p183314461122"></a><a name="p183314461122"></a>实现按元素做幂运算功能。</p>
-</td>
-</tr>
-<tr id="row8331144631211"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p20331146121218"><a name="p20331146121218"></a><a name="p20331146121218"></a><a href="高阶API/数学计算/Round接口/Round.md">Round</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p11331946151214"><a name="p11331946151214"></a><a name="p11331946151214"></a>将输入的元素四舍五入到最接近的整数。</p>
-</td>
-</tr>
-<tr id="row0331174621213"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p233194613123"><a name="p233194613123"></a><a name="p233194613123"></a><a href="高阶API/数学计算/Sign接口/Sign.md">Sign</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p433110466122"><a name="p433110466122"></a><a name="p433110466122"></a>按元素执行Sign操作，Sign是指返回输入数据的符号。</p>
-</td>
-</tr>
-<tr id="row13310463124"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p103311346121214"><a name="p103311346121214"></a><a name="p103311346121214"></a><a href="高阶API/数学计算/Sin接口/Sin.md">Sin</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1133110462120"><a name="p1133110462120"></a><a name="p1133110462120"></a>按元素做正弦函数计算。</p>
-</td>
-</tr>
-<tr id="row10331124610124"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p5331194615122"><a name="p5331194615122"></a><a name="p5331194615122"></a><a href="高阶API/数学计算/Sinh接口/Sinh.md">Sinh</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p2331154618126"><a name="p2331154618126"></a><a name="p2331154618126"></a>按元素做双曲正弦函数计算。</p>
-</td>
-</tr>
-<tr id="row9331546131219"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p733118468123"><a name="p733118468123"></a><a name="p733118468123"></a><a href="高阶API/数学计算/Tan接口/Tan.md">Tan</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p103311246151214"><a name="p103311246151214"></a><a name="p103311246151214"></a>按元素做正切函数计算。</p>
-</td>
-</tr>
-<tr id="row1533124619123"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p833114651211"><a name="p833114651211"></a><a name="p833114651211"></a><a href="高阶API/数学计算/Tanh接口/Tanh.md">Tanh</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p033111464127"><a name="p033111464127"></a><a name="p033111464127"></a>按元素做逻辑回归Tanh。</p>
-</td>
-</tr>
-<tr id="row7331164681211"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p203311346191210"><a name="p203311346191210"></a><a name="p203311346191210"></a><a href="高阶API/数学计算/Trunc接口/Trunc.md">Trunc</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p20331144651218"><a name="p20331144651218"></a><a name="p20331144651218"></a>按元素做浮点数截断操作，即向零取整操作。</p>
-</td>
-</tr>
-<tr id="row123329469123"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p103321046181214"><a name="p103321046181214"></a><a name="p103321046181214"></a><a href="高阶API/数学计算/Xor接口/Xor-82.md">Xor</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p533224611126"><a name="p533224611126"></a><a name="p533224611126"></a>按元素执行Xor（异或）运算。</p>
-</td>
-</tr>
-<tr id="row6226126112911"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p622617619296"><a name="p622617619296"></a><a name="p622617619296"></a><a href="高阶API/数学计算/Fma接口/Fma接口.md">Fma</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p722620642915"><a name="p722620642915"></a><a name="p722620642915"></a>按元素计算两个输入相乘后与第三个输入相加的结果。</p>
-</td>
-</tr>
-<tr id="row980410892919"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1780414862913"><a name="p1780414862913"></a><a name="p1780414862913"></a><a href="高阶API/数学计算/IsNan接口/IsNan接口.md">IsNan</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p38041818296"><a name="p38041818296"></a><a name="p38041818296"></a>按元素判断输入的浮点数是否为nan。</p>
-</td>
-</tr>
-<tr id="row13670181019299"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p103301445314"><a name="p103301445314"></a><a name="p103301445314"></a><a href="高阶API/数学计算/IsInf接口/IsInf接口.md">IsInf</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p06701810122920"><a name="p06701810122920"></a><a name="p06701810122920"></a>按元素判断输入的浮点数是否为&plusmn;INF。</p>
-</td>
-</tr>
-<tr id="row37451613142914"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p733064410319"><a name="p733064410319"></a><a name="p733064410319"></a><a href="高阶API/数学计算/Rint接口/Rint接口.md">Rint</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1474571382914"><a name="p1474571382914"></a><a name="p1474571382914"></a>获取与输入数据最接近的整数。</p>
-</td>
-</tr>
-<tr id="row98766156296"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p0876111510296"><a name="p0876111510296"></a><a name="p0876111510296"></a><a href="高阶API/数学计算/SinCos接口/SinCos接口.md">SinCos</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p17877815152917"><a name="p17877815152917"></a><a name="p17877815152917"></a>按元素进行正弦计算和余弦计算，分别获得正弦和余弦的结果。</p>
-</td>
-</tr>
-<tr id="row12309142814569"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p12309628115619"><a name="p12309628115619"></a><a name="p12309628115619"></a><a href="高阶API/数学计算/LogicalNot接口/LogicalNot.md">LogicalNot</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p20309152805616"><a name="p20309152805616"></a><a name="p20309152805616"></a>按元素进行取反操作。</p>
-</td>
-</tr>
-<tr id="row94521039125610"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p14452739185615"><a name="p14452739185615"></a><a name="p14452739185615"></a><a href="高阶API/数学计算/LogicalAnd接口/LogicalAnd.md">LogicalAnd</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p16453439125612"><a name="p16453439125612"></a><a name="p16453439125612"></a>按元素进行与操作。</p>
-</td>
-</tr>
-<tr id="row1654215408567"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p15431040115616"><a name="p15431040115616"></a><a name="p15431040115616"></a><a href="高阶API/数学计算/LogicalAnds接口/LogicalAnds.md">LogicalAnds</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p9543440175617"><a name="p9543440175617"></a><a name="p9543440175617"></a>输入矢量内的每个元素与标量进行与操作。</p>
-</td>
-</tr>
-<tr id="row499344016568"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1599344085618"><a name="p1599344085618"></a><a name="p1599344085618"></a><a href="高阶API/数学计算/LogicalOr接口/LogicalOr.md">LogicalOr</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1599364045612"><a name="p1599364045612"></a><a name="p1599364045612"></a>按元素进行或操作。</p>
-</td>
-</tr>
-<tr id="row5448341105615"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p5448204112567"><a name="p5448204112567"></a><a name="p5448204112567"></a><a href="高阶API/数学计算/LogicalOrs接口/LogicalOrs.md">LogicalOrs</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p194481841115610"><a name="p194481841115610"></a><a name="p194481841115610"></a>输入矢量内的每个元素与标量进行或操作。</p>
-</td>
-</tr>
-<tr id="row4668163093217"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p187781634193218"><a name="p187781634193218"></a><a name="p187781634193218"></a><a href="高阶API/数学计算/LogicalXor接口/LogicalXor.md">LogicalXor</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p147786344321"><a name="p147786344321"></a><a name="p147786344321"></a>按元素进行逻辑异或操作。</p>
-</td>
-</tr>
-<tr id="row5422125043317"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p186138413415"><a name="p186138413415"></a><a name="p186138413415"></a><a href="高阶API/数学计算/BitwiseNot接口/BitwiseNot.md">BitwiseNot</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p861494153417"><a name="p861494153417"></a><a name="p861494153417"></a>逐比特对输入进行取反。</p>
-</td>
-</tr>
-<tr id="row3119242135615"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1111924235618"><a name="p1111924235618"></a><a name="p1111924235618"></a><a href="高阶API/数学计算/BitwiseAnd接口/BitwiseAnd.md">BitwiseAnd</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p20119174210565"><a name="p20119174210565"></a><a name="p20119174210565"></a>逐比特对两个输入进行与操作。</p>
-</td>
-</tr>
-<tr id="row1847385613338"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p155221232342"><a name="p155221232342"></a><a name="p155221232342"></a><a href="高阶API/数学计算/BitwiseOr接口/BitwiseOr.md">BitwiseOr</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p4522152393416"><a name="p4522152393416"></a><a name="p4522152393416"></a>逐比特对两个输入进行或操作。</p>
-</td>
-</tr>
-<tr id="row394945893311"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p10748540103412"><a name="p10748540103412"></a><a name="p10748540103412"></a><a href="高阶API/数学计算/BitwiseXor接口/BitwiseXor.md">BitwiseXor</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p974816402341"><a name="p974816402341"></a><a name="p974816402341"></a>逐比特对两个输入进行异或操作。</p>
-</td>
-</tr>
-<tr id="row36751142135614"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p20675134217564"><a name="p20675134217564"></a><a name="p20675134217564"></a><a href="高阶API/数学计算/Where接口/Where.md">Where</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p7675194211563"><a name="p7675194211563"></a><a name="p7675194211563"></a>根据指定的条件，从两个源操作数中选择元素，生成目标操作数。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [Acos](高阶API/数学计算/Acos接口/Acos.md) | 按元素做反余弦函数计算。 |
+| [Acosh](高阶API/数学计算/Acosh接口/Acosh.md) | 按元素做双曲反余弦函数计算。 |
+| [Asin](高阶API/数学计算/Asin接口/Asin.md) | 按元素做反正弦函数计算。 |
+| [Asinh](高阶API/数学计算/Asinh接口/Asinh.md) | 按元素做反双曲正弦函数计算。 |
+| [Atan](高阶API/数学计算/Atan接口/Atan.md) | 按元素做三角函数反正切运算。 |
+| [Atanh](高阶API/数学计算/Atanh接口/Atanh.md) | 按元素做反双曲正切余弦函数计算。 |
+| [Axpy](高阶API/数学计算/Axpy接口/Axpy-80.md) | 源操作数中每个元素与标量求积后和目的操作数中的对应元素相加。 |
+| [Ceil](高阶API/数学计算/Ceil接口/Ceil.md) | 获取大于或等于x的最小的整数值，即向正无穷取整操作。 |
+| [ClampMax](高阶API/数学计算/Clamp接口/ClampMax.md) | 将srcTensor中大于scalar的数替换为scalar，小于等于scalar的数保持不变，作为dstTensor输出。 |
+| [ClampMin](高阶API/数学计算/Clamp接口/ClampMin.md) | 将srcTensor中小于scalar的数替换为scalar，大于等于scalar的数保持不变，作为dstTensor输出。 |
+| [Cos](高阶API/数学计算/Cos接口/Cos.md) | 按元素做三角函数余弦运算。 |
+| [Cosh](高阶API/数学计算/Cosh接口/Cosh.md) | 按元素做双曲余弦函数计算。 |
+| [CumSum](高阶API/数学计算/CumSum接口/CumSum.md) | 对数据按行依次累加或按列依次累加。 |
+| [Digamma](高阶API/数学计算/Digamma接口/Digamma.md) | 按元素计算x的gamma函数的对数导数。 |
+| [Erf](高阶API/数学计算/Erf接口/Erf.md) | 按元素做误差函数计算，也称为高斯误差函数。 |
+| [Erfc](高阶API/数学计算/Erfc接口/Erfc.md) | 返回输入x的互补误差函数结果，积分区间为x到无穷大。 |
+| [Exp](高阶API/数学计算/Exp接口/Exp-81.md) | 按元素取自然指数。 |
+| [Floor](高阶API/数学计算/Floor接口/Floor.md) | 获取小于或等于x的最小的整数值，即向负无穷取整操作。 |
+| [Fmod](高阶API/数学计算/Fmod接口/Fmod.md) | 按元素计算两个浮点数相除后的余数。 |
+| [Frac](高阶API/数学计算/Frac接口/Frac.md) | 按元素做取小数计算。 |
+| [Hypot](高阶API/数学计算/Hypot接口/Hypot.md) | 按元素计算两个浮点数平方和的平方根。 |
+| [IsFinite](高阶API/数学计算/IsFinite接口/IsFinite.md) | 按元素判断输入的浮点数是否非NAN、非±INF。 |
+| [Lgamma](高阶API/数学计算/Lgamma接口/Lgamma.md) | 按元素计算x的gamma函数的绝对值并求自然对数。 |
+| [Log](高阶API/数学计算/Log接口/Log-79.md) | 按元素以e、2、10为底做对数运算。 |
+| [Power](高阶API/数学计算/Power接口/Power.md) | 实现按元素做幂运算功能。 |
+| [Round](高阶API/数学计算/Round接口/Round.md) | 将输入的元素四舍五入到最接近的整数。 |
+| [Sign](高阶API/数学计算/Sign接口/Sign.md) | 按元素执行Sign操作，Sign是指返回输入数据的符号。 |
+| [Sin](高阶API/数学计算/Sin接口/Sin.md) | 按元素做正弦函数计算。 |
+| [Sinh](高阶API/数学计算/Sinh接口/Sinh.md) | 按元素做双曲正弦函数计算。 |
+| [Tan](高阶API/数学计算/Tan接口/Tan.md) | 按元素做正切函数计算。 |
+| [Tanh](高阶API/数学计算/Tanh接口/Tanh.md) | 按元素做逻辑回归Tanh。 |
+| [Trunc](高阶API/数学计算/Trunc接口/Trunc.md) | 按元素做浮点数截断操作，即向零取整操作。 |
+| [Xor](高阶API/数学计算/Xor接口/Xor-82.md) | 按元素执行Xor（异或）运算。 |
+| [Fma](高阶API/数学计算/Fma接口/Fma接口.md) | 按元素计算两个输入相乘后与第三个输入相加的结果。 |
+| [IsNan](高阶API/数学计算/IsNan接口/IsNan接口.md) | 按元素判断输入的浮点数是否为nan。 |
+| [IsInf](高阶API/数学计算/IsInf接口/IsInf接口.md) | 按元素判断输入的浮点数是否为±INF。 |
+| [Rint](高阶API/数学计算/Rint接口/Rint接口.md) | 获取与输入数据最接近的整数。 |
+| [SinCos](高阶API/数学计算/SinCos接口/SinCos接口.md) | 按元素进行正弦计算和余弦计算，分别获得正弦和余弦的结果。 |
+| [LogicalNot](高阶API/数学计算/LogicalNot接口/LogicalNot.md) | 按元素进行取反操作。 |
+| [LogicalAnd](高阶API/数学计算/LogicalAnd接口/LogicalAnd.md) | 按元素进行与操作。 |
+| [LogicalAnds](高阶API/数学计算/LogicalAnds接口/LogicalAnds.md) | 输入矢量内的每个元素与标量进行与操作。 |
+| [LogicalOr](高阶API/数学计算/LogicalOr接口/LogicalOr.md) | 按元素进行或操作。 |
+| [LogicalOrs](高阶API/数学计算/LogicalOrs接口/LogicalOrs.md) | 输入矢量内的每个元素与标量进行或操作。 |
+| [LogicalXor](高阶API/数学计算/LogicalXor接口/LogicalXor.md) | 按元素进行逻辑异或操作。 |
+| [BitwiseNot](高阶API/数学计算/BitwiseNot接口/BitwiseNot.md) | 逐比特对输入进行取反。 |
+| [BitwiseAnd](高阶API/数学计算/BitwiseAnd接口/BitwiseAnd.md) | 逐比特对两个输入进行与操作。 |
+| [BitwiseOr](高阶API/数学计算/BitwiseOr接口/BitwiseOr.md) | 逐比特对两个输入进行或操作。 |
+| [BitwiseXor](高阶API/数学计算/BitwiseXor接口/BitwiseXor.md) | 逐比特对两个输入进行异或操作。 |
+| [Where](高阶API/数学计算/Where接口/Where.md) | 根据指定的条件，从两个源操作数中选择元素，生成目标操作数。 |
 
 **表 15**  量化操作API列表
 
-<a name="table11421635141314"></a>
-<table><thead align="left"><tr id="row10422735121314"><th class="cellrowborder" valign="top" width="37.71%" id="mcps1.2.3.1.1"><p id="p3422183561312"><a name="p3422183561312"></a><a name="p3422183561312"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.29%" id="mcps1.2.3.1.2"><p id="p542213354138"><a name="p542213354138"></a><a name="p542213354138"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row101065443561"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1710674455615"><a name="p1710674455615"></a><a name="p1710674455615"></a><a href="高阶API/量化操作/AntiQuantize.md">AntiQuantize</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1910684465613"><a name="p1910684465613"></a><a name="p1910684465613"></a>按元素做伪量化计算，比如将int8_t数据类型伪量化为half数据类型。</p>
-</td>
-</tr>
-<tr id="row164273359136"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p742783581318"><a name="p742783581318"></a><a name="p742783581318"></a><a href="高阶API/量化操作/AscendAntiQuant.md">AscendAntiQuant</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p5427835121317"><a name="p5427835121317"></a><a name="p5427835121317"></a>按元素做伪量化计算，比如将int8_t数据类型伪量化为half数据类型。</p>
-</td>
-</tr>
-<tr id="row87731046155619"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p167731446135611"><a name="p167731446135611"></a><a name="p167731446135611"></a><a href="高阶API/量化操作/Dequantize.md">Dequantize</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p9773446115615"><a name="p9773446115615"></a><a name="p9773446115615"></a>按元素做反量化计算，比如将int32_t数据类型反量化为half/float等数据类型。</p>
-</td>
-</tr>
-<tr id="row12427435111311"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1642733591318"><a name="p1642733591318"></a><a name="p1642733591318"></a><a href="高阶API/量化操作/AscendDequant.md">AscendDequant</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p11427635151312"><a name="p11427635151312"></a><a name="p11427635151312"></a>按元素做反量化计算，比如将int32_t数据类型反量化为half/float等数据类型。</p>
-</td>
-</tr>
-<tr id="row18942184911567"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1494254905613"><a name="p1494254905613"></a><a name="p1494254905613"></a><a href="高阶API/量化操作/Quantize.md">Quantize</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p7942134917563"><a name="p7942134917563"></a><a name="p7942134917563"></a>按元素做量化计算，比如将half/float数据类型量化为int8_t数据类型。</p>
-</td>
-</tr>
-<tr id="row164271635201317"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p2427435201319"><a name="p2427435201319"></a><a name="p2427435201319"></a><a href="高阶API/量化操作/AscendQuant.md">AscendQuant</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p342718351139"><a name="p342718351139"></a><a name="p342718351139"></a>按元素做量化计算，比如将half/float数据类型量化为int8_t数据类型。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [AntiQuantize](高阶API/量化操作/AntiQuantize.md) | 按元素做伪量化计算，比如将int8_t数据类型伪量化为half数据类型。 |
+| [AscendAntiQuant](高阶API/量化操作/AscendAntiQuant.md) | 按元素做伪量化计算，比如将int8_t数据类型伪量化为half数据类型。 |
+| [Dequantize](高阶API/量化操作/Dequantize.md) | 按元素做反量化计算，比如将int32_t数据类型反量化为half/float等数据类型。 |
+| [AscendDequant](高阶API/量化操作/AscendDequant.md) | 按元素做反量化计算，比如将int32_t数据类型反量化为half/float等数据类型。 |
+| [Quantize](高阶API/量化操作/Quantize.md) | 按元素做量化计算，比如将half/float数据类型量化为int8_t数据类型。 |
+| [AscendQuant](高阶API/量化操作/AscendQuant.md) | 按元素做量化计算，比如将half/float数据类型量化为int8_t数据类型。 |
 
 **表 16**  归一化操作API列表
 
-<a name="table3781201031415"></a>
-<table><thead align="left"><tr id="row12781510111418"><th class="cellrowborder" valign="top" width="37.71%" id="mcps1.2.3.1.1"><p id="p12782101020142"><a name="p12782101020142"></a><a name="p12782101020142"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.29%" id="mcps1.2.3.1.2"><p id="p6782101016142"><a name="p6782101016142"></a><a name="p6782101016142"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row8786410121418"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p4786131012145"><a name="p4786131012145"></a><a name="p4786131012145"></a><a href="高阶API/归一化操作/BatchNorm.md">BatchNorm</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1778631013141"><a name="p1778631013141"></a><a name="p1778631013141"></a>对于每个batch中的样本，对其输入的每个特征在batch的维度上进行归一化。</p>
-</td>
-</tr>
-<tr id="row87861710151413"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p11786410151410"><a name="p11786410151410"></a><a name="p11786410151410"></a><a href="高阶API/归一化操作/DeepNorm.md">DeepNorm</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p17861410111419"><a name="p17861410111419"></a><a name="p17861410111419"></a>在深层神经网络训练过程中，可以替代LayerNorm的一种归一化方法。</p>
-</td>
-</tr>
-<tr id="row18506114553319"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p571415485334"><a name="p571415485334"></a><a name="p571415485334"></a><a href="高阶API/归一化操作/GroupNorm.md">GroupNorm</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p11714174853314"><a name="p11714174853314"></a><a name="p11714174853314"></a>将输入的C维度分为groupNum组，对每一组数据进行标准化。</p>
-</td>
-</tr>
-<tr id="row5786191091412"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p11786131071415"><a name="p11786131071415"></a><a name="p11786131071415"></a><a href="高阶API/归一化操作/LayerNorm.md">LayerNorm</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p157861910161416"><a name="p157861910161416"></a><a name="p157861910161416"></a>将输入数据收敛到[0, 1]之间，可以规范网络层输入输出数据分布的一种归一化方法。</p>
-</td>
-</tr>
-<tr id="row378616105148"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p47863104149"><a name="p47863104149"></a><a name="p47863104149"></a><a href="高阶API/归一化操作/LayerNorm.md">LayerNormGrad</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p11786141091411"><a name="p11786141091411"></a><a name="p11786141091411"></a>用于计算LayerNorm的反向传播梯度。</p>
-</td>
-</tr>
-<tr id="row7786111071411"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1978721091412"><a name="p1978721091412"></a><a name="p1978721091412"></a><a href="高阶API/归一化操作/LayerNormGradBeta.md">LayerNormGradBeta</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p978771018141"><a name="p978771018141"></a><a name="p978771018141"></a>用于获取反向beta/gmma的数值，和LayerNormGrad共同输出pdx, gmma和beta。</p>
-</td>
-</tr>
-<tr id="row1833102211208"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p233172292010"><a name="p233172292010"></a><a name="p233172292010"></a><a href="高阶API/归一化操作/Normalize.md">Normalize</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p33482202020"><a name="p33482202020"></a><a name="p33482202020"></a><a href="高阶API/归一化操作/LayerNorm.md">LayerNorm</a>中，已知均值和方差，计算shape为[A，R]的输入数据的标准差的倒数rstd和归一化输出y。</p>
-</td>
-</tr>
-<tr id="row478741061416"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p7787121071417"><a name="p7787121071417"></a><a name="p7787121071417"></a><a href="高阶API/归一化操作/RmsNorm.md">RmsNorm</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p19787171017144"><a name="p19787171017144"></a><a name="p19787171017144"></a>实现对shape大小为[B，S，H]的输入数据的RmsNorm归一化。</p>
-</td>
-</tr>
-<tr id="row48116253209"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p58111925192011"><a name="p58111925192011"></a><a name="p58111925192011"></a><a href="高阶API/归一化操作/WelfordUpdate.md">WelfordUpdate</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p48111625102019"><a name="p48111625102019"></a><a name="p48111625102019"></a>实现Welford算法的前处理。</p>
-</td>
-</tr>
-<tr id="row189721927192015"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p29731627182019"><a name="p29731627182019"></a><a name="p29731627182019"></a><a href="高阶API/归一化操作/WelfordFinalize.md">WelfordFinalize</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p69731627112018"><a name="p69731627112018"></a><a name="p69731627112018"></a>实现Welford算法的后处理。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [BatchNorm](高阶API/归一化操作/BatchNorm.md) | 对于每个batch中的样本，对其输入的每个特征在batch的维度上进行归一化。 |
+| [DeepNorm](高阶API/归一化操作/DeepNorm.md) | 在深层神经网络训练过程中，可以替代LayerNorm的一种归一化方法。 |
+| [GroupNorm](高阶API/归一化操作/GroupNorm.md) | 将输入的C维度分为groupNum组，对每一组数据进行标准化。 |
+| [LayerNorm](高阶API/归一化操作/LayerNorm.md) | 将输入数据收敛到[0, 1]之间，可以规范网络层输入输出数据分布的一种归一化方法。 |
+| [LayerNormGrad](高阶API/归一化操作/LayerNorm.md) | 用于计算LayerNorm的反向传播梯度。 |
+| [LayerNormGradBeta](高阶API/归一化操作/LayerNormGradBeta.md) | 用于获取反向beta/gmma的数值，和LayerNormGrad共同输出pdx, gmma和beta。 |
+| [Normalize](高阶API/归一化操作/Normalize.md) | [LayerNorm](高阶API/归一化操作/LayerNorm.md)中，已知均值和方差，计算shape为[A，R]的输入数据的标准差的倒数rstd和归一化输出y。 |
+| [RmsNorm](高阶API/归一化操作/RmsNorm.md) | 实现对shape大小为[B，S，H]的输入数据的RmsNorm归一化。 |
+| [WelfordUpdate](高阶API/归一化操作/WelfordUpdate.md) | 实现Welford算法的前处理。 |
+| [WelfordFinalize](高阶API/归一化操作/WelfordFinalize.md) | 实现Welford算法的后处理。 |
 
 **表 17**  激活函数API列表
 
-<a name="table952317081517"></a>
-<table><thead align="left"><tr id="row052317019157"><th class="cellrowborder" valign="top" width="37.71%" id="mcps1.2.3.1.1"><p id="p13523605151"><a name="p13523605151"></a><a name="p13523605151"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.29%" id="mcps1.2.3.1.2"><p id="p20523100141510"><a name="p20523100141510"></a><a name="p20523100141510"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1523406156"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p135235061516"><a name="p135235061516"></a><a name="p135235061516"></a><a href="高阶API/激活函数/SoftMax接口/AdjustSoftMaxRes.md">AdjustSoftMaxRes</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1952380121514"><a name="p1952380121514"></a><a name="p1952380121514"></a>用于对SoftMax相关计算结果做后处理，调整SoftMax的计算结果为指定的值。</p>
-</td>
-</tr>
-<tr id="row10523408156"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1452340201510"><a name="p1452340201510"></a><a name="p1452340201510"></a><a href="高阶API/激活函数/Gelu接口/FasterGelu.md">FasterGelu</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p15232011159"><a name="p15232011159"></a><a name="p15232011159"></a>FastGelu化简版本的一种激活函数。</p>
-</td>
-</tr>
-<tr id="row452380181515"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p752416091513"><a name="p752416091513"></a><a name="p752416091513"></a><a href="高阶API/激活函数/Gelu接口/FasterGeluV2.md">FasterGeluV2</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p552413017153"><a name="p552413017153"></a><a name="p552413017153"></a><span>实现FastGeluV2</span>版本的一种激活函数。</p>
-</td>
-</tr>
-<tr id="row16524110151518"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1952430161515"><a name="p1952430161515"></a><a name="p1952430161515"></a><a href="高阶API/激活函数/GeGLU接口/GeGLU.md">GeGLU</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p165241407155"><a name="p165241407155"></a><a name="p165241407155"></a>采用GeLU作为激活函数的GLU变体。</p>
-</td>
-</tr>
-<tr id="row65248014151"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p252412091510"><a name="p252412091510"></a><a name="p252412091510"></a><a href="高阶API/激活函数/Gelu接口/Gelu.md">Gelu</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p175241406158"><a name="p175241406158"></a><a name="p175241406158"></a>GELU是一个重要的激活函数，其灵感来源于relu和dropout，在激活中引入了随机正则的思想。</p>
-</td>
-</tr>
-<tr id="row165241301159"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p155243071519"><a name="p155243071519"></a><a name="p155243071519"></a><a href="高阶API/激活函数/LogSoftMax接口/LogSoftMax.md">LogSoftMax</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p35248041516"><a name="p35248041516"></a><a name="p35248041516"></a>对输入tensor做LogSoftmax计算。</p>
-</td>
-</tr>
-<tr id="row1352419071515"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1152410051518"><a name="p1152410051518"></a><a name="p1152410051518"></a><a href="高阶API/激活函数/ReGlu接口/ReGlu.md">ReGlu</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p75248013150"><a name="p75248013150"></a><a name="p75248013150"></a>一种GLU变体，使用Relu作为激活函数。</p>
-</td>
-</tr>
-<tr id="row852413013150"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p852415071513"><a name="p852415071513"></a><a name="p852415071513"></a><a href="高阶API/激活函数/Sigmoid接口/Sigmoid.md">Sigmoid</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1052419031510"><a name="p1052419031510"></a><a name="p1052419031510"></a>按元素做逻辑回归Sigmoid。</p>
-</td>
-</tr>
-<tr id="row1252416071515"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p25241601158"><a name="p25241601158"></a><a name="p25241601158"></a><a href="高阶API/激活函数/Silu接口/Silu.md">Silu</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p852416041517"><a name="p852416041517"></a><a name="p852416041517"></a>按元素做Silu运算。</p>
-</td>
-</tr>
-<tr id="row5524190141518"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p852419019156"><a name="p852419019156"></a><a name="p852419019156"></a><a href="高阶API/激活函数/SoftMax接口/SimpleSoftMax.md">SimpleSoftMax</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p35247012154"><a name="p35247012154"></a><a name="p35247012154"></a>使用计算好的sum和max数据对输入tensor做softmax计算。</p>
-</td>
-</tr>
-<tr id="row1752419071511"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p195249051510"><a name="p195249051510"></a><a name="p195249051510"></a><a href="高阶API/激活函数/SoftMax接口/SoftMax.md">SoftMax</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p16525100121512"><a name="p16525100121512"></a><a name="p16525100121512"></a>对输入tensor按行做Softmax计算。</p>
-</td>
-</tr>
-<tr id="row452512011153"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p205251707159"><a name="p205251707159"></a><a name="p205251707159"></a><a href="高阶API/激活函数/SoftMax接口/SoftmaxFlash.md">SoftmaxFlash</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1152511081511"><a name="p1152511081511"></a><a name="p1152511081511"></a>SoftMax增强版本，除了可以对输入tensor做softmaxflash计算，还可以根据上一次softmax计算的sum和max来更新本次的softmax计算结果。</p>
-</td>
-</tr>
-<tr id="row352510091518"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p65251081518"><a name="p65251081518"></a><a name="p65251081518"></a><a href="高阶API/激活函数/SoftMax接口/SoftmaxFlashV2.md">SoftmaxFlashV2</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p175251107154"><a name="p175251107154"></a><a name="p175251107154"></a>SoftmaxFlash增强版本，对应FlashAttention-2算法。</p>
-</td>
-</tr>
-<tr id="row46249508349"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p10625550163411"><a name="p10625550163411"></a><a name="p10625550163411"></a><a href="高阶API/激活函数/SoftMax接口/SoftmaxFlashV3.md">SoftmaxFlashV3</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p662545013412"><a name="p662545013412"></a><a name="p662545013412"></a>SoftmaxFlash增强版本，对应Softmax PASA算法。</p>
-</td>
-</tr>
-<tr id="row65251015155"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p155254018158"><a name="p155254018158"></a><a name="p155254018158"></a><a href="高阶API/激活函数/SoftMax接口/SoftmaxGrad.md">SoftmaxGrad</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p8525507154"><a name="p8525507154"></a><a name="p8525507154"></a>对输入tensor做grad反向计算的一种方法。</p>
-</td>
-</tr>
-<tr id="row152513016156"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p352512001517"><a name="p352512001517"></a><a name="p352512001517"></a><a href="高阶API/激活函数/SoftMax接口/SoftmaxGradFront.md">SoftmaxGradFront</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p752570131513"><a name="p752570131513"></a><a name="p752570131513"></a>对输入tensor做grad反向计算的一种方法。</p>
-</td>
-</tr>
-<tr id="row135257081512"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p9525200111511"><a name="p9525200111511"></a><a name="p9525200111511"></a><a href="高阶API/激活函数/SwiGLU接口/SwiGLU.md">SwiGLU</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1952550131511"><a name="p1952550131511"></a><a name="p1952550131511"></a>采用Swish作为激活函数的GLU变体。</p>
-</td>
-</tr>
-<tr id="row1252515041520"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p752515071514"><a name="p752515071514"></a><a name="p752515071514"></a><a href="高阶API/激活函数/Swish接口/Swish.md">Swish</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p95251306151"><a name="p95251306151"></a><a name="p95251306151"></a>神经网络中的Swish激活函数。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [AdjustSoftMaxRes](高阶API/激活函数/SoftMax接口/AdjustSoftMaxRes.md) | 用于对SoftMax相关计算结果做后处理，调整SoftMax的计算结果为指定的值。 |
+| [FasterGelu](高阶API/激活函数/Gelu接口/FasterGelu.md) | FastGelu化简版本的一种激活函数。 |
+| [FasterGeluV2](高阶API/激活函数/Gelu接口/FasterGeluV2.md) | 实现FastGeluV2版本的一种激活函数。 |
+| [GeGLU](高阶API/激活函数/GeGLU接口/GeGLU.md) | 采用GeLU作为激活函数的GLU变体。 |
+| [Gelu](高阶API/激活函数/Gelu接口/Gelu.md) | GELU是一个重要的激活函数，其灵感来源于relu和dropout，在激活中引入了随机正则的思想。 |
+| [LogSoftMax](高阶API/激活函数/LogSoftMax接口/LogSoftMax.md) | 对输入tensor做LogSoftmax计算。 |
+| [ReGlu](高阶API/激活函数/ReGlu接口/ReGlu.md) | 一种GLU变体，使用Relu作为激活函数。 |
+| [Sigmoid](高阶API/激活函数/Sigmoid接口/Sigmoid.md) | 按元素做逻辑回归Sigmoid。 |
+| [Silu](高阶API/激活函数/Silu接口/Silu.md) | 按元素做Silu运算。 |
+| [SimpleSoftMax](高阶API/激活函数/SoftMax接口/SimpleSoftMax.md) | 使用计算好的sum和max数据对输入tensor做softmax计算。 |
+| [SoftMax](高阶API/激活函数/SoftMax接口/SoftMax.md) | 对输入tensor按行做Softmax计算。 |
+| [SoftmaxFlash](高阶API/激活函数/SoftMax接口/SoftmaxFlash.md) | SoftMax增强版本，除了可以对输入tensor做softmaxflash计算，还可以根据上一次softmax计算的sum和max来更新本次的softmax计算结果。 |
+| [SoftmaxFlashV2](高阶API/激活函数/SoftMax接口/SoftmaxFlashV2.md) | SoftmaxFlash增强版本，对应FlashAttention-2算法。 |
+| [SoftmaxFlashV3](高阶API/激活函数/SoftMax接口/SoftmaxFlashV3.md) | SoftmaxFlash增强版本，对应Softmax PASA算法。 |
+| [SoftmaxGrad](高阶API/激活函数/SoftMax接口/SoftmaxGrad.md) | 对输入tensor做grad反向计算的一种方法。 |
+| [SoftmaxGradFront](高阶API/激活函数/SoftMax接口/SoftmaxGradFront.md) | 对输入tensor做grad反向计算的一种方法。 |
+| [SwiGLU](高阶API/激活函数/SwiGLU接口/SwiGLU.md) | 采用Swish作为激活函数的GLU变体。 |
+| [Swish](高阶API/激活函数/Swish接口/Swish.md) | 神经网络中的Swish激活函数。 |
 
 **表 18**  归约操作API列表
 
-<a name="table56871381153"></a>
-<table><thead align="left"><tr id="row368753820157"><th class="cellrowborder" valign="top" width="37.71%" id="mcps1.2.3.1.1"><p id="p968711387154"><a name="p968711387154"></a><a name="p968711387154"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.29%" id="mcps1.2.3.1.2"><p id="p1368773841515"><a name="p1368773841515"></a><a name="p1368773841515"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row16251161812813"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1068811382157"><a name="p1068811382157"></a><a name="p1068811382157"></a><a href="高阶API/归约操作/Sum接口/Sum.md">Sum</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p13688203811515"><a name="p13688203811515"></a><a name="p13688203811515"></a>获取最后一个维度的元素总和。</p>
-</td>
-</tr>
-<tr id="row106871338111517"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p16871238131513"><a name="p16871238131513"></a><a name="p16871238131513"></a><a href="高阶API/归约操作/Mean接口/Mean.md">Mean</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1668715385158"><a name="p1668715385158"></a><a name="p1668715385158"></a>根据最后一轴的方向对各元素求平均值。</p>
-</td>
-</tr>
-<tr id="row186871038171510"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1268793811159"><a name="p1268793811159"></a><a name="p1268793811159"></a><a href="高阶API/归约操作/ReduceXorSum接口/ReduceXorSum.md">ReduceXorSum</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p12688163811519"><a name="p12688163811519"></a><a name="p12688163811519"></a>按照元素执行Xor（按位异或）运算，并将计算结果ReduceSum求和。</p>
-</td>
-</tr>
-<tr id="row15688103871519"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p95115441718"><a name="p95115441718"></a><a name="p95115441718"></a><a href="高阶API/归约操作/ReduceSum接口/ReduceSum-90.md">ReduceSum</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p11517441717"><a name="p11517441717"></a><a name="p11517441717"></a>对一个多维向量按照指定的维度进行数据累加。</p>
-</td>
-</tr>
-<tr id="row199410371158"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p209412372517"><a name="p209412372517"></a><a name="p209412372517"></a><a href="高阶API/归约操作/ReduceMean接口/ReduceMean.md">ReduceMean</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p09416377512"><a name="p09416377512"></a><a name="p09416377512"></a>对一个多维向量按照指定的维度求平均值。</p>
-</td>
-</tr>
-<tr id="row6979134616516"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p16979246851"><a name="p16979246851"></a><a name="p16979246851"></a><a href="高阶API/归约操作/ReduceMax接口/ReduceMax-91.md">ReduceMax</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p197934616510"><a name="p197934616510"></a><a name="p197934616510"></a>对一个多维向量在指定的维度求最大值。</p>
-</td>
-</tr>
-<tr id="row2429249255"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1542914496515"><a name="p1542914496515"></a><a name="p1542914496515"></a><a href="高阶API/归约操作/ReduceMin接口/ReduceMin-92.md">ReduceMin</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p164291497518"><a name="p164291497518"></a><a name="p164291497518"></a>对一个多维向量在指定的维度求最小值。</p>
-</td>
-</tr>
-<tr id="row1211653851"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p112113531558"><a name="p112113531558"></a><a name="p112113531558"></a><a href="高阶API/归约操作/ReduceAny接口/ReduceAny.md">ReduceAny</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p15211153654"><a name="p15211153654"></a><a name="p15211153654"></a>对一个多维向量在指定的维度求逻辑或。</p>
-</td>
-</tr>
-<tr id="row18411155515512"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p19411195519518"><a name="p19411195519518"></a><a name="p19411195519518"></a><a href="高阶API/归约操作/ReduceAll接口/ReduceAll.md">ReduceAll</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p17411195512511"><a name="p17411195512511"></a><a name="p17411195512511"></a>对一个多维向量在指定的维度求逻辑与。</p>
-</td>
-</tr>
-<tr id="row20399155816518"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p4399958855"><a name="p4399958855"></a><a name="p4399958855"></a><a href="高阶API/归约操作/ReduceProd接口/ReduceProd.md">ReduceProd</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p183995581754"><a name="p183995581754"></a><a name="p183995581754"></a>对一个多维向量在指定的维度求积。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [Sum](高阶API/归约操作/Sum接口/Sum.md) | 获取最后一个维度的元素总和。 |
+| [Mean](高阶API/归约操作/Mean接口/Mean.md) | 根据最后一轴的方向对各元素求平均值。 |
+| [ReduceXorSum](高阶API/归约操作/ReduceXorSum接口/ReduceXorSum.md) | 按照元素执行Xor（按位异或）运算，并将计算结果ReduceSum求和。 |
+| [ReduceSum](高阶API/归约操作/ReduceSum接口/ReduceSum-90.md) | 对一个多维向量按照指定的维度进行数据累加。 |
+| [ReduceMean](高阶API/归约操作/ReduceMean接口/ReduceMean.md) | 对一个多维向量按照指定的维度求平均值。 |
+| [ReduceMax](高阶API/归约操作/ReduceMax接口/ReduceMax-91.md) | 对一个多维向量在指定的维度求最大值。 |
+| [ReduceMin](高阶API/归约操作/ReduceMin接口/ReduceMin-92.md) | 对一个多维向量在指定的维度求最小值。 |
+| [ReduceAny](高阶API/归约操作/ReduceAny接口/ReduceAny.md) | 对一个多维向量在指定的维度求逻辑或。 |
+| [ReduceAll](高阶API/归约操作/ReduceAll接口/ReduceAll.md) | 对一个多维向量在指定的维度求逻辑与。 |
+| [ReduceProd](高阶API/归约操作/ReduceProd接口/ReduceProd.md) | 对一个多维向量在指定的维度求积。 |
 
 **表 19**  排序操作API列表
 
-<a name="table1075717581619"></a>
-<table><thead align="left"><tr id="row87570510167"><th class="cellrowborder" valign="top" width="37.71%" id="mcps1.2.3.1.1"><p id="p87573520167"><a name="p87573520167"></a><a name="p87573520167"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.29%" id="mcps1.2.3.1.2"><p id="p1475714531618"><a name="p1475714531618"></a><a name="p1475714531618"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row475745191616"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p875865181616"><a name="p875865181616"></a><a name="p875865181616"></a><a href="高阶API/排序操作/TopK.md">TopK</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p97581255164"><a name="p97581255164"></a><a name="p97581255164"></a>获取最后一个维度的前k个最大值或最小值及其对应的索引。</p>
-</td>
-</tr>
-<tr id="row97581516168"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1475812517162"><a name="p1475812517162"></a><a name="p1475812517162"></a><a href="高阶API/排序操作/Concat.md">Concat</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p375875131613"><a name="p375875131613"></a><a name="p375875131613"></a>对数据进行预处理，将要排序的源操作数srcLocal一一对应的合入目标数据concatLocal中，数据预处理完后，可以进行Sort。</p>
-</td>
-</tr>
-<tr id="row14758650165"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p47583591616"><a name="p47583591616"></a><a name="p47583591616"></a><a href="高阶API/排序操作/Extract.md">Extract</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p87581950161"><a name="p87581950161"></a><a name="p87581950161"></a>处理Sort的结果数据，输出排序后的value和index。</p>
-</td>
-</tr>
-<tr id="row57583513169"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p1375813514166"><a name="p1375813514166"></a><a name="p1375813514166"></a><a href="高阶API/排序操作/Sort.md">Sort</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p14758554166"><a name="p14758554166"></a><a name="p14758554166"></a>排序函数，按照数值大小进行降序排序。</p>
-</td>
-</tr>
-<tr id="row475815512168"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p17581591616"><a name="p17581591616"></a><a name="p17581591616"></a><a href="高阶API/排序操作/MrgSort-93.md">MrgSort</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p1375885121617"><a name="p1375885121617"></a><a name="p1375885121617"></a>将已经排好序的最多4条队列，合并排列成1条队列，结果按照score域由大到小排序。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [TopK](高阶API/排序操作/TopK.md) | 获取最后一个维度的前k个最大值或最小值及其对应的索引。 |
+| [Concat](高阶API/排序操作/Concat.md) | 对数据进行预处理，将要排序的源操作数srcLocal一一对应的合入目标数据concatLocal中，数据预处理完后，可以进行Sort。 |
+| [Extract](高阶API/排序操作/Extract.md) | 处理Sort的结果数据，输出排序后的value和index。 |
+| [Sort](高阶API/排序操作/Sort.md) | 排序函数，按照数值大小进行降序排序。 |
+| [MrgSort](高阶API/排序操作/MrgSort-93.md) | 将已经排好序的最多4条队列，合并排列成1条队列，结果按照score域由大到小排序。 |
 
 **表 20**  数据过滤API列表
 
-<a name="table7398513176"></a>
-<table><thead align="left"><tr id="row133985161711"><th class="cellrowborder" valign="top" width="37.71%" id="mcps1.2.3.1.1"><p id="p23983191712"><a name="p23983191712"></a><a name="p23983191712"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.29%" id="mcps1.2.3.1.2"><p id="p10398111111716"><a name="p10398111111716"></a><a name="p10398111111716"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1943972012455"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p138751045194610"><a name="p138751045194610"></a><a name="p138751045194610"></a><a href="高阶API/数据过滤/Select-95.md">Select</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p0875445174619"><a name="p0875445174619"></a><a name="p0875445174619"></a>给定两个源操作数src0和src1，根据maskTensor相应位置的值（非bit位）选取元素，得到目的操作数dst。</p>
-</td>
-</tr>
-<tr id="row193983120178"><td class="cellrowborder" valign="top" width="37.71%" headers="mcps1.2.3.1.1 "><p id="p103981111179"><a name="p103981111179"></a><a name="p103981111179"></a><a href="高阶API/数据过滤/DropOut.md">DropOut</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.29%" headers="mcps1.2.3.1.2 "><p id="p20398121101710"><a name="p20398121101710"></a><a name="p20398121101710"></a>提供根据MaskTensor对源操作数进行过滤的功能，得到目的操作数。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [Select](高阶API/数据过滤/Select-95.md) | 给定两个源操作数src0和src1，根据maskTensor相应位置的值（非bit位）选取元素，得到目的操作数dst。 |
+| [DropOut](高阶API/数据过滤/DropOut.md) | 提供根据MaskTensor对源操作数进行过滤的功能，得到目的操作数。 |
 
 **表 21**  张量变换API列表
 
-<a name="table86595781819"></a>
-<table><thead align="left"><tr id="row16660147101819"><th class="cellrowborder" valign="top" width="37.669999999999995%" id="mcps1.2.3.1.1"><p id="p866010718184"><a name="p866010718184"></a><a name="p866010718184"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.33%" id="mcps1.2.3.1.2"><p id="p66603741815"><a name="p66603741815"></a><a name="p66603741815"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row02335914543"><td class="cellrowborder" valign="top" width="37.669999999999995%" headers="mcps1.2.3.1.1 "><p id="p192315965413"><a name="p192315965413"></a><a name="p192315965413"></a><a href="高阶API/张量变换/Transpose-96.md">Transpose</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.33%" headers="mcps1.2.3.1.2 "><p id="p1248169212"><a name="p1248169212"></a><a name="p1248169212"></a>对输入数据进行数据排布及Reshape操作。</p>
-</td>
-</tr>
-<tr id="row113798510352"><td class="cellrowborder" valign="top" width="37.669999999999995%" headers="mcps1.2.3.1.1 "><p id="p73791051163519"><a name="p73791051163519"></a><a name="p73791051163519"></a><a href="高阶API/张量变换/TransData.md">TransData</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.33%" headers="mcps1.2.3.1.2 "><p id="p1837919517358"><a name="p1837919517358"></a><a name="p1837919517358"></a>将输入数据的排布格式转换为目标排布格式。</p>
-</td>
-</tr>
-<tr id="row12653659194315"><td class="cellrowborder" valign="top" width="37.669999999999995%" headers="mcps1.2.3.1.1 "><p id="p68351016134419"><a name="p68351016134419"></a><a name="p68351016134419"></a><a href="高阶API/张量变换/Broadcast.md">Broadcast</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.33%" headers="mcps1.2.3.1.2 "><p id="p28356164441"><a name="p28356164441"></a><a name="p28356164441"></a>将输入按照输出shape进行广播。</p>
-</td>
-</tr>
-<tr id="row061716212442"><td class="cellrowborder" valign="top" width="37.669999999999995%" headers="mcps1.2.3.1.1 "><p id="p118359168448"><a name="p118359168448"></a><a name="p118359168448"></a><a href="高阶API/张量变换/Pad.md">Pad</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.33%" headers="mcps1.2.3.1.2 "><p id="p483521619442"><a name="p483521619442"></a><a name="p483521619442"></a>对height * width的二维Tensor在width方向上pad到32B对齐。</p>
-</td>
-</tr>
-<tr id="row1650326144416"><td class="cellrowborder" valign="top" width="37.669999999999995%" headers="mcps1.2.3.1.1 "><p id="p11835161634418"><a name="p11835161634418"></a><a name="p11835161634418"></a><a href="高阶API/张量变换/UnPad.md">UnPad</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.33%" headers="mcps1.2.3.1.2 "><p id="p6835161674420"><a name="p6835161674420"></a><a name="p6835161674420"></a>对height * width的二维Tensor在width方向上进行unpad。</p>
-</td>
-</tr>
-<tr id="row1922374193911"><td class="cellrowborder" valign="top" width="37.669999999999995%" headers="mcps1.2.3.1.1 "><p id="p022434193913"><a name="p022434193913"></a><a name="p022434193913"></a><a href="高阶API/张量变换/Fill-97.md">Fill</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.33%" headers="mcps1.2.3.1.2 "><p id="p122418416392"><a name="p122418416392"></a><a name="p122418416392"></a>将Global Memory上的数据初始化为指定值。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [Transpose](高阶API/张量变换/Transpose-96.md) | 对输入数据进行数据排布及Reshape操作。 |
+| [TransData](高阶API/张量变换/TransData.md) | 将输入数据的排布格式转换为目标排布格式。 |
+| [Broadcast](高阶API/张量变换/Broadcast.md) | 将输入按照输出shape进行广播。 |
+| [Pad](高阶API/张量变换/Pad.md) | 对height * width的二维Tensor在width方向上pad到32B对齐。 |
+| [UnPad](高阶API/张量变换/UnPad.md) | 对height * width的二维Tensor在width方向上进行unpad。 |
+| [Fill](高阶API/张量变换/Fill-97.md) | 将Global Memory上的数据初始化为指定值。 |
 
 **表 22**  索引计算API列表
 
-<a name="table67319289189"></a>
-<table><thead align="left"><tr id="row1873528161818"><th class="cellrowborder" valign="top" width="37.63%" id="mcps1.2.3.1.1"><p id="p473728141810"><a name="p473728141810"></a><a name="p473728141810"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.370000000000005%" id="mcps1.2.3.1.2"><p id="p1973328111812"><a name="p1973328111812"></a><a name="p1973328111812"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row05463289557"><td class="cellrowborder" valign="top" width="37.63%" headers="mcps1.2.3.1.1 "><p id="p1045773617556"><a name="p1045773617556"></a><a name="p1045773617556"></a><a href="高阶API/索引计算/Arange-94.md">Arange</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.370000000000005%" headers="mcps1.2.3.1.2 "><p id="p189228338558"><a name="p189228338558"></a><a name="p189228338558"></a>给定起始值，等差值和长度，返回一个等差数列。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [Arange](高阶API/索引计算/Arange-94.md) | 给定起始值，等差值和长度，返回一个等差数列。 |
 
 **表 23**  矩阵计算API列表
 
-<a name="table16634248182011"></a>
-<table><thead align="left"><tr id="row763454810205"><th class="cellrowborder" valign="top" width="37.669999999999995%" id="mcps1.2.3.1.1"><p id="p16634164832017"><a name="p16634164832017"></a><a name="p16634164832017"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.33%" id="mcps1.2.3.1.2"><p id="p1363464815203"><a name="p1363464815203"></a><a name="p1363464815203"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row2635748192012"><td class="cellrowborder" valign="top" width="37.669999999999995%" headers="mcps1.2.3.1.1 "><p id="p10635248122013"><a name="p10635248122013"></a><a name="p10635248122013"></a><a href="高阶API/矩阵计算/Matmul-Kernel侧接口/Matmul-Kernel侧接口.md">Matmul</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.33%" headers="mcps1.2.3.1.2 "><p id="p1563517485201"><a name="p1563517485201"></a><a name="p1563517485201"></a>Matmul矩阵乘法的运算。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [Matmul](高阶API/矩阵计算/Matmul-Kernel侧接口/Matmul-Kernel侧接口.md) | Matmul矩阵乘法的运算。 |
 
 **表 24**  HCCL通信类API列表
 
-<a name="table483522817566"></a>
-<table><thead align="left"><tr id="row1183572813564"><th class="cellrowborder" valign="top" width="37.669999999999995%" id="mcps1.2.3.1.1"><p id="p4835152811563"><a name="p4835152811563"></a><a name="p4835152811563"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.33%" id="mcps1.2.3.1.2"><p id="p283502813566"><a name="p283502813566"></a><a name="p283502813566"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row7534141110415"><td class="cellrowborder" valign="top" width="37.669999999999995%" headers="mcps1.2.3.1.1 "><p id="p13534411643"><a name="p13534411643"></a><a name="p13534411643"></a><a href="高阶API/HCCL通信类/HCCL通信类.md">HCCL通信类</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.33%" headers="mcps1.2.3.1.2 "><p id="p553418111947"><a name="p553418111947"></a><a name="p553418111947"></a>在AI Core侧编排集合通信任务。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [HCCL通信类](高阶API/HCCL通信类/HCCL通信类.md) | 在AI Core侧编排集合通信任务。 |
 
 **表 25**  卷积计算API列表
 
-<a name="table12502184212139"></a>
-<table><thead align="left"><tr id="row1150274261313"><th class="cellrowborder" valign="top" width="37.6%" id="mcps1.2.3.1.1"><p id="p45022423132"><a name="p45022423132"></a><a name="p45022423132"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.4%" id="mcps1.2.3.1.2"><p id="p75021942101318"><a name="p75021942101318"></a><a name="p75021942101318"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row185021242151312"><td class="cellrowborder" valign="top" width="37.6%" headers="mcps1.2.3.1.1 "><p id="p250294215131"><a name="p250294215131"></a><a name="p250294215131"></a><a href="高阶API/卷积计算/Conv3D/Conv3D.md">Conv3D</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.4%" headers="mcps1.2.3.1.2 "><p id="p1650394291312"><a name="p1650394291312"></a><a name="p1650394291312"></a>3维卷积正向矩阵运算。</p>
-</td>
-</tr>
-<tr id="row1217212361282"><td class="cellrowborder" valign="top" width="37.6%" headers="mcps1.2.3.1.1 "><p id="p5172113652817"><a name="p5172113652817"></a><a name="p5172113652817"></a><a href="高阶API/卷积计算/Conv3DBackpropInput/Conv3DBackpropInput.md">Conv3DBackpropInput</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.4%" headers="mcps1.2.3.1.2 "><p id="p317293622815"><a name="p317293622815"></a><a name="p317293622815"></a>卷积的反向运算，求解特征矩阵的反向传播误差。</p>
-</td>
-</tr>
-<tr id="row15623133842814"><td class="cellrowborder" valign="top" width="37.6%" headers="mcps1.2.3.1.1 "><p id="p1162303802817"><a name="p1162303802817"></a><a name="p1162303802817"></a><a href="高阶API/卷积计算/Conv3DBackpropFilter/Conv3DBackpropFilter.md">Conv3DBackpropFilter</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.4%" headers="mcps1.2.3.1.2 "><p id="p86233387286"><a name="p86233387286"></a><a name="p86233387286"></a>卷积的反向运算，求解权重的反向传播误差。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [Conv3D](高阶API/卷积计算/Conv3D/Conv3D.md) | 3维卷积正向矩阵运算。 |
+| [Conv3DBackpropInput](高阶API/卷积计算/Conv3DBackpropInput/Conv3DBackpropInput.md) | 卷积的反向运算，求解特征矩阵的反向传播误差。 |
+| [Conv3DBackpropFilter](高阶API/卷积计算/Conv3DBackpropFilter/Conv3DBackpropFilter.md) | 卷积的反向运算，求解权重的反向传播误差。 |
 
 **表 26**  随机函数API列表
 
-<a name="table20932123194516"></a>
-<table><thead align="left"><tr id="row16932113164513"><th class="cellrowborder" valign="top" width="37.6%" id="mcps1.2.3.1.1"><p id="p29329318456"><a name="p29329318456"></a><a name="p29329318456"></a>接口名</p>
-</th>
-<th class="cellrowborder" valign="top" width="62.4%" id="mcps1.2.3.1.2"><p id="p17932123104517"><a name="p17932123104517"></a><a name="p17932123104517"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row17932163194517"><td class="cellrowborder" valign="top" width="37.6%" headers="mcps1.2.3.1.1 "><p id="p2932131104520"><a name="p2932131104520"></a><a name="p2932131104520"></a><a href="高阶API/随机函数/PhiloxRandom.md">PhiloxRandom</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="62.4%" headers="mcps1.2.3.1.2 "><p id="p19321731134518"><a name="p19321731134518"></a><a name="p19321731134518"></a>基于Philox随机数生成算法，给定随机数种子，生成若干的随机数。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 接口名 | 功能描述 |
+| --- | --- |
+| [PhiloxRandom](高阶API/随机函数/PhiloxRandom.md) | 基于Philox随机数生成算法，给定随机数种子，生成若干的随机数。 |
