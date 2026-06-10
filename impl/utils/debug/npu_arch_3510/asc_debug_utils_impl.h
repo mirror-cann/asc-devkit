@@ -60,16 +60,15 @@ __simd_callee__ constexpr inline DumpTensorDataType get_dump_datatype()
 
 __simd_callee__ inline void enable_asc_diagnostics()
 {
-#if defined(__ENABLE_ASCENDC_PRINTF__) && (ASCENDC_SIMD_VF_DEBUG == 1)
 #if (!defined(ASCENDC_DUMP) || (ASCENDC_DUMP != 0)) || defined(ASCENDC_TIME_STAMP_ON)
     static const struct AscTlv __asc_debug_meta_section__ __attribute__ ((used, section (".ascend.meta"))) =
     {4, 4, 1};
-#endif
 #endif
 }
 
 __simd_callee__ __ubuf__ inline BlockVFBufInfo* get_printf_ubuf_addr(uint64_t addr, uint16_t blockIdx = 0)
 {
+#if defined(ASCENDC_SIMD_VF_DEBUG)
     constexpr uint32_t safeStaticLen = 32;
     static __ubuf__ uint64_t info[safeStaticLen];
     if (addr != 0) {
@@ -81,6 +80,9 @@ __simd_callee__ __ubuf__ inline BlockVFBufInfo* get_printf_ubuf_addr(uint64_t ad
         bufInfo->blockIdx = blockIdx;
     }
     return reinterpret_cast<__ubuf__ BlockVFBufInfo*>(info[0]);
+#else
+    return reinterpret_cast<__ubuf__ BlockVFBufInfo*>(0);
+#endif
 }
 
 __simd_callee__ inline void asc_copy_ub2gm_align(__gm__ void* dst, __ubuf__ void* src, uint32_t size)
