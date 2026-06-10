@@ -360,17 +360,17 @@ __simd_callee__ inline void asc_reduce_min(vector_half& dst, vector_half src, ve
 __simd_callee__ inline void asc_reduce_min(vector_float& dst, vector_float src, vector_bool mask);
 
 // ==========asc_reduce_min_datablock(uint16_t/int16_t/half/uint32_t/int32_t/float)==========
-__simd_callee__ inline void asc_reduce_min_datablock_(vector_int16_t& dst, vector_int16_t src, vector_bool mask);
+__simd_callee__ inline void asc_reduce_min_datablock(vector_int16_t& dst, vector_int16_t src, vector_bool mask);
 
-__simd_callee__ inline void asc_reduce_min_datablock_(vector_int32_t& dst, vector_int32_t src, vector_bool mask);
+__simd_callee__ inline void asc_reduce_min_datablock(vector_int32_t& dst, vector_int32_t src, vector_bool mask);
 
-__simd_callee__ inline void asc_reduce_min_datablock_(vector_uint16_t& dst, vector_uint16_t src, vector_bool mask);
+__simd_callee__ inline void asc_reduce_min_datablock(vector_uint16_t& dst, vector_uint16_t src, vector_bool mask);
 
-__simd_callee__ inline void asc_reduce_min_datablock_(vector_uint32_t& dst, vector_uint32_t src, vector_bool mask);
+__simd_callee__ inline void asc_reduce_min_datablock(vector_uint32_t& dst, vector_uint32_t src, vector_bool mask);
 
-__simd_callee__ inline void asc_reduce_min_datablock_(vector_half& dst, vector_half src, vector_bool mask);
+__simd_callee__ inline void asc_reduce_min_datablock(vector_half& dst, vector_half src, vector_bool mask);
 
-__simd_callee__ inline void asc_reduce_min_datablock_(vector_float& dst, vector_float src, vector_bool mask);
+__simd_callee__ inline void asc_reduce_min_datablock(vector_float& dst, vector_float src, vector_bool mask);
 
 // ==========asc_axpy(half/float)==========
 __simd_callee__ inline void asc_axpy(vector_half& dst, vector_half src, half value, vector_bool mask);
