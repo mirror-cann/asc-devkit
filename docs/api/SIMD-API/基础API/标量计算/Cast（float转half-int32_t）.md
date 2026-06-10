@@ -72,17 +72,17 @@ __aicore__ inline U Cast(T valueIn)
 
 ```cpp
 float valueIn = 3.14159f;
-half halfOut = Cast<float, half, CAST_ODD>(valueIn);             // 返回3.142578
+half halfOut = AscendC::Cast<float, half, AscendC::RoundMode::CAST_ODD>(valueIn);             // 返回3.142578
 
 valueIn = 1.5f;
-int32_t intRoundOut = Cast<float, int32_t, CAST_ROUND>(valueIn); // 使用CAST_ROUND模式，四舍五入返回2
-int32_t intCeilOut = Cast<float, int32_t, CAST_CEIL>(valueIn);   // 使用CAST_CEIL模式，向上取整返回2
-int32_t intFloorOut = Cast<float, int32_t, CAST_FLOOR>(valueIn); // 使用CAST_FLOOR模式，向下取整返回1
-int32_t intRintOut = Cast<float, int32_t, CAST_RINT>(valueIn);   // 使用CAST_RINT模式，1.5向临近偶数舍入返回2
+int32_t intRoundOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_ROUND>(valueIn); // 使用CAST_ROUND模式，四舍五入返回2
+int32_t intCeilOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_CEIL>(valueIn);   // 使用CAST_CEIL模式，向上取整返回2
+int32_t intFloorOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_FLOOR>(valueIn); // 使用CAST_FLOOR模式，向下取整返回1
+int32_t intRintOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_RINT>(valueIn);   // 使用CAST_RINT模式，1.5向临近偶数舍入返回2
 
 valueIn = 2.5f;
-intRoundOut = Cast<float, int32_t, CAST_ROUND>(valueIn); // 使用CAST_ROUND模式，四舍五入返回3
-intCeilOut = Cast<float, int32_t, CAST_CEIL>(valueIn);   // 使用CAST_CEIL模式，向上取整返回3
-intFloorOut = Cast<float, int32_t, CAST_FLOOR>(valueIn); // 使用CAST_FLOOR模式，向下取整返回2
-intRintOut = Cast<float, int32_t, CAST_RINT>(valueIn);   // 使用CAST_RINT模式，2.5向临近偶数舍入返回2
+intRoundOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_ROUND>(valueIn); // 使用CAST_ROUND模式，四舍五入返回3
+intCeilOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_CEIL>(valueIn);   // 使用CAST_CEIL模式，向上取整返回3
+intFloorOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_FLOOR>(valueIn); // 使用CAST_FLOOR模式，向下取整返回2
+intRintOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_RINT>(valueIn);   // 使用CAST_RINT模式，2.5向临近偶数舍入返回2
 ```
