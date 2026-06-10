@@ -272,3 +272,27 @@ TEST_F(TestHcclSymbolLoader, GetInitTiling_withValidAscendHome_success)
     Mc2CcTilingConfig ccTilingConfig("test", 1, "fullmesh", 1);
     EXPECT_EQ(ccTilingConfig.GetTiling(initTilingInner), EXIT_SUCCESS);
 }
+
+// SetDevType 的环境变量校验:ASCEND_HOME_PATH 未设置时,getenv 返回 nullptr。
+TEST_F(TestHcclSymbolLoader, GetInitTiling_ascendHomeUnset_failure)
+{
+    unsetenv("ASCEND_HOME_PATH");
+    ASSERT_EQ(std::getenv("ASCEND_HOME_PATH"), nullptr);
+
+    ::Mc2InitTiling initTilingInner;
+    Mc2CcTilingConfig ccTilingConfig("test", 1, "fullmesh", 1);
+    EXPECT_EQ(ccTilingConfig.GetTiling(initTilingInner), EXIT_FAILURE);
+}
+
+// SetDevType 的环境变量校验:ASCEND_HOME_PATH 为空字符串时,getenv 返回非空指针但首字符为 '\0'。
+TEST_F(TestHcclSymbolLoader, GetInitTiling_ascendHomeEmpty_failure)
+{
+    setenv("ASCEND_HOME_PATH", "", 1);
+    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    ASSERT_NE(homePath, nullptr);
+    ASSERT_EQ(homePath[0], '\0');
+
+    ::Mc2InitTiling initTilingInner;
+    Mc2CcTilingConfig ccTilingConfig("test", 1, "fullmesh", 1);
+    EXPECT_EQ(ccTilingConfig.GetTiling(initTilingInner), EXIT_FAILURE);
+}
