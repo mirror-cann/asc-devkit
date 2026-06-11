@@ -177,7 +177,7 @@ __aicore__ inline void MmadWithSparse(const LocalTensor<T>& dst, const LocalTens
 
 ## 调用示例
 
-完整使用样例请参见[MmadWithSparse样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/mmad_with_sparse)。
+完整使用样例请参见[MmadWithSparse样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/mmad_with_sparse)。
 
 ```cpp
 AscendC::LocalTensor<int8_t> a1Local(AscendC::TPosition::A1, a1Addr, aSize);

@@ -377,7 +377,7 @@ __aicore__ inline void LoadDataWithTranspose(const LocalTensor<T>& dst, const Lo
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
--   示例1：该示例输入a矩阵为int8\_t类型，shape为\[40,70\]，输入b矩阵为int8\_t类型，shape为\[70,50\]，输出c的类型为int32\_t。a矩阵从A1-\>A2转置，b矩阵从B1-\>B2转置，之后进行Mmad计算和Fixpipe计算。完整使用样例请参见[LoadData\_L12L0样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/load_data_l12l0)。
+-   示例1：该示例输入a矩阵为int8\_t类型，shape为\[40,70\]，输入b矩阵为int8\_t类型，shape为\[70,50\]，输出c的类型为int32\_t。a矩阵从A1-\>A2转置，b矩阵从B1-\>B2转置，之后进行Mmad计算和Fixpipe计算。完整使用样例请参见[LoadData\_L12L0样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/load_data_l12l0)。
 
     ```
     uint16_t m = 40, k = 70, n = 50;
@@ -416,7 +416,7 @@ __aicore__ inline void LoadDataWithTranspose(const LocalTensor<T>& dst, const Lo
     }
     ```
 
--   示例2：该示例输入a矩阵为half类型，shape为\[40,70\]，输入b矩阵为half类型，shape为\[70,50\]，输出c的类型为float。a矩阵从A1-\>A2转置，b矩阵从B1-\>B2转置，之后进行Mmad计算和Fixpipe计算。完整使用样例请参见[LoadData\_L12L0样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/load_data_l12l0)。
+-   示例2：该示例输入a矩阵为half类型，shape为\[40,70\]，输入b矩阵为half类型，shape为\[70,50\]，输出c的类型为float。a矩阵从A1-\>A2转置，b矩阵从B1-\>B2转置，之后进行Mmad计算和Fixpipe计算。完整使用样例请参见[LoadData\_L12L0样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/load_data_l12l0)。
 
     ```
     
@@ -455,7 +455,7 @@ __aicore__ inline void LoadDataWithTranspose(const LocalTensor<T>& dst, const Lo
     }
     ```
 
--   示例3：该示例输入a矩阵为float类型，shape为\[40,70\]，输入b矩阵为float类型，shape为\[70,50\]，输出c的类型为float。a矩阵从A1-\>A2转置，b矩阵从B1-\>B2转置，之后进行Mmad计算和Fixpipe计算。完整使用样例请参见[LoadData\_L12L0样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/load_data_l12l0)。
+-   示例3：该示例输入a矩阵为float类型，shape为\[40,70\]，输入b矩阵为float类型，shape为\[70,50\]，输出c的类型为float。a矩阵从A1-\>A2转置，b矩阵从B1-\>B2转置，之后进行Mmad计算和Fixpipe计算。完整使用样例请参见[LoadData\_L12L0样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/load_data_l12l0)。
 
     ```
     uint32_t m = 40, k = 70, n = 50;

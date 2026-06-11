@@ -392,7 +392,7 @@ enum class RoundMode {
 
 本样例中只展示Compute流程中的部分代码。本样例的srcLocal为half类型，dstLocal为int32\_t类型，计算mask时以int32\_t为准。
 
-如果您需要运行样例代码，完整的调用样例请参考[Cast样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/02_memory_vector_compute/cast)。
+如果您需要运行样例代码，完整的调用样例请参考[Cast样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/01_memory_vector_compute/cast)。
 
 - tensor高维切分计算样例-mask连续模式。
 

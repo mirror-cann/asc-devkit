@@ -101,8 +101,8 @@ You can also refer to the following key dimensions for quick decision-making:
 - Scenarios that require developing extreme performance operators in production environments while maintaining code maintainability and extensibility.
 
 **Examples**
-- [SIMD Add Operator Example with Tque / Tpipe Automatic Memory and Synchronization Management](../../examples/01_simd_cpp_api/00_introduction/01_vector/add_tpipe_tque/add_tpipe_tque.asc)
-- [SIMD Add Operator Example with LocalMemoryAllocator Independent Memory and Synchronization Management](../../examples/01_simd_cpp_api/00_introduction/01_vector/add/add.asc)
+- [SIMD Add Operator Example with Tque / Tpipe Automatic Memory and Synchronization Management](../../examples/01_simd_cpp_api/00_introduction/01_add/add_tpipe_tque/add_tpipe_tque.asc)
+- [SIMD Add Operator Example with LocalMemoryAllocator Independent Memory and Synchronization Management](../../examples/01_simd_cpp_api/00_introduction/01_add/add/add.asc)
 - Tensor API Example Based on Layout (to be added)
 
 ---

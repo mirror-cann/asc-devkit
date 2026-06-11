@@ -276,7 +276,7 @@ enum class TransposeType : uint8_t {
 
 输出Tensor \{ shape:\[B, S, N, H/N\], origin\_shape:\[B, S, N, H/N\], format:"ND", origin\_format:"ND"\}
 
-B=1，N=2, S=64, H/N=32，输入数据类型均为half。更多完整样例请参考[Transpose样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/03_libraries/08_tensor_transformation/transpose)。
+B=1，N=2, S=64, H/N=32，输入数据类型均为half。更多完整样例请参考[Transpose样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/03_libraries/08_transpose/transpose)。
 
 ```
 // dst：输入Tensor

@@ -8,6 +8,7 @@ After developers implement custom operators using Ascend C API, they can verify 
 | [01_simd_cpp_api](./01_simd_cpp_api) | SIMD API examples based on Ascend C, introducing SIMD API usage through <<<>>> direct invocation implementation |
 | [02_simd_c_api](./02_simd_c_api) | C_API examples based on Ascend C, introducing C_API usage through C_API implementation |
 | [03_simt_api](./03_simt_api) | Operator examples based on Ascend C SIMT programming, introducing SIMT usage through <<<>>> direct invocation implementation |
+| [04_aicpu](./04_aicpu) | Operator examples based on Ascend C AICPU programming, introducing AICPU usage through <<<>>> direct invocation implementation |
 ## npu-arch Build Option Description
 
 Developers need to modify the --npu-arch build option in the CMakeLists.txt file under the specific example directory according to the actual execution environment. Refer to the correspondence in the table below to modify the npu-arch parameter value for the environment.

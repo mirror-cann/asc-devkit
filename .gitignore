@@ -11,6 +11,7 @@ oat_reports/
 presmoke_reports/
 log/
 .DS_Store
+!/examples/**/10_math/log/
 third_party/
 openssl-device-src/
 openssl-host-src/

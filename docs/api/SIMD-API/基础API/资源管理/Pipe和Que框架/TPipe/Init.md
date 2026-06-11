@@ -77,7 +77,7 @@ __aicore__ inline void Init()
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-完整算子样例参考：[TPipeReuse](https://gitcode.com/cann/asc-devkit/tree/master/examples/02_features/10_memory_management/tpipe_reuse)。
+完整算子样例参考：[TPipeReuse](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/07_tpipe_tque/tpipe_reuse)。
 
 ```
 // 实例化一个浮点型的自定义算子对象

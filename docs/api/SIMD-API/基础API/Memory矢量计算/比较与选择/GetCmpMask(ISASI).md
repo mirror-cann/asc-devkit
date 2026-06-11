@@ -90,7 +90,7 @@ dst的空间大小不能少于128字节。
 
 ## 调用示例<a name="section837496171220"></a>
 
-[Compare（结果存入寄存器）](Compare（结果存入寄存器）.md)指令的结果使用uint8\_t类型数据存储，因此dstLocal使用uint8\_t类型。完整的示例参考[Compare类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/02_memory_vector_compute/compare)。
+[Compare（结果存入寄存器）](Compare（结果存入寄存器）.md)指令的结果使用uint8\_t类型数据存储，因此dstLocal使用uint8\_t类型。完整的示例参考[Compare类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/01_memory_vector_compute/compare)。
 
 ```cpp
 AscendC::LocalTensor<float> src0Local;

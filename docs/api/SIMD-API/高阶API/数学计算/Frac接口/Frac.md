@@ -92,7 +92,7 @@ Frac\(5592.625\) = 0.625
 
 ## 调用示例
 
-完整的调用样例请参考[Frac样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/12_math/frac)。
+完整的调用样例请参考[Frac样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/10_math/frac)。
 
 ```
 // dstLocal: 存放计算结果的Tensor

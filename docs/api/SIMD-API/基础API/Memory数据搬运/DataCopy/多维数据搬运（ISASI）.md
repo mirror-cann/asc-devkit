@@ -313,7 +313,7 @@ struct NdDmaLoopInfo  {
 
 ## 调用示例<a name="section122101199486"></a>
 
-完整算子样例参考：[多维数据搬运样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/00_data_movement/data_copy_gm2ub_nddma)。
+完整算子样例参考：[多维数据搬运样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/00_data_movement/data_copy_gm2ub_nddma)。
 
 ```
 // T：搬运数据的类型

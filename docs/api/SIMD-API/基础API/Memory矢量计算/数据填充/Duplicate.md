@@ -174,7 +174,7 @@ def Duplicate(scalarValue, dst, count):
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-本示例仅展示Compute流程的部分代码。如需运行，请将代码段复制并粘贴到[Duplicate样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/02_memory_vector_compute/duplicate)中的Compute函数对应位置。
+本示例仅展示Compute流程的部分代码。如需运行，请将代码段复制并粘贴到[Duplicate样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/01_memory_vector_compute/duplicate)中的Compute函数对应位置。
 
 - tensor高维切分计算样例，mask连续模式
 

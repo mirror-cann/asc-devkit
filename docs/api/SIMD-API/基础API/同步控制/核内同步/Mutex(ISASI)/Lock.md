@@ -112,7 +112,7 @@ static __aicore__ inline void Lock(MutexID id)
 
 ## 调用示例<a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_section320753512363"></a>
 
-完整算子样例参考：[Mutex样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/06_sync_control/mutex)。
+完整算子样例参考：[Mutex样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/05_sync_control/mutex)。
 
 ```
 // 锁定 MTE2 流水线互斥锁，确保当前线程独占 MTE2 资源进行数据搬运

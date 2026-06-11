@@ -191,4 +191,4 @@ AscendC::DataCopy(workGlobal[blockIdx * perBlockSize], dstLocal, perBlockSize);
 AscendC::SyncAll(syncGlobal, workLocal);
 ```
 
-完整样例请参考[SyncAll样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/06_sync_control/sync_all)。
+完整样例请参考[SyncAll样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/05_sync_control/sync_all)。

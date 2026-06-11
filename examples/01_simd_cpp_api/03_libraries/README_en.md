@@ -16,7 +16,7 @@ This section contains usage samples based on Ascend C API libraries, introducing
 | [05_sort](./05_sort) | This sample set introduces typical usage of sort operations with different operator features and provides corresponding end-to-end implementations |
 | [06_index](./06_index) | This sample set introduces typical usage of index computation operators with different features and provides corresponding end-to-end implementations |
 | [07_filter](./07_filter) | This sample set introduces typical usage of data filtering operators with different features and provides corresponding end-to-end implementations |
-| [08_tensor_transformation](./08_tensor_transformation) | This sample set introduces typical usage of tensor transformation operators with different features and provides corresponding end-to-end implementations |
-| [11_random](./11_random) | This sample set introduces typical usage of random functions with different features and provides corresponding end-to-end implementations |
-| [12_math](./12_math) | This sample set introduces typical usage of math computations with different operator features and provides corresponding end-to-end implementations |
-| [13_utils](./13_utils) | This sample set introduces typical usage of data type features and provides corresponding end-to-end implementations |
+| [08_transpose](./08_transpose) | This sample set introduces typical usage of tensor transformation operators with different features and provides corresponding end-to-end implementations |
+| [09_random](./09_random) | This sample set introduces typical usage of random functions with different features and provides corresponding end-to-end implementations |
+| [10_math](./10_math) | This sample set introduces typical usage of math computations with different operator features and provides corresponding end-to-end implementations |
+| [11_utils](./11_utils) | This sample set introduces typical usage of data type features and provides corresponding end-to-end implementations |

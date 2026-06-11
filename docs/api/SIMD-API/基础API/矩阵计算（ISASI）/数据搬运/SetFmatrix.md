@@ -122,7 +122,7 @@ __aicore__ inline void SetFmatrix(uint16_t l1H, uint16_t l1W, const uint8_t padL
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-完整调用示例参考[SetLoadDataBoundary样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_compatibility_guide/set_loaddata_boundary_910B)。
+完整调用示例参考[SetLoadDataBoundary样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_compatibility_guide/set_loaddata_boundary)。
 
 ```
 uint16_t channelSize = 32;

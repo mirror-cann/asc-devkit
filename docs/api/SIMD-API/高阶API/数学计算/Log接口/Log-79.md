@@ -132,7 +132,7 @@
 
 ## 调用示例
 
-完整的调用样例可参考[Log样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/12_math/log)。
+完整的调用样例可参考[Log样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/10_math/log)。
 
 ```
 // dstLocal: 存放计算结果的Tensor

@@ -144,7 +144,7 @@ def CreateVecIndex(dst, firstValue, count):
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-本样例中只展示Compute流程中的部分代码。如果您需要运行样例代码，请将该代码段拷贝并替换[CreateVecIndex样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_libraries/07_index/create_vec_index)中Compute函数相关代码片段即可。
+本样例中只展示Compute流程中的部分代码。如果您需要运行样例代码，请将该代码段拷贝并替换[CreateVecIndex样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/01_memory_vector_compute/create_vec_index)中Compute函数相关代码片段即可。
 
 - tensor高维切分计算样例-mask连续模式
 

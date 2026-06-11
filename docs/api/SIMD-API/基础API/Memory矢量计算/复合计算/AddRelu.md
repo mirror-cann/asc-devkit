@@ -125,7 +125,7 @@ $$
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-完整的调用样例可参考[复合计算样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/02_memory_vector_compute/element_wise_compound_compute)。
+完整的调用样例可参考[复合计算样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/01_memory_vector_compute/element_wise_compound_compute)。
 
 - tensor高维切分计算样例-mask连续模式。
 

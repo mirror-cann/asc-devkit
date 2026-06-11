@@ -123,7 +123,7 @@ __aicore__ inline void SetPadValue(T paddingValue)
 
 ## 调用示例<a name="section1227835243314"></a>
 
-更多样例请参见[DataCopyPad样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/03_basic_api/00_data_movement/data_copy_pad_gm2ub_ub2gm)。
+更多样例请参见[DataCopyPad样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/01_basic_api/00_data_movement/data_copy_pad_gm2ub_ub2gm)。
 
 ```
 uint32_t m_n1 = 32;

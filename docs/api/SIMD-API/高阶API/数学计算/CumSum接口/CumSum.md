@@ -119,7 +119,7 @@ struct CumSumInfo
 
 ## 调用示例
 
-完整的调用样例请参考[CumSum样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/12_math/cumsum)。
+完整的调用样例请参考[CumSum样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/10_math/cumsum)。
 
 ```
 // dstLocal: 存放计算结果的Tensor

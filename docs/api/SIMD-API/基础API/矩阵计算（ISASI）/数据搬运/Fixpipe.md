@@ -75,14 +75,14 @@
 ## 函数原型<a name="section620mcpsimp"></a>
 
 -   传入FixpipeParamsV220
-    -   通路CO1-\>GM，不开启tensor量化功能：
+    -   通路CO1-\>GM，不使能tensor量化功能：
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR>
         __aicore__ inline void Fixpipe(const GlobalTensor<T>& dst, const LocalTensor<U>& src, const FixpipeParamsV220& intriParams)
         ```
 
-    -   通路CO1-\>GM，开启tensor量化功能：
+    -   通路CO1-\>GM，使能tensor量化功能：
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR, typename S = uint64_t, typename Std::enable_if<Std::is_same<PrimT<S>, uint64_t>::value, bool>::type = true>
@@ -90,28 +90,28 @@
         ```
 
 -   传入FixpipeParamsM300
-    -   通路CO1-\>UB，不开启tensor量化功能：
+    -   通路CO1-\>UB，不使能tensor量化功能：
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR>
         __aicore__ inline void Fixpipe(const LocalTensor<T>& dst, const LocalTensor<U>& src, const FixpipeParamsM300& intriParams)
         ```
 
-    -   通路CO1-\>UB，开启tensor量化功能：
+    -   通路CO1-\>UB，使能tensor量化功能：
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR, typename S = uint64_t, typename Std::enable_if<Std::is_same<PrimT<S>, uint64_t>::value, bool>::type = true>
         __aicore__ inline void Fixpipe(const LocalTensor<T>& dst, const LocalTensor<U>& src, const LocalTensor<S>& cbufWorkspace, const FixpipeParamsM300& intriParams)
         ```
 
-    -   通路CO1-\>GM，不开启tensor量化功能：
+    -   通路CO1-\>GM，不使能tensor量化功能：
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR>
         __aicore__ inline void Fixpipe(const GlobalTensor<T>& dst, const LocalTensor<U>& src, const FixpipeParamsM300& intriParams)
         ```
 
-    -   通路CO1-\>GM，开启tensor量化功能：
+    -   通路CO1-\>GM，使能tensor量化功能：
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR, typename S = uint64_t, typename Std::enable_if<Std::is_same<PrimT<S>, uint64_t>::value, bool>::type = true>
@@ -119,42 +119,42 @@
         ```
 
 -   传入FixpipeParamsArch3510
-    -   通路CO1-\>L1 Buffer，不开启tensor量化功能
+    -   通路CO1-\>L1 Buffer，不使能tensor量化功能
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR>
         __aicore__ inline void Fixpipe(const LocalTensor<T>& dst, const LocalTensor<U>& src, const FixpipeParamsArch3510<config.format>& intriParams)
         ```
 
-    -   通路CO1-\>L1 Buffer，开启tensor量化功能
+    -   通路CO1-\>L1 Buffer，使能tensor量化功能
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR>
         __aicore__ inline void Fixpipe(const LocalTensor<T>& dst, const LocalTensor<U>& src, const LocalTensor<uint64_t>& cbufWorkspace, const FixpipeParamsArch3510<config.format>& intriParams)
         ```
 
-    -   通路CO1-\>UB，不开启tensor量化功能：
+    -   通路CO1-\>UB，不使能tensor量化功能：
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR>
         __aicore__ inline void Fixpipe(const LocalTensor<T>& dst, const LocalTensor<U>& src, const FixpipeParamsArch3510<config.format>& intriParams)
         ```
 
-    -   通路CO1-\>UB，开启tensor量化功能：
+    -   通路CO1-\>UB，使能tensor量化功能：
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR>
         __aicore__ inline void Fixpipe(const LocalTensor<T>& dst, const LocalTensor<U>& src, const LocalTensor<uint64_t>& cbufWorkspace, const FixpipeParamsArch3510<config.format>& intriParams)
         ```
 
-    -   通路CO1-\>GM，不开启tensor量化功能：
+    -   通路CO1-\>GM，不使能tensor量化功能：
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR>
         __aicore__ inline void Fixpipe(const GlobalTensor<T>& dst, const LocalTensor<U>& src, const FixpipeParamsArch3510<config.format>& intriParams)
         ```
 
-    -   通路CO1-\>GM，开启tensor量化功能：
+    -   通路CO1-\>GM，使能tensor量化功能：
 
         ```
         template <typename T, typename U, const FixpipeConfig& config = CFG_ROW_MAJOR>
@@ -185,15 +185,15 @@
 <tr id="row937273310304"><td class="cellrowborder" valign="top" width="14.08%" headers="mcps1.2.3.1.1 "><p id="p19405113493017"><a name="p19405113493017"></a><a name="p19405113493017"></a>config</p>
 </td>
 <td class="cellrowborder" valign="top" width="85.92%" headers="mcps1.2.3.1.2 "><p id="p1740523443011"><a name="p1740523443011"></a><a name="p1740523443011"></a>Fixpipe相关配置参数，类型为FixpipeConfig。取值如下：</p>
-<a name="ul17842203693817"></a><a name="ul17842203693817"></a><ul id="ul17842203693817"><li><strong id="b640553483017"><a name="b640553483017"></a><a name="b640553483017"></a>CFG_ROW_MAJOR（默认取值）</strong>：开启NZ2ND，输出数据格式为ND格式。</li><li>CFG_NZ: 不开启NZ2ND，输出数据格式为NZ格式。</li><li>CFG_COLUMN_MAJOR：开启NZ2DN，输出数据格式为DN格式。</li></ul>
+<a name="ul17842203693817"></a><a name="ul17842203693817"></a><ul id="ul17842203693817"><li><strong id="b640553483017"><a name="b640553483017"></a><a name="b640553483017"></a>CFG_ROW_MAJOR（默认取值）</strong>：使能NZ2ND，输出数据格式为ND格式。</li><li>CFG_NZ: 不使能NZ2ND，输出数据格式为NZ格式。</li><li>CFG_COLUMN_MAJOR：使能NZ2DN，输出数据格式为DN格式。</li></ul>
 <a name="screen4405834193014"></a><a name="screen4405834193014"></a><pre class="screen" codetype="Cpp" id="screen4405834193014">struct FixpipeConfig {
     CO2Layout format;
     bool isToUB; // 用于用户指定目的地址的位置是否是UB 
 };
 enum class CO2Layout : uint8_t {
     NZ = 0, // 输出数据格式仍为NZ格式。
-    ROW_MAJOR, // 开启NZ2ND，输出数据格式为ND格式。
-    COLUMN_MAJOR, // 开启NZ2DN，输出数据格式为DN格式。
+    ROW_MAJOR, // 使能NZ2ND，输出数据格式为ND格式。
+    COLUMN_MAJOR, // 使能NZ2DN，输出数据格式为DN格式。
 };
 constexpr FixpipeConfig CFG_NZ = {CO2Layout::NZ};
 constexpr FixpipeConfig CFG_ROW_MAJOR = {CO2Layout::ROW_MAJOR};
@@ -279,10 +279,10 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 <td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p167983025319"><a name="p167983025319"></a><a name="p167983025319"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><p id="p2384183185914"><a name="p2384183185914"></a><a name="p2384183185914"></a>源NZ矩阵在N方向上的大小。</p>
-<a name="ul1614820539210"></a><a name="ul1614820539210"></a><ul id="ul1614820539210"><li>不开启NZ2ND功能<p id="p3913117638"><a name="p3913117638"></a><a name="p3913117638"></a>若开启channelSplit功能，nSize必须为8的倍数，取值范围：nSize∈[1, 4095]。</p>
-<p id="p1350283818336"><a name="p1350283818336"></a><a name="p1350283818336"></a>若不开启channelSplit功能，nSize必须为16的倍数，取值范围：nSize∈[1, 4095]。</p>
+<a name="ul1614820539210"></a><a name="ul1614820539210"></a><ul id="ul1614820539210"><li>不使能NZ2ND功能<p id="p3913117638"><a name="p3913117638"></a><a name="p3913117638"></a>若使能channelSplit功能，nSize必须为8的倍数，取值范围：nSize∈[1, 4095]。</p>
+<p id="p1350283818336"><a name="p1350283818336"></a><a name="p1350283818336"></a>若不使能channelSplit功能，nSize必须为16的倍数，取值范围：nSize∈[1, 4095]。</p>
 </li></ul>
-<a name="ul1263216231934"></a><a name="ul1263216231934"></a><ul id="ul1263216231934"><li>开启NZ2ND功能<p id="p1117443113208"><a name="p1117443113208"></a><a name="p1117443113208"></a>nSize取值范围 ∈[1, 4095]。</p>
+<a name="ul1263216231934"></a><a name="ul1263216231934"></a><ul id="ul1263216231934"><li>使能NZ2ND功能<p id="p1117443113208"><a name="p1117443113208"></a><a name="p1117443113208"></a>nSize取值范围 ∈[1, 4095]。</p>
 </li></ul>
 </td>
 </tr>
@@ -291,9 +291,9 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 <td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p1379818010537"><a name="p1379818010537"></a><a name="p1379818010537"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><p id="p182986458"><a name="p182986458"></a><a name="p182986458"></a>源NZ矩阵在M方向上的大小。</p>
-<a name="ul497913120510"></a><a name="ul497913120510"></a><ul id="ul497913120510"><li>不开启NZ2ND功能<p id="p1420619273418"><a name="p1420619273418"></a><a name="p1420619273418"></a>取值范围：mSize∈[1, 65535]。</p>
+<a name="ul497913120510"></a><a name="ul497913120510"></a><ul id="ul497913120510"><li>不使能NZ2ND功能<p id="p1420619273418"><a name="p1420619273418"></a><a name="p1420619273418"></a>取值范围：mSize∈[1, 65535]。</p>
 </li></ul>
-<a name="ul428310181147"></a><a name="ul428310181147"></a><ul id="ul428310181147"><li>开启NZ2ND功能<p id="p97981300531"><a name="p97981300531"></a><a name="p97981300531"></a>取值范围：mSize∈[1, 8192]。</p>
+<a name="ul428310181147"></a><a name="ul428310181147"></a><ul id="ul428310181147"><li>使能NZ2ND功能<p id="p97981300531"><a name="p97981300531"></a><a name="p97981300531"></a>取值范围：mSize∈[1, 8192]。</p>
 </li></ul>
 </td>
 </tr>
@@ -308,9 +308,9 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 </td>
 <td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p107991005319"><a name="p107991005319"></a><a name="p107991005319"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><a name="ul4462818706"></a><a name="ul4462818706"></a><ul id="ul4462818706"><li>不开启NZ2ND功能<p id="p187991003533"><a name="p187991003533"></a><a name="p187991003533"></a>目的NZ矩阵中相邻Z排布的起始地址偏移，取值不为0， 单位：datablock(32Bytes)。</p>
+<td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><a name="ul4462818706"></a><a name="ul4462818706"></a><ul id="ul4462818706"><li>不使能NZ2ND功能<p id="p187991003533"><a name="p187991003533"></a><a name="p187991003533"></a>目的NZ矩阵中相邻Z排布的起始地址偏移，取值不为0， 单位：datablock(32Bytes)。</p>
 </li></ul>
-<a name="ul1078723912015"></a><a name="ul1078723912015"></a><ul id="ul1078723912015"><li>开启NZ2ND功能<p id="p1706171910"><a name="p1706171910"></a><a name="p1706171910"></a>目的ND矩阵每一行中的元素个数，取值不为0 ，单位：element。</p>
+<a name="ul1078723912015"></a><a name="ul1078723912015"></a><ul id="ul1078723912015"><li>使能NZ2ND功能<p id="p1706171910"><a name="p1706171910"></a><a name="p1706171910"></a>目的ND矩阵每一行中的元素个数，取值不为0 ，单位：element。</p>
 </li></ul>
 </td>
 </tr>
@@ -318,8 +318,8 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 </td>
 <td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p12800104535"><a name="p12800104535"></a><a name="p12800104535"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><p id="p7427841113712"><a name="p7427841113712"></a><a name="p7427841113712"></a>QuantMode_t是一个枚举类型，用于控制量化模式，默认值为QuantMode_t::NoQuant，即不开启量化功能。QuantMode_t取值如下：</p>
-<a name="ul17664135412379"></a><a name="ul17664135412379"></a><ul id="ul17664135412379"><li>NoQuant，不开启量化功能</li><li>F322F16，float cast成half，cast mode为CAST_RINT模式</li><li>F322BF16，float cast成bfloat16_t，cast mode为CAST_RINT模式</li><li>DEQF16，int32_t量化成half，scalar量化</li><li>VDEQF16， int32_t量化成half，tensor量化</li><li>QF322B8_PRE，float量化成uint8_t/int8_t，scalar量化</li><li>VQF322B8_PRE，float量化成uint8_t/int8_t，tensor量化</li><li>REQ8，int32_t量化成uint8_t/int8_t，scalar量化</li><li>VREQ8，int32_t量化成uint8_t/int8_t，tensor量化</li></ul>
+<td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><p id="p7427841113712"><a name="p7427841113712"></a><a name="p7427841113712"></a>QuantMode_t是一个枚举类型，用于控制量化模式，默认值为QuantMode_t::NoQuant，即不使能量化功能。QuantMode_t取值如下：</p>
+<a name="ul17664135412379"></a><a name="ul17664135412379"></a><ul id="ul17664135412379"><li>NoQuant，不使能量化功能</li><li>F322F16，float cast成half，cast mode为CAST_RINT模式</li><li>F322BF16，float cast成bfloat16_t，cast mode为CAST_RINT模式</li><li>DEQF16，int32_t量化成half，scalar量化</li><li>VDEQF16， int32_t量化成half，tensor量化</li><li>QF322B8_PRE，float量化成uint8_t/int8_t，scalar量化</li><li>VQF322B8_PRE，float量化成uint8_t/int8_t，tensor量化</li><li>REQ8，int32_t量化成uint8_t/int8_t，scalar量化</li><li>VREQ8，int32_t量化成uint8_t/int8_t，tensor量化</li></ul>
 </td>
 </tr>
 <tr id="row129021142124519"><td class="cellrowborder" valign="top" width="13.459999999999999%" headers="mcps1.2.4.1.1 "><p id="p1902942144514"><a name="p1902942144514"></a><a name="p1902942144514"></a>deqScalar</p>
@@ -354,25 +354,25 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 </td>
 <td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p376221314410"><a name="p376221314410"></a><a name="p376221314410"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><p id="p7762171320445"><a name="p7762171320445"></a><a name="p7762171320445"></a>是否开启relu的开关，false：不开启relu功能；true：开启relu功能。</p>
+<td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><p id="p7762171320445"><a name="p7762171320445"></a><a name="p7762171320445"></a>是否使能relu的开关，false：不使能relu功能；true：使能relu功能。</p>
 </td>
 </tr>
 <tr id="row4306125615443"><td class="cellrowborder" valign="top" width="13.459999999999999%" headers="mcps1.2.4.1.1 "><p id="p23074567441"><a name="p23074567441"></a><a name="p23074567441"></a>unitFlag</p>
 </td>
 <td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p1930735614442"><a name="p1930735614442"></a><a name="p1930735614442"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><p id="p9307115654415"><a name="p9307115654415"></a><a name="p9307115654415"></a>unitFlag是一种Mmad指令和Fixpipe指令细粒度的并行，开启该功能后，硬件每计算完一个分形，计算结果就会被搬出，该功能不适用于在L0C Buffer累加的场景。取值说明如下：</p>
+<td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><p id="p9307115654415"><a name="p9307115654415"></a><a name="p9307115654415"></a>unitFlag是一种Mmad指令和Fixpipe指令细粒度的并行，使能该功能后，硬件每计算完一个分形，计算结果就会被搬出，该功能不适用于在L0C Buffer累加的场景。取值说明如下：</p>
 <p id="p1225131744220"><a name="p1225131744220"></a><a name="p1225131744220"></a>0：保留值；</p>
-<p id="p3836113514213"><a name="p3836113514213"></a><a name="p3836113514213"></a>2：开启unitFlag，硬件执行完指令之后，不会设置寄存器；</p>
-<p id="p53431612144318"><a name="p53431612144318"></a><a name="p53431612144318"></a>3：开启unitFlag，硬件执行完指令之后，会将unitFlag关闭。</p>
-<p id="p14988589213"><a name="p14988589213"></a><a name="p14988589213"></a>开启该功能时，Fixpipe指令的unitFlag设置为3即可。</p>
+<p id="p3836113514213"><a name="p3836113514213"></a><a name="p3836113514213"></a>2：使能unitFlag，硬件执行完指令之后，不会设置寄存器；</p>
+<p id="p53431612144318"><a name="p53431612144318"></a><a name="p53431612144318"></a>3：使能unitFlag，硬件执行完指令之后，会将unitFlag关闭。</p>
+<p id="p14988589213"><a name="p14988589213"></a><a name="p14988589213"></a>使能该功能时，Fixpipe指令的unitFlag设置为3即可。</p>
 </td>
 </tr>
 <tr id="row189241520171518"><td class="cellrowborder" valign="top" width="13.459999999999999%" headers="mcps1.2.4.1.1 "><p id="p1092412021519"><a name="p1092412021519"></a><a name="p1092412021519"></a>isChannelSplit</p>
 </td>
 <td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p4924920191517"><a name="p4924920191517"></a><a name="p4924920191517"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><p id="p15924020141512"><a name="p15924020141512"></a><a name="p15924020141512"></a>是否开启通道拆分的功能。默认为false，不开启该功能。仅在src和dst都为float时才能开启通道拆分，且不能同时开启ChannelSplit和NZ2ND功能。</p>
+<td class="cellrowborder" valign="top" width="76.49000000000001%" headers="mcps1.2.4.1.3 "><p id="p15924020141512"><a name="p15924020141512"></a><a name="p15924020141512"></a>是否使能通道拆分的功能。默认为false，不使能该功能。仅在src和dst都为float时才能使能通道拆分，且不能同时使能ChannelSplit和NZ2ND功能。</p>
 </td>
 </tr>
 </tbody>
@@ -394,10 +394,10 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 <td class="cellrowborder" valign="top" width="9.16%" headers="mcps1.2.4.1.2 "><p id="p1433131212219"><a name="p1433131212219"></a><a name="p1433131212219"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p18598141656"><a name="p18598141656"></a><a name="p18598141656"></a>源NZ矩阵在N方向上的大小。</p>
-<a name="ul743441210218"></a><a name="ul743441210218"></a><ul id="ul743441210218"><li>不开启NZ2ND功能<p id="p3895115235716"><a name="p3895115235716"></a><a name="p3895115235716"></a>若开启channelSplit功能，nSize必须为8的倍数，取值范围：nSize∈[1, 4095]。</p>
-<p id="p187966552579"><a name="p187966552579"></a><a name="p187966552579"></a>若不开启channelSplit功能，nSize必须为16的倍数，取值范围：nSize∈[1, 4095]。</p>
+<a name="ul743441210218"></a><a name="ul743441210218"></a><ul id="ul743441210218"><li>不使能NZ2ND功能<p id="p3895115235716"><a name="p3895115235716"></a><a name="p3895115235716"></a>若使能channelSplit功能，nSize必须为8的倍数，取值范围：nSize∈[1, 4095]。</p>
+<p id="p187966552579"><a name="p187966552579"></a><a name="p187966552579"></a>若不使能channelSplit功能，nSize必须为16的倍数，取值范围：nSize∈[1, 4095]。</p>
 </li></ul>
-<a name="ul18434111217212"></a><a name="ul18434111217212"></a><ul id="ul18434111217212"><li>开启NZ2ND功能<p id="p194346120215"><a name="p194346120215"></a><a name="p194346120215"></a>nSize取值范围 ∈[1, 4095]。</p>
+<a name="ul18434111217212"></a><a name="ul18434111217212"></a><ul id="ul18434111217212"><li>使能NZ2ND功能<p id="p194346120215"><a name="p194346120215"></a><a name="p194346120215"></a>nSize取值范围 ∈[1, 4095]。</p>
 <a name="ul1942794917104"></a><a name="ul1942794917104"></a><ul id="ul1942794917104"><li>通路CO1-&gt;UB/L1，nSize*sizeof(T)必须为32的倍数。</li></ul>
 </li></ul>
 </td>
@@ -408,7 +408,7 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 </td>
 <td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p15724163212516"><a name="p15724163212516"></a><a name="p15724163212516"></a>源NZ矩阵在M方向上的大小。</p>
 <p id="p2434512112119"><a name="p2434512112119"></a><a name="p2434512112119"></a>取值范围：mSize∈[1, 65535]。</p>
-<a name="ul1825551617180"></a><a name="ul1825551617180"></a><ul id="ul1825551617180"><li>开启NZ2DN功能，通路CO1-&gt;UB/L1，mSize*sizeof(T)必须为32的倍数</li></ul>
+<a name="ul1825551617180"></a><a name="ul1825551617180"></a><ul id="ul1825551617180"><li>使能NZ2DN功能，通路CO1-&gt;UB/L1，mSize*sizeof(T)必须为32的倍数</li></ul>
 </td>
 </tr>
 <tr id="row743491272111"><td class="cellrowborder" valign="top" width="14.19%" headers="mcps1.2.4.1.1 "><p id="p1434171214215"><a name="p1434171214215"></a><a name="p1434171214215"></a>srcStride</p>
@@ -422,9 +422,9 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 </td>
 <td class="cellrowborder" valign="top" width="9.16%" headers="mcps1.2.4.1.2 "><p id="p043411129218"><a name="p043411129218"></a><a name="p043411129218"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><a name="ul12435212192115"></a><a name="ul12435212192115"></a><ul id="ul12435212192115"><li>不开启NZ2ND功能<p id="p1943571282110"><a name="p1943571282110"></a><a name="p1943571282110"></a>目的NZ矩阵中相邻Z排布的起始地址偏移，取值不为0， 单位：element。</p>
+<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><a name="ul12435212192115"></a><a name="ul12435212192115"></a><ul id="ul12435212192115"><li>不使能NZ2ND功能<p id="p1943571282110"><a name="p1943571282110"></a><a name="p1943571282110"></a>目的NZ矩阵中相邻Z排布的起始地址偏移，取值不为0， 单位：element。</p>
 </li></ul>
-<a name="ul943541262117"></a><a name="ul943541262117"></a><ul id="ul943541262117"><li>开启NZ2ND/NZ2DN功能<p id="p10435191216219"><a name="p10435191216219"></a><a name="p10435191216219"></a>目的ND矩阵每一行中的元素个数，取值不为0 ，单位：element。</p>
+<a name="ul943541262117"></a><a name="ul943541262117"></a><ul id="ul943541262117"><li>使能NZ2ND/NZ2DN功能<p id="p10435191216219"><a name="p10435191216219"></a><a name="p10435191216219"></a>目的ND矩阵每一行中的元素个数，取值不为0 ，单位：element。</p>
 </li></ul>
 </td>
 </tr>
@@ -432,8 +432,8 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 </td>
 <td class="cellrowborder" valign="top" width="9.16%" headers="mcps1.2.4.1.2 "><p id="p4435101210213"><a name="p4435101210213"></a><a name="p4435101210213"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p174358123212"><a name="p174358123212"></a><a name="p174358123212"></a>QuantMode_t是一个枚举类型，用于控制量化模式，默认值为QuantMode_t::NoQuant，即不开启量化功能。QuantMode_t取值如下：</p>
-<a name="ul978141520339"></a><a name="ul978141520339"></a><ul id="ul978141520339"><li>NoQuant，不开启量化功能</li><li>F322F16，float cast成half，cast mode为CAST_RINT模式</li><li>F322BF16，float cast成bfloat16_t，cast mode为CAST_RINT模式</li><li>DEQF16，int32_t量化成half， scalar量化</li><li>VDEQF16，int32_t量化成half，tensor量化</li><li>QF322B8_PRE，float量化成uint8_t/int8_t，scalar量化</li><li>VQF322B8_PRE，float量化成uint8_t/int8_t，tensor量化</li><li>REQ8，int32_t量化成uint8_t/int8_t，scalar量化</li><li>VREQ8，int32_t量化成uint8_t/int8_t，tensor量化</li><li>QF322FP8_PRE，float量化成fp8_e4m3fn_t，scalar量化</li><li>VQF322FP8_PRE，float量化成fp8_e4m3fn_t，tensor量化</li><li>QF322HIF8_PRE，float量化成hifloat8_t(Half to Away Round)，scalar量化</li><li>VQF322HIF8_PRE，float量化成hifloat8_t(Half to Away Round)，tensor量化</li><li>QF322HIF8_PRE_HYBRID，float量化成hifloat8_t(Hybrid Round)，scalar量化</li><li>VQF322HIF8_PRE_HYBRID，float量化成hifloat8_t(Hybrid Round)，tensor量化</li><li>QS322BF16_PRE，int32_t量化成bfloat16_t，scalar量化</li><li>VQS322BF16_PRE，int32_t量化成bfloat16_t，tensor量化</li><li>QF322F16_PRE，float量化成half，scalar量化</li><li>VQF322F16_PRE，float量化成half，tensor量化</li><li>QF322BF16_PRE，float量化成bfloat16_t，scalar量化</li><li>VQF322BF16_PRE，float量化成bfloat16_t，tensor量化</li><li>QF322F32_PRE，float量化成float，scalar量化，该量化模式精度无法达到双万分之一，可以达到双千分之一。如果有双万分之一的精度要求，建议使用<a href="../../../高阶API/量化操作/AscendDequant.md">AscendDeQuant</a>高阶API。</li><li>VQF322F32_PRE，float量化成float，tensor量化，该量化模式精度无法达到双万分之一，可以达到双千分之一。如果有双万分之一的精度要求，建议使用<a href="../../../高阶API/量化操作/AscendDequant.md">AscendDeQuant</a>高阶API。</li></ul>
+<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p174358123212"><a name="p174358123212"></a><a name="p174358123212"></a>QuantMode_t是一个枚举类型，用于控制量化模式，默认值为QuantMode_t::NoQuant，即不使能量化功能。QuantMode_t取值如下：</p>
+<a name="ul978141520339"></a><a name="ul978141520339"></a><ul id="ul978141520339"><li>NoQuant，不使能量化功能</li><li>F322F16，float cast成half，cast mode为CAST_RINT模式</li><li>F322BF16，float cast成bfloat16_t，cast mode为CAST_RINT模式</li><li>DEQF16，int32_t量化成half， scalar量化</li><li>VDEQF16，int32_t量化成half，tensor量化</li><li>QF322B8_PRE，float量化成uint8_t/int8_t，scalar量化</li><li>VQF322B8_PRE，float量化成uint8_t/int8_t，tensor量化</li><li>REQ8，int32_t量化成uint8_t/int8_t，scalar量化</li><li>VREQ8，int32_t量化成uint8_t/int8_t，tensor量化</li><li>QF322FP8_PRE，float量化成fp8_e4m3fn_t，scalar量化</li><li>VQF322FP8_PRE，float量化成fp8_e4m3fn_t，tensor量化</li><li>QF322HIF8_PRE，float量化成hifloat8_t(Half to Away Round)，scalar量化</li><li>VQF322HIF8_PRE，float量化成hifloat8_t(Half to Away Round)，tensor量化</li><li>QF322HIF8_PRE_HYBRID，float量化成hifloat8_t(Hybrid Round)，scalar量化</li><li>VQF322HIF8_PRE_HYBRID，float量化成hifloat8_t(Hybrid Round)，tensor量化</li><li>QS322BF16_PRE，int32_t量化成bfloat16_t，scalar量化</li><li>VQS322BF16_PRE，int32_t量化成bfloat16_t，tensor量化</li><li>QF322F16_PRE，float量化成half，scalar量化</li><li>VQF322F16_PRE，float量化成half，tensor量化</li><li>QF322BF16_PRE，float量化成bfloat16_t，scalar量化</li><li>VQF322BF16_PRE，float量化成bfloat16_t，tensor量化</li><li>QF322F32_PRE，float量化成float，scalar量化，该量化模式精度无法达到双万分之一，可以达到双千分之一。如果有双万分之一的精度要求，建议使用<a href="../../../高阶API/量化操作/AscendDequant.md">AscendDeQuant</a>高阶API。</li><li>VQF322F32_PRE，float量化成float，tensor量化，该量化模式精度无法达到双万分之一，可以达到双千分之一。如果有双万分之一的精度要求，建议使用<a href="../../../高阶API/量化操作/AscendDequant.md">AscendDeQuant</a>高阶API。</li></ul>
 </td>
 </tr>
 <tr id="row0497111218213"><td class="cellrowborder" valign="top" width="14.19%" headers="mcps1.2.4.1.1 "><p id="p849721252112"><a name="p849721252112"></a><a name="p849721252112"></a>deqScalar</p>
@@ -447,18 +447,18 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 </td>
 <td class="cellrowborder" valign="top" width="9.16%" headers="mcps1.2.4.1.2 "><p id="p208401416391"><a name="p208401416391"></a><a name="p208401416391"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p3840121610920"><a name="p3840121610920"></a><a name="p3840121610920"></a>是否开启relu的开关，false：不开启relu功能；true：开启relu功能。</p>
+<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p3840121610920"><a name="p3840121610920"></a><a name="p3840121610920"></a>是否使能relu的开关，false：不使能relu功能；true：使能relu功能。</p>
 </td>
 </tr>
 <tr id="row167211423478"><td class="cellrowborder" valign="top" width="14.19%" headers="mcps1.2.4.1.1 "><p id="p1553065184715"><a name="p1553065184715"></a><a name="p1553065184715"></a>unitFlag</p>
 </td>
 <td class="cellrowborder" valign="top" width="9.16%" headers="mcps1.2.4.1.2 "><p id="p45307515476"><a name="p45307515476"></a><a name="p45307515476"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p8530857474"><a name="p8530857474"></a><a name="p8530857474"></a>unitFlag是一种Mmad指令和Fixpipe指令细粒度的并行，开启该功能后，硬件每计算完一个分形，计算结果就会被搬出，该功能不适用于在L0C Buffer累加的场景。取值说明如下：</p>
+<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p8530857474"><a name="p8530857474"></a><a name="p8530857474"></a>unitFlag是一种Mmad指令和Fixpipe指令细粒度的并行，使能该功能后，硬件每计算完一个分形，计算结果就会被搬出，该功能不适用于在L0C Buffer累加的场景。取值说明如下：</p>
 <p id="p132227570444"><a name="p132227570444"></a><a name="p132227570444"></a>0：保留值；</p>
-<p id="p2222135704413"><a name="p2222135704413"></a><a name="p2222135704413"></a>2：开启unitFlag，硬件执行完指令之后，不会设置寄存器；</p>
-<p id="p4222145784415"><a name="p4222145784415"></a><a name="p4222145784415"></a>3：开启unitFlag，硬件执行完指令之后，会将unitFlag关闭。</p>
-<p id="p4222657114418"><a name="p4222657114418"></a><a name="p4222657114418"></a>开启该功能时，Fixpipe指令的unitFlag设置为3即可。</p>
+<p id="p2222135704413"><a name="p2222135704413"></a><a name="p2222135704413"></a>2：使能unitFlag，硬件执行完指令之后，不会设置寄存器；</p>
+<p id="p4222145784415"><a name="p4222145784415"></a><a name="p4222145784415"></a>3：使能unitFlag，硬件执行完指令之后，会将unitFlag关闭。</p>
+<p id="p4222657114418"><a name="p4222657114418"></a><a name="p4222657114418"></a>使能该功能时，Fixpipe指令的unitFlag设置为3即可。</p>
 </td>
 </tr>
 <tr id="row6563440185617"><td class="cellrowborder" valign="top" width="14.19%" headers="mcps1.2.4.1.1 "><p id="p356384012560"><a name="p356384012560"></a><a name="p356384012560"></a>params</p>
@@ -532,13 +532,13 @@ struct TransformParams&lt;CO2Layout::COLUMN_MAJOR&gt; {
 </td>
 <td class="cellrowborder" valign="top" width="9.16%" headers="mcps1.2.4.1.2 "><p id="p149894921418"><a name="p149894921418"></a><a name="p149894921418"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p129892914147"><a name="p129892914147"></a><a name="p129892914147"></a>是否开启通道拆分的功能。默认为false，不开启该功能。仅在src和dst都为float时才能开启通道拆分，且不能同时开启ChannelSplit和NZ2ND功能。</p>
+<td class="cellrowborder" valign="top" width="76.64999999999999%" headers="mcps1.2.4.1.3 "><p id="p129892914147"><a name="p129892914147"></a><a name="p129892914147"></a>是否使能通道拆分的功能。默认为false，不使能该功能。仅在src和dst都为float时才能使能通道拆分，且不能同时使能ChannelSplit和NZ2ND功能。</p>
 </td>
 </tr>
 </tbody>
 </table>
 
-不开启NZ2ND的情况下，参数设置示例（通过Fixpipe接口搬运并去除dummy数据）和解释说明如下：
+不使能NZ2ND的情况下，参数设置示例（通过Fixpipe接口搬运并去除dummy数据）和解释说明如下：
 
 当M方向上的数据元素个数不是16的倍数时，搬入时会额外读取dummy数据，并在写入目标位置后丢弃这些dummy数据。矩阵块被定义为连续的16\*16的数据块，数据块的个数为M/16向上取整， 矩阵块的长度为M\*16\*sizeof\(T\)，T是数据类型。
 
@@ -549,8 +549,8 @@ struct TransformParams&lt;CO2Layout::COLUMN_MAJOR&gt; {
 -   srcStride = 64，表示源NZ矩阵中待搬运矩阵相邻Z排布的起始地址偏移，即下图中第一个蓝色Z排布的起始地址与第二个蓝色Z排布的起始地址之间的间隔为64 \* C0\_Size。
 -   dstStride = 40 \* C0，表示目的NZ矩阵中相邻Z排布的起始地址偏移，即下图中第一个蓝色Z排布的起始地址与第二个蓝色Z排布的起始地址之间的间隔为40 \* 16个元素。
 
-**图 1**  不开启NZ2ND参数的单搬运模式设置示意图、<a name="fig128961542184620"></a>  
-![](../../../../figures/不开启NZ2ND参数的单搬运模式设置示意图.png "不开启NZ2ND参数的单搬运模式设置示意图")
+**图 1**  不使能NZ2ND参数的单搬运模式设置示意图、<a name="fig128961542184620"></a>  
+![](../../../../figures/不使能NZ2ND参数的单搬运模式设置示意图.png "不使能NZ2ND参数的单搬运模式设置示意图")
 
 双目标控制模式：
 
@@ -570,10 +570,10 @@ M方向切分：
 -   srcStride = 64，表示源NZ矩阵中待搬运矩阵相邻Z排布的起始地址偏移，即下图中第一个块Z排布矩阵的起始地址与第二个Z排布矩阵的起始地址之间的间隔为64 \* C0\_Size。
 -   dstStride = 40 \* C0，表示目的NZ矩阵中相邻Z排布的起始地址偏移，即下图中UB0（或UB1）中第一个Z排布的起始地址与第二个Z排布的起始地址之间的间隔为40 \*  16个元素。
 
-**图 2**  不开启NZ2ND参数和NZ2DN参数的双目标搬运模式设置示意图<a name="fig6561154491913"></a>  
-![](../../../../figures/不开启NZ2ND参数和NZ2DN参数的双目标搬运模式设置示意图.png "不开启NZ2ND参数和NZ2DN参数的双目标搬运模式设置示意图")
+**图 2**  不使能NZ2ND参数和NZ2DN参数的双目标搬运模式设置示意图<a name="fig6561154491913"></a>  
+![](../../../../figures/不使能NZ2ND参数和NZ2DN参数的双目标搬运模式设置示意图.png "不使能NZ2ND参数和NZ2DN参数的双目标搬运模式设置示意图")
 
-开启NZ2ND的情况下，参数设置示例和解释说明如下：
+使能NZ2ND的情况下，参数设置示例和解释说明如下：
 
 -   ndNum = 2，表示源NZ矩阵的数目为2。图中蓝色区域为NZ矩阵1，紫色区域为NZ矩阵2。
 
@@ -584,8 +584,8 @@ M方向切分：
 -   srcNdStride = 16,  表示不同NZ矩阵起始地址之间的间隔为16 \*  16 \* C0\_Size。
 -   dstNdStride  = 4096，表示目的相邻ND矩阵起始地址之间的偏移为4096个元素。
 
-**图 3**  开启NZ2ND参数设置示意图<a name="fig79783143556"></a>  
-![](../../../../figures/开启NZ2ND参数设置示意图.png "开启NZ2ND参数设置示意图")
+**图 3**  使能NZ2ND参数设置示意图<a name="fig79783143556"></a>  
+![](../../../../figures/使能NZ2ND参数设置示意图.png "使能NZ2ND参数设置示意图")
 
 单搬入模式
 
@@ -598,8 +598,8 @@ M方向切分：
 -   srcNdStride = 256,  表示不同NZ矩阵起始地址之间的间隔为256，单位为C0\_Size。
 -   dstNdStride  = 4096，表示目的相邻ND矩阵起始地址之间的偏移为4096个元素。
 
-**图 4**  开启NZ2ND参数的单搬入模式设置示意图<a name="fig11991024112516"></a>  
-![](../../../../figures/开启NZ2ND参数的单搬入模式设置示意图.png "开启NZ2ND参数的单搬入模式设置示意图")
+**图 4**  使能NZ2ND参数的单搬入模式设置示意图<a name="fig11991024112516"></a>  
+![](../../../../figures/使能NZ2ND参数的单搬入模式设置示意图.png "使能NZ2ND参数的单搬入模式设置示意图")
 
 双搬入模式
 
@@ -613,10 +613,10 @@ M方向切分：
 -   srcNdStride = 240 ,  表示不同NZ矩阵起始地址之间的间隔为240 \* C0\_Size。
 -   dstNdStride  = 4096，表示目的相邻ND矩阵起始地址之间的偏移为4096个元素。
 
-    **图 5**  开启NZ2ND参数双搬入模式设置示意图<a name="fig8810182815117"></a>  
-    ![](../../../../figures/开启NZ2ND参数双搬入模式设置示意图.png "开启NZ2ND参数双搬入模式设置示意图")
+    **图 5**  使能NZ2ND参数双搬入模式设置示意图<a name="fig8810182815117"></a>  
+    ![](../../../../figures/使能NZ2ND参数双搬入模式设置示意图.png "使能NZ2ND参数双搬入模式设置示意图")
 
-开启NZ2DN的情况下，参数设置示例和解释说明如下：
+使能NZ2DN的情况下，参数设置示例和解释说明如下：
 
 单搬运模式：
 
@@ -631,8 +631,8 @@ M方向切分：
 -   srcNzC0Stride = 1：表示源矩阵NZ分形相邻行的地址偏移，。
 -   dstDnMatrixStride：表示相邻DN矩阵起始地址间的偏移为48 \* 80 =3840个元素。
 
-**图 6**  开启NZ2DN单搬运模式示意图1<a name="fig19772110476"></a>  
-![](../../../../figures/开启NZ2DN单搬运模式示意图1.png "开启NZ2DN单搬运模式示意图1")
+**图 6**  使能NZ2DN单搬运模式示意图1<a name="fig19772110476"></a>  
+![](../../../../figures/使能NZ2DN单搬运模式示意图1.png "使能NZ2DN单搬运模式示意图1")
 
 单搬运模式：
 
@@ -647,8 +647,8 @@ M方向切分：
 -   srcNzC0Stride = 2：表示源矩阵NZ分形相邻行的地址偏移。
 -   dstDnMatrixStride：表示相邻DN矩阵起始地址间的偏移为48 \* 60 = 2880个元素。
 
-**图 7**  开启NZ2DN单搬运模式示意图2<a name="fig769114585716"></a>  
-![](../../../../figures/开启NZ2DN单搬运模式示意图2.png "开启NZ2DN单搬运模式示意图2")
+**图 7**  使能NZ2DN单搬运模式示意图2<a name="fig769114585716"></a>  
+![](../../../../figures/使能NZ2DN单搬运模式示意图2.png "使能NZ2DN单搬运模式示意图2")
 
 ## 约束说明<a name="section205941531307"></a>
 
@@ -659,7 +659,7 @@ M方向切分：
 
 ## 调用示例<a name="section93513321362"></a>
 
--   示例一：通路CO1-\>GM。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为float，默认配置开启Nz2Nd的格式转换。完整样例可以参考[样例链接](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/fixpipe_l0c2gm)。
+-   示例一：通路CO1-\>GM。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为float，默认配置使能Nz2Nd的格式转换。完整样例可以参考[样例链接](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/fixpipe_l0c2gm)。
 
     ```
         AscendC::GlobalTensor<outputType> cGM;
@@ -680,7 +680,7 @@ M方向切分：
         AscendC::Fixpipe<outputType, l0cType, AscendC::CFG_ROW_MAJOR>(cGM, c, fixpipeParams);
     ```
 
--   示例二：通路CO1-\>C1。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为int8\_t，不开启Nz2Nd的格式转换，开启Scalar量化。完整样例可以参考[样例链接](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/fixpipe_l0c2l1)。
+-   示例二：通路CO1-\>C1。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为int8\_t，不使能Nz2Nd的格式转换，使能Scalar量化。完整样例可以参考[样例链接](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/fixpipe_l0c2l1)。
 
     ```
         AscendC::LocalTensor<outputType> c1Local(AscendC::TPosition::C1, c1Addr, cSizeAlignL1);
@@ -725,7 +725,7 @@ M方向切分：
     #endif
     ```
 
--   示例三：通路CO1-\>UB。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为float，默认配置开启Nz2Nd的格式转换。完整样例可以参考[样例链接](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/fixpipe_l0c2ub)。
+-   示例三：通路CO1-\>UB。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为float，默认配置使能Nz2Nd的格式转换。完整样例可以参考[样例链接](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/fixpipe_l0c2ub)。
 
     ```
     AscendC::LocalTensor<outputType> cUB;

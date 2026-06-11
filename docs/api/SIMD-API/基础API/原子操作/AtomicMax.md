@@ -116,7 +116,7 @@ GM地址上做原子操作前的数据。
 
 ## 调用示例<a name="section177231425115410"></a>
 
-更多样例请参见[ScalarAtomicOperations样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/08_atomic_operations/scalar_atomic_operations)。
+更多样例请参见[ScalarAtomicOperations样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/06_atomic/scalar_atomic_operations)。
 
 ```
 // 传入全局数据地址，初始化dstGlobal与dstLocal

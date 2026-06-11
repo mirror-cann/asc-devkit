@@ -93,7 +93,7 @@ Trunc\(-3.9\) = -3
 
 ## 调用示例
 
-完整的调用样例可参考[算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/12_math/ceil)。
+完整的调用样例可参考[算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/10_math/ceil)。
 
 ```
 // dstLocal: 存放计算结果的Tensor

@@ -135,4 +135,4 @@ AscendC::DataCopy(dstGlobal, srcLocal, SIZE);
 AscendC::DisableDmaAtomic();
 ```
 
-完整样例请参考[DataMovementWithAtomicOperations样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/03_basic_api/08_atomic_operations/data_movement_with_atomic_operations/data_movement_with_atomic_operations.asc)。
+完整样例请参考[DataMovementWithAtomicOperations样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/01_basic_api/06_atomic/data_movement_with_atomic_operations/data_movement_with_atomic_operations.asc)。

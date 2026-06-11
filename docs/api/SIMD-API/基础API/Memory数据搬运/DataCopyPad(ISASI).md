@@ -500,7 +500,7 @@
 
 ## 调用示例<a name="section177231425115410"></a>
 
-本示例实现了GM-\>VECIN-\>GM的非对齐搬运过程，完整使用样例请参见[DataCopyPad样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/00_data_movement/data_copy_pad_gm2ub_ub2gm)。
+本示例实现了GM-\>VECIN-\>GM的非对齐搬运过程，完整使用样例请参见[DataCopyPad样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/00_data_movement/data_copy_pad_gm2ub_ub2gm)。
 
 ```
 AscendC::DataCopyExtParams copyParams{1, 20 * sizeof(half), 0, 0, 0}; 

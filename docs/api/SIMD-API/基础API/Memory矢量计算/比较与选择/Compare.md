@@ -277,7 +277,7 @@
 
 本样例中，源操作数src0和src1各存储了256个float类型的数据。样例实现的功能为，逐元素对src0和src1中的数据进行比较，如果src0中的元素小于src1中的元素，dst结果中对应的比特位置1；反之，则置0。dst结果使用uint8\_t类型数据存储。
 
-完整的调用样例可参考[Compare类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/02_memory_vector_compute/compare)场景一。
+完整的调用样例可参考[Compare类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/01_memory_vector_compute/compare)场景一。
 
 - 整个tensor参与计算
 

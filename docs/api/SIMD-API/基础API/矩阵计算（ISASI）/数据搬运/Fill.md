@@ -192,7 +192,7 @@ __aicore__ inline void Fill(const LocalTensor<T>& dst, const InitConstValueParam
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-完整使用样例请参见[基础API Fill样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/03_libraries/08_tensor_transformation/fill)。
+完整使用样例请参见[基础API Fill样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/03_libraries/08_transpose/fill)。
 
 ```
 uint32 mLength = 16;

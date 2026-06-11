@@ -93,7 +93,7 @@ aclnnStatus aclnnXxxTensorGetWorkspaceSize(const aclTensor *x0, const aclTensor 
 
 ## 准备验证代码工程<a name="zh-cn_topic_0000001541959061_section2021523012501"></a>
 
-代码工程目录结构如下，您可以单击[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_invocation/aclnn_invocation)，获取样例工程的完整样例：
+代码工程目录结构如下，您可以单击[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/99_aclnn_op/01_aclnn_invocation/aclnn_invocation)，获取样例工程的完整样例：
 
 ```
 ├── CMakeLists.txt    // 编译规则文件
