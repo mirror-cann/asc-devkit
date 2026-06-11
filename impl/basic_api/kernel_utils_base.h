@@ -101,7 +101,6 @@ public:
         #else
             InitSplitArchSpr();
         #endif
-        set_st_atomic_cfg(0b00100100);
     #elif __NPU_ARCH__ == 3002
         set_padding(static_cast<uint64_t>(0));
     #endif
