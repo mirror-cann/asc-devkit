@@ -23,7 +23,6 @@
 
 #include "impl/utils/sys_macros.h"
 #include "simt_api/device_types.h"
-#include "kernel_macros.h"
 
 #ifndef __CHECK_FEATURE_AT_PRECOMPILE
 #ifndef ASCENDC_SIMD_VF_DEBUG
