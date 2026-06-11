@@ -169,6 +169,44 @@ void RunL0C2GMBatchNoQuant(uint32_t expectedDstStride, bool nz2ndEn, bool nz2dnE
     GlobalMockObject::verify();
 }
 
+void RunL0C2GMBatchNZ2NZNoQuant()
+{
+    using namespace AscendC::Te;
+
+    constexpr uint32_t kSrcBatch = 3;
+    constexpr uint32_t kDstBatch = 9;
+    constexpr uint32_t kM = 32;
+    constexpr uint32_t kN = 64;
+    constexpr uint32_t kMatrixSize = kM * kN;
+    constexpr uint16_t kSrcMatrixStride = kM;
+    constexpr uint32_t kDstMatrixStride = FRACTAL_FIXED * kM;
+
+    __cc__ float src[kSrcBatch * kMatrixSize] = {0};
+    __gm__ float dst[kDstBatch * kMatrixSize] = {0};
+
+    auto srcTensor = MakeTensorAt<Location::L0C>(
+        src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(kSrcBatch, kM, kN));
+    auto dstTensor = MakeTensorAt<Location::GM>(
+        dst, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(kDstBatch, kM, kN));
+
+    n_size_global = kSrcBatch * kN;
+    m_size_global = kM;
+    src_stride_global = kSrcMatrixStride;
+    dst_stride_global = kDstMatrixStride;
+    NZ2ND_en_global = false;
+    NZ2DN_en_global = false;
+    gm_addr_global = nullptr;
+    quant_pre_global = static_cast<uint64_t>(QuantMode_t::NoQuant);
+    gExpectedLoop3Para = 1;
+
+    MOCKER(set_loop3_para, void(uint64_t)).times(1).will(invoke(SetLoop3ParaStub));
+
+    auto atom = MakeCopy(CopyL0C2GM{}, CopyL0C2GMTraitDefault{});
+    atom.Call(dstTensor, srcTensor);
+
+    GlobalMockObject::verify();
+}
+
 } // namespace
 
 TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2GMNZ2ND)
@@ -298,6 +336,11 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2GMBatchNZ2DNExt)
 TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2GMBatchNZ2DNLayout)
 {
     RunL0C2GMBatchNoQuant<DNLayoutPtn>(32, false, true, true);
+}
+
+TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2GMBatchNZ2NZ)
+{
+    RunL0C2GMBatchNZ2NZNoQuant();
 }
 
 

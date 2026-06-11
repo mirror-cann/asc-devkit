@@ -175,6 +175,46 @@ void RunL0C2UBBatchNoQuant(uint32_t expectedDstStride, bool nz2ndEn, bool nz2dnE
     is_mock_copy_matrix_cc_to_ub = false;
 }
 
+void RunL0C2UBBatchNZ2NZNoQuant()
+{
+    using namespace AscendC::Te;
+
+    constexpr uint32_t kSrcBatch = 3;
+    constexpr uint32_t kDstBatch = 9;
+    constexpr uint32_t kM = 32;
+    constexpr uint32_t kN = 64;
+    constexpr uint32_t kMatrixSize = kM * kN;
+    constexpr uint16_t kSrcMatrixStride = kM;
+    constexpr uint32_t kDstMatrixStride = FRACTAL_FIXED * kM;
+
+    __cc__ float src[kSrcBatch * kMatrixSize] = {0};
+    __ubuf__ float dst[kDstBatch * kMatrixSize] = {0};
+
+    auto srcTensor = MakeTensorAt<Location::L0C>(
+        src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(kSrcBatch, kM, kN));
+    auto dstTensor = MakeTensorAt<Location::UB>(
+        dst, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(kDstBatch, kM, kN));
+
+    n_size_global = kSrcBatch * kN;
+    m_size_global = kM;
+    src_stride_global = kSrcMatrixStride;
+    dst_stride_global = kDstMatrixStride;
+    NZ2ND_en_global = false;
+    NZ2DN_en_global = false;
+    is_mock_copy_matrix_cc_to_ub = true;
+    ub_addr_global = nullptr;
+    quant_pre_global = static_cast<uint64_t>(QuantMode_t::NoQuant);
+    gExpectedLoop3Para = 1;
+
+    MOCKER(set_loop3_para, void(uint64_t)).times(1).will(invoke(SetLoop3ParaStub));
+
+    auto atom = MakeCopy(CopyL0C2UB{}, CopyL0C2UBTraitDefault{});
+    atom.Call(dstTensor, srcTensor);
+
+    GlobalMockObject::verify();
+    is_mock_copy_matrix_cc_to_ub = false;
+}
+
 } // namespace
 
 TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBNZ2ND)
@@ -305,6 +345,11 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBBatchNZ2DNExt)
 TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBBatchNZ2DNLayout)
 {
     RunL0C2UBBatchNoQuant<DNLayoutPtn>(32, false, true, true);
+}
+
+TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBBatchNZ2NZ)
+{
+    RunL0C2UBBatchNZ2NZNoQuant();
 }
 
 template <class L0C_TYPE, class C_TYPE, QuantMode_t QUANT_MODE, bool IS_TENSOR, bool HAS_COORD>

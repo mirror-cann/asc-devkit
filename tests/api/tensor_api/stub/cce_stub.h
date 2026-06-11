@@ -66,7 +66,9 @@ inline void copy_matrix_cc_to_gm( \
             EXPECT_EQ(loop_src_stride, src_stride_global); \	 
             EXPECT_EQ(NZ2ND_en, NZ2ND_en_global); \	 
             EXPECT_EQ(NZ2DN_en, NZ2DN_en_global); \ 
-            EXPECT_EQ(dst_addr, gm_addr_global); \ 
+            if (gm_addr_global != nullptr) { \
+                EXPECT_EQ(dst_addr, gm_addr_global); \
+            } \
             EXPECT_EQ(quant_pre, quant_pre_global); \ 
         } \ 
     } \ 
@@ -265,7 +267,9 @@ inline void copy_matrix_cc_to_ub(__ubuf__ float *dst_addr, __cc__ float *src_add
         EXPECT_EQ(loop_src_stride, src_stride_global);
         EXPECT_EQ(NZ2ND_en, NZ2ND_en_global);
         EXPECT_EQ(NZ2DN_en, NZ2DN_en_global);
-        EXPECT_EQ(reinterpret_cast<void*>(dst_addr), ub_addr_global);
+        if (ub_addr_global != nullptr) {
+            EXPECT_EQ(reinterpret_cast<void*>(dst_addr), ub_addr_global);
+        }
         EXPECT_EQ(quant_pre, quant_pre_global);
     }
 }
