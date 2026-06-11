@@ -59,34 +59,23 @@
 
 ## 功能说明<a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_section259105813316"></a>
 
+头文件路径为：`"tools/cpudebug/include/stub_def.h"`。
+
 进行核函数的CPU侧运行验证时，用于释放通过[GmAlloc](GmAlloc.md)申请的共享内存。
 
 ## 函数原型<a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_section2067518173415"></a>
 
-```
+```cpp
 void GmFree(void *ptr)
 ```
 
 ## 参数说明<a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_section158061867342"></a>
 
-<a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_table33761356"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="16.49%" id="mcps1.1.4.1.1"><p id="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_p20917673"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="11.93%" id="mcps1.1.4.1.2"><p id="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_p16609919"><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_p16609919"></a><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_p16609919"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="71.58%" id="mcps1.1.4.1.3"><p id="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_zh-cn_topic_0235751031_p59995477"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_row42461942101815"><td class="cellrowborder" valign="top" width="16.49%" headers="mcps1.1.4.1.1 "><p id="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_p284425844311"><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_p284425844311"></a><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_p284425844311"></a>ptr</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.93%" headers="mcps1.1.4.1.2 "><p id="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_p158449584436"><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_p158449584436"></a><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_p158449584436"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.58%" headers="mcps1.1.4.1.3 "><p id="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_p297233812230"><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_p297233812230"></a><a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_p297233812230"></a>需要释放的共享内存的指针。</p>
-</td>
-</tr>
-</tbody>
-</table>
+**表 1**  参数说明
+
+| 参数名称 | 输入/输出 | 描述 |
+| ------ | ------ | ------ |
+| ptr | 输入 | 需要释放的共享内存的指针。|
 
 ## 返回值说明<a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_section640mcpsimp"></a>
 
@@ -94,11 +83,11 @@ void GmFree(void *ptr)
 
 ## 约束说明<a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_section794123819592"></a>
 
-传入的指针必须是之前通过GmAlloc申请过的共享内存的指针。
+- 为了保留接口兼容，推荐[<<<>>>](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/调试调优/功能调试/CPU域孪生调试.md)编译使用。
+- 传入的指针必须是之前通过GmAlloc申请过的共享内存的指针。
 
 ## 调用示例<a name="zh-cn_topic_0000002000199397_zh-cn_topic_0000001592243993_section82241477610"></a>
 
-```
+```cpp
 AscendC::GmFree((void*)x);
 ```
-

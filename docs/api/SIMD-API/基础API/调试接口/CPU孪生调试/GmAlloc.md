@@ -59,34 +59,23 @@
 
 ## 功能说明<a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_section259105813316"></a>
 
+头文件路径为：`"tools/cpudebug/include/stub_def.h"`。
+
 进行核函数的CPU侧运行验证时，用于创建共享内存：在/tmp目录下创建一个共享文件，并返回该文件的映射指针。
 
 ## 函数原型<a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_section2067518173415"></a>
 
-```
+```cpp
 void *GmAlloc(size_t size)
 ```
 
 ## 参数说明<a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_section158061867342"></a>
 
-<a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_table33761356"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="16.49%" id="mcps1.1.4.1.1"><p id="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_p20917673"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="11.93%" id="mcps1.1.4.1.2"><p id="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_p16609919"><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_p16609919"></a><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_p16609919"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="71.58%" id="mcps1.1.4.1.3"><p id="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_zh-cn_topic_0235751031_p59995477"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_row42461942101815"><td class="cellrowborder" valign="top" width="16.49%" headers="mcps1.1.4.1.1 "><p id="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_p284425844311"><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_p284425844311"></a><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_p284425844311"></a>size</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.93%" headers="mcps1.1.4.1.2 "><p id="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_p158449584436"><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_p158449584436"></a><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_p158449584436"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.58%" headers="mcps1.1.4.1.3 "><p id="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_p297233812230"><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_p297233812230"></a><a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_p297233812230"></a>用户想要申请的共享内存大小</p>
-</td>
-</tr>
-</tbody>
-</table>
+**表 1**  参数说明
+
+| 参数名称 | 输入/输出 | 描述 |
+| ------ | ------ | ------ |
+| size | 输入 | 用户想要申请的共享内存大小。|
 
 ## 返回值说明<a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_section640mcpsimp"></a>
 
@@ -94,14 +83,15 @@ void *GmAlloc(size_t size)
 
 ## 约束说明<a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_section794123819592"></a>
 
-该接口在系统的/tmp目录下生成临时文件，故需要磁盘空间足够才可以正常生成共享内存。
+- 为了保留接口兼容，推荐[<<<>>>](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/调试调优/功能调试/CPU域孪生调试.md)编译使用。
+- 该接口在系统的/tmp目录下生成临时文件，故需要磁盘空间足够才可以正常生成共享内存。
+- 必须配合[GmFree](GmFree.md)进行释放。
 
 ## 调用示例<a name="zh-cn_topic_0000001963639306_zh-cn_topic_0000001541764188_section82241477610"></a>
 
-```
-uint32_t numBlocks = 8;    // 总核数
-uint32_t blockLength = 2048;    // 每个核分配的内存大小
-size_t len = numBlocks * blockLength * sizeof(uint16_t);    // 共享内存大小
+```cpp
+uint32_t numBlocks = 8;    // 总核数。
+uint32_t blockLength = 2048;    // 每个核分配的内存大小。
+size_t len = numBlocks * blockLength * sizeof(uint16_t);    // 共享内存大小。
 uint8_t* x = (uint8_t*)AscendC::GmAlloc(len);
 ```
-

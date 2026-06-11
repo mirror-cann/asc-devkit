@@ -666,6 +666,7 @@
                 -   [MetricsProfStart](SIMD-API/基础API/调试接口/性能统计/MetricsProfStart.md)
                 -   [MetricsProfStop](SIMD-API/基础API/调试接口/性能统计/MetricsProfStop.md)
                 -   [MarkStamp](SIMD-API/基础API/调试接口/性能统计/MarkStamp.md)
+            -   [关闭ASCENDC_DUMP说明](SIMD-API/基础API/调试接口/关闭ASCENDC_DUMP说明.md)
 
         -   [工具接口](SIMD-API/基础API/工具接口/工具接口.md)
             -   [执行模式](SIMD-API/基础API/工具接口/执行模式/执行模式.md)

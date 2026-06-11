@@ -59,11 +59,13 @@
 
 ## 功能说明<a name="section259105813316"></a>
 
+头文件路径为：`"basic_api/kernel_operator_sys_var_intf.h"`。
+
 在Kernel侧调用，NPU模式下会中断AI Core的运行，CPU模式下等同于assert。可用于Kernel侧异常场景的调试。
 
 ## 函数原型<a name="section2067518173415"></a>
 
-```
+```cpp
 __aicore__ inline void Trap()
 ```
 
@@ -81,12 +83,12 @@ __aicore__ inline void Trap()
 
 ## 调用示例<a name="section82241477610"></a>
 
-```
+```cpp
 AscendC::LocalTensor<half> src0Local;
 AscendC::LocalTensor<half> src1Local;
 AscendC::LocalTensor<half> dstLocal;
-constexpr int32_t count = 512;    // 参与计算的元素个数
-if (src1Local[0] == 0) {    // 如果除数为0，则报异常
+constexpr int32_t count = 512;    // 参与计算的元素个数。
+if (src1Local[0] == 0) {    // 如果src1Local[0]为0，则程序终止。
     AscendC::Trap();
 } else {
     AscendC::Divs(dstLocal, src0Local, src1Local[0], count);

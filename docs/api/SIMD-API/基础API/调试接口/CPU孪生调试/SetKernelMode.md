@@ -59,39 +59,20 @@
 
 ## 功能说明<a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_section259105813316"></a>
 
+头文件路径为：`"tools/cpudebug/include/stub_def.h"`。
+
 针对分离模式，CPU调测时，设置内核模式为单AIV模式，单AIC模式或者MIX模式，以分别支持单AIV矢量算子，单AIC矩阵算子，MIX混合算子的CPU调试。不调用该接口的情况下，默认为MIX模式。为保证算子代码在多个硬件平台兼容，耦合模式下也可以调用，该场景下接口不会生效，不影响正常调试。
 
 ## 函数原型<a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_section2067518173415"></a>
 
-```
+```cpp
 void SetKernelMode(KernelMode mode)
 ```
 
 ## 参数说明<a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_section158061867342"></a>
-
-<a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_table33761356"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="16.49%" id="mcps1.1.4.1.1"><p id="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_p20917673"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="11.93%" id="mcps1.1.4.1.2"><p id="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_p16609919"><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_p16609919"></a><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_p16609919"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="71.58%" id="mcps1.1.4.1.3"><p id="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_zh-cn_topic_0235751031_p59995477"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_row42461942101815"><td class="cellrowborder" valign="top" width="16.49%" headers="mcps1.1.4.1.1 "><p id="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_p45208478318"><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_p45208478318"></a><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_p45208478318"></a>mode</p>
-</td>
-<td class="cellrowborder" valign="top" width="11.93%" headers="mcps1.1.4.1.2 "><p id="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_p135196472314"><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_p135196472314"></a><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_p135196472314"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.58%" headers="mcps1.1.4.1.3 "><p id="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_p11518154714314"><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_p11518154714314"></a><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_p11518154714314"></a>内核模式，针对AIC，AIV，MIX算子的CPU调试，参数取值分别为AIC_MODE，AIV_MODE，MIX_MODE。</p>
-<a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_screen15712112124613"></a><a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_screen15712112124613"></a><pre class="screen" codetype="Cpp" id="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_screen15712112124613">enum class KernelMode {
-    MIX_MODE = 0,
-    AIC_MODE,
-    AIV_MODE
-};</pre>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名称 | 输入/输出 | 描述 |
+| ------ | ------ | ------ |
+| mode | 输入 | 内核模式，用于 AIC/AIV/MIX 算子的 CPU 调试。<br><pre>enum class KernelMode {&#10;    MIX_MODE = 0,&#10;    AIC_MODE,&#10;    AIV_MODE&#10;};</pre> |
 
 ## 返回值说明<a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_section640mcpsimp"></a>
 
@@ -99,14 +80,14 @@ void SetKernelMode(KernelMode mode)
 
 ## 调用示例<a name="zh-cn_topic_0000001963639310_zh-cn_topic_0000001656094169_section82241477610"></a>
 
-```
+```cpp
 int32_t main(int32_t argc, char* argv[])
 {
     ...
 #ifdef ASCENDC_CPU_DEBUG
     ...
     AscendC::SetKernelMode(KernelMode::AIV_MODE);
-    ICPU_RUN_KF(add_custom, numBlocks, x, y, z); // use this macro for cpu debug
+    ICPU_RUN_KF(add_custom, numBlocks, x, y, z);
     ...
     AscendC::GmFree((void *)x);
     AscendC::GmFree((void *)y);
@@ -117,4 +98,3 @@ int32_t main(int32_t argc, char* argv[])
     return 0;
 }
 ```
-

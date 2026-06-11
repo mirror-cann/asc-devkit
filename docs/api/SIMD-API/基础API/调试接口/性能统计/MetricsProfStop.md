@@ -49,13 +49,15 @@
 
 ## 功能说明<a name="zh-cn_topic_0000002000280001_zh-cn_topic_0000001960477980_section259105813316"></a>
 
-推荐使用[asc\_prof\_stop](../../../../Utils-API/调测接口/asc_prof_stop.md)接口进行性能数据采集信号停止的设置，该接口同时适用于C语言和C++语言编程。
+头文件路径为：`"basic_api/kernel_prof_trace_intf.h"`。
 
-设置性能数据采集信号停止，和MetricsProfStart配合使用。使用工具进行算子上板调优时，可在kernel侧代码段前后分别调用MetricsProfStart和MetricsProfStop来指定需要调优的代码段范围。
+推荐使用[asc_prof_stop](../../../../Utils-API/调测接口/asc_prof_stop.md)接口进行性能数据采集信号启动的设置，该接口同时适用于C语言和C++语言编程。
+
+设置性能数据采集信号停止，和[MetricsProfStart](MetricsProfStart.md)配合使用。使用msProf工具进行算子上板调优时，可在kernel侧代码段前后分别调用MetricsProfStart和MetricsProfStop来指定需要调优的代码段范围。
 
 ## 函数原型<a name="zh-cn_topic_0000002000280001_zh-cn_topic_0000001960477980_section2067518173415"></a>
 
-```
+```cpp
 __aicore__ inline void MetricsProfStop()
 ```
 
@@ -73,7 +75,8 @@ __aicore__ inline void MetricsProfStop()
 
 ## 调用示例<a name="zh-cn_topic_0000002000280001_zh-cn_topic_0000001960477980_section82241477610"></a>
 
-```
+```cpp
+MetricsProfStart();
+... // 需要调优的kernel侧代码段。
 MetricsProfStop();
 ```
-
