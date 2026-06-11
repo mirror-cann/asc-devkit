@@ -31,6 +31,7 @@ class LoadDataL12L0AZN2NZB8B4 {
 public:
     template <const CopyL12L0ATrait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src) {
+        CheckTemplate<trait, T, U>();
         LoadDataImpl<trait, T, U>(dst, src);
     }
 
@@ -79,7 +80,6 @@ private:
     template <const CopyL12L0ATrait& trait, typename T, typename U>
     __aicore__ inline static void LoadDataImpl(const T& dst, const U& src)
     {
-        CheckTemplate<trait, T, U>();
         using DstType = typename T::elementType;
         auto dstLayout = dst.Layout();
         auto srcLayout = src.Layout();
@@ -91,8 +91,7 @@ private:
                   GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(dstLayout);
         auto mStep = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(dstLayout) *
                 GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(dstLayout) / FRACTAL_FIXED;
-        auto kStep = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout) *
-                GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(srcLayout) / C0_ELEMENT<DstType>;
+        auto kStep = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
         // Zn -> Nz
         constexpr uint32_t STRIDE_UNIT = C0_ELEMENT<DstType> * FRACTAL_FIXED;
         auto srcStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout) / STRIDE_UNIT;

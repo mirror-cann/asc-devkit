@@ -31,6 +31,7 @@ class LoadDataL12L0BNZ2ZN {
 public:
     template <const CopyL12L0BTrait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src) {
+        CheckTemplate<trait, T, U>();
         if constexpr (T::layoutType::depth == FIVE_DIM_DATA) {
             BatchLoadDataImpl<trait, T, U>(dst, src);
         } else if constexpr (T::layoutType::depth == FOUR_DIM_DATA) {
@@ -50,49 +51,42 @@ private:
         CheckDataType::CheckL12L0BDataType<T, U>();
     }
 
-    template <const CopyL12L0BTrait& trait, typename T, typename U>
-    __aicore__ inline static void LoadDataImpl(const T& dst, const U& src)
+    template <typename DstT, typename SrcT, typename DstLayoutT, typename SrcLayoutT>
+    __aicore__ inline static void LoadDataFractal(const DstT& dst, const SrcT& src,
+        const DstLayoutT& dstLayout, const SrcLayoutT& srcLayout)
     {
-        CheckTemplate<trait, T, U>();
-        using DstType = typename T::elementType;
-        auto dstLayout = dst.Layout();
-        auto srcLayout = src.Layout();
-        auto mStartPosition = 0;
-        auto kStartPosition = 0;
-        auto mStep = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout) *
-                GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(srcLayout) / FRACTAL_FIXED;
+        using DstType = typename DstT::elementType;
+        uint16_t mStartPosition = 0;
+        uint16_t kStartPosition = 0;
+        auto mStep = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
         auto kStep = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(dstLayout) *
                 GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(dstLayout) / C0_ELEMENT<DstType>;
         // Nz -> Zn
-        uint32_t STRIDE_UNIT = C0_ELEMENT<DstType> * FRACTAL_FIXED;
+        constexpr uint32_t STRIDE_UNIT = C0_ELEMENT<DstType> * FRACTAL_FIXED;
         auto srcStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout) / STRIDE_UNIT;
         auto dstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstLayout) / STRIDE_UNIT;
         LoadCbufToCb::LoadData<true>(dst, src, mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride);
     }
 
     template <const CopyL12L0BTrait& trait, typename T, typename U>
+    __aicore__ inline static void LoadDataImpl(const T& dst, const U& src)
+    {
+        LoadDataFractal(dst, src, dst.Layout(), src.Layout());
+    }
+
+    template <const CopyL12L0BTrait& trait, typename T, typename U>
     __aicore__ inline static void BatchLoadDataImpl(const T& dst, const U& src)
     {
-        CheckDataType::CheckL12L0BDataType<T, U>();
-        using DstType = typename T::elementType;
         auto dstLayout = dst.Layout();
         auto srcLayout = src.Layout();
         auto dstNoBatchLayout = RemoveBatchDim(dstLayout);
         auto srcNoBatchLayout = RemoveBatchDim(srcLayout);
-        uint16_t mStartPosition = 0;
-        uint16_t kStartPosition = 0;
-        auto mStep = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(dstNoBatchLayout);
-        auto kStep = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(dstNoBatchLayout);
-        // Nz -> Zn
-        constexpr uint32_t STRIDE_UNIT = C0_ELEMENT<DstType> * FRACTAL_FIXED;
-        auto srcStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcNoBatchLayout) / STRIDE_UNIT;
-        auto dstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstNoBatchLayout) / STRIDE_UNIT;
         auto batchNum = Get<0>(dstLayout.Shape());
         for (uint32_t i = 0; i < batchNum; ++i) {
-            LoadCbufToCb::LoadData<true>(
-                dst(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))), 
-                src(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))), 
-                mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride);
+            LoadDataFractal(
+                dst(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))),
+                src(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))),
+                dstNoBatchLayout, srcNoBatchLayout);
         }
     }
 };

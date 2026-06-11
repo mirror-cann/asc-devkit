@@ -24,7 +24,6 @@
 #define IMPL_TENSOR_API_ARCH_CUBE_L1_TO_L0SCALEA_ROUTING_H
 
 #include "impl/tensor_api/arch/cube/l1_to_l0scalea/copy_impl/scalea.h"
-#include "impl/tensor_api/arch/cube/l1_to_l0scalea/copy_impl/scalea_with_coord.h"
 
 namespace AscendC {
 namespace Te {
@@ -37,25 +36,17 @@ public:
     }
 };
 
-template <uint32_t Version, typename DstLayoutPattern, typename SrcLayoutPattern,
-    typename CopyMode>
+template <uint32_t Version, typename DstLayoutPattern, typename SrcLayoutPattern>
 struct CopyL12L0ScaleARouting {
     using type = CopyL12L0ScaleAIgnore;
 };
 
 template <uint32_t Version>
-struct CopyL12L0ScaleARouting<Version, ZZLayoutPtn, ZZLayoutPtn,
-    CopyMode::NORMAL>
+struct CopyL12L0ScaleARouting<Version, ZZLayoutPtn, ZZLayoutPtn>
 {
     using type = LoadDataL12L0MxScaleA3510;
 };
 
-template <uint32_t Version>
-struct CopyL12L0ScaleARouting<Version, ZZLayoutPtn, ZZLayoutPtn,
-    CopyMode::NORMAL_COORD>
-{
-    using type = LoadDataL12L0MxScaleAWithCoord3510;
-};
 } // namespace Te
 } // namespace AscendC
 #endif // IMPL_TENSOR_API_ARCH_CUBE_L1_TO_L0SCALEA_ROUTING_H

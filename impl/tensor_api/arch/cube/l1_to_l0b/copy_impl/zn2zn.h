@@ -31,6 +31,7 @@ class LoadDataL12L0BZN2ZN {
 public:
     template <const CopyL12L0BTrait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src) {
+        CheckTemplate<trait, T, U>();
         if constexpr (T::layoutType::depth == FIVE_DIM_DATA) {
             BatchLoadDataImpl<trait, T, U>(dst, src);
         } else if constexpr (T::layoutType::depth == FOUR_DIM_DATA) {
@@ -53,7 +54,6 @@ private:
     template <const CopyL12L0BTrait& trait, typename T, typename U>
     __aicore__ inline static void LoadDataImpl(const T& dst, const U& src)
     {
-        CheckTemplate<trait, T, U>();
         using DstType = typename T::elementType;
         auto dstLayout = dst.Layout();
         auto srcLayout = src.Layout();
@@ -62,7 +62,7 @@ private:
         auto mStep = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(dstLayout);
         auto kStep = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(dstLayout);
         // Zn -> Zn
-        uint32_t STRIDE_UNIT = C0_ELEMENT<DstType> * FRACTAL_FIXED;
+        constexpr uint32_t STRIDE_UNIT = C0_ELEMENT<DstType> * FRACTAL_FIXED;
         auto srcStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout) / STRIDE_UNIT;
         auto dstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstLayout) / STRIDE_UNIT;
         LoadCbufToCb::LoadData<false>(dst, src, mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride);
@@ -71,7 +71,6 @@ private:
     template <const CopyL12L0BTrait& trait, typename T, typename U>
     __aicore__ inline static void BatchLoadDataImpl(const T& dst, const U& src)
     {
-        CheckDataType::CheckL12L0BDataType<T, U>();
         using DstType = typename T::elementType;
         auto dstLayout = dst.Layout();
         auto srcLayout = src.Layout();

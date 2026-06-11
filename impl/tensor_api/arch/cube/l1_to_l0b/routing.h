@@ -26,9 +26,6 @@
 #include "impl/tensor_api/arch/cube/l1_to_l0b/copy_impl/zn2zn.h"
 #include "impl/tensor_api/arch/cube/l1_to_l0b/copy_impl/nz2zn.h"
 #include "impl/tensor_api/arch/cube/l1_to_l0b/copy_impl/nz2znb8b4.h"
-#include "impl/tensor_api/arch/cube/l1_to_l0b/copy_impl/zn2zn_with_coord.h"
-#include "impl/tensor_api/arch/cube/l1_to_l0b/copy_impl/nz2zn_with_coord.h"
-#include "impl/tensor_api/arch/cube/l1_to_l0b/copy_impl/nz2znb8b4_with_coord.h"
 
 namespace AscendC {
 namespace Te {
@@ -53,33 +50,15 @@ struct CopyL12L0BRouting<Version, ZNLayoutPtn, ZNLayoutPtn, CopyMode::NORMAL>
 };
 
 template <uint32_t Version>
-struct CopyL12L0BRouting<Version, ZNLayoutPtn, ZNLayoutPtn, CopyMode::NORMAL_COORD>
-{
-    using type = LoadDataL12L0BZN2ZNWithCoord;
-};
-
-template <uint32_t Version>
 struct CopyL12L0BRouting<Version, ZNLayoutPtn, NZLayoutPtn, CopyMode::TRANS>
 {
     using type = LoadDataL12L0BNZ2ZN;
 };
 
 template <uint32_t Version>
-struct CopyL12L0BRouting<Version, ZNLayoutPtn, NZLayoutPtn, CopyMode::TRANS_COORD>
-{
-    using type = LoadDataL12L0BNZ2ZNWithCoord;
-};
-
-template <uint32_t Version>
 struct CopyL12L0BRouting<Version, ZNLayoutPtn, NZLayoutPtn, CopyMode::TRANS_B8B4>
 {
     using type = LoadDataL12L0BNZ2ZNB8B4;
-};
-
-template <uint32_t Version>
-struct CopyL12L0BRouting<Version, ZNLayoutPtn, NZLayoutPtn, CopyMode::TRANS_B8B4_COORD>
-{
-    using type = LoadDataL12L0BNZ2ZNB8B4WithCoord;
 };
 
 } // namespace Te

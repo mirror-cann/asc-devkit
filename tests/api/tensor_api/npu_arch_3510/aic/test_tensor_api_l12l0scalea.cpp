@@ -86,11 +86,9 @@ TEST_F(Tensor_Api_Cube_Copy_L12L0ScaleA_3510, CopyL12L0ScaleARoutesToCubeArchCop
     auto l1Tensor = MakeTensor(MakeMemPtr<Location::L1>(src), MakeFrameLayout<ZZLayoutPtn, AscendC::Std::Int<2>>(m, n));
     auto dstPtr = MakeMemPtr<Location::L0ScaleA, fp8_e8m0_t>((reinterpret_cast<uint64_t>(dst)) / 16);
     auto l0aTensor = MakeTensor(dstPtr, MakeFrameLayout<ZZLayoutPtn, AscendC::Std::Int<2>>(m, n));
-    auto coord = MakeCoord(AscendC::Std::Int<0>{}, AscendC::Std::Int<0>{});
 
     RunCopyCallPaths<CopyL12L0ScaleA, CopyL12L0ScaleATraitDefault>(l0aTensor, l1Tensor);
     RunCopyWithPaths<CopyL12L0ScaleA, CopyL12L0ScaleATraitDefault>(l0aTensor, l1Tensor);
-    CopyAtom<CopyTraits<CopyL12L0ScaleA, CopyL12L0ScaleATraitDefault>>{}.Call(l0aTensor, l1Tensor, coord);
 
     EXPECT_EQ(dst[0], static_cast<fp8_e8m0_t>(0));
 }

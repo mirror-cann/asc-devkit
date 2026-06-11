@@ -40,12 +40,6 @@ using CopyL12L0AModeSet = TupleMap<
     Std::tuple<Std::tuple<_0, _0>, CopyMode::TRANS>,
     Std::tuple<Std::tuple<_0, _1>, CopyMode::TRANS_B8B4>>;
 
-using CopyL12L0AModeCoordSet = TupleMap<
-    Std::tuple<Std::tuple<_1, _0>, CopyMode::NORMAL_COORD>,
-    Std::tuple<Std::tuple<_1, _1>, CopyMode::NORMAL_COORD>,
-    Std::tuple<Std::tuple<_0, _0>, CopyMode::TRANS_COORD>,
-    Std::tuple<Std::tuple<_0, _1>, CopyMode::TRANS_B8B4_COORD>>;
-
 struct CopyL12L0A {
 public:
     template <typename Tp, const Tp& traits, typename... Args>
@@ -77,27 +71,6 @@ private:
         using CopyL12L0AImpl = typename CopyL12L0ARouting<CURRENT_ARCH_VERSION, DstPattern, SrcPattern, CopyL12L0AMode>::type;
         CopyL12L0AImpl::template Run<trait, T, U>(dst, src);
     }
-
-    template<const CopyL12L0ATrait& trait = DEFAULT_COPY_L1_TO_L0A_TRAIT, typename T, typename U, class Coord> 
-     __aicore__ inline static void LoadData(const T& dst, const U& src, const Coord& coord) 
-     { 
-        using dstPos = GetMemLocation<T>; 
-        using srcPos = GetMemLocation<U>; 
-        static_assert(Std::is_same_v<dstPos, Location::L0A>,
-            "When Copy tensor from L1 to L0A, dst tensor must be from L0A.");
-        static_assert(Std::is_same_v<srcPos, Location::L1>,
-            "When Copy tensor from L1 to L0A, src tensor must be from L1.");
-        using DstLayout = typename T::layoutType; 
-        using SrcLayout = typename U::layoutType; 
-        using DstPattern = GetLayoutPattern<DstLayout>; 
-        using SrcPattern = GetLayoutPattern<SrcLayout>; 
-        constexpr auto isB8B4Type = sizeof(typename T::elementType) == 1; 
-        constexpr auto noTrans = Std::is_same_v<DstPattern, SrcPattern>; 
-        using CopyL12L0AMode = typename CopyL12L0AModeCoordSet::template Get<Std::tuple<Std::Int<noTrans>, Std::Int<isB8B4Type>>>; 
-        static_assert(!Std::is_same_v<CopyL12L0AMode, Std::ignore_t>, "Unsupported CopyL12L0ACoordMode."); 
-        using CopyL12L0AImpl = typename CopyL12L0ARouting<CURRENT_ARCH_VERSION, DstPattern, SrcPattern, CopyL12L0AMode>::type;
-        CopyL12L0AImpl::template Run<trait, T, U, Coord>(dst, src, coord);
-     }
 };
 
 }
