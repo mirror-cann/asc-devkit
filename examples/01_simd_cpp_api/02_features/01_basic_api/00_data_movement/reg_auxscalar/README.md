@@ -11,7 +11,7 @@
 
 ## 目录结构介绍
 ```
-├── auxscalar_reg
+├── reg_auxscalar
 │   ├── scripts
 │   │   ├── gen_data.py                // 输入数据和真值数据生成脚本
 │   ├── CMakeLists.txt                 // 编译工程文件

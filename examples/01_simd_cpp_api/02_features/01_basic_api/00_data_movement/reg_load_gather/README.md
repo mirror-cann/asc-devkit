@@ -25,7 +25,7 @@
 
 ## 目录结构介绍
 ```
-├── gather_ld_reg
+├── reg_load_gather
 │   ├── scripts
 │   │   ├── gen_data.py                // 输入数据和真值数据生成脚本
 │   ├── CMakeLists.txt                 // 编译工程文件

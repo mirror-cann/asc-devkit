@@ -41,7 +41,7 @@
 
 ## 目录结构介绍
 ```
-├── ld_st_reg_align
+├── reg_load_store_align
 │   ├── scripts
 │   │   ├── gen_data.py                // 输入数据和真值数据生成脚本
 │   ├── CMakeLists.txt                 // 编译工程文件

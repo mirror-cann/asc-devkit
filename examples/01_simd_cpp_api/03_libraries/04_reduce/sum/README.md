@@ -23,7 +23,8 @@
 │   │   └── gen_data.py               // 生成数据和真值数据的生成脚本
 │   ├── CMakeLists.txt                // 编译工程文件
 │   ├── data_utils.h                  // 数据读写工具函数
-│   └── sum.asc                       // Ascend C样例实例 & 主程序
+│   ├── sum.asc                       // Ascend C样例实例 & 主程序
+│   └── README.md                     // 样例说明文档
 ```
 
 ## 样例规格

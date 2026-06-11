@@ -20,7 +20,8 @@
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
 │   ├── figures                 // 图示
-│   └── mmad_mx.asc             // Ascend C 基础 API 样例实现
+│   ├── mmad_mx.asc             // Ascend C 基础 API 样例实现
+│   └── README.md               // 样例说明文档
 ```
 
 ## MxMatmul 介绍

@@ -25,7 +25,7 @@
 
 ## 目录结构介绍
 ```
-├── ld_st_reg_mask
+├── reg_load_store_mask
 │   ├── scripts
 │   │   └── gen_data.py                // 输入数据和真值数据生成脚本
 │   ├── figures                        // 图示

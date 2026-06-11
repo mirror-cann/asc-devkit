@@ -18,6 +18,7 @@
 ├── quant_group_matmul_high_performance
 │   ├── CMakeLists.txt                     // 编译工程文件
 │   ├── data_utils.h                       // 数据读入写出函数
+│   ├── figures                            // README中图片资源目录
 │   ├── quant_group_matmul_custom.asc      // Ascend C样例实现 & 调用样例
 │   ├── README.md                          // 样例说明文档
 │   └── scripts

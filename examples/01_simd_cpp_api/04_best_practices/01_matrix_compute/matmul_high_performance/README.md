@@ -247,7 +247,7 @@ AscendC::Matmul<AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, ATyp
 - 相比Case 3，Task Duration从12283.84μs降低到5039.86μs，耗时降低**58.98%**
 - aic_mte2_time从8616.671μs降低到4051.458μs，MTE2搬运时间降低**52.97%**，降幅**4565.213μs**
 - aic_mac_ratio从**31.2%**提升到**69.4%**
-- 后续优化方向：MDL模板自动调优计算的的Tiling没有完全利用L1空间，可手动调整Tiling参数，进一步提高MTE2的搬运力度
+- 后续优化方向：MDL模板自动调优计算的Tiling没有完全利用L1空间，可手动调整Tiling参数，进一步提高MTE2的搬运力度
 
 ### Case 5: 多核MDL + L1Cache优化 (MULTI_CORE_MDL_L1CACHE)
 

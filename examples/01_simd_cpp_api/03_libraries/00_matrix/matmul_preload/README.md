@@ -18,7 +18,8 @@ M/N方向预加载的Matmul样例，可以减少MTE2间隙。在MTE2流水间隙
 │   │   └── verify_result.py    // 真值对比文件
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
-│   └── matmul_preload.asc      // Ascend C样例实现 & 调用样例
+│   ├── matmul_preload.asc      // Ascend C样例实现 & 调用样例
+│   └── README.md               // 样例说明文档
 ```
 ## 样例描述
 
