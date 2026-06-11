@@ -31,4 +31,5 @@ target_link_libraries(demo PRIVATE
 
 target_compile_options(demo PRIVATE
     $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES}>
+    $<$<AND:$<COMPILE_LANGUAGE:ASC>,$<STREQUAL:${CMAKE_ASC_ARCHITECTURES},dav-3510>>:-DENABLE_CV_COMM_VIA_SSBUF=true>   # Enable SSBUF communication only for dav-3510.
 )
