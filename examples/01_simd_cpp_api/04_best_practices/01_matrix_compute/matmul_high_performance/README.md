@@ -23,7 +23,8 @@
 │   ├── data_utils.h            // 数据读入写出函数
 │   ├── figures                 // 图示
 │   ├── matmul.h                // 所有优化case的头文件定义
-│   └── matmul.asc              // Ascend C样例实现
+│   ├── matmul.asc              // Ascend C样例实现
+│   └── README.md               // 样例说明文档
 ```
 
 ## 样例描述

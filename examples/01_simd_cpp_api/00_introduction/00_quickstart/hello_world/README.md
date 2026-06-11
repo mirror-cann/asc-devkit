@@ -17,7 +17,8 @@
 ```
 ├── hello_world
 │   ├── CMakeLists.txt      // 编译工程文件
-│   └── hello_world.asc     // Ascend C样例实现 & 调用样例
+│   ├── hello_world.asc     // Ascend C样例实现 & 调用样例
+│   └── README.md           // 样例说明文档
 ```
 
 ## 编译运行

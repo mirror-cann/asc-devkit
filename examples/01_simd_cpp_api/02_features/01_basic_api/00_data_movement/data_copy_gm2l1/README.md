@@ -22,7 +22,8 @@
 │   │   └── verify_result.py           // 验证输出数据和真值数据是否一致的验证脚本
 │   ├── data_utils.h                   // 数据读入写出函数
 │   ├── CMakeLists.txt                 // cmake编译文件
-│   └── data_copy_gm2l1.asc            // Ascend C样例实现 & 调用样例
+│   ├── data_copy_gm2l1.asc            // Ascend C样例实现 & 调用样例
+│   └── README.md                      // 样例说明文档
 ```
 
 ## 场景详细说明

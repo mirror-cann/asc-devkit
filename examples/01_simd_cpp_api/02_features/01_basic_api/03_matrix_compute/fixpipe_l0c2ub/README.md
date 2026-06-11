@@ -20,7 +20,8 @@
 │   ├── CMakeLists.txt                 // 编译工程文件
 │   ├── data_utils.h                   // 数据读入写出函数
 │   ├── figures                        // 图示
-│   └── fixpipe_l0c2ub.asc             // Ascend C样例实现 & 调用样例
+│   ├── fixpipe_l0c2ub.asc             // Ascend C样例实现 & 调用样例
+│   └── README.md                      // 样例说明文档
 ```
 
 ## 场景详细说明

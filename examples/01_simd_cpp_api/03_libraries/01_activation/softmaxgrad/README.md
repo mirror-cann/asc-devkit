@@ -27,7 +27,8 @@
 │   │   ├── gen_data.py         // 输入数据和真值数据生成脚本（支持两种模式）
 │   ├── CMakeLists.txt          // 编译工程文件（支持 -DUSE_FRONT_MODE）
 │   ├── data_utils.h            // 数据读入写出函数
-│   └── softmaxgrad.asc         // Ascend C 样例实现 & 调用示例（两种模式合并）
+│   ├── softmaxgrad.asc         // Ascend C 样例实现 & 调用示例（两种模式合并）
+│   └── README.md               // 样例说明文档
 ```
 
 ## 样例规格

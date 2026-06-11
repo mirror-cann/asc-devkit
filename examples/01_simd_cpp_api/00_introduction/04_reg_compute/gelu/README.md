@@ -225,7 +225,8 @@ cat ./PROF_*/mindstudio_profiler_output/op_summary_*.csv
 │   │   └── verify_result.py // 输出结果和真值数据校验脚本
 │   ├── CMakeLists.txt      // 编译工程文件
 │   ├── data_utils.h        // 数据读入写出函数
-│   └── gelu.asc            // Ascend C样例实现 & 调用样例
+│   ├── gelu.asc            // Ascend C样例实现 & 调用样例
+│   └── README.md           // 样例说明文档
 ```
 
 ## 编译运行

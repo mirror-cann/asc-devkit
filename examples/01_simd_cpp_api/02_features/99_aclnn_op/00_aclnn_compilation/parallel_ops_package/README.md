@@ -28,11 +28,12 @@
 ├── parallel_ops_package
 │   ├── CMakeLists.txt              // 顶层编译工程文件（并行构建多个算子包）
 │   ├── add_custom                  // Add算子工程目录
-│   └── leaky_relu_custom           // LeakyRelu算子工程目录
-│       ├── CMakeLists.txt          // LeakyRelu算子编译工程文件
-│       ├── framework               // 框架适配插件目录
-│       ├── op_host                 // Host侧算子实现目录
-│       └── op_kernel               // Kernel侧算子实现目录
+│   ├── leaky_relu_custom           // LeakyRelu算子工程目录
+│   │   ├── CMakeLists.txt          // LeakyRelu算子编译工程文件
+│   │   ├── framework               // 框架适配插件目录
+│   │   ├── op_host                 // Host侧算子实现目录
+│   │   └── op_kernel               // Kernel侧算子实现目录
+│   └── README.md                   // 样例说明文档
 ```
 
 ## 样例描述

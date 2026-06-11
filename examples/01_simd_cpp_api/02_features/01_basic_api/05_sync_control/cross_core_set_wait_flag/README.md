@@ -46,7 +46,8 @@
 │   ├── data_utils.h                 // 数据读入写出函数
 │   ├── figures                      // 图示
 │   ├── cross_core_set_wait_flag.h   // Ascend C样例实现
-│   └── cross_core_set_wait_flag.asc // 调用样例以及结果校验
+│   ├── cross_core_set_wait_flag.asc // 调用样例以及结果校验
+│   └── README.md                    // 样例说明文档
 ```
 
 ## 样例描述

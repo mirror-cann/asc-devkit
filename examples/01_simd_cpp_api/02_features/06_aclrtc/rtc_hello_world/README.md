@@ -17,7 +17,8 @@
 ```
 ├── rtc_hello_world
 │   ├── CMakeLists.txt           // 编译工程文件
-│   └── rtc_hello_world.cpp      // Host侧代码（含RTC核函数源码字符串）
+│   ├── rtc_hello_world.cpp      // Host侧代码（含RTC核函数源码字符串）
+│   └── README.md               // 样例说明文档
 ```
 
 ## 样例描述

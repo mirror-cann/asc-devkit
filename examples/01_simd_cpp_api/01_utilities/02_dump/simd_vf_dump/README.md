@@ -19,7 +19,8 @@
 │   │   └── verify_result.py    // 验证输出数据和真值数据是否一致
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
-│   └── simd_vf_dump.asc        // Ascend C样例实现&调用样例
+│   ├── simd_vf_dump.asc        // Ascend C样例实现&调用样例
+│   └── README.md               // 样例说明文档
 ```
 
 ## 样例描述

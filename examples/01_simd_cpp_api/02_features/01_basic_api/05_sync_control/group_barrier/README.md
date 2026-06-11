@@ -19,7 +19,8 @@
 ```
 ├── group_barrier
 │   ├── CMakeLists.txt          // 编译工程文件
-│   └── group_barrier.asc       // Ascend C样例实现 & 调用样例
+│   ├── group_barrier.asc       // Ascend C样例实现 & 调用样例
+│   └── README.md               // 样例说明文档
 ```
 
 ## 样例描述

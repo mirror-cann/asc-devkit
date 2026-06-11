@@ -22,7 +22,8 @@
 │   ├── data_copy.asc          // Ascend C 样例入口与 Kernel 调用
 │   ├── data_copy_l1.h         // GM 到 L1 搬运实现
 │   ├── data_copy_ub.h         // GM 到 UB 搬运实现
-│   └── data_utils.h           // 数据读入写出函数
+│   ├── data_utils.h           // 数据读入写出函数
+│   └── README.md              // 样例说明文档
 ```
 
 ## 样例描述

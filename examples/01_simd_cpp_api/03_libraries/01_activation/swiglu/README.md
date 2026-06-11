@@ -20,7 +20,8 @@
 │   │   ├── gen_data.py         // 输入数据和真值数据生成脚本
 │   ├── CMakeLists.txt          // 编译工程文件（支持 -DCMAKE_ASC_RUN_MODE、-DCMAKE_ASC_ARCHITECTURES）
 │   ├── data_utils.h            // 数据读入写出函数
-│   └── swiglu.asc              // Ascend C样例实现 & 调用（含Tiling机制）
+│   ├── swiglu.asc              // Ascend C样例实现 & 调用（含Tiling机制）
+│   └── README.md               // 样例说明文档
 ```
 
 ## 样例描述

@@ -31,12 +31,13 @@
 │   │   ├── add_custom_template      // Add模板算子Host实现
 │   │   ├── add_custom_tiling_sink   // Add Tiling下沉算子Host实现
 │   │   └── leaky_relu_custom        // LeakyRelu算子Host实现
-│   └── op_kernel                    // Kernel侧算子实现目录
-│       ├── CMakeLists.txt           // Kernel侧编译工程文件
-│       ├── add_custom               // Add算子Kernel实现
-│       ├── add_custom_template      // Add模板算子Kernel实现
-│       ├── add_custom_tiling_sink   // Add Tiling下沉算子Kernel实现
-│       └── leaky_relu_custom        // LeakyRelu算子Kernel实现
+│   ├── op_kernel                    // Kernel侧算子实现目录
+│   │   ├── CMakeLists.txt           // Kernel侧编译工程文件
+│   │   ├── add_custom               // Add算子Kernel实现
+│   │   ├── add_custom_template      // Add模板算子Kernel实现
+│   │   ├── add_custom_tiling_sink   // Add Tiling下沉算子Kernel实现
+│   │   └── leaky_relu_custom        // LeakyRelu算子Kernel实现
+│   └── README.md                    // 样例说明文档
 ```
 
 ## 样例描述

@@ -21,7 +21,8 @@
 │   │   └── verify_result.py        // 验证输出数据和真值数据是否一致的验证脚本
 │   ├── CMakeLists.txt              // 编译工程文件
 │   ├── data_utils.h                // 数据读入写出函数
-│   └── add_tpipe_tque.asc          // Ascend C样例实现，tque管理内存 & 调用样例
+│   ├── add_tpipe_tque.asc          // Ascend C样例实现，tque管理内存 & 调用样例
+│   └── README.md                   // 样例说明文档
 ```
 
 ## 样例描述

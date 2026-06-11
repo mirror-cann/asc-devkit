@@ -18,7 +18,8 @@
 │   │   └── gen_data.py      // 生成测试输入和golden数据
 │   ├── CMakeLists.txt       // 编译工程文件
 │   ├── data_utils.h         // 数据读写工具函数
-│   └── trait.asc            // Ascend C算子实现 & 调用样例
+│   ├── trait.asc            // Ascend C算子实现 & 调用样例
+│   └── README.md            // 样例说明文档
 ```
 
 ## 样例描述

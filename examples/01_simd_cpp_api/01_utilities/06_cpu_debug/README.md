@@ -17,7 +17,8 @@
 ```
 ├── 06_cpu_debug
 │   ├── CMakeLists.txt          // 编译工程文件
-│   └── cpu_debug.asc           // Ascend C样例实现 & 调用样例
+│   ├── cpu_debug.asc           // Ascend C样例实现 & 调用样例
+│   └── README.md               // 样例说明文档
 ```
 
 ## 样例描述

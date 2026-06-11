@@ -18,7 +18,8 @@
 │   ├── aicore_kernel.asc                  // AI Core算子实现
 │   ├── kernel_args.h                      // tiling结构体头文件
 │   ├── main.asc                           // AI CPU算子与AI Core算子调用
-│   └── aicpu_tiling.aicpu                 // AI CPU算子实现
+│   ├── aicpu_tiling.aicpu                 // AI CPU算子实现
+│   └── README.md                          // 样例说明文档
 ```
 
 ## 样例描述

@@ -17,7 +17,8 @@
 ```
 ├── list_tensor_desc_input
 │   ├── CMakeLists.txt              // 编译工程文件
-│   └── list_tensor_desc_input.asc  // Ascend C样例实现 & 调用样例
+│   ├── list_tensor_desc_input.asc  // Ascend C样例实现 & 调用样例
+│   └── README.md                   // 样例说明文档
 ```
 
 ## 样例描述

@@ -19,7 +19,8 @@
 ```
 ├── aclnn_invocation
 │   ├── CMakeLists.txt          // 编译工程文件
-│   └── main.cpp                // 算子调用主程序
+│   ├── main.cpp                // 算子调用主程序
+│   └── README.md               // 样例说明文档
 ```
 
 ## 代码实现介绍

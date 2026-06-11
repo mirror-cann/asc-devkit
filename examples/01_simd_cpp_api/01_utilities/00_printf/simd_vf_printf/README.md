@@ -15,7 +15,8 @@
 ```
 ├── simd_vf_printf
 │   ├── CMakeLists.txt          // 编译工程文件
-│   └── simd_vf_printf.asc      // Ascend C样例实现&调用样例
+│   ├── simd_vf_printf.asc      // Ascend C样例实现&调用样例
+│   └── README.md               // 样例说明文档
 ```
 
 ## 样例描述
