@@ -53,7 +53,7 @@
 
 -   dim3<a name="li1136665405"></a>
 
-    用于指定和获取线程网格（grid）、线程块（block）在x、y、z维度上的内置结构体。
+    用于指定和获取线程网格（Grid）、线程块（Thread Block）在x、y、z维度上的内置结构体。
 
     dim3由3个无符号整数组成，结构体定义为\{dimx，dimy，dimz\}，用于指定3个不同维度的大小，三维总数为dimx \* dimy \* dimz。开发者可以通过如下方式创建dim3结构。
 
@@ -74,7 +74,7 @@
 
 -   blockDim<a name="li076017381191"></a>
 
-    内置全局变量，在核函数中可以直接使用，用于获取线程块中配置的线程的三维层次结构，即启动VF时配置的dim3结构体实例值。blockDim.x，blockDim.y，blockDim.z分别表示线程块中三个维度的线程数。
+    内置全局变量，在核函数中可以直接使用，用于获取线程块中配置的线程的三维层次结构，即启动核函数时配置的dim3结构体实例值。blockDim.x，blockDim.y，blockDim.z分别表示线程块中三个维度的线程数。
 
 -   blockIdx<a name="li1676053814914"></a>
 
@@ -95,23 +95,23 @@
     -   对于二维线程块，其线程ID为二维结构，其计算公式为：
 
         ```
-        threadID.x = blockIdx.x * blockDim.x + threadIdx.x；
-        threadID.y = blockIdx.y * blockDim.y + threadIdx.y；
+        thread_id_x = blockIdx.x * blockDim.x + threadIdx.x；
+        thread_id_y = blockIdx.y * blockDim.y + threadIdx.y；
         ```
 
     -   对于三维线程块，其线程ID为三维结构，其计算公式为：
 
         ```
-        threadID.x = blockIdx.x * blockDim.x + threadIdx.x；
-        threadID.y = blockIdx.y * blockDim.y + threadIdx.y；
-        threadID.z = blockIdx.z * blockDim.z + threadIdx.z；
+        thread_id_x = blockIdx.x * blockDim.x + threadIdx.x；
+        thread_id_y = blockIdx.y * blockDim.y + threadIdx.y；
+        thread_id_z = blockIdx.z * blockDim.z + threadIdx.z；
         ```
 
 当前提供了以下仅在Device上可用的int类型的内置变量：
 
 -   warpSize
 
-    运行时变量，表示一个线程束（warp）中的线程数量，当前为固定值32。
+    运行时变量，表示一个线程束（Warp）中的线程数量，当前为固定值32。
 
 ## 内置数据类型<a name="section1835494915576"></a>
 
@@ -255,10 +255,10 @@ res[idx] = x[idx] > y[idx] ? x[idx] : y[idx];
 
 其中：
 
--   blocks\_per\_grid：int或dim3类型，用于指定网格（grid）的维度与规模，blocks\_per\_grid.x \* blocks\_per\_grid.y \* blocks\_per\_grid.z等于启动的线程块总数。
--   threads\_per\_block：int或dim3类型，用于指定每个线程块（block）的维度与规模，threads\_per\_block.x \* threads\_per\_block.y \* threads\_per\_block.z等于每个线程块包含的线程数，需要小于等于\_\_launch\_bounds\_\_配置。
+-   blocks\_per\_grid：dim3类型，用于指定网格（Grid）的维度与规模。blocks\_per\_grid.x \* blocks\_per\_grid.y \* blocks\_per\_grid.z等于启动的线程块总数，不能超过65535。
+-   threads\_per\_block：dim3类型，用于指定每个线程块（Thread Block）的维度与规模。threads\_per\_block.x \* threads\_per\_block.y \* threads\_per\_block.z等于每个线程块包含的线程数，需要小于等于\_\_launch\_bounds\_\_配置。
 -   dyn\_ubuf\_size：size\_t类型，用于指定每个线程块动态分配的共享内存大小，单位为字节。这部分内存供数组使用，具体用法请参考[共享内存](../编程模型/AI-Core-SIMT编程/内存层级.md#共享内存unified-buffer)中的“动态申请”方式。
--   stream：aclrtStream类型指针，指定关联的流，用于维护异步操作的执行顺序。
+-   stream：aclrtStream类型，指定关联的流，用于维护异步操作的执行顺序。
 
 以下示例展示了内核函数的声明与调用方式。
 
@@ -266,7 +266,10 @@ res[idx] = x[idx] > y[idx] ? x[idx] : y[idx];
 // 声明
 __global__ void add_custom(float* x, float* y, float* z, uint64_t total_length);
 // 调用
-add_custom<<<blocks_per_grid, threads_per_block, dyn_ubuf_size, stream>>>(x, y, z, 1024);
+uint32_t blocks_per_grid = 48; // Number of thread blocks (Grid size)
+uint32_t threads_per_block = 256; // Number of threads per block (Block size)
+size_t dyn_ubuf_size = 1024; // need 1024 Byte dynamic memory
+add_custom<<<blocks_per_grid, threads_per_block, dyn_ubuf_size, stream>>>(x, y, z, 1024); //blocks_per_grid和threads_per_block会被隐式转换为dim3类型
 ```
 
 在执行函数之前，会先对上述配置参数进行校验。如果blocks\_per\_grid或threads\_per\_block超出设备的最大允许规模，或dyn\_ubuf\_size超过分配静态内存后剩余的可用共享内存，该函数将会执行失败。
@@ -281,7 +284,7 @@ add_custom<<<blocks_per_grid, threads_per_block, dyn_ubuf_size, stream>>>(x, y, 
 
 -   \_\_launch\_bounds\_\_\(N\) <a name="li23861114618"></a>
   
-    函数标记宏，在核函数上可选配置，用于在编译期指定核函数启动的最大线程数。最大线程数决定了每个线程可分配的寄存器数量，具体对应关系请见下表，寄存器用于存储线程中的局部变量，若局部变量的个数超出寄存器个数，容易出现栈溢出等问题。建议最大线程数与启动VF任务的dim3线程数保持一致。
+    函数标记宏，在核函数上可选配置，用于指定核函数启动的最大线程数。最大线程数决定了每个线程可分配的寄存器数量，具体对应关系请见下表，寄存器用于存储线程中的局部变量，若局部变量的个数超出寄存器个数，容易出现栈溢出等问题。建议最大线程数与启动核函数时的dim3线程数保持一致。
     
     **表 5**  \_\_launch\_bounds\_\_的Thread数量与每个Thread可用寄存器数
 
