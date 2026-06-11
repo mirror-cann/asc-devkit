@@ -84,7 +84,11 @@ Warp内指定线程的var值。
 
 ## 调用示例
 
--   SIMT编程场景：
+以下示例包含两类用法：示例1使用asc\_shfl\_xor获取Warp分组内当前线程LaneId与lane\_mask异或后对应线程的输入值；示例2使用asc\_shfl\_xor在每个Warp内进行归约求和。
+
+-   示例1：
+
+    SIMT编程场景：
 
     ```
     __global__ __launch_bounds__(1024) void KernelShflXor(int32_t* dst)
@@ -93,28 +97,12 @@ Warp内指定线程的var值。
         int32_t laneId = idx % 32;
         // 0-15线程返回值分别为{1,0,3,2,5,4,7,6,9,8,11,10,13,12,15,14}
         // 16-31线程返回值为{17,16,19,18,21,20,23,22,25,24,27,26,29,28,31,30}
-         int32_t result = asc_shfl_xor(laneId, 1, 16);
-         dst[idx] = result;
-    }
-
-    // asc_shfl_xor实现reducesum
-    __global__ __launch_bounds__(1024) void KernelShflXorReduceSum(int32_t* dst)
-    {
-        int idx = threadIdx.x + blockIdx.x * blockDim.x;
-        int32_t laneId = idx % 32;
-        int32_t value = laneId;
-
-        value += asc_shfl_xor(value, 1, 31);  // 1
-        value += asc_shfl_xor(value, 2, 31);  // 2
-        value += asc_shfl_xor(value, 4, 31);  // 4
-        value += asc_shfl_xor(value, 8, 31);  // 8
-        value += asc_shfl_xor(value, 16, 31); // 16
-
-        dst[idx] = value;
+        int32_t result = asc_shfl_xor(laneId, 1, 16);
+        dst[idx] = result;
     }
     ```
 
--   SIMD与SIMT混合编程场景：
+    SIMD与SIMT混合编程场景：
 
     ```
     __simt_vf__ __launch_bounds__(1024) inline void KernelShflXor(__gm__ int32_t* dst)
@@ -124,23 +112,47 @@ Warp内指定线程的var值。
         int32_t laneId = idx % 32;
         // 0-15线程返回值分别为{1,0,3,2,5,4,7,6,9,8,11,10,13,12,15,14}
         // 16-31线程返回值为{17,16,19,18,21,20,23,22,25,24,27,26,29,28,31,30}
-         int32_t result = asc_shfl_xor(laneId, 1, 16);
-         dst[idx] = result;
+        int32_t result = asc_shfl_xor(laneId, 1, 16);
+        dst[idx] = result;
     }
+    ```
 
-    // asc_shfl_xor实现reducesum
+-   示例2：
+
+    SIMT编程场景：
+
+    ```
+    __global__ __launch_bounds__(1024) void KernelShflXorReduceSum(int32_t* dst)
+    {
+        int idx = threadIdx.x + blockIdx.x * blockDim.x;
+        int32_t laneId = idx % 32;
+        int32_t value = laneId;
+
+        value += asc_shfl_xor(value, 1, 32);
+        value += asc_shfl_xor(value, 2, 32);
+        value += asc_shfl_xor(value, 4, 32);
+        value += asc_shfl_xor(value, 8, 32);
+        value += asc_shfl_xor(value, 16, 32);
+
+        dst[idx] = value; // 归约求和结果位于每个Warp内所有线程
+    }
+    ```
+
+    SIMD与SIMT混合编程场景：
+
+    ```
     __simt_vf__ __launch_bounds__(1024) inline void KernelShflXorReduceSum(__gm__ int32_t* dst)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         int32_t laneId = idx % 32;
         int32_t value = laneId;
 
-        value += asc_shfl_xor(value, 1, 31);  // 1
-        value += asc_shfl_xor(value, 2, 31);  // 2
-        value += asc_shfl_xor(value, 4, 31);  // 4
-        value += asc_shfl_xor(value, 8, 31);  // 8
-        value += asc_shfl_xor(value, 16, 31); // 16
+        value += asc_shfl_xor(value, 1, 32);
+        value += asc_shfl_xor(value, 2, 32);
+        value += asc_shfl_xor(value, 4, 32);
+        value += asc_shfl_xor(value, 8, 32);
+        value += asc_shfl_xor(value, 16, 32);
 
-        dst[idx] = value;
+        dst[idx] = value; // 归约求和结果位于每个Warp内所有线程
     }
     ```

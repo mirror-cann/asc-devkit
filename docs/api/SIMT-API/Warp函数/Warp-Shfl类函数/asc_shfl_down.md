@@ -88,10 +88,14 @@ Warp内指定线程的var值。
 
 完整样例请参考[Sobel边缘检测样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/02_features/01_api_features/03_warp_instruction/sobel_warp_shfl/README.md)。
 
--   SIMT编程场景：
+以下示例包含两类用法：示例1使用asc\_shfl\_down获取Warp分组内相对当前线程向后偏移delta的线程的输入值；示例2使用asc\_shfl\_down在每个Warp内进行归约求和。
+
+-   示例1：
+
+    SIMT编程场景：
 
     ```
-    __global___ __launch_bounds__(1024) void KernelShflDown(int32_t* dst)
+    __global__ __launch_bounds__(1024) void KernelShflDown(int32_t* dst)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         int32_t laneId = idx % 32;
@@ -100,25 +104,9 @@ Warp内指定线程的var值。
         int32_t result = asc_shfl_down(laneId, 2, 16);
         dst[idx] = result;
     }
-
-    // asc_shfl_down实现reducesum
-    __global__ __launch_bounds__(1024) void KernelShflDownReduceSum(int32_t* dst)
-    {
-        int idx = threadIdx.x + blockIdx.x * blockDim.x;
-        int32_t laneId = idx % 32;
-        int32_t value = laneId;
-
-        value += asc_shfl_down(value, 1, 31); // 1
-        value += asc_shfl_down(value, 2, 31); // 2
-        value += asc_shfl_down(value, 4, 31); // 4
-        value += asc_shfl_down(value, 8, 31); // 8
-        value += asc_shfl_down(value, 16, 31); // 16
-
-        dst[idx] = value;
-    }
     ```
 
--   SIMD与SIMT混合编程场景：
+    SIMD与SIMT混合编程场景：
 
     ```
     __simt_vf__ __launch_bounds__(1024) inline void KernelShflDown(__gm__ int32_t* dst)
@@ -131,20 +119,44 @@ Warp内指定线程的var值。
         int32_t result = asc_shfl_down(laneId, 2, 16);
         dst[idx] = result;
     }
+    ```
 
-    // asc_shfl_down实现reducesum
+-   示例2：
+
+    SIMT编程场景：
+
+    ```
+    __global__ __launch_bounds__(1024) void KernelShflDownReduceSum(int32_t* dst)
+    {
+        int idx = threadIdx.x + blockIdx.x * blockDim.x;
+        int32_t laneId = idx % 32;
+        int32_t value = laneId;
+
+        value += asc_shfl_down(value, 16, 32);
+        value += asc_shfl_down(value, 8, 32);
+        value += asc_shfl_down(value, 4, 32);
+        value += asc_shfl_down(value, 2, 32);
+        value += asc_shfl_down(value, 1, 32);
+
+        dst[idx] = value; // 归约求和结果位于每个Warp内laneId为0的线程
+    }
+    ```
+
+    SIMD与SIMT混合编程场景：
+
+    ```
     __simt_vf__ __launch_bounds__(1024) inline void KernelShflDownReduceSum(__gm__ int32_t* dst)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         int32_t laneId = idx % 32;
         int32_t value = laneId;
 
-        value += asc_shfl_down(value, 1, 31); // 1
-        value += asc_shfl_down(value, 2, 31); // 2
-        value += asc_shfl_down(value, 4, 31); // 4
-        value += asc_shfl_down(value, 8, 31); // 8
-        value += asc_shfl_down(value, 16, 31); // 16
+        value += asc_shfl_down(value, 16, 32);
+        value += asc_shfl_down(value, 8, 32);
+        value += asc_shfl_down(value, 4, 32);
+        value += asc_shfl_down(value, 2, 32);
+        value += asc_shfl_down(value, 1, 32);
 
-        dst[idx] = value;
+        dst[idx] = value; // 归约求和结果位于每个Warp内laneId为0的线程
     }
     ```
