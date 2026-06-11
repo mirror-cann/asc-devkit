@@ -493,7 +493,7 @@ __simd_callee__ inline void asc_half2uint8_rd_sat(vector_uint8_t& dst, vector_ha
 
 __simd_callee__ inline void asc_half2uint8_rd_v2(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
-__simd_callee__ inline void asc_half2uint8_rd_sat_v2_impl(vector_uint8_t& dst, vector_half src, vector_bool mask);
+__simd_callee__ inline void asc_half2uint8_rd_sat_v2(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
 __simd_callee__ inline void asc_half2uint8_rn(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
@@ -501,7 +501,7 @@ __simd_callee__ inline void asc_half2uint8_rn_sat(vector_uint8_t& dst, vector_ha
 
 __simd_callee__ inline void asc_half2uint8_rn_v2(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
-__simd_callee__ inline void asc_half2uint8_rn_sat_v2_impl(vector_uint8_t& dst, vector_half src, vector_bool mask);
+__simd_callee__ inline void asc_half2uint8_rn_sat_v2(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
 __simd_callee__ inline void asc_half2uint8_rna(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
@@ -509,7 +509,7 @@ __simd_callee__ inline void asc_half2uint8_rna_sat(vector_uint8_t& dst, vector_h
 
 __simd_callee__ inline void asc_half2uint8_rna_v2(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
-__simd_callee__ inline void asc_half2uint8_rna_sat_v2_impl(vector_uint8_t& dst, vector_half src, vector_bool mask);
+__simd_callee__ inline void asc_half2uint8_rna_sat_v2(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
 __simd_callee__ inline void asc_half2uint8_ru(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
@@ -517,7 +517,7 @@ __simd_callee__ inline void asc_half2uint8_ru_sat(vector_uint8_t& dst, vector_ha
 
 __simd_callee__ inline void asc_half2uint8_ru_v2(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
-__simd_callee__ inline void asc_half2uint8_ru_sat_v2_impl(vector_uint8_t& dst, vector_half src, vector_bool mask);
+__simd_callee__ inline void asc_half2uint8_ru_sat_v2(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
 __simd_callee__ inline void asc_half2uint8_rz(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
@@ -525,9 +525,9 @@ __simd_callee__ inline void asc_half2uint8_rz_sat(vector_uint8_t& dst, vector_ha
 
 __simd_callee__ inline void asc_half2uint8_rz_v2(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
-__simd_callee__ inline void asc_half2uint8_rz_sat_v2_impl(vector_uint8_t& dst, vector_half src, vector_bool mask);
+__simd_callee__ inline void asc_half2uint8_rz_sat_v2(vector_uint8_t& dst, vector_half src, vector_bool mask);
 
-//===================asc_int162half_impl=================
+//===================asc_int162half=================
 __simd_callee__ inline void asc_int162half_rd(vector_half& dst, vector_int16_t src, vector_bool mask);
 
 __simd_callee__ inline void asc_int162half_rn(vector_half& dst, vector_int16_t src, vector_bool mask);

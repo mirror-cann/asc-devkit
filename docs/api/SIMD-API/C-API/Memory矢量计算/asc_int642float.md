@@ -41,11 +41,11 @@
 - 同步计算
 
     ```c++
-    __aicore__ inline void asc_int642float_sync_rd(__ubuf__ float* dst, __ubuf__ int64_t* src, uint32_t count)
-    __aicore__ inline void asc_int642float_sync_rn(__ubuf__ float* dst, __ubuf__ int64_t* src, uint32_t count)
-    __aicore__ inline void asc_int642float_sync_rna(__ubuf__ float* dst, __ubuf__ int64_t* src, uint32_t count)
-    __aicore__ inline void asc_int642float_sync_ru(__ubuf__ float* dst, __ubuf__ int64_t* src, uint32_t count)
-    __aicore__ inline void asc_int642float_sync_rz(__ubuf__ float* dst, __ubuf__ int64_t* src, uint32_t count)
+    __aicore__ inline void asc_int642float_rd_sync(__ubuf__ float* dst, __ubuf__ int64_t* src, uint32_t count)
+    __aicore__ inline void asc_int642float_rn_sync(__ubuf__ float* dst, __ubuf__ int64_t* src, uint32_t count)
+    __aicore__ inline void asc_int642float_rna_sync(__ubuf__ float* dst, __ubuf__ int64_t* src, uint32_t count)
+    __aicore__ inline void asc_int642float_ru_sync(__ubuf__ float* dst, __ubuf__ int64_t* src, uint32_t count)
+    __aicore__ inline void asc_int642float_rz_sync(__ubuf__ float* dst, __ubuf__ int64_t* src, uint32_t count)
     ```
 
 ## 参数说明
