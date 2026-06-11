@@ -150,24 +150,11 @@ private:
         uint32_t matrixElems = srcShapeRows * srcShapeColumns;
         uint8_t cacheMode = src.Engine().GetCacheMode();
 
-        uint32_t blockCount;
-        uint32_t blockLen;
-        uint64_t srcStride;
-        uint32_t dstStride;
-
-        if (srcBatchStride == matrixElems && dstBatchStride == matrixElems) {
-            // batches are contiguous on both sides: fold to one B*M*N block.
-            blockCount = 1;
-            blockLen = batchSize * matrixElems * sizeof(type);
-            srcStride = 0;
-            dstStride = blockLen;
-        } else {
-            // batch-strided: B blocks, stride = per-matrix start-to-start in bytes.
-            blockCount = batchSize;
-            blockLen = matrixElems * sizeof(type);
-            srcStride = srcBatchStride * sizeof(type);
-            dstStride = dstBatchStride * sizeof(type);
-        }
+        // batch-strided: B blocks, stride = per-matrix start-to-start in bytes.
+        uint32_t blockCount = batchSize;
+        uint32_t blockLen = matrixElems * sizeof(type);
+        uint64_t srcStride = srcBatchStride * sizeof(type);
+        uint32_t dstStride = dstBatchStride * sizeof(type);
 
         if constexpr (IsB4Type<type>) {
             // move fp4 as b8, need to be divided by 2

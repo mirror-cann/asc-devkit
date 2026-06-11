@@ -214,12 +214,13 @@ DATA_COPY_TEST_L12BIAS_TWO_TYPE_ND2ND(half, 1, 64, float, 1, 64)
 // Batch ND2ND (l1_to_bt)
 //
 // Layout (B, (M, N)) constructed via MakeBatchPatternLayout always emits
-// sB == M*N, so the compact-fold branch fires:
+// sB == M*N. The implementation only keeps the batched branch:
 //   convControl = 0 (same-type) or 1 (half->float)
-//   blockCount  = 1
-//   blockLen    = ceil_division(B*M*N, C0_ELEMENT<srcType>), rounded up to 2 for fp32/int32
-//   srcStride   = 0
-//   dstStride   = 0
+//   blockCount  = B
+//   blockLen    = ceil_division(M*N, C0_ELEMENT<srcType>), rounded up to 2 for fp32/int32
+//   srcStride   = (sB - M*N) / C0_ELEMENT<srcType>
+//   dstStride   = ceil_align((sB - M*N) / C0_ELEMENT<dstType>, 2)
+// With sB == M*N both strides are 0.
 // =========================================================================
 template <typename DTYPE, int B, int M, int N>
 __aicore__ inline void copy_cbuf_to_bt_batch_compact_stub(uint64_t dst, __cbuf__ DTYPE* src,
@@ -228,8 +229,8 @@ __aicore__ inline void copy_cbuf_to_bt_batch_compact_stub(uint64_t dst, __cbuf__
                                                           uint16_t dstStride)
 {
     EXPECT_EQ(convControl, 0);
-    EXPECT_EQ(blockCount, 1);
-    uint16_t expectBlockLen = TestCeilDivision(B * M * N * sizeof(DTYPE), TEST_C0_SIZE);
+    EXPECT_EQ(blockCount, B);
+    uint16_t expectBlockLen = TestCeilDivision(M * N * sizeof(DTYPE), TEST_C0_SIZE);
     if constexpr (std::is_same_v<DTYPE, float> || std::is_same_v<DTYPE, int32_t>) {
         expectBlockLen = (expectBlockLen + 1) & ~1;
     }
@@ -270,8 +271,8 @@ __aicore__ inline void copy_cbuf_to_bt_batch_compact_half2float_stub(uint64_t ds
                                                                      uint16_t srcStride, uint16_t dstStride)
 {
     EXPECT_EQ(convControl, 1);
-    EXPECT_EQ(blockCount, 1);
-    EXPECT_EQ(blockLen, TestCeilDivision(B * M * N * sizeof(half), TEST_C0_SIZE));
+    EXPECT_EQ(blockCount, B);
+    EXPECT_EQ(blockLen, TestCeilDivision(M * N * sizeof(half), TEST_C0_SIZE));
     EXPECT_EQ(srcStride, 0);
     EXPECT_EQ(dstStride, 0);
 }

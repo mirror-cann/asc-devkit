@@ -144,30 +144,14 @@ private:
 
         uint32_t matrixElems = srcShapeRows * srcShapeColumns;
 
-        uint16_t blockCount;
-        uint16_t blockLen;
-        uint16_t srcStride;
-        uint16_t dstStride;
-
-        if (srcBatchStride == matrixElems && dstBatchStride == matrixElems) {
-            // batches are contiguous on both sides: fold to one B*M*N block.
-            blockCount = 1;
-            blockLen = Std::ceil_division(batchSize * matrixElems, C0_ELEMENT<srcType>);
-            if constexpr (IsOneOfAttrV<srcType, float, int32_t>) {
-                blockLen = Std::ceil_align(blockLen, 2);
-            }
-            srcStride = 0;
-            dstStride = 0;
-        } else {
-            // batch-strided: B blocks, stride encodes per-matrix end-to-next-start gap.
-            blockCount = batchSize;
-            blockLen = Std::ceil_division(matrixElems, C0_ELEMENT<srcType>);
-            if constexpr (IsOneOfAttrV<srcType, float, int32_t>) {
-                blockLen = Std::ceil_align(blockLen, 2);
-            }
-            srcStride = (srcBatchStride - matrixElems) / C0_ELEMENT<srcType>;
-            dstStride = Std::ceil_align((dstBatchStride - matrixElems) / C0_ELEMENT<dstType>, 2);
+        // batch-strided: B blocks, stride encodes per-matrix end-to-next-start gap.
+        uint16_t blockCount = batchSize;
+        uint16_t blockLen = Std::ceil_division(matrixElems, C0_ELEMENT<srcType>);
+        if constexpr (IsOneOfAttrV<srcType, float, int32_t>) {
+            blockLen = Std::ceil_align(blockLen, 2);
         }
+        uint16_t srcStride = (srcBatchStride - matrixElems) / C0_ELEMENT<srcType>;
+        uint16_t dstStride = Std::ceil_align((dstBatchStride - matrixElems) / C0_ELEMENT<dstType>, 2);
 
         CopyL12BTInstr::DataCopy(dst, src, convControl, blockCount, blockLen, srcStride, dstStride);
     }

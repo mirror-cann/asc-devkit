@@ -202,6 +202,26 @@ __aicore__ inline constexpr auto MakeTensor(const Iterator& iter, const Args&...
     return MakeTensorBuilder<Iterator>{}(iter, args...);
 }
 
+// Construct a single-batch sub-tensor from a batched tensor by offsetting the engine pointer
+// and stripping the leading batch axis from the layout. Layout depth 5 -> 4 (e.g. NZ fractal)
+// or 3 -> 2 (e.g. ND row/col). Other depths trigger a compile-time error.
+template <typename Tensor>
+__aicore__ inline constexpr auto MakeSingleBatchSubTensor(const Tensor& t, uint32_t batchIdx)
+{
+    using LayoutType = typename Tensor::layoutType;
+    static_assert(LayoutType::depth == THREE_DIM_DATA || LayoutType::depth == FIVE_DIM_DATA,
+        "MakeSingleBatchSubTensor only supports batched layouts of depth 3 or 5.");
+    auto layout = t.Layout();
+    auto batchStride = Get<0>(layout.Stride());
+    auto subEngine = t.Engine() + batchStride * batchIdx;
+    auto subLayout = RemoveBatchDim(layout);
+    using NewEngine = Std::remove_cvref_t<decltype(subEngine)>;
+    using NewLayout = Std::remove_cvref_t<decltype(subLayout)>;
+    using Location = GetMemLocation<NewEngine>;
+    using NewTensor = typename MakeTensorResult<Location, NewEngine, NewLayout>::type;
+    return NewTensor{subEngine, subLayout};
+}
+
 } // namespace Te
 
 template <typename EngineType, typename LayoutType>

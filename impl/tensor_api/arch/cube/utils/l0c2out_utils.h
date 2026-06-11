@@ -36,6 +36,12 @@ constexpr FixpipeParams DEFAULT_FIXPIPE_PARAMS = FixpipeParams{};
 template <typename TensorType>
 inline constexpr bool IsL0COutSrcBatchLayoutV = TensorType::layoutType::depth == FIVE_DIM_DATA;
 
+// Generic batched-layout predicate for L0C->out tensors that may use ND/DN/NDExt/DNExt or quant
+// shapes: non-batch depth is 2/4, batch depth is 3/5. Use IsL0COutSrcBatchLayoutV for src (NZ).
+template <typename TensorType>
+inline constexpr bool IsL0COutBatchedLayoutV =
+    TensorType::layoutType::depth == THREE_DIM_DATA || TensorType::layoutType::depth == FIVE_DIM_DATA;
+
 template <typename TensorType>
 inline constexpr bool IsL0COutNDFormatV =
     IsSatisfiedPtnFormatV<TensorType, NDExtLayoutPtn> || IsSatisfiedPtnFormatV<TensorType, NDLayoutPtn>;
@@ -350,6 +356,22 @@ __aicore__ inline static void SetRegisterImpl(const T& dst, const U& src, uint64
     } else {
         SetRegisterInstr::SetRegister(quant, 1, 0, 0);
     }
+}
+
+// Validate the batch-axis consistency between dst/src/quant tensors used by L0C->GM/UB vector
+// quant copy. Returns whether the quant tensor is batched so the caller can use the result for
+// `if constexpr` dispatch without recomputing it.
+template <typename T, typename U, typename V>
+__aicore__ inline static constexpr bool CheckVectorQuantBatchConsistency()
+{
+    constexpr bool srcBatched = IsL0COutSrcBatchLayoutV<U>;
+    constexpr bool dstBatched = IsL0COutBatchedLayoutV<T>;
+    constexpr bool quantBatched = IsL0COutBatchedLayoutV<V>;
+    static_assert(srcBatched == dstBatched,
+        "src and dst tensors must both carry a batch axis or both omit it.");
+    static_assert(!quantBatched || srcBatched,
+        "Vector quant with batched quant tensor requires batched src and dst tensors as well.");
+    return quantBatched;
 }
 
 } // namespace Te

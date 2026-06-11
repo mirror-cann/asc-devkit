@@ -2493,10 +2493,14 @@ CAPTURE_GM_TO_L1_IMPL(uint32_t);
 // =========================================================================
 // Batch ND2ND (gm_to_l1)
 //
-// Layout (B, (M, N)) with strides (sB, (sM, sN)). Per-matrix internal
-// compactness is assumed (sM == N). MakeBatchPatternLayout always emits
-// sB == M*N, so the compact-fold branch fires:
-//   blockCount = 1, blockLen = B*M*N*sizeof(T), srcStride = 0, dstStride = blockLen
+// Layout (B, (M, N)) with strides (sB, (sM, sN)). The implementation only
+// keeps the batched branch (no compact-fold):
+//   blockCount = B
+//   blockLen   = M*N*sizeof(T)
+//   srcStride  = sB*sizeof(T)
+//   dstStride  = sB*sizeof(T)
+// MakeBatchPatternLayout always emits sB == M*N, so srcStride == dstStride
+// == M*N*sizeof(T).
 // (MakeBatchNDExt is provided by the file-scope MAKE_BATCH_LAYOUT_FUNC macro above.)
 // =========================================================================
 
@@ -2521,8 +2525,9 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ND2ND_Compact_FoldsToSingleBlock)
 
     MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{}).Call(l1A, gmA);
 
-    constexpr uint32_t expectBlockLen = B * M * N * sizeof(T);
-    EXPECT_GM2L1_BATCH_LAST_CALL(1, expectBlockLen, 0, expectBlockLen);
+    constexpr uint32_t expectBlockLen = M * N * sizeof(T);
+    constexpr uint64_t expectStride = static_cast<uint64_t>(M) * N * sizeof(T);
+    EXPECT_GM2L1_BATCH_LAST_CALL(B, expectBlockLen, expectStride, expectStride);
 }
 
 TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ND2ND_Compact_HalfType)
@@ -2536,6 +2541,7 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ND2ND_Compact_HalfType)
 
     MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{}).Call(l1A, gmA);
 
-    constexpr uint32_t expectBlockLen = B * M * N * sizeof(T);
-    EXPECT_GM2L1_BATCH_LAST_CALL(1, expectBlockLen, 0, expectBlockLen);
+    constexpr uint32_t expectBlockLen = M * N * sizeof(T);
+    constexpr uint64_t expectStride = static_cast<uint64_t>(M) * N * sizeof(T);
+    EXPECT_GM2L1_BATCH_LAST_CALL(B, expectBlockLen, expectStride, expectStride);
 }
