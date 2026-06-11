@@ -94,7 +94,7 @@
 
   请参考[pytorch: Ascend Extension for PyTorch](https://gitcode.com/Ascend/pytorch)开源代码仓或[Ascend Extension for PyTorch昇腾社区](https://hiascend.com/document/redirect/Pytorch-index)的安装说明，选取支持的`Python`版本配套发行版，完成`torch`和`torch-npu`的安装。
   
-  > torch_npu 的版本为 26.0.0 。
+  > torch_npu 的版本为 26.0.0。
 
 - 安装前置依赖
 

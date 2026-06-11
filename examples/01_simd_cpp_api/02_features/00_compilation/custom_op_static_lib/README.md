@@ -50,6 +50,6 @@ AddCustom算子介绍等内容可参考[算子描述](../custom_op/README.md)。
 
   执行结果如下，说明执行成功。
 
-  ```log
+  ```text
   test pass
   ```

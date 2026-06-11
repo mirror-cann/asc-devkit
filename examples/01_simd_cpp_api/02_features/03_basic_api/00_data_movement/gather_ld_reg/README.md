@@ -41,7 +41,7 @@
   **场景1：Gather模式**
   - 使用Gather接口，从UB按元素索引收集数据到RegTensor
   - 按元素收集：dst[i] = src[index[i]]
-  - 源数据数据量为1024个元素，索引数据量为128个元素，输出数据量为128个元素。
+  - 源数据量为1024个元素，索引数据量为128个元素，输出数据量为128个元素。
   - 样例规格：
     <table>
     <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="3" align="center">AIV样例</td></tr>
@@ -58,7 +58,7 @@
 
   **场景2：GatherB模式**
   - 使用GatherB接口，按32字节DataBlock收集
-  - 源数据数据量为1024个元素，索引数据量为8个元素（对应8个DataBlock），输出数据量为128个元素。
+  - 源数据量为1024个元素，索引数据量为8个元素（对应8个DataBlock），输出数据量为128个元素。
   - 样例规格：
     <table>
     <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="3" align="center">AIV样例</td></tr>

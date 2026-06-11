@@ -203,7 +203,7 @@
 01_simd_cpp_api/03_libraries/00_matrix/matmul
 01_simd_cpp_api/03_libraries/00_matrix/matmul_preload
 01_simd_cpp_api/03_libraries/00_matrix/matmul_unitflag
-01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_mannul
+01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_manual
 01_simd_cpp_api/03_libraries/00_matrix/matmul_mn_double_buffer
 01_simd_cpp_api/03_libraries/00_matrix/matmul_tscm_src_vecout
 01_simd_cpp_api/03_libraries/00_matrix/matmul_a2b2_share

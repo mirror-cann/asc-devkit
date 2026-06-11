@@ -29,7 +29,7 @@
 ## 样例描述
 
 - 样例功能：  
-  组合调用 `ReadGmByPassDCache` 和 `WriteGmByPassDCache` ，实现：
+  组合调用 `ReadGmByPassDCache` 和 `WriteGmByPassDCache`，实现：
   1. 使用 `ReadGmByPassDCache` 从 GM 地址读取一个int32_t类型的标量值
   2. 使用 `WriteGmByPassDCache` 将读出的值加100后，写入到输出GM地址
 

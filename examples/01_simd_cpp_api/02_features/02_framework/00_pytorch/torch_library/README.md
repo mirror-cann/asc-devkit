@@ -35,14 +35,10 @@
   <table border="2" align="center">
   <caption>表1：AddCustom样例规格描述</caption>
   <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">AddCustom</td></tr>
-  </tr>
   <tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
   <tr><td align="center">x</td><td align="center">[8, 2048]</td><td align="center">half</td><td align="center">ND</td></tr>
   <tr><td align="center">y</td><td align="center">[8, 2048]</td><td align="center">half</td><td align="center">ND</td></tr>
-  </tr>
-  </tr>
   <tr><td rowspan="1" align="center">样例输出</td><td align="center">z</td><td align="center">[8, 2048]</td><td align="center">half</td><td align="center">ND</td></tr>
-  </tr>
   <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">add_custom</td></tr>
   </table>
 
@@ -52,7 +48,7 @@
 
   PyTorch提供`TORCH_LIBRARY`宏作为自定义样例注册的核心接口，用于创建并初始化自定义算子库，注册后在Python侧可以通过`torch.ops.namespace.op_name`方式进行调用，例如：
 
-  ```c++
+  ```cpp
   TORCH_LIBRARY(ascendc_ops, m) {
       m.def("ascendc_add(Tensor x, Tensor y) -> Tensor");
   }
@@ -60,7 +56,7 @@
 
   `TORCH_LIBRARY_IMPL`用于将算子绑定到特定的`DispatchKey`（PyTorch设备调度标识）。针对NPU设备，需要将算子实现注册到`PrivateUse1`这一专属的`DispatchKey`上，例如：
 
-  ```c++
+  ```cpp
   TORCH_LIBRARY_IMPL(ascendc_ops, PrivateUse1, m)
   {
       m.impl("ascendc_add", TORCH_FN(ascendc_ops::ascendc_add));

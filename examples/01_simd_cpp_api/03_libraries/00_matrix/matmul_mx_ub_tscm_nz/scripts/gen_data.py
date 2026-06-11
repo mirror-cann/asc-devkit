@@ -60,12 +60,10 @@ def float_to_hex(f):
 
 def IsRoundOne(sign, man, truncLen):
     roundingTruncLen = 64
-    # mask0 = (truncLen >= roundingTruncLen) ? 0 : 0x1ul << truncLen;
     if truncLen >= roundingTruncLen:
         mask0 = 0
     else:
         mask0 = 0x1 << truncLen
-    # mask1 = (truncLen > roundingTruncLen) ? 0 : 0x1ul << (truncLen - 1);
     if (truncLen > roundingTruncLen):
         mask1 = 0
     else:
@@ -144,7 +142,6 @@ def trans_np_bfloat16_tensor_to_fp4_e1m2(in_tensor):
     fp4_shape = (shape_tensor[0],shape_tensor[1]//2)
     fp4_tensor = np.zeros(multi_shape//2).astype(np.uint8)
     for i in range(multi_shape//2):
-        # fp4_tensor[i] = (out_tensor[i*2] << 4) | out_tensor[i*2+1] # 按常规顺序保存b4
         fp4_tensor[i] = (out_tensor[i*2+1] << 4) | out_tensor[i*2] # 按两两交叉顺序保存b4，比如b4两个数：0100 0010 存为b8后为0010 0100
     
     fp4_tensor = fp4_tensor.reshape(fp4_shape)
@@ -170,7 +167,6 @@ def gen_golden_data():
     b_format = "NZ"
     scalea_format = "NZ"
     scaleb_format = "NZ"
-    # c0_size = 32 if type in ('fp8_e5m2_t', 'fp8_e4m3fn_t') else 64
     c0_size = 64
     sk = (int)(np.ceil(k / 64) * 2)
 
@@ -273,4 +269,3 @@ def gen_golden_data():
 
 if __name__ == "__main__":
     gen_golden_data()
-    

@@ -144,7 +144,7 @@
 01_simd_cpp_api/03_libraries/00_matrix/matmul_nbuffer33
 01_simd_cpp_api/03_libraries/01_activation/softmaxflashv2
 01_simd_cpp_api/03_libraries/00_matrix/matmul_triangle
-01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_mannul
+01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_manual
 01_simd_cpp_api/03_libraries/00_matrix/matmul_preload
 01_simd_cpp_api/03_libraries/00_matrix/matmul_unitflag
 01_simd_cpp_api/03_libraries/00_matrix/matmul_a2b2_share

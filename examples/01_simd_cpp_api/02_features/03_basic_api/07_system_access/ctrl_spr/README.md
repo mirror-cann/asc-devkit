@@ -35,7 +35,7 @@
   验证CTRL寄存器非饱和模式操作的完整流程及其功能效果：
   1. SetCtrlSpr：设置 `CTRL[60]=1` 使能全局生效，设置 `CTRL[48]=1` 选择非饱和模式（INF/NAN保持原输出）
   2. GetCtrlSpr：读取 `CTRL[48]` 设置后的值，存入 `ctrlLocal` 前4位
-  3. Adds：执行half类型浮点数加法计算，输入包含INF值，存入 `dstLocal` ，用于验证非饱和模式下INF是否保持原值
+  3. Adds：执行half类型浮点数加法计算，输入包含INF值，存入 `dstLocal`，用于验证非饱和模式下INF是否保持原值
   4. ResetCtrlSpr：重置 `CTRL[48]`、`CTRL[60]` 为默认值
   5. GetCtrlSpr：读取 `CTRL[48]` 重置后的值，存入 `ctrlLocal` 后4位
 

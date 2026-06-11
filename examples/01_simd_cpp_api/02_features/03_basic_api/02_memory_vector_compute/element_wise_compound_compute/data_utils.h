@@ -23,14 +23,6 @@
 
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
 
-/**
- * @brief Read data from file
- * @param [in] filePath: file path
- * @param [out] fileSize: actual file size
- * @param [in] buffer: buffer to store file data
- * @param [in] bufferSize: buffer size
- * @return read result
- */
 bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_t bufferSize)
 {
     struct stat sBuf;
@@ -70,13 +62,6 @@ bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_
     return true;
 }
 
-/**
- * @brief Write data to file
- * @param [in] filePath: file path
- * @param [in] buffer: data to write to file
- * @param [in] size: size to write
- * @return write result
- */
 bool WriteFile(const std::string &filePath, const void *buffer, size_t size)
 {
     if (buffer == nullptr) {

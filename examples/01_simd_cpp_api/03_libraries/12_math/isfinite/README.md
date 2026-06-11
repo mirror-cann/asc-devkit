@@ -17,7 +17,7 @@
 
 ## 目录结构介绍
 
-```plain
+```text
 ├── isfinite
 │   ├── scripts
 │   │   └── gen_data.py         // 输入数据和真值数据生成脚本

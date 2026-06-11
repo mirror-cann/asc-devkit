@@ -19,6 +19,7 @@
 │   ├── figures                     // 图示
 │   ├── scripts
 │   │   ├── gen_data.py             // 输入数据和真值数据生成脚本
+│   │   ├── mmad.py                 // 矩阵乘法辅助脚本
 │   │   └── verify_result.py        // 验证输出数据和真值数据是否一致的验证脚本
 │   ├── CMakeLists.txt              // 编译工程文件
 │   ├── data_utils.h                // 数据读入写出函数
@@ -173,7 +174,7 @@
   - Bias [1, 40] float类型
 - 输出：C [30, 40] float类型，ND格式
 - 实现：使用`Mmad`实现矩阵乘法运算，传入biasTensor，该场景下`mmadParams.cmatrixSource`参数无效
-- 说明：float类型输入，A矩阵转置场景下，需要使用`mmadParams.kDirectionAlign`来解决K轴实际向`CeilAlign(K, 8*2)`对齐，与Mmad指令默认要求对齐到`CeilAlign(K, 8)`不一的问题。该场景下该参数设置为真，K轴对齐到`CeilAlign(K, 16)`，矩阵计算单元从L0A读取数据会跳过填充的无效数据，其余场景下该参数默认为flase，K轴仍向`CeilAlign(K, 8)`对齐，如下图2所示：
+- 说明：float类型输入，A矩阵转置场景下，需要使用`mmadParams.kDirectionAlign`来解决K轴实际向`CeilAlign(K, 8*2)`对齐，与Mmad指令默认要求对齐到`CeilAlign(K, 8)`不一致的问题。该场景下该参数设置为真，K轴对齐到`CeilAlign(K, 16)`，矩阵计算单元从L0A读取数据会跳过填充的无效数据，其余场景下该参数默认为false，K轴仍向`CeilAlign(K, 8)`对齐，如下图2所示：
 
 <p align="center">
   <img src="figures/mmad_f32_L0A_转置.png" width="1100">

@@ -3658,8 +3658,8 @@
     ]
   },
   {
-    "case": "01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_mannul",
-    "runner": "scripts/presmoke/cases/01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_mannul/run.sh",
+    "case": "01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_manual",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_manual/run.sh",
     "source": "readme",
     "confidence": "high",
     "supported_archs": [

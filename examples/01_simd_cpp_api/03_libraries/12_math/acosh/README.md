@@ -26,7 +26,7 @@
 
 ## 目录结构介绍
 
-```plain
+```text
 ├── acosh
 │   ├── CMakeLists.txt     // 编译工程文件
 │   └── acosh.asc          // Ascend C样例实现 & 调用样例

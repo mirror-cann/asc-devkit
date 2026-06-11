@@ -53,6 +53,8 @@
 - 执行结果
 
   执行结果如下，说明执行成功：
+  其中，`__mix__(1, 2)`会启动1个Cube执行单元和2个Vector执行单元，因此`Hello World`日志会打印3次。
+
   ```bash
   MyAicpuKernel inited
   MyAicpuKernel inited type 1 mode 2 len 4 end!

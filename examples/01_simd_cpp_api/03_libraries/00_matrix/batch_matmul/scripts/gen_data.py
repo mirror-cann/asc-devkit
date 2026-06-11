@@ -48,7 +48,6 @@ def gen_golden_data():
     b_t = np.transpose(b, axes=(0, 2, 3, 4, 1))
     a_broadcast_shape = [max(aLayoutInfoB, bLayoutInfoB), max(aLayoutInfoN, bLayoutInfoN), max(aLayoutInfoG, bLayoutInfoG), aLayoutInfoS, aLayoutInfoD]
     b_broadcast_shape = [max(aLayoutInfoB, bLayoutInfoB), max(aLayoutInfoN, bLayoutInfoN), max(aLayoutInfoG, bLayoutInfoG), bLayoutInfoD, bLayoutInfoS]
-    # print(" a brc shape is ", a_broadcast_shape, " b brc shape is ", b_broadcast_shape)
     a_broadcast = np.broadcast_to(a_t, a_broadcast_shape)
     b_broadcast = np.broadcast_to(b_t, b_broadcast_shape)
     golden = np.matmul(a_broadcast, b_broadcast).astype(np.float32)
@@ -62,4 +61,3 @@ def gen_golden_data():
 
 if __name__ == "__main__":
     gen_golden_data()
-    

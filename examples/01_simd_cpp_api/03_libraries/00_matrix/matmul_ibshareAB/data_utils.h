@@ -61,14 +61,6 @@ typedef enum {
         }                                                                                   \
     } while (0);
 
-/**
- * @brief Read data from file
- * @param [in] filePath: file path
- * @param [out] fileSize: file size
- * @param [in] buffer: data to write to file
- * @param [in] bufferSize: size of data to write to file
- * @return read result
- */
 bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_t bufferSize)
 {
     struct stat sBuf;
@@ -108,13 +100,6 @@ bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_
     return true;
 }
 
-/**
- * @brief Write data to file
- * @param [in] filePath: file path
- * @param [in] buffer: data to write to file
- * @param [in] size: size to write
- * @return write result
- */
 
 double ReportTime(const std::chrono::time_point<std::chrono::steady_clock> &start, const std::chrono::time_point<std::chrono::steady_clock> &end)
 {

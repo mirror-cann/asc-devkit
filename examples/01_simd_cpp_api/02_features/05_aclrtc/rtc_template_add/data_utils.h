@@ -76,13 +76,6 @@ bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_
     return true;
 }
 
-/**
- * @brief Write data to file
- * @param [in] filePath: file path
- * @param [in] buffer: data to write to file
- * @param [in] size: size to write
- * @return write result
- */
 bool WriteFile(const std::string &filePath, const void *buffer, size_t size)
 {
     if (buffer == nullptr) {
@@ -106,13 +99,6 @@ bool WriteFile(const std::string &filePath, const void *buffer, size_t size)
     return true;
 }
 
-/**
- * @brief Generate random test data in [1, 100) and compute golden = x + y
- * @param [out] x      input buffer (len floats)
- * @param [out] y      input buffer (len floats)
- * @param [out] golden expected output (len floats)
- * @param [in]  len    number of elements
- */
 inline void GenTestData(float *x, float *y, float *golden, size_t len)
 {
     srand((unsigned int)time(nullptr));
@@ -123,13 +109,6 @@ inline void GenTestData(float *x, float *y, float *golden, size_t len)
     }
 }
 
-/**
- * @brief Verify output against golden data with tolerance
- * @param [in] output  actual output buffer
- * @param [in] golden  expected output buffer
- * @param [in] len     number of elements
- * @return true if error ratio <= 1e-4
- */
 inline bool VerifyResult(const float *output, const float *golden, size_t len)
 {
     constexpr float RELATIVE_TOL = 1e-4f;

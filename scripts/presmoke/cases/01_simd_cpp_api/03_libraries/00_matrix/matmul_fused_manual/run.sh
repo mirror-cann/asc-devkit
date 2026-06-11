@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-CASE_REL=01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_mannul
+CASE_REL=01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_manual
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../../../_case_entry.sh"
 presmoke_case_init "$CASE_REL"

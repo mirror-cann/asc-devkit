@@ -66,8 +66,8 @@
 - 说明：紧凑模式，允许单次搬运不对齐，统一在整块数据末尾补齐至32字节对齐。此处示例中，leftPadding为0，rightPadding为16，在最后一个数据块右侧填充16字节。目的操作数的数据量为160字节。
 
 **场景4：使用SetLoopModePara使能loop mode（Compact模式） ----此场景仅在 Ascend 950PR/Ascend 950DT产品支持**
-- 输入shape：[1, 320]，如图 1所示
-- 输出shape：[1, 576]，如图 2所示
+- 输入shape：[1, 320]，如图 1 所示
+- 输出shape：[1, 576]，如图 2 所示
 - 数据类型：int8
 - 参数配置：
   - GM→UB：LoopModeParams{loop1Size=2, loop2Size=2, loop1SrcStride=80, loop1DstStride=128, loop2SrcStride=160, loop2DstStride=288}，DataCopyMVType::OUT_TO_UB
@@ -84,8 +84,8 @@
 <img src="figures/datacopypad2.png">
 
 **场景5：使用SetLoopModePara使能loop mode（Normal模式） ----此场景仅在 Ascend 950PR/Ascend 950DT产品支持**
-- 输入shape：[1, 320]，如图 1所示
-- 输出shape：[1, 576]，如图 3所示
+- 输入shape：[1, 320]，如图 1 所示
+- 输出shape：[1, 576]，如图 3 所示
 - 数据类型：int8
 - 参数配置：
   - GM→UB：LoopModeParams{loop1Size=2, loop2Size=2, loop1SrcStride=80, loop1DstStride=128, loop2SrcStride=160, loop2DstStride=288}，DataCopyMVType::OUT_TO_UB

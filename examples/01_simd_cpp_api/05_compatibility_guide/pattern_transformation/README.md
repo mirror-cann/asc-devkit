@@ -108,7 +108,7 @@ for (uint32_t i = 0; i < mBlocks; ++i) {
 }
 ```
 
-在 Ascend 950PR/Ascend 950DT 中，L1->L0A需要不需要做分型转换，保持Nz分形，通过Load2D 接口实现，相关代码如下：
+在 Ascend 950PR/Ascend 950DT 中，L1->L0A不需要做分形转换，保持Nz分形，通过Load2D 接口实现，相关代码如下：
 
 ```cpp
 constexpr uint32_t mBlocks = M / CUBE_BLOCK;

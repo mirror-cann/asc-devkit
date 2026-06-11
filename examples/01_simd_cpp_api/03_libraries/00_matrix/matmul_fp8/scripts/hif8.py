@@ -84,9 +84,9 @@ def _get_hif8_fraction_bits_number(exponent):
         #d4
         return 12, 4, 1
     if exponent > 15:
-        #over flow
+        # overflow
         return 12, 4, -1
-    logging.info("[ERROR] unknow exponent value")
+    logging.info("[ERROR] unknown exponent value")
     return 0, 0, 0
 
 
@@ -248,7 +248,7 @@ def cvt_float16_to_hifuint8(x, round_mode="round", over_mode=True):
         random_t = 0
         carry_exp_status, hif8_frac_value = _fp16_sr_round_to_hif8(fraction_int, fraction_hif8_bits, random_t)
     else:
-        logging.info("[ERROR] unknow round type")
+        logging.info("[ERROR] unknown round type")
         return 0
     if carry_exp_status:
         exponent += 1
@@ -256,7 +256,7 @@ def cvt_float16_to_hifuint8(x, round_mode="round", over_mode=True):
         hif8_frac_value = hif8_frac_value >> (fraction_hif8_bits - fraction_hif8_bits_new)
         fraction_hif8_bits = fraction_hif8_bits_new
     if fraction_hif8_bits == -1:
-        #over flow
+        # overflow
         res = get_over_flow_res(sign, over_mode)
         if res > 0:
             return res
@@ -327,7 +327,7 @@ def cvt_float32_to_hifuint8(x, round_mode="round", over_mode=True):
         random_t = 0
         carry_exp_status, hif8_frac_value = _fp32_sr_round_to_hif8(fraction_int, fraction_hif8_bits, random_t)
     else:
-        logging.info("[ERROR] unknow round type")
+        logging.info("[ERROR] unknown round type")
         return 0
     if carry_exp_status:
         exponent += 1

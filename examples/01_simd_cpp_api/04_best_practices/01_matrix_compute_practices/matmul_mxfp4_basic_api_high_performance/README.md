@@ -160,7 +160,7 @@ MxMatmul 的输入不是两路，而是四路：A、B、scaleA、scaleB。因此
 
 通过 `stepKa=2`、`stepKb=2` 一次搬入 `stepKa * baseM * baseK` 的 A 矩阵数据 和 `stepKb * baseN * baseK` 的 B 矩阵数据，减少搬运指令数量，提高 GM 到 L1 的搬运效率。
 
-scale 的搬运粒度由 `scaleFactorKa=4`、`scaleFactorKb=4` 控制，一次搬入 `scaleFactorKa * stepKa * baseM * baseSK` 的 ScakeA 矩阵数据 和 `scaleFactorKb * stepKb * baseN * baseSK` 的 ScaleB 矩阵数据，其中`baseSK = basK / 32`。它的作用是让 scaleA/scaleB 在 K 方向相比于 A/B 一次覆盖更大的范围，减少 scale 反复搬运带来的 MTE2 压力。
+scale 的搬运粒度由 `scaleFactorKa=4`、`scaleFactorKb=4` 控制，一次搬入 `scaleFactorKa * stepKa * baseM * baseSK` 的 ScaleA 矩阵数据 和 `scaleFactorKb * stepKb * baseN * baseSK` 的 ScaleB 矩阵数据，其中`baseSK = baseK / 32`。它的作用是让 scaleA/scaleB 在 K 方向相比于 A/B 一次覆盖更大的范围，减少 scale 反复搬运带来的 MTE2 压力。
 
 以 A 侧为例，`DataCopyInA` 使用 `Nd2NzParams` 一次搬入 `stepKa` 个 K 方向 base 块，每个base块为`baseM * baseK`：
 

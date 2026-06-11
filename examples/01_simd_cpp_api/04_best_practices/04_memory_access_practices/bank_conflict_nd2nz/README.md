@@ -114,7 +114,7 @@ ND和NZ的数据排布如图所示
 
 ### Atlas A2/A3 系列产品（dav-2201）
 
-> 编译时通过 `-DCMAKE_ASC_ARCHITECTURES=dav-2201` 选择 Atlas A2/A3 系列产品 。
+> 编译时通过 `-DCMAKE_ASC_ARCHITECTURES=dav-2201` 选择 Atlas A2/A3 系列产品。
 
 #### UB Bank 结构与冲突类型
 

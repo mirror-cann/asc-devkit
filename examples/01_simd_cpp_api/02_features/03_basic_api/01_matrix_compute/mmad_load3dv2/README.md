@@ -22,6 +22,7 @@
 │   │   └── verify_result.py                 // 验证输出数据和真值数据是否一致的验证脚本
 │   ├── CMakeLists.txt                       // 编译工程文件
 │   ├── data_utils.h                         // 数据读入写出函数
+│   ├── load3d.py                            // LoadData3D辅助脚本
 │   └── mmad_load3dv2.asc                    // Ascend C算子实现 & 调用样例
 ```
 ## 算子描述
