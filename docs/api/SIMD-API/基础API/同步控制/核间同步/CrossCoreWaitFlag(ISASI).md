@@ -83,6 +83,7 @@ __aicore__ inline void CrossCoreWaitFlag(uint16_t flagId)
 
 - 不同产品版本下，CrossCoreWaitFlag接口对核间同步模式和流水类型的配置支持情况如下：
 <cann-filter npu-type="950">
+
     - Ascend 950PR/Ascend 950DT，硬件支持配置核间同步模式和流水类型，模板参数modeId和pipe生效。模式0、1、2支持的流水类型为PIPE_V、PIPE_M、PIPE_MTE1、PIPE_MTE2、PIPE_MTE3、PIPE_FIX；模式4相较其他三种模式额外支持PIPE_S流水类型。
 </cann-filter>
 <cann-filter npu-type="A3">
@@ -91,6 +92,7 @@ __aicore__ inline void CrossCoreWaitFlag(uint16_t flagId)
 <cann-filter npu-type="910b">
     - Atlas A2 训练系列产品/Atlas A2 推理系列产品，硬件不支持配置核间同步模式和流水类型，传入该接口的模板参数modeId和pipe不生效。
 </cann-filter>
+
 - 由于当Kernel类型为KERNEL_TYPE_AIC_ONLY或 KERNEL_TYPE_AIV_ONLY时，硬件不会开启调度模块，也就无法正常进行核间同步，因此不同的同步模式配置[Kernel类型](../../Kernel-Tiling/设置Kernel类型.md)或[函数修饰符](../../../../../guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#section1074418132518)的情况如不：
     - 在纯Vector/Cube场景下（模式0或模式1），建议设置Kernel类型为KERNEL\_TYPE\_MIX\_AIV\_1\_0或KERNEL\_TYPE\_MIX\_AIC\_1\_0，其它支持的Kernel类型请参考表3。
     - 对于Vector和Cube混合场景（模式2），需根据AI Core中AIC和AIV的比例灵活配置Kernel类型，不同模式支持的函数修饰符和Kernel类型请参照表3。
