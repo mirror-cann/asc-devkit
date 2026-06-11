@@ -27,7 +27,7 @@
 ## 样例描述
 
 - 样例功能：
-  本样例在AIC核创建纯Cube模式的Matmul对象，实现Matmul计算，中间结果输出至GM。AIC核计算完成后，通过调用CrossCoreSetFlag和CrossCoreSetFlag接口手动控制核间同步，继续在AIV核对GM上的中间结果进行LeakyRelu的计算。
+  本样例在AIC核创建纯Cube模式的Matmul对象，实现Matmul计算，中间结果输出至GM。AIC核计算完成后，通过调用CrossCoreSetFlag和CrossCoreWaitFlag接口手动控制核间同步，继续在AIV核对GM上的中间结果进行LeakyRelu的计算。
 
 - 样例规格：
   本样例中：M = 128, N = 128, K = 256
@@ -46,7 +46,7 @@
   - Kernel关键步骤
     - AIC侧具体步骤：
       - 创建Matmul对象并初始化。
-        在#include "lib/matmul_intf.h"前配置ASCENDC_CUBE_ONLY宏，创建纯Cube模式的Mamtul对象
+        在#include "lib/matmul_intf.h"前配置ASCENDC_CUBE_ONLY宏，创建纯Cube模式的Matmul对象
           ```cpp
           #define ASCENDC_CUBE_ONLY
           #include "lib/matmul_intf.h"

@@ -36,7 +36,7 @@
 | [matmul_mx_ub_tscm_nz](./matmul_mx_ub_tscm_nz) |  在MXFP4/MXFP8数据格式下，使用用户自定义TSCM、VECOUT的输入的MxMatmul样例 | Ascend 950PR/Ascend 950DT |
 | [matmul_nbuffer33](./matmul_nbuffer33) |  NBuffer33算法的Matmul样例，实现搬入搬出带宽平衡从而提升效率 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [matmul_partial_output](./matmul_partial_output) |  Matmul高阶API实现开启Partial Output功能的样例 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
-| [matmul_preload](./matmul_preload) |  M/N方向预加载的Matmul样例，可以减少MET2间隙 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [matmul_preload](./matmul_preload) |  M/N方向预加载的Matmul样例，可以减少MTE2间隙 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [matmul_quant](./matmul_quant) |  输出随路反量化的Matmul样例，支持同一系数的反量化模式和向量的反量化模式 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [matmul_sparse](./matmul_sparse) |  4:2稀疏矩阵乘（Sparse Matmul）的Matmul样例，可以减少矩阵乘计算时的内存占用和计算量 | Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [matmul_splitk](./matmul_splitk) |  多核切K场景下的Matmul样例，将输入矩阵沿K轴切分后分配到多核上并行处理 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |

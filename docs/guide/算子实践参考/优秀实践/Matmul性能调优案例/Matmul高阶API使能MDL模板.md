@@ -101,7 +101,7 @@ Tiling参数如下：
 **图 2**  MDL模板流水示意图<a name="fig15563371352"></a>  
 ![](../../../figures/MDL模板流水示意图.png "MDL模板流水示意图")
 
-Matmul API开启MDL模板的完整样例请参考[开启UnitFlag功能和MDL模板的Mamtul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_unitflag)。开启MDL模板的主要步骤如下：
+Matmul API开启MDL模板的完整样例请参考[开启UnitFlag功能和MDL模板的Matmul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_unitflag)。开启MDL模板的主要步骤如下：
 
 1.  创建Matmul对象，使用默认的MDL模板参数CFG\_MDL。
 

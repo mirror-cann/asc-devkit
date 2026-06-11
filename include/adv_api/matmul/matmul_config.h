@@ -263,7 +263,7 @@ struct MatmulFuncParams {
                               //   set by the SetSelfDefineData function
     bool enableUBReuse;  // enable reuse of UB buffer to cache double data for two iterate
     bool isPartialOutput = false;  // enable K axis does not atomic add
-    bool isA2B2Shared = false;  // enable all Mamtul instance share the double buffer feature of A2 and B2
+    bool isA2B2Shared = false;  // enable all Matmul instance share the double buffer feature of A2 and B2
     bool isEnableChannelSplit = false;  // enable C matrix split form [x]*[m*n] to [2x]*[m*(n/2)]
                                         //     when C's DataType is float, Position is GM and CubeFormat is NZ
     bool enableKdimReorderLoad = false;  // enable K axis load data by peak-shifting
