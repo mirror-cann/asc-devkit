@@ -19,7 +19,7 @@ find_package(ASC REQUIRED)
 project(kernel_samples LANGUAGES ASC CXX)
 
 add_executable(demo
-    matmul_fused_mannul.asc
+    matmul_fused_manual.asc
 )
 
 target_link_libraries(demo PRIVATE

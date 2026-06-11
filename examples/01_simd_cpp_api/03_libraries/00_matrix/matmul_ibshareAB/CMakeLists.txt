@@ -44,6 +44,12 @@ endif()
 
 target_compile_definitions(demo PRIVATE SCENARIO_NUM=${SCENARIO_NUM})
 
+if (CMAKE_ASC_RUN_MODE STREQUAL "npu")
+    target_compile_definitions(demo PRIVATE CYCLENUMS=10000)
+else()
+    target_compile_definitions(demo PRIVATE CYCLENUMS=1)
+endif()
+
 target_compile_options(demo PRIVATE
     $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES}>
 )

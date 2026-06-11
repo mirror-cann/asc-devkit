@@ -54,7 +54,7 @@ EXAMPLE_LIST=(
     01_simd_cpp_api/02_features/03_basic_api/04_resource_management/get_tpipe_ptr
     01_simd_cpp_api/02_features/03_basic_api/06_sync_control/group_barrier
     01_simd_cpp_api/02_features/03_basic_api/08_atomic_operations/data_movement_with_atomic_operations
-    01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_mannul
+    01_simd_cpp_api/03_libraries/00_matrix/matmul_fused_manual
     01_simd_cpp_api/03_libraries/00_matrix/matmul_a2b2_share
     01_simd_cpp_api/03_libraries/00_matrix/matmul_tscm
     01_simd_cpp_api/03_libraries/01_activation/gelu

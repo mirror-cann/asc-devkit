@@ -2,7 +2,7 @@
 
 ## Overview
 
-Simple examples of matrix and vector computation based on Ascend C programming.
+This directory provides introductory examples for Ascend C SIMD C++ API, covering basic scenarios such as direct kernel invocation, vector computation, matrix multiplication computation, fusion computation, SIMT/SIMD hybrid programming, and RegBase vector programming, helping developers understand the sample project structure, compilation and execution process, and common programming patterns.
 
 ## Sample List
 
