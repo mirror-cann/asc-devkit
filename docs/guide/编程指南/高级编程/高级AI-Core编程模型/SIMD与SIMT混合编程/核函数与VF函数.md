@@ -48,13 +48,13 @@ __global__ __vector__ void kernel_name(__gm__ type* param1, __gm__ type* param2,
 -   入参支持指针类型（需使用\_\_gm\_\_修饰）和Ascend C内置数据类型；
 -   指针参数必须是指向Global Memory上的内存地址，使用\_\_gm\_\_修饰。
 
-核函数的调用是通过<<<...\>\>\>内核调用符在Host侧调用，语法如下：
+核函数的调用是通过<<<...\>\>\>核函数调用符在Host侧调用，语法如下：
 
 ```
 kernel_name<<<block_num, dyn_ub_size, stream>>>(args...);
 ```
 
-内核调用符内的配置参数说明如下：
+核函数调用符内的配置参数说明如下：
 
 <a name="zh-cn_topic_0000002571578013_table942016184315"></a>
 | 参数 | 类型 | 说明 | 约束 |
@@ -91,11 +91,15 @@ SIMT VF函数定义中的关键修饰符说明如下：
 asc_vf_call<function_name>(dim3(blockDim), arg1, arg2, ...);
 ```
 
+> [!NOTE]说明 
+> 与SIMT编程场景中在核函数调用符内配置线程数不同，混合编程场景中SIMT线程配置通过asc_vf_call接口的第一个参数配置。
+
 SIMT VF函数有以下约束：
 
 -   入参仅支持Ascend C的[内置数据类型](../../../语言扩展层/SIMD&SIMT-BuiltIn关键字.md#zh-cn_topic_0000002571575581_section1880403364916)（int32\_t、uint32\_t、float、half等）及其组成的指针、数组、结构体类型，且指针类型必须指向GM或者UB内存。
+-   不支持将核函数中局部变量的地址或引用传递给VF函数。
 -   函数返回类型必须是void。
--   SIMT VF内只能调用\_\_simt\_callee\_\_函数或constexpr \_\_aicore\_\_函数。
+-   SIMT VF内只能调用\_\_simt\_callee\_\_函数或\_\_callee\_\_函数。
 
 ## \_\_simt\_callee\_\_子函数<a name="zh-cn_topic_0000002571578013_section4680126514"></a>
 
@@ -115,4 +119,4 @@ return_type result = function_name(arg1, arg2, ...);
 
 -   入参仅支持Ascend C的[内置数据类型](../../../语言扩展层/SIMD&SIMT-BuiltIn关键字.md#zh-cn_topic_0000002571575581_section1880403364916)（int32\_t、uint32\_t、float、half等）和指针类型。
 -   函数返回值只能是Ascend C的[内置数据类型](../../../语言扩展层/SIMD&SIMT-BuiltIn关键字.md#zh-cn_topic_0000002571575581_section1880403364916)（int32\_t、uint32\_t、float、half等）及对应的指针类型。
--   函数内只能调用\_\_simt\_callee\_\_函数或constexpr \_\_aicore\_\_函数。
+-   函数内只能调用\_\_simt\_callee\_\_函数或\_\_callee\_\_函数。
