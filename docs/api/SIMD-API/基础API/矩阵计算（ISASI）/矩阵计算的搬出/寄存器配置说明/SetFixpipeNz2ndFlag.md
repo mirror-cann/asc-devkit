@@ -122,7 +122,7 @@ Kirin 9030；
 
 ## 调用示例<a id="section6461234123118"></a>
 
-完整示例可参考[data_copy_l0c2gm](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/00_data_movement/data_copy_l0c2gm)。
+完整示例可参考[data_copy_l0c2gm](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/00_data_movement/data_copy_l0c2gm)。
 
 ```cpp
 uint16_t ndNum = 2;

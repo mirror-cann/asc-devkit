@@ -241,7 +241,7 @@ Atlas A2 训练系列产品/Atlas A2 推理系列产品；
 
 <cann-filter npu_type = "950,A3,910b">
 
-Fixpipe完整样例请参考[fixpipe\_l0c2l1样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/fixpipe_l0c2l1)；
+Fixpipe完整样例请参考[fixpipe\_l0c2l1样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/fixpipe_l0c2l1)；
 
 - 示例：通路L0C Buffer->L1 Buffer。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为int8_t，不开启NZ2ND的格式转换，开启scalar量化。
 

@@ -29,14 +29,14 @@ Atlas A3 训练系列产品/Atlas A3 推理系列产品；
 
 - \(V\)REQ8量化（\(Vector\)ReQuant \(u\)int8量化）与随路ReLU组合
 
-    将L0C Buffer上int32\_t数据搬出过程中转换成int8\_t/uint8\_t，具体随路量化与ReLU算法的完整Python示例代码请参考[\(V\)REQ8量化算法](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/fixpipe_l0c2gm/scripts/gen_data_s322s8.py)。
+    将L0C Buffer上int32\_t数据搬出过程中转换成int8\_t/uint8\_t，具体随路量化与ReLU算法的完整Python示例代码请参考[\(V\)REQ8量化算法](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/fixpipe_l0c2gm/scripts/gen_data_s322s8.py)。
 
 - DEQF16与VDEQF16量化与随路ReLU组合
 
-    将L0C Buffer上int32\_t数据搬出过程中转换成half（float16），具体随路量化与ReLU算法的完整Python示例代码请参考[\(V\)DEQF16算法](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/fixpipe_l0c2gm/scripts/gen_data_s322f16.py)。
+    将L0C Buffer上int32\_t数据搬出过程中转换成half（float16），具体随路量化与ReLU算法的完整Python示例代码请参考[\(V\)DEQF16算法](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/fixpipe_l0c2gm/scripts/gen_data_s322f16.py)。
 
 - QF322B8\_PRE与VQF322B8\_PRE量化与随路ReLU组合
 
-    将L0C Buffer上float数据搬出过程中转换成int8\_t/uint8\_t，具体随路量化与ReLU算法的完整Python示例代码请参考[\(V\)QF322B8\_PRE算法](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/fixpipe_l0c2gm/scripts/gen_data_f322s8.py)。
+    将L0C Buffer上float数据搬出过程中转换成int8\_t/uint8\_t，具体随路量化与ReLU算法的完整Python示例代码请参考[\(V\)QF322B8\_PRE算法](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/fixpipe_l0c2gm/scripts/gen_data_f322s8.py)。
 
 </cann-filter>

@@ -161,7 +161,7 @@ DataCopy矩阵搬出接口支持多种随路能力的组合，需要设置不同
 
 <cann-filter npu_type = "950,A3,910b">
 
-DataCopy完整样例请参考[data_copy_l0c2gm](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/00_data_movement/data_copy_l0c2gm)；
+DataCopy完整样例请参考[data_copy_l0c2gm](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/00_data_movement/data_copy_l0c2gm)；
 
 - 示例：Mmad含有矩阵乘偏置，左矩阵和右矩阵的数据类型为int8\_t，结果矩阵的数据类型为int32\_t。量化模式DEQF16，Scalar量化参数为2.0，将Mmad计算出的结果由int32\_t量化成half并搬出。
 

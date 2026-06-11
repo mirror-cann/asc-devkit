@@ -63,7 +63,7 @@ fixpipeParams.unitFlag = 3;
 AscendC::Fixpipe(cGM, c, fixpipeParams);
 ```
 
-开启与不开启unitFlag功能的完整示例：[UnitFlag示例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/mmad_unitflag)
+开启与不开启unitFlag功能的完整示例：[UnitFlag示例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/mmad_unitflag)
 
 **表 1**  性能示例说明（以输入数据类型half为例，无业务实测表示忽略指令的前后序操作，只考虑单指令性能，包含带宽延迟等开销）
 

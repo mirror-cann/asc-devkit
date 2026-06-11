@@ -287,7 +287,7 @@ enableSmallC0开启模式下的ND2NZ转换示意图如下：
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_demo.png)
 
-示例代码片段如下，仅展示样例中的部分代码，完整示例请参考：[DataCopy_GM2L1样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/load_data_l12l0)。
+示例代码片段如下，仅展示样例中的部分代码，完整示例请参考：[DataCopy_GM2L1样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/load_data_l12l0)。
 
 ```cpp
 // m=40,k=56,fractalShape[0] = 16,fractalShape[1] = 16,fractalSize = 16 * fractalShape[1]

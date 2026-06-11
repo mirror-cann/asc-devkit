@@ -141,4 +141,4 @@ MmadMx的计算公式为：C=(scaleA⊗A)*(scaleB⊗B)+Bias，“⊗”表示广
 
 ## 调用示例
 
-完整使用样例请参考[MmadMx最佳实践](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_best_practices/01_matrix_compute_practices/matmul_mxfp4_basic_api_high_performance)。
+完整使用样例请参考[MmadMx最佳实践](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_best_practices/01_matrix_compute/matmul_mxfp4_basic_api_high_performance)。

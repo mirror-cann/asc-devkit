@@ -27,7 +27,7 @@ $$
 C = A \times B + C
 $$
 
-完整示例请参考：[MmadWithSparse样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/mmad_with_sparse)
+完整示例请参考：[MmadWithSparse样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/mmad_with_sparse)
 
 **表 1**  Sparse矩阵计算矩阵A、B、C解释说明
 

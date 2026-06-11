@@ -141,4 +141,4 @@ __aicore__ inline MmadBitModeParams(const MmadBitModeParams &mmadParams_);
 
 ## 调用示例
 
-样例请参考[Mmad样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/mmad)。
+样例请参考[Mmad样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/03_matrix_compute/mmad)。
