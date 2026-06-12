@@ -148,7 +148,7 @@ TEST_F(TEST_TPIPE, TPipeConstructionTest)
     EXPECT_EQ(pipe->g_tpipeImpl.curBufSize_, 0);
     // check hardware addr, alias bufpool
     for (int32_t i = 0; i < static_cast<int32_t>(Hardware::MAX); i++) {
-        EXPECT_EQ(pipe->g_tpipeImpl.bufPool_[i].maxAddr, 0);
+        EXPECT_EQ(Internal::g_tPipeAddrBufPool[i], 0);
     }
 
     // for cpu debug, check all space allocated
@@ -167,7 +167,7 @@ TEST_F(TEST_TPIPE, TPipeInitBufferWithTBufTest)
     uint32_t len = 128;
     TPipe pipe;
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 0);
-    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[static_cast<uint8_t>(hardPos)].maxAddr, 0);
+    EXPECT_EQ(Internal::g_tPipeAddrBufPool[static_cast<uint8_t>(hardPos)], 0);
     pipe.InitBuffer(buf, len);
     EXPECT_EQ(buf.bufStart, &(pipe.g_tpipeImpl.buf_[0]));
     EXPECT_EQ(buf.bufStart->address, 0);
@@ -177,7 +177,7 @@ TEST_F(TEST_TPIPE, TPipeInitBufferWithTBufTest)
     EXPECT_EQ(buf.bufStart->dataLen, len);
     EXPECT_EQ(buf.bufStart->usertag, -1);
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 1);
-    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[static_cast<uint8_t>(hardPos)].maxAddr, len);
+    EXPECT_EQ(Internal::g_tPipeAddrBufPool[static_cast<uint8_t>(hardPos)], len);
 
     uint32_t lenGet = 32;
     TBufHandle bufHandle = buf.Get(lenGet);
@@ -227,7 +227,7 @@ TEST_F(TEST_TPIPE, TPipeInitBufferWithTQueTest)
         buf++;
     }
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 2);
-    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[static_cast<uint8_t>(hardPos)].maxAddr, num * len);
+    EXPECT_EQ(Internal::g_tPipeAddrBufPool[static_cast<uint8_t>(hardPos)], num * len);
 }
 
 /* **************************** TPipe Reset api ****************************** */
@@ -241,10 +241,10 @@ TEST_F(TEST_TPIPE, TPipeReset)
 
     pipe.InitBuffer(que, num, len);
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 2);
-    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[static_cast<uint8_t>(hardPos)].maxAddr, num * len);
+    EXPECT_EQ(Internal::g_tPipeAddrBufPool[static_cast<uint8_t>(hardPos)], num * len);
     pipe.Reset();
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 0);
-    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[static_cast<uint8_t>(hardPos)].maxAddr, 0);
+    EXPECT_EQ(Internal::g_tPipeAddrBufPool[static_cast<uint8_t>(hardPos)], 0);
 }
 
 /* **************************** TPipe GetAbsAddr ****************************** */

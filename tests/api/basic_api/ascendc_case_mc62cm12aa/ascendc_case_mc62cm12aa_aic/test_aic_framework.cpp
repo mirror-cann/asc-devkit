@@ -41,7 +41,7 @@ TEST_F(TQueWithBufIDTest, testAicQueInitBuffer)
     uint32_t len = 1024;
     TPipe pipe;
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 0);
-    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[(uint8_t)hardPos].maxAddr, 0);
+    EXPECT_EQ(Internal::g_tPipeAddrBufPool[(uint8_t)hardPos], 0);
     pipe.InitBuffer(tscm, 1, len);
     pipe.InitBuffer(que, 1, len);
     EXPECT_EQ(que.bufStart, &(pipe.g_tpipeImpl.buf_[1]));
