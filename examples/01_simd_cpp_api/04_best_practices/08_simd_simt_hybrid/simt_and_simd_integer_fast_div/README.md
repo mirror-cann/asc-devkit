@@ -246,9 +246,9 @@ uint32_t result = (value + q) >> shift;
 
   在本样例目录下执行如下命令。
   ```bash
-  SCENARIO=0                                                           # 选择执行场景
+  SCENARIO_NUM=0                                                           # 选择执行场景
   mkdir -p build && cd build;                                          # 创建并进入 build 目录
-  cmake -DSCENARIO_NUM=$SCENARIO -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j;  # 编译工程
+  cmake -DSCENARIO_NUM=$SCENARIO_NUM -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j;  # 编译工程
   ./integer_div                                                        # 执行样例
   ```
 
