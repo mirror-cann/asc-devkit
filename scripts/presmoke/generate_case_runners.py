@@ -35,31 +35,56 @@ LOG = logging.getLogger(__name__)
 SPECIAL_PREFIXES = (
     "01_simd_cpp_api/02_features/00_",
     "01_simd_cpp_api/02_features/01_",
-    "01_simd_cpp_api/02_features/02_",
+    "01_simd_cpp_api/02_features/99_",
 )
 
-CUSTOM_OP_PACKAGE_CASE = "01_simd_cpp_api/02_features/00_compilation/custom_op"
+CUSTOM_OP_PACKAGE_CASE = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op"
+PARALLEL_OPS_PACKAGE_CASE = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/parallel_ops_package"
+TILING_SINK_PROGRAMMING_CASE = "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming"
+TILING_SINK_GENERATE_TASK_PATTERN = (
+    "GenerateTaskForSinkOp:Node [AddCustomTilingSink, AddCustomTilingSink] starts to generate tasks "
+    "for the tiling sink, sk_flag [0]."
+)
 
 CUSTOM_OP_PACKAGE_DEPENDENTS = {
-    "01_simd_cpp_api/02_features/01_invocation/aclnn_invocation",
-    "01_simd_cpp_api/02_features/01_invocation/aclop_invocation",
-    "01_simd_cpp_api/02_features/02_framework/02_onnx/onnx_plugin",
-    "01_simd_cpp_api/02_features/04_aicpu/tiling_sink_programming",
+    "01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclnn_invocation",
+    "01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclop_invocation",
+    "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin",
+    TILING_SINK_PROGRAMMING_CASE,
+}
+
+# These projects either build host-only apps, superbuild subprojects, or C API
+# samples with their own explicit --npu-arch option. Passing
+# CMAKE_ASC_ARCHITECTURES to their top-level CMake only produces an unused
+# variable warning.
+NO_CMAKE_ARCH_INJECTION_CASES = {
+    "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin",
+    "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op_static_lib",
+    "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/parallel_ops_package",
+    "01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclnn_invocation",
+    "01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclop_invocation",
+    "02_simd_c_api/00_introduction/00_quickstart/hello_world_npu",
+    "02_simd_c_api/00_introduction/01_add/c_api_delicacy_async_add",
+    "02_simd_c_api/00_introduction/01_add/c_api_sync_add",
+    "02_simd_c_api/02_features/03_c_api/00_vector_compute/00_sync_add",
+    "02_simd_c_api/02_features/03_c_api/00_vector_compute/01_async_add",
+    "02_simd_c_api/02_features/03_c_api/00_vector_compute/02_c_api_delicacy_async_add",
 }
 
 TENSORFLOW_SKIP_REASON = "requires TensorFlow 2.6.5 environment; skipped by presmoke"
 ARCH_OVERRIDES = {
-    "01_simd_cpp_api/02_features/00_compilation/custom_op": ["dav-2201", "dav-3510"],
-    "01_simd_cpp_api/02_features/00_compilation/custom_op_static_lib": ["dav-2201", "dav-3510"],
-    "01_simd_cpp_api/02_features/01_invocation/aclnn_invocation": ["dav-2201", "dav-3510"],
-    "01_simd_cpp_api/02_features/01_invocation/aclop_invocation": ["dav-2201", "dav-3510"],
-    "01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_builtin": ["dav-2201", "dav-3510"],
-    "01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_custom": ["dav-2201", "dav-3510"],
-    "01_simd_cpp_api/02_features/02_framework/02_onnx/onnx_plugin": ["dav-2201", "dav-3510"],
-    "01_simd_cpp_api/02_features/04_aicpu/tiling_sink_programming": ["dav-2201", "dav-3510"],
+    "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op": ["dav-2201", "dav-3510"],
+    "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/parallel_ops_package": ["dav-2201", "dav-3510"],
+    "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op_static_lib": ["dav-2201", "dav-3510"],
+    "01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclnn_invocation": ["dav-2201", "dav-3510"],
+    "01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclop_invocation": ["dav-2201", "dav-3510"],
+    "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_builtin": ["dav-2201", "dav-3510"],
+    "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom": ["dav-2201", "dav-3510"],
+    "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin": ["dav-2201", "dav-3510"],
+    "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming": ["dav-2201", "dav-3510"],
     # README "支持的产品" only lists Ascend 950PR/950DT. The option table also
     # mentions dav-2201, but the sample uses FP8/hifloat8 types unavailable on 910B.
-    "01_simd_cpp_api/03_libraries/00_matrix/matmul_fp8": ["dav-3510"],
+    "01_simd_cpp_api/04_advanced_api/00_matmul/matmul_fp8": ["dav-3510"],
 }
 
 ARCH_ENV_KEYS = {
@@ -135,6 +160,7 @@ def main() -> int:
         )
         reports.append(report)
 
+    remove_stale_runners(runners_root, reports)
     write_manifest(reports_root, reports)
     LOG.info("generated_runners=%s", len(reports))
     LOG.info("low_confidence=%s", sum(1 for item in reports if item.confidence != "high"))
@@ -320,13 +346,13 @@ def requires_custom_op_package(rel: str) -> bool:
         return True
     if rel in CUSTOM_OP_PACKAGE_DEPENDENTS:
         return True
-    if "/02_framework/01_tensorflow/" in rel:
+    if "/00_framework/01_tensorflow/" in rel:
         return True
     return False
 
 
 def explicit_skip_reason(rel: str) -> str:
-    if "/02_framework/01_tensorflow/" in rel:
+    if "/00_framework/01_tensorflow/" in rel:
         return TENSORFLOW_SKIP_REASON
     return ""
 
@@ -334,15 +360,76 @@ def explicit_skip_reason(rel: str) -> str:
 def render_runner(
     spec: RunnerRenderSpec,
 ) -> str:
+    if spec.rel == PARALLEL_OPS_PACKAGE_CASE:
+        return render_parallel_ops_package_runner(spec)
+    if spec.rel == TILING_SINK_PROGRAMMING_CASE:
+        return render_tiling_sink_programming_runner(spec)
     build_prefix = custom_op_guard(spec.custom_op_dependency, spec.skip_reason)
     run_prefix = custom_op_guard(spec.custom_op_package_case, spec.skip_reason)
+    inject_cmake_arch = spec.rel not in NO_CMAKE_ARCH_INJECTION_CASES
     lines = [
         *runner_header(spec),
-        *runner_function("case_build", [*build_prefix, *indent_commands(spec.build_cmds)]),
+        *runner_function(
+            "case_build",
+            [*build_prefix, *indent_commands(spec.build_cmds, inject_cmake_arch=inject_cmake_arch)],
+        ),
         *runner_function("case_run", [*run_prefix, *indent_commands(spec.run_cmds, default_cd_build=True)]),
         *runner_function("case_verify", indent_commands(spec.verify_cmds, default_cd_build=True)),
         "case_clean() {",
         "    presmoke_default_clean",
+        "}",
+        "",
+        'presmoke_case_main "$@"',
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def render_tiling_sink_programming_runner(spec: RunnerRenderSpec) -> str:
+    build_prefix = custom_op_guard(spec.custom_op_dependency, spec.skip_reason)
+    lines = [
+        *runner_header(spec),
+        *runner_function("case_build", [*build_prefix, *indent_commands(spec.build_cmds)]),
+        *runner_function(
+            "case_run",
+            [
+                "    presmoke_clear_plog",
+                *indent_tiling_sink_run_commands(spec.run_cmds),
+                f"    presmoke_verify_tiling_sink_task_log {shlex.quote(TILING_SINK_GENERATE_TASK_PATTERN)}",
+            ],
+        ),
+        *runner_function("case_verify", indent_commands(spec.verify_cmds, default_cd_build=True)),
+        "case_clean() {",
+        "    presmoke_default_clean",
+        "}",
+        "",
+        'presmoke_case_main "$@"',
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def render_parallel_ops_package_runner(spec: RunnerRenderSpec) -> str:
+    lines = [
+        *runner_header(spec),
+        "case_build() {",
+        "    local cmake_args=(cmake -S . -B build)",
+        '    if [[ -n "${NLOHMANN_JSON_URL:-}" ]]; then',
+        '        cmake_args+=("-DNLOHMANN_JSON_URL=$NLOHMANN_JSON_URL")',
+        "    fi",
+        '    if [[ -n "${RUN_MODE_ARG:-}" ]]; then',
+        '        cmake_args+=("$RUN_MODE_ARG")',
+        "    fi",
+        "",
+        '    mkdir -p "$BUILD_DIR"',
+        '    (cd "$CASE_DIR" && soc_version=$SOC_VERSION presmoke_run_command "${cmake_args[@]}")',
+        '    (cd "$CASE_DIR" && soc_version=$SOC_VERSION presmoke_run_command cmake --build build -j)',
+        "}",
+        "",
+        *runner_function("case_run", indent_commands(spec.run_cmds, default_cd_build=True)),
+        *runner_function("case_verify", indent_commands(spec.verify_cmds, default_cd_build=True)),
+        "case_clean() {",
+        '    rm -rf "$CASE_DIR/build" "$BUILD_DIR"',
         "}",
         "",
         'presmoke_case_main "$@"',
@@ -391,21 +478,37 @@ def case_entry_relative_path(rel: str) -> str:
     return "../" * depth + "_case_entry.sh"
 
 
-def indent_commands(commands: Iterable[Command], default_cd_build: bool = False) -> List[str]:
+def indent_commands(
+    commands: Iterable[Command],
+    default_cd_build: bool = False,
+    inject_cmake_arch: bool = True,
+) -> List[str]:
     lines: List[str] = []
     for command in commands:
         if isinstance(command, str):
             command = Command(command, "shell")
-        lines.append(indent_command(command, default_cd_build))
+        lines.append(indent_command(command, default_cd_build, inject_cmake_arch))
     return lines
 
 
-def indent_command(command: Command, default_cd_build: bool = False) -> str:
+def indent_tiling_sink_run_commands(commands: Iterable[Command]) -> List[str]:
+    lines: List[str] = []
+    for command in commands:
+        raw = rewrite_runtime_arch_options(command.raw)
+        raw = rewrite_runtime_cmake_options(raw)
+        quoted = shlex.quote(raw)
+        env_prefix = command_env_prefix(command)
+        runner = f"ASCEND_GLOBAL_LOG_LEVEL=1 {env_prefix}bash -lc {quoted}"
+        lines.append(f'    (cd "{command_workdir(raw, default_cd_build=True)}" && {runner})')
+    return lines
+
+
+def indent_command(command: Command, default_cd_build: bool = False, inject_cmake_arch: bool = True) -> str:
     raw = command.raw
     if not raw or raw == ":":
         return "    :"
     raw = rewrite_runtime_arch_options(raw)
-    raw = rewrite_runtime_cmake_options(raw)
+    raw = rewrite_runtime_cmake_options(raw, inject_cmake_arch)
     quoted = shlex.quote(raw)
     env_prefix = command_env_prefix(command)
     runner = f"{env_prefix}bash -lc {quoted}"
@@ -432,12 +535,12 @@ def command_runs_from_build_dir(command: str, default_cd_build: bool = False) ->
     return default_cd_build and command.startswith("./") and not command.startswith("./build/")
 
 
-def rewrite_runtime_cmake_options(command: str) -> str:
+def rewrite_runtime_cmake_options(command: str, inject_cmake_arch: bool = True) -> str:
     if not command.startswith("cmake ") or not is_cmake_configure(command):
         return command
     command = re.sub(
         r"-DCMAKE_ASC_ARCHITECTURES=(?:'[^']*'|\"[^\"]*\"|[^ \t;]+)",
-        '-DCMAKE_ASC_ARCHITECTURES="$ARCH"',
+        '-DCMAKE_ASC_ARCHITECTURES="$ARCH"' if inject_cmake_arch else "",
         command,
     )
     command = re.sub(
@@ -445,7 +548,8 @@ def rewrite_runtime_cmake_options(command: str) -> str:
         "",
         command,
     )
-    if "-DCMAKE_ASC_ARCHITECTURES=" not in command:
+    command = re.sub(r"[ \t]+", " ", command).strip()
+    if inject_cmake_arch and "-DCMAKE_ASC_ARCHITECTURES=" not in command:
         command = f'{command} -DCMAKE_ASC_ARCHITECTURES="$ARCH"'
     return f"{command} $RUN_MODE_ARG"
 
@@ -489,6 +593,26 @@ def write_manifest(reports_root: Path, reports: List[CaseReport]) -> None:
         json.dumps([asdict(report) for report in reports], ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+
+def remove_stale_runners(runners_root: Path, reports: List[CaseReport]) -> None:
+    expected = {item.case for item in reports}
+    for runner in list(runners_root.rglob("run.sh")):
+        rel = runner.parent.relative_to(runners_root).as_posix()
+        if rel in expected:
+            continue
+        LOG.info("remove_stale_runner=%s", rel)
+        runner.unlink()
+        remove_empty_parents(runner.parent, runners_root)
+
+
+def remove_empty_parents(path: Path, stop: Path) -> None:
+    while path != stop:
+        try:
+            path.rmdir()
+        except OSError:
+            return
+        path = path.parent
 
 
 if __name__ == "__main__":

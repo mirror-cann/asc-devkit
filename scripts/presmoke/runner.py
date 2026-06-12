@@ -33,7 +33,7 @@ from .pool import NpuSlotPool
 NpuGate = Callable[[Cell, Command, Callable[[], int]], tuple[int, float]]
 
 PRESERVE_BUILD_ARTIFACT_CASES = {
-    "01_simd_cpp_api/02_features/00_compilation/custom_op",
+    "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op",
 }
 CPU_RUN_TIMEOUT = 300
 

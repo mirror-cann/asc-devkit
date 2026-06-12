@@ -11,21 +11,18 @@
 
 #include "kernel_operator.h"
 #include "add_custom_tiling_sink_tiling_struct.h"
-#include "lib/matmul_intf.h"
 namespace AscendC {
-constexpr uint32_t BUFFER_NUM = 2;
 constexpr uint32_t STATIC_TILE_LENGTH = 8;
 
 template <uint32_t tileLength>
 class KernelAdd {
 public:
-    __aicore__ inline KernelAdd() {}
     __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, uint32_t totalLength, uint32_t tileNum)
     {
         ascendc_assert(tileNum != 0, "tileNum can not be zero.\n");
         this->blockLength = totalLength / AscendC::GetBlockNum();
         this->tileNum = tileNum;
-        uint32_t runtimeTileLength = this->blockLength / tileNum / BUFFER_NUM;
+        uint32_t runtimeTileLength = this->blockLength / tileNum;
         ascendc_assert(runtimeTileLength == tileLength, "runtime tileLength must match template tileLength.\n");
 
         xGm.SetGlobalBuffer((__gm__ DTYPE_X *)x + this->blockLength * AscendC::GetBlockIdx(), this->blockLength);
@@ -34,26 +31,40 @@ public:
     }
     __aicore__ inline void Process()
     {
-        int32_t loopCount = this->tileNum * BUFFER_NUM;
-
         AscendC::LocalMemAllocator<AscendC::Hardware::UB> ubAllocator;
         AscendC::LocalTensor<DTYPE_X> xLocal = ubAllocator.Alloc<DTYPE_X, tileLength>();
         AscendC::LocalTensor<DTYPE_Y> yLocal = ubAllocator.Alloc<DTYPE_Y, tileLength>();
         AscendC::LocalTensor<DTYPE_Z> zLocal = ubAllocator.Alloc<DTYPE_Z, tileLength>();
 
-        for (int32_t i = 0; i < loopCount; i++) {
+        for (int32_t i = 0; i < this->tileNum; i++) {
+            if (i != 0) {
+                AscendC::WaitFlag<AscendC::HardEvent::V_MTE2>(EVENT_ID0);
+            }
+
             AscendC::DataCopy(xLocal, xGm[i * tileLength], tileLength);
             AscendC::DataCopy(yLocal, yGm[i * tileLength], tileLength);
 
             AscendC::SetFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
             AscendC::WaitFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
 
+            if (i != 0) {
+                AscendC::WaitFlag<AscendC::HardEvent::MTE3_V>(EVENT_ID0);
+            }
+
             AscendC::Add(zLocal, xLocal, yLocal, tileLength);
+
+            if (i != this->tileNum - 1) {
+                AscendC::SetFlag<AscendC::HardEvent::V_MTE2>(EVENT_ID0);
+            }
 
             AscendC::SetFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
             AscendC::WaitFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
 
             AscendC::DataCopy(zGm[i * tileLength], zLocal, tileLength);
+
+            if (i != this->tileNum - 1) {
+                AscendC::SetFlag<AscendC::HardEvent::MTE3_V>(EVENT_ID0);
+            }
         }
     }
 
@@ -70,10 +81,8 @@ extern "C" __global__ __aicore__ void add_custom_tiling_sink(__gm__ uint8_t* x, 
 {
     REGISTER_TILING_DEFAULT(TilingSinkTilingData);
     GET_TILING_DATA(tiling_data, tiling);
-    KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_MIX_AIC_1_2); // 将算子强制指定在AIC、AIV混合场景运行，模拟融合算子场景
-    if ASCEND_IS_AIC {
-        return;
-    }
+    KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
+
     AscendC::InitSocState();
     AscendC::KernelAdd<AscendC::STATIC_TILE_LENGTH> op;
     op.Init(x, y, z, tiling_data.totalLength, tiling_data.tileNum);

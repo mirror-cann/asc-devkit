@@ -56,8 +56,8 @@ class SchedulerTest(unittest.TestCase):
         self.assertEqual([item.example.rel_path for item in scheduled], ["a", "b", "c"])
 
     def test_custom_op_static_lib_is_always_before_custom_op(self) -> None:
-        custom_op = "01_simd_cpp_api/02_features/00_compilation/custom_op"
-        static_lib = "01_simd_cpp_api/02_features/00_compilation/custom_op_static_lib"
+        custom_op = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op"
+        static_lib = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op_static_lib"
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             cells = [cell(root, "a"), cell(root, custom_op), cell(root, "b"), cell(root, static_lib)]
@@ -68,8 +68,8 @@ class SchedulerTest(unittest.TestCase):
         self.assertLess(names.index(static_lib), names.index(custom_op))
 
     def test_parallel_ops_package_is_always_after_custom_op_static_lib(self) -> None:
-        static_lib = "01_simd_cpp_api/02_features/00_compilation/custom_op_static_lib"
-        parallel_ops = "01_simd_cpp_api/02_features/00_compilation/parallel_ops_package"
+        static_lib = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op_static_lib"
+        parallel_ops = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/parallel_ops_package"
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             cells = [cell(root, parallel_ops), cell(root, "a"), cell(root, static_lib)]
@@ -80,8 +80,8 @@ class SchedulerTest(unittest.TestCase):
         self.assertLess(names.index(static_lib), names.index(parallel_ops))
 
     def test_required_order_survives_build_desc_schedule(self) -> None:
-        custom_op = "01_simd_cpp_api/02_features/00_compilation/custom_op"
-        static_lib = "01_simd_cpp_api/02_features/00_compilation/custom_op_static_lib"
+        custom_op = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op"
+        static_lib = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op_static_lib"
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             report = root / "report.json"
@@ -104,14 +104,14 @@ class SchedulerTest(unittest.TestCase):
         self.assertLess(names.index(static_lib), names.index(custom_op))
 
     def test_custom_op_dependents_are_always_after_custom_op(self) -> None:
-        custom_op = "01_simd_cpp_api/02_features/00_compilation/custom_op"
+        custom_op = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op"
         dependents = [
-            "01_simd_cpp_api/02_features/01_invocation/aclnn_invocation",
-            "01_simd_cpp_api/02_features/01_invocation/aclop_invocation",
-            "01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_builtin",
-            "01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_custom",
-            "01_simd_cpp_api/02_features/02_framework/02_onnx/onnx_plugin",
-            "01_simd_cpp_api/02_features/04_aicpu/tiling_sink_programming",
+            "01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclnn_invocation",
+            "01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclop_invocation",
+            "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_builtin",
+            "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom",
+            "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin",
+            "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming",
         ]
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -133,9 +133,9 @@ class SchedulerTest(unittest.TestCase):
             self.assertLess(names.index(custom_op), names.index(dependent))
 
     def test_npu_idle_min_preserves_custom_op_required_order(self) -> None:
-        custom_op = "01_simd_cpp_api/02_features/00_compilation/custom_op"
-        static_lib = "01_simd_cpp_api/02_features/00_compilation/custom_op_static_lib"
-        dependent = "01_simd_cpp_api/02_features/02_framework/02_onnx/onnx_plugin"
+        custom_op = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op"
+        static_lib = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op_static_lib"
+        dependent = "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin"
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             report = root / "report.json"
@@ -156,9 +156,9 @@ class SchedulerTest(unittest.TestCase):
         self.assertLess(names.index(custom_op), names.index(dependent))
 
     def test_npu_idle_min_delays_custom_op_dependents_until_custom_op_build_ready(self) -> None:
-        custom_op = "01_simd_cpp_api/02_features/00_compilation/custom_op"
-        static_lib = "01_simd_cpp_api/02_features/00_compilation/custom_op_static_lib"
-        dependent = "01_simd_cpp_api/02_features/04_aicpu/tiling_sink_programming"
+        custom_op = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op"
+        static_lib = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op_static_lib"
+        dependent = "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming"
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             report = root / "report.json"
@@ -258,10 +258,10 @@ class SchedulerTest(unittest.TestCase):
         self.assertEqual([item.example.rel_path for item in scheduled], ["b", "a", "c"])
 
     def test_fixed_schedule_preserves_custom_op_required_order(self) -> None:
-        custom_op = "01_simd_cpp_api/02_features/00_compilation/custom_op"
-        static_lib = "01_simd_cpp_api/02_features/00_compilation/custom_op_static_lib"
-        dependent = "01_simd_cpp_api/02_features/02_framework/02_onnx/onnx_plugin"
-        parallel_ops = "01_simd_cpp_api/02_features/00_compilation/parallel_ops_package"
+        custom_op = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op"
+        static_lib = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op_static_lib"
+        dependent = "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin"
+        parallel_ops = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/parallel_ops_package"
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             schedule_file = root / "schedule.txt"

@@ -49,7 +49,7 @@ Run one case:
 
 ```bash
 bash scripts/run_presmoke.sh \
-  --filter 01_simd_cpp_api/02_features/03_basic_api/01_matrix_compute/mmad_unitflag
+  --filter 01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_unitflag
 ```
 
 Write reports to a specific directory:

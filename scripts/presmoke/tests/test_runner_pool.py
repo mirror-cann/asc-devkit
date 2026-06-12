@@ -208,7 +208,7 @@ class RunnerPoolTest(unittest.TestCase):
             root = Path(tmp)
             c = cell(
                 root,
-                "01_simd_cpp_api/02_features/00_compilation/custom_op",
+                "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op",
                 commands=[
                     Command("mkdir -p build_npu && touch build_npu/custom_opp_test.run", "build"),
                     Command(":", "run"),

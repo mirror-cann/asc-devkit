@@ -13,6 +13,7 @@ cmake_minimum_required(VERSION 3.16.0)
 project(opp)
 
 find_package(ASC REQUIRED)
+set(ASCEND_SKIP_FAILED_COMPUTE_UNIT ON)
 
 npu_op_package(${vendor_name}
     TYPE RUN

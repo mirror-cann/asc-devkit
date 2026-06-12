@@ -16,7 +16,7 @@
 
 namespace optiling {
 static constexpr uint32_t NUM_BLOCKS = 8;
-static constexpr uint32_t TILE_NUM = 3;
+static constexpr uint32_t TILE_NUM = 6;
 static constexpr size_t MAX_WORKSPACE_SIZE = 32; // 算子所需用户workspace空间最大值，AddCustomTilingSink算子本身逻辑无需用户workspace空间，此处设置为固定值仅作为示例
 static constexpr size_t DEFAULT_WORKSPACE_SIZE = 0;
 

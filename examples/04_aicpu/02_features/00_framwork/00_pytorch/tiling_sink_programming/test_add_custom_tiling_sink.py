@@ -73,7 +73,7 @@ class TestCustomAdd(TestCase):
             SingleOpModel().npu(), fullgraph=True, backend=npu_backend, dynamic=False
         )
 
-        length = [6, 64]
+        length = [8, 48]
         x = torch.rand(length, device="cpu", dtype=torch.float)
         y = torch.rand(length, device="cpu", dtype=torch.float)
         output = model(x.npu(), y.npu()).cpu()

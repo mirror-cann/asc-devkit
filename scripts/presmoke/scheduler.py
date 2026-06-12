@@ -22,16 +22,16 @@ from typing import Iterable, List, Optional
 from .model import Cell
 
 
-CUSTOM_OP_CASE = "01_simd_cpp_api/02_features/00_compilation/custom_op"
-CUSTOM_OP_STATIC_LIB_CASE = "01_simd_cpp_api/02_features/00_compilation/custom_op_static_lib"
-PARALLEL_OPS_PACKAGE_CASE = "01_simd_cpp_api/02_features/00_compilation/parallel_ops_package"
+CUSTOM_OP_CASE = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op"
+CUSTOM_OP_STATIC_LIB_CASE = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op_static_lib"
+PARALLEL_OPS_PACKAGE_CASE = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/parallel_ops_package"
 CUSTOM_OP_DEPENDENT_CASES = {
-    "01_simd_cpp_api/02_features/01_invocation/aclnn_invocation",
-    "01_simd_cpp_api/02_features/01_invocation/aclop_invocation",
-    "01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_builtin",
-    "01_simd_cpp_api/02_features/02_framework/01_tensorflow/tensorflow_custom",
-    "01_simd_cpp_api/02_features/02_framework/02_onnx/onnx_plugin",
-    "01_simd_cpp_api/02_features/04_aicpu/tiling_sink_programming",
+    "01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclnn_invocation",
+    "01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclop_invocation",
+    "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_builtin",
+    "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom",
+    "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin",
+    "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming",
 }
 
 
