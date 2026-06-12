@@ -2,7 +2,7 @@
 
 ## 案例介绍<a name="section1618932742516"></a>
 
-本案例介绍[InsertHashTable算子](https://gitcode.com/ai_xin/asc-devkit/tree/master/examples/03_simt_api/03_best_practices/00_simt_insert_hash_table)，展示基于SIMT实现的大规模线程并发访问Global Memory内存的算子实践。
+本案例介绍[InsertHashTable算子](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/03_best_practices/00_simt_insert_hash_table)，展示基于SIMT实现的大规模线程并发访问Global Memory内存的算子实践。
 
 ## 背景知识<a name="section111061628366"></a>
 
@@ -157,4 +157,3 @@ for (uint32_t i = 0; i < capacity; i++) {
 ## 总结<a name="section8281219125011"></a>
 
 本案例展示了基于SIMT编程实现向hash table中批量插入元素，重点介绍了如何通过原子指令解决多线程写冲突，以及如何使用asc\_threadfence\(\)接口实现核间数据同步。
-
