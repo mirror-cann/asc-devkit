@@ -1,58 +1,62 @@
-# PairReduceSum样例
+# `ReducePairElem<SUM>`样例
 
 ## 概述
 
-本样例在归约场景下，基于接口PairReduceSum对数据（a1, a2, a3, a4, a5, a6...）的相邻两个元素求和为（a1+a2, a3+a4, a5+a6, ......），即对每个pair（偶数下标与奇数下标组成的相邻元素对）进行求和归约，输出元素个数为输入的一半。
+本样例在归约场景下，基于接口`ReducePairElem<SUM>`对数据（a1, a2, a3, a4, a5, a6...）的相邻两个元素求和为（a1+a2, a3+a4, a5+a6, ......），即对每个pair（偶数下标与奇数下标组成的相邻元素对）进行求和归约，输出元素个数为输入的一半。
+
+注：`ReducePairElem`为 CANN 9.1.0 重命名后的 API。CANN 9.0.0 及之前版本请使用`PairReduceSum`。
 
 ## 本样例支持的产品及CANN软件版本
 
 | 产品 | CANN软件版本 |
 |------|-------------|
 | Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
+| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.1.0 |
+| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.1.0 |
 
 ## 目录结构介绍
 
-```
-├── pair_reduce_sum
+``` text
+├── reduce_pair_elem
 │   ├── scripts
 │   │   ├── gen_data.py         // 输入数据和真值数据生成脚本
 │   │   └── verify_result.py    // 验证输出数据和真值数据是否一致的验证脚本
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── data_utils.h            // 数据读入写出函数
-│   ├── pair_reduce_sum.asc     // Ascend C 样例实现 & 调用
+│   ├── reduce_pair_elem.asc    // Ascend C 样例实现 & 调用
 │   └── README.md               // 样例说明文档
 ```
 
 ## 样例描述
 
 - 样例功能：  
-  本样例中调用PairReduceSum接口，对输入元素中所有的相邻元素对执行求和计算。样例规格如下表所示：
+  本样例中调用`ReducePairElem<SUM>`接口，对输入元素中所有的相邻元素对执行求和计算。样例规格如下表所示：
 
   <table border="2">
-  <caption>表1：PairReduceSum样例规格</caption>
+  <caption>表1：ReducePairElem&lt;SUM&gt;样例规格</caption>
   <tr>
   <td rowspan="1" align="center">样例类型(OpType)</td>
-  <td colspan="4" align="center">PairReduceSum</td></tr>
+  <td colspan="4" align="center">ReducePairElem&lt;SUM&gt;</td></tr>
   <tr><td rowspan="2" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
   <tr><td align="center">x</td><td align="center">[1, 128]</td><td align="center">half</td><td align="center">ND</td></tr>
    <tr><td rowspan="2" align="center">样例输出</td></tr>
    <tr><td align="center">y</td><td align="center">[1, 64]</td><td align="center">half</td><td align="center">ND</td></tr>
 
-  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">pair_reduce_sum_custom</td></tr>
+  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">reduce_pair_elem_custom</td></tr>
   </table>
 
 - 样例实现：  
-  本样例中实现的是固定shape为输入x[1, 128]，输出y[1, 64]的PairReduceSum样例。
+  本样例中实现的是固定shape为输入x[1, 128]，输出y[1, 64]的`ReducePairElem<SUM>`样例。
 
   Compute任务负责对srcLocal中每对相邻元素（偶数下标与奇数下标）求和，并将结果存储在dstLocal中。
 
 ## 编译运行
 
 在本样例根目录下执行如下步骤，编译并运行样例。
+
 - 配置环境变量  
   请根据当前环境上CANN开发套件包的[安装方式](../../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+
   ```bash
   source ${install_path}/cann/set_env.sh
   ```
@@ -62,6 +66,7 @@
 - 样例执行
 
   在本样例目录下执行如下命令。
+  
   ```bash
   mkdir -p build && cd build;   # 创建并进入build目录
   cmake -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j;             # 编译工程，默认npu模式

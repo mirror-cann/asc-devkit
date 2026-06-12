@@ -1,5 +1,5 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
+* Copyright (c) 2026 Huawei Technologies Co., Ltd.
 * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
 * CANN Open Software License Agreement Version 2.0 (the "License").
 * Please refer to the License for details. You may not use this file except in compliance with the License.
@@ -62,6 +62,13 @@ bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_
     return true;
 }
 
+/**
+ * @brief Write data to file
+ * @param [in] filePath: file path
+ * @param [in] buffer: data to write to file
+ * @param [in] size: size to write
+ * @return write result
+ */
 bool WriteFile(const std::string &filePath, const void *buffer, size_t size)
 {
     if (buffer == nullptr) {

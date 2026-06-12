@@ -21,9 +21,9 @@ np.random.seed(9)
 def gen_golden_data(scenarioNum=1):
     """
     根据场景编号生成输入数据和Golden数据
-    场景1：BlockReduceMax<half>，输入[1, 256]，输出[1, 16]
-    场景2：BlockReduceMin<half>，输入[4, 128]，输出[4, 8]
-    场景3：BlockReduceSum<float>，输入[1, 128]，输出[1, 16]
+    场景1：ReduceDataBlock<MAX, half>，输入[1, 256]，输出[1, 16]
+    场景2：ReduceDataBlock<MIN, half>，输入[4, 128]，输出[4, 8]
+    场景3：ReduceDataBlock<SUM, float>，输入[1, 128]，输出[1, 16]
     """
     if scenarioNum == 1:
         input_type = np.float16

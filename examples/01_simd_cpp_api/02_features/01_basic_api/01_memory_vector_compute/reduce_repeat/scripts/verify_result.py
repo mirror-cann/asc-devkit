@@ -26,14 +26,14 @@ ABSOLUTE_TOL_F32 = 1e-8
 
 
 def verify_result(scenarioNum, output, golden):
-    if scenarioNum in (3, 4, 6):
+    if scenarioNum in (3, 5):
         output = np.fromfile(output, dtype=np.float32).reshape(-1)
         golden = np.fromfile(golden, dtype=np.float32).reshape(-1)
     else:
         output = np.fromfile(output, dtype=np.float16).reshape(-1)
         golden = np.fromfile(golden, dtype=np.float16).reshape(-1)
 
-    if scenarioNum == 5:
+    if scenarioNum == 4:
         val_out = float(output[0])
         val_gold = float(golden[0])
         idx_out = struct.unpack('<H', output[1].tobytes())[0]
@@ -49,8 +49,8 @@ def verify_result(scenarioNum, output, golden):
                 print("idx mismatch: output=%d, golden=%d" % (idx_out, idx_gold))
             return False
 
-    rtol = RELATIVE_TOL_F32 if scenarioNum in (3, 4, 6) else RELATIVE_TOL
-    atol = ABSOLUTE_TOL_F32 if scenarioNum in (3, 4, 6) else ABSOLUTE_TOL
+    rtol = RELATIVE_TOL_F32 if scenarioNum in (3, 5) else RELATIVE_TOL
+    atol = ABSOLUTE_TOL_F32 if scenarioNum in (3, 5) else ABSOLUTE_TOL
 
     different_element_results = np.isclose(output,
                                            golden,
@@ -74,7 +74,7 @@ def verify_result(scenarioNum, output, golden):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=range(1, 7))
+    parser.add_argument('-scenarioNum', type=int, default=1, choices=range(1, 6))
     parser.add_argument('output', type=str)
     parser.add_argument('golden', type=str)
     args = parser.parse_args()

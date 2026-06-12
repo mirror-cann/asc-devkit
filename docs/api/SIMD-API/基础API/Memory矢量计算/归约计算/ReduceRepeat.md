@@ -196,7 +196,7 @@
 
 ## 调用示例
 
-更多样例可参考[ReduceRepeat样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/01_memory_vector_compute/whole_reduce_min_max_sum)。
+更多样例可参考[ReduceRepeat样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/01_basic_api/01_memory_vector_compute/reduce_repeat)。
 
 - `ReduceRepeat<ReduceType::MAX>` tensor高维切分计算样例-`mask`连续模式：
 

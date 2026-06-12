@@ -8,7 +8,6 @@
 
 | 目录名称 | 功能描述 | 支持的产品 |
 |----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------| --- |
-| [block_reduce_min_max_sum](./block_reduce_min_max_sum) |  本样例基于BlockReduceMax/BlockReduceMin/BlockReduceSum实现归约计算 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [brcb](./brcb) |  本样例基于Brcb实现数据填充，可用于每次取输入张量中的8个数填充到结果张量的8个datablock中 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [cast](./cast) |  本样例基于Cast实现源操作数和目的操作数Tensor的数据类型及精度转换 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [compare](./compare) |  本样例基于Compare、Compares接口完成多场景下的数据比较功能，实现逐元素大小比较。 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
@@ -20,9 +19,10 @@
 | [gather](./gather) |  本样例基于GatherMask、Gather、Gatherb等接口完成多种场景模式下的数据选择功能，实现从源操作数中选取元素写入目的操作数。 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [interleave_pair](./interleave_pair) |  本样例基于Interleave和DeInterleave接口实现元素交织和解交织功能 | Ascend 950PR/Ascend 950DT |
 | [mrg_sort](./mrg_sort) |  本样例基于Sort32和MrgSort基础API实现将已排好序的最多4条队列，合并成1条队列，结果按照score域由大到小排序 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
-| [pair_reduce_sum](./pair_reduce_sum) |  本样例基于PairReduceSum实现相邻奇偶元素对求和归约 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
-| [reduce_computation](./reduce_computation) |  本样例基于ReduceMax/ReduceMin/ReduceSum接口实现归约计算 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [reduce_data_block](./reduce_data_block) |  本样例基于`ReduceDataBlock`实现归约计算 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [reduce_repeat](./reduce_repeat) |  本样例介绍归约类接口在多种场景下的使用方法，包括`ReduceRepeat`，以及`ReduceRepeat<MIN>`配合`GetReduceRepeatMaxMinSpr`获取全局最小值及索引的使用方法。 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [reduce_pair_elem](./reduce_pair_elem) |  本样例基于`ReducePairElem<SUM>`实现相邻奇偶元素对求和归约 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [reduce_computation](./reduce_computation) |  本样例基于`ReduceMax`、`ReduceMin`、`ReduceSum`接口实现归约计算 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [region_proposal_sort](./region_proposal_sort) |  本样例介绍Region Proposal相关的排序接口使用方法 | Atlas 推理系列产品AI Core |
 | [select](./select) |  本样例基于Select接口完成多种场景下的数据选择功能，根据掩码在两个向量或向量与标量之间选取元素写入目的向量 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [transpose](./transpose) |  本样例基于Transpose、TransDataTo5HD接口实现数据转置功能，包括16*16的二维矩阵数据块转置，[N,C,H,W]与[N,H,W,C]四维矩阵互相转换以及NCHW格式转换成NC1HWC0格式。 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
-| [whole_reduce_min_max_sum](./whole_reduce_min_max_sum) |  本样例介绍归约类接口在多种场景下的使用方法，包括WholeReduceMax、WholeReduceMin、WholeReduceSum、RepeatReduceSum，以及WholeReduceMax/Min配合GetReduceRepeatMaxMinSpr获取全局极值及索引的使用方法。 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |

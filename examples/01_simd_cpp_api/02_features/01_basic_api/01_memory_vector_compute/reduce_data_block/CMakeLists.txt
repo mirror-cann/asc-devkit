@@ -19,15 +19,23 @@ project(kernel_samples LANGUAGES ASC CXX)
 
 # 场景参数（通过命令行传入）
 # SCENARIO_NUM: 场景编号
-#   1 - BlockReduceMax<half>：每个datablock内求最大值，输入[1, 256]，输出[1, 16]
-#   2 - BlockReduceMin<half>：每个datablock内求最小值，输入[4, 128]，输出[4, 8]
-#   3 - BlockReduceSum<float>：每个datablock内求和，输入[1, 128]，输出[1, 16]
+#   1 - ReduceDataBlock<MAX, half>：每个datablock内求最大值，输入[1, 256]，输出[1, 16]
+#   2 - ReduceDataBlock<MIN, half>：每个datablock内求最小值，输入[4, 128]，输出[4, 8]
+#   3 - ReduceDataBlock<SUM, float>：每个datablock内求和，输入[1, 128]，输出[1, 16]
 set(SCENARIO_NUM "1" CACHE STRING "Scene number (1-3)")
 
-add_definitions(-DSCENARIO_NUM=${SCENARIO_NUM})
+message(STATUS "[INFO] SCENARIO_NUM is ${SCENARIO_NUM}")
+
+if(NOT SCENARIO_NUM MATCHES "^[1-3]$")
+    message(FATAL_ERROR "SCENARIO_NUM must be 1,2,3, got: ${SCENARIO_NUM}")
+endif()
 
 add_executable(demo
-    block_reduce_min_max_sum.asc
+    reduce_data_block.asc
+)
+
+target_compile_definitions(demo PRIVATE
+    SCENARIO_NUM=${SCENARIO_NUM}
 )
 
 target_compile_options(demo PRIVATE

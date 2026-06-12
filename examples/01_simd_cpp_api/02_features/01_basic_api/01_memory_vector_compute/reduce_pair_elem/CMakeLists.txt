@@ -18,7 +18,7 @@ find_package(ASC REQUIRED)
 project(kernel_samples LANGUAGES ASC CXX)
 
 add_executable(demo
-    pair_reduce_sum.asc
+    reduce_pair_elem.asc
 )
 
 target_compile_options(demo PRIVATE

@@ -2,7 +2,9 @@
 
 ## 概述
 
-本样例介绍了调用WholeReduceSum和BlockReduceSum高阶API实现reduce算子，实现了连续内存上数据元素的累加，返回累加结果的功能。
+本样例介绍了调用`ReduceRepeat<SUM>`和`ReduceDataBlock<SUM>`高阶API实现reduce算子，实现了连续内存上数据元素的累加，返回累加结果的功能。
+
+注：`ReduceRepeat`和`ReduceDataBlock`为 CANN 9.1.0 重命名后的 API。CANN 9.0.0 及之前版本请使用`WholeReduceSum`，`BlockReduceSum`。
 
 ## 本样例支持的产品及CANN软件版本
 
@@ -14,7 +16,7 @@
 
 ## 目录结构介绍
 
-```
+``` text
 ├── reduce
 │   ├── scripts
 │   │   ├── gen_data.py         // 输入数据和真值数据生成脚本
@@ -29,7 +31,7 @@
 - 算子功能：  
   ReduceCustom算子实现了连续内存上数据元素的累加，返回累加结果的功能。对应的数学表达式为：
 
-  ```
+  ```cpp
   z = sum(x)
   ```
 
@@ -52,15 +54,15 @@
 
     样例将一段连续的输入做累加，得到这段连续buffer内元素的和。
 
-      - 1、在小于256B时，ComputeKey = 1，采用WholeReduceSum一次性可以得到结果。
+      - 1、在小于256B时，ComputeKey = 1，采用ReduceRepeat<SUM>一次性可以得到结果。
 
-      - 2、长度在float输入(256B,2KB]，或者half输入(256B,4KB]时，ComputeKey = 2。由于同样长度的输入，BlockReduceSum比WholeReduceSum的执行速度更快，所以采用一条BlockReduceSum加一条WholeReduceSum的做法，得到更高的计算效率。
+      - 2、长度在float输入(256B,2KB]，或者half输入(256B,4KB]时，ComputeKey = 2。由于同样长度的输入，ReduceDataBlock<SUM>比ReduceRepeat<SUM>的执行速度更快，所以采用一条ReduceDataBlock<SUM>加一条ReduceRepeat<SUM>的做法，得到更高的计算效率。
 
-      - 3、长度在float输入(2KB,16KB]，或者half输入(4KB,32KB]时，ComputeKey = 3。由于一条WholeReduceSum的累加效率比使用两条BlockReduceSum的累加效率更高。所以采用两条WholeReduceSum（而不是两条BlockReduceSum+一条WholeReduceSum），得到这段buffer的累加和。
+      - 3、长度在float输入(2KB,16KB]，或者half输入(4KB,32KB]时，ComputeKey = 3。由于一条ReduceRepeat<SUM>的累加效率比使用两条ReduceDataBlock<SUM>的累加效率更高。所以采用两条ReduceRepeat<SUM>（而不是两条ReduceDataBlock<SUM>+一条ReduceRepeat<SUM>），得到这段buffer的累加和。
 
-      - 4、长度在float输入为10000时，ComputeKey = 4，对应WholeReduceSumImpl中的处理方法，在Counter模式下，采用WholeReduceSum指令，循环处理二维数据中的每一行，得到每一行的归约运行结果。
+      - 4、长度在float输入为10000时，ComputeKey = 4，对应WholeReduceSumImpl中的处理方法，在Counter模式下，采用ReduceRepeat<SUM>指令，循环处理二维数据中的每一行，得到每一行的归约运行结果。
 
-      - 5、长度在float输入为20000时，ComputeKey = 5，对应BinaryReduceSumImpl中的处理方法，在Counter模式下，先将运算数据一分为二，使用Add指令将两部分数据相加，循环往复，最后一条WholeReduceSum指令得到归约的运行结果。此种操作方式，相比较WholeReduceSum单指令操作的方式，在数据量较大，循环次数较多的场景下，性能更优。  
+      - 5、长度在float输入为20000时，ComputeKey = 5，对应BinaryReduceSumImpl中的处理方法，在Counter模式下，先将运算数据一分为二，使用Add指令将两部分数据相加，循环往复，最后一条ReduceRepeat<SUM>指令得到归约的运行结果。此种操作方式，相比较ReduceRepeat<SUM>单指令操作的方式，在数据量较大，循环次数较多的场景下，性能更优。  
       注意代码中使用了Counter模式。
 
   - Kernel实现  
@@ -77,6 +79,7 @@
 
 - 配置环境变量
   请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+
   ```bash
   source ${install_path}/cann/set_env.sh
   ```
@@ -86,6 +89,7 @@
 - 样例执行
 
   在本样例目录下执行如下命令。
+
   ```bash
   mkdir -p build && cd build;
   cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201;make -j; # 默认npu模式
@@ -96,6 +100,7 @@
   使用 CPU调试 或 NPU仿真 模式时，添加 `-DCMAKE_ASC_RUN_MODE=cpu` 或 `-DCMAKE_ASC_RUN_MODE=sim` 参数即可。
 
   示例如下：
+
   ```bash
   cmake -DCMAKE_ASC_RUN_MODE=cpu -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j; # cpu调试模式
   cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j; # NPU仿真模式
@@ -104,12 +109,14 @@
   > **注意：** 切换编译模式前需清理 cmake 缓存，可在 build 目录下执行 `rm CMakeCache.txt` 后重新 cmake。
 
 - 编译选项说明
+- 
   | 选项 | 可选值 | 说明 |
   |------|--------|------|
   | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`cpu`、`sim` | 运行模式：NPU 运行、CPU调试、NPU仿真 |
   | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU 架构：dav-2201 对应 Atlas A2 训练系列产品/Atlas A2 推理系列产品和 Atlas A3 训练系列产品/Atlas A3 推理系列产品，dav-3510 对应 Ascend 950PR/Ascend 950DT |
 
   执行结果如下，说明精度对比成功。
+  
   ```bash
   test pass!
   ```

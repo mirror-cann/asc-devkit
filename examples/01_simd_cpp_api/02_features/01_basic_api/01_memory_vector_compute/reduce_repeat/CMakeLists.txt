@@ -19,18 +19,25 @@ project(kernel_samples LANGUAGES ASC CXX)
 
 # 场景参数（通过命令行传入）
 # SCENARIO_NUM: 场景编号
-#   1 - WholeReduceMax：每个repeat内求最大值，输入[1, 1024]，输出[1, 8]
-#   2 - WholeReduceMin：每个repeat内求最小值及索引，输入[1, 1024]，输出[1, 16]
-#   3 - WholeReduceSum：每个repeat内求和，输入float类型[1, 2048]，输出[1, 32]
-#   4 - RepeatReduceSum：累加模式求和，输入float类型[1, 2048]，输出[1, 32]
-#   5 - WholeReduceMin + GetReduceRepeatMaxMinSpr：求全局最小值及索引，输入[1, 1024]，输出[1, 16]
-#   6 - WholeReduceSum非对齐场景：对每行非对齐数据求和，输入float类型[13, 57]，输出[1, 13]
-set(SCENARIO_NUM "1" CACHE STRING "Scene number (1-6)")
+#   1 - ReduceRepeat<MAX>：每个repeat内求最大值，输入[1, 1024]，输出[1, 8]
+#   2 - ReduceRepeat<MIN>：每个repeat内求最小值及索引，输入[1, 1024]，输出[1, 16]
+#   3 - ReduceRepeat<SUM>：每个repeat内求和，输入float类型[1, 2048]，输出[1, 32]
+#   4 - ReduceRepeat<MIN> + GetReduceRepeatMaxMinSpr：求全局最小值及索引，输入[1, 1024]，输出[1, 16]
+#   5 - ReduceRepeat<SUM>非对齐场景：对每行非对齐数据求和，输入float类型[13, 57]，输出[1, 13]
+set(SCENARIO_NUM "1" CACHE STRING "Scene number (1-5)")
 
-add_definitions(-DSCENARIO_NUM=${SCENARIO_NUM})
+message(STATUS "[INFO] SCENARIO_NUM is ${SCENARIO_NUM}")
+
+if(NOT SCENARIO_NUM MATCHES "^[1-5]$")
+    message(FATAL_ERROR "SCENARIO_NUM must be 1,2,3,4,5, got: ${SCENARIO_NUM}")
+endif()
 
 add_executable(demo
-    whole_reduce_min_max_sum.asc
+    reduce_repeat.asc
+)
+
+target_compile_definitions(demo PRIVATE
+    SCENARIO_NUM=${SCENARIO_NUM}
 )
 
 target_compile_options(demo PRIVATE
