@@ -6,6 +6,8 @@
 
 -   **[矩阵计算（ISASI）](矩阵计算（ISASI）/矩阵计算（ISASI）.md)**  
 
+-   **[矩阵计算（Tensor API）](矩阵计算（TensorAPI）/矩阵计算（TensorAPI）.md)** 
+
 -   **[Memory矢量计算](Memory矢量计算/Memory矢量计算.md)**  
 
 -   **[Reg矢量计算](Reg矢量计算/Reg矢量计算.md)**  
