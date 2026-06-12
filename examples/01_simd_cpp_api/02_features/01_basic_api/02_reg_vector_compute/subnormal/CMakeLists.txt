@@ -22,6 +22,9 @@ set(CMAKE_ASC_RUN_MODE "npu" CACHE STRING "Run mode: npu, cpu, sim")
 #   1 - PRECISION_1ULP_FTZ_TRUE：使用单指令计算得出结果，最大精度误差为1 ulp
 #   2 - PRECISION_1ULP_FTZ_FALSE：支持Subnormal数据计算，使用单指令计算得出结果，最大精度误差为1 ulp
 set(SCENARIO_NUM "1" CACHE STRING "Scene number (1-2)")
+if(NOT SCENARIO_NUM MATCHES "^[1-2]$")
+    message(FATAL_ERROR "SCENARIO_NUM must be 1 or 2, but got ${SCENARIO_NUM}")
+endif()
 add_definitions(-DSCENARIO_NUM=${SCENARIO_NUM})
 
 set(TARGET_FILENAME "demo" CACHE STRING "Execution file name")

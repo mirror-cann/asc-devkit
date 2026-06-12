@@ -22,6 +22,9 @@ set(CMAKE_ASC_RUN_MODE "npu" CACHE STRING "Run mode: npu, cpu, sim")
 #   1 - RegTraitNumOne：RegTensor类型中包含1个相应数据类型的矢量Reg，长度为VL，
 #   2 - RegTraitNumTwo：RegTensor类型中包含2个相应数据类型的矢量Reg，总长度为2 * VL，提升并行度
 set(SCENARIO_NUM "1" CACHE STRING "Scene number (1-2)")
+if(NOT SCENARIO_NUM MATCHES "^[1-2]$")
+    message(FATAL_ERROR "SCENARIO_NUM must be 1 or 2, but got ${SCENARIO_NUM}")
+endif()
 add_definitions(-DSCENARIO_NUM=${SCENARIO_NUM})
 
 set(TARGET_FILENAME "demo" CACHE STRING "Execution file name")
