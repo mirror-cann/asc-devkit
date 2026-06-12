@@ -887,6 +887,7 @@ function(npu_op_library target_name target_type)
       -Wl,--whole-archive
       rt2_registry
       -Wl,--no-whole-archive
+      mmpa
     )
     get_property(tmp_tiling_target GLOBAL PROPERTY ASCENDC_TILING_TARGET)
     list(APPEND tmp_tiling_target ${target_name})
