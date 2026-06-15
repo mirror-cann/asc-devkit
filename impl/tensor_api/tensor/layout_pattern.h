@@ -162,6 +162,11 @@ struct MakeZzFrameLayout {
         using LayoutT = Layout<decltype(shape), decltype(stride), Std::tuple<ZZLayoutPtn, TraitType>>;
         return LayoutT(shape, stride);
     }
+
+    template <typename TraitType, typename Batch, typename T, typename U>
+    __aicore__ inline static auto Make(Batch batch, T row, U column) {
+        return MakeBatchPatternLayout<ZZLayoutPtn, TraitType>(batch, Make<TraitType>(row, column));
+    }
 };
 
 struct MakeNnFrameLayout {
@@ -175,6 +180,11 @@ struct MakeNnFrameLayout {
         using LayoutT = Layout<decltype(shape), decltype(stride), Std::tuple<NNLayoutPtn, TraitType>>;
         return LayoutT(shape, stride);
     }
+
+    template <typename TraitType, typename Batch, typename T, typename U>
+    __aicore__ inline static auto Make(Batch batch, T row, U column) {
+        return MakeBatchPatternLayout<NNLayoutPtn, TraitType>(batch, Make<TraitType>(row, column));
+    }
 };
 
 struct MakeScaleANDFrameLayout {
@@ -186,6 +196,11 @@ struct MakeScaleANDFrameLayout {
         auto stride = MakeStride(MakeStride(_0{}, column), MakeStride(_0{}, _1{}));
         using LayoutT = Layout<decltype(shape), decltype(stride), Std::tuple<ScaleANDLayoutPtn, TraitType>>;
         return LayoutT(shape, stride);
+    }
+
+    template <typename TraitType, typename Batch, typename T, typename U>
+    __aicore__ inline static auto Make(Batch batch, T row, U column) {
+        return MakeBatchPatternLayout<ScaleANDLayoutPtn, TraitType>(batch, Make<TraitType>(row, column));
     }
 };
 
@@ -200,6 +215,11 @@ struct MakeScaleADNFrameLayout {
         using LayoutT = Layout<decltype(shape), decltype(stride), Std::tuple<ScaleADNLayoutPtn, TraitType>>;
         return LayoutT(shape, stride);
     }
+
+    template <typename TraitType, typename Batch, typename T, typename U>
+    __aicore__ inline static auto Make(Batch batch, T row, U column) {
+        return MakeBatchPatternLayout<ScaleADNLayoutPtn, TraitType>(batch, Make<TraitType>(row, column));
+    }
 };
 
 struct MakeScaleBNDFrameLayout {
@@ -213,6 +233,11 @@ struct MakeScaleBNDFrameLayout {
         using LayoutT = Layout<decltype(shape), decltype(stride), Std::tuple<ScaleBNDLayoutPtn, TraitType>>;
         return LayoutT(shape, stride);
     }
+
+    template <typename TraitType, typename Batch, typename T, typename U>
+    __aicore__ inline static auto Make(Batch batch, T row, U column) {
+        return MakeBatchPatternLayout<ScaleBNDLayoutPtn, TraitType>(batch, Make<TraitType>(row, column));
+    }
 };
 
 struct MakeScaleBDNFrameLayout {
@@ -222,6 +247,11 @@ struct MakeScaleBDNFrameLayout {
         auto stride = MakeStride(MakeStride(_0{}, _1{}), MakeStride(_0{}, row));
         using LayoutT = Layout<decltype(shape), decltype(stride), Std::tuple<ScaleBDNLayoutPtn, TraitType>>;
         return LayoutT(shape, stride);
+    }
+
+    template <typename TraitType, typename Batch, typename T, typename U>
+    __aicore__ inline static auto Make(Batch batch, T row, U column) {
+        return MakeBatchPatternLayout<ScaleBDNLayoutPtn, TraitType>(batch, Make<TraitType>(row, column));
     }
 };
 

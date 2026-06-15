@@ -59,17 +59,30 @@ void RunCopyWithPaths(const DstTensor& dst, const SrcTensor& src)
 uint64_t gExpectedMxDstAddr = 0;
 __cbuf__ void* gExpectedMxSrc = nullptr;
 
+// Batched scale L1->L0 now copies one matrix per batch in a loop (see commit "scale batch layout"),
+// so the instruction fires once per batch with the single-matrix step values, and the dst/src
+// addresses advance by the batch layout's per-batch stride each call. With the compact
+// MakeBatchPatternLayout below, that stride is the single-matrix Capacity (ZZ m=16,n=32,c0=2 -> 512),
+// applied equally to dst and src. Single-matrix mStep(xStep)=ceil(m/16)=1, yStep=ceil(n/2)=16.
+constexpr uint32_t kScaleABatch = 3;
+constexpr uint32_t kScaleAM = 16;
+constexpr uint32_t kScaleAN = 32;
+constexpr uint32_t kScaleABatchStrideElem = 512;
+uint32_t gScaleACallIdx = 0;
+
 void load_cbuf_to_ca_mx_batch_stub(uint64_t dst, __cbuf__ void* src, uint16_t xStartPos, uint16_t yStartPos,
     uint8_t xStep, uint8_t yStep, uint16_t srcStride, uint16_t dstStride)
 {
-    EXPECT_EQ(dst, gExpectedMxDstAddr);
-    EXPECT_EQ(src, gExpectedMxSrc);
+    EXPECT_EQ(dst, gExpectedMxDstAddr + gScaleACallIdx * kScaleABatchStrideElem);
+    EXPECT_EQ(src, reinterpret_cast<__cbuf__ void*>(
+        reinterpret_cast<fp8_e8m0_t*>(gExpectedMxSrc) + gScaleACallIdx * kScaleABatchStrideElem));
     EXPECT_EQ(xStartPos, 0);
     EXPECT_EQ(yStartPos, 0);
-    EXPECT_EQ(xStep, 3);
+    EXPECT_EQ(xStep, 1);
     EXPECT_EQ(yStep, 16);
     EXPECT_EQ(srcStride, 16);
     EXPECT_EQ(dstStride, 16);
+    ++gScaleACallIdx;
 }
 
 } // namespace
@@ -97,9 +110,9 @@ TEST_F(Tensor_Api_Cube_Copy_L12L0ScaleA_3510, CopyL12L0ScaleABatch)
 {
     using namespace AscendC::Te;
 
-    constexpr uint32_t batch = 3;
-    constexpr uint32_t m = 16;
-    constexpr uint32_t n = 32;
+    constexpr uint32_t batch = kScaleABatch;
+    constexpr uint32_t m = kScaleAM;
+    constexpr uint32_t n = kScaleAN;
     __cbuf__ fp8_e8m0_t src[batch * m * n] = {0};
     __ca__ fp8_e8m0_t dst[batch * m * n] = {0};
 
@@ -112,13 +125,15 @@ TEST_F(Tensor_Api_Cube_Copy_L12L0ScaleA_3510, CopyL12L0ScaleABatch)
 
     gExpectedMxDstAddr = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(dst)) / 16;
     gExpectedMxSrc = reinterpret_cast<__cbuf__ void*>(src);
+    gScaleACallIdx = 0;
 
     MOCKER_CPP(load_cbuf_to_ca_mx,
         void(uint64_t, __cbuf__ void*, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t, uint16_t))
-        .times(1)
+        .times(batch)
         .will(invoke(&load_cbuf_to_ca_mx_batch_stub));
 
     Copy(CopyAtom<CopyTraits<CopyL12L0ScaleA, CopyL12L0ScaleATraitDefault>>{}, l0aTensor, l1Tensor);
 
+    EXPECT_EQ(gScaleACallIdx, batch);
     mockcpp::GlobalMockObject::verify();
 }
