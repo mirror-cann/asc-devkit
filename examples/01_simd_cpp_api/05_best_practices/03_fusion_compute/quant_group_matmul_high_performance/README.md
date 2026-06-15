@@ -459,6 +459,7 @@ Atlas A2/A3上表现不同：Scenario 2中`aiv_vec_time`为235.872μs，高于`a
   > **注意：** 切换编译模式前需清理 cmake 缓存，可在 build 目录下执行 `rm CMakeCache.txt` 后重新 cmake。
 
 - 编译选项说明
+
   | 选项 | 可选值 | 说明 |
   |------|--------|------|
   | `SCENARIO_NUM` | `0`、`1`、`2` | 场景编号：0-基准单AIV，1-双AIV无流水，2-双AIV+4级流水 |

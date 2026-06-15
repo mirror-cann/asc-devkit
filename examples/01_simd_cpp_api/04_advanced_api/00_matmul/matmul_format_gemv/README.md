@@ -39,13 +39,13 @@
 - 样例实现
   - Kernel关键步骤
     - 创建Matmul对象：A矩阵Format参数为CubeFormat::VECTOR。
-        ```cpp
-        AscendC::Matmul<
-          AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::VECTOR, ATYPE>,
-          AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BType>,
-          AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, CType>,
-          AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BiasType>> matmulObj;
-        ```
+      ```cpp
+      AscendC::Matmul<
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::VECTOR, ATYPE>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BType>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, CType>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BiasType>> matmulObj;
+      ```
 
   - Tiling关键步骤
     - 创建一个Tiling对象：A矩阵Format参数为CubeFormat::VECTOR。

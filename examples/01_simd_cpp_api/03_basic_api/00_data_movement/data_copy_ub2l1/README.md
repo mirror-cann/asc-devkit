@@ -25,7 +25,7 @@
 ## 样例描述
 
 - 样例功能：  
-  将数据从UB（Unified Buffer）搬运到L1（L1 Buffer），然后进行Mmad矩阵乘计算，最后通过Fixpipe搬出到GM（Global Memory）。接口资料参考[随路基础数据搬运](../../../../../../docs/api/SIMD-API/基础API/Memory数据搬运/DataCopy/基础数据搬运.md)。
+  将数据从UB（Unified Buffer）搬运到L1（L1 Buffer），然后进行Mmad矩阵乘计算，最后通过Fixpipe搬出到GM（Global Memory）。接口资料参考[随路基础数据搬运](../../../../../docs/api/SIMD-API/基础API/Memory数据搬运/DataCopy/基础数据搬运.md)。
 - 样例规格：
   <table>
   <tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
@@ -47,7 +47,7 @@
 
 在本样例根目录下执行如下步骤，编译并执行样例。
 - 配置环境变量
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

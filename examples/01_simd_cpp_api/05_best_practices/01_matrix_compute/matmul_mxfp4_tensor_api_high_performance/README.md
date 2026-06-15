@@ -440,25 +440,13 @@ python3 -m pip install ml_dtypes==0.2.0 en_dtypes==0.0.4
 
 ### 配置环境变量
 
-请根据当前环境上 CANN 开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，选择对应配置环境变量的命令，**当前仅支持使用[CANN master](../../../../../docs/quick_start.md#下载-cann-master)**。
+请根据当前环境上 CANN 开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量，**当前仅支持使用[CANN master](../../../../../docs/quick_start.md#下载-cann-master)**。
 
-- 默认路径，root 用户安装 CANN 软件包
+```bash
+source ${install_path}/cann/set_env.sh
+```
 
-  ```bash
-  source /usr/local/Ascend/cann/set_env.sh
-  ```
-
-- 默认路径，非 root 用户安装 CANN 软件包
-
-  ```bash
-  source $HOME/Ascend/cann/set_env.sh
-  ```
-
-- 指定路径 install_path，安装 CANN 软件包
-
-  ```bash
-  source ${install_path}/cann/set_env.sh
-  ```
+> **说明：** `${install_path}` 为CANN包安装目录，未指定安装目录时默认安装至 `/usr/local/Ascend` 下。
 
 ### 样例执行
 

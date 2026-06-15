@@ -11,8 +11,6 @@
 
 #include "kernel_operator.h"
 #include "add_custom_tiling_sink_tiling_struct.h"
-namespace AscendC {
-constexpr uint32_t STATIC_TILE_LENGTH = 8;
 
 template <uint32_t tileLength>
 class KernelAdd {
@@ -75,16 +73,16 @@ private:
     uint32_t blockLength;
     uint32_t tileNum;
 };
-} // namespace AscendC
 
 extern "C" __global__ __aicore__ void add_custom_tiling_sink(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, __gm__ uint8_t* workspace, __gm__ uint8_t* tiling)
 {
+    constexpr uint32_t STATIC_TILE_LENGTH = 8;
     REGISTER_TILING_DEFAULT(TilingSinkTilingData);
     GET_TILING_DATA(tiling_data, tiling);
     KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
 
     AscendC::InitSocState();
-    AscendC::KernelAdd<AscendC::STATIC_TILE_LENGTH> op;
+    KernelAdd<STATIC_TILE_LENGTH> op;
     op.Init(x, y, z, tiling_data.totalLength, tiling_data.tileNum);
     op.Process();
     AscendC::PipeBarrier<PIPE_ALL>();
