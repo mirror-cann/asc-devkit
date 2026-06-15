@@ -14,15 +14,15 @@ project(rtc_template_add LANGUAGES CXX)
 # 注意：Aclrtc仅支持NPU模式，不支持cpu/sim调试模式
 set(CMAKE_ASC_ARCHITECTURES "dav-2201" CACHE STRING "NPU architecture: dav-2201, dav-3510")
 
-add_executable(main rtc_template_add.cpp)
+add_executable(demo rtc_template_add.cpp)
 
-target_include_directories(main PRIVATE
+target_include_directories(demo PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     $ENV{ASCEND_HOME_PATH}/include
 )
 
-target_link_directories(main PRIVATE $ENV{ASCEND_HOME_PATH}/lib64)
+target_link_directories(demo PRIVATE $ENV{ASCEND_HOME_PATH}/lib64)
 
-target_link_libraries(main PRIVATE ascendcl acl_rtc)
+target_link_libraries(demo PRIVATE ascendcl acl_rtc)
 
-target_compile_definitions(main PRIVATE ACLRTC_NPU_ARCH="${CMAKE_ASC_ARCHITECTURES}")
+target_compile_definitions(demo PRIVATE ACLRTC_NPU_ARCH="${CMAKE_ASC_ARCHITECTURES}")

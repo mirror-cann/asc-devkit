@@ -43,8 +43,7 @@
 
 - `aclrtBinaryLoadFromData` — 将编译产物加载到设备
 - `aclrtBinaryGetFunction` — 通过核函数名`hello_world`获取核函数句柄
-- `aclrtKernelArgsInit` / `aclrtKernelArgsFinalize` — 配置核函数参数（本样例核函数无参数，跳过`aclrtKernelArgsAppend`）
-- `aclrtLaunchKernelWithConfig` — 启动核函数，指定8个block执行
+- `aclrtLaunchKernelWithArgsArray` — 本样例核函数无参数，传入空参数数组并启动核函数
 - `aclrtSynchronizeDevice` — 等待Device侧执行完成
 
 ## 编译运行

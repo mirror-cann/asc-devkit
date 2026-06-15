@@ -12,9 +12,11 @@ RTC是Ascend C运行时编译库，通过[aclrtc](https://gitcode.com/cann/asc-d
 -   aclrtcDestroyProg：在编译和执行过程结束后，销毁给定的程序。
 
 编译完成后需要调用如下接口完成（仅列出核心接口）Kernel加载与执行。完整流程和详细接口说明请参考[《Runtime运行时API》](https://hiascend.com/document/redirect/CannCommunityRuntimeApi)中的“Kernel加载与执行”章节。
-1.  通过aclrtBinaryLoadFromData接口解析由aclrtcGetBinData接口获取的算子二进制数据。
-2.  获取核函数句柄并根据核函数句柄操作其参数列表，相关接口包括aclrtBinaryGetFunction（获取核函数句柄）、aclrtKernelArgsInit（初始化参数列表）、aclrtKernelArgsAppend（追加拷贝用户设置的参数值如xDevice,  yDevice, zDevice）等。
-3.  调用aclrtLaunchKernelWithConfig接口，启动对应算子的计算任务。
+1.  调用aclInit、aclrtSetDevice等接口初始化运行环境并指定Device。
+2.  通过aclrtBinaryLoadFromData接口解析由aclrtcGetBinData接口获取的算子二进制数据。加载时可通过ACL_RT_BINARY_LOAD_OPT_MAGIC指定二进制类型，如ACL_RT_BINARY_MAGIC_ELF_AICORE。
+3.  调用aclrtBinaryGetFunction接口获取核函数句柄。
+4.  调用aclrtLaunchKernelWithArgsArray接口，在已创建的Stream上按参数数组方式启动对应算子的计算任务。无参数核函数可传入空参数数组；有参数核函数需保证参数数组元素按核函数入参顺序排列，且每个元素指向Host侧的参数值。
+5.  调用aclrtSynchronizeStream、aclrtBinaryUnLoad、aclrtDestroyStream、aclrtResetDevice、aclFinalize等接口完成同步和资源释放。
 
 如下样例演示了如何使用aclrtc接口编译并运行一个核函数，该核函数中调用了printf进行打印。完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/05_aclrtc/rtc_hello_world/README.md)。
 
@@ -41,11 +43,11 @@ RTC是Ascend C运行时编译库，通过[aclrtc](https://gitcode.com/cann/asc-d
 } while(0)
 
 const char *src = R""""(
-    #include "debug/asc_printf.h"
-    extern "C" __global__ __vector__ void hello_world()
-    {
-        printf("Hello World!!!\n");
-    }
+#include "utils/debug/asc_printf.h"
+extern "C" __global__ __vector__ void hello_world()
+{
+    printf("Hello World!!!\n");
+}
 )"""";
 
 int main(int argc, char *argv[])
@@ -59,7 +61,7 @@ int main(int argc, char *argv[])
     };
     int numOptions = sizeof(options) / sizeof(options[0]);
     aclError ret = aclrtcCompileProg(prog, 1, options);
-    if (ret != ACL_SUCCESS) { // 编译报错时打印错误信息
+    if (ret != ACL_SUCCESS) {
         size_t size = 0;
         (void)aclrtcGetCompileLogSize(prog, &size);
         char log[size] = {0};
@@ -72,39 +74,41 @@ int main(int argc, char *argv[])
     std::vector<char> deviceELF(binDataSizeRet);
     ASCENDC_CHECK(aclrtcGetBinData(prog, deviceELF.data()));
 
-    // ----------------------------------------------- aclrt part ------------------------------------------------
+    ASCENDC_CHECK(aclInit(nullptr));
+    ASCENDC_CHECK(aclrtSetDevice(0));
+    aclrtStream stream = nullptr;
+    ASCENDC_CHECK(aclrtCreateStream(&stream));
+
     aclrtBinHandle binHandle = nullptr;
     aclrtBinaryLoadOptions loadOption;
     loadOption.numOpt = 1;
     aclrtBinaryLoadOption option;
-    option.type = ACL_RT_BINARY_LOAD_OPT_LAZY_MAGIC;
+    option.type = ACL_RT_BINARY_LOAD_OPT_MAGIC;
     option.value.magic = ACL_RT_BINARY_MAGIC_ELF_AICORE;
     loadOption.options = &option;
-    ASCENDC_CHECK(aclrtSetDevice(0));
     ASCENDC_CHECK(aclrtBinaryLoadFromData(deviceELF.data(), binDataSizeRet, &loadOption, &binHandle));
-
 
     aclrtFuncHandle funcHandle = nullptr;
     const char *funcName = "hello_world";
     ASCENDC_CHECK(aclrtBinaryGetFunction(binHandle, funcName, &funcHandle));
 
-    aclrtArgsHandle argsHandle = nullptr;
-    ASCENDC_CHECK(aclrtKernelArgsInit(funcHandle, &argsHandle));
-    ASCENDC_CHECK(aclrtKernelArgsFinalize(argsHandle));
     // 核函数执行
     uint32_t numBlocks = 8;
-    ASCENDC_CHECK(aclrtLaunchKernelWithConfig(funcHandle, numBlocks, nullptr, nullptr, argsHandle, nullptr));
-    ASCENDC_CHECK(aclrtSynchronizeDevice());
-    ASCENDC_CHECK(aclrtBinaryUnLoad(binHandle));
-    ASCENDC_CHECK(aclrtResetDevice(0));
+    void *kernelArgs[] = {};
+    ASCENDC_CHECK(aclrtLaunchKernelWithArgsArray(funcHandle, numBlocks, stream, nullptr, kernelArgs));
+    ASCENDC_CHECK(aclrtSynchronizeStream(stream));
 
+    ASCENDC_CHECK(aclrtBinaryUnLoad(binHandle));
+    ASCENDC_CHECK(aclrtDestroyStream(stream));
+    ASCENDC_CHECK(aclrtResetDevice(0));
+    ASCENDC_CHECK(aclFinalize());
     // 编译和运行均已结束，销毁程序
     ASCENDC_CHECK(aclrtcDestroyProg(&prog));
     return 0;
 }
 ```
 
-编译命令如下，编译时需要设置-I\$\{ASCEND_HOME_PATH\}/include，用于找到aclrtc相关头文件，并设置-L\$\{ASCEND_HOME_PATH\}/lib64链接alc_rtc动态库。
+编译命令如下，编译时需要设置-I\$\{ASCEND_HOME_PATH\}/include，用于找到aclrtc相关头文件，并设置-L\$\{ASCEND_HOME_PATH\}/lib64链接acl_rtc动态库。
 
 ```
 g++ rtc_hello_world.cpp -I${ASCEND_HOME_PATH}/include -L${ASCEND_HOME_PATH}/lib64 -lascendcl -lacl_rtc -o main

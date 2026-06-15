@@ -28,7 +28,7 @@
 
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
 
-#define CHECK_ACL(x)                                                                        \
+#define ASCENDC_CHECK(x)                                                                        \
     do {                                                                                    \
         aclError __ret = x;                                                                 \
         if (__ret != ACL_ERROR_NONE) {                                                      \

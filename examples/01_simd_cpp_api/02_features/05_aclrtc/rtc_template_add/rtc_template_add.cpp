@@ -17,6 +17,10 @@
 #include "acl/acl_rt_compile.h"
 #include "data_utils.h"
 
+#ifndef ACLRTC_NPU_ARCH
+#define ACLRTC_NPU_ARCH "dav-2201"
+#endif
+
 int main(int argc, char *argv[])
 {
     const char *src = R""""(
@@ -61,7 +65,7 @@ private:
 
 namespace Kernel {
 template<typename T>
-__vector__ __global__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z)
+__global__ __vector__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z)
 {
     AscendC::InitSocState();
     KernelAdd op;
@@ -72,56 +76,53 @@ __vector__ __global__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z)
 )"""";
 
     aclrtcProg prog;
-    CHECK_ACL(aclrtcCreateProg(&prog, src, "add_custom", 0, nullptr, nullptr));
+    ASCENDC_CHECK(aclrtcCreateProg(&prog, src, "add_custom", 0, nullptr, nullptr));
 
     const char* kernelNameExpr = "Kernel::add_custom<float>";
-    CHECK_ACL(aclrtcAddNameExpr(prog, kernelNameExpr));
+    ASCENDC_CHECK(aclrtcAddNameExpr(prog, kernelNameExpr));
 
-#ifndef ACLRTC_NPU_ARCH
-#define ACLRTC_NPU_ARCH "dav-2201"
-#endif
     const char *options[] = {
         "--npu-arch=" ACLRTC_NPU_ARCH,
     };
 
     int numOptions = sizeof(options) / sizeof(options[0]);
-    CHECK_ACL(aclrtcCompileProg(prog, numOptions, options));
+    ASCENDC_CHECK(aclrtcCompileProg(prog, numOptions, options));
 
     size_t binDataSizeRet;
-    CHECK_ACL(aclrtcGetBinDataSize(prog, &binDataSizeRet));
+    ASCENDC_CHECK(aclrtcGetBinDataSize(prog, &binDataSizeRet));
 
     std::vector<char> deviceELF(binDataSizeRet);
-    CHECK_ACL(aclrtcGetBinData(prog, deviceELF.data()));
+    ASCENDC_CHECK(aclrtcGetBinData(prog, deviceELF.data()));
 
     const char* manglingName = "";
-    CHECK_ACL(aclrtcGetLoweredName(prog, kernelNameExpr, &manglingName));
+    ASCENDC_CHECK(aclrtcGetLoweredName(prog, kernelNameExpr, &manglingName));
 
     uint32_t numBlocks = 1;
     uint32_t dataLen = 1024; // TOTAL_LENGTH
     size_t inputByteSize = dataLen * sizeof(float);
     size_t outputByteSize = dataLen * sizeof(float);
 
-    CHECK_ACL(aclInit(nullptr));
+    ASCENDC_CHECK(aclInit(nullptr));
     int32_t deviceId = 0;
-    CHECK_ACL(aclrtSetDevice(deviceId));
+    ASCENDC_CHECK(aclrtSetDevice(deviceId));
     aclrtStream stream = nullptr;
-    CHECK_ACL(aclrtCreateStream(&stream));
+    ASCENDC_CHECK(aclrtCreateStream(&stream));
 
     float *xHost, *yHost, *zHost, *golden;
     uint8_t *xDevice, *yDevice, *zDevice;
 
-    CHECK_ACL(aclrtMallocHost((void **)(&xHost), inputByteSize));
-    CHECK_ACL(aclrtMallocHost((void **)(&yHost), inputByteSize));
-    CHECK_ACL(aclrtMallocHost((void **)(&zHost), outputByteSize));
-    CHECK_ACL(aclrtMallocHost((void **)(&golden), outputByteSize));
-    CHECK_ACL(aclrtMalloc((void **)&xDevice, inputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
-    CHECK_ACL(aclrtMalloc((void **)&yDevice, inputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
-    CHECK_ACL(aclrtMalloc((void **)&zDevice, outputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
+    ASCENDC_CHECK(aclrtMallocHost((void **)(&xHost), inputByteSize));
+    ASCENDC_CHECK(aclrtMallocHost((void **)(&yHost), inputByteSize));
+    ASCENDC_CHECK(aclrtMallocHost((void **)(&zHost), outputByteSize));
+    ASCENDC_CHECK(aclrtMallocHost((void **)(&golden), outputByteSize));
+    ASCENDC_CHECK(aclrtMalloc((void **)&xDevice, inputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
+    ASCENDC_CHECK(aclrtMalloc((void **)&yDevice, inputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
+    ASCENDC_CHECK(aclrtMalloc((void **)&zDevice, outputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
 
     GenTestData(xHost, yHost, golden, dataLen);
 
-    CHECK_ACL(aclrtMemcpy(xDevice, inputByteSize, xHost, inputByteSize, ACL_MEMCPY_HOST_TO_DEVICE));
-    CHECK_ACL(aclrtMemcpy(yDevice, inputByteSize, yHost, inputByteSize, ACL_MEMCPY_HOST_TO_DEVICE));
+    ASCENDC_CHECK(aclrtMemcpy(xDevice, inputByteSize, xHost, inputByteSize, ACL_MEMCPY_HOST_TO_DEVICE));
+    ASCENDC_CHECK(aclrtMemcpy(yDevice, inputByteSize, yHost, inputByteSize, ACL_MEMCPY_HOST_TO_DEVICE));
 
     aclrtBinHandle binHandle = nullptr;
     aclrtBinaryLoadOptions loadOption;
@@ -130,22 +131,20 @@ __vector__ __global__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z)
     option.type = ACL_RT_BINARY_LOAD_OPT_MAGIC;
     option.value.magic = ACL_RT_BINARY_MAGIC_ELF_AICORE;
     loadOption.options = &option;
-    CHECK_ACL(aclrtBinaryLoadFromData(deviceELF.data(), binDataSizeRet, &loadOption, &binHandle));
+    ASCENDC_CHECK(aclrtBinaryLoadFromData(deviceELF.data(), binDataSizeRet, &loadOption, &binHandle));
     aclrtFuncHandle funcHandle = nullptr;
 
-    CHECK_ACL(aclrtBinaryGetFunction(binHandle, manglingName, &funcHandle));
+    ASCENDC_CHECK(aclrtBinaryGetFunction(binHandle, manglingName, &funcHandle));
 
-    aclrtArgsHandle argsHandle = nullptr;
-    aclrtParamHandle paramHandle = nullptr;
-    CHECK_ACL(aclrtKernelArgsInit(funcHandle, &argsHandle));
-    CHECK_ACL(aclrtKernelArgsAppend(argsHandle, (void **)&xDevice, sizeof(uintptr_t), &paramHandle));
-    CHECK_ACL(aclrtKernelArgsAppend(argsHandle, (void **)&yDevice, sizeof(uintptr_t), &paramHandle));
-    CHECK_ACL(aclrtKernelArgsAppend(argsHandle, (void **)&zDevice, sizeof(uintptr_t), &paramHandle));
-    CHECK_ACL(aclrtKernelArgsFinalize(argsHandle));
-    CHECK_ACL(aclrtLaunchKernelWithConfig(funcHandle, numBlocks, stream, nullptr, argsHandle, nullptr));
+    void *kernelArgs[] = {
+        static_cast<void *>(&xDevice),
+        static_cast<void *>(&yDevice),
+        static_cast<void *>(&zDevice),
+    };
+    ASCENDC_CHECK(aclrtLaunchKernelWithArgsArray(funcHandle, numBlocks, stream, nullptr, kernelArgs));
 
-    CHECK_ACL(aclrtSynchronizeStream(stream));
-    CHECK_ACL(aclrtMemcpy(zHost, outputByteSize, zDevice, outputByteSize, ACL_MEMCPY_DEVICE_TO_HOST));
+    ASCENDC_CHECK(aclrtSynchronizeStream(stream));
+    ASCENDC_CHECK(aclrtMemcpy(zHost, outputByteSize, zDevice, outputByteSize, ACL_MEMCPY_DEVICE_TO_HOST));
 
     // 精度校验（C++内完成，无需Python脚本）
     if (VerifyResult(zHost, golden, dataLen)) {
@@ -155,19 +154,19 @@ __vector__ __global__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z)
         return 1;
     }
 
-    CHECK_ACL(aclrtBinaryUnLoad(binHandle));
-    CHECK_ACL(aclrtFree(xDevice));
-    CHECK_ACL(aclrtFree(yDevice));
-    CHECK_ACL(aclrtFree(zDevice));
-    CHECK_ACL(aclrtFreeHost(golden));
-    CHECK_ACL(aclrtFreeHost(xHost));
-    CHECK_ACL(aclrtFreeHost(yHost));
-    CHECK_ACL(aclrtFreeHost(zHost));
-    CHECK_ACL(aclrtDestroyStream(stream));
-    CHECK_ACL(aclrtResetDevice(deviceId));
-    CHECK_ACL(aclFinalize());
+    ASCENDC_CHECK(aclrtBinaryUnLoad(binHandle));
+    ASCENDC_CHECK(aclrtFree(xDevice));
+    ASCENDC_CHECK(aclrtFree(yDevice));
+    ASCENDC_CHECK(aclrtFree(zDevice));
+    ASCENDC_CHECK(aclrtFreeHost(golden));
+    ASCENDC_CHECK(aclrtFreeHost(xHost));
+    ASCENDC_CHECK(aclrtFreeHost(yHost));
+    ASCENDC_CHECK(aclrtFreeHost(zHost));
+    ASCENDC_CHECK(aclrtDestroyStream(stream));
+    ASCENDC_CHECK(aclrtResetDevice(deviceId));
+    ASCENDC_CHECK(aclFinalize());
 
-    CHECK_ACL(aclrtcDestroyProg(&prog));
+    ASCENDC_CHECK(aclrtcDestroyProg(&prog));
 
     return 0;
 }
