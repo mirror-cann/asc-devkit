@@ -390,10 +390,10 @@ __simd_callee__ inline void AbsUsingS32(T& dstReg, T& srcReg0, MaskReg& mask)
 }
 
 template <typename T>
-__simd_callee__ inline void VbrUsingU32(T& dstReg, uint32_t highScalar, uint32_t lowScalar)
+__simd_callee__ inline void VbrUsingU32(T& dstReg, uint32_t lowScalar, uint32_t highScalar)
 {
-    vbr((RegTensor<uint32_t>&)dstReg.reg[0], highScalar);
-    vbr((RegTensor<uint32_t>&)dstReg.reg[1], lowScalar);
+    vbr((RegTensor<uint32_t>&)dstReg.reg[0], lowScalar);
+    vbr((RegTensor<uint32_t>&)dstReg.reg[1], highScalar);
 }
 
 template <typename T, typename U>
@@ -544,13 +544,11 @@ __simd_callee__ inline void DivS64Impl(T& dstReg, T& srcReg0, T& srcReg1, MaskRe
     RegTensor<int64_t, RegTraitNumTwo> vAbsSrc0, vAbsSrc1, vTmp5;
     RegTensor<float, RegTraitNumOne> vTmp2, vTmp3;
     RegTensor<uint32_t, RegTraitNumOne> vTmp4;
-    RegTensor<uint64_t, RegTraitNumTwo> vConstDup0, qZero, vConstDup1, vTmp6, vTmp7, vTmp8, vTmp9;
+    RegTensor<uint64_t, RegTraitNumTwo> vConstDup0, vConstDup1, vTmp6, vTmp7, vTmp8, vTmp9;
     MaskReg  zeroMask,  nonZeroMask, oriMask, nonOneMask, oneMask, signResP, ge0P;
     AbsUsingS32(vAbsSrc0, srcReg0, mask);
     AbsUsingS32(vAbsSrc1, srcReg1, mask);
     VbrUsingU32(vConstDup0, static_cast<uint32_t>(0), static_cast<uint32_t>(0));
-    constexpr uint32_t u32MaxNum = 0xFFFFFFFFU;
-    VbrUsingU32(qZero, u32MaxNum, u32MaxNum);
     VbrUsingU32(vConstDup1, static_cast<uint32_t>(1), static_cast<uint32_t>(0));
     VcmpEqUsingU32( zeroMask, srcReg1, vConstDup0, mask);
     pnot( nonZeroMask,  zeroMask, mask);
@@ -588,9 +586,18 @@ __simd_callee__ inline void DivS64Impl(T& dstReg, T& srcReg0, T& srcReg1, MaskRe
     mask = oriMask;
     DivSignCal(signResP, srcReg0, srcReg1, vTmp4, mask);
     MaskReg pg1 = pset_b32(PAT_ALL);
+    // Saturate by numerator sign on division by zero: negative → INT_MIN, non-negative → INT_MAX
+    constexpr uint64_t vdivU64Const = 0x7FFFFFFFFFFFFFFFULL;
+    VbrUsingU32(vTmp7, static_cast<uint32_t>(vdivU64Const), static_cast<uint32_t>(vdivU64Const >> 32));
+    MaskReg numNegMask;
+    vcmp_ge(numNegMask, (RegTensor<int32_t>&)srcReg0.reg[1], (RegTensor<int32_t>&)vTmp4, zeroMask);
+    pnot(numNegMask, numNegMask, zeroMask);
+    vTmp9 = vTmp7;
+    AddB64Impl(vTmp9, vTmp9, vConstDup1, pg1);
+    VselUsingU32(vTmp7, vTmp9, vTmp7, numNegMask);
     VsubUsingU32(vTmp8, vConstDup0, vTmp6, pg1);
     VselUsingU32(vTmp6, vTmp6, vTmp8, signResP);
-    VselUsingU32(dstReg, qZero, vTmp6,  zeroMask);
+    VselUsingU32(dstReg, vTmp7, vTmp6,  zeroMask);
     mask = startMask;
 }
 

@@ -390,10 +390,10 @@ __simd_callee__ inline void AbsUsingS32(T& dstReg, T& srcReg0, MaskReg& mask)
 }
 
 template <typename T>
-__simd_callee__ inline void VbrUsingU32(T& dstReg, uint32_t highScalar, uint32_t lowScalar)
+__simd_callee__ inline void VbrUsingU32(T& dstReg, uint32_t lowScalar, uint32_t highScalar)
 {
-    vbr((RegTensor<uint32_t>&)dstReg.reg[0], highScalar);
-    vbr((RegTensor<uint32_t>&)dstReg.reg[1], lowScalar);
+    vbr((RegTensor<uint32_t>&)dstReg.reg[0], lowScalar);
+    vbr((RegTensor<uint32_t>&)dstReg.reg[1], highScalar);
 }
 
 template <typename T, typename U>
@@ -544,13 +544,11 @@ __simd_callee__ inline void DivS64Impl(T& dstReg, T& srcReg0, T& srcReg1, MaskRe
     RegTensor<int64_t, RegTraitNumTwo> vAbsSrc0, vAbsSrc1, vTmp5;
     RegTensor<float, RegTraitNumOne> vTmp2, vTmp3;
     RegTensor<uint32_t, RegTraitNumOne> vTmp4;
-    RegTensor<uint64_t, RegTraitNumTwo> vConstDup0, qZero, vConstDup1, vTmp6, vTmp7, vTmp8, vTmp9;
+    RegTensor<uint64_t, RegTraitNumTwo> vConstDup0, vConstDup1, vTmp6, vTmp7, vTmp8, vTmp9;
     MaskReg  zeroMask,  nonZeroMask, oriMask, nonOneMask, oneMask, signResP, ge0P;
     AbsUsingS32(vAbsSrc0, srcReg0, mask);
     AbsUsingS32(vAbsSrc1, srcReg1, mask);
     VbrUsingU32(vConstDup0, static_cast<uint32_t>(0), static_cast<uint32_t>(0));
-    constexpr uint32_t u32MaxNum = 0xFFFFFFFFU;
-    VbrUsingU32(qZero, u32MaxNum, u32MaxNum);
     VbrUsingU32(vConstDup1, static_cast<uint32_t>(1), static_cast<uint32_t>(0));
     VcmpEqUsingU32( zeroMask, srcReg1, vConstDup0, mask);
     pnot( nonZeroMask,  zeroMask, mask);
@@ -588,9 +586,18 @@ __simd_callee__ inline void DivS64Impl(T& dstReg, T& srcReg0, T& srcReg1, MaskRe
     mask = oriMask;
     DivSignCal(signResP, srcReg0, srcReg1, vTmp4, mask);
     MaskReg pg1 = pset_b32(PAT_ALL);
+    // Saturate by numerator sign on division by zero: negative → INT_MIN, non-negative → INT_MAX
+    constexpr uint64_t vdivU64Const = 0x7FFFFFFFFFFFFFFFULL;
+    VbrUsingU32(vTmp7, static_cast<uint32_t>(vdivU64Const), static_cast<uint32_t>(vdivU64Const >> 32));
+    MaskReg numNegMask;
+    vcmp_ge(numNegMask, (RegTensor<int32_t>&)srcReg0.reg[1], (RegTensor<int32_t>&)vTmp4, zeroMask);
+    pnot(numNegMask, numNegMask, zeroMask);
+    vTmp9 = vTmp7;
+    AddB64Impl(vTmp9, vTmp9, vConstDup1, pg1);
+    VselUsingU32(vTmp7, vTmp9, vTmp7, numNegMask);
     VsubUsingU32(vTmp8, vConstDup0, vTmp6, pg1);
     VselUsingU32(vTmp6, vTmp6, vTmp8, signResP);
-    VselUsingU32(dstReg, qZero, vTmp6,  zeroMask);
+    VselUsingU32(dstReg, vTmp7, vTmp6,  zeroMask);
     mask = startMask;
 }
 
@@ -927,6 +934,8 @@ __simd_callee__ inline void DivIEEE754FloatImpl(RegTensor<float>& dst, RegTensor
 
     NotNumUnion nan;
     nan.i = F32_NAN;
+    NotNumUnion min_denormal;
+    min_denormal.i = 0x1;
 
     NotNumUnion normalizeScaleEnlarge;
     normalizeScaleEnlarge.i = 0x4B000000; // 2^23
@@ -936,16 +945,19 @@ __simd_callee__ inline void DivIEEE754FloatImpl(RegTensor<float>& dst, RegTensor
     Reg::RegTensor<float> maxSubnormal;
     Reg::RegTensor<uint32_t> tmp0;
     Reg::RegTensor<int32_t> tmp1;
+    Reg::RegTensor<uint32_t> tmp2;
 
     Reg::RegTensor<float> src0Abs;
     Reg::RegTensor<float> src0Subnormal;
     Reg::RegTensor<float> src0Norm;
     Reg::RegTensor<float> src0All;
+    Reg::RegTensor<float> src0AbsNorm;
 
     Reg::RegTensor<float> src1Abs;
     Reg::RegTensor<float> src1Subnormal;
     Reg::RegTensor<float> src1Norm;
     Reg::RegTensor<float> src1All;
+    Reg::RegTensor<float> src1AbsNorm;
 
     MaskReg mask0;
     MaskReg maskSrc0Normal;
@@ -958,11 +970,13 @@ __simd_callee__ inline void DivIEEE754FloatImpl(RegTensor<float>& dst, RegTensor
     MaskReg maskSrc0Zero; // dividend 0
     MaskReg maskSrc1Zero; // divisor 0
     MaskReg maskValid;
+    MaskReg maskNorm;
 
     RegTensor<uint32_t> src0Exponent;
     RegTensor<uint32_t> src1Exponent;
 
     RegTensor<float> z1;
+    RegTensor<float> z2;
     RegTensor<int32_t> scale;
     RegTensor<uint32_t> dstExponent;
     RegTensor<uint32_t> dstSign;
@@ -1019,6 +1033,9 @@ __simd_callee__ inline void DivIEEE754FloatImpl(RegTensor<float>& dst, RegTensor
     Add((RegTensor<uint32_t>&)src1Norm, (RegTensor<uint32_t>&)src1Norm, tmp0, maskValid);
     Select(src0Norm, src0Norm, src0All, maskValid);
     Select(src1Norm, src1Norm, src1All, maskValid);
+    Abs(src0AbsNorm, src0Norm, maskValid);
+    Abs(src1AbsNorm, src1Norm, maskValid);
+    Compare<float, CMPMODE::LE>(maskNorm, src0AbsNorm, src1AbsNorm, maskValid);
 
     if constexpr (is0ULP) {
         DivPrecisionImpl<float, mode, U>(dst, src0Norm, src1Norm, mask);
@@ -1066,6 +1083,16 @@ __simd_callee__ inline void DivIEEE754FloatImpl(RegTensor<float>& dst, RegTensor
     // overflow (exponent over 255) underflow (exponent under 0) detection // FP32:1S + 8E + 23M
     Duplicate(tmp1, -23, mask);
     // True if underflow/overflow
+    Compare<int32_t, CMPMODE::EQ>(mask0, scale, (RegTensor<int32_t>&)tmp1, mask);
+    MaskAnd(mask0, mask0, maskValid, mask);
+    Duplicate(tmp0, min_denormal.i, mask0);
+    Add((RegTensor<uint32_t>&)z1, (RegTensor<uint32_t>&)dstSign, tmp0, mask0);
+    Duplicate(tmp2, static_cast<uint32_t>(0), mask0);
+    Add((RegTensor<uint32_t>&)z2, (RegTensor<uint32_t>&)dstSign, tmp2, mask0);
+    Select(z1, z2, z1, maskNorm);
+    Select(dst, z1, dst, mask0);
+    MaskNot(mask0, mask0, mask);
+    MaskAnd(maskValid, mask0, maskValid, mask);
     Compare<int32_t, CMPMODE::LT>(mask0, scale, (RegTensor<int32_t>&)tmp1, mask);
     // set overflown/underflown result to infinity
     MaskAnd(mask0, mask0, maskValid, mask);
@@ -1128,6 +1155,8 @@ __simd_callee__ inline void DivIEEE754HalfImpl(RegTensor<half>& dst, RegTensor<h
 
     HalfUnion nan;
     nan.i = 0x7E00;
+    HalfUnion min_denormal;
+    min_denormal.i = 0x1;
 
     HalfUnion normalizeScaleEnlarge;
     normalizeScaleEnlarge.i = 0x6400; // 2^10
@@ -1137,16 +1166,19 @@ __simd_callee__ inline void DivIEEE754HalfImpl(RegTensor<half>& dst, RegTensor<h
     Reg::RegTensor<half> maxSubnormal;
     Reg::RegTensor<uint16_t> tmp0;
     Reg::RegTensor<int16_t> tmp1;
+    Reg::RegTensor<uint16_t> tmp2;
 
     Reg::RegTensor<half> src0Abs;
     Reg::RegTensor<half> src0Subnormal;
     Reg::RegTensor<half> src0Norm;
     Reg::RegTensor<half> src0All;
+    Reg::RegTensor<half> src0AbsNorm;
 
     Reg::RegTensor<half> src1Abs;
     Reg::RegTensor<half> src1Subnormal;
     Reg::RegTensor<half> src1Norm;
     Reg::RegTensor<half> src1All;
+    Reg::RegTensor<half> src1AbsNorm;
 
     MaskReg mask0;
     MaskReg maskSrc0Normal;
@@ -1159,11 +1191,13 @@ __simd_callee__ inline void DivIEEE754HalfImpl(RegTensor<half>& dst, RegTensor<h
     MaskReg maskSrc0Zero; // dividend 0
     MaskReg maskSrc1Zero; // divisor 0
     MaskReg maskValid;
+    MaskReg maskNorm;
 
     RegTensor<uint16_t> src0Exponent;
     RegTensor<uint16_t> src1Exponent;
 
     RegTensor<half> z1;
+    RegTensor<half> z2;
     RegTensor<int16_t> scale;
     RegTensor<uint16_t> dstExponent;
     RegTensor<uint16_t> dstSign;
@@ -1220,6 +1254,9 @@ __simd_callee__ inline void DivIEEE754HalfImpl(RegTensor<half>& dst, RegTensor<h
     Add((RegTensor<uint16_t>&)src1Norm, (RegTensor<uint16_t>&)src1Norm, tmp0, maskValid);
     Select(src0Norm, src0Norm, src0All, maskValid);
     Select(src1Norm, src1Norm, src1All, maskValid);
+    Abs(src0AbsNorm, src0Norm, maskValid);
+    Abs(src1AbsNorm, src1Norm, maskValid);
+    Compare<half, CMPMODE::LE>(maskNorm, src0AbsNorm, src1AbsNorm, maskValid);
 
     constexpr DivSpecificMode sprMode = Internal::GetDivSpecificMode(MaskMergeMode::ZEROING);
     constexpr auto modeValue = GetMaskMergeMode<sprMode.mrgMode>();
@@ -1262,6 +1299,16 @@ __simd_callee__ inline void DivIEEE754HalfImpl(RegTensor<half>& dst, RegTensor<h
     // ===========================================================
     // overflow (exponent over 31) underflow (exponent under -9) detection // FP16:1S + 5E + 9M
     Duplicate(tmp1, -9, mask);
+    Compare<int16_t, CMPMODE::EQ>(mask0, scale, (RegTensor<int16_t>&)tmp1, mask);
+    MaskAnd(mask0, mask0, maskValid, mask);
+    Duplicate(tmp0, min_denormal.i, mask0);
+    Add((RegTensor<uint16_t>&)z1, (RegTensor<uint16_t>&)dstSign, tmp0, mask0);
+    Duplicate(tmp2, static_cast<uint16_t>(0), mask0);
+    Add((RegTensor<uint16_t>&)z2, (RegTensor<uint16_t>&)dstSign, tmp2, mask0);
+    Select(z1, z2, z1, maskNorm);
+    Select(dst, z1, dst, mask0);
+    MaskNot(mask0, mask0, mask);
+    MaskAnd(maskValid, mask0, maskValid, mask);
     // True if underflow/overflow
     Compare<int16_t, CMPMODE::LT>(mask0, scale, (RegTensor<int16_t>&)tmp1, mask);
     // set overflown/underflown result to infinity
@@ -1397,17 +1444,23 @@ __simd_callee__ inline void MaxOperator(U& dstReg, U& srcReg0, U& srcReg1, MaskR
             RegTensor<ActualT, RegTraitNumTwo> traitTwoSrcReg0;
             RegTensor<ActualT, RegTraitNumTwo> traitTwoSrcReg1;
             RegTensor<ActualT, RegTraitNumTwo> traitTwoDstReg;
+            RegTensor<ActualT, RegTraitNumTwo> traitTwoTmpReg;
             B64TraitOneToTraitTwo(traitTwoSrcReg0, srcReg0);
             B64TraitOneToTraitTwo(traitTwoSrcReg1, srcReg1);
             MaskReg selMask;
             Compare<ActualT, CMPMODE::GT>(selMask, traitTwoSrcReg0, traitTwoSrcReg1, maskTrait2);
             Select(traitTwoDstReg, traitTwoSrcReg0, traitTwoSrcReg1, selMask);
+            Duplicate(traitTwoTmpReg, static_cast<ActualT>(0));
+            Select(traitTwoDstReg, traitTwoDstReg, traitTwoTmpReg, maskTrait2);
             B64TraitTwoToTraitOne(dstReg, traitTwoDstReg);
         }
     } else if constexpr (CheckRegTrait<U, RegTraitNumTwo>()) {
+        U tmpReg;
         MaskReg selMask;
         Compare<ActualT, CMPMODE::GT>(selMask, srcReg0, srcReg1, mask);
         Select(dstReg, srcReg0, srcReg1, selMask);
+        Duplicate(tmpReg, static_cast<ActualT>(0));
+        Select(dstReg, dstReg, tmpReg, mask);
     }
 }
 
@@ -1443,17 +1496,23 @@ __simd_callee__ inline void MinOperator(U& dstReg, U& srcReg0, U& srcReg1, MaskR
             RegTensor<ActualT, RegTraitNumTwo> traitTwoSrcReg0;
             RegTensor<ActualT, RegTraitNumTwo> traitTwoSrcReg1;
             RegTensor<ActualT, RegTraitNumTwo> traitTwoDstReg;
+            RegTensor<ActualT, RegTraitNumTwo> traitTwoTmpReg;
             B64TraitOneToTraitTwo(traitTwoSrcReg0, srcReg0);
             B64TraitOneToTraitTwo(traitTwoSrcReg1, srcReg1);
             MaskReg selMask;
             Compare<ActualT, CMPMODE::LT>(selMask, traitTwoSrcReg0, traitTwoSrcReg1, maskTrait2);
             Select(traitTwoDstReg, traitTwoSrcReg0, traitTwoSrcReg1, selMask);
+            Duplicate(traitTwoTmpReg, static_cast<ActualT>(0));
+            Select(traitTwoDstReg, traitTwoDstReg, traitTwoTmpReg, maskTrait2);
             B64TraitTwoToTraitOne(dstReg, traitTwoDstReg);
         }
     } else if constexpr (CheckRegTrait<U, RegTraitNumTwo>()) {
+        U tmpReg;
         MaskReg selMask;
         Compare<ActualT, CMPMODE::LT>(selMask, srcReg0, srcReg1, mask);
         Select(dstReg, srcReg0, srcReg1, selMask);
+        Duplicate(tmpReg, static_cast<ActualT>(0));
+        Select(dstReg, dstReg, tmpReg, mask);
     }
 }
 
