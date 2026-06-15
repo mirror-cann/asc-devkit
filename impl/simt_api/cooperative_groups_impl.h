@@ -314,8 +314,8 @@ template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl(T var, int src_rank) const
 {
     static_assert(
-        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
+        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
     int lane = src_rank % static_cast<int>(num_threads());
     if (num_threads() != warpSize) {
         lane = __fns_internal(_tiled_info.mask, 0, lane + 1);
@@ -327,8 +327,8 @@ template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl_up(T var, unsigned int delta) const
 {
     static_assert(
-        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
+        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
     if (num_threads() == warpSize) {
         return asc_shfl_up(var, delta, warpSize);
     }
@@ -345,8 +345,8 @@ template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl_down(T var, unsigned int delta) const
 {
     static_assert(
-        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
+        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
     if (num_threads() == warpSize) {
         return asc_shfl_down(var, delta, warpSize);
     }
@@ -420,8 +420,8 @@ template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl(T var, int src_rank) const
 {
     static_assert(
-        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
+        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
     return asc_shfl(var, src_rank, static_cast<int32_t>(numThreads));
 }
 
@@ -430,8 +430,8 @@ template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl_up(T var, unsigned int delta) const
 {
     static_assert(
-        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
+        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
     return asc_shfl_up(var, delta, static_cast<int32_t>(numThreads));
 }
 
@@ -440,8 +440,8 @@ template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl_down(T var, unsigned int delta) const
 {
     static_assert(
-        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
+        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
     return asc_shfl_down(var, delta, static_cast<int32_t>(numThreads));
 }
 
@@ -450,8 +450,8 @@ template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl_xor(T var, unsigned int lane_mask) const
 {
     static_assert(
-        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2.");
+        SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
     return asc_shfl_xor(var, static_cast<int32_t>(lane_mask), static_cast<int32_t>(numThreads));
 }
 

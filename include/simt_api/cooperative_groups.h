@@ -19,6 +19,7 @@
 #include "simt_api/common_functions.h"
 #include "simt_api/device_types.h"
 #include "simt_api/asc_fp16.h"
+#include "simt_api/asc_bf16.h"
 
 namespace cooperative_groups {
 

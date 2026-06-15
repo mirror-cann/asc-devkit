@@ -48,6 +48,19 @@ T __shfl(T var, U mask)
     return var;
 }
 
+// bfloat16_t / bfloat16x2_t warp-shuffle stubs are defined in
+// device_warp_functions_debug.cpp (the released stub_fun.h only declares up to
+// half/half2). Declare them here so the asc_bf16 impl resolves them in the
+// CPU-debug twin build.
+bfloat16_t __shfl(bfloat16_t var, int32_t num);
+bfloat16x2_t __shfl(bfloat16x2_t var, int32_t num);
+bfloat16_t __shfl_up(bfloat16_t var, int32_t num);
+bfloat16x2_t __shfl_up(bfloat16x2_t var, int32_t num);
+bfloat16_t __shfl_down(bfloat16_t var, int32_t num);
+bfloat16x2_t __shfl_down(bfloat16x2_t var, int32_t num);
+bfloat16_t __shfl_xor(bfloat16_t var, int32_t num);
+bfloat16x2_t __shfl_xor(bfloat16x2_t var, int32_t num);
+
 static inline unsigned int __brev(unsigned int x)
 {
     unsigned int result = 0;

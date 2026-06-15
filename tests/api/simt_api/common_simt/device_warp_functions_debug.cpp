@@ -93,6 +93,8 @@ REGISTER_SIMT_ASC_SHFL(__shfl, int64_t);
 REGISTER_SIMT_ASC_SHFL(__shfl, float);
 REGISTER_SIMT_ASC_SHFL(__shfl, half);
 REGISTER_SIMT_ASC_SHFL(__shfl, half2);
+REGISTER_SIMT_ASC_SHFL(__shfl, bfloat16_t);
+REGISTER_SIMT_ASC_SHFL(__shfl, bfloat16x2_t);
 #endif
 
 template <typename T>
@@ -127,6 +129,8 @@ REGISTER_SIMT_ASC_SHFL_UP(__shfl_up, int64_t);
 REGISTER_SIMT_ASC_SHFL_UP(__shfl_up, float);
 REGISTER_SIMT_ASC_SHFL_UP(__shfl_up, half);
 REGISTER_SIMT_ASC_SHFL_UP(__shfl_up, half2);
+REGISTER_SIMT_ASC_SHFL_UP(__shfl_up, bfloat16_t);
+REGISTER_SIMT_ASC_SHFL_UP(__shfl_up, bfloat16x2_t);
 #endif
 
 template <typename T>
@@ -163,6 +167,8 @@ REGISTER_SIMT_ASC_SHFL_DOWN(__shfl_down, int64_t);
 REGISTER_SIMT_ASC_SHFL_DOWN(__shfl_down, float);
 REGISTER_SIMT_ASC_SHFL_DOWN(__shfl_down, half);
 REGISTER_SIMT_ASC_SHFL_DOWN(__shfl_down, half2);
+REGISTER_SIMT_ASC_SHFL_DOWN(__shfl_down, bfloat16_t);
+REGISTER_SIMT_ASC_SHFL_DOWN(__shfl_down, bfloat16x2_t);
 #endif
 
 template <typename T>
@@ -199,6 +205,8 @@ REGISTER_SIMT_ASC_SHFL_XOR(__shfl_xor, int64_t);
 REGISTER_SIMT_ASC_SHFL_XOR(__shfl_xor, float);
 REGISTER_SIMT_ASC_SHFL_XOR(__shfl_xor, half);
 REGISTER_SIMT_ASC_SHFL_XOR(__shfl_xor, half2);
+REGISTER_SIMT_ASC_SHFL_XOR(__shfl_xor, bfloat16_t);
+REGISTER_SIMT_ASC_SHFL_XOR(__shfl_xor, bfloat16x2_t);
 #endif
 
 template <typename T>

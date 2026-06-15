@@ -388,6 +388,22 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_stwt(bfloat16_t* address, bfloat1
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_stwt(bfloat16x2_t* address, bfloat16x2_t val);
 #endif
 
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_shfl(bfloat16_t var, int32_t src_lane, int32_t width = warpSize);
+
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl(bfloat16x2_t var, int32_t src_lane, int32_t width = warpSize);
+
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_shfl_up(bfloat16_t var, uint32_t delta, int32_t width = warpSize);
+
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl_up(bfloat16x2_t var, uint32_t delta, int32_t width = warpSize);
+
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_shfl_down(bfloat16_t var, uint32_t delta, int32_t width = warpSize);
+
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl_down(bfloat16x2_t var, uint32_t delta, int32_t width = warpSize);
+
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_shfl_xor(bfloat16_t var, int32_t lane_mask, int32_t width = warpSize);
+
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl_xor(bfloat16x2_t var, int32_t lane_mask, int32_t width = warpSize);
+
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t make_bfloat162(bfloat16_t x, bfloat16_t y);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t __ushort_as_bfloat16(const unsigned short int x);

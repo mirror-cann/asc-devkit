@@ -27,7 +27,7 @@ T shfl_xor(T var, unsigned int lane_mask) const
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| var | 输入 | 线程用于交换的输入操作数。支持的数据类型为：half、int32_t、uint32_t、float、half2、int64_t、uint64_t。 |
+| var | 输入 | 线程用于交换的输入操作数。支持的数据类型为：half、int32_t、uint32_t、float、half2、int64_t、uint64_t、bfloat16_t、bfloat16x2_t。 |
 | lane_mask | 输入 | 与当前线程rank做异或运算的操作数。 |
 
 ## 返回值说明
