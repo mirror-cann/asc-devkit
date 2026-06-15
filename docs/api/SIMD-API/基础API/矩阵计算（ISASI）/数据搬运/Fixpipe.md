@@ -203,7 +203,7 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 <tr id="row162252057304"><td class="cellrowborder" valign="top" width="14.08%" headers="mcps1.2.3.1.1 "><p id="p182256513019"><a name="p182256513019"></a><a name="p182256513019"></a>S</p>
 </td>
 <td class="cellrowborder" valign="top" width="85.92%" headers="mcps1.2.3.1.2 "><p id="p973319214339"><a name="p973319214339"></a><a name="p973319214339"></a>cbufWorkspace的数据类型。</p>
-<a name="ul7112101853218"></a><a name="ul7112101853218"></a><ul id="ul7112101853218"><li>当目的操作数、源操作数、cbufWorkspace使用基础数据类型时，模板参数S必须为uint64_t类型，否则编译失败。</li><li>当目的操作数、源操作数、cbufWorkspace使用<a href="../../../基础数据结构/TensorTrait/TensorTrait.md">TensorTrait</a>类型时，模板参数S的LiteType必须为uint64_t类型，否则编译失败。</li></ul>
+<a name="ul7112101853218"></a><a name="ul7112101853218"></a><ul id="ul7112101853218"><li>当目的操作数、源操作数、cbufWorkspace使用基础数据类型时，模板参数S必须为uint64_t类型，否则编译失败。</li><li>当目的操作数、源操作数、cbufWorkspace使用<a href="../../数据结构/辅助数据结构/TensorTrait/TensorTrait.md">TensorTrait</a>类型时，模板参数S的LiteType必须为uint64_t类型，否则编译失败。</li></ul>
 <p id="p187025511315"><a name="p187025511315"></a><a name="p187025511315"></a>模板参数S后一个模板参数仅用于上述数据类型检查，用户无需关注。</p>
 </td>
 </tr>
@@ -225,7 +225,7 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 </td>
 <td class="cellrowborder" valign="top" width="10.291029102910292%" headers="mcps1.2.4.1.2 "><p id="p5590551181016"><a name="p5590551181016"></a><a name="p5590551181016"></a>输出</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.52755275527552%" headers="mcps1.2.4.1.3 "><p id="p255711621817"><a name="p255711621817"></a><a name="p255711621817"></a>目的操作数，类型为<a href="../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>或<a href="../../../基础数据结构/GlobalTensor/GlobalTensor.md">GlobalTensor</a>。</p>
+<td class="cellrowborder" valign="top" width="75.52755275527552%" headers="mcps1.2.4.1.3 "><p id="p255711621817"><a name="p255711621817"></a><a name="p255711621817"></a>目的操作数，类型为<a href="../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md">LocalTensor</a>或<a href="../../数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor.md">GlobalTensor</a>。</p>
 <a name="ul16146134605518"></a><a name="ul16146134605518"></a><ul id="ul16146134605518"><li>针对LocalTensor：<p id="p81673546560"><a name="p81673546560"></a><a name="p81673546560"></a><span id="ph16979343205618"><a name="ph16979343205618"></a><a name="ph16979343205618"></a><term id="zh-cn_topic_0000001312391781_term354143892110_1"><a name="zh-cn_topic_0000001312391781_term354143892110_1"></a><a name="zh-cn_topic_0000001312391781_term354143892110_1"></a>Atlas 200I/500 A2 推理产品</term></span>，支持的数据类型为：int8_t、uint8_t、half、bfloat16_t、float、half、int32_t。</p>
 <p id="p1463883873214"><a name="p1463883873214"></a><a name="p1463883873214"></a><span id="ph1263893863210"><a name="ph1263893863210"></a><a name="ph1263893863210"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：int8_t、uint8_t、half、bfloat16_t、float、half、int32_t。</p>
 </li><li>针对GlobalTensor：<p id="p71581752135517"><a name="p71581752135517"></a><a name="p71581752135517"></a><span id="ph14920205581619"><a name="ph14920205581619"></a><a name="ph14920205581619"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：int8_t、uint8_t、hifloat8_t、fp8_e4m3fn_t、half、bfloat16_t、int32_t、float。</p>
@@ -242,7 +242,7 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};</pre>
 </td>
 <td class="cellrowborder" valign="top" width="10.291029102910292%" headers="mcps1.2.4.1.2 "><p id="p628711148165"><a name="p628711148165"></a><a name="p628711148165"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.52755275527552%" headers="mcps1.2.4.1.3 "><p id="p49136785815"><a name="p49136785815"></a><a name="p49136785815"></a>源操作数，支持的TPosition为CO1，为Mmad接口计算的结果，类型为LocalTensor数据结构的定义请参考<a href="../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>。支持的数据类型为float/int32_t，支持的TPosition为CO1，数据格式为NZ格式。起始地址需要满足64B对齐。</p>
+<td class="cellrowborder" valign="top" width="75.52755275527552%" headers="mcps1.2.4.1.3 "><p id="p49136785815"><a name="p49136785815"></a><a name="p49136785815"></a>源操作数，支持的TPosition为CO1，为Mmad接口计算的结果，类型为LocalTensor数据结构的定义请参考<a href="../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md">LocalTensor</a>。支持的数据类型为float/int32_t，支持的TPosition为CO1，数据格式为NZ格式。起始地址需要满足64B对齐。</p>
 </td>
 </tr>
 <tr id="row0800184819273"><td class="cellrowborder" valign="top" width="14.18141814181418%" headers="mcps1.2.4.1.1 "><p id="p4800104842720"><a name="p4800104842720"></a><a name="p4800104842720"></a>intriParams</p>
@@ -738,4 +738,3 @@ M方向切分：
     fixpipeParams.dstStride = baseN;
     AscendC::Fixpipe<outputType, l0cType, CFG_ROW_MAJOR_UB>(cUB, c, fixpipeParams);
     ```
-

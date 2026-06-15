@@ -146,7 +146,7 @@ constexpr BinaryConfig DEFAULT_BINARY_CONFIG = {1};</pre>
 <td class="cellrowborder" valign="top" width="9.31%" headers="mcps1.2.4.1.2 "><p id="p194315165469"><a name="p194315165469"></a><a name="p194315165469"></a>输出</p>
 </td>
 <td class="cellrowborder" valign="top" width="76.18%" headers="mcps1.2.4.1.3 "><p id="p1143101611469"><a name="p1143101611469"></a><a name="p1143101611469"></a>目的操作数。</p>
-<p id="p64341624613"><a name="p64341624613"></a><a name="p64341624613"></a><span id="zh-cn_topic_0000001530181537_ph173308471594"><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><span id="zh-cn_topic_0000001530181537_ph9902231466"><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816"><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a>类型为<a href="../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
+<p id="p64341624613"><a name="p64341624613"></a><a name="p64341624613"></a><span id="zh-cn_topic_0000001530181537_ph173308471594"><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><a name="zh-cn_topic_0000001530181537_ph173308471594"></a><span id="zh-cn_topic_0000001530181537_ph9902231466"><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><a name="zh-cn_topic_0000001530181537_ph9902231466"></a><span id="zh-cn_topic_0000001530181537_ph1782115034816"><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a><a name="zh-cn_topic_0000001530181537_ph1782115034816"></a>类型为<a href="../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md">LocalTensor</a>，支持的TPosition为VECIN/VECCALC/VECOUT。</span></span></span></p>
 <p id="p24312165461"><a name="p24312165461"></a><a name="p24312165461"></a><span id="ph5430168461"><a name="ph5430168461"></a><a name="ph5430168461"></a>LocalTensor的起始地址需要32字节对齐。</span></p>
 <p id="p4432165467"><a name="p4432165467"></a><a name="p4432165467"></a><span id="ph1943116154619"><a name="ph1943116154619"></a><a name="ph1943116154619"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：half、float、int64_t、uint64_t、complex32、complex64。</p>
 </td>
@@ -174,7 +174,7 @@ constexpr BinaryConfig DEFAULT_BINARY_CONFIG = {1};</pre>
 </td>
 <td class="cellrowborder" valign="top" width="9.31%" headers="mcps1.2.4.1.2 "><p id="p344101654616"><a name="p344101654616"></a><a name="p344101654616"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.18%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0000001530181537_p0554313181312"><a name="zh-cn_topic_0000001530181537_p0554313181312"></a><a name="zh-cn_topic_0000001530181537_p0554313181312"></a><span id="zh-cn_topic_0000001530181537_ph793119540147"><a name="zh-cn_topic_0000001530181537_ph793119540147"></a><a name="zh-cn_topic_0000001530181537_ph793119540147"></a><span id="zh-cn_topic_0000001530181537_ph199431319161515"><a name="zh-cn_topic_0000001530181537_ph199431319161515"></a><a name="zh-cn_topic_0000001530181537_ph199431319161515"></a><a href="https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/C++类库API/基础API/接口分类说明/高维切分API.md" target="_blank" rel="noopener noreferrer">mask</a></span>用于控制每次迭代内参与计算的元素。</span></p>
+<td class="cellrowborder" valign="top" width="76.18%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0000001530181537_p0554313181312"><a name="zh-cn_topic_0000001530181537_p0554313181312"></a><a name="zh-cn_topic_0000001530181537_p0554313181312"></a><span id="zh-cn_topic_0000001530181537_ph793119540147"><a name="zh-cn_topic_0000001530181537_ph793119540147"></a><a name="zh-cn_topic_0000001530181537_ph793119540147"></a><span id="zh-cn_topic_0000001530181537_ph199431319161515"><a name="zh-cn_topic_0000001530181537_ph199431319161515"></a><a name="zh-cn_topic_0000001530181537_ph199431319161515"></a><a href="../SIMD计算说明/高维切分.md" target="_blank" rel="noopener noreferrer">mask</a></span>用于控制每次迭代内参与计算的元素。</span></p>
 <a name="zh-cn_topic_0000001530181537_ul1255411133132"></a><a name="zh-cn_topic_0000001530181537_ul1255411133132"></a><ul id="zh-cn_topic_0000001530181537_ul1255411133132"><li>逐bit模式：可以按位控制哪些元素参与计算，bit位的值为1表示参与计算，0表示不参与。<p id="zh-cn_topic_0000001530181537_p121114581013"><a name="zh-cn_topic_0000001530181537_p121114581013"></a><a name="zh-cn_topic_0000001530181537_p121114581013"></a>mask为数组形式，数组长度和数组元素的取值范围和操作数的数据类型有关。当操作数为16位时，数组长度为2，mask[0]、mask[1]∈[0, 2<sup id="zh-cn_topic_0000001530181537_sup1411059101"><a name="zh-cn_topic_0000001530181537_sup1411059101"></a><a name="zh-cn_topic_0000001530181537_sup1411059101"></a>64</sup>-1]并且不同时为0；当操作数为32位时，数组长度为1，mask[0]∈(0, 2<sup id="zh-cn_topic_0000001530181537_sup1711155161017"><a name="zh-cn_topic_0000001530181537_sup1711155161017"></a><a name="zh-cn_topic_0000001530181537_sup1711155161017"></a>64</sup>-1]；当操作数为64位时，数组长度为1，mask[0]∈(0, 2<sup id="zh-cn_topic_0000001530181537_sup181195111019"><a name="zh-cn_topic_0000001530181537_sup181195111019"></a><a name="zh-cn_topic_0000001530181537_sup181195111019"></a>32</sup>-1]。</p>
 <p id="zh-cn_topic_0000001530181537_p711354105"><a name="zh-cn_topic_0000001530181537_p711354105"></a><a name="zh-cn_topic_0000001530181537_p711354105"></a>例如，mask=[8, 0]，8=0b1000，表示仅第4个元素参与计算。</p>
 </li></ul>
@@ -186,14 +186,14 @@ constexpr BinaryConfig DEFAULT_BINARY_CONFIG = {1};</pre>
 <td class="cellrowborder" valign="top" width="9.31%" headers="mcps1.2.4.1.2 "><p id="p14416164461"><a name="p14416164461"></a><a name="p14416164461"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="76.18%" headers="mcps1.2.4.1.3 "><p id="p10444162462"><a name="p10444162462"></a><a name="p10444162462"></a>重复迭代次数。 矢量计算单元，每次读取连续的256Bytes数据进行计算，为完成对输入数据的处理，必须通过多次迭代（repeat）才能完成所有数据的读取与计算。repeatTime表示迭代的次数。</p>
-<p id="p19449164465"><a name="p19449164465"></a><a name="p19449164465"></a>关于该参数的具体描述请参考<span id="zh-cn_topic_0000001530181537_ph43961850144019"><a name="zh-cn_topic_0000001530181537_ph43961850144019"></a><a name="zh-cn_topic_0000001530181537_ph43961850144019"></a><a href="https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/C++类库API/基础API/接口分类说明/高维切分API.md" target="_blank" rel="noopener noreferrer">高维切分API</a></span>。</p>
+<p id="p19449164465"><a name="p19449164465"></a><a name="p19449164465"></a>关于该参数的具体描述请参考<span id="zh-cn_topic_0000001530181537_ph43961850144019"><a name="zh-cn_topic_0000001530181537_ph43961850144019"></a><a name="zh-cn_topic_0000001530181537_ph43961850144019"></a><a href="../SIMD计算说明/高维切分.md" target="_blank" rel="noopener noreferrer">高维切分API</a></span>。</p>
 </td>
 </tr>
 <tr id="row13442161464"><td class="cellrowborder" valign="top" width="14.510000000000002%" headers="mcps1.2.4.1.1 "><p id="p104461613461"><a name="p104461613461"></a><a name="p104461613461"></a>repeatParams</p>
 </td>
 <td class="cellrowborder" valign="top" width="9.31%" headers="mcps1.2.4.1.2 "><p id="p6442165469"><a name="p6442165469"></a><a name="p6442165469"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="76.18%" headers="mcps1.2.4.1.3 "><p id="p14414161469"><a name="p14414161469"></a><a name="p14414161469"></a>元素操作控制结构信息，具体请参考<a href="../../../其他数据类型/UnaryRepeatParams.md">UnaryRepeatParams</a>。</p>
+<td class="cellrowborder" valign="top" width="76.18%" headers="mcps1.2.4.1.3 "><p id="p14414161469"><a name="p14414161469"></a><a name="p14414161469"></a>元素操作控制结构信息，具体请参考<a href="../../数据结构/辅助数据结构//UnaryRepeatParams.md">UnaryRepeatParams</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -282,4 +282,3 @@ constexpr BinaryConfig DEFAULT_BINARY_CONFIG = {1};</pre>
 输入数据src1Local：[2 2 2 ... 2]
 输出数据dstLocal：[512 512 512 ... 512]
 ```
-

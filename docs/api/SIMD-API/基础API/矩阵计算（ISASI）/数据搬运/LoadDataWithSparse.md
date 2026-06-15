@@ -82,7 +82,7 @@ __aicore__ inline void LoadDataWithSparse(const LocalTensor<T>& dst, const Local
 </td>
 <td class="cellrowborder" valign="top" width="82.57%" headers="mcps1.2.3.1.2 "><p id="p14306152041916"><a name="p14306152041916"></a><a name="p14306152041916"></a>idx的数据类型。</p>
 <a name="ul3987732122120"></a><a name="ul3987732122120"></a><ul id="ul3987732122120"><li>当dst、src、idx为基础数据类型时，T和U必须为uint8_t类型，否则编译失败。</li></ul>
-<a name="ul17416131483320"></a><a name="ul17416131483320"></a><ul id="ul17416131483320"><li>当dst、src、idx为<a href="../../../基础数据结构/TensorTrait/TensorTrait.md">TensorTrait</a>类型时，T和U的LiteType必须为int8_t类型，否则编译失败。</li></ul>
+<a name="ul17416131483320"></a><a name="ul17416131483320"></a><ul id="ul17416131483320"><li>当dst、src、idx为<a href="../../数据结构/辅助数据结构/TensorTrait/TensorTrait.md">TensorTrait</a>类型时，T和U的LiteType必须为int8_t类型，否则编译失败。</li></ul>
 <p id="p882014184212"><a name="p882014184212"></a><a name="p882014184212"></a>最后两个模板参数仅用于上述数据类型检查，用户无需关注。</p>
 </td>
 </tr>
@@ -149,4 +149,3 @@ __aicore__ inline void LoadDataWithSparse(const LocalTensor<T>& dst, const Local
 ## 调用示例<a name="section6461234123118"></a>
 
 详细用例请参考[MmadWithSparse](../矩阵计算/MmadWithSparse.md)。
-

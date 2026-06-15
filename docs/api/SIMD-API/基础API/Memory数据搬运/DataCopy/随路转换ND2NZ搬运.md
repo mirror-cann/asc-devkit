@@ -250,7 +250,7 @@ enableSmallC0开启模式下的ND2NZ转换示意图如下：
 
 ## 支持的通路和数据类型<a name="section87413163309"></a>
 
-下文的数据通路均通过逻辑位置[TPosition](../../../其他数据类型/TPosition.md#table5376122715308)来表达，并注明了对应的物理通路。TPosition与物理内存的映射关系见[表1](../../../通用说明和约束.md#table07372185712)。
+下文的数据通路均通过逻辑位置[TPosition](../../数据结构/辅助数据结构//TPosition.md#table5376122715308)来表达，并注明了对应的物理通路。TPosition与物理内存的映射关系见[表1](../../../通用说明和约束.md#table07372185712)。
 
 **表 4**  Global Memory -\> Local Memory具体通路和支持的数据类型
 
@@ -373,4 +373,3 @@ AscendC::DataCopy(srcLocal, workLocal, intriParams);
 输入数据(srcGlobal): [1 2 3 ... 1024]
 输出数据(dstGlobal):[1 2 ... 15 16 33 34 ... 47 48 65 66 ... 79 80 97 98 ... 111 112 ... 1009 1010... 1023 1024]
 ```
-

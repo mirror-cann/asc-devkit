@@ -115,7 +115,7 @@ __simd_callee__ inline void LocalMemBar()
 <tr id="row19615183817191"><td class="cellrowborder" valign="top" width="18.21%" headers="mcps1.2.3.1.1 "><p id="p1484519586432"><a name="p1484519586432"></a><a name="p1484519586432"></a>SCALAR_LOAD</p>
 </td>
 <td class="cellrowborder" valign="top" width="81.78999999999999%" headers="mcps1.2.3.1.2 "><p id="p1415113416592"><a name="p1415113416592"></a><a name="p1415113416592"></a>SIMD_VF函数内标量读UB流水线。</p>
-<p id="p1539022412570"><a name="p1539022412570"></a><a name="p1539022412570"></a>对应UB读取标量的指令，如<a href="../../../基础数据结构/LocalTensor/GetValue.md#section618mcpsimp">GetValue</a>。</p>
+<p id="p1539022412570"><a name="p1539022412570"></a><a name="p1539022412570"></a>对应UB读取标量的指令，如<a href="../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/GetValue.md#section618mcpsimp">GetValue</a>。</p>
 </td>
 </tr>
 <tr id="row114116587598"><td class="cellrowborder" valign="top" width="18.21%" headers="mcps1.2.3.1.1 "><p id="p141415587592"><a name="p141415587592"></a><a name="p141415587592"></a>VEC_ALL</p>
@@ -233,4 +233,3 @@ __simd_vf__ inline void AddVF(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf_
     }
 }
 ```
-

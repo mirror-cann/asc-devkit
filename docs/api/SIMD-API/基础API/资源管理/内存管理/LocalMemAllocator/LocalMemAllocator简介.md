@@ -1,6 +1,6 @@
 # LocalMemAllocator简介<a name="ZH-CN_TOPIC_0000002337856509"></a>
 
-LocalMemAllocator是在使用[静态Tensor编程](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编程模型/AI-Core-SIMD编程/SIMD编程/静态Tensor编程.md)时用于内存管理的类，用户无需构建TPipe/TQue，而是直接创建LocalTensor对象（也可以直接通过[LocalTensor构造函数](../../../../基础数据结构/LocalTensor/LocalTensor构造函数.md#li1192912551322)进行构造）并开发算子，从而减少运行时的开销，实现更优的性能。
+LocalMemAllocator是在使用[静态Tensor编程](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编程模型/AI-Core-SIMD编程/SIMD编程/静态Tensor编程.md)时用于内存管理的类，用户无需构建TPipe/TQue，而是直接创建LocalTensor对象（也可以直接通过[LocalTensor构造函数](../../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor构造函数.md)进行构造）并开发算子，从而减少运行时的开销，实现更优的性能。
 
 LocalMemAllocator仅支持在Ascend C静态Tensor编程方式中使用，不可以与TPipe等接口混用。
 
@@ -58,4 +58,3 @@ MAX };</pre>
 </tr>
 </tbody>
 </table>
-

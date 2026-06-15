@@ -43,7 +43,7 @@ __aicore__ inline void GetBatchC(const LocalTensor<DstT>& c, uint32_t batchA, ui
 | batchA | 输入 | 左矩阵的batch数。 |
 | batchB | 输入 | 右矩阵的batch数。 |
 | enSequentialWrite | 输入 | 输出是否连续存放数据，默认false（非连续写模式）。 |
-| c | 输入 | C矩阵，用于保存矩阵分片。类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)。 |
+| c | 输入 | C矩阵，用于保存矩阵分片。类型为[LocalTensor](../../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)。 |
 
 ## 返回值说明
 

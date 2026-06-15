@@ -104,7 +104,7 @@ EXTERN\_IMPL\_BUFPOOL宏内部定义的函数Reset、Init、GetBufHandle、SetCu
 </td>
 <td class="cellrowborder" valign="top" width="7.75%" headers="mcps1.2.4.1.2 "><p id="p1342115582416"><a name="p1342115582416"></a><a name="p1342115582416"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="79.89%" headers="mcps1.2.4.1.3 "><p id="p154210516247"><a name="p154210516247"></a><a name="p154210516247"></a>自定义TBufPool逻辑位置，可以为<span>VECIN、VECOUT、</span>VECCALC、A1<span>、</span>B1、C1。<span>关于TPosition的具体介绍请参考</span><a href="../../../../其他数据类型/TPosition.md">TPosition</a>。</p>
+<td class="cellrowborder" valign="top" width="79.89%" headers="mcps1.2.4.1.3 "><p id="p154210516247"><a name="p154210516247"></a><a name="p154210516247"></a>自定义TBufPool逻辑位置，可以为<span>VECIN、VECOUT、</span>VECCALC、A1<span>、</span>B1、C1。<span>关于TPosition的具体介绍请参考</span><a href="../../../数据结构/辅助数据结构//TPosition.md">TPosition</a>。</p>
 </td>
 </tr>
 <tr id="row1460143271116"><td class="cellrowborder" valign="top" width="12.36%" headers="mcps1.2.4.1.1 "><p id="p2601143215118"><a name="p2601143215118"></a><a name="p2601143215118"></a>BUFID_SIZE</p>
@@ -153,4 +153,3 @@ public:
     EXTERN_IMPL_BUFPOOL(MyBufPool, AscendC::TPosition::VECCALC, 16);
 };
 ```
-

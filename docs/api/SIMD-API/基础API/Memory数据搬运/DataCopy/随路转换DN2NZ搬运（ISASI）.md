@@ -189,7 +189,7 @@ DN2NZ转换示意图如下，样例中参数设置值和解释说明如下（以
 <a name="table14255161718545"></a>
 <table><thead align="left"><tr id="row3255181710543"><th class="cellrowborder" valign="top" width="11.04%" id="mcps1.2.4.1.1"><p id="p52550177546"><a name="p52550177546"></a><a name="p52550177546"></a>支持型号</p>
 </th>
-<th class="cellrowborder" valign="top" width="23.93%" id="mcps1.2.4.1.2"><p id="p13255191735420"><a name="p13255191735420"></a><a name="p13255191735420"></a>数据通路（通过<a href="../../../其他数据类型/TPosition.md#table5376122715308">TPosition</a>表达）</p>
+<th class="cellrowborder" valign="top" width="23.93%" id="mcps1.2.4.1.2"><p id="p13255191735420"><a name="p13255191735420"></a><a name="p13255191735420"></a>数据通路（通过<a href="../../数据结构/辅助数据结构//TPosition.md#table5376122715308">TPosition</a>表达）</p>
 </th>
 <th class="cellrowborder" valign="top" width="65.03%" id="mcps1.2.4.1.3"><p id="p6255617175419"><a name="p6255617175419"></a><a name="p6255617175419"></a>源操作数和目的操作数的数据类型 (两者保持一致)</p>
 </th>
@@ -232,4 +232,3 @@ AscendC::Dn2NzParams dn2nzParams(
 // 将GM中DN的格式的数据， 按照 dn2nzParams 定义的规则，转换为NZ并拷贝到A1/B1中
 AscendC::DataCopy(dstLocal, srcGlobal, dn2nzParams);
 ```
-

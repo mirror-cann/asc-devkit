@@ -24,7 +24,7 @@ __aicore__ inline void SetBias(const AscendC::GlobalTensor<BiasT>& bias)
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| bias | 输入 | Bias在Global Memory上的地址。类型为[GlobalTensor](../../../../基础数据结构/GlobalTensor/GlobalTensor.md)。偏置矩阵Bias支持的数据类型为：half、bfloat16_t。 |
+| bias | 输入 | Bias在Global Memory上的地址。类型为[GlobalTensor](../../../../基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor.md)。偏置矩阵Bias支持的数据类型为：half、bfloat16_t。 |
 
 ## 返回值说明
 
@@ -43,4 +43,3 @@ if (biasFlag) {
     conv3dApi.SetBias(biasGm);
 }
 ```
-

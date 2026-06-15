@@ -82,7 +82,7 @@ inline uint8_t* GetBaseAddr(int8_t logicPos)
 </td>
 <td class="cellrowborder" valign="top" width="12.379999999999999%" headers="mcps1.1.4.1.2 "><p id="p9331531865"><a name="p9331531865"></a><a name="p9331531865"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.26%" headers="mcps1.1.4.1.3 "><p id="p143308311967"><a name="p143308311967"></a><a name="p143308311967"></a>逻辑位置类型。该类型具体说明请参考<a href="../../../../其他数据类型/TPosition.md">TPosition</a>。</p>
+<td class="cellrowborder" valign="top" width="75.26%" headers="mcps1.1.4.1.3 "><p id="p143308311967"><a name="p143308311967"></a><a name="p143308311967"></a>逻辑位置类型。该类型具体说明请参考<a href="../../../数据结构/辅助数据结构//TPosition.md">TPosition</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -101,4 +101,3 @@ NA
 ```
 auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(pos));
 ```
-

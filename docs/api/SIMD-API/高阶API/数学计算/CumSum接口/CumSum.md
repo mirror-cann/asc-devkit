@@ -93,10 +93,10 @@ enum class CumSumAlgorithm {
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| dstTensor | 输出 | 目的操作数。按first轴或last轴处理，输入元素的累加和。<br><br>类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
-| lastRowTensor | 输出 | 目的操作数。模板参数config中的outputLastRow参数取值为true时，输出的最后一行数据。<br><br>类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
-| srcTensor | 输入 | 源操作数。<br><br>类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
-| sharedTmpBuffer | 输入 | 临时缓存。<br><br>类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>用于CumSum内部复杂计算时存储中间变量，由开发者提供。<br><br>临时空间大小BufferSize的获取方式请参考[GetCumSumMaxMinTmpSize](GetCumSumMaxMinTmpSize.md)。 |
+| dstTensor | 输出 | 目的操作数。按first轴或last轴处理，输入元素的累加和。<br><br>类型为[LocalTensor](../../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| lastRowTensor | 输出 | 目的操作数。模板参数config中的outputLastRow参数取值为true时，输出的最后一行数据。<br><br>类型为[LocalTensor](../../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| srcTensor | 输入 | 源操作数。<br><br>类型为[LocalTensor](../../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| sharedTmpBuffer | 输入 | 临时缓存。<br><br>类型为[LocalTensor](../../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>用于CumSum内部复杂计算时存储中间变量，由开发者提供。<br><br>临时空间大小BufferSize的获取方式请参考[GetCumSumMaxMinTmpSize](GetCumSumMaxMinTmpSize.md)。 |
 | cumSumInfo | 输入 | srcTensor的shape信息。CumSumInfo类型，具体定义如下方代码所示，其中参数的含义为：<br><br>outter：表示输入数据的外轴长度。<br><br>inner：表示输入数据的内轴长度。<br><br>请注意：<br><br>cumSumInfo.outter和cumSumInfo.inner都应大于0。<br><br>cumSumInfo.outter * cumSumInfo.inner不能大于dstTensor或srcTensor的大小。<br><br>cumSumInfo.inner * sizeof(T)必须是32字节的整数倍。<br><br>当模板参数config中的outputLastRow取值为true时，cumSumInfo.inner不能大于lastRowTensor输出的最后一行数据的大小。 |
 
 ```
@@ -153,4 +153,3 @@ cumSumConfig取值\{false, false, true, AscendC::CumSumAlgorithm::CUMSUM\_ALGORI
 输出数据(dstLocal): [1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4]
 输出数据(lastRowLocal): [4 4 4 4 4 4 4 4]
 ```
-

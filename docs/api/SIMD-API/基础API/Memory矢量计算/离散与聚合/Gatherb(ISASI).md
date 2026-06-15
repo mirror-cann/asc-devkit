@@ -94,7 +94,7 @@ __aicore__ inline void Gatherb(const LocalTensor<T>& dst, const LocalTensor<T>& 
 
 | 参数名称 | 输入/输出 | 含义 |
 | :------- | :-------- | :--- |
-| dst | 输出 | 目的操作数，<br><br>类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT(存储位置为Unified Buffer)。<br><br>LocalTensor的起始地址需要按照32字节对齐。 |
+| dst | 输出 | 目的操作数，<br><br>类型为[LocalTensor](../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT(存储位置为Unified Buffer)。<br><br>LocalTensor的起始地址需要按照32字节对齐。 |
 | src | 输入 | 源操作数，类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT(存储位置为Unified Buffer)。<br><br>LocalTensor的起始地址需要按照32字节对齐。 |
 | offset | 输入 | 每个DataBlock在源操作数中对应的地址偏移，类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT(存储位置为Unified Buffer)。<br><br>LocalTensor的起始地址需要按照32字节对齐。<br><br>该偏移量是相对于src的基地址而言的。每个元素值要大于等于0，单位为字节，取值要求如下：<br>•取值应保证src元素类型位宽对齐。<br>•偏移地址后需要32字节对齐。<br>•偏移地址后不能超出UB大小数据的范围。<br>•地址偏移的取值范围：不能超出uint32_t的范围。 |
 | repeatTime | 输入 | 指令迭代次数，每次迭代完成8个DataBlock的数据收集，取值范围：repeatTime∈[0,255]。<br><br>**注：repeatTime = 0表示不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。** |

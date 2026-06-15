@@ -95,7 +95,7 @@ __aicore__ inline void Fill(const LocalTensor<T>& dst, const InitConstValueParam
 <tr id="row118213273213"><td class="cellrowborder" valign="top" width="17.41%" headers="mcps1.2.3.1.1 "><p id="p161827233218"><a name="p161827233218"></a><a name="p161827233218"></a>U</p>
 </td>
 <td class="cellrowborder" valign="top" width="82.59%" headers="mcps1.2.3.1.2 "><p id="p15182229327"><a name="p15182229327"></a><a name="p15182229327"></a>初始化值的数据类型。</p>
-<a name="ul17416131483320"></a><a name="ul17416131483320"></a><ul id="ul17416131483320"><li>当dst使用基础数据类型时， U和dst的数据类型T需保持一致，否则编译失败。</li><li>当dst使用<a href="../../../基础数据结构/TensorTrait/TensorTrait.md">TensorTrait</a>类型时，U和dst的数据类型T的LiteType需保持一致，否则编译失败。</li></ul>
+<a name="ul17416131483320"></a><a name="ul17416131483320"></a><ul id="ul17416131483320"><li>当dst使用基础数据类型时， U和dst的数据类型T需保持一致，否则编译失败。</li><li>当dst使用<a href="../../数据结构/辅助数据结构/TensorTrait/TensorTrait.md">TensorTrait</a>类型时，U和dst的数据类型T的LiteType需保持一致，否则编译失败。</li></ul>
 <p id="p472714219338"><a name="p472714219338"></a><a name="p472714219338"></a>最后一个模板参数仅用于上述数据类型检查，用户无需关注。</p>
 </td>
 </tr>
@@ -199,4 +199,3 @@ uint32 mLength = 16;
 uint32 kLength = 16;
 Fill(leftMatrix, {1, static_cast<uint16_t>(mLength * kLength * sizeof(float) / 32), 0, 1}); // 给leftMatrix填充 mLength * kLength长度的数据为1， 按32B的颗粒进行填充
 ```
-

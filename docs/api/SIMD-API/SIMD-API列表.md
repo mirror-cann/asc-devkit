@@ -11,27 +11,27 @@
 </th>
 </tr>
 </thead>
-<tbody><tr id="row102681557105520"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p12251181311560"><a name="p12251181311560"></a><a name="p12251181311560"></a><a href="基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a></p>
+<tbody><tr id="row102681557105520"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p12251181311560"><a name="p12251181311560"></a><a name="p12251181311560"></a><a href="基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md">LocalTensor</a></p>
 </td>
-<td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p2025215484579"><a name="p2025215484579"></a><a name="p2025215484579"></a><span id="ph4396131516585"><a name="ph4396131516585"></a><a name="ph4396131516585"></a>LocalTensor用于存放AI Core中Local Memory（内部存储）的数据，支持逻辑位置<a href="其他数据类型/TPosition.md">TPosition</a>为<span>VECIN、VECOUT、VECCALC、</span>A1<span>、</span>A2<span>、</span>B1<span>、</span>B2<span>、</span>CO1<span>、</span>CO2。</span></p>
+<td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p2025215484579"><a name="p2025215484579"></a><a name="p2025215484579"></a><span id="ph4396131516585"><a name="ph4396131516585"></a><a name="ph4396131516585"></a>LocalTensor用于存放AI Core中Local Memory（内部存储）的数据，支持逻辑位置<a href="基础API/数据结构/辅助数据结构/TPosition.md">TPosition</a>为<span>VECIN、VECOUT、VECCALC、</span>A1<span>、</span>A2<span>、</span>B1<span>、</span>B2<span>、</span>CO1<span>、</span>CO2。</span></p>
 </td>
 </tr>
-<tr id="row026925718557"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p142691057115518"><a name="p142691057115518"></a><a name="p142691057115518"></a><a href="基础数据结构/GlobalTensor/GlobalTensor.md">GlobalTensor</a></p>
+<tr id="row026925718557"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p142691057115518"><a name="p142691057115518"></a><a name="p142691057115518"></a><a href="基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor.md">GlobalTensor</a></p>
 </td>
 <td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p625254835716"><a name="p625254835716"></a><a name="p625254835716"></a><span id="ph698815359590"><a name="ph698815359590"></a><a name="ph698815359590"></a>GlobalTensor用来存放Global Memory（外部存储）的全局数据。</span></p>
 </td>
 </tr>
-<tr id="row32691573557"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p8269195705514"><a name="p8269195705514"></a><a name="p8269195705514"></a><a href="基础数据结构/Coordinate/Coordinate.md">Coordinate</a></p>
+<tr id="row32691573557"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p8269195705514"><a name="p8269195705514"></a><a name="p8269195705514"></a><a href="基础API/数据结构/辅助数据结构/Coordinate/Coordinate.md">Coordinate</a></p>
 </td>
 <td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p1825015488573"><a name="p1825015488573"></a><a name="p1825015488573"></a>Coordinate本质上是一个元组（tuple），用于表示张量在不同维度的位置信息，即坐标值。</p>
 </td>
 </tr>
-<tr id="row926915745510"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p192691757185519"><a name="p192691757185519"></a><a name="p192691757185519"></a><a href="基础数据结构/Layout/Layout.md">Layout</a></p>
+<tr id="row926915745510"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p192691757185519"><a name="p192691757185519"></a><a name="p192691757185519"></a><a href="基础API/数据结构/辅助数据结构/Layout/Layout.md">Layout</a></p>
 </td>
 <td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p1724954818576"><a name="p1724954818576"></a><a name="p1724954818576"></a><span id="ph198761643125913"><a name="ph198761643125913"></a><a name="ph198761643125913"></a>Layout&lt;Shape, Stride&gt;数据结构是描述多维张量内存布局的基础模板类，通过编译时的形状（Shape）和步长（Stride）信息，实现逻辑坐标空间到一维内存地址空间的映射，为复杂张量操作和硬件优化提供基础支持。</span></p>
 </td>
 </tr>
-<tr id="row97101411165713"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p5710711115712"><a name="p5710711115712"></a><a name="p5710711115712"></a><a href="基础数据结构/TensorTrait/TensorTrait.md">TensorTrait</a></p>
+<tr id="row97101411165713"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p5710711115712"><a name="p5710711115712"></a><a name="p5710711115712"></a><a href="基础API/数据结构/辅助数据结构/TensorTrait/TensorTrait.md">TensorTrait</a></p>
 </td>
 <td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p167101111155717"><a name="p167101111155717"></a><a name="p167101111155717"></a><span id="ph287618459597"><a name="ph287618459597"></a><a name="ph287618459597"></a>TensorTrait数据结构是描述Tensor相关信息的基础模板类，包含Tensor的数据类型、逻辑位置和Layout内存布局。</span></p>
 </td>
@@ -310,7 +310,7 @@
 <td class="cellrowborder" valign="top" width="59.77%" headers="mcps1.2.4.1.3 "><p id="p5969213430"><a name="p5969213430"></a><a name="p5969213430"></a>根据源操作数和目的操作数Tensor的数据类型进行精度转换。</p>
 </td>
 </tr>
-<tr id="row1651510211434"><td class="cellrowborder" rowspan="11" valign="top" width="15.590000000000002%" headers="mcps1.2.4.1.1 "><p id="p1757701610436"><a name="p1757701610436"></a><a name="p1757701610436"></a>归约计算</p>
+<tr id="row1651510211434"><td class="cellrowborder" rowspan="6" valign="top" width="15.590000000000002%" headers="mcps1.2.4.1.1 "><p id="p1757701610436"><a name="p1757701610436"></a><a name="p1757701610436"></a>归约计算</p>
 </td>
 <td class="cellrowborder" valign="top" width="24.64%" headers="mcps1.2.4.1.2 "><p id="p1357731618438"><a name="p1357731618438"></a><a name="p1357731618438"></a><a href="基础API/Memory矢量计算/归约计算/ReduceMax.md">ReduceMax</a></p>
 </td>
@@ -327,44 +327,19 @@
 <td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1546312559583"><a name="p1546312559583"></a><a name="p1546312559583"></a>对所有的输入数据求和。</p>
 </td>
 </tr>
-<tr id="row79421217439"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p65788161435"><a name="p65788161435"></a><a name="p65788161435"></a><a href="基础API/Memory矢量计算/归约计算/WholeReduceMax.md">WholeReduceMax</a></p>
+<tr id="row79421217439"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p65788161435"><a name="p65788161435"></a><a name="p65788161435"></a><a href="基础API/Memory矢量计算/归约计算/ReduceRepeat.md">ReduceRepeat</a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p193962509594"><a name="p193962509594"></a><a name="p193962509594"></a>每个repeat内所有数据求最大值以及其索引index。</p>
-</td>
-</tr>
-<tr id="row1961802720599"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p961972710592"><a name="p961972710592"></a><a name="p961972710592"></a><a href="基础API/Memory矢量计算/归约计算/WholeReduceMin.md">WholeReduceMin</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p0619192712592"><a name="p0619192712592"></a><a name="p0619192712592"></a>每个repeat内所有数据求最小值以及其索引index。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p193962509594"><a name="p193962509594"></a><a name="p193962509594"></a>用于对每个repeat内所有数据进行归约操作，求和/求最大值/求最小值，及最值索引。</p>
 </td>
 </tr>
-<tr id="row2928152965915"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1492892975917"><a name="p1492892975917"></a><a name="p1492892975917"></a><a href="基础API/Memory矢量计算/归约计算/WholeReduceSum.md">WholeReduceSum</a></p>
+<tr id="row157712324319"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p3578151614430"><a name="p3578151614430"></a><a name="p3578151614430"></a><a href="基础API/Memory矢量计算/归约计算/ReduceDataBlock.md">ReduceDataBlock</a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p199283290594"><a name="p199283290594"></a><a name="p199283290594"></a>每个repeat内所有数据求和。</p>
-</td>
-</tr>
-<tr id="row157712324319"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p3578151614430"><a name="p3578151614430"></a><a name="p3578151614430"></a><a href="基础API/Memory矢量计算/归约计算/BlockReduceMax.md">BlockReduceMax</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p177391045819"><a name="p177391045819"></a><a name="p177391045819"></a>对每个repeat内所有元素求最大值。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p177391045819"><a name="p177391045819"></a><a name="p177391045819"></a>对每个DataBlock内的数据求和/求最大值/求最小值。</p>
 </td>
 </tr>
-<tr id="row17211133134315"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1057841619435"><a name="p1057841619435"></a><a name="p1057841619435"></a><a href="基础API/Memory矢量计算/归约计算/BlockReduceMin.md">BlockReduceMin</a></p>
+<tr id="row250213184316"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p957811615437"><a name="p957811615437"></a><a name="p957811615437"></a><a href="基础API/Memory矢量计算/归约计算/ReducePairElem.md">ReducePairElem</a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p2021183144310"><a name="p2021183144310"></a><a name="p2021183144310"></a>对每个repeat内所有元素求最小值。</p>
-</td>
-</tr>
-<tr id="row193401338432"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1557814168438"><a name="p1557814168438"></a><a name="p1557814168438"></a><a href="基础API/Memory矢量计算/归约计算/BlockReduceSum.md">BlockReduceSum</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p998114445293"><a name="p998114445293"></a><a name="p998114445293"></a>对每个repeat内所有元素求和。源操作数相加采用二叉树方式，两两相加。</p>
-</td>
-</tr>
-<tr id="row250213184316"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p957811615437"><a name="p957811615437"></a><a name="p957811615437"></a><a href="基础API/Memory矢量计算/归约计算/PairReduceSum.md">PairReduceSum</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p6502183184316"><a name="p6502183184316"></a><a name="p6502183184316"></a>PairReduceSum：相邻两个（奇偶）元素求和。</p>
-</td>
-</tr>
-<tr id="row5812182116350"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p198129212351"><a name="p198129212351"></a><a name="p198129212351"></a><a href="基础API/Memory矢量计算/归约计算/RepeatReduceSum.md">RepeatReduceSum</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1481215214350"><a name="p1481215214350"></a><a name="p1481215214350"></a>每个repeat内所有数据求和。和<a href="基础API/Memory矢量计算/归约计算/WholeReduceSum.md">WholeReduceSum</a>接口相比，不支持mask逐bit模式。建议使用功能更全面的<a href="基础API/Memory矢量计算/归约计算/WholeReduceSum.md">WholeReduceSum</a>接口。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p6502183184316"><a name="p6502183184316"></a><a name="p6502183184316"></a>对相邻两个（奇偶）元素进行归约操作。</p>
 </td>
 </tr>
 <tr id="row109261892541"><td class="cellrowborder" rowspan="2" valign="top" width="15.590000000000002%" headers="mcps1.2.4.1.1 "><p id="p629093119547"><a name="p629093119547"></a><a name="p629093119547"></a>数据排布转换</p>
@@ -948,12 +923,12 @@
 <td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p184655418496"><a name="p184655418496"></a><a name="p184655418496"></a>为<a href="基础API/Memory矢量计算/比较与选择/Select.md">Select</a>不传入mask参数的接口设置比较寄存器。</p>
 </td>
 </tr>
-<tr id="row1952774119326"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p8429183014919"><a name="p8429183014919"></a><a name="p8429183014919"></a><a href="基础API/Memory矢量计算/归约计算/GetReduceRepeatSumSpr(ISASI).md">GetReduceRepeatSumSpr</a></p>
+<tr id="row1952774119326"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p8429183014919"><a name="p8429183014919"></a><a name="p8429183014919"></a><a href="基础API/Memory矢量计算/归约计算/寄存器辅助接口/GetReduceRepeatSumSpr(ISASI).md">GetReduceRepeatSumSpr</a></p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p165272418326"><a name="p165272418326"></a><a name="p165272418326"></a>获取<a href="基础API/Memory矢量计算/归约计算/ReduceSum.md">ReduceSum</a>（针对tensor前n个数据计算）接口的计算结果。</p>
 </td>
 </tr>
-<tr id="row125271041103210"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p12638205318500"><a name="p12638205318500"></a><a name="p12638205318500"></a><a href="基础API/Memory矢量计算/归约计算/GetReduceRepeatMaxMinSpr(ISASI).md">GetReduceRepeatMaxMinSpr</a></p>
+<tr id="row125271041103210"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p12638205318500"><a name="p12638205318500"></a><a name="p12638205318500"></a><a href="基础API/Memory矢量计算/归约计算/寄存器辅助接口/GetReduceRepeatMaxMinSpr(ISASI).md">GetReduceRepeatMaxMinSpr</a></p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p195452267225"><a name="p195452267225"></a><a name="p195452267225"></a>获取<a href="基础API/Memory矢量计算/归约计算/ReduceMax.md">ReduceMax</a>、<a href="基础API/Memory矢量计算/归约计算/ReduceMin.md">ReduceMin</a>连续场景下的最大/最小值以及相应的索引值。</p>
 </td>

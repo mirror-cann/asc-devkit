@@ -130,7 +130,7 @@ Load3D用于完成image to column操作，将多维feature map转为二维矩阵
 <tr id="row14580104484717"><td class="cellrowborder" valign="top" width="16.55%" headers="mcps1.2.3.1.1 "><p id="p127976994513"><a name="p127976994513"></a><a name="p127976994513"></a>U</p>
 </td>
 <td class="cellrowborder" valign="top" width="83.45%" headers="mcps1.2.3.1.2 "><p id="p19530141011266"><a name="p19530141011266"></a><a name="p19530141011266"></a>LoadData3DParamsV1/LoadData3DParamsV2中padValue的数据类型。</p>
-<a name="ul16617163514483"></a><a name="ul16617163514483"></a><ul id="ul16617163514483"><li>当dst、src使用基础数据类型时， U和dst、src的数据类型T需保持一致，否则编译失败。</li><li>当dst 、src使用<a href="../../../../基础数据结构/TensorTrait/TensorTrait.md">TensorTrait</a>类型时，U和dst、src的数据类型T的LiteType需保持一致，否则编译失败。</li></ul>
+<a name="ul16617163514483"></a><a name="ul16617163514483"></a><ul id="ul16617163514483"><li>当dst、src使用基础数据类型时， U和dst、src的数据类型T需保持一致，否则编译失败。</li><li>当dst 、src使用<a href="../../../数据结构/辅助数据结构/TensorTrait/TensorTrait.md">TensorTrait</a>类型时，U和dst、src的数据类型T的LiteType需保持一致，否则编译失败。</li></ul>
 <p id="p101791414114819"><a name="p101791414114819"></a><a name="p101791414114819"></a>最后一个模板参数仅用于上述数据类型检查，用户无需关注。</p>
 </td>
 </tr>
@@ -536,4 +536,3 @@ uint8_t padList[4] = {padLeft, padRight, padTop, padBottom};
 AscendC::LoadData(featureMapA2, featureMapA1,
     { padList, H, W, 0, 0, 0, -1, -1, strideW, strideH, Kw, Kh, dilationW, dilationH, 1, 0, fmRepeat, 0, (half)(0)});
 ```
-

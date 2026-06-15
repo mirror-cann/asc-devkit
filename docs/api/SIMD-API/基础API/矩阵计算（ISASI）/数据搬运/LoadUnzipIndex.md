@@ -76,7 +76,7 @@ __aicore__ inline void LoadUnzipIndex(const GlobalTensor<T>& src, uint32_t numOf
 <tbody><tr id="zh-cn_topic_0000001429830437_row1835857145817"><td class="cellrowborder" valign="top" width="17.43%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000001429830437_p5835457165816"><a name="zh-cn_topic_0000001429830437_p5835457165816"></a><a name="zh-cn_topic_0000001429830437_p5835457165816"></a>T</p>
 </td>
 <td class="cellrowborder" valign="top" width="82.57%" headers="mcps1.2.3.1.2 "><p id="p1832835813118"><a name="p1832835813118"></a><a name="p1832835813118"></a>src的数据类型。</p>
-<a name="ul17416131483320"></a><a name="ul17416131483320"></a><ul id="ul17416131483320"><li>当src使用基础数据类型时， 其数据类型必须为uint8_t，否则编译失败。</li><li>当src使用<a href="../../../基础数据结构/TensorTrait/TensorTrait.md">TensorTrait</a>类型时， src数据类型T的LiteType必须为int8_t，否则编译失败。</li></ul>
+<a name="ul17416131483320"></a><a name="ul17416131483320"></a><ul id="ul17416131483320"><li>当src使用基础数据类型时， 其数据类型必须为uint8_t，否则编译失败。</li><li>当src使用<a href="../../数据结构/辅助数据结构/TensorTrait/TensorTrait.md">TensorTrait</a>类型时， src数据类型T的LiteType必须为int8_t，否则编译失败。</li></ul>
 <p id="p472714219338"><a name="p472714219338"></a><a name="p472714219338"></a>最后一个模板参数仅用于上述数据类型检查，用户无需关注。</p>
 </td>
 </tr>
@@ -130,4 +130,3 @@ __aicore__ inline void LoadUnzipIndex(const GlobalTensor<T>& src, uint32_t numOf
 indexGlobal.SetGlobalBuffer((__gm__ int8_t*)indexGm);
 AscendC::LoadUnzipIndex(indexGlobal, numOfIndexTabEntry);
 ```
-
