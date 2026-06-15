@@ -215,7 +215,7 @@ for (uint32_t i = global_idx; i < index_total_length; i += stride) {
 
 下图直观展示了上表中Task Duration随线程块数量的变化趋势：
 
-<img src="figures/fig2_case3_16384_curve.png" alt="Case 2 小数据量场景（16384） Task Duration 随线程块数量的变化" width="600" />
+<img src="figures/fig2_case2_16384_curve.png" alt="Case 2 小数据量场景（16384） Task Duration 随线程块数量的变化" width="600" />
 
 
 **分析**：

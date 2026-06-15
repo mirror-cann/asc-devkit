@@ -82,9 +82,9 @@
 - 配置日志环境变量（仅NPU模式）
   本样例支持通过环境变量控制日志输出行为（以下环境变量仅在NPU模式下生效）：
   ```bash
-  export ASCEND_PROCESS_LOG_PATH=./log        // 日志落盘路径
-  export ASCEND_SLOG_PRINT_TO_STDOUT=1        // 控制日志是否打印到屏幕（1：开启，0：关闭）
-  export ASCEND_GLOBAL_LOG_LEVEL=1            // 控制日志级别
+  export ASCEND_PROCESS_LOG_PATH=./log        # 日志落盘路径
+  export ASCEND_SLOG_PRINT_TO_STDOUT=1        # 控制日志是否打印到屏幕（1：开启，0：关闭）
+  export ASCEND_GLOBAL_LOG_LEVEL=1            # 控制日志级别
   ```
 
   > 注意：
