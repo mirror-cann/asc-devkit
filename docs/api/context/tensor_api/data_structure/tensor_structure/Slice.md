@@ -45,7 +45,7 @@ __aicore__ inline constexpr decltype(auto) Slice(Tensor&& tensor, const Coord& c
 
 - coord的tuple结构必须与当前Tensor的Layout.Shape()结构一致。
 - 当info为Shape时：info必须是二维Shape；当前Tensor的Layout必须为二维或四维。
-- 当info为Layout时，info的必须与当前Tensor的Layout的维度相同。
+- 当info为Layout时，info必须与当前Tensor的Layout的维度相同。
 
 ## 调用示例
 

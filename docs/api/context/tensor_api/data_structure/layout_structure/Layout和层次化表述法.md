@@ -72,7 +72,7 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
 
 - ZN Layout
 
-    ZN Layout格式的ShapeRow0、ShapeColumn0为固定值。内层分形的Shape为（32Byte / sizeof(T)） * 16，StrideRow0、StrideColumn0也为固定值，即内层分形按N字形组织，外层分形按字形组织，因此StrideRow1需要满足按整块对齐的要求。
+    ZN Layout格式的ShapeRow0、ShapeColumn0为固定值。内层分形的Shape为（32Byte / sizeof(T)） * 16，StrideRow0、StrideColumn0也为固定值，即内层分形按N字形组织，外层分形按Z字形组织，因此StrideRow1需要满足按整块对齐的要求。
 
     ```cpp
     Layout = ((Shape) : (Stride))

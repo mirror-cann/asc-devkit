@@ -36,11 +36,11 @@ __ubuf__ float ubData[size];
 __cbuf__ float L1Data[size];
 
 // 创建Global Memory指针
-auto gmPtr = AscendC::MakeMemPtr(gmData);
+auto gmPtr = AscendC::Te::MakeMemPtr(gmData);
 
 // 创建Unified Buffer指针
-auto ubPtr = AscendC::MakeMemPtr(ubData);
+auto ubPtr = AscendC::Te::MakeMemPtr(ubData);
 
 // 创建L1 Buffer指针
-auto l1Ptr = AscendC::MakeMemPtr(L1Data);
+auto l1Ptr = AscendC::Te::MakeMemPtr(L1Data);
 ```
