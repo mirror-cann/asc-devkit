@@ -94,7 +94,6 @@ public:
         }
     }
 
-
 private:
     template <const CopyL0C2GMTrait& trait, QuantMode_t quantPre, typename T, typename U, typename V>
     __aicore__ inline static void EmitBatchNZ2NZDataCopy(

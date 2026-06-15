@@ -86,7 +86,6 @@ private:
  	    auto dstStride = Get<0>(dstLayout.Stride()) / STRIDE_UNIT;
         LoadCbufToCb::LoadData<false>(dst, src, mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride);
     }
-        
 };
 } // namespace Te
 } // namespace AscendC

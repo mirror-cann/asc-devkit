@@ -39,7 +39,6 @@ private:
     template <const MmadTrait& trait, typename T, typename U, typename S, typename V>
     __aicore__ inline static constexpr void CheckTemplateForNormal()
     {
-
         CheckLayoutPattern<T, U, S, V>();
         CheckDataType::CheckMmadBiasDataType<T, U, S, V>();
     }
