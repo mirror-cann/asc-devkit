@@ -146,10 +146,10 @@
 
 | API层级 | 矢量计算类型 | Add算子实例 | 说明 |
 |--------------|-----------|--------------|--------------|
-| SIMD C API | 基于指针的Memory矢量计算 | [Memory矢量计算Add算子示例（同上述C API实现样例）](https://gitcode.com/cann/asc-devkit/blob/master/examples/02_simd_c_api/00_introduction/01_add/c_api_async_add/README.md) | 贴合C语言开发习惯，易于上手 |
-| SIMD C API | 基于指针和Reg计算的Reg矢量计算 | [Reg矢量计算Add算子示例](https://gitcode.com/cann/asc-devkit/blob/master/examples/02_simd_c_api/00_introduction/04_reg_base_add_compute/c_api_simd_add/README.md) | 贴合C语言开发习惯，性能上限更高 |
-| 基础API | 基于Tensor的Memory矢量计算 | [Memory矢量计算Add算子示例（同上述C++ Tensor实现样例）](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/00_introduction/01_vector/add/README.md) | 匹配Tensor编程习惯，易于上手 |
-| 基础API | 基于Tensor的Reg矢量计算 | [Reg矢量计算Add算子示例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/00_introduction/04_vector_reg/add/README.md) | 匹配Tensor编程习惯，性能上限更高 |
+| SIMD C API | 基于指针的Memory矢量计算 | [Memory矢量计算Add算子示例（同上述C API实现样例）](https://gitcode.com/cann/asc-devkit/blob/9.1.0-beta.3/examples/02_simd_c_api/00_introduction/01_add/c_api_async_add/README.md) | 贴合C语言开发习惯，易于上手 |
+| SIMD C API | 基于指针和Reg计算的Reg矢量计算 | [Reg矢量计算Add算子示例](https://gitcode.com/cann/asc-devkit/blob/9.1.0-beta.3/examples/02_simd_c_api/00_introduction/04_reg_base_add_compute/c_api_simd_add/README.md) | 贴合C语言开发习惯，性能上限更高 |
+| 基础API | 基于Tensor的Memory矢量计算 | [Memory矢量计算Add算子示例（同上述C++ Tensor实现样例）](https://gitcode.com/cann/asc-devkit/blob/9.1.0-beta.3/examples/01_simd_cpp_api/00_introduction/01_vector/add/README.md) | 匹配Tensor编程习惯，易于上手 |
+| 基础API | 基于Tensor的Reg矢量计算 | [Reg矢量计算Add算子示例](https://gitcode.com/cann/asc-devkit/blob/9.1.0-beta.3/examples/01_simd_cpp_api/00_introduction/04_vector_reg/add/README.md) | 匹配Tensor编程习惯，性能上限更高 |
 
 > [!NOTE] 说明
 > Ascend 950PR/Ascend 950DT新一代架构在传统[UB](../../../技术附录/概念原理和术语/术语表.md)缓存体系的基础上，开放了寄存器（Register）可编程能力，单个寄存器大小为256B。基于寄存器的矢量计算称为Reg矢量计算，而基于传统UB的矢量计算称为Memory矢量计算。

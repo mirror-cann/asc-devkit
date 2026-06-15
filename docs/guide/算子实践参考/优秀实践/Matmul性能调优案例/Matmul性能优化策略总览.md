@@ -42,14 +42,14 @@
     </td>
     <td class="cellrowborder" valign="top" width="40.82591740825918%" headers="mcps1.2.4.1.2 "><p id="p5258326185015"><a name="p5258326185015"></a><a name="p5258326185015"></a>矩阵的K轴较大、M轴和N轴相比K轴较小的场景。</p>
     </td>
-    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p1625832617508"><a name="p1625832617508"></a><a name="p1625832617508"></a><a href="Matmul高阶API使能多核切K.md">Matmul高阶API使能多核切K</a></p>
+    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p1625832617508"><a name="p1625832617508"></a><a name="p1625832617508"></a><a href="Matmul高阶API使能多核切K.md">Matmul高阶API开启多核切K</a></p>
     </td>
     </tr>
     <tr id="row1225815262506"><td class="cellrowborder" valign="top" width="30.086991300869915%" headers="mcps1.2.4.1.1 "><p id="p8258152625011"><a name="p8258152625011"></a><a name="p8258152625011"></a>多核间数据访问并行：优化多核数据并行访问机制，如多核场景同一内存数据的地址访问冲突优化，实现多核数据访问效率提升。</p>
     </td>
     <td class="cellrowborder" valign="top" width="40.82591740825918%" headers="mcps1.2.4.1.2 "><p id="p162587262503"><a name="p162587262503"></a><a name="p162587262503"></a>多核执行Matmul，输入矩阵的K轴较大且K轴非全载的场景。</p>
     </td>
-    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p192580261505"><a name="p192580261505"></a><a name="p192580261505"></a><a href="Matmul高阶API使能多核K轴错峰访问内存.md">Matmul高阶API使能多核K轴错峰访问内存</a></p>
+    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p192580261505"><a name="p192580261505"></a><a name="p192580261505"></a><a href="Matmul高阶API使能多核K轴错峰访问内存.md">Matmul高阶API开启多核K轴错峰访问内存</a></p>
     </td>
     </tr>
     <tr id="row8258126165014"><td class="cellrowborder" valign="top" width="30.086991300869915%" headers="mcps1.2.4.1.1 "><p id="p8258192614509"><a name="p8258192614509"></a><a name="p8258192614509"></a>单核内流水并行：利用不同指令队列间的相互独立性和可并行执行特性，优化核内流水并行度。</p>
@@ -57,7 +57,7 @@
     </td>
     <td class="cellrowborder" valign="top" width="40.82591740825918%" headers="mcps1.2.4.1.2 "><a name="ol68291208611"></a><a name="ol68291208611"></a><ol id="ol68291208611"><li>算子的MMAD流水和FIXPIPE流水之间串行执行，同步等待的时间在算子整体执行耗时中占比较高。</li><li>MTE2 Bound且MTE2流水和其他流水串行执行。</li></ol>
     </td>
-    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><a name="ol224351311615"></a><a name="ol224351311615"></a><ol id="ol224351311615"><li><a href="Matmul高阶API使能UnitFlag.md">Matmul高阶API使能UnitFlag</a></li><li><a href="Matmul高阶API使能NBuffer33模板.md">Matmul高阶API使能NBuffer33模板</a></li></ol>
+    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><a name="ol224351311615"></a><a name="ol224351311615"></a><ol id="ol224351311615"><li><a href="Matmul高阶API使能UnitFlag.md">Matmul高阶API开启UnitFlag</a></li><li><a href="Matmul高阶API使能NBuffer33模板.md">Matmul高阶API开启NBuffer33模板</a></li></ol>
     </td>
     </tr>
     </tbody>
@@ -80,8 +80,8 @@
     </td>
     <td class="cellrowborder" valign="top" width="40.82591740825918%" headers="mcps1.2.4.1.2 "><p id="p196026548501"><a name="p196026548501"></a><a name="p196026548501"></a>MIX场景下，多个AIV的A矩阵或B矩阵GM地址相同，且多个AIV复用的A矩阵或B矩阵在L1 Buffer上全载。</p>
     </td>
-    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p1160255465017"><a name="p1160255465017"></a><a name="p1160255465017"></a><a href="Matmul高阶API使能IBShare模板共享A和B矩阵数据.md">Matmul高阶API使能IBShare模板共享A和B矩阵数据</a></p>
-    <p id="p8602185495016"><a name="p8602185495016"></a><a name="p8602185495016"></a><a href="Matmul高阶API使能IBShare模板共享B矩阵数据.md">Matmul高阶API使能IBShare模板共享B矩阵数据</a></p>
+    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p1160255465017"><a name="p1160255465017"></a><a name="p1160255465017"></a><a href="Matmul高阶API使能IBShare模板共享A和B矩阵数据.md">Matmul高阶API开启IBShare模板共享A和B矩阵数据</a></p>
+    <p id="p8602185495016"><a name="p8602185495016"></a><a name="p8602185495016"></a><a href="Matmul高阶API使能IBShare模板共享B矩阵数据.md">Matmul高阶API开启IBShare模板共享B矩阵数据</a></p>
     </td>
     </tr>
     <tr id="row19602135415012"><td class="cellrowborder" valign="top" width="30.086991300869915%" headers="mcps1.2.4.1.1 "><p id="p1460235415508"><a name="p1460235415508"></a><a name="p1460235415508"></a>内存对齐：确保处理的数据满足特定的对齐要求，针对非对齐数据使用不同的搬运策略，以提升数据搬运的效率。</p>
@@ -112,14 +112,14 @@
     <td class="cellrowborder" valign="top" width="40.82591740825918%" headers="mcps1.2.4.1.2 "><p id="p147291104560"><a name="p147291104560"></a><a name="p147291104560"></a>Matmul初始化时的Scalar计算较多，影响指令头开销。</p>
     <p id="p1563512345614"><a name="p1563512345614"></a><a name="p1563512345614"></a>Matmul迭代之间的Scalar计算较多，阻塞MTE2流水。</p>
     </td>
-    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p12148182365118"><a name="p12148182365118"></a><a name="p12148182365118"></a><a href="Matmul高阶API使能Tiling全量常量化.md">Matmul高阶API使能Tiling全量常量化</a></p>
+    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p12148182365118"><a name="p12148182365118"></a><a name="p12148182365118"></a><a href="Matmul高阶API使能Tiling全量常量化.md">Matmul高阶API开启Tiling全量常量化</a></p>
     </td>
     </tr>
     <tr id="row16148523155115"><td class="cellrowborder" valign="top" width="30.086991300869915%" headers="mcps1.2.4.1.1 "><p id="p514812319512"><a name="p514812319512"></a><a name="p514812319512"></a>纯Cube模式：减少消息处理机制带来额外的Scalar开销。</p>
     </td>
     <td class="cellrowborder" valign="top" width="40.82591740825918%" headers="mcps1.2.4.1.2 "><p id="p1914812237516"><a name="p1914812237516"></a><a name="p1914812237516"></a>相较于MIX模式，没有矢量计算，只有矩阵计算的场景。</p>
     </td>
-    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p17148723205118"><a name="p17148723205118"></a><a name="p17148723205118"></a><a href="Matmul高阶API使能纯Cube模式.md">Matmul高阶API使能纯Cube模式</a></p>
+    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p17148723205118"><a name="p17148723205118"></a><a name="p17148723205118"></a><a href="Matmul高阶API使能纯Cube模式.md">Matmul高阶API开启纯Cube模式</a></p>
     </td>
     </tr>
     </tbody>
@@ -142,16 +142,15 @@
     </td>
     <td class="cellrowborder" valign="top" width="40.82591740825918%" headers="mcps1.2.4.1.2 "><a name="ol9152163610615"></a><a name="ol9152163610615"></a><ol id="ol9152163610615"><li>MTE2循环搬运次数多的大shape场景。</li><li>输入和输出的数据量超过L2 Cache大小的场景。</li></ol>
     </td>
-    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><a name="ol0907154317615"></a><a name="ol0907154317615"></a><ol id="ol0907154317615"><li><a href="Matmul高阶API使能MDL模板.md">Matmul 高阶API使能MDL模板</a></li><li><a href="Matmul高阶API使能L2-Cache切分.md">Matmul高阶API使能L2 Cache切分</a></li></ol>
+    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><a name="ol0907154317615"></a><a name="ol0907154317615"></a><ol id="ol0907154317615"><li><a href="Matmul高阶API使能MDL模板.md">Matmul 高阶API开启MDL模板</a></li><li><a href="Matmul高阶API使能L2-Cache切分.md">Matmul高阶API开启L2 Cache切分</a></li></ol>
     </td>
     </tr>
     <tr id="row1542174715511"><td class="cellrowborder" valign="top" width="30.086991300869915%" headers="mcps1.2.4.1.1 "><p id="p10421347185119"><a name="p10421347185119"></a><a name="p10421347185119"></a>预加载搬运：预加载需要搬运的数据块，减少流水之间的间隙。</p>
     </td>
     <td class="cellrowborder" valign="top" width="40.82591740825918%" headers="mcps1.2.4.1.2 "><p id="p14284716513"><a name="p14284716513"></a><a name="p14284716513"></a>MTE2流水间隙较大，且M或N数值较大的场景。</p>
     </td>
-    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p042947135117"><a name="p042947135117"></a><a name="p042947135117"></a><a href="Matmul高阶API使能MTE2-Preload.md">Matmul高阶API使能MTE2 Preload</a></p>
+    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><p id="p042947135117"><a name="p042947135117"></a><a name="p042947135117"></a><a href="Matmul高阶API使能MTE2-Preload.md">Matmul高阶API开启MTE2 Preload</a></p>
     </td>
     </tr>
     </tbody>
     </table>
-

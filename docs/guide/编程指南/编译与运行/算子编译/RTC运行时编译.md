@@ -16,7 +16,7 @@ RTC是Ascend C运行时编译库，通过[aclrtc](https://gitcode.com/cann/asc-d
 2.  获取核函数句柄并根据核函数句柄操作其参数列表，相关接口包括aclrtBinaryGetFunction（获取核函数句柄）、aclrtKernelArgsInit（初始化参数列表）、aclrtKernelArgsAppend（追加拷贝用户设置的参数值如xDevice,  yDevice, zDevice）等。
 3.  调用aclrtLaunchKernelWithConfig接口，启动对应算子的计算任务。
 
-如下样例演示了如何使用aclrtc接口编译并运行一个核函数，该核函数中调用了printf进行打印。完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/06_aclrtc/rtc_hello_world/README.md)。
+如下样例演示了如何使用aclrtc接口编译并运行一个核函数，该核函数中调用了printf进行打印。完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.3/examples/01_simd_cpp_api/02_features/06_aclrtc/rtc_hello_world/README.md)。
 
 
 ```c++
@@ -123,4 +123,4 @@ const char* manglingName = "";
 aclrtcGetLoweredName(prog, kernelNameExpr, &manglingName);
 ```
 
-完整样例请参考：[rtc_template_add](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/06_aclrtc/rtc_template_add/README.md)。
+完整样例请参考：[rtc_template_add](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.3/examples/01_simd_cpp_api/02_features/06_aclrtc/rtc_template_add/README.md)。

@@ -1,4 +1,4 @@
-# Matmul使能AtomicAdd选项<a name="ZH-CN_TOPIC_0000001925216954"></a>
+# Matmul开启AtomicAdd选项<a name="ZH-CN_TOPIC_0000001925216954"></a>
 
 【优先级】中
 
@@ -82,8 +82,7 @@
 
 【性能对比】
 
-**图 1**  Matmul使能AtomicAdd选项前后性能对比<a name="fig1924944205516"></a>  
-![](../../../figures/Matmul使能AtomicAdd选项前后性能对比.png "Matmul使能AtomicAdd选项前后性能对比")
+**图 1**  Matmul开启AtomicAdd选项前后性能对比<a name="fig1924944205516"></a>  
+![](../../../figures/Matmul使能AtomicAdd选项前后性能对比.png "Matmul开启AtomicAdd选项前后性能对比")
 
-以矩阵维度M=64，N=256，K=256，矩阵D为\(64, 256\)为例，Matmul使能AtomicAdd选项前后的性能对比如上图所示，平均cycle数从开启AtomicAdd选项前的154181变为开启后的135054，性能优化12.4%。因此在这种场景下，使能AtomicAdd选项能获取更优的性能。
-
+以矩阵维度M=64，N=256，K=256，矩阵D为\(64, 256\)为例，Matmul开启AtomicAdd选项前后的性能对比如上图所示，平均cycle数从开启AtomicAdd选项前的154181变为开启后的135054，性能优化12.4%。因此在这种场景下，开启AtomicAdd选项能获取更优的性能。

@@ -196,7 +196,7 @@ __aicore__ inline HcclHandle AlltoAll(GM_ADDR sendBuf, GM_ADDR recvBuf, uint64_t
 
 -   多轮切分场景
 
-    使能多轮切分，等效处理上述非多轮切分示例的通信。在每张卡的数据均分成4块（A\\B\\C\\D）的基础上，将每一块继续切分若干块。本例中继续切分3块，如下图所示，被继续切分成的3块数据包括，2个数据量为tileLen的数据块，1个数据量为tailLen的尾块。切分后，需要分3轮进行AlltoAll通信任务，将等效上述非多轮切分的通信结果。
+    开启多轮切分，等效处理上述非多轮切分示例的通信。在每张卡的数据均分成4块（A\\B\\C\\D）的基础上，将每一块继续切分若干块。本例中继续切分3块，如下图所示，被继续切分成的3块数据包括，2个数据量为tileLen的数据块，1个数据量为tailLen的尾块。切分后，需要分3轮进行AlltoAll通信任务，将等效上述非多轮切分的通信结果。
 
     **图 2**  3轮切分场景下4卡AlltoAll通信<a name="fig118912192116"></a>  
     ![](../../../../figures/3轮切分场景下4卡AlltoAll通信.png "3轮切分场景下4卡AlltoAll通信")
@@ -244,4 +244,3 @@ __aicore__ inline HcclHandle AlltoAll(GM_ADDR sendBuf, GM_ADDR recvBuf, uint64_t
         }
     }
     ```
-

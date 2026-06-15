@@ -2,9 +2,9 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-设置是否使能HF32模式。**当前版本暂不支持。**
+设置是否开启HF32模式。**当前版本暂不支持。**
 
-对于Ascend 950PR/Ascend 950DT，本接口可用于设置是否使能HF32模式（**当前版本暂不支持**）、设置是否使能MxMatmul场景。在MxMatmul场景，必须调用该接口并配置为使能MxMatmul场景，从而保证该场景下正确计算并返回Tiling参数**。**
+对于Ascend 950PR/Ascend 950DT，本接口可用于设置是否开启HF32模式（**当前版本暂不支持**）、设置是否开启MxMatmul场景。在MxMatmul场景，必须调用该接口并配置为开启MxMatmul场景，从而保证该场景下正确计算并返回Tiling参数**。**
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -31,8 +31,8 @@ int32_t SetMadType(MatrixMadType madType)
 </td>
 <td class="cellrowborder" valign="top" width="72.99%" headers="mcps1.2.4.1.3 "><p id="p31537014914"><a name="p31537014914"></a><a name="p31537014914"></a>设置Matmul模式。MatrixMadType类型，定义如下方代码所示，其中参数的含义为：</p>
 <p id="p582145910918"><a name="p582145910918"></a><a name="p582145910918"></a>MatrixMadType::NORMAL：普通模式，即非HF32模式、非MxMatmul场景。</p>
-<p id="p15836591493"><a name="p15836591493"></a><a name="p15836591493"></a>MatrixMadType::HF32：使能HF32模式。</p>
-<p id="p8836590919"><a name="p8836590919"></a><a name="p8836590919"></a>MatrixMadType::MXMODE：使能MxMatmul场景。</p>
+<p id="p15836591493"><a name="p15836591493"></a><a name="p15836591493"></a>MatrixMadType::HF32：开启HF32模式。</p>
+<p id="p8836590919"><a name="p8836590919"></a><a name="p8836590919"></a>MatrixMadType::MXMODE：开启MxMatmul场景。</p>
 </td>
 </tr>
 </tbody>
@@ -60,6 +60,5 @@ MXMODE = 2,
 auto ascendcPlatform = platform_ascendc::PlatformAscendC(context->GetPlatformInfo());
 matmul_tiling::MatmulApiTiling tiling(ascendcPlatform); 
 tiling.SetTraverse(MatrixTraverse::FIRSTM);  // 设置遍历方式
-tiling.SetMadType(MatrixMadType::MXMODE);  // 使能MxMatmul场景
+tiling.SetMadType(MatrixMadType::MXMODE);  // 开启MxMatmul场景
 ```
-

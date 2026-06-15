@@ -574,7 +574,7 @@
 
     -   案例2：未遵循模板约束条件
 
-        在使能[doMTE2Preload](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulConfig.md)预加载模板时，若K方向非全载，不满足模板约束条件，则会导致精度比对失败。
+        在开启[doMTE2Preload](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulConfig.md)预加载模板时，若K方向非全载，不满足模板约束条件，则会导致精度比对失败。
 
         除了满足函数接口约束条件外，也需要满足模板参数相应的约束条件，排查模板参数的使用。
 

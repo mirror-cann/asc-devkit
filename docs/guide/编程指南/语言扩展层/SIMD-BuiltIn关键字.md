@@ -119,7 +119,7 @@
 
     ASCENDC\_CUBE\_ONLY是通过C++宏实现的条件判断语句，用于在\_\_aicore\_\_修饰的函数中实现代码的条件编译。
 
-    基于分离模式开发非融合算子时，在只有矩阵计算的算子场景下，可以通过设置ASCENDC\_CUBE\_ONLY，使能纯Cube模式完成Matmul计算，减少消息通信的性能开销，提升算子性能。
+    基于分离模式开发非融合算子时，在只有矩阵计算的算子场景下，可以通过设置ASCENDC\_CUBE\_ONLY，开启纯Cube模式完成Matmul计算，减少消息通信的性能开销，提升算子性能。
 
     >[!CAUTION]注意 
     >ASCENDC\_CUBE\_ONLY宏必须在\#include "lib/matmul\_intf.h"之前设置。

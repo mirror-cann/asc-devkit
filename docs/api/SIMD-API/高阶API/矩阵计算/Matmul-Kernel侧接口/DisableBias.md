@@ -54,7 +54,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-清除Bias标志位，表示Matmul计算时没有Bias参与。如果在初始化时配置了TCubeTiling结构中的isBias参数来使能Bias，调用该接口后，会清除Bias标志位，不再使能Bias。
+清除Bias标志位，表示Matmul计算时没有Bias参与。如果在初始化时配置了TCubeTiling结构中的isBias参数来启用Bias，调用该接口后，会清除Bias标志位，不再启用Bias。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -84,4 +84,3 @@ mm.DisableBias();    //清除tiling中的Bias标志位
 mm.IterateAll(gm_c);
 mm.End();
 ```
-

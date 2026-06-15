@@ -249,7 +249,7 @@ UB（即Unified Buffer）内存空间总大小为256KB，参考[图3](#fig184031
 
 ## 编程示例<a name="section776244992018"></a>
 
-样例中介绍的算子完整代码请参见[SIMD与SIMT混合编程实现gather&adds算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/00_introduction/03_fusion_operation/gather_adds_simt_simd_hybrid)。
+样例中介绍的算子完整代码请参见[SIMD与SIMT混合编程实现gather&adds算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.3/examples/01_simd_cpp_api/00_introduction/03_fusion_operation/gather_adds_simt_simd_hybrid)。
 
 ```
 __simt_vf__ __launch_bounds__(THREAD_COUNT) inline void simt_gather(__gm__ float* input, __gm__ uint32_t* index, __ubuf__ float* gatherOutput, uint32_t inputTotalLength,

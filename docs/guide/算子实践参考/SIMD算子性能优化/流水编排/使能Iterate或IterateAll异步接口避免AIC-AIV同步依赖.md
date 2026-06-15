@@ -1,4 +1,4 @@
-# 使能Iterate或IterateAll异步接口避免AIC/AIV同步依赖<a name="ZH-CN_TOPIC_0000001893695885"></a>
+# 启用Iterate或IterateAll异步接口避免AIC/AIV同步依赖<a name="ZH-CN_TOPIC_0000001893695885"></a>
 
 【优先级】高
 
@@ -56,4 +56,3 @@ while(mm.template Iterate<false>()){
     ...
 }
 ```
-

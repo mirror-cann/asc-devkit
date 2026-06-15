@@ -44,7 +44,7 @@
 </tbody>
 </table>
 
-当前案例使用的AI处理器共24个核，算子中使能高阶API Matmul的纯Cube模式。使用MDL模板，Tiling参数如下：
+当前案例使用的AI处理器共24个核，算子中开启高阶API Matmul的纯Cube模式。使用MDL模板，Tiling参数如下：
 
 -   原始shape：M=1024, N= 4095, K=1024。
 -   单核shape：singleCoreM=128，singleCoreN=1408，singleCoreK=1024。

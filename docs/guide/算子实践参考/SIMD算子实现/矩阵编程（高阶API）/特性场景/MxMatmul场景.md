@@ -220,7 +220,7 @@ Host侧自动获取Tiling参数的关键步骤介绍如下：
     cubeTiling.SetBiasType(AscendC::TPosition::GM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT);
     ```
 
-3.  **使能MxMatmul场景**。
+3.  **设置MxMatmul场景**。
 
     调用[SetMadType](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/SetMadType.md)接口，设置Tiling计算逻辑为MxMatmul场景。
 
@@ -270,11 +270,11 @@ Kernel侧的关键步骤介绍如下：
     typedef AscendC::MatmulTypeWithScale<AscendC::TPosition::GM, AscendC::TPosition::GM, CubeFormat::ND, fp8_e5m2_t, isTransposeB> bType;
     typedef AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float> cType; 
     typedef AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float> biasType; 
-    // 定义matmul对象时，传入MatmulWithScalePolicy表明使能MxMatmul模板策略
+    // 定义matmul对象时，传入MatmulWithScalePolicy表明开启MxMatmul模板策略
     AscendC::Matmul<aType, bType, cType, biasType, CFG_MDL, MatmulCallBackFunc<nullptr, nullptr, nullptr>, AscendC::Impl::Detail::MatmulWithScalePolicy> mm; 
     ```
 
-    创建对象时需要传入A、scaleA、B、scaleB、C、Bias的参数类型信息， A、scaleA、B、scaleB类型信息通过[MatmulTypeWithScale](#zh-cn_topic_0000002270097206_table14759942142014)来定义，C、Bias类型信息通过[MatmulType](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Matmul使用说明.md)来定义，包括：内存逻辑位置、数据格式、数据类型、转置信息。同时，通过模板参数[MatmulPolicy](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulPolicy.md)传入[MatmulWithScalePolicy](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulPolicy.md)表明使能MxMatmul场景。
+    创建对象时需要传入A、scaleA、B、scaleB、C、Bias的参数类型信息， A、scaleA、B、scaleB类型信息通过[MatmulTypeWithScale](#zh-cn_topic_0000002270097206_table14759942142014)来定义，C、Bias类型信息通过[MatmulType](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Matmul使用说明.md)来定义，包括：内存逻辑位置、数据格式、数据类型、转置信息。同时，通过模板参数[MatmulPolicy](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulPolicy.md)传入[MatmulWithScalePolicy](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulPolicy.md)表明开启MxMatmul场景。
 
     ```
     template <TPosition POSITION, TPosition SCALE_POSITION, CubeFormat FORMAT, typename TYPE, bool ISTRANS = false, TPosition SRCPOS = TPosition::GM, CubeFormat SCALE_FORMAT = FORMAT, bool SCALE_ISTRANS = ISTRANS, TPosition SCALE_SRCPOS = SRCPOS>
@@ -325,7 +325,7 @@ Kernel侧的关键步骤介绍如下：
     mm.End();
     ```
 
-更多完整的算子样例请参考[MxMatmul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_mx)、[自定义输入来源的MxMatmul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_mx_ub_tscm_nz)、[scale多倍缓存的MxMatmul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_mx_scale_cache)。
+更多完整的算子样例请参考[MxMatmul样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.3/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_mx)、[自定义输入来源的MxMatmul样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.3/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_mx_ub_tscm_nz)、[scale多倍缓存的MxMatmul样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.3/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_mx_scale_cache)。
 
 ## 参数说明<a name="zh-cn_topic_0000002270097206_section2756107144914"></a>
 
@@ -376,9 +376,9 @@ Kernel侧的关键步骤介绍如下：
 </tr>
 <tr id="zh-cn_topic_0000002270097206_row67591429205"><td class="cellrowborder" valign="top" width="18.11%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000002270097206_p1475904232016"><a name="zh-cn_topic_0000002270097206_p1475904232016"></a><a name="zh-cn_topic_0000002270097206_p1475904232016"></a>ISTRANS</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.89%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000002270097206_p15691340143420"><a name="zh-cn_topic_0000002270097206_p15691340143420"></a><a name="zh-cn_topic_0000002270097206_p15691340143420"></a>是否开启使能A、B矩阵转置的功能。默认值为false。参数支持的取值如下：</p>
-<p id="p11558102715289"><a name="p11558102715289"></a><a name="p11558102715289"></a>true：开启使能矩阵转置的功能，开启后，分别通过SetTensorA和SetTensorB中的isTransposeA、isTransposeB参数设置A、B矩阵是否转置。若设置A、B矩阵转置，Matmul会认为A矩阵形状为[K, M]，B矩阵形状为[N, K]。</p>
-<p id="p45581527162811"><a name="p45581527162811"></a><a name="p45581527162811"></a>false：不开启使能矩阵转置的功能，通过SetTensorA和SetTensorB不能设置A、B矩阵的转置情况。Matmul会认为A矩阵形状为[M, K]，B矩阵形状为[K, N]。</p>
+<td class="cellrowborder" valign="top" width="81.89%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000002270097206_p15691340143420"><a name="zh-cn_topic_0000002270097206_p15691340143420"></a><a name="zh-cn_topic_0000002270097206_p15691340143420"></a>是否开启A、B矩阵转置的功能。默认值为false。参数支持的取值如下：</p>
+<p id="p11558102715289"><a name="p11558102715289"></a><a name="p11558102715289"></a>true：开启矩阵转置的功能，开启后，分别通过SetTensorA和SetTensorB中的isTransposeA、isTransposeB参数设置A、B矩阵是否转置。若设置A、B矩阵转置，Matmul会认为A矩阵形状为[K, M]，B矩阵形状为[N, K]。</p>
+<p id="p45581527162811"><a name="p45581527162811"></a><a name="p45581527162811"></a>false：不开启矩阵转置的功能，通过SetTensorA和SetTensorB不能设置A、B矩阵的转置情况。Matmul会认为A矩阵形状为[M, K]，B矩阵形状为[K, N]。</p>
 </td>
 </tr>
 <tr id="zh-cn_topic_0000002270097206_row68812038163520"><td class="cellrowborder" valign="top" width="18.11%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000002270097206_p54471329153612"><a name="zh-cn_topic_0000002270097206_p54471329153612"></a><a name="zh-cn_topic_0000002270097206_p54471329153612"></a>SRCPOS</p>
@@ -402,9 +402,9 @@ Kernel侧的关键步骤介绍如下：
 </tr>
 <tr id="zh-cn_topic_0000002270097206_row0325310101910"><td class="cellrowborder" valign="top" width="18.11%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000002270097206_p19617394191"><a name="zh-cn_topic_0000002270097206_p19617394191"></a><a name="zh-cn_topic_0000002270097206_p19617394191"></a>SCALE_ISTRANS</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.89%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000002270097206_p22682252237"><a name="zh-cn_topic_0000002270097206_p22682252237"></a><a name="zh-cn_topic_0000002270097206_p22682252237"></a>是否开启使能scaleA、scaleB矩阵转置的功能。默认值为ISTRANS参数的取值。参数支持的取值如下：</p>
-<p id="p1407842193011"><a name="p1407842193011"></a><a name="p1407842193011"></a>true：开启使能矩阵转置的功能。开启后，分别通过SetTensorScaleA和SetTensorScaleB中的isTransposeScaleA、isTransposeScaleB参数设置scaleA、scaleB矩阵是否转置。在Scale矩阵为ND格式的场景中，若设置scaleA、scaleB矩阵转置，Matmul会认为scaleA矩阵形状为[Ceil(K/64), M, 2]，scaleB矩阵形状为[N, Ceil(K/64), 2]。</p>
-<p id="p19408124217308"><a name="p19408124217308"></a><a name="p19408124217308"></a>false：不开启使能矩阵转置的功能。通过SetTensorScaleA和SetTensorScaleB不能设置scaleA、scaleB矩阵的转置情况。Matmul会认为scaleA矩阵形状为[M, Ceil(K/64), 2]，scaleB矩阵形状为[Ceil(K/64), N, 2]。</p>
+<td class="cellrowborder" valign="top" width="81.89%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000002270097206_p22682252237"><a name="zh-cn_topic_0000002270097206_p22682252237"></a><a name="zh-cn_topic_0000002270097206_p22682252237"></a>是否开启scaleA、scaleB矩阵转置的功能。默认值为ISTRANS参数的取值。参数支持的取值如下：</p>
+<p id="p1407842193011"><a name="p1407842193011"></a><a name="p1407842193011"></a>true：开启矩阵转置的功能。开启后，分别通过SetTensorScaleA和SetTensorScaleB中的isTransposeScaleA、isTransposeScaleB参数设置scaleA、scaleB矩阵是否转置。在Scale矩阵为ND格式的场景中，若设置scaleA、scaleB矩阵转置，Matmul会认为scaleA矩阵形状为[Ceil(K/64), M, 2]，scaleB矩阵形状为[N, Ceil(K/64), 2]。</p>
+<p id="p19408124217308"><a name="p19408124217308"></a><a name="p19408124217308"></a>false：不开启矩阵转置的功能。通过SetTensorScaleA和SetTensorScaleB不能设置scaleA、scaleB矩阵的转置情况。Matmul会认为scaleA矩阵形状为[M, Ceil(K/64), 2]，scaleB矩阵形状为[Ceil(K/64), N, 2]。</p>
 </td>
 </tr>
 <tr id="zh-cn_topic_0000002270097206_row11254846161912"><td class="cellrowborder" valign="top" width="18.11%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000002270097206_p6158144912199"><a name="zh-cn_topic_0000002270097206_p6158144912199"></a><a name="zh-cn_topic_0000002270097206_p6158144912199"></a>SCALE_SRCPOS</p>

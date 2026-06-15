@@ -245,7 +245,7 @@ target_compile_options(demo PRIVATE
 )
 ```
 
-编译AI Core SIMT代码时，需要在编译选项中增加`--enable-simt`，示例如下，完整样例请参考：[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/00_introduction/00_quickstart/hello_world_simt)。
+编译AI Core SIMT代码时，需要在编译选项中增加`--enable-simt`，示例如下，完整样例请参考：[LINK](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.3/examples/03_simt_api/00_introduction/00_quickstart/hello_world_simt)。
 
 ```cmake
 target_compile_options(demo PRIVATE

@@ -126,7 +126,7 @@ Sin\(x\)的泰勒展开式为：
 <tr id="zh-cn_topic_0000001538537601_row9756719122620"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000001538537601_p1682112447268"><a name="zh-cn_topic_0000001538537601_p1682112447268"></a><a name="zh-cn_topic_0000001538537601_p1682112447268"></a>isReuseSource</p>
 </td>
 <td class="cellrowborder" valign="top" width="80.61%" headers="mcps1.2.3.1.2 "><p id="p165511311158"><a name="p165511311158"></a><a name="p165511311158"></a>是否允许修改源操作数，默认值为false。该参数仅在输入的数据类型为float时生效。</p>
-<a name="ul1513803335520"></a><a name="ul1513803335520"></a><ul id="ul1513803335520"><li>true：开发者允许源操作数被改写，可以使能该参数，使能后本接口内部计算时<strong id="b68501198557"><a name="b68501198557"></a><a name="b68501198557"></a>复用</strong>srcTensor的内存空间，节省部分内存空间；</li><li>false：本接口内部计算时<strong id="b2850191935517"><a name="b2850191935517"></a><a name="b2850191935517"></a>不复用</strong>srcTensor的内存空间。</li></ul>
+<a name="ul1513803335520"></a><a name="ul1513803335520"></a><ul id="ul1513803335520"><li>true：开发者允许源操作数被改写，可以启用该参数，启用后本接口内部计算时<strong id="b68501198557"><a name="b68501198557"></a><a name="b68501198557"></a>复用</strong>srcTensor的内存空间，节省部分内存空间；</li><li>false：本接口内部计算时<strong id="b2850191935517"><a name="b2850191935517"></a><a name="b2850191935517"></a>不复用</strong>srcTensor的内存空间。</li></ul>
 </td>
 </tr>
 <tr id="row17906183963010"><td class="cellrowborder" valign="top" width="19.39%" headers="mcps1.2.3.1.1 "><p id="p990618396302"><a name="p990618396302"></a><a name="p990618396302"></a>config</p>
@@ -243,4 +243,3 @@ AscendC::Sin<half, false, config>(dstLocal, srcLocal, sharedTmpBuffer, 512);
 输出数据(dstLocal): 
 [-0.54889839 -0.55703507 -0.56672889 ... 0. 0.57474768 0.56672889 0.55703507]
 ```
-

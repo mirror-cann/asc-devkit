@@ -68,7 +68,7 @@ __simd_vf__ inline void floor_mod_int_simd(__ubuf__ T* dstAddr, __ubuf__ T* inpu
 
 【正例】
 
-基于SIMT的floor\_mod算子实现：采用SIMT编程方式实现计算过程，通过if else语句完成分支判断，代码如下所示，代码简洁且易于实现。完整的算子实现代码请参考[floor\_mod算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_best_practices/03_fusion_compute_practices/simt_and_simd_floor_mod)。
+基于SIMT的floor\_mod算子实现：采用SIMT编程方式实现计算过程，通过if else语句完成分支判断，代码如下所示，代码简洁且易于实现。完整的算子实现代码请参考[floor\_mod算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.3/examples/01_simd_cpp_api/04_best_practices/03_fusion_compute_practices/simt_and_simd_floor_mod)。
 
 ```
 template <typename T>

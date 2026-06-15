@@ -98,7 +98,7 @@ __aicore__ inline void SetBatchNum(int32_t batchA, int32_t batchB)
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
--   当使能MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
+-   当开启MixDualMaster（双主模式）场景时，即模板参数[enableMixDualMaster](MatmulConfig.md#p9218181073719)设置为true，不支持使用该接口。
 -   本接口仅支持在纯Cube模式（只有矩阵计算）下调用。
 
 ## 调用示例<a name="section1665082013318"></a>
@@ -120,4 +120,3 @@ mm1.SetBatchNum(batchA, batchB);
 // 多batch Matmul计算
 mm1.IterateBatch(gm_c, false, 0, false);
 ```
-
