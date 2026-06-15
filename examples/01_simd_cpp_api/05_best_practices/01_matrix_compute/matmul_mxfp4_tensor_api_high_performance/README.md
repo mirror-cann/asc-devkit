@@ -54,8 +54,8 @@ $$
 |------|------|----------|------|------|
 | A | `[M, K]` | `fp4x2_e1m2_t` | ND | 左矩阵，每个字节打包 2 个 fp4 元素 |
 | ScaleA | `[M, scaleK]` | `fp8_e8m0_t` | ND | A 矩阵的缩放因子，A矩阵在K 方向每 32 个元素共享一个 scale |
-| B | `[N, K]` | `fp4x2_e1m2_t` | ND | 右矩阵，按 `[N, K]` 形式输入 kernel |
-| ScaleB | `[N, scaleK]` | `fp8_e8m0_t` | ND | B 矩阵的缩放因子，B矩阵在K 方向每 32 个元素共享一个 scale |
+| B | `[N, K]` | `fp4x2_e1m2_t` | DN | 右矩阵，按 `[N, K]` 形式输入 kernel |
+| ScaleB | `[N, scaleK]` | `fp8_e8m0_t` | DN | B 矩阵的缩放因子，B矩阵在K 方向每 32 个元素共享一个 scale |
 | C | `[M, N]` | `bfloat16_t` | ND | 输出矩阵 |
 
 其中：
@@ -227,7 +227,7 @@ L0C->GM                                                           | Copy L0C to 
 
 ```text
 for nBlock in N blocks:
-  for nBlock in M blocks:
+  for mBlock in M blocks:
     for kBlock in K blocks:
         Copy(A block, ScaleA block)
         Copy(B block, ScaleB block)
@@ -370,9 +370,9 @@ Cube 理论运算时间 $T_{cube}$ 为：
 
 $$T_{cube} = \frac{M \times N \times K}{16 \times 64 \times 16 \times 1.65 \times 10^9 \times \text{核数}} = \frac{8192 \times 8192 \times 8192}{16384 \times 1.65 \times 10^9 \times 32} = 635.5 μs$$
 
-从表中可以看出 `aic_mac_time` 为 `640.16 μs`，相对理论值 `635.5 μs`，误差 $E_{cube}$ 为：
+从表中可以看出 `aic_mac_time` 为 `640.591 μs`，相对理论值 `635.5 μs`，误差 $E_{cube}$ 为：
 
-$$E_{cube} = \frac{T_{actual} - T_{cube}}{T_{cube}} = \frac{640.16 - 635.5}{635.5} = 0.73 \%$$
+$$E_{cube} = \frac{T_{actual} - T_{cube}}{T_{cube}} = \frac{640.591 - 635.5}{635.5} = 0.80 \%$$
 
 ### MTE2 带宽分析
 
@@ -386,7 +386,7 @@ $$E_{cube} = \frac{T_{actual} - T_{cube}}{T_{cube}} = \frac{640.16 - 635.5}{635.
 MxFP4 Matmul 还包含两路 ScaleA/ScaleB 输入，K 方向每 32 个元素共享一个 scale，因此 `scaleK = K/32`：
 
 - ScaleA 形状 `[M, scaleK]`，按 M 方向切成 `M/baseM` 个行块，每个 ScaleA 行块参与 N 方向 `N/baseN` 个输出块的计算
-- ScaleB 形状 `[scaleK, N]`，按 N 方向切成 `N/baseN` 个列块，每个 ScaleB 列块参与 M 方向 `M/baseM` 个输出块的计算
+- ScaleB 形状 `[N, scaleK]`，按 N 方向切成 `N/baseN` 个列块，每个 ScaleB 列块参与 M 方向 `M/baseM` 个输出块的计算
 
 由于 L1/L2Cache 容量有限，无法缓存所有输入数据，同一数据块会被多次从 HBM 搬运到 L2Cache/L1，导致数据重复搬运。
 
@@ -424,7 +424,7 @@ $$T_{MTE2} = \frac{D_{HBM}}{1.6TB/s} + \frac{D_{L2Cache}}{5TB/s} = \frac{68MB}{1
 
 MTE2 耗时误差 $E_{MTE2}$ 为：
 
-$$E_{MTE2} = \frac{T_{actual} - T_{MTE2}}{T_{MTE2}} = \frac{588.736μs - 453.9μs}{453.9μs} = 29.7\%$$
+$$E_{MTE2} = \frac{T_{actual} - T_{MTE2}}{T_{MTE2}} = \frac{589.308μs - 453.9μs}{453.9μs} = 29.8\%$$
 
 Ascend 950PR中 L2Cache 大小为 128MB，无法缓存所有输入数据，部分数据在搬运时会发生 L2Cache miss，需要从 HBM 获取。用户可进一步优化 L2Cache 切分策略以提高 MTE2 带宽。
 
