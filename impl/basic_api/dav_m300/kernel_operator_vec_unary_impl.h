@@ -139,7 +139,7 @@ __aicore__ inline void FUNC_NAME(__ubuf__ DATA_TYPE* dst, __ubuf__ DATA_TYPE* sr
         maskBuf[1] = mask[1];                                                                                   \
         maskBuf[2] = mask[2];                                                                                   \
         maskBuf[3] = mask[3];                                                                                   \
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));                \
+        event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());                \
         SetFlag<HardEvent::S_V>(eventIdSToV);                                                                   \
         WaitFlag<HardEvent::S_V>(eventIdSToV);                                                                  \
         __VEC_SCOPE__                                                                                           \

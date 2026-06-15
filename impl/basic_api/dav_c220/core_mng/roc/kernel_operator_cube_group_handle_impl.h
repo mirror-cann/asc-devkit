@@ -25,7 +25,7 @@ __aicore__ inline KfcWorkspace::KfcWorkspace(GM_ADDR workspace)
 {
     msgStart = workspace;
     if ASCEND_IS_AIV {
-        evtID = GetTPipePtr()->AllocEventID<HardEvent::MTE3_S>();
+        evtID = AllocEventID<HardEvent::MTE3_S>();
         SetFlag<HardEvent::MTE3_S>(evtID);
     }
 }
@@ -44,7 +44,7 @@ __aicore__ inline KfcWorkspace::~KfcWorkspace()
 {
     if ASCEND_IS_AIV {
         WaitFlag<HardEvent::MTE3_S>(evtID);
-        GetTPipePtr()->ReleaseEventID<HardEvent::MTE3_S>(evtID);
+        ReleaseEventID<HardEvent::MTE3_S>(evtID);
     }
 }
 
@@ -78,7 +78,7 @@ __aicore__ inline CubeResGroupHandle<T>::CubeResGroupHandle(
 
 #if ASCENDC_CPU_DEBUG
         ubMsg =
-            reinterpret_cast<__ubuf__ T *>(GetTPipePtr()->GetBaseAddr((int8_t)TPosition::VECOUT) + ubMsgAddr);
+            reinterpret_cast<__ubuf__ T *>(GetBaseAddrCpu((int8_t)TPosition::VECOUT) + ubMsgAddr);
 #else
         ubMsg = reinterpret_cast<__ubuf__ T *>(ubMsgAddr);
 #endif
@@ -397,7 +397,7 @@ __aicore__ inline void CubeResGroupHandle<T>::__WriteGmCubeMsgByDatacopy(
     for (uint32_t i = 0; i < sizeof(T) / sizeof(uint64_t); i++, ubData++, msgData++) {
         *ubData = *msgData;
     }
-    event_t evtID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
+    event_t evtID = static_cast<event_t>(FetchEventID<HardEvent::S_MTE3>());
     SetFlag<HardEvent::S_MTE3>(evtID);
     WaitFlag<HardEvent::S_MTE3>(evtID);
     PipeBarrier<PIPE_MTE3>();

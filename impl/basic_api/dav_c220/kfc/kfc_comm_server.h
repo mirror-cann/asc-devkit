@@ -81,17 +81,17 @@ public:
 
     __aicore__ inline void FreeUB(int32_t addr)
     {
-        event_t eventID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE2));
+        event_t eventID = static_cast<event_t>(FetchEventID<HardEvent::MTE3_MTE2>());
         SetFlag<HardEvent::MTE3_MTE2>(eventID);
         WaitFlag<HardEvent::MTE3_MTE2>(eventID);
         __cbuf__ uint32_t* dst = (__cbuf__ uint32_t*)(TOTAL_L1_SIZE);
 #if ASCENDC_CPU_DEBUG
-        dst = (uint32_t*)(GetTPipePtr()->GetBaseAddr(static_cast<uint8_t>(TPosition::A1)) + TOTAL_L1_SIZE);
+        dst = (uint32_t*)(GetBaseAddrCpu(static_cast<uint8_t>(TPosition::A1)) + TOTAL_L1_SIZE);
         *dst = addr;
 #else
         create_cbuf_matrix((__cbuf__ uint32_t*)dst, 0x10001, static_cast<uint32_t>(addr));
 #endif
-        eventID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_MTE3));
+        eventID = static_cast<event_t>(FetchEventID<HardEvent::MTE2_MTE3>());
         SetFlag<HardEvent::MTE2_MTE3>(eventID);
         WaitFlag<HardEvent::MTE2_MTE3>(eventID);
 

@@ -217,7 +217,7 @@ namespace AscendC {
         maskBuf[1] = mask[1];                                                                               \
         maskBuf[2] = 0;                                                                                     \
         maskBuf[3] = 0;                                                                                     \
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));            \
+        event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());            \
         SetFlag<HardEvent::S_V>(eventIdSToV);                                                               \
         WaitFlag<HardEvent::S_V>(eventIdSToV);                                                              \
         CAST_LV0_VF(srcTypeShort, dstTypeShort, srcBits, dstBits, repeatSize, roundMode,            \

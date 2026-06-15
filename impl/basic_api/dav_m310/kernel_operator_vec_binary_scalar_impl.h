@@ -44,7 +44,7 @@ __aicore__ inline void AddsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -71,7 +71,7 @@ __aicore__ inline void AddsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -100,7 +100,7 @@ __aicore__ inline void AddsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -129,7 +129,7 @@ __aicore__ inline void AddsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -345,7 +345,7 @@ __aicore__ inline void MulsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -372,7 +372,7 @@ __aicore__ inline void MulsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -401,7 +401,7 @@ __aicore__ inline void MulsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -430,7 +430,7 @@ __aicore__ inline void MulsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -646,7 +646,7 @@ __aicore__ inline void MaxsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -673,7 +673,7 @@ __aicore__ inline void MaxsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -702,7 +702,7 @@ __aicore__ inline void MaxsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -731,7 +731,7 @@ __aicore__ inline void MaxsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -947,7 +947,7 @@ __aicore__ inline void MinsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -974,7 +974,7 @@ __aicore__ inline void MinsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1003,7 +1003,7 @@ __aicore__ inline void MinsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1032,7 +1032,7 @@ __aicore__ inline void MinsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1248,7 +1248,7 @@ __aicore__ inline void ShiftLeftImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __u
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1275,7 +1275,7 @@ __aicore__ inline void ShiftLeftImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __u
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1304,7 +1304,7 @@ __aicore__ inline void ShiftLeftImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubu
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1333,7 +1333,7 @@ __aicore__ inline void ShiftLeftImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubu
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1550,7 +1550,7 @@ __aicore__ inline void ShiftRightImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1578,7 +1578,7 @@ __aicore__ inline void ShiftRightImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1607,7 +1607,7 @@ __aicore__ inline void ShiftRightImpl<int32_t, true>(__ubuf__ int32_t* dst, __ub
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1636,7 +1636,7 @@ __aicore__ inline void ShiftRightImpl<int16_t, true>(__ubuf__ int16_t* dst, __ub
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1854,7 +1854,7 @@ __aicore__ inline void LeakyReluImpl<float, true>(__ubuf__ float* dst, __ubuf__ 
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1883,7 +1883,7 @@ __aicore__ inline void LeakyReluImpl<half, true>(__ubuf__ half* dst, __ubuf__ ha
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__

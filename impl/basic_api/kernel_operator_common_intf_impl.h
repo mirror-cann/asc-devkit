@@ -141,7 +141,7 @@ __aicore__ inline __in_pipe__(V)
     uint32_t tail = size % popSize;
     uint32_t roundSize = round != 0 ? popSize : 0;
     DuplicateImpl<T>((__ubuf__ T*)popBuffer.GetPhyAddr(), value, popSize);
-    event_t eventIDVToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE3));
+    event_t eventIDVToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::V_MTE3>());
     SetFlag<HardEvent::V_MTE3>(eventIDVToMTE3);
     WaitFlag<HardEvent::V_MTE3>(eventIDVToMTE3);
     struct DataCopyExtParams repeatParams;

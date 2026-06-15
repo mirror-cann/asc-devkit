@@ -555,7 +555,7 @@ __aicore__ inline void CheckFixpipeParams(__cc__ SrcT *src, const FixpipeParamsA
             {KERNEL_LOG(KERNEL_ERROR,"When preReluMode is enable, reluEn must be true"); });
     }
     constexpr uint32_t L0C_SRC_ALIGN = 16 * sizeof(float); // src must align with 16 elements, each of them is F32 / S32
-    uint64_t srcAbsAddr = src - (SrcT*)(GetTPipePtr()->GetBaseAddr(int8_t(TPosition::CO1)));
+    uint64_t srcAbsAddr = src - (SrcT*)(GetBaseAddrCpu(int8_t(TPosition::CO1)));
     ASCENDC_ASSERT((srcAbsAddr % L0C_SRC_ALIGN == 0), {KERNEL_LOG(KERNEL_ERROR, "Failed to check src start "\
         "address alignment in Fixpipe");});
 
@@ -603,7 +603,7 @@ __aicore__ inline void CheckFixpipeL0C2UBParam(
 {
     CheckFixpipeParams<DstT, SrcT, config>(src, params);
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    uint64_t dstAbsAddr = dst - (DstT*)(GetTPipePtr()->GetBaseAddr(int8_t(TPosition::VECCALC)));
+    uint64_t dstAbsAddr = dst - (DstT*)(GetBaseAddrCpu(int8_t(TPosition::VECCALC)));
     ASCENDC_ASSERT((dstAbsAddr % ONE_BLK_SIZE == 0), {KERNEL_LOG(KERNEL_ERROR, "Failed to check dst start "\
         "address alignment in Fixpipe");});
 #endif
@@ -615,7 +615,7 @@ __aicore__ inline void CheckFixpipeL0C2L1Param(
 {
     CheckFixpipeParams<DstT, SrcT, config>(src, params);
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    uint64_t dstAbsAddr = dst - (DstT*)(GetTPipePtr()->GetBaseAddr(int8_t(TPosition::C1)));
+    uint64_t dstAbsAddr = dst - (DstT*)(GetBaseAddrCpu(int8_t(TPosition::C1)));
     ASCENDC_ASSERT((dstAbsAddr % ONE_BLK_SIZE == 0), {KERNEL_LOG(KERNEL_ERROR, "Failed to check dst start "\
         "address alignment in Fixpipe");});
 #endif

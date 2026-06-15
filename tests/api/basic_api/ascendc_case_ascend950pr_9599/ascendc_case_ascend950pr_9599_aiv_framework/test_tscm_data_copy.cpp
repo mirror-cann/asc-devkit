@@ -271,4 +271,49 @@ TEST_F(TscmRealMsgTestSuite, ScmDataCopyNd2NzWritesRealKfcMessage)
     EXPECT_EQ(msg->ubAddr, 456);
 #endif
 }
+
+TEST_F(TscmRealMsgTestSuite, DataCopyGmToTscmImplSendsOffsetMessage)
+{
+    KfcCommClient client(workspace, 0);
+    g_kfcClient = &client;
+    uint8_t src[256] = {0};
+    DataCopyParams intriParams {2, 4, 6, 8};
+    auto* tscmBase = GetBaseAddrCpu(static_cast<int8_t>(TPosition::TSCM));
+    ASSERT_NE(tscmBase, nullptr);
+    auto* dst = reinterpret_cast<__cbuf__ half*>(tscmBase + 0x40);
+
+    DataCopyGM2L1Impl(dst, reinterpret_cast<__gm__ half*>(src), intriParams);
+
+    auto* msg = client.ubMsg;
+    auto* body = reinterpret_cast<const Gm2L1Params*>(msg->buffer);
+    EXPECT_EQ(KfcMsgGetFunID(msg->head), KFC_Enum::SCMFUN_GM2L1);
+    EXPECT_EQ(reinterpret_cast<uintptr_t>(body->dst), static_cast<uintptr_t>(0x40));
+    EXPECT_EQ(reinterpret_cast<uintptr_t>(body->src), reinterpret_cast<uintptr_t>(src));
+#if KFC_C310_SSBUF == 0
+    EXPECT_EQ(msg->ubAddr, -1);
+#endif
+}
+
+TEST_F(TscmRealMsgTestSuite, DataCopyGmToTscmNd2NzImplSendsOffsetMessage)
+{
+    KfcCommClient client(workspace, 0);
+    g_kfcClient = &client;
+    uint8_t src[512] = {0};
+    Nd2NzParams intriParams {1, 16, 16, 16, 16, 16, 1, 16};
+    auto* tscmBase = GetBaseAddrCpu(static_cast<int8_t>(TPosition::TSCM));
+    ASSERT_NE(tscmBase, nullptr);
+    auto* dst = reinterpret_cast<__cbuf__ half*>(tscmBase + 0x80);
+
+    DataCopyGM2L1ND2NZImpl(dst, reinterpret_cast<__gm__ half*>(src), intriParams);
+
+    auto* msg = client.ubMsg;
+    auto* body = reinterpret_cast<const Gm2L1Nd2NzParams*>(msg->buffer);
+    EXPECT_EQ(KfcMsgGetFunID(msg->head), KFC_Enum::SCMFUN_GM2L1ND2NZ);
+    EXPECT_EQ(reinterpret_cast<uintptr_t>(body->dst), static_cast<uintptr_t>(0x80));
+    EXPECT_EQ(reinterpret_cast<uintptr_t>(body->src), reinterpret_cast<uintptr_t>(src));
+    EXPECT_EQ(body->dataTypeLen, sizeof(half));
+#if KFC_C310_SSBUF == 0
+    EXPECT_EQ(msg->ubAddr, -1);
+#endif
+}
 } // namespace AscendC

@@ -182,7 +182,7 @@ __aicore__ inline void CheckFixpipeL0C2L1Param(__cbuf__ T *dst, __cc__ U *src, c
 {
     CheckCommonFixpipeParam<T, U, config>(src, params);
 #if ASCENDC_CPU_DEBUG
-    uint64_t dstAbsAddr = dst - (T*)(GetTPipePtr()->GetBaseAddr(int8_t(TPosition::A1)));
+    uint64_t dstAbsAddr = dst - (T*)(GetBaseAddrCpu(int8_t(TPosition::A1)));
     ASCENDC_ASSERT((dstAbsAddr % ONE_BLK_SIZE == 0), {KERNEL_LOG(KERNEL_ERROR, "Failed to check dstLocal start "\
         "address alignment in Fixpipe, when dst position is A1, its start address must align with 32B");});
 #endif

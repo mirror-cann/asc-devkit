@@ -66,18 +66,6 @@ class tuple;
 
 namespace AscendC {
 __aicore__ inline void PrintTimeStamp(uint32_t descId);
-#if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-inline uint8_t* GetBaseAddrCpu(int8_t logicPos)
-{
-    auto positionHardMap = ConstDefiner::Instance().positionHardMap;
-    ASCENDC_ASSERT((positionHardMap.find((TPosition)logicPos) != positionHardMap.end()),
-                    { KERNEL_LOG(KERNEL_ERROR, "illegal logicPos %d ", int32_t(logicPos)); });
-    Hardware hardType = positionHardMap.at((TPosition)logicPos);
-    ASCENDC_ASSERT((hardType != Hardware::GM),
-                    { KERNEL_LOG(KERNEL_ERROR, "hardware position can not be gm"); });
-    return ConstDefiner::Instance().GetHardwareBaseAddr(hardType);
-}
-#endif
 
 // begin impl of tpipe
 __aicore__ inline TPipe::TPipe()
@@ -267,7 +255,7 @@ template <class T> __aicore__ inline bool TPipe::InitBuffer(T& que, uint8_t num,
         ASCENDC_ASSERT((num * len <= bufferInitLen.at(pool)), {
             KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", num * len, bufferInitLen.at(pool)); });
         auto pos_ = GetPosition(T::srcPosition, T::dstPosition);
-        auto absAddr = GetBaseAddr(static_cast<int8_t>(pos_));
+        auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos_));
         AscendCBufInit(static_cast<uint8_t>(pos_), 0, num, reinterpret_cast<uint64_t>(curPoolAddr + absAddr), len);
 #endif
         for (int32_t i = 0; i < num; i++, ptr++) {
@@ -335,7 +323,7 @@ template <TPosition pos> __aicore__ inline bool TPipe::InitBuffer(TBuf<pos>& buf
     auto bufferInitLen = ConstDefiner::Instance().bufferInitLen;
     ASCENDC_ASSERT((len <= bufferInitLen.at(pool)),
                    { KERNEL_LOG(KERNEL_ERROR, "len is %u, exceeds the limit %d", len, bufferInitLen.at(pool)); });
-    auto absAddr = GetBaseAddr(static_cast<int8_t>(pos));
+    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
     AscendCBufInit(static_cast<uint8_t>(pos), 1, 1, reinterpret_cast<uint64_t>(curPoolAddr + absAddr), len);
 #endif
     ptr->state = TBufState::FREE;
@@ -384,7 +372,7 @@ __aicore__ inline bool TPipe::InitBufPool(T &bufPool, uint32_t len)
     ASCENDC_ASSERT((len <= bufferInitLen.at(pool)),
         { KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", len, bufferInitLen.at(pool)); });
     auto pos = T::poolPos;
-    auto absAddr = GetBaseAddr(static_cast<int8_t>(pos));
+    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
     AscendCTBufPoolInit(static_cast<uint8_t>(pos),
         reinterpret_cast<uint64_t>(curPoolAddr + absAddr),
         len,
@@ -431,7 +419,7 @@ __aicore__ inline bool TPipe::InitBufPool(T &bufPool, uint32_t len, U &shareBuf)
     ASCENDC_ASSERT((len <= bufferInitLen.at(pool)),
         { KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", len, bufferInitLen.at(pool)); });
     auto pos = T::poolPos;
-    auto absAddr = GetBaseAddr(static_cast<int8_t>(pos));
+    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
     AscendCTBufPoolInit(static_cast<uint8_t>(pos),
         reinterpret_cast<uint64_t>(bufPool.tBufPoolImpl.startAddr_ + absAddr),
         len,
@@ -475,7 +463,7 @@ template <TPosition pos> __aicore__ inline TBuffAddr TPipe::GetAbsAddr(int32_t o
     ASCENDC_ASSERT(((offset + len) <= bufferInitLen.at(pool)), {
         KERNEL_LOG(KERNEL_ERROR, "offset is %d, len is %d, exceeds the limit %d", offset, len, bufferInitLen.at(pool));
     });
-    auto absAddr = this->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(pool)].absAddr;
+    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
     addr.absAddr = absAddr + addr.bufferAddr;
 #endif
     return addr;
@@ -564,16 +552,16 @@ __aicore__ inline void TPipe::WriteSpmBuffer(const LocalTensor<T>& writeLocal, c
      * before write, the local may come from MTE2/V, so need insert MTE3 wait V/MTE2
      * after write, the local may used to compute or copy out, need insert V/MTE2 wait MTE3
      */
-    event_t eventIDVToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE3));
+    event_t eventIDVToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::V_MTE3>());
     SetFlag<HardEvent::V_MTE3>(eventIDVToMTE3);
     WaitFlag<HardEvent::V_MTE3>(eventIDVToMTE3);
-    event_t eventIDMTE2ToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_MTE3));
+    event_t eventIDMTE2ToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::MTE2_MTE3>());
     SetFlag<HardEvent::MTE2_MTE3>(eventIDMTE2ToMTE3);
     WaitFlag<HardEvent::MTE2_MTE3>(eventIDMTE2ToMTE3);
     if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::GM)) {
         DataCopyUB2GMImpl(reinterpret_cast<__gm__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
             reinterpret_cast<__ubuf__ T*>(writeLocal.GetPhyAddr()), copyParams);
-        event_t eventIDMTE3ToMTE2 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE2));
+        event_t eventIDMTE3ToMTE2 = static_cast<event_t>(FetchEventID<HardEvent::MTE3_MTE2>());
         SetFlag<HardEvent::MTE3_MTE2>(eventIDMTE3ToMTE2);
         WaitFlag<HardEvent::MTE3_MTE2>(eventIDMTE3ToMTE2);
     } else if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::L1)) {
@@ -581,11 +569,11 @@ __aicore__ inline void TPipe::WriteSpmBuffer(const LocalTensor<T>& writeLocal, c
                        { KERNEL_LOG(KERNEL_ERROR, "writeOffset is %d, which must be 32B aligned", writeOffset); });
         DataCopyUB2L1Impl(reinterpret_cast<__cbuf__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
             reinterpret_cast<__ubuf__ T*>(writeLocal.GetPhyAddr()), copyParams);
-        event_t eventIDMTE3ToMTE1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE1));
+        event_t eventIDMTE3ToMTE1 = static_cast<event_t>(FetchEventID<HardEvent::MTE3_MTE1>());
         SetFlag<HardEvent::MTE3_MTE1>(eventIDMTE3ToMTE1);
         WaitFlag<HardEvent::MTE3_MTE1>(eventIDMTE3ToMTE1);
     }
-    event_t eventIDMTE3ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_V));
+    event_t eventIDMTE3ToV = static_cast<event_t>(FetchEventID<HardEvent::MTE3_V>());
     SetFlag<HardEvent::MTE3_V>(eventIDMTE3ToV);
     WaitFlag<HardEvent::MTE3_V>(eventIDMTE3ToV);
 }
@@ -599,9 +587,9 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
      * after read, the local may used to compute or copy out, need insert V/MTE2 wait MTE3
      */
     if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::GM)) {
-        event_t eventIDVToMTE2 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE2));
-        event_t eventIDMTE2ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_V));
-        event_t eventIDMTE2ToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_MTE3));
+        event_t eventIDVToMTE2 = static_cast<event_t>(FetchEventID<HardEvent::V_MTE2>());
+        event_t eventIDMTE2ToV = static_cast<event_t>(FetchEventID<HardEvent::MTE2_V>());
+        event_t eventIDMTE2ToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::MTE2_MTE3>());
         SetFlag<HardEvent::V_MTE2>(eventIDVToMTE2);
         WaitFlag<HardEvent::V_MTE2>(eventIDVToMTE2);
         DataCopyGM2UBImpl(reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
@@ -614,9 +602,9 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
     } else if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::L1)) {
         ASCENDC_ASSERT((readOffset % ONE_BLK_SIZE == 0),
                        { KERNEL_LOG(KERNEL_ERROR, "readOffset is %d, which must be 32B aligned", readOffset); });
-        event_t eventIDVToMTE1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE1));
-        event_t eventIDMTE1ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_V));
-        event_t eventIDMTE1ToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_MTE3));
+        event_t eventIDVToMTE1 = static_cast<event_t>(FetchEventID<HardEvent::V_MTE1>());
+        event_t eventIDMTE1ToV = static_cast<event_t>(FetchEventID<HardEvent::MTE1_V>());
+        event_t eventIDMTE1ToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::MTE1_MTE3>());
         SetFlag<HardEvent::V_MTE1>(eventIDVToMTE1);
         WaitFlag<HardEvent::V_MTE1>(eventIDVToMTE1);
         DataCopyL12UBImpl(reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
@@ -641,9 +629,9 @@ __aicore__ inline void TPipe::WriteSpmBuffer(const LocalTensor<T>& writeLocal, c
     int computeSize = writeSize != 0 ? writeSize : GetShapeSize(writeLocal.GetShapeInfo());
     struct DataCopyParams repeatParams;
     repeatParams.blockLen = computeSize / AscendCUtils::GetC0Count(sizeof(T));
-    event_t eventIDVToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE3));
-    event_t eventIDMTE2ToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_MTE3));
-    event_t eventIDMTE3ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_V));
+    event_t eventIDVToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::V_MTE3>());
+    event_t eventIDMTE2ToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::MTE2_MTE3>());
+    event_t eventIDMTE3ToV = static_cast<event_t>(FetchEventID<HardEvent::MTE3_V>());
     SetFlag<HardEvent::V_MTE3>(eventIDVToMTE3);
     WaitFlag<HardEvent::V_MTE3>(eventIDVToMTE3);
 
@@ -652,7 +640,7 @@ __aicore__ inline void TPipe::WriteSpmBuffer(const LocalTensor<T>& writeLocal, c
     if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::GM)) {
         DataCopyUB2GMImpl(reinterpret_cast<__gm__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
             reinterpret_cast<__ubuf__ T*>(writeLocal.GetPhyAddr()), repeatParams);
-        event_t eventIDMTE3ToMTE2 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE2));
+        event_t eventIDMTE3ToMTE2 = static_cast<event_t>(FetchEventID<HardEvent::MTE3_MTE2>());
         SetFlag<HardEvent::MTE3_MTE2>(eventIDMTE3ToMTE2);
         WaitFlag<HardEvent::MTE3_MTE2>(eventIDMTE3ToMTE2);
     } else if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::L1)) {
@@ -662,7 +650,7 @@ __aicore__ inline void TPipe::WriteSpmBuffer(const LocalTensor<T>& writeLocal, c
                        { KERNEL_LOG(KERNEL_ERROR, "writeSize is %d, which must be 32B aligned", writeSize); });
         DataCopyUB2L1Impl(reinterpret_cast<__cbuf__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
             reinterpret_cast<__ubuf__ T*>(writeLocal.GetPhyAddr()), repeatParams);
-        event_t eventIDMTE3ToMTE1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE1));
+        event_t eventIDMTE3ToMTE1 = static_cast<event_t>(FetchEventID<HardEvent::MTE3_MTE1>());
         SetFlag<HardEvent::MTE3_MTE1>(eventIDMTE3ToMTE1);
         WaitFlag<HardEvent::MTE3_MTE1>(eventIDMTE3ToMTE1);
     }
@@ -682,9 +670,9 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
     struct DataCopyParams repeatParams;
     repeatParams.blockLen = computeSize / AscendCUtils::GetC0Count(sizeof(T));
     if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::GM)) {
-        event_t eventIDVToMTE2 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE2));
-        event_t eventIDMTE2ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_V));
-        event_t eventIDMTE2ToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_MTE3));
+        event_t eventIDVToMTE2 = static_cast<event_t>(FetchEventID<HardEvent::V_MTE2>());
+        event_t eventIDMTE2ToV = static_cast<event_t>(FetchEventID<HardEvent::MTE2_V>());
+        event_t eventIDMTE2ToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::MTE2_MTE3>());
         SetFlag<HardEvent::V_MTE2>(eventIDVToMTE2);
         WaitFlag<HardEvent::V_MTE2>(eventIDVToMTE2);
         DataCopyGM2UBImpl(reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
@@ -700,9 +688,9 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
                        { KERNEL_LOG(KERNEL_ERROR, "readOffset is %d, which must be 32B aligned", readOffset); });
         ASCENDC_ASSERT((readSize % ONE_BLK_SIZE == 0),
                        { KERNEL_LOG(KERNEL_ERROR, "readSize is %d, which must be 32B aligned", readSize); });
-        event_t eventIDVToMTE1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE1));
-        event_t eventIDMTE1ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_V));
-        event_t eventIDMTE1ToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_MTE3));
+        event_t eventIDVToMTE1 = static_cast<event_t>(FetchEventID<HardEvent::V_MTE1>());
+        event_t eventIDMTE1ToV = static_cast<event_t>(FetchEventID<HardEvent::MTE1_V>());
+        event_t eventIDMTE1ToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::MTE1_MTE3>());
         SetFlag<HardEvent::V_MTE1>(eventIDVToMTE1);
         WaitFlag<HardEvent::V_MTE1>(eventIDVToMTE1);
         DataCopyL12UBImpl(reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
@@ -718,9 +706,7 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
 
 template <TPosition pos> __aicore__ inline uint64_t TPipe::GetQueueEndAddress()
 {
-    Hardware hardType = GetPhyType(pos);
-    ASCENDC_ASSERT((hardType == Hardware::UB), { KERNEL_LOG(KERNEL_ERROR, "hardType should be UB"); });
-    return Internal::g_tPipeAddrBufPool[static_cast<uint8_t>(hardType)];
+    return ::AscendC::GetQueueEndAddress<pos>();
 }
 
 __aicore__ inline void TPipe::DestroyWithoutPipeAll()
@@ -800,8 +786,7 @@ inline uint64_t TPipe::GetAbsAddr(const LocalTensor<T>& tensor)
     ASCENDC_ASSERT(((hardType == Hardware::UB) || (hardType == Hardware::L1)),
                     { KERNEL_LOG(KERNEL_ERROR, "illegal hardType %d ", static_cast<int32_t>(hardType)); });
     uint8_t* phyAddr = reinterpret_cast<uint8_t*>(tensor.GetPhyAddr());
-    uint8_t* baseAddr =
-        static_cast<uint8_t*>(g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint32_t>(hardType)].absAddr);
+    uint8_t* baseAddr = GetBaseAddrCpu(logicPos);
     ASCENDC_ASSERT((phyAddr >= baseAddr), {
         KERNEL_LOG(KERNEL_ERROR, "phyAddr is %p, baseAddr is %p, phyAddr should be larger than baseAddr", phyAddr,
                    baseAddr);
@@ -830,8 +815,7 @@ template <typename T> inline uint64_t GetAbsAddr(TPipe* tpipe, const LocalTensor
     ASCENDC_ASSERT(((hardType == Hardware::UB) || (hardType == Hardware::L1)),
                     { KERNEL_LOG(KERNEL_ERROR, "illegal hardType %d ", static_cast<int32_t>(hardType)); });
     uint8_t* phyAddr = reinterpret_cast<uint8_t*>(tensor.GetPhyAddr());
-    uint8_t* baseAddr =
-        static_cast<uint8_t*>(tpipe->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint32_t>(hardType)].absAddr);
+    uint8_t* baseAddr = GetBaseAddrCpu(logicPos);
     ASCENDC_ASSERT((phyAddr >= baseAddr), {
         KERNEL_LOG(KERNEL_ERROR, "phyAddr is %p, baseAddr is %p, phyAddr should be larger than baseAddr", phyAddr,
             baseAddr);
@@ -849,15 +833,7 @@ template <typename T> inline uint64_t GetAbsAddr(TPipe* tpipe, const LocalTensor
 
 inline uint8_t* TPipe::GetBaseAddr(int8_t logicPos)
 {
-    auto positionHardMap = ConstDefiner::Instance().positionHardMap;
-    ASCENDC_ASSERT((positionHardMap.find((TPosition)logicPos) != positionHardMap.end()),
-                    { KERNEL_LOG(KERNEL_ERROR, "illegal logicPos %d ", int32_t(logicPos)); });
-    Hardware hardType = positionHardMap.at((TPosition)logicPos);
-    ASCENDC_ASSERT((hardType != Hardware::GM),
-                    { KERNEL_LOG(KERNEL_ERROR, "hardware position can not be gm"); });
-    uint8_t* baseAddr =
-        static_cast<uint8_t*>(g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint32_t>(hardType)].absAddr);
-    return baseAddr;
+    return GetBaseAddrCpu(logicPos);
 }
 
 void inline TPipe::SetBufferCtx(Hardware hard, struct BufPoolExtra* bufPool)

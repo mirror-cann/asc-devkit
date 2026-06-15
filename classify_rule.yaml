@@ -54,6 +54,17 @@ asc-devkit:
       - impl/basic_api/dav_c100/kernel_operator_dump_tensor_impl.h
       - impl/basic_api/dav_m310/kernel_operator_dump_tensor_impl.h
       - impl/basic_api/dav_m310/kernel_operator_common_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_data_copy_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_fixpipe_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_vec_binary_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_vec_binary_scalar_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_vec_cmpsel_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_vec_duplicate_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_vec_gather_mask_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_vec_reduce_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_vec_ternary_scalar_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_vec_unary_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_vec_vconv_impl.h
       - impl/basic_api/dav_m200/kernel_operator_dump_tensor_impl.h
       - impl/basic_api/dav_c220/kernel_operator_dump_tensor_impl.h
       - impl/c_api/instr_impl/npu_arch_2201/debug_impl/printf_impl.h

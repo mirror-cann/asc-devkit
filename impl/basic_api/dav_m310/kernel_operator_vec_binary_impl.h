@@ -45,7 +45,7 @@ __aicore__ inline void AddImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -76,7 +76,7 @@ __aicore__ inline void AddImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -107,7 +107,7 @@ __aicore__ inline void AddImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -140,7 +140,7 @@ __aicore__ inline void AddImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -282,7 +282,7 @@ __aicore__ inline void SubImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -313,7 +313,7 @@ __aicore__ inline void SubImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -344,7 +344,7 @@ __aicore__ inline void SubImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -377,7 +377,7 @@ __aicore__ inline void SubImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -520,7 +520,7 @@ __aicore__ inline void MulImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -552,7 +552,7 @@ __aicore__ inline void MulImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -584,7 +584,7 @@ __aicore__ inline void MulImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -618,7 +618,7 @@ __aicore__ inline void MulImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -762,7 +762,7 @@ __aicore__ inline void DivImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -794,7 +794,7 @@ __aicore__ inline void DivImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -900,7 +900,7 @@ __aicore__ inline void MaxImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -932,7 +932,7 @@ __aicore__ inline void MaxImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -964,7 +964,7 @@ __aicore__ inline void MaxImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -998,7 +998,7 @@ __aicore__ inline void MaxImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1135,7 +1135,7 @@ __aicore__ inline void MinImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1167,7 +1167,7 @@ __aicore__ inline void MinImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1199,7 +1199,7 @@ __aicore__ inline void MinImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1233,7 +1233,7 @@ __aicore__ inline void MinImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1377,7 +1377,7 @@ __aicore__ inline void AndImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1409,7 +1409,7 @@ __aicore__ inline void AndImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src0, 
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1504,7 +1504,7 @@ __aicore__ inline void OrImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __u
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -1535,7 +1535,7 @@ __aicore__ inline void OrImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src0, _
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__

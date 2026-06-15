@@ -116,7 +116,7 @@ __aicore__ inline void AxpyIntrinsicsImpl(__ubuf__ half* dst, __ubuf__ half* src
     __ubuf__ uint64_t* sharedTmpBuffer = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(TMP_UB_OFFSET, PLD_BUFFER_SIZE);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)sharedTmpBuffer)) = (static_cast<uint64_t>(mask[0]));
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)sharedTmpBuffer + 1)) = (static_cast<uint64_t>(mask[1]));
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -135,7 +135,7 @@ __aicore__ inline void AxpyIntrinsicsImpl(__ubuf__ float* dst, __ubuf__ float* s
     __ubuf__ uint64_t* pldBuffer = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(TMP_UB_OFFSET, PLD_BUFFER_SIZE);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)pldBuffer)) = (static_cast<uint64_t>(mask[0]));
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)pldBuffer + 1)) = (static_cast<uint64_t>(mask[1]));
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -186,7 +186,7 @@ __aicore__ inline void AxpyFmixImpl(__ubuf__ float* dst, __ubuf__ half* src, hal
     __ubuf__ uint64_t* pldsBuffer = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(TMP_UB_OFFSET, PLD_BUFFER_SIZE);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)pldsBuffer)) = (static_cast<uint64_t>(mask[0]));
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)pldsBuffer + 1)) = (static_cast<uint64_t>(mask[1]));
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__

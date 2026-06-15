@@ -158,13 +158,13 @@ __aicore__ inline void ReduceSumImpl(__ubuf__ T* dst, __ubuf__ T* src, uint32_t 
             set_vector_mask(0, count);
         }
         vcadd(dst, src, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE, 1);
-        auto eventIdVToS = GetTPipePtr()->FetchEventID(HardEvent::V_S);
+        auto eventIdVToS = FetchEventID<HardEvent::V_S>();
         SetFlag<HardEvent::V_S>(eventIdVToS);
         WaitFlag<HardEvent::V_S>(eventIdVToS);
         int64_t accVal = get_acc_val();
         *(dst) = *(reinterpret_cast<T*>(&accVal));
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        event_t eventIdSToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
+        event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+        event_t eventIdSToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::S_MTE3>());
         SetFlag<HardEvent::S_V>(eventIdSToV);
         WaitFlag<HardEvent::S_V>(eventIdSToV);
         SetFlag<HardEvent::S_MTE3>(eventIdSToMTE3);
@@ -347,12 +347,12 @@ __aicore__ inline void ReduceSumSecondStep(__ubuf__ T* dstLocal, __ubuf__ T* sha
         AscendCUtils::SetMask<T>(highMask, lowMask);
         ReduceSumIntrinsicsImpl<T>(dstLocal, sharedTmpBuffer + srcOffset, 1, DEFAULT_REPEAT_STRIDE);
 
-        event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
+        event_t eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
         SetFlag<HardEvent::V_S>(eventIdVToS);
         WaitFlag<HardEvent::V_S>(eventIdVToS);
         *(sharedTmpBuffer + newRepeatTimes) = *dstLocal;
         if (newRepeatTimes != 0) {
-            event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+            event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
             SetFlag<HardEvent::S_V>(eventIdSToV);
             WaitFlag<HardEvent::S_V>(eventIdSToV);
         }
@@ -570,7 +570,7 @@ __aicore__ inline void ReduceImplThirdStep(__ubuf__ T* dstLocal, __ubuf__ T* sha
     int32_t offsetNumPerRep = ONE_BLK_SIZE / sizeof(T) * srcRepStride;
     int32_t elementNumPerRep = ONE_REPEAT_BYTE_SIZE / sizeof(T);
     if (curData == VREDUCE_PER_REP_OUTPUT) {
-        event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
+        event_t eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
         SetFlag<HardEvent::V_S>(eventIdVToS);
         WaitFlag<HardEvent::V_S>(eventIdVToS);
 
@@ -579,8 +579,8 @@ __aicore__ inline void ReduceImplThirdStep(__ubuf__ T* dstLocal, __ubuf__ T* sha
         int32_t redultIndex = secondIndex + preNum;
         *dstLocal = *(sharedTmpBuffer + secondStartPos);
         *(dstLocal + 1) = *reinterpret_cast<T*>(&redultIndex);
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        event_t eventIdSToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
+        event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+        event_t eventIdSToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::S_MTE3>());
         SetFlag<HardEvent::S_V>(eventIdSToV);
         WaitFlag<HardEvent::S_V>(eventIdSToV);
         SetFlag<HardEvent::S_MTE3>(eventIdSToMTE3);
@@ -600,7 +600,7 @@ __aicore__ inline void ReduceImplThirdStep(__ubuf__ T* dstLocal, __ubuf__ T* sha
         PipeBarrier<PIPE_V>();
         ReduceOperation<T>(sharedTmpBuffer + dstOffset, sharedTmpBuffer + srcOffset, 1, DEFAULT_REPEAT_STRIDE, highMask, lowMask,
             mode);
-        event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
+        event_t eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
         SetFlag<HardEvent::V_S>(eventIdVToS);
         WaitFlag<HardEvent::V_S>(eventIdVToS);
 
@@ -617,7 +617,7 @@ __aicore__ inline void ReduceImplThirdStep(__ubuf__ T* dstLocal, __ubuf__ T* sha
 
         ReduceOperation<T>(sharedTmpBuffer + dstOffset, sharedTmpBuffer + srcOffset, 1, DEFAULT_REPEAT_STRIDE, highMask, lowMask,
             mode);
-        event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
+        event_t eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
         SetFlag<HardEvent::V_S>(eventIdVToS);
         WaitFlag<HardEvent::V_S>(eventIdVToS);
 
@@ -630,8 +630,8 @@ __aicore__ inline void ReduceImplThirdStep(__ubuf__ T* dstLocal, __ubuf__ T* sha
 
     int32_t redultIndex = firstIndex + preNum;
     *(dstLocal + 1) = *reinterpret_cast<T*>(&redultIndex);
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-    event_t eventIdSToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+    event_t eventIdSToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::S_MTE3>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     SetFlag<HardEvent::S_MTE3>(eventIdSToMTE3);
@@ -668,12 +668,12 @@ __aicore__ inline void ReduceSumFinalStep(__ubuf__ T* dstLocal, __ubuf__ T* shar
     uint64_t highMask = 0;
     uint64_t lowMask = 0;
     if (secondResultNum == 1) {
-        event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
+        event_t eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
         SetFlag<HardEvent::V_S>(eventIdVToS);
         WaitFlag<HardEvent::V_S>(eventIdVToS);
         *(dstLocal) = *(sharedTmpBuffer);
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        event_t eventIdSToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
+        event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+        event_t eventIdSToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::S_MTE3>());
         SetFlag<HardEvent::S_V>(eventIdSToV);
         WaitFlag<HardEvent::S_V>(eventIdSToV);
         SetFlag<HardEvent::S_MTE3>(eventIdSToMTE3);
@@ -728,13 +728,13 @@ __aicore__ inline void ReduceImplThirdStepNoIndex(__ubuf__ T* dstLocal, __ubuf__
 
     CreateSpecialFormatMask<T>(curData / VREDUCE_PER_REP_OUTPUT, highMask, lowMask);
     ReduceOperation<T>(sharedTmpBuffer, sharedTmpBuffer, 1, DEFAULT_REPEAT_STRIDE, highMask, lowMask, mode);
-    event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
+    event_t eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
     SetFlag<HardEvent::V_S>(eventIdVToS);
     WaitFlag<HardEvent::V_S>(eventIdVToS);
 
     *dstLocal = *sharedTmpBuffer;
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-    event_t eventIdSToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+    event_t eventIdSToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::S_MTE3>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     SetFlag<HardEvent::S_MTE3>(eventIdSToMTE3);
@@ -771,12 +771,12 @@ __aicore__ inline void ReduceImplNoIndex(__ubuf__ T* dstLocal, __ubuf__ T* srcLo
     if ASCEND_IS_AIV {
         if (params.repeatTimes == 1) {
             ReduceOperation<T>(sharedTmpBuffer, srcLocal, 1, params.srcRepStride, params.highMask, params.lowMask, mode);
-            event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
+            event_t eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
             SetFlag<HardEvent::V_S>(eventIdVToS);
             WaitFlag<HardEvent::V_S>(eventIdVToS);
             *dstLocal = *sharedTmpBuffer;
-            event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-            event_t eventIdSToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
+            event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+            event_t eventIdSToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::S_MTE3>());
             SetFlag<HardEvent::S_V>(eventIdSToV);
             WaitFlag<HardEvent::S_V>(eventIdSToV);
             SetFlag<HardEvent::S_MTE3>(eventIdSToMTE3);
@@ -826,7 +826,7 @@ __aicore__ inline void ReduceTailCompute(const LocalTensor<T>& dst, const LocalT
     int32_t repeatTime = count / elementNumPerRep;
     int32_t tailCount = count % elementNumPerRep; // tailCount  <= 128/64 repeat=1
 
-    event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
+    event_t eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
     SetFlag<HardEvent::V_S>(eventIdVToS);
     WaitFlag<HardEvent::V_S>(eventIdVToS);
     PrimT<T> bodyValue = dst.GetValue(0);
@@ -838,7 +838,7 @@ __aicore__ inline void ReduceTailCompute(const LocalTensor<T>& dst, const LocalT
     ReduceImpl<PrimT<T>>((__ubuf__ PrimT<T>*)dst.GetPhyAddr(), // reuse dst
         (__ubuf__ PrimT<T>*)src.GetPhyAddr(elementNumPerRep * repeatTime), (__ubuf__ PrimT<T>*)sharedTmpBuffer.GetPhyAddr(),
         tailParams, calIndex, mode);
-    eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
+    eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
     SetFlag<HardEvent::V_S>(eventIdVToS);
     WaitFlag<HardEvent::V_S>(eventIdVToS);
     PrimT<T> tailValue = dst.GetValue(0);
@@ -848,14 +848,14 @@ __aicore__ inline void ReduceTailCompute(const LocalTensor<T>& dst, const LocalT
     struct ReduceRepeatParams lastParams(2, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
     sharedTmpBuffer.SetValue(0, bodyValue);
     sharedTmpBuffer.SetValue(1, tailValue);
-    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
 
     ReduceImpl<PrimT<T>>((__ubuf__ PrimT<T>*)dst.GetPhyAddr(), (__ubuf__ PrimT<T>*)sharedTmpBuffer.GetPhyAddr(),
         (__ubuf__ PrimT<T>*)sharedTmpBuffer.GetPhyAddr(), lastParams, calIndex, mode);
     if (calIndex) {
-        eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
+        eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
         SetFlag<HardEvent::V_S>(eventIdVToS);
         WaitFlag<HardEvent::V_S>(eventIdVToS);
         PrimT<T> lastIndexVal = dst.GetValue(1);
@@ -873,8 +873,8 @@ __aicore__ inline void ReduceTailCompute(const LocalTensor<T>& dst, const LocalT
         } else {
             dst.SetValue(1, bodyIndex);
         }
-        eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
-        event_t eventIdSToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
+        eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+        event_t eventIdSToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::S_MTE3>());
         SetFlag<HardEvent::S_V>(eventIdSToV);
         WaitFlag<HardEvent::S_V>(eventIdSToV);
         SetFlag<HardEvent::S_MTE3>(eventIdSToMTE3);

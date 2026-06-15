@@ -111,7 +111,7 @@ REGISTER_GATHER_MASK_B16(int16_t, s16)
         uint32_t blockElm = ONE_BLK_SIZE / sizeof(float);                                                            \
         if (reduceMode) {                                                                                              \
             __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);              \
-            event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));                   \
+            event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());                   \
             SetFlag<HardEvent::S_V>(eventIdSToV);                                                                      \
             WaitFlag<HardEvent::S_V>(eventIdSToV);                                                                     \
             __VEC_SCOPE__ {                                                                                            \

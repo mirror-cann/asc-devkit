@@ -82,11 +82,11 @@ public:
     // 310没有L1-GM通道, 改为scalar写gm，dcci
     __aicore__ inline void FreeUB(int32_t addr)
     {
-        event_t eventID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE2));
+        event_t eventID = static_cast<event_t>(FetchEventID<HardEvent::MTE3_MTE2>());
         SetFlag<HardEvent::MTE3_MTE2>(eventID);
         WaitFlag<HardEvent::MTE3_MTE2>(eventID);
         
-        eventID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
+        eventID = static_cast<event_t>(FetchEventID<HardEvent::S_MTE3>());
         SetFlag<HardEvent::S_MTE3>(eventID);
         WaitFlag<HardEvent::S_MTE3>(eventID);
 

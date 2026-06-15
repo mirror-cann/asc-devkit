@@ -127,7 +127,7 @@ __aicore__ inline void DataCopyGM2L1ND2NZImplBase(__cbuf__ T* dst, __gm__ T* src
     uint16_t alignedDValueBlockNum = (dValue * sizeof(T) - 1) / 32 + 1;
     uint16_t alignedDValue = alignedDValueBlockNum * 32 / sizeof(T);
 
-    event_t eventIdMTE3ToMTE2 = static_cast<event_t>(GetTPipePtr()->AllocEventID<HardEvent::MTE3_MTE2>());
+    event_t eventIdMTE3ToMTE2 = static_cast<event_t>(AllocEventID<HardEvent::MTE3_MTE2>());
     SetFlag<HardEvent::MTE3_MTE2>(eventIdMTE3ToMTE2);
     for (int i = 0; i < ndNum; ++i) {
         WaitFlag<HardEvent::MTE3_MTE2>(eventIdMTE3ToMTE2);
@@ -136,7 +136,7 @@ __aicore__ inline void DataCopyGM2L1ND2NZImplBase(__cbuf__ T* dst, __gm__ T* src
             DataCopyGM2UBImpl(nd2nzTempBuf, src + i * srcNdMatrixStride,
                 { nValue, static_cast<uint16_t>(dValue * sizeof(T) / 32),
                 static_cast<uint16_t>((srcDValue - dValue) * sizeof(T) / 32), 0 });
-            event_t eventIdMTE2ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_V));
+            event_t eventIdMTE2ToV = static_cast<event_t>(FetchEventID<HardEvent::MTE2_V>());
             SetFlag<HardEvent::MTE2_V>(eventIdMTE2ToV);
             WaitFlag<HardEvent::MTE2_V>(eventIdMTE2ToV);
         } else {
@@ -146,7 +146,7 @@ __aicore__ inline void DataCopyGM2L1ND2NZImplBase(__cbuf__ T* dst, __gm__ T* src
                     { 1, static_cast<uint16_t>(alignedDValueBlockNum), 0, 0 });
             }
             if (alignedDValue != dValue) {
-                event_t eventIdMTE2ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_V));
+                event_t eventIdMTE2ToV = static_cast<event_t>(FetchEventID<HardEvent::MTE2_V>());
                 SetFlag<HardEvent::MTE2_V>(eventIdMTE2ToV);
                 WaitFlag<HardEvent::MTE2_V>(eventIdMTE2ToV);
 
@@ -158,7 +158,7 @@ __aicore__ inline void DataCopyGM2L1ND2NZImplBase(__cbuf__ T* dst, __gm__ T* src
                 DuplicateImpl(nd2nzTempBuf + downAlignedDValue, (T)0, mask, nValue, 1, alignedDValueBlockNum);
                 PipeBarrier<PIPE_V>();
             } else {
-                event_t eventIdMTE2ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_V));
+                event_t eventIdMTE2ToV = static_cast<event_t>(FetchEventID<HardEvent::MTE2_V>());
                 SetFlag<HardEvent::MTE2_V>(eventIdMTE2ToV);
                 WaitFlag<HardEvent::MTE2_V>(eventIdMTE2ToV);
             }
@@ -167,7 +167,7 @@ __aicore__ inline void DataCopyGM2L1ND2NZImplBase(__cbuf__ T* dst, __gm__ T* src
         __ubuf__ T* nzTempBuf = nd2nzTempBuf + (4 * 1024 / sizeof(T));
         TransND2NZ(nzTempBuf, nd2nzTempBuf, nValue, alignedDValue, (T)0);
 
-        event_t eventIdVToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE3));
+        event_t eventIdVToMTE3 = static_cast<event_t>(FetchEventID<HardEvent::V_MTE3>());
         SetFlag<HardEvent::V_MTE3>(eventIdVToMTE3);
         WaitFlag<HardEvent::V_MTE3>(eventIdVToMTE3);
 
@@ -180,7 +180,7 @@ __aicore__ inline void DataCopyGM2L1ND2NZImplBase(__cbuf__ T* dst, __gm__ T* src
         SetFlag<HardEvent::MTE3_MTE2>(eventIdMTE3ToMTE2);
     }
     WaitFlag<HardEvent::MTE3_MTE2>(eventIdMTE3ToMTE2);
-    GetTPipePtr()->ReleaseEventID<HardEvent::MTE3_MTE2>(eventIdMTE3ToMTE2);
+    ReleaseEventID<HardEvent::MTE3_MTE2>(eventIdMTE3ToMTE2);
 }
 
 template <typename T>
@@ -796,7 +796,7 @@ __aicore__ inline void DataCopyL0C2UBImpl(__ubuf__ T* dst, __cc__ U* src, const 
             deqScaleSpr |= 1ULL << 46;
         }
         set_deqscale(deqScaleSpr);
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+        event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
         SetFlag<HardEvent::S_V>(eventIdSToV);
         WaitFlag<HardEvent::S_V>(eventIdSToV);
     } else if ((enhancedParams.deqScale == DeqScale::VDEQ8) || (enhancedParams.deqScale == DeqScale::VDEQ16)) {
@@ -814,7 +814,7 @@ __aicore__ inline void DataCopyL0C2UBImpl(__ubuf__ T* dst, __cc__ U* src, const 
         }
         set_deqscale(deqScaleSprAddr);
 #endif
-        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
+        event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
         SetFlag<HardEvent::S_V>(eventIdSToV);
         WaitFlag<HardEvent::S_V>(eventIdSToV);
     }

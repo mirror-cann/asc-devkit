@@ -312,7 +312,7 @@ __aicore__ inline void GemmExecNmNopingpong(const LocalTensor<T>& l0c, const Loc
     LocalTensor<U> l0a;
     LocalTensor<S> l0b;
     GetSingleThreadBuffer(l0a, l0b);
-    event_t eventIdMToMte1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::M_MTE1));
+    event_t eventIdMToMte1 = static_cast<event_t>(FetchEventID<HardEvent::M_MTE1>());
     SetFlag<HardEvent::M_MTE1>(eventIdMToMte1);
     for (size_t indexK = 0; indexK < tilling.kIterNum; indexK++) {
         uint32_t kBlocks = tilling.kTileBlock;
@@ -326,7 +326,7 @@ __aicore__ inline void GemmExecNmNopingpong(const LocalTensor<T>& l0c, const Loc
             for (size_t indexM = 0; indexM < tilling.mIterNum; indexM++) {
                 // load data from l1 to l0a
                 LoadL0A(kBlocks, tilling.mTileBlock, tilling, indexK, indexM, src0, l0a);
-                event_t eventIdMte1ToM = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_M));
+                event_t eventIdMte1ToM = static_cast<event_t>(FetchEventID<HardEvent::MTE1_M>());
                 SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 PipeBarrier<PIPE_M>();
@@ -349,8 +349,8 @@ __aicore__ inline void GemmExecNmPingPong(const LocalTensor<T>& l0c, const Local
     LocalTensor<S> l0bPong;
     GetPingPongBuffer(l0aPing, l0aPong, l0bPing, l0bPong);
 
-    event_t eventId0 = static_cast<event_t>(GetTPipePtr()->AllocEventID<HardEvent::M_MTE1>());
-    event_t eventId1 = static_cast<event_t>(GetTPipePtr()->AllocEventID<HardEvent::M_MTE1>());
+    event_t eventId0 = static_cast<event_t>(AllocEventID<HardEvent::M_MTE1>());
+    event_t eventId1 = static_cast<event_t>(AllocEventID<HardEvent::M_MTE1>());
     SetFlag<HardEvent::M_MTE1>(eventId0);
     SetFlag<HardEvent::M_MTE1>(eventId1);
 
@@ -367,7 +367,7 @@ __aicore__ inline void GemmExecNmPingPong(const LocalTensor<T>& l0c, const Local
                 for (size_t indexM = 0; indexM < tilling.mIterNum; indexM++) {
                     // load data from l1 to l0a
                     LoadL0A(kBlocks, tilling.mTileBlock, tilling, i, indexM, src0, l0aPing);
-                    event_t eventIdMte1ToM = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_M));
+                    event_t eventIdMte1ToM = static_cast<event_t>(FetchEventID<HardEvent::MTE1_M>());
                     SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                     WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                     PipeBarrier<PIPE_M>();
@@ -383,7 +383,7 @@ __aicore__ inline void GemmExecNmPingPong(const LocalTensor<T>& l0c, const Local
                 for (size_t indexM = 0; indexM < tilling.mIterNum; indexM++) {
                     // load data from l1 to l0a
                     LoadL0A(kBlocks, tilling.mTileBlock, tilling, i, indexM, src0, l0aPong);
-                    event_t eventIdMte1ToM = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_M));
+                    event_t eventIdMte1ToM = static_cast<event_t>(FetchEventID<HardEvent::MTE1_M>());
                     SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                     WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                     PipeBarrier<PIPE_M>();
@@ -397,9 +397,9 @@ __aicore__ inline void GemmExecNmPingPong(const LocalTensor<T>& l0c, const Local
 
 #if __NPU_ARCH__ == 2201
     WaitFlag<HardEvent::M_MTE1>(eventId0);
-    GetTPipePtr()->ReleaseEventID<HardEvent::M_MTE1>(eventId0);
+    ReleaseEventID<HardEvent::M_MTE1>(eventId0);
     WaitFlag<HardEvent::M_MTE1>(eventId1);
-    GetTPipePtr()->ReleaseEventID<HardEvent::M_MTE1>(eventId1);
+    ReleaseEventID<HardEvent::M_MTE1>(eventId1);
 #else
     WaitFlag<HardEvent::M_MTE1>(eventId0);
     WaitFlag<HardEvent::M_MTE1>(eventId1);
@@ -426,7 +426,7 @@ __aicore__ inline void GemmExecMnNopingpong(const LocalTensor<T>& l0c, const Loc
     LocalTensor<S> l0b;
     LocalTensor<U> l0a;
     GetSingleThreadBuffer(l0a, l0b);
-    event_t eventIdMToMte1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::M_MTE1));
+    event_t eventIdMToMte1 = static_cast<event_t>(FetchEventID<HardEvent::M_MTE1>());
     SetFlag<HardEvent::M_MTE1>(eventIdMToMte1);
     for (size_t indexK = 0; indexK < tilling.kIterNum; indexK++) {
         uint32_t kBlocks = tilling.kTileBlock;
@@ -440,7 +440,7 @@ __aicore__ inline void GemmExecMnNopingpong(const LocalTensor<T>& l0c, const Loc
             for (size_t indexN = 0; indexN < tilling.nIterNum; indexN++) {
                 // load data from l1 to l0b
                 LoadL0B(kBlocks, tilling.nTileBlock, tilling, indexK, indexN, src1, l0b);
-                event_t eventIdMte1ToM = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_M));
+                event_t eventIdMte1ToM = static_cast<event_t>(FetchEventID<HardEvent::MTE1_M>());
                 SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 PipeBarrier<PIPE_M>();
@@ -463,8 +463,8 @@ __aicore__ inline void GemmExecMnPingPong(const LocalTensor<T>& l0c, const Local
     LocalTensor<S> l0bPong;
     GetPingPongBuffer(l0aPing, l0aPong, l0bPing, l0bPong);
 
-    event_t eventId0 = static_cast<event_t>(GetTPipePtr()->AllocEventID<HardEvent::M_MTE1>());
-    event_t eventId1 = static_cast<event_t>(GetTPipePtr()->AllocEventID<HardEvent::M_MTE1>());
+    event_t eventId0 = static_cast<event_t>(AllocEventID<HardEvent::M_MTE1>());
+    event_t eventId1 = static_cast<event_t>(AllocEventID<HardEvent::M_MTE1>());
     SetFlag<HardEvent::M_MTE1>(eventId0);
     SetFlag<HardEvent::M_MTE1>(eventId1);
 
@@ -482,7 +482,7 @@ __aicore__ inline void GemmExecMnPingPong(const LocalTensor<T>& l0c, const Local
                     // load data from l1 to l0b
                     LoadL0B(kBlocks, tilling.nTileBlock, tilling, i, indexN, src1, l0bPing);
 
-                    event_t eventIdMte1ToM = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_M));
+                    event_t eventIdMte1ToM = static_cast<event_t>(FetchEventID<HardEvent::MTE1_M>());
                     SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                     WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                     PipeBarrier<PIPE_M>();
@@ -498,7 +498,7 @@ __aicore__ inline void GemmExecMnPingPong(const LocalTensor<T>& l0c, const Local
                 for (size_t indexN = 0; indexN < tilling.nIterNum; indexN++) {
                     // load data from l1 to l0b
                     LoadL0B(kBlocks, tilling.nTileBlock, tilling, i, indexN, src1, l0bPong);
-                    event_t eventIdMte1ToM = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_M));
+                    event_t eventIdMte1ToM = static_cast<event_t>(FetchEventID<HardEvent::MTE1_M>());
                     SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                     WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                     PipeBarrier<PIPE_M>();
@@ -511,9 +511,9 @@ __aicore__ inline void GemmExecMnPingPong(const LocalTensor<T>& l0c, const Local
     }
 
     WaitFlag<HardEvent::M_MTE1>(eventId0);
-    GetTPipePtr()->ReleaseEventID<HardEvent::M_MTE1>(eventId0);
+    ReleaseEventID<HardEvent::M_MTE1>(eventId0);
     WaitFlag<HardEvent::M_MTE1>(eventId1);
-    GetTPipePtr()->ReleaseEventID<HardEvent::M_MTE1>(eventId1);
+    ReleaseEventID<HardEvent::M_MTE1>(eventId1);
 }
 
 template <typename T, typename U, typename S>

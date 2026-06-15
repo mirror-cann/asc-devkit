@@ -114,6 +114,15 @@ struct BufPoolExtra {
 };
 #endif
 
+#if !(defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3103) || (__NPU_ARCH__ == 3113)))
+template <TPosition pos> __aicore__ inline uint64_t GetQueueEndAddress()
+{
+    Hardware hardType = GetPhyType(pos);
+    ASCENDC_DEBUG_ASSERT((hardType == Hardware::UB), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "hardType should be UB"));
+    return Internal::g_tPipeAddrBufPool[static_cast<uint8_t>(hardType)];
+}
+#endif
+
 struct TShareBuf {
     enum class ShareHard : uint8_t {  // Redefine to save resources
         L1 = 0,
