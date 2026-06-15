@@ -15,7 +15,6 @@
 import os
 import sys
 import random
-import torch
 import numpy as np
 
 
@@ -53,7 +52,7 @@ def gen_golden_data_simple():
     random_set_boundary([src2])
 
     golden = np.zeros([128]).astype(dtype)
-    golden = torch.addcmul(torch.from_numpy(src2), torch.from_numpy(src0), torch.from_numpy(src1), value=1).numpy()
+    golden = (src2 + src0 * src1).astype(dtype)
     golden[count:data_size] = 0
 
     os.makedirs("input", exist_ok=True)

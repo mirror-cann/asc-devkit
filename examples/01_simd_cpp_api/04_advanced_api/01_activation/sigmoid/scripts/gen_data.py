@@ -14,7 +14,6 @@
 
 import os
 import sys
-import torch
 import numpy as np
 
 
@@ -34,14 +33,13 @@ def gen_golden_data_simple():
 
     if src_type in [np.float16]:
         src_tmp = src.astype(np.float32)
-        src_tensor = torch.from_numpy(src_tmp)
     else:
-        src_tensor = torch.from_numpy(src)
-    
+        src_tmp = src
+
     if api_mode == 1 or api_mode == 2:
-        golden[:calcount] = torch.sigmoid(src_tensor[:calcount]).numpy()
+        golden[:calcount] = (1.0 / (1.0 + np.exp(-src_tmp[:calcount]))).astype(src_type)
     else:
-        golden = torch.sigmoid(src_tensor).numpy()
+        golden = (1.0 / (1.0 + np.exp(-src_tmp))).astype(src_type)
 
     if src_type in [np.float16]:
         golden = golden.astype(src_type)

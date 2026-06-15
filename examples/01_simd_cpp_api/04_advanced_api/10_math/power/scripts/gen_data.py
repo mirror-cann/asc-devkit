@@ -13,7 +13,6 @@
 
 
 import os
-import torch
 import numpy as np
 import argparse
 
@@ -25,17 +24,13 @@ def gen_golden_data_simple(scenario):
     src1 = np.random.uniform(-10, 10, src_shape).astype(src_type)
     src2 = np.random.uniform(-10, 10, src_shape).astype(src_type)
     golden = np.zeros(src_shape).astype(src_type)
-    src1_tmp = src1.astype(np.float32)
-    src1_tensor = torch.from_numpy(src1_tmp)
-    src2_tmp = src2.astype(np.float32)
-    src2_tensor = torch.from_numpy(src2_tmp)
 
     if scenario == 0:
-        golden = torch.pow(src1_tensor, src2_tensor).numpy()
+        golden = np.power(src1, src2)
     elif scenario == 1:
-        golden = torch.pow(src1_tensor, src2_tensor[0]).numpy()
+        golden = np.power(src1, src2[0])
     elif scenario == 2:
-        golden = torch.pow(src1_tensor[0], src2_tensor).numpy()
+        golden = np.power(src1[0], src2)
     golden = golden.astype(src1.dtype)
 
     os.makedirs("input", exist_ok=True)

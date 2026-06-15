@@ -13,7 +13,6 @@
 
 
 import os
-import torch
 import numpy as np
 
 
@@ -34,8 +33,7 @@ def gen_golden_data_simple():
     if api_mode == 1 or api_mode == 2:
         count = calcount
 
-    tmp_tensor = torch.frac(torch.tensor(src))
-    tmp_golden = tmp_tensor.numpy()
+    tmp_golden = src - np.floor(src)
     golden[:count] = tmp_golden[:count]
 
     os.makedirs("input", exist_ok=True)
