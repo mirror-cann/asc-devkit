@@ -9,7 +9,9 @@
 - Atlas 推理系列产品AI Core：不支持
 - Atlas 推理系列产品Vector Core：不支持
 - Atlas 训练系列产品：不支持
+<!-- npu="x90" id1 -->
 - Kirin X90：支持
+<!-- end id1 -->
 
 ## 功能说明
 
@@ -43,7 +45,7 @@ __aicore__ constexpr MatmulApiStaticTiling GetMatmulApiTiling(const MatmulConfig
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| mmCFG | 输入 | 获取的[MatmulConfig](MatmulConfig.md#table1761013213153)模板。<br><br>对于Ascend 950PR/Ascend 950DT，支持常量化的为全部模板：Norm, IBShare, MDL模板。<br><br>对于Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持常量化的模板有：Norm, MDL模板。<br><br>对于Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持常量化的模板有：Norm, MDL模板。<br><br>对于Kirin X90，支持常量化的模板有：Norm, MDL模板。 |
+| mmCFG | 输入 | 获取的[MatmulConfig](MatmulConfig.md#table1761013213153)模板。<br><br>对于Ascend 950PR/Ascend 950DT，支持常量化的为全部模板：Norm, IBShare, MDL模板。<br><br>对于Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持常量化的模板有：Norm, MDL模板。<br><br>对于Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持常量化的模板有：Norm, MDL模板。<!-- npu="x90" id2 --><br><br>对于Kirin X90，支持常量化的模板有：Norm, MDL模板。<!-- end id2 --> |
 | l1Size | 输入 | 可用的L1大小，默认值L1_SIZE。 |
 
 ## 返回值说明
@@ -67,4 +69,3 @@ typedef AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float> biasT
 constexpr auto staticTiling = GetMatmulApiTiling<aType, bType, cType, biasType>(CFG, 524288); // 该示例L1 Buffer可用大小为512KB
 AscendC::Matmul<aType, bType, cType, biasType, staticTiling > mm;
 ```
-

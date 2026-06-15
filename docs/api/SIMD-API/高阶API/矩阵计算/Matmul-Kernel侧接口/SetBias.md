@@ -9,7 +9,9 @@
 - Atlas 推理系列产品AI Core：支持
 - Atlas 推理系列产品Vector Core：不支持
 - Atlas 训练系列产品：不支持
+<!-- npu="x90" id1 -->
 - Kirin X90：支持
+<!-- end id1 -->
 
 ## 功能说明
 
@@ -55,7 +57,9 @@ __aicore__ inline void SetBias(const LocalTensor<BiasT>& inputBias)
 
     Atlas 200I/500 A2 推理产品，支持的数据类型为：half、float、int32_t，其中仅在A、B的数据类型为int8_t时，Bias的数据类型可以设置为int32_t。
 
+    <!-- npu="x90" id2 -->
     Kirin X90，支持的数据类型为：half、int32_t，其中仅在A、B的数据类型为int8_t时，Bias的数据类型可以设置为int32_t。
+    <!-- end id2 -->
 
 ## 调用示例
 
