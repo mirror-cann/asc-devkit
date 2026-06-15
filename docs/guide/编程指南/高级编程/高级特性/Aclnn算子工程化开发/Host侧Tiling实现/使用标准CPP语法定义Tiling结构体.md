@@ -370,7 +370,7 @@
     </tbody>
     </table>
 
-3.  **最后**，在Kernel函数入口处新增[REGISTER\_TILING\_DEFAULT](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Kernel-Tiling/REGISTER_TILING_DEFAULT.md)调用，用于注册Tiling结构体。该注册操作的作用是：告知框架用户已使用标准C++ 语法定义Tiling结构体，并明确其类型，以便框架在进行Tiling数据解析时能够正确识别和使用该结构体。
+3.  **最后**，在Kernel函数入口处新增[REGISTER\_TILING\_DEFAULT](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Kernel-Tiling/REGISTER_TILING_DEFAULT.md)调用，用于注册Tiling结构体。该注册操作的作用是：告知框架用户已使用标准C++语法定义Tiling结构体，并明确其类型，以便框架在进行Tiling数据解析时能够正确识别和使用该结构体。
 
     ```
     #include "matmul_custom_tiling.h"
