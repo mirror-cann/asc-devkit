@@ -24,7 +24,7 @@
 
     ![](../../../figures/zh-cn_formulaimage_0000001666705128.png)
 
--   PER\_CHANNEL量化：srcTensor的shape为\[m, n\], 每个channel维度对应一个量化参数，量化参数的shape为\[n\]。
+-   PER\_CHANNEL量化：srcTensor的shape为\[m, n\],每个channel维度对应一个量化参数，量化参数的shape为\[n\]。
 
     ![](../../../figures/zh-cn_formulaimage_0000001738671878.png)
 
@@ -55,13 +55,13 @@
 
 ## 实现原理
 
-**图 1**  AscendQuant算法框图scale和offset都是scalar  
+**图1**  AscendQuant算法框图scale和offset都是scalar  
 ![](../../../figures/AscendQuant算法框图scale和offset都是scalar.png "AscendQuant算法框图scale和offset都是scalar")
 
-**图 2**  AscendQuant算法框图scale和offset都是Tensor  
+**图2**  AscendQuant算法框图scale和offset都是Tensor  
 ![](../../../figures/AscendQuant算法框图scale和offset都是Tensor.png "AscendQuant算法框图scale和offset都是Tensor")
 
-**图 3**  AscendQuant算法框图scale是Tensor&offset是Scalar  
+**图3**  AscendQuant算法框图scale是Tensor&offset是Scalar  
 ![](../../../figures/AscendQuant算法框图scale是Tensor-offset是Scalar.png "AscendQuant算法框图scale是Tensor-offset是Scalar")
 
 如上图所示是AscendQuant内部算法框图，计算过程大致描述为如下几步，均在Vector上进行：
@@ -72,10 +72,10 @@
 4.  计算offset：当Tmp1和offset为向量时做Add计算，当offset是scalar时做Adds计算，得到Tmp2；
 5.  精度转换：将Tmp2从half转换成int8\_t类型，得到output。
 
-**图 4**  AscendQuant算法框图PER\_TOKEN/PER\_GROUP场景scale和offset都是tensor  
+**图4**  AscendQuant算法框图PER\_TOKEN/PER\_GROUP场景scale和offset都是tensor  
 ![](../../../figures/AscendQuant算法框图PER_TOKEN-PER_GROUP场景scale和offset都是tensor.png "AscendQuant算法框图PER_TOKEN-PER_GROUP场景scale和offset都是tensor")
 
-**图 5**  AscendQuant算法框图PER\_TOKEN/PER\_GROUP场景scale是tensor&offset是scalar  
+**图5**  AscendQuant算法框图PER\_TOKEN/PER\_GROUP场景scale是tensor&offset是scalar  
 ![](../../../figures/AscendQuant算法框图PER_TOKEN-PER_GROUP场景scale是tensor-offset是scalar.png "AscendQuant算法框图PER_TOKEN-PER_GROUP场景scale是tensor-offset是scalar")
 
 PER\_TOKEN/PER\_GROUP场景的计算逻辑如下：
@@ -299,7 +299,7 @@ PER\_TOKEN/PER\_GROUP场景的计算逻辑如下：
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -322,7 +322,7 @@ uint32_t workLocalSize = 0;
 constexpr AscendQuantConfig ASCEND_QUANT_DEFAULT_CFG = {0, 0, 0, 0};
 ```
 
-**表 2**  dstTensor非固定数据类型的模板参数说明
+**表2**  dstTensor非固定数据类型的模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -330,7 +330,7 @@ constexpr AscendQuantConfig ASCEND_QUANT_DEFAULT_CFG = {0, 0, 0, 0};
 | srcT | 源操作数的数据类型。支持的数据类型为：half、bfloat16_t、float。 |
 | isReuseSource | 是否允许修改源操作数。该参数预留，传入默认值false即可。 |
 
-**表 3**  PER\_TOKEN/PER\_GROUP场景特有模板参数说明
+**表3**  PER\_TOKEN/PER\_GROUP场景特有模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -346,7 +346,7 @@ struct AscendQuantConfig {
 }
 ```
 
-**表 4**  PER\_TOKEN/PER\_GROUP场景支持的数据类型组合
+**表4**  PER\_TOKEN/PER\_GROUP场景支持的数据类型组合
 
 | srcDtype | scaleDtype/offsetDtype | dstDtype | roundMode |
 | --- | --- | --- | --- |
@@ -370,7 +370,7 @@ struct AscendQuantConfig {
 | bfloat16_t | bfloat16_t | fp4x2_e1m2_t/fp4x2_e2m1_t<br><br>（当前均只支持PER_GROUP场景） | CAST_RINT（默认）<br>CAST_ROUND<br>CAST_FLOOR<br>CAST_CEIL<br>CAST_TRUNC |
 | bfloat16_t | float | fp4x2_e1m2_t/fp4x2_e2m1_t<br><br>（当前均只支持PER_GROUP场景） | CAST_RINT（默认）<br>CAST_ROUND<br>CAST_FLOOR<br>CAST_CEIL<br>CAST_TRUNC |
 
-**表 5**  PER\_TENSOR接口参数说明
+**表5**  PER\_TENSOR接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -381,7 +381,7 @@ struct AscendQuantConfig {
 | offset | 输入 | 量化参数。<br><br>类型为Scalar，支持的数据类型为float。 |
 | calCount | 输入 | 参与计算的元素个数。 |
 
-**表 6**  PER\_CHANNEL接口参数说明
+**表6**  PER\_CHANNEL接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -394,7 +394,7 @@ struct AscendQuantConfig {
 | offsetCount | 输入 | 实际量化参数元素个数，且offsetCount∈[0, min(offsetTensor.GetSize(),dstTensor.GetSize())]，并且和scaleCount必须相等，要求是32的整数倍。 |
 | calCount | 输入 | 参与计算的元素个数。calCount必须是scaleCount的整数倍。 |
 
-**表 7**  PER\_TOKEN/PER\_GROUP接口参数说明
+**表7**  PER\_TOKEN/PER\_GROUP接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

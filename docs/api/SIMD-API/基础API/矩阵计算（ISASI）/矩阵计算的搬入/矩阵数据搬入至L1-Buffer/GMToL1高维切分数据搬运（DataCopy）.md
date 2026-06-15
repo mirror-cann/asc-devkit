@@ -35,13 +35,13 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 ## 参数说明<a id="zh-cn_topic_0000002566658905_section16128134420472"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | ---------- | ---------- |
 | T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002566658905_section4219135304818)。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -49,7 +49,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 | src | 输入 | 源操作数，类型为GlobalTensor，存储位置为Global Memory，源地址需要1字节对齐。 |
 | repeatParams | 输入 | 搬运参数，类型为DataCopyParams。通过该参数可以配置搬运的数据块个数、长度、地址间隔等信息，同时支持非连续和连续搬运。<br>DataCopyParams参数说明请参考[表3](#zh-cn_topic_0000002566658905_table144203616291)。 |
 
-**表 3** DataCopyParams结构体参数定义<a id="zh-cn_topic_0000002566658905_table144203616291"></a>
+**表3** DataCopyParams结构体参数定义<a id="zh-cn_topic_0000002566658905_table144203616291"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -114,7 +114,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 - 当DataCopyParams结构体参数blockCount、blockLen任意一个值为0时，表示指令不会执行，该接口将被视为NOP（空操作）。
 - DataCopyParams结构体参数的值需在取值范围内：
 
-    **表 4** DataCopyParams结构体参数取值范围
+    **表4** DataCopyParams结构体参数取值范围
 
     | 参数名称 | 取值范围 |
     | ---------- | ---------- |
@@ -162,7 +162,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 - srcGap = 0，源操作数相邻数据块之间的间隔为0。
 - dstGap = 0，目的操作数相邻数据块之间的间隔为0。
 
-**图 1** 连续搬运示意图<a id="zh-cn_topic_0000002566658905_fig769164701717"></a>
+**图1** 连续搬运示意图<a id="zh-cn_topic_0000002566658905_fig769164701717"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_continuous_copy_highdim.png)
 
@@ -177,7 +177,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 - srcGap= 1，源操作数相邻数据块之间的间隔为1。
 - dstGap= 2，目的操作数相邻数据块之间的间隔为2。
 
-**图 2** 非连续搬运示意图<a id="zh-cn_topic_0000002566658905_fig12371910189"></a>
+**图2** 非连续搬运示意图<a id="zh-cn_topic_0000002566658905_fig12371910189"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_noncontinuous_copy_highdim.png)
 

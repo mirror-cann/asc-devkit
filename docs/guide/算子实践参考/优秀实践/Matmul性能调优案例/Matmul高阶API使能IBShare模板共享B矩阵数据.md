@@ -14,7 +14,7 @@
 
 本案例的算子规格如下：
 
-**表 1**  算子规格
+**表1**  算子规格
 
 <a name="table101751125175213"></a>
 <table><thead align="left"><tr id="row8175525185219"><th class="cellrowborder" valign="top" width="25%" id="mcps1.2.5.1.1"><p id="p1417582516529"><a name="p1417582516529"></a><a name="p1417582516529"></a>输入</p>
@@ -73,12 +73,12 @@
 
 下图是不开启IBShare模板（默认使用Norm模板）的Matmul计算流水示意图。MTE2分多次从Global Memory搬运基本块到A1或B1，即使前后两次搬运的B矩阵基本块数据是相同的数据，也会重复搬运。
 
-**图 1**  不开启IBShare模板的Matmul流水示意图<a name="fig1723213921319"></a>  
+**图1**  不开启IBShare模板的Matmul流水示意图<a name="fig1723213921319"></a>  
 ![](../../../figures/不使能IBShare模板的Matmul流水示意图.png "不开启IBShare模板的Matmul流水示意图")
 
 下图是开启IBShare模板的Matmul计算流水示意图。MTE2分多次从Global Memory搬运基本块到A1或B1，若前后两次搬运的B矩阵基本块数据相同，不会重复搬运，第一次搬运到B1内的数据会被复用。
 
-**图 2**  开启IBShare模板的Matmul流水示意图<a name="fig10881182610139"></a>  
+**图2**  开启IBShare模板的Matmul流水示意图<a name="fig10881182610139"></a>  
 ![](../../../figures/使能IBShare模板的Matmul流水示意图.png "开启IBShare模板的Matmul流水示意图")
 
 Matmul API开启IBShare模板共享B矩阵的完整样例请参考[仅B矩阵开启IBShare样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_ibshareB)。开启IBShare功能的主要步骤如下：

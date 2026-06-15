@@ -30,7 +30,7 @@ enum class TPosition : uint8_t {
 
 TPosition枚举值的具体定义如下：
 
-**表 1**  TPosition枚举值含义说明
+**表1**  TPosition枚举值含义说明
 
 <a name="table5376122715308"></a>
 <table><thead align="left"><tr id="row1337716275309"><th class="cellrowborder" valign="top" width="17.53%" id="mcps1.2.3.1.1"><p id="p1537762711305"><a name="p1537762711305"></a><a name="p1537762711305"></a>枚举值</p>

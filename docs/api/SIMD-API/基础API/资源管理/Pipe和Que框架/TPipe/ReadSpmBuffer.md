@@ -79,7 +79,7 @@
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 <a name="table1794522316251"></a>
 <table><thead align="left"><tr id="row19456238252"><th class="cellrowborder" valign="top" width="12.36%" id="mcps1.2.4.1.1"><p id="p119458239258"><a name="p119458239258"></a><a name="p119458239258"></a>参数名称</p>
@@ -121,7 +121,7 @@
 </tbody>
 </table>
 
-**表 2**  DataCopyParams结构体参数定义
+**表2**  DataCopyParams结构体参数定义
 
 <a name="table9182515919"></a>
 <table><thead align="left"><tr id="row151816516917"><th class="cellrowborder" valign="top" width="15%" id="mcps1.2.3.1.1"><p id="p18182513916"><a name="p18182513916"></a><a name="p18182513916"></a>参数名称</p>
@@ -164,4 +164,3 @@
 ## 调用示例<a name="section642mcpsimp"></a>
 
 调用样例请参考[调用示例](WriteSpmBuffer.md#section642mcpsimp)。
-

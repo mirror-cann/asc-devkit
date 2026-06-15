@@ -6,7 +6,7 @@
 
 算子编译过程中，会根据数据类型生成多个.o，并通过这些数据类型在运行时索引算子二进制。某些算子支持多种数据类型，且对数据类型不敏感，这时可以使用该接口，将多种数据类型映射到同一个算子二进制，多个数据类型可以复用一个.o，从而减少二进制文件的生成。
 
-例如，如果一个算子的输入支持多种数据类型（ge::DT\_INT16 和ge::DT\_INT32），并且使用ge::DT\_INT16 输入时可以复用ge::DT\_INT32 的二进制文件而不影响最终结果，那么可以采用如下配置：
+例如，如果一个算子的输入支持多种数据类型（ge::DT\_INT16和ge::DT\_INT32），并且使用ge::DT\_INT16输入时可以复用ge::DT\_INT32 的二进制文件而不影响最终结果，那么可以采用如下配置：
 
 ```
 this->Input("x")
@@ -137,4 +137,3 @@ OpParamDef算子定义，OpParamDef请参考[OpParamDef](OpParamDef.md)。
                 .DataTypeForBinQuery({ge::DT_FLOAT, ge::DT_FLOAT, ge::DT_FLOAT16, ge::DT_FLOAT16})
                 .Format({ge::FORMAT_ND, ge::FORMAT_ND, ge::FORMAT_ND, ge::FORMAT_ND});
     ```
-

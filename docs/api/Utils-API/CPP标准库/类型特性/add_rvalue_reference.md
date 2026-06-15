@@ -23,7 +23,7 @@ struct add_rvalue_reference;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -70,4 +70,3 @@ class MyClass {};
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_rvalue_reference_t<MyClass>, MyClass&&>));
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_rvalue_reference_t<const MyClass>, const MyClass&&>));
 ```
-

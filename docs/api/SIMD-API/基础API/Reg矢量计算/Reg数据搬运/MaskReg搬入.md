@@ -54,13 +54,13 @@ Reg矢量计算数据搬运接口，适用于从UB或RegTensor搬入MaskReg。
 ## 函数原型<a name="section620mcpsimp"></a>
 
 ```
-// MaskReg搬入使用 AddrReg 存储偏移量
+// MaskReg搬入使用AddrReg存储偏移量
 template <typename T, MaskDist dist = MaskDist::DIST_NORM>
 __simd_callee__ inline void LoadAlign(MaskReg& mask, __ubuf__ T* srcAddr, AddrReg offset);
-// MaskReg搬入POST_MODE_NORMAL 场景
+// MaskReg搬入POST_MODE_NORMAL场景
 template <typename T, MaskDist dist = MaskDist::DIST_NORM>
 __simd_callee__ inline void LoadAlign(MaskReg& mask, __ubuf__ T* srcAddr);
-// MaskReg搬入POST_MODE_UPDATE 场景
+// MaskReg搬入POST_MODE_UPDATE场景
 template <typename T, PostLiteral postMode, MaskDist dist = MaskDist::DIST_NORM>
 __simd_callee__ inline void LoadAlign(MaskReg& mask, __ubuf__ T* &srcAddr, int32_t offset);
 // MaskReg从RegTensor搬入
@@ -70,7 +70,7 @@ __simd_callee__ inline void MaskGenWithRegTensor(MaskReg& dst, U& srcReg);
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  MaskReg搬入使用AddrReg存储偏移量参数说明
+**表1**  MaskReg搬入使用AddrReg存储偏移量参数说明
 
 <a name="table14132101714462"></a>
 <table><thead align="left"><tr id="row19176617124620"><th class="cellrowborder" valign="top" width="13.268673132686734%" id="mcps1.2.4.1.1"><p id="p117621724612"><a name="p117621724612"></a><a name="p117621724612"></a>参数名</p>
@@ -114,13 +114,13 @@ __simd_callee__ inline void MaskGenWithRegTensor(MaskReg& dst, U& srcReg);
 </td>
 <td class="cellrowborder" valign="top" width="12.47875212478752%" headers="mcps1.2.4.1.2 "><p id="p567151494415"><a name="p567151494415"></a><a name="p567151494415"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="74.25257474252575%" headers="mcps1.2.4.1.3 "><p id="p1185418151015"><a name="p1185418151015"></a><a name="p1185418151015"></a>实际搬运UB起始地址为 srcAddr + offset。</p>
+<td class="cellrowborder" valign="top" width="74.25257474252575%" headers="mcps1.2.4.1.3 "><p id="p1185418151015"><a name="p1185418151015"></a><a name="p1185418151015"></a>实际搬运UB起始地址为srcAddr + offset。</p>
 </td>
 </tr>
 </tbody>
 </table>
 
-**表 2**  MaskReg搬入POST\_MODE\_NORMAL场景参数说明
+**表2**  MaskReg搬入POST\_MODE\_NORMAL场景参数说明
 
 <a name="table628514470512"></a>
 <table><thead align="left"><tr id="row11285847135113"><th class="cellrowborder" valign="top" width="13.268673132686734%" id="mcps1.2.4.1.1"><p id="p1228517474515"><a name="p1228517474515"></a><a name="p1228517474515"></a>参数名</p>
@@ -164,7 +164,7 @@ __simd_callee__ inline void MaskGenWithRegTensor(MaskReg& dst, U& srcReg);
 </tbody>
 </table>
 
-**表 3**  MaskReg搬入POST\_MODE\_UPDATE场景参数说明
+**表3**  MaskReg搬入POST\_MODE\_UPDATE场景参数说明
 
 <a name="table27711449115114"></a>
 <table><thead align="left"><tr id="row277115491518"><th class="cellrowborder" valign="top" width="13.268673132686734%" id="mcps1.2.4.1.1"><p id="p10771164985116"><a name="p10771164985116"></a><a name="p10771164985116"></a>参数名</p>
@@ -218,23 +218,23 @@ __simd_callee__ inline void MaskGenWithRegTensor(MaskReg& dst, U& srcReg);
 </td>
 <td class="cellrowborder" valign="top" width="12.47875212478752%" headers="mcps1.2.4.1.2 "><p id="p167721849125110"><a name="p167721849125110"></a><a name="p167721849125110"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="74.25257474252575%" headers="mcps1.2.4.1.3 "><div class="p" id="p1461773515108"><a name="p1461773515108"></a><a name="p1461773515108"></a>当offset为int32_t类型时，POST_MODE_NORMAL与POST_MODE_UPDATE含义不一致。<a name="ul16772949185118"></a><a name="ul16772949185118"></a><ul id="ul16772949185118"><li>POST_MODE_NORMAL 场景：实际搬运UB起始地址为srcAddr + offset。</li><li>POST_MODE_UPDATE 场景：实际搬运UB起始地址为srcAddr，搬运后执行地址更新 srcAddr +=  offset。</li></ul>
+<td class="cellrowborder" valign="top" width="74.25257474252575%" headers="mcps1.2.4.1.3 "><div class="p" id="p1461773515108"><a name="p1461773515108"></a><a name="p1461773515108"></a>当offset为int32_t类型时，POST_MODE_NORMAL与POST_MODE_UPDATE含义不一致。<a name="ul16772949185118"></a><a name="ul16772949185118"></a><ul id="ul16772949185118"><li>POST_MODE_NORMAL场景：实际搬运UB起始地址为srcAddr + offset。</li><li>POST_MODE_UPDATE场景：实际搬运UB起始地址为srcAddr，搬运后执行地址更新srcAddr +=  offset。</li></ul>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
 
-**图 1**  DIST\_NORM模式搬入<a name="fig16757125316916"></a>  
+**图1**  DIST\_NORM模式搬入<a name="fig16757125316916"></a>  
 ![](../../../../figures/DIST_NORM模式搬入.png "DIST_NORM模式搬入")
 
-**图 2**  DIST\_US模式搬入<a name="fig1982131214910"></a>  
+**图2**  DIST\_US模式搬入<a name="fig1982131214910"></a>  
 ![](../../../../figures/DIST_US模式搬入.png "DIST_US模式搬入")
 
-**图 3**  DIST\_DS模式搬入<a name="fig9402845095"></a>  
+**图3**  DIST\_DS模式搬入<a name="fig9402845095"></a>  
 ![](../../../../figures/DIST_DS模式搬入.png "DIST_DS模式搬入")
 
-**表 4**  MaskReg从RegTensor搬入参数说明
+**表4**  MaskReg从RegTensor搬入参数说明
 
 <a name="table67195217515"></a>
 <table><thead align="left"><tr id="row177135218510"><th class="cellrowborder" valign="top" width="13.268673132686734%" id="mcps1.2.4.1.1"><p id="p177252135115"><a name="p177252135115"></a><a name="p177252135115"></a>参数名</p>
@@ -285,7 +285,7 @@ __simd_callee__ inline void MaskGenWithRegTensor(MaskReg& dst, U& srcReg);
 </tbody>
 </table>
 
-**图 4**  Offset功能示意图<a name="fig115968013431"></a>  
+**图4**  Offset功能示意图<a name="fig115968013431"></a>  
 ![](../../../../figures/Offset功能示意图.png "Offset功能示意图")
 
 ## 返回值说明<a name="section1575141714439"></a>
@@ -321,4 +321,3 @@ __simd_vf__ inline void MaskGenWithRegTensorVF(__ubuf__ T* dstAddr, __ubuf__ T* 
     AscendC::Reg::StoreAlign(dstAddr, mask);
 }
 ```
-

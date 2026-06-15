@@ -60,7 +60,7 @@ __aicore__ inline CubeResGroupHandle<CubeMsgType> CreateCubeResGroup(KfcWorkspac
 
 ## 参数说明<a name="zh-cn_topic_0000001526206862_section129451113125413"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table775915013250"></a>
 <table><thead align="left"><tr id="row18759203252"><th class="cellrowborder" valign="top" width="13.270000000000001%" id="mcps1.2.3.1.1"><p id="p175919042514"><a name="p175919042514"></a><a name="p175919042514"></a>参数</p>
@@ -92,7 +92,7 @@ __aicore__ inline CubeResGroupHandle<CubeMsgType> CreateCubeResGroup(KfcWorkspac
 </tbody>
 </table>
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 <a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_table111938719446"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_row6223476444"><th class="cellrowborder" valign="top" width="12.97%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"><a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"></a><a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"></a>参数</p>
@@ -159,4 +159,3 @@ CubeResGroupHandle对象实例。
 ```
 auto handle = AscendC::CreateCubeResGroup<GROUPID, MatmulApiType, MyCallbackFunc, CubeMsgBody> (desc, BLOCKSTART, BLOCKSIZE, MSGQUEUESIZE, tilingGM);
 ```
-

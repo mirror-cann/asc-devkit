@@ -51,7 +51,7 @@
 
 通过AllocMessage接口获取到消息空间地址后，发送退出消息，告知该消息队列对应的AIC无需处理该队列的消息。如下图，Queue5对应的AIV发了退出消息后，Block1将不再处理Queue5的任何消息。
 
-**图 1**  消息队列退出示意图<a name="fig915491163918"></a>  
+**图1**  消息队列退出示意图<a name="fig915491163918"></a>  
 ![](../../../../figures/消息队列退出示意图.png "消息队列退出示意图")
 
 ## 函数原型<a name="section765814724715"></a>
@@ -62,7 +62,7 @@ __aicore__ inline void SetQuit(__gm__ CubeMsgType* msg)
 
 ## 参数说明<a name="zh-cn_topic_0000001526206862_section129451113125413"></a>
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 <a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_table111938719446"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_row6223476444"><th class="cellrowborder" valign="top" width="9.09%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"><a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"></a><a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"></a>参数</p>
@@ -98,4 +98,3 @@ handle.AssignQueue(queIdx);
 auto msgPtr = a.AllocMessage();        // 获取消息空间指针msgPtr
 handle.SetQuit(msgPtr);              // 发送退出消息
 ```
-

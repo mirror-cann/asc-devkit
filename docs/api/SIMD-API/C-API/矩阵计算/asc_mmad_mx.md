@@ -68,7 +68,7 @@ PIPE_M
 ## 约束说明
 
 - 当left_height、right_width、n_dim中的任意一个值为0时，该指令不会被执行。
-- 当开启GEMV模式，即disable_gemv=false时，必须要满足 left_height=1。
+- 当开启GEMV模式，即disable_gemv=false时，必须要满足left_height=1。
 - 操作数地址对齐约束请参考[通用地址对齐约束](../通用说明和约束.md#通用地址对齐约束)。
 
 ## 调用示例

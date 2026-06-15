@@ -63,7 +63,7 @@
 
 如下图1所示，完成同一流水线内的同步控制，用于在同一流水线内部约束执行顺序。其作用是，保证前序指令中所有数据的读写工作全部完成，后序指令才能执行。
 
-**图 1**  PipeBarrier接口功能示意图<a name="zh-cn_topic_0000002549838971_fig7681194617307"></a>  
+**图1**  PipeBarrier接口功能示意图<a name="zh-cn_topic_0000002549838971_fig7681194617307"></a>  
 ![](../../../../figures/pipebarrier_function_diagram.png "PipeBarrier_接口功能示意图")
 
 ## 函数原型<a name="section620mcpsimp"></a>
@@ -75,7 +75,7 @@ __aicore__ inline void PipeBarrier()
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | -------- | -------- |
@@ -101,7 +101,7 @@ __aicore__ inline void PipeBarrier()
 
 注：仅作为示例参考，开启自动同步（Kernel直调算子工程和自定义算子开发工程已默认开启）的情况下，编译器自动插入PIPE\_V同步，无需开发者手动插入。
 
-**图 2**  Mul指令和Add指令是串行关系，必须等待Add指令执行完成后，才能执行Mul指令。<a name="fig1359216580459"></a>  
+**图2**  Mul指令和Add指令是串行关系，必须等待Add指令执行完成后，才能执行Mul指令。<a name="fig1359216580459"></a>  
 ![](../../../../figures/mul_add_pipebarrier_sync_diagram.png "Mul_Add_指令_串行依赖_PipeBarrier_同步示意图")
 
 ```cpp

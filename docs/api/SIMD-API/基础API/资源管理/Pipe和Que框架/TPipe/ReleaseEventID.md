@@ -70,7 +70,7 @@ __aicore__ inline void ReleaseEventID(TEventID id)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table58993346461"></a>
 <table><thead align="left"><tr id="row88991534124617"><th class="cellrowborder" valign="top" width="12.23%" id="mcps1.2.3.1.1"><p id="p5899163484616"><a name="p5899163484616"></a><a name="p5899163484616"></a>参数名</p>
@@ -87,7 +87,7 @@ __aicore__ inline void ReleaseEventID(TEventID id)
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="table193329316393"></a>
 <table><thead align="left"><tr id="row123331131153919"><th class="cellrowborder" valign="top" width="12.36%" id="mcps1.2.4.1.1"><p id="p8333133153913"><a name="p8333133153913"></a><a name="p8333133153913"></a>参数名</p>
@@ -128,4 +128,3 @@ AscendC::WaitFlag<AscendC::HardEvent::V_S>(eventID);
 GetTPipePtr()->ReleaseEventID<AscendC::HardEvent::V_S>(eventID); //释放scalar等vector的同步HardEvent的ID
 ......
 ```
-

@@ -60,7 +60,7 @@ Global Memory到L1 Buffer通路使用`CopyGM2L1{}`作为`copyOperation`，使用
 
 **函数参数说明**
 
-**表 1**  `Copy`接口参数说明
+**表1**  `Copy`接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
@@ -68,7 +68,7 @@ Global Memory到L1 Buffer通路使用`CopyGM2L1{}`作为`copyOperation`，使用
 | dst | 输出 | 目的张量，存储位置为`Location::L1`。 |
 | src | 输入 | 源张量，存储位置为`Location::GM`。 |
 
-**表 2**  `MakeCopy`接口参数说明
+**表2**  `MakeCopy`接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |

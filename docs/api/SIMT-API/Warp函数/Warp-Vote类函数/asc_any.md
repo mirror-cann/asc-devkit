@@ -24,7 +24,7 @@ inline int32_t asc_any(int32_t predicate)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -70,4 +70,3 @@ inline int32_t asc_any(int32_t predicate)
         dst[idx] = asc_any(lane_id); // 返回值为1
     }
     ```
-

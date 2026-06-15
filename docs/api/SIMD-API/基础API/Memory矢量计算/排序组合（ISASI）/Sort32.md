@@ -60,7 +60,7 @@ src1固定为uint32\_t类型，无论src0是float还是half类型，dst中的（
 - 当src0为float类型时，dst中的index存储在高4B，score存储在低4B；
 - 当src0为half类型时，dst中index存储在高4B，score存储在低2B，中间的2B保留。
 
-**图 1**  Sort32排序示意图
+**图1**  Sort32排序示意图
 
 ![](../../../../figures/sort32.png)<a id="图1-Sort32排序示意图"></a>
 
@@ -113,7 +113,7 @@ __aicore__ inline void Sort32(const LocalTensor<T>& dst, const LocalTensor<T>& s
 AscendC::LocalTensor<float> srcLocal0 = inQueueSrc0.DeQue<float>();
 AscendC::LocalTensor<uint32_t> srcLocal1 = inQueueSrc1.DeQue<uint32_t>();
 AscendC::LocalTensor<float> dstLocal = outQueueDst.AllocTensor<float>();
-// repeatTime = 4, 对128个数分成4组进行排序，每次完成1组32个数的排序
+// repeatTime = 4,对128个数分成4组进行排序，每次完成1组32个数的排序
 AscendC::Sort32<float>(dstLocal, srcLocal0, srcLocal1, 4);
 outQueueDst.EnQue<float>(dstLocal);
 inQueueSrc0.FreeTensor(srcLocal0);

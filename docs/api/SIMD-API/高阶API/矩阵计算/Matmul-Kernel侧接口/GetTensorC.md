@@ -83,13 +83,13 @@ __aicore__ inline void GetTensorC(const LocalTensor<DstT>& c, uint8_t enAtomic =
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | sync | 设置同步或者异步模式：同步模式设置为true；异步模式设置为false。<br><br>Ascend 950PR/Ascend 950DT支持异步模式。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品支持异步模式。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品支持异步模式。<br><br>Atlas 推理系列产品AI Core不支持异步模式。<br><br>Atlas 200I/500 A2 推理产品不支持异步模式。<!-- npu="x90" id3 --><br><br>Kirin X90支持异步模式。<!-- end id3 --> |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -98,10 +98,10 @@ __aicore__ inline void GetTensorC(const LocalTensor<DstT>& c, uint8_t enAtomic =
 | enAtomic | 输入 | 是否开启Atomic操作，默认值为0。<br><br>参数取值：<br><br>0：不开启Atomic操作<br><br>1：开启AtomicAdd累加操作<br><br>2：开启AtomicMax求最大值操作<br><br>3：开启AtomicMin求最小值操作<br><br>对于Atlas 推理系列产品AI Core，只有输出位置是GM才支持开启Atomic操作。<br><br>对于Atlas 200I/500 A2 推理产品，只有输出位置是GM才支持开启Atomic操作。 |
 | enSequentialWrite | 输入 | 是否开启连续写模式（连续写，写入[baseM, baseN]；非连续写，写入[singleCoreM, singleCoreN]中对应的位置），默认值false（非连续写模式）。<br><br>注意：非连续写模式，内部会按照迭代顺序算好偏移，开发者不需要关注；如果开发者需要决定排布顺序，可以选择连续写模式，自行按照设定的偏移进行搬运操作。<br><br>对于Atlas 200I/500 A2 推理产品，只支持非连续写模式。 |
 
-**图 1**  非连续写模式示意图  
+**图1**  非连续写模式示意图  
 ![](../../../../figures/非连续写模式示意图.png "非连续写模式示意图")
 
-**图 2**  连续写模式示意图  
+**图2**  连续写模式示意图  
 ![](../../../../figures/连续写模式示意图.png "连续写模式示意图")
 
 ## 返回值说明
@@ -195,7 +195,7 @@ __aicore__ inline void GetTensorC(const LocalTensor<DstT>& c, uint8_t enAtomic =
         for(int j = 0; j < 4; ++j) {
             LocalTensor local = que.AllocTensor<half>(); // 分配64*128大小的UB空间
             DataCopy(local, global[64 * 128 * i], 64 * 128); // 将GM的数据拷贝进UB中，进行后续的Vector操作
-            // 其他Vector 操作
+            // 其他Vector操作
         }
     }
     ```

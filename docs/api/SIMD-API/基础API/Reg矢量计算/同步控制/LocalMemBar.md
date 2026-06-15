@@ -51,7 +51,7 @@
 
 Reg矢量计算宏函数内不同流水线之间的同步指令。该同步指令指定src源流水线和dst目的流水线，如下图所示，目的流水线将等待源流水线上所有指令完成才进行执行。读写场景下，当读指令使用的寄存器和写指令使用的寄存器相同时，可以触发寄存器保序，指令将会按照代码顺序执行，不需要插入同步指令，而当使用的寄存器不同时，如果要确保读写指令顺序执行，则需要插入同步指令，写写场景同理。
 
-**图 1**  流水线等待示意图<a name="fig2635167165614"></a>  
+**图1**  流水线等待示意图<a name="fig2635167165614"></a>  
 ![](../../../../figures/流水线等待示意图.png "流水线等待示意图")
 
 ## 函数原型<a name="section620mcpsimp"></a>
@@ -63,7 +63,7 @@ __simd_callee__ inline void LocalMemBar()
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="18.27%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -85,7 +85,7 @@ __simd_callee__ inline void LocalMemBar()
 </tbody>
 </table>
 
-**表 2**  MemType取值说明
+**表2**  MemType取值说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.21%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>MemType取值</p>
@@ -131,7 +131,7 @@ __simd_callee__ inline void LocalMemBar()
 </tbody>
 </table>
 
-**表 3**  src和dst组合取值说明
+**表3**  src和dst组合取值说明
 
 <a name="table913981754616"></a>
 <table><thead align="left"><tr id="row817651712466"><th class="cellrowborder" valign="top" width="48.42%" id="mcps1.2.3.1.1"><p id="p1017614172466"><a name="p1017614172466"></a><a name="p1017614172466"></a>src</p>

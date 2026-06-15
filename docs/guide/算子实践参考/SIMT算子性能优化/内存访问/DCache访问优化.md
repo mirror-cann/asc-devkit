@@ -33,7 +33,7 @@ __global__ void sin_table_lookup_baseline(float* input, float* sin_table, float*
 }
 ```
 
-上述实现中，`input[idx]`、`sin_table[n]`、`sin_table[n+1]`和 `output[idx]`均使用默认方式访问Global Memory。输入数据虽然仅访问一次，但其加载时会占用DCache空间；输出数据写入后也可能驻留DCache。当输入和输出数据大量加载时，sin查找表的数据会被挤出DCache，导致后续线程查表时需要重新从Global Memory加载，增加DCache Read GM次数。
+上述实现中，`input[idx]`、`sin_table[n]`、`sin_table[n+1]`和`output[idx]`均使用默认方式访问Global Memory。输入数据虽然仅访问一次，但其加载时会占用DCache空间；输出数据写入后也可能驻留DCache。当输入和输出数据大量加载时，sin查找表的数据会被挤出DCache，导致后续线程查表时需要重新从Global Memory加载，增加DCache Read GM次数。
 
 反例算子的性能数据如下：
 

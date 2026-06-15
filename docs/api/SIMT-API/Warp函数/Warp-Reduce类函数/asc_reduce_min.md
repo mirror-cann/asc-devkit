@@ -34,7 +34,7 @@ inline half asc_reduce_min(half val)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -86,4 +86,3 @@ Warp内所有活跃线程输入val的最小值。
         dst[idx] = result;
     }
     ```
-

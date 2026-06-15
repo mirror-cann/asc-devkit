@@ -29,7 +29,7 @@ $$
 
 完整示例请参考：[MmadWithSparse样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_with_sparse)
 
-**表 1**  Sparse矩阵计算矩阵A、B、C解释说明
+**表1**  Sparse矩阵计算矩阵A、B、C解释说明
 
 <table>
     <thead>
@@ -66,7 +66,7 @@ $$
 
 下面的图展示了Cube如何计算出其中一行和一列的内积：
 
-**图 1**  MmadWithSparse接口计算流程示意图
+**图1**  MmadWithSparse接口计算流程示意图
 ![MmadWithSparse接口计算流程示意图](../../../../figures/mmadwithsparse_workflow_demo.png "MmadWithSparse接口计算流程示意图")
 
 其中矩阵A原始分形为\(16, 2\*C0\)，索引矩阵Index分形为\(C0，16\)，每一行矩阵A的数据会基于索引矩阵Index中对应的一列数据进行4选2，索引矩阵分形格式及生成方式请参考4选2稀疏索引矩阵，选择算法参考[矩阵A稀疏选择算法说明](#zh-cn_topic_0000002535726174_li1829819426378)；经过选择处理后的矩阵A分形变成\(16, C0\)，矩阵B原始分形为\(C0, 16\)，接下来会执行普通Mmad运算，即矩阵A中一行和矩阵B中一列完成内积运算得到结果矩阵C中对应一个元素。
@@ -79,7 +79,7 @@ $$
   - 第二个索引数据1用于指示第2个非零元素在后3个元素中的相对位置。
   - 其中，“-”表示不关心该位置上的值，即会被过滤。
 
-    **表 2**  矩阵A选择过滤规则表
+    **表2**  矩阵A选择过滤规则表
 
 
     | 索引数据0 | 索引数据1 | 元素0 | 元素1 | 元素2 | 元素3 |
@@ -96,7 +96,7 @@ $$
     | 2’b00    | 2’b00    | X     | Y     | -     | -     |
     | 2’b00    | 2’b00    | X     | Y     | -     | -     |
 
-    **图 2**  矩阵A 4：2选择算法模型<a name="zh-cn_topic_0000002535726174_fig14223210123816"></a>
+    **图2**  矩阵A 4：2选择算法模型<a name="zh-cn_topic_0000002535726174_fig14223210123816"></a>
     ![矩阵A-4-2选择算法模型](../../../../figures/sparse_mmad_4select2.png "矩阵A-4-2选择算法模型")
 
     [图2](#zh-cn_topic_0000002535726174_fig14223210123816)展示了一个uint8类型的索引元素对应选择8个原始矩阵A元素的算法模型，最后输出4个选择后的矩阵A元素。
@@ -114,7 +114,7 @@ __aicore__ inline void MmadWithSparse(const LocalTensor<T>& dst, const LocalTens
 
 ## 参数说明
 
-**表 3**  模板参数说明
+**表3**  模板参数说明
 
 
 | 参数名 | 描述                                                                                                               |
@@ -122,7 +122,7 @@ __aicore__ inline void MmadWithSparse(const LocalTensor<T>& dst, const LocalTens
 | T      | dst的数据类型。                                                                                                    |
 | U      | fm、filter的数据类型。<br>当dst、fm、filter为基础数据类型时，T必须为int32_t类型，U必须为int8_t类型，否则编译失败。 |
 
-**表 4**  参数说明
+**表4**  参数说明
 
 
 | 参数名称   | 输入/输出 | 含义                                                                                                                                                                                                                                                     |
@@ -132,7 +132,7 @@ __aicore__ inline void MmadWithSparse(const LocalTensor<T>& dst, const LocalTens
 | filter     | 输入      | 源操作数，右矩阵B，类型为LocalTensor，支持的物理存储位置为L0B Buffer（TPosition:B2）。<br><br>LocalTensor的起始地址需要512字节对齐。                                                                                                                     |
 | mmadParams | 输入      | 矩阵乘相关参数，类型为MmadParams。<br><br>具体定义请参考\${INSTALL_DIR}/include/ascendc/basic_api/interface/kernel_struct_mm.h，${INSTALL_DIR}请替换为CANN软件安装后文件存储路径。<br><br>参数说明请参考[表5](#zh_cn_topic_mmadsparse_section5_table5)。 |
 
-**表 5**  MmadParams结构体内参数说明（Sparse场景）<a id="zh_cn_topic_mmadsparse_section5_table5"></a>
+**表5**  MmadParams结构体内参数说明（Sparse场景）<a id="zh_cn_topic_mmadsparse_section5_table5"></a>
 
 
 | 参数名称        | 含义                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -143,16 +143,16 @@ __aicore__ inline void MmadWithSparse(const LocalTensor<T>& dst, const LocalTens
 | cmatrixInitVal  | 是否使能C矩阵默认初始化清零操作。默认值true。<br>true：C矩阵默认初始化为0；false：C矩阵不进行默认操作，通过设置cmatrixSource参数进行初始化。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | cmatrixSource   | 配置C矩阵初始值是否来源于BT Buffer。默认值为false。<br>false：不对L0C进行初始化操作；<br>true：使用BT Buffer（TPosition:C2）的数据对L0C进行初始化操作。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持配置为true/false。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持配置为true/false。<br><br>Atlas 200I/500 A2 推理产品，支持配置为true/false。<br><br>注意：带bias输入的接口配置该参数无效，会根据bias输入的位置来判断C矩阵初始值是否来源于BT Buffer。                                                                                                                                                                           |
 | isBias          | 该参数废弃，新开发内容不要使用该参数。如果需要累加初始矩阵，请使用带bias的接口来实现；也可以通过cmatrixInitVal和cmatrixSource参数配置C矩阵的初始值来源来实现。推荐使用带bias的接口，相比于配置cmatrixInitVal和cmatrixSource参数更加简单方便。<br><br>配置是否需要累加初始矩阵，默认值为false，取值说明如下：<br>false：矩阵乘，无需累加初始矩阵，C = A \* B。true：矩阵乘加，需要累加初始矩阵，C += A \* B。                                                                                                                                                                                                                                              |
-| unitFlag        | unitFlag是一种Mmad指令和Fixpipe指令细粒度的并行，使能该功能后，硬件每计算完一个分形，计算结果就会被搬出。取值说明如下：<br><br>0（2'b00）：不使能unitFlag；<br><br>1（2'b01）：保留值；<br><br>2（2'b10）：使能unitFlag，硬件执行完指令之后，不复位单元标记位；<br><br>3（2'b11）：使能unitFlag，硬件执行完指令之后，复位单元标记位。<br><br>使能该功能时，须将Mmad指令和Fixpipe指令的unitFlag值设置为2或3。<br><br>该参数仅支持如下型号：<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br><br>参数设置方案和特性细节可参考： [UnitFlag](关键特性说明/UnitFlag.md#ZH-CN_TOPIC_00000025690709788) |
-| kDirectionAlign | Sparse场景本开关默认为false，不支持配置为true。K方向对齐的核心功能是通过`kDirectionAlign` 参数控制在使用float数据类型时，L0A和L0B矩阵在K方向上的对齐方式。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| unitFlag        | unitFlag是一种Mmad指令和Fixpipe指令细粒度的并行，使能该功能后，硬件每计算完一个分形，计算结果就会被搬出。取值说明如下：<br><br>0（2'b00）：不使能unitFlag；<br><br>1（2'b01）：保留值；<br><br>2（2'b10）：使能unitFlag，硬件执行完指令之后，不复位单元标记位；<br><br>3（2'b11）：使能unitFlag，硬件执行完指令之后，复位单元标记位。<br><br>使能该功能时，须将Mmad指令和Fixpipe指令的unitFlag值设置为2或3。<br><br>该参数仅支持如下型号：<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br><br>参数设置方案和特性细节可参考：[UnitFlag](关键特性说明/UnitFlag.md#ZH-CN_TOPIC_00000025690709788) |
+| kDirectionAlign | Sparse场景本开关默认为false，不支持配置为true。K方向对齐的核心功能是通过`kDirectionAlign`参数控制在使用float数据类型时，L0A和L0B矩阵在K方向上的对齐方式。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | fmOffset        | 左矩阵offset（整个左矩阵对应一个值），支持Scalar（应与src_fm.dtype一致）/立即数，默认0。<br><br>注：未使用，兼容旧款产品接口传入，Atlas A2 训练系列产品/Atlas A2 推理系列产品及往后产品不做处理。                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | enSsparse       | 使能结构化稀疏特性，默认false；<br><br>注：未使用，兼容旧款产品接口传入，Atlas A2 训练系列产品/Atlas A2 推理系列产品及往后产品不做处理。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| enWinogradA     | 指示矩阵a是否通过winograd_feature_map_transform() 生成，用于支持winograd特性，bool类型，默认false；<br><br>注：未使用，兼容旧款产品接口传入，Atlas A2 训练系列产品/Atlas A2 推理系列产品及往后产品不做处理。                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| enWinogradA     | 指示矩阵a是否通过winograd_feature_map_transform()生成，用于支持winograd特性，bool类型，默认false；<br><br>注：未使用，兼容旧款产品接口传入，Atlas A2 训练系列产品/Atlas A2 推理系列产品及往后产品不做处理。                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | enWinogradB     | 指示矩阵b是否通过winograd_weight_transform()生成，用于支持winograd特性，bool类型，默认false；<br><br>注：未使用，兼容旧款产品接口传入，Atlas A2 训练系列产品/Atlas A2 推理系列产品及往后产品不做处理。                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 ## 数据类型<a id="zh_cn_topic_mmadsparse_section_datatype"></a>
 
-**表 6**  A、B、C支持的精度类型组合（Atlas 200I/500 A2 推理产品）（Atlas A2 训练系列产品/Atlas A2 推理系列产品）（Atlas A3 训练系列产品/Atlas A3 推理系列产品）
+**表6**  A、B、C支持的精度类型组合（Atlas 200I/500 A2 推理产品）（Atlas A2 训练系列产品/Atlas A2 推理系列产品）（Atlas A3 训练系列产品/Atlas A3 推理系列产品）
 
 
 | 左矩阵A | 右矩阵B | 结果矩阵C |
@@ -192,13 +192,13 @@ CopyIn(a1Local, b1Local, idxB1Local);
 AscendC::SetFlag<AscendC::HardEvent::MTE2_MTE1>(EVENT_ID0);
 AscendC::WaitFlag<AscendC::HardEvent::MTE2_MTE1>(EVENT_ID0);
 
-// L1->L0, 将原始矩阵a，稠密化矩阵b与对应idx矩阵搬运至L0
+// L1->L0,将原始矩阵a，稠密化矩阵b与对应idx矩阵搬运至L0
 SplitA(a1Local, a2Local);
 SplitB(b2Local, b1Local, idxB1Local);
 AscendC::SetFlag<AscendC::HardEvent::MTE1_M>(EVENT_ID0);
 AscendC::WaitFlag<AscendC::HardEvent::MTE1_M>(EVENT_ID0);
 
-// mmad 需要指定矩阵的维度进行计算
+// mmad需要指定矩阵的维度进行计算
 uint32 m = 128;
 uint32 k = 64;
 uint32 n = 128;

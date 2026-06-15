@@ -11,10 +11,10 @@
 
 对每个Repeat内所有元素求最小值，以及Repeat内的首个最小值元素在当前Repeat中的索引index。一次Repeat计算256字节。
 
-index_value 接口：表示index位于低半部，返回结果存储顺序为[index, value]。输入数据类型为half时，index数据类型为uint16；输入数据类型为float时，index数据类型为uint32。
-value_index 接口：表示value位于低半部，返回结果存储顺序为[value, index]。输入数据类型为half时，index数据类型为uint16；输入数据类型为float时，index数据类型为uint32。
-only_value  接口：表示只返回最值，返回结果存储顺序为[value]。
-only_index  接口：表示只返回最值索引，返回结果存储顺序为[index]。index数据类型固定为uint32
+index_value接口：表示index位于低半部，返回结果存储顺序为[index, value]。输入数据类型为half时，index数据类型为uint16；输入数据类型为float时，index数据类型为uint32。
+value_index接口：表示value位于低半部，返回结果存储顺序为[value, index]。输入数据类型为half时，index数据类型为uint16；输入数据类型为float时，index数据类型为uint32。
+only_value接口：表示只返回最值，返回结果存储顺序为[value]。
+only_index接口：表示只返回最值索引，返回结果存储顺序为[index]。index数据类型固定为uint32
 
 执行此接口后，可以继续执行[asc_get_reduce_min_cnt](./asc_get_reduce_min_cnt.md)获取全部repeat内的最小值，以及第一个最小值时的索引。
 
@@ -61,7 +61,7 @@ only_index  接口：表示只返回最值索引，返回结果存储顺序为[i
 
 ## 参数说明
 
-表1 参数说明
+表1参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 |----|-----|-----|
@@ -99,7 +99,7 @@ constexpr uint32_t dst_length = 4;
 __ubuf__ half dst[dst_length];
 
 uint8_t repeat = 2;
-// 单位为 sizeof(half)*2 = 4字节，连续存放
+// 单位为sizeof(half)*2 = 4字节，连续存放
 uint16_t dst_repeat_stride = 1;
 uint16_t src_block_stride = 1;
 uint16_t src_repeat_stride = 8;

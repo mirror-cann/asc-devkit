@@ -59,7 +59,7 @@ __aicore__ inline void Arrive(uint32_t arriveIndex)
 
 ## 参数说明<a name="zh-cn_topic_0000001526206862_section129451113125413"></a>
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 <a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_table111938719446"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_row6223476444"><th class="cellrowborder" valign="top" width="17.22%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"><a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"></a><a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"></a>参数</p>
@@ -96,4 +96,3 @@ if (id >= 0 && id < ARRIVE_NUM) {
   barA.Arrive(id);  // Arrive组中有2个AIV，分别为Block0、1，表示它们已完成任务。
 }
 ```
-

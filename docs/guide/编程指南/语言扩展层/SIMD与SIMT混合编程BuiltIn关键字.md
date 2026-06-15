@@ -95,7 +95,7 @@ __global__ __vector__ void kernel_name(__gm__ type* param1, __gm__ type* param2,
 
     最大线程数决定了每个线程可分配的寄存器数量，具体对应关系请见下表，寄存器用于存储线程中的局部变量，若局部变量的个数超出寄存器个数，容易出现栈溢出等问题。建议最大线程数与启动VF任务的dim3线程数保持一致。
 
-    **表 1**  \_\_launch\_bounds\_\_的Thread数量与每个Thread可用寄存器数
+    **表1**  \_\_launch\_bounds\_\_的Thread数量与每个Thread可用寄存器数
 
     | Thread的个数(个) | 每个Thread可用寄存器个数(个) |
     | --- | --- |
@@ -131,14 +131,14 @@ __aicore__ inline void asc_vf_call(dim3 threadNums, Args &&...args)
 
 其中模板参数为指定的SIMT VF函数名以及SIMT VF函数参数，具体描述如下：
 
-**表 2**  模板参数说明
+**表2**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | funcPtr | 用于指定SIMT入口核函数。 |
 | Args | 定义可变参数，用于传递实参到SIMT入口核函数。 |
 
-**表 3**  参数说明
+**表3**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -152,7 +152,7 @@ __aicore__ inline void asc_vf_call(dim3 threadNums, Args &&...args)
 __simt_vf__ inline void add_simt(
     __gm__ float* dst, __gm__ float* src0, __gm__ float* src1)
 {
-    // simt 代码
+    // simt代码
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
     dst[idx] = src0[idx] + src1[idx];
 }

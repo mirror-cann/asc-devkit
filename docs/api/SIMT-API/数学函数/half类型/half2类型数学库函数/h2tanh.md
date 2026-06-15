@@ -24,7 +24,7 @@ inline half2 h2tanh(half2 x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -71,4 +71,3 @@ inline half2 h2tanh(half2 x)
         dst[idx] = h2tanh(x[idx]);
     }
     ```
-

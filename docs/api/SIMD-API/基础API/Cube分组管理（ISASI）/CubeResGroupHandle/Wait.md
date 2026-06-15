@@ -60,7 +60,7 @@ __aicore__ inline bool Wait(uint16_t offset)
 
 ## 参数说明<a name="zh-cn_topic_0000001526206862_section129451113125413"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table7254433348"></a>
 <table><thead align="left"><tr id="row102594383418"><th class="cellrowborder" valign="top" width="9.2%" id="mcps1.2.3.1.1"><p id="p102574316348"><a name="p102574316348"></a><a name="p102574316348"></a>参数</p>
@@ -78,7 +78,7 @@ __aicore__ inline bool Wait(uint16_t offset)
 </tbody>
 </table>
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 <a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_table111938719446"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_row6223476444"><th class="cellrowborder" valign="top" width="9.09%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"><a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"></a><a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"></a>参数</p>
@@ -121,4 +121,3 @@ auto msgFakePtr = handle.AllocMessage();
 offset = handle.PostFakeMsg(msgFakePtr);
 bool waitState = handle.template Wait<true>(offset); // 等待AIC处理完假消息msgFake
 ```
-

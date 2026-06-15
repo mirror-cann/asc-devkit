@@ -29,7 +29,7 @@ __aicore__ inline void SetFmatrix(uint16_t l1H, uint16_t l1W, const uint8_t padL
 ## 参数说明<a name="section622mcpsimp"></a>
 
 <a name="table8955841508"></a>
-**表 1** 参数说明
+**表1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --------- | ---------- | ------ |

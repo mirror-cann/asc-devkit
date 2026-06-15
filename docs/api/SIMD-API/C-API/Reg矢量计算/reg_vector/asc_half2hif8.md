@@ -16,21 +16,21 @@
 ## 函数原型
 
 ```cpp
-// ROUND舍入模式, 非饱和模式，数据写入索引为偶数的位置
+// ROUND舍入模式,非饱和模式，数据写入索引为偶数的位置
 __simd_callee__ inline void asc_half2hif8_rna(vector_hifloat8_t& dst, vector_half src, vector_bool mask)
-// ROUND舍入模式, 饱和模式，数据写入索引为偶数的位置
+// ROUND舍入模式,饱和模式，数据写入索引为偶数的位置
 __simd_callee__ inline void asc_half2hif8_rna_sat(vector_hifloat8_t& dst, vector_half src, vector_bool mask)
-// ROUND舍入模式, 非饱和模式，数据写入索引为奇数的位置
+// ROUND舍入模式,非饱和模式，数据写入索引为奇数的位置
 __simd_callee__ inline void asc_half2hif8_rna_v2(vector_hifloat8_t& dst, vector_half src, vector_bool mask)
-// ROUND舍入模式, 饱和模式，数据写入索引为奇数的位置
+// ROUND舍入模式,饱和模式，数据写入索引为奇数的位置
 __simd_callee__ inline void asc_half2hif8_rna_sat_v2(vector_hifloat8_t& dst, vector_half src, vector_bool mask)
-// HYBRID舍入模式, 非饱和模式，数据写入索引为偶数的位置
+// HYBRID舍入模式,非饱和模式，数据写入索引为偶数的位置
 __simd_callee__ inline void asc_half2hif8_rh(vector_hifloat8_t& dst, vector_half src, vector_bool mask)
-// HYBRID舍入模式, 饱和模式，数据写入索引为偶数的位置
+// HYBRID舍入模式,饱和模式，数据写入索引为偶数的位置
 __simd_callee__ inline void asc_half2hif8_rh_sat(vector_hifloat8_t& dst, vector_half src, vector_bool mask)
-// HYBRID舍入模式, 非饱和模式，数据写入索引为奇数的位置
+// HYBRID舍入模式,非饱和模式，数据写入索引为奇数的位置
 __simd_callee__ inline void asc_half2hif8_rh_v2(vector_hifloat8_t& dst, vector_half src, vector_bool mask)
-// HYBRID舍入模式, 饱和模式，数据写入索引为奇数的位置
+// HYBRID舍入模式,饱和模式，数据写入索引为奇数的位置
 __simd_callee__ inline void asc_half2hif8_rh_sat_v2(vector_hifloat8_t& dst, vector_half src, vector_bool mask)
 ```
 
@@ -56,11 +56,11 @@ PIPE_V
 
 - 非饱和模式：
   - 输入数据超过输出类型最值时，返回输出类型的对应符号inf值。
-  - 输入数据为+/-inf时, 返回+/-inf。
+  - 输入数据为+/-inf时,返回+/-inf。
   - 输入数据为nan时，返回nan。
 - 饱和模式：
   - 输入数据超过输出类型最值时，返回输出类型的对应最值。
-  - 输入数据为+/-inf时, 返回输出类型的对应最值。
+  - 输入数据为+/-inf时,返回输出类型的对应最值。
   - 输入数据为nan时，返回0。
 - 开启饱和模式和非饱和模式时，需配置ctrl寄存器，ctrl寄存器的详细说明请参见[asc_set_ctrl.md](../../系统变量/asc_set_ctrl.md)。
 

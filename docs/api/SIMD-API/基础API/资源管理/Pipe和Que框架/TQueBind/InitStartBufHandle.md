@@ -59,7 +59,7 @@ __aicore__ inline void InitStartBufHandle(TBufHandle startBufhandle, uint8_t num
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="table181221135162517"></a>
 <table><thead align="left"><tr id="row151221135112520"><th class="cellrowborder" valign="top" width="12.471247124712471%" id="mcps1.2.4.1.1"><p id="p1353754532512"><a name="p1353754532512"></a><a name="p1353754532512"></a>参数名称</p>
@@ -146,4 +146,3 @@ pipe.InitBufPool(tbufPool, 1024 * 2);
 tbufPool.InitBuffer(srcQue0, 1, 1024);
 tbufPool.InitBuffer(srcBuf1, 1024);
 ```
-

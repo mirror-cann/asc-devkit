@@ -51,7 +51,7 @@
 
 AIV从消息队列里申请消息空间，用于存放消息结构体，返回当前申请的消息空间的地址。消息队列的深度固定为4，申请消息空间的顺序为自上而下，然后循环。当消息队列指针指向的消息空间为FREE状态时，AllocMessage返回空间的地址，否则循环等待，直到当前空间的状态为FREE。
 
-**图 1**  AllocMessage示意图<a name="fig153760010192"></a>  
+**图1**  AllocMessage示意图<a name="fig153760010192"></a>  
 ![](../../../../figures/AllocMessage示意图.png "AllocMessage示意图")
 
 ## 函数原型<a name="section765814724715"></a>
@@ -63,7 +63,7 @@ __aicore__ inline __gm__ CubeMsgType *AllocMessage()
 
 ## 参数说明<a name="zh-cn_topic_0000001526206862_section129451113125413"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table1436511617117"></a>
 <table><thead align="left"><tr id="row4365369115"><th class="cellrowborder" valign="top" width="12.82%" id="mcps1.2.3.1.1"><p id="p236526181117"><a name="p236526181117"></a><a name="p236526181117"></a>参数名</p>
@@ -102,4 +102,3 @@ auto queIdx = AscendC::GetBlockIdx();
 handle.AssignQueue(queIdx);
 auto msgPtr = handle.AllocMessage();        // 绑定队列后，从该队列中申请消息空间，消息空间地址为msgPtr。
 ```
-

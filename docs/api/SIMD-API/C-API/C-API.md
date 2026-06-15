@@ -161,19 +161,19 @@ C API文档目录，整体使用时可以引入asc_simd.h，C API列表如下：
 | [asc_set_l13d_fmatrix_b](矩阵数据搬运/asc_set_l13d_fmatrix_b.md)                                                           | 设置Feature map属性描述，用于在调用[asc_copy_l12l0a](矩阵数据搬运/asc_copy_l12l0a)/[asc_copy_l12l0b](矩阵数据搬运/asc_copy_l12l0b)的3D格式搬运接口时配置填充数值。从右矩阵获取FeatureMap的属性时使用该接口。|
 | [asc_set_l0c2gm_lrelu_alpha](矩阵数据搬运/asc_set_l0c2gm_lrelu_alpha.md)                                                   | 用于设置asc_copy_l0c2l1或asc_copy_l0c2gm接口计算过程中使用的Leaky ReLU alpha值。该值只支持half和float两种数据类型。 |
 | [asc_copy_ub2ub](矢量数据搬运/asc_copy_ub2ub.md)                                                                         | 将数据从Unified Buffer搬运到Unified Buffer。 |
-| [asc_copy_gm2ub](矢量数据搬运/asc_copy_gm2ub.md)                                                                         | 将数据从Global Memory搬运到 Unified Buffer。 |
-| [asc_copy_gm2ub_align](矢量数据搬运/asc_copy_gm2ub_align)                                                                | 提供数据非对齐搬运的功能，将数据从Global Memory搬运到 Unified Buffer，并支持8位/16位/32位数据类型搬运。 |
-| [asc_copy_ub2gm](矢量数据搬运/asc_copy_ub2gm.md)                                                                         | 将数据从Unified Buffer搬运到 Global Memory。 |
-| [asc_copy_ub2gm_align](矢量数据搬运/asc_copy_ub2gm_align)                                                                | 将数据从Unified Buffer搬运到 Global Memory，支持8位/16位/32位分块拷贝操作。 |
+| [asc_copy_gm2ub](矢量数据搬运/asc_copy_gm2ub.md)                                                                         | 将数据从Global Memory搬运到Unified Buffer。 |
+| [asc_copy_gm2ub_align](矢量数据搬运/asc_copy_gm2ub_align)                                                                | 提供数据非对齐搬运的功能，将数据从Global Memory搬运到Unified Buffer，并支持8位/16位/32位数据类型搬运。 |
+| [asc_copy_ub2gm](矢量数据搬运/asc_copy_ub2gm.md)                                                                         | 将数据从Unified Buffer搬运到Global Memory。 |
+| [asc_copy_ub2gm_align](矢量数据搬运/asc_copy_ub2gm_align)                                                                | 将数据从Unified Buffer搬运到Global Memory，支持8位/16位/32位分块拷贝操作。 |
 | [asc_set_copy_pad_val](矢量数据搬运/asc_set_copy_pad_val.md)                                                             | 和asc_copy_gm2ub_align或asc_copy_ub2gm_align接口配合使用，设置连续搬运数据块左右两侧需要填补的数据值。 |
-| [asc_copy_ub2l1](矢量数据搬运/asc_copy_ub2l1.md)                                                                         | 将数据从Unified Buffer (UB) 搬运到L1 Buffer。 |
-| [asc_ndim_copy_gm2ub](矢量数据搬运/asc_ndim_copy_gm2ub.md)                                                               | 多维数据搬运接口，将数据从Global Memory (GM) 搬运到 Unified Buffer (UB)。 |
-| [asc_set_gm2ub_loop1_stride](矢量数据搬运/asc_set_gm2ub_loop1_stride.md)                                                 | 使用[asc_copy_gm2ub_align](矢量数据搬运/asc_copy_gm2ub_align)将数据从Global Memory (GM) 搬运到 Unified Buffer (UB)时，设置内层循环中相邻迭代数据块间的间隔。 |
-| [asc_set_gm2ub_loop2_stride](矢量数据搬运/asc_set_gm2ub_loop2_stride.md)                                                 | 使用[asc_copy_gm2ub_align](矢量数据搬运/asc_copy_gm2ub_align)将数据从Global Memory (GM) 搬运到 Unified Buffer (UB)时，设置外层循环中相邻迭代数据块间的间隔。 |
-| [asc_set_gm2ub_loop_size](矢量数据搬运/asc_set_gm2ub_loop_size.md)                                                       | 使用[asc_copy_gm2ub_align](矢量数据搬运/asc_copy_gm2ub_align)将数据从Global Memory (GM) 搬运到 Unified Buffer (UB)时，设置数据搬运流程中的循环次数。 |
-| [asc_set_ub2gm_loop1_stride](矢量数据搬运/asc_set_ub2gm_loop1_stride.md)                                                 | 使用[asc_copy_ub2gm_align](矢量数据搬运/asc_copy_ub2gm_align)将数据从Unified Buffer (UB) 搬运到 Global Memory (GM)时，设置内层循环中源操作数在相邻迭代间的数据块间隔，以及目的操作数在相邻迭代间的数据块间隔。 |
-| [asc_set_ub2gm_loop2_stride](矢量数据搬运/asc_set_ub2gm_loop2_stride.md)                                                 | 使用[asc_copy_ub2gm_align](矢量数据搬运/asc_copy_ub2gm_align)将数据从Unified Buffer (UB) 搬运到 Global Memory (GM)时，设置外层循环中源操作数在相邻迭代间的数据块间隔，以及目的操作数在相邻迭代间的数据块间隔。 |
-| [asc_set_ub2gm_loop_size](矢量数据搬运/asc_set_ub2gm_loop_size.md)                                                       | 使用[asc_copy_ub2gm_align](矢量数据搬运/asc_copy_ub2gm_align)将数据从Unified Buffer (UB) 搬运到 Global Memory (GM)时，设置内层循环和外层循环的次数。 |
+| [asc_copy_ub2l1](矢量数据搬运/asc_copy_ub2l1.md)                                                                         | 将数据从Unified Buffer (UB)搬运到L1 Buffer。 |
+| [asc_ndim_copy_gm2ub](矢量数据搬运/asc_ndim_copy_gm2ub.md)                                                               | 多维数据搬运接口，将数据从Global Memory (GM)搬运到Unified Buffer (UB)。 |
+| [asc_set_gm2ub_loop1_stride](矢量数据搬运/asc_set_gm2ub_loop1_stride.md)                                                 | 使用[asc_copy_gm2ub_align](矢量数据搬运/asc_copy_gm2ub_align)将数据从Global Memory (GM)搬运到Unified Buffer (UB)时，设置内层循环中相邻迭代数据块间的间隔。 |
+| [asc_set_gm2ub_loop2_stride](矢量数据搬运/asc_set_gm2ub_loop2_stride.md)                                                 | 使用[asc_copy_gm2ub_align](矢量数据搬运/asc_copy_gm2ub_align)将数据从Global Memory (GM)搬运到Unified Buffer (UB)时，设置外层循环中相邻迭代数据块间的间隔。 |
+| [asc_set_gm2ub_loop_size](矢量数据搬运/asc_set_gm2ub_loop_size.md)                                                       | 使用[asc_copy_gm2ub_align](矢量数据搬运/asc_copy_gm2ub_align)将数据从Global Memory (GM)搬运到Unified Buffer (UB)时，设置数据搬运流程中的循环次数。 |
+| [asc_set_ub2gm_loop1_stride](矢量数据搬运/asc_set_ub2gm_loop1_stride.md)                                                 | 使用[asc_copy_ub2gm_align](矢量数据搬运/asc_copy_ub2gm_align)将数据从Unified Buffer (UB)搬运到Global Memory (GM)时，设置内层循环中源操作数在相邻迭代间的数据块间隔，以及目的操作数在相邻迭代间的数据块间隔。 |
+| [asc_set_ub2gm_loop2_stride](矢量数据搬运/asc_set_ub2gm_loop2_stride.md)                                                 | 使用[asc_copy_ub2gm_align](矢量数据搬运/asc_copy_ub2gm_align)将数据从Unified Buffer (UB)搬运到Global Memory (GM)时，设置外层循环中源操作数在相邻迭代间的数据块间隔，以及目的操作数在相邻迭代间的数据块间隔。 |
+| [asc_set_ub2gm_loop_size](矢量数据搬运/asc_set_ub2gm_loop_size.md)                                                       | 使用[asc_copy_ub2gm_align](矢量数据搬运/asc_copy_ub2gm_align)将数据从Unified Buffer (UB)搬运到Global Memory (GM)时，设置内层循环和外层循环的次数。 |
 | [asc_set_ndim_loop_stride](矢量数据搬运/asc_set_ndim_loop_stride.md)                                                     | 设置[asc_ndim_copy_gm2ub](矢量数据搬运/asc_ndim_copy_gm2ub.md)在进行多维搬运时每个维度内的源操作数与目的操作数的元素之间的间隔，最多设置5个维度。 |
 | [asc_set_ndim_pad_value](矢量数据搬运/asc_set_ndim_pad_value.md)                                                         | 设置[asc_ndim_copy_gm2ub](矢量数据搬运/asc_ndim_copy_gm2ub.md)接口Padding的填充固定值。 |
 
@@ -274,7 +274,7 @@ C API文档目录，整体使用时可以引入asc_simd.h，C API列表如下：
 |   API名称   |   说明   |
 |----------|-----------|
 | [asc_datacache_preload](缓存控制/asc_datacache_preload.md)| 从源地址所在的特定GM地址预加载数据到Data Cache中。 |
-| [asc_dcci](缓存控制/asc_dcci.md) | 用于刷新Cache， 保证Cache的一致性。 |
+| [asc_dcci](缓存控制/asc_dcci.md) | 用于刷新Cache，保证Cache的一致性。 |
 | <cann-filter npu_type = "950"> [asc_dci](缓存控制/asc_dci.md) | 数据缓存失效，使整个数据缓存无效化。</cann-filter>|
 | [asc_get_icache_preload_status](缓存控制/asc_get_icache_preload_status.md) | 获取ICache的Preload的状态。 |
 | [asc_icache_preload](缓存控制/asc_icache_preload.md) | 从指令所在DDR地址预加载数据到对应的cacheline中。 |

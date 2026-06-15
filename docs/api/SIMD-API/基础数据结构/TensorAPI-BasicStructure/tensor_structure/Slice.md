@@ -21,7 +21,7 @@ __aicore__ inline constexpr decltype(auto) Slice(Tensor&& tensor, const Coord& c
 
 ## 参数说明
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 类型 | 描述 |
 |--------|------|------|
@@ -29,7 +29,7 @@ __aicore__ inline constexpr decltype(auto) Slice(Tensor&& tensor, const Coord& c
 | Coord | 输入 | 坐标类型，通常为Coord<...>元组类型。 |
 | Info | 输入 | 切片描述类型，可以为Shape类型或Layout类型。传入Shape时，表示按给定形状截取子张量；传入Layout时，表示按Layout中的Shape信息截取子张量并保持原有布局模式和Stride结构。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名 | 类型 | 描述 |
 |--------|------|------|

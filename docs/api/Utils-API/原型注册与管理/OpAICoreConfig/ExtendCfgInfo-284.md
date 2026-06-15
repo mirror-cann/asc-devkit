@@ -12,7 +12,7 @@ OpAICoreConfig &OpAICoreConfig::ExtendCfgInfo(const char *key, const char *value
 
 ## 参数说明<a name="zh-cn_topic_0000001600884192_zh-cn_topic_0000001576875005_zh-cn_topic_0000001525424352_section75395119104"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="zh-cn_topic_0000001600884192_zh-cn_topic_0000001576875005_zh-cn_topic_0000001575944081_table111938719446"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001600884192_zh-cn_topic_0000001576875005_zh-cn_topic_0000001575944081_row6223476444"><th class="cellrowborder" valign="top" width="17.22%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001600884192_zh-cn_topic_0000001576875005_zh-cn_topic_0000001575944081_p10223674448"><a name="zh-cn_topic_0000001600884192_zh-cn_topic_0000001576875005_zh-cn_topic_0000001575944081_p10223674448"></a><a name="zh-cn_topic_0000001600884192_zh-cn_topic_0000001576875005_zh-cn_topic_0000001575944081_p10223674448"></a>参数</p>
@@ -42,7 +42,7 @@ OpAICoreConfig &OpAICoreConfig::ExtendCfgInfo(const char *key, const char *value
 
 ExtendCfgInfo支持的参数如下表：
 
-**表 2**  ExtendCfgInfo支持配置的参数
+**表2**  ExtendCfgInfo支持配置的参数
 
 <a name="table57844329252"></a>
 <table><thead align="left"><tr id="row07842329252"><th class="cellrowborder" valign="top" width="16.919999999999998%" id="mcps1.2.3.1.1"><p id="p1778416325253"><a name="p1778416325253"></a><a name="p1778416325253"></a>参数</p>
@@ -87,4 +87,3 @@ OpAICoreConfig算子定义，请参考[OpAICoreConfig](OpAICoreConfig.md)。
 ## 约束说明<a name="zh-cn_topic_0000001600884192_zh-cn_topic_0000001576875005_zh-cn_topic_0000001525424352_section19165124931511"></a>
 
 无
-

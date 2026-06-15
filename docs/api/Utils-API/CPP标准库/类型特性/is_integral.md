@@ -23,7 +23,7 @@ struct is_integral;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -87,4 +87,3 @@ AscendC::Std::is_integral::value:0
 AscendC::Std::is_integral::value:0
 AscendC::Std::is_integral::value:0
 ```
-

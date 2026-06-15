@@ -12,7 +12,7 @@ Mc2CcTilingConfig(const std::string &groupName, uint32_t opType, const std::stri
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -24,7 +24,7 @@ Mc2CcTilingConfig(const std::string &groupName, uint32_t opType, const std::stri
 | srcDataType | 输入 | 通信任务中输入数据的数据类型。uint8_t类型，该参数的取值范围请参考[表1](../HCCL-Kernel侧接口/HCCL使用说明.md#table116710585514)。<br><br>Ascend 950PR/Ascend 950DT，不同通信任务支持的输入数据类型如下：<br>AllReduce通信任务：支持的输入类型为int16_t、half、bfloat16_t、int32_t、float。<br>AllGather、AllToAll、AllToAllV、AllToAllVWrite通信任务：支持的输入类型为int8_t、uint8_t、hifloat8_t、fp8_e5m2_t、fp8_e4m3fn_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、double。<br>ReduceScatter通信任务：支持的输入类型为int8_t、hifloat8_t、fp8_e5m2_t、fp8_e4m3fn_t、int16_t、half、bfloat16_t、int32_t、float。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，该参数暂不支持，配置后不生效。<br><br>针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，该参数暂不支持，配置后不生效。 |
 | commEngine | 输入 | 通信引擎。uint8_t类型，该参数的取值范围请参考：[HcclCommConfig](https://gitcode.com/cann/hcomm/blob/master/docs/zh/api_ref/comm_mgr_c/data_type_definition/HcclCommConfig.md#参数说明)中的hcclOpExpansionMode参数的取值说明。 |
 
-**表 2**  HcclCMDType参数说明
+**表2**  HcclCMDType参数说明
 
 | 数据类型 | 说明 |
 | --- | --- |

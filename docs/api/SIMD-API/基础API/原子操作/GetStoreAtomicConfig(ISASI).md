@@ -26,7 +26,7 @@ __aicore__ inline void GetStoreAtomicConfig(uint16_t& atomicType, uint16_t& atom
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 |--------|-----------|------|

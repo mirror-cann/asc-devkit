@@ -66,7 +66,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -84,7 +84,7 @@ struct TanhConfig {
 };
 ```
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -112,12 +112,12 @@ struct TanhConfig {
 
 // 接口框架申请临时空间，全部参与计算
 AscendC::Tanh(dstLocal, srcLocal);
-// 接口框架申请临时空间，部分参与计算, 需要参与计算的元素个数为512
+// 接口框架申请临时空间，部分参与计算,需要参与计算的元素个数为512
 AscendC::Tanh(dstLocal, srcLocal, 512);
 
 // 通过sharedTmpBuffer入参传入临时空间，全部参与计算
 AscendC::Tanh(dstLocal, srcLocal, sharedTmpBuffer);
-// 通过sharedTmpBuffer入参传入临时空间，部分参与计算, 需要参与计算的元素个数为512
+// 通过sharedTmpBuffer入参传入临时空间，部分参与计算,需要参与计算的元素个数为512
 AscendC::Tanh(dstLocal, srcLocal, sharedTmpBuffer, 512);
 static constexpr AscendC::TanhAlgo algo = AscendC::TanhAlgo::SUBSECTION_COMPENSATION;
 static constexpr AscendC::TanhConfig config = { algo };

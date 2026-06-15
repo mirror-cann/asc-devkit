@@ -40,7 +40,7 @@ private:
 
 ## 函数说明<a name="zh-cn_topic_0000001656780128_section1340317244469"></a>
 
-**表 1**  OpAttrDef类成员函数说明
+**表1**  OpAttrDef类成员函数说明
 
 <a name="zh-cn_topic_0000001656780128_zh-cn_topic_0000001441184464_table18149577913"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001656780128_zh-cn_topic_0000001441184464_row61411571196"><th class="cellrowborder" valign="top" width="16.650000000000002%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001656780128_zh-cn_topic_0000001441184464_p2093713281104"><a name="zh-cn_topic_0000001656780128_zh-cn_topic_0000001441184464_p2093713281104"></a><a name="zh-cn_topic_0000001656780128_zh-cn_topic_0000001441184464_p2093713281104"></a>函数名称</p>
@@ -193,4 +193,3 @@ private:
 </tr>
 </tbody>
 </table>
-

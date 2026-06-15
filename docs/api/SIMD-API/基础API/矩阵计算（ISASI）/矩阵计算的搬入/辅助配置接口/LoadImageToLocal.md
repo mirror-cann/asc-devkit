@@ -25,7 +25,7 @@ __aicore__ inline void LoadImageToLocal(const LocalTensor<T>& dst, const LoadIma
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1** 参数说明
+**表1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
@@ -33,7 +33,7 @@ __aicore__ inline void LoadImageToLocal(const LocalTensor<T>& dst, const LoadIma
 | loadDataParams | 输入 | LoadData参数结构体，类型为LoadImageToLocalParams。<br>具体定义请参考：\$\{INSTALL_DIR\}/include/ascendc/basic_api/interface/kernel_struct_mm.h，\$\{INSTALL_DIR\}请替换为CANN软件安装后文件存储路径。<br>参数说明参考[表2](#table8955841508)。 |
 
 <a name="table8955841508"></a>
-**表 2** LoadImageToLocalParams结构体内参数说明
+**表2** LoadImageToLocalParams结构体内参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |

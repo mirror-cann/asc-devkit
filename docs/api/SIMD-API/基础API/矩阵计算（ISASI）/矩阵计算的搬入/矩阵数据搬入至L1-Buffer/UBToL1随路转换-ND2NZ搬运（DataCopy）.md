@@ -32,13 +32,13 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 ## 参数说明<a id="section1251613311396"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | ---------- | ---------- |
 | T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#section4219135304818)。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -46,7 +46,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 | src | 输入 | 源操作数，类型为LocalTensor，存储位置为Unified Buffer（TPosition为VECIN/VECCALC/VECOUT）。 |
 | intriParams | 输入 | 搬运参数，类型为[Nd2NzParams](#table844881954715)。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\${INSTALL\_DIR}请替换为CANN软件安装后文件存储路径。 |
 
-**表 3** Nd2NzParams结构体参数定义<a id="table844881954715"></a>
+**表3** Nd2NzParams结构体参数定义<a id="table844881954715"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -70,7 +70,7 @@ ND2NZ转换示意图如下，样例中参数设置值和解释说明如下：
 - dstNzNStride = 2，表示src中一个ND矩阵的第x行和第x+1行转换为NZ格式后在dst中的偏移，即A1和B1在dst之间的偏移为2个DataBlock。
 - dstNzMatrixStride = 96，表示dst中第x个ND矩阵的起点和第x+1个ND矩阵的起点的偏移，即A1和C1之间的距离，即为6个DataBlock，6 * 16 = 96个元素。
 
-**图 1** ND2NZ转换示意图（half数据类型）<a id="fig128961542184620"></a>
+**图1** ND2NZ转换示意图（half数据类型）<a id="fig128961542184620"></a>
 
 ![](../../../../../figures/ND2NZ转换示意图（half数据类型）.png)
 

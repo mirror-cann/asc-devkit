@@ -14,7 +14,7 @@
 
 在某些算法下，一次完整的集合通信任务可以细分为多个步骤，对每个步骤的数据完成点对点的通信任务，称为细粒度通信。以通信算法"AlltoAll=level0:fullmesh;level1:pairwise"、通信步长为1的AlltoAllV通信任务为例，这里参数level0代表配置Server（昇腾AI Server，通常是8卡或16卡的昇腾NPU设备组成的服务器形态的统称）内通信算法，参数level1代表配置Server间通信算法，fullmesh为全连接通信算法，pairwise为逐对通信算法；如下图所示，该示例展示了AlltoAllV通信的所有待发送数据、每一步通信完成后各卡收到的数据。
 
-**图 1**  使用pairwise算法的AlltoAllV通信步骤示意图  
+**图1**  使用pairwise算法的AlltoAllV通信步骤示意图  
 ![](../../../../figures/使用pairwise算法的AlltoAllV通信步骤示意图.png "使用pairwise算法的AlltoAllV通信步骤示意图")
 
 在通算融合算子中，通过调用本接口，结合对应的Prepare原语，获取通信算法每一步的输入或输出，让计算、通信实现更精细粒度的流水排布，从而获得更好的性能收益。
@@ -28,13 +28,13 @@ __aicore__ inline int32_t Iterate(HcclHandle handleId, uint16_t *seqSlices, uint
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | sync | 输入 | bool类型。是否需要等待当前通信步骤完成再进行后续计算或通信任务，参数取值如下：<br>true：默认值，表示阻塞并等待当前通信步骤完成。该参数取值为true时，无需再调用[Wait](Wait-98.md)接口等待通信任务完成。<br>false：表示不等待当前通信步骤完成。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

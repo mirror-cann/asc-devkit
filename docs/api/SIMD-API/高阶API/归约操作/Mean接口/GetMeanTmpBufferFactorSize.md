@@ -28,7 +28,7 @@ void GetMeanTmpBufferFactorSize(const uint32_t typeSize, uint32_t& maxLiveNodeCo
 
 ## 参数说明
 
-**表 1**  参数列表
+**表1**  参数列表
 
 | 接口 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -53,4 +53,3 @@ uint32_t maxLiveNodeCnt = 0;
 uint32_t extraBuf = 0;
 AscendC::GetMeanTmpBufferFactorSize(typeSize, maxLiveNodeCnt, extraBuf);
 ```
-

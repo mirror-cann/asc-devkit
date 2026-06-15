@@ -35,14 +35,14 @@ coalesced_group tiled_partition(const coalesced_group& parent, unsigned int tile
 
 ## 参数说明
 
-**表 1**  模板版本参数说明
+**表1**  模板版本参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | g | 输入 | 被划分的父组，类型只能是`thread_block`或`thread_block_tile`。 |
 | Size | 输入 | 模板参数，指定划分出的`thread_block_tile`组大小。 |
 
-**表 2**  非模板版本参数说明
+**表2**  非模板版本参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

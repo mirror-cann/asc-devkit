@@ -16,7 +16,7 @@ int64_t GetTiling(AscendC::tiling::Conv3DBackpropInputTilingData &tiling)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -61,4 +61,3 @@ tiling.SetOutputPadding(0, 0, 0); // 对Conv3dTranspose的输出Y进行padding
 optiling::Conv3DBackpropInputTilingData tilingData;
 int ret = tiling.GetTiling(tilingData);  // 获取Tiling参数
 ```
-

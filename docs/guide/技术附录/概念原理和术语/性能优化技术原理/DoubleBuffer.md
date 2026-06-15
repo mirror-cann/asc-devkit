@@ -6,7 +6,7 @@
 
 如[图1](#fig994415385460)所示，考虑一个完整的数据搬运和计算过程，CopyIn过程将数据从Global Memory搬运到Local Memory，Vector计算单元完成计算后，经过CopyOut过程将计算结果搬回Global Memory。
 
-**图 1**  数据搬运与Vector计算过程<a name="fig994415385460"></a>  
+**图1**  数据搬运与Vector计算过程<a name="fig994415385460"></a>  
 ![](../../../figures/数据搬运与Vector计算过程.png "数据搬运与Vector计算过程")
 
 在此过程中，数据搬运与Vector计算串行执行，Vector计算单元无可避免存在资源闲置问题。举例而言，若CopyIn、Compute、CopyOut三阶段分别耗时_t_，则Vector的时间利用率仅为1/3，等待时间过长，Vector利用率严重不足。
@@ -19,7 +19,7 @@
 pipe.InitBuffer(inQueueX, 2, 256);
 ```
 
-**图 2**  DoubleBuffer机制<a name="fig189541246194710"></a>  
+**图2**  DoubleBuffer机制<a name="fig189541246194710"></a>  
 ![](../../../figures/DoubleBuffer机制.png "DoubleBuffer机制")
 
 **需要注意**：
@@ -30,4 +30,3 @@ pipe.InitBuffer(inQueueX, 2, 256);
 -   又如，当原始数据较小且Vector可一次性完成所有计算时，强行使用DoubleBuffer会降低Vector计算资源的利用率，最终效果可能适得其反。
 
 因此，DoubleBuffer的性能收益需综合考虑Vector算力、数据量大小、搬运与计算时间占比等多种因素。
-

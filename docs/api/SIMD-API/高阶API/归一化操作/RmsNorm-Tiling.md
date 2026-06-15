@@ -50,7 +50,7 @@ bool GetRmsNormTilingInfo(const ge::Shape& srcShape, const ge::Shape& originSrcS
 
 ## 参数说明
 
-**表 1**  GetRmsNormMaxMinTmpSize接口参数说明
+**表1**  GetRmsNormMaxMinTmpSize接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -60,7 +60,7 @@ bool GetRmsNormTilingInfo(const ge::Shape& srcShape, const ge::Shape& originSrcS
 | minValue | 输出 | RmsNorm接口能完成计算所需最小临时空间大小。为保证功能正确，接口计算时预留/申请的临时空间不能小于该数值。最小空间大小为0表示计算不需要临时空间。 |
 | isBasicBlock | 输入 | 是否要开启基本块计算，与kernel侧接口一致，默认false。 |
 
-**表 2**  GetRmsNormTilingInfo接口参数说明
+**表2**  GetRmsNormTilingInfo接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

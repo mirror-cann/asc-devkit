@@ -25,7 +25,7 @@ __aicore__ inline void Where(const LocalTensor<T>& dst, const U& src0, const S& 
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -34,7 +34,7 @@ __aicore__ inline void Where(const LocalTensor<T>& dst, const U& src0, const S& 
 | S | LocalTensor类型或标量类型。根据输入参数src1自动推导类型，开发者无需配置该参数，保证src1的数据类型与目的操作数保持一致即可。 |
 | V | 条件的数据类型，当前支持的数据类型为：bool。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名称 | 类型 | 说明 |
 | --- | --- | --- |

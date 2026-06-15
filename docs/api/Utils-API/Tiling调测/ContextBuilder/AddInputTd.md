@@ -104,10 +104,9 @@ context_ascendc::ContextBuilder builder
     .SetOpNameType("tmpName", "tmpType")
     .AddInputTd(0, ge::DT_FLOAT16, ge::FORMAT_ND, ge::FORMAT_ND, x_shape, reinterpret_cast<void *>(x_const_value.data()))  // 内部会将该指针指向的数据转为float16类型
     .AddInputTd(1, ge::DT_FLOAT16, ge::FORMAT_ND, ge::FORMAT_ND, weight1_shape)
-    .AddInputTd(2, ge::DT_INT64, ge::FORMAT_ND, ge::FORMAT_ND, expert_tokens_shape, "./expert_tokens_data.bin")   // index2 的 第一个dynamic tensor，值依赖场景传入数据路径
-    .AddInputTd(3, ge::DT_INT64, ge::FORMAT_ND, ge::FORMAT_ND, expert_tokens_shape, "./expert_tokens_data.bin")   // index2 的 第二个dynamic tensor， 值依赖场景传入数据路径
+    .AddInputTd(2, ge::DT_INT64, ge::FORMAT_ND, ge::FORMAT_ND, expert_tokens_shape, "./expert_tokens_data.bin")   // index2 的第一个dynamic tensor，值依赖场景传入数据路径
+    .AddInputTd(3, ge::DT_INT64, ge::FORMAT_ND, ge::FORMAT_ND, expert_tokens_shape, "./expert_tokens_data.bin")   // index2 的第二个dynamic tensor，值依赖场景传入数据路径
     .AddInputTd(4, ge::DT_FLOAT16, ge::FORMAT_ND, ge::FORMAT_ND, bias1_shape)
     .AddInputTd(5, ge::DT_BF16, ge::FORMAT_ND, ge::FORMAT_ND, bias2_shape, reinterpret_cast<void*>(bias_value.data()))  // 内部会将该指针指向的数据转为Bf16类型
 
 ```
-

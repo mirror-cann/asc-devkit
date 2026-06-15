@@ -22,7 +22,7 @@ __aicore__ inline GM_ADDR GetWindowsOutAddr(uint32_t rankId)
 
 ## 参数说明
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -39,4 +39,3 @@ __aicore__ inline GM_ADDR GetWindowsOutAddr(uint32_t rankId)
 ## 调用示例
 
 请参见[GetWindowsInAddr](GetWindowsInAddr.md)的调用示例。
-

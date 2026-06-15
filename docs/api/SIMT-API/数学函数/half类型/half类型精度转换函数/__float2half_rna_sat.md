@@ -22,7 +22,7 @@ inline half __float2half_rna_sat(const float x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -57,4 +57,3 @@ SIMT编程场景由于无法设置CTRL寄存器，本接口的饱和模式不生
         dst[idx] = __float2half_rna_sat(x[idx]);
     }
     ```
-

@@ -58,7 +58,7 @@ __aicore__ inline MmadBitModeParams(const MmadBitModeParams &mmadParams_);
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 
 | 参数名称   | 输入/输出 | 含义                                                                                                                                                                                                                                                                      |
@@ -69,7 +69,7 @@ __aicore__ inline MmadBitModeParams(const MmadBitModeParams &mmadParams_);
 | bias       | 输入      | 源操作数，bias矩阵，类型为LocalTensor，支持的物理存储位置为BT Buffer（TPosition:C2）。<br><br>LocalTensor的起始地址需要按照64字节对齐。                                                                                                                                   |
 | mmadParams | 输入      | 矩阵乘相关参数。该参数类型的具体定义请参考\${INSTALL_DIR}/include/ascendc/basic_api/interface/kernel_struct_mm.h，${INSTALL_DIR}请替换为CANN软件安装后文件存储路径。<br><br>MmadBitModeParams参数说明请参考下表。                                                         |
 
-**表 2**  MmadBitModeParams类参数说明
+**表2**  MmadBitModeParams类参数说明
 
 
 | 参数名称       | 含义                                                                                                                                                      |
@@ -77,7 +77,7 @@ __aicore__ inline MmadBitModeParams(const MmadBitModeParams &mmadParams_);
 | config0        | uint64_t类型，与MmadBitModeConfig0位域（bit-field）结构体类型参数config0BitMode组成联合体（union），初始化为0，可以使用类对象的GetConfig0()函数获取其值。 |
 | config0BitMode | MmadBitModeConfig0位域（bit-field）结构体类型，参数参考[表3](#zh_cn_topic_mmadbitmode_section4_table3)，与config0组成联合体（union）。                    |
 
-**表 3**  MmadBitModeConfig0结构体参数说明<a id="zh_cn_topic_mmadbitmode_section4_table3"></a>
+**表3**  MmadBitModeConfig0结构体参数说明<a id="zh_cn_topic_mmadbitmode_section4_table3"></a>
 
 
 | 参数名称       | 含义                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -92,7 +92,7 @@ __aicore__ inline MmadBitModeParams(const MmadBitModeParams &mmadParams_);
 
 ## 数据类型<a id="zh_cn_topic_mmadbitmode_section_datatype"></a>
 
-**表 4**  Mmad接口左矩阵、右矩阵、Bias矩阵、结果矩阵支持的精度类型组合
+**表4**  Mmad接口左矩阵、右矩阵、Bias矩阵、结果矩阵支持的精度类型组合
 
 
 | 左矩阵fm type | 右矩阵filter type | bias type | 结果矩阵dst type |
@@ -107,7 +107,7 @@ __aicore__ inline MmadBitModeParams(const MmadBitModeParams &mmadParams_);
 | fp8_e5m2_t    | fp8_e5m2_t        | float     | float            |
 | hifloat8_t    | hifloat8_t        | float     | float            |
 
-**表 5**  MmadMx接口左矩阵、右矩阵、Scale矩阵、Bias矩阵、结果矩阵支持的精度类型组合
+**表5**  MmadMx接口左矩阵、右矩阵、Scale矩阵、Bias矩阵、结果矩阵支持的精度类型组合
 
 
 | 左矩阵fm     | 右矩阵filter | Scale矩阵  | 偏置Bias | 结果矩阵dst |

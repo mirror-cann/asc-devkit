@@ -32,7 +32,7 @@ ShapeInfo用来存放LocalTensor或GlobalTensor的shape信息。
 
 ## 函数说明<a name="zh-cn_topic_0000001441184464_section622mcpsimp"></a>
 
-**表 1**  ShapeInfo结构参数说明
+**表1**  ShapeInfo结构参数说明
 
 <a name="zh-cn_topic_0000001441184464_table18149577913"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001441184464_row61411571196"><th class="cellrowborder" valign="top" width="19.59%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001441184464_p2093713281104"><a name="zh-cn_topic_0000001441184464_p2093713281104"></a><a name="zh-cn_topic_0000001441184464_p2093713281104"></a>参数名称</p>
@@ -76,7 +76,7 @@ ShapeInfo用来存放LocalTensor或GlobalTensor的shape信息。
 </tbody>
 </table>
 
-**表 2**  GetShapeSize参数说明
+**表2**  GetShapeSize参数说明
 
 <a name="table153364918102"></a>
 <table><thead align="left"><tr id="row7363209171013"><th class="cellrowborder" valign="top" width="19.81%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -96,4 +96,3 @@ ShapeInfo用来存放LocalTensor或GlobalTensor的shape信息。
 </tr>
 </tbody>
 </table>
-

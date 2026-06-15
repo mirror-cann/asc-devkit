@@ -19,7 +19,7 @@ void GetSinMaxMinTmpSize(const SinConfig& config, const ge::Shape& srcShape, con
 
 ## 参数说明
 
-**表 1**  接口参数列表
+**表1**  接口参数列表
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -53,4 +53,3 @@ AscendC::SinConfig config;
 config.algo = AscendC::SinAlgo::RADIAN_REDUCTION;
 AscendC::GetSinMaxMinTmpSize(config, shape, 2, false, maxValue, minValue);
 ```
-

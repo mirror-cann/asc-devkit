@@ -24,7 +24,7 @@ unsigned int __uhadd(unsigned int x, unsigned int y)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -68,4 +68,3 @@ unsigned int __uhadd(unsigned int x, unsigned int y)
         dst[idx] = __uhadd(x[idx], y[idx]);
     }
     ```
-

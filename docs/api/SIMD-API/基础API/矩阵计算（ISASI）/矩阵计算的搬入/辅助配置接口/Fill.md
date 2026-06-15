@@ -22,12 +22,12 @@
 
 如下图所示，将数据空间内最后三行初始化为0，配置InitConstValueParams参数：initValue=0表示初始化值为0，repeatTimes=5表示按照行方向迭代5次，blockNum=3表示每次repeat对列方向的3块32Byte数据块清0，dstGap=5表示相邻repeat之间间隔5个数据块。
 
-**图 1** L1 Buffer中Fill示意图<a name="zh-cn_topic_0000002512331632_fig197511640134513"></a>  
+**图1** L1 Buffer中Fill示意图<a name="zh-cn_topic_0000002512331632_fig197511640134513"></a>  
 ![](../../../../../figures/Fill_L1.png "L1 Buffer中Fill示意图")
 
 如下图所示，将内存空间内的值全部初始化为0，需要配置InitConstValueParams参数：initValue=0表示初始化值为0，repeatTimes=5表示按照行方向迭代5次，blockNum=2表示每次repeat对列方向的2块512Byte数据块清0，dstGap=3表示相邻repeat之间间隔3个数据块。
 
-**图 2** L0A Buffer中Fill示意图<a name="zh-cn_topic_0000002512331632_fig11499125816478"></a>  
+**图2** L0A Buffer中Fill示意图<a name="zh-cn_topic_0000002512331632_fig11499125816478"></a>  
 ![](../../../../../figures/Fill_L0A.png)
 
 ## 函数原型<a name="section620mcpsimp"></a>
@@ -39,14 +39,14 @@ __aicore__ inline void Fill(const LocalTensor<T>& dst, const InitConstValueParam
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名称 | 描述 |
 | ------- | ------ |
 | T | dst的数据类型。 |
-| U | 初始化值的数据类型。<br>&nbsp;&nbsp;&bull; 当dst使用基础数据类型时，U和dst的数据类型T需保持一致，否则编译失败。<br>&nbsp;&nbsp;&bull; 当dst使用[TensorTrait](../../../数据结构/辅助数据结构/TensorTrait/TensorTrait.md)类型时，U和dst的数据类型T的LiteType需保持一致，否则编译失败。<br>&nbsp;&nbsp;最后一个模板参数仅用于上述数据类型检查，用户无需关注。 |
+| U | 初始化值的数据类型。<br>&nbsp;&nbsp;&bull;当dst使用基础数据类型时，U和dst的数据类型T需保持一致，否则编译失败。<br>&nbsp;&nbsp;&bull;当dst使用[TensorTrait](../../../数据结构/辅助数据结构/TensorTrait/TensorTrait.md)类型时，U和dst的数据类型T的LiteType需保持一致，否则编译失败。<br>&nbsp;&nbsp;最后一个模板参数仅用于上述数据类型检查，用户无需关注。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --------- | ---------- | ------ |
@@ -54,12 +54,12 @@ __aicore__ inline void Fill(const LocalTensor<T>& dst, const InitConstValueParam
 | InitConstValueParams | 输入 | 初始化相关参数，类型为InitConstValueParams。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_mm.h，\${INSTALL\_DIR}请替换为CANN软件安装后文件存储路径。<br>参数说明请参考[表3](#table3)。 |
 
 <a name="table3"></a>
-**表 3** InitConstValueParams结构体参数说明
+**表3** InitConstValueParams结构体参数说明
 
 | 参数名称 | 含义 |
 | --------- | ------ |
 | repeatTimes | 迭代次数。默认值为0。取值范围：repeatTimes∈[0, 32767]。**注：repeatTimes = 0表示不执行，该指令将被视为NOP（空操作）。** |
-| blockNum | 每次迭代初始化的数据块个数，取值范围：blockNum∈[0, 32767] 。默认值为0。**注：blockNum = 0表示不执行，该指令将被视为NOP（空操作）。**<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L1 Buffer（TPosition: A1/B1）时，每一个block（数据块）大小是32B；<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L0A Buffer（TPosition: A2）/L0B Buffer（TPosition: B2）时，每一个block（数据块）大小是512B。 |
+| blockNum | 每次迭代初始化的数据块个数，取值范围：blockNum∈[0, 32767]。默认值为0。**注：blockNum = 0表示不执行，该指令将被视为NOP（空操作）。**<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L1 Buffer（TPosition: A1/B1）时，每一个block（数据块）大小是32B；<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L0A Buffer（TPosition: A2）/L0B Buffer（TPosition: B2）时，每一个block（数据块）大小是512B。 |
 | dstGap | 目的操作数前一个迭代结束地址到后一个迭代起始地址之间的距离。<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L1 Buffer（TPosition: A1/B1）时，单位是32B；<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L0A Buffer（TPosition: A2）/L0B Buffer（TPosition: B2）时，单位是512B。<br>&nbsp;&nbsp;取值范围：dstGap∈[0, 32767]。默认值为0。 |
 | initValue | 初始化的value值，支持的数据类型与dst保持一致。 |
 

@@ -12,7 +12,7 @@ int32_t EnableBias(bool isBiasIn = false)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -34,4 +34,3 @@ matmul_tiling::MatmulApiTiling tiling(ascendcPlatform);
 
 tiling.EnableBias(true);  // 设置Bias是否参与运算
 ```
-

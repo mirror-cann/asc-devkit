@@ -4,7 +4,7 @@ TConv3DBpFilterTiling结构体包含Conv3dBackpropFilter算子规格信息及Til
 
 用户通过调用[GetTiling](GetTiling-128.md)接口获取TConv3DBpFilterTiling结构体，具体流程请参考[使用说明](Conv3DBackpropFilter-Tiling使用说明.md)。当前暂不支持用户自定义配置TConv3DBpFilterTiling结构体中的参数。
 
-**表 1**  TConv3DBpFilterTiling结构说明
+**表1**  TConv3DBpFilterTiling结构说明
 
 <a name="table1563162142915"></a>
 | 参数名称 | 说明 |

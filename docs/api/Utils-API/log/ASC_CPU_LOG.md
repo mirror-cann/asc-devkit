@@ -8,8 +8,8 @@
 | Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ |
 | Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ |
 | Atlas 200I/500 A2 推理产品 | √ |
-| Atlas 推理系列产品 AI Core | √ |
-| Atlas 推理系列产品 Vector Core | x |
+| Atlas 推理系列产品AI Core | √ |
+| Atlas 推理系列产品Vector Core | x |
 | Atlas 训练系列产品 | √ |
 
 ## 功能说明<a name="section618mcpsimp"></a>
@@ -17,7 +17,7 @@
 提供Host侧打印Log的功能。开发者可以在算子的TilingFunc代码中使用ASC\_CPU\_LOG\_XXX接口来输出相关内容。一般情况下，开发者也可以选择使用printf等Host侧通用的打印方式进行调试。然而，在Tiling下沉场景中，由于Tiling函数运行在AI CPU上，必须使用本接口进行打印。
 
 -   非Tiling下沉场景，日志输出到plog中。比如，debug级别的日志输出到/root/ascend/log/debug/plog中，日志级别通过环境变量ASCEND_GLOBAL_LOG_LEVEL控制。会打印日志级别、时间戳、日志所在代码行和日志所在函数名。
--   Tiling下沉场景，日志不会输出到plog中，而是需要落盘并进行解析。算子运行之前需要开启Dump功能，使得日志Dump功能生效。如何开启Dump功能依赖于具体的网络运行方式。以TorchAir图模式为例，需要配置enable\_dump、dump\_path、dump\_mode等Dump参数。详细说明可参考[《Ascend Extension for PyTorch》](https://www.hiascend.com/document/redirect/pytorchuserguide) 中的“《Pytorch图模式使用(TorchAir)》 >GE图模式 \> GE图模式功能 \> 算子data dump功能”章节。示例如下：
+-   Tiling下沉场景，日志不会输出到plog中，而是需要落盘并进行解析。算子运行之前需要开启Dump功能，使得日志Dump功能生效。如何开启Dump功能依赖于具体的网络运行方式。以TorchAir图模式为例，需要配置enable\_dump、dump\_path、dump\_mode等Dump参数。详细说明可参考[《Ascend Extension for PyTorch》](https://www.hiascend.com/document/redirect/pytorchuserguide)中的“《Pytorch图模式使用(TorchAir)》 >GE图模式 \> GE图模式功能 \> 算子data dump功能”章节。示例如下：
 
     ```
     import torch_npu, torchair
@@ -50,7 +50,7 @@
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 |--------|----------|------|
@@ -93,4 +93,3 @@ static ge::graphStatus TilingFunc(gert::TilingContext *context)
 [WARNING] ASCENDCKERNEL(xxx,execute_add_op):2025-xx-xx-xx:xx:xx.xxx.xxx [/xxx/xxx.cpp:xx][TilingFunc] I am WARNING log: 291
 [DEBUG] ASCENDCKERNEL(xxx,execute_add_op):2025-xx-xx-xx:xx:xx.xxx.xxx [/xxx/xxx.cpp:xx][TilingFunc] I am DEBUG log: 291
 ```
-

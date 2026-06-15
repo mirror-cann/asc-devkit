@@ -67,7 +67,7 @@
 __aicore__ inline TBufHandle GetBufHandle(uint8_t offset)
 ```
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="table1960411494236"></a>
 <table><thead align="left"><tr id="row17605204922320"><th class="cellrowborder" valign="top" width="12.36%" id="mcps1.2.4.1.1"><p id="p6605649122315"><a name="p6605649122315"></a><a name="p6605649122315"></a>参数名称</p>
@@ -99,4 +99,3 @@ offset值不可超出EXTERN\_IMPL\_BUFPOOL中定义的BUFID\_SIZE大小，用户
 ## 调用示例<a name="section1234017553610"></a>
 
 请参考[调用示例](EXTERN_IMPL_BUFPOOL宏.md#section1234017553610)。
-

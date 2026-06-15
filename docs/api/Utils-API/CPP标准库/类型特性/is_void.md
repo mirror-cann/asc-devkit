@@ -23,7 +23,7 @@ struct is_void;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -73,4 +73,3 @@ AscendC::Std::is_void::value:1
 AscendC::Std::is_void::value:1
 AscendC::Std::is_void::value:1
 ```
-

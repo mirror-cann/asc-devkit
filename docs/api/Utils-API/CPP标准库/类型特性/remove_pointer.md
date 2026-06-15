@@ -23,7 +23,7 @@ struct remove_pointer;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -76,4 +76,3 @@ ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::remove_pointer_t<double* v
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::remove_pointer_t<int* const volatile>, int>));
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::remove_pointer_t<double* const volatile>, double>));
 ```
-

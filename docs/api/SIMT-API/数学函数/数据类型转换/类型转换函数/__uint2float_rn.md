@@ -22,7 +22,7 @@ inline float __uint2float_rn(const unsigned int x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -65,4 +65,3 @@ inline float __uint2float_rn(const unsigned int x)
         dst[idx] = __uint2float_rn(x[idx]);
     }
     ```
-

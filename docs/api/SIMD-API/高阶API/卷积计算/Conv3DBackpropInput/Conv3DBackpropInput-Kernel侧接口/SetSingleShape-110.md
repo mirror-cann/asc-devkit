@@ -22,7 +22,7 @@ __aicore__ inline void SetSingleShape(uint64_t singleShapeM, uint64_t singleShap
 
 ## 参数说明
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -47,4 +47,3 @@ ConvBackpropApi::Conv3DBackpropInput<weightDxType, inputSizeDxType, gradOutputDx
 // ...设置其它参数
 gradInput_.SetSingleShape(singleShapeM_, singleShapeK_, singleShapeN_); // 设置单核计算的形状
 ```
-

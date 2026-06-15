@@ -8,8 +8,8 @@
 | <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
 | <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
 | <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品 AI Core | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品 Vector Core | x </cann-filter>|
+| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ </cann-filter>|
+| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
 | <cann-filter npu-type="910">Atlas 训练系列产品 | √ </cann-filter>|
 | <cann-filter npu-type="x90">Kirin X90 | √ </cann-filter>|
 | <cann-filter npu-type="9030">Kirin 9030 | √ </cann-filter>|
@@ -22,7 +22,7 @@
 
 `ReduceMax`计算过程如下图所示：首先，在每个repeat迭代中计算得到最大值和repeat内部索引，这些中间结果暂存于`sharedTmpBuffer`工作区中；然后，在中间结果的基础上继续按repeat迭代得到最终的最大值和最大值索引。需要注意的是，每次repeat迭代获取的最大值索引是repeat内部索引，返回最终结果时，需要根据迭代位置和repeat内部索引推导全量数据的最大值索引。
 
-**图 1**  `ReduceMax`计算示意图<a id="fig1"></a>
+**图1**  `ReduceMax`计算示意图<a id="fig1"></a>
 
 ![ReduceMax计算示意图](../../../../figures/ReduceMax_scale.png "ReduceMax计算示意图")
 
@@ -52,13 +52,13 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | T | 操作数数据类型。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
@@ -81,7 +81,7 @@
 - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持half、float。</cann-filter>
 - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持half、float。</cann-filter>
 - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core，支持half、float。</cann-filter>
+- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持half、float。</cann-filter>
 - <cann-filter npu-type = "910">Atlas 训练系列产品，支持half。</cann-filter>
 - <cann-filter npu-type = "x90">Kirin X90，支持half、float。</cann-filter>
 - <cann-filter npu-type = "9030">Kirin 9030，支持half、float。</cann-filter>
@@ -118,7 +118,7 @@
   - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
   - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品</cann-filter>
   - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品</cann-filter>
-  - <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core</cann-filter>
+  - <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core</cann-filter>
   - <cann-filter npu-type = "910">Atlas 训练系列产品</cann-filter>
   - <cann-filter npu-type = "x90">Kirin X90</cann-filter>
   - <cann-filter npu-type = "9030">Kirin 9030</cann-filter>
@@ -197,7 +197,7 @@
 
     ```cpp
     // ReduceMax接口sharedTmpBuffer计算示例一：
-    // dstLocal,srcLocal和sharedTmpBuffer均为half类型,srcLocal的计算数据量为8320, 使用tensor高维切分计算接口, repeatTime为65, mask为128,需要索引值
+    // dstLocal,srcLocal和sharedTmpBuffer均为half类型,srcLocal的计算数据量为8320,使用tensor高维切分计算接口, repeatTime为65, mask为128,需要索引值
     // tensor高维切分计算接口调用示例为：
     AscendC::ReduceMax<half>(dstLocal, srcLocal, sharedTmpBuffer, 128, 65, 8, true);
     // 此时sharedTmpBuffer所需的最小空间计算过程为：
@@ -217,7 +217,7 @@
     int iter3AlignEnd = RoundUp(iter3OutputCount, elementsPerBlock) * elementsPerBlock = 16;  // 第三轮产生的元素个数做向上取整
     // 最终sharedTmpBuffer所需的最小空间为iter2AlignStart + iter3AlignStart + iter3AlignEnd = 144 + 16 + 16 = 176 ,也就是352Bytes
     // ReduceMax接口sharedTmpBuffer计算示例二：
-    // dstLocal,srcLocal和sharedTmpBuffer均为half类型,srcLocal的计算数据量为32640, 使用tensor高维切分计算接口,repeatTime为255, mask为128,需要索引值
+    // dstLocal,srcLocal和sharedTmpBuffer均为half类型,srcLocal的计算数据量为32640,使用tensor高维切分计算接口,repeatTime为255, mask为128,需要索引值
     // tensor高维切分计算接口调用示例为：
     AscendC::ReduceMax<half>(dstLocal, srcLocal, sharedTmpBuffer, 128, 255, 8, true);
     // 此时sharedTmpBuffer所需的最小空间计算过程为：
@@ -274,7 +274,7 @@
     int iter1AlignEnd = RoundUp(iter1OutputCount, elementsPerBlock) * elementsPerBlock = 1024; // 第一轮产生的元素个数做向上取整
     // 由于calIndex为false,因此最终sharedTmpBuffer所需的最小空间大小就是对第一轮产生元素做向上取整后的结果，此处就是1024，也就是2048Bytes
     // ReduceMax接口sharedTmpBuffer计算示例六：
-    // dstLocal,srcLocal和sharedTmpBuffer均为float类型,srcLocal的计算数据量为8320, 使用tensor高维切分计算接口, repeatTime为130, mask为64,需要索引值
+    // dstLocal,srcLocal和sharedTmpBuffer均为float类型,srcLocal的计算数据量为8320,使用tensor高维切分计算接口, repeatTime为130, mask为64,需要索引值
     // tensor高维切分计算接口调用示例为：
     AscendC::ReduceMax<float>(dstLocal, srcLocal, sharedTmpBuffer, 64, 130, 8, true);
     // 此时sharedTmpBuffer所需的最小空间计算过程为：

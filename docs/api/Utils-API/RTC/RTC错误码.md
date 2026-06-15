@@ -1,6 +1,6 @@
 # RTC错误码<a name="ZH-CN_TOPIC_0000002487335325"></a>
 
-**表 1**  aclrtc接口返回aclError错误码说明
+**表1**  aclrtc接口返回aclError错误码说明
 
 <a name="table1098718523239"></a>
 <table><thead align="left"><tr id="row298895218235"><th class="cellrowborder" valign="top" width="43.65%" id="mcps1.2.4.1.1"><p id="p14988852132312"><a name="p14988852132312"></a><a name="p14988852132312"></a>错误码名称</p>
@@ -78,7 +78,7 @@
 </td>
 <td class="cellrowborder" valign="top" width="11.600000000000001%" headers="mcps1.2.4.1.2 "><p id="p08341936131220"><a name="p08341936131220"></a><a name="p08341936131220"></a>276000</p>
 </td>
-<td class="cellrowborder" valign="top" width="44.75%" headers="mcps1.2.4.1.3 "><p id="p6605141210301"><a name="p6605141210301"></a><a name="p6605141210301"></a>创建aclrtcProg (handle) 失败。</p>
+<td class="cellrowborder" valign="top" width="44.75%" headers="mcps1.2.4.1.3 "><p id="p6605141210301"><a name="p6605141210301"></a><a name="p6605141210301"></a>创建aclrtcProg (handle)失败。</p>
 </td>
 </tr>
 <tr id="row76051712123013"><td class="cellrowborder" valign="top" width="43.65%" headers="mcps1.2.4.1.1 "><p id="p1467912252343"><a name="p1467912252343"></a><a name="p1467912252343"></a>ACL_ERROR_RTC_OUT_OF_MEMORY</p>
@@ -97,4 +97,3 @@
 </tr>
 </tbody>
 </table>
-

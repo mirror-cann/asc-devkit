@@ -60,7 +60,7 @@ __simd_callee__ inline void Squeeze(U& dstReg, U& srcReg, MaskReg& mask)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="18.77%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -83,13 +83,13 @@ __simd_callee__ inline void Squeeze(U& dstReg, U& srcReg, MaskReg& mask)
 </tr>
 <tr id="row104455914519"><td class="cellrowborder" valign="top" width="18.77%" headers="mcps1.2.3.1.1 "><p id="p144175913451"><a name="p144175913451"></a><a name="p144175913451"></a>U</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.23%" headers="mcps1.2.3.1.2 "><p id="p34418597453"><a name="p34418597453"></a><a name="p34418597453"></a>srcReg/dstReg RegTensor类型， 例如RegTensor&lt;uint32_t&gt;，由编译器自动推导，用户不需要填写。</p>
+<td class="cellrowborder" valign="top" width="81.23%" headers="mcps1.2.3.1.2 "><p id="p34418597453"><a name="p34418597453"></a><a name="p34418597453"></a>srcReg/dstReg RegTensor类型，例如RegTensor&lt;uint32_t&gt;，由编译器自动推导，用户不需要填写。</p>
 </td>
 </tr>
 </tbody>
 </table>
 
-**表 2**  函数参数说明
+**表2**  函数参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>

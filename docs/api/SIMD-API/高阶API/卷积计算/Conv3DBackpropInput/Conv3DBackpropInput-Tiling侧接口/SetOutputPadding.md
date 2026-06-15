@@ -12,7 +12,7 @@ bool SetOutputPadding(int64_t outputPadD, int64_t outputPadH, int64_t outputPadW
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -35,4 +35,3 @@ auto ascendcPlatform = platform_ascendc::PlatformAscendCManager::GetInstance();
 ConvBackpropApi::Conv3DBpInputTiling conv3DBpDxTiling(*ascendcPlatform);
 conv3DBpDxTiling.SetOutputPadding(outputPadD, outputPadH, outputPadW);
 ```
-

@@ -21,12 +21,12 @@ __simd_callee__ inline void asc_mem_bar(MEM_TYPE mem_type)
 
 ## 参数说明
 
-表1 参数说明
+表1参数说明
 | 参数名  | 输入/输出 | 描述 |
 | :----- | :------- | :------- |
-| mem_type | 输入 | 同步流水线的类型，类型为MEM_TYPE，取值范围见 表2 mem_type取值说明。 |
+| mem_type | 输入 | 同步流水线的类型，类型为MEM_TYPE，取值范围见表2 mem_type取值说明。 |
 
-表2 mem_type取值说明（源流水线/目的流水线表示的含义见 表3 Reg计算流水线说明）
+表2 mem_type取值说明（源流水线/目的流水线表示的含义见表3 Reg计算流水线说明）
 | 值  | 源流水线 | 目的流水线 |
 | ------ | -------- | -------- |
 | VV_ALL | VEC_ALL | VEC_ALL |

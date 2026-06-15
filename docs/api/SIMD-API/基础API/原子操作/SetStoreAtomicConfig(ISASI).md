@@ -27,7 +27,7 @@ __aicore__ inline void SetStoreAtomicConfig()
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-<a name="table622mcpsimp"></a>**表 1**  模板参数说明
+<a name="table622mcpsimp"></a>**表1**  模板参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 |--------|-----------|------|

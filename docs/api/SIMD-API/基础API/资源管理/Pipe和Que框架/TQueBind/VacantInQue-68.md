@@ -89,6 +89,5 @@ que.EnQue(tensor1);// 将tensor1加入VECOUT的Queue中
 que.EnQue(tensor2);// 将tensor2加入VECOUT的Queue中
 que.EnQue(tensor3);// 将tensor3加入VECOUT的Queue中
 que.EnQue(tensor4);// 将tensor4加入VECOUT的Queue中
-ret = que.VacantInQue(); // 返回为false, 继续入队操作（Enque）将报错
+ret = que.VacantInQue(); // 返回为false,继续入队操作（Enque）将报错
 ```
-

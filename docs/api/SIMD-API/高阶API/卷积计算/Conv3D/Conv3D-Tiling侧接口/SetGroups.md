@@ -2,7 +2,7 @@
 
 ## 功能说明
 
-设置分组卷积的分组大小。分组大小为1表示普通卷积。**当前Conv3D 高阶API不支持分组卷积**。
+设置分组卷积的分组大小。分组大小为1表示普通卷积。**当前Conv3D高阶API不支持分组卷积**。
 
 ## 函数原型
 
@@ -32,4 +32,3 @@ auto ascendcPlatform = platform_ascendc::PlatformAscendC(context->GetPlatformInf
 Conv3dTilingApi::Conv3dTiling conv3dApiTiling(ascendcPlatform);
 conv3dApiTiling.SetGroups(groups);
 ```
-

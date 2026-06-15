@@ -60,7 +60,7 @@ static __aicore__ inline void Lock(MutexID id)
 
 ## 参数说明<a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_section75395119104"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table1965616488585"></a>
 <table><thead align="left"><tr id="row865644816588"><th class="cellrowborder" valign="top" width="18.29%" id="mcps1.2.3.1.1"><p id="p765612483583"><a name="p765612483583"></a><a name="p765612483583"></a>参数名</p>
@@ -78,7 +78,7 @@ static __aicore__ inline void Lock(MutexID id)
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="table103102222579"></a>
 <table><thead align="left"><tr id="row631032216571"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="p231082295719"><a name="p231082295719"></a><a name="p231082295719"></a>参数名</p>
@@ -115,17 +115,16 @@ static __aicore__ inline void Lock(MutexID id)
 完整算子样例参考：[Mutex样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/05_sync_control/mutex)。
 
 ```
-// 锁定 MTE2 流水线互斥锁，确保当前线程独占 MTE2 资源进行数据搬运
+// 锁定MTE2 流水线互斥锁，确保当前线程独占MTE2 资源进行数据搬运
 AscendC::Mutex::Lock<PIPE_MTE2>(mutexId);
 AscendC::DataCopy(xLocal, src0Global[TILE_LENGTH * progress], TILE_LENGTH);
 AscendC::DataCopy(yLocal, src1Global[TILE_LENGTH * progress], TILE_LENGTH);
-// 解锁 MTE2 流水线，允许其他线程使用 MTE2
+// 解锁MTE2 流水线，允许其他线程使用MTE2
 AscendC::Mutex::Unlock<PIPE_MTE2>(mutexId);
 
-// 锁定 Vector 流水线互斥锁，确保当前线程独占向量计算资源
+// 锁定Vector流水线互斥锁，确保当前线程独占向量计算资源
 AscendC::Mutex::Lock<PIPE_V>(mutexId);
 AscendC::Add(zLocal, xLocal, yLocal, TILE_LENGTH);
-// 解锁 Vector 流水线，释放计算资源供其他线程使用
+// 解锁Vector流水线，释放计算资源供其他线程使用
 AscendC::Mutex::Unlock<PIPE_V>(mutexId);
 ```
-

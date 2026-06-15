@@ -37,13 +37,13 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | :--- | :--- |
 | T | 操作数的数据类型。支持的数据类型请参考[数据类型](#section4219135304818)。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
@@ -51,7 +51,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 | src | 输入 | 源操作数，类型为LocalTensor，存储位置为Unified Buffer，源地址需要32字节对齐。 |
 | repeatParams | 输入 | 搬运参数，DataCopyParams类型，参数说明请参考表3。通过该参数可配置搬运的数据块大小、个数、间隔等信息，同时支持非连续和连续搬运。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
 
-**表 3**  DataCopyParams结构体参数定义
+**表3**  DataCopyParams结构体参数定义
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -75,7 +75,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
     - srcGap = 0，源操作数相邻数据块之间的间隔为0。
     - dstGap = 0，目的操作数相邻数据块之间的间隔为0。
 
-    **图 1**  连续搬运示意图<a name="zh-cn_topic_0000002535088926_fig4621152141711"></a>  
+    **图1**  连续搬运示意图<a name="zh-cn_topic_0000002535088926_fig4621152141711"></a>  
     ![](../../../../../figures/continuous_data_copy_diagram.png "连续搬运示意图")
 
 - 示例2：非连续搬运
@@ -89,7 +89,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
     - srcGap = 1，源操作数相邻数据块之间的间隔为1。
     - dstGap = 2，目的操作数相邻数据块之间的间隔为2。
 
-    **图 2**  非连续搬运示意图<a name="zh-cn_topic_0000002535088926_fig422819202304"></a>  
+    **图2**  非连续搬运示意图<a name="zh-cn_topic_0000002535088926_fig422819202304"></a>  
     ![](../../../../../figures/discontinuous_data_copy_diagram.png "非连续搬运示意图")
 
 ## 数据类型<a name="section4219135304818"></a>
@@ -137,7 +137,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 </cann-filter>
 - DataCopyParams结构体参数的值需在取值范围内：
 
-    **表 4**  DataCopyParams结构体参数取值范围
+    **表4**  DataCopyParams结构体参数取值范围
 
     | 参数名 | 取值范围 |
     | --- | --- |

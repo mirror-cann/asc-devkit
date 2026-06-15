@@ -26,11 +26,11 @@ __aicore__ inline void ICachePreLoad(const int64_t preFetchLen)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 |--------|-----------|------|
-| preFetchLen | 输入 | 预取长度。<cann-filter npu-type="950"><br>&bull; 针对Ascend 950PR/Ascend 950DT，preFetchLen参数单位为2K Byte，取值应小于ICache的大小/2K。AIC和AIV的ICache大小分别为32KB和16KB。</cann-filter><cann-filter npu-type="A3"><br>&bull; 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，preFetchLen参数单位为2K Byte，取值应小于ICache的大小/2K。AIC和AIV的ICache大小分别为32KB和16KB。</cann-filter><cann-filter npu-type="910b"><br>&bull; 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，preFetchLen参数单位为2K Byte，取值应小于ICache的大小/2K。AIC和AIV的ICache大小分别为32KB和16KB。</cann-filter><cann-filter npu-type="310p"><br>&bull; 针对Atlas 推理系列产品AI Core，传入该参数无效，预取长度均为128Byte。</cann-filter> |
+| preFetchLen | 输入 | 预取长度。<cann-filter npu-type="950"><br>&bull;针对Ascend 950PR/Ascend 950DT，preFetchLen参数单位为2K Byte，取值应小于ICache的大小/2K。AIC和AIV的ICache大小分别为32KB和16KB。</cann-filter><cann-filter npu-type="A3"><br>&bull;针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，preFetchLen参数单位为2K Byte，取值应小于ICache的大小/2K。AIC和AIV的ICache大小分别为32KB和16KB。</cann-filter><cann-filter npu-type="910b"><br>&bull;针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，preFetchLen参数单位为2K Byte，取值应小于ICache的大小/2K。AIC和AIV的ICache大小分别为32KB和16KB。</cann-filter><cann-filter npu-type="310p"><br>&bull;针对Atlas 推理系列产品AI Core，传入该参数无效，预取长度均为128Byte。</cann-filter> |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 

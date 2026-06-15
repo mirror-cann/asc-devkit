@@ -29,14 +29,14 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 ## 参数说明<a id="section622mcpsimp"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | ---------- | ---------- |
 | T | 源操作数或者目的操作数的数据类型。 |
 | enableSmallC0 | SmallC0模式开关：当dValue小于等于4的时候，C0_SIZE会补齐到4 * sizeof(T)字节，默认不开启。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -44,7 +44,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 | src | 输入 | 源操作数，类型为GlobalTensor，存储位置为Global Memory。 |
 | intriParams | 输入 | 搬运参数，Dn2NzParams类型，具体参数说明请参考[表3](#table9182515919)。 |
 
-**表 3** Dn2NzParams结构体参数定义<a id="table9182515919"></a>
+**表3** Dn2NzParams结构体参数定义<a id="table9182515919"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |

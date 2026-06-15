@@ -16,10 +16,10 @@
 
 定义指定计算的维度（Reduce轴）为R轴，非指定维度（Normal轴）为A轴。如下图所示，对shape为\(2, 3\)的二维矩阵进行运算，指定在第一维求逻辑与，输出结果为\[1, 0, 0\]；指定在第二维求逻辑与，输出结果为\[0, 0\]。
 
-**图 1**  ReduceAll按第一个维度计算示例  
+**图1**  ReduceAll按第一个维度计算示例  
 ![](../../../../figures/ReduceAll按第一个维度计算示例.png "ReduceAll按第一个维度计算示例")
 
-**图 2**  ReduceAll按最后一个维度计算示例  
+**图2**  ReduceAll按最后一个维度计算示例  
 ![](../../../../figures/ReduceAll按最后一个维度计算示例.png "ReduceAll按最后一个维度计算示例")
 
 ## 函数原型
@@ -47,7 +47,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -55,7 +55,7 @@
 | pattern | 用于指定ReduceAll计算轴，包括Reduce轴和Normal轴。pattern由与向量维度数量相同的A、R字母组合形成，字母A表示Normal轴，R表示Reduce轴。例如，AR表示对二维向量进行ReduceAll计算：第一维是Normal轴，第二维是Reduce轴，即对第二维数据求逻辑与。<br><br>pattern是定义在AscendC::Pattern::Reduce命名空间下的结构体，其成员变量用户无需关注。<br><br>pattern当前只支持取值为AR和RA，当前用户需要显式指定pattern为AscendC::Pattern::Reduce::AR或者AscendC::Pattern::Reduce::RA。 |
 | isReuseSource | 是否允许修改源操作数，默认值为false。如果开发者允许源操作数被改写，可以设置该参数取值为true开启，开启后能够节省部分内存空间。<br><br>设置为true，则本接口内部计算时复用src的内存空间，节省内存空间；设置为false，则本接口内部计算时不复用src的内存空间。<br><br>isReuseSource的使用样例请参考[更多样例](../../数学计算/更多样例-83.md#section639165323915)。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -80,7 +80,7 @@
 ## 调用示例
 
 ```
-// dstLocal： 输出结果
+// dstLocal：输出结果
 // srcLocal：输入数据
 // tmp：存储中间结果的临时空间
 // shape：输入数据的shape信息，当前仅支持2维

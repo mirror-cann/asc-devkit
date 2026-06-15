@@ -92,7 +92,7 @@
 </td>
 <td class="cellrowborder" valign="top" width="71.58%" headers="mcps1.1.4.1.3 "><p id="p183314251610"><a name="p183314251610"></a><a name="p183314251610"></a>预留参数，当前不开启。</p>
 <p id="p15604318228"><a name="p15604318228"></a><a name="p15604318228"></a>SuperKernel相关特性的掩码。</p>
-<a name="ul138368184718"></a><a name="ul138368184718"></a><ul id="ul138368184718"><li>4 表示 DCCI（默认值，建议使用）</li><li>2 表示 early start set flag</li><li>1 表示 early start wait flag</li></ul>
+<a name="ul138368184718"></a><a name="ul138368184718"></a><ul id="ul138368184718"><li>4表示DCCI（默认值，建议使用）</li><li>2 表示early start set flag</li><li>1表示early start wait flag</li></ul>
 </td>
 </tr>
 <tr id="row91818456218"><td class="cellrowborder" valign="top" width="16.49%" headers="mcps1.1.4.1.1 "><p id="p3182455216"><a name="p3182455216"></a><a name="p3182455216"></a>SK0</p>
@@ -134,7 +134,7 @@
 ```
 #include "kernel_operator.h"
 
-// 原普通 kernel 保留（用于非 SuperKernel 场景）
+// 原普通kernel保留（用于非SuperKernel场景）
 __global__ __vector__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z, uint32_t totalLength) 
 { 
     KernelAdd op; 
@@ -142,31 +142,30 @@ __global__ __vector__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z, uint32_t 
     op.Process(); 
 } 
 
-// 规则3：定义参数结构体（根据原 global 函数的实际参数定义）
+// 规则3：定义参数结构体（根据原global函数的实际参数定义）
 struct GmmArgs { 
-   GM_ADDR x;                      // 对应 add_custom 的第一个参数 
-   GM_ADDR y;                      // 对应 add_custom 的第二个参数 
-   GM_ADDR z;                      // 对应 add_custom 的第三个参数 
-   uint32_t totalLength;           // 对应 add_custom 的第四个参数
+   GM_ADDR x;                      // 对应add_custom的第一个参数 
+   GM_ADDR y;                      // 对应add_custom的第二个参数 
+   GM_ADDR z;                      // 对应add_custom的第三个参数 
+   uint32_t totalLength;           // 对应add_custom的第四个参数
 };  
-// 定义一个带模板参数的 SK 子函数
+// 定义一个带模板参数的SK子函数
 // 模板参数仅用于实例化出不同的符号，不影响函数逻辑
 template<uint32_t splitNum>
-__sk__ __vector__ void add_custom_sk(const GmmArgs *args, sk::SkSystemArgs *sysArgs/* 可选添加 sysArgs 参数*/)
+__sk__ __vector__ void add_custom_sk(const GmmArgs *args, sk::SkSystemArgs *sysArgs/* 可选添加sysArgs 参数*/)
 {
     // 从结构体中获取参数
     GM_ADDR x = args->x;
     GM_ADDR y = args->y; 
     GM_ADDR z = args->z; 
     uint32_t totalLength = args->totalLength; 
-    // 规则5：逻辑与 global 函数一致
+    // 规则5：逻辑与global函数一致
     KernelAdd op;
     op.Init(x, y, z, totalLength);
     op.Process();
 }
-// 规则6：使用 SK_BIND 绑定
-// 通过指定模板参数实例化出 4 个不同的符号
+// 规则6：使用SK_BIND绑定
+// 通过指定模板参数实例化出4个不同的符号
 
 SK_BIND(add_custom, 4, add_custom_sk<0>, add_custom_sk<1>, add_custom_sk<2>, add_custom_sk<3>);
 ```
-

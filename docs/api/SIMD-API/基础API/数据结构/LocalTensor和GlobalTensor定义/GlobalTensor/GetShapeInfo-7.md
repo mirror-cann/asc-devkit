@@ -72,7 +72,7 @@ GlobalTensor的shape信息，[ShapeInfo](../../辅助数据结构//ShapeInfo.md)
 ## 调用示例<a name="section025788373"></a>
 
 ```cpp
-// 示例 获取Tensor的ShapeInfo信息，获取通过SetShapeInfo设置过Shape信息
+// 示例获取Tensor的ShapeInfo信息，获取通过SetShapeInfo设置过Shape信息
 AscendC::ShapeInfo maxShapeInfo = tglobal.GetShapeInfo();
 // 获取原始的shape各个维度的值
 uint32_t orgShape0 = maxShapeInfo.originalShape[0];

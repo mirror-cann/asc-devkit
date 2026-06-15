@@ -23,7 +23,7 @@ struct is_base_of;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -68,22 +68,22 @@ public:
 template <typename T>
 class DerivedTemplate : public BaseTemplate<T> {};
 
-// 检查 Base 是否是 Derived 的基类
+// 检查Base是否是Derived的基类
 AscendC::PRINTF("Is Base a base of Derived? %d\n" , AscendC::Std::is_base_of<Base, Derived>::value);
 
-// 检查 Derived 是否是 Base 的基类（应该为 false）
+// 检查Derived是否是Base的基类（应该为false）
 AscendC::PRINTF("Is Derived a base of Base? %d\n" , AscendC::Std::is_base_of<Derived, Base>::value);
 
-// 检查 Base 是否是 Unrelated 的基类（应该为 false）
+// 检查Base是否是Unrelated的基类（应该为false）
 AscendC::PRINTF("Is Base a base of Unrelated? %d\n" , AscendC::Std::is_base_of<Base, Unrelated>::value);
 
 AscendC::PRINTF("Is Base a base of Derived (virtual inheritance)? %d\n", AscendC::Std::is_base_of<Base, Derived2>::value);
 
 AscendC::PRINTF("Is BaseTemplate<int> a base of DerivedTemplate<int>? %d\n", AscendC::Std::is_base_of<BaseTemplate<int>, DerivedTemplate<int>>::value);
 
-// 测试 Base 是否为 VirtualDerived 的基类（虚继承情况）
+// 测试Base是否为VirtualDerived的基类（虚继承情况）
 AscendC::PRINTF("Is Base a base of VirtualDerived? %d\n" , AscendC::Std::is_base_of<Base, VirtualDerived>::value);
-// 测试 Base 是否为 MultiDerived 的基类（多重继承情况）
+// 测试Base是否为MultiDerived的基类（多重继承情况）
 AscendC::PRINTF("Is Base a base of MultiDerived? %d\n" , AscendC::Std::is_base_of<Base, MultiDerived>::value);
 ```
 
@@ -97,4 +97,3 @@ Is BaseTemplate<int> a base of DerivedTemplate<int>? 1
 Is Base a base of VirtualDerived? 1
 Is Base a base of MultiDerived? 1
 ```
-

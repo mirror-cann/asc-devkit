@@ -74,7 +74,7 @@ PIPE_V
 ## 调用示例
 
 ```cpp
-constexpr int total_length = 256; //total_length 指参与计算的数据长度
+constexpr int total_length = 256; //total_length指参与计算的数据长度
 half value = 3;
 __ubuf__ half src[total_length];
 __ubuf__ half dst[total_length];

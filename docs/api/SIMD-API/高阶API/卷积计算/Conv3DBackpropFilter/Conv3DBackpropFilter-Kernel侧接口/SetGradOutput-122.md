@@ -22,7 +22,7 @@ __aicore__ inline void SetGradOutput(const AscendC::GlobalTensor<SrcT> &gradOutp
 
 ## 参数说明
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -44,7 +44,7 @@ const Conv3DBackpropFilterTilingData* tilingData;
 ConvBackpropApi::Conv3DBackpropFilter <inputType, weightSizeType, gradOutputType, gradWeightType> gradWeight_;
 gradWeight_.Init(&(tilingData->dwTiling));
 gradWeight_.SetInput(inputGm_[offsetB_]);
-// 设置 gradOutput
+// 设置gradOutput
 gradWeight_.SetGradOutput(gradOutputGm_[offsetA_]);
 ...
 ```

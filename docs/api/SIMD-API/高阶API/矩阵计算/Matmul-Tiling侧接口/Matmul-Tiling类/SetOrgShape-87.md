@@ -16,7 +16,7 @@ int32_t SetOrgShape(int32_t orgMIn, int32_t orgNIn, int32_t orgKaIn, int32_t org
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -43,4 +43,3 @@ matmul_tiling::MatmulApiTiling tiling(ascendcPlatform);
 tiling.SetShape(1024, 1024, 1024);
 tiling.SetOrgShape(1024, 1024, 1024);  // 设置原始完整的形状
 ```
-

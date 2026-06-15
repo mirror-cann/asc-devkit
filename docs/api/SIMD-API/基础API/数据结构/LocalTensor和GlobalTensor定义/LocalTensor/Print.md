@@ -60,7 +60,7 @@ inline void Print(uint32_t len)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="13.94%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -92,7 +92,7 @@ inline void Print(uint32_t len)
 ## 调用示例<a name="section17531157161314"></a>
 
 ```cpp
-// 示例 只限于CPU调试，在调试窗口中打印LocalTensor数据用于精度调试，每一行打印一个datablock(32Bytes)的数据
+// 示例只限于CPU调试，在调试窗口中打印LocalTensor数据用于精度调试，每一行打印一个datablock(32Bytes)的数据
 AscendC::LocalTensor<int32_t> inputLocal = softmaxMaxBuf.template Get<int32_t>();
 for (int32_t i = 0; i < 16; ++i) {
     inputLocal.SetValue(i, i); // 对input_local中第i个位置进行赋值为i
@@ -101,4 +101,3 @@ inputLocal.Print();
 // 0000: 0 1 2 3 4 5 6 7 8
 // 0008: 9 10 11 12 13 14 15
 ```
-

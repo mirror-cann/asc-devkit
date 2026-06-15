@@ -47,7 +47,7 @@ void AddConfig(const char *soc, OpAICoreConfig &aicore_config)
 
 不传入aicore\_config参数时，对OpAICoreConfig结构中的部分参数会配置成默认值，具体的参数和默认值如下表所示：
 
-**表 1**  不传入aicore\_config参数时，OpAICoreConfig默认配置
+**表1**  不传入aicore\_config参数时，OpAICoreConfig默认配置
 
 <a name="table56008147710"></a>
 <table><thead align="left"><tr id="row3601014470"><th class="cellrowborder" valign="top" width="18.09%" id="mcps1.2.4.1.1"><p id="p19601111411713"><a name="p19601111411713"></a><a name="p19601111411713"></a>配置参数</p>
@@ -102,4 +102,3 @@ void AddConfig(const char *soc, OpAICoreConfig &aicore_config)
 </tr>
 </tbody>
 </table>
-

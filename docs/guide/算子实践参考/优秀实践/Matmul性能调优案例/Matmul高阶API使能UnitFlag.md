@@ -15,7 +15,7 @@
 
 本案例的算子规格如下：
 
-**表 1**  算子规格
+**表1**  算子规格
 
 <a name="table101751125175213"></a>
 <table><thead align="left"><tr id="row8175525185219"><th class="cellrowborder" valign="top" width="25%" id="mcps1.2.5.1.1"><p id="p1417582516529"><a name="p1417582516529"></a><a name="p1417582516529"></a>输入</p>
@@ -79,12 +79,12 @@
 
 如下图所示，未开启UnitFlag功能时，MMAD和FIXPIPE是指令级别的同步，FIXPIPE指令需要等MMAD指令执行完成才进行结果搬出，MMAD和FIXPIPE之间流水串行。
 
-**图 1**  未开启UnitFlag功能<a name="fig108452036134412"></a>  
+**图1**  未开启UnitFlag功能<a name="fig108452036134412"></a>  
 ![](../../../figures/未开启UnitFlag功能.png "未开启UnitFlag功能")
 
 如下图所示，开启UnitFlag功能时，MMAD和FIXPIPE指令是512B大小的细粒度同步。在一条MMAD指令执行过程中，每当完成一个512B数据结果的计算，FIXPIPE立即开始搬出该512B的数据，从而实现MMAD和FIXPIPE之间的流水并行，提升算子性能。
 
-**图 2**  开启UnitFlag功能<a name="fig58335714416"></a>  
+**图2**  开启UnitFlag功能<a name="fig58335714416"></a>  
 ![](../../../figures/开启UnitFlag功能.png "开启UnitFlag功能")
 
 Matmul API开启UnitFlag功能的完整样例请参考[开启UnitFlag功能和MDL模板的Matmul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_unitflag)。开启UnitFlag功能的主要步骤如下：

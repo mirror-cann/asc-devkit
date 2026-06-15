@@ -61,7 +61,7 @@ __aicore__ inline void InitDetermineComputeWorkspace(GlobalTensor<int32_t>& gmWo
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1** 接口参数说明
+**表1** 接口参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | :--- | :--- | :--- |

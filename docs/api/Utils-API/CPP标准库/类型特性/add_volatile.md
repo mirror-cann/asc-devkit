@@ -23,7 +23,7 @@ struct add_volatile;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -55,4 +55,3 @@ ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_volatile_t<double>, vo
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_volatile_t<volatile int>, volatile int>));
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_volatile_t<volatile double>, volatile double>));
 ```
-

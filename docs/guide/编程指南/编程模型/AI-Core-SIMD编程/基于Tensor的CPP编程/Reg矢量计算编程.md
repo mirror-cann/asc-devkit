@@ -139,7 +139,7 @@ __aicore__ inline void Compute()
 }
 ```
 
-这种写法使基础API 能够与`__aicore__`中`LocalTensor`流程衔接。
+这种写法使基础API能够与`__aicore__`中`LocalTensor`流程衔接。
 
 > 📌 **提示**：使用LocalTensor作为VF函数参数时，不能使用引用LocalTensor &。因为在`__aicore__`和`__simd_vf__`是两个相互隔离的执行域，无法通过跨执行域通过引用访问。
 
@@ -193,7 +193,7 @@ AscendC::Reg::Store(dstAddr, dstReg, count);
 
 #### 对齐搬运
 
-[`LoadAlign`](../../../../../api/SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续对齐搬入.md) / [`StoreAlign`](../../../../../api/SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续对齐搬出.md) 适用于UB地址满足对齐要求的连续搬入/搬出，是Reg矢量编程中最常见的搬运接口。在搬运时可以按照内置的功能随路进行数据排布等操作，具体功能以对应API章节为准。
+[`LoadAlign`](../../../../../api/SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续对齐搬入.md) / [`StoreAlign`](../../../../../api/SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续对齐搬出.md)适用于UB地址满足对齐要求的连续搬入/搬出，是Reg矢量编程中最常见的搬运接口。在搬运时可以按照内置的功能随路进行数据排布等操作，具体功能以对应API章节为准。
 
 ```cpp
 AscendC::Reg::LoadAlign(srcReg, srcAddr);

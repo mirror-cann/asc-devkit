@@ -68,8 +68,8 @@ PIPE_S
 ## 调用示例
 
 ```cpp
-// 示例1：SINGLE_CACHE_LINE 模式，假设首地址为0x40（64B对齐）
-// total_length 指参与计算的数据长度
+// 示例1：SINGLE_CACHE_LINE模式，假设首地址为0x40（64B对齐）
+// total_length指参与计算的数据长度
 constexpr uint64_t total_length = 32;
 __gm__ int16_t src[total_length];
 for( int i = 0; i < total_length; i++) {

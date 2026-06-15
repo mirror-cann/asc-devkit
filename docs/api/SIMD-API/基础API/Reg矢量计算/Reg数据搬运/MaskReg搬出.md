@@ -73,7 +73,7 @@ __simd_callee__ inline void StoreUnAlign(__ubuf__ T*& dstAddr, MaskReg& mask, Un
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  MaskReg搬出使用AddrReg存储偏移量参数说明
+**表1**  MaskReg搬出使用AddrReg存储偏移量参数说明
 
 <a name="table14132101714462"></a>
 <table><thead align="left"><tr id="row19176617124620"><th class="cellrowborder" valign="top" width="13.268673132686734%" id="mcps1.2.4.1.1"><p id="p117621724612"><a name="p117621724612"></a><a name="p117621724612"></a>参数名</p>
@@ -117,13 +117,13 @@ __simd_callee__ inline void StoreUnAlign(__ubuf__ T*& dstAddr, MaskReg& mask, Un
 </td>
 <td class="cellrowborder" valign="top" width="12.47875212478752%" headers="mcps1.2.4.1.2 "><p id="p567151494415"><a name="p567151494415"></a><a name="p567151494415"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="74.25257474252575%" headers="mcps1.2.4.1.3 "><p id="p928118257494"><a name="p928118257494"></a><a name="p928118257494"></a>实际搬运UB起始地址为 dstAddr + offset。</p>
+<td class="cellrowborder" valign="top" width="74.25257474252575%" headers="mcps1.2.4.1.3 "><p id="p928118257494"><a name="p928118257494"></a><a name="p928118257494"></a>实际搬运UB起始地址为dstAddr + offset。</p>
 </td>
 </tr>
 </tbody>
 </table>
 
-**表 2**  MaskReg搬出POST\_MODE\_NORMAL场景参数说明
+**表2**  MaskReg搬出POST\_MODE\_NORMAL场景参数说明
 
 <a name="table15062617384"></a>
 <table><thead align="left"><tr id="row1850192663818"><th class="cellrowborder" valign="top" width="13.268673132686734%" id="mcps1.2.4.1.1"><p id="p55022613381"><a name="p55022613381"></a><a name="p55022613381"></a>参数名</p>
@@ -166,7 +166,7 @@ __simd_callee__ inline void StoreUnAlign(__ubuf__ T*& dstAddr, MaskReg& mask, Un
 </tbody>
 </table>
 
-**表 3**  MaskReg搬出POST\_MODE\_UPDATE场景参数说明
+**表3**  MaskReg搬出POST\_MODE\_UPDATE场景参数说明
 
 <a name="table083611281388"></a>
 <table><thead align="left"><tr id="row4836162833816"><th class="cellrowborder" valign="top" width="13.268673132686734%" id="mcps1.2.4.1.1"><p id="p118361728123818"><a name="p118361728123818"></a><a name="p118361728123818"></a>参数名</p>
@@ -226,7 +226,7 @@ __simd_callee__ inline void StoreUnAlign(__ubuf__ T*& dstAddr, MaskReg& mask, Un
 </tbody>
 </table>
 
-**表 4**  MaskReg非对齐搬出参数说明
+**表4**  MaskReg非对齐搬出参数说明
 
 <a name="table11733115714442"></a>
 <table><thead align="left"><tr id="row8734165774414"><th class="cellrowborder" valign="top" width="13.268673132686734%" id="mcps1.2.4.1.1"><p id="p27341957134415"><a name="p27341957134415"></a><a name="p27341957134415"></a>参数名</p>
@@ -291,4 +291,3 @@ __simd_vf__ inline void StoreAlignVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, u
     }
 }
 ```
-

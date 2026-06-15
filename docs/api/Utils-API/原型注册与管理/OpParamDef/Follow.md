@@ -58,7 +58,7 @@ OpParamDef算子定义，OpParamDef请参考[OpParamDef](OpParamDef.md)。
 -   可以支持链式Follow，例如C Follow B，B Follow A，但此时Follow的模式不可中途变更（ftype需要保持一致）。
 -   使用Follow接口通常比InferShape函数逻辑更加简单，能用Follow表达的逻辑，建议使用Follow接口，则无需再编写注册InferShape函数。
 -   InferShape推导函数和使用Follow接口去Follow shape不能混用，即不支持部分输出采用Infershape推导、部分输出采用Follow推导的情况。若用户同时使用了InferShape函数和Follow接口，以用户的InferShape函数为准，需要保证在InferShape函数中能够推导出所有的输出shape。
--   datatype/format同时支持Follow输入的参数类型为[DataTypeList](DataTypeList.md)/[FormatList](FormatList.md)  ，调用Follow后，当前输入/输出的datatype/format与paramName组合后的datatype/format一致。
+-   datatype/format同时支持Follow输入的参数类型为[DataTypeList](DataTypeList.md)/[FormatList](FormatList.md)，调用Follow后，当前输入/输出的datatype/format与paramName组合后的datatype/format一致。
 
 ## 调用示例<a name="zh-cn_topic_0000002052867297_zh-cn_topic_0000001526594958_zh-cn_topic_0000001575944081_section320753512363"></a>
 
@@ -92,4 +92,3 @@ OpParamDef算子定义，OpParamDef请参考[OpParamDef](OpParamDef.md)。
         .ParamType(REQUIRED)
         .Follow("x2");
     ```
-

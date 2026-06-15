@@ -49,11 +49,11 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-当ReduceType 为SUM，将每个DataBlock（32B）中参与计算的元素相加，并将最终的计算结果依次保存在dstReg的最低位。
+当ReduceType为SUM，将每个DataBlock（32B）中参与计算的元素相加，并将最终的计算结果依次保存在dstReg的最低位。
 
-当ReduceType 为MAX，将每个DataBlock（32B）中的最大值依次保存在dstReg中的最低位。
+当ReduceType为MAX，将每个DataBlock（32B）中的最大值依次保存在dstReg中的最低位。
 
-当ReduceType 为MIN，将每个DataBlock（32B）中的最小值依次保存在dstReg中的最低位。
+当ReduceType为MIN，将每个DataBlock（32B）中的最小值依次保存在dstReg中的最低位。
 
 ## 定义原型<a name="section620mcpsimp"></a>
 
@@ -64,7 +64,7 @@ __simd_callee__ inline void ReduceDataBlock(U& dstReg, U srcReg, MaskReg mask)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="36.42%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -86,7 +86,7 @@ __simd_callee__ inline void ReduceDataBlock(U& dstReg, U srcReg, MaskReg mask)
 <tr id="row1835857145817"><td class="cellrowborder" valign="top" width="36.42%" headers="mcps1.2.3.1.1 "><p id="p5835457165816"><a name="p5835457165816"></a><a name="p5835457165816"></a>T</p>
 </td>
 <td class="cellrowborder" valign="top" width="63.580000000000005%" headers="mcps1.2.3.1.2 "><p id="p168351657155818"><a name="p168351657155818"></a><a name="p168351657155818"></a>目的操作数和源操作数的数据类型。</p>
-<p id="p7844541195218"><a name="p7844541195218"></a><a name="p7844541195218"></a><span id="ph158441241135214"><a name="ph158441241135214"></a><a name="ph158441241135214"></a>Ascend 950PR/Ascend 950DT</span>, 支持的数据类型为：int16_t/uint16_t/half/int32_t/uint32_t/float</p>
+<p id="p7844541195218"><a name="p7844541195218"></a><a name="p7844541195218"></a><span id="ph158441241135214"><a name="ph158441241135214"></a><a name="ph158441241135214"></a>Ascend 950PR/Ascend 950DT</span>,支持的数据类型为：int16_t/uint16_t/half/int32_t/uint32_t/float</p>
 </td>
 </tr>
 <tr id="row3742113618507"><td class="cellrowborder" valign="top" width="36.42%" headers="mcps1.2.3.1.1 "><p id="p1383515717581"><a name="p1383515717581"></a><a name="p1383515717581"></a>mode</p>
@@ -97,13 +97,13 @@ __simd_callee__ inline void ReduceDataBlock(U& dstReg, U srcReg, MaskReg mask)
 </tr>
 <tr id="row11021944191014"><td class="cellrowborder" valign="top" width="36.42%" headers="mcps1.2.3.1.1 "><p id="p916243141912"><a name="p916243141912"></a><a name="p916243141912"></a>U</p>
 </td>
-<td class="cellrowborder" valign="top" width="63.580000000000005%" headers="mcps1.2.3.1.2 "><p id="p131047476612"><a name="p131047476612"></a><a name="p131047476612"></a>目的操作数和源操作数的RegTensor类型， 例如RegTensor&lt;int32_t&gt;，由编译器自动推导，用户不需要填写。</p>
+<td class="cellrowborder" valign="top" width="63.580000000000005%" headers="mcps1.2.3.1.2 "><p id="p131047476612"><a name="p131047476612"></a><a name="p131047476612"></a>目的操作数和源操作数的RegTensor类型，例如RegTensor&lt;int32_t&gt;，由编译器自动推导，用户不需要填写。</p>
 </td>
 </tr>
 </tbody>
 </table>
 
-**表 2**  函数参数说明
+**表2**  函数参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -167,4 +167,3 @@ __simd_vf__ inline void ReduceDataBlockVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAd
     }
 }
 ```
-

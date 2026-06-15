@@ -82,7 +82,7 @@ EXTERN\_IMPL\_BUFPOOL宏内部定义的函数Reset、Init、GetBufHandle、SetCu
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  EXTERN\_IMPL\_BUFPOOL宏原型定义参数说明
+**表1**  EXTERN\_IMPL\_BUFPOOL宏原型定义参数说明
 
 <a name="table1960411494236"></a>
 <table><thead align="left"><tr id="row17605204922320"><th class="cellrowborder" valign="top" width="12.36%" id="mcps1.2.4.1.1"><p id="p6605649122315"><a name="p6605649122315"></a><a name="p6605649122315"></a>参数名称</p>

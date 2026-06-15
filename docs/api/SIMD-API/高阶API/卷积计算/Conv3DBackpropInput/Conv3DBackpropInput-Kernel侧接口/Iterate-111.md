@@ -23,7 +23,7 @@ __aicore__ inline bool Iterate(bool enPartialSum = false)
 
 ## 参数说明
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -59,4 +59,3 @@ while (gradInput_.Iterate()) {
 // SingleShape计算完成后，需要将ctx.isFirstIter_设置为true，确保下一块SingleShape的正确计算
 gradInput_.ctx.isFirstIter_ = true;
 ```
-

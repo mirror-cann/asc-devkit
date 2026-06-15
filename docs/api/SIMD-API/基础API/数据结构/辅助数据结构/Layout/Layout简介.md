@@ -14,7 +14,7 @@ Layout包含两个核心组成部分：
 
 [表1](#table12525201245615)中给出了一维内存地址空间视图，[表2](#table17519406546)中给出了该二维矩阵的逻辑视图。
 
-**表 1** **线性地址视图**
+**表1** **线性地址视图**
 
 <a name="table12525201245615"></a>
 <table><thead align="left"><tr id="row20525012185616"><th class="cellrowborder" valign="top" width="8.080808080808083%" id="mcps1.2.13.1.1"><p id="p101677148592"><a name="p101677148592"></a><a name="p101677148592"></a>地址</p>
@@ -71,43 +71,43 @@ Layout包含两个核心组成部分：
 </tbody>
 </table>
 
-**表 2** **矩阵逻辑视图**
+**表2** **矩阵逻辑视图**
 
 <a name="table17519406546"></a>
 <table><thead align="left"><tr id="row375940195412"><th class="cellrowborder" valign="top" width="33.33333333333333%" id="mcps1.2.4.1.1"><p id="p1337044595410"><a name="p1337044595410"></a><a name="p1337044595410"></a>索引</p>
 </th>
-<th class="cellrowborder" valign="top" width="33.33333333333333%" id="mcps1.2.4.1.2"><p id="p4370194535410"><a name="p4370194535410"></a><a name="p4370194535410"></a>列 0</p>
+<th class="cellrowborder" valign="top" width="33.33333333333333%" id="mcps1.2.4.1.2"><p id="p4370194535410"><a name="p4370194535410"></a><a name="p4370194535410"></a>列0</p>
 </th>
-<th class="cellrowborder" valign="top" width="33.33333333333333%" id="mcps1.2.4.1.3"><p id="p16370154513542"><a name="p16370154513542"></a><a name="p16370154513542"></a>列 1</p>
+<th class="cellrowborder" valign="top" width="33.33333333333333%" id="mcps1.2.4.1.3"><p id="p16370154513542"><a name="p16370154513542"></a><a name="p16370154513542"></a>列1</p>
 </th>
 </tr>
 </thead>
-<tbody><tr id="row3761740175413"><td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.1 "><p id="p537084575410"><a name="p537084575410"></a><a name="p537084575410"></a>行 0</p>
+<tbody><tr id="row3761740175413"><td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.1 "><p id="p537084575410"><a name="p537084575410"></a><a name="p537084575410"></a>行0</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.2 "><p id="p1370134535418"><a name="p1370134535418"></a><a name="p1370134535418"></a>a00 (地址 0)</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.2 "><p id="p1370134535418"><a name="p1370134535418"></a><a name="p1370134535418"></a>a00 (地址0)</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p237024517543"><a name="p237024517543"></a><a name="p237024517543"></a>a01 (地址 1)</p>
-</td>
-</tr>
-<tr id="row676104005417"><td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.1 "><p id="p2370645145412"><a name="p2370645145412"></a><a name="p2370645145412"></a>行 1</p>
-</td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.2 "><p id="p53701345165410"><a name="p53701345165410"></a><a name="p53701345165410"></a>a10 (地址 4)</p>
-</td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p1937034518545"><a name="p1937034518545"></a><a name="p1937034518545"></a>a11 (地址 5)</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p237024517543"><a name="p237024517543"></a><a name="p237024517543"></a>a01 (地址1)</p>
 </td>
 </tr>
-<tr id="row207654015545"><td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.1 "><p id="p23701045135412"><a name="p23701045135412"></a><a name="p23701045135412"></a>行 2</p>
+<tr id="row676104005417"><td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.1 "><p id="p2370645145412"><a name="p2370645145412"></a><a name="p2370645145412"></a>行1</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.2 "><p id="p137019452548"><a name="p137019452548"></a><a name="p137019452548"></a>a20 (地址 8)</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.2 "><p id="p53701345165410"><a name="p53701345165410"></a><a name="p53701345165410"></a>a10 (地址4)</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p4370845165416"><a name="p4370845165416"></a><a name="p4370845165416"></a>a21 (地址 9)</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p1937034518545"><a name="p1937034518545"></a><a name="p1937034518545"></a>a11 (地址5)</p>
 </td>
 </tr>
-<tr id="row187694055418"><td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.1 "><p id="p183701345125411"><a name="p183701345125411"></a><a name="p183701345125411"></a>行 3</p>
+<tr id="row207654015545"><td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.1 "><p id="p23701045135412"><a name="p23701045135412"></a><a name="p23701045135412"></a>行2</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.2 "><p id="p0370945105417"><a name="p0370945105417"></a><a name="p0370945105417"></a>a30 (地址 12)</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.2 "><p id="p137019452548"><a name="p137019452548"></a><a name="p137019452548"></a>a20 (地址8)</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p9370145125416"><a name="p9370145125416"></a><a name="p9370145125416"></a>a31 (地址 13)</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p4370845165416"><a name="p4370845165416"></a><a name="p4370845165416"></a>a21 (地址9)</p>
+</td>
+</tr>
+<tr id="row187694055418"><td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.1 "><p id="p183701345125411"><a name="p183701345125411"></a><a name="p183701345125411"></a>行3</p>
+</td>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.2 "><p id="p0370945105417"><a name="p0370945105417"></a><a name="p0370945105417"></a>a30 (地址12)</p>
+</td>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p9370145125416"><a name="p9370145125416"></a><a name="p9370145125416"></a>a31 (地址13)</p>
 </td>
 </tr>
 </tbody>
@@ -142,7 +142,7 @@ struct Layout : private Std::tuple<ShapeType, StrideType> {
 
 ## 模板参数<a name="section116801320102618"></a>
 
-**表 3**  模板参数说明
+**表3**  模板参数说明
 
 <a name="table13588175515344"></a>
 <table><thead align="left"><tr id="row1160915519346"><th class="cellrowborder" valign="top" width="21.8%" id="mcps1.2.3.1.1"><p id="p9609105553412"><a name="p9609105553412"></a><a name="p9609105553412"></a>参数名</p>

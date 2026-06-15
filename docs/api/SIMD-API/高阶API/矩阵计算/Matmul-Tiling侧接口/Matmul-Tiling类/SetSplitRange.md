@@ -2,7 +2,7 @@
 
 ## 功能说明
 
-设置baseM/baseN/baseK的最大值和最小值。 目前Tiling暂时不支持该功能。
+设置baseM/baseN/baseK的最大值和最小值。目前Tiling暂时不支持该功能。
 
 ## 函数原型
 
@@ -12,7 +12,7 @@ int32_t SetSplitRange(int32_t maxBaseM = -1, int32_t maxBaseN = -1, int32_t maxB
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -30,4 +30,3 @@ int32_t SetSplitRange(int32_t maxBaseM = -1, int32_t maxBaseN = -1, int32_t maxB
 ## 约束说明
 
 若baseM/baseN/baseK不满足C0\_size对齐，计算Tiling时会将该值对齐到C0\_size。提示，half/bfloat16\_t数据类型的C0\_size为16，float数据类型的C0\_size为8，int8\_t数据类型的C0\_size为32，int4b\_t数据类型的C0\_size为64。
-

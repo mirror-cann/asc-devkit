@@ -4,11 +4,11 @@ F32 Channel Split是矩阵计算结果搬出过程中的通道拆分能力。当
 
 启用该能力后，目的NZ输出的C0按8处理，N方向大小必须为8的倍数。如下图所示，当源操作数shape为`[64, 32]`时，搬出结果会被拆分为16个独立的16 x 8分形矩阵。当源操作数shape为`[64, 24]`时，搬出结果会被拆分为3列16 x 8分形矩阵。
 
-**图 1**  F32 channel split示意图1
+**图1**  F32 channel split示意图1
 
 ![](../../../../../figures/Fixpipe_Channel_Split.png)
 
-**图 2**  F32 channel split示意图2
+**图2**  F32 channel split示意图2
 
 ![](../../../../../figures/Fixpipe_Channel_Split_with_dirty.png)
 

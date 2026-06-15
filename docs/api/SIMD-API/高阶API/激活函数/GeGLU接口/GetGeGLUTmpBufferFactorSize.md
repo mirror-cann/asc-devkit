@@ -24,7 +24,7 @@ void GetGeGLUTmpBufferFactorSize(const uint32_t typeSize, uint32_t& maxLiveNodeC
 
 ## 参数说明
 
-**表 1**  参数列表
+**表1**  参数列表
 
 | 接口 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -49,4 +49,3 @@ uint32_t extraBuf = 0;
 
 AscendC::GetGeGLUTmpBufferFactorSize(typeSize, maxLiveNodeCount, extraBuf);
 ```
-

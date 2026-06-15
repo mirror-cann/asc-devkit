@@ -60,7 +60,7 @@ __aicore__ inline LocalTensor<CAST_T> ReinterpretCast() const
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001429830437_row118356578583"><th class="cellrowborder" valign="top" width="16.28%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001429830437_p48354572582"><a name="zh-cn_topic_0000001429830437_p48354572582"></a><a name="zh-cn_topic_0000001429830437_p48354572582"></a>参数名</p>
@@ -89,7 +89,7 @@ __aicore__ inline LocalTensor<CAST_T> ReinterpretCast() const
 
 ```cpp
 // 示例
-// input_local为int32_t 类型，包含16个元素(64字节)
+// input_local为int32_t类型，包含16个元素(64字节)
 for (int32_t i = 0; i < 16; ++i) {
     inputLocal.SetValue(i, i); // 对inputLocal中第i个位置进行赋值为i
 }
@@ -101,4 +101,3 @@ AscendC::LocalTensor<int16_t> interpreTensor = inputLocal.ReinterpretCast<int16_
 // inputLocal:0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 // interpreTensor:0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9 0 10 0 11 0 12 0 13 0 14 0 15 0
 ```
-

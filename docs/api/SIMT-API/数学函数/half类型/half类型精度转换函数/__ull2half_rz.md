@@ -22,7 +22,7 @@ inline half __ull2half_rz(const unsigned long long int x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

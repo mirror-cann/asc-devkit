@@ -69,7 +69,7 @@ AscendC::LocalTensor<T> local5 = que4.AllocTensor<T>();
 
 ```
 // 此时建议通过以下方法解决：
-// 如果确实有多块buffer使用, 可以将多个buffer合并到一块buffer, 通过偏移使用
+// 如果确实有多块buffer使用,可以将多个buffer合并到一块buffer,通过偏移使用
 pipe.InitBuffer(que0, 1, len * 3);
 pipe.InitBuffer(que1, 1, len * 3);
 /*
@@ -83,4 +83,3 @@ AscendC::LocalTensor<T> local1 = que0.AllocTensor<T>();
 AscendC::LocalTensor<T> local2 = local1[offset1];
 AscendC::LocalTensor<T> local3 = local1[offset2];
 ```
-

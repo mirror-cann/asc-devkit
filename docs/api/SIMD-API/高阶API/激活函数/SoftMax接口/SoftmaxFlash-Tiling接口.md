@@ -33,7 +33,7 @@
 
 ## 参数说明
 
-**表 1**  SoftmaxFlash GetSoftMaxFlashMaxTmpSize/GetSoftMaxFlashMinTmpSize接口参数列表
+**表1**  SoftmaxFlash GetSoftMaxFlashMaxTmpSize/GetSoftMaxFlashMinTmpSize接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -42,7 +42,7 @@
 | isUpdate | 输入 | 是否开启刷新功能，和kernel侧SoftmaxFlash接口一致，默认false。 |
 | isReuseSource | 输入 | 与kernel侧接口配置保持一致。 |
 
-**表 2**  SoftmaxFlash SoftMaxFlashTilingFunc接口参数列表
+**表2**  SoftmaxFlash SoftMaxFlashTilingFunc接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |

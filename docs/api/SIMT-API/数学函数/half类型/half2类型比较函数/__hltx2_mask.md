@@ -22,7 +22,7 @@ unsigned int __hltx2_mask(half2 x, half2 y)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -84,4 +84,3 @@ unsigned int __hltx2_mask(half2 x, half2 y)
         asc_vf_call<simt_hltx2_mask>(dim3(1024), (__gm__ half2*)x, (__gm__ half2*)y, dst, input_total_length);
     }
     ```
-

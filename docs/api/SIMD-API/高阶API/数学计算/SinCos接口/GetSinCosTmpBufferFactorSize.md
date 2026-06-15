@@ -28,7 +28,7 @@ void GetSinCosTmpBufferFactorSize(const platform_ascendc::PlatformAscendC& ascen
 
 ## 参数说明
 
-**表 1**  参数列表
+**表1**  参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -55,4 +55,3 @@ uint32_t extraBuf = 0;
 auto plat = platform_ascendc::PlatformAscendC(context->GetPlatformInfo());
 AscendC::GetSinCosTmpBufferFactorSize(plat, typeSize, maxLivedNodeCount, extraBuf);
 ```
-

@@ -41,6 +41,6 @@ mm.template Iterate<false>();
 for (int i = 0; i < singleCoreM/baseM * singleCoreN/baseN; ++i) {
     mm.template GetTensorC<false>(ubCmatrix);
     mm.WaitGetTensorC();
-    // Vector 操作
+    // Vector操作
 }
 ```

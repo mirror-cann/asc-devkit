@@ -2,7 +2,7 @@
 
 如下图中的示例，算子的输入shape为（1，2048），支持的数据类型为half类型，输入数据可以对齐到一个datablock的大小（32字节），输入数据为2048 \* 2 / 32 = 128个datablock，因此可以平均分配到每个核上（假设使用8个核），每个核上处理256个数，16个datablock。此时不需要进行尾块处理。
 
-**图 1**  shape对齐场景<a name="zh-cn_topic_0000002201157442_fig55115212126"></a>  
+**图1**  shape对齐场景<a name="zh-cn_topic_0000002201157442_fig55115212126"></a>  
 ![](../../../../figures/shape对齐场景.png "shape对齐场景")
 
 针对一些shape，比如算子的输入shape为（1，1904），支持的数据类型为half类型，输入数据可以对齐到一个datablock的大小（32字节），可以平均分配到每个核上（假设使用8个核），每个核上处理238个数，238个数无法均分到datablock上，分满14个datablock后，剩余14个数（28字节），多核切分后需要进行尾块处理。
@@ -14,7 +14,7 @@
 -   tileLength：每个核上主块数据块的长度；
 -   lastTileLength：每个核上尾块的长度。
 
-**图 2**  多核Tiling尾块示意图<a name="zh-cn_topic_0000002201157442_fig48081401102"></a>  
+**图2**  多核Tiling尾块示意图<a name="zh-cn_topic_0000002201157442_fig48081401102"></a>  
 ![](../../../../figures/多核Tiling尾块示意图.png "多核Tiling尾块示意图")
 
 ## Tiling实现<a name="zh-cn_topic_0000002201157442_section469034017306"></a>
@@ -205,4 +205,3 @@ __aicore__ inline void CopyOut(int32_t progress, uint32_t tileLength)
     outQueueZ.FreeTensor(zLocal);
 }
 ```
-

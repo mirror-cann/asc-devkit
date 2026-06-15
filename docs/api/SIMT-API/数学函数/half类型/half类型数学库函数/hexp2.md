@@ -24,7 +24,7 @@ inline half hexp2(half x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -72,4 +72,3 @@ inline half hexp2(half x)
         dst[idx] = hexp2(x[idx]);
     }
     ```
-

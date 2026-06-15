@@ -13,7 +13,7 @@
 
 ## 功能说明
 
-需要包含的头文件为： #include "ceil_division.h"
+需要包含的头文件为：#include "ceil_division.h"
 
 ceil_division用于计算两个数相除后的向上取整结果。其计算公式为：
 
@@ -30,14 +30,14 @@ ASCENDC_HOST_AICORE inline constexpr auto ceil_division(const T& num1, const U& 
 
 ## 参数说明
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 类型 | 描述 |
 |--------|------|------|
 | T | 输入 | 被除数类型。 |
 | U | 输入 | 除数类型。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名 | 类型 | 描述 |
 |--------|------|------|

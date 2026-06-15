@@ -60,7 +60,7 @@ __aicore__ inline bool EnQue(const LocalTensor<T>& tensor)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="table181221135162517"></a>
 <table><thead align="left"><tr id="row151221135112520"><th class="cellrowborder" valign="top" width="12.471247124712471%" id="mcps1.2.4.1.1"><p id="p1353754532512"><a name="p1353754532512"></a><a name="p1353754532512"></a>参数名称</p>
@@ -93,4 +93,3 @@ __aicore__ inline bool EnQue(const LocalTensor<T>& tensor)
 ## 调用示例<a name="section642mcpsimp"></a>
 
 参考[调用示例](AllocTensor-60.md#section642mcpsimp)。
-

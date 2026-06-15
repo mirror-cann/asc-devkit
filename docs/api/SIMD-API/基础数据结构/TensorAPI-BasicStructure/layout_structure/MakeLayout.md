@@ -62,7 +62,7 @@ auto layout1 = MakeLayout(MakeShape(8, 16), MakeStride(16, 1));
 
 // 示例2：仅指定Shape，自动推导连续布局的Stride
 auto layout2 = MakeLayout(MakeShape(8, 16, 32));
-// 推导得到 stride = (16 * 32, 32, 1) = (512, 32, 1)
+// 推导得到stride = (16 * 32, 32, 1) = (512, 32, 1)
 
 // 示例3：嵌套Shape自动推导嵌套Stride
 auto layout3 = MakeLayout(MakeShape(MakeShape(2, 4), MakeShape(8, 16)));

@@ -25,13 +25,13 @@ __aicore__ inline HcclHandle AllReduce(GM_ADDR sendBuf, GM_ADDR recvBuf, uint64_
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | commit | 输入 | bool类型。参数取值如下：<br>true：在调用Prepare接口时，Commit同步通知服务端可以执行该通信任务。<br>false：在调用Prepare接口时，不通知服务端执行该通信任务。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -42,7 +42,7 @@ __aicore__ inline HcclHandle AllReduce(GM_ADDR sendBuf, GM_ADDR recvBuf, uint64_
 | op | 输入 | Reduce的操作类型，目前支持sum、max、min操作类型，即支持取值为HCCL_REDUCE_SUM、HCCL_REDUCE_MAX、HCCL_REDUCE_MIN。HcclReduceOp数据类型的介绍请参考[表2](HCCL使用说明.md#table2469980529)。 |
 | repeat | 输入 | 一次下发的AllReduce通信任务个数。repeat取值≥1，默认值为1。当repeat>1时，每个AllReduce任务的sendBuf和recvBuf地址由服务端自动算出，计算公式如下：<br><br>sendBuf[i] = sendBuf + count* sizeof(datatype) * i, i∈[0, repeat)<br><br>recvBuf[i] = recvBuf + count* sizeof(datatype) * i, i∈[0, repeat)<br><br>注意：当设置repeat>1时，须与count参数配合使用，规划通信数据地址。 |
 
-**图 1**  AllReduce三轮切分通信示例  
+**图1**  AllReduce三轮切分通信示例  
 ![AllReduce三轮切分通信示例](../../../../figures/AllReduce三轮切分通信示例.png)
 
 ## 返回值说明
@@ -64,7 +64,7 @@ __aicore__ inline HcclHandle AllReduce(GM_ADDR sendBuf, GM_ADDR recvBuf, uint64_
 
     如下图所示，4张卡上均有count=300个float16数据，每张卡从xGM内存中获取到本卡数据，各卡的数据进行reduce sum计算后，将结果输出到各卡的yGM。
 
-    **图 2**  非多轮切分场景下4卡AllReduce通信
+    **图2**  非多轮切分场景下4卡AllReduce通信
 
     ![](../../../../figures/250902140829537_gai.png)
 
@@ -98,12 +98,12 @@ __aicore__ inline HcclHandle AllReduce(GM_ADDR sendBuf, GM_ADDR recvBuf, uint64_
 
     开启多轮切分，等效处理上述非多轮切分示例的通信。如下图所示，每张卡的300个float16数据，被切分为2个首块数据，1个尾块数据。每个首块的数据量tileLen为128个float16数据，尾块的数据量tailLen为44个float16数据。在算子内部实现时，需要对切分后的数据分3轮进行AllReduce通信任务，将等效上述非多轮切分的通信结果。
 
-    **图 3**  各卡数据切分示意图  
+    **图3**  各卡数据切分示意图  
     ![各卡数据切分示意图](../../../../figures/各卡数据切分示意图.png)
 
     具体实现为，第1轮通信，每个rank上0-0\\1-0\\2-0\\3-0数据块进行AllReduce处理。第2轮通信，每个rank上0-1\\1-1\\2-1\\3-1数据块进行AllReduce处理。第3轮通信，每个rank上0-2\\1-2\\2-2\\3-2数据块进行AllReduce处理，图示及代码示例如下。
 
-    **图 4**  4卡AllReduce示意图  
+    **图4**  4卡AllReduce示意图  
     ![4卡AllReduce示意图](../../../../figures/4卡AllReduce示意图.png)
 
     ```

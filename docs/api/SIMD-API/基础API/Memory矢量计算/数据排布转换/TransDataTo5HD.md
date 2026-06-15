@@ -90,13 +90,13 @@ TransDataTo5HD接口数据格式转换，一般用于将NCHW格式转换成[NC1H
 
 ## 参数说明<a name="zh-cn_topic_0000001521260417_section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名称 | 含义 |
 | :------- | :--- |
 | T | 操作数数据类型。 |
 
-**表 2**  参数列表
+**表2**  参数列表
 
 | 参数名称 | 输入/输出 | 含义 |
 | :------- | :-------- | :--- |
@@ -106,7 +106,7 @@ TransDataTo5HD接口数据格式转换，一般用于将NCHW格式转换成[NC1H
 | src | 输入 | 源操作数。<br><br>类型为LocalTensor，连续存储对应LocalTensor的地址值。LocalTensor支持的TPosition为VECIN/VECCALC/VECOUT。LocalTensor的起始地址需要32字节对齐。 |
 | nchwconvParams | 输入 | 用于控制TransdataTo5HD的数据结构和指令迭代的相关参数。<br>nchwconvParams参数说明请参考[TransDataTo5HDParams参数说明](#table3)。 |
 
-**表 3**  TransDataTo5HDParams参数说明<a id="table3"></a>
+**表3**  TransDataTo5HDParams参数说明<a id="table3"></a>
 
 | 参数名称 | 类型 | 说明 |
 | :------- | :--- | :--- |
@@ -180,22 +180,22 @@ TransDataTo5HD接口数据格式转换，一般用于将NCHW格式转换成[NC1H
 
 - 当数据类型位宽为8位时，每个DataBlock包含32个数，从指定的16个DataBlock中的对应位置取值，组成半个DataBlock放入目的地址中，读取和存放是在DataBlock的高半部分还是低半部分由参数srcHighHalf和dstHighHalf决定。
 
-  **图 1** b8类型矩阵转置
+  **图1** b8类型矩阵转置
   ![b8](../../../../figures/trans_data_to_5hd_b8.png)
 
 - 当数据类型位宽为16位时，每个DataBlock包含16个数，从指定的16个DataBlock中的对应位置取值，组成1个新的DataBlock放入目的地址中。
 
-  **图 2** b16类型矩阵转置
+  **图2** b16类型矩阵转置
   ![b16](../../../../figures/trans_data_to_5hd_b16.png)
 
 - 当数据类型位宽为32位时，每个DataBlock包含8个数，从指定的16个DataBlock中的对应位置取值，组成2个新的DataBlock放入目的地址中。
 
-  **图 3** b32类型矩阵转置
+  **图3** b32类型矩阵转置
   ![b32](../../../../figures/trans_data_to_5hd_b32.png)
 
 - 16个DataBlock数据可以不连续，推荐通过GetPhyAddr获取LocalTensor的地址值存入地址数组。
 
-  **图 4**  单次repeat实现16个DataBlock数据转置<a name="zh-cn_topic_0000002557628265_fig12595141012208"></a>
+  **图4**  单次repeat实现16个DataBlock数据转置<a name="zh-cn_topic_0000002557628265_fig12595141012208"></a>
   ![单次repeat实现16个DataBlock数据转置](../../../../figures/trans_data_to_5hd.png)
 
 ### 将NCHW格式转换成NC1HWC0格式<a name="zh-cn_topic_0000002557628265_section3122131914516"></a>
@@ -224,7 +224,7 @@ TransDataTo5HD接口数据格式转换，一般用于将NCHW格式转换成[NC1H
   constexpr uint32_t loopCount = N * C /NCHW_CONV_ADDR_LIST_SIZE; // 4
   // 设置转换参数：NCHW → NC1HWC0
   AscendC::TransDataTo5HDParams transParams;
-  transParams.repeatTimes = 16;  // hSize * wSize / elems_per_block 处理整个HW平面需要的repeat次数
+  transParams.repeatTimes = 16;  // hSize * wSize / elems_per_block处理整个HW平面需要的repeat次数
   transParams.dstRepStride = 16; // 循环间dstList间隔NCHW_CONV_ADDR_LIST_SIZE个DataBlock
   transParams.srcRepStride = 1;  // 循环间同一HW平面srcList连续
   // 循环处理数据

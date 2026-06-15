@@ -22,7 +22,7 @@ inline half2 __halves2half2(const half x, const half y)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -82,4 +82,3 @@ inline half2 __halves2half2(const half x, const half y)
         asc_vf_call<simt_halves2half2>(dim3(1024), input1, input2, (__gm__ half2*)output, input_total_length);
     }
     ```
-

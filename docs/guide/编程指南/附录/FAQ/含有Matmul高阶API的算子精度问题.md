@@ -556,7 +556,7 @@
         
             mm.SetTensorA(gmA, isTransA);
             mm.SetTensorB(gmB, isTransB);
-            // mm.SetTail(tailM, tailN); 尾核设置接口，若此处未更新尾块会导致单核精度正确，多核失败
+            // mm.SetTail(tailM, tailN);尾核设置接口，若此处未更新尾块会导致单核精度正确，多核失败
             mm.IterateAll(gmC);
             mm.End();
         }

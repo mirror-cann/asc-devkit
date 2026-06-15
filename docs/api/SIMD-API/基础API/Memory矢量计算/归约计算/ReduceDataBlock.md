@@ -8,8 +8,8 @@
 | <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √</cann-filter> |
 | <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √</cann-filter> |
 | <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core | √</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 Vector Core | x</cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √</cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x</cann-filter> |
 | <cann-filter npu-type = "910">Atlas 训练系列产品 | √</cann-filter> |
 | <cann-filter npu-type = "x90">Kirin X90 | √</cann-filter> |
 | <cann-filter npu-type = "9030">Kirin 9030 | √</cann-filter> |
@@ -22,7 +22,7 @@
 
 `ReduceDataBlock`对输入数据进行多次迭代计算，每个迭代会取出8个DataBlock（每个DataBlock数据块内部地址连续，大小为32字节）进行计算，输出结果会连续写入目的地址。
 
-**图 1**  `ReduceDataBlock`归约示意图
+**图1**  `ReduceDataBlock`归约示意图
 
 ![ReduceDataBlock归约示意图](../../../../figures/ReduceDataBlock.png "ReduceDataBlock归约示意图")
 
@@ -44,7 +44,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | ------ | ---- |
@@ -53,7 +53,7 @@
 | U | 源操作数数据类型。 |
 | isSetMask | 是否在接口内部设置`mask`。<br>&bull; `true`，表示在接口内部设置`mask`。<br>&bull; `false`，表示在接口外部设置`mask`，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置`mask`值。这种模式下，本接口入参中的`mask`值必须设置为占位符`MASK_PLACEHOLDER`。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | -------- | -------- | ---- |
@@ -75,7 +75,7 @@
 - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持half、float。</cann-filter>
 - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持half、float。</cann-filter>
 - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core，支持half、float。</cann-filter>
+- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持half、float。</cann-filter>
 - <cann-filter npu-type = "910">Atlas 训练系列产品，支持half。</cann-filter>
 - <cann-filter npu-type = "x90">Kirin X90，支持half、float。</cann-filter>
 - <cann-filter npu-type = "9030">Kirin 9030，支持half、float。</cann-filter>
@@ -116,7 +116,7 @@
 - `float`数据类型只支持寄存器非饱和模式，`half`数据类型默认是寄存器非饱和模式。寄存器的非饱和/饱和模式具体配置方式参考[SetCtrlSpr(ISASI).md](../../特殊寄存器访问/SetCtrlSpr(ISASI).md)。
     - 下图说明`reduceType`取`ReduceType::SUM`时，在饱和模式下`half`数据类型的计算过程。源操作数为$[60000,60000,-30000,100]$，首先$60000+60000$溢出，结果为$65504$，然后计算$-30000+100=-29900$，最后计算$65504-29900=35604$。
 
-        **图 2**  `ReduceDataBlock<ReduceType::SUM>`饱和模式数值溢出情况处理说明
+        **图2**  `ReduceDataBlock<ReduceType::SUM>`饱和模式数值溢出情况处理说明
 
         ![ReduceDataBlock<ReduceType::SUM>饱和模式数值溢出情况处理说明](../../../../figures/vcgadd_overflow.png "ReduceDataBlock<ReduceType::SUM>饱和模式数值溢出情况处理说明")
 
@@ -130,7 +130,7 @@
 2. data01和data02相加得到data001，data03和data04相加得到data002，...，data07和data08相加得到data004；
 3. 以此类推，得到目的操作数为1个`half`类型的数据sum。
 
-**图 3**  `ReduceDataBlock<ReduceType::SUM>`求和示意图
+**图3**  `ReduceDataBlock<ReduceType::SUM>`求和示意图
 
 ![ReduceDataBlock<ReduceType::SUM>求和示意图](../../../../figures/vcgadd_binary_add.png "ReduceDataBlock<ReduceType::SUM>求和示意图")
 

@@ -68,7 +68,7 @@ Sin\(x\)的泰勒展开式为：
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -86,7 +86,7 @@ enum class SinAlgo {
 };
 ```
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -120,12 +120,12 @@ enum class SinAlgo {
 
 // 接口框架申请临时空间，全部参与计算
 AscendC::Sin(dstLocal, srcLocal);
-// 接口框架申请临时空间，部分参与计算, 需要参与计算的元素个数为512
+// 接口框架申请临时空间，部分参与计算,需要参与计算的元素个数为512
 AscendC::Sin(dstLocal, srcLocal, 512);
 
 // 通过sharedTmpBuffer入参传入临时空间，全部参与计算
 AscendC::Sin(dstLocal, srcLocal, sharedTmpBuffer);
-// 通过sharedTmpBuffer入参传入临时空间，部分参与计算, 需要参与计算的元素个数为512
+// 通过sharedTmpBuffer入参传入临时空间，部分参与计算,需要参与计算的元素个数为512
 AscendC::Sin(dstLocal, srcLocal, sharedTmpBuffer, 512);
 constexpr AscendC::SinAlgo algo = AscendC::SinAlgo::RADIAN_REDUCTION;
 constexpr AscendC::SinConfig config = { algo };

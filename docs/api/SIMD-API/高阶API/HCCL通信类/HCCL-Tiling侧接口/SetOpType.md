@@ -12,7 +12,7 @@ uint32_t SetOpType(uint32_t opType)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -46,4 +46,3 @@ mc2CcTilingConfig.SetSkipLocalRankCopy(0);
 mc2CcTilingConfig.SetSkipBufferWindowCopy(1);
 mc2CcTilingConfig.GetTiling(tiling->allGatherTiling);
 ```
-

@@ -59,7 +59,7 @@ __aicore__ inline GlobalTensor<T>() {}
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001429830437_row118356578583"><th class="cellrowborder" valign="top" width="16.28%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001429830437_p48354572582"><a name="zh-cn_topic_0000001429830437_p48354572582"></a><a name="zh-cn_topic_0000001429830437_p48354572582"></a>参数名</p>
@@ -87,4 +87,3 @@ __aicore__ inline GlobalTensor<T>() {}
 ## 调用示例<a name="section17531157161314"></a>
 
 参考[调用示例](SetGlobalBuffer.md#section17531157161314)。
-

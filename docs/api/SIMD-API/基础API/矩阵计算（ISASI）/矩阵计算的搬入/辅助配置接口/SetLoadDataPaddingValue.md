@@ -29,7 +29,7 @@ __aicore__ inline void SetLoadDataPaddingValue(const T padValue)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1** 参数说明
+**表1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ------ | ------ | ------ |

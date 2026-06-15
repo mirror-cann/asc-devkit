@@ -27,7 +27,7 @@ coalesced_group binary_partition(const thread_block_tile<Size, ParentT>& g, bool
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -53,9 +53,9 @@ coalesced_group binary_partition(const thread_block_tile<Size, ParentT>& g, bool
         auto block = this_thread_block();
         auto tile32 = tiled_partition<32>(block);
 
-        // inputArr 中是随机的整数
+        // inputArr中是随机的整数
         int elem = inputArr[block.thread_rank()];
-        // 根据 elem&1 是否为 true 将tile32划分为两个子组
+        // 根据elem&1是否为true将tile32划分为两个子组
         auto subtile = binary_partition(tile32, (elem & 1));
         ...
     }
@@ -71,9 +71,9 @@ coalesced_group binary_partition(const thread_block_tile<Size, ParentT>& g, bool
         auto block = this_thread_block();
         auto tile32 = tiled_partition<32>(block);
 
-        // inputArr 中是随机的整数
+        // inputArr中是随机的整数
         int elem = inputArr[block.thread_rank()];
-        // 根据 elem&1 是否为 true 将tile32划分为两个子组
+        // 根据elem&1是否为true将tile32划分为两个子组
         auto subtile = binary_partition(tile32, (elem & 1));
         ...
     }

@@ -27,7 +27,7 @@ struct KernelRunContextHolder {
 
 ## 函数说明<a name="zh-cn_topic_0000001872423361_zh-cn_topic_0000001441184464_section622mcpsimp"></a>
 
-**表 1**  函数说明
+**表1**  函数说明
 
 <a name="zh-cn_topic_0000001872423361_zh-cn_topic_0000001441184464_table18149577913"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001872423361_zh-cn_topic_0000001441184464_row61411571196"><th class="cellrowborder" valign="top" width="15.409999999999998%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001872423361_zh-cn_topic_0000001441184464_p2093713281104"><a name="zh-cn_topic_0000001872423361_zh-cn_topic_0000001441184464_p2093713281104"></a><a name="zh-cn_topic_0000001872423361_zh-cn_topic_0000001441184464_p2093713281104"></a>函数名称</p>
@@ -55,7 +55,7 @@ struct KernelRunContextHolder {
 </tbody>
 </table>
 
-**表 2**  变量说明
+**表2**  变量说明
 
 <a name="zh-cn_topic_0000001872423361_table161170462134"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001872423361_row511724611310"><th class="cellrowborder" valign="top" width="50%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001872423361_p91171467133"><a name="zh-cn_topic_0000001872423361_p91171467133"></a><a name="zh-cn_topic_0000001872423361_p91171467133"></a>变量名称</p>
@@ -95,4 +95,3 @@ if (holder != nullptr) {
     gert::ComputeNodeInfo* info = holder->MutableComputeNodeInfo();
 }
 ```
-

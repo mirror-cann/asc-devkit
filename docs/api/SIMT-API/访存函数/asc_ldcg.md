@@ -166,7 +166,7 @@ inline half2 asc_ldcg(half2* address)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -219,4 +219,3 @@ L2 Cache中的缓存数据或输入的Global Memory地址上的数据。
         dst[idx] = asc_ldcg(src + idx);
     }
     ```
-

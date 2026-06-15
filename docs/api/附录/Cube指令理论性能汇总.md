@@ -15,7 +15,7 @@
 
 </cann-filter>
 
-**表 1**  Mmad理论性能计算公式中并行度和k0的取值
+**表1**  Mmad理论性能计算公式中并行度和k0的取值
 
 <a name="table1877123815211"></a>
 | 接口 | 左矩阵A | 右矩阵B | cube<sub>m</sub> | cube<sub>n</sub> | cube<sub>k</sub> | k<sub>0</sub> |

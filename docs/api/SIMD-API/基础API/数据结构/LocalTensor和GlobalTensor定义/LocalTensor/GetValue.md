@@ -61,7 +61,7 @@ __aicore__ inline __inout_pipe__(S) PrimType GetValue(const uint32_t index) cons
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="13.94%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -105,13 +105,12 @@ using PrimType = PrimT<T>;
 auto element = inputLocal.GetValue(2); // 获取inputLocal中第i个位置的数值
 
 // 示例1结果如下：
-// element 为200
+// element为200
 
 
 // 示例2
 // 数据(inputLocal): [0 100 200  ... ]
 auto element = inputLocal(1); // 获取inputLocal中第i个位置的数值
 // 示例2结果如下：
-// element 为100
+// element为100
 ```
-

@@ -15,7 +15,7 @@ void GetDigammaMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize,
 
 ## 参数说明
 
-**表 1**  参数列表
+**表1**  参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -47,4 +47,3 @@ uint32_t typeSize = sizeof(half);
 
 AscendC::GetDigammaMaxMinTmpSize(shape, typeSize, false, maxValue, minValue);
 ```
-

@@ -18,7 +18,7 @@
 
 例如，Warp内32个活跃线程调用asc\_shfl\_down\(LaneId, 2, 16\)接口，每个线程的返回值为当前线程LaneId+2对应线程的var值，或者当前线程的var值。
 
-**图 1**  asc\_shfl\_down结果示意图
+**图1**  asc\_shfl\_down结果示意图
 
 ![](../../../figures/asc_shfl_down结果示意图.png "asc_shfl_down结果示意图")
 
@@ -62,7 +62,7 @@ inline bfloat16x2_t asc_shfl_down(bfloat16x2_t var, uint32_t delta, int32_t widt
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -77,7 +77,7 @@ Warp内指定线程的var值。
 ## 约束说明
 
 -   如果目标线程是非活跃状态，获取到寄存器中未初始化的值。
--   若delta \>=width， 所有线程都返回当前线程的var值。
+-   若delta \>=width，所有线程都返回当前线程的var值。
 -   width不是2的倍数或者超出32，返回值异常。
 
 ## 需要包含的头文件

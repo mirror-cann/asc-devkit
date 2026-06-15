@@ -11,10 +11,10 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
 
 当后续无通信任务时，调用[Finalize](Finalize.md)接口，通知服务端后续无通信任务，执行结束后退出，客户端检测并等待最后一个通信任务执行结束。以上介绍的AI Core下发HCCL通信任务的机制如下图所示。
 
-**图 1**  AI Core下发HCCL通信任务机制  
+**图1**  AI Core下发HCCL通信任务机制  
 ![](../../../../figures/AI-Core下发HCCL通信任务机制.png "AI-Core下发HCCL通信任务机制")
 
-**图 2** Ascend 950PR/Ascend 950DT  AI Core下发HCCL通信任务机制  
+**图2** Ascend 950PR/Ascend 950DT  AI Core下发HCCL通信任务机制  
 ![](../../../../figures/Ascend-950PR-Ascend-950DT-AI-Core下发HCCL通信任务机制.png "Ascend-950PR-Ascend-950DT-AI-Core下发HCCL通信任务机制")
 
 > [!CAUTION]注意
@@ -68,7 +68,7 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
 
     示例的Prepare接口为[ReduceScatter](ReduceScatter.md)，其他接口可参考后续章节的内容。其中的参数AscendC::HCCL\_DATA\_TYPE\_FP16是HCCL任务的数据类型，其数据结构为HcclDataType，对应的参数说明参考[表1](#table116710585514)；参数HCCL\_REDUCE\_SUM是一种Reduce操作，AllReduce和ReduceScatter归约操作支持的Reduce操作类型参见[表2](#table2469980529)。
 
-    **表 1**  HcclDataType参数说明
+    **表1**  HcclDataType参数说明
 
     <a name="table116710585514"></a>
     | 数据类型 | 说明 |
@@ -89,7 +89,7 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
         HCCL_DATA_TYPE_UINT32 = 9, /* uint32 */
         HCCL_DATA_TYPE_FP64 = 10,  /* float64 */
         HCCL_DATA_TYPE_BFP16 = 11, /* bfloat16 */
-        HCCL_DATA_TYPE_INT128 = 12, /* int128 预留类型，暂不支持 */
+        HCCL_DATA_TYPE_INT128 = 12, /* int128预留类型，暂不支持 */
         HCCL_DATA_TYPE_HIF8 = 14,  /* hif8 */
         HCCL_DATA_TYPE_FP8E4M3 = 15,  /* fp8e4m3 */
         HCCL_DATA_TYPE_FP8E5M2 = 16,  /* fp8e5m2 */
@@ -98,7 +98,7 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
     };
     ```
 
-    **表 2**  HcclReduceOp参数说明
+    **表2**  HcclReduceOp参数说明
 
     <a name="table2469980529"></a>
     | 数据类型 | 说明 |
@@ -228,10 +228,10 @@ extern "C" __global__ __aicore__ void reduce_scatter_custom(GM_ADDR xGM, GM_ADDR
 }
 ```
 
-**图 3**  ReduceScatter通信示例<a name="fig19780192164210"></a>  
+**图3**  ReduceScatter通信示例<a name="fig19780192164210"></a>  
 ![](../../../../figures/ReduceScatter通信示例.png "ReduceScatter通信示例")
 
-**表 3**  MC2\_BUFFER\_LOCATION参数说明
+**表3**  MC2\_BUFFER\_LOCATION参数说明
 
 | 数据类型 | 说明 |
 | --- | --- |

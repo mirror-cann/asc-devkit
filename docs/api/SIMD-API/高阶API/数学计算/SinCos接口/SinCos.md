@@ -43,7 +43,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -56,7 +56,7 @@ struct SinCosConfig {
 };
 ```
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -82,9 +82,9 @@ struct SinCosConfig {
     ```
     AscendC::TPipe pipe;
     AscendC::TQue<AscendC::TPosition::VECCALC, 1> tmpQue;
-    pipe.InitBuffer(tmpQue, 1, bufferSize); // bufferSize 通过Host侧tiling参数获取
+    pipe.InitBuffer(tmpQue, 1, bufferSize); // bufferSize通过Host侧tiling参数获取
     LocalTensor<uint8_t> sharedTmpBuffer = tmpQue.AllocTensor<uint8_t>();
-    // 输入tensor长度为1024, 算子输入的数据类型为half, 实际计算个数为512
+    // 输入tensor长度为1024,算子输入的数据类型为half,实际计算个数为512
     static constexpr AscendC::SinCosConfig sincosConfig = { false };  // 不修改源操作数
     // dst0、dst1、src为half类型的LocalTensor
     AscendC::SinCos<sincosConfig, half>(dst0, dst1, src, sharedTmpBuffer, 512);
@@ -95,8 +95,8 @@ struct SinCosConfig {
     ```
     AscendC::TPipe pipe;
     AscendC::TQue<AscendC::TPosition::VECCALC, 1> tmpQue;
-    pipe.InitBuffer(tmpQue, 1, bufferSize); // bufferSize 通过Host侧tiling参数获取
-    // 输入tensor长度为1024, 算子输入的数据类型为half, 实际计算个数为512
+    pipe.InitBuffer(tmpQue, 1, bufferSize); // bufferSize通过Host侧tiling参数获取
+    // 输入tensor长度为1024,算子输入的数据类型为half,实际计算个数为512
     static constexpr AscendC::SinCosConfig sincosConfig = { false };  // 不修改源操作数
     // dst0、dst1、src为half类型的LocalTensor
     AscendC::SinCos<sincosConfig, half>(dst0, dst1, src, 512);

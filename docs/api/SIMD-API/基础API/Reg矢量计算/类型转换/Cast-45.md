@@ -65,7 +65,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="18.58%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -104,7 +104,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -144,7 +144,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </tbody>
 </table>
 
-**表 3**  浮点转整数
+**表3**  浮点转整数
 
 <a name="table17752925941"></a>
 <table><thead align="left"><tr id="row87528251243"><th class="cellrowborder" valign="top" width="16.666666666666664%" id="mcps1.2.7.1.1"><p id="p1432987510"><a name="p1432987510"></a><a name="p1432987510"></a>src dtype</p>
@@ -227,7 +227,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </tbody>
 </table>
 
-**表 4**  浮点转浮点
+**表4**  浮点转浮点
 
 <a name="table18665350162315"></a>
 <table><thead align="left"><tr id="row766575022310"><th class="cellrowborder" valign="top" width="13.0373925214957%" id="mcps1.2.7.1.1"><p id="p1098426162416"><a name="p1098426162416"></a><a name="p1098426162416"></a>src dtype</p>
@@ -409,7 +409,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </tbody>
 </table>
 
-**表 5**  整数转浮点
+**表5**  整数转浮点
 
 <a name="table2536411175011"></a>
 <table><thead align="left"><tr id="row1853616114502"><th class="cellrowborder" valign="top" width="20%" id="mcps1.2.6.1.1"><p id="p11162827165018"><a name="p11162827165018"></a><a name="p11162827165018"></a>src dtype</p>
@@ -485,7 +485,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </tbody>
 </table>
 
-**表 6**  整数转整数
+**表6**  整数转整数
 
 <a name="table183851919811"></a>
 <table><thead align="left"><tr id="row638621920118"><th class="cellrowborder" valign="top" width="19.96%" id="mcps1.2.6.1.1"><p id="p1479210241936"><a name="p1479210241936"></a><a name="p1479210241936"></a>src dtype</p>
@@ -621,7 +621,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </tbody>
 </table>
 
-**表 7**  浮点转整数转换规则
+**表7**  浮点转整数转换规则
 
 <a name="table13605442194314"></a>
 <table><thead align="left"><tr id="row1160510421435"><th class="cellrowborder" valign="top" width="27%" id="mcps1.2.3.1.1"><p id="p060504214431"><a name="p060504214431"></a><a name="p060504214431"></a>转换模式</p>
@@ -651,7 +651,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p131527314456"><a name="p131527314456"></a><a name="p131527314456"></a>输入5.5，输出6，因为6相比5，距离0更远，所以向6舍入</p>
 <p id="p1152131154515"><a name="p1152131154515"></a><a name="p1152131154515"></a>输入-2.4，输出2</p>
 <p id="p3152131184510"><a name="p3152131184510"></a><a name="p3152131184510"></a>输入-3.6，输出-4</p>
-<p id="p84413486466"><a name="p84413486466"></a><a name="p84413486466"></a>输入-6.5，输出-7， 因为-7相比-6，距离0更远</p>
+<p id="p84413486466"><a name="p84413486466"></a><a name="p84413486466"></a>输入-6.5，输出-7，因为-7相比-6，距离0更远</p>
 </td>
 </tr>
 <tr id="row116051742204313"><td class="cellrowborder" valign="top" width="27%" headers="mcps1.2.3.1.1 "><p id="p126061242164312"><a name="p126061242164312"></a><a name="p126061242164312"></a>CAST_FLOOR</p>
@@ -690,7 +690,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </tbody>
 </table>
 
-**表 8**  浮点转浮点转换规则
+**表8**  浮点转浮点转换规则
 
 <a name="table7407201112197"></a>
 <table><thead align="left"><tr id="row740831181916"><th class="cellrowborder" valign="top" width="20.32203220322032%" id="mcps1.2.4.1.1"><p id="p1740811118190"><a name="p1740811118190"></a><a name="p1740811118190"></a>src dtype</p>
@@ -715,7 +715,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p178861155131415"><a name="p178861155131415"></a><a name="p178861155131415"></a>float_exponet = 0b10000101 = 133</p>
 <p id="p1776105720134"><a name="p1776105720134"></a><a name="p1776105720134"></a>half_exponet - 15 = 133 - 127</p>
 <p id="p11403113213156"><a name="p11403113213156"></a><a name="p11403113213156"></a>half_exponet  = 21 = 0b10101</p>
-<p id="p593102015168"><a name="p593102015168"></a><a name="p593102015168"></a>float_mantissa 第14位为1奇数，所以不进位，舍弃后面13位</p>
+<p id="p593102015168"><a name="p593102015168"></a><a name="p593102015168"></a>float_mantissa第14位为1奇数，所以不进位，舍弃后面13位</p>
 <p id="p196421781177"><a name="p196421781177"></a><a name="p196421781177"></a>111011001<span>1</span>1011101110111</p>
 <p id="p1018984491719"><a name="p1018984491719"></a><a name="p1018984491719"></a>得到half_mantissa = 111011001<span>1</span></p>
 <p id="p37914513187"><a name="p37914513187"></a><a name="p37914513187"></a>所以half二进制为</p>
@@ -727,7 +727,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </td>
 <td class="cellrowborder" valign="top" width="16.53165316531653%" headers="mcps1.2.4.1.2 "><p id="p1140816114190"><a name="p1140816114190"></a><a name="p1140816114190"></a>bfloat16_t</p>
 </td>
-<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p24081211101917"><a name="p24081211101917"></a><a name="p24081211101917"></a>float 二进制规则为</p>
+<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p24081211101917"><a name="p24081211101917"></a><a name="p24081211101917"></a>float二进制规则为</p>
 <p id="p1752119271715"><a name="p1752119271715"></a><a name="p1752119271715"></a>sign:1bit,exponent:8bit mantissa:23bit</p>
 <p id="p681771429"><a name="p681771429"></a><a name="p681771429"></a>bfloat16_t二进制规则为</p>
 <p id="p102653137211"><a name="p102653137211"></a><a name="p102653137211"></a>sign:1bit,exponent:8bit,mantissa:7bit</p>
@@ -789,11 +789,11 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p1310919566229"><a name="p1310919566229"></a><a name="p1310919566229"></a>当bfloat16_exponent = <span>exponent</span>-127 &gt;= -14时</p>
 <p id="p337012491715"><a name="p337012491715"></a><a name="p337012491715"></a>因为bfloat16精度低，float16精度高，所以bfloat16到float16精度不变</p>
 <p id="p985717391252"><a name="p985717391252"></a><a name="p985717391252"></a><strong id="b1225285194612"><a name="b1225285194612"></a><a name="b1225285194612"></a>例1</strong>：bfloat16_mantissa = 0b1011000 -&gt;</p>
-<p id="p19964103717418"><a name="p19964103717418"></a><a name="p19964103717418"></a>float16_maintissa = 0b1011000<span>000</span>, 二进制位不发生进位，只需要再低位补3个0</p>
+<p id="p19964103717418"><a name="p19964103717418"></a><a name="p19964103717418"></a>float16_maintissa = 0b1011000<span>000</span>,二进制位不发生进位，只需要再低位补3个0</p>
 <p id="p14338194712516"><a name="p14338194712516"></a><a name="p14338194712516"></a>当bfloat16_exponent = <span>exponent</span>-127 &lt; -14时</p>
-<p id="p3613101018611"><a name="p3613101018611"></a><a name="p3613101018611"></a><strong id="b15241154217462"><a name="b15241154217462"></a><a name="b15241154217462"></a>例2</strong>：当<span>exponent</span> = 108， bfloat16_exponent = <span>exponent</span>-127 = -19&lt; -14时，因为float16_exponent = <span>exponent</span> - 14 最小为-14，无法表示，所以指数需要+5保持和float16_exponent相等，同时尾数位需要除以2的5次方，因为bf16计算公式 = s * (2^(e-127))*(man) =</p>
+<p id="p3613101018611"><a name="p3613101018611"></a><a name="p3613101018611"></a><strong id="b15241154217462"><a name="b15241154217462"></a><a name="b15241154217462"></a>例2</strong>：当<span>exponent</span> = 108， bfloat16_exponent = <span>exponent</span>-127 = -19&lt; -14时，因为float16_exponent = <span>exponent</span> - 14最小为-14，无法表示，所以指数需要+5保持和float16_exponent相等，同时尾数位需要除以2的5次方，因为bf16计算公式 = s * (2^(e-127))*(man) =</p>
 <p id="p143605231394"><a name="p143605231394"></a><a name="p143605231394"></a>s * (2^(e-127+5))*(man*2^(-5)),指数位乘以一个数，尾数位需要除以相同大小的数，保证最终值不变。假设bfloat16_mantissa = 0b1011011</p>
-<p id="p15828152472510"><a name="p15828152472510"></a><a name="p15828152472510"></a>bfloat16 mantissa计算公式为 1+ man/128, 用例二进制表示为</p>
+<p id="p15828152472510"><a name="p15828152472510"></a><a name="p15828152472510"></a>bfloat16 mantissa计算公式为1+ man/128,用例二进制表示为</p>
 <p id="p1518413108211"><a name="p1518413108211"></a><a name="p1518413108211"></a>0b1.1011011，指数位乘以2的5次方时，尾数要除以2的5次，小数点向左移动5位，所以bfloat16_mantissa = 0b0.000011011<span>0</span><span>11</span>，尾数为12位，因为float16只有10bit尾数位，所以在以下CAST模式中需要舍弃最低2位，并根据舍入模式决定是否舍入，当前例子的<span>舍弃精度中间值</span>为0b<span>10</span></p>
 <p id="p59971634115710"><a name="p59971634115710"></a><a name="p59971634115710"></a><strong id="b1099723405713"><a name="b1099723405713"></a><a name="b1099723405713"></a>CAST_RINT：</strong>就近舍入，距离相等时向偶数进位</p>
 <p id="p7696142111015"><a name="p7696142111015"></a><a name="p7696142111015"></a>当bfloat16_mantissa尾数小于等于10位时，不需要舍入；</p>
@@ -804,12 +804,12 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p44375564362"><a name="p44375564362"></a><a name="p44375564362"></a>2）被舍弃的精度大于<span>舍弃精度中间值</span>时，进位</p>
 <p id="p277394183718"><a name="p277394183718"></a><a name="p277394183718"></a>例bfloat16_mantissa = 0b0.000011011<span>0</span><span>0xxx</span></p>
 <p id="p6773194115378"><a name="p6773194115378"></a><a name="p6773194115378"></a>1x1x &gt; <span>1000</span> 输出float16_mantissa = 0b0.000011011<span>1</span></p>
-<p id="p24988117404"><a name="p24988117404"></a><a name="p24988117404"></a>3) 被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第10位</span>为偶数时不进位</p>
+<p id="p24988117404"><a name="p24988117404"></a><a name="p24988117404"></a>3)被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第10位</span>为偶数时不进位</p>
 <p id="p2471459184019"><a name="p2471459184019"></a><a name="p2471459184019"></a>例bfloat16_mantissa = 0b0.000011011<span>0</span><span>0xxx</span></p>
-<p id="p647959194019"><a name="p647959194019"></a><a name="p647959194019"></a><span>0</span> % 2 == 0 输出float16_mantissa = 0b0.000011011<span>0</span></p>
-<p id="p139931425114113"><a name="p139931425114113"></a><a name="p139931425114113"></a>4) 被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第10位</span>为奇数时进位</p>
+<p id="p647959194019"><a name="p647959194019"></a><a name="p647959194019"></a><span>0</span> % 2 == 0输出float16_mantissa = 0b0.000011011<span>0</span></p>
+<p id="p139931425114113"><a name="p139931425114113"></a><a name="p139931425114113"></a>4)被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第10位</span>为奇数时进位</p>
 <p id="p1899342544115"><a name="p1899342544115"></a><a name="p1899342544115"></a>例bfloat16_mantissa = 0b0.000011000<span>1</span><span>0xxx</span></p>
-<p id="p199931825194111"><a name="p199931825194111"></a><a name="p199931825194111"></a><span>1</span> % 2 == 1 输出float16_mantissa = 0b0.000011000<span>1</span></p>
+<p id="p199931825194111"><a name="p199931825194111"></a><a name="p199931825194111"></a><span>1</span> % 2 == 1输出float16_mantissa = 0b0.000011000<span>1</span></p>
 <p id="p5883125765714"><a name="p5883125765714"></a><a name="p5883125765714"></a><strong id="b288365715715"><a name="b288365715715"></a><a name="b288365715715"></a>CAST_ROUND：</strong>就近舍入，距离相等时向远离0方向进位</p>
 <p id="p5249165014440"><a name="p5249165014440"></a><a name="p5249165014440"></a>当bfloat16_mantissa尾数小于等于10位时，不需要进位；</p>
 <p id="p151428284467"><a name="p151428284467"></a><a name="p151428284467"></a>当bfloat16_mantissa尾数大于10位时，类似<strong id="b250693124713"><a name="b250693124713"></a><a name="b250693124713"></a>例2</strong>的例子</p>
@@ -819,7 +819,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p1714210286469"><a name="p1714210286469"></a><a name="p1714210286469"></a>2）被舍弃的精度大于<span>舍弃精度中间值</span>时，进位</p>
 <p id="p1814252854619"><a name="p1814252854619"></a><a name="p1814252854619"></a>例bfloat16_mantissa = 0b0.000011011<span>0</span><span>0xxx</span></p>
 <p id="p8142228124614"><a name="p8142228124614"></a><a name="p8142228124614"></a>1x1x &gt; <span>1000</span> 输出float16_mantissa = 0b0.000011011<span>1</span></p>
-<p id="p51420286462"><a name="p51420286462"></a><a name="p51420286462"></a>3) 被舍弃的精度等于<span>舍弃精度中间值</span>时，进位远离0，所以进位</p>
+<p id="p51420286462"><a name="p51420286462"></a><a name="p51420286462"></a>3)被舍弃的精度等于<span>舍弃精度中间值</span>时，进位远离0，所以进位</p>
 <p id="p16142028174612"><a name="p16142028174612"></a><a name="p16142028174612"></a>例bfloat16_mantissa = 0b0.000011011<span>0</span><span>0xxx</span></p>
 <p id="p61431528134617"><a name="p61431528134617"></a><a name="p61431528134617"></a>输出float16_mantissa = 0b0.000011011<span>1</span></p>
 <p id="p351815175815"><a name="p351815175815"></a><a name="p351815175815"></a><strong id="b16510015185819"><a name="b16510015185819"></a><a name="b16510015185819"></a>CAST_FLOOR：</strong>向负无穷方向舍入</p>
@@ -849,7 +849,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p5207161418618"><a name="p5207161418618"></a><a name="p5207161418618"></a><strong id="b61451528566"><a name="b61451528566"></a><a name="b61451528566"></a>完整举例</strong>：</p>
 <p id="p19694291663"><a name="p19694291663"></a><a name="p19694291663"></a>输入bfloat16为2.90573e-06，二进制为</p>
 <p id="p166211313915"><a name="p166211313915"></a><a name="p166211313915"></a>sign:0, exponent:01101100, mantissa:1000011</p>
-<p id="p21931943394"><a name="p21931943394"></a><a name="p21931943394"></a>bfloat16_exponent = 108-127 = -19 &lt; -14，float16_exponent最小为-14，所以bfloat16_exponent += 5，bfloat16_mantissa 小数点左移</p>
+<p id="p21931943394"><a name="p21931943394"></a><a name="p21931943394"></a>bfloat16_exponent = 108-127 = -19 &lt; -14，float16_exponent最小为-14，所以bfloat16_exponent += 5，bfloat16_mantissa小数点左移</p>
 <p id="p527714569142"><a name="p527714569142"></a><a name="p527714569142"></a>5位，1.1000011 -&gt; 0.000011000<span>0</span><span>11</span></p>
 <p id="p16811749171516"><a name="p16811749171516"></a><a name="p16811749171516"></a>CAST_RINT模式</p>
 <p id="p181042231613"><a name="p181042231613"></a><a name="p181042231613"></a>舍弃精度<span>11</span>大于<span>舍弃精度中间值10</span>，所以进位</p>
@@ -929,7 +929,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </td>
 <td class="cellrowborder" valign="top" width="16.53165316531653%" headers="mcps1.2.4.1.2 "><p id="p9752193852218"><a name="p9752193852218"></a><a name="p9752193852218"></a>fp8_e4m3fn_t</p>
 </td>
-<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p7832184583112"><a name="p7832184583112"></a><a name="p7832184583112"></a>float 二进制规则为</p>
+<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p7832184583112"><a name="p7832184583112"></a><a name="p7832184583112"></a>float二进制规则为</p>
 <p id="p883215456314"><a name="p883215456314"></a><a name="p883215456314"></a>sign:1bit,exponent:8bit mantissa:23bit</p>
 <p id="p397555417315"><a name="p397555417315"></a><a name="p397555417315"></a>fp8_e4m3fn_t二进制规则为</p>
 <p id="p98322458315"><a name="p98322458315"></a><a name="p98322458315"></a>sign:1bit,exponent:4bit,mantissa:3bit</p>
@@ -968,7 +968,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </td>
 <td class="cellrowborder" valign="top" width="16.53165316531653%" headers="mcps1.2.4.1.2 "><p id="p46181139115"><a name="p46181139115"></a><a name="p46181139115"></a>fp8_e5m2_t</p>
 </td>
-<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p26646114217"><a name="p26646114217"></a><a name="p26646114217"></a>float 二进制规则为</p>
+<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p26646114217"><a name="p26646114217"></a><a name="p26646114217"></a>float二进制规则为</p>
 <p id="p196641912023"><a name="p196641912023"></a><a name="p196641912023"></a>sign:1bit,exponent:8bit mantissa:23bit</p>
 <p id="p196641912218"><a name="p196641912218"></a><a name="p196641912218"></a>fp8_e5m2_t二进制规则为</p>
 <p id="p1966420115217"><a name="p1966420115217"></a><a name="p1966420115217"></a>sign:1bit,exponent:5bit,mantissa:2bit</p>
@@ -1013,9 +1013,9 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p98341164149"><a name="p98341164149"></a><a name="p98341164149"></a>sign:1bit,<span>exponent</span>:2bit,mantissa:1bit</p>
 <p id="p1783518671418"><a name="p1783518671418"></a><a name="p1783518671418"></a>尾数位相差<span>6位</span></p>
 <p id="p883519611416"><a name="p883519611416"></a><a name="p883519611416"></a>当bfloat16_exponent = <span>exponent</span>-127 &lt; 0时</p>
-<p id="p1835960148"><a name="p1835960148"></a><a name="p1835960148"></a><strong id="b18835468143"><a name="b18835468143"></a><a name="b18835468143"></a>例1</strong>：当<span>exponent</span> = 124， bfloat16_exponent = <span>exponent</span>-127 = -3 &lt; 0时，因为float4_e2m1_exponent = <span>exponent</span> - 1 最小为0，无法表示，所以指数需要+3保持和float4_e2m1_exponent相等，同时尾数位需要除以2的3次方，因为bf16计算公式 = s * (2^(e-127))*(man) =</p>
+<p id="p1835960148"><a name="p1835960148"></a><a name="p1835960148"></a><strong id="b18835468143"><a name="b18835468143"></a><a name="b18835468143"></a>例1</strong>：当<span>exponent</span> = 124， bfloat16_exponent = <span>exponent</span>-127 = -3 &lt; 0时，因为float4_e2m1_exponent = <span>exponent</span> - 1最小为0，无法表示，所以指数需要+3保持和float4_e2m1_exponent相等，同时尾数位需要除以2的3次方，因为bf16计算公式 = s * (2^(e-127))*(man) =</p>
 <p id="p88351163149"><a name="p88351163149"></a><a name="p88351163149"></a>s * (2^(e-127+3))*(man*2^(-3)),指数位乘以一个数，尾数位需要除以相同大小的数，保证最终值不变。假设bfloat16_mantissa = 0b1011011</p>
-<p id="p17835196121411"><a name="p17835196121411"></a><a name="p17835196121411"></a>bfloat16 mantissa计算公式为 1+ man/128, 用例二进制表示为</p>
+<p id="p17835196121411"><a name="p17835196121411"></a><a name="p17835196121411"></a>bfloat16 mantissa计算公式为1+ man/128,用例二进制表示为</p>
 <p id="p18835861144"><a name="p18835861144"></a><a name="p18835861144"></a>0b1.1011011，指数位乘以2的3次方时，尾数要除以2的3次，小数点向左移动3位，所以bfloat16_mantissa = 0b0.0<span>0110110</span><span>11</span>，因为float4_e2m1只有1bit尾数位，所以在以下CAST模式中需要舍弃最低9位，并根据舍入模式决定是否舍入，当前例子的<span>舍弃精度中间值</span>为0b<span>10</span><span>0000000</span></p>
 <p id="p683517631417"><a name="p683517631417"></a><a name="p683517631417"></a><strong id="b18835366141"><a name="b18835366141"></a><a name="b18835366141"></a>CAST_RINT：</strong>就近舍入，距离相等时向偶数进位</p>
 <p id="p48352610145"><a name="p48352610145"></a><a name="p48352610145"></a>1）被舍弃的精度小于<span>舍弃精度中间值</span>时，不进位，</p>
@@ -1024,12 +1024,12 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p1783517617149"><a name="p1783517617149"></a><a name="p1783517617149"></a>2）被舍弃的精度大于<span>舍弃精度中间值</span>时，进位</p>
 <p id="p583514616148"><a name="p583514616148"></a><a name="p583514616148"></a>例bfloat16_mantissa = 0b0.<span>0</span><span>100110xxx</span></p>
 <p id="p137931513103111"><a name="p137931513103111"></a><a name="p137931513103111"></a><span>100110xxx</span> &gt; <span>舍弃精度中间值</span> 输出float4_e2m1_mantissa = 0b0.<span>1</span></p>
-<p id="p108368611145"><a name="p108368611145"></a><a name="p108368611145"></a>3) 被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第1位</span>为偶数时不进位</p>
+<p id="p108368611145"><a name="p108368611145"></a><a name="p108368611145"></a>3)被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第1位</span>为偶数时不进位</p>
 <p id="p1583615617147"><a name="p1583615617147"></a><a name="p1583615617147"></a>例bfloat16_mantissa = 0b0.<span>0</span><span>100000xxx</span></p>
-<p id="p2083614681419"><a name="p2083614681419"></a><a name="p2083614681419"></a><span>0</span> % 2 == 0 输出float4_e2m1_mantissa = 0b0.<span>0</span></p>
-<p id="p10836146151414"><a name="p10836146151414"></a><a name="p10836146151414"></a>4) 被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第1位</span>为奇数时进位</p>
+<p id="p2083614681419"><a name="p2083614681419"></a><a name="p2083614681419"></a><span>0</span> % 2 == 0输出float4_e2m1_mantissa = 0b0.<span>0</span></p>
+<p id="p10836146151414"><a name="p10836146151414"></a><a name="p10836146151414"></a>4)被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第1位</span>为奇数时进位</p>
 <p id="p168360610148"><a name="p168360610148"></a><a name="p168360610148"></a>例bfloat16_mantissa = 0b0.<span>1</span><span>100000xxx</span></p>
-<p id="p118360611147"><a name="p118360611147"></a><a name="p118360611147"></a><span>1</span> % 2 == 1 输出float4_e2m1_mantissa = 0b0.<span>1</span></p>
+<p id="p118360611147"><a name="p118360611147"></a><a name="p118360611147"></a><span>1</span> % 2 == 1输出float4_e2m1_mantissa = 0b0.<span>1</span></p>
 <p id="p1783610671416"><a name="p1783610671416"></a><a name="p1783610671416"></a><strong id="b1083610611149"><a name="b1083610611149"></a><a name="b1083610611149"></a>CAST_ROUND：</strong>就近舍入，距离相等时向远离0方向进位</p>
 <p id="p768811420364"><a name="p768811420364"></a><a name="p768811420364"></a>1）被舍弃的精度小于<span>舍弃精度中间值</span>时，不进位，</p>
 <p id="p868871413617"><a name="p868871413617"></a><a name="p868871413617"></a>例bfloat16_mantissa = 0b0.<span>0</span><span>000110xxx</span></p>
@@ -1037,7 +1037,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p86883144361"><a name="p86883144361"></a><a name="p86883144361"></a>2）被舍弃的精度大于<span>舍弃精度中间值</span>时，进位</p>
 <p id="p126888147366"><a name="p126888147366"></a><a name="p126888147366"></a>例bfloat16_mantissa = 0b0.<span>0</span><span>100110xxx</span></p>
 <p id="p13688141419364"><a name="p13688141419364"></a><a name="p13688141419364"></a><span>100110xxx</span> &gt; <span>舍弃精度中间值</span> 输出float4_e2m1_mantissa = 0b0.<span>1</span></p>
-<p id="p10688131413368"><a name="p10688131413368"></a><a name="p10688131413368"></a>3) 被舍弃的精度等于<span>舍弃精度中间值</span>时，进位远离0，所以进位</p>
+<p id="p10688131413368"><a name="p10688131413368"></a><a name="p10688131413368"></a>3)被舍弃的精度等于<span>舍弃精度中间值</span>时，进位远离0，所以进位</p>
 <p id="p10688181417360"><a name="p10688181417360"></a><a name="p10688181417360"></a>例bfloat16_mantissa = 0b0.<span>0</span><span>100000xxx</span></p>
 <p id="p16688814163612"><a name="p16688814163612"></a><a name="p16688814163612"></a>输出float4_e2m1_mantissa = 0b0.<span>1</span></p>
 <p id="p983715610143"><a name="p983715610143"></a><a name="p983715610143"></a><strong id="b083716101419"><a name="b083716101419"></a><a name="b083716101419"></a>CAST_FLOOR：</strong>向负无穷方向舍入</p>
@@ -1061,7 +1061,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p168387681414"><a name="p168387681414"></a><a name="p168387681414"></a><strong id="b683815651415"><a name="b683815651415"></a><a name="b683815651415"></a>完整举例</strong>：</p>
 <p id="p8838106141416"><a name="p8838106141416"></a><a name="p8838106141416"></a>输入bfloat16为0.761719，二进制为</p>
 <p id="p11838156161415"><a name="p11838156161415"></a><a name="p11838156161415"></a>sign:0, exponent:<span>01111110</span>, mantissa:1000011</p>
-<p id="p583816191419"><a name="p583816191419"></a><a name="p583816191419"></a>bfloat16_exponent = <span>126</span>-127 = -1 &lt; 0，float16_exponent最小为0，所以bfloat16_exponent += 1，bfloat16_mantissa 小数点左移</p>
+<p id="p583816191419"><a name="p583816191419"></a><a name="p583816191419"></a>bfloat16_exponent = <span>126</span>-127 = -1 &lt; 0，float16_exponent最小为0，所以bfloat16_exponent += 1，bfloat16_mantissa小数点左移</p>
 <p id="p78386651417"><a name="p78386651417"></a><a name="p78386651417"></a>1位，1.1000011 -&gt; 0.<span>1</span><span>1000011</span></p>
 <p id="p68381063149"><a name="p68381063149"></a><a name="p68381063149"></a>CAST_RINT模式</p>
 <p id="p118381462149"><a name="p118381462149"></a><a name="p118381462149"></a>舍弃精度<span>1000011</span>大于<span>舍弃精度中间值1000000</span>，所以进位</p>
@@ -1082,9 +1082,9 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p790316161450"><a name="p790316161450"></a><a name="p790316161450"></a>sign:1bit,<span>exponent</span>:1bit,mantissa:2bit</p>
 <p id="p18903121654519"><a name="p18903121654519"></a><a name="p18903121654519"></a>尾数位相差<span>5位</span></p>
 <p id="p13903191612456"><a name="p13903191612456"></a><a name="p13903191612456"></a>当bfloat16_exponent = <span>exponent</span>-127 &lt; 0时，bfloat16_mantissa需要发生位移</p>
-<p id="p1590312169455"><a name="p1590312169455"></a><a name="p1590312169455"></a><strong id="b8903216144517"><a name="b8903216144517"></a><a name="b8903216144517"></a>例1</strong>：当<span>exponent</span> = 124， bfloat16_exponent = <span>exponent</span>-127 = -3 &lt; 0时，因为float4_e1m2_exponent = <span>exponent</span> - 1 最小为0，无法表示，所以指数需要+3保持和float4_e2m1_exponent相等，同时尾数位需要除以2的3次方，因为bf16计算公式 = s * (2^(e-127))*(man) =</p>
+<p id="p1590312169455"><a name="p1590312169455"></a><a name="p1590312169455"></a><strong id="b8903216144517"><a name="b8903216144517"></a><a name="b8903216144517"></a>例1</strong>：当<span>exponent</span> = 124， bfloat16_exponent = <span>exponent</span>-127 = -3 &lt; 0时，因为float4_e1m2_exponent = <span>exponent</span> - 1最小为0，无法表示，所以指数需要+3保持和float4_e2m1_exponent相等，同时尾数位需要除以2的3次方，因为bf16计算公式 = s * (2^(e-127))*(man) =</p>
 <p id="p2904111694510"><a name="p2904111694510"></a><a name="p2904111694510"></a>s * (2^(e-127+3))*(man*2^(-3)),指数位乘以一个数，尾数位需要除以相同大小的数，保证最终值不变。假设bfloat16_mantissa = 0b1011011</p>
-<p id="p2904916184517"><a name="p2904916184517"></a><a name="p2904916184517"></a>bfloat16 mantissa计算公式为 1+ man/128, 用例二进制表示为</p>
+<p id="p2904916184517"><a name="p2904916184517"></a><a name="p2904916184517"></a>bfloat16 mantissa计算公式为1+ man/128,用例二进制表示为</p>
 <p id="p8904151613454"><a name="p8904151613454"></a><a name="p8904151613454"></a>0b1.1011011，指数位乘以2的3次方时，尾数要除以2的3次，小数点向左移动3位，所以bfloat16_mantissa = 0b0.00<span>110110</span><span>11</span>，因为float4_e2m1只有2bit尾数位，所以在以下CAST模式中需要舍弃最低8位，并根据舍入模式决定是否舍入，当前例子的<span>舍弃精度中间值</span>为0b<span>10</span><span>000000</span></p>
 <p id="p49044165458"><a name="p49044165458"></a><a name="p49044165458"></a><strong id="b1790451620455"><a name="b1790451620455"></a><a name="b1790451620455"></a>CAST_RINT：</strong>就近舍入，距离相等时向偶数进位</p>
 <p id="p1390413161454"><a name="p1390413161454"></a><a name="p1390413161454"></a>1）被舍弃的精度小于<span>舍弃精度中间值</span>时，不进位，</p>
@@ -1093,12 +1093,12 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p119041516124511"><a name="p119041516124511"></a><a name="p119041516124511"></a>2）被舍弃的精度大于<span>舍弃精度中间值</span>时，进位</p>
 <p id="p8904121664511"><a name="p8904121664511"></a><a name="p8904121664511"></a>例bfloat16_mantissa = 0b0.0<span>0</span><span>10011xxx</span></p>
 <p id="p690431684515"><a name="p690431684515"></a><a name="p690431684515"></a><span>10011xxx</span> &gt; <span>舍弃精度中间值</span> 输出float4_e1m2_mantissa = 0b0.0<span>1</span></p>
-<p id="p11904516104516"><a name="p11904516104516"></a><a name="p11904516104516"></a>3) 被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第2位</span>为偶数时不进位</p>
+<p id="p11904516104516"><a name="p11904516104516"></a><a name="p11904516104516"></a>3)被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第2位</span>为偶数时不进位</p>
 <p id="p590411164455"><a name="p590411164455"></a><a name="p590411164455"></a>例bfloat16_mantissa = 0b0.0<span>0</span><span>10000xxx</span></p>
-<p id="p990431615459"><a name="p990431615459"></a><a name="p990431615459"></a><span>0</span> % 2 == 0 输出float4_e1m2_mantissa = 0b0.0<span>0</span></p>
-<p id="p169056166452"><a name="p169056166452"></a><a name="p169056166452"></a>4) 被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第2位</span>为奇数时进位</p>
+<p id="p990431615459"><a name="p990431615459"></a><a name="p990431615459"></a><span>0</span> % 2 == 0输出float4_e1m2_mantissa = 0b0.0<span>0</span></p>
+<p id="p169056166452"><a name="p169056166452"></a><a name="p169056166452"></a>4)被舍弃的精度等于<span>舍弃精度中间值</span>时，<span>第2位</span>为奇数时进位</p>
 <p id="p29057165456"><a name="p29057165456"></a><a name="p29057165456"></a>例bfloat16_mantissa = 0b0.0<span>1</span><span>10000xxx</span></p>
-<p id="p209055163457"><a name="p209055163457"></a><a name="p209055163457"></a><span>1</span> % 2 == 1 输出float4_e1m2_mantissa = 0b0.1<span>0</span></p>
+<p id="p209055163457"><a name="p209055163457"></a><a name="p209055163457"></a><span>1</span> % 2 == 1输出float4_e1m2_mantissa = 0b0.1<span>0</span></p>
 <p id="p18905716204511"><a name="p18905716204511"></a><a name="p18905716204511"></a><strong id="b1590516164452"><a name="b1590516164452"></a><a name="b1590516164452"></a>CAST_ROUND：</strong>就近舍入，距离相等时向远离0方向进位</p>
 <p id="p490571674515"><a name="p490571674515"></a><a name="p490571674515"></a>1）被舍弃的精度小于<span>舍弃精度中间值</span>时，不进位，</p>
 <p id="p490520161455"><a name="p490520161455"></a><a name="p490520161455"></a>例bfloat16_mantissa = 0b0.0<span>0</span><span>00110xxx</span></p>
@@ -1106,7 +1106,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p14905131617456"><a name="p14905131617456"></a><a name="p14905131617456"></a>2）被舍弃的精度大于<span>舍弃精度中间值</span>时，进位</p>
 <p id="p690581618458"><a name="p690581618458"></a><a name="p690581618458"></a>例bfloat16_mantissa = 0b0.0<span>0</span><span>10110xxx</span></p>
 <p id="p1590591611458"><a name="p1590591611458"></a><a name="p1590591611458"></a><span>10110xxx</span> &gt; <span>舍弃精度中间值</span> 输出float4_e1m2_mantissa = 0b0.0<span>1</span></p>
-<p id="p15905141634515"><a name="p15905141634515"></a><a name="p15905141634515"></a>3) 被舍弃的精度等于<span>舍弃精度中间值</span>时，进位远离0，所以进位</p>
+<p id="p15905141634515"><a name="p15905141634515"></a><a name="p15905141634515"></a>3)被舍弃的精度等于<span>舍弃精度中间值</span>时，进位远离0，所以进位</p>
 <p id="p1590514166456"><a name="p1590514166456"></a><a name="p1590514166456"></a>例bfloat16_mantissa = 0b0.<span>00</span><span>10000xxx</span></p>
 <p id="p9905516154513"><a name="p9905516154513"></a><a name="p9905516154513"></a>输出float4_e1m2_mantissa = 0b0.0<span>1</span></p>
 <p id="p390511614453"><a name="p390511614453"></a><a name="p390511614453"></a><strong id="b139061916164518"><a name="b139061916164518"></a><a name="b139061916164518"></a>CAST_FLOOR：</strong>向负无穷方向舍入</p>
@@ -1130,7 +1130,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p149061016134516"><a name="p149061016134516"></a><a name="p149061016134516"></a><strong id="b20907316174512"><a name="b20907316174512"></a><a name="b20907316174512"></a>完整举例</strong>：</p>
 <p id="p49071216174514"><a name="p49071216174514"></a><a name="p49071216174514"></a>输入bfloat16为0.761719，二进制为</p>
 <p id="p49078166455"><a name="p49078166455"></a><a name="p49078166455"></a>sign:0, exponent:<span>01111110</span>, mantissa:1000011</p>
-<p id="p14907151674516"><a name="p14907151674516"></a><a name="p14907151674516"></a>bfloat16_exponent = <span>126</span>-127 = -1 &lt; 0，float16_exponent最小为0，所以bfloat16_exponent += 1，bfloat16_mantissa 小数点左移</p>
+<p id="p14907151674516"><a name="p14907151674516"></a><a name="p14907151674516"></a>bfloat16_exponent = <span>126</span>-127 = -1 &lt; 0，float16_exponent最小为0，所以bfloat16_exponent += 1，bfloat16_mantissa小数点左移</p>
 <p id="p690717162451"><a name="p690717162451"></a><a name="p690717162451"></a>1位，1.1000011 -&gt; 0.1<span>1</span><span>000011</span></p>
 <p id="p1890711664518"><a name="p1890711664518"></a><a name="p1890711664518"></a>CAST_RINT模式</p>
 <p id="p11907916184513"><a name="p11907916184513"></a><a name="p11907916184513"></a>舍弃精度<span>000011</span>小于<span>舍弃精度中间值100000</span>，所以不进位</p>
@@ -1151,7 +1151,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </tbody>
 </table>
 
-**表 9**  float to hifloat8\_t类型转换规则
+**表9**  float to hifloat8\_t类型转换规则
 
 <a name="table1352142520363"></a>
 <table><thead align="left"><tr id="row1035382513367"><th class="cellrowborder" colspan="2" valign="top" id="mcps1.2.3.1.1"><p id="p2926133119405"><a name="p2926133119405"></a><a name="p2926133119405"></a>VCVTFF:F322HiF8</p>
@@ -1207,7 +1207,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </tbody>
 </table>
 
-**表 10**  half to hifloat8\_t类型转换规则
+**表10**  half to hifloat8\_t类型转换规则
 
 <a name="table163085984311"></a>
 <table><thead align="left"><tr id="row231185918436"><th class="cellrowborder" valign="top" width="100%" id="mcps1.2.2.1.1"><p id="p19567167184418"><a name="p19567167184418"></a><a name="p19567167184418"></a>VCVTFF: F162HiF8</p>
@@ -1269,10 +1269,10 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
--   该指令需配合[SetCtrlSpr\(ISASI\)](../../特殊寄存器访问/SetCtrlSpr(ISASI).md)  指令使用，通过设置寄存器的值控制Cast的饱和和非饱和模式。
+-   该指令需配合[SetCtrlSpr\(ISASI\)](../../特殊寄存器访问/SetCtrlSpr(ISASI).md)指令使用，通过设置寄存器的值控制Cast的饱和和非饱和模式。
 -   浮点数转整数：
-    -   非饱和模式：输入数据超过输出类型最值时，结果被截断为目标格式的数据宽度，例如输入half值为257, 输出uint8\_t值为1，输入为+/-inf，则返回输出类型的对应最值，输入nan时，返回0。
-    -   饱和模式：输入数据超过输出类型最值时，返回输出类型的对应最值，例如输入half值为257, 输出uint8值为255，输入half值为-inf，输出uint8\_t值为0，输入nan时，返回0。
+    -   非饱和模式：输入数据超过输出类型最值时，结果被截断为目标格式的数据宽度，例如输入half值为257,输出uint8\_t值为1，输入为+/-inf，则返回输出类型的对应最值，输入nan时，返回0。
+    -   饱和模式：输入数据超过输出类型最值时，返回输出类型的对应最值，例如输入half值为257,输出uint8值为255，输入half值为-inf，输出uint8\_t值为0，输入nan时，返回0。
 
 -   浮点数转浮点数：
     -   当前浮点数转浮点数支持饱和模式和非饱和模式，非饱和模式下，输入数据为nan时，输出为nan，输入+/-inf时，输出为+/-inf；饱和模式下，输入为nan时，输出为0，输入数据超过输出类型最值时，返回输出类型的对应最值。
@@ -1280,7 +1280,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
     -   当输出类型为fp8\_e4m3fn\_t时，由于fp8\_e4m3fn\_t没有inf表示格式，所以输出为nan。
     -   当输出类型为fp8\_e5m2\_t/fp8\_e4m3fn\_t时，输入nan，默认输出为0。
     -   对于bfloat16 to float4类型，输入bfloat16 inf或超出fp4x2\_e2m1\_t/fp4x2\_e1m2\_t数据最值范围时，会返回对应符号的fp4x2\_e2m1\_t/fp4x2\_e1m2\_t最值；输入nan时，fp4x2\_e2m1\_t/fp4x2\_e1m2\_t输出0。
-    -   对于bfloat16\_t到fp4x2\_e2m1\_t/fp4x2\_e1m2\_t数据类型的转换，指令会以每2个元素为一对进行读写，mask有效位以偶数位为准，例如 10 00 00 00 10 10 00 10 等效于11 11 00 00 10 10 00 11。
+    -   对于bfloat16\_t到fp4x2\_e2m1\_t/fp4x2\_e1m2\_t数据类型的转换，指令会以每2个元素为一对进行读写，mask有效位以偶数位为准，例如10 00 00 00 10 10 00 10等效于11 11 00 00 10 10 00 11。
 
         ![](../../../../figures/3-3-4-8-1.png)
 
@@ -1288,11 +1288,11 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 
         输入bfloat16\_t +/-inf或绝对值超出fp8\_e8m0\_t类型最值，则返回fp8\_e8m0\_t最大值0b11111110；
 
-        输入bfloat16\_t nan 输出fp8\_e8m0\_t nan = 0b11111111。
+        输入bfloat16\_t nan输出fp8\_e8m0\_t nan = 0b11111111。
 
 -   整数转整数
 
-    不饱和模式：输入数据会截断为目标数据格式，例如，输入int32\_t值为256, 输出uint8\_t值为0
+    不饱和模式：输入数据会截断为目标数据格式，例如，输入int32\_t值为256,输出uint8\_t值为0
 
     饱和模式：输入数据超出目标数据范围，会饱和为目标数据最值
 
@@ -1348,4 +1348,3 @@ __simd_vf__ inline void CastVFF322S16(__ubuf__ float* xAddr, __ubuf__ int16_t* y
     }
 }
 ```
-

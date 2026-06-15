@@ -24,7 +24,7 @@ inline float norm3df(float a, float b, float c)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

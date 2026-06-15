@@ -27,7 +27,7 @@ __aicore__ inline void SetFixpipePreQuantFlag(uint64_t config)
 
 ## 参数说明<a name="zh-cn_topic_0000002516049318_section622mcpsimp"></a>
 
-**表 1** 参数说明
+**表1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |

@@ -22,7 +22,7 @@ __aicore__ inline void InitV2(GM_ADDR context, const void *initTiling)
 
 ## 参数说明
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -67,4 +67,3 @@ extern "C" __global__ __aicore__ void userKernel(GM_ADDR aGM, GM_ADDR workspaceG
     // 调用HCCL的Prepare、Commit、Wait、Finalize接口
 }
 ```
-

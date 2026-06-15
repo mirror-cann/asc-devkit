@@ -30,7 +30,7 @@ using make_index_sequence = MakeIntegerSequence<size_t, N>;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -61,4 +61,3 @@ __aicore__ inline void Process()
     PrintIndexSequence(AscendC::Std::index_sequence<0,1,2,10,8000>{}); // 打印结果: 0，1，2，10, 8000
 }
 ```
-

@@ -66,7 +66,7 @@ Fmod\(-3.0, 1.1\) = -0.8
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -86,7 +86,7 @@ struct FmodConfig {
 };
 ```
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -120,12 +120,12 @@ struct FmodConfig {
 
 // 接口框架申请临时空间，全部参与计算
 AscendC::Fmod(dstLocal, src0Local, src1Local);
-// 接口框架申请临时空间，部分参与计算, 需要参与计算的元素个数为512
+// 接口框架申请临时空间，部分参与计算,需要参与计算的元素个数为512
 AscendC::Fmod(dstLocal, src0Local, src1Local, 512);
 
 // 通过sharedTmpBuffer入参传入临时空间，全部参与计算
 AscendC::Fmod(dstLocal, src0Local, src1Local, sharedTmpBuffer);
-// 通过sharedTmpBuffer入参传入临时空间，部分参与计算, 需要参与计算的元素个数为512
+// 通过sharedTmpBuffer入参传入临时空间，部分参与计算,需要参与计算的元素个数为512
 AscendC::Fmod(dstLocal, src0Local, src1Local, sharedTmpBuffer, 512);
 ```
 

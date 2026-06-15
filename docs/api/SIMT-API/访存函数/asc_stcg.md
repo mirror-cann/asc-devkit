@@ -166,7 +166,7 @@ inline void asc_stcg(half2* address, half2 val)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -220,4 +220,3 @@ inline void asc_stcg(half2* address, half2 val)
         asc_stcg(src + idx, val[idx]);
     }
     ```
-

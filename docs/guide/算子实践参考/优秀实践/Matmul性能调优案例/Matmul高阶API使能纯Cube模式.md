@@ -4,14 +4,14 @@
 
 本案例呈现了在矩阵乘算子场景中，开启Matmul高阶API的纯Cube模式对算子性能的提升效果。如下图所示，Matmul API默认使用MIX模式，即用户从AIV侧发起消息，通过消息通信框架中转消息后，在AIC侧执行Matmul计算。这套消息处理机制会带来额外的Scalar性能开销。相较于MIX模式，纯Cube模式可以直接跳过消息通信框架，完成Matmul计算，提升算子性能。
 
-**图 1**  默认MIX模式的Matmul流程示意图<a name="fig0672118378"></a>  
+**图1**  默认MIX模式的Matmul流程示意图<a name="fig0672118378"></a>  
 ![](../../../figures/默认MIX模式的Matmul流程示意图.png "默认MIX模式的Matmul流程示意图")
 
 -   开启纯Cube模式的适用场景
 
     非融合算子，只有矩阵计算的场景。即相较于MIX模式（包含矩阵计算和矢量计算），没有矢量计算的场景。本案例的算子规格如下：
 
-**表 1**  算子用例规格
+**表1**  算子用例规格
 
 <a name="table15465191317123"></a>
 <table><thead align="left"><tr id="row184651013131217"><th class="cellrowborder" valign="top" width="25%" id="mcps1.2.5.1.1"><p id="p24653132122"><a name="p24653132122"></a><a name="p24653132122"></a>输入</p>
@@ -73,7 +73,7 @@ Tiling参数如下：
 
 ## 设计优化方案<a name="section81265422311"></a>
 
-默认MIX模式下，用户在AIV侧发起消息，通过消息通信框架中转消息后，在AIC侧执行Matmul计算。基于这样的流程，用户使用Matmul高阶API编写算子代码时，可以使用[REGIST\_MATMUL\_OBJ](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/REGIST_MATMUL_OBJ.md)宏，无需区分AIV和AIC，但也因这套消息处理机制导致产生了额外的性能开销，如[图1 默认MIX模式的Matmul流程示意图](#fig0672118378)所示。
+默认MIX模式下，用户在AIV侧发起消息，通过消息通信框架中转消息后，在AIC侧执行Matmul计算。基于这样的流程，用户使用Matmul高阶API编写算子代码时，可以使用[REGIST\_MATMUL\_OBJ](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/REGIST_MATMUL_OBJ.md)宏，无需区分AIV和AIC，但也因这套消息处理机制导致产生了额外的性能开销，如[图1默认MIX模式的Matmul流程示意图](#fig0672118378)所示。
 
 实现默认MIX模式的具体步骤如下：
 
@@ -106,7 +106,7 @@ Tiling参数如下：
 
 在没有矢量计算的算子场景下，可以跳过消息通信框架的机制，开启纯Cube模式完成Matmul计算，减少消息通信的性能开销，提升算子性能。
 
-**图 2**  纯Cube模式的Matmul流程示意图<a name="fig20558182319127"></a>  
+**图2**  纯Cube模式的Matmul流程示意图<a name="fig20558182319127"></a>  
 ![](../../../figures/纯Cube模式的Matmul流程示意图.png "纯Cube模式的Matmul流程示意图")
 
 Matmul API开启纯Cube模式的完整样例请参考[纯Cube模式的Matmul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul)。开启纯Cube模式的主要步骤如下：

@@ -80,7 +80,7 @@
 
 -   对RegTensor操作
 
-    **表 1**  模板参数说明
+    **表1**  模板参数说明
 
     <a name="table1878811121758"></a>
     <table><thead align="left"><tr id="row97885121457"><th class="cellrowborder" valign="top" width="18.2%" id="mcps1.2.3.1.1"><p id="p2078817124511"><a name="p2078817124511"></a><a name="p2078817124511"></a>参数名</p>
@@ -103,13 +103,13 @@
     </tr>
     <tr id="row07893121515"><td class="cellrowborder" valign="top" width="18.2%" headers="mcps1.2.3.1.1 "><p id="p27898128518"><a name="p27898128518"></a><a name="p27898128518"></a>U</p>
     </td>
-    <td class="cellrowborder" valign="top" width="81.8%" headers="mcps1.2.3.1.2 "><p id="p1678910126514"><a name="p1678910126514"></a><a name="p1678910126514"></a>srcReg0/srcReg1/dstReg RegTensor类型， 例如RegTensor&lt;uint32_t&gt;，由编译器自动推导，用户不需要填写。</p>
+    <td class="cellrowborder" valign="top" width="81.8%" headers="mcps1.2.3.1.2 "><p id="p1678910126514"><a name="p1678910126514"></a><a name="p1678910126514"></a>srcReg0/srcReg1/dstReg RegTensor类型，例如RegTensor&lt;uint32_t&gt;，由编译器自动推导，用户不需要填写。</p>
     </td>
     </tr>
     </tbody>
     </table>
 
-    **表 2**  参数说明
+    **表2**  参数说明
 
     <a name="table378911128510"></a>
     <table><thead align="left"><tr id="row157893121054"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="p978911212516"><a name="p978911212516"></a><a name="p978911212516"></a>参数名</p>
@@ -158,7 +158,7 @@
 
 -   对MaskReg操作
 
-    **表 3**  参数说明
+    **表3**  参数说明
 
     <a name="table481714378514"></a>
     <table><thead align="left"><tr id="row98171837059"><th class="cellrowborder" valign="top" width="50%" id="mcps1.2.3.1.1"><p id="p1181793716511"><a name="p1181793716511"></a><a name="p1181793716511"></a>参数名</p>
@@ -240,4 +240,3 @@
         }
     }
     ```
-

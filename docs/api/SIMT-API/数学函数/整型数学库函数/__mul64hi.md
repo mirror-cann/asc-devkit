@@ -24,7 +24,7 @@ long long __mul64hi(long long x, long long y)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -68,4 +68,3 @@ long long __mul64hi(long long x, long long y)
         dst[idx] = __mul64hi(x[idx], y[idx]);
     }
     ```
-

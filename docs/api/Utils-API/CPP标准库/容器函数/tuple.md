@@ -50,7 +50,7 @@ public:
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -276,4 +276,3 @@ AscendC::PRINTF("The value of the test element is: %d, %f, %d\n", const_uint32_t
 (test9 tuple_element) The value of the test element is: 88, 8.800000, 1
 (test9 tie) The value of the test element is: 33, 4.400000, 1
 ```
-

@@ -48,14 +48,14 @@
 
 ## 参数说明<a name="zh-cn_topic_0000002567699435_section16128134420472"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002567699435_section4219135304818)。 |
 | isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，本接口入参中的mask值必须设置为占位符MASK_PLACEHOLDER。<br>isSetMask的具体使用方式可参考[掩码](../../SIMD计算说明/掩码/概述.md)。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -65,7 +65,7 @@
 | repeatTime | 输入 | 重复迭代次数。矢量计算单元，每次读取连续的256字节数据进行计算，为完成对输入数据的处理，必须通过多次迭代（repeat）才能完成所有数据的读取与计算。repeatTime表示迭代的次数。<br>关于该参数的具体描述请参考[高维切分](../../SIMD计算说明/高维切分.md)。|
 | repeatParams | 输入 | 控制操作数地址步长的参数。<br>CopyRepeatParams类型，包含操作数相邻迭代间相同DataBlock的地址步长，操作数同一迭代内不同DataBlock的地址步长等参数。CopyRepeatParams参数说明请参考表3。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
 
-**表 3**  CopyRepeatParams结构体参数定义
+**表3**  CopyRepeatParams结构体参数定义
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -124,7 +124,7 @@
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../../通用说明和约束.md#通用地址重叠约束)。
 - CopyRepeatParams结构体参数的值需在取值范围内：
 
-    **表 4**  CopyRepeatParams结构体参数取值范围
+    **表4**  CopyRepeatParams结构体参数取值范围
 
     | 参数名 | 取值范围 |
     | --- | --- |

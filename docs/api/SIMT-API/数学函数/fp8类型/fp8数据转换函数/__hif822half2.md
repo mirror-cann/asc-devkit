@@ -22,7 +22,7 @@ inline half2 __hif822half2(const hifloat8x2_t x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -64,4 +64,3 @@ SIMT编程场景当前不支持使用该接口。
         asc_vf_call<simt_hif822half2>(dim3(1024), (__gm__ hifloat8x2_t*)input, (__gm__ half2*)output, input_total_length);
     }
     ```
-

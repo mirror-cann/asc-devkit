@@ -36,7 +36,7 @@ unsigned long long thread_rank() const
 
 示例代码中以4个线程为一组划分线程块，各线程在所属的`thread_block_tile`组内的排名如下图所示。
 
-**图 1**   thread_rank接口返回值示意图  
+**图1**   thread_rank接口返回值示意图  
 ![](../../../figures/thread_block_tile_rank.png "thread_block_tile_rank")
 
 - SIMT编程场景：

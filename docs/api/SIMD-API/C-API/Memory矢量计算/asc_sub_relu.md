@@ -93,7 +93,7 @@ asc_sub_relu(dst, src0, src1, total_length);
 
 ```c++
 // 目的操作数和源操作数的数据类型不一致（s162s8）
-// total_length 指参与计算的数据长度
+// total_length指参与计算的数据长度
 constexpr uint64_t total_length = 256;
 __ubuf__ int16_t src0[total_length];
 __ubuf__ int16_t src1[total_length];

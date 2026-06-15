@@ -249,14 +249,14 @@ quant_post可选量化模式分别为：
 |:-----------------|:------|:---------------------------------------------------------------------------------------------------------------------------------|
 | dst_addr              | 输出    | 目的操作数（矢量）的起始地址。                                                                                                                  |
 | src_addr              | 输入    | 源操作数（矢量）的起始地址。                                                                                                                   |
-| n_size           | 输入    | 源NZ矩阵在N方向上的大小。<br/>&bull; 不开启NZ2ND功能，取值范围：[1, 4095]；<br/>&bull; 开启NZ2ND功能，取值范围：[1, 4095]。                                        |
-| m_size           | 输入    | 源NZ矩阵在M方向上的大小。<br/>&bull; 不开启NZ2ND功能，取值范围：[1, 65535]；<br/>&bull; 开启NZ2ND功能，取值范围：[1, 8192]。                                       |
-| loop_dst_stride       | 输入    | <br> - 不开启NZ2ND功能,目的NZ矩阵中相邻Z排布的起始地址偏移，取值不为0， 单位：element。<br> - 开启NZ2ND/NZ2DN功能,目的ND矩阵每一行中的元素个数，取值不为0 ，单位：element。                |
+| n_size           | 输入    | 源NZ矩阵在N方向上的大小。<br/>&bull;不开启NZ2ND功能，取值范围：[1, 4095]；<br/>&bull;开启NZ2ND功能，取值范围：[1, 4095]。                                        |
+| m_size           | 输入    | 源NZ矩阵在M方向上的大小。<br/>&bull;不开启NZ2ND功能，取值范围：[1, 65535]；<br/>&bull;开启NZ2ND功能，取值范围：[1, 8192]。                                       |
+| loop_dst_stride       | 输入    | <br> - 不开启NZ2ND功能,目的NZ矩阵中相邻Z排布的起始地址偏移，取值不为0，单位：element。<br> - 开启NZ2ND/NZ2DN功能,目的ND矩阵每一行中的元素个数，取值不为0 ，单位：element。                |
 | loop_src_stride       | 输入    | 源NZ矩阵中相邻Z排布的起始地址偏移，取值范围：[0, 65535]，单位：C0_Size（16*sizeof(T)，T为src_addr的数据类型）。                                                          |
 | dual_dst_ctl | 输入 | 双目的控制参数。 |
 | sub_blockid | 输入 | 子块ID。 |
 | clip_relu_pre    | 输入    | 预处理阶段开启clip_relu，需搭配normal relu（归一化的relu函数）一起使用且需要开启量化功能。                                                                        |
-| unit_flag_ctl   | 输入    | 与unit_flag参数相关，取值如下：<br/>&bull;0 保留值；<br/>&bull;2 开启unit_flag，硬件执行完指令之后，不会设置寄存器；<br/>&bull;3 开启unit_flag，硬件执行完指令后，会将unit_flag关闭。 |
+| unit_flag_ctl   | 输入    | 与unit_flag参数相关，取值如下：<br/>&bull;0保留值；<br/>&bull;2 开启unit_flag，硬件执行完指令之后，不会设置寄存器；<br/>&bull;3 开启unit_flag，硬件执行完指令后，会将unit_flag关闭。 |
 | quant_pre        | 输入    | 预处理阶段量化参数。取值见[功能说明](#功能说明)。                                                                        |
 | relu_pre         | 输入    | 预处理阶段开启relu。                                                                                                                     |
 | split_en    | 输入    | 是否开启通道拆分的功能，默认false，不开启该功能。仅在src_addr和dst_addr都为float时才能开启通道拆分，且不能同时开启split_en和NZ2ND功能。                                               |

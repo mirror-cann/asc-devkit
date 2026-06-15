@@ -31,7 +31,7 @@ kernel侧LogSoftMax接口的计算需要开发者预留/申请临时空间，以
 
 ## 参数说明
 
-**表 1**  GetLogSoftMaxMaxTmpSize/GetLogSoftMaxMinTmpSize接口参数列表
+**表1**  GetLogSoftMaxMaxTmpSize/GetLogSoftMaxMinTmpSize接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -39,7 +39,7 @@ kernel侧LogSoftMax接口的计算需要开发者预留/申请临时空间，以
 | dataTypeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | isReuseSource | 输入 | 是否复用源操作数输入的空间，与LogSoftMax接口一致。 |
 
-**表 2**  LogSoftMaxTilingFunc接口参数列表
+**表2**  LogSoftMaxTilingFunc接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -64,7 +64,7 @@ LogSoftMaxTilingFunc接口无返回值。
 // shape：输入的shape信息
 // dtypesize：输入的数据类型大小，单位为字节
 
-// 定义 LogSoftMax 算子的 Tiling 参数结构体实例
+// 定义LogSoftMax算子的Tiling参数结构体实例
 AscendC::tiling::LogSoftMaxTiling tilingData;
 // 是否复用源操作数输入的空间，与LogSoftMax接口一致
 bool isReuseSource = false;

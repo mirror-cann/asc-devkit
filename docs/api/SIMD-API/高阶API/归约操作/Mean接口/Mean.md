@@ -49,7 +49,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -59,7 +59,7 @@
 | isBasicBlock | 预留参数，暂不支持。 |
 | reduceDim | 用于指定按数据的哪一维度进行求和。本接口按最后一个维度实现，不支持reduceDim参数，传入默认值-1即可。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -101,7 +101,7 @@ meanParams.n = n;
 // inner = (n * sizeof(half) + 32 - 1)/32 * 32 / sizeof(half) = 16
 meanParams.inner = inner;
 // T为half，accTypes为实际计算的类型这里是half
-// dstLocal输出数据，srcLocal输入数据，tmplocalTensor用户传入的临时缓存                                                                     AscendC::Mean<T, accType>(dstLocal, srcLocal, tmplocalTensor, meanParams)
+// dstLocal输出数据，srcLocal输入数据，tmplocalTensor用户传入的临时缓存AscendC::Mean<T, accType>(dstLocal, srcLocal, tmplocalTensor, meanParams)
 // 也可不使用tmplocalTensor。调用如下
 // AscendC::Mean<T, accType>(dstLocal, srcLocal, meanParams);
 ```

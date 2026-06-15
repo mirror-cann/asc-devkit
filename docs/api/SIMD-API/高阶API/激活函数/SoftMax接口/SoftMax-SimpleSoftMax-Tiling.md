@@ -31,7 +31,7 @@
 
 ## 参数说明
 
-**表 1**  SoftMax/SimpleSoftMax GetSoftMaxMaxTmpSize/GetSoftMaxMinTmpSize接口参数列表
+**表1**  SoftMax/SimpleSoftMax GetSoftMaxMaxTmpSize/GetSoftMaxMinTmpSize接口参数列表
 
 | 参数名  | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -39,7 +39,7 @@
 | dataTypeSize | 输入 | 参与计算的max和sum的数据类型，比如half=2。 |
 | isReuseSource | 输入 | 与kernel侧接口配置保持一致。 |
 
-**表 2**  SoftMax/SimpleSoftMax SoftMaxTilingFunc接口参数列表
+**表2**  SoftMax/SimpleSoftMax SoftMaxTilingFunc接口参数列表
 
 | 参数名  | 输入/输出 | 功能 |
 | --- | --- | --- |

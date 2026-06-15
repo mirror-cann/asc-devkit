@@ -26,7 +26,7 @@ __aicore__ inline void SetFmatrix(const SetFMatrixBitModeParams& param, const Fm
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1** 参数说明
+**表1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --------- | ---------- | ------ |
@@ -34,7 +34,7 @@ __aicore__ inline void SetFmatrix(const SetFMatrixBitModeParams& param, const Fm
 | param | 输入 | 类型为SetFMatrixBitMode，具体参考[表2](#table85031523118)。 |
 
 <a name="table85031523118"></a>
-**表 2** SetFMatrixBitMode类参数说明
+**表2** SetFMatrixBitMode类参数说明
 
 | 参数名称 | 含义 |
 | --------- | --------- |
@@ -59,13 +59,13 @@ __aicore__ inline SetFMatrixBitModeParams(const LoadData3DParamsV2<T> &loadData3
 也可以使用各参数的Set函数修改参数值，并且由于使用了联合体，还可以对config0直接进行逐bit位修改来修改参数。
 
 <a name="table1162220101434"></a>
-**表 3** SetFMatrixBitModeConfig0结构体参数说明
+**表3** SetFMatrixBitModeConfig0结构体参数说明
 
 | 参数名称 | 含义 |
 | --- | --- |
 | l1H | 源操作数height，取值范围：l1H∈[1, 32767]。该参数是位域结构体的最低位参数，占用16bit，可以使用SetFMatrixBitMode类对象的SetL1H()函数设置其值。 |
 | l1W | 源操作数width，取值范围：l1W∈[1, 32767]。该参数是位域结构体的第二低位参数，占用16bit，可以使用SetFMatrixBitMode类对象的SetL1W()函数设置其值。 |
-| padList0 | 对应[表 LoadData3DParamsV2结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)中padding列表中的padding_left值，取值范围：[0,255]。默认为0。该参数是位域结构体的第三低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
+| padList0 | 对应[表LoadData3DParamsV2结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)中padding列表中的padding_left值，取值范围：[0,255]。默认为0。该参数是位域结构体的第三低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
 | padList1 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的padding_right值，取值范围：[0,255]。默认为0。该参数是位域结构体的第四低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
 | padList2 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的padding_top值，取值范围：[0,255]。默认为0。该参数是位域结构体的第五低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
 | padList3 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的padding_bottom值，取值范围：[0,255]。默认为0。该参数是位域结构体的最高位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |

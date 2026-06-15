@@ -51,7 +51,7 @@
 
 设置GlobalTensor相应偏移位置的值。
 
--   因为硬件实现不同，其与通用CPU标量赋值操作存在差异。SetValue赋值操作首先改写的是每个AI Core内部的DCache， 不会立刻写出到Global Memory，且后续写出时以Cache Line（64B）为单位。使用该接口之前必须了解DCache结构和Cache一致性原理（参见[DataCacheCleanAndInvalid](../../../缓存控制/DataCacheCleanAndInvalid.md)），否则可能存在误用的情况，**请谨慎使用。**
+-   因为硬件实现不同，其与通用CPU标量赋值操作存在差异。SetValue赋值操作首先改写的是每个AI Core内部的DCache，不会立刻写出到Global Memory，且后续写出时以Cache Line（64B）为单位。使用该接口之前必须了解DCache结构和Cache一致性原理（参见[DataCacheCleanAndInvalid](../../../缓存控制/DataCacheCleanAndInvalid.md)），否则可能存在误用的情况，**请谨慎使用。**
 -   调用SetValue后，首先改写的是每个AI Core内部的DCache，如果需要立即写出到Global Memory，需要在调用此接口后，再调用[DataCacheCleanAndInvalid](../../../缓存控制/DataCacheCleanAndInvalid.md)，确保DCache与Global Memory的Cache一致性。
 -   多核操作GM地址时，要求不同核操作的地址（通过offset参数设置元素偏移，可以转换为地址）至少有Cache Line大小的偏移，否则会出现多核数据随机覆盖。同时需要考虑地址对齐（64B）的问题。详细内容请参考[调用示例](../../../缓存控制/DataCacheCleanAndInvalid.md#section837496171220)。
 
@@ -63,7 +63,7 @@ __aicore__ inline void SetValue(const uint64_t offset, PrimType value)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="13.94%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>

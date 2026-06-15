@@ -22,7 +22,7 @@ __aicore__ inline int32_t Wait(HcclHandle handleId)
 
 ## 参数说明
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -66,4 +66,3 @@ if (AscendC::g_coreType == AIC) {
     hccl.Finalize(); // 后续无其他通信任务，通知服务端执行上述ReduceScatter任务之后即可退出
 }
 ```
-

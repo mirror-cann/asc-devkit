@@ -81,7 +81,7 @@ uint32_t size = listTensorDesc.GetSize();                                       
 auto dataPtr0 = listTensorDesc.GetDataPtr<int32_t>(0);                          // 获取ptr0
 auto dataPtr1 = listTensorDesc.GetDataPtr<int32_t>(1);                          // 获取ptr1
 
-uint64_t buf[100] = {0}; // 示例中Tensor的dim为3, 此处的100表示预留足够大的空间
+uint64_t buf[100] = {0}; // 示例中Tensor的dim为3,此处的100表示预留足够大的空间
 AscendC::TensorDesc<int32_t> desc;
 desc.SetShapeAddr(buf);          // 为desc指定用于储存shape信息的地址
 listTensorDesc.GetDesc(desc, 0); // 获取索引0的shape信息
@@ -95,4 +95,3 @@ for (uint32_t i = 0; i < desc.GetDim(); i++)
 }
 auto ptr = desc.GetDataPtr();
 ```
-

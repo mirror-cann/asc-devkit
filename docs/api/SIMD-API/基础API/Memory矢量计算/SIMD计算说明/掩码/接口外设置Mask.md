@@ -16,7 +16,7 @@
     AscendC::ResetMask();
     ```
 
-    **图 1**  接口外设置Mask，Counter模式前n个数据计算示例  
+    **图1**  接口外设置Mask，Counter模式前n个数据计算示例  
     ![](../../../../../figures/external_counter_first_n.png)<a id="图1-接口外设置Mask-counter模式前n个数据计算示例"></a>
 
 - **高维切分：连续计算**
@@ -37,7 +37,7 @@
     AscendC::ResetMask(); 
     ```
 
-    **图 2**  接口外设置Mask，Counter模式连续计算示例  
+    **图2**  接口外设置Mask，Counter模式连续计算示例  
     ![](../../../../../figures/external_counter_continuous.png)<a id="图2-接口外设置Mask-counter模式连续计算示例"></a>
 
 ## Normal模式
@@ -61,7 +61,7 @@
     AscendC::ResetMask();
     ```
 
-    **图 3**  接口外设置Mask，Normal模式高维切分逐bit计算示例  
+    **图3**  接口外设置Mask，Normal模式高维切分逐bit计算示例  
     ![](../../../../../figures/external_normal_bitwise.png)<a id="图3-接口外设置Mask-normal模式高维切分逐bit计算示例"></a>
 
 - **高维切分：连续计算**
@@ -79,7 +79,7 @@
     AscendC::ResetMask();
     ```
 
-    **图 4**  接口外设置Mask，Normal模式高维切分连续计算示例  
+    **图4**  接口外设置Mask，Normal模式高维切分连续计算示例  
     ![](../../../../../figures/external_normal_continuous.png)<a id="图4-接口外设置Mask-normal模式高维切分连续计算示例"></a>
 
 > [!NOTE]说明

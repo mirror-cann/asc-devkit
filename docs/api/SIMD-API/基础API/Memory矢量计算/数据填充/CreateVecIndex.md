@@ -88,13 +88,13 @@ def CreateVecIndex(dst, firstValue, count):
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名称 | 描述 |
 | ------ | ------ |
 | T | 操作数数据类型。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 | 参数说明 | 输入/输出 | 含义 |
 | ------ | ------ | ------ |
 | dst | 输出 | 目的操作数，类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT（存储位置为Unified Buffer）。LocalTensor的起始地址需要按照32字节对齐。|
@@ -124,7 +124,7 @@ def CreateVecIndex(dst, firstValue, count):
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md#section796754519912)。
 - firstValue需保证不超出dst中元素数据类型对应的大小范围。
 <cann-filter npu-type="A3,910b">
-- repeatTime = 0表示不会执行计算操作，不会对目的操作数进行写入，该接口将被视为 NOP（空操作）。该约束适用于以下型号。
+- repeatTime = 0表示不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。该约束适用于以下型号。
 <cann-filter npu-type="A3">
 
   - Atlas A3 训练系列产品/Atlas A3 推理系列产品
@@ -151,8 +151,8 @@ def CreateVecIndex(dst, firstValue, count):
     ```cpp
     // repeatTime = 1, mask = 128, 128 elements one repeat, 128 elements total
     // firstValue数据类型为int16_t，dstLocal数据类型为int16_t
-    // dstBlkStride = 1, 单次迭代内数据连续写入
-    // dstRepStride = 8, 相邻迭代内数据连续写入
+    // dstBlkStride = 1,单次迭代内数据连续写入
+    // dstRepStride = 8,相邻迭代内数据连续写入
     AscendC::CreateVecIndex(dstLocal, (int16_t)0, mask, repeatTime, dstBlkStride, dstRepStride);
     ```
 
@@ -162,8 +162,8 @@ def CreateVecIndex(dst, firstValue, count):
     uint64_t mask[2] = { UINT64_MAX, UINT64_MAX };
     // repeatTime = 1, 128 elements one repeat, 128 elements total
     // firstValue数据类型为int16_t，dstLocal数据类型为int16_t
-    // dstBlkStride = 1, 单次迭代内数据连续写入
-    // dstRepStride = 8, 相邻迭代内数据连续写入
+    // dstBlkStride = 1,单次迭代内数据连续写入
+    // dstRepStride = 8,相邻迭代内数据连续写入
     AscendC::CreateVecIndex(dstLocal, (int16_t)0, mask, repeatTime, dstBlkStride, dstRepStride);
     ```
 

@@ -42,7 +42,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -50,7 +50,7 @@
 | highPrecision | 是否开启高精度模式，以提升运算准确度。默认值为false，表示不开启高精度模式。<br><br>注意：高精度模式只在half数据类型下开启后生效，该参数的取值不影响float数据类型下的接口精度和性能。 |
 | highPerformance | 是否开启高性能模式，以提升运算效率。默认值为false，表示不开启高性能模式。<br><br>注意：开启高性能模式相比于默认不开启高精度和高性能模式会有精度下降，同时开启高精度和高性能模式相比于仅开启高性能模式可能会有性能下降。针对Ascend 950PR/Ascend 950DT，该参数保留但不生效，取值为true或者false，接口的精度和性能没有区别。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -77,10 +77,10 @@
 // srcLocal: 存放Gelu的输入Tensor
 // sharedTmpBuffer: 存放Gelu计算过程中临时缓存的Tensor
 
-// 接口框架申请临时空间，部分参与计算, 需要参与计算的元素个数为32
+// 接口框架申请临时空间，部分参与计算,需要参与计算的元素个数为32
 AscendC::Gelu<srcType, false>(dstLocal, srcLocal, 32);
 
-// 通过sharedTmpBuffer入参传入临时空间，部分参与计算, 需要参与计算的元素个数为32
+// 通过sharedTmpBuffer入参传入临时空间，部分参与计算,需要参与计算的元素个数为32
 AscendC::Gelu<srcType, false>(dstLocal, srcLocal, sharedTmpBuffer, 32);
 ```
 

@@ -70,7 +70,7 @@ bool TopKTilingFunc(const platform_ascendc::PlatformAscendC& ascendcPlatform, co
 
 ## 参数说明
 
-**表 1**  GetTopKMaxMinTmpSize接口参数列表
+**表1**  GetTopKMaxMinTmpSize接口参数列表
 
 | 接口 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -105,7 +105,7 @@ enum class TopKOrder {
 };
 ```
 
-**表 2**  TopKTilingFunc接口参数列表
+**表2**  TopKTilingFunc接口参数列表
 
 | 接口 | 输入/输出 | 功能 |
 | --- | --- | --- |

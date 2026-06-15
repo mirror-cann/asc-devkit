@@ -23,7 +23,7 @@ struct add_cv;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -69,4 +69,3 @@ ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_cv_t<volatile double>,
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_cv_t<const volatile int>, const volatile int>));
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_cv_t<const volatile double>, const volatile double>));
 ```
-

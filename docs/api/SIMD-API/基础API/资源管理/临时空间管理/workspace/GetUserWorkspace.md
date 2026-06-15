@@ -69,7 +69,7 @@ __aicore__ inline GM_ADDR GetUserWorkspace(GM_ADDR workspace)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 <a name="table1055216132132"></a>
 <table><thead align="left"><tr id="row105531513121315"><th class="cellrowborder" valign="top" width="16.49%" id="mcps1.2.4.1.1"><p id="p5553171319138"><a name="p5553171319138"></a><a name="p5553171319138"></a>参数名称</p>
@@ -97,4 +97,3 @@ __aicore__ inline GM_ADDR GetUserWorkspace(GM_ADDR workspace)
 ## 返回值说明<a name="section640mcpsimp"></a>
 
 用户使用workspace指针。
-

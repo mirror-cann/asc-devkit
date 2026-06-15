@@ -60,7 +60,7 @@ __simd_callee__ inline void Pack(S& dstReg, V& srcReg)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table104985541254"></a>
 <table><thead align="left"><tr id="row1049811545512"><th class="cellrowborder" valign="top" width="16.71%" id="mcps1.2.3.1.1"><p id="p3498854954"><a name="p3498854954"></a><a name="p3498854954"></a>参数名</p>
@@ -102,7 +102,7 @@ __simd_callee__ inline void Pack(S& dstReg, V& srcReg)
 </tbody>
 </table>
 
-**表 2**  函数参数说明
+**表2**  函数参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="16.86%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -126,7 +126,7 @@ __simd_callee__ inline void Pack(S& dstReg, V& srcReg)
 </tbody>
 </table>
 
-**表 3**  源操作数和目的操作数的数据类型对应表
+**表3**  源操作数和目的操作数的数据类型对应表
 
 <a name="table113383813355"></a>
 <table><thead align="left"><tr id="row14332038103513"><th class="cellrowborder" valign="top" width="49.95%" id="mcps1.2.3.1.1"><p id="p1833133810356"><a name="p1833133810356"></a><a name="p1833133810356"></a><strong id="b9504175916367"><a name="b9504175916367"></a><a name="b9504175916367"></a>T数据类型</strong></p>
@@ -196,4 +196,3 @@ __simd_vf__ inline void PackVF(__ubuf__ T* dstAddr, __ubuf__ U* srcAddr, uint32_
     }
 }
 ```
-

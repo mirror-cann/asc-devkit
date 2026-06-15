@@ -34,7 +34,7 @@ public:
 
 ## 参数说明<a name="zh-cn_topic_0000001867289945_zh-cn_topic_0000001389787297_section75395119104"></a>
 
-**表 1**  DEVICE\_IMPL\_OP\_OPTILING参数说明
+**表1**  DEVICE\_IMPL\_OP\_OPTILING参数说明
 
 <a name="zh-cn_topic_0000001820490272_zh-cn_topic_0000001389787297_table111938719446"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001820490272_zh-cn_topic_0000001389787297_row6223476444"><th class="cellrowborder" valign="top" width="17.22%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001820490272_zh-cn_topic_0000001389787297_p10223674448"><a name="zh-cn_topic_0000001820490272_zh-cn_topic_0000001389787297_p10223674448"></a><a name="zh-cn_topic_0000001820490272_zh-cn_topic_0000001389787297_p10223674448"></a>参数</p>
@@ -55,7 +55,7 @@ public:
 </tbody>
 </table>
 
-**表 2**  Tiling成员函数参数说明
+**表2**  Tiling成员函数参数说明
 
 <a name="table2060634264310"></a>
 <table><thead align="left"><tr id="row860654216436"><th class="cellrowborder" valign="top" width="17.22%" id="mcps1.2.4.1.1"><p id="p19606154212434"><a name="p19606154212434"></a><a name="p19606154212434"></a>参数</p>
@@ -89,4 +89,3 @@ public:
 ```
 DEVICE_IMPL_OP_OPTILING(TestOptype).Tiling(TestTilingFunc); // 将Tiling函数以及其OpType注册到Tiling下沉
 ```
-

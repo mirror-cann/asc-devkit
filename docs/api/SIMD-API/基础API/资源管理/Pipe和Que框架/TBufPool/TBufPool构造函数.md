@@ -13,7 +13,7 @@ __aicore__ inline TBufPool();
 
 ## 参数说明<a name="zh-cn_topic_0000001935531088_zh-cn_topic_0000001339105488_section75395119104"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table1550165916920"></a>
 <table><thead align="left"><tr id="row115015591391"><th class="cellrowborder" valign="top" width="14.099999999999998%" id="mcps1.2.3.1.1"><p id="p12501159099"><a name="p12501159099"></a><a name="p12501159099"></a>参数名</p>

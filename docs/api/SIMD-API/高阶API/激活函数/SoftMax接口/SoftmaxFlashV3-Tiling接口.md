@@ -27,7 +27,7 @@
 
 ## 参数说明
 
-**表 1**  GetSoftMaxFlashV3MaxMinTmpSize接口参数列表
+**表1**  GetSoftMaxFlashV3MaxMinTmpSize接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -39,7 +39,7 @@
 | isUpdate | 输入 | 是否开启SoftMaxFlashV3 update为true的公式计算。该参数取值与SoftmaxFlashV3 Kernel接口的模板参数isUpdate保持一致。 |
 | isBasicBlock | 输入 | 预留参数，暂未启用，必须使用默认值false。 |
 
-**表 2**  SoftMaxFlashV3TilingFunc接口参数列表
+**表2**  SoftMaxFlashV3TilingFunc接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |

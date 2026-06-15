@@ -29,7 +29,7 @@ L0C_ADDR[16:0] = { BANK_DEPTH[6:0], BANK[3:0], BANK_WIDTH[5:0] }    // bit位顺
 // BANK_WIDTH表示地址在Bank一行上的偏移量，占用6位bit位，取值范围为[0, 63]
 ```
 
-**图 1** L0C Buffer内存结构图<a id="zh-cn_topic_0000002555148561_fig1715315610160"></a>  
+**图1** L0C Buffer内存结构图<a id="zh-cn_topic_0000002555148561_fig1715315610160"></a>  
 
 ![](../../../../figures/L0C_Memory_Structure.png)
 

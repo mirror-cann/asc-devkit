@@ -15,7 +15,7 @@
 
 本案例的算子规格如下：
 
-**表 1**  算子规格
+**表1**  算子规格
 
 <a name="table101751125175213"></a>
 <table><thead align="left"><tr id="row8175525185219"><th class="cellrowborder" valign="top" width="25%" id="mcps1.2.5.1.1"><p id="p1417582516529"><a name="p1417582516529"></a><a name="p1417582516529"></a>输入</p>
@@ -69,7 +69,7 @@
 
 开启多核切K后，矩阵的K方向数据可以进行切分。如下图所示，C矩阵中的R矩阵块，是通过A1\*B1+A2\*B2+A3\*B3累加得到的，其中，A1\*B1、A2\*B2、A3\*B3可在多个核上并行计算。
 
-**图 1**  开启多核切K<a name="fig194841921104410"></a>  
+**图1**  开启多核切K<a name="fig194841921104410"></a>  
 ![](../../../figures/开启多核切K.png "开启多核切K")
 
 开启多核切K功能的方式为：在GetTiling接口前调用EnableMultiCoreSplitK接口，开启多核切K，并在Kernel实现中，对C矩阵的Global Memory地址清零后开启AtomicAdd。开启多核切K的完整样例请参考[多核切K场景的算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_splitk)。具体步骤如下：

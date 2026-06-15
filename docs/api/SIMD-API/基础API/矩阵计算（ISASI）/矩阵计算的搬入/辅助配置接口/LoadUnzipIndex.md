@@ -29,18 +29,18 @@ __aicore__ inline void LoadUnzipIndex(const GlobalTensor<T>& src, uint32_t numOf
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名称 | 描述 |
 | --- | --- |
-| T | src的数据类型。<br>&nbsp;&nbsp;&nbsp;&nbsp;&bull; 当src使用基础数据类型时，其数据类型必须为uint8_t，否则编译失败。<br>&nbsp;&nbsp;&nbsp;&nbsp;&bull; 当src使用TensorTrait类型时，src数据类型T的LiteType必须为int8_t，否则编译失败。<br>最后一个模板参数仅用于上述数据类型检查，用户无需关注。 |
+| T | src的数据类型。<br>&nbsp;&nbsp;&nbsp;&nbsp;&bull;当src使用基础数据类型时，其数据类型必须为uint8_t，否则编译失败。<br>&nbsp;&nbsp;&nbsp;&nbsp;&bull;当src使用TensorTrait类型时，src数据类型T的LiteType必须为int8_t，否则编译失败。<br>最后一个模板参数仅用于上述数据类型检查，用户无需关注。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
 | src | 输入 | 源操作数，索引表地址，类型为GlobalTensor。<br>&nbsp;&nbsp;&bull; src地址必须2字节对齐。<br>&nbsp;&nbsp;&bull; src长度必须是512字节的整数倍，最大为32KB。 |
-| numOfIndexTabEntry | 输入 | 输入数据，表示加载的索引表个数。<br>&nbsp;&nbsp;&bull; 索引表个数必须大于0。 |
+| numOfIndexTabEntry | 输入 | 输入数据，表示加载的索引表个数。<br>&nbsp;&nbsp;&bull;索引表个数必须大于0。 |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 

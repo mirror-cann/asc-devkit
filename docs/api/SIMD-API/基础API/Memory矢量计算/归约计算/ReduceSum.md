@@ -8,8 +8,8 @@
 | <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
 | <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
 | <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品 AI Core | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品 Vector Core | x </cann-filter>|
+| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ </cann-filter>|
+| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
 | <cann-filter npu-type="910">Atlas 训练系列产品 | √ </cann-filter>|
 | <cann-filter npu-type="x90">Kirin X90 | √ </cann-filter>|
 | <cann-filter npu-type="9030">Kirin 9030 | √ </cann-filter>|
@@ -20,7 +20,7 @@
 
 `ReduceSum`接口对所有输入数据进行求和，计算过程如下。
 
-**图 1** `ReduceSum`计算示意图<a id="fig1"></a>
+**图1** `ReduceSum`计算示意图<a id="fig1"></a>
 
 ![](../../../../figures/ReduceSum_basic_api.png "ReduceSum计算示意图")
 
@@ -50,14 +50,14 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | T | 操作数数据类型。 |
 | isSetMask | 保留参数，设置无效。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
@@ -79,7 +79,7 @@
 - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持half、float。</cann-filter>
 - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持half、float。</cann-filter>
 - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core，支持half、float。</cann-filter>
+- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持half、float。</cann-filter>
 - <cann-filter npu-type = "910">Atlas 训练系列产品，支持half。</cann-filter>
 - <cann-filter npu-type = "x90">Kirin X90，支持half、float。</cann-filter>
 - <cann-filter npu-type = "9030">Kirin 9030，支持half、float。</cann-filter>
@@ -136,7 +136,7 @@
 - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，tensor前n个数据计算接口采用方式二，tensor高维切分计算接口采用方式一。</cann-filter>
 - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，tensor前n个数据计算接口采用方式二，tensor高维切分计算接口采用方式一。</cann-filter>
 - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，采用方式一。</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core，采用方式一。</cann-filter>
+- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，采用方式一。</cann-filter>
 - <cann-filter npu-type = "910">Atlas 训练系列产品，采用方式一。</cann-filter>
 - <cann-filter npu-type = "x90">Kirin X90，采用方式一。</cann-filter>
 - <cann-filter npu-type = "9030">Kirin 9030，采用方式一。</cann-filter>

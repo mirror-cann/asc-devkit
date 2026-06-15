@@ -42,7 +42,7 @@
 
     以float类型，ND格式，输入为inputX\[B, S, H\]，gamma\[H\]和beta\[H\]为例，描述LayerNorm高阶API内部算法框图，如下图所示。
 
-    **图 1**  LayerNorm算法框图
+    **图1**  LayerNorm算法框图
     ![](../../../figures/LayerNorm算法框图.png "LayerNorm算法框图")
 
     计算过程分为如下几步，均在Vector上进行（下文中m指尾轴H的长度）：
@@ -56,7 +56,7 @@
 
     以float类型，ND格式，输入为inputX\[A, R\]，gamma\[R\] 和beta\[R\]为例，描述LayerNorm高阶API内部算法框架，如下图所示。
 
-    **图 2**  LayerNorm-Rstd版本算法框图
+    **图2**  LayerNorm-Rstd版本算法框图
 
     ![](../../../figures/layernorm.png)
 
@@ -114,14 +114,14 @@
 
 -   对shape为\[B，S，H\]的输入数据，输出归一化结果、均值和方差的接口
 
-    **表 1**  模板参数说明
+    **表1**  模板参数说明
 
     | 参数名 | 描述 |
     | --- | --- |
     | T | 操作数的数据类型。支持的数据类型为：half、float。 |
     | isReuseSource | 是否允许修改源操作数，默认值为false。如果开发者允许源操作数被改写，可以设置该参数取值为true开启，开启后能够节省部分内存空间。<br>    <br>设置为true，则本接口内部计算时复用inputX的内存空间，节省内存空间；设置为false，则本接口内部计算时不复用inputX的内存空间。<br>    <br>对于float数据类型输入支持开启该参数，half数据类型输入不支持开启该参数。<br>    <br>isReuseSource的使用样例请参考[更多样例](../数学计算/更多样例-83.md#section639165323915)。 |
 
-    **表 2**  接口参数说明
+    **表2**  接口参数说明
 
     | 参数名称 | 输入/输出 | 含义 |
     | --- | --- | --- |
@@ -137,7 +137,7 @@
 
 -   对shape为\[A，R\]的输入数据，输出归一化结果、均值、标准差的倒数或方差的接口
 
-    **表 3**  模板参数说明
+    **表3**  模板参数说明
 
     | 参数名 | 描述 |
     | --- | --- |
@@ -155,7 +155,7 @@
     };
     ```
 
-    **表 4**  接口参数说明
+    **表4**  接口参数说明
 
     | 参数名称 | 输入/输出 | 含义 |
     | --- | --- | --- |
@@ -214,14 +214,14 @@
 
     ```
     AscendC::LayerNorm<float, false>(
-        output,           // [输出] 归一化后的结果 y，shape [B, S, H]
-        mean,             // [输出] 每个 (B, S) 位置上 H 维度的均值，shape [B, S]
-        variance,         // [输出] 每个 (B, S) 位置上 H 维度的方差，shape [B, S]
-        inputX,           // [输入] 原始输入数据 x，shape [B, S, H]，将被归一化
+        output,           // [输出] 归一化后的结果y，shape [B, S, H]
+        mean,             // [输出] 每个(B, S)位置上H维度的均值，shape [B, S]
+        variance,         // [输出] 每个(B, S)位置上H维度的方差，shape [B, S]
+        inputX,           // [输入] 原始输入数据x，shape [B, S, H]，将被归一化
         gamma,            // [输入] 缩放系数 γ，shape [H]，用于缩放归一化后的数据
         beta,             // [输入] 平移系数 β，shape [H]，用于偏移归一化后的数据
         (float)epsilon,   // [输入] 防除零系数 ε，避免方差为0时除以0
-        tiling            // [输入] Tiling 信息，包含硬件计算分块策略（如 block、thread 等）
+        tiling            // [输入] Tiling信息，包含硬件计算分块策略（如block、thread等）
     );
     ```
 
@@ -259,21 +259,21 @@
 -   输入数据的shape为\[A，R\]，输出归一化结果、均值、标准差的倒数或方差的接口调用示例
 
     ```
-    // config：编译期常量，定义 LayerNorm 的行为配置
+    // config：编译期常量，定义LayerNorm的行为配置
     constexpr auto config = AscendC::LayerNormConfig{false, false, false, true};
     // para：运行时参数，描述输入张量的维度信息
     AscendC::LayerNormPara para = {aLength, rLength, rLengthWithPadding};
 
-    // LayerNorm 接口调用
+    // LayerNorm接口调用
     AscendC::LayerNorm<float, float, false, config>(
-        output,           // [输出] 归一化后的结果 y，shape [A, R]
-        mean,             // [输出] 每个 A 位置上 R 维度的均值，shape [A]
-        output1,          // [输出] 标准差的倒数 rstd（或方差），shape [A]
-        inputX,           // [输入] 原始输入数据 x，shape [A, R]
+        output,           // [输出] 归一化后的结果y，shape [A, R]
+        mean,             // [输出] 每个A位置上R维度的均值，shape [A]
+        output1,          // [输出] 标准差的倒数rstd（或方差），shape [A]
+        inputX,           // [输入] 原始输入数据x，shape [A, R]
         gamma,            // [输入] 缩放系数 γ，shape [R]
         beta,             // [输入] 平移系数 β，shape [R]
         (float)epsilon,   // [输入] 防除零系数 ε
-        para,             // [输入] 包含 A 和 R 轴长度等信息的结构体
-        tiling            // [输入] Tiling 策略信息
+        para,             // [输入] 包含A和R轴长度等信息的结构体
+        tiling            // [输入] Tiling策略信息
     );
     ```

@@ -81,7 +81,7 @@
 
 -   收集UB中的元素
 
-    **表 1**  模板参数说明
+    **表1**  模板参数说明
 
     <a name="table197504752219"></a>
     <table><thead align="left"><tr id="row1275124715224"><th class="cellrowborder" valign="top" width="18.75%" id="mcps1.2.3.1.1"><p id="p19761647162215"><a name="p19761647162215"></a><a name="p19761647162215"></a>参数名</p>
@@ -107,7 +107,7 @@
     </tr>
     <tr id="row197614717228"><td class="cellrowborder" valign="top" width="18.75%" headers="mcps1.2.3.1.1 "><p id="p137664732218"><a name="p137664732218"></a><a name="p137664732218"></a>T3</p>
     </td>
-    <td class="cellrowborder" valign="top" width="81.25%" headers="mcps1.2.3.1.2 "><p id="p147674782212"><a name="p147674782212"></a><a name="p147674782212"></a>目的操作数的RegTensor类型， 例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写。</p>
+    <td class="cellrowborder" valign="top" width="81.25%" headers="mcps1.2.3.1.2 "><p id="p147674782212"><a name="p147674782212"></a><a name="p147674782212"></a>目的操作数的RegTensor类型，例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写。</p>
     </td>
     </tr>
     <tr id="row276947192212"><td class="cellrowborder" valign="top" width="18.75%" headers="mcps1.2.3.1.1 "><p id="p147604713229"><a name="p147604713229"></a><a name="p147604713229"></a>T4</p>
@@ -118,7 +118,7 @@
     </tbody>
     </table>
 
-    **表 2**  函数参数说明
+    **表2**  函数参数说明
 
     <a name="table1776134722217"></a>
     <table><thead align="left"><tr id="row1876124732213"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="p6761447142219"><a name="p6761447142219"></a><a name="p6761447142219"></a>参数名</p>
@@ -171,7 +171,7 @@
 
 -   收集RegTensor中的元素
 
-    **表 3**  模板参数说明
+    **表3**  模板参数说明
 
     <a name="table99711138233"></a>
     <table><thead align="left"><tr id="row11971013122315"><th class="cellrowborder" valign="top" width="18.13%" id="mcps1.2.3.1.1"><p id="p179718130237"><a name="p179718130237"></a><a name="p179718130237"></a>参数名</p>
@@ -205,7 +205,7 @@
     </tbody>
     </table>
 
-    **表 4**  函数参数说明
+    **表4**  函数参数说明
 
     <a name="table29781322318"></a>
     <table><thead align="left"><tr id="row39721320234"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="p189714131230"><a name="p189714131230"></a><a name="p189714131230"></a>参数名</p>
@@ -251,7 +251,7 @@
 -   收集UB中的元素
     -   T0，T1和T2数据类型需要配套使用。配套关系如下表：
 
-        **表 5**  Gather操作数数据类型对应表
+        **表5**  Gather操作数数据类型对应表
 
         <a name="table19126103352518"></a>
         <table><thead align="left"><tr id="row131261133202514"><th class="cellrowborder" valign="top" width="33.3033303330333%" id="mcps1.2.4.1.1"><p id="p61269332250"><a name="p61269332250"></a><a name="p61269332250"></a><strong id="b12126143362515"><a name="b12126143362515"></a><a name="b12126143362515"></a>T0数据类型</strong></p>
@@ -464,4 +464,3 @@
         }
     }
     ```
-

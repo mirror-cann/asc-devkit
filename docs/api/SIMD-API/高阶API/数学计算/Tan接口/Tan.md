@@ -70,14 +70,14 @@ Tan\(x\)的泰勒展开式为：
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | T | 操作数的数据类型。支持的数据类型为：half、float。 |
 | isReuseSource | 是否允许修改源操作数。该参数预留，传入默认值false即可。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -107,12 +107,12 @@ Tan\(x\)的泰勒展开式为：
 
 // 接口框架申请临时空间，全部参与计算
 AscendC::Tan(dstLocal, srcLocal);
-// 接口框架申请临时空间，部分参与计算, 需要参与计算的元素个数为512
+// 接口框架申请临时空间，部分参与计算,需要参与计算的元素个数为512
 AscendC::Tan(dstLocal, srcLocal, 512);
 
 // 通过sharedTmpBuffer入参传入临时空间，全部参与计算
 AscendC::Tan(dstLocal, srcLocal, sharedTmpBuffer);
-// 通过sharedTmpBuffer入参传入临时空间，部分参与计算, 需要参与计算的元素个数为512
+// 通过sharedTmpBuffer入参传入临时空间，部分参与计算,需要参与计算的元素个数为512
 AscendC::Tan(dstLocal, srcLocal, sharedTmpBuffer, 512);
 ```
 

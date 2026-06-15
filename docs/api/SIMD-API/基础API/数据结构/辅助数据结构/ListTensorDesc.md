@@ -49,7 +49,7 @@
 
 ## 功能说明<a name="section195171847105215"></a>
 
-ListTensorDesc用来解析符合以下内存排布格式的数据， 并在kernel侧根据索引获取储存对应数据的地址及shape信息。
+ListTensorDesc用来解析符合以下内存排布格式的数据，并在kernel侧根据索引获取储存对应数据的地址及shape信息。
 
 ![](../../figures/Tiling---副本.png)
 
@@ -74,7 +74,7 @@ class ListTensorDesc {
 
 ## 函数说明<a name="section396516531098"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table13588175515344"></a>
 <table><thead align="left"><tr id="row1160915519346"><th class="cellrowborder" valign="top" width="21.8%" id="mcps1.2.3.1.1"><p id="p9609105553412"><a name="p9609105553412"></a><a name="p9609105553412"></a>参数名</p>
@@ -91,7 +91,7 @@ class ListTensorDesc {
 </tbody>
 </table>
 
-**表 2**  函数及参数说明
+**表2**  函数及参数说明
 
 <a name="table153364918102"></a>
 <table><thead align="left"><tr id="row7363209171013"><th class="cellrowborder" valign="top" width="22.58%" id="mcps1.2.4.1.1"><p id="p136399171010"><a name="p136399171010"></a><a name="p136399171010"></a><strong id="b137544519107"><a name="b137544519107"></a><a name="b137544519107"></a>函数名称</strong></p>
@@ -172,7 +172,7 @@ uint32_t size = listTensorDesc.GetSize();                                       
 auto dataPtr0 = listTensorDesc.GetDataPtr<int32_t>(0);                          // 获取ptr0
 auto dataPtr1 = listTensorDesc.GetDataPtr<int32_t>(1);                          // 获取ptr1
 
-uint64_t buf[100] = {0}; // 示例中Tensor的dim为3, 此处的100表示预留足够大的空间
+uint64_t buf[100] = {0}; // 示例中Tensor的dim为3,此处的100表示预留足够大的空间
 AscendC::TensorDesc<int32_t> desc;
 desc.SetShapeAddr(buf);          // 为desc指定用于储存shape信息的地址
 listTensorDesc.GetDesc(desc, 0); // 获取索引0的shape信息
@@ -186,4 +186,3 @@ for (uint32_t i = 0; i < desc.GetDim(); i++)
 }
 auto ptr = desc.GetDataPtr();
 ```
-

@@ -29,7 +29,7 @@ public:
 
 ## 模板参数<a name="section116801320102618"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table13588175515344"></a>
 <table><thead align="left"><tr id="row1160915519346"><th class="cellrowborder" valign="top" width="21.8%" id="mcps1.2.3.1.1"><p id="p9609105553412"><a name="p9609105553412"></a><a name="p9609105553412"></a>参数名</p>
@@ -90,7 +90,7 @@ template <typename T> struct is_tensorTrait
     >-   和API配合使用时，当前暂不支持TensorTrait结构配置pos、LayoutType模板参数，需要使用构造函数构造TensorTrait，pos、LayoutType保持默认值即可。
     >-   DataCopy切片数据搬运接口需要ShapeInfo信息，不支持输入TensorTrait类型的GlobalTensor/LocalTensor。
 
-    **表 2**  TensorTrait特性支持的接口列表
+    **表2**  TensorTrait特性支持的接口列表
 
     <a name="table5536122919441"></a>
     <table><thead align="left"><tr id="row9536132974410"><th class="cellrowborder" valign="top" width="36.69%" id="mcps1.2.3.1.1"><p id="p053720299442"><a name="p053720299442"></a><a name="p053720299442"></a>接口分类</p>

@@ -60,7 +60,7 @@ __simd_callee__ inline void Truncate(S& dstReg, S& srcReg, MaskReg& mask)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="18.48%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -78,7 +78,7 @@ __simd_callee__ inline void Truncate(S& dstReg, S& srcReg, MaskReg& mask)
 <tr id="row878242318442"><td class="cellrowborder" valign="top" width="18.48%" headers="mcps1.2.3.1.1 "><p id="p1578212233441"><a name="p1578212233441"></a><a name="p1578212233441"></a>roundMode</p>
 </td>
 <td class="cellrowborder" valign="top" width="81.52000000000001%" headers="mcps1.2.3.1.2 "><p id="p10782152316444"><a name="p10782152316444"></a><a name="p10782152316444"></a>舍入模式，取值如下：</p>
-<a name="ul10735652193110"></a><a name="ul10735652193110"></a><ul id="ul10735652193110"><li>RoundMode::CAST_NONE：默认值，该模式在转换会导致精度丢失的场景下相当于CAST_RINT，其他场景下无效果；</li><li>RoundMode::CAST_RINT：该模式返回最接近参数的整数，如果有两个整数同样接近，则会返回偶数的那个；</li><li>RoundMode::CAST_ROUND：round模式， 四舍五入求整；</li><li>RoundMode::CAST_FLOOR：floor模式，向下取整；</li><li>RoundMode::CAST_CEIL：ceil模式， 向上取整；</li><li>RoundMode::CAST_TRUNC：truncation模式， 向0取整，舍弃小数位。</li></ul>
+<a name="ul10735652193110"></a><a name="ul10735652193110"></a><ul id="ul10735652193110"><li>RoundMode::CAST_NONE：默认值，该模式在转换会导致精度丢失的场景下相当于CAST_RINT，其他场景下无效果；</li><li>RoundMode::CAST_RINT：该模式返回最接近参数的整数，如果有两个整数同样接近，则会返回偶数的那个；</li><li>RoundMode::CAST_ROUND：round模式，四舍五入求整；</li><li>RoundMode::CAST_FLOOR：floor模式，向下取整；</li><li>RoundMode::CAST_CEIL：ceil模式，向上取整；</li><li>RoundMode::CAST_TRUNC：truncation模式，向0取整，舍弃小数位。</li></ul>
 </td>
 </tr>
 <tr id="row18835145716587"><td class="cellrowborder" valign="top" width="18.48%" headers="mcps1.2.3.1.1 "><p id="p1383515717581"><a name="p1383515717581"></a><a name="p1383515717581"></a>mode</p>
@@ -89,13 +89,13 @@ __simd_callee__ inline void Truncate(S& dstReg, S& srcReg, MaskReg& mask)
 </tr>
 <tr id="row6323202343820"><td class="cellrowborder" valign="top" width="18.48%" headers="mcps1.2.3.1.1 "><p id="p432372303816"><a name="p432372303816"></a><a name="p432372303816"></a>S</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.52000000000001%" headers="mcps1.2.3.1.2 "><p id="p93238232385"><a name="p93238232385"></a><a name="p93238232385"></a>srcReg/dstReg 类型，例如RegTensor&lt;float&gt;，由编译器自动推导，用户不需要填写。</p>
+<td class="cellrowborder" valign="top" width="81.52000000000001%" headers="mcps1.2.3.1.2 "><p id="p93238232385"><a name="p93238232385"></a><a name="p93238232385"></a>srcReg/dstReg类型，例如RegTensor&lt;float&gt;，由编译器自动推导，用户不需要填写。</p>
 </td>
 </tr>
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -139,8 +139,8 @@ __simd_callee__ inline void Truncate(S& dstReg, S& srcReg, MaskReg& mask)
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
--   非饱和模式下，输入nan，输出nan; 输入值超出输入类型的最值范围，则输出+/-inf。
--   饱和模式下，输入nan, 输出为0，输入值超出输入类型的最值范围时，则其被饱和为最值。
+-   非饱和模式下，输入nan，输出nan;输入值超出输入类型的最值范围，则输出+/-inf。
+-   饱和模式下，输入nan,输出为0，输入值超出输入类型的最值范围时，则其被饱和为最值。
 -   float类型只支持不饱和模式。
 
 ## 调用示例<a name="section642mcpsimp"></a>
@@ -160,4 +160,3 @@ __simd_vf__ inline void TruncVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32
     }
 }
 ```
-

@@ -76,7 +76,7 @@ Quantize与[AscendQuant](AscendQuant.md)的功能类似，Quantize在PER\_TENSOR
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -101,7 +101,7 @@ enum class QuantizePolicy : int32_t {
 };
 ```
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -122,7 +122,7 @@ struct QuantizeParams {
 
 输入输出支持的数据类型组合如下：
 
-**表 3**  DstT为fp8_e5m2_t/fp8_e4m3fn_t支持的数据类型组合
+**表3**  DstT为fp8_e5m2_t/fp8_e4m3fn_t支持的数据类型组合
 
 | SrcT | ScaleT/OffsetT |  roundMode |
 | --- | --- | --- |
@@ -132,7 +132,7 @@ struct QuantizeParams {
 | half | float | CAST_RINT(默认) |
 | bfloat16_t | float | CAST_RINT(默认) |
 
-**表 4**  DstT为hifloat8_t支持的数据类型组合
+**表4**  DstT为hifloat8_t支持的数据类型组合
 
 | SrcT | ScaleT/OffsetT |  roundMode |
 | --- | --- | --- |
@@ -142,7 +142,7 @@ struct QuantizeParams {
 | half | float | CAST_ROUND(默认)<br>CAST_HYBRID |
 | bfloat16_t | float | CAST_ROUND(默认)<br>CAST_HYBRID |
 
-**表 5**  DstT为int8_t支持的数据类型组合
+**表5**  DstT为int8_t支持的数据类型组合
 | SrcT | ScaleT/OffsetT |  roundMode |
 | --- | --- | --- |
 | half | half | CAST_RINT(默认)<br>CAST_ROUND<br>CAST_FLOOR<br>CAST_CEIL<br>CAST_TRUNC |
@@ -151,7 +151,7 @@ struct QuantizeParams {
 | half | float | CAST_RINT(默认)<br>CAST_ROUND<br>CAST_FLOOR<br>CAST_CEIL<br>CAST_TRUNC |
 | bfloat16_t | float | CAST_RINT(默认)<br>CAST_ROUND<br>CAST_FLOOR<br>CAST_CEIL<br>CAST_TRUNC |
 
-**表 6**  DstT为fp4x2_e1m2_t/fp4x2_e2m1_t支持的数据类型组合（当前均只支持PER_GROUP场景）
+**表6**  DstT为fp4x2_e1m2_t/fp4x2_e2m1_t支持的数据类型组合（当前均只支持PER_GROUP场景）
 | SrcT | ScaleT/OffsetT |  roundMode |
 | --- | --- | --- |
 | half | half | CAST_RINT(默认)<br>CAST_ROUND<br>CAST_FLOOR<br>CAST_CEIL<br>CAST_TRUNC |

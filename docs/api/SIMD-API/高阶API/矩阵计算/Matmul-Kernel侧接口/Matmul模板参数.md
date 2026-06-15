@@ -20,7 +20,7 @@
 
 创建Matmul对象时需要传入：
 
--   A、B、C、Bias的参数类型信息， 类型信息通过MatmulType来定义，包括：内存逻辑位置、数据格式、数据类型、是否转置、数据排布和是否开启L1复用。
+-   A、B、C、Bias的参数类型信息，类型信息通过MatmulType来定义，包括：内存逻辑位置、数据格式、数据类型、是否转置、数据排布和是否开启L1复用。
 -   MatmulConfig信息（可选），用于配置Matmul模板信息以及相关的配置参数。不配置默认使用Norm模板。
 
     针对Atlas 200I/500 A2 推理产品，当前只支持使用默认的Norm模板。
@@ -85,7 +85,7 @@ using Matmul = AscendC::MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, MM
 
 ## 参数说明
 
-**表 1**  MatmulApiStaticTiling常量化Tiling参数说明
+**表1**  MatmulApiStaticTiling常量化Tiling参数说明
 
 <a name="table7939847143412"></a>
 | 参数 | 数据类型 | 说明 |

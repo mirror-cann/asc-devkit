@@ -15,7 +15,7 @@ void GetBitwiseXorMaxMinTmpSize(const platform_ascendc::PlatformAscendC& ascendc
 
 ## 参数说明
 
-**表 1**  接口参数列表
+**表1**  接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -46,4 +46,3 @@ uint32_t minValue = 0;
 auto plat = platform_ascendc::PlatformAscendC(context->GetPlatformInfo());
 AscendC::GetBitwiseXorMaxMinTmpSize(plat, shape, 2, false, maxValue, minValue);
 ```
-

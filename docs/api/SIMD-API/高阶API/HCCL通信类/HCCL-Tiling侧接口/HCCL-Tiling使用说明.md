@@ -27,7 +27,7 @@ HCCL Tiling API获取Tiling参数的流程如下：
 
     可调用的配置接口列于下表。
 
-    **表 1**  Mc2CcTilingConfig类对象的配置接口列表
+    **表1**  Mc2CcTilingConfig类对象的配置接口列表
 
     | 接口 | 功能 |
     | --- | --- |

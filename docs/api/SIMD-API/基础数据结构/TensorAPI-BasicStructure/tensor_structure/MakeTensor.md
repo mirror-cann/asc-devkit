@@ -28,7 +28,7 @@ __aicore__ inline constexpr auto MakeTensor(const Iterator& iter, const Args&...
 | 参数名  | 输入/输出 | 描述 |
 | :----- | :------- | :------- |
 | iter | 输入 | 迭代器，要求传入ViewEngine对象，用于创建Tensor。返回类型由该迭代器绑定的内存位置决定。 |
-| args | 输入 | 可变参数，当前支持传入一个或两个参数。<br>&bull; 当传入一个入参时：根据传入的Layout对象创建Tensor。<br>&bull; 当传入两个入参时：根据传入的参数构建Layout对象，并基于该Layout创建Tensor。 |
+| args | 输入 | 可变参数，当前支持传入一个或两个参数。<br>&bull;当传入一个入参时：根据传入的Layout对象创建Tensor。<br>&bull;当传入两个入参时：根据传入的参数构建Layout对象，并基于该Layout创建Tensor。 |
 
 ## 返回值说明
 

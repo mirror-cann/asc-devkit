@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-将数据从Unified Buffer (UB) 搬运到L1 Buffer。
+将数据从Unified Buffer (UB)搬运到L1 Buffer。
 
 ## 函数原型
 

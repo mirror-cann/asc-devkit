@@ -6,7 +6,7 @@ TQueBind绑定源逻辑位置和目的逻辑位置，根据源位置和目的位
 
 ![](../../../../../figures/矩阵编程逻辑位置示意图-40.png)
 
-**表 1**  TQueBind和TQue对于数据通路的表达
+**表1**  TQueBind和TQue对于数据通路的表达
 
 <a name="table171821134125613"></a>
 <table><thead align="left"><tr id="row218203418566"><th class="cellrowborder" valign="top" width="22.71%" id="mcps1.2.4.1.1"><p id="p6182183411565"><a name="p6182183411565"></a><a name="p6182183411565"></a>数据通路</p>
@@ -132,7 +132,7 @@ TQueBind&lt;TPosition::VECOUT, TPosition::C1, 1&gt;</pre>
 template <TPosition src, TPosition dst, int32_t depth, auto mask = 0> class TQueBind {...};
 ```
 
-**表 2**  模板参数说明
+**表2**  模板参数说明
 
 <a name="table1550165916920"></a>
 <table><thead align="left"><tr id="row115015591391"><th class="cellrowborder" valign="top" width="14.099999999999998%" id="mcps1.2.3.1.1"><p id="p12501159099"><a name="p12501159099"></a><a name="p12501159099"></a>参数名</p>

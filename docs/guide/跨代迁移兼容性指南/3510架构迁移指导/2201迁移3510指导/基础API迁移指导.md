@@ -10,7 +10,7 @@
 
     **兼容方案**：通过设置config模板参数来配置Subnormal计算模式。软件模拟对Subnormal数据的处理，通过精度扩展等处理方式来避免Subnormal浮点数下溢为0。
 
-    **表 1**  涉及Subnormal的API和config参数说明
+    **表1**  涉及Subnormal的API和config参数说明
 
     <a name="table288510533427"></a>
     <table><thead align="left"><tr id="row388575318425"><th class="cellrowborder" align="center" valign="top" width="27%" id="mcps1.2.3.1.1"><p id="p12885175314420"><a name="p12885175314420"></a><a name="p12885175314420"></a>Ascend C基础API</p>

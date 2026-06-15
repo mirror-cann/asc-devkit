@@ -25,7 +25,7 @@ __aicore__ inline void SetSingleShape(int singleM, int singleN, int singleK)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

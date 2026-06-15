@@ -22,7 +22,7 @@ inline float __float2float_rd(const float x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -65,4 +65,3 @@ __simt_vf__ __launch_bounds__(1024) inline void kernel__float2float_rd(__gm__ fl
     dst[idx] = __float2float_rd(x[idx]);
 }
 ```
-

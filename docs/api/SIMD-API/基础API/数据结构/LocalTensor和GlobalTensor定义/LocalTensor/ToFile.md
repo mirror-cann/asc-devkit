@@ -59,7 +59,7 @@ int32_t ToFile(const std::string& fileName) const
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="13.94%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -91,8 +91,7 @@ int32_t ToFile(const std::string& fileName) const
 ## 调用示例<a name="section17531157161314"></a>
 
 ```cpp
-// 示例 只限于CPU调试，将LocalTensor数据Dump到文件中，用于精度调试，文件保存在执行目录
+// 示例只限于CPU调试，将LocalTensor数据Dump到文件中，用于精度调试，文件保存在执行目录
 AscendC::LocalTensor<float> tmpTensor = softmaxMaxBuf.template Get<float>();
 tmpTensor.ToFile("tmpTensor.bin");
 ```
-

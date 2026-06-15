@@ -22,7 +22,7 @@ bfloat16_t __hfma_relu(const bfloat16_t x, const bfloat16_t y, const bfloat16_t 
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -75,4 +75,3 @@ x \* y + z的值。本接口不受全局饱和模式影响，特殊值如下：
         dst[idx] = __hfma_relu(x[idx], y[idx], z[idx]);
     }
     ```
-

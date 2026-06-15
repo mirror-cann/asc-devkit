@@ -56,7 +56,7 @@ for (j = 0; j < mSize; j++) {
 
 **使用示例：**
 
-**图 1** NZ2NZ示意图<a name="zh-cn_topic_0000002515820868_fig199191646174210"></a>  
+**图1** NZ2NZ示意图<a name="zh-cn_topic_0000002515820868_fig199191646174210"></a>  
 
 ![](../../../../../figures/Fixpipe_NZ2NZ.png)
 

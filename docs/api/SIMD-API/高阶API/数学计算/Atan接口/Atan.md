@@ -65,7 +65,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -84,7 +84,7 @@ struct AtanConfig {
 };
 ```
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -112,15 +112,15 @@ struct AtanConfig {
 
 // 接口框架申请临时空间，全部参与计算
 AscendC::Atan(dstLocal, srcLocal);
-// 接口框架申请临时空间，部分参与计算, 需要参与计算的元素个数为512
+// 接口框架申请临时空间，部分参与计算,需要参与计算的元素个数为512
 AscendC::Atan(dstLocal, srcLocal, 512);
 
 // 通过sharedTmpBuffer入参传入临时空间，全部参与计算
 AscendC::Atan(dstLocal, srcLocal, sharedTmpBuffer);
-// 通过sharedTmpBuffer入参传入临时空间，部分参与计算, 需要参与计算的元素个数为512
+// 通过sharedTmpBuffer入参传入临时空间，部分参与计算,需要参与计算的元素个数为512
 AscendC::Atan(dstLocal, srcLocal, sharedTmpBuffer, 512);
 
-// 指定输入算法为POLYNOMIAL_APPROXIMATION, 输入的数据类型为float, 实际计算个数为512
+// 指定输入算法为POLYNOMIAL_APPROXIMATION,输入的数据类型为float,实际计算个数为512
 static constexpr AscendC::AtanConfig atanConfig = { AscendC::AtanAlgo::POLYNOMIAL_APPROXIMATION};
 AscendC::Atan<float, false, atanConfig>(dstLocal, srcLocal, sharedTmpBuffer, 512);
 ```

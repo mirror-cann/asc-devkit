@@ -7,7 +7,7 @@ template <TPosition pos, int32_t depth, auto mask = 0>
 using TSCM = TQueBind<pos, TPosition::TSCM, depth, mask>;
 ```
 
-**表 1**  模板参数介绍
+**表1**  模板参数介绍
 
 <a name="table1550165916920"></a>
 <table><thead align="left"><tr id="row115015591391"><th class="cellrowborder" valign="top" width="13.63%" id="mcps1.2.3.1.1"><p id="p12501159099"><a name="p12501159099"></a><a name="p12501159099"></a>参数名称</p>

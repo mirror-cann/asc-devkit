@@ -21,7 +21,7 @@ void GetArithProgressionMaxMinTmpSize(uint32_t& maxValue, uint32_t& minValue)
 
 ## 参数说明
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

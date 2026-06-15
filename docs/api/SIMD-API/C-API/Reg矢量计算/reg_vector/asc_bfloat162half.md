@@ -20,35 +20,35 @@
 
 - 非饱和模式：
   - 输入数据超过输出类型最值时，返回输出类型的对应符号inf值。
-  - 输入数据为+/-inf时, 返回+/-inf。
+  - 输入数据为+/-inf时,返回+/-inf。
   - 输入数据为nan时，返回nan。
 - 饱和模式：
   - 输入数据超过输出类型最值时，返回输出类型的对应最值。
-  - 输入数据为+/-inf时, 返回输出类型的对应最值。
+  - 输入数据为+/-inf时,返回输出类型的对应最值。
   - 输入数据为nan时，返回0。
 
 ## 函数原型
 
 ```cpp
-// RINT舍入模式, 非饱和模式
+// RINT舍入模式,非饱和模式
 __simd_callee__ inline void asc_bfloat162half_rn(vector_half& dst, vector_bfloat16_t src, vector_bool mask)
-// RINT舍入模式, 饱和模式
+// RINT舍入模式,饱和模式
 __simd_callee__ inline void asc_bfloat162half_rn_sat(vector_half& dst, vector_bfloat16_t src, vector_bool mask)
-// ROUND舍入模式, 非饱和模式
+// ROUND舍入模式,非饱和模式
 __simd_callee__ inline void asc_bfloat162half_rna(vector_half& dst, vector_bfloat16_t src, vector_bool mask)
-// ROUND舍入模式, 饱和模式
+// ROUND舍入模式,饱和模式
 __simd_callee__ inline void asc_bfloat162half_rna_sat(vector_half& dst, vector_bfloat16_t src, vector_bool mask)
-// FLOOR舍入模式, 非饱和模式
+// FLOOR舍入模式,非饱和模式
 __simd_callee__ inline void asc_bfloat162half_rd(vector_half& dst, vector_bfloat16_t src, vector_bool mask)
-// FLOOR舍入模式, 饱和模式
+// FLOOR舍入模式,饱和模式
 __simd_callee__ inline void asc_bfloat162half_rd_sat(vector_half& dst, vector_bfloat16_t src, vector_bool mask)
-// CEIL舍入模式, 非饱和模式
+// CEIL舍入模式,非饱和模式
 __simd_callee__ inline void asc_bfloat162half_ru(vector_half& dst, vector_bfloat16_t src, vector_bool mask)
-// CEIL舍入模式, 饱和模式
+// CEIL舍入模式,饱和模式
 __simd_callee__ inline void asc_bfloat162half_ru_sat(vector_half& dst, vector_bfloat16_t src, vector_bool mask)
-// TRUNC舍入模式, 非饱和模式
+// TRUNC舍入模式,非饱和模式
 __simd_callee__ inline void asc_bfloat162half_rz(vector_half& dst, vector_bfloat16_t src, vector_bool mask)
-// TRUNC舍入模式, 饱和模式
+// TRUNC舍入模式,饱和模式
 __simd_callee__ inline void asc_bfloat162half_rz_sat(vector_half& dst, vector_bfloat16_t src, vector_bool mask)
 ```
 

@@ -12,7 +12,7 @@ uint32_t SetGroupName(const std::string &groupName)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -30,4 +30,3 @@ uint32_t SetGroupName(const std::string &groupName)
 ## 调用示例
 
 本接口的调用示例请见[调用示例](SetOpType.md#section1665082013318)。
-

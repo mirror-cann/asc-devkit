@@ -22,7 +22,7 @@ half2 __hfmax2(const half2 x, const half2 y, const half2 z)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -94,4 +94,3 @@ half2 __hfmax2(const half2 x, const half2 y, const half2 z)
         asc_vf_call<simt_hfmax2>(dim3(1024), (__gm__ half2*)x, (__gm__ half2*)y, (__gm__ half2*)z, (__gm__ half2*)dst, input_total_length);
     }
     ```
-

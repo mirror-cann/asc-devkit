@@ -47,7 +47,7 @@
             std::cout << "Failed to load tiling so" << std::endl;
             return -1;
         }
-        context_ascendc::TilingFunc tilingFunc = tmpIns.GetTilingFunc("AddCustom");  // 获取AddCustom算子对应的Tiling函数, 此处入参为OpType
+        context_ascendc::TilingFunc tilingFunc = tmpIns.GetTilingFunc("AddCustom");  // 获取AddCustom算子对应的Tiling函数,此处入参为OpType
         if (tilingFunc != nullptr) {
             ge::graphStatus ret = tilingFunc(tilingContext);  // 执行Tiling函数
             if (ret != ge::GRAPH_SUCCESS) {
@@ -82,4 +82,3 @@
     ```
     ./test
     ```
-

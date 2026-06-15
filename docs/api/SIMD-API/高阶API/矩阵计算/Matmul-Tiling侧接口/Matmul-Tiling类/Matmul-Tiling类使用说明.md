@@ -63,7 +63,7 @@ Matmul Tiling API分为Matmul单核Tiling接口、多核Tiling接口和BatchMatm
     bmmTiling.SetOrgShape(64, 48, 32);
     // Layout类型为NORMAL时,通过SetBatchInfoForNormal设置A、B、C矩阵的Layout轴信息
     bmmTiling.SetBatchInfoForNormal(2, 2, 64, 48, 32);
-    // Layout类型为BSNGD、SBNGD、BNGS1S2时, 通过SetALayout、SetBLayout、SetCLayout设置A、B、C矩阵的Layout轴信息
+    // Layout类型为BSNGD、SBNGD、BNGS1S2时,通过SetALayout、SetBLayout、SetCLayout设置A、B、C矩阵的Layout轴信息
     // bmmTiling.SetALayout(3, 64, 2, 2, 32);
     // bmmTiling.SetBLayout(3, 32, 2, 2, 48);
     // bmmTiling.SetCLayout(3, 64, 2, 2, 48);
@@ -75,7 +75,7 @@ Matmul Tiling API分为Matmul单核Tiling接口、多核Tiling接口和BatchMatm
 
 接口列表如下：
 
-**表 1**  MatmulApiTiling/MultiCoreMatmulTiling/BatchMatmulTiling共有接口列表
+**表1**  MatmulApiTiling/MultiCoreMatmulTiling/BatchMatmulTiling共有接口列表
 
 | 接口 | 功能 |
 | --- | --- |
@@ -105,7 +105,7 @@ Matmul Tiling API分为Matmul单核Tiling接口、多核Tiling接口和BatchMatm
 | GetBaseK | 获取baseK值。 |
 | GetTiling | 获取Tiling参数。 |
 
-**表 2**  MultiCoreMatmulTiling其他接口
+**表2**  MultiCoreMatmulTiling其他接口
 
 | 接口 | 功能 |
 | --- | --- |
@@ -114,15 +114,15 @@ Matmul Tiling API分为Matmul单核Tiling接口、多核Tiling接口和BatchMatm
 | SetSingleShape | 设置Matmul单核计算的形状singleCoreM、singleCoreN、singleCoreK，单位为元素个数。 |
 | GetSingleShape | 获取计算后的singleCoreM/singleCoreN/singleCoreK。 |
 | SetAlignSplit | 设置多核切分时singleCoreM/singleCoreN/singleCoreK的对齐值。 |
-| GetCoreNum | 获得多核切分后， 使用的numBlocks。 |
+| GetCoreNum | 获得多核切分后，使用的numBlocks。 |
 | SetSplitK | 多核场景，开启切K轴。建议使用EnableMultiCoreSplitK接口。 |
 | EnableMultiCoreSplitK | 多核场景，开启切K轴。 |
 
-**表 3**  BatchMatmulTiling其他接口
+**表3**  BatchMatmulTiling其他接口
 
 | 接口 | 功能 |
 | --- | --- |
-| GetCoreNum | 获得多核切分后， 使用的numBlocks。 |
+| GetCoreNum | 获得多核切分后，使用的numBlocks。 |
 
 ## 需要包含的头文件
 

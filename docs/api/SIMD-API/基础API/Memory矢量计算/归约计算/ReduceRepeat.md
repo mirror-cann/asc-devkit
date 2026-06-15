@@ -8,8 +8,8 @@
 | <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √</cann-filter> |
 | <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √</cann-filter> |
 | <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core | √</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 Vector Core | x</cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √</cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x</cann-filter> |
 | <cann-filter npu-type = "910">Atlas 训练系列产品 | √</cann-filter> |
 | <cann-filter npu-type = "x90">Kirin X90 | √</cann-filter> |
 | <cann-filter npu-type = "9030">Kirin 9030 | √</cann-filter> |
@@ -22,7 +22,7 @@
 
 在求最大值或最小值时可以返回对应的索引，返回的索引值为每个repeat内部索引。支持[高维切分](../SIMD计算说明/高维切分.md)计算。
 
-**图 1**  ReduceRepeat计算示意图
+**图1**  ReduceRepeat计算示意图
 
 ![](../../../../figures/ReduceRepeat.png "ReduceRepeat计算示意图")
 
@@ -45,7 +45,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -54,7 +54,7 @@
 | U | 源操作数数据类型。 |
 | isSetMask | 是否在接口内部设置mask。<br>&bull; `true`，表示在接口内部设置mask。<br>&bull; `false`，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，本接口入参中的mask值必须设置为占位符`MASK_PLACEHOLDER`。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
@@ -62,7 +62,7 @@
 | src | 输入 | 源操作数。<br>类型为[LocalTensor](../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN、VECCALC、VECOUT（存储位置为Unified Buffer）。 |
 | mask[]/mask | 输入 | `mask`用于控制每次迭代内参与计算的源操作数。详细设置参考[掩码概述](../SIMD计算说明/掩码/概述.md)。 |
 | repeatTime | 输入 | 迭代次数。取值范围为[0, 255]。 |
-| dstRepStride | 输入 | 目的操作数相邻迭代间的地址步长，以一个repeatTime归约后的长度为单位。取值范围为[0, $2^{16}-1$]。<br>**注意：dstRepStride的单位受操作数数据类型、`reduceType`和`order`参数的影响**，参考[表3](#tab3)：<br>&bull; 返回索引和最值时，单位为dst数据类型所占字节长度的两倍；<br>&bull; 仅返回最值时，单位为dst数据类型所占字节长度；<br>&bull; 仅返回索引时，单位为uint32_t类型所占字节长度。<cann-filter npu-type = "910"><br>**注意：Atlas 训练系列产品不支持配置0。**</cann-filter> |
+| dstRepStride | 输入 | 目的操作数相邻迭代间的地址步长，以一个repeatTime归约后的长度为单位。取值范围为[0, $2^{16}-1$]。<br>**注意：dstRepStride的单位受操作数数据类型、`reduceType`和`order`参数的影响**，参考[表3](#tab3)：<br>&bull;返回索引和最值时，单位为dst数据类型所占字节长度的两倍；<br>&bull;仅返回最值时，单位为dst数据类型所占字节长度；<br>&bull;仅返回索引时，单位为uint32_t类型所占字节长度。<cann-filter npu-type = "910"><br>**注意：Atlas 训练系列产品不支持配置0。**</cann-filter> |
 | srcBlkStride | 输入 | 单次迭代内DataBlock的地址步长，单位为32字节。取值范围为[0, $2^{16}-1$]。 |
 | srcRepStride | 输入 | 源操作数相邻迭代间的地址步长，即源操作数每次迭代跳过的DataBlock数目。取值范围为[0, $2^{16}-1$]。 |
 | order | 输入 | 在归约操作类型为MAX或MIN时，指定dst中最大值value和索引值index的相对位置以及返回结果行为，参数类型为`ReduceOrder`枚举类型，默认值为`ORDER_VALUE_INDEX`。<br>`ReduceOrder`取值如下：<br>&bull; `ORDER_VALUE_INDEX`：表示value位于低半部，返回结果存储顺序为[value, index]。<br>&bull; `ORDER_INDEX_VALUE`：表示index位于低半部，返回结果存储顺序为[index, value]。<br>&bull; `ORDER_ONLY_VALUE`：表示只返回最值，返回结果存储顺序为[value]。<br>&bull; `ORDER_ONLY_INDEX`：表示只返回最值索引，返回结果存储顺序为[index]。<br>**注：归约操作类型为SUM时，该参数不生效。** |
@@ -77,7 +77,7 @@
 - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持half、float。</cann-filter>
 - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持half、float。</cann-filter>
 - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core，支持half、float。</cann-filter>
+- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持half、float。</cann-filter>
 - <cann-filter npu-type = "910">Atlas 训练系列产品，支持half。</cann-filter>
 - <cann-filter npu-type = "x90">Kirin X90，支持half、float。</cann-filter>
 - <cann-filter npu-type = "9030">Kirin 9030，支持half、float。</cann-filter>
@@ -105,7 +105,7 @@
 - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
 - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品</cann-filter>
 - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core</cann-filter>
+- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core</cann-filter>
 - <cann-filter npu-type = "910">Atlas 训练系列产品</cann-filter>
 - <cann-filter npu-type = "x90">Kirin X90</cann-filter>
 - <cann-filter npu-type = "9030">Kirin 9030</cann-filter>
@@ -121,7 +121,7 @@
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md#通用地址重叠约束)。
 - 源操作数的地址对齐约束请参考[通用地址对齐约束](../../../通用说明和约束.md#通用地址对齐约束)，起始地址需要32字节对齐；目的操作数的起始地址对齐约束受操作数数据类型、`reduceType`和`order`参数的影响，请参考[表3](#tab3)。
 
-    **表 3**  目的操作数地址对齐约束及dstRepStride单位
+    **表3**  目的操作数地址对齐约束及dstRepStride单位
 
     <a id="tab3"></a>
 
@@ -159,7 +159,7 @@
     - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`、`ORDER_ONLY_VALUE`、`ORDER_ONLY_INDEX`。</cann-filter>
     - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`、`ORDER_ONLY_VALUE`、`ORDER_ONLY_INDEX`。</cann-filter>
     - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持`ORDER_VALUE_INDEX`、`ORDER_ONLY_VALUE`。</cann-filter>
-    - <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`。</cann-filter>
+    - <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`。</cann-filter>
     - <cann-filter npu-type = "910">Atlas 训练系列产品，支持`ORDER_VALUE_INDEX`。</cann-filter>
     - <cann-filter npu-type = "x90">Kirin X90，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`。</cann-filter>
     - <cann-filter npu-type = "9030">Kirin 9030，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`。</cann-filter>

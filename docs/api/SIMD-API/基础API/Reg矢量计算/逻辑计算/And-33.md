@@ -80,7 +80,7 @@
 
 -   对RegTensor操作
 
-    **表 1**  模板参数说明
+    **表1**  模板参数说明
 
     <a name="table172551105016"></a>
     <table><thead align="left"><tr id="row152514120505"><th class="cellrowborder" valign="top" width="18.2%" id="mcps1.2.3.1.1"><p id="p1325101195013"><a name="p1325101195013"></a><a name="p1325101195013"></a>参数名</p>
@@ -98,18 +98,18 @@
     <tr id="row12514135013"><td class="cellrowborder" valign="top" width="18.2%" headers="mcps1.2.3.1.1 "><p id="p52512195012"><a name="p52512195012"></a><a name="p52512195012"></a>mode</p>
     </td>
     <td class="cellrowborder" valign="top" width="81.8%" headers="mcps1.2.3.1.2 "><p id="p22511112504"><a name="p22511112504"></a><a name="p22511112504"></a>选择MERGING模式或ZEROING模式。</p>
-    <a name="ul10251514504"></a><a name="ul10251514504"></a><ul id="ul10251514504"><li>ZEROING, mask未筛选的元素在dst中置零。</li><li>MERGING, 当前不支持。</li></ul>
+    <a name="ul10251514504"></a><a name="ul10251514504"></a><ul id="ul10251514504"><li>ZEROING, mask未筛选的元素在dst中置零。</li><li>MERGING,当前不支持。</li></ul>
     </td>
     </tr>
     <tr id="row152591105013"><td class="cellrowborder" valign="top" width="18.2%" headers="mcps1.2.3.1.1 "><p id="p72531125019"><a name="p72531125019"></a><a name="p72531125019"></a>U</p>
     </td>
-    <td class="cellrowborder" valign="top" width="81.8%" headers="mcps1.2.3.1.2 "><p id="p725171135010"><a name="p725171135010"></a><a name="p725171135010"></a>srcReg0/srcReg1/dstReg RegTensor类型， 例如RegTensor&lt;uint32_t&gt;，由编译器自动推导，用户不需要填写。</p>
+    <td class="cellrowborder" valign="top" width="81.8%" headers="mcps1.2.3.1.2 "><p id="p725171135010"><a name="p725171135010"></a><a name="p725171135010"></a>srcReg0/srcReg1/dstReg RegTensor类型，例如RegTensor&lt;uint32_t&gt;，由编译器自动推导，用户不需要填写。</p>
     </td>
     </tr>
     </tbody>
     </table>
 
-    **表 2**  参数说明
+    **表2**  参数说明
 
     <a name="table14261514502"></a>
     <table><thead align="left"><tr id="row3262116508"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="p6267118507"><a name="p6267118507"></a><a name="p6267118507"></a>参数名</p>
@@ -238,4 +238,3 @@
         }
     }
     ```
-

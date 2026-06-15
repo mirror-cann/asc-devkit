@@ -64,7 +64,7 @@ __aicore__ constexpr inline U Cast(T bVal)
 
 <cann-filter npu-type = "950">
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | ------ | ------ |
@@ -73,7 +73,7 @@ __aicore__ constexpr inline U Cast(T bVal)
 
 </cann-filter>
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名称 | 输入/输出 | 含义               |
 | -------- | --------- | ------------------ |

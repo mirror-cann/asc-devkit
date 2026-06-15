@@ -9,7 +9,7 @@ AI CPU启动下发通信任务前，需获取固定的通信配置，如[表1](#
 
 ## 参数说明
 
-**表 1**  v2版本HCCL TilingData参数说明
+**表1**  v2版本HCCL TilingData参数说明
 
 <a name="table4835205712588"></a>
 | 参数名 | 描述 |
@@ -19,7 +19,7 @@ AI CPU启动下发通信任务前，需获取固定的通信配置，如[表1](#
 | serverCfg | [Mc2ServerCfg](#table96371578575)类型。集合通信server端通用参数配置。 |
 | hcom | [Mc2HcommCfg](#table13131010011)类型。各通信域中每个通信任务的参数配置。在通信算子TilingData的定义中，根据各通信域中通信任务总个数，共需要定义mc2HcommCnt个Mc2HcommCfg结构体。例如：mc2HcommCnt=2，则需要依次定义2个[Mc2HcommCfg](#table13131010011)类型的参数，自定义参数名，比如hcom1、hcom2。 |
 
-**表 2**  Mc2ServerCfg结构体说明
+**表2**  Mc2ServerCfg结构体说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -30,7 +30,7 @@ AI CPU启动下发通信任务前，需获取固定的通信配置，如[表1](#
 | commOutArgIndex | 预留字段，不需要配置。 |
 | reserved | 预留字段，不需要配置。 |
 
-**表 3**  Mc2HcommCfg结构体说明
+**表3**  Mc2HcommCfg结构体说明
 
 | 参数名 | 描述 |
 | --- | --- |

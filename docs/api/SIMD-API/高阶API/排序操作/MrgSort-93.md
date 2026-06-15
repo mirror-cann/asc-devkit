@@ -47,14 +47,14 @@ __aicore__ inline void MrgSort(const LocalTensor<T> &dst, const MrgSortSrcList<T
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | T | 操作数的数据类型。支持的数据类型为：half、float。 |
 | isExhaustedSuspension | 某条队列耗尽（即该队列已经全部排序到目的操作数）后，是否需要停止合并。类型为bool，参数取值如下：<br>false：直到所有队列耗尽完才停止合并。<br>true：某条队列耗尽后，停止合并。<br><br>默认值为false。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -75,7 +75,7 @@ struct MrgSortSrcList {
 };
 ```
 
-**表 3**  MrgSortSrcList参数说明
+**表3**  MrgSortSrcList参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |

@@ -15,7 +15,7 @@ inline void GetSumMaxMinTmpSize(const uint32_t n, const uint32_t typeSize, const
 
 ## 参数说明
 
-**表 1**  接口参数列表
+**表1**  接口参数列表
 
 | 接口 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -42,4 +42,3 @@ uint32_t maxValue = 0;
 uint32_t minValue = 0;
 AscendC::GetSumMaxMinTmpSize(n, 2, false, maxValue, minValue);
 ```
-

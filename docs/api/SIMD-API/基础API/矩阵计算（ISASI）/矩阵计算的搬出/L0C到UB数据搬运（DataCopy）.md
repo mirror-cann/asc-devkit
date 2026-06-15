@@ -40,13 +40,13 @@
 
 ## 参数说明<a name="section1592117358563"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | ---------- | ---------- |
 | T、U | 操作数的数据类型。支持的数据类型请参考[数据类型](#section8664371012)。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -55,7 +55,7 @@
 | intriParams | 输入 | 搬运参数。DataCopyParams类型。 |
 | enhancedParams | 输入 | 增强信息参数。DataCopyEnhancedParams类型。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
 
-**表 3** DataCopyEnhancedParams结构参数说明
+**表3** DataCopyEnhancedParams结构参数说明
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -67,7 +67,7 @@
 | isRelu | 配置是否可以随路做线性整流操作。配置deqValue的情况下，如果该参数被置为true，那么会刷新deqValue的ReLU标志位为1；如果被置为false，则不会做修改。配置deqTensorAddr的情况下，反量化参数向量元素中的ReLU标志位不生效，以isRelu为准。<br>仅配置isRelu，不配置量化参数，即deqValue配置为DEQ_NONE场景，支持src和dst的数据类型组合如下：{half，half}，{float，float}，{int32_t，int32_t}，{float，half}；同时配置isRelu和量化参数的场景，支持的数据类型组合参考[表5](#table168091348673)。 |
 | padMode | 预留参数，当前暂不支持。 |
 
-**表 4** 不同blockMode对应的参数单位<a id="table13396838183618"></a>
+**表4** 不同blockMode对应的参数单位<a id="table13396838183618"></a>
 
 | blockMode | src | dst | 数据类型 | blockLen单位 | srcStride单位 | dstStride单位 |
 | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
@@ -76,23 +76,23 @@
 | BLOCK_MODE_VECTOR | CO1 | CO2 | half、int16_t、uint16_t | 32B | 512B | 32B |
 | BLOCK_MODE_VECTOR | CO1 | CO2 | float、int32_t、uint32_t | 64B | 1024B | 32B |
 
-**表 5** deqScale参数列表<a id="table168091348673"></a>
+**表5** deqScale参数列表<a id="table168091348673"></a>
 
 | 量化模式 | src.dtype | dst.dtype | 配合使用的参数 |
 | ---------- | ---------- | ---------- | ---------- |
 | DEQ | int32_t | half | deqValue中的变量M |
 | DEQ | half | half | deqValue中的变量M |
-| DEQ8 | int32_t | int8_t | &bull; deqValue<br>&nbsp;&nbsp;&bull; 变量M<br>&nbsp;&nbsp;&bull; 变量N<br>&nbsp;&nbsp;&bull; MCB标志位<br>&nbsp;&nbsp;&bull; Offset<br>&nbsp;&nbsp;&bull; Sign标志位<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
-| DEQ8 | int32_t | uint8_t | &bull; deqValue<br>&nbsp;&nbsp;&bull; 变量M<br>&nbsp;&nbsp;&bull; 变量N<br>&nbsp;&nbsp;&bull; MCB标志位<br>&nbsp;&nbsp;&bull; Offset<br>&nbsp;&nbsp;&bull; Sign标志位<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
-| DEQ16 | int32_t | half | &bull; deqValue<br>&nbsp;&nbsp;&bull; 变量M<br>&nbsp;&nbsp;&bull; 变量N<br>&nbsp;&nbsp;&bull; MCB标志位<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
-| DEQ16 | int32_t | int16_t | &bull; deqValue<br>&nbsp;&nbsp;&bull; 变量N<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
+| DEQ8 | int32_t | int8_t | &bull; deqValue<br>&nbsp;&nbsp;&bull;变量M<br>&nbsp;&nbsp;&bull;变量N<br>&nbsp;&nbsp;&bull; MCB标志位<br>&nbsp;&nbsp;&bull; Offset<br>&nbsp;&nbsp;&bull; Sign标志位<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
+| DEQ8 | int32_t | uint8_t | &bull; deqValue<br>&nbsp;&nbsp;&bull;变量M<br>&nbsp;&nbsp;&bull;变量N<br>&nbsp;&nbsp;&bull; MCB标志位<br>&nbsp;&nbsp;&bull; Offset<br>&nbsp;&nbsp;&bull; Sign标志位<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
+| DEQ16 | int32_t | half | &bull; deqValue<br>&nbsp;&nbsp;&bull;变量M<br>&nbsp;&nbsp;&bull;变量N<br>&nbsp;&nbsp;&bull; MCB标志位<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
+| DEQ16 | int32_t | int16_t | &bull; deqValue<br>&nbsp;&nbsp;&bull;变量N<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
 | VDEQ | int32_t | half | deqTensorAddr地址存储的反量化参数向量中的元素deqValue支持配置的参数分别对应DEQ/DEQ8/DEQ16的说明。<br>&nbsp;&nbsp;&bull; deqTensorAddr<br>&nbsp;&nbsp;&bull; DEQADDR<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
 | VDEQ8 | int32_t | int8_t | deqTensorAddr地址存储的反量化参数向量中的元素deqValue支持配置的参数分别对应DEQ/DEQ8/DEQ16的说明。<br>&nbsp;&nbsp;&bull; deqTensorAddr<br>&nbsp;&nbsp;&bull; DEQADDR<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
 | VDEQ8 | int32_t | uint8_t | deqTensorAddr地址存储的反量化参数向量中的元素deqValue支持配置的参数分别对应DEQ/DEQ8/DEQ16的说明。<br>&nbsp;&nbsp;&bull; deqTensorAddr<br>&nbsp;&nbsp;&bull; DEQADDR<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
 | VDEQ16 | int32_t | half | deqTensorAddr地址存储的反量化参数向量中的元素deqValue支持配置的参数分别对应DEQ/DEQ8/DEQ16的说明。<br>&nbsp;&nbsp;&bull; deqTensorAddr<br>&nbsp;&nbsp;&bull; DEQADDR<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
 | VDEQ16 | int32_t | int16_t | deqTensorAddr地址存储的反量化参数向量中的元素deqValue支持配置的参数分别对应DEQ/DEQ8/DEQ16的说明。<br>&nbsp;&nbsp;&bull; deqTensorAddr<br>&nbsp;&nbsp;&bull; DEQADDR<br>&nbsp;&nbsp;&bull; ReLU标志位<br>&nbsp;&nbsp;&bull; isRelu |
 
-**表 6** deqValue配置方式<a id="table54451538192912"></a>
+**表6** deqValue配置方式<a id="table54451538192912"></a>
 
 | 模式 | 比特位数 | 变量名 | 作用介绍 |
 | ---------- | ---------- | ---------- | ---------- |
@@ -101,11 +101,11 @@
 | DEQ8、VDEQ8、DEQ16、VDEQ16 | 36 | MCB标志位 | Mode Control Bit。如果置为0，输入的int32_t会被直接转换为float。如果置为1，输入的int32_t会先右移N比特位，转变成int16_t，然后转换为float。 |
 | DEQ8、VDEQ8、DEQ16、VDEQ16 | 37~45 | Offset | 9bit的整型数据，在进行反量化src * M的计算结果后与Offset进行相加。仅在DEQ8、VDEQ8模式中会用到。如果不使用offset，请置为0。 |
 | DEQ8、VDEQ8、DEQ16、VDEQ16 | 46 | Sign标志位 | 如果置为1，表明反量化结果是signed(int8)；如果置为0，表明反量化结果是unsigned(uint8)。仅在DEQ8、VDEQ8模式中会用到。 |
-| DEQ8、VDEQ8、DEQ16、VDEQ16 | 47 | ReLU标志位 | 如果置为1，对最终结果进行ReLU计算；如果置为0，不进行额外计算。<br>&nbsp;&nbsp;&bull; 对于int32_t->int8_t，配置ReLU时，offset必须配置成-128；<br>&nbsp;&nbsp;&bull; 对于int32_t->uint8_t，配置ReLU时，offset必须配置成0。 |
+| DEQ8、VDEQ8、DEQ16、VDEQ16 | 47 | ReLU标志位 | 如果置为1，对最终结果进行ReLU计算；如果置为0，不进行额外计算。<br>&nbsp;&nbsp;&bull;对于int32_t->int8_t，配置ReLU时，offset必须配置成-128；<br>&nbsp;&nbsp;&bull;对于int32_t->uint8_t，配置ReLU时，offset必须配置成0。 |
 | DEQ8、VDEQ8、DEQ16、VDEQ16 | 48~63 | - | 预留 |
 | DEQ、VDEQ | 0 ~ 15 | M | 这16位数被视为half，作为反量化计算需要乘的值。 |
 
-**图 1** sidStoreMode配置示意图<a id="fig5416115192414"></a>  
+**图1** sidStoreMode配置示意图<a id="fig5416115192414"></a>  
 
 ![](../../../../figures/sidStoreMode配置示意图.png "sidStoreMode配置示意图")
 
@@ -113,7 +113,7 @@
 
 源操作数和目的操作数的数据类型保持一致时，支持的数据类型为：half、float、int32_t、uint32_t。
 
-**表 7** 源操作数和目的操作数的数据类型不一致时的支持情况
+**表7** 源操作数和目的操作数的数据类型不一致时的支持情况
 
 | 源操作数的数据类型 | 目的操作数的数据类型 |
 | ---------- | ---------- |

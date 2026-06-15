@@ -23,7 +23,7 @@ struct is_convertible;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -48,17 +48,17 @@ class Base {};
 class Derived : public Base {};
 class Unrelated {};
 
-// 检查 int 是否可以隐式转换为 double
+// 检查int是否可以隐式转换为double
 AscendC::PRINTF("Is int convertible to double? %d\n", AscendC::Std::is_convertible<int, double>::value);
 
-// 检查 double 是否可以隐式转换为 int
+// 检查double是否可以隐式转换为int
 AscendC::PRINTF("Is double convertible to int? %d\n", AscendC::Std::is_convertible<double, int>::value);
 
-// 检查 Derived 是否可以转换为 Base
+// 检查Derived是否可以转换为Base
 AscendC::PRINTF("Is Derived callable with Base? %d\n", AscendC::Std::is_convertible<Derived, Base>::value);
-// 检查 Base 是否可以转换为 Derived
+// 检查Base是否可以转换为Derived
 AscendC::PRINTF("Is Base callable with Derived? %d\n", AscendC::Std::is_convertible<Base, Derived>::value);
-// 检查 Derived 是否可以转换为 Unrelated
+// 检查Derived是否可以转换为Unrelated
 AscendC::PRINTF("Is Derived callable with Unrelated? %d\n", AscendC::Std::is_convertible<Derived, Unrelated>::value);
 ```
 
@@ -70,4 +70,3 @@ Is Derived callable with Base? 1
 Is Base callable with Derived? 0
 Is Derived callable with Unrelated? 0
 ```
-

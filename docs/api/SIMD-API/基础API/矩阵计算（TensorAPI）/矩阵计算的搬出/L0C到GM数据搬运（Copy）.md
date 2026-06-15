@@ -18,7 +18,7 @@ L0C Buffer到Global Memory搬运支持不量化输出、float到half或bfloat16_
 
 针对Ascend 950PR/Ascend 950DT：
 
-**图 1**  L0C2GM流程图
+**图1**  L0C2GM流程图
 
 ![](../../../../figures/l0c2gm_flowchart-68.png)
 
@@ -56,7 +56,7 @@ L0C Buffer到Global Memory搬运支持不量化输出、float到half或bfloat16_
 
 ## 参数说明
 
-**表 1**  `Copy`接口参数说明
+**表1**  `Copy`接口参数说明
 
 |参数名|输入/输出|描述|
 |--------|--------|--------|
@@ -66,7 +66,7 @@ L0C Buffer到Global Memory搬运支持不量化输出、float到half或bfloat16_
 |quant|输入|可选量化参数。传入`uint64_t`时表示scalar量化参数，传入张量时表示tensor量化参数，张量位于L1 Buffer，元素类型为`uint64_t`。|
 |fixpipeParams|输入|可选搬运参数，类型为`FixpipeParams`，通过`atomCopy`的`with`接口绑定到搬运原子对象，未绑定时使用默认值。|
 
-**表 2**  `MakeCopy`接口参数说明
+**表2**  `MakeCopy`接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |

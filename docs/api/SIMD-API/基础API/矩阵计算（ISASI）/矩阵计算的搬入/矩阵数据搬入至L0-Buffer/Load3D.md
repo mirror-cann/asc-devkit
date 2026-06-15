@@ -8,8 +8,8 @@
 | <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
 | <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
 | <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core | √ </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
 | <cann-filter npu-type = "910">Atlas 训练系列产品 | √ </cann-filter> |
 | <cann-filter npu-type = "x90">Kirin X90 | √ </cann-filter> |
 | <cann-filter npu-type = "9030">Kirin 9030 | x </cann-filter> |
@@ -26,7 +26,7 @@ Load3D仅支持如下数据通路：L1 Buffer->L0A Buffer、L1 Buffer->L0B Buffe
 
 实现原理可参考伪代码：[Load3D伪代码](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_l12l0/scripts/load3d.py)。
 
-**图 1** Load3D to L0A Buffer功能示意图<a id="zh-cn_topic_0000002512171652_fig54450833715"></a>  
+**图1** Load3D to L0A Buffer功能示意图<a id="zh-cn_topic_0000002512171652_fig54450833715"></a>  
 
 ![](../../../../../figures/load3d_l1tol0a_demo.png "Load3D-to-L0A Buffer功能示意图")
 
@@ -38,7 +38,7 @@ Load3D仅支持如下数据通路：L1 Buffer->L0A Buffer、L1 Buffer->L0B Buffe
 
 <cann-filter npu-type = "310p">
 
-Atlas 推理系列产品 AI Core；
+Atlas 推理系列产品AI Core；
 
 </cann-filter>
 
@@ -87,7 +87,7 @@ Atlas 200I/500 A2 推理产品；
 
 <cann-filter npu-type = "310p">
 
-Atlas 推理系列产品 AI Core；
+Atlas 推理系列产品AI Core；
 
 </cann-filter>
 
@@ -121,15 +121,15 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 ## 参数说明<a id="zh-cn_topic_0000002512171652_section16128134420472"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名称 | 含义 |
 | ---------- | ------ |
 | T | 源操作数和目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002512171652_section4219135304818)。 |
 | defaultConfig | 控制是否在Load3Dv1/Load3Dv2接口内部设置相关属性。IsResetLoad3dConfig类型。IsResetLoad3dConfig结构定义如下：<pre>struct IsResetLoad3dConfig {<br>   bool isSetFMatrix = true;<br>   bool isSetPadding = true;<br>};</pre>isSetFMatrix配置为true，表示在接口内部设置FeatureMap的属性描述（包括l1H、l1W、padList，参数介绍参考[表3](#zh-cn_topic_0000002512171652_table679014222918)、[表4](#zh-cn_topic_0000002512171652_table193501032193419)）；设置为false，表示该接口传入的FeatureMap的属性描述不生效，开发者需要通过SetFmatrix进行设置。<br>isSetPadding配置为true，表示在接口内部设置Pad属性描述（即padValue参数，参数介绍参考[表3](#zh-cn_topic_0000002512171652_table679014222918)、[表4](#zh-cn_topic_0000002512171652_table193501032193419)）；设置为false，表示该接口传入的Pad属性不生效，开发者需要通过SetLoadDataPaddingValue进行设置。可参考样例SetFmatrix调用示例。<br>该参数的默认值如下：<pre>constexpr IsResetLoad3dConfig IS_RESER_LOAD3D_DEFAULT_CONFIG = {true, true};</pre>特性细节可参考：[Feature Map、Pad属性描述寄存器设置](#zh-cn_topic_0000002512171652_section1881795134015)。 |
-| U | LoadData3DParamsV1/LoadData3DParamsV2中padValue的数据类型。<br>&nbsp;&nbsp;&bull; 当dst、src使用基础数据类型时，U和dst、src的数据类型T需保持一致，否则编译失败。<br>&nbsp;&nbsp;&bull; 当dst、src使用TensorTrait类型时，U和dst、src的数据类型T的LiteType需保持一致，否则编译失败。<br>最后一个模板参数仅用于上述数据类型检查，用户无需关注。 |
+| U | LoadData3DParamsV1/LoadData3DParamsV2中padValue的数据类型。<br>&nbsp;&nbsp;&bull;当dst、src使用基础数据类型时，U和dst、src的数据类型T需保持一致，否则编译失败。<br>&nbsp;&nbsp;&bull;当dst、src使用TensorTrait类型时，U和dst、src的数据类型T的LiteType需保持一致，否则编译失败。<br>最后一个模板参数仅用于上述数据类型检查，用户无需关注。 |
 
-**表 2** 通用参数说明
+**表2** 通用参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ----------- | ------ |
@@ -143,7 +143,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 <cann-filter npu-type = "310p">
 
-Atlas 推理系列产品 AI Core；
+Atlas 推理系列产品AI Core；
 
 </cann-filter>
 
@@ -153,7 +153,7 @@ Atlas 训练系列产品；
 
 </cann-filter>
 
-**表 3** LoadData3DParamsV1结构体内参数说明<a id="zh-cn_topic_0000002512171652_table679014222918"></a>
+**表3** LoadData3DParamsV1结构体内参数说明<a id="zh-cn_topic_0000002512171652_table679014222918"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ------ |
@@ -172,7 +172,7 @@ Atlas 训练系列产品；
 | dilationFilterW | 卷积核width膨胀系数，取值范围：dilationFilterW∈[1, 255]。 |
 | dilationFilterH | 卷积核height膨胀系数，取值范围：dilationFilterH∈[1, 255]。 |
 | jumpStride | 迭代之间，目的操作数首地址步长，取值范围：jumpStride∈[1, 127]。 |
-| repeatMode | 迭代模式。<br>&nbsp;&nbsp;&bull; 模式0：每次迭代，增加卷积核窗口中的点，对应在目的矩阵上往w维度方向增长。<br>&nbsp;&nbsp;&bull; 模式1：每次迭代，增加滑动窗口左上坐标，对应在目的矩阵上往h维度方向增长。<br>取值范围：repeatMode∈[0, 1]。默认为0。 |
+| repeatMode | 迭代模式。<br>&nbsp;&nbsp;&bull;模式0：每次迭代，增加卷积核窗口中的点，对应在目的矩阵上往w维度方向增长。<br>&nbsp;&nbsp;&bull;模式1：每次迭代，增加滑动窗口左上坐标，对应在目的矩阵上往h维度方向增长。<br>取值范围：repeatMode∈[0, 1]。默认为0。 |
 | repeatTime | 迭代次数，每一次源操作数和目的操作数的地址都会改变。取值范围：repeatTime∈[1, 255]。 |
 | cSize | 配置是否开启cSize = 4(b16) / cSize = 8(b8)优化，取值范围：cSize∈[0, 1]。默认为0。 |
 | padValue | Pad填充值的数值，数据类型需要与src保持一致。默认为0。若不想开启padding，可将padList设为全0。 |
@@ -209,7 +209,7 @@ Atlas 200I/500 A2 推理产品；
 
 <cann-filter npu-type = "310p">
 
-Atlas 推理系列产品 AI Core；
+Atlas 推理系列产品AI Core；
 
 </cann-filter>
 
@@ -219,14 +219,14 @@ Kirin X90；
 
 </cann-filter>
 
-**表 4** LoadData3DParamsV2结构体内参数说明<a id="zh-cn_topic_0000002512171652_table193501032193419"></a>
+**表4** LoadData3DParamsV2结构体内参数说明<a id="zh-cn_topic_0000002512171652_table193501032193419"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ------ |
 | padList | padding列表 [padding_left, padding_right, padding_top, padding_bottom]，每个元素取值范围：[0, 255]。默认为{0, 0, 0, 0}。 |
 | l1H | 源操作数height，取值范围：l1H∈[0, 32767]。默认为0。<br>**注：针对Atlas A2/A3系列产品，l1H = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | l1W | 源操作数weight，取值范围：l1W∈[0, 32767]。默认为0。<br>**注：针对Atlas A2/A3系列产品，l1W = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
-| channelSize | 源操作数的通道数，取值范围：channelSize∈[0, 65535]。默认为0。<cann-filter npu-type = "310p"><br>&nbsp;&nbsp;&bull; 针对Atlas 推理系列产品 AI Core：对于half，channelSize可取值为4，8，16，N\*16+4，N\*16+8；对于int8_t/uint8_t，channelSize可取值为4，8，16，32，N\*32+4，N\*32+8，N\*32+16；对于int4b_t，channelSize可取值为8，16，32，N\*64，N\*64+8，N\*64+16，N\*64+32。N为正整数。</cann-filter><cann-filter npu-type = "950,A3,910b,310b,x90"><br>&nbsp;&nbsp;&bull; 针对Ascend 950PR/Ascend 950DT、Atlas A3 训练系列产品/Atlas A3 推理系列产品、Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas 200I/500 A2 推理产品、Kirin X90：对于uint32_t/int32_t/float，channelSize可取值为4，N\*8，N\*8+4；对于half/bfloat16，channelSize可取值为4，8，N\*16，N\*16 + 4，N\*16+8；对于int8_t/uint8_t，channelSize可取值为4，8，16，32\*N，N\*32+4，N\*32+8，N\*32+16；对于int4b_t，channelSize可取值为8，16，32，N\*64，N\*64+8，N\*64+16，N\*64+32。N为正整数。</cann-filter><br>**注：针对Atlas A2/A3系列产品，channelSize = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
+| channelSize | 源操作数的通道数，取值范围：channelSize∈[0, 65535]。默认为0。<cann-filter npu-type = "310p"><br>&nbsp;&nbsp;&bull;针对Atlas 推理系列产品AI Core：对于half，channelSize可取值为4，8，16，N\*16+4，N\*16+8；对于int8_t/uint8_t，channelSize可取值为4，8，16，32，N\*32+4，N\*32+8，N\*32+16；对于int4b_t，channelSize可取值为8，16，32，N\*64，N\*64+8，N\*64+16，N\*64+32。N为正整数。</cann-filter><cann-filter npu-type = "950,A3,910b,310b,x90"><br>&nbsp;&nbsp;&bull;针对Ascend 950PR/Ascend 950DT、Atlas A3 训练系列产品/Atlas A3 推理系列产品、Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas 200I/500 A2 推理产品、Kirin X90：对于uint32_t/int32_t/float，channelSize可取值为4，N\*8，N\*8+4；对于half/bfloat16，channelSize可取值为4，8，N\*16，N\*16 + 4，N\*16+8；对于int8_t/uint8_t，channelSize可取值为4，8，16，32\*N，N\*32+4，N\*32+8，N\*32+16；对于int4b_t，channelSize可取值为8，16，32，N\*64，N\*64+8，N\*64+16，N\*64+32。N为正整数。</cann-filter><br>**注：针对Atlas A2/A3系列产品，channelSize = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | kExtension | 该指令在目的操作数width维度的传输长度，如果不覆盖最右侧的分形，对于b32类型，应为8的倍数，对于b16类型，应为16的倍数，对于b8类型，应为32的倍数，对于b4类型，应为64的倍数；覆盖的情况则任何数据类型都无倍数要求。取值范围：kExtension∈[0, 65535]。默认为0。<br>**注：针对Atlas A2/A3系列产品，kExtension = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | mExtension | 该指令在目的操作数height维度的传输长度，如果不覆盖最下侧的分形，对于b4、b8、b16类型，应为16的倍数，b32类型无要求；覆盖的情况则任何数据类型都无倍数要求。取值范围：mExtension∈[0, 65535]。默认为0。<br>**注：针对Atlas A2/A3系列产品，mExtension = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | kStartPt | 该指令在目的操作数width维度的起点，对于b32类型，应为8的倍数，对于b16类型，应为16的倍数，对于b8类型，应为32的倍数，对于b4类型，应为64的倍数；取值范围[0, 65535]。默认为0。 |
@@ -240,7 +240,7 @@ Kirin X90；
 | enTranspose | 是否启用转置功能，对整个目标矩阵进行转置，支持数据类型为bool，默认为false。<br>&nbsp;&nbsp;&bull; true：启用<br>&nbsp;&nbsp;&bull; false：不启用<cann-filter npu-type = "A3,910b"><br>针对Atlas A2 训练系列产品/Atlas A2 推理系列产品和Atlas A3 训练系列产品/Atlas A3 推理系列产品，在目的操作数的物理存储位置为L0A Buffer(TPosition: A2)，且源操作数为b16/b32类型时有效。</cann-filter><cann-filter npu-type = "950"><br>针对Ascend 950PR/Ascend 950DT，在目的操作数的物理存储位置为L0A Buffer(TPosition: A2)，且源操作数为b8/b16/b32类型时有效。</cann-filter><br>**注：在目的操作数的物理存储位置为L0B Buffer(TPosition: B2)时本参数无效。** |
 | enSmallK | 是否开启small k特性，每个分形矩阵大小为16*4，支持数据类型为bool，默认为false。当前产品形态，该特性已不再支持。 |
 | padValue | Pad填充值的数值，数据类型需要与src保持一致。若不想开启padding，可将padList设为全0。默认为0。 |
-| filterSizeW | 是否在filterW的基础上将卷积核width增加256 个元素。true，增加；false，不增加。默认为false。 |
+| filterSizeW | 是否在filterW的基础上将卷积核width增加256个元素。true，增加；false，不增加。默认为false。 |
 | filterSizeH | 是否在filterH的基础上将卷积核height增加256个元素。true，增加；false，不增加。默认为false。 |
 | fMatrixCtrl | 表示LoadData3DV2指令从左矩阵还是右矩阵获取FeatureMap的属性描述，与SetFmatrix配合使用，默认值为false。当前只支持设置为false。<br>&nbsp;&nbsp;&bull; true：从右矩阵中获取FeatureMap的属性描述；<br>&nbsp;&nbsp;&bull; false：从左矩阵中获取FeatureMap的属性描述。 |
 
@@ -248,7 +248,7 @@ Kirin X90；
 
 <cann-filter npu-type = "950">
 
-**表 5** LoadData3DParamsV2Pro结构体内参数说明<a id="zh-cn_topic_0000002512171652_table118027314415"></a>
+**表5** LoadData3DParamsV2Pro结构体内参数说明<a id="zh-cn_topic_0000002512171652_table118027314415"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ------ |
@@ -271,7 +271,7 @@ Kirin X90；
 
 <cann-filter npu-type = "310p">
 
-- Atlas 推理系列产品 AI Core，支持的数据类型为：int8_t、uint8_t、half。
+- Atlas 推理系列产品AI Core，支持的数据类型为：int8_t、uint8_t、half。
 
 </cann-filter>
 
@@ -319,7 +319,7 @@ Kirin X90；
 
 <cann-filter npu-type = "310p">
 
-- Atlas 推理系列产品 AI Core，支持的数据类型为：int4b_t、int8_t、uint8_t、half。
+- Atlas 推理系列产品AI Core，支持的数据类型为：int4b_t、int8_t、uint8_t、half。
 
 </cann-filter>
 
@@ -535,7 +535,7 @@ isSetPadding配置为true，表示在接口内部设置Pad属性描述（即padV
 
 对应的feature map格式如下图：
 
-**图 2** feature map格式<a id="zh-cn_topic_0000002512171652_fig8137131714319"></a>  
+**图2** feature map格式<a id="zh-cn_topic_0000002512171652_fig8137131714319"></a>  
 
 ![](../../../../../figures/feature-map格式.png "feature-map格式")
 
@@ -543,13 +543,13 @@ isSetPadding配置为true，表示在接口内部设置Pad属性描述（即padV
 
 其中n为filter的个数，可以看出维度排布为(Hk,Wk,Ci,n)，但是需要注意的是下图的格式还需要根据Mmad中B矩阵的格式转换。
 
-**图 3** filter的格式<a id="zh-cn_topic_0000002512171652_fig1395194710496"></a>  
+**图3** filter的格式<a id="zh-cn_topic_0000002512171652_fig1395194710496"></a>  
 
 ![](../../../../../figures/filter的格式.png "filter的格式")
 
 实际操作中，由于存储空间或者计算能力限制，我们通常会将整个卷积计算分块，一次只搬运并计算一小块数据。
 
-**图 4** 卷积计算分块<a id="zh-cn_topic_0000002512171652_fig5278110624"></a>  
+**图4** 卷积计算分块<a id="zh-cn_topic_0000002512171652_fig5278110624"></a>  
 
 ![](../../../../../figures/卷积计算分块.png "卷积计算分块")
 
@@ -559,13 +559,13 @@ isSetPadding配置为true，表示在接口内部设置Pad属性描述（即padV
 
 repeatMode =0时，每次repeat会改变在filter窗口中读取数据点的位置，然后跳到下一个C0的位置。
 
-**图 5** repeatMode = 0 时的filter窗口<a id="zh-cn_topic_0000002512171652_fig11710143294513"></a>  
+**图5** repeatMode = 0时的filter窗口<a id="zh-cn_topic_0000002512171652_fig11710143294513"></a>  
 
 ![](../../../../../figures/repeatMode-0-时的filter窗口.png "repeatMode-0-时的filter窗口")
 
 repeatMode =1的时候filter窗口中读取数据的位置保持不变，每个repeat在feature map中前进C0个元素。
 
-**图 6** repeatMode = 1 时的filter窗口<a id="zh-cn_topic_0000002512171652_fig1648315981717"></a>  
+**图6** repeatMode = 1时的filter窗口<a id="zh-cn_topic_0000002512171652_fig1648315981717"></a>  
 
 ![](../../../../../figures/repeatMode-1-时的filter窗口.png "repeatMode-1-时的filter窗口")
 

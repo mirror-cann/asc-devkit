@@ -12,7 +12,7 @@ bool SetWeightShape(int64_t cout, int64_t cin, int64_t d, int64_t h, int64_t w)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -37,4 +37,3 @@ auto ascendcPlatform = platform_ascendc::PlatformAscendCManager::GetInstance();
 ConvBackpropApi::Conv3DBpInputTiling con3dBpDxTiling(*ascendcPlatform);
 con3dBpDxTiling.SetWeightShape(cout, cin, d, h, w);
 ```
-

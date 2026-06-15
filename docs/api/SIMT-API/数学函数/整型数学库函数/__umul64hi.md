@@ -24,7 +24,7 @@ unsigned long long __umul64hi(unsigned long long x, unsigned long long y)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -68,4 +68,3 @@ unsigned long long __umul64hi(unsigned long long x, unsigned long long y)
         dst[idx] = __umul64hi(x[idx], y[idx]);
     }
     ```
-

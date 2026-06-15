@@ -25,7 +25,7 @@ __aicore__ inline constexpr auto Coshape(const Layout<Shape, Stride>& layout)
 
 ## 参数说明
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
   | 参数名 | 类型 | 描述 |
 |--------|------|------|
@@ -33,7 +33,7 @@ __aicore__ inline constexpr auto Coshape(const Layout<Shape, Stride>& layout)
 | Stride | 输入 | 组成Layout的stride的类型，即元组（tuple）类型。 |
 | Is... | size_t... | 索引序列，指定子维度范围，仅对选定维度进行计算。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
   | 参数名 | 类型 | 描述 |
 |--------|------|------|

@@ -23,7 +23,7 @@ struct add_const;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -55,4 +55,3 @@ ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_const_t<double>, const
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_const_t<const int>, const int>));
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_const_t<const double>, const double>));
 ```
-

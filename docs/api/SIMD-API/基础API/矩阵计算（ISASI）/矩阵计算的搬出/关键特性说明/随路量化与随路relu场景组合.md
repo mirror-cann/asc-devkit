@@ -18,7 +18,7 @@ Atlas A3 训练系列产品/Atlas A3 推理系列产品；
 
 </cann-filter>
 
-**表 1** 随路量化与随路ReLU的组合表
+**表1** 随路量化与随路ReLU的组合表
 
 | quantPre\reluPre | no ReLU | Normal ReLU |
 | ------------------ | --------- | ------------ |

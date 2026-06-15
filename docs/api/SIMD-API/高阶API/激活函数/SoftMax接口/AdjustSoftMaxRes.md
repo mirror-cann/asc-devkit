@@ -40,7 +40,7 @@ __aicore__ inline bool AdjustSoftMaxRes(const LocalTensor<T1>& softMaxRes, const
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -49,7 +49,7 @@ __aicore__ inline bool AdjustSoftMaxRes(const LocalTensor<T1>& softMaxRes, const
 | isDataFormatNZ | 当前输入输出的数据格式是否为NZ格式，默认数据格式为ND，即默认取值为false。 |
 | stepSizeMode | maxTensor取元素的步进长度的模式。参数取值如下：<br>0：默认值，每个BlockSize（32字节）内，取第一个元素的数值与输入from的数值作对比。即，maxTensor的数据类型为float时，按照输入shape为(m, 8)的格式，每8个数取一个数，maxTensor的数据类型为half时，按照输入shape为(m, 16)的格式，每16个数取一个数。<br>非0：取maxTensor每个元素的数值与输入from的数值作对比。即，按照输入shape为(m, 1)的格式，每次取一个元素的数值与输入from的数值作对比。该参数取值非0时仅支持maxTensor为ND格式。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -75,7 +75,7 @@ bool类型，当返回true时，表示maxTensor中存在需要判断的值，若
 ## 约束说明
 
 -   操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md#section796754519912)。
--   当参数softmaxShapeInfo中srcM != oriSrcM 或者 srcK != oriSrcK时，开发者需要对GM上的原始输入\(oriSrcM, oriSrcK\)在M或K方向补齐数据到\(srcM, srcK\)，补齐的数据会参与部分运算，在输入输出复用的场景下，API的计算结果会覆盖srcTensor中补齐的原始数据，在输入输出不复用的场景下，API的计算结果会覆盖dstTensor中对应srcTensor补齐位置的数据。
+-   当参数softmaxShapeInfo中srcM != oriSrcM或者srcK != oriSrcK时，开发者需要对GM上的原始输入\(oriSrcM, oriSrcK\)在M或K方向补齐数据到\(srcM, srcK\)，补齐的数据会参与部分运算，在输入输出复用的场景下，API的计算结果会覆盖srcTensor中补齐的原始数据，在输入输出不复用的场景下，API的计算结果会覆盖dstTensor中对应srcTensor补齐位置的数据。
 
 ## 调用示例
 
@@ -85,8 +85,8 @@ bool类型，当返回true时，表示maxTensor中存在需要判断的值，若
 // srcLocal：softmax计算结果
 AscendC::SoftMax(srcLocal, ...)
 // maxLocal：softmax中间结果，reducemax的结果
-// FROM： 判断maxLocal中是否存在值等于FROM的元素
-// TO： 当maxLocal中存在值等于FROM的元素时，srcLocal中对应行的元素将被替换为TO
+// FROM：判断maxLocal中是否存在值等于FROM的元素
+// TO：当maxLocal中存在值等于FROM的元素时，srcLocal中对应行的元素将被替换为TO
 // srcShape：描述srcLocal的shape信息
 
 AscendC::SoftMaxShapeInfo srcShape = {height, width, height, width};

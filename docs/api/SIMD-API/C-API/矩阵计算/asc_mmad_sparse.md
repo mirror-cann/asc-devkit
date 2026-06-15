@@ -55,9 +55,9 @@ PIPE_M
 ## 稠密算法说明
 
 假设原始稀疏矩阵B的每4个元素中至少有2个零，稠密化后的矩阵B是一个在每4个元素中过滤掉2个零的稠密矩阵。矩阵B稠密化的过程中生成索引矩阵，过程如下：对于稀疏矩阵B中的每4个元素，将在index矩阵中生成2个2位索引，并按照以下规则进行编码。索引必须在{0, 1, 2}范围内。
-<br>&bull; 第一个索引用于指示前3个元素中第1个非零元素的相对位置。
-<br>&bull; 第二个索引用于指示第2个非零元素在后3个元素中的相对位置。
-<br>具体可参考下表。其中，“-” 表示算法不关心该位置上的值，因为其会被过滤。
+<br>&bull;第一个索引用于指示前3个元素中第1个非零元素的相对位置。
+<br>&bull;第二个索引用于指示第2个非零元素在后3个元素中的相对位置。
+<br>具体可参考下表。其中，“-”表示算法不关心该位置上的值，因为其会被过滤。
 <table border="1" style="border-collapse: collapse; width: 100%; text-align: center;">
   <!-- 第1行：不合并 -->
   <tr>
@@ -70,7 +70,7 @@ PIPE_M
     <td style="padding: 8px; border: 1px solid #333;">Index_b[i]</td>
   </tr>
 
-  <!-- 第2-7行：第一列合并 (共6行) -->
+  <!-- 第2-7行：第一列合并(共6行) -->
   <tr>
     <td rowspan="6" style="padding: 8px; border: 1px solid #333; vertical-align: middle;">Two non-zero elements</td>
     <td style="padding: 8px; border: 1px solid #333;">0</td>
@@ -121,7 +121,7 @@ PIPE_M
     <td style="padding: 8px; border: 1px solid #333;">2'b00</td>
   </tr>
 
-  <!-- 第8-11行：第一列合并 (共4行) -->
+  <!-- 第8-11行：第一列合并(共4行) -->
   <tr>
     <td rowspan="4" style="padding: 8px; border: 1px solid #333; vertical-align: middle;">One non-zero element</td>
     <td style="padding: 8px; border: 1px solid #333;">0</td>

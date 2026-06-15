@@ -23,7 +23,7 @@ struct add_pointer;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -63,4 +63,3 @@ ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_pointer<ArrayType>::ty
 // Test pointer type
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::add_pointer<int*>::type, int**>));
 ```
-

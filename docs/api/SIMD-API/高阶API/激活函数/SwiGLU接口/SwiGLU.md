@@ -67,14 +67,14 @@ SwiGLU是采用Swish作为激活函数的GLU变体。具体计算公式如下：
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | T | 操作数的数据类型。支持的数据类型为：half、float。 |
 | isReuseSource | 是否允许修改源操作数。该参数预留，传入默认值false即可。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -108,12 +108,12 @@ float scalarValue = 1.0;
 
 // 接口框架申请临时空间，全部参与计算
 AscendC::SwiGLU(dstLocal, src0Local, src1Local, scalarValue);
-// 接口框架申请临时空间，部分参与计算, 需要参与计算的元素个数为32
+// 接口框架申请临时空间，部分参与计算,需要参与计算的元素个数为32
 AscendC::SwiGLU(dstLocal, src0Local, src1Local, scalarValue, 32);
 
 // 通过sharedTmpBuffer入参传入临时空间，全部参与计算
 AscendC::SwiGLU(dstLocal, src0Local, src1Local, scalarValue, sharedTmpBuffer);
-// 通过sharedTmpBuffer入参传入临时空间，部分参与计算, 需要参与计算的元素个数为32
+// 通过sharedTmpBuffer入参传入临时空间，部分参与计算,需要参与计算的元素个数为32
 AscendC::SwiGLU(dstLocal, src0Local, src1Local, scalarValue, sharedTmpBuffer, 32);
 ```
 

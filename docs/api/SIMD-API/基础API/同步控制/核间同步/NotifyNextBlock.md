@@ -63,7 +63,7 @@ __aicore__ inline void NotifyNextBlock(GlobalTensor<int32_t>& gmWorkspace, Local
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |

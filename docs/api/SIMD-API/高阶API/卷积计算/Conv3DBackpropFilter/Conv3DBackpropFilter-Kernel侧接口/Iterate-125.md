@@ -23,13 +23,13 @@ __aicore__ inline bool Iterate(bool enPartialSum = false)
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | sync | 预留参数，用户无需感知。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -65,4 +65,3 @@ while (gradWeight_.Iterate()) {
 // SingleShape计算完成后，需要将ctx.isFirstIter_设置为true，确保下一块SingleShape的正确计算
 gradWeight_.ctx.isFirstIter_ = true;
 ```
-

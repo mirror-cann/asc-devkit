@@ -22,7 +22,7 @@ __aicore__ inline void SetSingleShape(uint64_t singleCoreM, uint64_t singleCoreN
 
 ## 参数说明
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -51,4 +51,3 @@ gradWeight_.SetGradOutput(gradOutputGm_[offsetA_]);
 gradWeight_.SetSingleShape(singleCoreM, singleCoreN, singleCoreK);// 设置单核计算量
 ....
 ```
-

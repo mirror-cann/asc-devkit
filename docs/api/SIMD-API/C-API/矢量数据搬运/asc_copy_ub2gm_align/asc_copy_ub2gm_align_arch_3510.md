@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-将数据从Unified Buffer (UB) 搬运到 Global Memory (GM)，支持8位/16位/32位数据类型搬运。
+将数据从Unified Buffer (UB)搬运到Global Memory (GM)，支持8位/16位/32位数据类型搬运。
 
 循环搬运时，需要通过接口[asc_set_ub2gm_loop_size](../asc_set_ub2gm_loop_size.md)、[asc_set_ub2gm_loop1_stride](../asc_set_ub2gm_loop1_stride.md)和[asc_set_ub2gm_loop2_stride](../asc_set_ub2gm_loop2_stride.md)设置循环模式，和该接口配合使用。
 

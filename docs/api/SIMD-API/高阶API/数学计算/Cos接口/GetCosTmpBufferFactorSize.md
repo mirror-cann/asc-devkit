@@ -32,7 +32,7 @@ void GetCosTmpBufferFactorSize(const CosConfig& config, const uint32_t typeSize,
 
 ## 参数说明
 
-**表 1**  参数列表
+**表1**  参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -61,4 +61,3 @@ AscendC::CosConfig config;
 config.algo = AscendC::CosAlgo::RADIAN_REDUCTION;
 AscendC::GetCosTmpBufferFactorSize(config, typeSize, maxLiveNodeCount, extraBuf);
 ```
-

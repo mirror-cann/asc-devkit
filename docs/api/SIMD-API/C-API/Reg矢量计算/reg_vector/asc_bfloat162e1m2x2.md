@@ -21,45 +21,45 @@
 ## 函数原型
 
 ```cpp
-// RINT舍入模式, 数据写入索引0的位置
+// RINT舍入模式,数据写入索引0的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rn(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// RINT舍入模式, 数据写入索引1的位置
+// RINT舍入模式,数据写入索引1的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rn_v2(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// RINT舍入模式, 数据写入索引2的位置
+// RINT舍入模式,数据写入索引2的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rn_v3(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// RINT舍入模式, 数据写入索引3的位置
+// RINT舍入模式,数据写入索引3的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rn_v4(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// ROUND舍入模式, 数据写入索引0的位置
+// ROUND舍入模式,数据写入索引0的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rna(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// ROUND舍入模式, 数据写入索引1的位置
+// ROUND舍入模式,数据写入索引1的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rna_v2(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// ROUND舍入模式, 数据写入索引2的位置
+// ROUND舍入模式,数据写入索引2的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rna_v3(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// ROUND舍入模式, 数据写入索引3的位置
+// ROUND舍入模式,数据写入索引3的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rna_v4(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// FLOOR舍入模式, 数据写入索引0的位置
+// FLOOR舍入模式,数据写入索引0的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rd(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// FLOOR舍入模式, 数据写入索引1的位置
+// FLOOR舍入模式,数据写入索引1的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rd_v2(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// FLOOR舍入模式, 数据写入索引2的位置
+// FLOOR舍入模式,数据写入索引2的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rd_v3(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// FLOOR舍入模式, 数据写入索引3的位置
+// FLOOR舍入模式,数据写入索引3的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rd_v4(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// CEIL舍入模式, 数据写入索引0的位置
+// CEIL舍入模式,数据写入索引0的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_ru(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// CEIL舍入模式, 数据写入索引1的位置
+// CEIL舍入模式,数据写入索引1的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_ru_v2(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// CEIL舍入模式, 数据写入索引2的位置
+// CEIL舍入模式,数据写入索引2的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_ru_v3(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// CEIL舍入模式, 数据写入索引3的位置
+// CEIL舍入模式,数据写入索引3的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_ru_v4(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// TRUNC舍入模式, 数据写入索引0的位置
+// TRUNC舍入模式,数据写入索引0的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rz(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// TRUNC舍入模式, 数据写入索引1的位置
+// TRUNC舍入模式,数据写入索引1的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rz_v2(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// TRUNC舍入模式, 数据写入索引2的位置
+// TRUNC舍入模式,数据写入索引2的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rz_v3(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
-// TRUNC舍入模式, 数据写入索引3的位置
+// TRUNC舍入模式,数据写入索引3的位置
 __simd_callee__ inline void asc_bfloat162e1m2x2_rz_v4(vector_fp4x2_e1m2_t& dst, vector_bfloat16_t src, vector_bool mask)
 ```
 

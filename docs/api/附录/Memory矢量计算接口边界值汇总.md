@@ -34,13 +34,13 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 ## Memory矢量计算接口输出inf/nan的场景总结
 
-**表 1**  浮点数计算输出inf/nan的场景
+**表1**  浮点数计算输出inf/nan的场景
 
 <a name="table1645210351498"></a>
 | 场景描述 | 浮点数计算输出结果 | 说明 |
 | --- | --- | --- |
 | **输入包含inf**<br>例外场景：<br>&bull; exp(-inf)=0<br>&bull; inf * 0 = nan<br>&bull; inf + (-inf) = nan | inf | inf区分+inf和-inf |
-| **计算结果发生溢出**<br>例外情况：<br>&bull; 非nan值（不包含0）除以0，比如Div/Sqrt/Reciprocal等指令<br>&bull; ln(0.0) = -inf；ln(-0.0) = -inf<br>&bull; rsqrt(0.0) = inf; rsqrt(-0.0) = -inf | inf | inf区分+inf和-inf |
+| **计算结果发生溢出**<br>例外情况：<br>&bull;非nan值（不包含0）除以0，比如Div/Sqrt/Reciprocal等指令<br>&bull; ln(0.0) = -inf；ln(-0.0) = -inf<br>&bull; rsqrt(0.0) = inf; rsqrt(-0.0) = -inf | inf | inf区分+inf和-inf |
 | **输入包含nan** | nan | nan不区分正负 |
 | **计算结果产生nan**<br>举例：<br>&bull; (-inf) - (-inf) = nan，比如Add/Sub/Reduce等指令<br>&bull; (-inf) + inf = nan，比如Add/Sub/Reduce等指令<br>&bull; 0 * (+/-inf) = nan，比如Mul等指令<br>&bull; (+/-inf)/(+/-inf) = nan<br>&bull; 0/0 = nan<br>&bull; ln/Sqrt/Rsqrt指令输入为负值 | nan | nan不区分正负 |
 
@@ -50,7 +50,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：下表中的MAX/MIN对应操作数对应数据类型下的最大值和最小值。
 
-**表 2**  Exp特殊值/边界值输入的计算结果
+**表2**  Exp特殊值/边界值输入的计算结果
 
 <a name="table864650154918"></a>
 | src/dst的数据类型 | src的元素取值 | dst的元素取值（INF/NAN模式） | dst的元素取值（饱和模式） |
@@ -72,7 +72,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 3**  Ln特殊值/边界值输入的计算结果
+**表3**  Ln特殊值/边界值输入的计算结果
 
 <a name="table10972164142410"></a>
 | src/dst的数据类型 | src的元素取值 | dst的元素取值（INF/NAN模式） | dst的元素取值（饱和模式） |
@@ -94,7 +94,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 4**  Abs特殊值/边界值输入的计算结果
+**表4**  Abs特殊值/边界值输入的计算结果
 
 <a name="table1975185932512"></a>
 | src/dst的数据类型 | src的元素取值 | dst的元素取值（INF/NAN模式） | dst的元素取值（饱和模式） |
@@ -116,7 +116,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 5**  Reciprocal特殊值/边界值输入的计算结果
+**表5**  Reciprocal特殊值/边界值输入的计算结果
 
 <a name="table1046894562620"></a>
 | src/dst的数据类型 | src的元素取值 | dst的元素取值（INF/NAN模式） | dst的元素取值（饱和模式） |
@@ -138,7 +138,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 6**  Sqrt特殊值/边界值输入的计算结果
+**表6**  Sqrt特殊值/边界值输入的计算结果
 
 <a name="table1648943062718"></a>
 | src/dst的数据类型 | src的元素取值 | dst的元素取值（INF/NAN模式） | dst的元素取值（饱和模式） |
@@ -160,7 +160,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 7**  Rsqrt特殊值/边界值输入的计算结果
+**表7**  Rsqrt特殊值/边界值输入的计算结果
 
 <a name="table12701922112818"></a>
 | src/dst的数据类型 | src的元素取值 | dst的元素取值（INF/NAN模式） | dst的元素取值（饱和模式） |
@@ -182,7 +182,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 8**  Relu特殊值/边界值输入的计算结果
+**表8**  Relu特殊值/边界值输入的计算结果
 
 <a name="table135522523284"></a>
 | src/dst的数据类型 | src的元素取值 | dst的元素取值（INF/NAN模式） | dst的元素取值（饱和模式） |
@@ -206,7 +206,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 9**  Add特殊值/边界值输入的计算结果
+**表9**  Add特殊值/边界值输入的计算结果
 
 <a name="table071981613"></a>
 | src/dst的数据类型 | src0的元素取值 | src1的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -262,7 +262,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 10**  Sub特殊值/边界值输入的计算结果
+**表10**  Sub特殊值/边界值输入的计算结果
 
 <a name="table12357151012179"></a>
 | src/dst的数据类型 | src0的元素取值 | src1的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -328,7 +328,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 11**  Mul特殊值/边界值输入的计算结果
+**表11**  Mul特殊值/边界值输入的计算结果
 
 <a name="table89442511309"></a>
 | src/dst的数据类型 | src0的元素取值 | src1的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -386,7 +386,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 12**  Div特殊值/边界值输入的计算结果
+**表12**  Div特殊值/边界值输入的计算结果
 
 <a name="table118329223319"></a>
 | src/dst的数据类型 | src0的元素取值 | src1的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -448,7 +448,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 13**  Max特殊值/边界值输入的计算结果
+**表13**  Max特殊值/边界值输入的计算结果
 
 <a name="table172607531318"></a>
 | src/dst的数据类型 | src0的元素取值 | src1的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -498,7 +498,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 14**  Min特殊值/边界值输入的计算结果说明
+**表14**  Min特殊值/边界值输入的计算结果说明
 
 <a name="table179652226325"></a>
 | src/dst的数据类型 | src0的元素取值 | src1的元素取值 | dst的元素取值<br>（寄存器非饱和模式） | dst的元素取值<br>（寄存器饱和模式） |
@@ -548,7 +548,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 15**  Adds特殊值/边界值输入的计算结果
+**表15**  Adds特殊值/边界值输入的计算结果
 
 <a name="table15619175083314"></a>
 | src/dst的数据类型 | src的元素取值 | scalarValue取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -604,7 +604,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 16**  Muls特殊值/边界值输入的计算结果
+**表16**  Muls特殊值/边界值输入的计算结果
 
 <a name="table1510462203414"></a>
 | src/dst的数据类型 | src的元素取值 | scalarValue取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -662,7 +662,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 17**  Maxs特殊值/边界值输入的计算结果
+**表17**  Maxs特殊值/边界值输入的计算结果
 
 <a name="table825085423412"></a>
 | src/dst的数据类型 | src的元素取值 | scalarValue取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -712,7 +712,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 18**  Mins特殊值/边界值输入的计算结果
+**表18**  Mins特殊值/边界值输入的计算结果
 
 <a name="table714843013511"></a>
 | src/dst的数据类型 | src的元素取值 | scalarValue取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -762,7 +762,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 19**  LeakyRelu特殊值/边界值输入的计算结果
+**表19**  LeakyRelu特殊值/边界值输入的计算结果
 
 <a name="table2399171617392"></a>
 | src/dst的数据类型 | src的元素取值 | scalarValue取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -808,7 +808,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：下表中的MAX/MIN对应操作数对应数据类型下的最大值和最小值。
 
-**表 20**  Axpy特殊值/边界值输入的计算结果
+**表20**  Axpy特殊值/边界值输入的计算结果
 
 <a name="table1819218568247"></a>
 | src取值/scalarValue取值 | 中间阶段（src*scalarValue） | 中间阶段（饱和模式，仅输出为half数据类型时支持） | dst取值 | dst输出（INF/NAN模式） | dst输出（饱和模式，仅输出为half数据类型时支持） |
@@ -865,7 +865,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 21**  MulAddDst特殊值/边界值输入的计算结果
+**表21**  MulAddDst特殊值/边界值输入的计算结果
 
 <a name="table1042313583406"></a>
 | src0取值/src1取值 | 中间阶段（src0*src1） | 中间阶段（饱和模式，仅输出为half数据类型时支持） | dst取值 | dst输出（INF/NAN模式） | dst输出（饱和模式，仅输出为half数据类型时支持） |
@@ -922,7 +922,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 22**  FusedMulAdd特殊值/边界值输入的计算结果
+**表22**  FusedMulAdd特殊值/边界值输入的计算结果
 
 <a name="table1158211814515"></a>
 | src0取值/dst取值 | 中间阶段（src0*dst） | 中间阶段（饱和模式，仅输出为half数据类型时支持） | src1取值 | dst输出（INF/NAN模式） | dst输出（饱和模式，仅输出为half数据类型时支持） |
@@ -979,7 +979,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 23**  MulAddRelu特殊值/边界值输入的计算结果
+**表23**  MulAddRelu特殊值/边界值输入的计算结果
 
 <a name="table126194714473"></a>
 | src0取值/dst取值 | 中间阶段1（src0*dst） | 中间阶段1（饱和模式，仅输出为half数据类型时支持） | src1取值 | 中间阶段2（INF/NAN模式） | 中间阶段2（饱和模式，仅输出为half数据类型时支持） | dst输出（INF/NAN模式） | dst输出（饱和模式，仅输出为half数据类型时支持） |
@@ -1036,7 +1036,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 24**  AddRelu特殊值/边界值输入的计算结果
+**表24**  AddRelu特殊值/边界值输入的计算结果
 
 <a name="table143801137164310"></a>
 | src0取值/src1取值 | 中间阶段(src0+src1) | 中间阶段（饱和模式，仅输出为half数据类型时支持） | dst输出（INF/NAN模式） | dst输出（饱和模式，仅输出为half数据类型时支持） |
@@ -1051,7 +1051,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 25**  SubRelu特殊值/边界值输入的计算结果
+**表25**  SubRelu特殊值/边界值输入的计算结果
 
 <a name="table7783335111811"></a>
 | src0取值/src1取值 | 中间阶段(src0-src1) | 中间阶段（饱和模式，仅输出为half数据类型时支持） | dst输出（INF/NAN模式） | dst输出（饱和模式，仅输出为half数据类型时支持） |
@@ -1066,7 +1066,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 26**  AddReluCast特殊值/边界值输入的计算结果
+**表26**  AddReluCast特殊值/边界值输入的计算结果
 
 <a name="table494414452367"></a>
 | src0数据类型/src1数据类型/dst数据类型 | src0取值/src1取值 | 中间阶段1（src0+src1）（INF/NAN模式） | 中间阶段2（INF/NAN模式） | dst输出（INF/NAN模式） |
@@ -1091,7 +1091,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 27**  SubReluCast特殊值/边界值输入的计算结果
+**表27**  SubReluCast特殊值/边界值输入的计算结果
 
 <a name="table1418126172917"></a>
 | src0数据类型/src1数据类型/dst数据类型 | src0取值/src1取值 | 中间阶段1（src0-src1）（INF/NAN模式） | 中间阶段2（INF/NAN模式） | dst输出（INF/NAN模式） |
@@ -1116,7 +1116,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 28**  MulCast特殊值/边界值输入的计算结果
+**表28**  MulCast特殊值/边界值输入的计算结果
 
 <a name="table1698216295159"></a>
 | src0取值/src1取值 | 中间阶段（src0*src1） | 中间阶段（饱和模式，仅输出为half数据类型时支持） | dst输出（INF/NAN模式） | dst输出（饱和模式，仅输出为half数据类型时支持） |
@@ -1131,7 +1131,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 29**  CastDequant特殊值/边界值输入的计算结果（MAX/MIN对应操作数对应数据类型下的最大值和最小值，scale=1，offset=0）
+**表29**  CastDequant特殊值/边界值输入的计算结果（MAX/MIN对应操作数对应数据类型下的最大值和最小值，scale=1，offset=0）
 
 <a name="table18277108174810"></a>
 | src数据类型/dst数据类型 | src取值 | dst输出（INF/NAN模式） | dst输出（饱和模式，仅输出为half数据类型时支持） |
@@ -1153,7 +1153,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 - 下表中的MAX/MIN对应操作数对应数据类型下的最大值和最小值。
 - GetCmpMask为设置比较掩码寄存器的数据搬运操作，不涉及特殊值/边界值。
 
-**表 30**  Compare特殊值/边界值输入的计算结果
+**表30**  Compare特殊值/边界值输入的计算结果
 
 <a name="table1961220798"></a>
 | src数据类型/src1数据类型 | cmpMode比较模式 | src0数据类型 | src1数据类型 | dst输出数据（INF/NAN模式） | dst输出数据（饱和模式） |
@@ -1253,7 +1253,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 -   在其余模式中，dst输出数据（INF/NAN模式）、dst输出数据（饱和模式）结果，与IEEE754理论结果一致。
 
-**表 31**  Compares特殊值/边界值输入的计算结果
+**表31**  Compares特殊值/边界值输入的计算结果
 
 <a name="table1126411512176"></a>
 | src数据类型/src1数据类型 | cmpMode比较模式 | src0数据类型 | scalar数据类型 | dst输出数据（INF/NAN模式） | dst输出数据（饱和模式） |
@@ -1357,7 +1357,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：下表中的MAX/MIN对应操作数对应数据类型下的最大值和最小值。
 
-**表 32**  Cast特殊值/边界值输入的计算结果
+**表32**  Cast特殊值/边界值输入的计算结果
 
 <a name="table1225292414418"></a>
 | src数据类型/dst数据类型 | src输入数据 | dst输出数据（INF/NAN模式） | dst输出数据（饱和模式，仅输出数据类型为half、bfloat16有效） |
@@ -1483,7 +1483,7 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 
 注：下表中的MAX/MIN对应操作数对应数据类型下的最大值和最小值。
 
-**表 33**  ReduceDataBlock<MAX\>特殊值/边界值输入的计算结果
+**表33**  ReduceDataBlock<MAX\>特殊值/边界值输入的计算结果
 
 <a name="table2883162019243"></a>
 | src/dst的数据类型 | src（1个DataBlock）的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -1495,10 +1495,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0.0 |
 | half | 全为inf | inf | 65504.0 |
 | half | 全为-inf | -inf | -65504.0 |
-| half | inf，-inf，nan 交替 | nan | 0.0 |
-| half | inf，-inf 交替 | inf | 65504.0 |
-| half | inf，nan 交替 | nan | 0.0 |
-| half | -inf，nan 交替 | nan | 0.0 |
+| half | inf，-inf，nan交替 | nan | 0.0 |
+| half | inf，-inf交替 | inf | 65504.0 |
+| half | inf，nan交替 | nan | 0.0 |
+| half | -inf，nan交替 | nan | 0.0 |
 | half | 15个1.0加1个inf | inf | 65504.0 |
 | half | 15个1.0加1个-inf | 1.0 | 1.0 |
 | half | 15个1.0加1个nan | nan | 0.0 |
@@ -1509,17 +1509,17 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | inf | inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | inf | inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 7个1.0加1个inf | inf | inf |
 | float | 7个1.0加1个-inf | 1.0 | 1.0 |
 | float | 7个1.0加1个nan | nan | nan |
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 34**  ReduceDataBlock<MIN\>特殊值/边界值输入的计算结果
+**表34**  ReduceDataBlock<MIN\>特殊值/边界值输入的计算结果
 
 <a name="table6602183015217"></a>
 | src/dst的数据类型 | src（1个DataBlock）的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -1531,10 +1531,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0.0 |
 | half | 全为inf | inf | 65504.0 |
 | half | 全为-inf | -inf | -65504.0 |
-| half | inf，-inf，nan 交替 | nan | 0.0 |
-| half | inf，-inf 交替 | -inf | -65504 |
-| half | inf，nan 交替 | nan | 0.0 |
-| half | -inf，nan 交替 | nan | 0.0 |
+| half | inf，-inf，nan交替 | nan | 0.0 |
+| half | inf，-inf交替 | -inf | -65504 |
+| half | inf，nan交替 | nan | 0.0 |
+| half | -inf，nan交替 | nan | 0.0 |
 | half | 15个1.0加1个inf | 1.0 | 1.0 |
 | half | 15个1.0加1个-inf | -inf | -65504.0 |
 | half | 15个1.0加1个nan | nan | 0.0 |
@@ -1545,17 +1545,17 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | -inf | -inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | -inf | -inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 7个1.0加1个inf | 1.0 | 1.0 |
 | float | 7个1.0加1个-inf | -inf | -inf |
 | float | 7个1.0加1个nan | nan | nan |
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 35**  ReduceDataBlock<SUM\>特殊值/边界值输入的计算结果
+**表35**  ReduceDataBlock<SUM\>特殊值/边界值输入的计算结果
 
 <a name="table47791758122218"></a>
 | src/dst的数据类型 | src（1个DataBlock）的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -1567,10 +1567,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0.0 |
 | half | 全为inf | inf | 65504.0 |
 | half | 全为-inf | -inf | -65504.0 |
-| half | inf，-inf，nan 交替 | nan | 0.0 |
-| half | inf，-inf 交替 | nan | 0.0 |
-| half | inf，nan 交替 | nan | 0.0 |
-| half | -inf，nan 交替 | nan | 0.0 |
+| half | inf，-inf，nan交替 | nan | 0.0 |
+| half | inf，-inf交替 | nan | 0.0 |
+| half | inf，nan交替 | nan | 0.0 |
+| half | -inf，nan交替 | nan | 0.0 |
 | half | 15个1.0加1个inf | inf | 65344.0 |
 | half | 15个1.0加1个-inf | -inf | -65344.0 |
 | half | 15个1.0加1个nan | nan | 14.0 |
@@ -1581,17 +1581,17 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | nan | nan |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | nan | nan |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 7个1.0加1个inf | inf | inf |
 | float | 7个1.0加1个-inf | -inf | -inf |
 | float | 7个1.0加1个nan | nan | nan |
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 36**  ReduceRepeat<MAX\>特殊值/边界值输入的计算结果
+**表36**  ReduceRepeat<MAX\>特殊值/边界值输入的计算结果
 
 <a name="table818992302819"></a>
 | src/dst的数据类型 | src（8个DataBlock）的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -1603,10 +1603,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0.0 |
 | half | 全为inf | inf | 65504.0 |
 | half | 全为-inf | -inf | -65504.0 |
-| half | inf，-inf，nan 交替 | nan | 0.0 |
-| half | inf，-inf 交替 | inf | 65504.0 |
-| half | inf，nan 交替 | nan | 0.0 |
-| half | -inf，nan 交替 | nan | 0.0 |
+| half | inf，-inf，nan交替 | nan | 0.0 |
+| half | inf，-inf交替 | inf | 65504.0 |
+| half | inf，nan交替 | nan | 0.0 |
+| half | -inf，nan交替 | nan | 0.0 |
 | half | 127个1.0加1个inf | inf | 65504.0 |
 | half | 127个1.0加1个-inf | 1 | 1.0 |
 | half | 127个1.0加1个nan | nan | 0.0 |
@@ -1617,17 +1617,17 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | inf | inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | inf | inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | inf | inf |
 | float | 63个1.0加1个-inf | 1 | 1 |
 | float | 63个1.0加1个nan | nan | nan |
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 37**  ReduceRepeat<MIN\>特殊值/边界值输入的计算结果
+**表37**  ReduceRepeat<MIN\>特殊值/边界值输入的计算结果
 
 <a name="table11721236104119"></a>
 | src/dst的数据类型 | src（8个DataBlock）的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -1639,10 +1639,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0 |
 | half | 全为inf | inf | 65504 |
 | half | 全为-inf | -inf | -65504 |
-| half | inf，-inf，nan 交替 | nan | 0 |
-| half | inf，-inf 交替 | -inf | -65504 |
-| half | inf，nan 交替 | nan | 0 |
-| half | -inf，nan 交替 | nan | 0 |
+| half | inf，-inf，nan交替 | nan | 0 |
+| half | inf，-inf交替 | -inf | -65504 |
+| half | inf，nan交替 | nan | 0 |
+| half | -inf，nan交替 | nan | 0 |
 | half | 127个1.0加1个inf | 1 | 1 |
 | half | 127个1.0加1个-inf | -inf | -65504 |
 | half | 127个1.0加1个nan | nan | 0 |
@@ -1653,17 +1653,17 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | -inf | -inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | -inf | -inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | 1.0 | 1.0 |
 | float | 63个1.0加1个-inf | -inf | -inf |
 | float | 63个1.0加1个nan | nan | nan |
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 38**  ReduceRepeat<SUM\>特殊值/边界值输入的计算结果
+**表38**  ReduceRepeat<SUM\>特殊值/边界值输入的计算结果
 
 <a name="table9281103820417"></a>
 | src/dst的数据类型 | src（8个DataBlock）的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -1675,10 +1675,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0.0 |
 | half | 全为inf | inf | 65504.0 |
 | half | 全为-inf | -inf | -65504.0 |
-| half | inf，-inf，nan 交替 | nan | 0.0 |
-| half | inf，-inf 交替 | nan | 0.0 |
-| half | inf，nan 交替 | nan | 0.0 |
-| half | -inf，nan 交替 | nan | 0.0 |
+| half | inf，-inf，nan交替 | nan | 0.0 |
+| half | inf，-inf交替 | nan | 0.0 |
+| half | inf，nan交替 | nan | 0.0 |
+| half | -inf，nan交替 | nan | 0.0 |
 | half | 127个1.0加1个inf | inf | 65504.0 |
 | half | 127个1.0加1个-inf | -inf | -65376.0 |
 | half | 127个1.0加1个nan | nan | 126.0 |
@@ -1689,17 +1689,17 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | nan | nan |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | nan | nan |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | inf | inf |
 | float | 63个1.0加1个-inf | -inf | -inf |
 | float | 63个1.0加1个nan | nan | nan |
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 39**  ReduceMax特殊值/边界值输入的计算结果
+**表39**  ReduceMax特殊值/边界值输入的计算结果
 
 <a name="table491948105210"></a>
 | src/dst的数据类型 | src（8个DataBlock）的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -1725,17 +1725,17 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | inf | inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | inf | inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | inf | inf |
 | float | 63个1.0加1个-inf | 1.0 | 1.0 |
 | float | 63个1.0加1个nan | nan | nan |
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 40**  ReduceMin特殊值/边界值输入的计算结果
+**表40**  ReduceMin特殊值/边界值输入的计算结果
 
 <a name="table144621256001"></a>
 | src/dst的数据类型 | src（8个DataBlock）的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -1761,17 +1761,17 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | -inf | -inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | -inf | -inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | 1.0 | 1.0 |
 | float | 63个1.0加1个-inf | -inf | -inf |
 | float | 63个1.0加1个nan | nan | nan |
 
 注：dst的元素取值（INF/NAN模式）列结果，与IEEE754理论结果一致。
 
-**表 41**  ReduceSum特殊值/边界值输入的计算结果
+**表41**  ReduceSum特殊值/边界值输入的计算结果
 
 <a name="table16600131416"></a>
 | src/dst的数据类型 | src（8个DataBlock）的元素取值 | dst的元素取值<br>（INF/NAN模式） | dst的元素取值<br>（饱和模式） |
@@ -1797,10 +1797,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | nan | nan |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | nan | nan |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | inf | inf |
 | float | 63个1.0加1个-inf | -inf | -inf |
 | float | 63个1.0加1个nan | nan | nan |

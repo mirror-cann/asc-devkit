@@ -19,7 +19,7 @@
 - 缓存控制、同步控制和原子操作类指令，不涉及理论性能。
 - 对于矢量计算API，若接口调用的传入参数`count`或`repeatTime`取值为0，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作），但相较于不调用会有额外性能耗时。
 
-**表 1**  基础算术类指令理论性能汇总
+**表1**  基础算术类指令理论性能汇总
 
 <a name="table291476204714"></a>
 | 接口 | 输入/输出数据类型 | 硬件并行度（单位：element/cycle） |
@@ -83,7 +83,7 @@
 | LeakyRelu | int32_t | 64 |
 | LeakyRelu | float | 64 |
 
-**表 2**  逻辑计算类指令理论性能汇总
+**表2**  逻辑计算类指令理论性能汇总
 
 <a name="table116881509216"></a>
 | 接口 | src数据类型 | 硬件并行度（单位：element/cycle） |
@@ -96,7 +96,7 @@
 | ShiftRight | int16_t/uint16_t | 128 |
 | ShiftRight | int32_t/uint32_t | 64 |
 
-**表 3**  复合计算类指令理论性能汇总
+**表3**  复合计算类指令理论性能汇总
 
 <a name="table1089823515222"></a>
 | 接口 | src0数据类型 | scalar/src1数据类型 | dst数据类型 | 硬件并行度（单位：element/cycle） |
@@ -129,7 +129,7 @@
 | CastDequant | int32_t | NA | half | 64 |
 | AddDeqRelu | - | - | - | 软仿指令，不涉及理论并行度 |
 
-**表 4**  比较与选择类指令理论性能汇总
+**表4**  比较与选择类指令理论性能汇总
 
 <a name="table205131952256"></a>
 | 接口 | src0数据类型 | scalar/src1数据类型 | dst数据类型 | 硬件并行度（单位：element/cycle） |
@@ -154,7 +154,7 @@
 | GatherMask | uint32_t | uint32_t | uint32_t | 32 |
 | GatherMask | int32_t | uint32_t | int32_t | 32 |
 
-**表 5**  类型转换类指令理论性能汇总
+**表5**  类型转换类指令理论性能汇总
 
 <a name="table1712055602918"></a>
 | 接口 | src数据类型 | dst数据类型 | 理论并行度（element/cycle） |
@@ -174,7 +174,7 @@
 | Cast | float | int16_t/bfloat16_t/int32_t/float | 64 |
 | Cast | float | int64_t | 32 |
 
-**表 6**  归约计算类指令理论性能汇总
+**表6**  归约计算类指令理论性能汇总
 
 <a name="table76761043412"></a>
 | 接口 | src数据类型 | dst数据类型 | 理论并行度（element/cycle） |
@@ -187,7 +187,7 @@
 | ReducePairElem | float | float | 64 |
 | ReduceMax/ReduceMin/ReduceSum | - | - | 软仿指令，不涉及理论并行度 |
 
-**表 7**  数据排布转换类指令理论性能汇总
+**表7**  数据排布转换类指令理论性能汇总
 
 <a name="table2514311153610"></a>
 | 接口 | src数据类型 | dst数据类型 | 理论并行度（element/cycle） |
@@ -199,7 +199,7 @@
 | TransDataTo5HD | int16_t/uint16_t/half | int16_t/uint16_t/half | 128 |
 | TransDataTo5HD | int32_t/uint32_t/float | int32_t/uint32_t/float | 64 |
 
-**表 8**  数据填充类指令理论性能汇总
+**表8**  数据填充类指令理论性能汇总
 
 <a name="table18675133833617"></a>
 | 接口 | src数据类型 | dst数据类型 | 理论输入并行度（element/cycle） | 理论输出并行度（element/cycle） |
@@ -211,7 +211,7 @@
 | CreateVecIndex | int16_t/half | int16_t/half | - | 128 |
 | CreateVecIndex | int32_t/float | int32_t/float | - | 64 |
 
-**表 9**  排序组合类指令理论性能汇总
+**表9**  排序组合类指令理论性能汇总
 
 <a name="table1361419514367"></a>
 | 接口 | dst数据类型 | 理论并行度（element/cycle） |
@@ -221,7 +221,7 @@
 | MrgSort | half | 2 |
 | MrgSort | float | 2 |
 
-**表 10**  离散与聚合类指令理论性能汇总
+**表10**  离散与聚合类指令理论性能汇总
 
 <a name="table111588914379"></a>
 | 接口 | src数据类型 | dst数据类型 | 理论并行度（element/cycle） |
@@ -230,7 +230,7 @@
 | Gatherb | uint16_t | uint16_t | 42 |
 | Gatherb | uint32_t | uint32_t | 21 |
 
-**表 11**  掩码操作类指令理论性能汇总
+**表11**  掩码操作类指令理论性能汇总
 
 <a name="table12905102516375"></a>
 | 接口 | 输入数据类型 | 理论并行度（element/cycle） |
@@ -241,7 +241,7 @@
 | SetVectorMask | int32_t | 1 |
 | ResetMask | - | 1 |
 
-**表 12**  标量计算类指令理论性能汇总
+**表12**  标量计算类指令理论性能汇总
 
 <a name="table12906133883716"></a>
 | 接口 | 输入数据类型 | 输出数据类型 | 理论并行度（cycle/instruction） |
@@ -254,7 +254,7 @@
 | Cast（float转bfloat16_t） | - | - | 软仿指令，不涉及理论并行度 |
 | Cast（bfloat16_t转float） | - | - | 软仿指令，不涉及理论并行度 |
 
-**表 13**  工具接口类指令理论性能汇总
+**表13**  工具接口类指令理论性能汇总
 
 <a name="table1843362415383"></a>
 | 接口 | 理论并行度（cycle/instruction） |

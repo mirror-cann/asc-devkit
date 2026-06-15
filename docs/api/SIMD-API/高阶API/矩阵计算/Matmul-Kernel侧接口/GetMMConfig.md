@@ -31,20 +31,20 @@ __aicore__ inline constexpr MatmulConfig GetMMConfig(ArgTypes&&... args)
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | configMode | 获取的MatmulConfig模板。 |
 | ArgTypes | 可变模板参数。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | args | 输入 | 可变参数，任意顺序传入需要设置的MatmulShapeParams、MatmulQuantParams、MatmulBatchParams、MatmulFuncParams中的一个或多个。 |
 
-**表 3**  MatmulConfigMode参数说明
+**表3**  MatmulConfigMode参数说明
 
 <a name="table17837129144319"></a>
 | 参数 | 说明 |
@@ -54,7 +54,7 @@ __aicore__ inline constexpr MatmulConfig GetMMConfig(ArgTypes&&... args)
 | CONFIG_SPECIALMDL | 表示设置MatmulConfig默认值为SpecialMDL模板 |
 | CONFIG_IBSHARE | 表示设置MatmulConfig默认值为IBShare模板 |
 
-**表 4**  MatmulShapeParams参数说明
+**表4**  MatmulShapeParams参数说明
 
 <a name="table16317184295116"></a>
 | 参数 | 数据类型 | 说明 |
@@ -66,7 +66,7 @@ __aicore__ inline constexpr MatmulConfig GetMMConfig(ArgTypes&&... args)
 | basicN | uint32_t | 与[TCubeTiling结构体](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md)中的baseN参数含义相同，Matmul计算时base块N轴长度，以元素为单位。 |
 | basicK | uint32_t | 与[TCubeTiling结构体](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md)中的baseK参数含义相同，Matmul计算时base块K轴长度，以元素为单位。 |
 
-**表 5**  MatmulQuantParams参数说明
+**表5**  MatmulQuantParams参数说明
 
 <a name="table8313111211573"></a>
 | 参数 | 数据类型 | 说明 |
@@ -74,7 +74,7 @@ __aicore__ inline constexpr MatmulConfig GetMMConfig(ArgTypes&&... args)
 | isPerTensor | bool | A矩阵half类型输入且B矩阵int8_t类型输入场景，开启B矩阵量化时是否为per tensor。<br>true：per tensor量化。false：per channel量化。<br><br>对于Ascend 950PR/Ascend 950DT，MxMatmul场景不支持此参数。 |
 | hasAntiQuantOffset | bool | A矩阵half类型输入且B矩阵int8_t类型输入场景，开启B矩阵量化时是否使用offset系数。<br><br>对于Ascend 950PR/Ascend 950DT，MxMatmul场景不支持此参数。 |
 
-**表 6**  MatmulBatchParams参数说明
+**表6**  MatmulBatchParams参数说明
 
 <a name="table15129204644"></a>
 | 参数 | 数据类型 | 说明 |
@@ -84,7 +84,7 @@ __aicore__ inline constexpr MatmulConfig GetMMConfig(ArgTypes&&... args)
 | isBiasBatch | bool | 批量多Batch的Matmul场景，即BatchMatmul场景，Bias的大小是否带有Batch轴。参数取值如下：<br>true：Bias带有Batch轴，Bias大小为Batch * N（默认值）。<br>false：Bias不带Batch轴，Bias大小为N，多Batch计算Matmul时，会复用Bias。<br>注意：BatchMode::SINGLE_LARGE_THAN_L1场景仅支持设置为true。<br><br>除MxMatmul场景外，Ascend 950PR/Ascend 950DT支持该参数。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品支持该参数。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品支持该参数。<br><br>Atlas 推理系列产品AI Core不支持设置为false。<br><br>Atlas 200I/500 A2 推理产品不支持设置为false。<!-- npu="x90" id3 --><br><br>Kirin X90支持此参数。<!-- end id3 --> |
 | bmmOutMode | BatchOutMode | 预留参数。 |
 
-**表 7**  MatmulFuncParams参数说明
+**表7**  MatmulFuncParams参数说明
 
 <a name="table66217141862"></a>
 | 参数 | 数据类型 | 说明 |
@@ -95,7 +95,7 @@ __aicore__ inline constexpr MatmulConfig GetMMConfig(ArgTypes&&... args)
 | enableL1CacheUB | bool | 是否开启L1 Buffer缓存Unified Buffer计算块。建议在MTE3和MTE2流水串行较多的场景使用。参数取值如下：<br>true：开启L1 Buffer缓存Unified Buffer计算块。<br>false：不开启L1 Buffer缓存Unified Buffer计算块。<br><br>若要开启L1 Buffer缓存Unified Buffer计算块，必须在Tiling实现中调用[SetMatmulConfigParams](../Matmul-Tiling侧接口/Matmul-Tiling类/SetMatmulConfigParams.md)接口将参数enableL1CacheUBIn设置为true。<br><br>包括MxMatmul场景，Ascend 950PR/Ascend 950DT不支持该参数。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品不支持该参数。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品不支持该参数。<br><br>Atlas 推理系列产品AI Core支持该参数。<br><br>Atlas 200I/500 A2 推理产品不支持该参数。<!-- npu="x90" id5 --><br><br>Kirin X90不支持该参数。<!-- end id5 --> |
 | doMTE2Preload | uint32_t | 在MTE2流水间隙较大，且M/N数值较大时可通过该参数开启对应M/N方向的预加载功能，开启后能减小MTE2间隙，提升性能。预加载功能仅在MDL模板有效（不支持SpecialMDL模板）。参数取值如下：<br>0：不开启（默认值）。<br>1：开启M方向preload。<br>2：开启N方向preload。<br><br>注意：开启M/N方向的预加载功能时需保证K全载且M/N方向开启DoubleBuffer；其中，M方向的K全载条件为：singleCoreK/baseK <= stepKa；N方向的K全载条件为：singleCoreK/baseK <= stepKb。 |
 | iterateOrder | IterateOrder | Matmul做矩阵运算的循环迭代顺序，与[表1](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md#table1563162142915)中的iterateOrder参数含义相同。当ScheduleType参数取值为ScheduleType::OUTER_PRODUCT时，本参数生效。参数取值如下：<br><br>ORDER_M：先往M轴方向偏移再往N轴方向偏移。<br><br>ORDER_N：先往N轴方向偏移再往M轴方向偏移。<br><br>UNDEF：当前无效。<br><br>注：Norm模板的Matmul场景、MDL模板使用时，若IterateOrder取值ORDER_M，[TCubeTiling结构](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md#table1563162142915)中的stepN需要大于1，IterateOrder取值ORDER_N时，TCubeTiling结构中的stepM需要大于1。MxMatmul仅支持MDL模板。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品支持该参数。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品支持该参数。<br><br>Atlas 推理系列产品AI Core不支持该参数。<br><br>Atlas 200I/500 A2 推理产品不支持该参数。<!-- npu="x90" id6 --><br><br>Kirin X90支持该参数。<!-- end id6 --> |
-| scheduleType | ScheduleType | 配置Matmul数据搬运模式。参数取值如下：<br>ScheduleType::INNER_PRODUCT：默认模式，在K方向上做MTE1的循环搬运；<br>ScheduleType::OUTER_PRODUCT：在M或N方向上做MTE1的循环搬运；设置该取值后，需要与IterateOrder参数配合使用。该配置当前只在BatchMatmul场景（开启Norm模板）或 Matmul场景（开启MDL模板或Norm模板）生效。<br>若IterateOrder取值ORDER_M，则N方向循环搬运（在singleCoreN大于baseN场景可能有性能提升），即B矩阵的MTE1搬运并行；<br>若IterateOrder取值ORDER_N，则M方向循环搬运（在singleCoreM大于baseM场景可能有性能提升），即A矩阵的MTE1搬运并行；<br>不能同时开启M方向和N方向循环搬运；<br><br>注：<br>Norm模板的Batch Matmul场景或者MDL模板中，singleCoreK>baseK时，不能设置为ScheduleType::OUTER_PRODUCT取值，需使用默认模式。<br>Norm模板或MDL模板的Matmul场景，仅支持在纯Cube模式（只有矩阵计算）下配置ScheduleType::OUTER_PRODUCT。<br>MDL模板仅在调用[IterateAll](IterateAll.md)计算的场景支持配置ScheduleType::OUTER_PRODUCT。<br>仅在C矩阵输出至GM时，支持配置ScheduleType::OUTER_PRODUCT。<br><br>Ascend 950PR/Ascend 950DT支持该参数。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品支持该参数。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品支持该参数。<br><br>Atlas 推理系列产品AI Core不支持该参数。<br><br>Atlas 200I/500 A2 推理产品不支持该参数。<!-- npu="x90" id7 --><br><br>Kirin X90支持该参数。<!-- end id7 --> |
+| scheduleType | ScheduleType | 配置Matmul数据搬运模式。参数取值如下：<br>ScheduleType::INNER_PRODUCT：默认模式，在K方向上做MTE1的循环搬运；<br>ScheduleType::OUTER_PRODUCT：在M或N方向上做MTE1的循环搬运；设置该取值后，需要与IterateOrder参数配合使用。该配置当前只在BatchMatmul场景（开启Norm模板）或Matmul场景（开启MDL模板或Norm模板）生效。<br>若IterateOrder取值ORDER_M，则N方向循环搬运（在singleCoreN大于baseN场景可能有性能提升），即B矩阵的MTE1搬运并行；<br>若IterateOrder取值ORDER_N，则M方向循环搬运（在singleCoreM大于baseM场景可能有性能提升），即A矩阵的MTE1搬运并行；<br>不能同时开启M方向和N方向循环搬运；<br><br>注：<br>Norm模板的Batch Matmul场景或者MDL模板中，singleCoreK>baseK时，不能设置为ScheduleType::OUTER_PRODUCT取值，需使用默认模式。<br>Norm模板或MDL模板的Matmul场景，仅支持在纯Cube模式（只有矩阵计算）下配置ScheduleType::OUTER_PRODUCT。<br>MDL模板仅在调用[IterateAll](IterateAll.md)计算的场景支持配置ScheduleType::OUTER_PRODUCT。<br>仅在C矩阵输出至GM时，支持配置ScheduleType::OUTER_PRODUCT。<br><br>Ascend 950PR/Ascend 950DT支持该参数。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品支持该参数。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品支持该参数。<br><br>Atlas 推理系列产品AI Core不支持该参数。<br><br>Atlas 200I/500 A2 推理产品不支持该参数。<!-- npu="x90" id7 --><br><br>Kirin X90支持该参数。<!-- end id7 --> |
 | enableReuse | bool | [SetSelfDefineData](SetSelfDefineData.md)函数设置的回调函数中的dataPtr是否直接传递计算数据。若未调用SetSelfDefineData设置dataPtr，该参数仅支持默认值true。参数取值如下：<br>true：直接传递计算数据，仅限单个值。<br>false：传递GM上存储的数据地址信息。<br><br>对于Ascend 950PR/Ascend 950DT，MxMatmul场景不支持该参数。 |
 | enableUBReuse | bool | 是否开启Unified Buffer复用。在Unified Buffer空间足够的条件下（Unified Buffer空间大于4倍TCubeTiling的[transLength](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md#p1620315053211)参数），设置开启Unified Buffer复用后，Unified Buffer空间分为互不重叠的两份，分别存储Matmul计算相邻前后两轮迭代的数据，后一轮迭代数据的搬入将不必等待前一轮迭代的Unified Buffer空间释放，从而优化流水。参数取值如下：<br>true：开启Unified Buffer复用。<br>false：不开启Unified Buffer复用。<br><br>包括MxMatmul场景，Ascend 950PR/Ascend 950DT不支持该参数。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品不支持该参数。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品不支持该参数。<br><br>Atlas 推理系列产品AI Core支持该参数。<br><br>Atlas 200I/500 A2 推理产品不支持该参数。<!-- npu="x90" id8 --><br><br>Kirin X90不支持该参数。<!-- end id8 --> |
 | isPartialOutput | bool | 是否开启PartialOutput功能，即控制Matmul顺序输出K方向的基本块计算方式：Matmul一次Iterate计算的K轴是否进行累加计算。参数取值如下：<br>true：开启PartialOutput功能，一次Iterate的K轴不进行累加计算，Matmul每次计算输出局部baseK的baseM * baseN大小的矩阵分片。<br>false：不开启PartialOutput功能，一次Iterate的K轴进行累加计算，Matmul每次计算输出SingleCoreK长度的baseM * baseN大小的矩阵分片。<br><br>Ascend 950PR/Ascend 950DT支持该参数。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品支持该参数。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品支持该参数。<br><br>Atlas 推理系列产品AI Core不支持该参数。<br><br>Atlas 200I/500 A2 推理产品不支持该参数。<!-- npu="x90" id9 --><br><br>Kirin X90支持此参数。<!-- end id9 --> |

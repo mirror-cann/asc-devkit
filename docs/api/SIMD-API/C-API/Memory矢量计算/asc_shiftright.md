@@ -90,6 +90,6 @@ asc_shiftright(dst, src, value, total_length);    // 对src中的每个元素做
 // src[0] = 0b1010, dst[0] = 0b0101
 
 asc_shiftright_round(dst, src, value, total_length);    // 对src中的每个元素做算术右移一位并进行舍入，将结果存放到dst中
-// src[0] = 0b1010, dst[0] = 0b0101  被舍入最后一位为0，不进1
-// src[0] = 0b1001, dst[0] = 0b0101  被舍入最后一位为1，进1
+// src[0] = 0b1010, dst[0] = 0b0101被舍入最后一位为0，不进1
+// src[0] = 0b1001, dst[0] = 0b0101被舍入最后一位为1，进1
 ```

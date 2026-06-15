@@ -62,7 +62,7 @@ __simd_callee__ inline void GatherB(U& dstReg, __ubuf__ T* baseAddr, S& index, M
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="18.41%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -78,7 +78,7 @@ __simd_callee__ inline void GatherB(U& dstReg, __ubuf__ T* baseAddr, S& index, M
 </tr>
 <tr id="row57311844194617"><td class="cellrowborder" valign="top" width="18.41%" headers="mcps1.2.3.1.1 "><p id="p1673194420460"><a name="p1673194420460"></a><a name="p1673194420460"></a>U</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.58999999999999%" headers="mcps1.2.3.1.2 "><p id="p14983122419"><a name="p14983122419"></a><a name="p14983122419"></a>目的操作数的RegTensor类型， 例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写</p>
+<td class="cellrowborder" valign="top" width="81.58999999999999%" headers="mcps1.2.3.1.2 "><p id="p14983122419"><a name="p14983122419"></a><a name="p14983122419"></a>目的操作数的RegTensor类型，例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写</p>
 </td>
 </tr>
 <tr id="row13971201184719"><td class="cellrowborder" valign="top" width="18.41%" headers="mcps1.2.3.1.1 "><p id="p69710116478"><a name="p69710116478"></a><a name="p69710116478"></a>S</p>
@@ -89,7 +89,7 @@ __simd_callee__ inline void GatherB(U& dstReg, __ubuf__ T* baseAddr, S& index, M
 </tbody>
 </table>
 
-**表 2**  函数参数说明
+**表2**  函数参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -161,4 +161,3 @@ __simd_vf__ inline void GatherBVF(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __u
     }
 }
 ```
-

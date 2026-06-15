@@ -22,7 +22,7 @@ inline float2 __e5m2x22float2(const float8_e5m2x2_t x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -64,4 +64,3 @@ SIMT编程场景当前不支持使用该接口。
         asc_vf_call<simt_e5m2x22float2>(dim3(1024), (__gm__ float8_e5m2x2_t*)input, (__gm__ float2*)output, input_total_length);
     }
     ```
-

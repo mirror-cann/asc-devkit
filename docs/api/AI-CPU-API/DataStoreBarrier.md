@@ -94,7 +94,7 @@ __mix__(1,2) __global__ __aicore__ void hello_world(GM_ADDR m, GM_ADDR TilingPtr
     // 执行完留一个核释放lock
     if ASCEND_IS_AIV {
         if (AscendC::GetBlockIdx() == 0) {
-            lock.SetValue(0, 0);  // 刷新 lock
+            lock.SetValue(0, 0);  // 刷新lock
             AscendC::DataCacheCleanAndInvalid<uint64_t, AscendC::CacheLine::SINGLE_CACHE_LINE,
                 AscendC::DcciDst::CACHELINE_OUT>(lock);    //刷新Dcache，同步与GM之间的数据
         }
@@ -114,4 +114,3 @@ extern "C" __global__ __aicpu__ uint32_t MyAicpuKernel(void *arg)
     return 0;
 }
 ```
-

@@ -22,7 +22,7 @@
 
 ND到NZ的格式转换等价于DN到ZN的格式转换，如[图1](#zh-cn_topic_0000002566538879_fig444462417355)。
 
-**图 1** ND2NZ与DN2ZN示意图<a id="zh-cn_topic_0000002566538879_fig444462417355"></a>
+**图1** ND2NZ与DN2ZN示意图<a id="zh-cn_topic_0000002566538879_fig444462417355"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_copy.png)
 
@@ -46,7 +46,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 ## 参数说明<a id="zh-cn_topic_0000002566538879_section16128134420472"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | ---------- | ---------- |
@@ -63,7 +63,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 - 其他型号不支持该参数。
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -71,7 +71,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 | src | 输入 | 源操作数，类型为GlobalTensor，存储位置为Global Memory，源地址需要1字节对齐。 |
 | intriParams | 输入 | ND2NZ搬运参数，类型为Nd2NzParams。<br>Nd2NzParams参数说明请参考[表4](#zh-cn_topic_0000002566538879_table144203616291)。 |
 
-**表 3** Nd2NzParams结构体参数定义<a id="zh-cn_topic_0000002566538879_table144203616291"></a>
+**表3** Nd2NzParams结构体参数定义<a id="zh-cn_topic_0000002566538879_table144203616291"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -136,7 +136,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - 搬运至L1 Buffer的数据不能重叠，如果存在重叠写入，硬件不会产生任何警告或错误，并且不保证重叠数据的写入顺序。
 - Nd2NzParams结构体参数的值需在取值范围内：
 
-    **表 4** Nd2NzParams结构体参数取值范围
+    **表4** Nd2NzParams结构体参数取值范围
 
     | 参数名称 | 取值范围 |
     | ---------- | ---------- |
@@ -170,7 +170,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - dstNzNStride = 1，表示NZ矩阵中相邻行起始地址的偏移。
 - dstNzMatrixStride = 0，只有一个NZ矩阵，该值为0。
 
-**图 2** ND2NZ转换示意图（连续搬运）<a id="zh-cn_topic_0000002566538879_fig7420114233419"></a>
+**图2** ND2NZ转换示意图（连续搬运）<a id="zh-cn_topic_0000002566538879_fig7420114233419"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_continuous_copy.png)
 
@@ -187,7 +187,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - dstNzNStride = 2，表示NZ矩阵中相邻行起始地址的偏移。
 - dstNzMatrixStride = 320，相邻NZ矩阵起始地址的偏移，每行16个元素，共20行，偏移为16 * 20 = 320个元素。
 
-**图 3** ND2NZ转换示意图（非连续搬运）<a id="zh-cn_topic_0000002566538879_fig19978184883316"></a>
+**图3** ND2NZ转换示意图（非连续搬运）<a id="zh-cn_topic_0000002566538879_fig19978184883316"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_noncontinuous_copy.png)
 
@@ -195,7 +195,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 
 enableSmallC0开启模式下的ND2NZ转换示意图如下：
 
-**图 4** enableSmallC0开启模式下的ND2NZ转换示意图（half数据类型）<a name="fig07641913195410"></a>  
+**图4** enableSmallC0开启模式下的ND2NZ转换示意图（half数据类型）<a name="fig07641913195410"></a>  
 
 ![](../../../../../figures/enableSmallC0开启模式下的ND2NZ转换示意图-（half数据类型）.png "enableSmallC0开启模式下的ND2NZ转换示意图-（half数据类型）")
 

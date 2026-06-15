@@ -16,7 +16,7 @@
 
     如图1所示，采用Counter模式进行前n个数据计算，通过count参数指定参与计算的元素数量为128，接口内部会自动完成Mask的设置。
 
-    **图 1**  Counter模式进行前n个数据计算示例  
+    **图1**  Counter模式进行前n个数据计算示例  
     ![](../../../../../figures/counter_first_n_calc.png)<a id="图1-counter模式进行前n个数据计算示例"></a>
 
 - **高维切分：连续计算**
@@ -37,7 +37,7 @@
 
     如图2所示，采用Counter模式下的高维切分连续计算接口，mask数组中仅低64bit有效，表示参与计算的元素总数为130。该模式接口内部的repeatTimes参数无效，系统根据mask值自动计算迭代次数。repeatParams参数配置表示DataBlock间存在间隔，迭代间连续。
 
-    **图 2**  Counter模式进行高维切分连续计算示例  
+    **图2**  Counter模式进行高维切分连续计算示例  
     ![](../../../../../figures/counter_high_dim_continuous.png)<a id="图2-counter模式进行高维切分连续计算示例"></a>
 
 ## Normal模式
@@ -60,7 +60,7 @@
 
     如图3所示，采用Normal模式进行逐bit计算时，mask参数以位数组形式控制每个元素是否参与计算，详细展示了第一个DataBlock中元素的计算过程。repeatParams参数配置表示DataBlock间存在间隔，迭代间连续。
 
-    **图 3**  Normal模式高维切分逐bit计算示例  
+    **图3**  Normal模式高维切分逐bit计算示例  
     ![](../../../../../figures/normal_high_dim_bitwise.png)<a id="图3-normal模式高维切分逐bit计算示例"></a>
 
 - **高维切分：连续计算**
@@ -77,7 +77,7 @@
 
     如图4所示，采用Normal模式进行连续计算时，mask参数表示迭代内连续参与计算的元素数量为128。repeatParams参数配置表示DataBlock间存在间隔，迭代间连续。
 
-    **图 4**  Normal模式进行高维切分连续计算示例  
+    **图4**  Normal模式进行高维切分连续计算示例  
     ![](../../../../../figures/normal_high_dim_continuous.png)<a id="图4-normal模式进行高维切分连续计算示例"></a>
 
 > [!NOTE]说明

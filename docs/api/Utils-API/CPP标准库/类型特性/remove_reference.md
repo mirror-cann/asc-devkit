@@ -23,7 +23,7 @@ struct remove_reference;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -62,4 +62,3 @@ ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::remove_reference_t<double&
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::remove_reference_t<int&&>, int>));
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::remove_reference_t<double&&>, double>));
 ```
-

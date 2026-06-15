@@ -60,7 +60,7 @@ __simd_callee__ inline void ShiftLeft(S& dstReg, S& srcReg0, V& srcReg1, MaskReg
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="18.35%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -90,18 +90,18 @@ __simd_callee__ inline void ShiftLeft(S& dstReg, S& srcReg0, V& srcReg1, MaskReg
 </tr>
 <tr id="row36123513619"><td class="cellrowborder" valign="top" width="18.35%" headers="mcps1.2.3.1.1 "><p id="p916243141912"><a name="p916243141912"></a><a name="p916243141912"></a>S</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.65%" headers="mcps1.2.3.1.2 "><p id="p131047476612"><a name="p131047476612"></a><a name="p131047476612"></a>srcReg0/dstReg的RegTensor类型， 例如RegTensor&lt;uint32_t&gt;，由编译器自动推导，用户不需要填写。</p>
+<td class="cellrowborder" valign="top" width="81.65%" headers="mcps1.2.3.1.2 "><p id="p131047476612"><a name="p131047476612"></a><a name="p131047476612"></a>srcReg0/dstReg的RegTensor类型，例如RegTensor&lt;uint32_t&gt;，由编译器自动推导，用户不需要填写。</p>
 </td>
 </tr>
 <tr id="row0687131810519"><td class="cellrowborder" valign="top" width="18.35%" headers="mcps1.2.3.1.1 "><p id="p156882018157"><a name="p156882018157"></a><a name="p156882018157"></a>V</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.65%" headers="mcps1.2.3.1.2 "><p id="p206881518751"><a name="p206881518751"></a><a name="p206881518751"></a>srcReg1的RegTensor类型， 例如RegTensor&lt;int32_t&gt;，由编译器自动推导，用户不需要填写。</p>
+<td class="cellrowborder" valign="top" width="81.65%" headers="mcps1.2.3.1.2 "><p id="p206881518751"><a name="p206881518751"></a><a name="p206881518751"></a>srcReg1的RegTensor类型，例如RegTensor&lt;int32_t&gt;，由编译器自动推导，用户不需要填写。</p>
 </td>
 </tr>
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -148,7 +148,7 @@ __simd_callee__ inline void ShiftLeft(S& dstReg, S& srcReg0, V& srcReg1, MaskReg
 </tbody>
 </table>
 
-**表 3**  源操作数和目的操作数的数据类型约束
+**表3**  源操作数和目的操作数的数据类型约束
 
 <a name="table15348612514"></a>
 <table><thead align="left"><tr id="row3341061250"><th class="cellrowborder" valign="top" width="50%" id="mcps1.2.3.1.1"><p id="p10342614250"><a name="p10342614250"></a><a name="p10342614250"></a>srcReg0/dstReg数据类型</p>
@@ -228,4 +228,3 @@ __simd_vf__ inline void ShiftLeftVF(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, _
     }
 }
 ```
-

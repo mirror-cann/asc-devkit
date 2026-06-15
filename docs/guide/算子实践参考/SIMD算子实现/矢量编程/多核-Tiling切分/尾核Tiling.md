@@ -2,7 +2,7 @@
 
 对于不同shape的输入进行数据切分时，可能会发生数据无法平均分配到多个核的情况。例如当算子的输入shape为\[1, 1999\]，使用核数为8，数据类型为half时，需要计算的数据总量为1 \* 1999 \* sizeof\(half\) = 3998字节，3998字节既不满足32字节对齐，也无法平均分配到8个核上。因此该场景下，对数据进行多核切分后，每个核的计算数据量不同。此种情况下，应该尽可能均匀的分配数据，所有核上的计算数据量有两种情况，将计算量较多的核称为整核，计算量较少的核称为尾核。
 
-**图 1**  数据对齐示意图<a name="zh-cn_topic_0000002201317270_fig5261155043319"></a>  
+**图1**  数据对齐示意图<a name="zh-cn_topic_0000002201317270_fig5261155043319"></a>  
 ![](../../../../figures/数据对齐示意图.png "数据对齐示意图")
 
 ## Tiling实现<a name="zh-cn_topic_0000002201317270_section209650864618"></a>
@@ -29,7 +29,7 @@
 
     根据上述步骤得出，如果每个核上分配15个数据块，那么将有5个数据块剩余。将这5个剩余的数据块分配到5个核上，这样可以得到5个计算16个数据块的整核和3个计算15个数据块的尾核。下图展示了数据无法均分时多核切分的示例。
 
-    **图 2**  无法均分到每个核上的示例<a name="zh-cn_topic_0000002201317270_fig68506184496"></a>  
+    **图2**  无法均分到每个核上的示例<a name="zh-cn_topic_0000002201317270_fig68506184496"></a>  
     ![](../../../../figures/无法均分到每个核上的示例.png "无法均分到每个核上的示例")
 
 基于上文，设计如下的算子Tiling结构体成员：
@@ -62,7 +62,7 @@ void GenerateTilingData(uint8_t* tilingBuf, uint32_t numBlocks)
     // 整核计算的数据长度：totalLengthAligned / NUM_BLOCKS为每个核上计算的元素个数，formerLength为上述元素个数向上32字节对齐的结果
     uint32_t formerLength =
             static_cast<uint32_t>(((totalLengthAligned + numBlocks - 1) / numBlocks + ALIGN_NUM - 1) / ALIGN_NUM) * ALIGN_NUM;
-    // 尾核计算的数据长度：totalLengthAligned / NUM_BLOCKS为每个核上计算的元素个数，tailLength 为上述元素个数向下32字节对齐的结果
+    // 尾核计算的数据长度：totalLengthAligned / NUM_BLOCKS为每个核上计算的元素个数，tailLength为上述元素个数向下32字节对齐的结果
     uint32_t tailLength = (totalLengthAligned / numBlocks / ALIGN_NUM) * ALIGN_NUM;
     ...
 }

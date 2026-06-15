@@ -34,7 +34,7 @@
 
 -   **比特模式**
 
-    MaskTensor的每个bit数值，代表是否取用SrcTensor对应位置的数值：如果是，则选取SrcTensor中的数值存入DstTensor；否则，对DstTensor中的对应位置赋值为零。SrcTensor和DstTensor的shape相同，假设均为\[height ， width\]，MaskTensor的shape为\[height ， \(width / 8\)\]。示例如下：
+    MaskTensor的每个bit数值，代表是否取用SrcTensor对应位置的数值：如果是，则选取SrcTensor中的数值存入DstTensor；否则，对DstTensor中的对应位置赋值为零。SrcTensor和DstTensor的shape相同，假设均为\[height ， width\]，MaskTensor的shape为\[height ，\(width / 8\)\]。示例如下：
 
     **SrcTensor=\[1，2，3，4，5，6，7，8\]**
 
@@ -62,7 +62,7 @@
 
 以float类型，ND格式，shape为\[srcM, srcN\]的SrcTensor，shape为\[maskM, maskN\]的MaskTensor，比特模式场景为例，描述Dropout高阶API内部算法框图，如下图所示。
 
-**图 1**  Dropout算法框图  
+**图1**  Dropout算法框图  
 ![](../../../figures/Dropout算法框图.png "Dropout算法框图")
 
 计算过程分为如下几步，均在Vector上进行：
@@ -71,7 +71,7 @@
 2.  Select步骤：根据输入的MaskTensor对SrcTensor做数据选择，被选中的数据位置，保留原始数据，对舍弃的数据位置，设置为0；
 3.  Muls步骤：将输出数据每个元素除以keepProb。
 
-**图 2**  Dropout算法框图  
+**图2**  Dropout算法框图  
 ![](../../../figures/Dropout算法框图-55.png "Dropout算法框图-55")
 
 计算过程在Vector上进行，循环srcM次，每次对srcN个元素进行如下操作：
@@ -93,7 +93,7 @@ __aicore__ inline void DropOut(const LocalTensor<T>& dstLocal, const LocalTensor
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -101,7 +101,7 @@ __aicore__ inline void DropOut(const LocalTensor<T>& dstLocal, const LocalTensor
 | isInitBitMode | 在比特模式下，是否需要在接口内部初始化（默认false）。 |
 | dropOutMode | 选择执行何种输入场景：<br><br>0：默认值，由接口根据输入shape推断运行模式，注意，推断不符合预期的场景，需设置对应模式<br><br>1：执行字节模式，且maskLocal含有脏数据<br><br>2：执行字节模式，且maskLocal不含有脏数据<br><br>3：执行比特模式，且maskLocal不含有脏数据<br><br>4：执行比特模式，且maskLocal含有脏数据 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |

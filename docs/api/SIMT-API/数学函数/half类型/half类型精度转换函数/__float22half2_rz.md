@@ -22,7 +22,7 @@ inline half2 __float22half2_rz(const float2 x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -81,4 +81,3 @@ inline half2 __float22half2_rz(const float2 x)
         asc_vf_call<simt_float22half2_rz>(dim3(1024), (__gm__ float2*)input, (__gm__ half2*)output, input_total_length);
     }
     ```
-

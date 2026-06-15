@@ -28,14 +28,14 @@ __aicore__ inline void SetLoadDataRepeat(const LoadDataRepeatParam& repeatParams
 
 ### 接口参数和结构体参数说明
 
-**表 1** 参数说明
+**表1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
 | repeatParams | 输入 | 设置[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)接口的repeat参数，类型为LoadDataRepeatParam。<br>具体定义请参考：\$\{INSTALL_DIR\}/include/ascendc/basic_api/interface/kernel_struct_mm.h，\$\{INSTALL_DIR\}请替换为CANN软件安装后文件存储路径。<br>参数说明请参考[表2](#table15780447181917)。 |
 
 <a name="table15780447181917"></a>
-**表 2** LoadDataRepeatParam结构体参数说明
+**表2** LoadDataRepeatParam结构体参数说明
 
 | 参数名称 | 含义 |
 | --- | --- |
@@ -116,7 +116,7 @@ __aicore__ inline void SetLoadDataRepeat(const LoadDataRepeatParam& repeatParams
 展示代码示例片段：
 
 ```cpp
-// Load3Dv2指令完成img2col的过程，可知 img2col后A矩阵高度为ho * wo，根据ho和wo的计算公式，代入卷积核宽度、卷积核滑动步长、卷积核膨胀系数等参数可知：A矩阵的高度为CeilAlign(k, fractalShape[0])；img2col后A矩阵宽度为ci * kh * kw，代入kh=1，kw=1，可知A矩阵的宽度为CeilAlign(m, fractalShape[1])。最后，配置loadDataParams.enTranspose = true，将整个A 矩阵转置并且将其中每一个分形转置
+// Load3Dv2指令完成img2col的过程，可知img2col后A矩阵高度为ho * wo，根据ho和wo的计算公式，代入卷积核宽度、卷积核滑动步长、卷积核膨胀系数等参数可知：A矩阵的高度为CeilAlign(k, fractalShape[0])；img2col后A矩阵宽度为ci * kh * kw，代入kh=1，kw=1，可知A矩阵的宽度为CeilAlign(m, fractalShape[1])。最后，配置loadDataParams.enTranspose = true，将整个A矩阵转置并且将其中每一个分形转置
 // 使用load3d接口，实现NZ2ZZ
 AscendC::LoadData3DParamsV2<T> loadDataParams;
 
@@ -127,7 +127,7 @@ AscendC::LoadData3DParamsV2<T> loadDataParams;
 AscendC::LoadDataRepeatParam repeatParams;
 repeatParams.repeatTime = 1;  // height/width方向上的迭代次数
 repeatParams.repeatStride = 1;  // height/width方向上前后迭代起始位置的距离
-repeatParams.repeatMode = 0;  // 迭代方向 0: 迭代沿height; 1: 迭代沿width
+repeatParams.repeatMode = 0;  // 迭代方向0: 迭代沿height; 1: 迭代沿width
 repeatParams.dstStride = CeilDivision(m, fractalShape[0]);  // 输出矩阵K轴方向偏移
 AscendC::SetLoadDataRepeat(repeatParams);
 

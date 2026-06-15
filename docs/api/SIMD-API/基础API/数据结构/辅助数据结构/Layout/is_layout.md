@@ -59,7 +59,7 @@ template <typename T> struct is_layout
 
 ## 参数说明<a name="zh-cn_topic_0000002078447573_zh-cn_topic_0000001576806829_zh-cn_topic_0000001339187720_section75395119104"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_table111938719446"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_row6223476444"><th class="cellrowborder" valign="top" width="20.34%" id="mcps1.2.3.1.1"><p id="p1085176175119"><a name="p1085176175119"></a><a name="p1085176175119"></a>参数名</p>
@@ -100,4 +100,3 @@ value = AscendC::is_layout<decltype(stride)>::value; //value = false
 value = AscendC::is_layout<decltype(layoutMake)>::value;//value = true
 value = AscendC::is_layout<decltype(layoutInit)>::value;//value = true
 ```
-

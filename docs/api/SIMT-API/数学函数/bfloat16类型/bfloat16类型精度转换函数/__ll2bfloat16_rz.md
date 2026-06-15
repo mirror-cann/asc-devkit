@@ -22,7 +22,7 @@ inline bfloat16_t __ll2bfloat16_rz(const long long int x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -65,4 +65,3 @@ inline bfloat16_t __ll2bfloat16_rz(const long long int x)
         dst[idx] = __ll2bfloat16_rz(x[idx]);
     }
     ```
-

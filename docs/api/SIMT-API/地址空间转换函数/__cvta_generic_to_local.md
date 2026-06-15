@@ -22,7 +22,7 @@ size_t __cvta_generic_to_local(const void* ptr)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -56,4 +56,3 @@ __global__ __launch_bounds__(1024) void kernel__cvta_generic_to_local(uint32_t* 
     dst[idx] = __cvta_generic_to_local(ptr + idx);
 }
 ```
-

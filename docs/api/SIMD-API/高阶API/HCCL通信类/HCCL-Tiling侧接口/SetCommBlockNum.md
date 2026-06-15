@@ -12,7 +12,7 @@ uint32_t SetCommBlockNum(uint16_t num)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -37,4 +37,3 @@ uint32_t reduceType = HCCL_REDUCE_SUM;
 AscendC::Mc2CcTilingConfig mc2CcTilingConfig(groupName, opType, algConfig, reduceType);
 mc2CcTilingConfig.SetCommBlockNum(24U);
 ```
-

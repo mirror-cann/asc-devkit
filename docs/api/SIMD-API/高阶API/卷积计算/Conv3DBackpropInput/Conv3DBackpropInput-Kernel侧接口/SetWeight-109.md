@@ -22,7 +22,7 @@ __aicore__ inline void SetWeight(const AscendC::GlobalTensor<SrcT> &weight)
 
 ## 参数说明
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

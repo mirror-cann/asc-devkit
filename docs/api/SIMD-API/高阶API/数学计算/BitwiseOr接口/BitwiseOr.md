@@ -25,7 +25,7 @@ __aicore__ inline void BitwiseOr(const LocalTensor<T>& dst, const LocalTensor<T>
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -38,7 +38,7 @@ struct BitwiseOrConfig {
 };
 ```
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名称 | 类型 | 说明 |
 | --- | --- | --- |

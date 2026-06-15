@@ -4,13 +4,13 @@
 
 CAST\_RINT：返回最接近参数的整数，如果有2个整数同样接近，则会返回偶数的那个；
 
-CAST\_ROUND：round模式， 四舍五入求整；
+CAST\_ROUND：round模式，四舍五入求整；
 
 CAST\_FLOOR：floor模式，向下取整；
 
-CAST\_CEIL：ceil模式， 向上取整；
+CAST\_CEIL：ceil模式，向上取整；
 
-CAST\_TRUNC：truncation模式， 截断取整；
+CAST\_TRUNC：truncation模式，截断取整；
 
 CAST\_ODD：向奇数的方向舍入，既当小数点后数值不为0时，如果整数位是偶数，则进位；
 
@@ -28,4 +28,3 @@ enum class RoundMode {
     CAST_HYBRID,    // hybrid，目前特指输出结果是hif8数据时，会用到的一种随机舍入 
 };
 ```
-

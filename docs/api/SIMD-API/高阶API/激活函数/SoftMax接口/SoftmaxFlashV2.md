@@ -54,7 +54,7 @@ def softmax_flash_2(src, inmax=None, insum=None, update=None):
 
 以float类型，ND格式，shape为\[m, k\]的输入Tensor为例，描述SoftmaxFlashV2高阶API内部算法框图，如下图所示。
 
-**图 1**  SoftmaxFlashV2算法框图  
+**图1**  SoftmaxFlashV2算法框图  
 ![](../../../../figures/SoftmaxFlashV2算法框图.png "SoftmaxFlashV2算法框图")
 
 计算过程根据isUpdate是否开启分为两个分支处理，均在Vector上进行。
@@ -151,7 +151,7 @@ def softmax_flash_2(src, inmax=None, insum=None, update=None):
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -160,7 +160,7 @@ def softmax_flash_2(src, inmax=None, insum=None, update=None):
 | isReuseSource | 该参数预留，传入默认值false即可。 |
 | isBasicBlock | srcTensor和dstTensor的shape信息和Tiling切分策略满足基本块要求的情况下，可以设置为true开启该参数用于提升性能，默认为false表示不开启。是否满足基本块的要求，可以采用如下两种方式之一判断：<br>srcTensor和dstTensor的shape信息[m,n]需要满足如下条件：尾轴长度n小于2048并且大于等于256/sizeof(T)（即half场景下n最小为128，float场景下n最小为64），同时n是64的倍数；非尾轴长度的乘积m为8的倍数。<br><br>在Tiling实现中，通过调用[IsBasicBlockInSoftMax](IsBasicBlockInSoftMax.md)判断Tiling切分策略是否满足基本块的切分要求。<br><br>针对Atlas 200I/500 A2 推理产品，该参数为预留参数，暂未启用，为后续的功能扩展做保留，保持默认值即可。 |
 | isDataFormatNZ | 当前输入输出的数据格式是否为NZ格式，默认数据格式为ND，即默认取值为false。<br><br>针对Atlas 200I/500 A2 推理产品，不支持配置为NZ格式。 |
-| config | 结构体模板参数，此参数可选配，SoftmaxConfig类型，具体定义如下方代码所示，其中参数的含义为：<br>isCheckTiling：是否需要检查shape和tiling的一致性；若不一致，API内会根据shape重新计算所需tiling。默认取值true：API内部会检查一致性。<br>oriSrcM：原始非尾轴长度的乘积。设置该参数后，将shape常量化，编译过程中使用常量化的shape。<br>oriSrcK：原始尾轴长度。设置该参数后，将shape常量化，编译过程中使用常量化的shape。<br>mode：输出shape的处理模式。当输入输出的数据格式为NZ格式时，不支持配置mode参数。SoftmaxMode类型，取值如下：<br>SOFTMAX_NORMAL ：默认值，常规模式，对输出数据做Broadcast，使得输出shape由(m, 1)拓展成(m, 8)（输出为float数据类型）或者(m, 16)（输出为half数据类型）。<br>SOFTMAX_OUTPUT_WITHOUT_BRC ：非拓展模式，不对输出数据做Broadcast，输出shape均为(m, 1)，相应的输入参数（例如inExpSumTensor、inMaxTensor），shape也均为(m, 1) 。<br><br>此参数一般用于配合kernel侧tiling计算的接口使用。<br><br>注意：设置了oriSrcM与oriSrcK后，模板参数isBasicBlock不生效，计算数据是否为基本块由API内部判断并处理。<br><br>针对Ascend 950PR/Ascend 950DT，支持该参数。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持该参数。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持该参数。<br><br>针对Atlas 200I/500 A2 推理产品，该参数为预留参数，暂未启用，保持默认值即可。<br><br>Atlas 推理系列产品AI Core，支持该参数，不支持配置mode。<br><br><!-- npu="x90" id3 -->针对Kirin X90，支持该参数。<!-- end id3 --><br><br><!-- npu="9030" id4 -->针对Kirin 9030，支持该参数。<!-- end id4 --> |
+| config | 结构体模板参数，此参数可选配，SoftmaxConfig类型，具体定义如下方代码所示，其中参数的含义为：<br>isCheckTiling：是否需要检查shape和tiling的一致性；若不一致，API内会根据shape重新计算所需tiling。默认取值true：API内部会检查一致性。<br>oriSrcM：原始非尾轴长度的乘积。设置该参数后，将shape常量化，编译过程中使用常量化的shape。<br>oriSrcK：原始尾轴长度。设置该参数后，将shape常量化，编译过程中使用常量化的shape。<br>mode：输出shape的处理模式。当输入输出的数据格式为NZ格式时，不支持配置mode参数。SoftmaxMode类型，取值如下：<br>SOFTMAX_NORMAL ：默认值，常规模式，对输出数据做Broadcast，使得输出shape由(m, 1)拓展成(m, 8)（输出为float数据类型）或者(m, 16)（输出为half数据类型）。<br>SOFTMAX_OUTPUT_WITHOUT_BRC ：非拓展模式，不对输出数据做Broadcast，输出shape均为(m, 1)，相应的输入参数（例如inExpSumTensor、inMaxTensor），shape也均为(m, 1)。<br><br>此参数一般用于配合kernel侧tiling计算的接口使用。<br><br>注意：设置了oriSrcM与oriSrcK后，模板参数isBasicBlock不生效，计算数据是否为基本块由API内部判断并处理。<br><br>针对Ascend 950PR/Ascend 950DT，支持该参数。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持该参数。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持该参数。<br><br>针对Atlas 200I/500 A2 推理产品，该参数为预留参数，暂未启用，保持默认值即可。<br><br>Atlas 推理系列产品AI Core，支持该参数，不支持配置mode。<br><br><!-- npu="x90" id3 -->针对Kirin X90，支持该参数。<!-- end id3 --><br><br><!-- npu="9030" id4 -->针对Kirin 9030，支持该参数。<!-- end id4 --> |
 
 ```
 struct SoftmaxConfig{
@@ -177,7 +177,7 @@ struct SoftmaxConfig{
 constexpr SoftmaxConfig SOFTMAX_DEFAULT_CFG = {true, 0, 0, SoftmaxMode::SOFTMAX_NORMAL};
 ```
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -218,7 +218,7 @@ struct SoftMaxShapeInfo {
 
 -   操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md#section796754519912)。
 -   不支持sharedTmpBuffer与源操作数和目的操作数地址重叠。
--   当参数softmaxShapeInfo中srcM != oriSrcM 或者 srcK != oriSrcK时，开发者需要对GM上的原始输入\(oriSrcM, oriSrcK\)在M或K方向补齐数据到\(srcM, srcK\)，补齐的数据会参与部分运算，在输入输出复用的场景下，API的计算结果会覆盖srcTensor中补齐的原始数据，在输入输出不复用的场景下，API的计算结果会覆盖dstTensor中对应srcTensor补齐位置的数据。
+-   当参数softmaxShapeInfo中srcM != oriSrcM或者srcK != oriSrcK时，开发者需要对GM上的原始输入\(oriSrcM, oriSrcK\)在M或K方向补齐数据到\(srcM, srcK\)，补齐的数据会参与部分运算，在输入输出复用的场景下，API的计算结果会覆盖srcTensor中补齐的原始数据，在输入输出不复用的场景下，API的计算结果会覆盖dstTensor中对应srcTensor补齐位置的数据。
 
 ## 调用示例
 
@@ -295,7 +295,7 @@ struct SoftMaxShapeInfo {
 
     ```
     #include "kernel_operator.h"
-    // init阶段  height=320, width=63
+    // init阶段height=320, width=63
     padWidth = AlignUp(width * sizeof(T), 32) / sizeof(T);
     // copyin阶段
     AscendC::DataCopyExtParams copyParams{static_cast<uint16_t>(height), static_cast<uint32_t>(width * sizeof(T)), 0, 0, 0};

@@ -25,7 +25,7 @@ OpAICoreConfig& PrecisionReduceFlag(bool flag)
 </td>
 <td class="cellrowborder" valign="top" width="15.340000000000002%" headers="mcps1.1.4.1.2 "><p id="zh-cn_topic_0000001575772044_zh-cn_topic_0000001576875005_zh-cn_topic_0000001575944081_p320343694214"><a name="zh-cn_topic_0000001575772044_zh-cn_topic_0000001576875005_zh-cn_topic_0000001575944081_p320343694214"></a><a name="zh-cn_topic_0000001575772044_zh-cn_topic_0000001576875005_zh-cn_topic_0000001575944081_p320343694214"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="67.44%" headers="mcps1.1.4.1.3 "><a name="zh-cn_topic_0000001575772044_ul67628222412"></a><a name="zh-cn_topic_0000001575772044_ul67628222412"></a><ul id="zh-cn_topic_0000001575772044_ul67628222412"><li>若配置为"false"，则认为是黑名单，算子必须保持算子本身的原始数据类型。</li><li>若配置为"true"，则认为是白名单，如果算子既支持float32又支持float16数据类型，同时算子的原图格式是float32或者float16的情况下，优先为算子选择float16数据类型。</li><li>若未配置这个字段，则认为是灰名单，在有上一个算子的情况下， 选择和上一个算子相同的数据类型，否则选择当前算子的原始数据类型。</li></ul>
+<td class="cellrowborder" valign="top" width="67.44%" headers="mcps1.1.4.1.3 "><a name="zh-cn_topic_0000001575772044_ul67628222412"></a><a name="zh-cn_topic_0000001575772044_ul67628222412"></a><ul id="zh-cn_topic_0000001575772044_ul67628222412"><li>若配置为"false"，则认为是黑名单，算子必须保持算子本身的原始数据类型。</li><li>若配置为"true"，则认为是白名单，如果算子既支持float32又支持float16数据类型，同时算子的原图格式是float32或者float16的情况下，优先为算子选择float16数据类型。</li><li>若未配置这个字段，则认为是灰名单，在有上一个算子的情况下，选择和上一个算子相同的数据类型，否则选择当前算子的原始数据类型。</li></ul>
 </td>
 </tr>
 </tbody>
@@ -38,4 +38,3 @@ OpAICoreConfig类，请参考[OpAICoreConfig](OpAICoreConfig.md)。
 ## 约束说明<a name="zh-cn_topic_0000001575772044_zh-cn_topic_0000001576875005_zh-cn_topic_0000001525424352_section19165124931511"></a>
 
 无
-

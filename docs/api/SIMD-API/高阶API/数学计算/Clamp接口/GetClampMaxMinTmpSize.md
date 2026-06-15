@@ -15,7 +15,7 @@ void GetClampMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, c
 
 ## 参数说明
 
-**表 1**  参数列表
+**表1**  参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -45,4 +45,3 @@ uint32_t maxValue = 0;
 uint32_t minValue = 0;
 AscendC::GetClampMaxMinTmpSize(shape, 2, false, maxValue, minValue);
 ```
-

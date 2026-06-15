@@ -36,10 +36,10 @@
 
 当用户将模板参数中的mode配置为**DEQUANT\_WITH\_SINGLE\_ROW**时：
 
-针对DequantParams \{m, n, calCount\}， 若同时满足以下3个条件：
+针对DequantParams \{m, n, calCount\}，若同时满足以下3个条件：
 
 1.  m = 1
-2.  calCount为 32 / sizeof\(dstT\)的倍数
+2.  calCount为32 / sizeof\(dstT\)的倍数
 3.  n % calCount = 0
 
 此时 \{1, n, calCount\}会被视作为** \{n / calCount, calCount, calCount\}**  进行反量化的计算。
@@ -67,7 +67,7 @@
 
 以数据类型int32\_t，shape为\[m, n\]的输入srcTensor，数据类型scaleT，shape为\[n\]的输入deqScale和数据类型dstT，shape为\[m, n\]的输出dstTensor为例，描述AscendDequant高阶API内部算法框图，如下图所示。
 
-**图 1**  AscendDequant内部算法框图  
+**图1**  AscendDequant内部算法框图  
 ![](../../../figures/AscendDequant内部算法框图.png "AscendDequant内部算法框图")
 
 计算过程分为如下几步，均在Vector上进行：
@@ -78,7 +78,7 @@
 
 PER\_TOKEN/PER\_GROUP场景下，输入srcTensor数据类型是int32\_t/float，此时内部算法框图如下所示。
 
-**图 2**  AscendDequant PER\_TOKEN/PER\_GROUP内部算法框图  
+**图2**  AscendDequant PER\_TOKEN/PER\_GROUP内部算法框图  
 ![](../../../figures/AscendDequant-PER_TOKEN-PER_GROUP内部算法框图.png "AscendDequant-PER_TOKEN-PER_GROUP内部算法框图")
 
 PER\_TOKEN/PER\_GROUP场景的计算逻辑如下：
@@ -170,21 +170,21 @@ __aicore__ inline void AscendDequant(const LocalTensor<dstT>& dstTensor, const L
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | dstT | 目的操作数的数据类型。 |
 | scaleT | deqScale的数据类型。 |
-| mode | 决定当DequantParams为{1, n, calCount}时的计算逻辑，传入enum DeQuantMode，支持以下 2 种配置：<br>DEQUANT_WITH_SINGLE_ROW：当DequantParams {m, n, calCount} 同时满足以下条件：1、m = 1；2、calCount为 32 / sizeof(dstT)的倍数；3、n % calCount = 0时，即 {1, n, calCount} 会当作 {n / calCount, calCount, calCount} 进行计算。<br>DEQUANT_WITH_MULTI_ROW：即使满足上述所有条件，{1, n, calCount} 依然只会当作 {1, n, calCount} 进行计算， 即总共n个数，前calCount个数进行反量化的计算。 |
+| mode | 决定当DequantParams为{1, n, calCount}时的计算逻辑，传入enum DeQuantMode，支持以下2 种配置：<br>DEQUANT_WITH_SINGLE_ROW：当DequantParams {m, n, calCount} 同时满足以下条件：1、m = 1；2、calCount为32 / sizeof(dstT)的倍数；3、n % calCount = 0时，即 {1, n, calCount} 会当作 {n / calCount, calCount, calCount} 进行计算。<br>DEQUANT_WITH_MULTI_ROW：即使满足上述所有条件，{1, n, calCount} 依然只会当作 {1, n, calCount} 进行计算，即总共n个数，前calCount个数进行反量化的计算。 |
 
-**表 2**  PER\_TOKEN/PER\_GROUP场景模板参数说明
+**表2**  PER\_TOKEN/PER\_GROUP场景模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | srcT | 源操作数的数据类型。 |
 | config | 量化接口配置参数，AscendDeQuantConfig类型，定义如下方代码所示，其中参数的含义如下。<br>hasOffset：量化参数offset是否参与计算。True：表示offset参数参与计算。False：表示offset参数不参与计算。<br>kDim：group的计算方向，即k方向。仅在PER_GROUP场景有效，支持的取值如下。0：k轴是第0轴，即m方向为group的计算方向；1：k轴是第1轴，即n方向为group的计算方向。 |
-| policy | 量化策略配置参数，AscendDeQuantPolicy 枚举类型，可取值如下：<br>PER_TOKEN：配置为PER_TOKEN模式。<br>PER_GROUP：配置为PER_GROUP模式。<br>PER_CHANNEL_PER_GROUP：预留参数，暂不支持。<br>PER_TOKEN_PER_GROUP：预留参数，暂不支持。 |
+| policy | 量化策略配置参数，AscendDeQuantPolicy枚举类型，可取值如下：<br>PER_TOKEN：配置为PER_TOKEN模式。<br>PER_GROUP：配置为PER_GROUP模式。<br>PER_CHANNEL_PER_GROUP：预留参数，暂不支持。<br>PER_TOKEN_PER_GROUP：预留参数，暂不支持。 |
 
 ```
 struct AscendDeQuantConfig {
@@ -193,11 +193,11 @@ struct AscendDeQuantConfig {
 }
 ```
 
-**表 3**  接口参数说明
+**表3**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| dstTensor | 输出 | 目的操作数。类型为[LocalTensor](../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。不同型号支持的数据类型请参考[dstTensor支持的数据类型](#li17926145114504)。<br>dstTensor的行数和srcTensor的行数保持一致。<br>n * sizeof(dstT)不满足32字节对齐时，需要向上补齐为32字节，n_dst为向上补齐后的列数。如srcTensor数据类型为int32_t，shape为 (4, 8)，dstTensor为bfloat16_t，则n_dst应从8补齐为16，dstTensor shape为(4, 16)。补齐的计算过程为：n_dst = (8 * sizeof(bfloat16_t) + 32 - 1) / 32 * 32 / sizeof(bfloat16_t)。 |
+| dstTensor | 输出 | 目的操作数。类型为[LocalTensor](../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。不同型号支持的数据类型请参考[dstTensor支持的数据类型](#li17926145114504)。<br>dstTensor的行数和srcTensor的行数保持一致。<br>n * sizeof(dstT)不满足32字节对齐时，需要向上补齐为32字节，n_dst为向上补齐后的列数。如srcTensor数据类型为int32_t，shape为(4, 8)，dstTensor为bfloat16_t，则n_dst应从8补齐为16，dstTensor shape为(4, 16)。补齐的计算过程为：n_dst = (8 * sizeof(bfloat16_t) + 32 - 1) / 32 * 32 / sizeof(bfloat16_t)。 |
 | srcTensor | 输入 | 源操作数。类型为[LocalTensor](../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。支持的数据类型为：int32_t。<br><br>shape为 [m, n]，n个输入数据所占字节数要求32字节对齐。 |
 | deqScale | 输入 | 源操作数。类型为标量或者[LocalTensor](../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)。类型为LocalTensor时，支持的TPosition为VECIN/VECCALC/VECOUT。不同型号支持的数据类型请参考[deqScale支持的数据类型](#li189021550175211)。<br><br>dstTensor、srcTensor、deqScale支持的数据类型组合请参考表5和表6。 |
 | sharedTmpBuffer | 输入 | 临时缓存。类型为[LocalTensor](../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。支持的数据类型为：uint8_t。<br><br>临时空间大小BufferSize的获取方式请参考[GetAscendDequantMaxMinTmpSize](GetAscendDequantMaxMinTmpSize.md)。 |
@@ -212,7 +212,7 @@ struct DequantParams
 };
 ```
 
-**表 4**  PER\_TOKEN/PER\_GROUP场景接口参数说明
+**表4**  PER\_TOKEN/PER\_GROUP场景接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -232,7 +232,7 @@ struct AscendDeQuantParam {
 }
 ```
 
-**表 5**  支持的数据类型组合（deqScale为LocalTensor）
+**表5**  支持的数据类型组合（deqScale为LocalTensor）
 
 | dstTensor | srcTensor | deqScale |
 | --- | --- | --- |
@@ -242,7 +242,7 @@ struct AscendDeQuantParam {
 | bfloat16_t | int32_t | bfloat16_t |
 | bfloat16_t | int32_t | float |
 
-**表 6**  支持的数据类型组合（deqScale为标量）
+**表6**  支持的数据类型组合（deqScale为标量）
 
 | dstTensor | srcTensor | deqScale |
 | --- | --- | --- |
@@ -251,7 +251,7 @@ struct AscendDeQuantParam {
 | float | int32_t | bfloat16_t |
 | float | int32_t | float |
 
-**表 7**  PER\_TOKEN/PER\_GROUP场景支持的数据类型组合
+**表7**  PER\_TOKEN/PER\_GROUP场景支持的数据类型组合
 
 | srcDtype | scaleDtype | dstDtype |
 | --- | --- | --- |

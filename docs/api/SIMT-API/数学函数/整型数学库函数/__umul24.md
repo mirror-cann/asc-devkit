@@ -22,7 +22,7 @@ unsigned int __umul24(unsigned int x, unsigned int y)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -66,4 +66,3 @@ unsigned int __umul24(unsigned int x, unsigned int y)
         dst[idx] = __umul24(x[idx], y[idx]);
     }
     ```
-

@@ -23,7 +23,7 @@ struct is_same;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -84,4 +84,3 @@ Is ClassC the same as ClassC_alias? 1
 Is TemplateClass<int> the same as TemplateClass<int>? 1
 Is TemplateClass<int> the same as TemplateClass<double>? 0
 ```
-

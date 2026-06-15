@@ -60,7 +60,7 @@ __aicore__ inline void RpSort16(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001429830437_row118356578583"><th class="cellrowborder" valign="top" width="13.58%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001429830437_p48354572582"><a name="zh-cn_topic_0000001429830437_p48354572582"></a><a name="zh-cn_topic_0000001429830437_p48354572582"></a>参数名</p>
@@ -79,7 +79,7 @@ __aicore__ inline void RpSort16(const LocalTensor<T>& dst, const LocalTensor<T>&
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="table16397194910519"></a>
 <table><thead align="left"><tr id="row14397114985110"><th class="cellrowborder" valign="top" width="13.661366136613662%" id="mcps1.2.4.1.1"><p id="p10397449125111"><a name="p10397449125111"></a><a name="p10397449125111"></a>参数名称</p>
@@ -132,7 +132,7 @@ __aicore__ inline void RpSort16(const LocalTensor<T>& dst, const LocalTensor<T>&
 
     ```
     // ProposalConcat将连续元素合入Region Proposal内对应位置
-    // repeatTime = 2, 对2个Region Proposal进行排序，model=4起始位置为4
+    // repeatTime = 2,对2个Region Proposal进行排序，model=4起始位置为4
     AscendC::ProposalConcat(dstLocal, srcLocal, 2, 4);
     AscendC::RpSort16(dstLocal, dstLocal, 2);
     ```

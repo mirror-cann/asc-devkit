@@ -60,7 +60,7 @@ __aicore__ inline T AtomicCas(__gm__ T *address, T value1, T value2)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="12.42%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -78,7 +78,7 @@ __aicore__ inline T AtomicCas(__gm__ T *address, T value1, T value2)
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="table1055216132132"></a>
 <table><thead align="left"><tr id="row105531513121315"><th class="cellrowborder" valign="top" width="12.58%" id="mcps1.2.4.1.1"><p id="p1663233972817"><a name="p1663233972817"></a><a name="p1663233972817"></a>参数名</p>
@@ -141,12 +141,11 @@ DataCopy(dstLocal, dstGlobal, dataSize);
 原GM数据dst: [1,1,1,1,1,...,1] 
 核1：
 原子计算后GM数据dst: [2,1,1,1,1,...,1] 
-返回值 a: 1
+返回值a: 1
 核2：
 原子计算后GM数据dst: [2,1,1,1,1,...,1] 
-返回值 a: 2
+返回值a: 2
 核3：
 原子计算后GM数据dst: [2,1,1,1,1,...,1] 
-返回值 a: 2
+返回值a: 2
 ```
-

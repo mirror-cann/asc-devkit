@@ -27,7 +27,7 @@ __aicore__ inline void SetAtomicMax()
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 |--------|------|

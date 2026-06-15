@@ -22,7 +22,7 @@ inline bfloat16x2_t __float2bfloat162_rn(const float x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -81,4 +81,3 @@ inline bfloat16x2_t __float2bfloat162_rn(const float x)
         asc_vf_call<simt_float2bfloat162_rn>(dim3(1024), input, (__gm__ bfloat16x2_t*)output, input_total_length);
     }
     ```
-

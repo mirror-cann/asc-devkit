@@ -70,7 +70,7 @@ __aicore__ inline TBuf();
 
 ## 参数说明<a name="zh-cn_topic_0000001935531088_zh-cn_topic_0000001339105488_section75395119104"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table473143421713"></a>
 <table><thead align="left"><tr id="row117317341170"><th class="cellrowborder" valign="top" width="14.760000000000002%" id="mcps1.2.3.1.1"><p id="p19731113414177"><a name="p19731113414177"></a><a name="p19731113414177"></a>参数名称</p>

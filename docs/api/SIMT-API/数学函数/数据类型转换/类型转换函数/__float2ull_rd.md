@@ -22,7 +22,7 @@ inline unsigned long long int __float2ull_rd(const float x)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -69,4 +69,3 @@ inline unsigned long long int __float2ull_rd(const float x)
         dst[idx] = __float2ull_rd(x[idx]);
     }
     ```
-

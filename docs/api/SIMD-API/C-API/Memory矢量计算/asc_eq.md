@@ -82,11 +82,11 @@ uint8_t src1_block_stride = 1;
 uint8_t dst_repeat_stride = 8;
 uint8_t src0_repeat_stride = 8;
 uint8_t src1_repeat_stride = 8;
-// …… 数据搬运及同步操作
+//…… 数据搬运及同步操作
 
 // 结果存入寄存器，通过寄存器获取比较结果
 asc_eq(src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride, src0_repeat_stride, src1_repeat_stride);
-// …… 同步操作
+//…… 同步操作
 asc_get_cmp_mask(dst); // 读取结果
 
 // 结果输出到目标地址中

@@ -8,8 +8,8 @@
 | <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | x </cann-filter>|
 | <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | x </cann-filter>|
 | <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | x </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品 AI Core | x </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品 Vector Core | x </cann-filter>|
+| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | x </cann-filter>|
+| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
 | <cann-filter npu-type="910">Atlas 训练系列产品 | x </cann-filter>|
 
 ## 功能说明
@@ -43,5 +43,5 @@ __aicore__ inline __ssbuf__ void*  GetSsbufBaseAddr()
 
 ```cpp
  __ssbuf__ void* ssbuf = GetSsbufBaseAddr(); // NPU域中返回(void*) 0 ,CPU域中返回CPU模拟分配的地址
-AscendC::printf("Ssbuf基地址指针： %p\n", ssbuf); // %p为打印指针格式符，NPU环境中，将特殊的0指针值显示为nil
+AscendC::printf("Ssbuf基地址指针：%p\n", ssbuf); // %p为打印指针格式符，NPU环境中，将特殊的0指针值显示为nil
 ```

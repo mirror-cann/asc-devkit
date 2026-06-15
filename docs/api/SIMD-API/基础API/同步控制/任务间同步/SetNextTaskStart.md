@@ -23,11 +23,11 @@
 
 在[SuperKernel](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/高级编程/SuperKernel/原理介绍.md)的子Kernel中调用，调用后的指令可以和后续其他的子Kernel实现并行，提升整体性能。如[图1](#fig37581010773)所示，SuperKernel按序调用子Kernel，为保证子Kernel之间数据互不干扰，会在子Kernel间插入算子间同步进行保序，子Kernel<sub>N-1</sub>调用该接口后，之后的指令会和后续子Kernel<sub>N</sub>实现并行。
 
-SuperKernel是一种算子的二进制融合技术，与源码融合不同，它聚焦于内核函数 \(Kernel\) 的二进制的调度方案，展开深度优化，于已编译的二进制代码基础上融合创建一个超级Kernel函数（SuperKernel），以调用子函数的方式调用多个其他内核函数，也就是子Kernel。相对于单算子下发，SuperKernel技术可以减少任务调度等待时间和调度开销，同时利用Task间隙资源进一步优化算子头开销。
+SuperKernel是一种算子的二进制融合技术，与源码融合不同，它聚焦于内核函数 \(Kernel\)的二进制的调度方案，展开深度优化，于已编译的二进制代码基础上融合创建一个超级Kernel函数（SuperKernel），以调用子函数的方式调用多个其他内核函数，也就是子Kernel。相对于单算子下发，SuperKernel技术可以减少任务调度等待时间和调度开销，同时利用Task间隙资源进一步优化算子头开销。
 
 **开发者需要自行保证调用此接口后的指令不会与后序算子互相干扰而导致精度问题，推荐在整个算子最后一条搬运指令后调用此接口。**
 
-**图 1**  通过SetNextTaskStart实现并行示意图<a name="fig37581010773"></a>  
+**图1**  通过SetNextTaskStart实现并行示意图<a name="fig37581010773"></a>  
 ![](../../../../figures/set_next_task_start_parallel_diagram.png "通过SetNextTaskStart实现并行示意图")
 
 ## 函数原型<a name="section620mcpsimp"></a>
@@ -74,7 +74,7 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |

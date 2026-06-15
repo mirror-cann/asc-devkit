@@ -84,7 +84,7 @@ LocalTensor构造函数。
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001429830437_row118356578583"><th class="cellrowborder" valign="top" width="16.28%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001429830437_p48354572582"><a name="zh-cn_topic_0000001429830437_p48354572582"></a><a name="zh-cn_topic_0000001429830437_p48354572582"></a>参数名</p>
@@ -105,7 +105,7 @@ __aicore__ inline LocalTensor&lt;T&gt;(uint32_t addr)</pre>
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="16.53%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -127,7 +127,7 @@ __aicore__ inline LocalTensor&lt;T&gt;(uint32_t addr)</pre>
 </td>
 <td class="cellrowborder" valign="top" width="10.4%" headers="mcps1.2.4.1.2 "><p id="p241611832219"><a name="p241611832219"></a><a name="p241611832219"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="73.07000000000001%" headers="mcps1.2.4.1.3 "><p id="p241615183223"><a name="p241615183223"></a><a name="p241615183223"></a>LocalTensor的起始地址，其范围为[0, 对应物理内存最大值)。起始地址需要保证32字节对齐。</p>
+<td class="cellrowborder" valign="top" width="73.07000000000001%" headers="mcps1.2.4.1.3 "><p id="p241615183223"><a name="p241615183223"></a><a name="p241615183223"></a>LocalTensor的起始地址，其范围为[0,对应物理内存最大值)。起始地址需要保证32字节对齐。</p>
 </td>
 </tr>
 <tr id="row583211182317"><td class="cellrowborder" valign="top" width="16.53%" headers="mcps1.2.4.1.1 "><p id="p1083210116237"><a name="p1083210116237"></a><a name="p1083210116237"></a>tileSize</p>
@@ -166,7 +166,7 @@ for (int32_t i = 0; i < srcLen; ++i) {
     auto element = inputLocal.GetValue(i); // 获取inputLocal中第i个位置的数值
 }
 // 示例2结果如下：
-// element 为100
+// element为100
 
 // 示例3
 for (int32_t i = 0; i < srcLen; ++i) {
@@ -180,7 +180,7 @@ for (int32_t i = 0; i < srcLen; ++i) {
     auto element = inputLocal(i); // 获取inputLocal中第i个位置的数值
 }
 // 示例4结果如下：
-// element 为100
+// element为100
 
 // 示例5
 auto size = inputLocal.GetSize(); // 获取inputLocal的长度，size大小为inputLocal有多少个元素
@@ -210,7 +210,7 @@ if ((tag1 <= 10) && (tag2 >= 9)) {
     AscendC::Add(tensor3, tensor1, tensor2, TILE_LENGTH); // 当tag1小于等于10，tag2大于等于9的时候，才能进行相加操作。
 }
 // 示例9
-// input_local为int32_t 类型，包含16个元素(64字节)
+// input_local为int32_t类型，包含16个元素(64字节)
 for (int32_t i = 0; i < 16; ++i) {
     inputLocal.SetValue(i, i); // 对inputLocal中第i个位置进行赋值为i
 }
@@ -251,7 +251,7 @@ AscendC::LocalTensor<float> maxUb = softmaxMaxBuf.template Get<float>();
 uint32_t shapeArray[] = {16, 1024};
 maxUb.SetShapeInfo(AscendC::ShapeInfo(2, shapeArray, AscendC::DataFormat::ND));
 
-// 示例14 获取Tensor的ShapeInfo信息
+// 示例14获取Tensor的ShapeInfo信息
 AscendC::ShapeInfo maxShapeInfo = maxUb.GetShapeInfo();
 uint32_t orgShape0 = maxShapeInfo.originalShape[0];
 uint32_t orgShape1 = maxShapeInfo.originalShape[1];
@@ -265,20 +265,20 @@ AscendC::LocalTensor<float> tmpBuffer1 = tempBmm2Queue.AllocTensor<float>();
 AscendC::LocalTensor<half> tmpHalfBuffer;
 tmpHalfBuffer.SetAddrWithOffset(tmpBuffer1, calcSize * 2);
 
-// 示例16 SetBufferLen 如下示例将申请的Tensor长度修改为1024(单位为字节)
+// 示例16 SetBufferLen如下示例将申请的Tensor长度修改为1024(单位为字节)
 AscendC::LocalTensor<float> tmpBuffer2 = tempBmm2Queue.AllocTensor<float>();
 tmpBuffer2.SetBufferLen(1024);
 
-// 示例17 SetSize 如下示例将申请的Tensor长度修改为256(单位为元素)
+// 示例17 SetSize如下示例将申请的Tensor长度修改为256(单位为元素)
 AscendC::LocalTensor<float> tmpBuffer3 = tempBmm2Queue.AllocTensor<float>();
 tmpBuffer3.SetSize(256);
 
 #ifdef ASCENDC_CPU_DEBUG
-// 示例18 只限于CPU调试，将LocalTensor数据Dump到文件中，用于精度调试，文件保存在执行目录
+// 示例18只限于CPU调试，将LocalTensor数据Dump到文件中，用于精度调试，文件保存在执行目录
 AscendC::LocalTensor<float> tmpTensor = softmaxMaxBuf.template Get<float>();
 tmpTensor.ToFile("tmpTensor.bin");
 
-// 示例19 只限于CPU调试，在调试窗口中打印LocalTensor数据用于精度调试，每一行打印一个datablock(32Bytes)的数据
+// 示例19只限于CPU调试，在调试窗口中打印LocalTensor数据用于精度调试，每一行打印一个datablock(32Bytes)的数据
 AscendC::LocalTensor<int32_t> inputLocal = softmaxMaxBuf.template Get<int32_t>();
 for (int32_t i = 0; i < 16; ++i) {
     inputLocal.SetValue(i, i); // 对input_local中第i个位置进行赋值为i
@@ -288,7 +288,7 @@ inputLocal.Print();
 // 0008: 9 10 11 12 13 14 15
 #endif
 
-// 示例20 在静态Tensor编程场景使用，根据传入的逻辑位置VECIN、起始地址128、元素个数32、数据类型float，构造出Tensor对象
+// 示例20在静态Tensor编程场景使用，根据传入的逻辑位置VECIN、起始地址128、元素个数32、数据类型float，构造出Tensor对象
 uint32_t addr = 128;
 uint32_t tileSize = 32;
 AscendC::LocalTensor<float> tensor1 = AscendC::LocalTensor<float>(AscendC::TPosition::VECIN, addr, tileSize);

@@ -27,7 +27,7 @@
 
 以float类型，ND格式，shape为\[m, k1\]的source输入Tensor，shape为\[m, k2\]的mask Tensor为例，描述Select高阶API内部算法框图，如下图所示。
 
-**图 1**  Select算法框图  
+**图1**  Select算法框图  
 ![](../../../figures/Select算法框图.png "Select算法框图")
 
 计算过程分为如下几步，均在Vector上进行：
@@ -37,7 +37,7 @@
 3.  Compare步骤：使用Compare接口将上一步的mask结果与0进行比较，得到cmpmask结果；
 4.  Select步骤：根据cmpmask的结果，选择srcTensor相应位置的值或者scalar值，输出Output。
 
-**图 2**  Select算法框图  
+**图2**  Select算法框图  
 ![](../../../figures/Select算法框图-54.png "Select算法框图-54")
 
 计算过程在Vector上进行，循环m次，每次对k1个元素进行如下操作：
@@ -65,7 +65,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -73,7 +73,7 @@
 | U | 掩码Tensor mask的数据类型。支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t。 |
 | isReuseMask | 是否允许修改maskTensor。默认为true。<br><br>取值为true时，仅在maskTensor尾轴元素个数和srcTensor尾轴元素个数不同的情况下，maskTensor可能会被修改；其余场景，maskTensor不会修改。<br><br>取值为false时，任意场景下，maskTensor均不会修改，但可能会需要更多的临时空间。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
@@ -82,7 +82,7 @@
 | src1(srcScalar)<br><br>src0(srcScalar) | 输入 | 源操作数。类型为scalar。 |
 | mask | 输入 | 掩码Tensor。用于描述如何选择srcTensor和srcScalar之间的值。maskTensor尾轴需32字节对齐且元素个数为16的倍数。<br>**src0为srcTensor（tensor类型），src1为srcScalar（scalar类型）**：<br>若mask的值为0，选择srcTensor相应的值放入dstLocal，否则选择srcScalar的值放入dstLocal。<br>**src0为srcScalar（scalar类型），src1为srcTensor（tensor类型）**：<br>若mask的值为0，选择srcScalar的值放入dstLocal，否则选择srcTensor相应的值放入dstLocal。 |
 | sharedTmpBuffer | 输入 | 该API用于计算的临时空间，所需空间大小根据[GetSelectMaxMinTmpSize](GetSelectMaxMinTmpSize.md)获取。 |
-| info | 输入 | 描述SrcTensor和maskTensor的shape信息。SelectWithBytesMaskShapeInfo类型，定义如下方代码所示，其中参数的含义为：<br>firstAxis：srcLocal/maskTensor的前轴元素个数。<br>srcLastAxis：srcLocal的尾轴元素个数。<br>maskLastAxis：maskTensor的尾轴元素个数。<br>注意：<br>需要满足srcTensor和maskTensor的前轴元素个数相同，均为firstAxis。<br>需要满足firstAxis * srcLastAxis = srcTensor.GetSize() ；firstAxis * maskLastAxis = maskTensor.GetSize()。<br>maskTensor尾轴的元素个数大于等于srcTensor尾轴的元素个数，计算时会丢弃maskTensor多余部分，不参与计算。 |
+| info | 输入 | 描述SrcTensor和maskTensor的shape信息。SelectWithBytesMaskShapeInfo类型，定义如下方代码所示，其中参数的含义为：<br>firstAxis：srcLocal/maskTensor的前轴元素个数。<br>srcLastAxis：srcLocal的尾轴元素个数。<br>maskLastAxis：maskTensor的尾轴元素个数。<br>注意：<br>需要满足srcTensor和maskTensor的前轴元素个数相同，均为firstAxis。<br>需要满足firstAxis * srcLastAxis = srcTensor.GetSize()；firstAxis * maskLastAxis = maskTensor.GetSize()。<br>maskTensor尾轴的元素个数大于等于srcTensor尾轴的元素个数，计算时会丢弃maskTensor多余部分，不参与计算。 |
 
 ```
 struct SelectWithBytesMaskShapeInfo {

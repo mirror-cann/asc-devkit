@@ -8,8 +8,8 @@
 | <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | x </cann-filter> |
 | <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | x </cann-filter> |
 | <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
 | <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
 | <cann-filter npu-type = "x90">Kirin X90 | x </cann-filter> |
 | <cann-filter npu-type = "9030">Kirin 9030 | x </cann-filter> |
@@ -58,8 +58,8 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 | ---------- | ------ |
 | mStartPosition | 以M×K矩阵为例，源矩阵M轴方向的起始位置，单位为16个元素。 |
 | kStartPosition | 以M×K矩阵为例，源矩阵K轴方向的起始位置，单位为32字节。 |
-| mStep | 以M×K矩阵为例，源矩阵M轴方向搬运长度，单位为16个元素。取值范围：mStep∈[0, 255]。<br>通过ifTranspose参数启用转置功能时，mStep除需满足取值范围外，还需满足以下额外约束：<br>&nbsp;&nbsp;&bull; 当数据类型为b4时，mStep必须是4的倍数；<br>&nbsp;&nbsp;&bull; 当数据类型为b8时，mStep必须是2的倍数；<br>&nbsp;&nbsp;&bull; 当数据类型为b16时，mStep必须是1的倍数；<br>&nbsp;&nbsp;&bull; 当数据类型为b32时，mStep无额外约束。<br>**注：mStep=0表示不执行搬运，该接口将被视为NOP（空操作）。** |
-| kStep | 以M×K矩阵为例，源矩阵K轴方向搬运长度，单位为32字节。取值范围：kStep∈[0, 255]。<br>通过ifTranspose参数启用转置功能时，kStep除需满足取值范围外，还需满足以下额外约束：<br>&nbsp;&nbsp;&bull; 当数据类型为b4、b8或b16时，kStep没有额外约束；<br>&nbsp;&nbsp;&bull; 当数据类型为b32时，kStep必须是2的倍数。<br>**注：kStep=0表示不执行搬运，该接口将被视为NOP（空操作）。** |
+| mStep | 以M×K矩阵为例，源矩阵M轴方向搬运长度，单位为16个元素。取值范围：mStep∈[0, 255]。<br>通过ifTranspose参数启用转置功能时，mStep除需满足取值范围外，还需满足以下额外约束：<br>&nbsp;&nbsp;&bull;当数据类型为b4时，mStep必须是4的倍数；<br>&nbsp;&nbsp;&bull;当数据类型为b8时，mStep必须是2的倍数；<br>&nbsp;&nbsp;&bull;当数据类型为b16时，mStep必须是1的倍数；<br>&nbsp;&nbsp;&bull;当数据类型为b32时，mStep无额外约束。<br>**注：mStep=0表示不执行搬运，该接口将被视为NOP（空操作）。** |
+| kStep | 以M×K矩阵为例，源矩阵K轴方向搬运长度，单位为32字节。取值范围：kStep∈[0, 255]。<br>通过ifTranspose参数启用转置功能时，kStep除需满足取值范围外，还需满足以下额外约束：<br>&nbsp;&nbsp;&bull;当数据类型为b4、b8或b16时，kStep没有额外约束；<br>&nbsp;&nbsp;&bull;当数据类型为b32时，kStep必须是2的倍数。<br>**注：kStep=0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | srcStride | 以M×K矩阵为例，源矩阵K方向前一个分形起始地址与后一个分形起始地址的间隔，单位：512字节。 |
 | dstStride | 以M×K矩阵为例，目标矩阵K方向前一个分形起始地址与后一个分形起始地址的间隔，单位：512字节。 |
 | ifTranspose | 是否启用转置功能，对每个分形矩阵进行转置，默认为false：<br>&nbsp;&nbsp;&bull; true：启用<br>&nbsp;&nbsp;&bull; false：不启用<br>注意：只有L1 Buffer（TPosition: A1）->L0A Buffer（TPosition: A2）和L1 Buffer（TPosition: B1）->L0B Buffer（TPosition: B2）通路才能开启转置。开启转置功能时，支持b4、b8、b16、b32数据类型。 |

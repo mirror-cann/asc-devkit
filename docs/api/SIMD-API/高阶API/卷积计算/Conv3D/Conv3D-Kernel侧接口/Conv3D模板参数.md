@@ -14,7 +14,7 @@
 
 创建Conv3D对象时需要传入：
 
--   Input、Weight、Output和Bias（可选）的参数类型信息， 类型信息通过[ConvType](Conv3D使用说明.md#table19081115275)来定义，包括：内存逻辑位置、数据格式、数据类型。
+-   Input、Weight、Output和Bias（可选）的参数类型信息，类型信息通过[ConvType](Conv3D使用说明.md#table19081115275)来定义，包括：内存逻辑位置、数据格式、数据类型。
 -   Conv3dParam信息（可选），用于开启不同场景的性能优化模板。**当前暂不支持使用。**
 
 ## 函数原型
@@ -26,7 +26,7 @@ using Conv3D = Conv3dIntfExt<Config<ConvApi::ConvDataType<INPUT_TYPE, WEIGHT_TYP
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

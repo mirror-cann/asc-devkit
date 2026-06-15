@@ -15,7 +15,7 @@
 
 </cann-filter>
 
-**表 1**  Memory矢量计算API流水类型汇总
+**表1**  Memory矢量计算API流水类型汇总
 
 <a name="table132070121817"></a>
 | API类型 | API接口名称 | 执行核（AIC/AIV） | 流水类型 |
@@ -90,7 +90,7 @@
 | 数据搬运 | DataCopy(UB->UB) | AIV | PIPE_V |
 | 数据搬运 | Copy | AIV | PIPE_V |
 
-**表 2**  Cube API流水类型汇总
+**表2**  Cube API流水类型汇总
 
 <a name="table12311219174812"></a>
 | API接口名称 | 执行核（AIC/AIV） | 流水类型 |
@@ -126,7 +126,7 @@
 | SetFixpipeNz2ndFlag | AIC | PIPE_S |
 | SetLreluALPHA | AIC | PIPE_S |
 
-**表 3**  标量计算指令流水类型汇总
+**表3**  标量计算指令流水类型汇总
 
 | API接口名称 | 流水类型 |
 | --- | --- |
@@ -140,7 +140,7 @@
 | ReadGmByPassDCache(ISASI) | PIPE_S |
 | WriteGmByPassDCache(ISASI) | PIPE_S |
 
-**表 4**  同步指令流水类型汇总
+**表4**  同步指令流水类型汇总
 
 <a name="table1054353913238"></a>
 | API接口名称 | 流水类型 |
@@ -154,7 +154,7 @@
 | SetNextTaskStart | PIPE_S |
 | WaitPreTaskEnd | PIPE_S |
 
-**表 5**  原子操作流水类型汇总
+**表5**  原子操作流水类型汇总
 
 <a name="table25871912193814"></a>
 | API接口名称 | 流水类型 |
@@ -167,7 +167,7 @@
 | GetStoreAtomicConfig(ISASI) | PIPE_S |
 | SetStoreAtomicConfig(ISASI) | PIPE_S |
 
-**表 6**  工具接口流水类型汇总
+**表6**  工具接口流水类型汇总
 
 <a name="table1147331317457"></a>
 | API接口名称 | 流水类型 |
@@ -183,7 +183,7 @@
 | GetProgramCounter | PIPE_S |
 | GetArchVersion | PIPE_S |
 
-**表 7**  缓存控制接口流水类型汇总
+**表7**  缓存控制接口流水类型汇总
 
 | API接口名称 | 流水类型 |
 | --- | --- |

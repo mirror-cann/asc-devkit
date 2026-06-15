@@ -4,7 +4,7 @@ RTC是Ascend C运行时编译库，通过[aclrtc](https://gitcode.com/cann/asc-d
 
 运行时编译库提供以下核心接口：
 -   aclrtcCreateProg：根据输入参数（字符串形式表达的Ascend C源代码等）创建aclrtcProg程序实例。
--   aclrtcAddNameExpr（可选）：注册需要导出的核函数名表达式，支持模板参数（如 "Kernel::add_custom\<float\>"），非模板核函数可跳过。
+-   aclrtcAddNameExpr（可选）：注册需要导出的核函数名表达式，支持模板参数（如"Kernel::add_custom\<float\>"），非模板核函数可跳过。
 -   aclrtcCompileProg：编译给定的程序，支持用户自定义编译选项，比如指定[NPU架构版本号](../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)：--npu-arch=dav-2201。支持的编译选项可以参考[《毕昇编译器用户指南》](https://www.hiascend.com/document/redirect/CannCommunityBiSheng)。
 -   aclrtcGetBinDataSize：获取编译后的Device侧二进制数据的大小。
 -   aclrtcGetBinData：获取编译后的Device侧二进制数据。

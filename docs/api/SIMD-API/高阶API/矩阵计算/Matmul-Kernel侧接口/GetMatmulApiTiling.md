@@ -32,7 +32,7 @@ __aicore__ constexpr MatmulApiStaticTiling GetMatmulApiTiling(const MatmulConfig
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -41,7 +41,7 @@ __aicore__ constexpr MatmulApiStaticTiling GetMatmulApiTiling(const MatmulConfig
 | C_TYPE | C矩阵类型信息，通过[MatmulType](Matmul使用说明.md#table1188045714378)来定义。 |
 | BIAS_TYPE | BIAS矩阵类型信息，通过[MatmulType](Matmul使用说明.md#table1188045714378)来定义。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

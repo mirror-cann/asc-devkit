@@ -29,13 +29,13 @@ template <bool sync = true> __aicore__ inline void IterateAll(const LocalTensor<
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | sync | 获取C矩阵过程分为同步和异步两种模式：<br>同步：需要同步等待IterateAll执行结束。<br>异步：不需要同步等待IterateAll执行结束。<br><br>通过该参数设置同步或者异步模式：同步模式设置为true；异步模式设置为false，默认为同步模式。<br><br>Atlas 200I/500 A2 推理产品只支持设置为true。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

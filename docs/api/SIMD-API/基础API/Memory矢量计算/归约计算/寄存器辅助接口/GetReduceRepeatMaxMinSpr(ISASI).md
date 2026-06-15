@@ -8,8 +8,8 @@
 | <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
 | <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
 | <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | x </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品 AI Core | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品 Vector Core | x </cann-filter>|
+| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ </cann-filter>|
+| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
 | <cann-filter npu-type="910">Atlas 训练系列产品 | x </cann-filter>|
 
 ## 功能说明
@@ -51,7 +51,7 @@
 
 <cann-filter npu-type="310p">
 
-- 获取调用[ReduceRepeat<MAX/MIN>](../ReduceRepeat.md)时所有repeat内的最值，或获取调用[ReduceMax](../ReduceMax.md)/[ReduceMin](../ReduceMin.md)得到的最值。该函数原型仅支持Atlas 推理系列产品 AI Core。
+- 获取调用[ReduceRepeat<MAX/MIN>](../ReduceRepeat.md)时所有repeat内的最值，或获取调用[ReduceMax](../ReduceMax.md)/[ReduceMin](../ReduceMin.md)得到的最值。该函数原型仅支持Atlas 推理系列产品AI Core。
 
     ```cpp
     template <typename T>
@@ -62,13 +62,13 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | T | 操作数数据类型。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -88,7 +88,7 @@
 - 仅支持`ReduceRepeat<MAX/MIN>`、`ReduceMax`、`ReduceMin`的连续计算场景，即调用上述归约接口时参数需满足`srcRepStride=8`、`srcBlkStride=1`。
 - 不支持获取归约接口使用[Mask Counter模式](../../SIMD计算说明/掩码/概述.md#mask-mode)时的结果。
 - 用于[ReduceMax](../ReduceMax.md)/[ReduceMin](../ReduceMin.md)场景时，仅可获取准确最值，不能获取对应的准确索引；如需准确索引，以[ReduceMax](../ReduceMax.md)/[ReduceMin](../ReduceMin.md)自身输出为准。
-- 索引`maxMinIndex` 按操作数数据类型存储，比如操作数使用`half`类型时，`maxMinIndex`是按照`half`类型进行存储的，如果按照`half`格式进行读取，`maxMinIndex`的值是不对的，因此`maxMinIndex`的读取需要使用`reinterpret_cast`方法转换到整数类型，若输入数据类型是`half`，需要使用`reinterpret_cast<uint16_t*>`，若输入是`float`，需要使用`reinterpret_cast<uint32_t*>`。
+- 索引`maxMinIndex`按操作数数据类型存储，比如操作数使用`half`类型时，`maxMinIndex`是按照`half`类型进行存储的，如果按照`half`格式进行读取，`maxMinIndex`的值是不对的，因此`maxMinIndex`的读取需要使用`reinterpret_cast`方法转换到整数类型，若输入数据类型是`half`，需要使用`reinterpret_cast<uint16_t*>`，若输入是`float`，需要使用`reinterpret_cast<uint32_t*>`。
 - 操作数数据类型T，需要与所使用的归约接口目的操作数数据类型一致，否则会导致精度错误。
 
 ## 调用示例
@@ -119,7 +119,7 @@
 
     <cann-filter npu-type="310p">
 
-    - 针对Atlas 推理系列产品 AI Core：
+    - 针对Atlas 推理系列产品AI Core：
 
         ```cpp
         AscendC::LocalTensor<float> src;
@@ -156,7 +156,7 @@
 
     <cann-filter npu-type="310p">
 
-    - 针对Atlas 推理系列产品 AI Core版本，可在调用`ReduceMax`后直接调用`GetReduceRepeatMaxMinSpr`指令获取最大值。
+    - 针对Atlas 推理系列产品AI Core版本，可在调用`ReduceMax`后直接调用`GetReduceRepeatMaxMinSpr`指令获取最大值。
 
         ```cpp
         AscendC::LocalTensor<float> src;

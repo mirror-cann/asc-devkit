@@ -10,7 +10,7 @@
 
 【样例介绍】以floor\_mod算子为例，算子功能为将输入x的每个元素除以输入y的对应元素，获取余数。该余数应与除数y具有相同的符号，且其绝对值应小于y的绝对值。在计算过程中，需要判断y中每个元素的符号以及余数与该元素绝对值的大小关系。完整的算子实现代码请参考[SIMT与SIMD混合编程高性能优化样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_high_performance)。
 
-**表 1**  样例规格
+**表1**  样例规格
 
 <table>
 <thead>

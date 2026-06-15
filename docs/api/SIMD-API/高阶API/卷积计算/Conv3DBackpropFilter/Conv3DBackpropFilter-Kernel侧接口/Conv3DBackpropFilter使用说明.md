@@ -12,10 +12,10 @@ Conv3dBackpropFilter的计算公式为：
 -   ∂L/∂Y为卷积正向损失函数对输出Y的梯度GradOutput，作为求反向传播误差∂L/∂W的输入，即卷积的输出反向GradOutput。
 -   ∂L/∂W为Weight权重的反向传播误差GradWeight。
 
-**图 1**  卷积反向权重传播示意图<a name="fig1710410547569"></a>  
+**图1**  卷积反向权重传播示意图<a name="fig1710410547569"></a>  
 ![](../../../../../figures/卷积反向权重传播示意图.png "卷积反向权重传播示意图")
 
-**图 2**  卷积反向权重计算过程示意图<a name="fig25291917533"></a>  
+**图2**  卷积反向权重计算过程示意图<a name="fig25291917533"></a>  
 ![](../../../../../figures/卷积反向权重计算过程示意图.png "卷积反向权重计算过程示意图")
 
 Kernel侧实现Conv3DBackpropFilter求解反向传播误差运算的步骤概括为：
@@ -71,7 +71,7 @@ Kernel侧实现Conv3DBackpropFilter求解反向传播误差运算的步骤概括
     }
     ```
 
-    **表 1**  ConvType说明
+    **表1**  ConvType说明
 
     <a name="table19081115275"></a>
     | 参数 | 说明 |
@@ -80,7 +80,7 @@ Kernel侧实现Conv3DBackpropFilter求解反向传播误差运算的步骤概括
     | ConvFormat | 数据格式。<br>    Input矩阵可设置为ConvFormat::NDC1HWC0。<br>WeightSize矩阵可设置为ConvFormat::ND。<br>GradOutput矩阵可设置为ConvFormat::NDC1HWC0。<br>GradWeight矩阵可设置为ConvFormat::FRACTAL_Z_3D。 |
     | TYPE | 数据类型。<br>Input矩阵可设置为half、bfloat16_t。<br>WeightSize可设置为int32_t。<br>GradOutput矩阵可设置为half、bfloat16_tGrad。<br>Weight矩阵可设置为float。<br><br>注意：Input、GradOutput数据类型需要一致，具体数据类型组合关系请参考表2。 |
 
-    **表 2**  Conv3DBackpropFilter输入输出数据类型的组合说明
+    **表2**  Conv3DBackpropFilter输入输出数据类型的组合说明
 
     | Input | WeightSize | GradOutput | GradWeight | 支持平台 |
     | --- | --- | --- | --- | --- |

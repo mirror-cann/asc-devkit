@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-多维数据搬运接口，将数据从Global Memory (GM) 搬运到 Unified Buffer (UB)。相比于基础数据搬移接口，可以更加自由配置搬入的维度信息。
+多维数据搬运接口，将数据从Global Memory (GM)搬运到Unified Buffer (UB)。相比于基础数据搬移接口，可以更加自由配置搬入的维度信息。
 本功能最多能处理5个维度，每个维度都可以单独配置Stride，且支持随路Padding功能。相关配置参数有很多，需要通过不同的接口传入。
 
 表1 Stride配置涉及的所有参数及其传入接口，其中i表示第i维，可取值[0,4]
@@ -65,7 +65,7 @@ __aicore__ inline void asc_ndim_copy_gm2ub(__ubuf__ float* dst, __gm__ float* sr
 
 ## 参数说明
 
-表1 参数说明
+表1参数说明
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :--- | :--- |
 | dst | 输出 | 目的UB地址。 |

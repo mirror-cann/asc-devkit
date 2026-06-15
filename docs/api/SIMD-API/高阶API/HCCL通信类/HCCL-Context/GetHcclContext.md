@@ -23,7 +23,7 @@ __aicore__ inline __gm__ uint8_t* __gm__ GetHcclContext(void)
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -42,4 +42,3 @@ __aicore__ inline __gm__ uint8_t* __gm__ GetHcclContext(void)
 ```
 GM_ADDR contextGM = AscendC::GetHcclContext<0>();
 ```
-

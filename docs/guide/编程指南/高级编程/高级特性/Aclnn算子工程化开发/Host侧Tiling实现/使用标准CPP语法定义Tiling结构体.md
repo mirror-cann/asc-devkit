@@ -275,7 +275,7 @@
 
 1.  **首先**将之前位于op\_host目录下的Tiling结构体定义头文件移至op\_kernel目录下，内容前后对比如下，**注意此时包含的头文件变化，不需要再包含宏定义相关的头文件**。
 
-    **表 1**  两种方式对比
+    **表1**  两种方式对比
 
     <a name="table882614511524"></a>
     <table><thead align="left"><tr id="row78261151165217"><th class="cellrowborder" valign="top" width="50%" id="mcps1.2.3.1.1"><p id="p19826125115523"><a name="p19826125115523"></a><a name="p19826125115523"></a>宏定义方式</p>
@@ -309,7 +309,7 @@
 
 2.  **然后**修改Host侧的Tiling函数实现，此时对Tiling结构体的成员变量赋值无需使用宏定义生成的set方法，而是使用用户熟悉的C++指针赋值方式。
 
-    **表 2**  两种方式对比
+    **表2**  两种方式对比
 
     <a name="table3481171754810"></a>
     <table><thead align="left"><tr id="row5482151714815"><th class="cellrowborder" valign="top" width="50%" id="mcps1.2.3.1.1"><p id="p1848218179487"><a name="p1848218179487"></a><a name="p1848218179487"></a>宏定义方式</p>
@@ -370,7 +370,7 @@
     </tbody>
     </table>
 
-3.  **最后**，在Kernel 函数入口处新增[REGISTER\_TILING\_DEFAULT](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Kernel-Tiling/REGISTER_TILING_DEFAULT.md)调用，用于注册Tiling结构体。该注册操作的作用是：告知框架用户已使用标准 C++ 语法定义Tiling结构体，并明确其类型，以便框架在进行Tiling数据解析时能够正确识别和使用该结构体。
+3.  **最后**，在Kernel函数入口处新增[REGISTER\_TILING\_DEFAULT](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Kernel-Tiling/REGISTER_TILING_DEFAULT.md)调用，用于注册Tiling结构体。该注册操作的作用是：告知框架用户已使用标准C++ 语法定义Tiling结构体，并明确其类型，以便框架在进行Tiling数据解析时能够正确识别和使用该结构体。
 
     ```
     #include "matmul_custom_tiling.h"
@@ -382,4 +382,3 @@
         ...
     }
     ```
-

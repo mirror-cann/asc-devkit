@@ -70,12 +70,12 @@ uint32_t repeat = 2;
 for (uint32_t i = 0; i < repeat; i++) {
     // 其他reg操作
 
-    // 第一次：src[0:62] 写入 dst[0:62]（即UB[8:256]）；同时src[62:64] 写入 ureg[0:2]
-    // 第二次：ureg[0:2] + src[0:62] 写入 dst[62:126]（即UB[256:512]）；同时src[62:64] 写入 ureg[0:2]
+    // 第一次：src[0:62] 写入dst[0:62]（即UB[8:256]）；同时src[62:64] 写入ureg[0:2]
+    // 第二次：ureg[0:2] + src[0:62] 写入dst[62:126]（即UB[256:512]）；同时src[62:64] 写入ureg[0:2]
     asc_storeunalign(dst + i*count, ureg, src, count);
 }
 // dst结束地址为520，即dst + repeat * count * sizeof(uint32_t)，所以offset要配置为repeat * count
 int32_t offset = repeat * count;
-// ureg[0:2] 写入 dst[126:128]（即UB[512:520]）
+// ureg[0:2] 写入dst[126:128]（即UB[512:520]）
 asc_storeunalign_post(dst, ureg, offset);
 ```

@@ -122,7 +122,7 @@
 
 ### 模板参数及接口参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -130,7 +130,7 @@
 | U | 目的操作数数据类型。 |
 | isSetMask | 保留参数，保持默认值即可。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名称 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -282,12 +282,12 @@
 - 整个tensor参与计算
 
     ```cpp
-    dstLocal = src0Local < src1Local;  // 小于 LT
-    dstLocal = src0Local > src1Local;  // 大于 GT
-    dstLocal = src0Local <= src1Local; // 小于等于 LE
-    dstLocal = src0Local >= src1Local; // 大于等于 GE
-    dstLocal = src0Local == src1Local; // 等于 EQ
-    dstLocal = src0Local != src1Local; // 不等于 NE
+    dstLocal = src0Local < src1Local;  // 小于LT
+    dstLocal = src0Local > src1Local;  // 大于GT
+    dstLocal = src0Local <= src1Local; // 小于等于LE
+    dstLocal = src0Local >= src1Local; // 大于等于GE
+    dstLocal = src0Local == src1Local; // 等于EQ
+    dstLocal = src0Local != src1Local; // 不等于NE
     ```
 
 - tensor前n个数据计算

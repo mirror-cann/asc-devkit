@@ -62,7 +62,7 @@ __simd_callee__ inline void DeInterleave(MaskReg& dst0, MaskReg& dst1, MaskReg& 
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table329841281718"></a>
 <table><thead align="left"><tr id="row629871213174"><th class="cellrowborder" valign="top" width="50%" id="mcps1.2.3.1.1"><p id="p62981112131710"><a name="p62981112131710"></a><a name="p62981112131710"></a>参数名</p>
@@ -80,7 +80,7 @@ __simd_callee__ inline void DeInterleave(MaskReg& dst0, MaskReg& dst1, MaskReg& 
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="50%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -142,4 +142,3 @@ __simd_vf__ inline void InterleaveDeInterleaveVF(__ubuf__ T* dstAddr, __ubuf__ T
     }
 }
 ```
-

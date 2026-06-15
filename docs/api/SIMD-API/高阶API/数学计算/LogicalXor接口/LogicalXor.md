@@ -25,7 +25,7 @@ __aicore__ inline void LogicalXor(const LocalTensor<T>& dst, const LocalTensor<U
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -39,7 +39,7 @@ struct LogicalXorConfig {
 };
 ```
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名称 | 类型 | 说明 |
 | --- | --- | --- |

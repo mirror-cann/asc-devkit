@@ -16,7 +16,7 @@ int64_t GetTiling(AscendC::tiling::Conv3DBackpropFilterTilingData& tiling)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -58,4 +58,3 @@ int ret = conv3dBpDwTiling.GetTiling(tilingData);    // 获取tiling参数
 AscendC::tiling::Conv3DBackpropFilterTilingData tilingDataNotOp;
 ret = conv3dBpDwTiling.GetTiling(tilingDataNotOp);
 ```
-

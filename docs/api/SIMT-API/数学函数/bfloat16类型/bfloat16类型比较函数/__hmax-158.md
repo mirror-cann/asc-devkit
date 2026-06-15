@@ -24,7 +24,7 @@ inline bfloat16_t __hmax(bfloat16_t x, bfloat16_t y)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -79,4 +79,3 @@ inline bfloat16_t __hmax(bfloat16_t x, bfloat16_t y)
         dst[idx] = __hmax(x[idx], y[idx]);
     }
     ```
-

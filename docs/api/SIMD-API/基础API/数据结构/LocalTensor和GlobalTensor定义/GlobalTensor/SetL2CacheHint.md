@@ -60,7 +60,7 @@ __aicore__ inline void SetL2CacheHint(CacheMode mode);
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="27.839999999999996%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -83,7 +83,7 @@ RW = 3
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="13.94%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -102,7 +102,7 @@ RW = 3
 <a name="screen1440994812502"></a><a name="screen1440994812502"></a><pre class="screen" codetype="Cpp" id="screen1440994812502">enum class CacheMode : uint8_t {
 CACHE_MODE_DISABLE = 0, // 不启用L2 Cache
 CACHE_MODE_NORMAL = 1,  // 启用L2 Cache
-CACHE_MODE_PERSISTENT = 4,  // 启用L2 Cache 驻留模式
+CACHE_MODE_PERSISTENT = 4,  // 启用L2 Cache驻留模式
 };</pre>
 <p id="p595815581177"><a name="p595815581177"></a><a name="p595815581177"></a>当特定GlobalTensor启用L2 Cache后实测性能反而下降时，可考虑手动禁用该GlobalTensor的L2 Cache功能。例如，若某算子仅对特定GlobalTensor执行单次读取操作，将其数据缓存至L2 Cache不仅无法带来性能收益，反而可能因数据频繁搬运至L2 Cache而引入额外的开销，此时建议关闭该GlobalTensor的L2 Cache。</p>
 <p id="p595815581177"><a name="p595815581177"></a><a name="p595815581177"></a>通常情况下，L2 Cache可采用CACHE_MODE_NORMAL模式运行。在此模式下，当L2 Cache容量耗尽时会触发数据置换机制，已存入L2 Cache中的数据可能被替换。若需确保特定GlobalTensor的数据始终保留在L2 Cache中，可采用驻留模式。目前该驻留模式功能尚在开发中，暂不支持，计划于Ascend 950PR/Ascend 950DT产品上提供支持。</p>

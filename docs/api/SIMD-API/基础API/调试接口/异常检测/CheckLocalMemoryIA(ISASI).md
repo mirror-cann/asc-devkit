@@ -60,13 +60,13 @@ __aicore__ inline void CheckLocalMemoryIA(const CheckLocalMemoryIAParam& checkPa
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名称 | 输入/输出 | 描述 |
 | ------ | ------ | ------ |
 | checkParams | 输入 | 用于配置对UB访问的检查行为，类型为CheckLocalMemoryIAParam。<br>具体定义请参考`${INSTALL_DIR}`/include/ascendc/basic_api/interface/kernel_struct_mm.h，`${INSTALL_DIR}`请替换为CANN软件安装后文件存储路径。<br>参数说明请参考[表2](#table15780447181917)。 |
 
-**表 2**  CheckLocalMemoryIAParam结构体内参数说明<a name="table15780447181917"></a>
+**表2**  CheckLocalMemoryIAParam结构体内参数说明<a name="table15780447181917"></a>
 
 | 参数名称 | 含义 |
 | ------ | ------ |

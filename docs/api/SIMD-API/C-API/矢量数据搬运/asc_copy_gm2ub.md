@@ -9,7 +9,7 @@
 
 ## 功能说明
 
-将数据从Global Memory (GM) 搬运到 Unified Buffer (UB)。
+将数据从Global Memory (GM)搬运到Unified Buffer (UB)。
 
 ## 函数原型
 
@@ -33,7 +33,7 @@ __aicore__ inline void asc_copy_gm2ub_sync(__ubuf__ void* dst, __gm__ void* src,
 
 ## 参数说明
 
-表1 参数说明
+表1参数说明
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :--- | :--- |
 | dst | 输出 | 目的UB地址。 |

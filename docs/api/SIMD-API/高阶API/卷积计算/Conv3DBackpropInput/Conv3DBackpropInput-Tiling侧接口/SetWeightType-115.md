@@ -12,7 +12,7 @@ void SetWeightType(ConvCommonApi::TPosition pos, ConvCommonApi::ConvFormat forma
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -37,4 +37,3 @@ conv3DBpDxTiling.SetWeightType(ConvCommonApi::TPosition::GM,
                                    ConvCommonApi::ConvFormat::FRACTAL_Z_3D,
                                    ConvCommonApi::ConvDtype::FLOAT16);
 ```
-

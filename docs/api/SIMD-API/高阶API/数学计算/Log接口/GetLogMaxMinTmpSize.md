@@ -20,7 +20,7 @@ void GetLog2MaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, co
 
 ## 参数说明
 
-**表 1**  接口参数列表
+**表1**  接口参数列表
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -74,4 +74,3 @@ void GetLog2MaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, co
     uint32_t minValue = 0;
     AscendC::GetLog2MaxMinTmpSize(shape, 2, false, maxValue, minValue);
     ```
-

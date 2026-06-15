@@ -27,13 +27,13 @@ __aicore__ inline HcclHandle AlltoAllV(GM_ADDR sendBuf, void *sendCounts, void *
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | commit | 输入 | bool类型。参数取值如下：<br>true：在调用Prepare接口时，Commit同步通知服务端可以执行该通信任务。<br>false：在调用Prepare接口时，不通知服务端执行该通信任务。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -67,7 +67,7 @@ __aicore__ inline HcclHandle AlltoAllV(GM_ADDR sendBuf, void *sendCounts, void *
 
     4张卡调用AlltoAllV接口。非多轮切分场景下，每张卡上的数据块和数据量一致，如下图中每张卡的A\\B\\C\\D数据块，数据量均为dataCount。
 
-    **图 1**  非切分场景下4卡AlltoAllV图示  
+    **图1**  非切分场景下4卡AlltoAllV图示  
     ![](../../../../figures/非切分场景下4卡AlltoAllV图示.png "非切分场景下4卡AlltoAllV图示")
 
     ```
@@ -113,7 +113,7 @@ __aicore__ inline HcclHandle AlltoAllV(GM_ADDR sendBuf, void *sendCounts, void *
 
     如下图所示，每个rank下的方格中数字表示发送或接收的数据个数，以rank1为例进行说明：rank1分别向rank0、rank1、rank2、rank3发送2、2、3、2个数据，并分别从rank0、rank1、rank2、rank3接收3、2、4、3个数据，对应的代码示例如下。
 
-    **图 2**  非切分场景下4卡不均匀收发  
+    **图2**  非切分场景下4卡不均匀收发  
     ![](../../../../figures/非切分场景下4卡不均匀收发.png "非切分场景下4卡不均匀收发")
 
     ```

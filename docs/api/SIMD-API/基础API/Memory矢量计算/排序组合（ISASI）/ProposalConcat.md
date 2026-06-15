@@ -82,7 +82,7 @@ __aicore__ inline void ProposalConcat(const LocalTensor<T>& dst, const LocalTens
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001429830437_row118356578583"><th class="cellrowborder" valign="top" width="13.58%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001429830437_p48354572582"><a name="zh-cn_topic_0000001429830437_p48354572582"></a><a name="zh-cn_topic_0000001429830437_p48354572582"></a>参数名</p>
@@ -101,7 +101,7 @@ __aicore__ inline void ProposalConcat(const LocalTensor<T>& dst, const LocalTens
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="table62161631132810"></a>
 <table><thead align="left"><tr id="row12216103118284"><th class="cellrowborder" valign="top" width="13.661366136613662%" id="mcps1.2.4.1.1"><p id="p1421643114288"><a name="p1421643114288"></a><a name="p1421643114288"></a>参数名称</p>
@@ -166,7 +166,7 @@ __aicore__ inline void ProposalConcat(const LocalTensor<T>& dst, const LocalTens
 -   接口使用样例
 
     ```
-    // repeatTime = 2, modeNumber = 4, 把32个数合入到32个Region Proposal中的score域中
+    // repeatTime = 2, modeNumber = 4,把32个数合入到32个Region Proposal中的score域中
     AscendC::ProposalConcat(dstLocal, srcLocal, 2, 4);
     ```
 

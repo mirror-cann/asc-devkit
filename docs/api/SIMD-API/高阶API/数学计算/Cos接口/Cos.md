@@ -67,7 +67,7 @@ Cos\(x\)的泰勒展开式为：
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -85,7 +85,7 @@ enum class CosAlgo {
 };
 ```
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -115,8 +115,8 @@ enum class CosAlgo {
 ```
 // dstLocal: 存放计算结果的Tensor
 // srcLocal: 参与计算的输入Tensor
-// sharedTmpBuffer: 临时缓存, 内部复杂计算时存储中间变量
-// 输入tensor长度为1024, 算子输入的数据类型为half, 实际计算个数为512
+// sharedTmpBuffer: 临时缓存,内部复杂计算时存储中间变量
+// 输入tensor长度为1024,算子输入的数据类型为half,实际计算个数为512
 AscendC::Cos(dstLocal, srcLocal, sharedTmpBuffer, 512);
 constexpr AscendC::CosAlgo algo = AscendC::CosAlgo::RADIAN_REDUCTION;
 constexpr AscendC::CosConfig config = { algo };

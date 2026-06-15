@@ -35,13 +35,13 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | :--- | :--- |
 | T | 操作数的数据类型。支持的数据类型请参考[数据类型](#section4219135304818)。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
@@ -51,7 +51,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 以half数据类型为例，源操作数的shape为1 \* 128。当count = 128时，[图1](#zh-cn_topic_0000002567699425_fig13481537531)将源操作数中128个元素连续搬运至目的操作数。
 
-**图 1**  连续搬运示意图<a name="zh-cn_topic_0000002567699425_fig13481537531"></a>  
+**图1**  连续搬运示意图<a name="zh-cn_topic_0000002567699425_fig13481537531"></a>  
 ![](../../../../../figures/continuous_data_copy_diagram.png "连续搬运示意图")
 
 ## 数据类型<a name="section4219135304818"></a>

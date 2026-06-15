@@ -30,14 +30,14 @@ __aicore__ inline void SetFixPipeConfig(const LocalTensor<T>& preData, bool isUn
 
 ## 参数说明<a name="zh-cn_topic_0000002547729135_section622mcpsimp"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | ---------- | ---------- |
 | T | 操作数的数据类型。 |
 | setRelu | 针对设置一个tensor的情况，setRelu当前仅支持设置为false，即只支持设置随路quantPre系数。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |

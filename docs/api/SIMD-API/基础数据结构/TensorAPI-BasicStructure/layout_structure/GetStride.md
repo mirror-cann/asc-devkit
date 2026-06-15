@@ -27,7 +27,7 @@ __aicore__ inline constexpr auto GetStride(Layout<ShapeType, StrideType>& layout
 
 ## 参数说明
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | -------- | ----------- | ------ |
@@ -35,7 +35,7 @@ __aicore__ inline constexpr auto GetStride(Layout<ShapeType, StrideType>& layout
 | ShapeType | 输入 | Layout的shape类型。 |
 | StrideType | 输入 | Layout的stride类型。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | -------- | ----------- | ------ |
@@ -56,12 +56,12 @@ using namespace AscendC::Te;
 
 auto layout = MakeLayout(MakeShape(10, 20, 30), MakeStride(1, 10, 200));
 
-// 不指定 Is... → 返回完整 stride 元组
+// 不指定Is... → 返回完整stride元组
 auto fullStride = GetStride(layout);         // (1, 10, 200)
 
 // 指定单个索引 → 返回对应元素
 auto s0 = GetStride<0>(layout);             // 1
 
-// 指定多个索引 → 组成新 tuple
+// 指定多个索引 → 组成新tuple
 auto s01 = GetStride<0, 1>(layout);         // (1, 10)
 ```

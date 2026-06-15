@@ -47,40 +47,40 @@
 
 ## 参数说明<a name="zh-cn_topic_0000002565968945_section16128134420472"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | :--- | :--- |
 | T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002565968945_section4219135304818)。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
-| dst | 输出 | 目的操作数。<br>&bull; 类型为[LocalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)时，存储位置为Unified Buffer，目的地址需要32字节对齐。<br>&bull; 类型为[GlobalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)时，存储位置为Global Memory，目的地址需要1字节对齐。 |
-| src | 输入 | 源操作数。<br>&bull; 类型为GlobalTensor时，存储位置为Global Memory，源地址需要1字节对齐。<br>&bull; 类型为LocalTensor时，存储位置为Unified Buffer，源地址需要32字节对齐。 |
+| dst | 输出 | 目的操作数。<br>&bull;类型为[LocalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)时，存储位置为Unified Buffer，目的地址需要32字节对齐。<br>&bull;类型为[GlobalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)时，存储位置为Global Memory，目的地址需要1字节对齐。 |
+| src | 输入 | 源操作数。<br>&bull;类型为GlobalTensor时，存储位置为Global Memory，源地址需要1字节对齐。<br>&bull;类型为LocalTensor时，存储位置为Unified Buffer，源地址需要32字节对齐。 |
 | dstSliceInfo | 输入 | 目的操作数切片信息，类型为SliceInfo。通过该参数可以配置切片的起始和终止元素个数、间隔、长度等信息。<br>SliceInfo参数说明请参考[表3](#table_slice_3)。 |
 | srcSliceInfo | 输入 | 源操作数切片信息，类型为SliceInfo。通过该参数可以配置切片的起始和终止元素个数、间隔、长度等信息。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。<br>SliceInfo参数说明请参考[表3](#table_slice_3)。 |
 | dimValue | 输入 | 操作数维度信息，默认值为1。 |
 
-**表 3**  SliceInfo结构体参数定义<a name="table_slice_3"></a>
+**表3**  SliceInfo结构体参数定义<a name="table_slice_3"></a>
 
 | 参数名 | 描述 |
 | :--- | :--- |
 | startIndex | 切片的起始元素位置，数据类型为uint16_t，单位是元素个数。 |
 | endIndex | 切片的终止元素位置，数据类型为uint16_t，单位是元素个数。 |
 | stride | 切片的间隔元素个数，数据类型为uint16_t。 |
-| burstLen | 横向切片，每一片数据的长度，仅在dimValue = 1时生效，超出1维的情况下，必须配置为1，不支持配置成其他值。数据类型为uint16_t，单位：datablock（32B）。<br>例如，srcSliceInfo的List为 {{16, 70, 7, 3, 87},  {0, 2, 1, 1, 3}}，{16, 70, 7, 3, 87}表示第一维的切片信息，burstLen设置为3，表示一个切片数据段大小为3个datablock； {0, 2, 1, 1, 3}为第二维的切片信息，burstLen仅能设置为1。 |
+| burstLen | 横向切片，每一片数据的长度，仅在dimValue = 1时生效，超出1维的情况下，必须配置为1，不支持配置成其他值。数据类型为uint16_t，单位：datablock（32B）。<br>例如，srcSliceInfo的List为 {{16, 70, 7, 3, 87},  {0, 2, 1, 1, 3}}，{16, 70, 7, 3, 87}表示第一维的切片信息，burstLen设置为3，表示一个切片数据段大小为3个datablock；{0, 2, 1, 1, 3}为第二维的切片信息，burstLen仅能设置为1。 |
 | shapeValue | 当前维度的原始长度。数据类型为uint16_t，单位为元素个数。 |
 
 如[图1](#fig1196816115710)所示，以float数据类型为例，切片搬运接口能从shape为3\*87的源操作中，选取四个不连续的横向切片搬运到目的操作数中，下面结合图示对SliceInfo结构体参数进行解析：
 
-**图 1**  参数解析示意图<a name="fig1196816115710"></a>  
+**图1**  参数解析示意图<a name="fig1196816115710"></a>  
 ![](../../../../../figures/slice_datacopy_parameter_analysis_diagram.png "参数解析示意图")
 
 - dimValue为2，表示操作数有2维。
 - srcSliceInfo为 {{16, 70, 7, 3, 87},  {0, 2, 1, 1, 3}}
-    - {16, 70, 7, 3, 87}是针对单独一行， 即从一维的角度来配置，每个元素代表一个数：
+    - {16, 70, 7, 3, 87}是针对单独一行，即从一维的角度来配置，每个元素代表一个数：
 
         **startIndex**  = 16，表示有效数据段从第16个数开始；
 
@@ -105,7 +105,7 @@
         **shapeValue**  = 3，表明一共有3行。
 
 - dstSliceInfo为{{0, 47, 0, 3, 48}, {0, 1, 0, 1, 2}}
-    - {0, 47, 0, 3, 48}是针对单独一行， 即从一维的角度来配置，每个元素代表一个数：
+    - {0, 47, 0, 3, 48}是针对单独一行，即从一维的角度来配置，每个元素代表一个数：
 
         **startIndex**  = 0，表示有效数据段从第0个数开始；
 
@@ -168,7 +168,7 @@
 - burstLen，仅在dimValue = 1时生效，超出1维的情况下，必须配置为1，不支持配置成其他值。
 - 切片数据搬运中的横向burstLen大小设置，需要用户自己通过计算：横向切片元素个数\* sizeof\(T\)/32字节。横向切片元素个数\* sizeof\(T\)的大小必须是32字节的倍数。
 - SliceInfo结构体的成员变量startIndex、endIndex、stride、burstLen的取值须满足：
-$$endIndex - startIndex + 1 = (N - 1) \times stride + N \times burstLen \times \frac{32}{sizeof(T)}, \quad N \in 正整数$$
+$$endIndex - startIndex + 1 = (N - 1) \times stride + N \times burstLen \times \frac{32}{sizeof(T)}, \quad N \in正整数$$
 - SliceInfo结构体的成员变量startIndex、endIndex、shapeValue的取值须满足：
 $$startIndex < endIndex \le shapeValue$$
 - 切片数据搬运中的SliceInfo结构体数组大小和dimValue需要保持一致，并且不超过8。

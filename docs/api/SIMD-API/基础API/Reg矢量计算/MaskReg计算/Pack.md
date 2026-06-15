@@ -60,7 +60,7 @@ __simd_callee__ inline void Pack(MaskReg& dst, MaskReg& src)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="50%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -72,13 +72,13 @@ __simd_callee__ inline void Pack(MaskReg& dst, MaskReg& src)
 <tbody><tr id="row1835857145817"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.3.1.1 "><p id="p5835457165816"><a name="p5835457165816"></a><a name="p5835457165816"></a>part</p>
 </td>
 <td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.3.1.2 "><p id="p168351657155818"><a name="p168351657155818"></a><a name="p168351657155818"></a>枚举类型，低位模式或高位模式。</p>
-<a name="ul1188693111513"></a><a name="ul1188693111513"></a><ul id="ul1188693111513"><li>LOWEST  低位模式；</li><li>HIGHEST 高位模式。</li></ul>
+<a name="ul1188693111513"></a><a name="ul1188693111513"></a><ul id="ul1188693111513"><li>LOWEST低位模式；</li><li>HIGHEST高位模式。</li></ul>
 </td>
 </tr>
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="table299395481215"></a>
 <table><thead align="left"><tr id="row1399413543129"><th class="cellrowborder" valign="top" width="50%" id="mcps1.2.3.1.1"><p id="p14994175441217"><a name="p14994175441217"></a><a name="p14994175441217"></a>参数名</p>
@@ -127,4 +127,3 @@ __simd_vf__ inline void PackVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_
     }
 }
 ```
-

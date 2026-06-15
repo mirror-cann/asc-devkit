@@ -55,7 +55,7 @@
 
 如下图所示，假设Queue1、2、3的第0条消息与Queue0的第0条消息相同，在消息合并场景中，从AIC视角来看，Queue0\(0\)，Queue4\(0\)的消息会被处理，并根据用户自定义的消息内容完成相应的AIC上的计算。Queue1\(0\), Queue2\(0\), Queue3\(0\)由于发了假消息，AIC将不会读取消息内容进行计算，直接释放消息。
 
-**图 1**  PostFakeMessage示意图<a name="fig6289195515216"></a>  
+**图1**  PostFakeMessage示意图<a name="fig6289195515216"></a>  
 ![](../../../../figures/PostFakeMessage示意图.png "PostFakeMessage示意图")
 
 ## 函数原型<a name="section765814724715"></a>
@@ -66,7 +66,7 @@ __aicore__ inline uint16_t PostFakeMsg(__gm__ CubeMsgType* msg)
 
 ## 参数说明<a name="zh-cn_topic_0000001526206862_section129451113125413"></a>
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 <a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_table111938719446"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_row6223476444"><th class="cellrowborder" valign="top" width="9.09%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"><a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"></a><a name="zh-cn_topic_0000001526206862_zh-cn_topic_0000001389783361_p10223674448"></a>参数</p>
@@ -102,4 +102,3 @@ hanndle.AssignQueue(queIdx);
 auto msgPtr = handle.AllocMessage();        // 获取消息空间指针msgPtr
 auto offset = handle.PostFakeMsg(msgPtr);           // 在msgPtr指针位置，发送假消息
 ```
-

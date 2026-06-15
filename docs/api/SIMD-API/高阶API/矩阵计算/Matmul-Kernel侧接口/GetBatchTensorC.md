@@ -28,13 +28,13 @@ __aicore__ inline void GetBatchTensorC(const LocalTensor<DstT>& c, uint32_t batc
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | sync | 当前仅支持异步模式，即该参数只支持取值为false。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

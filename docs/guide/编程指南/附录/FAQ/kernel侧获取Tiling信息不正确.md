@@ -33,7 +33,7 @@ kernel侧获取Tiling信息不正确的原因一般有以下两种：
 
 2.  如果上一步骤中打印的TilingData正确，需要排查kernel侧核函数的参数是否按照正确顺序填写。
 
-    使用msOpGen工具创建算子工程，并基于工程进行kernel侧算子开发时，核函数的定义模板已通过msOpGen工具自动生成，样例如下所示。参数按照 “输入、输出、workspace、tiling”的顺序排布。请检查是否调整过参数顺序导致和正确顺序不一致。
+    使用msOpGen工具创建算子工程，并基于工程进行kernel侧算子开发时，核函数的定义模板已通过msOpGen工具自动生成，样例如下所示。参数按照“输入、输出、workspace、tiling”的顺序排布。请检查是否调整过参数顺序导致和正确顺序不一致。
 
     ```
     #include "kernel_operator.h"
@@ -42,4 +42,3 @@ kernel侧获取Tiling信息不正确的原因一般有以下两种：
         // TODO: user kernel impl
     }
     ```
-

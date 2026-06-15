@@ -36,12 +36,12 @@ Atlas A2 训练系列产品/Atlas A2 推理系列产品；
 
 如下图所示，当开启Channel Split功能后，shape为\[64,32\]的源操作数将会被拆分为16个独立的16x8分形矩阵。
 
-**图 1** F32 Channel Split示意图1<a name="zh-cn_topic_0000002515660950_fig222295694112"></a>  
+**图1** F32 Channel Split示意图1<a name="zh-cn_topic_0000002515660950_fig222295694112"></a>  
 
 ![](../../../../../figures/Fixpipe_Channel_Split.png)
 
 当开启Channel Split功能后，nSize（源NZ矩阵在N方向上的大小）必须为8的倍数。如下图所示，shape为\[64,24\]的源操作数将会被拆分为3列16x8分形矩阵。
 
-**图 2** F32 Channel Split示意图2<a name="zh-cn_topic_0000002515660950_fig5809145844116"></a>  
+**图2** F32 Channel Split示意图2<a name="zh-cn_topic_0000002515660950_fig5809145844116"></a>  
 
 ![](../../../../../figures/Fixpipe_Channel_Split_with_dirty.png)

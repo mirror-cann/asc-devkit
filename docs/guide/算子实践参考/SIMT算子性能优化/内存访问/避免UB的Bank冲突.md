@@ -6,7 +6,7 @@
 
 以Ascend 950PR/Ascend 950DT为例，下图为UB bank结构示意图，图中箭头方向表示内存排布的顺序。UB总大小为256KB，可以划分为16个bank，并组织为8个bank group。bank0和bank8属于同一个bank group，bank1和bank9属于同一个bank group，依次类推。SIMT场景下需要重点关注同一个Warp内的并发线程是否集中访问UB的少数bank。
 
-**图 1**  bank结构示意图
+**图1**  bank结构示意图
 
 ![bank结构示意图（图中箭头方向表示内存排布的顺序）-71](../../../figures/bank结构示意图（图中箭头方向表示内存排布的顺序）-71.png)
 
@@ -40,9 +40,9 @@ __global__ void transpose_coalesced_kernel(float *output, const float *input, in
 }
 ```
 
-上述实现通过UB中转保证了GM读写连续，这里的UB中的 `tile`数组表示用于暂存32 x 32矩阵块的二维UB数组。 `tile`数组的数据在UB中的排布为32 x 32。每行32个 `float`，共128B，恰好跨越4个bank。转置写回时，同一个Warp的线程会读取UB中的一列元素，即访问 `tile[threadIdx.x][threadIdx.y]`。由于行跨度固定为32个 `float`，同一列的32个元素会集中落到少数bank上，容易出现读读冲突。
+上述实现通过UB中转保证了GM读写连续，这里的UB中的`tile`数组表示用于暂存32 x 32矩阵块的二维UB数组。 `tile`数组的数据在UB中的排布为32 x 32。每行32个`float`，共128B，恰好跨越4个bank。转置写回时，同一个Warp的线程会读取UB中的一列元素，即访问`tile[threadIdx.x][threadIdx.y]`。由于行跨度固定为32个`float`，同一列的32个元素会集中落到少数bank上，容易出现读读冲突。
 
-下图展示了UB中的 `tile`数组前10行元素按照行优先存储的排布，其中蓝色标记表示每行的第一个元素。在32 x 32的UB tile中，同一个Warp中32个线程读取同一列时可能集中访问两个bank，即每个bank约有16个线程同时访问，冲突规模较大。
+下图展示了UB中的`tile`数组前10行元素按照行优先存储的排布，其中蓝色标记表示每行的第一个元素。在32 x 32的UB tile中，同一个Warp中32个线程读取同一列时可能集中访问两个bank，即每个bank约有16个线程同时访问，冲突规模较大。
 
 <img src="../../../figures/避免Bank冲突反例.png">
 
@@ -76,7 +76,7 @@ __global__ void transpose_avoid_bank_conflicts_kernel(float *output, const float
 }
 ```
 
-上述实现将UB中的 `tile`数组从32 x 32调整为32 x 33。算法路径、ThreadBlock切分、线程映射和GM访问方式都不变，只改变UB中每行的物理跨度。增加1列padding后，每行包含33个 `float` 数据，列方向会访问逐行错开的UB地址，使同一个Warp读取一列时分布到更多bank上。下图为增加padding后的内存布局；从地址映射看，32 x 33布局可以将同一Warp的32个线程分散到8个bank中，即每个bank约有4个线程同时访问，相比32 x 32布局下每个bank约16个线程访问，冲突规模明显降低。
+上述实现将UB中的`tile`数组从32 x 32调整为32 x 33。算法路径、ThreadBlock切分、线程映射和GM访问方式都不变，只改变UB中每行的物理跨度。增加1列padding后，每行包含33个`float`数据，列方向会访问逐行错开的UB地址，使同一个Warp读取一列时分布到更多bank上。下图为增加padding后的内存布局；从地址映射看，32 x 33布局可以将同一Warp的32个线程分散到8个bank中，即每个bank约有4个线程同时访问，相比32 x 32布局下每个bank约16个线程访问，冲突规模明显降低。
 
 <img src="../../../figures/避免Bank冲突正例.png">
 

@@ -1,6 +1,6 @@
 # AI CPU API列表<a name="ZH-CN_TOPIC_0000002571169820"></a>
 
-**表 1**  AI CPU API列表
+**表1**  AI CPU API列表
 
 <a name="table340354212211"></a>
 <table><thead align="left"><tr id="row1440344222113"><th class="cellrowborder" valign="top" width="37.419999999999995%" id="mcps1.2.3.1.1"><p id="p140384218217"><a name="p140384218217"></a><a name="p140384218217"></a>接口名</p>
@@ -21,4 +21,3 @@
 </tr>
 </tbody>
 </table>
-

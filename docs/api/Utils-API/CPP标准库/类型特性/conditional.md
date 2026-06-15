@@ -25,7 +25,7 @@ struct conditional;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -78,14 +78,14 @@ __aicore__ inline void selectOtherType() {
     }
 }
 
-// 条件为 true，选择 TypeA
+// 条件为true，选择TypeA
 selectType<true>();
-// 条件为 false，选择 TypeB
+// 条件为false，选择TypeB
 selectType<false>();
 
-// 测试条件为 true 的情况
+// 测试条件为true的情况
 selectOtherType<true>();
-// 测试条件为 false 的情况
+// 测试条件为false的情况
 selectOtherType<false>();
 ```
 
@@ -96,4 +96,3 @@ This is TypeB..
 Selected type is int.
 Selected type is float.
 ```
-

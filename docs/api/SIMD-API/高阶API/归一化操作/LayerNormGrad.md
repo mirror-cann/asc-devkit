@@ -28,7 +28,7 @@ res_for_gamma(BSH) = (data_x - data_mean) * np.power((data_variance + EPSILON), 
 
 以float类型，ND格式，输入为inputDy\[B, S, H\], inputX\[B, S, H\], inputVariance\[B, S\], inputMean\[B, S\], inputGamma\[H\]为例，描述LayerNormGrad高阶API内部算法框图，如下图所示。
 
-**图 1**  LayerNormGrad算法框图  
+**图1**  LayerNormGrad算法框图  
 ![](../../../figures/LayerNormGrad算法框图.png "LayerNormGrad算法框图")
 
 计算过程分为如下几步，均在Vector上进行：
@@ -65,14 +65,14 @@ res_for_gamma(BSH) = (data_x - data_mean) * np.power((data_variance + EPSILON), 
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | T | 操作数的数据类型。支持的数据类型为：half、float。 |
 | isReuseSource | 是否允许修改源操作数，默认值为false。如果开发者允许源操作数被改写，可以设置该参数取值为true开启，开启后能够节省部分内存空间。<br><br>设置为true，则本接口内部计算时复用inputX的内存空间，节省内存空间；设置为false，则本接口内部计算时不复用inputX的内存空间。<br><br>对于float数据类型输入支持开启该参数，half数据类型输入不支持开启该参数。<br><br>isReuseSource的使用样例请参考[更多样例](../数学计算/更多样例-83.md#section639165323915)。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
@@ -111,31 +111,31 @@ struct LayerNormGradShapeInfo {
 本样例中，输入inputX和inputDy的shape为\[2, 32, 16\]，inputVariance和inputMean的shape为\[2, 32\]，inputGamma的shape为\[16\]。输出outputPdX和resForGamma的shape为\[2, 32, 16\]。数据排布均为ND格式，数据类型均为float，不复用源操作数的内存空间。
 
 ```
-// outputPdX: 输出对输入 X 的梯度，即 dX，shape 为 [B, S, H]
-// resForGamma: 输出用于计算 gamma 和 beta 梯度的中间结果（如 dy * normalized_x），shape 为 [B, S, H]
-// inputDy: 输入的上层梯度 dy，shape 为 [B, S, H]
-// inputX: 前向传播时的输入 X，shape 为 [B, S, H]
-// inputVariance: 前向 LayerNorm 计算得到的方差 variance，shape 为 [B, S]
-// inputMean: 前向 LayerNorm 计算得到的均值 mean，shape 为 [B, S]
-// inputGamma: LayerNorm 中的缩放参数 gamma，shape 为 [H]
+// outputPdX: 输出对输入X的梯度，即dX，shape为 [B, S, H]
+// resForGamma: 输出用于计算gamma和beta梯度的中间结果（如dy * normalized_x），shape为 [B, S, H]
+// inputDy: 输入的上层梯度dy，shape为 [B, S, H]
+// inputX: 前向传播时的输入X，shape为 [B, S, H]
+// inputVariance: 前向LayerNorm计算得到的方差variance，shape为 [B, S]
+// inputMean: 前向LayerNorm计算得到的均值mean，shape为 [B, S]
+// inputGamma: LayerNorm中的缩放参数gamma，shape为 [H]
 // sharedTmpBuffer: 开发者管理的临时缓冲区，用于存放内部计算中的中间变量
-// epsilon: 防除零小量，例如 1e-5
-// tiling: 包含计算所需 Tiling 信息的结构体（如 block、thread 等划分）
-// shapeInfo: 可选参数，描述输入张量的数据排布格式，当前仅支持 ND 格式
+// epsilon: 防除零小量，例如1e-5
+// tiling: 包含计算所需Tiling信息的结构体（如block、thread等划分）
+// shapeInfo: 可选参数，描述输入张量的数据排布格式，当前仅支持ND格式
 
-// 使用 LayerNormGrad 接口执行 Layer Normalization 的反向传播计算：
+// 使用LayerNormGrad接口执行Layer Normalization的反向传播计算：
 AscendC::LayerNormGrad<float, isReuseSource>(
-    outputPdX,        // 输出：输入梯度 dX，shape [B, S, H]
-    resForGamma,      // 输出：中间结果，用于计算 dgamma/dbeta
-    inputDy,          // 输入：上层梯度 dy，shape [B, S, H]
-    inputX,           // 输入：原始输入 X，shape [B, S, H]
-    inputVariance,    // 输入：前向计算的方差 variance，shape [B, S]
-    inputMean,        // 输入：前向计算的均值 mean，shape [B, S]
-    inputGamma,       // 输入：缩放参数 gamma，shape [H]
-    sharedTmpBuffer,  // 输入：开发者提供的临时空间（需通过 GetLayerNormGradMaxMinTmpSize 获取大小）
+    outputPdX,        // 输出：输入梯度dX，shape [B, S, H]
+    resForGamma,      // 输出：中间结果，用于计算dgamma/dbeta
+    inputDy,          // 输入：上层梯度dy，shape [B, S, H]
+    inputX,           // 输入：原始输入X，shape [B, S, H]
+    inputVariance,    // 输入：前向计算的方差variance，shape [B, S]
+    inputMean,        // 输入：前向计算的均值mean，shape [B, S]
+    inputGamma,       // 输入：缩放参数gamma，shape [H]
+    sharedTmpBuffer,  // 输入：开发者提供的临时空间（需通过GetLayerNormGradMaxMinTmpSize获取大小）
     epsilon,          // 输入：防除零系数ε
-    tiling,           // 输入：Tiling 信息，由 Tiling 工具生成
-    {DataFormat::ND}  // 输入：shapeInfo，默认为 DataFormat::ND
+    tiling,           // 输入：Tiling信息，由Tiling工具生成
+    {DataFormat::ND}  // 输入：shapeInfo，默认为DataFormat::ND
 );
 ```
 

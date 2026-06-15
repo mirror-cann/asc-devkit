@@ -59,7 +59,7 @@ aclError aclrtcDestroyProg(aclrtcProg *prog)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 <a name="table549971610414"></a>
 <table><thead align="left"><tr id="row15008166418"><th class="cellrowborder" valign="top" width="17.580000000000002%" id="mcps1.2.4.1.1"><p id="p19500141674120"><a name="p19500141674120"></a><a name="p19500141674120"></a>参数名</p>
@@ -94,4 +94,3 @@ aclError为int类型变量，详细说明请参考[RTC错误码](RTC错误码.md
 aclrtcProg prog;
 aclError result = aclrtcDestroyProg(&prog);
 ```
-

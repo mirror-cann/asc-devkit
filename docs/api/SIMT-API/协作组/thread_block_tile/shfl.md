@@ -24,7 +24,7 @@ T shfl(T var, int src_rank) const
 ## 参数说明
 
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -43,7 +43,7 @@ T shfl(T var, int src_rank) const
 
 示例代码中以4个线程为一组划分线程块，获取组内排名为2的线程输入的`var`值。
 
-**图 1**   shfl接口返回结果示意图  
+**图1**   shfl接口返回结果示意图  
 ![](../../../figures/thread_block_tile_shfl.png "thread_block_tile_shfl")
 
 - SIMT编程场景：

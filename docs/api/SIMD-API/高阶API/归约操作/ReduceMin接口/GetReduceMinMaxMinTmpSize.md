@@ -15,7 +15,7 @@ void GetReduceMinMaxMinTmpSize(const ge::Shape& srcShape, const ge::DataType dat
 
 ## 参数说明
 
-**表 1**  接口参数列表
+**表1**  接口参数列表
 
 | 接口 | 输入/输出 | 功能 |
 | --- | --- | --- |

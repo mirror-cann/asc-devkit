@@ -48,14 +48,14 @@
 
 ## 参数说明<a name="section1251613311396"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | :--- | :--- |
 | T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#section4219135304818)。 |
 | enableSmallC0 | SmallC0模式开关：当dValue小于等于4的时候，C0_SIZE会补齐到4 * sizeof(T)字节。<br>默认不开启。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
@@ -63,7 +63,7 @@
 | src | 输入 | 源操作数，类型为[GlobalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)。 |
 | intriParams | 输入 | 搬运参数，类型为Nd2NzParam，具体参数请参考[表3](#table_nd2nz_3)。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
 
-**表 3**  Nd2NzParams结构体参数定义<a name="table_nd2nz_3"></a>
+**表3**  Nd2NzParams结构体参数定义<a name="table_nd2nz_3"></a>
 
 | 参数名 | 描述 |
 | :--- | :--- |
@@ -87,12 +87,12 @@ ND2NZ转换示意图如下，样例中参数设置值和解释说明如下：
 - dstNzNStride = 2，表示src中一个ND矩阵的第x行和第x+1行转换为NZ格式后在dst中的偏移，即A1和B1在dst之间的偏移为2个DataBlock。
 - dstNzMatrixStride = 96，表达dst中第x个ND矩阵的起点和第x+1个ND矩阵的起点的偏移，即A1和C1之间的距离，即为6个DataBlock，6 \* 16 = 96个元素。
 
-**图 1**  ND2NZ转换示意图（half数据类型）<a name="fig128961542184620"></a>  
+**图1**  ND2NZ转换示意图（half数据类型）<a name="fig128961542184620"></a>  
 ![](../../../../../figures/nd2nz_conversion_half.png "ND2NZ转换示意图（half数据类型）")
 
 enableSmallC0开启模式下的ND2NZ转换示意图如下：
 
-**图 2**  enableSmallC0开启模式下的ND2NZ转换示意图（half数据类型）<a name="fig07641913195410"></a>  
+**图2**  enableSmallC0开启模式下的ND2NZ转换示意图（half数据类型）<a name="fig07641913195410"></a>  
 ![](../../../../../figures/enable_smallc0_nd2nz_conversion_half.png "enableSmallC0开启模式下的ND2NZ转换示意图-（half数据类型）")
 
 ## 数据类型<a name="section4219135304818"></a>
@@ -130,7 +130,7 @@ enableSmallC0开启模式下的ND2NZ转换示意图如下：
 - 该接口为软仿接口，从易用性角度出发进行设计。
 - Nd2NzParams结构体参数的值需在取值范围内：
 
-    **表 4**  Nd2NzParams结构体参数取值范围
+    **表4**  Nd2NzParams结构体参数取值范围
 
     | 参数名 | 取值范围 |
     | --- | --- |

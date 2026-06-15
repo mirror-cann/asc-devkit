@@ -59,7 +59,7 @@ __aicore__ inline void ReleaseMutexID(MutexID id)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="table193329316393"></a>
 <table><thead align="left"><tr id="row123331131153919"><th class="cellrowborder" valign="top" width="12.36%" id="mcps1.2.4.1.1"><p id="p8333133153913"><a name="p8333133153913"></a><a name="p8333133153913"></a>参数名</p>
@@ -91,4 +91,3 @@ __aicore__ inline void ReleaseMutexID(MutexID id)
 ## 调用示例<a name="section837496171220"></a>
 
 请参考[调用示例](AllocMutexID-(ISASI).md#section837496171220)。
-

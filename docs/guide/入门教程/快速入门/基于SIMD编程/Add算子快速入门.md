@@ -16,19 +16,19 @@
 
     - **Device端核函数编程接口**
         - 核函数定义：通过 [\_\_global\_\_](../../../编程指南/语言扩展层/SIMD-BuiltIn关键字.md)修饰符声明。
-        - 数据分块（Tiling）：使用内置关键字 [block_idx](../../../编程指南/语言扩展层/SIMD-BuiltIn关键字.md) 确定每个Block负责处理的数据。
-        - 数据搬入：通过[C API接口](../../../编程指南/语言扩展层/SIMD语言扩展层C-API.md) `asc_copy_gm2ub` 或[C++接口](../../../编程指南/类库API/编程接口概述.md) `AscendC::DataCopy` 完成。
-        - 数据计算：通过C API接口`asc_add` 或C++接口 `AscendC::Add` 完成。
-        - 数据搬出：通过C API接口`asc_copy_ub2gm` 或C++接口 `AscendC::DataCopy` 完成。
+        - 数据分块（Tiling）：使用内置关键字 [block_idx](../../../编程指南/语言扩展层/SIMD-BuiltIn关键字.md)确定每个Block负责处理的数据。
+        - 数据搬入：通过[C API接口](../../../编程指南/语言扩展层/SIMD语言扩展层C-API.md) `asc_copy_gm2ub`或[C++接口](../../../编程指南/类库API/编程接口概述.md) `AscendC::DataCopy`完成。
+        - 数据计算：通过C API接口`asc_add`或C++接口`AscendC::Add`完成。
+        - 数据搬出：通过C API接口`asc_copy_ub2gm`或C++接口`AscendC::DataCopy`完成。
     - **Host端运行时接口**
-        - 内存分配：使用 `aclrtMallocHost` 分配Host Memory，`aclrtMalloc` 分配Device Memory。
-        - 数据搬入：使用 `aclrtMemcpy` 将输入数据从Host Memory拷贝到Device Memory。
-        - 启动NPU计算任务：通过 `<<<...>>>` 语法糖启动核函数。
-        - 同步等待：调用 `aclrtSynchronizeStream` 或 `aclrtSynchronizeDevice`等待任务完成。
-        - 数据搬出：使用 `aclrtMemcpy`将计算结果从Device Memory拷贝回Host Memory。
+        - 内存分配：使用`aclrtMallocHost`分配Host Memory，`aclrtMalloc`分配Device Memory。
+        - 数据搬入：使用`aclrtMemcpy`将输入数据从Host Memory拷贝到Device Memory。
+        - 启动NPU计算任务：通过`<<<...>>>`语法糖启动核函数。
+        - 同步等待：调用`aclrtSynchronizeStream`或`aclrtSynchronizeDevice`等待任务完成。
+        - 数据搬出：使用`aclrtMemcpy`将计算结果从Device Memory拷贝回Host Memory。
       
       > [!NOTE] 说明
-      > - 请参见[Ascend-C概述与学习路径](../../Ascend-C概述与学习路径.md)技术附录章节，获取`Ascend C API 参考`和`CANN运行时接口`链接，以查阅更多接口信息。
+      > - 请参见[Ascend-C概述与学习路径](../../Ascend-C概述与学习路径.md)技术附录章节，获取`Ascend C API参考`和`CANN运行时接口`链接，以查阅更多接口信息。
 
 - **算子代码实现**：
 
@@ -168,10 +168,10 @@
   )
 
   # ======================================================================================
-  # NPU 编译选项配置
+  # NPU编译选项配置
   #
   # 说明：
-  #   - 需根据实际部署的 NPU 硬件架构选择对应的 `npu-arch` 参数。
+  #   - 需根据实际部署的NPU硬件架构选择对应的`npu-arch`参数。
   # ======================================================================================
   target_compile_options(c_api_add_example PRIVATE
       $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=dav-2201>

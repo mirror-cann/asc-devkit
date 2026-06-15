@@ -22,7 +22,7 @@ bool __hneu(half x, half y)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -69,4 +69,3 @@ bool __hneu(half x, half y)
         dst[idx] = __hneu(x[idx], y[idx]);
     }
     ```
-

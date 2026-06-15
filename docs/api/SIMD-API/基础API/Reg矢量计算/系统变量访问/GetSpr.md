@@ -60,7 +60,7 @@ __aicore__ inline int64_t GetSpr()
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="18.27%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -77,7 +77,7 @@ __aicore__ inline int64_t GetSpr()
 </tbody>
 </table>
 
-**表 2**  SpecialPurposeReg模板参数说明
+**表2**  SpecialPurposeReg模板参数说明
 
 <a name="table37531617424"></a>
 <table><thead align="left"><tr id="row14753181710213"><th class="cellrowborder" valign="top" width="17.89%" id="mcps1.2.3.1.1"><p id="p1975471711219"><a name="p1975471711219"></a><a name="p1975471711219"></a>取值</p>
@@ -105,4 +105,3 @@ __aicore__ inline int64_t GetSpr()
 ## 调用示例<a name="section642mcpsimp"></a>
 
 预留接口，无调用示例。
-

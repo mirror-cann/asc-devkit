@@ -31,7 +31,7 @@
 
 ## 参数说明
 
-**表 1**  SoftmaxGrad GetSoftMaxGradMaxTmpSize/GetSoftMaxGradMinTmpSize接口参数列表
+**表1**  SoftmaxGrad GetSoftMaxGradMaxTmpSize/GetSoftMaxGradMinTmpSize接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -40,7 +40,7 @@
 | isFront | 输入 | 是否只计算![](../../../../figures/zh-cn_formulaimage_0000001722356465.png)，和kernel侧的SoftmaxGrad接口一致，默认false。 |
 | isReuseSource | 输入 | 与kernel侧接口配置保持一致。 |
 
-**表 2**  SoftmaxGrad SoftMaxGradTilingFunc接口参数列表
+**表2**  SoftmaxGrad SoftMaxGradTilingFunc接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |

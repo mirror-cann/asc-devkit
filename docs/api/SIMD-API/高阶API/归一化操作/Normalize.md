@@ -46,7 +46,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -65,7 +65,7 @@ struct NormalizeConfig {
 };
 ```
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
@@ -112,16 +112,16 @@ struct NormalizePara {
 ## 调用示例
 
 ```
-// yLocal: 输出归一化后的结果 y，shape 为 [A, R]
-// rstdLocal: 输出标准差的倒数（1 / sqrt(variance + epsilon)），shape 为 [A]
-// meanLocal: 输入的均值，shape 为 [A]
-// varianceLocal: 输入的方差，shape 为 [A]
-// xLocal: 输入数据 X，shape 为 [A, R]，数据类型与 output 一致
-// gammaLocal: 缩放参数 gamma，shape 为 [R]
-// betaLocal: 平移参数 beta，shape 为 [R]
+// yLocal: 输出归一化后的结果y，shape为 [A, R]
+// rstdLocal: 输出标准差的倒数（1 / sqrt(variance + epsilon)），shape为 [A]
+// meanLocal: 输入的均值，shape为 [A]
+// varianceLocal: 输入的方差，shape为 [A]
+// xLocal: 输入数据X，shape为 [A, R]，数据类型与output一致
+// gammaLocal: 缩放参数gamma，shape为 [R]
+// betaLocal: 平移参数beta，shape为 [R]
 // epsilon: 防除零系数
-// para: 包含 A、R 维度信息的 NormalizePara 结构体
-// config: Normalize 配置参数，指定是否跳过 gamma/beta、reduce 模式等
+// para: 包含A、R维度信息的NormalizePara结构体
+// config: Normalize配置参数，指定是否跳过gamma/beta、reduce模式等
 
 constexpr AscendC::NormalizeConfig CONFIG {
     .reducePattern = AscendC::ReducePattern::AR,
@@ -131,17 +131,17 @@ constexpr AscendC::NormalizeConfig CONFIG {
     .isOnlyOutput = false
 };
 
-// 使用 Normalize 接口执行层归一化计算
+// 使用Normalize接口执行层归一化计算
 AscendC::Normalize<DTYPE_Y, DTYPE_X, false, CONFIG>(
-    yLocal,          // 输出：归一化结果 y，shape [A, R]
-    rstdLocal,       // 输出：标准差倒数 rstd，shape [A]
-    meanLocal,       // 输入：均值 mean，shape [A]
-    varianceLocal,   // 输入：方差 variance，shape [A]
-    xLocal,          // 输入：原始数据 X，shape [A, R]
+    yLocal,          // 输出：归一化结果y，shape [A, R]
+    rstdLocal,       // 输出：标准差倒数rstd，shape [A]
+    meanLocal,       // 输入：均值mean，shape [A]
+    varianceLocal,   // 输入：方差variance，shape [A]
+    xLocal,          // 输入：原始数据X，shape [A, R]
     gammaLocal,      // 输入：缩放系数γ，shape [R]
     betaLocal,       // 输入：平移系数β，shape [R]
     epsilon,         // 输入：防除零系数ε
-    para             // 输入：Tiling 参数，包含 aLength、rLength、rLengthWithPadding
+    para             // 输入：Tiling参数，包含aLength、rLength、rLengthWithPadding
 );
 ```
 

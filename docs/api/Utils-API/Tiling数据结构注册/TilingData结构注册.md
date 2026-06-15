@@ -22,7 +22,7 @@
 
 ## 参数说明<a name="zh-cn_topic_0000001576728165_section552316288018"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="zh-cn_topic_0000001576728165_zh-cn_topic_0000001389733241_table111938719446"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001576728165_zh-cn_topic_0000001389733241_row6223476444"><th class="cellrowborder" valign="top" width="17.22%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0000001576728165_zh-cn_topic_0000001389733241_p10223674448"><a name="zh-cn_topic_0000001576728165_zh-cn_topic_0000001389733241_p10223674448"></a><a name="zh-cn_topic_0000001576728165_zh-cn_topic_0000001389733241_p10223674448"></a>参数</p>
@@ -83,7 +83,7 @@
       TILING_DATA_FIELD_DEF(uint16_t, mmVar);
       TILING_DATA_FIELD_DEF_ARR(uint16_t, 3, mmArr);
     END_TILING_DATA_DEF;
-    //注册中间结构体，第一个参数固定为struct_name#Op，第二个参数即struct_name, 如struct_name为Matmul，第一参数为MatmulOp，第二个参数为Matmul
+    //注册中间结构体，第一个参数固定为struct_name#Op，第二个参数即struct_name,如struct_name为Matmul，第一参数为MatmulOp，第二个参数为Matmul
     REGISTER_TILING_DATA_CLASS(MatmulOp, Matmul)      //注册中间结构体
     ```
 
@@ -106,4 +106,3 @@
     END_TILING_DATA_DEF; 
     REGISTER_TILING_DATA_CLASS(Add_1, AddStructSample1) 
     ```
-

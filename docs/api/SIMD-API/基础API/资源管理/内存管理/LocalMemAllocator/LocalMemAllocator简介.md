@@ -32,7 +32,7 @@ public:
 
 ## 模板参数<a name="section116801320102618"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table13588175515344"></a>
 <table><thead align="left"><tr id="row1160915519346"><th class="cellrowborder" valign="top" width="21.8%" id="mcps1.2.3.1.1"><p id="p9609105553412"><a name="p9609105553412"></a><a name="p9609105553412"></a>参数名</p>

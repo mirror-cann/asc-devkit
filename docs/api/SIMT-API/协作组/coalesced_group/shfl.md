@@ -23,7 +23,7 @@ T shfl(T var, int src_rank) const
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -42,7 +42,7 @@ T shfl(T var, int src_rank) const
 
 示例代码中的条件分支将一个warp中所有线程id是偶数的线程组成`coalesced_group`协作组，组内各线程shfl接口返回结果如下图所示。
 
-**图 1**  shfl结果示意图  
+**图1**  shfl结果示意图  
 ![](../../../figures/coalesced_group_shfl.png)
 
 - SIMT编程场景：

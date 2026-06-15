@@ -63,7 +63,7 @@ __aicore__ inline void WaitFlag(TEventID id)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -111,4 +111,3 @@ sync.SetFlag(0);
 sync.WaitFlag(0);
 AscendC::DataCopy(dstGlobal, dstLocal, dataSize);
 ```
-

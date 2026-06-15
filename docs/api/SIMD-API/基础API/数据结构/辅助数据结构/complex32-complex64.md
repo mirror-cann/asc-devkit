@@ -63,7 +63,7 @@ using complex32 = AscendC::Complex<half>;
 using complex64 = AscendC::Complex<float>;
 ```
 
-**表 1**  Complex模板参数说明
+**表1**  Complex模板参数说明
 
 <a name="zh-cn_topic_0000001441184464_table18149577913"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0000001441184464_row61411571196"><th class="cellrowborder" valign="top" width="19.59%" id="mcps1.2.3.1.1"><p id="zh-cn_topic_0000001441184464_p2093713281104"><a name="zh-cn_topic_0000001441184464_p2093713281104"></a><a name="zh-cn_topic_0000001441184464_p2093713281104"></a>参数名称</p>
@@ -80,7 +80,7 @@ using complex64 = AscendC::Complex<float>;
 </tbody>
 </table>
 
-**表 2**  Complex结构体参数说明
+**表2**  Complex结构体参数说明
 
 <a name="table153364918102"></a>
 <table><thead align="left"><tr id="row7363209171013"><th class="cellrowborder" valign="top" width="19.62%" id="mcps1.2.3.1.1"><p id="p136399171010"><a name="p136399171010"></a><a name="p136399171010"></a><strong id="b137544519107"><a name="b137544519107"></a><a name="b137544519107"></a>函数名称</strong></p>
@@ -112,4 +112,3 @@ complex32 value1(3);
 // value2代表实部为4，虚部为0的复数，即4+0j
 complex64 value2 = 4;
 ```
-

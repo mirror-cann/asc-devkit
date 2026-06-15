@@ -35,13 +35,13 @@ __aicore__ inline void DataCopy(const GlobalTensor<T>& dst, const LocalTensor<T>
 
 ## 参数说明<a name="zh-cn_topic_0000002540558032_section16128134420472"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | ---------- | ---------- |
 | T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002540558032_section4219135304818)。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -49,7 +49,7 @@ __aicore__ inline void DataCopy(const GlobalTensor<T>& dst, const LocalTensor<T>
 | src | 输入 | 源操作数，类型为LocalTensor，存储位置为L1 Buffer，地址需要32字节对齐。 |
 | repeatParams | 输入 | 搬运参数，类型为DataCopyParams。通过该参数可以配置搬运的数据块个数、长度、地址间隔等信息，同时支持非连续和连续搬运。<br>DataCopyParams参数说明请参考[表3](#zh-cn_topic_0000002540558032_table144203616291)。 |
 
-**表 3** DataCopyParams结构体参数定义<a id="zh-cn_topic_0000002540558032_table144203616291"></a>
+**表3** DataCopyParams结构体参数定义<a id="zh-cn_topic_0000002540558032_table144203616291"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -121,7 +121,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 
 - DataCopyParams结构体参数的值需在取值范围内：
 
-    **表 4** DataCopyParams结构体参数取值范围
+    **表4** DataCopyParams结构体参数取值范围
 
     | 参数名称 | 取值范围 |
     | ---------- | ---------- |
@@ -145,7 +145,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - srcGap = 0，源操作数相邻数据块之间的间隔为0。
 - dstGap = 0，目的操作数相邻数据块之间的间隔为0。
 
-**图 1** 连续搬运示意图<a id="zh-cn_topic_0000002540558032_fig187115784817"></a>  
+**图1** 连续搬运示意图<a id="zh-cn_topic_0000002540558032_fig187115784817"></a>  
 
 ![](../../../../../figures/L12GM_HighDim_Continuous_Transporting.png)
 
@@ -160,7 +160,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - srcGap= 1，源操作数相邻数据块之间的间隔为1。
 - dstGap= 2，目的操作数相邻数据块之间的间隔为2。
 
-**图 2** 非连续搬运示意图<a id="zh-cn_topic_0000002540558032_fig123821924175312"></a>  
+**图2** 非连续搬运示意图<a id="zh-cn_topic_0000002540558032_fig123821924175312"></a>  
 
 ![](../../../../../figures/L12GM_HighDim_Discontinuous_Transporting.png)
 

@@ -28,7 +28,7 @@ uint8_t byte1 = (tmp64 >> (selector1 * 8)) & 0xFF;
 uint8_t byte2 = (tmp64 >> (selector2 * 8)) & 0xFF;
 uint8_t byte3 = (tmp64 >> (selector3 * 8)) & 0xFF;
 
-// result 为BytePerm返回值，其结果由对应字节按照顺序拼接而成
+// result为BytePerm返回值，其结果由对应字节按照顺序拼接而成
 uint32_t result = byte0 | (byte1 << 8) | (byte2 << 16) | (byte3 << 24);
 ```
 
@@ -40,7 +40,7 @@ unsigned int __byte_perm(unsigned int x, unsigned int y, unsigned int s)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -88,4 +88,3 @@ unsigned int __byte_perm(unsigned int x, unsigned int y, unsigned int s)
         dst[idx] = __byte_perm(x[idx], y[idx], s[idx]);
     }
     ```
-

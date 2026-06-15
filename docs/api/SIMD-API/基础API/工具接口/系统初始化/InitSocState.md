@@ -8,8 +8,8 @@
 | <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √</cann-filter> |
 | <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √</cann-filter> |
 | <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core | √</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 Vector Core | √</cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √</cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | √</cann-filter> |
 | <cann-filter npu-type = "910">Atlas 训练系列产品 | x</cann-filter> |
 
 ## 功能说明
@@ -36,7 +36,7 @@
 
 <cann-filter npu-type = "950">
 
-**表 1** 针对Ascend 950PR/Ascend 950DT本接口执行的初始化项
+**表1** 针对Ascend 950PR/Ascend 950DT本接口执行的初始化项
 
 | 状态类别 | 初始化内容 |
 | ---- | ---- |
@@ -53,7 +53,7 @@
 
 <cann-filter npu-type = "A3">
 
-**表 2** 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品本接口执行的初始化项
+**表2** 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品本接口执行的初始化项
 
 | 状态类别 | 初始化内容 |
 | ---- | ---- |
@@ -67,7 +67,7 @@
 
 <cann-filter npu-type = "910b">
 
-**表 3** 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品本接口执行的初始化项
+**表3** 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品本接口执行的初始化项
 
 | 状态类别 | 初始化内容 |
 | ---- | ---- |
@@ -81,7 +81,7 @@
 
 <cann-filter npu-type = "310p">
 
-**表 4** 针对Atlas 推理系列产品 AI Core和Atlas 推理系列产品 Vector Core本接口执行的初始化项
+**表4** 针对Atlas 推理系列产品AI Core和Atlas 推理系列产品Vector Core本接口执行的初始化项
 
 | 状态类别 | 初始化内容 |
 | ---- | ---- |

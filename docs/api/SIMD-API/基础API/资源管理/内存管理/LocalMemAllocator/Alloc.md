@@ -77,7 +77,7 @@
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  原型1和原型2模板参数说明
+**表1**  原型1和原型2模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="17.43%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -104,7 +104,7 @@
 </tbody>
 </table>
 
-**表 2**  原型2参数说明
+**表2**  原型2参数说明
 
 <a name="table10918948849"></a>
 <table><thead align="left"><tr id="row159181048845"><th class="cellrowborder" valign="top" width="17.22%" id="mcps1.2.4.1.1"><p id="p89187484413"><a name="p89187484413"></a><a name="p89187484413"></a>参数名</p>
@@ -126,7 +126,7 @@
 </tbody>
 </table>
 
-**表 3**  原型3模板参数说明
+**表3**  原型3模板参数说明
 
 <a name="table645894610463"></a>
 <table><thead align="left"><tr id="row12458246134618"><th class="cellrowborder" valign="top" width="27.839999999999996%" id="mcps1.2.3.1.1"><p id="p045817465464"><a name="p045817465464"></a><a name="p045817465464"></a>参数名</p>

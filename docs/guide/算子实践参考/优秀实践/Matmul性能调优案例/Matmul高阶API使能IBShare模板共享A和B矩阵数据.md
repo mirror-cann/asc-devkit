@@ -11,7 +11,7 @@
 
 本案例的算子规格如下：
 
-**表 1**  算子规格
+**表1**  算子规格
 
 <a name="table568792363119"></a>
 <table><thead align="left"><tr id="row1368792319318"><th class="cellrowborder" valign="top" width="25%" id="mcps1.2.5.1.1"><p id="p186887235312"><a name="p186887235312"></a><a name="p186887235312"></a>输入</p>
@@ -53,7 +53,7 @@
 
 ## 分析主要瓶颈点<a name="section371410542511"></a>
 
-**图 1**  优化前Profiling数据<a name="fig516161474220"></a>  
+**图1**  优化前Profiling数据<a name="fig516161474220"></a>  
 ![](../../../figures/优化前Profiling数据-86.png "优化前Profiling数据-86")
 
 通过分析以上Profiling数据可以看出，算子执行多次的平均耗时为27.11us，aic\_scalar\_time的平均耗时为26.27us，当前性能瓶颈点为Cube的Scalar流水。
@@ -62,12 +62,12 @@
 
 A矩阵和B矩阵均未开启IBShare时，数据需要根据K轴、M轴或N轴进行切分计算。这里以K轴切分为例，未开启IBShare之前，算子以AIV Block为视角进行tiling切分，AIV0发起A0\*B0的计算，AIV1发起A1\*B1的计算。
 
-**图 2**  未开启IBShare<a name="fig16885185245110"></a>  
+**图2**  未开启IBShare<a name="fig16885185245110"></a>  
 ![](../../../figures/未开启IBShare.png "未开启IBShare")
 
 当A矩阵和B矩阵都启用IBShare时，可以一次性加载到L1 Buffer上，省去了切分，分开搬运的过程，同时Cube计算单元完全由AIV0单核驱动，发起一次计算，计算的结果由AIV0和AIV1共享，从而减少Cube响应的次数，减少Scalar计算。
 
-**图 3**  开启IBShare<a name="fig103191116"></a>  
+**图3**  开启IBShare<a name="fig103191116"></a>  
 
 ![](../../../figures/matmul算子计算流程图-87.png)
 
@@ -125,7 +125,7 @@ MatmulABshareKernel<aType, bType, cType>::CalcOffset(int32_t blockIdx, const TCu
 
 优化后执行多次的平均耗时：22.44us，较优化前有较大提升。
 
-**图 4**  优化后Profiling数据<a name="fig1865995314535"></a>  
+**图4**  优化后Profiling数据<a name="fig1865995314535"></a>  
 ![](../../../figures/优化后Profiling数据.png "优化后Profiling数据")
 
 ## 总结<a name="section15200958526"></a>

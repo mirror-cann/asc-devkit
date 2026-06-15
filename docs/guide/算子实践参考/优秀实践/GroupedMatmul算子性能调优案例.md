@@ -16,7 +16,7 @@ for i in range(g):
 
 优化分析以如下算子规格为例：
 
-**表 1**  算子规格
+**表1**  算子规格
 
 <a name="table162628535334"></a>
 <table><thead align="left"><tr id="row17263115333315"><th class="cellrowborder" valign="top" width="25%" id="mcps1.2.5.1.1"><p id="p528831925514"><a name="p528831925514"></a><a name="p528831925514"></a>input</p>
@@ -114,12 +114,12 @@ for i in range(g):
 
 固定8核进行测试的情况下，通过msprof op命令获取指令的cycle占比数据如下：
 
-**图 1**  指令的cycle占比数据ArithmeticUtilization.csv（性能总耗时为218.1us）<a name="fig394318012515"></a>  
+**图1**  指令的cycle占比数据ArithmeticUtilization.csv（性能总耗时为218.1us）<a name="fig394318012515"></a>  
 ![](../../figures/指令的cycle占比数据ArithmeticUtilization-csv（性能总耗时为218-1us）.png "指令的cycle占比数据ArithmeticUtilization-csv（性能总耗时为218-1us）")
 
 通过msprof op simulator获取到的指令流水图如下图所示：
 
-**图 2**  指令流水图<a name="fig1566120572287"></a>  
+**图2**  指令流水图<a name="fig1566120572287"></a>  
 ![](../../figures/指令流水图.png "指令流水图")
 
 结合上述两种数据（真实数据和仿真数据）进行性能分析：
@@ -237,4 +237,3 @@ for i in range(g):
 -   在Vector计算为主要瓶颈点时，将AI Core中的AIC核和AIV核启动比例设置为1:2；
 -   Cube、Vector计算时间接近，且两者都有因相互等待导致的间隙时，采用4份workspace优化；
 -   观察数据搬运是否与计算相互掩盖，多轮计算没有数据依赖，且buffer够大时，开启double buffer，增加并行效率。
-

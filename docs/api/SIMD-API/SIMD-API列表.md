@@ -2,7 +2,7 @@
 
 ## 基础数据结构<a name="section3119442205518"></a>
 
-**表 1**  基础数据结构列表
+**表1**  基础数据结构列表
 
 <a name="table16268175715515"></a>
 <table><thead align="left"><tr id="row11268657105518"><th class="cellrowborder" valign="top" width="40.37%" id="mcps1.2.3.1.1"><p id="p1026810577553"><a name="p1026810577553"></a><a name="p1026810577553"></a>接口名</p>
@@ -41,7 +41,7 @@
 
 ## 基础API<a name="section117632211201"></a>
 
-**表 2**  Memory矢量计算API列表
+**表2**  Memory矢量计算API列表
 
 <a name="table107281858237"></a>
 <table><thead align="left"><tr id="row1372812592319"><th class="cellrowborder" valign="top" width="15.590000000000002%" id="mcps1.2.4.1.1"><p id="p28543193914"><a name="p28543193914"></a><a name="p28543193914"></a>分类</p>
@@ -443,7 +443,7 @@
 </tbody>
 </table>
 
-**表 3**  标量计算API列表
+**表3**  标量计算API列表
 
 <a name="table339023582010"></a>
 <table><thead align="left"><tr id="row1539063572010"><th class="cellrowborder" valign="top" width="40.37%" id="mcps1.2.3.1.1"><p id="p13390235192015"><a name="p13390235192015"></a><a name="p13390235192015"></a>接口名</p>
@@ -490,7 +490,7 @@
 </tbody>
 </table>
 
-**表 4**  资源管理API列表
+**表4**  资源管理API列表
 
 <a name="table1267664316264"></a>
 <table><thead align="left"><tr id="row15676154310267"><th class="cellrowborder" valign="top" width="40.37%" id="mcps1.2.3.1.1"><p id="p6676543192617"><a name="p6676543192617"></a><a name="p6676543192617"></a>接口名</p>
@@ -562,7 +562,7 @@
 </tbody>
 </table>
 
-**表 5**  同步控制API列表
+**表5**  同步控制API列表
 
 <a name="table921112251162"></a>
 <table><thead align="left"><tr id="row975619311161"><th class="cellrowborder" valign="top" width="40.37%" id="mcps1.2.3.1.1"><p id="p8307249121617"><a name="p8307249121617"></a><a name="p8307249121617"></a>接口名</p>
@@ -619,7 +619,7 @@
 </tbody>
 </table>
 
-**表 6**  缓存处理API列表
+**表6**  缓存处理API列表
 
 <a name="table5254131810573"></a>
 <table><thead align="left"><tr id="row32541018135711"><th class="cellrowborder" valign="top" width="40.27%" id="mcps1.2.3.1.1"><p id="p17682103125810"><a name="p17682103125810"></a><a name="p17682103125810"></a>接口名</p>
@@ -641,7 +641,7 @@
 </tbody>
 </table>
 
-**表 7**  系统变量访问API列表
+**表7**  系统变量访问API列表
 
 <a name="table26716458301"></a>
 <table><thead align="left"><tr id="row15672134518304"><th class="cellrowborder" valign="top" width="40.37%" id="mcps1.2.3.1.1"><p id="p18672144511306"><a name="p18672144511306"></a><a name="p18672144511306"></a>接口名</p>
@@ -672,13 +672,13 @@
 </tr>
 <tr id="row4284193416298"><td class="cellrowborder" valign="top" width="40.37%" headers="mcps1.2.3.1.1 "><p id="p12284163417298"><a name="p12284163417298"></a><a name="p12284163417298"></a><a href="基础API/工具接口/系统初始化/InitSocState.md">InitSocState</a></p>
 </td>
-<td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p1828453452913"><a name="p1828453452913"></a><a name="p1828453452913"></a>由于AI Core上存在一些全局状态，如原子累加状态、Mask模式等，在实际运行中，这些值可以被前序执行的算子修改而导致计算出现不符合预期的行为，在静态Tensor编程的场景中用户必须在Kernel入口处调用此函数来初始化AI Core状态 。</p>
+<td class="cellrowborder" valign="top" width="59.63%" headers="mcps1.2.3.1.2 "><p id="p1828453452913"><a name="p1828453452913"></a><a name="p1828453452913"></a>由于AI Core上存在一些全局状态，如原子累加状态、Mask模式等，在实际运行中，这些值可以被前序执行的算子修改而导致计算出现不符合预期的行为，在静态Tensor编程的场景中用户必须在Kernel入口处调用此函数来初始化AI Core状态。</p>
 </td>
 </tr>
 </tbody>
 </table>
 
-**表 8**  原子操作接口列表
+**表8**  原子操作接口列表
 
 <a name="table1395854383210"></a>
 <table><thead align="left"><tr id="row12958043173211"><th class="cellrowborder" valign="top" width="40.089999999999996%" id="mcps1.2.3.1.1"><p id="p2958104363212"><a name="p2958104363212"></a><a name="p2958104363212"></a>接口名</p>
@@ -730,7 +730,7 @@
 </tbody>
 </table>
 
-**表 9**  调试接口列表
+**表9**  调试接口列表
 
 <a name="table18295429109"></a>
 <table><thead align="left"><tr id="row530154201012"><th class="cellrowborder" valign="top" width="37.71%" id="mcps1.2.3.1.1"><p id="p113014281016"><a name="p113014281016"></a><a name="p113014281016"></a>接口名</p>
@@ -824,7 +824,7 @@
 </tbody>
 </table>
 
-**表 10**  工具函数接口列表
+**表10**  工具函数接口列表
 
 <a name="table9496143191816"></a>
 <table><thead align="left"><tr id="row14962043181812"><th class="cellrowborder" valign="top" width="40.089999999999996%" id="mcps1.2.3.1.1"><p id="p449784310180"><a name="p449784310180"></a><a name="p449784310180"></a>接口名</p>
@@ -861,7 +861,7 @@
 </tbody>
 </table>
 
-**表 11**  Kernel Tiling接口列表
+**表11**  Kernel Tiling接口列表
 
 <a name="table2017815711517"></a>
 <table><thead align="left"><tr id="row11179357358"><th class="cellrowborder" valign="top" width="39.900000000000006%" id="mcps1.2.3.1.1"><p id="p417975719517"><a name="p417975719517"></a><a name="p417975719517"></a>接口名</p>
@@ -918,7 +918,7 @@
 </tbody>
 </table>
 
-**表 12**  ISASI接口列表
+**表12**  ISASI接口列表
 
 <a name="table19526741203211"></a>
 <table><thead align="left"><tr id="row352624118322"><th class="cellrowborder" valign="top" width="12.379999999999999%" id="mcps1.2.4.1.1"><p id="p88065174816"><a name="p88065174816"></a><a name="p88065174816"></a>分类</p>
@@ -990,7 +990,7 @@
 </tr>
 <tr id="row745884215480"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p139441358114819"><a name="p139441358114819"></a><a name="p139441358114819"></a><a href="基础API/Memory矢量计算/排序组合（ISASI）/MrgSort4.md">MrgSort4</a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p101781237141713"><a name="p101781237141713"></a><a name="p101781237141713"></a>将已经排好序的最多4 条region proposals队列，排列并合并成1条队列，结果按照score域由大到小排序。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p101781237141713"><a name="p101781237141713"></a><a name="p101781237141713"></a>将已经排好序的最多4条region proposals队列，排列并合并成1条队列，结果按照score域由大到小排序。</p>
 </td>
 </tr>
 <tr id="row1019917563485"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p594585811484"><a name="p594585811484"></a><a name="p594585811484"></a><a href="基础API/Memory矢量计算/排序组合（ISASI）/Sort32.md">Sort32</a></p>
@@ -1000,7 +1000,7 @@
 </tr>
 <tr id="row18337125610483"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p10945175864811"><a name="p10945175864811"></a><a name="p10945175864811"></a><a href="基础API/Memory矢量计算/排序组合（ISASI）/MrgSort.md">MrgSort</a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p78578171182"><a name="p78578171182"></a><a name="p78578171182"></a>将已经排好序的最多4 条队列，合并排列成 1 条队列，结果按照score域由大到小排序。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p78578171182"><a name="p78578171182"></a><a name="p78578171182"></a>将已经排好序的最多4条队列，合并排列成1条队列，结果按照score域由大到小排序。</p>
 </td>
 </tr>
 <tr id="row8465195684815"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p139456584485"><a name="p139456584485"></a><a name="p139456584485"></a><a href="基础API/Memory矢量计算/排序组合（ISASI）/GetMrgSortResult.md">GetMrgSortResult</a></p>
@@ -1035,17 +1035,17 @@
 </tr>
 <tr id="row610542433612"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p17573105103717"><a name="p17573105103717"></a><a name="p17573105103717"></a><a href="基础API/Memory矢量计算/复合计算/AbsSub(ISASI).md">AbsSub</a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1310512414366"><a name="p1310512414366"></a><a name="p1310512414366"></a><span id="ph4885524194011"><a name="ph4885524194011"></a><a name="ph4885524194011"></a>将src0Local与src1相减再求绝对值， 并将计算结果写入dst。</span></p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1310512414366"><a name="p1310512414366"></a><a name="p1310512414366"></a><span id="ph4885524194011"><a name="ph4885524194011"></a><a name="ph4885524194011"></a>将src0Local与src1相减再求绝对值，并将计算结果写入dst。</span></p>
 </td>
 </tr>
 <tr id="row21531226203613"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p968312193716"><a name="p968312193716"></a><a name="p968312193716"></a><a href="基础API/Memory矢量计算/复合计算/ExpSub(ISASI).md">ExpSub</a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p15153126143614"><a name="p15153126143614"></a><a name="p15153126143614"></a><span id="ph2080081312419"><a name="ph2080081312419"></a><a name="ph2080081312419"></a>src0与src1相减，将差值作为指数计算自然常数e的幂次， 并将计算结果写入dst。</span></p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p15153126143614"><a name="p15153126143614"></a><a name="p15153126143614"></a><span id="ph2080081312419"><a name="ph2080081312419"></a><a name="ph2080081312419"></a>src0与src1相减，将差值作为指数计算自然常数e的幂次，并将计算结果写入dst。</span></p>
 </td>
 </tr>
 <tr id="row18177628103613"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p128991739174417"><a name="p128991739174417"></a><a name="p128991739174417"></a><a href="基础API/Memory矢量计算/复合计算/MulCast.md">MulsCast</a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p121781328103612"><a name="p121781328103612"></a><a name="p121781328103612"></a><span id="ph17644543174116"><a name="ph17644543174116"></a><a name="ph17644543174116"></a>将矢量源操作数前count个数据与标量相乘再按照CAST_ROUND模式转换成half类型， 并将计算结果写入dst，此接口支持标量在前和标量在后两种场景。</span></p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p121781328103612"><a name="p121781328103612"></a><a name="p121781328103612"></a><span id="ph17644543174116"><a name="ph17644543174116"></a><a name="ph17644543174116"></a>将矢量源操作数前count个数据与标量相乘再按照CAST_ROUND模式转换成half类型，并将计算结果写入dst，此接口支持标量在前和标量在后两种场景。</span></p>
 </td>
 </tr>
 <tr id="row11469585616"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p522018118566"><a name="p522018118566"></a><a name="p522018118566"></a><a href="基础API/Memory矢量计算/类型转换/Truncate(ISASI).md">Truncate</a></p>
@@ -1084,7 +1084,7 @@
 </tr>
 <tr id="row12765526165715"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1176511267573"><a name="p1176511267573"></a><a name="p1176511267573"></a><a href="基础API/矩阵计算（ISASI）/矩阵计算/MmadWithSparse.md">MmadWithSparse</a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p47651826105712"><a name="p47651826105712"></a><a name="p47651826105712"></a>完成矩阵乘加操作，传入的左矩阵A为稀疏矩阵， 右矩阵B为稠密矩阵 。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p47651826105712"><a name="p47651826105712"></a><a name="p47651826105712"></a>完成矩阵乘加操作，传入的左矩阵A为稀疏矩阵，右矩阵B为稠密矩阵。</p>
 </td>
 </tr>
 <tr id="row0435522154918"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p8552203094910"><a name="p8552203094910"></a><a name="p8552203094910"></a><a href="基础API/矩阵计算（ISASI）/矩阵计算/SetHF32Mode.md">SetHF32Mode</a></p>
@@ -1164,7 +1164,7 @@
 </tr>
 <tr id="row1948463715319"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1061103015541"><a name="p1061103015541"></a><a name="p1061103015541"></a><a href="基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/LoadImageToLocal.md">LoadImageToLocal</a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p792614613548"><a name="p792614613548"></a><a name="p792614613548"></a>将图像数据从GM搬运到A1/B1。 搬运过程中可以完成图像预处理操作：包括图像翻转，改变图像尺寸（抠图，裁边，缩放，伸展），以及色域转换，类型转换等。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p792614613548"><a name="p792614613548"></a><a name="p792614613548"></a>将图像数据从GM搬运到A1/B1。搬运过程中可以完成图像预处理操作：包括图像翻转，改变图像尺寸（抠图，裁边，缩放，伸展），以及色域转换，类型转换等。</p>
 </td>
 </tr>
 <tr id="row0248535339"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p16995181110545"><a name="p16995181110545"></a><a name="p16995181110545"></a><a href="基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/LoadUnzipIndex.md">LoadUnZipIndex</a></p>
@@ -1353,7 +1353,7 @@
 
 ## 高阶API
 
-**表 13**  数学计算API列表
+**表13**  数学计算API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -1407,7 +1407,7 @@
 | [BitwiseXor](高阶API/数学计算/BitwiseXor接口/BitwiseXor.md) | 逐比特对两个输入进行异或操作。 |
 | [Where](高阶API/数学计算/Where接口/Where.md) | 根据指定的条件，从两个源操作数中选择元素，生成目标操作数。 |
 
-**表 14**  量化操作API列表
+**表14**  量化操作API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -1418,7 +1418,7 @@
 | [Quantize](高阶API/量化操作/Quantize.md) | 按元素做量化计算，比如将half/float数据类型量化为int8_t数据类型。 |
 | [AscendQuant](高阶API/量化操作/AscendQuant.md) | 按元素做量化计算，比如将half/float数据类型量化为int8_t数据类型。 |
 
-**表 15**  归一化操作API列表
+**表15**  归一化操作API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -1433,7 +1433,7 @@
 | [WelfordUpdate](高阶API/归一化操作/WelfordUpdate.md) | 实现Welford算法的前处理。 |
 | [WelfordFinalize](高阶API/归一化操作/WelfordFinalize.md) | 实现Welford算法的后处理。 |
 
-**表 16**  激活函数API列表
+**表16**  激活函数API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -1456,7 +1456,7 @@
 | [SwiGLU](高阶API/激活函数/SwiGLU接口/SwiGLU.md) | 采用Swish作为激活函数的GLU变体。 |
 | [Swish](高阶API/激活函数/Swish接口/Swish.md) | 神经网络中的Swish激活函数。 |
 
-**表 17**  归约操作API列表
+**表17**  归约操作API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -1471,7 +1471,7 @@
 | [ReduceAll](高阶API/归约操作/ReduceAll接口/ReduceAll.md) | 对一个多维向量在指定的维度求逻辑与。 |
 | [ReduceProd](高阶API/归约操作/ReduceProd接口/ReduceProd.md) | 对一个多维向量在指定的维度求积。 |
 
-**表 18**  排序操作API列表
+**表18**  排序操作API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -1481,14 +1481,14 @@
 | [Sort](高阶API/排序操作/Sort.md) | 排序函数，按照数值大小进行降序排序。 |
 | [MrgSort](高阶API/排序操作/MrgSort-93.md) | 将已经排好序的最多4条队列，合并排列成1条队列，结果按照score域由大到小排序。 |
 
-**表 19**  数据过滤API列表
+**表19**  数据过滤API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
 | [Select](高阶API/数据过滤/Select-95.md) | 给定两个源操作数src0和src1，根据maskTensor相应位置的值（非bit位）选取元素，得到目的操作数dst。 |
 | [DropOut](高阶API/数据过滤/DropOut.md) | 提供根据MaskTensor对源操作数进行过滤的功能，得到目的操作数。 |
 
-**表 20**  张量变换API列表
+**表20**  张量变换API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -1499,25 +1499,25 @@
 | [UnPad](高阶API/张量变换/UnPad.md) | 对height * width的二维Tensor在width方向上进行unpad。 |
 | [Fill](高阶API/张量变换/Fill-97.md) | 将Global Memory上的数据初始化为指定值。 |
 
-**表 21**  索引计算API列表
+**表21**  索引计算API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
 | [Arange](高阶API/索引计算/Arange-94.md) | 给定起始值，等差值和长度，返回一个等差数列。 |
 
-**表 22**  矩阵计算API列表
+**表22**  矩阵计算API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
 | [Matmul](高阶API/矩阵计算/Matmul-Kernel侧接口/Matmul-Kernel侧接口.md) | Matmul矩阵乘法的运算。 |
 
-**表 23**  HCCL通信类API列表
+**表23**  HCCL通信类API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
 | [HCCL通信类](高阶API/HCCL通信类/HCCL通信类.md) | 在AI Core侧编排集合通信任务。 |
 
-**表 24**  卷积计算API列表
+**表24**  卷积计算API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -1525,7 +1525,7 @@
 | [Conv3DBackpropInput](高阶API/卷积计算/Conv3DBackpropInput/Conv3DBackpropInput.md) | 卷积的反向运算，求解特征矩阵的反向传播误差。 |
 | [Conv3DBackpropFilter](高阶API/卷积计算/Conv3DBackpropFilter/Conv3DBackpropFilter.md) | 卷积的反向运算，求解权重的反向传播误差。 |
 
-**表 25**  随机函数API列表
+**表25**  随机函数API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |

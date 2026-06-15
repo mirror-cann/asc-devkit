@@ -23,13 +23,13 @@ __aicore__ inline void GetTensorC(const AscendC::GlobalTensor<DstT> &output, uin
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | sync | 预留参数，用户无需感知。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -58,4 +58,3 @@ while (gradWeight_.Iterate()) {
     gradWeight_.GetTensorC(gradWeightGm_[offsetC_]);
 }
 ```
-

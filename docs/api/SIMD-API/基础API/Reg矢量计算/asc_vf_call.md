@@ -60,7 +60,7 @@ __aicore__ inline void asc_vf_call(Args &&...args)
 
 ## 参数说明<a name="section0866173114710"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 <a name="table4835205712588"></a>
 <table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="23.549999999999997%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
@@ -82,7 +82,7 @@ __aicore__ inline void asc_vf_call(Args &&...args)
 </tbody>
 </table>
 
-**表 2**  参数说明
+**表2**  参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 <table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="14.12%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
@@ -114,7 +114,7 @@ __aicore__ inline void asc_vf_call(Args &&...args)
 
 ## 调用示例<a name="section1316724610428"></a>
 
-使用SIMD VF 函数对UB数据做加法计算。
+使用SIMD VF函数对UB数据做加法计算。
 
 ```
 // SIMD函数
@@ -154,4 +154,3 @@ __aicore__ inline void Compute()
     inQueueY.FreeTensor(src1);
 }
 ```
-

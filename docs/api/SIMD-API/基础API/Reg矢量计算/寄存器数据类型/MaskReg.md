@@ -18,7 +18,7 @@ __simd_callee__ inline MaskReg UpdateMask(uint32_t& scalarValue);
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="table14132101714462"></a>
 <table><thead align="left"><tr id="row19176617124620"><th class="cellrowborder" valign="top" width="13.268673132686734%" id="mcps1.2.4.1.1"><p id="p117621724612"><a name="p117621724612"></a><a name="p117621724612"></a>参数名</p>
@@ -107,4 +107,3 @@ for (uint16_t i = 0; i < 2; i++) {
     AscendC::Reg::StoreAlign<T, AscendC::Reg::PostLiteral::POST_MODE_UPDATE>(dst1Addr, srcReg, 0, mask1);
 }
 ```
-

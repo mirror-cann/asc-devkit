@@ -56,7 +56,7 @@
     msobjdump --dump-elf <elf_file> [--verbose]
     ```
 
-    **表 1**  参数说明<a name="table167911947163519"></a>
+    **表1**  参数说明<a name="table167911947163519"></a>
 
     | 参数（区分大小写） | 可选/必选 | 说明 |
     | ---- | ---- | ---- |
@@ -69,7 +69,7 @@
     msobjdump --extract-elf <elf_file> [--out-dir <out_path>]
     ```
 
-    **表 2**  参数说明<a name="table131531242133819"></a>
+    **表2**  参数说明<a name="table131531242133819"></a>
 
     | 参数（区分大小写） | 可选/必选 | 说明 |
     | ---- | ---- | ---- |
@@ -82,14 +82,14 @@
     msobjdump --list-elf <elf_file>
     ```
 
-    **表 3**  参数说明
+    **表3**  参数说明
 
     <a name="table121952819427"></a>
     | 参数（区分大小写） | 可选/必选 | 说明 |
     | ---- | ---- | ---- |
     | `--list-elf <elf_file>`，`-l` | 必选 | 获取ELF文件中包含的device信息文件列表，并打印显示。<br>`<elf_file>`表示待打印的ELF文件路径，如`/home/op_api/lib_api.so`。 |
 
-**表 4**  ELF解析字段说明（标准/简易自定义算子工程及融合编译工程）<a name="table94384560259"></a>
+**表4**  ELF解析字段说明（标准/简易自定义算子工程及融合编译工程）<a name="table94384560259"></a>
 
 | 字段名 | 含义 | 是否必选 | 打印说明 |
 | ---- | ---- | ---- | ---- |
@@ -107,7 +107,7 @@
 | `FUNCTION_ENTRY` | 算子TilingKey的值。 | 否 | 不设置`--verbose`，默认打印。 |
 | `elf header infos` | 包括ELF Header、Section Headers、Key to Flags、Program Headers、Symbol表等信息。 | 否 | 设置`--verbose`，开启全量打印。 |
 
-**表 5**  kernel type信息
+**表5**  kernel type信息
 
 <a name="table187419221164"></a>
 | KERNEL_TYPE | 说明 |
@@ -121,7 +121,7 @@
 | `AIV_ROLLBACK` | 算子执行时会同时启动AI Core和Vector Core，此时AI Core会当成Vector Core使用。 |
 
 
-**表 6**  ELF解析字段说明（Kernel直调工程）
+**表6**  ELF解析字段说明（Kernel直调工程）
 
 <a name="table217334916136"></a>
 | 字段名 | 含义 | 是否必选 | 打印说明 |

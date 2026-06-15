@@ -49,7 +49,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -63,7 +63,7 @@ struct IsInfConfig {
 };
 ```
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
@@ -72,7 +72,7 @@ struct IsInfConfig {
 | sharedTmpBuffer | 输入 | 临时缓存。<br><br>类型为[LocalTensor](../../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>用于IsInf内部复杂计算时存储中间变量，由开发者提供。<br><br>临时空间大小BufferSize的获取方式请参考[GetIsInfMaxMinTmpSize](GetIsInfMaxMinTmpSize.md)。 |
 | count | 输入 | 参与计算的元素个数。 |
 
-**表 3**  输入输出支持的数据类型组合
+**表3**  输入输出支持的数据类型组合
 
 | srcDtype | dstDtype |
 | --- | --- |
@@ -99,7 +99,7 @@ struct IsInfConfig {
     AscendC::TQue<AscendC::TPosition::VECCALC, 1> tmpQue;
     pipe.InitBuffer(tmpQue, 1, bufferSize);  // bufferSize通过Host侧tiling参数获取
     AscendC::LocalTensor<uint8_t> sharedTmpBuffer = tmpQue.AllocTensor<uint8_t>();
-    // 输入tensor长度为1024, 算子输入的数据类型为half, 实际计算个数为512
+    // 输入tensor长度为1024,算子输入的数据类型为half,实际计算个数为512
     static constexpr AscendC::IsInfConfig isInfConfig = { false }; // 不修改源操作数
     // dst为bool类型的LocalTensor，src为half类型的LocalTensor
     AscendC::IsInf<isInfConfig, bool, half>(dst, src, sharedTmpBuffer, 512);
@@ -111,7 +111,7 @@ struct IsInfConfig {
     AscendC::TPipe pipe;
     AscendC::TQue<AscendC::TPosition::VECCALC, 1> tmpQue;
     pipe.InitBuffer(tmpQue, 1, bufferSize);  // bufferSize通过Host侧tiling参数获取
-    // 输入tensor长度为1024, 算子输入的数据类型为half, 实际计算个数为512
+    // 输入tensor长度为1024,算子输入的数据类型为half,实际计算个数为512
     static constexpr AscendC::IsInfConfig isInfConfig = { false }; // 不修改源操作数
     // dst为bool类型的LocalTensor，src为half类型的LocalTensor
     AscendC::IsInf<isInfConfig, bool, half>(dst, src, 512);

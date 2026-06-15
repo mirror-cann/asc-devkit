@@ -40,7 +40,7 @@
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | :--- | :--- |
@@ -48,7 +48,7 @@
 | dim | 搬运的数据维度，数据类型为uint8_t，支持的维度为[1, 5]。 |
 | config | 搬运配置选项，NdDmaConfig类型，定义如下，具体参数说明请参考[表3](#table_nddma_3)。<br><pre>struct NdDmaConfig {<br>    static constexpr uint16_t unsetPad = 0xffff;<br>    bool isNearestValueMode = false;<br>    uint16_t loopLpSize = unsetPad; // Left padding size of all dimensions, must be less than 256.<br>    uint16_t loopRpSize = unsetPad; // Right padding size of all dimensions, must be less than 256.<br>    bool ascOptimize = false;       // used for Ascend C optimization on special scenario.<br>};</pre> |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
@@ -56,7 +56,7 @@
 | src | 输入 | 源操作数，类型为[GlobalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)。 |
 | params | 输入 | 搬运参数NdDmaParams类型，定义如下，具体参数说明请参考[表4](#table_nddma_4)。<br><pre>template &lt;typename T, uint8_t dim&gt;<br>struct NdDmaParams  {<br>    NdDmaLoopInfo&lt;dim&gt; loopInfo;<br>    T constantValue;  // 若有左右Padding，且不使能NearestValueMode时，该值将作为Padding值填充。<br>};</pre><br>NdDmaLoopInfo类型，定义如下，具体参数说明请参考[表5](#table_nddma_5)。<br><pre>template &lt;uint8_t dim&gt;<br>struct NdDmaLoopInfo  {<br>    uint64_t loopSrcStride[dim] = {0}; // src stride info per loop.<br>    uint32_t loopDstStride[dim] = {0}; // dst stride info per loop.<br>    uint32_t loopSize[dim] = {0}; // Loop size per loop.<br>    uint8_t loopLpSize[dim] = {0}; // Left padding size per loop.<br>    uint8_t loopRpSize[dim] = {0}; // Right padding size per loop.<br>};<br>// 注意：dim的有效范围为[1,5]。</pre> |
 
-**表 3**  NdDmaConfig结构体参数定义<a name="table_nddma_3"></a>
+**表3**  NdDmaConfig结构体参数定义<a name="table_nddma_3"></a>
 
 | 参数名 | 描述 |
 | :--- | :--- |
@@ -66,14 +66,14 @@
 | loopRpSize | 表示每个维度内的PaddingSize，当该值不为unsetPad时，则表示所有循环里的右PaddingSize为该值，且会使NdDmaLoopInfo::loopRpSize不生效。默认值为unsetPad，开发者可填的范围为默认值或[0,255]。 |
 | ascOptimize | 预留参数，暂不支持。 |
 
-**表 4**  NdDmaParams结构体参数定义<a name="table_nddma_4"></a>
+**表4**  NdDmaParams结构体参数定义<a name="table_nddma_4"></a>
 
 | 参数名 | 描述 |
 | :--- | :--- |
 | loopInfo | 每维进行搬运的信息，类型为NdDmaLoopInfo&lt;dim&gt;。<br>NdDmaLoopInfo结构中数组类型的参数，其数组索引值对应实际维度信息，索引0 - 4对应1 - 5维。具体参数介绍可参考[表5](#table_nddma_5)。 |
 | constantValue | 数据类型为T的数值，当存在维度左右Padding，且不使能NearestValueMode时，该值将作为Padding值填充。<br>当数据类型为b64时，参数constantValue的值应为0。 |
 
-**表 5**  NdDmaLoopInfo结构体参数定义<a name="table_nddma_5"></a>
+**表5**  NdDmaLoopInfo结构体参数定义<a name="table_nddma_5"></a>
 
 | 参数名 | 描述 |
 | :--- | :--- |
@@ -85,16 +85,16 @@
 
 以下以2维的例子介绍几个典型使用场景。
 
-**图 1**  2D Padding场景<a name="fig10722115123919"></a>  
+**图1**  2D Padding场景<a name="fig10722115123919"></a>  
 ![](../../../../../figures/2d_padding_scenario.png "2D-Padding场景")
 
-**图 2**  2D Transpose场景<a name="fig104451143104510"></a>  
+**图2**  2D Transpose场景<a name="fig104451143104510"></a>  
 ![](../../../../../figures/2d_transpose_scenario.png "2D-Transpose场景")
 
-**图 3**  2D BroadCast场景<a name="fig4654326132913"></a>  
+**图3**  2D BroadCast场景<a name="fig4654326132913"></a>  
 ![](../../../../../figures/2d_broadcast_scenario.png "2D-BroadCast场景")
 
-**图 4**  2D Slice场景<a name="fig13061435132915"></a>  
+**图4**  2D Slice场景<a name="fig13061435132915"></a>  
 ![](../../../../../figures/2d_slice_scenario.png "2D-Slice场景")
 
 ## 数据类型

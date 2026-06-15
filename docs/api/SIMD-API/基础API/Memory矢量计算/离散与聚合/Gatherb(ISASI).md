@@ -84,13 +84,13 @@ __aicore__ inline void Gatherb(const LocalTensor<T>& dst, const LocalTensor<T>& 
 
 ## 参数说明<a name="section1619484392111"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | :----- | :--- |
 | T | 操作数数据类型。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | :------- | :-------- | :--- |
@@ -100,7 +100,7 @@ __aicore__ inline void Gatherb(const LocalTensor<T>& dst, const LocalTensor<T>& 
 | repeatTime | 输入 | 指令迭代次数，每次迭代完成8个DataBlock的数据收集，取值范围：repeatTime∈[0,255]。<br><br>**注：repeatTime = 0表示不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。** |
 | repeatParams | 输入 | 用于控制指令迭代的相关参数。<br><br>GatherRepeatParams参数说明请参考[表3](#table3)。 |
 
-**表 3**  GatherRepeatParams结构体内参数说明<a id="table3"></a>
+**表3**  GatherRepeatParams结构体内参数说明<a id="table3"></a>
 
 | 参数名称 | 含义 |
 | :------- | :--- |

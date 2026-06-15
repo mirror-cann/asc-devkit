@@ -15,7 +15,7 @@ bool GetExpMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, con
 
 ## 参数说明
 
-**表 1**  接口参数列表
+**表1**  接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -45,4 +45,3 @@ uint32_t maxValue = 0;
 uint32_t minValue = 0;
 bool res = AscendC::GetExpMaxMinTmpSize(shape, 2, false, maxValue, minValue);
 ```
-

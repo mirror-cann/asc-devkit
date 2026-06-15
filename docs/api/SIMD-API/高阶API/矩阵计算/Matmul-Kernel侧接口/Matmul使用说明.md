@@ -8,7 +8,7 @@ Matmul的计算公式为：C = A \* B + Bias，其示意图如下。
 -   C为目的操作数，存放矩阵乘结果的矩阵，形状为\[M, N\]。
 -   Bias为矩阵乘偏置，形状为\[1, N\]。对A\*B结果矩阵的每一行都采用该Bias进行偏置。
 
-**图 1**  Matmul矩阵乘示意图  
+**图1**  Matmul矩阵乘示意图  
 ![](../../../../figures/Matmul矩阵乘示意图.png "Matmul矩阵乘示意图")
 
 > [!NOTE]说明
@@ -43,7 +43,7 @@ Kernel侧实现Matmul矩阵乘运算的步骤概括为：
     AscendC::Matmul<aType, bType, cType, biasType> mm;
     ```
 
-    创建对象时需要传入A、B、C、Bias的参数类型信息， 类型信息通过[MatmulType](#table1188045714378)来定义，包括：内存逻辑位置、数据格式、数据类型、数据来源的内存逻辑位置。
+    创建对象时需要传入A、B、C、Bias的参数类型信息，类型信息通过[MatmulType](#table1188045714378)来定义，包括：内存逻辑位置、数据格式、数据类型、数据来源的内存逻辑位置。
 
     ```
     template <AscendC::TPosition POSITION, CubeFormat FORMAT, typename TYPE, bool ISTRANS = false, LayoutMode LAYOUT = LayoutMode::NONE, bool IBSHARE = false, TPosition SRCPOS = TPosition::GM> struct MatmulType {
@@ -57,7 +57,7 @@ Kernel侧实现Matmul矩阵乘运算的步骤概括为：
     };
     ```
 
-    **表 1**  MatmulType参数说明
+    **表1**  MatmulType参数说明
 
     <a name="table1188045714378"></a>
     | 参数 | 说明 |
@@ -70,7 +70,7 @@ Kernel侧实现Matmul矩阵乘运算的步骤概括为：
     | IBSHARE | 是否开启IBShare（IntraBlock Share）。IBShare的功能是能够复用L1 Buffer上相同的A矩阵或B矩阵数据，复用的矩阵必须在L1 Buffer上全载。A矩阵和B矩阵仅有一个开启IBShare的场景，与[IBShare模板](MatmulConfig.md#table6981133810309)配合使用，具体参数设置详见[表2](MatmulConfig.md#table1761013213153)。<br>    <br>注意，A矩阵和B矩阵同时开启IBShare的场景，表示L1 Buffer上的A矩阵和B矩阵同时复用，需要满足：<br>    同一算子中其它Matmul对象的A矩阵和B矩阵也必须同时开启IBShare；<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，获取矩阵计算结果时，只支持调用[IterateAll](IterateAll.md)接口，且只支持输出到GlobalTensor，即计算结果放置于Global Memory的地址。<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，获取矩阵计算结果时，只支持调用[IterateAll](IterateAll.md)接口，且只支持输出到GlobalTensor，即计算结果放置于Global Memory的地址。<br>Ascend 950PR/Ascend 950DT，获取矩阵计算结果时，支持输出到GlobalTensor和LocalTensor。输出到LocalTensor，即计算结果放置于Local Memory的场景，默认实现策略与[SplitM模板策略](MatmulPolicy.md#li1329014255511)相同，且仅支持输出数据类型为float，仅支持[Norm模板](MatmulConfig.md#p159827389308)。<br>    <br>Ascend 950PR/Ascend 950DT支持该参数。<br>    <br>Atlas A3 训练系列产品/Atlas A3 推理系列产品支持该参数。<br>    <br>Atlas A2 训练系列产品/Atlas A2 推理系列产品支持该参数。<br>    <br>Atlas 推理系列产品AI Core不支持该参数。<br>    <br>Atlas 200I/500 A2 推理产品不支持该参数。<!-- npu="x90" id9 --><br>    <br>Kirin X90不支持此参数。<!-- end id9 --><!-- npu="9030" id10 --><br>    <br>Kirin 9030不支持此参数。<!-- end id10 --> |
     | SRC_POSITION | 该参数仅支持Ascend 950PR/Ascend 950DT。<br>    <br>A/B矩阵的POSITION参数配置为TPosition::TSCM时，必须要设置TSCM中矩阵数据的来源的内存逻辑位置，默认为TPosition::GM。<br>    <br>针对Ascend 950PR/Ascend 950DT：<br>    A矩阵可设置为TPosition::GM，TPosition::VECOUT<br>B矩阵可设置为TPosition::GM，TPosition::VECOUT |
 
-    **表 2**  Matmul输入输出数据类型的支持列表
+    **表2**  Matmul输入输出数据类型的支持列表
 
     <a name="table1996113269499"></a>
     | A矩阵 | B矩阵 | Bias | C矩阵 | 支持平台 |
@@ -178,7 +178,7 @@ Kernel侧实现Matmul矩阵乘运算的步骤概括为：
     mm.End();
     ```
 
-**表 3**  CubeFormat::NZ格式的矩阵对齐要求
+**表3**  CubeFormat::NZ格式的矩阵对齐要求
 
 <a name="table98851538118"></a>
 | 源/目的操作数 | 外轴 | 内轴 |
@@ -203,7 +203,7 @@ Kernel侧实现Matmul矩阵乘运算的步骤概括为：
 
 以输入矩阵A \(GM, ND, half\)、矩阵B\(GM, ND, half\)，输出矩阵C \(GM, ND, float\)，无Bias场景为例，其中\(GM, ND, half\)表示数据存放在GM上，数据格式为ND，数据类型为half，描述Matmul高阶API典型场景的内部算法框图，如下图所示。
 
-**图 2**  Matmul算法框图  
+**图2**  Matmul算法框图  
 ![](../../../../figures/Matmul算法框图.png "Matmul算法框图")
 
 计算过程分为如下几步：

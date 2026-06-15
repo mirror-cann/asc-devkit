@@ -18,7 +18,7 @@
 
 如laneid为31的线程，调用本接口获取到32位掩码：1111 1111 1111 1111 1111 1111 1111 1111。
 
-**图 1**  lanemask\_le示意图
+**图1**  lanemask\_le示意图
 
 ![](../../../figures/lanemask_le.png "lanemask_le图示")
 

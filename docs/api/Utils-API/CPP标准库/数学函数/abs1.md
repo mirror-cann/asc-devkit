@@ -23,13 +23,13 @@ __aicore__ inline T abs(const T src)
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
 | T | 输入数据src的数据类型。当前支持的数据类型为int8_t、int16_t、int32_t、float、int64_t。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 含义 |
 | --- | --- | --- |
@@ -51,4 +51,3 @@ int64_t src = -2;
 int64_t result = AscendC::Std::abs(src);
 // result: 2
 ```
-

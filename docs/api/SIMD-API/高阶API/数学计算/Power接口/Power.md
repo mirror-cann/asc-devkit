@@ -123,7 +123,7 @@
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -142,7 +142,7 @@ struct PowerConfig {
 };
 ```
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -198,7 +198,7 @@ AscendC::Power<T, false>(dstLocal, srcLocalBase, scalarValueExp);
 // AscendC::Power<srcType, false, config>(dstLocal, scalarValue, srcLocal2);
 ```
 
-AscendC::Power<T, false\>\(dstLocal, srcLocalBase, srcLocalExp\) 示例数据如下：
+AscendC::Power<T, false\>\(dstLocal, srcLocalBase, srcLocalExp\)示例数据如下：
 
 ```
 输入数据(srcLocalBase): [2 3 4 5 6 7 8 9]
@@ -206,7 +206,7 @@ AscendC::Power<T, false\>\(dstLocal, srcLocalBase, srcLocalExp\) 示例数据如
 输出数据(dstLocal): [16 27 16 5 1296 343 64 9]
 ```
 
-AscendC::Power<T, false\>\(dstLocal, scalarValueBase, srcLocalExp\) 示例数据如下：
+AscendC::Power<T, false\>\(dstLocal, scalarValueBase, srcLocalExp\)示例数据如下：
 
 ```
 输入数据(scalarValueBase): 2
@@ -214,7 +214,7 @@ AscendC::Power<T, false\>\(dstLocal, scalarValueBase, srcLocalExp\) 示例数据
 输出数据(dstLocal): [16 8 4 2 16 8 4 2]
 ```
 
-AscendC::Power<T, false\>\(dstLocal, srcLocalBase, scalarValueExp\) 示例数据如下：
+AscendC::Power<T, false\>\(dstLocal, srcLocalBase, scalarValueExp\)示例数据如下：
 
 ```
 输入数据(srcLocalBase): [2 3 4 5 6 7 8 9]

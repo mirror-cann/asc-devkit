@@ -19,7 +19,7 @@ __aicore__ inline constexpr auto Size(const Layout<Shape, Stride>& layout);
 
 ### 参数说明
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
   | 参数名 | 类型 | 描述 |
 |--------|------|------|
@@ -27,7 +27,7 @@ __aicore__ inline constexpr auto Size(const Layout<Shape, Stride>& layout);
 | Stride | 输入 | 组成Layout的stride的类型，即元组（tuple）类型。 |
 | Is... | size_t | 索引序列，用于编译时递归选择shape和stride的子结构。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
   | 参数名 | 类型 | 描述 |
 |--------|------|------|

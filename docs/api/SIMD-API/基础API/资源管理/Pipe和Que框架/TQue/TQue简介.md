@@ -10,7 +10,7 @@
 template <TPosition pos, int32_t depth, auto mask = 0> class TQue{...};
 ```
 
-**表 1**  TQue模板参数介绍
+**表1**  TQue模板参数介绍
 
 <a name="table1550165916920"></a>
 <table><thead align="left"><tr id="row115015591391"><th class="cellrowborder" valign="top" width="14.099999999999998%" id="mcps1.2.3.1.1"><p id="p12501159099"><a name="p12501159099"></a><a name="p12501159099"></a>参数名称</p>

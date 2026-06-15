@@ -2,7 +2,7 @@
 
 为了提高数据访问的效率和吞吐量，Unified Buffer采用了bank（大小相等的内存模块）结构设计。Unified Buffer总大小为256K，划分为16个bank。每个bank由512行组成，每行长度为32B。这16个bank进一步组织为8个bank group，每个bank group包含2个bank，例如bank7和bank15组成一个bank group。
 
-**图 1**  bank结构示意图（图中箭头方向表示内存排布的顺序）<a name="fig873359165316"></a>  
+**图1**  bank结构示意图（图中箭头方向表示内存排布的顺序）<a name="fig873359165316"></a>  
 ![](../../../../figures/bank结构示意图（图中箭头方向表示内存排布的顺序）-71.png "bank结构示意图（图中箭头方向表示内存排布的顺序）-71")
 
 每个bank可以独立地进行数据的读写操作，允许多个数据请求同时进行。然而，当多个读写操作试图同时访问同一个bank，由于硬件资源的限制，这些操作必须排队等待，会导致bank冲突，引起性能下降。
@@ -19,14 +19,14 @@ bank冲突主要可以分为以下三种场景：
 
 下文给出了一些具体的示例，假设，0x10000地址在bank0上，0x10020在bank1上，如下图所示：
 
-**图 2**  地址分配示意图<a name="fig1750123073213"></a>  
+**图2**  地址分配示意图<a name="fig1750123073213"></a>  
 ![](../../../../figures/地址分配示意图-72.png "地址分配示意图-72")
 
 -   读写冲突示例
 
     Vector指令的源操作数src和目的操作数dst同时读写到同一个bank时造成读写冲突，具体分析如下：
 
-    **表 1**  读写冲突示例
+    **表1**  读写冲突示例
 
     <a name="table178973521409"></a>
     <table><thead align="left"><tr id="row20897752164015"><th class="cellrowborder" valign="top" width="5.9988002399520095%" id="mcps1.2.7.1.1"><p id="p13897195244019"><a name="p13897195244019"></a><a name="p13897195244019"></a>序号</p>
@@ -76,7 +76,7 @@ bank冲突主要可以分为以下三种场景：
 
     Vector指令目的操作数dst对应的8个DataBlock（block0-block7）同时写到一个bank group时造成写写冲突，具体分析如下：
 
-    **表 2**  写写冲突示例
+    **表2**  写写冲突示例
 
     <a name="table15913191235615"></a>
     <table><thead align="left"><tr id="row891371215561"><th class="cellrowborder" valign="top" width="5.789726356216995%" id="mcps1.2.9.1.1"><p id="p1913412195619"><a name="p1913412195619"></a><a name="p1913412195619"></a>序号</p>
@@ -120,7 +120,7 @@ bank冲突主要可以分为以下三种场景：
 -   读读冲突
     -   Vector指令两个源操作数同时读到同一个bank时造成读读冲突，具体分析如下：
 
-        **表 3**  双src场景读读冲突示例
+        **表3**  双src场景读读冲突示例
 
         <a name="table983101761813"></a>
         <table><thead align="left"><tr id="row7834178187"><th class="cellrowborder" valign="top" width="6.5786842631473705%" id="mcps1.2.7.1.1"><p id="p1283121713188"><a name="p1283121713188"></a><a name="p1283121713188"></a>序号</p>
@@ -168,7 +168,7 @@ bank冲突主要可以分为以下三种场景：
 
     -   Vector指令某一个源操作数对应的8个DataBlock\(block0-block7）读到同一个bank时造成读读冲突，具体分析如下：
 
-        **表 4**  单src场景读读冲突示例
+        **表4**  单src场景读读冲突示例
 
         <a name="table1055918277182"></a>
         <table><thead align="left"><tr id="row05601327161818"><th class="cellrowborder" valign="top" width="6.117919521374119%" id="mcps1.2.9.1.1"><p id="p856062714185"><a name="p856062714185"></a><a name="p856062714185"></a>序号</p>
@@ -286,9 +286,9 @@ bank冲突主要可以分为以下三种场景：
     <p id="p10205175810318"><a name="p10205175810318"></a><a name="p10205175810318"></a>在一个Repeat内，x和y同时读同一个bank group，x/y和z同时读写同一个bank。</p>
     </td>
     <td class="cellrowborder" valign="top" width="51.17297770855641%" headers="mcps1.1.4.1.3 "><p id="p1720555893117"><a name="p1720555893117"></a><a name="p1720555893117"></a>优化地址，使用InitBuffer分配内存时适当扩大内存申请，各个Tensor的地址分别为：</p>
-    <p id="p1205105810316"><a name="p1205105810316"></a><a name="p1205105810316"></a>x：起始地址0x00000，tensor长度为4096 * sizeof(float) 字节</p>
+    <p id="p1205105810316"><a name="p1205105810316"></a><a name="p1205105810316"></a>x：起始地址0x00000，tensor长度为4096 * sizeof(float)字节</p>
     <p id="p420575820318"><a name="p420575820318"></a><a name="p420575820318"></a>y：起始地址0x04000，tensor长度为(8 * 16 * 1024 - (4096 * sizeof(float) )字节</p>
-    <p id="p120525813116"><a name="p120525813116"></a><a name="p120525813116"></a>z：起始地址0x20000，tensor长度为4096 * sizeof(float) 字节</p>
+    <p id="p120525813116"><a name="p120525813116"></a><a name="p120525813116"></a>z：起始地址0x20000，tensor长度为4096 * sizeof(float)字节</p>
     <p id="p162053589314"><a name="p162053589314"></a><a name="p162053589314"></a>y多申请空间，确保z不会和x/y落入同一个bank。</p>
     </td>
     </tr>
@@ -316,4 +316,3 @@ bank冲突主要可以分为以下三种场景：
     </tr>
     </tbody>
     </table>
-

@@ -29,7 +29,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 ## 参数说明<a id="zh-cn_topic_0000002567745223_section16128134420472"></a>
 
-**表 1** 通用参数说明
+**表1** 通用参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -37,7 +37,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>
 | src | 输入 | 源操作数，类型为GlobalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考矩阵计算输入搬运约束中的[对齐约束](../矩阵计算输入搬运约束.md)。<br>数据类型和dst的数据类型保持一致。<br>支持的物理存储位置为Global Memory（TPosition为GM）。 |
 | loadDataParams | 输入 | LoadData参数结构体，类型为LoadData2DParams，具体参考[表2](#zh-cn_topic_0000002567745223_table8955841508)。 |
 
-**表 2** LoadData2DParams结构体内参数说明<a id="zh-cn_topic_0000002567745223_table8955841508"></a>
+**表2** LoadData2DParams结构体内参数说明<a id="zh-cn_topic_0000002567745223_table8955841508"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |

@@ -107,13 +107,13 @@ DumpTensor: desc=5, addr=0, data_type=float16, position=UB, dump_size=32
 
 ## 参数说明<a name="section158061867342"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名称 | 描述 |
 | ------ | ------ |
 | T | 需要dump的Tensor的数据类型。 |
 
-**表 2**  参数说明
+**表2**  参数说明
 
 | 参数名称 | 输入/输出 | 描述 |
 | ------ | ------ | ------ |
@@ -132,7 +132,7 @@ DumpTensor: desc=5, addr=0, data_type=float16, position=UB, dump_size=32
 
 <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品，T支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
 
-<cann-filter npu-type="310p">Atlas 推理系列产品 AI Core，T支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
+<cann-filter npu-type="310p">Atlas 推理系列产品AI Core，T支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
 
 <cann-filter npu-type="910">Atlas 训练系列产品，T支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
 
@@ -183,7 +183,7 @@ DumpTensor: desc=5, addr=0, data_type=float16, position=UB, dump_size=32
         ```cpp
         uint32_t array1[] = {static_cast<uint32_t>(7), static_cast<uint32_t>(8)};
         AscendC::ShapeInfo shapeInfo1(2, array1); // dim为2， shape为(7,8)
-        AscendC::DumpTensor(x1, 3, 64, shapeInfo1); // 当Shape尺寸小于等于dumpSize元素个数时， 按照ShapeInfo打印元素，多出的Dump数据不展示
+        AscendC::DumpTensor(x1, 3, 64, shapeInfo1); // 当Shape尺寸小于等于dumpSize元素个数时，按照ShapeInfo打印元素，多出的Dump数据不展示
         ```
         打印结果如下：
         ```plain
@@ -201,7 +201,7 @@ DumpTensor: desc=5, addr=0, data_type=float16, position=UB, dump_size=32
         ```cpp
         uint32_t array2[] = {static_cast<uint32_t>(9), static_cast<uint32_t>(8)};
         AscendC::ShapeInfo shapeInfo2(2, array2); // dim为2， shape为(9,8)
-        AscendC::DumpTensor(x2, 4, 64, shapeInfo2); // 当Shape尺寸大于dumpSize元素个数时， 按照ShapeInfo打印元素，不足的Dump数据用"-"展示
+        AscendC::DumpTensor(x2, 4, 64, shapeInfo2); // 当Shape尺寸大于dumpSize元素个数时，按照ShapeInfo打印元素，不足的Dump数据用"-"展示
         ```
         打印结果如下：
         ```plain

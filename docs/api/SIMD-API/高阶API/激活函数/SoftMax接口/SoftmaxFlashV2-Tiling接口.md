@@ -31,7 +31,7 @@
 
 ## 参数说明
 
-**表 1**  GetSoftMaxFlashV2MinTmpSize/GetSoftMaxFlashV2MaxTmpSize接口参数列表
+**表1**  GetSoftMaxFlashV2MinTmpSize/GetSoftMaxFlashV2MaxTmpSize接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
@@ -42,7 +42,7 @@
 | isBasicBlock | 输入 | 是否要开启基本块计算。isBasicBlock参数可以通过[isBasicBlockInSoftmax](IsBasicBlockInSoftMax.md)接口获取，与kernel侧接口的模板参数保持一致，默认false。注意，若kernel侧API启用模板参数SoftmaxConfig，即shape常量化场景，isBasicBlock参数必须通过接口[isBasicBlockInSoftmax](IsBasicBlockInSoftMax.md)获取。 |
 | isFlashOutputBrc | 输入 | 是否开启输出shape的非拓展模式。非拓展模式为不对输出数据做Broadcast，输出shape为(m, 1)。参数取值如下：<br>false：不开启非拓展模式，默认值。输出为float数据类型时，shape为(m，8)；输出为half数据类型时，shape为(m, 16)。<br>true：开启非拓展模式，输出的shape均为(m, 1)。该参数取值为true时，[kernel接口](SoftmaxFlashV2.md)的模板参数SoftmaxConfig中的mode必须配置为SoftmaxMode::SOFTMAX_OUTPUT_WITHOUT_BRC。 |
 
-**表 2**  SoftMaxFlashV2TilingFunc接口参数列表
+**表2**  SoftMaxFlashV2TilingFunc接口参数列表
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |

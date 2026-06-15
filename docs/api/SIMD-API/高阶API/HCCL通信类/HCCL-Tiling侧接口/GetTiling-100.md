@@ -16,7 +16,7 @@ uint32_t GetTiling(::Mc2CcTiling &tiling)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -42,4 +42,3 @@ AscendC::Mc2CcTilingConfig mc2CcTilingConfig(groupName, opType, algConfig, reduc
 mc2CcTilingConfig.GetTiling(tiling->mc2InitTiling); // tiling为算子组装的TilingData结构体，获取Mc2InitTiling
 mc2CcTilingConfig.GetTiling(tiling->reduceScatterTiling); // tiling为算子组装的TilingData结构体，获取Mc2CcTiling
 ```
-

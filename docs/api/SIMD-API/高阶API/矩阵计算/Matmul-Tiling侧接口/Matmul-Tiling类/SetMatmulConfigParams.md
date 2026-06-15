@@ -16,7 +16,7 @@ void SetMatmulConfigParams(const MatmulConfigParams& configParams)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 <a name="table9646134355611"></a>
 | 参数名 | 输入/输出 | 描述 |
@@ -48,7 +48,7 @@ struct MatmulConfigParams
 };
 ```
 
-**表 2**  MatmulConfigParams结构体内参数说明
+**表2**  MatmulConfigParams结构体内参数说明
 
 <a name="table15780447181917"></a>
 | 参数名称 | 含义 |

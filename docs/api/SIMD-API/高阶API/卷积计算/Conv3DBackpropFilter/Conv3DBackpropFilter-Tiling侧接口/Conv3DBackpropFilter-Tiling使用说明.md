@@ -32,7 +32,7 @@ conv3dBpDwTiling.SetWeightShape(cout, cin, d, h, w);
 conv3dBpDwTiling.SetPadding(padFront, padBack, padUp, padDown, padLeft, padRight);
 conv3dBpDwTiling.SetStride(strideD, strideH, strideW);
 conv3dBpDwTiling.SetDilation(dilationD, dilationH, dilationW);
-int ret = conv3dBpDwTiling.GetTiling(tilingData);    // 如果 ret = -1, 获取tiling 结果失败
+int ret = conv3dBpDwTiling.GetTiling(tilingData);    // 如果ret = -1,获取tiling结果失败
 ```
 
 ## 需要包含的头文件
@@ -40,4 +40,3 @@ int ret = conv3dBpDwTiling.GetTiling(tilingData);    // 如果 ret = -1, 获取t
 ```
 #include "lib/conv_backprop/conv3d_bp_filter_tiling.h"
 ```
-

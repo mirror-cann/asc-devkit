@@ -24,7 +24,7 @@ inline long long int llmin(const long long int x, const long long int y)
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -68,4 +68,3 @@ inline long long int llmin(const long long int x, const long long int y)
         dst[idx] = llmin(x[idx], y[idx]);
     }
     ```
-

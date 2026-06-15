@@ -15,7 +15,7 @@ void GetAscendDequantMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typ
 
 ## 参数说明
 
-**表 1**  接口参数列表
+**表1**  接口参数列表
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

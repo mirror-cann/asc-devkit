@@ -28,11 +28,11 @@
     __aicore__ inline void asc_copy_gm2l1_pad4(__cbuf__ void* dst, __gm__ void* src, uint32_t size)
     // 以32B为单位，每8B插入8B的pad
     __aicore__ inline void asc_copy_gm2l1_pad5(__cbuf__ void* dst, __gm__ void* src, uint32_t size)
-    // 每32B删除最高位的28B, 最低位的4B连续存储
+    // 每32B删除最高位的28B,最低位的4B连续存储
     __aicore__ inline void asc_copy_gm2l1_pad6(__cbuf__ void* dst, __gm__ void* src, uint32_t size)
-    // 每32B删除最高位的24B, 最低位的8B连续存储
+    // 每32B删除最高位的24B,最低位的8B连续存储
     __aicore__ inline void asc_copy_gm2l1_pad7(__cbuf__ void* dst, __gm__ void* src, uint32_t size)
-    // 每32B删除最高位的16B, 最低位的16B连续存储
+    // 每32B删除最高位的16B,最低位的16B连续存储
     __aicore__ inline void asc_copy_gm2l1_pad8(__cbuf__ void* dst, __gm__ void* src, uint32_t size)
     ```
 
@@ -57,13 +57,13 @@
     // 以32B为单位，每8B插入8B的pad
     __aicore__ inline void asc_copy_gm2l1_pad5(__cbuf__ void* dst, __gm__ void* src, uint16_t n_burst,
                                       uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
-    // 每32B删除最高位的28B, 最低位的4B连续存储
+    // 每32B删除最高位的28B,最低位的4B连续存储
     __aicore__ inline void asc_copy_gm2l1_pad6(__cbuf__ void* dst, __gm__ void* src, uint16_t n_burst,
                                       uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
-    // 每32B删除最高位的24B, 最低位的8B连续存储
+    // 每32B删除最高位的24B,最低位的8B连续存储
     __aicore__ inline void asc_copy_gm2l1_pad7(__cbuf__ void* dst, __gm__ void* src, uint16_t n_burst,
                                       uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
-    // 每32B删除最高位的16B, 最低位的16B连续存储
+    // 每32B删除最高位的16B,最低位的16B连续存储
     __aicore__ inline void asc_copy_gm2l1_pad8(__cbuf__ void* dst, __gm__ void* src, uint16_t n_burst,
                                       uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
     ```
@@ -83,11 +83,11 @@
     __aicore__ inline void asc_copy_gm2l1_pad4_sync(__cbuf__ void* dst, __gm__ void* src, uint32_t size)
     // 以32B为单位，每8B插入8B的pad
     __aicore__ inline void asc_copy_gm2l1_pad5_sync(__cbuf__ void* dst, __gm__ void* src, uint32_t size)
-    // 每32B删除最高位的28B, 最低位的4B连续存储
+    // 每32B删除最高位的28B,最低位的4B连续存储
     __aicore__ inline void asc_copy_gm2l1_pad6_sync(__cbuf__ void* dst, __gm__ void* src, uint32_t size)
-    // 每32B删除最高位的24B, 最低位的8B连续存储
+    // 每32B删除最高位的24B,最低位的8B连续存储
     __aicore__ inline void asc_copy_gm2l1_pad7_sync(__cbuf__ void* dst, __gm__ void* src, uint32_t size)
-    // 每32B删除最高位的16B, 最低位的16B连续存储
+    // 每32B删除最高位的16B,最低位的16B连续存储
     __aicore__ inline void asc_copy_gm2l1_pad8_sync(__cbuf__ void* dst, __gm__ void* src, uint32_t size)
     ```
 

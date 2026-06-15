@@ -324,7 +324,7 @@ For Ascend 950PR/DT products:
 ```
 
 **Requirements**:
-- **Must separate by product series** — different chips support different type combinations (e.g., 950PR adds fp8/hifloat8)
+- **Must separate by product series**— different chips support different type combinations (e.g., 950PR adds fp8/hifloat8)
 - No bias and with bias are **different tables** (bias column has additional type constraints)
 - Column headers use type names (no abbreviations), sorted by precision from low to high
 - Each combination is one row; do not merge "int8_t/int4b_t"

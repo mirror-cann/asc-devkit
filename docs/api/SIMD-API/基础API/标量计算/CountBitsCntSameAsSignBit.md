@@ -28,7 +28,7 @@ int64_t valueOut = AscendC::CountBitsCntSameAsSignBit(0x0100000000000020ULL); //
 
 其计算结果如下图所示：
 
-**图 1**  CountBitsCntSameAsSignBit计算示意图<a name="fig1"></a>
+**图1**  CountBitsCntSameAsSignBit计算示意图<a name="fig1"></a>
 
 ![CountBitsCntSameAsSignBit计算示意图](../../../figures/CountBitsCntSameAsSignBit.png)
 
@@ -40,7 +40,7 @@ __aicore__ inline int64_t CountBitsCntSameAsSignBit(int64_t valueIn)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名称 | 输入/输出 | 描述 |
 | ------ | ------ | ------ |
@@ -61,7 +61,7 @@ int64_t valueOut;
 int64_t valueIn = 0;                                    // 二进制表示全为0
 valueOut = AscendC::CountBitsCntSameAsSignBit(valueIn); // 返回-1
 
-valueIn = 0xFFFFFFFFFFFFFFFFLL;                         // -1, 二进制表示全为1
+valueIn = 0xFFFFFFFFFFFFFFFFLL;                         // -1,二进制表示全为1
 valueOut = AscendC::CountBitsCntSameAsSignBit(valueIn); // 返回-1
 
 valueIn = 0x7FFFFFFFFFFFFFFFLL;                         // 正数最大值

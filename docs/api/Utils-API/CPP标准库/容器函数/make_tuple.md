@@ -23,7 +23,7 @@ __aicore__ inline constexpr tuple<unwrap_decay_t<Tps>...> make_tuple(Tps&& ...ar
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -48,4 +48,3 @@ AscendC::Std::tuple<uint32_t, float, bool> test = AscendC::Std::make_tuple(22, 3
 ```
 
 更多调用示例请参见[示例](tuple.md#section1193764916212)。
-

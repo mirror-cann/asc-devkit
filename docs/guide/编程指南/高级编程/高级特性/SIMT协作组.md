@@ -30,7 +30,7 @@ namespace cg = cooperative_groups;
     - [thread_block_tile](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMT-API/协作组/thread_block_tile/thread_block_tile简介.md)：由父组划分得到的固定大小线程子组，支持组内同步、shfl类和vote类线程操作。
     - [coalesced_group](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMT-API/协作组/coalesced_group/coalesced_group简介.md)：当前Warp内处于同一执行路径的活跃线程集合，常用于处理分支发散后的线程协作。
 
-**图 1**  线程块中的协作组层次结构图
+**图1**  线程块中的协作组层次结构图
 
 ![线程块中的协作组层次结构](../../../figures/cooperative_groups.png)
 

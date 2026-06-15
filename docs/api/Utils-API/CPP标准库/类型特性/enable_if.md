@@ -25,7 +25,7 @@ struct enable_if;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -49,7 +49,7 @@ enable\_if的静态常量成员type用于获取返回值，enable\_if<Bp,  Tp\>:
 template <typename T>
 class Calculator {
 public:
-    // 当 T 是整数类型时启用此成员函数
+    // 当T是整数类型时启用此成员函数
     template <typename U = T>
     typename AscendC::Std::enable_if<AscendC::Std::is_integral<U>::value, U>::type
     __aicore__ inline multiply(U a, U b) {
@@ -57,7 +57,7 @@ public:
         return a * b;
     }
 
-    // 当 T 不是整数类型时启用此成员函数
+    // 当T不是整数类型时启用此成员函数
     template <typename U = T>
     typename AscendC::Std::enable_if<!AscendC::Std::is_integral<U>::value, U>::type
     __aicore__ inline multiply(U a, U b) {
@@ -75,7 +75,7 @@ public:
     }
 };
 
-// 特化版本，当 T 是整数类型时启用
+// 特化版本，当T是整数类型时启用
 template <typename T>
 class Container<T, typename AscendC::Std::enable_if<AscendC::Std::is_integral<T>::value>::type> {
 public:
@@ -84,14 +84,14 @@ public:
     }
 };
 
-// 当 T 是整数类型时启用该函数
+// 当T是整数类型时启用该函数
 template <typename T>
 __aicore__ inline typename AscendC::Std::enable_if<AscendC::Std::is_integral<T>::value, T>::type add(T a, T b) {
     AscendC::PRINTF("Integral type addition.");
     return a + b;
 }
 
-// 当 T 不是整数类型时启用该函数
+// 当T不是整数类型时启用该函数
 template <typename T>
 __aicore__ inline typename AscendC::Std::enable_if<!AscendC::Std::is_integral<T>::value, T>::type add(T a, T b) {
     AscendC::PRINTF("Non-integral type addition.");
@@ -125,4 +125,3 @@ Integral container.
 Integral type addition.Integer result: 3
 Non-integral type addition.float result: -1.000000
 ```
-

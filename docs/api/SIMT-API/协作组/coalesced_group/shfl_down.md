@@ -23,7 +23,7 @@ T shfl_down(T var, unsigned int delta) const
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -42,7 +42,7 @@ T shfl_down(T var, unsigned int delta) const
 
 示例代码中的条件分支将一个Warp中所有线程id是偶数的线程组成`coalesced_group`协作组，组内各线程`shfl_down`接口返回结果如下图所示。
 
-**图 1**  shfl_down结果示意图  
+**图1**  shfl_down结果示意图  
 ![](../../../figures/coalesced_group_shfl_down.png "shfl_down结果示意图")
 
 - SIMT编程场景：

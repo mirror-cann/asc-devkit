@@ -43,6 +43,6 @@ PIPE_S
 
 ```cpp
 constexpr uint64_t relu_pre = 0;
-constexpr uint64_t quant_pre = 0x1000;// 假设量化操作有效地址为 0x1000
+constexpr uint64_t quant_pre = 0x1000;// 假设量化操作有效地址为0x1000
 asc_set_l0c2gm_config(relu_pre, quant_pre, true);
 ```

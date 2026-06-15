@@ -109,14 +109,14 @@ def Duplicate(scalarValue, dst, count):
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数说明 | 描述 |
 | ------ | ------ |
 | T | 操作数数据类型。 |
 | isSetMask | 是否在接口内部设置mask，默认为true。<br/>• true，表示在接口内部设置mask。<br/>• false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，本接口入参中的mask值必须设置为占位符MASK_PLACEHOLDER。|
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 | 参数说明 | 输入/输出 | 含义 |
 | ------ | ------ | ------ |
 | dst | 输出 | 目的操作数，类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT（存储位置为Unified Buffer）。LocalTensor的起始地址需要按照32字节对齐。|
@@ -138,7 +138,7 @@ def Duplicate(scalarValue, dst, count):
 
 <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter>
 
-<cann-filter npu-type="310p">Atlas 推理系列产品 AI Core，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter>
+<cann-filter npu-type="310p">Atlas 推理系列产品AI Core，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter>
 
 <cann-filter npu-type="910">Atlas 训练系列产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter>
 
@@ -154,7 +154,7 @@ def Duplicate(scalarValue, dst, count):
 
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md#section796754519912)。
 <cann-filter npu-type="A3,910b">
-- repeatTime = 0表示不会执行计算操作，不会对目的操作数进行写入，该接口将被视为 NOP（空操作）。该约束适用于以下型号。
+- repeatTime = 0表示不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。该约束适用于以下型号。
 <cann-filter npu-type="A3">
 
   - Atlas A3 训练系列产品/Atlas A3 推理系列产品

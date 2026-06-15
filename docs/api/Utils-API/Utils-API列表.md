@@ -1,6 +1,6 @@
 # Utils API列表
 
-**表 1**  C++标准库API列表
+**表1**  C++标准库API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -37,21 +37,21 @@
 | [conditional](CPP标准库/类型特性/conditional.md) | 在程序编译时根据一个布尔条件从两个类型中选择一个类型。 |
 | [integral_constant](CPP标准库/类型特性/integral_constant.md) | 用于封装一个编译时常量整数值，是标准库中许多类型特性和编译时计算的基础组件。 |
 
-**表 2**  平台信息获取API列表
+**表2**  平台信息获取API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
 | [PlatformAscendC](平台信息获取/PlatformAscendC/PlatformAscendC.md) | 在实现Host侧的Tiling函数时，可能需要获取一些硬件平台的信息，来支撑Tiling的计算，比如获取硬件平台的核数等信息。PlatformAscendC类提供获取这些平台信息的功能。 |
 | [PlatformAscendCManager](平台信息获取/PlatformAscendCManager.md) | 基于Kernel Launch算子工程，通过基础调用（Kernel Launch）方式调用算子的场景下，可能需要获取硬件平台相关信息，比如获取硬件平台的核数。PlatformAscendCManager类提供获取平台信息的功能。 |
 
-**表 3**  Tiling调测API列表
+**表3**  Tiling调测API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
 | [OpTilingRegistry](Tiling调测/OpTilingRegistry/OpTilingRegistry.md) | OpTilingRegistry类属于context_ascendc命名空间，主要用于加载Tiling实现的动态库，并获取算子的Tiling函数指针以进行调试和验证。 |
 | [ContextBuilder](Tiling调测/ContextBuilder/ContextBuilder.md) | ContextBuilder类提供一系列的API接口，支持手动构造类来验证Tiling函数以及KernelContext类用于TilingParse函数的验证。 |
 
-**表 4**  Tiling模板编程API列表
+**表4**  Tiling模板编程API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -59,7 +59,7 @@
 | [GET_TPL_TILING_KEY](Tiling模板编程/GET_TPL_TILING_KEY.md) | Tiling模板编程时，开发者通过调用此接口自动生成TilingKey。该接口将传入的模板参数通过定义的位宽，转成二进制，按照顺序组合后转成uint64数值，即TilingKey。 |
 | [ASCENDC_TPL_SEL_PARAM](Tiling模板编程/ASCENDC_TPL_SEL_PARAM.md) | Tiling模板编程时，开发者通过调用此接口自动生成并配置TilingKey。 |
 
-**表 5**  RTC API列表
+**表5**  RTC API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
@@ -71,13 +71,13 @@
 | [aclrtcGetCompileLogSize](RTC/aclrtcGetCompileLogSize.md) | 获取编译日志的大小。用于在[aclrtcGetCompileLog](RTC/aclrtcGetCompileLog.md)获取日志内容时分配对应大小的内存空间。 |
 | [aclrtcGetCompileLog](RTC/aclrtcGetCompileLog.md) | 获取编译日志的内容，以字符串形式保存。 |
 
-**表 6**  log API列表
+**表6**  log API列表
 
 | 接口名 | 功能描述 |
 | --- | --- |
 | [ASC_CPU_LOG](log/ASC_CPU_LOG.md) | 提供Host侧打印Log的功能。开发者可以在算子的TilingFunc代码中使用ASC_CPU_LOG_XXX接口来输出相关内容。 |
 
-**表 7**  调测接口列表
+**表7**  调测接口列表
 
 | 接口名 | 功能描述 |
 | --- | --- |

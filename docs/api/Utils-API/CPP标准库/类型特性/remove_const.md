@@ -23,7 +23,7 @@ struct remove_const;
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 含义 |
 | --- | --- |
@@ -55,4 +55,3 @@ ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::remove_const_t<double>, do
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::remove_const_t<const int>, int>));
 ascendc_assert((AscendC::Std::is_same_v<AscendC::Std::remove_const_t<const double>, double>));
 ```
-

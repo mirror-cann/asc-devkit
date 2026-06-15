@@ -32,14 +32,14 @@ __aicore__ inline void DataCopyL1ToUB(const LocalTensor<T>& dst, const LocalTens
 
 ## 参数说明
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | :--- | :--- |
 | T | 操作数的数据类型。 |
 | subBlockId | AI Core上的Vector核ID。根据输入的Vector核ID，将数据搬运至对应核上的UB地址。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :--- | :--- |
@@ -48,7 +48,7 @@ __aicore__ inline void DataCopyL1ToUB(const LocalTensor<T>& dst, const LocalTens
 | repeatParams | 输入 | 搬运参数，[DataCopyParams](#参数说明)类型。通过该参数可配置搬运的数据块大小、个数、间隔等信息，同时支持非连续和连续搬运。具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
 | count | 输入 | 参与搬运的元素个数。<br>说明：count * sizeof(T)需要32字节对齐，若不对齐，搬运量将对32字节做向下取整。 |
 
-**表 3** DataCopyParams结构体参数定义
+**表3** DataCopyParams结构体参数定义
 
 | 参数名 | 描述 |
 | :--- | :--- |

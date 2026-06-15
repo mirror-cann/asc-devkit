@@ -30,7 +30,7 @@
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 <a name="table4835205712588"></a>
 
@@ -38,7 +38,7 @@
 | --- | --- |
 | T | 操作数以及paddingValue（待填充数据值）的数据类型。 |
 
-**表 2** 接口参数说明
+**表2** 接口参数说明
 
 <a name="zh-cn_topic_0235751031_table33761356"></a>
 
@@ -49,14 +49,14 @@
 | dataCopyParams | 输入 | 搬运参数。<br>&nbsp;&nbsp;&bull; DataCopyExtParams类型，具体参数说明请参考[表4](#table10572141063919)。 |
 | nd2nzParams | 输入 | 从UB->L1 Buffer（VECIN/VECOUT->TSCM）进行数据搬运时，可以进行ND到NZ的数据格式转换。nd2nzParams是用于控制数据格式转换的参数，Nd2NzParams类型，具体参数请参考[UBToL1随路转换-ND2NZ搬运（DataCopy）](UBToL1随路转换-ND2NZ搬运（DataCopy）.md)中的介绍。<br>**注意：本接口Nd2NzParams的ndNum仅支持设置为1**。 |
 
-**表 3** DataCopyExtParams结构体参数定义
+**表3** DataCopyExtParams结构体参数定义
 
 <a name="table10572141063919"></a>
 
 | 参数名称 | 含义 |
 | --- | --- |
 | blockCount | 指定该指令包含的连续传输数据块个数，数据类型为uint16_t，取值范围：blockCount∈[1, 4095]。 |
-| blockLen | 指定该指令每个连续传输数据块长度，**该指令支持非对齐搬运**，**每个连续传输数据块长度单位为字节**。数据类型为uint32_t，取值范围：blockLen∈[1, 2097151]**，blockLen必须是 sizeof(T) 的整数倍，需要注意UB不要超限**。 |
+| blockLen | 指定该指令每个连续传输数据块长度，**该指令支持非对齐搬运**，**每个连续传输数据块长度单位为字节**。数据类型为uint32_t，取值范围：blockLen∈[1, 2097151]**，blockLen必须是sizeof(T)的整数倍，需要注意UB不要超限**。 |
 | srcStride | 源操作数，相邻连续数据块的间隔（前面一个数据块的尾与后面数据块的头的间隔）。单位为dataBlock(32字节)。<br>数据类型为uint32_t，srcStride不要超出该数据类型的取值范围。 |
 | dstStride | 目的操作数，相邻连续数据块间的间隔（前面一个数据块的尾与后面数据块的头的间隔）。单位为dataBlock(32字节)。数据类型为uint32_t，dstStride不要超出该数据类型的取值范围。 |
 | rsv | 保留字段。 |
@@ -85,7 +85,7 @@
         - **dstNzNStride**为src中ndMatrix的相邻行在NZ矩阵中相隔多少个datablock，如A1\~B1的距离，即为2个datablock（A1 + 空白）；
         - **dstNzMatrixStride**为相邻NZ矩阵之间的元素个数，因为仅涉及1个NZ矩阵，所以可以填为1。
 
-    **图 1** UB->L1 Buffer（VECIN/VECOUT->TSCM）搬运示意图<a name="fig9329040132719"></a>  
+    **图1** UB->L1 Buffer（VECIN/VECOUT->TSCM）搬运示意图<a name="fig9329040132719"></a>  
 
     ![](../../../../../figures/VECIN-VECOUT--TSCM搬运示意图.png "VECIN-VECOUT--TSCM搬运示意图")
 

@@ -12,7 +12,7 @@ int32_t MultiCoreMatmulGetTmpBufSizeV2(AscendC::tiling::TCubeTiling &tiling, mat
 
 ## 参数说明
 
-**表 1**  参数说明
+**表1**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -46,4 +46,3 @@ int ret = tiling.GetTiling(tilingData);    // 获取Tiling参数
 SysTilingTempBufSize bufSize;
 MultiCoreMatmulGetTmpBufSizeV2(tilingData, bufSize);
 ```
-

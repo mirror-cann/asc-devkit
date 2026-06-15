@@ -22,7 +22,7 @@ __aicore__ inline GM_ADDR GetWindowsInAddr(uint32_t rankId)
 
 ## 参数说明
 
-**表 1**  接口参数说明
+**表1**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -50,4 +50,3 @@ auto winOutAddr = hccl.GetWindowsOutAddr(0);
 auto rankId = hccl.GetRankId();
 auto rankDim = hccl.GetRankDim();  // 4张卡
 ```
-

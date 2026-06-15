@@ -89,7 +89,7 @@ AddKernelInvocationNeo
 
 3.  CPU侧运行验证。完成算子核函数CPU侧运行验证的步骤如下：
 
-    **图 1**  CPU侧运行验证步骤<a name="fig13576112114442"></a>  
+    **图1**  CPU侧运行验证步骤<a name="fig13576112114442"></a>  
     ![](../../figures/CPU侧运行验证步骤.png "CPU侧运行验证步骤")
 
     ```
@@ -114,7 +114,7 @@ AddKernelInvocationNeo
 
 4.  NPU侧运行验证。完成算子核函数NPU侧运行验证的步骤如下：
 
-    **图 2**  NPU侧运行验证步骤<a name="fig558132018817"></a>  
+    **图2**  NPU侧运行验证步骤<a name="fig558132018817"></a>  
     ![](../../figures/NPU侧运行验证步骤.png "NPU侧运行验证步骤")
 
     ```
@@ -177,7 +177,7 @@ AddKernelInvocationNeo
 
 本节会介绍CMake文件中一些关键环境变量和Cmake命令参数的说明，通常情况下不需要开发者修改，但是这些参数可以帮助开发者更好的理解编译原理，方便有能力的开发者对Cmake进行定制化处理。
 
-**表 1**  环境变量说明
+**表1**  环境变量说明
 
 <a name="table8269104175818"></a>
 <table><thead align="left"><tr id="row126924116583"><th class="cellrowborder" valign="top" width="24.54%" id="mcps1.2.3.1.1"><p id="p182692415584"><a name="p182692415584"></a><a name="p182692415584"></a>环境变量</p>
@@ -219,7 +219,7 @@ AddKernelInvocationNeo
 </tbody>
 </table>
 
-**表 2**  Cmake命令语法说明
+**表2**  Cmake命令语法说明
 
 <a name="table481718169817"></a>
 <table><thead align="left"><tr id="row1981751617812"><th class="cellrowborder" valign="top" width="24.67%" id="mcps1.2.3.1.1"><p id="p188171016288"><a name="p188171016288"></a><a name="p188171016288"></a>Cmake命令</p>
@@ -294,7 +294,7 @@ AddKernelInvocationNeo
 
 简化的编译流程图如下图所示：将算子核函数源文件编译生成kernel侧的库文件（\*.so或\*.a库文件）；工程框架自动生成核函数调用接口声明头文件；编译main.cpp（算子调用应用程序）时依赖上述头文件，将编译应用程序生成的目标文件和kernel侧的库文件进行链接，生成最终的可执行文件。
 
-**图 3**  编译简化流程图<a name="fig744344916358"></a>  
+**图3**  编译简化流程图<a name="fig744344916358"></a>  
 ![](../../figures/编译简化流程图.png "编译简化流程图")
 
 编译安装结束后在CMAKE\_INSTALL\_PREFIX目录下生成的编译产物示例如下；最终的可执行文件会生成在cmake命令的执行目录下。
@@ -369,7 +369,7 @@ if __name__ == '__main__':
 
 您可以基于样例工程中提供的一键式编译运行脚本进行快速编译，并在CPU侧和NPU侧执行Ascend C算子。一键式编译运行脚本主要完成以下功能：
 
-**图 4**  一键式编译运行脚本流程图<a name="fig125041443583"></a>  
+**图4**  一键式编译运行脚本流程图<a name="fig125041443583"></a>  
 ![](../../figures/一键式编译运行脚本流程图.png "一键式编译运行脚本流程图")
 
 >[!NOTE]说明 
@@ -386,7 +386,7 @@ bash run.sh --run-mode=npu  --soc-version=<soc_version> --install-path=<install_
 bash run.sh -r npu  -v <soc_version> -i <install_path> -b Debug -p <install-prefix>
 ```
 
-**表 3**  脚本参数介绍
+**表3**  脚本参数介绍
 
 <a name="table98393011180"></a>
 <table><thead align="left"><tr id="row98396051814"><th class="cellrowborder" valign="top" width="16.14%" id="mcps1.2.4.1.1"><p id="p283916071814"><a name="p283916071814"></a><a name="p283916071814"></a>参数名</p>
@@ -445,7 +445,7 @@ bash run.sh -r npu  -v <soc_version> -i <install_path> -b Debug -p <install-pref
 
 在非昇腾设备上，开发者可以利用CPU仿真环境先行进行算子开发和测试，并在准备就绪后，利用昇腾设备进行加速计算。在[编译与运行](../编译与运行/算子编译/AI-Core算子编译基本用法.md)章节，我们已经介绍了算子Kernel程序NPU域的编译运行。相比于NPU域的算子运行逻辑，CPU域调试，实际上是通过标准的GCC编译器编译算子Kernel程序。此时算子Kernel程序链接CPU调测库，执行编译生成的可执行文件，可以完成算子CPU域的运行验证。CPU侧的运行程序，通过GDB通用调试工具进行单步调试，可以精准验证程序执行流程是否符合预期。
 
-**图 5**  CPU域和NPU域的核函数运行逻辑对比<a name="fig1274642720202"></a>  
+**图5**  CPU域和NPU域的核函数运行逻辑对比<a name="fig1274642720202"></a>  
 ![](../../figures/CPU域和NPU域的核函数运行逻辑对比-36.png "CPU域和NPU域的核函数运行逻辑对比-36")
 
 基于Kernel直调样例工程，通过ACLRT\_LAUNCH\_KERNEL接口调用核函数时，可实现CPU与NPU域的代码的统一，且该方式仅支持以下型号：
