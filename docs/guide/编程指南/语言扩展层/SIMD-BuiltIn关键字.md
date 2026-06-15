@@ -67,7 +67,7 @@
     }
     ```
 
--   **ASCEND\_IS\_AIV、ASCEND\_IS\_AIC**
+-   <a name="li19530175294118"></a>**ASCEND\_IS\_AIV、ASCEND\_IS\_AIC**
 
     ASCEND\_IS\_AIV和ASCEND\_IS\_AIC是通过C++宏实现的条件判断语句，用于在\_\_aicore\_\_修饰的函数中实现代码的条件编译。基于分离模式（AIC核和AIV核分离）开发融合算子时，算子逻辑中同时涉及AIV核和AIC核的处理逻辑，并需要进行核间同步，此时需要通过ASCEND\_IS\_AIV/ ASCEND\_IS\_AIC进行AIV和AIC核代码的隔离。
 

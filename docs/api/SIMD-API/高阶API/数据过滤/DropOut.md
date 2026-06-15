@@ -150,7 +150,7 @@ struct DropOutShapeInfo {
     Kirin 9030，支持的数据类型为：half、float。
     <!-- end id4 -->
 
-## 调用示例
+## 调用示例<a name="section642mcpsimp"></a>
 
 ```
 // yLocal：DropOut结果

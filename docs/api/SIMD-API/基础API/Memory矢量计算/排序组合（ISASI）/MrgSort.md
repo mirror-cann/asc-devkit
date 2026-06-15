@@ -53,7 +53,7 @@
 
 将已经排好序的最多4条队列，合并排列成1条队列，结果按照score域由大到小排序。
 
-MrgSort接口通常处理经过Sort32接口预处理的数据，队列结构参考[Sort32功能说明](Sort32.md#功能说明)。
+MrgSort接口通常处理经过Sort32接口预处理的数据，队列结构参考[Sort32功能说明](Sort32.md)。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 

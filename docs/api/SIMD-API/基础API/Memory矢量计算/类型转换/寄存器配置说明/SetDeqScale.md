@@ -57,7 +57,7 @@
 
 | 模式 | 比特位数 | 变量名 | 含义 |
 | :--- | :------- | :----- | :--- |
-| [AddDeqRelu](../../复合计算/AddDeqRelu.md#AddDeqRelu)、[Cast](../Cast.md)、[CastDequant](../../复合计算/CastDequant.md#CastDequant)的s322f16场景 | 0~15 | scale | 一个half类型数据。 |
+| [AddDeqRelu](../../复合计算/AddDeqRelu.md)、[Cast](../Cast.md)、[CastDequant](../../复合计算/CastDequant.md)的s322f16场景 | 0~15 | scale | 一个half类型数据。 |
 | CastDequant不开启向量量化的s162b8场景 | 0~31 | scale | 一个float类型数据M（硬件在计算时将其视为(1,8,10)格式，即1个符号位、8个指数位和10个尾数位）。 |
 | CastDequant不开启向量量化的s162b8场景 | 37~45 | offset | 一个有符号的9位整数。 |
 | CastDequant不开启向量量化的s162b8场景 | 46 | signMode | 用于指示量化结果是否有符号（其中0表示无符号，1表示有符号）。 |
