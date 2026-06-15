@@ -75,7 +75,7 @@ extern "C" __global__ __aicore__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z
 
 >[!NOTE]说明 
 >- 输出的顺序和原型定义中输出的顺序保持一致。
->- 对于uint64\_t的输出数据类型（对于tensor而言），需要将dim的uint32\_t的高位设置为1，表示以uint64\_t类型解析该tensor。
+>- 对于uint64\_t的输出数据类型（对于tensor而言），需要将dim的uint32\_t的高位设置为1，表示后续每维Shape会以uint64\_t类型进行解析。对于uint32\_t的输出类型，dim的高32位不需要配置，后续每维Shape会以uint32\_t进行解析。
 
 -   如下示例中，算子中有一个输出依赖计算得出，输出tensor的数据类型为uint32\_t，计算完成后，得到输出的shape为（32, 64），出参shape\_out用于存放该shape信息，值为（2, 32, 64）。代码示例如下：
 
@@ -84,12 +84,12 @@ extern "C" __global__ __aicore__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z
     ...
         constexpr uint32_t SHAPEOUT_SIZE = 9;
         // 输出数据为2维([32, 64])，tensor类型为uint32_t
-        // shapeoutGlobal_uint32用于存放输出Shape信息，数据类型固定为uint64_t
+        // shapeoutGlobal_uint32用于存放输出Shape信息，存储格式固定为uint64_t
         GlobalTensor<uint64_t> shapeoutGlobal_uint32;
         shapeoutGlobal_uint32.SetGlobalBuffer((__gm__ uint64_t*)shape_out, SHAPEOUT_SIZE);
-        shapeoutGlobal_uint32.SetValue(0, 2);
-        shapeoutGlobal_uint32.SetValue(1, 32);
-        shapeoutGlobal_uint32.SetValue(2, 64);
+        shapeoutGlobal_uint32.SetValue(0, 2); // 2维tensor
+        shapeoutGlobal_uint32.SetValue(1, 32); // shape[0]
+        shapeoutGlobal_uint32.SetValue(2, 64); // shape[1]
     ...
     }
     ```
@@ -101,14 +101,14 @@ extern "C" __global__ __aicore__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z
     ...
         constexpr uint32_t SHAPEOUT_SIZE = 9;
         // 输出数据为4维([1, 64, 128, 128])，tensor类型为uint64_t
-        // shapeoutGlobal_uint64用于存放输出Shape信息，数据类型固定为uint64_t
+        // shapeoutGlobal_uint64用于存放输出Shape信息，存储格式固定为uint64_t
         GlobalTensor<uint64_t> shapeoutGlobal_uint64;
         shapeoutGlobal_uint64.SetGlobalBuffer((__gm__ uint64_t*)shape_out, SHAPEOUT_SIZE);
-        shapeoutGlobal_uint64.SetValue(0, 0x0000000080000000 | 4);
-        shapeoutGlobal_uint64.SetValue(1, 1);
-        shapeoutGlobal_uint64.SetValue(2, 64);
-        shapeoutGlobal_uint64.SetValue(3, 128);
-        shapeoutGlobal_uint64.SetValue(4, 128);
+        shapeoutGlobal_uint64.SetValue(0, 0x0000000080000000 | 4); // dim 高32位至1表示为uint64_t类型的4维tensor
+        shapeoutGlobal_uint64.SetValue(1, 1); // shape[0]
+        shapeoutGlobal_uint64.SetValue(2, 64); // shape[1]
+        shapeoutGlobal_uint64.SetValue(3, 128); // shape[2]
+        shapeoutGlobal_uint64.SetValue(4, 128); // shape[3]
     ...
     }
     ```
@@ -121,14 +121,14 @@ extern "C" __global__ __aicore__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z
         // 有两个输出需要刷新shape，一个维度为2维[16, 32]，一个维度为4维[1, 16, 16, 32]
         // 输出tensor类型为uint64_t
         constexpr uint32_t SHAPEOUT_SIZE_2 = 18;
-        // shapeoutGlobal_uint64_2用于存放输出Shape信息，数据类型固定为uint64_t
+        // shapeoutGlobal_uint64_2用于存放输出Shape信息，存储格式固定为uint64_t
         GlobalTensor<uint64_t> shapeoutGlobal_uint64_2;
         shapeoutGlobal_uint64_2.SetGlobalBuffer((__gm__ uint64_t*)shape_out, SHAPEOUT_SIZE_2 );
-        shapeoutGlobal_uint64_2.SetValue(0, 0x0000000080000000 | 2);
+        shapeoutGlobal_uint64_2.SetValue(0, 0x0000000080000000 | 2); // uint64_t类型的2维tensor
         shapeoutGlobal_uint64_2.SetValue(1, 16);
         shapeoutGlobal_uint64_2.SetValue(2, 32);
         // index[3]~index[8]数据为占位
-        shapeoutGlobal_uint64_2.SetValue(9, 0x0000000080000000 | 4);
+        shapeoutGlobal_uint64_2.SetValue(9, 0x0000000080000000 | 4); // uint64_t类型的4维tensor
         shapeoutGlobal_uint64_2.SetValue(10, 1);
         shapeoutGlobal_uint64_2.SetValue(11, 16);
         shapeoutGlobal_uint64_2.SetValue(12, 16);
