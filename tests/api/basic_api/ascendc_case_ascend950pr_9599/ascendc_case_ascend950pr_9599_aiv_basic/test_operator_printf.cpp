@@ -13,6 +13,17 @@
 #include <vector>
 #include "kernel_operator.h"
 
+#if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
+__aicore__ inline uint32_t asc_debug_get_core_idx()
+{
+    if ASCEND_IS_AIV {
+        return AscendC::GetBlockIdxImpl();
+    } else {
+        return AscendC::GetBlockIdxImpl() + AscendC::AIV_CORE_NUM;
+    }
+}
+#endif
+
 using namespace AscendC;
 
 enum class PrintfCaseEnum : uint32_t {
@@ -94,14 +105,14 @@ TEST_F(TestPrintfSuite, DumpBlockIdxAndSysVarCase)
     sub_block_idx = 1;
     g_taskRation = 2;
     EXPECT_EQ(GetBlockIdx(), 7);
-    EXPECT_EQ(GetDumpBlockIdx(), 7);
+    EXPECT_EQ(asc_debug_get_core_idx(), 7);
 
     SetGCoreType(1);
     block_idx = 4;
     sub_block_idx = 0;
     g_taskRation = 2;
     EXPECT_EQ(GetBlockIdx(), 4);
-    EXPECT_EQ(GetDumpBlockIdx(), 4 + AIV_CORE_NUM);
+    EXPECT_EQ(asc_debug_get_core_idx(), 4 + AIV_CORE_NUM);
 
     SetGCoreType(coreTypeTmp);
     block_num = blockNumTmp;

@@ -17,6 +17,18 @@
 #include "impl/utils/debug/npu_arch_3510/asc_aicore_dump_utils.h"
 #define ASCENDC_TEST_HAS_SIMD_VF_DUMP_POSITION 1
 #endif
+
+#if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
+__aicore__ inline uint32_t asc_debug_get_core_idx()
+{
+    if ASCEND_IS_AIV {
+        return AscendC::GetBlockIdxImpl();
+    } else {
+        return AscendC::GetBlockIdxImpl() + AscendC::AIV_CORE_NUM;
+    }
+}
+#endif
+
 // #include "api_check/kernel_cpu_check.h"
 
 using namespace AscendC;
@@ -171,7 +183,7 @@ TEST_F(TestDumpTensorSuite, InitDumpImplSkipsOutOfRangeCore)
 
     std::vector<uint8_t> workGm(DUMP_UINTSIZE, 0);
     AscendC::g_dumpWorkspaceReserved = workGm.data();
-    EXPECT_EQ(GetDumpBlockIdx(), DUMP_CORE_COUNT);
+    EXPECT_EQ(asc_debug_get_core_idx(), DUMP_CORE_COUNT);
 
     InitDumpImpl(false, DUMP_UINTSIZE);
 

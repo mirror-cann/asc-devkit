@@ -109,6 +109,30 @@ __aicore__ inline void asc_dump_impl(U src, uint32_t desc, uint32_t dump_size)
     update_write_info(writeInfo, tlvLen);
 }
 
+__aicore__ inline void asc_dump_shape_impl(const uint32_t shapeDim, const uint32_t* shape)
+{
+    __gm__ DebugBlockHeadInfo* blockInfo = get_block_info();
+    if (blockInfo == nullptr) {
+        return;
+    }
+    uint32_t tlvLen = sizeof(DumpShapeTlv);
+    if (!check_ringbuf_space(blockInfo, tlvLen)) {
+        return;
+    }
+    __gm__ DumpShapeTlv* shapeTlv = reinterpret_cast<__gm__ DumpShapeTlv*>(get_ringbuf_tlv_addr(blockInfo));
+    shapeTlv->type = static_cast<uint32_t>(DumpType::DUMP_SHAPE);
+    shapeTlv->length = tlvLen - sizeof(uint32_t[2]);
+    shapeTlv->dim = shapeDim;
+    for (uint32_t i = 0; i < 8; ++i) {
+        shapeTlv->shape[i] = i < shapeDim ? shape[i] : 1;
+    }
+    shapeTlv->resv = static_cast<uint32_t>(0U);
+    asc_entire_dcci(reinterpret_cast<__gm__ uint64_t*>(shapeTlv));
+
+    __gm__ DebugBlockWriteInfo* writeInfo = get_block_write_info(blockInfo);
+    update_write_info(writeInfo, tlvLen);
+}
+
 template <AscendC::Hardware hardware, typename T, typename U>
 __aicore__ inline void asc_dump_local_impl(U input, uint32_t desc, uint32_t dump_size)
 {
@@ -208,6 +232,11 @@ __aicore__ inline void asc_dump_l1buf(__cbuf__ T* input, uint32_t desc, uint32_t
 template<typename T>
 __aicore__ inline void asc_dump(T* input, uint32_t desc, uint32_t dump_size) {
     ASCENDC_ASSERT((false), "asc_dump is not supported in cpu mode.");
+}
+
+__aicore__ inline void asc_dump_shape_impl(const uint32_t shapeDim, const uint32_t* shape)
+{
+    ASCENDC_ASSERT((false), "asc_dump_shape_impl is not supported in cpu mode.");
 }
 } // namespace __asc_aicore
 

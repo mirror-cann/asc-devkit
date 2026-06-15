@@ -122,6 +122,7 @@ asc-devkit:
       - impl/basic_api/dav_m300/kernel_operator_vec_gather_impl.h
       - impl/simt_api/cpp/kernel_simt_print_intf_impl.h
       - impl/adv_api/detail/matmul/stage/copy_cube_in/copy_tile_to_cube/copy_lut_to_ub.h
+      - impl/basic_api/dav_3510/kernel_operator_print_impl.h
 
   llt:
     ut_check: true
