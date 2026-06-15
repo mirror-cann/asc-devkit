@@ -2,17 +2,65 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-| 产品 | 是否支持（不传入config的原型）| 是否支持（传入config的原型）|
-|---|---|---|
-| <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT | x | √</cann-filter> |
-| <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ | x</cann-filter> |
-| <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ | x</cann-filter> |
-| <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √ | x</cann-filter> |
-| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ | x</cann-filter> |
-| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x | x</cann-filter> |
-| <cann-filter npu-type="910">Atlas 训练系列产品 | √ | x</cann-filter> |
-| <cann-filter npu-type="x90">Kirin X90 | √ | x</cann-filter> |
-| <cann-filter npu-type="9030">Kirin 9030 | √ | x</cann-filter> |
+### 不传入config的原型
+
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：不支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：支持
+<!-- end id9 -->
+
+### 传入config的原型
+
+<!-- npu="950" id10 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id10 -->
+<!-- npu="A3" id11 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持
+<!-- end id11 -->
+<!-- npu="910b" id12 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持
+<!-- end id12 -->
+<!-- npu="310b" id13 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id13 -->
+<!-- npu="310p" id14 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id14 -->
+<!-- npu="310p" id15 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id15 -->
+<!-- npu="910" id16 -->
+- Atlas 训练系列产品：不支持
+<!-- end id16 -->
+<!-- npu="x90" id17 -->
+- Kirin X90：不支持
+<!-- end id17 -->
+<!-- npu="9030" id18 -->
+- Kirin 9030：不支持
+<!-- end id18 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -23,7 +71,6 @@ Rsqrt属于单目矢量类计算接口，负责将输入的tensor按元素进行
 $dst_i = \frac{1}{\sqrt{src_i}}$
 
 ## 函数原型<a name="section620mcpsimp"></a>
-
 
 - 传入config的原型
 
@@ -49,8 +96,6 @@ $dst_i = \frac{1}{\sqrt{src_i}}$
             __aicore__ inline void Rsqrt(const LocalTensor<T>& dst, const LocalTensor<T>& src, uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
             ```
 
-
-
 - 不传入config的原型
 
     - tensor前n个数据连续计算
@@ -75,7 +120,6 @@ $dst_i = \frac{1}{\sqrt{src_i}}$
             __aicore__ inline void Rsqrt(const LocalTensor<T>& dst, const LocalTensor<T>& src, uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
             ```
 
-
 ## 参数说明<a name="section622mcpsimp"></a>
 
 **表1**  模板参数说明
@@ -84,7 +128,7 @@ $dst_i = \frac{1}{\sqrt{src_i}}$
 |---|---|
 | T | 操作数数据类型。 |
 | isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，本接口入参中的mask值必须设置为占位符`MASK_PLACEHOLDER`。<br>具体使用方式可参考[掩码](../SIMD计算说明/掩码/掩码.md)。 |
-| <cann-filter npu-type="950">config | 该参数仅支持Ascend 950PR/Ascend 950DT。<br>用于配置精度计算模式，RsqrtConfig类型，定义如下：<br><br>enum&nbsp;class&nbsp;RsqrtAlgo&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;INTRINSIC&nbsp;=&nbsp;0,<br>&nbsp;&nbsp;&nbsp;&nbsp;FAST_INVERSE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_1ULP_FTZ_TRUE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_0ULP_FTZ_FALSE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_1ULP_FTZ_FALSE,<br>};<br>struct&nbsp;RsqrtConfig&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;RsqrtAlgo&nbsp;algo&nbsp;=&nbsp;RsqrtAlgo::INTRINSIC;<br>};<br>通过RsqrtConfig结构体的参数algo来配置精度计算模式。algo取值如下：<br>&bull; RsqrtAlgo::INTRINSIC、RsqrtAlgo::PRECISION_1ULP_FTZ_TRUE，使用单指令计算得出结果，最大精度误差为1 ulp。<br>&bull; RsqrtAlgo::FAST_INVERSE、RsqrtAlgo::PRECISION_0ULP_FTZ_FALSE，使用快速求逆算法得出结果。适用于输入值在[0, 85070596800837026223494223584045301760]范围内的计算。在该范围内，算法保证输出的最大精度误差为0 ulp；当输入值大于85070596800837026223494223584045301760时，输出为inf。目前，该算法支持float数据类型，并在该模式下支持Subnormal数据计算。<br>&bull; RsqrtAlgo::PRECISION_1ULP_FTZ_FALSE，仅支持half类型的Subnormal数据计算，此时最大精度误差为1 ulp。<br>该参数的默认值DEFAULT_RSQRT_CONFIG的取值如下：<br><br>constexpr&nbsp;RsqrtConfig&nbsp;DEFAULT_RSQRT_CONFIG&nbsp;=&nbsp;{&nbsp;RsqrtAlgo::INTRINSIC&nbsp;};<br></cann-filter> |
+| <!-- npu="950" id22 -->config | 该参数仅支持Ascend 950PR/Ascend 950DT。<br>用于配置精度计算模式，RsqrtConfig类型，定义如下：<br><br>enum&nbsp;class&nbsp;RsqrtAlgo&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;INTRINSIC&nbsp;=&nbsp;0,<br>&nbsp;&nbsp;&nbsp;&nbsp;FAST_INVERSE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_1ULP_FTZ_TRUE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_0ULP_FTZ_FALSE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_1ULP_FTZ_FALSE,<br>};<br>struct&nbsp;RsqrtConfig&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;RsqrtAlgo&nbsp;algo&nbsp;=&nbsp;RsqrtAlgo::INTRINSIC;<br>};<br>通过RsqrtConfig结构体的参数algo来配置精度计算模式。algo取值如下：<br>&bull; RsqrtAlgo::INTRINSIC、RsqrtAlgo::PRECISION_1ULP_FTZ_TRUE，使用单指令计算得出结果，最大精度误差为1 ulp。<br>&bull; RsqrtAlgo::FAST_INVERSE、RsqrtAlgo::PRECISION_0ULP_FTZ_FALSE，使用快速求逆算法得出结果。适用于输入值在[0, 85070596800837026223494223584045301760]范围内的计算。在该范围内，算法保证输出的最大精度误差为0 ulp；当输入值大于85070596800837026223494223584045301760时，输出为inf。目前，该算法支持float数据类型，并在该模式下支持Subnormal数据计算。<br>&bull; RsqrtAlgo::PRECISION_1ULP_FTZ_FALSE，仅支持half类型的Subnormal数据计算，此时最大精度误差为1 ulp。<br>该参数的默认值DEFAULT_RSQRT_CONFIG的取值如下：<br><br>constexpr&nbsp;RsqrtConfig&nbsp;DEFAULT_RSQRT_CONFIG&nbsp;=&nbsp;{&nbsp;RsqrtAlgo::INTRINSIC&nbsp;};<br><!-- end id22 --> |
 
 **表2**  参数说明
 
@@ -110,22 +154,15 @@ T支持的数据类型为：half、float。
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md)。
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md)。
 
-<cann-filter npu-type="A3,910b">
-
+<!-- npu="A3,910b" id21 -->
 - 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
-
-  <cann-filter npu-type="A3">
-
+  <!-- npu="A3" id19 -->
   - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-
-  </cann-filter>
-  <cann-filter npu-type="910b">
-
+  <!-- end id19 -->
+  <!-- npu="910b" id20 -->
   - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-  </cann-filter>
-
-</cann-filter>
+  <!-- end id20 -->
+<!-- end id21 -->
 
 - 如果src中的数值为非正数，可能会产生未知结果。
 - 使用Rsqrt时，half的算子结果对比误差不满足双千分之一的要求，float的算子结果对比误差不满足双万分之一的要求，如果需要高精度，建议使用[Div](Div.md)和[Sqrt](Sqrt.md)替代实现。
@@ -158,16 +195,15 @@ T支持的数据类型为：half、float。
     AscendC::Rsqrt(dstLocal, srcLocal, 512);
     ```
 
-    <cann-filter npu-type="950">
 
-    以下示例仅支持Ascend 950PR/Ascend 950DT
+<!-- npu="950" id23 -->
+以下示例仅支持Ascend 950PR/Ascend 950DT
 
     ```cpp
     static constexpr RsqrtConfig config = { RsqrtAlgo::FAST_INVERSE };
     AscendC::Rsqrt<T, config>(dstLocal, srcLocal, 512);
     ```
-
-    </cann-filter>
+<!-- end id23 -->
 
 结果示例如下：
 

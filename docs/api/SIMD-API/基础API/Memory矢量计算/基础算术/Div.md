@@ -2,17 +2,65 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-| 产品 | 是否支持（不传入config的原型）| 是否支持（传入config的原型）|
-|---|---|---|
-| <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT | x | √</cann-filter> |
-| <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ | x</cann-filter> |
-| <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ | x</cann-filter> |
-| <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √ | x</cann-filter> |
-| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ | x</cann-filter> |
-| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x | x</cann-filter> |
-| <cann-filter npu-type="910">Atlas 训练系列产品 | √ | x</cann-filter> |
-| <cann-filter npu-type="x90">Kirin X90 | √ | x</cann-filter> |
-| <cann-filter npu-type="9030">Kirin 9030 | √ | x</cann-filter> |
+### 不传入config的原型
+
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：不支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：支持
+<!-- end id9 -->
+
+### 传入config的原型
+
+<!-- npu="950" id10 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id10 -->
+<!-- npu="A3" id11 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持
+<!-- end id11 -->
+<!-- npu="910b" id12 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持
+<!-- end id12 -->
+<!-- npu="310b" id13 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id13 -->
+<!-- npu="310p" id14 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id14 -->
+<!-- npu="310p" id15 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id15 -->
+<!-- npu="910" id16 -->
+- Atlas 训练系列产品：不支持
+<!-- end id16 -->
+<!-- npu="x90" id17 -->
+- Kirin X90：不支持
+<!-- end id17 -->
+<!-- npu="9030" id18 -->
+- Kirin 9030：不支持
+<!-- end id18 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -86,7 +134,7 @@ $dst_i = src0_i / src1_i$
 |---|---|
 | T | 操作数数据类型。 |
 | isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，本接口入参中的mask值必须设置为占位符`MASK_PLACEHOLDER`。<br>具体使用方式可参考[掩码](../SIMD计算说明/掩码/掩码.md)。 |
-| <cann-filter npu-type="950">config | 该参数仅支持Ascend 950PR/Ascend 950DT。<br>用于配置精度计算模式，DivConfig类型，定义如下：<br><br>enum&nbsp;class&nbsp;DivAlgo&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;INTRINSIC&nbsp;=&nbsp;0,<br>&nbsp;&nbsp;&nbsp;&nbsp;DIFF_COMPENSATION,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_1ULP_FTZ_TRUE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_0ULP_FTZ_TRUE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_0ULP_FTZ_FALSE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_1ULP_FTZ_FALSE<br>};<br>struct&nbsp;DivConfig&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;DivAlgo&nbsp;algo&nbsp;=&nbsp;DivAlgo::INTRINSIC;<br>};<br>通过DivConfig结构体的参数algo来配置精度计算模式。algo取值如下：<br>&bull; DivAlgo::INTRINSIC、DivAlgo::PRECISION_1ULP_FTZ_TRUE，使用单指令计算得出结果，最大精度误差为1 ulp。<br>&bull; DivAlgo::DIFF_COMPENSATION、DivAlgo::PRECISION_0ULP_FTZ_TRUE，使用差值补偿算法得出结果，最大精度误差为0 ulp。目前，该算法支持float数据类型。<br>&bull; DivAlgo::PRECISION_0ULP_FTZ_FALSE，支持Subnormal数据计算，使用差值补偿算法得出结果，最大精度误差为0 ulp。目前，该算法支持float数据类型。<br>&bull; DivAlgo::PRECISION_1ULP_FTZ_FALSE，支持Subnormal数据计算，使用单指令计算得出结果，最大精度误差为1 ulp。<br>该参数的默认值DEFAULT_DIV_CONFIG的取值如下：<br><br>constexpr&nbsp;DivConfig&nbsp;DEFAULT_DIV_CONFIG&nbsp;=&nbsp;{&nbsp;DivAlgo::INTRINSIC&nbsp;};<br></cann-filter> |
+| <!-- npu="950" id30 -->config | 该参数仅支持Ascend 950PR/Ascend 950DT。<br>用于配置精度计算模式，DivConfig类型，定义如下：<br><br>enum&nbsp;class&nbsp;DivAlgo&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;INTRINSIC&nbsp;=&nbsp;0,<br>&nbsp;&nbsp;&nbsp;&nbsp;DIFF_COMPENSATION,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_1ULP_FTZ_TRUE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_0ULP_FTZ_TRUE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_0ULP_FTZ_FALSE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_1ULP_FTZ_FALSE<br>};<br>struct&nbsp;DivConfig&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;DivAlgo&nbsp;algo&nbsp;=&nbsp;DivAlgo::INTRINSIC;<br>};<br>通过DivConfig结构体的参数algo来配置精度计算模式。algo取值如下：<br>&bull; DivAlgo::INTRINSIC、DivAlgo::PRECISION_1ULP_FTZ_TRUE，使用单指令计算得出结果，最大精度误差为1 ulp。<br>&bull; DivAlgo::DIFF_COMPENSATION、DivAlgo::PRECISION_0ULP_FTZ_TRUE，使用差值补偿算法得出结果，最大精度误差为0 ulp。目前，该算法支持float数据类型。<br>&bull; DivAlgo::PRECISION_0ULP_FTZ_FALSE，支持Subnormal数据计算，使用差值补偿算法得出结果，最大精度误差为0 ulp。目前，该算法支持float数据类型。<br>&bull; DivAlgo::PRECISION_1ULP_FTZ_FALSE，支持Subnormal数据计算，使用单指令计算得出结果，最大精度误差为1 ulp。<br>该参数的默认值DEFAULT_DIV_CONFIG的取值如下：<br><br>constexpr&nbsp;DivConfig&nbsp;DEFAULT_DIV_CONFIG&nbsp;=&nbsp;{&nbsp;DivAlgo::INTRINSIC&nbsp;};<br><!-- end id30 --> |
 
 **表2**  参数说明
 
@@ -101,53 +149,30 @@ $dst_i = src0_i / src1_i$
 
 ## 数据类型
 
-<cann-filter npu-type="950">
-
+<!-- npu="950" id19 -->
 - 针对Ascend 950PR/Ascend 950DT，T支持的数据类型为：int16_t、uint16_t、half、int32_t、uint32_t、float、complex32、int64_t、uint64_t、complex64。数据类型complex32、int64_t、uint64_t、complex64仅支持tensor前n个数据计算接口和整个tensor参与计算的运算符重载。
-
-</cann-filter>
-
-<cann-filter npu-type="A3">
-
+<!-- end id19 -->
+<!-- npu="A3" id20 -->
 - 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="910b">
-
+<!-- end id20 -->
+<!-- npu="910b" id21 -->
 - 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="310b">
-
+<!-- end id21 -->
+<!-- npu="310b" id22 -->
 - 针对Atlas 200I/500 A2 推理产品，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="310p">
-
+<!-- end id22 -->
+<!-- npu="310p" id23 -->
 - 针对Atlas 推理系列产品AI Core，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="910">
-
+<!-- end id23 -->
+<!-- npu="910" id24 -->
 - 针对Atlas 训练系列产品，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="x90">
-
+<!-- end id24 -->
+<!-- npu="x90" id25 -->
 - 针对Kirin X90，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="9030">
-
+<!-- end id25 -->
+<!-- npu="9030" id26 -->
 - 针对Kirin 9030，T支持的数据类型为：half、float。
-
-</cann-filter>
+<!-- end id26 -->
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -159,22 +184,15 @@ $dst_i = src0_i / src1_i$
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md)。
 - 使用整个tensor参与计算接口符号重载时，运算量为目的LocalTensor的总长度。
 
-<cann-filter npu-type="A3,910b">
-
+<!-- npu="A3,910b" id29 -->
 - 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
-
-  <cann-filter npu-type="A3">
-
+  <!-- npu="A3" id27 -->
   - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-
-  </cann-filter>
-  <cann-filter npu-type="910b">
-
+  <!-- end id27 -->
+  <!-- npu="910b" id28 -->
   - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-  </cann-filter>
-
-</cann-filter>
+  <!-- end id28 -->
+<!-- end id29 -->
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
@@ -203,9 +221,9 @@ $dst_i = src0_i / src1_i$
     AscendC::Div(dstLocal, src0Local, src1Local, 512);
     ```
 
-    <cann-filter npu-type="950">
 
-    以下示例仅支持Ascend 950PR/Ascend 950DT
+<!-- npu="950" id31 -->
+以下示例仅支持Ascend 950PR/Ascend 950DT
 
     ```cpp
     // Div 0ulp.
@@ -215,8 +233,7 @@ $dst_i = src0_i / src1_i$
     static constexpr DivConfig config = { DivAlgo::PRECISION_0ULP_FTZ_FALSE };
     Div<T, config>(dstLocalX, srcLocalX, srcLocalY, calCount);
     ```
-
-    </cann-filter>
+<!-- end id31 -->
 
 - 整个tensor参与计算样例
 

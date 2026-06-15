@@ -2,17 +2,33 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-| 产品 | 是否支持 |
-|---|---|
-| <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT | √</cann-filter> |
-| <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √</cann-filter> |
-| <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √</cann-filter> |
-| <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √</cann-filter> |
-| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √</cann-filter> |
-| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x</cann-filter> |
-| <cann-filter npu-type="910">Atlas 训练系列产品 | √</cann-filter> |
-| <cann-filter npu-type="x90">Kirin X90 | √</cann-filter> |
-| <cann-filter npu-type="9030">Kirin 9030 | √</cann-filter> |
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：支持
+<!-- end id9 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -31,8 +47,7 @@ $dst_i = |src_i|$
     __aicore__ inline void Abs(const LocalTensor<T>& dst, const LocalTensor<T>& src, const int32_t& count)
     ```
 
-<cann-filter npu-type="950">
-
+<!-- npu="950" id21 -->
 - tensor前n个复数计算
 
     ```cpp
@@ -40,8 +55,7 @@ $dst_i = |src_i|$
     template <typename T, typename U>
     __aicore__ inline void Abs(const LocalTensor<T>& dst, const LocalTensor<U>& src, const int32_t& count)
     ```
-
-</cann-filter>
+<!-- end id21 -->
 
 - tensor高维切分计算
     - mask逐bit模式
@@ -65,7 +79,7 @@ $dst_i = |src_i|$
 | 参数名 | 描述 |
 |---|---|
 | T | 操作数数据类型。 |
-| <cann-filter npu-type="950">U | tensor前n个复数计算接口中的源操作数数据类型。</cann-filter> |
+| <!-- npu="950" id20 -->U | tensor前n个复数计算接口中的源操作数数据类型。<!-- end id20 --> |
 | isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，本接口入参中的mask值必须设置为占位符`MASK_PLACEHOLDER`。<br>具体使用方式可参考[掩码](../SIMD计算说明/掩码/掩码.md)。 |
 
 **表2**  参数说明
@@ -81,55 +95,32 @@ $dst_i = |src_i|$
 
 ## 数据类型
 
-<cann-filter npu-type="950">
-
+<!-- npu="950" id22 -->
 - 针对Ascend 950PR/Ascend 950DT
     - T支持的数据类型为：int8_t、int16_t、half、int32_t、float、int64_t。数据类型int8_t、int64_t仅支持tensor前n个数据计算接口。
     - U支持的数据类型为：complex32、complex64；当U为complex32类型时，T必须是half类型；当U为complex64类型时，T必须是float类型。
-
-</cann-filter>
-
-<cann-filter npu-type="A3">
-
+<!-- end id22 -->
+<!-- npu="A3" id10 -->
 - 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="910b">
-
+<!-- end id10 -->
+<!-- npu="910b" id11 -->
 - 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="310b">
-
+<!-- end id11 -->
+<!-- npu="310b" id12 -->
 - 针对Atlas 200I/500 A2 推理产品，T支持的数据类型为：int16_t、half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="310p">
-
+<!-- end id12 -->
+<!-- npu="310p" id13 -->
 - 针对Atlas 推理系列产品AI Core，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="910">
-
+<!-- end id13 -->
+<!-- npu="910" id14 -->
 - 针对Atlas 训练系列产品，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="x90">
-
+<!-- end id14 -->
+<!-- npu="x90" id15 -->
 - 针对Kirin X90，T支持的数据类型为：half、float。
-
-</cann-filter>
-
-<cann-filter npu-type="9030">
-
+<!-- end id15 -->
+<!-- npu="9030" id16 -->
 - 针对Kirin 9030，T支持的数据类型为：half、float。
-
-</cann-filter>
+<!-- end id16 -->
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -139,23 +130,15 @@ $dst_i = |src_i|$
 
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md)。
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md)。
-
-<cann-filter npu-type="A3,910b">
-
+<!-- npu="A3,910b" id19 -->
 - 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
-
-  <cann-filter npu-type="A3">
-
+  <!-- npu="A3" id17 -->
   - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-
-  </cann-filter>
-  <cann-filter npu-type="910b">
-
+  <!-- end id17 -->
+  <!-- npu="910b" id18 -->
   - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-  </cann-filter>
-
-</cann-filter>
+  <!-- end id18 -->
+<!-- end id19 -->
 
 ## 调用示例<a name="section176061616102911"></a>
 
@@ -206,8 +189,7 @@ $dst_i = |src_i|$
     输出数据dstLocal：[0.0 1.0 2.0 3.0 ...]
     ```
 
-<cann-filter npu-type="950">
-
+<!-- npu="950" id23 -->
 针对Ascend 950PR/Ascend 950DT：
 
 - tensor前n个复数计算接口样例
@@ -224,5 +206,5 @@ $dst_i = |src_i|$
     输入数据srcLocal：[1+2j  2-3j ...]
     输出数据dstLocal：[2.236 3.605 ...]
     ```
+<!-- end id23 -->
 
-</cann-filter>
