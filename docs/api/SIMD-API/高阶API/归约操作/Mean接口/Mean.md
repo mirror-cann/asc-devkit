@@ -26,14 +26,14 @@
 
 ## 函数原型
 
--   通过sharedTmpBuffer入参传入临时空间
+- 通过sharedTmpBuffer入参传入临时空间
 
     ```
     template <typename T, typename accType = T, bool isReuseSource = false, bool isBasicBlock = false, int32_t reduceDim = -1>
     __aicore__ inline void Mean(const LocalTensor<T>& dstTensor, const LocalTensor<T>& srcTensor, const LocalTensor<uint8_t>& sharedTmpBuffer, const MeanParams& meanParams)
     ```
 
--   接口框架申请临时空间
+- 接口框架申请临时空间
 
     ```
     template <typename T, typename accType = T, bool isReuseSource = false, bool isBasicBlock = false, int32_t reduceDim = -1>
@@ -42,8 +42,8 @@
 
 由于该接口的内部实现中涉及复杂的数学计算，需要额外的临时空间来存储计算过程中的中间变量。临时空间支持开发者**通过sharedTmpBuffer入参传入**和**接口框架申请**两种方式。
 
--   通过sharedTmpBuffer入参传入，使用该tensor作为临时空间进行处理，接口框架不再申请。该方式开发者可以自行管理sharedTmpBuffer内存空间，并在接口调用完成后，复用该部分内存，内存不会反复申请释放，灵活性较高，内存利用率也较高。
--   接口框架申请临时空间，开发者无需申请，但是需要预留临时空间的大小。
+- 通过sharedTmpBuffer入参传入，使用该tensor作为临时空间进行处理，接口框架不再申请。该方式开发者可以自行管理sharedTmpBuffer内存空间，并在接口调用完成后，复用该部分内存，内存不会反复申请释放，灵活性较高，内存利用率也较高。
+- 接口框架申请临时空间，开发者无需申请，但是需要预留临时空间的大小。
 
 通过sharedTmpBuffer传入的情况，开发者需要为tensor申请空间；接口框架申请的方式，开发者需要预留临时空间。临时空间大小BufferSize的获取方式如下：通过[GetMeanMaxMinTmpSize](GetMeanMaxMinTmpSize.md)中提供的接口获取需要预留空间范围的大小。
 
@@ -63,9 +63,9 @@
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| dstTensor | 输出 | 目的操作数。<br><br>类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>输出值需要outter * sizeof(T)大小的空间进行保存。开发者要根据该大小和框架的对齐要求来为dstTensor分配实际内存空间。 |
-| srcTensor | 输入 | 源操作数。<br><br>类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>源操作数的数据类型需要与目的操作数保持一致。<br><br>输入数据shape为outter * inner。开发者需要为其开辟大小为outter * inner * sizeof(T)的空间。 |
-| sharedTmpBuffer | 输入 | 临时缓存。<br><br>类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>用于Mean内部复杂计算时存储中间变量，由开发者提供。<br><br>临时空间大小BufferSize的获取方式请参考[GetMeanMaxMinTmpSize](GetMeanMaxMinTmpSize.md)。 |
+| dstTensor | 输出 | 目的操作数。<br><br>类型为[LocalTensor](../../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>输出值需要outter * sizeof(T)大小的空间进行保存。开发者要根据该大小和框架的对齐要求来为dstTensor分配实际内存空间。 |
+| srcTensor | 输入 | 源操作数。<br><br>类型为[LocalTensor](../../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>源操作数的数据类型需要与目的操作数保持一致。<br><br>输入数据shape为outter * inner。开发者需要为其开辟大小为outter * inner * sizeof(T)的空间。 |
+| sharedTmpBuffer | 输入 | 临时缓存。<br><br>类型为[LocalTensor](../../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br><br>用于Mean内部复杂计算时存储中间变量，由开发者提供。<br><br>临时空间大小BufferSize的获取方式请参考[GetMeanMaxMinTmpSize](GetMeanMaxMinTmpSize.md)。 |
 | MeanParams | 输入 | srcTensor的shape信息。MeanParams类型，具体定义如下方代码所示，其中参数的含义为：<br>outter：输入数据的外轴长度。<br>inner：输入数据内轴实际元素个数32字节补齐后的元素个数，inner\*sizeof(T)必须是32字节的整数倍。<br>n：输入数据内轴的实际元素个数。<br>请注意：MeanParams.inner是MeanParams.n向上32字节对齐后的值，inner = (n *sizeof(T) + 32 - 1) / 32 * 32 / sizeof(T)，因此MeanParams.n的大小应该满足：1 <= MeanParams.n <= MeanParams.inner。 |
 
 ```
@@ -82,11 +82,11 @@ struct MeanParams{
 
 ## 约束说明
 
--   操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md#section796754519912)。
--   **不支持源操作数与目的操作数地址重叠。**
--   不支持sharedTmpBuffer与源操作数和目的操作数地址重叠。
--   当前仅支持ND格式的输入，不支持其他格式。
--   对于mean，采用的方式为先求和再做除法，其求和时内部使用的底层相加方式与[Sum](../Sum接口/Sum.md)、[ReduceSum](../../../基础API/Memory矢量计算/归约计算/ReduceSum.md)以及[WholeReduceSum](../../../基础API/Memory矢量计算/归约计算/WholeReduceSum.md)的内部的相加方式一致，采用二叉树方式，两两相加，可参考[Sum](../Sum接口/Sum.md)。
+- 操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md#section796754519912)。
+- **不支持源操作数与目的操作数地址重叠。**
+- 不支持sharedTmpBuffer与源操作数和目的操作数地址重叠。
+- 当前仅支持ND格式的输入，不支持其他格式。
+- 对于mean，采用的方式为先求和再做除法，其求和时内部使用的底层相加方式与[Sum](../Sum接口/Sum.md)、[ReduceSum](../../../基础API/Memory矢量计算/归约计算/ReduceSum.md)以及[ReduceRepeat](../../../基础API/Memory矢量计算/归约计算/ReduceRepeat.md)的内部的相加方式一致，采用二叉树方式，两两相加，可参考[Sum](../Sum接口/Sum.md)。
 
 ## 调用示例
 

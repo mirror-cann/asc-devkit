@@ -111,7 +111,7 @@
 </td>
 <td class="cellrowborder" valign="top" width="12.591259125912593%" headers="mcps1.2.4.1.2 "><p id="p1653714592515"><a name="p1653714592515"></a><a name="p1653714592515"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="74.93749374937492%" headers="mcps1.2.4.1.3 "><p id="p165371945142512"><a name="p165371945142512"></a><a name="p165371945142512"></a>inplace接口需要传入<a href="../../../../基础数据结构/LocalTensor/LocalTensor.md">LocalTensor</a>作为内存管理的对象。</p>
+<td class="cellrowborder" valign="top" width="74.93749374937492%" headers="mcps1.2.4.1.3 "><p id="p165371945142512"><a name="p165371945142512"></a><a name="p165371945142512"></a>inplace接口需要传入<a href="../../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md">LocalTensor</a>作为内存管理的对象。</p>
 </td>
 </tr>
 </tbody>
@@ -214,4 +214,3 @@ non-inplace接口返回值为LocalTensor对象，inplace接口没有返回值。
     AscendC::LocalTensor<half> tensor1;
     que.AllocTensor<half>(tensor1); // AllocTensor分配Tensor长度为1024Bytes
     ```
-

@@ -213,7 +213,7 @@
 </thead>
 <tbody><tr id="row167376215416"><td class="cellrowborder" valign="top" width="12.34%" headers="mcps1.2.3.1.1 "><p id="p14568152324113"><a name="p14568152324113"></a><a name="p14568152324113"></a>bufPos</p>
 </td>
-<td class="cellrowborder" valign="top" width="87.66000000000001%" headers="mcps1.2.3.1.2 "><p id="p188271137124113"><a name="p188271137124113"></a><a name="p188271137124113"></a>TBuf所在的逻辑位置，<a href="../../../../其他数据类型/TPosition.md">TPosition</a>类型。</p>
+<td class="cellrowborder" valign="top" width="87.66000000000001%" headers="mcps1.2.3.1.2 "><p id="p188271137124113"><a name="p188271137124113"></a><a name="p188271137124113"></a>TBuf所在的逻辑位置，<a href="../../../数据结构/辅助数据结构//TPosition.md">TPosition</a>类型。</p>
 </td>
 </tr>
 </tbody>
@@ -282,4 +282,3 @@ AscendC::TBuf<AscendC::TPosition::A1> buf; // 输出数据管理对象，TPositi
 uint32_t len = 128;
 pipe.InitBuffer(buf, len);
 ```
-

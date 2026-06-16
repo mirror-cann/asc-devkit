@@ -102,7 +102,7 @@ def Gather(src, dst, count, srcOffset, srcBaseAddr):
 
 | 参数名称 | 输入/输出 | 含义 |
 | :------- | :-------- | :--- |
-| dst | 输出 | 目的操作数，类型为[LocalTensor](../../../基础数据结构/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT（存储位置为Unified Buffer）。<br><br>LocalTensor的起始地址需要按照32字节对齐。 |
+| dst | 输出 | 目的操作数，类型为[LocalTensor](../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT（存储位置为Unified Buffer）。<br><br>LocalTensor的起始地址需要按照32字节对齐。 |
 | src | 输入 | 源操作数，类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT（存储位置为Unified Buffer）。<br><br>LocalTensor的起始地址需要按照32字节对齐。<br><br>数据类型和dst保持一致。 |
 | srcOffset | 输入 | 每个元素在src中对应的地址偏移，类型为LocalTensor，支持的TPosition为VECIN/VECCALC/VECOUT（存储位置为Unified Buffer）。<br><br>LocalTensor的起始地址需要32字节对齐。<br><br>该偏移量相对于src的起始基地址而言。单位为字节。取值要求见[约束说明](#约束说明)。 |
 | srcBaseAddr | 输入 | 用于指定Gather操作中源操作数的起始位置，单位为字节。取值应保证src元素类型位宽对齐，否则会导致非预期行为。 |

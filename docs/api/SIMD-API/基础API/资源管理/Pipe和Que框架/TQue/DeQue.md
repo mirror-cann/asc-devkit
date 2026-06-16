@@ -144,7 +144,7 @@
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
-non-inplace接口和指定源和目的位置的接口返回值为从队列中取出的[LocalTensor](../../../../基础数据结构/LocalTensor/LocalTensor.md)；inplace接口没有返回值。
+non-inplace接口和指定源和目的位置的接口返回值为从队列中取出的[LocalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)；inplace接口没有返回值。
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
@@ -180,4 +180,3 @@ que.EnQue(tensor1);
 que.DeQue<half>(tensor1); // 将tensor从VECOUT的Queue中搬出
 que.FreeTensor<half>(tensor1);
 ```
-

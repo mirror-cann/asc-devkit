@@ -18,7 +18,7 @@
 
 [DataCopyPad](../GMToUB非对齐数据搬运(DataCopyPad).md)从Global Memory将数据非对齐搬运至Unified Buffer时，可根据开发者的需要自行填充数据。SetPadValue用于设置DataCopyPad需要填充的数值。
 
-具体支持的数据通路为（以[逻辑位置TPosition](../../../../../其他数据类型/TPosition.md)表示）：
+具体支持的数据通路为（以[逻辑位置TPosition](../../../../数据结构/辅助数据结构/TPosition.md)表示）：
 
 - Global Memory -> Unified Buffer
     - GM -> VECIN

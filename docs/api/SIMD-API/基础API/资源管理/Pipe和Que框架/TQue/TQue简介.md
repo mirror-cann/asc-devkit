@@ -21,7 +21,7 @@ template <TPosition pos, int32_t depth, auto mask = 0> class TQue{...};
 </thead>
 <tbody><tr id="row1550117591914"><td class="cellrowborder" valign="top" width="14.099999999999998%" headers="mcps1.2.3.1.1 "><p id="p185019592913"><a name="p185019592913"></a><a name="p185019592913"></a>pos</p>
 </td>
-<td class="cellrowborder" valign="top" width="85.9%" headers="mcps1.2.3.1.2 "><p id="p35011591693"><a name="p35011591693"></a><a name="p35011591693"></a>队列逻辑位置，可以为<span>VECIN、VECOUT、</span>A1<span>、</span>A2<span>、</span>B1<span>、</span>B2<span>、</span>CO1<span>、</span>CO2。<span>关于TPosition的具体介绍请参考</span><a href="../../../../其他数据类型/TPosition.md">TPosition</a>。</p>
+<td class="cellrowborder" valign="top" width="85.9%" headers="mcps1.2.3.1.2 "><p id="p35011591693"><a name="p35011591693"></a><a name="p35011591693"></a>队列逻辑位置，可以为<span>VECIN、VECOUT、</span>A1<span>、</span>A2<span>、</span>B1<span>、</span>B2<span>、</span>CO1<span>、</span>CO2。<span>关于TPosition的具体介绍请参考</span><a href="../../../数据结构/辅助数据结构//TPosition.md">TPosition</a>。</p>
 </td>
 </tr>
 <tr id="row12501859799"><td class="cellrowborder" valign="top" width="14.099999999999998%" headers="mcps1.2.3.1.1 "><p id="p1650113599915"><a name="p1650113599915"></a><a name="p1650113599915"></a>depth</p>
@@ -179,4 +179,3 @@ AscendC::TQue<AscendC::TPosition::VECOUT, 1, &conf> outQueue;
 pipe.InitBuffer(inQueueX, 1, dataSize * sizeof(srcType));
 pipe.InitBuffer(outQueue, 1, dataSize * sizeof(int8_t));
 ```
-

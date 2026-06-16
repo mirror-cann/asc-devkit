@@ -36,4 +36,3 @@ auto plat = platform_ascendc::PlatformAscendC(&platform_info);
 const uint32_t elemCount = 128;
 AscendC::GetConcatTmpSize(plat, elemCount, 2);
 ```
-
