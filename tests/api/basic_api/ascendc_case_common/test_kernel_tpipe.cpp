@@ -179,7 +179,7 @@ TEST_F(TEST_TPIPE, TPipeConstructionTest)
     EXPECT_EQ(pipe->g_tpipeImpl.curBufSize_, 0);
     // check hardware addr, alias bufpool
     for (int32_t i = 0; i < (int32_t)Hardware::MAX; i++) {
-        EXPECT_EQ(Internal::g_tPipeAddrBufPool[i], 0);
+        EXPECT_EQ(pipe->g_tpipeImpl.bufPool_[i].maxAddr, 0);
     }
 
     // for cpu debug, check all space allocated
@@ -199,7 +199,7 @@ TEST_F(TEST_TPIPE, TPipeInitBufferWithTBufTest)
     uint32_t len = 128;
     TPipe pipe;
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 0);
-    EXPECT_EQ(Internal::g_tPipeAddrBufPool[(uint8_t)hardPos], 0);
+    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[(uint8_t)hardPos].maxAddr, 0);
     pipe.InitBuffer(buf, len);
     EXPECT_EQ(buf.bufStart, &(pipe.g_tpipeImpl.buf_[0]));
     EXPECT_EQ(buf.bufStart->address, 0);
@@ -209,7 +209,7 @@ TEST_F(TEST_TPIPE, TPipeInitBufferWithTBufTest)
     EXPECT_EQ(buf.bufStart->dataLen, len);
     EXPECT_EQ(buf.bufStart->usertag, -1);
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 1);
-    EXPECT_EQ(Internal::g_tPipeAddrBufPool[(uint8_t)hardPos], len);
+    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[(uint8_t)hardPos].maxAddr, len);
 
     uint32_t lenGet = 32;
     TBufHandle bufHandle = buf.Get(lenGet);
@@ -262,7 +262,7 @@ TEST_F(TEST_TPIPE, TPipeInitBufferWithTQueTest)
         buf++;
     }
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 2);
-    EXPECT_EQ(Internal::g_tPipeAddrBufPool[(uint8_t)hardPos], num * len);
+    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[(uint8_t)hardPos].maxAddr, num * len);
 }
 
 /* **************************** TPipe Reset api ****************************** */
@@ -276,10 +276,10 @@ TEST_F(TEST_TPIPE, TPipeReset)
 
     pipe.InitBuffer(que, num, len);
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 2);
-    EXPECT_EQ(Internal::g_tPipeAddrBufPool[(uint8_t)hardPos], num * len);
+    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[(uint8_t)hardPos].maxAddr, num * len);
     pipe.Reset();
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 0);
-    EXPECT_EQ(Internal::g_tPipeAddrBufPool[(uint8_t)hardPos], 0);
+    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[(uint8_t)hardPos].maxAddr, 0);
 }
 
 /* **************************** TPipe GetAbsAddr ****************************** */
