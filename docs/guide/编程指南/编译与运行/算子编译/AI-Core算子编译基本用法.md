@@ -44,7 +44,7 @@ AI Core SIMD的基本编译流程如下：Host代码使用Host编译器编译成
   // ------- definition.asc -------
   __gm__ int dev_var = 5;
   __aicore__ int device_function();
- 
+
   // ------- example.asc -------
   extern __gm__ int dev_var;
   __aicore__  int device_function();
@@ -213,6 +213,25 @@ AI Core SIMT的基本编译流程如下：Host代码使用Host编译器编译成
 <td class="cellrowborder" valign="top" width="9.676767676767676%" headers="mcps1.1.4.1.2 "><p id="p49274178137"><a name="p49274178137"></a><a name="p49274178137"></a>否</p>
 </td>
 <td class="cellrowborder" valign="top" width="56.686868686868685%" headers="mcps1.1.4.1.3 "><p id="p139275178134"><a name="p139275178134"></a><a name="p139275178134"></a>SIMT编程场景，指定SIMT方式编译。</p>
+</td>
+</tr>
+</tr>
+<tr id="row109271176132"><td class="cellrowborder" valign="top" width="33.63636363636363%" headers="mcps1.1.4.1.1 "><p id="p1092701741311"><a name="p1092701741311"></a><a name="p1092701741311"></a>--cce-disable-asc-reserved-ubuf</p>
+</td>
+<td class="cellrowborder" valign="top" width="9.676767676767676%" headers="mcps1.1.4.1.2 "><p id="p49274178137"><a name="p49274178137"></a><a name="p49274178137"></a>否</p>
+</td>
+<td class="cellrowborder" valign="top" width="56.686868686868685%" headers="mcps1.1.4.1.3 "><p id="p139275178134"><a name="p139275178134"></a><a name="p139275178134"></a>禁用Ascend C接口使用预留UB空间。开启后，依赖预留UB空间的Ascend C接口在对应芯片架构下不可用，使用时编译报错。
+
+使用预留UB空间的API列表参考：
+[使用预留UB空间的API](../../../../../docs/guide/编程指南/编程模型/AI-Core-SIMD编程/基于Tensor的CPP编程/静态Tensor编程.md#使用预留ub空间的api范围)。由于同一API使用预留UB空间的情况在不同NPU架构下有差异，开启该编译选项后，需要手动调整API调用方式或替换为不依赖预留UB空间的实现，才能完成兼容性迁移。
+</tr>
+<tr id="row109271176132"><td class="cellrowborder" valign="top" width="33.63636363636363%" headers="mcps1.1.4.1.1 "><p id="p1092701741311"><a name="p1092701741311"></a><a name="p1092701741311"></a>--cce-disable-vf-stack-reserved-ubuf</p>
+</td>
+<td class="cellrowborder" valign="top" width="9.676767676767676%" headers="mcps1.1.4.1.2 "><p id="p49274178137"><a name="p49274178137"></a><a name="p49274178137"></a>否</p>
+</td>
+<td class="cellrowborder" valign="top" width="56.686868686868685%" headers="mcps1.1.4.1.3 "><p id="p139275178134"><a name="p139275178134"></a><a name="p139275178134"></a>禁用SIMD VF栈预留的UB空间。开启后，编译器不再预留该部分UB空间，该空间可作为普通UB空间使用。
+
+针对 [NPU架构版本2201](../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)，此编译选项无实际效果；针对 [NPU架构版本3510](../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)，此编译选项生效，当用户使用此编译选项后，编译器将无法使用预留的UB空间进行寄存器溢出的缓存，需要用户保证寄存器不溢出。</p>
 </td>
 </tr>
 </tbody>
@@ -395,7 +414,7 @@ add_executable(demo
 </tbody>
 </table>
 
-### 高阶API常用链接库 
+### 高阶API常用链接库
 在使用高阶API时，必须链接以下库，因为这些库是高阶API功能所依赖的。在其他场景下，可以根据具体需求选择是否链接这些库。
 |链接库名称|作用描述|使用场景|动态库路径|
 |--|--|--|--|
