@@ -49,7 +49,7 @@
 | reduceType | 归约操作类型。<br>类型为`ReduceType`枚举类型，支持：<br>&bull; `ReduceType::SUM`：求和。 |
 | T | 目的操作数数据类型。 |
 | U | 源操作数数据类型。 |
-| isSetMask | 是否在接口内部设置`mask`，默认为`true`。<br>&bull; `true`，表示在接口内部设置`mask`。<br>&bull; `false`，表示在接口外部设置`mask`，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置`mask`值。这种模式下，本接口入参中的`mask`值必须设置为占位符`MASK_PLACEHOLDER`。 |
+| isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，接口入参中的mask值设置为占位符`MASK_PLACEHOLDER`，用于占位，无实际含义。 |
 
 **表 2**  参数说明
 
