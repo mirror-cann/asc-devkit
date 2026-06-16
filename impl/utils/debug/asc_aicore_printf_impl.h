@@ -230,8 +230,10 @@ __aicore__ inline void printf_impl_common(DumpType debugType, __gm__ const char*
 template <class... Args>
 __aicore__ inline void printf_impl(__gm__ const char* fmt, Args&&... args)
 {
+#if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
     enable_asc_diagnostics();
     printf_impl_common(DumpType::DUMP_SCALAR, fmt, args...);
+#endif
 }
 
 template <class... Args>
@@ -271,7 +273,9 @@ enum class DumpType : uint8_t {
 template <class... Args>
 __aicore__ inline void printf_impl(__gm__ const char* fmt, Args&&... args)
 {
+#if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
     std::printf(fmt, args...);
+#endif
 }
 
 template <class... Args>
