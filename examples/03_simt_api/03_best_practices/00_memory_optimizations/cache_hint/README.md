@@ -87,7 +87,7 @@
 
 | 指标                  | 说明                          |
 |---------------------|-----------------------------|
-| Task Duration(us)   | 整个任务执行的总时间，算子执行时间以该参数为准     |
+| Task Duration(μs)   | 整个任务执行的总时间，算子执行时间以该参数为准     |
 | DCache Read GM      | DCache从Global Memory读取数据的次数 |
 | DCache Read Vector  | Vector Core从DCache读取数据的次数   |
 | DCache Write Vector | Vector Core向DCache写入数据的次数   |
@@ -124,13 +124,13 @@ output[idx] = sign * (low_val + frac * (high_val - low_val));
 
 **性能数据**：
 
-| Task Duration(us) | DCache Read GM | DCache Read Vector | DCache Write Vector |
+| Task Duration(μs) | DCache Read GM | DCache Read Vector | DCache Write Vector |
 |:-----------------:|:-----------------:|:---------------------:|:----------------------:|
 |       56.82       |       5064        |         2048          |          6144          |
 
 **分析**：
 
-Case 0的Task Duration为56.82us，DCache Read GM为5064次，作为基线版本。
+Case 0的Task Duration为56.82μs，DCache Read GM为5064次，作为基线版本。
 
 Case 0的场景中，加载input，output时会把数据缓存在DCache上，替换DCache中某个缓存数据，假设sin_table中索引2对应的数据被替换掉了，当后续某个线程计算时需要sin_table中索引2对应数据时，就会出现cache miss，需要从GM重新加载。此外，被缓存到DCache上的input和output数据实际上不会再被使用，不需要缓存，不应该占用DCache空间。
 
@@ -169,12 +169,12 @@ asc_stcg(&output[idx], y);
 
 **性能数据**：
 
-| Task Duration(us) | DCache Read GM | DCache Read Vector | DCache Write Vector |
+| Task Duration(μs) | DCache Read GM | DCache Read Vector | DCache Write Vector |
 |:-----------------:|:-----------------:|:---------------------:|:----------------------:|
 |      50.895       |       3531        |         2048          |          6144          |
 
 **分析**：
-- 相比Case 0基线版本，Task Duration从56.82us降低到50.895us，耗时下降约10.4%
+- 相比Case 0基线版本，Task Duration从56.82μs降低到50.895μs，耗时下降约10.4%
 - DCache Read GM从5064次降至3531次，减少约30.2%（减少1533次Global Memory访问），这是性能提升的关键因素
 - DCache Read Vector和DCache Write Vector保持不变，说明优化没有增加额外开销
 - sin表数据常驻DCache后，避免被输入/输出数据挤出，减少了从Global Memory重新加载sin表的次数
@@ -185,10 +185,10 @@ asc_stcg(&output[idx], y);
 ### Ascend 950PR性能数据
 
 **综合优化效果**：
-- 从Case 0基线版本到Case 1优化版本，Task Duration从56.82us降低到50.895us，耗时下降约10.4%
+- 从Case 0基线版本到Case 1优化版本，Task Duration从56.82μs降低到50.895μs，耗时下降约10.4%
 - DCache Read GM从5064次降至3531次，减少约30.2%，减少1533次Global Memory访问
 
-| Case version | Task Duration(us) | Task Duration相对Case 0 | 优化点                   |
+| Case version | Task Duration(μs) | Task Duration相对Case 0 | 优化点                   |
 |--------------|-------------------|-----------------------|-----------------------|
 | Case 0       | 56.82             | **1x**                | 基线版本，所有数据共同竞争DCache空间 |
 | Case 1       | 50.895            | **0.90x耗时**           | 数据缓存优化，sin表常驻DCache空间 |

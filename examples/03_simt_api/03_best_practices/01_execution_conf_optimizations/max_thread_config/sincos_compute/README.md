@@ -81,7 +81,7 @@ sincos_compute/
 
 | 指标                  | 说明                          |
 |---------------------|-----------------------------|
-| Task Duration(us)   | 整个任务执行的总时间，算子执行时间以该参数为准     |
+| Task Duration(μs)   | 整个任务执行的总时间，算子执行时间以该参数为准     |
 | DCache Read GM      | DCache从Global Memory读取数据的次数 |
 | DCache Read Vector  | Vector Core从DCache读取数据的次数   |
 | DCache Write Vector | Vector Core向DCache写入数据的次数   |
@@ -127,7 +127,7 @@ __global__ void sincos_thread_1024(float* input, float* output_sin,
 
 **性能数据**：
 
-| Task Duration(us) | DCache Read GM | DCache Read Vector | DCache Write Vector |
+| Task Duration(μs) | DCache Read GM | DCache Read Vector | DCache Write Vector |
 |:-----------------:|:-----------------:|:---------------------:|:----------------------:|
 |       102.47       |       256        |         640          |          768          |
 
@@ -178,12 +178,12 @@ __global__ __launch_bounds__(512) void sincos_thread_512(float* input,
 
 **性能数据**：
 
-| Task Duration(us) | DCache Read GM(次) | DCache Read Vector(次) | DCache Write Vector(次) |
+| Task Duration(μs) | DCache Read GM(次) | DCache Read Vector(次) | DCache Write Vector(次) |
 |:-----------------:|:-----------------:|:---------------------:|:----------------------:|
 |      96.22       |       256        |         512          |          256          |
 
 **优化效果分析**：
-- Task Duration从102.47us降低到96.22us，耗时下降约**6.1%**
+- Task Duration从102.47μs降低到96.22μs，耗时下降约**6.1%**
 - DCache Read GM保持不变，说明并没有增加额外开销
 - DCache Read Vector从640减小至512， DCache Write Vector从768减小至256，说明没有寄存器溢出后，对于Data Cache的读写次数减少（stack物理位置位于Global Memory，因此寄存器溢出时对于stack的访问会体现在Data Cache的访问次数上）
 - 寄存器充分利用，避免数据溢出到Global Memory
@@ -195,10 +195,10 @@ __global__ __launch_bounds__(512) void sincos_thread_512(float* input,
 ### Ascend 950PR性能数据
 
 **综合优化效果**：
-- 从Case 0基线版本到Case 1优化版本，Task Duration从102.47us降低到96.22us，耗时下降约6.1%
+- 从Case 0基线版本到Case 1优化版本，Task Duration从102.47μs降低到96.22μs，耗时下降约6.1%
 - DCache Read Vector从640减小至512，DCache Write Vector从768减小至256
 
-| Case version | Task Duration(us) | Task Duration相对Case 0 | 优化点                   |
+| Case version | Task Duration(μs) | Task Duration相对Case 0 | 优化点                   |
 |--------------|-------------------|-----------------------|-----------------------|
 | Case 0       | 102.47             | **1x**                | 基线版本，寄存器溢出到Global Memory |
 | Case 1       | 96.22            | **0.94x耗时**           | 配置launch bounds避免寄存器溢出 |

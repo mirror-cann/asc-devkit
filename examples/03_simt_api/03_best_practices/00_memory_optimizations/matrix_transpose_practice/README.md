@@ -98,12 +98,12 @@ int index = x_index + width * y_index;
 
 | 指标                | 说明                                                                                      |
 | ------------------- | ----------------------------------------------------------------------------------------- |
-| Task Duration(us)   | Task整体耗时，包含调度到加速器的时间、加速器上的执行时间以及响应结束时间                  |
-| aiv_time(us)        | Task在AI Vector Core上的理论执行时间，单位为us                                            |
+| Task Duration(μs)   | Task整体耗时，包含调度到加速器的时间、加速器上的执行时间以及响应结束时间                  |
+| aiv_time(μs)        | Task在AI Vector Core上的理论执行时间，单位为μs                                            |
 | aiv_total_cycles    | 该Task被分配到每个AI Vector Core计算单元上后，每个AI Vector Core计算单元上的执行cycle总数 |
-| aiv_vec_time(us)    | vec类型指令（向量类运算指令）耗时，单位为us                                               |
+| aiv_vec_time(μs)    | vec类型指令（向量类运算指令）耗时，单位为μs                                               |
 | aiv_vec_ratio       | vec类型指令（向量类运算指令）的cycle数在total cycle数中的占用比                           |
-| aiv_scalar_time(us) | scalar类型指令（标量类运算指令）耗时，单位为us                                            |
+| aiv_scalar_time(μs) | scalar类型指令（标量类运算指令）耗时，单位为μs                                            |
 | aiv_scalar_ratio    | scalar类型指令（标量类运算指令）的cycle数在total cycle数中的占用比                        |
 
 除Task Duration外，本例中其余指标均展示的为所有block上性能指标的平均值。
@@ -133,13 +133,13 @@ output[index] = input[index];
 
 **性能数据**：
 
-| Task Duration(us) | aiv_time(us) | aiv_total_cycles | aiv_vec_time(us) | aiv_vec_ratio | aiv_scalar_time(us) | aiv_scalar_ratio |
+| Task Duration(μs) | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio |
 | :---------------: | :----------: | :--------------: | :--------------: | :-----------: | :-----------------: | :--------------: |
 |      24.777      |    1.054    |     1739.820     |      0.889      |     0.847     |        0.153        |      0.141      |
 
 **分析**：
 
-- Case 0的Task Duration为24.777us，作为连续GM读写场景的耗时基线
+- Case 0的Task Duration为24.777μs，作为连续GM读写场景的耗时基线
 - 后续转置版本需要在完成坐标交换的同时尽量接近该基线
 
 ---
@@ -170,13 +170,13 @@ output[index_out] = input[index_in];
 
 **性能数据**：
 
-| Task Duration(us) | aiv_time(us) | aiv_total_cycles | aiv_vec_time(us) | aiv_vec_ratio | aiv_scalar_time(us) | aiv_scalar_ratio |
+| Task Duration(μs) | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio |
 | :---------------: | :----------: | :--------------: | :--------------: | :-----------: | :-----------------: | :--------------: |
 |      60.477      |    3.516    |     5801.925     |      3.357      |     0.955     |        0.147        |      0.041      |
 
 **分析**：
 
-- 与Case 0的copy基线相比，Task Duration从24.777us增加到60.477us，约为copy版本的2.44倍
+- 与Case 0的copy基线相比，Task Duration从24.777μs增加到60.477μs，约为copy版本的2.44倍
 - 直接索引转置本身计算量很小，但转置后的GM写回变为跨行、非连续访问，因此端到端耗时明显高于copy基线
 - 该版本GM读取仍然是连续读，但GM写回地址不连续，同一个Warp的写请求难以高效合并，这是Task Duration上升的主要原因
 
@@ -220,13 +220,13 @@ output[index_out] = tile[threadIdx.x][threadIdx.y];
 
 **性能数据**：
 
-| Task Duration(us) | aiv_time(us) | aiv_total_cycles | aiv_vec_time(us) | aiv_vec_ratio | aiv_scalar_time(us) | aiv_scalar_ratio |
+| Task Duration(μs) | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio |
 | :---------------: | :----------: | :--------------: | :--------------: | :-----------: | :-----------------: | :--------------: |
 |      35.945      |    1.814    |     2993.315     |      1.646      |     0.910     |        0.156        |      0.083      |
 
 **分析**：
 
-- 相比Case 1的naive transpose，Task Duration从60.477us降低到35.945us，耗时下降约40.6%，整体性能提升约1.68倍
+- 相比Case 1的naive transpose，Task Duration从60.477μs降低到35.945μs，耗时下降约40.6%，整体性能提升约1.68倍
 - Case 2通过UB中转把Case 1中的非连续GM写转移为UB侧访问，使GM读写都更接近连续访问，因此Task Duration明显降低
 - 与Case 0的copy基线相比，Case 2的Task Duration仍高约45.1%。这部分差距主要来自额外的UB读写、同步以及转置方向的UB访问开销
 
@@ -292,13 +292,13 @@ output[index_out] = tile[threadIdx.x][threadIdx.y];
 
 **性能数据**：
 
-| Task Duration(us) | aiv_time(us) | aiv_total_cycles | aiv_vec_time(us) | aiv_vec_ratio | aiv_scalar_time(us) | aiv_scalar_ratio |
+| Task Duration(μs) | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio |
 | :---------------: | :----------: | :--------------: | :--------------: | :-----------: | :-----------------: | :--------------: |
 |      26.725      |    1.224    |     2018.943     |      1.059      |     0.869     |        0.152        |      0.121      |
 
 **分析**：
 
-- 相比Case 2的transpose_coalesced_kernel，Task Duration从35.945us降低到26.725us，耗时下降约25.7%，整体性能提升约1.35倍
+- 相比Case 2的transpose_coalesced_kernel，Task Duration从35.945μs降低到26.725μs，耗时下降约25.7%，整体性能提升约1.35倍
 - Case 3在Case 2的基础上通过padding降低UB转置读阶段的bank冲突，因此端到端Task Duration继续下降
 - 相比Case 1的naive transpose，Case 3的Task Duration下降约55.8%，整体性能提升约2.26倍，说明“GM访存合并 + UB bank冲突降低”两步优化在端到端耗时上叠加生效
 - 与Case 0的copy基线相比，Case 3的Task Duration只高约7.9%，已经接近连续GM读写的基准水平。剩余差距主要来自UB中转、同步以及UB读写时仍然存在的少量bank冲突
@@ -311,10 +311,10 @@ output[index_out] = tile[threadIdx.x][threadIdx.y];
 
 **综合优化效果**：
 
-- 从Case 1直接索引转置到Case 3完整优化版本，Task Duration从60.477us降低到26.725us，耗时下降约55.8%，整体性能提升约2.26倍
+- 从Case 1直接索引转置到Case 3完整优化版本，Task Duration从60.477μs降低到26.725μs，耗时下降约55.8%，整体性能提升约2.26倍
 - Case 3相比Case 0 copy基线仅高约7.9%，说明通过GM访存合并和UB Bank冲突优化后，矩阵转置已经接近连续GM读写基线
 
-| Case version | Task Duration(us) | Task Duration相对Case 0 | 优化点                                |
+| Case version | Task Duration(μs) | Task Duration相对Case 0 | 优化点                                |
 | ------------ | ----------------- | ----------------------- | ------------------------------------- |
 | Case 0       | 24.777            | **1x**            | 矩阵复制基线，GM连续读、连续写        |
 | Case 1       | 60.477            | **2.44x耗时**     | 直接索引转置，GM连续读、非连续写      |

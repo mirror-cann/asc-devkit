@@ -118,7 +118,7 @@
 
 - 性能数据
 
-  |       TData       | Task Duration(us) | aiv_total_cycles |
+  |       TData       | Task Duration(μs) | aiv_total_cycles |
   | :---------------: | :---------------: | :--------------: |
   |      Align4       |     27889.33      |   46005213.32    |
   |     Misalign4     |     81223.02      |   134028903.60   |
@@ -139,7 +139,7 @@
 
   本次所有测试用例的总搬运数据量统一为512MiB，更宽的访存指令，总体耗时更少，搬运效率更高。将各对照组对齐前后的耗时差异汇总如下：
 
-  | 结构体大小                  | 对齐Task Duration(us) | 非对齐Task Duration(us)  | 非对齐Task Duration/对齐Task Duration |
+  | 结构体大小                  | 对齐Task Duration(μs) | 非对齐Task Duration(μs)  | 非对齐Task Duration/对齐Task Duration |
   | :------------------------: | :-------------------: | :---------------------: | :---------: |
   | 4B (4×u8)                  | 27889.33 (alignof=4)  | 81223.02 (alignof=1)    | **2.91x**   |
   | 4B (2×u16)                 | 27833.56 (alignof=4)  | 46656.61 (alignof=2)    | **1.68x**   |
