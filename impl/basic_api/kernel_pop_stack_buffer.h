@@ -40,13 +40,9 @@ template <typename T, TPosition pos> __aicore__ inline bool PopStackBuffer(Local
 {
     TBuffAddr addr;
     addr.logicPos = (int8_t)pos;
-    uint64_t endAddress = GetEndAddress<pos>();
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3103) || (__NPU_ARCH__ == 3113))
     ASCENDC_ASSERT((GetTPipePtr() != nullptr), { KERNEL_LOG(KERNEL_ERROR, "GetTPipePtr is nullptr"); });
+    uint64_t endAddress = GetEndAddress<pos>();
     uint64_t queEndAddress = GetTPipePtr()->GetQueueEndAddress<pos>();
-#else
-    uint64_t queEndAddress = GetQueueEndAddress<pos>();
-#endif
     ASCENDC_ASSERT((queEndAddress % ONE_BLK_SIZE == 0),
                    { KERNEL_LOG(KERNEL_ERROR, "queEndAddress is %lu, which must be 32B aligned", queEndAddress); });
     ASCENDC_ASSERT((endAddress > queEndAddress), {
@@ -57,11 +53,7 @@ template <typename T, TPosition pos> __aicore__ inline bool PopStackBuffer(Local
     addr.dataLen = static_cast<uint32_t>(endAddress - queEndAddress);
     addr.bufferAddr = queEndAddress;
 #ifdef ASCENDC_CPU_DEBUG
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3103) || (__NPU_ARCH__ == 3113))
     auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(pos));
-#else
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
-#endif
     addr.absAddr = absAddr + addr.bufferAddr;
     AscendCBufInit(static_cast<uint8_t>(pos), static_cast<uint8_t>(1), static_cast<uint8_t>(1), (uint64_t)addr.absAddr,
         static_cast<uint64_t>(addr.dataLen));
@@ -75,12 +67,7 @@ template <typename T, TPosition pos> __aicore__ inline bool PopStackBuffer(Local
 template <TPosition pos> __aicore__ inline bool PopStackBuffer(TBuf<pos>& popBuffer, TBufType& bufStart)
 {
     uint64_t endAddress = GetEndAddress<pos>();
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3103) || (__NPU_ARCH__ == 3113))
-    ASCENDC_ASSERT((GetTPipePtr() != nullptr), { KERNEL_LOG(KERNEL_ERROR, "GetTPipePtr is nullptr"); });
     uint64_t queEndAddress = GetTPipePtr()->GetQueueEndAddress<pos>();
-#else
-    uint64_t queEndAddress = GetQueueEndAddress<pos>();
-#endif
     ASCENDC_ASSERT((queEndAddress % ONE_BLK_SIZE == 0),
                    { KERNEL_LOG(KERNEL_ERROR, "queEndAddress is %lu, which must be 32B aligned", queEndAddress); });
     ASCENDC_ASSERT((endAddress > queEndAddress), {
@@ -93,11 +80,7 @@ template <TPosition pos> __aicore__ inline bool PopStackBuffer(TBuf<pos>& popBuf
     bufStart.dataLen = dataLen;
     popBuffer.SetTpipeBuf(&bufStart, dataLen);
 #ifdef ASCENDC_CPU_DEBUG
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3103) || (__NPU_ARCH__ == 3113))
     auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(pos));
-#else
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
-#endif
     AscendCBufInit(static_cast<uint8_t>(pos), static_cast<uint8_t>(1), static_cast<uint8_t>(1),
         (uint64_t)(absAddr + queEndAddress), static_cast<uint64_t>(dataLen));
     AscendCBufInit(static_cast<uint8_t>(pos), static_cast<uint8_t>(1), static_cast<uint8_t>(1),

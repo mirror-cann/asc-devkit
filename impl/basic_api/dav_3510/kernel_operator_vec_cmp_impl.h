@@ -85,7 +85,7 @@ __aicore__ inline void VcmpImpl(
 {
     static_assert(SupportType<T, half, float>(), "current data type is not supported!");
     bool isCounterMode = Internal::IsCounterMode();
-    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __ubuf__ uint64_t *tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 2);
@@ -151,7 +151,7 @@ __aicore__ inline void VcmpImpl(
                 break;
         }
     }
-    event_t eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
+    event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
     SetFlag<HardEvent::V_S>(eventIdVToS);
     WaitFlag<HardEvent::V_S>(eventIdVToS);
     if constexpr (sizeof(T) == 2) {
@@ -170,7 +170,7 @@ __aicore__ inline void VcmpImpl(
 {
     static_assert(SupportType<T, half, float>(), "current data type is not supported!");
     bool isCounterMode = Internal::IsCounterMode();
-    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __ubuf__ uint64_t *tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 2);
@@ -233,7 +233,7 @@ __aicore__ inline void VcmpImpl(
                 break;
         }
     }
-    event_t eventIdVToS = static_cast<event_t>(FetchEventID<HardEvent::V_S>());
+    event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
     SetFlag<HardEvent::V_S>(eventIdVToS);
     WaitFlag<HardEvent::V_S>(eventIdVToS);
     if constexpr (sizeof(T) == 2) {

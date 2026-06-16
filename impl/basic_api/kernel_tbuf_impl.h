@@ -56,7 +56,7 @@ __aicore__ inline __sync_alias__ LocalTensor<T> TBuf<pos>::Get(uint32_t len)
     addr.bufferAddr = ptr->address;
     addr.dataLen = ptr->dataLen;
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(GetPhyType(pos))].absAddr;
     addr.absAddr = absAddr + addr.bufferAddr;
     AscendCBufGet(addr.logicPos, static_cast<uint8_t>(GetPhyType(pos)), reinterpret_cast<uint64_t>(addr.absAddr), len);
     if (this->bufPoolHandle != 0U) {
@@ -100,7 +100,7 @@ __aicore__ inline __sync_alias__ LocalTensor<T> TBuf<pos>::GetWithOffset(uint32_
     addr.bufferAddr = ptr->address + bufOffset;
     addr.dataLen = ptr->dataLen;
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
+    auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(pos));
     addr.absAddr = absAddr + addr.bufferAddr;
 #endif
     LocalTensor<T> output;
@@ -178,7 +178,7 @@ template <TPosition pos> __aicore__ inline TBuffAddr TBuf<pos>::GetBufferAddr(TB
     addr.bufferAddr = ptr->address;
     addr.dataLen = ptr->dataLen;
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(GetPhyType(pos))].absAddr;
     addr.absAddr = absAddr + addr.bufferAddr;
 #endif
     return addr;

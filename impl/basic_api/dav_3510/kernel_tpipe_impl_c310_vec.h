@@ -295,7 +295,7 @@ __aicore__ inline bool TQueBind<src, dst, depth, mask>::EnQue(TBufHandle buf)
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufEnque(static_cast<uint8_t>(src), static_cast<uint8_t>(dst), static_cast<uint8_t>(GetPosition(src, dst)),
         reinterpret_cast<uint64_t>(absAddr + ptr->address));
 #endif // ASCENDC_CPU_DEBUG
@@ -377,7 +377,7 @@ __aicore__ inline bool TQueBind<src, dst, depth, mask>::EnQue(TBufHandle buf)
                     ASCENDC_ASSERT(BufIdTracker::GetInstance().GetState(),
                         { KERNEL_LOG(KERNEL_ERROR, "EnQue is not matched with the previous state."); });
                 } else {
-                    auto enQueEvtID = AllocEventID<enQueEvt>();
+                    auto enQueEvtID = GetTPipePtr()->AllocEventID<enQueEvt>();
                     SetFlag<enQueEvt>(enQueEvtID);
                     ptr->enQueEvtID = enQueEvtID;
                 }
@@ -398,7 +398,7 @@ __aicore__ inline bool TQueBind<src, dst, depth, mask>::EnQue(TBufHandle buf)
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
         constexpr Hardware bufferType = GetBufferPos(src, dst);
-        auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+        auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
         AscendCBufEnque(static_cast<uint8_t>(src), static_cast<uint8_t>(dst),
             static_cast<uint8_t>(GetPosition(src, dst)), reinterpret_cast<uint64_t>(absAddr + ptr->address));
 #endif // ASCENDC_CPU_DEBUG
@@ -487,7 +487,7 @@ __aicore__ inline TBufHandle TQueBind<src, dst, depth, mask>::DeQue()
                 } else {
                     if (ptr->enQueEvtID != INVALID_TEVENTID) {
                         WaitFlag<enQueEvt>(ptr->enQueEvtID);
-                        ReleaseEventID<enQueEvt>(ptr->enQueEvtID);
+                        GetTPipePtr()->ReleaseEventID<enQueEvt>(ptr->enQueEvtID);
                         ptr->enQueEvtID = INVALID_TEVENTID;
                     }
                 }
@@ -524,7 +524,7 @@ __aicore__ inline TBufHandle TQueBind<src, dst, depth, mask>::DeQue()
         }
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
         constexpr Hardware bufferType = GetBufferPos(src, dst);
-        auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+        auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
         AscendCBufDeque(static_cast<uint8_t>(src), static_cast<uint8_t>(dst),
             static_cast<uint8_t>(GetPosition(src, dst)), (uint64_t)(absAddr + ptr->address));
 #endif // ASCENDC_CPU_DEBUG
@@ -561,7 +561,7 @@ template <typename T> __aicore__ inline void TQueBind<src, dst, depth, mask>::De
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufDeque(static_cast<uint8_t>(src), static_cast<uint8_t>(dst),
         static_cast<uint8_t>(GetPosition(src, dst)), (uint64_t)(absAddr + ptr->address));
 #endif // ASCENDC_CPU_DEBUG
@@ -623,7 +623,7 @@ __aicore__ inline TBufHandle TQueBind<src, dst, depth, mask>::DeQue()
     }
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufDeque(static_cast<uint8_t>(src), static_cast<uint8_t>(dst), static_cast<uint8_t>(GetPosition(src, dst)),
         (uint64_t)(absAddr + ptr->address));
 #endif // ASCENDC_CPU_DEBUG
@@ -683,7 +683,7 @@ __aicore__ inline void TQueBind<src, dst, depth, mask>::FreeBuffer(TBufHandle bu
                     GetBuffImpl<dstPipe, true>(ptr->bufId);
                     ReleaseBuffImpl<dstPipe, true>(ptr->bufId);
                 } else {
-                    ptr->freeBufEvtID = AllocEventID<freeBufEvt>();
+                    ptr->freeBufEvtID = GetTPipePtr()->AllocEventID<freeBufEvt>();
                     SetFlag<freeBufEvt>(ptr->freeBufEvtID);
                 }
             }
@@ -703,7 +703,7 @@ __aicore__ inline void TQueBind<src, dst, depth, mask>::FreeBuffer(TBufHandle bu
         }
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
         constexpr Hardware bufferType = GetBufferPos(src, dst);
-        auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+        auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
         AscendCBufFree(static_cast<uint8_t>(bufferType), static_cast<uint8_t>(GetPosition(src, dst)),
             (uint64_t)(absAddr + ptr->address), static_cast<uint64_t>(ptr->dataLen));
 #endif // ASCENDC_CPU_DEBUG
@@ -799,7 +799,7 @@ __aicore__ inline TBufHandle TQueBind<src, dst, depth, mask>::AllocBuffer()
                 if constexpr (depth != 0) {
                     if (ret->freeBufEvtID != INVALID_TEVENTID) {
                         WaitFlag<freeBufEvt>(ret->freeBufEvtID);
-                        ReleaseEventID<freeBufEvt>(ret->freeBufEvtID);
+                        GetTPipePtr()->ReleaseEventID<freeBufEvt>(ret->freeBufEvtID);
                         ret->freeBufEvtID = INVALID_TEVENTID;
                     }
                 }
@@ -811,7 +811,7 @@ __aicore__ inline TBufHandle TQueBind<src, dst, depth, mask>::AllocBuffer()
     }
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufAlloc(static_cast<uint8_t>(bufferType), static_cast<uint8_t>(GetPosition(src, dst)),
         reinterpret_cast<uint64_t>(absAddr + ret->address), static_cast<uint64_t>(ret->dataLen));
     if (this->bufPoolHandle != 0U) {
@@ -877,7 +877,7 @@ __aicore__ inline void TQueBind<src, dst, depth, mask>::FreeAllEvent()
                                 { KERNEL_LOG(KERNEL_ERROR, "enque event id can not be -1"); });
                     if (ptr->freeBufEvtID != INVALID_TEVENTID) {
                         WaitFlag<freeBufEvt>(ptr->freeBufEvtID);
-                        ReleaseEventID<freeBufEvt>(ptr->freeBufEvtID);
+                        GetTPipePtr()->ReleaseEventID<freeBufEvt>(ptr->freeBufEvtID);
                         ptr->freeBufEvtID = INVALID_TEVENTID;
                     }
                 }
@@ -906,7 +906,7 @@ __aicore__ inline TBuffAddr TQueBind<src, dst, depth, mask>::GetBufferAddr(TBufH
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     if constexpr (!enableGlobalManageQue) {
         constexpr Hardware bufferType = GetBufferPos(src, dst);
-        auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+        auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
         addr.absAddr = absAddr + addr.bufferAddr;
     } else {
         constexpr Hardware bufferType = GetBufferPos(src, dst);
@@ -1038,7 +1038,7 @@ __aicore__ inline __sync_noalias__ LocalTensor<T> TBuf<pos>::Get(uint32_t len)
     addr.bufferAddr = ptr->address;
     addr.dataLen = ptr->dataLen;
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(GetPhyType(pos))].absAddr;
     addr.absAddr = absAddr + addr.bufferAddr;
     AscendCBufGet(addr.logicPos, static_cast<uint8_t>(GetPhyType(pos)), reinterpret_cast<uint64_t>(addr.absAddr), len);
     if (this->bufPoolHandle != 0U) {
@@ -1071,7 +1071,7 @@ __aicore__ inline __sync_noalias__ LocalTensor<T> TBuf<pos>::GetWithOffset(uint3
     addr.bufferAddr = ptr->address + bufOffset;
     addr.dataLen = ptr->dataLen;
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
+    auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(pos));
     addr.absAddr = absAddr + addr.bufferAddr;
 #endif
     LocalTensor<T> tensor;
@@ -1149,7 +1149,7 @@ template <TPosition pos> __aicore__ inline TBuffAddr TBuf<pos>::GetBufferAddr(TB
     addr.bufferAddr = ptr->address;
     addr.dataLen = ptr->dataLen;
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(pos));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(GetPhyType(pos))].absAddr;
     addr.absAddr = absAddr + addr.bufferAddr;
 #endif
     return addr;
@@ -1243,7 +1243,7 @@ __aicore__ inline void TBufPoolExtImpl<pos, bufIDSize>::Reset()
         do {
             if (ptr->freeBufEvtID != INVALID_TEVENTID) {
                 WaitFlagImpl(ptr->freeBufEvt, ptr->freeBufEvtID);
-                ReleaseEventID<freeBufEvt>(ptr->freeBufEvtID);
+                GetTPipePtr()->ReleaseEventID<freeBufEvt>(ptr->freeBufEvtID);
                 ptr->freeBufEvtID = INVALID_TEVENTID;
             }
             i++;
@@ -1291,7 +1291,7 @@ __aicore__ inline bool TBufPoolExtImpl<pos, bufIDSize>::InitBuffer(T &que, uint8
     ASCENDC_ASSERT((num * len <= bufferInitLen.at(pool)),
         { KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", num * len, bufferInitLen.at(pool)); });
     auto bufPos = GetPosition(T::srcPosition, T::dstPosition);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(bufPos));
+    auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(bufPos));
     AscendCBufInit(static_cast<uint8_t>(bufPos), 0, num, reinterpret_cast<uint64_t>(curPoolAddr + absAddr), len);
     que.SetTBufPoolHandle(reinterpret_cast<uint64_t>(&tBufPoolImpl));
     ASCENDC_ASSERT((curPoolAddr + num * len <= bufferInitLen.at(pool)),
@@ -1351,7 +1351,7 @@ __aicore__ inline bool TBufPoolExtImpl<pos, bufIDSize>::InitBuffer(TBuf<bufPos> 
     auto bufferInitLen = ConstDefiner::Instance().bufferInitLen;
     ASCENDC_ASSERT((len <= bufferInitLen.at(pool)),
         { KERNEL_LOG(KERNEL_ERROR, "len is %u, exceeds the limit %d", len, bufferInitLen.at(pool)); });
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(bufPos));
+    auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(bufPos));
     AscendCBufInit(static_cast<uint8_t>(bufPos), 1, 1, reinterpret_cast<uint64_t>(curPoolAddr + absAddr), len);
     buf.SetTBufPoolHandle(reinterpret_cast<uint64_t>(&tBufPoolImpl));
 #endif
@@ -1405,7 +1405,7 @@ __aicore__ inline bool TBufPoolExtImpl<pos, bufIDSize>::InitBufPool(T &bufPool, 
     ASCENDC_ASSERT((len <= bufferInitLen.at(pool)),
         { KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", len, bufferInitLen.at(pool)); });
     auto bufPos = T::poolPos;
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(bufPos));
+    auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(bufPos));
     AscendCTBufPoolInit(static_cast<uint8_t>(bufPos),
         reinterpret_cast<uint64_t>(curPoolAddr + absAddr),
         len,
@@ -1448,7 +1448,7 @@ __aicore__ inline bool TBufPoolExtImpl<pos, bufIDSize>::InitBufPool(T &bufPool, 
     ASCENDC_ASSERT((len <= bufferInitLen.at(pool)),
         { KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", len, bufferInitLen.at(pool)); });
     auto bufPos = T::poolPos;
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(bufPos));
+    auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(bufPos));
     AscendCTBufPoolInit(static_cast<uint8_t>(bufPos),
         reinterpret_cast<uint64_t>(bufPool.tBufPoolImpl.startAddr_ + absAddr),
         len,

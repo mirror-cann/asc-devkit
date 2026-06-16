@@ -48,7 +48,7 @@ __aicore__ inline GroupBarrier<pipeMode>::GroupBarrier(
         // worst case: max aiv wait max aiv, thus need at least max aiv block which first element is 1 to atomic add
 #if ASCENDC_CPU_DEBUG
         __ubuf__ int32_t *dst = reinterpret_cast<__ubuf__ int32_t *>(
-            GetBaseAddrCpu(static_cast<uint8_t>(TPosition::VECOUT)) + UB_START_ADDR);
+            GetTPipePtr()->GetBaseAddr(static_cast<uint8_t>(TPosition::VECOUT)) + UB_START_ADDR);
 #else
         __ubuf__ int32_t *dst = reinterpret_cast<__ubuf__ int32_t *>(UB_START_ADDR);
 #endif
@@ -119,14 +119,14 @@ __aicore__ inline void GroupBarrier<pipeMode>::__WriteCurrentValue(__gm__ Barrie
 {
     if ASCEND_IS_AIV {
         uint32_t num = (arriveSize >= waitSize) ? arriveSize : waitSize;
-        event_t eventID = static_cast<event_t>(FetchEventID<HardEvent::S_MTE3>());
+        event_t eventID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
         SetFlag<HardEvent::S_MTE3>(eventID);
         WaitFlag<HardEvent::S_MTE3>(eventID);
         SetAtomicAddImpl<int32_t>();
 #if ASCENDC_CPU_DEBUG
         ProcessLock::GetProcessLock()->Write();
         __ubuf__ int32_t *dst =
-            (__ubuf__ int32_t *)(GetBaseAddrCpu(static_cast<uint8_t>(TPosition::VECIN)) + UB_START_ADDR);
+            (__ubuf__ int32_t *)(GetTPipePtr()->GetBaseAddr(static_cast<uint8_t>(TPosition::VECIN)) + UB_START_ADDR);
         copy_ubuf_to_gm((__gm__ void *)barrierInfoAddr, (__ubuf__ void *)dst, 0, num, 1, 0, CACHELINE_BLKNUM - 1);
         ProcessLock::GetProcessLock()->Unlock();
 #else

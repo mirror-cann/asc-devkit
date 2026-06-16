@@ -158,7 +158,7 @@ __aicore__ inline void DuplicateImpl<half, true>(__ubuf__ half* dstLocal, const 
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
 
@@ -184,7 +184,7 @@ __aicore__ inline void DuplicateImpl<float, true>(__ubuf__ float* dstLocal, cons
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
     __VEC_SCOPE__
@@ -211,7 +211,7 @@ __aicore__ inline void DuplicateImpl<int16_t, true>(__ubuf__ int16_t* dstLocal, 
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
 
@@ -237,7 +237,7 @@ __aicore__ inline void DuplicateImpl<uint16_t, true>(__ubuf__ uint16_t* dstLocal
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
 
@@ -263,7 +263,7 @@ __aicore__ inline void DuplicateImpl<int32_t, true>(__ubuf__ int32_t* dstLocal, 
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
 
@@ -291,7 +291,7 @@ __aicore__ inline void DuplicateImpl<uint32_t, true>(__ubuf__ uint32_t* dstLocal
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
     *((__ubuf__ uint64_t*)tmpBuf + 1) = mask[1];
 
-    event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+    event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
 

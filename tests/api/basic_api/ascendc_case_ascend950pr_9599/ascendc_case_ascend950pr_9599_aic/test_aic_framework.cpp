@@ -36,7 +36,7 @@ TEST_F(TQueWithBufIDTest, testAicQueInitBuffer)
     uint32_t len = 1024;
     TPipe pipe;
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 0);
-    EXPECT_EQ(Internal::g_tPipeAddrBufPool[static_cast<uint8_t>(hardPos)], 0);
+    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[static_cast<uint8_t>(hardPos)].maxAddr, 0);
     pipe.InitBuffer(tscm, 1, len);
     pipe.InitBuffer(que, 1, len);
     EXPECT_EQ(que.bufStart, &(pipe.g_tpipeImpl.buf_[1]));
@@ -66,7 +66,7 @@ TEST_F(TQueWithBufIDTest, testAicQueInitBufferWithBufferId)
     uint32_t len = 1024;
     TPipe pipe;
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 0);
-    EXPECT_EQ(Internal::g_tPipeAddrBufPool[static_cast<uint8_t>(hardPos)], 0);
+    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[static_cast<uint8_t>(hardPos)].maxAddr, 0);
     pipe.InitBuffer(tscm, 1, len);
     pipe.InitBuffer(que, 1, len);
     EXPECT_EQ(que.bufStart, &(pipe.g_tpipeImpl.buf_[1]));
@@ -77,7 +77,7 @@ TEST_F(TQueWithBufIDTest, testAicQueInitBufferWithBufferId)
     EXPECT_EQ(que.bufStart->dataLen, len);
     EXPECT_EQ(que.bufStart->usertag, -1);
     EXPECT_EQ(pipe.g_tpipeImpl.curBufSize_, 2);
-    EXPECT_EQ(Internal::g_tPipeAddrBufPool[static_cast<uint8_t>(hardPos)], len);
+    EXPECT_EQ(pipe.g_tpipeImpl.bufPool_[static_cast<uint8_t>(hardPos)].maxAddr, len);
 
     auto tensor = que.AllocTensor<float>();
     EXPECT_EQ(que.bufStart->bufId, 0);

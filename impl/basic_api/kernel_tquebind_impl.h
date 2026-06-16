@@ -125,7 +125,7 @@ __aicore__ inline __sync_alias__ void TQueBind<src, dst, depth, mask>::AllocTens
     input.SetAddr(addr);
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufAlloc(static_cast<uint8_t>(bufferType), static_cast<uint8_t>(GetPosition(src, dst)),
         reinterpret_cast<uint64_t>(absAddr + ret->address), static_cast<uint64_t>(ret->dataLen));
     if (this->bufPoolHandle != 0U) {
@@ -213,7 +213,7 @@ __aicore__ inline __sync_alias__ bool TQueBind<src, dst, depth, mask>::EnQue(TBu
             SetFlag<enQueUserEvt>(0);
             ptr->enQueEvtID = 0;
         } else {
-            auto enQueUserEvtID = AllocEventID<enQueUserEvt>();
+            auto enQueUserEvtID = GetTPipePtr()->AllocEventID<enQueUserEvt>();
             SetFlag<enQueUserEvt>(enQueUserEvtID);
             ptr->enQueEvtID = enQueUserEvtID;
         }
@@ -225,7 +225,7 @@ __aicore__ inline __sync_alias__ bool TQueBind<src, dst, depth, mask>::EnQue(TBu
     }
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufEnque(static_cast<uint8_t>(src), static_cast<uint8_t>(dst), static_cast<uint8_t>(GetPosition(src, dst)),
         reinterpret_cast<uint64_t>(absAddr + ptr->address));
 #endif // ASCENDC_CPU_DEBUG
@@ -281,12 +281,12 @@ __aicore__ inline __sync_alias__ bool TQueBind<src, dst, depth, mask>::EnQue(TBu
 #if __NPU_ARCH__ == 2201
         // If the AIC is not entered, the AIV does not process any event ID.
         if (g_coreType != AIV || (GetPosition(src, dst) != TPosition::TSCM)) {
-            auto enQueEvtID = AllocEventID<enQueEvt>();
+            auto enQueEvtID = GetTPipePtr()->AllocEventID<enQueEvt>();
             SetFlag<enQueEvt>(enQueEvtID);
             ptr->enQueEvtID = enQueEvtID;
         }
 #else
-        auto enQueEvtID = AllocEventID<enQueEvt>();
+        auto enQueEvtID = GetTPipePtr()->AllocEventID<enQueEvt>();
         SetFlag<enQueEvt>(enQueEvtID);
         ptr->enQueEvtID = enQueEvtID;
 #endif
@@ -299,7 +299,7 @@ __aicore__ inline __sync_alias__ bool TQueBind<src, dst, depth, mask>::EnQue(TBu
     }
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufEnque(static_cast<uint8_t>(src), static_cast<uint8_t>(dst),
         static_cast<uint8_t>(GetPosition(src, dst)), reinterpret_cast<uint64_t>(absAddr + ptr->address));
 #endif // ASCENDC_CPU_DEBUG
@@ -377,14 +377,14 @@ __aicore__ inline __sync_alias__ TBufHandle TQueBind<src, dst, depth, mask>::DeQ
     if (g_coreType != AIV || (GetPosition(src, dst) != TPosition::TSCM)) {
         if (ptr->enQueEvtID != INVALID_TEVENTID) {
             WaitFlag<enQueEvt>(ptr->enQueEvtID);
-            ReleaseEventID<enQueEvt>(ptr->enQueEvtID);
+            GetTPipePtr()->ReleaseEventID<enQueEvt>(ptr->enQueEvtID);
             ptr->enQueEvtID = INVALID_TEVENTID;
         }
     }
 #else
     if (ptr->enQueEvtID != INVALID_TEVENTID) {
         WaitFlag<enQueEvt>(ptr->enQueEvtID);
-        ReleaseEventID<enQueEvt>(ptr->enQueEvtID);
+        GetTPipePtr()->ReleaseEventID<enQueEvt>(ptr->enQueEvtID);
         ptr->enQueEvtID = INVALID_TEVENTID;
     }
 #endif
@@ -396,7 +396,7 @@ __aicore__ inline __sync_alias__ TBufHandle TQueBind<src, dst, depth, mask>::DeQ
     }
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufDeque(static_cast<uint8_t>(src), static_cast<uint8_t>(dst), static_cast<uint8_t>(GetPosition(src, dst)),
         (uint64_t)(absAddr + ptr->address));
 #endif // ASCENDC_CPU_DEBUG
@@ -456,7 +456,7 @@ __aicore__ inline __sync_alias__ TBufHandle TQueBind<src, dst, depth, mask>::DeQ
     } else {
         if (ptr->enQueEvtID != INVALID_TEVENTID) {
             WaitFlag<deQueUserEvt>(ptr->enQueEvtID);
-            ReleaseEventID<deQueUserEvt>(ptr->enQueEvtID);
+            GetTPipePtr()->ReleaseEventID<deQueUserEvt>(ptr->enQueEvtID);
             ptr->enQueEvtID = INVALID_TEVENTID;
         }
     }
@@ -469,7 +469,7 @@ __aicore__ inline __sync_alias__ TBufHandle TQueBind<src, dst, depth, mask>::DeQ
     }
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufDeque(static_cast<uint8_t>(src), static_cast<uint8_t>(dst),
         static_cast<uint8_t>(GetPosition(src, dst)), (uint64_t)(absAddr + ptr->address));
 #endif // ASCENDC_CPU_DEBUG
@@ -509,7 +509,7 @@ __aicore__ inline void TQueBind<src, dst, depth, mask>::FreeBuffer(TBufHandle bu
             if constexpr (!IsAivTscm(src, dst)) {
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ != 1001) && (__NPU_ARCH__ != 2002)
                 // in 220 version, event changed from v to M_MTE1 on condition C1 -> C2
-                ptr->freeBufEvtID = AllocEventID<freeBufEvt>();
+                ptr->freeBufEvtID = GetTPipePtr()->AllocEventID<freeBufEvt>();
                 SetFlag<freeBufEvt>(ptr->freeBufEvtID);
                 if constexpr (enableLoopQueue) {
                     ptr->freeBufEvt = freeBufEvt;
@@ -520,13 +520,13 @@ __aicore__ inline void TQueBind<src, dst, depth, mask>::FreeBuffer(TBufHandle bu
                     ASCENDC_DEBUG_ASSERT((ptr->freeBufEvtID == INVALID_TEVENTID),
                                 KERNEL_LOG_INTERNAL(KERNEL_ERROR, "freebuf event id can not be -1"));
                 } else {
-                    ptr->freeBufEvtID = AllocEventID<freeBufEvt>();
+                    ptr->freeBufEvtID = GetTPipePtr()->AllocEventID<freeBufEvt>();
                     SetFlag<freeBufEvt>(ptr->freeBufEvtID);
                 }
 #endif
             } else if constexpr (srcHardType == Hardware::GM) {
                 if ASCEND_IS_AIC {
-                    ptr->freeBufEvtID = AllocEventID<freeBufEvt>();
+                    ptr->freeBufEvtID = GetTPipePtr()->AllocEventID<freeBufEvt>();
                     SetFlag<freeBufEvt>(ptr->freeBufEvtID);
                     if constexpr (enableLoopQueue) {
                         ptr->freeBufEvt = freeBufEvt;
@@ -541,7 +541,7 @@ __aicore__ inline void TQueBind<src, dst, depth, mask>::FreeBuffer(TBufHandle bu
     }
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufFree(static_cast<uint8_t>(bufferType), static_cast<uint8_t>(GetPosition(src, dst)),
         (uint64_t)(absAddr + ptr->address), static_cast<uint64_t>(ptr->dataLen));
 #endif // ASCENDC_CPU_DEBUG
@@ -585,19 +585,19 @@ __aicore__ inline TBufHandle TQueBind<src, dst, depth, mask>::AllocBuffer()
                     if constexpr (enableLoopQueue) {
                         if (freeBufEvt == ret->freeBufEvt) {
                             WaitFlag<freeBufEvt>(ret->freeBufEvtID);
-                            ReleaseEventID<freeBufEvt>(ret->freeBufEvtID);
+                            GetTPipePtr()->ReleaseEventID<freeBufEvt>(ret->freeBufEvtID);
                             ret->freeBufEvtID = INVALID_TEVENTID;
                         } else if (freeBufEvt == HardEvent::V_MTE2 && ret->freeBufEvt == HardEvent::MTE3_V) {
                             WaitFlag<HardEvent::MTE3_V>(ret->freeBufEvtID);
-                            ReleaseEventID<HardEvent::MTE3_V>(ret->freeBufEvtID);
+                            GetTPipePtr()->ReleaseEventID<HardEvent::MTE3_V>(ret->freeBufEvtID);
                             ret->freeBufEvtID = INVALID_TEVENTID;
-                            TEventID evtId = AllocEventID<HardEvent::MTE3_MTE2>();
+                            TEventID evtId = GetTPipePtr()->AllocEventID<HardEvent::MTE3_MTE2>();
                             SetFlag<HardEvent::MTE3_MTE2>(evtId);
                             WaitFlag<HardEvent::MTE3_MTE2>(evtId);
-                            ReleaseEventID<HardEvent::MTE3_MTE2>(evtId);
+                            GetTPipePtr()->ReleaseEventID<HardEvent::MTE3_MTE2>(evtId);
                         } else if (freeBufEvt == HardEvent::MTE3_V && ret->freeBufEvt == HardEvent::V_MTE2) {
                             WaitFlag<HardEvent::V_MTE2>(ret->freeBufEvtID);
-                            ReleaseEventID<HardEvent::V_MTE2>(ret->freeBufEvtID);
+                            GetTPipePtr()->ReleaseEventID<HardEvent::V_MTE2>(ret->freeBufEvtID);
                             ret->freeBufEvtID = INVALID_TEVENTID;
                         } else {
                             ASCENDC_DEBUG_ASSERT(false,
@@ -605,7 +605,7 @@ __aicore__ inline TBufHandle TQueBind<src, dst, depth, mask>::AllocBuffer()
                         }
                     } else {
                         WaitFlag<freeBufEvt>(ret->freeBufEvtID);
-                        ReleaseEventID<freeBufEvt>(ret->freeBufEvtID);
+                        GetTPipePtr()->ReleaseEventID<freeBufEvt>(ret->freeBufEvtID);
                         ret->freeBufEvtID = INVALID_TEVENTID;
                     }
                 }
@@ -620,7 +620,7 @@ __aicore__ inline TBufHandle TQueBind<src, dst, depth, mask>::AllocBuffer()
     this->bufUsedCount++;
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     AscendCBufAlloc(static_cast<uint8_t>(bufferType), static_cast<uint8_t>(GetPosition(src, dst)),
         reinterpret_cast<uint64_t>(absAddr + ret->address), static_cast<uint64_t>(ret->dataLen));
     if (this->bufPoolHandle != 0U) {
@@ -651,7 +651,7 @@ __aicore__ inline void TQueBind<src, dst, depth, mask>::FreeAllEvent()
                        KERNEL_LOG_INTERNAL(KERNEL_ERROR, "enque event id can not be -1"));
         if (ptr->freeBufEvtID != INVALID_TEVENTID) {
             WaitFlag<freeBufEvt>(ptr->freeBufEvtID);
-            ReleaseEventID<freeBufEvt>(ptr->freeBufEvtID);
+            GetTPipePtr()->ReleaseEventID<freeBufEvt>(ptr->freeBufEvtID);
             ptr->freeBufEvtID = INVALID_TEVENTID;
         }
     }
@@ -691,7 +691,7 @@ __aicore__ inline TBuffAddr TQueBind<src, dst, depth, mask>::GetBufferAddr(TBufH
     addr.dataLen = ptr->dataLen;
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     constexpr Hardware bufferType = GetBufferPos(src, dst);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(GetDefaultPosition(bufferType)));
+    auto absAddr = GetTPipePtr()->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(bufferType)].absAddr;
     addr.absAddr = absAddr + addr.bufferAddr;
 #endif
     return addr;

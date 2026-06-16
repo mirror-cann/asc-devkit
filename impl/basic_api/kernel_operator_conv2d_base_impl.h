@@ -247,7 +247,7 @@ __aicore__ inline void MmadFuncForConv2D(const LocalTensor<U>& l0a, const LocalT
         uint32_t extent = sizeof(PrimT<T>) * nBlocks * 16;
         uint32_t burstLen = extent / burstLenUnit;
         BroadCastVecToMM(l0c[dstFlattenIdx], bias[biasOffset], 1, burstLen, 0, 0);
-        event_t eventIdVToM = static_cast<event_t>(FetchEventID<HardEvent::V_M>());
+        event_t eventIdVToM = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_M));
         SetFlag<HardEvent::V_M>(eventIdVToM);
         WaitFlag<HardEvent::V_M>(eventIdVToM);
     }
@@ -263,7 +263,7 @@ __aicore__ inline void Conv2DExecNmNopingpong(const LocalTensor<T>& l0c, const L
     LocalTensor<U> l0b;
     LocalTensor<U> l0a;
     GetSingleThreadBuffer(l0a, l0b);
-    event_t eventIdMToMte1 = static_cast<event_t>(FetchEventID<HardEvent::M_MTE1>());
+    event_t eventIdMToMte1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::M_MTE1));
     SetFlag<HardEvent::M_MTE1>(eventIdMToMte1);
     for (size_t indexK = 0; indexK < tilling.kIterNum; indexK++) {
         uint32_t kBlocks = tilling.kTileBlock;
@@ -277,7 +277,7 @@ __aicore__ inline void Conv2DExecNmNopingpong(const LocalTensor<T>& l0c, const L
             for (size_t indexM = 0; indexM < tilling.mIterNum; indexM++) {
                 // load data from l1 to l0a
                 LoadL0AForConv2D(kBlocks, indexK, tilling.mTileNums, indexM, conv2dParams, tilling, src0, l0a);
-                event_t eventIdMte1ToM = static_cast<event_t>(FetchEventID<HardEvent::MTE1_M>());
+                event_t eventIdMte1ToM = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_M));
                 SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 PipeBarrier<PIPE_M>();
@@ -292,7 +292,7 @@ __aicore__ inline void Conv2DExecNmNopingpong(const LocalTensor<T>& l0c, const L
 
 __aicore__ inline void SetWaitFlagMte1ToM()
 {
-    event_t eventIdMte1ToM = static_cast<event_t>(FetchEventID<HardEvent::MTE1_M>());
+    event_t eventIdMte1ToM = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_M));
     SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
     WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
     PipeBarrier<PIPE_M>();
@@ -301,9 +301,9 @@ __aicore__ inline void SetWaitFlagMte1ToM()
 __aicore__ inline void PingPongReleaseEvent(event_t eventId0, event_t eventId1)
 {
     WaitFlag<HardEvent::M_MTE1>(eventId0);
-    ReleaseEventID<HardEvent::M_MTE1>(eventId0);
+    GetTPipePtr()->ReleaseEventID<HardEvent::M_MTE1>(eventId0);
     WaitFlag<HardEvent::M_MTE1>(eventId1);
-    ReleaseEventID<HardEvent::M_MTE1>(eventId1);
+    GetTPipePtr()->ReleaseEventID<HardEvent::M_MTE1>(eventId1);
 }
 
 template <typename T, typename U>
@@ -318,8 +318,8 @@ __aicore__ inline void Conv2DExecNmPingPong(const LocalTensor<T>& l0c, const Loc
     LocalTensor<U> l0bPong;
     GetPingPongBuffer(l0aPing, l0aPong, l0bPing, l0bPong);
 
-    event_t eventId0 = static_cast<event_t>(AllocEventID<HardEvent::M_MTE1>());
-    event_t eventId1 = static_cast<event_t>(AllocEventID<HardEvent::M_MTE1>());
+    event_t eventId0 = static_cast<event_t>(GetTPipePtr()->AllocEventID<HardEvent::M_MTE1>());
+    event_t eventId1 = static_cast<event_t>(GetTPipePtr()->AllocEventID<HardEvent::M_MTE1>());
 
     SetFlag<HardEvent::M_MTE1>(eventId0);
     SetFlag<HardEvent::M_MTE1>(eventId1);
@@ -388,7 +388,7 @@ __aicore__ inline void Conv2DExecMnNopingpong(const LocalTensor<T>& l0c, const L
     LocalTensor<U> l0a;
     LocalTensor<U> l0b;
     GetSingleThreadBuffer(l0a, l0b);
-    event_t eventIdMToMte1 = static_cast<event_t>(FetchEventID<HardEvent::M_MTE1>());
+    event_t eventIdMToMte1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::M_MTE1));
     SetFlag<HardEvent::M_MTE1>(eventIdMToMte1);
     for (size_t indexK = 0; indexK < tilling.kIterNum; indexK++) {
         uint32_t kBlocks = tilling.kTileBlock;
@@ -402,7 +402,7 @@ __aicore__ inline void Conv2DExecMnNopingpong(const LocalTensor<T>& l0c, const L
             for (size_t indexN = 0; indexN < tilling.nIterNum; indexN++) {
                 // load data from l1 to l0b
                 LoadL0BForConv2D(kBlocks, tilling.nTileBlock, indexK, indexN, tilling, src1, l0b);
-                event_t eventIdMte1ToM = static_cast<event_t>(FetchEventID<HardEvent::MTE1_M>());
+                event_t eventIdMte1ToM = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_M));
                 SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 PipeBarrier<PIPE_M>();
@@ -427,8 +427,8 @@ __aicore__ inline void Conv2DExecMnPingPong(const LocalTensor<T>& l0c, const Loc
     LocalTensor<U> l0bPong;
     GetPingPongBuffer(l0aPing, l0aPong, l0bPing, l0bPong);
 
-    event_t eventId0 = static_cast<event_t>(AllocEventID<HardEvent::M_MTE1>());
-    event_t eventId1 = static_cast<event_t>(AllocEventID<HardEvent::M_MTE1>());
+    event_t eventId0 = static_cast<event_t>(GetTPipePtr()->AllocEventID<HardEvent::M_MTE1>());
+    event_t eventId1 = static_cast<event_t>(GetTPipePtr()->AllocEventID<HardEvent::M_MTE1>());
     SetFlag<HardEvent::M_MTE1>(eventId0);
     SetFlag<HardEvent::M_MTE1>(eventId1);
 

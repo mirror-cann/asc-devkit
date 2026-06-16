@@ -77,7 +77,7 @@ template <typename T, typename U, const FixpipeConfig& config>
 __aicore__ inline void CheckCommonFixpipeParam(__cc__ U *src, const FixpipeParamsM300 &params)
 {
 #if ASCENDC_CPU_DEBUG
-    uint64_t srcAbsAddr = src - (U*)(GetBaseAddrCpu(int8_t(TPosition::CO1)));
+    uint64_t srcAbsAddr = src - (U*)(GetTPipePtr()->GetBaseAddr(int8_t(TPosition::CO1)));
     ASCENDC_ASSERT(srcAbsAddr % L0C_SRC_ALIGN == 0, {KERNEL_LOG(KERNEL_ERROR, "Failed to check srcLocal start address "
         "alignment in Fixpipe, its start address must align with 64B");});
     if (params.isChannelSplit) {

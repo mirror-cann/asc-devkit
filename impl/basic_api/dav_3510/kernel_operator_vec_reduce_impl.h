@@ -786,10 +786,10 @@ __aicore__ inline void ReduceSumImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal,
         DispatchReduceSumCounterMode<T>(dstLocal, srcLocal, workLocal, count, srcRepStride);
     }
     if constexpr (AscendC::Std::is_same<T, float>::value || AscendC::Std::is_same<T, half>::value) {
-        TEventID eventID = AllocEventID<HardEvent::V_S>();
+        TEventID eventID = GetTPipePtr()->AllocEventID<HardEvent::V_S>();
         SetFlag<HardEvent::V_S>(eventID);
         WaitFlag<HardEvent::V_S>(eventID);
-        ReleaseEventID<AscendC::HardEvent::V_S>(eventID);
+        GetTPipePtr()->ReleaseEventID<AscendC::HardEvent::V_S>(eventID);
         // extract the value from dstLocal and store it as a float in block_local
         if constexpr (AscendC::Std::is_same<T, float>::value) {
             accValFloat = dstLocal[0];
@@ -1475,7 +1475,7 @@ __aicore__ inline void GetReduceMaxMinCountImpl(T &maxMinValue, T &maxMinIndex)
     }
     bool isCounterMode = Internal::IsCounterMode();
 
-    TEventID eventID = AllocEventID<HardEvent::V_S>();
+    TEventID eventID = GetTPipePtr()->AllocEventID<HardEvent::V_S>();
     if (!isSetMask && bitwiseMask) {
         GetReduceMaxMinCountImplVF<T>(popBufferAddress);
         SetFlag<HardEvent::V_S>(eventID);
@@ -1483,7 +1483,7 @@ __aicore__ inline void GetReduceMaxMinCountImpl(T &maxMinValue, T &maxMinIndex)
         mask0 = popBufferAddress[0];
         mask1 = popBufferAddress[1];
     }
-    ReleaseEventID<AscendC::HardEvent::V_S>(eventID);
+    GetTPipePtr()->ReleaseEventID<AscendC::HardEvent::V_S>(eventID);
 
     uint32_t maxMinInd = -1;
     IterateSrc<T>(

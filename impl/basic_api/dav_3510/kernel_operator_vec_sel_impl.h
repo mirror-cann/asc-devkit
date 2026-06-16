@@ -130,7 +130,7 @@ __aicore__ inline void SelectCal(
         } else {
             (*(__ubuf__ uint64_t *)((__ubuf__ uint64_t *)tempBuf)) = Internal::g_cmpMaskLow;
         }
-        event_t eventIdSToV = static_cast<event_t>(FetchEventID<HardEvent::S_V>());
+        event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
         SetFlag<HardEvent::S_V>(eventIdSToV);
         WaitFlag<HardEvent::S_V>(eventIdSToV);
         if (isCounterMode) {

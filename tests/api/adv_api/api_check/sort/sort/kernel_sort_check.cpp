@@ -107,5 +107,5 @@ TEST_F(SortAPICheck, SortAPICheckTestFailure)
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
     AscendC::CHECK_FUNC_HIGHLEVEL_API(
         Sort, (uint8_t, true), (dst[1], srcConcat[1], srcIndex[1], sharedTmpBuffer, -128));
-    EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 12);
+    EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 13);
 }

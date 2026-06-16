@@ -658,7 +658,7 @@ template <typename T>
 __aicore__ inline void DataCopyPadUB2GMImpl(__gm__ T* dst, __ubuf__ T* src, const DataCopyParams& intriParams)
 {
 #if ASCENDC_CPU_DEBUG
-    uint64_t absUbAddr = (uint8_t*)src - (uint8_t*)(GetBaseAddrCpu((int8_t)TPosition::VECIN));
+    uint64_t absUbAddr = (uint8_t*)src - (uint8_t*)(GetTPipePtr()->GetBaseAddr((int8_t)TPosition::VECIN));
     ASCENDC_ASSERT((absUbAddr % ONE_BLK_SIZE == 0),
                    { KERNEL_LOG(KERNEL_ERROR, "absUbAddr is 0x%lx, which must be 32B aligned", absUbAddr); });
 #endif
@@ -678,7 +678,7 @@ template <typename T>
 __aicore__ inline void DataCopyPadUB2GMImpl(__gm__ T* dst, __ubuf__ T* src, const DataCopyExtParams& intriParams)
 {
 #if ASCENDC_CPU_DEBUG
-    uint64_t absUbAddr = (uint8_t*)src - (uint8_t*)(GetBaseAddrCpu((int8_t)TPosition::VECIN));
+    uint64_t absUbAddr = (uint8_t*)src - (uint8_t*)(GetTPipePtr()->GetBaseAddr((int8_t)TPosition::VECIN));
     ASCENDC_ASSERT((absUbAddr % ONE_BLK_SIZE == 0),
                    { KERNEL_LOG(KERNEL_ERROR, "absUbAddr is 0x%lx, which must be 32B aligned", absUbAddr); });
 #endif

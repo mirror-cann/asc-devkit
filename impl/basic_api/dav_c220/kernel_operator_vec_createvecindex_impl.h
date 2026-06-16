@@ -48,7 +48,7 @@ __aicore__ inline void CreateVecIndexOneBlk(const LocalTensor<T> &dst, const T &
     for (int32_t i = 0; i < static_cast<int32_t>(count); i++) {
         dst.SetValue(i, GetCreateVecIndexValue(firstValue, i));
     }
-    auto eventIdSToV = FetchEventID<HardEvent::S_V>();
+    auto eventIdSToV = GetTPipePtr()->FetchEventID(HardEvent::S_V);
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
 }
@@ -83,7 +83,7 @@ __aicore__ inline void CreateVecIndexOneRep(const LocalTensor<T> &dst, const T &
             maskValue <<= 1;
         }
     }
-    auto eventIdSToV = FetchEventID<HardEvent::S_V>();
+    auto eventIdSToV = GetTPipePtr()->FetchEventID(HardEvent::S_V);
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
 }

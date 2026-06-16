@@ -274,7 +274,7 @@ __aicore__ inline void DataCopyGM2L1Impl(__cbuf__ T* dst, __gm__ T* src, const D
         }
     } else if ASCEND_IS_AIV { // Add for TSCM AIV: just send the message to aic;
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-        uint8_t* tscmCpuBaseAddr = GetBaseAddrCpu(int8_t(TPosition::TSCM));
+        uint8_t* tscmCpuBaseAddr = GetTPipePtr()->GetBaseAddr(int8_t(TPosition::TSCM));
         uint64_t l1Addr = (uint8_t*)dst - tscmCpuBaseAddr;
         ScmDataCopyMsg((__cbuf__ void*)l1Addr, (__gm__ void*)src, intriParams, -1);
 #else
@@ -329,7 +329,7 @@ __aicore__ inline void DataCopyGM2L1ND2NZImplBase(__cbuf__ T* dst, __gm__ T* src
         }
     } else if ASCEND_IS_AIV { // Add for TSCM: aiv just send the message
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-        uint8_t* tscmCpuBaseAddr = GetBaseAddrCpu(int8_t(TPosition::TSCM));
+        uint8_t* tscmCpuBaseAddr = GetTPipePtr()->GetBaseAddr(int8_t(TPosition::TSCM));
         uint64_t l1Addr = (uint8_t*)dst - tscmCpuBaseAddr;
         ScmDataCopyND2NZMsg((__cbuf__ void*)l1Addr, (__gm__ void*)src, sizeof(T), intriParams, -1);
 #else
@@ -595,7 +595,7 @@ __aicore__ inline __in_pipe__(MTE3)
         uint32_t tensorSize = intriParams.blockCount * intriParams.blockLen * 32;
         int32_t ubAddr = -1;
 #if ASCENDC_CPU_DEBUG
-        uint64_t absSrc = (uint8_t*)src - (uint8_t*)(GetBaseAddrCpu((int8_t)TPosition::VECIN));
+        uint64_t absSrc = (uint8_t*)src - (uint8_t*)(GetTPipePtr()->GetBaseAddr((int8_t)TPosition::VECIN));
         ASCENDC_ASSERT((static_cast<uint64_t>(absSrc) >= 0 && static_cast<uint64_t>(absSrc) < TOTAL_UB_SIZE), {
             KERNEL_LOG(KERNEL_ERROR, "abs src is 0x%lx, which should be in range of [0, %u)", absSrc, TOTAL_UB_SIZE);
         });
@@ -603,7 +603,7 @@ __aicore__ inline __in_pipe__(MTE3)
 #else
         GM_ADDR gmAddr = (GetKfcClient()->AllocUB(tensorSize, ubAddr));
 #endif
-        event_t eventID = static_cast<event_t>(FetchEventID<HardEvent::V_MTE3>());
+        event_t eventID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE3));
         SetFlag<HardEvent::V_MTE3>(eventID);
         WaitFlag<HardEvent::V_MTE3>(eventID);
         // 2.copy ub->GM
@@ -616,7 +616,7 @@ __aicore__ inline __in_pipe__(MTE3)
 
         // 3.send message, copy GM to L1
 #if ASCENDC_CPU_DEBUG
-        uint8_t* aicBaseTSCMAddr = GetBaseAddrCpu(int8_t(TPosition::TSCM));
+        uint8_t* aicBaseTSCMAddr = GetTPipePtr()->GetBaseAddr(int8_t(TPosition::TSCM));
         ASCENDC_ASSERT((aicBaseTSCMAddr != nullptr),
             { KERNEL_LOG(KERNEL_ERROR, "aicBaseTSCMAddr can not be nullptr"); });
         uint64_t l1AddrDst = (uint8_t*)dst - (uint8_t*)aicBaseTSCMAddr;
@@ -736,7 +736,7 @@ __aicore__ inline void DataCopyUB2L1ND2NZImpl(__cbuf__ T* dst, __ubuf__ T* src, 
         uint16_t alignedDValueBlockNum = (intriParams.dValue * sizeof(T) - 1) / ONE_BLK_SIZE + 1;
         uint16_t alignedDValue = cols * ONE_BLK_SIZE / sizeof(T);
         TransND2NZ((__ubuf__ T*)popBuffer.GetPhyAddr(), src, rows, cols, static_cast<T>(0));
-        auto eventID = FetchEventID<HardEvent::V_MTE3>();
+        auto eventID = GetTPipePtr()->FetchEventID(HardEvent::V_MTE3);
         SetFlag<HardEvent::V_MTE3>(eventID);
         WaitFlag<HardEvent::V_MTE3>(eventID);
         CopyUbufToCbuf(dst, (__ubuf__ T*)popBuffer.GetPhyAddr(), 1, actualSize / ONE_BLK_SIZE, 0, 0);
@@ -754,8 +754,8 @@ __aicore__ inline void DataCopyUB2L1ND2NZImpl(__cbuf__ T* dst, __ubuf__ T* src, 
         int32_t ubAddr = -1;
         // 1. get GM addr, copy corresponding data to GM, ND->ND
 #if ASCENDC_CPU_DEBUG
-        uint64_t absUbAddr = (uint8_t*)src - (uint8_t*)(GetBaseAddrCpu((int8_t)TPosition::VECIN));
-        uint64_t absL1Addr = (uint8_t*)dst - (uint8_t*)(GetBaseAddrCpu((int8_t)TPosition::TSCM));
+        uint64_t absUbAddr = (uint8_t*)src - (uint8_t*)(GetTPipePtr()->GetBaseAddr((int8_t)TPosition::VECIN));
+        uint64_t absL1Addr = (uint8_t*)dst - (uint8_t*)(GetTPipePtr()->GetBaseAddr((int8_t)TPosition::TSCM));
         ASCENDC_ASSERT((absL1Addr % ONE_BLK_SIZE == 0), { KERNEL_LOG(KERNEL_ERROR, "Failed to check dst tensor address "
             "alignment in DataCopy with Nd2NzParams from VECIN / VECOUT to TSCM, it should be 32B aligned");});
         ASCENDC_ASSERT((intriParams.ndNum == 1), {KERNEL_LOG(KERNEL_ERROR,
@@ -764,7 +764,7 @@ __aicore__ inline void DataCopyUB2L1ND2NZImpl(__cbuf__ T* dst, __ubuf__ T* src, 
 #else
         GM_ADDR gmAddr = (GetKfcClient()->AllocUB(tensorSize, ubAddr));
 #endif
-        event_t eventID = static_cast<event_t>(FetchEventID<HardEvent::V_MTE3>());
+        event_t eventID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE3));
         SetFlag<HardEvent::V_MTE3>(eventID);
         WaitFlag<HardEvent::V_MTE3>(eventID);
         // 2. copy ub->GM
@@ -1193,8 +1193,8 @@ __aicore__ inline void DataCopyPadUB2L1ImplCommon(__cbuf__ T* dst, __ubuf__ T* s
         int32_t ubAddr = -1;
         // 1. get GM addr, first copy to GM, ND->ND
 #if ASCENDC_CPU_DEBUG
-        uint64_t absUbAddr = (uint8_t*)src - (uint8_t*)(GetBaseAddrCpu((int8_t)TPosition::VECIN));
-        uint64_t absL1Addr = (uint8_t*)dst - (uint8_t*)(GetBaseAddrCpu((int8_t)TPosition::TSCM));
+        uint64_t absUbAddr = (uint8_t*)src - (uint8_t*)(GetTPipePtr()->GetBaseAddr((int8_t)TPosition::VECIN));
+        uint64_t absL1Addr = (uint8_t*)dst - (uint8_t*)(GetTPipePtr()->GetBaseAddr((int8_t)TPosition::TSCM));
         ValidateUbL1Address(absUbAddr, absL1Addr, tensorSize);
         ASCENDC_ASSERT((absL1Addr % ONE_BLK_SIZE == 0), { KERNEL_LOG(KERNEL_ERROR, "Failed to check dst tensor address "
             "alignment in DataCopyPad from VECIN / VECOUT to TSCM, it should be 32B aligned");});
@@ -1205,7 +1205,7 @@ __aicore__ inline void DataCopyPadUB2L1ImplCommon(__cbuf__ T* dst, __ubuf__ T* s
 #else
         GM_ADDR gmAddr = (GetKfcClient()->AllocUB(tensorSize, ubAddr));
 #endif
-        event_t eventID = static_cast<event_t>(FetchEventID<HardEvent::V_MTE3>());
+        event_t eventID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE3));
         SetFlag<HardEvent::V_MTE3>(eventID);
         WaitFlag<HardEvent::V_MTE3>(eventID);
         // 2. copy ub->GM
@@ -1373,7 +1373,7 @@ __aicore__ inline void ScmDataCopy(MSG_POS void* kfcMsgPtr)
 #endif
     uint8_t cacheMode = ExtractCacheMode((__gm__ uint32_t*)scmCopyParams->src);
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    uint8_t* aicBaseTSCMAddr = GetBaseAddrCpu(int8_t(TPosition::TSCM));
+    uint8_t* aicBaseTSCMAddr = GetTPipePtr()->GetBaseAddr(int8_t(TPosition::TSCM));
     uint8_t* l1AddrDst = aicBaseTSCMAddr + (uint64_t)scmCopyParams->dst;
     copy_gm_to_cbuf_align_v2((__cbuf__ uint32_t*)l1AddrDst, (__gm__ uint32_t*)scmCopyParams->src, 0,
                              scmCopyParams->blockCount, burstLength, 0, 0, false, cacheMode, srcStride, dstStride);
@@ -1382,7 +1382,7 @@ __aicore__ inline void ScmDataCopy(MSG_POS void* kfcMsgPtr)
     copy_gm_to_cbuf_align_v2((__cbuf__ uint32_t*)dst, (__gm__ uint32_t*)scmCopyParams->src, 0,
                              scmCopyParams->blockCount, burstLength, 0, 0, false, cacheMode, srcStride, dstStride);
 #endif
-    auto eventID = FetchEventID<HardEvent::MTE2_MTE1>();
+    auto eventID = GetTPipePtr()->FetchEventID(HardEvent::MTE2_MTE1);
     set_flag(PIPE_MTE2, PIPE_MTE1, (event_t)eventID);
     wait_flag(PIPE_MTE2, PIPE_MTE1, (event_t)eventID);
 }
@@ -1393,7 +1393,7 @@ __aicore__ inline void ScmDataCopyND2NZ(MSG_POS void* kfcMsgPtr)
     auto scmCopyParams = reinterpret_cast<MSG_POS struct Gm2L1Nd2NzParams*>(kfcMsgPtr);
     auto l1AddrDst = reinterpret_cast<__cbuf__ void*>(scmCopyParams->dst);
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    uint8_t* aicBaseTSCMAddr = GetBaseAddrCpu(int8_t(TPosition::TSCM));
+    uint8_t* aicBaseTSCMAddr = GetTPipePtr()->GetBaseAddr(int8_t(TPosition::TSCM));
     ASCENDC_ASSERT((aicBaseTSCMAddr != nullptr), { KERNEL_LOG(KERNEL_ERROR, "aicBaseTSCMAddr can not be nullptr"); });
     uint64_t l1AbsAddr = reinterpret_cast<uint64_t>(l1AddrDst);
     l1AddrDst = l1AbsAddr + reinterpret_cast<uint8_t*>(aicBaseTSCMAddr);
@@ -1434,7 +1434,7 @@ __aicore__ inline void ScmDataCopyND2NZ(MSG_POS void* kfcMsgPtr)
         copy_gm_to_cbuf_multi_nd2nz((__cbuf__ int8_t*)l1AddrDst, (__gm__ int8_t*)scmCopyParams->src, uint8_t(0),
                                     loop1_src_stride, cacheMode, n_value, d_value, loop4_src_stride, false);
     }
-    auto eventID = FetchEventID<HardEvent::MTE2_MTE1>();
+    auto eventID = GetTPipePtr()->FetchEventID(HardEvent::MTE2_MTE1);
     set_flag(PIPE_MTE2, PIPE_MTE1, (event_t)eventID);
     wait_flag(PIPE_MTE2, PIPE_MTE1, (event_t)eventID);
 }

@@ -628,7 +628,7 @@ __aicore__ inline void DataCopyUB2L1ND2NZImpl(__cbuf__ T* dst, __ubuf__ T* src, 
     uint16_t alignedDValueBlockNum = (intriParams.dValue * sizeof(T) - 1) / ONE_BLK_SIZE + 1;
     uint16_t alignedDValue = cols * ONE_BLK_SIZE / sizeof(T);
     TransND2NZ((__ubuf__ T*)popBuffer.GetPhyAddr(), src, rows, cols, static_cast<T>(0));
-    auto eventID = FetchEventID<HardEvent::V_MTE3>();
+    auto eventID = GetTPipePtr()->FetchEventID(HardEvent::V_MTE3);
     SetFlag<HardEvent::V_MTE3>(eventID);
     WaitFlag<HardEvent::V_MTE3>(eventID);
     CopyUbufToCbuf(dst, (__ubuf__ T*)popBuffer.GetPhyAddr(), 1, actualSize / ONE_BLK_SIZE, 0, 0);

@@ -102,7 +102,7 @@ __aicore__ inline bool TBufPool<pos, bufIDSize>::InitBuffer(T &que, uint8_t num,
     ASCENDC_DEBUG_ASSERT((num * len <= bufferInitLen.at(pool)),
         KERNEL_LOG_INTERNAL(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", num * len, bufferInitLen.at(pool)));
     auto bufPos = GetPosition(T::srcPosition, T::dstPosition);
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(bufPos));
+    auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(bufPos));
     AscendCBufInit(static_cast<uint8_t>(bufPos), 0, num, reinterpret_cast<uint64_t>(curPoolAddr + absAddr), len);
     que.SetTBufPoolHandle(reinterpret_cast<uint64_t>(&tBufPoolImpl));
     ASCENDC_DEBUG_ASSERT((curPoolAddr + num * len <= bufferInitLen.at(pool)),
@@ -149,7 +149,7 @@ __aicore__ inline bool TBufPool<pos, bufIDSize>::InitBuffer(TBuf<bufPos> &buf, u
     auto bufferInitLen = ConstDefiner::Instance().bufferInitLen;
     ASCENDC_DEBUG_ASSERT((len <= bufferInitLen.at(pool)),
         KERNEL_LOG_INTERNAL(KERNEL_ERROR, "len is %u, exceeds the limit %d", len, bufferInitLen.at(pool)));
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(bufPos));
+    auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(bufPos));
     AscendCBufInit(static_cast<uint8_t>(bufPos), 1, 1, reinterpret_cast<uint64_t>(curPoolAddr + absAddr), len);
     buf.SetTBufPoolHandle(reinterpret_cast<uint64_t>(&tBufPoolImpl));
 #endif
@@ -199,7 +199,7 @@ __aicore__ inline bool TBufPool<pos, bufIDSize>::InitBufPool(T &bufPool, uint32_
     ASCENDC_DEBUG_ASSERT((len <= bufferInitLen.at(pool)),
         KERNEL_LOG_INTERNAL(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", len, bufferInitLen.at(pool)));
     auto bufPos = T::poolPos;
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(bufPos));
+    auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(bufPos));
     AscendCTBufPoolInit(static_cast<uint8_t>(bufPos),
         reinterpret_cast<uint64_t>(curPoolAddr + absAddr),
         len,
@@ -240,7 +240,7 @@ __aicore__ inline bool TBufPool<pos, bufIDSize>::InitBufPool(T &bufPool, uint32_
     ASCENDC_DEBUG_ASSERT((len <= bufferInitLen.at(pool)),
         KERNEL_LOG_INTERNAL(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", len, bufferInitLen.at(pool)));
     auto bufPos = T::poolPos;
-    auto absAddr = GetBaseAddrCpu(static_cast<int8_t>(bufPos));
+    auto absAddr = GetTPipePtr()->GetBaseAddr(static_cast<int8_t>(bufPos));
     AscendCTBufPoolInit(static_cast<uint8_t>(bufPos),
         reinterpret_cast<uint64_t>(bufPool.tBufPoolImpl.startAddr_ + absAddr),
         len,
