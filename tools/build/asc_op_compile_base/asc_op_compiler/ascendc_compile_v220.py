@@ -57,7 +57,7 @@ def _gen_compile_cmd_c310(src_file: str, dst_file: str, compile_option_tuple, su
                     "-mllvm", "-cce-aicore-dcci-insert-for-scalar=false"
                     ]
     if global_var_storage.get_variable("ascendc_enable_sanitizer"):
-        compile_cmd += ["--cce-enable-sanitizer", "-g"]
+        compile_cmd += ["-gline-tables-only"]
         compile_cmd += ["-mllvm", "-cce-aicore-long-call", "-mllvm", "-cce-aicore-jump-expand=true"]
 
     for opt in compile_option_tuple.mllvm_options:
@@ -98,7 +98,7 @@ def _gen_compile_cmd_v220(src_file: str, dst_file: str, compile_option_tuple, su
                     "-mllvm", "-cce-aicore-addr-transform",
                     "-mllvm", "-cce-aicore-dcci-insert-for-scalar=false"]
     if global_var_storage.get_variable("ascendc_enable_sanitizer"):
-        compile_cmd += ["--cce-enable-sanitizer", "-g"]
+        compile_cmd += ["--cce-enable-sanitizer", "-gline-tables-only"]
         compile_cmd += ["-mllvm", "-cce-aicore-long-call", "-mllvm", "-cce-aicore-jump-expand=true"]
 
     for opt in compile_option_tuple.mllvm_options:
@@ -148,7 +148,7 @@ def _gen_compile_cmd_m510(src_file: str, dst_file: str, compile_option_tuple, ti
                     "-mllvm", "-cce-aicore-dcci-insert-for-scalar=false"
                     ]
     if global_var_storage.get_variable("ascendc_enable_sanitizer"):
-        compile_cmd += ["--cce-enable-sanitizer", "-g"]
+        compile_cmd += ["--cce-enable-sanitizer", "-gline-tables-only"]
         compile_cmd += ["-mllvm", "-cce-aicore-long-call", "-mllvm", "-cce-aicore-jump-expand=true"]
 
     for opt in compile_option_tuple.mllvm_options:

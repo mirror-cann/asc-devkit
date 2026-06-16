@@ -711,7 +711,8 @@ def is_enable_sanitizer(compile_options):
                 "Ascend310P": [
                     "${ASCEND_HOME_PATH}/tools/mssanitizer/lib64/libsanitizer_stub_dav-m200.a",
                     "${ASCEND_HOME_PATH}/tools/mssanitizer/lib64/libsanitizer_stub_dav-m200-vec.a"
-                ]
+                ],
+                "Ascend950": []
             }
         ]
     }

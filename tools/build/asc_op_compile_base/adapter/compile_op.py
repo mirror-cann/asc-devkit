@@ -2224,12 +2224,15 @@ def _mssanitizer_link(src_file, dst_file, compile_log_path=None):
     short_soc_version = global_var_storage.get_variable("ascendc_short_soc_version")
     if short_soc_version not in global_var_storage.get_variable("ascendc_asan_obj_path"):
         raise Exception("asan config file not support asan.a path")
+    asan_obj_paths = global_var_storage.get_variable("ascendc_asan_obj_path")[short_soc_version]
+    if asan_obj_paths == []:
+        return
     if not isinstance(src_file, list):
         src_file = [src_file]
     cmd = [CCECInfo.get_exe("ld.lld"), "-m", "aicorelinux", "-r", "-Ttext=0"]
     cmd.extend(src_file)
     cmd.extend(['--dependent-libraries'])
-    cmd.extend(global_var_storage.get_variable("ascendc_asan_obj_path")[short_soc_version])
+    cmd.extend(asan_obj_paths)
     cmd.extend([
         "-r",
         "-o",

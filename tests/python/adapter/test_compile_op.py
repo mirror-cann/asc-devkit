@@ -744,7 +744,6 @@ class TestCompileOp(unittest.TestCase):
         compile_op_module.global_var_storage.set_variable("ascendc_enable_ccache", True)
         compile_cmd = gen_compile_cmd_v220(
             src_file, dst_file, compile_option_tuple, "dav-c310", tiling_file, True)
-        self.assertIn('--cce-enable-sanitizer', compile_cmd)
         self.assertEqual(compile_cmd[0], "/usr/bin/ccache")
         compile_op_module.global_var_storage.set_variable("ascendc_enable_ccache", False)
         compile_cmd = gen_compile_cmd_v220(
