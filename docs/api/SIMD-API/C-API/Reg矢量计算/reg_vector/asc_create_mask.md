@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-根据入参生成相应的掩码寄存器。
+根据入参生成相应的掩码寄存器。生成的掩码用于约束RegTensor的计算范围，将掩码作为参数传入其他函数，则只有掩码为True所对应的元素才会参与计算。
 
 ## 函数原型
 
@@ -22,11 +22,11 @@
 
 | 参数名       | 输入/输出 | 描述                |
 | --------- | ----- | ----------------- |
-| pat_mode  | 输入 | 创建掩码寄存器的模式，定义如下：<pre><code>PAT_ALL, // All elements are set to True<br>PAT_VL1, // The lowest element<br>PAT_VL2, // The lowest 2 element<br>PAT_VL3, // The lowest 3 element<br>PAT_VL4, // The lowest 4 element<br>PAT_VL8, // The lowest 8 element<br>PAT_VL16, // The lowest 16 element<br>PAT_VL32, // The lowest 32 element<br>PAT_VL64, // The lowest 64 element<br>PAT_VL128, // The lowest 128 element<br>PAT_M3, // Multiples of 3<br>PAT_M4, // Multiples of 4<br>PAT_H, // The lowest half elements<br>PAT_Q, // The lowest quarter elements<br>PAT_ALLF = 15 // All elements are set to False</pre> |
+| pat_mode  | 输入 | 掩码寄存器的创建模式，pat_mode表示选取元素的范围，定义如下：<pre><code>PAT_ALL, // 所有元素都参与计算<br>PAT_VL1, // 最低位的1个元素<br>PAT_VL2, // 最低位的2个元素<br>PAT_VL3, // 最低位的3个元素<br>PAT_VL4, // 最低位的4个元素<br>PAT_VL8, // 最低位的8个元素<br>PAT_VL16, // 最低位的16个元素<br>PAT_VL32, // 最低位的32个元素<br>PAT_VL64, // 最低位的64个元素<br>PAT_VL128, // 最低位的128个元素<br>PAT_M3, // 下标为3的倍数的元素<br>PAT_M4, // 下标为4的倍数的元素<br>PAT_H, // 低一半的元素<br>PAT_Q, // 低四分之一的元素<br>PAT_ALLF = 15 // 任何元素都不参与计算</pre> |
 
 ## 返回值说明
 
-根据上述提供的模式生成相应的掩码寄存器。
+根据上述提供的模式生成相应的掩码寄存器，数据类型为vector_bool，其位宽固定为VL/8。如果是调用 `asc_create_mask_b8`生成的掩码，返回值中一个bit位置对应一个元素；如果生成的是非b8类型的掩码，则返回值中N（N=数据位宽/8）个bit对应一个元素，只有低比特位有效。
 
 ## 流水类型
 
