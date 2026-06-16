@@ -546,6 +546,30 @@
     ]
   },
   {
+    "case": "01_simd_cpp_api/02_features/00_framework/00_pytorch/ge_torchair",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/02_features/00_framework/00_pytorch/ge_torchair/run.sh",
+    "source": "readme",
+    "confidence": "low",
+    "supported_archs": [
+      "dav-2201",
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "npu"
+    ],
+    "target_runnable": true,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [
+      "special_02_features_00_01_02"
+    ],
+    "commands": [
+      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "python3 ../add_custom_test.py"
+    ]
+  },
+  {
     "case": "01_simd_cpp_api/02_features/00_framework/00_pytorch/pybind",
     "runner": "scripts/presmoke/cases/01_simd_cpp_api/02_features/00_framework/00_pytorch/pybind/run.sh",
     "source": "readme",
@@ -671,6 +695,32 @@
       "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
       "make -j",
       "./execute_leaky_relu_op"
+    ]
+  },
+  {
+    "case": "01_simd_cpp_api/02_features/00_framework/03_ge/triple_chevron_notation",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/02_features/00_framework/03_ge/triple_chevron_notation/run.sh",
+    "source": "readme",
+    "confidence": "low",
+    "supported_archs": [
+      "dav-2201",
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "npu"
+    ],
+    "target_runnable": true,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [
+      "shell_variable_reference",
+      "special_02_features_00_01_02"
+    ],
+    "commands": [
+      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "export ASCEND_CUSTOM_OPP_PATH=\"$(pwd)/output:${ASCEND_CUSTOM_OPP_PATH}\"",
+      "./demo"
     ]
   },
   {
