@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document presents framework integration samples based on Ascend C SIMT, demonstrating custom operator implementation methods for different frameworks.
+This document presents framework integration samples based on Ascend C SIMT, demonstrating custom operator implementation methods for the frameworks.
 
 ## Sample List
 

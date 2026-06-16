@@ -127,7 +127,7 @@ __global__ void sincos_thread_1024(float* input, float* output_sin,
 
 **性能数据**：
 
-| Task Duration(μs) | DCache Read GM | DCache Read Vector | DCache Write Vector |
+| Task Duration(μs) | DCache Read GM(次) | DCache Read Vector(次) | DCache Write Vector(次) |
 |:-----------------:|:-----------------:|:---------------------:|:----------------------:|
 |       102.47       |       256        |         640          |          768          |
 

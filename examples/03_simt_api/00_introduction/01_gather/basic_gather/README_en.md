@@ -2,7 +2,7 @@
 
 ## Overview
 
-Basic samples based on Ascend C SIMT programming, including one-dimensional and two-dimensional Gather operators for simple scenarios with fixed shapes, demonstrating the basic SIMT programming flow.
+Basic samples based on Ascend C SIMT programming, implementing one-dimensional and two-dimensional Gather operators for simple scenarios with fixed shapes, demonstrating the basic SIMT programming flow.
 
 ## Sample List
 

@@ -54,8 +54,9 @@ bisheng -shared kernel.asc -o libkernel.so -fPIC --npu-arch=dav-3510 --enable-si
 
 ```cmake
 # 将.asc文件编译为动态共享库
-add_library(kernel SHARED
-    kernel.asc)
+add_library(gather_kernel SHARED
+    gather_kernel.asc
+)
 ```
 
 ## 编译运行

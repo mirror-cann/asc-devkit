@@ -167,21 +167,21 @@
 <a name="table13856144241"></a>
 | 数据类型 | 内存大小（字节） | 地址对齐（字节） |
 | --- | --- | --- |
-| char2, uchar2 | 2 | 2 |
-| char3, uchar3， char4, uchar4 | 4 | 4 |
-| short2, ushort2 | 4 | 4 |
-| short3, ushort3，short4, ushort4 | 8 | 8 |
-| int2, uint2 | 8 | 8 |
-| int3, uint3， int4, uint4 | 16 | 16 |
-| long2，ulong2 | 8 | 8 |
-| long3，ulong3，long4，ulong4 | 16 | 16 |
-| longlong2，ulonglong2 | 16 | 16 |
-| longlong3，ulonglong3，longlong4，ulonglong4 | 32 | 32 |
+| char2、 uchar2 | 2 | 2 |
+| char3、 uchar3、 char4、 uchar4 | 4 | 4 |
+| short2、 ushort2 | 4 | 4 |
+| short3、 ushort3、 short4、 ushort4 | 8 | 8 |
+| int2、 uint2 | 8 | 8 |
+| int3、 uint3、 int4、 uint4 | 16 | 16 |
+| long2、 ulong2 | 8 | 8 |
+| long3、 ulong3、 long4、 ulong4 | 16 | 16 |
+| longlong2、 ulonglong2 | 16 | 16 |
+| longlong3、 ulonglong3、 longlong4、 ulonglong4 | 32 | 32 |
 | float2 | 8 | 8 |
-| float3，float4 | 16 | 16 |
-| float4_e2m1x2_t， float4_e1m2x2_t | 1 | 1 |
-| float8_e4m3x2_t，float8_e5m2x2_t，hifloat8x2_t | 2 | 2 |
-| half2，bfloat16x2_t | 4 | 4 |
+| float3、 float4 | 16 | 16 |
+| float4_e2m1x2_t、 float4_e1m2x2_t | 1 | 1 |
+| float8_e4m3x2_t、 float8_e5m2x2_t、 hifloat8x2_t | 2 | 2 |
+| half2、bfloat16x2_t | 4 | 4 |
 
 ## 运算符<a name="section186787252339"></a>
 

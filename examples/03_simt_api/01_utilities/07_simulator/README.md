@@ -87,7 +87,7 @@
 
 ## 仿真调优
 
-基于`./demo`可通过`msprof op simulator`进行仿真性能分析，生成可视化的指令流水图等信息，指令如下：
+基于`./demo`，可通过`msprof op simulator`进行仿真性能分析，生成可视化的指令流水图等信息，指令如下：
 
 ```bash
 msprof op simulator --soc-version=<soc_version> ./demo
