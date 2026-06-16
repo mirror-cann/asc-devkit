@@ -222,7 +222,6 @@ using VectorTypeTransform = TupleMap<
 #endif
     >;
 #endif
-
 } // namespace Te
 } // namespace AscendC
 
