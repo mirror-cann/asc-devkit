@@ -469,3 +469,43 @@ TEST_F(Tensor_Api_Frame_Layout, OtherGroupIntegralConstantTrait)
     EXPECT_EQ(AscendC::Std::get<0>(GetShape<1>(nnLayout)), 16);
     EXPECT_EQ(AscendC::Std::get<1>(GetShape<1>(nnLayout)), 2);
 }
+
+TEST_F(Tensor_Api_Frame_Layout, ScaleAndZzNnBatchFrameLayout)
+{
+    using namespace AscendC::Te;
+
+    constexpr int batch = 2;
+    auto zz = MakeFrameLayout<ZZLayoutPtn, 2>(batch, 32, 64);
+    auto nn = MakeFrameLayout<NNLayoutPtn, 2>(batch, 16, 32);
+    auto sand = MakeFrameLayout<ScaleANDLayoutPtn, 2>(batch, 32, 16);
+    auto sadn = MakeFrameLayout<ScaleADNLayoutPtn, 2>(batch, 32, 16);
+    auto sbnd = MakeFrameLayout<ScaleBNDLayoutPtn, 2>(batch, 16, 32);
+    auto sbdn = MakeFrameLayout<ScaleBDNLayoutPtn, 2>(batch, 16, 32);
+
+    auto zzBase = MakeFrameLayout<ZZLayoutPtn, 2>(32, 64);
+    auto nnBase = MakeFrameLayout<NNLayoutPtn, 2>(16, 32);
+    auto sandBase = MakeFrameLayout<ScaleANDLayoutPtn, 2>(32, 16);
+    auto sadnBase = MakeFrameLayout<ScaleADNLayoutPtn, 2>(32, 16);
+    auto sbndBase = MakeFrameLayout<ScaleBNDLayoutPtn, 2>(16, 32);
+    auto sbdnBase = MakeFrameLayout<ScaleBDNLayoutPtn, 2>(16, 32);
+
+    // Batch dim shape == batch, batch stride == single-matrix Capacity, for every pattern.
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape(zz)), batch);
+    EXPECT_EQ(AscendC::Std::get<0>(GetStride(zz)), Capacity(zzBase));
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape(nn)), batch);
+    EXPECT_EQ(AscendC::Std::get<0>(GetStride(nn)), Capacity(nnBase));
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape(sand)), batch);
+    EXPECT_EQ(AscendC::Std::get<0>(GetStride(sand)), Capacity(sandBase));
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape(sadn)), batch);
+    EXPECT_EQ(AscendC::Std::get<0>(GetStride(sadn)), Capacity(sadnBase));
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape(sbnd)), batch);
+    EXPECT_EQ(AscendC::Std::get<0>(GetStride(sbnd)), Capacity(sbndBase));
+    EXPECT_EQ(AscendC::Std::get<0>(GetShape(sbdn)), batch);
+    EXPECT_EQ(AscendC::Std::get<0>(GetStride(sbdn)), Capacity(sbdnBase));
+
+    // Inner fractal shape unchanged vs the non-batch ZZ(32,64,c0=2) layout: ((16,2),(2,32)).
+    EXPECT_EQ(AscendC::Std::get<0>(AscendC::Std::get<0>(GetShape<1>(zz))), 16);
+    EXPECT_EQ(AscendC::Std::get<1>(AscendC::Std::get<0>(GetShape<1>(zz))), 2);
+    EXPECT_EQ(AscendC::Std::get<0>(AscendC::Std::get<1>(GetShape<1>(zz))), 2);
+    EXPECT_EQ(AscendC::Std::get<1>(AscendC::Std::get<1>(GetShape<1>(zz))), 32);
+}
