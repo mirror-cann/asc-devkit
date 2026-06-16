@@ -2,24 +2,24 @@
 
 ## 产品支持情况
 
-|产品|是否支持|
-|----------|:----------:|
-|Ascend 950PR/Ascend 950DT|√|
-|Atlas A3 训练系列产品/Atlas A3 推理系列产品|√|
-|Atlas A2 训练系列产品/Atlas A2 推理系列产品|√|
-|Atlas 200I/500 A2 推理产品|x|
-|Atlas 推理系列产品AI Core|√|
-|Atlas 推理系列产品Vector Core|x|
-|Atlas 训练系列产品|x|
-|Kirin X90|x|
-|Kirin 9030|x|
+| 产品 | 是否支持 |
+| ---------- | :----------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | x </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | x </cann-filter> |
 
 ## 功能说明
 
-> [!NOTE]说明 
-> 本接口为软件仿真实现，是在Matmul高阶API的基础上，利用Matmul高阶API中的workspace GM空间作为数据中转空间，数据先搬入GM，再搬入L1 Buffer。因此，在使用本接口时，需要先使用REGISSTER_MATMUL注册高阶API。
+> **说明：**
+> 本接口为软件仿真实现，是在Matmul高阶API的基础上，利用Matmul高阶API中的workspace GM空间作为数据中转空间，数据先搬入GM，再搬入L1 Buffer。因此，在使用本接口时，需要先使用REGISTER_MATMUL注册高阶API。
 
-头文件路径为："basic_api/kernel_operator_data_copy_intf.h"。
+头文件路径为：basic_api/kernel_operator_data_copy_intf.h。
 
 该接口实现将矩阵从Unified Buffer（UB，TPosition为VECIN/VECCALC/VECOUT）搬运至L1 Buffer，搬运方式为连续搬运，数据搬运时格式和内容保持不变。
 
@@ -33,43 +33,43 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 ## 参数说明
 
-**表 1**  模板参数说明
+**表 1** 模板参数说明
 
-|参数名|描述|
-|----------|----------|
-|T|操作数的数据类型。源操作数和目的操作数的数据类型保持一致。|
+| 参数名 | 描述 |
+| ---------- | ---------- |
+| T | 操作数的数据类型。源操作数和目的操作数的数据类型保持一致。 |
 
-**表 2**  参数说明
+**表 2** 参数说明
 
-|参数名称|输入/输出|含义|
-|----------|----------|----------|
-|dst|输出|目的操作数，类型为LocalTensor，存储位置为L1 Buffer，起始地址要求32字节对齐。|
-|src|输入|源操作数，类型为LocalTensor，存储位置为Unified Buffer（TPosition为VECIN/VECCALC/VECOUT），起始地址要求32字节对齐。|
-|count|输入|参与搬运的元素个数。count * sizeof(T)需要32字节对齐，若不对齐，搬运量将对32字节做向下取整。|
+| 参数名称 | 输入/输出 | 含义 |
+| ---------- | ---------- | ---------- |
+| dst | 输出 | 目的操作数，类型为LocalTensor，存储位置为L1 Buffer，起始地址要求32字节对齐。 |
+| src | 输入 | 源操作数，类型为LocalTensor，存储位置为Unified Buffer（TPosition为VECIN/VECCALC/VECOUT），起始地址要求32字节对齐。 |
+| count | 输入 | 参与搬运的元素个数。count * sizeof(T)需要32字节对齐，若不对齐，搬运量将对32字节做向下取整。 |
 
 ## 数据类型
 
 源矩阵和目的矩阵支持的数据类型保持一致。
 
-<cann-filter npu_type="950">
+<cann-filter npu-type = "950">
 
 针对Ascend 950PR/Ascend 950DT，支持数据类型为：bool、int8_t、uint8_t、hifloat8_t、fp8_e5m2_t、fp8_e4m3fn_t、fp8_e8m0_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、complex32、int64_t、uint64_t、double、complex64。
 
 </cann-filter>
 
-<cann-filter npu_type="A3">
+<cann-filter npu-type = "A3">
 
 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、bfloat16_t、float、double。
 
 </cann-filter>
 
-<cann-filter npu_type="910b">
+<cann-filter npu-type = "910b">
 
 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、bfloat16_t、float、double。
 
 </cann-filter>
 
-<cann-filter npu_type="310p">
+<cann-filter npu-type = "310p">
 
 针对Atlas 推理系列产品AI Core，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、float、double。
 
@@ -85,17 +85,17 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 - 如果搬运的目的地址L1 Buffer存在重叠，两条搬运指令之间需要调用PipeBarrier\<PIPE_MTE2\>()添加MTE2搬入流水的同步。
 
-<cann-filter npu_type="A3,910b">
+<cann-filter npu-type = "A3,910b">
 
 - 针对如下产品型号：
 
-    <cann-filter npu_type = "A3">
+    <cann-filter npu-type = "A3">
 
     Atlas A3 训练系列产品/Atlas A3 推理系列产品；
 
     </cann-filter>
 
-    <cann-filter npu_type = "910b">
+    <cann-filter npu-type = "910b">
 
     Atlas A2 训练系列产品/Atlas A2 推理系列产品；
     
@@ -105,7 +105,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 </cann-filter>
 
-<cann-filter npu_type="950">
+<cann-filter npu-type = "950">
 
 - 针对Ascend 950PR/Ascend 950DT，在UB->L1 Buffer的数据搬运时，可以通过配置编译选项ENABLE_CV_COMM_VIA_SSBUF来选择两种搬运通路，当ENABLE_CV_COMM_VIA_SSBUF配置为true时，使用SSBuffer进行通信，数据通过UB->L1 Buffer之间的硬件通道进行搬运（推荐），参考样例[硬通道搬运](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_ub2l1)；当ENABLE_CV_COMM_VIA_SSBUF为false时，数据搬运到L1 Buffer经过GM，该场景下需要借助Matmul高阶API进行注册操作。
 

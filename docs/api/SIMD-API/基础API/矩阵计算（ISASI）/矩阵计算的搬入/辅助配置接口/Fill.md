@@ -1,22 +1,22 @@
-# Fill<a name="ZH-CN_TOPIC_0000001834660669"></a>
+﻿# Fill<a name="ZH-CN_TOPIC_0000001834660669"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
 | 产品 | 是否支持 |
-|------|:------:|
-| <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-| <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
-| <cann-filter npu-type="910">Atlas 训练系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="x90">Kirin X90 | √ </cann-filter>|
-| <cann-filter npu-type="9030">Kirin 9030 | √ </cann-filter>|
+| ------ | :------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | √ </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | √ </cann-filter> |
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为：basic\_api/kernel\_operator\_mm\_intf.h。
+头文件路径为：basic_api/kernel_operator_mm_intf.h。
 
 将特定物理存储位置的LocalTensor初始化为某一具体数值。仅支持L1 Buffer/L0A Buffer/L0B Buffer上的LocalTensor初始化。
 
@@ -42,14 +42,14 @@ __aicore__ inline void Fill(const LocalTensor<T>& dst, const InitConstValueParam
 **表 1** 模板参数说明
 
 | 参数名称 | 描述 |
-|-------|------|
+| ------- | ------ |
 | T | dst的数据类型。 |
 | U | 初始化值的数据类型。<br>&nbsp;&nbsp;&bull; 当dst使用基础数据类型时，U和dst的数据类型T需保持一致，否则编译失败。<br>&nbsp;&nbsp;&bull; 当dst使用[TensorTrait](../../../数据结构/辅助数据结构/TensorTrait/TensorTrait.md)类型时，U和dst的数据类型T的LiteType需保持一致，否则编译失败。<br>&nbsp;&nbsp;最后一个模板参数仅用于上述数据类型检查，用户无需关注。 |
 
 **表 2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
-|---------|----------|------|
+| --------- | ---------- | ------ |
 | dst | 输出 | 目的操作数，结果矩阵，类型为LocalTensor。 |
 | InitConstValueParams | 输入 | 初始化相关参数，类型为InitConstValueParams。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_mm.h，\${INSTALL\_DIR}请替换为CANN软件安装后文件存储路径。<br>参数说明请参考[表3](#table3)。 |
 
@@ -57,22 +57,22 @@ __aicore__ inline void Fill(const LocalTensor<T>& dst, const InitConstValueParam
 **表 3** InitConstValueParams结构体参数说明
 
 | 参数名称 | 含义 |
-|---------|------|
+| --------- | ------ |
 | repeatTimes | 迭代次数。默认值为0。取值范围：repeatTimes∈[0, 32767]。**注：repeatTimes = 0表示不执行，该指令将被视为NOP（空操作）。** |
-| blockNum | 每次迭代初始化的数据块个数，取值范围：blockNum∈[0, 32767] 。默认值为0。**注：blockNum = 0表示不执行，该指令将被视为 NOP（空操作）。**<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L1 Buffer（TPosition: A1/B1）时，每一个block（数据块）大小是32B；<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L0A Buffer（TPosition: A2）/L0B Buffer（TPosition: B2）时，每一个block（数据块）大小是512B。 |
+| blockNum | 每次迭代初始化的数据块个数，取值范围：blockNum∈[0, 32767] 。默认值为0。**注：blockNum = 0表示不执行，该指令将被视为NOP（空操作）。**<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L1 Buffer（TPosition: A1/B1）时，每一个block（数据块）大小是32B；<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L0A Buffer（TPosition: A2）/L0B Buffer（TPosition: B2）时，每一个block（数据块）大小是512B。 |
 | dstGap | 目的操作数前一个迭代结束地址到后一个迭代起始地址之间的距离。<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L1 Buffer（TPosition: A1/B1）时，单位是32B；<br>&nbsp;&nbsp;&bull; dst的物理存储位置为L0A Buffer（TPosition: A2）/L0B Buffer（TPosition: B2）时，单位是512B。<br>&nbsp;&nbsp;取值范围：dstGap∈[0, 32767]。默认值为0。 |
 | initValue | 初始化的value值，支持的数据类型与dst保持一致。 |
 
 ## 数据类型
 
-<cann-filter npu-type="910">Atlas 训练系列产品，支持的数据类型为：half。</cann-filter><br>
-<cann-filter npu-type="310p">Atlas 推理系列产品AI Core，支持的数据类型为：int16_t、uint16_t、half。</cann-filter><br>
-<cann-filter npu-type="910b">Atlas A2训练系列产品/Atlas A2推理系列产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter><br>
-<cann-filter npu-type="A3">Atlas A3训练系列产品/Atlas A3推理系列产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter><br>
-<cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter><br>
-<cann-filter npu-type="950">Ascend 950PR/Ascend 950DT，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter><br>
-<cann-filter npu-type="x90">Kirin X90，支持的数据类型为：int8_t、half。</cann-filter><br>
-<cann-filter npu-type="9030">Kirin 9030，支持的数据类型为：half。</cann-filter>
+<cann-filter npu-type = "910">Atlas 训练系列产品，支持的数据类型为：half。</cann-filter><br>
+<cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持的数据类型为：int16_t、uint16_t、half。</cann-filter><br>
+<cann-filter npu-type = "910b">Atlas A2训练系列产品/Atlas A2推理系列产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter><br>
+<cann-filter npu-type = "A3">Atlas A3训练系列产品/Atlas A3推理系列产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter><br>
+<cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter><br>
+<cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter><br>
+<cann-filter npu-type = "x90">Kirin X90，支持的数据类型为：int8_t、half。</cann-filter><br>
+<cann-filter npu-type = "9030">Kirin 9030，支持的数据类型为：half。</cann-filter>
 
 ## 返回值说明
 
@@ -88,24 +88,23 @@ __aicore__ inline void Fill(const LocalTensor<T>& dst, const InitConstValueParam
     - 支持配置所有参数场景下，支持配置迭代次数、初始化值、每个迭代处理的数据块个数和迭代间间隔。
     - 特别地，针对如下型号，仅支持配置迭代次数和初始化值。
         
-        <cann-filter npu-type="910">
+        <cann-filter npu-type = "910">
 
         - Atlas 训练系列产品。
 
         </cann-filter>
-        <cann-filter npu-type="310p">
+        <cann-filter npu-type = "310p">
 
         - Atlas 推理系列产品AI Core。
         
         </cann-filter>
 
 - 支持的物理存储位置为：L1 Buffer（TPosition: A1/B1）、L0A Buffer（TPosition: A2）、L0B Buffer（TPosition: B2）。
-    <cann-filter npu-type="950">
+    <cann-filter npu-type = "950">
     - 特别针对Ascend 950PR/Ascend 950DT，支持物理存储位置为：L1 Buffer（TPosition: A1/B1）。
     </cann-filter>
     - 如果物理存储位置为L1 Buffer（TPosition: A1/B1），起始地址需要满足32B对齐；
     - 如果物理存储位置为L0A Buffer（TPosition: A2）、L0B Buffer（TPosition: B2），起始地址需要满足512B对齐。
-
 
 ## 调用示例<a name="section642mcpsimp"></a>
 

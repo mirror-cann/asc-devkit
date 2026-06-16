@@ -1,4 +1,4 @@
-﻿# 矩阵数据搬入至L0 Buffer<a id="ZH-CN_TOPIC_0000002538071218"></a>
+﻿# 矩阵数据搬入至L0A Buffer/L0B Buffer<a id="ZH-CN_TOPIC_0000002538071218"></a>
 
 - **[Load2D](Load2D.md)**
 
@@ -16,7 +16,7 @@
 
 - **[LoadDataWithSparse](LoadDataWithSparse.md)**
 
-- **[BroadCastVecToMM(ISASI)](BroadCastVecToMM(ISASI).md)
+- **[BroadCastVecToMM(ISASI)](BroadCastVecToMM(ISASI).md)**
 
 - **[L1ToBiasTable-Buffer数据搬运（DataCopy）](L1ToBiasTable-Buffer数据搬运（DataCopy）.md)**
 

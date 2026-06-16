@@ -2,21 +2,21 @@
 
 ## 产品支持情况<a name="zh-cn_topic_0000002512171654_section796754519912"></a>
 
-|产品|是否支持|
-|----------|:----------:|
-|Ascend 950PR/Ascend 950DT|x|
-|Atlas A3 训练系列产品/Atlas A3 推理系列产品|√|
-|Atlas A2 训练系列产品/Atlas A2 推理系列产品|√|
-|Atlas 200I/500 A2 推理产品|x|
-|Atlas 推理系列产品 AI Core|x|
-|Atlas 推理系列产品 Vector Core|x|
-|Atlas 训练系列产品|x|
-|Kirin X90|x|
-|Kirin 9030|x|
+| 产品 | 是否支持 |
+| ---------- | :----------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | x </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品 Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | x </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | x </cann-filter> |
 
 ## 功能说明<a name="zh-cn_topic_0000002512171654_section106841136114319"></a>
 
-头文件路径为："basic_api/kernel_operator_mm_intf.h"。
+头文件路径为：basic_api/kernel_operator_mm_intf.h。
 
 用于从L1 Buffer中搬运以512字节为单位存放的稠密权重矩阵到L0B Buffer里，同时搬运以128字节为单位的索引矩阵到内置的专用buffer空间（用于后续MmadWithSparse接口进行读取）。
 
@@ -24,7 +24,7 @@
 
 仅支持如下数据通路的搬运：L1 Buffer->L0B Buffer。
 
-**图 1**  L1 Buffer->L0B Buffer LoadDataWithSparse示意图，LoadData2dParams参数配置startIndex = 1，repeatTimes = 5，表示需要从源操作数src中第1块数据分形开始搬运5块连续的数据分形，从源操作数idx中第1块index分形开始搬运5块连续的index分形。<a name="zh-cn_topic_0000002512171654_fig71111314164414"></a>  
+**图 1** L1 Buffer->L0B Buffer LoadDataWithSparse示意图，LoadData2dParams参数配置startIndex = 1，repeatTimes = 5，表示需要从源操作数src中第1块数据分形开始搬运5块连续的数据分形，从源操作数idx中第1块index分形开始搬运5块连续的index分形。<a name="zh-cn_topic_0000002512171654_fig71111314164414"></a>  
 
 ![](../../../../../figures/loaddatawithsparse_l12l0b.png)
 
@@ -37,25 +37,29 @@ __aicore__ inline void LoadDataWithSparse(const LocalTensor<T>& dst, const Local
 
 ## 参数说明<a name="zh-cn_topic_0000002512171654_section16128134420472"></a>
 
-**表 1**  模板参数说明
+**表 1** 模板参数说明
 
-|参数名|描述|
-|--------|------|
-|T|dst、src的数据类型。|
-|U|idx的数据类型。<br>&bull; 当dst、src、idx为基础数据类型时，T和U必须为uint8_t类型，否则编译失败。<br>&bull; 当dst、src、idx为TensorTrait类型时，T和U的LiteType必须为int8_t类型，否则编译失败。<br>最后两个模板参数仅用于上述数据类型检查，用户无需关注。|
+| 参数名 | 描述 |
+| -------- | ------ |
+| T | dst、src的数据类型。 |
+| U | idx的数据类型。<br>&nbsp;&nbsp;&bull; 当dst、src、idx为基础数据类型时，T和U必须为uint8_t类型，否则编译失败。<br>&nbsp;&nbsp;&bull; 当dst、src、idx为TensorTrait类型时，T和U的LiteType必须为int8_t类型，否则编译失败。<br>最后两个模板参数仅用于上述数据类型检查，用户无需关注。 |
 
-**表 2**  参数说明
+**表 2** 参数说明
 
-|参数名称|输入/输出| 含义 |
-|----------|-----------|------|
-|dst|输出| 目的操作数，类型为LocalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>支持的数据类型为int8_t。<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的物理存储位置为L0B Buffer(TPosition: B2)。<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的物理存储位置为L0B Buffer(TPosition: B2)。 |
-|src|输入| 源操作数，类型为LocalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>支持的数据类型为int8_t。<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。 |
-|idx|输入| 源操作数，类型为LocalTensor。<br>数据分形大小为128字节，每个数据分形shape为16 \* 32 \* 2bit。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>支持的数据类型为uint8_t。<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。 |
-|loadDataParam|输入| LoadData参数结构体，类型为：<br>&bull; LoadData2dParams，具体参考[LoadData2dParams结构体内参数说明](Load2D.md)。<br>需要注意的是，本接口仅支持连续的数据分形搬运，不支持跳stride，因此仅支持配置loadDataParam中的startIndex和repeatTimes参数，其余参数未使用，无需配置。 |
+| 参数名称 | 输入/输出 | 含义 |
+| ---------- | ----------- | ------ |
+| dst | 输出 | 目的操作数，类型为LocalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>支持的数据类型为int8_t。<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的物理存储位置为L0B Buffer(TPosition: B2)。<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的物理存储位置为L0B Buffer(TPosition: B2)。 |
+| src | 输入 | 源操作数，类型为LocalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>支持的数据类型为int8_t。<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。 |
+| idx | 输入 | 源操作数，类型为LocalTensor。<br>数据分形大小为128字节，每个数据分形shape为16 \* 32 \* 2bit。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>支持的数据类型为uint8_t。<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。 |
+| loadDataParam | 输入 | LoadData参数结构体，类型为：<br>&nbsp;&nbsp;&bull; LoadData2dParams，具体参考[LoadData2dParams结构体内参数说明](Load2D.md)。<br>需要注意的是，本接口仅支持连续的数据分形搬运，不支持跳stride，因此仅支持配置loadDataParam中的startIndex和repeatTimes参数，其余参数未使用，无需配置。 |
 
 ## 数据类型<a name="zh-cn_topic_0000002512171654_section4219135304818"></a>
 
 支持数据类型为：src和dst支持int8_t，idx支持uint8_t。
+
+## 返回值说明<a name="zh-cn_topic_0000002512171654_section640mcpsimp"></a>
+
+无
 
 ## 约束说明<a name="zh-cn_topic_0000002512171654_section2045914466492"></a>
 
@@ -64,10 +68,6 @@ __aicore__ inline void LoadDataWithSparse(const LocalTensor<T>& dst, const Local
 - 存放索引矩阵的专用buffer空间大小为L0B Buffer大小的四分之一，开发者无需配置地址，MmadWithSparse接口会自动从该buffer中读取数据。
 - 仅支持L1 Buffer->L0B Buffer通路，且L1 Buffer上的分形为Zn。
 - 每次迭代中的startIndex不能小于零。
-
-## 返回值说明<a name="zh-cn_topic_0000002512171654_section640mcpsimp"></a>
-
-无
 
 ## 调用示例<a name="zh-cn_topic_0000002512171654_section088124295117"></a>
 

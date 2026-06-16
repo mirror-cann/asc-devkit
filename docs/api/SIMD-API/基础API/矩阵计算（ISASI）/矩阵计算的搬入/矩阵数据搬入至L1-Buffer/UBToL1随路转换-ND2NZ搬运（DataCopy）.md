@@ -2,24 +2,24 @@
 
 ## 产品支持情况<a id="section1550532418810"></a>
 
-|产品|是否支持|
-|----------|:----------:|
-|Ascend 950PR/Ascend 950DT|√|
-|Atlas A3 训练系列产品/Atlas A3 推理系列产品|√|
-|Atlas A2 训练系列产品/Atlas A2 推理系列产品|√|
-|Atlas 200I/500 A2 推理产品|x|
-|Atlas 推理系列产品AI Core|x|
-|Atlas 推理系列产品Vector Core|x|
-|Atlas 训练系列产品|x|
-|Kirin X90|x|
-|Kirin 9030|x|
+| 产品 | 是否支持 |
+| ---------- | :----------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | x </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | x </cann-filter> |
 
 ## 功能说明<a id="section12840195813362"></a>
 
-> [!NOTE]说明 
-> 本接口为软件仿真实现，是在Matmul高阶API的基础上，利用Matmul高阶API中的workspace GM空间作为数据中转空间，数据先搬入GM，再搬入L1 Buffer。因此，在使用本接口时，需要先使用REGISSTER_MATMUL注册高阶API。
+> **说明：**
+> 本接口为软件仿真实现，是在Matmul高阶API的基础上，利用Matmul高阶API中的workspace GM空间作为数据中转空间，数据先搬入GM，再搬入L1 Buffer。因此，在使用本接口时，需要先使用REGISTER_MATMUL注册高阶API。
 
-头文件路径为："basic_api/kernel_operator_data_copy_intf.h"。
+头文件路径为：basic_api/kernel_operator_data_copy_intf.h。
 
 支持在数据搬运时进行ND到NZ格式的转换。数据从Unified Buffer（UB，TPosition为VECIN/VECCALC/VECOUT）搬运至L1 Buffer，搬运过程中完成ND->NZ格式转换。
 
@@ -32,32 +32,32 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 ## 参数说明<a id="section1251613311396"></a>
 
-**表 1**  模板参数说明
+**表 1** 模板参数说明
 
-|参数名|描述|
-|----------|----------|
-|T|源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#section4219135304818)。|
+| 参数名 | 描述 |
+| ---------- | ---------- |
+| T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#section4219135304818)。 |
 
-**表 2**  参数说明
+**表 2** 参数说明
 
-|参数名称|输入/输出|含义|
-|----------|----------|----------|
-|dst|输出|目的操作数，类型为LocalTensor，存储位置为L1 Buffer（TSCM）。|
-|src|输入|源操作数，类型为LocalTensor，存储位置为Unified Buffer（TPosition为VECIN/VECCALC/VECOUT）。|
-|intriParams|输入|搬运参数，类型为[Nd2NzParams](#table844881954715)。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\${INSTALL\_DIR}请替换为CANN软件安装后文件存储路径。|
+| 参数名称 | 输入/输出 | 含义 |
+| ---------- | ---------- | ---------- |
+| dst | 输出 | 目的操作数，类型为LocalTensor，存储位置为L1 Buffer（TSCM）。 |
+| src | 输入 | 源操作数，类型为LocalTensor，存储位置为Unified Buffer（TPosition为VECIN/VECCALC/VECOUT）。 |
+| intriParams | 输入 | 搬运参数，类型为[Nd2NzParams](#table844881954715)。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\${INSTALL\_DIR}请替换为CANN软件安装后文件存储路径。 |
 
-**表 3**  Nd2NzParams结构体参数定义<a id="table844881954715"></a>
+**表 3** Nd2NzParams结构体参数定义<a id="table844881954715"></a>
 
-|参数名称|含义|
-|----------|----------|
-|ndNum|传输ND矩阵的数目，取值范围：ndNum∈[0, 4095]。|
-|nValue|ND矩阵的行数，取值范围：nValue∈[0, 16384]。|
-|dValue|ND矩阵的列数，取值范围：dValue∈[0, 65535]。|
-|srcNdMatrixStride|源操作数相邻ND矩阵起始地址间的偏移，取值范围：srcNdMatrixStride∈[0, 65535]，单位为元素。|
-|srcDValue|源操作数同一ND矩阵的相邻行起始地址间的偏移，取值范围：srcDValue∈[1, 65535]，单位为元素。|
-|dstNzC0Stride|ND转换到NZ格式后，源操作数中的一行会转换为目的操作数的多行。dstNzC0Stride表示，目的NZ矩阵中，来自源操作数同一行的多行数据相邻行起始地址间的偏移，取值范围：dstNzC0Stride∈[1, 16384]，单位：C0_SIZE（32字节）。|
-|dstNzNStride|目的NZ矩阵中，Z型矩阵相邻行起始地址之间的偏移。取值范围：dstNzNStride∈[1, 16384]，单位：C0_SIZE（32字节）。|
-|dstNzMatrixStride|目的NZ矩阵中，相邻NZ矩阵起始地址间的偏移，取值范围：dstNzMatrixStride∈[0, 65535]，单位为元素。|
+| 参数名称 | 含义 |
+| ---------- | ---------- |
+| ndNum | 传输ND矩阵的数目，取值范围：ndNum∈[0, 4095]。 |
+| nValue | ND矩阵的行数，取值范围：nValue∈[0, 16384]。 |
+| dValue | ND矩阵的列数，取值范围：dValue∈[0, 65535]。 |
+| srcNdMatrixStride | 源操作数相邻ND矩阵起始地址间的偏移，取值范围：srcNdMatrixStride∈[0, 65535]，单位为元素。 |
+| srcDValue | 源操作数同一ND矩阵的相邻行起始地址间的偏移，取值范围：srcDValue∈[1, 65535]，单位为元素。 |
+| dstNzC0Stride | ND转换到NZ格式后，源操作数中的一行会转换为目的操作数的多行。dstNzC0Stride表示，目的NZ矩阵中，来自源操作数同一行的多行数据相邻行起始地址间的偏移，取值范围：dstNzC0Stride∈[1, 16384]，单位：C0_SIZE（32字节）。 |
+| dstNzNStride | 目的NZ矩阵中，Z型矩阵相邻行起始地址之间的偏移。取值范围：dstNzNStride∈[1, 16384]，单位：C0_SIZE（32字节）。 |
+| dstNzMatrixStride | 目的NZ矩阵中，相邻NZ矩阵起始地址间的偏移，取值范围：dstNzMatrixStride∈[0, 65535]，单位为元素。 |
 
 ND2NZ转换示意图如下，样例中参数设置值和解释说明如下：
 
@@ -70,7 +70,7 @@ ND2NZ转换示意图如下，样例中参数设置值和解释说明如下：
 - dstNzNStride = 2，表示src中一个ND矩阵的第x行和第x+1行转换为NZ格式后在dst中的偏移，即A1和B1在dst之间的偏移为2个DataBlock。
 - dstNzMatrixStride = 96，表示dst中第x个ND矩阵的起点和第x+1个ND矩阵的起点的偏移，即A1和C1之间的距离，即为6个DataBlock，6 * 16 = 96个元素。
 
-**图 1**  ND2NZ转换示意图（half数据类型）<a id="fig128961542184620"></a>
+**图 1** ND2NZ转换示意图（half数据类型）<a id="fig128961542184620"></a>
 
 ![](../../../../../figures/ND2NZ转换示意图（half数据类型）.png)
 
@@ -78,19 +78,19 @@ ND2NZ转换示意图如下，样例中参数设置值和解释说明如下：
 
 源矩阵和目的矩阵支持的数据类型保持一致。
 
-<cann-filter npu_type="950">
+<cann-filter npu-type = "950">
 
 针对Ascend 950PR/Ascend 950DT，支持数据类型为：bool、int8_t、uint8_t、hifloat8_t、fp8_e5m2_t、fp8_e4m3fn_t、fp8_e8m0_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、complex32。
 
 </cann-filter>
 
-<cann-filter npu_type="A3">
+<cann-filter npu-type = "A3">
 
 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、half、bfloat16_t、float。
 
 </cann-filter>
 
-<cann-filter npu_type="910b">
+<cann-filter npu-type = "910b">
 
 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、half、bfloat16_t、float。
 

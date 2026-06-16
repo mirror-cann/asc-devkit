@@ -1,24 +1,24 @@
-# SetFmatrix<a name="ZH-CN_TOPIC_0000001834660673"></a>
+﻿# SetFmatrix<a name="ZH-CN_TOPIC_0000001834660673"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
 | 产品 | 是否支持 |
-|------|:------:|
-| <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-| <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
-| <cann-filter npu-type="910">Atlas 训练系列产品 | x </cann-filter>|
-| <cann-filter npu-type="x90">Kirin X90 | √ </cann-filter>|
-| <cann-filter npu-type="9030">Kirin 9030 | √ </cann-filter>|
+| ------ | :------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | √ </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | √ </cann-filter> |
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为：basic\_api/kernel\_operator\_mm\_intf.h。
+头文件路径为：basic_api/kernel_operator_mm_intf.h。
 
-用于调用Load3D时设置FeatureMap的属性描述。Load3D的模板参数isSetFMatrix设置为false时，表示Load3D传入的FeatureMap的属性（包括l1H、l1W、padList，参数介绍参考表4 LoadData3DParamsV1结构体内参数说明、表5 LoadData3DParamsV2结构体内参数说明）将不生效，开发者需要通过该接口进行设置。
+用于调用[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)时设置FeatureMap的属性描述。Load3D的模板参数isSetFMatrix设置为false时，表示Load3D传入的FeatureMap的属性（包括l1H、l1W、padList，参数介绍参考[表3 LoadData3DParamsV1结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table679014222918)、[表4 LoadData3DParamsV2结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)）将不生效，开发者需要通过该接口进行设置。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -32,7 +32,7 @@ __aicore__ inline void SetFmatrix(uint16_t l1H, uint16_t l1W, const uint8_t padL
 **表 1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
-|---------|----------|------|
+| --------- | ---------- | ------ |
 | l1H | 输入 | 源操作数height，取值范围：l1H∈[1, 32767]。 |
 | l1W | 输入 | 源操作数width，取值范围：l1W∈[1, 32767]。 |
 | padList | 输入 | padding列表 [padding\_left, padding\_right, padding\_top, padding\_bottom]，每个元素取值范围：[0,255]。默认为{0, 0, 0, 0}。 |
@@ -44,7 +44,7 @@ __aicore__ inline void SetFmatrix(uint16_t l1H, uint16_t l1W, const uint8_t padL
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-- 该接口需要配合Load3D接口一起使用，需要在Load3D接口之前调用，其中fmatrixMode参数需要和Load3D接口参数中的fMatrixCtrl值保持一致。
+- 该接口需要配合[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)接口一起使用，需要在[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)接口之前调用，其中fmatrixMode参数需要和Load3D接口参数中的fMatrixCtrl值保持一致。
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../../通用说明和约束.md#section796754519912)。
 
 ## 调用示例<a name="section642mcpsimp"></a>

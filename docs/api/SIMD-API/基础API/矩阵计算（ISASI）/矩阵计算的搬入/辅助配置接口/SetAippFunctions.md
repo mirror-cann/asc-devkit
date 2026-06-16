@@ -3,14 +3,14 @@
 ## 产品支持情况<a name="section1550532418810"></a>
 
 | 产品 | 是否支持 |
-|------|:------:|
-| <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-| <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
-| <cann-filter npu-type="910">Atlas 训练系列产品 | x </cann-filter>|
+| --- | :---: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -19,22 +19,26 @@
 - **数据填充：** 在图片HW方向上padding。分为如下几种模式：
     - 模式0：常量填充模式，padding区域各位置填充为常数，支持设置每个通道填充的常数。该模式下仅支持左右padding，不支持上下padding。
 
-        **图 1** 常量填充模式（图片中间的绿色区域表示原始数据，其他为padding数据）<a name="fig56681157121916"></a>  
+        **图 1** 常量填充模式（图片中间的绿色区域表示原始数据，其他为padding数据）<a name="fig56681157121916"></a>
+
         ![](../../../../../figures/常量填充模式（图片中间的绿色区域表示原始数据-其他为padding数据）.png "常量填充模式（图片中间的绿色区域表示原始数据——其他为padding数据）")
 
     - 模式1：行列填充模式，padding区域各位置填充行/列上最邻近源图片位置的数据。
 
-        **图 2** 行列填充模式（图片中间的绿色区域表示原始数据，其他为padding数据）<a name="fig4239143712713"></a>  
+        **图 2** 行列填充模式（图片中间的绿色区域表示原始数据，其他为padding数据）<a name="fig4239143712713"></a>
+
         ![](../../../../../figures/行列填充模式（图片中间的绿色区域表示原始数据-其他为padding数据）.png "行列填充模式（图片中间的绿色区域表示原始数据——其他为padding数据）")
 
     - 模式2：块填充模式，按照padding的宽高，从源图片拷贝数据块进行padding区域填充。
 
-        **图 3** 块填充模式（图片中间的绿色区域表示原始数据，其他为padding数据）<a name="fig38821202817"></a>  
+        **图 3** 块填充模式（图片中间的绿色区域表示原始数据，其他为padding数据）<a name="fig38821202817"></a>
+
         ![](../../../../../figures/块填充模式（图片中间的绿色区域表示原始数据-其他为padding数据）.png "块填充模式（图片中间的绿色区域表示原始数据——其他为padding数据）")
 
     - 模式3：镜像块填充模式，按照padding的宽高，从源图片拷贝数据块的镜像进行padding区域填充。
 
-        **图 4** 镜像块填充模式（图片中间的绿色区域表示原始数据，其他为padding数据）<a name="fig14371141920261"></a>  
+        **图 4** 镜像块填充模式（图片中间的绿色区域表示原始数据，其他为padding数据）<a name="fig14371141920261"></a>
+
         ![](../../../../../figures/镜像块填充模式（图片中间的绿色区域表示原始数据-其他为padding数据）.png "镜像块填充模式（图片中间的绿色区域表示原始数据——其他为padding数据）")
 
 - **通道交换：** 将图片通道进行交换。
@@ -103,7 +107,7 @@
 | src0 | 输入 | 源图片在Global Memory上的矩阵。<br>源图片格式为YUV420SP时，表示Y维度在Global Memory上的矩阵。 |
 | src1 | 输入 | 源图片格式为YUV420SP时，表示UV维度在Global Memory上的矩阵。<br>源图片格式为其他格式时，该参数无效。 |
 | format | 输入 | 源图片的图片格式。AippInputFormat为枚举类型，取值为：<br>AippInputFormat::YUV420SP_U8：图片格式为YUV420 Semi-Planar，数据类型为uint8_t<br>AippInputFormat::XRGB8888_U8：图片格式为XRGB8888，数据类型为uint8_t<br>AippInputFormat::RGB888_U8：图片格式为RGB888，数据类型为uint8_t<br>AippInputFormat::YUV400_U8：图片格式为YUV400，数据类型为uint8_t<br><pre>enum class AippInputFormat : uint8_t {<br>    YUV420SP_U8 = 0,<br>    XRGB8888_U8 = 1,<br>    RGB888_U8 = 4,<br>    YUV400_U8 = 9,<br>};</pre> |
-| config | 输入 | 图片预处理的相关参数，类型为AippParams，结构体具体定义为：<br><pre>template <typename T><br>struct AippParams {<br>    AippPaddingParams<T> paddingParams;<br>    AippSwapParams swapParams;<br>    AippSingleLineParams singleLineParams;<br>    AippDataTypeConvParams dtcParams;<br>    AippChannelPaddingParams<T> cPaddingParams;<br>    AippColorSpaceConvParams cscParams;<br>};</pre><br>AippParams结构体内各子结构体定义如下：<br>&bull; 数据填充功能相关参数，说明见表3。<br><pre>template <typename T><br>struct AippPaddingParams {<br>    uint32_t paddingMode;<br>    T paddingValueCh0;<br>    T paddingValueCh1;<br>    T paddingValueCh2;<br>    T paddingValueCh3;<br>};</pre><br>&bull; 通道交换功能相关参数，说明见表4。<br><pre>struct AippSwapParams {<br>    bool isSwapRB;<br>    bool isSwapUV;<br>    bool isSwapAX;<br>};</pre><br>&bull; 单行读取功能相关参数，说明见表5。<br><pre>struct AippSingleLineParams {<br>    bool isSingleLineCopy;<br>};</pre><br>&bull; 数据类型转换功能相关参数，说明见表6。<br><pre>struct AippDataTypeConvParams {<br>    uint8_t dtcMeanCh0{ 0 };<br>    uint8_t dtcMeanCh1{ 0 };<br>    uint8_t dtcMeanCh2{ 0 };<br>    half dtcMinCh0{ 0 };<br>    half dtcMinCh1{ 0 };<br>    half dtcMinCh2{ 0 };<br>    half dtcVarCh0{ 1.0 };<br>    half dtcVarCh1{ 1.0 };<br>    half dtcVarCh2{ 1.0 };<br>    uint32_t dtcRoundMode{ 0 };<br>};</pre><br>&bull; 通道填充功能相关参数，说明见表7。<br><pre>template <typename T><br>struct AippChannelPaddingParams {<br>    uint32_t cPaddingMode;<br>    T cPaddingValue;<br>};</pre><br>&bull; 色域转换功能相关参数，说明见表8。<br><pre>struct AippColorSpaceConvParams {<br>    bool isEnableCsc;<br>    int16_t cscMatrixR0C0;<br>    int16_t cscMatrixR0C1;<br>    int16_t cscMatrixR0C2;<br>    int16_t cscMatrixR1C0;<br>    int16_t cscMatrixR1C1;<br>    int16_t cscMatrixR1C2;<br>    int16_t cscMatrixR2C0;<br>    int16_t cscMatrixR2C1;<br>    int16_t cscMatrixR2C2;<br>    uint8_t cscBiasIn0;<br>    uint8_t cscBiasIn1;<br>    uint8_t cscBiasIn2;<br>    uint8_t cscBiasOut0;<br>    uint8_t cscBiasOut1;<br>    uint8_t cscBiasOut2;<br>};</pre> |
+| config | 输入 | 图片预处理的相关参数，类型为AippParams，结构体具体定义为：<br><pre>template <typename T><br>struct AippParams {<br>    AippPaddingParams<T> paddingParams;<br>    AippSwapParams swapParams;<br>    AippSingleLineParams singleLineParams;<br>    AippDataTypeConvParams dtcParams;<br>    AippChannelPaddingParams<T> cPaddingParams;<br>    AippColorSpaceConvParams cscParams;<br>};</pre><br>AippParams结构体内各子结构体定义如下：<br>&nbsp;&nbsp;&bull; 数据填充功能相关参数，说明见表3。<br><pre>template <typename T><br>struct AippPaddingParams {<br>    uint32_t paddingMode;<br>    T paddingValueCh0;<br>    T paddingValueCh1;<br>    T paddingValueCh2;<br>    T paddingValueCh3;<br>};</pre><br>&nbsp;&nbsp;&bull; 通道交换功能相关参数，说明见表4。<br><pre>struct AippSwapParams {<br>    bool isSwapRB;<br>    bool isSwapUV;<br>    bool isSwapAX;<br>};</pre><br>&nbsp;&nbsp;&bull; 单行读取功能相关参数，说明见表5。<br><pre>struct AippSingleLineParams {<br>    bool isSingleLineCopy;<br>};</pre><br>&nbsp;&nbsp;&bull; 数据类型转换功能相关参数，说明见表6。<br><pre>struct AippDataTypeConvParams {<br>    uint8_t dtcMeanCh0{ 0 };<br>    uint8_t dtcMeanCh1{ 0 };<br>    uint8_t dtcMeanCh2{ 0 };<br>    half dtcMinCh0{ 0 };<br>    half dtcMinCh1{ 0 };<br>    half dtcMinCh2{ 0 };<br>    half dtcVarCh0{ 1.0 };<br>    half dtcVarCh1{ 1.0 };<br>    half dtcVarCh2{ 1.0 };<br>    uint32_t dtcRoundMode{ 0 };<br>};</pre><br>&nbsp;&nbsp;&bull; 通道填充功能相关参数，说明见表7。<br><pre>template <typename T><br>struct AippChannelPaddingParams {<br>    uint32_t cPaddingMode;<br>    T cPaddingValue;<br>};</pre><br>&nbsp;&nbsp;&bull; 色域转换功能相关参数，说明见表8。<br><pre>struct AippColorSpaceConvParams {<br>    bool isEnableCsc;<br>    int16_t cscMatrixR0C0;<br>    int16_t cscMatrixR0C1;<br>    int16_t cscMatrixR0C2;<br>    int16_t cscMatrixR1C0;<br>    int16_t cscMatrixR1C1;<br>    int16_t cscMatrixR1C2;<br>    int16_t cscMatrixR2C0;<br>    int16_t cscMatrixR2C1;<br>    int16_t cscMatrixR2C2;<br>    uint8_t cscBiasIn0;<br>    uint8_t cscBiasIn1;<br>    uint8_t cscBiasIn2;<br>    uint8_t cscBiasOut0;<br>    uint8_t cscBiasOut1;<br>    uint8_t cscBiasOut2;<br>};</pre> |
 
 **表 3** AippPaddingParams结构体内参数说明<a name="table8955841508"></a>
 
@@ -142,7 +146,9 @@
 | dtcVarCh0 | 输入 | 计算公式内的var值，channel0，数据类型为half，默认值为1.0。 |
 | dtcVarCh1 | 输入 | 计算公式内的var值，channel1，数据类型为half，默认值为1.0。 |
 | dtcVarCh2 | 输入 | 计算公式内的var值，channel2，数据类型为half，默认值为1.0。 |
-| <cann-filter npu-type="310b">dtcRoundMode | 输入 | 控制dtc做数据类型转换的模式，数据类型为uint32_t，默认值为0。<br>0：四舍五入到最接近的整数值（C语言round）。<br>1：四舍五入到最接近的偶数（C语言rint）。<br>仅Atlas 200I/500 A2 推理产品支持配置该参数。</cann-filter> |
+| dtcRoundMode | 输入 | 控制dtc做数据类型转换的模式，数据类型为uint32_t，默认值为0。<br>0：四舍五入到最接近的整数值（C语言round）。<br>1：四舍五入到最接近的偶数（C语言rint）。 |
+
+**说明：参数dtcRoundMode，仅在Atlas 200I/500 A2 推理产品支持配置。**
 
 **表 7** AippChannelPaddingParams结构体内参数说明<a name="table163681812917"></a>
 
@@ -182,16 +188,16 @@
 
     <a name="table9587253131611"></a>
 
-    | 图片格式 | src0 | src1 |
-    | --- | --- | --- |
-    | YUV420SP | 必须2Bytes对齐 | 必须2Bytes对齐 |
-    | XRGB8888 | 必须4Bytes对齐 | - |
-    | RGB888 | 无对齐要求 | - |
-    | YUV400 | 无对齐要求 | - |
+| 图片格式 | src0 | src1 |
+| --- | --- | --- |
+| YUV420SP | 必须2Bytes对齐 | 必须2Bytes对齐 |
+| XRGB8888 | 必须4Bytes对齐 | - |
+| RGB888 | 无对齐要求 | - |
+| YUV400 | 无对齐要求 | - |
 
 - 对于XRGB输入格式的数据，芯片会默认丢弃第四个通道的数据输出RGB格式的数据。如果X在channel0的场景下，X通道后移功能必须使能，将输入通道转换为RGBX；反之如果X在channel3的场景下，X通道后移功能必须不使能，以输出RGB格式的数据。
 
-<cann-filter npu-type="310p">
+<cann-filter npu-type = "310p">
 
 ## 调用示例<a name="section6461234123118"></a>
 

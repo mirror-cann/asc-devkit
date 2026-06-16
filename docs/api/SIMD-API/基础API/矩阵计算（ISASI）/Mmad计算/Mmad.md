@@ -1,22 +1,22 @@
-# Mmad<a name="ZH-CN_TOPIC_00000025382311899"></a>
+﻿# Mmad<a name="ZH-CN_TOPIC_00000025382311899"></a>
 
 ## 产品支持情况
 
 | 产品 | 是否支持（<br><br>不传入bias的原型<br><br>） | 是否支持（<br><br>传入bias的原型<br><br>） |
 | --- | --- | --- |
-| Ascend 950PR/Ascend 950DT | √ | √ |
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ | √ |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ | √ |
-| Atlas 200I/500 A2 推理产品 | √ | √ |
-| Atlas 推理系列产品AI Core | √ | x |
-| Atlas 推理系列产品Vector Core | x | x |
-| Atlas 训练系列产品 | √ | x |
-| Kirin X90 | √ | √ |
-| Kirin 9030 | √ | x |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √ | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | √ | x </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | √ | √ </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | √ | x </cann-filter> |
 
 ## 功能说明
 
-头文件路径为：\#include "basic\_api/kernel\_operator\_mm\_intf.h"。
+头文件路径为：basic_api/kernel_operator_mm_intf.h。
 
 Mmad接口是Ascend C面向昇腾AI芯片的矩阵乘加核心计算接口，专为高性能算子开发设计，封装了昇腾NPU硬件的矩阵乘加计算能力，广泛用于神经网络层（如全连接层、卷积层）、数值计算类算子的开发。
 
@@ -24,55 +24,28 @@ Mmad接口实现昇腾NPU矩阵乘计算能力，其数学表达式为：
 
 $$C = A \times B + C$$
 
-<cann-filter npu-type="950">
+<cann-filter npu-type = "950">
 
 针对Ascend 950PR/Ascend 950DT：
 
-**表 1**  矩阵计算矩阵A、B、C解释说明
+**表 1** 矩阵计算矩阵A、B、C解释说明
 
-  <table>
-    <thead>
-      <tr>
-        <th>矩阵计算逻辑</th>
-        <th>矩阵计算物理位置</th>
-        <th>维度</th>
-        <th>输入/输出数据格式</th>
-        <th>数据类型</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>A</td>
-        <td>L0A Buffer</td>
-        <td>M x K</td>
-        <td>Nz</td>
-        <td rowspan="3"><a href="#zh_cn_topic_mmad_section5">数据类型</a></td>
-      </tr>
-      <tr>
-        <td>B</td>
-        <td>L0B Buffer</td>
-        <td>K x N</td>
-        <td>Zn</td>
-      </tr>
-      <tr>
-        <td>C</td>
-        <td>L0C Buffer</td>
-        <td>M x N，可支持使用偏置矩阵Bias进行初始化，维度为1 x N</td>
-        <td>Nz</td>
-      </tr>
-    </tbody>
-  </table>
+| Mmad计算逻辑 | 矩阵计算物理位置 | 维度 | 输入/输出数据格式 | 数据类型 |
+| --- | --- | --- | --- | --- |
+| A | L0A Buffer | M x K | Nz | <a href="#zh_cn_topic_mmad_section5">数据类型</a> |
+| B | L0B Buffer | K x N | Zn | <a href="#zh_cn_topic_mmad_section5">数据类型</a> |
+| C | L0C Buffer | M x N，可支持使用偏置矩阵Bias进行初始化，维度为1 x N | Nz | <a href="#zh_cn_topic_mmad_section5">数据类型</a> |
 
-**图 1**  Mmad接口矩阵乘分形示意图（Ascend 950PR/Ascend 950DT）<a id="zh_cn_topic_mmad_section2_figure1"></a>
- ![](../../../../figures/mmad_demo_a5.png "Mmad接口计算分形示意图")
+**图 1** Mmad接口矩阵乘分形示意图（Ascend 950PR/Ascend 950DT）<a id="zh_cn_topic_mmad_section2_figure1"></a>
+![](../../../../figures/mmad_demo_a5.png "Mmad接口计算分形示意图")
 
 </cann-filter>
 
-<cann-filter npu-type="910b,A3">
+<cann-filter npu-type = "910b,A3">
 
 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品和Atlas A3 训练系列产品/Atlas A3 推理系列产品：
 
-**表 2**  矩阵计算矩阵A、B、C解释说明
+**表 2** 矩阵计算矩阵A、B、C解释说明
 
   <table>
     <thead>
@@ -127,17 +100,17 @@ $$C = A \times B + C$$
 
 ## 参数说明
 
-**表 3**  参数说明
+**表 3** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
-| dst | 输出 | 目的操作数，结果矩阵c，类型为LocalTensor，支持的物理存储位置为L0C Buffer（TPosition:CO1）。<br><br>LocalTensor的起始地址需要按照1024字节对齐。 |
-| fm | 输入 | 源操作数，左矩阵a，类型为LocalTensor，支持的物理存储位置为L0A Buffer（TPosition: A2）。<br><br>LocalTensor的起始地址需要按照512字节对齐。 |
-| filter | 输入 | 源操作数，右矩阵b，类型为LocalTensor，支持的物理存储位置为L0B Buffer（TPosition: B2）。<br><br>LocalTensor的起始地址需要按照512字节对齐。 |
-| bias | 输入 | 源操作数，bias矩阵，类型为LocalTensor，支持的物理存储位置为BT Buffer（TPosition:C2）。<br><br>LocalTensor的起始地址需要按照64字节对齐。 |
-| mmadParams | 输入 | 矩阵乘相关参数。该参数类型的具体定义请参考\${INSTALL_DIR}/include/ascendc/basic_api/interface/kernel_struct_mm.h，${INSTALL_DIR}请替换为CANN软件安装后文件存储路径。<br><br>MmadParams参数说明请参考[表4](#zh_cn_topic_mmad_section4_table4)。 |
+| dst | 输出 | 目的操作数，结果矩阵C，类型为LocalTensor，支持的物理存储位置为L0C Buffer（TPosition:CO1）。<br>LocalTensor的起始地址需要按照1024字节对齐。 |
+| fm | 输入 | 源操作数，左矩阵A，类型为LocalTensor，支持的物理存储位置为L0A Buffer（TPosition: A2）。<br>LocalTensor的起始地址需要按照512字节对齐。 |
+| filter | 输入 | 源操作数，右矩阵B，类型为LocalTensor，支持的物理存储位置为L0B Buffer（TPosition: B2）。<br>LocalTensor的起始地址需要按照512字节对齐。 |
+| bias | 输入 | 源操作数，Bias矩阵，类型为LocalTensor，支持的物理存储位置为BT Buffer（TPosition:C2）。<br>LocalTensor的起始地址需要按照64字节对齐。 |
+| mmadParams | 输入 | 矩阵乘相关参数。<br>该参数类型的具体定义请参考\$\{INSTALL_DIR\}/include/ascendc/basic_api/interface/kernel_struct_mm.h，\$\{INSTALL_DIR\}请替换为CANN软件安装后文件存储路径。<br>MmadParams参数说明请参考[表4](#zh_cn_topic_mmad_section4_table4)。 |
 
-**表 4**  MmadParams结构体内参数说明<a id="zh_cn_topic_mmad_section4_table4"></a>
+**表 4** MmadParams结构体内参数说明<a id="zh_cn_topic_mmad_section4_table4"></a>
 
 | 参数名称 | 含义 |
 | --- | --- |
@@ -145,11 +118,11 @@ $$C = A \times B + C$$
 | n | 右矩阵Width，取值范围：n∈[0，4095]。默认值为0。 |
 | k | 左矩阵Width、右矩阵Height，取值范围：k∈[0，4095]。默认值为0。 |
 | cmatrixInitVal | 是否使能C矩阵默认初始化清零操作。默认值true。<br>true：C矩阵默认初始化为0；false：C矩阵不进行默认操作，通过设置cmatrixSource参数进行初始化。 |
-| cmatrixSource | 配置C矩阵初始值是否来源于BT Buffer。默认值为false。<br>false：不对L0C进行初始化操作；<br>true：使用BT Buffer(TPosition:C2)的数据对L0C进行初始化操作。<br><br>Atlas 训练系列产品，仅支持配置为false。<br><br>Atlas 推理系列产品AI Core，仅支持配置为false。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持配置为true/false。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持配置为true/false。<br><br>Atlas 200I/500 A2 推理产品，支持配置为true/false。<br><br>Ascend 950PR/Ascend 950DT，支持配置为true/false。<br><br>Kirin X90仅支持配置为false。<br><br>Kirin 9030仅支持配置为false。<br><br>注意：带bias输入的接口配置该参数无效，会根据bias输入的位置来判断C矩阵初始值是否来源于BT Buffer。 |
-| isBias | 该参数废弃，新开发内容不要使用该参数。如果需要累加初始矩阵，请使用带bias的接口来实现；也可以通过cmatrixInitVal和cmatrixSource参数配置C矩阵的初始值来源来实现。推荐使用带bias的接口，相比于配置cmatrixInitVal和cmatrixSource参数更加简单方便。<br><br>配置是否需要累加初始矩阵，默认值为false，取值说明如下：<br>false：矩阵乘，无需累加初始矩阵，C = A \* B。true：矩阵乘加，需要累加初始矩阵，C += A \* B。 |
-| disableGemv | M=1时，该参数用来配置Mmad计算是否开启[GEMV](关键特性说明/GEMV.md#ZH-CN_TOPIC_0000002538231187)模式。<br>false：开启GEMV模式。true：关闭GEMV模式。<br><br>该参数仅支持如下型号：<br><br>Ascend 950PR/Ascend 950DT |
+| cmatrixSource | 配置C矩阵初始值是否来源于BT Buffer。默认值为false。<br>false：不对L0C Buffer进行初始化操作；<br>true：使用BT Buffer(TPosition:C2)的数据对L0C Buffer进行初始化操作。<br><br>Atlas 训练系列产品，仅支持配置为false。<br><br>Atlas 推理系列产品AI Core，仅支持配置为false。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持配置为true/false。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持配置为true/false。<br><br>Atlas 200I/500 A2 推理产品，支持配置为true/false。<br><br>Ascend 950PR/Ascend 950DT，支持配置为true/false。<br><br>Kirin X90仅支持配置为false。<br><br>Kirin 9030仅支持配置为false。<br><br>注意：带Bias输入的接口配置该参数无效，会根据bias输入的位置来判断C矩阵初始值是否来源于BT Buffer。 |
+| isBias | 该参数废弃，新开发内容不要使用该参数。如果需要累加初始矩阵，请使用带Bias的接口来实现；也可以通过cmatrixInitVal和cmatrixSource参数配置C矩阵的初始值来源来实现。推荐使用带Bias的接口，相比于配置cmatrixInitVal和cmatrixSource参数更加简单方便。<br><br>配置是否需要累加初始矩阵，默认值为false，取值说明如下：<br>false：矩阵乘，无需累加初始矩阵，C = A \* B。<br>true：矩阵乘加，需要累加初始矩阵，C += A \* B。 |
+| disableGemv | M=1时，该参数用来配置Mmad计算是否开启[GEMV](关键特性说明/GEMV.md#ZH-CN_TOPIC_0000002538231187)模式。<br>false：开启GEMV模式。<br>true：关闭GEMV模式。<br><br>该参数仅支持如下型号：<br><br>Ascend 950PR/Ascend 950DT |
 | unitFlag | unitFlag可以控制Mmad指令和Fixpipe指令细粒度的并行，使能该功能后，硬件每计算完一个分形，计算结果就会被搬出。取值说明如下：<br><br>0（2'b00）：不使能unitFlag；<br><br>1（2'b01）：保留值；<br><br>2（2'b10）：使能unitFlag，硬件执行完指令之后，不复位单元标记位；<br><br>3（2'b11）：使能unitFlag，硬件执行完指令之后，复位单元标记位。<br><br>使能该功能时，须将Mmad指令和Fixpipe指令的unitFlag值设置为2或3。<br><br>该参数仅支持如下型号：<br><br>Ascend 950PR/Ascend 950DT<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品。参数设置方案和特性细节可参考： [UnitFlag特性说明](关键特性说明/UnitFlag.md#ZH-CN_TOPIC_00000025690709788) |
-| kDirectionAlign | K方向对齐的核心功能是通过 `kDirectionAlign` 参数控制在使用float数据类型时，L0A和L0B矩阵在K方向上的对齐方式。<br><br>取值说明如下：<br><br>false：默认值，K方向对齐到 `ceil(K / 8) * 8`。<br><br>true：K 方向对齐到 `ceil(K/16)*16`。<br><br>Atlas 训练系列产品，仅支持配置为false。<br><br>Atlas 推理系列产品AI Core，仅支持配置为false。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，仅支持配置为true/false。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，仅支持配置为true/false。<br><br>Atlas 200I/500 A2 推理产品，仅支持配置为false。<br><br>Ascend 950PR/Ascend 950DT，仅支持配置为false。<br><br>Kirin X90支持配置为true/false。<br><br>Kirin 9030支持配置为true/false。<br><br>特性细节可参考：[kDirectionAlign特性说明](关键特性说明/K-方向对齐约束.md#ZH-CN_TOPIC_0000002569070973) |
+| kDirectionAlign | K方向对齐的核心功能是通过 `kDirectionAlign` 参数控制在使用float数据类型时，L0A Buffer和L0B Buffer矩阵在K方向上的对齐方式。<br><br>取值说明如下：<br><br>false：默认值，K方向对齐到 `ceil(K / 8) * 8`。<br><br>true：K 方向对齐到 `ceil(K/16)*16`。<br><br>Atlas 训练系列产品，仅支持配置为false。<br><br>Atlas 推理系列产品AI Core，仅支持配置为false。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，仅支持配置为true/false。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，仅支持配置为true/false。<br><br>Atlas 200I/500 A2 推理产品，仅支持配置为false。<br><br>Ascend 950PR/Ascend 950DT，仅支持配置为false。<br><br>Kirin X90支持配置为true/false。<br><br>Kirin 9030支持配置为true/false。<br><br>特性细节可参考：[kDirectionAlign特性说明](关键特性说明/K-方向对齐约束.md#ZH-CN_TOPIC_0000002569070973)。 |
 | fmOffset | 左矩阵offset（整个左矩阵对应一个值），支持Scalar（应与src_fm.dtype一致）/立即数，默认0。<br><br>注：未使用，兼容旧款产品接口传入，Atlas A2 训练系列产品/Atlas A2 推理系列产品及往后产品不做处理。 |
 | enSsparse | 使能结构化稀疏特性，默认false；<br><br>注：未使用，兼容旧款产品接口传入，Atlas A2 训练系列产品/Atlas A2 推理系列产品及往后产品不做处理。 |
 | enWinogradA | 指示矩阵a是否通过winograd_feature_map_transform() 生成，用于支持winograd特性，bool类型，默认false；<br><br>注：未使用，兼容旧款产品接口传入，Atlas A2 训练系列产品/Atlas A2 推理系列产品及往后产品不做处理。 |
@@ -157,9 +130,9 @@ $$C = A \times B + C$$
 
 ## 数据类型<a id="zh_cn_topic_mmad_section5"></a>
 
-<cann-filter npu-type="950">
+<cann-filter npu-type = "950">
 
-**表 5**  dst、fm、filter支持的精度类型组合（Ascend 950PR/Ascend 950DT）
+**表 5** dst、fm、filter支持的精度类型组合（Ascend 950PR/Ascend 950DT）
 
 | 左矩阵fm type | 右矩阵filter type | 结果矩阵dst type |
 | --- | --- | --- |
@@ -173,7 +146,7 @@ $$C = A \times B + C$$
 | fp8_e5m2_t | fp8_e5m2_t | float |
 | hifloat8_t | hifloat8_t | float |
 
-**表 6**  dst、fm、filter、bias支持的精度类型组合（Ascend 950PR/Ascend 950DT）
+**表 6** dst、fm、filter、bias支持的精度类型组合（Ascend 950PR/Ascend 950DT）
 
 | 左矩阵fm type | 右矩阵filter type | bias type | 结果矩阵dst type |
 | --- | --- | --- | --- |
@@ -189,9 +162,9 @@ $$C = A \times B + C$$
 
 </cann-filter>
 
-<cann-filter npu-type="910b,A3,310b">
+<cann-filter npu-type = "910b,A3,310b">
 
-**表 7**  dst、fm、filter支持的精度类型组合（Atlas A2 训练系列产品/Atlas A2 推理系列产品）（Atlas A3 训练系列产品/Atlas A3 推理系列产品）（Atlas 200I/500 A2 推理产品）
+**表 7** dst、fm、filter支持的精度类型组合（Atlas A2 训练系列产品/Atlas A2 推理系列产品）（Atlas A3 训练系列产品/Atlas A3 推理系列产品）（Atlas 200I/500 A2 推理产品）
 
 | 左矩阵fm type | 右矩阵filter type | 结果矩阵dst type |
 | --- | --- | --- |
@@ -201,7 +174,7 @@ $$C = A \times B + C$$
 | bfloat16_t | bfloat16_t | float |
 | int4b_t | int4b_t | int32_t |
 
-**表 8**  dst、fm、filter、bias支持的精度类型组合（Atlas A2 训练系列产品/Atlas A2 推理系列产品）（Atlas A3 训练系列产品/Atlas A3 推理系列产品）（Atlas 200I/500 A2 推理产品）
+**表 8** dst、fm、filter、bias支持的精度类型组合（Atlas A2 训练系列产品/Atlas A2 推理系列产品）（Atlas A3 训练系列产品/Atlas A3 推理系列产品）（Atlas 200I/500 A2 推理产品）
 
 | 左矩阵fm type | 右矩阵filter type | bias type | 结果矩阵dst type |
 | --- | --- | --- | --- |
@@ -212,9 +185,9 @@ $$C = A \times B + C$$
 
 </cann-filter>
 
-<cann-filter npu-type="310p">
+<cann-filter npu-type = "310p">
 
-**表 9**  dst、fm、filter支持的精度类型组合（Atlas 推理系列产品AI Core）
+**表 9** dst、fm、filter支持的精度类型组合（Atlas 推理系列产品AI Core）
 
 | 左矩阵fm type | 右矩阵filter type | 结果矩阵dst type |
 | --- | --- | --- |
@@ -227,9 +200,9 @@ $$C = A \times B + C$$
 
 </cann-filter>
 
-<cann-filter npu-type="910">
+<cann-filter npu-type = "910">
 
-**表 10**  dst、fm、filter支持的精度类型组合（Atlas 训练系列产品）
+**表 10** dst、fm、filter支持的精度类型组合（Atlas 训练系列产品）
 
 | 左矩阵fm type | 右矩阵filter type | 结果矩阵dst type |
 | --- | --- | --- |
@@ -241,9 +214,9 @@ $$C = A \times B + C$$
 
 </cann-filter>
 
-<cann-filter npu-type="x90">
+<cann-filter npu-type = "x90">
 
-**表 11**  dst、fm、filter、bias支持的精度类型组合 （Kirin X90）
+**表 11** dst、fm、filter、bias支持的精度类型组合 （Kirin X90）
 
 | 左矩阵fm type | 右矩阵filter type | bias type | 结果矩阵dst type |
 | --- | --- | --- | --- |
@@ -252,9 +225,9 @@ $$C = A \times B + C$$
 
 </cann-filter>
 
-<cann-filter npu-type="9030">
+<cann-filter npu-type = "9030">
 
-**表 12**  dst、fm、filter、bias支持的精度类型组合 （Kirin 9030）
+**表 12** dst、fm、filter、bias支持的精度类型组合 （Kirin 9030）
 
 | 左矩阵fm type | 右矩阵filter type | bias type | 结果矩阵dst type |
 | --- | --- | --- | --- |
@@ -271,7 +244,7 @@ $$C = A \times B + C$$
 - 结果矩阵C只支持位于CO1（存储位置为L0C Buffer），左矩阵A只支持位于A2（存储位置为L0A Buffer），右矩阵B只支持位于B2（存储位置为L0B Buffer）。
 - 当M、K、N中的任意一个值为0时，表示指令不会执行，该接口将被视为NOP（空操作）。
 - 当M = 1时，会默认开启GEMV（General Matrix-Vector Multiplication）功能。在这种情况下，Mmad API从L0A Buffer读取数据时，会以ND格式进行读取，而不会将其视为ZZ格式。所以此时左矩阵需要直接按照ND格式进行排布（[GEMV特性说明](关键特性说明/GEMV.md#ZH-CN_TOPIC_0000002538231187)）。要注意的是，开启GEMV的情况下，A矩阵的起始地址仍要求512字节对齐。
-- 一般来说，一次Mmad计算至少完成一次A\(16\*16\*half\) \* B\(16\*16\*half)数据块计算。但实际计算时M、K、N有效值可能不是16的倍数，从而有部分数据为无效数据。以M=30，K=70，N=40为例来介绍无效数据与有效数据的排布方式。
+- 一般来说，一次Mmad计算至少完成一次A(16\*16\*half) \* B(16\*16\*half)数据块计算。但实际计算时M、K、N有效值可能不是16的倍数，从而有部分数据为无效数据。以M=30，K=70，N=40为例来介绍无效数据与有效数据的排布方式。
 
     数据为half类型，当M=30，K=70，N=40的时候，A2（L0A Buffer）中有2x5个16x16矩阵，B2（L0B Buffer）中有5x3个16x16矩阵，CO1（L0C Buffer）中有2x3个16x16矩阵。在这种场景下M、K和N都不是16的倍数，A2中右下角的矩阵实际有效的数据只有14x6个，但是也需要占一个16x16矩阵的空间，其他无效数据在计算中会被忽略。一个16x16分形的数据块中，无效数据与有效数据排布的方式示意如下：
 
@@ -288,7 +261,7 @@ $$C = A \times B + C$$
     当计算量小于阈值时，需要插入PipeBarrier\(PIPE\_M\)。
 
     ```cpp
-    if ((m / 16) * (n /  16) < 10) {
+    if ((m / 16) * (n / 16) < 10) {
         AscendC::PipeBarrier<PIPE_M>();
     }
     ```
@@ -299,9 +272,9 @@ $$C = A \times B + C$$
 
     Mmad和Fixpipe接口均提供了 \`unitFlag\` 参数来控制该功能的启用，需确保两者同步开启，才能正常生效。
 
-    当希望控制同一块L0C内存空间能持续只被多条Mmad或多条Fixpipe指令操作时，需将对应的前n-1条指令的unitFlag值设置为2，维持被操作内存空间的持续占用状态，最后一条指令设置为3，解除被占用状态。
+    当希望控制同一块L0C Buffer内存空间能持续只被多条Mmad或多条Fixpipe指令操作时，需将对应的前n-1条指令的unitFlag值设置为2，维持被操作内存空间的持续占用状态，最后一条指令设置为3，解除被占用状态。
 
-    当启用 \`unitFlag\` 功能后，建议Mmad的计算数据量与Fixpipe搬出的数据量保持一致。若Mmad计算了大块数据（M × N = 128 × 128），但Fixpipe只搬出了其中一部分数据（M × N = 64 × 64），则可能会导致执行异常，可以通过SetFixPipeConfig\(\)接口重置L0C的状态，详细操作方式见[UnitFlag特性说明](关键特性说明/UnitFlag.md#ZH-CN_TOPIC_00000025690709788)中的示例。
+    当启用 \`unitFlag\` 功能后，建议Mmad的计算数据量与Fixpipe搬出的数据量保持一致。若Mmad计算了大块数据（M × N = 128 × 128），但Fixpipe只搬出了其中一部分数据（M × N = 64 × 64），则可能会导致执行异常，可以通过SetFixPipeConfig\(\)接口重置L0C Buffer的状态，详细操作方式见[UnitFlag特性说明](关键特性说明/UnitFlag.md#ZH-CN_TOPIC_00000025690709788)中的示例。
 
 - **特殊值/边界值约束说明**
 

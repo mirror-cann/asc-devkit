@@ -155,34 +155,34 @@
 
                 </cann-filter>
             
-            -   [矩阵计算的搬入](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/总体说明.md)
+            -   [矩阵计算的搬入](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵计算的搬入.md)
                 -   [总体说明](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/总体说明.md)
                 -   [矩阵计算输入搬运约束](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵计算输入搬运约束.md)
                 -   [L1 Buffer/L0A Buffer/L0B Buffer内存结构介绍](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/L1-L0A-B内存结构介绍.md)
-                -   [矩阵数据搬入至L1 Buffer](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/矩阵数据搬入至L1-Buffer.md)
-                    -   [GMToL1连续数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1连续数据搬运（DataCopy）.md)
-                    -   [GMToL1高维切分数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1高维切分数据搬运（DataCopy）.md)
-                    -   [GMToL1随路转换-ND2NZ搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1随路转换-ND2NZ搬运（DataCopy）.md)
-                    -   [GMToL1随路转换-DN2NZ搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1随路转换-DN2NZ搬运（DataCopy）.md)
-                    -   [GMToL1非对齐数据搬运（DataCopyPad）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1非对齐数据搬运（DataCopyPad）.md)
-                    -   [GMToL1 Load2D指令搬运](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1-Load2D指令搬运.md)
-                    -   [GMToL1 Load2DV2指令搬运](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1-Load2DV2指令搬运.md)
-                    -   [UBToL1连续数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1连续数据搬运（DataCopy）.md)
-                    -   [UBToL1高维切分数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1高维切分数据搬运（DataCopy）.md)
-                    -   [UBToL1随路转换-ND2NZ搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1随路转换-ND2NZ搬运（DataCopy）.md)
-                    -   [UBToL1随路转换-ND2NZ搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1随路转换-ND2NZ搬运（DataCopy）.md)
-                -   [矩阵数据搬入至L0 Buffer](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/矩阵数据搬入至L0-Buffer.md)
+                -   [矩阵数据搬入至L0-Buffer](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/矩阵数据搬入至L0-Buffer.md)
                     -   [Load2D](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load2D.md)
                     -   [Load2DV2](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load2DV2.md)
-                    -   [Load2DBitMode](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load2DBitMode.md)
                     -   [Load2DMX](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load2DMX.md)
+                    -   [Load2DBitMode](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load2DBitMode.md)
                     -   [Load3D](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load3D.md)
                     -   [Load3DBitMode](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load3DBitMode.md)
                     -   [LoadDataWithTranspose](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadDataWithTranspose.md)
                     -   [LoadDataWithSparse](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadDataWithSparse.md)
-                    -   [L1ToBiasTable Buffer数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/L1ToBiasTable-Buffer数据搬运（DataCopy）.md)
-                    -   [L1ToFixpipe Buffer数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/L1ToFixpipe-Buffer数据搬运（DataCopy）.md)
                     -   [BroadCastVecToMM(ISASI)](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/BroadCastVecToMM(ISASI).md)
+                    -   [L1ToBiasTable-Buffer数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/L1ToBiasTable-Buffer数据搬运（DataCopy）.md)
+                    -   [L1ToFixpipe-Buffer数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/L1ToFixpipe-Buffer数据搬运（DataCopy）.md)
+                -   [矩阵数据搬入至L1-Buffer](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/矩阵数据搬入至L1-Buffer.md)
+                    -   [GMToL1-Load2D指令搬运](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1-Load2D指令搬运.md)
+                    -   [GMToL1-Load2DV2指令搬运](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1-Load2DV2指令搬运.md)
+                    -   [GMToL1连续数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1连续数据搬运（DataCopy）.md)
+                    -   [GMToL1高维切分数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1高维切分数据搬运（DataCopy）.md)
+                    -   [GMToL1非对齐数据搬运（DataCopyPad）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1非对齐数据搬运（DataCopyPad）.md)
+                    -   [GMToL1随路转换-DN2NZ搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1随路转换-DN2NZ搬运（DataCopy）.md)
+                    -   [GMToL1随路转换-ND2NZ搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1随路转换-ND2NZ搬运（DataCopy）.md)
+                    -   [UBToL1连续数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1连续数据搬运（DataCopy）.md)
+                    -   [UBToL1高维切分数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1高维切分数据搬运（DataCopy）.md)
+                    -   [UBToL1非对齐数据搬运（DataCopyPad）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1非对齐数据搬运（DataCopyPad）.md)
+                    -   [UBToL1随路转换-ND2NZ搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1随路转换-ND2NZ搬运（DataCopy）.md)
                 -   [辅助配置接口](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/辅助配置接口.md)
                     -   [Fill](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/Fill.md)
                     -   [SetFmatrix](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetFmatrix.md)
@@ -194,76 +194,50 @@
                     -   [LoadImageToLocal](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/LoadImageToLocal.md)
                     -   [LoadUnzipIndex](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/LoadUnzipIndex.md)
                     -   [SetAippFunctions](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetAippFunctions.md)
-            -   [数据搬运](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/数据搬运.md)
-                -   [Fill](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/Fill.md)
-                -   [LoadData](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadData/LoadData.md)
-                    -   [Load2D](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadData/Load2D.md)
-                    -   [Load2DMX](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadData/Load2DMX.md)
-                    -   [Load2DBitMode](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadData/Load2DBitMode.md)
-                    -   [Load3D](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadData/Load3D.md)
-                    -   [Load3DBitMode](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadData/Load3DBitMode.md)
 
-                -   [LoadUnzipIndex](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadUnzipIndex.md)
-                -   [LoadDataUnzip](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadDataUnzip.md)
-                -   [LoadDataWithTranspose](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadDataWithTranspose.md)
-                -   [LoadDataWithSparse](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadDataWithSparse.md)
-                -   [SetFmatrix](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetFmatrix.md)
-                -   [SetFmatrixBitMode](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetFmatrixBitMode.md)
-                -   [SetLoadDataBoundary](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetLoadDataBoundary.md)
-                -   [SetLoadDataRepeat](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetLoadDataRepeat.md)
-                -   [SetLoadDataPaddingValue](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetLoadDataPaddingValue.md)
-                -   [Fixpipe](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/Fixpipe.md)
-                -   [SetFixPipeConfig](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetFixPipeConfig.md)
-                -   [SetFixpipeNz2ndFlag](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetFixpipeNz2ndFlag.md)
-                -   [SetFixpipePreQuantFlag](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetFixpipePreQuantFlag.md)
-                -   [SetFixPipeClipRelu](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetFixPipeClipRelu.md)
-                -   [SetFixPipeAddr](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetFixPipeAddr.md)
-                -   [SetAippFunctions](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/SetAippFunctions.md)
-                -   [LoadImageToLocal](SIMD-API/基础API/矩阵计算（ISASI）/数据搬运/LoadImageToLocal.md)
-
-            -   [矩阵计算](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/矩阵计算.md)
-                -   [Mmad](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/Mmad.md)
+            -   [Mmad计算](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad计算.md)
+                -   [Mmad](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md)
 
                 <cann-filter npu-type="950">
 
-                -   [MmadMx](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/MmadMx.md)
-                -   [MmadBitMode](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/MmadBitMode.md)
+                -   [MmadMx](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/MmadMx.md)
+                -   [MmadBitMode](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/MmadBitMode.md)
 
                 </cann-filter>
 
                 <cann-filter npu-type="910b,A3">
 
-                -   [MmadWithSparse](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/MmadWithSparse.md)
+                -   [MmadWithSparse](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/MmadWithSparse.md)
 
                 </cann-filter>
 
-                -   [关键特性说明](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/关键特性说明.md)
-                    -   [GEMV](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/关键特性说明/GEMV.md)
+                -   [关键特性说明](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/关键特性说明/关键特性说明.md)
+                    -   [GEMV](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/关键特性说明/GEMV.md)
 
                     <cann-filter npu-type="950,910b,A3,310b">
 
-                    -   [HF32](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/关键特性说明/HF32.md)
-                    -   [UnitFlag](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/关键特性说明/UnitFlag.md)
+                    -   [HF32](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/关键特性说明/HF32.md)
+                    -   [UnitFlag](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/关键特性说明/UnitFlag.md)
 
                     </cann-filter>
 
                     <cann-filter npu-type="910b,A3,x90,9030">
 
-                    -   [K方向对齐约束](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/关键特性说明/K方向对齐约束.md)
+                    -   [K方向对齐约束](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/关键特性说明/K-方向对齐约束.md)
 
                     </cann-filter>
 
                 <cann-filter npu-type="950,910b,A3,310b">
 
-                -   [寄存器配置说明](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/寄存器配置说明.md)
-                    -   [SetMMColumnMajor/SetMMRowMajor](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/寄存器配置说明/SetMMColumnMajor-SetMMRowMajor.md)
-                    -   [SetHF32Mode](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/寄存器配置说明/SetHF32Mode.md)
-                    -   [SetHF32TransMode](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/寄存器配置说明/SetHF32TransMode.md)
+                -   [寄存器配置说明](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/寄存器配置说明/寄存器配置说明.md)
+                    -   [SetMMColumnMajor/SetMMRowMajor](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/寄存器配置说明/SetMMColumnMajor-SetMMRowMajor.md)
+                    -   [SetHF32Mode](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/寄存器配置说明/SetHF32Mode.md)
+                    -   [SetHF32TransMode](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/寄存器配置说明/SetHF32TransMode.md)
 
                 </cann-filter>
 
-                -   [Conv2D（废弃）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/Conv2D（废弃）.md)
-                -   [Gemm（废弃）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算/Gemm（废弃）.md)
+                -   [Conv2D（废弃）](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Conv2D（废弃）.md)
+                -   [Gemm（废弃）](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Gemm（废弃）.md)
 
             -   [矩阵计算的搬出](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/矩阵计算的搬出.md)
                 -   [总体说明](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/总体说明.md)
@@ -272,8 +246,8 @@
                 -   [L0C到GM数据搬运（Fixpipe）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md)
                 -   [L0C到L1数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到L1数据搬运（DataCopy）.md)
                 -   [L0C到L1数据搬运（Fixpipe）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到L1数据搬运（Fixpipe）.md)
-                -   [L0C到UB数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到UB数据搬运（DataCopy）.md)
                 -   [L0C到UB数据搬运（Fixpipe）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到UB数据搬运（Fixpipe）.md)
+                -   [L0C到UB数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到UB数据搬运（DataCopy）.md)
                 -   [L1到UB数据搬运（DataCopyL1ToUB）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L1到UB数据搬运（DataCopyL1ToUB）.md)
                 -   [L1到GM数据搬运](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L1到GM数据搬运/L1到GM数据搬运.md)
                     -   [L1ToGM连续数据搬运（DataCopy）](SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L1到GM数据搬运/L1ToGM连续数据搬运（DataCopy）.md)

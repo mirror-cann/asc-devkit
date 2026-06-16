@@ -4,7 +4,7 @@
 
 - **[MmadMx](MmadMx.md)**
 
-- **[MmadBitMode.md](MmadBitMode.md)**
+- **[MmadBitMode](MmadBitMode.md)**
 
 - **[MmadWithSparse](MmadWithSparse.md)**
 

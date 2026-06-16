@@ -1,4 +1,4 @@
-# NZ2ND<a name="ZH-CN_TOPIC_0000002568950981"></a>
+﻿# NZ2ND<a name="ZH-CN_TOPIC_0000002568950981"></a>
 
 **特性说明：**
 
@@ -22,7 +22,7 @@ for (i = 0; i < ndNum; i++) {
 }
 ```
 
-伪代码使用的参数具体说明如下:
+伪代码使用的参数具体说明如下：
 
 - src表示源操作数搬运的起始地址。
 - dst表示目的操作数搬运的起始地址。
@@ -32,7 +32,7 @@ for (i = 0; i < ndNum; i++) {
 - 目的操作数每个ND矩阵中每一行的起始地址为dst\_temp\_n\_addr。
 - 在每一行中，以16个数据为一个数据块，源操作数每块数据块的起始地址为src\_block\_addr，目的操作数中每一块数据块的起始地址为dst\_block\_addr。
 
-以下参数为NZ2ND用户可配置参数，含义取值范围参见[Fixpipe搬运参数](../L0C到GM数据搬运（Fixpipe）.md)与[参数说明](../寄存器配置说明/SetFixpipeNz2ndFlag.md)：
+以下参数为NZ2ND用户可配置参数，含义及取值范围参见[Fixpipe搬运参数](../L0C到GM数据搬运（Fixpipe）.md)与[参数说明](../寄存器配置说明/SetFixpipeNz2ndFlag.md)：
 
 - mSize与nSize分别表示矩阵m方向和n方向上的维度。
 - srcStride表示NZ矩阵中不同Z分形列的间隔，单位为C0\_Size。
@@ -50,7 +50,7 @@ for (i = 0; i < ndNum; i++) {
 
 如下图所示，在L0C Buffer中有两个NZ格式的矩阵，每个矩阵N方向上维度为32，M方向上维度为48，经过NZ2ND转换，将数据格式变为右部分所示排布。
 
-**图 1**  NZ2ND示意图<a name="zh-cn_topic_0000002547300777_fig862819576334"></a>  
+**图 1** NZ2ND示意图<a name="zh-cn_topic_0000002547300777_fig862819576334"></a>  
 
 ![](../../../../../figures/Fixpipe_NZ2ND.png)
 
@@ -62,4 +62,4 @@ for (i = 0; i < ndNum; i++) {
 - srcStride = 64，表示源NZ矩阵中相邻Z排布的起始地址之间的间隔为64 \* C0\_Size\(C0\_Size = 16\*sizeof\(T\)，T为操作数的数据类型\)字节。
 - dstStride = 64，表示目的ND矩阵每一行中的元素个数为64。
 - srcNdStride = 256，表示不同NZ矩阵起始地址之间的间隔为256 \* C0\_Size字节。
-- dstNdStride  = 4096，表示目的相邻ND矩阵起始地址之间的偏移为4096个元素。
+- dstNdStride = 4096，表示目的相邻ND矩阵起始地址之间的偏移为4096个元素。

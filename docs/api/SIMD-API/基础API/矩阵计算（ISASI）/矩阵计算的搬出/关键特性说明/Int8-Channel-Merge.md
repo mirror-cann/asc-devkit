@@ -1,4 +1,4 @@
-# Int8 Channel Merge<a name="ZH-CN_TOPIC_0000002538071280"></a>
+﻿# Int8 Channel Merge<a name="ZH-CN_TOPIC_0000002538071280"></a>
 
 **特性说明：**
 
@@ -10,8 +10,8 @@
 
 **使用示例：**
 
-例如，当目标数据类型为s8，M为32，N为48时，硬件会先将N方向上前两个16×16的分形矩阵合并成一个16×32的矩阵，然后将剩余的16×16分形矩阵直接搬运至L1。
+例如，当目标数据类型为s8，M为32，N为48时，硬件会先将N方向上前两个16×16的分形矩阵合并成一个16×32的矩阵，然后将剩余的16×16分形矩阵直接搬运至L1 Buffer。
 
-**图 1**  Int8 Channel Merge示意图<a name="zh-cn_topic_0000002547260781_fig1935632714360"></a>  
+**图 1** Int8 Channel Merge示意图<a name="zh-cn_topic_0000002547260781_fig1935632714360"></a>  
 
 ![](../../../../../figures/Fixpipe_Int8_Channel_Merge.png)

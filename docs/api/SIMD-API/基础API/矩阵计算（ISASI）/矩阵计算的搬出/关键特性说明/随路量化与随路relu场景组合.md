@@ -2,26 +2,26 @@
 
 矩阵搬出支持多种随路量化与随路ReLU的组合，芯片支持的全量场景组合参考下表，接下来将对下表中的随路量化ReLU算法逐一介绍。
 
-<cann-filter npu_type = "A3,910b">
+<cann-filter npu-type = "A3,910b">
 
 针对如下产品型号，随路量化与随路ReLU的组合情况如下：
 
-<cann-filter npu_type = "910b">
+<cann-filter npu-type = "910b">
 
 Atlas A2 训练系列产品/Atlas A2 推理系列产品；
 
 </cann-filter>
 
-<cann-filter npu_type = "A3">
+<cann-filter npu-type = "A3">
 
 Atlas A3 训练系列产品/Atlas A3 推理系列产品；
 
 </cann-filter>
 
-**表 1**  随路量化与随路ReLU的组合表
+**表 1** 随路量化与随路ReLU的组合表
 
 | quantPre\reluPre | no ReLU | Normal ReLU |
-|------------------|---------|------------|
+| ------------------ | --------- | ------------ |
 | &bull; REQ8<br>&bull; DEQF16<br>&bull; QF322B8_PRE | M1=QUANT_PRE\[31:0\]<br>M2=QUANT_PRE\[31:0\]<br>M1、M2均为量化参数 | M1=QUANT_PRE\[31:0\]<br>M2=0<br>M1为量化参数、M2为Normal ReLU系数 |
 | &bull; VREQ8<br>&bull; VDEQF16<br>&bull; VQF322B8_PRE | M1=Quant_PRE_ADDR\[i\]\[31:0\]<br>M2=Quant_PRE_ADDR\[i\]\[31:0\]<br>M1、M2均为量化参数，i为原始矩阵的列索引 | M1=Quant_PRE_ADDR\[i\]\[31:0\]<br>M2=0<br>M1为量化参数，M2为Normal ReLU系数，i为原始矩阵的列索引 |
 

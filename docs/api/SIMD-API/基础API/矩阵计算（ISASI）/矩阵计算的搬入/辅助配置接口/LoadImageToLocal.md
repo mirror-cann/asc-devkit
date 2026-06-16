@@ -1,16 +1,16 @@
-# LoadImageToLocal<a name="ZH-CN_TOPIC_0000001945534165"></a>
+﻿# LoadImageToLocal<a name="ZH-CN_TOPIC_0000001945534165"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
 | 产品 | 是否支持 |
-|------|:------:|
-| <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-| <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
-| <cann-filter npu-type="910">Atlas 训练系列产品 | x </cann-filter>|
+| ------ | :------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -50,11 +50,11 @@ __aicore__ inline void LoadImageToLocal(const LocalTensor<T>& dst, const LoadIma
 
 ## 数据类型
 
-<cann-filter npu-type="950">Ascend 950PR/Ascend 950DT，支持的数据类型为：int8_t、uint8_t、half。</cann-filter><br>
-<cann-filter npu-type="A3">Atlas A3训练系列产品/Atlas A3推理系列产品，支持数据类型：int8_t、half。</cann-filter><br>
-<cann-filter npu-type="910b">Atlas A2训练系列产品/Atlas A2推理系列产品，支持数据类型：int8_t、half。</cann-filter><br>
-<cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品，支持数据类型为：int8_t、uint8_t、half。</cann-filter><br>
-<cann-filter npu-type="310p">Atlas 推理系列产品AI Core，支持的数据类型为：int8_t、uint8_t、half。</cann-filter>
+<cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，支持的数据类型为：int8_t、uint8_t、half。</cann-filter><br>
+<cann-filter npu-type = "A3">Atlas A3训练系列产品/Atlas A3推理系列产品，支持数据类型：int8_t、half。</cann-filter><br>
+<cann-filter npu-type = "910b">Atlas A2训练系列产品/Atlas A2推理系列产品，支持数据类型：int8_t、half。</cann-filter><br>
+<cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持数据类型为：int8_t、uint8_t、half。</cann-filter><br>
+<cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持的数据类型为：int8_t、uint8_t、half。</cann-filter>
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -66,13 +66,13 @@ __aicore__ inline void LoadImageToLocal(const LocalTensor<T>& dst, const LoadIma
 - 加载到dst的图片的大小加padding的大小必须小于等于所在存储空间的大小。
 - 当通过[SetAippFunctions](SetAippFunctions.md)配置padding模式为块填充模式或者镜像块填充模式时，因为padding的数据来自于抠出的图片，左右padding的长度（leftPadSize、rightPadSize）必须小于或等于抠图的水平长度（horizSize），上下padding的长度（topPadSize、botPadSize）必须小于或等于抠图的垂直的长度（vertSize）。
 - 支持的物理存储位置为：L1 Buffer（TPosition: A1/B1）。
-    <cann-filter npu-type="950">
+    <cann-filter npu-type = "950">
     - 特别针对Ascend 950PR/Ascend 950DT，支持物理存储位置为：VECIN、VECCALC、VECOUT。
     </cann-filter>
 
 ## 调用示例<a name="section22811728184217"></a>
 
-<cann-filter npu-type="310p">
+<cann-filter npu-type = "310p">
 
 该调用示例支持的运行平台为Atlas 推理系列产品AI Core，示例图片格式为YUV420SP。
 

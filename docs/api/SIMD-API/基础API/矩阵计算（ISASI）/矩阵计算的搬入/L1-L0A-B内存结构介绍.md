@@ -8,7 +8,7 @@
 
 L1 Buffer的总容量为512K字节，由16个Bank组成。每个Bank的容量为32K字节，由1024行组成，每行的宽度为32字节。**同一Bank最多同时允许一读或一写**。
 
-这16个Bank被进一步组织为8个Bank Group。每个Bank Group包含2个Bank（Bank0 和 Bank1）。**同属于一个Bank Group的两个Bank支持一个读、另一个写，但不支持同时读或同时写**。
+这16个Bank被进一步组织为8个Bank Group。每个Bank Group包含2个Bank（Bank0和Bank1）。**同属于一个Bank Group的两个Bank支持一个读、另一个写，但不支持同时读或同时写**。
 
 L1 Buffer的内存结构如[图1](#zh-cn_topic_0000002545385271_fig5383229131020)所示，地址编码格式如下：
 

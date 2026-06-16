@@ -1,18 +1,18 @@
-# SetFixPipeConfig<a name="ZH-CN_TOPIC_0000002538231208"></a>
+﻿# SetFixPipeConfig<a name="ZH-CN_TOPIC_0000002538231208"></a>
 
 ## 产品支持情况<a name="zh-cn_topic_0000002547729135_section18204144912492"></a>
 
-|产品|是否支持|
-|----------|:----------:|
-|Ascend 950PR/Ascend 950DT|√|
-|Atlas A3 训练系列产品/Atlas A3 推理系列产品|√|
-|Atlas A2 训练系列产品/Atlas A2 推理系列产品|√|
-|Atlas 200I/500 A2 推理产品|√|
-|Atlas 推理系列产品AI Core|x|
-|Atlas 推理系列产品Vector Core|x|
-|Atlas 训练系列产品|x|
-|Kirin X90|√|
-|Kirin  9030|√|
+| 产品 | 是否支持 |
+| ---------- | :----------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | √ </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | √ </cann-filter> |
 
 ## 功能说明<a name="zh-cn_topic_0000002547729135_section618mcpsimp"></a>
 
@@ -30,21 +30,21 @@ __aicore__ inline void SetFixPipeConfig(const LocalTensor<T>& preData, bool isUn
 
 ## 参数说明<a name="zh-cn_topic_0000002547729135_section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表 1** 模板参数说明
 
-|参数名|描述|
-|----------|----------|
-|T|操作数的数据类型。|
-|setRelu|针对设置一个tensor的情况，setRelu当前仅支持设置为false，即只支持设置随路quantPre系数|
+| 参数名 | 描述 |
+| ---------- | ---------- |
+| T | 操作数的数据类型。 |
+| setRelu | 针对设置一个tensor的情况，setRelu当前仅支持设置为false，即只支持设置随路quantPre系数。 |
 
-**表 2**  参数说明
+**表 2** 参数说明
 
-|参数名称|输入/输出|含义|
-|----------|----------|----------|
-|reluPre|输入|源操作数，ReLU操作时参与计算的tensor，类型为LocalTensor，支持的物理内存为Fixpipe buffer（TPosition为C2PIPE2GM），为后续的功能扩展做保留，传入一个空LocalTensor即可。|
-|quantPre|输入|源操作数，quant tensor，量化操作时参与计算的tensor，类型为LocalTensor，支持的物理内存为Fixpipe buffer（TPosition为C2PIPE2GM）。|
-|isUnitFlag|输入|unitFlag清空标志位，类型为bool。如果设为true，L0C Buffer中所有内存块的单元标志位都会设为0。旨在消除之前操作中unitFlag产生的多余影响。|
-|preData|输入|支持设置一个Tensor，通过开关控制是relu Tensor还是quant Tensor，支持的物理内存为Fixpipe buffer（TPosition为C2PIPE2GM）。当前仅支持传入quant Tensor。对于单独设置unitFlag清空标志位isUnitFlag的场景，支持的物理地址为L0C buffer（TPosition设置为CO1）。|
+| 参数名称 | 输入/输出 | 含义 |
+| ---------- | ---------- | ---------- |
+| reluPre | 输入 | 源操作数，ReLU操作时参与计算的tensor，类型为LocalTensor，支持的物理内存为Fixpipe Buffer（TPosition为C2PIPE2GM），为后续的功能扩展做保留，传入一个空LocalTensor即可。 |
+| quantPre | 输入 | 源操作数，quant tensor，量化操作时参与计算的tensor，类型为LocalTensor，支持的物理内存为Fixpipe Buffer（TPosition为C2PIPE2GM）。 |
+| isUnitFlag | 输入 | unitFlag清空标志位，类型为bool。如果设为true，L0C Buffer中所有内存块的单元标志位都会设为0。旨在消除之前操作中unitFlag产生的多余影响。 |
+| preData | 输入 | 支持设置一个Tensor，通过开关控制是relu Tensor还是quant Tensor，支持的物理内存为Fixpipe Buffer（TPosition为C2PIPE2GM）。当前仅支持传入quant Tensor。对于单独设置unitFlag清空标志位isUnitFlag的场景，支持的物理地址为L0C Buffer（TPosition设置为CO1）。 |
 
 ## 数据类型
 

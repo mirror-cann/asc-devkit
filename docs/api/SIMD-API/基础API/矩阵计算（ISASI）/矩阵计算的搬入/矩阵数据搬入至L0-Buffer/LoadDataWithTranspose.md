@@ -2,25 +2,25 @@
 
 ## 产品支持情况<a id="zh-cn_topic_0000002543851571_section796754519912"></a>
 
-|产品|是否支持|
-|----------|:----------:|
-|Ascend 950PR/Ascend 950DT|√|
-|Atlas A3 训练系列产品/Atlas A3 推理系列产品|√|
-|Atlas A2 训练系列产品/Atlas A2 推理系列产品|√|
-|Atlas 200I/500 A2 推理产品|√|
-|Atlas 推理系列产品 AI Core|x|
-|Atlas 推理系列产品 Vector Core|x|
-|Atlas 训练系列产品|x|
-|Kirin X90|√|
-|Kirin 9030|x|
+| 产品 | 是否支持 |
+| ---------- | :----------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品 Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | √ </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | x </cann-filter> |
 
 ## 功能说明<a id="zh-cn_topic_0000002543851571_section106841136114319"></a>
 
-头文件路径为："basic_api/kernel_operator_mm_intf.h"。
+头文件路径为：basic_api/kernel_operator_mm_intf.h。
 
 LoadDataWithTranspose负责完成普通矩阵计算所需的2D格式的数据的搬运，搬运过程中会伴随转置操作，参考特性[分形转置](#zh-cn_topic_0000002543851571_section10110103802915)。以512字节的数据分形为单位进行搬运，支持如下数据通路的搬运：
 
-L1 Buffer->L0A Buffer; L1 Buffer->L0B Buffer
+L1 Buffer->L0A Buffer、L1 Buffer->L0B Buffer。
 
 实现原理可参考伪代码：[LoadDataWithTranspose伪代码](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/03_basic_api/01_matrix_compute/load_data_l12l0/scripts/load_data_with_transpose.py)。
 
@@ -31,7 +31,7 @@ template <typename T>
 __aicore__ inline void LoadDataWithTranspose(const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData2dTransposeParams& loadDataParams)
 ```
 
-<cann-filter npu_type="950">
+<cann-filter npu-type = "950">
 
 针对Ascend 950PR/Ascend 950DT：
 
@@ -44,72 +44,67 @@ __aicore__ inline void LoadDataWithTranspose(const LocalTensor<T>& dst, const Lo
 
 ## 参数说明<a id="zh-cn_topic_0000002543851571_section16128134420472"></a>
 
-**表 1**  模板参数说明
+**表 1** 模板参数说明
 
-|参数名|描述|
-|--------|------|
-|T|<cann-filter npu_type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的数据类型为：int4b_t、int8_t、uint8_t、half、bfloat16_t、float、int32_t、uint32_t，其中int4b_t仅支持B1->B2通路。</cann-filter><cann-filter npu_type="A3"><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的数据类型为：int4b_t、int8_t、uint8_t、half、bfloat16_t、float、int32_t、uint32_t，其中int4b_t仅支持B1->B2通路。</cann-filter><cann-filter npu_type="310b"><br>Atlas 200I/500 A2 推理产品，支持的数据类型为：int4b_t、uint8_t、int8_t、uint16_t、int16_t、half、bfloat16_t、uint32_t、int32_t、float，其中int4b_t仅支持B1->B2通路。</cann-filter><cann-filter npu_type="950"><br>Ascend 950PR/Ascend 950DT，支持数据类型：int8_t、uint8_t、half、bfloat16_t、float、int32_t、uint32_t。</cann-filter><cann-filter npu_type="x90"><br>Kirin X90，支持数据类型：int8_t、half。</cann-filter>|
+| 参数名 | 描述 |
+| -------- | ------ |
+| T | 模板参数，类型为LocalTensor。 |
 
-**表 2**  参数说明
+**表 2** 参数说明
 
-|参数名称|输入/输出| 含义 |
-|----------|-----------|------|
-|dst|输出| 目的操作数，结果矩阵，类型为LocalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>LocalTensor的起始地址需要保证512字节对齐。<br>数据类型和src的数据类型保持一致。 |
-|src|输入| 源操作数，类型为LocalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>LocalTensor的起始地址需要保证32字节对齐。<br>数据类型和dst的数据类型保持一致。 |
-|loadDataParams|输入| LoadDataWithTranspose相关参数，类型为LoadData2dTransposeParams。具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_mm.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。<br>参数说明请参考[表4](#zh-cn_topic_0000002543851571_table13526111319538)。 |
+| 参数名称 | 输入/输出 | 含义 |
+| ---------- | ----------- | ------ |
+| dst | 输出 | 目的操作数，结果矩阵，类型为LocalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>LocalTensor的起始地址需要保证512字节对齐。<br>数据类型和src的数据类型保持一致。 |
+| src | 输入 | 源操作数，类型为LocalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>LocalTensor的起始地址需要保证32字节对齐。<br>数据类型和dst的数据类型保持一致。 |
+| loadDataParams | 输入 | LoadDataWithTranspose相关参数。不同型号该参数的类型不同，请参考[loadDataParams参数类型说明](#loadDataParams参数类型说明)。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_mm.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
 
-<cann-filter npu_type="950">
+### loadDataParams参数类型说明
 
-针对Ascend 950PR/Ascend 950DT：
+不同型号的参数loadDataParams的类型不同，开发者可参考如下：
 
-**表 3**  参数说明
-
-|参数名称|输入/输出| 含义 |
-|----------|-----------|------|
-|dst|输出| 目的操作数，结果矩阵，类型为LocalTensor。<br>分形约束参考矩阵计算输入搬运约束。<br>起始地址对齐约束参考矩阵计算输入搬运约束中的对齐约束。<br>LocalTensor的起始地址需要保证512字节对齐。<br>数据类型和src的数据类型保持一致。 |
-|src|输入| 源操作数，类型为LocalTensor。<br>分形约束参考矩阵计算输入搬运约束。<br>起始地址对齐约束参考矩阵计算输入搬运约束中的对齐约束。<br>LocalTensor的起始地址需要保证32字节对齐。<br>数据类型和dst的数据类型保持一致。 |
-|loadDataParams|输入| LoadDataWithTranspose相关参数，类型为LoadData2dTransposeParamsV2。<br>参数说明请参考[表5](#zh-cn_topic_0000002543851571_table64891930194618)。 |
-
+- 类型为LoadData2dTransposeParams，参数说明请参考[表3](#zh-cn_topic_0000002543851571_table13526111319538)。
+<cann-filter npu-type = "950">
+- 特别针对Ascend 950PR/Ascend 950DT，类型为LoadData2dTransposeParamsV2。参数说明请参考[表4](#zh-cn_topic_0000002543851571_table64891930194618)。
 </cann-filter>
 
-**表 4**  LoadData2dTransposeParams结构体内参数说明<a id="zh-cn_topic_0000002543851571_table13526111319538"></a>
+**表 3** LoadData2dTransposeParams结构体内参数说明<a id="zh-cn_topic_0000002543851571_table13526111319538"></a>
 
-|参数名称|输入/输出| 含义 |
-|----------|-----------|------|
-|startIndex|输入| 方块矩阵ID，搬运起始位置为源操作数中第几个方块矩阵（0 为源操作数中第1个方块矩阵）。取值范围：startIndex∈[0, 65535]。默认为0。<br>例如，源操作数中有20个大小为16\*8\*4字节的分形（数据类型为float），startIndex=1表示搬运起始位置为第2个方块矩阵，即将第3和第4个分形从源操作数中转置到目的操作数中（第1、2个分形组成第1个方块矩阵，第3、4个分形组成第2个方块矩阵）。<br>特性细节可参考：[设置搬运起始位置](#zh-cn_topic_0000002543851571_section520575413118)。 |
-|repeatTimes|输入| 迭代次数。<br>对于uint8_t/int8_t数据类型，每次迭代处理32\*32\*1字节数据；<br>对于half/bfloat16_t数据类型，每次迭代处理16\*16\*2字节数据；<br>对于float/int32_t/uint32_t数据类型，每次迭代处理16\*16\*4字节数据。<br>对于int4b_t数据类型，每次迭代处理16\*64\*0.5字节数据。<br>取值范围：repeatTimes∈[0, 255]。默认为0。<br>**注：repeatTimes = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
-|srcStride|输入| 相邻迭代间，源操作数前一个分形与后一个分形起始地址的间隔。这里的单位实际上是拼接后的方块矩阵的大小。<br>对于uint8_t/int8_t数据类型，单位是32\*32\*1字节；<br>对于half/bfloat16_t数据类型，单位是16\*16\*2字节；<br>对于float/int32_t/uint32_t数据类型，单位是16\*16\*4字节。<br>对于int4b_t数据类型，每次迭代处理16\*64\*0.5字节数据。<br>取值范围：srcStride∈[0, 65535]。默认为0。<br>**注：srcStride = 0表示在连续的重复执行周期之间，重复获取相同的分形矩阵。**<br>特性细节可参考：[非连续搬入](#zh-cn_topic_0000002543851571_section1750533101219)。 |
-|dstGap|输入| 相邻迭代间，目的操作数前一个迭代第一个分形的结束地址到下一个迭代第一个分形起始地址的间隔，单位：512字节。取值范围：dstGap∈[0, 65535]。默认为0。<br>**注：dstGap = 0表示目的操作数前一个迭代第一个分形的结束地址到下一个迭代第一个分形起始地址无间隔，分形连续排布。**<br>特性细节可参考：[非连续搬入](#zh-cn_topic_0000002543851571_section1750533101219)。 |
-|dstFracGap|输入| 每个迭代内目的操作数转置前一个分形结束地址与后一个分形起始地址的间隔，单位为512字节，仅在数据类型为float/int32_t/uint32_t/uint8_t/int8_t/int4b_t时有效。取值范围：dstFracGap∈[0, 65535]。默认为0。<br>**注：dstFracGap = 0表示每个迭代内目的操作数前一个分形结束地址与后一个分形起始地址无间隔，分形连续排布。**<br>特性细节可参考：[非连续搬入](#zh-cn_topic_0000002543851571_section1750533101219)。 |
-|addrMode|输入| 控制地址更新方式，默认为false：<br>&bull; true：递减，每次迭代在前一个地址的基础上减去srcStride。<br>&bull; false：递增，每次迭代在前一个地址的基础上加上srcStride。<br>特性细节可参考：[控制地址更新方式](#zh-cn_topic_0000002543851571_section26691915141315)。<br>**注：保持默认值即可，该参数不涉及性能。** |
+| 参数名称 | 输入/输出 | 含义 |
+| ---------- | ----------- | ------ |
+| startIndex | 输入 | 方块矩阵ID，搬运起始位置为源操作数中第几个方块矩阵（0 为源操作数中第1个方块矩阵）。取值范围：startIndex∈[0, 65535]。默认为0。<br>例如，源操作数中有20个大小为16\*8\*4字节的分形（数据类型为float），startIndex=1表示搬运起始位置为第2个方块矩阵，即将第3和第4个分形从源操作数中转置到目的操作数中（第1、2个分形组成第1个方块矩阵，第3、4个分形组成第2个方块矩阵）。<br>特性细节可参考：[设置搬运起始位置](#zh-cn_topic_0000002543851571_section520575413118)。 |
+| repeatTimes | 输入 | 迭代次数。<br>对于uint8_t/int8_t数据类型，每次迭代处理32\*32\*1字节数据；<br>对于half/bfloat16_t数据类型，每次迭代处理16\*16\*2字节数据；<br>对于float/int32_t/uint32_t数据类型，每次迭代处理16\*16\*4字节数据。<br>对于int4b_t数据类型，每次迭代处理16\*64\*0.5字节数据。<br>取值范围：repeatTimes∈[0, 255]。默认为0。<br>**注：repeatTimes = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
+| srcStride | 输入 | 相邻迭代间，源操作数前一个分形与后一个分形起始地址的间隔。这里的单位实际上是拼接后的方块矩阵的大小。<br>对于uint8_t/int8_t数据类型，单位是32\*32\*1字节；<br>对于half/bfloat16_t数据类型，单位是16\*16\*2字节；<br>对于float/int32_t/uint32_t数据类型，单位是16\*16\*4字节。<br>对于int4b_t数据类型，每次迭代处理16\*64\*0.5字节数据。<br>取值范围：srcStride∈[0, 65535]。默认为0。<br>**注：srcStride = 0表示在连续的重复执行周期之间，重复获取相同的分形矩阵。**<br>特性细节可参考：[非连续搬入](#zh-cn_topic_0000002543851571_section1750533101219)。 |
+| dstGap | 输入 | 相邻迭代间，目的操作数前一个迭代第一个分形的结束地址到下一个迭代第一个分形起始地址的间隔，单位：512字节。取值范围：dstGap∈[0, 65535]。默认为0。<br>**注：dstGap = 0表示目的操作数前一个迭代第一个分形的结束地址到下一个迭代第一个分形起始地址无间隔，分形连续排布。**<br>特性细节可参考：[非连续搬入](#zh-cn_topic_0000002543851571_section1750533101219)。 |
+| dstFracGap | 输入 | 每个迭代内目的操作数转置前一个分形结束地址与后一个分形起始地址的间隔，单位为512字节，仅在数据类型为float/int32_t/uint32_t/uint8_t/int8_t/int4b_t时有效。取值范围：dstFracGap∈[0, 65535]。默认为0。<br>**注：dstFracGap = 0表示每个迭代内目的操作数前一个分形结束地址与后一个分形起始地址无间隔，分形连续排布。**<br>特性细节可参考：[非连续搬入](#zh-cn_topic_0000002543851571_section1750533101219)。 |
+| addrMode | 输入 | 控制地址更新方式，默认为false：<br>&nbsp;&nbsp;&bull; true：递减，每次迭代在前一个地址的基础上减去srcStride。<br>&nbsp;&nbsp;&bull; false：递增，每次迭代在前一个地址的基础上加上srcStride。<br>特性细节可参考：[控制地址更新方式](#zh-cn_topic_0000002543851571_section26691915141315)。<br>**注：保持默认值即可，该参数不涉及性能。** |
 
-<cann-filter npu_type="950">
+<cann-filter npu-type = "950">
 
-针对Ascend 950PR/Ascend 950DT：
+针对Ascend 950PR/Ascend 950DT，类型为LoadData2dTransposeParamsV2，请参考下表：
 
-**表 5**  LoadData2dTransposeParamsV2结构体内参数说明<a id="zh-cn_topic_0000002543851571_table64891930194618"></a>
+**表 4** LoadData2dTransposeParamsV2结构体内参数说明<a id="zh-cn_topic_0000002543851571_table64891930194618"></a>
 
-|参数名称|输入/输出| 含义 |
-|----------|-----------|------|
-|startIndex|输入| 方块矩阵ID，搬运起始位置为源操作数中第几个分形。取值范围：startIndex∈[0, 65535]。默认为0。 |
-|repeatTimes|输入| 迭代次数。<br>对于int4b_t数据类型，每次迭代处理4个分形，每个分形为16\*64\*0.5字节数据。<br>对于uint8_t/int8_t数据类型，每次迭代处理2个分形，每个分形处理16\*32\*1字节数据；<br>对于half/bfloat16_t数据类型，每次迭代处理1个分形，每个分形处理16\*16\*2字节数据；<br>对于int32_t/uint32_t/float数据类型，每次迭代处理4个分形，每个分形为16\*8\*4字节数据。<br>取值范围：repeatTimes∈[1, 255]。 |
-|srcStride|输入| 相邻迭代间，源操作数前一个分形与后一个分形起始地址的间隔。单位为单个分形512字节。<br>取值范围：srcStride∈[0, 65535]。默认为0。 |
-|dstGap|输入| 相邻迭代间，目的操作数前一个迭代第一个分形的结束地址到下一个迭代第一个分形起始地址的间隔，单位：512字节。取值范围：dstGap∈[0, 65535]。默认为0。 |
-|dstFracGap|输入| 每个迭代内目的操作数转置前一个分形结束地址与后一个分形起始地址的间隔，单位为512字节，仅在数据类型为float/int32_t/uint32_t/uint8_t/int8_t/int4b_t时有效。 |
-|srcFracGap|输入| 每个迭代内源操作数前一个分形结束地址与后一个分形起始地址的间隔，单位为512字节，仅在数据类型为float/int32_t/uint32_t/uint8_t/int8_t/int4b_t时有效。 |
-|addrMode|输入| 控制地址更新方式，默认为false：<br>&bull; true：递减，每次迭代在前一个地址的基础上减去srcStride。<br>&bull; false：递增，每次迭代在前一个地址的基础上加上srcStride。 |
+| 参数名称 | 输入/输出 | 含义 |
+| ---------- | ----------- | ------ |
+| startIndex | 输入 | 方块矩阵ID，搬运起始位置为源操作数中第几个分形。取值范围：startIndex∈[0, 65535]。默认为0。 |
+| repeatTimes | 输入 | 迭代次数。<br>对于int4b_t数据类型，每次迭代处理4个分形，每个分形为16\*64\*0.5字节数据。<br>对于uint8_t/int8_t数据类型，每次迭代处理2个分形，每个分形处理16\*32\*1字节数据；<br>对于half/bfloat16_t数据类型，每次迭代处理1个分形，每个分形处理16\*16\*2字节数据；<br>对于int32_t/uint32_t/float数据类型，每次迭代处理4个分形，每个分形为16\*8\*4字节数据。<br>取值范围：repeatTimes∈[1, 255]。 |
+| srcStride | 输入 | 相邻迭代间，源操作数前一个分形与后一个分形起始地址的间隔。单位为单个分形512字节。<br>取值范围：srcStride∈[0, 65535]。默认为0。 |
+| dstGap | 输入 | 相邻迭代间，目的操作数前一个迭代第一个分形的结束地址到下一个迭代第一个分形起始地址的间隔，单位：512字节。取值范围：dstGap∈[0, 65535]。默认为0。 |
+| dstFracGap | 输入 | 每个迭代内目的操作数转置前一个分形结束地址与后一个分形起始地址的间隔，单位为512字节，仅在数据类型为float/int32_t/uint32_t/uint8_t/int8_t/int4b_t时有效。 |
+| srcFracGap | 输入 | 每个迭代内源操作数前一个分形结束地址与后一个分形起始地址的间隔，单位为512字节，仅在数据类型为float/int32_t/uint32_t/uint8_t/int8_t/int4b_t时有效。 |
+| addrMode | 输入 | 控制地址更新方式，默认为false：<br>&nbsp;&nbsp;&bull; true：递减，每次迭代在前一个地址的基础上减去srcStride。<br>&nbsp;&nbsp;&bull; false：递增，每次迭代在前一个地址的基础上加上srcStride。 |
 
 </cann-filter>
 
 ## 数据类型<a id="zh-cn_topic_0000002543851571_section4219135304818"></a>
 
-<cann-filter npu_type="950">
+<cann-filter npu-type = "950">
 
 Ascend 950PR/Ascend 950DT，支持数据类型为：int8_t、uint8_t、half、bfloat16_t、int32_t、uint32_t、float。
 
 </cann-filter>
 
-<cann-filter npu_type="A3">
+<cann-filter npu-type = "A3">
 
 Atlas A3 训练系列产品/Atlas A3 推理系列产品：
 
@@ -118,7 +113,7 @@ Atlas A3 训练系列产品/Atlas A3 推理系列产品：
 
 </cann-filter>
 
-<cann-filter npu_type="910b">
+<cann-filter npu-type = "910b">
 
 Atlas A2 训练系列产品/Atlas A2 推理系列产品：
 
@@ -127,17 +122,21 @@ Atlas A2 训练系列产品/Atlas A2 推理系列产品：
 
 </cann-filter>
 
-<cann-filter npu_type="310b">
+<cann-filter npu-type = "310b">
 
 Atlas 200I/500 A2 推理产品，支持数据类型为：int4b_t、int8_t、uint8_t、half、bfloat16_t、int32_t、uint32_t、float。
 
 </cann-filter>
 
-<cann-filter npu_type="x90">
+<cann-filter npu-type = "x90">
 
 Kirin X90，支持数据类型：int8_t、half。
 
 </cann-filter>
+
+## 返回值说明<a id="zh-cn_topic_0000002543851571_section640mcpsimp"></a>
+
+无
 
 ## 约束说明<a id="zh-cn_topic_0000002543851571_section2045914466492"></a>
 
@@ -146,12 +145,9 @@ Kirin X90，支持数据类型：int8_t、half。
 - 当srcStride=0时，表示连续的repeat之间读取的源操作数中的同一块数据分形。
 - fp32场景下，源操作数2个连续的16\*8分形将被合并为1个16\*16的方块矩阵，然后再基于该方块矩阵做转置，因此要求两个连续分形合并为方块矩阵，要求L1 Buffer上的A矩阵满足ZZ或ZN排布。
 - 开发者需要保证目的操作数转置后的分形没有重叠。
-<cann-filter npu_type="950">- 针对Ascend 950PR/Ascend 950DT，推荐使用LoadData2dTransposeParamsV2作为参数，该参数具有更精细的搬运粒度。</cann-filter>
-
-## 返回值说明<a id="zh-cn_topic_0000002543851571_section640mcpsimp"></a>
-
-无
-
+<cann-filter npu-type = "950">
+- 针对Ascend 950PR/Ascend 950DT，推荐使用LoadData2dTransposeParamsV2作为参数，该参数具有更精细的搬运粒度。
+</cann-filter>
 ## 关键特性说明<a id="zh-cn_topic_0000002543851571_section1891111310132"></a>
 
 ### 功能和参数讲解
@@ -171,8 +167,8 @@ Kirin X90，支持数据类型：int8_t、half。
 
     如下图示例：
 
-    - repeatTime和srcStride的解释和上图示例一致。
-    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔。
+    - repeatTime和srcStride的解释和上图示例一致；
+    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔；
     - dstFracGap = 2，表示每个迭代内目的操作数前一个分形的结束地址与后一个分形起始地址的间隔为2（单位：512字节）。
 
     ![](../../../../../figures/Nd2Nz转换示意图-14.png)
@@ -199,8 +195,8 @@ Kirin X90，支持数据类型：int8_t、half。
 
     如下图示例：
 
-    - repeatTime和srcStride的解释和上图示例一致。
-    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔。
+    - repeatTime和srcStride的解释和上图示例一致；
+    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔；
     - dstFracGap = 2，表示每个迭代内目的操作数前一个分形结束地址与后一个分形起始地址的间隔为2（单位：512字节）。
 
     ![](../../../../../figures/Nd2Nz转换示意图-17.png)
@@ -222,8 +218,8 @@ Kirin X90，支持数据类型：int8_t、half。
 
     如下图示例：
 
-    - repeatTime和srcStride的解释和上图示例一致。
-    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔。
+    - repeatTime和srcStride的解释和上图示例一致；
+    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔；
     - dstFracGap = 2，表示每个迭代内目的操作数前一个分形的结束地址与后一个分形起始地址的间隔为2（单位：512字节）。
 
     ![](../../../../../figures/Nd2Nz转换示意图-19.png)
@@ -259,9 +255,9 @@ Kirin X90，支持数据类型：int8_t、half。
 
     如下图示例：
 
-    - repeatTime和srcStride的解释和上图示例一致。
-    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔。
-    - dstFracGap = 2，表示每个迭代内目的操作数前一个分形的结束地址与后一个分形起始地址的间隔为2（单位：512字节）。
+    - repeatTime和srcStride的解释和上图示例一致；
+    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔；
+    - dstFracGap = 2，表示每个迭代内目的操作数前一个分形的结束地址与后一个分形起始地址的间隔为2（单位：512字节）；
     - 外层for循环的循环次数是2，源操作数的地址偏移量是3（单位：64\*64\*0.5字节），目的操作数的地址偏移量是3（单位：64\*64\*0.5字节）。
 
     ![](../../../../../figures/loaddatawithtrans_l12l0a_b4_demo2.png)
@@ -280,9 +276,9 @@ Kirin X90，支持数据类型：int8_t、half。
 
     如下图示例：
 
-    - repeatTimes和srcStride的解释和上图示例一致。
-    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔。
-    - dstFracGap = 2，表示每个迭代内目的操作数前一个分形的结束地址与后一个分形起始地址的间隔为2（单位：512字节）。
+    - repeatTimes和srcStride的解释和上图示例一致；
+    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔；
+    - dstFracGap = 2，表示每个迭代内目的操作数前一个分形的结束地址与后一个分形起始地址的间隔为2（单位：512字节）；
     - 外层for循环的循环次数是2，源操作数的地址偏移量是3（单位：32\*32\*1字节），目的操作数的地址偏移量是3（单位：32\*32\*1字节）。
 
     ![](../../../../../figures/loaddatawithtrans_l12l0a_b8_demo2.png)
@@ -311,9 +307,9 @@ Kirin X90，支持数据类型：int8_t、half。
 
     如下图示例：
 
-    - repeatTime和srcStride的解释和上图示例一致。
-    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔。
-    - dstFracGap = 2，表示每个迭代内目的操作数前一个分形结束地址与后一个分形起始地址的间隔为2（单位：512字节）。
+    - repeatTime和srcStride的解释和上图示例一致；
+    - dstGap = 0，表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址和下一个迭代第一个分形起始地址无间隔；
+    - dstFracGap = 2，表示每个迭代内目的操作数前一个分形结束地址与后一个分形起始地址的间隔为2（单位：512字节）；
     - 外层for循环的循环次数是2，源操作数的地址偏移量是3（单位：16\*16\*4字节），目的操作数的地址偏移量是3（单位：16\*16\*4字节）。
 
     ![](../../../../../figures/loaddatawithtrans_l12l0a_b32_demo2.png)
@@ -336,7 +332,7 @@ Kirin X90，支持数据类型：int8_t、half。
 
 ### 非连续搬入<a id="zh-cn_topic_0000002543851571_section1750533101219"></a>
 
-从L1 Buffer搬运2个方块矩阵到L0A Buffer，利用srcStride 、dstGap和dstFracGap进行跳读跳写。
+从L1 Buffer搬运2个方块矩阵到L0A Buffer，利用srcStride、dstGap和dstFracGap进行跳读跳写。
 
 - 对于int8_t数据类型，每次迭代处理32\*32\*1字节数据，可处理2个分形（一个分形512字节），每次迭代中，源操作数中2个连续的16\*32分形将被合并为1个32\*32的方块矩阵，基于方块矩阵做转置，转置后分裂为2个32\*16分形，根据目的操作数分形间隔等参数可以有不同的排布。
 
@@ -444,7 +440,7 @@ for (int i = 0; i < CeilDivision(k, fractalShape[0] * fractalNum); ++i) {
 uint16_t m = 40, k = 70, n = 50;
 uint32_t fractalShape[0] = 16;
 uint32_t fractalShape[1] = 32 / sizeof(half);
-uint32_t fractalNum = 1
+uint32_t fractalNum = 1;
 uint32_t fractalSize = fractalShape[0] * fractalShape[1];
 
 // A矩阵LoadDataWithTranspose: Nz -> Zz
@@ -474,7 +470,7 @@ for (int i = 0; i < CeilDivision(k, fractalShape[0] * fractalNum); ++i) {
 }
 ```
 
-### 示例 4：：float数据类型，A、B矩阵需要转置的场景
+### 示例 4：float数据类型，A、B矩阵需要转置的场景
 
 该示例输入a矩阵为float类型，shape为[40,70]，输入b矩阵为float类型，shape为[70,50]，输出c的类型为float。a矩阵从A1->A2转置，b矩阵从B1->B2转置。示例代码片段如下，仅展示样例中的部分代码，完整使用样例请参见[LoadData_L12L0样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_matrix_compute/load_data_l12l0)。
 
@@ -511,7 +507,7 @@ for (int i = 0; i < CeilDivision(k, fractalShape[0]); ++i) {
 }
 ```
 
-<cann-filter npu_type="950">
+<cann-filter npu-type = "950">
 
 ### 示例 5：使用LoadData2dTransposeParamsV2结构体作为参数的场景
 

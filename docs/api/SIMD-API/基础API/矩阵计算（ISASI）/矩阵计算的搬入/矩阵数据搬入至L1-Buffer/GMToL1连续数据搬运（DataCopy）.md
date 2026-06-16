@@ -2,21 +2,21 @@
 
 ## 产品支持情况<a id="zh-cn_topic_0000002535739034_section796754519912"></a>
 
-|产品|是否支持|
-|----------|:----------:|
-|Ascend 950PR/Ascend 950DT|√|
-|Atlas A3 训练系列产品/Atlas A3 推理系列产品|√|
-|Atlas A2 训练系列产品/Atlas A2 推理系列产品|√|
-|Atlas 200I/500 A2 推理产品|x|
-|Atlas 推理系列产品AI Core|√|
-|Atlas 推理系列产品Vector Core|x|
-|Atlas 训练系列产品|√|
-|Kirin X90|√|
-|Kirin 9030|√|
+| 产品 | 是否支持 |
+| ---------- | :----------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | √ </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | √ </cann-filter> |
 
 ## 功能说明<a id="zh-cn_topic_0000002535739034_section106841136114319"></a>
 
-头文件路径为："basic_api/kernel_operator_data_copy_intf.h"。
+头文件路径为：basic_api/kernel_operator_data_copy_intf.h。
 
 该接口能够将矩阵从Global Memory连续搬运至L1 Buffer（TPosition为A1/B1），数据搬运时格式和内容保持不变。
 
@@ -29,23 +29,23 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 ## 参数说明<a id="zh-cn_topic_0000002535739034_section16128134420472"></a>
 
-**表 1**  模板参数说明
+**表 1** 模板参数说明
 
-|参数名|描述|
-|----------|----------|
-|T|源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002535739034_section4219135304818)。|
+| 参数名 | 描述 |
+| ---------- | ---------- |
+| T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002535739034_section4219135304818)。 |
 
-**表 2**  参数说明
+**表 2** 参数说明
 
-|参数名称|输入/输出|含义|
-|----------|----------|----------|
-|dst|输出|目的操作数，类型为LocalTensor，存储位置为L1 Buffer（TPosition为A1/B1），目的地址需要32字节对齐。|
-|src|输入|源操作数，类型为GlobalTensor，存储位置为Global Memory，源地址需要1字节对齐。|
-|count|输入|参与搬运的元素个数。count * sizeof(T)需要32字节对齐，若未对齐，则搬运量会向下取整到32字节对齐。|
+| 参数名称 | 输入/输出 | 含义 |
+| ---------- | ---------- | ---------- |
+| dst | 输出 | 目的操作数，类型为LocalTensor，存储位置为L1 Buffer（TPosition为A1/B1），目的地址需要32字节对齐。 |
+| src | 输入 | 源操作数，类型为GlobalTensor，存储位置为Global Memory，源地址需要1字节对齐。 |
+| count | 输入 | 参与搬运的元素个数。count * sizeof(T)需要32字节对齐，若未对齐，则搬运量会向下取整到32字节对齐。 |
 
 以half数据类型为例，源操作数的shape为1 * 128。当count = 128时，[图1](#zh-cn_topic_0000002535739034_fig79455329161)将源操作数中128个元素连续搬运至目的操作数。
 
-**图 1**  连续搬运示意图<a id="zh-cn_topic_0000002535739034_fig79455329161"></a>
+**图 1** 连续搬运示意图<a id="zh-cn_topic_0000002535739034_fig79455329161"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_continuous_copy.png)
 
@@ -53,43 +53,43 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 源矩阵和目的矩阵支持的数据类型保持一致。
 
-<cann-filter npu_type="950">
+<cann-filter npu-type = "950">
 
 针对Ascend 950PR/Ascend 950DT，支持数据类型为：b8、b16、b32、b64。
 
 </cann-filter>
 
-<cann-filter npu_type="A3">
+<cann-filter npu-type = "A3">
 
 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持数据类型为：b8、b16、b32、b64。
 
 </cann-filter>
 
-<cann-filter npu_type="910b">
+<cann-filter npu-type = "910b">
 
 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持数据类型为：b8、b16、b32、b64。
 
 </cann-filter>
 
-<cann-filter npu_type="310p">
+<cann-filter npu-type = "310p">
 
 针对Atlas 推理系列产品AI Core，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、float、double。
 
 </cann-filter>
 
-<cann-filter npu_type="910">
+<cann-filter npu-type = "910">
 
 针对Atlas 训练系列产品，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、float、double。
 
 </cann-filter>
 
-<cann-filter npu_type="x90">
+<cann-filter npu-type = "x90">
 
 针对Kirin X90，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、float、double。
 
 </cann-filter>
 
-<cann-filter npu_type="9030">
+<cann-filter npu-type = "9030">
 
 针对Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、float、double。
 
@@ -107,17 +107,17 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
     ![](../../../../../figures/绘图4.png)
 
-<cann-filter npu_type="A3,910b">
+<cann-filter npu-type = "A3,910b">
 
 - 针对如下产品型号：
 
-    <cann-filter npu_type = "A3">
+    <cann-filter npu-type = "A3">
 
     Atlas A3 训练系列产品/Atlas A3 推理系列产品；
 
     </cann-filter>
 
-    <cann-filter npu_type = "910b">
+    <cann-filter npu-type = "910b">
 
     Atlas A2 训练系列产品/Atlas A2 推理系列产品；
     

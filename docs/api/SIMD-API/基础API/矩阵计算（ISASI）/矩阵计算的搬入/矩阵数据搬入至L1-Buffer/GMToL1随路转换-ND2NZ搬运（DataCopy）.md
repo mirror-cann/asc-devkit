@@ -2,82 +2,40 @@
 
 ## 产品支持情况<a id="zh-cn_topic_0000002566538879_section796754519912"></a>
 
-|产品|是否支持|
-|----------|:----------:|
-|Ascend 950PR/Ascend 950DT|√|
-|Atlas A3 训练系列产品/Atlas A3 推理系列产品|√|
-|Atlas A2 训练系列产品/Atlas A2 推理系列产品|√|
-|Atlas 200I/500 A2 推理产品|x|
-|Atlas 推理系列产品AI Core|√|
-|Atlas 推理系列产品Vector Core|x|
-|Atlas 训练系列产品|x|
-|Kirin X90|√|
-|Kirin 9030|√|
+| 产品 | 是否支持 |
+| ---------- | :----------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | √ </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | √ </cann-filter> |
 
 ## 功能说明<a id="zh-cn_topic_0000002566538879_section106841136114319"></a>
 
-头文件路径为："basic_api/kernel_operator_data_copy_intf.h"。
+头文件路径为：basic_api/kernel_operator_data_copy_intf.h。
 
 该接口主要实现将矩阵从Global Memory搬运至L1 Buffer（TPosition为A1/B1），并支持在数据搬运时进行ND到NZ格式的转换。
 
 ND到NZ的格式转换等价于DN到ZN的格式转换，如[图1](#zh-cn_topic_0000002566538879_fig444462417355)。
 
-**图 1**  ND2NZ与DN2ZN示意图<a id="zh-cn_topic_0000002566538879_fig444462417355"></a>
+**图 1** ND2NZ与DN2ZN示意图<a id="zh-cn_topic_0000002566538879_fig444462417355"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_copy.png)
 
 ## 函数原型<a id="zh-cn_topic_0000002566538879_section82039854412"></a>
-
-<cann-filter npu_type="950,A3,910b,310p,x90,9030">
-
-针对如下产品型号：
-
-<cann-filter npu_type="950">
-
-Ascend 950PR/Ascend 950DT：
-
-</cann-filter>
-
-<cann-filter npu_type="A3">
-
-Atlas A3 训练系列产品/Atlas A3 推理系列产品；
-
-</cann-filter>
-
-<cann-filter npu_type="910b">
-
-Atlas A2 训练系列产品/Atlas A2 推理系列产品；
-
-</cann-filter>
-
-<cann-filter npu_type="310p">
-
-Atlas 推理系列产品AI Core；
-
-</cann-filter>
-
-<cann-filter npu_type="x90">
-
-Kirin X90；
-
-</cann-filter>
-
-<cann-filter npu_type="9030">
-
-Kirin 9030；
-
-</cann-filter>
 
 ```cpp
 template <typename T>
 __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>& src, const Nd2NzParams& intriParams)
 ```
 
-</cann-filter>
+<cann-filter npu-type = "950">
 
-<cann-filter npu_type="950">
-
-针对Ascend 950PR/Ascend 950DT：
+特别针对Ascend 950PR/Ascend 950DT，函数原型请参考如下：
 
 ```cpp
 template <typename T, bool enableSmallC0 = false>
@@ -88,117 +46,79 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 ## 参数说明<a id="zh-cn_topic_0000002566538879_section16128134420472"></a>
 
-<cann-filter npu_type="A3,910b,310p,x90,9030">
+**表 1** 模板参数说明
 
-针对如下产品型号，模板参数说明见下表：
+| 参数名 | 描述 |
+| ---------- | ---------- |
+| T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002566538879_section4219135304818)。 |
+| enableSmallC0 | SmallC0模式开关：当dValue小于等于4的时候，C0_SIZE会补齐到4 * sizeof(T)字节。<br>默认不开启。不同的型号，enableSmallC0支持度不同，请参考[enableSmallC0参数支持度说明](#enableSmallC0参数支持度说明)。 |
 
-<cann-filter npu_type="A3">
+### enableSmallC0参数支持度说明
 
-Atlas A3 训练系列产品/Atlas A3 推理系列产品；
+<cann-filter npu-type = "950">
 
-</cann-filter>
-
-<cann-filter npu_type="910b">
-
-Atlas A2 训练系列产品/Atlas A2 推理系列产品；
-
-</cann-filter>
-
-<cann-filter npu_type="310p">
-
-Atlas 推理系列产品AI Core；
+- 针对Ascend 950PR/Ascend 950DT，新增enableSmallC0参数，调用该接口必须配置参数enableSmallC0；
 
 </cann-filter>
 
-<cann-filter npu_type="x90">
+- 其他型号不支持该参数。
 
-Kirin X90；
+**表 2** 参数说明
 
-</cann-filter>
+| 参数名称 | 输入/输出 | 含义 |
+| ---------- | ---------- | ---------- |
+| dst | 输出 | 目的操作数，类型为LocalTensor，存储位置为L1 Buffer（TPosition为A1/B1），目的地址需要32字节对齐。 |
+| src | 输入 | 源操作数，类型为GlobalTensor，存储位置为Global Memory，源地址需要1字节对齐。 |
+| intriParams | 输入 | ND2NZ搬运参数，类型为Nd2NzParams。<br>Nd2NzParams参数说明请参考[表4](#zh-cn_topic_0000002566538879_table144203616291)。 |
 
-<cann-filter npu_type="9030">
+**表 3** Nd2NzParams结构体参数定义<a id="zh-cn_topic_0000002566538879_table144203616291"></a>
 
-Kirin 9030；
-
-</cann-filter>
-
-**表 1**  模板参数说明
-
-|参数名|描述|
-|----------|----------|
-|T|源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002566538879_section4219135304818)。|
-
-</cann-filter>
-
-<cann-filter npu_type="950">
-
-针对Ascend 950PR/Ascend 950DT：
-
-**表 2**  模板参数说明
-
-|参数名|描述|
-|----------|----------|
-|T|源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002566538879_section4219135304818)。|
-|enableSmallC0|SmallC0模式开关：当dValue小于等于4的时候，C0_SIZE会补齐到4 * sizeof(T)字节。<br>默认不开启。|
-
-</cann-filter>
-
-**表 3**  参数说明
-
-|参数名称|输入/输出|含义|
-|----------|----------|----------|
-|dst|输出|目的操作数，类型为LocalTensor，存储位置为L1 Buffer（TPosition为A1/B1），目的地址需要32字节对齐。|
-|src|输入|源操作数，类型为GlobalTensor，存储位置为Global Memory，源地址需要1字节对齐。|
-|intriParams|输入|ND2NZ搬运参数，类型为Nd2NzParams。<br>Nd2NzParams参数说明请参考[表4](#zh-cn_topic_0000002566538879_table144203616291)。|
-
-**表 4**  Nd2NzParams结构体参数定义<a id="zh-cn_topic_0000002566538879_table144203616291"></a>
-
-|参数名称|含义|
-|----------|----------|
-|ndNum|源矩阵中ND矩阵的数量，取值范围：ndNum∈[0, 4095]。<br>**注：ndNum = 0表示不执行搬运，该接口将被视为NOP（空操作）。**|
-|nValue|源矩阵中ND矩阵的行数，取值范围：nValue∈[0, 16384]。<br>**注：nValue = 0表示不执行搬运，该接口将被视为NOP（空操作）。**|
-|dValue|源矩阵中ND矩阵的列数，取值范围：dValue∈[0, 65535]。当dValue * sizeof(T)不满足32字节对齐时，在目的矩阵中会补0对齐到32字节。<br>**注：dValue = 0表示不执行搬运，该接口将被视为NOP（空操作）。**|
-|srcNdMatrixStride|源矩阵相邻ND矩阵起始地址间的偏移，取值范围：srcNdMatrixStride∈[0, 65535]，单位：元素个数。<br>&bull; ndNum = 1时，srcNdMatrixStride无意义，设置为0即可。<br>&bull; ndNum ≠ 1时，当srcNdMatrixStride = 0时，表示重复搬出源矩阵的第一个ND矩阵。|
-|srcDValue|源矩阵一行中包含的元素个数，取值范围：srcDValue∈[1, 65535]，单位：元素个数。|
-|dstNzC0Stride|ND转换为NZ格式后，目的NZ矩阵中相邻Z矩阵起始地址的偏移，取值范围：dstNzC0Stride∈[1, 16384]，单位：C0_SIZE（32字节）。|
-|dstNzNStride|目的矩阵中，NZ矩阵中相邻行起始地址的偏移，取值范围：dstNzNStride∈[1, 16384]，单位：C0_SIZE（32字节）。|
-|dstNzMatrixStride|目的矩阵中，相邻NZ矩阵起始地址的偏移，取值范围：dstNzMatrixStride∈[0, 65535]，单位：元素个数。<br>&bull; ndNum = 1时，dstNzMatrixStride无意义，设置为0即可。<br>&bull; ndNum ≠ 1时，当dstNzMatrixStride = 0时，表示目的矩阵中搬入的每个NZ矩阵都会覆盖第一个NZ矩阵。|
+| 参数名称 | 含义 |
+| ---------- | ---------- |
+| ndNum | 源矩阵中ND矩阵的数量，取值范围：ndNum∈[0, 4095]。<br>**注：ndNum = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
+| nValue | 源矩阵中ND矩阵的行数，取值范围：nValue∈[0, 16384]。<br>**注：nValue = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
+| dValue | 源矩阵中ND矩阵的列数，取值范围：dValue∈[0, 65535]。当dValue * sizeof(T)不满足32字节对齐时，在目的矩阵中会补0对齐到32字节。<br>**注：dValue = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
+| srcNdMatrixStride | 源矩阵相邻ND矩阵起始地址间的偏移，取值范围：srcNdMatrixStride∈[0, 65535]，单位：元素个数。<br>&nbsp;&nbsp;&bull; ndNum = 1时，srcNdMatrixStride无意义，设置为0即可。<br>&nbsp;&nbsp;&bull; ndNum ≠ 1时，当srcNdMatrixStride = 0时，表示重复搬出源矩阵的第一个ND矩阵。 |
+| srcDValue | 源矩阵一行中包含的元素个数，取值范围：srcDValue∈[1, 65535]，单位：元素个数。 |
+| dstNzC0Stride | ND转换为NZ格式后，目的NZ矩阵中相邻Z矩阵起始地址的偏移，取值范围：dstNzC0Stride∈[1, 16384]，单位：C0_SIZE（32字节）。 |
+| dstNzNStride | 目的矩阵中，NZ矩阵中相邻行起始地址的偏移，取值范围：dstNzNStride∈[1, 16384]，单位：C0_SIZE（32字节）。 |
+| dstNzMatrixStride | 目的矩阵中，相邻NZ矩阵起始地址的偏移，取值范围：dstNzMatrixStride∈[0, 65535]，单位：元素个数。<br>&nbsp;&nbsp;&bull; ndNum = 1时，dstNzMatrixStride无意义，设置为0即可。<br>&nbsp;&nbsp;&bull; ndNum ≠ 1时，当dstNzMatrixStride = 0时，表示目的矩阵中搬入的每个NZ矩阵都会覆盖第一个NZ矩阵。 |
 
 ## 数据类型<a id="zh-cn_topic_0000002566538879_section4219135304818"></a>
 
 源矩阵和目的矩阵支持的数据类型保持一致。
 
-<cann-filter npu_type="950">
+<cann-filter npu-type = "950">
 
 针对Ascend 950PR/Ascend 950DT，支持的数据类型为：bool、int8_t、uint8_t、fp4x2_e2m1_t、fp4x2_e1m2_t、hifloat8_t、fp8_e5m2_t、fp8_e4m3fn_t、fp8_e8m0_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、complex32。
 
 </cann-filter>
 
-<cann-filter npu_type="A3">
+<cann-filter npu-type = "A3">
 
 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持数据类型为：b4（int4b_t）、int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、half、bfloat16_t、float。
 
 </cann-filter>
 
-<cann-filter npu_type="910b">
+<cann-filter npu-type = "910b">
 
 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持数据类型为：b4（int4b_t）、int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、half、bfloat16_t、float。
 
 </cann-filter>
 
-<cann-filter npu_type="310p">
+<cann-filter npu-type = "310p">
 
 针对Atlas 推理系列产品AI Core，支持数据类型为：int16_t、uint16_t、int32_t、uint32_t、half、float。
 
 </cann-filter>
 
-<cann-filter npu_type="x90">
+<cann-filter npu-type = "x90">
 
 Kirin X90，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、half。
 
 </cann-filter>
 
-<cann-filter npu_type="9030">
+<cann-filter npu-type = "9030">
 
 Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、half。
 
@@ -216,20 +136,20 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - 搬运至L1 Buffer的数据不能重叠，如果存在重叠写入，硬件不会产生任何警告或错误，并且不保证重叠数据的写入顺序。
 - Nd2NzParams结构体参数的值需在取值范围内：
 
-    **表 5**  Nd2NzParams结构体参数取值范围
+    **表 4** Nd2NzParams结构体参数取值范围
 
-    |参数名称|取值范围|
-    |----------|----------|
-    |ndNum|[0, 4095]|
-    |nValue|[0, 16384]|
-    |dValue|[0, 65535]|
-    |srcNdMatrixStride|[0, 65535]|
-    |srcDValue|[1, 65535]|
-    |dstNzC0Stride|[1, 16384]|
-    |dstNzNStride|[1, 16384]|
-    |dstNzMatrixStride|[0, 65535]|
+    | 参数名称 | 取值范围 |
+    | ---------- | ---------- |
+    | ndNum | [0, 4095] |
+    | nValue | [0, 16384] |
+    | dValue | [0, 65535] |
+    | srcNdMatrixStride | [0, 65535] |
+    | srcDValue | [1, 65535] |
+    | dstNzC0Stride | [1, 16384] |
+    | dstNzNStride | [1, 16384] |
+    | dstNzMatrixStride | [0, 65535] |
 
-<cann-filter npu_type="310p">
+<cann-filter npu-type = "310p">
 
 - 针对Atlas 推理系列产品AI Core，使用Global Memory -\> Local Memory通路的ND2NZ搬运接口时，需要预留8K的UB空间，作为接口的临时数据存放区。
 
@@ -250,7 +170,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - dstNzNStride = 1，表示NZ矩阵中相邻行起始地址的偏移。
 - dstNzMatrixStride = 0，只有一个NZ矩阵，该值为0。
 
-**图 2**  ND2NZ转换示意图（连续搬运）<a id="zh-cn_topic_0000002566538879_fig7420114233419"></a>
+**图 2** ND2NZ转换示意图（连续搬运）<a id="zh-cn_topic_0000002566538879_fig7420114233419"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_continuous_copy.png)
 
@@ -267,7 +187,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - dstNzNStride = 2，表示NZ矩阵中相邻行起始地址的偏移。
 - dstNzMatrixStride = 320，相邻NZ矩阵起始地址的偏移，每行16个元素，共20行，偏移为16 * 20 = 320个元素。
 
-**图 3**  ND2NZ转换示意图（非连续搬运）<a id="zh-cn_topic_0000002566538879_fig19978184883316"></a>
+**图 3** ND2NZ转换示意图（非连续搬运）<a id="zh-cn_topic_0000002566538879_fig19978184883316"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_noncontinuous_copy.png)
 
@@ -275,7 +195,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 
 enableSmallC0开启模式下的ND2NZ转换示意图如下：
 
-**图 4**  enableSmallC0开启模式下的ND2NZ转换示意图（half数据类型）<a name="fig07641913195410"></a>  
+**图 4** enableSmallC0开启模式下的ND2NZ转换示意图（half数据类型）<a name="fig07641913195410"></a>  
 
 ![](../../../../../figures/enableSmallC0开启模式下的ND2NZ转换示意图-（half数据类型）.png "enableSmallC0开启模式下的ND2NZ转换示意图-（half数据类型）")
 

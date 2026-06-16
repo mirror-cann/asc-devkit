@@ -1,22 +1,22 @@
-# SetFmatrixBitMode<a name="ZH-CN_TOPIC_0000002517448448"></a>
+﻿# SetFmatrixBitMode<a name="ZH-CN_TOPIC_0000002517448448"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
 | 产品 | 是否支持 |
-|------|:------:|
-| <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-| <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | x </cann-filter>|
-| <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | x </cann-filter>|
-| <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | x </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | x </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
-| <cann-filter npu-type="910">Atlas 训练系列产品 | x </cann-filter>|
-| <cann-filter npu-type="x90">Kirin X90 | x </cann-filter>|
-| <cann-filter npu-type="9030">Kirin 9030 | x </cann-filter>|
+| ------ | :------: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | x </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | x </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
+| <cann-filter npu-type = "x90">Kirin X90 | x </cann-filter> |
+| <cann-filter npu-type = "9030">Kirin 9030 | x </cann-filter> |
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-用于调用Load3D时设置FeatureMap的属性描述。Load3D的模板参数isSetFMatrix设置为false时，表示Load3D传入的FeatureMap的属性（包括l1H、l1W、padList，参数介绍参考表4 LoadData3DParamsV1结构体内参数说明、表5 LoadData3DParamsV2结构体内参数说明）将不生效，开发者需要通过该接口进行设置。
+用于调用[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)时设置FeatureMap的属性描述。Load3D的模板参数isSetFMatrix设置为false时，表示Load3D传入的FeatureMap的属性（包括l1H、l1W、padList，参数介绍参考[表3 LoadData3DParamsV1结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table679014222918)、[表4 LoadData3DParamsV2结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)）将不生效，开发者需要通过该接口进行设置。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -29,7 +29,7 @@ __aicore__ inline void SetFmatrix(const SetFMatrixBitModeParams& param, const Fm
 **表 1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
-|---------|----------|------|
+| --------- | ---------- | ------ |
 | fmatrixMode | 输入 | 用于控制LoadData指令从left还是right寄存器获取信息。FmatrixMode类型，定义如下。当前只支持FMATRIX\_LEFT，左右矩阵均使用该配置。<br><pre>enum class FmatrixMode : uint8_t {<br>    FMATRIX_LEFT = 0,<br>    FMATRIX_RIGHT = 1,<br>};</pre> |
 | param | 输入 | 类型为SetFMatrixBitMode，具体参考[表2](#table85031523118)。 |
 
@@ -37,7 +37,7 @@ __aicore__ inline void SetFmatrix(const SetFMatrixBitModeParams& param, const Fm
 **表 2** SetFMatrixBitMode类参数说明
 
 | 参数名称 | 含义 |
-|---------|---------|
+| --------- | --------- |
 | config0 | uint64_t类型，与SetFMatrixBitModeConfig0位域（bit-field）结构体类型参数config0BitMode组成联合体（union），初始化为0，可以使用类对象的GetConfig0()函数获取其值。 |
 | config0BitMode | SetFMatrixBitModeConfig0位域（bit-field）结构体类型，参数参考[表3](#table1162220101434)，与config0组成联合体（union）。 |
 
@@ -49,7 +49,7 @@ SetFMatrixBitMode类参数设计思想说明：
 
 SetFMatrixBitMode类使用union与bit-field方法，采用bit位表达参数类型，使用bit-field结构体自动处理入参的bit位数，并利用union的特性实现多参数融合传递，仅需传递一个入参即可包含全部所需信息，对应底层接口仅需要接收一个参数。同时，当需要修改参数中某一bit位的值时，仅通过循环和位运算即可实现，不需要重新传入参数，减少了scalar计算，实现性能提升。
 
-SetFMatrixBitMode类可以直接使用LoadData3DParamsV2结构体类型对象初始化：
+SetFMatrixBitMode类可以直接使用[LoadData3DParamsV2结构体](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)结构体类型对象初始化：
 
 ```cpp
 template <typename T>
@@ -65,10 +65,10 @@ __aicore__ inline SetFMatrixBitModeParams(const LoadData3DParamsV2<T> &loadData3
 | --- | --- |
 | l1H | 源操作数height，取值范围：l1H∈[1, 32767]。该参数是位域结构体的最低位参数，占用16bit，可以使用SetFMatrixBitMode类对象的SetL1H()函数设置其值。 |
 | l1W | 源操作数width，取值范围：l1W∈[1, 32767]。该参数是位域结构体的第二低位参数，占用16bit，可以使用SetFMatrixBitMode类对象的SetL1W()函数设置其值。 |
-| padList0 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的 padding_left值，取值范围：[0,255]。默认为0。该参数是位域结构体的第三低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
-| padList1 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的 padding_right值，取值范围：[0,255]。默认为0。该参数是位域结构体的第四低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
-| padList2 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的 padding_top值，取值范围：[0,255]。默认为0。该参数是位域结构体的第五低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
-| padList3 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的 padding_bottom值，取值范围：[0,255]。默认为0。该参数是位域结构体的最高位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
+| padList0 | 对应[表 LoadData3DParamsV2结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)中padding列表中的padding_left值，取值范围：[0,255]。默认为0。该参数是位域结构体的第三低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
+| padList1 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的padding_right值，取值范围：[0,255]。默认为0。该参数是位域结构体的第四低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
+| padList2 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的padding_top值，取值范围：[0,255]。默认为0。该参数是位域结构体的第五低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
+| padList3 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的padding_bottom值，取值范围：[0,255]。默认为0。该参数是位域结构体的最高位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
 
 ## 返回值说明
 
@@ -76,7 +76,7 @@ __aicore__ inline SetFMatrixBitModeParams(const LoadData3DParamsV2<T> &loadData3
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-- 该接口需要配合Load3D接口一起使用，需要在Load3D接口之前调用。
+- 该接口需要配合[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)接口一起使用，需要在[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)接口之前调用。
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../../通用说明和约束.md#section796754519912)。
 
 ## 调用示例<a name="section642mcpsimp"></a>

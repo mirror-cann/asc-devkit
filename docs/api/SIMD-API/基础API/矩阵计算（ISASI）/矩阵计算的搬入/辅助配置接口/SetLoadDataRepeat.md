@@ -3,20 +3,20 @@
 ## 产品支持情况<a name="section1550532418810"></a>
 
 | 产品 | 是否支持 |
-|------|:------:|
-| <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-| <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | x </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
-| <cann-filter npu-type="910">Atlas 训练系列产品 | x </cann-filter>|
+| --- | :---: |
+| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
+| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | x </cann-filter> |
+| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
+| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
 头文件路径为：basic_api/kernel_operator_mm_intf.h。
 
-用于设置Load3D接口的repeat参数。设置repeat参数后，可以通过调用一次Load3D接口完成多个迭代的数据搬运。
+用于设置[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)接口的repeat参数。设置repeat参数后，可以通过调用一次Load3D接口完成多个迭代的数据搬运。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -31,8 +31,8 @@ __aicore__ inline void SetLoadDataRepeat(const LoadDataRepeatParam& repeatParams
 **表 1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
-|------|------|------|
-| repeatParams | 输入 | 设置Load3D接口的repeat参数，类型为LoadDataRepeatParam。<br>具体定义请参考：\$\{INSTALL_DIR\}/include/ascendc/basic_api/interface/kernel_struct_mm.h，\$\{INSTALL_DIR\}请替换为CANN软件安装后文件存储路径。<br>参数说明请参考[表2](#table15780447181917)。 |
+| --- | --- | --- |
+| repeatParams | 输入 | 设置[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)接口的repeat参数，类型为LoadDataRepeatParam。<br>具体定义请参考：\$\{INSTALL_DIR\}/include/ascendc/basic_api/interface/kernel_struct_mm.h，\$\{INSTALL_DIR\}请替换为CANN软件安装后文件存储路径。<br>参数说明请参考[表2](#table15780447181917)。 |
 
 <a name="table15780447181917"></a>
 **表 2** LoadDataRepeatParam结构体参数说明
@@ -46,25 +46,25 @@ __aicore__ inline void SetLoadDataRepeat(const LoadDataRepeatParam& repeatParams
 
 ### dstStride参数支持度说明
 
-<cann-filter npu-type="950">
+<cann-filter npu-type = "950">
 
 - 针对Ascend 950PR/Ascend 950DT，新增dstStride参数，调用该接口必须配置参数dstStride。
 
 </cann-filter>
 
-<cann-filter npu-type="910b">
+<cann-filter npu-type = "910b">
 
 - 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，不支持该参数。
 
 </cann-filter>
 
-<cann-filter npu-type="A3">
+<cann-filter npu-type = "A3">
 
 - 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，不支持该参数。
 
 </cann-filter>
 
-<cann-filter npu-type="310b">
+<cann-filter npu-type = "310b">
 
 - 针对Atlas 200I/500 A2 推理产品，不支持该参数。
 
@@ -79,7 +79,7 @@ __aicore__ inline void SetLoadDataRepeat(const LoadDataRepeatParam& repeatParams
 - 迭代沿height方向时，repeatStride的单位为16个元素，迭代沿width方向时，repeatStride的单位为32/sizeof\(data\_type\)个元素。
 - repeatTimes=0表示Load3D不执行搬运，Load3D接口将被视为NOP（空操作）。
 
-<cann-filter npu-type="950">
+<cann-filter npu-type = "950">
 
 - 针对Ascend 950PR/Ascend 950DT，调用Load3D指令时，必须配置本接口中dstStride参数。
 
@@ -87,25 +87,25 @@ __aicore__ inline void SetLoadDataRepeat(const LoadDataRepeatParam& repeatParams
 
 - 不同芯片型号，repeatStride的单位不同，具体参考如下：
     
-    <cann-filter npu-type="950">
+    <cann-filter npu-type = "950">
     
     - Ascend 950PR/Ascend 950DT，repeatStride的单位为32/sizeof(data_type)个元素。
 
     </cann-filter>
 
-    <cann-filter npu-type="910b">
+    <cann-filter npu-type = "910b">
 
     - Atlas A2 训练系列产品/Atlas A2 推理系列产品，repeatStride的单位为32/sizeof(data_type)个元素。
 
     </cann-filter>
 
-    <cann-filter npu-type="A3">
+    <cann-filter npu-type = "A3">
 
     - Atlas A3 训练系列产品/Atlas A3 推理系列产品，repeatStride的单位为32/sizeof(data_type)个元素。
 
     </cann-filter>
 
-    <cann-filter npu-type="310b">
+    <cann-filter npu-type = "310b">
 
     - Atlas 200I/500 A2 推理产品，repeatStride的单位为64/sizeof(data_type)个元素。
 
