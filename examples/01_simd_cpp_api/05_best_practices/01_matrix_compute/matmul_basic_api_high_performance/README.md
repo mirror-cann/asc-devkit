@@ -58,10 +58,11 @@
 | aic_mac_ratio | Cube 计算单元的时间占比，反映计算单元利用率 |
 | aic_mte1_time(μs) | MTE1（L1 到 L0A/L0B 搬运）的执行时间 |
 | aic_mte1_ratio | MTE1 的时间占比，反映 L1 到 L0 的数据搬运压力 |
-| aic_mte2_time(μs) | MTE2（GM 到 L1 搬运）的执行时间 |
+| aic_mte2_time(μs) | MTE2（[GM](../../../../../docs/guide/编程指南/编程模型/AI-Core-SIMD编程/抽象硬件架构.md)（Global Memory） 到 L1 搬运）的执行时间 |
 | aic_mte2_ratio | MTE2 的时间占比，反映 GM 到 L1 的数据加载压力 |
-| aic_fixpipe_time(μs) | FixPipe（L0C 到 GM 搬运）的执行时间 |
-| aic_fixpipe_ratio | FixPipe 的时间占比，反映结果写回的访存压力 |
+| aic_fixpipe_time(μs) | [Fixpipe](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md)（L0C 到 GM 搬运）的执行时间 |
+| aic_fixpipe_ratio | [Fixpipe](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) 的时间占比，反映结果写回的访存压力 |
+
 
 ### 数据流路径：
 
@@ -70,7 +71,7 @@ GM ──(MTE2, DataCopy)──> L1 ──(MTE1, LoadData)──> L0A/L0B ──
        DataCopyInA/B             DataLoadA/B                   Compute             CopyOut
 ```
 
-### 核心特性
+### 中级性能优化
 
 #### 1. L1/L0 双缓冲 Ping-Pong 布局
 
@@ -114,29 +115,18 @@ AscendC::LocalTensor<half> a2LocalPing(AscendC::TPosition::A2, 0, a2PingpongSize
 AscendC::LocalTensor<half> a2LocalPong(AscendC::TPosition::A2, L0_PINGPONG_BYTES, a2PingpongSize);
 ```
 
-#### 2. 大包搬运
-
-通过 `stepKa`/`stepKb` 参数将多个基本块打包为一次 DataCopyIn 操作（称为"大包"），减少 MTE2 搬运次数。例如 `stepKa=8` 表示一次将 8 个 baseM * baseK 块从 GM 搬入 L1。
-
-```cpp
-// DataCopyInA: 一次搬入 stepKa 个 baseK 块
-AscendC::Nd2NzParams nd2nzParams;
-nd2nzParams.nValue = curM;
-nd2nzParams.dValue = baseK * stepKa;  // 大包包含 stepKa 个 baseM * baseK
-```
-
-#### 3. 细粒度流水同步
+#### 2. 细粒度流水同步
 
 使用四类硬件事件标志实现精确的流水线同步，分为正向同步（数据就绪通知）和反向同步（缓冲区释放通知）：
 
 | 事件类型 | 方向 | 用途 | flag 编号 |
 |---------|------|------|----------|
-| MTE2_MTE1 | 正向 | L1 数据就绪通知，DataCopyIn 通知 DataLoad 可读取 | 0/1: A1 Ping/Pong; 2/3: B1 Ping/Pong |
-| MTE1_MTE2 | 反向 | L1 缓冲区释放通知，DataLoad 通知 DataCopyIn 可写入 | 同上 |
-| MTE1_M | 正向 | L0 数据就绪通知，DataLoad 通知 Compute 可计算 | mte1DBFlag (0/1 交替) |
-| M_MTE1 | 反向 | L0 缓冲区释放通知，Compute 通知 DataLoad 可写入 | mte1DBFlag (0/1 交替) |
+| [MTE2_MTE1](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) | 正向 | L1 数据就绪通知，DataCopyIn 通知 DataLoad 可读取 | 0/1: A1 Ping/Pong; 2/3: B1 Ping/Pong |
+| [MTE1_MTE2](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) | 反向 | L1 缓冲区释放通知，DataLoad 通知 DataCopyIn 可写入 | 同上 |
+| [MTE1_M](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) | 正向 | L0 数据就绪通知，DataLoad 通知 Compute 可计算 | mte1DBFlag (0/1 交替) |
+| [M_MTE1](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) | 反向 | L0 缓冲区释放通知，Compute 通知 DataLoad 可写入 | mte1DBFlag (0/1 交替) |
 
-**反向同步需预置**：由于反向同步是"消费方 SetFlag → 生产方 WaitFlag"，首次使用前必须预置 SetFlag，否则首次 WaitFlag 会死锁：
+**反向同步需预置**：由于反向同步是"消费方 [SetFlag](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) → 生产方 [WaitFlag](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md)"，首次使用前必须预置 SetFlag，否则首次 WaitFlag 会死锁：
 
 ```cpp
 // 初始化：预置反向同步 flag，防止首次 WaitFlag 死锁
@@ -161,9 +151,45 @@ if ((kOffsetInChunkA + 1) == stepKa) {
 }
 ```
 
-#### 4. LoadData3D 替代 LoadData2D——减少指令队列占用
+#### 3. 多核并行切分
 
-在 Atlas A2/A3 架构上，本样例使用 `LoadData3DParamsV2`（即 LoadData3D）替代 `LoadData2DParams`（即 LoadData2D）完成 L1→L0 的数据搬运。这是一个关键的指令队列优化。
+按 M/N 方向均匀切分矩阵到多核并行计算，4×6 切分策略（M 方向 4 块、N 方向 6 块，共 24 核）满足地址 512B 对齐，并减少同地址访问冲突：
+
+```cpp
+constexpr uint32_t mIter = AscendC::DivCeil(M, singleCoreM);
+uint32_t mIterIdx = AscendC::GetBlockIdx() % mIter;
+uint32_t nIterIdx = AscendC::GetBlockIdx() / mIter;
+```
+
+#### 4. DataCopyIn 优先搬运 B 矩阵
+
+当 `stepKa > stepKb` 时，B 矩阵每 `stepKb` 个 baseK 就需要切换到下一个 L1 缓冲区（Pong），而 A 矩阵需要 `stepKa` 个 baseK 才切换。因此 B 的数据需求更紧迫。如果先搬运 A，MTE2 流水被 A 占用，B 的搬运要等 A 搬完才能开始，导致需要 B 数据时 B 尚未就绪。
+
+本样例在 Compute 之后触发 DataCopyIn 时，**先 B 后 A**，优先搬运更紧迫的 B 数据：
+
+```
+k=0:  Compute → DataCopyIn(B1 Pong) → DataCopyIn(A1 Pong)
+                 ↑ MTE2 先搬 B        ↑ 再搬 A
+k=stepKb:       需要 B1 Pong → 已就绪 ✓（B 已有 stepKb 轮时间搬运）
+k=stepKa:       需要 A1 Pong → 已就绪 ✓（A 有 stepKa 轮时间搬运，更充裕）
+```
+
+### 高级极限打磨
+
+#### 5. 大包搬运
+
+通过 `stepKa`/`stepKb` 参数将多个基本块打包为一次 DataCopyIn 操作（称为"大包"），减少 MTE2 搬运次数。例如 `stepKa=8` 表示一次将 8 个 baseM * baseK 块从 GM 搬入 L1。
+
+```cpp
+// DataCopyInA: 一次搬入 stepKa 个 baseK 块
+AscendC::Nd2NzParams nd2nzParams;
+nd2nzParams.nValue = curM;
+nd2nzParams.dValue = baseK * stepKa;  // 大包包含 stepKa 个 baseM * baseK
+```
+
+#### 6. LoadData3D 替代 LoadData2D——减少指令队列占用
+
+在 Atlas A2/A3 架构上，本样例使用 [`LoadData3DParamsV2`](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load3D.md)（即 [LoadData3D](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load3D.md)）替代 [`LoadData2DParams`](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load2D.md)（即 LoadData2D）完成 L1→L0 的数据搬运。这是一个关键的指令队列优化。
 
 **问题背景**：MTE1 指令队列深度为 32。使用 LoadData2D 时，由于单条 LoadData2D 指令搬运粒度有限，搬运一个 baseM×baseK 的切片需要用 for 循环发射多条 LoadData2D 指令。例如 baseM=128、baseK=64 时，最少需要发射 `baseK/16 = 4` 条 LoadData2D 指令。
 
@@ -196,17 +222,7 @@ AscendC::LoadData(a2Local, a1Local[srcAddr], loadDataParams);
 
 > **注意**：Atlas A5 芯片提供了 `LoadData2DParamsV2` 接口，单条指令即可完成搬运，无需 LoadData3D。因此本样例通过 `__NPU_ARCH__` 条件编译区分两种架构的 LoadData 实现。
 
-#### 5. 多核并行切分
-
-按 M/N 方向均匀切分矩阵到多核并行计算，4×6 切分策略（M 方向 4 块、N 方向 6 块，共 24 核）满足地址 512B 对齐，并减少同地址访问冲突：
-
-```cpp
-constexpr uint32_t mIter = AscendC::DivCeil(M, singleCoreM);
-uint32_t mIterIdx = AscendC::GetBlockIdx() % mIter;
-uint32_t nIterIdx = AscendC::GetBlockIdx() / mIter;
-```
-
-#### 6. 常量 Tiling
+#### 7. 常量 Tiling
 
 所有 Tiling 参数（baseM/baseK/baseN、singleCoreM/K/N、stepKa/stepKb）通过模板参数在编译期确定，运行时无需 Scalar 动态计算，减少 Scalar 开销：
 
@@ -217,9 +233,9 @@ template <uint32_t M, uint32_t K, uint32_t N, uint32_t baseM, uint32_t baseK, ui
 class KernelMmad { ... };
 ```
 
-#### 7. UnitFlag 优化
+#### 8. UnitFlag 优化
 
-开启 UnitFlag 后，MMAD 和 FIXPIPE 实现细粒度（512B）流水并行，而非指令级同步。每当 Cube 完成一个 512B 数据结果的计算，FIXPIPE 立即搬出该数据，Cube 计算与结果写回流水重叠：
+开启 UnitFlag 后，[MMAD](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md) 和 [FIXPIPE](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) 实现细粒度（512B）流水并行，而非指令级同步。每当 Cube 完成一个 512B 数据结果的计算，FIXPIPE 立即搬出该数据，Cube 计算与结果写回流水重叠：
 
 ```cpp
 mmadParams.unitFlag = (kBlockIdx != kLoopCount - 1) ? 2 : 3;  // 开启 UnitFlag
@@ -227,19 +243,6 @@ mmadParams.unitFlag = (kBlockIdx != kLoopCount - 1) ? 2 : 3;  // 开启 UnitFlag
 
 - `unitFlag = 2`：中间 K 块，MMAD 计算结果不立即写回，而是等待下一个 512B 完成后流水搬出
 - `unitFlag = 3`：最后一个 K 块，通知 FIXPIPE 将所有剩余结果写回 GM
-
-#### 8. DataCopyIn 优先搬运 B 矩阵
-
-当 `stepKa > stepKb` 时，B 矩阵每 `stepKb` 个 baseK 就需要切换到下一个 L1 缓冲区（Pong），而 A 矩阵需要 `stepKa` 个 baseK 才切换。因此 B 的数据需求更紧迫。如果先搬运 A，MTE2 流水被 A 占用，B 的搬运要等 A 搬完才能开始，导致需要 B 数据时 B 尚未就绪。
-
-本样例在 Compute 之后触发 DataCopyIn 时，**先 B 后 A**，优先搬运更紧迫的 B 数据：
-
-```
-k=0:  Compute → DataCopyIn(B1 Pong) → DataCopyIn(A1 Pong)
-                 ↑ MTE2 先搬 B        ↑ 再搬 A
-k=stepKb:       需要 B1 Pong → 已就绪 ✓（B 已有 stepKb 轮时间搬运）
-k=stepKa:       需要 A1 Pong → 已就绪 ✓（A 有 stepKa 轮时间搬运，更充裕）
-```
 
 #### 9. L2Cache 优化
 
@@ -261,7 +264,7 @@ for (uint32_t outerMIdx = 0; outerMIdx < outerMLoopCount; outerMIdx++) {
 }
 ```
 
-#### 10. K 方向主循环完整流程
+#### K 方向主循环完整流程
 
 以 stepKa=8、stepKb=4 为例，展示一个完整 (mBlockIdx, nBlockIdx) 子块内 K 方向循环的详细执行流程：
 
@@ -468,7 +471,39 @@ $$MTE2耗时误差 = \frac{1874.267 - 1832.10}{1832.10} = 2.30\%$$
   test pass!
   ```
 
-## 性能分析
+## 功能调试
+
+### printf
+
+该接口提供CPU域或NPU域调试场景下的格式化输出功能。
+
+在算子kernel侧实现代码中需要输出日志信息的地方调用printf接口打印相关内容。
+
+示例如下：
+
+```cpp
+AscendC::printf("matmul blockIdx=%d\n", AscendC::GetBlockIdx());
+```
+
+> [!CAUTION]注意 
+>printf（PRINTF）接口打印功能会对算子实际运行的性能带来一定影响，通常在调测阶段使用。开发者可以按需通过设置ASCENDC\_DUMP=0的方式关闭打印功能。
+
+### DumpTensor
+
+基于算子工程开发的算子，可以使用该接口Dump指定Tensor的内容。同时支持打印自定义的附加信息（仅支持uint32\_t数据类型的信息），比如打印当前行号等。
+
+在算子kernel侧实现代码中需要打印Tensor数据的地方调用DumpTensor接口打印相关内容。样例如下：
+
+```cpp
+AscendC::DumpTensor(cLocal, baseM * baseN);
+```
+
+> [!CAUTION]注意 
+>DumpTensor接口打印功能会对算子实际运行的性能带来一定影响，通常在调测阶段使用。开发者可以按需通过设置ASCENDC\_DUMP=0来关闭打印功能。
+
+## 性能调试
+
+### msProf工具介绍
 
 使用 `msprof` 工具获取详细性能数据：
 
@@ -476,13 +511,13 @@ $$MTE2耗时误差 = \frac{1874.267 - 1832.10}{1832.10} = 2.30\%$$
 msprof ./demo   # 分析样例性能
 ```
 
-当前目录下会生成 PROF_ 前缀的文件夹，`mindstudio_profiler_output` 目录保存 Host 和各个 Device 的性能数据汇总，性能数据分析推荐查看该目录下文件：
+当前目录下会生成 PROF_ 前缀的文件夹，`mindstudio_profiler_output` 目录保存Host和各个Device的性能数据汇总，性能数据分析推荐查看该目录下文件：
 ```bash
 PROF_xxxx_XXXXXX
 ├── device_{id}
 └── host
 └── mindstudio_profiler_log
-└── mindstudio_profiler_output    # 保存 Host 和各个 Device 的性能数据汇总
+└── mindstudio_profiler_output    # 保存Host和各个Device的性能数据汇总
     ├── msprof_*.json
     ├── xx_*.csv
     └── README.txt
