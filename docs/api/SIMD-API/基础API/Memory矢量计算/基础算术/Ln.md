@@ -127,7 +127,7 @@ $dst_i = \ln(src_i)$
 | 参数名 | 描述 |
 |---|---|
 | T | 操作数数据类型。 |
-| isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，本接口入参中的mask值必须设置为占位符`MASK_PLACEHOLDER`。<br>具体使用方式可参考[掩码](../SIMD计算说明/掩码/掩码.md)。 |
+| isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，接口入参中的mask值设置为占位符`MASK_PLACEHOLDER`，用于占位，无实际含义。 |
 | <!-- npu="950" id22 -->config | 该参数仅支持Ascend 950PR/Ascend 950DT。<br>用于配置Subnormal计算模式，LnConfig类型，定义如下：<br><br>enum&nbsp;class&nbsp;LnAlgo&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;INTRINSIC&nbsp;=&nbsp;0,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_1ULP_FTZ_TRUE,<br>&nbsp;&nbsp;&nbsp;&nbsp;PRECISION_1ULP_FTZ_FALSE,<br>};<br>struct&nbsp;LnConfig&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;LnAlgo&nbsp;algo&nbsp;=&nbsp;LnAlgo::INTRINSIC;<br>};<br>通过LnConfig结构体的参数algo来配置Subnormal计算模式。algo取值如下：<br>&bull; LnAlgo::INTRINSIC、LnAlgo::PRECISION_1ULP_FTZ_TRUE，使用单指令计算得出结果，所有Subnormal被近似为0。<br>&bull; LnAlgo::PRECISION_1ULP_FTZ_FALSE，支持Subnormal数据计算。<br>该参数的默认值DEFAULT_LN_CONFIG的取值如下：<br><br>constexpr&nbsp;LnConfig&nbsp;DEFAULT_LN_CONFIG&nbsp;=&nbsp;{&nbsp;LnAlgo::INTRINSIC&nbsp;};<br><!-- end id22 --> |
 
 **表2**  参数说明
