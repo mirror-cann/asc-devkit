@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "test_utils.h"
@@ -16,17 +16,16 @@ using namespace std;
 using namespace AscendC;
 
 namespace {
-int32_t RaiseStubForNpuDebug(int32_t i)
-{
-    return 0;
-}
-}
+int32_t RaiseStubForNpuDebug(int32_t i) { return 0; }
+} // namespace
 
 namespace AscendC {
 class KernelMatmulSp {
 public:
     __aicore__ inline KernelMatmulSp() {}
-    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* idx, __gm__ uint8_t* c, uint16_t m, uint16_t k, uint16_t n)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* idx, __gm__ uint8_t* c, uint16_t m, uint16_t k,
+        uint16_t n)
     {
         this->m = m;
         this->k = k;
@@ -73,9 +72,9 @@ private:
         LocalTensor<TensorTrait<int8_t>> a1Local = inQueueA1.AllocTensor<TensorTrait<int8_t>>();
         LocalTensor<TensorTrait<int8_t>> b1Local = inQueueB1.AllocTensor<TensorTrait<int8_t>>();
         LocalTensor<TensorTrait<uint8_t>> idxb1Local = inQueueIdxB1.AllocTensor<TensorTrait<uint8_t>>();
-        DataCopy(a1Local, aGM, { 1, static_cast<uint16_t>(aSize * sizeof(int8_t) / 32), 0, 0 });
-        DataCopy(b1Local, bGM, { 1, static_cast<uint16_t>(bSize * sizeof(int8_t) / 32), 0, 0 });
-        DataCopy(idxb1Local, idxGM, { 1, static_cast<uint16_t>(bSize / 4 * sizeof(int8_t) / 32), 0, 0 });
+        DataCopy(a1Local, aGM, {1, static_cast<uint16_t>(aSize * sizeof(int8_t) / 32), 0, 0});
+        DataCopy(b1Local, bGM, {1, static_cast<uint16_t>(bSize * sizeof(int8_t) / 32), 0, 0});
+        DataCopy(idxb1Local, idxGM, {1, static_cast<uint16_t>(bSize / 4 * sizeof(int8_t) / 32), 0, 0});
 
         inQueueA1.EnQue(a1Local);
         inQueueB1.EnQue(b1Local);
@@ -98,7 +97,8 @@ private:
         inQueueA2.EnQue<TensorTrait<int8_t>>(a2Local);
         inQueueA1.FreeTensor(a1Local);
     }
-    __aicore__ inline void SplitB(LocalTensor<TensorTrait<int8_t>>& b1Local, LocalTensor<TensorTrait<uint8_t>>& idxb1Local)
+    __aicore__ inline void SplitB(
+        LocalTensor<TensorTrait<int8_t>>& b1Local, LocalTensor<TensorTrait<uint8_t>>& idxb1Local)
     {
         LocalTensor<TensorTrait<int8_t>> b2Local = inQueueB2.AllocTensor<TensorTrait<int8_t>>();
 
@@ -117,7 +117,7 @@ private:
         LocalTensor<TensorTrait<int8_t>> b2Local = inQueueB2.DeQue<TensorTrait<int8_t>>();
         LocalTensor<TensorTrait<int32_t>> c1Local = outQueueCO1.AllocTensor<TensorTrait<int32_t>>();
 
-        MmadWithSparse(c1Local, a2Local, b2Local, { m, n, k, false, 0, false, false, false });
+        MmadWithSparse(c1Local, a2Local, b2Local, {m, n, k, false, 0, false, false, false});
 
         outQueueCO1.EnQue<TensorTrait<int32_t>>(c1Local);
         inQueueB2.FreeTensor(b2Local);
@@ -162,14 +162,11 @@ private:
 
     uint16_t aSize, bSize, cSize, mBlocks, nBlocks, kBlocks;
 };
-}
+} // namespace AscendC
 
 class TEST_MMAD_SP : public testing::Test {
 protected:
-    void SetUp()
-    {
-        g_coreType = AscendC::AIC_TYPE;
-    }
+    void SetUp() { g_coreType = AscendC::AIC_TYPE; }
     void TearDown()
     {
         AscendC::CheckSyncState();
@@ -193,7 +190,7 @@ TEST_F(TEST_MMAD_SP, MMAD_SP_Case)
     AscendC::KernelMatmulSp op;
     op.Init(a, b, idx, c, m, k, n);
     op.Process();
-    
+
     for (int32_t i = 0; i < m * n * sizeof(int32_t); i++) {
         EXPECT_EQ(c[i], 0x00);
     }
@@ -206,13 +203,9 @@ TEST_F(TEST_MMAD_SP, MMAD_SP_Case)
 // Note: LoadDataWithSparse is only available on C220 (__NPU_ARCH__ == 2201)
 // ============================================================
 
-
 class TestLoadDataWithSparseNpuDebug : public testing::Test {
 protected:
-    void SetUp()
-    {
-        g_coreType = AscendC::AIC_TYPE;
-    }
+    void SetUp() { g_coreType = AscendC::AIC_TYPE; }
     void TearDown()
     {
         AscendC::CheckSyncState();
@@ -245,7 +238,7 @@ TEST_F(TestLoadDataWithSparseNpuDebug, DstPositionNotB2)
     loadDataParams.srcStride = 0;
     loadDataParams.ifTranspose = false;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
     LoadDataWithSparse(dstLocal, srcLocal, idxLocal, loadDataParams);
 }
 
@@ -273,7 +266,7 @@ TEST_F(TestLoadDataWithSparseNpuDebug, SrcPositionNotB1)
     loadDataParams.srcStride = 0;
     loadDataParams.ifTranspose = false;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
     LoadDataWithSparse(dstLocal, srcLocal, idxLocal, loadDataParams);
 }
 
@@ -301,7 +294,7 @@ TEST_F(TestLoadDataWithSparseNpuDebug, IdxPositionNotB1)
     loadDataParams.srcStride = 0;
     loadDataParams.ifTranspose = false;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
     LoadDataWithSparse(dstLocal, srcLocal, idxLocal, loadDataParams);
 }
 
@@ -315,10 +308,7 @@ TEST_F(TestLoadDataWithSparseNpuDebug, IdxPositionNotB1)
 
 class TestMmadWithSparseNpuDebug : public testing::Test {
 protected:
-    void SetUp()
-    {
-        g_coreType = AscendC::AIC_TYPE;
-    }
+    void SetUp() { g_coreType = AscendC::AIC_TYPE; }
     void TearDown()
     {
         AscendC::CheckSyncState();
@@ -355,7 +345,7 @@ TEST_F(TestMmadWithSparseNpuDebug, DstPositionNotCO1)
     mmadParams.cmatrixSource = false;
     mmadParams.cmatrixInitVal = false;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
     MmadWithSparse(dstLocal, fmLocal, filterLocal, mmadParams);
 }
 
@@ -387,7 +377,7 @@ TEST_F(TestMmadWithSparseNpuDebug, FmPositionNotA2)
     mmadParams.cmatrixSource = false;
     mmadParams.cmatrixInitVal = false;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
     MmadWithSparse(dstLocal, fmLocal, filterLocal, mmadParams);
 }
 
@@ -419,6 +409,6 @@ TEST_F(TestMmadWithSparseNpuDebug, FilterPositionNotB2)
     mmadParams.cmatrixSource = false;
     mmadParams.cmatrixInitVal = false;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
     MmadWithSparse(dstLocal, fmLocal, filterLocal, mmadParams);
 }

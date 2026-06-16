@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -20,12 +19,8 @@ class BatchNormAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(BatchNormAPICheck, BatchNormAPICheckTestSuccess)
@@ -69,7 +64,8 @@ TEST_F(BatchNormAPICheck, BatchNormAPICheckTestSuccess)
 
     BatchNormTiling tiling;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(BatchNorm, (float, false, false),
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        BatchNorm, (float, false, false),
         (output, outputMean, outputVariance, inputX, gamm, beta, sharedTmpBuffer, 1.1, tiling));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
@@ -90,8 +86,10 @@ TEST_F(BatchNormAPICheck, BatchNormAPICheckTestSubFailure)
 
     BatchNormTiling tiling;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(BatchNorm, (uint8_t, true, false),
-        (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, 1.1, tiling));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        BatchNorm, (uint8_t, true, false),
+        (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, 1.1,
+         tiling));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 15);
 }
 
@@ -111,7 +109,9 @@ TEST_F(BatchNormAPICheck, BatchNormAPICheckTestFailure)
 
     BatchNormTiling tiling;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(BatchNorm, (uint8_t, true, true),
-        (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, 1.1, tiling));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        BatchNorm, (uint8_t, true, true),
+        (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, 1.1,
+         tiling));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 17);
 }

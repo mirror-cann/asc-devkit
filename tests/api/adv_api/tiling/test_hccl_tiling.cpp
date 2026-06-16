@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "graph/tensor.h"
 #include <dlfcn.h>
@@ -81,8 +81,10 @@ TEST_F(TestHcclTiling, Mc2CcTilingConfig_failed1)
     uint32_t reduceType = 1;
     Mc2CcTilingConfig ccTilingConfig(groupName, opType, algConfig, reduceType);
     EXPECT_NE(ccTilingConfig.SetOpType(static_cast<uint32_t>(HcclCMDType::HCCL_CMD_ALL)), EXIT_SUCCESS);
-    string value129 = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678";
-    string value128 = "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567";
+    string value129 = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345"
+                      "678901234567890123456789012345678";
+    string value128 = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345"
+                      "67890123456789012345678901234567";
     EXPECT_NE(ccTilingConfig.SetGroupName(value129), EXIT_SUCCESS);
     EXPECT_EQ(ccTilingConfig.SetGroupName(value128), EXIT_SUCCESS);
     EXPECT_NE(ccTilingConfig.SetAlgConfig(value129), EXIT_SUCCESS);
@@ -126,7 +128,7 @@ TEST_F(TestHcclTiling, Mc2CcTilingConfig_failed3)
 
 TEST_F(TestHcclTiling, Mc2CcTilingConfig_SetReduceType_ReduceOp)
 {
-    const char *groupName = "testGroup";
+    const char* groupName = "testGroup";
     uint32_t opType = static_cast<uint32_t>(HcclCMDType::HCCL_CMD_REDUCE_SCATTER);
     std::string algConfig = "ReduceScatter=level0:doublering";
     uint32_t reduceType = static_cast<uint32_t>(HcclReduceOp::HCCL_REDUCE_RESERVED);
@@ -148,7 +150,7 @@ TEST_F(TestHcclTiling, Mc2CcTilingConfig_SetReduceType_ReduceOp)
 
 TEST_F(TestHcclTiling, Mc2CcTilingConfig_SetReduceType_NotReduceOp)
 {
-    const char *groupName = "testGroup";
+    const char* groupName = "testGroup";
     uint32_t opType = static_cast<uint32_t>(HcclCMDType::HCCL_CMD_ALLGATHER);
     std::string algConfig = "AllGather=level0:doublering";
     uint32_t reduceType = static_cast<uint32_t>(HcclReduceOp::HCCL_REDUCE_RESERVED);
@@ -186,7 +188,7 @@ protected:
     // 保存并在用例结束后恢复 ASCEND_HOME_PATH,避免污染其他用例。
     void SetUp() override
     {
-        const char *env = std::getenv("ASCEND_HOME_PATH");
+        const char* env = std::getenv("ASCEND_HOME_PATH");
         hasOldEnv_ = (env != nullptr);
         if (hasOldEnv_) {
             oldEnv_ = env;
@@ -208,26 +210,26 @@ protected:
 // Load 在 pathName 为合法目录、so 真实存在时,能够成功加载到符号。
 TEST_F(TestHcclSymbolLoader, Load_validPath_success)
 {
-    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    const char* homePath = std::getenv("ASCEND_HOME_PATH");
     ASSERT_NE(homePath, nullptr);
     std::string pathName = std::string(homePath) + "/lib64/";
 
-    auto func = HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>(
-        "libruntime.so", "rtGetSocVersion", pathName);
+    auto func =
+        HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>("libruntime.so", "rtGetSocVersion", pathName);
     EXPECT_NE(func, nullptr);
 }
 
 // Load 命中缓存:同一 so + func 第二次加载走 symbolMap_ 缓存分支,返回相同指针。
 TEST_F(TestHcclSymbolLoader, Load_cached_returnsSamePointer)
 {
-    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    const char* homePath = std::getenv("ASCEND_HOME_PATH");
     ASSERT_NE(homePath, nullptr);
     std::string pathName = std::string(homePath) + "/lib64/";
 
-    auto func1 = HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>(
-        "libruntime.so", "rtGetSocVersion", pathName);
-    auto func2 = HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>(
-        "libruntime.so", "rtGetSocVersion", pathName);
+    auto func1 =
+        HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>("libruntime.so", "rtGetSocVersion", pathName);
+    auto func2 =
+        HcclSymbolLoader::GetInstance().Load<void (*)(char*, uint32_t)>("libruntime.so", "rtGetSocVersion", pathName);
     EXPECT_NE(func1, nullptr);
     EXPECT_EQ(func1, func2);
 }
@@ -253,7 +255,7 @@ TEST_F(TestHcclSymbolLoader, Load_emptyPath_returnsNull)
 // so 存在但符号不存在时,dlsym 失败返回 nullptr。
 TEST_F(TestHcclSymbolLoader, Load_invalidSymbol_returnsNull)
 {
-    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    const char* homePath = std::getenv("ASCEND_HOME_PATH");
     ASSERT_NE(homePath, nullptr);
     std::string pathName = std::string(homePath) + "/lib64/";
 
@@ -265,7 +267,7 @@ TEST_F(TestHcclSymbolLoader, Load_invalidSymbol_returnsNull)
 // SetDevType 经由 GetTiling(Mc2InitTiling) 调用:ASCEND_HOME_PATH 已正确设置时成功。
 TEST_F(TestHcclSymbolLoader, GetInitTiling_withValidAscendHome_success)
 {
-    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    const char* homePath = std::getenv("ASCEND_HOME_PATH");
     ASSERT_NE(homePath, nullptr);
 
     ::Mc2InitTiling initTilingInner;
@@ -288,7 +290,7 @@ TEST_F(TestHcclSymbolLoader, GetInitTiling_ascendHomeUnset_failure)
 TEST_F(TestHcclSymbolLoader, GetInitTiling_ascendHomeEmpty_failure)
 {
     setenv("ASCEND_HOME_PATH", "", 1);
-    const char *homePath = std::getenv("ASCEND_HOME_PATH");
+    const char* homePath = std::getenv("ASCEND_HOME_PATH");
     ASSERT_NE(homePath, nullptr);
     ASSERT_EQ(homePath[0], '\0');
 

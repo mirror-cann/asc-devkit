@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -70,18 +70,13 @@ struct MrgSort4TestParams {
 
 class MrgSort4Testsuite : public testing::Test, public testing::WithParamInterface<MrgSort4TestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_MRGSORT4, MrgSort4Testsuite,
-    ::testing::Values(MrgSort4TestParams { 2, MainMrgSort<half> }, MrgSort4TestParams { 4, MainMrgSort<float> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_MRGSORT4, MrgSort4Testsuite,
+    ::testing::Values(MrgSort4TestParams{2, MainMrgSort<half>}, MrgSort4TestParams{4, MainMrgSort<float>}));
 
 TEST_P(MrgSort4Testsuite, MrgSortOpTestCase)
 {
@@ -93,8 +88,8 @@ TEST_P(MrgSort4Testsuite, MrgSortOpTestCase)
 }
 
 template <typename T>
-__global__ __aicore__ void MainSort32(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm)
+__global__ __aicore__ void MainSort32(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm)
 {
     TPipe tpipe;
     int32_t dataSize = 128;
@@ -114,7 +109,7 @@ __global__ __aicore__ void MainSort32(__gm__ uint8_t* __restrict__ dstGm, __gm__
     TBuf<TPosition::VECCALC> tbuf1;
     tpipe.InitBuffer(tbuf1, dataSize * sizeof(uint32_t));
     LocalTensor<uint32_t> inputLocal1 = tbuf1.Get<uint32_t>();
-    
+
     TBuf<TPosition::VECCALC> tbuf2;
     tpipe.InitBuffer(tbuf2, (dataSize * 2 + 2 * dataSize * (sizeof(uint32_t) - sizeof(T))) * sizeof(T));
     LocalTensor<T> outputLocal = tbuf2.Get<T>();
@@ -142,19 +137,13 @@ struct Sort32TestParams {
 
 class Sort32Testsuite : public testing::Test, public testing::WithParamInterface<Sort32TestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_SORT32, Sort32Testsuite,
-    ::testing::Values(Sort32TestParams { 2, MainSort32<half> }, Sort32TestParams { 4, MainSort32<float> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_SORT32, Sort32Testsuite,
+    ::testing::Values(Sort32TestParams{2, MainSort32<half>}, Sort32TestParams{4, MainSort32<float>}));
 
 TEST_P(Sort32Testsuite, Sort32OpTestCase)
 {

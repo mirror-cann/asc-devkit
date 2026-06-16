@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -30,10 +30,12 @@ TEST_F(TestMatmulAPITiling, TestMatmulApiTilingMultiCoreNZINOUT)
     optiling::TCubeTiling tilingData;
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(10);
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType::DT_FLOAT, true);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType::DT_FLOAT, true);
     tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType::DT_FLOAT);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
     tilingApi.SetOrgShape(736, 7168, 4096);
     tilingApi.SetShape(736, 7168, 4096);
     tilingApi.EnableBias(true);
@@ -58,10 +60,13 @@ TEST_F(TestMatmulAPITiling, TestMatmulApiTilingMultiCoreBTSCM)
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(24);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
-    tilingApi.SetBType(matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
 
     tilingApi.SetOrgShape(65536, 64, 64);
     tilingApi.SetShape(-1, -1, -1);
@@ -78,10 +83,13 @@ TEST_F(TestMatmulAPITiling, TestMatmulApiTilingMultiCoreBTSCM2)
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(24);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
-    tilingApi.SetBType(matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
 
     tilingApi.SetOrgShape(65536, 64, 64);
     tilingApi.SetShape(65536, 64, 64);
@@ -98,10 +106,13 @@ TEST_F(TestMatmulAPITiling, TestMatmulApiTilingMultiCoreCase)
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(24);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
 
     tilingApi.SetOrgShape(4096, 5120, 4096);
     tilingApi.SetShape(-1, -1, -1);
@@ -118,10 +129,13 @@ TEST_F(TestMatmulAPITiling, TestMatmulApiTilingMultiCoreCaseWithTranspose)
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(24);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
 
     tilingApi.SetOrgShape(4095, 5121, 4095);
     tilingApi.SetShape(-1, -1, -1);
@@ -158,10 +172,13 @@ TEST_F(TestMatmulAPITiling, SmallShapeAlign1)
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(24);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
 
     tilingApi.SetOrgShape(256, 512, 4096);
     tilingApi.SetShape(-1, -1, -1);
@@ -178,10 +195,13 @@ TEST_F(TestMatmulAPITiling, SmallShapeAlign2)
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(24);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
 
     tilingApi.SetOrgShape(32, 6400, 5120);
     tilingApi.SetShape(-1, -1, -1);
@@ -198,10 +218,13 @@ TEST_F(TestMatmulAPITiling, SmallShapeAlign3)
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(24);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
 
     tilingApi.SetOrgShape(6400, 32, 5120);
     tilingApi.SetShape(-1, -1, -1);
@@ -218,10 +241,13 @@ TEST_F(TestMatmulAPITiling, SmallShapeAlign4)
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(24);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
 
     tilingApi.SetOrgShape(256, 512, 4096);
     tilingApi.SetShape(-1, -1, -1);
@@ -233,10 +259,14 @@ TEST_F(TestMatmulAPITiling, SmallShapeAlign4)
 
     tilingApi.SetDim(20);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT, false);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT, false);
-    tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT, false);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT, false);
+    tilingApi.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT);
 
     tilingApi.SetOrgShape(16, 256, 256);
     tilingApi.SetShape(-1, -1, -1);
@@ -246,10 +276,13 @@ TEST_F(TestMatmulAPITiling, SmallShapeAlign4)
     res = tilingApi.GetTiling(tilingData);
     EXPECT_EQ(res, 0);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT8, false);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT8, false);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT8, false);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT8, false);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT32);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT32);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT32);
 
     tilingApi.SetOrgShape(16, 256, 256);
     tilingApi.SetShape(-1, -1, -1);
@@ -259,10 +292,13 @@ TEST_F(TestMatmulAPITiling, SmallShapeAlign4)
     res = tilingApi.GetTiling(tilingData);
     EXPECT_EQ(res, 0);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT4, false);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT4, false);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT4, false);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT4, false);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT32);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT32);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT32);
 
     tilingApi.SetOrgShape(16, 256, 256);
     tilingApi.SetShape(-1, -1, -1);
@@ -279,10 +315,13 @@ TEST_F(TestMatmulAPITiling, SmallShapeNotAlign)
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(24);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
 
     tilingApi.SetOrgShape(18, 3456, 5120);
     tilingApi.SetShape(-1, -1, -1);
@@ -299,10 +338,13 @@ TEST_F(TestMatmulAPITiling, SmallShapeNotAlign2)
     matmul_tiling::MultiCoreMatmulTiling tilingApi;
     tilingApi.SetDim(24);
 
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, false);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, true);
     tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
 
     tilingApi.SetOrgShape(1280, 320, 4);
     tilingApi.SetShape(-1, -1, -1);
@@ -312,6 +354,3 @@ TEST_F(TestMatmulAPITiling, SmallShapeNotAlign2)
     int64_t res = tilingApi.GetTiling(tilingData);
     EXPECT_EQ(res, 0);
 }
-
-
-

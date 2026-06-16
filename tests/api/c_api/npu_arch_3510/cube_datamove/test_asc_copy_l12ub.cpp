@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <mockcpp/mockcpp.hpp>
@@ -15,17 +15,14 @@
 
 class TestCubeDmamoveCopyL12UBCAPI : public testing::Test {
 protected:
-    void SetUp() {
-        g_coreType = C_API_AIC_TYPE;
-    }
-    void TearDown() {
-        g_coreType = C_API_AIV_TYPE;
-    }
+    void SetUp() { g_coreType = C_API_AIC_TYPE; }
+    void TearDown() { g_coreType = C_API_AIV_TYPE; }
 };
 
 namespace {
-void copy_cbuf_to_ubuf_Stub(__ubuf__ void* dst_in, __cbuf__ void* src_in, bool sub_blockid_in,
-                            uint16_t n_burst_in, uint16_t len_burst_in, uint16_t src_gap, uint16_t dst_gap)
+void copy_cbuf_to_ubuf_Stub(
+    __ubuf__ void* dst_in, __cbuf__ void* src_in, bool sub_blockid_in, uint16_t n_burst_in, uint16_t len_burst_in,
+    uint16_t src_gap, uint16_t dst_gap)
 {
     __ubuf__ void* dst = reinterpret_cast<__ubuf__ void*>(1);
     __cbuf__ void* src = reinterpret_cast<__cbuf__ void*>(2);
@@ -43,7 +40,7 @@ void copy_cbuf_to_ubuf_Stub(__ubuf__ void* dst_in, __cbuf__ void* src_in, bool s
     EXPECT_EQ(dst_gap_size, dst_gap);
 }
 
-}
+} // namespace
 
 TEST_F(TestCubeDmamoveCopyL12UBCAPI, c_api_asc_copy_l12ub_Succ)
 {

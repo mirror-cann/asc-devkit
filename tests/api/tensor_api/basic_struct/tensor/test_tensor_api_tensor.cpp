@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "tensor_api/stub/cce_stub.h"
@@ -30,8 +30,7 @@ struct IsTensorApiGlobalTensor<AscendC::GlobalTensor<AscendC::TensorAttribute<En
     : AscendC::Std::true_type {};
 
 template <typename T>
-constexpr bool IsTensorApiGlobalTensorV =
-    IsTensorApiGlobalTensor<AscendC::Std::remove_cvref_t<T>>::value;
+constexpr bool IsTensorApiGlobalTensorV = IsTensorApiGlobalTensor<AscendC::Std::remove_cvref_t<T>>::value;
 
 template <typename T>
 struct IsTensorApiLocalTensor : AscendC::Std::false_type {};
@@ -41,8 +40,7 @@ struct IsTensorApiLocalTensor<AscendC::LocalTensor<AscendC::TensorAttribute<Engi
     : AscendC::Std::true_type {};
 
 template <typename T>
-constexpr bool IsTensorApiLocalTensorV =
-    IsTensorApiLocalTensor<AscendC::Std::remove_cvref_t<T>>::value;
+constexpr bool IsTensorApiLocalTensorV = IsTensorApiLocalTensor<AscendC::Std::remove_cvref_t<T>>::value;
 
 template <typename Tensor>
 void ExpectTensorBasicAbility(const Tensor& tensor, uint32_t size)
@@ -60,7 +58,8 @@ TEST_F(Tensor_Api_Tensor_Struct, TestLocalTensorStruct)
     using namespace AscendC::Te;
 
     __gm__ float data[6] = {0, 1, 2, 3, 4, 5};
-    auto tensor = MakeTensor(MakeMemPtr<Location::GM>(data), MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<float>>(2, 3));
+    auto tensor =
+        MakeTensor(MakeMemPtr<Location::GM>(data), MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<float>>(2, 3));
 
     EXPECT_EQ(tensor.Tensor().Data(), tensor.Data());
     EXPECT_EQ(tensor.Engine().Begin(), tensor.Data());

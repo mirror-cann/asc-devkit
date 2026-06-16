@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <type_traits>
 #include "simt_compiler_stub.h"
@@ -37,7 +37,7 @@ TEST_F(TypeCastApiFloatTestsuite, TypeCastApiFloatTest)
 
     uint32_t result1 = __float2uint_rna(x1);
     uint32_t expect1 = static_cast<uint32_t>(round(x1));
-    
+
     int32_t result2 = __float2int_rna(x1);
     int32_t expect2 = static_cast<int32_t>(round(x1));
 
@@ -90,7 +90,7 @@ TEST_F(TypeCastApiUintTestsuite, TypeCastApiUintTest)
 
     float result1 = __uint2float_rna(x1);
     float expect1 = static_cast<float>(round(x1));
-    
+
     half result2 = __uint2half_rna(x1);
     half expect2 = static_cast<half>(round(x1));
 
@@ -119,7 +119,7 @@ TEST_F(TypeCastApiIntTestsuite, TypeCastApiIntTest)
 
     float result1 = __int2float_rna(x1);
     float expect1 = static_cast<float>(round(x1));
-    
+
     half result2 = __int2half_rna(x1);
     half expect2 = static_cast<half>(round(x1));
 
@@ -148,7 +148,7 @@ TEST_F(TypeCastApiUllTestsuite, TypeCastApiUllTest)
 
     float result1 = __ull2float_rna(x1);
     float expect1 = static_cast<float>(round(x1));
-    
+
     half result2 = __ull2half_rna(x1);
     half expect2 = static_cast<half>(round(x1));
 
@@ -177,7 +177,7 @@ TEST_F(TypeCastApiLlTestsuite, TypeCastApiLlTest)
 
     float result1 = __ll2float_rna(x1);
     float expect1 = static_cast<float>(round(x1));
-    
+
     half result2 = __ll2half_rna(x1);
     half expect2 = static_cast<half>(round(x1));
 
@@ -207,7 +207,7 @@ TEST_F(TypeCastApiHalfTestsuite, TypeCastApiHalfTest)
 
     uint32_t result1 = __half2uint_rna(hx1);
     uint32_t expect1 = static_cast<uint32_t>(round(float(hx1)));
-    
+
     int32_t result2 = __half2int_rna(hx1);
     int32_t expect2 = static_cast<int32_t>(round(float(hx1)));
 
@@ -230,7 +230,8 @@ struct TypeCastApiBfloat16Params {
     int32_t mode;
 };
 
-class TypeCastApiBfloat16Testsuite : public testing::Test, public testing::WithParamInterface<TypeCastApiBfloat16Params> {
+class TypeCastApiBfloat16Testsuite : public testing::Test,
+                                     public testing::WithParamInterface<TypeCastApiBfloat16Params> {
 protected:
     void SetUp() {}
     void TearDown() {}
@@ -243,7 +244,7 @@ TEST_F(TypeCastApiBfloat16Testsuite, TypeCastApiBfloat16Test)
 
     half result1 = __bfloat162half_rna(bfx1);
     half expect1 = static_cast<half>(round(float(bfx1)));
-    
+
     uint32_t result2 = __bfloat162uint_rna(bfx1);
     uint32_t expect2 = static_cast<uint32_t>(round(float(bfx1)));
 
@@ -279,7 +280,7 @@ TEST_F(TypeCastApiBfloat16Testsuite, TypeCastApiBfloat16Test)
     bfloat16_t result11 = __bfloat162bfloat16_rn(bfx1);
 
     bfloat16_t result12 = __bfloat162bfloat16_rz(bfx1);
-    
+
     bfloat16_t result13 = __bfloat162bfloat16_rd(bfx1);
 
     bfloat16_t result14 = __bfloat162bfloat16_ru(bfx1);
@@ -293,24 +294,24 @@ TEST_F(TypeCastApiBfloat16Testsuite, TypeCastApiBfloat16Test)
 
 // ================================ Test type cast(hif82) start ==================================
 struct TypeCastApiHif82Params {
- 	int32_t mode;
+    int32_t mode;
 };
- 	 
+
 class TypeCastApiHif82Testsuite : public testing::Test, public testing::WithParamInterface<TypeCastApiHif82Params> {
 protected:
- 	void SetUp() {}
- 	void TearDown() {}
+    void SetUp() {}
+    void TearDown() {}
 };
- 	 
+
 TEST_F(TypeCastApiHif82Testsuite, TypeCastApiHif82Test)
 {
- 	float x1 = static_cast<float>(rand()) / RAND_MAX;
- 	half x2 = half(x1);
- 	float2 f2x1 = make_float2(x1, x1);
- 	half2 h2x2 = {x2, x2};
- 	 
+    float x1 = static_cast<float>(rand()) / RAND_MAX;
+    half x2 = half(x1);
+    float2 f2x1 = make_float2(x1, x1);
+    half2 h2x2 = {x2, x2};
+
     f2x1 = make_float2(1.0f, 2.0f);
- 	hifloat8x2_t result1 = __float22hif82_rna(f2x1);
+    hifloat8x2_t result1 = __float22hif82_rna(f2x1);
     EXPECT_EQ(result1.x.ToFloat(), 1.0f);
     EXPECT_EQ(result1.y.ToFloat(), 2.0f);
 
@@ -383,7 +384,7 @@ TEST_F(TypeCastApiHif82Testsuite, TypeCastApiHif82Test)
     EXPECT_EQ(result6.x, 1.0f);
     EXPECT_EQ(result6.y, 2.0f);
 
- 	x1 = 1.0f;
- 	EXPECT_EQ(x1, 1.0f);
+    x1 = 1.0f;
+    EXPECT_EQ(x1, 1.0f);
 }
 // ================================ Test type cast(hif82) end ==================================

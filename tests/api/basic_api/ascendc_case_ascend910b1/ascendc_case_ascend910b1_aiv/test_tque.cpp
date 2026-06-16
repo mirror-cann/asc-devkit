@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <fstream>
 #include <iostream>
@@ -16,26 +16,22 @@
 using namespace std;
 using namespace AscendC;
 
-class TEST_TSCM: public testing::Test {
+class TEST_TSCM : public testing::Test {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(AIV_TYPE);
-    }
-    void TearDown() {
+    void SetUp() { AscendC::SetGCoreType(AIV_TYPE); }
+    void TearDown()
+    {
         AscendC::CheckSyncState();
         AscendC::SetGCoreType(0);
         GlobalMockObject::verify();
     }
 };
 
-
-void AbortStub1()
+void AbortStub1() {}
+TEST_F(TEST_TSCM, TEST_ALLOC_AND_FREE_BUFFER)
 {
-
-}
-TEST_F(TEST_TSCM, TEST_ALLOC_AND_FREE_BUFFER) {
     static constexpr TPosition tpTscm[8] = {TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX,
-            TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX};
+                                            TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX};
     static constexpr TQueConfig confTscm = GetTQueConfig(false, false, false, 0, 0, 0, tpTscm, false, true);
     int32_t tmpCore = g_coreType;
     g_coreType = AscendC::AIV_TYPE;
@@ -53,14 +49,15 @@ TEST_F(TEST_TSCM, TEST_ALLOC_AND_FREE_BUFFER) {
     g_coreType = tmpCore;
 }
 
-TEST_F(TEST_TSCM, TEST_ALLOC_TOO_MUCH_BUFFER_IN_ONE_INITBUFFER) {
+TEST_F(TEST_TSCM, TEST_ALLOC_TOO_MUCH_BUFFER_IN_ONE_INITBUFFER)
+{
     g_coreType = AscendC::AIV_TYPE;
     TPipe pipe;
     TQue<TPosition::VECIN, 1> tque1;
-    MOCKER(raise, int(*)(int)).times(2).will(returnValue(0));
+    MOCKER(raise, int (*)(int)).times(2).will(returnValue(0));
 
-    static int32_t count =0;
-    std::string fileName = "print_ut_aiv_init_buffer" + std::to_string(getpid()) + "_" + std::to_string(count)+ ".txt";
+    static int32_t count = 0;
+    std::string fileName = "print_ut_aiv_init_buffer" + std::to_string(getpid()) + "_" + std::to_string(count) + ".txt";
     freopen(fileName.c_str(), "w", stdout);
 
     pipe.InitBuffer(tque1, 65, 1024);
@@ -77,14 +74,15 @@ TEST_F(TEST_TSCM, TEST_ALLOC_TOO_MUCH_BUFFER_IN_ONE_INITBUFFER) {
     std::string resultString(streambuffer.str());
     std::string goldenStr = "Failed to check num value in InitBuffer, its valid range is 1 ~ 64, current value is 65.";
     resultFile.close();
-    std::cout << "resultString is " << resultString  << std::endl;
-    std::cout << "goldenStr is " << goldenStr  << std::endl;
+    std::cout << "resultString is " << resultString << std::endl;
+    std::cout << "goldenStr is " << goldenStr << std::endl;
     EXPECT_TRUE(resultString.find(goldenStr) != std::string::npos);
     EXPECT_EQ(remove(fileName.c_str()), 0);
 }
 
 // 预计分配到65会挂
-TEST_F(TEST_TSCM, TEST_ALLOC_MANY_BUFFER_IN_MULTIPLE_INITBUFFER) {
+TEST_F(TEST_TSCM, TEST_ALLOC_MANY_BUFFER_IN_MULTIPLE_INITBUFFER)
+{
     g_coreType = AscendC::AIV_TYPE;
     TPipe pipe;
     TQue<TPosition::VECIN, 1> tque1;
@@ -93,10 +91,10 @@ TEST_F(TEST_TSCM, TEST_ALLOC_MANY_BUFFER_IN_MULTIPLE_INITBUFFER) {
     pipe.InitBuffer(tque2, 32, 1024);
 }
 
-
-TEST_F(TEST_TSCM, TEST_LOOP_QUEUE_ALLOC_FREE_SAME_EVT) {
+TEST_F(TEST_TSCM, TEST_LOOP_QUEUE_ALLOC_FREE_SAME_EVT)
+{
     static constexpr TPosition tp[8] = {TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX,
-            TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX};
+                                        TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX};
     static constexpr TQueConfig confLoopQueue = GetTQueConfig(false, false, false, 0, 0, 0, tp, false, true);
     g_coreType = AscendC::AIV_TYPE;
     TPipe pipe;
@@ -118,7 +116,6 @@ TEST_F(TEST_TSCM, TEST_LOOP_QUEUE_ALLOC_FREE_SAME_EVT) {
     tque.FreeTensor(dequeTensor2);
     EXPECT_EQ(tque.bufUsedCount, 0);
 
-
     auto tensor3 = tque.AllocTensor<float>();
     EXPECT_EQ(tque.bufUsedCount, 1);
     tque.EnQue(tensor3);
@@ -130,9 +127,10 @@ TEST_F(TEST_TSCM, TEST_LOOP_QUEUE_ALLOC_FREE_SAME_EVT) {
 // enableLoopQueue=true, freeBufEvt(V_MTE2) != ret->freeBufEvt(MTE3_V)
 // This simulates the case where a buffer freed by a VECOUT queue (freeBufEvt=MTE3_V)
 // is re-allocated by a VECIN queue (freeBufEvt=V_MTE2)
-TEST_F(TEST_TSCM, TEST_LOOP_QUEUE_ALLOC_FREE_DIFF_EVT_V_MTE2_MTE3_V) {
+TEST_F(TEST_TSCM, TEST_LOOP_QUEUE_ALLOC_FREE_DIFF_EVT_V_MTE2_MTE3_V)
+{
     static constexpr TPosition tp[8] = {TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX,
-            TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX};
+                                        TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX};
     static constexpr TQueConfig confLoopQueue = GetTQueConfig(false, false, false, 0, 0, 0, tp, false, true);
     g_coreType = AscendC::AIV_TYPE;
     TPipe pipe;
@@ -175,9 +173,10 @@ TEST_F(TEST_TSCM, TEST_LOOP_QUEUE_ALLOC_FREE_DIFF_EVT_V_MTE2_MTE3_V) {
 // enableLoopQueue=true, freeBufEvt(MTE3_V) != ret->freeBufEvt(V_MTE2)
 // This simulates the case where a buffer freed by a VECIN queue (freeBufEvt=V_MTE2)
 // is re-allocated by a VECOUT queue (freeBufEvt=MTE3_V)
-TEST_F(TEST_TSCM, TEST_LOOP_QUEUE_ALLOC_FREE_DIFF_EVT_MTE3_V_V_MTE2) {
+TEST_F(TEST_TSCM, TEST_LOOP_QUEUE_ALLOC_FREE_DIFF_EVT_MTE3_V_V_MTE2)
+{
     static constexpr TPosition tp[8] = {TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX,
-            TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX};
+                                        TPosition::MAX, TPosition::MAX, TPosition::MAX, TPosition::MAX};
     static constexpr TQueConfig confLoopQueue = GetTQueConfig(false, false, false, 0, 0, 0, tp, false, true);
     g_coreType = AscendC::AIV_TYPE;
     TPipe pipe;

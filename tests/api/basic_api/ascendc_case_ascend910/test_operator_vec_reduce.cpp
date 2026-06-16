@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -14,8 +14,9 @@ using namespace AscendC;
 
 namespace {
 template <typename T>
-void MainC100VecReduce(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm,
-    __gm__ int32_t srcDataSize, __gm__ int32_t dstDataSize)
+void MainC100VecReduce(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t srcDataSize,
+    __gm__ int32_t dstDataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
@@ -75,10 +76,7 @@ struct C100ReduceTestParams {
 
 class C100ReduceTestSuite : public testing::Test, public testing::WithParamInterface<C100ReduceTestParams> {
 protected:
-    void SetUp() override
-    {
-        SetGCoreType(AIV_TYPE);
-    }
+    void SetUp() override { SetGCoreType(AIV_TYPE); }
 
     void TearDown() override
     {
@@ -87,16 +85,17 @@ protected:
     }
 };
 
-INSTANTIATE_TEST_CASE_P(C100ReduceCases, C100ReduceTestSuite,
-    ::testing::Values(C100ReduceTestParams{ MainC100VecReduce<half>, 16800, 128, 2 }));
+INSTANTIATE_TEST_CASE_P(
+    C100ReduceCases, C100ReduceTestSuite,
+    ::testing::Values(C100ReduceTestParams{MainC100VecReduce<half>, 16800, 128, 2}));
 
 TEST_P(C100ReduceTestSuite, ReduceMaxMinSumMultiRepeat)
 {
     auto param = GetParam();
-    uint8_t srcGm[param.srcDataSize * param.dtypeSize] = { 0 };
-    uint8_t dstGm[param.dstDataSize * param.dtypeSize] = { 0 };
+    uint8_t srcGm[param.srcDataSize * param.dtypeSize] = {0};
+    uint8_t dstGm[param.dstDataSize * param.dtypeSize] = {0};
 
     param.calFunc(srcGm, dstGm, param.srcDataSize, param.dstDataSize);
     EXPECT_EQ(dstGm[0], 0x00);
 }
-}  // namespace
+} // namespace

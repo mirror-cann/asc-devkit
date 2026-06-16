@@ -20,8 +20,9 @@ protected:
 };
 
 namespace {
-void scatter_vnchwconv_b8_stub_repeat(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride,
-                                      uint16_t src_stride, bool dst_high_half, bool src_high_half)
+void scatter_vnchwconv_b8_stub_repeat(
+    ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride, bool dst_high_half,
+    bool src_high_half)
 {
     EXPECT_EQ(ub_addr8_t::VA0, dst);
     EXPECT_EQ(ub_addr8_t::VA2, src);
@@ -32,8 +33,8 @@ void scatter_vnchwconv_b8_stub_repeat(ub_addr8_t dst, ub_addr8_t src, uint8_t re
     EXPECT_EQ(src_high_half, false);
 }
 
-void scatter_vnchwconv_b16_stub_repeat(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride,
-                                       uint16_t src_stride)
+void scatter_vnchwconv_b16_stub_repeat(
+    ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride)
 {
     EXPECT_EQ(ub_addr8_t::VA1, dst);
     EXPECT_EQ(ub_addr8_t::VA3, src);
@@ -42,8 +43,8 @@ void scatter_vnchwconv_b16_stub_repeat(ub_addr8_t dst, ub_addr8_t src, uint8_t r
     EXPECT_EQ(src_stride, static_cast<uint16_t>(7));
 }
 
-void scatter_vnchwconv_b32_stub_repeat(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride,
-                                       uint16_t src_stride)
+void scatter_vnchwconv_b32_stub_repeat(
+    ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride)
 {
     EXPECT_EQ(ub_addr8_t::VA4, dst);
     EXPECT_EQ(ub_addr8_t::VA5, src);
@@ -81,8 +82,8 @@ TEST_F(TestTransto5HDCAPI, asc_transto5hd_b8_repeat_sync_Succ)
         .times(1)
         .will(invoke(scatter_vnchwconv_b8_stub_repeat));
 
-    asc_transto5hd_b8_sync(ub_addr8_t::VA0, ub_addr8_t::VA2, repeat, dst_stride, src_stride, dst_high_half,
-                           src_high_half);
+    asc_transto5hd_b8_sync(
+        ub_addr8_t::VA0, ub_addr8_t::VA2, repeat, dst_stride, src_stride, dst_high_half, src_high_half);
     GlobalMockObject::verify();
 }
 

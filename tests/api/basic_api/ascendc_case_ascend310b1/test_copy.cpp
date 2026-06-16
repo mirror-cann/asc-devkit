@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -16,14 +16,8 @@ constexpr int32_t BUFFER_NUM = 1;
 
 class TEST_COPY : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename Type, int32_t extent1>
@@ -32,7 +26,9 @@ struct CopyType {
     constexpr static int32_t extent = extent1;
 };
 
-template<class XType, int32_t isSetMask = 0, int32_t maskMode = 0, int32_t mode = 0, int32_t maskLen = 1, int32_t counterMask = 0>
+template <
+    class XType, int32_t isSetMask = 0, int32_t maskMode = 0, int32_t mode = 0, int32_t maskLen = 1,
+    int32_t counterMask = 0>
 class KernelCopy {
 public:
     using X_T = typename XType::T;
@@ -49,16 +45,16 @@ public:
     {
         CopyIn();
         if constexpr (IsSameType<X_T, bfloat16_t>::value) {
-            //Normal mode
-            if constexpr(maskMode == 0) {
-                if constexpr(mode == 0) {
-                    if constexpr(isSetMask == 1) {
+            // Normal mode
+            if constexpr (maskMode == 0) {
+                if constexpr (mode == 0) {
+                    if constexpr (isSetMask == 1) {
                         ComputeBf16NormalBitIsSetMaskTrue();
                     } else {
                         ComputeBf16NormalBitIsSetMaskFalse();
                     }
-                } else if constexpr(mode == 1) {
-                    if constexpr(isSetMask == 1) {
+                } else if constexpr (mode == 1) {
+                    if constexpr (isSetMask == 1) {
                         ComputeBf16NormalContinuousIsSetMaskTrue();
                     } else {
                         ComputeBf16NormalContinuousIsSetMaskFalse();
@@ -67,8 +63,8 @@ public:
                     ASSERT(false && "Normal mode only support bit and continuous mode!!!");
                 }
             } else {
-                if constexpr(maskLen == 1) {
-                    if constexpr(isSetMask == 1) {
+                if constexpr (maskLen == 1) {
+                    if constexpr (isSetMask == 1) {
                         ComputeBf16CounterMaskIsSetMaskTrue();
                     } else {
                         ComputeBf16CounterMaskIsSetMaskFalse();
@@ -78,16 +74,16 @@ public:
                 }
             }
         } else {
-            //Normal mode
-            if constexpr(maskMode == 0) {
-                if constexpr(mode == 0) {
-                    if constexpr(isSetMask == 1) {
+            // Normal mode
+            if constexpr (maskMode == 0) {
+                if constexpr (mode == 0) {
+                    if constexpr (isSetMask == 1) {
                         ComputeNormalBitIsSetMaskTrue();
                     } else {
                         ComputeNormalBitIsSetMaskFalse();
                     }
-                } else if constexpr(mode == 1) {
-                    if constexpr(isSetMask == 1) {
+                } else if constexpr (mode == 1) {
+                    if constexpr (isSetMask == 1) {
                         ComputeNormalContinuousIsSetMaskTrue();
                     } else {
                         ComputeNormalContinuousIsSetMaskFalse();
@@ -96,8 +92,8 @@ public:
                     ASSERT(false && "Normal mode only support bit and continuous mode!!!");
                 }
             } else {
-                if constexpr(maskLen == 1) {
-                    if constexpr(isSetMask == 1) {
+                if constexpr (maskLen == 1) {
+                    if constexpr (isSetMask == 1) {
                         ComputeCounterMaskIsSetMaskTrue();
                     } else {
                         ComputeCounterMaskIsSetMaskFalse();
@@ -117,7 +113,8 @@ private:
         DataCopy(srcLocal, srcGm, 256);
         inQueueX.EnQue(srcLocal);
     }
-    __aicore__ inline void ComputeBf16NormalBitIsSetMaskTrue() {
+    __aicore__ inline void ComputeBf16NormalBitIsSetMaskTrue()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -127,7 +124,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeBf16NormalBitIsSetMaskFalse() {
+    __aicore__ inline void ComputeBf16NormalBitIsSetMaskFalse()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -140,7 +138,8 @@ private:
         inQueueX.FreeTensor(srcLocal);
     }
 
-    __aicore__ inline void ComputeBf16NormalContinuousIsSetMaskTrue() {
+    __aicore__ inline void ComputeBf16NormalContinuousIsSetMaskTrue()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -149,7 +148,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeBf16NormalContinuousIsSetMaskFalse() {
+    __aicore__ inline void ComputeBf16NormalContinuousIsSetMaskFalse()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -162,7 +162,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeBf16CounterMaskIsSetMaskTrue() {
+    __aicore__ inline void ComputeBf16CounterMaskIsSetMaskTrue()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -171,7 +172,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeBf16CounterMaskIsSetMaskFalse() {
+    __aicore__ inline void ComputeBf16CounterMaskIsSetMaskFalse()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -184,7 +186,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeBf16CounterMasksIsSetMaskFalse() {
+    __aicore__ inline void ComputeBf16CounterMasksIsSetMaskFalse()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -198,7 +201,8 @@ private:
         inQueueX.FreeTensor(srcLocal);
     }
 
-    __aicore__ inline void ComputeNormalBitIsSetMaskTrue() {
+    __aicore__ inline void ComputeNormalBitIsSetMaskTrue()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -215,7 +219,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeNormalBitIsSetMaskFalse() {
+    __aicore__ inline void ComputeNormalBitIsSetMaskFalse()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -233,7 +238,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeNormalContinuousIsSetMaskTrue() {
+    __aicore__ inline void ComputeNormalContinuousIsSetMaskTrue()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -244,7 +250,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeNormalContinuousIsSetMaskFalse() {
+    __aicore__ inline void ComputeNormalContinuousIsSetMaskFalse()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -258,7 +265,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeCounterMaskIsSetMaskTrue() {
+    __aicore__ inline void ComputeCounterMaskIsSetMaskTrue()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -269,7 +277,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeCounterMaskIsSetMaskFalse() {
+    __aicore__ inline void ComputeCounterMaskIsSetMaskFalse()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -284,7 +293,8 @@ private:
         outQueueZ.EnQue<X_T>(dstLocal);
         inQueueX.FreeTensor(srcLocal);
     }
-    __aicore__ inline void ComputeCounterMasksIsSetMaskFalse() {
+    __aicore__ inline void ComputeCounterMasksIsSetMaskFalse()
+    {
         LocalTensor<X_T> srcLocal = inQueueX.DeQue<X_T>();
         LocalTensor<X_T> dstLocal = outQueueZ.AllocTensor<X_T>();
         uint8_t repeat = sizeof(X_T);
@@ -315,53 +325,55 @@ private:
     int32_t count_mask{counterMask};
 };
 
-#define KERNEL_COPY_V300(dataType, isSetMask, maskMode, mode, maskLen, counterMask)         \
-    TEST_F(TEST_COPY, copy_kernel_##dataType##_is_set_mask_##isSetMask##_mask_mode_##maskMode##_##mode##_mask_len_##maskLen##_##counterMask##_case) \
-    {                                                                                       \
-        uint32_t dataSize = 256;                                                           \
-        uint8_t srcGm[dataSize * sizeof(dataType)];                                        \
-        uint8_t dstGm[dataSize * sizeof(dataType)];                                        \
-        typedef CopyType<dataType, 256> xType;                                              \
-        KernelCopy<xType, isSetMask, maskMode, mode, maskLen, counterMask> op;              \
-        op.Init(srcGm, dstGm);                                                              \
-        op.Process();                                                                       \
-        dataType golden[dataSize];                                                         \
-        uint8_t repeat = sizeof(dataType);                                                  \
-        uint8_t vecLen = 256 / sizeof(dataType);                                            \
-        if (maskMode == 0 && mode == 0) {                                                   \
-            for (int i = 0; i < repeat; i++) {                                              \
-                for (int j = 0; j < vecLen; j++) {                                          \
-                    if (j % 2 == 0) {                                                       \
-                        golden[i*vecLen + j] = srcGm[i*vecLen + j];                         \
-                    } else {                                                                \
-                        golden[i*vecLen + j] = 0;                                           \
-                    }                                                                       \
-                }                                                                           \
-            }                                                                               \
-        } else {                                                                            \
-            if (isSetMask == 1) {                                                           \
-                for (int r = 0; r < repeat; r++) {                                          \
-                    for (int i = 0; i < vecLen; i++) {                                      \
-                        if (i < counterMask) {                                              \
-                            golden[r*vecLen + i] = srcGm[r*vecLen + i];                     \
-                        } else {                                                            \
-                            golden[r*vecLen + i] = 0;                                       \
-                        }                                                                   \
-                    }                                                                       \
-                }                                                                           \
-            } else {                                                                        \
-                for (int i = 0; i < dataSize; i++) {                                       \
-                    if (i < counterMask) {                                                  \
-                        golden[i] = srcGm[i];                                               \
-                    } else {                                                                \
-                        golden[i] = 0;                                                      \
-                    }                                                                       \
-                }                                                                           \
-            }                                                                               \
-        }                                                                                   \
-        for (uint32_t i = 0; i < dataSize; i++) {                                          \
-            EXPECT_EQ(dstGm[i], 0x00);                                                      \
-        }                                                                                   \
+#define KERNEL_COPY_V300(dataType, isSetMask, maskMode, mode, maskLen, counterMask)                                                   \
+    TEST_F(                                                                                                                           \
+        TEST_COPY,                                                                                                                    \
+        copy_kernel_##dataType##_is_set_mask_##isSetMask##_mask_mode_##maskMode##_##mode##_mask_len_##maskLen##_##counterMask##_case) \
+    {                                                                                                                                 \
+        uint32_t dataSize = 256;                                                                                                      \
+        uint8_t srcGm[dataSize * sizeof(dataType)];                                                                                   \
+        uint8_t dstGm[dataSize * sizeof(dataType)];                                                                                   \
+        typedef CopyType<dataType, 256> xType;                                                                                        \
+        KernelCopy<xType, isSetMask, maskMode, mode, maskLen, counterMask> op;                                                        \
+        op.Init(srcGm, dstGm);                                                                                                        \
+        op.Process();                                                                                                                 \
+        dataType golden[dataSize];                                                                                                    \
+        uint8_t repeat = sizeof(dataType);                                                                                            \
+        uint8_t vecLen = 256 / sizeof(dataType);                                                                                      \
+        if (maskMode == 0 && mode == 0) {                                                                                             \
+            for (int i = 0; i < repeat; i++) {                                                                                        \
+                for (int j = 0; j < vecLen; j++) {                                                                                    \
+                    if (j % 2 == 0) {                                                                                                 \
+                        golden[i * vecLen + j] = srcGm[i * vecLen + j];                                                               \
+                    } else {                                                                                                          \
+                        golden[i * vecLen + j] = 0;                                                                                   \
+                    }                                                                                                                 \
+                }                                                                                                                     \
+            }                                                                                                                         \
+        } else {                                                                                                                      \
+            if (isSetMask == 1) {                                                                                                     \
+                for (int r = 0; r < repeat; r++) {                                                                                    \
+                    for (int i = 0; i < vecLen; i++) {                                                                                \
+                        if (i < counterMask) {                                                                                        \
+                            golden[r * vecLen + i] = srcGm[r * vecLen + i];                                                           \
+                        } else {                                                                                                      \
+                            golden[r * vecLen + i] = 0;                                                                               \
+                        }                                                                                                             \
+                    }                                                                                                                 \
+                }                                                                                                                     \
+            } else {                                                                                                                  \
+                for (int i = 0; i < dataSize; i++) {                                                                                  \
+                    if (i < counterMask) {                                                                                            \
+                        golden[i] = srcGm[i];                                                                                         \
+                    } else {                                                                                                          \
+                        golden[i] = 0;                                                                                                \
+                    }                                                                                                                 \
+                }                                                                                                                     \
+            }                                                                                                                         \
+        }                                                                                                                             \
+        for (uint32_t i = 0; i < dataSize; i++) {                                                                                     \
+            EXPECT_EQ(dstGm[i], 0x00);                                                                                                \
+        }                                                                                                                             \
     }
 
 KERNEL_COPY_V300(int16_t, 0, 0, 0, 2, 0)

@@ -1,40 +1,29 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
 using namespace std;
 using namespace AscendC;
 
-enum TestMode {
-    NORMAL_MODE,
-    CAL_MODE,
-    BUF_MODE,
-    BUF_CAL_MODE
-};
+enum TestMode { NORMAL_MODE, CAL_MODE, BUF_MODE, BUF_CAL_MODE };
 
 class TEST_TAN : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T>
-void MainVecTanLevel2Demo(__gm__ uint8_t* __restrict__ dstGm,
-    __gm__ uint8_t* __restrict__ srcGm, uint32_t dataSize, TestMode testMode)
+void MainVecTanLevel2Demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, uint32_t dataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
@@ -69,8 +58,7 @@ void MainVecTanLevel2Demo(__gm__ uint8_t* __restrict__ dstGm,
         LocalTensor<uint8_t> tmpLocal = tbuf3.Get<uint8_t>();
         if (testMode == BUF_MODE) {
             Tan<T>(outputLocal, inputLocal, tmpLocal);
-        }
-        else if (testMode == BUF_CAL_MODE){
+        } else if (testMode == BUF_CAL_MODE) {
             Tan<T>(outputLocal, inputLocal, tmpLocal, dataSize);
         }
     }

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include <vector>
@@ -18,18 +18,14 @@ using namespace AscendC;
 using namespace std;
 
 namespace {
-int32_t RaiseStubCreateTensor(int32_t i)
-{
-    return 0;
-}
-}
+int32_t RaiseStubCreateTensor(int32_t i) { return 0; }
+} // namespace
 
 class TEST_ALLOC_AIV : public testing::Test {
 protected:
-    void SetUp() {
-        g_coreType = AscendC::AIV_TYPE;
-    }
-    void TearDown() {
+    void SetUp() { g_coreType = AscendC::AIV_TYPE; }
+    void TearDown()
+    {
         ConstDefiner::Instance().allocatorUsed.clear();
         GlobalMockObject::verify();
         g_coreType = AscendC::MIX_TYPE;
@@ -37,7 +33,7 @@ protected:
 };
 
 TEST_F(TEST_ALLOC_AIV, TestCustmizedGen)
-{    
+{
     int32_t tmp = g_coreType;
     g_coreType = AscendC::AIC_TYPE;
 
@@ -57,7 +53,7 @@ TEST_F(TEST_ALLOC_AIV, TestCustmizedGenIllegal)
     InitSocState();
     int32_t tmp = g_coreType;
     g_coreType = AscendC::AIC_TYPE;
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubCreateTensor));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubCreateTensor));
 
     uint32_t addr = 127;
     uint32_t tileSize = 31;
@@ -78,12 +74,11 @@ TEST_F(TEST_ALLOC_AIV, TestCustmizedGenIllegal)
     g_coreType = tmp;
 }
 
-
 template <uint32_t v>
 using UIntImm = Std::integral_constant<uint32_t, v>;
 
 TEST_F(TEST_ALLOC_AIV, TestTensorTrait)
-{    
+{
     int32_t tmp = g_coreType;
     g_coreType = AscendC::AIC_TYPE;
 
@@ -151,7 +146,7 @@ TEST_F(TEST_ALLOC_AIV, TestLocalMemAllocatorAlloc2)
     int32_t tmp = g_coreType;
     g_coreType = AscendC::AIC_TYPE;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubCreateTensor));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubCreateTensor));
 
     LocalMemAllocator<Hardware::L1> allocator;
     auto tensor1 = allocator.Alloc<TPosition::A1, float>(2048);
@@ -211,4 +206,3 @@ TEST_F(TEST_ALLOC_AIV, TestLocalMemAllocatorDefaultPos)
     EXPECT_EQ(allocatorL0B.GetCurAddr(), 2048 * sizeof(float));
     EXPECT_EQ(allocatorL0C.GetCurAddr(), 2048 * sizeof(float));
 }
-

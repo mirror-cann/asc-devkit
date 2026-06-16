@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -28,13 +28,14 @@ constexpr uint32_t BASIC_FLOAT_BLK_SHLENGTH = 64;
 constexpr int32_t MAX_REPEAT_TIMES = 255;
 const uint8_t DEFAULT_REPEAT_STRIDE = 8;
 
-__aicore__ inline uint32_t AlignToBlockSize(const uint32_t inputX, const uint32_t inputY) {
+__aicore__ inline uint32_t AlignToBlockSize(const uint32_t inputX, const uint32_t inputY)
+{
     return (inputX + inputY - 1) / inputY * inputY;
 }
 
-__aicore__ inline bool GetBatchNormNDTilingInfo(const ShapeInfo srcShape, const ShapeInfo originSrcShape,
-    const uint32_t stackBufferByteSize, const uint32_t typeSize, const bool isReuseSource, BatchNormTiling &tilling,
-    const bool isBasicBlock)
+__aicore__ inline bool GetBatchNormNDTilingInfo(
+    const ShapeInfo srcShape, const ShapeInfo originSrcShape, const uint32_t stackBufferByteSize,
+    const uint32_t typeSize, const bool isReuseSource, BatchNormTiling& tilling, const bool isBasicBlock)
 {
     const uint32_t bLength = srcShape.shape[0];
     const uint32_t sLength = srcShape.shape[1];
@@ -118,12 +119,12 @@ __aicore__ inline bool GetBatchNormNDTilingInfo(const ShapeInfo srcShape, const 
     tilling.castHalfOutRepStride = castHalfOutRepStride;
     return true;
 };
-}// namespace test_batch_norm
+} // namespace test_batch_norm
 
 template <typename dataType, bool isReuseSource = false, bool isBasicBlock = false>
-__aicore__ inline void main_batchnorm_test(GM_ADDR inputX_gm, GM_ADDR gamm_gm, GM_ADDR beta_gm, GM_ADDR output_gm,
-    GM_ADDR outputMean_gm, GM_ADDR outputVariance_gm, uint32_t bLength, uint32_t sLength, uint32_t hLength,
-    uint32_t originbLength)
+__aicore__ inline void main_batchnorm_test(
+    GM_ADDR inputX_gm, GM_ADDR gamm_gm, GM_ADDR beta_gm, GM_ADDR output_gm, GM_ADDR outputMean_gm,
+    GM_ADDR outputVariance_gm, uint32_t bLength, uint32_t sLength, uint32_t hLength, uint32_t originbLength)
 {
     TPipe tpipe;
     dataType epsilon = 0.001;
@@ -148,9 +149,9 @@ __aicore__ inline void main_batchnorm_test(GM_ADDR inputX_gm, GM_ADDR gamm_gm, G
     outputVariance_global.SetGlobalBuffer(reinterpret_cast<__gm__ dataType*>(outputVariance_gm), shLength);
 
     TPipe pipe;
-    TQue<TPosition::VECIN, 1>  inQueueX;
-    TQue<TPosition::VECIN, 1>  inQueueGamma;
-    TQue<TPosition::VECIN, 1>  inQueueBeta;
+    TQue<TPosition::VECIN, 1> inQueueX;
+    TQue<TPosition::VECIN, 1> inQueueGamma;
+    TQue<TPosition::VECIN, 1> inQueueBeta;
     TQue<TPosition::VECOUT, 1> outQueue;
     TQue<TPosition::VECOUT, 1> outQueueMean;
     TQue<TPosition::VECOUT, 1> outQueueVariance;
@@ -184,11 +185,11 @@ __aicore__ inline void main_batchnorm_test(GM_ADDR inputX_gm, GM_ADDR gamm_gm, G
     BatchNormTiling batchNormTiling;
     uint32_t inputShape[3] = {bLength, sLength, hLength};
     uint32_t originInputShape[3] = {originbLength, sLength, hLength};
-    ShapeInfo shapeInfo{ 3, inputShape, 3, inputShape, dataFormat };
-    ShapeInfo oriShapeInfo{ 3, originInputShape, 3, originInputShape, dataFormat };
+    ShapeInfo shapeInfo{3, inputShape, 3, inputShape, dataFormat};
+    ShapeInfo oriShapeInfo{3, originInputShape, 3, originInputShape, dataFormat};
 
-    bool tilingRes = test_batch_norm::GetBatchNormNDTilingInfo(shapeInfo, oriShapeInfo, stackBufferSize, sizeof(dataType), isReuseSource,
-        batchNormTiling, isBasicBlock);
+    bool tilingRes = test_batch_norm::GetBatchNormNDTilingInfo(
+        shapeInfo, oriShapeInfo, stackBufferSize, sizeof(dataType), isReuseSource, batchNormTiling, isBasicBlock);
 
     // if the data exceeds the UB size, tiling is 0, change tilingData
     if (!tilingRes) {
@@ -214,8 +215,8 @@ __aicore__ inline void main_batchnorm_test(GM_ADDR inputX_gm, GM_ADDR gamm_gm, G
         batchNormTiling.castHalfOutRepStride = 4;
     }
 
-    BatchNorm<dataType, isReuseSource, isBasicBlock>(outputLocal, meanLocal, varianceLocal, inputXLocal, gammaLocal,
-        betaLocal, (dataType)epsilon, batchNormTiling);
+    BatchNorm<dataType, isReuseSource, isBasicBlock>(
+        outputLocal, meanLocal, varianceLocal, inputXLocal, gammaLocal, betaLocal, (dataType)epsilon, batchNormTiling);
     PipeBarrier<PIPE_ALL>();
 
     DataCopy(output_global, outputLocal, bshLength);
@@ -237,36 +238,30 @@ struct batchnormTestParams {
     uint32_t hLength;
     uint32_t originbLength;
     uint32_t typeSize;
-    void (*cal_func)(uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint32_t, uint32_t, uint32_t,
-        uint32_t);
+    void (*cal_func)(
+        uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint32_t, uint32_t, uint32_t, uint32_t);
 };
 
 class batchnormTestSuite : public testing::Test, public testing::WithParamInterface<batchnormTestParams> {
 protected:
-    static void SetUpTestCase()
-    {
-        std::cout << "batchnormTestSuite SetUpTestCase" << std::endl;
-    }
-    static void TearDownTestCase()
-    {
-        std::cout << "batchnormTestSuite TearDownTestCase" << std::endl;
-    }
+    static void SetUpTestCase() { std::cout << "batchnormTestSuite SetUpTestCase" << std::endl; }
+    static void TearDownTestCase() { std::cout << "batchnormTestSuite TearDownTestCase" << std::endl; }
     virtual void SetUp() {}
     virtual void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_PACKAGE_batchnorm, batchnormTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_PACKAGE_batchnorm, batchnormTestSuite,
     ::testing::Values(
-    batchnormTestParams { 16, 16, 16, 16, sizeof(half),  main_batchnorm_test<half,  false, true>  },
-    batchnormTestParams { 16, 16, 16, 16, sizeof(half),  main_batchnorm_test<half,  false, false> },
-    batchnormTestParams { 32, 4, 16, 1, sizeof(half),  main_batchnorm_test<half,  false, false>  },
-    batchnormTestParams { 256, 4, 16, 256, sizeof(half), main_batchnorm_test<half, false, true> },
-    batchnormTestParams { 272, 4, 16, 272, sizeof(half), main_batchnorm_test<half, false, true> },
-    batchnormTestParams { 272, 4, 16, 272, sizeof(half), main_batchnorm_test<half, false, false> },
-    batchnormTestParams { 8, 16, 16, 8, sizeof(float), main_batchnorm_test<float, true, true>  },
-    batchnormTestParams { 8, 16, 16, 8, sizeof(float), main_batchnorm_test<float, false, false> },
-    batchnormTestParams { 256, 1, 16, 256, sizeof(float), main_batchnorm_test<float, true, false>  }
-    ));
+        batchnormTestParams{16, 16, 16, 16, sizeof(half), main_batchnorm_test<half, false, true>},
+        batchnormTestParams{16, 16, 16, 16, sizeof(half), main_batchnorm_test<half, false, false>},
+        batchnormTestParams{32, 4, 16, 1, sizeof(half), main_batchnorm_test<half, false, false>},
+        batchnormTestParams{256, 4, 16, 256, sizeof(half), main_batchnorm_test<half, false, true>},
+        batchnormTestParams{272, 4, 16, 272, sizeof(half), main_batchnorm_test<half, false, true>},
+        batchnormTestParams{272, 4, 16, 272, sizeof(half), main_batchnorm_test<half, false, false>},
+        batchnormTestParams{8, 16, 16, 8, sizeof(float), main_batchnorm_test<float, true, true>},
+        batchnormTestParams{8, 16, 16, 8, sizeof(float), main_batchnorm_test<float, false, false>},
+        batchnormTestParams{256, 1, 16, 256, sizeof(float), main_batchnorm_test<float, true, false>}));
 
 TEST_P(batchnormTestSuite, batchnormTestCase)
 {
@@ -281,15 +276,16 @@ TEST_P(batchnormTestSuite, batchnormTestCase)
     uint32_t bshLength = originbLength * sLength * hLength;
     uint32_t shLength = sLength * hLength;
 
-    uint8_t inputX_gm[bshLength * typeSize] { 0x00 };
-    uint8_t gamm_gm[bLength * typeSize] { 0x00 };
-    uint8_t beta_gm[bLength * typeSize] { 0x00 };
+    uint8_t inputX_gm[bshLength * typeSize]{0x00};
+    uint8_t gamm_gm[bLength * typeSize]{0x00};
+    uint8_t beta_gm[bLength * typeSize]{0x00};
 
-    uint8_t output_gm[bshLength * typeSize] {0x00};
-    uint8_t outputMean_gm[shLength * typeSize] {0x00};
-    uint8_t outputVariance_gm[shLength * typeSize] {0x00};
+    uint8_t output_gm[bshLength * typeSize]{0x00};
+    uint8_t outputMean_gm[shLength * typeSize]{0x00};
+    uint8_t outputVariance_gm[shLength * typeSize]{0x00};
 
-    param.cal_func(inputX_gm, gamm_gm, beta_gm, output_gm, outputMean_gm, outputVariance_gm, bLength, sLength, hLength,
+    param.cal_func(
+        inputX_gm, gamm_gm, beta_gm, output_gm, outputMean_gm, outputVariance_gm, bLength, sLength, hLength,
         originbLength);
 
     for (int32_t i = 0; i < bshLength * typeSize; i++) {

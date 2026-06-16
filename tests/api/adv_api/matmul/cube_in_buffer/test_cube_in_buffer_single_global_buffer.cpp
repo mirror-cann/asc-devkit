@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -18,25 +18,22 @@
 using namespace std;
 using namespace AscendC;
 
-
 namespace {
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using CubeInBufferA = Impl::Detail::CubeInBuffer<IMPL, MatmulInputAType<A_TYPE, typename A_TYPE::T>, MM_CFG>;
     using CubeInBufferB = Impl::Detail::CubeInBuffer<IMPL, MatmulInputBType<B_TYPE, typename A_TYPE::T>, MM_CFG>;
 };
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
-MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE(CubeInBufferA)
-, MATMUL_IMPORT_MODULE_PRIVATE(MLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(NLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(KLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+    MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(CubeInBufferA),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(NLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(KLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling) {
     MATMUL_ALLOW_USING(CubeInBufferA);
     MATMUL_ALLOW_USING_PRIVATE(MLoop);
     MATMUL_ALLOW_USING_PRIVATE(NLoop);
@@ -44,15 +41,15 @@ class MatmulImpl
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeTiling);
 
 public:
-    using CubeInBufferA::Init;
-    using CubeInBufferA::Destroy;
     using CubeInBufferA::AllocTensor;
-    using CubeInBufferA::FreeTensor;
-    using CubeInBufferA::Hit;
-    using CubeInBufferA::GetBuffer;
-    using CubeInBufferA::Reset;
-    using CubeInBufferA::EnQue;
     using CubeInBufferA::DeQue;
+    using CubeInBufferA::Destroy;
+    using CubeInBufferA::EnQue;
+    using CubeInBufferA::FreeTensor;
+    using CubeInBufferA::GetBuffer;
+    using CubeInBufferA::Hit;
+    using CubeInBufferA::Init;
+    using CubeInBufferA::Reset;
     using CubeInBufferA::SetOrgTensor;
     using IMPL = MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, MM_CB, MATMUL_POLICY>;
     MATMUL_USE_MODULE(MatmulShapeTiling);
@@ -61,20 +58,18 @@ public:
     using VAR_PARAMS =
         typename Impl::Detail::MatmulParams<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, GetMatmulMode(MM_CFG)>::PARAMS;
 
-    MatmulImpl() {
-        InitVar();
-    }
+    MatmulImpl() { InitVar(); }
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar() {
+    void InitVar()
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
     }
 
-    void SetInitParams(int32_t stepM, int32_t stepKa, int32_t baseM, int32_t baseK) {
+    void SetInitParams(int32_t stepM, int32_t stepKa, int32_t baseM, int32_t baseK)
+    {
         tiling.stepM = stepM;
         tiling.stepKa = stepKa;
         tiling.baseM = baseM;
@@ -87,7 +82,7 @@ private:
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class test_cube_in_buffer_single_global_buffer : public testing::Test {
 protected:
@@ -104,7 +99,8 @@ private:
     Impl::Detail::GlobalCache gCache;
 };
 
-TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_cube_in_buffer_global_get_iter_index) {
+TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_cube_in_buffer_global_get_iter_index)
+{
     gCache.Init();
     int32_t mIter = 2;
     int32_t kIter = 3;
@@ -112,7 +108,8 @@ TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_cube_in_buffer_global_
     mm.Init(1024, 4);
 }
 
-TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_all_interface_hit_none) {
+TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_all_interface_hit_none)
+{
     gCache.Init();
     GlobalTensor<half> fakeInput;
     int32_t mIter = 2;
@@ -143,7 +140,8 @@ TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_all_interface_hit_none
     ASSERT_EQ(hitCnt, 0);
 }
 
-TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_all_interface_normal_hit) {
+TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_all_interface_normal_hit)
+{
     gCache.Init();
     GlobalTensor<half> fakeInput;
     int32_t mIter = 2;
@@ -174,7 +172,8 @@ TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_all_interface_normal_h
     ASSERT_EQ(hitCnt, 6);
 }
 
-TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_all_interface_reduce_cache) {
+TEST_F(test_cube_in_buffer_single_global_buffer, DISABLED_all_interface_reduce_cache)
+{
     gCache.Init();
     int32_t mIter = 2;
     int32_t kIter = 2;

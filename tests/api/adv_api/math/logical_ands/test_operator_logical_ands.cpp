@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -14,22 +14,16 @@ using namespace std;
 using namespace AscendC;
 
 namespace AscendC {
-enum class ScalarType : std::uint8_t{
-    TENSOR_SCALAR,
-    SCALAR_TENSOR,
-    TENSOR_INDEX0,
-    TENSOR_INDEX1
-};
+enum class ScalarType : std::uint8_t { TENSOR_SCALAR, SCALAR_TENSOR, TENSOR_INDEX0, TENSOR_INDEX1 };
 template <typename T, typename U, ScalarType scalarType>
 class KernelLogicalAnds {
 public:
-    __aicore__ inline KernelLogicalAnds()
-    {}
+    __aicore__ inline KernelLogicalAnds() {}
     __aicore__ inline void Init(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t srcSize)
     {
-        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(src0Gm), srcSize);
-        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(src1Gm), srcSize);
-        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), srcSize);
+        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(src0Gm), srcSize);
+        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(src1Gm), srcSize);
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), srcSize);
 
         pipe.InitBuffer(inQueueX0, 1, srcSize * sizeof(U));
         pipe.InitBuffer(inQueueX1, 1, srcSize * sizeof(U));
@@ -70,7 +64,7 @@ private:
             LogicalOrs<config>(dstLocal, src0Local, src1Local, dataSize);
         } else if constexpr (scalarType == ScalarType::TENSOR_INDEX1) {
             LogicalOrs(dstLocal, src0Local, src1Local, dataSize);
-        } 
+        }
         outQueue.EnQue<T>(dstLocal);
         inQueueX0.FreeTensor(src0Local);
         inQueueX1.FreeTensor(src1Local);
@@ -100,8 +94,7 @@ private:
     TQue<TPosition::VECOUT, 1> outQueue;
     uint32_t dataSize = 0;
 };
-}
-
+} // namespace AscendC
 
 template <typename T, typename U, ScalarType scalarType>
 __aicore__ void testLogicalAnds(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t srcSize)
@@ -111,13 +104,11 @@ __aicore__ void testLogicalAnds(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, u
     op.Process();
 }
 
-
 struct LogicalAndsTestParams {
     uint32_t dataTypeSize;
     uint32_t inDataSize;
     void (*calFunc)(GM_ADDR, GM_ADDR, GM_ADDR, uint32_t);
 };
-
 
 class LogicalAndsTestSuite : public testing::Test, public testing::WithParamInterface<LogicalAndsTestParams> {
 protected:
@@ -125,157 +116,156 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ADVANCE_API_LOGICAL_ANDS, LogicalAndsTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ADVANCE_API_LOGICAL_ANDS, LogicalAndsTestSuite,
     ::testing::Values(
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, bool, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, bool, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, bool, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, half, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, half, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, half, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, float, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, float, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, float, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {8, 1024, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {8, 32, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {8, 256, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {8, 1024, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {8, 32, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_SCALAR> },
-        LogicalAndsTestParams {8, 256, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_SCALAR> },
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, bool, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, bool, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, bool, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, half, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, half, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, half, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, float, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, float, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, float, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{8, 1024, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{8, 32, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{8, 256, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{8, 1024, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{8, 32, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_SCALAR>},
+        LogicalAndsTestParams{8, 256, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_SCALAR>},
 
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, bool, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, bool, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, bool, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, uint8_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, uint8_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, uint8_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, int8_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, int8_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, int8_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, half, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, half, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, half, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, bfloat16_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, bfloat16_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, bfloat16_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, uint16_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, uint16_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, uint16_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, int16_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, int16_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, int16_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, float, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, float, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, float, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, uint32_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, uint32_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, uint32_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, int32_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, int32_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, int32_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {8, 1024, testLogicalAnds<bool, uint64_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {8, 32, testLogicalAnds<bool, uint64_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {8, 256, testLogicalAnds<bool, uint64_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {8, 1024, testLogicalAnds<bool, int64_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {8, 32, testLogicalAnds<bool, int64_t, ScalarType::SCALAR_TENSOR> },
-        LogicalAndsTestParams {8, 256, testLogicalAnds<bool, int64_t, ScalarType::SCALAR_TENSOR> },
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, bool, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, bool, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, bool, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, uint8_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, uint8_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, uint8_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, int8_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, int8_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, int8_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, half, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, half, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, half, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, bfloat16_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, bfloat16_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, bfloat16_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, uint16_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, uint16_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, uint16_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, int16_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, int16_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, int16_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, float, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, float, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, float, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, uint32_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, uint32_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, uint32_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, int32_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, int32_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, int32_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{8, 1024, testLogicalAnds<bool, uint64_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{8, 32, testLogicalAnds<bool, uint64_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{8, 256, testLogicalAnds<bool, uint64_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{8, 1024, testLogicalAnds<bool, int64_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{8, 32, testLogicalAnds<bool, int64_t, ScalarType::SCALAR_TENSOR>},
+        LogicalAndsTestParams{8, 256, testLogicalAnds<bool, int64_t, ScalarType::SCALAR_TENSOR>},
 
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {8, 1024, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {8, 32, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {8, 256, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {8, 1024, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {8, 32, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX0> },
-        LogicalAndsTestParams {8, 256, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX0> },
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{8, 1024, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{8, 32, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{8, 256, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{8, 1024, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{8, 32, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX0>},
+        LogicalAndsTestParams{8, 256, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX0>},
 
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {1, 1024, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {1, 32, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {1, 256, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 1024, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 32, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {2, 256, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {4, 1024, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {4, 32, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {4, 256, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {8, 1024, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {8, 32, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {8, 256, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {8, 1024, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {8, 32, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX1> },
-        LogicalAndsTestParams {8, 256, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX1> }
-    )
-);
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, bool, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, uint8_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{1, 1024, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{1, 32, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{1, 256, testLogicalAnds<bool, int8_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, half, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, bfloat16_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, uint16_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 1024, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 32, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{2, 256, testLogicalAnds<bool, int16_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, float, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, uint32_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{4, 1024, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{4, 32, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{4, 256, testLogicalAnds<bool, int32_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{8, 1024, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{8, 32, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{8, 256, testLogicalAnds<bool, uint64_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{8, 1024, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{8, 32, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX1>},
+        LogicalAndsTestParams{8, 256, testLogicalAnds<bool, int64_t, ScalarType::TENSOR_INDEX1>}));
 
 TEST_P(LogicalAndsTestSuite, testLogicalAnds)
 {
@@ -290,4 +280,3 @@ TEST_P(LogicalAndsTestSuite, testLogicalAnds)
         EXPECT_EQ(outputGm[i], 0x00);
     }
 }
-

@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -20,12 +19,8 @@ class TopKAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(TopKAPICheck, TopKAPICheckTestSuccess)
@@ -68,8 +63,10 @@ TEST_F(TopKAPICheck, TopKAPICheckTestSuccess)
     topKInfo.n = 8;
     TopkTiling tilling;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(TopK, (float, true, true, false, AscendC::TopKMode::TOPK_NORMAL), (
-        dstValueLocal, dstIndexLocal, srcLocal, srcIndexLocal, finishLocal, sharedTmpBuffer, 7, tilling, topKInfo, false));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        TopK, (float, true, true, false, AscendC::TopKMode::TOPK_NORMAL),
+        (dstValueLocal, dstIndexLocal, srcLocal, srcIndexLocal, finishLocal, sharedTmpBuffer, 7, tilling, topKInfo,
+         false));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
 
@@ -103,9 +100,10 @@ TEST_F(TopKAPICheck, TopKAPICheckTestSubFailure)
     topKInfo.n = 8;
     TopkTiling tilling;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(TopK, (uint8_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL), (
-        dstTensor[1], srcIndexLocal[1], dstTensor[1], srcIndexLocal[1], finishLocal[1], sharedTmpBuffer,
-        7, tilling, topKInfo, false));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        TopK, (uint8_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL),
+        (dstTensor[1], srcIndexLocal[1], dstTensor[1], srcIndexLocal[1], finishLocal[1], sharedTmpBuffer, 7, tilling,
+         topKInfo, false));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 12);
 }
 
@@ -139,8 +137,9 @@ TEST_F(TopKAPICheck, TopKAPICheckTestFailure)
     topKInfo.n = 4097;
     TopkTiling tilling;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(TopK, (uint8_t, true, true, true, AscendC::TopKMode::TOPK_NORMAL), (
-        dstTensor[1], srcIndexLocal[1], dstTensor[1], srcIndexLocal[1], finishLocal[1], sharedTmpBuffer, 7,
-        tilling, topKInfo, false));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        TopK, (uint8_t, true, true, true, AscendC::TopKMode::TOPK_NORMAL),
+        (dstTensor[1], srcIndexLocal[1], dstTensor[1], srcIndexLocal[1], finishLocal[1], sharedTmpBuffer, 7, tilling,
+         topKInfo, false));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 17);
 }

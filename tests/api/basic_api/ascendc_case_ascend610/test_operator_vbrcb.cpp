@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -29,7 +29,9 @@ protected:
 };
 
 template <typename T>
-void TestVbrcbFunc(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint32_t length, __gm__ uint32_t stride)
+void TestVbrcbFunc(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint32_t length,
+    __gm__ uint32_t stride)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -57,7 +59,7 @@ void TestVbrcbFunc(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restric
     set_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
 
-    BrcbRepeatParams params { stride, 8 };
+    BrcbRepeatParams params{stride, 8};
     uint8_t repeat = srcLen / 8;
     Brcb(outputLocal, input0Local, repeat, params);
 
@@ -67,11 +69,12 @@ void TestVbrcbFunc(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restric
     pipe_barrier(PIPE_ALL);
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_BRCB, BrcbTestSuite,
-    ::testing::Values(BrcbTestParams { 16, 2, 1, TestVbrcbFunc<uint16_t> },
-    BrcbTestParams { 32, 2, 1, TestVbrcbFunc<uint16_t> }, BrcbTestParams { 128, 2, 2, TestVbrcbFunc<uint16_t> },
-    BrcbTestParams { 16, 4, 2, TestVbrcbFunc<uint32_t> }, BrcbTestParams { 32, 4, 1, TestVbrcbFunc<uint32_t> },
-    BrcbTestParams { 64, 4, 1, TestVbrcbFunc<uint32_t> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_BRCB, BrcbTestSuite,
+    ::testing::Values(
+        BrcbTestParams{16, 2, 1, TestVbrcbFunc<uint16_t>}, BrcbTestParams{32, 2, 1, TestVbrcbFunc<uint16_t>},
+        BrcbTestParams{128, 2, 2, TestVbrcbFunc<uint16_t>}, BrcbTestParams{16, 4, 2, TestVbrcbFunc<uint32_t>},
+        BrcbTestParams{32, 4, 1, TestVbrcbFunc<uint32_t>}, BrcbTestParams{64, 4, 1, TestVbrcbFunc<uint32_t>}));
 
 TEST_P(BrcbTestSuite, BrcbTestCase)
 {

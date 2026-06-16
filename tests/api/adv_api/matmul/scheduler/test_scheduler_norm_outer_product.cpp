@@ -1,13 +1,13 @@
 
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file test_scheduler_norm_outer_product.cpp
@@ -30,8 +30,7 @@ using namespace AscendC;
 namespace {
 
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using L0cT = typename GetMmDstType<typename A_TYPE::T>::Type;
     using CopyCubeInA = CustomCopyCubeIn<IMPL, MatmulInputAType<A_TYPE, typename A_TYPE::T>, MM_CFG>;
@@ -45,26 +44,25 @@ public:
     using BiasScheduler = CustomBiasScheduler<IMPL, A_TYPE, B_TYPE, BIAS_TYPE, MM_CFG>;
 };
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const auto& MM_CFG,
-class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE(Scheduler)
-, MATMUL_IMPORT_MODULE_PRIVATE(MLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(NLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(KLoop)
-, MATMUL_IMPORT_MODULE(CopyCubeInA)
-, MATMUL_IMPORT_MODULE(CopyCubeInB)
-, MATMUL_IMPORT_MODULE(LoadToA2)
-, MATMUL_IMPORT_MODULE(LoadToB2)
-, MATMUL_IMPORT_MODULE(TBufPoolL0)
-, MATMUL_IMPORT_MODULE(MmadCompute)
-, MATMUL_IMPORT_MODULE(CubeOutBuffer)
-, MATMUL_IMPORT_MODULE(CopyCubeOut)
-, MATMUL_IMPORT_MODULE(BiasScheduler)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulUnitFlag)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const auto& MM_CFG,
+    class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(Scheduler),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(NLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(KLoop),
+                   MATMUL_IMPORT_MODULE(CopyCubeInA),
+                   MATMUL_IMPORT_MODULE(CopyCubeInB),
+                   MATMUL_IMPORT_MODULE(LoadToA2),
+                   MATMUL_IMPORT_MODULE(LoadToB2),
+                   MATMUL_IMPORT_MODULE(TBufPoolL0),
+                   MATMUL_IMPORT_MODULE(MmadCompute),
+                   MATMUL_IMPORT_MODULE(CubeOutBuffer),
+                   MATMUL_IMPORT_MODULE(CopyCubeOut),
+                   MATMUL_IMPORT_MODULE(BiasScheduler),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulUnitFlag) {
     MATMUL_ALLOW_USING_PRIVATE(MLoop);
     MATMUL_ALLOW_USING_PRIVATE(NLoop);
     MATMUL_ALLOW_USING_PRIVATE(KLoop);
@@ -102,11 +100,10 @@ public:
 
     MatmulImpl() {}
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void Init(const TCubeTiling &tiling) {
+    void Init(const TCubeTiling& tiling)
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
         MATMUL_MODULE(CubeOutBuffer)->Init(tiling.baseM * tiling.baseN * 2);
@@ -116,15 +113,13 @@ public:
         MATMUL_MODULE(TBufPoolL0)->Init();
     }
 
-    void SetBias(bool) {
-        MATMUL_MODULE(BiasScheduler)->SetBias();
-    }
+    void SetBias(bool) { MATMUL_MODULE(BiasScheduler)->SetBias(); }
 
 private:
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class TestSchedulerNormOuterProduct : public testing::Test {
 protected:
@@ -139,25 +134,35 @@ private:
 
     constexpr static MatmulConfigMode configMode = MatmulConfigMode::CONFIG_NORM;
     // ORDER_M
-    constexpr static MatmulFuncParams funcParamsOrderM{false, false, false, false, 0, IterateOrder::ORDER_M, ScheduleType::OUTER_PRODUCT, true, true};
+    constexpr static MatmulFuncParams funcParamsOrderM{
+        false, false, false, false, 0, IterateOrder::ORDER_M, ScheduleType::OUTER_PRODUCT, true, true};
     constexpr static MatmulConfig CFG_NORM_OUTER_PRODUCT_ORDER_M = GetMMConfig<configMode>(funcParamsOrderM);
-    MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM_OUTER_PRODUCT_ORDER_M, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mmOrderM;
+    MatmulImpl<
+        A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM_OUTER_PRODUCT_ORDER_M,
+        MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy>
+        mmOrderM;
 
     // ORDER_N
-    constexpr static MatmulFuncParams funcParamsOrderN{false, false, false, false, 0, IterateOrder::ORDER_N, ScheduleType::OUTER_PRODUCT, true, true};
+    constexpr static MatmulFuncParams funcParamsOrderN{
+        false, false, false, false, 0, IterateOrder::ORDER_N, ScheduleType::OUTER_PRODUCT, true, true};
     constexpr static MatmulConfig CFG_NORM_OUTER_PRODUCT_ORDER_N = GetMMConfig<configMode>(funcParamsOrderN);
-    MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM_OUTER_PRODUCT_ORDER_N, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mmOrderN;
+    MatmulImpl<
+        A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM_OUTER_PRODUCT_ORDER_N,
+        MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy>
+        mmOrderN;
 };
 
 // N axis L0 DB
-TEST_F(TestSchedulerNormOuterProduct, ScheduleOnce_OrderM_NIter_15_StepN_5) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder
+TEST_F(TestSchedulerNormOuterProduct, ScheduleOnce_OrderM_NIter_15_StepN_5)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder
     TilingParams tilingParams = {1, 16, 1920, 16, 16, 1920, 16, 16, 128, 16, 1, 5, 1, 5, 1, 1, 1, 0};
     TCubeTiling tiling;
     tilingParams.GetTiling(tiling);
     mmOrderM.Init(tiling);
     mmOrderM.SetBias(1);
-    
+
     // [NLoop] totalIter=15, outerIter=4, innerIter=5
     // [NLoop] totalIndex: |0, 1, 2, 3, 4,| 5, 6, 7, 8, 9,| 10, 11, 12, 13, 14|
     // [NLoop] innerIndex: 0 -> 2 -> 4 -> 5 -> 7 -> 9 -> 10 -> 12 -> 14 (9次)
@@ -169,8 +174,10 @@ TEST_F(TestSchedulerNormOuterProduct, ScheduleOnce_OrderM_NIter_15_StepN_5) {
 }
 
 // M axis L0 DB
-TEST_F(TestSchedulerNormOuterProduct, ScheduleOnce_OrderN_MIter_15_StepM_5) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder
+TEST_F(TestSchedulerNormOuterProduct, ScheduleOnce_OrderN_MIter_15_StepM_5)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder
     TilingParams tilingParams = {1, 1920, 16, 16, 1920, 16, 16, 128, 16, 16, 5, 1, 5, 1, 1, 1, 1, 1};
     TCubeTiling tiling;
     tilingParams.GetTiling(tiling);

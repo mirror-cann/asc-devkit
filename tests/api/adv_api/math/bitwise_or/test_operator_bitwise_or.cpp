@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -17,13 +17,12 @@ namespace AscendC {
 template <typename T>
 class KernelBitwiseOr {
 public:
-    __aicore__ inline KernelBitwiseOr()
-    {}
+    __aicore__ inline KernelBitwiseOr() {}
     __aicore__ inline void Init(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t srcSize)
     {
-        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(src0Gm), srcSize);
-        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(src1Gm), srcSize);
-        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), srcSize);
+        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(src0Gm), srcSize);
+        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(src1Gm), srcSize);
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), srcSize);
 
         pipe.InitBuffer(inQueueX0, 1, srcSize * sizeof(T));
         pipe.InitBuffer(inQueueX1, 1, srcSize * sizeof(T));
@@ -84,8 +83,7 @@ private:
     TQue<TPosition::VECOUT, 1> outQueue;
     uint32_t dataSize = 0;
 };
-}
-
+} // namespace AscendC
 
 template <typename T>
 __aicore__ void testBitwiseOr(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t srcSize)
@@ -95,13 +93,11 @@ __aicore__ void testBitwiseOr(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uin
     op.Process();
 }
 
-
 struct BitwiseOrTestParams {
     uint32_t dataTypeSize;
     uint32_t inDataSize;
     void (*calFunc)(GM_ADDR, GM_ADDR, GM_ADDR, uint32_t);
 };
-
 
 class BitwiseOrTestSuite : public testing::Test, public testing::WithParamInterface<BitwiseOrTestParams> {
 protected:
@@ -109,34 +105,21 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ADVANCE_API_BITWISE_OR, BitwiseOrTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ADVANCE_API_BITWISE_OR, BitwiseOrTestSuite,
     ::testing::Values(
-        BitwiseOrTestParams {1, 1024, testBitwiseOr<uint8_t> },
-        BitwiseOrTestParams {1, 32, testBitwiseOr<uint8_t> },
-        BitwiseOrTestParams {1, 256, testBitwiseOr<uint8_t> },
-        BitwiseOrTestParams {1, 1024, testBitwiseOr<int8_t> },
-        BitwiseOrTestParams {1, 32, testBitwiseOr<int8_t> },
-        BitwiseOrTestParams {1, 256, testBitwiseOr<int8_t> },
-        BitwiseOrTestParams {2, 1024, testBitwiseOr<uint16_t> },
-        BitwiseOrTestParams {2, 32, testBitwiseOr<uint16_t> },
-        BitwiseOrTestParams {2, 256, testBitwiseOr<uint16_t> },
-        BitwiseOrTestParams {2, 1024, testBitwiseOr<int16_t> },
-        BitwiseOrTestParams {2, 32, testBitwiseOr<int16_t> },
-        BitwiseOrTestParams {2, 256, testBitwiseOr<int16_t> },
-        BitwiseOrTestParams {4, 1024, testBitwiseOr<uint32_t> },
-        BitwiseOrTestParams {4, 32, testBitwiseOr<uint32_t> },
-        BitwiseOrTestParams {4, 256, testBitwiseOr<uint32_t> },
-        BitwiseOrTestParams {4, 1024, testBitwiseOr<int32_t> },
-        BitwiseOrTestParams {4, 32, testBitwiseOr<int32_t> },
-        BitwiseOrTestParams {4, 256, testBitwiseOr<int32_t> },
-        BitwiseOrTestParams {8, 1024, testBitwiseOr<uint64_t> },
-        BitwiseOrTestParams {8, 32, testBitwiseOr<uint64_t> },
-        BitwiseOrTestParams {8, 256, testBitwiseOr<uint64_t> },
-        BitwiseOrTestParams {8, 1024, testBitwiseOr<int64_t> },
-        BitwiseOrTestParams {8, 32, testBitwiseOr<int64_t> },
-        BitwiseOrTestParams {8, 256, testBitwiseOr<int64_t> }
-    )
-);
+        BitwiseOrTestParams{1, 1024, testBitwiseOr<uint8_t>}, BitwiseOrTestParams{1, 32, testBitwiseOr<uint8_t>},
+        BitwiseOrTestParams{1, 256, testBitwiseOr<uint8_t>}, BitwiseOrTestParams{1, 1024, testBitwiseOr<int8_t>},
+        BitwiseOrTestParams{1, 32, testBitwiseOr<int8_t>}, BitwiseOrTestParams{1, 256, testBitwiseOr<int8_t>},
+        BitwiseOrTestParams{2, 1024, testBitwiseOr<uint16_t>}, BitwiseOrTestParams{2, 32, testBitwiseOr<uint16_t>},
+        BitwiseOrTestParams{2, 256, testBitwiseOr<uint16_t>}, BitwiseOrTestParams{2, 1024, testBitwiseOr<int16_t>},
+        BitwiseOrTestParams{2, 32, testBitwiseOr<int16_t>}, BitwiseOrTestParams{2, 256, testBitwiseOr<int16_t>},
+        BitwiseOrTestParams{4, 1024, testBitwiseOr<uint32_t>}, BitwiseOrTestParams{4, 32, testBitwiseOr<uint32_t>},
+        BitwiseOrTestParams{4, 256, testBitwiseOr<uint32_t>}, BitwiseOrTestParams{4, 1024, testBitwiseOr<int32_t>},
+        BitwiseOrTestParams{4, 32, testBitwiseOr<int32_t>}, BitwiseOrTestParams{4, 256, testBitwiseOr<int32_t>},
+        BitwiseOrTestParams{8, 1024, testBitwiseOr<uint64_t>}, BitwiseOrTestParams{8, 32, testBitwiseOr<uint64_t>},
+        BitwiseOrTestParams{8, 256, testBitwiseOr<uint64_t>}, BitwiseOrTestParams{8, 1024, testBitwiseOr<int64_t>},
+        BitwiseOrTestParams{8, 32, testBitwiseOr<int64_t>}, BitwiseOrTestParams{8, 256, testBitwiseOr<int64_t>}));
 
 TEST_P(BitwiseOrTestSuite, testBitwiseOr)
 {

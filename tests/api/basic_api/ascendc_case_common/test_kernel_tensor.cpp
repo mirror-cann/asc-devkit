@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include <vector>
@@ -18,11 +18,8 @@ using namespace AscendC;
 using namespace std;
 
 namespace {
-int32_t RaiseStubCreateTensor(int32_t i)
-{
-    return 0;
-}
-}
+int32_t RaiseStubCreateTensor(int32_t i) { return 0; }
+} // namespace
 
 /* **************************** LocalTensor Print ****************************** */
 struct PrintTensorParams {
@@ -37,31 +34,42 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TENSOR_PRINT, TEST_TENSOR_PRINT,
-    ::testing::Values(PrintTensorParams { "uint32_t", 16, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n" },
-    PrintTensorParams { "uint32_t", 7, "0000 : 0 1 2 3 4 5 6 \n" },
-    PrintTensorParams { "int32_t", 16, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n" },
-    PrintTensorParams { "int32_t", 7, "0000 : 0 1 2 3 4 5 6 \n" },
-    PrintTensorParams { "half", 33,
-    "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 "
-    "\n" },
-    PrintTensorParams { "half", 17, "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 \n" },
-    PrintTensorParams { "half", 7, "0000 : 0 1 2 3 4 5 6 \n" },
-    PrintTensorParams { "float", 17, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 \n" },
-    PrintTensorParams { "float", 7, "0000 : 0 1 2 3 4 5 6 \n" },
-    PrintTensorParams { "uint16_t", 33,
-    "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 "
-    "\n" },
-    PrintTensorParams { "uint16_t", 17, "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 \n" },
-    PrintTensorParams { "uint16_t", 7, "0000 : 0 1 2 3 4 5 6 \n" },
-    PrintTensorParams { "uint8_t", 33,
-    "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 \n" },
-    PrintTensorParams { "int8_t", 33,
-    "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 \n" },
-    PrintTensorParams { "bool", 33,
-    "0000 : 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 \n0032 : 1 \n" }));
+INSTANTIATE_TEST_CASE_P(
+    TENSOR_PRINT, TEST_TENSOR_PRINT,
+    ::testing::Values(
+        PrintTensorParams{"uint32_t", 16, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n"},
+        PrintTensorParams{"uint32_t", 7, "0000 : 0 1 2 3 4 5 6 \n"},
+        PrintTensorParams{"int32_t", 16, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n"},
+        PrintTensorParams{"int32_t", 7, "0000 : 0 1 2 3 4 5 6 \n"},
+        PrintTensorParams{
+            "half", 33,
+            "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 "
+            "\n0032 : 32 "
+            "\n"},
+        PrintTensorParams{"half", 17, "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 \n"},
+        PrintTensorParams{"half", 7, "0000 : 0 1 2 3 4 5 6 \n"},
+        PrintTensorParams{"float", 17, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 \n"},
+        PrintTensorParams{"float", 7, "0000 : 0 1 2 3 4 5 6 \n"},
+        PrintTensorParams{
+            "uint16_t", 33,
+            "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 "
+            "\n0032 : 32 "
+            "\n"},
+        PrintTensorParams{"uint16_t", 17, "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 \n"},
+        PrintTensorParams{"uint16_t", 7, "0000 : 0 1 2 3 4 5 6 \n"},
+        PrintTensorParams{
+            "uint8_t", 33,
+            "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 "
+            "\n"},
+        PrintTensorParams{
+            "int8_t", 33,
+            "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 "
+            "\n"},
+        PrintTensorParams{
+            "bool", 33, "0000 : 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 \n0032 : 1 \n"}));
 
-template <typename T> void GetPrintString(const string& dataType, const int32_t printSize, string& retStr)
+template <typename T>
+void GetPrintString(const string& dataType, const int32_t printSize, string& retStr)
 {
     const int32_t maxLen = 64;
     TBuffAddr addr;
@@ -103,7 +111,8 @@ TEST_P(TEST_TENSOR_PRINT, TensorPrintTest)
 class TEST_TENSOR : public testing::Test {
 protected:
     void SetUp() {}
-    void TearDown() {
+    void TearDown()
+    {
         ConstDefiner::Instance().allocatorUsed.clear();
         GlobalMockObject::verify();
     }
@@ -131,7 +140,7 @@ TEST_F(TEST_TENSOR, TensorBracketWithoutInitBuffer)
     string str1 = tensor.os_.str();
     string str2 = tensorPart.os_.str();
     string str1Golden = "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 \n0024 "
-        ": 24 25 26 27 28 29 30 31 \n";
+                        ": 24 25 26 27 28 29 30 31 \n";
     string str2Golden = "";
     EXPECT_EQ(str1, str1Golden);
     EXPECT_EQ(str2, str2Golden);
@@ -162,7 +171,7 @@ TEST_F(TEST_TENSOR, TensorBracketWithInitBuffer)
     string str1 = tensor.os_.str();
     string str2 = tensorPart.os_.str();
     string str1Golden = "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 \n0024 "
-        ": 24 25 26 27 28 29 30 31 \n";
+                        ": 24 25 26 27 28 29 30 31 \n";
     string str2Golden = "";
     EXPECT_EQ(str1, str1Golden);
     EXPECT_EQ(str2, str2Golden);
@@ -192,7 +201,7 @@ TEST_F(TEST_TENSOR, TensorEqual)
     string str1 = tensor1.os_.str();
     string str2 = tensor2.os_.str();
     string strGolden = "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 \n0024 "
-        ": 24 25 26 27 28 29 30 31 \n";
+                       ": 24 25 26 27 28 29 30 31 \n";
     EXPECT_EQ(str1, strGolden);
     EXPECT_EQ(str2, "");
     EXPECT_EQ(tensor1.GetSize(), maxLen);
@@ -224,7 +233,7 @@ TEST_F(TEST_TENSOR, TensorConpyConstrcutWithInitBuffer)
     string str1 = tensor1.os_.str();
     string str2 = tensor2.os_.str();
     string strGolden = "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 \n0024 "
-        ": 24 25 26 27 28 29 30 31 \n";
+                       ": 24 25 26 27 28 29 30 31 \n";
     EXPECT_EQ(str1, strGolden);
     EXPECT_EQ(str2, "");
     EXPECT_EQ(tensor2.GetSize(), maxLen);
@@ -252,7 +261,7 @@ TEST_F(TEST_TENSOR, TensorCopyConstrcutWithoutInitBuffer)
     string str1 = tensor1.os_.str();
     string str2 = tensor2.os_.str();
     string str1Golden = "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 \n0024 "
-        ": 24 25 26 27 28 29 30 31 \n";
+                        ": 24 25 26 27 28 29 30 31 \n";
     string str2Golden = "";
     EXPECT_EQ(str1, str1Golden);
     EXPECT_EQ(str2, str2Golden);
@@ -311,7 +320,7 @@ TEST_F(TEST_TENSOR, LocalTensorSupportInt4Test)
     addr.bufferHandle = nullptr;
     addr.dataLen = num / INT4_TWO;
     addr.bufferAddr = 0;
-    addr.absAddr = (uint8_t *)&data;
+    addr.absAddr = (uint8_t*)&data;
 
     LocalTensor<int4b_t> tensor1(addr);
     EXPECT_EQ(tensor1.GetSize(), 16);
@@ -337,8 +346,8 @@ TEST_F(TEST_TENSOR, GlobalTensorSupportInt4Test)
 {
     const int32_t num = 16;
     uint64_t data = 0xfedcba9876543210;
-    uint8_t *dataPtr = (uint8_t *)&data;
-    __gm__ int4b_t *gmAddr = (__gm__ int4b_t *)&data;
+    uint8_t* dataPtr = (uint8_t*)&data;
+    __gm__ int4b_t* gmAddr = (__gm__ int4b_t*)&data;
 
     GlobalTensor<int4b_t> glbTensor1;
     GlobalTensor<int4b_t> glbTensor2;
@@ -346,10 +355,10 @@ TEST_F(TEST_TENSOR, GlobalTensorSupportInt4Test)
     glbTensor2 = glbTensor1[num / 2];
 
     EXPECT_EQ(glbTensor1.GetSize(), num);
-    EXPECT_EQ(glbTensor1.GetPhyAddr(), (int4b_t *)&data);
+    EXPECT_EQ(glbTensor1.GetPhyAddr(), (int4b_t*)&data);
 
     for (int i = 0; i < num / 2; i++) {
-        EXPECT_EQ(glbTensor1.GetPhyAddr(i * 2), (int4b_t *)&dataPtr[i]);
+        EXPECT_EQ(glbTensor1.GetPhyAddr(i * 2), (int4b_t*)&dataPtr[i]);
     }
 
     for (int i = 0; i < num; i++) {
@@ -367,7 +376,7 @@ TEST_F(TEST_TENSOR, GlobalTensorSupportInt4Test)
 }
 
 TEST_F(TEST_TENSOR, TestGetSetValue)
-{    
+{
     int32_t tmp = g_coreType;
     g_coreType = AscendC::AIC_TYPE;
     const int32_t num = 16;
@@ -377,7 +386,7 @@ TEST_F(TEST_TENSOR, TestGetSetValue)
     addr.bufferHandle = nullptr;
     addr.dataLen = num / 1;
     addr.bufferAddr = 0;
-    addr.absAddr = (uint8_t *)&data;
+    addr.absAddr = (uint8_t*)&data;
     LocalTensor<uint8_t> tensor1(addr);
     tensor1.SetValue(0, 0);
     uint8_t value = tensor1.GetValue(0);
@@ -394,42 +403,41 @@ struct CreateTensorParams {
     std::vector<std::string> errStrGolden;
 };
 
-class TEST_CREATE_TENSOR
-    : public testing::Test
-    , public testing::WithParamInterface<CreateTensorParams> {
+class TEST_CREATE_TENSOR : public testing::Test, public testing::WithParamInterface<CreateTensorParams> {
 protected:
     void SetUp() {}
-    void TearDown() {
-        GlobalMockObject::verify();
-    }
+    void TearDown() { GlobalMockObject::verify(); }
 };
 
 #ifdef __DAV_C220_VEC__
-INSTANTIATE_TEST_CASE_P(CREATE_TENSOR_TEST, TEST_CREATE_TENSOR,
-    ::testing::Values(CreateTensorParams{"float",
-                          TPosition::VECIN,
-                          0x1,
-                          1200000,
-                          {"addr input is 1, which shoule be 32 bytes align",
-                              "tensor size input is 1200000, which shoule be in range (0, 65536]",
-                              "addr input is 1, tensor length is 4800000 bytes, which exceeds max len 262144 bytes"}},
-        CreateTensorParams{"int4b_t",
+INSTANTIATE_TEST_CASE_P(
+    CREATE_TENSOR_TEST, TEST_CREATE_TENSOR,
+    ::testing::Values(
+        CreateTensorParams{
+            "float",
+            TPosition::VECIN,
+            0x1,
+            1200000,
+            {"addr input is 1, which shoule be 32 bytes align",
+             "tensor size input is 1200000, which shoule be in range (0, 65536]",
+             "addr input is 1, tensor length is 4800000 bytes, which exceeds max len 262144 bytes"}},
+        CreateTensorParams{
+            "int4b_t",
             TPosition::VECIN,
             31,
             1200001,
             {"addr input is 31, which shoule be 32 bytes align",
-                "tensor size input is 1200001, which shoule be even number in range (0, 524288]",
-                "addr input is 31, tensor length is 600000 bytes, which exceeds max len 262144 bytes"}}));
+             "tensor size input is 1200001, which shoule be even number in range (0, 524288]",
+             "addr input is 31, tensor length is 600000 bytes, which exceeds max len 262144 bytes"}}));
 
 TEST_P(TEST_CREATE_TENSOR, TestCreateTensor)
 {
     int32_t tmp = g_coreType;
     g_coreType = AscendC::AIC_TYPE;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubCreateTensor));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubCreateTensor));
     static uint32_t count = 0;
-    std::string fileName =
-        "TestCreateTensor" + std::to_string(getpid()) + "_" + std::to_string(count) + ".txt";
+    std::string fileName = "TestCreateTensor" + std::to_string(getpid()) + "_" + std::to_string(count) + ".txt";
     freopen(fileName.c_str(), "w", stdout);
     auto param = GetParam();
     AscendC::TPosition pos = param.pos;

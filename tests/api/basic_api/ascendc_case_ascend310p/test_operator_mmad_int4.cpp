@@ -1,18 +1,17 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "test_utils.h"
 
 using namespace std;
-
 
 namespace AscendC {
 class KernelMmadInt4 {
@@ -63,8 +62,8 @@ private:
         LocalTensor<TensorTrait<int4b_t>> a1Local = inQueueA1.AllocTensor<TensorTrait<int4b_t>>();
         LocalTensor<TensorTrait<int4b_t>> b1Local = inQueueB1.AllocTensor<TensorTrait<int4b_t>>();
 
-        DataCopy(a1Local, aGM, { 1, static_cast<uint16_t>(16*64 * sizeof(int4b_t) / 2 / 32), 0, 0 });
-        DataCopy(b1Local, bGM, { 1, static_cast<uint16_t>(64*64 * sizeof(int4b_t) / 2 / 32), 0, 0 });
+        DataCopy(a1Local, aGM, {1, static_cast<uint16_t>(16 * 64 * sizeof(int4b_t) / 2 / 32), 0, 0});
+        DataCopy(b1Local, bGM, {1, static_cast<uint16_t>(64 * 64 * sizeof(int4b_t) / 2 / 32), 0, 0});
 
         inQueueA1.EnQue(a1Local);
         inQueueB1.EnQue(b1Local);
@@ -85,7 +84,7 @@ private:
 
             LoadData(a2Local, a1Local, loadDataParams);
         } else {
-            //load3d
+            // load3d
             LoadData3DParamsV2<int4b_t> loadData3dParams;
             loadData3dParams.l1W = 8;
             loadData3dParams.l1H = 2;
@@ -156,7 +155,7 @@ private:
         LocalTensor<TensorTrait<int4b_t>> b2Local = inQueueB2.DeQue<TensorTrait<int4b_t>>();
         LocalTensor<TensorTrait<int32_t>> c1Local = outQueueCO1.AllocTensor<TensorTrait<int32_t>>();
 
-        Mmad(c1Local, a2Local, b2Local, { m, n, k, 0, false, true});
+        Mmad(c1Local, a2Local, b2Local, {m, n, k, 0, false, true});
 
         outQueueCO1.EnQue<TensorTrait<int32_t>>(c1Local);
         inQueueB2.FreeTensor(b2Local);
@@ -184,7 +183,7 @@ private:
         dataCopyParams1.srcGap = 0;
         dataCopyParams1.dstGap = 1;
         for (int i = 0; i < nBlocks; ++i) {
-            DataCopy(cGM[i * 16], c3Local[i * m * 16], { m, 2, 0, uint16_t((nBlocks - 1) * 2) });
+            DataCopy(cGM[i * 16], c3Local[i * m * 16], {m, 2, 0, uint16_t((nBlocks - 1) * 2)});
         }
     }
 
@@ -210,18 +209,12 @@ private:
     uint16_t aSize, bSize, cSize, mBlocks, nBlocks, kBlocks;
     bool is2d;
 };
-}
+} // namespace AscendC
 
 class TEST_MMAD_INT4 : public testing::Test {
 protected:
-    void SetUp()
-    {
-        g_coreType = AscendC::AIC_TYPE;
-    }
-    void TearDown()
-    {
-        g_coreType = AscendC::MIX_TYPE;
-    }
+    void SetUp() { g_coreType = AscendC::AIC_TYPE; }
+    void TearDown() { g_coreType = AscendC::MIX_TYPE; }
 };
 
 TEST_F(TEST_MMAD_INT4, MMAD_Case_int4_load3dv2)
@@ -239,7 +232,7 @@ TEST_F(TEST_MMAD_INT4, MMAD_Case_int4_load3dv2)
     AscendC::KernelMmadInt4 op;
     op.Init(a, b, c, false);
     op.Process();
-    
+
     for (int32_t i = 0; i < m * n * sizeof(int32_t) / 2; i++) {
         EXPECT_EQ(c[i], 0x00);
     }
@@ -260,7 +253,7 @@ TEST_F(TEST_MMAD_INT4, MMAD_Case_int4_load2d)
     AscendC::KernelMmadInt4 op;
     op.Init(a, b, c, true);
     op.Process();
-    
+
     for (int32_t i = 0; i < m * n * sizeof(int32_t) / 2; i++) {
         EXPECT_EQ(c[i], 0x00);
     }

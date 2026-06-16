@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 
 #include <type_traits>
@@ -31,9 +31,7 @@ public:
 template <typename dstType, typename srcType>
 __simt_vf__ LAUNCH_BOUND(1024) inline __aicore__ void KernelCastCompute(__gm__ dstType* dst, const int mode)
 {
-    for (int idx = GetThreadIdx<0>() + block_idx * GetThreadNum<0>(); idx < 128;
-         idx += block_num * GetThreadNum<0>()) {
-
+    for (int idx = GetThreadIdx<0>() + block_idx * GetThreadNum<0>(); idx < 128; idx += block_num * GetThreadNum<0>()) {
         if (mode == 0) {
             half srcNum = half(idx);
             if (idx == 1022) {
@@ -144,9 +142,11 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(CastTestCase, CastTestsuite,
-                        ::testing::Values(CastParams{0}, CastParams{1}, CastParams{2}, CastParams{3}, CastParams{4},
-                                          CastParams{5}, CastParams{6}, CastParams{7}, CastParams{8}, CastParams{9}));
+INSTANTIATE_TEST_CASE_P(
+    CastTestCase, CastTestsuite,
+    ::testing::Values(
+        CastParams{0}, CastParams{1}, CastParams{2}, CastParams{3}, CastParams{4}, CastParams{5}, CastParams{6},
+        CastParams{7}, CastParams{8}, CastParams{9}));
 
 TEST_P(CastTestsuite, CastTestCase)
 {
@@ -170,7 +170,7 @@ TEST_P(CastTestsuite, CastTestCase)
         }
         if (mode == 0) {
             if (i == 1023) {
-                expectValues[i] =  half(-87825);
+                expectValues[i] = half(-87825);
             }
             continue;
         } else if (mode == 1) {
@@ -194,7 +194,7 @@ TEST_P(CastTestsuite, CastTestCase)
         }
     }
 
-    float *actualValue = reinterpret_cast<float *>(dstGm);
+    float* actualValue = reinterpret_cast<float*>(dstGm);
     for (int i = 0; i < shape_size; i += 1) {
         ASSERT_EQ(expectValues[i], actualValue[i]);
         ASSERT_EQ(expectValues[i], actualValue[i]);

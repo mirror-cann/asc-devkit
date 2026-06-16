@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protect public
@@ -20,8 +20,8 @@ template <typename T>
 class CreateVecIndexTest {
 public:
     __aicore__ inline CreateVecIndexTest() {}
-    __aicore__ inline void Init(GM_ADDR dstGm, uint64_t mask, uint8_t repeatTimes,
-        uint16_t dstBlkStride, uint8_t dstRepStride)
+    __aicore__ inline void Init(
+        GM_ADDR dstGm, uint64_t mask, uint8_t repeatTimes, uint16_t dstBlkStride, uint8_t dstRepStride)
     {
         m_mask = mask;
         m_repeatTimes = repeatTimes;
@@ -38,11 +38,9 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
-    __aicore__ inline void CopyIn()
-    {
-        ;
-    }
+    __aicore__ inline void CopyIn() { ; }
     __aicore__ inline void Compute()
     {
         LocalTensor<T> dstLocal = m_queOut.AllocTensor<T>();
@@ -59,10 +57,11 @@ private:
     __aicore__ inline void CopyOut()
     {
         LocalTensor<T> dstLocal = m_queOut.DeQue<T>();
-        
+
         DataCopy(m_dstGlobal, dstLocal, m_elementCount);
         m_queOut.FreeTensor(dstLocal);
     }
+
 private:
     TPipe m_pipe;
     uint32_t m_elementCount;
@@ -77,8 +76,8 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void testCreateVecIndex(GM_ADDR dstGm, uint64_t mask, uint8_t repeatTimes,
-        uint16_t dstBlkStride, uint8_t dstRepStride)
+__global__ __aicore__ void testCreateVecIndex(
+    GM_ADDR dstGm, uint64_t mask, uint8_t repeatTimes, uint16_t dstBlkStride, uint8_t dstRepStride)
 {
     AscendC::CreateVecIndexTest<T> op;
     op.Init(dstGm, mask, repeatTimes, dstBlkStride, dstRepStride);
@@ -94,31 +93,28 @@ struct createVecIndexParams {
     void (*cal_func)(uint8_t*, uint64_t, uint8_t, uint16_t, uint8_t);
 };
 
-class CreateVecIndexTestsuite : public testing::Test,
-    public testing::WithParamInterface<createVecIndexParams> {
+class CreateVecIndexTestsuite : public testing::Test, public testing::WithParamInterface<createVecIndexParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(0);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(0); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CREATEVECINDEX, CreateVecIndexTestsuite,
-    ::testing::Values(createVecIndexParams { 2, 256, 2, 1, 8, testCreateVecIndex<half>},
-                      createVecIndexParams { 4, 128, 2, 1, 8, testCreateVecIndex<float>},
-                      createVecIndexParams { 2, 256, 2, 1, 8, testCreateVecIndex<int16_t>},
-                      createVecIndexParams { 4, 128, 2, 1, 8, testCreateVecIndex<int32_t>}));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CREATEVECINDEX, CreateVecIndexTestsuite,
+    ::testing::Values(
+        createVecIndexParams{2, 256, 2, 1, 8, testCreateVecIndex<half>},
+        createVecIndexParams{4, 128, 2, 1, 8, testCreateVecIndex<float>},
+        createVecIndexParams{2, 256, 2, 1, 8, testCreateVecIndex<int16_t>},
+        createVecIndexParams{4, 128, 2, 1, 8, testCreateVecIndex<int32_t>}));
 
 TEST_P(CreateVecIndexTestsuite, testCreateVecIndex)
 {
     auto param = GetParam();
-    uint8_t *dstGm = new uint8_t[param.repeatTimes * 256 * 10] {0};
+    uint8_t* dstGm = new uint8_t[param.repeatTimes * 256 * 10]{0};
     param.cal_func(dstGm, param.mask, param.repeatTimes, param.dstBlkStride, param.dstRepStride);
-    
+
     for (int32_t i = 0; i < param.repeatTimes * 256 / param.typeSize; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
-    delete []dstGm;
+    delete[] dstGm;
 }

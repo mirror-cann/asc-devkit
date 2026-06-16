@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "mockcpp/mockcpp.hpp"
@@ -25,7 +25,8 @@ enum class CubeFormat {
     VECTOR,
 };
 
-template <TPosition POSITION, CubeFormat FORMAT, typename TYPE> struct InputInfo {
+template <TPosition POSITION, CubeFormat FORMAT, typename TYPE>
+struct InputInfo {
     constexpr static TPosition pos = POSITION;
     constexpr static CubeFormat format = FORMAT;
     using T = TYPE;
@@ -41,7 +42,8 @@ int32_t constexpr GetNdNzMask(CubeFormat dstFormat, CubeFormat srcFormat)
     return 0;
 }
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE> class E2eCase {
+template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE>
+class E2eCase {
     using SrcT = typename A_TYPE::T;
     using Src1T = typename B_TYPE::T;
     using DstT = typename C_TYPE::T;
@@ -49,7 +51,7 @@ template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE> class E2eCa
 
 public:
     __aicore__ inline E2eCase() {}
-    __aicore__ inline void Init(TPipe *tpipe, int32_t m, int32_t n, int32_t k, int32_t enableBias)
+    __aicore__ inline void Init(TPipe* tpipe, int32_t m, int32_t n, int32_t k, int32_t enableBias)
     {
         pipe = tpipe;
         mLength = m;
@@ -68,18 +70,9 @@ public:
         pipe->InitBuffer(qidCO1_, 1, m * n * sizeof(float));
         pipe->InitBuffer(tmpQueue, 1, m * k * sizeof(SrcT));
     }
-    __aicore__ inline void SetTensorA(const GlobalTensor<SrcT> &gm)
-    {
-        aGlobal_ = gm;
-    }
-    __aicore__ inline void SetTensorB(const GlobalTensor<SrcT> &gm)
-    {
-        bGlobal_ = gm;
-    }
-    __aicore__ inline void SetBias(const GlobalTensor<BiasT> &biasGlobal)
-    {
-        biasGlobal_ = biasGlobal;
-    }
+    __aicore__ inline void SetTensorA(const GlobalTensor<SrcT>& gm) { aGlobal_ = gm; }
+    __aicore__ inline void SetTensorB(const GlobalTensor<SrcT>& gm) { bGlobal_ = gm; }
+    __aicore__ inline void SetBias(const GlobalTensor<BiasT>& biasGlobal) { biasGlobal_ = biasGlobal; }
     __aicore__ inline uint16_t CeilDiv(uint16_t num1, uint16_t num2)
     {
         ASSERT(num2 > 0);
@@ -203,12 +196,12 @@ public:
         qidCO1_.EnQue(co1Local);
     }
 
-    __aicore__ inline void CopyL0CToGm(const GlobalTensor<DstT> &gm)
+    __aicore__ inline void CopyL0CToGm(const GlobalTensor<DstT>& gm)
     {
         auto co1Local = qidCO1_.DeQue<float>();
         if constexpr (C_TYPE::format == CubeFormat::ND) {
             FixpipeParamsArch3510<CO2Layout::ROW_MAJOR> fixpipeParams(nLength, mLength, mLength, nLength);
-            fixpipeParams.params = { 1, 0, 0 };
+            fixpipeParams.params = {1, 0, 0};
             if (IsSameType<DstT, half>::value) {
                 fixpipeParams.quantPre = QuantMode_t::F322F16;
             } else if (IsSameType<DstT, bfloat16_t>::value) {
@@ -284,28 +277,28 @@ public:
             uint16_t fracNum = 2;
             uint16_t kStep = CeilDiv(kLength, 16);
             uint16_t nStep = CeilDiv(nLength, 32);
-            for (uint16_t i = 0; i < nStep; i ++) {
+            for (uint16_t i = 0; i < nStep; i++) {
                 LoadData2dTransposeParamsV2 loadDataParams;
                 loadDataParams.startIndex = i * kStep;
-                loadDataParams.repeatTimes = kStep / 2;               // original is n
+                loadDataParams.repeatTimes = kStep / 2; // original is n
                 loadDataParams.srcStride = 2;
-                loadDataParams.dstGap = nStep*2 - 1;
-                LoadDataWithTranspose(b2[1024*i], rightMatrix, loadDataParams);
+                loadDataParams.dstGap = nStep * 2 - 1;
+                LoadDataWithTranspose(b2[1024 * i], rightMatrix, loadDataParams);
             }
         }
 
-        if constexpr(IsSameType<Src1T, float>::value) {
+        if constexpr (IsSameType<Src1T, float>::value) {
             uint16_t kStep = CeilDiv(kLength, 16);
             uint16_t nStep = CeilDiv(nLength, 8);
-            for (uint16_t i = 0; i < kStep; i ++) {
+            for (uint16_t i = 0; i < kStep; i++) {
                 LoadData2dTransposeParamsV2 loadDataParams;
                 loadDataParams.startIndex = i;
-                loadDataParams.repeatTimes = nStep / 2;               // original is n
+                loadDataParams.repeatTimes = nStep / 2; // original is n
                 loadDataParams.srcStride = kStep * 2;
                 loadDataParams.srcFracGap = kStep - 1;
                 loadDataParams.dstGap = 0;
                 loadDataParams.dstFracGap = nStep / 2 - 1;
-                LoadDataWithTranspose(b2[128 * nStep*i], rightMatrix, loadDataParams);
+                LoadDataWithTranspose(b2[128 * nStep * i], rightMatrix, loadDataParams);
             }
         }
 
@@ -378,18 +371,18 @@ public:
         qidB1_.EnQue(rightMatrix);
     }
 
-    __aicore__ inline void IterateAll(const GlobalTensor<DstT> &gm)
+    __aicore__ inline void IterateAll(const GlobalTensor<DstT>& gm)
     {
-            CopyGmToA1Nd2Nz();
-            CopyGmToB1Nd2Nz();
-            Load2DA1ToL0A();
-            Load2DA1ToL0B();
-            Load2dGMToL1Left();
-            Load2dGMToL1Right();
+        CopyGmToA1Nd2Nz();
+        CopyGmToB1Nd2Nz();
+        Load2DA1ToL0A();
+        Load2DA1ToL0B();
+        Load2dGMToL1Left();
+        Load2dGMToL1Right();
     }
 
 private:
-    TPipe *pipe = nullptr;
+    TPipe* pipe = nullptr;
     int32_t mLength = 0;
     int32_t nLength = 0;
     int32_t kLength = 0;
@@ -412,8 +405,8 @@ private:
 };
 
 template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE>
-__aicore__ inline void E2eKernel(GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_ADDR biasGM, int32_t m, int32_t n, int32_t k,
-    int hasBias)
+__aicore__ inline void E2eKernel(
+    GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_ADDR biasGM, int32_t m, int32_t n, int32_t k, int hasBias)
 {
     // cube core cases, ignore vector core
     if (g_coreType == AIV) {
@@ -429,10 +422,10 @@ __aicore__ inline void E2eKernel(GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_ADDR 
     GlobalTensor<B_T> bGlobal;
     GlobalTensor<C_T> cGlobal;
     GlobalTensor<BiasT> biasGlobal;
-    aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ A_T *>(aGM), m * k);
-    bGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ B_T *>(bGM), k * n);
-    cGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ C_T *>(cGM), m * n);
-    biasGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ BiasT *>(biasGM), n);
+    aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ A_T*>(aGM), m * k);
+    bGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ B_T*>(bGM), k * n);
+    cGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ C_T*>(cGM), m * n);
+    biasGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ BiasT*>(biasGM), n);
 
     int offsetA = 0;
     int offsetB = 0;
@@ -460,8 +453,9 @@ __aicore__ inline void E2eKernel(GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_ADDR 
 }
 
 template <typename T1, typename T2>
-__global__ __aicore__ void kernelE2E(__gm__ uint8_t *aGm, __gm__ uint8_t *bGm, __gm__ uint8_t *cGm,
-    __gm__ uint8_t *biasGm, __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k)
+__global__ __aicore__ void kernelE2E(
+    __gm__ uint8_t* aGm, __gm__ uint8_t* bGm, __gm__ uint8_t* cGm, __gm__ uint8_t* biasGm, __gm__ uint16_t m,
+    __gm__ uint16_t n, __gm__ uint16_t k)
 {
     typedef InputInfo<TPosition::GM, CubeFormat::ND, T1> aType;
     typedef InputInfo<TPosition::GM, CubeFormat::ND, T1> bType;
@@ -474,15 +468,12 @@ struct E2eParams {
     uint16_t m;
     uint16_t n;
     uint16_t k;
-    void (*cal_func)(uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint16_t, uint16_t, uint16_t);
+    void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint16_t, uint16_t, uint16_t);
 };
 
 class E2eTestsuite : public testing::Test {
 protected:
-    void SetUp()
-    {
-        g_coreType = AIC_TYPE;
-    }
+    void SetUp() { g_coreType = AIC_TYPE; }
     void TearDown()
     {
         g_coreType = MIX_TYPE;
@@ -492,7 +483,7 @@ protected:
 
 TEST_F(E2eTestsuite, LoadDataTestsuite_half_half_float)
 {
-    E2eParams param{ 16, 16, 16 };
+    E2eParams param{16, 16, 16};
     uint8_t aGm[param.m * param.k];
     uint8_t bGm[param.n * param.k];
     uint8_t cGm[param.m * param.n * 2] = {0};
@@ -505,7 +496,7 @@ TEST_F(E2eTestsuite, LoadDataTestsuite_half_half_float)
 }
 TEST_F(E2eTestsuite, LoadDataTestsuite_int8_t_int8_t_int32_t)
 {
-    E2eParams param{ 16, 32, 32 };
+    E2eParams param{16, 32, 32};
     uint8_t aGm[param.m * param.k];
     uint8_t bGm[param.n * param.k];
     uint8_t cGm[param.m * param.n * 4] = {0};
@@ -517,7 +508,7 @@ TEST_F(E2eTestsuite, LoadDataTestsuite_int8_t_int8_t_int32_t)
 }
 TEST_F(E2eTestsuite, LoadDataTestsuite_float_float_float)
 {
-    E2eParams param{ 16, 16, 16 };
+    E2eParams param{16, 16, 16};
     uint8_t aGm[param.m * param.k];
     uint8_t bGm[param.n * param.k];
     uint8_t cGm[param.m * param.n] = {0};
@@ -530,7 +521,8 @@ TEST_F(E2eTestsuite, LoadDataTestsuite_float_float_float)
 
 namespace AscendC {
 // T, U for gm->l1 nd2nz
-template <typename T> class KernelDataCopyGm2L1Nd2Nz {
+template <typename T>
+class KernelDataCopyGm2L1Nd2Nz {
 public:
     __aicore__ inline KernelDataCopyGm2L1Nd2Nz() {}
     __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, Nd2NzParams& intriParamsIn)
@@ -538,10 +530,10 @@ public:
         intriParams = intriParamsIn;
         srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
-        pipe.InitBuffer(inQueueSrcA1, 1,
-            (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
-        pipe.InitBuffer(inQueueSrcVecOut, 1,
-            (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
+        pipe.InitBuffer(
+            inQueueSrcA1, 1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
+        pipe.InitBuffer(
+            inQueueSrcVecOut, 1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
     }
     __aicore__ inline void Process()
     {
@@ -571,8 +563,8 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void MainDataCopyGm2L1Nd2Nz(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-    Nd2NzParams& intriParams)
+__global__ __aicore__ void MainDataCopyGm2L1Nd2Nz(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, Nd2NzParams& intriParams)
 {
     KernelDataCopyGm2L1Nd2Nz<T> op;
     op.Init(dstGm, srcGm, intriParams);
@@ -586,22 +578,24 @@ struct DataCopyGm2L1Nd2NzTestParams {
 };
 
 class DataCopyGm2L1Nd2NzTestsuite : public testing::Test,
-    public testing::WithParamInterface<DataCopyGm2L1Nd2NzTestParams> {
+                                    public testing::WithParamInterface<DataCopyGm2L1Nd2NzTestParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DATACOPYGM2L1ND2NZ, DataCopyGm2L1Nd2NzTestsuite,
-    ::testing::Values(DataCopyGm2L1Nd2NzTestParams { 2, MainDataCopyGm2L1Nd2Nz<half>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2L1Nd2NzTestParams { 4, MainDataCopyGm2L1Nd2Nz<float>, { 2, 2, 13, 48, 16, 11, 2, 40 } }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DATACOPYGM2L1ND2NZ, DataCopyGm2L1Nd2NzTestsuite,
+    ::testing::Values(
+        DataCopyGm2L1Nd2NzTestParams{2, MainDataCopyGm2L1Nd2Nz<half>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2L1Nd2NzTestParams{4, MainDataCopyGm2L1Nd2Nz<float>, {2, 2, 13, 48, 16, 11, 2, 40}}));
 
 TEST_P(DataCopyGm2L1Nd2NzTestsuite, DataCopyGm2L1Nd2NzTestsuiteOpTestCase)
 {
     auto param = GetParam();
     Nd2NzParams intriParams = param.intriParams;
     uint8_t srcGm[intriParams.ndNum * intriParams.srcNdMatrixStride * param.typeSize] = {0};
-    uint8_t dstGm[((intriParams.dValue * param.typeSize -1 ) / 32 + 1) * intriParams.dstNzC0Stride * 32] = {0};
+    uint8_t dstGm[((intriParams.dValue * param.typeSize - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32] = {0};
 
     param.cal_func(dstGm, srcGm, intriParams);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
@@ -610,7 +604,8 @@ TEST_P(DataCopyGm2L1Nd2NzTestsuite, DataCopyGm2L1Nd2NzTestsuiteOpTestCase)
 }
 
 namespace AscendC {
-template <typename src0_T, bool UseFill = false> class KernelCreatMartix {
+template <typename src0_T, bool UseFill = false>
+class KernelCreatMartix {
 public:
     __aicore__ inline void Init()
     {
@@ -632,10 +627,7 @@ public:
         pipe.InitBuffer(inQueueFmA1, 1, featureMapA1Size * sizeof(src0_T));
         pipe.InitBuffer(inQueueWeightB1, 1, weightA1Size * sizeof(src0_T));
     }
-    __aicore__ inline void Process()
-    {
-        CopyIn();
-    }
+    __aicore__ inline void Process() { CopyIn(); }
 
 private:
     __aicore__ inline void CopyIn()
@@ -648,11 +640,13 @@ private:
         set_l3d_rpt(0);
         // init l1
         if constexpr (UseFill) {
-            Fill<src0_T>(featureMapA1,
-                { 1, static_cast<uint16_t>(featureMapA1Size * sizeof(src0_T) / 32), 0, static_cast<src0_T>(1) });
-        }else{
-            InitConstValue<src0_T>(featureMapA1,
-                { 1, static_cast<uint16_t>(featureMapA1Size * sizeof(src0_T) / 32), 0, static_cast<src0_T>(1) });
+            Fill<src0_T>(
+                featureMapA1,
+                {1, static_cast<uint16_t>(featureMapA1Size * sizeof(src0_T) / 32), 0, static_cast<src0_T>(1)});
+        } else {
+            InitConstValue<src0_T>(
+                featureMapA1,
+                {1, static_cast<uint16_t>(featureMapA1Size * sizeof(src0_T) / 32), 0, static_cast<src0_T>(1)});
         }
         inQueueFmA1.FreeTensor(featureMapA1);
     }
@@ -699,35 +693,31 @@ struct CreatmartixTestParams {
 
 class CreatmartixTestsuite : public testing::Test, public testing::WithParamInterface<CreatmartixTestParams> {
 protected:
-    void SetUp()
-    {
-        g_coreType = AIC_TYPE;
-    }
-    void TearDown()
-    {
-        g_coreType = MIX_TYPE;
-    }
+    void SetUp() { g_coreType = AIC_TYPE; }
+    void TearDown() { g_coreType = MIX_TYPE; }
 };
 
-INSTANTIATE_TEST_CASE_P(SetCreatmartixTest, CreatmartixTestsuite,
-    ::testing::Values(CreatmartixTestParams { 192, 32, 64, creat_martix_AscendC<half>, 2 },
-    CreatmartixTestParams { 192, 32, 64, creat_martix_AscendC<int16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, creat_martix_AscendC<uint16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, creat_martix_AscendC<bfloat16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, creat_martix_AscendC<int32_t>, 4 },
-    CreatmartixTestParams { 192, 32, 64, creat_martix_AscendC<uint32_t>, 4 },
-    CreatmartixTestParams { 192, 32, 64, creat_martix_AscendC<float>, 4 }
-    ));
+INSTANTIATE_TEST_CASE_P(
+    SetCreatmartixTest, CreatmartixTestsuite,
+    ::testing::Values(
+        CreatmartixTestParams{192, 32, 64, creat_martix_AscendC<half>, 2},
+        CreatmartixTestParams{192, 32, 64, creat_martix_AscendC<int16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, creat_martix_AscendC<uint16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, creat_martix_AscendC<bfloat16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, creat_martix_AscendC<int32_t>, 4},
+        CreatmartixTestParams{192, 32, 64, creat_martix_AscendC<uint32_t>, 4},
+        CreatmartixTestParams{192, 32, 64, creat_martix_AscendC<float>, 4}));
 
-INSTANTIATE_TEST_CASE_P(SetFillTest, CreatmartixTestsuite,
-    ::testing::Values(CreatmartixTestParams { 192, 32, 64, FillAscendC<half>, 2 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<int16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<uint16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<bfloat16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<int32_t>, 4 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<uint32_t>, 4 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<float>, 4 }
-    ));
+INSTANTIATE_TEST_CASE_P(
+    SetFillTest, CreatmartixTestsuite,
+    ::testing::Values(
+        CreatmartixTestParams{192, 32, 64, FillAscendC<half>, 2},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<int16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<uint16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<bfloat16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<int32_t>, 4},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<uint32_t>, 4},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<float>, 4}));
 
 TEST_P(CreatmartixTestsuite, CreatmartixTest)
 {
@@ -739,9 +729,7 @@ TEST(SPR_PADDING, SetLoadDataPaddingValue)
 {
     // test impl Load3DSetPaddingCal
     uint16_t paddingValue = 0;
-    MOCKER_CPP(set_padding, void(*)(uint16_t))
-        .stubs()
-        .with(spy(paddingValue), any());
+    MOCKER_CPP(set_padding, void (*)(uint16_t)).stubs().with(spy(paddingValue), any());
     SetLoadDataPaddingValue(static_cast<uint8_t>(2));
     EXPECT_EQ(paddingValue, 0x0202);
     SetLoadDataPaddingValue(static_cast<int8_t>(-2));

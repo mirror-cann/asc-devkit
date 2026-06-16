@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -23,7 +23,6 @@ void TestCommon(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint32_t dataSize, Co
     TPipe tpipe;
     GlobalTensor<int32_t> outputGlobal;
     outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ int32_t*>(dstGm), dataSize);
-
 
     TBuf<TPosition::VECCALC> tbuf;
     tpipe.InitBuffer(tbuf, dataSize * sizeof(int32_t));
@@ -60,11 +59,11 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(CommonTestCase, CommonTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    CommonTestCase, CommonTestsuite,
     ::testing::Values(
-        CommonTestParams { 256, 4, CommonFunc::BLOCKIDX, TestCommon },
-        CommonTestParams { 256, 4, CommonFunc::BLOCKNUM, TestCommon }
-    ));
+        CommonTestParams{256, 4, CommonFunc::BLOCKIDX, TestCommon},
+        CommonTestParams{256, 4, CommonFunc::BLOCKNUM, TestCommon}));
 
 TEST_P(CommonTestsuite, CommonTestCase)
 {

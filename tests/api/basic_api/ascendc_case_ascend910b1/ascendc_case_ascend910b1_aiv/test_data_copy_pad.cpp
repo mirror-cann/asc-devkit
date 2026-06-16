@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <type_traits>
 #include "kernel_operator.h"
@@ -25,14 +25,16 @@ struct TestDataCopyPadParams {
 class TestDataCopyPadSuite : public testing::Test, public testing::WithParamInterface<TestDataCopyPadParams> {
 protected:
     void SetUp() {}
-    void TearDown() {
+    void TearDown()
+    {
         AscendC::CheckSyncState();
         GlobalMockObject::verify();
     }
 };
 
-template<typename T>
-void MainDataCopyPadKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
+template <typename T>
+void MainDataCopyPadKernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -55,13 +57,11 @@ void MainDataCopyPadKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* _
     DataCopyPad(inputLocal, srcGlobal, copyParams, DataCopyPadExtParams<T>());
 }
 
-int32_t RaiseStubForDataCopyPad(int32_t input)
-{
-    return 0;
-}
+int32_t RaiseStubForDataCopyPad(int32_t input) { return 0; }
 
-template<typename T>
-void MainDataCopyPadKernelWrongPos(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
+template <typename T>
+void MainDataCopyPadKernelWrongPos(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -82,7 +82,7 @@ void MainDataCopyPadKernelWrongPos(__gm__ uint8_t* __restrict__ srcGm, __gm__ ui
     DataCopyExtParams copyExtParams{1, 20 * sizeof(T), 0, 0, 0};
     DataCopyPadExtParams<T> padExtParams{true, 0, 1, 3};
 
-    MOCKER(raise, int32_t (*)(int32_t)).times(22).will(invoke(RaiseStubForDataCopyPad));
+    MOCKER(raise, int32_t(*)(int32_t)).times(22).will(invoke(RaiseStubForDataCopyPad));
     DataCopyPad(inputLocal, srcGlobal, copyParams, padParams);
     DataCopyPad(srcGlobal, inputLocal, copyParams);
     DataCopyPad(inputLocal, srcGlobal, copyExtParams, padExtParams);
@@ -101,8 +101,9 @@ void MainDataCopyPadKernelWrongPos(__gm__ uint8_t* __restrict__ srcGm, __gm__ ui
     SetAtomicNone();
 }
 
-template<typename T>
-void MainDataCopyPadKernelB64(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
+template <typename T>
+void MainDataCopyPadKernelB64(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -155,17 +156,18 @@ void MainDataCopyPadKernelB64(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t
         }
     }
 }
-INSTANTIATE_TEST_CASE_P(TEST_DATA_COPY_PAD, TestDataCopyPadSuite,
-    ::testing::Values(TestDataCopyPadParams { 64, 4, MainDataCopyPadKernel<int32_t> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernel<int16_t> },
-    TestDataCopyPadParams { 64, 4, MainDataCopyPadKernel<float> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernel<half> },
-    TestDataCopyPadParams { 64, 1, MainDataCopyPadKernel<int8_t> },
-    TestDataCopyPadParams { 64, 1, MainDataCopyPadKernel<uint8_t> },
-    TestDataCopyPadParams { 64, 8, MainDataCopyPadKernelB64<int64_t> },
-    TestDataCopyPadParams { 64, 8, MainDataCopyPadKernelB64<uint64_t> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernelWrongPos<int16_t> }
-    ));
+INSTANTIATE_TEST_CASE_P(
+    TEST_DATA_COPY_PAD, TestDataCopyPadSuite,
+    ::testing::Values(
+        TestDataCopyPadParams{64, 4, MainDataCopyPadKernel<int32_t>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernel<int16_t>},
+        TestDataCopyPadParams{64, 4, MainDataCopyPadKernel<float>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernel<half>},
+        TestDataCopyPadParams{64, 1, MainDataCopyPadKernel<int8_t>},
+        TestDataCopyPadParams{64, 1, MainDataCopyPadKernel<uint8_t>},
+        TestDataCopyPadParams{64, 8, MainDataCopyPadKernelB64<int64_t>},
+        TestDataCopyPadParams{64, 8, MainDataCopyPadKernelB64<uint64_t>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernelWrongPos<int16_t>}));
 
 TEST_P(TestDataCopyPadSuite, TestDataCopyPadCases)
 {
@@ -182,17 +184,14 @@ TEST_P(TestDataCopyPadSuite, TestDataCopyPadCases)
 
 class DataCopyUB2L0CTestSuite : public ::testing::Test {
 protected:
-    virtual void SetUp()
-    {
-        SetGCoreType(2);
-    }
+    virtual void SetUp() { SetGCoreType(2); }
     virtual void TearDown()
     {
         GlobalMockObject::verify();
         SetGCoreType(0);
     }
 };
- 
+
 TEST_F(DataCopyUB2L0CTestSuite, testCaseDataCopyUB2L0C)
 {
     LocalTensor<uint16_t> srcGm;

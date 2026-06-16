@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -14,11 +14,12 @@ using namespace std;
 using namespace AscendC;
 
 constexpr uint32_t FLOAT_PER_BLOCK = 8;
-constexpr uint32_t DTYPE16_PER_BLOCK = 16;   // half
+constexpr uint32_t DTYPE16_PER_BLOCK = 16; // half
 
 template <typename dstT, typename scaleT, bool scaleIsTensor, uint8_t mode>
-void AscendDequantKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm,
-    __gm__ uint8_t* __restrict__ deqScaleGm, __gm__ int32_t dataSize)
+void AscendDequantKernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ deqScaleGm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     TQue<TPosition::VECIN, 1> vecQue;
@@ -69,16 +70,17 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_ASCEND_DEQUANT, AscendDequantTestsuite,
-    ::testing::Values(AscendDequantTestParams { 256, 4, AscendDequantKernel<half, uint64_t, true, 0> },
-                      AscendDequantTestParams { 512, 4, AscendDequantKernel<half, uint64_t, true, 1> },
-                      AscendDequantTestParams { 24, 4, AscendDequantKernel<float, float, true, 0> },
-                      AscendDequantTestParams { 24, 4, AscendDequantKernel<float, float, true, 1> },
-                      AscendDequantTestParams { 256, 4, AscendDequantKernel<half, uint64_t, false, 0> },
-                      AscendDequantTestParams { 512, 4, AscendDequantKernel<half, uint64_t, false, 1> },
-                      AscendDequantTestParams { 24, 4, AscendDequantKernel<float, float, false, 0> },
-                      AscendDequantTestParams { 24, 4, AscendDequantKernel<float, float, false, 1> }
-                    ));
+INSTANTIATE_TEST_CASE_P(
+    TEST_ASCEND_DEQUANT, AscendDequantTestsuite,
+    ::testing::Values(
+        AscendDequantTestParams{256, 4, AscendDequantKernel<half, uint64_t, true, 0>},
+        AscendDequantTestParams{512, 4, AscendDequantKernel<half, uint64_t, true, 1>},
+        AscendDequantTestParams{24, 4, AscendDequantKernel<float, float, true, 0>},
+        AscendDequantTestParams{24, 4, AscendDequantKernel<float, float, true, 1>},
+        AscendDequantTestParams{256, 4, AscendDequantKernel<half, uint64_t, false, 0>},
+        AscendDequantTestParams{512, 4, AscendDequantKernel<half, uint64_t, false, 1>},
+        AscendDequantTestParams{24, 4, AscendDequantKernel<float, float, false, 0>},
+        AscendDequantTestParams{24, 4, AscendDequantKernel<float, float, false, 1>}));
 
 TEST_P(AscendDequantTestsuite, AscendDequantTestCase)
 {

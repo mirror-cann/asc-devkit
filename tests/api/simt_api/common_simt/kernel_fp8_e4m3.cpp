@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_fp8_e4m3.cpp
@@ -37,18 +37,12 @@ bool Fp8e4m3IsNan(const int8_t& x)
 
 uint8_t Fp8e4m3Constructor(uint16_t s, uint16_t e, uint16_t m)
 {
-    return (((s) << FP8_SIGN_INDEX) | ((e) << FP8E4M3_MAN_LEN) | ((m) & FP8_MAX_MAN));
+    return (((s) << FP8_SIGN_INDEX) | ((e) << FP8E4M3_MAN_LEN) | ((m)&FP8_MAX_MAN));
 }
 
-uint16_t Fp8e4m3ExtracSign(uint8_t x)
-{
-    return (((x) >> FP8_SIGN_INDEX) & 0x1);
-}
+uint16_t Fp8e4m3ExtracSign(uint8_t x) { return (((x) >> FP8_SIGN_INDEX) & 0x1); }
 
-uint16_t Fp8e4m3ExtracExp(uint8_t x)
-{
-    return (((x) >> FP8E4M3_MAN_LEN) & 0xF);
-}
+uint16_t Fp8e4m3ExtracExp(uint8_t x) { return (((x) >> FP8E4M3_MAN_LEN) & 0xF); }
 
 uint16_t Fp8e4m3ExtracMan(uint8_t x)
 {
@@ -128,9 +122,9 @@ bool IsRoundOne(uint32_t sign, uint64_t man, uint16_t truncLen)
     uint64_t mask2 = mask1 - 1;
 
     // ROUND_TO_NEAREST
-    bool lastBit = ((man & mask0) > 0);                            // Last bit after conversion
-    bool truncHighBit = ((man & mask1) > 0);                       // Highest bit in the truncated part
-    bool truncLeft = ((man & mask2) > 0);                          // Truncated left part (except for the highest bit)
+    bool lastBit = ((man & mask0) > 0);      // Last bit after conversion
+    bool truncHighBit = ((man & mask1) > 0); // Highest bit in the truncated part
+    bool truncLeft = ((man & mask2) > 0);    // Truncated left part (except for the highest bit)
     return (truncHighBit && (truncLeft || lastBit));
 }
 
@@ -141,14 +135,14 @@ void Fp8e4m3Normalize(int16_t& exp, uint32_t& man)
         if (exp > FP8_MAX_EXP) {
             man = FP8_MAX_MAN - 1;
         } else if ((exp == FP8_MAX_EXP) && (man >= FP8_MAX_MAN)) {
-            man = FP8_MAX_MAN - 1 ;
+            man = FP8_MAX_MAN - 1;
         }
     } else if (exp == 0 && man == FP8_MAN_HIDE_BIT) {
         exp++;
         man = 0;
     }
 }
-}  // namespace
+} // namespace
 
 int8_t Fp8e4m3T::FloatToFp8e4m3(const float src) const
 {
@@ -224,13 +218,7 @@ int8_t Fp8e4m3T::FloatToFp8e4m3(const float src) const
     return ret;
 }
 
-Fp8e4m3T::operator float() const
-{
-    return AscendC::GetScalarBitcodeValue<uint32_t, float>(Fp8e4m3ToFp32(val));
-}
+Fp8e4m3T::operator float() const { return AscendC::GetScalarBitcodeValue<uint32_t, float>(Fp8e4m3ToFp32(val)); }
 
-float Fp8e4m3T::ToFloat() const
-{
-    return AscendC::GetScalarBitcodeValue<uint32_t, float>(Fp8e4m3ToFp32(val));
-}
-}  // namespace float8_e4m3
+float Fp8e4m3T::ToFloat() const { return AscendC::GetScalarBitcodeValue<uint32_t, float>(Fp8e4m3ToFp32(val)); }
+} // namespace float8_e4m3

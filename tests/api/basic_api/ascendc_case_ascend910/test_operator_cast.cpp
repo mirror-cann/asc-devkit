@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "mockcpp/mockcpp.hpp"
@@ -25,20 +25,15 @@ enum TestDataCopyCheckMode {
 };
 class TEST_CAST : public testing::Test {
 protected:
-    void SetUp() {
-        g_coreType = AscendC::AIV_TYPE;
-    }
-    void TearDown() {
-        g_coreType = AscendC::MIX_TYPE;
-    }
+    void SetUp() { g_coreType = AscendC::AIV_TYPE; }
+    void TearDown() { g_coreType = AscendC::MIX_TYPE; }
 };
 
 class TEST_CAST_COMPILE : public testing::Test {
 protected:
-    void SetUp() {
-        g_coreType = AscendC::AIV_TYPE;
-    }
-    void TearDown() {
+    void SetUp() { g_coreType = AscendC::AIV_TYPE; }
+    void TearDown()
+    {
         g_coreType = AscendC::MIX_TYPE;
         GlobalMockObject::verify();
     }
@@ -46,10 +41,7 @@ protected:
 
 class TEST_DATA_COPY_CHECK : public testing::Test {
 protected:
-    void SetUp()
-    {
-        g_coreType = AscendC::AIV_TYPE;
-    }
+    void SetUp() { g_coreType = AscendC::AIV_TYPE; }
     void TearDown()
     {
         g_coreType = AscendC::MIX_TYPE;
@@ -58,8 +50,9 @@ protected:
 };
 
 template <typename DstType, typename SrcType>
-void MainVecCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode,
-    uint32_t dstDataSize, uint32_t srcDataSize, TestMode testMode)
+void MainVecCastDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode, uint32_t dstDataSize,
+    uint32_t srcDataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<SrcType> inputGlobal;
@@ -109,32 +102,29 @@ void MainVecCastDemoDeath(RoundMode roundMode, uint32_t dstDataSize, uint32_t sr
     outputLocal = tbuf1.Get<DstType>();
     Cast(outputLocal, inputLocal, roundMode, dstDataSize);
 }
-int32_t RaiseStub(int32_t input)
-{
-    return 0;
-}
-#define VEC_CAST_TESTCASE(srcType, dstType, roundMode, testMode)                                      \
-    TEST_F(TEST_CAST, Cast##srcType##2##dstType##roundMode##testMode##Case)                           \
-    {                                                                                                     \
-        uint32_t srcDataSize = 512;                                                                     \
-        uint32_t dstDataSize = 512;                                                                     \
-        uint8_t inputGm[srcDataSize * sizeof(srcType)];                                               \
-        uint8_t outputGm[dstDataSize * sizeof(dstType)];                                              \
-                                                                                                          \
-        MainVecCastDemo<dstType, srcType>(outputGm, inputGm, RoundMode::roundMode, dstDataSize, \
-            srcDataSize, testMode);                                                                    \
-                                                                                                          \
-        for (uint32_t i = 0; i < dstDataSize; i++) {                                                    \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                \
-        }                                                                                                 \
+int32_t RaiseStub(int32_t input) { return 0; }
+#define VEC_CAST_TESTCASE(srcType, dstType, roundMode, testMode)                          \
+    TEST_F(TEST_CAST, Cast##srcType##2##dstType##roundMode##testMode##Case)               \
+    {                                                                                     \
+        uint32_t srcDataSize = 512;                                                       \
+        uint32_t dstDataSize = 512;                                                       \
+        uint8_t inputGm[srcDataSize * sizeof(srcType)];                                   \
+        uint8_t outputGm[dstDataSize * sizeof(dstType)];                                  \
+                                                                                          \
+        MainVecCastDemo<dstType, srcType>(                                                \
+            outputGm, inputGm, RoundMode::roundMode, dstDataSize, srcDataSize, testMode); \
+                                                                                          \
+        for (uint32_t i = 0; i < dstDataSize; i++) {                                      \
+            EXPECT_EQ(outputGm[i], 0x00);                                                 \
+        }                                                                                 \
     }
 
-#define VEC_CAST_FAILED_TESTCASE(srcType, dstType, roundMode, testMode)                                           \
-    TEST_F(TEST_CAST_COMPILE, Cast##srcType##2##dstType##roundMode##testMode##FailedCase)                         \
-    {                                                                                                                 \
-        uint32_t srcDataSize = 512;                                                                                 \
-        uint32_t dstDataSize = 512;                                                                                 \
-        MOCKER(raise, int32_t (*)(int32_t)).times(1).will(invoke(RaiseStub));                                         \
+#define VEC_CAST_FAILED_TESTCASE(srcType, dstType, roundMode, testMode)                                   \
+    TEST_F(TEST_CAST_COMPILE, Cast##srcType##2##dstType##roundMode##testMode##FailedCase)                 \
+    {                                                                                                     \
+        uint32_t srcDataSize = 512;                                                                       \
+        uint32_t dstDataSize = 512;                                                                       \
+        MOCKER(raise, int32_t (*)(int32_t)).times(1).will(invoke(RaiseStub));                             \
         MainVecCastDemoDeath<dstType, srcType>(RoundMode::roundMode, dstDataSize, srcDataSize, testMode); \
     }
 VEC_CAST_FAILED_TESTCASE(int8_t, half, CAST_RINT, LEVEL2);
@@ -196,8 +186,8 @@ VEC_CAST_TESTCASE(int8_t, half, CAST_NONE, LEVEL2);
 template <typename DstType, typename SrcType>
 void MainVecDataCheckDemo(TestDataCopyCheckMode testMode)
 {
-    __gm__ DstType *dst;
-    __cbuf__ SrcType *src;
+    __gm__ DstType* dst;
+    __cbuf__ SrcType* src;
     DataCopyParams intriParams;
     DataCopyEnhancedParams enhancedParams;
     if (testMode == TestDataCopyCheckMode::L12GM) {
@@ -206,11 +196,11 @@ void MainVecDataCheckDemo(TestDataCopyCheckMode testMode)
         DataCopyL12L0CImpl<DstType>(dst, src, intriParams, enhancedParams);
     }
 }
-#define TEST_DATA_COPY_CHECK_FAILED_TESTCASE(srcType, dstType, testMode)                   \
-    TEST_F(TEST_DATA_COPY_CHECK, DATACOPYCHEK##srcType##2##dstType##testMode##FailedCase)  \
-    {                                                                                    \
-        MOCKER(raise, int32_t (*)(int32_t)).times(1).will(invoke(RaiseStub)); \
-        MainVecDataCheckDemo<dstType, srcType>(testMode);                         \
+#define TEST_DATA_COPY_CHECK_FAILED_TESTCASE(srcType, dstType, testMode)                  \
+    TEST_F(TEST_DATA_COPY_CHECK, DATACOPYCHEK##srcType##2##dstType##testMode##FailedCase) \
+    {                                                                                     \
+        MOCKER(raise, int32_t (*)(int32_t)).times(1).will(invoke(RaiseStub));             \
+        MainVecDataCheckDemo<dstType, srcType>(testMode);                                 \
     }
 TEST_DATA_COPY_CHECK_FAILED_TESTCASE(int8_t, int8_t, L12GM);
 TEST_DATA_COPY_CHECK_FAILED_TESTCASE(int8_t, int8_t, L12L0C);

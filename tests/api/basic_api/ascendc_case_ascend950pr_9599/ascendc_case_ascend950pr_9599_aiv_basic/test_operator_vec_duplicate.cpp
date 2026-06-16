@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -17,9 +17,9 @@ using namespace AscendC;
 template <typename SrcType>
 class KernelDuplicate {
 public:
-    __aicore__ inline void Init(GM_ADDR srcGm, GM_ADDR dstGm, uint32_t stackSize, uint32_t dataSize,
-        uint64_t maskCounter, uint64_t maskBitHigh, uint64_t maskBitLow, uint8_t repeatTimes,
-        uint16_t dstBlockStride, uint8_t dstRepeatStride)
+    __aicore__ inline void Init(
+        GM_ADDR srcGm, GM_ADDR dstGm, uint32_t stackSize, uint32_t dataSize, uint64_t maskCounter, uint64_t maskBitHigh,
+        uint64_t maskBitLow, uint8_t repeatTimes, uint16_t dstBlockStride, uint8_t dstRepeatStride)
     {
         stackSize_ = stackSize;
         dataSize_ = dataSize;
@@ -97,13 +97,14 @@ private:
 };
 
 template <typename SrcType>
-__aicore__ void DuplicateTest(GM_ADDR srcGm, GM_ADDR dstGm, uint32_t stackSize, uint32_t dataSize,
-    uint64_t maskCounter, uint64_t maskBitHigh, uint64_t maskBitLow, uint8_t repeatTimes,
-    uint16_t dstBlockStride, uint8_t dstRepeatStride)
+__aicore__ void DuplicateTest(
+    GM_ADDR srcGm, GM_ADDR dstGm, uint32_t stackSize, uint32_t dataSize, uint64_t maskCounter, uint64_t maskBitHigh,
+    uint64_t maskBitLow, uint8_t repeatTimes, uint16_t dstBlockStride, uint8_t dstRepeatStride)
 {
     KernelDuplicate<SrcType> op;
-    op.Init(srcGm, dstGm, stackSize, dataSize, maskCounter, maskBitHigh, maskBitLow, repeatTimes,
-        dstBlockStride, dstRepeatStride);
+    op.Init(
+        srcGm, dstGm, stackSize, dataSize, maskCounter, maskBitHigh, maskBitLow, repeatTimes, dstBlockStride,
+        dstRepeatStride);
     op.Process();
 }
 
@@ -121,23 +122,20 @@ struct InputParams {
 
 class DuplicateTestsuite : public testing::Test {
 protected:
-    void TearDown() override
-    {
-        GlobalMockObject::verify();
-    }
+    void TearDown() override { GlobalMockObject::verify(); }
 };
 
-#define DUPLICATE_NORMAL_TEST(testCaseName, dataType)                                                       \
-    TEST_F(DuplicateTestsuite, testCaseName)                                                               \
-    {                                                                                                      \
-        InputParams params {256, 256, sizeof(PrimT<dataType>), 11, 22, 0, 3, 3, 3};                       \
-        uint8_t srcGm[params.stackSize * params.dataTypeSize] = {0};                                      \
-        uint8_t dstGm[params.stackSize * params.dataTypeSize] = {0};                                      \
-        DuplicateTest<dataType>(srcGm, dstGm, params.stackSize, params.dataSize, params.maskCounter,      \
-            params.maskBitHigh, params.maskBitLow, params.repeatTimes, params.dstBlockStride,            \
-            params.dstRepeatStride);                                                                       \
-        EXPECT_EQ(dstGm[0], 0x00);                                                                         \
-        EXPECT_EQ(dstGm[1], 0x00);                                                                         \
+#define DUPLICATE_NORMAL_TEST(testCaseName, dataType)                                                \
+    TEST_F(DuplicateTestsuite, testCaseName)                                                         \
+    {                                                                                                \
+        InputParams params{256, 256, sizeof(PrimT<dataType>), 11, 22, 0, 3, 3, 3};                   \
+        uint8_t srcGm[params.stackSize * params.dataTypeSize] = {0};                                 \
+        uint8_t dstGm[params.stackSize * params.dataTypeSize] = {0};                                 \
+        DuplicateTest<dataType>(                                                                     \
+            srcGm, dstGm, params.stackSize, params.dataSize, params.maskCounter, params.maskBitHigh, \
+            params.maskBitLow, params.repeatTimes, params.dstBlockStride, params.dstRepeatStride);   \
+        EXPECT_EQ(dstGm[0], 0x00);                                                                   \
+        EXPECT_EQ(dstGm[1], 0x00);                                                                   \
     }
 
 DUPLICATE_NORMAL_TEST(Level0Float, float);
@@ -154,26 +152,24 @@ using TTUint64 = TensorTrait<uint64_t>;
 DUPLICATE_NORMAL_TEST(TensorTraitNumOne, TTFloat);
 DUPLICATE_NORMAL_TEST(TensorTraitNumTwo, TTUint64);
 
-bool DuplicateImplCheckCalCount(const int32_t& calCount)
-{
-    return calCount == 256;
-}
+bool DuplicateImplCheckCalCount(const int32_t& calCount) { return calCount == 256; }
 
 TEST_F(DuplicateTestsuite, ScalarOverloadsDispatch)
 {
-    InputParams params {256, 256, sizeof(float), 11, 22, 0, 3, 3, 3};
+    InputParams params{256, 256, sizeof(float), 11, 22, 0, 3, 3, 3};
     MOCKER(DuplicateImpl, void (*)(__ubuf__ float*, const float&, const int32_t&))
         .times(1)
         .with(any(), any(), checkWith(DuplicateImplCheckCalCount));
-    MOCKER(DuplicateImpl, void (*)(__ubuf__ float*, const float&, uint64_t*, const uint8_t, const uint16_t,
-        const uint8_t))
+    MOCKER(
+        DuplicateImpl, void (*)(__ubuf__ float*, const float&, uint64_t*, const uint8_t, const uint16_t, const uint8_t))
         .times(1);
-    MOCKER(DuplicateImpl, void (*)(__ubuf__ float*, const float&, uint64_t, const uint8_t, const uint16_t,
-        const uint8_t))
+    MOCKER(
+        DuplicateImpl, void (*)(__ubuf__ float*, const float&, uint64_t, const uint8_t, const uint16_t, const uint8_t))
         .times(1);
 
     uint8_t srcGm[params.stackSize * params.dataTypeSize] = {0};
     uint8_t dstGm[params.stackSize * params.dataTypeSize] = {0};
-    DuplicateTest<float>(srcGm, dstGm, params.stackSize, params.dataSize, params.maskCounter, params.maskBitHigh,
-        params.maskBitLow, params.repeatTimes, params.dstBlockStride, params.dstRepeatStride);
+    DuplicateTest<float>(
+        srcGm, dstGm, params.stackSize, params.dataSize, params.maskCounter, params.maskBitHigh, params.maskBitLow,
+        params.repeatTimes, params.dstBlockStride, params.dstRepeatStride);
 }

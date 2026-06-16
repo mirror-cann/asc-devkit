@@ -1,25 +1,27 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
 
 namespace AscendC {
-template <typename T, bool isInitIndex = false, bool isHasfinish = false, bool isReuseSrc = false,
-    enum AscendC::TopKMode topkMode = AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder order = AscendC::TopKOrder::UNSET, bool sorted = false>
+template <
+    typename T, bool isInitIndex = false, bool isHasfinish = false, bool isReuseSrc = false,
+    enum AscendC::TopKMode topkMode = AscendC::TopKMode::TOPK_NORMAL,
+    AscendC::TopKOrder order = AscendC::TopKOrder::UNSET, bool sorted = false>
 class KernelRadixTopK {
 public:
-    __aicore__ inline KernelRadixTopK()
-    {}
-    __aicore__ inline void Init(GM_ADDR srcGmValue, GM_ADDR srcGmIndex, GM_ADDR finishGm, GM_ADDR dstGmValue, GM_ADDR dstGmIndex,
-        int32_t kGm, uint32_t outter, uint32_t inner, int32_t n,  bool isLargestGm)
+    __aicore__ inline KernelRadixTopK() {}
+    __aicore__ inline void Init(
+        GM_ADDR srcGmValue, GM_ADDR srcGmIndex, GM_ADDR finishGm, GM_ADDR dstGmValue, GM_ADDR dstGmIndex, int32_t kGm,
+        uint32_t outter, uint32_t inner, int32_t n, bool isLargestGm)
     {
         printf("outter_shape: %u, inner_shape: %u, k: %u\n", outter, inner, kGm);
 
@@ -39,17 +41,17 @@ public:
         if (topkMode == AscendC::TopKMode::TOPK_NSMALL) {
             inIndexDataSize = inValueDataSize;
         }
-        
+
         finishLocalBytes = topKInfo.outter * sizeof(bool);
         if (finishLocalBytes % 32 != 0) {
             finishLocalBytes = (finishLocalBytes + 31) / 32 * 32;
         }
-    
-        srcValueGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGmValue), inValueDataSize);
-        srcIndexGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ int32_t  *>(srcGmIndex), inIndexDataSize);
-        srcFinishGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ bool *>(finishGm), finishLocalBytes / sizeof(bool));
-        dstValueGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGmValue), outValueDataSize);
-        dstIndexGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ int32_t  *>(dstGmIndex), outIndexDataSize);
+
+        srcValueGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGmValue), inValueDataSize);
+        srcIndexGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ int32_t*>(srcGmIndex), inIndexDataSize);
+        srcFinishGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ bool*>(finishGm), finishLocalBytes / sizeof(bool));
+        dstValueGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGmValue), outValueDataSize);
+        dstIndexGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ int32_t*>(dstGmIndex), outIndexDataSize);
 
         uint32_t alignedCnt = (inner + 31) / 32 * 32;
         tmplocalBytes = 512 + 11 * alignedCnt;
@@ -60,7 +62,7 @@ public:
         uint32_t extraTypeSize = sizeof(T);
         uint32_t extraIndexTypeSize = sizeof(int32_t);
         tmplocalBytes += extraTypeSize * alignedCnt;
-        
+
         tmplocalBytes += 512 + 11 * alignedCnt;
         tmplocalBytes += (4 + extraIndexTypeSize + extraTypeSize) * alignedCnt;
 
@@ -104,16 +106,15 @@ private:
         LocalTensor<T> srcValueLocal = inValueQueue.DeQue<T>();
         LocalTensor<int32_t> srcIndexLocal = inIndexQueue.DeQue<int32_t>();
         LocalTensor<bool> srcFinishLocal = inFinishQueue.DeQue<bool>();
-		LocalTensor<uint8_t> tmp = tmpBuf.Get<uint8_t>();
+        LocalTensor<uint8_t> tmp = tmpBuf.Get<uint8_t>();
 
         TopkTiling tiling;
 
-        static constexpr AscendC::TopKConfig config = {
-            AscendC::TopKAlgo::RADIX_SELECT, order, sorted
-        };
+        static constexpr AscendC::TopKConfig config = {AscendC::TopKAlgo::RADIX_SELECT, order, sorted};
 
         AscendC::TopK<T, isInitIndex, false, isReuseSrc, topkMode, config>(
-            dstValueLocal, dstIndexLocal, srcValueLocal, srcIndexLocal, srcFinishLocal, tmp, k, tiling, topKInfo, isLargest);
+            dstValueLocal, dstIndexLocal, srcValueLocal, srcIndexLocal, srcFinishLocal, tmp, k, tiling, topKInfo,
+            isLargest);
 
         outValueQueue.EnQue(dstValueLocal);
         outIndexQueue.EnQue(dstIndexLocal);
@@ -158,7 +159,7 @@ private:
     TQue<TPosition::VECOUT, 1> outIndexQueue;
 
     TBuf<TPosition::VECIN> tmpBuf;
-    uint32_t tmplocalBytes  = 0;
+    uint32_t tmplocalBytes = 0;
 
     uint32_t inValueDataSize = 0;
     uint32_t inIndexDataSize = 0;
@@ -171,14 +172,19 @@ private:
     bool isLargest = true;
     AscendC::TopKInfo topKInfo;
 };
-}
+} // namespace AscendC
 
-template <typename T, bool isInitIndex, bool isHasfinish, bool isReuseSrc, AscendC::TopKMode topkMode, AscendC::TopKOrder order, bool sorted>
-__aicore__ void testRadixTopK(GM_ADDR srcGmValue, GM_ADDR srcGmIndex, GM_ADDR finishGm, GM_ADDR dstGmValue,
-    GM_ADDR dstGmIndex, int32_t kGm, AscendC::TopKInfo tkInfo, bool isLargest)
-{   
+template <
+    typename T, bool isInitIndex, bool isHasfinish, bool isReuseSrc, AscendC::TopKMode topkMode,
+    AscendC::TopKOrder order, bool sorted>
+__aicore__ void testRadixTopK(
+    GM_ADDR srcGmValue, GM_ADDR srcGmIndex, GM_ADDR finishGm, GM_ADDR dstGmValue, GM_ADDR dstGmIndex, int32_t kGm,
+    AscendC::TopKInfo tkInfo, bool isLargest)
+{
     AscendC::KernelRadixTopK<T, isInitIndex, isHasfinish, isReuseSrc, topkMode, order, sorted> op;
-    op.Init(srcGmValue, srcGmIndex, finishGm, dstGmValue, dstGmIndex, kGm, tkInfo.outter,  tkInfo.inner, tkInfo.n, isLargest);
+    op.Init(
+        srcGmValue, srcGmIndex, finishGm, dstGmValue, dstGmIndex, kGm, tkInfo.outter, tkInfo.inner, tkInfo.n,
+        isLargest);
     op.Process();
 }
 
@@ -193,14 +199,8 @@ struct TopKTestParams {
 
 class AdvanceTopKTestSuite : public testing::Test, public testing::WithParamInterface<TopKTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T>
@@ -208,16 +208,16 @@ inline int32_t GetKPad(int32_t k)
 {
     if constexpr (sizeof(T) == 1) {
         return (k + 31) / 32 * 32;
-    } 
-    
+    }
+
     if constexpr (sizeof(T) == 2) {
         return (k + 15) / 16 * 16;
-    } 
-    
+    }
+
     if constexpr (sizeof(T) == 4) {
         return (k + 7) / 8 * 8;
-    } 
-    
+    }
+
     if constexpr (sizeof(T) == 8) {
         return (k + 3) / 4 * 4;
     }
@@ -226,153 +226,543 @@ inline int32_t GetKPad(int32_t k)
 }
 
 INSTANTIATE_TEST_CASE_P(
-    TEST_OPEARATION_ADVANCE_API_TOPK, AdvanceTopKTestSuite, 
+    TEST_OPEARATION_ADVANCE_API_TOPK, AdvanceTopKTestSuite,
     ::testing::Values(
         // uint8_t
-        TopKTestParams{ 1, GetKPad<uint8_t>(1), {1, 32, 32}, sizeof(uint8_t), true,
-            testRadixTopK<uint8_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<uint8_t>(2), {2, 32, 32}, sizeof(uint8_t), true,
-            testRadixTopK<uint8_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<uint8_t>(20), {1, 128, 128}, sizeof(uint8_t), true,
-            testRadixTopK<uint8_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 2, GetKPad<uint8_t>(2), {2, 256, 256}, sizeof(uint8_t), true,
-            testRadixTopK<uint8_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 20, GetKPad<uint8_t>(20), {2, 512, 512}, sizeof(uint8_t), true,
-            testRadixTopK<uint8_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 2, GetKPad<uint8_t>(2), {2, 1024, 1024}, sizeof(uint8_t), true,
-            testRadixTopK<uint8_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
+        TopKTestParams{
+            1,
+            GetKPad<uint8_t>(1),
+            {1, 32, 32},
+            sizeof(uint8_t),
+            true,
+            testRadixTopK<
+                uint8_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint8_t>(2),
+            {2, 32, 32},
+            sizeof(uint8_t),
+            true,
+            testRadixTopK<
+                uint8_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<uint8_t>(20),
+            {1, 128, 128},
+            sizeof(uint8_t),
+            true,
+            testRadixTopK<
+                uint8_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint8_t>(2),
+            {2, 256, 256},
+            sizeof(uint8_t),
+            true,
+            testRadixTopK<
+                uint8_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            20,
+            GetKPad<uint8_t>(20),
+            {2, 512, 512},
+            sizeof(uint8_t),
+            true,
+            testRadixTopK<
+                uint8_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint8_t>(2),
+            {2, 1024, 1024},
+            sizeof(uint8_t),
+            true,
+            testRadixTopK<
+                uint8_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
         // int8_t
-        TopKTestParams{ 1, GetKPad<int8_t>(1), {1, 32, 32}, sizeof(int8_t), true,
-            testRadixTopK<int8_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<int8_t>(2), {2, 32, 32}, sizeof(int8_t), true,
-            testRadixTopK<int8_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<int8_t>(20), {1, 128, 128}, sizeof(int8_t), true,
-            testRadixTopK<int8_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 255, GetKPad<int8_t>(255), {2, 256, 256}, sizeof(int8_t), true,
-            testRadixTopK<int8_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 512, GetKPad<int8_t>(512), {1, 512, 512}, sizeof(int8_t), true,
-            testRadixTopK<int8_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 1, GetKPad<int8_t>(1), {2, 4096, 4096}, sizeof(int8_t), true,
-            testRadixTopK<int8_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
+        TopKTestParams{
+            1,
+            GetKPad<int8_t>(1),
+            {1, 32, 32},
+            sizeof(int8_t),
+            true,
+            testRadixTopK<
+                int8_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<int8_t>(2),
+            {2, 32, 32},
+            sizeof(int8_t),
+            true,
+            testRadixTopK<
+                int8_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<int8_t>(20),
+            {1, 128, 128},
+            sizeof(int8_t),
+            true,
+            testRadixTopK<
+                int8_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            255,
+            GetKPad<int8_t>(255),
+            {2, 256, 256},
+            sizeof(int8_t),
+            true,
+            testRadixTopK<
+                int8_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            512,
+            GetKPad<int8_t>(512),
+            {1, 512, 512},
+            sizeof(int8_t),
+            true,
+            testRadixTopK<
+                int8_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            1,
+            GetKPad<int8_t>(1),
+            {2, 4096, 4096},
+            sizeof(int8_t),
+            true,
+            testRadixTopK<
+                int8_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
         // uint16_t
-        TopKTestParams{ 1, GetKPad<uint16_t>(1), {1, 32, 32}, sizeof(uint16_t), true,
-            testRadixTopK<uint16_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<uint16_t>(2), {2, 32, 32}, sizeof(uint16_t), true,
-            testRadixTopK<uint16_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<uint16_t>(20), {1, 128, 128}, sizeof(uint16_t), true,
-            testRadixTopK<uint16_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 2, GetKPad<uint16_t>(2), {2, 256, 256}, sizeof(uint16_t), true,
-            testRadixTopK<uint16_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 20, GetKPad<uint16_t>(20), {2, 512, 512}, sizeof(uint16_t), true,
-            testRadixTopK<uint16_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 2, GetKPad<uint16_t>(2), {2, 1024, 1024}, sizeof(uint16_t), true,
-            testRadixTopK<uint16_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
+        TopKTestParams{
+            1,
+            GetKPad<uint16_t>(1),
+            {1, 32, 32},
+            sizeof(uint16_t),
+            true,
+            testRadixTopK<
+                uint16_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint16_t>(2),
+            {2, 32, 32},
+            sizeof(uint16_t),
+            true,
+            testRadixTopK<
+                uint16_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<uint16_t>(20),
+            {1, 128, 128},
+            sizeof(uint16_t),
+            true,
+            testRadixTopK<
+                uint16_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint16_t>(2),
+            {2, 256, 256},
+            sizeof(uint16_t),
+            true,
+            testRadixTopK<
+                uint16_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            20,
+            GetKPad<uint16_t>(20),
+            {2, 512, 512},
+            sizeof(uint16_t),
+            true,
+            testRadixTopK<
+                uint16_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint16_t>(2),
+            {2, 1024, 1024},
+            sizeof(uint16_t),
+            true,
+            testRadixTopK<
+                uint16_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
         // int16_t
-        TopKTestParams{ 1, GetKPad<int16_t>(1), {1, 32, 32}, sizeof(int16_t), true,
-            testRadixTopK<int16_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<int16_t>(2), {2, 32, 32}, sizeof(int16_t), true,
-            testRadixTopK<int16_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<int16_t>(20), {1, 128, 128}, sizeof(int16_t), true,
-            testRadixTopK<int16_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 255, GetKPad<int16_t>(255), {2, 256, 256}, sizeof(int16_t), true,
-            testRadixTopK<int16_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 512, GetKPad<int16_t>(512), {1, 512, 512}, sizeof(int16_t), true,
-            testRadixTopK<int16_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 1, GetKPad<int16_t>(1), {2, 4096, 4096}, sizeof(int16_t), true,
-            testRadixTopK<int16_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
+        TopKTestParams{
+            1,
+            GetKPad<int16_t>(1),
+            {1, 32, 32},
+            sizeof(int16_t),
+            true,
+            testRadixTopK<
+                int16_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<int16_t>(2),
+            {2, 32, 32},
+            sizeof(int16_t),
+            true,
+            testRadixTopK<
+                int16_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<int16_t>(20),
+            {1, 128, 128},
+            sizeof(int16_t),
+            true,
+            testRadixTopK<
+                int16_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            255,
+            GetKPad<int16_t>(255),
+            {2, 256, 256},
+            sizeof(int16_t),
+            true,
+            testRadixTopK<
+                int16_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            512,
+            GetKPad<int16_t>(512),
+            {1, 512, 512},
+            sizeof(int16_t),
+            true,
+            testRadixTopK<
+                int16_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            1,
+            GetKPad<int16_t>(1),
+            {2, 4096, 4096},
+            sizeof(int16_t),
+            true,
+            testRadixTopK<
+                int16_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
         // uint32_t
-        TopKTestParams{ 1, GetKPad<uint32_t>(1), {1, 32, 32}, sizeof(uint32_t), true,
-            testRadixTopK<uint32_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<uint32_t>(2), {2, 32, 32}, sizeof(uint32_t), true,
-            testRadixTopK<uint32_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<uint32_t>(20), {1, 128, 128}, sizeof(uint32_t), true,
-            testRadixTopK<uint32_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 2, GetKPad<uint32_t>(2), {2, 256, 256}, sizeof(uint32_t), true,
-            testRadixTopK<uint32_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 20, GetKPad<uint32_t>(20), {2, 512, 512}, sizeof(uint32_t), true,
-            testRadixTopK<uint32_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 2, GetKPad<uint32_t>(2), {2, 1024, 1024}, sizeof(uint32_t), true,
-            testRadixTopK<uint32_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
+        TopKTestParams{
+            1,
+            GetKPad<uint32_t>(1),
+            {1, 32, 32},
+            sizeof(uint32_t),
+            true,
+            testRadixTopK<
+                uint32_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint32_t>(2),
+            {2, 32, 32},
+            sizeof(uint32_t),
+            true,
+            testRadixTopK<
+                uint32_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<uint32_t>(20),
+            {1, 128, 128},
+            sizeof(uint32_t),
+            true,
+            testRadixTopK<
+                uint32_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint32_t>(2),
+            {2, 256, 256},
+            sizeof(uint32_t),
+            true,
+            testRadixTopK<
+                uint32_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            20,
+            GetKPad<uint32_t>(20),
+            {2, 512, 512},
+            sizeof(uint32_t),
+            true,
+            testRadixTopK<
+                uint32_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint32_t>(2),
+            {2, 1024, 1024},
+            sizeof(uint32_t),
+            true,
+            testRadixTopK<
+                uint32_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
         // int32_t
-        TopKTestParams{ 1, GetKPad<int32_t>(1), {1, 32, 32}, sizeof(int32_t), true,
-            testRadixTopK<int32_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<int32_t>(2), {2, 32, 32}, sizeof(int32_t), true,
-            testRadixTopK<int32_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<int32_t>(20), {1, 128, 128}, sizeof(int32_t), true,
-            testRadixTopK<int32_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 255, GetKPad<int32_t>(255), {2, 256, 256}, sizeof(int32_t), true,
-            testRadixTopK<int32_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 512, GetKPad<int32_t>(512), {1, 512, 512}, sizeof(int32_t), true,
-            testRadixTopK<int32_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 1, GetKPad<int32_t>(1), {2, 4096, 4096}, sizeof(int32_t), true,
-            testRadixTopK<int32_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
+        TopKTestParams{
+            1,
+            GetKPad<int32_t>(1),
+            {1, 32, 32},
+            sizeof(int32_t),
+            true,
+            testRadixTopK<
+                int32_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<int32_t>(2),
+            {2, 32, 32},
+            sizeof(int32_t),
+            true,
+            testRadixTopK<
+                int32_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<int32_t>(20),
+            {1, 128, 128},
+            sizeof(int32_t),
+            true,
+            testRadixTopK<
+                int32_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            255,
+            GetKPad<int32_t>(255),
+            {2, 256, 256},
+            sizeof(int32_t),
+            true,
+            testRadixTopK<
+                int32_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            512,
+            GetKPad<int32_t>(512),
+            {1, 512, 512},
+            sizeof(int32_t),
+            true,
+            testRadixTopK<
+                int32_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            1,
+            GetKPad<int32_t>(1),
+            {2, 4096, 4096},
+            sizeof(int32_t),
+            true,
+            testRadixTopK<
+                int32_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
         // uint64_t
-        TopKTestParams{ 1, GetKPad<uint64_t>(1), {1, 32, 32}, sizeof(uint64_t), true,
-            testRadixTopK<uint64_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<uint64_t>(2), {2, 32, 32}, sizeof(uint64_t), true,
-            testRadixTopK<uint64_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<uint64_t>(20), {1, 128, 128}, sizeof(uint64_t), true,
-            testRadixTopK<uint64_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 2, GetKPad<uint64_t>(2), {2, 256, 256}, sizeof(uint64_t), true,
-            testRadixTopK<uint64_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 20, GetKPad<uint64_t>(20), {2, 512, 512}, sizeof(uint64_t), true,
-            testRadixTopK<uint64_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 2, GetKPad<uint64_t>(2), {2, 1024, 1024}, sizeof(uint64_t), true,
-            testRadixTopK<uint64_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
+        TopKTestParams{
+            1,
+            GetKPad<uint64_t>(1),
+            {1, 32, 32},
+            sizeof(uint64_t),
+            true,
+            testRadixTopK<
+                uint64_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint64_t>(2),
+            {2, 32, 32},
+            sizeof(uint64_t),
+            true,
+            testRadixTopK<
+                uint64_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<uint64_t>(20),
+            {1, 128, 128},
+            sizeof(uint64_t),
+            true,
+            testRadixTopK<
+                uint64_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint64_t>(2),
+            {2, 256, 256},
+            sizeof(uint64_t),
+            true,
+            testRadixTopK<
+                uint64_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            20,
+            GetKPad<uint64_t>(20),
+            {2, 512, 512},
+            sizeof(uint64_t),
+            true,
+            testRadixTopK<
+                uint64_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<uint64_t>(2),
+            {2, 1024, 1024},
+            sizeof(uint64_t),
+            true,
+            testRadixTopK<
+                uint64_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
         // int64_t
-        TopKTestParams{ 1, GetKPad<int64_t>(1), {1, 32, 32}, sizeof(int64_t), true,
-            testRadixTopK<int64_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<int64_t>(2), {2, 32, 32}, sizeof(int64_t), true,
-            testRadixTopK<int64_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<int64_t>(20), {1, 128, 128}, sizeof(int64_t), true,
-            testRadixTopK<int64_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 2, GetKPad<int64_t>(2), {2, 256, 256}, sizeof(int64_t), true,
-            testRadixTopK<int64_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 20, GetKPad<int64_t>(20), {2, 512, 512}, sizeof(int64_t), true,
-            testRadixTopK<int64_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 2, GetKPad<int64_t>(2), {2, 1024, 1024}, sizeof(int64_t), true,
-            testRadixTopK<int64_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
+        TopKTestParams{
+            1,
+            GetKPad<int64_t>(1),
+            {1, 32, 32},
+            sizeof(int64_t),
+            true,
+            testRadixTopK<
+                int64_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<int64_t>(2),
+            {2, 32, 32},
+            sizeof(int64_t),
+            true,
+            testRadixTopK<
+                int64_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<int64_t>(20),
+            {1, 128, 128},
+            sizeof(int64_t),
+            true,
+            testRadixTopK<
+                int64_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<int64_t>(2),
+            {2, 256, 256},
+            sizeof(int64_t),
+            true,
+            testRadixTopK<
+                int64_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            20,
+            GetKPad<int64_t>(20),
+            {2, 512, 512},
+            sizeof(int64_t),
+            true,
+            testRadixTopK<
+                int64_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<int64_t>(2),
+            {2, 1024, 1024},
+            sizeof(int64_t),
+            true,
+            testRadixTopK<
+                int64_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
         // half
-        TopKTestParams{ 1, GetKPad<half>(1), {1, 32, 32}, sizeof(half), true,
-            testRadixTopK<half, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<half>(2), {2, 32, 32}, sizeof(half), true,
-            testRadixTopK<half, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<half>(20), {1, 128, 128}, sizeof(half), true,
-            testRadixTopK<half, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 2, GetKPad<half>(2), {2, 256, 256}, sizeof(half), true,
-            testRadixTopK<half, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 20, GetKPad<half>(20), {2, 512, 512}, sizeof(half), true,
-            testRadixTopK<half, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 2, GetKPad<half>(2), {2, 1024, 1024}, sizeof(half), true,
-            testRadixTopK<half, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
+        TopKTestParams{
+            1,
+            GetKPad<half>(1),
+            {1, 32, 32},
+            sizeof(half),
+            true,
+            testRadixTopK<half, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<half>(2),
+            {2, 32, 32},
+            sizeof(half),
+            true,
+            testRadixTopK<half, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<half>(20),
+            {1, 128, 128},
+            sizeof(half),
+            true,
+            testRadixTopK<
+                half, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<half>(2),
+            {2, 256, 256},
+            sizeof(half),
+            true,
+            testRadixTopK<half, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            20,
+            GetKPad<half>(20),
+            {2, 512, 512},
+            sizeof(half),
+            true,
+            testRadixTopK<
+                half, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            2,
+            GetKPad<half>(2),
+            {2, 1024, 1024},
+            sizeof(half),
+            true,
+            testRadixTopK<
+                half, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
         // float
-        TopKTestParams{ 1, GetKPad<float>(1), {1, 32, 32}, sizeof(float), true,
-            testRadixTopK<float, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<float>(2), {2, 32, 32}, sizeof(float), true,
-            testRadixTopK<float, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<float>(20), {1, 128, 128}, sizeof(float), true,
-            testRadixTopK<float, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 255, GetKPad<float>(255), {2, 256, 256}, sizeof(float), true,
-            testRadixTopK<float, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 512, GetKPad<float>(512), {1, 512, 512}, sizeof(float), true,
-            testRadixTopK<float, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 1, GetKPad<float>(1), {2, 4096, 4096}, sizeof(float), true,
-            testRadixTopK<float, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
+        TopKTestParams{
+            1,
+            GetKPad<float>(1),
+            {1, 32, 32},
+            sizeof(float),
+            true,
+            testRadixTopK<
+                float, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<float>(2),
+            {2, 32, 32},
+            sizeof(float),
+            true,
+            testRadixTopK<float, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<float>(20),
+            {1, 128, 128},
+            sizeof(float),
+            true,
+            testRadixTopK<
+                float, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            255,
+            GetKPad<float>(255),
+            {2, 256, 256},
+            sizeof(float),
+            true,
+            testRadixTopK<
+                float, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            512,
+            GetKPad<float>(512),
+            {1, 512, 512},
+            sizeof(float),
+            true,
+            testRadixTopK<
+                float, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            1,
+            GetKPad<float>(1),
+            {2, 4096, 4096},
+            sizeof(float),
+            true,
+            testRadixTopK<
+                float, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
         // bfloat16_t
-        TopKTestParams{ 1, GetKPad<bfloat16_t>(1), {1, 32, 32}, sizeof(bfloat16_t), true,
-            testRadixTopK<bfloat16_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 2, GetKPad<bfloat16_t>(2), {2, 32, 32}, sizeof(bfloat16_t), true,
-            testRadixTopK<bfloat16_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false> },
-        TopKTestParams{ 20, GetKPad<bfloat16_t>(20), {1, 128, 128}, sizeof(bfloat16_t), true,
-            testRadixTopK<bfloat16_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 255, GetKPad<bfloat16_t>(255), {2, 256, 256}, sizeof(bfloat16_t), true,
-            testRadixTopK<bfloat16_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false> },
-        TopKTestParams{ 512, GetKPad<bfloat16_t>(512), {1, 512, 512}, sizeof(bfloat16_t), true,
-            testRadixTopK<bfloat16_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> },
-        TopKTestParams{ 1, GetKPad<bfloat16_t>(1), {2, 4096, 4096}, sizeof(bfloat16_t), true,
-            testRadixTopK<bfloat16_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false> }
-    )
-);
+        TopKTestParams{
+            1,
+            GetKPad<bfloat16_t>(1),
+            {1, 32, 32},
+            sizeof(bfloat16_t),
+            true,
+            testRadixTopK<
+                bfloat16_t, false, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            2,
+            GetKPad<bfloat16_t>(2),
+            {2, 32, 32},
+            sizeof(bfloat16_t),
+            true,
+            testRadixTopK<
+                bfloat16_t, true, false, false, AscendC::TopKMode::TOPK_NSMALL, AscendC::TopKOrder::UNSET, false>},
+        TopKTestParams{
+            20,
+            GetKPad<bfloat16_t>(20),
+            {1, 128, 128},
+            sizeof(bfloat16_t),
+            true,
+            testRadixTopK<
+                bfloat16_t, false, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            255,
+            GetKPad<bfloat16_t>(255),
+            {2, 256, 256},
+            sizeof(bfloat16_t),
+            true,
+            testRadixTopK<
+                bfloat16_t, true, true, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::LARGEST, false>},
+        TopKTestParams{
+            512,
+            GetKPad<bfloat16_t>(512),
+            {1, 512, 512},
+            sizeof(bfloat16_t),
+            true,
+            testRadixTopK<
+                bfloat16_t, false, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>},
+        TopKTestParams{
+            1,
+            GetKPad<bfloat16_t>(1),
+            {2, 4096, 4096},
+            sizeof(bfloat16_t),
+            true,
+            testRadixTopK<
+                bfloat16_t, true, false, false, AscendC::TopKMode::TOPK_NORMAL, AscendC::TopKOrder::SMALLEST, false>}));
 
 TEST_P(AdvanceTopKTestSuite, testRadixTopK)
 {

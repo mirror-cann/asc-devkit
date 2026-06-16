@@ -1,23 +1,19 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
 using namespace std;
 using namespace AscendC;
 
-enum TestMode {
-    COMPARE_TENSOR_TENSOR,
-    COMPARE_TENSOR_SCALAR,
-    COMPARE_SCALAR_TENSOR
-};
+enum TestMode { COMPARE_TENSOR_TENSOR, COMPARE_TENSOR_SCALAR, COMPARE_SCALAR_TENSOR };
 
 enum MemMode {
     NORMAL_MODE,
@@ -26,10 +22,7 @@ enum MemMode {
 
 class TEST_COMPARE : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
     void TearDown()
     {
         AscendC::CheckSyncState();
@@ -38,8 +31,8 @@ protected:
 };
 
 template <typename T, bool USE_COMPARES>
-void MainVecCompareLevel2Demo(__gm__ uint8_t* __restrict__ dstGm,
-    __gm__ uint8_t* __restrict__ src0Gm, uint32_t dataSize)
+void MainVecCompareLevel2Demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, uint32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -59,7 +52,7 @@ void MainVecCompareLevel2Demo(__gm__ uint8_t* __restrict__ dstGm,
 
     set_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
-    if constexpr (USE_COMPARES){
+    if constexpr (USE_COMPARES) {
         if constexpr (AscendC::IsSameType<T, int32_t>::value) {
             Compares(outputLocal, input0Local, static_cast<T>(0), CMPMODE::EQ, dataSize);
         } else {
@@ -70,7 +63,7 @@ void MainVecCompareLevel2Demo(__gm__ uint8_t* __restrict__ dstGm,
             Compares(outputLocal, input0Local, static_cast<T>(0), CMPMODE::LT, dataSize);
             Compares(outputLocal, input0Local, static_cast<T>(0), CMPMODE::LE, dataSize);
         }
-    }else{
+    } else {
         if constexpr (AscendC::IsSameType<T, int32_t>::value) {
             CompareScalar(outputLocal, input0Local, static_cast<T>(0), CMPMODE::EQ, dataSize);
         } else {

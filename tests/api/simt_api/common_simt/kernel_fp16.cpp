@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_fp16.cpp
@@ -18,7 +18,7 @@ namespace {
 constexpr uint16_t K_MAN_BIT_LENGTH = 11;
 constexpr int16_t HFEXP_NUM = 31;
 constexpr uint32_t ERET_NUM = 255;
-}
+} // namespace
 
 // namespace float16 {
 /**
@@ -110,8 +110,9 @@ static float Fp16ToFloat(const uint16_t& fpVal)
 
     if (hfExp == HFEXP_NUM) {
         eRet = ERET_NUM;
-        mRet = hfMan << (static_cast<uint32_t>(Fp32BasicParam::K_FP32_MAN_LEN) -
-                        static_cast<uint32_t>(Fp16BasicParam::K_FP16_MAN_LEN));
+        mRet = hfMan
+               << (static_cast<uint32_t>(Fp32BasicParam::K_FP32_MAN_LEN) -
+                   static_cast<uint32_t>(Fp16BasicParam::K_FP16_MAN_LEN));
         uint32_t fVal = FP32_CONSTRUCTOR(sRet, eRet, mRet);
         auto pRetV = reinterpret_cast<float*>(&fVal);
 
@@ -123,10 +124,11 @@ static float Fp16ToFloat(const uint16_t& fpVal)
         mRet = 0;
     } else {
         eRet = (static_cast<uint32_t>(hfExp) - static_cast<uint32_t>(Fp16BasicParam::K_FP16_EXP_BIAS)) +
-            static_cast<uint32_t>(Fp32BasicParam::K_FP32_EXP_BIAS);
+               static_cast<uint32_t>(Fp32BasicParam::K_FP32_EXP_BIAS);
         mRet = static_cast<uint32_t>(hfMan & static_cast<uint16_t>(Fp16BasicParam::K_FP16_MAN_MASK));
-        mRet = mRet << (static_cast<uint32_t>(Fp32BasicParam::K_FP32_MAN_LEN) -
-            static_cast<uint32_t>(Fp16BasicParam::K_FP16_MAN_LEN));
+        mRet = mRet
+               << (static_cast<uint32_t>(Fp32BasicParam::K_FP32_MAN_LEN) -
+                   static_cast<uint32_t>(Fp16BasicParam::K_FP16_MAN_LEN));
     }
     uint32_t fVal = FP32_CONSTRUCTOR(sRet, eRet, mRet);
     auto pRetV = reinterpret_cast<float*>(&fVal);
@@ -142,7 +144,7 @@ static uint16_t Fp16AddCalVal(const uint16_t& sRet, int16_t eRet, uint16_t mRet,
     while ((mRet < mMin) && (eRet > 0)) { // the value of mRet should not be smaller than 2^23
         mRet = mRet << 1;
         mRet += (static_cast<uint32_t>(Fp32BasicParam::K_FP32_SIGN_MASK) & mTrunc) >>
-            static_cast<uint16_t>(Fp32BasicParam::K_FP32_SIGN_INDEX);
+                static_cast<uint16_t>(Fp32BasicParam::K_FP32_SIGN_INDEX);
         mTrunc = mTrunc << 1;
         eRet = eRet - 1;
     }
@@ -155,9 +157,9 @@ static uint16_t Fp16AddCalVal(const uint16_t& sRet, int16_t eRet, uint16_t mRet,
 
     bool bLastBit = ((mRet & 1) > 0);
     bool bTruncHigh = (ROUND_MODE == TagFp16RoundMode::K_ROUND_TO_NEAREST) &&
-        ((mTrunc & static_cast<uint32_t>(Fp32BasicParam::K_FP32_SIGN_MASK)) > 0);
+                      ((mTrunc & static_cast<uint32_t>(Fp32BasicParam::K_FP32_SIGN_MASK)) > 0);
     bool bTruncLeft = (ROUND_MODE == TagFp16RoundMode::K_ROUND_TO_NEAREST) &&
-        ((mTrunc & static_cast<uint32_t>(Fp32BasicParam::K_FP32_ABS_MAX)) > 0);
+                      ((mTrunc & static_cast<uint32_t>(Fp32BasicParam::K_FP32_ABS_MAX)) > 0);
     mRet = ManRoundToNearest(bLastBit, bTruncHigh, bTruncLeft, mRet, shiftOut);
     while (mRet >= mMax) {
         mRet = mRet >> 1;
@@ -203,7 +205,7 @@ static uint16_t Fp16Add(uint16_t v1, uint16_t v2)
         ReverseMan(sb > 0, mb);
         sum = static_cast<uint16_t>(GetManSum(ea, ma, eb, mb));
         sRet = (sum & static_cast<uint16_t>(Fp16BasicParam::K_FP16_SIGN_MASK)) >>
-            static_cast<uint16_t>(Fp16BasicParam::K_FP16_SIGN_INDEX);
+               static_cast<uint16_t>(Fp16BasicParam::K_FP16_SIGN_INDEX);
         ReverseMan(sRet > 0, ma);
         ReverseMan(sRet > 0, mb);
     } else {
@@ -233,38 +235,40 @@ static uint16_t Fp16Add(uint16_t v1, uint16_t v2)
 }
 
 // operate
-half half::operator + (const half fp) const
+half half::operator+(const half fp) const
 {
     uint16_t retVal = Fp16Add(val, fp.val);
     half ret;
     ret.val = retVal;
     return ret;
 }
-half half::operator += (const half fp)
+half half::operator+=(const half fp)
 {
     val = Fp16Add(val, fp.val);
     return *this;
 }
 // compare
-bool half::operator == (const half& fp) const
+bool half::operator==(const half& fp) const
 {
     bool result = true;
     if (FP16_IS_ZERO(val) && FP16_IS_ZERO(fp.val)) {
         result = true;
     } else {
-        result = ((val & static_cast<uint16_t>(NumBitMax::K_BIT_LEN16_MAX)) ==
-            (fp.val & static_cast<uint16_t>(NumBitMax::K_BIT_LEN16_MAX))); // bit compare
+        result =
+            ((val & static_cast<uint16_t>(NumBitMax::K_BIT_LEN16_MAX)) ==
+             (fp.val & static_cast<uint16_t>(NumBitMax::K_BIT_LEN16_MAX))); // bit compare
     }
     return result;
 }
-bool half::operator != (const half& fp) const
+bool half::operator!=(const half& fp) const
 {
     bool result = true;
     if (FP16_IS_ZERO(val) && FP16_IS_ZERO(fp.val)) {
         result = false;
     } else {
-        result = ((val & static_cast<uint16_t>(NumBitMax::K_BIT_LEN16_MAX)) !=
-            (fp.val & static_cast<uint16_t>(NumBitMax::K_BIT_LEN16_MAX))); // bit compare
+        result =
+            ((val & static_cast<uint16_t>(NumBitMax::K_BIT_LEN16_MAX)) !=
+             (fp.val & static_cast<uint16_t>(NumBitMax::K_BIT_LEN16_MAX))); // bit compare
     }
     return result;
 }
@@ -292,7 +296,7 @@ static bool CmpNegNums(const uint16_t& ea, const uint16_t& eb, const uint16_t& m
     }
     return result;
 }
-bool half::operator > (const half& fp) const
+bool half::operator>(const half& fp) const
 {
     uint16_t sa;
     uint16_t sb;
@@ -326,7 +330,7 @@ bool half::operator > (const half& fp) const
     return result;
 }
 
-bool half::operator >= (const half& fp) const
+bool half::operator>=(const half& fp) const
 {
     bool result = true;
     if (((*this) > fp) || ((*this) == fp)) {
@@ -338,7 +342,7 @@ bool half::operator >= (const half& fp) const
     return result;
 }
 
-bool half::operator <= (const half& fp) const
+bool half::operator<=(const half& fp) const
 {
     bool result = true;
     if ((*this) > fp) {
@@ -347,7 +351,7 @@ bool half::operator <= (const half& fp) const
     return result;
 }
 
-bool half::operator < (const half& fp) const
+bool half::operator<(const half& fp) const
 {
     bool result = true;
     if ((*this) >= fp) {
@@ -356,29 +360,23 @@ bool half::operator < (const half& fp) const
     return result;
 }
 
-half half::operator ++ ()
+half half::operator++()
 {
     half one = 1.0;
     val = Fp16Add(val, one.val);
     return *this;
 }
 
-half half::operator ++ (int)
+half half::operator++(int)
 {
     half oldBf = *this;
     operator++();
     return oldBf;
 }
 
-bool half::operator && (const half fp) const
-{
-    return (val != 0) && (fp.val != 0);
-}
+bool half::operator&&(const half fp) const { return (val != 0) && (fp.val != 0); }
 
-bool half::operator || (const half fp) const
-{
-    return (val != 0) || (fp.val != 0);
-}
+bool half::operator||(const half fp) const { return (val != 0) || (fp.val != 0); }
 
 uint16_t half::FloatToFp16(const float& fVal) const
 {
@@ -390,12 +388,14 @@ uint16_t half::FloatToFp16(const float& fVal) const
     const uint32_t ui32V = *(reinterpret_cast<const uint32_t*>(&fVal)); // 1:8:23bit sign:exp:man
     uint32_t mLenDelta;
 
-    sRet = static_cast<uint16_t>((ui32V & static_cast<uint32_t>(Fp32BasicParam::K_FP32_SIGN_MASK)) >>
+    sRet = static_cast<uint16_t>(
+        (ui32V & static_cast<uint32_t>(Fp32BasicParam::K_FP32_SIGN_MASK)) >>
         static_cast<uint16_t>(Fp32BasicParam::K_FP32_SIGN_INDEX)); // 4Byte->2Byte
     ef = (ui32V & static_cast<uint32_t>(Fp32BasicParam::K_FP32_EXP_MASK)) >>
-        static_cast<uint16_t>(Fp32BasicParam::K_FP32_MAN_LEN); // 8 bit exponent
-    mf = (ui32V &
-        static_cast<uint32_t>(Fp32BasicParam::K_FP32_MAN_MASK)); // 23 bit mantissa dont't need to care about denormal
+         static_cast<uint16_t>(Fp32BasicParam::K_FP32_MAN_LEN); // 8 bit exponent
+    mf =
+        (ui32V &
+         static_cast<uint32_t>(Fp32BasicParam::K_FP32_MAN_MASK)); // 23 bit mantissa dont't need to care about denormal
     mLenDelta =
         static_cast<uint16_t>(Fp32BasicParam::K_FP32_MAN_LEN) - static_cast<uint16_t>(Fp16BasicParam::K_FP16_MAN_LEN);
 
@@ -438,32 +438,17 @@ uint16_t half::FloatToFp16(const float& fVal) const
     return FP16_CONSTRUCTOR(sRet, static_cast<uint16_t>(eRet), mRet);
 }
 
-uint16_t half::DoubleToFp16(const double& dVal)
-{
-    return 0;
-}
+uint16_t half::DoubleToFp16(const double& dVal) { return 0; }
 
-uint16_t half::Int16ToFp16(const int16_t& iVal) const
-{
-    return iVal;
-}
+uint16_t half::Int16ToFp16(const int16_t& iVal) const { return iVal; }
 
-uint16_t half::UInt16ToFp16(const uint16_t& uiVal)
-{
-    return uiVal;
-}
-uint16_t half::Int32ToFp16(const int32_t& iVal) const
-{
-    return iVal;
-}
+uint16_t half::UInt16ToFp16(const uint16_t& uiVal) { return uiVal; }
+uint16_t half::Int32ToFp16(const int32_t& iVal) const { return iVal; }
 
-uint16_t half::UInt32ToFp16(const uint32_t& uiVal) const
-{
-    return uiVal;
-}
+uint16_t half::UInt32ToFp16(const uint32_t& uiVal) const { return uiVal; }
 
 // evaluation
-half& half::operator = (const half& fp)
+half& half::operator=(const half& fp)
 {
     if (&fp == this) {
         return *this;
@@ -473,13 +458,7 @@ half& half::operator = (const half& fp)
 }
 
 // convert
-half::operator float() const
-{
-    return Fp16ToFloat(val);
-}
+half::operator float() const { return Fp16ToFloat(val); }
 
-float half::ToFloat() const
-{
-    return Fp16ToFloat(val);
-}
+float half::ToFloat() const { return Fp16ToFloat(val); }
 // } // namespace float16

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -38,19 +38,19 @@ protected:
 
 namespace AscendC {
 template <typename T, TestMode testMode>
-void main_vec_clamp_demo(__gm__ uint8_t *__restrict__ dstGm, __gm__ uint8_t *__restrict__ srcGm, 
-    __gm__ uint8_t *__restrict__ minGm, __gm__ uint8_t *__restrict__ maxGm, uint32_t dataSize,
-    TmpMode tmpMode)
+void main_vec_clamp_demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ minGm,
+    __gm__ uint8_t* __restrict__ maxGm, uint32_t dataSize, TmpMode tmpMode)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
     GlobalTensor<T> outputGlobal;
     GlobalTensor<T> minGlobal;
     GlobalTensor<T> maxGlobal;
-    inputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm), dataSize);
-    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), dataSize);
-    minGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(minGm), dataSize);
-    maxGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(maxGm), dataSize);
+    inputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm), dataSize);
+    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dataSize);
+    minGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(minGm), dataSize);
+    maxGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(maxGm), dataSize);
 
     TBuf<TPosition::VECCALC> tbuf1;
     tpipe.InitBuffer(tbuf1, dataSize * sizeof(T));
@@ -110,19 +110,19 @@ void main_vec_clamp_demo(__gm__ uint8_t *__restrict__ dstGm, __gm__ uint8_t *__r
 
     PipeBarrier<PIPE_ALL>();
 }
-}
-#define VEC_CLAMP_TESTCASE(DATA_TYPE, TEST_MODE, CALCOUNT, TMP_MODE)                         \
-    TEST_F(TEST_CLAMP, Clamp##_##DATA_TYPE##_##CALCOUNT##_##TEST_MODE##_##TMP_MODE##_##Case) \
-    {                                                                                        \
-        uint32_t dataSize = CALCOUNT;                                                        \
-        uint8_t inputGm[dataSize * sizeof(DATA_TYPE)] = {0};                                       \
-        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)] = {0};                                      \
-        uint8_t minGm[dataSize * sizeof(DATA_TYPE)] = {0};                                      \
-        uint8_t maxGm[dataSize * sizeof(DATA_TYPE)] = {0};                                      \
-        main_vec_clamp_demo<DATA_TYPE, TEST_MODE>(outputGm, inputGm, minGm, maxGm, dataSize, TMP_MODE);    \
-        for (uint32_t i = 0; i < dataSize; i++) {                                            \
-            EXPECT_EQ(outputGm[i], 0x00);                                                    \
-        }                                                                                    \
+} // namespace AscendC
+#define VEC_CLAMP_TESTCASE(DATA_TYPE, TEST_MODE, CALCOUNT, TMP_MODE)                                    \
+    TEST_F(TEST_CLAMP, Clamp##_##DATA_TYPE##_##CALCOUNT##_##TEST_MODE##_##TMP_MODE##_##Case)            \
+    {                                                                                                   \
+        uint32_t dataSize = CALCOUNT;                                                                   \
+        uint8_t inputGm[dataSize * sizeof(DATA_TYPE)] = {0};                                            \
+        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)] = {0};                                           \
+        uint8_t minGm[dataSize * sizeof(DATA_TYPE)] = {0};                                              \
+        uint8_t maxGm[dataSize * sizeof(DATA_TYPE)] = {0};                                              \
+        main_vec_clamp_demo<DATA_TYPE, TEST_MODE>(outputGm, inputGm, minGm, maxGm, dataSize, TMP_MODE); \
+        for (uint32_t i = 0; i < dataSize; i++) {                                                       \
+            EXPECT_EQ(outputGm[i], 0x00);                                                               \
+        }                                                                                               \
     }
 VEC_CLAMP_TESTCASE(float, CLAMP_MAX, 256, MODE_NORMAL);
 VEC_CLAMP_TESTCASE(float, CLAMP_MIN, 256, MODE_NORMAL);

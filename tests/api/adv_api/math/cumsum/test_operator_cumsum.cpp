@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -21,28 +21,23 @@ enum TestMode {
 
 class TEST_CUMSUM : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(AscendC::AIV_TYPE);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(AscendC::MIX_TYPE);
-    }
+    void SetUp() { AscendC::SetGCoreType(AscendC::AIV_TYPE); }
+    void TearDown() { AscendC::SetGCoreType(AscendC::MIX_TYPE); }
 };
 
 template <typename T, bool isFirstAxis = false>
-void main_vec_cumsum_demo(__gm__ uint8_t *__restrict__ dst_gm, __gm__ uint8_t *__restrict__ last_row_gm,
-    __gm__ uint8_t *__restrict__ src_gm, const CumSumInfo &cumSumParams, TestMode test_mode)
+void main_vec_cumsum_demo(
+    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restrict__ last_row_gm, __gm__ uint8_t* __restrict__ src_gm,
+    const CumSumInfo& cumSumParams, TestMode test_mode)
 {
     TPipe tpipe;
     GlobalTensor<T> input_global;
     GlobalTensor<T> output_global;
     GlobalTensor<T> last_raw_global;
     uint32_t srcSize = cumSumParams.outter * cumSumParams.inner;
-    input_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(src_gm), srcSize);
-    output_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dst_gm), srcSize);
-    last_raw_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(last_row_gm), cumSumParams.inner);
+    input_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(src_gm), srcSize);
+    output_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dst_gm), srcSize);
+    last_raw_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(last_row_gm), cumSumParams.inner);
 
     TBuf<TPosition::VECCALC> tbuf;
     tpipe.InitBuffer(tbuf, srcSize * sizeof(T));
@@ -79,20 +74,20 @@ void main_vec_cumsum_demo(__gm__ uint8_t *__restrict__ dst_gm, __gm__ uint8_t *_
 
     PipeBarrier<PIPE_ALL>();
 }
-#define VEC_CUMSUM_LASTDIM_TESTCASE(firstDim, lastDim, DATA_TYPE, TEST_MODE)                             \
-    TEST_F(TEST_CUMSUM, CUMSUM##firstDim##lastDim##DATA_TYPE##TEST_MODE##Case)                           \
-    {                                                                                                    \
-        CumSumInfo cumSumParams{firstDim, lastDim};                                                      \
-        uint32_t srcSize = firstDim * lastDim;                                                           \
-        DATA_TYPE input_gm[srcSize];                                                                     \
-        DATA_TYPE output_gm[srcSize];                                                                    \
-        DATA_TYPE last_row_gm[lastDim];                                                                  \
-        main_vec_cumsum_demo<DATA_TYPE>(                                                                 \
-            (uint8_t *)output_gm, (uint8_t *)last_row_gm, (uint8_t *)input_gm, cumSumParams, TEST_MODE); \
-                                                                                                         \
-        for (uint32_t i = 0; i < srcSize; i++) {                                                         \
-            EXPECT_EQ(output_gm[i], static_cast<DATA_TYPE>(0));                                          \
-        }                                                                                                \
+#define VEC_CUMSUM_LASTDIM_TESTCASE(firstDim, lastDim, DATA_TYPE, TEST_MODE)                          \
+    TEST_F(TEST_CUMSUM, CUMSUM##firstDim##lastDim##DATA_TYPE##TEST_MODE##Case)                        \
+    {                                                                                                 \
+        CumSumInfo cumSumParams{firstDim, lastDim};                                                   \
+        uint32_t srcSize = firstDim * lastDim;                                                        \
+        DATA_TYPE input_gm[srcSize];                                                                  \
+        DATA_TYPE output_gm[srcSize];                                                                 \
+        DATA_TYPE last_row_gm[lastDim];                                                               \
+        main_vec_cumsum_demo<DATA_TYPE>(                                                              \
+            (uint8_t*)output_gm, (uint8_t*)last_row_gm, (uint8_t*)input_gm, cumSumParams, TEST_MODE); \
+                                                                                                      \
+        for (uint32_t i = 0; i < srcSize; i++) {                                                      \
+            EXPECT_EQ(output_gm[i], static_cast<DATA_TYPE>(0));                                       \
+        }                                                                                             \
     }
 
 VEC_CUMSUM_LASTDIM_TESTCASE(16, 16, half, MODE_NORMAL);
@@ -104,20 +99,20 @@ VEC_CUMSUM_LASTDIM_TESTCASE(16, 16, float, MODE_NORMAL);
 VEC_CUMSUM_LASTDIM_TESTCASE(32, 16, float, MODE_NORMAL);
 VEC_CUMSUM_LASTDIM_TESTCASE(8, 8, float, MODE_NORMAL);
 
-#define VEC_CUMSUM_FIRST_TESTCASE(firstDim, lastDim, DATA_TYPE, TEST_MODE)                               \
-    TEST_F(TEST_CUMSUM, CUMSUM_FIRST_DIM##firstDim##lastDim##DATA_TYPE##TEST_MODE##Case)                 \
-    {                                                                                                    \
-        CumSumInfo cumSumParams{firstDim, lastDim};                                                      \
-        uint32_t srcSize = firstDim * lastDim;                                                           \
-        DATA_TYPE input_gm[srcSize];                                                                     \
-        DATA_TYPE output_gm[srcSize];                                                                    \
-        DATA_TYPE last_row_gm[lastDim];                                                                  \
-        main_vec_cumsum_demo<DATA_TYPE, true>(                                                           \
-            (uint8_t *)output_gm, (uint8_t *)last_row_gm, (uint8_t *)input_gm, cumSumParams, TEST_MODE); \
-                                                                                                         \
-        for (uint32_t i = 0; i < srcSize; i++) {                                                         \
-            EXPECT_EQ(output_gm[i], static_cast<DATA_TYPE>(0));                                          \
-        }                                                                                                \
+#define VEC_CUMSUM_FIRST_TESTCASE(firstDim, lastDim, DATA_TYPE, TEST_MODE)                            \
+    TEST_F(TEST_CUMSUM, CUMSUM_FIRST_DIM##firstDim##lastDim##DATA_TYPE##TEST_MODE##Case)              \
+    {                                                                                                 \
+        CumSumInfo cumSumParams{firstDim, lastDim};                                                   \
+        uint32_t srcSize = firstDim * lastDim;                                                        \
+        DATA_TYPE input_gm[srcSize];                                                                  \
+        DATA_TYPE output_gm[srcSize];                                                                 \
+        DATA_TYPE last_row_gm[lastDim];                                                               \
+        main_vec_cumsum_demo<DATA_TYPE, true>(                                                        \
+            (uint8_t*)output_gm, (uint8_t*)last_row_gm, (uint8_t*)input_gm, cumSumParams, TEST_MODE); \
+                                                                                                      \
+        for (uint32_t i = 0; i < srcSize; i++) {                                                      \
+            EXPECT_EQ(output_gm[i], static_cast<DATA_TYPE>(0));                                       \
+        }                                                                                             \
     }
 
 VEC_CUMSUM_FIRST_TESTCASE(16, 16, half, MODE_NORMAL);

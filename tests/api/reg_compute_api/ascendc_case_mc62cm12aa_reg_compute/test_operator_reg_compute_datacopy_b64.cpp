@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -18,15 +18,16 @@ using Reg::MaskReg;
 using Reg::RegTensor;
 using Reg::UpdateMask;
 
-template <typename T, int Mode, int Count, int TraitNum> class KernelMicroDataCopyB64 {
+template <typename T, int Mode, int Count, int TraitNum>
+class KernelMicroDataCopyB64 {
 public:
     __aicore__ inline KernelMicroDataCopyB64() {}
     __aicore__ inline void Init(GM_ADDR srcGm, GM_ADDR dstGm, uint32_t totalNum)
     {
         const int alginSize = 32 / sizeof(T);
         dstSize = (totalNum + alginSize - 1) / alginSize * alginSize;
-        srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm), dstSize);
-        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), dstSize);
+        srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm), dstSize);
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dstSize);
         pipe.InitBuffer(inQueue, 1, dstSize * sizeof(T));
         pipe.InitBuffer(outQueue, 1, dstSize * sizeof(T));
     }
@@ -46,14 +47,13 @@ private:
         inQueue.EnQue<T>(srcLocal);
     }
 
-    __aicore__ inline void ComputeMode0(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode0(__ubuf__ T* dst, __ubuf__ T* src)
     {
         // Pat { ALL, VL1, VL2, VL3, VL4, VL8, VL16, VL32, VL64, VL128, M3, M4, H, Q, ALLF = 15 }
         if constexpr (TraitNum == 1) {
             RegTensor<T, Reg::RegTraitNumOne> vreg0;
             uint32_t sregLower = 32;
-            MaskReg preg =
-                CreateMask<T, static_cast<Reg::MaskPattern>(Mode), Reg::RegTraitNumOne>();
+            MaskReg preg = CreateMask<T, static_cast<Reg::MaskPattern>(Mode), Reg::RegTraitNumOne>();
             for (uint16_t i = 0; i < (uint16_t)1; ++i) {
                 DataCopy(vreg0, src + i * sregLower);
                 DataCopy(dst + i * sregLower, vreg0, preg);
@@ -61,8 +61,7 @@ private:
         } else {
             RegTensor<T, Reg::RegTraitNumTwo> vreg0;
             uint32_t sregLower = 64;
-            MaskReg preg =
-                CreateMask<T, static_cast<Reg::MaskPattern>(Mode), Reg::RegTraitNumTwo>();
+            MaskReg preg = CreateMask<T, static_cast<Reg::MaskPattern>(Mode), Reg::RegTraitNumTwo>();
             for (uint16_t i = 0; i < (uint16_t)1; ++i) {
                 DataCopy(vreg0, src + i * sregLower);
                 DataCopy(dst + i * sregLower, vreg0, preg);
@@ -70,7 +69,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode1(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode1(__ubuf__ T* dst, __ubuf__ T* src)
     {
         uint32_t sreg = (uint32_t)Count;
         if constexpr (TraitNum == 1) {
@@ -96,7 +95,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode2(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode2(__ubuf__ T* dst, __ubuf__ T* src)
     {
         uint32_t sreg = (uint32_t)Count;
         if constexpr (TraitNum == 1) {
@@ -122,7 +121,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode4(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode4(__ubuf__ T* dst, __ubuf__ T* src)
     {
         uint32_t sreg = (uint32_t)Count;
         if constexpr (TraitNum == 1) {
@@ -156,7 +155,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode5(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode5(__ubuf__ T* dst, __ubuf__ T* src)
     {
         constexpr uint32_t sregLower = (uint32_t)(VECTOR_REG_WIDTH / sizeof(T) / 8);
         uint16_t repeatTimes = CeilDivision(dstSize, sregLower);
@@ -171,7 +170,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode6(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode6(__ubuf__ T* dst, __ubuf__ T* src)
     {
         constexpr uint32_t sregLower = (uint32_t)(VECTOR_REG_WIDTH / 8);
         uint16_t repeatTimes = CeilDivision(dstSize * sizeof(T), sregLower);
@@ -180,10 +179,8 @@ private:
             MaskReg preg0;
             int32_t sreg = (int32_t)sregLower;
             for (uint16_t i = 0; i < (uint16_t)repeatTimes; ++i) {
-                Reg::DataCopy<T, Reg::PostLiteral::POST_MODE_UPDATE,
-                    Reg::MaskDist::DIST_NORM>(preg0, src, sreg);
-                Reg::DataCopy<T, Reg::PostLiteral::POST_MODE_UPDATE,
-                    Reg::MaskDist::DIST_NORM>(dst, preg0, sreg);
+                Reg::DataCopy<T, Reg::PostLiteral::POST_MODE_UPDATE, Reg::MaskDist::DIST_NORM>(preg0, src, sreg);
+                Reg::DataCopy<T, Reg::PostLiteral::POST_MODE_UPDATE, Reg::MaskDist::DIST_NORM>(dst, preg0, sreg);
             }
         }
     }
@@ -195,8 +192,8 @@ private:
         Duplicate(tmp, (uint32_t)0, dstSize * 2);
         LocalTensor<T> srcLocal = inQueue.DeQue<T>();
 
-        __ubuf__ T *src = (__ubuf__ T *)srcLocal[0].GetPhyAddr();
-        __ubuf__ T *dst = (__ubuf__ T *)dstLocal[0].GetPhyAddr();
+        __ubuf__ T* src = (__ubuf__ T*)srcLocal[0].GetPhyAddr();
+        __ubuf__ T* dst = (__ubuf__ T*)dstLocal[0].GetPhyAddr();
         __VEC_SCOPE__
         {
             if constexpr (Mode < 100) {
@@ -206,8 +203,8 @@ private:
             } else if constexpr (Mode == 300) {
                 ComputeMode2(dst, src);
             } else if constexpr (Mode == 500) {
-                __ubuf__ T *src1 = (__ubuf__ T *)srcLocal[dstSize - Count].GetPhyAddr();
-                __ubuf__ T *dst1 = (__ubuf__ T *)dstLocal[dstSize - Count].GetPhyAddr();
+                __ubuf__ T* src1 = (__ubuf__ T*)srcLocal[dstSize - Count].GetPhyAddr();
+                __ubuf__ T* dst1 = (__ubuf__ T*)dstLocal[dstSize - Count].GetPhyAddr();
                 ComputeMode4(dst1, src1);
             } else if constexpr (Mode == 600) {
                 ComputeMode5(dst, src);
@@ -238,42 +235,45 @@ private:
 };
 
 template <typename T, int Mode, int Count, int TraitNum>
-__global__ __aicore__ void MicroDatacopyB64(uint8_t *dstGm, uint8_t *srcGm, uint32_t size)
+__global__ __aicore__ void MicroDatacopyB64(uint8_t* dstGm, uint8_t* srcGm, uint32_t size)
 {
     KernelMicroDataCopyB64<T, Mode, Count, TraitNum> op;
     op.Init(srcGm, dstGm, size);
     op.Process();
 }
 
-template <int dim, int Count, int TraitNum> struct MicroDatacopyModeB64TestParams {
-    void (*cal_func)(uint8_t *, uint8_t *, uint32_t);
+template <int dim, int Count, int TraitNum>
+struct MicroDatacopyModeB64TestParams {
+    void (*cal_func)(uint8_t*, uint8_t*, uint32_t);
     uint32_t size;
 };
 
 template <int Mode, int Count, int TraitNum>
-class MicroDatacopyB64Testsuite : public testing::Test,
-    public testing::WithParamInterface<MicroDatacopyModeB64TestParams<Mode, Count, TraitNum>> {};
+class MicroDatacopyB64Testsuite
+    : public testing::Test,
+      public testing::WithParamInterface<MicroDatacopyModeB64TestParams<Mode, Count, TraitNum>> {};
 
 #define MICRO_DATACOPY_B64_TEST_CASE(MODE, COUNT, TRAIT_NUM)                                                          \
     using MicroDatacopyB64Testsuite_mode##MODE##COUNT##TRAIT_NUM = MicroDatacopyB64Testsuite<MODE, COUNT, TRAIT_NUM>; \
-    INSTANTIATE_TEST_CASE_P(TEST_MicroDatacopyB64, MicroDatacopyB64Testsuite_mode##MODE##COUNT##TRAIT_NUM,            \
+    INSTANTIATE_TEST_CASE_P(                                                                                          \
+        TEST_MicroDatacopyB64, MicroDatacopyB64Testsuite_mode##MODE##COUNT##TRAIT_NUM,                                \
         ::testing::Values(                                                                                            \
-        MicroDatacopyModeB64TestParams<MODE, COUNT, TRAIT_NUM>{ MicroDatacopyB64<uint64_t, MODE, COUNT, TRAIT_NUM>,   \
-        128 },                                                                                                        \
-        MicroDatacopyModeB64TestParams<MODE, COUNT, TRAIT_NUM>{ MicroDatacopyB64<int64_t, MODE, COUNT, TRAIT_NUM>,    \
-        128 }));                                                                                                      \
+            MicroDatacopyModeB64TestParams<MODE, COUNT, TRAIT_NUM>{                                                   \
+                MicroDatacopyB64<uint64_t, MODE, COUNT, TRAIT_NUM>, 128},                                             \
+            MicroDatacopyModeB64TestParams<MODE, COUNT, TRAIT_NUM>{                                                   \
+                MicroDatacopyB64<int64_t, MODE, COUNT, TRAIT_NUM>, 128}));                                            \
                                                                                                                       \
     TEST_P(MicroDatacopyB64Testsuite_mode##MODE##COUNT##TRAIT_NUM, MicroDatacopyB64TestCase)                          \
     {                                                                                                                 \
-        auto param = GetParam();                                                                  \
-        uint8_t* srcGm = new uint8_t[param.size * 4 * 10]{0};                                      \
-        uint8_t* dstGm = new uint8_t[param.size * 4 * 10]{0};                                      \
-        param.cal_func(dstGm, srcGm, param.size);                                                 \
-        for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {                        \
-            EXPECT_EQ(dstGm[i], 0x00);                                                            \
-        }                                                                                         \
-        delete [] srcGm;                                                                          \
-        delete [] dstGm;                                                                          \
+        auto param = GetParam();                                                                                      \
+        uint8_t* srcGm = new uint8_t[param.size * 4 * 10]{0};                                                         \
+        uint8_t* dstGm = new uint8_t[param.size * 4 * 10]{0};                                                         \
+        param.cal_func(dstGm, srcGm, param.size);                                                                     \
+        for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {                                            \
+            EXPECT_EQ(dstGm[i], 0x00);                                                                                \
+        }                                                                                                             \
+        delete[] srcGm;                                                                                               \
+        delete[] dstGm;                                                                                               \
     }
 
 MICRO_DATACOPY_B64_TEST_CASE(0, 128, 1);

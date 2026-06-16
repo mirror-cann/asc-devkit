@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 /*!
  * \file test_matmul_load_to_l0a_gemv_mx.cpp
  * \brief
@@ -29,22 +29,20 @@ namespace {
 constexpr int32_t MX_K_FACTOR = 32;
 
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using LoadToA2 = Impl::Detail::LoadToL0A<IMPL, A_TYPE, MM_CFG>;
 };
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
-MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE(LoadToA2) {
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+    MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(LoadToA2) {
     MATMUL_ALLOW_USING(LoadToA2);
 
 public:
     MatmulImpl() = default;
     TPipe pipe;
-
 };
 
 class TestMxMatmulLoadToL0aGemv : public testing::Test {
@@ -53,15 +51,19 @@ protected:
     void TearDown() {}
 
 private:
-    using A_FP8_TYPE = MatmulTypeWithScale<TPosition::GM, TPosition::GM, CubeFormat::ND,
-        fp8_e5m2_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
-    using A_FP4_TYPE = MatmulTypeWithScale<TPosition::GM, TPosition::GM, CubeFormat::ND,
-        fp4x2_e2m1_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
+    using A_FP8_TYPE = MatmulTypeWithScale<
+        TPosition::GM, TPosition::GM, CubeFormat::ND, fp8_e5m2_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
+    using A_FP4_TYPE = MatmulTypeWithScale<
+        TPosition::GM, TPosition::GM, CubeFormat::ND, fp4x2_e2m1_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
 
-    using B_FP8_TYPE = MatmulTypeWithScale<TPosition::GM, TPosition::GM, CubeFormat::ND,
-        fp8_e4m3fn_t, true, TPosition::GM, CubeFormat::ND, true, TPosition::GM>;
-    using B_FP4_TYPE = MatmulTypeWithScale<TPosition::GM, TPosition::GM, CubeFormat::ND,
-        fp4x2_e1m2_t, true, TPosition::GM, CubeFormat::ND, true, TPosition::GM>;
+    using B_FP8_TYPE = MatmulTypeWithScale<
+        TPosition::GM, TPosition::GM, CubeFormat::ND, fp8_e4m3fn_t, true, TPosition::GM, CubeFormat::ND, true,
+        TPosition::GM>;
+    using B_FP4_TYPE = MatmulTypeWithScale<
+        TPosition::GM, TPosition::GM, CubeFormat::ND, fp4x2_e1m2_t, true, TPosition::GM, CubeFormat::ND, true,
+        TPosition::GM>;
 
     using C_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
     using BIAS_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
@@ -70,7 +72,8 @@ private:
     MatmulImpl<A_FP4_TYPE, B_FP4_TYPE, C_TYPE, BIAS_TYPE, CFG_MDL, void, CustomMatmulPolicy> mm2;
 };
 
-TEST_F(TestMxMatmulLoadToL0aGemv, MxMatmulLoadL1ToL0aGemvFp8Case) {
+TEST_F(TestMxMatmulLoadToL0aGemv, MxMatmulLoadL1ToL0aGemvFp8Case)
+{
     // input: M: 1, K: 1024
     const uint32_t M = 1;
     const uint32_t K = 1024;
@@ -85,10 +88,11 @@ TEST_F(TestMxMatmulLoadToL0aGemv, MxMatmulLoadL1ToL0aGemvFp8Case) {
     mm1.pipe.InitBuffer(l1aMxBuf, M * K / MX_K_FACTOR);
     auto l1aMx = l1aMxBuf.Get<fp8_e8m0_t>();
 
-    mm1.Load(l0a, l1a, 0, 0, M, K, 0, 0, false, l1aMx, M * K / MX_K_FACTOR, 0 , 0);
+    mm1.Load(l0a, l1a, 0, 0, M, K, 0, 0, false, l1aMx, M * K / MX_K_FACTOR, 0, 0);
 }
 
-TEST_F(TestMxMatmulLoadToL0aGemv, MxMatmulLoadL1ToL0aGemvFp4Case) {
+TEST_F(TestMxMatmulLoadToL0aGemv, MxMatmulLoadL1ToL0aGemvFp4Case)
+{
     // input: M: 1, K: 1024
     const uint32_t M = 1;
     const uint32_t K = 1024;
@@ -103,6 +107,6 @@ TEST_F(TestMxMatmulLoadToL0aGemv, MxMatmulLoadL1ToL0aGemvFp4Case) {
     mm2.pipe.InitBuffer(l1aMxBuf, M * K / MX_K_FACTOR);
     auto l1aMx = l1aMxBuf.Get<fp8_e8m0_t>();
 
-    mm2.Load(l0a, l1a, 0, 0, M, K, 0, 0, false, l1aMx, M * K / MX_K_FACTOR, 0 , 0);
+    mm2.Load(l0a, l1a, 0, 0, M, K, 0, 0, false, l1aMx, M * K / MX_K_FACTOR, 0, 0);
 }
-} //namespace
+} // namespace

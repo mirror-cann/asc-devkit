@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -19,8 +19,9 @@ using namespace std;
 using namespace AscendC;
 
 template <typename T>
-__global__ __aicore__ void MainSyncAllTest(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm,
-    __gm__ uint8_t* __restrict__ workGm, __gm__ uint8_t* __restrict__ syncGm)
+__global__ __aicore__ void MainSyncAllTest(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ workGm,
+    __gm__ uint8_t* __restrict__ syncGm)
 {
     AscendC::TPipe tpipe;
     block_num = 1; // system numBlocks
@@ -33,10 +34,10 @@ __global__ __aicore__ void MainSyncAllTest(__gm__ uint8_t* __restrict__ dstGm, _
     GlobalTensor<float> dstGlobal;
     GlobalTensor<float> workGlobal;
     GlobalTensor<int32_t> syncGlobal;
-    srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ float*>(srcGm + blockIdx * perBlockDataSize * sizeof(float)),
-        perBlockDataSize);
-    dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ float*>(dstGm + blockIdx * perBlockDataSize * sizeof(float)),
-        perBlockDataSize);
+    srcGlobal.SetGlobalBuffer(
+        reinterpret_cast<__gm__ float*>(srcGm + blockIdx * perBlockDataSize * sizeof(float)), perBlockDataSize);
+    dstGlobal.SetGlobalBuffer(
+        reinterpret_cast<__gm__ float*>(dstGm + blockIdx * perBlockDataSize * sizeof(float)), perBlockDataSize);
     workGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ float*>(workGm), srcDataSize);
     syncGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ int32_t*>(syncGm), 8);
 
@@ -99,8 +100,8 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_SYNCALL, SyncAllTestsuite,
-    ::testing::Values(SyncAllTestParams { 4, MainSyncAllTest<float> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_SYNCALL, SyncAllTestsuite, ::testing::Values(SyncAllTestParams{4, MainSyncAllTest<float>}));
 
 TEST_P(SyncAllTestsuite, SyncAllOpTestCase)
 {

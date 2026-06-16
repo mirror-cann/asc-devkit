@@ -1,20 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
 using namespace std;
 using namespace AscendC;
 template <typename T>
-void MainVecBinaryScalarDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm,
-    __gm__ int32_t dataSize)
+void MainVecBinaryScalarDemo(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
@@ -48,7 +48,6 @@ void MainVecBinaryScalarDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t*
     pipe_barrier(PIPE_ALL);
 }
 
-
 struct BinaryScalarTestParams {
     int32_t dataSize;
     int32_t dataBitSize;
@@ -61,9 +60,11 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_VEC_BINARY_SCALAR, BinaryScalarSimpleTestsuite,
-    ::testing::Values(BinaryScalarTestParams { 256, 2, MainVecBinaryScalarDemo<half> },
-    BinaryScalarTestParams { 256, 4, MainVecBinaryScalarDemo<float> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_VEC_BINARY_SCALAR, BinaryScalarSimpleTestsuite,
+    ::testing::Values(
+        BinaryScalarTestParams{256, 2, MainVecBinaryScalarDemo<half>},
+        BinaryScalarTestParams{256, 4, MainVecBinaryScalarDemo<float>}));
 
 TEST_P(BinaryScalarSimpleTestsuite, BinaryScalarSimpleTestCase)
 {

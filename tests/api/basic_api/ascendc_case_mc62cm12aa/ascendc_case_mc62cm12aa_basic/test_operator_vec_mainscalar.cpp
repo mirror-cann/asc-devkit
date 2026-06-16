@@ -1,13 +1,13 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
- 
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
+
 #include <gtest/gtest.h>
 #include <type_traits>
 #include "kernel_operator.h"
@@ -18,19 +18,19 @@ using namespace AscendC;
 template <typename T, typename U, int16_t VF>
 class KernelMainScalar {
 public:
-    __aicore__ inline KernelMainScalar()
-    {}
-    __aicore__ inline void Init(GM_ADDR srcGm0, GM_ADDR srcGm1, GM_ADDR dstGm0, GM_ADDR dstGm1, uint32_t dataSizeIn, uint32_t calCountIn)
+    __aicore__ inline KernelMainScalar() {}
+    __aicore__ inline void Init(
+        GM_ADDR srcGm0, GM_ADDR srcGm1, GM_ADDR dstGm0, GM_ADDR dstGm1, uint32_t dataSizeIn, uint32_t calCountIn)
     {
         calCount = calCountIn;
         const int srcAlignSize = 32 / sizeof(T);
         srcDataSize = CeilDivision(dataSizeIn, srcAlignSize) * srcAlignSize;
         const int dstAlignSize = 32 / sizeof(U);
         dstDataSize = CeilDivision(dataSizeIn, dstAlignSize) * dstAlignSize;
-        srcGlobalX.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm0), srcDataSize);
-        srcGlobalY.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm1), srcDataSize);
-        dstGlobalX.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(dstGm0), dstDataSize);
-        dstGlobalY.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(dstGm1), dstDataSize);
+        srcGlobalX.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm0), srcDataSize);
+        srcGlobalY.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm1), srcDataSize);
+        dstGlobalX.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(dstGm0), dstDataSize);
+        dstGlobalY.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(dstGm1), dstDataSize);
         pipe.InitBuffer(inQueueX, 1, srcDataSize * sizeof(T));
         pipe.InitBuffer(inQueueY, 1, srcDataSize * sizeof(T));
         pipe.InitBuffer(outQueueX, 1, dstDataSize * sizeof(U));
@@ -54,7 +54,6 @@ private:
         LocalTensor<T> srcLocalY = inQueueY.AllocTensor<T>();
         DataCopy(srcLocalY, srcGlobalY, srcDataSize);
         inQueueY.EnQue<T>(srcLocalY);
-
     }
 
     __aicore__ inline void Compute()
@@ -69,18 +68,19 @@ private:
         if constexpr (IsSameType<T, int64_t>::value || IsSameType<T, float>::value) {
             Zero = bisheng::cce::sqrt(Zero);
         }
-        if constexpr (IsSameType<T, int64_t>::value || IsSameType<T, int32_t>::value || IsSameType<T, int16_t>::value ||
-                      IsSameType<T, int8_t>::value || IsSameType<T, float>::value) {
+        if constexpr (
+            IsSameType<T, int64_t>::value || IsSameType<T, int32_t>::value || IsSameType<T, int16_t>::value ||
+            IsSameType<T, int8_t>::value || IsSameType<T, float>::value) {
             Zero = bisheng::cce::abs(Zero);
         }
         Duplicate(dstLocalX, Zero, dstDataSize);
         Duplicate(dstLocalY, Zero, dstDataSize);
-     
-        #ifdef VF
-        #if VF == 0
-            Neg(dstLocalX, srcLocalY, calCount);
-        #endif
-        #endif
+
+#ifdef VF
+#if VF == 0
+        Neg(dstLocalX, srcLocalY, calCount);
+#endif
+#endif
         outQueueX.EnQue<U>(dstLocalX);
         outQueueY.EnQue<U>(dstLocalY);
         inQueueX.FreeTensor(srcLocalX);
@@ -91,7 +91,7 @@ private:
     {
         LocalTensor<U> dstLocalX = outQueueX.DeQue<U>();
         LocalTensor<U> dstLocalY = outQueueY.DeQue<U>();
-        
+
         DataCopy(dstGlobalX, dstLocalX, dstDataSize);
         DataCopy(dstGlobalY, dstLocalY, dstDataSize);
         outQueueX.FreeTensor(dstLocalX);
@@ -113,13 +113,14 @@ private:
     uint32_t srcDataSize;
     uint32_t dstDataSize;
 };
- 
+
 struct MicroMainScalarParams {
     void (*CallFunc)();
 };
- 
-template<typename T, typename U, int16_t VF>
-void RunCase() {
+
+template <typename T, typename U, int16_t VF>
+void RunCase()
+{
     int srcByteSize = sizeof(T);
     int dstByteSize = sizeof(U);
     int dataSize = 256;
@@ -128,7 +129,7 @@ void RunCase() {
     uint8_t dstGm1[dataSize * dstByteSize] = {0};
     uint8_t srcGm0[dataSize * srcByteSize] = {0};
     uint8_t srcGm1[dataSize * srcByteSize] = {0};
- 
+
     KernelMainScalar<T, U, VF> op;
     op.Init(srcGm0, srcGm1, dstGm0, dstGm1, dataSize, mask);
     op.Process();
@@ -139,15 +140,14 @@ protected:
     void SetUp() {}
     void TearDown() {}
 };
- 
-INSTANTIATE_TEST_CASE_P(MicroMainScalarTestCases, MicroMainScalarTestSuite,
-    ::testing::Values(MicroMainScalarParams { RunCase<float, float, 0>},
-                      MicroMainScalarParams { RunCase<int8_t, int8_t, 0>},
-                      MicroMainScalarParams { RunCase<int16_t, int16_t, 0>},
-                      MicroMainScalarParams { RunCase<int32_t, int32_t, 0>},
-                      MicroMainScalarParams { RunCase<int64_t, int64_t, 0>}
-                      ));
- 
+
+INSTANTIATE_TEST_CASE_P(
+    MicroMainScalarTestCases, MicroMainScalarTestSuite,
+    ::testing::Values(
+        MicroMainScalarParams{RunCase<float, float, 0>}, MicroMainScalarParams{RunCase<int8_t, int8_t, 0>},
+        MicroMainScalarParams{RunCase<int16_t, int16_t, 0>}, MicroMainScalarParams{RunCase<int32_t, int32_t, 0>},
+        MicroMainScalarParams{RunCase<int64_t, int64_t, 0>}));
+
 TEST_P(MicroMainScalarTestSuite, MicroMainScalarTestCase)
 {
     auto param = GetParam();

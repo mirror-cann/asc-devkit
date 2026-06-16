@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <vector>
 #include <gtest/gtest.h>
@@ -32,11 +32,12 @@ protected:
     virtual void TearDown() {}
 };
 
-void SetType(Conv3dBpFilterTiling &testTiling)
+void SetType(Conv3dBpFilterTiling& testTiling)
 {
     testTiling.SetWeightType(TPosition::GM, ConvCommonApi::ConvFormat::FRACTAL_Z_3D, ConvCommonApi::ConvDtype::FLOAT32);
     testTiling.SetInputType(TPosition::GM, ConvCommonApi::ConvFormat::NDC1HWC0, ConvCommonApi::ConvDtype::FLOAT16);
-    testTiling.SetGradOutputType(TPosition::CO1, ConvCommonApi::ConvFormat::NDC1HWC0, ConvCommonApi::ConvDtype::FLOAT16);
+    testTiling.SetGradOutputType(
+        TPosition::CO1, ConvCommonApi::ConvFormat::NDC1HWC0, ConvCommonApi::ConvDtype::FLOAT16);
 }
 
 TEST_F(TestConv3dFilterTiling, Check_Init_001)
@@ -52,13 +53,13 @@ TEST_F(TestConv3dFilterTiling, Check_Init_001)
     constexpr uint64_t TEST_BT_SIZE = 1024;
     constexpr uint64_t TEST_FB_SIZE = 2048;
 
-    EXPECT_EQ(TEST_L1_SIZE_LOCAL ,conv3dDw_empty_init.platformInfo.l1Size);
-    EXPECT_EQ(TEST_L0A_SIZE ,conv3dDw_empty_init.platformInfo.l0ASize);
-    EXPECT_EQ(TEST_L0B_SIZE ,conv3dDw_empty_init.platformInfo.l0BSize);
-    EXPECT_EQ(TEST_L0C_SIZE ,conv3dDw_empty_init.platformInfo.l0CSize);
-    EXPECT_EQ(TEST_UB_SIZE,conv3dDw_empty_init.platformInfo.ubSize);
-    EXPECT_EQ(TEST_BT_SIZE,conv3dDw_empty_init.platformInfo.btSize);
-    EXPECT_EQ(TEST_FB_SIZE,conv3dDw_empty_init.platformInfo.fbSize);
+    EXPECT_EQ(TEST_L1_SIZE_LOCAL, conv3dDw_empty_init.platformInfo.l1Size);
+    EXPECT_EQ(TEST_L0A_SIZE, conv3dDw_empty_init.platformInfo.l0ASize);
+    EXPECT_EQ(TEST_L0B_SIZE, conv3dDw_empty_init.platformInfo.l0BSize);
+    EXPECT_EQ(TEST_L0C_SIZE, conv3dDw_empty_init.platformInfo.l0CSize);
+    EXPECT_EQ(TEST_UB_SIZE, conv3dDw_empty_init.platformInfo.ubSize);
+    EXPECT_EQ(TEST_BT_SIZE, conv3dDw_empty_init.platformInfo.btSize);
+    EXPECT_EQ(TEST_FB_SIZE, conv3dDw_empty_init.platformInfo.fbSize);
 }
 
 TEST_F(TestConv3dFilterTiling, Check_Init_002)
@@ -77,13 +78,13 @@ TEST_F(TestConv3dFilterTiling, Check_Init_002)
     platform.btSize = 0;
     platform.fbSize = 0;
     Conv3dBpFilterTiling conv3dDw_PlatformInfo_init(platform);
-    EXPECT_EQ(0 ,conv3dDw_PlatformInfo_init.platformInfo.l1Size);
-    EXPECT_EQ(0 ,conv3dDw_PlatformInfo_init.platformInfo.l0ASize);
-    EXPECT_EQ(0 ,conv3dDw_PlatformInfo_init.platformInfo.l0BSize);
-    EXPECT_EQ(0 ,conv3dDw_PlatformInfo_init.platformInfo.l0CSize);
-    EXPECT_EQ(0,conv3dDw_PlatformInfo_init.platformInfo.ubSize);
-    EXPECT_EQ(1024,conv3dDw_PlatformInfo_init.platformInfo.btSize);
-    EXPECT_EQ(2048,conv3dDw_PlatformInfo_init.platformInfo.fbSize);
+    EXPECT_EQ(0, conv3dDw_PlatformInfo_init.platformInfo.l1Size);
+    EXPECT_EQ(0, conv3dDw_PlatformInfo_init.platformInfo.l0ASize);
+    EXPECT_EQ(0, conv3dDw_PlatformInfo_init.platformInfo.l0BSize);
+    EXPECT_EQ(0, conv3dDw_PlatformInfo_init.platformInfo.l0CSize);
+    EXPECT_EQ(0, conv3dDw_PlatformInfo_init.platformInfo.ubSize);
+    EXPECT_EQ(1024, conv3dDw_PlatformInfo_init.platformInfo.btSize);
+    EXPECT_EQ(2048, conv3dDw_PlatformInfo_init.platformInfo.fbSize);
 }
 
 TEST_F(TestConv3dFilterTiling, Check_Input_Attr)
@@ -175,8 +176,13 @@ TEST_F(TestConv3dFilterTiling, Check_SetGroup)
 TEST_F(TestConv3dFilterTiling, Check_ShrinkBlockBaseMN)
 {
     optiling::Conv3DBackpropFilterTilingData tilingData;
-    ConvBackpropApi::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    ConvBackpropApi::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     Conv3dBpFilterTiling conv3dDw(plat);
     conv3dDw.shapeInfo.orgkH = 1;
     conv3dDw.shapeInfo.orgkW = 1;
@@ -184,32 +190,36 @@ TEST_F(TestConv3dFilterTiling, Check_ShrinkBlockBaseMN)
     conv3dDw.shapeInfo.orgWi = 1;
     conv3dDw.shapeCalc.channelSize = 16;
     conv3dDw.blockTiling_.blockBaseM = 17;
-    conv3dDw.blockTiling_.blockBaseN = 16; 
-    conv3dDw.blockTiling_.blockBaseK = 17; 
-    conv3dDw.blockTiling_.stepKa = 1000; 
-    conv3dDw.blockTiling_.stepKb = 1000; 
+    conv3dDw.blockTiling_.blockBaseN = 16;
+    conv3dDw.blockTiling_.blockBaseK = 17;
+    conv3dDw.blockTiling_.stepKa = 1000;
+    conv3dDw.blockTiling_.stepKb = 1000;
     conv3dDw.ShrinkBlockBaseMN();
     EXPECT_EQ(16, conv3dDw.blockTiling_.blockBaseM);
     EXPECT_EQ(16, conv3dDw.blockTiling_.blockBaseN);
 }
 
-
 TEST_F(TestConv3dFilterTiling, Check_ShrinkBlockBaseMN_ShouldFurtherAdjustBlockBaseM)
 {
     optiling::Conv3DBackpropFilterTilingData tilingData;
-    ConvBackpropApi::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    ConvBackpropApi::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     Conv3dBpFilterTiling conv3dDw(plat);
 
     conv3dDw.blockTiling_.blockBaseM = 16384;
-    conv3dDw.blockTiling_.blockBaseN = 16385; 
+    conv3dDw.blockTiling_.blockBaseN = 16385;
     conv3dDw.blockTiling_.blockBaseK = 2;
-    
+
     conv3dDw.shapeInfo.orgkH = 3;
     conv3dDw.shapeInfo.orgkW = 3;
     conv3dDw.shapeInfo.orgWo = 4;
- 
-    conv3dDw.blockTiling_.stepKb = 4; 
+
+    conv3dDw.blockTiling_.stepKb = 4;
     conv3dDw.ShrinkBlockBaseMN();
     EXPECT_EQ(1008, conv3dDw.blockTiling_.blockBaseM);
     EXPECT_EQ(1008, conv3dDw.blockTiling_.blockBaseN);
@@ -226,7 +236,7 @@ TEST_F(TestConv3dFilterTiling, Check_Zero_Filter)
     EXPECT_EQ(0, conv3dDw.CalculateBl1Cin1CopyLen(temp));
     conv3dDw.shapeInfo.orgkW = 33;
     EXPECT_EQ(false, conv3dDw.CheckInputShape());
-    
+
     conv3dDw.blockTiling_.blockBaseM = 0;
     conv3dDw.mmInfo_.kValue = 128;
     conv3dDw.InitBaseMNK();

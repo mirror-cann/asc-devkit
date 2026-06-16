@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -14,14 +14,13 @@
 namespace AscendC {
 class KernelAdd {
 public:
-    __aicore__ inline KernelAdd()
-    {}
-    __aicore__ inline void Init(__gm__ uint8_t *x, __gm__ uint8_t *y, __gm__ uint8_t *z)
+    __aicore__ inline KernelAdd() {}
+    __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z)
     {
         // get start index for current core, core parallel
-        xGm.SetGlobalBuffer((__gm__ float *)x, 1024);
-        yGm.SetGlobalBuffer((__gm__ float *)y, 1024);
-        zGm.SetGlobalBuffer((__gm__ float *)z, 1024);
+        xGm.SetGlobalBuffer((__gm__ float*)x, 1024);
+        yGm.SetGlobalBuffer((__gm__ float*)y, 1024);
+        zGm.SetGlobalBuffer((__gm__ float*)z, 1024);
         // pipe alloc memory to queue, the unit is Bytes
         pipe.InitBuffer(tmpBufInX[0], 1024 * sizeof(float));
         pipe.InitBuffer(tmpBufInY[0], 1024 * sizeof(float));
@@ -112,7 +111,7 @@ private:
     // create queue for output, in this case depth is equal to buffer num
     GlobalTensor<float> xGm, yGm, zGm;
 };
-}
+} // namespace AscendC
 
 __global__ __aicore__ void testGetBuff(GM_ADDR x, GM_ADDR y, GM_ADDR z)
 {
@@ -124,19 +123,13 @@ __global__ __aicore__ void testGetBuff(GM_ADDR x, GM_ADDR y, GM_ADDR z)
 struct GetBuffParams {
     int32_t dataSize;
     int32_t sizeOfT;
-    void (*cal_func)(uint8_t *, uint8_t *, uint8_t *);
+    void (*cal_func)(uint8_t*, uint8_t*, uint8_t*);
 };
 
 class GetBuffTestsuite : public testing::Test, public testing::WithParamInterface<GetBuffParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 INSTANTIATE_TEST_CASE_P(

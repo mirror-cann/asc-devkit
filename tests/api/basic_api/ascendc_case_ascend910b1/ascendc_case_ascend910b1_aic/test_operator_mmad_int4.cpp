@@ -1,18 +1,17 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "test_utils.h"
 
 using namespace std;
-
 
 namespace AscendC {
 class KernelMatmulInt4 {
@@ -59,8 +58,8 @@ private:
         LocalTensor<TensorTrait<int4b_t>> a1Local = inQueueA1.AllocTensor<TensorTrait<int4b_t>>();
         LocalTensor<TensorTrait<int4b_t>> b1Local = inQueueB1.AllocTensor<TensorTrait<int4b_t>>();
 
-        DataCopy(a1Local, aGM, { 1, static_cast<uint16_t>(16*64 * sizeof(int4b_t) / 2 / 32), 0, 0 });
-        DataCopy(b1Local, bGM, { 1, static_cast<uint16_t>(64*64 * sizeof(int4b_t) / 2 / 32), 0, 0 });
+        DataCopy(a1Local, aGM, {1, static_cast<uint16_t>(16 * 64 * sizeof(int4b_t) / 2 / 32), 0, 0});
+        DataCopy(b1Local, bGM, {1, static_cast<uint16_t>(64 * 64 * sizeof(int4b_t) / 2 / 32), 0, 0});
 
         LocalTensor<float> ub1(TPosition::VECIN, 0, 256);
         LocalTensor<float> ub2(TPosition::VECIN, 256, 256);
@@ -97,7 +96,7 @@ private:
             LoadData(a2TmpBuf, a1TmpBuf, loadDataParams);
 
         } else {
-            //load3d
+            // load3d
             LoadData3DParamsV2<int4b_t> loadData3dParams;
             loadData3dParams.l1W = 8;
             loadData3dParams.l1H = 2;
@@ -135,14 +134,14 @@ private:
             loadDataParams.ifTranspose = false;
 
             LoadData(b2Local, b1Local, loadDataParams);
-            //cover
+            // cover
             auto b1TmpBuf = b1Local.ReinterpretCast<TensorTrait<int8_t>>();
             auto b2TmpBuf = b2Local.ReinterpretCast<TensorTrait<int8_t>>();
             loadDataParams.ifTranspose = true;
             LoadData(b2TmpBuf, b1TmpBuf, loadDataParams);
 
         } else {
-            //load2dwithtranspose
+            // load2dwithtranspose
             LoadData2dTransposeParams loadDataParams;
             loadDataParams.startIndex = 0;
             loadDataParams.srcStride = 1;
@@ -152,7 +151,7 @@ private:
             loadDataParams.dstGap = 16;
             loadDataParams.dstFracGap = 0;
             LoadDataWithTranspose<TensorTrait<int4b_t>>(b2Local, b1Local, loadDataParams);
-            //cover
+            // cover
             auto b1TmpBuf = b1Local.ReinterpretCast<TensorTrait<int8_t>>();
             auto b2TmpBuf = b2Local.ReinterpretCast<TensorTrait<int8_t>>();
             LoadDataWithTranspose<TensorTrait<int8_t>>(b2TmpBuf, b1TmpBuf, loadDataParams);
@@ -165,7 +164,7 @@ private:
         LocalTensor<TensorTrait<int4b_t>> b2Local = inQueueB2.DeQue<TensorTrait<int4b_t>>();
         LocalTensor<TensorTrait<int32_t>> c1Local = outQueueCO1.AllocTensor<TensorTrait<int32_t>>();
 
-        Mmad(c1Local, a2Local, b2Local, { m, n, k, false, 0, false, false, false });
+        Mmad(c1Local, a2Local, b2Local, {m, n, k, false, 0, false, false, false});
 
         outQueueCO1.EnQue<TensorTrait<int32_t>>(c1Local);
         inQueueB2.FreeTensor(b2Local);
@@ -210,14 +209,11 @@ private:
     uint16_t aSize, bSize, cSize, mBlocks, nBlocks, kBlocks;
     bool is2d;
 };
-}
+} // namespace AscendC
 
 class TEST_MMAD_INT4 : public testing::Test {
 protected:
-    void SetUp()
-    {
-        g_coreType = AscendC::AIC_TYPE;
-    }
+    void SetUp() { g_coreType = AscendC::AIC_TYPE; }
     void TearDown()
     {
         AscendC::CheckSyncState();

@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -20,12 +19,8 @@ class SwiGLUAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(SwiGLUAPICheck, SwiGLUAPICheckTestNoCountSuccess)
@@ -53,7 +48,8 @@ TEST_F(SwiGLUAPICheck, SwiGLUAPICheckTestNoCountSuccess)
     sharedTmpBuffer.SetSize(32);
 
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SwiGLU, (float, false), (dstTensor, srcTensor0, srcTensor1, 2.0, sharedTmpBuffer));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SwiGLU, (float, false), (dstTensor, srcTensor0, srcTensor1, 2.0, sharedTmpBuffer));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
 
@@ -72,7 +68,8 @@ TEST_F(SwiGLUAPICheck, SwiGLUAPICheckTestNoCountFailure)
     sharedTmpBuffer.SetSize(0);
 
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SwiGLU, (uint8_t, true), (dstTensor[1], dstTensor[4], dstTensor[5], 2.0, sharedTmpBuffer));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SwiGLU, (uint8_t, true), (dstTensor[1], dstTensor[4], dstTensor[5], 2.0, sharedTmpBuffer));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 1);
 }
 
@@ -102,7 +99,8 @@ TEST_F(SwiGLUAPICheck, SwiGLUAPICheckTestSuccess)
 
     uint8_t calCount = 8;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SwiGLU, (float, false), (dstTensor, srcTensor0, srcTensor1, 2.0, sharedTmpBuffer, calCount));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SwiGLU, (float, false), (dstTensor, srcTensor0, srcTensor1, 2.0, sharedTmpBuffer, calCount));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
 
@@ -122,6 +120,7 @@ TEST_F(SwiGLUAPICheck, SwiGLUAPICheckTestFailure)
 
     uint8_t calCount = 32;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SwiGLU, (uint8_t, true), (dstTensor[1], dstTensor[1], dstTensor[1], 2.0, sharedTmpBuffer, calCount));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SwiGLU, (uint8_t, true), (dstTensor[1], dstTensor[1], dstTensor[1], 2.0, sharedTmpBuffer, calCount));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 13);
 }

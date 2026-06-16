@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "mockcpp/mockcpp.hpp"
@@ -14,11 +14,11 @@
 using namespace std;
 
 namespace AscendC {
-#define LOCAL_TENSOR_REGISTER(tensorName, type, quePos, initAddr, dataSize) \
-    AscendC::LocalTensor<type> tensorName;                                     \
-    AscendC::TBuffAddr tbuf_##tensorName;                                      \
-    tbuf_##tensorName.logicPos = static_cast<uint8_t>(AscendC::TPosition::quePos);       \
-    tensorName.SetAddr(tbuf_##tensorName);                                    \
+#define LOCAL_TENSOR_REGISTER(tensorName, type, quePos, initAddr, dataSize)        \
+    AscendC::LocalTensor<type> tensorName;                                         \
+    AscendC::TBuffAddr tbuf_##tensorName;                                          \
+    tbuf_##tensorName.logicPos = static_cast<uint8_t>(AscendC::TPosition::quePos); \
+    tensorName.SetAddr(tbuf_##tensorName);                                         \
     tensorName.InitBuffer(initAddr, dataSize);
 
 #define ALIGN_ADDR(addr) (((addr) + 31) / 32 * 32)
@@ -39,9 +39,9 @@ enum TestInstr {
 // l0a l0b mmad -> l0c
 // l0c data copy -> out
 template <typename DstT, typename Src0T, typename Src1T, uint8_t instrType>
-void MainLoadData(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-                  __gm__ uint8_t* __restrict__ src1Gm, __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k,
-                  __gm__ uint16_t channelSize)
+void MainLoadData(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k, __gm__ uint16_t channelSize)
 {
     AscendC::TPipe tpipe;
     // mmad c = a * b
@@ -161,7 +161,7 @@ void MainLoadData(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict
         loadData3dParams1.filterSizeW = 0;
         loadData3dParams1.filterSizeH = 0;
         loadData3dParams1.fMatrixCtrl = false;
-        AscendC::LoadData(src1_l0b, src1_l1, loadData3dParams1);  
+        AscendC::LoadData(src1_l0b, src1_l1, loadData3dParams1);
     } else if constexpr (instrType == 2) {
         AscendC::DataCopy(src0_l1, input0Global, m * k);
         AscendC::DataCopy(src1_l1, input1Global, k * n);
@@ -271,9 +271,7 @@ struct LoadDataTestParams {
     uint8_t sizeofSrc1;
 };
 
-class LoadData610LiteTestsuite
-    : public testing::Test
-    , public testing::WithParamInterface<LoadDataTestParams> {
+class LoadData610LiteTestsuite : public testing::Test, public testing::WithParamInterface<LoadDataTestParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
@@ -282,19 +280,18 @@ protected:
 INSTANTIATE_TEST_CASE_P(
     TEST_LOAD_DATA, LoadData610LiteTestsuite,
     ::testing::Values(
-        LoadDataTestParams{ 16, 128, 32, 32, MainLoadData<float, half, half, uint8_t(TestInstr::Load2dv2)>, 4, 2, 2 },
-        LoadDataTestParams{ 16, 32, 32, 32, MainLoadData<int32_t, int8_t, int8_t, uint8_t(TestInstr::Load2dv2)>, 4, 1,
-                            1 },
-        LoadDataTestParams{ 32, 64, 64, 32, MainLoadData<int32_t, int4b_t, int4b_t, uint8_t(TestInstr::Load2dv2)>, 4, 2,
-                            2 },
-        LoadDataTestParams{ 16, 128, 32, 32, MainLoadData<float, half, half, uint8_t(TestInstr::Load3dv2)>, 4, 2, 2 },
-        LoadDataTestParams{ 16, 128, 32, 32, MainLoadData<float, half, half, uint8_t(TestInstr::LoadWithTranspose)>, 4,
-                            2, 2 },
-        LoadDataTestParams{ 32, 64, 64, 32, MainLoadData<int32_t, int4b_t, int4b_t, TestInstr::Load2dv2Gm2L1>, 4, 2,
-                            2 },
-        LoadDataTestParams{ 16, 128, 32, 32, MainLoadData<float, half, half, TestInstr::Load2dv2Gm2L1>, 4, 2, 2 },
-        LoadDataTestParams{ 16, 128, 32, 32, MainLoadData<float, half, half, uint8_t(TestInstr::Load2dv2Gm2L0)>, 4, 2,
-                            2 }));
+        LoadDataTestParams{16, 128, 32, 32, MainLoadData<float, half, half, uint8_t(TestInstr::Load2dv2)>, 4, 2, 2},
+        LoadDataTestParams{
+            16, 32, 32, 32, MainLoadData<int32_t, int8_t, int8_t, uint8_t(TestInstr::Load2dv2)>, 4, 1, 1},
+        LoadDataTestParams{
+            32, 64, 64, 32, MainLoadData<int32_t, int4b_t, int4b_t, uint8_t(TestInstr::Load2dv2)>, 4, 2, 2},
+        LoadDataTestParams{16, 128, 32, 32, MainLoadData<float, half, half, uint8_t(TestInstr::Load3dv2)>, 4, 2, 2},
+        LoadDataTestParams{
+            16, 128, 32, 32, MainLoadData<float, half, half, uint8_t(TestInstr::LoadWithTranspose)>, 4, 2, 2},
+        LoadDataTestParams{32, 64, 64, 32, MainLoadData<int32_t, int4b_t, int4b_t, TestInstr::Load2dv2Gm2L1>, 4, 2, 2},
+        LoadDataTestParams{16, 128, 32, 32, MainLoadData<float, half, half, TestInstr::Load2dv2Gm2L1>, 4, 2, 2},
+        LoadDataTestParams{
+            16, 128, 32, 32, MainLoadData<float, half, half, uint8_t(TestInstr::Load2dv2Gm2L0)>, 4, 2, 2}));
 
 TEST_P(LoadData610LiteTestsuite, LoadDataTestCase)
 {
@@ -308,7 +305,8 @@ TEST_P(LoadData610LiteTestsuite, LoadDataTestCase)
     }
 }
 
-template <typename Src0T, bool UseFill = false> class KernelCreatMartix {
+template <typename Src0T, bool UseFill = false>
+class KernelCreatMartix {
 public:
     __aicore__ inline void Init()
     {
@@ -335,10 +333,7 @@ public:
         pipe.InitBuffer(inQueueWeightB2, 1, weightB2Size * sizeof(Src0T));
         pipe.InitBuffer(outQueueCO1, 1, featureMapA1Size * sizeof(Src0T));
     }
-    __aicore__ inline void Process()
-    {
-        CopyIn();
-    }
+    __aicore__ inline void Process() { CopyIn(); }
 
 private:
     __aicore__ inline void CopyIn()
@@ -353,42 +348,36 @@ private:
 
         if constexpr (UseFill) {
             // init l1
-            Fill<Src0T>(featureMapA1,
-                { 1, static_cast<uint16_t>(featureMapA1Size * sizeof(Src0T) / 32), 0, static_cast<Src0T>(1) });
+            Fill<Src0T>(
+                featureMapA1,
+                {1, static_cast<uint16_t>(featureMapA1Size * sizeof(Src0T) / 32), 0, static_cast<Src0T>(1)});
             // init l0a
-            Fill<Src0T>(featureMapA2,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
+            Fill<Src0T>(featureMapA2, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
             // init l0b
-            Fill<Src0T>(weightB2,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
+            Fill<Src0T>(weightB2, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
 
             // init l0b
-            Fill<Src0T>(weightB2,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
-            
+            Fill<Src0T>(weightB2, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
+
             // init l0c error case
             MOCKER(raise).stubs().will(returnValue(int(0)));
-            Fill<Src0T>(featureMapCO1,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
-        }else{
+            Fill<Src0T>(featureMapCO1, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
+        } else {
             // init l1
-            InitConstValue<Src0T>(featureMapA1,
-                { 1, static_cast<uint16_t>(featureMapA1Size * sizeof(Src0T) / 32), 0, static_cast<Src0T>(1) });
+            InitConstValue<Src0T>(
+                featureMapA1,
+                {1, static_cast<uint16_t>(featureMapA1Size * sizeof(Src0T) / 32), 0, static_cast<Src0T>(1)});
             // init l0a
-            InitConstValue<Src0T>(featureMapA2,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
+            InitConstValue<Src0T>(featureMapA2, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
             // init l0b
-            InitConstValue<Src0T>(weightB2,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
+            InitConstValue<Src0T>(weightB2, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
 
             // init l0b
-            InitConstValue<Src0T>(weightB2,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
-            
+            InitConstValue<Src0T>(weightB2, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
+
             // init l0c error case
             MOCKER(raise).stubs().will(returnValue(int(0)));
-            InitConstValue<Src0T>(featureMapCO1,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
+            InitConstValue<Src0T>(featureMapCO1, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
         }
         inQueueFmA1.FreeTensor(featureMapA1);
         inQueueFmA2.FreeTensor(featureMapA2);
@@ -438,31 +427,27 @@ struct CreatmartixTestParams {
 
 class CreatmartixTestsuite : public testing::Test, public testing::WithParamInterface<CreatmartixTestParams> {
 protected:
-    void SetUp()
-    {
-        g_coreType = AscendC::AIC_TYPE;
-    }
-    void TearDown()
-    {
-        g_coreType = AscendC::MIX_TYPE;
-    }
+    void SetUp() { g_coreType = AscendC::AIC_TYPE; }
+    void TearDown() { g_coreType = AscendC::MIX_TYPE; }
 };
 
-INSTANTIATE_TEST_CASE_P(SetCreatmartixTest, CreatmartixTestsuite,
-    ::testing::Values(CreatmartixTestParams { 192, 32, 64, creat_martix_AscendC<half>, 2 },
-    CreatmartixTestParams { 192, 32, 64, creat_martix_AscendC<int16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, creat_martix_AscendC<uint16_t>, 2 }
-    ));
+INSTANTIATE_TEST_CASE_P(
+    SetCreatmartixTest, CreatmartixTestsuite,
+    ::testing::Values(
+        CreatmartixTestParams{192, 32, 64, creat_martix_AscendC<half>, 2},
+        CreatmartixTestParams{192, 32, 64, creat_martix_AscendC<int16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, creat_martix_AscendC<uint16_t>, 2}));
 
-INSTANTIATE_TEST_CASE_P(SetFillTest, CreatmartixTestsuite,
-    ::testing::Values(CreatmartixTestParams { 192, 32, 64, FillAscendC<half>, 2 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<int16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<uint16_t>, 2 }
-    ));
+INSTANTIATE_TEST_CASE_P(
+    SetFillTest, CreatmartixTestsuite,
+    ::testing::Values(
+        CreatmartixTestParams{192, 32, 64, FillAscendC<half>, 2},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<int16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<uint16_t>, 2}));
 
 TEST_P(CreatmartixTestsuite, CreatmartixTest)
 {
     auto param = GetParam();
     param.cal_func();
 }
-}  // namespace AscendC
+} // namespace AscendC

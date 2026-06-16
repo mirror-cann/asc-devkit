@@ -1,27 +1,28 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "stub_def.h"
 #include "stub_fun.h"
 #include "securec.h"
-#include <stdio.h>  
-#include <unistd.h>  
-#include <sys/types.h>  
-#include <sys/wait.h>  
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 using namespace std;
 
-class TestFfts: public testing::Test {
+class TestFfts : public testing::Test {
 protected:
-    void SetUp() {
+    void SetUp()
+    {
         block_idx = 0;
         block_num = 1;
         g_coreType = 1;
@@ -29,15 +30,13 @@ protected:
         sub_block_idx = 0;
         g_kernelMode = KernelMode::MIX_MODE;
     }
-    void TearDown()
-    {
-    }
+    void TearDown() {}
 };
 
 TEST_F(TestFfts, MIXFftsCaseMode0)
 {
-    constexpr size_t fftsCounterSize = AscendC::GetMaxCoreNum() *
-        AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
+    constexpr size_t fftsCounterSize =
+        AscendC::GetMaxCoreNum() * AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
     void* fftsAddr = AscendC::GmAlloc(fftsCounterSize);
     memset_s(fftsAddr, fftsCounterSize, 0, fftsCounterSize);
     set_ffts_base_addr(reinterpret_cast<uint64_t>(fftsAddr));
@@ -66,8 +65,8 @@ TEST_F(TestFfts, AICFftsCaseMode0)
 {
     AscendC::SetKernelMode(KernelMode::AIC_MODE);
     g_coreType = 1;
-    constexpr size_t fftsCounterSize = AscendC::GetMaxCoreNum() *
-        AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
+    constexpr size_t fftsCounterSize =
+        AscendC::GetMaxCoreNum() * AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
     void* fftsAddr = AscendC::GmAlloc(fftsCounterSize);
     memset_s(fftsAddr, fftsCounterSize, 0, fftsCounterSize);
     set_ffts_base_addr(reinterpret_cast<uint64_t>(fftsAddr));
@@ -85,8 +84,8 @@ TEST_F(TestFfts, AIVFftsCaseMode0)
 {
     AscendC::SetKernelMode(KernelMode::AIV_MODE);
     g_coreType = 2;
-    constexpr size_t fftsCounterSize = AscendC::GetMaxCoreNum() *
-        AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
+    constexpr size_t fftsCounterSize =
+        AscendC::GetMaxCoreNum() * AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
     void* fftsAddr = AscendC::GmAlloc(fftsCounterSize);
     memset_s(fftsAddr, fftsCounterSize, 0, fftsCounterSize);
     set_ffts_base_addr(reinterpret_cast<uint64_t>(fftsAddr));
@@ -102,8 +101,8 @@ TEST_F(TestFfts, AIVFftsCaseMode0)
 
 TEST_F(TestFfts, FftsCaseMode1)
 {
-    constexpr size_t fftsCounterSize = AscendC::GetMaxCoreNum() *
-        AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
+    constexpr size_t fftsCounterSize =
+        AscendC::GetMaxCoreNum() * AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
     void* fftsAddr = AscendC::GmAlloc(fftsCounterSize);
     memset_s(fftsAddr, fftsCounterSize, 0, fftsCounterSize);
     set_ffts_base_addr(reinterpret_cast<uint64_t>(fftsAddr));
@@ -129,8 +128,8 @@ TEST_F(TestFfts, FftsCaseMode1)
 
 TEST_F(TestFfts, FftsCaseMode2)
 {
-    constexpr size_t fftsCounterSize = AscendC::GetMaxCoreNum() *
-        AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
+    constexpr size_t fftsCounterSize =
+        AscendC::GetMaxCoreNum() * AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
     void* fftsAddr = AscendC::GmAlloc(fftsCounterSize);
     memset_s(fftsAddr, fftsCounterSize, 0, fftsCounterSize);
     set_ffts_base_addr(reinterpret_cast<uint64_t>(fftsAddr));
@@ -171,8 +170,8 @@ TEST_F(TestFfts, FftsCaseMode2)
 
 TEST_F(TestFfts, MultiProcessTest)
 {
-    constexpr size_t fftsCounterSize = AscendC::GetMaxCoreNum() *
-        AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
+    constexpr size_t fftsCounterSize =
+        AscendC::GetMaxCoreNum() * AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
     void* fftsAddr = AscendC::GmAlloc(fftsCounterSize);
     memset_s(fftsAddr, fftsCounterSize, 0, fftsCounterSize);
     set_ffts_base_addr(reinterpret_cast<uint64_t>(fftsAddr));
@@ -193,7 +192,7 @@ TEST_F(TestFfts, MultiProcessTest)
         wait_flag_dev(0x3);
         exit(0);
     }
-    
+
     pid_t pid2 = fork();
     if (pid2 < 0) {
         perror("fork error!");
@@ -204,23 +203,23 @@ TEST_F(TestFfts, MultiProcessTest)
         exit(0);
     }
 
-    // 父进程  
-    printf("This is the parent process\n");  
-  
-    // 等待子进程结束  
-    wait(nullptr);  
-    wait(nullptr);  
+    // 父进程
+    printf("This is the parent process\n");
+
+    // 等待子进程结束
+    wait(nullptr);
+    wait(nullptr);
 
     EXPECT_EQ(AscendC::g_syncCounterEachcore[0][3], 0);
 
-    printf("All child processes have exited\n");  
+    printf("All child processes have exited\n");
     AscendC::GmFree((void*)AscendC::g_syncCounterFfts);
 }
 
 TEST_F(TestFfts, CrossCoreCast)
 {
-    constexpr size_t fftsCounterSize = AscendC::GetMaxCoreNum() *
-        AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
+    constexpr size_t fftsCounterSize =
+        AscendC::GetMaxCoreNum() * AscendC::MIX_IN_GROUP_CORE_NUM * AscendC::FLAG_NUM * AscendC::FFTS_COUNTER_NUM;
     void* fftsAddr = AscendC::GmAlloc(fftsCounterSize);
     memset_s(fftsAddr, fftsCounterSize, 0, fftsCounterSize);
     set_ffts_base_addr(reinterpret_cast<uint64_t>(fftsAddr));

@@ -16,48 +16,45 @@
 class TestAscBitsortCAPI : public testing::Test {
 protected:
     void SetUp() {}
-    void TearDown()
-    {
-        GlobalMockObject::verify();
-    }
+    void TearDown() { GlobalMockObject::verify(); }
 };
 
-#define TEST_ASC_BITSORT_REPEAT(data_type)                                                                             \
-    namespace {                                                                                                        \
-    void vbs_repeat_##data_type##_stub(__ubuf__ data_type* dst, __ubuf__ data_type* src0, __ubuf__ uint32_t* src1,     \
-                                       uint64_t config)                                                                \
-    {                                                                                                                  \
-        EXPECT_EQ(dst, reinterpret_cast<__ubuf__ data_type*>(1));                                                      \
-        EXPECT_EQ(src0, reinterpret_cast<__ubuf__ data_type*>(2));                                                     \
-        EXPECT_EQ(src1, reinterpret_cast<__ubuf__ uint32_t*>(3));                                                      \
-        EXPECT_EQ(config, static_cast<uint64_t>(10) << 56);                                                            \
-    }                                                                                                                  \
-    }                                                                                                                  \
-                                                                                                                       \
-    TEST_F(TestAscBitsortCAPI, c_api_bitsort_##data_type##_repeat)                                                     \
-    {                                                                                                                  \
-        __ubuf__ data_type* dst = reinterpret_cast<__ubuf__ data_type*>(1);                                            \
-        __ubuf__ data_type* src0 = reinterpret_cast<__ubuf__ data_type*>(2);                                           \
-        __ubuf__ uint32_t* src1 = reinterpret_cast<__ubuf__ uint32_t*>(3);                                             \
-                                                                                                                       \
-        MOCKER_CPP(vbs, void(__ubuf__ data_type*, __ubuf__ data_type*, __ubuf__ uint32_t*, uint64_t))                  \
-            .stubs()                                                                                                   \
-            .will(invoke(vbs_repeat_##data_type##_stub));                                                              \
-                                                                                                                       \
-        asc_bitsort(dst, src0, src1, 10);                                                                              \
-    }                                                                                                                  \
-                                                                                                                       \
-    TEST_F(TestAscBitsortCAPI, c_api_bitsort_sync_##data_type##_repeat)                                                \
-    {                                                                                                                  \
-        __ubuf__ data_type* dst = reinterpret_cast<__ubuf__ data_type*>(1);                                            \
-        __ubuf__ data_type* src0 = reinterpret_cast<__ubuf__ data_type*>(2);                                           \
-        __ubuf__ uint32_t* src1 = reinterpret_cast<__ubuf__ uint32_t*>(3);                                             \
-                                                                                                                       \
-        MOCKER_CPP(vbs, void(__ubuf__ data_type*, __ubuf__ data_type*, __ubuf__ uint32_t*, uint64_t))                  \
-            .stubs()                                                                                                   \
-            .will(invoke(vbs_repeat_##data_type##_stub));                                                              \
-                                                                                                                       \
-        asc_bitsort_sync(dst, src0, src1, 10);                                                                         \
+#define TEST_ASC_BITSORT_REPEAT(data_type)                                                            \
+    namespace {                                                                                       \
+    void vbs_repeat_##data_type##_stub(                                                               \
+        __ubuf__ data_type* dst, __ubuf__ data_type* src0, __ubuf__ uint32_t* src1, uint64_t config)  \
+    {                                                                                                 \
+        EXPECT_EQ(dst, reinterpret_cast<__ubuf__ data_type*>(1));                                     \
+        EXPECT_EQ(src0, reinterpret_cast<__ubuf__ data_type*>(2));                                    \
+        EXPECT_EQ(src1, reinterpret_cast<__ubuf__ uint32_t*>(3));                                     \
+        EXPECT_EQ(config, static_cast<uint64_t>(10) << 56);                                           \
+    }                                                                                                 \
+    }                                                                                                 \
+                                                                                                      \
+    TEST_F(TestAscBitsortCAPI, c_api_bitsort_##data_type##_repeat)                                    \
+    {                                                                                                 \
+        __ubuf__ data_type* dst = reinterpret_cast<__ubuf__ data_type*>(1);                           \
+        __ubuf__ data_type* src0 = reinterpret_cast<__ubuf__ data_type*>(2);                          \
+        __ubuf__ uint32_t* src1 = reinterpret_cast<__ubuf__ uint32_t*>(3);                            \
+                                                                                                      \
+        MOCKER_CPP(vbs, void(__ubuf__ data_type*, __ubuf__ data_type*, __ubuf__ uint32_t*, uint64_t)) \
+            .stubs()                                                                                  \
+            .will(invoke(vbs_repeat_##data_type##_stub));                                             \
+                                                                                                      \
+        asc_bitsort(dst, src0, src1, 10);                                                             \
+    }                                                                                                 \
+                                                                                                      \
+    TEST_F(TestAscBitsortCAPI, c_api_bitsort_sync_##data_type##_repeat)                               \
+    {                                                                                                 \
+        __ubuf__ data_type* dst = reinterpret_cast<__ubuf__ data_type*>(1);                           \
+        __ubuf__ data_type* src0 = reinterpret_cast<__ubuf__ data_type*>(2);                          \
+        __ubuf__ uint32_t* src1 = reinterpret_cast<__ubuf__ uint32_t*>(3);                            \
+                                                                                                      \
+        MOCKER_CPP(vbs, void(__ubuf__ data_type*, __ubuf__ data_type*, __ubuf__ uint32_t*, uint64_t)) \
+            .stubs()                                                                                  \
+            .will(invoke(vbs_repeat_##data_type##_stub));                                             \
+                                                                                                      \
+        asc_bitsort_sync(dst, src0, src1, 10);                                                        \
     }
 
 TEST_ASC_BITSORT_REPEAT(half)

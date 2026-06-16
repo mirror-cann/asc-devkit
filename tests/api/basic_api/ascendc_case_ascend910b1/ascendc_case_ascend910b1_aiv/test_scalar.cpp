@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 // #include "model/model_factory.h"
@@ -25,7 +25,7 @@ protected:
 TEST_F(TestScalarInstr, ScalarInstrCase)
 {
     uint64_t u64XnVal = 28;
-    int64_t  s64XnVal = 28;
+    int64_t s64XnVal = 28;
     EXPECT_EQ(ScalarGetCountOfValue<0>(u64XnVal), 61);
     EXPECT_EQ(ScalarGetCountOfValue<1>(u64XnVal), 3);
     EXPECT_EQ(ScalarCountLeadingZero(u64XnVal), 59);
@@ -137,7 +137,7 @@ TEST_F(TestScalarInstr, ScalarInstrCase)
 TEST_F(TestScalarInstr, ScalarInstrNewCase)
 {
     uint64_t u64XnVal = 28;
-    int64_t  s64XnVal = 28;
+    int64_t s64XnVal = 28;
     EXPECT_EQ(ScalarGetCountOfValue<0>(u64XnVal), 61);
     EXPECT_EQ(ScalarGetCountOfValue<1>(u64XnVal), 3);
     EXPECT_EQ(ScalarCountLeadingZero(u64XnVal), 59);

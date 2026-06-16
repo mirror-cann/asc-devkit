@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -20,7 +20,7 @@ using namespace std;
 using namespace AscendC;
 
 namespace AscendC {
-template <typename T, typename U, bool isUpdate = false> 
+template <typename T, typename U, bool isUpdate = false>
 class KernelSoftmaxFlashV3 {
 public:
     __aicore__ inline KernelSoftmaxFlashV3() {}
@@ -69,11 +69,13 @@ private:
 
         srcLocal1.SetShapeInfo(ShapeInfo(shapeDim, array)); // default ND
         dstLocal.SetShapeInfo(ShapeInfo(shapeDim, array));
-        SoftMaxParams params = { height, width, height, width, loopCnt, splitMeanCnt, alpha };
-        SoftMaxTiling flashTiling = { height, width, height * width, height, 8, height * 8,
-            height, width, height * width, height, 8, height * 8, 1, 0, 0, 0};
-        SoftmaxFlashV3<T, U, isUpdate, false, false>(dstLocal, inmeanLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor,
-            inmeanLocal, insumLocal, inmaxLocal, flashTiling, params);
+        SoftMaxParams params = {height, width, height, width, loopCnt, splitMeanCnt, alpha};
+        SoftMaxTiling flashTiling = {
+            height, width, height * width, height, 8, height * 8, height, width, height * width,
+            height, 8,     height * 8,     1,      0, 0,          0};
+        SoftmaxFlashV3<T, U, isUpdate, false, false>(
+            dstLocal, inmeanLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, inmeanLocal, insumLocal, inmaxLocal,
+            flashTiling, params);
         outQueueDst.EnQue<T>(dstLocal);
         inMaxQueue.FreeTensor(inmaxLocal);
         inSumQueue.FreeTensor(insumLocal);
@@ -105,7 +107,8 @@ private:
 };
 } // namespace AscendC
 
-template <typename T, typename U, bool isUpdate = false, bool isBasicBlock = false, bool isDataFormatNZ = false,
+template <
+    typename T, typename U, bool isUpdate = false, bool isBasicBlock = false, bool isDataFormatNZ = false,
     const SoftmaxConfig& config = SOFTMAX_DEFAULT_CFG>
 __global__ __aicore__ void MainSoftmax(__gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm, uint32_t height, uint32_t width)
 {
@@ -123,22 +126,18 @@ struct SoftMaxV3TestParams {
 
 class SoftMaxFlashV3Testsuite : public testing::Test, public testing::WithParamInterface<SoftMaxV3TestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
 
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_SOFTMAXFLASHV3, SoftMaxFlashV3Testsuite,
-    ::testing::Values(SoftMaxV3TestParams{ 2, 5, 1024, MainSoftmax<half, float, true> },
-    SoftMaxV3TestParams{ 2, 5, 1024, MainSoftmax<half, float, false> },
-    SoftMaxV3TestParams{ 2, 8, 1024, MainSoftmax<half, float, true> },
-    SoftMaxV3TestParams{ 2, 8, 1024, MainSoftmax<half, float, false> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_SOFTMAXFLASHV3, SoftMaxFlashV3Testsuite,
+    ::testing::Values(
+        SoftMaxV3TestParams{2, 5, 1024, MainSoftmax<half, float, true>},
+        SoftMaxV3TestParams{2, 5, 1024, MainSoftmax<half, float, false>},
+        SoftMaxV3TestParams{2, 8, 1024, MainSoftmax<half, float, true>},
+        SoftMaxV3TestParams{2, 8, 1024, MainSoftmax<half, float, false>}));
 
 TEST_P(SoftMaxFlashV3Testsuite, SoftMaxFlashV3OpTestCase)
 {

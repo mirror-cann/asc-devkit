@@ -1,19 +1,18 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <type_traits>
 #include "kernel_operator.h"
 using namespace std;
 using namespace AscendC;
-
 
 #define DType half
 #define DType1 half
@@ -22,15 +21,14 @@ using namespace AscendC;
 template <typename T, typename Scr1T, int32_t mD>
 class KernelCmp {
 public:
-    __aicore__ inline KernelCmp()
-    {}
-    __aicore__ inline void Init(GM_ADDR dst0Gm, GM_ADDR dst1Gm, GM_ADDR src0Gm, GM_ADDR src1Gm,
-            uint32_t nums, uint32_t vecMask)
+    __aicore__ inline KernelCmp() {}
+    __aicore__ inline void Init(
+        GM_ADDR dst0Gm, GM_ADDR dst1Gm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t nums, uint32_t vecMask)
     {
-        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(src0Gm), nums);
-        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ Scr1T *>(src1Gm), nums);
-        dst0Global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dst0Gm), nums);
-        dst1Global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dst1Gm), nums);
+        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(src0Gm), nums);
+        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ Scr1T*>(src1Gm), nums);
+        dst0Global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dst0Gm), nums);
+        dst1Global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dst1Gm), nums);
 
         pipe.InitBuffer(inQueueX, 1, nums * sizeof(T));
         pipe.InitBuffer(inQueueX2, 1, nums * sizeof(Scr1T));
@@ -73,8 +71,8 @@ private:
         LocalTensor<T> src0Local = inQueueX.DeQue<T>();
         LocalTensor<Scr1T> src1Local = inQueueX2.DeQue<Scr1T>();
         uint16_t maskBitSize = 256;
-        uint16_t oneRepSize = maskBitSize/sizeof(T);
-        uint16_t rep = dataSize/oneRepSize;
+        uint16_t oneRepSize = maskBitSize / sizeof(T);
+        uint16_t rep = dataSize / oneRepSize;
         __ubuf__ T* dstPtr = (__ubuf__ T*)dst0Local.GetPhyAddr();
         __ubuf__ T* dst1Ptr = (__ubuf__ T*)dst1Local.GetPhyAddr();
         __ubuf__ T* src0Ptr = (__ubuf__ T*)src0Local.GetPhyAddr();
@@ -163,8 +161,9 @@ struct MicroCmpParams {
     void (*CallFunc)();
 };
 
-template<typename T, int32_t mode>
-void RunCase() {
+template <typename T, int32_t mode>
+void RunCase()
+{
     int byteSize = sizeof(T);
     int shapeSize = 1024;
     int mask = 256;
@@ -185,101 +184,43 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(MicroCmpTestCase, MicroCmpTestsuite,
-    ::testing::Values(MicroCmpParams { RunCase<uint16_t, 0> },
-                      MicroCmpParams { RunCase<int16_t, 0> },
-                      MicroCmpParams { RunCase<uint32_t, 0> },
-                      MicroCmpParams { RunCase<int32_t, 0> },
-                      MicroCmpParams { RunCase<uint64_t, 0> },
-                      MicroCmpParams { RunCase<int64_t, 0> },
-                      MicroCmpParams { RunCase<uint16_t, 1> },
-                      MicroCmpParams { RunCase<int16_t, 1> },
-                      MicroCmpParams { RunCase<uint32_t, 1> },
-                      MicroCmpParams { RunCase<int32_t, 1> },
-                      MicroCmpParams { RunCase<uint64_t, 1> },
-                      MicroCmpParams { RunCase<int64_t, 1> },
-                      MicroCmpParams { RunCase<uint16_t, 2> },
-                      MicroCmpParams { RunCase<int16_t, 2> },
-                      MicroCmpParams { RunCase<uint32_t, 2> },
-                      MicroCmpParams { RunCase<int32_t, 2> },
-                      MicroCmpParams { RunCase<uint64_t, 2> },
-                      MicroCmpParams { RunCase<int64_t, 2> },
-                      MicroCmpParams { RunCase<uint16_t, 3> },
-                      MicroCmpParams { RunCase<int16_t, 3> },
-                      MicroCmpParams { RunCase<uint32_t, 3> },
-                      MicroCmpParams { RunCase<int32_t, 3> },
-                      MicroCmpParams { RunCase<uint64_t, 3> },
-                      MicroCmpParams { RunCase<int64_t, 3> },
-                      MicroCmpParams { RunCase<uint16_t, 4> },
-                      MicroCmpParams { RunCase<int16_t, 4> },
-                      MicroCmpParams { RunCase<uint32_t, 4> },
-                      MicroCmpParams { RunCase<int32_t, 4> },
-                      MicroCmpParams { RunCase<uint64_t, 4> },
-                      MicroCmpParams { RunCase<int64_t, 4> },
-                      MicroCmpParams { RunCase<uint16_t, 5> },
-                      MicroCmpParams { RunCase<int16_t, 5> },
-                      MicroCmpParams { RunCase<uint32_t, 5> },
-                      MicroCmpParams { RunCase<int32_t, 5> },
-                      MicroCmpParams { RunCase<uint64_t, 5> },
-                      MicroCmpParams { RunCase<int64_t, 5> },
-                      MicroCmpParams { RunCase<uint8_t, 6> },
-                      MicroCmpParams { RunCase<int8_t, 6> },
-                      MicroCmpParams { RunCase<uint16_t, 6> },
-                      MicroCmpParams { RunCase<int16_t, 6> },
-                      MicroCmpParams { RunCase<uint32_t, 6> },
-                      MicroCmpParams { RunCase<int32_t, 6> },
-                      MicroCmpParams { RunCase<uint64_t, 6> },
-                      MicroCmpParams { RunCase<int64_t, 6> },
-                      MicroCmpParams { RunCase<uint8_t, 7> },
-                      MicroCmpParams { RunCase<int8_t, 7> },
-                      MicroCmpParams { RunCase<uint16_t, 7> },
-                      MicroCmpParams { RunCase<int16_t, 7> },
-                      MicroCmpParams { RunCase<uint32_t, 7> },
-                      MicroCmpParams { RunCase<int32_t, 7> },
-                      MicroCmpParams { RunCase<uint64_t, 7> },
-                      MicroCmpParams { RunCase<int64_t, 7> },
-                      MicroCmpParams { RunCase<uint8_t, 8> },
-                      MicroCmpParams { RunCase<int8_t, 8> },
-                      MicroCmpParams { RunCase<uint16_t, 8> },
-                      MicroCmpParams { RunCase<int16_t, 8> },
-                      MicroCmpParams { RunCase<uint32_t, 8> },
-                      MicroCmpParams { RunCase<int32_t, 8> },
-                      MicroCmpParams { RunCase<uint64_t, 8> },
-                      MicroCmpParams { RunCase<int64_t, 8> },
-                      MicroCmpParams { RunCase<uint8_t, 9> },
-                      MicroCmpParams { RunCase<int8_t, 9> },
-                      MicroCmpParams { RunCase<uint16_t, 9> },
-                      MicroCmpParams { RunCase<int16_t, 9> },
-                      MicroCmpParams { RunCase<uint32_t, 9> },
-                      MicroCmpParams { RunCase<int32_t, 9> },
-                      MicroCmpParams { RunCase<uint64_t, 9> },
-                      MicroCmpParams { RunCase<int64_t, 9> },
-                      MicroCmpParams { RunCase<uint8_t, 10> },
-                      MicroCmpParams { RunCase<int8_t, 10> },
-                      MicroCmpParams { RunCase<uint16_t, 10> },
-                      MicroCmpParams { RunCase<int16_t, 10> },
-                      MicroCmpParams { RunCase<uint32_t, 10> },
-                      MicroCmpParams { RunCase<int32_t, 10> },
-                      MicroCmpParams { RunCase<uint64_t, 10> },
-                      MicroCmpParams { RunCase<int64_t, 10> },
-                      MicroCmpParams { RunCase<uint8_t, 11> },
-                      MicroCmpParams { RunCase<int8_t, 11> },
-                      MicroCmpParams { RunCase<uint16_t, 11> },
-                      MicroCmpParams { RunCase<int16_t, 11> },
-                      MicroCmpParams { RunCase<uint32_t, 11> },
-                      MicroCmpParams { RunCase<int32_t, 11> },
-                      MicroCmpParams { RunCase<uint64_t, 11> },
-                      MicroCmpParams { RunCase<int64_t, 11> },
-                      MicroCmpParams { RunCase<bool, 12> },
-                      MicroCmpParams { RunCase<uint8_t, 12> },
-                      MicroCmpParams { RunCase<int8_t, 12> },
-                      MicroCmpParams { RunCase<uint16_t, 12> },
-                      MicroCmpParams { RunCase<int16_t, 12> },
-                      MicroCmpParams { RunCase<uint32_t, 12> },
-                      MicroCmpParams { RunCase<int32_t, 12> },
-                      MicroCmpParams { RunCase<uint64_t, 12> },
-                      MicroCmpParams { RunCase<int64_t, 12> }
-                      ));
+INSTANTIATE_TEST_CASE_P(
+    MicroCmpTestCase, MicroCmpTestsuite,
+    ::testing::Values(
+        MicroCmpParams{RunCase<uint16_t, 0>}, MicroCmpParams{RunCase<int16_t, 0>}, MicroCmpParams{RunCase<uint32_t, 0>},
+        MicroCmpParams{RunCase<int32_t, 0>}, MicroCmpParams{RunCase<uint64_t, 0>}, MicroCmpParams{RunCase<int64_t, 0>},
+        MicroCmpParams{RunCase<uint16_t, 1>}, MicroCmpParams{RunCase<int16_t, 1>}, MicroCmpParams{RunCase<uint32_t, 1>},
+        MicroCmpParams{RunCase<int32_t, 1>}, MicroCmpParams{RunCase<uint64_t, 1>}, MicroCmpParams{RunCase<int64_t, 1>},
+        MicroCmpParams{RunCase<uint16_t, 2>}, MicroCmpParams{RunCase<int16_t, 2>}, MicroCmpParams{RunCase<uint32_t, 2>},
+        MicroCmpParams{RunCase<int32_t, 2>}, MicroCmpParams{RunCase<uint64_t, 2>}, MicroCmpParams{RunCase<int64_t, 2>},
+        MicroCmpParams{RunCase<uint16_t, 3>}, MicroCmpParams{RunCase<int16_t, 3>}, MicroCmpParams{RunCase<uint32_t, 3>},
+        MicroCmpParams{RunCase<int32_t, 3>}, MicroCmpParams{RunCase<uint64_t, 3>}, MicroCmpParams{RunCase<int64_t, 3>},
+        MicroCmpParams{RunCase<uint16_t, 4>}, MicroCmpParams{RunCase<int16_t, 4>}, MicroCmpParams{RunCase<uint32_t, 4>},
+        MicroCmpParams{RunCase<int32_t, 4>}, MicroCmpParams{RunCase<uint64_t, 4>}, MicroCmpParams{RunCase<int64_t, 4>},
+        MicroCmpParams{RunCase<uint16_t, 5>}, MicroCmpParams{RunCase<int16_t, 5>}, MicroCmpParams{RunCase<uint32_t, 5>},
+        MicroCmpParams{RunCase<int32_t, 5>}, MicroCmpParams{RunCase<uint64_t, 5>}, MicroCmpParams{RunCase<int64_t, 5>},
+        MicroCmpParams{RunCase<uint8_t, 6>}, MicroCmpParams{RunCase<int8_t, 6>}, MicroCmpParams{RunCase<uint16_t, 6>},
+        MicroCmpParams{RunCase<int16_t, 6>}, MicroCmpParams{RunCase<uint32_t, 6>}, MicroCmpParams{RunCase<int32_t, 6>},
+        MicroCmpParams{RunCase<uint64_t, 6>}, MicroCmpParams{RunCase<int64_t, 6>}, MicroCmpParams{RunCase<uint8_t, 7>},
+        MicroCmpParams{RunCase<int8_t, 7>}, MicroCmpParams{RunCase<uint16_t, 7>}, MicroCmpParams{RunCase<int16_t, 7>},
+        MicroCmpParams{RunCase<uint32_t, 7>}, MicroCmpParams{RunCase<int32_t, 7>}, MicroCmpParams{RunCase<uint64_t, 7>},
+        MicroCmpParams{RunCase<int64_t, 7>}, MicroCmpParams{RunCase<uint8_t, 8>}, MicroCmpParams{RunCase<int8_t, 8>},
+        MicroCmpParams{RunCase<uint16_t, 8>}, MicroCmpParams{RunCase<int16_t, 8>}, MicroCmpParams{RunCase<uint32_t, 8>},
+        MicroCmpParams{RunCase<int32_t, 8>}, MicroCmpParams{RunCase<uint64_t, 8>}, MicroCmpParams{RunCase<int64_t, 8>},
+        MicroCmpParams{RunCase<uint8_t, 9>}, MicroCmpParams{RunCase<int8_t, 9>}, MicroCmpParams{RunCase<uint16_t, 9>},
+        MicroCmpParams{RunCase<int16_t, 9>}, MicroCmpParams{RunCase<uint32_t, 9>}, MicroCmpParams{RunCase<int32_t, 9>},
+        MicroCmpParams{RunCase<uint64_t, 9>}, MicroCmpParams{RunCase<int64_t, 9>}, MicroCmpParams{RunCase<uint8_t, 10>},
+        MicroCmpParams{RunCase<int8_t, 10>}, MicroCmpParams{RunCase<uint16_t, 10>},
+        MicroCmpParams{RunCase<int16_t, 10>}, MicroCmpParams{RunCase<uint32_t, 10>},
+        MicroCmpParams{RunCase<int32_t, 10>}, MicroCmpParams{RunCase<uint64_t, 10>},
+        MicroCmpParams{RunCase<int64_t, 10>}, MicroCmpParams{RunCase<uint8_t, 11>}, MicroCmpParams{RunCase<int8_t, 11>},
+        MicroCmpParams{RunCase<uint16_t, 11>}, MicroCmpParams{RunCase<int16_t, 11>},
+        MicroCmpParams{RunCase<uint32_t, 11>}, MicroCmpParams{RunCase<int32_t, 11>},
+        MicroCmpParams{RunCase<uint64_t, 11>}, MicroCmpParams{RunCase<int64_t, 11>}, MicroCmpParams{RunCase<bool, 12>},
+        MicroCmpParams{RunCase<uint8_t, 12>}, MicroCmpParams{RunCase<int8_t, 12>},
+        MicroCmpParams{RunCase<uint16_t, 12>}, MicroCmpParams{RunCase<int16_t, 12>},
+        MicroCmpParams{RunCase<uint32_t, 12>}, MicroCmpParams{RunCase<int32_t, 12>},
+        MicroCmpParams{RunCase<uint64_t, 12>}, MicroCmpParams{RunCase<int64_t, 12>}));
 
 TEST_P(MicroCmpTestsuite, MicroCmpTestCase)
 {

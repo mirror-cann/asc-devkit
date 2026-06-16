@@ -7,7 +7,7 @@
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
- 
+
 #include "gtest/gtest.h"
 #include "sim_world.h"
 #include "hccl.h"
@@ -17,16 +17,13 @@
 #include "check_utils.h"
 #include <thread>
 #include "alg_env_config.h"
- 
+
 using namespace HcclSim;
 using namespace mc2_ops_hccl;
- 
+
 class ST_REDUCE_SCATTER_TEST : public ::testing::Test {
 protected:
-    void SetUp() override
-    {
-        ResetAlgEnvConfigInitState();
-    }
+    void SetUp() override { ResetAlgEnvConfigInitState(); }
     void TearDown() override
     {
         unsetenv("HCCL_OP_EXPANSION_MODE");
@@ -34,23 +31,21 @@ protected:
         unsetenv("HCCL_INDEPENDENT_OP");
         unsetenv("HCCL_ENABLE_OPEN_AICPU");
     }
-    static void SetUpTestCase()
-    {}
-    static void TearDownTestCase()
-    {}
+    static void SetUpTestCase() {}
+    static void TearDownTestCase() {}
 };
- 
+
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_001)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                                    // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -58,8 +53,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_001)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_INT8;  // 数据类型
+    auto recvCount = 1;                                // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_INT8; // 数据类型
     size_t dataUnitSize = sizeof(int8_t);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -74,9 +69,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_001)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -103,14 +98,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_001)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_002)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0; // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -118,8 +113,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_002)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 100 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 100 * 1024 * 1024;                // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -134,9 +129,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_002)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -163,8 +158,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_002)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_003)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0; // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
@@ -178,8 +173,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_003)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 100 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 100 * 1024 * 1024;                // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -194,9 +189,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_003)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -223,14 +218,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_003)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_004)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2, 3, 4, 5, 6, 7}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2, 3, 4, 5, 6, 7}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                             // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -238,8 +233,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_004)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 100 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 100 * 1024 * 1024;                // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -254,9 +249,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_004)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -283,14 +278,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_004)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_005)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0}, {0}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0}, {0}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;             // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -298,8 +293,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_005)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -314,9 +309,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_005)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -343,14 +338,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_005)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_006)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                                           // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -358,8 +353,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_006)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -374,9 +369,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_006)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -403,14 +398,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_006)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_007)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2, 3, 4, 5, 6, 7}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2, 3, 4, 5, 6, 7}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                             // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -418,8 +413,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_007)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -434,9 +429,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_007)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -463,14 +458,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_007)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_008)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0; // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -478,8 +473,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_008)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -494,9 +489,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_008)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -523,14 +518,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_008)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_009)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0; // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -538,8 +533,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_009)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -554,9 +549,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_009)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -583,14 +578,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_009)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_010)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0; // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -598,8 +593,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_010)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -614,9 +609,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_010)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -643,14 +638,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_010)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_011)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                                    // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -658,8 +653,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_011)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -674,9 +669,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_011)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -703,14 +698,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_011)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_013)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                                    // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -718,8 +713,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_013)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_MIN;
     // 多线程运行SCATTER算子
@@ -734,9 +729,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_013)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -763,14 +758,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_013)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_014)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                                    // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -778,8 +773,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_014)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP32; // 数据类型
     size_t dataUnitSize = sizeof(float);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_MAX;
     // 多线程运行SCATTER算子
@@ -794,9 +789,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_014)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -823,14 +818,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_014)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_016)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                                    // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -838,8 +833,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_016)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP16;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_FP16; // 数据类型
     size_t dataUnitSize = sizeof(int16_t);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -854,9 +849,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_016)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -883,14 +878,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_016)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_017)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                                    // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -898,8 +893,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_017)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_INT16;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                   // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_INT16; // 数据类型
     size_t dataUnitSize = sizeof(int16_t);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -914,9 +909,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_017)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -943,14 +938,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_017)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_018)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                                    // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -958,8 +953,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_018)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_INT32;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                   // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_INT32; // 数据类型
     size_t dataUnitSize = sizeof(int32_t);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -974,9 +969,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_018)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -1003,14 +998,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_018)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_019)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                                    // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -1018,8 +1013,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_019)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_BFP16;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                   // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_BFP16; // 数据类型
     size_t dataUnitSize = sizeof(int16_t);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -1034,9 +1029,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_019)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -1063,14 +1058,14 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_019)
 TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_020)
 {
     // 仿真模型初始化
-    TopoMeta topoMeta {{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};  // 三维数组指定超节点-Server-Device信息
-    auto rankSize = 0;  // 参与集合通信的卡数(同topoMeta卡数一致)
+    TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}}; // 三维数组指定超节点-Server-Device信息
+    auto rankSize = 0;                                    // 参与集合通信的卡数(同topoMeta卡数一致)
     for (auto elem : topoMeta[0]) {
         rankSize += elem.size();
     }
 
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
- 
+
     // 设置展开模式为AI_CPU
     setenv("HCCL_OP_EXPANSION_MODE", "AI_CPU", 1);
     setenv("ENABLE_HOSTDPU_FOR_LLT", "1", 1);
@@ -1078,8 +1073,8 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_020)
     setenv("HCCL_ENABLE_OPEN_AICPU", "1", 1);
 
     // 算子执行参数设置
-    auto recvCount = 1 * 1024 * 1024; // 接收数据量
-    auto dataType = HcclDataType::HCCL_DATA_TYPE_INT8;  // 数据类型
+    auto recvCount = 1 * 1024 * 1024;                  // 接收数据量
+    auto dataType = HcclDataType::HCCL_DATA_TYPE_INT8; // 数据类型
     size_t dataUnitSize = sizeof(int8_t);
     auto reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     // 多线程运行SCATTER算子
@@ -1094,9 +1089,9 @@ TEST_F(ST_REDUCE_SCATTER_TEST, test_host_dpu_reducescatter_020)
             // 3.初始化通信域
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = recvCount * dataUnitSize * rankSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = recvCount * dataUnitSize * rankSize; // 数据量转化为字节数
             u64 recvBufSize = recvCount * dataUnitSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));

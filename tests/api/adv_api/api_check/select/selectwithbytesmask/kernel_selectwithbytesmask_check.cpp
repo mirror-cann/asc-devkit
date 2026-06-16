@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -20,12 +19,8 @@ class SelectWithBytesMaskAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(SelectWithBytesMaskAPICheck, SelectWithBytesMaskAPICheckTestSuccess)
@@ -57,8 +52,8 @@ TEST_F(SelectWithBytesMaskAPICheck, SelectWithBytesMaskAPICheckTestSuccess)
     info.srcLastAxis = 32;
     info.maskLastAxis = 32;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SelectWithBytesMask, (float, int32_t, true, false),
-        (dst, src0, 1.1, mask, sharedTmpBuffer, info));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SelectWithBytesMask, (float, int32_t, true, false), (dst, src0, 1.1, mask, sharedTmpBuffer, info));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
 
@@ -81,7 +76,8 @@ TEST_F(SelectWithBytesMaskAPICheck, SelectWithBytesMaskAPICheckTestSubFailure)
     info.srcLastAxis = 8;
     info.maskLastAxis = 16;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SelectWithBytesMask, (uint8_t, uint8_t, true, false),
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SelectWithBytesMask, (uint8_t, uint8_t, true, false),
         (dstTensor[1], dstTensor[1], 1.1, dstTensor[1], sharedTmpBuffer, info));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 8);
 }
@@ -105,7 +101,8 @@ TEST_F(SelectWithBytesMaskAPICheck, SelectWithBytesMaskAPICheckTestFailure)
     info.srcLastAxis = 13;
     info.maskLastAxis = 9;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SelectWithBytesMask, (uint8_t, uint8_t, true, false),
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SelectWithBytesMask, (uint8_t, uint8_t, true, false),
         (dstTensor[1], dstTensor[1], 1.1, dstTensor[1], sharedTmpBuffer, info));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 12);
 }

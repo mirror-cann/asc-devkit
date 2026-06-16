@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -21,19 +21,14 @@ enum TestMode {
 
 class TEST_CAST_DEQ : public testing::Test {
 protected:
-    void SetUp()
-    {
-        SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        SetGCoreType(0);
-    }
+    void SetUp() { SetGCoreType(2); }
+    void TearDown() { SetGCoreType(0); }
 };
 
-template <typename T, typename U, TestMode TestMode, bool isSetMask, bool isCounterMode, bool isVecDeq, bool halfBlock, bool USE_CAST_DEQ>
-void MainVecCastDeqDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm,
-    uint32_t dataSize)
+template <
+    typename T, typename U, TestMode TestMode, bool isSetMask, bool isCounterMode, bool isVecDeq, bool halfBlock,
+    bool USE_CAST_DEQ>
+void MainVecCastDeqDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, uint32_t dataSize)
 {
     uint32_t LowMask = 0x0000000f;
     uint32_t HighMask = 0x000fff0f;
@@ -207,33 +202,34 @@ void MainVecCastDeqDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __re
         else
             CastDequant<U, T, isVecDeq, halfBlock>(dstLocal, inputLocal, LowMask);
     }
-        DataCopy(dstGlobal, dstLocal, dstSize);
-
-    
+    DataCopy(dstGlobal, dstLocal, dstSize);
 }
 
-#define VEC_CAST_EQ_TESTCASE(t, u, testMode, isSetMask, isCounterMode, isVecDeq, halfBlock)                                                \
-    TEST_F(TEST_CAST_DEQ, CastDeq##t##u##RELATION_OP##testMode##isSetMask##isCounterMode##isVecDeq##halfBlock##Case)                                 \
-    {                                                                                                      \
-        uint32_t dataSize = 2048;                                                                          \
-        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                    \
-        uint8_t inputGm[dataSize * sizeof(PrimT<t>)];                                                  \
-        uint8_t outputGm[dataSize * 2 * sizeof(PrimT<u>)];                                                                      \
-        MainVecCastDeqDemo<t, u, testMode, isSetMask, isCounterMode, isVecDeq, halfBlock, true>(outputGm, inputGm, dataSize);   \
-        for (uint32_t i = 0; i < selMaskSize; i++) {                                                     \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                 \
-        }                                                                                                  \
-    }                                                                                                      \
-    TEST_F(TEST_CAST_DEQ, CastDequant##t##u##RELATION_OP##testMode##isSetMask##isCounterMode##isVecDeq##halfBlock##Case)                                 \
-    {                                                                                                      \
-        uint32_t dataSize = 2048;                                                                          \
-        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                    \
-        uint8_t inputGm[dataSize * sizeof(PrimT<t>)];                                                  \
-        uint8_t outputGm[dataSize * 2 * sizeof(PrimT<u>)];                                                                      \
-        MainVecCastDeqDemo<t, u, testMode, isSetMask, isCounterMode, isVecDeq, halfBlock, false>(outputGm, inputGm, dataSize);  \
-        for (uint32_t i = 0; i < selMaskSize; i++) {                                                     \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                 \
-        }                                                                                                  \
+#define VEC_CAST_EQ_TESTCASE(t, u, testMode, isSetMask, isCounterMode, isVecDeq, halfBlock)                           \
+    TEST_F(TEST_CAST_DEQ, CastDeq##t##u##RELATION_OP##testMode##isSetMask##isCounterMode##isVecDeq##halfBlock##Case)  \
+    {                                                                                                                 \
+        uint32_t dataSize = 2048;                                                                                     \
+        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                                  \
+        uint8_t inputGm[dataSize * sizeof(PrimT<t>)];                                                                 \
+        uint8_t outputGm[dataSize * 2 * sizeof(PrimT<u>)];                                                            \
+        MainVecCastDeqDemo<t, u, testMode, isSetMask, isCounterMode, isVecDeq, halfBlock, true>(                      \
+            outputGm, inputGm, dataSize);                                                                             \
+        for (uint32_t i = 0; i < selMaskSize; i++) {                                                                  \
+            EXPECT_EQ(outputGm[i], 0x00);                                                                             \
+        }                                                                                                             \
+    }                                                                                                                 \
+    TEST_F(                                                                                                           \
+        TEST_CAST_DEQ, CastDequant##t##u##RELATION_OP##testMode##isSetMask##isCounterMode##isVecDeq##halfBlock##Case) \
+    {                                                                                                                 \
+        uint32_t dataSize = 2048;                                                                                     \
+        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                                  \
+        uint8_t inputGm[dataSize * sizeof(PrimT<t>)];                                                                 \
+        uint8_t outputGm[dataSize * 2 * sizeof(PrimT<u>)];                                                            \
+        MainVecCastDeqDemo<t, u, testMode, isSetMask, isCounterMode, isVecDeq, halfBlock, false>(                     \
+            outputGm, inputGm, dataSize);                                                                             \
+        for (uint32_t i = 0; i < selMaskSize; i++) {                                                                  \
+            EXPECT_EQ(outputGm[i], 0x00);                                                                             \
+        }                                                                                                             \
     }
 
 VEC_CAST_EQ_TESTCASE(int16_t, uint8_t, LEVEL2, true, true, true, true);

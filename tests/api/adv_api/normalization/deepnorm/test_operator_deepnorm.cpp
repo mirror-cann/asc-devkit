@@ -1,34 +1,33 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
 #include "kernel_operator.h"
-
 
 using namespace std;
 using namespace AscendC;
 
 namespace AscendC {
 
-   __aicore__ inline void GetDeepNormNDTilingInfo(const ShapeInfo& inputShapeInfo, const ShapeInfo& originShapeInfo,
-    const uint32_t stackBufferSize, const uint32_t typeSize, const bool isReuseSource, const bool isBasicBlk,
-    DeepNormTiling& tiling)
+__aicore__ inline void GetDeepNormNDTilingInfo(
+    const ShapeInfo& inputShapeInfo, const ShapeInfo& originShapeInfo, const uint32_t stackBufferSize,
+    const uint32_t typeSize, const bool isReuseSource, const bool isBasicBlk, DeepNormTiling& tiling)
 {
     uint32_t bLength = inputShapeInfo.shape[0];
     uint32_t sLength = inputShapeInfo.shape[1];
-    uint32_t hLength = inputShapeInfo.shape[2];                    // H after alignment
+    uint32_t hLength = inputShapeInfo.shape[2]; // H after alignment
 
     uint32_t originalBLength = originShapeInfo.shape[0];
     uint32_t originalSLength = originShapeInfo.shape[1];
-    uint32_t originalHLength = originShapeInfo.shape[2];           // H before alignment
+    uint32_t originalHLength = originShapeInfo.shape[2]; // H before alignment
 
     // do not need to update tiling
     if ((tiling.bLength == bLength) && (tiling.sLength == sLength) && (tiling.hLength == hLength) &&
@@ -40,10 +39,10 @@ namespace AscendC {
     tiling.sLength = sLength;
     tiling.hLength = hLength;
     tiling.originalHLength = originalHLength;
-    tiling.inputXSize = tiling.bLength * tiling.sLength * tiling.hLength;   // B * S * H
-    tiling.meanVarSize = tiling.bLength * tiling.sLength;                   // B * S
+    tiling.inputXSize = tiling.bLength * tiling.sLength * tiling.hLength; // B * S * H
+    tiling.meanVarSize = tiling.bLength * tiling.sLength;                 // B * S
 
-    tiling.numberOfTmpBuf = (isReuseSource && (typeSize == 4))? TWO_OF_STACK_BUFFER: THREE_OF_STACK_BUFFER;
+    tiling.numberOfTmpBuf = (isReuseSource && (typeSize == 4)) ? TWO_OF_STACK_BUFFER : THREE_OF_STACK_BUFFER;
 
     uint32_t oneBlockNum = ONE_BLK_SIZE / sizeof(float);
     tiling.meanTmpTensorPos = 0;
@@ -51,8 +50,8 @@ namespace AscendC {
     tiling.varianceTmpTensorPos = tiling.meanTmpTensorSize;
     tiling.varianceTmpTensorSize = tiling.meanTmpTensorSize;
 
-    uint32_t meanVarTotalSize = (typeSize == B32_BYTE_SIZE) ? 0 : tiling.meanTmpTensorSize +
-        tiling.varianceTmpTensorSize;
+    uint32_t meanVarTotalSize =
+        (typeSize == B32_BYTE_SIZE) ? 0 : tiling.meanTmpTensorSize + tiling.varianceTmpTensorSize;
 
     tiling.tmpBufSize = stackBufferSize / sizeof(float);
     tiling.oneTmpSize = (tiling.tmpBufSize - meanVarTotalSize) / tiling.numberOfTmpBuf;
@@ -84,9 +83,9 @@ class KernelDeepNorm {
 public:
     __aicore__ inline KernelDeepNorm() {}
 
-    __aicore__ inline void Init(GM_ADDR inputXGm, GM_ADDR inputGxGm, GM_ADDR betaGm, GM_ADDR gammGm,
-        GM_ADDR outputGm, GM_ADDR outputMeanGm, GM_ADDR outputVarianceGm, uint32_t bLength, uint32_t sLength,
-        uint32_t hLength)
+    __aicore__ inline void Init(
+        GM_ADDR inputXGm, GM_ADDR inputGxGm, GM_ADDR betaGm, GM_ADDR gammGm, GM_ADDR outputGm, GM_ADDR outputMeanGm,
+        GM_ADDR outputVarianceGm, uint32_t bLength, uint32_t sLength, uint32_t hLength)
     {
         this->bLength = bLength;
         this->sLength = sLength;
@@ -165,9 +164,11 @@ private:
         bool ans = PopStackBuffer<uint8_t, TPosition::LCM>(stackBuffer);
         stackBufferSize = stackBuffer.GetSize();
 
-        GetDeepNormNDTilingInfo(shapeInfo, orishapeInfo, stackBufferSize, sizeof(dataType), isReuseSrc, isBasicBlock, tiling);
-        DeepNorm<dataType, isReuseSrc, isBasicBlock>(outputLocal, meanLocal, varianceLocal, inputXLocal,
-            inputGxLocal, betaLocal, gammaLocal, (dataType)alpha, (dataType)epsilon, tiling);
+        GetDeepNormNDTilingInfo(
+            shapeInfo, orishapeInfo, stackBufferSize, sizeof(dataType), isReuseSrc, isBasicBlock, tiling);
+        DeepNorm<dataType, isReuseSrc, isBasicBlock>(
+            outputLocal, meanLocal, varianceLocal, inputXLocal, inputGxLocal, betaLocal, gammaLocal, (dataType)alpha,
+            (dataType)epsilon, tiling);
 
         outQueue.EnQue<dataType>(outputLocal);
         outQueueMean.EnQue<dataType>(meanLocal);
@@ -229,13 +230,12 @@ private:
 } // namespace AscendC
 
 template <typename dataType, bool isReuseSrc = false, bool isBasicBlock = false>
-__global__ __aicore__ void kernel_deepnorm_operator(GM_ADDR inputXGm, GM_ADDR inputGxGm, GM_ADDR betaGm,
-    GM_ADDR gammGm, GM_ADDR outputGm, GM_ADDR outputMeanGm, GM_ADDR outputVarianceGm, uint32_t bLength,
-    uint32_t sLength, uint32_t hLength)
+__global__ __aicore__ void kernel_deepnorm_operator(
+    GM_ADDR inputXGm, GM_ADDR inputGxGm, GM_ADDR betaGm, GM_ADDR gammGm, GM_ADDR outputGm, GM_ADDR outputMeanGm,
+    GM_ADDR outputVarianceGm, uint32_t bLength, uint32_t sLength, uint32_t hLength)
 {
     AscendC::KernelDeepNorm<dataType, isReuseSrc, isBasicBlock> op;
-    op.Init(inputXGm, inputGxGm, betaGm, gammGm, outputGm, outputMeanGm, outputVarianceGm,
-        bLength, sLength, hLength);
+    op.Init(inputXGm, inputGxGm, betaGm, gammGm, outputGm, outputMeanGm, outputVarianceGm, bLength, sLength, hLength);
     op.Process();
 }
 
@@ -244,39 +244,32 @@ struct DeepNormTestParams {
     uint32_t sLength;
     uint32_t hLength;
     uint32_t typeSize;
-    void (*calFunc) (uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint32_t, uint32_t,
-        uint32_t);
+    void (*calFunc)(uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint32_t, uint32_t, uint32_t);
 };
 
 class DeepNormTestsuite : public testing::Test, public testing::WithParamInterface<DeepNormTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
 
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DEEPNORM, DeepNormTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DEEPNORM, DeepNormTestsuite,
     ::testing::Values(
-    DeepNormTestParams {2, 32, 16, sizeof(half),  kernel_deepnorm_operator<half,  true, false>  },
-    DeepNormTestParams {2, 32, 16, sizeof(half),  kernel_deepnorm_operator<half,  false, false> },
-    DeepNormTestParams {2, 16, 32, sizeof(half),  kernel_deepnorm_operator<half,  true, false>  },
-    DeepNormTestParams {2, 16, 32, sizeof(half),  kernel_deepnorm_operator<half,  false, false> },
-    DeepNormTestParams {2, 32, 16, sizeof(float), kernel_deepnorm_operator<float, true, false>  },
-    DeepNormTestParams {2, 32, 16, sizeof(float), kernel_deepnorm_operator<float, false, false> },
-    DeepNormTestParams {2, 16, 32, sizeof(float), kernel_deepnorm_operator<float, true, false>  },
-    DeepNormTestParams {2, 16, 32, sizeof(float), kernel_deepnorm_operator<float, false, false> },
-    // basic block
-    DeepNormTestParams {1, 16, 128, sizeof(half),  kernel_deepnorm_operator<half, true, true>  },
-    DeepNormTestParams {1, 16, 128, sizeof(half),  kernel_deepnorm_operator<half, false, true> },
-    DeepNormTestParams {1, 16, 128, sizeof(float), kernel_deepnorm_operator<float, true, true> },
-    DeepNormTestParams {1, 16, 128, sizeof(float), kernel_deepnorm_operator<float, false, true>}
-));
+        DeepNormTestParams{2, 32, 16, sizeof(half), kernel_deepnorm_operator<half, true, false>},
+        DeepNormTestParams{2, 32, 16, sizeof(half), kernel_deepnorm_operator<half, false, false>},
+        DeepNormTestParams{2, 16, 32, sizeof(half), kernel_deepnorm_operator<half, true, false>},
+        DeepNormTestParams{2, 16, 32, sizeof(half), kernel_deepnorm_operator<half, false, false>},
+        DeepNormTestParams{2, 32, 16, sizeof(float), kernel_deepnorm_operator<float, true, false>},
+        DeepNormTestParams{2, 32, 16, sizeof(float), kernel_deepnorm_operator<float, false, false>},
+        DeepNormTestParams{2, 16, 32, sizeof(float), kernel_deepnorm_operator<float, true, false>},
+        DeepNormTestParams{2, 16, 32, sizeof(float), kernel_deepnorm_operator<float, false, false>},
+        // basic block
+        DeepNormTestParams{1, 16, 128, sizeof(half), kernel_deepnorm_operator<half, true, true>},
+        DeepNormTestParams{1, 16, 128, sizeof(half), kernel_deepnorm_operator<half, false, true>},
+        DeepNormTestParams{1, 16, 128, sizeof(float), kernel_deepnorm_operator<float, true, true>},
+        DeepNormTestParams{1, 16, 128, sizeof(float), kernel_deepnorm_operator<float, false, true>}));
 
 TEST_P(DeepNormTestsuite, DeepNormOpTestCase)
 {
@@ -291,15 +284,15 @@ TEST_P(DeepNormTestsuite, DeepNormOpTestCase)
     uint32_t bsLength = bLength * sLength;
     bsLength = (bsLength + oneBlockNum - 1) / oneBlockNum * oneBlockNum;
 
-    uint8_t inputXGm[bshLength * typeSize] { 0x00 };
-    uint8_t inputGxGm[bshLength * typeSize] { 0x00 };
-    uint8_t gammGm[hLength * typeSize] { 0x00 };
-    uint8_t betaGm[hLength * typeSize] { 0x00 };
+    uint8_t inputXGm[bshLength * typeSize]{0x00};
+    uint8_t inputGxGm[bshLength * typeSize]{0x00};
+    uint8_t gammGm[hLength * typeSize]{0x00};
+    uint8_t betaGm[hLength * typeSize]{0x00};
 
-    uint8_t outputGm[bshLength * typeSize] {0x00};
-    uint8_t outputMeanGm[bsLength * typeSize] {0x00};
-    uint8_t outputVarianceGm[bsLength * typeSize] {0x00};
+    uint8_t outputGm[bshLength * typeSize]{0x00};
+    uint8_t outputMeanGm[bsLength * typeSize]{0x00};
+    uint8_t outputVarianceGm[bsLength * typeSize]{0x00};
 
-    param.calFunc(inputXGm, inputGxGm, gammGm, betaGm, outputGm, outputMeanGm, outputVarianceGm, bLength,
-        sLength, hLength);
+    param.calFunc(
+        inputXGm, inputGxGm, gammGm, betaGm, outputGm, outputMeanGm, outputVarianceGm, bLength, sLength, hLength);
 }

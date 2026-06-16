@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_tensor_impl.h"
 #include <vector>
@@ -33,31 +33,42 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TENSOR_DESC_PRINT, TEST_TENSOR_DESC_PRINT,
-    ::testing::Values(PrintTensorDescParams { "uint32_t", 16, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n" },
-    PrintTensorDescParams { "uint32_t", 7, "0000 : 0 1 2 3 4 5 6 \n" },
-    PrintTensorDescParams { "int32_t", 16, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n" },
-    PrintTensorDescParams { "int32_t", 7, "0000 : 0 1 2 3 4 5 6 \n" },
-    PrintTensorDescParams { "half", 33,
-    "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 "
-    "\n" },
-    PrintTensorDescParams { "half", 17, "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 \n" },
-    PrintTensorDescParams { "half", 7, "0000 : 0 1 2 3 4 5 6 \n" },
-    PrintTensorDescParams { "float", 17, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 \n" },
-    PrintTensorDescParams { "float", 7, "0000 : 0 1 2 3 4 5 6 \n" },
-    PrintTensorDescParams { "uint16_t", 33,
-    "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 "
-    "\n" },
-    PrintTensorDescParams { "uint16_t", 17, "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 \n" },
-    PrintTensorDescParams { "uint16_t", 7, "0000 : 0 1 2 3 4 5 6 \n" },
-    PrintTensorDescParams { "uint8_t", 33,
-    "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 \n" },
-    PrintTensorDescParams { "int8_t", 33,
-    "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 \n" },
-    PrintTensorDescParams { "bool", 33,
-    "0000 : 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 \n0032 : 1 \n" }));
+INSTANTIATE_TEST_CASE_P(
+    TENSOR_DESC_PRINT, TEST_TENSOR_DESC_PRINT,
+    ::testing::Values(
+        PrintTensorDescParams{"uint32_t", 16, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n"},
+        PrintTensorDescParams{"uint32_t", 7, "0000 : 0 1 2 3 4 5 6 \n"},
+        PrintTensorDescParams{"int32_t", 16, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n"},
+        PrintTensorDescParams{"int32_t", 7, "0000 : 0 1 2 3 4 5 6 \n"},
+        PrintTensorDescParams{
+            "half", 33,
+            "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 "
+            "\n0032 : 32 "
+            "\n"},
+        PrintTensorDescParams{"half", 17, "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 \n"},
+        PrintTensorDescParams{"half", 7, "0000 : 0 1 2 3 4 5 6 \n"},
+        PrintTensorDescParams{"float", 17, "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 \n"},
+        PrintTensorDescParams{"float", 7, "0000 : 0 1 2 3 4 5 6 \n"},
+        PrintTensorDescParams{
+            "uint16_t", 33,
+            "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 "
+            "\n0032 : 32 "
+            "\n"},
+        PrintTensorDescParams{"uint16_t", 17, "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \n0016 : 16 \n"},
+        PrintTensorDescParams{"uint16_t", 7, "0000 : 0 1 2 3 4 5 6 \n"},
+        PrintTensorDescParams{
+            "uint8_t", 33,
+            "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 "
+            "\n"},
+        PrintTensorDescParams{
+            "int8_t", 33,
+            "0000 : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 \n0032 : 32 "
+            "\n"},
+        PrintTensorDescParams{
+            "bool", 33, "0000 : 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 \n0032 : 1 \n"}));
 
-template <typename T> void GetPrintString(const string& dataType, const int32_t printSize, string& retStr)
+template <typename T>
+void GetPrintString(const string& dataType, const int32_t printSize, string& retStr)
 {
     const int32_t maxLen = 64;
     TBuffAddr addr;
@@ -124,7 +135,7 @@ TEST_F(TEST_TENSOR_DESC, TensorBracketWithoutInitBuffer)
     string str1 = tensor.os_.str();
     string str2 = tensorPart.os_.str();
     string str1Golden = "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 \n0024 "
-        ": 24 25 26 27 28 29 30 31 \n";
+                        ": 24 25 26 27 28 29 30 31 \n";
     string str2Golden = "";
     EXPECT_EQ(str1, str1Golden);
     EXPECT_EQ(str2, str2Golden);
@@ -155,7 +166,7 @@ TEST_F(TEST_TENSOR_DESC, TensorBracketWithInitBuffer)
     string str1 = tensor.os_.str();
     string str2 = tensorPart.os_.str();
     string str1Golden = "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 \n0024 "
-        ": 24 25 26 27 28 29 30 31 \n";
+                        ": 24 25 26 27 28 29 30 31 \n";
     string str2Golden = "";
     EXPECT_EQ(str1, str1Golden);
     EXPECT_EQ(str2, str2Golden);
@@ -185,7 +196,7 @@ TEST_F(TEST_TENSOR_DESC, TensorEqual)
     string str1 = tensor1.os_.str();
     string str2 = tensor2.os_.str();
     string strGolden = "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 \n0024 "
-        ": 24 25 26 27 28 29 30 31 \n";
+                       ": 24 25 26 27 28 29 30 31 \n";
     EXPECT_EQ(str1, strGolden);
     EXPECT_EQ(str2, "");
     EXPECT_EQ(tensor1.GetSize(), maxLen);
@@ -217,7 +228,7 @@ TEST_F(TEST_TENSOR_DESC, TensorConpyConstrcutWithInitBuffer)
     string str1 = tensor1.os_.str();
     string str2 = tensor2.os_.str();
     string strGolden = "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 \n0024 "
-        ": 24 25 26 27 28 29 30 31 \n";
+                       ": 24 25 26 27 28 29 30 31 \n";
     EXPECT_EQ(str1, strGolden);
     EXPECT_EQ(str2, "");
     EXPECT_EQ(tensor2.GetSize(), maxLen);
@@ -245,7 +256,7 @@ TEST_F(TEST_TENSOR_DESC, TensorCopyConstrcutWithoutInitBuffer)
     string str1 = tensor1.os_.str();
     string str2 = tensor2.os_.str();
     string str1Golden = "0000 : 0 1 2 3 4 5 6 7 \n0008 : 8 9 10 11 12 13 14 15 \n0016 : 16 17 18 19 20 21 22 23 \n0024 "
-        ": 24 25 26 27 28 29 30 31 \n";
+                        ": 24 25 26 27 28 29 30 31 \n";
     string str2Golden = "";
     EXPECT_EQ(str1, str1Golden);
     EXPECT_EQ(str2, str2Golden);
@@ -304,7 +315,7 @@ TEST_F(TEST_TENSOR_DESC, LocalTensorSupportInt4Test)
     addr.bufferHandle = nullptr;
     addr.dataLen = num / INT4_TWO;
     addr.bufferAddr = 0;
-    addr.absAddr = (uint8_t *)&data;
+    addr.absAddr = (uint8_t*)&data;
 
     LocalTensor<SelfTensorDesc<int4b_t>> tensor1(addr);
     EXPECT_EQ(tensor1.GetSize(), 16);
@@ -330,8 +341,8 @@ TEST_F(TEST_TENSOR_DESC, GlobalTensorSupportInt4Test)
 {
     const int32_t num = 16;
     uint64_t data = 0xfedcba9876543210;
-    uint8_t *dataPtr = (uint8_t *)&data;
-    __gm__ int4b_t *gmAddr = (__gm__ int4b_t *)&data;
+    uint8_t* dataPtr = (uint8_t*)&data;
+    __gm__ int4b_t* gmAddr = (__gm__ int4b_t*)&data;
 
     GlobalTensor<SelfTensorDesc<int4b_t>> glbTensor1;
     GlobalTensor<SelfTensorDesc<int4b_t>> glbTensor2;
@@ -339,10 +350,10 @@ TEST_F(TEST_TENSOR_DESC, GlobalTensorSupportInt4Test)
     glbTensor2 = glbTensor1[num / 2];
 
     EXPECT_EQ(glbTensor1.GetSize(), num);
-    EXPECT_EQ(glbTensor1.GetPhyAddr(), (int4b_t *)&data);
+    EXPECT_EQ(glbTensor1.GetPhyAddr(), (int4b_t*)&data);
 
     for (int i = 0; i < num / 2; i++) {
-        EXPECT_EQ(glbTensor1.GetPhyAddr(i * 2), (int4b_t *)&dataPtr[i]);
+        EXPECT_EQ(glbTensor1.GetPhyAddr(i * 2), (int4b_t*)&dataPtr[i]);
     }
 
     for (int i = 0; i < num; i++) {

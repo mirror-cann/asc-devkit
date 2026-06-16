@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "mockcpp/mockcpp.hpp"
 #include "stub_def.h"
@@ -17,14 +17,11 @@ protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
     virtual void SetUp() {}
-    void TearDown()
-    {
-        GlobalMockObject::verify();
-    }
+    void TearDown() { GlobalMockObject::verify(); }
 };
 
 template <size_t v>
-using Int = AscendC::Std::integral_constant<size_t, v>; 
+using Int = AscendC::Std::integral_constant<size_t, v>;
 
 TEST_F(TensorTraitTest, ShapeAndStrideOperation)
 {
@@ -90,8 +87,8 @@ TEST_F(TensorTraitTest, IsTupleOperation)
 
 TEST_F(TensorTraitTest, LayoutOperation)
 {
-    AscendC::Shape<int,int,int> shape = AscendC::MakeShape(10, 20, 30);
-    AscendC::Stride<int,int,int> stride = AscendC::MakeStride(1, 100, 200);
+    AscendC::Shape<int, int, int> shape = AscendC::MakeShape(10, 20, 30);
+    AscendC::Stride<int, int, int> stride = AscendC::MakeStride(1, 100, 200);
 
     auto layoutMake = AscendC::MakeLayout(shape, stride);
 
@@ -105,7 +102,6 @@ TEST_F(TensorTraitTest, LayoutOperation)
     EXPECT_EQ(AscendC::Std::get<1>(layoutMake.GetStride()), 100);
     EXPECT_EQ(AscendC::Std::get<2>(layoutMake.GetStride()), 200);
 
-
     EXPECT_EQ(AscendC::Std::get<0>(layoutInit.GetShape()), 10);
     EXPECT_EQ(AscendC::Std::get<1>(layoutInit.GetShape()), 20);
     EXPECT_EQ(AscendC::Std::get<2>(layoutInit.GetShape()), 30);
@@ -117,8 +113,8 @@ TEST_F(TensorTraitTest, LayoutOperation)
 
 TEST_F(TensorTraitTest, IsLayoutOperation)
 {
-    AscendC::Shape<int,int,int> shape = AscendC::MakeShape(10, 20, 30);
-    AscendC::Stride<int,int,int> stride = AscendC::MakeStride(1, 100, 200);
+    AscendC::Shape<int, int, int> shape = AscendC::MakeShape(10, 20, 30);
+    AscendC::Stride<int, int, int> stride = AscendC::MakeStride(1, 100, 200);
 
     auto layoutMake = AscendC::MakeLayout(shape, stride);
 
@@ -137,10 +133,10 @@ TEST_F(TensorTraitTest, IsLayoutOperation)
 
 TEST_F(TensorTraitTest, TensorTraitOperation)
 {
-    AscendC::Shape<int,int,int> shape = AscendC::MakeShape(10, 20, 30);
-    AscendC::Stride<int,int,int> stride = AscendC::MakeStride(1, 100, 200);
+    AscendC::Shape<int, int, int> shape = AscendC::MakeShape(10, 20, 30);
+    AscendC::Stride<int, int, int> stride = AscendC::MakeStride(1, 100, 200);
 
-    auto layoutMake = AscendC::MakeLayout(shape, stride);    
+    auto layoutMake = AscendC::MakeLayout(shape, stride);
 
     auto tensorTraitMake = AscendC::MakeTensorTrait<float, AscendC::TPosition::VECIN>(layoutMake);
 
@@ -152,7 +148,9 @@ TEST_F(TensorTraitTest, TensorTraitOperation)
     EXPECT_EQ(AscendC::Std::get<1>(tensorTraitMake.GetLayout().GetStride()), 100);
     EXPECT_EQ(AscendC::Std::get<2>(tensorTraitMake.GetLayout().GetStride()), 200);
 
-    using TensorTraitType = AscendC::TensorTrait<half, AscendC::TPosition::VECCALC, AscendC::Layout<AscendC::Shape<int, int, int>, AscendC::Stride<int, int, int>>>;
+    using TensorTraitType = AscendC::TensorTrait<
+        half, AscendC::TPosition::VECCALC,
+        AscendC::Layout<AscendC::Shape<int, int, int>, AscendC::Stride<int, int, int>>>;
 
     TensorTraitType tensorTraitInit(layoutMake);
 
@@ -178,10 +176,10 @@ TEST_F(TensorTraitTest, TensorTraitOperation)
 
 TEST_F(TensorTraitTest, IsTensorTraitOperation)
 {
-    AscendC::Shape<int,int,int> shape = AscendC::MakeShape(10, 20, 30);
-    AscendC::Stride<int,int,int> stride = AscendC::MakeStride(1, 100, 200);
+    AscendC::Shape<int, int, int> shape = AscendC::MakeShape(10, 20, 30);
+    AscendC::Stride<int, int, int> stride = AscendC::MakeStride(1, 100, 200);
 
-    auto layoutMake = AscendC::MakeLayout(shape, stride);    
+    auto layoutMake = AscendC::MakeLayout(shape, stride);
 
     auto tensorTraitMake = AscendC::MakeTensorTrait<float, AscendC::TPosition::VECIN>(layoutMake);
 
@@ -198,8 +196,8 @@ TEST_F(TensorTraitTest, IsTensorTraitOperation)
 
 TEST_F(TensorTraitTest, TensorOperation)
 {
-    AscendC::Shape<int,int,int> shape = AscendC::MakeShape(10, 20, 30);
-    AscendC::Stride<int,int,int> stride = AscendC::MakeStride(1, 100, 200);
+    AscendC::Shape<int, int, int> shape = AscendC::MakeShape(10, 20, 30);
+    AscendC::Stride<int, int, int> stride = AscendC::MakeStride(1, 100, 200);
 
     auto layoutMake = AscendC::MakeLayout(shape, stride);
 
@@ -236,8 +234,10 @@ TEST_F(TensorTraitTest, MakeCoordOperation)
     constexpr int blockN = 14;
 
     auto coord = AscendC::MakeCoord(Int<20>{}, Int<30>{});
-    auto shape = AscendC::MakeShape(AscendC::MakeShape(Int<blockM>{}, Int<M/blockM>{}), AscendC::MakeShape(Int<blockN>{}, Int<N/blockN>{}));
-    auto stride = AscendC::MakeStride(AscendC::MakeStride(Int<blockN>{}, Int<blockM*blockN>{}),AscendC::MakeStride(Int<1>{}, Int<M*blockN>{}));
+    auto shape = AscendC::MakeShape(
+        AscendC::MakeShape(Int<blockM>{}, Int<M / blockM>{}), AscendC::MakeShape(Int<blockN>{}, Int<N / blockN>{}));
+    auto stride = AscendC::MakeStride(
+        AscendC::MakeStride(Int<blockN>{}, Int<blockM * blockN>{}), AscendC::MakeStride(Int<1>{}, Int<M * blockN>{}));
 
     auto layout = AscendC::MakeLayout(shape, stride);
     auto index = layout(coord);
@@ -249,51 +249,57 @@ TEST_F(TensorTraitTest, MakeCoordOperation)
 
 TEST_F(TensorTraitTest, Crd2IdxOperation)
 {
-    auto blockCoordM    = Int<11>{};
-    auto blockCoordN    = Int<12>{};
-    auto baseShapeM     = Int<13>{};
-    auto baseShapeN     = Int<14>{};
-    auto basestrideM    = Int<15>{};
-    auto basestrideN    = Int<16>{};
+    auto blockCoordM = Int<11>{};
+    auto blockCoordN = Int<12>{};
+    auto baseShapeM = Int<13>{};
+    auto baseShapeN = Int<14>{};
+    auto basestrideM = Int<15>{};
+    auto basestrideN = Int<16>{};
 
     auto coord = AscendC::MakeCoord(blockCoordM, blockCoordN);
-    auto shape = AscendC::MakeShape(AscendC::MakeShape(baseShapeM, baseShapeM), AscendC::MakeShape(baseShapeN, baseShapeN));
-    auto stride = AscendC::MakeStride(AscendC::MakeStride(basestrideM, basestrideM),AscendC::MakeStride(basestrideN, basestrideN));
-    
+    auto shape =
+        AscendC::MakeShape(AscendC::MakeShape(baseShapeM, baseShapeM), AscendC::MakeShape(baseShapeN, baseShapeN));
+    auto stride = AscendC::MakeStride(
+        AscendC::MakeStride(basestrideM, basestrideM), AscendC::MakeStride(basestrideN, basestrideN));
+
     auto index = AscendC::Crd2Idx(coord, shape, stride);
     EXPECT_EQ(index, 357);
 }
 
 TEST_F(TensorTraitTest, Crd2IdxIntZeroOperation)
 {
-    auto blockCoordM    = Int<11>{};
-    auto blockCoordN    = Int<12>{};
-    auto baseShapeM     = Int<13>{};
-    auto baseShapeN     = Int<14>{};
-    auto basestrideM    = Int<15>{};
-    auto basestrideN    = Int<16>{};
+    auto blockCoordM = Int<11>{};
+    auto blockCoordN = Int<12>{};
+    auto baseShapeM = Int<13>{};
+    auto baseShapeN = Int<14>{};
+    auto basestrideM = Int<15>{};
+    auto basestrideN = Int<16>{};
 
     auto coord = AscendC::MakeCoord(Int<0>{}, Int<0>{});
-    auto shape = AscendC::MakeShape(AscendC::MakeShape(baseShapeM, baseShapeM), AscendC::MakeShape(baseShapeN, baseShapeN));
-    auto stride = AscendC::MakeStride(AscendC::MakeStride(basestrideM, basestrideM),AscendC::MakeStride(basestrideN, basestrideN));
-    
+    auto shape =
+        AscendC::MakeShape(AscendC::MakeShape(baseShapeM, baseShapeM), AscendC::MakeShape(baseShapeN, baseShapeN));
+    auto stride = AscendC::MakeStride(
+        AscendC::MakeStride(basestrideM, basestrideM), AscendC::MakeStride(basestrideN, basestrideN));
+
     auto index = AscendC::Crd2Idx(coord, shape, stride);
     EXPECT_EQ(index, 0);
 }
 
 TEST_F(TensorTraitTest, Crd2IdxCoordSingleZeroOperation)
 {
-    auto blockCoordM    = Int<11>{};
-    auto blockCoordN    = Int<12>{};
-    auto baseShapeM     = Int<13>{};
-    auto baseShapeN     = Int<14>{};
-    auto basestrideM    = Int<15>{};
-    auto basestrideN    = Int<16>{};
+    auto blockCoordM = Int<11>{};
+    auto blockCoordN = Int<12>{};
+    auto baseShapeM = Int<13>{};
+    auto baseShapeN = Int<14>{};
+    auto basestrideM = Int<15>{};
+    auto basestrideN = Int<16>{};
 
     auto coord = AscendC::MakeCoord(Int<0>{}, blockCoordN);
-    auto shape = AscendC::MakeShape(AscendC::MakeShape(baseShapeM, baseShapeM), AscendC::MakeShape(baseShapeN, baseShapeN));
-    auto stride = AscendC::MakeStride(AscendC::MakeStride(basestrideM, basestrideM),AscendC::MakeStride(basestrideN, basestrideN));
-    
+    auto shape =
+        AscendC::MakeShape(AscendC::MakeShape(baseShapeM, baseShapeM), AscendC::MakeShape(baseShapeN, baseShapeN));
+    auto stride = AscendC::MakeStride(
+        AscendC::MakeStride(basestrideM, basestrideM), AscendC::MakeStride(basestrideN, basestrideN));
+
     auto index = AscendC::Crd2Idx(coord, shape, stride);
     EXPECT_EQ(index, 192);
 }

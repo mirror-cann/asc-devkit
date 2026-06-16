@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -23,19 +23,15 @@ template <typename T>
 const LocalTensor<T> EMPTY_TENSOR;
 
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {};
 
-};
-
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG,
-class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE(CubeOutBuffer)
-, MATMUL_IMPORT_MODULE(CopyCubeOut)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG,
+    class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(CubeOutBuffer),
+                   MATMUL_IMPORT_MODULE(CopyCubeOut),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling) {
     MATMUL_ALLOW_USING(CubeOutBuffer);
     MATMUL_ALLOW_USING(CopyCubeOut);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeInfo);
@@ -62,18 +58,15 @@ public:
 
     MatmulImpl() {}
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar(const TCubeTiling &tiling) {
+    void InitVar(const TCubeTiling& tiling)
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
     }
 
-    void SetRuntimeParams(int32_t m, int32_t n) {
-        MATMUL_MODULE(MatmulShapeInfo)->SetOrgShape(m, n, n, n, 0);
-    }
+    void SetRuntimeParams(int32_t m, int32_t n) { MATMUL_MODULE(MatmulShapeInfo)->SetOrgShape(m, n, n, n, 0); }
 
     uint32_t GetBufferSize()
     {
@@ -85,10 +78,9 @@ private:
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class TestCopyCubeOut : public testing::Test {
-
     using A_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float, false>;
     using B_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float, false>;
     using C_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
@@ -101,12 +93,17 @@ protected:
     void TearDown() {}
 
 private:
-    MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm;
-    MatmulImpl<A_TYPE, B_TYPE, C_TYPE_NZ, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm1;
+    MatmulImpl<
+        A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy>
+        mm;
+    MatmulImpl<
+        A_TYPE, B_TYPE, C_TYPE_NZ, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        mm1;
 };
 
-TEST_F(TestCopyCubeOut, Copy_NZ_From_ND) {
-
+TEST_F(TestCopyCubeOut, Copy_NZ_From_ND)
+{
     TCubeTiling tiling;
     tiling.M = 16;
     tiling.N = 16;
@@ -145,8 +142,8 @@ TEST_F(TestCopyCubeOut, Copy_NZ_From_ND) {
     mm.FreeTensor(co1Local);
 }
 
-TEST_F(TestCopyCubeOut, Copy_NZ_From_NZ) {
-
+TEST_F(TestCopyCubeOut, Copy_NZ_From_NZ)
+{
     TCubeTiling tiling;
     tiling.M = 16;
     tiling.N = 16;

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -21,20 +21,14 @@ enum TestMode {
 
 class TEST_SELECT : public testing::Test {
 protected:
-    void SetUp()
-    {
-        SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        SetGCoreType(0);
-    }
+    void SetUp() { SetGCoreType(2); }
+    void TearDown() { SetGCoreType(0); }
 };
 
 template <typename T, TestMode TestMode, bool withMask>
-void MainVecSelectLevel2Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ selMaskGm,
-    __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm, SELMODE selMode, uint32_t dataSize,
-    uint32_t selMaskSize)
+void MainVecSelectLevel2Demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_t* __restrict__ src0Gm,
+    __gm__ uint8_t* __restrict__ src1Gm, SELMODE selMode, uint32_t dataSize, uint32_t selMaskSize)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -62,14 +56,16 @@ void MainVecSelectLevel2Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t*
     TBuffAddr tbuf2;
     tbuf2.logicPos = static_cast<uint8_t>(TPosition::VECCALC);
     selMaskLocal.SetAddr(tbuf2);
-    selMaskLocal.InitBuffer(input0Local.GetSize() * sizeof(PrimT<T>) + input1Local.GetSize() * sizeof(PrimT<T>), selMaskSize);
+    selMaskLocal.InitBuffer(
+        input0Local.GetSize() * sizeof(PrimT<T>) + input1Local.GetSize() * sizeof(PrimT<T>), selMaskSize);
 
     LocalTensor<T> outputLocal;
     TBuffAddr tbuf3;
     tbuf3.logicPos = static_cast<uint8_t>(TPosition::VECCALC);
     outputLocal.SetAddr(tbuf3);
-    outputLocal.InitBuffer(input0Local.GetSize() * sizeof(PrimT<T>) + input1Local.GetSize() * sizeof(PrimT<T>) +
-        selMaskLocal.GetSize() * sizeof(uint8_t),
+    outputLocal.InitBuffer(
+        input0Local.GetSize() * sizeof(PrimT<T>) + input1Local.GetSize() * sizeof(PrimT<T>) +
+            selMaskLocal.GetSize() * sizeof(uint8_t),
         dataSize);
 
     DataCopy(input0Local, input0Global, dataSize);
@@ -94,30 +90,39 @@ void MainVecSelectLevel2Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t*
                 mask[1] = 0;
             }
             if (selMode == SELMODE::VSEL_TENSOR_SCALAR_MODE) {
-                Select(outputLocal, selMaskLocal, input0Local, static_cast<PrimT<T>>(0), selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, static_cast<PrimT<T>>(0), input0Local, selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, input0Local, input0Local[0], selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, input0Local[0], input0Local, selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
+                Select(
+                    outputLocal, selMaskLocal, input0Local, static_cast<PrimT<T>>(0), selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, static_cast<PrimT<T>>(0), input0Local, selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, input0Local, input0Local[0], selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, input0Local[0], input0Local, selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
                 AscendC::SetMaskCount();
-                Select(outputLocal, selMaskLocal, input0Local, static_cast<PrimT<T>>(0), selMode, counterMask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, static_cast<PrimT<T>>(0), input0Local, selMode, counterMask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, input0Local, input0Local[0], selMode, counterMask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, input0Local[0], input0Local, selMode, counterMask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
+                Select(
+                    outputLocal, selMaskLocal, input0Local, static_cast<PrimT<T>>(0), selMode, counterMask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, static_cast<PrimT<T>>(0), input0Local, selMode, counterMask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, input0Local, input0Local[0], selMode, counterMask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, input0Local[0], input0Local, selMode, counterMask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
                 AscendC::SetMaskNorm();
             } else {
-                Select(outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
+                Select(
+                    outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime, {1, 1, 1, 8, 8, 8});
                 AscendC::SetMaskCount();
-                Select(outputLocal, selMaskLocal, input0Local, input1Local, selMode, counterMask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
+                Select(
+                    outputLocal, selMaskLocal, input0Local, input1Local, selMode, counterMask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
                 AscendC::SetMaskNorm();
             }
         } else if constexpr (TestMode == LEVEL0_COUNT_MODE) {
@@ -129,30 +134,38 @@ void MainVecSelectLevel2Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t*
                 mask = 64;
             }
             if (selMode == SELMODE::VSEL_TENSOR_SCALAR_MODE) {
-                Select(outputLocal, selMaskLocal, input0Local, static_cast<PrimT<T>>(0), selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, static_cast<PrimT<T>>(0), input0Local, selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, input0Local, input0Local[0], selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, input0Local[0], input0Local, selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
+                Select(
+                    outputLocal, selMaskLocal, input0Local, static_cast<PrimT<T>>(0), selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, static_cast<PrimT<T>>(0), input0Local, selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, input0Local, input0Local[0], selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, input0Local[0], input0Local, selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
                 AscendC::SetMaskCount();
-                Select(outputLocal, selMaskLocal, input0Local, static_cast<PrimT<T>>(0), selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, static_cast<PrimT<T>>(0), input0Local, selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, input0Local, input0Local[0], selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
-                Select(outputLocal, selMaskLocal, input0Local[0], input0Local, selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
+                Select(
+                    outputLocal, selMaskLocal, input0Local, static_cast<PrimT<T>>(0), selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, static_cast<PrimT<T>>(0), input0Local, selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, input0Local, input0Local[0], selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
+                Select(
+                    outputLocal, selMaskLocal, input0Local[0], input0Local, selMode, mask, repeatTime,
+                    {1, 1, 1, 8, 8, 8});
                 AscendC::SetMaskNorm();
             } else {
-                Select(outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
+                Select(
+                    outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime, {1, 1, 1, 8, 8, 8});
                 AscendC::SetMaskCount();
-                Select(outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime,
-                    { 1, 1, 1, 8, 8, 8 });
+                Select(
+                    outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime, {1, 1, 1, 8, 8, 8});
                 AscendC::SetMaskNorm();
             }
         }
@@ -164,34 +177,36 @@ void MainVecSelectLevel2Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t*
         AscendC::SetMaskCount();
         if (selMode == SELMODE::VSEL_TENSOR_TENSOR_MODE) {
             uint32_t selAddr = static_cast<uint32_t>(
-                reinterpret_cast<int64_t>(reinterpret_cast<__ubuf__ int64_t *>(selMaskLocal.GetPhyAddr())));
+                reinterpret_cast<int64_t>(reinterpret_cast<__ubuf__ int64_t*>(selMaskLocal.GetPhyAddr())));
             Duplicate(tmpLocal, selAddr, 32);
             SetCmpMask(tmpLocal);
-            Select<T, SELMODE::VSEL_TENSOR_TENSOR_MODE>(outputLocal, input0Local, input1Local, repeatTime, { 1, 1, 1, 8, 8, 8 });
+            Select<T, SELMODE::VSEL_TENSOR_TENSOR_MODE>(
+                outputLocal, input0Local, input1Local, repeatTime, {1, 1, 1, 8, 8, 8});
         } else if (selMode == SELMODE::VSEL_TENSOR_SCALAR_MODE) {
             SetCmpMask(input1Local);
-            Select(outputLocal, selMaskLocal, input0Local, repeatTime, { 1, 1, 1, 8, 8, 8 });
+            Select(outputLocal, selMaskLocal, input0Local, repeatTime, {1, 1, 1, 8, 8, 8});
         } else if (selMode == SELMODE::VSEL_CMPMASK_SPR) {
             SetCmpMask(selMaskLocal);
-            Select<T, SELMODE::VSEL_CMPMASK_SPR>(outputLocal, input0Local, input1Local, repeatTime, { 1, 1, 1, 8, 8, 8 });
+            Select<T, SELMODE::VSEL_CMPMASK_SPR>(outputLocal, input0Local, input1Local, repeatTime, {1, 1, 1, 8, 8, 8});
         }
         AscendC::SetMaskNorm();
         AscendC::ResetMask();
-        AscendC::SetVectorMask<PrimT<T>, AscendC::MaskMode::NORMAL>(static_cast<uint64_t>(0x00000000), static_cast<uint64_t>(0x0000ffff));
+        AscendC::SetVectorMask<PrimT<T>, AscendC::MaskMode::NORMAL>(
+            static_cast<uint64_t>(0x00000000), static_cast<uint64_t>(0x0000ffff));
         if (selMode == SELMODE::VSEL_TENSOR_TENSOR_MODE) {
-            auto selAddr = reinterpret_cast<int64_t>(reinterpret_cast<__ubuf__ int64_t *>(selMaskLocal.GetPhyAddr()));
+            auto selAddr = reinterpret_cast<int64_t>(reinterpret_cast<__ubuf__ int64_t*>(selMaskLocal.GetPhyAddr()));
             auto tmpLocalPtr = (int64_t*)tmpLocal.GetPhyAddr();
             *tmpLocalPtr = selAddr;
             SetCmpMask(tmpLocal);
-            Select<T, SELMODE::VSEL_TENSOR_TENSOR_MODE>(outputLocal, input0Local, input1Local, repeatTime, { 1, 1, 1, 8, 8, 8 });
+            Select<T, SELMODE::VSEL_TENSOR_TENSOR_MODE>(
+                outputLocal, input0Local, input1Local, repeatTime, {1, 1, 1, 8, 8, 8});
         } else if (selMode == SELMODE::VSEL_TENSOR_SCALAR_MODE) {
             SetCmpMask(input1Local);
-            Select(outputLocal, selMaskLocal, input0Local, repeatTime, { 1, 1, 1, 8, 8, 8 });
+            Select(outputLocal, selMaskLocal, input0Local, repeatTime, {1, 1, 1, 8, 8, 8});
         } else if (selMode == SELMODE::VSEL_CMPMASK_SPR) {
             SetCmpMask(selMaskLocal);
-            Select<T, SELMODE::VSEL_CMPMASK_SPR>(outputLocal, input0Local, input1Local, repeatTime, { 1, 1, 1, 8, 8, 8 });
+            Select<T, SELMODE::VSEL_CMPMASK_SPR>(outputLocal, input0Local, input1Local, repeatTime, {1, 1, 1, 8, 8, 8});
         }
-        
     }
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -202,19 +217,18 @@ void MainVecSelectLevel2Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t*
     pipe_barrier(PIPE_ALL);
 }
 
-#define VEC_SELECT_LEVEL2_TESTCASE(dataType, selMode, testMode, withMask)                                              \
-    TEST_F(TEST_SELECT, Select##dataType##selMode##testMode##withMask##Case)                                           \
-    {                                                                                                           \
-        uint32_t dataSize = 256;                                                                               \
-        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                            \
-        uint8_t input0Gm[dataSize * sizeof(PrimT<dataType>)];                                                       \
-        uint8_t input1Gm[dataSize * sizeof(PrimT<dataType>)];                                                       \
-        uint8_t selMaskGm[dataSize];                                                                         \
-        uint8_t outputGm[dataSize * sizeof(PrimT<dataType>)];                                                       \
-                                                                                                                \
-        MainVecSelectLevel2Demo<dataType, testMode, withMask>(outputGm, selMaskGm, input0Gm, input1Gm, SELMODE::selMode,\
-            dataSize, selMaskSize);                                                               \
-                                                                                                                \
+#define VEC_SELECT_LEVEL2_TESTCASE(dataType, selMode, testMode, withMask)                      \
+    TEST_F(TEST_SELECT, Select##dataType##selMode##testMode##withMask##Case)                   \
+    {                                                                                          \
+        uint32_t dataSize = 256;                                                               \
+        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));           \
+        uint8_t input0Gm[dataSize * sizeof(PrimT<dataType>)];                                  \
+        uint8_t input1Gm[dataSize * sizeof(PrimT<dataType>)];                                  \
+        uint8_t selMaskGm[dataSize];                                                           \
+        uint8_t outputGm[dataSize * sizeof(PrimT<dataType>)];                                  \
+                                                                                               \
+        MainVecSelectLevel2Demo<dataType, testMode, withMask>(                                 \
+            outputGm, selMaskGm, input0Gm, input1Gm, SELMODE::selMode, dataSize, selMaskSize); \
     }
 
 VEC_SELECT_LEVEL2_TESTCASE(uint64_t, VSEL_CMPMASK_SPR, LEVEL2, true);
@@ -337,7 +351,6 @@ VEC_SELECT_LEVEL2_TESTCASE(half, VSEL_CMPMASK_SPR, LEVEL0_COUNT_MODE, false);
 VEC_SELECT_LEVEL2_TESTCASE(int16_t, VSEL_CMPMASK_SPR, LEVEL0_COUNT_MODE, false);
 VEC_SELECT_LEVEL2_TESTCASE(bfloat16_t, VSEL_CMPMASK_SPR, LEVEL0_COUNT_MODE, false);
 VEC_SELECT_LEVEL2_TESTCASE(uint16_t, VSEL_CMPMASK_SPR, LEVEL0_COUNT_MODE, false);
-
 
 // TensorTrait Cases
 using TTU16 = TensorTrait<uint16_t>;

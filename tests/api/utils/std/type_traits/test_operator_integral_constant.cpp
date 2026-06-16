@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,18 +15,13 @@ protected:
     virtual void SetUp() {}
     void TearDown() {}
 
-    static void SetUpTestCase()
-    {
-        std::cout << "IntegralConstantTest SetUpTestCase" << std::endl;
-    }
-    static void TearDownTestCase()
-    {
-        std::cout << "IntegralConstantTest TearDownTestCase" << std::endl;
-    }
+    static void SetUpTestCase() { std::cout << "IntegralConstantTest SetUpTestCase" << std::endl; }
+    static void TearDownTestCase() { std::cout << "IntegralConstantTest TearDownTestCase" << std::endl; }
 };
 
 // test the fundamental properties of integral_constant
-TEST(IntegralConstantTest, BasicProperties) {
+TEST(IntegralConstantTest, BasicProperties)
+{
     using IntTrue = AscendC::Std::integral_constant<int, 1>;
     using IntFalse = AscendC::Std::integral_constant<int, 0>;
     using CharA = AscendC::Std::integral_constant<char, 'A'>;
@@ -48,7 +43,8 @@ TEST(IntegralConstantTest, BasicProperties) {
 }
 
 // testing the boolean specialization of integral_constant
-TEST(IntegralConstantTest, BooleanSpecialization) {
+TEST(IntegralConstantTest, BooleanSpecialization)
+{
     using TrueType = AscendC::Std::true_type;
     using FalseType = AscendC::Std::false_type;
 
@@ -74,7 +70,8 @@ template <typename T, T v>
 struct IsIntegralConstant<AscendC::Std::integral_constant<T, v>> : AscendC::Std::true_type {};
 
 // testing the use of integral_constant in template metaprogramming
-TEST(IntegralConstantTest, TemplateMetaprogramming) {
+TEST(IntegralConstantTest, TemplateMetaprogramming)
+{
     EXPECT_TRUE((IsIntegralConstant<AscendC::Std::integral_constant<int, 42>>::value));
     EXPECT_TRUE((IsIntegralConstant<AscendC::Std::true_type>::value));
     EXPECT_TRUE((IsIntegralConstant<AscendC::Std::false_type>::value));
@@ -87,11 +84,10 @@ TEST(IntegralConstantTest, TemplateMetaprogramming) {
 }
 
 // test integral_constant as a function parameter
-TEST(IntegralConstantTest, AsFunctionParameter) {
+TEST(IntegralConstantTest, AsFunctionParameter)
+{
     // a function that accepts integral_constant as a parameter
-    auto checkValue = [](auto constant) {
-        return constant.value;
-    };
+    auto checkValue = [](auto constant) { return constant.value; };
 
     EXPECT_EQ(checkValue(AscendC::Std::integral_constant<int, 5>{}), 5);
     EXPECT_EQ(checkValue(AscendC::Std::integral_constant<char, 'Z'>{}), 'Z');
@@ -112,7 +108,8 @@ TEST(IntegralConstantTest, AsFunctionParameter) {
 }
 
 // test basic attributes
-TEST(IntegralConstantTest, IntBasicProperties) {
+TEST(IntegralConstantTest, IntBasicProperties)
+{
     using Zero = AscendC::Std::Int<0>;
     using One = AscendC::Std::Int<1>;
     using Large = AscendC::Std::Int<0xFFFFFFFF>;
@@ -134,13 +131,14 @@ TEST(IntegralConstantTest, IntBasicProperties) {
 }
 
 // test compile-time calculations
-TEST(IntegralConstantTest, CompileTimeOperations) {
+TEST(IntegralConstantTest, CompileTimeOperations)
+{
     // add
     static_assert((AscendC::Std::Int<5>::value + AscendC::Std::Int<3>::value) == 8, "Addition failed");
-    
+
     // muls
     static_assert((AscendC::Std::Int<4>::value * AscendC::Std::Int<6>::value) == 24, "Multiplication failed");
-    
+
     // compare
     static_assert(AscendC::Std::Int<10>::value > AscendC::Std::Int<5>::value, "Comparison failed");
     static_assert(AscendC::Std::Int<7>::value != AscendC::Std::Int<77>::value, "Equality check failed");
@@ -161,7 +159,8 @@ template <typename Then, typename Else>
 struct IfThenElse<AscendC::Std::Int<0>, Then, Else> : Else {};
 
 // testing as a template parameter
-TEST(IntegralConstantTest, TemplateParameter) {
+TEST(IntegralConstantTest, TemplateParameter)
+{
     // verifying compile-time calcultion result
     static_assert(Factorial<AscendC::Std::Int<0>>::value == 1, "Factorial(0) failed");
     static_assert(Factorial<AscendC::Std::Int<1>>::value == 1, "Factorial(1) failed");
@@ -176,27 +175,28 @@ TEST(IntegralConstantTest, TemplateParameter) {
 
 // verifying of Compatibility with AscendC::Std::enable_if
 template <typename T>
-auto getValue(T t, AscendC::Std::enable_if_t<T::value <= 10, int>* = nullptr) {
+auto getValue(T t, AscendC::Std::enable_if_t<T::value <= 10, int>* = nullptr)
+{
     return t.value * 2;
 }
 
 template <typename T>
-auto getValue(T t, AscendC::Std::enable_if_t<T::value >= 10, int>* = nullptr) {
+auto getValue(T t, AscendC::Std::enable_if_t<T::value >= 10, int>* = nullptr)
+{
     return t.value / 2;
 }
 
 // testing combined with standard library features
-TEST(IntegralConstantTest, StdTraitsIntegration) {
+TEST(IntegralConstantTest, StdTraitsIntegration)
+{
     // verifying of Compatibility with AscendC::Std::is_same
     EXPECT_TRUE((AscendC::Std::is_same_v<AscendC::Std::Int<42>, AscendC::Std::integral_constant<size_t, 42>>));
     EXPECT_FALSE((AscendC::Std::is_same_v<AscendC::Std::Int<1>, AscendC::Std::Int<2>>));
 
     // verifying of Compatibility with AscendC::Std::conditional
     using Result = AscendC::Std::conditional_t<
-        AscendC::Std::is_same_v<AscendC::Std::Int<1>, AscendC::Std::Int<1>>,
-        AscendC::Std::Int<100>,
-        AscendC::Std::Int<200>
-    >;
+        AscendC::Std::is_same_v<AscendC::Std::Int<1>, AscendC::Std::Int<1>>, AscendC::Std::Int<100>,
+        AscendC::Std::Int<200>>;
     EXPECT_EQ(Result::value, 100);
 
     EXPECT_EQ(getValue(AscendC::Std::Int<5>{}), 10);
@@ -204,12 +204,11 @@ TEST(IntegralConstantTest, StdTraitsIntegration) {
 }
 
 // application scenarios during test run
-TEST(IntegralConstantTest, RuntimeUsage) {
+TEST(IntegralConstantTest, RuntimeUsage)
+{
     // function parameter
-    auto add = [](auto a, auto b) {
-        return a.value + b.value;
-    };
-    
+    auto add = [](auto a, auto b) { return a.value + b.value; };
+
     EXPECT_EQ(add(AscendC::Std::Int<3>{}, AscendC::Std::Int<7>{}), 10);
 
     // array size
@@ -224,7 +223,8 @@ TEST(IntegralConstantTest, RuntimeUsage) {
     EXPECT_EQ(sum, 6); // 0+1+2+3=6
 }
 
-TEST(IntegralConstantTest, IntNamedBinaryFunctions) {
+TEST(IntegralConstantTest, IntNamedBinaryFunctions)
+{
     using namespace AscendC::Std;
     using MaxType = decltype(max(Int<3>{}, Int<7>{}));
     using MinType = decltype(min(Int<3>{}, Int<7>{}));

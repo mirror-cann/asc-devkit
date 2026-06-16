@@ -23,8 +23,8 @@ SimChannelExchangeHandler& SimChannelExchangeHandler::GetInstance()
 
 std::string SimChannelExchangeHandler::GetExchangeKey(std::shared_ptr<SimChannel> channel)
 {
-    return channel->GetCommId() + ":" + channel->GetTag() + ":" +
-        to_string(channel->GetEngine()) + ":" + to_string(channel->GetProtocol());
+    return channel->GetCommId() + ":" + channel->GetTag() + ":" + to_string(channel->GetEngine()) + ":" +
+           to_string(channel->GetProtocol());
 }
 
 void SimChannelExchangeHandler::Clear()
@@ -47,4 +47,4 @@ std::shared_ptr<SimChannel> SimChannelExchangeHandler::GetChannel(
     return channelMap_[key][srcRank][dstRank][channelIdx];
 }
 
-}
+} // namespace HcclSim

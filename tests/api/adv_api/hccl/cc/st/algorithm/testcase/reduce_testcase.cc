@@ -25,10 +25,7 @@ using namespace mc2_ops_hccl;
 class ST_REDUCE_TEST
     : public ::testing::TestWithParam<std::tuple<TopoMeta, u64, HcclDataType, HcclReduceOp, uint32_t>> {
 protected:
-    void SetUp() override
-    {
-        ResetAlgEnvConfigInitState();
-    }
+    void SetUp() override { ResetAlgEnvConfigInitState(); }
 
     void TearDown() override
     {
@@ -38,11 +35,9 @@ protected:
         unsetenv("HCCL_ENABLE_OPEN_AICPU");
     }
 
-    static void SetUpTestCase()
-    {}
+    static void SetUpTestCase() {}
 
-    static void TearDownTestCase()
-    {}
+    static void TearDownTestCase() {}
 
     size_t GetDataTypeSize(HcclDataType type)
     {
@@ -71,11 +66,11 @@ protected:
         }
     }
 
-    u32 GetRankSize(const TopoMeta &topoMeta)
+    u32 GetRankSize(const TopoMeta& topoMeta)
     {
         u32 rankSize = 0;
-        for (const SuperPodMeta &superPod : topoMeta) {
-            for (const ServerMeta &server : superPod) {
+        for (const SuperPodMeta& superPod : topoMeta) {
+            for (const ServerMeta& server : superPod) {
                 rankSize += static_cast<u32>(server.size());
             }
         }
@@ -83,7 +78,7 @@ protected:
     }
 
     void RunReduceTest(
-        const TopoMeta &topoMeta, u64 recvCount, HcclDataType dataType, HcclReduceOp reduceOp, uint32_t root)
+        const TopoMeta& topoMeta, u64 recvCount, HcclDataType dataType, HcclReduceOp reduceOp, uint32_t root)
     {
         // 初始化仿真环境
         SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
@@ -102,8 +97,8 @@ protected:
                 HcclComm comm = nullptr;
                 CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
 
-                void *sendBuf = nullptr;
-                void *recvBuf = nullptr;
+                void* sendBuf = nullptr;
+                void* recvBuf = nullptr;
                 u64 sendBufSize = recvCount * GetDataTypeSize(dataType) * rankSize;
                 u64 recvBufSize = recvCount * GetDataTypeSize(dataType);
                 aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -116,7 +111,7 @@ protected:
             });
         }
 
-        for (auto &thread : threads) {
+        for (auto& thread : threads) {
             thread.join();
         }
 
@@ -126,8 +121,9 @@ protected:
 
         SimWorld::Global()->Deinit();
     }
-    void RunReduceDPUCase(const TopoMeta &topoInfo, const u64 dataCount,
-    const HcclDataType dataType, const u32 dataTypeSize, const HcclReduceOp reduceOp, const u32 root)
+    void RunReduceDPUCase(
+        const TopoMeta& topoInfo, const u64 dataCount, const HcclDataType dataType, const u32 dataTypeSize,
+        const HcclReduceOp reduceOp, const u32 root)
     {
         // 仿真模型初始化
         SimWorld::Global()->Init(topoInfo, DevType::DEV_TYPE_950);
@@ -159,9 +155,9 @@ protected:
                 HcclComm comm = nullptr;
                 CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
 
-                void *sendBuf = nullptr;
-                void *recvBuf = nullptr;
-                u64 sendBufSize = dataCount * dataTypeSize;  // 数据量转化为字节数
+                void* sendBuf = nullptr;
+                void* recvBuf = nullptr;
+                u64 sendBufSize = dataCount * dataTypeSize; // 数据量转化为字节数
                 u64 recvBufSize = dataCount * dataTypeSize;
                 // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
                 aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -194,7 +190,7 @@ protected:
 TEST_P(ST_REDUCE_TEST, st_reduce_aicpu_test)
 {
     auto params = GetParam();
-    const auto &topoMeta = std::get<0>(params);
+    const auto& topoMeta = std::get<0>(params);
     u64 recvCount = std::get<1>(params);
     HcclDataType dataType = std::get<2>(params);
     HcclReduceOp reduceOp = std::get<3>(params);
@@ -357,7 +353,8 @@ TopoMeta GenerateMeshTopoMeta(u32 xSize, u32 ySize = 1, u32 serverSize = 1)
 }
 
 // 参数化实例化
-INSTANTIATE_TEST_SUITE_P(ReduceVariants, ST_REDUCE_TEST,
+INSTANTIATE_TEST_SUITE_P(
+    ReduceVariants, ST_REDUCE_TEST,
     ::testing::Values(
         // 每个 tuple 表示一组测试参数
         // 1D Mesh

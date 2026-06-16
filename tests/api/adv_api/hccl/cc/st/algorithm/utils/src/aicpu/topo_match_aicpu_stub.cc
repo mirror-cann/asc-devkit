@@ -29,30 +29,25 @@ std::vector<u32> MakeAllRankIds(u32 rankSize)
     return ranks;
 }
 
-bool AllSame(const uint32_t *values, uint32_t valueNum)
+bool AllSame(const uint32_t* values, uint32_t valueNum)
 {
     if (values == nullptr || valueNum == 0) {
         return true;
     }
-    return std::all_of(values + 1, values + valueNum, [first = values[0]](uint32_t value) {
-        return value == first;
-    });
+    return std::all_of(values + 1, values + valueNum, [first = values[0]](uint32_t value) { return value == first; });
 }
 } // namespace
 
-TopoMatch1D::TopoMatch1D()
-{}
+TopoMatch1D::TopoMatch1D() {}
 
-TopoMatch1D::~TopoMatch1D()
-{}
+TopoMatch1D::~TopoMatch1D() {}
 
-HcclResult TopoMatch1D::MatchTopo(HcclComm comm, TopoInfoWithNetLayerDetails *topoInfo,
-    AlgHierarchyInfoForAllLevel &algHierarchyInfo)
+HcclResult TopoMatch1D::MatchTopo(
+    HcclComm comm, TopoInfoWithNetLayerDetails* topoInfo, AlgHierarchyInfoForAllLevel& algHierarchyInfo)
 {
     (void)comm;
     CHK_PTR_NULL(topoInfo);
-    CHK_PRT_RET(topoInfo->userRankSize == 0,
-        HCCL_ERROR("[TopoMatch1D][UT] rankSize is 0."), HCCL_E_PARA);
+    CHK_PRT_RET(topoInfo->userRankSize == 0, HCCL_ERROR("[TopoMatch1D][UT] rankSize is 0."), HCCL_E_PARA);
 
     algHierarchyInfo.infos.clear();
     algHierarchyInfo.infos.resize(1);
@@ -60,27 +55,26 @@ HcclResult TopoMatch1D::MatchTopo(HcclComm comm, TopoInfoWithNetLayerDetails *to
     return HCCL_SUCCESS;
 }
 
-TopoMatchMultilevel::TopoMatchMultilevel()
-    : TopoMatchBase()
-{}
+TopoMatchMultilevel::TopoMatchMultilevel() : TopoMatchBase() {}
 
-TopoMatchMultilevel::~TopoMatchMultilevel()
-{}
+TopoMatchMultilevel::~TopoMatchMultilevel() {}
 
-HcclResult TopoMatchMultilevel::TopoForLayer0(const HcclComm comm, uint32_t &layer0Size, const uint32_t myRank,
-    AlgHierarchyInfoForAllLevel &algHierarchyInfo, uint32_t gcdInstSize) const
+HcclResult TopoMatchMultilevel::TopoForLayer0(
+    const HcclComm comm, uint32_t& layer0Size, const uint32_t myRank, AlgHierarchyInfoForAllLevel& algHierarchyInfo,
+    uint32_t gcdInstSize) const
 {
-    uint32_t *topoInsts = nullptr;
+    uint32_t* topoInsts = nullptr;
     uint32_t topoInstNum = 0;
     CHK_RET(HcclRankGraphGetTopoInstsByLayer(comm, NET_LAYER0, &topoInsts, &topoInstNum));
 
     if (topoInstNum == NET_INST_NUM_1) {
-        uint32_t *ranks = nullptr;
+        uint32_t* ranks = nullptr;
         uint32_t rankNum = 0;
         CHK_RET(HcclRankGraphGetRanksByTopoInst(comm, NET_LAYER0, topoInsts[0], &ranks, &rankNum));
         if (gcdInstSize > 0 && gcdInstSize < rankNum) {
             auto it = std::find(ranks, ranks + rankNum, myRank);
-            CHK_PRT_RET(it == ranks + rankNum,
+            CHK_PRT_RET(
+                it == ranks + rankNum,
                 HCCL_ERROR("[TopoMatchMultilevel][UT] myRank [%u] not found in layer0 ranks.", myRank),
                 HCCL_E_INTERNAL);
             const uint32_t myIdx = static_cast<uint32_t>(it - ranks);
@@ -103,7 +97,7 @@ HcclResult TopoMatchMultilevel::TopoForLayer0(const HcclComm comm, uint32_t &lay
             if (topoType == CommTopo::COMM_TOPO_CLOS) {
                 continue;
             }
-            uint32_t *ranks = nullptr;
+            uint32_t* ranks = nullptr;
             uint32_t rankNum = 0;
             CHK_RET(HcclRankGraphGetRanksByTopoInst(comm, NET_LAYER0, topoInsts[idx], &ranks, &rankNum));
             std::vector<uint32_t> rankVec(ranks, ranks + rankNum);
@@ -114,17 +108,18 @@ HcclResult TopoMatchMultilevel::TopoForLayer0(const HcclComm comm, uint32_t &lay
     return HCCL_SUCCESS;
 }
 
-HcclResult TopoMatchMultilevel::TopoForLayer1(const HcclComm comm, uint32_t &layer0Size, const uint32_t myRank,
-    AlgHierarchyInfoForAllLevel &algHierarchyInfo) const
+HcclResult TopoMatchMultilevel::TopoForLayer1(
+    const HcclComm comm, uint32_t& layer0Size, const uint32_t myRank,
+    AlgHierarchyInfoForAllLevel& algHierarchyInfo) const
 {
-    uint32_t *topoInsts = nullptr;
+    uint32_t* topoInsts = nullptr;
     uint32_t topoInstNum = 0;
     CHK_RET(HcclRankGraphGetTopoInstsByLayer(comm, NET_LAYER1, &topoInsts, &topoInstNum));
-    CHK_PRT_RET(topoInstNum != NET_INST_NUM_1,
-        HCCL_ERROR("[TopoMatchMultilevel][UT] invalid layer1 topoInstNum [%u].", topoInstNum),
-        HCCL_E_PARA);
+    CHK_PRT_RET(
+        topoInstNum != NET_INST_NUM_1,
+        HCCL_ERROR("[TopoMatchMultilevel][UT] invalid layer1 topoInstNum [%u].", topoInstNum), HCCL_E_PARA);
 
-    uint32_t *ranks = nullptr;
+    uint32_t* ranks = nullptr;
     uint32_t rankNum = 0;
     CHK_RET(HcclRankGraphGetRanksByTopoInst(comm, NET_LAYER1, topoInsts[0], &ranks, &rankNum));
 
@@ -139,7 +134,7 @@ HcclResult TopoMatchMultilevel::TopoForLayer1(const HcclComm comm, uint32_t &lay
     return HCCL_SUCCESS;
 }
 
-bool TopoMatchMultilevel::CheckVecElementAllSame(const uint32_t *instSizeList, uint32_t listSize) const
+bool TopoMatchMultilevel::CheckVecElementAllSame(const uint32_t* instSizeList, uint32_t listSize) const
 {
     return AllSame(instSizeList, listSize);
 }
@@ -153,7 +148,7 @@ uint32_t TopoMatchMultilevel::GcdTwo(uint32_t a, uint32_t b) const
     return a;
 }
 
-uint32_t TopoMatchMultilevel::GcdOfInstSizeList(const uint32_t *instSizeList, uint32_t listSize) const
+uint32_t TopoMatchMultilevel::GcdOfInstSizeList(const uint32_t* instSizeList, uint32_t listSize) const
 {
     uint32_t result = instSizeList[0];
     for (uint32_t i = 1; i < listSize; ++i) {
@@ -162,14 +157,14 @@ uint32_t TopoMatchMultilevel::GcdOfInstSizeList(const uint32_t *instSizeList, ui
     return result;
 }
 
-HcclResult TopoMatchMultilevel::MatchTopo(const HcclComm comm, TopoInfoWithNetLayerDetails *topoInfo,
-    AlgHierarchyInfoForAllLevel &algHierarchyInfo)
+HcclResult TopoMatchMultilevel::MatchTopo(
+    const HcclComm comm, TopoInfoWithNetLayerDetails* topoInfo, AlgHierarchyInfoForAllLevel& algHierarchyInfo)
 {
     CHK_PTR_NULL(topoInfo);
     uint32_t myRank = 0;
     CHK_RET(HcclGetRankId(comm, &myRank));
 
-    uint32_t *instSizeList = nullptr;
+    uint32_t* instSizeList = nullptr;
     uint32_t listSize = 0;
     CHK_RET(HcclRankGraphGetInstSizeListByLayer(comm, NET_LAYER0, &instSizeList, &listSize));
 
@@ -177,8 +172,7 @@ HcclResult TopoMatchMultilevel::MatchTopo(const HcclComm comm, TopoInfoWithNetLa
     algHierarchyInfo.infos.resize(COMM_LAYER_SIZE_2);
     uint32_t layer0Size = 0;
     if (!CheckVecElementAllSame(instSizeList, listSize)) {
-        CHK_RET(TopoForLayer0(comm, layer0Size, myRank, algHierarchyInfo,
-            GcdOfInstSizeList(instSizeList, listSize)));
+        CHK_RET(TopoForLayer0(comm, layer0Size, myRank, algHierarchyInfo, GcdOfInstSizeList(instSizeList, listSize)));
     } else {
         CHK_RET(TopoForLayer0(comm, layer0Size, myRank, algHierarchyInfo));
     }
@@ -186,22 +180,20 @@ HcclResult TopoMatchMultilevel::MatchTopo(const HcclComm comm, TopoInfoWithNetLa
     return HCCL_SUCCESS;
 }
 
-TopoMatchUBX::TopoMatchUBX()
-    : TopoMatchBase()
-{}
+TopoMatchUBX::TopoMatchUBX() : TopoMatchBase() {}
 
-TopoMatchUBX::~TopoMatchUBX()
-{}
+TopoMatchUBX::~TopoMatchUBX() {}
 
-HcclResult TopoMatchUBX::TopoForLayer0(const HcclComm comm, uint32_t &layer0Size, const uint32_t myRank,
-    AlgHierarchyInfoForAllLevel &algHierarchyInfo) const
+HcclResult TopoMatchUBX::TopoForLayer0(
+    const HcclComm comm, uint32_t& layer0Size, const uint32_t myRank,
+    AlgHierarchyInfoForAllLevel& algHierarchyInfo) const
 {
-    uint32_t *topoInsts = nullptr;
+    uint32_t* topoInsts = nullptr;
     uint32_t topoInstNum = 0;
     CHK_RET(HcclRankGraphGetTopoInstsByLayer(comm, NET_LAYER0, &topoInsts, &topoInstNum));
 
     if (topoInstNum == NET_INST_NUM_1) {
-        uint32_t *ranks = nullptr;
+        uint32_t* ranks = nullptr;
         uint32_t rankNum = 0;
         CHK_RET(HcclRankGraphGetRanksByTopoInst(comm, NET_LAYER0, topoInsts[0], &ranks, &rankNum));
         algHierarchyInfo.infos[0].push_back(std::vector<uint32_t>(ranks, ranks + rankNum));
@@ -212,7 +204,7 @@ HcclResult TopoMatchUBX::TopoForLayer0(const HcclComm comm, uint32_t &layer0Size
     } else {
         layer0Size = 1;
         for (uint32_t idx = 0; idx < topoInstNum; ++idx) {
-            uint32_t *ranks = nullptr;
+            uint32_t* ranks = nullptr;
             uint32_t rankNum = 0;
             CHK_RET(HcclRankGraphGetRanksByTopoInst(comm, NET_LAYER0, topoInsts[idx], &ranks, &rankNum));
             std::vector<uint32_t> rankVec(ranks, ranks + rankNum);
@@ -223,17 +215,18 @@ HcclResult TopoMatchUBX::TopoForLayer0(const HcclComm comm, uint32_t &layer0Size
     return HCCL_SUCCESS;
 }
 
-HcclResult TopoMatchUBX::TopoForLayer1(const HcclComm comm, uint32_t layer0Size, const uint32_t myRank,
-    AlgHierarchyInfoForAllLevel &algHierarchyInfo) const
+HcclResult TopoMatchUBX::TopoForLayer1(
+    const HcclComm comm, uint32_t layer0Size, const uint32_t myRank,
+    AlgHierarchyInfoForAllLevel& algHierarchyInfo) const
 {
-    uint32_t *topoInsts = nullptr;
+    uint32_t* topoInsts = nullptr;
     uint32_t topoInstNum = 0;
     CHK_RET(HcclRankGraphGetTopoInstsByLayer(comm, NET_LAYER1, &topoInsts, &topoInstNum));
-    CHK_PRT_RET(topoInstNum != NET_INST_NUM_1,
-        HCCL_ERROR("[TopoMatchUBX][UT] invalid layer1 topoInstNum [%u].", topoInstNum),
+    CHK_PRT_RET(
+        topoInstNum != NET_INST_NUM_1, HCCL_ERROR("[TopoMatchUBX][UT] invalid layer1 topoInstNum [%u].", topoInstNum),
         HCCL_E_PARA);
 
-    uint32_t *ranks = nullptr;
+    uint32_t* ranks = nullptr;
     uint32_t rankNum = 0;
     CHK_RET(HcclRankGraphGetRanksByTopoInst(comm, NET_LAYER1, topoInsts[0], &ranks, &rankNum));
     std::vector<uint32_t> layer1Ranks;
@@ -247,13 +240,13 @@ HcclResult TopoMatchUBX::TopoForLayer1(const HcclComm comm, uint32_t layer0Size,
     return HCCL_SUCCESS;
 }
 
-HcclResult TopoMatchUBX::CheckVecElementAllSame(const uint32_t *instSizeList, uint32_t listSize) const
+HcclResult TopoMatchUBX::CheckVecElementAllSame(const uint32_t* instSizeList, uint32_t listSize) const
 {
     return AllSame(instSizeList, listSize) ? HCCL_SUCCESS : HCCL_E_PARA;
 }
 
-HcclResult TopoMatchUBX::MatchTopo(const HcclComm comm, TopoInfoWithNetLayerDetails *topoInfo,
-    AlgHierarchyInfoForAllLevel &algHierarchyInfo)
+HcclResult TopoMatchUBX::MatchTopo(
+    const HcclComm comm, TopoInfoWithNetLayerDetails* topoInfo, AlgHierarchyInfoForAllLevel& algHierarchyInfo)
 {
     CHK_PTR_NULL(topoInfo);
     uint32_t myRank = 0;
@@ -262,7 +255,7 @@ HcclResult TopoMatchUBX::MatchTopo(const HcclComm comm, TopoInfoWithNetLayerDeta
     algHierarchyInfo.infos.resize(COMM_LAYER_SIZE_2);
     uint32_t layer0Size = 0;
     CHK_RET(TopoForLayer0(comm, layer0Size, myRank, algHierarchyInfo));
-    uint32_t *netLayers = nullptr;
+    uint32_t* netLayers = nullptr;
     uint32_t layerNum = 0;
     CHK_RET(HcclRankGraphGetLayers(comm, &netLayers, &layerNum));
     if (layerNum >= COMM_LAYER_SIZE_2) {

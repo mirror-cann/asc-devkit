@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -20,12 +19,8 @@ class LayerNormAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(LayerNormAPICheck, LayerNormAPICheckTestRstdSuccess)
@@ -74,8 +69,9 @@ TEST_F(LayerNormAPICheck, LayerNormAPICheckTestRstdSuccess)
     para.rLengthWithPadding = 8;
     LayerNormSeparateTiling tiling;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(LayerNorm, (float, float, false, configLayerNorm), (output, outputMean, outputRstd,
-        inputX, gamma, beta, 0.4, sharedTmpBuffer, para, tiling));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        LayerNorm, (float, float, false, configLayerNorm),
+        (output, outputMean, outputRstd, inputX, gamma, beta, 0.4, sharedTmpBuffer, para, tiling));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
 
@@ -105,8 +101,10 @@ TEST_F(LayerNormAPICheck, LayerNormAPICheckTestRstdFailure)
     para.rLengthWithPadding = 17;
     LayerNormSeparateTiling tiling;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(LayerNorm, (uint8_t, uint8_t, true, configLayerNorm1), (dstTensor[1], output[1], output[1],
-        dstTensor[1], dstTensor[1], dstTensor[1], 0.4, sharedTmpBuffer, para, tiling));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        LayerNorm, (uint8_t, uint8_t, true, configLayerNorm1),
+        (dstTensor[1], output[1], output[1], dstTensor[1], dstTensor[1], dstTensor[1], 0.4, sharedTmpBuffer, para,
+         tiling));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 49);
 }
 
@@ -151,8 +149,9 @@ TEST_F(LayerNormAPICheck, LayerNormAPICheckTestVarSuccess)
 
     LayerNormTiling tiling;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(LayerNorm, (float, false), (output, outputMean, outputVariance, inputX, gamma, beta,
-        sharedTmpBuffer, 0.8, tiling));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        LayerNorm, (float, false),
+        (output, outputMean, outputVariance, inputX, gamma, beta, sharedTmpBuffer, 0.8, tiling));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
 
@@ -172,7 +171,9 @@ TEST_F(LayerNormAPICheck, LayerNormAPICheckTestVarFailure)
 
     LayerNormTiling tiling;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(LayerNorm, (uint8_t, true), (dstTensor[1], dstTensor[1], dstTensor[1],
-        dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, 0.8, tiling));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        LayerNorm, (uint8_t, true),
+        (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, 0.8,
+         tiling));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 63);
 }

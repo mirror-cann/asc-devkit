@@ -1,15 +1,15 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
- 
+
 using namespace std;
 using namespace AscendC;
 
@@ -19,9 +19,9 @@ public:
     __aicore__ inline KernelReduceXorSum() {}
     __aicore__ inline void Init(GM_ADDR src0Gm, GM_ADDR src1Gm, GM_ADDR dstGm, uint32_t srcSize)
     {
-        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(src0Gm), srcSize);
-        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(src1Gm), srcSize);
-        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(dstGm), 16);
+        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(src0Gm), srcSize);
+        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(src1Gm), srcSize);
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(dstGm), 16);
 
         pipe.InitBuffer(in0Queue, 1, srcSize * sizeof(srcType));
         pipe.InitBuffer(in1Queue, 1, srcSize * sizeof(srcType));
@@ -85,29 +85,23 @@ __aicore__ void kernelReduceXorSumOperator(GM_ADDR src0Gm, GM_ADDR src1Gm, GM_AD
 
 class TEST_ReduceXorSum : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-#define VEC_ReduceXorSum_TESTCASE(DATA_TYPE, SRC_SIZE)                                  \
-    TEST_F(TEST_ReduceXorSum, ReduceXorSum##DATA_TYPE##SRC_SIZE##Case)                  \
-    {                                                                                   \
-        uint8_t input0Gm[(SRC_SIZE) * sizeof(DATA_TYPE)];                                 \
-        uint8_t input1Gm[(SRC_SIZE) * sizeof(DATA_TYPE)];                                 \
-        uint8_t outputGm[16 * sizeof(DATA_TYPE)];                                       \
-        for (uint32_t i = 0; i < (SRC_SIZE); i++) {                                       \
-            input0Gm[i] = 0;                                                            \
-            input1Gm[i] = 1;                                                            \
-        }                                                                               \
-        kernelReduceXorSumOperator<DATA_TYPE>(input0Gm, input1Gm, outputGm, SRC_SIZE);  \
-                                                                                        \
-        EXPECT_EQ(outputGm[0], 0);                                                      \
+#define VEC_ReduceXorSum_TESTCASE(DATA_TYPE, SRC_SIZE)                                 \
+    TEST_F(TEST_ReduceXorSum, ReduceXorSum##DATA_TYPE##SRC_SIZE##Case)                 \
+    {                                                                                  \
+        uint8_t input0Gm[(SRC_SIZE) * sizeof(DATA_TYPE)];                              \
+        uint8_t input1Gm[(SRC_SIZE) * sizeof(DATA_TYPE)];                              \
+        uint8_t outputGm[16 * sizeof(DATA_TYPE)];                                      \
+        for (uint32_t i = 0; i < (SRC_SIZE); i++) {                                    \
+            input0Gm[i] = 0;                                                           \
+            input1Gm[i] = 1;                                                           \
+        }                                                                              \
+        kernelReduceXorSumOperator<DATA_TYPE>(input0Gm, input1Gm, outputGm, SRC_SIZE); \
+                                                                                       \
+        EXPECT_EQ(outputGm[0], 0);                                                     \
     }
 
 VEC_ReduceXorSum_TESTCASE(int16_t, 1024);

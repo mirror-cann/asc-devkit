@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <type_traits>
 #include "kernel_operator.h"
@@ -14,14 +14,13 @@
 template <uint32_t category, typename T>
 class KernelVecLimits {
 public:
-    __aicore__ inline KernelVecLimits()
-    {}
+    __aicore__ inline KernelVecLimits() {}
     __aicore__ inline void Init(GM_ADDR dstGm, uint32_t dstCount)
     {
         count = dstCount;
         const int alginSize = AscendC::GetDataBlockSizeInBytes() / sizeof(T);
         dstSize = (dstCount + 256 + alginSize - 1) / alginSize * alginSize;
-        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), dstSize);
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dstSize);
         pipe.InitBuffer(outQueue, 1, dstSize * sizeof(T));
     }
 
@@ -74,7 +73,7 @@ private:
 };
 
 template <uint32_t category, typename T>
-__global__ __aicore__ void MainKernelNumericLimits(uint8_t *dstGm, uint32_t dstSize)
+__global__ __aicore__ void MainKernelNumericLimits(uint8_t* dstGm, uint32_t dstSize)
 {
     KernelVecLimits<category, T> op;
     op.Init(dstGm, dstSize);
@@ -82,14 +81,16 @@ __global__ __aicore__ void MainKernelNumericLimits(uint8_t *dstGm, uint32_t dstS
 }
 
 struct NumericLimitsTestParams {
-    void (*cal_func)(uint8_t *, uint32_t);
+    void (*cal_func)(uint8_t*, uint32_t);
     uint32_t dstSize;
 };
 
 class NumericLimitsTestsuite : public testing::Test, public testing::WithParamInterface<NumericLimitsTestParams> {};
 
-INSTANTIATE_TEST_CASE_P(NumericLimitsTestCase, NumericLimitsTestsuite,
-    ::testing::Values(NumericLimitsTestParams{MainKernelNumericLimits<0, uint8_t>, 257},
+INSTANTIATE_TEST_CASE_P(
+    NumericLimitsTestCase, NumericLimitsTestsuite,
+    ::testing::Values(
+        NumericLimitsTestParams{MainKernelNumericLimits<0, uint8_t>, 257},
         NumericLimitsTestParams{MainKernelNumericLimits<0, int8_t>, 257},
         NumericLimitsTestParams{MainKernelNumericLimits<0, uint16_t>, 257},
         NumericLimitsTestParams{MainKernelNumericLimits<0, int16_t>, 257},

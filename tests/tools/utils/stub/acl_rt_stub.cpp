@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "acl/acl_rt.h"
 #include <cstdlib>
 
@@ -17,9 +17,9 @@ aclrtStream g_aclrtLaunchKernelWithHostArgsLastStream = nullptr;
 size_t g_aclrtLaunchKernelWithHostArgsLastArgsSize = 0;
 uint32_t g_aclrtLaunchKernelWithHostArgsLastCfgAttrNum = 0;
 aclrtLaunchKernelAttr g_aclrtLaunchKernelWithHostArgsLastAttrs[4] = {};
-const char *g_aclrtRegStreamStateCallbackLastName = nullptr;
+const char* g_aclrtRegStreamStateCallbackLastName = nullptr;
 aclrtStreamStateCallback g_aclrtRegStreamStateCallbackLastCallback = nullptr;
-void *g_aclrtRegStreamStateCallbackLastArg = nullptr;
+void* g_aclrtRegStreamStateCallbackLastArg = nullptr;
 aclrtStream g_aclrtCreateStreamWithConfigLastStream = reinterpret_cast<aclrtStream>(0x1010);
 aclrtEvent g_aclrtCreateEventExWithFlagLastEventA = reinterpret_cast<aclrtEvent>(0x2020);
 aclrtEvent g_aclrtCreateEventExWithFlagLastEventB = reinterpret_cast<aclrtEvent>(0x3030);
@@ -37,58 +37,32 @@ int64_t g_aclrtGetDeviceInfoAicoreNum = 0;
 int64_t g_aclrtGetDeviceInfoVectorNum = 0;
 }
 
-int aclrtMemcpy(void *dst, size_t destMax, const void *src, size_t count, aclrtMemcpyKind kind)
+int aclrtMemcpy(void* dst, size_t destMax, const void* src, size_t count, aclrtMemcpyKind kind) { return 0; }
+
+int aclrtRegisterCpuFunc(
+    const aclrtBinHandle handle, const char* funcName, const char* kernelName, aclrtFuncHandle* funcHandle)
 {
     return 0;
 }
 
-int aclrtRegisterCpuFunc(const aclrtBinHandle handle, const char *funcName,
-    const char *kernelName, aclrtFuncHandle *funcHandle)
+int aclrtKernelArgsInit(aclrtFuncHandle funcHandle, aclrtArgsHandle* argsHandle) { return 0; }
+
+int aclrtKernelArgsAppend(aclrtArgsHandle argsHandle, void* param, size_t paramSize, aclrtParamHandle* paramHandle)
 {
     return 0;
 }
 
-int aclrtKernelArgsInit(aclrtFuncHandle funcHandle, aclrtArgsHandle *argsHandle)
-{
-    return 0;
-}
+int aclrtKernelArgsFinalize(aclrtArgsHandle argsHandl) { return 0; }
 
-int aclrtKernelArgsAppend(aclrtArgsHandle argsHandle, void *param, size_t paramSize,
-    aclrtParamHandle *paramHandle)
-{
-    return 0;
-}
+int aclrtGetDevice(int32_t* deviceId) { return 0; }
 
-int aclrtKernelArgsFinalize(aclrtArgsHandle argsHandl)
-{
-    return 0;
-}
+int aclrtSetDevice(int32_t deviceId) { return 0; }
 
-int aclrtGetDevice(int32_t* deviceId)
-{
-    return 0;
-}
+int aclrtResetDevice(int32_t deviceId) { return 0; }
 
-int aclrtSetDevice(int32_t deviceId)
-{
-    return 0;
-}
+int aclrtMalloc(void** devPtr, size_t size, aclrtMemMallocPolicy policy) { return 0; }
 
-int aclrtResetDevice(int32_t deviceId)
-{
-    return 0;
-}
-
-
-int aclrtMalloc(void **devPtr, size_t size, aclrtMemMallocPolicy policy)
-{
-    return 0;
-}
-
-int aclrtGetFunctionName(aclrtFuncHandle funcHandle, uint32_t maxLen, char *name)
-{
-    return 0;
-}
+int aclrtGetFunctionName(aclrtFuncHandle funcHandle, uint32_t maxLen, char* name) { return 0; }
 
 aclError aclrtRecordEvent(aclrtEvent event, aclrtStream stream)
 {
@@ -104,12 +78,9 @@ aclError aclrtStreamWaitEvent(aclrtStream stream, aclrtEvent event)
     return ACL_ERROR_NONE;
 }
 
-aclError aclrtResetEvent(aclrtEvent event, aclrtStream stream)
-{
-    return ACL_ERROR_NONE;
-}
+aclError aclrtResetEvent(aclrtEvent event, aclrtStream stream) { return ACL_ERROR_NONE; }
 
-aclError aclrtGetDeviceInfo(uint32_t deviceId, aclrtDevAttr attr, int64_t *value)
+aclError aclrtGetDeviceInfo(uint32_t deviceId, aclrtDevAttr attr, int64_t* value)
 {
     if (value == nullptr) {
         return 1;
@@ -129,10 +100,7 @@ aclError aclrtDestroyEvent(aclrtEvent event)
     return ACL_ERROR_NONE;
 }
 
-const char *aclrtGetSocName()
-{
-    return " ";
-}
+const char* aclrtGetSocName() { return " "; }
 
 aclError aclrtDestroyStream(aclrtStream stream)
 {
@@ -141,12 +109,9 @@ aclError aclrtDestroyStream(aclrtStream stream)
     return ACL_ERROR_NONE;
 }
 
-aclError aclrtCreateEventWithFlag(aclrtEvent *event, uint32_t flag)
-{
-    return ACL_ERROR_NONE;
-}
+aclError aclrtCreateEventWithFlag(aclrtEvent* event, uint32_t flag) { return ACL_ERROR_NONE; }
 
-aclError aclrtCreateEventExWithFlag(aclrtEvent *event, uint32_t flag)
+aclError aclrtCreateEventExWithFlag(aclrtEvent* event, uint32_t flag)
 {
     ++g_aclrtCreateEventExWithFlagCallCount;
     if (event == nullptr) {
@@ -160,7 +125,7 @@ aclError aclrtCreateEventExWithFlag(aclrtEvent *event, uint32_t flag)
     return ACL_ERROR_NONE;
 }
 
-aclError aclrtCreateStreamWithConfig(aclrtStream *stream, uint32_t priority, uint32_t flag)
+aclError aclrtCreateStreamWithConfig(aclrtStream* stream, uint32_t priority, uint32_t flag)
 {
     ++g_aclrtCreateStreamWithConfigCallCount;
     if (stream == nullptr) {
@@ -170,7 +135,7 @@ aclError aclrtCreateStreamWithConfig(aclrtStream *stream, uint32_t priority, uin
     return ACL_ERROR_NONE;
 }
 
-aclError aclrtFree(void *devPtr)
+aclError aclrtFree(void* devPtr)
 {
     if (devPtr == nullptr) {
         return 1;
@@ -178,7 +143,7 @@ aclError aclrtFree(void *devPtr)
     return ACL_ERROR_NONE;
 }
 
-aclError aclrtMallocHost(void **hostPtr, size_t size)
+aclError aclrtMallocHost(void** hostPtr, size_t size)
 {
     if (hostPtr == nullptr || size == 0) {
         return 1;
@@ -187,7 +152,7 @@ aclError aclrtMallocHost(void **hostPtr, size_t size)
     return *hostPtr == nullptr ? 1 : ACL_ERROR_NONE;
 }
 
-aclError aclrtFreeHost(void *hostPtr)
+aclError aclrtFreeHost(void* hostPtr)
 {
     if (hostPtr == nullptr) {
         return 1;
@@ -196,8 +161,7 @@ aclError aclrtFreeHost(void *hostPtr)
     return ACL_ERROR_NONE;
 }
 
-aclError aclrtMallocWithCfg(void **devPtr, size_t size, aclrtMemMallocPolicy policy,
-    aclrtMallocConfig *cfg)
+aclError aclrtMallocWithCfg(void** devPtr, size_t size, aclrtMemMallocPolicy policy, aclrtMallocConfig* cfg)
 {
     if (devPtr == nullptr) {
         return 1;
@@ -205,14 +169,14 @@ aclError aclrtMallocWithCfg(void **devPtr, size_t size, aclrtMemMallocPolicy pol
     return ACL_ERROR_NONE;
 }
 
-aclError aclrtBinaryGetFunction(const aclrtBinHandle binHandle, const char *kernelName, aclrtFuncHandle *funcHandle)
+aclError aclrtBinaryGetFunction(const aclrtBinHandle binHandle, const char* kernelName, aclrtFuncHandle* funcHandle)
 {
     return 0;
 }
 
-aclError aclrtLaunchKernelWithHostArgs(aclrtFuncHandle funcHandle, uint32_t numBlocks, aclrtStream stream,
-    aclrtLaunchKernelCfg *cfg, void *hostArgs, size_t argsSize, aclrtPlaceHolderInfo *placeHolderArray,
-    size_t placeHolderNum)
+aclError aclrtLaunchKernelWithHostArgs(
+    aclrtFuncHandle funcHandle, uint32_t numBlocks, aclrtStream stream, aclrtLaunchKernelCfg* cfg, void* hostArgs,
+    size_t argsSize, aclrtPlaceHolderInfo* placeHolderArray, size_t placeHolderNum)
 {
     ++g_aclrtLaunchKernelWithHostArgsCallCount;
     g_aclrtLaunchKernelWithHostArgsLastNumBlocks = numBlocks;
@@ -228,24 +192,20 @@ aclError aclrtLaunchKernelWithHostArgs(aclrtFuncHandle funcHandle, uint32_t numB
     return 0;
 }
 
-aclError aclmdlRICaptureThreadExchangeMode(aclmdlRICaptureMode *mode)
+aclError aclmdlRICaptureThreadExchangeMode(aclmdlRICaptureMode* mode) { return 0; }
+
+aclError aclrtBinaryGetFunctionByEntry(const aclrtBinHandle binHandle, uint64_t entry, aclrtFuncHandle* funcHandle)
 {
     return 0;
 }
 
-aclError aclrtBinaryGetFunctionByEntry(const aclrtBinHandle binHandle, uint64_t entry,
-    aclrtFuncHandle *funcHandle)
-{
-    return 0;
-}
-
-aclError aclrtGetHardwareSyncAddr(void **addr)
+aclError aclrtGetHardwareSyncAddr(void** addr)
 {
     *addr = nullptr;
     return 0;
 }
 
-aclError aclrtRegStreamStateCallback(const char *streamName, aclrtStreamStateCallback callback, void *arg)
+aclError aclrtRegStreamStateCallback(const char* streamName, aclrtStreamStateCallback callback, void* arg)
 {
     g_aclrtRegStreamStateCallbackLastName = streamName;
     g_aclrtRegStreamStateCallbackLastCallback = callback;

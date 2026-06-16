@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -21,19 +21,13 @@ enum TestMode {
 
 class TestLog : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T>
-void MainVecSelectCase(__gm__ uint8_t* __restrict__ dstGm,
-    __gm__ uint8_t* __restrict__ srcGm0, uint32_t dataSize,TestMode testMode)
+void MainVecSelectCase(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm0, uint32_t dataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal0;
@@ -69,19 +63,19 @@ void MainVecSelectCase(__gm__ uint8_t* __restrict__ dstGm,
 
     PipeBarrier<PIPE_ALL>();
 }
-#define VEC_LOG_LEVEL2_TESTCASE(DATA_TYPE, TEST_MODE)                                              \
-    TEST_F(TestLog, Log##DATA_TYPE##TEST_MODE##Case)                                           \
-    {                                                                                                           \
-        uint32_t dataSize = 256;                                                                               \
-        uint32_t sel_mask_size = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                         \
-        uint8_t inputGm[dataSize * sizeof(DATA_TYPE)];                                                       \
-        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)];                                                       \
-                                                                                                                \
-        MainVecSelectCase<DATA_TYPE>(outputGm, inputGm, dataSize, TEST_MODE);                     \
-                                                                                                                \
-        for (uint32_t i = 0; i < dataSize; i++) {                                                              \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                      \
-        }                                                                                                       \
+#define VEC_LOG_LEVEL2_TESTCASE(DATA_TYPE, TEST_MODE)                                  \
+    TEST_F(TestLog, Log##DATA_TYPE##TEST_MODE##Case)                                   \
+    {                                                                                  \
+        uint32_t dataSize = 256;                                                       \
+        uint32_t sel_mask_size = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t)); \
+        uint8_t inputGm[dataSize * sizeof(DATA_TYPE)];                                 \
+        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)];                                \
+                                                                                       \
+        MainVecSelectCase<DATA_TYPE>(outputGm, inputGm, dataSize, TEST_MODE);          \
+                                                                                       \
+        for (uint32_t i = 0; i < dataSize; i++) {                                      \
+            EXPECT_EQ(outputGm[i], 0x00);                                              \
+        }                                                                              \
     }
 VEC_LOG_LEVEL2_TESTCASE(float, LOG_MODE);
 VEC_LOG_LEVEL2_TESTCASE(half, LOG_MODE);

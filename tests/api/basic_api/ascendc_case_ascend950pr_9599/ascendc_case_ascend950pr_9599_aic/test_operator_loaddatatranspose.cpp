@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -14,10 +14,10 @@ using namespace std;
 
 namespace AscendC {
 #define LOCAL_TENSOR_REGISTER(tensorName, type, quePos, initAddr, dataSize) \
-    LocalTensor<type> tensorName;                                     \
-    TBuffAddr tbuf_##tensorName;                                      \
-    tbuf_##tensorName.logicPos = static_cast<uint8_t>(TPosition::quePos);       \
-    tensorName.SetAddr(tbuf_##tensorName);                                    \
+    LocalTensor<type> tensorName;                                           \
+    TBuffAddr tbuf_##tensorName;                                            \
+    tbuf_##tensorName.logicPos = static_cast<uint8_t>(TPosition::quePos);   \
+    tensorName.SetAddr(tbuf_##tensorName);                                  \
     tensorName.InitBuffer(initAddr, dataSize);
 
 #define ALIGN_ADDR(addr) (((addr) + 31) / 32 * 32)
@@ -34,9 +34,9 @@ enum TestInstr {
  * LoadDataWithTranspose                                             *
  * ************************************************************************************************* */
 template <typename DstT, typename Src0T, typename Src1T>
-void MainLoadData(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-                  __gm__ uint8_t* __restrict__ src1Gm, __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k,
-                  __gm__ uint16_t channelSize)
+void MainLoadData(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k, __gm__ uint16_t channelSize)
 {
     TPipe tpipe;
     // mmad c = a * b
@@ -107,9 +107,7 @@ struct LoadDataTestParams {
     uint8_t sizeofSrc1;
 };
 
-class LoadDataTranspose910dTestsuite
-    : public testing::Test
-    , public testing::WithParamInterface<LoadDataTestParams> {
+class LoadDataTranspose910dTestsuite : public testing::Test, public testing::WithParamInterface<LoadDataTestParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
@@ -117,8 +115,7 @@ protected:
 
 INSTANTIATE_TEST_CASE_P(
     TEST_LOAD_DATA, LoadDataTranspose910dTestsuite,
-    ::testing::Values(
-        LoadDataTestParams{ 16, 128, 32, 32, MainLoadData<float, half, half>, 4, 2, 2 }));
+    ::testing::Values(LoadDataTestParams{16, 128, 32, 32, MainLoadData<float, half, half>, 4, 2, 2}));
 
 TEST_P(LoadDataTranspose910dTestsuite, LoadDataTransposeTestCase)
 {
@@ -128,4 +125,4 @@ TEST_P(LoadDataTranspose910dTestsuite, LoadDataTransposeTestCase)
     uint8_t src1Gm[param.k * param.n * param.sizeofSrc1];
     param.cal_func(dstGm, src0Gm, src1Gm, param.m, param.n, param.k, param.channelSize);
 }
-}  // namespace AscendC
+} // namespace AscendC

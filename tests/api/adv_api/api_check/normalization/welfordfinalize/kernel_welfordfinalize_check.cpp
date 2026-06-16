@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -20,12 +19,8 @@ class WelfordFinalizeAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(WelfordFinalizeAPICheck, WelfordFinalizeAPICheckTestSuccess)
@@ -59,8 +54,8 @@ TEST_F(WelfordFinalizeAPICheck, WelfordFinalizeAPICheckTestSuccess)
 
     AscendC::WelfordFinalizePara para = {1, 8, 1, 3, 1, 5, 0.125, 0.125};
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(WelfordFinalize, (false), (outputMean, outputVariance,
-        inputMean, inputVariance, sharedTmpBuffer, para));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        WelfordFinalize, (false), (outputMean, outputVariance, inputMean, inputVariance, sharedTmpBuffer, para));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
 
@@ -80,8 +75,8 @@ TEST_F(WelfordFinalizeAPICheck, WelfordFinalizeAPICheckTestFailure)
 
     AscendC::WelfordFinalizePara para = {35, 8, 1, 2, 1, 5, 0.1256, 0.1256};
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(WelfordFinalize, (true), (dstTensor[1], dstTensor[1],
-        dstTensor[1], dstTensor[1], sharedTmpBuffer, para));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        WelfordFinalize, (true), (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, para));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 29);
 }
 
@@ -121,8 +116,9 @@ TEST_F(WelfordFinalizeAPICheck, WelfordFinalizeAPICheckTestCountsSuccess)
 
     AscendC::WelfordFinalizePara para = {1, 8, 1, 3, 1, 5, 0.125, 0.125};
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(WelfordFinalize, (false), (outputMean, outputVariance, inputMean,
-        inputVariance, counts, sharedTmpBuffer, para));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        WelfordFinalize, (false),
+        (outputMean, outputVariance, inputMean, inputVariance, counts, sharedTmpBuffer, para));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
 
@@ -147,7 +143,8 @@ TEST_F(WelfordFinalizeAPICheck, WelfordFinalizeAPICheckTestCountsFailure)
 
     AscendC::WelfordFinalizePara para = {35, 8, 1, 2, 1, 5, 0.1256, 0.1256};
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(WelfordFinalize, (true), (dstTensor[1], dstTensor[1], dstTensor[1],
-        dstTensor[1], counts, sharedTmpBuffer, para));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        WelfordFinalize, (true),
+        (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], counts, sharedTmpBuffer, para));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 40);
 }

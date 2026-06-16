@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <type_traits>
@@ -14,22 +14,20 @@
 using namespace std;
 using namespace AscendC;
 
-
 #define DType half
 #define DType1 half
 
 template <typename T, typename SCR1_T, int32_t MD, int32_t VF>
 class KernelBinary {
 public:
-    __aicore__ inline KernelBinary()
-    {}
-    __aicore__ inline void Init(GM_ADDR dst0_gm, GM_ADDR dst1_gm, GM_ADDR src0_gm, GM_ADDR src1_gm,
-            uint32_t nums, uint32_t vec_mask)
+    __aicore__ inline KernelBinary() {}
+    __aicore__ inline void Init(
+        GM_ADDR dst0_gm, GM_ADDR dst1_gm, GM_ADDR src0_gm, GM_ADDR src1_gm, uint32_t nums, uint32_t vec_mask)
     {
-        src0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(src0_gm), nums);
-        src1_global.SetGlobalBuffer(reinterpret_cast<__gm__ SCR1_T *>(src1_gm), nums);
-        dst0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dst0_gm), nums);
-        dst1_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dst1_gm), nums);
+        src0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(src0_gm), nums);
+        src1_global.SetGlobalBuffer(reinterpret_cast<__gm__ SCR1_T*>(src1_gm), nums);
+        dst0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dst0_gm), nums);
+        dst1_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dst1_gm), nums);
 
         pipe.InitBuffer(inQueueX, 1, nums * sizeof(T));
         pipe.InitBuffer(inQueueX2, 1, nums * sizeof(SCR1_T));
@@ -62,16 +60,16 @@ private:
         LocalTensor<SCR1_T> src1Local = inQueueX2.DeQue<SCR1_T>();
 
         // Mirco Trait2
-        if constexpr(MD == 0) {
-            __ubuf__ T *src0 = (__ubuf__ T *)src0Local.GetPhyAddr();
-            __ubuf__ T *src1 = (__ubuf__ T *)src1Local.GetPhyAddr();
-            __ubuf__ T *dst = (__ubuf__ T *)dstLocal.GetPhyAddr();
+        if constexpr (MD == 0) {
+            __ubuf__ T* src0 = (__ubuf__ T*)src0Local.GetPhyAddr();
+            __ubuf__ T* src1 = (__ubuf__ T*)src1Local.GetPhyAddr();
+            __ubuf__ T* dst = (__ubuf__ T*)dstLocal.GetPhyAddr();
             uint16_t mask_bit_size = 256;
-            uint16_t one_rep_size = mask_bit_size/sizeof(T);
+            uint16_t one_rep_size = mask_bit_size / sizeof(T);
             uint16_t repeat_times;
             repeat_times = CeilDivision(dataSize, 64);
 
-            __VEC_SCOPE__ 
+            __VEC_SCOPE__
             {
                 Reg::RegTensor<T, Reg::RegTraitNumTwo> vSrcReg0;
                 Reg::RegTensor<T, Reg::RegTraitNumTwo> vSrcReg1;
@@ -82,38 +80,39 @@ private:
                     Reg::MaskReg maskReg = Reg::UpdateMask<T, Reg::RegTraitNumTwo>(sreg);
                     DataCopy(vSrcReg0, src0 + i * one_rep_size * 2);
                     DataCopy(vSrcReg1, src1 + i * one_rep_size * 2);
-                    #ifdef VF
-                    #if VF == 0
-                        Reg::Div(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
-                    #elif VF == 1:
-                        Reg::MulAddDst(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
-                    #endif
-                    #endif
+#ifdef VF
+#if VF == 0
+                    Reg::Div(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
+#elif VF == 1:
+                    Reg::MulAddDst(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
+#endif
+#endif
                     DataCopy(dst + i * one_rep_size * 2, vDstReg0, maskReg);
                 }
             }
-        // Basic
-        } else if constexpr(MD == 1) {
-            #ifdef VF
-            #if VF == 0
-                Div(dstLocal, src0Local, src1Local, dataSize);
-            #elif VF == 1:
-                Reg::MulAddDst(dstLocal, src0Local, src1Local, dataSize);
-            #elif VF == 2:
-                    Reg::FusedAbsSub(dstLocal, src0Local, src1Local, dataSize);s
-            #endif
-            #endif
-        // Mirco Trait1
-        } else if constexpr(MD == 2) {
-            __ubuf__ T *src0 = (__ubuf__ T *)src0Local.GetPhyAddr();
-            __ubuf__ T *src1 = (__ubuf__ T *)src1Local.GetPhyAddr();
-            __ubuf__ T *dst = (__ubuf__ T *)dstLocal.GetPhyAddr();
+            // Basic
+        } else if constexpr (MD == 1) {
+#ifdef VF
+#if VF == 0
+            Div(dstLocal, src0Local, src1Local, dataSize);
+#elif VF == 1:
+            Reg::MulAddDst(dstLocal, src0Local, src1Local, dataSize);
+#elif VF == 2:
+            Reg::FusedAbsSub(dstLocal, src0Local, src1Local, dataSize);
+            s
+#endif
+#endif
+            // Mirco Trait1
+        } else if constexpr (MD == 2) {
+            __ubuf__ T* src0 = (__ubuf__ T*)src0Local.GetPhyAddr();
+            __ubuf__ T* src1 = (__ubuf__ T*)src1Local.GetPhyAddr();
+            __ubuf__ T* dst = (__ubuf__ T*)dstLocal.GetPhyAddr();
             uint16_t mask_bit_size = 256;
-            uint16_t one_rep_size = mask_bit_size/sizeof(T);
+            uint16_t one_rep_size = mask_bit_size / sizeof(T);
             uint16_t repeat_times;
             repeat_times = CeilDivision(dataSize, one_rep_size);
 
-            __VEC_SCOPE__ 
+            __VEC_SCOPE__
             {
                 Reg::RegTensor<T, Reg::RegTraitNumOne> vSrcReg0;
                 Reg::RegTensor<T, Reg::RegTraitNumOne> vSrcReg1;
@@ -124,15 +123,15 @@ private:
                     Reg::MaskReg maskReg = Reg::UpdateMask<T, Reg::RegTraitNumTwo>(sreg);
                     DataCopy(vSrcReg0, src0 + i * one_rep_size);
                     DataCopy(vSrcReg1, src1 + i * one_rep_size);
-                    #ifdef VF
-                    #if VF == 0
-                        Reg::Div(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
-                    #elif VF == 1:
-                        Reg::MulAddDst(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
-                    #elif VF == 2:
-                        Reg::FusedAbsSub(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
-                    #endif
-                    #endif
+#ifdef VF
+#if VF == 0
+                    Reg::Div(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
+#elif VF == 1:
+                    Reg::MulAddDst(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
+#elif VF == 2:
+                    Reg::FusedAbsSub(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
+#endif
+#endif
                     DataCopy(dst + i * one_rep_size, vDstReg0, maskReg);
                 }
             }
@@ -168,8 +167,9 @@ struct MicroBinaryParams {
     void (*CallFunc)();
 };
 
-template<typename T, typename T2, int32_t mode, int16_t VF>
-void MicroBinaryRunCase() {
+template <typename T, typename T2, int32_t mode, int16_t VF>
+void MicroBinaryRunCase()
+{
     int byte_size = sizeof(T);
     int shape_size = 1024;
     int mask = 256;
@@ -190,15 +190,15 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(MicroBinaryB64TestCase, MicroBinaryB64Testsuite,
+INSTANTIATE_TEST_CASE_P(
+    MicroBinaryB64TestCase, MicroBinaryB64Testsuite,
     ::testing::Values(
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 0, 0> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, uint64_t, 0, 0> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 0, 1> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, uint64_t, 0, 1> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 0, 2> },
-                      MicroBinaryParams { MicroBinaryRunCase<bfloat16_t, bfloat16_t, 0, 1> }
-                      ));
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 0, 0>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, uint64_t, 0, 0>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 0, 1>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, uint64_t, 0, 1>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 0, 2>},
+        MicroBinaryParams{MicroBinaryRunCase<bfloat16_t, bfloat16_t, 0, 1>}));
 
 TEST_P(MicroBinaryB64Testsuite, MicroBinaryB64TestCase)
 {

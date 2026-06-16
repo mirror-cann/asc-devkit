@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file test_batch_loop.cpp
@@ -30,19 +30,17 @@ using namespace AscendC;
 
 namespace {
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using BatchLoop = Impl::Detail::BatchLoop<IMPL, MatmulInputAType<A_TYPE, typename A_TYPE::T>, BIAS_TYPE, MM_CFG>;
 };
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG,
-          class MM_CB, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl :
-    MATMUL_IMPORT_MODULE(BatchLoop),
-    MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
-    MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+    MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(BatchLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling) {
     MATMUL_ALLOW_USING(BatchLoop);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeInfo);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeTiling);
@@ -54,21 +52,20 @@ public:
     MATMUL_USE_MODULE(MatmulShapeTiling);
     MATMUL_USE_MODULE(MatmulShapeInfo);
 
-    MatmulImpl() {
-        InitVar();
-    }
+    MatmulImpl() { InitVar(); }
 
-    void SetTiling(TCubeTiling &cubeTiling) {
-        tiling = cubeTiling;
-    }
+    void SetTiling(TCubeTiling& cubeTiling) { tiling = cubeTiling; }
 
-    void InitVar() {
+    void InitVar()
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
     }
 
-    void SetSingleCoreParams(int32_t singleCoreM, int32_t singleCoreN, int32_t singleCoreK,
-        int32_t aLayoutInfoB, int32_t bLayoutInfoB, int32_t batchNum) {
+    void SetSingleCoreParams(
+        int32_t singleCoreM, int32_t singleCoreN, int32_t singleCoreK, int32_t aLayoutInfoB, int32_t bLayoutInfoB,
+        int32_t batchNum)
+    {
         MATMUL_MODULE(MatmulShapeInfo)->SetSingleShape(singleCoreM, singleCoreN, singleCoreK);
         tiling.singleCoreM = singleCoreM;
         tiling.singleCoreN = singleCoreN;
@@ -84,7 +81,7 @@ private:
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class TestBatchLoop : public testing::Test {
 protected:
@@ -92,7 +89,6 @@ protected:
     void TearDown() {}
 
 private:
-
     using A_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, half, false, LayoutMode::NORMAL>;
     using B_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, half, false, LayoutMode::NORMAL>;
     using C_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float, false, LayoutMode::NORMAL>;
@@ -105,10 +101,11 @@ private:
     MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, mm_cfg1, void, CustomMatmulPolicy> mm1;
 };
 
-TEST_F(TestBatchLoop, batch_loop) {
+TEST_F(TestBatchLoop, batch_loop)
+{
     mm.SetSingleCoreParams(144, 77, 64, 3, 1, 1);
     mm.Init();
-    for (mm.OuterStart(); !mm.OuterEnd();mm.OuterNext()) {
+    for (mm.OuterStart(); !mm.OuterEnd(); mm.OuterNext()) {
         for (mm.SplitStart(); !mm.SplitEnd(); mm.SplitNext()) {
             for (mm.InnerStart(); !mm.InnerEnd(); mm.InnerNext()) {
             }
@@ -125,10 +122,11 @@ TEST_F(TestBatchLoop, batch_loop) {
     EXPECT_EQ(mm.GetBatchIndex(), 3);
 }
 
-TEST_F(TestBatchLoop, batch_loop_db) {
+TEST_F(TestBatchLoop, batch_loop_db)
+{
     mm1.SetSingleCoreParams(32, 256, 64, 2, 6, 6);
     mm1.Init();
-    for (mm1.OuterStart(); !mm1.OuterEnd();mm1.OuterNext()) {
+    for (mm1.OuterStart(); !mm1.OuterEnd(); mm1.OuterNext()) {
         for (mm1.SplitStart(); !mm1.SplitEnd(); mm1.SplitNext()) {
             for (mm1.InnerStart(); !mm1.InnerEnd(); mm1.InnerNext()) {
             }
@@ -145,10 +143,11 @@ TEST_F(TestBatchLoop, batch_loop_db) {
     EXPECT_EQ(mm1.GetBatchIndex(), 6);
 }
 
-TEST_F(TestBatchLoop, batch_loop_bias) {
+TEST_F(TestBatchLoop, batch_loop_bias)
+{
     mm.SetSingleCoreParams(256, 256, 256, 4, 4, 4);
     mm.Init();
-    for (mm.OuterStart(); !mm.OuterEnd();mm.OuterNext()) {
+    for (mm.OuterStart(); !mm.OuterEnd(); mm.OuterNext()) {
         for (mm.SplitStart(); !mm.SplitEnd(); mm.SplitNext()) {
             for (mm.InnerStart(); !mm.InnerEnd(); mm.InnerNext()) {
             }

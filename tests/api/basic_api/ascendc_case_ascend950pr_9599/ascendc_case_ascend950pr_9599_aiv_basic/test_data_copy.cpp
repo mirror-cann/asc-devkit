@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 // #include "api_check/kernel_cpu_check.h"
@@ -28,8 +28,9 @@ protected:
     void TearDown() {}
 };
 
-template<typename T>
-void MainDataCopyKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, int32_t dataSize, bool ub2l1)
+template <typename T>
+void MainDataCopyKernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, int32_t dataSize, bool ub2l1)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -65,19 +66,21 @@ void MainDataCopyKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     DataCopy(dstGlobal, inputLocal, datacopyParams);
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_DATA_COPY, TestDataCopySuite,
-    ::testing::Values(TestDataCopyParams { 512, 4, MainDataCopyKernel<int32_t>, false },
-    TestDataCopyParams { 512, 2, MainDataCopyKernel<int16_t>, false },
-    TestDataCopyParams { 512, 4, MainDataCopyKernel<float>, false },
-    TestDataCopyParams { 768, 2, MainDataCopyKernel<half>, false },
-    TestDataCopyParams { 2048, 1, MainDataCopyKernel<int8_t>, false },
-    TestDataCopyParams { 2048, 1, MainDataCopyKernel<uint8_t>, false },
-    TestDataCopyParams { 512, 4, MainDataCopyKernel<int32_t>, true },
-    TestDataCopyParams { 512, 2, MainDataCopyKernel<int16_t>, true },
-    TestDataCopyParams { 512, 4, MainDataCopyKernel<float>, true },
-    TestDataCopyParams { 768, 2, MainDataCopyKernel<half>, true },
-    TestDataCopyParams { 2048, 1, MainDataCopyKernel<int8_t>, true },
-    TestDataCopyParams { 2048, 1, MainDataCopyKernel<uint8_t>, true }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_DATA_COPY, TestDataCopySuite,
+    ::testing::Values(
+        TestDataCopyParams{512, 4, MainDataCopyKernel<int32_t>, false},
+        TestDataCopyParams{512, 2, MainDataCopyKernel<int16_t>, false},
+        TestDataCopyParams{512, 4, MainDataCopyKernel<float>, false},
+        TestDataCopyParams{768, 2, MainDataCopyKernel<half>, false},
+        TestDataCopyParams{2048, 1, MainDataCopyKernel<int8_t>, false},
+        TestDataCopyParams{2048, 1, MainDataCopyKernel<uint8_t>, false},
+        TestDataCopyParams{512, 4, MainDataCopyKernel<int32_t>, true},
+        TestDataCopyParams{512, 2, MainDataCopyKernel<int16_t>, true},
+        TestDataCopyParams{512, 4, MainDataCopyKernel<float>, true},
+        TestDataCopyParams{768, 2, MainDataCopyKernel<half>, true},
+        TestDataCopyParams{2048, 1, MainDataCopyKernel<int8_t>, true},
+        TestDataCopyParams{2048, 1, MainDataCopyKernel<uint8_t>, true}));
 
 TEST_P(TestDataCopySuite, TestDataCopyCases)
 {
@@ -89,17 +92,14 @@ TEST_P(TestDataCopySuite, TestDataCopyCases)
 
 class DataCopyUB2L0CTestSuite : public ::testing::Test {
 protected:
-    virtual void SetUp()
-    {
-        SetGCoreType(2);
-    }
+    virtual void SetUp() { SetGCoreType(2); }
     virtual void TearDown()
     {
         GlobalMockObject::verify();
         SetGCoreType(0);
     }
 };
- 
+
 TEST_F(DataCopyUB2L0CTestSuite, testCaseDataCopyUB2L0C)
 {
     LocalTensor<uint16_t> srcGm;

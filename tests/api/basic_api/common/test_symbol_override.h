@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,8 +15,9 @@
 
 namespace AscendC {
 template <typename T>
-void test_symbol_override_add_kernel(__gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
-    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint32_t data_size)
+void test_symbol_override_add_kernel(
+    __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint8_t* __restrict__ dst_gm,
+    __gm__ uint32_t data_size)
 {
     TPipe tpipe;
     GlobalTensor<T> input0_global;
@@ -59,8 +60,9 @@ void test_symbol_override_add_kernel(__gm__ uint8_t* __restrict__ src0_gm, __gm_
 }
 
 template <typename T>
-void test_symbol_override_div_kernel(__gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
-    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint32_t data_size)
+void test_symbol_override_div_kernel(
+    __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint8_t* __restrict__ dst_gm,
+    __gm__ uint32_t data_size)
 {
     TPipe tpipe;
     GlobalTensor<T> input0_global;
@@ -101,8 +103,9 @@ void test_symbol_override_div_kernel(__gm__ uint8_t* __restrict__ src0_gm, __gm_
 }
 
 template <typename T>
-void test_symbol_override_compare_kernel(__gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
-    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint32_t data_size)
+void test_symbol_override_compare_kernel(
+    __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint8_t* __restrict__ dst_gm,
+    __gm__ uint32_t data_size)
 {
     TPipe tpipe;
     int32_t sel_size = data_size / AscendCUtils::GetBitSize(sizeof(uint8_t));
@@ -153,8 +156,9 @@ void test_symbol_override_compare_kernel(__gm__ uint8_t* __restrict__ src0_gm, _
 }
 
 template <typename T>
-void test_symbol_override_compare_gt_kernel(__gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
-    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint32_t data_size)
+void test_symbol_override_compare_gt_kernel(
+    __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint8_t* __restrict__ dst_gm,
+    __gm__ uint32_t data_size)
 {
     TPipe tpipe;
     int32_t sel_size = data_size / AscendCUtils::GetBitSize(sizeof(uint8_t));
@@ -205,8 +209,9 @@ void test_symbol_override_compare_gt_kernel(__gm__ uint8_t* __restrict__ src0_gm
 }
 
 template <typename T>
-void test_symbol_override_compare_ge_kernel(__gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
-    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint32_t data_size)
+void test_symbol_override_compare_ge_kernel(
+    __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint8_t* __restrict__ dst_gm,
+    __gm__ uint32_t data_size)
 {
     TPipe tpipe;
     int32_t sel_size = data_size / AscendCUtils::GetBitSize(sizeof(uint8_t));
@@ -257,8 +262,9 @@ void test_symbol_override_compare_ge_kernel(__gm__ uint8_t* __restrict__ src0_gm
 }
 
 template <typename T>
-void test_symbol_override_compare_le_kernel(__gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
-    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint32_t data_size)
+void test_symbol_override_compare_le_kernel(
+    __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint8_t* __restrict__ dst_gm,
+    __gm__ uint32_t data_size)
 {
     TPipe tpipe;
     int32_t sel_size = data_size / AscendCUtils::GetBitSize(sizeof(uint8_t));
@@ -309,8 +315,9 @@ void test_symbol_override_compare_le_kernel(__gm__ uint8_t* __restrict__ src0_gm
 }
 
 template <typename T>
-void test_symbol_override_compare_eq_kernel(__gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
-    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint32_t data_size)
+void test_symbol_override_compare_eq_kernel(
+    __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint8_t* __restrict__ dst_gm,
+    __gm__ uint32_t data_size)
 {
     TPipe tpipe;
     int32_t sel_size = data_size / AscendCUtils::GetBitSize(sizeof(uint8_t));
@@ -361,8 +368,9 @@ void test_symbol_override_compare_eq_kernel(__gm__ uint8_t* __restrict__ src0_gm
 }
 
 template <typename T>
-void test_symbol_override_or_kernel(__gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
-    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint32_t data_size)
+void test_symbol_override_or_kernel(
+    __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint8_t* __restrict__ dst_gm,
+    __gm__ uint32_t data_size)
 {
     TPipe tpipe;
     GlobalTensor<T> input0_global;

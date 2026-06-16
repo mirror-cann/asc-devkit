@@ -18,10 +18,7 @@ namespace mc2_ops_hccl {
 
 aclrtBinHandle g_binKernelHandle = reinterpret_cast<aclrtBinHandle>(0x1);
 
-HcclResult LoadAICPUKernel(void)
-{
-    return HCCL_SUCCESS;
-}
+HcclResult LoadAICPUKernel(void) { return HCCL_SUCCESS; }
 
 int32_t HcclLaunchDPUKernel(uint64_t ptr, int32_t size)
 {
@@ -30,7 +27,7 @@ int32_t HcclLaunchDPUKernel(uint64_t ptr, int32_t size)
     return static_cast<int32_t>(HCCL_SUCCESS);
 }
 
-HcclResult haclrtMemcpy(void *dst, size_t destMax, const void *src, size_t count, aclrtMemcpyKind kind)
+HcclResult haclrtMemcpy(void* dst, size_t destMax, const void* src, size_t count, aclrtMemcpyKind kind)
 {
     static_cast<void>(kind);
     if (dst == nullptr || src == nullptr) {
@@ -46,7 +43,7 @@ HcclResult haclrtMemcpy(void *dst, size_t destMax, const void *src, size_t count
     return HCCL_SUCCESS;
 }
 
-HcclResult haclrtGetCaptureInfo(aclrtStream stream, aclmdlRICaptureStatus &captureStatus, u64 &modelId, bool &isCapture)
+HcclResult haclrtGetCaptureInfo(aclrtStream stream, aclmdlRICaptureStatus& captureStatus, u64& modelId, bool& isCapture)
 {
     static_cast<void>(stream);
     captureStatus = aclmdlRICaptureStatus::ACL_MODEL_RI_CAPTURE_STATUS_NONE;
@@ -55,27 +52,15 @@ HcclResult haclrtGetCaptureInfo(aclrtStream stream, aclmdlRICaptureStatus &captu
     return HCCL_SUCCESS;
 }
 
-}
+} // namespace mc2_ops_hccl
 
 extern "C" {
 
-void HcommDlInit(void)
-{
-}
+void HcommDlInit(void) {}
 
-int GetHcommVersion(void)
-{
-    return 90000009;
-}
+int GetHcommVersion(void) { return 90000009; }
 
-bool HcommIsProfilingSupported()
-{
-    return true;
-}
+bool HcommIsProfilingSupported() { return true; }
 
-bool HcommIsExportThreadSupported()
-{
-    return true;
-}
-
+bool HcommIsExportThreadSupported() { return true; }
 }

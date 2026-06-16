@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -17,13 +17,12 @@ namespace AscendC {
 template <typename T, typename U>
 class KernelLogicalAnd {
 public:
-    __aicore__ inline KernelLogicalAnd()
-    {}
+    __aicore__ inline KernelLogicalAnd() {}
     __aicore__ inline void Init(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t srcSize)
     {
-        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(src0Gm), srcSize);
-        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(src1Gm), srcSize);
-        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), srcSize);
+        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(src0Gm), srcSize);
+        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(src1Gm), srcSize);
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), srcSize);
 
         pipe.InitBuffer(inQueueX0, 1, srcSize * sizeof(U));
         pipe.InitBuffer(inQueueX1, 1, srcSize * sizeof(U));
@@ -84,8 +83,7 @@ private:
     TQue<TPosition::VECOUT, 1> outQueue;
     uint32_t dataSize = 0;
 };
-}
-
+} // namespace AscendC
 
 template <typename T, typename U>
 __aicore__ void testLogicalAnd(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t srcSize)
@@ -95,13 +93,11 @@ __aicore__ void testLogicalAnd(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, ui
     op.Process();
 }
 
-
 struct LogicalAndTestParams {
     uint32_t dataTypeSize;
     uint32_t inDataSize;
     void (*calFunc)(GM_ADDR, GM_ADDR, GM_ADDR, uint32_t);
 };
-
 
 class LogicalAndTestSuite : public testing::Test, public testing::WithParamInterface<LogicalAndTestParams> {
 protected:
@@ -109,46 +105,45 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ADVANCE_API_LOGICAL_AND, LogicalAndTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ADVANCE_API_LOGICAL_AND, LogicalAndTestSuite,
     ::testing::Values(
-        LogicalAndTestParams {1, 1024, testLogicalAnd<bool, bool> },
-        LogicalAndTestParams {1, 32, testLogicalAnd<bool, bool> },
-        LogicalAndTestParams {1, 256, testLogicalAnd<bool, bool> },
-        LogicalAndTestParams {1, 1024, testLogicalAnd<bool, uint8_t> },
-        LogicalAndTestParams {1, 32, testLogicalAnd<bool, uint8_t> },
-        LogicalAndTestParams {1, 256, testLogicalAnd<bool, uint8_t> },
-        LogicalAndTestParams {1, 1024, testLogicalAnd<bool, int8_t> },
-        LogicalAndTestParams {1, 32, testLogicalAnd<bool, int8_t> },
-        LogicalAndTestParams {1, 256, testLogicalAnd<bool, int8_t> },
-        LogicalAndTestParams {2, 1024, testLogicalAnd<bool, half> },
-        LogicalAndTestParams {2, 32, testLogicalAnd<bool, half> },
-        LogicalAndTestParams {2, 256, testLogicalAnd<bool, half> },
-        LogicalAndTestParams {2, 1024, testLogicalAnd<bool, bfloat16_t> },
-        LogicalAndTestParams {2, 32, testLogicalAnd<bool, bfloat16_t> },
-        LogicalAndTestParams {2, 256, testLogicalAnd<bool, bfloat16_t> },
-        LogicalAndTestParams {2, 1024, testLogicalAnd<bool, uint16_t> },
-        LogicalAndTestParams {2, 32, testLogicalAnd<bool, uint16_t> },
-        LogicalAndTestParams {2, 256, testLogicalAnd<bool, uint16_t> },
-        LogicalAndTestParams {2, 1024, testLogicalAnd<bool, int16_t> },
-        LogicalAndTestParams {2, 32, testLogicalAnd<bool, int16_t> },
-        LogicalAndTestParams {2, 256, testLogicalAnd<bool, int16_t> },
-        LogicalAndTestParams {4, 1024, testLogicalAnd<bool, float> },
-        LogicalAndTestParams {4, 32, testLogicalAnd<bool, float> },
-        LogicalAndTestParams {4, 256, testLogicalAnd<bool, float> },
-        LogicalAndTestParams {4, 1024, testLogicalAnd<bool, uint32_t> },
-        LogicalAndTestParams {4, 32, testLogicalAnd<bool, uint32_t> },
-        LogicalAndTestParams {4, 256, testLogicalAnd<bool, uint32_t> },
-        LogicalAndTestParams {4, 1024, testLogicalAnd<bool, int32_t> },
-        LogicalAndTestParams {4, 32, testLogicalAnd<bool, int32_t> },
-        LogicalAndTestParams {4, 256, testLogicalAnd<bool, int32_t> },
-        LogicalAndTestParams {8, 1024, testLogicalAnd<bool, uint64_t> },
-        LogicalAndTestParams {8, 32, testLogicalAnd<bool, uint64_t> },
-        LogicalAndTestParams {8, 256, testLogicalAnd<bool, uint64_t> },
-        LogicalAndTestParams {8, 1024, testLogicalAnd<bool, int64_t> },
-        LogicalAndTestParams {8, 32, testLogicalAnd<bool, int64_t> },
-        LogicalAndTestParams {8, 256, testLogicalAnd<bool, int64_t> }
-    )
-);
+        LogicalAndTestParams{1, 1024, testLogicalAnd<bool, bool>},
+        LogicalAndTestParams{1, 32, testLogicalAnd<bool, bool>},
+        LogicalAndTestParams{1, 256, testLogicalAnd<bool, bool>},
+        LogicalAndTestParams{1, 1024, testLogicalAnd<bool, uint8_t>},
+        LogicalAndTestParams{1, 32, testLogicalAnd<bool, uint8_t>},
+        LogicalAndTestParams{1, 256, testLogicalAnd<bool, uint8_t>},
+        LogicalAndTestParams{1, 1024, testLogicalAnd<bool, int8_t>},
+        LogicalAndTestParams{1, 32, testLogicalAnd<bool, int8_t>},
+        LogicalAndTestParams{1, 256, testLogicalAnd<bool, int8_t>},
+        LogicalAndTestParams{2, 1024, testLogicalAnd<bool, half>},
+        LogicalAndTestParams{2, 32, testLogicalAnd<bool, half>},
+        LogicalAndTestParams{2, 256, testLogicalAnd<bool, half>},
+        LogicalAndTestParams{2, 1024, testLogicalAnd<bool, bfloat16_t>},
+        LogicalAndTestParams{2, 32, testLogicalAnd<bool, bfloat16_t>},
+        LogicalAndTestParams{2, 256, testLogicalAnd<bool, bfloat16_t>},
+        LogicalAndTestParams{2, 1024, testLogicalAnd<bool, uint16_t>},
+        LogicalAndTestParams{2, 32, testLogicalAnd<bool, uint16_t>},
+        LogicalAndTestParams{2, 256, testLogicalAnd<bool, uint16_t>},
+        LogicalAndTestParams{2, 1024, testLogicalAnd<bool, int16_t>},
+        LogicalAndTestParams{2, 32, testLogicalAnd<bool, int16_t>},
+        LogicalAndTestParams{2, 256, testLogicalAnd<bool, int16_t>},
+        LogicalAndTestParams{4, 1024, testLogicalAnd<bool, float>},
+        LogicalAndTestParams{4, 32, testLogicalAnd<bool, float>},
+        LogicalAndTestParams{4, 256, testLogicalAnd<bool, float>},
+        LogicalAndTestParams{4, 1024, testLogicalAnd<bool, uint32_t>},
+        LogicalAndTestParams{4, 32, testLogicalAnd<bool, uint32_t>},
+        LogicalAndTestParams{4, 256, testLogicalAnd<bool, uint32_t>},
+        LogicalAndTestParams{4, 1024, testLogicalAnd<bool, int32_t>},
+        LogicalAndTestParams{4, 32, testLogicalAnd<bool, int32_t>},
+        LogicalAndTestParams{4, 256, testLogicalAnd<bool, int32_t>},
+        LogicalAndTestParams{8, 1024, testLogicalAnd<bool, uint64_t>},
+        LogicalAndTestParams{8, 32, testLogicalAnd<bool, uint64_t>},
+        LogicalAndTestParams{8, 256, testLogicalAnd<bool, uint64_t>},
+        LogicalAndTestParams{8, 1024, testLogicalAnd<bool, int64_t>},
+        LogicalAndTestParams{8, 32, testLogicalAnd<bool, int64_t>},
+        LogicalAndTestParams{8, 256, testLogicalAnd<bool, int64_t>}));
 
 TEST_P(LogicalAndTestSuite, testLogicalAnd)
 {

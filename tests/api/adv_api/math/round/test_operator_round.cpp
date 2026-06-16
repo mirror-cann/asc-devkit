@@ -1,38 +1,29 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
 using namespace std;
 using namespace AscendC;
 
-enum TestMode {
-    CAL_MODE,
-    BUF_CAL_MODE
-};
+enum TestMode { CAL_MODE, BUF_CAL_MODE };
 
 class TEST_ROUND : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T>
-void main_vec_round_level2_demo(__gm__ uint8_t* __restrict__ dstGm,
-    __gm__ uint8_t* __restrict__ src0Gm, uint32_t dataSize,TestMode testMode)
+void main_vec_round_level2_demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, uint32_t dataSize, TestMode testMode)
 {
     TPipe tPipe;
     GlobalTensor<T> input0Global;
@@ -75,19 +66,19 @@ void main_vec_round_level2_demo(__gm__ uint8_t* __restrict__ dstGm,
     PipeBarrier<PIPE_ALL>();
 }
 
-#define VEC_ROUND_LEVEL2_TESTCASE(DATA_TYPE, TEST_MODE)                                              \
-    TEST_F(TEST_ROUND, Round##DATA_TYPE##TEST_MODE##Case)                                           \
-    {                                                                                                           \
-        uint32_t dataSize = 1024;                                                                               \
-        uint32_t sel_mask_size = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                         \
-        uint8_t input0Gm[dataSize * sizeof(DATA_TYPE)];                                                       \
-        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)];                                                       \
-                                                                                                                \
-        main_vec_round_level2_demo<DATA_TYPE>(outputGm, input0Gm, dataSize, TEST_MODE);                     \
-                                                                                                                \
-        for (uint32_t i = 0; i < dataSize; i++) {                                                              \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                      \
-        }                                                                                                       \
+#define VEC_ROUND_LEVEL2_TESTCASE(DATA_TYPE, TEST_MODE)                                 \
+    TEST_F(TEST_ROUND, Round##DATA_TYPE##TEST_MODE##Case)                               \
+    {                                                                                   \
+        uint32_t dataSize = 1024;                                                       \
+        uint32_t sel_mask_size = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));  \
+        uint8_t input0Gm[dataSize * sizeof(DATA_TYPE)];                                 \
+        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)];                                 \
+                                                                                        \
+        main_vec_round_level2_demo<DATA_TYPE>(outputGm, input0Gm, dataSize, TEST_MODE); \
+                                                                                        \
+        for (uint32_t i = 0; i < dataSize; i++) {                                       \
+            EXPECT_EQ(outputGm[i], 0x00);                                               \
+        }                                                                               \
     }
 VEC_ROUND_LEVEL2_TESTCASE(half, CAL_MODE);
 VEC_ROUND_LEVEL2_TESTCASE(half, BUF_CAL_MODE);

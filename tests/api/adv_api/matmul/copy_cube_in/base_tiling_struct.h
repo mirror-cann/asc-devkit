@@ -1,24 +1,42 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef BASE_TILING_STRUCT_H
 #define BASE_TILING_STRUCT_H
 struct TilingParams {
     __aicore__ TilingParams() {}
-    __aicore__ TilingParams(uint32_t coreNum, uint32_t M, uint32_t N, uint32_t K, uint32_t singleCoreM,
-        uint32_t singleCoreN, uint32_t singleCoreK, uint32_t baseM, uint32_t baseN, uint32_t baseK, uint32_t depthA1,
-        uint32_t depthB1, uint32_t stepM, uint32_t stepN, uint32_t stepKa, uint32_t stepKb, uint32_t isbias,
-        uint32_t iterateOrder, uint32_t batchNum = 0) : coreNum_(coreNum), M_(M), N_(N), K_(K),
-        singleCoreM_(singleCoreM), singleCoreN_(singleCoreN), singleCoreK_(singleCoreK), baseM_(baseM), baseN_(baseN),
-        baseK_(baseK), depthA1_(depthA1), depthB1_(depthB1), stepM_(stepM), stepN_(stepN), stepKa_(stepKa),
-        stepKb_(stepKb), isbias_(isbias), iterateOrder_(iterateOrder), batchNum_(batchNum) {}
-    __aicore__ void GetTiling(TCubeTiling &tiling)
+    __aicore__ TilingParams(
+        uint32_t coreNum, uint32_t M, uint32_t N, uint32_t K, uint32_t singleCoreM, uint32_t singleCoreN,
+        uint32_t singleCoreK, uint32_t baseM, uint32_t baseN, uint32_t baseK, uint32_t depthA1, uint32_t depthB1,
+        uint32_t stepM, uint32_t stepN, uint32_t stepKa, uint32_t stepKb, uint32_t isbias, uint32_t iterateOrder,
+        uint32_t batchNum = 0)
+        : coreNum_(coreNum),
+          M_(M),
+          N_(N),
+          K_(K),
+          singleCoreM_(singleCoreM),
+          singleCoreN_(singleCoreN),
+          singleCoreK_(singleCoreK),
+          baseM_(baseM),
+          baseN_(baseN),
+          baseK_(baseK),
+          depthA1_(depthA1),
+          depthB1_(depthB1),
+          stepM_(stepM),
+          stepN_(stepN),
+          stepKa_(stepKa),
+          stepKb_(stepKb),
+          isbias_(isbias),
+          iterateOrder_(iterateOrder),
+          batchNum_(batchNum)
+    {}
+    __aicore__ void GetTiling(TCubeTiling& tiling)
     {
         tiling.usedCoreNum = coreNum_;
         tiling.M = M_;
@@ -63,24 +81,54 @@ struct TilingParams {
 
 struct TilingParamsBatch {
     __aicore__ TilingParamsBatch() {}
-    __aicore__ TilingParamsBatch(uint32_t coreNum, uint32_t M, uint32_t N, uint32_t K, uint32_t singleCoreM,
-        uint32_t singleCoreN, uint32_t singleCoreK, uint32_t baseM, uint32_t baseN, uint32_t baseK, uint32_t depthA1,
-        uint32_t depthB1, uint32_t stepM, uint32_t stepN, uint32_t stepKa, uint32_t stepKb, uint32_t isbias,
-        uint32_t iterateOrder, uint32_t batchM, uint32_t batchN, uint32_t batchNum, uint32_t ALayoutInfoB,
-        uint32_t ALayoutInfoS, uint32_t ALayoutInfoN, uint32_t ALayoutInfoG, uint32_t ALayoutInfoD,
-        uint32_t BLayoutInfoB, uint32_t BLayoutInfoS, uint32_t BLayoutInfoN, uint32_t BLayoutInfoG,
-        uint32_t BLayoutInfoD, uint32_t CLayoutInfoB, uint32_t CLayoutInfoS1, uint32_t CLayoutInfoN,
-        uint32_t CLayoutInfoG, uint32_t CLayoutInfoS2) : coreNum_(coreNum), M_(M), N_(N), K_(K),
-        singleCoreM_(singleCoreM), singleCoreN_(singleCoreN), singleCoreK_(singleCoreK), baseM_(baseM), baseN_(baseN),
-        baseK_(baseK), depthA1_(depthA1), depthB1_(depthB1), stepM_(stepM), stepN_(stepN), stepKa_(stepKa),
-        stepKb_(stepKb), isbias_(isbias), iterateOrder_(iterateOrder), batchM_(batchM), batchN_(batchN), batchNum_(batchNum), ALayoutInfoB_(ALayoutInfoB),
-        ALayoutInfoS_(ALayoutInfoS), ALayoutInfoN_(ALayoutInfoN), ALayoutInfoG_(ALayoutInfoG), ALayoutInfoD_(ALayoutInfoD),
-        BLayoutInfoB_(BLayoutInfoB), BLayoutInfoS_(BLayoutInfoS), BLayoutInfoN_(BLayoutInfoN), BLayoutInfoG_(BLayoutInfoG),
-        BLayoutInfoD_(BLayoutInfoD),
-        CLayoutInfoB_(CLayoutInfoB), CLayoutInfoS1_(CLayoutInfoS1), CLayoutInfoN_(CLayoutInfoN), CLayoutInfoG_(CLayoutInfoG),
-        CLayoutInfoS2_(CLayoutInfoS2) {}
+    __aicore__ TilingParamsBatch(
+        uint32_t coreNum, uint32_t M, uint32_t N, uint32_t K, uint32_t singleCoreM, uint32_t singleCoreN,
+        uint32_t singleCoreK, uint32_t baseM, uint32_t baseN, uint32_t baseK, uint32_t depthA1, uint32_t depthB1,
+        uint32_t stepM, uint32_t stepN, uint32_t stepKa, uint32_t stepKb, uint32_t isbias, uint32_t iterateOrder,
+        uint32_t batchM, uint32_t batchN, uint32_t batchNum, uint32_t ALayoutInfoB, uint32_t ALayoutInfoS,
+        uint32_t ALayoutInfoN, uint32_t ALayoutInfoG, uint32_t ALayoutInfoD, uint32_t BLayoutInfoB,
+        uint32_t BLayoutInfoS, uint32_t BLayoutInfoN, uint32_t BLayoutInfoG, uint32_t BLayoutInfoD,
+        uint32_t CLayoutInfoB, uint32_t CLayoutInfoS1, uint32_t CLayoutInfoN, uint32_t CLayoutInfoG,
+        uint32_t CLayoutInfoS2)
+        : coreNum_(coreNum),
+          M_(M),
+          N_(N),
+          K_(K),
+          singleCoreM_(singleCoreM),
+          singleCoreN_(singleCoreN),
+          singleCoreK_(singleCoreK),
+          baseM_(baseM),
+          baseN_(baseN),
+          baseK_(baseK),
+          depthA1_(depthA1),
+          depthB1_(depthB1),
+          stepM_(stepM),
+          stepN_(stepN),
+          stepKa_(stepKa),
+          stepKb_(stepKb),
+          isbias_(isbias),
+          iterateOrder_(iterateOrder),
+          batchM_(batchM),
+          batchN_(batchN),
+          batchNum_(batchNum),
+          ALayoutInfoB_(ALayoutInfoB),
+          ALayoutInfoS_(ALayoutInfoS),
+          ALayoutInfoN_(ALayoutInfoN),
+          ALayoutInfoG_(ALayoutInfoG),
+          ALayoutInfoD_(ALayoutInfoD),
+          BLayoutInfoB_(BLayoutInfoB),
+          BLayoutInfoS_(BLayoutInfoS),
+          BLayoutInfoN_(BLayoutInfoN),
+          BLayoutInfoG_(BLayoutInfoG),
+          BLayoutInfoD_(BLayoutInfoD),
+          CLayoutInfoB_(CLayoutInfoB),
+          CLayoutInfoS1_(CLayoutInfoS1),
+          CLayoutInfoN_(CLayoutInfoN),
+          CLayoutInfoG_(CLayoutInfoG),
+          CLayoutInfoS2_(CLayoutInfoS2)
+    {}
 
-    __aicore__ void GetTiling(TCubeTiling &tiling)
+    __aicore__ void GetTiling(TCubeTiling& tiling)
     {
         tiling.usedCoreNum = coreNum_;
         tiling.M = M_;
@@ -161,14 +209,32 @@ struct TilingParamsBatch {
 
 struct TilingParamsMx {
     __aicore__ TilingParamsMx() {}
-    __aicore__ TilingParamsMx(uint32_t coreNum, uint32_t M, uint32_t N, uint32_t K, uint32_t singleCoreM,
-        uint32_t singleCoreN, uint32_t singleCoreK, uint32_t baseM, uint32_t baseN, uint32_t baseK, uint32_t depthA1,
-        uint32_t depthB1, uint32_t stepM, uint32_t stepN, uint32_t stepKa, uint32_t stepKb, uint32_t isbias,
-        uint32_t iterateOrder, uint32_t mxTypePara) : coreNum_(coreNum), M_(M), N_(N), K_(K),
-        singleCoreM_(singleCoreM), singleCoreN_(singleCoreN), singleCoreK_(singleCoreK), baseM_(baseM), baseN_(baseN),
-        baseK_(baseK), depthA1_(depthA1), depthB1_(depthB1), stepM_(stepM), stepN_(stepN), stepKa_(stepKa),
-        stepKb_(stepKb), isbias_(isbias), iterateOrder_(iterateOrder), mxTypePara_(mxTypePara) {}
-    __aicore__ void GetTiling(TCubeTiling &tiling)
+    __aicore__ TilingParamsMx(
+        uint32_t coreNum, uint32_t M, uint32_t N, uint32_t K, uint32_t singleCoreM, uint32_t singleCoreN,
+        uint32_t singleCoreK, uint32_t baseM, uint32_t baseN, uint32_t baseK, uint32_t depthA1, uint32_t depthB1,
+        uint32_t stepM, uint32_t stepN, uint32_t stepKa, uint32_t stepKb, uint32_t isbias, uint32_t iterateOrder,
+        uint32_t mxTypePara)
+        : coreNum_(coreNum),
+          M_(M),
+          N_(N),
+          K_(K),
+          singleCoreM_(singleCoreM),
+          singleCoreN_(singleCoreN),
+          singleCoreK_(singleCoreK),
+          baseM_(baseM),
+          baseN_(baseN),
+          baseK_(baseK),
+          depthA1_(depthA1),
+          depthB1_(depthB1),
+          stepM_(stepM),
+          stepN_(stepN),
+          stepKa_(stepKa),
+          stepKb_(stepKb),
+          isbias_(isbias),
+          iterateOrder_(iterateOrder),
+          mxTypePara_(mxTypePara)
+    {}
+    __aicore__ void GetTiling(TCubeTiling& tiling)
     {
         tiling.usedCoreNum = coreNum_;
         tiling.M = M_;

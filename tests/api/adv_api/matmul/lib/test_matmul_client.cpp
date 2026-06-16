@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file test_matmul_client.cpp
@@ -28,27 +28,36 @@ protected:
     void TearDown() {}
 
 private:
-    using AS_TYPE_UB = MatmulTypeWithScale<TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND,
-        fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
-    using AS_TYPE_UB_fp4 = MatmulTypeWithScale<TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND,
-        fp4x2_e2m1_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
+    using AS_TYPE_UB = MatmulTypeWithScale<
+        TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND, fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
+    using AS_TYPE_UB_fp4 = MatmulTypeWithScale<
+        TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND, fp4x2_e2m1_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
 
-    using BS_TYPE_UB = MatmulTypeWithScale<TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND,
-        fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
-    using BS_TYPE_UB_fp4 = MatmulTypeWithScale<TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND,
-        fp4x2_e2m1_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
+    using BS_TYPE_UB = MatmulTypeWithScale<
+        TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND, fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
+    using BS_TYPE_UB_fp4 = MatmulTypeWithScale<
+        TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND, fp4x2_e2m1_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
 
     using C_TYPE_UB = MatmulType<TPosition::VECIN, CubeFormat::NZ, float>;
 
     using BIAS_TYPE = MatmulType<TPosition::GM, CubeFormat::ND, float>;
 
-    Matmul<AS_TYPE_UB, BS_TYPE_UB, C_TYPE_UB, BIAS_TYPE, CFG_NORM,
-               MatmulCallBackFunc<nullptr, nullptr, nullptr>, Impl::Detail::MatmulWithScalePolicy> mm0;
-    Matmul<AS_TYPE_UB_fp4, BS_TYPE_UB_fp4, C_TYPE_UB, BIAS_TYPE, CFG_NORM,
-               MatmulCallBackFunc<nullptr, nullptr, nullptr>, Impl::Detail::MatmulWithScalePolicy> mm1;
+    Matmul<
+        AS_TYPE_UB, BS_TYPE_UB, C_TYPE_UB, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        Impl::Detail::MatmulWithScalePolicy>
+        mm0;
+    Matmul<
+        AS_TYPE_UB_fp4, BS_TYPE_UB_fp4, C_TYPE_UB, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        Impl::Detail::MatmulWithScalePolicy>
+        mm1;
 };
 
-TEST_F(TestMatmulClient, test_mx_matmul_client_fp8) {
+TEST_F(TestMatmulClient, test_mx_matmul_client_fp8)
+{
     TPipe pipe;
     TCubeTiling tiling;
 
@@ -80,8 +89,8 @@ TEST_F(TestMatmulClient, test_mx_matmul_client_fp8) {
     TBuffAddr tbufOutTmp;
     KfcMsg kfcMsg;
     tbufOutTmp.logicPos = (uint8_t)(TPosition::B1);
-    tbufOutTmp.dataLen = Ceil(tiling.Ka / NUM_THIRTYTWO, BLOCK_CUBE) * BLOCK_CUBE * 
-        Ceil(tiling.N, BLOCK_CUBE) * BLOCK_CUBE * sizeof(MX_T);
+    tbufOutTmp.dataLen = Ceil(tiling.Ka / NUM_THIRTYTWO, BLOCK_CUBE) * BLOCK_CUBE * Ceil(tiling.N, BLOCK_CUBE) *
+                         BLOCK_CUBE * sizeof(MX_T);
     tbufOutTmp.bufferAddr = kfcMsg.body.quantScalar;
     tbufOutTmp.absAddr = GetTPipePtr()->GetBaseAddr(static_cast<uint8_t>(TPosition::B1)) + tbufOutTmp.bufferAddr;
     LocalTensor<MX_T> l1Matrix;
@@ -89,11 +98,16 @@ TEST_F(TestMatmulClient, test_mx_matmul_client_fp8) {
     int32_t c0Size_ = 32;
     int32_t scaleK = Ceil(tiling.Ka, AscendC::Impl::MX_BASEK_FACTOR) * 2;
     int32_t offset = 0;
-    mm0.ND2ScaleZZ(reinterpret_cast<LocalTensor<uint8_t>&>(l1Matrix), reinterpret_cast<LocalTensor<uint8_t>&>(bufferMxLeft), tiling.M, Ceil(scaleK, c0Size_) * c0Size_, scaleK, offset);
-    mm0.CopyUbNZ2NZForScale(reinterpret_cast<LocalTensor<uint8_t>&>(l1Matrix), reinterpret_cast<LocalTensor<uint8_t>&>(bufferMxLeft), scaleK, Ceil(tiling.M, BLOCK_CUBE) * BLOCK_CUBE, offset);
+    mm0.ND2ScaleZZ(
+        reinterpret_cast<LocalTensor<uint8_t>&>(l1Matrix), reinterpret_cast<LocalTensor<uint8_t>&>(bufferMxLeft),
+        tiling.M, Ceil(scaleK, c0Size_) * c0Size_, scaleK, offset);
+    mm0.CopyUbNZ2NZForScale(
+        reinterpret_cast<LocalTensor<uint8_t>&>(l1Matrix), reinterpret_cast<LocalTensor<uint8_t>&>(bufferMxLeft),
+        scaleK, Ceil(tiling.M, BLOCK_CUBE) * BLOCK_CUBE, offset);
 }
 
-TEST_F(TestMatmulClient, test_mx_matmul_client_fp8_ab) {
+TEST_F(TestMatmulClient, test_mx_matmul_client_fp8_ab)
+{
     TPipe pipe;
     TCubeTiling tiling;
 
@@ -123,8 +137,8 @@ TEST_F(TestMatmulClient, test_mx_matmul_client_fp8_ab) {
     KfcMsg kfcMsg;
     TBuffAddr tbufOutTmp2;
     tbufOutTmp2.logicPos = (uint8_t)(TPosition::A1);
-    tbufOutTmp2.dataLen = Ceil(tiling.Ka, BLOCK_CUBE) * BLOCK_CUBE * 
-        Ceil(tiling.N, BLOCK_CUBE) * BLOCK_CUBE * sizeof(fp8_e4m3fn_t);
+    tbufOutTmp2.dataLen =
+        Ceil(tiling.Ka, BLOCK_CUBE) * BLOCK_CUBE * Ceil(tiling.N, BLOCK_CUBE) * BLOCK_CUBE * sizeof(fp8_e4m3fn_t);
     tbufOutTmp2.bufferAddr = kfcMsg.body.quantScalar;
     tbufOutTmp2.absAddr = GetTPipePtr()->GetBaseAddr(static_cast<uint8_t>(TPosition::A1)) + tbufOutTmp2.bufferAddr;
     LocalTensor<fp8_e4m3fn_t> AL1Matrix;
@@ -137,7 +151,8 @@ TEST_F(TestMatmulClient, test_mx_matmul_client_fp8_ab) {
     mm0.CopyUbBToL1ForND(AL1Matrix, bufferRight, true);
 }
 
-TEST_F(TestMatmulClient, test_mx_matmul_client_fp4) {
+TEST_F(TestMatmulClient, test_mx_matmul_client_fp4)
+{
     TPipe pipe;
     TCubeTiling tiling;
 
@@ -164,8 +179,8 @@ TEST_F(TestMatmulClient, test_mx_matmul_client_fp4) {
     KfcMsg kfcMsg;
     TBuffAddr tbufOutTmp;
     tbufOutTmp.logicPos = (uint8_t)(TPosition::A1);
-    tbufOutTmp.dataLen = Ceil(tiling.Ka / NUM_THIRTYTWO, BLOCK_CUBE) * BLOCK_CUBE * 
-        Ceil(tiling.N, BLOCK_CUBE) * BLOCK_CUBE * sizeof(MX_T);
+    tbufOutTmp.dataLen = Ceil(tiling.Ka / NUM_THIRTYTWO, BLOCK_CUBE) * BLOCK_CUBE * Ceil(tiling.N, BLOCK_CUBE) *
+                         BLOCK_CUBE * sizeof(MX_T);
     tbufOutTmp.bufferAddr = kfcMsg.body.quantScalar;
     tbufOutTmp.absAddr = GetTPipePtr()->GetBaseAddr(static_cast<uint8_t>(TPosition::A1)) + tbufOutTmp.bufferAddr;
     LocalTensor<MX_T> l1Matrix;
@@ -176,7 +191,11 @@ TEST_F(TestMatmulClient, test_mx_matmul_client_fp4) {
     int32_t offset = 0;
     mm1.c0Size_ = fp4C0Size_;
     int32_t scaleK = Ceil(tiling.Ka, AscendC::Impl::MX_BASEK_FACTOR) * 2;
-    mm1.ND2ScaleZZ(reinterpret_cast<LocalTensor<uint8_t>&>(l1Matrix), reinterpret_cast<LocalTensor<uint8_t>&>(bufferMxLeft), tiling.N, Ceil(scaleK, fp4C0Size_) * fp4C0Size_, scaleK, offset);
-    mm1.CopyUbNZ2NZForScale(reinterpret_cast<LocalTensor<uint8_t>&>(l1Matrix), reinterpret_cast<LocalTensor<uint8_t>&>(bufferMxLeft), scaleK, Ceil(tiling.N, BLOCK_CUBE) * BLOCK_CUBE, offset);
+    mm1.ND2ScaleZZ(
+        reinterpret_cast<LocalTensor<uint8_t>&>(l1Matrix), reinterpret_cast<LocalTensor<uint8_t>&>(bufferMxLeft),
+        tiling.N, Ceil(scaleK, fp4C0Size_) * fp4C0Size_, scaleK, offset);
+    mm1.CopyUbNZ2NZForScale(
+        reinterpret_cast<LocalTensor<uint8_t>&>(l1Matrix), reinterpret_cast<LocalTensor<uint8_t>&>(bufferMxLeft),
+        scaleK, Ceil(tiling.N, BLOCK_CUBE) * BLOCK_CUBE, offset);
 }
-}
+} // namespace AscendC

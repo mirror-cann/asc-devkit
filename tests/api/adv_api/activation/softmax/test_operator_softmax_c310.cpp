@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -24,8 +24,8 @@ template <typename T1, typename T2, bool isBasicBlock = false, bool isDataFormat
 class KernelSoftmax {
 public:
     __aicore__ inline KernelSoftmax() {}
-    __aicore__ inline void Init(__gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, __gm__ uint8_t* dstGm,
-        uint32_t inheight, uint32_t inwidth)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, __gm__ uint8_t* dstGm, uint32_t inheight, uint32_t inwidth)
     {
         height = inheight;
         width = inwidth;
@@ -76,7 +76,7 @@ private:
         LocalTensor<T1> dstLocal = outQueueDst.AllocTensor<T1>();
 
         const uint32_t shapeDim = 2;
-        DataFormat dataFormat{ DataFormat::ND };
+        DataFormat dataFormat{DataFormat::ND};
         if (isDataFormatNZ) {
             dataFormat = DataFormat::NZ;
         }
@@ -87,61 +87,79 @@ private:
         srcLocal2.SetShapeInfo(srcShape);
         dstLocal.SetShapeInfo(srcShape);
 
-        SoftMaxShapeInfo alignSrcShape = { height, width, height, width };
-        SoftMaxShapeInfo unalignedSrcShape = { height, width, height, width - 8 };
+        SoftMaxShapeInfo alignSrcShape = {height, width, height, width};
+        SoftMaxShapeInfo unalignedSrcShape = {height, width, height, width - 8};
         SoftMaxTiling tiling;
 
-        SoftMax<T1, false, isBasicBlock, isDataFormatNZ>(srcLocal1, insumLocal, inmaxLocal, srcLocal1, tiling, alignSrcShape);
-        SoftMax<T1, false, isBasicBlock, isDataFormatNZ>(srcLocal1, insumLocal, inmaxLocal, srcLocal1, tiling, unalignedSrcShape);
+        SoftMax<T1, false, isBasicBlock, isDataFormatNZ>(
+            srcLocal1, insumLocal, inmaxLocal, srcLocal1, tiling, alignSrcShape);
+        SoftMax<T1, false, isBasicBlock, isDataFormatNZ>(
+            srcLocal1, insumLocal, inmaxLocal, srcLocal1, tiling, unalignedSrcShape);
         SoftMax<T1, false, isBasicBlock>(srcLocal1, srcLocal1, tiling, alignSrcShape);
         AdjustSoftMaxRes<T1, T2, isDataFormatNZ>(srcLocal1, inmaxLocal, 9, (T1)1.0, alignSrcShape);
         SoftMax<T1, false, isBasicBlock>(srcLocal1, srcLocal1, tiling, unalignedSrcShape);
         AdjustSoftMaxRes<T1, T2, isDataFormatNZ>(srcLocal1, inmaxLocal, 9, (T1)1.0, unalignedSrcShape);
-        SimpleSoftMax<T1, false, isBasicBlock, isDataFormatNZ>(dstLocal, insumLocal, inmaxLocal, srcLocal1, tiling, alignSrcShape);
-        SimpleSoftMax<T1, false, isBasicBlock, isDataFormatNZ>(dstLocal, insumLocal, inmaxLocal, srcLocal1, tiling, unalignedSrcShape);
-        SimpleSoftMax<T1, false, isBasicBlock, isDataFormatNZ, config>(dstLocal, insumLocal, inmaxLocal, srcLocal1, tiling, alignSrcShape);
-        SimpleSoftMax<T1, false, isBasicBlock, isDataFormatNZ, config>(dstLocal, insumLocal, inmaxLocal, srcLocal1, tiling, unalignedSrcShape);
+        SimpleSoftMax<T1, false, isBasicBlock, isDataFormatNZ>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal1, tiling, alignSrcShape);
+        SimpleSoftMax<T1, false, isBasicBlock, isDataFormatNZ>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal1, tiling, unalignedSrcShape);
+        SimpleSoftMax<T1, false, isBasicBlock, isDataFormatNZ, config>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal1, tiling, alignSrcShape);
+        SimpleSoftMax<T1, false, isBasicBlock, isDataFormatNZ, config>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal1, tiling, unalignedSrcShape);
 
         if constexpr (sizeof(T1) == sizeof(T2)) {
             AscendC::LocalTensor<uint8_t> sharedTmpBuffer;
             AscendC::PopStackBuffer<uint8_t, AscendC::TPosition::LCM>(sharedTmpBuffer);
             LogSoftMaxTiling logTiling;
-            LogSoftMax<T1, false, isDataFormatNZ>(srcLocal1, insumLocal, inmaxLocal, srcLocal1, sharedTmpBuffer, logTiling, alignSrcShape);
-            LogSoftMax<T1, false, isDataFormatNZ>(srcLocal1, insumLocal, inmaxLocal, srcLocal1, sharedTmpBuffer, logTiling, unalignedSrcShape);
+            LogSoftMax<T1, false, isDataFormatNZ>(
+                srcLocal1, insumLocal, inmaxLocal, srcLocal1, sharedTmpBuffer, logTiling, alignSrcShape);
+            LogSoftMax<T1, false, isDataFormatNZ>(
+                srcLocal1, insumLocal, inmaxLocal, srcLocal1, sharedTmpBuffer, logTiling, unalignedSrcShape);
         }
 
-        SoftmaxFlash<T1, false, isBasicBlock>(dstLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, insumLocal,
-            inmaxLocal, tiling, false, alignSrcShape);
-        SoftmaxFlash<T1, false, isBasicBlock>(dstLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, insumLocal,
-            inmaxLocal, tiling, false, unalignedSrcShape);
-        SoftmaxFlash<T1, false, isBasicBlock>(dstLocal, insumLocal, inmaxLocal, srcLocal2, expMaxTensor, insumLocal,
-            inmaxLocal, tiling, true, alignSrcShape);
-        SoftmaxFlash<T1, false, isBasicBlock>(dstLocal, insumLocal, inmaxLocal, srcLocal2, expMaxTensor, insumLocal,
-            inmaxLocal, tiling, true, unalignedSrcShape);
+        SoftmaxFlash<T1, false, isBasicBlock>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, insumLocal, inmaxLocal, tiling, false,
+            alignSrcShape);
+        SoftmaxFlash<T1, false, isBasicBlock>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, insumLocal, inmaxLocal, tiling, false,
+            unalignedSrcShape);
+        SoftmaxFlash<T1, false, isBasicBlock>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal2, expMaxTensor, insumLocal, inmaxLocal, tiling, true,
+            alignSrcShape);
+        SoftmaxFlash<T1, false, isBasicBlock>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal2, expMaxTensor, insumLocal, inmaxLocal, tiling, true,
+            unalignedSrcShape);
 
-        SoftmaxFlash<T1, false, isBasicBlock>(dstLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, insumLocal,
-            inmaxLocal, tiling, false);
-        SoftmaxFlash<T1, false, isBasicBlock>(dstLocal, insumLocal, inmaxLocal, srcLocal2, expMaxTensor, insumLocal,
-            inmaxLocal, tiling, true);
+        SoftmaxFlash<T1, false, isBasicBlock>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, insumLocal, inmaxLocal, tiling, false);
+        SoftmaxFlash<T1, false, isBasicBlock>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal2, expMaxTensor, insumLocal, inmaxLocal, tiling, true);
 
         SoftMaxTiling flashv2Tiling;
-        SoftmaxFlashV2<T1, false, false, isBasicBlock, isDataFormatNZ>(dstLocal, insumLocal, inmaxLocal, srcLocal1,
-            expMaxTensor, insumLocal, inmaxLocal, flashv2Tiling, alignSrcShape);
-        SoftmaxFlashV2<T1, false, false, isBasicBlock, isDataFormatNZ>(dstLocal, insumLocal, inmaxLocal, srcLocal1,
-            expMaxTensor, insumLocal, inmaxLocal, flashv2Tiling, unalignedSrcShape);
-        SoftmaxFlashV2<T1, true, false, isBasicBlock, isDataFormatNZ>(dstLocal, insumLocal, inmaxLocal, srcLocal2,
-            expMaxTensor, insumLocal, inmaxLocal, flashv2Tiling, alignSrcShape);
-        SoftmaxFlashV2<T1, true, false, isBasicBlock, isDataFormatNZ>(dstLocal, insumLocal, inmaxLocal, srcLocal2,
-            expMaxTensor, insumLocal, inmaxLocal, flashv2Tiling, unalignedSrcShape);
-        
+        SoftmaxFlashV2<T1, false, false, isBasicBlock, isDataFormatNZ>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, insumLocal, inmaxLocal, flashv2Tiling,
+            alignSrcShape);
+        SoftmaxFlashV2<T1, false, false, isBasicBlock, isDataFormatNZ>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, insumLocal, inmaxLocal, flashv2Tiling,
+            unalignedSrcShape);
+        SoftmaxFlashV2<T1, true, false, isBasicBlock, isDataFormatNZ>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal2, expMaxTensor, insumLocal, inmaxLocal, flashv2Tiling,
+            alignSrcShape);
+        SoftmaxFlashV2<T1, true, false, isBasicBlock, isDataFormatNZ>(
+            dstLocal, insumLocal, inmaxLocal, srcLocal2, expMaxTensor, insumLocal, inmaxLocal, flashv2Tiling,
+            unalignedSrcShape);
+
         if constexpr (Std::is_same<T1, half>::value && Std::is_same<T2, float>::value) {
             if (height == 8 && width == 512) {
                 SoftMaxTiling flashv3Tiling;
                 Duplicate(inmeanLocal, (float)9, height * 8);
-                SoftmaxFlashV3<T1, T2, false>(dstLocal, inmeanLocal, insumLocal, inmaxLocal, srcLocal1,
-                    expMaxTensor, inmeanLocal, insumLocal, inmaxLocal, flashv3Tiling, {8, 512, 8, 512, 2, 8, 0.9375});
-                SoftmaxFlashV3<T1, T2, true>(dstLocal, inmeanLocal, insumLocal, inmaxLocal, srcLocal1,
-                    expMaxTensor, inmeanLocal, insumLocal, inmaxLocal, flashv3Tiling, {8, 512, 8, 512, 2, 8, 0.9375});
+                SoftmaxFlashV3<T1, T2, false>(
+                    dstLocal, inmeanLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, inmeanLocal, insumLocal,
+                    inmaxLocal, flashv3Tiling, {8, 512, 8, 512, 2, 8, 0.9375});
+                SoftmaxFlashV3<T1, T2, true>(
+                    dstLocal, inmeanLocal, insumLocal, inmaxLocal, srcLocal1, expMaxTensor, inmeanLocal, insumLocal,
+                    inmaxLocal, flashv3Tiling, {8, 512, 8, 512, 2, 8, 0.9375});
             }
         }
 
@@ -184,8 +202,8 @@ private:
 } // namespace AscendC
 
 template <typename T1, typename T2, bool isBasicBlock = false, bool isDataFormatNZ = false>
-__global__ __aicore__ void MainSoftmax(__gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm,
-    uint32_t height, uint32_t width)
+__global__ __aicore__ void MainSoftmax(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, uint32_t height, uint32_t width)
 {
     AscendC::KernelSoftmax<T1, T2, isBasicBlock, isDataFormatNZ> op;
     op.Init(src0Gm, src1Gm, dstGm, height, width);
@@ -201,29 +219,24 @@ struct SoftMaxTestParams {
 
 class SoftMaxTestsuite : public testing::Test, public testing::WithParamInterface<SoftMaxTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
 
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_SOFTMAX, SoftMaxTestsuite,
-    ::testing::Values(SoftMaxTestParams{ 2, 128, 144, MainSoftmax<half, half, false, true> },
-    SoftMaxTestParams{ 2, 16, 16, MainSoftmax<half, half, false, false> },
-    SoftMaxTestParams{ 2, 16, 32, MainSoftmax<half, half, false, false> },
-    SoftMaxTestParams{ 2, 16, 16, MainSoftmax<half, half, false, true> },
-    SoftMaxTestParams{ 2, 129, 256, MainSoftmax<half, half> },
-    SoftMaxTestParams{ 2, 128, 256, MainSoftmax<half, half> },
-    SoftMaxTestParams{ 2, 64, 128, MainSoftmax<half, float> },
-    SoftMaxTestParams{ 2, 8, 512, MainSoftmax<half, float> },
-    SoftMaxTestParams{ 2, 64, 128, MainSoftmax<half, float, false, true> },
-    SoftMaxTestParams{ 4, 64, 128, MainSoftmax<float, float> },
-    SoftMaxTestParams{ 4, 64, 128, MainSoftmax<float, float, false, true> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_SOFTMAX, SoftMaxTestsuite,
+    ::testing::Values(
+        SoftMaxTestParams{2, 128, 144, MainSoftmax<half, half, false, true>},
+        SoftMaxTestParams{2, 16, 16, MainSoftmax<half, half, false, false>},
+        SoftMaxTestParams{2, 16, 32, MainSoftmax<half, half, false, false>},
+        SoftMaxTestParams{2, 16, 16, MainSoftmax<half, half, false, true>},
+        SoftMaxTestParams{2, 129, 256, MainSoftmax<half, half>},
+        SoftMaxTestParams{2, 128, 256, MainSoftmax<half, half>},
+        SoftMaxTestParams{2, 64, 128, MainSoftmax<half, float>}, SoftMaxTestParams{2, 8, 512, MainSoftmax<half, float>},
+        SoftMaxTestParams{2, 64, 128, MainSoftmax<half, float, false, true>},
+        SoftMaxTestParams{4, 64, 128, MainSoftmax<float, float>},
+        SoftMaxTestParams{4, 64, 128, MainSoftmax<float, float, false, true>}));
 
 TEST_P(SoftMaxTestsuite, SoftMaxOpTestCase)
 {

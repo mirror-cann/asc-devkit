@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -17,8 +17,8 @@ using namespace AscendC;
 
 namespace testCase {
 // 场景13
-__aicore__ inline void GetConfusionTranspose021TilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose021TilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t shapeDims = srcShape.shapeDim;
     uint32_t dim0 = 1;
@@ -29,15 +29,15 @@ __aicore__ inline void GetConfusionTranspose021TilingInfo(const ShapeInfo srcSha
         dim1 = srcShape.shape[1];
         dim2 = srcShape.shape[2];
     }
- 
+
     tiling.param0 = dim0;
     tiling.param1 = dim1;
     tiling.param2 = dim2;
 }
 
 // 场景14
-__aicore__ inline void GetConfusionTranspose102TilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose102TilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t shapeDims = srcShape.shapeDim;
     uint32_t dim0 = srcShape.shape[0];
@@ -49,8 +49,8 @@ __aicore__ inline void GetConfusionTranspose102TilingInfo(const ShapeInfo srcSha
 }
 
 // 场景15
-__aicore__ inline void GetConfusionTranspose210TilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose210TilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t shapeDims = srcShape.shapeDim;
     uint32_t dim0 = srcShape.shape[0];
@@ -61,8 +61,9 @@ __aicore__ inline void GetConfusionTranspose210TilingInfo(const ShapeInfo srcSha
     tiling.param2 = dim2;
 }
 
-__aicore__ inline void GetConfusionTransposeTilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, const TransposeType transposeTypeIn, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTransposeTilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize,
+    const TransposeType transposeTypeIn, ConfusionTransposeTiling& tiling)
 {
     if (transposeTypeIn == TransposeType::TRANSPOSE_ND2ND_021) {
         GetConfusionTranspose021TilingInfo(srcShape, stackBufferSize, typeSize, tiling);
@@ -73,26 +74,24 @@ __aicore__ inline void GetConfusionTransposeTilingInfo(const ShapeInfo srcShape,
     }
 }
 
-
 template <typename T, uint32_t srcExtent, uint32_t dstExtent, uint32_t dim0Extent>
 class KernelConfusionTransposeDavid {
 public:
-    __aicore__ inline KernelConfusionTransposeDavid()
-    {}
+    __aicore__ inline KernelConfusionTransposeDavid() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *srcGm, __gm__ uint8_t *dstGm, uint32_t dim0In, uint32_t dim1In,
-        uint32_t dim2In, TransposeType transposetypeIn)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* srcGm, __gm__ uint8_t* dstGm, uint32_t dim0In, uint32_t dim1In, uint32_t dim2In,
+        TransposeType transposetypeIn)
     {
         dim0 = dim0In;
         dim1 = dim1In;
         dim2 = dim2In;
         transposetype = transposetypeIn;
-        srcGlobal.SetGlobalBuffer((__gm__ T *)srcGm);
-        dstGlobal.SetGlobalBuffer((__gm__ T *)dstGm);
+        srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
+        dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
         constexpr int alginSize = 32 / sizeof(T);
         pipe.InitBuffer(inQueueSrcVecIn, 1, (srcExtent + alginSize - 1) / alginSize * alginSize * sizeof(T));
         pipe.InitBuffer(inQueueSrcVecOut, 1, srcExtent * sizeof(T));
-        
     }
     __aicore__ inline void Process()
     {
@@ -108,7 +107,8 @@ private:
         DataCopyPadExtParams<T> padParams;
         DataCopyExtParams copyParams;
         copyParams.blockCount = 1;
-        copyParams.blockLen = static_cast<uint32_t>(srcExtent * sizeof(T));;
+        copyParams.blockLen = static_cast<uint32_t>(srcExtent * sizeof(T));
+        ;
         copyParams.srcStride = 0;
         copyParams.dstStride = 0;
         padParams.isPad = 0;
@@ -123,7 +123,7 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
 
-        if constexpr(dim0Extent == 0) {
+        if constexpr (dim0Extent == 0) {
             uint32_t srcOriShape[] = {dim1, dim2};
             uint32_t srcShape[] = {dim1, dim2};
             ShapeInfo srcShapeInfo(2, srcShape, 2, srcOriShape, DataFormat::ND);
@@ -164,7 +164,7 @@ private:
 
             inQueueSrcVecOut.EnQue<T>(dstLocal);
             inQueueSrcVecIn.FreeTensor(srcLocal);
-        } 
+        }
     }
     __aicore__ inline void CopyOut()
     {
@@ -190,9 +190,11 @@ private:
     uint32_t dim2;
     TransposeType transposetype;
 };
-}  // namespace testCase
+} // namespace testCase
 
-template <typename type, int32_t srcExtent, int32_t dstExtent, uint32_t dim0, uint32_t dim1, uint32_t dim2, uint32_t tranModeIn>
+template <
+    typename type, int32_t srcExtent, int32_t dstExtent, uint32_t dim0, uint32_t dim1, uint32_t dim2,
+    uint32_t tranModeIn>
 __aicore__ inline void MainConfusionTranposeTest(GM_ADDR srcGm, GM_ADDR dstGm)
 {
     testCase::KernelConfusionTransposeDavid<type, srcExtent, dstExtent, dim0> op;
@@ -201,41 +203,41 @@ __aicore__ inline void MainConfusionTranposeTest(GM_ADDR srcGm, GM_ADDR dstGm)
 }
 
 struct ConfusionTranposeParams {
-    void (*cal_func)(uint8_t *, uint8_t *);
+    void (*cal_func)(uint8_t*, uint8_t*);
 };
 
 class ConfusionTranposeTestsuite : public testing::Test, public testing::WithParamInterface<ConfusionTranposeParams> {};
 
-INSTANTIATE_TEST_CASE_P(TEST_ConfusionTranpose, ConfusionTranposeTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_ConfusionTranpose, ConfusionTranposeTestsuite,
     ::testing::Values(
-    ConfusionTranposeParams{ MainConfusionTranposeTest<float, 64, 64, 0, 2, 32, 13> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<uint32_t, 64, 64, 0, 2, 32, 13> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<int32_t, 64, 64, 0, 2, 32, 13> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<half, 256, 256, 0, 2, 128, 13> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<int16_t, 256, 256, 0, 2, 128, 13> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<uint16_t, 256, 256, 0, 2, 128, 13> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<bfloat16_t, 256, 256, 0, 2, 128, 13> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<int8_t, 512, 512, 0, 2, 256, 13> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<uint8_t, 512, 512, 0, 2, 256, 13> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<float, 192, 192, 3, 2, 32, 14> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<uint32_t, 192, 192, 3, 2, 32, 14> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<int32_t, 192, 192, 3, 2, 32, 14> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<half, 768, 768, 3, 2, 128, 14> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<int16_t, 768, 768, 3, 2, 128, 14> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<uint16_t, 768, 768, 3, 2, 128, 14> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<bfloat16_t, 768, 768, 3, 2, 128, 14> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<int8_t, 1536, 1536, 3, 2, 256, 14> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<uint8_t, 1536, 1536, 3, 2, 256, 14> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<float, 192, 192, 3, 2, 32, 15> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<uint32_t, 192, 192, 3, 2, 32, 15> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<int32_t, 192, 192, 3, 2, 32, 15> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<half, 768, 768, 3, 2, 128, 15> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<int16_t, 768, 768, 3, 2, 128, 15> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<uint16_t, 768, 768, 3, 2, 128, 15> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<bfloat16_t, 768, 768, 3, 2, 128, 15> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<int8_t, 1536, 1536, 3, 2, 256, 15> },
-    ConfusionTranposeParams{ MainConfusionTranposeTest<uint8_t, 1536, 1536, 3, 2, 256, 15> }));
-
+        ConfusionTranposeParams{MainConfusionTranposeTest<float, 64, 64, 0, 2, 32, 13>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<uint32_t, 64, 64, 0, 2, 32, 13>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<int32_t, 64, 64, 0, 2, 32, 13>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<half, 256, 256, 0, 2, 128, 13>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<int16_t, 256, 256, 0, 2, 128, 13>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<uint16_t, 256, 256, 0, 2, 128, 13>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<bfloat16_t, 256, 256, 0, 2, 128, 13>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<int8_t, 512, 512, 0, 2, 256, 13>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<uint8_t, 512, 512, 0, 2, 256, 13>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<float, 192, 192, 3, 2, 32, 14>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<uint32_t, 192, 192, 3, 2, 32, 14>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<int32_t, 192, 192, 3, 2, 32, 14>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<half, 768, 768, 3, 2, 128, 14>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<int16_t, 768, 768, 3, 2, 128, 14>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<uint16_t, 768, 768, 3, 2, 128, 14>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<bfloat16_t, 768, 768, 3, 2, 128, 14>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<int8_t, 1536, 1536, 3, 2, 256, 14>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<uint8_t, 1536, 1536, 3, 2, 256, 14>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<float, 192, 192, 3, 2, 32, 15>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<uint32_t, 192, 192, 3, 2, 32, 15>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<int32_t, 192, 192, 3, 2, 32, 15>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<half, 768, 768, 3, 2, 128, 15>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<int16_t, 768, 768, 3, 2, 128, 15>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<uint16_t, 768, 768, 3, 2, 128, 15>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<bfloat16_t, 768, 768, 3, 2, 128, 15>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<int8_t, 1536, 1536, 3, 2, 256, 15>},
+        ConfusionTranposeParams{MainConfusionTranposeTest<uint8_t, 1536, 1536, 3, 2, 256, 15>}));
 
 TEST_P(ConfusionTranposeTestsuite, ConfusionTranposeTestCase)
 {
@@ -252,8 +254,8 @@ TEST_P(ConfusionTranposeTestsuite, ConfusionTranposeTestCase)
 // 场景1
 namespace AscendC {
 // 场景1、2: srcShape[B, A1, A2, A3]
-__aicore__ inline void GetConfusionTranspose0213TilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose0213TilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t blockSize = ONE_BLK_SIZE / typeSize;
     uint32_t shapeB = srcShape.originalShape[0];
@@ -293,8 +295,8 @@ __aicore__ inline void GetConfusionTranspose0213TilingInfo(const ShapeInfo srcSh
 }
 
 // 场景3：srcShape[B, N, S, H/N]
-__aicore__ inline void GetConfusionTranspose2NZ012NTilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose2NZ012NTilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t blockSize = ONE_BLK_SIZE / typeSize;
     uint32_t shapeB = srcShape.originalShape[0];
@@ -334,8 +336,8 @@ __aicore__ inline void GetConfusionTranspose2NZ012NTilingInfo(const ShapeInfo sr
 }
 
 // 场景4：srcShape[B, N, S, H/N]
-__aicore__ inline void GetConfusionTranspose2ND012NTilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose2ND012NTilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t blockSize = ONE_BLK_SIZE / typeSize;
     uint32_t shapeB = srcShape.originalShape[0];
@@ -377,8 +379,8 @@ __aicore__ inline void GetConfusionTranspose2ND012NTilingInfo(const ShapeInfo sr
 }
 
 // 场景5、6：srcShape[B, N, S, H/N]
-__aicore__ inline void GetConfusionTranspose012TilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose012TilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t blockSize = ONE_BLK_SIZE / typeSize;
     uint32_t shapeB = srcShape.originalShape[0];
@@ -414,8 +416,8 @@ __aicore__ inline void GetConfusionTranspose012TilingInfo(const ShapeInfo srcSha
 }
 
 // 场景7：srcShape[height, width]
-__aicore__ inline void GetConfusionTransposeOnlyTilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTransposeOnlyTilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t blockSize = ONE_BLK_SIZE / typeSize;
     uint32_t height = srcShape.originalShape[0];
@@ -432,8 +434,9 @@ __aicore__ inline void GetConfusionTransposeOnlyTilingInfo(const ShapeInfo srcSh
     tiling.param5 = repeat;
 }
 
-__aicore__ inline void GetConfusionTransposeTilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, const uint32_t transposeTypeIn, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTransposeTilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const uint32_t transposeTypeIn,
+    ConfusionTransposeTiling& tiling)
 {
     if (transposeTypeIn == 1 || transposeTypeIn == 2) {
         GetConfusionTranspose0213TilingInfo(srcShape, stackBufferSize, typeSize, tiling);
@@ -451,9 +454,10 @@ __aicore__ inline void GetConfusionTransposeTilingInfo(const ShapeInfo srcShape,
 template <typename T>
 class KernelConfusionTransposeFirst {
 public:
-    __aicore__ inline KernelConfusionTransposeFirst() { }
+    __aicore__ inline KernelConfusionTransposeFirst() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
         TransposeType transposetypeIn)
     {
         A1 = A1In;
@@ -484,7 +488,7 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
         uint32_t srcOriShape[] = {1, A1, A2, A3};
-        uint32_t srcShape[] = { 1, A1, A3 / 16, A2 / 16, 16, 16 };
+        uint32_t srcShape[] = {1, A1, A3 / 16, A2 / 16, 16, 16};
         ShapeInfo srcShapeInfo(6, srcShape, 4, srcOriShape, DataFormat::NZ);
 
         uint32_t dstOriShape[] = {1, A2, A1, A3};
@@ -519,8 +523,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void ConfusionTransposeFirst(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t A1In, uint32_t A2In,
-    uint32_t A3In, TransposeType transposetypeIn)
+__global__ __aicore__ void ConfusionTransposeFirst(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
+    TransposeType transposetypeIn)
 {
     AscendC::KernelConfusionTransposeFirst<T> op;
     op.Init(dstGm, srcGm, A1In, A2In, A3In, transposetypeIn);
@@ -537,21 +542,19 @@ struct ConfusionTransposeFirstTestParams {
 };
 
 class ConfusionTransposeFirstTestsuite : public testing::Test,
-    public testing::WithParamInterface<ConfusionTransposeFirstTestParams> {
+                                         public testing::WithParamInterface<ConfusionTransposeFirstTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeFirstTestsuite,
-    ::testing::Values(ConfusionTransposeFirstTestParams { 2, ConfusionTransposeFirst<half>, 2, 64, 32, TransposeType::TRANSPOSE_NZ2ND_0213 },
-    ConfusionTransposeFirstTestParams { 4, ConfusionTransposeFirst<float>, 2, 64, 32, TransposeType::TRANSPOSE_NZ2ND_0213 }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeFirstTestsuite,
+    ::testing::Values(
+        ConfusionTransposeFirstTestParams{
+            2, ConfusionTransposeFirst<half>, 2, 64, 32, TransposeType::TRANSPOSE_NZ2ND_0213},
+        ConfusionTransposeFirstTestParams{
+            4, ConfusionTransposeFirst<float>, 2, 64, 32, TransposeType::TRANSPOSE_NZ2ND_0213}));
 
 TEST_P(ConfusionTransposeFirstTestsuite, ConfusionTransposeFirstTestCase)
 {
@@ -570,9 +573,10 @@ namespace AscendC {
 template <typename T>
 class KernelConfusionTransposeSecond {
 public:
-    __aicore__ inline KernelConfusionTransposeSecond() { }
+    __aicore__ inline KernelConfusionTransposeSecond() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
         TransposeType transposetypeIn)
     {
         A1 = A1In;
@@ -603,7 +607,7 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
         uint32_t srcOriShape[] = {1, A1, A2, A3};
-        uint32_t srcShape[] = { 1, A1, A3 / 16, A2 / 16, 16, 16 };
+        uint32_t srcShape[] = {1, A1, A3 / 16, A2 / 16, 16, 16};
         ShapeInfo srcShapeInfo(6, srcShape, 4, srcOriShape, DataFormat::NZ);
 
         uint32_t dstOriShape[] = {1, A2, A1, A3};
@@ -638,8 +642,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void ConfusionTransposeSecond(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t A1In, uint32_t A2In,
-    uint32_t A3In, TransposeType transposetypeIn)
+__global__ __aicore__ void ConfusionTransposeSecond(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
+    TransposeType transposetypeIn)
 {
     AscendC::KernelConfusionTransposeSecond<T> op;
     op.Init(dstGm, srcGm, A1In, A2In, A3In, transposetypeIn);
@@ -656,25 +661,27 @@ struct ConfusionTransposeSecondTestParams {
 };
 
 class ConfusionTransposeSecondTestsuite : public testing::Test,
-    public testing::WithParamInterface<ConfusionTransposeSecondTestParams> {
+                                          public testing::WithParamInterface<ConfusionTransposeSecondTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeSecondTestsuite,
-    ::testing::Values(ConfusionTransposeSecondTestParams { 2, ConfusionTransposeSecond<half>, 16, 80, 32, TransposeType::TRANSPOSE_NZ2NZ_0213 },
-    ConfusionTransposeSecondTestParams { 2, ConfusionTransposeSecond<half>, 32, 48, 16, TransposeType::TRANSPOSE_NZ2NZ_0213 },
-    ConfusionTransposeSecondTestParams { 2, ConfusionTransposeSecond<half>, 16, 32, 32, TransposeType::TRANSPOSE_NZ2NZ_0213 },
-    // ConfusionTransposeSecondTestParams { 4, ConfusionTransposeSecond<float>, 16, 80, 32, TransposeType::TRANSPOSE_NZ2NZ_0213 },
-    ConfusionTransposeSecondTestParams { 4, ConfusionTransposeSecond<float>, 32, 32, 16, TransposeType::TRANSPOSE_NZ2NZ_0213 },
-    ConfusionTransposeSecondTestParams { 4, ConfusionTransposeSecond<float>, 16, 32, 32, TransposeType::TRANSPOSE_NZ2NZ_0213 }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeSecondTestsuite,
+    ::testing::Values(
+        ConfusionTransposeSecondTestParams{
+            2, ConfusionTransposeSecond<half>, 16, 80, 32, TransposeType::TRANSPOSE_NZ2NZ_0213},
+        ConfusionTransposeSecondTestParams{
+            2, ConfusionTransposeSecond<half>, 32, 48, 16, TransposeType::TRANSPOSE_NZ2NZ_0213},
+        ConfusionTransposeSecondTestParams{
+            2, ConfusionTransposeSecond<half>, 16, 32, 32, TransposeType::TRANSPOSE_NZ2NZ_0213},
+        // ConfusionTransposeSecondTestParams { 4, ConfusionTransposeSecond<float>, 16, 80, 32,
+        // TransposeType::TRANSPOSE_NZ2NZ_0213 },
+        ConfusionTransposeSecondTestParams{
+            4, ConfusionTransposeSecond<float>, 32, 32, 16, TransposeType::TRANSPOSE_NZ2NZ_0213},
+        ConfusionTransposeSecondTestParams{
+            4, ConfusionTransposeSecond<float>, 16, 32, 32, TransposeType::TRANSPOSE_NZ2NZ_0213}));
 
 TEST_P(ConfusionTransposeSecondTestsuite, ConfusionTransposeSecondTestCase)
 {
@@ -693,9 +700,10 @@ namespace AscendC {
 template <typename T>
 class KernelConfusionTransposeThird {
 public:
-    __aicore__ inline KernelConfusionTransposeThird() { }
+    __aicore__ inline KernelConfusionTransposeThird() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
         uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
     {
         N = NIn;
@@ -708,7 +716,7 @@ public:
 
         hAlign = hBlockNum * 16;
         hnDivAlign = hnDivBlockNum * 16;
-        gap = hnDivAlign - H/N;
+        gap = hnDivAlign - H / N;
 
         srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
@@ -735,11 +743,11 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
         uint32_t srcOriShape[] = {1, S, H};
-        uint32_t srcShape[] = { 1, (H + 16-1)/16, S/16, 16, 16 };
+        uint32_t srcShape[] = {1, (H + 16 - 1) / 16, S / 16, 16, 16};
         ShapeInfo srcShapeInfo(5, srcShape, 3, srcOriShape, DataFormat::NZ);
 
-        uint32_t dstOriShape[] = { 1, N, S, H / N };
-        uint32_t dstShape[] = { 1, N, (H / N + 16-1)/16, S/16, 16, 16 };
+        uint32_t dstOriShape[] = {1, N, S, H / N};
+        uint32_t dstShape[] = {1, N, (H / N + 16 - 1) / 16, S / 16, 16, 16};
         ShapeInfo dstShapeInfo(6, dstShape, 4, dstOriShape, DataFormat::NZ);
 
         LocalTensor<T> stackBuffer;
@@ -772,8 +780,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void ConfusionTransposeThird(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn,
-    uint32_t HIn, uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
+__global__ __aicore__ void ConfusionTransposeThird(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn, uint32_t hnDivBlockNumIn,
+    uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
 {
     AscendC::KernelConfusionTransposeThird<T> op;
     op.Init(dstGm, srcGm, NIn, SIn, HIn, hnDivBlockNumIn, hBlockNumIn, sBlockNumIn, transposetypeIn);
@@ -793,26 +802,29 @@ struct ConfusionTransposeThirdTestParams {
 };
 
 class ConfusionTransposeThirdTestsuite : public testing::Test,
-    public testing::WithParamInterface<ConfusionTransposeThirdTestParams> {
+                                         public testing::WithParamInterface<ConfusionTransposeThirdTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeThirdTestsuite,
-    ::testing::Values(ConfusionTransposeThirdTestParams { 2, ConfusionTransposeThird<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    ConfusionTransposeThirdTestParams { 2, ConfusionTransposeThird<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    ConfusionTransposeThirdTestParams { 2, ConfusionTransposeThird<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    ConfusionTransposeThirdTestParams { 2, ConfusionTransposeThird<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    ConfusionTransposeThirdTestParams { 4, ConfusionTransposeThird<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    ConfusionTransposeThirdTestParams { 4, ConfusionTransposeThird<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    ConfusionTransposeThirdTestParams { 4, ConfusionTransposeThird<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeThirdTestsuite,
+    ::testing::Values(
+        ConfusionTransposeThirdTestParams{
+            2, ConfusionTransposeThird<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        ConfusionTransposeThirdTestParams{
+            2, ConfusionTransposeThird<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        ConfusionTransposeThirdTestParams{
+            2, ConfusionTransposeThird<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        ConfusionTransposeThirdTestParams{
+            2, ConfusionTransposeThird<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        ConfusionTransposeThirdTestParams{
+            4, ConfusionTransposeThird<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        ConfusionTransposeThirdTestParams{
+            4, ConfusionTransposeThird<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        ConfusionTransposeThirdTestParams{
+            4, ConfusionTransposeThird<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N}));
 
 TEST_P(ConfusionTransposeThirdTestsuite, ConfusionTransposeThirdTestCase)
 {
@@ -820,7 +832,9 @@ TEST_P(ConfusionTransposeThirdTestsuite, ConfusionTransposeThirdTestCase)
     uint8_t srcGm[param.hBlockNumIn * param.sBlockNumIn * 16 * 16 * param.typeSize] = {0};
     uint8_t dstGm[param.NIn * param.sBlockNumIn * param.hnDivBlockNumIn * 16 * 16 * param.typeSize] = {0};
 
-    param.cal_func(dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn, param.transposetypeIn);
+    param.cal_func(
+        dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn,
+        param.transposetypeIn);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
@@ -831,9 +845,10 @@ namespace AscendC {
 template <typename T>
 class KernelConfusionTransposeFourth {
 public:
-    __aicore__ inline KernelConfusionTransposeFourth() { }
+    __aicore__ inline KernelConfusionTransposeFourth() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
         uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
     {
         N = NIn;
@@ -846,7 +861,7 @@ public:
 
         hAlign = hBlockNum * 16;
         hnDivAlign = hnDivBlockNum * 16;
-        gap = hnDivAlign - H/N;
+        gap = hnDivAlign - H / N;
 
         srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
@@ -873,11 +888,11 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
         uint32_t srcOriShape[] = {1, S, H};
-        uint32_t srcShape[] = { 1, (H + 16-1)/16, S/16, 16, 16 };
+        uint32_t srcShape[] = {1, (H + 16 - 1) / 16, S / 16, 16, 16};
         ShapeInfo srcShapeInfo(5, srcShape, 3, srcOriShape, DataFormat::NZ);
 
-        uint32_t dstOriShape[] = { 1, N, S, H / N };
-        uint32_t dstShape[] = { 1, N, (H / N + 16-1)/16, S/16, 16, 16 };
+        uint32_t dstOriShape[] = {1, N, S, H / N};
+        uint32_t dstShape[] = {1, N, (H / N + 16 - 1) / 16, S / 16, 16, 16};
         ShapeInfo dstShapeInfo(6, dstShape, 4, dstOriShape, DataFormat::NZ);
 
         LocalTensor<T> stackBuffer;
@@ -910,8 +925,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void ConfusionTransposeFourth(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn,
-    uint32_t HIn, uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
+__global__ __aicore__ void ConfusionTransposeFourth(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn, uint32_t hnDivBlockNumIn,
+    uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
 {
     AscendC::KernelConfusionTransposeFourth<T> op;
     op.Init(dstGm, srcGm, NIn, SIn, HIn, hnDivBlockNumIn, hBlockNumIn, sBlockNumIn, transposetypeIn);
@@ -931,26 +947,29 @@ struct ConfusionTransposeFourthTestParams {
 };
 
 class ConfusionTransposeFourthTestsuite : public testing::Test,
-    public testing::WithParamInterface<ConfusionTransposeFourthTestParams> {
+                                          public testing::WithParamInterface<ConfusionTransposeFourthTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeFourthTestsuite,
-    ::testing::Values(ConfusionTransposeFourthTestParams { 2, ConfusionTransposeFourth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFourthTestParams { 2, ConfusionTransposeFourth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFourthTestParams { 2, ConfusionTransposeFourth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFourthTestParams { 2, ConfusionTransposeFourth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFourthTestParams { 4, ConfusionTransposeFourth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFourthTestParams { 4, ConfusionTransposeFourth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFourthTestParams { 4, ConfusionTransposeFourth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeFourthTestsuite,
+    ::testing::Values(
+        ConfusionTransposeFourthTestParams{
+            2, ConfusionTransposeFourth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFourthTestParams{
+            2, ConfusionTransposeFourth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFourthTestParams{
+            2, ConfusionTransposeFourth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFourthTestParams{
+            2, ConfusionTransposeFourth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFourthTestParams{
+            4, ConfusionTransposeFourth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFourthTestParams{
+            4, ConfusionTransposeFourth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFourthTestParams{
+            4, ConfusionTransposeFourth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N}));
 
 TEST_P(ConfusionTransposeFourthTestsuite, ConfusionTransposeFourthTestCase)
 {
@@ -958,21 +977,23 @@ TEST_P(ConfusionTransposeFourthTestsuite, ConfusionTransposeFourthTestCase)
     uint8_t srcGm[param.hBlockNumIn * param.sBlockNumIn * 16 * 16 * param.typeSize] = {0};
     uint8_t dstGm[param.NIn * param.sBlockNumIn * param.hnDivBlockNumIn * 16 * 16 * param.typeSize] = {0};
 
-    param.cal_func(dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn, param.transposetypeIn);
+    param.cal_func(
+        dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn,
+        param.transposetypeIn);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
 }
-
 
 // 场景5
 namespace AscendC {
 template <typename T>
 class KernelConfusionTransposeFifth {
 public:
-    __aicore__ inline KernelConfusionTransposeFifth() { }
+    __aicore__ inline KernelConfusionTransposeFifth() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
         uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
     {
         InitSocState();
@@ -1012,8 +1033,8 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
 
-        uint32_t srcOriShape[] = { 1, N, S, H / N };
-        uint32_t srcShape[] = { 1, N, static_cast<int32_t>(hnDivBlockNum), S / 16, 16, 16 };
+        uint32_t srcOriShape[] = {1, N, S, H / N};
+        uint32_t srcShape[] = {1, N, static_cast<int32_t>(hnDivBlockNum), S / 16, 16, 16};
         ShapeInfo srcShapeInfo(6, srcShape, 4, srcOriShape, DataFormat::NZ);
 
         uint32_t dstOriShape[] = {1, S, H};
@@ -1029,7 +1050,7 @@ private:
 
         uint64_t mask[2];
         mask[1] = 0;
-        mask[0] = ((1 << (gap)) - 1) << (16-gap);
+        mask[0] = ((1 << (gap)) - 1) << (16 - gap);
         uint32_t tensorOffset = (hBlockNum - 1) * 16;
         uint32_t dstRepeatStride = (hBlockNum * 16) * sizeof(T) / 32;
         AscendC::Duplicate(dstLocal[tensorOffset], static_cast<T>(0), mask, S, 1, dstRepeatStride);
@@ -1057,8 +1078,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void ConfusionTransposeFifth(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn,
-    uint32_t HIn, uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
+__global__ __aicore__ void ConfusionTransposeFifth(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn, uint32_t hnDivBlockNumIn,
+    uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
 {
     AscendC::KernelConfusionTransposeFifth<T> op;
     op.Init(dstGm, srcGm, NIn, SIn, HIn, hnDivBlockNumIn, hBlockNumIn, sBlockNumIn, transposetypeIn);
@@ -1078,26 +1100,29 @@ struct ConfusionTransposeFifthTestParams {
 };
 
 class ConfusionTransposeFifthTestsuite : public testing::Test,
-    public testing::WithParamInterface<ConfusionTransposeFifthTestParams> {
+                                         public testing::WithParamInterface<ConfusionTransposeFifthTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeFifthTestsuite,
-    ::testing::Values(ConfusionTransposeFifthTestParams { 2, ConfusionTransposeFifth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFifthTestParams { 2, ConfusionTransposeFifth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFifthTestParams { 2, ConfusionTransposeFifth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFifthTestParams { 2, ConfusionTransposeFifth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFifthTestParams { 4, ConfusionTransposeFifth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFifthTestParams { 4, ConfusionTransposeFifth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    ConfusionTransposeFifthTestParams { 4, ConfusionTransposeFifth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeFifthTestsuite,
+    ::testing::Values(
+        ConfusionTransposeFifthTestParams{
+            2, ConfusionTransposeFifth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFifthTestParams{
+            2, ConfusionTransposeFifth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFifthTestParams{
+            2, ConfusionTransposeFifth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFifthTestParams{
+            2, ConfusionTransposeFifth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFifthTestParams{
+            4, ConfusionTransposeFifth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFifthTestParams{
+            4, ConfusionTransposeFifth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        ConfusionTransposeFifthTestParams{
+            4, ConfusionTransposeFifth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N}));
 
 TEST_P(ConfusionTransposeFifthTestsuite, ConfusionTransposeFifthTestCase)
 {
@@ -1105,21 +1130,23 @@ TEST_P(ConfusionTransposeFifthTestsuite, ConfusionTransposeFifthTestCase)
     uint8_t srcGm[param.NIn * param.sBlockNumIn * param.hnDivBlockNumIn * 16 * 16 * param.typeSize] = {0};
     uint8_t dstGm[param.hBlockNumIn * param.sBlockNumIn * 16 * 16 * param.typeSize] = {0};
 
-    param.cal_func(dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn, param.transposetypeIn);
+    param.cal_func(
+        dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn,
+        param.transposetypeIn);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
 }
-
 
 // 场景6
 namespace AscendC {
 template <typename T>
 class KernelConfusionTransposeSixth {
 public:
-    __aicore__ inline KernelConfusionTransposeSixth() { }
+    __aicore__ inline KernelConfusionTransposeSixth() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
         uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
     {
         InitSocState();
@@ -1159,12 +1186,12 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
 
-        uint32_t srcOriShape[] = { 1, N, S, H / N };
-        uint32_t srcShape[] = { 1, N, static_cast<int32_t>(hnDivBlockNum), S / 16, 16, 16 };
+        uint32_t srcOriShape[] = {1, N, S, H / N};
+        uint32_t srcShape[] = {1, N, static_cast<int32_t>(hnDivBlockNum), S / 16, 16, 16};
         ShapeInfo srcShapeInfo(6, srcShape, 4, srcOriShape, DataFormat::NZ);
 
         uint32_t dstOriShape[] = {1, S, H};
-        uint32_t dstShape[] = { 1, H / 16, S / 16, 16, 16 };
+        uint32_t dstShape[] = {1, H / 16, S / 16, 16, 16};
         ShapeInfo dstShapeInfo(5, dstShape, 3, dstOriShape, DataFormat::NZ);
 
         LocalTensor<T> stackBuffer;
@@ -1176,7 +1203,7 @@ private:
 
         uint64_t mask[2];
         mask[1] = 0;
-        mask[0] = ((1 << (gap)) - 1) << (16-gap);
+        mask[0] = ((1 << (gap)) - 1) << (16 - gap);
         uint32_t tensorOffset = sBlockNum * 16 * (hBlockNum - 1) * 16;
         uint32_t dstRepeatStride = 16 * sizeof(T) / 32;
         AscendC::Duplicate(dstLocal[tensorOffset], static_cast<T>(0), mask, S, 1, dstRepeatStride);
@@ -1204,8 +1231,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void ConfusionTransposeSixth(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn,
-    uint32_t HIn, uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
+__global__ __aicore__ void ConfusionTransposeSixth(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn, uint32_t hnDivBlockNumIn,
+    uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
 {
     AscendC::KernelConfusionTransposeSixth<T> op;
     op.Init(dstGm, srcGm, NIn, SIn, HIn, hnDivBlockNumIn, hBlockNumIn, sBlockNumIn, transposetypeIn);
@@ -1225,26 +1253,29 @@ struct ConfusionTransposeSixthTestParams {
 };
 
 class ConfusionTransposeSixthTestsuite : public testing::Test,
-    public testing::WithParamInterface<ConfusionTransposeSixthTestParams> {
+                                         public testing::WithParamInterface<ConfusionTransposeSixthTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeSixthTestsuite,
-    ::testing::Values(ConfusionTransposeSixthTestParams { 2, ConfusionTransposeSixth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    ConfusionTransposeSixthTestParams { 2, ConfusionTransposeSixth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    ConfusionTransposeSixthTestParams { 2, ConfusionTransposeSixth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    ConfusionTransposeSixthTestParams { 2, ConfusionTransposeSixth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    ConfusionTransposeSixthTestParams { 4, ConfusionTransposeSixth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    ConfusionTransposeSixthTestParams { 4, ConfusionTransposeSixth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    ConfusionTransposeSixthTestParams { 4, ConfusionTransposeSixth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeSixthTestsuite,
+    ::testing::Values(
+        ConfusionTransposeSixthTestParams{
+            2, ConfusionTransposeSixth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        ConfusionTransposeSixthTestParams{
+            2, ConfusionTransposeSixth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        ConfusionTransposeSixthTestParams{
+            2, ConfusionTransposeSixth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        ConfusionTransposeSixthTestParams{
+            2, ConfusionTransposeSixth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        ConfusionTransposeSixthTestParams{
+            4, ConfusionTransposeSixth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        ConfusionTransposeSixthTestParams{
+            4, ConfusionTransposeSixth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        ConfusionTransposeSixthTestParams{
+            4, ConfusionTransposeSixth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N}));
 
 TEST_P(ConfusionTransposeSixthTestsuite, ConfusionTransposeSixthTestCase)
 {
@@ -1252,7 +1283,9 @@ TEST_P(ConfusionTransposeSixthTestsuite, ConfusionTransposeSixthTestCase)
     uint8_t srcGm[param.NIn * param.sBlockNumIn * param.hnDivBlockNumIn * 16 * 16 * param.typeSize] = {0};
     uint8_t dstGm[param.hBlockNumIn * param.sBlockNumIn * 16 * 16 * param.typeSize] = {0};
 
-    param.cal_func(dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn, param.transposetypeIn);
+    param.cal_func(
+        dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn,
+        param.transposetypeIn);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
@@ -1263,9 +1296,11 @@ namespace AscendC {
 template <typename T>
 class KernelConfusionTransposeSeventh {
 public:
-    __aicore__ inline KernelConfusionTransposeSeventh() { }
+    __aicore__ inline KernelConfusionTransposeSeventh() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t widthIn, uint32_t heightIn, TransposeType transposetypeIn)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t widthIn, uint32_t heightIn,
+        TransposeType transposetypeIn)
     {
         width = widthIn;
         height = heightIn;
@@ -1334,7 +1369,8 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void ConfusionTransposeSeventh(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t widthIn, uint32_t heightIn, TransposeType transposetypeIn)
+__global__ __aicore__ void ConfusionTransposeSeventh(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t widthIn, uint32_t heightIn, TransposeType transposetypeIn)
 {
     AscendC::KernelConfusionTransposeSeventh<T> op;
     op.Init(dstGm, srcGm, widthIn, heightIn, transposetypeIn);
@@ -1350,26 +1386,29 @@ struct ConfusionTransposeSeventhTestParams {
 };
 
 class ConfusionTransposeSeventhTestsuite : public testing::Test,
-    public testing::WithParamInterface<ConfusionTransposeSeventhTestParams> {
+                                           public testing::WithParamInterface<ConfusionTransposeSeventhTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeSeventhTestsuite,
-    ::testing::Values(ConfusionTransposeSeventhTestParams { 2, ConfusionTransposeSeventh<half>, 32, 32, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    ConfusionTransposeSeventhTestParams { 2, ConfusionTransposeSeventh<half>, 16, 16, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    ConfusionTransposeSeventhTestParams { 2, ConfusionTransposeSeventh<half>, 16, 32, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    ConfusionTransposeSeventhTestParams { 4, ConfusionTransposeSeventh<float>, 16, 32, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    ConfusionTransposeSeventhTestParams { 4, ConfusionTransposeSeventh<float>, 16, 8, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    ConfusionTransposeSeventhTestParams { 4, ConfusionTransposeSeventh<float>, 32, 32, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    ConfusionTransposeSeventhTestParams { 4, ConfusionTransposeSeventh<float>, 16, 16, TransposeType::TRANSPOSE_ND2ND_ONLY }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, ConfusionTransposeSeventhTestsuite,
+    ::testing::Values(
+        ConfusionTransposeSeventhTestParams{
+            2, ConfusionTransposeSeventh<half>, 32, 32, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        ConfusionTransposeSeventhTestParams{
+            2, ConfusionTransposeSeventh<half>, 16, 16, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        ConfusionTransposeSeventhTestParams{
+            2, ConfusionTransposeSeventh<half>, 16, 32, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        ConfusionTransposeSeventhTestParams{
+            4, ConfusionTransposeSeventh<float>, 16, 32, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        ConfusionTransposeSeventhTestParams{
+            4, ConfusionTransposeSeventh<float>, 16, 8, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        ConfusionTransposeSeventhTestParams{
+            4, ConfusionTransposeSeventh<float>, 32, 32, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        ConfusionTransposeSeventhTestParams{
+            4, ConfusionTransposeSeventh<float>, 16, 16, TransposeType::TRANSPOSE_ND2ND_ONLY}));
 
 TEST_P(ConfusionTransposeSeventhTestsuite, ConfusionTransposeSeventhTestCase)
 {

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -56,7 +56,7 @@ void MainVecUnary01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restri
     TBuf<TPosition::VECCALC> tbuf4;
     tpipe.InitBuffer(tbuf4, dataSize * 2 * sizeof(uint8_t));
     LocalTensor<uint8_t> outputLocal3 = tbuf4.Get<uint8_t>();
-    if constexpr (USE_CAST_DEQ){
+    if constexpr (USE_CAST_DEQ) {
         CastDeq<int8_t, int16_t, false, false>(outputLocal2, inputLocal2, dataSize);
         CastDeq<uint8_t, int16_t, false, true>(outputLocal3, inputLocal2, dataSize);
         CastDeq<int8_t, int16_t, true, false>(outputLocal2, inputLocal2, dataSize);
@@ -72,7 +72,7 @@ void MainVecUnary01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restri
         CastDeq<uint8_t, int16_t, true, false, true>(outputLocal3, inputLocal2, maskVec, 2, repeatParams);
         CastDeq<int8_t, int16_t, true, true, false>(outputLocal2, inputLocal2, maskVec, 2, repeatParams);
         CastDeq<uint8_t, int16_t, true, true, true>(outputLocal3, inputLocal2, maskVec, 2, repeatParams);
-    }else{
+    } else {
         CastDequant<int8_t, int16_t, false, false>(outputLocal2, inputLocal2, dataSize);
         CastDequant<uint8_t, int16_t, false, true>(outputLocal3, inputLocal2, dataSize);
         CastDequant<int8_t, int16_t, true, false>(outputLocal2, inputLocal2, dataSize);
@@ -211,13 +211,14 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_UNARY_SIMPLE, UnarySimpleTestsuite,
-    ::testing::Values(UnaryTestParams { 208, 2, MainVecUnary01<half, true> },
-    UnaryTestParams { 208, 4, MainVecUnary01<float, true> }, UnaryTestParams { 208, 2, MainVecUnary01<half, false> },
-    UnaryTestParams { 208, 4, MainVecUnary01<float, false> }, UnaryTestParams { 208, 4, MainVecUnary02<int32_t> },
-    UnaryTestParams { 208, 4, MainVecUnary02<half> }, UnaryTestParams { 208, 4, MainVecUnary02<float> },
-    UnaryTestParams { 208, 2, MainVecUnary03<int16_t> }, UnaryTestParams { 208, 2, MainVecUnary03<uint16_t> },
-    UnaryTestParams { 208, 4, MainVecUnary04<float> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_UNARY_SIMPLE, UnarySimpleTestsuite,
+    ::testing::Values(
+        UnaryTestParams{208, 2, MainVecUnary01<half, true>}, UnaryTestParams{208, 4, MainVecUnary01<float, true>},
+        UnaryTestParams{208, 2, MainVecUnary01<half, false>}, UnaryTestParams{208, 4, MainVecUnary01<float, false>},
+        UnaryTestParams{208, 4, MainVecUnary02<int32_t>}, UnaryTestParams{208, 4, MainVecUnary02<half>},
+        UnaryTestParams{208, 4, MainVecUnary02<float>}, UnaryTestParams{208, 2, MainVecUnary03<int16_t>},
+        UnaryTestParams{208, 2, MainVecUnary03<uint16_t>}, UnaryTestParams{208, 4, MainVecUnary04<float>}));
 
 TEST_P(UnarySimpleTestsuite, UnarySimpleTestCase)
 {

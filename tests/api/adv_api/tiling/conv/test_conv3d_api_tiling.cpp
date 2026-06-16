@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "graph/tensor.h"
 #define private public
@@ -36,8 +36,8 @@ protected:
     uint64_t l0cSize = 131072;
     uint64_t l0aSize = 65536;
     uint64_t l0bSize = 65536;
-    const char *socVersion = "Ascend910B4";
-    platform_ascendc::PlatformAscendC *ascendcPlatform =
+    const char* socVersion = "Ascend910B4";
+    platform_ascendc::PlatformAscendC* ascendcPlatform =
         platform_ascendc::PlatformAscendCManager::GetInstance(socVersion);
 };
 
@@ -52,16 +52,22 @@ void SetPlatFormInfo(Conv3dTiling* testTiling)
     testTiling->platformInfo.fbSize = FB_SIZE;
 }
 
-void SetSingleOutputShapeInTest(Conv3dTilingApi::Conv3dTiling &testTiling)
+void SetSingleOutputShapeInTest(Conv3dTilingApi::Conv3dTiling& testTiling)
 {
     int64_t orgHo = (testTiling.shapeInfo.orgHi + testTiling.attrInfo.padUp + testTiling.attrInfo.padDown -
-             testTiling.attrInfo.dilationH * (testTiling.shapeInfo.orgkH - 1) - 1) / testTiling.attrInfo.strideH + 1;
+                     testTiling.attrInfo.dilationH * (testTiling.shapeInfo.orgkH - 1) - 1) /
+                        testTiling.attrInfo.strideH +
+                    1;
     int64_t orgWo = (testTiling.shapeInfo.orgWi + testTiling.attrInfo.padLeft + testTiling.attrInfo.padRight -
-             testTiling.attrInfo.dilationW * (testTiling.shapeInfo.orgkW - 1) - 1) / testTiling.attrInfo.strideW + 1;
+                     testTiling.attrInfo.dilationW * (testTiling.shapeInfo.orgkW - 1) - 1) /
+                        testTiling.attrInfo.strideW +
+                    1;
 
     int64_t singleM = orgHo * orgWo;
     int64_t singleDo = (testTiling.shapeInfo.orgDi + testTiling.attrInfo.padHead + testTiling.attrInfo.padTail -
-                        testTiling.attrInfo.dilationD * (testTiling.shapeInfo.orgkD - 1) - 1) / testTiling.attrInfo.strideD + 1;
+                        testTiling.attrInfo.dilationD * (testTiling.shapeInfo.orgkD - 1) - 1) /
+                           testTiling.attrInfo.strideD +
+                       1;
 
     testTiling.SetSingleOutputShape(testTiling.shapeInfo.orgCo, singleDo, singleM);
     testTiling.SetGroups(1);
@@ -75,7 +81,7 @@ void SetSingleOutputShapeInTest(Conv3dTilingApi::Conv3dTiling &testTiling)
     //                                 static_cast<int64_t>(testTiling.shapeInfo.coutOpt));
 }
 
-void SetType(Conv3dTilingApi::Conv3dTiling &testTiling)
+void SetType(Conv3dTilingApi::Conv3dTiling& testTiling)
 {
     testTiling.SetWeightType(TPosition::GM, ConvFormat::FRACTAL_Z_3D, ConvDtype::BF16);
     testTiling.SetInputType(TPosition::GM, ConvFormat::NDC1HWC0, ConvDtype::BF16);
@@ -85,7 +91,7 @@ void SetType(Conv3dTilingApi::Conv3dTiling &testTiling)
     }
 }
 
-void TestTilingResult(int64_t ret, Conv3dTilingApi::Conv3dTiling &testTiling)
+void TestTilingResult(int64_t ret, Conv3dTilingApi::Conv3dTiling& testTiling)
 {
     EXPECT_EQ(ret, 0);
     EXPECT_NE(testTiling.l1TilingInfo.kAL1, 0);
@@ -96,14 +102,14 @@ void TestTilingResult(int64_t ret, Conv3dTilingApi::Conv3dTiling &testTiling)
         EXPECT_NE(testTiling.l1TilingInfo.kBL1, 0);
 
         EXPECT_NE(testTiling.l1TilingInfo.nBL1Value, 0);
-        int multiDivFlag = (testTiling.l1TilingInfo.nBL1Value % testTiling.l0TilingInfo.nL0 == 0) | 
-                            (testTiling.l1TilingInfo.nBL1Value % testTiling.cubeInfo.n0 == 0);
+        int multiDivFlag = (testTiling.l1TilingInfo.nBL1Value % testTiling.l0TilingInfo.nL0 == 0) |
+                           (testTiling.l1TilingInfo.nBL1Value % testTiling.cubeInfo.n0 == 0);
         EXPECT_EQ(multiDivFlag, 1);
     }
-    
+
     EXPECT_NE(testTiling.l1TilingInfo.mAL1Value, 0);
-    int multiDivFlag = (testTiling.l1TilingInfo.mAL1Value % testTiling.l0TilingInfo.mL0 == 0) | 
-                        (testTiling.l1TilingInfo.mAL1Value % testTiling.cubeInfo.m0 == 0);
+    int multiDivFlag = (testTiling.l1TilingInfo.mAL1Value % testTiling.l0TilingInfo.mL0 == 0) |
+                       (testTiling.l1TilingInfo.mAL1Value % testTiling.cubeInfo.m0 == 0);
     EXPECT_EQ(multiDivFlag, 1);
 
     EXPECT_NE(testTiling.l0TilingInfo.mL0, 0);
@@ -741,9 +747,9 @@ TEST_F(TestConv3dTiling, NetWorks_003)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
-    SetType(testTiling); 
-    
+    testTiling.hasBias = 0;
+    SetType(testTiling);
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -761,9 +767,9 @@ TEST_F(TestConv3dTiling, NetWorks_004)
     testTiling.SetStride(2, 2, 2);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -781,9 +787,9 @@ TEST_F(TestConv3dTiling, NetWorks_005)
     testTiling.SetStride(2, 2, 2);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -801,9 +807,9 @@ TEST_F(TestConv3dTiling, NetWorks_006)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -821,9 +827,9 @@ TEST_F(TestConv3dTiling, NetWorks_007)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -841,9 +847,9 @@ TEST_F(TestConv3dTiling, NetWorks_008)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -861,7 +867,7 @@ TEST_F(TestConv3dTiling, NetWorks_009)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -879,11 +885,11 @@ TEST_F(TestConv3dTiling, NetWorks_010)
     testTiling.SetPadding(0, 0, 1, 1, 1, 1);
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
-    
+
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -901,7 +907,7 @@ TEST_F(TestConv3dTiling, NetWorks_011)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -921,9 +927,9 @@ TEST_F(TestConv3dTiling, NetWorks_012)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -941,7 +947,7 @@ TEST_F(TestConv3dTiling, NetWorks_013)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -961,9 +967,9 @@ TEST_F(TestConv3dTiling, NetWorks_014)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -981,9 +987,9 @@ TEST_F(TestConv3dTiling, NetWorks_015)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1001,9 +1007,9 @@ TEST_F(TestConv3dTiling, NetWorks_016)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1021,9 +1027,9 @@ TEST_F(TestConv3dTiling, NetWorks_017)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1041,9 +1047,9 @@ TEST_F(TestConv3dTiling, NetWorks_018)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1061,9 +1067,9 @@ TEST_F(TestConv3dTiling, NetWorks_019)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1081,9 +1087,9 @@ TEST_F(TestConv3dTiling, NetWorks_020)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1101,9 +1107,9 @@ TEST_F(TestConv3dTiling, NetWorks_021)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1121,9 +1127,9 @@ TEST_F(TestConv3dTiling, NetWorks_022)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1141,9 +1147,9 @@ TEST_F(TestConv3dTiling, NetWorks_023)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1161,9 +1167,9 @@ TEST_F(TestConv3dTiling, NetWorks_024)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1181,9 +1187,9 @@ TEST_F(TestConv3dTiling, NetWorks_025)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1201,9 +1207,9 @@ TEST_F(TestConv3dTiling, NetWorks_026)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1221,9 +1227,9 @@ TEST_F(TestConv3dTiling, NetWorks_027)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1241,9 +1247,9 @@ TEST_F(TestConv3dTiling, NetWorks_028)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1261,9 +1267,9 @@ TEST_F(TestConv3dTiling, NetWorks_029)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1281,9 +1287,9 @@ TEST_F(TestConv3dTiling, NetWorks_030)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1301,9 +1307,9 @@ TEST_F(TestConv3dTiling, NetWorks_031)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1321,9 +1327,9 @@ TEST_F(TestConv3dTiling, NetWorks_032)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1341,9 +1347,9 @@ TEST_F(TestConv3dTiling, NetWorks_033)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -1361,7 +1367,7 @@ TEST_F(TestConv3dTiling, NetWorks_034)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1381,7 +1387,7 @@ TEST_F(TestConv3dTiling, NetWorks_035)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1401,7 +1407,7 @@ TEST_F(TestConv3dTiling, NetWorks_036)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1421,7 +1427,7 @@ TEST_F(TestConv3dTiling, NetWorks_037)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1441,7 +1447,7 @@ TEST_F(TestConv3dTiling, NetWorks_038)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1461,7 +1467,7 @@ TEST_F(TestConv3dTiling, NetWorks_039)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1481,7 +1487,7 @@ TEST_F(TestConv3dTiling, NetWorks_040)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1501,7 +1507,7 @@ TEST_F(TestConv3dTiling, NetWorks_041)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1521,7 +1527,7 @@ TEST_F(TestConv3dTiling, NetWorks_042)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1541,7 +1547,7 @@ TEST_F(TestConv3dTiling, NetWorks_043)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1561,7 +1567,7 @@ TEST_F(TestConv3dTiling, NetWorks_044)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1581,7 +1587,7 @@ TEST_F(TestConv3dTiling, NetWorks_045)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1601,7 +1607,7 @@ TEST_F(TestConv3dTiling, NetWorks_046)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1621,7 +1627,7 @@ TEST_F(TestConv3dTiling, NetWorks_047)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1641,7 +1647,7 @@ TEST_F(TestConv3dTiling, NetWorks_048)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1661,7 +1667,7 @@ TEST_F(TestConv3dTiling, NetWorks_049)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1681,7 +1687,7 @@ TEST_F(TestConv3dTiling, NetWorks_050)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1701,13 +1707,12 @@ TEST_F(TestConv3dTiling, NetWorks_051)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
-
 
 TEST_F(TestConv3dTiling, NetWorks_052)
 {
@@ -1722,7 +1727,7 @@ TEST_F(TestConv3dTiling, NetWorks_052)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1742,7 +1747,7 @@ TEST_F(TestConv3dTiling, NetWorks_053)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1762,7 +1767,7 @@ TEST_F(TestConv3dTiling, NetWorks_054)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1782,7 +1787,7 @@ TEST_F(TestConv3dTiling, NetWorks_055)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1802,7 +1807,7 @@ TEST_F(TestConv3dTiling, NetWorks_056)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1822,7 +1827,7 @@ TEST_F(TestConv3dTiling, NetWorks_057)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1842,7 +1847,7 @@ TEST_F(TestConv3dTiling, NetWorks_058)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1862,7 +1867,7 @@ TEST_F(TestConv3dTiling, NetWorks_059)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1882,7 +1887,7 @@ TEST_F(TestConv3dTiling, NetWorks_060)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1902,7 +1907,7 @@ TEST_F(TestConv3dTiling, NetWorks_061)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1922,7 +1927,7 @@ TEST_F(TestConv3dTiling, NetWorks_062)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1942,7 +1947,7 @@ TEST_F(TestConv3dTiling, NetWorks_063)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1962,7 +1967,7 @@ TEST_F(TestConv3dTiling, NetWorks_064)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -1982,7 +1987,7 @@ TEST_F(TestConv3dTiling, NetWorks_065)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2002,7 +2007,7 @@ TEST_F(TestConv3dTiling, NetWorks_066)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2022,7 +2027,7 @@ TEST_F(TestConv3dTiling, NetWorks_067)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2042,7 +2047,7 @@ TEST_F(TestConv3dTiling, NetWorks_068)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2062,7 +2067,7 @@ TEST_F(TestConv3dTiling, NetWorks_069)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2082,7 +2087,7 @@ TEST_F(TestConv3dTiling, NetWorks_070)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2102,7 +2107,7 @@ TEST_F(TestConv3dTiling, NetWorks_071)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2122,7 +2127,7 @@ TEST_F(TestConv3dTiling, NetWorks_072)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2142,7 +2147,7 @@ TEST_F(TestConv3dTiling, NetWorks_073)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2162,7 +2167,7 @@ TEST_F(TestConv3dTiling, NetWorks_074)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2182,7 +2187,7 @@ TEST_F(TestConv3dTiling, NetWorks_075)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2202,7 +2207,7 @@ TEST_F(TestConv3dTiling, NetWorks_076)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2222,7 +2227,7 @@ TEST_F(TestConv3dTiling, NetWorks_077)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2242,7 +2247,7 @@ TEST_F(TestConv3dTiling, NetWorks_078)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2262,7 +2267,7 @@ TEST_F(TestConv3dTiling, NetWorks_079)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2282,9 +2287,9 @@ TEST_F(TestConv3dTiling, NetWorks_080)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2301,10 +2306,10 @@ TEST_F(TestConv3dTiling, NetWorks_081)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2321,10 +2326,9 @@ TEST_F(TestConv3dTiling, NetWorks_082)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
@@ -2342,10 +2346,10 @@ TEST_F(TestConv3dTiling, NetWorks_083)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2362,10 +2366,10 @@ TEST_F(TestConv3dTiling, NetWorks_084)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2382,10 +2386,10 @@ TEST_F(TestConv3dTiling, NetWorks_085)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2402,10 +2406,10 @@ TEST_F(TestConv3dTiling, NetWorks_086)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2422,10 +2426,10 @@ TEST_F(TestConv3dTiling, NetWorks_087)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2442,10 +2446,10 @@ TEST_F(TestConv3dTiling, NetWorks_088)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2462,10 +2466,10 @@ TEST_F(TestConv3dTiling, NetWorks_089)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2482,10 +2486,10 @@ TEST_F(TestConv3dTiling, NetWorks_090)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2502,10 +2506,10 @@ TEST_F(TestConv3dTiling, NetWorks_091)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2522,10 +2526,10 @@ TEST_F(TestConv3dTiling, NetWorks_092)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2542,10 +2546,10 @@ TEST_F(TestConv3dTiling, NetWorks_093)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2562,10 +2566,10 @@ TEST_F(TestConv3dTiling, NetWorks_094)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2582,10 +2586,10 @@ TEST_F(TestConv3dTiling, NetWorks_095)
     testTiling.SetDilation(1, 1, 1);
     testTiling.SetStride(1, 1, 1);
 
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
     SetSingleOutputShapeInTest(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2603,9 +2607,9 @@ TEST_F(TestConv3dTiling, NetWorks_096)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2623,7 +2627,7 @@ TEST_F(TestConv3dTiling, NetWorks_097)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2643,9 +2647,9 @@ TEST_F(TestConv3dTiling, NetWorks_098)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
-    
+
     int64_t ret1 = testTiling.GetTiling(tilingData);
     TestTilingResult(ret1, testTiling);
 }
@@ -2663,7 +2667,7 @@ TEST_F(TestConv3dTiling, NetWorks_099)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2683,7 +2687,7 @@ TEST_F(TestConv3dTiling, NetWorks_100)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2703,7 +2707,7 @@ TEST_F(TestConv3dTiling, NetWorks_101)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2723,7 +2727,7 @@ TEST_F(TestConv3dTiling, NetWorks_102)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2743,7 +2747,7 @@ TEST_F(TestConv3dTiling, NetWorks_103)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2763,7 +2767,7 @@ TEST_F(TestConv3dTiling, NetWorks_104)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2783,7 +2787,7 @@ TEST_F(TestConv3dTiling, NetWorks_105)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2803,7 +2807,7 @@ TEST_F(TestConv3dTiling, NetWorks_106)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2823,7 +2827,7 @@ TEST_F(TestConv3dTiling, NetWorks_107)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2843,7 +2847,7 @@ TEST_F(TestConv3dTiling, NetWorks_108)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2863,7 +2867,7 @@ TEST_F(TestConv3dTiling, NetWorks_109)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2883,7 +2887,7 @@ TEST_F(TestConv3dTiling, NetWorks_110)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2903,7 +2907,7 @@ TEST_F(TestConv3dTiling, NetWorks_111)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2923,7 +2927,7 @@ TEST_F(TestConv3dTiling, NetWorks_112)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2943,7 +2947,7 @@ TEST_F(TestConv3dTiling, NetWorks_113)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2963,7 +2967,7 @@ TEST_F(TestConv3dTiling, NetWorks_114)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -2983,7 +2987,7 @@ TEST_F(TestConv3dTiling, NetWorks_115)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3003,7 +3007,7 @@ TEST_F(TestConv3dTiling, NetWorks_116)
     testTiling.SetStride(2, 2, 2);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3023,7 +3027,7 @@ TEST_F(TestConv3dTiling, NetWorks_117)
     testTiling.SetStride(2, 2, 2);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3043,7 +3047,7 @@ TEST_F(TestConv3dTiling, NetWorks_118)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3063,7 +3067,7 @@ TEST_F(TestConv3dTiling, NetWorks_119)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3083,7 +3087,7 @@ TEST_F(TestConv3dTiling, NetWorks_120)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3123,7 +3127,7 @@ TEST_F(TestConv3dTiling, NetWorks_122)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3143,7 +3147,7 @@ TEST_F(TestConv3dTiling, NetWorks_123)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3163,7 +3167,7 @@ TEST_F(TestConv3dTiling, NetWorks_124)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3183,7 +3187,7 @@ TEST_F(TestConv3dTiling, NetWorks_125)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3203,7 +3207,7 @@ TEST_F(TestConv3dTiling, NetWorks_126)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3223,7 +3227,7 @@ TEST_F(TestConv3dTiling, NetWorks_127)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3243,7 +3247,7 @@ TEST_F(TestConv3dTiling, NetWorks_128)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3263,7 +3267,7 @@ TEST_F(TestConv3dTiling, NetWorks_129)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3283,7 +3287,7 @@ TEST_F(TestConv3dTiling, NetWorks_130)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3303,7 +3307,7 @@ TEST_F(TestConv3dTiling, NetWorks_131)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3323,7 +3327,7 @@ TEST_F(TestConv3dTiling, NetWorks_132)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3343,7 +3347,7 @@ TEST_F(TestConv3dTiling, NetWorks_133)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3363,7 +3367,7 @@ TEST_F(TestConv3dTiling, NetWorks_134)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3383,7 +3387,7 @@ TEST_F(TestConv3dTiling, NetWorks_135)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3403,7 +3407,7 @@ TEST_F(TestConv3dTiling, NetWorks_136)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3423,7 +3427,7 @@ TEST_F(TestConv3dTiling, NetWorks_137)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3443,7 +3447,7 @@ TEST_F(TestConv3dTiling, NetWorks_138)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3463,7 +3467,7 @@ TEST_F(TestConv3dTiling, NetWorks_139)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3483,7 +3487,7 @@ TEST_F(TestConv3dTiling, NetWorks_140)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3503,7 +3507,7 @@ TEST_F(TestConv3dTiling, NetWorks_141)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3523,7 +3527,7 @@ TEST_F(TestConv3dTiling, NetWorks_142)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3543,7 +3547,7 @@ TEST_F(TestConv3dTiling, NetWorks_143)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3563,7 +3567,7 @@ TEST_F(TestConv3dTiling, NetWorks_144)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3583,7 +3587,7 @@ TEST_F(TestConv3dTiling, NetWorks_145)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3603,7 +3607,7 @@ TEST_F(TestConv3dTiling, NetWorks_146)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3623,7 +3627,7 @@ TEST_F(TestConv3dTiling, NetWorks_147)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3643,7 +3647,7 @@ TEST_F(TestConv3dTiling, NetWorks_148)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3663,7 +3667,7 @@ TEST_F(TestConv3dTiling, NetWorks_149)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3683,7 +3687,7 @@ TEST_F(TestConv3dTiling, NetWorks_150)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3703,7 +3707,7 @@ TEST_F(TestConv3dTiling, NetWorks_151)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3723,7 +3727,7 @@ TEST_F(TestConv3dTiling, NetWorks_152)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3743,7 +3747,7 @@ TEST_F(TestConv3dTiling, NetWorks_153)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3763,7 +3767,7 @@ TEST_F(TestConv3dTiling, NetWorks_154)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3783,7 +3787,7 @@ TEST_F(TestConv3dTiling, NetWorks_155)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3803,7 +3807,7 @@ TEST_F(TestConv3dTiling, NetWorks_156)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3823,7 +3827,7 @@ TEST_F(TestConv3dTiling, NetWorks_157)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3843,7 +3847,7 @@ TEST_F(TestConv3dTiling, NetWorks_158)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3863,7 +3867,7 @@ TEST_F(TestConv3dTiling, NetWorks_159)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3883,7 +3887,7 @@ TEST_F(TestConv3dTiling, NetWorks_160)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3903,7 +3907,7 @@ TEST_F(TestConv3dTiling, NetWorks_161)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3923,7 +3927,7 @@ TEST_F(TestConv3dTiling, NetWorks_162)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3943,7 +3947,7 @@ TEST_F(TestConv3dTiling, NetWorks_163)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3963,7 +3967,7 @@ TEST_F(TestConv3dTiling, NetWorks_164)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -3983,7 +3987,7 @@ TEST_F(TestConv3dTiling, NetWorks_165)
     testTiling.SetStride(2, 2, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4003,7 +4007,7 @@ TEST_F(TestConv3dTiling, NetWorks_166)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4023,7 +4027,7 @@ TEST_F(TestConv3dTiling, NetWorks_167)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4043,7 +4047,7 @@ TEST_F(TestConv3dTiling, NetWorks_168)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4063,7 +4067,7 @@ TEST_F(TestConv3dTiling, NetWorks_169)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4083,7 +4087,7 @@ TEST_F(TestConv3dTiling, NetWorks_170)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4103,7 +4107,7 @@ TEST_F(TestConv3dTiling, NetWorks_171)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4123,7 +4127,7 @@ TEST_F(TestConv3dTiling, NetWorks_172)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4143,7 +4147,7 @@ TEST_F(TestConv3dTiling, NetWorks_173)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4163,7 +4167,7 @@ TEST_F(TestConv3dTiling, NetWorks_174)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4183,7 +4187,7 @@ TEST_F(TestConv3dTiling, NetWorks_175)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4203,7 +4207,7 @@ TEST_F(TestConv3dTiling, NetWorks_176)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4223,7 +4227,7 @@ TEST_F(TestConv3dTiling, NetWorks_177)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4243,7 +4247,7 @@ TEST_F(TestConv3dTiling, NetWorks_178)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4263,7 +4267,7 @@ TEST_F(TestConv3dTiling, NetWorks_179)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4283,7 +4287,7 @@ TEST_F(TestConv3dTiling, NetWorks_180)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4303,7 +4307,7 @@ TEST_F(TestConv3dTiling, NetWorks_181)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4323,7 +4327,7 @@ TEST_F(TestConv3dTiling, NetWorks_182)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4343,7 +4347,7 @@ TEST_F(TestConv3dTiling, NetWorks_183)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4363,7 +4367,7 @@ TEST_F(TestConv3dTiling, NetWorks_184)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4383,7 +4387,7 @@ TEST_F(TestConv3dTiling, NetWorks_185)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4403,7 +4407,7 @@ TEST_F(TestConv3dTiling, NetWorks_186)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4423,7 +4427,7 @@ TEST_F(TestConv3dTiling, NetWorks_187)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4443,7 +4447,7 @@ TEST_F(TestConv3dTiling, NetWorks_188)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4463,7 +4467,7 @@ TEST_F(TestConv3dTiling, NetWorks_189)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4483,7 +4487,7 @@ TEST_F(TestConv3dTiling, NetWorks_190)
     testTiling.SetStride(1, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 1; 
+    testTiling.hasBias = 1;
     SetType(testTiling);
 
     int64_t ret1 = testTiling.GetTiling(tilingData);
@@ -4559,7 +4563,7 @@ TEST_F(TestConv3dTiling, Beyond_Input_Attr_Upper_Error)
     testTiling.SetSingleWeightShape(testTiling.shapeInfo.orgCi, 3, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     testTiling.SetPadding(1000001, 1, 0, 0, 0, 0);
@@ -4591,7 +4595,7 @@ TEST_F(TestConv3dTiling, Beyond_Org_Input_Upper_Error)
     testTiling.SetSingleWeightShape(testTiling.shapeInfo.orgCi, 3, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     testTiling.SetOrgInputShape(1000001, 25, 10, 16);
@@ -4631,7 +4635,7 @@ TEST_F(TestConv3dTiling, Set_Org_Input_Negative_Error)
     testTiling.SetSingleWeightShape(testTiling.shapeInfo.orgCi, 3, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     testTiling.SetOrgWeightShape(-1, 3, 1, 1);
@@ -4727,7 +4731,7 @@ TEST_F(TestConv3dTiling, Beyond_Input_Attr_Load3D_Limits_Error)
     testTiling.SetSingleWeightShape(testTiling.shapeInfo.orgCi, 3, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     testTiling.SetPadding(1, 1, 0, 0, 0, 0);
@@ -4767,7 +4771,7 @@ TEST_F(TestConv3dTiling, Beyond_Org_Output_Upper_Error)
     testTiling.SetSingleWeightShape(testTiling.shapeInfo.orgCi, 3, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     testTiling.SetOrgInputShape(1280, 2000000, 10, 16);
@@ -4785,8 +4789,8 @@ TEST_F(TestConv3dTiling, Beyond_Org_Output_Upper_Error)
 
 TEST_F(TestConv3dTiling, Check_Ascend910_93)
 {
-    const char *socVersion1 = "Ascend910_93";
-    platform_ascendc::PlatformAscendC *ascendcPlatform1 =
+    const char* socVersion1 = "Ascend910_93";
+    platform_ascendc::PlatformAscendC* ascendcPlatform1 =
         platform_ascendc::PlatformAscendCManager::GetInstance(socVersion1);
     optiling::TConv3DApiTiling tilingData;
     Conv3dTilingApi::Conv3dTiling testTiling(*ascendcPlatform1);
@@ -4795,7 +4799,7 @@ TEST_F(TestConv3dTiling, Check_Ascend910_93)
     testTiling.SetSingleWeightShape(testTiling.shapeInfo.orgCi, 3, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret = testTiling.GetTiling(tilingData);
@@ -4806,8 +4810,8 @@ TEST_F(TestConv3dTiling, Check_Ascend910_93)
 #if defined(__NPU_ARCH__) && __NPU_ARCH__ == 2002
 TEST_F(TestConv3dTiling, Soc_Error)
 {
-    const char *socVersion1 = "Ascend310P3";
-    platform_ascendc::PlatformAscendC *ascendcPlatform1 =
+    const char* socVersion1 = "Ascend310P3";
+    platform_ascendc::PlatformAscendC* ascendcPlatform1 =
         platform_ascendc::PlatformAscendCManager::GetInstance(socVersion1);
     optiling::TConv3DApiTiling tilingData;
     Conv3dTilingApi::Conv3dTiling testTiling(*ascendcPlatform1);
@@ -4816,7 +4820,7 @@ TEST_F(TestConv3dTiling, Soc_Error)
     testTiling.SetSingleWeightShape(testTiling.shapeInfo.orgCi, 3, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret = testTiling.GetTiling(tilingData);
@@ -4827,8 +4831,8 @@ TEST_F(TestConv3dTiling, Soc_Error)
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3102 || __NPU_ARCH__ == 3510)
 TEST_F(TestConv3dTiling, Soc_Error1)
 {
-    const char *socVersion1 = "AscendError";
-    platform_ascendc::PlatformAscendC *ascendcPlatform1 =
+    const char* socVersion1 = "AscendError";
+    platform_ascendc::PlatformAscendC* ascendcPlatform1 =
         platform_ascendc::PlatformAscendCManager::GetInstance(socVersion1);
     optiling::TConv3DApiTiling tilingData;
     Conv3dTilingApi::Conv3dTiling testTiling(*ascendcPlatform1);
@@ -4837,7 +4841,7 @@ TEST_F(TestConv3dTiling, Soc_Error1)
     testTiling.SetSingleWeightShape(testTiling.shapeInfo.orgCi, 3, 1, 1);
 
     SetSingleOutputShapeInTest(testTiling);
-    testTiling.hasBias = 0; 
+    testTiling.hasBias = 0;
     SetType(testTiling);
 
     int64_t ret = testTiling.GetTiling(tilingData);

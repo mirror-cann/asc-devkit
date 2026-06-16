@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <mockcpp/mockcpp.hpp>
 #include "kernel_operator.h"
@@ -15,10 +15,8 @@
 using namespace std;
 using namespace AscendC;
 namespace {
-int32_t RaiseStub(int32_t i) {
-    return 0;
-}
-}
+int32_t RaiseStub(int32_t i) { return 0; }
+} // namespace
 
 class TestLoaddataCheck : public testing::Test {
 protected:
@@ -65,54 +63,59 @@ struct TestLoaddata3dv2ApiCheckParams {
 };
 
 class TestLoaddata2dApiCheckSuite : public testing::Test,
-    public testing::WithParamInterface<TestLoaddata2dApiCheckParams> {
+                                    public testing::WithParamInterface<TestLoaddata2dApiCheckParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
 };
 
 class TestLoaddata3dv1ApiCheckSuite : public testing::Test,
-    public testing::WithParamInterface<TestLoaddata3dv1ApiCheckParams> {
+                                      public testing::WithParamInterface<TestLoaddata3dv1ApiCheckParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
 };
 
 class TestLoaddata3dv2ApiCheckSuite : public testing::Test,
-    public testing::WithParamInterface<TestLoaddata3dv2ApiCheckParams> {
+                                      public testing::WithParamInterface<TestLoaddata3dv2ApiCheckParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TestLoaddata2dApiCheck, TestLoaddata2dApiCheckSuite,
-    ::testing::Values(TestLoaddata2dApiCheckParams { 512, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true },
-    TestLoaddata2dApiCheckParams { 512, 512, TPosition::A2, TPosition::A1, 1, 0, 1, 0, false },
-    TestLoaddata2dApiCheckParams { 512, 512, TPosition::A1, TPosition::C1, 1, 0, 1, 0, false },
-    TestLoaddata2dApiCheckParams { 54289, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true },
-    TestLoaddata2dApiCheckParams { 255, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true },
-    TestLoaddata2dApiCheckParams { 512, 255, TPosition::B1, TPosition::B2, 1, 0, 1, 0, true }));
+INSTANTIATE_TEST_CASE_P(
+    TestLoaddata2dApiCheck, TestLoaddata2dApiCheckSuite,
+    ::testing::Values(
+        TestLoaddata2dApiCheckParams{512, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true},
+        TestLoaddata2dApiCheckParams{512, 512, TPosition::A2, TPosition::A1, 1, 0, 1, 0, false},
+        TestLoaddata2dApiCheckParams{512, 512, TPosition::A1, TPosition::C1, 1, 0, 1, 0, false},
+        TestLoaddata2dApiCheckParams{54289, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true},
+        TestLoaddata2dApiCheckParams{255, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true},
+        TestLoaddata2dApiCheckParams{512, 255, TPosition::B1, TPosition::B2, 1, 0, 1, 0, true}));
 
-INSTANTIATE_TEST_CASE_P(TestLoaddata3dv1ApiCheck, TestLoaddata3dv1ApiCheckSuite,
-    ::testing::Values(TestLoaddata3dv1ApiCheckParams { 3584, 3584, TPosition::A1, TPosition::A2, 1, 1, 1, false },
-    TestLoaddata3dv1ApiCheckParams { 3584, 3584, TPosition::A1, TPosition::A2, 0, 1, 1, false },
-    TestLoaddata3dv1ApiCheckParams { 18577, 3584, TPosition::A1, TPosition::A2, 1, 1, 1, false },
-    TestLoaddata3dv1ApiCheckParams { 3584, 256, TPosition::A1, TPosition::A2, 1, 1, 1, false }));
+INSTANTIATE_TEST_CASE_P(
+    TestLoaddata3dv1ApiCheck, TestLoaddata3dv1ApiCheckSuite,
+    ::testing::Values(
+        TestLoaddata3dv1ApiCheckParams{3584, 3584, TPosition::A1, TPosition::A2, 1, 1, 1, false},
+        TestLoaddata3dv1ApiCheckParams{3584, 3584, TPosition::A1, TPosition::A2, 0, 1, 1, false},
+        TestLoaddata3dv1ApiCheckParams{18577, 3584, TPosition::A1, TPosition::A2, 1, 1, 1, false},
+        TestLoaddata3dv1ApiCheckParams{3584, 256, TPosition::A1, TPosition::A2, 1, 1, 1, false}));
 
-INSTANTIATE_TEST_CASE_P(TestLoaddata3dv2ApiCheck, TestLoaddata3dv2ApiCheckSuite,
-    ::testing::Values(TestLoaddata3dv2ApiCheckParams { 6144, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32,
-    192, true },
-    TestLoaddata3dv2ApiCheckParams { 6144, 6144, TPosition::A2, TPosition::A2, 32, 12, 16, 32, 192, false },
-    TestLoaddata3dv2ApiCheckParams { 6144, 6144, TPosition::A1, TPosition::C1, 32, 12, 16, 32, 192, false },
-    TestLoaddata3dv2ApiCheckParams { 26145, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true },
-    TestLoaddata3dv2ApiCheckParams { 6144, 16000, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true },
-    TestLoaddata3dv2ApiCheckParams { 6143, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true },
-    TestLoaddata3dv2ApiCheckParams { 6144, 6143, TPosition::B1, TPosition::B2, 32, 12, 16, 32, 192, true }));
+INSTANTIATE_TEST_CASE_P(
+    TestLoaddata3dv2ApiCheck, TestLoaddata3dv2ApiCheckSuite,
+    ::testing::Values(
+        TestLoaddata3dv2ApiCheckParams{6144, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true},
+        TestLoaddata3dv2ApiCheckParams{6144, 6144, TPosition::A2, TPosition::A2, 32, 12, 16, 32, 192, false},
+        TestLoaddata3dv2ApiCheckParams{6144, 6144, TPosition::A1, TPosition::C1, 32, 12, 16, 32, 192, false},
+        TestLoaddata3dv2ApiCheckParams{26145, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true},
+        TestLoaddata3dv2ApiCheckParams{6144, 16000, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true},
+        TestLoaddata3dv2ApiCheckParams{6143, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true},
+        TestLoaddata3dv2ApiCheckParams{6144, 6143, TPosition::B1, TPosition::B2, 32, 12, 16, 32, 192, true}));
 
 TEST_P(TestLoaddata2dApiCheckSuite, Loaddata2dApiCheckAllHighLevel)
 {
     TPipe tpipe;
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     auto param = GetParam();
     uint64_t srcSizeEle = param.srcSizeEle;
     uint64_t dstSizeEle = param.dstSizeEle;
@@ -159,7 +162,8 @@ TEST_P(TestLoaddata2dApiCheckSuite, Loaddata2dApiCheckAllHighLevel)
     bool ifTranspose = false;
     uint8_t addrMode = 0;
 
-    check::LoadData2dApiParams chkParams { reinterpret_cast<uint64_t>(output.GetPhyAddr()),
+    check::LoadData2dApiParams chkParams{
+        reinterpret_cast<uint64_t>(output.GetPhyAddr()),
         reinterpret_cast<uint64_t>(input.GetPhyAddr()),
         startIndex,
         repeatTimes,
@@ -173,7 +177,7 @@ TEST_P(TestLoaddata2dApiCheckSuite, Loaddata2dApiCheckAllHighLevel)
         static_cast<uint64_t>(output.GetLength()),
         static_cast<uint64_t>(input.GetLength()),
         static_cast<uint8_t>(output.GetPosition()),
-        static_cast<uint8_t>(input.GetPosition()) };
+        static_cast<uint8_t>(input.GetPosition())};
     // check::TikcppLoaddata2dCheck chkIns { "loaddata2d", chkParams };
     // bool flag = CheckFuncLoadData2dImpl(chkParams, "loaddata2d");
 
@@ -216,7 +220,8 @@ TEST_P(TestLoaddata3dv1ApiCheckSuite, Loaddata3dv1ApiCheckAllHighLevel)
     uint8_t cSize = 1;
     uint8_t padValue = 7;
 
-    check::LoadData3dv1ApiParams chkParams { reinterpret_cast<uint64_t>(output.GetPhyAddr()),
+    check::LoadData3dv1ApiParams chkParams{
+        reinterpret_cast<uint64_t>(output.GetPhyAddr()),
         reinterpret_cast<uint64_t>(input.GetPhyAddr()),
         padList,
         l1H,
@@ -241,7 +246,7 @@ TEST_P(TestLoaddata3dv1ApiCheckSuite, Loaddata3dv1ApiCheckAllHighLevel)
         static_cast<uint64_t>(output.GetLength()),
         static_cast<uint64_t>(input.GetLength()),
         static_cast<uint8_t>(output.GetPosition()),
-        static_cast<uint8_t>(input.GetPosition()) };
+        static_cast<uint8_t>(input.GetPosition())};
     // check::TikcppLoaddata3dv1Check chkIns { "loaddata3dv1", chkParams };
     // bool flag = CheckFuncLoadData3dv1Impl(chkParams, "loaddata3dv1");
 
@@ -304,7 +309,8 @@ TEST_P(TestLoaddata3dv2ApiCheckSuite, Loaddata3dv2ApiCheckAllHighLevel)
     bool enSmallK = false;
     uint8_t padValue = 0;
 
-    check::LoadData3dv2ApiParams chkParams { reinterpret_cast<uint64_t>(output.GetPhyAddr()),
+    check::LoadData3dv2ApiParams chkParams{
+        reinterpret_cast<uint64_t>(output.GetPhyAddr()),
         reinterpret_cast<uint64_t>(input.GetPhyAddr()),
         padList,
         l1H,
@@ -327,7 +333,7 @@ TEST_P(TestLoaddata3dv2ApiCheckSuite, Loaddata3dv2ApiCheckAllHighLevel)
         static_cast<uint64_t>(output.GetLength()),
         static_cast<uint64_t>(input.GetLength()),
         static_cast<uint8_t>(output.GetPosition()),
-        static_cast<uint8_t>(input.GetPosition()) };
+        static_cast<uint8_t>(input.GetPosition())};
     // check::TikcppLoaddata3dv2Check chkIns { "loaddata3dv2", chkParams };
     // bool flag = CheckFuncLoadData3dv2Impl(chkParams, "loaddata3dv2");
 
@@ -344,10 +350,7 @@ TEST_P(TestLoaddata3dv2ApiCheckSuite, Loaddata3dv2ApiCheckAllHighLevel)
 
 class TestLoadData3dv1NpuDebug : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
     void TearDown()
     {
         AscendC::CheckSyncState();
@@ -392,7 +395,7 @@ TEST_F(TestLoadData3dv1NpuDebug, SrcPositionNotL1)
     params.cSize = 0;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -428,11 +431,11 @@ TEST_F(TestLoadData3dv1NpuDebug, RepeatTimesUnderflow)
     params.dilationFilterH = 1;
     params.jumpStride = 1;
     params.repeatMode = 0;
-    params.repeatTime = 0;  // below min=1
+    params.repeatTime = 0; // below min=1
     params.cSize = 0;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -453,7 +456,7 @@ TEST_F(TestLoadData3dv1NpuDebug, L1HUnderflow)
     params.padList[1] = 0;
     params.padList[2] = 0;
     params.padList[3] = 0;
-    params.l1H = 0;  // below min=1
+    params.l1H = 0; // below min=1
     params.l1W = 56;
     params.c1Index = 0;
     params.fetchFilterW = 0;
@@ -472,7 +475,7 @@ TEST_F(TestLoadData3dv1NpuDebug, L1HUnderflow)
     params.cSize = 0;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -507,12 +510,12 @@ TEST_F(TestLoadData3dv1NpuDebug, RepeatModeOverflow)
     params.dilationFilterW = 1;
     params.dilationFilterH = 1;
     params.jumpStride = 1;
-    params.repeatMode = 2;  // exceeds [0, 1]
+    params.repeatMode = 2; // exceeds [0, 1]
     params.repeatTime = 1;
     params.cSize = 0;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -540,7 +543,7 @@ TEST_F(TestLoadData3dv1NpuDebug, StrideWUnderflow)
     params.fetchFilterH = 0;
     params.leftTopW = 0;
     params.leftTopH = 0;
-    params.strideW = 0;  // below min=1
+    params.strideW = 0; // below min=1
     params.strideH = 1;
     params.filterW = 1;
     params.filterH = 1;
@@ -552,7 +555,7 @@ TEST_F(TestLoadData3dv1NpuDebug, StrideWUnderflow)
     params.cSize = 0;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -574,7 +577,7 @@ TEST_F(TestLoadData3dv1NpuDebug, L1WUnderflow)
     params.padList[2] = 0;
     params.padList[3] = 0;
     params.l1H = 2;
-    params.l1W = 0;  // below min=1
+    params.l1W = 0; // below min=1
     params.c1Index = 0;
     params.fetchFilterW = 0;
     params.fetchFilterH = 0;
@@ -592,7 +595,7 @@ TEST_F(TestLoadData3dv1NpuDebug, L1WUnderflow)
     params.cSize = 0;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -615,7 +618,7 @@ TEST_F(TestLoadData3dv1NpuDebug, C1IndexOverflow)
     params.padList[3] = 0;
     params.l1H = 2;
     params.l1W = 56;
-    params.c1Index = 4096;  // exceeds max=4095
+    params.c1Index = 4096; // exceeds max=4095
     params.fetchFilterW = 0;
     params.fetchFilterH = 0;
     params.leftTopW = 0;
@@ -632,7 +635,7 @@ TEST_F(TestLoadData3dv1NpuDebug, C1IndexOverflow)
     params.cSize = 0;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -662,7 +665,7 @@ TEST_F(TestLoadData3dv1NpuDebug, FilterWUnderflow)
     params.leftTopH = 0;
     params.strideW = 1;
     params.strideH = 1;
-    params.filterW = 0;  // below min=1
+    params.filterW = 0; // below min=1
     params.filterH = 1;
     params.dilationFilterW = 1;
     params.dilationFilterH = 1;
@@ -672,7 +675,7 @@ TEST_F(TestLoadData3dv1NpuDebug, FilterWUnderflow)
     params.cSize = 0;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -704,7 +707,7 @@ TEST_F(TestLoadData3dv1NpuDebug, DilationFilterWUnderflow)
     params.strideH = 1;
     params.filterW = 1;
     params.filterH = 1;
-    params.dilationFilterW = 0;  // below min=1
+    params.dilationFilterW = 0; // below min=1
     params.dilationFilterH = 1;
     params.jumpStride = 1;
     params.repeatMode = 0;
@@ -712,7 +715,7 @@ TEST_F(TestLoadData3dv1NpuDebug, DilationFilterWUnderflow)
     params.cSize = 0;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -746,13 +749,13 @@ TEST_F(TestLoadData3dv1NpuDebug, JumpStrideUnderflow)
     params.filterH = 1;
     params.dilationFilterW = 1;
     params.dilationFilterH = 1;
-    params.jumpStride = 0;  // below min=1
+    params.jumpStride = 0; // below min=1
     params.repeatMode = 0;
     params.repeatTime = 1;
     params.cSize = 0;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -789,10 +792,10 @@ TEST_F(TestLoadData3dv1NpuDebug, CSizeOverflow)
     params.jumpStride = 1;
     params.repeatMode = 0;
     params.repeatTime = 1;
-    params.cSize = 2;  // exceeds [0, 1]
+    params.cSize = 2; // exceeds [0, 1]
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -806,10 +809,7 @@ TEST_F(TestLoadData3dv1NpuDebug, CSizeOverflow)
 
 class TestLoadData3dv2NpuDebug : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
     void TearDown()
     {
         AscendC::CheckSyncState();
@@ -852,7 +852,7 @@ TEST_F(TestLoadData3dv2NpuDebug, SrcPositionNotL1)
     params.enSmallK = false;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -873,7 +873,7 @@ TEST_F(TestLoadData3dv2NpuDebug, L1HUnderflow)
     params.padList[1] = 0;
     params.padList[2] = 0;
     params.padList[3] = 0;
-    params.l1H = 0;  // below min=1
+    params.l1H = 0; // below min=1
     params.l1W = 16;
     params.channelSize = 32;
     params.kExtension = 32;
@@ -890,7 +890,7 @@ TEST_F(TestLoadData3dv2NpuDebug, L1HUnderflow)
     params.enSmallK = false;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -914,7 +914,7 @@ TEST_F(TestLoadData3dv2NpuDebug, KExtensionUnderflow)
     params.l1H = 12;
     params.l1W = 16;
     params.channelSize = 32;
-    params.kExtension = 0;  // below min=1
+    params.kExtension = 0; // below min=1
     params.mExtension = 192;
     params.kStartPt = 0;
     params.mStartPt = 0;
@@ -928,7 +928,7 @@ TEST_F(TestLoadData3dv2NpuDebug, KExtensionUnderflow)
     params.enSmallK = false;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -956,7 +956,7 @@ TEST_F(TestLoadData3dv2NpuDebug, StrideWUnderflow)
     params.mExtension = 192;
     params.kStartPt = 0;
     params.mStartPt = 0;
-    params.strideW = 0;  // below min=1
+    params.strideW = 0; // below min=1
     params.strideH = 1;
     params.filterW = 1;
     params.filterH = 1;
@@ -966,7 +966,7 @@ TEST_F(TestLoadData3dv2NpuDebug, StrideWUnderflow)
     params.enSmallK = false;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -1004,7 +1004,7 @@ TEST_F(TestLoadData3dv2NpuDebug, DstB2InvalidDtypeInt8)
     params.enSmallK = false;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<int8_t>(dstLocal, srcLocal, params);
 }
 
@@ -1026,7 +1026,7 @@ TEST_F(TestLoadData3dv2NpuDebug, L1WUnderflow)
     params.padList[2] = 0;
     params.padList[3] = 0;
     params.l1H = 12;
-    params.l1W = 0;  // below min=1
+    params.l1W = 0; // below min=1
     params.channelSize = 32;
     params.kExtension = 32;
     params.mExtension = 192;
@@ -1042,7 +1042,7 @@ TEST_F(TestLoadData3dv2NpuDebug, L1WUnderflow)
     params.enSmallK = false;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -1067,7 +1067,7 @@ TEST_F(TestLoadData3dv2NpuDebug, MExtensionUnderflow)
     params.l1W = 16;
     params.channelSize = 32;
     params.kExtension = 32;
-    params.mExtension = 0;  // below min=1
+    params.mExtension = 0; // below min=1
     params.kStartPt = 0;
     params.mStartPt = 0;
     params.strideW = 1;
@@ -1080,7 +1080,7 @@ TEST_F(TestLoadData3dv2NpuDebug, MExtensionUnderflow)
     params.enSmallK = false;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -1110,7 +1110,7 @@ TEST_F(TestLoadData3dv2NpuDebug, FilterWUnderflow)
     params.mStartPt = 0;
     params.strideW = 1;
     params.strideH = 1;
-    params.filterW = 0;  // below min=1
+    params.filterW = 0; // below min=1
     params.filterH = 1;
     params.dilationFilterW = 1;
     params.dilationFilterH = 1;
@@ -1118,7 +1118,7 @@ TEST_F(TestLoadData3dv2NpuDebug, FilterWUnderflow)
     params.enSmallK = false;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }
 
@@ -1150,12 +1150,12 @@ TEST_F(TestLoadData3dv2NpuDebug, DilationFilterWUnderflow)
     params.strideH = 1;
     params.filterW = 1;
     params.filterH = 1;
-    params.dilationFilterW = 0;  // below min=1
+    params.dilationFilterW = 0; // below min=1
     params.dilationFilterH = 1;
     params.enTranspose = false;
     params.enSmallK = false;
     params.padValue = 0;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     LoadData<half>(dstLocal, srcLocal, params);
 }

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -22,15 +22,14 @@ using namespace std;
 using namespace AscendC;
 
 namespace {
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
-MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE_PRIVATE(NLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(KLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(CopyCubeInParamsB)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+    MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE_PRIVATE(NLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(KLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(CopyCubeInParamsB),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling) {
     MATMUL_ALLOW_USING_PRIVATE(CopyCubeInParamsB);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeInfo);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeTiling);
@@ -49,19 +48,20 @@ public:
     MATMUL_USE_MODULE(MatmulShapeInfo);
     MatmulImpl() {}
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar(const TCubeTiling &tiling) {
+    void InitVar(const TCubeTiling& tiling)
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
     }
 
-    void SetRuntimeParams(int32_t baseUseK, int32_t baseUseN, int32_t stepKbIdx = 0, int32_t stepNIdx = 0, bool isTranspose = false) {
+    void SetRuntimeParams(
+        int32_t baseUseK, int32_t baseUseN, int32_t stepKbIdx = 0, int32_t stepNIdx = 0, bool isTranspose = false)
+    {
         const auto tiling = MATMUL_MODULE(MatmulShapeTiling)->GetTiling();
-        MATMUL_MODULE(MatmulShapeInfo)->SetSingleShape(tiling.GetSingleCoreM(),
-            tiling.GetSingleCoreN(), tiling.GetSingleCoreK());
+        MATMUL_MODULE(MatmulShapeInfo)
+            ->SetSingleShape(tiling.GetSingleCoreM(), tiling.GetSingleCoreN(), tiling.GetSingleCoreK());
         MATMUL_MODULE(MatmulShapeInfo)->SetOrgN(tiling.GetSingleCoreM());
         MATMUL_MODULE(MatmulShapeInfo)->SetOrgKb(tiling.GetSingleCoreK());
         MATMUL_MODULE(MatmulShapeInfo)->SetTransposeB(isTranspose);
@@ -73,7 +73,7 @@ private:
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class TestCopyCubeInParams : public testing::Test {
 protected:
@@ -89,7 +89,8 @@ private:
     MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_MDL, void> mm;
 };
 
-TEST_F(TestCopyCubeInParams, all_interface) {
+TEST_F(TestCopyCubeInParams, all_interface)
+{
     TilingParams tilingParams = {1, 64, 48, 256, 64, 48, 256, 32, 48, 96, 2, 4, 1, 2, 1, 3, 1, 1};
     TCubeTiling tiling;
     tilingParams.GetTiling(tiling);

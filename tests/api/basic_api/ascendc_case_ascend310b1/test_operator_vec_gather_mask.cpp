@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 // #include "model/model_factory.h"
@@ -16,8 +16,9 @@ using namespace std;
 using namespace AscendC;
 
 template <typename T, typename U>
-__global__ __aicore__ void MainReducev2(__gm__ uint16_t* __restrict__ dstGm, __gm__ uint16_t* __restrict__ src0Gm,
-    __gm__ uint16_t* __restrict__ src1Gm, int16_t dataSize1, int16_t dataSize2, int16_t dataSize3)
+__global__ __aicore__ void MainReducev2(
+    __gm__ uint16_t* __restrict__ dstGm, __gm__ uint16_t* __restrict__ src0Gm, __gm__ uint16_t* __restrict__ src1Gm,
+    int16_t dataSize1, int16_t dataSize2, int16_t dataSize3)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -42,18 +43,16 @@ __global__ __aicore__ void MainReducev2(__gm__ uint16_t* __restrict__ dstGm, __g
     DataCopy(input0Local, input0Global, dataSize1);
     DataCopy(input1Local, input1Global, dataSize2);
 
-
     set_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
-
 
     for (int i = 0; i < dataSize2; i++) {
         input1Local.SetValue(i, 65535);
     }
     uint64_t rsvdCnt = 0;
-    GatherMask(outputLocal, input0Local, input1Local, false, 0, { 1, 1, 0, 0 }, rsvdCnt);
-    GatherMask(outputLocal, input0Local, 1, false, 0, { 1, 1, 0, 0 }, rsvdCnt);
-    GatherMask(outputLocal, input0Local, input1Local, true, 64, { 1, 1, 0, 0 }, rsvdCnt);
+    GatherMask(outputLocal, input0Local, input1Local, false, 0, {1, 1, 0, 0}, rsvdCnt);
+    GatherMask(outputLocal, input0Local, 1, false, 0, {1, 1, 0, 0}, rsvdCnt);
+    GatherMask(outputLocal, input0Local, input1Local, true, 64, {1, 1, 0, 0}, rsvdCnt);
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -73,23 +72,19 @@ struct Reducev2TestParams {
 
 class Reducev2Testsuite : public testing::Test, public testing::WithParamInterface<Reducev2TestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_REDUCEV2, Reducev2Testsuite,
-    ::testing::Values(Reducev2TestParams { 2, 128, 16, 128, MainReducev2<half, uint16_t> },
-    Reducev2TestParams { 2, 128, 16, 128, MainReducev2<uint16_t, uint16_t> },
-    Reducev2TestParams { 2, 128, 16, 128, MainReducev2<int16_t, uint16_t> },
-    Reducev2TestParams { 4, 64, 8, 32, MainReducev2<float, uint32_t> },
-    Reducev2TestParams { 4, 64, 8, 32, MainReducev2<uint32_t, uint32_t> },
-    Reducev2TestParams { 4, 64, 8, 32, MainReducev2<int32_t, uint32_t> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_REDUCEV2, Reducev2Testsuite,
+    ::testing::Values(
+        Reducev2TestParams{2, 128, 16, 128, MainReducev2<half, uint16_t>},
+        Reducev2TestParams{2, 128, 16, 128, MainReducev2<uint16_t, uint16_t>},
+        Reducev2TestParams{2, 128, 16, 128, MainReducev2<int16_t, uint16_t>},
+        Reducev2TestParams{4, 64, 8, 32, MainReducev2<float, uint32_t>},
+        Reducev2TestParams{4, 64, 8, 32, MainReducev2<uint32_t, uint32_t>},
+        Reducev2TestParams{4, 64, 8, 32, MainReducev2<int32_t, uint32_t>}));
 
 TEST_P(Reducev2Testsuite, Reducev2TestCase)
 {

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -20,12 +20,14 @@ constexpr uint32_t BASIC_BLK_BSLENGTH = 8;
 constexpr uint32_t MAX_REPEAT = 255;
 constexpr uint32_t HALF_SIZE_IN_BYTE = 2;
 
-inline __aicore__ uint32_t AlignToBlock(const uint32_t inputValue, const uint32_t typeSize) {
+inline __aicore__ uint32_t AlignToBlock(const uint32_t inputValue, const uint32_t typeSize)
+{
     uint32_t alignUnit = ONE_BLK_SIZE / typeSize;
     return (inputValue + alignUnit - 1) / alignUnit * alignUnit;
 }
-__aicore__ bool GetRmsNormTilingInfo(const ShapeInfo &srcShape, const uint32_t stackBufferSize, const uint32_t typeSize,
-    RmsNormTiling &tiling, const bool isBasicBlock)
+__aicore__ bool GetRmsNormTilingInfo(
+    const ShapeInfo& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, RmsNormTiling& tiling,
+    const bool isBasicBlock)
 {
     tiling.bLength = srcShape.shape[0];
     tiling.sLength = srcShape.shape[1];
@@ -38,8 +40,8 @@ __aicore__ bool GetRmsNormTilingInfo(const ShapeInfo &srcShape, const uint32_t s
     uint32_t oneTmpSize = stackBufferSize / sizeof(float);
     uint32_t alignBsLength = ONE_BLK_FLOAT_NUM;
     // for half need two tmp buffers
-    uint32_t halfCoeff = (typeSize == sizeof(float) ? 1u: 2u);
-    while (oneTmpSize > alignBsLength * tiling.hLength * halfCoeff  + alignBsLength) {
+    uint32_t halfCoeff = (typeSize == sizeof(float) ? 1u : 2u);
+    while (oneTmpSize > alignBsLength * tiling.hLength * halfCoeff + alignBsLength) {
         alignBsLength += ONE_BLK_FLOAT_NUM;
     }
     alignBsLength = alignBsLength == ONE_BLK_FLOAT_NUM ? ONE_BLK_FLOAT_NUM : alignBsLength - ONE_BLK_FLOAT_NUM;
@@ -71,11 +73,13 @@ __aicore__ bool GetRmsNormTilingInfo(const ShapeInfo &srcShape, const uint32_t s
     tiling.tailBsLength = inputTailSize / tiling.hLength;
     return true;
 }
-template <typename dataType, bool isBasicBlock = false> class KernelRmsNorm {
+template <typename dataType, bool isBasicBlock = false>
+class KernelRmsNorm {
 public:
     __aicore__ inline KernelRmsNorm() {}
-    __aicore__ inline void Init(GM_ADDR inputGm, GM_ADDR gammaGm, GM_ADDR outputGm, const uint32_t bLength,
-        const uint32_t sLength, const uint32_t inHLength)
+    __aicore__ inline void Init(
+        GM_ADDR inputGm, GM_ADDR gammaGm, GM_ADDR outputGm, const uint32_t bLength, const uint32_t sLength,
+        const uint32_t inHLength)
     {
         hLength = AlignToBlock(inHLength, sizeof(dataType));
         dataType epsilon = 0.001;
@@ -172,25 +176,19 @@ struct RmsnormTestParams {
 
 class RmsnormTestSuite : public testing::Test, public testing::WithParamInterface<RmsnormTestParams> {
 protected:
-    static void SetUpTestCase()
-    {
-        std::cout << "RmsnormTestSuite SetUpTestCase" << std::endl;
-    }
-    static void TearDownTestCase()
-    {
-        std::cout << "RmsnormTestSuite TearDownTestCase" << std::endl;
-    }
+    static void SetUpTestCase() { std::cout << "RmsnormTestSuite SetUpTestCase" << std::endl; }
+    static void TearDownTestCase() { std::cout << "RmsnormTestSuite TearDownTestCase" << std::endl; }
     virtual void SetUp() {}
     virtual void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_PACKAGE_RMSNORM, RmsnormTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_PACKAGE_RMSNORM, RmsnormTestSuite,
     ::testing::Values(
-    RmsnormTestParams { 2, 32, 64, sizeof(half),  main_rmsnorm_test<half,  true>  },
-    RmsnormTestParams { 4, 8, 512, sizeof(half),  main_rmsnorm_test<half,  false> },
-    RmsnormTestParams { 1, 7, 2048, sizeof(float), main_rmsnorm_test<float, true>  },
-    RmsnormTestParams { 2, 256, 32, sizeof(float), main_rmsnorm_test<float, false> }
-    ));
+        RmsnormTestParams{2, 32, 64, sizeof(half), main_rmsnorm_test<half, true>},
+        RmsnormTestParams{4, 8, 512, sizeof(half), main_rmsnorm_test<half, false>},
+        RmsnormTestParams{1, 7, 2048, sizeof(float), main_rmsnorm_test<float, true>},
+        RmsnormTestParams{2, 256, 32, sizeof(float), main_rmsnorm_test<float, false>}));
 
 TEST_P(RmsnormTestSuite, RmsnormTestCase)
 {
@@ -204,10 +202,10 @@ TEST_P(RmsnormTestSuite, RmsnormTestCase)
     uint32_t bshLength = bLength * sLength * hLength;
     uint32_t bsLength = bLength * sLength;
 
-    uint8_t inputGm[bshLength * typeSize] { 0x00 };
-    uint8_t gammGm[hLength * typeSize] { 0x00 };
+    uint8_t inputGm[bshLength * typeSize]{0x00};
+    uint8_t gammGm[hLength * typeSize]{0x00};
 
-    uint8_t outputGm[bshLength * typeSize] {0x00};
+    uint8_t outputGm[bshLength * typeSize]{0x00};
 
     param.cal_func(inputGm, gammGm, outputGm, bLength, sLength, hLength);
 

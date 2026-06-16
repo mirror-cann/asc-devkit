@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,14 +15,14 @@ template <typename T, int mode>
 class MicroCreateIndexTest {
 public:
     __aicore__ inline MicroCreateIndexTest() {}
-    __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-        __gm__ uint8_t* indexOffsetGm, const uint32_t count)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* indexOffsetGm, const uint32_t count)
     {
         mElementCount = count;
         mSrcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         mIndexOffsetGlobal.SetGlobalBuffer((__gm__ T*)indexOffsetGm);
         mDstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
- 
+
         mPipe.InitBuffer(mQueIn, 1, mElementCount * sizeof(T));
         mPipe.InitBuffer(mQueIn2, 1, mElementCount * sizeof(T));
         mPipe.InitBuffer(mQueOut, 1, mElementCount * sizeof(T));
@@ -33,13 +33,14 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
         LocalTensor<T> srcLocal = mQueIn.AllocTensor<T>();
         DataCopy(srcLocal, mSrcGlobal, mElementCount);
         mQueIn.EnQue(srcLocal);
- 
+
         LocalTensor<T> indexLocal = mQueIn2.AllocTensor<T>();
         DataCopy(indexLocal, mIndexOffsetGlobal, mElementCount);
         mQueIn2.EnQue(indexLocal);
@@ -52,7 +53,7 @@ private:
         __ubuf__ T* srcPtr = (__ubuf__ T*)srcLocal.GetPhyAddr();
         __ubuf__ T* indexPtr = (__ubuf__ T*)indexLocal.GetPhyAddr();
         __ubuf__ T* dstPtr = (__ubuf__ T*)dstLocal.GetPhyAddr();
- 
+
         __VEC_SCOPE__
         {
             Reg::RegTensor<T> vIndexReg;
@@ -67,12 +68,11 @@ private:
                 preg = Reg::UpdateMask<half>(sreg);
                 Reg::DataCopy(vIndexReg, indexPtr + i * repeatElm);
                 Reg::Arange(vDstReg, scalar);
- 
+
                 Reg::DataCopy(dstPtr + i * repeatElm, vDstReg, preg);
             }
         }
-       
- 
+
         mQueIn.FreeTensor(srcLocal);
         mQueIn2.FreeTensor(indexLocal);
         mQueOut.EnQue(dstLocal);
@@ -83,6 +83,7 @@ private:
         DataCopy(mDstGlobal, dstLocal, mElementCount);
         mQueOut.FreeTensor(dstLocal);
     }
+
 private:
     TPipe mPipe;
     uint32_t mElementCount;
@@ -96,8 +97,8 @@ private:
 } // namespace AscendC
 
 template <typename T, int mode>
-__global__ __aicore__ void testCreIndex(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-    __gm__ uint8_t* indexOffsetGm, uint32_t elementCount)
+__global__ __aicore__ void testCreIndex(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* indexOffsetGm, uint32_t elementCount)
 {
     AscendC::MicroCreateIndexTest<T, mode> op;
     op.Init(dstGm, srcGm, indexOffsetGm, elementCount);
@@ -111,24 +112,18 @@ struct CreIndexParams {
     void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint32_t);
 };
 
-class creIndexTestsuite : public testing::Test,
-    public testing::WithParamInterface<CreIndexParams> {
+class creIndexTestsuite : public testing::Test, public testing::WithParamInterface<CreIndexParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CREINDEX, creIndexTestsuite,
-    ::testing::Values(CreIndexParams { 2, 2, 128, testCreIndex<half, 0>},
-    CreIndexParams { 4, 4, 64, testCreIndex<int32_t, 0>},
-    CreIndexParams { 2, 2, 128, testCreIndex<int16_t, 0>},
-    CreIndexParams { 2, 2, 128, testCreIndex<int8_t, 0>},
-    CreIndexParams { 4, 4, 64, testCreIndex<float, 0>}));
-
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CREINDEX, creIndexTestsuite,
+    ::testing::Values(
+        CreIndexParams{2, 2, 128, testCreIndex<half, 0>}, CreIndexParams{4, 4, 64, testCreIndex<int32_t, 0>},
+        CreIndexParams{2, 2, 128, testCreIndex<int16_t, 0>}, CreIndexParams{2, 2, 128, testCreIndex<int8_t, 0>},
+        CreIndexParams{4, 4, 64, testCreIndex<float, 0>}));
 
 TEST_P(creIndexTestsuite, testCreIndex)
 {
@@ -137,7 +132,7 @@ TEST_P(creIndexTestsuite, testCreIndex)
     uint8_t srcGm[param.elementCount * param.srcTypeSize] = {0};
     uint8_t indexOffsetGm[param.elementCount * param.dstTypeSize] = {0};
     param.cal_func(dstGm, srcGm, indexOffsetGm, param.elementCount);
-    
+
     for (int32_t i = 0; i < param.elementCount; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }

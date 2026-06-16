@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -22,27 +22,25 @@ using namespace AscendC;
 
 namespace {
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using BiasScheduler = Impl::Detail::BiasScheduler<IMPL, A_TYPE, B_TYPE, BIAS_TYPE, MM_CFG>;
 };
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
-MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE(CubeOutBuffer)
-, MATMUL_IMPORT_MODULE_PRIVATE(C1Buffer)
-, MATMUL_IMPORT_MODULE_PRIVATE(C2Buffer)
-, MATMUL_IMPORT_MODULE_PRIVATE(CopyBiasIn)
-, MATMUL_IMPORT_MODULE_PRIVATE(LoadBias2C2)
-, MATMUL_IMPORT_MODULE_PRIVATE(MLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(NLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(KLoop)
-, MATMUL_IMPORT_MODULE(BiasScheduler)
-, MATMUL_IMPORT_MODULE_PRIVATE(LocalWorkspace)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+    MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(CubeOutBuffer),
+                   MATMUL_IMPORT_MODULE_PRIVATE(C1Buffer),
+                   MATMUL_IMPORT_MODULE_PRIVATE(C2Buffer),
+                   MATMUL_IMPORT_MODULE_PRIVATE(CopyBiasIn),
+                   MATMUL_IMPORT_MODULE_PRIVATE(LoadBias2C2),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(NLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(KLoop),
+                   MATMUL_IMPORT_MODULE(BiasScheduler),
+                   MATMUL_IMPORT_MODULE_PRIVATE(LocalWorkspace),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling) {
     MATMUL_ALLOW_USING(CubeOutBuffer);
     MATMUL_ALLOW_USING(BiasScheduler);
     MATMUL_ALLOW_USING_PRIVATE(MLoop);
@@ -58,6 +56,7 @@ class MatmulImpl
     using BiasT = typename BIAS_TYPE::T;
     using BiasScheduler::IsBias;
     using BiasScheduler::SetBias;
+
 public:
     using VAR_PARAMS =
         typename Impl::Detail::MatmulParams<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, GetMatmulMode(MM_CFG)>::PARAMS;
@@ -71,19 +70,14 @@ public:
     MATMUL_USE_MODULE(NLoop);
     MATMUL_USE_MODULE(KLoop);
     MATMUL_USE_MODULE(MatmulShapeTiling);
-    MatmulImpl() {
-        SetGCoreType(1);
-    }
+    MatmulImpl() { SetGCoreType(1); }
 
-    ~MatmulImpl() {
-        SetGCoreType(0);
-    }
+    ~MatmulImpl() { SetGCoreType(0); }
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar(const TCubeTiling &tiling) {
+    void InitVar(const TCubeTiling& tiling)
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
     }
@@ -97,7 +91,8 @@ public:
         MATMUL_MODULE(BiasScheduler)->SetInput(fakeInput);
     }
 
-    void RunCase(bool isBias = false, bool isUBIn = false) {
+    void RunCase(bool isBias = false, bool isUBIn = false)
+    {
         const auto tiling = MATMUL_MODULE(MatmulShapeTiling)->GetTiling();
         auto mLoop = MATMUL_MODULE(MLoop);
         auto nLoop = MATMUL_MODULE(NLoop);
@@ -134,7 +129,7 @@ private:
     VAR_PARAMS var;
     TQue<TPosition::VECIN, 2> qidBias_;
 };
-}
+} // namespace
 
 class TestBiasScheduler : public testing::Test {
 protected:
@@ -154,8 +149,10 @@ private:
     MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE_UB, CFG_MDL, void, CustomMatmulPolicy> mm2_;
 };
 
-TEST_F(TestBiasScheduler, copy_bias_from_gm) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder
+TEST_F(TestBiasScheduler, copy_bias_from_gm)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder
     TilingParams tilingParams = {1, 64, 256, 256, 64, 256, 256, 32, 64, 128, 2, 4, 1, 1, 1, 1, 1, 1};
     TCubeTiling tiling;
     tilingParams.GetTiling(tiling);
@@ -166,8 +163,10 @@ TEST_F(TestBiasScheduler, copy_bias_from_gm) {
     ASSERT_FALSE(mm1_.IsBias());
 }
 
-TEST_F(TestBiasScheduler, copy_bias_from_ub) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder
+TEST_F(TestBiasScheduler, copy_bias_from_ub)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder
     TilingParams tilingParams = {1, 64, 256, 256, 64, 256, 256, 32, 64, 128, 2, 4, 1, 1, 1, 1, 1, 1};
     TCubeTiling tiling;
     tilingParams.GetTiling(tiling);

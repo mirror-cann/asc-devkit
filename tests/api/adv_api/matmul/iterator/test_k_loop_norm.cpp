@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -21,15 +21,13 @@
 using namespace std;
 using namespace AscendC;
 
-
 namespace {
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
-MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE_PRIVATE(KLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+    MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE_PRIVATE(KLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling) {
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeInfo);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeTiling);
     MATMUL_ALLOW_USING_PRIVATE(KLoop);
@@ -41,35 +39,31 @@ public:
     MATMUL_USE_MODULE(MatmulShapeTiling);
     MATMUL_USE_MODULE(MatmulShapeInfo);
 
-    MatmulImpl() {
-        InitVar();
-    }
+    MatmulImpl() { InitVar(); }
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar() {
+    void InitVar()
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
     }
 
-    void SetInitParams(int32_t stepKa, int32_t stepKb, int32_t baseK) {
+    void SetInitParams(int32_t stepKa, int32_t stepKb, int32_t baseK)
+    {
         tiling.stepKa = stepKa;
         tiling.stepKb = stepKb;
         tiling.baseK = baseK;
     }
 
-    void SetRuntimeParams(int32_t singleCoreK) {
-        MATMUL_MODULE(MatmulShapeInfo)->SetSingleCoreK(singleCoreK);
-    }
+    void SetRuntimeParams(int32_t singleCoreK) { MATMUL_MODULE(MatmulShapeInfo)->SetSingleCoreK(singleCoreK); }
 
 private:
     TCubeTiling tiling;
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class test_k_loop_norm : public testing::Test {
 protected:
@@ -85,7 +79,8 @@ private:
     MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM, void> mm;
 };
 
-TEST_F(test_k_loop_norm, get_loop_cnt) {
+TEST_F(test_k_loop_norm, get_loop_cnt)
+{
     int32_t stepKa = 2;
     int32_t stepKb = 3;
     int32_t baseK = 32;
@@ -108,7 +103,8 @@ TEST_F(test_k_loop_norm, get_loop_cnt) {
     ASSERT_EQ(innerIter, 16);
 }
 
-TEST_F(test_k_loop_norm, loop_with_tail) {
+TEST_F(test_k_loop_norm, loop_with_tail)
+{
     int32_t stepKa = 2;
     int32_t stepKb = 3;
     int32_t baseK = 32;

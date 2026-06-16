@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -34,6 +34,7 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
@@ -55,16 +56,14 @@ private:
         DataCopyPad(srcLocal, mSrcGlobal, dataCopyExtParams, padParams);
         mQueInSrc.EnQue(srcLocal);
     }
-    __aicore__ inline void Compute()
-    {
-        ;
-    }
+    __aicore__ inline void Compute() { ; }
     __aicore__ inline void CopyOut()
     {
         LocalTensor<T> dstLocal = mQueInSrc.DeQue<T>();
         DataCopy(mDstGlobal, dstLocal, mN1 * mN2Align);
         mQueInSrc.FreeTensor(dstLocal);
     }
+
 private:
     TPipe mPipe;
     uint32_t mN1;
@@ -91,19 +90,15 @@ struct setPadValueParams {
     void (*CalFunc)(uint8_t*, uint8_t*, uint32_t, uint32_t);
 };
 
-class SetPadValueTestsuite : public testing::Test,
-    public testing::WithParamInterface<setPadValueParams> {
+class SetPadValueTestsuite : public testing::Test, public testing::WithParamInterface<setPadValueParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_SETPADVALUE, SetPadValueTestsuite,
-    ::testing::Values(setPadValueParams { 32, 31, 2, testSetPadValue<half>}));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_SETPADVALUE, SetPadValueTestsuite,
+    ::testing::Values(setPadValueParams{32, 31, 2, testSetPadValue<half>}));
 
 TEST_P(SetPadValueTestsuite, testSetPadValue)
 {
@@ -114,7 +109,7 @@ TEST_P(SetPadValueTestsuite, testSetPadValue)
     uint8_t srcGm[n1 * n2 * param.typeSize] = {0};
     uint8_t dstGm[n1 * n2Align * param.typeSize] = {0};
     param.CalFunc(dstGm, srcGm, n1, n2);
-    
+
     for (int32_t i = 0; i < n1 * n2Align; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }

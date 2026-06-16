@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <mockcpp/mockcpp.hpp>
@@ -20,17 +20,12 @@ protected:
 };
 
 namespace {
-vector_bool asc_get_mask_spr_Stub()
-{
-    return 1;
-}
-}
+vector_bool asc_get_mask_spr_Stub() { return 1; }
+} // namespace
 
 TEST_F(TestVectorDatamoveGetMaskSpr, get_mask_spr_b16_Succ)
 {
-    MOCKER_CPP(movp_b16, vector_bool(void))
-            .times(1)
-            .will(invoke(asc_get_mask_spr_Stub));
+    MOCKER_CPP(movp_b16, vector_bool(void)).times(1).will(invoke(asc_get_mask_spr_Stub));
 
     vector_bool val = asc_get_mask_spr_b16();
     EXPECT_EQ(1, val);
@@ -39,9 +34,7 @@ TEST_F(TestVectorDatamoveGetMaskSpr, get_mask_spr_b16_Succ)
 
 TEST_F(TestVectorDatamoveGetMaskSpr, get_mask_spr_b32_Succ)
 {
-    MOCKER_CPP(movp_b32, vector_bool(void))
-            .times(1)
-            .will(invoke(asc_get_mask_spr_Stub));
+    MOCKER_CPP(movp_b32, vector_bool(void)).times(1).will(invoke(asc_get_mask_spr_Stub));
 
     vector_bool val = asc_get_mask_spr_b32();
     EXPECT_EQ(1, val);

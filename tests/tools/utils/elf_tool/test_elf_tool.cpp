@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <cmath>
 #include <fstream>
@@ -40,16 +40,12 @@ std::string GetElfString()
 class TEST_ELFTOOL : public testing::Test {
 protected:
     void SetUp() {}
-    void TearDown()
-    {
-        GlobalMockObject::verify();
-    }
+    void TearDown() { GlobalMockObject::verify(); }
 };
 
 void GetElfBuffer(const char* str, char* buf, int& len)
 {
-    char b2c[16] = {'0', '1', '2', '3', '4', '5', '6', '7',
-                    '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    char b2c[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
     char c2b[256];
     for (int i = 0; i < 16; i++) {
         c2b[b2c[i]] = i;
@@ -123,7 +119,11 @@ TEST_F(TEST_ELFTOOL, elfGetSymbolOffsetNoTable)
 {
     const size_t buf_size = sizeof(Elf_Ehdr) + 2 * sizeof(Elf_Shdr) + 20;
     uint8_t elf[buf_size] = {0};
-    memcpy(elf, "\x7F""ELF", 4);
+    memcpy(
+        elf,
+        "\x7F"
+        "ELF",
+        4);
     Elf_Ehdr* eh = (Elf_Ehdr*)elf;
     eh->e_ident[EI_CLASS] = ELFCLASS32;
     eh->e_ident[EI_DATA] = ELFDATA2LSB;
@@ -139,7 +139,7 @@ TEST_F(TEST_ELFTOOL, elfGetSymbolOffsetNoTable)
     memset(sh, 0, sizeof(Elf_Shdr));
     sh++;
     sh->sh_name = 1;
-    sh->sh_type = 3;  /* String table */
+    sh->sh_type = 3; /* String table */
     sh->sh_offset = eh->e_shoff + 2 * sizeof(Elf_Shdr);
     sh->sh_size = 20;
 

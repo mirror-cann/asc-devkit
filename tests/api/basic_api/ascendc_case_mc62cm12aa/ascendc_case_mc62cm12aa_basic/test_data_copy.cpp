@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protect public
@@ -30,8 +30,9 @@ protected:
     void TearDown() {}
 };
 
-template<typename T>
-void main_data_copy_kernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, int32_t dataSize, bool ub2l1)
+template <typename T>
+void main_data_copy_kernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, int32_t dataSize, bool ub2l1)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -56,10 +57,9 @@ void main_data_copy_kernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* _
     l1Local.SetAddr(tbuf_l1);
     l1Local.InitBuffer(0, dataSize);
 
-
     LocalTensor<T> biasLocal;
     TBuffAddr tbuf_bias;
-    tbuf_bias.logicPos = (uint8_t)TPosition::C2;  
+    tbuf_bias.logicPos = (uint8_t)TPosition::C2;
     biasLocal.SetAddr(tbuf_bias);
     biasLocal.InitBuffer(0, dataSize);
 
@@ -72,23 +72,25 @@ void main_data_copy_kernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* _
     } else {
         DataCopy(outputLocal, inputLocal, datacopyParams, enhancedParams);
     }
-    DataCopy(dstGlobal,inputLocal,datacopyParams);
+    DataCopy(dstGlobal, inputLocal, datacopyParams);
     DataCopy(biasLocal, l1Local, datacopyParams);
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_DATA_COPY, TestDataCopySuite,
-    ::testing::Values(TestDataCopyParams { 512, 4, main_data_copy_kernel<int32_t>, false },
-    TestDataCopyParams { 512, 2, main_data_copy_kernel<int16_t>, false },
-    TestDataCopyParams { 512, 4, main_data_copy_kernel<float>, false },
-    TestDataCopyParams { 768, 2, main_data_copy_kernel<half>, false },
-    TestDataCopyParams { 2048, 1, main_data_copy_kernel<int8_t>, false },
-    TestDataCopyParams { 2048, 1, main_data_copy_kernel<uint8_t>, false },
-    TestDataCopyParams { 512, 4, main_data_copy_kernel<int32_t>, true },
-    TestDataCopyParams { 512, 2, main_data_copy_kernel<int16_t>, true },
-    TestDataCopyParams { 512, 4, main_data_copy_kernel<float>, true },
-    TestDataCopyParams { 768, 2, main_data_copy_kernel<half>, true },
-    TestDataCopyParams { 2048, 1, main_data_copy_kernel<int8_t>, true },
-    TestDataCopyParams { 2048, 1, main_data_copy_kernel<uint8_t>, true }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_DATA_COPY, TestDataCopySuite,
+    ::testing::Values(
+        TestDataCopyParams{512, 4, main_data_copy_kernel<int32_t>, false},
+        TestDataCopyParams{512, 2, main_data_copy_kernel<int16_t>, false},
+        TestDataCopyParams{512, 4, main_data_copy_kernel<float>, false},
+        TestDataCopyParams{768, 2, main_data_copy_kernel<half>, false},
+        TestDataCopyParams{2048, 1, main_data_copy_kernel<int8_t>, false},
+        TestDataCopyParams{2048, 1, main_data_copy_kernel<uint8_t>, false},
+        TestDataCopyParams{512, 4, main_data_copy_kernel<int32_t>, true},
+        TestDataCopyParams{512, 2, main_data_copy_kernel<int16_t>, true},
+        TestDataCopyParams{512, 4, main_data_copy_kernel<float>, true},
+        TestDataCopyParams{768, 2, main_data_copy_kernel<half>, true},
+        TestDataCopyParams{2048, 1, main_data_copy_kernel<int8_t>, true},
+        TestDataCopyParams{2048, 1, main_data_copy_kernel<uint8_t>, true}));
 
 TEST_P(TestDataCopySuite, TestDataCopyCases)
 {
@@ -96,23 +98,20 @@ TEST_P(TestDataCopySuite, TestDataCopyCases)
     uint8_t* srcGm = new uint8_t[param.dataSize * param.typeSize * 10];
     uint8_t* dstGm = new uint8_t[param.dataSize * param.typeSize * 10];
     param.cal_func(srcGm, dstGm, param.dataSize, param.ub2l1);
-    delete [] srcGm;
-    delete [] dstGm;
+    delete[] srcGm;
+    delete[] dstGm;
 }
 
 class DataCopyUB2L0CTestSuite : public ::testing::Test {
 protected:
-    virtual void SetUp()
-    {
-        SetGCoreType(2);
-    }
+    virtual void SetUp() { SetGCoreType(2); }
     virtual void TearDown()
     {
         GlobalMockObject::verify();
         SetGCoreType(0);
     }
 };
- 
+
 TEST_F(DataCopyUB2L0CTestSuite, testCaseDataCopyUB2L0C)
 {
     LocalTensor<uint16_t> srcGm;

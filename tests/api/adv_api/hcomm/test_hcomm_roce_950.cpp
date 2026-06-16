@@ -16,7 +16,6 @@
 using namespace std;
 using namespace AscendC;
 
-
 class HcommRoCETestSuite : public testing::Test {
 protected:
     virtual void SetUp()
@@ -85,8 +84,7 @@ TEST_F(HcommRoCETestSuite, Init_ReadNbi_Drain)
     EXPECT_EQ(hcomm.Init((__ubuf__ uint8_t*)(addr_), 256), -1);
     EXPECT_EQ(hcomm.Init((__ubuf__ uint8_t*)(addr_), 512), 0);
     ChannelHandle channelHandle = reinterpret_cast<ChannelHandle>(&channel_);
-    int32_t ret = hcomm.ReadNbi(channelHandle,
-        reinterpret_cast<GM_ADDR>(0x110), reinterpret_cast<GM_ADDR>(0x220), 10);
+    int32_t ret = hcomm.ReadNbi(channelHandle, reinterpret_cast<GM_ADDR>(0x110), reinterpret_cast<GM_ADDR>(0x220), 10);
     EXPECT_EQ(ret, 0);
     ret = hcomm.Drain(channelHandle);
     EXPECT_EQ(ret, 0);
@@ -98,11 +96,10 @@ TEST_F(HcommRoCETestSuite, Init_WriteNbi_Drain)
     EXPECT_EQ(hcomm.Init(tempTensor_, 256), -1);
     EXPECT_EQ(hcomm.Init(tempTensor_, 512), 0);
     ChannelHandle channelHandle = reinterpret_cast<ChannelHandle>(&channel_);
-    int32_t ret = hcomm.WriteNbi<false>(channelHandle,
-        reinterpret_cast<GM_ADDR>(0x220), reinterpret_cast<GM_ADDR>(0x110), 10);
+    int32_t ret =
+        hcomm.WriteNbi<false>(channelHandle, reinterpret_cast<GM_ADDR>(0x220), reinterpret_cast<GM_ADDR>(0x110), 10);
     EXPECT_EQ(ret, 0);
-    ret = hcomm.WriteNbi<false>(channelHandle,
-        reinterpret_cast<GM_ADDR>(0x220), reinterpret_cast<GM_ADDR>(0x110), 10);
+    ret = hcomm.WriteNbi<false>(channelHandle, reinterpret_cast<GM_ADDR>(0x220), reinterpret_cast<GM_ADDR>(0x110), 10);
     EXPECT_EQ(ret, 0);
     ret = hcomm.Commit(channelHandle);
     EXPECT_EQ(ret, 0);
@@ -115,7 +112,8 @@ TEST_F(HcommRoCETestSuite, Init_WriteWithNotifyNbi)
     Hcomm<AscendC::COMM_PROTOCOL_ROCE> hcomm;
     EXPECT_EQ(hcomm.Init(tempTensor_, 512), 0);
     ChannelHandle channelHandle = reinterpret_cast<ChannelHandle>(&channel_);
-    int32_t ret = hcomm.WriteWithNotifyNbi<false>(channelHandle,
-        reinterpret_cast<GM_ADDR>(0x220), reinterpret_cast<GM_ADDR>(0x110), 10, reinterpret_cast<GM_ADDR>(0x310), 10);
+    int32_t ret = hcomm.WriteWithNotifyNbi<false>(
+        channelHandle, reinterpret_cast<GM_ADDR>(0x220), reinterpret_cast<GM_ADDR>(0x110), 10,
+        reinterpret_cast<GM_ADDR>(0x310), 10);
     EXPECT_EQ(ret, -1);
 }

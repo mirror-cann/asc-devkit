@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -18,41 +18,35 @@
 using namespace std;
 using namespace AscendC;
 
-
 namespace {
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
-MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE(CubeOutBuffer)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+    MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(CubeOutBuffer), MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling) {
     MATMUL_ALLOW_USING(CubeOutBuffer);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeTiling);
     using VAR_PARAMS =
         typename Impl::Detail::MatmulParams<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, GetMatmulMode(MM_CFG)>::PARAMS;
 
 public:
-    using CubeOutBuffer::Destroy;
-    using CubeOutBuffer::Init;
     using CubeOutBuffer::AllocTensor;
-    using CubeOutBuffer::GetTensor;
-    using CubeOutBuffer::EnQue;
     using CubeOutBuffer::DeQue;
+    using CubeOutBuffer::Destroy;
+    using CubeOutBuffer::EnQue;
     using CubeOutBuffer::FreeTensor;
+    using CubeOutBuffer::GetTensor;
+    using CubeOutBuffer::Init;
     using IMPL = MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, MM_CB, MATMUL_POLICY>;
     MATMUL_USE_MODULE(MatmulShapeTiling);
 
 public:
-    MatmulImpl() {
-        InitVar();
-    }
+    MatmulImpl() { InitVar(); }
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar() {
+    void InitVar()
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
         var.baseMN_ = 1024;
@@ -63,7 +57,7 @@ private:
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class test_matmul_l0c_buffer : public testing::Test {
 protected:
@@ -82,8 +76,8 @@ private:
     MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_MDL, void> disUnitFlagMM;
 };
 
-TEST_F(test_matmul_l0c_buffer, enable_unit_flag) {
-
+TEST_F(test_matmul_l0c_buffer, enable_unit_flag)
+{
     enUnitFlagMM.Init(1024);
     auto co1Local = enUnitFlagMM.AllocTensor();
     auto co1Local1 = enUnitFlagMM.GetTensor();
@@ -93,8 +87,8 @@ TEST_F(test_matmul_l0c_buffer, enable_unit_flag) {
     enUnitFlagMM.Destroy();
 }
 
-TEST_F(test_matmul_l0c_buffer, disable_unit_flag) {
-
+TEST_F(test_matmul_l0c_buffer, disable_unit_flag)
+{
     disUnitFlagMM.Init(1024);
     auto co1Local = disUnitFlagMM.AllocTensor();
     auto co1Local1 = disUnitFlagMM.GetTensor();

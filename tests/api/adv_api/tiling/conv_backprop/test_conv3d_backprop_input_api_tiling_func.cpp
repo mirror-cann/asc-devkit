@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <vector>
 #include <gtest/gtest.h>
 #include "graph/tensor.h"
@@ -72,7 +72,7 @@ TEST_F(TestConv3dInputTiling, Init_Check_002)
     platform.ubSize = static_cast<uint64_t>(0);
     platform.btSize = 0;
     platform.fbSize = 0;
-    Conv3DBpInputTiling  conv3dDx_PlatformInfo_init(platform);
+    Conv3DBpInputTiling conv3dDx_PlatformInfo_init(platform);
 
     EXPECT_EQ(0, conv3dDx_PlatformInfo_init.platformInfo.l1Size);
     EXPECT_EQ(0, conv3dDx_PlatformInfo_init.platformInfo.l0ASize);
@@ -208,7 +208,6 @@ TEST_F(TestConv3dInputTiling, LegalProtection)
     conv3dDx.tilingParams.al1Pbuffer = 2;
     conv3dDx.tilingParams.bl1Pbuffer = 2;
     conv3dDx.mmInfo_.kValue = 32;
-    
 
     conv3dDx.lenHkWkC0_ = 2;
     conv3dDx.LegalProtection();
@@ -262,12 +261,11 @@ TEST_F(TestConv3dInputTiling, ShrinkBasicBlock_ShouldRestoreOriginalValues_WhenA
 
     conv3dDx.mmInfo_.kValue = 200;
 
-
     conv3dDx.tilingParams.stepKa = 2;
     conv3dDx.tilingParams.stepKb = 2;
     conv3dDx.tilingParams.stepN = 1;
     conv3dDx.tilingParams.stepM = 1;
-    
+
     conv3dDx.ShrinkBasicBlock();
 
     EXPECT_EQ(49, conv3dDx.tilingParams.baseM);
@@ -277,7 +275,6 @@ TEST_F(TestConv3dInputTiling, ShrinkBasicBlock_ShouldRestoreOriginalValues_WhenA
     conv3dDx.lenHkWkC0_ = 0;
     conv3dDx.ShrinkBasicBlock();
 }
-
 
 TEST_F(TestConv3dInputTiling, Check_Zero_Input)
 {
@@ -303,8 +300,7 @@ TEST_F(TestConv3dInputTiling, Check_Zero_Input)
     conv3dDx.mmInfo_.kValue = 1;
     conv3dDx.mmInfo_.nValue = 1;
     conv3dDx.AdjustBaseMNK(1, 1, baseM, baseN, baseK);
-    
-    
+
     conv3dDx.shapeInfo.orgkH = 1;
     conv3dDx.shapeInfo.orgkW = 1;
     conv3dDx.tilingParams.baseK = 1;

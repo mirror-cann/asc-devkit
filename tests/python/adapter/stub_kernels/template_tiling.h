@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
- /*!
+/*!
  * \file template_argument.h
  * \brief
  */
 
- #ifndef TEMPLATE_ARGUMENT_H
- #define TEMPLATE_ARGUMENT_H
+#ifndef TEMPLATE_ARGUMENT_H
+#define TEMPLATE_ARGUMENT_H
 
 #include <cstdint>
 #ifndef ASCENDC_TPL_KERNEL
@@ -47,19 +47,19 @@ using namespace std;
 #define ASCENDC_TPL_UI_MIX 2
 
 #if defined(ASCENDC_TPL_PRE)
-#define ASCENDC_TPL_DTYPE_DECL(x, ...) @@ASCENDC_TPL_DTYPE_DECL_##x@@ = {__VA_ARGS__}
-#define ASCENDC_TPL_FORMAT_DECL(x, ...) @@ASCENDC_TPL_FORMAT_DECL_##x@@ = {__VA_ARGS__}
-#define ASCENDC_TPL_UINT_DECL(x, ...) @@ASCENDC_TPL_UINT_DECL_##x@@ = {__VA_ARGS__}
-#define ASCENDC_TPL_BOOL_DECL(x, ...) @@ASCENDC_TPL_BOOL_DECL_##x@@ = {__VA_ARGS__}
+#define ASCENDC_TPL_DTYPE_DECL(x, ...) @ @ASCENDC_TPL_DTYPE_DECL_##x @ @ = {__VA_ARGS__}
+#define ASCENDC_TPL_FORMAT_DECL(x, ...) @ @ASCENDC_TPL_FORMAT_DECL_##x @ @ = {__VA_ARGS__}
+#define ASCENDC_TPL_UINT_DECL(x, ...) @ @ASCENDC_TPL_UINT_DECL_##x @ @ = {__VA_ARGS__}
+#define ASCENDC_TPL_BOOL_DECL(x, ...) @ @ASCENDC_TPL_BOOL_DECL_##x @ @ = {__VA_ARGS__}
 
-#define ASCENDC_TPL_DTYPE_SEL(x, ...) @@ASCENDC_TPL_DTYPE_SEL_##x@@ = {__VA_ARGS__}
-#define ASCENDC_TPL_FORMAT_SEL(x, ...) @@ASCENDC_TPL_FORMAT_SEL_##x@@ = {__VA_ARGS__}
-#define ASCENDC_TPL_UINT_SEL(x, ...) @@ASCENDC_TPL_UINT_SEL_##x@@ = {__VA_ARGS__}
-#define ASCENDC_TPL_BOOL_SEL(x, ...) @@ASCENDC_TPL_BOOL_SEL_##x@@ = {__VA_ARGS__}
+#define ASCENDC_TPL_DTYPE_SEL(x, ...) @ @ASCENDC_TPL_DTYPE_SEL_##x @ @ = {__VA_ARGS__}
+#define ASCENDC_TPL_FORMAT_SEL(x, ...) @ @ASCENDC_TPL_FORMAT_SEL_##x @ @ = {__VA_ARGS__}
+#define ASCENDC_TPL_UINT_SEL(x, ...) @ @ASCENDC_TPL_UINT_SEL_##x @ @ = {__VA_ARGS__}
+#define ASCENDC_TPL_BOOL_SEL(x, ...) @ @ASCENDC_TPL_BOOL_SEL_##x @ @ = {__VA_ARGS__}
 
-#define ASCENDC_TPL_ARGS_DECL(x, ...) @@ASCENDC_TPL_ARGS_DECL_##x@@ = {__VA_ARGS__}
-#define ASCENDC_TPL_ARGS_SEL(...) @@{__VA_ARGS__}
-#define ASCENDC_TPL_SEL(...) @@ASCENDC_TPL_LISTS@@ = {__VA_ARGS__}
+#define ASCENDC_TPL_ARGS_DECL(x, ...) @ @ASCENDC_TPL_ARGS_DECL_##x @ @ = {__VA_ARGS__}
+#define ASCENDC_TPL_ARGS_SEL(...) @ @{__VA_ARGS__}
+#define ASCENDC_TPL_SEL(...) @ @ASCENDC_TPL_LISTS @ @ = {__VA_ARGS__}
 
 #else
 #define ASCENDC_TPL_DTYPE_DECL(...)

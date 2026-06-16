@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -17,12 +17,11 @@ using namespace AscendC;
 template <typename srcType, uint32_t calCount, uint32_t dataSize, uint32_t apiMode>
 class KernelLgamma {
 public:
-    __aicore__ inline KernelLgamma()
-    {}
+    __aicore__ inline KernelLgamma() {}
     __aicore__ inline void Init(GM_ADDR src_gm, GM_ADDR dst_gm)
     {
-        src_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(src_gm), dataSize);
-        dst_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(dst_gm), dataSize);
+        src_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(src_gm), dataSize);
+        dst_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(dst_gm), dataSize);
 
         pipe.InitBuffer(inQueueX, 1, dataSize * sizeof(srcType));
         pipe.InitBuffer(outQueue, 1, dataSize * sizeof(srcType));
@@ -98,24 +97,17 @@ struct LgammaTestParams {
 
 class AdvanceLgammaTestSuite : public testing::TestWithParam<LgammaTestParams> {
 protected:
-void SetUp()
-{
-    AscendC::SetGCoreType(2);
-}
-void TearDown()
-{
-    AscendC::SetGCoreType(0);
-}
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ADVANCE_API_LGAMMA, AdvanceLgammaTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ADVANCE_API_LGAMMA, AdvanceLgammaTestSuite,
     ::testing::Values(
-        LgammaTestParams {4, 32, kernel_lgamma_operator<float, 32, 32, 0>},
-        LgammaTestParams {4, 4096, kernel_lgamma_operator<float, 32, 4096, 1>},
-        LgammaTestParams {2, 32, kernel_lgamma_operator<half, 32, 32, 0>},
-        LgammaTestParams {2, 4096, kernel_lgamma_operator<half, 32, 4096, 1>},
-    )
-);
+        LgammaTestParams{4, 32, kernel_lgamma_operator<float, 32, 32, 0>},
+        LgammaTestParams{4, 4096, kernel_lgamma_operator<float, 32, 4096, 1>},
+        LgammaTestParams{2, 32, kernel_lgamma_operator<half, 32, 32, 0>},
+        LgammaTestParams{2, 4096, kernel_lgamma_operator<half, 32, 4096, 1>}, ));
 
 TEST_P(AdvanceLgammaTestSuite, kernel_lgamma_operator)
 {

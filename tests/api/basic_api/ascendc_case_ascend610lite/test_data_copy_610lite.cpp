@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -14,8 +14,8 @@
 using namespace AscendC;
 
 template <typename T>
-__global__ __aicore__ void MainDataCopySimple(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm,
-    int32_t dataSize)
+__global__ __aicore__ void MainDataCopySimple(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -51,12 +51,13 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_DATA_COPY_SIMPLE, DataCopySimpleTestsuite,
-    ::testing::Values(DataCopyTestParams { 512, 4, MainDataCopySimple<float> },
-    DataCopyTestParams { 512, 1, MainDataCopySimple<uint8_t> },
-    DataCopyTestParams { 512, 2, MainDataCopySimple<uint16_t> },
-    DataCopyTestParams { 512, 4, MainDataCopySimple<uint32_t> },
-    DataCopyTestParams { 512, 8, MainDataCopySimple<uint64_t> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_DATA_COPY_SIMPLE, DataCopySimpleTestsuite,
+    ::testing::Values(
+        DataCopyTestParams{512, 4, MainDataCopySimple<float>}, DataCopyTestParams{512, 1, MainDataCopySimple<uint8_t>},
+        DataCopyTestParams{512, 2, MainDataCopySimple<uint16_t>},
+        DataCopyTestParams{512, 4, MainDataCopySimple<uint32_t>},
+        DataCopyTestParams{512, 8, MainDataCopySimple<uint64_t>}));
 
 TEST_P(DataCopySimpleTestsuite, DataCopy610LiteSimpleTestCase)
 {
@@ -82,8 +83,9 @@ protected:
     void TearDown() {}
 };
 
-template<typename T, bool copyByUb>
-void MainDataCopyPadKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
+template <typename T, bool copyByUb>
+void MainDataCopyPadKernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -97,7 +99,7 @@ void MainDataCopyPadKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* _
 
     InitOutput(testGlobal, dataSize * sizeof(T) / sizeof(half));
 
-    if constexpr(copyByUb) {
+    if constexpr (copyByUb) {
         TBuf<TPosition::VECCALC> tbuf;
         tpipe.InitBuffer(tbuf, dataSize * sizeof(T));
         LocalTensor<T> inputLocal = tbuf.Get<T>();
@@ -118,24 +120,25 @@ void MainDataCopyPadKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* _
     }
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_DATA_COPY_PAD, TestDataCopyPadSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_DATA_COPY_PAD, TestDataCopyPadSuite,
     ::testing::Values(
-    TestDataCopyPadParams { 64, 4, MainDataCopyPadKernel<int32_t, true> },
-    TestDataCopyPadParams { 64, 4, MainDataCopyPadKernel<uint32_t, true> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernel<int16_t, true> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernel<uint16_t, true> },
-    TestDataCopyPadParams { 64, 4, MainDataCopyPadKernel<float, true> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernel<half, true> },
-    TestDataCopyPadParams { 64, 1, MainDataCopyPadKernel<int8_t, true> },
-    TestDataCopyPadParams { 64, 1, MainDataCopyPadKernel<uint8_t, true> },
-    TestDataCopyPadParams { 64, 4, MainDataCopyPadKernel<int32_t, false> },
-    TestDataCopyPadParams { 64, 4, MainDataCopyPadKernel<uint32_t, false> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernel<int16_t, false> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernel<uint16_t, false> },
-    TestDataCopyPadParams { 64, 4, MainDataCopyPadKernel<float, false> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernel<half, false> },
-    TestDataCopyPadParams { 64, 1, MainDataCopyPadKernel<int8_t, false> },
-    TestDataCopyPadParams { 64, 1, MainDataCopyPadKernel<uint8_t, false> }));
+        TestDataCopyPadParams{64, 4, MainDataCopyPadKernel<int32_t, true>},
+        TestDataCopyPadParams{64, 4, MainDataCopyPadKernel<uint32_t, true>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernel<int16_t, true>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernel<uint16_t, true>},
+        TestDataCopyPadParams{64, 4, MainDataCopyPadKernel<float, true>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernel<half, true>},
+        TestDataCopyPadParams{64, 1, MainDataCopyPadKernel<int8_t, true>},
+        TestDataCopyPadParams{64, 1, MainDataCopyPadKernel<uint8_t, true>},
+        TestDataCopyPadParams{64, 4, MainDataCopyPadKernel<int32_t, false>},
+        TestDataCopyPadParams{64, 4, MainDataCopyPadKernel<uint32_t, false>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernel<int16_t, false>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernel<uint16_t, false>},
+        TestDataCopyPadParams{64, 4, MainDataCopyPadKernel<float, false>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernel<half, false>},
+        TestDataCopyPadParams{64, 1, MainDataCopyPadKernel<int8_t, false>},
+        TestDataCopyPadParams{64, 1, MainDataCopyPadKernel<uint8_t, false>}));
 
 TEST_P(TestDataCopyPadSuite, TestDataCopyPadCases)
 {
@@ -168,6 +171,7 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
@@ -189,16 +193,14 @@ private:
         DataCopyPad(srcLocal, mSrcGlobal, dataCopyExtParams, padParams);
         mQueInSrc.EnQue(srcLocal);
     }
-    __aicore__ inline void Compute()
-    {
-        ;
-    }
+    __aicore__ inline void Compute() { ; }
     __aicore__ inline void CopyOut()
     {
         LocalTensor<T> dstLocal = mQueInSrc.DeQue<T>();
         DataCopy(mDstGlobal, dstLocal, mN1 * mN2Align);
         mQueInSrc.FreeTensor(dstLocal);
     }
+
 private:
     TPipe mPipe;
     uint32_t mN1;
@@ -224,19 +226,15 @@ struct SetPadValueParams {
     void (*cal_func)(uint8_t*, uint8_t*, uint32_t, uint32_t);
 };
 
-class SetPadValueTestsuite : public testing::Test,
-    public testing::WithParamInterface<SetPadValueParams> {
+class SetPadValueTestsuite : public testing::Test, public testing::WithParamInterface<SetPadValueParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_SETPADVALUE, SetPadValueTestsuite,
-    ::testing::Values(SetPadValueParams { 32, 31, 2, testSetPadValue<half>}));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_SETPADVALUE, SetPadValueTestsuite,
+    ::testing::Values(SetPadValueParams{32, 31, 2, testSetPadValue<half>}));
 
 TEST_P(SetPadValueTestsuite, testSetPadValue)
 {
@@ -247,7 +245,7 @@ TEST_P(SetPadValueTestsuite, testSetPadValue)
     uint8_t srcGm[n1 * n2 * param.typeSize] = {0};
     uint8_t dstGm[n1 * n2Align * param.typeSize] = {0};
     param.cal_func(dstGm, srcGm, n1, n2);
-    
+
     for (int32_t i = 0; i < n1 * n2Align; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }

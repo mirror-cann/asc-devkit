@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "acl/acl.h"
 #include "securec.h"
@@ -22,17 +22,14 @@
 class TEST_AICPU_RT : public testing::Test {
 protected:
     void SetUp() {}
-    void TearDown()
-    {
-        GlobalMockObject::verify();
-    }
+    void TearDown() { GlobalMockObject::verify(); }
 };
 
 extern "C" {
-    int32_t ElfGetSymbolOffset(uint8_t* elf, size_t elfSize, const char* symbolName, size_t* offset, size_t* size);
+int32_t ElfGetSymbolOffset(uint8_t* elf, size_t elfSize, const char* symbolName, size_t* offset, size_t* size);
 }
 
-int AicpuGetDumpConfigStub(void **addr, size_t *size)
+int AicpuGetDumpConfigStub(void** addr, size_t* size)
 {
     char buffer[16] = {0};
     *addr = buffer;
@@ -41,35 +38,35 @@ int AicpuGetDumpConfigStub(void **addr, size_t *size)
 }
 
 // Stubs for ElfGetSymbolOffset with different validation scenarios
-int32_t ElfGetSymbolOffsetStubInvalidSize(uint8_t* elf, size_t elfSize, const char* symbolName, size_t* offset, 
-    size_t* size)
+int32_t ElfGetSymbolOffsetStubInvalidSize(
+    uint8_t* elf, size_t elfSize, const char* symbolName, size_t* offset, size_t* size)
 {
     *offset = 16;
-    *size = 8;  // Less than sizeof(size_t) * 2 = 16
+    *size = 8; // Less than sizeof(size_t) * 2 = 16
     return 0;
 }
 
-int32_t ElfGetSymbolOffsetStubInvalidAlignment(uint8_t* elf, size_t elfSize, const char* symbolName, size_t* offset, 
-    size_t* size)
+int32_t ElfGetSymbolOffsetStubInvalidAlignment(
+    uint8_t* elf, size_t elfSize, const char* symbolName, size_t* offset, size_t* size)
 {
-    *offset = 10;  // Not 8-byte aligned
+    *offset = 10; // Not 8-byte aligned
     *size = 16;
     return 0;
 }
 
-int32_t ElfGetSymbolOffsetStubOutOfBounds(uint8_t* elf, size_t elfSize, const char* symbolName, size_t* offset, 
-    size_t* size)
+int32_t ElfGetSymbolOffsetStubOutOfBounds(
+    uint8_t* elf, size_t elfSize, const char* symbolName, size_t* offset, size_t* size)
 {
-    *offset = elfSize;  // Will cause out-of-bounds
+    *offset = elfSize; // Will cause out-of-bounds
     *size = 16;
     return 0;
 }
 
-int32_t ElfGetSymbolOffsetStubSuccess(uint8_t* elf, size_t elfSize, const char* symbolName, size_t* offset, 
-    size_t* size)
+int32_t ElfGetSymbolOffsetStubSuccess(
+    uint8_t* elf, size_t elfSize, const char* symbolName, size_t* offset, size_t* size)
 {
-    *offset = 16;   // Valid aligned offset
-    *size = 16;     // Valid size (>= sizeof(size_t) * 2)
+    *offset = 16; // Valid aligned offset
+    *size = 16;   // Valid size (>= sizeof(size_t) * 2)
     return 0;
 }
 
@@ -99,13 +96,13 @@ TEST_F(TEST_AICPU_RT, AicpuSetDumpConfigTest)
     delete[] aicpuFileBuf;
 }
 
-int aclrtGetDeviceStub(int32_t *devicdId)
+int aclrtGetDeviceStub(int32_t* devicdId)
 {
     *devicdId = 0;
     return 0;
 }
 
-int aclrtMallocStub(void **devPtr, size_t size, aclrtMemMallocPolicy policy)
+int aclrtMallocStub(void** devPtr, size_t size, aclrtMemMallocPolicy policy)
 {
     *devPtr = malloc(size);
     return 0;
@@ -114,7 +111,7 @@ int aclrtMallocStub(void **devPtr, size_t size, aclrtMemMallocPolicy policy)
 TEST_F(TEST_AICPU_RT, AicpuGetDumpConfigTest)
 {
     char buffer[16] = {0};
-    void *addr = buffer;
+    void* addr = buffer;
     size_t size = 1048576;
     MOCKER(aclrtGetDevice).stubs().will(invoke(aclrtGetDeviceStub));
     MOCKER(aclrtMalloc).stubs().will(invoke(aclrtMallocStub));
@@ -124,7 +121,7 @@ TEST_F(TEST_AICPU_RT, AicpuGetDumpConfigTest)
 TEST_F(TEST_AICPU_RT, AicpuDumpPrintBufferReturn)
 {
     char buffer[16] = {0};
-    void *addr = buffer;
+    void* addr = buffer;
     size_t size = 0;
     EXPECT_NO_THROW(AicpuDumpPrintBuffer(addr, size));
 }
@@ -132,7 +129,7 @@ TEST_F(TEST_AICPU_RT, AicpuDumpPrintBufferReturn)
 TEST_F(TEST_AICPU_RT, AicpuDumpPrintBufferTest)
 {
     char buffer[16] = {0};
-    void *addr = buffer;
+    void* addr = buffer;
     size_t size = 1048576;
     EXPECT_NO_THROW(AicpuDumpPrintBuffer(addr, size));
 }

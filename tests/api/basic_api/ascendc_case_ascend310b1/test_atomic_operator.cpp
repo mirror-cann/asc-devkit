@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -16,17 +16,11 @@ constexpr int32_t BUFFER_NUM = 1;
 
 class TEST_ATOMIC_OPERATOR : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-template<typename T, bool isAtomicAdd>
+template <typename T, bool isAtomicAdd>
 class KernelAtomic {
 public:
     __aicore__ inline KernelAtomic() {}
@@ -41,7 +35,7 @@ public:
     __aicore__ inline void Process()
     {
         CopyIn();
-        if constexpr(isAtomicAdd) {
+        if constexpr (isAtomicAdd) {
             ComputeAtomicAdd();
         } else {
             ComputeGetSetAtomicConfig();
@@ -51,21 +45,23 @@ public:
 
 private:
     __aicore__ inline void CopyIn() {}
-    __aicore__ inline void ComputeAtomicAdd() {
+    __aicore__ inline void ComputeAtomicAdd()
+    {
         LocalTensor<T> dstLocal = outQueueZ.AllocTensor<T>();
         SetAtomicNone();
         Duplicate(dstLocal, static_cast<T>(1), 256);
         outQueueZ.EnQue<T>(dstLocal);
     }
-    __aicore__ inline void ComputeGetSetAtomicConfig() {
+    __aicore__ inline void ComputeGetSetAtomicConfig()
+    {
         LocalTensor<T> dstLocal = outQueueZ.AllocTensor<T>();
-        if constexpr(IsSameType<T, float>::value) {
+        if constexpr (IsSameType<T, float>::value) {
             set_st_atomic_cfg(atomic_type_t::ATOMIC_F32, atomic_op_t::ATOMIC_SUM);
-        } else if constexpr(IsSameType<T, half>::value) {
+        } else if constexpr (IsSameType<T, half>::value) {
             set_st_atomic_cfg(atomic_type_t::ATOMIC_F16, atomic_op_t::ATOMIC_SUM);
-        } else if constexpr(IsSameType<T, int16_t>::value) {
+        } else if constexpr (IsSameType<T, int16_t>::value) {
             set_st_atomic_cfg(atomic_type_t::ATOMIC_S16, atomic_op_t::ATOMIC_SUM);
-        } else if constexpr(IsSameType<T, int32_t>::value) {
+        } else if constexpr (IsSameType<T, int32_t>::value) {
             set_st_atomic_cfg(atomic_type_t::ATOMIC_S32, atomic_op_t::ATOMIC_SUM);
         }
         pipe_barrier(PIPE_ALL);
@@ -94,20 +90,19 @@ private:
     GlobalTensor<T> dstGm;
 };
 
-#define KERNEL_ATOMIC(type, isAtomicAdd)                                                  \
-    TEST_F(TEST_ATOMIC_OPERATOR, atomic_kernel_##type##_##isAtomicAdd##_case)             \
-    {                                                                                       \
-        uint32_t dataSize = 256;                                                           \
-        uint8_t srcGm[dataSize * sizeof(type)];                                            \
-        uint8_t dstGm[dataSize * sizeof(type)];                                            \
-        KernelAtomic<type, isAtomicAdd> op;                                               \
-        op.Init(srcGm, dstGm);                                                              \
-        op.Process();                                                                       \
-        for (uint32_t i = 0; i < dataSize; i++) {                                          \
-            EXPECT_EQ(dstGm[i], 0x00);                                                      \
-        }                                                                                   \
+#define KERNEL_ATOMIC(type, isAtomicAdd)                                      \
+    TEST_F(TEST_ATOMIC_OPERATOR, atomic_kernel_##type##_##isAtomicAdd##_case) \
+    {                                                                         \
+        uint32_t dataSize = 256;                                              \
+        uint8_t srcGm[dataSize * sizeof(type)];                               \
+        uint8_t dstGm[dataSize * sizeof(type)];                               \
+        KernelAtomic<type, isAtomicAdd> op;                                   \
+        op.Init(srcGm, dstGm);                                                \
+        op.Process();                                                         \
+        for (uint32_t i = 0; i < dataSize; i++) {                             \
+            EXPECT_EQ(dstGm[i], 0x00);                                        \
+        }                                                                     \
     }
-
 
 KERNEL_ATOMIC(float, true)
 KERNEL_ATOMIC(half, true)

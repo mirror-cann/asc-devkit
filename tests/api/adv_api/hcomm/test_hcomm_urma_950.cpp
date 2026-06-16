@@ -25,9 +25,7 @@ constexpr uint32_t URMA_BUFFER_NUM = 2;
 
 class UrmaChannelResource {
 public:
-    UrmaChannelResource()
-        : sqBuffer_(URMA_SQ_DEPTH * URMA_WQE_SIZE, 0),
-          cqBuffer_(URMA_SQ_DEPTH * URMA_CQE_SIZE, 0)
+    UrmaChannelResource() : sqBuffer_(URMA_SQ_DEPTH * URMA_WQE_SIZE, 0), cqBuffer_(URMA_SQ_DEPTH * URMA_CQE_SIZE, 0)
     {
         channel_.engine = COMM_ENGINE_AIV;
         channel_.protocol = COMM_PROTOCOL_UB_MEM;
@@ -65,10 +63,7 @@ public:
         InitBuffer(localBuffers_[1], 0x5000, 0x1000, 0x333333, 0x444444);
     }
 
-    AscendC::ChannelHandle GetHandle()
-    {
-        return reinterpret_cast<AscendC::ChannelHandle>(&channel_);
-    }
+    AscendC::ChannelHandle GetHandle() { return reinterpret_cast<AscendC::ChannelHandle>(&channel_); }
 
     void CompleteCurrentSq()
     {
@@ -77,8 +72,8 @@ public:
     }
 
 private:
-    void InitBuffer(AscendC::RegedBufferEntity& buffer, uint64_t addr, uint64_t size, uint32_t tokenId,
-        uint32_t tokenValue)
+    void InitBuffer(
+        AscendC::RegedBufferEntity& buffer, uint64_t addr, uint64_t size, uint32_t tokenId, uint32_t tokenValue)
     {
         buffer.type = AscendC::REGED_BUFFER_RMA;
         buffer.bufferInfo.rma.addr = addr;
@@ -108,15 +103,9 @@ private:
 
 class HcommUrmaTestSuite : public testing::Test {
 protected:
-    void SetUp() override
-    {
-        blockIdxBak_ = block_idx;
-    }
+    void SetUp() override { blockIdxBak_ = block_idx; }
 
-    void TearDown() override
-    {
-        block_idx = blockIdxBak_;
-    }
+    void TearDown() override { block_idx = blockIdxBak_; }
 
     int32_t InitHcomm(AscendC::Hcomm<AscendC::COMM_PROTOCOL_UBC_CTP>& hcomm)
     {
@@ -136,8 +125,7 @@ protected:
     uint32_t GetSqPIFromBuf()
     {
         AscendC::LocalTensor<uint32_t> hcommLocal = hcommBuf_.Get<uint32_t>();
-        constexpr uint32_t sqPIIdx =
-            AscendC::HCOMM_URMA_WQE_U32_NUM + AscendC::HCOMM_URMA_CQE_U32_NUM;
+        constexpr uint32_t sqPIIdx = AscendC::HCOMM_URMA_WQE_U32_NUM + AscendC::HCOMM_URMA_CQE_U32_NUM;
         return hcommLocal.GetValue(sqPIIdx);
     }
 
@@ -154,8 +142,8 @@ TEST_F(HcommUrmaTestSuite, Aiv_Urma_Read)
 
     AscendC::Hcomm<AscendC::COMM_PROTOCOL_UBC_CTP> hcomm;
     EXPECT_EQ(InitHcomm(hcomm), AscendC::HCOMM_SUCCESS);
-    int32_t ret = hcomm.ReadNbi(
-        channel.GetHandle(), reinterpret_cast<GM_ADDR>(0x5008), reinterpret_cast<GM_ADDR>(0x3008), 8);
+    int32_t ret =
+        hcomm.ReadNbi(channel.GetHandle(), reinterpret_cast<GM_ADDR>(0x5008), reinterpret_cast<GM_ADDR>(0x3008), 8);
     EXPECT_EQ(ret, 0);
     channel.CompleteCurrentSq();
     ret = hcomm.Drain(channel.GetHandle());
@@ -186,8 +174,9 @@ TEST_F(HcommUrmaTestSuite, Aiv_Urma_WriteWithNotify)
 
     AscendC::Hcomm<AscendC::COMM_PROTOCOL_UBC_CTP> hcomm;
     EXPECT_EQ(InitHcomm(hcomm), AscendC::HCOMM_SUCCESS);
-    int32_t ret = hcomm.WriteWithNotifyNbi<false>(channel.GetHandle(),
-        reinterpret_cast<GM_ADDR>(0x3008), reinterpret_cast<GM_ADDR>(0x5008), 8, reinterpret_cast<GM_ADDR>(0x33), 1);
+    int32_t ret = hcomm.WriteWithNotifyNbi<false>(
+        channel.GetHandle(), reinterpret_cast<GM_ADDR>(0x3008), reinterpret_cast<GM_ADDR>(0x5008), 8,
+        reinterpret_cast<GM_ADDR>(0x33), 1);
     EXPECT_EQ(ret, 0);
     ret = hcomm.Commit(channel.GetHandle());
     EXPECT_EQ(ret, 0);
@@ -212,8 +201,9 @@ TEST_F(HcommUrmaTestSuite, Aiv_Urma_WriteWithNotify_WqeBbCnt)
     EXPECT_EQ(GetSqPIFromBuf(), 1U);
 
     // WriteWithNotifyNbi should advance sqPI by 2
-    ret = hcomm.WriteWithNotifyNbi<false>(channel.GetHandle(),
-        reinterpret_cast<GM_ADDR>(0x3008), reinterpret_cast<GM_ADDR>(0x5008), 8, reinterpret_cast<GM_ADDR>(0x33), 1);
+    ret = hcomm.WriteWithNotifyNbi<false>(
+        channel.GetHandle(), reinterpret_cast<GM_ADDR>(0x3008), reinterpret_cast<GM_ADDR>(0x5008), 8,
+        reinterpret_cast<GM_ADDR>(0x33), 1);
     EXPECT_EQ(ret, AscendC::HCOMM_SUCCESS);
     EXPECT_EQ(GetSqPIFromBuf(), 3U);
 
@@ -233,8 +223,9 @@ TEST_F(HcommUrmaTestSuite, Aiv_Urma_RemoteBufferNotFound)
     EXPECT_EQ(InitHcomm(hcomm), AscendC::HCOMM_SUCCESS);
 
     // Address completely outside any remote buffer range (remote buffers are at 0x1000-0x2000 and 0x3000-0x4000)
-    int32_t h = hcomm.WriteWithNotifyNbi<false>(channel.GetHandle(),
-        reinterpret_cast<GM_ADDR>(0x9000), reinterpret_cast<GM_ADDR>(0x5008), 8, reinterpret_cast<GM_ADDR>(0x33), 1);
+    int32_t h = hcomm.WriteWithNotifyNbi<false>(
+        channel.GetHandle(), reinterpret_cast<GM_ADDR>(0x9000), reinterpret_cast<GM_ADDR>(0x5008), 8,
+        reinterpret_cast<GM_ADDR>(0x33), 1);
     EXPECT_EQ(h, AscendC::HCOMM_FAILED);
 
     // Address in range but len exceeds buffer boundary
@@ -254,8 +245,9 @@ TEST_F(HcommUrmaTestSuite, Aiv_Urma_BatchCommitDrain)
     int32_t ret = hcomm.WriteNbi<false>(
         channel.GetHandle(), reinterpret_cast<GM_ADDR>(0x1008), reinterpret_cast<GM_ADDR>(0x2008), 8);
     EXPECT_EQ(ret, AscendC::HCOMM_SUCCESS);
-    ret = hcomm.WriteWithNotifyNbi<false>(channel.GetHandle(),
-        reinterpret_cast<GM_ADDR>(0x3008), reinterpret_cast<GM_ADDR>(0x5008), 8, reinterpret_cast<GM_ADDR>(0x33), 1);
+    ret = hcomm.WriteWithNotifyNbi<false>(
+        channel.GetHandle(), reinterpret_cast<GM_ADDR>(0x3008), reinterpret_cast<GM_ADDR>(0x5008), 8,
+        reinterpret_cast<GM_ADDR>(0x33), 1);
     EXPECT_EQ(ret, AscendC::HCOMM_SUCCESS);
     ret = hcomm.WriteNbi<false>(
         channel.GetHandle(), reinterpret_cast<GM_ADDR>(0x1018), reinterpret_cast<GM_ADDR>(0x2018), 8);

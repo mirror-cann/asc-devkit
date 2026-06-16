@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <vector>
 #include <gtest/gtest.h>
@@ -32,15 +32,16 @@ protected:
     virtual void TearDown() {}
 };
 
-void SetTypeNetWork(Conv3dBpFilterTiling &testTiling)
+void SetTypeNetWork(Conv3dBpFilterTiling& testTiling)
 {
     testTiling.SetWeightType(TPosition::GM, ConvFormat::FRACTAL_Z_3D, ConvDtype::FLOAT32);
     testTiling.SetInputType(TPosition::GM, ConvFormat::NDC1HWC0, ConvDtype::FLOAT16);
     testTiling.SetGradOutputType(TPosition::CO1, ConvFormat::NDC1HWC0, ConvDtype::FLOAT16);
 }
 
-bool TestBasicBlockResult(uint32_t singleCoreM, uint64_t singleCoreN,
-                          uint64_t singleCoreK, optiling::Conv3DBackpropFilterTilingData &tilingData)
+bool TestBasicBlockResult(
+    uint32_t singleCoreM, uint64_t singleCoreN, uint64_t singleCoreK,
+    optiling::Conv3DBackpropFilterTilingData& tilingData)
 {
     bool res = true;
     res = res && singleCoreM == tilingData.basicBlockTiling.get_singleCoreM();
@@ -49,8 +50,9 @@ bool TestBasicBlockResult(uint32_t singleCoreM, uint64_t singleCoreN,
     return res;
 }
 
-bool TestBasicBlockResult(uint32_t singleCoreM, uint64_t singleCoreN,
-                          uint64_t singleCoreK, AscendC::tiling::Conv3DBackpropFilterTilingData &tilingData)
+bool TestBasicBlockResult(
+    uint32_t singleCoreM, uint64_t singleCoreN, uint64_t singleCoreK,
+    AscendC::tiling::Conv3DBackpropFilterTilingData& tilingData)
 {
     bool res = true;
     res = res && singleCoreM == tilingData.basicBlockTiling.singleCoreM;
@@ -84,7 +86,7 @@ TEST_F(TestConv3dFilterTilingNetWork, NetWorks_002)
     auto ascendcPlatform = platform_ascendc::PlatformAscendCManager::GetInstance();
     Conv3dBpFilterTiling conv3dDw(*ascendcPlatform);
 
-    conv3dDw.SetWeightShape(3, 64,3, 3, 3);
+    conv3dDw.SetWeightShape(3, 64, 3, 3, 3);
     conv3dDw.SetInputShape(16, 64, 22, 130, 130);
     conv3dDw.SetGradOutputShape(16, 3, 20, 128, 128);
 
@@ -205,7 +207,7 @@ TEST_F(TestConv3dFilterTilingNetWork, NetWorks_008)
     auto ascendcPlatform = platform_ascendc::PlatformAscendCManager::GetInstance();
     Conv3dBpFilterTiling conv3dDw(*ascendcPlatform);
 
-    conv3dDw.SetWeightShape(1152,4, 1, 2, 2);
+    conv3dDw.SetWeightShape(1152, 4, 1, 2, 2);
     conv3dDw.SetInputShape(1, 4, 120, 32, 32);
     conv3dDw.SetGradOutputShape(1, 1152, 120, 16, 16);
 
@@ -494,8 +496,13 @@ TEST_F(TestConv3dFilterTilingNetWork, NetWorks_022)
 TEST_F(TestConv3dFilterTilingNetWork, NetWorks_023)
 {
     optiling::Conv3DBackpropFilterTilingData tilingData;
-    ConvBackpropApi::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    ConvBackpropApi::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     Conv3dBpFilterTiling conv3dDw(plat);
 
     conv3dDw.SetWeightShape(36, 58, 18, 1, 1);
@@ -514,8 +521,13 @@ TEST_F(TestConv3dFilterTilingNetWork, NetWorks_023)
 TEST_F(TestConv3dFilterTilingNetWork, NetWorks_024)
 {
     optiling::Conv3DBackpropFilterTilingData tilingData;
-    ConvBackpropApi::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    ConvBackpropApi::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     Conv3dBpFilterTiling conv3dDw(plat);
 
     conv3dDw.SetWeightShape(64, 56, 2, 1, 1);

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,8 +15,8 @@ template <typename DstT, typename SrcT, typename IndexT>
 class GatherbTest {
 public:
     __aicore__ inline GatherbTest() {}
-    __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-        __gm__ uint8_t* indexOffsetGm, const uint32_t count)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* indexOffsetGm, const uint32_t count)
     {
         m_elementCount = count;
         m_srcGlobal.SetGlobalBuffer((__gm__ SrcT*)srcGm);
@@ -33,6 +33,7 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
@@ -53,9 +54,9 @@ private:
         __ubuf__ IndexT* indexPtr = (__ubuf__ IndexT*)indexLocal.GetPhyAddr();
         __ubuf__ DstT* dstPtr = (__ubuf__ DstT*)dstLocal.GetPhyAddr();
 
-        using Reg::RegTensor;
-        using Reg::MaskReg;
         using Reg::CreateMask;
+        using Reg::MaskReg;
+        using Reg::RegTensor;
         using Reg::UpdateMask;
 
         __VEC_SCOPE__
@@ -68,7 +69,8 @@ private:
             uint16_t repeatTimes = CeilDivision(m_elementCount, repeatElm);
             for (uint16_t i = 0; i < (uint16_t)repeatTimes; ++i) {
                 if constexpr (sizeof(SrcT) == 8) {
-                    preg = CreateMask<uint8_t, Reg::MaskPattern::ALL>();  // notice in gatherb instruction regarded as B32 format
+                    preg = CreateMask<uint8_t, Reg::MaskPattern::ALL>(); // notice in gatherb instruction regarded as
+                                                                         // B32 format
                 } else {
                     preg = UpdateMask<SrcT>(sreg);
                 }
@@ -93,6 +95,7 @@ private:
         DataCopy(m_dstGlobal, dstLocal, m_elementCount);
         m_queOut.FreeTensor(dstLocal);
     }
+
 private:
     TPipe m_pipe;
     uint32_t m_elementCount;
@@ -106,7 +109,8 @@ private:
 } // namespace AscendC
 
 template <typename DstT, typename SrcT, typename IndexT>
-__global__ __aicore__ void testGatherb(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* indexOffsetGm, uint32_t elementCount)
+__global__ __aicore__ void testGatherb(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* indexOffsetGm, uint32_t elementCount)
 {
     AscendC::GatherbTest<DstT, SrcT, IndexT> op;
     op.Init(dstGm, srcGm, indexOffsetGm, elementCount);
@@ -121,31 +125,26 @@ struct gatherbParams {
     void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint32_t);
 };
 
-class GatherbTestsuite : public testing::Test,
-    public testing::WithParamInterface<gatherbParams> {
+class GatherbTestsuite : public testing::Test, public testing::WithParamInterface<gatherbParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_GATHER, GatherbTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_GATHER, GatherbTestsuite,
     ::testing::Values(
-        gatherbParams { 1, 1, 4, 256, testGatherb<int8_t, int8_t, uint32_t>},
-        gatherbParams { 1, 1, 4, 256, testGatherb<uint8_t, uint8_t, uint32_t>},
-        gatherbParams { 2, 2, 4, 256, testGatherb<int16_t, int16_t, uint32_t>},
-        gatherbParams { 2, 2, 4, 256, testGatherb<uint16_t, uint16_t, uint32_t>},
-        gatherbParams { 4, 4, 4, 128, testGatherb<int32_t, int32_t, uint32_t>},
-        gatherbParams { 4, 4, 4, 128, testGatherb<uint32_t, uint32_t, uint32_t>},
-        gatherbParams { 2, 2, 4, 256, testGatherb<half, half, uint32_t>},
-        gatherbParams { 4, 4, 4, 128, testGatherb<float, float, uint32_t>},
-        gatherbParams { 2, 2, 4, 256, testGatherb<bfloat16_t, bfloat16_t, uint32_t>},
-        gatherbParams { 8, 8, 4, 256, testGatherb<uint64_t, uint64_t, uint32_t>},
-        gatherbParams { 8, 8, 4, 256, testGatherb<int64_t, int64_t, uint32_t>}));
-
+        gatherbParams{1, 1, 4, 256, testGatherb<int8_t, int8_t, uint32_t>},
+        gatherbParams{1, 1, 4, 256, testGatherb<uint8_t, uint8_t, uint32_t>},
+        gatherbParams{2, 2, 4, 256, testGatherb<int16_t, int16_t, uint32_t>},
+        gatherbParams{2, 2, 4, 256, testGatherb<uint16_t, uint16_t, uint32_t>},
+        gatherbParams{4, 4, 4, 128, testGatherb<int32_t, int32_t, uint32_t>},
+        gatherbParams{4, 4, 4, 128, testGatherb<uint32_t, uint32_t, uint32_t>},
+        gatherbParams{2, 2, 4, 256, testGatherb<half, half, uint32_t>},
+        gatherbParams{4, 4, 4, 128, testGatherb<float, float, uint32_t>},
+        gatherbParams{2, 2, 4, 256, testGatherb<bfloat16_t, bfloat16_t, uint32_t>},
+        gatherbParams{8, 8, 4, 256, testGatherb<uint64_t, uint64_t, uint32_t>},
+        gatherbParams{8, 8, 4, 256, testGatherb<int64_t, int64_t, uint32_t>}));
 
 TEST_P(GatherbTestsuite, testGatherb)
 {
@@ -154,7 +153,7 @@ TEST_P(GatherbTestsuite, testGatherb)
     uint8_t srcGm[param.elementCount * param.srcTypeSize] = {0};
     uint8_t indexOffsetGm[param.elementCount * param.indexTypeSize] = {0};
     param.cal_func(dstGm, srcGm, indexOffsetGm, param.elementCount);
-    
+
     for (int32_t i = 0; i < param.elementCount; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -26,7 +26,7 @@ void AxpyKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__
     outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dataSize);
     tpipe.InitBuffer(vecInQue, 1, dataSize * sizeof(U));
     tpipe.InitBuffer(vecOutQue, 1, dataSize * sizeof(T));
-    if (sizeof(U) == sizeof(float)) { 
+    if (sizeof(U) == sizeof(float)) {
         tpipe.InitBuffer(vecTmpQue, 1, dataSize * sizeof(float));
     } else {
         tpipe.InitBuffer(vecTmpQue, 1, dataSize * 4 * sizeof(half));
@@ -67,10 +67,11 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_AXPY, AxpyTestsuite,
-    ::testing::Values(AxpyTestParams { 256, 2, AxpyKernel<half, half> },
-    AxpyTestParams { 256, 4, AxpyKernel<float, half> },
-    AxpyTestParams { 256, 4, AxpyKernel<float, float> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_AXPY, AxpyTestsuite,
+    ::testing::Values(
+        AxpyTestParams{256, 2, AxpyKernel<half, half>}, AxpyTestParams{256, 4, AxpyKernel<float, half>},
+        AxpyTestParams{256, 4, AxpyKernel<float, float>}));
 
 TEST_P(AxpyTestsuite, AxpyTestCase)
 {

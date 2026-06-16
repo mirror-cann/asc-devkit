@@ -1,13 +1,13 @@
 
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -33,8 +33,7 @@ __aicore__ inline constexpr MatmulConfig GetMmConfig()
 }
 constexpr MatmulConfig MM_CFG_INTRABLOCK = GetMmConfig();
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using L0cT = typename GetMmDstType<typename A_TYPE::T>::Type;
     using CopyCubeInA = CustomCopyCubeIn<IMPL, MatmulInputAType<A_TYPE, typename A_TYPE::T>, MM_CFG>;
@@ -53,28 +52,27 @@ public:
     using MatmulQuantProcessor = Impl::Detail::MatmulQuantProcessor<IMPL, A_TYPE, C_TYPE, MM_CFG>;
 };
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const auto& MM_CFG,
-class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE(Scheduler)
-, MATMUL_IMPORT_MODULE(MLoop)
-, MATMUL_IMPORT_MODULE(NLoop)
-, MATMUL_IMPORT_MODULE(KLoop)
-, MATMUL_IMPORT_MODULE(CopyCubeInA)
-, MATMUL_IMPORT_MODULE(CopyCubeInB)
-, MATMUL_IMPORT_MODULE(LoadToA2)
-, MATMUL_IMPORT_MODULE(LoadToB2)
-, MATMUL_IMPORT_MODULE(TBufPoolL0)
-, MATMUL_IMPORT_MODULE(MmadCompute)
-, MATMUL_IMPORT_MODULE(CubeOutBuffer)
-, MATMUL_IMPORT_MODULE(CopyCubeOut)
-, MATMUL_IMPORT_MODULE(BiasScheduler)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulSubBlockInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulUnitFlag)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulQuantProcessor)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const auto& MM_CFG,
+    class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(Scheduler),
+                   MATMUL_IMPORT_MODULE(MLoop),
+                   MATMUL_IMPORT_MODULE(NLoop),
+                   MATMUL_IMPORT_MODULE(KLoop),
+                   MATMUL_IMPORT_MODULE(CopyCubeInA),
+                   MATMUL_IMPORT_MODULE(CopyCubeInB),
+                   MATMUL_IMPORT_MODULE(LoadToA2),
+                   MATMUL_IMPORT_MODULE(LoadToB2),
+                   MATMUL_IMPORT_MODULE(TBufPoolL0),
+                   MATMUL_IMPORT_MODULE(MmadCompute),
+                   MATMUL_IMPORT_MODULE(CubeOutBuffer),
+                   MATMUL_IMPORT_MODULE(CopyCubeOut),
+                   MATMUL_IMPORT_MODULE(BiasScheduler),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulSubBlockInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulUnitFlag),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulQuantProcessor) {
     MATMUL_ALLOW_USING(MLoop);
     MATMUL_ALLOW_USING(NLoop);
     MATMUL_ALLOW_USING(KLoop);
@@ -115,11 +113,10 @@ public:
 
     MatmulImpl() {}
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar(const TCubeTiling &tiling) {
+    void InitVar(const TCubeTiling& tiling)
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         MATMUL_MODULE(MatmulShapeInfo)->SetTransposeA(false);
         MATMUL_MODULE(MatmulShapeInfo)->SetTransposeB(false);
@@ -135,33 +132,32 @@ public:
         MATMUL_MODULE(TBufPoolL0)->Init();
     }
 
-    void SetBias(bool) {
-        MATMUL_MODULE(BiasScheduler)->SetBias();
-    }
+    void SetBias(bool) { MATMUL_MODULE(BiasScheduler)->SetBias(); }
 
 private:
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class TestSchedulerIntrablock : public testing::Test {
 protected:
-    void SetUp() {
-        SetGCoreType(1);
-    }
-    void TearDown() {
-        SetGCoreType(0);
-    }
+    void SetUp() { SetGCoreType(1); }
+    void TearDown() { SetGCoreType(0); }
 };
 
-TEST_F(TestSchedulerIntrablock, ScheduleOnce_FakeIntra) {
+TEST_F(TestSchedulerIntrablock, ScheduleOnce_FakeIntra)
+{
     using A_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, half, false>;
     using B_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, half, true>;
     using C_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
     using BIAS_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
-    MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG_INTRABLOCK, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm;
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder
+    MatmulImpl<
+        A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG_INTRABLOCK, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        mm;
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder
     TilingParams tilingParams = {1, 64, 64, 64, 64, 64, 64, 32, 32, 32, 2, 2, 1, 1, 2, 2, 1, 0};
     TCubeTiling tiling;
     tilingParams.GetTiling(tiling);
@@ -171,13 +167,18 @@ TEST_F(TestSchedulerIntrablock, ScheduleOnce_FakeIntra) {
     mm.Schedule(gm, 0, false, true);
 }
 
-TEST_F(TestSchedulerIntrablock, ScheduleOnce_RealIntra) {
+TEST_F(TestSchedulerIntrablock, ScheduleOnce_RealIntra)
+{
     using A_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, half, false>;
     using B_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, half, true>;
     using C_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
     using BIAS_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
-    MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG_INTRABLOCK, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm;
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder
+    MatmulImpl<
+        A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG_INTRABLOCK, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        mm;
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder
     TilingParams tilingParams = {1, 64, 64, 64, 64, 64, 64, 32, 32, 32, 2, 2, 1, 1, 2, 2, 1, 0};
     TCubeTiling tiling;
     tilingParams.GetTiling(tiling);

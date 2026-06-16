@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "mockcpp/mockcpp.hpp"
@@ -26,10 +26,9 @@ enum BinaryCastFunc {
 
 class TestCast : public testing::Test {
 protected:
-    void SetUp() {
-        g_coreType = AscendC::AIV_TYPE;
-    }
-    void TearDown() {
+    void SetUp() { g_coreType = AscendC::AIV_TYPE; }
+    void TearDown()
+    {
         g_coreType = AscendC::MIX_TYPE;
         GlobalMockObject::verify();
     }
@@ -37,18 +36,18 @@ protected:
 
 class TestCastCompile : public testing::Test {
 protected:
-    void SetUp() {
-        g_coreType = AscendC::AIV_TYPE;
-    }
-    void TearDown() {
+    void SetUp() { g_coreType = AscendC::AIV_TYPE; }
+    void TearDown()
+    {
         g_coreType = AscendC::MIX_TYPE;
         GlobalMockObject::verify();
     }
 };
 
 template <typename DstType, typename SrcType>
-void MainVecCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode,
-    uint32_t dstDataSize, uint32_t srcDataSize, TestMode testMode)
+void MainVecCastDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode, uint32_t dstDataSize,
+    uint32_t srcDataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<SrcType> inputGlobal;
@@ -104,13 +103,14 @@ void MainVecCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restr
         }
         repeat = 2 * s;
         if (sizeof(SrcType) < sizeof(DstType)) {
-            Cast(outputLocal, outputLocal[dstDataSize / 2].template ReinterpretCast<SrcType>(), roundMode,
-                mask, repeat, { 1, 1, dstRepStride, srcRepStride });
+            Cast(
+                outputLocal, outputLocal[dstDataSize / 2].template ReinterpretCast<SrcType>(), roundMode, mask, repeat,
+                {1, 1, dstRepStride, srcRepStride});
         }
         if (std::is_same<SrcType, half>::value && std::is_same<DstType, int16_t>::value) {
-            Cast(outputLocal, inputLocal, roundMode, mask, 4, { 1, 2, dstRepStride, 16 });
+            Cast(outputLocal, inputLocal, roundMode, mask, 4, {1, 2, dstRepStride, 16});
         }
-        Cast(outputLocal, inputLocal, roundMode, mask, repeat, { 1, 1, dstRepStride, srcRepStride });
+        Cast(outputLocal, inputLocal, roundMode, mask, repeat, {1, 1, dstRepStride, srcRepStride});
     }
     if (testMode == LEVEL0_COUNT_MODE) {
         uint64_t mask = 0;
@@ -118,13 +118,14 @@ void MainVecCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restr
         mask = 256 / s;
         repeat = 512 / mask;
         if (sizeof(SrcType) < sizeof(DstType)) {
-            Cast(outputLocal, outputLocal[dstDataSize / 2].template ReinterpretCast<SrcType>(), roundMode,
-                mask, repeat, { 1, 1, dstRepStride, srcRepStride });
+            Cast(
+                outputLocal, outputLocal[dstDataSize / 2].template ReinterpretCast<SrcType>(), roundMode, mask, repeat,
+                {1, 1, dstRepStride, srcRepStride});
         }
         if (std::is_same<SrcType, float>::value && std::is_same<DstType, int16_t>::value) {
-            Cast(outputLocal, inputLocal, roundMode, 64, 8, { 1, 2, dstRepStride, 16 });
+            Cast(outputLocal, inputLocal, roundMode, 64, 8, {1, 2, dstRepStride, 16});
         }
-        Cast(outputLocal, inputLocal, roundMode, mask, repeat, { 1, 1, dstRepStride, srcRepStride });
+        Cast(outputLocal, inputLocal, roundMode, mask, repeat, {1, 1, dstRepStride, srcRepStride});
     }
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -134,8 +135,9 @@ void MainVecCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restr
     pipe_barrier(PIPE_ALL);
 }
 
-void MainVecCastS42f16Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode,
-    uint32_t dstDataSize, uint32_t srcDataSize, TestMode testMode)
+void MainVecCastS42f16Demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode, uint32_t dstDataSize,
+    uint32_t srcDataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<int8_t> inputGlobal;
@@ -168,16 +170,18 @@ void MainVecCastS42f16Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* _
     if (testMode == LEVEL0_BIT_MODE) {
         uint64_t mask[2] = {0xffffffffffffffff, 0xffffffffffffffff};
         uint8_t repeat = 1;
-        Cast(outputLocal, outputLocal[dstDataSize / 4 * 3].ReinterpretCast<int4b_t>(), roundMode,
-            mask, repeat, { 1, 1, dstRepStride, srcRepStride });
-        Cast(outputLocal, inputLocalS4, roundMode, mask, repeat, { 1, 1, dstRepStride, srcRepStride });
+        Cast(
+            outputLocal, outputLocal[dstDataSize / 4 * 3].ReinterpretCast<int4b_t>(), roundMode, mask, repeat,
+            {1, 1, dstRepStride, srcRepStride});
+        Cast(outputLocal, inputLocalS4, roundMode, mask, repeat, {1, 1, dstRepStride, srcRepStride});
     }
     if (testMode == LEVEL0_COUNT_MODE) {
         uint64_t mask = 128;
         uint8_t repeat = 2;
-        Cast(outputLocal, outputLocal[dstDataSize / 4 * 3].ReinterpretCast<int4b_t>(), roundMode,
-            mask, repeat, { 1, 1, dstRepStride, srcRepStride });
-        Cast(outputLocal, inputLocalS4, roundMode, mask, repeat, { 1, 1, dstRepStride, srcRepStride });
+        Cast(
+            outputLocal, outputLocal[dstDataSize / 4 * 3].ReinterpretCast<int4b_t>(), roundMode, mask, repeat,
+            {1, 1, dstRepStride, srcRepStride});
+        Cast(outputLocal, inputLocalS4, roundMode, mask, repeat, {1, 1, dstRepStride, srcRepStride});
     }
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -187,8 +191,9 @@ void MainVecCastS42f16Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* _
     pipe_barrier(PIPE_ALL);
 }
 
-void MainVecCastF162s4Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode,
-    uint32_t dstDataSize, uint32_t srcDataSize, TestMode testMode)
+void MainVecCastF162s4Demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode, uint32_t dstDataSize,
+    uint32_t srcDataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<half> inputGlobal;
@@ -220,12 +225,12 @@ void MainVecCastF162s4Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* _
     if (testMode == LEVEL0_BIT_MODE) {
         uint64_t mask[2] = {0xffffffffffffffff, 0xffffffffffffffff};
         uint8_t repeat = 1;
-        Cast(outputLocalS4, inputLocal, roundMode, mask, repeat, { 1, 1, dstRepStride, srcRepStride });
+        Cast(outputLocalS4, inputLocal, roundMode, mask, repeat, {1, 1, dstRepStride, srcRepStride});
     }
     if (testMode == LEVEL0_COUNT_MODE) {
         uint64_t mask = 128;
         uint8_t repeat = 2;
-        Cast(outputLocalS4, inputLocal, roundMode, mask, repeat, { 1, 1, dstRepStride, srcRepStride });
+        Cast(outputLocalS4, inputLocal, roundMode, mask, repeat, {1, 1, dstRepStride, srcRepStride});
     }
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -235,73 +240,68 @@ void MainVecCastF162s4Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* _
     pipe_barrier(PIPE_ALL);
 }
 
-int32_t RaiseStub(int32_t input)
-{
-    return 0;
-}
+int32_t RaiseStub(int32_t input) { return 0; }
 
-#define VEC_CAST_TESTCASE_2(srcType, dstType, roundMode, testMode, errorTimes)                       \
-    TEST_F(TestCast, Cast##srcType##2##dstType##roundMode##testMode##case)                           \
-    {                                                                                                     \
-        uint32_t srcDataSize = 512;                                                                     \
-        uint32_t dstDataSize = 512;                                                                     \
-        uint8_t inputGm[srcDataSize * sizeof(srcType)] = {0};                                         \
-        uint8_t outputGm[dstDataSize * sizeof(dstType)] = {0};                                        \
-        MOCKER(raise, int32_t (*)(int32_t)).times(1).will(invoke(RaiseStub));                             \
-        MainVecCastDemo<dstType, srcType>(outputGm, inputGm, RoundMode::roundMode, dstDataSize, \
-            srcDataSize, testMode);                                                                    \
-                                                                                                          \
-        for (uint32_t i = 0; i < dstDataSize; i++) {                                                    \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                \
-        }                                                                                                 \
+#define VEC_CAST_TESTCASE_2(srcType, dstType, roundMode, testMode, errorTimes)            \
+    TEST_F(TestCast, Cast##srcType##2##dstType##roundMode##testMode##case)                \
+    {                                                                                     \
+        uint32_t srcDataSize = 512;                                                       \
+        uint32_t dstDataSize = 512;                                                       \
+        uint8_t inputGm[srcDataSize * sizeof(srcType)] = {0};                             \
+        uint8_t outputGm[dstDataSize * sizeof(dstType)] = {0};                            \
+        MOCKER(raise, int32_t (*)(int32_t)).times(1).will(invoke(RaiseStub));             \
+        MainVecCastDemo<dstType, srcType>(                                                \
+            outputGm, inputGm, RoundMode::roundMode, dstDataSize, srcDataSize, testMode); \
+                                                                                          \
+        for (uint32_t i = 0; i < dstDataSize; i++) {                                      \
+            EXPECT_EQ(outputGm[i], 0x00);                                                 \
+        }                                                                                 \
     }
 
-#define VEC_CAST_TESTCASE(srcType, dstType, roundMode, testMode)                                      \
-    TEST_F(TestCast, Cast##srcType##2##dstType##roundMode##testMode##case)                           \
-    {                                                                                                     \
-        uint32_t srcDataSize = 512;                                                                     \
-        uint32_t dstDataSize = 512;                                                                     \
-        uint8_t inputGm[srcDataSize * sizeof(srcType)] = {0};                                         \
-        uint8_t outputGm[dstDataSize * sizeof(dstType)] = {0};                                        \
-                                                                                                          \
-        MainVecCastDemo<dstType, srcType>(outputGm, inputGm, RoundMode::roundMode, dstDataSize, \
-            srcDataSize, testMode);                                                                    \
-                                                                                                          \
-        for (uint32_t i = 0; i < dstDataSize; i++) {                                                    \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                \
-        }                                                                                                 \
+#define VEC_CAST_TESTCASE(srcType, dstType, roundMode, testMode)                          \
+    TEST_F(TestCast, Cast##srcType##2##dstType##roundMode##testMode##case)                \
+    {                                                                                     \
+        uint32_t srcDataSize = 512;                                                       \
+        uint32_t dstDataSize = 512;                                                       \
+        uint8_t inputGm[srcDataSize * sizeof(srcType)] = {0};                             \
+        uint8_t outputGm[dstDataSize * sizeof(dstType)] = {0};                            \
+                                                                                          \
+        MainVecCastDemo<dstType, srcType>(                                                \
+            outputGm, inputGm, RoundMode::roundMode, dstDataSize, srcDataSize, testMode); \
+                                                                                          \
+        for (uint32_t i = 0; i < dstDataSize; i++) {                                      \
+            EXPECT_EQ(outputGm[i], 0x00);                                                 \
+        }                                                                                 \
     }
 
-#define VEC_CAST_S42F16_TESTCASE(roundMode, testMode)                                                   \
-    TEST_F(TestCast, CastS42F16##roundMode##testMode##case)                                            \
-    {                                                                                                     \
-        uint32_t srcDataSize = 512 / INT4_TWO;                                                          \
-        uint32_t dstDataSize = 512;                                                                     \
-        uint8_t inputGm[srcDataSize] = {0};                                                            \
-        uint8_t outputGm[dstDataSize * sizeof(half)] = {0};                                            \
-                                                                                                          \
-        MainVecCastS42f16Demo(outputGm, inputGm, RoundMode::roundMode, dstDataSize,              \
-            srcDataSize, testMode);                                                                    \
-                                                                                                          \
-        for (uint32_t i = 0; i < dstDataSize; i++) {                                                    \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                \
-        }                                                                                                 \
+#define VEC_CAST_S42F16_TESTCASE(roundMode, testMode)                                                       \
+    TEST_F(TestCast, CastS42F16##roundMode##testMode##case)                                                 \
+    {                                                                                                       \
+        uint32_t srcDataSize = 512 / INT4_TWO;                                                              \
+        uint32_t dstDataSize = 512;                                                                         \
+        uint8_t inputGm[srcDataSize] = {0};                                                                 \
+        uint8_t outputGm[dstDataSize * sizeof(half)] = {0};                                                 \
+                                                                                                            \
+        MainVecCastS42f16Demo(outputGm, inputGm, RoundMode::roundMode, dstDataSize, srcDataSize, testMode); \
+                                                                                                            \
+        for (uint32_t i = 0; i < dstDataSize; i++) {                                                        \
+            EXPECT_EQ(outputGm[i], 0x00);                                                                   \
+        }                                                                                                   \
     }
 
-#define VEC_CAST_F162S4_TESTCASE(roundMode, testMode)                                                   \
-    TEST_F(TestCast, CastF162S4##roundMode##testMode##case)                                            \
-    {                                                                                                     \
-        uint32_t srcDataSize = 512;                                                                     \
-        uint32_t dstDataSize = 512 / INT4_TWO;                                                          \
-        uint8_t inputGm[srcDataSize * sizeof(half)] = {0};                                             \
-        uint8_t outputGm[dstDataSize] = {0};                                                           \
-                                                                                                          \
-        MainVecCastF162s4Demo(outputGm, inputGm, RoundMode::roundMode, dstDataSize,              \
-            srcDataSize, testMode);                                                                    \
-                                                                                                          \
-        for (uint32_t i = 0; i < dstDataSize; i++) {                                                    \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                \
-        }                                                                                                 \
+#define VEC_CAST_F162S4_TESTCASE(roundMode, testMode)                                                       \
+    TEST_F(TestCast, CastF162S4##roundMode##testMode##case)                                                 \
+    {                                                                                                       \
+        uint32_t srcDataSize = 512;                                                                         \
+        uint32_t dstDataSize = 512 / INT4_TWO;                                                              \
+        uint8_t inputGm[srcDataSize * sizeof(half)] = {0};                                                  \
+        uint8_t outputGm[dstDataSize] = {0};                                                                \
+                                                                                                            \
+        MainVecCastF162s4Demo(outputGm, inputGm, RoundMode::roundMode, dstDataSize, srcDataSize, testMode); \
+                                                                                                            \
+        for (uint32_t i = 0; i < dstDataSize; i++) {                                                        \
+            EXPECT_EQ(outputGm[i], 0x00);                                                                   \
+        }                                                                                                   \
     }
 
 VEC_CAST_TESTCASE(int32_t, half, CAST_NONE, LEVEL2);
@@ -656,9 +656,9 @@ VEC_CAST_F162S4_TESTCASE(CAST_NONE, LEVEL0_COUNT_MODE);
 VEC_CAST_S42F16_TESTCASE(CAST_NONE, LEVEL0_COUNT_MODE);
 
 template <typename DstType, typename SrcType>
-void MainVecBinaryCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, uint32_t dstDataSize, uint32_t srcDataSize, BinaryCastFunc funcName,
-    TestMode testMode)
+void MainVecBinaryCastDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    uint32_t dstDataSize, uint32_t srcDataSize, BinaryCastFunc funcName, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<SrcType> input0Global;
@@ -737,19 +737,21 @@ void MainVecBinaryCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* _
         switch (funcName) {
             case BinaryCastFunc::ADDRELUCAST:
                 if (std::is_same<DstType, half>::value) {
-                    AddReluCast(outputLocal, input0Local, input1Local, mask, 128,
-                        { 1, 2, 1, dstRepStride, 16, srcRepStride });
+                    AddReluCast(
+                        outputLocal, input0Local, input1Local, mask, 128, {1, 2, 1, dstRepStride, 16, srcRepStride});
                 }
-                AddReluCast(outputLocal, input0Local, input1Local, mask, repeat,
-                    { 1, 1, 1, dstRepStride, srcRepStride, srcRepStride });
+                AddReluCast(
+                    outputLocal, input0Local, input1Local, mask, repeat,
+                    {1, 1, 1, dstRepStride, srcRepStride, srcRepStride});
                 break;
             case BinaryCastFunc::SUBRELUCAST:
                 if (std::is_same<DstType, half>::value) {
-                    SubReluCast(outputLocal, input0Local, input1Local, mask, 128,
-                        { 1, 2, 1, dstRepStride, 16, srcRepStride });
+                    SubReluCast(
+                        outputLocal, input0Local, input1Local, mask, 128, {1, 2, 1, dstRepStride, 16, srcRepStride});
                 }
-                SubReluCast(outputLocal, input0Local, input1Local, mask, repeat,
-                    { 1, 1, 1, dstRepStride, srcRepStride, srcRepStride });
+                SubReluCast(
+                    outputLocal, input0Local, input1Local, mask, repeat,
+                    {1, 1, 1, dstRepStride, srcRepStride, srcRepStride});
                 break;
             default:
                 ASCENDC_ASSERT(
@@ -765,19 +767,23 @@ void MainVecBinaryCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* _
         switch (funcName) {
             case BinaryCastFunc::ADDRELUCAST:
                 if (std::is_same<SrcType, half>::value) {
-                    AddReluCast(outputLocal, input0Local, input1Local, mask, 16,
-                        { 1, 1, 1, dstRepStride, srcRepStride, srcRepStride });
+                    AddReluCast(
+                        outputLocal, input0Local, input1Local, mask, 16,
+                        {1, 1, 1, dstRepStride, srcRepStride, srcRepStride});
                 }
-                AddReluCast(outputLocal, input0Local, input1Local, mask, repeat,
-                    { 1, 1, 1, dstRepStride, srcRepStride, srcRepStride });
+                AddReluCast(
+                    outputLocal, input0Local, input1Local, mask, repeat,
+                    {1, 1, 1, dstRepStride, srcRepStride, srcRepStride});
                 break;
             case BinaryCastFunc::SUBRELUCAST:
                 if (std::is_same<SrcType, half>::value) {
-                    SubReluCast(outputLocal, input0Local, input1Local, mask, 16,
-                        { 1, 1, 1, dstRepStride, srcRepStride, srcRepStride });
+                    SubReluCast(
+                        outputLocal, input0Local, input1Local, mask, 16,
+                        {1, 1, 1, dstRepStride, srcRepStride, srcRepStride});
                 }
-                SubReluCast(outputLocal, input0Local, input1Local, mask, repeat,
-                    { 1, 1, 1, dstRepStride, srcRepStride, srcRepStride });
+                SubReluCast(
+                    outputLocal, input0Local, input1Local, mask, repeat,
+                    {1, 1, 1, dstRepStride, srcRepStride, srcRepStride});
                 break;
             default:
                 ASCENDC_ASSERT(
@@ -802,51 +808,55 @@ void MainVecBinaryCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* _
     uint64_t bitMask[2] = {0xffffffffffffffff, 0};
     AddReluCast(dst, src0, src1, dstDataSize);
     SubReluCast(dst, src0, src1, dstDataSize);
-    AddReluCast(dst, src0, src1, mask, 1,
-        { 1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE });
-    SubReluCast(dst, src0, src1, mask, 1,
-        { 1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE });
-    AddReluCast(dst, src0, src1, bitMask, 1,
-        { 1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE });
-    SubReluCast(dst, src0, src1, bitMask, 1,
-        { 1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE });
+    AddReluCast(
+        dst, src0, src1, mask, 1,
+        {1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE});
+    SubReluCast(
+        dst, src0, src1, mask, 1,
+        {1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE});
+    AddReluCast(
+        dst, src0, src1, bitMask, 1,
+        {1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE});
+    SubReluCast(
+        dst, src0, src1, bitMask, 1,
+        {1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE});
     g_coreType = tmp;
 
     pipe_barrier(PIPE_ALL);
 }
 
-#define VEC_BINARY_CAST_TESTCASE_2(srcType, dstType, funcName, testMode, errorTimes)                 \
-    TEST_F(TestCast, Test##funcName##srcType##2##dstType##testMode##case)                            \
-    {                                                                                                     \
-        uint32_t srcDataSize = 512;                                                                     \
-        uint32_t dstDataSize = 512;                                                                     \
-        uint8_t input0Gm[srcDataSize * sizeof(srcType)] = {0};                                        \
-        uint8_t input1Gm[srcDataSize * sizeof(srcType)] = {0};                                        \
-        uint8_t outputGm[dstDataSize * sizeof(dstType)] = {0};                                        \
-        MOCKER(raise, int32_t (*)(int32_t)).times(errorTimes).will(invoke(RaiseStub));                    \
-        MainVecBinaryCastDemo<dstType, srcType>(outputGm, input0Gm, input1Gm, dstDataSize,     \
-            srcDataSize, funcName, testMode);                                                         \
-                                                                                                          \
-        for (uint32_t i = 0; i < dstDataSize; i++) {                                                    \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                \
-        }                                                                                                 \
+#define VEC_BINARY_CAST_TESTCASE_2(srcType, dstType, funcName, testMode, errorTimes)     \
+    TEST_F(TestCast, Test##funcName##srcType##2##dstType##testMode##case)                \
+    {                                                                                    \
+        uint32_t srcDataSize = 512;                                                      \
+        uint32_t dstDataSize = 512;                                                      \
+        uint8_t input0Gm[srcDataSize * sizeof(srcType)] = {0};                           \
+        uint8_t input1Gm[srcDataSize * sizeof(srcType)] = {0};                           \
+        uint8_t outputGm[dstDataSize * sizeof(dstType)] = {0};                           \
+        MOCKER(raise, int32_t (*)(int32_t)).times(errorTimes).will(invoke(RaiseStub));   \
+        MainVecBinaryCastDemo<dstType, srcType>(                                         \
+            outputGm, input0Gm, input1Gm, dstDataSize, srcDataSize, funcName, testMode); \
+                                                                                         \
+        for (uint32_t i = 0; i < dstDataSize; i++) {                                     \
+            EXPECT_EQ(outputGm[i], 0x00);                                                \
+        }                                                                                \
     }
 
-#define VEC_BINARY_CAST_TESTCASE(srcType, dstType, funcName, testMode)                                \
-    TEST_F(TestCast, Test##funcName##srcType##2##dstType##testMode##case)                            \
-    {                                                                                                     \
-        uint32_t srcDataSize = 512;                                                                     \
-        uint32_t dstDataSize = 512;                                                                     \
-        uint8_t input0Gm[srcDataSize * sizeof(srcType)] = {0};                                        \
-        uint8_t input1Gm[srcDataSize * sizeof(srcType)] = {0};                                        \
-        uint8_t outputGm[dstDataSize * sizeof(dstType)] = {0};                                        \
-                                                                                                          \
-        MainVecBinaryCastDemo<dstType, srcType>(outputGm, input0Gm, input1Gm, dstDataSize,     \
-            srcDataSize, funcName, testMode);                                                         \
-                                                                                                          \
-        for (uint32_t i = 0; i < dstDataSize; i++) {                                                    \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                \
-        }                                                                                                 \
+#define VEC_BINARY_CAST_TESTCASE(srcType, dstType, funcName, testMode)                   \
+    TEST_F(TestCast, Test##funcName##srcType##2##dstType##testMode##case)                \
+    {                                                                                    \
+        uint32_t srcDataSize = 512;                                                      \
+        uint32_t dstDataSize = 512;                                                      \
+        uint8_t input0Gm[srcDataSize * sizeof(srcType)] = {0};                           \
+        uint8_t input1Gm[srcDataSize * sizeof(srcType)] = {0};                           \
+        uint8_t outputGm[dstDataSize * sizeof(dstType)] = {0};                           \
+                                                                                         \
+        MainVecBinaryCastDemo<dstType, srcType>(                                         \
+            outputGm, input0Gm, input1Gm, dstDataSize, srcDataSize, funcName, testMode); \
+                                                                                         \
+        for (uint32_t i = 0; i < dstDataSize; i++) {                                     \
+            EXPECT_EQ(outputGm[i], 0x00);                                                \
+        }                                                                                \
     }
 
 VEC_BINARY_CAST_TESTCASE(half, int8_t, ADDRELUCAST, LEVEL2);
@@ -890,28 +900,28 @@ void MainVecCastDemoDeath(RoundMode roundMode, uint32_t dstDataSize, uint32_t sr
     Cast(outputLocal, inputLocal, roundMode, dstDataSize);
 }
 
-#define VEC_CAST_TESTCASE(srcType, dstType, roundMode, testMode)                                      \
-    TEST_F(TestCast, Cast##srcType##2##dstType##roundMode##testMode##case)                           \
-    {                                                                                                     \
-        uint32_t srcDataSize = 512;                                                                     \
-        uint32_t dstDataSize = 512;                                                                     \
-        uint8_t inputGm[srcDataSize * sizeof(srcType)];                                               \
-        uint8_t outputGm[dstDataSize * sizeof(dstType)];                                              \
-                                                                                                          \
-        MainVecCastDemo<dstType, srcType>(outputGm, inputGm, RoundMode::roundMode, dstDataSize, \
-            srcDataSize, testMode);                                                                    \
-                                                                                                          \
-        for (uint32_t i = 0; i < dstDataSize; i++) {                                                    \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                \
-        }                                                                                                 \
+#define VEC_CAST_TESTCASE(srcType, dstType, roundMode, testMode)                          \
+    TEST_F(TestCast, Cast##srcType##2##dstType##roundMode##testMode##case)                \
+    {                                                                                     \
+        uint32_t srcDataSize = 512;                                                       \
+        uint32_t dstDataSize = 512;                                                       \
+        uint8_t inputGm[srcDataSize * sizeof(srcType)];                                   \
+        uint8_t outputGm[dstDataSize * sizeof(dstType)];                                  \
+                                                                                          \
+        MainVecCastDemo<dstType, srcType>(                                                \
+            outputGm, inputGm, RoundMode::roundMode, dstDataSize, srcDataSize, testMode); \
+                                                                                          \
+        for (uint32_t i = 0; i < dstDataSize; i++) {                                      \
+            EXPECT_EQ(outputGm[i], 0x00);                                                 \
+        }                                                                                 \
     }
 
-#define VEC_CAST_FAILED_TESTCASE(srcType, dstType, roundMode, testMode)                                           \
-    TEST_F(TestCastCompile, Cast##srcType##2##dstType##roundMode##testMode##FailedCase)                         \
-    {                                                                                                                 \
-        uint32_t srcDataSize = 512;                                                                                 \
-        uint32_t dstDataSize = 512;                                                                                 \
-        MOCKER(raise, int32_t (*)(int32_t)).times(1).will(invoke(RaiseStub));                                         \
+#define VEC_CAST_FAILED_TESTCASE(srcType, dstType, roundMode, testMode)                                   \
+    TEST_F(TestCastCompile, Cast##srcType##2##dstType##roundMode##testMode##FailedCase)                   \
+    {                                                                                                     \
+        uint32_t srcDataSize = 512;                                                                       \
+        uint32_t dstDataSize = 512;                                                                       \
+        MOCKER(raise, int32_t (*)(int32_t)).times(1).will(invoke(RaiseStub));                             \
         MainVecCastDemoDeath<dstType, srcType>(RoundMode::roundMode, dstDataSize, srcDataSize, testMode); \
     }
 

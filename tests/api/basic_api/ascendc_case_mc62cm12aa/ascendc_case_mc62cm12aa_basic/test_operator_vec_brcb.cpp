@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #define private public
@@ -59,7 +59,7 @@ void test_vbrcb_func(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restr
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
 
     SetMaskCount();
-    BrcbRepeatParams params { 1, 8 };
+    BrcbRepeatParams params{1, 8};
     uint8_t repeat = srcLen / 8;
     Brcb(outputLocal, inputLocal, repeat, params);
 
@@ -69,23 +69,16 @@ void test_vbrcb_func(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restr
     pipe_barrier(PIPE_ALL);
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_BRCB, BrcbTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_BRCB, BrcbTestSuite,
     ::testing::Values(
-        BrcbTestParams { 32, 1, test_vbrcb_func<uint8_t> },
-        BrcbTestParams { 32, 1, test_vbrcb_func<int8_t> },
-        BrcbTestParams { 16, 2, test_vbrcb_func<uint16_t> },
-        BrcbTestParams { 16, 2, test_vbrcb_func<half> },
-        BrcbTestParams { 16, 2, test_vbrcb_func<bfloat16_t> },
-        BrcbTestParams { 32, 2, test_vbrcb_func<int16_t> }, 
-        BrcbTestParams { 128, 2, test_vbrcb_func<uint16_t> },
-        BrcbTestParams { 16, 4, test_vbrcb_func<int32_t> },
-        BrcbTestParams { 16, 4, test_vbrcb_func<float> }, 
-        BrcbTestParams { 32, 4, test_vbrcb_func<uint32_t> },
-        BrcbTestParams { 64, 4, test_vbrcb_func<uint32_t> },
-        BrcbTestParams { 64, 8, test_vbrcb_func<uint64_t> },
-        BrcbTestParams { 64, 8, test_vbrcb_func<int64_t> }
-    )
-);
+        BrcbTestParams{32, 1, test_vbrcb_func<uint8_t>}, BrcbTestParams{32, 1, test_vbrcb_func<int8_t>},
+        BrcbTestParams{16, 2, test_vbrcb_func<uint16_t>}, BrcbTestParams{16, 2, test_vbrcb_func<half>},
+        BrcbTestParams{16, 2, test_vbrcb_func<bfloat16_t>}, BrcbTestParams{32, 2, test_vbrcb_func<int16_t>},
+        BrcbTestParams{128, 2, test_vbrcb_func<uint16_t>}, BrcbTestParams{16, 4, test_vbrcb_func<int32_t>},
+        BrcbTestParams{16, 4, test_vbrcb_func<float>}, BrcbTestParams{32, 4, test_vbrcb_func<uint32_t>},
+        BrcbTestParams{64, 4, test_vbrcb_func<uint32_t>}, BrcbTestParams{64, 8, test_vbrcb_func<uint64_t>},
+        BrcbTestParams{64, 8, test_vbrcb_func<int64_t>}));
 
 TEST_P(BrcbTestSuite, BrcbTestCase)
 {

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -19,8 +19,9 @@ template <typename T>
 class SyncTest {
 public:
     __aicore__ inline SyncTest() {}
-    __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* gmWorkspace, 
-    const uint32_t count, const uint32_t datacopyTimes)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* gmWorkspace, const uint32_t count,
+        const uint32_t datacopyTimes)
     {
         mElementCount = count;
         mDatacopyTimes = datacopyTimes;
@@ -44,10 +45,7 @@ private:
         DataCopy(srcLocal, mSrcGlobal, mElementCount);
         mQue.EnQue(srcLocal);
     }
-    __aicore__ inline void Compute()
-    {
-        ;
-    }
+    __aicore__ inline void Compute() { ; }
     __aicore__ inline void CopyOut()
     {
         LocalTensor<T> dstLocal = mQue.DeQue<T>();
@@ -83,8 +81,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void TestSync(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, __gm__ uint8_t *gmWorkspace,
-    uint32_t elementCount, uint32_t datacopyTimes)
+__global__ __aicore__ void TestSync(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* gmWorkspace, uint32_t elementCount,
+    uint32_t datacopyTimes)
 {
     AscendC::SyncTest<T> op;
     op.Init(dstGm, srcGm, gmWorkspace, elementCount, datacopyTimes);
@@ -98,19 +97,17 @@ struct SyncTestParams {
     void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint32_t, uint32_t);
 };
 
-class DeterComputeSyncTestsuite : public testing::Test,
-    public testing::WithParamInterface<SyncTestParams> {
+class DeterComputeSyncTestsuite : public testing::Test, public testing::WithParamInterface<SyncTestParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_SYNC, DeterComputeSyncTestsuite,
-    ::testing::Values(SyncTestParams { 2, 128, 20, TestSync<half>},
-        SyncTestParams { 2, 2048, 10, TestSync<half>},
-        SyncTestParams { 4, 128, 20, TestSync<float>},
-        SyncTestParams { 4, 2048, 10, TestSync<float>}));
-
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_SYNC, DeterComputeSyncTestsuite,
+    ::testing::Values(
+        SyncTestParams{2, 128, 20, TestSync<half>}, SyncTestParams{2, 2048, 10, TestSync<half>},
+        SyncTestParams{4, 128, 20, TestSync<float>}, SyncTestParams{4, 2048, 10, TestSync<float>}));
 
 TEST_P(DeterComputeSyncTestsuite, TestSync)
 {
@@ -119,7 +116,7 @@ TEST_P(DeterComputeSyncTestsuite, TestSync)
     uint8_t dstGm[param.elementCount * param.typeSize] = {0};
     uint8_t gmWorkspace[8 * sizeof(int32_t)] = {0};
     param.cal_func(dstGm, srcGm, gmWorkspace, param.elementCount, param.datacopyTimes);
-    
+
     for (int32_t i = 0; i < param.elementCount; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }

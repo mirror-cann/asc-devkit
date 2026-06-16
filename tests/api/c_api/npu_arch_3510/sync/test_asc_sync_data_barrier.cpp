@@ -20,10 +20,7 @@ protected:
 };
 
 namespace {
-void dsb_stub(mem_dsb_t arg)
-{
-    EXPECT_EQ(mem_dsb_t::DSB_ALL, arg);
-}
+void dsb_stub(mem_dsb_t arg) { EXPECT_EQ(mem_dsb_t::DSB_ALL, arg); }
 } // namespace
 
 TEST_F(TestAscSyncDataBarrierCAPI, c_api_asc_sync_data_barrier_succ)

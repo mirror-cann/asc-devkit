@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -22,8 +22,9 @@ namespace TEST_CASE {
 constexpr uint32_t WEL_UP_REP_SIZE = 256;
 constexpr uint32_t WEL_UP_FLOAT_SIZE = 256 / sizeof(float);
 
-bool GetWelfordUpdateMaxMinTmpSize(const int32_t rnLength, const int32_t abLength, const uint32_t typeSizeT,
-    const uint32_t typeSizeU, const bool isReuseSource, const bool isInplace, uint32_t& maxValue, uint32_t& minValue)
+bool GetWelfordUpdateMaxMinTmpSize(
+    const int32_t rnLength, const int32_t abLength, const uint32_t typeSizeT, const uint32_t typeSizeU,
+    const bool isReuseSource, const bool isInplace, uint32_t& maxValue, uint32_t& minValue)
 {
     if (typeSizeT == sizeof(uint16_t)) {
         minValue = 0x3 * WEL_UP_REP_SIZE;
@@ -36,15 +37,15 @@ bool GetWelfordUpdateMaxMinTmpSize(const int32_t rnLength, const int32_t abLengt
     return true;
 }
 
-}  // namespace TEST_CASE
+} // namespace TEST_CASE
 
 template <typename T, typename U, bool isReuseSource = false, bool isInplace = false, bool tmpLocal = false>
 class KernelWelfordUpdate {
 public:
-    __aicore__ inline KernelWelfordUpdate()
-    {}
-    __aicore__ inline void Init(GM_ADDR inputX_gm, GM_ADDR inputMean_gm, GM_ADDR inputVar_gm, GM_ADDR outputMean_gm,
-        GM_ADDR outputVar_gm, int32_t rnLength, int32_t abLength, int32_t abComputeLength, float nRec)
+    __aicore__ inline KernelWelfordUpdate() {}
+    __aicore__ inline void Init(
+        GM_ADDR inputX_gm, GM_ADDR inputMean_gm, GM_ADDR inputVar_gm, GM_ADDR outputMean_gm, GM_ADDR outputVar_gm,
+        int32_t rnLength, int32_t abLength, int32_t abComputeLength, float nRec)
     {
         m_rnLength = rnLength;
         m_abLength = abLength;
@@ -53,18 +54,17 @@ public:
         bshLength = rnLength * abLength;
         inplace = isInplace;
 
-        inputX_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(inputX_gm), bshLength);
-        inputMean_global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(inputMean_gm), bshLength);
-        inputVar_global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(inputVar_gm), bshLength);
-        outputMean_global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(outputMean_gm), bshLength);
-        outputVar_global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(outputVar_gm), bshLength);
+        inputX_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(inputX_gm), bshLength);
+        inputMean_global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(inputMean_gm), bshLength);
+        inputVar_global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(inputVar_gm), bshLength);
+        outputMean_global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(outputMean_gm), bshLength);
+        outputVar_global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(outputVar_gm), bshLength);
 
         pipe.InitBuffer(inQueueX, 1, bshLength * sizeof(T));
         pipe.InitBuffer(inQueueMean, 1, bshLength * sizeof(U));
         pipe.InitBuffer(inQueueVar, 1, bshLength * sizeof(U));
         pipe.InitBuffer(outQueueMean, 1, bshLength * sizeof(U));
         pipe.InitBuffer(outQueueVar, 1, bshLength * sizeof(U));
-
     }
     __aicore__ inline void Process()
     {
@@ -102,30 +102,30 @@ private:
 
         struct WelfordUpdateParam para = {m_rnLength, m_abLength, m_abComputeLength, m_nRec};
         if (tmpLocal) {
-            TEST_CASE::GetWelfordUpdateMaxMinTmpSize(m_rnLength, m_abLength, sizeof(T), sizeof(U), isReuseSource,
-                isInplace, tmpMaxBytes, tmpMinBytes);
+            TEST_CASE::GetWelfordUpdateMaxMinTmpSize(
+                m_rnLength, m_abLength, sizeof(T), sizeof(U), isReuseSource, isInplace, tmpMaxBytes, tmpMinBytes);
             if (tmpMinBytes % WEL_UP_BLOCK_SIZE != 0) {
                 tmpMinBytes = (tmpMinBytes + WEL_UP_BLOCK_SIZE - 1) / WEL_UP_BLOCK_SIZE * WEL_UP_BLOCK_SIZE;
             }
             pipe.InitBuffer(tmpLocalBuf, tmpMinBytes);
             LocalTensor<uint8_t> tmpLocalTensor = tmpLocalBuf.Get<uint8_t>();
             if (inplace) {
-                WelfordUpdate<T, U, isReuseSource, WELFORD_UPDATE_ENABLE_INPLACE_CFG>(outMeanLocal, outVarLocal,
-                    inputMeanLocal, inputVarLocal, inputXLocal, tmpLocalTensor, para);
+                WelfordUpdate<T, U, isReuseSource, WELFORD_UPDATE_ENABLE_INPLACE_CFG>(
+                    outMeanLocal, outVarLocal, inputMeanLocal, inputVarLocal, inputXLocal, tmpLocalTensor, para);
             } else {
-                WelfordUpdate<T, U, isReuseSource, WELFORD_UPDATE_UNENABLE_INPLACE_CFG>(outMeanLocal, outVarLocal,
-                    inputMeanLocal, inputVarLocal, inputXLocal, tmpLocalTensor, para);
+                WelfordUpdate<T, U, isReuseSource, WELFORD_UPDATE_UNENABLE_INPLACE_CFG>(
+                    outMeanLocal, outVarLocal, inputMeanLocal, inputVarLocal, inputXLocal, tmpLocalTensor, para);
             }
         } else {
             if (inplace) {
-                WelfordUpdate<T, U, isReuseSource, WELFORD_UPDATE_ENABLE_INPLACE_CFG>(outMeanLocal, outVarLocal,
-                    inputMeanLocal, inputVarLocal, inputXLocal, para);
+                WelfordUpdate<T, U, isReuseSource, WELFORD_UPDATE_ENABLE_INPLACE_CFG>(
+                    outMeanLocal, outVarLocal, inputMeanLocal, inputVarLocal, inputXLocal, para);
             } else {
-                WelfordUpdate<T, U, isReuseSource, WELFORD_UPDATE_UNENABLE_INPLACE_CFG>(outMeanLocal, outVarLocal,
-                    inputMeanLocal, inputVarLocal, inputXLocal, para);
+                WelfordUpdate<T, U, isReuseSource, WELFORD_UPDATE_UNENABLE_INPLACE_CFG>(
+                    outMeanLocal, outVarLocal, inputMeanLocal, inputVarLocal, inputXLocal, para);
             }
         }
-        
+
         outQueueMean.EnQue<U>(outMeanLocal);
         outQueueVar.EnQue<U>(outVarLocal);
 
@@ -171,8 +171,9 @@ private:
 };
 
 template <typename T, typename U, bool isReuseSource = false, bool isFullwelfordUpdate = false, bool tmpLocal = false>
-__aicore__ void main_WelfordUpdate_test(GM_ADDR srcGm, GM_ADDR inMeanGm, GM_ADDR inVarGm, GM_ADDR outMeanGm,
-    GM_ADDR outVarGm, int32_t rnLength, int32_t abLength, int32_t abComputeLength, float nRec)
+__aicore__ void main_WelfordUpdate_test(
+    GM_ADDR srcGm, GM_ADDR inMeanGm, GM_ADDR inVarGm, GM_ADDR outMeanGm, GM_ADDR outVarGm, int32_t rnLength,
+    int32_t abLength, int32_t abComputeLength, float nRec)
 {
     KernelWelfordUpdate<T, U, isReuseSource, isFullwelfordUpdate, tmpLocal> op;
     op.Init(srcGm, inMeanGm, inVarGm, outMeanGm, outVarGm, rnLength, abLength, abComputeLength, nRec);
@@ -186,45 +187,53 @@ struct WelfordUpdateTestParams {
     float nRec;
     uint32_t TypeSizeT;
     uint32_t TypeSizeU;
-    void (*calFunc)(uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *, int32_t, int32_t, int32_t, float);
+    void (*calFunc)(uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, int32_t, int32_t, int32_t, float);
 };
 
 class WelfordUpdateTestSuite : public testing::Test, public testing::WithParamInterface<WelfordUpdateTestParams> {
 protected:
-    static void SetUpTestCase()
-    {
-        std::cout << "WelfordUpdateTestSuite SetUpTestCase" << std::endl;
-    }
-    static void TearDownTestCase()
-    {
-        std::cout << "WelfordUpdateTestSuite TearDownTestCase" << std::endl;
-    }
-    virtual void SetUp()
-    {}
-    virtual void TearDown()
-    {}
+    static void SetUpTestCase() { std::cout << "WelfordUpdateTestSuite SetUpTestCase" << std::endl; }
+    static void TearDownTestCase() { std::cout << "WelfordUpdateTestSuite TearDownTestCase" << std::endl; }
+    virtual void SetUp() {}
+    virtual void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_PACKAGE_WelfordUpdate, WelfordUpdateTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_PACKAGE_WelfordUpdate, WelfordUpdateTestSuite,
     ::testing::Values(
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, true, true, true> },
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, true, true, false> },
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, true, false, true> },
-    WelfordUpdateTestParams { 1, 16, 16, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, false, true, true> },
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, true, false, false> },
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, false, true, false> },
-    WelfordUpdateTestParams { 1, 16, 16, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, false, false, true> },
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, false, false, false> },
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, true, true, true>},
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, true, true, false>},
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, true, false, true>},
+        WelfordUpdateTestParams{
+            1, 16, 16, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, false, true, true>},
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, true, false, false>},
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, false, true, false>},
+        WelfordUpdateTestParams{
+            1, 16, 16, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, false, false, true>},
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(half), sizeof(float), main_WelfordUpdate_test<half, float, false, false, false>},
 
-    WelfordUpdateTestParams { 1, 8, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, true, true, true> },
-    WelfordUpdateTestParams { 1, 16, 13, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, true, true, false> },
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, true, false, true> },
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, false, true, true> },
-    WelfordUpdateTestParams { 1, 16, 16, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, true, false, false> },
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, false, true, false> },
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, false, false, true> },
-    WelfordUpdateTestParams { 1, 16, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, false, false, false> }
-));
+        WelfordUpdateTestParams{
+            1, 8, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, true, true, true>},
+        WelfordUpdateTestParams{
+            1, 16, 13, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, true, true, false>},
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, true, false, true>},
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, false, true, true>},
+        WelfordUpdateTestParams{
+            1, 16, 16, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, true, false, false>},
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, false, true, false>},
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, false, false, true>},
+        WelfordUpdateTestParams{
+            1, 16, 3, 0.8, sizeof(float), sizeof(float), main_WelfordUpdate_test<float, float, false, false, false>}));
 
 TEST_P(WelfordUpdateTestSuite, WelfordUpdateTestCase)
 {
@@ -235,11 +244,11 @@ TEST_P(WelfordUpdateTestSuite, WelfordUpdateTestCase)
     uint8_t inVarGm[srcSize * param.TypeSizeU]{0x00};
     uint8_t outMeanGm[srcSize * param.TypeSizeU]{0x00};
     uint8_t outVarGm[srcSize * param.TypeSizeU]{0x00};
-    param.calFunc(srcGm, inMeanGm, inVarGm, outMeanGm, outVarGm, param.rnLength, param.abLength, param.abComputeLength,
+    param.calFunc(
+        srcGm, inMeanGm, inVarGm, outMeanGm, outVarGm, param.rnLength, param.abLength, param.abComputeLength,
         param.nRec);
     for (int32_t i = 0; i < srcSize; i++) {
         EXPECT_EQ(outMeanGm[i], 0x00);
         EXPECT_EQ(outVarGm[i], 0x00);
     }
 }
-

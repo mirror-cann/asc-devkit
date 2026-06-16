@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 // #include "api_check/kernel_cpu_check.h"
@@ -26,8 +26,9 @@ protected:
     void TearDown() {}
 };
 
-template<typename T>
-void MainDataCopyPadKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
+template <typename T>
+void MainDataCopyPadKernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -74,14 +75,16 @@ void MainDataCopyPadKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* _
     DataCopyPad<T, PaddingMode::Normal>(inputCbufLocal, srcGlobal, copyParams, DataCopyPadExtParams<T>());
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_DATA_COPY_PAD, TestDataCopyPadSuite,
-    ::testing::Values(TestDataCopyPadParams { 64, 4, MainDataCopyPadKernel<int32_t> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernel<int16_t> },
-    TestDataCopyPadParams { 64, 4, MainDataCopyPadKernel<float> },
-    TestDataCopyPadParams { 64, 8, MainDataCopyPadKernel<uint64_t> },
-    TestDataCopyPadParams { 64, 2, MainDataCopyPadKernel<half> },
-    TestDataCopyPadParams { 64, 1, MainDataCopyPadKernel<int8_t> },
-    TestDataCopyPadParams { 64, 1, MainDataCopyPadKernel<uint8_t> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_DATA_COPY_PAD, TestDataCopyPadSuite,
+    ::testing::Values(
+        TestDataCopyPadParams{64, 4, MainDataCopyPadKernel<int32_t>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernel<int16_t>},
+        TestDataCopyPadParams{64, 4, MainDataCopyPadKernel<float>},
+        TestDataCopyPadParams{64, 8, MainDataCopyPadKernel<uint64_t>},
+        TestDataCopyPadParams{64, 2, MainDataCopyPadKernel<half>},
+        TestDataCopyPadParams{64, 1, MainDataCopyPadKernel<int8_t>},
+        TestDataCopyPadParams{64, 1, MainDataCopyPadKernel<uint8_t>}));
 
 TEST_P(TestDataCopyPadSuite, TestDataCopyPadCases)
 {

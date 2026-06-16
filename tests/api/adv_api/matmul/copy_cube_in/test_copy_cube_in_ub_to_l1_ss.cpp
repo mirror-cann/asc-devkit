@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -16,7 +16,7 @@
 #include "impl/adv_api/detail/matmul/policy/matmul_private_modules.h"
 #include "impl/adv_api/detail/matmul/utils/matmul_call_back.h"
 #include "base_tiling_struct.h"
- 
+
 using namespace std;
 
 namespace AscendC {
@@ -28,6 +28,7 @@ const int NUM_SIXTY_FOUR = 64;
 template <typename IMPL, class INPUT_TYPE, const auto& MM_CFG>
 class CustomCubeInBuffer {
     using SrcT = typename INPUT_TYPE::TRANS_T;
+
 public:
     __aicore__ inline CustomCubeInBuffer() {}
     __aicore__ inline ~CustomCubeInBuffer() {}
@@ -35,21 +36,16 @@ public:
     {
         GetTPipePtr()->InitBuffer(qid_, 1, NUM_INIT);
     }
-    __aicore__ inline void Destroy() {
+    __aicore__ inline void Destroy()
+    {
         if (cacheProc_ > 0) {
             qid_.FreeTensor(tensor_);
             cacheProc_ = 0;
         }
         qid_.FreeAllEvent();
     }
-    __aicore__ inline int32_t GetIterIndex(int32_t curRow, int32_t curCol)
-    {
-        return 0;
-    }
-    __aicore__ inline bool Hit(int32_t iterIndex, int32_t bufferPos = -1)
-    {
-        return false;
-    }
+    __aicore__ inline int32_t GetIterIndex(int32_t curRow, int32_t curCol) { return 0; }
+    __aicore__ inline bool Hit(int32_t iterIndex, int32_t bufferPos = -1) { return false; }
     __aicore__ inline LocalTensor<SrcT> GetBuffer(int32_t iterIndex, int32_t bufferPos = -1)
     {
         return EMPTY_TENSOR<SrcT>;
@@ -67,60 +63,50 @@ public:
             cacheProc_ = 0;
         }
     }
-    __aicore__ inline void Reset()
-    {
-        FreeTensor();
-    }
-    __aicore__ inline void EnQue(LocalTensor<SrcT>& tensor)
-    {
-        qid_.EnQue(tensor);
-    }
-    __aicore__ inline void DeQue() {
-        qid_.DeQue();
-    }
- 
-    __aicore__ inline uint64_t GetBufferHeadAddr() {
-        return 0;
-    }
- 
+    __aicore__ inline void Reset() { FreeTensor(); }
+    __aicore__ inline void EnQue(LocalTensor<SrcT>& tensor) { qid_.EnQue(tensor); }
+    __aicore__ inline void DeQue() { qid_.DeQue(); }
+
+    __aicore__ inline uint64_t GetBufferHeadAddr() { return 0; }
+
 private:
-    TQueBind<TPosition::GM, INPUT_TYPE::TAG == InputTypeTag::A ? TPosition::A1 : TPosition::B1,
-        1, GetNdNzMask(CubeFormat::NZ, INPUT_TYPE::format)> qid_;
+    TQueBind<
+        TPosition::GM, INPUT_TYPE::TAG == InputTypeTag::A ? TPosition::A1 : TPosition::B1, 1,
+        GetNdNzMask(CubeFormat::NZ, INPUT_TYPE::format)>
+        qid_;
     LocalTensor<SrcT> tensor_;
     int32_t cacheProc_ = 0;
 };
- 
+
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using CubeInBufferA = CustomCubeInBuffer<IMPL, MatmulInputAType<A_TYPE, typename A_TYPE::T>, MM_CFG>;
     using CubeInBufferB = CustomCubeInBuffer<IMPL, MatmulInputBType<B_TYPE, typename A_TYPE::T>, MM_CFG>;
     using CopyCubeInA = Impl::Detail::CopyCubeIn<IMPL, MatmulInputAType<A_TYPE, typename A_TYPE::T>, MM_CFG>;
     using CopyCubeInB = Impl::Detail::CopyCubeIn<IMPL, MatmulInputBType<B_TYPE, typename A_TYPE::T>, MM_CFG>;
 };
- 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG,
-class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE(CubeInBufferA)
-, MATMUL_IMPORT_MODULE(CubeInBufferB)
-, MATMUL_IMPORT_MODULE(CopyCubeInA)
-, MATMUL_IMPORT_MODULE_PRIVATE(MLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(KLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(CopyCubeInParamsA)
-, MATMUL_IMPORT_MODULE_PRIVATE(DataCopyUtilsA)
-, MATMUL_IMPORT_MODULE_PRIVATE(CopyCubeInParamsB)
-, MATMUL_IMPORT_MODULE_PRIVATE(DataCopyUtilsB)
-, MATMUL_IMPORT_MODULE_PRIVATE(DataCopyWrapperA)
-, MATMUL_IMPORT_MODULE_PRIVATE(DataCopyWrapperB)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulTensorInfoA)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulTensorInfoB)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulSubBlockInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulUserDefineInfo)
-{
+
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG,
+    class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(CubeInBufferA),
+                   MATMUL_IMPORT_MODULE(CubeInBufferB),
+                   MATMUL_IMPORT_MODULE(CopyCubeInA),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(KLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(CopyCubeInParamsA),
+                   MATMUL_IMPORT_MODULE_PRIVATE(DataCopyUtilsA),
+                   MATMUL_IMPORT_MODULE_PRIVATE(CopyCubeInParamsB),
+                   MATMUL_IMPORT_MODULE_PRIVATE(DataCopyUtilsB),
+                   MATMUL_IMPORT_MODULE_PRIVATE(DataCopyWrapperA),
+                   MATMUL_IMPORT_MODULE_PRIVATE(DataCopyWrapperB),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulTensorInfoA),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulTensorInfoB),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulSubBlockInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulUserDefineInfo) {
     MATMUL_ALLOW_USING(CopyCubeInA);
     MATMUL_ALLOW_USING(CubeInBufferA);
     MATMUL_ALLOW_USING_PRIVATE(CopyCubeInParamsA);
@@ -138,29 +124,31 @@ class MatmulImpl
     MATMUL_ALLOW_USING_PRIVATE(MatmulSubBlockInfo);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeTiling);
     MATMUL_ALLOW_USING_PRIVATE(MatmulUserDefineInfo);
- 
+
     using SrcT = typename A_TYPE::T;
- 
+
 public:
     using VAR_PARAMS =
         typename Impl::Detail::MatmulParams<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, GetMatmulMode(MM_CFG)>::PARAMS;
     using IMPL = MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, MM_CB, MATMUL_POLICY>;
- 
+
     template <InputTypeTag TAG>
     using CubeInBuffer = typename AscendC::Conditional<TAG == InputTypeTag::A, CubeInBufferA, CubeInBufferB>::type;
     template <InputTypeTag TAG>
-    using CopyCubeInParams = typename AscendC::Conditional<TAG == InputTypeTag::A, CopyCubeInParamsA, CopyCubeInParamsB>::type;
+    using CopyCubeInParams =
+        typename AscendC::Conditional<TAG == InputTypeTag::A, CopyCubeInParamsA, CopyCubeInParamsB>::type;
     template <InputTypeTag TAG>
-    using MatmulTensorInfo = typename AscendC::Conditional<TAG == InputTypeTag::A, MatmulTensorInfoA, MatmulTensorInfoB>::type;
- 
+    using MatmulTensorInfo =
+        typename AscendC::Conditional<TAG == InputTypeTag::A, MatmulTensorInfoA, MatmulTensorInfoB>::type;
+
     template <InputTypeTag TAG>
     using DataCopyUtils = typename AscendC::Conditional<TAG == InputTypeTag::A, DataCopyUtilsA, DataCopyUtilsB>::type;
     using CallBack = MM_CB;
- 
+
     template <InputTypeTag TAG>
     using DataCopyWrapper =
         typename AscendC::Conditional<TAG == InputTypeTag::A, DataCopyWrapperA, DataCopyWrapperB>::type;
- 
+
     MATMUL_USE_MODULE(CopyCubeInA);
     MATMUL_USE_MODULE(MLoop);
     MATMUL_USE_MODULE(KLoop);
@@ -168,24 +156,25 @@ public:
     MATMUL_USE_MODULE(MatmulShapeInfo);
     MatmulImpl() {}
 
-    void InitVar(const TCubeTiling &tiling) {
+    void InitVar(const TCubeTiling& tiling)
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
     }
- 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
- 
-    void SetRuntimeParams(int32_t baseUseM, int32_t baseUseK, bool isTranspose = false) {
+
+    VAR_PARAMS& GetVar() { return var; }
+
+    void SetRuntimeParams(int32_t baseUseM, int32_t baseUseK, bool isTranspose = false)
+    {
         const auto tiling = MATMUL_MODULE(MatmulShapeTiling)->GetTiling();
-        MATMUL_MODULE(MatmulShapeInfo)->SetSingleShape(tiling.GetSingleCoreM(),
-            tiling.GetSingleCoreN(), tiling.GetSingleCoreK());
+        MATMUL_MODULE(MatmulShapeInfo)
+            ->SetSingleShape(tiling.GetSingleCoreM(), tiling.GetSingleCoreN(), tiling.GetSingleCoreK());
         MATMUL_MODULE(MatmulShapeInfo)->SetOrgM(tiling.GetSingleCoreM());
         MATMUL_MODULE(MatmulShapeInfo)->SetOrgKa(tiling.GetSingleCoreK());
     }
- 
-    void RunCase(int32_t curRow, int32_t curCol, int32_t tileHeight, int32_t tileWidth, bool isTranspose = false) {
+
+    void RunCase(int32_t curRow, int32_t curCol, int32_t tileHeight, int32_t tileWidth, bool isTranspose = false)
+    {
         MATMUL_MODULE(MLoop)->Init(MATMUL_MODULE(MatmulShapeInfo)->GetSingleCoreM());
         MATMUL_MODULE(KLoop)->Init(MATMUL_MODULE(MatmulShapeInfo)->GetSingleCoreK());
         MATMUL_MODULE(CopyCubeInA)->Init();
@@ -196,30 +185,35 @@ public:
         MATMUL_MODULE(CopyCubeInA)->ClearLoadData(EMPTY_TENSOR<SrcT>, 0, 0);
         MATMUL_MODULE(CopyCubeInA)->Destroy();
     }
- 
+
 private:
     TPipe pipe;
     VAR_PARAMS var;
     int32_t batchA_;
     int32_t batchB_;
 };
- 
+
 class TestCopyCubeInUbToL1SingleShape : public testing::Test {
 protected:
     void SetUp() {}
     void TearDown() {}
- 
+
 private:
     using A_TYPE_UB = MatmulType<AscendC::TPosition::VECIN, CubeFormat::ND, half, false>;
     using B_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, half, false>;
     using C_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
     using BIAS_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
- 
-    MatmulImpl<A_TYPE_UB, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm;
+
+    MatmulImpl<
+        A_TYPE_UB, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        mm;
 };
- 
-TEST_F(TestCopyCubeInUbToL1SingleShape, Ub_L1_TO_ss) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder
+
+TEST_F(TestCopyCubeInUbToL1SingleShape, Ub_L1_TO_ss)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder
     TilingParams tilingParams = {1, 64, 256, 256, 64, 256, 256, 32, 64, 256, 2, 4, 1, 2, 1, 1, 1, 1};
     TCubeTiling tiling;
     tilingParams.GetTiling(tiling);
@@ -227,4 +221,4 @@ TEST_F(TestCopyCubeInUbToL1SingleShape, Ub_L1_TO_ss) {
     mm.SetRuntimeParams(NUM_THRITY_TWO, NUM_SIXTY_FOUR);
     mm.RunCase(0, 0, NUM_THRITY_TWO, NUM_SIXTY_FOUR);
 }
-} // namespace
+} // namespace AscendC

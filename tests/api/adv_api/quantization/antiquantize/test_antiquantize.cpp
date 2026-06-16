@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -18,8 +18,9 @@ template <typename InputDataType, typename OutputDataType, bool WithOffset = tru
 class AntiQuantTest {
 public:
     __aicore__ inline AntiQuantTest() {}
-    __aicore__ inline void Init(GM_ADDR dstGm, GM_ADDR srcGm, GM_ADDR offsetGm, GM_ADDR scaleGm,
-        uint32_t elementCountOfInput, uint32_t elementCountOfOffset, uint32_t tmpBufferSize)
+    __aicore__ inline void Init(
+        GM_ADDR dstGm, GM_ADDR srcGm, GM_ADDR offsetGm, GM_ADDR scaleGm, uint32_t elementCountOfInput,
+        uint32_t elementCountOfOffset, uint32_t tmpBufferSize)
     {
         m_elementCountOfInput = elementCountOfInput;
         m_elementCountOfOffset = elementCountOfOffset;
@@ -41,6 +42,7 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
@@ -82,6 +84,7 @@ private:
         DataCopy(m_dstGlobal, dstLocal, m_elementCountOfInput);
         m_queOut.FreeTensor(dstLocal);
     }
+
 private:
     TPipe m_pipe;
     TQue<TPosition::VECIN, 1> m_queInSrc;
@@ -101,8 +104,9 @@ private:
 } // namespace AscendC
 
 template <typename InputDataType, typename OutputDataType, bool WithOffset = true>
-__global__ __aicore__ void testAntiQuant(GM_ADDR dst, GM_ADDR src, GM_ADDR offset, GM_ADDR scale,
-    uint32_t elementCountOfInput, uint32_t elementCountOfOffset, uint32_t tmpBufferSize)
+__global__ __aicore__ void testAntiQuant(
+    GM_ADDR dst, GM_ADDR src, GM_ADDR offset, GM_ADDR scale, uint32_t elementCountOfInput,
+    uint32_t elementCountOfOffset, uint32_t tmpBufferSize)
 {
     AscendC::AntiQuantTest<InputDataType, OutputDataType, WithOffset> op;
     op.Init(dst, src, offset, scale, elementCountOfInput, elementCountOfOffset, tmpBufferSize);
@@ -116,29 +120,24 @@ struct antiquantParams {
     void (*cal_func)(GM_ADDR, GM_ADDR, GM_ADDR, GM_ADDR, uint32_t, uint32_t, uint32_t);
 };
 
-class AntiQuantizeTestsuite : public testing::Test,
-    public testing::WithParamInterface<antiquantParams> {
+class AntiQuantizeTestsuite : public testing::Test, public testing::WithParamInterface<antiquantParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ANTIQUANT, AntiQuantizeTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ANTIQUANT, AntiQuantizeTestsuite,
     ::testing::Values(
-        antiquantParams { 2048, 64, 1024, testAntiQuant<int8_t, half>},
-        antiquantParams { 2048, 64, 1024, testAntiQuant<int8_t, bfloat16_t>},
-        antiquantParams { 2048, 64, 81920, testAntiQuant<int8_t, half>},
-        antiquantParams { 2048, 64, 81920, testAntiQuant<int8_t, bfloat16_t>},
-        antiquantParams { 5888, 256, 81920, testAntiQuant<int8_t, half>},
-        antiquantParams { 5888, 256, 81920, testAntiQuant<int8_t, bfloat16_t>},
-        antiquantParams { 12288, 96, 81920, testAntiQuant<int8_t, half>},
-        antiquantParams { 12288, 96, 81920, testAntiQuant<int8_t, bfloat16_t>},
-        antiquantParams { 2048, 64, 1024, testAntiQuant<int8_t, bfloat16_t, false>}
-        ));
+        antiquantParams{2048, 64, 1024, testAntiQuant<int8_t, half>},
+        antiquantParams{2048, 64, 1024, testAntiQuant<int8_t, bfloat16_t>},
+        antiquantParams{2048, 64, 81920, testAntiQuant<int8_t, half>},
+        antiquantParams{2048, 64, 81920, testAntiQuant<int8_t, bfloat16_t>},
+        antiquantParams{5888, 256, 81920, testAntiQuant<int8_t, half>},
+        antiquantParams{5888, 256, 81920, testAntiQuant<int8_t, bfloat16_t>},
+        antiquantParams{12288, 96, 81920, testAntiQuant<int8_t, half>},
+        antiquantParams{12288, 96, 81920, testAntiQuant<int8_t, bfloat16_t>},
+        antiquantParams{2048, 64, 1024, testAntiQuant<int8_t, bfloat16_t, false>}));
 
 TEST_P(AntiQuantizeTestsuite, testAntiQuantize)
 {
@@ -147,8 +146,8 @@ TEST_P(AntiQuantizeTestsuite, testAntiQuantize)
     uint8_t offsetGm[param.elementCountOfOffset * sizeof(half)] = {0};
     uint8_t scaleGm[param.elementCountOfOffset * sizeof(half)] = {0};
     uint8_t dstGm[param.elementCountOfInput * sizeof(half)] = {0};
-    param.cal_func(dstGm, srcGm, offsetGm, scaleGm,
-        param.elementCountOfInput, param.elementCountOfOffset, param.tmpBufferSize);
+    param.cal_func(
+        dstGm, srcGm, offsetGm, scaleGm, param.elementCountOfInput, param.elementCountOfOffset, param.tmpBufferSize);
     for (int32_t i = 0; i < param.elementCountOfInput; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }

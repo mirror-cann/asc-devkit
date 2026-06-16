@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -17,13 +17,12 @@ namespace AscendC {
 template <typename T>
 class KernelBitwiseXor {
 public:
-    __aicore__ inline KernelBitwiseXor()
-    {}
+    __aicore__ inline KernelBitwiseXor() {}
     __aicore__ inline void Init(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t srcSize)
     {
-        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(src0Gm), srcSize);
-        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(src1Gm), srcSize);
-        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), srcSize);
+        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(src0Gm), srcSize);
+        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(src1Gm), srcSize);
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), srcSize);
 
         pipe.InitBuffer(inQueueX0, 1, srcSize * sizeof(T));
         pipe.InitBuffer(inQueueX1, 1, srcSize * sizeof(T));
@@ -84,8 +83,7 @@ private:
     TQue<TPosition::VECOUT, 1> outQueue;
     uint32_t dataSize = 0;
 };
-}
-
+} // namespace AscendC
 
 template <typename T>
 __aicore__ void testBitwiseXor(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t srcSize)
@@ -95,13 +93,11 @@ __aicore__ void testBitwiseXor(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, ui
     op.Process();
 }
 
-
 struct BitwiseXorTestParams {
     uint32_t dataTypeSize;
     uint32_t inDataSize;
     void (*calFunc)(GM_ADDR, GM_ADDR, GM_ADDR, uint32_t);
 };
-
 
 class BitwiseXorTestSuite : public testing::Test, public testing::WithParamInterface<BitwiseXorTestParams> {
 protected:
@@ -109,34 +105,21 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ADVANCE_API_BITWISE_XOR, BitwiseXorTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ADVANCE_API_BITWISE_XOR, BitwiseXorTestSuite,
     ::testing::Values(
-        BitwiseXorTestParams {1, 1024, testBitwiseXor<uint8_t> },
-        BitwiseXorTestParams {1, 32, testBitwiseXor<uint8_t> },
-        BitwiseXorTestParams {1, 256, testBitwiseXor<uint8_t> },
-        BitwiseXorTestParams {1, 1024, testBitwiseXor<int8_t> },
-        BitwiseXorTestParams {1, 32, testBitwiseXor<int8_t> },
-        BitwiseXorTestParams {1, 256, testBitwiseXor<int8_t> },
-        BitwiseXorTestParams {2, 1024, testBitwiseXor<uint16_t> },
-        BitwiseXorTestParams {2, 32, testBitwiseXor<uint16_t> },
-        BitwiseXorTestParams {2, 256, testBitwiseXor<uint16_t> },
-        BitwiseXorTestParams {2, 1024, testBitwiseXor<int16_t> },
-        BitwiseXorTestParams {2, 32, testBitwiseXor<int16_t> },
-        BitwiseXorTestParams {2, 256, testBitwiseXor<int16_t> },
-        BitwiseXorTestParams {4, 1024, testBitwiseXor<uint32_t> },
-        BitwiseXorTestParams {4, 32, testBitwiseXor<uint32_t> },
-        BitwiseXorTestParams {4, 256, testBitwiseXor<uint32_t> },
-        BitwiseXorTestParams {4, 1024, testBitwiseXor<int32_t> },
-        BitwiseXorTestParams {4, 32, testBitwiseXor<int32_t> },
-        BitwiseXorTestParams {4, 256, testBitwiseXor<int32_t> },
-        BitwiseXorTestParams {8, 1024, testBitwiseXor<uint64_t> },
-        BitwiseXorTestParams {8, 32, testBitwiseXor<uint64_t> },
-        BitwiseXorTestParams {8, 256, testBitwiseXor<uint64_t> },
-        BitwiseXorTestParams {8, 1024, testBitwiseXor<int64_t> },
-        BitwiseXorTestParams {8, 32, testBitwiseXor<int64_t> },
-        BitwiseXorTestParams {8, 256, testBitwiseXor<int64_t> }
-    )
-);
+        BitwiseXorTestParams{1, 1024, testBitwiseXor<uint8_t>}, BitwiseXorTestParams{1, 32, testBitwiseXor<uint8_t>},
+        BitwiseXorTestParams{1, 256, testBitwiseXor<uint8_t>}, BitwiseXorTestParams{1, 1024, testBitwiseXor<int8_t>},
+        BitwiseXorTestParams{1, 32, testBitwiseXor<int8_t>}, BitwiseXorTestParams{1, 256, testBitwiseXor<int8_t>},
+        BitwiseXorTestParams{2, 1024, testBitwiseXor<uint16_t>}, BitwiseXorTestParams{2, 32, testBitwiseXor<uint16_t>},
+        BitwiseXorTestParams{2, 256, testBitwiseXor<uint16_t>}, BitwiseXorTestParams{2, 1024, testBitwiseXor<int16_t>},
+        BitwiseXorTestParams{2, 32, testBitwiseXor<int16_t>}, BitwiseXorTestParams{2, 256, testBitwiseXor<int16_t>},
+        BitwiseXorTestParams{4, 1024, testBitwiseXor<uint32_t>}, BitwiseXorTestParams{4, 32, testBitwiseXor<uint32_t>},
+        BitwiseXorTestParams{4, 256, testBitwiseXor<uint32_t>}, BitwiseXorTestParams{4, 1024, testBitwiseXor<int32_t>},
+        BitwiseXorTestParams{4, 32, testBitwiseXor<int32_t>}, BitwiseXorTestParams{4, 256, testBitwiseXor<int32_t>},
+        BitwiseXorTestParams{8, 1024, testBitwiseXor<uint64_t>}, BitwiseXorTestParams{8, 32, testBitwiseXor<uint64_t>},
+        BitwiseXorTestParams{8, 256, testBitwiseXor<uint64_t>}, BitwiseXorTestParams{8, 1024, testBitwiseXor<int64_t>},
+        BitwiseXorTestParams{8, 32, testBitwiseXor<int64_t>}, BitwiseXorTestParams{8, 256, testBitwiseXor<int64_t>}));
 
 TEST_P(BitwiseXorTestSuite, testBitwiseXor)
 {

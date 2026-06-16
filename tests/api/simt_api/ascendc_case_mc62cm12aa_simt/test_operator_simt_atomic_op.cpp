@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 
 #include <type_traits>
@@ -29,9 +29,11 @@ public:
 };
 
 template <typename T>
-__simt_vf__ LAUNCH_BOUND(1024) inline __aicore__ void KernelAtomicCompute(__gm__ T* dst, T value, T compare, const int num, const int mode)
+__simt_vf__ LAUNCH_BOUND(1024) inline __aicore__
+    void KernelAtomicCompute(__gm__ T* dst, T value, T compare, const int num, const int mode)
 {
-    for (int idx = AscendC::Simt::GetThreadIdx<0>() + block_idx * AscendC::Simt::GetThreadNum<0>(); idx < num; idx += block_num * AscendC::Simt::GetThreadNum<0>()) {
+    for (int idx = AscendC::Simt::GetThreadIdx<0>() + block_idx * AscendC::Simt::GetThreadNum<0>(); idx < num;
+         idx += block_num * AscendC::Simt::GetThreadNum<0>()) {
         if (mode == 0) {
             AscendC::Simt::AtomicAdd(dst, value);
         } else if (mode == 1) {
@@ -61,13 +63,15 @@ __simt_vf__ LAUNCH_BOUND(1024) inline __aicore__ void KernelAtomicCompute(__gm__
 template <typename T>
 __aicore__ inline void KernelAtomic<T>::Process(__gm__ T* dst, T value, T compare, const int num, const int mode)
 {
-    AscendC::Simt::VF_CALL<KernelAtomicCompute<T>>(AscendC::Simt::Dim3(THREAD_DIM, 1, 1), dst, value, compare, num, mode);
+    AscendC::Simt::VF_CALL<KernelAtomicCompute<T>>(
+        AscendC::Simt::Dim3(THREAD_DIM, 1, 1), dst, value, compare, num, mode);
 }
 
 template <typename T>
-__simt_vf__ inline void VfCallProcessStub(__gm__ T *dst, T value, T compare, int num, int mode)
+__simt_vf__ inline void VfCallProcessStub(__gm__ T* dst, T value, T compare, int num, int mode)
 {
-    for (int idx = AscendC::Simt::GetThreadIdx<0>() + block_idx * AscendC::Simt::GetThreadNum<0>(); idx < num; idx += block_num * AscendC::Simt::GetThreadNum<0>()) {
+    for (int idx = AscendC::Simt::GetThreadIdx<0>() + block_idx * AscendC::Simt::GetThreadNum<0>(); idx < num;
+         idx += block_num * AscendC::Simt::GetThreadNum<0>()) {
         if (mode == 0) {
             AscendC::Simt::AtomicAdd(dst, value);
         } else if (mode == 1) {
@@ -113,13 +117,12 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(AtomicOpTestCase, AtomicOpTestsuite,
-                        ::testing::Values(AtomicOpParams{.mode = 0}, AtomicOpParams{.mode = 1},
-                                          AtomicOpParams{.mode = 2}, AtomicOpParams{.mode = 3},
-                                          AtomicOpParams{.mode = 4}, AtomicOpParams{.mode = 5},
-                                          AtomicOpParams{.mode = 6}, AtomicOpParams{.mode = 7},
-                                          AtomicOpParams{.mode = 8}, AtomicOpParams{.mode = 9},
-                                          AtomicOpParams{.mode = 10}));
+INSTANTIATE_TEST_CASE_P(
+    AtomicOpTestCase, AtomicOpTestsuite,
+    ::testing::Values(
+        AtomicOpParams{.mode = 0}, AtomicOpParams{.mode = 1}, AtomicOpParams{.mode = 2}, AtomicOpParams{.mode = 3},
+        AtomicOpParams{.mode = 4}, AtomicOpParams{.mode = 5}, AtomicOpParams{.mode = 6}, AtomicOpParams{.mode = 7},
+        AtomicOpParams{.mode = 8}, AtomicOpParams{.mode = 9}, AtomicOpParams{.mode = 10}));
 
 TEST_P(AtomicOpTestsuite, AtomicOpTestCase)
 {

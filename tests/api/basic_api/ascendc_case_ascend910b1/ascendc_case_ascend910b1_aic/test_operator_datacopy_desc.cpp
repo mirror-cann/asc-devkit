@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -27,7 +27,8 @@ struct SelfTensorDesc : public TensorTrait<T> {
 
 namespace AscendC {
 // T, U for l1->l0c
-template <typename T, typename U> class KernelDataCopyL12L0c {
+template <typename T, typename U>
+class KernelDataCopyL12L0c {
 public:
     __aicore__ inline KernelDataCopyL12L0c() {}
     __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm)
@@ -98,22 +99,21 @@ struct DataCopyL12L0cTestParams {
 
 class DataCopyDescL12L0cTestsuite : public testing::Test, public testing::WithParamInterface<DataCopyL12L0cTestParams> {
 protected:
-    void SetUp() {
-        g_coreType = AIC_TYPE;
-    }
-    void TearDown() {
+    void SetUp() { g_coreType = AIC_TYPE; }
+    void TearDown()
+    {
         AscendC::CheckSyncState();
         g_coreType = MIX_TYPE;
     }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DATACOPYL12L0C, DataCopyDescL12L0cTestsuite,
-   ::testing::Values(
-    DataCopyL12L0cTestParams { 2, MainDataCopyL12L0c<bfloat16_t, bfloat16_t> },
-    DataCopyL12L0cTestParams { 2, MainDataCopyL12L0c<half, half> },
-    DataCopyL12L0cTestParams { 4, MainDataCopyL12L0c<float, float> }, 
-    DataCopyL12L0cTestParams { 4, MainDataCopyL12L0c<int32_t, int32_t> } 
-    ));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DATACOPYL12L0C, DataCopyDescL12L0cTestsuite,
+    ::testing::Values(
+        DataCopyL12L0cTestParams{2, MainDataCopyL12L0c<bfloat16_t, bfloat16_t>},
+        DataCopyL12L0cTestParams{2, MainDataCopyL12L0c<half, half>},
+        DataCopyL12L0cTestParams{4, MainDataCopyL12L0c<float, float>},
+        DataCopyL12L0cTestParams{4, MainDataCopyL12L0c<int32_t, int32_t>}));
 TEST_P(DataCopyDescL12L0cTestsuite, DataCopyL12L0cOpTestCase)
 {
     int32_t tmp = g_coreType;
@@ -131,7 +131,8 @@ TEST_P(DataCopyDescL12L0cTestsuite, DataCopyL12L0cOpTestCase)
 
 namespace AscendC {
 // T, U for gm->l1 nd2nz
-template <typename T> class KernelDataCopyGm2L1Nd2Nz {
+template <typename T>
+class KernelDataCopyGm2L1Nd2Nz {
 public:
     __aicore__ inline KernelDataCopyGm2L1Nd2Nz() {}
     __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, Nd2NzParams& intriParamsIn)
@@ -139,8 +140,8 @@ public:
         intriParams = intriParamsIn;
         srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
-        pipe.InitBuffer(inQueueSrcA1, 1,
-            (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
+        pipe.InitBuffer(
+            inQueueSrcA1, 1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
     }
     __aicore__ inline void Process()
     {
@@ -158,16 +159,14 @@ private:
 
         inQueueSrcA1.EnQue(srcLocal);
     }
-    __aicore__ inline void Compute()
-    {
-        ;
-    }
+    __aicore__ inline void Compute() { ; }
     __aicore__ inline void CopyOut()
     {
         LocalTensor<SelfTensorDesc<T>> dstLocal = inQueueSrcA1.DeQue<SelfTensorDesc<T>>();
 
-        DataCopy(dstGlobal, dstLocal,
-            { 1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32) / 32, 0, 0 });
+        DataCopy(
+            dstGlobal, dstLocal,
+            {1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32) / 32, 0, 0});
 
         inQueueSrcA1.FreeTensor(dstLocal);
     }
@@ -182,8 +181,8 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void MainDataCopyGm2L1Nd2Nz(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-    Nd2NzParams& intriParams)
+__global__ __aicore__ void MainDataCopyGm2L1Nd2Nz(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, Nd2NzParams& intriParams)
 {
     AscendC::KernelDataCopyGm2L1Nd2Nz<T> op;
     op.Init(dstGm, srcGm, intriParams);
@@ -197,12 +196,9 @@ struct DataCopyGm2L1Nd2NzTestParams {
 };
 
 class DataCopyDescGm2L1Nd2NzTestsuite : public testing::Test,
-    public testing::WithParamInterface<DataCopyGm2L1Nd2NzTestParams> {
+                                        public testing::WithParamInterface<DataCopyGm2L1Nd2NzTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(1);
-    }
+    void SetUp() { AscendC::SetGCoreType(1); }
     void TearDown()
     {
         AscendC::CheckSyncState();
@@ -210,23 +206,25 @@ protected:
     }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DATACOPYGM2L1ND2NZ, DataCopyDescGm2L1Nd2NzTestsuite,
-    ::testing::Values(DataCopyGm2L1Nd2NzTestParams { 2, MainDataCopyGm2L1Nd2Nz<half>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2L1Nd2NzTestParams { 2, MainDataCopyGm2L1Nd2Nz<bfloat16_t>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2L1Nd2NzTestParams { 2, MainDataCopyGm2L1Nd2Nz<int16_t>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2L1Nd2NzTestParams { 2, MainDataCopyGm2L1Nd2Nz<uint16_t>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2L1Nd2NzTestParams { 4, MainDataCopyGm2L1Nd2Nz<float>, { 2, 2, 13, 48, 16, 11, 2, 40 } },
-    DataCopyGm2L1Nd2NzTestParams { 4, MainDataCopyGm2L1Nd2Nz<int32_t>, { 2, 2, 13, 48, 16, 11, 2, 40 } },
-    DataCopyGm2L1Nd2NzTestParams { 4, MainDataCopyGm2L1Nd2Nz<uint32_t>, { 2, 2, 13, 48, 16, 11, 2, 40 } },
-    DataCopyGm2L1Nd2NzTestParams { 1, MainDataCopyGm2L1Nd2Nz<int8_t>, { 2, 2, 13, 96, 32, 11, 2, 96 } },
-    DataCopyGm2L1Nd2NzTestParams { 1, MainDataCopyGm2L1Nd2Nz<uint8_t>, { 2, 2, 13, 96, 32, 11, 2, 96 } }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DATACOPYGM2L1ND2NZ, DataCopyDescGm2L1Nd2NzTestsuite,
+    ::testing::Values(
+        DataCopyGm2L1Nd2NzTestParams{2, MainDataCopyGm2L1Nd2Nz<half>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2L1Nd2NzTestParams{2, MainDataCopyGm2L1Nd2Nz<bfloat16_t>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2L1Nd2NzTestParams{2, MainDataCopyGm2L1Nd2Nz<int16_t>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2L1Nd2NzTestParams{2, MainDataCopyGm2L1Nd2Nz<uint16_t>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2L1Nd2NzTestParams{4, MainDataCopyGm2L1Nd2Nz<float>, {2, 2, 13, 48, 16, 11, 2, 40}},
+        DataCopyGm2L1Nd2NzTestParams{4, MainDataCopyGm2L1Nd2Nz<int32_t>, {2, 2, 13, 48, 16, 11, 2, 40}},
+        DataCopyGm2L1Nd2NzTestParams{4, MainDataCopyGm2L1Nd2Nz<uint32_t>, {2, 2, 13, 48, 16, 11, 2, 40}},
+        DataCopyGm2L1Nd2NzTestParams{1, MainDataCopyGm2L1Nd2Nz<int8_t>, {2, 2, 13, 96, 32, 11, 2, 96}},
+        DataCopyGm2L1Nd2NzTestParams{1, MainDataCopyGm2L1Nd2Nz<uint8_t>, {2, 2, 13, 96, 32, 11, 2, 96}}));
 
 TEST_P(DataCopyDescGm2L1Nd2NzTestsuite, DataCopyGm2L1Nd2NzTestsuiteOpTestCase)
 {
     auto param = GetParam();
     Nd2NzParams intriParams = param.intriParams;
     uint8_t srcGm[intriParams.ndNum * intriParams.srcNdMatrixStride * param.typeSize] = {0};
-    uint8_t dstGm[((intriParams.dValue * param.typeSize -1 ) / 32 + 1) * intriParams.dstNzC0Stride * 32] = {0};
+    uint8_t dstGm[((intriParams.dValue * param.typeSize - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32] = {0};
 
     param.CalFunc(dstGm, srcGm, intriParams);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
@@ -236,7 +234,8 @@ TEST_P(DataCopyDescGm2L1Nd2NzTestsuite, DataCopyGm2L1Nd2NzTestsuiteOpTestCase)
 
 namespace AscendC {
 // T, U for l0c->l1
-template <typename T, typename U> class KernelDataCopyL0c2L1 {
+template <typename T, typename U>
+class KernelDataCopyL0c2L1 {
 public:
     __aicore__ inline KernelDataCopyL0c2L1() {}
     __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, QuantMode_t mode)
@@ -255,10 +254,7 @@ public:
     }
 
 private:
-    __aicore__ inline void CopyIn()
-    {
-        ;
-    }
+    __aicore__ inline void CopyIn() { ; }
     __aicore__ inline void Compute()
     {
         LocalTensor<SelfTensorDesc<U>> srcLocal = inQueueSrcCO1.AllocTensor<SelfTensorDesc<U>>();
@@ -302,26 +298,25 @@ struct DataCopyL0c2L1TestParams {
 
 class DataCopyDescL0c2L1Testsuite : public testing::Test, public testing::WithParamInterface<DataCopyL0c2L1TestParams> {
 protected:
-    void SetUp() {
-        g_coreType = AIC_TYPE;
-    }
-    void TearDown() {
+    void SetUp() { g_coreType = AIC_TYPE; }
+    void TearDown()
+    {
         AscendC::CheckSyncState();
         g_coreType = MIX_TYPE;
     }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DATACOPYL0C2L1, DataCopyDescL0c2L1Testsuite,
-   ::testing::Values(
-    DataCopyL0c2L1TestParams { 1, 4, QuantMode_t::QF322B8_PRE, MainDataCopyL0c2L1<int8_t, float> },
-    DataCopyL0c2L1TestParams { 1, 4, QuantMode_t::VQF322B8_PRE, MainDataCopyL0c2L1<int8_t, float> },
-    DataCopyL0c2L1TestParams { 2, 4, QuantMode_t::F322F16, MainDataCopyL0c2L1<half, float> },
-    DataCopyL0c2L1TestParams { 2, 4, QuantMode_t::F322BF16, MainDataCopyL0c2L1<bfloat16_t, float> },
-    DataCopyL0c2L1TestParams { 2, 4, QuantMode_t::DEQF16, MainDataCopyL0c2L1<half, int32_t> },
-    DataCopyL0c2L1TestParams { 2, 4, QuantMode_t::VDEQF16, MainDataCopyL0c2L1<half, int32_t> },
-    DataCopyL0c2L1TestParams { 1, 4, QuantMode_t::REQ8, MainDataCopyL0c2L1<int8_t, int32_t> },
-    DataCopyL0c2L1TestParams { 1, 4, QuantMode_t::VREQ8, MainDataCopyL0c2L1<int8_t, int32_t> }
-    ));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DATACOPYL0C2L1, DataCopyDescL0c2L1Testsuite,
+    ::testing::Values(
+        DataCopyL0c2L1TestParams{1, 4, QuantMode_t::QF322B8_PRE, MainDataCopyL0c2L1<int8_t, float>},
+        DataCopyL0c2L1TestParams{1, 4, QuantMode_t::VQF322B8_PRE, MainDataCopyL0c2L1<int8_t, float>},
+        DataCopyL0c2L1TestParams{2, 4, QuantMode_t::F322F16, MainDataCopyL0c2L1<half, float>},
+        DataCopyL0c2L1TestParams{2, 4, QuantMode_t::F322BF16, MainDataCopyL0c2L1<bfloat16_t, float>},
+        DataCopyL0c2L1TestParams{2, 4, QuantMode_t::DEQF16, MainDataCopyL0c2L1<half, int32_t>},
+        DataCopyL0c2L1TestParams{2, 4, QuantMode_t::VDEQF16, MainDataCopyL0c2L1<half, int32_t>},
+        DataCopyL0c2L1TestParams{1, 4, QuantMode_t::REQ8, MainDataCopyL0c2L1<int8_t, int32_t>},
+        DataCopyL0c2L1TestParams{1, 4, QuantMode_t::VREQ8, MainDataCopyL0c2L1<int8_t, int32_t>}));
 
 TEST_P(DataCopyDescL0c2L1Testsuite, DataCopyL0c2L1OpTestCase)
 {
@@ -337,7 +332,8 @@ TEST_P(DataCopyDescL0c2L1Testsuite, DataCopyL0c2L1OpTestCase)
 
 namespace AscendC {
 // T, U for l0c->gm
-template <typename T, typename U> class KernelDataCopyL0c2Gm {
+template <typename T, typename U>
+class KernelDataCopyL0c2Gm {
 public:
     __aicore__ inline KernelDataCopyL0c2Gm() {}
     __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, QuantMode_t mode)
@@ -355,10 +351,7 @@ public:
     }
 
 private:
-    __aicore__ inline void CopyIn()
-    {
-        ;
-    }
+    __aicore__ inline void CopyIn() { ; }
     __aicore__ inline void Compute()
     {
         LocalTensor<SelfTensorDesc<U>> srcLocal = inQueueSrcCO1.AllocTensor<SelfTensorDesc<U>>();
@@ -367,10 +360,7 @@ private:
         DataCopy(dstGlobal, srcLocal, dataCopyParams);
         inQueueSrcCO1.FreeTensor(srcLocal);
     }
-    __aicore__ inline void CopyOut()
-    {
-        ;
-    }
+    __aicore__ inline void CopyOut() { ; }
 
 private:
     TPipe pipe;
@@ -398,27 +388,26 @@ struct DataCopyL0c2GmTestParams {
 
 class DataCopyDescL0c2GmTestsuite : public testing::Test, public testing::WithParamInterface<DataCopyL0c2GmTestParams> {
 protected:
-    void SetUp() {
-        g_coreType = AIC_TYPE;
-    }
-    void TearDown() {
+    void SetUp() { g_coreType = AIC_TYPE; }
+    void TearDown()
+    {
         AscendC::CheckSyncState();
         g_coreType = MIX_TYPE;
     }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DATACOPYL0C2GM, DataCopyDescL0c2GmTestsuite,
-   ::testing::Values(
-    DataCopyL0c2GmTestParams { 4, 4, QuantMode_t::NoQuant, MainDataCopyL0c2Gm<int32_t, int32_t> },
-    DataCopyL0c2GmTestParams { 1, 4, QuantMode_t::QF322B8_PRE, MainDataCopyL0c2Gm<int8_t, float> },
-    DataCopyL0c2GmTestParams { 1, 4, QuantMode_t::VQF322B8_PRE, MainDataCopyL0c2Gm<int8_t, float> },
-    DataCopyL0c2GmTestParams { 2, 4, QuantMode_t::F322F16, MainDataCopyL0c2Gm<half, float> },
-    DataCopyL0c2GmTestParams { 2, 4, QuantMode_t::F322BF16, MainDataCopyL0c2Gm<bfloat16_t, float> },
-    DataCopyL0c2GmTestParams { 2, 4, QuantMode_t::DEQF16, MainDataCopyL0c2Gm<half, int32_t> },
-    DataCopyL0c2GmTestParams { 2, 4, QuantMode_t::VDEQF16, MainDataCopyL0c2Gm<half, int32_t> },
-    DataCopyL0c2GmTestParams { 1, 4, QuantMode_t::REQ8, MainDataCopyL0c2Gm<int8_t, int32_t> },
-    DataCopyL0c2GmTestParams { 1, 4, QuantMode_t::VREQ8, MainDataCopyL0c2Gm<int8_t, int32_t> }
-    ));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DATACOPYL0C2GM, DataCopyDescL0c2GmTestsuite,
+    ::testing::Values(
+        DataCopyL0c2GmTestParams{4, 4, QuantMode_t::NoQuant, MainDataCopyL0c2Gm<int32_t, int32_t>},
+        DataCopyL0c2GmTestParams{1, 4, QuantMode_t::QF322B8_PRE, MainDataCopyL0c2Gm<int8_t, float>},
+        DataCopyL0c2GmTestParams{1, 4, QuantMode_t::VQF322B8_PRE, MainDataCopyL0c2Gm<int8_t, float>},
+        DataCopyL0c2GmTestParams{2, 4, QuantMode_t::F322F16, MainDataCopyL0c2Gm<half, float>},
+        DataCopyL0c2GmTestParams{2, 4, QuantMode_t::F322BF16, MainDataCopyL0c2Gm<bfloat16_t, float>},
+        DataCopyL0c2GmTestParams{2, 4, QuantMode_t::DEQF16, MainDataCopyL0c2Gm<half, int32_t>},
+        DataCopyL0c2GmTestParams{2, 4, QuantMode_t::VDEQF16, MainDataCopyL0c2Gm<half, int32_t>},
+        DataCopyL0c2GmTestParams{1, 4, QuantMode_t::REQ8, MainDataCopyL0c2Gm<int8_t, int32_t>},
+        DataCopyL0c2GmTestParams{1, 4, QuantMode_t::VREQ8, MainDataCopyL0c2Gm<int8_t, int32_t>}));
 
 TEST_P(DataCopyDescL0c2GmTestsuite, DataCopyL0c2GmOpTestCase)
 {
@@ -432,13 +421,11 @@ TEST_P(DataCopyDescL0c2GmTestsuite, DataCopyL0c2GmOpTestCase)
     }
 }
 
-class DataCopyDescGm2L1Nd2NzTestsuiteCheckGmOverflow : public testing::Test,
-    public testing::WithParamInterface<DataCopyGm2L1Nd2NzTestParams> {
+class DataCopyDescGm2L1Nd2NzTestsuiteCheckGmOverflow
+    : public testing::Test,
+      public testing::WithParamInterface<DataCopyGm2L1Nd2NzTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(1);
-    }
+    void SetUp() { AscendC::SetGCoreType(1); }
     void TearDown()
     {
         AscendC::CheckSyncState();
@@ -446,23 +433,25 @@ protected:
     }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DATACOPYGM2L1ND2NZ_OOM, DataCopyDescGm2L1Nd2NzTestsuiteCheckGmOverflow,
-    ::testing::Values(DataCopyGm2L1Nd2NzTestParams { 2, MainDataCopyGm2L1Nd2Nz<half>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2L1Nd2NzTestParams { 2, MainDataCopyGm2L1Nd2Nz<bfloat16_t>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2L1Nd2NzTestParams { 2, MainDataCopyGm2L1Nd2Nz<int16_t>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2L1Nd2NzTestParams { 2, MainDataCopyGm2L1Nd2Nz<uint16_t>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2L1Nd2NzTestParams { 4, MainDataCopyGm2L1Nd2Nz<float>, { 2, 2, 13, 48, 16, 11, 2, 40 } },
-    DataCopyGm2L1Nd2NzTestParams { 4, MainDataCopyGm2L1Nd2Nz<int32_t>, { 2, 2, 13, 48, 16, 11, 2, 40 } },
-    DataCopyGm2L1Nd2NzTestParams { 4, MainDataCopyGm2L1Nd2Nz<uint32_t>, { 2, 2, 13, 48, 16, 11, 2, 40 } },
-    DataCopyGm2L1Nd2NzTestParams { 1, MainDataCopyGm2L1Nd2Nz<int8_t>, { 2, 2, 13, 96, 32, 11, 2, 96 } },
-    DataCopyGm2L1Nd2NzTestParams { 1, MainDataCopyGm2L1Nd2Nz<uint8_t>, { 2, 2, 13, 96, 32, 11, 2, 96 } }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DATACOPYGM2L1ND2NZ_OOM, DataCopyDescGm2L1Nd2NzTestsuiteCheckGmOverflow,
+    ::testing::Values(
+        DataCopyGm2L1Nd2NzTestParams{2, MainDataCopyGm2L1Nd2Nz<half>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2L1Nd2NzTestParams{2, MainDataCopyGm2L1Nd2Nz<bfloat16_t>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2L1Nd2NzTestParams{2, MainDataCopyGm2L1Nd2Nz<int16_t>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2L1Nd2NzTestParams{2, MainDataCopyGm2L1Nd2Nz<uint16_t>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2L1Nd2NzTestParams{4, MainDataCopyGm2L1Nd2Nz<float>, {2, 2, 13, 48, 16, 11, 2, 40}},
+        DataCopyGm2L1Nd2NzTestParams{4, MainDataCopyGm2L1Nd2Nz<int32_t>, {2, 2, 13, 48, 16, 11, 2, 40}},
+        DataCopyGm2L1Nd2NzTestParams{4, MainDataCopyGm2L1Nd2Nz<uint32_t>, {2, 2, 13, 48, 16, 11, 2, 40}},
+        DataCopyGm2L1Nd2NzTestParams{1, MainDataCopyGm2L1Nd2Nz<int8_t>, {2, 2, 13, 96, 32, 11, 2, 96}},
+        DataCopyGm2L1Nd2NzTestParams{1, MainDataCopyGm2L1Nd2Nz<uint8_t>, {2, 2, 13, 96, 32, 11, 2, 96}}));
 
 TEST_P(DataCopyDescGm2L1Nd2NzTestsuiteCheckGmOverflow, DataCopyGm2L1Nd2NzTestsuiteCheckGmOverflowCheckGmOverflow_1)
 {
     constexpr size_t workspaceSize = AscendC::RESERVED_WORKSPACE;
     uint8_t* sysWorkSpacePtr = (uint8_t*)AscendC::GmAlloc(workspaceSize);
     memset_s(sysWorkSpacePtr, workspaceSize, 0, workspaceSize);
-    std::cout<<"kernel_util sysWorkSpacePtr "<< reinterpret_cast<uintptr_t>(sysWorkSpacePtr)<<std::endl;
+    std::cout << "kernel_util sysWorkSpacePtr " << reinterpret_cast<uintptr_t>(sysWorkSpacePtr) << std::endl;
     if (sysWorkSpacePtr == nullptr) {
         printf("[error]g_sysWorkspaceReserved is null, g_sysWorkspaceReserved has been set or not\n");
     }
@@ -471,18 +460,20 @@ TEST_P(DataCopyDescGm2L1Nd2NzTestsuiteCheckGmOverflow, DataCopyGm2L1Nd2NzTestsui
     auto param = GetParam();
     Nd2NzParams intriParams = param.intriParams;
     uint8_t srcGm[intriParams.ndNum * intriParams.srcNdMatrixStride * param.typeSize] = {0};
-    uint8_t dstGm[((intriParams.dValue * param.typeSize -1 ) / 32 + 1) * intriParams.dstNzC0Stride * 32] = {0};
+    uint8_t dstGm[((intriParams.dValue * param.typeSize - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32] = {0};
 
-    *((__gm__ uint64_t *)((__gm__ uint8_t *)workspace + 11 * 1024 * 1024)) = 1;
-    *((__gm__ uint64_t *)((__gm__ uint8_t *)workspace + 11 * 1024 * 1024 + 8)) = 1;
-    *((__gm__ uintptr_t *)((__gm__ uint8_t *)workspace + 11 * 1024 * 1024 + 16)) = reinterpret_cast<uintptr_t>(srcGm);
-    *((__gm__ uint64_t *)((__gm__ uint8_t *)workspace + 11 * 1024 * 1024 + 24)) = intriParams.ndNum * intriParams.srcNdMatrixStride * param.typeSize;
-    *((__gm__ uintptr_t *)((__gm__ uint8_t *)workspace + 11 * 1024 * 1024 + 32)) = reinterpret_cast<uintptr_t>(dstGm);
-    *((__gm__ uint64_t *)((__gm__ uint8_t *)workspace + 11 * 1024 * 1024 + 40)) = ((intriParams.dValue * param.typeSize -1 ) / 32 + 1) * intriParams.dstNzC0Stride * 32;
+    *((__gm__ uint64_t*)((__gm__ uint8_t*)workspace + 11 * 1024 * 1024)) = 1;
+    *((__gm__ uint64_t*)((__gm__ uint8_t*)workspace + 11 * 1024 * 1024 + 8)) = 1;
+    *((__gm__ uintptr_t*)((__gm__ uint8_t*)workspace + 11 * 1024 * 1024 + 16)) = reinterpret_cast<uintptr_t>(srcGm);
+    *((__gm__ uint64_t*)((__gm__ uint8_t*)workspace + 11 * 1024 * 1024 + 24)) =
+        intriParams.ndNum * intriParams.srcNdMatrixStride * param.typeSize;
+    *((__gm__ uintptr_t*)((__gm__ uint8_t*)workspace + 11 * 1024 * 1024 + 32)) = reinterpret_cast<uintptr_t>(dstGm);
+    *((__gm__ uint64_t*)((__gm__ uint8_t*)workspace + 11 * 1024 * 1024 + 40)) =
+        ((intriParams.dValue * param.typeSize - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32;
 
     param.CalFunc(dstGm, srcGm, intriParams);
     AscendC::GmFree((void*)sysWorkSpacePtr);
-    g_sysWorkspaceReserved = nullptr; 
+    g_sysWorkspaceReserved = nullptr;
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }

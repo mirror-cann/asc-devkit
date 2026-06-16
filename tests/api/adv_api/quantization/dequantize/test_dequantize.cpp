@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -14,11 +14,12 @@ using namespace std;
 using namespace AscendC;
 
 constexpr uint32_t FLOAT_PER_BLOCK = 8;
-constexpr uint32_t DTYPE16_PER_BLOCK = 16;   // half / bfloat16
+constexpr uint32_t DTYPE16_PER_BLOCK = 16; // half / bfloat16
 
 template <typename dstT, typename scaleT, bool scaleIsTensor, uint8_t mode>
-void DequantizeKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm,
-    __gm__ uint8_t* __restrict__ deqScaleGm, __gm__ int32_t dataSize)
+void DequantizeKernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ deqScaleGm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     TQue<TPosition::VECIN, 1> vecQue;
@@ -71,23 +72,24 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_ASCEND_DEQUANT, DequantizeTestsuite,
-    ::testing::Values(DequantizeTestParams { 256, 4, DequantizeKernel<half, uint64_t, true, 0> },
-                      DequantizeTestParams { 512, 4, DequantizeKernel<half, uint64_t, true, 1> },
-                      DequantizeTestParams { 16,  4, DequantizeKernel<bfloat16_t, bfloat16_t, true, 0> },
-                      DequantizeTestParams { 128, 4, DequantizeKernel<float, bfloat16_t, true, 0> },
-                      DequantizeTestParams { 128, 4, DequantizeKernel<float, bfloat16_t, true, 1> },
-                      DequantizeTestParams { 24, 4, DequantizeKernel<float, float, true, 0> },
-                      DequantizeTestParams { 24, 4, DequantizeKernel<float, float, true, 1> },
-                      DequantizeTestParams { 256, 4, DequantizeKernel<half, uint64_t, false, 0> },
-                      DequantizeTestParams { 512, 4, DequantizeKernel<half, uint64_t, false, 1> },
-                      DequantizeTestParams { 16,  4, DequantizeKernel<bfloat16_t, bfloat16_t, false, 0> },
-                      DequantizeTestParams { 128, 4, DequantizeKernel<float, bfloat16_t, false, 0> },
-                      DequantizeTestParams { 128, 4, DequantizeKernel<float, bfloat16_t, false, 1> },
-                      DequantizeTestParams { 24, 4, DequantizeKernel<float, float, false, 0> },
-                      DequantizeTestParams { 24, 4, DequantizeKernel<float, float, false, 1> },
-                      DequantizeTestParams { 5120, 4, DequantizeKernel<bfloat16_t, bfloat16_t, true, 0> }
-                    ));
+INSTANTIATE_TEST_CASE_P(
+    TEST_ASCEND_DEQUANT, DequantizeTestsuite,
+    ::testing::Values(
+        DequantizeTestParams{256, 4, DequantizeKernel<half, uint64_t, true, 0>},
+        DequantizeTestParams{512, 4, DequantizeKernel<half, uint64_t, true, 1>},
+        DequantizeTestParams{16, 4, DequantizeKernel<bfloat16_t, bfloat16_t, true, 0>},
+        DequantizeTestParams{128, 4, DequantizeKernel<float, bfloat16_t, true, 0>},
+        DequantizeTestParams{128, 4, DequantizeKernel<float, bfloat16_t, true, 1>},
+        DequantizeTestParams{24, 4, DequantizeKernel<float, float, true, 0>},
+        DequantizeTestParams{24, 4, DequantizeKernel<float, float, true, 1>},
+        DequantizeTestParams{256, 4, DequantizeKernel<half, uint64_t, false, 0>},
+        DequantizeTestParams{512, 4, DequantizeKernel<half, uint64_t, false, 1>},
+        DequantizeTestParams{16, 4, DequantizeKernel<bfloat16_t, bfloat16_t, false, 0>},
+        DequantizeTestParams{128, 4, DequantizeKernel<float, bfloat16_t, false, 0>},
+        DequantizeTestParams{128, 4, DequantizeKernel<float, bfloat16_t, false, 1>},
+        DequantizeTestParams{24, 4, DequantizeKernel<float, float, false, 0>},
+        DequantizeTestParams{24, 4, DequantizeKernel<float, float, false, 1>},
+        DequantizeTestParams{5120, 4, DequantizeKernel<bfloat16_t, bfloat16_t, true, 0>}));
 
 TEST_P(DequantizeTestsuite, DequantizeTestCase)
 {

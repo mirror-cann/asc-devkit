@@ -1,19 +1,18 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <type_traits>
 #include "kernel_operator.h"
 using namespace std;
 using namespace AscendC;
-
 
 #define DType half
 #define DType1 half
@@ -22,14 +21,12 @@ using namespace AscendC;
 template <typename T, typename U>
 class KernelGather {
 public:
-    __aicore__ inline KernelGather()
-    {}
-    __aicore__ inline void Init(GM_ADDR dst0_gm, GM_ADDR src0_gm, GM_ADDR src1_gm,
-            uint32_t nums)
+    __aicore__ inline KernelGather() {}
+    __aicore__ inline void Init(GM_ADDR dst0_gm, GM_ADDR src0_gm, GM_ADDR src1_gm, uint32_t nums)
     {
-        src0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(src0_gm), nums);
-        src1_global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(src1_gm), nums);
-        dst0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dst0_gm), nums);
+        src0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(src0_gm), nums);
+        src1_global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(src1_gm), nums);
+        dst0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dst0_gm), nums);
 
         pipe.InitBuffer(inQueueX, 1, nums * sizeof(T));
         pipe.InitBuffer(inQueueX2, 1, nums * sizeof(U));
@@ -61,8 +58,8 @@ private:
         LocalTensor<T> src0Local = inQueueX.DeQue<T>();
         LocalTensor<T> src1Local = inQueueX2.DeQue<T>();
         uint16_t mask_bit_size = 256;
-        uint16_t one_rep_size = mask_bit_size/sizeof(T);
-        uint16_t rep = dataSize/one_rep_size;
+        uint16_t one_rep_size = mask_bit_size / sizeof(T);
+        uint16_t rep = dataSize / one_rep_size;
         __ubuf__ T* dstPtr = (__ubuf__ T*)dst0Local.GetPhyAddr();
         __ubuf__ T* src0Ptr = (__ubuf__ T*)src0Local.GetPhyAddr();
         __ubuf__ U* src1Ptr = (__ubuf__ U*)src1Local.GetPhyAddr();
@@ -109,8 +106,9 @@ struct MicroGatherParams {
     void (*CallFunc)();
 };
 
-template<typename T, typename U>
-void RunCase() {
+template <typename T, typename U>
+void RunCase()
+{
     int byte_size = sizeof(T);
     int shape_size = 1024;
     int dataSize = 1024;
@@ -129,17 +127,14 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(MicroGatherTestCase, MicroGatherTestsuite,
-    ::testing::Values(MicroGatherParams { RunCase<uint16_t, uint16_t> },
-                      MicroGatherParams { RunCase<int16_t, uint16_t> },
-                      MicroGatherParams { RunCase<half, uint16_t> },
-                      MicroGatherParams { RunCase<bfloat16_t, uint16_t> },
-                      MicroGatherParams { RunCase<uint32_t, uint32_t> },
-                      MicroGatherParams { RunCase<int32_t, uint32_t> },
-                      MicroGatherParams { RunCase<float, uint32_t> },
-                      MicroGatherParams { RunCase<int8_t, uint8_t> },
-                      MicroGatherParams { RunCase<uint8_t, uint8_t> }
-                      ));
+INSTANTIATE_TEST_CASE_P(
+    MicroGatherTestCase, MicroGatherTestsuite,
+    ::testing::Values(
+        MicroGatherParams{RunCase<uint16_t, uint16_t>}, MicroGatherParams{RunCase<int16_t, uint16_t>},
+        MicroGatherParams{RunCase<half, uint16_t>}, MicroGatherParams{RunCase<bfloat16_t, uint16_t>},
+        MicroGatherParams{RunCase<uint32_t, uint32_t>}, MicroGatherParams{RunCase<int32_t, uint32_t>},
+        MicroGatherParams{RunCase<float, uint32_t>}, MicroGatherParams{RunCase<int8_t, uint8_t>},
+        MicroGatherParams{RunCase<uint8_t, uint8_t>}));
 
 TEST_P(MicroGatherTestsuite, MicroGatherTestCase)
 {

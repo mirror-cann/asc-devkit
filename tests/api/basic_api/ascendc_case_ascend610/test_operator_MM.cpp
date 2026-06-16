@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "mockcpp/mockcpp.hpp"
@@ -15,8 +15,8 @@ using namespace std;
 using namespace AscendC;
 
 template <typename T>
-void MainNpuBroadcastDemo(__gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ dstGm,
-    int32_t dataSize, int32_t outputDataSize)
+void MainNpuBroadcastDemo(
+    __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ dstGm, int32_t dataSize, int32_t outputDataSize)
 {
     AscendCUtils::SetOverflow(0);
     TPipe tpipe;
@@ -69,17 +69,17 @@ protected:
     void TearDown() {}
 };
 
-#define VEC_BROADCAST_TESTCASE(testBroadcast, dstType)                           \
-    TEST_F(testBroadcast, Broadcast_Case_##dstType)                              \
-    {                                                                             \
-        const int32_t srcDataSize = 16;                                           \
-        const int32_t dstDataSize = 256;                                          \
-        uint8_t srcGm[srcDataSize * sizeof(dstType)];                             \
-        uint8_t dstGm[dstDataSize * sizeof(dstType)];                             \
+#define VEC_BROADCAST_TESTCASE(testBroadcast, dstType)                         \
+    TEST_F(testBroadcast, Broadcast_Case_##dstType)                            \
+    {                                                                          \
+        const int32_t srcDataSize = 16;                                        \
+        const int32_t dstDataSize = 256;                                       \
+        uint8_t srcGm[srcDataSize * sizeof(dstType)];                          \
+        uint8_t dstGm[dstDataSize * sizeof(dstType)];                          \
         MainNpuBroadcastDemo<dstType>(srcGm, dstGm, srcDataSize, dstDataSize); \
-        for (int32_t i = 0; i < dstDataSize * sizeof(dstType); i++) {             \
-            EXPECT_EQ(dstGm[i], 0x00);                                            \
-        }                                                                         \
+        for (int32_t i = 0; i < dstDataSize * sizeof(dstType); i++) {          \
+            EXPECT_EQ(dstGm[i], 0x00);                                         \
+        }                                                                      \
     }
 
 VEC_BROADCAST_TESTCASE(TEST_BROADCAST, int32_t);
@@ -87,9 +87,10 @@ VEC_BROADCAST_TESTCASE(TEST_BROADCAST, float);
 VEC_BROADCAST_TESTCASE(TEST_BROADCAST, half);
 
 template <typename Src0T, typename Src1T, typename DstT>
-void MainCpuMmadDemo(__gm__ uint8_t* __restrict__ featureGm, __gm__ uint8_t* __restrict__ weightGm,
-    __gm__ uint8_t* __restrict__ resultGm, int32_t featureDataSize, int32_t weightDataSize,
-    int32_t outputDataSize, bool isBias)
+void MainCpuMmadDemo(
+    __gm__ uint8_t* __restrict__ featureGm, __gm__ uint8_t* __restrict__ weightGm,
+    __gm__ uint8_t* __restrict__ resultGm, int32_t featureDataSize, int32_t weightDataSize, int32_t outputDataSize,
+    bool isBias)
 {
     TPipe tpipe;
     GlobalTensor<Src0T> featureGlobal;
@@ -132,7 +133,7 @@ void MainCpuMmadDemo(__gm__ uint8_t* __restrict__ featureGm, __gm__ uint8_t* __r
     loadData3DV1.repeatMode = 1;
     loadData3DV1.repeatTime = 7;
     if (sizeof(Src0T) == sizeof(half)) {
-        uint64_t repeat = ConstCeil(128, BLOCK_CUBE * 16)  << 16 ;
+        uint64_t repeat = ConstCeil(128, BLOCK_CUBE * 16) << 16;
         repeat |= 1;
         create_ca_matrix(static_cast<__ca__ void*>(featureLocal.GetPhyAddr()), repeat, static_cast<half>(1));
         create_cbuf_matrix(static_cast<__cbuf__ void*>(l1Local.GetPhyAddr()), repeat, static_cast<half>(1));
@@ -158,7 +159,6 @@ void MainCpuMmadDemo(__gm__ uint8_t* __restrict__ featureGm, __gm__ uint8_t* __r
     mmadParams.cmatrixInitVal = !isBias;
     Mmad<DstT, Src0T, Src1T>(l0cOut, featureLocal, weightLocal, mmadParams);
 
-
     TBuf<TPosition::CO2> tbuf4;
     tpipe.InitBuffer(tbuf4, outputDataSize * sizeof(DstT));
     LocalTensor<DstT> outLocal = tbuf4.Get<DstT>();
@@ -179,8 +179,8 @@ protected:
     void TearDown() {}
 };
 
-#define VEC_MMAD_TESTCASE(testMmad, biasOp, dstType, src0Type, src1Type)                                        \
-    TEST_F(testMmad, MMAD_Case_Bias_##biasOp##_##dstType##_##src0Type##_##src1Type)                             \
+#define VEC_MMAD_TESTCASE(testMmad, biasOp, dstType, src0Type, src1Type)                                         \
+    TEST_F(testMmad, MMAD_Case_Bias_##biasOp##_##dstType##_##src0Type##_##src1Type)                              \
     {                                                                                                            \
         const int32_t featureDataSize = 3584;                                                                    \
         const int32_t weightDataSize = 4096;                                                                     \
@@ -188,7 +188,7 @@ protected:
         uint8_t featureGlobal[featureDataSize * sizeof(src0Type)];                                               \
         uint8_t weightGlobal[weightDataSize * sizeof(src1Type)];                                                 \
         uint8_t outputGlobal[outputDataSize * sizeof(dstType)];                                                  \
-        MainCpuMmadDemo<src0Type, src1Type, dstType>(                                                         \
+        MainCpuMmadDemo<src0Type, src1Type, dstType>(                                                            \
             featureGlobal, weightGlobal, outputGlobal, featureDataSize, weightDataSize, outputDataSize, biasOp); \
         for (int32_t i = 0; i < outputDataSize * sizeof(dstType); i++) {                                         \
             EXPECT_EQ(outputGlobal[i], 0x00);                                                                    \

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 // #include "model/model_factory.h"
@@ -28,8 +28,9 @@ protected:
 };
 
 template <typename T>
-void TestVgatherbFunc(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ offsetGm, __gm__ uint32_t srcLen, __gm__ uint32_t offsetLen)
+void TestVgatherbFunc(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ offsetGm,
+    __gm__ uint32_t srcLen, __gm__ uint32_t offsetLen)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -66,7 +67,7 @@ void TestVgatherbFunc(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __rest
     set_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
 
-    GatherRepeatParams params { 1, 8 };
+    GatherRepeatParams params{1, 8};
     uint8_t repeat = srcLen * sizeof(PrimT<T>) / 256;
     Gatherb(outputLocal, input0Local, offsetLocal, repeat, params);
 
@@ -76,31 +77,28 @@ void TestVgatherbFunc(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __rest
     pipe_barrier(PIPE_ALL);
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_VGATHERB, GatherbTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_VGATHERB, GatherbTestSuite,
     ::testing::Values(
-        GatherbTestParams { 128, 16, 1, TestVgatherbFunc<uint8_t> },
-        GatherbTestParams { 256, 32, 1, TestVgatherbFunc<int8_t> },
-        GatherbTestParams { 128, 8, 2, TestVgatherbFunc<half> },
-        GatherbTestParams { 128, 8, 2, TestVgatherbFunc<bfloat16_t> },
-        GatherbTestParams { 128, 8, 2, TestVgatherbFunc<uint16_t> },
-        GatherbTestParams { 256, 32, 4, TestVgatherbFunc<int32_t> },
-        GatherbTestParams { 128, 16, 4, TestVgatherbFunc<uint32_t> },
-        GatherbTestParams { 128, 16, 4, TestVgatherbFunc<float> },
-        GatherbTestParams { 64, 16, 8, TestVgatherbFunc<int64_t> },
-        GatherbTestParams { 64, 16, 8, TestVgatherbFunc<uint64_t> },
+        GatherbTestParams{128, 16, 1, TestVgatherbFunc<uint8_t>},
+        GatherbTestParams{256, 32, 1, TestVgatherbFunc<int8_t>}, GatherbTestParams{128, 8, 2, TestVgatherbFunc<half>},
+        GatherbTestParams{128, 8, 2, TestVgatherbFunc<bfloat16_t>},
+        GatherbTestParams{128, 8, 2, TestVgatherbFunc<uint16_t>},
+        GatherbTestParams{256, 32, 4, TestVgatherbFunc<int32_t>},
+        GatherbTestParams{128, 16, 4, TestVgatherbFunc<uint32_t>},
+        GatherbTestParams{128, 16, 4, TestVgatherbFunc<float>}, GatherbTestParams{64, 16, 8, TestVgatherbFunc<int64_t>},
+        GatherbTestParams{64, 16, 8, TestVgatherbFunc<uint64_t>},
         // TensorTrait Case
-        GatherbTestParams { 128, 16, 1, TestVgatherbFunc<TensorTrait<uint8_t>> },
-        GatherbTestParams { 256, 32, 1, TestVgatherbFunc<TensorTrait<int8_t>> },
-        GatherbTestParams { 128, 8, 2, TestVgatherbFunc<TensorTrait<half>> },
-        GatherbTestParams { 128, 8, 2, TestVgatherbFunc<TensorTrait<bfloat16_t>> },
-        GatherbTestParams { 128, 8, 2, TestVgatherbFunc<TensorTrait<uint16_t>> },
-        GatherbTestParams { 256, 32, 4, TestVgatherbFunc<TensorTrait<int32_t>> },
-        GatherbTestParams { 128, 16, 4, TestVgatherbFunc<TensorTrait<uint32_t>> },
-        GatherbTestParams { 128, 16, 4, TestVgatherbFunc<TensorTrait<float>> },
-        GatherbTestParams { 64, 16, 8, TestVgatherbFunc<TensorTrait<int64_t>> },
-        GatherbTestParams { 64, 16, 8, TestVgatherbFunc<TensorTrait<uint64_t>> }
-    )
-);
+        GatherbTestParams{128, 16, 1, TestVgatherbFunc<TensorTrait<uint8_t>>},
+        GatherbTestParams{256, 32, 1, TestVgatherbFunc<TensorTrait<int8_t>>},
+        GatherbTestParams{128, 8, 2, TestVgatherbFunc<TensorTrait<half>>},
+        GatherbTestParams{128, 8, 2, TestVgatherbFunc<TensorTrait<bfloat16_t>>},
+        GatherbTestParams{128, 8, 2, TestVgatherbFunc<TensorTrait<uint16_t>>},
+        GatherbTestParams{256, 32, 4, TestVgatherbFunc<TensorTrait<int32_t>>},
+        GatherbTestParams{128, 16, 4, TestVgatherbFunc<TensorTrait<uint32_t>>},
+        GatherbTestParams{128, 16, 4, TestVgatherbFunc<TensorTrait<float>>},
+        GatherbTestParams{64, 16, 8, TestVgatherbFunc<TensorTrait<int64_t>>},
+        GatherbTestParams{64, 16, 8, TestVgatherbFunc<TensorTrait<uint64_t>>}));
 
 TEST_P(GatherbTestSuite, GatherbTestCase)
 {

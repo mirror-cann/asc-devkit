@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -14,11 +14,13 @@
 #include "kernel_operator.h"
 
 namespace AscendC {
-template <typename T> class BilinearInterpolationTest {
+template <typename T>
+class BilinearInterpolationTest {
 public:
     __aicore__ inline BilinearInterpolationTest() {}
-    __aicore__ inline void Init(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src0OffsetGm, GM_ADDR src1Gm, uint64_t mask,
-        uint8_t hRepeat, bool repeatMode, uint16_t dstBlkStride, uint16_t vROffset, uint8_t vRepeat)
+    __aicore__ inline void Init(
+        GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src0OffsetGm, GM_ADDR src1Gm, uint64_t mask, uint8_t hRepeat,
+        bool repeatMode, uint16_t dstBlkStride, uint16_t vROffset, uint8_t vRepeat)
     {
         mMask = mask;
         mHRepeat = hRepeat;
@@ -41,10 +43,10 @@ public:
             mSrc1lementCount = src1Number % 16 == 0 ? src1Number : (src1Number / 16 + 1) * 16;
         }
 
-        mDstGlobal.SetGlobalBuffer((__gm__ T *)dstGm);
-        mSrc0Global.SetGlobalBuffer((__gm__ T *)src0Gm);
-        mSrc0OffsetGlobal.SetGlobalBuffer((__gm__ uint32_t *)src0OffsetGm);
-        mSrc1Global.SetGlobalBuffer((__gm__ T *)src1Gm);
+        mDstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
+        mSrc0Global.SetGlobalBuffer((__gm__ T*)src0Gm);
+        mSrc0OffsetGlobal.SetGlobalBuffer((__gm__ uint32_t*)src0OffsetGm);
+        mSrc1Global.SetGlobalBuffer((__gm__ T*)src1Gm);
 
         mPipe.InitBuffer(mQueOut, 1, mDstElementCount * sizeof(T));
         mPipe.InitBuffer(mQueInSrc0, 1, mSrc0ElementCount * sizeof(T));
@@ -84,10 +86,12 @@ private:
 
         Duplicate(dstLocal, static_cast<T>(0), mDstElementCount);
         uint64_t maskbit[2] = {0x0, 0xFFFFFFFFFFFFFFFF};
-        BilinearInterpolation(dstLocal, src0Local, src0OffsetLocal, src1Local, maskbit, mHRepeat, mRepeatMode,
-            mDstBlkStride, mVROffset, mVRepeat, tmpLocal);
-        BilinearInterpolation(dstLocal, src0Local, src0OffsetLocal, src1Local, mMask, mHRepeat, mRepeatMode,
-            mDstBlkStride, mVROffset, mVRepeat, tmpLocal);
+        BilinearInterpolation(
+            dstLocal, src0Local, src0OffsetLocal, src1Local, maskbit, mHRepeat, mRepeatMode, mDstBlkStride, mVROffset,
+            mVRepeat, tmpLocal);
+        BilinearInterpolation(
+            dstLocal, src0Local, src0OffsetLocal, src1Local, mMask, mHRepeat, mRepeatMode, mDstBlkStride, mVROffset,
+            mVRepeat, tmpLocal);
         mQueOut.EnQue(dstLocal);
         mQueTmp.FreeTensor(tmpLocal);
     }
@@ -125,9 +129,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void testBilinearInterpolation(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src0OffsetGm,
-    GM_ADDR src1Gm, uint64_t mask, uint8_t hRepeat, bool repeatMode, uint16_t dstBlkStride, uint16_t vROffset,
-    uint8_t vRepeat)
+__global__ __aicore__ void testBilinearInterpolation(
+    GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src0OffsetGm, GM_ADDR src1Gm, uint64_t mask, uint8_t hRepeat,
+    bool repeatMode, uint16_t dstBlkStride, uint16_t vROffset, uint8_t vRepeat)
 {
     AscendC::BilinearInterpolationTest<T> op;
     op.Init(dstGm, src0Gm, src0OffsetGm, src1Gm, mask, hRepeat, repeatMode, dstBlkStride, vROffset, vRepeat);
@@ -141,24 +145,19 @@ struct BilinearInterpolationParams {
     uint16_t dstBlkStride;
     uint16_t vROffset;
     uint8_t vRepeat;
-    void (*cal_func)(uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint64_t, uint8_t, bool, uint16_t, uint16_t, uint8_t);
+    void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint64_t, uint8_t, bool, uint16_t, uint16_t, uint8_t);
 };
 
 class BilinearInterpolationTestsuite : public testing::Test,
-    public testing::WithParamInterface<BilinearInterpolationParams> {
+                                       public testing::WithParamInterface<BilinearInterpolationParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_BILINEARINTERPOLATION, BilinearInterpolationTestsuite,
-    ::testing::Values(BilinearInterpolationParams{ 128, 2, false, 1, 128, 2, testBilinearInterpolation<half> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_BILINEARINTERPOLATION, BilinearInterpolationTestsuite,
+    ::testing::Values(BilinearInterpolationParams{128, 2, false, 1, 128, 2, testBilinearInterpolation<half>}));
 
 TEST_P(BilinearInterpolationTestsuite, testBilinearInterpolation)
 {
@@ -184,7 +183,8 @@ TEST_P(BilinearInterpolationTestsuite, testBilinearInterpolation)
     uint8_t src0OffsetGm[src0OffsetlementCount * sizeof(uint32_t)] = {0};
     uint8_t src1Gm[src1lementCount * sizeof(half)] = {0};
     uint8_t dstGm[dstElementCount * sizeof(half)] = {0};
-    param.cal_func(dstGm, src0Gm, src0OffsetGm, src1Gm, param.mask, param.hRepeat, param.repeatMode, param.dstBlkStride,
+    param.cal_func(
+        dstGm, src0Gm, src0OffsetGm, src1Gm, param.mask, param.hRepeat, param.repeatMode, param.dstBlkStride,
         param.vROffset, param.vRepeat);
 
     for (int32_t i = 0; i < dstElementCount; i++) {

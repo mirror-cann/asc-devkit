@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -16,8 +16,8 @@ using namespace AscendC;
 constexpr AscendQuantConfig ASCEND_QUANT_DEFAULT_CFG = {256, 0, 0, 512};
 
 template <typename T>
-void AscendQuantKernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize,
-    bool isQuantConfig)
+void AscendQuantKernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize, bool isQuantConfig)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
@@ -66,17 +66,19 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_ASCEND_QUANT, AscendQuantTestsuite,
-    ::testing::Values(AscendQuantTestParams { 256, 2, false, AscendQuantKernel<half> },
-    AscendQuantTestParams { 256, 4, false, AscendQuantKernel<float> },
-    AscendQuantTestParams { 256, 2, true, AscendQuantKernel<half> },
-    AscendQuantTestParams { 256, 4, true, AscendQuantKernel<float> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_ASCEND_QUANT, AscendQuantTestsuite,
+    ::testing::Values(
+        AscendQuantTestParams{256, 2, false, AscendQuantKernel<half>},
+        AscendQuantTestParams{256, 4, false, AscendQuantKernel<float>},
+        AscendQuantTestParams{256, 2, true, AscendQuantKernel<half>},
+        AscendQuantTestParams{256, 4, true, AscendQuantKernel<float>}));
 
 TEST_P(AscendQuantTestsuite, AscendQuantTestCase)
 {
     auto param = GetParam();
     uint8_t srcGm[param.dataSize * param.dataBitSize];
-    uint8_t dstGm[param.dataSize] = { 0 };
+    uint8_t dstGm[param.dataSize] = {0};
 
     param.calFunc(srcGm, dstGm, param.dataSize, param.isQuantConfig);
     for (int32_t i = 0; i < param.dataSize; i++) {

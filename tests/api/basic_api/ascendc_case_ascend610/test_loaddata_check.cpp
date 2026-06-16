@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <mockcpp/mockcpp.hpp>
 #include "kernel_operator.h"
@@ -15,10 +15,8 @@
 using namespace std;
 using namespace AscendC;
 namespace {
-int32_t RaiseStub(int32_t i) {
-    return 0;
-}
-}
+int32_t RaiseStub(int32_t i) { return 0; }
+} // namespace
 
 class TestLoaddataCheck : public testing::Test {
 protected:
@@ -65,53 +63,58 @@ struct TestLoaddata3dv2ApiCheckParams {
 };
 
 class TestLoaddata2dApiCheckSuite : public testing::Test,
-    public testing::WithParamInterface<TestLoaddata2dApiCheckParams> {
+                                    public testing::WithParamInterface<TestLoaddata2dApiCheckParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
 };
 
 class TestLoaddata3dv1ApiCheckSuite : public testing::Test,
-    public testing::WithParamInterface<TestLoaddata3dv1ApiCheckParams> {
+                                      public testing::WithParamInterface<TestLoaddata3dv1ApiCheckParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
 };
 
 class TestLoaddata3dv2ApiCheckSuite : public testing::Test,
-    public testing::WithParamInterface<TestLoaddata3dv2ApiCheckParams> {
+                                      public testing::WithParamInterface<TestLoaddata3dv2ApiCheckParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_LOAD_DATA2D_API_CHECK, TestLoaddata2dApiCheckSuite,
-    ::testing::Values(TestLoaddata2dApiCheckParams { 512, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true },
-    TestLoaddata2dApiCheckParams { 512, 512, TPosition::A2, TPosition::A1, 1, 0, 1, 0, false },
-    TestLoaddata2dApiCheckParams { 512, 512, TPosition::B1, TPosition::C1, 1, 0, 1, 0, false },
-    TestLoaddata2dApiCheckParams { 5289, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true },
-    TestLoaddata2dApiCheckParams { 255, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true },
-    TestLoaddata2dApiCheckParams { 512, 255, TPosition::B1, TPosition::B2, 1, 0, 1, 0, true }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_LOAD_DATA2D_API_CHECK, TestLoaddata2dApiCheckSuite,
+    ::testing::Values(
+        TestLoaddata2dApiCheckParams{512, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true},
+        TestLoaddata2dApiCheckParams{512, 512, TPosition::A2, TPosition::A1, 1, 0, 1, 0, false},
+        TestLoaddata2dApiCheckParams{512, 512, TPosition::B1, TPosition::C1, 1, 0, 1, 0, false},
+        TestLoaddata2dApiCheckParams{5289, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true},
+        TestLoaddata2dApiCheckParams{255, 512, TPosition::A1, TPosition::A2, 1, 0, 1, 0, true},
+        TestLoaddata2dApiCheckParams{512, 255, TPosition::B1, TPosition::B2, 1, 0, 1, 0, true}));
 
-INSTANTIATE_TEST_CASE_P(TEST_LOAD_DATA3DV1_API_CHECK, TestLoaddata3dv1ApiCheckSuite,
-    ::testing::Values(TestLoaddata3dv1ApiCheckParams { 3584, 3584, TPosition::A1, TPosition::A2, 1, 1, 1, true },
-    TestLoaddata3dv1ApiCheckParams { 3584, 3584, TPosition::A1, TPosition::A2, 0, 1, 1, true },
-    TestLoaddata3dv1ApiCheckParams { 3584, 3584, TPosition::A1, TPosition::C1, 1, 1, 1, true },
-    TestLoaddata3dv1ApiCheckParams { 3584, 256, TPosition::A1, TPosition::A2, 1, 1, 1, false }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_LOAD_DATA3DV1_API_CHECK, TestLoaddata3dv1ApiCheckSuite,
+    ::testing::Values(
+        TestLoaddata3dv1ApiCheckParams{3584, 3584, TPosition::A1, TPosition::A2, 1, 1, 1, true},
+        TestLoaddata3dv1ApiCheckParams{3584, 3584, TPosition::A1, TPosition::A2, 0, 1, 1, true},
+        TestLoaddata3dv1ApiCheckParams{3584, 3584, TPosition::A1, TPosition::C1, 1, 1, 1, true},
+        TestLoaddata3dv1ApiCheckParams{3584, 256, TPosition::A1, TPosition::A2, 1, 1, 1, false}));
 
-INSTANTIATE_TEST_CASE_P(TEST_LOAD_DATA3DV2_API_CHECK, TestLoaddata3dv2ApiCheckSuite,
-    ::testing::Values(TestLoaddata3dv2ApiCheckParams { 6144, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32,
-    192, true },
-    TestLoaddata3dv2ApiCheckParams { 6144, 6144, TPosition::A2, TPosition::A2, 32, 12, 16, 32, 192, false },
-    TestLoaddata3dv2ApiCheckParams { 6144, 6144, TPosition::A1, TPosition::C1, 32, 12, 16, 32, 192, true },
-    TestLoaddata3dv2ApiCheckParams { 22145, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true },
-    TestLoaddata3dv2ApiCheckParams { 6143, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true },
-    TestLoaddata3dv2ApiCheckParams { 6144, 6143, TPosition::B1, TPosition::B2, 32, 12, 16, 32, 192, true }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_LOAD_DATA3DV2_API_CHECK, TestLoaddata3dv2ApiCheckSuite,
+    ::testing::Values(
+        TestLoaddata3dv2ApiCheckParams{6144, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true},
+        TestLoaddata3dv2ApiCheckParams{6144, 6144, TPosition::A2, TPosition::A2, 32, 12, 16, 32, 192, false},
+        TestLoaddata3dv2ApiCheckParams{6144, 6144, TPosition::A1, TPosition::C1, 32, 12, 16, 32, 192, true},
+        TestLoaddata3dv2ApiCheckParams{22145, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true},
+        TestLoaddata3dv2ApiCheckParams{6143, 6144, TPosition::A1, TPosition::A2, 32, 12, 16, 32, 192, true},
+        TestLoaddata3dv2ApiCheckParams{6144, 6143, TPosition::B1, TPosition::B2, 32, 12, 16, 32, 192, true}));
 
 TEST_P(TestLoaddata2dApiCheckSuite, Loaddata2dApiCheckAllHighLevel)
 {
     TPipe tpipe;
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStub));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStub));
     auto param = GetParam();
     uint64_t srcSizeEle = param.srcSizeEle;
     uint64_t dstSizeEle = param.dstSizeEle;
@@ -158,7 +161,8 @@ TEST_P(TestLoaddata2dApiCheckSuite, Loaddata2dApiCheckAllHighLevel)
     bool ifTranspose = false;
     uint8_t addrMode = 0;
 
-    check::LoadData2dApiParams chkParams { (uint64_t)output.GetPhyAddr(),
+    check::LoadData2dApiParams chkParams{
+        (uint64_t)output.GetPhyAddr(),
         (uint64_t)input.GetPhyAddr(),
         startIndex,
         repeatTimes,
@@ -172,7 +176,7 @@ TEST_P(TestLoaddata2dApiCheckSuite, Loaddata2dApiCheckAllHighLevel)
         (uint64_t)(output.GetLength()),
         (uint64_t)(input.GetLength()),
         (uint8_t)(output.GetPosition()),
-        (uint8_t)(input.GetPosition()) };
+        (uint8_t)(input.GetPosition())};
     // check::TikcppLoaddata2dCheck chkIns { "loaddata2d", chkParams };
     // bool flag = CheckFuncLoadData2dImpl(chkParams, "loaddata2d");
 
@@ -221,7 +225,8 @@ TEST_P(TestLoaddata3dv1ApiCheckSuite, Loaddata3dv1ApiCheckAllHighLevel)
     uint8_t cSize = 1;
     uint8_t padValue = 7;
 
-    check::LoadData3dv1ApiParams chkParams { (uint64_t)output.GetPhyAddr(),
+    check::LoadData3dv1ApiParams chkParams{
+        (uint64_t)output.GetPhyAddr(),
         (uint64_t)input.GetPhyAddr(),
         padList,
         l1H,
@@ -246,7 +251,7 @@ TEST_P(TestLoaddata3dv1ApiCheckSuite, Loaddata3dv1ApiCheckAllHighLevel)
         (uint64_t)(output.GetLength()),
         (uint64_t)(input.GetLength()),
         (uint8_t)(output.GetPosition()),
-        (uint8_t)(input.GetPosition()) };
+        (uint8_t)(input.GetPosition())};
     // check::TikcppLoaddata3dv1Check chkIns { "loaddata3dv1", chkParams };
     // bool flag = CheckFuncLoadData3dv1Impl(chkParams, "loaddata3dv1");
 
@@ -309,7 +314,8 @@ TEST_P(TestLoaddata3dv2ApiCheckSuite, Loaddata3dv2ApiCheckAllHighLevel)
     bool enSmallK = false;
     uint8_t padValue = 0;
 
-    check::LoadData3dv2ApiParams chkParams { (uint64_t)output.GetPhyAddr(),
+    check::LoadData3dv2ApiParams chkParams{
+        (uint64_t)output.GetPhyAddr(),
         (uint64_t)input.GetPhyAddr(),
         padList,
         l1H,
@@ -332,7 +338,7 @@ TEST_P(TestLoaddata3dv2ApiCheckSuite, Loaddata3dv2ApiCheckAllHighLevel)
         (uint64_t)(output.GetLength()),
         (uint64_t)(input.GetLength()),
         (uint8_t)(output.GetPosition()),
-        (uint8_t)(input.GetPosition()) };
+        (uint8_t)(input.GetPosition())};
     // check::TikcppLoaddata3dv2Check chkIns { "loaddata3dv2", chkParams };
     // bool flag = CheckFuncLoadData3dv2Impl(chkParams, "loaddata3dv2");
 

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -14,8 +14,9 @@ using namespace std;
 using namespace AscendC;
 
 template <typename T>
-void MainVecBinaryScalarDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm,
-    __gm__ T scalarValue, __gm__ int32_t dataSize)
+void MainVecBinaryScalarDemo(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ T scalarValue,
+    __gm__ int32_t dataSize)
 {
     AscendCUtils::SetOverflow(0);
     TPipe tpipe;
@@ -53,7 +54,8 @@ void MainVecBinaryScalarDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t*
 }
 
 template <typename T>
-void MainVlreluDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ T scalarValue,
+void MainVlreluDemo(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ T scalarValue,
     __gm__ int32_t dataSize)
 {
     TPipe tpipe;
@@ -88,7 +90,8 @@ void MainVlreluDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restri
 }
 
 template <typename T>
-void MainShiftDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ T scalarValue,
+void MainShiftDemo(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ T scalarValue,
     __gm__ int32_t dataSize)
 {
     TPipe tpipe;
@@ -125,15 +128,9 @@ void MainShiftDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restric
 
 class TEST_VEC_BINARY_SCALAR : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
 
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 TEST_F(TEST_VEC_BINARY_SCALAR, VecBinaryScalarFloatCase)

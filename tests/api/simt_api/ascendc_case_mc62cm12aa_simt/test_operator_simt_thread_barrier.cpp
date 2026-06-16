@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <type_traits>
 #include "kernel_operator.h"
@@ -19,31 +19,30 @@ using namespace AscendC::Simt;
 #define THREAD_DIM 128
 template <typename T>
 class KernelThreadBarrier {
-    public:
-        __aicore__ KernelThreadBarrier() {}
-        __aicore__ inline void Process(__gm__ T* out);
+public:
+    __aicore__ KernelThreadBarrier() {}
+    __aicore__ inline void Process(__gm__ T* out);
 };
 
 template <typename T>
 __simt_vf__ LAUNCH_BOUND(1024) inline __aicore__ void KernelThreadBarrierCompute(__gm__ T* dst)
 {
-    for(int idx = GetThreadIdx<0>() + block_idx*GetThreadNum<0>(); idx < 256; idx+=block_num*GetThreadNum<0>())
-    {
-        if(idx > 0 && idx != 128) {
+    for (int idx = GetThreadIdx<0>() + block_idx * GetThreadNum<0>(); idx < 256; idx += block_num * GetThreadNum<0>()) {
+        if (idx > 0 && idx != 128) {
             dst[idx] = 1;
         }
 
         ThreadBarrier();
         // 测试核内是否同步
-        if (idx==0) {
+        if (idx == 0) {
             dst[0] = 0;
-            for(int i=127; i>0;i--) {
+            for (int i = 127; i > 0; i--) {
                 dst[0] += dst[i];
             }
         }
 
         ThreadBarrier();
-        if(idx > 0 && idx != 128) {
+        if (idx > 0 && idx != 128) {
             dst[idx] = -1;
         }
     }
@@ -65,9 +64,7 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(ThreadBarrierTestCase, ThreadBarrierTestsuite,
-    ::testing::Values(ThreadBarrierParams {0}
-                      ));
+INSTANTIATE_TEST_CASE_P(ThreadBarrierTestCase, ThreadBarrierTestsuite, ::testing::Values(ThreadBarrierParams{0}));
 
 TEST_P(ThreadBarrierTestsuite, ThreadBarrierTestCase)
 {

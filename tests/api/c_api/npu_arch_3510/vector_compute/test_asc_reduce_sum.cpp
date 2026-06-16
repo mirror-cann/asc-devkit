@@ -19,33 +19,35 @@
 // 宏定义：为每种 (dst_type, src_type) 组合创建单独的测试类和测试用例
 // 通过 index 参数区分不同的类型组合，避免类名和测试名冲突
 
-#define TEST_REDUCE_SUM_INSTR(class_name, c_api_name, cce_name, dst_type, src_type, index)        \
-                                                                                                   \
-class TestVectorCompute##class_name##_##dst_type##_##src_type##_CApi_##index : public testing::Test { \
-protected:                                                                                         \
-    void SetUp() {}                                                                                \
-    void TearDown() {}                                                                             \
-};                                                                                                 \
-                                                                                                   \
-namespace {                                                                                        \
-void cce_name##_##dst_type##_##src_type##_Stub_##index(dst_type& dst, src_type src,                \
-    vector_bool mask, Literal mode) {}                                                             \
-}                                                                                                  \
-                                                                                                   \
-TEST_F(TestVectorCompute##class_name##_##dst_type##_##src_type##_CApi_##index,                     \
-       c_api_name##_##dst_type##_##src_type##_Succ)                                                \
-{                                                                                                  \
-    dst_type dst;                                                                                  \
-    src_type src;                                                                                  \
-    vector_bool mask;                                                                              \
-                                                                                                   \
-    MOCKER_CPP(cce_name, void(dst_type&, src_type, vector_bool, Literal))                          \
-        .times(1)                                                                                  \
-        .will(invoke(cce_name##_##dst_type##_##src_type##_Stub_##index));                          \
-                                                                                                   \
-    c_api_name(dst, src, mask);                                                                    \
-    GlobalMockObject::verify();                                                                    \
-}
+#define TEST_REDUCE_SUM_INSTR(class_name, c_api_name, cce_name, dst_type, src_type, index)                \
+                                                                                                          \
+    class TestVectorCompute##class_name##_##dst_type##_##src_type##_CApi_##index : public testing::Test { \
+    protected:                                                                                            \
+        void SetUp() {}                                                                                   \
+        void TearDown() {}                                                                                \
+    };                                                                                                    \
+                                                                                                          \
+    namespace {                                                                                           \
+    void cce_name##_##dst_type##_##src_type##_Stub_##index(                                               \
+        dst_type& dst, src_type src, vector_bool mask, Literal mode)                                      \
+    {}                                                                                                    \
+    }                                                                                                     \
+                                                                                                          \
+    TEST_F(                                                                                               \
+        TestVectorCompute##class_name##_##dst_type##_##src_type##_CApi_##index,                           \
+        c_api_name##_##dst_type##_##src_type##_Succ)                                                      \
+    {                                                                                                     \
+        dst_type dst;                                                                                     \
+        src_type src;                                                                                     \
+        vector_bool mask;                                                                                 \
+                                                                                                          \
+        MOCKER_CPP(cce_name, void(dst_type&, src_type, vector_bool, Literal))                             \
+            .times(1)                                                                                     \
+            .will(invoke(cce_name##_##dst_type##_##src_type##_Stub_##index));                             \
+                                                                                                          \
+        c_api_name(dst, src, mask);                                                                       \
+        GlobalMockObject::verify();                                                                       \
+    }
 
 // ==========asc_reduce_sum 测试用例==========
 // int16 -> int32

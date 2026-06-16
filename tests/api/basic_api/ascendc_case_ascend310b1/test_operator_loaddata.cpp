@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -17,7 +17,7 @@ namespace AscendC {
 __aicore__ inline uint32_t GetScalarBitcodeMm(float scalarValue)
 {
     union ScalarBitcode {
-    __aicore__ ScalarBitcode() {}
+        __aicore__ ScalarBitcode() {}
         float input;
         uint32_t output;
     } data;
@@ -26,7 +26,8 @@ __aicore__ inline uint32_t GetScalarBitcodeMm(float scalarValue)
 
     return data.output;
 }
-template <typename DstT, typename Src0T, typename Src1T, typename Src2T> class KernelLoadData {
+template <typename DstT, typename Src0T, typename Src1T, typename Src2T>
+class KernelLoadData {
 public:
     __aicore__ inline KernelLoadData(__gm__ uint16_t inputN)
     {
@@ -64,7 +65,8 @@ public:
         pipe.InitBuffer(inQueueFb, 1, weightB2Size * sizeof(Src1T));
         pipe.InitBuffer(outQueueCO1, 1, dstCO1Size * sizeof(Src2T));
     }
-    __aicore__ inline void Process(__gm__ uint16_t inputM, __gm__ uint16_t inputN, __gm__ uint16_t inputK, __gm__ bool doLoadData3dv2ProIn)
+    __aicore__ inline void Process(
+        __gm__ uint16_t inputM, __gm__ uint16_t inputN, __gm__ uint16_t inputK, __gm__ bool doLoadData3dv2ProIn)
     {
         m = inputM;
         n = inputN;
@@ -82,9 +84,9 @@ private:
         LocalTensor<Src0T> featureMapA1 = inQueueFmA1.AllocTensor<Src0T>();
         LocalTensor<Src1T> weightB1 = inQueueWeightB1.AllocTensor<Src1T>();
         // gm->L1
-        DataCopy(featureMapA1, fmGlobal, { 1, static_cast<uint16_t>(featureMapA1Size * sizeof(Src0T) / 32), 0, 0 });
+        DataCopy(featureMapA1, fmGlobal, {1, static_cast<uint16_t>(featureMapA1Size * sizeof(Src0T) / 32), 0, 0});
         // gm->L1
-        DataCopy(weightB1, weightGlobal, { 1, static_cast<uint16_t>(weightA1Size * sizeof(Src1T) / 32), 0, 0 });
+        DataCopy(weightB1, weightGlobal, {1, static_cast<uint16_t>(weightA1Size * sizeof(Src1T) / 32), 0, 0});
         inQueueFmA1.EnQue(featureMapA1);
         inQueueWeightB1.EnQue(weightB1);
     }
@@ -100,13 +102,14 @@ private:
         // loaddata3dv2
         uint64_t repeat = 0;
         if (sizeof(Src0T) == sizeof(half)) {
-            repeat = ConstCeil(k, BLOCK_CUBE * 16)  << 16 ;
+            repeat = ConstCeil(k, BLOCK_CUBE * 16) << 16;
             repeat |= 1;
             create_ca_matrix((__ca__ Src0T*)featureMapA2.GetPhyAddr(), repeat, static_cast<half>(1));
         } else if (sizeof(Src0T) == sizeof(float)) {
-            repeat = ConstCeil(k, BLOCK_CUBE * 8)  << 16 ;
+            repeat = ConstCeil(k, BLOCK_CUBE * 8) << 16;
             repeat |= 1;
-            create_ca_matrix((__ca__ Src0T*)featureMapA2.GetPhyAddr(), repeat, GetScalarBitcodeMm(static_cast<float>(1)));
+            create_ca_matrix(
+                (__ca__ Src0T*)featureMapA2.GetPhyAddr(), repeat, GetScalarBitcodeMm(static_cast<float>(1)));
         }
 
         if (doLoadData3dv2Pro) {
@@ -115,10 +118,13 @@ private:
             LoadData3DParamsV2Pro loadData3DV2;
             loadData3DV2.channelSize = channelSizeFmap;
             loadData3DV2.extConfig = (static_cast<uint64_t>(0) << LOAD_M_START_POSITION) |
-                (static_cast<uint64_t>(0) << LOAD_K_START_POSITION) | (static_cast<uint64_t>(192) << LOAD_M_EXTENSION) | static_cast<uint64_t>(32);
+                                     (static_cast<uint64_t>(0) << LOAD_K_START_POSITION) |
+                                     (static_cast<uint64_t>(192) << LOAD_M_EXTENSION) | static_cast<uint64_t>(32);
             loadData3DV2.filterConfig = (static_cast<uint64_t>(1) << LOAD_DILATION_FILTER_H) |
-                (static_cast<uint64_t>(1) << LOAD_DILATION_FILTER_W) | (static_cast<uint64_t>(1) << LOAD_FILTER_H) |
-                (static_cast<uint64_t>(1) << LOAD_FILTER_W) | (static_cast<uint64_t>(1) << LOAD_STRIDE_H) | static_cast<uint64_t>(1);
+                                        (static_cast<uint64_t>(1) << LOAD_DILATION_FILTER_W) |
+                                        (static_cast<uint64_t>(1) << LOAD_FILTER_H) |
+                                        (static_cast<uint64_t>(1) << LOAD_FILTER_W) |
+                                        (static_cast<uint64_t>(1) << LOAD_STRIDE_H) | static_cast<uint64_t>(1);
             LoadData<Src0T>(featureMapA2, featureMapA1, loadData3DV2);
 
             // failed case
@@ -128,20 +134,21 @@ private:
             MOCKER(raise).stubs().will(returnValue(int(0)));
             AscendC::LoadData<Src0T>(fmLocal, featureMapA1, loadData3DV2);
         } else {
-            LoadData(featureMapA2, featureMapA1,
-                { padList, hFmap, wFmap, channelSizeFmap, 32, 192, 0, 0, 1, 1, 1, 1, 1, 1, false, false, 0 });
+            LoadData(
+                featureMapA2, featureMapA1,
+                {padList, hFmap, wFmap, channelSizeFmap, 32, 192, 0, 0, 1, 1, 1, 1, 1, 1, false, false, 0});
             LoadData<bfloat16_t, IS_RESER_LOAD3D_DEFAULT_CONFIG>(
                 featureMapA2.template ReinterpretCast<bfloat16_t>(),
                 featureMapA1.template ReinterpretCast<bfloat16_t>(),
-                { padList, hFmap, wFmap, channelSizeFmap, 32, 192, 0, 0, 1, 1, 1, 1, 1, 1, false, false, 0 });
+                {padList, hFmap, wFmap, channelSizeFmap, 32, 192, 0, 0, 1, 1, 1, 1, 1, 1, false, false, 0});
             LoadData<bfloat16_t>(
                 featureMapA2.template ReinterpretCast<bfloat16_t>(),
                 featureMapA1.template ReinterpretCast<bfloat16_t>(),
-                { padList, hFmap, wFmap, channelSizeFmap, 32, 192, 0, 0, 1, 1, 1, 1, 1, 1, false, false, 0 });
+                {padList, hFmap, wFmap, channelSizeFmap, 32, 192, 0, 0, 1, 1, 1, 1, 1, 1, false, false, 0});
             LoadData<IS_RESER_LOAD3D_DEFAULT_CONFIG>(
                 featureMapA2.template ReinterpretCast<bfloat16_t>(),
                 featureMapA1.template ReinterpretCast<bfloat16_t>(),
-                { padList, hFmap, wFmap, channelSizeFmap, 32, 192, 0, 0, 1, 1, 1, 1, 1, 1, false, false, 0 });
+                {padList, hFmap, wFmap, channelSizeFmap, 32, 192, 0, 0, 1, 1, 1, 1, 1, 1, false, false, 0});
         }
         // //L1->L0B
         // loaddata3dv2
@@ -151,26 +158,27 @@ private:
             LoadData3DParamsV2Pro loadData3DToBV2;
             loadData3DToBV2.channelSize = channelSizeWeight;
             loadData3DToBV2.extConfig = (static_cast<uint64_t>(0) << LOAD_M_START_POSITION) |
-                (static_cast<uint64_t>(0) << LOAD_K_START_POSITION) | (static_cast<uint64_t>(32) << LOAD_M_EXTENSION) | static_cast<uint64_t>(64);
+                                        (static_cast<uint64_t>(0) << LOAD_K_START_POSITION) |
+                                        (static_cast<uint64_t>(32) << LOAD_M_EXTENSION) | static_cast<uint64_t>(64);
             loadData3DToBV2.filterConfig = (static_cast<uint64_t>(1) << LOAD_DILATION_FILTER_H) |
-                (static_cast<uint64_t>(1) << LOAD_DILATION_FILTER_W) | (static_cast<uint64_t>(2) << LOAD_FILTER_H) |
-                (static_cast<uint64_t>(2) << LOAD_FILTER_W) | (static_cast<uint64_t>(1) << LOAD_STRIDE_H) | static_cast<uint64_t>(1);
+                                           (static_cast<uint64_t>(1) << LOAD_DILATION_FILTER_W) |
+                                           (static_cast<uint64_t>(2) << LOAD_FILTER_H) |
+                                           (static_cast<uint64_t>(2) << LOAD_FILTER_W) |
+                                           (static_cast<uint64_t>(1) << LOAD_STRIDE_H) | static_cast<uint64_t>(1);
             LoadData<Src1T>(weightB2, weightB1, loadData3DToBV2);
         } else {
-            LoadData(weightB2, weightB1,
-                { padList, hWeight, wWeight, channelSizeWeight, 64, 32, 0, 0, 1, 1, 2, 2, 1, 1, false, false, 0 });
+            LoadData(
+                weightB2, weightB1,
+                {padList, hWeight, wWeight, channelSizeWeight, 64, 32, 0, 0, 1, 1, 2, 2, 1, 1, false, false, 0});
             LoadData<bfloat16_t, IS_RESER_LOAD3D_DEFAULT_CONFIG>(
-                weightB2.template ReinterpretCast<bfloat16_t>(),
-                weightB1.template ReinterpretCast<bfloat16_t>(),
-                { padList, hWeight, wWeight, channelSizeWeight, 64, 32, 0, 0, 1, 1, 2, 2, 1, 1, false, false, 0 });
+                weightB2.template ReinterpretCast<bfloat16_t>(), weightB1.template ReinterpretCast<bfloat16_t>(),
+                {padList, hWeight, wWeight, channelSizeWeight, 64, 32, 0, 0, 1, 1, 2, 2, 1, 1, false, false, 0});
             LoadData<IS_RESER_LOAD3D_DEFAULT_CONFIG>(
-                weightB2.template ReinterpretCast<bfloat16_t>(),
-                weightB1.template ReinterpretCast<bfloat16_t>(),
-                { padList, hWeight, wWeight, channelSizeWeight, 64, 32, 0, 0, 1, 1, 2, 2, 1, 1, false, false, 0 });
+                weightB2.template ReinterpretCast<bfloat16_t>(), weightB1.template ReinterpretCast<bfloat16_t>(),
+                {padList, hWeight, wWeight, channelSizeWeight, 64, 32, 0, 0, 1, 1, 2, 2, 1, 1, false, false, 0});
             LoadData<bfloat16_t>(
-                weightB2.template ReinterpretCast<bfloat16_t>(),
-                weightB1.template ReinterpretCast<bfloat16_t>(),
-                { padList, hWeight, wWeight, channelSizeWeight, 64, 32, 0, 0, 1, 1, 2, 2, 1, 1, false, false, 0 });
+                weightB2.template ReinterpretCast<bfloat16_t>(), weightB1.template ReinterpretCast<bfloat16_t>(),
+                {padList, hWeight, wWeight, channelSizeWeight, 64, 32, 0, 0, 1, 1, 2, 2, 1, 1, false, false, 0});
         }
         // datacopy B1->FB
         DataCopyParams dataCopyToFbParams = {1, weightB2Size * sizeof(Src1T) / 128, 0, 0};
@@ -189,7 +197,7 @@ private:
         LocalTensor<Src2T> dstCO1 = outQueueCO1.AllocTensor<Src2T>();
         // L0A*L0B->L0C
         // mad
-        Mmad(dstCO1, featureMapA2, weightB2, { m, n, k, 0, false, true });
+        Mmad(dstCO1, featureMapA2, weightB2, {m, n, k, 0, false, true});
         outQueueCO1.EnQue<Src2T>(dstCO1);
         inQueueFmA2.FreeTensor(featureMapA2);
         inQueueWeightB2.FreeTensor(weightB2);
@@ -201,9 +209,9 @@ private:
         uint16_t cburstNum = n / BLOCK_CUBE;
         uint16_t burstLen = m * BLOCK_CUBE * sizeof(Src2T) / ONE_BLK_SIZE;
         FixpipeParams<Src2T> fixpipeParams(cburstNum, burstLen, 0, 0);
-        fixpipeParams.quantParams = { QuantMode_t::F322F16 };
+        fixpipeParams.quantParams = {QuantMode_t::F322F16};
         fixpipeParams.reluEn = true;
-        fixpipeParams.nz2ndParams = { true, 1, 0, 0, n };
+        fixpipeParams.nz2ndParams = {true, 1, 0, 0, n};
 
         Fixpipe(dstGlobal, dstCO1, fixpipeParams);
         outQueueCO1.FreeTensor(dstCO1);
@@ -236,8 +244,9 @@ private:
 } // namespace AscendC
 
 template <typename DstT, typename Src0T, typename Src1T, typename Src2T>
-__global__ __aicore__ void LoadDataAscendC(__gm__ uint8_t* fmGm, __gm__ uint8_t* weightGm, __gm__ uint8_t* dstGm,
-    __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k, __gm__ bool doLoadData3dv2Pro)
+__global__ __aicore__ void LoadDataAscendC(
+    __gm__ uint8_t* fmGm, __gm__ uint8_t* weightGm, __gm__ uint8_t* dstGm, __gm__ uint16_t m, __gm__ uint16_t n,
+    __gm__ uint16_t k, __gm__ bool doLoadData3dv2Pro)
 {
     AscendC::KernelLoadData<DstT, Src0T, Src1T, Src2T> op(n);
     op.Init(fmGm, weightGm, dstGm);
@@ -262,9 +271,11 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(SetLoadDataTest1, LoadDataTestsuite,
-    ::testing::Values(LoadDataTestParams { 192, 32, 64, LoadDataAscendC<half, half, half, float>, 2, 2, 2, 4, false },
-    LoadDataTestParams { 192, 32, 64, LoadDataAscendC<half, half, half, float>, 2, 2, 2, 4, true }));
+INSTANTIATE_TEST_CASE_P(
+    SetLoadDataTest1, LoadDataTestsuite,
+    ::testing::Values(
+        LoadDataTestParams{192, 32, 64, LoadDataAscendC<half, half, half, float>, 2, 2, 2, 4, false},
+        LoadDataTestParams{192, 32, 64, LoadDataAscendC<half, half, half, float>, 2, 2, 2, 4, true}));
 
 TEST_P(LoadDataTestsuite, LoadDataTestCase)
 {
@@ -286,7 +297,8 @@ enum class CubeFormat {
     VECTOR,
 };
 
-template <TPosition POSITION, CubeFormat FORMAT, typename Type> struct InputInfo {
+template <TPosition POSITION, CubeFormat FORMAT, typename Type>
+struct InputInfo {
     constexpr static TPosition pos = POSITION;
     constexpr static CubeFormat format = FORMAT;
     using T = Type;
@@ -306,6 +318,7 @@ template <class AType, class BType, class CType>
 class E2eMain {
     using SrcT = typename AType::T;
     using DstT = typename CType::T;
+
 public:
     __aicore__ inline E2eMain() {}
     __aicore__ inline void Init(TPipe* tpipe, int32_t m, int32_t n, int32_t k)
@@ -323,14 +336,8 @@ public:
 
         pipe->InitBuffer(qidCO1, 1, m * n * sizeof(int32_t));
     }
-    __aicore__ inline void SetTensorA(const GlobalTensor<SrcT>& gm)
-    {
-        aGlobal1 = gm;
-    }
-    __aicore__ inline void SetTensorB(const GlobalTensor<SrcT>& gm)
-    {
-        bGlobal1 = gm; 
-    }
+    __aicore__ inline void SetTensorA(const GlobalTensor<SrcT>& gm) { aGlobal1 = gm; }
+    __aicore__ inline void SetTensorB(const GlobalTensor<SrcT>& gm) { bGlobal1 = gm; }
 
     __aicore__ inline void CopyGmToA1Nd2Nz()
     {
@@ -389,7 +396,8 @@ public:
         uint32_t dstOffset = nLength / 32 * 1024;
         uint32_t srcOffset = 1024;
         for (int i = 0; i < kLength / 32; ++i) {
-            load_cbuf_to_cb_transpose((__cb__ int8_t*)(b2[i * dstOffset].GetPhyAddr()),
+            load_cbuf_to_cb_transpose(
+                (__cb__ int8_t*)(b2[i * dstOffset].GetPhyAddr()),
                 (__cbuf__ int8_t*)(rightMatrix[i * srcOffset].GetPhyAddr()), 0, nLength / 32, kLength / 32, 1, inc, 0);
         }
         qidB2.EnQue(b2);
@@ -414,17 +422,17 @@ public:
         qidCO1.EnQue(co1Local);
     }
 
-     __aicore__ inline void CopyL0CToGm(const GlobalTensor<DstT>& gm)
+    __aicore__ inline void CopyL0CToGm(const GlobalTensor<DstT>& gm)
     {
         auto co1Local = qidCO1.DeQue<int32_t>();
-        FixpipeParams<int32_t> fixpipeParams(nLength / BLOCK_CUBE,
-            static_cast<uint16_t>(mLength * BLOCK_CUBE * sizeof(float) / ONE_BLK_SIZE),
-            0, static_cast<uint16_t>(nLength));
-        fixpipeParams.nz2ndParams = { true, 1, 0, 0, static_cast<uint16_t>(nLength) };
+        FixpipeParams<int32_t> fixpipeParams(
+            nLength / BLOCK_CUBE, static_cast<uint16_t>(mLength * BLOCK_CUBE * sizeof(float) / ONE_BLK_SIZE), 0,
+            static_cast<uint16_t>(nLength));
+        fixpipeParams.nz2ndParams = {true, 1, 0, 0, static_cast<uint16_t>(nLength)};
         if (IsSameType<DstT, half>::value) {
-            fixpipeParams.quantParams = { QuantMode_t::F322F16 };
+            fixpipeParams.quantParams = {QuantMode_t::F322F16};
         } else if (IsSameType<DstT, bfloat16_t>::value) {
-            fixpipeParams.quantParams = { QuantMode_t::F322BF16 };
+            fixpipeParams.quantParams = {QuantMode_t::F322BF16};
         }
         Fixpipe(gm, co1Local, fixpipeParams);
 
@@ -463,8 +471,8 @@ private:
 };
 
 template <class AType, class BType, class CType>
-__aicore__ inline void E2eKernel(__gm__ uint8_t* aGM, __gm__ uint8_t* bGM, __gm__ uint8_t* cGM,
-    int32_t m, int32_t n, int32_t k)
+__aicore__ inline void E2eKernel(
+    __gm__ uint8_t* aGM, __gm__ uint8_t* bGM, __gm__ uint8_t* cGM, int32_t m, int32_t n, int32_t k)
 {
     if (g_coreType == AIV) {
         return;
@@ -501,13 +509,15 @@ __aicore__ inline void E2eKernel(__gm__ uint8_t* aGM, __gm__ uint8_t* bGM, __gm_
     return;
 }
 
-__global__ __aicore__ void kernelE2e(__gm__ uint8_t* aGm, __gm__ uint8_t* bGm, __gm__ uint8_t* cGm,
-    __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k)
+__global__ __aicore__ void kernelE2e(
+    __gm__ uint8_t* aGm, __gm__ uint8_t* bGm, __gm__ uint8_t* cGm, __gm__ uint16_t m, __gm__ uint16_t n,
+    __gm__ uint16_t k)
 {
     typedef InputInfo<AscendC::TPosition::GM, CubeFormat::ND, int8_t> aType;
     typedef InputInfo<AscendC::TPosition::GM, CubeFormat::ND, int8_t> bType;
     typedef InputInfo<AscendC::TPosition::GM, CubeFormat::ND, int32_t> cType;
-    E2eKernel<aType, bType, cType>(aGm, bGm, cGm, static_cast<int32_t>(m), static_cast<int32_t>(n), static_cast<int32_t>(k));
+    E2eKernel<aType, bType, cType>(
+        aGm, bGm, cGm, static_cast<int32_t>(m), static_cast<int32_t>(n), static_cast<int32_t>(k));
 }
 
 struct E2eParams {
@@ -523,8 +533,7 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(E2eCase, E2eTestsuite,
-    ::testing::Values(E2eParams { 16, 32, 32, kernelE2e}));
+INSTANTIATE_TEST_CASE_P(E2eCase, E2eTestsuite, ::testing::Values(E2eParams{16, 32, 32, kernelE2e}));
 
 TEST_P(E2eTestsuite, E2eCase1)
 {
@@ -533,13 +542,14 @@ TEST_P(E2eTestsuite, E2eCase1)
     uint8_t bGm[param.n * param.k];
     uint8_t cGm[param.m * param.n * 4] = {0};
     param.cal_func(aGm, bGm, cGm, param.m, param.n, param.k);
-    for (int32_t i = 0; i <param.m * param.n * 4; i++) {
+    for (int32_t i = 0; i < param.m * param.n * 4; i++) {
         EXPECT_EQ(cGm[i], 0x00);
     }
 }
 
 namespace AscendC {
-template <typename Src0T, bool UseFill = false> class KernelCreatMartix {
+template <typename Src0T, bool UseFill = false>
+class KernelCreatMartix {
 public:
     __aicore__ inline void Init()
     {
@@ -565,10 +575,7 @@ public:
         pipe.InitBuffer(inQueueWeightB1, 1, weightA1Size * sizeof(Src0T));
         pipe.InitBuffer(inQueueWeightB2, 1, weightB2Size * sizeof(Src0T));
     }
-    __aicore__ inline void Process()
-    {
-        CopyIn();
-    }
+    __aicore__ inline void Process() { CopyIn(); }
 
 private:
     __aicore__ inline void CopyIn()
@@ -583,24 +590,22 @@ private:
         set_l3d_rpt(0);
         if constexpr (UseFill) {
             // init l1
-            Fill<Src0T>(featureMapA1,
-                { 1, static_cast<uint16_t>(featureMapA1Size * sizeof(Src0T) / 32), 0, static_cast<Src0T>(1) });
+            Fill<Src0T>(
+                featureMapA1,
+                {1, static_cast<uint16_t>(featureMapA1Size * sizeof(Src0T) / 32), 0, static_cast<Src0T>(1)});
             // init l0a
-            Fill<Src0T>(featureMapA2,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
+            Fill<Src0T>(featureMapA2, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
             // init l0b
-            Fill<Src0T>(weightB2,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
-        }else{
+            Fill<Src0T>(weightB2, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
+        } else {
             // init l1
-            InitConstValue<Src0T>(featureMapA1,
-                { 1, static_cast<uint16_t>(featureMapA1Size * sizeof(Src0T) / 32), 0, static_cast<Src0T>(1) });
+            InitConstValue<Src0T>(
+                featureMapA1,
+                {1, static_cast<uint16_t>(featureMapA1Size * sizeof(Src0T) / 32), 0, static_cast<Src0T>(1)});
             // init l0a
-            InitConstValue<Src0T>(featureMapA2,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
+            InitConstValue<Src0T>(featureMapA2, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
             // init l0b
-            InitConstValue<Src0T>(weightB2,
-                { 1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1) });
+            InitConstValue<Src0T>(weightB2, {1, static_cast<uint16_t>(1), 0, static_cast<Src0T>(1)});
         }
 
         inQueueFmA1.FreeTensor(featureMapA1);
@@ -656,25 +661,27 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(SetCreatmartixTest, CreatmartixTestsuite,
-    ::testing::Values(CreatmartixTestParams { 192, 32, 64, CreatMartixAscendC<half>, 2 },
-    CreatmartixTestParams { 192, 32, 64, CreatMartixAscendC<int16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, CreatMartixAscendC<uint16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, CreatMartixAscendC<bfloat16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, CreatMartixAscendC<int32_t>, 4 },
-    CreatmartixTestParams { 192, 32, 64, CreatMartixAscendC<uint32_t>, 4 },
-    CreatmartixTestParams { 192, 32, 64, CreatMartixAscendC<float>, 4 }
-    ));
+INSTANTIATE_TEST_CASE_P(
+    SetCreatmartixTest, CreatmartixTestsuite,
+    ::testing::Values(
+        CreatmartixTestParams{192, 32, 64, CreatMartixAscendC<half>, 2},
+        CreatmartixTestParams{192, 32, 64, CreatMartixAscendC<int16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, CreatMartixAscendC<uint16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, CreatMartixAscendC<bfloat16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, CreatMartixAscendC<int32_t>, 4},
+        CreatmartixTestParams{192, 32, 64, CreatMartixAscendC<uint32_t>, 4},
+        CreatmartixTestParams{192, 32, 64, CreatMartixAscendC<float>, 4}));
 
-INSTANTIATE_TEST_CASE_P(SetFillTest, CreatmartixTestsuite,
-    ::testing::Values(CreatmartixTestParams { 192, 32, 64, FillAscendC<half>, 2 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<int16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<uint16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<bfloat16_t>, 2 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<int32_t>, 4 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<uint32_t>, 4 },
-    CreatmartixTestParams { 192, 32, 64, FillAscendC<float>, 4 }
-    ));
+INSTANTIATE_TEST_CASE_P(
+    SetFillTest, CreatmartixTestsuite,
+    ::testing::Values(
+        CreatmartixTestParams{192, 32, 64, FillAscendC<half>, 2},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<int16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<uint16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<bfloat16_t>, 2},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<int32_t>, 4},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<uint32_t>, 4},
+        CreatmartixTestParams{192, 32, 64, FillAscendC<float>, 4}));
 
 TEST_P(CreatmartixTestsuite, CreatmartixTest)
 {

@@ -26,8 +26,7 @@ SimHcclThread::SimHcclThread(rtStream_t rtStream, u32 notifyNum, const NotifyLoa
 
 SimHcclThread::SimHcclThread(StreamType streamType, u32 notifyNum, const NotifyLoadType notifyLoadType)
     : streamType_(streamType), notifyNum_(notifyNum), notifyLoadType_(notifyLoadType)
-{
-}
+{}
 
 SimHcclThread::~SimHcclThread()
 {
@@ -78,4 +77,4 @@ uint32_t SimHcclThread::GetNotifyIdByIndex(uint32_t notifyIndex) const
     return notifys_[notifyIndex]->GetNotifyId();
 }
 
-};
+}; // namespace HcclSim

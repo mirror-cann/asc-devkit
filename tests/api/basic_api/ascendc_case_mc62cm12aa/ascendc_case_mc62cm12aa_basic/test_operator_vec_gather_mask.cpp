@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protect public
@@ -18,8 +18,9 @@ using namespace std;
 using namespace AscendC;
 
 template <typename T, typename U>
-__global__ __aicore__ void MainReducev2(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, int16_t dataSize1, int16_t dataSize2, int16_t dataSize3)
+__global__ __aicore__ void MainReducev2(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    int16_t dataSize1, int16_t dataSize2, int16_t dataSize3)
 {
     TPipe tpipe;
     GlobalTensor<T> input0_global;
@@ -50,32 +51,30 @@ __global__ __aicore__ void MainReducev2(__gm__ uint8_t* __restrict__ dstGm, __gm
     DataCopy(input0_local, input0_global, dataSize1);
     DataCopy(input1_local, input1_global, dataSize2);
 
-
     set_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
-
 
     for (int i = 0; i < dataSize2; i++) {
         input1_local.SetValue(i, 65535);
     }
     uint64_t rsvdCnt = 0;
     if constexpr (sizeof(T) != 4) {
-        GatherMask(output_local, input0_local, 1, false, 0, { 1, 1, 0, 0 }, rsvdCnt);
-	GatherMask(output_local, input0_local, 2, false, 0, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 3, false, 0, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 4, false, 0, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 5, false, 0, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 6, false, 0, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 7, false, 0, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 1, true, 120, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 2, true, 120, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 3, true, 120, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 4, true, 120, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 5, true, 120, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 6, true, 120, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, 7, true, 120, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, input1_local, false, 0, { 1, 1, 0, 0 }, rsvdCnt);
-        GatherMask(output_local, input0_local, input1_local, true, 64, { 1, 1, 0, 0 }, rsvdCnt);
+        GatherMask(output_local, input0_local, 1, false, 0, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 2, false, 0, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 3, false, 0, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 4, false, 0, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 5, false, 0, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 6, false, 0, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 7, false, 0, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 1, true, 120, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 2, true, 120, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 3, true, 120, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 4, true, 120, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 5, true, 120, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 6, true, 120, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, 7, true, 120, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, input1_local, false, 0, {1, 1, 0, 0}, rsvdCnt);
+        GatherMask(output_local, input0_local, input1_local, true, 64, {1, 1, 0, 0}, rsvdCnt);
     }
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -96,27 +95,22 @@ struct Reducev2TestParams {
 
 class Reducev2Testsuite : public testing::Test, public testing::WithParamInterface<Reducev2TestParams> {
 protected:
-    void SetUp()
-    {
-        SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        SetGCoreType(0);
-    }
+    void SetUp() { SetGCoreType(2); }
+    void TearDown() { SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_REDUCEV2, Reducev2Testsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_REDUCEV2, Reducev2Testsuite,
     ::testing::Values(
-    Reducev2TestParams { 1, 256, 32, 256, MainReducev2<uint8_t, uint8_t> },
-    Reducev2TestParams { 1, 256, 32, 256, MainReducev2<int8_t, uint8_t> },
-    Reducev2TestParams { 2, 128, 16, 128, MainReducev2<half, uint16_t> },
-    Reducev2TestParams { 2, 128, 16, 128, MainReducev2<uint16_t, uint16_t> },
-    Reducev2TestParams { 2, 128, 16, 128, MainReducev2<bfloat16_t, uint16_t> },
-    Reducev2TestParams { 2, 128, 16, 128, MainReducev2<int16_t, uint16_t> },
-    Reducev2TestParams { 4, 64, 8, 64, MainReducev2<float, uint32_t> },
-    Reducev2TestParams { 4, 64, 8, 64, MainReducev2<uint32_t, uint32_t> },
-    Reducev2TestParams { 4, 64, 8, 64, MainReducev2<int32_t, uint32_t> }));
+        Reducev2TestParams{1, 256, 32, 256, MainReducev2<uint8_t, uint8_t>},
+        Reducev2TestParams{1, 256, 32, 256, MainReducev2<int8_t, uint8_t>},
+        Reducev2TestParams{2, 128, 16, 128, MainReducev2<half, uint16_t>},
+        Reducev2TestParams{2, 128, 16, 128, MainReducev2<uint16_t, uint16_t>},
+        Reducev2TestParams{2, 128, 16, 128, MainReducev2<bfloat16_t, uint16_t>},
+        Reducev2TestParams{2, 128, 16, 128, MainReducev2<int16_t, uint16_t>},
+        Reducev2TestParams{4, 64, 8, 64, MainReducev2<float, uint32_t>},
+        Reducev2TestParams{4, 64, 8, 64, MainReducev2<uint32_t, uint32_t>},
+        Reducev2TestParams{4, 64, 8, 64, MainReducev2<int32_t, uint32_t>}));
 
 TEST_P(Reducev2Testsuite, Reducev2TestCase)
 {

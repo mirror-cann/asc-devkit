@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -26,13 +26,12 @@ namespace AscendC {
 using namespace TestCustomModules;
 namespace {
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulWithScalePolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulWithScalePolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using TRANS_B_TYPE = decltype(GetTransBDataType<A_TYPE, B_TYPE, MM_CFG>());
-    using L0bT = typename Conditional<HasScalePosition<B_TYPE>::value, \
-                 typename GetL0DataType<typename TRANS_B_TYPE::T, true>::Type, \
-                 typename GetL0DataType<typename TRANS_B_TYPE::T, false>::Type>::type;
+    using L0bT = typename Conditional<
+        HasScalePosition<B_TYPE>::value, typename GetL0DataType<typename TRANS_B_TYPE::T, true>::Type,
+        typename GetL0DataType<typename TRANS_B_TYPE::T, false>::Type>::type;
     using L0cT = typename GetMmDstType<typename A_TYPE::T>::Type;
     using CopyCubeInA = CustomCopyCubeIn<IMPL, MatmulInputAType<A_TYPE, typename A_TYPE::T>, MM_CFG>;
     using CopyCubeInB = CustomCopyCubeIn<IMPL, MatmulInputBType<B_TYPE, typename B_TYPE::T>, MM_CFG>;
@@ -50,31 +49,30 @@ public:
     using BiasScheduler = CustomBiasScheduler<IMPL, A_TYPE, B_TYPE, BIAS_TYPE, MM_CFG>;
 };
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const auto& MM_CFG,
-class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulWithScalePolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE(Scheduler)
-, MATMUL_IMPORT_MODULE(MLoop)
-, MATMUL_IMPORT_MODULE(NLoop)
-, MATMUL_IMPORT_MODULE(KLoop)
-, MATMUL_IMPORT_MODULE(CopyCubeInA)
-, MATMUL_IMPORT_MODULE(CopyCubeInB)
-, MATMUL_IMPORT_MODULE(CopyCubeInScaleA)
-, MATMUL_IMPORT_MODULE(CopyCubeInScaleB)
-, MATMUL_IMPORT_MODULE(LoadToA2)
-, MATMUL_IMPORT_MODULE(LoadToB2)
-, MATMUL_IMPORT_MODULE(TBufPoolL0)
-, MATMUL_IMPORT_MODULE(MmadCompute)
-, MATMUL_IMPORT_MODULE(CubeOutBuffer)
-, MATMUL_IMPORT_MODULE(CopyCubeOut)
-, MATMUL_IMPORT_MODULE(BiasScheduler)
-, MATMUL_IMPORT_MODULE(CubeInBufferA)
-, MATMUL_IMPORT_MODULE(CubeInBufferB)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulUnitFlag)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulCrossCoreSync)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const auto& MM_CFG,
+    class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulWithScalePolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(Scheduler),
+                   MATMUL_IMPORT_MODULE(MLoop),
+                   MATMUL_IMPORT_MODULE(NLoop),
+                   MATMUL_IMPORT_MODULE(KLoop),
+                   MATMUL_IMPORT_MODULE(CopyCubeInA),
+                   MATMUL_IMPORT_MODULE(CopyCubeInB),
+                   MATMUL_IMPORT_MODULE(CopyCubeInScaleA),
+                   MATMUL_IMPORT_MODULE(CopyCubeInScaleB),
+                   MATMUL_IMPORT_MODULE(LoadToA2),
+                   MATMUL_IMPORT_MODULE(LoadToB2),
+                   MATMUL_IMPORT_MODULE(TBufPoolL0),
+                   MATMUL_IMPORT_MODULE(MmadCompute),
+                   MATMUL_IMPORT_MODULE(CubeOutBuffer),
+                   MATMUL_IMPORT_MODULE(CopyCubeOut),
+                   MATMUL_IMPORT_MODULE(BiasScheduler),
+                   MATMUL_IMPORT_MODULE(CubeInBufferA),
+                   MATMUL_IMPORT_MODULE(CubeInBufferB),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulUnitFlag),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulCrossCoreSync) {
     MATMUL_ALLOW_USING(MLoop);
     MATMUL_ALLOW_USING(NLoop);
     MATMUL_ALLOW_USING(KLoop);
@@ -102,9 +100,9 @@ class MatmulImpl
     MATMUL_USE_MODULE(MatmulShapeInfo);
     MATMUL_USE_MODULE(MatmulShapeTiling);
 
-
 public:
-    using VAR_PARAMS = typename Impl::Detail::MatmulParams<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, GetMatmulMode(MM_CFG)>::PARAMS;
+    using VAR_PARAMS =
+        typename Impl::Detail::MatmulParams<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, GetMatmulMode(MM_CFG)>::PARAMS;
     using IMPL = MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, MM_CB, MATMUL_POLICY>;
 
     using POLICY = MATMUL_POLICY<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>;
@@ -113,17 +111,17 @@ public:
 
     MatmulImpl() {}
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar(const TCubeTiling &tiling) {
+    void InitVar(const TCubeTiling& tiling)
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
         MATMUL_MODULE(TBufPoolL0)->Init();
     }
 
-    void SetTranspose(bool isTranA, bool isTranB) {
+    void SetTranspose(bool isTranA, bool isTranB)
+    {
         MATMUL_MODULE(MatmulShapeInfo)->SetTransposeA(isTranA);
         MATMUL_MODULE(MatmulShapeInfo)->SetTransposeB(isTranB);
     }
@@ -132,7 +130,7 @@ private:
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class TestSchedulerMDLMx : public testing::Test {
 protected:
@@ -140,32 +138,51 @@ protected:
     void TearDown() {}
 
 private:
-    using AS_TYPE_GM = MatmulTypeWithScale<TPosition::GM, TPosition::GM, CubeFormat::NZ,
-        fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::NZ, false, TPosition::GM>;
-    using AS_TYPE_L1 = MatmulTypeWithScale<TPosition::TSCM, TPosition::TSCM, CubeFormat::NZ,
-        fp4x2_e1m2_t, false, TPosition::GM, CubeFormat::NZ, false, TPosition::GM>;
+    using AS_TYPE_GM = MatmulTypeWithScale<
+        TPosition::GM, TPosition::GM, CubeFormat::NZ, fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::NZ, false,
+        TPosition::GM>;
+    using AS_TYPE_L1 = MatmulTypeWithScale<
+        TPosition::TSCM, TPosition::TSCM, CubeFormat::NZ, fp4x2_e1m2_t, false, TPosition::GM, CubeFormat::NZ, false,
+        TPosition::GM>;
 
-    using BS_TYPE_GM = MatmulTypeWithScale<TPosition::GM, TPosition::GM, CubeFormat::NZ,
-        fp8_e5m2_t, true, TPosition::GM, CubeFormat::NZ, true, TPosition::GM>;
-    using BS_TYPE_l1 = MatmulTypeWithScale<TPosition::TSCM, TPosition::TSCM, CubeFormat::NZ,
-        fp4x2_e2m1_t, true, TPosition::GM, CubeFormat::NZ, true, TPosition::GM>;
+    using BS_TYPE_GM = MatmulTypeWithScale<
+        TPosition::GM, TPosition::GM, CubeFormat::NZ, fp8_e5m2_t, true, TPosition::GM, CubeFormat::NZ, true,
+        TPosition::GM>;
+    using BS_TYPE_l1 = MatmulTypeWithScale<
+        TPosition::TSCM, TPosition::TSCM, CubeFormat::NZ, fp4x2_e2m1_t, true, TPosition::GM, CubeFormat::NZ, true,
+        TPosition::GM>;
 
     using C_TYPE = MatmulType<TPosition::GM, CubeFormat::ND, float>;
     using BIAS_TYPE = MatmulType<TPosition::GM, CubeFormat::ND, float>;
 
-    MatmulImpl<AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, CFG_MDL, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm1;
-    MatmulImpl<AS_TYPE_L1, BS_TYPE_l1, C_TYPE, BIAS_TYPE, CFG_MDL, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm2;
+    MatmulImpl<
+        AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, CFG_MDL, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        mm1;
+    MatmulImpl<
+        AS_TYPE_L1, BS_TYPE_l1, C_TYPE, BIAS_TYPE, CFG_MDL, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        mm2;
 
     constexpr static MatmulConfigMode configMode = MatmulConfigMode::CONFIG_MDL;
     constexpr static MatmulShapeParams shapeParams = {64, 64, 64, 64, 64, 64};
-    constexpr static MatmulFuncParams funcParams = {false, false, false, false, 0, IterateOrder::ORDER_N, ScheduleType::INNER_PRODUCT, true, true};
+    constexpr static MatmulFuncParams funcParams = {
+        false, false, false, false, 0, IterateOrder::ORDER_N, ScheduleType::INNER_PRODUCT, true, true};
     constexpr static MatmulConfig mmStaticConfig = GetMMConfig<configMode>(shapeParams, funcParams);
 
-    constexpr static MatmulApiStaticTiling staticTilingGM = GetMatmulApiTiling<AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE>(mmStaticConfig);
-    MatmulImpl<AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, staticTilingGM, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm3;
+    constexpr static MatmulApiStaticTiling staticTilingGM =
+        GetMatmulApiTiling<AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE>(mmStaticConfig);
+    MatmulImpl<
+        AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, staticTilingGM, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        mm3;
 
-    constexpr static MatmulApiStaticTiling staticTilingL1 = GetMatmulApiTiling<AS_TYPE_L1, BS_TYPE_l1, C_TYPE, BIAS_TYPE>(mmStaticConfig);
-    MatmulImpl<AS_TYPE_L1, BS_TYPE_l1, C_TYPE, BIAS_TYPE, staticTilingL1, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm4;
+    constexpr static MatmulApiStaticTiling staticTilingL1 =
+        GetMatmulApiTiling<AS_TYPE_L1, BS_TYPE_l1, C_TYPE, BIAS_TYPE>(mmStaticConfig);
+    MatmulImpl<
+        AS_TYPE_L1, BS_TYPE_l1, C_TYPE, BIAS_TYPE, staticTilingL1, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        mm4;
 
     constexpr static MatmulConfig staticMmCfg = {
         .doNorm = false,
@@ -209,21 +226,27 @@ private:
         .scheduleType = ScheduleType::INNER_PRODUCT,
         .enableDoubleCache = false,
         .isBiasBatch = true,
-        .enableStaticPadZeros = true
-    };
-    constexpr static MatmulApiStaticTiling staticTiling = GetMatmulApiTiling<AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE>(staticMmCfg);
-    MatmulImpl<AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, staticTiling, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm5;
+        .enableStaticPadZeros = true};
+    constexpr static MatmulApiStaticTiling staticTiling =
+        GetMatmulApiTiling<AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE>(staticMmCfg);
+    MatmulImpl<
+        AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, staticTiling, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        mm5;
     constexpr static bool isPartialOutput = true;
     constexpr static MatmulFuncParams funcParamsPartialOutput = {
-        false, false, false, false, 0, IterateOrder::ORDER_N, ScheduleType::INNER_PRODUCT, true, true, isPartialOutput
-    };
+        false, false, false, false, 0, IterateOrder::ORDER_N, ScheduleType::INNER_PRODUCT, true, true, isPartialOutput};
     constexpr static MatmulConfig CFG_PARTIAL = GetMMConfig<configMode>(funcParamsPartialOutput);
-    MatmulImpl<AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, CFG_PARTIAL,
-        MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> partial_output_mm;
+    MatmulImpl<
+        AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, CFG_PARTIAL, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        partial_output_mm;
 };
 
-TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_Mx) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder, mxTypePara
+TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_Mx)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder, mxTypePara
     TilingParamsMx tilingParamsMx = {1, 64, 64, 64, 64, 64, 64, 32, 32, 32, 2, 2, 1, 1, 2, 2, 1, 0, 16843009};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -233,8 +256,10 @@ TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_Mx) {
     ASSERT_FALSE(mm1.ScheduleOnce(false));
 }
 
-TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderN_Mx) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder, mxTypePara
+TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderN_Mx)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder, mxTypePara
     TilingParamsMx tilingParamsMx = {1, 64, 96, 64, 64, 96, 64, 32, 48, 32, 2, 2, 2, 2, 1, 1, 1, 1, 16843009};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -244,8 +269,10 @@ TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderN_Mx) {
     ASSERT_FALSE(mm1.ScheduleOnce(false));
 }
 
-TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderN_L1_Mx) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder, mxTypePara
+TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderN_L1_Mx)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder, mxTypePara
     TilingParamsMx tilingParamsMx = {1, 64, 96, 64, 64, 96, 64, 32, 48, 32, 2, 2, 2, 2, 1, 1, 1, 1, 16843009};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -255,8 +282,10 @@ TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderN_L1_Mx) {
     ASSERT_FALSE(mm2.ScheduleOnce(false));
 }
 
-TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_TranB_Mx) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder, mxTypePara
+TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_TranB_Mx)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder, mxTypePara
     TilingParamsMx tilingParamsMx = {1, 64, 64, 64, 64, 64, 64, 32, 32, 32, 2, 2, 1, 1, 2, 2, 1, 0, 16843009};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -266,8 +295,10 @@ TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_TranB_Mx) {
     ASSERT_FALSE(mm2.ScheduleOnce(false));
 }
 
-TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_Basic_Mx) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder, mxTypePara
+TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_Basic_Mx)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder, mxTypePara
     TilingParamsMx tilingParamsMx = {1, 64, 64, 64, 64, 64, 64, 32, 32, 32, 2, 2, 1, 1, 2, 2, 1, 0, 16843009};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -277,8 +308,10 @@ TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_Basic_Mx) {
     ASSERT_FALSE(mm3.ScheduleOnce(false));
 }
 
-TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_Basic_L1_Mx) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder, mxTypePara
+TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_Basic_L1_Mx)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder, mxTypePara
     TilingParamsMx tilingParamsMx = {1, 64, 64, 64, 64, 64, 64, 32, 32, 32, 2, 2, 1, 1, 2, 2, 1, 0, 16843009};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -288,8 +321,10 @@ TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_Basic_L1_Mx) {
     ASSERT_FALSE(mm4.ScheduleOnce(false));
 }
 
-TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_StaticPadZeros_Mx) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder, mxTypePara
+TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_StaticPadZeros_Mx)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder, mxTypePara
     TilingParamsMx tilingParamsMx = {1, 64, 64, 64, 64, 64, 64, 32, 32, 32, 2, 2, 1, 1, 2, 2, 1, 0, 16843009};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -299,8 +334,10 @@ TEST_F(TestSchedulerMDLMx, ScheduleOnce_OrderM_StaticPadZeros_Mx) {
     ASSERT_FALSE(mm5.ScheduleOnce(false));
 }
 
-TEST_F(TestSchedulerMDLMx, ScheduleOnce_enable_partial_output) {
-    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa, stepKb, isBias, iterateOrder, mxTypePara
+TEST_F(TestSchedulerMDLMx, ScheduleOnce_enable_partial_output)
+{
+    // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN,
+    // stepKa, stepKb, isBias, iterateOrder, mxTypePara
     TilingParamsMx tilingParamsMx = {1, 272, 416, 384, 272, 416, 384, 128, 256, 128, 9, 6, 3, 2, 3, 3, 0, 0, 16843009};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -308,4 +345,4 @@ TEST_F(TestSchedulerMDLMx, ScheduleOnce_enable_partial_output) {
     partial_output_mm.SetTranspose(false, false);
     ASSERT_TRUE(partial_output_mm.ScheduleOnce(false));
 }
-}
+} // namespace AscendC

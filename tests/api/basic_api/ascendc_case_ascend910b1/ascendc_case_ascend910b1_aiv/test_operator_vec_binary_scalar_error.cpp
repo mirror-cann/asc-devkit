@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "mockcpp/mockcpp.hpp"
@@ -15,8 +15,9 @@ using namespace std;
 using namespace AscendC;
 
 template <typename T>
-void MainVecBinaryScalarErrorDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm,
-    __gm__ T scalarValue, __gm__ int32_t dataSize)
+void MainVecBinaryScalarErrorDemo(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ T scalarValue,
+    __gm__ int32_t dataSize)
 {
     AscendCUtils::SetOverflow(0);
     TPipe tpipe;
@@ -65,7 +66,8 @@ void MainVecBinaryScalarErrorDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uin
 }
 
 template <typename T>
-void MainVlreluErrorDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ T scalarValue,
+void MainVlreluErrorDemo(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ T scalarValue,
     __gm__ int32_t dataSize)
 {
     TPipe tpipe;
@@ -106,8 +108,9 @@ void MainVlreluErrorDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __r
 }
 
 template <typename T>
-void MainShiftErrorDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm,
-    __gm__ T scalarValue, __gm__ int32_t dataSize)
+void MainShiftErrorDemo(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ T scalarValue,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
@@ -151,10 +154,7 @@ void MainShiftErrorDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
 
 class TEST_VEC_BINARY_SCALAR_DESC_ERROR : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
 
     void TearDown()
     {
@@ -169,7 +169,7 @@ TEST_F(TEST_VEC_BINARY_SCALAR_DESC_ERROR, VecBinaryScalarErrorHalfCase)
     int32_t scalar = 2;
     uint8_t srcGm[dataSize * sizeof(half)];
     uint8_t dstGm[dataSize * sizeof(half)];
-    MOCKER(raise, int(*)(int)).times(15).will(returnValue(0));
+    MOCKER(raise, int (*)(int)).times(15).will(returnValue(0));
     MainVecBinaryScalarErrorDemo(srcGm, dstGm, static_cast<half>(scalar), dataSize);
     MainVlreluErrorDemo(srcGm, dstGm, static_cast<half>(scalar), dataSize);
     for (int32_t i = 0; i < dataSize; i++) {
@@ -183,10 +183,9 @@ TEST_F(TEST_VEC_BINARY_SCALAR_DESC_ERROR, VecBinaryScalarErrorUin16Case)
     int32_t scalar = 2;
     uint8_t srcGm[dataSize * sizeof(uint16_t)];
     uint8_t dstGm[dataSize * sizeof(uint16_t)];
-    MOCKER(raise, int(*)(int)).times(6).will(returnValue(0));
+    MOCKER(raise, int (*)(int)).times(6).will(returnValue(0));
     MainShiftErrorDemo(srcGm, dstGm, static_cast<uint16_t>(scalar), dataSize);
     for (int32_t i = 0; i < dataSize; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
 }
-

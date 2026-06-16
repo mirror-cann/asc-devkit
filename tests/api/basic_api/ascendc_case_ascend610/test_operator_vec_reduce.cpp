@@ -1,29 +1,29 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_log.h"
-static uint8_t g_testRes = 1;      // 全局变量记录运行结果, 如果进入ASCENDC_ASSERT报错，会被置为0
+static uint8_t g_testRes = 1; // 全局变量记录运行结果, 如果进入ASCENDC_ASSERT报错，会被置为0
 // 重定义ASCENDC_ASSERT，不Abort，仅修改全局变量通知进入报错分支
 #undef ASCENDC_ASSERT
 #define ASCENDC_ASSERT(cond, behavior) \
     do {                               \
         if (!(cond)) {                 \
-            g_testRes = 0;              \
+            g_testRes = 0;             \
             behavior;                  \
         }                              \
     } while (0)
 
 #undef ASCENDC_REPORT_CHECK_ERROR
-#define ASCENDC_REPORT_CHECK_ERROR(apiMsg, funcType)   \
-    do {                                                \
-        g_testRes = 0;                                   \
+#define ASCENDC_REPORT_CHECK_ERROR(apiMsg, funcType) \
+    do {                                             \
+        g_testRes = 0;                               \
     } while (0)
 
 #include "kernel_utils.h"
@@ -33,8 +33,9 @@ using namespace std;
 using namespace AscendC;
 
 template <typename T>
-void MainVecReduceDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm,
-    __gm__ int32_t srcDataSize, __gm__ int32_t dstDataSize)
+void MainVecReduceDemo(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t srcDataSize,
+    __gm__ int32_t dstDataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
@@ -64,14 +65,14 @@ void MainVecReduceDemo(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __res
 
     SetMaskCount();
     set_vector_mask(0, 64);
-    BlockReduceSumIntrinsicsImpl((__ubuf__ T*)outputLocal.GetPhyAddr(), (__ubuf__ T*)inputLocal.GetPhyAddr(), 1, 1, 1,
-        8);
-    BlockReduceMinIntrinsicsImpl((__ubuf__ T*)outputLocal.GetPhyAddr(), (__ubuf__ T*)inputLocal.GetPhyAddr(), 1, 1, 1,
-        8);
-    BlockReduceMaxIntrinsicsImpl((__ubuf__ T*)outputLocal.GetPhyAddr(), (__ubuf__ T*)inputLocal.GetPhyAddr(), 1, 1, 1,
-        8);
-    PairReduceSumIntrinsicsImpl((__ubuf__ T*)outputLocal.GetPhyAddr(), (__ubuf__ T*)inputLocal.GetPhyAddr(), 1, 1, 1,
-        8);
+    BlockReduceSumIntrinsicsImpl(
+        (__ubuf__ T*)outputLocal.GetPhyAddr(), (__ubuf__ T*)inputLocal.GetPhyAddr(), 1, 1, 1, 8);
+    BlockReduceMinIntrinsicsImpl(
+        (__ubuf__ T*)outputLocal.GetPhyAddr(), (__ubuf__ T*)inputLocal.GetPhyAddr(), 1, 1, 1, 8);
+    BlockReduceMaxIntrinsicsImpl(
+        (__ubuf__ T*)outputLocal.GetPhyAddr(), (__ubuf__ T*)inputLocal.GetPhyAddr(), 1, 1, 1, 8);
+    PairReduceSumIntrinsicsImpl(
+        (__ubuf__ T*)outputLocal.GetPhyAddr(), (__ubuf__ T*)inputLocal.GetPhyAddr(), 1, 1, 1, 8);
     SetMaskNorm();
     AscendCUtils::ResetMask();
 
@@ -121,12 +122,13 @@ TEST_F(TEST_VEC_REDUCE, OperatorVecReduceHalfCase)
 }
 
 template <typename T>
-__global__ __aicore__ void MainAllReduceSimple(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm,
-    __gm__ int32_t srcDataSize, __gm__ int32_t dstDataSize, __gm__ int32_t level)
+__global__ __aicore__ void MainAllReduceSimple(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t srcDataSize,
+    __gm__ int32_t dstDataSize, __gm__ int32_t level)
 {
     TPipe tpipe;
     int32_t mask = 64;
-    uint64_t masks[2] { FULL_MASK, 0 };
+    uint64_t masks[2]{FULL_MASK, 0};
     if (sizeof(T) == sizeof(half)) {
         mask = 128;
         masks[0] = FULL_MASK;
@@ -194,13 +196,13 @@ __global__ __aicore__ void MainAllReduceSimple(__gm__ uint8_t* __restrict__ srcG
 }
 
 template <typename T>
-__global__ __aicore__ void MainWholeReduceSimple(__gm__ uint8_t* __restrict__ srcGm,
-    __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t srcDataSize, __gm__ int32_t dstDataSize,
-    __gm__ int32_t level)
+__global__ __aicore__ void MainWholeReduceSimple(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t srcDataSize,
+    __gm__ int32_t dstDataSize, __gm__ int32_t level)
 {
     TPipe tpipe;
     int32_t mask = 64;
-    uint64_t masks[2] { FULL_MASK, 0 };
+    uint64_t masks[2]{FULL_MASK, 0};
     if (sizeof(T) == sizeof(half)) {
         mask = 128;
         masks[0] = FULL_MASK;
@@ -268,23 +270,25 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_REDUCE_SIMPLE, ReduceSimpleTestsuite,
-    ::testing::Values(ReduceTestParams { MainAllReduceSimple<half>, 128, 16, 2, 0 },
+INSTANTIATE_TEST_CASE_P(
+    TEST_REDUCE_SIMPLE, ReduceSimpleTestsuite,
+    ::testing::Values(
+        ReduceTestParams{MainAllReduceSimple<half>, 128, 16, 2, 0},
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002) // dav-m200
-    ReduceTestParams { MainAllReduceSimple<float>, 64, 16, 4, 0 },
-    ReduceTestParams { MainAllReduceSimple<float>, 64, 16, 4, 2 },
-    ReduceTestParams { MainAllReduceSimple<float>, 16648, 16, 4, 0 },
-    ReduceTestParams { MainAllReduceSimple<float>, 16648, 16, 4, 2 },
+        ReduceTestParams{MainAllReduceSimple<float>, 64, 16, 4, 0},
+        ReduceTestParams{MainAllReduceSimple<float>, 64, 16, 4, 2},
+        ReduceTestParams{MainAllReduceSimple<float>, 16648, 16, 4, 0},
+        ReduceTestParams{MainAllReduceSimple<float>, 16648, 16, 4, 2},
 
-    ReduceTestParams { MainWholeReduceSimple<float>, 64, 16, 4, 0 },
-    ReduceTestParams { MainWholeReduceSimple<float>, 256, 16, 4, 0 },
+        ReduceTestParams{MainWholeReduceSimple<float>, 64, 16, 4, 0},
+        ReduceTestParams{MainWholeReduceSimple<float>, 256, 16, 4, 0},
 #endif
-    ReduceTestParams { MainAllReduceSimple<half>, 128, 16, 2, 0 },
-    ReduceTestParams { MainAllReduceSimple<half>, 128, 16, 2, 2 },
-    ReduceTestParams { MainAllReduceSimple<half>, 32656, 16, 2, 0 },
-    ReduceTestParams { MainAllReduceSimple<half>, 32656, 16, 2, 2 },
+        ReduceTestParams{MainAllReduceSimple<half>, 128, 16, 2, 0},
+        ReduceTestParams{MainAllReduceSimple<half>, 128, 16, 2, 2},
+        ReduceTestParams{MainAllReduceSimple<half>, 32656, 16, 2, 0},
+        ReduceTestParams{MainAllReduceSimple<half>, 32656, 16, 2, 2},
 
-    ReduceTestParams { MainWholeReduceSimple<half>, 128, 16, 2, 0 }));
+        ReduceTestParams{MainWholeReduceSimple<half>, 128, 16, 2, 0}));
 
 TEST_P(ReduceSimpleTestsuite, ReduceSimpleTestCase)
 {
@@ -408,9 +412,10 @@ TEST_F(ReduceSimpleTestsuite, GetReduceRepeatMaxMinSprCase)
     pipe_barrier(PIPE_ALL);
 }
 template <typename T>
-__global__ __aicore__ void MainRepeatReduceSum(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm,
-    const int32_t repeat, const int32_t elemsInOneRepeat, const int32_t dstBlkStride, const int32_t srcBlkStride,
-    const int32_t dstRepStride, const int32_t srcRepStride, const int32_t dataSize1, const int32_t dataSize2)
+__global__ __aicore__ void MainRepeatReduceSum(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, const int32_t repeat,
+    const int32_t elemsInOneRepeat, const int32_t dstBlkStride, const int32_t srcBlkStride, const int32_t dstRepStride,
+    const int32_t srcRepStride, const int32_t dataSize1, const int32_t dataSize2)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
@@ -431,8 +436,8 @@ __global__ __aicore__ void MainRepeatReduceSum(__gm__ uint8_t* __restrict__ dstG
     set_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
 
-    RepeatReduceSum(outputLocal, inputLocal, repeat, elemsInOneRepeat, dstBlkStride, srcBlkStride, dstRepStride,
-        srcRepStride);
+    RepeatReduceSum(
+        outputLocal, inputLocal, repeat, elemsInOneRepeat, dstBlkStride, srcBlkStride, dstRepStride, srcRepStride);
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -449,8 +454,9 @@ struct RepeatReduceSumTestParams {
     const int32_t srcBlkStrideIn;
     const int32_t dstRepStrideIn;
     const int32_t srcRepStrideIn;
-    void (*cal_func)(uint8_t*, uint8_t*, const int32_t, const int32_t, const int32_t, const int32_t, const int32_t,
-        const int32_t, const int32_t, const int32_t);
+    void (*cal_func)(
+        uint8_t*, uint8_t*, const int32_t, const int32_t, const int32_t, const int32_t, const int32_t, const int32_t,
+        const int32_t, const int32_t);
     const int32_t datasize1;
     const int32_t datasize2;
     const int8_t typeByte;
@@ -462,9 +468,11 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_REPEATREDUCESUM, RepeatReduceSumTestsuite,
-    ::testing::Values(RepeatReduceSumTestParams { 1, 64, 1, 1, 8, 8, MainRepeatReduceSum<half>, 128, 16, 2 },
-    RepeatReduceSumTestParams { 2, 32, 1, 1, 8, 8, MainRepeatReduceSum<float>, 128, 16, 4 }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_REPEATREDUCESUM, RepeatReduceSumTestsuite,
+    ::testing::Values(
+        RepeatReduceSumTestParams{1, 64, 1, 1, 8, 8, MainRepeatReduceSum<half>, 128, 16, 2},
+        RepeatReduceSumTestParams{2, 32, 1, 1, 8, 8, MainRepeatReduceSum<float>, 128, 16, 4}));
 
 TEST_P(RepeatReduceSumTestsuite, RepeatReduceSumTestCase)
 {
@@ -472,7 +480,8 @@ TEST_P(RepeatReduceSumTestsuite, RepeatReduceSumTestCase)
     uint8_t dstGm[param.datasize1 * param.typeByte];
     uint8_t srcGm[param.datasize2 * param.typeByte];
 
-    param.cal_func(dstGm, srcGm, param.repeatIn, param.elemsInOneRepeatIn, param.dstBlkStrideIn, param.srcBlkStrideIn,
+    param.cal_func(
+        dstGm, srcGm, param.repeatIn, param.elemsInOneRepeatIn, param.dstBlkStrideIn, param.srcBlkStrideIn,
         param.dstRepStrideIn, param.srcRepStrideIn, param.datasize1, param.datasize2);
 
     for (int i = 1; i < param.datasize2; i++) {

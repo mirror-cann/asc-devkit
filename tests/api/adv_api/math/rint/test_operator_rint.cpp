@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -14,32 +14,23 @@
 using namespace std;
 using namespace AscendC;
 
-enum TestMode {
-    COUNT,
-    COUNT_TMPBUF
-};
+enum TestMode { COUNT, COUNT_TMPBUF };
 
 class RintTest : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T>
 void MainRintDemo(
-    __gm__ uint8_t *__restrict__ dstGm, __gm__ uint8_t *__restrict__ srcGm, uint32_t dataSize, TestMode testMode)
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, uint32_t dataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
     GlobalTensor<T> outputGlobal;
-    inputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm), dataSize);
-    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), dataSize);
+    inputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm), dataSize);
+    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dataSize);
 
     TBuf<TPosition::VECCALC> tbuf1;
     tpipe.InitBuffer(tbuf1, dataSize * sizeof(T));
@@ -73,15 +64,15 @@ void MainRintDemo(
 
     PipeBarrier<PIPE_ALL>();
 }
-#define VEC_RINT_TESTCASE(TYPE, testMode, SIZE)                       \
-    TEST_F(RintTest, Math_Rint_##TYPE##_##testMode##_##SIZE)                \
-    {                                                                         \
-        uint8_t inputGm[(SIZE) * sizeof(TYPE)];                               \
-        uint8_t outputGm[(SIZE) * sizeof(TYPE)];                              \
-        MainRintDemo<TYPE>(outputGm, inputGm, (SIZE), testMode);             \
-        for (uint32_t i = 0; i < (SIZE); i++) {                               \
-            EXPECT_EQ(outputGm[i], 0x00);                                     \
-        }                                                                     \
+#define VEC_RINT_TESTCASE(TYPE, testMode, SIZE)                  \
+    TEST_F(RintTest, Math_Rint_##TYPE##_##testMode##_##SIZE)     \
+    {                                                            \
+        uint8_t inputGm[(SIZE) * sizeof(TYPE)];                  \
+        uint8_t outputGm[(SIZE) * sizeof(TYPE)];                 \
+        MainRintDemo<TYPE>(outputGm, inputGm, (SIZE), testMode); \
+        for (uint32_t i = 0; i < (SIZE); i++) {                  \
+            EXPECT_EQ(outputGm[i], 0x00);                        \
+        }                                                        \
     }
 VEC_RINT_TESTCASE(float, COUNT, 256);
 VEC_RINT_TESTCASE(float, COUNT_TMPBUF, 256);

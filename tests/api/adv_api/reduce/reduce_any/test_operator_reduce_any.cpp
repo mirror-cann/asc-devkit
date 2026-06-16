@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -18,88 +18,88 @@ namespace AscendC {
 template <typename T, bool isReuse, bool isAr>
 class KernelReduceAny {
 public:
-__aicore__ inline KernelReduceAny() {}
-__aicore__ inline void Init(GM_ADDR srcGm, GM_ADDR dstGm, uint32_t firstAxis, uint32_t lastAxis)
-{
-    first = firstAxis;
-    last = lastAxis;
-    uint32_t padLast = AlignUp(last, ONE_BLK_SIZE / sizeof(T));
-    uint32_t reduceAxis = isAr ? last : first;
-    srcSize = padLast * first;
-    padRet = AlignUp(reduceAxis, ONE_BLK_SIZE / sizeof(T));
-    uint32_t k = 0, firstCopy = first;
-    while (firstCopy > 0) {
-        k++;
-        firstCopy >>= 1;
-    }
-    uint32_t splitK = 1 << (k - 1);
-    constexpr uint32_t elePerBlk = ONE_BLK_SIZE / sizeof(T);
-    constexpr uint32_t elePerRep = ONE_REPEAT_BYTE_SIZE / sizeof(T);
-    srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm), srcSize * sizeof(T));
-    dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), padRet * sizeof(T));
+    __aicore__ inline KernelReduceAny() {}
+    __aicore__ inline void Init(GM_ADDR srcGm, GM_ADDR dstGm, uint32_t firstAxis, uint32_t lastAxis)
+    {
+        first = firstAxis;
+        last = lastAxis;
+        uint32_t padLast = AlignUp(last, ONE_BLK_SIZE / sizeof(T));
+        uint32_t reduceAxis = isAr ? last : first;
+        srcSize = padLast * first;
+        padRet = AlignUp(reduceAxis, ONE_BLK_SIZE / sizeof(T));
+        uint32_t k = 0, firstCopy = first;
+        while (firstCopy > 0) {
+            k++;
+            firstCopy >>= 1;
+        }
+        uint32_t splitK = 1 << (k - 1);
+        constexpr uint32_t elePerBlk = ONE_BLK_SIZE / sizeof(T);
+        constexpr uint32_t elePerRep = ONE_REPEAT_BYTE_SIZE / sizeof(T);
+        srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm), srcSize * sizeof(T));
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), padRet * sizeof(T));
 
-    pipe.InitBuffer(inQueue, 1, srcSize * sizeof(T));
-    pipe.InitBuffer(outQueue, 1, padRet * sizeof(T));
-    if constexpr (!isReuse) {
-        if constexpr (sizeof(T) == 4) {
-            if constexpr (!isAr) {
-                pipe.InitBuffer(tbuf, splitK * padLast * sizeof(T));
-            } else {
-                if (last < elePerRep) {
-                    pipe.InitBuffer(tbuf, first * elePerBlk * sizeof(T));
+        pipe.InitBuffer(inQueue, 1, srcSize * sizeof(T));
+        pipe.InitBuffer(outQueue, 1, padRet * sizeof(T));
+        if constexpr (!isReuse) {
+            if constexpr (sizeof(T) == 4) {
+                if constexpr (!isAr) {
+                    pipe.InitBuffer(tbuf, splitK * padLast * sizeof(T));
                 } else {
-                    pipe.InitBuffer(tbuf, first * elePerRep * sizeof(T));
+                    if (last < elePerRep) {
+                        pipe.InitBuffer(tbuf, first * elePerBlk * sizeof(T));
+                    } else {
+                        pipe.InitBuffer(tbuf, first * elePerRep * sizeof(T));
+                    }
                 }
+            } else {
+                tmpSize =
+                    isAr ? ((first * ONE_BLK_SIZE + padLast * sizeof(uint16_t)) * sizeof(T)) : srcSize * sizeof(T);
+                pipe.InitBuffer(tbuf, tmpSize);
             }
-        } else {
-            tmpSize = isAr ? ((first * ONE_BLK_SIZE + padLast * sizeof(uint16_t)) * sizeof(T)) : srcSize * sizeof(T);
-            pipe.InitBuffer(tbuf, tmpSize);
         }
     }
-
-}
-__aicore__ inline void Process()
-{
-    CopyIn();
-    Compute();
-    CopyOut();
-}
+    __aicore__ inline void Process()
+    {
+        CopyIn();
+        Compute();
+        CopyOut();
+    }
 
 private:
-__aicore__ inline void CopyIn()
-{
-    LocalTensor<T> srcLocal = inQueue.AllocTensor<T>();
-    DataCopy(srcLocal, srcGlobal, srcSize);
-    inQueue.EnQue(srcLocal);
-}
-__aicore__ inline void Compute()
-{
-    LocalTensor<T> dstLocal = outQueue.AllocTensor<T>();
-    LocalTensor<T> srcLocal = inQueue.DeQue<T>();
-    uint32_t shape[] = { first, last };
-    if constexpr (!isReuse) {
-        LocalTensor<uint8_t> tmp = tbuf.Get<uint8_t>();
-        if constexpr (isAr) {
-            ReduceAny<T, Pattern::Reduce::AR, isReuse>(dstLocal, srcLocal, tmp, shape, true);
-        } else {
-            ReduceAny<T, Pattern::Reduce::RA, isReuse>(dstLocal, srcLocal, tmp, shape, true);
-        }
-    } else {
-        if constexpr (isAr) {
-            ReduceAny<T, Pattern::Reduce::AR, isReuse>(dstLocal, srcLocal, shape, true);
-        } else {
-            ReduceAny<T, Pattern::Reduce::RA, isReuse>(dstLocal, srcLocal, shape, true);
-        }
+    __aicore__ inline void CopyIn()
+    {
+        LocalTensor<T> srcLocal = inQueue.AllocTensor<T>();
+        DataCopy(srcLocal, srcGlobal, srcSize);
+        inQueue.EnQue(srcLocal);
     }
-    outQueue.EnQue<T>(dstLocal);
-    inQueue.FreeTensor(srcLocal);
-}
-__aicore__ inline void CopyOut()
-{
-    LocalTensor<T> dstLocal = outQueue.DeQue<T>();
-    DataCopy(dstGlobal, dstLocal, padRet);
-    outQueue.FreeTensor(dstLocal);
-}
+    __aicore__ inline void Compute()
+    {
+        LocalTensor<T> dstLocal = outQueue.AllocTensor<T>();
+        LocalTensor<T> srcLocal = inQueue.DeQue<T>();
+        uint32_t shape[] = {first, last};
+        if constexpr (!isReuse) {
+            LocalTensor<uint8_t> tmp = tbuf.Get<uint8_t>();
+            if constexpr (isAr) {
+                ReduceAny<T, Pattern::Reduce::AR, isReuse>(dstLocal, srcLocal, tmp, shape, true);
+            } else {
+                ReduceAny<T, Pattern::Reduce::RA, isReuse>(dstLocal, srcLocal, tmp, shape, true);
+            }
+        } else {
+            if constexpr (isAr) {
+                ReduceAny<T, Pattern::Reduce::AR, isReuse>(dstLocal, srcLocal, shape, true);
+            } else {
+                ReduceAny<T, Pattern::Reduce::RA, isReuse>(dstLocal, srcLocal, shape, true);
+            }
+        }
+        outQueue.EnQue<T>(dstLocal);
+        inQueue.FreeTensor(srcLocal);
+    }
+    __aicore__ inline void CopyOut()
+    {
+        LocalTensor<T> dstLocal = outQueue.DeQue<T>();
+        DataCopy(dstGlobal, dstLocal, padRet);
+        outQueue.FreeTensor(dstLocal);
+    }
 
 private:
     GlobalTensor<T> srcGlobal;
@@ -118,7 +118,8 @@ private:
 } // namespace AscendC
 
 template <typename T, bool isReuse>
-__global__ __aicore__ void MainReduceAny(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t first, uint32_t last, bool isAr)
+__global__ __aicore__ void MainReduceAny(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t first, uint32_t last, bool isAr)
 {
     if (isAr) {
         AscendC::KernelReduceAny<T, isReuse, true> op;
@@ -141,35 +142,29 @@ struct ReduceAnyTestParams {
 
 class ReduceAnyTestsuite : public testing::Test, public testing::WithParamInterface<ReduceAnyTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
 
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPERATTION_REDUCE_ANY, ReduceAnyTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPERATTION_REDUCE_ANY, ReduceAnyTestsuite,
     ::testing::Values(
-        ReduceAnyTestParams { 1, 8, 32, true, MainReduceAny<uint8_t, true> },
-        ReduceAnyTestParams { 1, 16, 128, true, MainReduceAny<uint8_t, false> },
-        ReduceAnyTestParams { 1, 1, 8, false, MainReduceAny<uint8_t, true> },
-        ReduceAnyTestParams { 1, 8, 1, false, MainReduceAny<uint8_t, false> },
-        ReduceAnyTestParams { 1, 16, 7, false, MainReduceAny<uint8_t, true> },
-        ReduceAnyTestParams { 1, 8, 7, true, MainReduceAny<uint8_t, false> },
-        ReduceAnyTestParams { 4, 8, 32, true, MainReduceAny<float, true> },
-        ReduceAnyTestParams { 4, 7, 35, true, MainReduceAny<float, true> },
-        ReduceAnyTestParams { 4, 16, 128, true, MainReduceAny<float, false> },
-        ReduceAnyTestParams { 4, 1, 8, false, MainReduceAny<float, true> },
-        ReduceAnyTestParams { 4, 8, 1, false, MainReduceAny<float, false> },
-        ReduceAnyTestParams { 4, 16, 7, false, MainReduceAny<float, true> },
-        ReduceAnyTestParams { 4, 4, 8, true, MainReduceAny<float, false> },
-        ReduceAnyTestParams { 4, 7, 1, true, MainReduceAny<float, false> },
-        ReduceAnyTestParams { 4, 4, 64, true, MainReduceAny<float, true> }
-        ));
+        ReduceAnyTestParams{1, 8, 32, true, MainReduceAny<uint8_t, true>},
+        ReduceAnyTestParams{1, 16, 128, true, MainReduceAny<uint8_t, false>},
+        ReduceAnyTestParams{1, 1, 8, false, MainReduceAny<uint8_t, true>},
+        ReduceAnyTestParams{1, 8, 1, false, MainReduceAny<uint8_t, false>},
+        ReduceAnyTestParams{1, 16, 7, false, MainReduceAny<uint8_t, true>},
+        ReduceAnyTestParams{1, 8, 7, true, MainReduceAny<uint8_t, false>},
+        ReduceAnyTestParams{4, 8, 32, true, MainReduceAny<float, true>},
+        ReduceAnyTestParams{4, 7, 35, true, MainReduceAny<float, true>},
+        ReduceAnyTestParams{4, 16, 128, true, MainReduceAny<float, false>},
+        ReduceAnyTestParams{4, 1, 8, false, MainReduceAny<float, true>},
+        ReduceAnyTestParams{4, 8, 1, false, MainReduceAny<float, false>},
+        ReduceAnyTestParams{4, 16, 7, false, MainReduceAny<float, true>},
+        ReduceAnyTestParams{4, 4, 8, true, MainReduceAny<float, false>},
+        ReduceAnyTestParams{4, 7, 1, true, MainReduceAny<float, false>},
+        ReduceAnyTestParams{4, 4, 64, true, MainReduceAny<float, true>}));
 
 TEST_P(ReduceAnyTestsuite, ReduceAnyOpTestCase)
 {

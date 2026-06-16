@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_event.h"
@@ -19,10 +19,10 @@ using namespace std;
 using namespace AscendC;
 struct TilingParams {
     __aicore__ TilingParams() {}
-    __aicore__ TilingParams(uint32_t coreNum, uint32_t M, uint32_t N, uint32_t K, uint32_t singleCoreM,
-        uint32_t singleCoreN, uint32_t singleCoreK, uint32_t baseM, uint32_t baseN, uint32_t baseK, uint32_t depthA1,
-        uint32_t depthB1, uint32_t stepM, uint32_t stepN, uint32_t stepKa, uint32_t stepKb, uint32_t isbias,
-        uint32_t iterateOrder)
+    __aicore__ TilingParams(
+        uint32_t coreNum, uint32_t M, uint32_t N, uint32_t K, uint32_t singleCoreM, uint32_t singleCoreN,
+        uint32_t singleCoreK, uint32_t baseM, uint32_t baseN, uint32_t baseK, uint32_t depthA1, uint32_t depthB1,
+        uint32_t stepM, uint32_t stepN, uint32_t stepKa, uint32_t stepKb, uint32_t isbias, uint32_t iterateOrder)
         : coreNum_(coreNum),
           M_(M),
           N_(N),
@@ -42,7 +42,7 @@ struct TilingParams {
           isbias_(isbias),
           iterateOrder_(iterateOrder)
     {}
-    __aicore__ void GetTiling(TCubeTiling &tiling)
+    __aicore__ void GetTiling(TCubeTiling& tiling)
     {
         tiling.usedCoreNum = coreNum_;
         tiling.M = M_;
@@ -85,8 +85,9 @@ struct TilingParams {
 };
 
 template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE>
-__aicore__ inline int32_t CalcGMOffset(int blockIdx, int usedCoreNum, TCubeTiling &param, int &offsetA, int &offsetB,
-    int &offsetC, int &offsetBias, int32_t isTransposeAIn, int32_t isTransposeBIn)
+__aicore__ inline int32_t CalcGMOffset(
+    int blockIdx, int usedCoreNum, TCubeTiling& param, int& offsetA, int& offsetB, int& offsetC, int& offsetBias,
+    int32_t isTransposeAIn, int32_t isTransposeBIn)
 {
     auto temp0 = ConstCeil(param.M, param.singleCoreM);
     auto temp1 = ConstCeil(param.N, param.singleCoreN);
@@ -157,22 +158,23 @@ __aicore__ inline int32_t CalcGMOffset(int blockIdx, int usedCoreNum, TCubeTilin
 class TEST_KERNEL_MATMUL : public testing::Test {
 protected:
     void SetUp() {}
-    void TearDown()
-    {
-    }
+    void TearDown() {}
 };
 
-template <typename T, TPosition> struct ExtractTensor {
+template <typename T, TPosition>
+struct ExtractTensor {
     using type = LocalTensor<T>;
 };
 
-template <typename T> struct ExtractTensor<T, TPosition::GM> {
+template <typename T>
+struct ExtractTensor<T, TPosition::GM> {
     using type = GlobalTensor<T>;
 };
 
-template <class aType, class bType, class cType, class biasType, const MatmulConfig &MM_CFG, bool mmMatmul>
-__aicore__ inline void kernel_matmul(GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_ADDR biasGM, TilingParams &tilingParam,
-    int32_t isTransposeAIn, int32_t isTransposeBIn)
+template <class aType, class bType, class cType, class biasType, const MatmulConfig& MM_CFG, bool mmMatmul>
+__aicore__ inline void kernel_matmul(
+    GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_ADDR biasGM, TilingParams& tilingParam, int32_t isTransposeAIn,
+    int32_t isTransposeBIn)
 {
     using A_T = typename aType::T;
     using B_T = typename bType::T;
@@ -196,18 +198,18 @@ __aicore__ inline void kernel_matmul(GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_A
     GlobalTensor<C_T> cGlobal;
     GlobalTensor<BiasT> biasGlobal;
 
-    aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ A_T *>(aGM), tiling.M * tiling.Ka);
-    bGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ B_T *>(bGM), tiling.Kb * tiling.N);
-    cGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ C_T *>(cGM), tiling.M * tiling.N);
-    biasGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ BiasT *>(biasGM), tiling.N);
+    aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ A_T*>(aGM), tiling.M * tiling.Ka);
+    bGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ B_T*>(bGM), tiling.Kb * tiling.N);
+    cGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ C_T*>(cGM), tiling.M * tiling.N);
+    biasGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ BiasT*>(biasGM), tiling.N);
 
     int offsetA = 0;
     int offsetB = 0;
     int offsetC = 0;
     int offsetBias = 0;
 
-    CalcGMOffset<aType, bType, cType, biasType>(block_idx, tiling.usedCoreNum, tiling, offsetA, offsetB, offsetC,
-        offsetBias, 0, 0);
+    CalcGMOffset<aType, bType, cType, biasType>(
+        block_idx, tiling.usedCoreNum, tiling, offsetA, offsetB, offsetC, offsetBias, 0, 0);
 
     auto gmA = aGlobal[offsetA];
     auto gmB = bGlobal[offsetB];
@@ -226,10 +228,9 @@ __aicore__ inline void kernel_matmul(GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_A
     TQue<TPosition::B1, 2> qidB1;
     TQue<TPosition::C1, 2> qidRes;
 
-
     SetAtomicNone();
     MatmulImpl<aType, bType, cType, biasType> mm;
-    if constexpr(mmMatmul) {
+    if constexpr (mmMatmul) {
         REGIST_MATMUL_OBJ(&que, GetSysWorkSpacePtr(), mm);
         mm.Init(&tiling);
     } else {
@@ -309,76 +310,97 @@ __aicore__ inline void kernel_matmul(GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_A
 
 // coreNum, M, N, K, singleCoreM, singleCoreN, singleCoreK, baseM, baseN, baseK, depthA1, depthB1, stepM, stepN, stepKa,
 // stepKb, isBias, iterateOrder
-TilingParams g_tilingParams = { 1, 16, 32, 32, 16, 32, 32, 16, 32, 32, 1, 1, 1, 1, 1, 1, 1, 0 };
+TilingParams g_tilingParams = {1, 16, 32, 32, 16, 32, 32, 16, 32, 32, 1, 1, 1, 1, 1, 1, 1, 0};
 
-#define KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, tilingParams, A_Pos, B_Pos, C_Pos, BIAS_Pos, A_Format, B_Format,                                                                                                         \
-    C_Format, BIAS_Format, A_DType, B_DType, C_DType, BIAS_DType, isTransposeA, isTransposeB, CFG_Mode, MM_Matmul)                                                                                                          \
-    TEST_F(TEST_KERNEL_MATMUL,                                                                                                                                                                                              \
-        Kernel_Matmul_Case##tilingParams##_##A_Pos##_##B_Pos##_##C_Pos##_##BIAS_Pos##_##A_Format##_##B_Format##_##C_Format##_##BIAS_Format##_##A_DType##_##B_DType##_##C_DType##_##BIAS_DType##_##isTransposeA##_##isTransposeB##_##CFG_Mode##_##MM_Matmul)   \
-    {                                                                                                                                                                                                                       \
-        typedef MatmulType<AscendC::TPosition::A_Pos, CubeFormat::A_Format, A_DType, isTransposeA> aType;                                                                                                           \
-        typedef MatmulType<AscendC::TPosition::B_Pos, CubeFormat::B_Format, B_DType, isTransposeB> bType;                                                                                                           \
-        typedef MatmulType<AscendC::TPosition::C_Pos, CubeFormat::C_Format, C_DType> cType;                                                                                                                         \
-        typedef MatmulType<AscendC::TPosition::BIAS_Pos, CubeFormat::BIAS_Format, BIAS_DType> biasType;                                                                                                             \
-        TilingParams tilingParam = tilingParams;                                                                                                                                                                            \
-        const int32_t left_data_size = tilingParam.M_ * tilingParam.K_;                                                                                                                                                     \
-        const int32_t right_data_size = tilingParam.K_ * tilingParam.N_;                                                                                                                                                    \
-        const int32_t bias_data_size = tilingParam.N_;                                                                                                                                                                      \
-        const int32_t output_data_size = tilingParam.M_ * tilingParam.N_;                                                                                                                                                   \
-        uint8_t left_global[left_data_size * sizeof(A_DType)] = {0};                                                                                                                                                        \
-        uint8_t right_global[right_data_size * sizeof(B_DType)] = {0};                                                                                                                                                      \
-        uint8_t bias_global[bias_data_size * sizeof(BIAS_DType)] = {0};                                                                                                                                                     \
-        uint8_t output_global[output_data_size * sizeof(C_DType)] = {0};                                                                                                                                                    \
-        kernel_matmul<aType, bType, cType, biasType, CFG_Mode, MM_Matmul>(left_global, right_global, output_global,                                                                                                         \
-            bias_global, tilingParams, isTransposeA, isTransposeB);                                                                                                                                                         \
-        for (int32_t i = 0; i < output_data_size * sizeof(C_DType); i++) {                                                                                                                                                  \
-            EXPECT_EQ(output_global[i], 0x00);                                                                                                                                                                              \
-        }                                                                                                                                                                                                                   \
+#define KERNEL_MATMUL_TESTCASE(                                                                                                                                                                                                                             \
+    TEST_KERNEL_MATMUL, tilingParams, A_Pos, B_Pos, C_Pos, BIAS_Pos, A_Format, B_Format, C_Format, BIAS_Format,                                                                                                                                             \
+    A_DType, B_DType, C_DType, BIAS_DType, isTransposeA, isTransposeB, CFG_Mode, MM_Matmul)                                                                                                                                                                 \
+    TEST_F(                                                                                                                                                                                                                                                 \
+        TEST_KERNEL_MATMUL,                                                                                                                                                                                                                                 \
+        Kernel_Matmul_Case##tilingParams##_##A_Pos##_##B_Pos##_##C_Pos##_##BIAS_Pos##_##A_Format##_##B_Format##_##C_Format##_##BIAS_Format##_##A_DType##_##B_DType##_##C_DType##_##BIAS_DType##_##isTransposeA##_##isTransposeB##_##CFG_Mode##_##MM_Matmul) \
+    {                                                                                                                                                                                                                                                       \
+        typedef MatmulType<AscendC::TPosition::A_Pos, CubeFormat::A_Format, A_DType, isTransposeA> aType;                                                                                                                                                   \
+        typedef MatmulType<AscendC::TPosition::B_Pos, CubeFormat::B_Format, B_DType, isTransposeB> bType;                                                                                                                                                   \
+        typedef MatmulType<AscendC::TPosition::C_Pos, CubeFormat::C_Format, C_DType> cType;                                                                                                                                                                 \
+        typedef MatmulType<AscendC::TPosition::BIAS_Pos, CubeFormat::BIAS_Format, BIAS_DType> biasType;                                                                                                                                                     \
+        TilingParams tilingParam = tilingParams;                                                                                                                                                                                                            \
+        const int32_t left_data_size = tilingParam.M_ * tilingParam.K_;                                                                                                                                                                                     \
+        const int32_t right_data_size = tilingParam.K_ * tilingParam.N_;                                                                                                                                                                                    \
+        const int32_t bias_data_size = tilingParam.N_;                                                                                                                                                                                                      \
+        const int32_t output_data_size = tilingParam.M_ * tilingParam.N_;                                                                                                                                                                                   \
+        uint8_t left_global[left_data_size * sizeof(A_DType)] = {0};                                                                                                                                                                                        \
+        uint8_t right_global[right_data_size * sizeof(B_DType)] = {0};                                                                                                                                                                                      \
+        uint8_t bias_global[bias_data_size * sizeof(BIAS_DType)] = {0};                                                                                                                                                                                     \
+        uint8_t output_global[output_data_size * sizeof(C_DType)] = {0};                                                                                                                                                                                    \
+        kernel_matmul<aType, bType, cType, biasType, CFG_Mode, MM_Matmul>(                                                                                                                                                                                  \
+            left_global, right_global, output_global, bias_global, tilingParams, isTransposeA, isTransposeB);                                                                                                                                               \
+        for (int32_t i = 0; i < output_data_size * sizeof(C_DType); i++) {                                                                                                                                                                                  \
+            EXPECT_EQ(output_global[i], 0x00);                                                                                                                                                                                                              \
+        }                                                                                                                                                                                                                                                   \
     }
 
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, SHM, GM, ND, ND, ND, ND, half, half, float,
-    float, 0, 0, CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, SHM, GM, ND, ND, ND, ND, int8_t, int8_t, int32_t,
-    int32_t, 0, 0, CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, ND, ND, ND, ND, half, half, float, float, 0, 0,
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, SHM, GM, ND, ND, ND, ND, half, half, float, float, 0, 0, CFG_NORM,
+    false);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, SHM, GM, ND, ND, ND, ND, int8_t, int8_t, int32_t, int32_t, 0, 0,
     CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, NZ, NZ, ND, ND, half, half, float, float, 0, 0,
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, ND, ND, ND, ND, half, half, float, float, 0, 0, CFG_NORM,
+    false);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, NZ, NZ, ND, ND, half, half, float, float, 0, 0, CFG_NORM,
+    false);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, ND, ND, ND, ND, float, float, float, float, 0, 0, CFG_NORM,
+    false);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, VECCALC, VECCALC, GM, GM, ND, ND, ND, ND, half, half, float, float, 0, 0,
     CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, ND, ND, ND, ND, float, float, float, float, 0, 0,
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, VECCALC, VECCALC, GM, GM, NZ, NZ, ND, ND, half, half, float, float, 0, 0,
     CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, VECCALC, VECCALC, GM, GM, ND, ND, ND, ND, half, half, float,
-    float, 0, 0, CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, VECCALC, VECCALC, GM, GM, NZ, NZ, ND, ND, half, half, float,
-    float, 0, 0, CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, A1, B1, GM, GM, NZ, NZ, ND, ND, half, half, float, float, 0, 0,
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, A1, B1, GM, GM, NZ, NZ, ND, ND, half, half, float, float, 0, 0, CFG_NORM,
+    false);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, VECCALC, GM, ND, ND, ND, ND, half, half, float, float, 0, 0, CFG_NORM,
+    false);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, VECCALC, GM, ND, ND, NZ, ND, half, half, float, float, 0, 0, CFG_NORM,
+    false);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, NZ, NZ, NZ, ND, half, half, float, float, 0, 0, CFG_NORM,
+    false);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, SHM, GM, ND, ND, ND, ND, half, half, float, float, 0, 0, CFG_NORM,
+    true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, SHM, GM, ND, ND, ND, ND, int8_t, int8_t, int32_t, int32_t, 0, 0,
+    CFG_NORM, true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, ND, ND, ND, ND, half, half, float, float, 0, 0, CFG_NORM, true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, NZ, NZ, ND, ND, half, half, float, float, 0, 0, CFG_NORM, true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, ND, ND, ND, ND, float, float, float, float, 0, 0, CFG_NORM,
+    true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, VECCALC, VECCALC, GM, GM, ND, ND, ND, ND, half, half, float, float, 0, 0,
+    CFG_NORM, true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, VECCALC, VECCALC, GM, GM, NZ, NZ, ND, ND, half, half, float, float, 0, 0,
+    CFG_NORM, true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, A1, B1, GM, GM, NZ, NZ, ND, ND, half, half, float, float, 0, 0, CFG_NORM, true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, VECCALC, GM, ND, ND, ND, ND, half, half, float, float, 0, 0, CFG_NORM,
+    true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, VECCALC, GM, ND, ND, NZ, ND, half, half, float, float, 0, 0, CFG_NORM,
+    true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, NZ, NZ, NZ, ND, half, half, float, float, 0, 0, CFG_NORM, true);
+KERNEL_MATMUL_TESTCASE(
+    TEST_KERNEL_MATMUL, g_tilingParams, VECCALC, VECCALC, GM, GM, ND, ND, ND, ND, half, half, float, float, 1, 1,
     CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, VECCALC, GM, ND, ND, ND, ND, half, half, float,
-    float, 0, 0, CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, VECCALC, GM, ND, ND, NZ, ND, half, half, float,
-    float, 0, 0, CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, NZ, NZ, NZ, ND, half, half, float, float, 0, 0,
-    CFG_NORM, false);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, SHM, GM, ND, ND, ND, ND, half, half, float,
-    float, 0, 0, CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, SHM, GM, ND, ND, ND, ND, int8_t, int8_t, int32_t,
-    int32_t, 0, 0, CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, ND, ND, ND, ND, half, half, float, float, 0, 0,
-    CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, NZ, NZ, ND, ND, half, half, float, float, 0, 0,
-    CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, ND, ND, ND, ND, float, float, float, float, 0, 0,
-    CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, VECCALC, VECCALC, GM, GM, ND, ND, ND, ND, half, half, float,
-    float, 0, 0, CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, VECCALC, VECCALC, GM, GM, NZ, NZ, ND, ND, half, half, float,
-    float, 0, 0, CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, A1, B1, GM, GM, NZ, NZ, ND, ND, half, half, float, float, 0, 0,
-    CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, VECCALC, GM, ND, ND, ND, ND, half, half, float,
-    float, 0, 0, CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, VECCALC, GM, ND, ND, NZ, ND, half, half, float,
-    float, 0, 0, CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, GM, GM, GM, GM, NZ, NZ, NZ, ND, half, half, float, float, 0, 0,
-    CFG_NORM, true);
-KERNEL_MATMUL_TESTCASE(TEST_KERNEL_MATMUL, g_tilingParams, VECCALC, VECCALC, GM, GM, ND, ND, ND, ND, half, half, float,
-    float, 1, 1, CFG_NORM, false);

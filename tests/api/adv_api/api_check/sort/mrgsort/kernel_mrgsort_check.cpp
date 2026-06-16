@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -20,12 +19,8 @@ class MrgSortAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(MrgSortAPICheck, MrgSortAPICheckTestSuccess)
@@ -50,8 +45,8 @@ TEST_F(MrgSortAPICheck, MrgSortAPICheckTestSuccess)
 
     uint32_t sortedNum[4];
 
-    const uint16_t elementCountList[4] = {singleProposalElementCount, singleProposalElementCount,
-                                          singleProposalElementCount, singleProposalElementCount};
+    const uint16_t elementCountList[4] = {
+        singleProposalElementCount, singleProposalElementCount, singleProposalElementCount, singleProposalElementCount};
 
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
 
@@ -81,13 +76,13 @@ TEST_F(MrgSortAPICheck, MrgSortAPICheckTestSubFailure)
 
     uint32_t sortedNum[4];
 
-    const uint16_t elementCountList[4] = {singleProposalElementCount, singleProposalElementCount,
-                                          singleProposalElementCount, singleProposalElementCount};
+    const uint16_t elementCountList[4] = {
+        singleProposalElementCount, singleProposalElementCount, singleProposalElementCount, singleProposalElementCount};
 
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
 
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(MrgSort, (uint32_t, false),
-                                      (dst, sortList, elementCountList, sortedNum, 0b1111, 0));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        MrgSort, (uint32_t, false), (dst, sortList, elementCountList, sortedNum, 0b1111, 0));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 2);
 }
 
@@ -113,12 +108,12 @@ TEST_F(MrgSortAPICheck, MrgSortAPICheckTestFailure)
 
     uint32_t sortedNum[4];
 
-    const uint16_t elementCountList[4] = {singleProposalElementCount, singleProposalElementCount,
-                                          singleProposalElementCount, singleProposalElementCount};
+    const uint16_t elementCountList[4] = {
+        singleProposalElementCount, singleProposalElementCount, singleProposalElementCount, singleProposalElementCount};
 
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
 
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(MrgSort, (uint32_t, false),
-                                      (dst[1], sortList, elementCountList, sortedNum, 0b1111, 0));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        MrgSort, (uint32_t, false), (dst[1], sortList, elementCountList, sortedNum, 0b1111, 0));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 6);
 }

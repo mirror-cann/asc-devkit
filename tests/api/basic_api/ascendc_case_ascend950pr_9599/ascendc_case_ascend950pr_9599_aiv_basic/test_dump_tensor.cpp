@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #define ASCENDC_DUMP 1
 #include <gtest/gtest.h>
 #include <mockcpp/mockcpp.hpp>
@@ -46,7 +46,7 @@ __asc_simd_vf::DumpTensorTlv* GetSimdVfDumpTlv(BlockVFBufInfo& blockInfo)
     __asc_simd_vf::get_printf_ubuf_addr(reinterpret_cast<uint64_t>(&blockInfo), TEST_SIMD_VF_BLOCK_IDX);
     return reinterpret_cast<__asc_simd_vf::DumpTensorTlv*>(blockInfo.buffer);
 }
-}
+} // namespace
 #endif
 
 struct TestDumpTensorParams {
@@ -54,26 +54,25 @@ struct TestDumpTensorParams {
     uint32_t typeSize;
     uint32_t dstSize;
     uint64_t dumpSize;
-    void (*CalFunc)(uint8_t *, uint8_t *, uint8_t *, uint32_t, uint32_t, uint64_t);
+    void (*CalFunc)(uint8_t*, uint8_t*, uint8_t*, uint32_t, uint32_t, uint64_t);
 };
 
 class TestDumpTensorSuite : public testing::Test, public testing::WithParamInterface<TestDumpTensorParams> {
 protected:
-    void SetUp()
-    {
-        MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForDumpTensor));
-    }
-    void TearDown()
-    {
-        GlobalMockObject::verify();
-    }
+    void SetUp() { MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForDumpTensor)); }
+    void TearDown() { GlobalMockObject::verify(); }
 };
 
 class DumpTensorRuntimeGuard {
 public:
-    DumpTensorRuntimeGuard() :
-        coreType_(g_coreType), blockNum_(block_num), blockIdx_(block_idx), subBlockIdx_(sub_block_idx),
-        taskRation_(g_taskRation), dumpWorkspace_(AscendC::g_dumpWorkspaceReserved), sysWorkspace_(GetSysWorkSpacePtr())
+    DumpTensorRuntimeGuard()
+        : coreType_(g_coreType),
+          blockNum_(block_num),
+          blockIdx_(block_idx),
+          subBlockIdx_(sub_block_idx),
+          taskRation_(g_taskRation),
+          dumpWorkspace_(AscendC::g_dumpWorkspaceReserved),
+          sysWorkspace_(GetSysWorkSpacePtr())
     {}
 
     ~DumpTensorRuntimeGuard()
@@ -107,7 +106,8 @@ void SetAivDumpEnv(uint32_t blockNumValue, uint32_t blockIdxValue, uint32_t subB
 }
 
 template <typename T>
-void DataDumpTensor(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, __gm__ uint8_t *workGm, __gm__ uint32_t dataSize,
+void DataDumpTensor(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* workGm, __gm__ uint32_t dataSize,
     __gm__ uint32_t dstSize, __gm__ uint64_t dumpSize)
 {
     TPipe tpipe;
@@ -116,9 +116,9 @@ void DataDumpTensor(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, __gm__ uint8_t
     GlobalTensor<T> dstGlobal;
     GlobalTensor<T> workGlobal;
 
-    srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm), dataSize);
-    dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), dstSize);
-    workGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(workGm), DUMP_WORKSPACE_SIZE * 2);
+    srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm), dataSize);
+    dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dstSize);
+    workGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(workGm), DUMP_WORKSPACE_SIZE * 2);
 
     TBuf<TPosition::VECCALC> tbuf;
     tpipe.InitBuffer(tbuf, dataSize * sizeof(T));
@@ -130,13 +130,11 @@ void DataDumpTensor(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, __gm__ uint8_t
     InitDump(false, workGm, dumpSize);
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_DUMP_TENSOR, TestDumpTensorSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_DUMP_TENSOR, TestDumpTensorSuite,
     ::testing::Values(TestDumpTensorParams{64, 4, 96, DUMP_UINTSIZE, DataDumpTensor<uint32_t>}));
 
-int32_t RaiseStubForDumpTensor(int32_t input)
-{
-    return 0;
-}
+int32_t RaiseStubForDumpTensor(int32_t input) { return 0; }
 
 TEST_P(TestDumpTensorSuite, TestDumpTensorCases)
 {

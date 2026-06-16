@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/matmul.h"
@@ -18,22 +18,21 @@ using namespace AscendC;
 namespace {
 class CustomMatmulScheduler {
 public:
-    __aicore__ inline void Init(const TCubeTiling *__restrict cubeTiling, TPipe *tpipe) {}
-    __aicore__ inline void GetResult(const LocalTensor<float>& co2Local, uint8_t enAtomic = 0, bool enSequentialWrite = false) {}
-    __aicore__ inline bool ScheduleOnce(bool enPartialSum) {
-        return false;
-    }
+    __aicore__ inline void Init(const TCubeTiling* __restrict cubeTiling, TPipe* tpipe) {}
+    __aicore__ inline void GetResult(
+        const LocalTensor<float>& co2Local, uint8_t enAtomic = 0, bool enSequentialWrite = false)
+    {}
+    __aicore__ inline bool ScheduleOnce(bool enPartialSum) { return false; }
     __aicore__ inline void Reset() {}
     __aicore__ inline void End() {}
 };
 
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulWithScalePolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulWithScalePolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using Scheduler = CustomMatmulScheduler;
 };
-}
+} // namespace
 
 class TestMxMatmulImpl : public testing::Test {
 protected:
@@ -41,28 +40,37 @@ protected:
     void TearDown() {}
 
 private:
-    using AS_TYPE_GM = MatmulTypeWithScale<TPosition::GM, TPosition::GM, CubeFormat::ND,
-        fp4x2_e1m2_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
-    using AS_TYPE_UB = MatmulTypeWithScale<TPosition::GM, TPosition::VECOUT, CubeFormat::ND,
-        fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
+    using AS_TYPE_GM = MatmulTypeWithScale<
+        TPosition::GM, TPosition::GM, CubeFormat::ND, fp4x2_e1m2_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
+    using AS_TYPE_UB = MatmulTypeWithScale<
+        TPosition::GM, TPosition::VECOUT, CubeFormat::ND, fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
 
-    using BS_TYPE_GM = MatmulTypeWithScale<TPosition::GM, TPosition::GM, CubeFormat::ND,
-        fp4x2_e2m1_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
-    using BS_TYPE_UB = MatmulTypeWithScale<TPosition::GM, TPosition::VECOUT, CubeFormat::ND,
-        fp8_e5m2_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
+    using BS_TYPE_GM = MatmulTypeWithScale<
+        TPosition::GM, TPosition::GM, CubeFormat::ND, fp4x2_e2m1_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
+    using BS_TYPE_UB = MatmulTypeWithScale<
+        TPosition::GM, TPosition::VECOUT, CubeFormat::ND, fp8_e5m2_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
 
     using C_TYPE_GM = MatmulType<TPosition::GM, CubeFormat::ND, float>;
     using C_TYPE_UB = MatmulType<TPosition::VECIN, CubeFormat::NZ, float>;
 
     using BIAS_TYPE = MatmulType<TPosition::GM, CubeFormat::ND, float>;
 
-    MatmulImpl<AS_TYPE_GM, BS_TYPE_GM, C_TYPE_GM, BIAS_TYPE, CFG_NORM,
-               MatmulCallBackFunc<nullptr, nullptr, nullptr>, Impl::Detail::MatmulWithScalePolicy> mm1;
-    MatmulImpl<AS_TYPE_UB, BS_TYPE_UB, C_TYPE_UB, BIAS_TYPE, CFG_NORM,
-               MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy> mm2;
+    MatmulImpl<
+        AS_TYPE_GM, BS_TYPE_GM, C_TYPE_GM, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        Impl::Detail::MatmulWithScalePolicy>
+        mm1;
+    MatmulImpl<
+        AS_TYPE_UB, BS_TYPE_UB, C_TYPE_UB, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        CustomMatmulPolicy>
+        mm2;
 };
 
-TEST_F(TestMxMatmulImpl, test_mx_matmul_impl_scaleUb_OutputUb) {
+TEST_F(TestMxMatmulImpl, test_mx_matmul_impl_scaleUb_OutputUb)
+{
     TPipe pipe;
     TCubeTiling tiling;
 

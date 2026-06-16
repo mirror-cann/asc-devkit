@@ -1,46 +1,35 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
 using namespace std;
 using namespace AscendC;
 
-enum TestMode {
-    NBUFFER_NCOUNT_MODE,
-    NBUFFER_COUNT_MODE,
-    BUFFER_NCOUNT_MODE,
-    BUFFER_COUNT_MODE
-};
+enum TestMode { NBUFFER_NCOUNT_MODE, NBUFFER_COUNT_MODE, BUFFER_NCOUNT_MODE, BUFFER_COUNT_MODE };
 
 class TEST_SINH : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T>
-void MainVecSinhLevel2Demo(__gm__ uint8_t *__restrict__ dstGm, __gm__ uint8_t *__restrict__ srcGm,
-    uint32_t dataSize, TestMode testMode)
+void MainVecSinhLevel2Demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, uint32_t dataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
     GlobalTensor<T> outputGlobal;
-    inputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm), dataSize);
-    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), dataSize);
+    inputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm), dataSize);
+    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dataSize);
 
     TBuf<TPosition::VECCALC> tbuf1;
     tpipe.InitBuffer(tbuf1, dataSize * sizeof(T));
@@ -73,7 +62,7 @@ void MainVecSinhLevel2Demo(__gm__ uint8_t *__restrict__ dstGm, __gm__ uint8_t *_
         } else if (testMode == BUFFER_COUNT_MODE) {
             Sinh<T>(outputLocal, inputLocal, tmpLocal, dataSize);
         }
-    } 
+    }
 
     SetFlag<HardEvent::V_MTE3>(EVENT_ID0);
     WaitFlag<HardEvent::V_MTE3>(EVENT_ID0);

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -19,8 +19,9 @@ template <typename InputDataType, typename OutputDataType>
 class AntiQuantWeightTest {
 public:
     __aicore__ inline AntiQuantWeightTest() {}
-    __aicore__ inline void Init(GM_ADDR dstGm, GM_ADDR srcGm, GM_ADDR offsetGm, GM_ADDR scaleGm,
-        uint32_t elementCountOfInput, uint32_t elementCountOfOffset, uint32_t K, uint32_t tmpBufferSize)
+    __aicore__ inline void Init(
+        GM_ADDR dstGm, GM_ADDR srcGm, GM_ADDR offsetGm, GM_ADDR scaleGm, uint32_t elementCountOfInput,
+        uint32_t elementCountOfOffset, uint32_t K, uint32_t tmpBufferSize)
     {
         m_elementCountOfInput = elementCountOfInput;
         m_elementCountOfOffset = elementCountOfOffset;
@@ -47,6 +48,7 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
@@ -70,10 +72,11 @@ private:
         LocalTensor<OutputDataType> dstLocal = m_queOut.AllocTensor<OutputDataType>();
         LocalTensor<uint8_t> sharedTmpBuffer = m_queTmp.AllocTensor<uint8_t>();
 
-        AntiQuantShapeInfo shapeInfo{static_cast<uint32_t>(m_elementCountOfOffset), static_cast<uint32_t>(1),
+        AntiQuantShapeInfo shapeInfo{
+            static_cast<uint32_t>(m_elementCountOfOffset), static_cast<uint32_t>(1),
             static_cast<uint32_t>(m_elementCountOfOffset), static_cast<uint32_t>(1)};
-        AscendAntiQuant<InputDataType, OutputDataType, true>(dstLocal, srcLocal, offsetLocal, scaleLocal,
-            sharedTmpBuffer, m_K, shapeInfo);
+        AscendAntiQuant<InputDataType, OutputDataType, true>(
+            dstLocal, srcLocal, offsetLocal, scaleLocal, sharedTmpBuffer, m_K, shapeInfo);
 
         m_queInSrc.FreeTensor(srcLocal);
         m_queInOffset.FreeTensor(offsetLocal);
@@ -87,6 +90,7 @@ private:
         DataCopy(m_dstGlobal, dstLocal, m_elementCountOfInput);
         m_queOut.FreeTensor(dstLocal);
     }
+
 private:
     TPipe m_pipe;
     TQue<TPosition::VECIN, 1> m_queInSrc;
@@ -109,8 +113,9 @@ private:
 using int4b_t = AscendC::int4b_t;
 
 template <typename InputDataType, typename OutputDataType>
-__global__ __aicore__ void testAntiQuantWeight(GM_ADDR dst, GM_ADDR src, GM_ADDR offset, GM_ADDR scale,
-    uint32_t elementCountOfInput, uint32_t elementCountOfOffset, uint32_t K, uint32_t tmpBufferSize)
+__global__ __aicore__ void testAntiQuantWeight(
+    GM_ADDR dst, GM_ADDR src, GM_ADDR offset, GM_ADDR scale, uint32_t elementCountOfInput,
+    uint32_t elementCountOfOffset, uint32_t K, uint32_t tmpBufferSize)
 {
     AscendC::AntiQuantWeightTest<InputDataType, OutputDataType> op;
     op.Init(dst, src, offset, scale, elementCountOfInput, elementCountOfOffset, K, tmpBufferSize);
@@ -125,24 +130,19 @@ struct antiquantWeightParams {
     void (*cal_func)(GM_ADDR, GM_ADDR, GM_ADDR, GM_ADDR, uint32_t, uint32_t, uint32_t, uint32_t);
 };
 
-class AntiquantWeightTestsuite : public testing::Test,
-    public testing::WithParamInterface<antiquantWeightParams> {
+class AntiquantWeightTestsuite : public testing::Test, public testing::WithParamInterface<antiquantWeightParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ANTIQUANTWEIGHT, AntiquantWeightTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ANTIQUANTWEIGHT, AntiquantWeightTestsuite,
     ::testing::Values(
-        antiquantWeightParams { 2048, 32, 64, 1024, testAntiQuantWeight<int8_t, half>},
-        antiquantWeightParams { 2048, 32, 64, 1024, testAntiQuantWeight<int8_t, bfloat16_t>},
-        antiquantWeightParams { 2048, 32, 64, 81920, testAntiQuantWeight<int8_t, half>},
-        antiquantWeightParams { 2048, 32, 64, 81920, testAntiQuantWeight<int8_t, bfloat16_t>}
-        ));
+        antiquantWeightParams{2048, 32, 64, 1024, testAntiQuantWeight<int8_t, half>},
+        antiquantWeightParams{2048, 32, 64, 1024, testAntiQuantWeight<int8_t, bfloat16_t>},
+        antiquantWeightParams{2048, 32, 64, 81920, testAntiQuantWeight<int8_t, half>},
+        antiquantWeightParams{2048, 32, 64, 81920, testAntiQuantWeight<int8_t, bfloat16_t>}));
 
 TEST_P(AntiquantWeightTestsuite, testAntiquantWeight)
 {
@@ -152,8 +152,9 @@ TEST_P(AntiquantWeightTestsuite, testAntiquantWeight)
     uint8_t scaleGm[param.elementCountOfOffset * sizeof(half)] = {0};
     uint8_t dstGm[param.elementCountOfInput * sizeof(half)] = {0};
 
-    param.cal_func(dstGm, srcGm, offsetGm, scaleGm,
-        param.elementCountOfInput, param.elementCountOfOffset, param.K, param.tmpBufferSize);
+    param.cal_func(
+        dstGm, srcGm, offsetGm, scaleGm, param.elementCountOfInput, param.elementCountOfOffset, param.K,
+        param.tmpBufferSize);
 
     for (int32_t i = 0; i < param.elementCountOfInput; i++) {
         EXPECT_EQ(dstGm[i], 0x00);

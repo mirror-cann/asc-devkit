@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -17,12 +17,11 @@ using namespace AscendC;
 template <typename srcType, uint32_t calCount, uint32_t dataSize, uint32_t apiMode>
 class KernelTan {
 public:
-    __aicore__ inline KernelTan()
-    {}
+    __aicore__ inline KernelTan() {}
     __aicore__ inline void Init(GM_ADDR src_gm, GM_ADDR dst_gm)
     {
-        src_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(src_gm), dataSize);
-        dst_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(dst_gm), dataSize);
+        src_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(src_gm), dataSize);
+        dst_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(dst_gm), dataSize);
 
         pipe.InitBuffer(inQueueX, 1, dataSize * sizeof(srcType));
         pipe.InitBuffer(outQueue, 1, dataSize * sizeof(srcType));
@@ -102,28 +101,21 @@ struct TanTestParams {
 
 class AdvanceTanTestSuite : public testing::TestWithParam<TanTestParams> {
 protected:
-void SetUp()
-{
-    AscendC::SetGCoreType(2);
-}
-void TearDown()
-{
-    AscendC::SetGCoreType(0);
-}
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ADVANCE_API_TAN, AdvanceTanTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ADVANCE_API_TAN, AdvanceTanTestSuite,
     ::testing::Values(
-        TanTestParams {4, 32, kernel_tan_operator<float, 32, 32, 0>},
-        TanTestParams {4, 4096, kernel_tan_operator<float, 32, 4096, 1>},
-        TanTestParams {4, 2048, kernel_tan_operator<float, 2048, 2048, 2>},
-        TanTestParams {4, 1024, kernel_tan_operator<float, 128, 1024, 3>},
-        TanTestParams {2, 32, kernel_tan_operator<half, 32, 32, 0>},
-        TanTestParams {2, 4096, kernel_tan_operator<half, 32, 4096, 1>},
-        TanTestParams {2, 2048, kernel_tan_operator<half, 2048, 2048, 2>},
-        TanTestParams {2, 1024, kernel_tan_operator<half, 128, 1024, 3>},
-    )
-);
+        TanTestParams{4, 32, kernel_tan_operator<float, 32, 32, 0>},
+        TanTestParams{4, 4096, kernel_tan_operator<float, 32, 4096, 1>},
+        TanTestParams{4, 2048, kernel_tan_operator<float, 2048, 2048, 2>},
+        TanTestParams{4, 1024, kernel_tan_operator<float, 128, 1024, 3>},
+        TanTestParams{2, 32, kernel_tan_operator<half, 32, 32, 0>},
+        TanTestParams{2, 4096, kernel_tan_operator<half, 32, 4096, 1>},
+        TanTestParams{2, 2048, kernel_tan_operator<half, 2048, 2048, 2>},
+        TanTestParams{2, 1024, kernel_tan_operator<half, 128, 1024, 3>}, ));
 
 TEST_P(AdvanceTanTestSuite, kernel_tan_operator)
 {

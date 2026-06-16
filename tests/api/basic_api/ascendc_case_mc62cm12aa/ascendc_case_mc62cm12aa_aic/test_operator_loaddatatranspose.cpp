@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -14,9 +14,9 @@ using namespace std;
 
 namespace AscendC {
 #define LOCAL_TENSOR_REGISTER(tensor_name, type, que_pos, init_addr, data_size) \
-    LocalTensor<type> tensor_name;                                     \
-    TBuffAddr tbuf_##tensor_name;                                      \
-    tbuf_##tensor_name.logicPos = (uint8_t)TPosition::que_pos;       \
+    LocalTensor<type> tensor_name;                                              \
+    TBuffAddr tbuf_##tensor_name;                                               \
+    tbuf_##tensor_name.logicPos = (uint8_t)TPosition::que_pos;                  \
     tensor_name.SetAddr(tbuf_##tensor_name);                                    \
     tensor_name.InitBuffer(init_addr, data_size);
 
@@ -34,9 +34,9 @@ enum TestInstr {
  * LoadDataWithTranspose                                             *
  * ************************************************************************************************* */
 template <typename dst_T, typename src0_T, typename src1_T>
-void MainLoadData(__gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restrict__ src0_gm,
-                  __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k,
-                  __gm__ uint16_t channelSize)
+void MainLoadData(
+    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
+    __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k, __gm__ uint16_t channelSize)
 {
     TPipe tpipe;
     // mmad c = a * b
@@ -75,7 +75,8 @@ void MainLoadData(__gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restric
     LoadData2DParamsV2 loadDataParamsB;
     loadDataParamsB.mStartPosition = 0;
     loadDataParamsB.kStartPosition = 0;
-    loadDataParamsB.mStep = DivCeil(m, 16);;
+    loadDataParamsB.mStep = DivCeil(m, 16);
+    ;
     loadDataParamsB.kStep = DivCeil(k * sizeof(src0_T), 32);
     if (IsSameType<src0_T, int4b_t>::value) {
         loadDataParams.kStep = DivCeil(loadDataParams.kStep, 2);
@@ -112,9 +113,7 @@ struct LoadDataTestParams {
     uint8_t sizeofSrc1;
 };
 
-class LoadDataTranspose910dTestsuite
-    : public testing::Test
-    , public testing::WithParamInterface<LoadDataTestParams> {
+class LoadDataTranspose910dTestsuite : public testing::Test, public testing::WithParamInterface<LoadDataTestParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
@@ -122,18 +121,17 @@ protected:
 
 INSTANTIATE_TEST_CASE_P(
     TEST_LOAD_DATA, LoadDataTranspose910dTestsuite,
-    ::testing::Values(
-        LoadDataTestParams{ 16, 128, 32, 32, MainLoadData<int32_t, int16_t, int16_t>, 4, 2, 2 }));
+    ::testing::Values(LoadDataTestParams{16, 128, 32, 32, MainLoadData<int32_t, int16_t, int16_t>, 4, 2, 2}));
 
 TEST_P(LoadDataTranspose910dTestsuite, LoadDataTransposeTestCase)
 {
     auto param = GetParam();
-    uint8_t* dst_gm = new uint8_t[param.m * param.n * param.sizeofDst*10];
-    uint8_t* src0_gm = new uint8_t[param.m * param.k * param.sizeofSrc0*10];
-    uint8_t* src1_gm = new uint8_t[param.k * param.n * param.sizeofSrc1*10];
+    uint8_t* dst_gm = new uint8_t[param.m * param.n * param.sizeofDst * 10];
+    uint8_t* src0_gm = new uint8_t[param.m * param.k * param.sizeofSrc0 * 10];
+    uint8_t* src1_gm = new uint8_t[param.k * param.n * param.sizeofSrc1 * 10];
     param.cal_func(dst_gm, src0_gm, src1_gm, param.m, param.n, param.k, param.channelSize);
-    delete [] dst_gm;
-    delete [] src0_gm;
-    delete [] src1_gm;
+    delete[] dst_gm;
+    delete[] src0_gm;
+    delete[] src1_gm;
 }
-}  // namespace AscendC
+} // namespace AscendC

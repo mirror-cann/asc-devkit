@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -22,8 +22,8 @@ using namespace AscendC;
 // scene 1
 namespace AscendC {
 // scene1,2: srcShape[B, A1, A2, A3]
-__aicore__ inline void GetConfusionTranspose0213TilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose0213TilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t blockSize = ONE_BLK_SIZE / typeSize;
     uint32_t shapeB = srcShape.originalShape[0];
@@ -63,8 +63,8 @@ __aicore__ inline void GetConfusionTranspose0213TilingInfo(const ShapeInfo srcSh
 }
 
 // scene 3: srcShape[B, N, S, H/N]
-__aicore__ inline void GetConfusionTranspose2NZ012NTilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose2NZ012NTilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t blockSize = ONE_BLK_SIZE / typeSize;
     uint32_t shapeB = srcShape.originalShape[0];
@@ -104,8 +104,8 @@ __aicore__ inline void GetConfusionTranspose2NZ012NTilingInfo(const ShapeInfo sr
 }
 
 // scene4: srcShape[B, N, S, H/N]
-__aicore__ inline void GetConfusionTranspose2ND012NTilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose2ND012NTilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t blockSize = ONE_BLK_SIZE / typeSize;
     uint32_t shapeB = srcShape.originalShape[0];
@@ -147,8 +147,8 @@ __aicore__ inline void GetConfusionTranspose2ND012NTilingInfo(const ShapeInfo sr
 }
 
 // scene5,6: srcShape[B, N, S, H/N]
-__aicore__ inline void GetConfusionTranspose012TilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetConfusionTranspose012TilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t blockSize = ONE_BLK_SIZE / typeSize;
     uint32_t shapeB = srcShape.originalShape[0];
@@ -184,8 +184,8 @@ __aicore__ inline void GetConfusionTranspose012TilingInfo(const ShapeInfo srcSha
 }
 
 // scene7: srcShape[height, width]
-__aicore__ inline void GetTransposeOnlyTilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetTransposeOnlyTilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, ConfusionTransposeTiling& tiling)
 {
     uint32_t blockSize = ONE_BLK_SIZE / typeSize;
     uint32_t height = srcShape.originalShape[0];
@@ -202,8 +202,9 @@ __aicore__ inline void GetTransposeOnlyTilingInfo(const ShapeInfo srcShape, cons
     tiling.param5 = repeat;
 }
 
-__aicore__ inline void GetTransposeTilingInfo(const ShapeInfo srcShape, const uint32_t stackBufferSize,
-    const uint32_t typeSize, const uint32_t transposeTypeIn, ConfusionTransposeTiling& tiling)
+__aicore__ inline void GetTransposeTilingInfo(
+    const ShapeInfo srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const uint32_t transposeTypeIn,
+    ConfusionTransposeTiling& tiling)
 {
     if (transposeTypeIn == 1 || transposeTypeIn == 2) {
         GetConfusionTranspose0213TilingInfo(srcShape, stackBufferSize, typeSize, tiling);
@@ -221,9 +222,10 @@ __aicore__ inline void GetTransposeTilingInfo(const ShapeInfo srcShape, const ui
 template <typename T>
 class KernelTransposeFirst {
 public:
-    __aicore__ inline KernelTransposeFirst() { }
+    __aicore__ inline KernelTransposeFirst() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
         TransposeType transposetypeIn)
     {
         A1 = A1In;
@@ -254,7 +256,7 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
         uint32_t srcOriShape[] = {1, A1, A2, A3};
-        uint32_t srcShape[] = { 1, A1, A3 / 16, A2 / 16, 16, 16 };
+        uint32_t srcShape[] = {1, A1, A3 / 16, A2 / 16, 16, 16};
         ShapeInfo srcShapeInfo(6, srcShape, 4, srcOriShape, DataFormat::NZ);
 
         uint32_t dstOriShape[] = {1, A2, A1, A3};
@@ -289,8 +291,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void TransposeFirst(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t A1In, uint32_t A2In,
-    uint32_t A3In, TransposeType transposetypeIn)
+__global__ __aicore__ void TransposeFirst(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
+    TransposeType transposetypeIn)
 {
     AscendC::KernelTransposeFirst<T> op;
     op.Init(dstGm, srcGm, A1In, A2In, A3In, transposetypeIn);
@@ -306,22 +309,17 @@ struct TransposeFirstTestParams {
     TransposeType transposetypeIn;
 };
 
-class TransposeFirstTestsuite : public testing::Test,
-    public testing::WithParamInterface<TransposeFirstTestParams> {
+class TransposeFirstTestsuite : public testing::Test, public testing::WithParamInterface<TransposeFirstTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeFirstTestsuite,
-    ::testing::Values(TransposeFirstTestParams { 2, TransposeFirst<half>, 2, 64, 32, TransposeType::TRANSPOSE_NZ2ND_0213 },
-    TransposeFirstTestParams { 4, TransposeFirst<float>, 2, 64, 32, TransposeType::TRANSPOSE_NZ2ND_0213 }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeFirstTestsuite,
+    ::testing::Values(
+        TransposeFirstTestParams{2, TransposeFirst<half>, 2, 64, 32, TransposeType::TRANSPOSE_NZ2ND_0213},
+        TransposeFirstTestParams{4, TransposeFirst<float>, 2, 64, 32, TransposeType::TRANSPOSE_NZ2ND_0213}));
 
 TEST_P(TransposeFirstTestsuite, TransposeFirstTestCase)
 {
@@ -340,9 +338,10 @@ namespace AscendC {
 template <typename T>
 class KernelTransposeSecond {
 public:
-    __aicore__ inline KernelTransposeSecond() { }
+    __aicore__ inline KernelTransposeSecond() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
         TransposeType transposetypeIn)
     {
         A1 = A1In;
@@ -373,7 +372,7 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
         uint32_t srcOriShape[] = {1, A1, A2, A3};
-        uint32_t srcShape[] = { 1, A1, A3 / 16, A2 / 16, 16, 16 };
+        uint32_t srcShape[] = {1, A1, A3 / 16, A2 / 16, 16, 16};
         ShapeInfo srcShapeInfo(6, srcShape, 4, srcOriShape, DataFormat::NZ);
 
         uint32_t dstOriShape[] = {1, A2, A1, A3};
@@ -408,8 +407,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void TransposeSecond(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t A1In, uint32_t A2In,
-    uint32_t A3In, TransposeType transposetypeIn)
+__global__ __aicore__ void TransposeSecond(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t A1In, uint32_t A2In, uint32_t A3In,
+    TransposeType transposetypeIn)
 {
     AscendC::KernelTransposeSecond<T> op;
     op.Init(dstGm, srcGm, A1In, A2In, A3In, transposetypeIn);
@@ -425,25 +425,20 @@ struct TransposeSecondTestParams {
     TransposeType transposetypeIn;
 };
 
-class TransposeSecondTestsuite : public testing::Test,
-    public testing::WithParamInterface<TransposeSecondTestParams> {
+class TransposeSecondTestsuite : public testing::Test, public testing::WithParamInterface<TransposeSecondTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeSecondTestsuite,
-    ::testing::Values(TransposeSecondTestParams { 2, TransposeSecond<half>, 16, 80, 32, TransposeType::TRANSPOSE_NZ2NZ_0213 },
-    TransposeSecondTestParams { 2, TransposeSecond<half>, 32, 48, 16, TransposeType::TRANSPOSE_NZ2NZ_0213 },
-    TransposeSecondTestParams { 2, TransposeSecond<half>, 16, 32, 32, TransposeType::TRANSPOSE_NZ2NZ_0213 },
-    TransposeSecondTestParams { 4, TransposeSecond<float>, 32, 32, 16, TransposeType::TRANSPOSE_NZ2NZ_0213 },
-    TransposeSecondTestParams { 4, TransposeSecond<float>, 16, 32, 32, TransposeType::TRANSPOSE_NZ2NZ_0213 }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeSecondTestsuite,
+    ::testing::Values(
+        TransposeSecondTestParams{2, TransposeSecond<half>, 16, 80, 32, TransposeType::TRANSPOSE_NZ2NZ_0213},
+        TransposeSecondTestParams{2, TransposeSecond<half>, 32, 48, 16, TransposeType::TRANSPOSE_NZ2NZ_0213},
+        TransposeSecondTestParams{2, TransposeSecond<half>, 16, 32, 32, TransposeType::TRANSPOSE_NZ2NZ_0213},
+        TransposeSecondTestParams{4, TransposeSecond<float>, 32, 32, 16, TransposeType::TRANSPOSE_NZ2NZ_0213},
+        TransposeSecondTestParams{4, TransposeSecond<float>, 16, 32, 32, TransposeType::TRANSPOSE_NZ2NZ_0213}));
 
 TEST_P(TransposeSecondTestsuite, TransposeSecondTestCase)
 {
@@ -462,9 +457,10 @@ namespace AscendC {
 template <typename T>
 class KernelTransposeThird {
 public:
-    __aicore__ inline KernelTransposeThird() { }
+    __aicore__ inline KernelTransposeThird() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
         uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
     {
         N = NIn;
@@ -477,7 +473,7 @@ public:
 
         hAlign = hBlockNum * 16;
         hnDivAlign = hnDivBlockNum * 16;
-        gap = hnDivAlign - H/N;
+        gap = hnDivAlign - H / N;
 
         srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
@@ -504,11 +500,11 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
         uint32_t srcOriShape[] = {1, S, H};
-        uint32_t srcShape[] = { 1, (H + 16-1)/16, S/16, 16, 16 };
+        uint32_t srcShape[] = {1, (H + 16 - 1) / 16, S / 16, 16, 16};
         ShapeInfo srcShapeInfo(5, srcShape, 3, srcOriShape, DataFormat::NZ);
 
-        uint32_t dstOriShape[] = { 1, N, S, H / N };
-        uint32_t dstShape[] = { 1, N, (H / N + 16-1)/16, S/16, 16, 16 };
+        uint32_t dstOriShape[] = {1, N, S, H / N};
+        uint32_t dstShape[] = {1, N, (H / N + 16 - 1) / 16, S / 16, 16, 16};
         ShapeInfo dstShapeInfo(6, dstShape, 4, dstOriShape, DataFormat::NZ);
 
         LocalTensor<T> stackBuffer;
@@ -520,11 +516,12 @@ private:
 
         uint64_t mask[2];
         mask[1] = 0;
-        mask[0] = ((1 << (gap)) - 1) << (16-gap);
+        mask[0] = ((1 << (gap)) - 1) << (16 - gap);
         uint32_t tensorOffset = sBlockNum * 16 * (hnDivBlockNum - 1) * 16;
         uint32_t dstRepeatStride = 16 * sizeof(T) / 32;
         for (uint16_t n = 0; n < N; n++) {
-            AscendC::Duplicate(dstLocal[tensorOffset + n * S * hnDivAlign], static_cast<T>(0), mask, S, 1, dstRepeatStride);
+            AscendC::Duplicate(
+                dstLocal[tensorOffset + n * S * hnDivAlign], static_cast<T>(0), mask, S, 1, dstRepeatStride);
         }
         inQueueSrcVecOut.EnQue<T>(dstLocal);
         inQueueSrcVecIn.FreeTensor(srcLocal);
@@ -549,8 +546,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void TransposeThird(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn,
-    uint32_t HIn, uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
+__global__ __aicore__ void TransposeThird(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn, uint32_t hnDivBlockNumIn,
+    uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
 {
     AscendC::KernelTransposeThird<T> op;
     op.Init(dstGm, srcGm, NIn, SIn, HIn, hnDivBlockNumIn, hBlockNumIn, sBlockNumIn, transposetypeIn);
@@ -569,27 +567,29 @@ struct TransposeThirdTestParams {
     TransposeType transposetypeIn;
 };
 
-class TransposeThirdTestsuite : public testing::Test,
-    public testing::WithParamInterface<TransposeThirdTestParams> {
+class TransposeThirdTestsuite : public testing::Test, public testing::WithParamInterface<TransposeThirdTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeThirdTestsuite,
-    ::testing::Values(TransposeThirdTestParams { 2, TransposeThird<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    TransposeThirdTestParams { 2, TransposeThird<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    TransposeThirdTestParams { 2, TransposeThird<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    TransposeThirdTestParams { 2, TransposeThird<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    TransposeThirdTestParams { 4, TransposeThird<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    TransposeThirdTestParams { 4, TransposeThird<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N },
-    TransposeThirdTestParams { 4, TransposeThird<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeThirdTestsuite,
+    ::testing::Values(
+        TransposeThirdTestParams{
+            2, TransposeThird<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        TransposeThirdTestParams{
+            2, TransposeThird<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        TransposeThirdTestParams{
+            2, TransposeThird<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        TransposeThirdTestParams{
+            2, TransposeThird<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        TransposeThirdTestParams{
+            4, TransposeThird<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        TransposeThirdTestParams{
+            4, TransposeThird<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N},
+        TransposeThirdTestParams{
+            4, TransposeThird<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITH_N}));
 
 TEST_P(TransposeThirdTestsuite, TransposeThirdTestCase)
 {
@@ -597,7 +597,9 @@ TEST_P(TransposeThirdTestsuite, TransposeThirdTestCase)
     uint8_t srcGm[param.hBlockNumIn * param.sBlockNumIn * 16 * 16 * param.typeSize] = {0};
     uint8_t dstGm[param.NIn * param.sBlockNumIn * param.hnDivBlockNumIn * 16 * 16 * param.typeSize] = {0};
 
-    param.cal_func(dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn, param.transposetypeIn);
+    param.cal_func(
+        dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn,
+        param.transposetypeIn);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
@@ -608,9 +610,10 @@ namespace AscendC {
 template <typename T>
 class KernelTransposeFourth {
 public:
-    __aicore__ inline KernelTransposeFourth() { }
+    __aicore__ inline KernelTransposeFourth() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
         uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
     {
         N = NIn;
@@ -623,7 +626,7 @@ public:
 
         hAlign = hBlockNum * 16;
         hnDivAlign = hnDivBlockNum * 16;
-        gap = hnDivAlign - H/N;
+        gap = hnDivAlign - H / N;
 
         srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
@@ -650,11 +653,11 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
         uint32_t srcOriShape[] = {1, S, H};
-        uint32_t srcShape[] = { 1, (H + 16-1)/16, S/16, 16, 16 };
+        uint32_t srcShape[] = {1, (H + 16 - 1) / 16, S / 16, 16, 16};
         ShapeInfo srcShapeInfo(5, srcShape, 3, srcOriShape, DataFormat::NZ);
 
-        uint32_t dstOriShape[] = { 1, N, S, H / N };
-        uint32_t dstShape[] = { 1, N, (H / N + 16-1)/16, S/16, 16, 16 };
+        uint32_t dstOriShape[] = {1, N, S, H / N};
+        uint32_t dstShape[] = {1, N, (H / N + 16 - 1) / 16, S / 16, 16, 16};
         ShapeInfo dstShapeInfo(6, dstShape, 4, dstOriShape, DataFormat::NZ);
 
         LocalTensor<T> stackBuffer;
@@ -666,11 +669,12 @@ private:
 
         uint64_t mask[2];
         mask[1] = 0;
-        mask[0] = ((1 << (gap)) - 1) << (16-gap);
+        mask[0] = ((1 << (gap)) - 1) << (16 - gap);
         uint32_t tensorOffset = sBlockNum * 16 * (hnDivBlockNum - 1) * 16;
         uint32_t dstRepeatStride = 16 * sizeof(T) / 32;
         for (uint16_t n = 0; n < N; n++) {
-            AscendC::Duplicate(dstLocal[tensorOffset + n * S * hnDivAlign], static_cast<T>(0), mask, S, 1, dstRepeatStride);
+            AscendC::Duplicate(
+                dstLocal[tensorOffset + n * S * hnDivAlign], static_cast<T>(0), mask, S, 1, dstRepeatStride);
         }
         inQueueSrcVecOut.EnQue<T>(dstLocal);
         inQueueSrcVecIn.FreeTensor(srcLocal);
@@ -695,8 +699,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void TransposeFourth(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn,
-    uint32_t HIn, uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
+__global__ __aicore__ void TransposeFourth(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn, uint32_t hnDivBlockNumIn,
+    uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
 {
     AscendC::KernelTransposeFourth<T> op;
     op.Init(dstGm, srcGm, NIn, SIn, HIn, hnDivBlockNumIn, hBlockNumIn, sBlockNumIn, transposetypeIn);
@@ -715,27 +720,29 @@ struct TransposeFourthTestParams {
     TransposeType transposetypeIn;
 };
 
-class TransposeFourthTestsuite : public testing::Test,
-    public testing::WithParamInterface<TransposeFourthTestParams> {
+class TransposeFourthTestsuite : public testing::Test, public testing::WithParamInterface<TransposeFourthTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeFourthTestsuite,
-    ::testing::Values(TransposeFourthTestParams { 2, TransposeFourth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFourthTestParams { 2, TransposeFourth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFourthTestParams { 2, TransposeFourth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFourthTestParams { 2, TransposeFourth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFourthTestParams { 4, TransposeFourth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFourthTestParams { 4, TransposeFourth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFourthTestParams { 4, TransposeFourth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeFourthTestsuite,
+    ::testing::Values(
+        TransposeFourthTestParams{
+            2, TransposeFourth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFourthTestParams{
+            2, TransposeFourth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFourthTestParams{
+            2, TransposeFourth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFourthTestParams{
+            2, TransposeFourth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFourthTestParams{
+            4, TransposeFourth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFourthTestParams{
+            4, TransposeFourth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFourthTestParams{
+            4, TransposeFourth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N}));
 
 TEST_P(TransposeFourthTestsuite, TransposeFourthTestCase)
 {
@@ -743,21 +750,23 @@ TEST_P(TransposeFourthTestsuite, TransposeFourthTestCase)
     uint8_t srcGm[param.hBlockNumIn * param.sBlockNumIn * 16 * 16 * param.typeSize] = {0};
     uint8_t dstGm[param.NIn * param.sBlockNumIn * param.hnDivBlockNumIn * 16 * 16 * param.typeSize] = {0};
 
-    param.cal_func(dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn, param.transposetypeIn);
+    param.cal_func(
+        dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn,
+        param.transposetypeIn);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
 }
-
 
 // scene 5
 namespace AscendC {
 template <typename T>
 class KernelTransposeFifth {
 public:
-    __aicore__ inline KernelTransposeFifth() { }
+    __aicore__ inline KernelTransposeFifth() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
         uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
     {
         N = NIn;
@@ -796,8 +805,8 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
 
-        uint32_t srcOriShape[] = { 1, N, S, H / N };
-        uint32_t srcShape[] = { 1, N, static_cast<int32_t>(hnDivBlockNum), S / 16, 16, 16 };
+        uint32_t srcOriShape[] = {1, N, S, H / N};
+        uint32_t srcShape[] = {1, N, static_cast<int32_t>(hnDivBlockNum), S / 16, 16, 16};
         ShapeInfo srcShapeInfo(6, srcShape, 4, srcOriShape, DataFormat::NZ);
 
         uint32_t dstOriShape[] = {1, S, H};
@@ -813,7 +822,7 @@ private:
 
         uint64_t mask[2];
         mask[1] = 0;
-        mask[0] = ((1 << (gap)) - 1) << (16-gap);
+        mask[0] = ((1 << (gap)) - 1) << (16 - gap);
         uint32_t tensorOffset = (hBlockNum - 1) * 16;
         uint32_t dstRepeatStride = (hBlockNum * 16) * sizeof(T) / 32;
         AscendC::Duplicate(dstLocal[tensorOffset], static_cast<T>(0), mask, S, 1, dstRepeatStride);
@@ -841,8 +850,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void TransposeFifth(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn,
-    uint32_t HIn, uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
+__global__ __aicore__ void TransposeFifth(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn, uint32_t hnDivBlockNumIn,
+    uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
 {
     AscendC::KernelTransposeFifth<T> op;
     op.Init(dstGm, srcGm, NIn, SIn, HIn, hnDivBlockNumIn, hBlockNumIn, sBlockNumIn, transposetypeIn);
@@ -861,27 +871,29 @@ struct TransposeFifthTestParams {
     TransposeType transposetypeIn;
 };
 
-class TransposeFifthTestsuite : public testing::Test,
-    public testing::WithParamInterface<TransposeFifthTestParams> {
+class TransposeFifthTestsuite : public testing::Test, public testing::WithParamInterface<TransposeFifthTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeFifthTestsuite,
-    ::testing::Values(TransposeFifthTestParams { 2, TransposeFifth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFifthTestParams { 2, TransposeFifth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFifthTestParams { 2, TransposeFifth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFifthTestParams { 2, TransposeFifth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFifthTestParams { 4, TransposeFifth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFifthTestParams { 4, TransposeFifth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N },
-    TransposeFifthTestParams { 4, TransposeFifth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeFifthTestsuite,
+    ::testing::Values(
+        TransposeFifthTestParams{
+            2, TransposeFifth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFifthTestParams{
+            2, TransposeFifth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFifthTestParams{
+            2, TransposeFifth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFifthTestParams{
+            2, TransposeFifth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFifthTestParams{
+            4, TransposeFifth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFifthTestParams{
+            4, TransposeFifth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N},
+        TransposeFifthTestParams{
+            4, TransposeFifth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2ND_012_WITH_N}));
 
 TEST_P(TransposeFifthTestsuite, TransposeFifthTestCase)
 {
@@ -889,21 +901,23 @@ TEST_P(TransposeFifthTestsuite, TransposeFifthTestCase)
     uint8_t srcGm[param.NIn * param.sBlockNumIn * param.hnDivBlockNumIn * 16 * 16 * param.typeSize] = {0};
     uint8_t dstGm[param.hBlockNumIn * param.sBlockNumIn * 16 * 16 * param.typeSize] = {0};
 
-    param.cal_func(dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn, param.transposetypeIn);
+    param.cal_func(
+        dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn,
+        param.transposetypeIn);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
 }
-
 
 // scene 6
 namespace AscendC {
 template <typename T>
 class KernelTransposeSixth {
 public:
-    __aicore__ inline KernelTransposeSixth() { }
+    __aicore__ inline KernelTransposeSixth() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn,
         uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
     {
         N = NIn;
@@ -942,12 +956,12 @@ private:
         LocalTensor<T> srcLocal = inQueueSrcVecIn.DeQue<T>();
         LocalTensor<T> dstLocal = inQueueSrcVecOut.AllocTensor<T>();
 
-        uint32_t srcOriShape[] = { 1, N, S, H / N };
-        uint32_t srcShape[] = { 1, N, static_cast<int32_t>(hnDivBlockNum), S / 16, 16, 16 };
+        uint32_t srcOriShape[] = {1, N, S, H / N};
+        uint32_t srcShape[] = {1, N, static_cast<int32_t>(hnDivBlockNum), S / 16, 16, 16};
         ShapeInfo srcShapeInfo(6, srcShape, 4, srcOriShape, DataFormat::NZ);
 
         uint32_t dstOriShape[] = {1, S, H};
-        uint32_t dstShape[] = { 1, H / 16, S / 16, 16, 16 };
+        uint32_t dstShape[] = {1, H / 16, S / 16, 16, 16};
         ShapeInfo dstShapeInfo(5, dstShape, 3, dstOriShape, DataFormat::NZ);
 
         LocalTensor<T> stackBuffer;
@@ -959,7 +973,7 @@ private:
 
         uint64_t mask[2];
         mask[1] = 0;
-        mask[0] = ((1 << (gap)) - 1) << (16-gap);
+        mask[0] = ((1 << (gap)) - 1) << (16 - gap);
         uint32_t tensorOffset = sBlockNum * 16 * (hBlockNum - 1) * 16;
         uint32_t dstRepeatStride = 16 * sizeof(T) / 32;
         AscendC::Duplicate(dstLocal[tensorOffset], static_cast<T>(0), mask, S, 1, dstRepeatStride);
@@ -987,8 +1001,9 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void TransposeSixth(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t NIn, uint32_t SIn,
-    uint32_t HIn, uint32_t hnDivBlockNumIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
+__global__ __aicore__ void TransposeSixth(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t NIn, uint32_t SIn, uint32_t HIn, uint32_t hnDivBlockNumIn,
+    uint32_t hBlockNumIn, uint32_t sBlockNumIn, TransposeType transposetypeIn)
 {
     AscendC::KernelTransposeSixth<T> op;
     op.Init(dstGm, srcGm, NIn, SIn, HIn, hnDivBlockNumIn, hBlockNumIn, sBlockNumIn, transposetypeIn);
@@ -1007,27 +1022,29 @@ struct TransposeSixthTestParams {
     TransposeType transposetypeIn;
 };
 
-class TransposeSixthTestsuite : public testing::Test,
-    public testing::WithParamInterface<TransposeSixthTestParams> {
+class TransposeSixthTestsuite : public testing::Test, public testing::WithParamInterface<TransposeSixthTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeSixthTestsuite,
-    ::testing::Values(TransposeSixthTestParams { 2, TransposeSixth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    TransposeSixthTestParams { 2, TransposeSixth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    TransposeSixthTestParams { 2, TransposeSixth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    TransposeSixthTestParams { 2, TransposeSixth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    TransposeSixthTestParams { 4, TransposeSixth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    TransposeSixthTestParams { 4, TransposeSixth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N },
-    TransposeSixthTestParams { 4, TransposeSixth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeSixthTestsuite,
+    ::testing::Values(
+        TransposeSixthTestParams{
+            2, TransposeSixth<half>, 3, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        TransposeSixthTestParams{
+            2, TransposeSixth<half>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        TransposeSixthTestParams{
+            2, TransposeSixth<half>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        TransposeSixthTestParams{
+            2, TransposeSixth<half>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        TransposeSixthTestParams{
+            4, TransposeSixth<float>, 6, 32, 18, 1, 2, 2, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        TransposeSixthTestParams{
+            4, TransposeSixth<float>, 6, 16, 18, 1, 2, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N},
+        TransposeSixthTestParams{
+            4, TransposeSixth<float>, 2, 16, 40, 2, 3, 1, TransposeType::TRANSPOSE_NZ2NZ_012_WITHOUT_N}));
 
 TEST_P(TransposeSixthTestsuite, TransposeSixthTestCase)
 {
@@ -1035,7 +1052,9 @@ TEST_P(TransposeSixthTestsuite, TransposeSixthTestCase)
     uint8_t srcGm[param.NIn * param.sBlockNumIn * param.hnDivBlockNumIn * 16 * 16 * param.typeSize] = {0};
     uint8_t dstGm[param.hBlockNumIn * param.sBlockNumIn * 16 * 16 * param.typeSize] = {0};
 
-    param.cal_func(dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn, param.transposetypeIn);
+    param.cal_func(
+        dstGm, srcGm, param.NIn, param.SIn, param.HIn, param.hnDivBlockNumIn, param.hBlockNumIn, param.sBlockNumIn,
+        param.transposetypeIn);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
@@ -1046,9 +1065,11 @@ namespace AscendC {
 template <typename T>
 class KernelTransposeSeventh {
 public:
-    __aicore__ inline KernelTransposeSeventh() { }
+    __aicore__ inline KernelTransposeSeventh() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t widthIn, uint32_t heightIn, TransposeType transposetypeIn)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t widthIn, uint32_t heightIn,
+        TransposeType transposetypeIn)
     {
         width = widthIn;
         height = heightIn;
@@ -1117,7 +1138,8 @@ private:
 } // namespace AscendC
 
 template <typename T>
-__global__ __aicore__ void TransposeSeventh(__gm__ uint8_t *dstGm, __gm__ uint8_t *srcGm, uint32_t widthIn, uint32_t heightIn, TransposeType transposetypeIn)
+__global__ __aicore__ void TransposeSeventh(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t widthIn, uint32_t heightIn, TransposeType transposetypeIn)
 {
     AscendC::KernelTransposeSeventh<T> op;
     op.Init(dstGm, srcGm, widthIn, heightIn, transposetypeIn);
@@ -1132,27 +1154,22 @@ struct TransposeSeventhTestParams {
     TransposeType transposetypeIn;
 };
 
-class TransposeSeventhTestsuite : public testing::Test,
-    public testing::WithParamInterface<TransposeSeventhTestParams> {
+class TransposeSeventhTestsuite : public testing::Test, public testing::WithParamInterface<TransposeSeventhTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeSeventhTestsuite,
-    ::testing::Values(TransposeSeventhTestParams { 2, TransposeSeventh<half>, 32, 32, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    TransposeSeventhTestParams { 2, TransposeSeventh<half>, 16, 16, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    TransposeSeventhTestParams { 2, TransposeSeventh<half>, 16, 32, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    TransposeSeventhTestParams { 4, TransposeSeventh<float>, 16, 32, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    TransposeSeventhTestParams { 4, TransposeSeventh<float>, 16, 8, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    TransposeSeventhTestParams { 4, TransposeSeventh<float>, 32, 32, TransposeType::TRANSPOSE_ND2ND_ONLY },
-    TransposeSeventhTestParams { 4, TransposeSeventh<float>, 16, 16, TransposeType::TRANSPOSE_ND2ND_ONLY }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_CONFUSION_TRANSPOSE, TransposeSeventhTestsuite,
+    ::testing::Values(
+        TransposeSeventhTestParams{2, TransposeSeventh<half>, 32, 32, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        TransposeSeventhTestParams{2, TransposeSeventh<half>, 16, 16, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        TransposeSeventhTestParams{2, TransposeSeventh<half>, 16, 32, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        TransposeSeventhTestParams{4, TransposeSeventh<float>, 16, 32, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        TransposeSeventhTestParams{4, TransposeSeventh<float>, 16, 8, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        TransposeSeventhTestParams{4, TransposeSeventh<float>, 32, 32, TransposeType::TRANSPOSE_ND2ND_ONLY},
+        TransposeSeventhTestParams{4, TransposeSeventh<float>, 16, 16, TransposeType::TRANSPOSE_ND2ND_ONLY}));
 
 TEST_P(TransposeSeventhTestsuite, TransposeSeventhTestCase)
 {

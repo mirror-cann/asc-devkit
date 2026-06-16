@@ -23,10 +23,7 @@ using namespace mc2_ops_hccl;
 
 class ST_ALL_REDUCE_DPU_TEST : public ::testing::Test {
 protected:
-    void SetUp() override
-    {
-        ResetAlgEnvConfigInitState();
-    }
+    void SetUp() override { ResetAlgEnvConfigInitState(); }
     void TearDown() override
     {
         unsetenv("HCCL_OP_EXPANSION_MODE");
@@ -34,14 +31,13 @@ protected:
         unsetenv("HCCL_INDEPENDENT_OP");
         unsetenv("HCCL_ENABLE_OPEN_AICPU");
     }
-    static void SetUpTestCase()
-    {}
-    static void TearDownTestCase()
-    {}
+    static void SetUpTestCase() {}
+    static void TearDownTestCase() {}
 };
 
-void RunAllReduceDPUCase(const TopoMeta &topoInfo, const u64 dataCount,
-    const HcclDataType dataType, const u32 dataTypeSize, const HcclReduceOp reduceOp)
+void RunAllReduceDPUCase(
+    const TopoMeta& topoInfo, const u64 dataCount, const HcclDataType dataType, const u32 dataTypeSize,
+    const HcclReduceOp reduceOp)
 {
     // 仿真模型初始化
     SimWorld::Global()->Init(topoInfo, DevType::DEV_TYPE_950);
@@ -73,9 +69,9 @@ void RunAllReduceDPUCase(const TopoMeta &topoInfo, const u64 dataCount,
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
 
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            u64 sendBufSize = dataCount * dataTypeSize;  // 数据量转化为字节数
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+            u64 sendBufSize = dataCount * dataTypeSize; // 数据量转化为字节数
             u64 recvBufSize = dataCount * dataTypeSize;
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendBufSize, static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
@@ -113,7 +109,7 @@ TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_base_test)
     HcclReduceOp reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     RunAllReduceDPUCase(topoMeta, dataCount, dataType, dataTypeSize, reduceOp);
 }
- 
+
 TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_single_dataCount)
 {
     TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}}};
@@ -123,7 +119,7 @@ TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_single_dataCount)
     HcclReduceOp reduceOp = HcclReduceOp::HCCL_REDUCE_MAX;
     RunAllReduceDPUCase(topoMeta, dataCount, dataType, dataTypeSize, reduceOp);
 }
- 
+
 TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_odd_dataCount)
 {
     TopoMeta topoMeta{{{0, 1}, {0, 1}, {0, 1}}};
@@ -133,7 +129,7 @@ TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_odd_dataCount)
     HcclReduceOp reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     RunAllReduceDPUCase(topoMeta, dataCount, dataType, dataTypeSize, reduceOp);
 }
- 
+
 TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_even_dataCount)
 {
     TopoMeta topoMeta{{{0, 1, 2}, {0, 1, 2}, {0, 1, 2}}};
@@ -143,7 +139,7 @@ TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_even_dataCount)
     HcclReduceOp reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     RunAllReduceDPUCase(topoMeta, dataCount, dataType, dataTypeSize, reduceOp);
 }
- 
+
 TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_small_data)
 {
     TopoMeta topoMeta{{{0, 1, 2}, {8, 9, 10}}};
@@ -153,7 +149,7 @@ TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_small_data)
     HcclReduceOp reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     RunAllReduceDPUCase(topoMeta, dataCount, dataType, dataTypeSize, reduceOp);
 }
- 
+
 TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_mid_data)
 {
     TopoMeta topoMeta{{{0, 1, 2, 3, 4, 5, 6, 7}, {0, 1, 2, 3, 4, 5, 6, 7}}};
@@ -163,7 +159,7 @@ TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_mid_data)
     HcclReduceOp reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     RunAllReduceDPUCase(topoMeta, dataCount, dataType, dataTypeSize, reduceOp);
 }
- 
+
 TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_hcclbuff_add_1)
 {
     TopoMeta topoMeta{{{0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}, {0, 1, 2, 3}}};
@@ -183,7 +179,7 @@ TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_base_test_eight_server_sole_ran
     HcclReduceOp reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     RunAllReduceDPUCase(topoMeta, dataCount, dataType, dataTypeSize, reduceOp);
 }
- 
+
 TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_base_test_eight_server_sole_rank_5data)
 {
     TopoMeta topoMeta{{{0}, {2}, {3}, {1}, {2}, {6}, {5}, {7}}};
@@ -193,7 +189,7 @@ TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_base_test_eight_server_sole_ran
     HcclReduceOp reduceOp = HcclReduceOp::HCCL_REDUCE_MAX;
     RunAllReduceDPUCase(topoMeta, dataCount, dataType, dataTypeSize, reduceOp);
 }
- 
+
 TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_odd_dataCount_three_server_five_rank)
 {
     TopoMeta topoMeta{{{0, 1, 5, 6, 7}, {0, 1, 2, 4, 5}, {0, 1, 5, 6, 7}}};
@@ -203,10 +199,18 @@ TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_odd_dataCount_three_server_five
     HcclReduceOp reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
     RunAllReduceDPUCase(topoMeta, dataCount, dataType, dataTypeSize, reduceOp);
 }
- 
+
 TEST_F(ST_ALL_REDUCE_DPU_TEST, st_all_reduce_dpu_mid_data_8servers_8ranks)
 {
-    TopoMeta topoMeta{{{0, 1, 2, 3, 4, 5, 6, 7}, {0, 1, 2, 3, 4, 5, 6, 7}, {0, 1, 2, 3, 4, 5, 6, 7}, {0, 1, 2, 3, 4, 5, 6, 7}, {0, 1, 2, 3, 4, 5, 6, 7}, {0, 1, 2, 3, 4, 5, 6, 7}, {0, 1, 2, 3, 4, 5, 6, 7}, {0, 1, 2, 3, 4, 5, 6, 7}}};
+    TopoMeta topoMeta{
+        {{0, 1, 2, 3, 4, 5, 6, 7},
+         {0, 1, 2, 3, 4, 5, 6, 7},
+         {0, 1, 2, 3, 4, 5, 6, 7},
+         {0, 1, 2, 3, 4, 5, 6, 7},
+         {0, 1, 2, 3, 4, 5, 6, 7},
+         {0, 1, 2, 3, 4, 5, 6, 7},
+         {0, 1, 2, 3, 4, 5, 6, 7},
+         {0, 1, 2, 3, 4, 5, 6, 7}}};
     u64 dataCount = 1048575;
     HcclDataType dataType = HcclDataType::HCCL_DATA_TYPE_BFP16;
     u32 dataTypeSize = 2;

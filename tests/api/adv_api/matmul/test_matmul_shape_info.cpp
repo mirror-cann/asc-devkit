@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -21,19 +21,17 @@
 using namespace std;
 using namespace AscendC;
 
-
 namespace {
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
-MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulTensorInfoB)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-, MATMUL_IMPORT_MODULE_PRIVATE(MLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(KLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(NLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulUserDefineInfo)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+    MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulTensorInfoB),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(KLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(NLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulUserDefineInfo) {
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeInfo);
     MATMUL_ALLOW_USING_PRIVATE(MatmulTensorInfoB);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeTiling);
@@ -42,6 +40,7 @@ class MatmulImpl
     MATMUL_ALLOW_USING_PRIVATE(NLoop);
     MATMUL_ALLOW_USING_PRIVATE(MatmulUserDefineInfo);
     using SrcT = typename A_TYPE::T;
+
 public:
     using VAR_PARAMS =
         typename Impl::Detail::MatmulParams<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, GetMatmulMode(MM_CFG)>::PARAMS;
@@ -52,15 +51,12 @@ public:
     MATMUL_USE_MODULE(MatmulShapeTiling);
     MATMUL_USE_MODULE(MatmulShapeInfo);
     MATMUL_USE_MODULE(MatmulUserDefineInfo);
-    MatmulImpl() {
-        InitVar();
-    }
+    MatmulImpl() { InitVar(); }
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar() {
+    void InitVar()
+    {
         tiling.depthA1 = 2;
         tiling.depthB1 = 2;
         tiling.iterateOrder = 0;
@@ -90,8 +86,9 @@ public:
         MATMUL_MODULE(NLoop)->Init(MATMUL_MODULE(MatmulShapeInfo)->GetSingleCoreN());
     }
 
-    void SetInitAParams(int32_t stepM, int32_t stepKa, int32_t baseM, int32_t baseK, int32_t depth,
-        bool isIntraBlock = false) {
+    void SetInitAParams(
+        int32_t stepM, int32_t stepKa, int32_t baseM, int32_t baseK, int32_t depth, bool isIntraBlock = false)
+    {
         tiling.stepM = stepM;
         tiling.stepKa = stepKa;
         tiling.baseM = baseM;
@@ -118,7 +115,9 @@ public:
         batchA_ = batch;
     }
 
-    void SetInitBParams(int32_t stepN, int32_t stepKb, int32_t baseN, int32_t baseK, int32_t depth, bool isIntraBlock = false) {
+    void SetInitBParams(
+        int32_t stepN, int32_t stepKb, int32_t baseN, int32_t baseK, int32_t depth, bool isIntraBlock = false)
+    {
         tiling.stepN = stepN;
         tiling.stepKb = stepKb;
         tiling.baseN = baseN;
@@ -156,25 +155,15 @@ public:
         }
     }
 
-    void SetSelfDefineData(uint64_t dataPtr) {
-        MATMUL_MODULE(MatmulUserDefineInfo)->SetSelfDefineData(dataPtr);
-    }
+    void SetSelfDefineData(uint64_t dataPtr) { MATMUL_MODULE(MatmulUserDefineInfo)->SetSelfDefineData(dataPtr); }
 
-    void SetUserDefineInfo(uint64_t tilingPtr) {
-        MATMUL_MODULE(MatmulUserDefineInfo)->SetUserDefineInfo(tilingPtr);
-    }
+    void SetUserDefineInfo(uint64_t tilingPtr) { MATMUL_MODULE(MatmulUserDefineInfo)->SetUserDefineInfo(tilingPtr); }
 
-    uint32_t GetMIter() {
-        return MATMUL_MODULE(MLoop)->GetTotalIter();
-    }
+    uint32_t GetMIter() { return MATMUL_MODULE(MLoop)->GetTotalIter(); }
 
-    uint32_t GetNIter() {
-        return MATMUL_MODULE(NLoop)->GetTotalIter();
-    }
+    uint32_t GetNIter() { return MATMUL_MODULE(NLoop)->GetTotalIter(); }
 
-    uint32_t GetKIter() {
-        return MATMUL_MODULE(KLoop)->GetTotalIter();
-    }
+    uint32_t GetKIter() { return MATMUL_MODULE(KLoop)->GetTotalIter(); }
 
 private:
     TCubeTiling tiling;
@@ -213,7 +202,7 @@ private:
 
     IntraBlock intraBlockMatmul;
 };
-}
+} // namespace
 
 class TestMatmulShapeInfo : public testing::Test {
 protected:
@@ -244,5 +233,4 @@ TEST_F(TestMatmulShapeInfo, test_get_singleCore_params)
     EXPECT_EQ(mm.GetOrgKc(), 32);
     EXPECT_EQ(mm.GetOrgN(), 32);
     EXPECT_EQ(mm.GetOrgM(), 32);
-
 }

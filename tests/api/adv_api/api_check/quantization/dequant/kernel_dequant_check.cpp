@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -20,12 +19,8 @@ class DequantAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(DequantAPICheck, DequantAPICheckTestSuccess)
@@ -59,7 +54,8 @@ TEST_F(DequantAPICheck, DequantAPICheckTestSuccess)
     uint32_t calCount = 8;
     // AscendC::DeQuantMode mode = AscendC::DeQuantMode::DEQUANT_WITH_SINGLE_ROW;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(AscendDequant, (float, float, true, AscendC::DeQuantMode::DEQUANT_WITH_SINGLE_ROW),
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        AscendDequant, (float, float, true, AscendC::DeQuantMode::DEQUANT_WITH_SINGLE_ROW),
         (dstTensor, srcTensor, deqScale, sharedTmpBuffer, params, calCount));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
@@ -90,7 +86,8 @@ TEST_F(DequantAPICheck, DequantAPICheckTestSubFailure)
     uint32_t calCount = 8;
     // AscendC::DeQuantMode mode = AscendC::DeQuantMode::DEQUANT_WITH_SINGLE_ROW;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(AscendDequant, (uint8_t, uint8_t, true, AscendC::DeQuantMode::DEQUANT_WITH_SINGLE_ROW),
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        AscendDequant, (uint8_t, uint8_t, true, AscendC::DeQuantMode::DEQUANT_WITH_SINGLE_ROW),
         (dstTensor[1], srcTensor[1], dstTensor[1], sharedTmpBuffer, params, calCount));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 8);
 }
@@ -109,7 +106,6 @@ TEST_F(DequantAPICheck, DequantAPICheckTestFailure)
     AscendC::LocalTensor<int32_t> srcTensor = m_queSrc.AllocTensor<int32_t>();
     srcTensor.SetSize(32);
 
-
     AscendC::TBuf<AscendC::TPosition::VECCALC> tmpBuf;
     m_pipe.InitBuffer(tmpBuf, 32 * sizeof(uint8_t));
     AscendC::LocalTensor<uint8_t> sharedTmpBuffer = tmpBuf.Get<uint8_t>();
@@ -122,7 +118,8 @@ TEST_F(DequantAPICheck, DequantAPICheckTestFailure)
     uint32_t calCount = 8;
     // AscendC::DeQuantMode mode = AscendC::DeQuantMode::DEQUANT_WITH_SINGLE_ROW;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(AscendDequant, (uint8_t, uint8_t, true, AscendC::DeQuantMode::DEQUANT_WITH_SINGLE_ROW),
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        AscendDequant, (uint8_t, uint8_t, true, AscendC::DeQuantMode::DEQUANT_WITH_SINGLE_ROW),
         (dstTensor[1], srcTensor[1], dstTensor[1], sharedTmpBuffer, params, calCount));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 13);
 }

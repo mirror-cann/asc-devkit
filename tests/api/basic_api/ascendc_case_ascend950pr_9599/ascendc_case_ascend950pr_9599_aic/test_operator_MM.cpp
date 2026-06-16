@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "test_utils.h"
@@ -17,7 +17,8 @@ constexpr AscendC::FixpipeConfig CFG_NZ_UB = {AscendC::CO2Layout::NZ, true};
 constexpr AscendC::FixpipeConfig CFG_ROW_MAJOR_UB = {AscendC::CO2Layout::ROW_MAJOR, true};
 
 template <typename DstT, typename SrcT>
-constexpr QuantMode_t GetQuantMode() {
+constexpr QuantMode_t GetQuantMode()
+{
     if constexpr (std::is_same_v<SrcT, int32_t> && std::is_same_v<DstT, half>) {
         return QuantMode_t::DEQF16;
     } else if constexpr (std::is_same_v<SrcT, int32_t> && std::is_same_v<DstT, bfloat16_t>) {
@@ -43,9 +44,10 @@ constexpr QuantMode_t GetQuantMode() {
 }
 
 template <typename DstT, typename Src0T, typename Src1T, typename L1OutT, typename BiasT>
-void MainCpuCmpMmadBiasDemo(__gm__ uint8_t* __restrict__ featureGm, __gm__ uint8_t* __restrict__ weightGm,
-    __gm__ uint8_t* __restrict__ biasGm, __gm__ uint8_t* __restrict__ resultGm, int32_t featureDataSize,
-    int32_t weightDataSize, int32_t biasDataSize, int32_t outputDataSize, bool isBias)
+void MainCpuCmpMmadBiasDemo(
+    __gm__ uint8_t* __restrict__ featureGm, __gm__ uint8_t* __restrict__ weightGm, __gm__ uint8_t* __restrict__ biasGm,
+    __gm__ uint8_t* __restrict__ resultGm, int32_t featureDataSize, int32_t weightDataSize, int32_t biasDataSize,
+    int32_t outputDataSize, bool isBias)
 {
     AscendC::TPipe tpipe;
     AscendC::GlobalTensor<Src0T> featureGlobal;
@@ -64,7 +66,6 @@ void MainCpuCmpMmadBiasDemo(__gm__ uint8_t* __restrict__ featureGm, __gm__ uint8
     LOCAL_TENSOR_REGISTER(weight_l1, Src1T, B1, 0, weightDataSize)
     LoadData(feature_l1, featureGlobal, {1, 0, 0, 0, 0, 0, 0, 0});
     LoadData(weight_l1, weightGlobal, {1, 0, 0, 0, 0, 0, 0, 0});
-
 
     // feature map: l1 ->l0a load2dv2
     LOCAL_TENSOR_REGISTER(feature_l0a, Src0T, A2, 0, featureDataSize)
@@ -95,7 +96,8 @@ void MainCpuCmpMmadBiasDemo(__gm__ uint8_t* __restrict__ featureGm, __gm__ uint8
     uint16_t cburstNum = mmad_params.n / AscendC::BLOCK_CUBE;
     uint16_t burstLen = mmad_params.m * AscendC::BLOCK_CUBE * sizeof(L1OutT) / AscendC::ONE_BLK_SIZE;
     // in 950 l0c to ub nz
-    AscendC::FixpipeParamsArch3510<AscendC::CO2Layout::NZ> fixpipeParams(mmad_params.n, mmad_params.m, mmad_params.m, mmad_params.m * AscendC::BLOCK_CUBE);
+    AscendC::FixpipeParamsArch3510<AscendC::CO2Layout::NZ> fixpipeParams(
+        mmad_params.n, mmad_params.m, mmad_params.m, mmad_params.m * AscendC::BLOCK_CUBE);
     fixpipeParams.reluEn = true;
     fixpipeParams.quantPre = GetQuantMode<DstT, L1OutT>();
     AscendC::Fixpipe<DstT, L1OutT, CFG_NZ_UB>(output_local, l0c_out, fixpipeParams);
@@ -105,7 +107,8 @@ void MainCpuCmpMmadBiasDemo(__gm__ uint8_t* __restrict__ featureGm, __gm__ uint8
     AscendC::Fixpipe<DstT, L1OutT, AscendC::CFG_NZ>(output_local_l1, l0c_out, fixpipeParams);
 
     // in 950 l0c to ub row_major
-    AscendC::FixpipeParamsArch3510<AscendC::CO2Layout::ROW_MAJOR> fixpipeParams2(mmad_params.n, mmad_params.m, mmad_params.m, mmad_params.n);
+    AscendC::FixpipeParamsArch3510<AscendC::CO2Layout::ROW_MAJOR> fixpipeParams2(
+        mmad_params.n, mmad_params.m, mmad_params.m, mmad_params.n);
     fixpipeParams2.dualDstCtl = 0b01;
     fixpipeParams2.quantPre = GetQuantMode<DstT, L1OutT>();
     if (fixpipeParams2.quantPre == QuantMode_t::NoQuant) {
@@ -120,33 +123,27 @@ void MainCpuCmpMmadBiasDemo(__gm__ uint8_t* __restrict__ featureGm, __gm__ uint8
 
 class TEST_MMAD_BIAS : public testing::Test {
 protected:
-    void SetUp()
-    {
-        g_coreType = AscendC::AIC_TYPE;
-    }
-    void TearDown()
-    {
-        g_coreType = AscendC::MIX_TYPE;
-    }
+    void SetUp() { g_coreType = AscendC::AIC_TYPE; }
+    void TearDown() { g_coreType = AscendC::MIX_TYPE; }
 };
 
-#define VEC_MMAD_BIAS_TESTCASE(testMmadBias, biasOp, dstType, src0Type, src1Type, L1OutT, biasT1)             \
-    TEST_F(testMmadBias, MMAD_Case_Bias_##biasOp##_##dstType##_##src0Type##_##src1Type##_##L1OutT##_##biasT1) \
-    {                                                                                                               \
+#define VEC_MMAD_BIAS_TESTCASE(testMmadBias, biasOp, dstType, src0Type, src1Type, L1OutT, biasT1)                 \
+    TEST_F(testMmadBias, MMAD_Case_Bias_##biasOp##_##dstType##_##src0Type##_##src1Type##_##L1OutT##_##biasT1)     \
+    {                                                                                                             \
         const int32_t featureDataSize = 3584;                                                                     \
         const int32_t weightDataSize = 4096;                                                                      \
         const int32_t biasDataSize = 128;                                                                         \
         const int32_t outputDataSize = 14336;                                                                     \
-        uint8_t featureGlobal[featureDataSize * sizeof(src0Type)] = {0};                                        \
-        uint8_t weightGlobal[weightDataSize * sizeof(src1Type)] = {0};                                          \
-        uint8_t biasGlobal[biasDataSize * sizeof(biasT1)] = {0};                                                 \
-        uint8_t outputGlobal[outputDataSize * sizeof(L1OutT)] = {0};                                            \
-        MainCpuCmpMmadBiasDemo<dstType, src0Type, src1Type, L1OutT, biasT1>(featureGlobal, weightGlobal, \
-            biasGlobal, outputGlobal, featureDataSize, weightDataSize, biasDataSize, outputDataSize,      \
-            biasOp);                                                                                                \
-        for (int32_t i = 0; i < outputDataSize * sizeof(dstType); i++) {                                         \
-            EXPECT_EQ(outputGlobal[i], 0x00);                                                                      \
-        }                                                                                                           \
+        uint8_t featureGlobal[featureDataSize * sizeof(src0Type)] = {0};                                          \
+        uint8_t weightGlobal[weightDataSize * sizeof(src1Type)] = {0};                                            \
+        uint8_t biasGlobal[biasDataSize * sizeof(biasT1)] = {0};                                                  \
+        uint8_t outputGlobal[outputDataSize * sizeof(L1OutT)] = {0};                                              \
+        MainCpuCmpMmadBiasDemo<dstType, src0Type, src1Type, L1OutT, biasT1>(                                      \
+            featureGlobal, weightGlobal, biasGlobal, outputGlobal, featureDataSize, weightDataSize, biasDataSize, \
+            outputDataSize, biasOp);                                                                              \
+        for (int32_t i = 0; i < outputDataSize * sizeof(dstType); i++) {                                          \
+            EXPECT_EQ(outputGlobal[i], 0x00);                                                                     \
+        }                                                                                                         \
     }
 VEC_MMAD_BIAS_TESTCASE(TEST_MMAD_BIAS, false, int32_t, int8_t, int8_t, int32_t, int32_t);
 VEC_MMAD_BIAS_TESTCASE(TEST_MMAD_BIAS, false, half, int8_t, int8_t, int32_t, int32_t);

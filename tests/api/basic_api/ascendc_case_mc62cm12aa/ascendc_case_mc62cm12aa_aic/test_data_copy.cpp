@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 // #include "api_check/kernel_cpu_check.h"
@@ -22,17 +22,17 @@ struct TestDataCopyParams {
 
 class TestDataCopySuite : public testing::Test, public testing::WithParamInterface<TestDataCopyParams> {
 protected:
-    void SetUp() {
+    void SetUp()
+    {
         SetGCoreType(1);
         BufIdTracker::GetInstance().Reset();
     }
-    void TearDown() {
-        SetGCoreType(0);
-    }
+    void TearDown() { SetGCoreType(0); }
 };
 
-template<typename T>
-void main_data_copy_kernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
+template <typename T>
+void main_data_copy_kernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -63,8 +63,9 @@ void main_data_copy_kernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* _
     tque.FreeTensor(outputLocal);
 }
 
-template<typename T>
-void main_data_copy_dn2nz_kernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
+template <typename T>
+void main_data_copy_dn2nz_kernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -92,29 +93,28 @@ void main_data_copy_dn2nz_kernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint
     DataCopy(inputLocal, srcGlobal, intriParams1);
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_DATA_COPY_AIC, TestDataCopySuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_DATA_COPY_AIC, TestDataCopySuite,
     ::testing::Values(
-    TestDataCopyParams { 64, 4, main_data_copy_kernel<int32_t> },
-    TestDataCopyParams { 64, 4, main_data_copy_kernel<uint32_t> },
-    TestDataCopyParams { 64, 2, main_data_copy_kernel<int16_t> },
-    TestDataCopyParams { 64, 2, main_data_copy_kernel<uint16_t> },
-    TestDataCopyParams { 64, 4, main_data_copy_kernel<float> },
-    TestDataCopyParams { 64, 2, main_data_copy_kernel<half> },
-    TestDataCopyParams { 64, 1, main_data_copy_kernel<int8_t> },
-    TestDataCopyParams { 64, 1, main_data_copy_kernel<uint8_t> },
-    TestDataCopyParams { 64, 4, main_data_copy_dn2nz_kernel<float> },
-    TestDataCopyParams { 64, 2, main_data_copy_dn2nz_kernel<half> },
-    TestDataCopyParams { 64, 1, main_data_copy_dn2nz_kernel<int8_t> },
-    TestDataCopyParams { 64, 1, main_data_copy_dn2nz_kernel<bfloat16_t> },
-    TestDataCopyParams { 64, 1, main_data_copy_dn2nz_kernel<uint8_t> },
-    TestDataCopyParams { 64, 1, main_data_copy_dn2nz_kernel<fp8_e4m3fn_t> },
-    TestDataCopyParams { 64, 1, main_data_copy_dn2nz_kernel<fp8_e5m2_t> },
-    TestDataCopyParams { 64, 1, main_data_copy_dn2nz_kernel<hifloat8_t> },
-    TestDataCopyParams { 64, 1, main_data_copy_dn2nz_kernel<int16_t> },
-    TestDataCopyParams { 64, 1, main_data_copy_dn2nz_kernel<uint16_t> },
-    TestDataCopyParams { 64, 1, main_data_copy_dn2nz_kernel<int32_t> },
-    TestDataCopyParams { 64, 1, main_data_copy_dn2nz_kernel<uint32_t> }
-    ));
+        TestDataCopyParams{64, 4, main_data_copy_kernel<int32_t>},
+        TestDataCopyParams{64, 4, main_data_copy_kernel<uint32_t>},
+        TestDataCopyParams{64, 2, main_data_copy_kernel<int16_t>},
+        TestDataCopyParams{64, 2, main_data_copy_kernel<uint16_t>},
+        TestDataCopyParams{64, 4, main_data_copy_kernel<float>}, TestDataCopyParams{64, 2, main_data_copy_kernel<half>},
+        TestDataCopyParams{64, 1, main_data_copy_kernel<int8_t>},
+        TestDataCopyParams{64, 1, main_data_copy_kernel<uint8_t>},
+        TestDataCopyParams{64, 4, main_data_copy_dn2nz_kernel<float>},
+        TestDataCopyParams{64, 2, main_data_copy_dn2nz_kernel<half>},
+        TestDataCopyParams{64, 1, main_data_copy_dn2nz_kernel<int8_t>},
+        TestDataCopyParams{64, 1, main_data_copy_dn2nz_kernel<bfloat16_t>},
+        TestDataCopyParams{64, 1, main_data_copy_dn2nz_kernel<uint8_t>},
+        TestDataCopyParams{64, 1, main_data_copy_dn2nz_kernel<fp8_e4m3fn_t>},
+        TestDataCopyParams{64, 1, main_data_copy_dn2nz_kernel<fp8_e5m2_t>},
+        TestDataCopyParams{64, 1, main_data_copy_dn2nz_kernel<hifloat8_t>},
+        TestDataCopyParams{64, 1, main_data_copy_dn2nz_kernel<int16_t>},
+        TestDataCopyParams{64, 1, main_data_copy_dn2nz_kernel<uint16_t>},
+        TestDataCopyParams{64, 1, main_data_copy_dn2nz_kernel<int32_t>},
+        TestDataCopyParams{64, 1, main_data_copy_dn2nz_kernel<uint32_t>}));
 
 TEST_P(TestDataCopySuite, TestDataCopyPadCases)
 {
@@ -126,7 +126,8 @@ TEST_P(TestDataCopySuite, TestDataCopyPadCases)
 
 namespace AscendC {
 // T, U for gm->l1 nd2nz
-template <typename T> class KernelDataCopyGm2UBNd2Nz {
+template <typename T>
+class KernelDataCopyGm2UBNd2Nz {
 public:
     __aicore__ inline KernelDataCopyGm2UBNd2Nz() {}
     __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, Nd2NzParams& intriParamsIn)
@@ -134,12 +135,12 @@ public:
         intriParams = intriParamsIn;
         srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
-        pipe.InitBuffer(inQueueSrcUB, 1,
-            (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
-        pipe.InitBuffer(inQueueSrcL1, 1,
-            (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
-        pipe.InitBuffer(inQueueSrcVecOut, 1,
-            (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
+        pipe.InitBuffer(
+            inQueueSrcUB, 1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
+        pipe.InitBuffer(
+            inQueueSrcL1, 1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
+        pipe.InitBuffer(
+            inQueueSrcVecOut, 1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
     }
     __aicore__ inline void Process()
     {
@@ -147,38 +148,37 @@ public:
         Compute();
         CopyOut();
     }
- 
+
 private:
     __aicore__ inline void CopyIn()
     {
         LocalTensor<T> srcLocal = inQueueSrcUB.AllocTensor<T>();
         LocalTensor<T> srcLocalL1 = inQueueSrcL1.AllocTensor<T>();
- 
+
         DataCopy(srcLocal, srcGlobal, intriParams);
- 
+
         DataCopyParams params(1, 128, 0, 0);
         DataCopy(srcLocalL1, srcLocal, params);
         inQueueSrcUB.EnQue(srcLocal);
     }
-    __aicore__ inline void Compute()
-    {
-        ;
-    }
+    __aicore__ inline void Compute() { ; }
     __aicore__ inline void CopyOut()
     {
         LocalTensor<T> dstLocal = inQueueSrcUB.DeQue<T>();
         LocalTensor<T> dstLocalVecOut = inQueueSrcVecOut.AllocTensor<T>();
-        DataCopy(dstLocalVecOut, dstLocal,
-            { 1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32) / 32, 0, 0 });
+        DataCopy(
+            dstLocalVecOut, dstLocal,
+            {1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32) / 32, 0, 0});
         inQueueSrcVecOut.EnQue(dstLocalVecOut);
         inQueueSrcVecOut.DeQue<T>();
-        DataCopy(dstGlobal, dstLocalVecOut,
-            { 1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32) / 32, 0, 0 });
- 
+        DataCopy(
+            dstGlobal, dstLocalVecOut,
+            {1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32) / 32, 0, 0});
+
         inQueueSrcVecOut.FreeTensor(dstLocalVecOut);
         inQueueSrcUB.FreeTensor(dstLocal);
     }
- 
+
 private:
     TPipe pipe;
     TQue<TPosition::VECIN, 1> inQueueSrcUB;
@@ -189,54 +189,56 @@ private:
     Nd2NzParams intriParams;
 };
 } // namespace AscendC
- 
+
 template <typename T>
-__global__ __aicore__ void MainDataCopyGm2UBNd2Nz(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-    Nd2NzParams& intriParams)
+__global__ __aicore__ void MainDataCopyGm2UBNd2Nz(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, Nd2NzParams& intriParams)
 {
     KernelDataCopyGm2UBNd2Nz<T> op;
     op.Init(dstGm, srcGm, intriParams);
     op.Process();
 }
- 
+
 struct DataCopyGm2UBNd2NzTestParams {
     int32_t typeSize;
     void (*cal_func)(uint8_t*, uint8_t*, Nd2NzParams&);
     Nd2NzParams intriParams;
 };
- 
+
 class DataCopyGm2UBNd2NzTestsuite : public testing::Test,
-    public testing::WithParamInterface<DataCopyGm2UBNd2NzTestParams> {
+                                    public testing::WithParamInterface<DataCopyGm2UBNd2NzTestParams> {
 protected:
-    void SetUp() {
+    void SetUp()
+    {
         SetGCoreType(2);
         BufIdTracker::GetInstance().Reset();
     }
-    void TearDown() {
-        SetGCoreType(1);
-    }
+    void TearDown() { SetGCoreType(1); }
 };
- 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DATACOPYGM2UBND2NZ, DataCopyGm2UBNd2NzTestsuite,
-    ::testing::Values(DataCopyGm2UBNd2NzTestParams { 2, MainDataCopyGm2UBNd2Nz<half>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2UBNd2NzTestParams { 4, MainDataCopyGm2UBNd2Nz<float>, { 2, 2, 13, 48, 16, 11, 2, 40 } }));
- 
+
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DATACOPYGM2UBND2NZ, DataCopyGm2UBNd2NzTestsuite,
+    ::testing::Values(
+        DataCopyGm2UBNd2NzTestParams{2, MainDataCopyGm2UBNd2Nz<half>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2UBNd2NzTestParams{4, MainDataCopyGm2UBNd2Nz<float>, {2, 2, 13, 48, 16, 11, 2, 40}}));
+
 TEST_P(DataCopyGm2UBNd2NzTestsuite, DataCopyGm2UBNd2NzTestsuiteOpTestCase)
 {
     auto param = GetParam();
     Nd2NzParams intriParams = param.intriParams;
     uint8_t srcGm[intriParams.ndNum * intriParams.srcNdMatrixStride * param.typeSize] = {0};
-    uint8_t dstGm[((intriParams.dValue * param.typeSize -1 ) / 32 + 1) * intriParams.dstNzC0Stride * 32] = {0};
- 
+    uint8_t dstGm[((intriParams.dValue * param.typeSize - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32] = {0};
+
     param.cal_func(dstGm, srcGm, intriParams);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }
 }
- 
+
 namespace AscendC {
 // T, U for gm->l1 nd2nz
-template <typename T> class KernelDataCopyGm2L1 {
+template <typename T>
+class KernelDataCopyGm2L1 {
 public:
     __aicore__ inline KernelDataCopyGm2L1() {}
     __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, Nd2NzParams& intriParamsIn)
@@ -244,8 +246,8 @@ public:
         intriParams = intriParamsIn;
         srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
-        pipe.InitBuffer(inQueueSrcL1, 1,
-            (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
+        pipe.InitBuffer(
+            inQueueSrcL1, 1, (((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32));
     }
     __aicore__ inline void Process()
     {
@@ -253,12 +255,12 @@ public:
         DataCopyParams params(1, 128, 0, 0);
         DataCopyPadParams padParams;
         DataCopyPad(srcLocal, srcGlobal, params, padParams);
- 
+
         DataCopyExtParams params2(1, 128, 0, 0, 0);
         DataCopyPadExtParams<T> padParams2;
         DataCopyPad(srcLocal, srcGlobal, params2, padParams2);
     }
- 
+
 private:
     TPipe pipe;
     TQue<TPosition::A1, 1> inQueueSrcL1;
@@ -267,48 +269,46 @@ private:
     Nd2NzParams intriParams;
 };
 } // namespace AscendC
- 
+
 template <typename T>
-__global__ __aicore__ void MainDataCopyGm2L1(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-    Nd2NzParams& intriParams)
+__global__ __aicore__ void MainDataCopyGm2L1(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, Nd2NzParams& intriParams)
 {
     KernelDataCopyGm2L1<T> op;
     op.Init(dstGm, srcGm, intriParams);
     op.Process();
 }
- 
+
 struct DataCopyGm2L1TestParams {
     int32_t typeSize;
     void (*cal_func)(uint8_t*, uint8_t*, Nd2NzParams&);
     Nd2NzParams intriParams;
 };
- 
-class DataCopyGm2L1Testsuite : public testing::Test,
-    public testing::WithParamInterface<DataCopyGm2L1TestParams> {
+
+class DataCopyGm2L1Testsuite : public testing::Test, public testing::WithParamInterface<DataCopyGm2L1TestParams> {
 protected:
-    void SetUp() {
+    void SetUp()
+    {
         SetGCoreType(1);
         BufIdTracker::GetInstance().Reset();
     }
-    void TearDown() {
-        SetGCoreType(1);
-    }
+    void TearDown() { SetGCoreType(1); }
 };
- 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DATACOPYGM2L1, DataCopyGm2L1Testsuite,
-    ::testing::Values(DataCopyGm2L1TestParams { 2, MainDataCopyGm2L1<half>, { 2, 2, 13, 48, 16, 11, 2, 48 } },
-    DataCopyGm2L1TestParams { 4, MainDataCopyGm2L1<float>, { 2, 2, 13, 48, 16, 11, 2, 40 } },
-    DataCopyGm2L1TestParams { 1, MainDataCopyGm2L1<fp8_e5m2_t>, { 2, 2, 13, 96, 32, 11, 2, 96 } },
-    DataCopyGm2L1TestParams { 1, MainDataCopyGm2L1<fp8_e4m3fn_t>, { 2, 2, 13, 96, 32, 11, 2, 96 } }
-    ));
- 
+
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DATACOPYGM2L1, DataCopyGm2L1Testsuite,
+    ::testing::Values(
+        DataCopyGm2L1TestParams{2, MainDataCopyGm2L1<half>, {2, 2, 13, 48, 16, 11, 2, 48}},
+        DataCopyGm2L1TestParams{4, MainDataCopyGm2L1<float>, {2, 2, 13, 48, 16, 11, 2, 40}},
+        DataCopyGm2L1TestParams{1, MainDataCopyGm2L1<fp8_e5m2_t>, {2, 2, 13, 96, 32, 11, 2, 96}},
+        DataCopyGm2L1TestParams{1, MainDataCopyGm2L1<fp8_e4m3fn_t>, {2, 2, 13, 96, 32, 11, 2, 96}}));
+
 TEST_P(DataCopyGm2L1Testsuite, DataCopyGm2L1TestsuiteOpTestCase)
 {
     auto param = GetParam();
     Nd2NzParams intriParams = param.intriParams;
     uint8_t srcGm[intriParams.ndNum * intriParams.srcNdMatrixStride * param.typeSize] = {0};
-    uint8_t dstGm[((intriParams.dValue * param.typeSize -1 ) / 32 + 1) * intriParams.dstNzC0Stride * 32] = {0};
- 
+    uint8_t dstGm[((intriParams.dValue * param.typeSize - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32] = {0};
+
     param.cal_func(dstGm, srcGm, intriParams);
     for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0x00);

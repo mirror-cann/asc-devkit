@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -14,16 +14,17 @@
 #include "kernel_operator.h"
 
 namespace AscendC {
-template <typename T, typename U> class MulcastTest {
+template <typename T, typename U>
+class MulcastTest {
 public:
     __aicore__ inline MulcastTest() {}
-    __aicore__ inline void Init(__gm__ uint8_t *dstGm, __gm__ uint8_t *src0Gm, __gm__ uint8_t *src1Gm,
-        const uint32_t calCount)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, const uint32_t calCount)
     {
         mElementCount = calCount;
-        mSrc0Global.SetGlobalBuffer((__gm__ U *)src0Gm);
-        mSrc1Global.SetGlobalBuffer((__gm__ U *)src1Gm);
-        mDstGlobal.SetGlobalBuffer((__gm__ T *)dstGm);
+        mSrc0Global.SetGlobalBuffer((__gm__ U*)src0Gm);
+        mSrc1Global.SetGlobalBuffer((__gm__ U*)src1Gm);
+        mDstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
 
         mPipe.InitBuffer(mQueInSrc0, 1, mElementCount * sizeof(U));
         mPipe.InitBuffer(mQueInSrc1, 1, mElementCount * sizeof(U));
@@ -92,24 +93,18 @@ __global__ __aicore__ void TestMulcast(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR sr
 
 struct MulcastParams {
     uint32_t calCount;
-    void (*cal_func)(uint8_t *, uint8_t *, uint8_t *, uint32_t);
+    void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint32_t);
 };
 
 class MulcastTestsuite : public testing::Test, public testing::WithParamInterface<MulcastParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_MULCAST, MulcastTestsuite,
-    ::testing::Values(MulcastParams{ 128, TestMulcast<int8_t, half> },
-    MulcastParams{ 128, TestMulcast<uint8_t, half> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_MULCAST, MulcastTestsuite,
+    ::testing::Values(MulcastParams{128, TestMulcast<int8_t, half>}, MulcastParams{128, TestMulcast<uint8_t, half>}));
 
 TEST_P(MulcastTestsuite, TestMulcast)
 {

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -14,23 +14,24 @@
 
 using namespace AscendC;
 
-template <int size = 0> struct GetSinAlgo {
+template <int size = 0>
+struct GetSinAlgo {
     static constexpr AscendC::SinAlgo value = AscendC::SinAlgo::POLYNOMIAL_APPROXIMATION;
 };
 
-template <> struct GetSinAlgo<1> {
+template <>
+struct GetSinAlgo<1> {
     static constexpr AscendC::SinAlgo value = AscendC::SinAlgo::RADIAN_REDUCTION;
 };
 
 template <typename srcType, uint32_t calCount, uint32_t dataSize, uint32_t apiMode, uint32_t algoMode = 0>
 class KernelSin {
 public:
-    __aicore__ inline KernelSin()
-    {}
+    __aicore__ inline KernelSin() {}
     __aicore__ inline void Init(GM_ADDR src_gm, GM_ADDR dst_gm)
     {
-        src_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(src_gm), dataSize);
-        dst_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(dst_gm), dataSize);
+        src_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(src_gm), dataSize);
+        dst_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(dst_gm), dataSize);
 
         pipe.InitBuffer(inQueueX, 1, dataSize * sizeof(srcType));
         pipe.InitBuffer(outQueue, 1, dataSize * sizeof(srcType));
@@ -64,7 +65,7 @@ private:
         uint32_t count = (uint32_t)calCount;
 
         constexpr AscendC::SinAlgo algo = GetSinAlgo<algoMode>::value;
-        static constexpr AscendC::SinConfig config = { algo };
+        static constexpr AscendC::SinConfig config = {algo};
 
         if constexpr (apiMode == 0) {
             Sin<srcType, false, config>(dstLocal, srcLocal);
@@ -113,36 +114,29 @@ struct SinTestParams {
 
 class AdvanceSinTestSuite : public testing::TestWithParam<SinTestParams> {
 protected:
-void SetUp()
-{
-    AscendC::SetGCoreType(2);
-}
-void TearDown()
-{
-    AscendC::SetGCoreType(0);
-}
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ADVANCE_API_SIN, AdvanceSinTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ADVANCE_API_SIN, AdvanceSinTestSuite,
     ::testing::Values(
-        SinTestParams {4, 32, kernel_sin_operator<float, 32, 32, 0, 0>},
-        SinTestParams {4, 4096, kernel_sin_operator<float, 32, 4096, 1, 0>},
-        SinTestParams {4, 2048, kernel_sin_operator<float, 2048, 2048, 2, 0>},
-        SinTestParams {4, 1024, kernel_sin_operator<float, 128, 1024, 3, 0>},
-        SinTestParams {4, 32, kernel_sin_operator<float, 32, 32, 0, 1>},
-        SinTestParams {4, 4096, kernel_sin_operator<float, 32, 4096, 1, 1>},
-        SinTestParams {4, 2048, kernel_sin_operator<float, 2048, 2048, 2, 1>},
-        SinTestParams {4, 1024, kernel_sin_operator<float, 128, 1024, 3, 1>},
-        SinTestParams {2, 32, kernel_sin_operator<half, 32, 32, 0, 0>},
-        SinTestParams {2, 4096, kernel_sin_operator<half, 32, 4096, 1, 0>},
-        SinTestParams {2, 2048, kernel_sin_operator<half, 2048, 2048, 2, 0>},
-        SinTestParams {2, 1024, kernel_sin_operator<half, 128, 1024, 3, 0>},
-        SinTestParams {2, 32, kernel_sin_operator<half, 32, 32, 0, 1>},
-        SinTestParams {2, 4096, kernel_sin_operator<half, 32, 4096, 1, 1>},
-        SinTestParams {2, 2048, kernel_sin_operator<half, 2048, 2048, 2, 1>},
-        SinTestParams {2, 1024, kernel_sin_operator<half, 128, 1024, 3, 1>}
-    )
-);
+        SinTestParams{4, 32, kernel_sin_operator<float, 32, 32, 0, 0>},
+        SinTestParams{4, 4096, kernel_sin_operator<float, 32, 4096, 1, 0>},
+        SinTestParams{4, 2048, kernel_sin_operator<float, 2048, 2048, 2, 0>},
+        SinTestParams{4, 1024, kernel_sin_operator<float, 128, 1024, 3, 0>},
+        SinTestParams{4, 32, kernel_sin_operator<float, 32, 32, 0, 1>},
+        SinTestParams{4, 4096, kernel_sin_operator<float, 32, 4096, 1, 1>},
+        SinTestParams{4, 2048, kernel_sin_operator<float, 2048, 2048, 2, 1>},
+        SinTestParams{4, 1024, kernel_sin_operator<float, 128, 1024, 3, 1>},
+        SinTestParams{2, 32, kernel_sin_operator<half, 32, 32, 0, 0>},
+        SinTestParams{2, 4096, kernel_sin_operator<half, 32, 4096, 1, 0>},
+        SinTestParams{2, 2048, kernel_sin_operator<half, 2048, 2048, 2, 0>},
+        SinTestParams{2, 1024, kernel_sin_operator<half, 128, 1024, 3, 0>},
+        SinTestParams{2, 32, kernel_sin_operator<half, 32, 32, 0, 1>},
+        SinTestParams{2, 4096, kernel_sin_operator<half, 32, 4096, 1, 1>},
+        SinTestParams{2, 2048, kernel_sin_operator<half, 2048, 2048, 2, 1>},
+        SinTestParams{2, 1024, kernel_sin_operator<half, 128, 1024, 3, 1>}));
 
 TEST_P(AdvanceSinTestSuite, kernel_sin_operator)
 {

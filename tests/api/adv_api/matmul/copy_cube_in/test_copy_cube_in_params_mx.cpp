@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -45,18 +45,16 @@ struct CaseResult {
     int32_t baseWidthF;
 };
 
-
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
     MATMUL_POLICY_DEFAULT_OF(MatmulWithScalePolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE_PRIVATE(MLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(NLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(KLoop)
-, MATMUL_IMPORT_MODULE_PRIVATE(CopyCubeInParamsScaleA)
-, MATMUL_IMPORT_MODULE_PRIVATE(CopyCubeInParamsScaleB)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-{
+class MatmulImpl : MATMUL_IMPORT_MODULE_PRIVATE(MLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(NLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(KLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(CopyCubeInParamsScaleA),
+                   MATMUL_IMPORT_MODULE_PRIVATE(CopyCubeInParamsScaleB),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling) {
     MATMUL_ALLOW_USING_PRIVATE(MLoop);
     MATMUL_ALLOW_USING_PRIVATE(NLoop);
     MATMUL_ALLOW_USING_PRIVATE(KLoop);
@@ -68,7 +66,8 @@ class MatmulImpl
 public:
     using IMPL = MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, MM_CB, MATMUL_POLICY>;
     using POLICY = MATMUL_POLICY<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>;
-    using VAR_PARAMS = typename Impl::Detail::MatmulParams<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, GetMatmulMode(MM_CFG)>::PARAMS;
+    using VAR_PARAMS =
+        typename Impl::Detail::MatmulParams<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, GetMatmulMode(MM_CFG)>::PARAMS;
 
     MATMUL_USE_MODULE(CopyCubeInParamsScaleA);
     MATMUL_USE_MODULE(CopyCubeInParamsScaleB);
@@ -79,18 +78,19 @@ public:
     MATMUL_USE_MODULE(MatmulShapeInfo);
     MatmulImpl() {}
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar(const TCubeTiling &tiling) {
+    void InitVar(const TCubeTiling& tiling)
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
     }
 
-    void SetRuntimeParams() {
+    void SetRuntimeParams()
+    {
         const auto tiling = MATMUL_MODULE(MatmulShapeTiling)->GetTiling();
-        MATMUL_MODULE(MatmulShapeInfo)->SetSingleShape(tiling.GetSingleCoreM(), tiling.GetSingleCoreN(), tiling.GetSingleCoreK());
+        MATMUL_MODULE(MatmulShapeInfo)
+            ->SetSingleShape(tiling.GetSingleCoreM(), tiling.GetSingleCoreN(), tiling.GetSingleCoreK());
         MATMUL_MODULE(MatmulShapeInfo)->SetOrgM(tiling.GetSingleCoreM());
         MATMUL_MODULE(MatmulShapeInfo)->SetOrgN(tiling.GetSingleCoreN());
         MATMUL_MODULE(MatmulShapeInfo)->SetOrgKa(tiling.GetSingleCoreK());
@@ -101,14 +101,16 @@ public:
         MATMUL_MODULE(KLoop)->Init(MATMUL_MODULE(MatmulShapeInfo)->GetSingleCoreK());
     }
 
-    void SetTranspose() {
+    void SetTranspose()
+    {
         MATMUL_MODULE(MatmulShapeInfo)->SetTransposeA(true);
         MATMUL_MODULE(MatmulShapeInfo)->SetTransposeScaleA(false);
         MATMUL_MODULE(MatmulShapeInfo)->SetTransposeB(true);
         MATMUL_MODULE(MatmulShapeInfo)->SetTransposeScaleB(false);
     }
 
-    void RunScaleACase(const CaseResult& caseresult) {
+    void RunScaleACase(const CaseResult& caseresult)
+    {
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template GetBufferPos()), caseresult.bufferPos);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template IsTranspose()), caseresult.isTranspose);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template GetBufferSize()), caseresult.bufferSize);
@@ -116,7 +118,8 @@ public:
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template GetScaleFactor()), caseresult.scaleFactor);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template IsKRowDirec()), caseresult.isKRowDirec);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template GetOrgHeight<true, true>()), caseresult.orgHeightT);
-        EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template GetOrgHeight<false, false>()), caseresult.orgHeightF);
+        EXPECT_EQ(
+            (MATMUL_MODULE(CopyCubeInParamsScaleA)->template GetOrgHeight<false, false>()), caseresult.orgHeightF);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template GetOrgWidth<true, true>()), caseresult.orgWidthT);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template GetOrgWidth<false, false>()), caseresult.orgWidthF);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template GetSingleHeight<true>()), caseresult.singleHeightT);
@@ -129,7 +132,8 @@ public:
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleA)->template GetBaseWidth<false>()), caseresult.baseWidthF);
     }
 
-    void RunScaleBCase(const CaseResult& caseresult) {
+    void RunScaleBCase(const CaseResult& caseresult)
+    {
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleB)->template GetBufferPos()), caseresult.bufferPos);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleB)->template IsTranspose()), caseresult.isTranspose);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleB)->template GetBufferSize()), caseresult.bufferSize);
@@ -137,7 +141,8 @@ public:
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleB)->template GetScaleFactor()), caseresult.scaleFactor);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleB)->template IsKRowDirec()), caseresult.isKRowDirec);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleB)->template GetOrgHeight<true, true>()), caseresult.orgHeightT);
-        EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleB)->template GetOrgHeight<false, false>()), caseresult.orgHeightF);
+        EXPECT_EQ(
+            (MATMUL_MODULE(CopyCubeInParamsScaleB)->template GetOrgHeight<false, false>()), caseresult.orgHeightF);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleB)->template GetOrgWidth<true, true>()), caseresult.orgWidthT);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleB)->template GetOrgWidth<false, false>()), caseresult.orgWidthF);
         EXPECT_EQ((MATMUL_MODULE(CopyCubeInParamsScaleB)->template GetSingleHeight<true>()), caseresult.singleHeightT);
@@ -154,7 +159,7 @@ private:
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class TestCopyCubeInParamsMx : public testing::Test {
 protected:
@@ -162,24 +167,41 @@ protected:
     void TearDown() {}
 
 private:
-     using AS_TYPE_GM = MatmulTypeWithScale<TPosition::GM, TPosition::GM, CubeFormat::ND,
-        fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
-    using AS_TYPE_UB = MatmulTypeWithScale<TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND,
-        fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
-    using BS_TYPE_GM = MatmulTypeWithScale<TPosition::GM, TPosition::GM, CubeFormat::ND,
-        fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
-    using BS_TYPE_UB = MatmulTypeWithScale<TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND,
-        fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false, TPosition::GM>;
+    using AS_TYPE_GM = MatmulTypeWithScale<
+        TPosition::GM, TPosition::GM, CubeFormat::ND, fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
+    using AS_TYPE_UB = MatmulTypeWithScale<
+        TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND, fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
+    using BS_TYPE_GM = MatmulTypeWithScale<
+        TPosition::GM, TPosition::GM, CubeFormat::ND, fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
+    using BS_TYPE_UB = MatmulTypeWithScale<
+        TPosition::VECOUT, TPosition::VECOUT, CubeFormat::ND, fp8_e4m3fn_t, false, TPosition::GM, CubeFormat::ND, false,
+        TPosition::GM>;
     using C_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
     using BIAS_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
 
-    MatmulImpl<AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>, Impl::Detail::MatmulWithScalePolicy> mm1;
-    MatmulImpl<AS_TYPE_UB, BS_TYPE_UB, C_TYPE, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>, Impl::Detail::MatmulWithScalePolicy> mm2;
-    MatmulImpl<AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, CFG_MDL, MatmulCallBackFunc<nullptr, nullptr, nullptr>, Impl::Detail::MatmulWithScalePolicy> mm3;
-    MatmulImpl<AS_TYPE_UB, BS_TYPE_UB, C_TYPE, BIAS_TYPE, CFG_MDL, MatmulCallBackFunc<nullptr, nullptr, nullptr>, Impl::Detail::MatmulWithScalePolicy> mm4;
+    MatmulImpl<
+        AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        Impl::Detail::MatmulWithScalePolicy>
+        mm1;
+    MatmulImpl<
+        AS_TYPE_UB, BS_TYPE_UB, C_TYPE, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        Impl::Detail::MatmulWithScalePolicy>
+        mm2;
+    MatmulImpl<
+        AS_TYPE_GM, BS_TYPE_GM, C_TYPE, BIAS_TYPE, CFG_MDL, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        Impl::Detail::MatmulWithScalePolicy>
+        mm3;
+    MatmulImpl<
+        AS_TYPE_UB, BS_TYPE_UB, C_TYPE, BIAS_TYPE, CFG_MDL, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
+        Impl::Detail::MatmulWithScalePolicy>
+        mm4;
 };
 
-TEST_F(TestCopyCubeInParamsMx, scaleAB_NORM_GM) {
+TEST_F(TestCopyCubeInParamsMx, scaleAB_NORM_GM)
+{
     TilingParamsMx tilingParamsMx = {1, 64, 48, 256, 64, 48, 256, 32, 48, 96, 2, 4, 1, 2, 1, 3, 1, 1, 16843009};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -193,7 +215,8 @@ TEST_F(TestCopyCubeInParamsMx, scaleAB_NORM_GM) {
     mm1.RunScaleBCase(caseResultB);
 }
 
-TEST_F(TestCopyCubeInParamsMx, scaleAB_NORM_GM_Transpose) {
+TEST_F(TestCopyCubeInParamsMx, scaleAB_NORM_GM_Transpose)
+{
     TilingParamsMx tilingParamsMx = {1, 64, 48, 256, 64, 48, 256, 32, 48, 96, 2, 4, 1, 2, 1, 3, 1, 1, 16843009};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -208,7 +231,8 @@ TEST_F(TestCopyCubeInParamsMx, scaleAB_NORM_GM_Transpose) {
     mm1.RunScaleBCase(caseResultB);
 }
 
-TEST_F(TestCopyCubeInParamsMx, scaleAB_NORM_UB) {
+TEST_F(TestCopyCubeInParamsMx, scaleAB_NORM_UB)
+{
     TilingParamsMx tilingParamsMx = {1, 64, 48, 256, 64, 48, 256, 32, 48, 96, 2, 4, 1, 2, 1, 3, 1, 1, 16908287};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -222,7 +246,8 @@ TEST_F(TestCopyCubeInParamsMx, scaleAB_NORM_UB) {
     mm2.RunScaleBCase(caseResultB);
 }
 
-TEST_F(TestCopyCubeInParamsMx, scaleAB_MDL_GM) {
+TEST_F(TestCopyCubeInParamsMx, scaleAB_MDL_GM)
+{
     TilingParamsMx tilingParamsMx = {1, 64, 48, 256, 64, 48, 256, 32, 48, 96, 2, 4, 1, 2, 1, 3, 1, 1, 16843263};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -236,7 +261,8 @@ TEST_F(TestCopyCubeInParamsMx, scaleAB_MDL_GM) {
     mm3.RunScaleBCase(caseResultB);
 }
 
-TEST_F(TestCopyCubeInParamsMx, scaleAB_MDL_UB) {
+TEST_F(TestCopyCubeInParamsMx, scaleAB_MDL_UB)
+{
     TilingParamsMx tilingParamsMx = {1, 64, 48, 256, 64, 48, 256, 32, 48, 96, 2, 4, 1, 2, 1, 3, 1, 1, 16908033};
     TCubeTiling tiling;
     tilingParamsMx.GetTiling(tiling);
@@ -249,4 +275,3 @@ TEST_F(TestCopyCubeInParamsMx, scaleAB_MDL_UB) {
     mm4.RunScaleACase(caseResultA);
     mm4.RunScaleBCase(caseResultB);
 }
-

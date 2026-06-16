@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -15,10 +15,7 @@ using namespace std;
 
 class TEST_LOADIMAGE : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(1);
-    }
+    void SetUp() { AscendC::SetGCoreType(1); }
     void TearDown()
     {
         AscendC::CheckSyncState();
@@ -27,14 +24,16 @@ protected:
 };
 
 namespace AscendC {
-template <typename SrcT, typename FMapT, typename WeightT, typename DstCO1T, typename DstT> class KernelLoadImage {
+template <typename SrcT, typename FMapT, typename WeightT, typename DstCO1T, typename DstT>
+class KernelLoadImage {
 public:
-    __aicore__ inline KernelLoadImage(uint16_t horizSizeIn, uint16_t vertSizeIn, uint16_t horizStartPosIn,
-        uint16_t vertStartPosIn, uint16_t srcHorizSizeIn, uint16_t srcVertSizeIn, uint8_t topPadSizeIn,
-        uint8_t botPadSizeIn, uint16_t leftPadSizeIn, uint16_t rightPadSizeIn, AscendC::AippInputFormat inputFormatIn,
-        uint32_t areaPadModeIn, uint32_t cPadModeIn, FMapT cPaddingValueIn, bool isSwapIn, bool isSingleLineCopyIn,
-        bool isCscEnableIn, int16_t cscMatrixValueIn, uint8_t biasInValueIn, uint8_t biasOutValueIn,
-        uint32_t dstHorizSizeIn, uint32_t dstVertSizeIn)
+    __aicore__ inline KernelLoadImage(
+        uint16_t horizSizeIn, uint16_t vertSizeIn, uint16_t horizStartPosIn, uint16_t vertStartPosIn,
+        uint16_t srcHorizSizeIn, uint16_t srcVertSizeIn, uint8_t topPadSizeIn, uint8_t botPadSizeIn,
+        uint16_t leftPadSizeIn, uint16_t rightPadSizeIn, AscendC::AippInputFormat inputFormatIn, uint32_t areaPadModeIn,
+        uint32_t cPadModeIn, FMapT cPaddingValueIn, bool isSwapIn, bool isSingleLineCopyIn, bool isCscEnableIn,
+        int16_t cscMatrixValueIn, uint8_t biasInValueIn, uint8_t biasOutValueIn, uint32_t dstHorizSizeIn,
+        uint32_t dstVertSizeIn)
     {
         // loadImage params
         horizSize = horizSizeIn;
@@ -60,7 +59,7 @@ public:
         // src shape
         srcVertSize = srcVertSizeIn;
 
-        //dst shape
+        // dst shape
         dstHorizSize = dstHorizSizeIn;
         dstVertSize = dstVertSizeIn;
 
@@ -103,9 +102,9 @@ private:
         // aipp config
         AippParams<FMapT> aippConfig;
         // 1、area pad
-            // 1) padding mode
+        // 1) padding mode
         aippConfig.paddingParams.paddingMode = areaPadMode;
-            // 2) const padding value
+        // 2) const padding value
         aippConfig.paddingParams.paddingValueCh0 = paddingValueCh0;
         aippConfig.paddingParams.paddingValueCh1 = paddingValueCh1;
         aippConfig.paddingParams.paddingValueCh2 = paddingValueCh2;
@@ -120,9 +119,9 @@ private:
         aippConfig.singleLineParams.isSingleLineCopy = isSingleLineCopy;
 
         // 4、csc mode
-            // 1) if csc
+        // 1) if csc
         aippConfig.cscParams.isEnableCsc = isCscEnable;
-            // 2) csc matrix
+        // 2) csc matrix
         aippConfig.cscParams.cscMatrixR0C0 = cscMatrixValue;
         aippConfig.cscParams.cscMatrixR0C1 = cscMatrixValue;
         aippConfig.cscParams.cscMatrixR0C2 = cscMatrixValue;
@@ -132,11 +131,11 @@ private:
         aippConfig.cscParams.cscMatrixR2C0 = cscMatrixValue;
         aippConfig.cscParams.cscMatrixR2C1 = cscMatrixValue;
         aippConfig.cscParams.cscMatrixR2C2 = cscMatrixValue;
-            // 3) YUV to RGB biasin
+        // 3) YUV to RGB biasin
         aippConfig.cscParams.cscBiasIn0 = biasInValue;
         aippConfig.cscParams.cscBiasIn1 = biasInValue;
         aippConfig.cscParams.cscBiasIn2 = biasInValue;
-            // 4) RGB to YUV biasout
+        // 4) RGB to YUV biasout
         aippConfig.cscParams.cscBiasOut0 = biasOutValue;
         aippConfig.cscParams.cscBiasOut1 = biasOutValue;
         aippConfig.cscParams.cscBiasOut2 = biasOutValue;
@@ -161,8 +160,9 @@ private:
         } else {
             SetAippFunctions(fmGlobal, inputFormat, aippConfig);
         }
-        LoadImageToLocal(featureMapA1, { horizSize, vertSize, horizStartPos, vertStartPos, srcHorizSize, topPadSize,
-            botPadSize, leftPadSize, rightPadSize });
+        LoadImageToLocal(
+            featureMapA1, {horizSize, vertSize, horizStartPos, vertStartPos, srcHorizSize, topPadSize, botPadSize,
+                           leftPadSize, rightPadSize});
 
         inQueueA1.EnQue(featureMapA1);
     }
@@ -177,12 +177,12 @@ private:
 
         inQueueA1.FreeTensor(featureMapA1);
     }
+
 private:
     TPipe pipe;
     // feature map queue
     TQue<TPosition::A1, 1> inQueueA1;
     TQue<TPosition::VECOUT, 1> outQueueUB;
-
 
     GlobalTensor<TensorTrait<SrcT>> fmGlobal;
     GlobalTensor<TensorTrait<WeightT>> weGlobal;
@@ -206,36 +206,35 @@ private:
 };
 } // namespace AscendC
 
-#define KERNEL_LOAD_IMAGE(srcType, fMapA1Type, weightType, co1Type, dstType, horizSizeIn, vertSizeIn,                        \
-    horizStartPosIn, vertStartPosIn, srcHorizSizeIn, srcVertSizeIn, topPadSizeIn, botPadSizeIn, leftPadSizeIn, rightPadSizeIn,    \
-    inputFormatIn, areaPadModeIn, cPadModeIn, cPaddingValueIn, isSwapIn, isSingleLineCopyIn, isCscEnableIn,                       \
-    cscMatrixValueIn, biasInValueIn, biasOutValueIn, dstVertSizeIn, dstHorizSizeIn)                                               \
-    TEST_F(TEST_LOADIMAGE, LOADIMAGE##_##inputFormatIn##_##Case)                                                                  \
-    {                                                                                                                             \
-        uint32_t cSizeIn = 32 / sizeof(fMapA1Type);                                                                              \
-        if (cPadModeIn != 0) {                                                                                                    \
-            cSizeIn = 4;                                                                                                          \
-        }                                                                                                                         \
-        uint32_t dstSizeIn = (dstHorizSizeIn + topPadSizeIn + botPadSizeIn) * (dstVertSizeIn + leftPadSizeIn + rightPadSizeIn)    \
-            * cSizeIn;                                                                                                            \
-        uint8_t fmGm[srcHorizSizeIn * srcVertSizeIn * sizeof(srcType)];                                                          \
-        uint8_t dstGm[dstSizeIn * sizeof(dstType)];                                                                              \
-        AscendC::KernelLoadImage<srcType, fMapA1Type, weightType, co1Type, dstType> op(horizSizeIn, vertSizeIn,              \
-            horizStartPosIn, vertStartPosIn, srcHorizSizeIn, srcVertSizeIn, topPadSizeIn, botPadSizeIn, leftPadSizeIn,            \
-            rightPadSizeIn, AscendC::AippInputFormat::inputFormatIn, areaPadModeIn, cPadModeIn, cPaddingValueIn, isSwapIn,                 \
-            isSingleLineCopyIn, isCscEnableIn, cscMatrixValueIn, biasInValueIn, biasOutValueIn, dstHorizSizeIn,                   \
-            dstVertSizeIn);                                                                                                       \
-        op.Init(fmGm, dstGm);                                                                                                     \
-        op.Process();                                                                                                             \
+#define KERNEL_LOAD_IMAGE(                                                                                             \
+    srcType, fMapA1Type, weightType, co1Type, dstType, horizSizeIn, vertSizeIn, horizStartPosIn, vertStartPosIn,       \
+    srcHorizSizeIn, srcVertSizeIn, topPadSizeIn, botPadSizeIn, leftPadSizeIn, rightPadSizeIn, inputFormatIn,           \
+    areaPadModeIn, cPadModeIn, cPaddingValueIn, isSwapIn, isSingleLineCopyIn, isCscEnableIn, cscMatrixValueIn,         \
+    biasInValueIn, biasOutValueIn, dstVertSizeIn, dstHorizSizeIn)                                                      \
+    TEST_F(TEST_LOADIMAGE, LOADIMAGE##_##inputFormatIn##_##Case)                                                       \
+    {                                                                                                                  \
+        uint32_t cSizeIn = 32 / sizeof(fMapA1Type);                                                                    \
+        if (cPadModeIn != 0) {                                                                                         \
+            cSizeIn = 4;                                                                                               \
+        }                                                                                                              \
+        uint32_t dstSizeIn = (dstHorizSizeIn + topPadSizeIn + botPadSizeIn) *                                          \
+                             (dstVertSizeIn + leftPadSizeIn + rightPadSizeIn) * cSizeIn;                               \
+        uint8_t fmGm[srcHorizSizeIn * srcVertSizeIn * sizeof(srcType)];                                                \
+        uint8_t dstGm[dstSizeIn * sizeof(dstType)];                                                                    \
+        AscendC::KernelLoadImage<srcType, fMapA1Type, weightType, co1Type, dstType> op(                                \
+            horizSizeIn, vertSizeIn, horizStartPosIn, vertStartPosIn, srcHorizSizeIn, srcVertSizeIn, topPadSizeIn,     \
+            botPadSizeIn, leftPadSizeIn, rightPadSizeIn, AscendC::AippInputFormat::inputFormatIn, areaPadModeIn,       \
+            cPadModeIn, cPaddingValueIn, isSwapIn, isSingleLineCopyIn, isCscEnableIn, cscMatrixValueIn, biasInValueIn, \
+            biasOutValueIn, dstHorizSizeIn, dstVertSizeIn);                                                            \
+        op.Init(fmGm, dstGm);                                                                                          \
+        op.Process();                                                                                                  \
     }
 
 // --test_YUV420SP_U8
-KERNEL_LOAD_IMAGE(uint8_t, int8_t, int8_t, int32_t, int8_t, 32, 32, 
-                    0, 0, 32, 32, 0, 0, 0, 0, 
-                    YUV420SP_U8, 0, 0, 0, false, false, false, 
-                    1, 1, 1, 32, 32);
+KERNEL_LOAD_IMAGE(
+    uint8_t, int8_t, int8_t, int32_t, int8_t, 32, 32, 0, 0, 32, 32, 0, 0, 0, 0, YUV420SP_U8, 0, 0, 0, false, false,
+    false, 1, 1, 1, 32, 32);
 // --test_XRGB8888_U8
-KERNEL_LOAD_IMAGE(uint8_t, int8_t, int8_t, int32_t, int8_t, 32, 32, 
-                    0, 0, 32, 32, 0, 0, 0, 0, 
-                    XRGB8888_U8, 0, 0, 0, false, false, false, 
-                    1, 1, 1, 32, 32);
+KERNEL_LOAD_IMAGE(
+    uint8_t, int8_t, int8_t, int32_t, int8_t, 32, 32, 0, 0, 32, 32, 0, 0, 0, 0, XRGB8888_U8, 0, 0, 0, false, false,
+    false, 1, 1, 1, 32, 32);

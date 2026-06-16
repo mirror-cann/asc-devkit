@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <mockcpp/mockcpp.hpp>
 #include <type_traits>
@@ -25,7 +25,8 @@ protected:
 
 class SimtDimGuard {
 public:
-    SimtDimGuard(cce::dim3 blockDimVal, cce::dim3 threadIdxVal, cce::dim3 blockIdxVal = cce::dim3(0u, 0u, 0u),
+    SimtDimGuard(
+        cce::dim3 blockDimVal, cce::dim3 threadIdxVal, cce::dim3 blockIdxVal = cce::dim3(0u, 0u, 0u),
         cce::dim3 gridDimVal = cce::dim3(1u, 1u, 1u))
         : oldBlockDim_(blockDim), oldThreadIdx_(threadIdx), oldBlockIdx_(blockIdx), oldGridDim_(gridDim)
     {
@@ -75,10 +76,7 @@ TEST_F(CooperativeGroupsTestsuite, ThreadBlockThisThreadBlockTest)
     EXPECT_EQ(tb.get_type(), group_type::thread_block_type);
 }
 
-TEST_F(CooperativeGroupsTestsuite, ThreadBlockSyncTest)
-{
-    thread_block::sync();
-}
+TEST_F(CooperativeGroupsTestsuite, ThreadBlockSyncTest) { thread_block::sync(); }
 
 TEST_F(CooperativeGroupsTestsuite, ThreadBlockThreadRankTest)
 {
@@ -94,8 +92,7 @@ TEST_F(CooperativeGroupsTestsuite, ThreadBlockGroupIndexTest)
 
 TEST_F(CooperativeGroupsTestsuite, ThreadBlockGroupIndex3DTest)
 {
-    SimtDimGuard guard(cce::dim3(8u, 4u, 2u), cce::dim3(0u, 0u, 0u), cce::dim3(3u, 2u, 1u),
-        cce::dim3(4u, 3u, 2u));
+    SimtDimGuard guard(cce::dim3(8u, 4u, 2u), cce::dim3(0u, 0u, 0u), cce::dim3(3u, 2u, 1u), cce::dim3(4u, 3u, 2u));
     dim3 gi = thread_block::group_index();
     EXPECT_EQ(gi.x, 3u);
     EXPECT_EQ(gi.y, 2u);
@@ -214,7 +211,9 @@ TEST_F(CooperativeGroupsTestsuite, CoalescedGroupThreadRankTest)
 TEST_F(CooperativeGroupsTestsuite, CoalescedGroupThreadRankUsesMaskAndLaneMaskTest)
 {
     coalesced_group cg(0x00000055);
-    EXPECT_EQ(cg.thread_rank(), static_cast<unsigned long long>(__popc(0x00000055 & static_cast<unsigned int>(lanemask_lt()))));
+    EXPECT_EQ(
+        cg.thread_rank(),
+        static_cast<unsigned long long>(__popc(0x00000055 & static_cast<unsigned int>(lanemask_lt()))));
 }
 
 namespace {
@@ -276,7 +275,7 @@ int32_t AscTileShflXorStub(int32_t var, int32_t lane_mask, int32_t width)
     EXPECT_EQ(width, 4);
     return 34;
 }
-}
+} // namespace
 
 TEST_F(CooperativeGroupsTestsuite, TiledGroupPropertiesTest)
 {
@@ -284,7 +283,9 @@ TEST_F(CooperativeGroupsTestsuite, TiledGroupPropertiesTest)
     EXPECT_EQ(tiled.get_type(), group_type::tiled_group_type);
     EXPECT_EQ(tiled.num_threads(), 6ull);
     EXPECT_EQ(tiled.size(), 6ull);
-    EXPECT_EQ(tiled.thread_rank(), static_cast<unsigned long long>(__popc(0x0000003F & static_cast<unsigned int>(lanemask_lt()))));
+    EXPECT_EQ(
+        tiled.thread_rank(),
+        static_cast<unsigned long long>(__popc(0x0000003F & static_cast<unsigned int>(lanemask_lt()))));
     tiled.sync();
 }
 
@@ -301,9 +302,7 @@ TEST_F(CooperativeGroupsTestsuite, ThreadGroupBaseClassTiledGroupDispatchTest)
 
 TEST_F(CooperativeGroupsTestsuite, CoalescedGroupShflInt32Test)
 {
-    MOCKER_CPP(asc_shfl, int32_t(int32_t, int32_t, int32_t))
-        .times(1)
-        .will(invoke(AscShflStub));
+    MOCKER_CPP(asc_shfl, int32_t(int32_t, int32_t, int32_t)).times(1).will(invoke(AscShflStub));
 
     coalesced_group cg(0x1FFFFFFF);
     int32_t result = cg.shfl(7, 2);
@@ -314,9 +313,7 @@ TEST_F(CooperativeGroupsTestsuite, CoalescedGroupShflInt32Test)
 
 TEST_F(CooperativeGroupsTestsuite, CoalescedGroupShflSrcRankModuloTest)
 {
-    MOCKER_CPP(asc_shfl, int32_t(int32_t, int32_t, int32_t))
-        .times(1)
-        .will(invoke(AscShflModuloStub));
+    MOCKER_CPP(asc_shfl, int32_t(int32_t, int32_t, int32_t)).times(1).will(invoke(AscShflModuloStub));
 
     coalesced_group cg(0x0000000F);
     int32_t result = cg.shfl(11, 7);
@@ -1019,7 +1016,8 @@ TEST_F(CooperativeGroupsTestsuite, ThreadGroupFromTiledPartitionThreadRankTest)
     thread_block tb = this_thread_block();
     thread_group tg = tiled_partition(tb, 4);
     unsigned long long rank = tg.thread_rank();
-    EXPECT_EQ(rank, static_cast<unsigned long long>(__popc(tg._tiled_info.mask & static_cast<unsigned int>(lanemask_lt()))));
+    EXPECT_EQ(
+        rank, static_cast<unsigned long long>(__popc(tg._tiled_info.mask & static_cast<unsigned int>(lanemask_lt()))));
 }
 
 TEST_F(CooperativeGroupsTestsuite, ThreadGroupFromTiledPartitionSyncTest)

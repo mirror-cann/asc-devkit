@@ -1,30 +1,30 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 
 #include "kernel_log.h"
-static uint8_t testRes = 1;      // 全局变量记录运行结果, 如果进入ASCENDC_ASSERT报错，会被置为0
+static uint8_t testRes = 1; // 全局变量记录运行结果, 如果进入ASCENDC_ASSERT报错，会被置为0
 // 重定义ASCENDC_ASSERT，不Abort，仅修改全局变量通知进入报错分支
 #undef ASCENDC_ASSERT
 #define ASCENDC_ASSERT(cond, behavior) \
     do {                               \
         if (!(cond)) {                 \
-            testRes = 0;              \
+            testRes = 0;               \
             behavior;                  \
         }                              \
     } while (0)
 
 #undef ASCENDC_REPORT_CHECK_ERROR
-#define ASCENDC_REPORT_CHECK_ERROR(apiMsg, funcType)   \
-    do {                                                \
-        testRes = 0;                                   \
+#define ASCENDC_REPORT_CHECK_ERROR(apiMsg, funcType) \
+    do {                                             \
+        testRes = 0;                                 \
     } while (0)
 
 #include "kernel_utils.h"
@@ -41,20 +41,14 @@ enum TestMode {
 
 class TEST_SELECT : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T>
-void MainVecSelectLevel2Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ selMaskGm,
-    __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm, SELMODE selMode, uint32_t dataSize,
-    uint32_t selMaskSize, TestMode testMode)
+void MainVecSelectLevel2Demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_t* __restrict__ src0Gm,
+    __gm__ uint8_t* __restrict__ src1Gm, SELMODE selMode, uint32_t dataSize, uint32_t selMaskSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -102,13 +96,13 @@ void MainVecSelectLevel2Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t*
             mask[1] = 0;
         }
         if (selMode == SELMODE::VSEL_TENSOR_SCALAR_MODE) {
-            Select(outputLocal, selMaskLocal, input0Local, static_cast<T>(0), selMode, mask, repeatTime,
-                { 1, 1, 1, 8, 8, 8 });
+            Select(
+                outputLocal, selMaskLocal, input0Local, static_cast<T>(0), selMode, mask, repeatTime,
+                {1, 1, 1, 8, 8, 8});
         } else {
-            Select(outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime,
-                { 1, 1, 1, 8, 8, 8 });
-            Select(outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime,
-                { 1, 2, 2, 8, 16, 16 });
+            Select(outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime, {1, 1, 1, 8, 8, 8});
+            Select(
+                outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime, {1, 2, 2, 8, 16, 16});
         }
     } else if (testMode == LEVEL0_COUNT_MODE) {
         uint8_t repeatTime = dataSize * sizeof(T) / ONE_REPEAT_BYTE_SIZE;
@@ -119,13 +113,14 @@ void MainVecSelectLevel2Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t*
             mask = 64;
         }
         if (selMode == SELMODE::VSEL_TENSOR_SCALAR_MODE) {
-            Select(outputLocal, selMaskLocal, input0Local, static_cast<T>(0), selMode, mask, repeatTime,
-                { 1, 1, 1, 8, 8, 8 });
-            Select(outputLocal, selMaskLocal, input0Local, static_cast<T>(0), selMode, mask, repeatTime,
-                { 2, 2, 2, 16, 16, 16 });
+            Select(
+                outputLocal, selMaskLocal, input0Local, static_cast<T>(0), selMode, mask, repeatTime,
+                {1, 1, 1, 8, 8, 8});
+            Select(
+                outputLocal, selMaskLocal, input0Local, static_cast<T>(0), selMode, mask, repeatTime,
+                {2, 2, 2, 16, 16, 16});
         } else {
-            Select(outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime,
-                { 1, 1, 1, 8, 8, 8 });
+            Select(outputLocal, selMaskLocal, input0Local, input1Local, selMode, mask, repeatTime, {1, 1, 1, 8, 8, 8});
         }
     }
 
@@ -136,22 +131,22 @@ void MainVecSelectLevel2Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t*
 
     pipe_barrier(PIPE_ALL);
 }
-#define VEC_SELECT_LEVEL2_TESTCASE(dataType, selMode1, testMode1)                                              \
-    TEST_F(TEST_SELECT, Select##dataType##selMode1##testMode1##Case)                                           \
-    {                                                                                                           \
-        uint32_t dataSize = 256;                                                                               \
-        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                            \
-        uint8_t input0Gm[dataSize * sizeof(dataType)];                                                       \
-        uint8_t input1Gm[dataSize * sizeof(dataType)];                                                       \
-        uint8_t selMaskGm[dataSize];                                                                         \
-        uint8_t outputGm[dataSize * sizeof(dataType)];                                                       \
-                                                                                                                \
-        MainVecSelectLevel2Demo<dataType>(outputGm, selMaskGm, input0Gm, input1Gm, SELMODE::selMode1, \
-            dataSize, selMaskSize, testMode1);                                                               \
-                                                                                                                \
-        for (uint32_t i = 0; i < dataSize; i++) {                                                              \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                      \
-        }                                                                                                       \
+#define VEC_SELECT_LEVEL2_TESTCASE(dataType, selMode1, testMode1)                                          \
+    TEST_F(TEST_SELECT, Select##dataType##selMode1##testMode1##Case)                                       \
+    {                                                                                                      \
+        uint32_t dataSize = 256;                                                                           \
+        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                       \
+        uint8_t input0Gm[dataSize * sizeof(dataType)];                                                     \
+        uint8_t input1Gm[dataSize * sizeof(dataType)];                                                     \
+        uint8_t selMaskGm[dataSize];                                                                       \
+        uint8_t outputGm[dataSize * sizeof(dataType)];                                                     \
+                                                                                                           \
+        MainVecSelectLevel2Demo<dataType>(                                                                 \
+            outputGm, selMaskGm, input0Gm, input1Gm, SELMODE::selMode1, dataSize, selMaskSize, testMode1); \
+                                                                                                           \
+        for (uint32_t i = 0; i < dataSize; i++) {                                                          \
+            EXPECT_EQ(outputGm[i], 0x00);                                                                  \
+        }                                                                                                  \
     }
 VEC_SELECT_LEVEL2_TESTCASE(float, VSEL_CMPMASK_SPR, LEVEL2);
 VEC_SELECT_LEVEL2_TESTCASE(half, VSEL_CMPMASK_SPR, LEVEL2);

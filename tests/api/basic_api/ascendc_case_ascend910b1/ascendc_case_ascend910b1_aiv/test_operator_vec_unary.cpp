@@ -1,30 +1,30 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 
 #include "kernel_log.h"
-static uint8_t g_testRes = 1;      // 全局变量记录运行结果, 如果进入ASCENDC_ASSERT报错，会被置为0
+static uint8_t g_testRes = 1; // 全局变量记录运行结果, 如果进入ASCENDC_ASSERT报错，会被置为0
 // 重定义ASCENDC_ASSERT，不Abort，仅修改全局变量通知进入报错分支
 #undef ASCENDC_ASSERT
 #define ASCENDC_ASSERT(cond, behavior) \
     do {                               \
         if (!(cond)) {                 \
-            g_testRes = 0;              \
+            g_testRes = 0;             \
             behavior;                  \
         }                              \
     } while (0)
 
 #undef ASCENDC_REPORT_CHECK_ERROR
-#define ASCENDC_REPORT_CHECK_ERROR(apiMsg, funcType)   \
-    do {                                                \
-        g_testRes = 0;                                   \
+#define ASCENDC_REPORT_CHECK_ERROR(apiMsg, funcType) \
+    do {                                             \
+        g_testRes = 0;                               \
     } while (0)
 
 #include "kernel_utils.h"
@@ -76,7 +76,7 @@ void MainVecUnary01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restri
     Reciprocal(outputLocal, inputLocal, dataSize);
     Rsqrt(outputLocal, inputLocal, dataSize);
     Sqrt(outputLocal, inputLocal, dataSize);
-    if constexpr (USE_CAST_DEQ){
+    if constexpr (USE_CAST_DEQ) {
         CastDeq<int8_t, int16_t, false, false>(outputLocal2, inputLocal2, dataSize);
         CastDeq<uint8_t, int16_t, false, true>(outputLocal3, inputLocal2, dataSize);
         CastDeq<int8_t, int16_t, true, false>(outputLocal2, inputLocal2, dataSize);
@@ -93,7 +93,7 @@ void MainVecUnary01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restri
         CastDeq<uint8_t, int16_t, true, false, true>(outputLocal3, inputLocal2, maskVec, 2, repeatParams);
         CastDeq<int8_t, int16_t, true, true, false>(outputLocal2, inputLocal2, maskVec, 2, repeatParams);
         CastDeq<uint8_t, int16_t, true, true, true>(outputLocal3, inputLocal2, maskVec, 2, repeatParams);
-    }else{
+    } else {
         CastDequant<int8_t, int16_t, false, false>(outputLocal2, inputLocal2, dataSize);
         CastDequant<uint8_t, int16_t, false, true>(outputLocal3, inputLocal2, dataSize);
         CastDequant<int8_t, int16_t, true, false>(outputLocal2, inputLocal2, dataSize);
@@ -111,7 +111,6 @@ void MainVecUnary01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restri
         CastDequant<int8_t, int16_t, true, true, false>(outputLocal2, inputLocal2, maskVec, 2, repeatParams);
         CastDequant<uint8_t, int16_t, true, true, true>(outputLocal3, inputLocal2, maskVec, 2, repeatParams);
     }
-
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -230,23 +229,18 @@ struct UnaryTestParams {
 
 class UnarySimpleTestsuite : public testing::Test, public testing::WithParamInterface<UnaryTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_UNARY_SIMPLE, UnarySimpleTestsuite,
-    ::testing::Values(UnaryTestParams { 208, 2, MainVecUnary01<half, true> },
-    UnaryTestParams { 208, 4, MainVecUnary01<float, true> }, UnaryTestParams { 208, 2, MainVecUnary01<half, false> }, 
-    UnaryTestParams { 208, 4, MainVecUnary01<float, false> }, UnaryTestParams { 208, 4, MainVecUnary02<int32_t> }, 
-    UnaryTestParams { 208, 4, MainVecUnary02<half> }, UnaryTestParams { 208, 4, MainVecUnary02<float> },
-    UnaryTestParams { 208, 2, MainVecUnary03<int16_t> }, UnaryTestParams { 208, 2, MainVecUnary03<uint16_t> },
-    UnaryTestParams { 208, 2, MainVecUnary04<int16_t> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_UNARY_SIMPLE, UnarySimpleTestsuite,
+    ::testing::Values(
+        UnaryTestParams{208, 2, MainVecUnary01<half, true>}, UnaryTestParams{208, 4, MainVecUnary01<float, true>},
+        UnaryTestParams{208, 2, MainVecUnary01<half, false>}, UnaryTestParams{208, 4, MainVecUnary01<float, false>},
+        UnaryTestParams{208, 4, MainVecUnary02<int32_t>}, UnaryTestParams{208, 4, MainVecUnary02<half>},
+        UnaryTestParams{208, 4, MainVecUnary02<float>}, UnaryTestParams{208, 2, MainVecUnary03<int16_t>},
+        UnaryTestParams{208, 2, MainVecUnary03<uint16_t>}, UnaryTestParams{208, 2, MainVecUnary04<int16_t>}));
 
 TEST_P(UnarySimpleTestsuite, UnarySimpleTestCase)
 {
@@ -262,15 +256,9 @@ TEST_P(UnarySimpleTestsuite, UnarySimpleTestCase)
 
 class TEST_VEC_UNARY_F : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
 
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 TEST_F(TEST_VEC_UNARY_F, VecUnaryCase)

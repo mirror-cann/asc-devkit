@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -34,19 +34,14 @@ enum TestMode {
 
 class TEST_COMPARE : public testing::Test {
 protected:
-    void SetUp()
-    {
-        SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        SetGCoreType(0);
-    }
+    void SetUp() { SetGCoreType(2); }
+    void TearDown() { SetGCoreType(0); }
 };
 
 template <typename T, TestMode TestMode, bool withDst>
-void main_vec_compare_demo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, CMPMODE cmpMode, uint32_t dataSize, uint32_t selMaskSize)
+void main_vec_compare_demo(
+    __gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    CMPMODE cmpMode, uint32_t dataSize, uint32_t selMaskSize)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -72,7 +67,8 @@ void main_vec_compare_demo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_
     TBuffAddr tbuf2;
     tbuf2.logicPos = static_cast<uint8_t>(TPosition::VECCALC);
     selMaskLocal.SetAddr(tbuf2);
-    selMaskLocal.InitBuffer(input0Local.GetSize() * sizeof(PrimT<T>) + input1Local.GetSize() * sizeof(PrimT<T>), selMaskSize);
+    selMaskLocal.InitBuffer(
+        input0Local.GetSize() * sizeof(PrimT<T>) + input1Local.GetSize() * sizeof(PrimT<T>), selMaskSize);
 
     DataCopy(input0Local, input0Global, dataSize);
     DataCopy(input1Local, input1Global, dataSize);
@@ -80,7 +76,7 @@ void main_vec_compare_demo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_
     set_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
 
-    if constexpr(withDst) {
+    if constexpr (withDst) {
         if constexpr (TestMode == LEVEL2) {
             Compare(selMaskLocal, input0Local, input1Local, cmpMode, dataSize);
         } else if constexpr (TestMode == LEVEL0_BIT_MODE) {
@@ -94,12 +90,14 @@ void main_vec_compare_demo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_
                 mask[0] = UINT64_MAX;
                 mask[1] = 0;
             }
-            Compare(selMaskLocal, input0Local, input1Local, cmpMode, mask, repeatTime, { 0, 1, 1, 0, 8, 8 });
+            Compare(selMaskLocal, input0Local, input1Local, cmpMode, mask, repeatTime, {0, 1, 1, 0, 8, 8});
             AscendC::SetMaskCount();
             AscendC::SetVectorMask<PrimT<T>, MaskMode::COUNTER>(0, 144);
-            Compare<T, uint8_t ,false>(selMaskLocal, input0Local, input1Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 1, 0, 8, 8 });
+            Compare<T, uint8_t, false>(
+                selMaskLocal, input0Local, input1Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime,
+                {0, 1, 1, 0, 8, 8});
             AscendC::ResetMask();
-            Compare(selMaskLocal, input0Local, input1Local, cmpMode, counterMask, repeatTime, { 0, 1, 1, 0, 8, 8 });
+            Compare(selMaskLocal, input0Local, input1Local, cmpMode, counterMask, repeatTime, {0, 1, 1, 0, 8, 8});
             AscendC::SetMaskNorm();
         } else if constexpr (TestMode == LEVEL0_COUNT_MODE) {
             uint8_t repeatTime = dataSize * sizeof(PrimT<T>) / ONE_REPEAT_BYTE_SIZE;
@@ -109,25 +107,27 @@ void main_vec_compare_demo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_
             } else if (sizeof(PrimT<T>) == 4) {
                 mask = 64;
             }
-            Compare(selMaskLocal, input0Local, input1Local, cmpMode, mask, repeatTime, { 0, 1, 1, 0, 8, 8 });
+            Compare(selMaskLocal, input0Local, input1Local, cmpMode, mask, repeatTime, {0, 1, 1, 0, 8, 8});
             AscendC::SetMaskCount();
             AscendC::SetVectorMask<PrimT<T>, MaskMode::COUNTER>(0, 144);
-            Compare<T, uint8_t ,false>(selMaskLocal, input0Local, input1Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 1, 0, 8, 8 });
+            Compare<T, uint8_t, false>(
+                selMaskLocal, input0Local, input1Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime,
+                {0, 1, 1, 0, 8, 8});
             AscendC::ResetMask();
-            Compare(selMaskLocal, input0Local, input1Local, cmpMode, mask, repeatTime, { 0, 1, 1, 0, 8, 8 });
+            Compare(selMaskLocal, input0Local, input1Local, cmpMode, mask, repeatTime, {0, 1, 1, 0, 8, 8});
             AscendC::SetMaskNorm();
         } else if constexpr (TestMode == LEVEL3) {
             if (cmpMode == CMPMODE::EQ) {
                 selMaskLocal = input0Local == input1Local;
             } else if (cmpMode == CMPMODE::GE) {
                 selMaskLocal = input0Local >= input1Local;
-            }else if (cmpMode == CMPMODE::GT) {
+            } else if (cmpMode == CMPMODE::GT) {
                 selMaskLocal = input0Local > input1Local;
-            }else if (cmpMode == CMPMODE::LE) {
+            } else if (cmpMode == CMPMODE::LE) {
                 selMaskLocal = input0Local <= input1Local;
-            }else if (cmpMode == CMPMODE::LT) {
+            } else if (cmpMode == CMPMODE::LT) {
                 selMaskLocal = input0Local < input1Local;
-            }else if (cmpMode == CMPMODE::NE) {
+            } else if (cmpMode == CMPMODE::NE) {
                 selMaskLocal = input0Local != input1Local;
             }
         }
@@ -139,31 +139,31 @@ void main_vec_compare_demo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_
         if (sizeof(PrimT<T>) == 2) {
             mask[0] = UINT64_MAX;
             mask[1] = UINT64_MAX;
-            normMask[0] = 127;  // max is 128
+            normMask[0] = 127; // max is 128
         } else if (sizeof(PrimT<T>) == 4) {
             mask[0] = UINT64_MAX;
             mask[1] = 0;
-            normMask[0] = 60;  // max is 64
+            normMask[0] = 60; // max is 64
         }
-        Compare(input0Local, input1Local, cmpMode, mask, { 0, 1, 1, 0, 8, 8 });
+        Compare(input0Local, input1Local, cmpMode, mask, {0, 1, 1, 0, 8, 8});
         GetCmpMask(selMaskLocal);
         AscendC::SetMaskCount();
         AscendC::SetVectorMask<PrimT<T>, MaskMode::COUNTER>(0, 144);
-        Compare<T, false>(input0Local, input1Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, { 0, 1, 1, 0, 8, 8 });
+        Compare<T, false>(input0Local, input1Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, {0, 1, 1, 0, 8, 8});
         GetCmpMask(selMaskLocal);
         AscendC::ResetMask();
-        Compare(input0Local, input1Local, cmpMode, counterMask, { 0, 1, 1, 0, 8, 8 });
+        Compare(input0Local, input1Local, cmpMode, counterMask, {0, 1, 1, 0, 8, 8});
         GetCmpMask(selMaskLocal);
         AscendC::SetMaskNorm();
 
-        Compare(input0Local, input1Local, cmpMode, normMask[0], { 0, 1, 1, 0, 8, 8 });
+        Compare(input0Local, input1Local, cmpMode, normMask[0], {0, 1, 1, 0, 8, 8});
         GetCmpMask(selMaskLocal);
         AscendC::SetMaskCount();
         AscendC::SetVectorMask<PrimT<T>, MaskMode::COUNTER>(0, 144);
-        Compare<T, false>(input0Local, input1Local, cmpMode, AscendC::MASK_PLACEHOLDER, { 0, 1, 1, 0, 8, 8 });
+        Compare<T, false>(input0Local, input1Local, cmpMode, AscendC::MASK_PLACEHOLDER, {0, 1, 1, 0, 8, 8});
         GetCmpMask(selMaskLocal);
         AscendC::ResetMask();
-        Compare(input0Local, input1Local, cmpMode, counterMask[0], { 0, 1, 1, 0, 8, 8 });
+        Compare(input0Local, input1Local, cmpMode, counterMask[0], {0, 1, 1, 0, 8, 8});
         GetCmpMask(selMaskLocal);
         AscendC::SetMaskNorm();
     }
@@ -176,21 +176,21 @@ void main_vec_compare_demo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_
     pipe_barrier(PIPE_ALL);
 }
 
-#define VEC_CMP_TESTCASE(dataType, relationOp, testMode, withDst)                                                \
-    TEST_F(TEST_COMPARE, Compare##dataType##relationOp##testMode##withDst##Case)                                 \
-    {                                                                                                      \
-        uint32_t dataSize = 256;                                                                          \
-        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                    \
-        uint8_t input0Gm[dataSize * sizeof(PrimT<dataType>)];                                                  \
-        uint8_t input1Gm[dataSize * sizeof(PrimT<dataType>)];                                                  \
-        uint8_t outputGm[dataSize];                                                                      \
-                                                                                                           \
-        main_vec_compare_demo<dataType, testMode, withDst>(outputGm, input0Gm, input1Gm, CMPMODE::relationOp, dataSize, \
-            selMaskSize);                                                                     \
-                                                                                                           \
-        for (uint32_t i = 0; i < selMaskSize; i++) {                                                     \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                 \
-        }                                                                                                  \
+#define VEC_CMP_TESTCASE(dataType, relationOp, testMode, withDst)                      \
+    TEST_F(TEST_COMPARE, Compare##dataType##relationOp##testMode##withDst##Case)       \
+    {                                                                                  \
+        uint32_t dataSize = 256;                                                       \
+        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));   \
+        uint8_t input0Gm[dataSize * sizeof(PrimT<dataType>)];                          \
+        uint8_t input1Gm[dataSize * sizeof(PrimT<dataType>)];                          \
+        uint8_t outputGm[dataSize];                                                    \
+                                                                                       \
+        main_vec_compare_demo<dataType, testMode, withDst>(                            \
+            outputGm, input0Gm, input1Gm, CMPMODE::relationOp, dataSize, selMaskSize); \
+                                                                                       \
+        for (uint32_t i = 0; i < selMaskSize; i++) {                                   \
+            EXPECT_EQ(outputGm[i], 0x00);                                              \
+        }                                                                              \
     }
 
 VEC_CMP_TESTCASE(uint8_t, LT, LEVEL2, true);
@@ -418,19 +418,14 @@ VEC_CMP_TESTCASE(TTFloat, EQ, LEVEL0_BIT_MODE, false);
 
 class TEST_COMPARE_SCALAR : public testing::Test {
 protected:
-    void SetUp()
-    {
-        SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        SetGCoreType(0);
-    }
+    void SetUp() { SetGCoreType(2); }
+    void TearDown() { SetGCoreType(0); }
 };
 
 template <typename T, TestMode TestMode, bool USE_COMPARES>
-void MainVecCompareScalarDemo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, CMPMODE cmpMode, uint32_t dataSize, uint32_t selMaskSize)
+void MainVecCompareScalarDemo(
+    __gm__ uint8_t* __restrict__ selMaskGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    CMPMODE cmpMode, uint32_t dataSize, uint32_t selMaskSize)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -456,7 +451,7 @@ void MainVecCompareScalarDemo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uin
 
     set_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
-    if constexpr (USE_COMPARES){
+    if constexpr (USE_COMPARES) {
         if constexpr (TestMode == LEVEL2) {
             Compares(selMaskLocal, input0Local, scalar, cmpMode, dataSize);
             Compares(selMaskLocal, scalar, input0Local, cmpMode, dataSize);
@@ -471,26 +466,38 @@ void MainVecCompareScalarDemo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uin
                 mask[0] = UINT64_MAX;
                 mask[1] = 0;
             }
-            Compares(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local, input0Local[0], cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local[0], input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
+            Compares(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local, input0Local[0], cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local[0], input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
             AscendC::SetMaskCount();
             AscendC::SetVectorMask<PrimT<T>, MaskMode::COUNTER>(0, 144);
-            Compares<T, uint8_t ,false>(selMaskLocal, input0Local, scalar, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
-            Compares<T, uint8_t ,false>(selMaskLocal, scalar, input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
-            Compares<T, uint8_t ,false>(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
-            Compares<T, uint8_t ,false>(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
-            Compares<T, uint8_t ,false>(selMaskLocal, input0Local, input0Local[0], cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
-            Compares<T, uint8_t ,false>(selMaskLocal, input0Local[0], input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
+            Compares<T, uint8_t, false>(
+                selMaskLocal, input0Local, scalar, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, {0, 1, 0, 8});
+            Compares<T, uint8_t, false>(
+                selMaskLocal, scalar, input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, {0, 1, 0, 8});
+            Compares<T, uint8_t, false>(
+                selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST,
+                repeatTime, {0, 1, 0, 8});
+            Compares<T, uint8_t, false>(
+                selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, AscendC::MASK_PLACEHOLDER_LIST,
+                repeatTime, {0, 1, 0, 8});
+            Compares<T, uint8_t, false>(
+                selMaskLocal, input0Local, input0Local[0], cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime,
+                {0, 1, 0, 8});
+            Compares<T, uint8_t, false>(
+                selMaskLocal, input0Local[0], input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime,
+                {0, 1, 0, 8});
             AscendC::ResetMask();
-            Compares(selMaskLocal, input0Local, scalar, cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, scalar, input0Local, cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local, input0Local[0], cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local[0], input0Local, cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
+            Compares(selMaskLocal, input0Local, scalar, cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, scalar, input0Local, cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
+            Compares(
+                selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
+            Compares(
+                selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local, input0Local[0], cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local[0], input0Local, cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
             AscendC::SetMaskNorm();
         } else if constexpr (TestMode == LEVEL0_COUNT_MODE) {
             uint8_t repeatTime = dataSize * sizeof(PrimT<T>) / ONE_REPEAT_BYTE_SIZE;
@@ -500,35 +507,48 @@ void MainVecCompareScalarDemo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uin
             } else if (sizeof(PrimT<T>) == 4) {
                 mask = 64;
             }
-            Compares(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, scalar, input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local, input0Local[0], cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local[0], input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
+            Compares(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, scalar, input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local, input0Local[0], cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local[0], input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
 
             constexpr static BinaryConfig config = {1};
-            Compares<T, uint8_t, false, config>(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Select<T, uint8_t, false, config>(input0Local, selMaskLocal, input0Local, scalar, SELMODE::VSEL_TENSOR_SCALAR_MODE, mask, 1, { 1, 1, 1, 8, 8, 8});
+            Compares<T, uint8_t, false, config>(
+                selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Select<T, uint8_t, false, config>(
+                input0Local, selMaskLocal, input0Local, scalar, SELMODE::VSEL_TENSOR_SCALAR_MODE, mask, 1,
+                {1, 1, 1, 8, 8, 8});
 
             AscendC::SetMaskCount();
             AscendC::SetVectorMask<T, MaskMode::COUNTER>(0, 144);
-            Compares<T, uint8_t ,false>(selMaskLocal, input0Local, scalar, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
-            Compares<T, uint8_t ,false>(selMaskLocal, scalar, input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
-            Compares<T, uint8_t ,false>(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
-            Compares<T, uint8_t ,false>(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
-            Compares<T, uint8_t ,false>(selMaskLocal, input0Local, input0Local[0], cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
-            Compares<T, uint8_t ,false>(selMaskLocal, input0Local[0], input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
+            Compares<T, uint8_t, false>(
+                selMaskLocal, input0Local, scalar, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, {0, 1, 0, 8});
+            Compares<T, uint8_t, false>(
+                selMaskLocal, scalar, input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, {0, 1, 0, 8});
+            Compares<T, uint8_t, false>(
+                selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime,
+                {0, 1, 0, 8});
+            Compares<T, uint8_t, false>(
+                selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime,
+                {0, 1, 0, 8});
+            Compares<T, uint8_t, false>(
+                selMaskLocal, input0Local, input0Local[0], cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime,
+                {0, 1, 0, 8});
+            Compares<T, uint8_t, false>(
+                selMaskLocal, input0Local[0], input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime,
+                {0, 1, 0, 8});
             AscendC::ResetMask();
-            Compares(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, scalar, input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode,  mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode,  mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local, input0Local[0], cmpMode,  mask, repeatTime, { 0, 1, 0, 8 });
-            Compares(selMaskLocal, input0Local[0], input0Local, cmpMode,  mask, repeatTime, { 0, 1, 0, 8 });
+            Compares(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, scalar, input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local, input0Local[0], cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Compares(selMaskLocal, input0Local[0], input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
             AscendC::SetMaskNorm();
         }
-    }else{
+    } else {
         if constexpr (TestMode == LEVEL2) {
             CompareScalar(selMaskLocal, input0Local, scalar, cmpMode, dataSize);
             CompareScalar(selMaskLocal, scalar, input0Local, cmpMode, dataSize);
@@ -543,26 +563,38 @@ void MainVecCompareScalarDemo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uin
                 mask[0] = UINT64_MAX;
                 mask[1] = 0;
             }
-            CompareScalar(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local, input0Local[0], cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local[0], input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
+            CompareScalar(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local, input0Local[0], cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local[0], input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
             AscendC::SetMaskCount();
             AscendC::SetVectorMask<PrimT<T>, MaskMode::COUNTER>(0, 144);
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, input0Local, scalar, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, scalar, input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, input0Local, input0Local[0], cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, input0Local[0], input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, { 0, 1, 0, 8 });
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, input0Local, scalar, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, {0, 1, 0, 8});
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, scalar, input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime, {0, 1, 0, 8});
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST,
+                repeatTime, {0, 1, 0, 8});
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, AscendC::MASK_PLACEHOLDER_LIST,
+                repeatTime, {0, 1, 0, 8});
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, input0Local, input0Local[0], cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime,
+                {0, 1, 0, 8});
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, input0Local[0], input0Local, cmpMode, AscendC::MASK_PLACEHOLDER_LIST, repeatTime,
+                {0, 1, 0, 8});
             AscendC::ResetMask();
-            CompareScalar(selMaskLocal, input0Local, scalar, cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, scalar, input0Local, cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local, input0Local[0], cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local[0], input0Local, cmpMode, counterMask, repeatTime, { 0, 1, 0, 8 });
+            CompareScalar(selMaskLocal, input0Local, scalar, cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, scalar, input0Local, cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(
+                selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(
+                selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local, input0Local[0], cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local[0], input0Local, cmpMode, counterMask, repeatTime, {0, 1, 0, 8});
             AscendC::SetMaskNorm();
         } else if constexpr (TestMode == LEVEL0_COUNT_MODE) {
             uint8_t repeatTime = dataSize * sizeof(PrimT<T>) / ONE_REPEAT_BYTE_SIZE;
@@ -572,32 +604,45 @@ void MainVecCompareScalarDemo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uin
             } else if (sizeof(PrimT<T>) == 4) {
                 mask = 64;
             }
-            CompareScalar(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, scalar, input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local, input0Local[0], cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local[0], input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
+            CompareScalar(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, scalar, input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local, input0Local[0], cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local[0], input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
 
             constexpr static BinaryConfig config = {1};
-            CompareScalar<T, uint8_t, false, config>(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            Select<T, uint8_t, false, config>(input0Local, selMaskLocal, input0Local, scalar, SELMODE::VSEL_TENSOR_SCALAR_MODE, mask, 1, { 1, 1, 1, 8, 8, 8});
+            CompareScalar<T, uint8_t, false, config>(
+                selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            Select<T, uint8_t, false, config>(
+                input0Local, selMaskLocal, input0Local, scalar, SELMODE::VSEL_TENSOR_SCALAR_MODE, mask, 1,
+                {1, 1, 1, 8, 8, 8});
 
             AscendC::SetMaskCount();
             AscendC::SetVectorMask<T, MaskMode::COUNTER>(0, 144);
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, input0Local, scalar, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, scalar, input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, input0Local, input0Local[0], cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar<T, uint8_t ,false>(selMaskLocal, input0Local[0], input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, { 0, 1, 0, 8 });
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, input0Local, scalar, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, {0, 1, 0, 8});
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, scalar, input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime, {0, 1, 0, 8});
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime,
+                {0, 1, 0, 8});
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime,
+                {0, 1, 0, 8});
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, input0Local, input0Local[0], cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime,
+                {0, 1, 0, 8});
+            CompareScalar<T, uint8_t, false>(
+                selMaskLocal, input0Local[0], input0Local, cmpMode, AscendC::MASK_PLACEHOLDER, repeatTime,
+                {0, 1, 0, 8});
             AscendC::ResetMask();
-            CompareScalar(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, scalar, input0Local, cmpMode, mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode,  mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode,  mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local, input0Local[0], cmpMode,  mask, repeatTime, { 0, 1, 0, 8 });
-            CompareScalar(selMaskLocal, input0Local[0], input0Local, cmpMode,  mask, repeatTime, { 0, 1, 0, 8 });
+            CompareScalar(selMaskLocal, input0Local, scalar, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, scalar, input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, static_cast<PrimT<T>>(0), input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local, static_cast<PrimT<T>>(0), cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local, input0Local[0], cmpMode, mask, repeatTime, {0, 1, 0, 8});
+            CompareScalar(selMaskLocal, input0Local[0], input0Local, cmpMode, mask, repeatTime, {0, 1, 0, 8});
             AscendC::SetMaskNorm();
         }
     }
@@ -609,36 +654,36 @@ void MainVecCompareScalarDemo(__gm__ uint8_t* __restrict__ selMaskGm, __gm__ uin
     pipe_barrier(PIPE_ALL);
 }
 
-#define VEC_CMPS_TESTCASE(dataType, relationOp, testMode)                                               \
-    TEST_F(TEST_COMPARE, Compares##dataType##relationOp##testMode##Case)                    \
-    {                                                                                                      \
-        uint32_t dataSize = 256;                                                                          \
-        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                    \
-        uint8_t input0Gm[dataSize * sizeof(PrimT<dataType>)];                                                  \
-        uint8_t input1Gm[dataSize * sizeof(PrimT<dataType>)];                                                  \
-        uint8_t outputGm[dataSize];                                                                      \
-                                                                                                           \
-        MainVecCompareScalarDemo<dataType, testMode, true>(outputGm, input0Gm, input1Gm, CMPMODE::relationOp,     \
-            dataSize, selMaskSize);                                                          \
-                                                                                                           \
-        for (uint32_t i = 0; i < selMaskSize; i++) {                                                     \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                 \
-        }                                                                                                  \
-    }                                                                                                      \
-    TEST_F(TEST_COMPARE_SCALAR, CompareScalar##dataType##relationOp##testMode##Case)                    \
-    {                                                                                                      \
-        uint32_t dataSize = 256;                                                                          \
-        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                    \
-        uint8_t input0Gm[dataSize * sizeof(PrimT<dataType>)];                                                  \
-        uint8_t input1Gm[dataSize * sizeof(PrimT<dataType>)];                                                  \
-        uint8_t outputGm[dataSize];                                                                      \
-                                                                                                           \
-        MainVecCompareScalarDemo<dataType, testMode, false>(outputGm, input0Gm, input1Gm, CMPMODE::relationOp,     \
-            dataSize, selMaskSize);                                                          \
-                                                                                                           \
-        for (uint32_t i = 0; i < selMaskSize; i++) {                                                     \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                 \
-        }                                                                                                  \
+#define VEC_CMPS_TESTCASE(dataType, relationOp, testMode)                              \
+    TEST_F(TEST_COMPARE, Compares##dataType##relationOp##testMode##Case)               \
+    {                                                                                  \
+        uint32_t dataSize = 256;                                                       \
+        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));   \
+        uint8_t input0Gm[dataSize * sizeof(PrimT<dataType>)];                          \
+        uint8_t input1Gm[dataSize * sizeof(PrimT<dataType>)];                          \
+        uint8_t outputGm[dataSize];                                                    \
+                                                                                       \
+        MainVecCompareScalarDemo<dataType, testMode, true>(                            \
+            outputGm, input0Gm, input1Gm, CMPMODE::relationOp, dataSize, selMaskSize); \
+                                                                                       \
+        for (uint32_t i = 0; i < selMaskSize; i++) {                                   \
+            EXPECT_EQ(outputGm[i], 0x00);                                              \
+        }                                                                              \
+    }                                                                                  \
+    TEST_F(TEST_COMPARE_SCALAR, CompareScalar##dataType##relationOp##testMode##Case)   \
+    {                                                                                  \
+        uint32_t dataSize = 256;                                                       \
+        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));   \
+        uint8_t input0Gm[dataSize * sizeof(PrimT<dataType>)];                          \
+        uint8_t input1Gm[dataSize * sizeof(PrimT<dataType>)];                          \
+        uint8_t outputGm[dataSize];                                                    \
+                                                                                       \
+        MainVecCompareScalarDemo<dataType, testMode, false>(                           \
+            outputGm, input0Gm, input1Gm, CMPMODE::relationOp, dataSize, selMaskSize); \
+                                                                                       \
+        for (uint32_t i = 0; i < selMaskSize; i++) {                                   \
+            EXPECT_EQ(outputGm[i], 0x00);                                              \
+        }                                                                              \
     }
 // Counter mode tests
 VEC_CMPS_TESTCASE(uint8_t, LT, LEVEL2);

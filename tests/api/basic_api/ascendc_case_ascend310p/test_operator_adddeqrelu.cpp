@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,21 +15,16 @@ using namespace AscendC;
 
 class TEST_ADDDEQRELU : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 class KernelAddDeqRelu {
 public:
     __aicore__ inline KernelAddDeqRelu() {}
-    __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, uint32_t totalLength, int64_t mask[2],
-        uint32_t repeatTimes, int64_t repeatParams[6])
+    __aicore__ inline void Init(
+        GM_ADDR x, GM_ADDR y, GM_ADDR z, uint32_t totalLength, int64_t mask[2], uint32_t repeatTimes,
+        int64_t repeatParams[6])
     {
         this->totalLength = totalLength;
         this->mask[0] = mask[0];
@@ -42,9 +37,9 @@ public:
         this->repeatParams.src0RepStride = repeatParams[4];
         this->repeatParams.src1RepStride = repeatParams[5];
 
-        xGm.SetGlobalBuffer((__gm__ int32_t *)x, this->totalLength);
-        yGm.SetGlobalBuffer((__gm__ int32_t *)y, this->totalLength);
-        zGm.SetGlobalBuffer((__gm__ half *)z, this->totalLength);
+        xGm.SetGlobalBuffer((__gm__ int32_t*)x, this->totalLength);
+        yGm.SetGlobalBuffer((__gm__ int32_t*)y, this->totalLength);
+        zGm.SetGlobalBuffer((__gm__ half*)z, this->totalLength);
         pipe.InitBuffer(inQueueX, 1, this->totalLength * sizeof(int32_t));
         pipe.InitBuffer(inQueueY, 1, this->totalLength * sizeof(int32_t));
         pipe.InitBuffer(outQueueZ, 1, this->totalLength * sizeof(half));
@@ -118,14 +113,14 @@ private:
 };
 
 #define VEC_ADDDEQRELU_TESTCASE(mask1, mask2)                                   \
-    TEST_F(TEST_ADDDEQRELU, ADDDEQRELU##_##mask1##_##mask2##_##Case)                 \
+    TEST_F(TEST_ADDDEQRELU, ADDDEQRELU##_##mask1##_##mask2##_##Case)            \
     {                                                                           \
         KernelAddDeqRelu op;                                                    \
-        int64_t dataSize = 64;                                                 \
-        int64_t tmpMask1 = mask1;                                              \
-        int64_t tmpMask2 = mask2;                                              \
-        int64_t mask[] = {tmpMask1, tmpMask2};                              \
-        int64_t repeatParams[] = {1, 1, 1, 4, 8, 8};                          \
+        int64_t dataSize = 64;                                                  \
+        int64_t tmpMask1 = mask1;                                               \
+        int64_t tmpMask2 = mask2;                                               \
+        int64_t mask[] = {tmpMask1, tmpMask2};                                  \
+        int64_t repeatParams[] = {1, 1, 1, 4, 8, 8};                            \
         uint8_t input0Gm[dataSize * sizeof(int32_t)];                           \
         uint8_t input1Gm[dataSize * sizeof(int32_t)];                           \
         uint8_t outputGm[dataSize * sizeof(half)];                              \

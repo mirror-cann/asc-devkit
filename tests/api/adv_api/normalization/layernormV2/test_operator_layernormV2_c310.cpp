@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -15,8 +15,9 @@
 using namespace std;
 using namespace AscendC;
 
-__aicore__ inline void GetLayerNormNDTilingInfo(const ShapeInfo &inputShapeInfo, const uint32_t stackBufferSize,
-                                                const uint32_t typeSize, const bool isReuseSource, LayerNormSeparateTiling &tiling)
+__aicore__ inline void GetLayerNormNDTilingInfo(
+    const ShapeInfo& inputShapeInfo, const uint32_t stackBufferSize, const uint32_t typeSize, const bool isReuseSource,
+    LayerNormSeparateTiling& tiling)
 {
     constexpr uint32_t LAYERNORM_FOLD_NUM = 2;
     uint32_t aLength = inputShapeInfo.shape[0];
@@ -49,8 +50,9 @@ __aicore__ inline void GetLayerNormNDTilingInfo(const ShapeInfo &inputShapeInfo,
 }
 
 template <typename U, typename T, bool isNoBeta = false, bool isNoGamma = false, bool isReuseSource = false>
-__aicore__ inline void MainLayernormrstdTest(GM_ADDR inputXGm, GM_ADDR gammGm, GM_ADDR betaGm, GM_ADDR outputGm,
-                                             GM_ADDR outputMeanGm, GM_ADDR outputRstdGm, uint32_t aLength, uint32_t rLength, uint32_t rLengthWithPadding)
+__aicore__ inline void MainLayernormrstdTest(
+    GM_ADDR inputXGm, GM_ADDR gammGm, GM_ADDR betaGm, GM_ADDR outputGm, GM_ADDR outputMeanGm, GM_ADDR outputRstdGm,
+    uint32_t aLength, uint32_t rLength, uint32_t rLengthWithPadding)
 {
     const float epsilon = 0.001;
     DataFormat dataFormat = DataFormat::ND;
@@ -64,13 +66,13 @@ __aicore__ inline void MainLayernormrstdTest(GM_ADDR inputXGm, GM_ADDR gammGm, G
 
     uint32_t arLength = aLength * rLengthWithPadding;
 
-    inputXGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(inputXGm), arLength);
-    gammGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(gammGm), rLengthWithPadding);
-    betaGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(betaGm), rLengthWithPadding);
+    inputXGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(inputXGm), arLength);
+    gammGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(gammGm), rLengthWithPadding);
+    betaGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(betaGm), rLengthWithPadding);
 
-    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(outputGm), arLength);
-    outputMeanGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ float *>(outputMeanGm), aLength);
-    outputRstdGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ float *>(outputRstdGm), aLength);
+    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(outputGm), arLength);
+    outputMeanGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ float*>(outputMeanGm), aLength);
+    outputRstdGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ float*>(outputRstdGm), aLength);
 
     TPipe pipe;
     TQue<TPosition::VECIN, 1> inQueueX;
@@ -102,7 +104,9 @@ __aicore__ inline void MainLayernormrstdTest(GM_ADDR inputXGm, GM_ADDR gammGm, G
 
     DataCopyPadParams dataCopyPadParams;
     for (int32_t i = 0; i < aLength; i++) {
-        DataCopyPad(inputXLocal[i * rLengthWithPadding], inputXGlobal[i * rLengthWithPadding], {1, static_cast<uint16_t>(rLengthWithPadding * sizeof(T)), 0, 0}, dataCopyPadParams);
+        DataCopyPad(
+            inputXLocal[i * rLengthWithPadding], inputXGlobal[i * rLengthWithPadding],
+            {1, static_cast<uint16_t>(rLengthWithPadding * sizeof(T)), 0, 0}, dataCopyPadParams);
     }
     if constexpr (!isNoGamma) {
         DataCopy(gammaLocal, gammGlobal, rLengthWithPadding);
@@ -132,20 +136,22 @@ __aicore__ inline void MainLayernormrstdTest(GM_ADDR inputXGm, GM_ADDR gammGm, G
     GetLayerNormNDTilingInfo(shapeInfo, stackBufferSize, sizeof(T), isReuseSource, tiling);
     static constexpr LayerNormConfig config = {isNoBeta, isNoGamma, false};
     if constexpr (!isNoGamma && !isNoBeta) {
-        LayerNorm<U, T, isReuseSource, config>(outputLocal, meanLocal, rstdLocal, inputXLocal, gammaLocal, betaLocal,
-                                               epsilon, para, tiling);
+        LayerNorm<U, T, isReuseSource, config>(
+            outputLocal, meanLocal, rstdLocal, inputXLocal, gammaLocal, betaLocal, epsilon, para, tiling);
     } else if constexpr (!isNoGamma) {
-        LayerNorm<U, T, isReuseSource, config>(outputLocal, meanLocal, rstdLocal, inputXLocal, gammaLocal, gammaLocal,
-                                               epsilon, para, tiling);
+        LayerNorm<U, T, isReuseSource, config>(
+            outputLocal, meanLocal, rstdLocal, inputXLocal, gammaLocal, gammaLocal, epsilon, para, tiling);
     } else if constexpr (!isNoBeta) {
-        LayerNorm<U, T, isReuseSource, config>(outputLocal, meanLocal, rstdLocal, inputXLocal, betaLocal, betaLocal,
-                                               epsilon, para, tiling);
+        LayerNorm<U, T, isReuseSource, config>(
+            outputLocal, meanLocal, rstdLocal, inputXLocal, betaLocal, betaLocal, epsilon, para, tiling);
     } else {
-        LayerNorm<U, T, isReuseSource, config>(outputLocal, meanLocal, rstdLocal, inputXLocal, inputXLocal, inputXLocal,
-                                               epsilon, para, tiling);
+        LayerNorm<U, T, isReuseSource, config>(
+            outputLocal, meanLocal, rstdLocal, inputXLocal, inputXLocal, inputXLocal, epsilon, para, tiling);
     }
     for (int32_t i = 0; i < aLength; i++) {
-        DataCopyPad(outputGlobal[i * rLengthWithPadding], outputLocal[i * rLengthWithPadding], {1, static_cast<uint16_t>(rLengthWithPadding * sizeof(T)), 0, 0});
+        DataCopyPad(
+            outputGlobal[i * rLengthWithPadding], outputLocal[i * rLengthWithPadding],
+            {1, static_cast<uint16_t>(rLengthWithPadding * sizeof(T)), 0, 0});
     }
 
     DataCopyPad(outputMeanGlobal, meanLocal, {1, static_cast<uint16_t>(aLength * sizeof(T)), 0, 0});
@@ -163,58 +169,69 @@ __aicore__ inline void MainLayernormrstdTest(GM_ADDR inputXGm, GM_ADDR gammGm, G
     outQueueRstd.FreeTensor(rstdLocal);
 }
 
-struct layernormrstdTestParams
-{
+struct layernormrstdTestParams {
     uint32_t aLength;
     uint32_t rLength;
     uint32_t rLengthWithPadding;
     uint32_t typeSizeU;
     uint32_t typeSizeT;
-    void (*cal_func)(uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint32_t, uint32_t, uint32_t);
+    void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint32_t, uint32_t, uint32_t);
 };
 
-class layernormrstdTestSuite : public testing::Test, public testing::WithParamInterface<layernormrstdTestParams>
-{
+class layernormrstdTestSuite : public testing::Test, public testing::WithParamInterface<layernormrstdTestParams> {
 protected:
-    static void SetUpTestCase()
-    {
-        std::cout << "layernormrstdTestSuite SetUpTestCase" << std::endl;
-    }
-    static void TearDownTestCase()
-    {
-        std::cout << "layernormrstdTestSuite TearDownTestCase" << std::endl;
-    }
+    static void SetUpTestCase() { std::cout << "layernormrstdTestSuite SetUpTestCase" << std::endl; }
+    static void TearDownTestCase() { std::cout << "layernormrstdTestSuite TearDownTestCase" << std::endl; }
     virtual void SetUp() {}
     virtual void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_PACKAGE_layernormrstd, layernormrstdTestSuite,
-                        ::testing::Values(
-                            // dtype combination
-                            layernormrstdTestParams{64, 16, 16, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, false, false>},
-                            layernormrstdTestParams{64, 16, 16, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
-                            layernormrstdTestParams{64, 16, 16, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>},
-                            // dtype combination
-                            layernormrstdTestParams{8, 128, 128, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, false, false>},
-                            layernormrstdTestParams{8, 128, 128, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
-                            layernormrstdTestParams{8, 128, 128, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>},
-                            // dtype combination
-                            layernormrstdTestParams{1, 4080, 4080, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>},
-                            layernormrstdTestParams{1, 4096, 4096, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>},
-                            layernormrstdTestParams{1, 4112, 4112, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>},
-                            // dtype combination
-                            layernormrstdTestParams{1, 16256, 16256, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
-                            layernormrstdTestParams{1, 16384, 16384, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
-                            layernormrstdTestParams{1, 16400, 16400, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
-                            layernormrstdTestParams{1, 16512, 16512, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
-                            // dtype combinationtrue
-                            layernormrstdTestParams{1, 32768, 32768, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, true, true>},
-                            layernormrstdTestParams{1, 32784, 32784, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, true, true>},
-                            layernormrstdTestParams{1, 32896, 32896, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, true, true>},
-                            // rLength != rWithPad
-                            layernormrstdTestParams{8, 27, 32, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, false, false>},
-                            layernormrstdTestParams{8, 29, 32, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
-                            layernormrstdTestParams{8, 27, 32, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>}));
+INSTANTIATE_TEST_CASE_P(
+    TEST_PACKAGE_layernormrstd, layernormrstdTestSuite,
+    ::testing::Values(
+        // dtype combination
+        layernormrstdTestParams{
+            64, 16, 16, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, false, false>},
+        layernormrstdTestParams{
+            64, 16, 16, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
+        layernormrstdTestParams{
+            64, 16, 16, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>},
+        // dtype combination
+        layernormrstdTestParams{
+            8, 128, 128, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, false, false>},
+        layernormrstdTestParams{
+            8, 128, 128, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
+        layernormrstdTestParams{
+            8, 128, 128, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>},
+        // dtype combination
+        layernormrstdTestParams{
+            1, 4080, 4080, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>},
+        layernormrstdTestParams{
+            1, 4096, 4096, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>},
+        layernormrstdTestParams{
+            1, 4112, 4112, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>},
+        // dtype combination
+        layernormrstdTestParams{
+            1, 16256, 16256, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
+        layernormrstdTestParams{
+            1, 16384, 16384, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
+        layernormrstdTestParams{
+            1, 16400, 16400, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
+        layernormrstdTestParams{
+            1, 16512, 16512, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
+        // dtype combinationtrue
+        layernormrstdTestParams{
+            1, 32768, 32768, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, true, true>},
+        layernormrstdTestParams{
+            1, 32784, 32784, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, true, true>},
+        layernormrstdTestParams{
+            1, 32896, 32896, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, true, true>},
+        // rLength != rWithPad
+        layernormrstdTestParams{8, 27, 32, sizeof(half), sizeof(half), MainLayernormrstdTest<half, half, false, false>},
+        layernormrstdTestParams{
+            8, 29, 32, sizeof(float), sizeof(half), MainLayernormrstdTest<float, half, false, false>},
+        layernormrstdTestParams{
+            8, 27, 32, sizeof(float), sizeof(float), MainLayernormrstdTest<float, float, false, false>}));
 
 TEST_P(layernormrstdTestSuite, LayernormrstdTestCase)
 {
@@ -236,7 +253,8 @@ TEST_P(layernormrstdTestSuite, LayernormrstdTestCase)
     uint8_t outputMeanGm[aLength * sizeof(float)]{0x00};
     uint8_t outputRstdeGm[aLength * sizeof(float)]{0x00};
 
-    param.cal_func(inputXGm, gammGm, betaGm, outputGm, outputMeanGm, outputRstdeGm, aLength, rLength, rLengthWithPadding);
+    param.cal_func(
+        inputXGm, gammGm, betaGm, outputGm, outputMeanGm, outputRstdeGm, aLength, rLength, rLengthWithPadding);
 
     for (int32_t i = 0; i < aLength * rLengthWithPadding * typeSizeT; i++) {
         EXPECT_EQ(outputGm[i], 0x00);

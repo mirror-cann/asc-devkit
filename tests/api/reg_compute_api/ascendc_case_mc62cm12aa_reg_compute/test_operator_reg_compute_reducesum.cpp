@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,14 +15,14 @@ template <typename T, typename U, int mode>
 class MicroReduceSumTest {
 public:
     __aicore__ inline MicroReduceSumTest() {}
-    __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-        __gm__ uint8_t* indexOffsetGm, const uint32_t count)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* indexOffsetGm, const uint32_t count)
     {
         m_elementCount = count;
         m_srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         m_indexOffsetGlobal.SetGlobalBuffer((__gm__ T*)indexOffsetGm);
         m_dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
- 
+
         m_pipe.InitBuffer(m_queIn, 1, m_elementCount * sizeof(T));
         m_pipe.InitBuffer(m_queIn2, 1, m_elementCount * sizeof(T));
         m_pipe.InitBuffer(m_queOut, 1, m_elementCount * sizeof(T));
@@ -33,13 +33,14 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
         LocalTensor<T> srcLocal = m_queIn.AllocTensor<T>();
         DataCopy(srcLocal, m_srcGlobal, m_elementCount);
         m_queIn.EnQue(srcLocal);
- 
+
         LocalTensor<T> indexLocal = m_queIn2.AllocTensor<T>();
         DataCopy(indexLocal, m_indexOffsetGlobal, m_elementCount);
         m_queIn2.EnQue(indexLocal);
@@ -52,7 +53,7 @@ private:
         __ubuf__ T* srcPtr = (__ubuf__ T*)srcLocal.GetPhyAddr();
         __ubuf__ T* indexPtr = (__ubuf__ T*)indexLocal.GetPhyAddr();
         __ubuf__ T* dstPtr = (__ubuf__ T*)dstLocal.GetPhyAddr();
- 
+
         __VEC_SCOPE__
         {
             Reg::RegTensor<T> vIndexReg;
@@ -70,8 +71,7 @@ private:
                 Reg::DataCopy(dstPtr + i * repeatElm, vDstReg, preg);
             }
         }
-       
- 
+
         m_queIn.FreeTensor(srcLocal);
         m_queIn2.FreeTensor(indexLocal);
         m_queOut.EnQue(dstLocal);
@@ -82,6 +82,7 @@ private:
         DataCopy(m_dstGlobal, dstLocal, m_elementCount);
         m_queOut.FreeTensor(dstLocal);
     }
+
 private:
     TPipe m_pipe;
     uint32_t m_elementCount;
@@ -95,8 +96,8 @@ private:
 } // namespace AscendC
 
 template <typename T, typename U, int mode>
-__global__ __aicore__ void testReduceSum(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-    __gm__ uint8_t* indexOffsetGm, uint32_t elementCount)
+__global__ __aicore__ void testReduceSum(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* indexOffsetGm, uint32_t elementCount)
 {
     AscendC::MicroReduceSumTest<T, U, mode> op;
     op.Init(dstGm, srcGm, indexOffsetGm, elementCount);
@@ -110,25 +111,21 @@ struct reduceSumParams {
     void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint32_t);
 };
 
-class reduceSumTestsuite : public testing::Test,
-    public testing::WithParamInterface<reduceSumParams> {
+class reduceSumTestsuite : public testing::Test, public testing::WithParamInterface<reduceSumParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_REDUCE_SUM, reduceSumTestsuite,
-    ::testing::Values(reduceSumParams { 2, 2, 128, testReduceSum<half, half, 0>},
-    reduceSumParams { 4, 4, 64, testReduceSum<int32_t, int32_t, 0>},
-    reduceSumParams { 4, 4, 64, testReduceSum<uint32_t, uint32_t, 0>},
-    reduceSumParams { 4, 4, 64, testReduceSum<int32_t, int16_t, 0>},
-    reduceSumParams { 4, 4, 64, testReduceSum<uint32_t, uint16_t, 0>},
-    reduceSumParams { 4, 4, 64, testReduceSum<float, float, 0>}));
-
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_REDUCE_SUM, reduceSumTestsuite,
+    ::testing::Values(
+        reduceSumParams{2, 2, 128, testReduceSum<half, half, 0>},
+        reduceSumParams{4, 4, 64, testReduceSum<int32_t, int32_t, 0>},
+        reduceSumParams{4, 4, 64, testReduceSum<uint32_t, uint32_t, 0>},
+        reduceSumParams{4, 4, 64, testReduceSum<int32_t, int16_t, 0>},
+        reduceSumParams{4, 4, 64, testReduceSum<uint32_t, uint16_t, 0>},
+        reduceSumParams{4, 4, 64, testReduceSum<float, float, 0>}));
 
 TEST_P(reduceSumTestsuite, testReduceSum)
 {
@@ -137,7 +134,7 @@ TEST_P(reduceSumTestsuite, testReduceSum)
     uint8_t srcGm[param.elementCount * param.srcTypeSize] = {0};
     uint8_t indexOffsetGm[param.elementCount * param.dstTypeSize] = {0};
     param.cal_func(dstGm, srcGm, indexOffsetGm, param.elementCount);
-    
+
     for (int32_t i = 0; i < param.elementCount; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <mockcpp/mockcpp.hpp>
@@ -19,9 +19,10 @@ protected:
     void TearDown() {}
 };
 
-namespace {   
-void scatter_vnchwconv_b8_stub(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride,
-    bool dst_high_half, bool src_high_half)
+namespace {
+void scatter_vnchwconv_b8_stub(
+    ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride, bool dst_high_half,
+    bool src_high_half)
 {
     EXPECT_EQ(ub_addr8_t::VA0, dst);
     EXPECT_EQ(ub_addr8_t::VA2, src);
@@ -32,8 +33,8 @@ void scatter_vnchwconv_b8_stub(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, u
     EXPECT_EQ(src_high_half, static_cast<bool>(0));
 }
 
-void scatter_vnchwconv_b16_stub(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride,
-                                uint16_t src_stride)
+void scatter_vnchwconv_b16_stub(
+    ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride)
 {
     EXPECT_EQ(ub_addr8_t::VA1, dst);
     EXPECT_EQ(ub_addr8_t::VA3, src);
@@ -42,8 +43,8 @@ void scatter_vnchwconv_b16_stub(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, 
     EXPECT_EQ(src_stride, static_cast<uint16_t>(7));
 }
 
-void scatter_vnchwconv_b32_stub(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride,
-                                uint16_t src_stride)
+void scatter_vnchwconv_b32_stub(
+    ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride)
 {
     EXPECT_EQ(ub_addr8_t::VA4, dst);
     EXPECT_EQ(ub_addr8_t::VA5, src);
@@ -51,7 +52,7 @@ void scatter_vnchwconv_b32_stub(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, 
     EXPECT_EQ(dst_stride, static_cast<uint16_t>(9));
     EXPECT_EQ(src_stride, static_cast<uint16_t>(10));
 }
-}
+} // namespace
 
 TEST_F(TestTransdataTo5HDCAPI, asc_transto5hd_b8_Succ)
 {
@@ -79,8 +80,8 @@ TEST_F(TestTransdataTo5HDCAPI, asc_transto5hd_b8_sync_Succ)
         .times(1)
         .will(invoke(scatter_vnchwconv_b8_stub));
 
-    asc_transto5hd_b8_sync(ub_addr8_t::VA0, ub_addr8_t::VA2, repeat, dst_stride, src_stride, dst_high_half,
-                           src_high_half);
+    asc_transto5hd_b8_sync(
+        ub_addr8_t::VA0, ub_addr8_t::VA2, repeat, dst_stride, src_stride, dst_high_half, src_high_half);
     GlobalMockObject::verify();
 }
 

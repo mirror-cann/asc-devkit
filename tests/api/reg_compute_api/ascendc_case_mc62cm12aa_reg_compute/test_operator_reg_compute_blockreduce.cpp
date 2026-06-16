@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,13 +15,12 @@ template <typename T, typename U, int Mode>
 class MicroBlockReduceTest {
 public:
     __aicore__ inline MicroBlockReduceTest() {}
-    __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-        const uint32_t count)
+    __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, const uint32_t count)
     {
         elementCount = count;
         srcGlobal.SetGlobalBuffer((__gm__ T*)srcGm);
         dstGlobal.SetGlobalBuffer((__gm__ T*)dstGm);
- 
+
         pipe.InitBuffer(queIn, 1, elementCount * sizeof(T));
         pipe.InitBuffer(queOut, 1, elementCount * sizeof(T));
     }
@@ -31,6 +30,7 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
@@ -44,7 +44,7 @@ private:
         LocalTensor<T> dstLocal = queOut.AllocTensor<T>();
         __ubuf__ T* srcPtr = (__ubuf__ T*)srcLocal.GetPhyAddr();
         __ubuf__ T* dstPtr = (__ubuf__ T*)dstLocal.GetPhyAddr();
- 
+
         __VEC_SCOPE__
         {
             Reg::RegTensor<T> vDstReg;
@@ -57,18 +57,17 @@ private:
             for (uint16_t i = 0; i < (uint16_t)repeatTimes; ++i) {
                 preg = Reg::UpdateMask<T>(sreg);
                 Reg::DataCopy(vSrcReg, srcPtr + i * repeatElm);
-                if constexpr(Mode == 0) {
+                if constexpr (Mode == 0) {
                     Reg::ReduceSumWithDataBlock(vDstReg, vSrcReg, preg);
-                } else if constexpr(Mode == 1) {
+                } else if constexpr (Mode == 1) {
                     Reg::ReduceMaxWithDataBlock(vDstReg, vSrcReg, preg);
-                } else if constexpr(Mode == 2) {
+                } else if constexpr (Mode == 2) {
                     Reg::ReduceMinWithDataBlock(vDstReg, vSrcReg, preg);
                 }
                 Reg::DataCopy(dstPtr + i * repeatElm, vDstReg, preg);
             }
         }
-       
- 
+
         queIn.FreeTensor(srcLocal);
         queOut.EnQue(dstLocal);
     }
@@ -78,6 +77,7 @@ private:
         DataCopy(dstGlobal, dstLocal, elementCount);
         queOut.FreeTensor(dstLocal);
     }
+
 private:
     TPipe pipe;
     uint32_t elementCount;
@@ -89,8 +89,7 @@ private:
 } // namespace AscendC
 
 template <typename T, typename U, int mode>
-__global__ __aicore__ void testBlockReduce(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-    uint32_t elementCount)
+__global__ __aicore__ void testBlockReduce(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t elementCount)
 {
     AscendC::MicroBlockReduceTest<T, U, mode> op;
     op.Init(dstGm, srcGm, elementCount);
@@ -104,28 +103,29 @@ struct blockReduceParams {
     void (*cal_func)(uint8_t*, uint8_t*, uint32_t);
 };
 
-class blockReduceTestsuite : public testing::Test,
-    public testing::WithParamInterface<blockReduceParams> {};
+class blockReduceTestsuite : public testing::Test, public testing::WithParamInterface<blockReduceParams> {};
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_BLOCK_REDUCE, blockReduceTestsuite,
-    ::testing::Values(blockReduceParams { 4, 4, 128, testBlockReduce<float, float, 0>},
-    blockReduceParams { 4, 4, 128, testBlockReduce<uint32_t, uint32_t, 0>},
-    blockReduceParams { 4, 4, 128, testBlockReduce<int32_t, int32_t, 0>},
-    blockReduceParams { 2, 2, 256, testBlockReduce<int16_t, int16_t, 0>},
-    blockReduceParams { 2, 2, 256, testBlockReduce<uint16_t, uint16_t, 0>},
-    blockReduceParams { 2, 2, 256, testBlockReduce<half, half, 0>},
-    blockReduceParams { 4, 4, 128, testBlockReduce<float, float, 1>},
-    blockReduceParams { 4, 4, 128, testBlockReduce<uint32_t, uint32_t, 1>},
-    blockReduceParams { 4, 4, 128, testBlockReduce<int32_t, int32_t, 1>},
-    blockReduceParams { 2, 2, 256, testBlockReduce<int16_t, int16_t, 1>},
-    blockReduceParams { 2, 2, 256, testBlockReduce<uint16_t, uint16_t, 1>},
-    blockReduceParams { 2, 2, 256, testBlockReduce<half, half, 1>},
-    blockReduceParams { 4, 4, 128, testBlockReduce<float, float, 2>},
-    blockReduceParams { 4, 4, 128, testBlockReduce<uint32_t, uint32_t, 2>},
-    blockReduceParams { 4, 4, 128, testBlockReduce<int32_t, int32_t, 2>},
-    blockReduceParams { 2, 2, 256, testBlockReduce<int16_t, int16_t, 2>},
-    blockReduceParams { 2, 2, 256, testBlockReduce<uint16_t, uint16_t, 2>},
-    blockReduceParams { 2, 2, 256, testBlockReduce<half, half, 2>}));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_BLOCK_REDUCE, blockReduceTestsuite,
+    ::testing::Values(
+        blockReduceParams{4, 4, 128, testBlockReduce<float, float, 0>},
+        blockReduceParams{4, 4, 128, testBlockReduce<uint32_t, uint32_t, 0>},
+        blockReduceParams{4, 4, 128, testBlockReduce<int32_t, int32_t, 0>},
+        blockReduceParams{2, 2, 256, testBlockReduce<int16_t, int16_t, 0>},
+        blockReduceParams{2, 2, 256, testBlockReduce<uint16_t, uint16_t, 0>},
+        blockReduceParams{2, 2, 256, testBlockReduce<half, half, 0>},
+        blockReduceParams{4, 4, 128, testBlockReduce<float, float, 1>},
+        blockReduceParams{4, 4, 128, testBlockReduce<uint32_t, uint32_t, 1>},
+        blockReduceParams{4, 4, 128, testBlockReduce<int32_t, int32_t, 1>},
+        blockReduceParams{2, 2, 256, testBlockReduce<int16_t, int16_t, 1>},
+        blockReduceParams{2, 2, 256, testBlockReduce<uint16_t, uint16_t, 1>},
+        blockReduceParams{2, 2, 256, testBlockReduce<half, half, 1>},
+        blockReduceParams{4, 4, 128, testBlockReduce<float, float, 2>},
+        blockReduceParams{4, 4, 128, testBlockReduce<uint32_t, uint32_t, 2>},
+        blockReduceParams{4, 4, 128, testBlockReduce<int32_t, int32_t, 2>},
+        blockReduceParams{2, 2, 256, testBlockReduce<int16_t, int16_t, 2>},
+        blockReduceParams{2, 2, 256, testBlockReduce<uint16_t, uint16_t, 2>},
+        blockReduceParams{2, 2, 256, testBlockReduce<half, half, 2>}));
 
 TEST_P(blockReduceTestsuite, testBlockReduce)
 {
@@ -133,7 +133,7 @@ TEST_P(blockReduceTestsuite, testBlockReduce)
     uint8_t dstGm[param.elementCount * param.dstTypeSize] = {0};
     uint8_t srcGm[param.elementCount * param.srcTypeSize] = {0};
     param.cal_func(dstGm, srcGm, param.elementCount);
-    
+
     for (int32_t i = 0; i < param.elementCount; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }

@@ -17,21 +17,15 @@
                                                                                                                        \
     class TestMmad##type_prefix##CAPI : public testing::Test {                                                         \
     protected:                                                                                                         \
-        void SetUp()                                                                                                   \
-        {                                                                                                              \
-            g_coreType = C_API_AIC_TYPE;                                                                               \
-        }                                                                                                              \
-        void TearDown()                                                                                                \
-        {                                                                                                              \
-            g_coreType = C_API_AIV_TYPE;                                                                               \
-        }                                                                                                              \
+        void SetUp() { g_coreType = C_API_AIC_TYPE; }                                                                  \
+        void TearDown() { g_coreType = C_API_AIV_TYPE; }                                                               \
     };                                                                                                                 \
                                                                                                                        \
     namespace {                                                                                                        \
-    void mad_##type_prefix##_params_Stub(__cc__ c_type* c_matrix, __ca__ a_type* a_matrix, __cb__ b_type* b_matrix,    \
-                                         uint16_t left_height, uint16_t n_dim, uint16_t right_width,                   \
-                                         uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,                   \
-                                         bool c_matrix_init_val)                                                       \
+    void mad_##type_prefix##_params_Stub(                                                                              \
+        __cc__ c_type* c_matrix, __ca__ a_type* a_matrix, __cb__ b_type* b_matrix, uint16_t left_height,               \
+        uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,              \
+        bool c_matrix_init_val)                                                                                        \
     {                                                                                                                  \
         EXPECT_EQ(c_matrix, reinterpret_cast<__cc__ c_type*>(1));                                                      \
         EXPECT_EQ(a_matrix, reinterpret_cast<__ca__ a_type*>(2));                                                      \
@@ -59,14 +53,17 @@
         bool c_matrix_source = false;                                                                                  \
         bool c_matrix_init_val = true;                                                                                 \
                                                                                                                        \
-        MOCKER_CPP(mad, void(__cc__ c_type * c_matrix, __ca__ a_type * a_matrix, __cb__ b_type * b_matrix,             \
-                             uint16_t left_height, uint16_t n_dim, uint16_t right_width, uint8_t unit_flag,            \
-                             bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val))                         \
+        MOCKER_CPP(                                                                                                    \
+            mad, void(                                                                                                 \
+                     __cc__ c_type * c_matrix, __ca__ a_type * a_matrix, __cb__ b_type * b_matrix,                     \
+                     uint16_t left_height, uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, \
+                     bool c_matrix_source, bool c_matrix_init_val))                                                    \
             .times(1)                                                                                                  \
             .will(invoke(mad_##type_prefix##_params_Stub));                                                            \
                                                                                                                        \
-        asc_mmad(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv,               \
-                 c_matrix_source, c_matrix_init_val);                                                                  \
+        asc_mmad(                                                                                                      \
+            c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv, c_matrix_source,   \
+            c_matrix_init_val);                                                                                        \
         GlobalMockObject::verify();                                                                                    \
     }                                                                                                                  \
                                                                                                                        \
@@ -83,14 +80,17 @@
         bool c_matrix_source = false;                                                                                  \
         bool c_matrix_init_val = true;                                                                                 \
                                                                                                                        \
-        MOCKER_CPP(mad, void(__cc__ c_type * c_matrix, __ca__ a_type * a_matrix, __cb__ b_type * b_matrix,             \
-                             uint16_t left_height, uint16_t n_dim, uint16_t right_width, uint8_t unit_flag,            \
-                             bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val))                         \
+        MOCKER_CPP(                                                                                                    \
+            mad, void(                                                                                                 \
+                     __cc__ c_type * c_matrix, __ca__ a_type * a_matrix, __cb__ b_type * b_matrix,                     \
+                     uint16_t left_height, uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, \
+                     bool c_matrix_source, bool c_matrix_init_val))                                                    \
             .times(1)                                                                                                  \
             .will(invoke(mad_##type_prefix##_params_Stub));                                                            \
                                                                                                                        \
-        asc_mmad_sync(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv,          \
-                      c_matrix_source, c_matrix_init_val);                                                             \
+        asc_mmad_sync(                                                                                                 \
+            c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv, c_matrix_source,   \
+            c_matrix_init_val);                                                                                        \
         GlobalMockObject::verify();                                                                                    \
     }
 

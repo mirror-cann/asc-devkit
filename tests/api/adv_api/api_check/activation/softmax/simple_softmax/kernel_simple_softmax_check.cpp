@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -19,12 +19,8 @@ class SimpleSoftMaxAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(SimpleSoftMaxAPICheck, SimpleSoftMaxAPICheckTestSuccess)
@@ -60,7 +56,8 @@ TEST_F(SimpleSoftMaxAPICheck, SimpleSoftMaxAPICheckTestSuccess)
     SoftMaxTiling tiling;
     AscendC::SoftMaxShapeInfo softmaxShapeInfo = {1, 8, 1, 8};
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SimpleSoftMax, (float, float, false, false, false, configSimple),
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SimpleSoftMax, (float, float, false, false, false, configSimple),
         (dst, inSumTensor, inMaxTensor, src, sharedTmpBuffer, tiling, softmaxShapeInfo));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
@@ -83,7 +80,8 @@ TEST_F(SimpleSoftMaxAPICheck, SimpleSoftMaxAPICheckTestSubFailure)
     SoftMaxTiling tiling;
     AscendC::SoftMaxShapeInfo softmaxShapeInfo = {1, 8, 1, 8};
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SimpleSoftMax, (uint8_t, uint8_t, false, false, false, configSimple1),
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SimpleSoftMax, (uint8_t, uint8_t, false, false, false, configSimple1),
         (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, tiling, softmaxShapeInfo));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 7);
 }
@@ -106,7 +104,8 @@ TEST_F(SimpleSoftMaxAPICheck, SimpleSoftMaxAPICheckTestFailure)
     SoftMaxTiling tiling;
     AscendC::SoftMaxShapeInfo softmaxShapeInfo = {9, 9, 1, 8};
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SimpleSoftMax, (uint8_t, uint8_t, true, true, true, configSimple2),
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SimpleSoftMax, (uint8_t, uint8_t, true, true, true, configSimple2),
         (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, tiling, softmaxShapeInfo));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 12);
 }

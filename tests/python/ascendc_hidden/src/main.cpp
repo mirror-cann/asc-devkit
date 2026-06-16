@@ -23,7 +23,8 @@ constexpr int32_t PARAM_CNT = 3;
 constexpr int32_t INDEX_ONE = 1;
 constexpr int32_t INDEX_TWO = 2;
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     if (argc != PARAM_CNT) {
         cout << endl << "Usage: " << argv[0] << " srcDirPath resultFilePath" << endl << endl;
         return FAILED;

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -29,8 +29,9 @@ protected:
 };
 
 template <typename T>
-void test_vgatherb_func(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ offsetGm, __gm__ uint32_t srcLen, __gm__ uint32_t offsetLen)
+void test_vgatherb_func(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ offsetGm,
+    __gm__ uint32_t srcLen, __gm__ uint32_t offsetLen)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -67,7 +68,7 @@ void test_vgatherb_func(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __re
     set_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
 
-    GatherRepeatParams params { 1, 8 };
+    GatherRepeatParams params{1, 8};
     uint8_t repeat = srcLen * sizeof(T) / 256;
     Gatherb(outputLocal, input0Local, offsetLocal, repeat, params);
 
@@ -77,11 +78,13 @@ void test_vgatherb_func(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __re
     pipe_barrier(PIPE_ALL);
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_VGATHERB, GatherbTestSuite,
-    ::testing::Values(GatherbTestParams { 128, 16, 2, test_vgatherb_func<uint16_t> },
-    GatherbTestParams { 256, 32, 4, test_vgatherb_func<uint32_t> },
-    GatherbTestParams { 128, 16, 4, test_vgatherb_func<uint32_t> },
-    GatherbTestParams { 512, 32, 2, test_vgatherb_func<uint16_t> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_VGATHERB, GatherbTestSuite,
+    ::testing::Values(
+        GatherbTestParams{128, 16, 2, test_vgatherb_func<uint16_t>},
+        GatherbTestParams{256, 32, 4, test_vgatherb_func<uint32_t>},
+        GatherbTestParams{128, 16, 4, test_vgatherb_func<uint32_t>},
+        GatherbTestParams{512, 32, 2, test_vgatherb_func<uint16_t>}));
 
 TEST_P(GatherbTestSuite, GatherbTestCase)
 {

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -19,12 +19,8 @@ class SoftMaxFlashAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(SoftMaxFlashAPICheck, SoftMaxFlashAPICheckTestSuccess)
@@ -74,8 +70,10 @@ TEST_F(SoftMaxFlashAPICheck, SoftMaxFlashAPICheckTestSuccess)
     SoftMaxTiling tiling;
     AscendC::SoftMaxShapeInfo softmaxShapeInfo = {1, 8, 1, 8};
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SoftmaxFlash, (float, false, false), (dstTensor, sumTensor, maxTensor, srcTensor,
-        expMaxTensor, inSumTensor, inMaxTensor, sharedTmpBuffer, tiling, false, softmaxShapeInfo));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SoftmaxFlash, (float, false, false),
+        (dstTensor, sumTensor, maxTensor, srcTensor, expMaxTensor, inSumTensor, inMaxTensor, sharedTmpBuffer, tiling,
+         false, softmaxShapeInfo));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
 
@@ -96,8 +94,10 @@ TEST_F(SoftMaxFlashAPICheck, SoftMaxFlashAPICheckTestSubFailure)
     SoftMaxTiling tiling;
     AscendC::SoftMaxShapeInfo softmaxShapeInfo = {1, 8, 1, 8};
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SoftmaxFlash, (uint8_t, false, false), (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1],
-        dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, tiling, false, softmaxShapeInfo));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SoftmaxFlash, (uint8_t, false, false),
+        (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1],
+         sharedTmpBuffer, tiling, false, softmaxShapeInfo));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 57);
 }
 
@@ -118,7 +118,9 @@ TEST_F(SoftMaxFlashAPICheck, SoftMaxFlashAPICheckTestFailure)
     SoftMaxTiling tiling;
     AscendC::SoftMaxShapeInfo softmaxShapeInfo = {13, 13, 1, 8};
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(SoftmaxFlash, (uint8_t, true, true), (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1],
-        dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, tiling, false, softmaxShapeInfo));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        SoftmaxFlash, (uint8_t, true, true),
+        (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1],
+         sharedTmpBuffer, tiling, false, softmaxShapeInfo));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 94);
 }

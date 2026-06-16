@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "graph/tensor.h"
 #include <dlfcn.h>
@@ -32,8 +32,8 @@ protected:
     virtual void SetUp() {}
     void TearDown() {}
 };
-extern void platfrom_stub_set_chip_version(const char *num);
-extern void platfrom_stub_set_npuarch(const char *num);
+extern void platfrom_stub_set_chip_version(const char* num);
+extern void platfrom_stub_set_npuarch(const char* num);
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
 TEST_F(TestTiling, testTransDataTilingUnalignedHw)
@@ -51,34 +51,38 @@ TEST_F(TestTiling, testTransDataTilingUnalignedHw)
     int32_t n1 = (n + n0 - 1) / n0;
     int32_t hw0 = 16;
     int32_t hw1 = (h * w + hw0 - 1) / hw0;
-    auto ncdhwShape = ge::Shape({ n, c, d, h, w });
-    auto ndc1hwc0Shape = ge::Shape({ n, d, c1, h, w, c0});
-    auto fractalzShape = ge::Shape({ d, c1, h, w, n1, n0, c0});
+    auto ncdhwShape = ge::Shape({n, c, d, h, w});
+    auto ndc1hwc0Shape = ge::Shape({n, d, c1, h, w, c0});
+    auto fractalzShape = ge::Shape({d, c1, h, w, n1, n0, c0});
     fe::PlatFormInfos platform_info;
     auto plat = platform_ascendc::PlatformAscendC(&platform_info);
     TransDataConfig config = {DataFormat::NCDHW, DataFormat::NDC1HWC0};
-    bool ret = GetTransDataMaxMinTmpSize(plat, ncdhwShape, ndc1hwc0Shape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    bool ret =
+        GetTransDataMaxMinTmpSize(plat, ncdhwShape, ndc1hwc0Shape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 1632);
     EXPECT_EQ(minSize, 1632);
 
     config = {DataFormat::NDC1HWC0, DataFormat::NCDHW};
-    ret = GetTransDataMaxMinTmpSize(plat, ndc1hwc0Shape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, ndc1hwc0Shape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 2048);
     EXPECT_EQ(minSize, 2048);
 
     config = {DataFormat::NCDHW, DataFormat::FRACTAL_Z_3D};
-    ret = GetTransDataMaxMinTmpSize(plat, ncdhwShape, fractalzShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, ncdhwShape, fractalzShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 26112);
     EXPECT_EQ(minSize, 26112);
 
     config = {DataFormat::FRACTAL_Z_3D, DataFormat::NCDHW};
-    ret = GetTransDataMaxMinTmpSize(plat, fractalzShape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, fractalzShape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, n1 * n0 * c1 * c0 * d * hw0 * hw1 * 2);
@@ -100,34 +104,38 @@ TEST_F(TestTiling, testTransDataTilingAlignedHw)
     int32_t n1 = (n + n0 - 1) / n0;
     int32_t hw0 = 16;
     int32_t hw1 = (h * w + hw0 - 1) / hw0;
-    auto ncdhwShape = ge::Shape({ n, c, d, h, w });
-    auto ndc1hwc0Shape = ge::Shape({ n, d, c1, h, w, c0});
-    auto fractalzShape = ge::Shape({ d, c1, h, w, n1, n0, c0});
+    auto ncdhwShape = ge::Shape({n, c, d, h, w});
+    auto ndc1hwc0Shape = ge::Shape({n, d, c1, h, w, c0});
+    auto fractalzShape = ge::Shape({d, c1, h, w, n1, n0, c0});
     fe::PlatFormInfos platform_info;
     auto plat = platform_ascendc::PlatformAscendC(&platform_info);
     TransDataConfig config = {DataFormat::NCDHW, DataFormat::NDC1HWC0};
-    bool ret = GetTransDataMaxMinTmpSize(plat, ncdhwShape, ndc1hwc0Shape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    bool ret =
+        GetTransDataMaxMinTmpSize(plat, ncdhwShape, ndc1hwc0Shape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 4224);
     EXPECT_EQ(minSize, 4224);
 
     config = {DataFormat::NDC1HWC0, DataFormat::NCDHW};
-    ret = GetTransDataMaxMinTmpSize(plat, ndc1hwc0Shape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, ndc1hwc0Shape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 4608);
     EXPECT_EQ(minSize, 4608);
 
     config = {DataFormat::NCDHW, DataFormat::FRACTAL_Z_3D};
-    ret = GetTransDataMaxMinTmpSize(plat, ncdhwShape, fractalzShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, ncdhwShape, fractalzShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 69376);
     EXPECT_EQ(minSize, 69376);
 
     config = {DataFormat::FRACTAL_Z_3D, DataFormat::NCDHW};
-    ret = GetTransDataMaxMinTmpSize(plat, fractalzShape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, fractalzShape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, n1 * n0 * c1 * c0 * d * hw0 * hw1 * 2 * 2);
@@ -136,7 +144,7 @@ TEST_F(TestTiling, testTransDataTilingAlignedHw)
 
 TEST_F(TestTiling, TestLgammaTiling)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxSize;
     uint32_t minSize;
@@ -160,7 +168,7 @@ TEST_F(TestTiling, TestRintTiling)
 {
     fe::PlatFormInfos platformInfo;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto RintShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -188,7 +196,7 @@ TEST_F(TestTiling, TestBitwiseAndTiling)
     fe::PlatFormInfos platformInfo;
     uint32_t typeSize = 2u;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto BitwiseAndShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -216,7 +224,7 @@ TEST_F(TestTiling, TestLogicalAndTiling)
     fe::PlatFormInfos platformInfo;
     uint32_t typeSize = 2u;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto LogicalAndShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -244,7 +252,7 @@ TEST_F(TestTiling, TestLogicalAndsTiling)
     fe::PlatFormInfos platformInfo;
     uint32_t typeSize = 2u;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto LogicalAndsShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -268,10 +276,10 @@ TEST_F(TestTiling, TestLogicalAndsTiling)
 }
 
 TEST_F(TestTiling, TestDigammaTilingFp32)
-{   
+{
     fe::PlatFormInfos platformInfo;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxSize;
     uint32_t minSize;
@@ -284,13 +292,13 @@ TEST_F(TestTiling, TestDigammaTilingFp32)
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
 
-    shapeDims = { 8 };
+    shapeDims = {8};
     shape = ge::Shape(shapeDims);
     GetDigammaMaxMinTmpSize(shape, 4, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
 
-    GetDigammaMaxMinTmpSize(shape, 4, true,maxSize, minSize);
+    GetDigammaMaxMinTmpSize(shape, 4, true, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
 
@@ -305,7 +313,7 @@ TEST_F(TestTiling, TestDigammaTilingHalf)
 {
     fe::PlatFormInfos platformInfo;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxSize;
     uint32_t minSize;
@@ -314,7 +322,7 @@ TEST_F(TestTiling, TestDigammaTilingHalf)
     EXPECT_EQ(maxSize, 131072);
     EXPECT_EQ(minSize, 131072);
 
-    shapeDims = { 8 };
+    shapeDims = {8};
     shape = ge::Shape(shapeDims);
     GetDigammaMaxMinTmpSize(shape, 2, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 1024);
@@ -332,7 +340,7 @@ TEST_F(TestTiling, TestLogicalOrTiling)
     fe::PlatFormInfos platformInfo;
     uint32_t typeSize = 2u;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto LogicalOrShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -360,7 +368,7 @@ TEST_F(TestTiling, TestLogicalOrsTiling)
     fe::PlatFormInfos platformInfo;
     uint32_t typeSize = 2u;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto LogicalOrsShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -388,7 +396,7 @@ TEST_F(TestTiling, TestLogicalNotTiling)
     fe::PlatFormInfos platformInfo;
     uint32_t typeSize = 2u;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto LogicalNotShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -415,7 +423,7 @@ TEST_F(TestTiling, TestIsNanTiling)
 {
     fe::PlatFormInfos platformInfo;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto IsNanShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -442,7 +450,7 @@ TEST_F(TestTiling, TestIsInfTiling)
 {
     fe::PlatFormInfos platformInfo;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto IsInfShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -469,7 +477,7 @@ TEST_F(TestTiling, TestFmaTiling)
 {
     fe::PlatFormInfos platformInfo;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto FmaShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -496,7 +504,7 @@ TEST_F(TestTiling, TestSinCosTiling)
 {
     fe::PlatFormInfos platformInfo;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto SinCosShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -523,7 +531,7 @@ TEST_F(TestTiling, TestWhereTiling)
 {
     gert::TilingContext* context = fe::GetFakeTilingContext();
     auto plat = platform_ascendc::PlatformAscendC(context->GetPlatformInfo());
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto WhereShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -548,23 +556,25 @@ TEST_F(TestTiling, TestWhereTiling)
 
 TEST_F(TestTiling, TestSoftMaxFlashV3Tiling)
 {
-    std::vector<int64_t> shapeDims = { 8, 1024 };
+    std::vector<int64_t> shapeDims = {8, 1024};
     optiling::SoftMaxTiling tilingData;
     auto softmaxShape = ge::Shape(shapeDims);
     uint32_t maxSumTypeSize = 4;
     uint32_t inputTypeSize = 2;
     uint32_t softmaxflashV3NeedMinLength = 0;
     uint32_t softmaxflashV3NeedMaxLength = 0;
-    GetSoftMaxFlashV3MaxMinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, softmaxflashV3NeedMaxLength,
-        softmaxflashV3NeedMinLength, false, false);
+    GetSoftMaxFlashV3MaxMinTmpSize(
+        softmaxShape, inputTypeSize, maxSumTypeSize, softmaxflashV3NeedMaxLength, softmaxflashV3NeedMinLength, false,
+        false);
 
     EXPECT_EQ(softmaxflashV3NeedMinLength, (8 * 64 + 8 * 1024) * 4);
     EXPECT_EQ(softmaxflashV3NeedMaxLength, (8 * 64 + 8 * 1024) * 4);
 
     softmaxflashV3NeedMinLength = 0;
     softmaxflashV3NeedMaxLength = 0;
-    GetSoftMaxFlashV3MaxMinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, softmaxflashV3NeedMaxLength,
-        softmaxflashV3NeedMinLength, true, false);
+    GetSoftMaxFlashV3MaxMinTmpSize(
+        softmaxShape, inputTypeSize, maxSumTypeSize, softmaxflashV3NeedMaxLength, softmaxflashV3NeedMinLength, true,
+        false);
 
     EXPECT_EQ(softmaxflashV3NeedMinLength, (8 * 64 + 8 * 1024 + 8 * 8) * 4);
     EXPECT_EQ(softmaxflashV3NeedMaxLength, (8 * 64 + 8 * 1024 + 8 * 8) * 4);
@@ -580,7 +590,7 @@ TEST_F(TestTiling, TestSoftMaxFlashV3Tiling)
 
 TEST_F(TestTiling, TestSoftMaxTiling)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     optiling::SoftMaxTiling tilingData;
     AscendC::tiling::SoftMaxTiling tilingDataNotOp;
     auto softmaxShape = ge::Shape(shapeDims);
@@ -654,7 +664,7 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     uint32_t softmaxflashV2NeedMinLength = 0;
     uint32_t softmaxflashV2NeedMaxLength = 0;
 
-    std::vector<int64_t> shapeDims = { 3, 3, 448 };
+    std::vector<int64_t> shapeDims = {3, 3, 448};
     auto softmaxShape = ge::Shape(shapeDims);
     uint32_t dataTypeSize1 = 2;
     uint32_t dataTypeSize2 = 2;
@@ -662,10 +672,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     uint32_t isBasicBlock = 0;
     uint32_t isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 17504);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 19008);
 
     shapeDims = {7, 1072};
@@ -676,10 +688,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 31296);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 32256);
 
     shapeDims = {1, 2, 3, 1, 2, 1, 16};
@@ -690,10 +704,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 2240);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 4608);
 
     shapeDims = {2, 6, 1, 16};
@@ -704,10 +720,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 2240);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 4608);
 
     shapeDims = {6, 1664};
@@ -718,13 +736,15 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 41184);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 41856);
 
-    shapeDims = {2, 1760 };
+    shapeDims = {2, 1760};
     softmaxShape = ge::Shape(shapeDims);
     dataTypeSize1 = 2;
     dataTypeSize2 = 2;
@@ -732,13 +752,15 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 15200);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 15200);
 
-    shapeDims = {1, 5536 };
+    shapeDims = {1, 5536};
     softmaxShape = ge::Shape(shapeDims);
     dataTypeSize1 = 2;
     dataTypeSize2 = 2;
@@ -746,17 +768,21 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 23232);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 23232);
     dataTypeSize2 = 4;
     isUpdate = 1;
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 22752);
     dataTypeSize1 = 4;
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 320);
 
     shapeDims = {2, 2, 2352};
@@ -767,13 +793,15 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 38816);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 38912);
 
-    shapeDims = {2, 2, 2, 480 };
+    shapeDims = {2, 2, 2, 480};
     softmaxShape = ge::Shape(shapeDims);
     dataTypeSize1 = 2;
     dataTypeSize2 = 2;
@@ -781,16 +809,19 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 16672);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 17920);
 
     dataTypeSize1 = 4;
     dataTypeSize2 = 4;
     isUpdate = 1;
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 2304);
 
     shapeDims = {2, 3632};
@@ -801,10 +832,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 29824);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 29824);
 
     shapeDims = {2, 4, 96};
@@ -815,41 +848,49 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 4608);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 6144);
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, 1, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, 1, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 0);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, 1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength =
+        GetSoftMaxFlashV2MaxTmpSize(softmaxShape, 1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 0);
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, 1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, 1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 0);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, 1, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength =
+        GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, 1, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 0);
 }
 
 TEST_F(TestTiling, TestSoftMaxFlashV2Tiling)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     optiling::SoftMaxTiling tilingData;
     AscendC::tiling::SoftMaxTiling tilingDataNotOp;
     auto softmaxShape = ge::Shape(shapeDims);
     uint32_t maxSumTypeSize = 2;
     uint32_t inputTypeSize = 2;
-    uint32_t softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, false);
+    uint32_t softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, false);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 128 * (16 + 128) * 4);
     softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, false);
     EXPECT_EQ(softmaxflashV2NeedMinLength, (128 * 2 + 128 * (128 + 16 * 2)) * 4);
     softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, true);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 128 * (128 + 16) * 4);
 
-    uint32_t softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, false);
+    uint32_t softmaxflashV2NeedMaxLength =
+        GetSoftMaxFlashV2MaxTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, false);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 128 * (128 + 64 + 16) * 4);
     softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, false);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 128 * (128 + 64 + 16 * 2) * 4);
@@ -900,16 +941,18 @@ TEST_F(TestTiling, TestSoftMaxFlashV2Tiling)
 
 TEST_F(TestTiling, TestSoftMaxFlashV2TilingBasicBlock)
 {
-    std::vector<int64_t> shapeDims = { 8, 1024 };
+    std::vector<int64_t> shapeDims = {8, 1024};
     optiling::SoftMaxTiling tilingData;
     AscendC::tiling::SoftMaxTiling tilingDataNotOp;
     auto softmaxShape = ge::Shape(shapeDims);
     uint32_t maxSumTypeSize = 4;
     uint32_t inputTypeSize = 4;
-    uint32_t softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true);
+    uint32_t softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true);
     EXPECT_EQ(softmaxflashV2NeedMinLength, (64 + 8 * (16)) * 4);
-    uint32_t softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true);
-    EXPECT_EQ(softmaxflashV2NeedMaxLength, 8*(8 + 64) * 4);
+    uint32_t softmaxflashV2NeedMaxLength =
+        GetSoftMaxFlashV2MaxTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true);
+    EXPECT_EQ(softmaxflashV2NeedMaxLength, 8 * (8 + 64) * 4);
 
     uint32_t workLength = 32 * 1024;
     SoftMaxFlashV2TilingFunc(softmaxShape, inputTypeSize, maxSumTypeSize, workLength, tilingData, true, true);
@@ -931,7 +974,7 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingBasicBlock)
 
 TEST_F(TestTiling, TestLogSoftMaxTiling)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     optiling::LogSoftMaxTiling tilingData;
     AscendC::tiling::LogSoftMaxTiling tilingDataNotOp;
     auto softmaxShape = ge::Shape(shapeDims);
@@ -1019,7 +1062,6 @@ TEST_F(TestTiling, TestLayerNormMaxMinTmpSize_ASCEND950_OutputRstd)
     EXPECT_EQ(minValue, totalLength * typeSize);
 }
 
-
 TEST_F(TestTiling, TestLayerNormRstdTiling)
 {
     const uint32_t stackBufferSize = 100 * 1024;
@@ -1036,7 +1078,8 @@ TEST_F(TestTiling, TestLayerNormRstdTiling)
     GetLayerNormMaxMinTmpSize(layernormShape, typeSize, isReuseSource, isComputeRstd, isOnlyOutput, maxValue, minValue);
     EXPECT_EQ(maxValue, 128 * typeSize + 128 * typeSize);
     EXPECT_EQ(minValue, 128 * typeSize + 128 * typeSize);
-    GetNormalizeMaxMinTmpSize(layernormShape, typeSize, typeSize, isReuseSource, isComputeRstd, isOnlyOutput, maxValue, minValue);
+    GetNormalizeMaxMinTmpSize(
+        layernormShape, typeSize, typeSize, isReuseSource, isComputeRstd, isOnlyOutput, maxValue, minValue);
     EXPECT_EQ(maxValue, 0);
     EXPECT_EQ(minValue, 0);
     GetLayerNormNDTilingInfo(layernormShape, stackBufferSize, typeSize, isReuseSource, isComputeRstd, tiling);
@@ -1046,12 +1089,12 @@ TEST_F(TestTiling, TestLayerNormRstdTiling)
     GetLayerNormNDTilingInfo(layernormShape, stackBufferSize, typeSize, isReuseSource, isComputeRstd, tilingNotOp);
     GetLayerNormNDTilingInfo(layernormShape, 0, typeSize, isReuseSource, isComputeRstd, tilingNotOp);
     EXPECT_EQ(tilingNotOp.rLength, 88);
-    EXPECT_EQ(tilingNotOp.rHeadLength, 64); 
+    EXPECT_EQ(tilingNotOp.rHeadLength, 64);
 }
 
 TEST_F(TestTiling, TestLayernormGradTiling1982)
 {
-    std::vector<int64_t> shapeDims = { 128, 128, 128, 128, 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128, 128, 128, 128, 128};
     auto layernormgradShape = ge::Shape(shapeDims);
     optiling::LayerNormGradTiling tiling;
 
@@ -1074,57 +1117,63 @@ TEST_F(TestTiling, TestLayernormGradTiling1982)
 
 TEST_F(TestTiling, TestAntiquantTilingNoTransposeFP4)
 {
-    std::vector<int64_t> srcDims = { 640, 5120 };
+    std::vector<int64_t> srcDims = {640, 5120};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 1, 5120 };
+    std::vector<int64_t> offsetDSms = {1, 5120};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = false;
     uint32_t maxValue;
     uint32_t minValue;
-    GetAscendAntiQuantMaxMinTmpSize(srcShape, offsetShape, isTranspose, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxValue, minValue);
+    GetAscendAntiQuantMaxMinTmpSize(
+        srcShape, offsetShape, isTranspose, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxValue, minValue);
     EXPECT_EQ(minValue, 0);
     EXPECT_EQ(maxValue, 0);
     uint32_t maxLiveNodeCnt = 1;
     uint32_t extraBuf = 1;
-    GetAscendAntiQuantTmpBufferFactorSize(srcShape, offsetShape, isTranspose, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxLiveNodeCnt, extraBuf);
+    GetAscendAntiQuantTmpBufferFactorSize(
+        srcShape, offsetShape, isTranspose, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxLiveNodeCnt, extraBuf);
     EXPECT_EQ(maxLiveNodeCnt, 0);
     EXPECT_EQ(extraBuf, 0);
 }
 
 TEST_F(TestTiling, TestAntiquantTilingTransposeFP4)
 {
-    std::vector<int64_t> srcDims = { 640, 5120 };
+    std::vector<int64_t> srcDims = {640, 5120};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 1, 5120 };
+    std::vector<int64_t> offsetDSms = {1, 5120};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = true;
     uint32_t maxValue;
     uint32_t minValue;
-    GetAscendAntiQuantMaxMinTmpSize(srcShape, offsetShape, isTranspose, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxValue, minValue);
+    GetAscendAntiQuantMaxMinTmpSize(
+        srcShape, offsetShape, isTranspose, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxValue, minValue);
     EXPECT_EQ(minValue, 10240);
     EXPECT_EQ(maxValue, 10240);
     uint32_t maxLiveNodeCnt = 1;
     uint32_t extraBuf = 1;
-    GetAscendAntiQuantTmpBufferFactorSize(srcShape, offsetShape, isTranspose, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxLiveNodeCnt, extraBuf);
+    GetAscendAntiQuantTmpBufferFactorSize(
+        srcShape, offsetShape, isTranspose, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxLiveNodeCnt, extraBuf);
     EXPECT_EQ(maxLiveNodeCnt, 0);
     EXPECT_EQ(extraBuf, 10240);
 }
 
 TEST_F(TestTiling, TestAntiquantizeTilingNoTransposeFP4)
 {
-    std::vector<int64_t> srcDims = { 640, 5120 };
+    std::vector<int64_t> srcDims = {640, 5120};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 1, 5120 };
+    std::vector<int64_t> offsetDSms = {1, 5120};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = false;
     uint32_t maxValue;
     uint32_t minValue;
-    GetAntiQuantizeMaxMinTmpSize(srcShape, offsetShape, isTranspose, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxValue, minValue);
+    GetAntiQuantizeMaxMinTmpSize(
+        srcShape, offsetShape, isTranspose, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxValue, minValue);
     EXPECT_EQ(minValue, 0);
     EXPECT_EQ(maxValue, 0);
     uint32_t maxLiveNodeCnt = 1;
     uint32_t extraBuf = 1;
-    GetAntiQuantizeTmpBufferFactorSize(srcShape, offsetShape, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxLiveNodeCnt, extraBuf);
+    GetAntiQuantizeTmpBufferFactorSize(
+        srcShape, offsetShape, ge::DT_FLOAT4_E2M1, ge::DT_FLOAT16, maxLiveNodeCnt, extraBuf);
     EXPECT_EQ(maxLiveNodeCnt, 0);
     EXPECT_EQ(extraBuf, 0);
 }
@@ -1154,7 +1203,7 @@ TEST_F(TestTiling, TestDequantizeTiling)
     GetDequantizeMaxMinTmpSize(shape_1d, 2, maxValue, minValue);
     EXPECT_EQ(minValue, 4 * (64 + 1 * 320 + 328));
     EXPECT_EQ(maxValue, 4 * (64 + 1 * 320 + 328));
-        
+
     GetDequantizeTmpBufferFactorSize(shape_1d, maxLivedNodesCnt, extraBuf);
     EXPECT_EQ(maxLivedNodesCnt, 2);
     EXPECT_EQ(extraBuf, 72);
@@ -1168,9 +1217,9 @@ TEST_F(TestTiling, TestDequantizeTiling)
 
 TEST_F(TestTiling, TestAntiquantizeTilingNoTransposePerChannelHalf)
 {
-    std::vector<int64_t> srcDims = { 640, 5120 };
+    std::vector<int64_t> srcDims = {640, 5120};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 1, 5120 };
+    std::vector<int64_t> offsetDSms = {1, 5120};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = false;
     uint32_t maxValue;
@@ -1178,7 +1227,7 @@ TEST_F(TestTiling, TestAntiquantizeTilingNoTransposePerChannelHalf)
     GetAntiQuantizeMaxMinTmpSize(srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_FLOAT16, maxValue, minValue);
     EXPECT_EQ(minValue, 0);
     EXPECT_EQ(maxValue, 0);
-    
+
     uint32_t maxLiveNodeCnt = 1;
     uint32_t extraBuf = 1;
     GetAntiQuantizeTmpBufferFactorSize(srcShape, offsetShape, ge::DT_INT8, ge::DT_FLOAT16, maxLiveNodeCnt, extraBuf);
@@ -1188,9 +1237,9 @@ TEST_F(TestTiling, TestAntiquantizeTilingNoTransposePerChannelHalf)
 
 TEST_F(TestTiling, TestAntiquantizeTilingNoTransposePerChannel)
 {
-    std::vector<int64_t> srcDims = { 640, 5120 };
+    std::vector<int64_t> srcDims = {640, 5120};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 1, 5120 };
+    std::vector<int64_t> offsetDSms = {1, 5120};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = false;
     uint32_t maxValue;
@@ -1208,9 +1257,9 @@ TEST_F(TestTiling, TestAntiquantizeTilingNoTransposePerChannel)
 
 TEST_F(TestTiling, TestAntiquantizeTilingNoTransposePerTensor)
 {
-    std::vector<int64_t> srcDims = { 640, 5120 };
+    std::vector<int64_t> srcDims = {640, 5120};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 1 };
+    std::vector<int64_t> offsetDSms = {1};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = false;
     uint32_t maxValue;
@@ -1228,7 +1277,7 @@ TEST_F(TestTiling, TestAntiquantizeTilingNoTransposePerTensor)
 
 TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutput)
 {
-    std::vector<int64_t> shapeDims = { 32, 32 };
+    std::vector<int64_t> shapeDims = {32, 32};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_INT16;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1236,7 +1285,7 @@ TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutput)
     bool hasSrcIndex = false;
     bool hasDstIndex = false;
     bool isReuseSource = false;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1247,7 +1296,7 @@ TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutput)
 
 TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutputB8)
 {
-    std::vector<int64_t> shapeDims = { 32, 32 };
+    std::vector<int64_t> shapeDims = {32, 32};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_UINT8;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1255,7 +1304,7 @@ TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutputB8)
     bool hasSrcIndex = false;
     bool hasDstIndex = false;
     bool isReuseSource = false;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1266,7 +1315,7 @@ TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutputB8)
 
 TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutputB64)
 {
-    std::vector<int64_t> shapeDims = { 32, 32 };
+    std::vector<int64_t> shapeDims = {32, 32};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_INT64;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1274,7 +1323,7 @@ TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutputB64)
     bool hasSrcIndex = false;
     bool hasDstIndex = false;
     bool isReuseSource = false;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1285,7 +1334,7 @@ TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutputB64)
 
 TEST_F(TestTiling, testAdvanceSortTilingDescendOrder)
 {
-    std::vector<int64_t> shapeDims = { 1023 };
+    std::vector<int64_t> shapeDims = {1023};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_UINT32;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1293,7 +1342,7 @@ TEST_F(TestTiling, testAdvanceSortTilingDescendOrder)
     bool hasSrcIndex = false;
     bool hasDstIndex = false;
     bool isReuseSource = false;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1304,7 +1353,7 @@ TEST_F(TestTiling, testAdvanceSortTilingDescendOrder)
 
 TEST_F(TestTiling, testAdvanceSortTilingWithExtraDstIndex)
 {
-    std::vector<int64_t> shapeDims = { 300 };
+    std::vector<int64_t> shapeDims = {300};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_FLOAT;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1312,7 +1361,7 @@ TEST_F(TestTiling, testAdvanceSortTilingWithExtraDstIndex)
     bool hasSrcIndex = false;
     bool hasDstIndex = true;
     bool isReuseSource = false;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1323,7 +1372,7 @@ TEST_F(TestTiling, testAdvanceSortTilingWithExtraDstIndex)
 
 TEST_F(TestTiling, testAdvanceSortTilingWithExtraDstIndexForB8)
 {
-    std::vector<int64_t> shapeDims = { 300 };
+    std::vector<int64_t> shapeDims = {300};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_UINT8;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1331,7 +1380,7 @@ TEST_F(TestTiling, testAdvanceSortTilingWithExtraDstIndexForB8)
     bool hasSrcIndex = false;
     bool hasDstIndex = true;
     bool isReuseSource = false;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1342,7 +1391,7 @@ TEST_F(TestTiling, testAdvanceSortTilingWithExtraDstIndexForB8)
 
 TEST_F(TestTiling, testAdvanceSortTilingWithBothSrcDstIndex)
 {
-    std::vector<int64_t> shapeDims = { 4096 };
+    std::vector<int64_t> shapeDims = {4096};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_UINT16;
     ge::DataType indexType = ge::DT_UINT64;
@@ -1350,7 +1399,7 @@ TEST_F(TestTiling, testAdvanceSortTilingWithBothSrcDstIndex)
     bool hasSrcIndex = true;
     bool hasDstIndex = true;
     bool isReuseSource = false;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1361,7 +1410,7 @@ TEST_F(TestTiling, testAdvanceSortTilingWithBothSrcDstIndex)
 
 TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutputReuseSource)
 {
-    std::vector<int64_t> shapeDims = { 32, 32 };
+    std::vector<int64_t> shapeDims = {32, 32};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_INT16;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1369,7 +1418,7 @@ TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutputReuseSource)
     bool hasSrcIndex = false;
     bool hasDstIndex = false;
     bool isReuseSource = true;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1380,7 +1429,7 @@ TEST_F(TestTiling, testAdvanceSortTilingOnlyDataOutputReuseSource)
 
 TEST_F(TestTiling, testAdvanceSortTilingDescendOrderReuseSource)
 {
-    std::vector<int64_t> shapeDims = { 1023 };
+    std::vector<int64_t> shapeDims = {1023};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_UINT32;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1388,7 +1437,7 @@ TEST_F(TestTiling, testAdvanceSortTilingDescendOrderReuseSource)
     bool hasSrcIndex = false;
     bool hasDstIndex = false;
     bool isReuseSource = true;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1399,7 +1448,7 @@ TEST_F(TestTiling, testAdvanceSortTilingDescendOrderReuseSource)
 
 TEST_F(TestTiling, testAdvanceSortTilingWithExtraDstIndexReuseSource)
 {
-    std::vector<int64_t> shapeDims = { 32, 32 };
+    std::vector<int64_t> shapeDims = {32, 32};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_INT32;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1407,7 +1456,7 @@ TEST_F(TestTiling, testAdvanceSortTilingWithExtraDstIndexReuseSource)
     bool hasSrcIndex = false;
     bool hasDstIndex = true;
     bool isReuseSource = true;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1418,7 +1467,7 @@ TEST_F(TestTiling, testAdvanceSortTilingWithExtraDstIndexReuseSource)
 
 TEST_F(TestTiling, testAdvanceSortTilingWithBothSrcDstIndexReuseSource)
 {
-    std::vector<int64_t> shapeDims = { 32, 32 };
+    std::vector<int64_t> shapeDims = {32, 32};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_INT16;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1426,7 +1475,7 @@ TEST_F(TestTiling, testAdvanceSortTilingWithBothSrcDstIndexReuseSource)
     bool hasSrcIndex = true;
     bool hasDstIndex = true;
     bool isReuseSource = true;
-    SortConfig config = { SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::RADIX_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1437,7 +1486,7 @@ TEST_F(TestTiling, testAdvanceSortTilingWithBothSrcDstIndexReuseSource)
 
 TEST_F(TestTiling, testAdvanceSortTilingMergeSortHalf)
 {
-    std::vector<int64_t> shapeDims = { 32, 32 };
+    std::vector<int64_t> shapeDims = {32, 32};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_FLOAT16;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1445,7 +1494,7 @@ TEST_F(TestTiling, testAdvanceSortTilingMergeSortHalf)
     bool hasSrcIndex = true;
     bool hasDstIndex = true;
     bool isReuseSource = true;
-    SortConfig config = { SortType::MERGE_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::MERGE_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1456,7 +1505,7 @@ TEST_F(TestTiling, testAdvanceSortTilingMergeSortHalf)
 
 TEST_F(TestTiling, testAdvanceSortTilingMergeSortFloat)
 {
-    std::vector<int64_t> shapeDims = { 32, 32 };
+    std::vector<int64_t> shapeDims = {32, 32};
     auto srcShape = ge::Shape(shapeDims);
     ge::DataType valueType = ge::DT_FLOAT;
     ge::DataType indexType = ge::DT_UINT32;
@@ -1464,7 +1513,7 @@ TEST_F(TestTiling, testAdvanceSortTilingMergeSortFloat)
     bool hasSrcIndex = true;
     bool hasDstIndex = true;
     bool isReuseSource = true;
-    SortConfig config = { SortType::MERGE_SORT, isDescend, hasSrcIndex, hasDstIndex };
+    SortConfig config = {SortType::MERGE_SORT, isDescend, hasSrcIndex, hasDstIndex};
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     AscendC::GetSortMaxMinTmpSize(srcShape, valueType, indexType, isReuseSource, config, maxValue, minValue);
@@ -1472,7 +1521,6 @@ TEST_F(TestTiling, testAdvanceSortTilingMergeSortFloat)
     EXPECT_EQ(maxValue, 32 * 32 * 8);
     EXPECT_EQ(minValue, 32 * 32 * 8);
 }
-
 
 TEST_F(TestTiling, TestTopkTiling_TopKModeNomal_isInitIndexTrue_Float_Inner64)
 {
@@ -1849,12 +1897,12 @@ TEST_F(TestTiling, TestTopkTiling_RadixTopKModeSmall_isInitIndexFalse)
     ge::DataType valueType = ge::DT_INT16;
     bool isReuseSource = false;
     bool isInitIndex = false;
-    TopKConfig config = { TopKAlgo::RADIX_SELECT, TopKOrder::UNSET, true};
+    TopKConfig config = {TopKAlgo::RADIX_SELECT, TopKOrder::UNSET, true};
 
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetTopKMaxMinTmpSize(inner, outter, k, isReuseSource, isInitIndex, topkMode,
-        true, valueType, config, maxValue, minValue);
+    GetTopKMaxMinTmpSize(
+        inner, outter, k, isReuseSource, isInitIndex, topkMode, true, valueType, config, maxValue, minValue);
     EXPECT_EQ(maxValue, 1696);
     EXPECT_EQ(minValue, 1696);
 }
@@ -1868,12 +1916,12 @@ TEST_F(TestTiling, TestTopkTiling_RadixTopKModeNormal_isInitIndexFalse)
     ge::DataType valueType = ge::DT_INT16;
     bool isReuseSource = false;
     bool isInitIndex = false;
-    TopKConfig config = { TopKAlgo::RADIX_SELECT, TopKOrder::UNSET, true};
+    TopKConfig config = {TopKAlgo::RADIX_SELECT, TopKOrder::UNSET, true};
 
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetTopKMaxMinTmpSize(inner, outter, k, isReuseSource, isInitIndex, topkMode,
-        true, valueType, config, maxValue, minValue);
+    GetTopKMaxMinTmpSize(
+        inner, outter, k, isReuseSource, isInitIndex, topkMode, true, valueType, config, maxValue, minValue);
     EXPECT_EQ(maxValue, 1696);
     EXPECT_EQ(minValue, 1696);
 }
@@ -1887,12 +1935,12 @@ TEST_F(TestTiling, TestTopkTiling_RadixTopKModeNormal_isInitIndexTrue)
     ge::DataType valueType = ge::DT_INT16;
     bool isReuseSource = false;
     bool isInitIndex = true;
-    TopKConfig config = { TopKAlgo::RADIX_SELECT, TopKOrder::UNSET, true};
+    TopKConfig config = {TopKAlgo::RADIX_SELECT, TopKOrder::UNSET, true};
 
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetTopKMaxMinTmpSize(inner, outter, k, isReuseSource, isInitIndex, topkMode,
-        true, valueType, config, maxValue, minValue);
+    GetTopKMaxMinTmpSize(
+        inner, outter, k, isReuseSource, isInitIndex, topkMode, true, valueType, config, maxValue, minValue);
     EXPECT_EQ(maxValue, 1568);
     EXPECT_EQ(minValue, 1568);
 }
@@ -1919,7 +1967,7 @@ TEST_F(TestTiling, TestTopkTiling_TopKModeNomal_isInitIndexFalse)
 
 TEST_F(TestTiling, TestPowerTiling)
 {
-    std::vector<int64_t> shapeDims = { 1, 512 };
+    std::vector<int64_t> shapeDims = {1, 512};
     auto powerShape = ge::Shape(shapeDims);
     uint32_t maxVal;
     uint32_t minVal;
@@ -1934,7 +1982,7 @@ TEST_F(TestTiling, TestPowerTiling)
     EXPECT_EQ(maxVal, 512 * 4 * 3);
     EXPECT_EQ(minVal, 512 * 4 * 3);
 
-    std::vector<int64_t> scalar_shape = { 1 };
+    std::vector<int64_t> scalar_shape = {1};
     auto scalarShape = ge::Shape(scalar_shape);
     GetPowerMaxMinTmpSize(powerShape, scalarShape, false, 2, false, maxVal, minVal);
     EXPECT_EQ(maxVal, 512 * 4 * 3);
@@ -1967,13 +2015,13 @@ TEST_F(TestTiling, TestPowerTilingFactorSize)
 
 TEST_F(TestTiling, TestCosTilingFloatWithConfig)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto cosShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
 
-    AscendC::CosConfig polyConfig = { AscendC::CosAlgo::POLYNOMIAL_APPROXIMATION };
-    AscendC::CosConfig radinConfig = { AscendC::CosAlgo::RADIAN_REDUCTION };
+    AscendC::CosConfig polyConfig = {AscendC::CosAlgo::POLYNOMIAL_APPROXIMATION};
+    AscendC::CosConfig radinConfig = {AscendC::CosAlgo::RADIAN_REDUCTION};
 
     AscendC::GetCosMaxMinTmpSize(polyConfig, cosShape, 4, false, maxValue, minValue);
     EXPECT_EQ(maxValue, 0);
@@ -1993,13 +2041,13 @@ TEST_F(TestTiling, TestCosTilingFloatWithConfig)
 
 TEST_F(TestTiling, TestCosTilingHalfWithConfig)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto cosShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
 
-    AscendC::CosConfig polyConfig = { AscendC::CosAlgo::POLYNOMIAL_APPROXIMATION };
-    AscendC::CosConfig radinConfig = { AscendC::CosAlgo::RADIAN_REDUCTION };
+    AscendC::CosConfig polyConfig = {AscendC::CosAlgo::POLYNOMIAL_APPROXIMATION};
+    AscendC::CosConfig radinConfig = {AscendC::CosAlgo::RADIAN_REDUCTION};
 
     AscendC::GetCosMaxMinTmpSize(polyConfig, cosShape, 2, false, maxValue, minValue);
     EXPECT_EQ(maxValue, 0);
@@ -2021,7 +2069,7 @@ TEST_F(TestTiling, TestCosTilingHalfWithConfig)
 
 TEST_F(TestTiling, TestHypotTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto atanShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -2037,13 +2085,13 @@ TEST_F(TestTiling, TestHypotTilingHalf)
 
 TEST_F(TestTiling, TestSinTilingFloatWithConfig)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto sinShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
 
-    AscendC::SinConfig polyConfig = { AscendC::SinAlgo::POLYNOMIAL_APPROXIMATION };
-    AscendC::SinConfig radinConfig = { AscendC::SinAlgo::RADIAN_REDUCTION };
+    AscendC::SinConfig polyConfig = {AscendC::SinAlgo::POLYNOMIAL_APPROXIMATION};
+    AscendC::SinConfig radinConfig = {AscendC::SinAlgo::RADIAN_REDUCTION};
 
     AscendC::GetSinMaxMinTmpSize(polyConfig, sinShape, 4, false, maxValue, minValue);
     EXPECT_EQ(maxValue, 0);
@@ -2063,13 +2111,13 @@ TEST_F(TestTiling, TestSinTilingFloatWithConfig)
 
 TEST_F(TestTiling, TestSinTilingHalfWithConfig)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto sinShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
 
-    AscendC::SinConfig polyConfig = { AscendC::SinAlgo::POLYNOMIAL_APPROXIMATION };
-    AscendC::SinConfig radinConfig = { AscendC::SinAlgo::RADIAN_REDUCTION };
+    AscendC::SinConfig polyConfig = {AscendC::SinAlgo::POLYNOMIAL_APPROXIMATION};
+    AscendC::SinConfig radinConfig = {AscendC::SinAlgo::RADIAN_REDUCTION};
 
     AscendC::GetSinMaxMinTmpSize(polyConfig, sinShape, 2, false, maxValue, minValue);
     EXPECT_EQ(maxValue, 0);
@@ -2094,7 +2142,7 @@ TEST_F(TestTiling, TestConfusionTransposeTiling)
     const uint32_t stackBufferSize = 0;
     const uint32_t typeSize = 4;
 
-    std::vector<int64_t> shapeDims = { 32, 64, 128 };
+    std::vector<int64_t> shapeDims = {32, 64, 128};
     auto srcShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -2115,7 +2163,7 @@ TEST_F(TestTiling, testReduceMaxTiling)
 {
     uint32_t maxSize;
     uint32_t minSize;
-    auto shape = ge::Shape({ 16, 8 });
+    auto shape = ge::Shape({16, 8});
     GetReduceMaxMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -2140,7 +2188,7 @@ TEST_F(TestTiling, testReduceMaxTiling)
     EXPECT_EQ(maxSize, 16 * 64 * 4);
     EXPECT_EQ(minSize, 16 * 64 * 4);
 
-    shape = ge::Shape({ 16, 16 });
+    shape = ge::Shape({16, 16});
     GetReduceMaxMaxMinTmpSize(shape, ge::DataType::DT_FLOAT16, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -2195,7 +2243,7 @@ TEST_F(TestTiling, testReduceMinTiling)
 {
     uint32_t maxSize;
     uint32_t minSize;
-    auto shape = ge::Shape({ 16, 8 });
+    auto shape = ge::Shape({16, 8});
     GetReduceMinMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -2220,7 +2268,7 @@ TEST_F(TestTiling, testReduceMinTiling)
     EXPECT_EQ(maxSize, 16 * 64 * 4);
     EXPECT_EQ(minSize, 16 * 64 * 4);
 
-    shape = ge::Shape({ 16, 16 });
+    shape = ge::Shape({16, 16});
     GetReduceMinMaxMinTmpSize(shape, ge::DataType::DT_FLOAT16, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -2275,7 +2323,7 @@ TEST_F(TestTiling, testReduceSumTiling)
 {
     uint32_t maxSize;
     uint32_t minSize;
-    auto shape = ge::Shape({ 128, 128 });
+    auto shape = ge::Shape({128, 128});
     GetReduceSumMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, (64 * 128) * 4);
     EXPECT_EQ(minSize, (64 * 128) * 4);
@@ -2324,12 +2372,16 @@ TEST_F(TestTiling, testReduceSumTiling)
 #else
 TEST_F(TestTiling, MultiCoreSmallMN)
 {
-    matmul_tiling::MultiCoreMatmulTiling rnnMatmul3,rnnMatmul4,rnnMatmul5;
-    rnnMatmul3.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul3.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul3.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul3.SetBiasType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul3.SetSingleRange(-1,-1,-1,-1,-1,-1);
+    matmul_tiling::MultiCoreMatmulTiling rnnMatmul3, rnnMatmul4, rnnMatmul5;
+    rnnMatmul3.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
+    rnnMatmul3.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
+    rnnMatmul3.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
+    rnnMatmul3.SetBiasType(
+        matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
+    rnnMatmul3.SetSingleRange(-1, -1, -1, -1, -1, -1);
     rnnMatmul3.EnableMultiCoreSplitK(true);
     auto ret = rnnMatmul3.EnableBias(true);
     ret = rnnMatmul3.SetDim(24);
@@ -2345,11 +2397,17 @@ TEST_F(TestTiling, MultiCoreSmallMN)
 
 TEST_F(TestTiling, MatmulApiTilingFP32OverFlow)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     matmul_tiling::MatmulApiTiling stft(plat);
     stft.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
-    stft.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
+    stft.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
     stft.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
     stft.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
     auto ret = stft.SetOrgShape(378, 168, 960);
@@ -2364,14 +2422,19 @@ TEST_F(TestTiling, MatmulApiTilingFP32OverFlow)
     EXPECT_GE(tilingData.get_shareL1Size(), 407040);
 }
 
-
 TEST_F(TestTiling, MatmulApiTilingFP32OverFlowND2NZ)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     matmul_tiling::MatmulApiTiling stft(plat);
     stft.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
-    stft.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
+    stft.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
     stft.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
     stft.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
     auto ret = stft.SetOrgShape(378, 168, 960);
@@ -2391,11 +2454,18 @@ TEST_F(TestTiling, MatmulApiTilingFP32OverFlowND2NZ)
 
 TEST_F(TestTiling, MatmulApiTilingATransFP32OverFlow)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     matmul_tiling::MatmulApiTiling stft(plat);
-    stft.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
-    stft.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
+    stft.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
+    stft.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
     stft.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
     stft.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
     auto ret = stft.SetOrgShape(378, 168, 960);
@@ -2412,11 +2482,14 @@ TEST_F(TestTiling, MatmulApiTilingATransFP32OverFlow)
 
 TEST_F(TestTiling, MatmulMDLND2NZNoFullLoad)
 {
-    matmul_tiling::MultiCoreMatmulTiling rnnMatmul3,rnnMatmul4,rnnMatmul5;
-    rnnMatmul3.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
+    matmul_tiling::MultiCoreMatmulTiling rnnMatmul3, rnnMatmul4, rnnMatmul5;
+    rnnMatmul3.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
     rnnMatmul3.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_INT8);
-    rnnMatmul3.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT16);
-    rnnMatmul3.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
+    rnnMatmul3.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT16);
+    rnnMatmul3.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
     auto ret = rnnMatmul3.EnableBias(true);
     ret = rnnMatmul3.SetDim(8);
     ret = rnnMatmul3.SetOrgShape(1024, 5120, 3584);
@@ -2432,9 +2505,12 @@ TEST_F(TestTiling, MatmulMDLND2NZNoFullLoad)
     EXPECT_GE(tilingDataA.get_transLength(), 65536);
 
     rnnMatmul4.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
-    rnnMatmul4.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
-    rnnMatmul4.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT16);
-    rnnMatmul4.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
+    rnnMatmul4.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
+    rnnMatmul4.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT16);
+    rnnMatmul4.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
     ret = rnnMatmul4.EnableBias(true);
     ret = rnnMatmul4.SetDim(8);
     ret = rnnMatmul4.SetOrgShape(5120, 1024, 3584);
@@ -2452,11 +2528,14 @@ TEST_F(TestTiling, MatmulMDLND2NZNoFullLoad)
 
 TEST_F(TestTiling, MatmulMDLND2NZFullLoad)
 {
-    matmul_tiling::MultiCoreMatmulTiling rnnMatmul3,rnnMatmul4;
+    matmul_tiling::MultiCoreMatmulTiling rnnMatmul3, rnnMatmul4;
     rnnMatmul3.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
-    rnnMatmul3.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
-    rnnMatmul3.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT16);
-    rnnMatmul3.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
+    rnnMatmul3.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
+    rnnMatmul3.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT16);
+    rnnMatmul3.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
     auto ret = rnnMatmul3.EnableBias(true);
     ret = rnnMatmul3.SetDim(8);
     ret = rnnMatmul3.SetOrgShape(32, 2048, 64);
@@ -2471,10 +2550,13 @@ TEST_F(TestTiling, MatmulMDLND2NZFullLoad)
     EXPECT_EQ(tilingDataA.get_shareL1Size(), 18432);
     EXPECT_EQ(tilingDataA.get_transLength(), 16384);
 
-    rnnMatmul4.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
+    rnnMatmul4.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
     rnnMatmul4.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
-    rnnMatmul4.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT16);
-    rnnMatmul4.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
+    rnnMatmul4.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT16);
+    rnnMatmul4.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
     ret = rnnMatmul4.EnableBias(true);
     ret = rnnMatmul4.SetDim(8);
     ret = rnnMatmul4.SetOrgShape(2048, 32, 64);
@@ -2496,7 +2578,8 @@ TEST_F(TestTiling, MatmulApiTilingFP32)
 {
     matmul_tiling::MatmulApiTiling stft;
     stft.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
-    stft.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
+    stft.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
     stft.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
     stft.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
     auto ret = stft.SetOrgShape(28, 784, 128);
@@ -2533,8 +2616,13 @@ TEST_F(TestTiling, TestArangeTiling)
 
 TEST_F(TestTiling, PlatformConstructor)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     MatmulApiTiling tiling(plat);
     tiling.SetAType(TPosition::TSCM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
     tiling.SetBType(TPosition::GM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
@@ -2562,8 +2650,13 @@ TEST_F(TestTiling, PlatformConstructor)
 
 TEST_F(TestTiling, TestMatmulApiTilingL0DB)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     MatmulApiTiling tiling(plat);
     tiling.SetAType(TPosition::TSCM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
     tiling.SetBType(TPosition::GM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
@@ -2588,8 +2681,13 @@ TEST_F(TestTiling, TestMatmulApiTilingL0DB)
 
 TEST_F(TestTiling, TestMatmulApiTilingL0DBError)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     MatmulApiTiling tiling(plat);
     tiling.SetAType(TPosition::TSCM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
     tiling.SetBType(TPosition::GM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
@@ -2613,8 +2711,13 @@ TEST_F(TestTiling, TestMatmulApiTilingL0DBError)
 
 TEST_F(TestTiling, TestMatmulApiTilingNormL0DB)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     MatmulApiTiling tiling(plat);
     tiling.SetAType(TPosition::TSCM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
     tiling.SetBType(TPosition::GM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
@@ -2634,8 +2737,13 @@ TEST_F(TestTiling, TestMatmulApiTilingNormL0DB)
 
 TEST_F(TestTiling, TestMatmulApiTilingBmmL0DBError)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     MatmulApiTiling tiling(plat);
     tiling.SetAType(TPosition::TSCM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
     tiling.SetBType(TPosition::GM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
@@ -2656,8 +2764,13 @@ TEST_F(TestTiling, TestMatmulApiTilingBmmL0DBError)
 
 TEST_F(TestTiling, TestInt4BaseK)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     MatmulApiTiling tiling(plat);
     tiling.SetAType(TPosition::GM, CubeFormat::ND, matmul_tiling::DataType::DT_INT4);
     tiling.SetBType(TPosition::GM, CubeFormat::ND, matmul_tiling::DataType::DT_INT4);
@@ -2676,15 +2789,20 @@ TEST_F(TestTiling, TestInt4BaseK)
 
 TEST_F(TestTiling, Tiling_310p_NotAligned)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND310P, .l1Size = 1048576,
-        .l0CSize = 262144, .ubSize = 262144, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND310P,
+        .l1Size = 1048576,
+        .l0CSize = 262144,
+        .ubSize = 262144,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     matmul_tiling::MultiCoreMatmulTiling rnnMatmul3(plat);
-    rnnMatmul3.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::VECTOR,
-        matmul_tiling::DataType ::DT_FLOAT16, false);
-    rnnMatmul3.SetBType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::NZ,
-        matmul_tiling::DataType ::DT_FLOAT16, true);
-    rnnMatmul3.SetCType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND,
-        matmul_tiling::DataType ::DT_FLOAT16);
+    rnnMatmul3.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::VECTOR, matmul_tiling::DataType ::DT_FLOAT16, false);
+    rnnMatmul3.SetBType(
+        matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT16, true);
+    rnnMatmul3.SetCType(
+        matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT16);
     auto ret = rnnMatmul3.EnableBias(false);
     ret = rnnMatmul3.SetOrgShape(1, 494, 128);
     ret = rnnMatmul3.SetShape(1, 494, 128);
@@ -2706,7 +2824,6 @@ TEST_F(TestTiling, Tiling_BatchMatmul)
     matmul_tiling::SysTilingTempBufSize bufSize;
     BatchMatmulGetTmpBufSize(tilingData, bufSize);
     EXPECT_EQ(ret, -1);
-
 
     bmm.bufferPool_.l1Size = 256;
     bmm.bufferPool_.l0CSize = 256;
@@ -3564,7 +3681,7 @@ TEST_F(TestTiling, TestSetBufferSpace)
 
 TEST_F(TestTiling, TestCosTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto cosShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -3581,7 +3698,7 @@ TEST_F(TestTiling, TestCosTilingFloat)
 
 TEST_F(TestTiling, TestCosTilingFloat512)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto cosShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -3593,7 +3710,7 @@ TEST_F(TestTiling, TestCosTilingFloat512)
 
 TEST_F(TestTiling, TestCosTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto cosShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -3609,7 +3726,7 @@ TEST_F(TestTiling, TestCosTilingHalf)
 
 TEST_F(TestTiling, TestAtanTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto atanShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -3620,7 +3737,7 @@ TEST_F(TestTiling, TestAtanTilingFloat)
 
 TEST_F(TestTiling, TestAtanTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto atanShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -3636,7 +3753,7 @@ TEST_F(TestTiling, TestAtanTilingHalf)
 
 TEST_F(TestTiling, TestClampTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto atanShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -3647,7 +3764,7 @@ TEST_F(TestTiling, TestClampTilingFloat)
 
 TEST_F(TestTiling, TestClampTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto atanShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -3663,7 +3780,7 @@ TEST_F(TestTiling, TestClampTilingHalf)
 
 TEST_F(TestTiling, TestSoftMaxTiling)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     optiling::SoftMaxTiling tilingData;
     auto softmaxShape = ge::Shape(shapeDims);
     uint32_t softmaxTmpSize = 100 * 1024 * 4;
@@ -3730,7 +3847,7 @@ TEST_F(TestTiling, TestSoftMaxTiling)
 
 TEST_F(TestTiling, TestLogSoftMaxTiling)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     optiling::LogSoftMaxTiling tilingData;
     AscendC::tiling::LogSoftMaxTiling tilingDataNotOp;
     auto softmaxShape = ge::Shape(shapeDims);
@@ -3750,7 +3867,7 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     uint32_t softmaxflashV2NeedMinLength = 0;
     uint32_t softmaxflashV2NeedMaxLength = 0;
 
-    std::vector<int64_t> shapeDims = { 3, 3, 448 };
+    std::vector<int64_t> shapeDims = {3, 3, 448};
     auto softmaxShape = ge::Shape(shapeDims);
     uint32_t dataTypeSize1 = 2;
     uint32_t dataTypeSize2 = 2;
@@ -3758,10 +3875,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     uint32_t isBasicBlock = 0;
     uint32_t isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 19584);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 19584);
 
     shapeDims = {7, 1072};
@@ -3772,10 +3891,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 32704);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 32704);
 
     shapeDims = {1, 2, 3, 1, 2, 1, 16};
@@ -3786,10 +3907,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 5376);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 5376);
 
     shapeDims = {2, 6, 1, 16};
@@ -3800,10 +3923,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 5376);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 5376);
 
     shapeDims = {6, 1664};
@@ -3814,13 +3939,15 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 42240);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 42240);
 
-    shapeDims = {2, 1760 };
+    shapeDims = {2, 1760};
     softmaxShape = ge::Shape(shapeDims);
     dataTypeSize1 = 2;
     dataTypeSize2 = 2;
@@ -3828,13 +3955,15 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 14848);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 14848);
 
-    shapeDims = {1, 5536 };
+    shapeDims = {1, 5536};
     softmaxShape = ge::Shape(shapeDims);
     dataTypeSize1 = 2;
     dataTypeSize2 = 2;
@@ -3842,10 +3971,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 22528);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 22528);
 
     shapeDims = {2, 2, 2352};
@@ -3856,13 +3987,15 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 39168);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 39168);
 
-    shapeDims = {2, 2, 2, 480 };
+    shapeDims = {2, 2, 2, 480};
     softmaxShape = ge::Shape(shapeDims);
     dataTypeSize1 = 2;
     dataTypeSize2 = 2;
@@ -3870,10 +4003,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 18432);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 18432);
 
     shapeDims = {2, 3632};
@@ -3884,10 +4019,12 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 29824);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 29824);
 
     shapeDims = {2, 4, 96};
@@ -3898,28 +4035,34 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingMaxMinTmpSize)
     isBasicBlock = 0;
     isFlashOutputBrc = 1;
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 6144);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(
+        softmaxShape, dataTypeSize1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 6144);
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, 1, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, dataTypeSize1, 1, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 0);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, 1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength =
+        GetSoftMaxFlashV2MaxTmpSize(softmaxShape, 1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 0);
 
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, 1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, 1, dataTypeSize2, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMinLength, 0);
 
-    softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, 1, isUpdate, isBasicBlock, isFlashOutputBrc);
+    softmaxflashV2NeedMaxLength =
+        GetSoftMaxFlashV2MaxTmpSize(softmaxShape, dataTypeSize1, 1, isUpdate, isBasicBlock, isFlashOutputBrc);
     EXPECT_EQ(softmaxflashV2NeedMaxLength, 0);
 }
 
 TEST_F(TestTiling, TestSoftMaxFlashV2Tiling)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     optiling::SoftMaxTiling tilingData;
     auto softmaxShape = ge::Shape(shapeDims);
     uint32_t maxSumTypeSize = 2;
@@ -3933,11 +4076,14 @@ TEST_F(TestTiling, TestSoftMaxFlashV2Tiling)
     EXPECT_EQ(softmaxflashV2NeedMinLength, 8 * (128 + 64 + 16) * 4);
 
     // isFlashOutputBrc
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, false, true);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, false, true);
     EXPECT_EQ(softmaxflashV2NeedMinLength, (128 + 64 + 16 * 2) * 4 * 16);
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, false, true);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, false, true);
     EXPECT_EQ(softmaxflashV2NeedMinLength, (128 + 64 + 16 * 2) * 4 * 16);
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, true, true);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, true, true);
     EXPECT_EQ(softmaxflashV2NeedMinLength, (128 + 64 + 16) * 4 * 16);
 
     uint32_t softmaxflashV2NeedMaxLength =
@@ -3955,9 +4101,11 @@ TEST_F(TestTiling, TestSoftMaxFlashV2Tiling)
     EXPECT_EQ(softmaxflashV2NeedMinLength, 8 * (128 + 64 + 8) * 4);
 
     // isFlashOutputBrc
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, false, true);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, false, true);
     EXPECT_EQ(softmaxflashV2NeedMinLength, (128 + 64 + 8 * 2) * 4 * 16);
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, true, true);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, false, true, true);
     EXPECT_EQ(softmaxflashV2NeedMinLength, (128 + 64 + 8) * 4 * 16);
 
     softmaxflashV2NeedMaxLength = GetSoftMaxFlashV2MaxTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, false);
@@ -3994,27 +4142,29 @@ TEST_F(TestTiling, TestSoftMaxFlashV2Tiling)
     EXPECT_EQ(tilingData.get_reduceM(), 64);
 
     // isFlashOutputBrc
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true, true);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true, true);
     EXPECT_EQ(softmaxflashV2NeedMinLength, (64 + 8) * 4 * 8);
     SoftMaxFlashV2TilingFunc(softmaxShape, inputTypeSize, maxSumTypeSize, workLength, tilingData, true, true, true);
     EXPECT_EQ(tilingData.get_reduceM(), 64);
 }
 TEST_F(TestTiling, TestSoftMaxFlashV2TilingBasicBlock)
 {
-    std::vector<int64_t> shapeDims = { 8, 1024 };
+    std::vector<int64_t> shapeDims = {8, 1024};
     optiling::SoftMaxTiling tilingData;
     auto softmaxShape = ge::Shape(shapeDims);
     uint32_t maxSumTypeSize = 4;
     uint32_t inputTypeSize = 4;
     uint32_t softmaxflashV2NeedMinLength =
         GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true);
-    EXPECT_EQ(softmaxflashV2NeedMinLength, 8*(8 + 128) * 4);
+    EXPECT_EQ(softmaxflashV2NeedMinLength, 8 * (8 + 128) * 4);
     uint32_t softmaxflashV2NeedMaxLength =
         GetSoftMaxFlashV2MaxTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true);
-    EXPECT_EQ(softmaxflashV2NeedMaxLength, 8*(8 + 128) * 4);
+    EXPECT_EQ(softmaxflashV2NeedMaxLength, 8 * (8 + 128) * 4);
 
     // isFlashOutputBrc
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true, true);
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true, true);
     EXPECT_EQ(softmaxflashV2NeedMinLength, (8 + 128) * 4 * 8);
 
     uint32_t workLength = 32 * 1024;
@@ -4031,36 +4181,39 @@ TEST_F(TestTiling, TestSoftMaxFlashV2TilingBasicBlock)
     EXPECT_EQ(tilingData.get_reduceM(), 8);
 
     // isFlashOutputBrc
-    softmaxShape = ge::Shape({ 64, 512 });
-    softmaxflashV2NeedMinLength = GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true, true);
+    softmaxShape = ge::Shape({64, 512});
+    softmaxflashV2NeedMinLength =
+        GetSoftMaxFlashV2MinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, true, true, true);
     EXPECT_EQ(softmaxflashV2NeedMinLength, (8 + 512 + 64) * 4 * 16);
     SoftMaxFlashV2TilingFunc(softmaxShape, inputTypeSize, maxSumTypeSize, workLength, tilingData, true, true, true);
     EXPECT_EQ(tilingData.get_reduceM(), 16);
 
     AscendC::tiling::SoftMaxTiling tilingDataNotOp;
-    SoftMaxFlashV2TilingFunc(softmaxShape, inputTypeSize, maxSumTypeSize, workLength, tilingDataNotOp, true, true, true);
+    SoftMaxFlashV2TilingFunc(
+        softmaxShape, inputTypeSize, maxSumTypeSize, workLength, tilingDataNotOp, true, true, true);
     EXPECT_EQ(tilingDataNotOp.reduceM, 16);
 }
 
 TEST_F(TestTiling, TestSoftMaxFlashV3Tiling)
 {
-    std::vector<int64_t> shapeDims = { 10, 1024 };
+    std::vector<int64_t> shapeDims = {10, 1024};
     optiling::SoftMaxTiling tilingData;
     auto softmaxShape = ge::Shape(shapeDims);
     uint32_t maxSumTypeSize = 4;
     uint32_t inputTypeSize = 2;
     uint32_t softmaxflashV3NeedMinLength = 0;
     uint32_t softmaxflashV3NeedMaxLength = 0;
-    GetSoftMaxFlashV3MaxMinTmpSize(softmaxShape, inputTypeSize, maxSumTypeSize, softmaxflashV3NeedMaxLength,
-        softmaxflashV3NeedMinLength, false, false);
+    GetSoftMaxFlashV3MaxMinTmpSize(
+        softmaxShape, inputTypeSize, maxSumTypeSize, softmaxflashV3NeedMaxLength, softmaxflashV3NeedMinLength, false,
+        false);
 
     EXPECT_EQ(softmaxflashV3NeedMinLength, (8 * 5 + 2 * 1024 + 64) * 4);
     EXPECT_EQ(softmaxflashV3NeedMaxLength, 10 * (8 * 5 + 2 * 1024 + 64) * 4);
 
     softmaxflashV3NeedMinLength = 0;
     softmaxflashV3NeedMaxLength = 0;
-    GetSoftMaxFlashV3MaxMinTmpSize(softmaxShape, inputTypeSize, 0, softmaxflashV3NeedMaxLength,
-        softmaxflashV3NeedMinLength, false, false);
+    GetSoftMaxFlashV3MaxMinTmpSize(
+        softmaxShape, inputTypeSize, 0, softmaxflashV3NeedMaxLength, softmaxflashV3NeedMinLength, false, false);
 
     EXPECT_EQ(softmaxflashV3NeedMinLength, 0);
     EXPECT_EQ(softmaxflashV3NeedMaxLength, 0);
@@ -4074,7 +4227,8 @@ TEST_F(TestTiling, TestSoftMaxFlashV3Tiling)
     EXPECT_EQ(tilingDataNotOp.reduceM, 8);
 }
 
-TEST_F(TestTiling, TestAsinTmpBufferFacotrHalfWithoutBasicBlock) {
+TEST_F(TestTiling, TestAsinTmpBufferFacotrHalfWithoutBasicBlock)
+{
     uint32_t maxLivedNodes = 0xffff;
     uint32_t extraBuffer = 0xffff;
     GetAsinTmpBufferFactorSize(2, maxLivedNodes, extraBuffer);
@@ -4082,7 +4236,8 @@ TEST_F(TestTiling, TestAsinTmpBufferFacotrHalfWithoutBasicBlock) {
     EXPECT_EQ(extraBuffer, 0);
 }
 
-TEST_F(TestTiling, TestAsinTmpBufferFacotrFloatWithoutBasicBlock) {
+TEST_F(TestTiling, TestAsinTmpBufferFacotrFloatWithoutBasicBlock)
+{
     uint32_t maxLivedNodes = 0xffff;
     uint32_t extraBuffer = 0xffff;
     GetAsinTmpBufferFactorSize(4, maxLivedNodes, extraBuffer);
@@ -4092,7 +4247,7 @@ TEST_F(TestTiling, TestAsinTmpBufferFacotrFloatWithoutBasicBlock) {
 
 TEST_F(TestTiling, TestAsinTilingHalf128)
 {
-    std::vector<int64_t> shapeDims = { 128 };
+    std::vector<int64_t> shapeDims = {128};
     auto asinShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4103,7 +4258,7 @@ TEST_F(TestTiling, TestAsinTilingHalf128)
 
 TEST_F(TestTiling, TestAsinTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 32 };
+    std::vector<int64_t> shapeDims = {32};
     auto asinShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4114,7 +4269,7 @@ TEST_F(TestTiling, TestAsinTilingFloat)
 
 TEST_F(TestTiling, TestAsinTilingHalf16K)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto asinShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4125,7 +4280,7 @@ TEST_F(TestTiling, TestAsinTilingHalf16K)
 
 TEST_F(TestTiling, TestAsinTilingFloat16K)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto asinShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4136,7 +4291,7 @@ TEST_F(TestTiling, TestAsinTilingFloat16K)
 
 TEST_F(TestTiling, TestSinhTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto sinhShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4153,7 +4308,7 @@ TEST_F(TestTiling, TestSinhTilingFloat)
 
 TEST_F(TestTiling, TestSinhTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto sinhShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4172,7 +4327,7 @@ TEST_F(TestTiling, TestRoundTiling)
 {
     fe::PlatFormInfos platform_info;
     auto plat = platform_ascendc::PlatformAscendC(&platform_info);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto tanShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4187,7 +4342,7 @@ TEST_F(TestTiling, TestRoundTiling)
 
 TEST_F(TestTiling, TestTanTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto tanShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4202,7 +4357,7 @@ TEST_F(TestTiling, TestTanTilingFloat)
 
 TEST_F(TestTiling, TestTanTilingFloat512)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto tanShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4217,7 +4372,7 @@ TEST_F(TestTiling, TestTanTilingFloat512)
 
 TEST_F(TestTiling, TestTanTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto tanShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4288,11 +4443,11 @@ TEST_F(TestTiling, TestSwiGLUFactorHalf)
 
 TEST_F(TestTiling, TestFmodTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto fmodShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetFmodMaxMinTmpSize(fmodShape, 4, false,  maxValue, minValue);
+    GetFmodMaxMinTmpSize(fmodShape, 4, false, maxValue, minValue);
     EXPECT_EQ(minValue, 256);
     EXPECT_EQ(maxValue, 128 * 128 * 1 * 4);
 
@@ -4305,11 +4460,11 @@ TEST_F(TestTiling, TestFmodTilingFloat)
 
 TEST_F(TestTiling, TestFmodTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto fmodShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetFmodMaxMinTmpSize(fmodShape, 2, false,  maxValue, minValue);
+    GetFmodMaxMinTmpSize(fmodShape, 2, false, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 8);
     EXPECT_EQ(maxValue, 128 * 128 * 8 * 2);
 
@@ -4322,7 +4477,7 @@ TEST_F(TestTiling, TestFmodTilingHalf)
 
 TEST_F(TestTiling, TestFmodTilingHalf512)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto truncShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4333,11 +4488,11 @@ TEST_F(TestTiling, TestFmodTilingHalf512)
 
 TEST_F(TestTiling, TestTruncTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto truncShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetTruncMaxMinTmpSize(truncShape, 4, false,  maxValue, minValue);
+    GetTruncMaxMinTmpSize(truncShape, 4, false, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 1);
     EXPECT_EQ(maxValue, 128 * 128 * 1 * 4);
 
@@ -4350,11 +4505,11 @@ TEST_F(TestTiling, TestTruncTilingFloat)
 
 TEST_F(TestTiling, TestTruncTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto truncShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetTruncMaxMinTmpSize(truncShape, 2, false,  maxValue, minValue);
+    GetTruncMaxMinTmpSize(truncShape, 2, false, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 2);
     EXPECT_EQ(maxValue, 128 * 128 * 2 * 2);
 
@@ -4367,7 +4522,7 @@ TEST_F(TestTiling, TestTruncTilingHalf)
 
 TEST_F(TestTiling, TestTruncTilingHalf512)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto truncShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4376,7 +4531,8 @@ TEST_F(TestTiling, TestTruncTilingHalf512)
     EXPECT_EQ(minValue, 256 * 2);
 }
 
-TEST_F(TestTiling, TestAcosTmpBufferFacotrHalfWithoutBasicBlock) {
+TEST_F(TestTiling, TestAcosTmpBufferFacotrHalfWithoutBasicBlock)
+{
     uint32_t maxLivedNodes = 0xffff;
     uint32_t extraBuffer = 0xffff;
     GetAcosTmpBufferFactorSize(2, maxLivedNodes, extraBuffer);
@@ -4384,8 +4540,8 @@ TEST_F(TestTiling, TestAcosTmpBufferFacotrHalfWithoutBasicBlock) {
     EXPECT_EQ(extraBuffer, 0);
 }
 
-
-TEST_F(TestTiling, TestAcosTmpBufferFacotrFloatWithoutBasicBlock) {
+TEST_F(TestTiling, TestAcosTmpBufferFacotrFloatWithoutBasicBlock)
+{
     uint32_t maxLivedNodes = 0xffff;
     uint32_t extraBuffer = 0xffff;
     GetAcosTmpBufferFactorSize(4, maxLivedNodes, extraBuffer);
@@ -4395,7 +4551,7 @@ TEST_F(TestTiling, TestAcosTmpBufferFacotrFloatWithoutBasicBlock) {
 
 TEST_F(TestTiling, TestAcosTilingHalf128)
 {
-    std::vector<int64_t> shapeDims = { 128 };
+    std::vector<int64_t> shapeDims = {128};
     auto acosShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4406,7 +4562,7 @@ TEST_F(TestTiling, TestAcosTilingHalf128)
 
 TEST_F(TestTiling, TestAcosTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 32 };
+    std::vector<int64_t> shapeDims = {32};
     auto acosShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4437,7 +4593,7 @@ TEST_F(TestTiling, TestTanhTiling)
 
 TEST_F(TestTiling, TestSigmoidTiling)
 {
-    std::vector<int64_t> shapeDims = { 128 };
+    std::vector<int64_t> shapeDims = {128};
     auto sigmoidShape = ge::Shape(shapeDims);
     uint32_t maxVal;
     uint32_t minVal;
@@ -4448,7 +4604,7 @@ TEST_F(TestTiling, TestSigmoidTiling)
 
 TEST_F(TestTiling, TestLogTilingMaxMin)
 {
-    std::vector<int64_t> shapeDims = { 128 };
+    std::vector<int64_t> shapeDims = {128};
     auto logShape = ge::Shape(shapeDims);
     uint32_t maxVal;
     uint32_t minVal;
@@ -4486,7 +4642,7 @@ TEST_F(TestTiling, TestLogTilingFactor)
 
 TEST_F(TestTiling, TestAcosTilingHalf16K)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto acosShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4497,7 +4653,7 @@ TEST_F(TestTiling, TestAcosTilingHalf16K)
 
 TEST_F(TestTiling, TestAcosTilingFloat16K)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto acosShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -4508,15 +4664,15 @@ TEST_F(TestTiling, TestAcosTilingFloat16K)
 
 TEST_F(TestTiling, TestAsinhTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto asinhShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    AscendC::GetAsinhMaxMinTmpSize(asinhShape, 4, true,  maxValue, minValue);
+    AscendC::GetAsinhMaxMinTmpSize(asinhShape, 4, true, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 3);
     EXPECT_EQ(maxValue, 128 * 128 * 3 * 4);
 
-    AscendC::GetAsinhMaxMinTmpSize(ge::Shape({32}), 4, true,  maxValue, minValue);
+    AscendC::GetAsinhMaxMinTmpSize(ge::Shape({32}), 4, true, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 3);
     EXPECT_EQ(maxValue, 256 * 3);
 
@@ -4529,11 +4685,11 @@ TEST_F(TestTiling, TestAsinhTilingFloat)
 
 TEST_F(TestTiling, TestAsinhTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto asinhShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    AscendC::GetAsinhMaxMinTmpSize(asinhShape, 2, true,  maxValue, minValue);
+    AscendC::GetAsinhMaxMinTmpSize(asinhShape, 2, true, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 3);
     EXPECT_EQ(maxValue, 128 * 128 * 3 * 2);
 
@@ -4546,11 +4702,11 @@ TEST_F(TestTiling, TestAsinhTilingHalf)
 
 TEST_F(TestTiling, TestAcoshTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto acoshShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    AscendC::GetAcoshMaxMinTmpSize(acoshShape, 2, true,  maxValue, minValue);
+    AscendC::GetAcoshMaxMinTmpSize(acoshShape, 2, true, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 2);
     EXPECT_EQ(maxValue, 128 * 128 * 2 * 2);
 
@@ -4563,11 +4719,11 @@ TEST_F(TestTiling, TestAcoshTilingHalf)
 
 TEST_F(TestTiling, TestAcoshTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto acoshShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    AscendC::GetAcoshMaxMinTmpSize(acoshShape, 4, true,  maxValue, minValue);
+    AscendC::GetAcoshMaxMinTmpSize(acoshShape, 4, true, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 1);
     EXPECT_EQ(maxValue, 128 * 128 * 1 * 4);
 
@@ -4580,7 +4736,7 @@ TEST_F(TestTiling, TestAcoshTilingFloat)
 
 TEST_F(TestTiling, TestSelectWithBytesMaskTilingSameAxis)
 {
-    const auto shape = ge::Shape({ 8, 128 });
+    const auto shape = ge::Shape({8, 128});
     const auto scalarShape = ge::Shape({1});
     uint32_t maxValue;
     uint32_t minValue;
@@ -4594,7 +4750,7 @@ TEST_F(TestTiling, TestSelectWithBytesMaskTilingSameAxis)
 
 TEST_F(TestTiling, TestSelectWithBytesMaskTilingSameAxisLargeShape)
 {
-    const auto shape = ge::Shape({ 128, 128 });
+    const auto shape = ge::Shape({128, 128});
     const auto scalarShape = ge::Shape({1});
     uint32_t maxValue;
     uint32_t minValue;
@@ -4608,7 +4764,7 @@ TEST_F(TestTiling, TestSelectWithBytesMaskTilingSameAxisLargeShape)
 
 TEST_F(TestTiling, TestSelectWithBytesMaskTilingSameAxisSmallShape)
 {
-    const auto shape = ge::Shape({ 1, 16 });
+    const auto shape = ge::Shape({1, 16});
     const auto scalarShape = ge::Shape({1});
     uint32_t maxValue;
     uint32_t minValue;
@@ -4622,9 +4778,9 @@ TEST_F(TestTiling, TestSelectWithBytesMaskTilingSameAxisSmallShape)
 
 TEST_F(TestTiling, TestSelectWithBytesMaskTilingDiffAxis)
 {
-    const auto srcShape = ge::Shape({ 8, 128 });
+    const auto srcShape = ge::Shape({8, 128});
     const auto scalarShape = ge::Shape({1});
-    const auto maskShape = ge::Shape({ 8, 160 });
+    const auto maskShape = ge::Shape({8, 160});
     uint32_t maxValue;
     uint32_t minValue;
     GetSelectWithBytesMaskMaxMinTmpSize(srcShape, scalarShape, 2, maskShape, 1, true, maxValue, minValue);
@@ -4640,9 +4796,9 @@ TEST_F(TestTiling, TestSelectWithBytesMaskTilingDiffAxis)
 
 TEST_F(TestTiling, TestSelectWithBytesMaskTilingDiffAxisLargeShape)
 {
-    const auto srcShape = ge::Shape({ 128, 128 });
+    const auto srcShape = ge::Shape({128, 128});
     const auto scalarShape = ge::Shape({1});
-    const auto maskShape = ge::Shape({ 128, 160 });
+    const auto maskShape = ge::Shape({128, 160});
     uint32_t maxValue;
     uint32_t minValue;
     GetSelectWithBytesMaskMaxMinTmpSize(srcShape, scalarShape, 2, maskShape, 1, true, maxValue, minValue);
@@ -4658,9 +4814,9 @@ TEST_F(TestTiling, TestSelectWithBytesMaskTilingDiffAxisLargeShape)
 
 TEST_F(TestTiling, TestSelectWithBytesMaskTilingDiffAxisSmallShape)
 {
-    const auto srcShape = ge::Shape({ 1, 16 });
+    const auto srcShape = ge::Shape({1, 16});
     const auto scalarShape = ge::Shape({1});
-    const auto maskShape = ge::Shape({ 1, 32 });
+    const auto maskShape = ge::Shape({1, 32});
     uint32_t maxValue;
     uint32_t minValue;
     GetSelectWithBytesMaskMaxMinTmpSize(srcShape, scalarShape, 2, maskShape, 1, true, maxValue, minValue);
@@ -4676,7 +4832,7 @@ TEST_F(TestTiling, TestSelectWithBytesMaskTilingDiffAxisSmallShape)
 
 TEST_F(TestTiling, TestSelectTilingSameAxis)
 {
-    const auto shape = ge::Shape({ 8, 128 });
+    const auto shape = ge::Shape({8, 128});
     const auto scalarShape = ge::Shape({1});
     uint32_t maxValue;
     uint32_t minValue;
@@ -4692,7 +4848,7 @@ TEST_F(TestTiling, TestSelectTilingSameAxis)
 
 TEST_F(TestTiling, TestSelectTilingSameAxisLargeShape)
 {
-    const auto shape = ge::Shape({ 128, 128 });
+    const auto shape = ge::Shape({128, 128});
     const auto scalarShape = ge::Shape({1});
     uint32_t maxValue;
     uint32_t minValue;
@@ -4708,7 +4864,7 @@ TEST_F(TestTiling, TestSelectTilingSameAxisLargeShape)
 
 TEST_F(TestTiling, TestSelectTilingSameAxisSmallShape)
 {
-    const auto shape = ge::Shape({ 1, 16 });
+    const auto shape = ge::Shape({1, 16});
     const auto scalarShape = ge::Shape({1});
     uint32_t maxValue;
     uint32_t minValue;
@@ -4724,9 +4880,9 @@ TEST_F(TestTiling, TestSelectTilingSameAxisSmallShape)
 
 TEST_F(TestTiling, TestSelectTilingDiffAxis)
 {
-    const auto srcShape = ge::Shape({ 8, 128 });
+    const auto srcShape = ge::Shape({8, 128});
     const auto scalarShape = ge::Shape({1});
-    const auto maskShape = ge::Shape({ 8, 160 });
+    const auto maskShape = ge::Shape({8, 160});
     uint32_t maxValue;
     uint32_t minValue;
     maxValue = GetSelectWithBytesMaskMaxTmpSize(srcShape, scalarShape, 2, maskShape, 1, true);
@@ -4746,9 +4902,9 @@ TEST_F(TestTiling, TestSelectTilingDiffAxis)
 
 TEST_F(TestTiling, TestSelectTilingDiffAxisLargeShape)
 {
-    const auto srcShape = ge::Shape({ 128, 128 });
+    const auto srcShape = ge::Shape({128, 128});
     const auto scalarShape = ge::Shape({1});
-    const auto maskShape = ge::Shape({ 128, 160 });
+    const auto maskShape = ge::Shape({128, 160});
     uint32_t maxValue;
     uint32_t minValue;
     maxValue = GetSelectWithBytesMaskMaxTmpSize(srcShape, scalarShape, 2, maskShape, 1, true);
@@ -4767,9 +4923,9 @@ TEST_F(TestTiling, TestSelectTilingDiffAxisLargeShape)
 
 TEST_F(TestTiling, TestSelectTilingDiffAxisSmallShape)
 {
-    const auto srcShape = ge::Shape({ 1, 16 });
+    const auto srcShape = ge::Shape({1, 16});
     const auto scalarShape = ge::Shape({1});
-    const auto maskShape = ge::Shape({ 1, 32 });
+    const auto maskShape = ge::Shape({1, 32});
     uint32_t maxValue;
     uint32_t minValue;
     maxValue = GetSelectWithBytesMaskMaxTmpSize(srcShape, scalarShape, 2, maskShape, 1, true);
@@ -4791,7 +4947,7 @@ TEST_F(TestTiling, TestLayernormTiling)
     const uint32_t stackBufferSize = 100 * 1024;
     const uint32_t typeSize = 4;
 
-    std::vector<int64_t> shapeDims = { 128, 128, 128, 128, 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128, 128, 128, 128, 128};
     auto layernormShape = ge::Shape(shapeDims);
     const bool isReuseSource = false;
     optiling::LayerNormTiling tilling;
@@ -4823,7 +4979,7 @@ TEST_F(TestTiling, TestGroupnormTiling)
     const uint32_t typeSize = 4;
     const uint32_t groupNum = 4;
 
-    std::vector<int64_t> shapeDims = { 16, 16, 8, 8};
+    std::vector<int64_t> shapeDims = {16, 16, 8, 8};
     auto groupnormShape = ge::Shape(shapeDims);
     const bool isReuseSource = false;
     optiling::GroupNormTiling tilling;
@@ -4871,7 +5027,7 @@ TEST_F(TestTiling, TestRmsnormTiling)
     constexpr uint32_t BASIC_BLK_HLENGTH = 64;
     constexpr uint32_t BASIC_BLK_BSLENGTH = 8;
     shapeDims[2] = BASIC_BLK_HLENGTH;
-    auto shape_basic_blk = ge::Shape(shapeDims);// 4,32,64
+    auto shape_basic_blk = ge::Shape(shapeDims); // 4,32,64
     // basic block scene 2: get minSize successfully
     res = AscendC::GetRmsNormMaxMinTmpSize(shape_basic_blk, typeSize, maxValue, minValue, true);
     goldenMin = (64 + 8) * typeSize;
@@ -4893,7 +5049,7 @@ TEST_F(TestTiling, TestRmsnormTiling)
     EXPECT_EQ(tiling.get_mainBshLength(), 64);
     EXPECT_EQ(tiling.get_mainBsLength(), 1);
 
-    auto shape1 = ge::Shape({1,7,16});
+    auto shape1 = ge::Shape({1, 7, 16});
     res = AscendC::GetRmsNormMaxMinTmpSize(shape1, typeSize, maxValue, minValue);
     goldenMin = (8 + 16) * typeSize;
     EXPECT_EQ(minValue, goldenMin);
@@ -4902,7 +5058,7 @@ TEST_F(TestTiling, TestRmsnormTiling)
     // common scene: get tiling info successfully, shape: 1,7,16
     res = AscendC::GetRmsNormTilingInfo(shape1, shape1, stackBufferSize, typeSize, tiling);
     EXPECT_EQ(res, true);
-    EXPECT_EQ(tiling.get_mainBshLength(), 1*7*16);
+    EXPECT_EQ(tiling.get_mainBshLength(), 1 * 7 * 16);
     EXPECT_EQ(tiling.get_mainBsLength(), 7);
 
     stackBufferSize = hLength;
@@ -4914,34 +5070,34 @@ TEST_F(TestTiling, TestRmsnormTiling)
     stackBufferSize = 100 * 1024; // shape: 4,32,64
     res = AscendC::GetRmsNormTilingInfo(shape_basic_blk, shape_basic_blk, stackBufferSize, typeSize, tiling, true);
     EXPECT_EQ(res, true);
-    EXPECT_EQ(tiling.get_mainBshLength(), 4*32*64);
+    EXPECT_EQ(tiling.get_mainBshLength(), 4 * 32 * 64);
 
     // basic block scene: get basic block tiling info successfully
-    stackBufferSize = (8*128 + 7)*4;
-    auto shape2 = ge::Shape({1,8,128});
+    stackBufferSize = (8 * 128 + 7) * 4;
+    auto shape2 = ge::Shape({1, 8, 128});
     res = AscendC::GetRmsNormTilingInfo(shape2, shape2, stackBufferSize, typeSize, tiling, true);
     EXPECT_EQ(res, true);
     EXPECT_EQ(tiling.get_mainBshLength(), 896);
     EXPECT_EQ(tiling.get_mainBsLength(), 7);
 
-    stackBufferSize = (8*128 + 8)*4; // shape: 1,8,128
+    stackBufferSize = (8 * 128 + 8) * 4; // shape: 1,8,128
     res = AscendC::GetRmsNormTilingInfo(shape2, shape2, stackBufferSize, typeSize, tiling, true);
     EXPECT_EQ(res, true);
     EXPECT_EQ(tiling.get_mainBshLength(), 128 * 8);
     EXPECT_EQ(tiling.get_mainBsLength(), 8);
 
-    stackBufferSize = (8*128 + 9)*4; // shape: 1,8,128
+    stackBufferSize = (8 * 128 + 9) * 4; // shape: 1,8,128
     res = AscendC::GetRmsNormTilingInfo(shape2, shape2, stackBufferSize, typeSize, tiling, true);
     EXPECT_EQ(res, true);
     EXPECT_EQ(tiling.get_mainBshLength(), 128 * 8);
     EXPECT_EQ(tiling.get_mainBsLength(), 8);
 
     // general case: bs > 256, set bs to 2*255+2
-    stackBufferSize = 32*512*4;
-    auto shape3 = ge::Shape({1,512,16}); // bs bigger than max_repeat(255)
+    stackBufferSize = 32 * 512 * 4;
+    auto shape3 = ge::Shape({1, 512, 16}); // bs bigger than max_repeat(255)
     res = AscendC::GetRmsNormTilingInfo(shape3, shape3, stackBufferSize, typeSize, tiling);
     EXPECT_EQ(res, true);
-    EXPECT_EQ(tiling.get_mainBshLength(), 255*16);
+    EXPECT_EQ(tiling.get_mainBshLength(), 255 * 16);
     EXPECT_EQ(tiling.get_mainBsLength(), 255);
     EXPECT_EQ(tiling.get_tailBsLength(), 2);
     EXPECT_EQ(tiling.get_loopRound(), 2);
@@ -4951,13 +5107,13 @@ TEST_F(TestTiling, TestRmsnormTiling)
     EXPECT_EQ(res, false);
 
     // abnormal case: basic block doesnot support h >= 2048
-    stackBufferSize = 16*2048*4;
-    auto shape4 = ge::Shape({1,8,2048});
+    stackBufferSize = 16 * 2048 * 4;
+    auto shape4 = ge::Shape({1, 8, 2048});
     res = AscendC::GetRmsNormTilingInfo(shape4, shape4, stackBufferSize, typeSize, tiling, true);
     EXPECT_EQ(res, false);
 
     stackBufferSize = 2048;
-    shape4 = ge::Shape({14,1,56});
+    shape4 = ge::Shape({14, 1, 56});
     res = AscendC::GetRmsNormTilingInfo(shape4, shape4, stackBufferSize, typeSize, tiling);
     EXPECT_EQ(res, true);
     EXPECT_EQ(tiling.get_mainBshLength(), 448);
@@ -4969,7 +5125,7 @@ TEST_F(TestTiling, TestRmsnormTiling)
     stackBufferSize = 2080;
     res = AscendC::GetRmsNormTilingInfo(shape4, shape4, stackBufferSize, typeSize, tiling);
     EXPECT_EQ(res, true);
-    EXPECT_EQ(tiling.get_mainBshLength(),504);
+    EXPECT_EQ(tiling.get_mainBshLength(), 504);
     EXPECT_EQ(tiling.get_mainBsLength(), 9);
     EXPECT_EQ(tiling.get_tailBshLength(), 280);
     EXPECT_EQ(tiling.get_tailBsLength(), 5);
@@ -4984,8 +5140,8 @@ TEST_F(TestTiling, TestBatchnormTiling)
     constexpr uint32_t originalBLength = 8;
     constexpr uint32_t shLength = sLength * hLength;
     constexpr uint32_t bshLength = originalBLength * sLength * hLength;
-    std::vector<int64_t> shapeDims = { bLength, sLength, hLength };
-    std::vector<int64_t> originShape_dims = { originalBLength, sLength, hLength };
+    std::vector<int64_t> shapeDims = {bLength, sLength, hLength};
+    std::vector<int64_t> originShape_dims = {originalBLength, sLength, hLength};
     auto shape = ge::Shape(shapeDims);
     auto originShape = ge::Shape(originShape_dims);
     bool reuseSrc = false;
@@ -5012,8 +5168,8 @@ TEST_F(TestTiling, TestBatchnormTiling)
     originShape_dims[2] = 16;
     auto shape_basic_blk = ge::Shape(originShape_dims);
     // basic block scene 2: get minSize successfully
-    res = AscendC::GetBatchNormMaxMinTmpSize(shape_basic_blk, shape_basic_blk, typeSize, reuseSrc, maxValue, minValue,
-        true);
+    res = AscendC::GetBatchNormMaxMinTmpSize(
+        shape_basic_blk, shape_basic_blk, typeSize, reuseSrc, maxValue, minValue, true);
     goldenMin = (3 * originalBLength * BASIC_BLK_SHLENGTH + 2 * 4 * 16) * typeSize;
     EXPECT_EQ(res, true);
     EXPECT_EQ(minValue, goldenMin);
@@ -5021,17 +5177,17 @@ TEST_F(TestTiling, TestBatchnormTiling)
     // basic block scene: get basic block using minTmpSize, shape = [8,4,16,2]
     optiling::BatchNormTiling tiling;
     AscendC::tiling::BatchNormTiling tilingNotOp;
-    res =
-        AscendC::GetBatchNormNDTilingInfo(shape_basic_blk, shape_basic_blk, minValue, typeSize, reuseSrc, tilingNotOp, true);
+    res = AscendC::GetBatchNormNDTilingInfo(
+        shape_basic_blk, shape_basic_blk, minValue, typeSize, reuseSrc, tilingNotOp, true);
     EXPECT_EQ(res, true);
 
     res =
         AscendC::GetBatchNormNDTilingInfo(shape_basic_blk, shape_basic_blk, minValue, typeSize, reuseSrc, tiling, true);
     EXPECT_EQ(res, true);
-    res = AscendC::GetBatchNormMaxMinTmpSize(shape_basic_blk, shape_basic_blk, halfTypeSize, reuseSrc, maxValue,
-        minValue, true);
-    res = AscendC::GetBatchNormNDTilingInfo(shape_basic_blk, shape_basic_blk, minValue, halfTypeSize, reuseSrc, tiling,
-        true);
+    res = AscendC::GetBatchNormMaxMinTmpSize(
+        shape_basic_blk, shape_basic_blk, halfTypeSize, reuseSrc, maxValue, minValue, true);
+    res = AscendC::GetBatchNormNDTilingInfo(
+        shape_basic_blk, shape_basic_blk, minValue, halfTypeSize, reuseSrc, tiling, true);
     EXPECT_EQ(res, true);
 
     uint32_t stackBufferSize = 100 * 1024;
@@ -5048,16 +5204,16 @@ TEST_F(TestTiling, TestBatchnormTiling)
 
     // basic block scene: get basic block tiling info successfully
     stackBufferSize = 100 * 1024;
-    res = AscendC::GetBatchNormNDTilingInfo(shape_basic_blk, shape_basic_blk, stackBufferSize, typeSize, reuseSrc,
-        tiling, true);
+    res = AscendC::GetBatchNormNDTilingInfo(
+        shape_basic_blk, shape_basic_blk, stackBufferSize, typeSize, reuseSrc, tiling, true);
     EXPECT_EQ(res, true);
 
     // basic block scene: fail to get basic block using buffer less than minValue
     goldenMin = (3 * originalBLength * BASIC_BLK_SHLENGTH + 2 * 4 * 6 - 1) * typeSize;
-    res = AscendC::GetBatchNormMaxMinTmpSize(shape_basic_blk, shape_basic_blk, typeSize, reuseSrc, maxValue, minValue,
-        true);
-    res = AscendC::GetBatchNormNDTilingInfo(shape_basic_blk, shape_basic_blk, goldenMin, typeSize, reuseSrc, tiling,
-        true);
+    res = AscendC::GetBatchNormMaxMinTmpSize(
+        shape_basic_blk, shape_basic_blk, typeSize, reuseSrc, maxValue, minValue, true);
+    res = AscendC::GetBatchNormNDTilingInfo(
+        shape_basic_blk, shape_basic_blk, goldenMin, typeSize, reuseSrc, tiling, true);
     EXPECT_EQ(res, false);
 }
 
@@ -5098,59 +5254,59 @@ TEST_F(TestTiling, TestDeepnormTiling)
     res = AscendC::GetDeepNormMaxMinTmpSize(wrongDeepNormShape, typeSize, varFalse, varTrue, maxValue, minValue);
     EXPECT_EQ(res, false);
 
-    AscendC::GetDeepNormTilingInfo(deepnormShape, oriDeepNormShape, stackBufferSize, typeSize, varFalse, varFalse,
-        tiling);
+    AscendC::GetDeepNormTilingInfo(
+        deepnormShape, oriDeepNormShape, stackBufferSize, typeSize, varFalse, varFalse, tiling);
     EXPECT_EQ(tiling.get_tmpBufSize(), stackBufferSize / sizeof(float));
-    AscendC::GetDeepNormTilingInfo(deepnormShape, oriDeepNormShape, stackBufferSize, typeSize, varFalse, varFalse,
-        tilingNotOp);
+    AscendC::GetDeepNormTilingInfo(
+        deepnormShape, oriDeepNormShape, stackBufferSize, typeSize, varFalse, varFalse, tilingNotOp);
     EXPECT_EQ(tilingNotOp.tmpBufSize, stackBufferSize / sizeof(float));
 
     // originalB = b, originalH = h
-    wrong_shape_dims = {1, 8, 128};          // originalb != b
+    wrong_shape_dims = {1, 8, 128}; // originalb != b
     wrongDeepNormShape = ge::Shape(wrong_shape_dims);
-    res = AscendC::GetDeepNormTilingInfo(deepnormShape, wrongDeepNormShape, stackBufferSize, typeSize, varFalse,
-        varFalse, tiling);
+    res = AscendC::GetDeepNormTilingInfo(
+        deepnormShape, wrongDeepNormShape, stackBufferSize, typeSize, varFalse, varFalse, tiling);
     EXPECT_EQ(res, false);
 
     // hlength must align to 32
     wrong_shape_dims = {1, 8, 4};
     wrongDeepNormShape = ge::Shape(wrong_shape_dims);
-    res = AscendC::GetDeepNormTilingInfo(wrongDeepNormShape, wrongDeepNormShape, stackBufferSize, typeSize, varFalse,
-        varFalse, tiling);
+    res = AscendC::GetDeepNormTilingInfo(
+        wrongDeepNormShape, wrongDeepNormShape, stackBufferSize, typeSize, varFalse, varFalse, tiling);
     EXPECT_EQ(res, false);
 
     // originalHlength <= hLength
     wrong_shape_dims = {2, 8, 136};
     wrongDeepNormShape = ge::Shape(wrong_shape_dims);
-    res = AscendC::GetDeepNormTilingInfo(deepnormShape, wrongDeepNormShape, stackBufferSize, typeSize, varFalse,
-        varFalse, tiling);
+    res = AscendC::GetDeepNormTilingInfo(
+        deepnormShape, wrongDeepNormShape, stackBufferSize, typeSize, varFalse, varFalse, tiling);
     EXPECT_EQ(res, false);
 
     // when basicblock, b*s must be divisible by 8
     wrong_shape_dims = {1, 4, 64};
     wrongDeepNormShape = ge::Shape(wrong_shape_dims);
-    res = AscendC::GetDeepNormTilingInfo(wrongDeepNormShape, wrongDeepNormShape, stackBufferSize, typeSize, varFalse,
-        varTrue, tiling);
+    res = AscendC::GetDeepNormTilingInfo(
+        wrongDeepNormShape, wrongDeepNormShape, stackBufferSize, typeSize, varFalse, varTrue, tiling);
     EXPECT_EQ(res, false);
 
     // when isbasicblock, origianlH must equal to H
-    res = AscendC::GetDeepNormTilingInfo(deepnormShape, oriDeepNormShape, stackBufferSize, typeSize, varFalse, varTrue,
-        tiling);
+    res = AscendC::GetDeepNormTilingInfo(
+        deepnormShape, oriDeepNormShape, stackBufferSize, typeSize, varFalse, varTrue, tiling);
     EXPECT_EQ(res, false);
 
     // hLength <= 255 * 8
     wrong_shape_dims = {1, 4, 2048};
     wrongDeepNormShape = ge::Shape(wrong_shape_dims);
-    res = AscendC::GetDeepNormTilingInfo(wrongDeepNormShape, wrongDeepNormShape, stackBufferSize, typeSize, varFalse,
-        varFalse, tiling);
+    res = AscendC::GetDeepNormTilingInfo(
+        wrongDeepNormShape, wrongDeepNormShape, stackBufferSize, typeSize, varFalse, varFalse, tiling);
     EXPECT_EQ(res, false);
 
     // assume initial oneTmpSize is 9*n, update to 8*n for efficiency when isBasicBlock
     // tiling.oneTmpSize before update: 704   after update: 512
     std::vector<int64_t> basicblk_shape_dims = {4, 4, 64};
     auto basicblkDeepNormShape = ge::Shape(basicblk_shape_dims);
-    res = AscendC::GetDeepNormTilingInfo(basicblkDeepNormShape, basicblkDeepNormShape, 8874, typeSize, varFalse,
-        varTrue, tiling);
+    res = AscendC::GetDeepNormTilingInfo(
+        basicblkDeepNormShape, basicblkDeepNormShape, 8874, typeSize, varFalse, varTrue, tiling);
     EXPECT_EQ(tiling.get_oneTmpSize(), 512);
 }
 
@@ -5206,7 +5362,6 @@ TEST_F(TestTiling, TestMatmulApiTilngFactorSplit1)
     EXPECT_EQ(tilingData.get_baseM(), 128);
 }
 
-
 TEST_F(TestTiling, TestMatmulApiTilngFactorSplit2)
 {
     MatmulApiTiling tiling;
@@ -5246,7 +5401,6 @@ TEST_F(TestTiling, TestMatmulApiTilngDimfactors)
     EXPECT_EQ(tilingData.get_baseK(), 16);
 }
 
-
 // when A matrix or B matrix is in TSCM, then calculaye loadSize should ignore it;
 TEST_F(TestTiling, TestMatmulApiTilngBMatrixTSCM)
 {
@@ -5280,7 +5434,6 @@ TEST_F(TestTiling, TestMatmulApiTilngFailed1)
     tiling.SetBufferSpace(-1, -1, -1);
     optiling::TCubeTiling tilingData;
     tiling.GetTiling(tilingData);
-
 }
 
 // single m = 970, upper round is 976 which is 61 times of 16. the value is not good.
@@ -5298,7 +5451,6 @@ TEST_F(TestTiling, TestMatmulApiTilngFailed2)
     tiling.SetBufferSpace(-1, -1, -1);
     optiling::TCubeTiling tilingData;
     tiling.GetTiling(tilingData);
-
 }
 
 // when B matrix is full load, l1Status.nBL1 * l0Status.nL0 is large then coreStatus.n or
@@ -5317,7 +5469,6 @@ TEST_F(TestTiling, TestMatmulApiTilngFailed3)
     tiling.SetBufferSpace(-1, -1, -1);
     optiling::TCubeTiling tilingData;
     tiling.GetTiling(tilingData);
-
 }
 
 // baseM * basek + BIAS are larger then l1size
@@ -5335,7 +5486,6 @@ TEST_F(TestTiling, TestMatmulApiTilngFailed4)
     tiling.SetBufferSpace(4096 * 4 + 64 * 4, -1, -1, 1024);
     optiling::TCubeTiling tilingData;
     tiling.GetTiling(tilingData);
-
 }
 
 TEST_F(TestTiling, TestMatmulApiTilngMultiCoreCase1)
@@ -5438,7 +5588,6 @@ TEST_F(TestTiling, TestMatmulApiTilngMultiCoreWithCppStruct)
     EXPECT_GE(tilingData.transLength, 0);
     matmul_tiling::SysTilingTempBufSize bufSize;
     EXPECT_EQ(MultiCoreMatmulGetTmpBufSizeV2(tilingData, bufSize), 0);
-
 }
 
 TEST_F(TestTiling, TestMatmulApiTilngKNotAlign)
@@ -5579,7 +5728,6 @@ TEST_F(TestTiling, TestMatmulApiTilngMultiCoreBTSCM4)
     EXPECT_GE(tilingData.get_transLength(), 0);
 }
 
-
 TEST_F(TestTiling, TestMatmulApiTilngSingleCoreFullLoadCase)
 {
     optiling::TCubeTiling tilingData;
@@ -5672,7 +5820,7 @@ TEST_F(TestTiling, TestUnPadTiling)
     const uint32_t stackBufferSize = 100 * 1024;
     const uint32_t typeSize = 4;
 
-    std::vector<int64_t> shapeDims = { 32, 32 };
+    std::vector<int64_t> shapeDims = {32, 32};
     auto srcShape = ge::Shape(shapeDims);
     optiling::UnPadTiling tiling;
     AscendC::tiling::UnPadTiling tilingNotOp;
@@ -5693,8 +5841,8 @@ TEST_F(TestTiling, TestPadTiling)
     const uint32_t stackBufferSize = 100 * 1024;
     const uint32_t typeSize = 4;
 
-    std::vector<int64_t> shapeDims = { 32, 32};
-    std::vector<int64_t> ori_shape_dims = { 32, 31 };
+    std::vector<int64_t> shapeDims = {32, 32};
+    std::vector<int64_t> ori_shape_dims = {32, 31};
     auto srcShape = ge::Shape(shapeDims);
     auto oriSrcShape = ge::Shape(ori_shape_dims);
     optiling::PadTiling tiling;
@@ -5713,7 +5861,7 @@ TEST_F(TestTiling, TestLayernormGradTiling)
 {
     const uint32_t stackBufferSize = 100 * 1024;
 
-    std::vector<int64_t> shapeDims = { 128, 128, 128, 128, 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128, 128, 128, 128, 128};
     auto layernormgradShape = ge::Shape(shapeDims);
     optiling::LayerNormGradTiling tiling;
     AscendC::tiling::LayerNormGradTiling tilingNotOp;
@@ -5744,7 +5892,7 @@ TEST_F(TestTiling, TestLayernormGradBetaTiling)
     const uint32_t stackBufferSize = 100 * 1024 * 1024;
     const uint32_t typeSize = 4;
 
-    std::vector<int64_t> shapeDims = { 128, 128, 128, 128, 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128, 128, 128, 128, 128};
     auto layernormgradbetaShape = ge::Shape(shapeDims);
     const bool isReuseSource = false;
 
@@ -5764,7 +5912,8 @@ TEST_F(TestTiling, TestLayernormGradBetaTiling)
     AscendC::GetLayerNormGradBetaNDTilingInfo(layernormgradbetaShape, stackBufferSize, typeSize, isReuseSource, tiling);
     EXPECT_EQ(tiling.get_stackBufferSize(), stackBufferSize / sizeof(float));
 
-    AscendC::GetLayerNormGradBetaNDTilingInfo(layernormgradbetaShape, stackBufferSize, typeSize, isReuseSource, tilingNotOp);
+    AscendC::GetLayerNormGradBetaNDTilingInfo(
+        layernormgradbetaShape, stackBufferSize, typeSize, isReuseSource, tilingNotOp);
     EXPECT_EQ(tilingNotOp.stackBufferSize, stackBufferSize / sizeof(float));
 }
 
@@ -5773,7 +5922,7 @@ TEST_F(TestTiling, TestConfusionTransposeTiling)
     const uint32_t stackBufferSize = 100 * 1024;
     const uint32_t typeSize = 2;
 
-    std::vector<int64_t> shapeDims = { 1, 2, 64, 32 };
+    std::vector<int64_t> shapeDims = {1, 2, 64, 32};
     auto srcShape = ge::Shape(shapeDims);
     optiling::ConfusionTransposeTiling tiling;
     AscendC::GetConfusionTransposeTilingInfo(srcShape, stackBufferSize, typeSize, 1, tiling);
@@ -5790,7 +5939,7 @@ TEST_F(TestTiling, TestConfusionTransposeTilingWithCppStruct)
     const uint32_t stackBufferSize = 100 * 1024;
     const uint32_t typeSize = 2;
 
-    std::vector<int64_t> shapeDims = { 1, 2, 64, 32 };
+    std::vector<int64_t> shapeDims = {1, 2, 64, 32};
     auto srcShape = ge::Shape(shapeDims);
     AscendC::tiling::ConfusionTransposeTiling tiling;
     AscendC::GetConfusionTransposeTilingInfo(srcShape, stackBufferSize, typeSize, 1, tiling);
@@ -5807,7 +5956,7 @@ TEST_F(TestTiling, TestGetTransposeTilingInfoWithCppStruct)
     const uint32_t stackBufferSize = 100 * 1024;
     const uint32_t typeSize = 2;
 
-    std::vector<int64_t> shapeDims = { 1, 2, 64, 32 };
+    std::vector<int64_t> shapeDims = {1, 2, 64, 32};
     auto srcShape = ge::Shape(shapeDims);
     AscendC::tiling::ConfusionTransposeTiling tiling;
     AscendC::GetTransposeTilingInfo(srcShape, stackBufferSize, typeSize, 1, tiling);
@@ -5896,22 +6045,24 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_RNN_TILING, RnnTilingbTestSuite,
-    ::testing::Values(RnnParams { 1280, 256, 128, 48, 24 * 1024 }, RnnParams { 36, 512, 256, 48, 128 * 1024 - 64 },
-    RnnParams { 48, 512, 256, 48, 128 * 1024 - 64 }, RnnParams { 64, 512, 256, 48, 128 * 1024 - 64 },
-    RnnParams { 36, 768, 1024, 48, 128 * 1024 - 64 }, RnnParams { 48, 768, 1024, 48, 128 * 1024 - 64 },
-    RnnParams { 64, 768, 1024, 48, 128 * 1024 - 64 }, RnnParams { 16, 16, 512, 48, 128 * 1024 - 64 },
-    RnnParams { 64, 256, 256, 48, 128 * 1024 - 64 }, RnnParams { 64, 128, 128, 48, 128 * 1024 - 64 },
-    RnnParams { 64, 256, 128, 48, 128 * 1024 - 64 }, RnnParams { 64, 512, 128, 48, 128 * 1024 - 64 },
-    RnnParams { 64, 512, 256, 48, 128 * 1024 - 64 }, RnnParams { 1280, 256, 128, 48, 128 * 1024 - 64 },
-    RnnParams { 1280, 256, 256, 48, 128 * 1024 - 64 }, RnnParams { 1280, 512, 128, 48, 128 * 1024 - 64 },
-    RnnParams { 1280, 512, 256, 48, 128 * 1024 - 64 }, RnnParams { 1920, 256, 128, 48, 128 * 1024 - 64 },
-    RnnParams { 1920, 256, 256, 48, 128 * 1024 - 64 }, RnnParams { 1920, 512, 128, 48, 128 * 1024 - 64 },
-    RnnParams { 1920, 512, 256, 48, 128 * 1024 - 64 }, RnnParams { 2560, 256, 128, 48, 128 * 1024 - 64 },
-    RnnParams { 2560, 256, 256, 48, 128 * 1024 - 64 }, RnnParams { 2560, 512, 128, 48, 128 * 1024 - 64 },
-    RnnParams { 2560, 512, 256, 48, 128 * 1024 - 64 }, RnnParams { 48, 512, 256, 48, 128 * 1024 - 64 },
-    RnnParams { 64, 1536, 1024, 48, 128 * 1024 - 64 }, RnnParams { 2560, 5120, 9760, 48, 128 * 1024 - 64 },
-    RnnParams { 479, 96, 381, 48, 128 * 1024 - 64 }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_RNN_TILING, RnnTilingbTestSuite,
+    ::testing::Values(
+        RnnParams{1280, 256, 128, 48, 24 * 1024}, RnnParams{36, 512, 256, 48, 128 * 1024 - 64},
+        RnnParams{48, 512, 256, 48, 128 * 1024 - 64}, RnnParams{64, 512, 256, 48, 128 * 1024 - 64},
+        RnnParams{36, 768, 1024, 48, 128 * 1024 - 64}, RnnParams{48, 768, 1024, 48, 128 * 1024 - 64},
+        RnnParams{64, 768, 1024, 48, 128 * 1024 - 64}, RnnParams{16, 16, 512, 48, 128 * 1024 - 64},
+        RnnParams{64, 256, 256, 48, 128 * 1024 - 64}, RnnParams{64, 128, 128, 48, 128 * 1024 - 64},
+        RnnParams{64, 256, 128, 48, 128 * 1024 - 64}, RnnParams{64, 512, 128, 48, 128 * 1024 - 64},
+        RnnParams{64, 512, 256, 48, 128 * 1024 - 64}, RnnParams{1280, 256, 128, 48, 128 * 1024 - 64},
+        RnnParams{1280, 256, 256, 48, 128 * 1024 - 64}, RnnParams{1280, 512, 128, 48, 128 * 1024 - 64},
+        RnnParams{1280, 512, 256, 48, 128 * 1024 - 64}, RnnParams{1920, 256, 128, 48, 128 * 1024 - 64},
+        RnnParams{1920, 256, 256, 48, 128 * 1024 - 64}, RnnParams{1920, 512, 128, 48, 128 * 1024 - 64},
+        RnnParams{1920, 512, 256, 48, 128 * 1024 - 64}, RnnParams{2560, 256, 128, 48, 128 * 1024 - 64},
+        RnnParams{2560, 256, 256, 48, 128 * 1024 - 64}, RnnParams{2560, 512, 128, 48, 128 * 1024 - 64},
+        RnnParams{2560, 512, 256, 48, 128 * 1024 - 64}, RnnParams{48, 512, 256, 48, 128 * 1024 - 64},
+        RnnParams{64, 1536, 1024, 48, 128 * 1024 - 64}, RnnParams{2560, 5120, 9760, 48, 128 * 1024 - 64},
+        RnnParams{479, 96, 381, 48, 128 * 1024 - 64}));
 
 TEST_P(RnnTilingbTestSuite, TestMatmulApiTilngRnnRealCase)
 {
@@ -5930,25 +6081,25 @@ TEST_P(RnnTilingbTestSuite, TestMatmulApiTilngRnnRealCase)
     bool isFullLoadWeight = false;
 
     rnnMatmul.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
-    rnnMatmul.SetBType(matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND,
-        (matmul_tiling::DataType)dataType);
+    rnnMatmul.SetBType(
+        matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
     rnnMatmul.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul.SetBiasType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND,
-        (matmul_tiling::DataType)dataType);
+    rnnMatmul.SetBiasType(
+        matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
     rnnMatmul1.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
-    rnnMatmul1.SetBType(matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND,
-        (matmul_tiling::DataType)dataType);
-    rnnMatmul1.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ,
-        matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul1.SetBiasType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND,
-        (matmul_tiling::DataType)dataType);
+    rnnMatmul1.SetBType(
+        matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
+    rnnMatmul1.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
+    rnnMatmul1.SetBiasType(
+        matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
     rnnMatmul2.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
-    rnnMatmul2.SetBType(matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND,
-        (matmul_tiling::DataType)dataType);
-    rnnMatmul2.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ,
-        matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul2.SetBiasType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND,
-        (matmul_tiling::DataType)dataType);
+    rnnMatmul2.SetBType(
+        matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
+    rnnMatmul2.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
+    rnnMatmul2.SetBiasType(
+        matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
     // full loaded
     auto ret = rnnMatmul.EnableBias(true);
     ret = rnnMatmul.SetDim(rnnParams.sysAivCoreNum / 4);
@@ -5972,8 +6123,10 @@ TEST_P(RnnTilingbTestSuite, TestMatmulApiTilngRnnRealCase)
         rnnParams.baseM = rnnMatmul.GetBaseM();
         rnnParams.baseN = rnnMatmul.GetBaseN();
         rnnParams.baseK = rnnMatmul.GetBaseK(); // get output info after cut
-        ret = rnnMatmul.GetSingleShape(rnnParams.singleM, rnnParams.singleN, rnnParams.singleK); // get single process info
-        ret = rnnMatmul.GetCoreNum(dim, mDim,
+        ret = rnnMatmul.GetSingleShape(
+            rnnParams.singleM, rnnParams.singleN, rnnParams.singleK); // get single process info
+        ret = rnnMatmul.GetCoreNum(
+            dim, mDim,
             nDim); // get used numBlocks after multi-cores cut, carried by user to kernel， contrl Kernel
         // input mm
         int32_t l1_left = 512 * 1024 - 64 - rnnParams.singleN * (input_align + hidden_align) * sizeof(float) * 2;
@@ -5988,9 +6141,9 @@ TEST_P(RnnTilingbTestSuite, TestMatmulApiTilngRnnRealCase)
         ret = rnnMatmul1.GetTiling(tilingData.inputMMParam);
         tilingData.inputMMParam.set_singleCoreN(rnnParams.singleN / 4);
         int32_t l1UsedSize = (tilingData.inputMMParam.get_baseM() * tilingData.inputMMParam.get_baseK() *
-            tilingData.inputMMParam.get_depthA1() +
-            rnnParams.singleN * (hidden_align + input_align) * 2) *
-            sizeof(float);
+                                  tilingData.inputMMParam.get_depthA1() +
+                              rnnParams.singleN * (hidden_align + input_align) * 2) *
+                             sizeof(float);
         EXPECT_LT(l1UsedSize, 512 * 1024 - 64);
         // hidden mm
         l1_left = 512 * 1024 - 64 - rnnParams.singleN * (input_align + hidden_align) * sizeof(float) * 2;
@@ -6006,9 +6159,9 @@ TEST_P(RnnTilingbTestSuite, TestMatmulApiTilngRnnRealCase)
         ret = rnnMatmul2.GetTiling(tilingData.hiddenMMParam);
         tilingData.hiddenMMParam.set_singleCoreN(rnnParams.singleN / 4);
         l1UsedSize = (tilingData.hiddenMMParam.get_baseM() * tilingData.hiddenMMParam.get_baseK() *
-            tilingData.hiddenMMParam.get_depthA1() +
-            rnnParams.singleN * (hidden_align + input_align) * 2) *
-            sizeof(float);
+                          tilingData.hiddenMMParam.get_depthA1() +
+                      rnnParams.singleN * (hidden_align + input_align) * 2) *
+                     sizeof(float);
         EXPECT_LT(l1UsedSize, 512 * 1024 - 64);
         rnnParams.usedCoreNum = dim * 4;
     } else { // part of full loaded
@@ -6029,9 +6182,11 @@ TEST_P(RnnTilingbTestSuite, TestMatmulApiTilngRnnRealCase)
             rnnParams.baseM = rnnMatmul.GetBaseM();
             rnnParams.baseN = rnnMatmul.GetBaseN();
             rnnParams.baseK = rnnMatmul.GetBaseK(); // get output info after cut
-            ret = rnnMatmul.GetSingleShape(rnnParams.singleM, rnnParams.singleN,
+            ret = rnnMatmul.GetSingleShape(
+                rnnParams.singleM, rnnParams.singleN,
                 rnnParams.singleK); // get single process info
-            ret = rnnMatmul.GetCoreNum(dim, mDim,
+            ret = rnnMatmul.GetCoreNum(
+                dim, mDim,
                 nDim); // get used numBlocks after multi-cores cut, carried by user to kernel， contrl Kernel business
             // input mm
             ret = rnnMatmul1.SetBufferSpace(-1, rnnParams.maxUbSize, rnnParams.maxUbSize);
@@ -6045,9 +6200,9 @@ TEST_P(RnnTilingbTestSuite, TestMatmulApiTilngRnnRealCase)
             ret = rnnMatmul1.GetTiling(tilingData.inputMMParam);
             tilingData.inputMMParam.set_singleCoreN(rnnParams.singleN / 4);
             int32_t l1UsedSize = (tilingData.inputMMParam.get_baseM() * tilingData.inputMMParam.get_baseK() *
-                tilingData.inputMMParam.get_depthA1() +
-                rnnParams.singleN * (input_align)*2) *
-                sizeof(float);
+                                      tilingData.inputMMParam.get_depthA1() +
+                                  rnnParams.singleN * (input_align) * 2) *
+                                 sizeof(float);
             EXPECT_LT(l1UsedSize, 512 * 1024 - 64);
             // hidden mm
             ret = rnnMatmul2.SetBufferSpace(-1, rnnParams.maxUbSize, rnnParams.maxUbSize);
@@ -6061,54 +6216,57 @@ TEST_P(RnnTilingbTestSuite, TestMatmulApiTilngRnnRealCase)
             ret = rnnMatmul2.GetTiling(tilingData.hiddenMMParam);
             tilingData.hiddenMMParam.set_singleCoreN(rnnParams.singleN / 4);
             l1UsedSize = (tilingData.hiddenMMParam.get_baseM() * tilingData.hiddenMMParam.get_baseK() *
-                tilingData.hiddenMMParam.get_depthA1() +
-                rnnParams.singleN * (hidden_align)*2) *
-                sizeof(float);
+                              tilingData.hiddenMMParam.get_depthA1() +
+                          rnnParams.singleN * (hidden_align) * 2) *
+                         sizeof(float);
             EXPECT_LT(l1UsedSize, 512 * 1024 - 64);
             rnnParams.usedCoreNum = dim * 4;
         } else { // no cache, reset AB，mm cache mechanism lose efficacy
             std::cout << "can not load any weight" << std::endl;
-            rnnMatmul.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND,
-                (matmul_tiling::DataType)dataType);
-            rnnMatmul.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND,
-                (matmul_tiling::DataType)dataType);
-            rnnMatmul.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ,
-                matmul_tiling::DataType ::DT_FLOAT);
-            rnnMatmul.SetBiasType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND,
-                (matmul_tiling::DataType)dataType);
+            rnnMatmul.SetAType(
+                matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
+            rnnMatmul.SetBType(
+                matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
+            rnnMatmul.SetCType(
+                matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
+            rnnMatmul.SetBiasType(
+                matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
 
-            rnnMatmul1.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND,
-                (matmul_tiling::DataType)dataType);
-            rnnMatmul1.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND,
-                (matmul_tiling::DataType)dataType);
-            rnnMatmul1.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ,
-                matmul_tiling::DataType ::DT_FLOAT);
-            rnnMatmul1.SetBiasType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND,
-                (matmul_tiling::DataType)dataType);
+            rnnMatmul1.SetAType(
+                matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
+            rnnMatmul1.SetBType(
+                matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
+            rnnMatmul1.SetCType(
+                matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
+            rnnMatmul1.SetBiasType(
+                matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
 
-            rnnMatmul2.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND,
-                (matmul_tiling::DataType)dataType);
-            rnnMatmul2.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND,
-                (matmul_tiling::DataType)dataType);
-            rnnMatmul2.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ,
-                matmul_tiling::DataType ::DT_FLOAT);
-            rnnMatmul2.SetBiasType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND,
-                (matmul_tiling::DataType)dataType);
+            rnnMatmul2.SetAType(
+                matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
+            rnnMatmul2.SetBType(
+                matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
+            rnnMatmul2.SetCType(
+                matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
+            rnnMatmul2.SetBiasType(
+                matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, (matmul_tiling::DataType)dataType);
             auto ret = rnnMatmul.EnableBias(true);
             ret = rnnMatmul.SetDim(rnnParams.sysAivCoreNum);
-            ret = rnnMatmul.SetOrgShape(rnnParams.batch, rnnParams.hiddenSize * 4,
-                rnnParams.inputSize + rnnParams.hiddenSize);
+            ret = rnnMatmul.SetOrgShape(
+                rnnParams.batch, rnnParams.hiddenSize * 4, rnnParams.inputSize + rnnParams.hiddenSize);
             ret = rnnMatmul.SetShape(rnnParams.batch, rnnParams.hiddenSize, rnnParams.inputSize + rnnParams.hiddenSize);
-            ret = rnnMatmul.SetBufferSpace(-1, rnnParams.maxUbSize,
+            ret = rnnMatmul.SetBufferSpace(
+                -1, rnnParams.maxUbSize,
                 rnnParams.maxUbSize); // set the space that can be used, by default, all space of the chip is used.
             ret = rnnMatmul.GetTiling(rnnParams.matmulTiling);
             int32_t dim, mDim, nDim;
             rnnParams.baseM = rnnMatmul.GetBaseM();
             rnnParams.baseN = rnnMatmul.GetBaseN();
             rnnParams.baseK = rnnMatmul.GetBaseK(); // get output info
-            ret = rnnMatmul.GetSingleShape(rnnParams.singleM, rnnParams.singleN,
+            ret = rnnMatmul.GetSingleShape(
+                rnnParams.singleM, rnnParams.singleN,
                 rnnParams.singleK); // get single core data
-            ret = rnnMatmul.GetCoreNum(dim, mDim,
+            ret = rnnMatmul.GetCoreNum(
+                dim, mDim,
                 nDim); // get used numBlocks after multi-cores cut, carried by user to kernel， contrl Kernel business
             // input mm
             ret = rnnMatmul1.SetBufferSpace(-1, rnnParams.maxUbSize, rnnParams.maxUbSize);
@@ -6120,10 +6278,10 @@ TEST_P(RnnTilingbTestSuite, TestMatmulApiTilngRnnRealCase)
             ret = rnnMatmul1.SetDim(dim);
             ret = rnnMatmul1.GetTiling(tilingData.inputMMParam);
             int32_t l1UsedSize = (tilingData.inputMMParam.get_baseM() * tilingData.inputMMParam.get_baseK() *
-                tilingData.inputMMParam.get_depthA1() +
-                tilingData.inputMMParam.get_baseN() * tilingData.inputMMParam.get_baseK() *
-                tilingData.inputMMParam.get_depthB1()) *
-                sizeof(float);
+                                      tilingData.inputMMParam.get_depthA1() +
+                                  tilingData.inputMMParam.get_baseN() * tilingData.inputMMParam.get_baseK() *
+                                      tilingData.inputMMParam.get_depthB1()) *
+                                 sizeof(float);
             EXPECT_LT(l1UsedSize, 512 * 1024 - 64);
             // hidden mm
             ret = rnnMatmul2.SetBufferSpace(-1, rnnParams.maxUbSize, rnnParams.maxUbSize);
@@ -6135,10 +6293,10 @@ TEST_P(RnnTilingbTestSuite, TestMatmulApiTilngRnnRealCase)
             ret = rnnMatmul2.SetDim(dim);
             ret = rnnMatmul2.GetTiling(tilingData.hiddenMMParam);
             l1UsedSize = (tilingData.hiddenMMParam.get_baseM() * tilingData.hiddenMMParam.get_baseK() *
-                tilingData.hiddenMMParam.get_depthA1() +
-                tilingData.hiddenMMParam.get_baseN() * tilingData.hiddenMMParam.get_baseK() *
-                tilingData.hiddenMMParam.get_depthB1()) *
-                sizeof(float);
+                              tilingData.hiddenMMParam.get_depthA1() +
+                          tilingData.hiddenMMParam.get_baseN() * tilingData.hiddenMMParam.get_baseK() *
+                              tilingData.hiddenMMParam.get_depthB1()) *
+                         sizeof(float);
             EXPECT_LT(l1UsedSize, 512 * 1024 - 64);
             rnnParams.usedCoreNum = dim;
         }
@@ -6164,7 +6322,7 @@ TEST_F(TestTiling, TestMatmulApiTilngSetShapeZero)
 
 TEST_F(TestTiling, TestLgammaTilingFp32)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxSize;
     uint32_t minSize;
@@ -6176,13 +6334,13 @@ TEST_F(TestTiling, TestLgammaTilingFp32)
     EXPECT_EQ(maxSize, 524288);
     EXPECT_EQ(minSize, 2048);
 
-    shapeDims = { 8 };
+    shapeDims = {8};
     shape = ge::Shape(shapeDims);
     GetLgammaMaxMinTmpSize(shape, 4, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 2048);
     EXPECT_EQ(minSize, 2048);
 
-    GetLgammaMaxMinTmpSize(shape, 4, true,maxSize, minSize);
+    GetLgammaMaxMinTmpSize(shape, 4, true, maxSize, minSize);
     EXPECT_EQ(maxSize, 1792);
     EXPECT_EQ(minSize, 1792);
 
@@ -6195,7 +6353,7 @@ TEST_F(TestTiling, TestLgammaTilingFp32)
 
 TEST_F(TestTiling, TestLgammaTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxSize;
     uint32_t minSize;
@@ -6204,7 +6362,7 @@ TEST_F(TestTiling, TestLgammaTilingHalf)
     EXPECT_EQ(maxSize, 128 * 128 * 2 * 13 * 2);
     EXPECT_EQ(minSize, 13 * 2 * 256);
 
-    shapeDims = { 8 };
+    shapeDims = {8};
     shape = ge::Shape(shapeDims);
     GetLgammaMaxMinTmpSize(shape, 2, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 256 * 13 * 2);
@@ -6381,7 +6539,7 @@ TEST_F(TestTiling, TestMatmulApiTilngInt8Case8)
 
 TEST_F(TestTiling, TestAscendQuantTiling)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxValue;
     uint32_t minValue;
@@ -6397,7 +6555,7 @@ TEST_F(TestTiling, TestAscendQuantTiling)
 
 TEST_F(TestTiling, TestQuantizeTiling)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxValue;
     uint32_t minValue;
@@ -6450,28 +6608,30 @@ TEST_F(TestTiling, TestAscendDequantTiling)
 
 TEST_F(TestTiling, TestAntiquantTilingNoTransposePerChannelHalf)
 {
-    std::vector<int64_t> srcDims = { 640, 5120 };
+    std::vector<int64_t> srcDims = {640, 5120};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 1, 5120 };
+    std::vector<int64_t> offsetDSms = {1, 5120};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = false;
     uint32_t maxValue;
     uint32_t minValue;
-    GetAscendAntiQuantMaxMinTmpSize(srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_FLOAT16, maxValue, minValue);
+    GetAscendAntiQuantMaxMinTmpSize(
+        srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_FLOAT16, maxValue, minValue);
     EXPECT_EQ(minValue, 0);
     EXPECT_EQ(maxValue, 0);
     uint32_t maxLiveNodeCnt = 1;
     uint32_t extraBuf = 1;
-    GetAscendAntiQuantTmpBufferFactorSize(srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_FLOAT16, maxLiveNodeCnt, extraBuf);
+    GetAscendAntiQuantTmpBufferFactorSize(
+        srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_FLOAT16, maxLiveNodeCnt, extraBuf);
     EXPECT_EQ(maxLiveNodeCnt, 0);
     EXPECT_EQ(extraBuf, 0);
 }
 
 TEST_F(TestTiling, TestAntiquantTilingNoTransposePerChannel)
 {
-    std::vector<int64_t> srcDims = { 640, 5120 };
+    std::vector<int64_t> srcDims = {640, 5120};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 1, 5120 };
+    std::vector<int64_t> offsetDSms = {1, 5120};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = false;
     uint32_t maxValue;
@@ -6483,16 +6643,17 @@ TEST_F(TestTiling, TestAntiquantTilingNoTransposePerChannel)
 
     uint32_t maxLiveNodeCnt = 1;
     uint32_t extraBuf = 1;
-    GetAscendAntiQuantTmpBufferFactorSize(srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_BF16, maxLiveNodeCnt, extraBuf);
+    GetAscendAntiQuantTmpBufferFactorSize(
+        srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_BF16, maxLiveNodeCnt, extraBuf);
     EXPECT_EQ(maxLiveNodeCnt, 0);
     EXPECT_EQ(extraBuf, expectValue);
 }
 
 TEST_F(TestTiling, TestAntiquantTilingNoTransposePerTensor)
 {
-    std::vector<int64_t> srcDims = { 640, 5120 };
+    std::vector<int64_t> srcDims = {640, 5120};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 1 };
+    std::vector<int64_t> offsetDSms = {1};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = false;
     uint32_t maxValue;
@@ -6503,16 +6664,17 @@ TEST_F(TestTiling, TestAntiquantTilingNoTransposePerTensor)
 
     uint32_t maxLiveNodeCnt = 0;
     uint32_t extraBuf = 1;
-    GetAscendAntiQuantTmpBufferFactorSize(srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_BF16, maxLiveNodeCnt, extraBuf);
+    GetAscendAntiQuantTmpBufferFactorSize(
+        srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_BF16, maxLiveNodeCnt, extraBuf);
     EXPECT_EQ(maxLiveNodeCnt, 1);
     EXPECT_EQ(extraBuf, 0);
 }
 
 TEST_F(TestTiling, TestAntiquantTilingTransposePerChannel)
 {
-    std::vector<int64_t> srcDims = { 64, 512 };
+    std::vector<int64_t> srcDims = {64, 512};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 64, 1 };
+    std::vector<int64_t> offsetDSms = {64, 1};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = true;
     uint32_t maxValue;
@@ -6523,16 +6685,17 @@ TEST_F(TestTiling, TestAntiquantTilingTransposePerChannel)
 
     uint32_t maxLiveNodeCnt = 1;
     uint32_t extraBuf = 0;
-    GetAscendAntiQuantTmpBufferFactorSize(srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_BF16, maxLiveNodeCnt, extraBuf);
+    GetAscendAntiQuantTmpBufferFactorSize(
+        srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_BF16, maxLiveNodeCnt, extraBuf);
     EXPECT_EQ(maxLiveNodeCnt, 0);
     EXPECT_EQ(extraBuf, 80 * 64 * sizeof(float));
 }
 
 TEST_F(TestTiling, TestAntiquantTilingTransposePerTensor)
 {
-    std::vector<int64_t> srcDims = { 640, 5120 };
+    std::vector<int64_t> srcDims = {640, 5120};
     auto srcShape = ge::Shape(srcDims);
-    std::vector<int64_t> offsetDSms = { 1 };
+    std::vector<int64_t> offsetDSms = {1};
     auto offsetShape = ge::Shape(offsetDSms);
     bool isTranspose = true;
     uint32_t maxValue;
@@ -6542,14 +6705,15 @@ TEST_F(TestTiling, TestAntiquantTilingTransposePerTensor)
     EXPECT_EQ(maxValue, 640 * 5120 * sizeof(float));
     uint32_t maxLiveNodeCnt = 0;
     uint32_t extraBuf = 1;
-    GetAscendAntiQuantTmpBufferFactorSize(srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_BF16, maxLiveNodeCnt, extraBuf);
+    GetAscendAntiQuantTmpBufferFactorSize(
+        srcShape, offsetShape, isTranspose, ge::DT_INT8, ge::DT_BF16, maxLiveNodeCnt, extraBuf);
     EXPECT_EQ(maxLiveNodeCnt, 1);
     EXPECT_EQ(extraBuf, 0);
 }
 
 TEST_F(TestTiling, TestGeluTiling)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto geluShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6580,7 +6744,7 @@ TEST_F(TestTiling, TestMatmulApiTilngInt8Case9)
 
 TEST_F(TestTiling, TestErfTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto erfShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6591,7 +6755,7 @@ TEST_F(TestTiling, TestErfTilingFloat)
 
 TEST_F(TestTiling, TestErfTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto erfShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6607,7 +6771,7 @@ TEST_F(TestTiling, TestErfTilingHalf)
 
 TEST_F(TestTiling, TestErfcTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto erfcShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6618,7 +6782,7 @@ TEST_F(TestTiling, TestErfcTilingFloat)
 
 TEST_F(TestTiling, TestErfcTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto erfcShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6674,19 +6838,25 @@ TEST_F(TestTiling, TestMatmulApiTilngInt8Case11)
 
 TEST_F(TestTiling, TestMatmulApiTilngInt8Case12)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND310P, .l1Size = 1048576,
-        .l0CSize = 262144, .ubSize = 262144, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND310P,
+        .l1Size = 1048576,
+        .l0CSize = 262144,
+        .ubSize = 262144,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     matmul_tiling::MultiCoreMatmulTiling rnnMatmul3(plat);
-    rnnMatmul3.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND,
-        matmul_tiling::DataType::DT_INT8, false);
-    rnnMatmul3.SetBType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::NZ,
-        matmul_tiling::DataType::DT_INT8, true);
-    rnnMatmul3.SetCType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::NZ,
-        matmul_tiling::DataType ::DT_FLOAT16);
+    rnnMatmul3.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_INT8, false);
+    rnnMatmul3.SetBType(
+        matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType::DT_INT8, true);
+    rnnMatmul3.SetCType(
+        matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT16);
     auto ret = rnnMatmul3.EnableBias(false);
     ret = rnnMatmul3.SetOrgShape(1, 494, 128);
     ret = rnnMatmul3.SetShape(1, 494, 128);
-    ret = rnnMatmul3.SetBufferSpace(1046528, 262144); // set the space that can be used, by default, all space of the chip is used.
+    ret = rnnMatmul3.SetBufferSpace(
+        1046528, 262144); // set the space that can be used, by default, all space of the chip is used.
     ret = rnnMatmul3.SetFixSplit(16, 256, 16);
     ret = rnnMatmul3.SetDequantType(DequantType::TENSOR);
     rnnMatmul3.SetTraverse(matmul_tiling::MatrixTraverse::FIRSTN);
@@ -6742,7 +6912,7 @@ TEST_F(TestTiling, TestMatmulApiTilngInt8ND2NZCase13)
 
 TEST_F(TestTiling, TestCoshTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto coshShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6753,7 +6923,7 @@ TEST_F(TestTiling, TestCoshTilingFloat)
 
 TEST_F(TestTiling, TestCoshTilingFloat512)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto coshShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6764,7 +6934,7 @@ TEST_F(TestTiling, TestCoshTilingFloat512)
 
 TEST_F(TestTiling, TestCoshTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto coshShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6780,7 +6950,7 @@ TEST_F(TestTiling, TestCoshTilingHalf)
 
 TEST_F(TestTiling, TestSinTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto sinShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6799,7 +6969,7 @@ TEST_F(TestTiling, TestSinTilingFloat)
 
 TEST_F(TestTiling, TestSinTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto sinShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6831,7 +7001,7 @@ TEST_F(TestTiling, TestAscendSumTiling)
 
 TEST_F(TestTiling, TestAscendSiluTiling)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxValue;
     uint32_t minValue;
@@ -6842,7 +7012,7 @@ TEST_F(TestTiling, TestAscendSiluTiling)
 
 TEST_F(TestTiling, TestAscendSwishTiling)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxValue;
     uint32_t minValue;
@@ -6853,7 +7023,7 @@ TEST_F(TestTiling, TestAscendSwishTiling)
 
 TEST_F(TestTiling, TestAscendXorTiling)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto xorShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6869,7 +7039,7 @@ TEST_F(TestTiling, TestAscendXorTiling)
 
 TEST_F(TestTiling, TestFracTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto fracShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -6885,7 +7055,7 @@ TEST_F(TestTiling, TestFracTilingFloat)
 
 TEST_F(TestTiling, TestFracTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto fracShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -7288,7 +7458,8 @@ TEST_F(TestTiling, TestTopkTiling_TopKModeNormal310P_FLOAT)
     EXPECT_EQ(tilingData.get_maskOffset(), 32);
     EXPECT_EQ(tilingData.get_kAlignTwoBytes(), 32);
     EXPECT_EQ(tilingData.get_kAlignFourBytes(), 32);
-    GetTopKMaxMinTmpSize(plat, inner, outter, isReuseSource, isInitIndex, topkMode, true, dataTypeSize, maxValue, minValue);
+    GetTopKMaxMinTmpSize(
+        plat, inner, outter, isReuseSource, isInitIndex, topkMode, true, dataTypeSize, maxValue, minValue);
     EXPECT_EQ(maxValue, 4352);
     EXPECT_EQ(minValue, 4352);
 }
@@ -7322,7 +7493,8 @@ TEST_F(TestTiling, TestTopkTiling_TopKModeNormal310P_HALF)
     EXPECT_EQ(tilingData.get_maskOffset(), 16);
     EXPECT_EQ(tilingData.get_kAlignTwoBytes(), 16);
     EXPECT_EQ(tilingData.get_kAlignFourBytes(), 8);
-    GetTopKMaxMinTmpSize(plat, inner, outter, isReuseSource, isInitIndex, topkMode, true, dataTypeSize, maxValue, minValue);
+    GetTopKMaxMinTmpSize(
+        plat, inner, outter, isReuseSource, isInitIndex, topkMode, true, dataTypeSize, maxValue, minValue);
     EXPECT_EQ(maxValue, 1152);
     EXPECT_EQ(minValue, 1152);
 }
@@ -7355,7 +7527,8 @@ TEST_F(TestTiling, TestTopkTiling_TopKModeSmall310P_FLOAT)
     EXPECT_EQ(tilingData.get_vreduceValMask1(), 0);
     EXPECT_EQ(tilingData.get_srcIndexOffset(), 288);
     EXPECT_EQ(tilingData.get_maskOffset(), 5);
-    GetTopKMaxMinTmpSize(plat, inner, outter, isReuseSource, isInitIndex, topkMode, true, dataTypeSize, maxValue, minValue);
+    GetTopKMaxMinTmpSize(
+        plat, inner, outter, isReuseSource, isInitIndex, topkMode, true, dataTypeSize, maxValue, minValue);
     EXPECT_EQ(maxValue, 2048);
     EXPECT_EQ(minValue, 2048);
 }
@@ -7388,7 +7561,8 @@ TEST_F(TestTiling, TestTopkTiling_TopKModeSmall310P_HALF)
     EXPECT_EQ(tilingData.get_vreduceValMask1(), 65535);
     EXPECT_EQ(tilingData.get_srcIndexOffset(), 320);
     EXPECT_EQ(tilingData.get_maskOffset(), 32);
-    GetTopKMaxMinTmpSize(plat, inner, outter, isReuseSource, isInitIndex, topkMode, true, dataTypeSize, maxValue, minValue);
+    GetTopKMaxMinTmpSize(
+        plat, inner, outter, isReuseSource, isInitIndex, topkMode, true, dataTypeSize, maxValue, minValue);
     EXPECT_EQ(maxValue, 1024);
     EXPECT_EQ(minValue, 1024);
 }
@@ -7414,7 +7588,7 @@ TEST_F(TestTiling, TestArange)
 
 TEST_F(TestTiling, TestGeGLUTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto GeGLUShape = ge::Shape(shapeDims);
     uint32_t GeGLUNeedMaxSize;
     uint32_t GeGLUNeedMinSize;
@@ -7431,7 +7605,7 @@ TEST_F(TestTiling, TestGeGLUTilingFloat)
 
 TEST_F(TestTiling, TestGeGLUTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto GeGLUShape = ge::Shape(shapeDims);
     uint32_t GeGLUNeedMaxSize;
     uint32_t GeGLUNeedMinSize;
@@ -7451,7 +7625,7 @@ TEST_F(TestTiling, TestDigammaTilingFp32)
 {
     fe::PlatFormInfos platformInfo;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxSize;
     uint32_t minSize;
@@ -7463,13 +7637,13 @@ TEST_F(TestTiling, TestDigammaTilingFp32)
     EXPECT_EQ(maxSize, 458752);
     EXPECT_EQ(minSize, 1792);
 
-    shapeDims = { 8 };
+    shapeDims = {8};
     shape = ge::Shape(shapeDims);
     GetDigammaMaxMinTmpSize(shape, 4, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 1792);
     EXPECT_EQ(minSize, 1792);
 
-    GetDigammaMaxMinTmpSize(shape, 4, true,maxSize, minSize);
+    GetDigammaMaxMinTmpSize(shape, 4, true, maxSize, minSize);
     EXPECT_EQ(maxSize, 1536);
     EXPECT_EQ(minSize, 1536);
 
@@ -7484,7 +7658,7 @@ TEST_F(TestTiling, TestDigammaTilingHalf)
 {
     fe::PlatFormInfos platformInfo;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxSize;
     uint32_t minSize;
@@ -7493,7 +7667,7 @@ TEST_F(TestTiling, TestDigammaTilingHalf)
     EXPECT_EQ(maxSize, 128 * 128 * 2 * 8 * 2);
     EXPECT_EQ(minSize, 8 * 2 * 256);
 
-    shapeDims = { 8 };
+    shapeDims = {8};
     shape = ge::Shape(shapeDims);
     GetDigammaMaxMinTmpSize(shape, 2, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 256 * 8 * 2);
@@ -7506,10 +7680,10 @@ TEST_F(TestTiling, TestDigammaTilingHalf)
     EXPECT_EQ(extraBuf, 0);
 }
 #endif
-              
+
 TEST_F(TestTiling, TestAtanhTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto aTanhShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -7526,7 +7700,7 @@ TEST_F(TestTiling, TestAtanhTilingFloat)
 
 TEST_F(TestTiling, TestAtanhTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto aTanhShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -7543,7 +7717,7 @@ TEST_F(TestTiling, TestAtanhTilingHalf)
 
 TEST_F(TestTiling, TestSignTiling)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto signShape = ge::Shape(shapeDims);
     uint32_t signNeedMaxSize;
     uint32_t signNeedMinSize;
@@ -7614,11 +7788,11 @@ TEST_F(TestTiling, TestAxpyTiling)
 
 TEST_F(TestTiling, TestCeilTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto ceilShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetCeilMaxMinTmpSize(ceilShape, sizeof(float), false,  maxValue, minValue);
+    GetCeilMaxMinTmpSize(ceilShape, sizeof(float), false, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 1);
     EXPECT_EQ(maxValue, 128 * 128 * 1 * 4);
 
@@ -7631,11 +7805,11 @@ TEST_F(TestTiling, TestCeilTilingFloat)
 
 TEST_F(TestTiling, TestCeilTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto ceilShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetCeilMaxMinTmpSize(ceilShape, 2, false,  maxValue, minValue);
+    GetCeilMaxMinTmpSize(ceilShape, 2, false, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 2);
     EXPECT_EQ(maxValue, 128 * 128 * 2 * 2);
 
@@ -7648,7 +7822,7 @@ TEST_F(TestTiling, TestCeilTilingHalf)
 
 TEST_F(TestTiling, TestCeilTilingHalf512)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto ceilShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -7659,11 +7833,11 @@ TEST_F(TestTiling, TestCeilTilingHalf512)
 
 TEST_F(TestTiling, TestFloorTilingFloat)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto floorShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetFloorMaxMinTmpSize(floorShape, sizeof(float), false,  maxValue, minValue);
+    GetFloorMaxMinTmpSize(floorShape, sizeof(float), false, maxValue, minValue);
     EXPECT_EQ(minValue, 0);
     EXPECT_EQ(maxValue, 0);
 
@@ -7676,11 +7850,11 @@ TEST_F(TestTiling, TestFloorTilingFloat)
 
 TEST_F(TestTiling, TestFloorTilingHalf)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto floorShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
-    GetFloorMaxMinTmpSize(floorShape, 2, false,  maxValue, minValue);
+    GetFloorMaxMinTmpSize(floorShape, 2, false, maxValue, minValue);
     EXPECT_EQ(minValue, 256 * 2);
     EXPECT_EQ(maxValue, 128 * 128 * 2 * 2);
 
@@ -7693,7 +7867,7 @@ TEST_F(TestTiling, TestFloorTilingHalf)
 
 TEST_F(TestTiling, TestFloorTilingHalf512)
 {
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto floorShape = ge::Shape(shapeDims);
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
@@ -7704,7 +7878,7 @@ TEST_F(TestTiling, TestFloorTilingHalf512)
 
 TEST_F(TestTiling, TestReGluFloat16OrBf16)
 {
-    const std::vector<int64_t> srcShapeDims = { 8, 128 };
+    const std::vector<int64_t> srcShapeDims = {8, 128};
     const auto srcShape = ge::Shape(srcShapeDims);
     uint32_t maxValue;
     uint32_t minValue;
@@ -7715,7 +7889,7 @@ TEST_F(TestTiling, TestReGluFloat16OrBf16)
 
 TEST_F(TestTiling, TestReGluFloat32)
 {
-    const std::vector<int64_t> srcShapeDims = { 8, 128 };
+    const std::vector<int64_t> srcShapeDims = {8, 128};
     const auto srcShape = ge::Shape(srcShapeDims);
     uint32_t maxValue;
     uint32_t minValue;
@@ -7799,7 +7973,7 @@ TEST_F(TestTiling, TestPowerTiling)
     platfrom_stub_set_chip_version("Ascend910B");
     platfrom_stub_set_npuarch("2201");
     auto platformPtr = platform_ascendc::PlatformAscendCManager::GetInstance("Ascend910B");
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto powerShape = ge::Shape(shapeDims);
     uint32_t maxVal;
     uint32_t minVal;
@@ -7812,7 +7986,7 @@ TEST_F(TestTiling, TestPowerTiling)
     GetPowerMaxMinTmpSize(powerShape, powerShape, false, 2, false, maxVal, minVal);
     EXPECT_EQ(maxVal, 512 * 2 * 14 + 256);
     EXPECT_EQ(minVal, 256 * 7 + 256);
-    std::vector<int64_t> scalar_shape = { 1 };
+    std::vector<int64_t> scalar_shape = {1};
     auto scalarShape = ge::Shape(scalar_shape);
     GetPowerMaxMinTmpSize(powerShape, scalarShape, false, 2, false, maxVal, minVal);
     EXPECT_EQ(maxVal, 512 * 2 * 14 + 256);
@@ -7824,8 +7998,8 @@ TEST_F(TestTiling, TestPowerTiling)
     EXPECT_EQ(maxVal, 512 * 4 * 5 + 256);
     EXPECT_EQ(minVal, 256 * 5 + 256);
 
-    std::vector<int64_t> shape1 = { 16 };
-    auto powerShape1 = ge::Shape( shape1 );
+    std::vector<int64_t> shape1 = {16};
+    auto powerShape1 = ge::Shape(shape1);
     GetPowerMaxMinTmpSize(powerShape1, scalarShape, false, 4, false, maxVal, minVal);
     EXPECT_EQ(maxVal, 256 * 5 + 256);
     EXPECT_EQ(minVal, 256 * 5 + 256);
@@ -7881,7 +8055,7 @@ TEST_F(TestTiling, TestPowerTilingV200)
     platfrom_stub_set_chip_version("Ascend310P");
     platfrom_stub_set_npuarch("2002");
     auto platformPtr = platform_ascendc::PlatformAscendCManager::GetInstance("Ascend310P");
-    std::vector<int64_t> shapeDims = { 512 };
+    std::vector<int64_t> shapeDims = {512};
     auto powerShape = ge::Shape(shapeDims);
     uint32_t maxVal;
     uint32_t minVal;
@@ -7894,7 +8068,7 @@ TEST_F(TestTiling, TestPowerTilingV200)
     GetPowerMaxMinTmpSize(powerShape, powerShape, false, 2, false, maxVal, minVal);
     EXPECT_EQ(maxVal, 512 * 2 * 16 + 256);
     EXPECT_EQ(minVal, 256 * 8 + 256);
-    std::vector<int64_t> scalar_shape = { 1 };
+    std::vector<int64_t> scalar_shape = {1};
     auto scalarShape = ge::Shape(scalar_shape);
     GetPowerMaxMinTmpSize(powerShape, scalarShape, false, 2, false, maxVal, minVal);
     EXPECT_EQ(maxVal, 512 * 2 * 16 + 256);
@@ -7906,8 +8080,8 @@ TEST_F(TestTiling, TestPowerTilingV200)
     EXPECT_EQ(maxVal, 512 * 4 * 6 + 256);
     EXPECT_EQ(minVal, 256 * 6 + 256);
 
-    std::vector<int64_t> shape1 = { 16 };
-    auto powerShape1 = ge::Shape( shape1 );
+    std::vector<int64_t> shape1 = {16};
+    auto powerShape1 = ge::Shape(shape1);
     GetPowerMaxMinTmpSize(powerShape1, scalarShape, false, 4, false, maxVal, minVal);
     EXPECT_EQ(maxVal, 256 * 6 + 256);
     EXPECT_EQ(minVal, 256 * 6 + 256);
@@ -7973,9 +8147,8 @@ TEST_F(TestTiling, TestLastBroadCast200)
     constexpr uint32_t halfOneBlockElementNum = 16;
     constexpr uint32_t MAX_BLOCK_NUM = 8;
     constexpr uint32_t ONE_BLOCK_SIZE = 32;
-    uint32_t minTmpBufferSize =
-            halfOneBlockElementNum * ((lastDim + MAX_BLOCK_NUM - 1) / MAX_BLOCK_NUM) * halfSize;
-    uint32_t minHalfAlignSize = ONE_BLOCK_SIZE + + minTmpBufferSize;
+    uint32_t minTmpBufferSize = halfOneBlockElementNum * ((lastDim + MAX_BLOCK_NUM - 1) / MAX_BLOCK_NUM) * halfSize;
+    uint32_t minHalfAlignSize = ONE_BLOCK_SIZE + +minTmpBufferSize;
     uint32_t maxHalfAlignSize = ONE_BLOCK_SIZE + firstDim * lastDim * halfSize;
     GetBroadCastMaxMinTmpSize(plat, srcShape, dstShape, halfSize, false, maxValue, minValue);
     EXPECT_EQ(minValue, minHalfAlignSize);
@@ -8071,34 +8244,38 @@ TEST_F(TestTiling, testTransDataTilingUnalignedHw)
     int32_t n1 = (n + n0 - 1) / n0;
     int32_t hw0 = 16;
     int32_t hw1 = (h * w + hw0 - 1) / hw0;
-    auto ncdhwShape = ge::Shape({ n, c, d, h, w });
-    auto ndc1hwc0Shape = ge::Shape({ n, d, c1, h, w, c0});
-    auto fractalzShape = ge::Shape({ d, c1, h, w, n1, n0, c0});
+    auto ncdhwShape = ge::Shape({n, c, d, h, w});
+    auto ndc1hwc0Shape = ge::Shape({n, d, c1, h, w, c0});
+    auto fractalzShape = ge::Shape({d, c1, h, w, n1, n0, c0});
     fe::PlatFormInfos platform_info;
     auto plat = platform_ascendc::PlatformAscendC(&platform_info);
     TransDataConfig config = {DataFormat::NCDHW, DataFormat::NDC1HWC0};
-    bool ret = GetTransDataMaxMinTmpSize(plat, ncdhwShape, ndc1hwc0Shape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    bool ret =
+        GetTransDataMaxMinTmpSize(plat, ncdhwShape, ndc1hwc0Shape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 1632);
     EXPECT_EQ(minSize, 1632);
 
     config = {DataFormat::NDC1HWC0, DataFormat::NCDHW};
-    ret = GetTransDataMaxMinTmpSize(plat, ndc1hwc0Shape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, ndc1hwc0Shape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 2048);
     EXPECT_EQ(minSize, 2048);
 
     config = {DataFormat::NCDHW, DataFormat::FRACTAL_Z_3D};
-    ret = GetTransDataMaxMinTmpSize(plat, ncdhwShape, fractalzShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, ncdhwShape, fractalzShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 26112);
     EXPECT_EQ(minSize, 26112);
 
     config = {DataFormat::FRACTAL_Z_3D, DataFormat::NCDHW};
-    ret = GetTransDataMaxMinTmpSize(plat, fractalzShape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, fractalzShape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, n1 * n0 * c1 * c0 * d * hw0 * hw1 * 2);
@@ -8122,34 +8299,38 @@ TEST_F(TestTiling, testTransDataTilingAlignedHw)
     int32_t n1 = (n + n0 - 1) / n0;
     int32_t hw0 = 16;
     int32_t hw1 = (h * w + hw0 - 1) / hw0;
-    auto ncdhwShape = ge::Shape({ n, c, d, h, w });
-    auto ndc1hwc0Shape = ge::Shape({ n, d, c1, h, w, c0});
-    auto fractalzShape = ge::Shape({ d, c1, h, w, n1, n0, c0});
+    auto ncdhwShape = ge::Shape({n, c, d, h, w});
+    auto ndc1hwc0Shape = ge::Shape({n, d, c1, h, w, c0});
+    auto fractalzShape = ge::Shape({d, c1, h, w, n1, n0, c0});
     fe::PlatFormInfos platform_info;
     auto plat = platform_ascendc::PlatformAscendC(&platform_info);
     TransDataConfig config = {DataFormat::NCDHW, DataFormat::NDC1HWC0};
-    bool ret = GetTransDataMaxMinTmpSize(plat, ncdhwShape, ndc1hwc0Shape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    bool ret =
+        GetTransDataMaxMinTmpSize(plat, ncdhwShape, ndc1hwc0Shape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 4224);
     EXPECT_EQ(minSize, 4224);
 
     config = {DataFormat::NDC1HWC0, DataFormat::NCDHW};
-    ret = GetTransDataMaxMinTmpSize(plat, ndc1hwc0Shape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, ndc1hwc0Shape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 4608);
     EXPECT_EQ(minSize, 4608);
 
     config = {DataFormat::NCDHW, DataFormat::FRACTAL_Z_3D};
-    ret = GetTransDataMaxMinTmpSize(plat, ncdhwShape, fractalzShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, ncdhwShape, fractalzShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, 69376);
     EXPECT_EQ(minSize, 69376);
 
     config = {DataFormat::FRACTAL_Z_3D, DataFormat::NCDHW};
-    ret = GetTransDataMaxMinTmpSize(plat, fractalzShape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
+    ret =
+        GetTransDataMaxMinTmpSize(plat, fractalzShape, ncdhwShape, ge::DataType::DT_FLOAT16, config, maxSize, minSize);
 
     EXPECT_TRUE(ret);
     EXPECT_EQ(maxSize, n1 * n0 * c1 * c0 * d * hw0 * hw1 * 2 * 2);
@@ -8158,7 +8339,7 @@ TEST_F(TestTiling, testTransDataTilingAlignedHw)
 
 TEST_F(TestTiling, TestReduceXorSumTilingInt16)
 {
-    std::vector<int64_t> shapeDims = { 128, 128 };
+    std::vector<int64_t> shapeDims = {128, 128};
     auto shape = ge::Shape(shapeDims);
     uint32_t maxSize;
     uint32_t minSize;
@@ -8170,13 +8351,13 @@ TEST_F(TestTiling, TestReduceXorSumTilingInt16)
     EXPECT_EQ(maxSize, 98304);
     EXPECT_EQ(minSize, 98304);
 
-    shapeDims = { 8 };
+    shapeDims = {8};
     shape = ge::Shape(shapeDims);
     GetReduceXorSumMaxMinTmpSize(shape, 2, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 768);
     EXPECT_EQ(minSize, 768);
 
-    GetReduceXorSumMaxMinTmpSize(shape, 2, true,maxSize, minSize);
+    GetReduceXorSumMaxMinTmpSize(shape, 2, true, maxSize, minSize);
     EXPECT_EQ(maxSize, 512);
     EXPECT_EQ(minSize, 512);
 }
@@ -8185,7 +8366,7 @@ TEST_F(TestTiling, testReduceProdTiling)
 {
     uint32_t maxSize;
     uint32_t minSize;
-    auto shape = ge::Shape({ 128, 128 });
+    auto shape = ge::Shape({128, 128});
     GetReduceProdMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 128 * 32 + 64 * 4 + 256);
     EXPECT_EQ(minSize, 128 * 32 + 64 * 4 + 256);
@@ -8215,7 +8396,7 @@ TEST_F(TestTiling, testReduceMaxTiling)
 {
     uint32_t maxSize;
     uint32_t minSize;
-    auto shape = ge::Shape({ 16, 8 });
+    auto shape = ge::Shape({16, 8});
     GetReduceMaxMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -8235,7 +8416,7 @@ TEST_F(TestTiling, testReduceMaxTiling)
     EXPECT_EQ(maxSize, 16 * 64 * 4);
     EXPECT_EQ(minSize, 16 * 64 * 4);
 
-    shape = ge::Shape({ 16, 16 });
+    shape = ge::Shape({16, 16});
     GetReduceMaxMaxMinTmpSize(shape, ge::DataType::DT_FLOAT16, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -8285,7 +8466,7 @@ TEST_F(TestTiling, testReduceMinTiling)
 {
     uint32_t maxSize;
     uint32_t minSize;
-    auto shape = ge::Shape({ 16, 8 });
+    auto shape = ge::Shape({16, 8});
     GetReduceMinMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -8305,7 +8486,7 @@ TEST_F(TestTiling, testReduceMinTiling)
     EXPECT_EQ(maxSize, 16 * 64 * 4);
     EXPECT_EQ(minSize, 16 * 64 * 4);
 
-    shape = ge::Shape({ 16, 16 });
+    shape = ge::Shape({16, 16});
     GetReduceMinMaxMinTmpSize(shape, ge::DataType::DT_FLOAT16, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -8355,7 +8536,7 @@ TEST_F(TestTiling, testReduceSumTiling)
 {
     uint32_t maxSize;
     uint32_t minSize;
-    auto shape = ge::Shape({ 128, 128 });
+    auto shape = ge::Shape({128, 128});
     GetReduceSumMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, (64 * 128) * 4);
     EXPECT_EQ(minSize, (64 * 128) * 4);
@@ -8390,12 +8571,12 @@ TEST_F(TestTiling, testReduceMeanTiling)
 {
     uint32_t maxSize;
     uint32_t minSize;
-    auto shape = ge::Shape({ 128, 128 });
+    auto shape = ge::Shape({128, 128});
     GetReduceMeanMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, (128 * 64) * 4);
     EXPECT_EQ(minSize, (128 * 64) * 4);
 
-    shape = ge::Shape({ 128, 32 });
+    shape = ge::Shape({128, 32});
     GetReduceMeanMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -8420,7 +8601,7 @@ TEST_F(TestTiling, testReduceAnyTiling)
 {
     uint32_t maxSize;
     uint32_t minSize;
-    auto shape = ge::Shape({ 16, 8 });
+    auto shape = ge::Shape({16, 8});
     GetReduceAnyMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -8455,7 +8636,7 @@ TEST_F(TestTiling, testReduceAnyTiling)
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
 
-    shape = ge::Shape({ 128, 128 });
+    shape = ge::Shape({128, 128});
     GetReduceAnyMaxMinTmpSize(shape, ge::DataType::DT_UINT8, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, (128 * 1 * 2) + (128 * 16 * 2));
     EXPECT_EQ(minSize, (128 * 1 * 2) + (128 * 16 * 2));
@@ -8486,7 +8667,7 @@ TEST_F(TestTiling, testReduceAllTiling)
     uint32_t maxSize;
     uint32_t minSize;
 
-    auto shape = ge::Shape({ 16, 8 });
+    auto shape = ge::Shape({16, 8});
     GetReduceAllMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, 0);
     EXPECT_EQ(minSize, 0);
@@ -8519,7 +8700,7 @@ TEST_F(TestTiling, testReduceAllTiling)
     shape = ge::Shape({256, 16});
     GetReduceAllMaxMinTmpSize(shape, ge::DataType::DT_FLOAT, ReducePattern::RA, true, true, maxSize, minSize);
 
-    shape = ge::Shape({ 128, 128 });
+    shape = ge::Shape({128, 128});
     GetReduceAllMaxMinTmpSize(shape, ge::DataType::DT_UINT8, ReducePattern::AR, true, false, maxSize, minSize);
     EXPECT_EQ(maxSize, (128 * 1 * 2) + (128 * 16 * 2));
     EXPECT_EQ(minSize, (128 * 1 * 2) + (128 * 16 * 2));
@@ -8556,7 +8737,8 @@ TEST_F(TestTiling, TestCumSum)
     constexpr uint32_t halfSize = 2;
     constexpr uint32_t transDataTo5HDAddrListSize = 16;
     uint32_t minHalfSize = transDataTo5HDAddrListSize * lastDim * 3 * sizeof(uint16_t);
-    uint32_t alignOutter = (firstDim + transDataTo5HDAddrListSize - 1) / transDataTo5HDAddrListSize * transDataTo5HDAddrListSize;
+    uint32_t alignOutter =
+        (firstDim + transDataTo5HDAddrListSize - 1) / transDataTo5HDAddrListSize * transDataTo5HDAddrListSize;
     uint32_t maxHalfSize = alignOutter * lastDim * 3 * sizeof(uint16_t);
 
     GetCumSumMaxMinTmpSize(srcShape, halfSize, true, false, maxValue, minValue);
@@ -8575,7 +8757,6 @@ TEST_F(TestTiling, TestCumSum)
     GetCumSumMaxMinTmpSize(srcShape, halfSize, false, false, maxValue, minValue);
     EXPECT_EQ(minValue, minHalfSize);
     EXPECT_EQ(maxValue, maxHalfSize);
-
 
     GetCumSumMaxMinTmpSize(srcShape, floatSize, false, false, maxValue, minValue);
     EXPECT_EQ(minValue, 0);
@@ -8604,8 +8785,8 @@ TEST_F(TestTiling, TestWelfordUpdateTiling)
     auto shape1d = ge::Shape(shapeDims1d);
     uint32_t maxsize = 0;
     uint32_t minsize = 0;
-    uint32_t dtypesizeT = 2;  // half type
-    uint32_t dtypesizeU = 4;  // float type
+    uint32_t dtypesizeT = 2; // half type
+    uint32_t dtypesizeU = 4; // float type
     bool isReuseSource = false;
     GetWelfordUpdateMaxMinTmpSize(shape1d, dtypesizeT, dtypesizeU, isReuseSource, false, maxsize, minsize);
     EXPECT_EQ(minsize, 3 * 256);
@@ -8613,8 +8794,8 @@ TEST_F(TestTiling, TestWelfordUpdateTiling)
 
     std::vector<int64_t> shapeDims2d = {1, 72};
     auto shape2d = ge::Shape(shapeDims2d);
-    dtypesizeT = 4;  // float type
-    dtypesizeU = 4;  // float type
+    dtypesizeT = 4; // float type
+    dtypesizeU = 4; // float type
     isReuseSource = false;
     GetWelfordUpdateMaxMinTmpSize(shape2d, dtypesizeT, dtypesizeU, isReuseSource, false, maxsize, minsize);
     EXPECT_EQ(minsize, 2 * 256);
@@ -8622,8 +8803,8 @@ TEST_F(TestTiling, TestWelfordUpdateTiling)
 
     std::vector<int64_t> shapeDims3d = {1, 256};
     auto shape3d = ge::Shape(shapeDims3d);
-    dtypesizeT = 4;  // float type
-    dtypesizeU = 4;  // float type
+    dtypesizeT = 4; // float type
+    dtypesizeU = 4; // float type
     isReuseSource = true;
     GetWelfordUpdateMaxMinTmpSize(shape3d, dtypesizeT, dtypesizeU, isReuseSource, false, maxsize, minsize);
     EXPECT_EQ(minsize, 1 * 256);
@@ -8636,7 +8817,7 @@ TEST_F(TestTiling, TestWelfordFinalizeTiling)
     auto shape_1d = ge::Shape(shape_dims_1d);
     uint32_t maxsize = 0;
     uint32_t minsize = 0;
-    uint32_t dtypesize = 4;  // float type
+    uint32_t dtypesize = 4; // float type
     bool isReuseSource = false;
     GetWelfordFinalizeMaxMinTmpSize(shape_1d, dtypesize, isReuseSource, maxsize, minsize);
     EXPECT_EQ(minsize, 4 * 256);
@@ -8670,7 +8851,7 @@ TEST_F(TestTiling, TestDropOutTiling)
     auto shape_1d = ge::Shape(shape_dims_1d);
     uint32_t maxsize = 0;
     uint32_t minsize = 0;
-    uint32_t dtypesize = 4;  // float type
+    uint32_t dtypesize = 4; // float type
     bool isReuseSource = true;
     GetDropOutMaxMinTmpSize(shape_1d, dtypesize, isReuseSource, maxsize, minsize);
     EXPECT_EQ(minsize, 512);
@@ -8683,7 +8864,7 @@ TEST_F(TestTiling, TestNormalizeTiling)
     uint32_t A = 4;
     uint32_t alignA = 8;
     uint32_t R = 32;
-    std::vector<int64_t> shapeDims = {A, R};   // [A, R]
+    std::vector<int64_t> shapeDims = {A, R}; // [A, R]
     auto shapeInput = ge::Shape(shapeDims);
     uint32_t maxsize = 0;
     uint32_t minsize = 0;
@@ -8714,7 +8895,7 @@ TEST_F(TestTiling, TestLayerNormRstdTiling)
     uint32_t A = 4;
     uint32_t R = 32;
     uint32_t AlignA = 8;
-    std::vector<int64_t> shapeDims = {A, R};   // [A, R]
+    std::vector<int64_t> shapeDims = {A, R}; // [A, R]
     auto shapeInput = ge::Shape(shapeDims);
     uint32_t maxsize = 0;
     uint32_t minsize = 0;
@@ -8733,14 +8914,14 @@ TEST_F(TestTiling, TestLayerNormRstdTiling)
 
     A = 32;
     R = 8;
-    std::vector<int64_t> shapeDims2 = {A, R};   // [A, R]
+    std::vector<int64_t> shapeDims2 = {A, R}; // [A, R]
     auto shapeInput2 = ge::Shape(shapeDims2);
     GetLayerNormMaxMinTmpSize(shapeInput2, sizeof(float), isReuseSource, true, false, maxsize, minsize);
     EXPECT_EQ(minsize, (2 * R + 2 * R + A) * sizeof(float));
     EXPECT_EQ(maxsize, (A + 2 * R + 2 * A * R) * sizeof(float));
     optiling::LayerNormSeparateTiling tiling;
     uint32_t stackBufferSize = 4096;
-    shapeDims = { A, R };
+    shapeDims = {A, R};
     auto layernormShape = ge::Shape(shapeDims);
     GetLayerNormNDTilingInfo(layernormShape, stackBufferSize, sizeof(float), false, true, tiling);
     GetLayerNormNDTilingInfo(layernormShape, 0, sizeof(float), false, true, tiling);
@@ -8752,8 +8933,13 @@ TEST_F(TestTiling, TestLayerNormRstdTiling)
 
 TEST_F(TestTiling, TestNZFp32UnalignedK)
 {
-    matmul_tiling::PlatformInfo plat {.socVersion = platform_ascendc::SocVersion::ASCEND910B, .l1Size = 524288,
-        .l0CSize = 131072, .ubSize = 196608, .l0ASize = 65536, .l0BSize = 65536};
+    matmul_tiling::PlatformInfo plat{
+        .socVersion = platform_ascendc::SocVersion::ASCEND910B,
+        .l1Size = 524288,
+        .l0CSize = 131072,
+        .ubSize = 196608,
+        .l0ASize = 65536,
+        .l0BSize = 65536};
     matmul_tiling::MatmulApiTiling tiling(plat);
     tiling.SetAType(TPosition::GM, CubeFormat::NZ, matmul_tiling::DataType::DT_FLOAT);
     tiling.SetBType(TPosition::GM, CubeFormat::NZ, matmul_tiling::DataType::DT_FLOAT);
@@ -8775,10 +8961,14 @@ TEST_F(TestTiling, TestNZFp32UnalignedK)
 TEST_F(TestTiling, MultiCoreSparse)
 {
     matmul_tiling::MatmulApiTiling sparseMatmul;
-    sparseMatmul.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
-    sparseMatmul.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
-    sparseMatmul.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
-    sparseMatmul.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
+    sparseMatmul.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
+    sparseMatmul.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
+    sparseMatmul.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
+    sparseMatmul.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
     sparseMatmul.SetSparse(true);
     auto ret = sparseMatmul.SetOrgShape(1024, 64, 128);
     ret = sparseMatmul.SetShape(1024, 64, 128);
@@ -8799,10 +8989,14 @@ TEST_F(TestTiling, MultiCoreSparse)
 TEST_F(TestTiling, MultiCoreSparseAlignBaseK)
 {
     matmul_tiling::MatmulApiTiling sparseMatmul;
-    sparseMatmul.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
-    sparseMatmul.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
-    sparseMatmul.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
-    sparseMatmul.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
+    sparseMatmul.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
+    sparseMatmul.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
+    sparseMatmul.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
+    sparseMatmul.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
     sparseMatmul.SetSparse(true);
     auto ret = sparseMatmul.SetOrgShape(28, 784, 16);
     ret = sparseMatmul.SetShape(28, 784, 16);
@@ -8822,10 +9016,14 @@ TEST_F(TestTiling, MultiCoreSparseAlignBaseK)
 TEST_F(TestTiling, MultiCoreSparseADbOff)
 {
     matmul_tiling::MatmulApiTiling sparseMatmul;
-    sparseMatmul.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
-    sparseMatmul.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
-    sparseMatmul.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
-    sparseMatmul.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
+    sparseMatmul.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
+    sparseMatmul.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
+    sparseMatmul.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
+    sparseMatmul.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
     sparseMatmul.SetSparse(true);
     auto ret = sparseMatmul.SetOrgShape(1024, 64, 128);
     ret = sparseMatmul.SetShape(1024, 64, 128);
@@ -8846,10 +9044,14 @@ TEST_F(TestTiling, MultiCoreSparseADbOff)
 TEST_F(TestTiling, MultiCoreSparseBDbOff)
 {
     matmul_tiling::MatmulApiTiling sparseMatmul;
-    sparseMatmul.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
-    sparseMatmul.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
-    sparseMatmul.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
-    sparseMatmul.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
+    sparseMatmul.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
+    sparseMatmul.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8, true);
+    sparseMatmul.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT32);
+    sparseMatmul.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_INT8);
     sparseMatmul.SetSparse(true);
     auto ret = sparseMatmul.SetOrgShape(64, 1024, 128);
     ret = sparseMatmul.SetShape(64, 1024, 128);
@@ -9021,7 +9223,8 @@ TEST_F(TestTiling, MatmulApiTilingNBuffer33SetSmallBaseM)
 TEST_F(TestTiling, MatmulApiTilingNBuffer33MultiDepthB1)
 {
     matmul_tiling::MatmulApiTiling tiling;
-    tiling.SetAType(matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
+    tiling.SetAType(
+        matmul_tiling::TPosition::TSCM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT, true);
     tiling.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
     tiling.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
     tiling.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "impl/adv_api/detail/api_check/kernel_api_check.h"
@@ -16,11 +16,13 @@ class ReduceXorSumAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
+    virtual void SetUp()
+    {
         AscendC::SetGCoreType(2);
         AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
     }
-    void TearDown() {
+    void TearDown()
+    {
         AscendC::SetGCoreType(0);
         AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
     }
@@ -46,9 +48,8 @@ TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckReduceXorSumSrc0CalCount)
     uint32_t calCount = 32;
     constexpr bool isReuseSource = false;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    HighLevelApiCheck::CheckFuncReduceXorSum<
-        int16_t, isReuseSource>("ReduceXorSum",
-        dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
+    HighLevelApiCheck::CheckFuncReduceXorSum<int16_t, isReuseSource>(
+        "ReduceXorSum", dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
     inQueueX.FreeTensor(src0Tensor);
     inQueueX2.FreeTensor(src1Tensor);
     outQueueY.FreeTensor(dstTensor);
@@ -76,9 +77,8 @@ TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckReduceXorSumSrc1CalCount)
     uint32_t calCount = 32;
     constexpr bool isReuseSource = false;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    HighLevelApiCheck::CheckFuncReduceXorSum<
-        int16_t, isReuseSource>("ReduceXorSum",
-        dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
+    HighLevelApiCheck::CheckFuncReduceXorSum<int16_t, isReuseSource>(
+        "ReduceXorSum", dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
     inQueueX.FreeTensor(src0Tensor);
     inQueueX2.FreeTensor(src1Tensor);
     outQueueY.FreeTensor(dstTensor);
@@ -86,10 +86,8 @@ TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckReduceXorSumSrc1CalCount)
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 2);
 }
 
-
 TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckReduceXorSumSrc0Pos)
 {
-    
     AscendC::TPipe pipe;
     AscendC::TQue<TPosition::A1, 1> inQueueX;
     AscendC::TQue<TPosition::VECIN, 1> inQueueX2;
@@ -108,9 +106,8 @@ TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckReduceXorSumSrc0Pos)
     uint32_t calCount = 16;
     constexpr bool isReuseSource = false;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    HighLevelApiCheck::CheckFuncReduceXorSum<
-        int16_t, isReuseSource>("ReduceXorSum",
-        dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
+    HighLevelApiCheck::CheckFuncReduceXorSum<int16_t, isReuseSource>(
+        "ReduceXorSum", dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
     inQueueX.FreeTensor(src0Tensor);
     inQueueX2.FreeTensor(src1Tensor);
     outQueueY.FreeTensor(dstTensor);
@@ -120,7 +117,6 @@ TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckReduceXorSumSrc0Pos)
 
 TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckReduceXorSumSrc1Pos)
 {
-    
     AscendC::TPipe pipe;
     AscendC::TQue<TPosition::VECIN, 1> inQueueX;
     AscendC::TQue<TPosition::A1, 1> inQueueX2;
@@ -139,9 +135,8 @@ TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckReduceXorSumSrc1Pos)
     uint32_t calCount = 16;
     constexpr bool isReuseSource = false;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    HighLevelApiCheck::CheckFuncReduceXorSum<
-        int16_t, isReuseSource>("ReduceXorSum",
-        dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
+    HighLevelApiCheck::CheckFuncReduceXorSum<int16_t, isReuseSource>(
+        "ReduceXorSum", dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
     inQueueX.FreeTensor(src0Tensor);
     inQueueX2.FreeTensor(src1Tensor);
     outQueueY.FreeTensor(dstTensor);
@@ -169,16 +164,14 @@ TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckReduceXorSumDstPos)
     uint32_t calCount = 16;
     constexpr bool isReuseSource = false;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    HighLevelApiCheck::CheckFuncReduceXorSum<
-        int16_t, isReuseSource>("ReduceXorSum",
-        dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
+    HighLevelApiCheck::CheckFuncReduceXorSum<int16_t, isReuseSource>(
+        "ReduceXorSum", dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
     inQueueX.FreeTensor(src0Tensor);
     inQueueX2.FreeTensor(src1Tensor);
     outQueueY.FreeTensor(dstTensor);
     tmplocalBuf.FreeTensor(sharedTmpBuffer);
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 1);
 }
-
 
 TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckTmpPos)
 {
@@ -200,9 +193,8 @@ TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckTmpPos)
     uint32_t calCount = 16;
     constexpr bool isReuseSource = false;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    HighLevelApiCheck::CheckFuncReduceXorSum<
-        int16_t, isReuseSource>("ReduceXorSum",
-        dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
+    HighLevelApiCheck::CheckFuncReduceXorSum<int16_t, isReuseSource>(
+        "ReduceXorSum", dstTensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
     inQueueX.FreeTensor(src0Tensor);
     inQueueX2.FreeTensor(src1Tensor);
     outQueueY.FreeTensor(dstTensor);
@@ -230,14 +222,11 @@ TEST_F(ReduceXorSumAPICheck, ReduceXorSumAPICheckOverlap)
     uint32_t calCount = 16;
     constexpr bool isReuseSource = false;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    HighLevelApiCheck::CheckFuncReduceXorSum<
-        int16_t, isReuseSource>("ReduceXorSum",
-        src0Tensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
+    HighLevelApiCheck::CheckFuncReduceXorSum<int16_t, isReuseSource>(
+        "ReduceXorSum", src0Tensor, src0Tensor, src1Tensor, sharedTmpBuffer, calCount);
     inQueueX.FreeTensor(src0Tensor);
     inQueueX2.FreeTensor(src1Tensor);
     outQueueY.FreeTensor(dstTensor);
     tmplocalBuf.FreeTensor(sharedTmpBuffer);
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 2);
 }
-
-

@@ -1,35 +1,30 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
- 
+
 using namespace std;
 using namespace AscendC;
- 
+
 class TEST_LOADUNZIP : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-
 namespace AscendC {
-template <typename FmapT, typename WeightT, typename DstT> class KernelLoadUnzip {
+template <typename FmapT, typename WeightT, typename DstT>
+class KernelLoadUnzip {
 public:
-    __aicore__ inline KernelLoadUnzip(uint32_t dstScopeIn, uint32_t srcLenIn, uint32_t dstLenIn, uint32_t numOfIndexTabEntryIn)
+    __aicore__ inline KernelLoadUnzip(
+        uint32_t dstScopeIn, uint32_t srcLenIn, uint32_t dstLenIn, uint32_t numOfIndexTabEntryIn)
     {
         dstScope = dstScopeIn;
         srcLen = srcLenIn;
@@ -37,7 +32,8 @@ public:
         numOfIndexTabEntry = numOfIndexTabEntryIn;
         cSize = m * n;
     }
-    __aicore__ inline void Init(__gm__ int8_t* fmGm, __gm__ int8_t* weGm, __gm__ int8_t* we1Gm, __gm__ int8_t* index0Gm,
+    __aicore__ inline void Init(
+        __gm__ int8_t* fmGm, __gm__ int8_t* weGm, __gm__ int8_t* we1Gm, __gm__ int8_t* index0Gm,
         __gm__ int8_t* index1Gm, __gm__ int8_t* dstGm)
     {
         fmGlobal.SetGlobalBuffer((__gm__ FmapT*)fmGm, dstLen);
@@ -57,7 +53,6 @@ public:
     }
     __aicore__ inline void Process()
     {
-
         CopyToB1Unzip();
         CopyToA1();
         CopyToL0A();
@@ -65,7 +60,6 @@ public:
         Compute();
         Aggregate();
         CopyOut();
-
     }
 
 private:
@@ -145,7 +139,6 @@ private:
         outQueueCO2.FreeTensor(c2Local);
     }
 
-
 private:
     TPipe pipe;
     TQue<TPosition::A1, 1> inQueueA1;
@@ -172,18 +165,17 @@ private:
 };
 } // namespace AscendC
 
-#define KERNEL_LOAD_UNZIP(fmapType, weightType, dstType, dstScope, srcLen, dstLen, numOfIndexTabEntry) \
-    TEST_F(TEST_LOADUNZIP, LOADUNZIP##_##weightType##_##dstType##_##Case)                                  \
-    {                                                                                                        \
-        int8_t fmapGm[dstLen * sizeof(fmapType)];                                                          \
-        int8_t weightGm[dstLen * sizeof(weightType)];                                                      \
-        int8_t weight1Gm[dstLen * sizeof(weightType)];                                                     \
-        int8_t index0Gm[8 * sizeof(int8_t)];                                                                 \
-        int8_t index1Gm[8 * sizeof(int8_t)];                                                                 \
-        int8_t dstGm[dstLen * sizeof(dstType)];                                                            \
-        AscendC::KernelLoadUnzip<fmapType, weightType, dstType> op(dstScope, srcLen, dstLen,           \
-            numOfIndexTabEntry);                                                                             \
-        op.Init(fmapGm, weightGm, weight1Gm, index0Gm, index1Gm, dstGm);                                     \
-        op.Process();                                                                                        \
+#define KERNEL_LOAD_UNZIP(fmapType, weightType, dstType, dstScope, srcLen, dstLen, numOfIndexTabEntry)            \
+    TEST_F(TEST_LOADUNZIP, LOADUNZIP##_##weightType##_##dstType##_##Case)                                         \
+    {                                                                                                             \
+        int8_t fmapGm[dstLen * sizeof(fmapType)];                                                                 \
+        int8_t weightGm[dstLen * sizeof(weightType)];                                                             \
+        int8_t weight1Gm[dstLen * sizeof(weightType)];                                                            \
+        int8_t index0Gm[8 * sizeof(int8_t)];                                                                      \
+        int8_t index1Gm[8 * sizeof(int8_t)];                                                                      \
+        int8_t dstGm[dstLen * sizeof(dstType)];                                                                   \
+        AscendC::KernelLoadUnzip<fmapType, weightType, dstType> op(dstScope, srcLen, dstLen, numOfIndexTabEntry); \
+        op.Init(fmapGm, weightGm, weight1Gm, index0Gm, index1Gm, dstGm);                                          \
+        op.Process();                                                                                             \
     }
 KERNEL_LOAD_UNZIP(int8_t, int8_t, int32_t, 0, 896, 1024, 1);

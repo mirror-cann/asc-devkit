@@ -18,13 +18,15 @@
 
 namespace CodeHidden {
 
-AscendcCodeHidden::~AscendcCodeHidden() {
+AscendcCodeHidden::~AscendcCodeHidden()
+{
     if (resultOfs_.is_open()) {
         resultOfs_.close();
     }
 }
 
-int32_t AscendcCodeHidden::Init() {
+int32_t AscendcCodeHidden::Init()
+{
     if (srcDirPath_.empty()) {
         cout << "[ERROR](Init) srcDirPath_ is empty." << endl;
         return FAILED;
@@ -48,7 +50,8 @@ int32_t AscendcCodeHidden::Init() {
     return SUCCESS;
 }
 
-int32_t AscendcCodeHidden::Run() {
+int32_t AscendcCodeHidden::Run()
+{
     if (WriteHeader() != SUCCESS) {
         cout << "[ERROR](Run) WriteHeader failed." << endl;
         return FAILED;
@@ -67,7 +70,8 @@ int32_t AscendcCodeHidden::Run() {
     return SUCCESS;
 }
 
-int32_t AscendcCodeHidden::WriteHeader() {
+int32_t AscendcCodeHidden::WriteHeader()
+{
     uint64_t magicNumber = MAGIC_NUMBER;
     if (WriteInt(magicNumber) != SUCCESS) {
         cout << "[ERROR](WriteHeader) Write magicNumber failed." << endl;
@@ -86,7 +90,8 @@ int32_t AscendcCodeHidden::WriteHeader() {
     return SUCCESS;
 }
 
-int32_t AscendcCodeHidden::WriteIndex() {
+int32_t AscendcCodeHidden::WriteIndex()
+{
     uint32_t fileOffset = 0;
     for (size_t i = 0; i < srcFiles_.size(); i++) {
         if (WriteInt(fileOffset) != SUCCESS) {
@@ -117,7 +122,8 @@ int32_t AscendcCodeHidden::WriteIndex() {
     return SUCCESS;
 }
 
-int32_t AscendcCodeHidden::WriteFileContent() {
+int32_t AscendcCodeHidden::WriteFileContent()
+{
     for (size_t i = 0; i < srcFiles_.size(); i++) {
         if (WriteFile(srcDirPath_ + srcFiles_[i]) != SUCCESS) {
             cout << "[ERROR](WriteFileContent) Write file content of the file[" << srcDirPath_ + srcFiles_[i]
@@ -128,7 +134,8 @@ int32_t AscendcCodeHidden::WriteFileContent() {
     return SUCCESS;
 }
 
-int32_t AscendcCodeHidden::GetAllFiles(string dirPath) {
+int32_t AscendcCodeHidden::GetAllFiles(string dirPath)
+{
     try {
         if (fs::exists(dirPath) == false) {
             cout << "[ERROR](GetAllFiles) dirPath[" << dirPath << "] not exists." << endl;
@@ -157,13 +164,15 @@ int32_t AscendcCodeHidden::GetAllFiles(string dirPath) {
     return SUCCESS;
 }
 
-bool AscendcCodeHidden::IsLittleEndian() {
+bool AscendcCodeHidden::IsLittleEndian()
+{
     uint32_t i = 0x12345678;
     uint8_t* c = reinterpret_cast<uint8_t*>(&i);
     return *c == 0x78;
 }
 
-int32_t AscendcCodeHidden::WriteFile(string filePath) {
+int32_t AscendcCodeHidden::WriteFile(string filePath)
+{
     ifstream srcFile(filePath, std::ios::in | std::ios::binary);
 
     if (srcFile.is_open() == false) {
@@ -186,7 +195,8 @@ int32_t AscendcCodeHidden::WriteFile(string filePath) {
 }
 
 template <typename T>
-int32_t AscendcCodeHidden::WriteInt(T data) {
+int32_t AscendcCodeHidden::WriteInt(T data)
+{
     try {
         if (isLittleEndian_) {
             resultOfs_.write(reinterpret_cast<char*>(&data), sizeof(T));
@@ -206,4 +216,4 @@ int32_t AscendcCodeHidden::WriteInt(T data) {
     return SUCCESS;
 }
 
-}  // namespace CodeHidden
+} // namespace CodeHidden

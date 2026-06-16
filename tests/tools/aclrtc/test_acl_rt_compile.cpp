@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include "acl_rt_compile.h"
 #include "stub/asrtc.h"
@@ -18,10 +18,7 @@
 class TEST_ACL_RT_COMPILE : public testing::Test {
 protected:
     void SetUp() {}
-    void TearDown()
-    {
-        GlobalMockObject::verify();
-    }
+    void TearDown() { GlobalMockObject::verify(); }
 };
 
 using asrtcCreateProgramFuncPtr =
@@ -45,8 +42,8 @@ extern asrtcGetLoweredNameFuncPtr asrtcGetLoweredNamePtr;
 extern asrtcGetProgramLogSizeFuncPtr asrtcGetProgramLogSizePtr;
 extern asrtcGetProgramLogFuncPtr asrtcGetProgramLogPtr;
 
-extern aclError aclrtcAddNameExpr(aclrtcProg prog, const char *nameExpr);
-extern aclError aclrtcGetLoweredName(aclrtcProg prog, const char *nameExpr, const char **manglingName);
+extern aclError aclrtcAddNameExpr(aclrtcProg prog, const char* nameExpr);
+extern aclError aclrtcGetLoweredName(aclrtcProg prog, const char* nameExpr, const char** manglingName);
 extern inline bool EndsWith(std::string_view str, std::string_view suffix);
 extern std::string ExtractCannPath(const std::string& pluginPath);
 extern bool PathCheck(const char* path);
@@ -72,9 +69,7 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcGetCompileLogSize)
 {
     MOCKER(PathCheck).stubs().will(returnValue(true));
     asrtcGetProgramLogSizeFuncPtr originalPtr = asrtcGetProgramLogSizePtr;
-    auto mockFunc = [](asrtcProgram, size_t*) -> asrtcResult {
-        return ASRTC_ERROR_NOT_IMPLEMENTED;
-    };
+    auto mockFunc = [](asrtcProgram, size_t*) -> asrtcResult { return ASRTC_ERROR_NOT_IMPLEMENTED; };
     asrtcGetProgramLogSizePtr = mockFunc;
     aclrtcProg prog = nullptr;
     size_t actualLogSize = 1024;
@@ -85,9 +80,7 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcGetCompileLogSize)
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcGetCompileLog)
 {
     asrtcGetProgramLogFuncPtr originalPtr = asrtcGetProgramLogPtr;
-    auto mockFunc = [](asrtcProgram, char*) -> asrtcResult {
-        return ASRTC_ERROR_NOT_IMPLEMENTED;
-    };
+    auto mockFunc = [](asrtcProgram, char*) -> asrtcResult { return ASRTC_ERROR_NOT_IMPLEMENTED; };
     asrtcGetProgramLogPtr = mockFunc;
     aclrtcProg prog = nullptr;
     char log[32] = "some log info ...";
@@ -98,7 +91,7 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcGetCompileLog)
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcAddNameExpr_nullptr)
 {
     aclrtcProg prog = nullptr;
-    const char *nameExpr = "hello_world";
+    const char* nameExpr = "hello_world";
     aclError result = aclrtcAddNameExpr(prog, nameExpr);
     EXPECT_EQ(result, ACL_ERROR_RTC_INVALID_INPUT);
 }
@@ -113,7 +106,7 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcAddNameExpr)
 
     alignas(void*) char fakeProgMem[64] = {0};
     aclrtcProg prog = reinterpret_cast<aclrtcProg>(fakeProgMem);
-    const char *nameExpr = "hello_world";
+    const char* nameExpr = "hello_world";
     aclError result = aclrtcAddNameExpr(prog, nameExpr);
     EXPECT_EQ(result, ACL_ERROR_RTC_NAME_EXPR_NOT_VALID);
 }
@@ -121,8 +114,8 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcAddNameExpr)
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcGetLoweredName_nullptr)
 {
     aclrtcProg prog = nullptr;
-    const char *nameExpr = "hello_world";
-    const char *loweredName = "hello_world";
+    const char* nameExpr = "hello_world";
+    const char* loweredName = "hello_world";
     aclError result = aclrtcGetLoweredName(prog, nameExpr, &loweredName);
     EXPECT_EQ(result, ACL_ERROR_RTC_INVALID_INPUT);
 }
@@ -137,8 +130,8 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcGetLoweredName)
 
     alignas(void*) char fakeProgMem[64] = {0};
     aclrtcProg prog = reinterpret_cast<aclrtcProg>(fakeProgMem);
-    const char *nameExpr = "hello_world";
-    const char *loweredName = "hello_world";
+    const char* nameExpr = "hello_world";
+    const char* loweredName = "hello_world";
     aclError result = aclrtcGetLoweredName(prog, nameExpr, &loweredName);
     EXPECT_EQ(result, ACL_ERROR_RTC_NO_NAME_EXPR_AFTER_COMPILATION);
 }
@@ -146,13 +139,11 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcGetLoweredName)
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcCompileProg)
 {
     asrtcCompileProgramFuncPtr originalPtr = asrtcCompileProgramPtr;
-    auto mockFunc = [](asrtcProgram, int, const char* const*) -> asrtcResult {
-        return ASRTC_ERROR_COMPILE;
-    };
+    auto mockFunc = [](asrtcProgram, int, const char* const*) -> asrtcResult { return ASRTC_ERROR_COMPILE; };
     asrtcCompileProgramPtr = mockFunc;
 
     aclrtcProg prog = nullptr;
-    const char *options[] = {"--cce-aicore-arch=dav-c220-cube", "-O2"};
+    const char* options[] = {"--cce-aicore-arch=dav-c220-cube", "-O2"};
     int numOptions = sizeof(options) / sizeof(options[0]);
     MOCKER(PathCheck).stubs().will(returnValue(true));
     aclError result = aclrtcCompileProg(prog, numOptions, options);
@@ -162,13 +153,11 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcCompileProg)
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcCompileProg_unknown)
 {
     asrtcCompileProgramFuncPtr originalPtr = asrtcCompileProgramPtr;
-    auto mockFunc = [](asrtcProgram, int, const char* const*) -> asrtcResult {
-        return ASRTC_ERROR_UNKNOWN;
-    };
+    auto mockFunc = [](asrtcProgram, int, const char* const*) -> asrtcResult { return ASRTC_ERROR_UNKNOWN; };
     asrtcCompileProgramPtr = mockFunc;
 
     aclrtcProg prog = nullptr;
-    const char *options[] = {"--cce-aicore-arch=dav-c220-cube", "-O2"};
+    const char* options[] = {"--cce-aicore-arch=dav-c220-cube", "-O2"};
     int numOptions = sizeof(options) / sizeof(options[0]);
     MOCKER(PathCheck).stubs().will(returnValue(true));
     aclError result = aclrtcCompileProg(prog, numOptions, options);
@@ -178,14 +167,12 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcCompileProg_unknown)
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcCreateProg)
 {
     asrtcCreateProgramFuncPtr originalPtr = asrtcCreateProgramPtr;
-    auto mockFunc =
-        [](asrtcProgram*, const char *, const char *, int, const char *const *, const char *const *) -> asrtcResult {
-        return ASRTC_SUCCESS;
-    };
+    auto mockFunc = [](asrtcProgram*, const char*, const char*, int, const char* const*,
+                       const char* const*) -> asrtcResult { return ASRTC_SUCCESS; };
     asrtcCreateProgramPtr = mockFunc;
 
     aclrtcProg prog = nullptr;
-    const char *src = R""""(
+    const char* src = R""""(
 #include "const.h"
 #include "kernel_operator.h"
 #include "acl/acl.h"
@@ -201,7 +188,7 @@ __global__ __aicore__ void add_custom(GM_ADDR x) {*x = 3 + MY_CONST;}
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcCreateProg_fail)
 {
     aclrtcProg prog = nullptr;
-    const char *src = R""""(
+    const char* src = R""""(
 #include "const.h"
 #include "kernel_operator.h"
 #include "acl/acl.h"
@@ -217,10 +204,8 @@ __global__ __aicore__ void add_custom(GM_ADDR x) {*x = 3 + MY_CONST;}
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcDestroyProg)
 {
     asrtcDestroyProgramFuncPtr originalPtr = asrtcDestroyProgramPtr;
-    auto mockFunc = [](asrtcProgram*) -> asrtcResult {
-        return ASRTC_SUCCESS;
-    };
-    const char *src = R""""(
+    auto mockFunc = [](asrtcProgram*) -> asrtcResult { return ASRTC_SUCCESS; };
+    const char* src = R""""(
 #include "const.h"
 #include "kernel_operator.h"
 #include "acl/acl.h"
@@ -239,9 +224,7 @@ __global__ __aicore__ void add_custom(GM_ADDR x) {*x = 3 + MY_CONST;}
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcGetBinData)
 {
     asrtcGetDeviceELFFuncPtr originalPtr = asrtcGetDeviceELFPtr;
-    auto mockFunc = [](asrtcProgram, char*) -> asrtcResult {
-        return ASRTC_ERROR_COMPILE;
-    };
+    auto mockFunc = [](asrtcProgram, char*) -> asrtcResult { return ASRTC_ERROR_COMPILE; };
     asrtcGetDeviceELFPtr = mockFunc;
 
     aclrtcProg prog = nullptr;
@@ -253,9 +236,7 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcGetBinData)
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_aclrtcGetBinDataSize)
 {
     asrtcGetDeviceELFSizeFuncPtr originalPtr = asrtcGetDeviceELFSizePtr;
-    auto mockFunc = [](asrtcProgram, size_t*) -> asrtcResult {
-        return ASRTC_ERROR_COMPILE;
-    };
+    auto mockFunc = [](asrtcProgram, size_t*) -> asrtcResult { return ASRTC_ERROR_COMPILE; };
     asrtcGetDeviceELFSizePtr = mockFunc;
 
     aclrtcProg prog = nullptr;
@@ -281,7 +262,7 @@ TEST_F(TEST_ACL_RT_COMPILE, aclrtc_ExtractCannPath)
 
 TEST_F(TEST_ACL_RT_COMPILE, aclrtc_PathCheck)
 {
-    const char *path = "../../../../tests/tools/aclrtc/stub/asrtc.h";
+    const char* path = "../../../../tests/tools/aclrtc/stub/asrtc.h";
     bool res = PathCheck(path);
     EXPECT_EQ(res, true);
 }

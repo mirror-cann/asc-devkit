@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "tensor_api/stub/cce_stub.h"
@@ -52,7 +52,7 @@ protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
 
-    void SetUp() override 
+    void SetUp() override
     {
         AscendC::SetGCoreType(1);
         is_mock_copy_matrix_cc_to_ub = false;
@@ -60,7 +60,7 @@ protected:
         quant_pre_global = static_cast<uint64_t>(QuantMode_t::NoQuant);
     }
 
-    void TearDown() override 
+    void TearDown() override
     {
         AscendC::SetGCoreType(0);
         is_mock_copy_matrix_cc_to_ub = false;
@@ -80,7 +80,6 @@ struct CopyL0C2UBTraitCustom {
     using TraitType = CopyL0C2UBTrait;
     static constexpr const TraitType value = l0c2ubTrait;
 };
-
 
 template <typename LocationTag, typename Pointer, typename Layout>
 auto MakeTensorAt(Pointer ptr, const Layout& layout)
@@ -118,15 +117,9 @@ void RunCopyWithParamPaths(const DstTensor& dst, const SrcTensor& src, const Par
 uint64_t gExpectedLoop3Para = 0;
 uint64_t gExpectedChannelPara = 0;
 
-void SetLoop3ParaStub(uint64_t config)
-{
-    EXPECT_EQ(gExpectedLoop3Para, config);
-}
+void SetLoop3ParaStub(uint64_t config) { EXPECT_EQ(gExpectedLoop3Para, config); }
 
-void SetChannelParaStub(uint64_t config)
-{
-    EXPECT_EQ(gExpectedChannelPara, config);
-}
+void SetChannelParaStub(uint64_t config) { EXPECT_EQ(gExpectedChannelPara, config); }
 
 template <typename DstLayoutPtn>
 void RunL0C2UBBatchNoQuant(uint32_t expectedDstStride, bool nz2ndEn, bool nz2dnEn, bool expectChannelPara)
@@ -147,8 +140,8 @@ void RunL0C2UBBatchNoQuant(uint32_t expectedDstStride, bool nz2ndEn, bool nz2dnE
 
     auto srcTensor = MakeTensorAt<Location::L0C>(
         src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(kSrcBatch, kM, kN));
-    auto dstTensor = MakeTensorAt<Location::UB>(
-        dst, MakeFrameLayout<DstLayoutPtn, LayoutTraitDefault<float>>(kDstBatch, kM, kN));
+    auto dstTensor =
+        MakeTensorAt<Location::UB>(dst, MakeFrameLayout<DstLayoutPtn, LayoutTraitDefault<float>>(kDstBatch, kM, kN));
 
     n_size_global = kN;
     m_size_global = kM;
@@ -159,8 +152,8 @@ void RunL0C2UBBatchNoQuant(uint32_t expectedDstStride, bool nz2ndEn, bool nz2dnE
     is_mock_copy_matrix_cc_to_ub = true;
     ub_addr_global = dst;
     quant_pre_global = static_cast<uint64_t>(QuantMode_t::NoQuant);
-    gExpectedLoop3Para = (static_cast<uint64_t>(kMatrixSize) << 32) |
-                         (static_cast<uint64_t>(kSrcBatchStride) << 16) | kSrcBatch;
+    gExpectedLoop3Para =
+        (static_cast<uint64_t>(kMatrixSize) << 32) | (static_cast<uint64_t>(kSrcBatchStride) << 16) | kSrcBatch;
 
     MOCKER(set_loop3_para, void(uint64_t)).times(1).will(invoke(SetLoop3ParaStub));
     if (expectChannelPara) {
@@ -226,7 +219,8 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBNZ2ND)
     __cc__ float src[m * n] = {0};
     __ubuf__ float dst[m * n] = {0};
 
-    auto l0cTensor = MakeTensorAt<Location::L0C>(src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
+    auto l0cTensor =
+        MakeTensorAt<Location::L0C>(src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
     auto ubTensor = MakeTensorAt<Location::UB>(dst, MakeFrameLayout<NDExtLayoutPtn, LayoutTraitDefault<float>>(m, n));
 
     RunCopyCallPaths<CopyL0C2UB, CopyL0C2UBTraitDefault>(ubTensor, l0cTensor);
@@ -244,7 +238,8 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBNZ2NDLayout)
     __cc__ float src[m * n] = {0};
     __ubuf__ float dst[m * n] = {0};
 
-    auto l0cTensor = MakeTensorAt<Location::L0C>(src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
+    auto l0cTensor =
+        MakeTensorAt<Location::L0C>(src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
     auto ubTensor = MakeTensorAt<Location::UB>(dst, MakeFrameLayout<NDLayoutPtn, LayoutTraitDefault<float>>(m, n));
 
     RunCopyCallPaths<CopyL0C2UB, CopyL0C2UBTraitDefault>(ubTensor, l0cTensor);
@@ -252,7 +247,6 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBNZ2NDLayout)
 
     EXPECT_EQ(dst[0], 0);
 }
-
 
 TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBNZ2DN)
 {
@@ -263,7 +257,8 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBNZ2DN)
     __cc__ float src[m * n] = {0};
     __ubuf__ float dst[m * n] = {0};
 
-    auto l0cTensor = MakeTensorAt<Location::L0C>(src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
+    auto l0cTensor =
+        MakeTensorAt<Location::L0C>(src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
     auto ubTensor = MakeTensorAt<Location::UB>(dst, MakeFrameLayout<DNExtLayoutPtn, LayoutTraitDefault<float>>(m, n));
 
     RunCopyCallPaths<CopyL0C2UB, CopyL0C2UBTraitDefault>(ubTensor, l0cTensor);
@@ -281,7 +276,8 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBNZ2DNLayout)
     __cc__ float src[m * n] = {0};
     __ubuf__ float dst[m * n] = {0};
 
-    auto l0cTensor = MakeTensorAt<Location::L0C>(src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
+    auto l0cTensor =
+        MakeTensorAt<Location::L0C>(src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
     auto ubTensor = MakeTensorAt<Location::UB>(dst, MakeFrameLayout<DNLayoutPtn, LayoutTraitDefault<float>>(m, n));
 
     RunCopyCallPaths<CopyL0C2UB, CopyL0C2UBTraitDefault>(ubTensor, l0cTensor);
@@ -299,7 +295,8 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBNZ2NZNoChannelSplit)
     __cc__ float src[m * n] = {0};
     __ubuf__ float dst[m * n] = {0};
 
-    auto l0cTensor = MakeTensorAt<Location::L0C>(src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
+    auto l0cTensor =
+        MakeTensorAt<Location::L0C>(src, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
     auto ubTensor = MakeTensorAt<Location::UB>(dst, MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float, _16>>(m, n));
 
     RunCopyCallPaths<CopyL0C2UB, CopyL0C2UBTraitDefault>(ubTensor, l0cTensor);
@@ -307,7 +304,6 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBNZ2NZNoChannelSplit)
 
     EXPECT_EQ(dst[0], 0);
 }
-
 
 TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBNZ2NZWithChannelSplit)
 {
@@ -347,10 +343,7 @@ TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBBatchNZ2DNLayout)
     RunL0C2UBBatchNoQuant<DNLayoutPtn>(32, false, true, true);
 }
 
-TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBBatchNZ2NZ)
-{
-    RunL0C2UBBatchNZ2NZNoQuant();
-}
+TEST_F(Tensor_Api_Cube_Copy_3510, CopyL0C2UBBatchNZ2NZ) { RunL0C2UBBatchNZ2NZNoQuant(); }
 
 template <class L0C_TYPE, class C_TYPE, QuantMode_t QUANT_MODE, bool IS_TENSOR, bool HAS_COORD>
 class L0C2UBTestCase {
@@ -415,8 +408,8 @@ private:
         auto ubIterator = MakeMemPtr<Location::UB>(ubC_);
         if constexpr (C_TYPE::format == CubeFormat::NZ) {
             using CastT = std::conditional_t<sizeof(DstT) == 4, half, DstT>;
-            auto ubMatrixLayout = MakeFrameLayout<typename C_TYPE::LayoutPtn, LayoutTraitDefault<CastT>>(mLength_,
-                                                                                                         nLength_);
+            auto ubMatrixLayout =
+                MakeFrameLayout<typename C_TYPE::LayoutPtn, LayoutTraitDefault<CastT>>(mLength_, nLength_);
             return MakeTensor(ubIterator, ubMatrixLayout);
         } else {
             auto ubMatrixLayout = MakeFrameLayout<typename C_TYPE::LayoutPtn>(mLength_, nLength_);
@@ -444,29 +437,33 @@ __aicore__ inline void TestL0c2Ub(uint8_t* cUB, int32_t m, int32_t n, int32_t us
     ins.TestRun(m, n, ubC);
 }
 
-#define KERNEL_TENSOR_API_L0C2UB_E2E(coreNum, M, N, C_Format, L0C_DType, C_DType, Quant_Mode, Is_Tensor, Has_Coord) \
-    TEST_F(Tensor_Api_Cube_Copy_3510, kernel_tensor_api_l0c2ub_##coreNum##_##M##_##N##_##C_Format##_##L0C_DType##_##C_DType##_##Quant_Mode##_##Is_Tensor##_##Has_Coord) \
-    { \
-        uint8_t cUB[M * N * sizeof(C_DType)] = {0}; \
-        typedef InputInfo<CubeFormat::NZ, L0C_DType> l0cType; \
-        typedef InputInfo<CubeFormat::C_Format, C_DType> cType; \
-        TestL0c2Ub<l0cType, cType, QuantMode_t::Quant_Mode, Is_Tensor, Has_Coord>(cUB, M, N, coreNum); \
-        for (uint32_t i = 0; i < M * N; i++) { \
-            EXPECT_EQ(cUB[i], 0x00); \
-        } \
+#define KERNEL_TENSOR_API_L0C2UB_E2E(coreNum, M, N, C_Format, L0C_DType, C_DType, Quant_Mode, Is_Tensor, Has_Coord)                       \
+    TEST_F(                                                                                                                               \
+        Tensor_Api_Cube_Copy_3510,                                                                                                        \
+        kernel_tensor_api_l0c2ub_##coreNum##_##M##_##N##_##C_Format##_##L0C_DType##_##C_DType##_##Quant_Mode##_##Is_Tensor##_##Has_Coord) \
+    {                                                                                                                                     \
+        uint8_t cUB[M * N * sizeof(C_DType)] = {0};                                                                                       \
+        typedef InputInfo<CubeFormat::NZ, L0C_DType> l0cType;                                                                             \
+        typedef InputInfo<CubeFormat::C_Format, C_DType> cType;                                                                           \
+        TestL0c2Ub<l0cType, cType, QuantMode_t::Quant_Mode, Is_Tensor, Has_Coord>(cUB, M, N, coreNum);                                    \
+        for (uint32_t i = 0; i < M * N; i++) {                                                                                            \
+            EXPECT_EQ(cUB[i], 0x00);                                                                                                      \
+        }                                                                                                                                 \
     }
 
-#define KERNEL_TENSOR_API_L0C2UB_E2E_LAYOUT(coreNum, M, N, C_Format, C_LayoutPtn, L0C_DType, C_DType, Quant_Mode,    \
-                                            Is_Tensor, Has_Coord)                                                    \
-    TEST_F(Tensor_Api_Cube_Copy_3510, kernel_tensor_api_l0c2ub_##coreNum##_##M##_##N##_##C_Format##_##C_LayoutPtn##_##L0C_DType##_##C_DType##_##Quant_Mode##_##Is_Tensor##_##Has_Coord) \
-    {                                                                                                                \
-        uint8_t cUB[M * N * sizeof(C_DType)] = {0};                                                                  \
-        typedef InputInfo<CubeFormat::NZ, L0C_DType> l0cType;                                                        \
-        typedef InputInfo<CubeFormat::C_Format, C_DType, C_LayoutPtn> cType;                                         \
-        TestL0c2Ub<l0cType, cType, QuantMode_t::Quant_Mode, Is_Tensor, Has_Coord>(cUB, M, N, coreNum);               \
-        for (uint32_t i = 0; i < M * N; i++) {                                                                       \
-            EXPECT_EQ(cUB[i], 0x00);                                                                                 \
-        }                                                                                                            \
+#define KERNEL_TENSOR_API_L0C2UB_E2E_LAYOUT(                                                                                                              \
+    coreNum, M, N, C_Format, C_LayoutPtn, L0C_DType, C_DType, Quant_Mode, Is_Tensor, Has_Coord)                                                           \
+    TEST_F(                                                                                                                                               \
+        Tensor_Api_Cube_Copy_3510,                                                                                                                        \
+        kernel_tensor_api_l0c2ub_##coreNum##_##M##_##N##_##C_Format##_##C_LayoutPtn##_##L0C_DType##_##C_DType##_##Quant_Mode##_##Is_Tensor##_##Has_Coord) \
+    {                                                                                                                                                     \
+        uint8_t cUB[M * N * sizeof(C_DType)] = {0};                                                                                                       \
+        typedef InputInfo<CubeFormat::NZ, L0C_DType> l0cType;                                                                                             \
+        typedef InputInfo<CubeFormat::C_Format, C_DType, C_LayoutPtn> cType;                                                                              \
+        TestL0c2Ub<l0cType, cType, QuantMode_t::Quant_Mode, Is_Tensor, Has_Coord>(cUB, M, N, coreNum);                                                    \
+        for (uint32_t i = 0; i < M * N; i++) {                                                                                                            \
+            EXPECT_EQ(cUB[i], 0x00);                                                                                                                      \
+        }                                                                                                                                                 \
     }
 
 KERNEL_TENSOR_API_L0C2UB_E2E(1, 16, 16, ND, float, float, NoQuant, false, false)

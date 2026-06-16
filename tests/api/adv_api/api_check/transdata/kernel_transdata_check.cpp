@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "impl/adv_api/detail/api_check/kernel_api_check.h"
@@ -16,16 +16,17 @@ class TransDataAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
+    virtual void SetUp()
+    {
         AscendC::SetGCoreType(2);
         AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
     }
-    void TearDown() {
+    void TearDown()
+    {
         AscendC::SetGCoreType(0);
         AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
     }
 };
-
 
 TEST_F(TransDataAPICheck, TransDataAPICheckTestConfig)
 {
@@ -65,7 +66,6 @@ TEST_F(TransDataAPICheck, TransDataAPICheckTestConfig)
     outQueueY.FreeTensor(dstTensor);
     tmplocalBuf.FreeTensor(sharedTmpBuffer);
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 1);
-
 }
 
 TEST_F(TransDataAPICheck, TransDataAPICheckTransDataSrcShapeDstShape)
@@ -99,7 +99,8 @@ TEST_F(TransDataAPICheck, TransDataAPICheckTransDataSrcShapeDstShape)
     static constexpr TransDataConfig config = {DataFormat::NCDHW, DataFormat::FRACTAL_Z_3D};
     TransDataParams<decltype(ncdhwLayout), decltype(fractalzLayout)> params = {ncdhwLayout, fractalzLayout};
 
-    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>("TransData", dstTensor, srcTensor, sharedTmpBuffer, params);
+    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>(
+        "TransData", dstTensor, srcTensor, sharedTmpBuffer, params);
     inQueueX.FreeTensor(srcTensor);
     outQueueY.FreeTensor(dstTensor);
     tmplocalBuf.FreeTensor(sharedTmpBuffer);
@@ -137,13 +138,13 @@ TEST_F(TransDataAPICheck, TransDataAPICheckTransDataSrcDstSize)
     static constexpr TransDataConfig config = {DataFormat::NCDHW, DataFormat::FRACTAL_Z_3D};
     TransDataParams<decltype(ncdhwLayout), decltype(fractalzLayout)> params = {ncdhwLayout, fractalzLayout};
 
-    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>("TransData", dstTensor, srcTensor, sharedTmpBuffer, params);
+    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>(
+        "TransData", dstTensor, srcTensor, sharedTmpBuffer, params);
     inQueueX.FreeTensor(srcTensor);
     outQueueY.FreeTensor(dstTensor);
     tmplocalBuf.FreeTensor(sharedTmpBuffer);
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 1);
 }
-
 
 TEST_F(TransDataAPICheck, TransDataAPICheckTransDataSrcPos)
 {
@@ -176,7 +177,8 @@ TEST_F(TransDataAPICheck, TransDataAPICheckTransDataSrcPos)
     static constexpr TransDataConfig config = {DataFormat::NCDHW, DataFormat::FRACTAL_Z_3D};
     TransDataParams<decltype(ncdhwLayout), decltype(fractalzLayout)> params = {ncdhwLayout, fractalzLayout};
 
-    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>("TransData", dstTensor, srcTensor, sharedTmpBuffer, params);
+    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>(
+        "TransData", dstTensor, srcTensor, sharedTmpBuffer, params);
     inQueueX.FreeTensor(srcTensor);
     outQueueY.FreeTensor(dstTensor);
     tmplocalBuf.FreeTensor(sharedTmpBuffer);
@@ -214,7 +216,8 @@ TEST_F(TransDataAPICheck, TransDataAPICheckTransDataDstPos)
     static constexpr TransDataConfig config = {DataFormat::NCDHW, DataFormat::FRACTAL_Z_3D};
     TransDataParams<decltype(ncdhwLayout), decltype(fractalzLayout)> params = {ncdhwLayout, fractalzLayout};
 
-    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>("TransData", dstTensor, srcTensor, sharedTmpBuffer, params);
+    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>(
+        "TransData", dstTensor, srcTensor, sharedTmpBuffer, params);
     inQueueX.FreeTensor(srcTensor);
     outQueueY.FreeTensor(dstTensor);
     tmplocalBuf.FreeTensor(sharedTmpBuffer);
@@ -252,7 +255,8 @@ TEST_F(TransDataAPICheck, TransDataAPICheckTransDataTmpPos)
     static constexpr TransDataConfig config = {DataFormat::NCDHW, DataFormat::FRACTAL_Z_3D};
     TransDataParams<decltype(ncdhwLayout), decltype(fractalzLayout)> params = {ncdhwLayout, fractalzLayout};
 
-    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>("TransData", dstTensor, srcTensor, sharedTmpBuffer, params);
+    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>(
+        "TransData", dstTensor, srcTensor, sharedTmpBuffer, params);
     inQueueX.FreeTensor(srcTensor);
     outQueueY.FreeTensor(dstTensor);
     tmplocalBuf.FreeTensor(sharedTmpBuffer);
@@ -290,10 +294,10 @@ TEST_F(TransDataAPICheck, TransDataAPICheckTransDataReuse)
     static constexpr TransDataConfig config = {DataFormat::NCDHW, DataFormat::FRACTAL_Z_3D};
     TransDataParams<decltype(ncdhwLayout), decltype(fractalzLayout)> params = {ncdhwLayout, fractalzLayout};
 
-    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>("TransData", srcTensor, srcTensor, sharedTmpBuffer, params);
+    HighLevelApiCheck::CheckFuncTransData<config, half, decltype(ncdhwLayout), decltype(fractalzLayout)>(
+        "TransData", srcTensor, srcTensor, sharedTmpBuffer, params);
     inQueueX.FreeTensor(srcTensor);
     outQueueY.FreeTensor(dstTensor);
     tmplocalBuf.FreeTensor(sharedTmpBuffer);
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 3);
 }
-

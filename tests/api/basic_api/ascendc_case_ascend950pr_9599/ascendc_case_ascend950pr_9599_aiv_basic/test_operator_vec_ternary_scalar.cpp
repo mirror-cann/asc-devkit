@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -23,8 +23,8 @@ enum TestMode {
 };
 
 template <typename SrcT, typename DstT>
-void VecTernary(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm,
-    __gm__ int32_t dataSize, TestMode testMode)
+void VecTernary(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, __gm__ int32_t dataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<SrcT> src;
@@ -101,30 +101,30 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TernarySimpleTestCase, TernarySimpleTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    TernarySimpleTestCase, TernarySimpleTestsuite,
     ::testing::Values(
-        TernaryTestParams { 256, 2, 2, TestMode::LEVEL0_NORM_MODE, VecTernary<half, half> },
-        TernaryTestParams { 128, 2, 2, TestMode::LEVEL0_NORM_MODE, VecTernary<half, half> },
-        TernaryTestParams { 256, 4, 4, TestMode::LEVEL0_NORM_MODE, VecTernary<float, float> },
-        TernaryTestParams { 128, 4, 4, TestMode::LEVEL0_NORM_MODE, VecTernary<float, float> },
+        TernaryTestParams{256, 2, 2, TestMode::LEVEL0_NORM_MODE, VecTernary<half, half>},
+        TernaryTestParams{128, 2, 2, TestMode::LEVEL0_NORM_MODE, VecTernary<half, half>},
+        TernaryTestParams{256, 4, 4, TestMode::LEVEL0_NORM_MODE, VecTernary<float, float>},
+        TernaryTestParams{128, 4, 4, TestMode::LEVEL0_NORM_MODE, VecTernary<float, float>},
 
-        TernaryTestParams { 256, 2, 2, TestMode::LEVEL0_BIT_MODE, VecTernary<half, half> },
-        TernaryTestParams { 256, 4, 4, TestMode::LEVEL0_BIT_MODE, VecTernary<float, float> },
-        TernaryTestParams { 128, 2, 2, TestMode::LEVEL0_BIT_MODE, VecTernary<half, half> },
-        TernaryTestParams { 128, 4, 4, TestMode::LEVEL0_BIT_MODE, VecTernary<float, float> },
+        TernaryTestParams{256, 2, 2, TestMode::LEVEL0_BIT_MODE, VecTernary<half, half>},
+        TernaryTestParams{256, 4, 4, TestMode::LEVEL0_BIT_MODE, VecTernary<float, float>},
+        TernaryTestParams{128, 2, 2, TestMode::LEVEL0_BIT_MODE, VecTernary<half, half>},
+        TernaryTestParams{128, 4, 4, TestMode::LEVEL0_BIT_MODE, VecTernary<float, float>},
 
-        TernaryTestParams { 256, 2, 4, TestMode::LEVEL0_FMIX_NORM_MODE, VecTernary<half, float> },
-        TernaryTestParams { 256, 2, 4, TestMode::LEVEL0_FMIX_NORM_MODE, VecTernary<half, float> },
+        TernaryTestParams{256, 2, 4, TestMode::LEVEL0_FMIX_NORM_MODE, VecTernary<half, float>},
+        TernaryTestParams{256, 2, 4, TestMode::LEVEL0_FMIX_NORM_MODE, VecTernary<half, float>},
 
-        TernaryTestParams { 256, 2, 4, TestMode::LEVEL0_FMIX_BIT_MODE, VecTernary<half, float> },
-        TernaryTestParams { 128, 2, 4, TestMode::LEVEL0_FMIX_BIT_MODE, VecTernary<half, float> },
+        TernaryTestParams{256, 2, 4, TestMode::LEVEL0_FMIX_BIT_MODE, VecTernary<half, float>},
+        TernaryTestParams{128, 2, 4, TestMode::LEVEL0_FMIX_BIT_MODE, VecTernary<half, float>},
 
-        TernaryTestParams { 256, 2, 2, TestMode::LEVEL2_COUNTER_MODE, VecTernary<half, half> },
-        TernaryTestParams { 256, 4, 4, TestMode::LEVEL2_COUNTER_MODE, VecTernary<float, float> },
+        TernaryTestParams{256, 2, 2, TestMode::LEVEL2_COUNTER_MODE, VecTernary<half, half>},
+        TernaryTestParams{256, 4, 4, TestMode::LEVEL2_COUNTER_MODE, VecTernary<float, float>},
 
-        TernaryTestParams { 256, 2, 4, TestMode::LEVEL2_FMIX_COUNTER_MODE, VecTernary<half, float> },
-        TernaryTestParams { 256, 2, 4, TestMode::LEVEL2_FMIX_COUNTER_MODE, VecTernary<half, float> }
-    ));
+        TernaryTestParams{256, 2, 4, TestMode::LEVEL2_FMIX_COUNTER_MODE, VecTernary<half, float>},
+        TernaryTestParams{256, 2, 4, TestMode::LEVEL2_FMIX_COUNTER_MODE, VecTernary<half, float>}));
 
 TEST_P(TernarySimpleTestsuite, TernarySimpleTestCase)
 {

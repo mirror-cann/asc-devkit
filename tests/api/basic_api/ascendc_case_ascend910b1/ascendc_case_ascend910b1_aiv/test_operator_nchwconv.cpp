@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "mockcpp/mockcpp.hpp"
@@ -15,8 +15,9 @@ using namespace std;
 using namespace AscendC;
 
 template <typename T>
-__global__ __aicore__ void MainNchwconv(__gm__ uint16_t* __restrict__ dstGm, __gm__ uint16_t* __restrict__ srcGm,
-    int32_t dataSize, const TransDataTo5HDParams& nchwconvParams, const int32_t width)
+__global__ __aicore__ void MainNchwconv(
+    __gm__ uint16_t* __restrict__ dstGm, __gm__ uint16_t* __restrict__ srcGm, int32_t dataSize,
+    const TransDataTo5HDParams& nchwconvParams, const int32_t width)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
@@ -76,22 +77,20 @@ struct NchwconvTestParams {
 
 class NchwconvTestsuite : public testing::Test, public testing::WithParamInterface<NchwconvTestParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_NCHWCONV, NchwconvTestsuite,
-    ::testing::Values(NchwconvTestParams { 256, 2, false, false, 1, 16, 16, MainNchwconv<half>, 16 },
-    NchwconvTestParams { 512, 2, false, false, 2, 16, 16, MainNchwconv<uint16_t>, 16 },
-    NchwconvTestParams { 512, 2, false, false, 2, 1, 1, MainNchwconv<int16_t>, 32 },
-    NchwconvTestParams { 512, 1, true, true, 1, 16, 16, MainNchwconv<int8_t>, 32 },
-    NchwconvTestParams { 512, 1, true, false, 1, 16, 16, MainNchwconv<int8_t>, 32 },
-    NchwconvTestParams { 1024, 1, false, false, 2, 16, 16, MainNchwconv<uint8_t>, 32 },
-    NchwconvTestParams { 1024, 1, false, true, 2, 1, 1, MainNchwconv<uint8_t>, 64 }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_NCHWCONV, NchwconvTestsuite,
+    ::testing::Values(
+        NchwconvTestParams{256, 2, false, false, 1, 16, 16, MainNchwconv<half>, 16},
+        NchwconvTestParams{512, 2, false, false, 2, 16, 16, MainNchwconv<uint16_t>, 16},
+        NchwconvTestParams{512, 2, false, false, 2, 1, 1, MainNchwconv<int16_t>, 32},
+        NchwconvTestParams{512, 1, true, true, 1, 16, 16, MainNchwconv<int8_t>, 32},
+        NchwconvTestParams{512, 1, true, false, 1, 16, 16, MainNchwconv<int8_t>, 32},
+        NchwconvTestParams{1024, 1, false, false, 2, 16, 16, MainNchwconv<uint8_t>, 32},
+        NchwconvTestParams{1024, 1, false, true, 2, 1, 1, MainNchwconv<uint8_t>, 64}));
 
 TEST_P(NchwconvTestsuite, NchwconvTestCase)
 {
@@ -124,18 +123,12 @@ TEST_P(NchwconvTestsuite, NchwconvTestCase)
 // ============================================================
 
 namespace {
-int32_t RaiseStubForNpuDebug(int32_t i)
-{
-    return 0;
-}
-}
+int32_t RaiseStubForNpuDebug(int32_t i) { return 0; }
+} // namespace
 
 class TestTransDataTo5HDNpuDebug : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
     void TearDown()
     {
         AscendC::CheckSyncState();
@@ -171,7 +164,7 @@ TEST_F(TestTransDataTo5HDNpuDebug, DstListPositionNotUbOverload1)
     params.dstRepStride = 16;
     params.srcRepStride = 16;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
     TransDataTo5HD<half>(dstList, srcList, params);
 }
 
@@ -202,7 +195,7 @@ TEST_F(TestTransDataTo5HDNpuDebug, SrcListPositionNotUbOverload1)
     params.dstRepStride = 16;
     params.srcRepStride = 16;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
     TransDataTo5HD<half>(dstList, srcList, params);
 }
 
@@ -227,13 +220,13 @@ TEST_F(TestTransDataTo5HDNpuDebug, DstHighHalfInvalidForHalfOverload1)
     }
 
     TransDataTo5HDParams params;
-    params.dstHighHalf = true;   // invalid for half
+    params.dstHighHalf = true; // invalid for half
     params.srcHighHalf = false;
     params.repeatTimes = 1;
     params.dstRepStride = 16;
     params.srcRepStride = 16;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
     TransDataTo5HD<half>(dstList, srcList, params);
 }
 
@@ -259,12 +252,11 @@ TEST_F(TestTransDataTo5HDNpuDebug, SrcHighHalfInvalidForHalfOverload1)
 
     TransDataTo5HDParams params;
     params.dstHighHalf = false;
-    params.srcHighHalf = true;   // invalid for half
+    params.srcHighHalf = true; // invalid for half
     params.repeatTimes = 1;
     params.dstRepStride = 16;
     params.srcRepStride = 16;
 
-    MOCKER(raise, int32_t (*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
+    MOCKER(raise, int32_t(*)(int32_t)).stubs().will(invoke(RaiseStubForNpuDebug));
     TransDataTo5HD<half>(dstList, srcList, params);
 }
-

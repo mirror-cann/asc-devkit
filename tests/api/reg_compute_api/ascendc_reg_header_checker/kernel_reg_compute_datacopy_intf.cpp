@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #ifndef VERIFY_SINGLE_HEADER
 #include "reg_compute/kernel_reg_compute_intf.h"
@@ -43,8 +43,8 @@ extern "C" __simd_vf__ void datacopy_test()
     AscendC::Reg::LoadAlign<uint8_t, AscendC::Reg::LoadDist::DIST_DINTLV_B8>(a, b, aAddr);
     // template <typename T = DefaultType, PostLiteral postMode, LoadDist dist, typename U>
     // __simd_callee__ inline void LoadAlign(U& dstReg0, U& dstReg1, __ubuf__ T*& srcAddr, int32_t postUpdateStride);
-    AscendC::Reg::LoadAlign<uint8_t, AscendC::Reg::PostLiteral::POST_MODE_UPDATE,
-        AscendC::Reg::LoadDist::DIST_DINTLV_B8>(a, b, aAddr, 5);
+    AscendC::Reg::LoadAlign<
+        uint8_t, AscendC::Reg::PostLiteral::POST_MODE_UPDATE, AscendC::Reg::LoadDist::DIST_DINTLV_B8>(a, b, aAddr, 5);
     // template <typename T = DefaultType, LoadDist dist, typename U>
     // __simd_callee__ inline void LoadAlign(U& dstReg0, U& dstReg1, __ubuf__ T* srcAddr, AddrReg offset);
     AscendC::Reg::LoadAlign<uint8_t, AscendC::Reg::LoadDist::DIST_DINTLV_B8>(a, b, aAddr, a1);
@@ -74,20 +74,24 @@ extern "C" __simd_vf__ void datacopy_test()
     // __simd_callee__ inline void LoadAlign(U& dstReg, __ubuf__ T* srcAddr, uint32_t dataBlockStride, MaskReg& mask);
     AscendC::Reg::LoadAlign<uint8_t, AscendC::Reg::DataCopyMode::DATA_BLOCK_COPY>(a, aAddr, 1, mask);
     // template <typename T = DefaultType, DataCopyMode dataMode, PostLiteral postMode, typename U>
-    // __simd_callee__ inline void LoadAlign(U &dstReg, __ubuf__ T*& srcAddr, uint32_t dataBlockStride, uint32_t repeatStride,
+    // __simd_callee__ inline void LoadAlign(U &dstReg, __ubuf__ T*& srcAddr, uint32_t dataBlockStride, uint32_t
+    // repeatStride,
     //                                       MaskReg& mask);
-    AscendC::Reg::LoadAlign<uint8_t, AscendC::Reg::DataCopyMode::DATA_BLOCK_COPY,
-        AscendC::Reg::PostLiteral::POST_MODE_UPDATE>(a, aAddr, 1, 8, mask);
+    AscendC::Reg::LoadAlign<
+        uint8_t, AscendC::Reg::DataCopyMode::DATA_BLOCK_COPY, AscendC::Reg::PostLiteral::POST_MODE_UPDATE>(
+        a, aAddr, 1, 8, mask);
 
     // vsstb
     // template <typename T = DefaultType, DataCopyMode dataMode, typename U>
     // __simd_callee__ inline void StoreAlign(__ubuf__ T* dstAddr, U& srcReg, uint32_t dataBlockStride, MaskReg& mask);
     AscendC::Reg::StoreAlign<uint8_t, AscendC::Reg::DataCopyMode::DATA_BLOCK_COPY>(aAddr, a, 1, mask);
     // template <typename T = DefaultType, DataCopyMode dataMode, PostLiteral postMode, typename U>
-    // __simd_callee__ inline void StoreAlign(__ubuf__ T*& dstAddr, U& srcReg, uint32_t dataBlockStride, uint32_t repeatStride,
+    // __simd_callee__ inline void StoreAlign(__ubuf__ T*& dstAddr, U& srcReg, uint32_t dataBlockStride, uint32_t
+    // repeatStride,
     //                                        MaskReg& mask);
-    AscendC::Reg::StoreAlign<uint8_t, AscendC::Reg::DataCopyMode::DATA_BLOCK_COPY,
-        AscendC::Reg::PostLiteral::POST_MODE_UPDATE>(aAddr, a, 1, 8, mask);
+    AscendC::Reg::StoreAlign<
+        uint8_t, AscendC::Reg::DataCopyMode::DATA_BLOCK_COPY, AscendC::Reg::PostLiteral::POST_MODE_UPDATE>(
+        aAddr, a, 1, 8, mask);
 
     // vldas/vldus
     // template <typename T>
@@ -119,7 +123,8 @@ extern "C" __simd_vf__ void datacopy_test()
     //                                          uint32_t postUpdateStride);
     AscendC::Reg::StoreUnAlign(aAddr, a, u1, 5);
     // template <typename T, PostLiteral postMode = PostLiteral::POST_MODE_UPDATE>
-    // __simd_callee__ inline void StoreUnAlignPost(__ubuf__ T*& dstAddr, UnalignRegForStore& ureg, int32_t postUpdateStride);
+    // __simd_callee__ inline void StoreUnAlignPost(__ubuf__ T*& dstAddr, UnalignRegForStore& ureg, int32_t
+    // postUpdateStride);
     AscendC::Reg::StoreUnAlignPost(aAddr, u1, 5);
     // template <typename T = DefaultType, typename U>
     // __simd_callee__ inline void Store(__ubuf__ T* dstAddr, U& srcReg);
@@ -130,7 +135,8 @@ extern "C" __simd_vf__ void datacopy_test()
 
     // vstu/vsta
     // template <typename T = DefaultType, PostLiteral postMode = PostLiteral::POST_MODE_UPDATE, typename U>
-    // __simd_callee__ inline void StoreUnAlign(__ubuf__ T*& dstAddr, U& srcReg, UnalignRegForStore& ureg, AddrReg& areg);
+    // __simd_callee__ inline void StoreUnAlign(__ubuf__ T*& dstAddr, U& srcReg, UnalignRegForStore& ureg, AddrReg&
+    // areg);
     AscendC::Reg::StoreUnAlign(aAddr, a, u1, a1);
     // template <typename T>
     // __simd_callee__ inline void StoreUnAlignPost(__ubuf__ T*& dstAddr, UnalignRegForStore& ureg, AddrReg& areg);

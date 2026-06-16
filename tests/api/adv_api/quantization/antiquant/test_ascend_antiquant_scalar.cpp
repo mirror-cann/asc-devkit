@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -18,8 +18,7 @@ template <typename InputDataType, typename OutputDataType>
 class AntiQuantScalarTest {
 public:
     __aicore__ inline AntiQuantScalarTest() {}
-    __aicore__ inline void Init(GM_ADDR dstGm, GM_ADDR srcGm,
-        uint32_t elementCountOfInput)
+    __aicore__ inline void Init(GM_ADDR dstGm, GM_ADDR srcGm, uint32_t elementCountOfInput)
     {
         m_elementCountOfInput = elementCountOfInput;
 
@@ -36,6 +35,7 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
@@ -52,11 +52,13 @@ private:
         if constexpr (IsSameType<OutputDataType, half>::value) {
             half offset = 1.2;
             half scale = 3.4;
-            AscendAntiQuant<InputDataType, OutputDataType, false>(dstLocal, srcLocal, offset, scale, sharedTmpBuffer, 64);
+            AscendAntiQuant<InputDataType, OutputDataType, false>(
+                dstLocal, srcLocal, offset, scale, sharedTmpBuffer, 64);
         } else {
             float offset = 1.2;
             float scale = 3.4;
-            AscendAntiQuant<InputDataType, OutputDataType, false>(dstLocal, srcLocal, ToBfloat16(offset), ToBfloat16(scale), sharedTmpBuffer, 64);
+            AscendAntiQuant<InputDataType, OutputDataType, false>(
+                dstLocal, srcLocal, ToBfloat16(offset), ToBfloat16(scale), sharedTmpBuffer, 64);
         }
 
         m_queInSrc.FreeTensor(srcLocal);
@@ -69,6 +71,7 @@ private:
         DataCopy(m_dstGlobal, dstLocal, m_elementCountOfInput);
         m_queOut.FreeTensor(dstLocal);
     }
+
 private:
     TPipe m_pipe;
     TQue<TPosition::VECIN, 1> m_queInSrc;
@@ -93,21 +96,18 @@ struct antiquantScalarParams {
     void (*cal_func)(GM_ADDR, GM_ADDR, uint32_t);
 };
 
-class AntiquantScalarTestsuite : public testing::Test,
-    public testing::WithParamInterface<antiquantScalarParams> {
+class AntiquantScalarTestsuite : public testing::Test, public testing::WithParamInterface<antiquantScalarParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ANTIQUANTSCALAR, AntiquantScalarTestsuite,
-    ::testing::Values(antiquantScalarParams { 2048, testAntiQuantScalar<int8_t, half>},
-        antiquantScalarParams { 2048, testAntiQuantScalar<int8_t, bfloat16_t>},
-        antiquantScalarParams { 2176, testAntiQuantScalar<int8_t, bfloat16_t>}));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ANTIQUANTSCALAR, AntiquantScalarTestsuite,
+    ::testing::Values(
+        antiquantScalarParams{2048, testAntiQuantScalar<int8_t, half>},
+        antiquantScalarParams{2048, testAntiQuantScalar<int8_t, bfloat16_t>},
+        antiquantScalarParams{2176, testAntiQuantScalar<int8_t, bfloat16_t>}));
 
 TEST_P(AntiquantScalarTestsuite, testAntiquantScalar)
 {

@@ -12,7 +12,7 @@
 #include <gtest/gtest.h>
 
 namespace {
-enum class ROUND { R, A, F, C, Z, O, H};
+enum class ROUND { R, A, F, C, Z, O, H };
 
 enum class RoundingSaturation {
     RS_DISABLE_VALUE = 0,
@@ -38,7 +38,7 @@ struct Tuple {};
 
 typedef uint16_t half;
 typedef uint16_t bfloat16_t;
-}
+} // namespace
 
 template <ROUND rnd, RoundingSaturation sat, typename T>
 int32_t __cvt_int32_t(T x)
@@ -76,7 +76,7 @@ bfloat16_t __cvt_bfloat16_t(T x)
     return 0;
 }
 
-#define __SIMT_DEVICE_FUNCTIONS_DECL__ 
+#define __SIMT_DEVICE_FUNCTIONS_DECL__
 
 #undef ASCENDC_CPU_DEBUG
 #include "impl/simt_api/cpp/dav_3510/kernel_simt_cast_sat_impl.h"

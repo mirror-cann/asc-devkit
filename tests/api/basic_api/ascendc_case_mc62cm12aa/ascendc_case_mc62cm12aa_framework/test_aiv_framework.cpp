@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_tpipe_impl.h"
 #include "mockcpp/mockcpp.hpp"
@@ -14,17 +14,18 @@
 
 namespace AscendC {
 namespace {
-constexpr int32_t TILE_NUM = 8;                               // split data into 8 tiles for each core
-constexpr int32_t TILE_LENGTH = 2048;      // length of each tile
-constexpr int32_t BUFFER_LENGTH = 1024;      // length of each tile
-constexpr int32_t BLOCK_LENGTH = TILE_NUM * TILE_LENGTH;                      // length computed of each core
-constexpr int32_t BUFFER_NUM = 2;                             // tensor num for each queue
-constexpr int32_t QUE_DEPTH = 1;                          // tensor num for each queue
-constexpr int32_t BUF_ID_SIZE = 4;                          // tensor num for each queue
-}
+constexpr int32_t TILE_NUM = 8;                          // split data into 8 tiles for each core
+constexpr int32_t TILE_LENGTH = 2048;                    // length of each tile
+constexpr int32_t BUFFER_LENGTH = 1024;                  // length of each tile
+constexpr int32_t BLOCK_LENGTH = TILE_NUM * TILE_LENGTH; // length computed of each core
+constexpr int32_t BUFFER_NUM = 2;                        // tensor num for each queue
+constexpr int32_t QUE_DEPTH = 1;                         // tensor num for each queue
+constexpr int32_t BUF_ID_SIZE = 4;                       // tensor num for each queue
+} // namespace
 
 template <typename T>
-void GetData(LocalTensor<T>& tensor, uint32_t& addr, uint32_t& len, uint8_t& bufId) {
+void GetData(LocalTensor<T>& tensor, uint32_t& addr, uint32_t& len, uint8_t& bufId)
+{
     TBufHandle handle = tensor.GetBufferHandle();
     TBufType* bufType = reinterpret_cast<TBufType*>(handle);
     addr = bufType->address;
@@ -34,10 +35,9 @@ void GetData(LocalTensor<T>& tensor, uint32_t& addr, uint32_t& len, uint8_t& buf
 
 class TQueWithBufIDTest : public testing::Test {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown()
+    {
         AscendC::SetGCoreType(0);
         GlobalMockObject::verify();
     }
@@ -130,14 +130,10 @@ TEST_F(TQueWithBufIDTest, testAivQueInitBufferWithNoneUBQue)
 
 class TEST_TBUFPOOL : public testing::Test {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(0);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(0); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
- 
+
 /* **************************** Tpipe InitBufPool api ****************************** */
 TEST_F(TEST_TBUFPOOL, TpipeInitBufPool)
 {
@@ -150,7 +146,7 @@ TEST_F(TEST_TBUFPOOL, TpipeInitBufPool)
     uint32_t poolLen = 65536;
     pipe.InitBufPool(tbufPool1, poolLen);
     pipe.InitBufPool(tbufPool2, poolLen, tbufPool1);
- 
+
     tbufPool1.InitBuffer(que1, num, len);
     EXPECT_EQ(tbufPool1.tBufPoolImpl.curBufSize_, 2);
     EXPECT_EQ(tbufPool1.tBufPoolImpl.maxAddr_, num * len);
@@ -161,7 +157,7 @@ TEST_F(TEST_TBUFPOOL, TpipeInitBufPool)
     EXPECT_EQ(tbufPool2.tBufPoolImpl.maxLen_, poolLen);
     EXPECT_EQ(tbufPool1.tBufPoolImpl.startAddr_, 0);
     EXPECT_EQ(tbufPool2.tBufPoolImpl.startAddr_, 0);
- 
+
     tbufPool1.Reset();
     EXPECT_EQ(tbufPool1.tBufPoolImpl.curBufSize_, 0);
     EXPECT_EQ(tbufPool1.tBufPoolImpl.maxAddr_, 0);
@@ -169,7 +165,7 @@ TEST_F(TEST_TBUFPOOL, TpipeInitBufPool)
     EXPECT_EQ(tbufPool2.tBufPoolImpl.curBufSize_, 0);
     EXPECT_EQ(tbufPool2.tBufPoolImpl.maxAddr_, 0);
 }
- 
+
 /* **************************** TbufPool InitBufPool api ****************************** */
 TEST_F(TEST_TBUFPOOL, TbufPoolInitBufPool)
 {
@@ -182,7 +178,7 @@ TEST_F(TEST_TBUFPOOL, TbufPoolInitBufPool)
     uint32_t len = 128;
     uint32_t poolLen = 65536;
     pipe.InitBufPool(tbufPool1, poolLen * 2);
- 
+
     tbufPool1.InitBuffer(que1, num, len);
     tbufPool1.InitBufPool(tbufPool2, poolLen);
     tbufPool1.InitBufPool(tbufPool3, poolLen, tbufPool2);
@@ -198,7 +194,7 @@ TEST_F(TEST_TBUFPOOL, TbufPoolInitBufPool)
     EXPECT_EQ(tbufPool3.tBufPoolImpl.maxAddr_, num * len);
     EXPECT_EQ(tbufPool3.tBufPoolImpl.maxLen_, poolLen);
 }
- 
+
 /* **************************** TbufPool InitBuffer api ****************************** */
 TEST_F(TEST_TBUFPOOL, TbufPoolInitBuffer)
 {
@@ -206,12 +202,12 @@ TEST_F(TEST_TBUFPOOL, TbufPoolInitBuffer)
     TBufPool<TPosition::VECIN> tbufPool;
     TQue<TPosition::VECOUT, 2> que;
     TBuf<TPosition::VECIN> tbuf;
- 
+
     Hardware hardPos = GetPhyType(TPosition::VECOUT);
     uint8_t num = 2;
     uint32_t poolLen = 65536;
     pipe.InitBufPool(tbufPool, poolLen);
- 
+
     tbufPool.InitBuffer(que, num, BUFFER_LENGTH);
     tbufPool.InitBuffer(tbuf, BUFFER_LENGTH);
     EXPECT_EQ(tbufPool.tBufPoolImpl.curBufSize_, 3);
@@ -226,22 +222,17 @@ TEST_F(TEST_TBUFPOOL, TbufPoolInitBuffer)
 
 class CustomTBufpoolTest : public testing::Test {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 class MyBufPool {
 public:
-    __aicore__ inline MyBufPool() {
-        Init();
-    }
+    __aicore__ inline MyBufPool() { Init(); }
 
-    template<class T> 
-    __aicore__ inline bool InitBuffer(T& que) {
+    template <class T>
+    __aicore__ inline bool InitBuffer(T& que)
+    {
         auto curPoolAddr = this->GetCurAddr();
 
         // call internal func to initnitial bufhandle
@@ -255,8 +246,9 @@ public:
         return true;
     }
 
-    template<AscendC::TPosition bufPos>
-    __aicore__ inline bool InitBuffer(AscendC::TBuf<bufPos>& buf, uint32_t len) {
+    template <AscendC::TPosition bufPos>
+    __aicore__ inline bool InitBuffer(AscendC::TBuf<bufPos>& buf, uint32_t len)
+    {
         auto ptr = this->GetBufHandle(this->GetCurBufSize());
         auto curPoolAddr = this->GetCurAddr();
 

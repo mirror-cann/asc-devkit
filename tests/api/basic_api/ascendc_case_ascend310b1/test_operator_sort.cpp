@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -18,8 +18,8 @@ template <typename T, bool isFullSort, bool isExhaustedSuspension>
 class FullSort {
 public:
     __aicore__ inline FullSort() {}
-    __aicore__ inline void Init(__gm__ uint8_t* dstValueGm, __gm__ uint8_t* dstIndexGm,
-        __gm__ uint8_t* srcValueGm, __gm__ uint8_t* srcIndexGm,
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstValueGm, __gm__ uint8_t* dstIndexGm, __gm__ uint8_t* srcValueGm, __gm__ uint8_t* srcIndexGm,
         uint32_t elementCount)
     {
         mElementCount = elementCount;
@@ -48,6 +48,7 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
@@ -69,7 +70,7 @@ private:
         LocalTensor<T> dstValueLocal = mQueOut.AllocTensor<T>();
         LocalTensor<uint32_t> dstIndexLocal = mQueOut.AllocTensor<uint32_t>();
         LocalTensor<T> concatLocal = mQueDst.AllocTensor<T>();
-        
+
         valueLocal.SetSize(mElementCount);
         Concat(concatLocal, valueLocal, concatTmpLocal, mConcatRepeatTimes);
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002)
@@ -85,7 +86,7 @@ private:
         sortTmpLocal.SetSize(mElementCount * 8);
 #endif
         Sort<T, isFullSort>(sortedLocal, concatLocal, indexLocal, sortTmpLocal, mSortRepeatTimes);
-        
+
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3002)
         uint32_t singleMergeTmpElementCount = 32;
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002)
@@ -101,8 +102,11 @@ private:
             baseOffset = singleMergeTmpElementCount * 32 / sizeof(T);
         }
 #endif
-        MrgSortSrcList sortList = MrgSortSrcList(sortedLocal[0], sortedLocal[baseOffset], sortedLocal[2 * baseOffset], sortedLocal[3 * baseOffset]);
-        const uint16_t elementCountList[4] = {singleMergeTmpElementCount, singleMergeTmpElementCount, singleMergeTmpElementCount, singleMergeTmpElementCount};
+        MrgSortSrcList sortList = MrgSortSrcList(
+            sortedLocal[0], sortedLocal[baseOffset], sortedLocal[2 * baseOffset], sortedLocal[3 * baseOffset]);
+        const uint16_t elementCountList[4] = {
+            singleMergeTmpElementCount, singleMergeTmpElementCount, singleMergeTmpElementCount,
+            singleMergeTmpElementCount};
         uint32_t sortedNum[4];
         MrgSort<T, isExhaustedSuspension>(sortTmpLocal, sortList, elementCountList, sortedNum, 0b1111, 1);
 
@@ -119,7 +123,6 @@ private:
         Extract(dstValueLocal, dstIndexLocal, sortedLocal, mExtractRepeatTimes);
         mQueOut.EnQue(dstValueLocal);
         mQueOut.EnQue(dstIndexLocal);
-        
     }
     __aicore__ inline void CopyOut()
     {
@@ -130,6 +133,7 @@ private:
         mQueOut.FreeTensor(dstValueLocal);
         mQueOut.FreeTensor(dstIndexLocal);
     }
+
 private:
     TPipe mPipe;
     TQue<TPosition::VECIN, 2> mQueIn;
@@ -149,7 +153,8 @@ private:
 } // namespace AscendC
 
 template <typename T, bool isFullSort, bool isExhaustedSuspension>
-__global__ __aicore__ void testSort(__gm__ uint8_t* dstValueGm, __gm__ uint8_t* dstIndexGm, __gm__ uint8_t* srcValueGm, __gm__ uint8_t* srcIndexGm,
+__global__ __aicore__ void testSort(
+    __gm__ uint8_t* dstValueGm, __gm__ uint8_t* dstIndexGm, __gm__ uint8_t* srcValueGm, __gm__ uint8_t* srcIndexGm,
     uint32_t elementCount)
 {
     AscendC::FullSort<T, isFullSort, isExhaustedSuspension> op;
@@ -163,41 +168,32 @@ struct SortParams {
     void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint32_t);
 };
 
-class SortTestsuite : public testing::Test,
-    public testing::WithParamInterface<SortParams> {
+class SortTestsuite : public testing::Test, public testing::WithParamInterface<SortParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
 };
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3002)
-    INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_SORT, SortTestsuite,
-        ::testing::Values(SortParams { 2, 128, testSort<half, true, true>},
-            SortParams { 2, 128, testSort<half, true, false>},
-            SortParams { 4, 128, testSort<float, true, true>},
-            SortParams { 4, 128, testSort<float, true, false>},
-            SortParams { 2, 192, testSort<half, true, true>},
-            SortParams { 2, 192, testSort<half, true, false>},
-            SortParams { 4, 512, testSort<float, true, true>},
-            SortParams { 4, 512, testSort<float, true, false>},
-            SortParams { 2, 512, testSort<half, true, true>},
-            SortParams { 2, 512, testSort<half, true, false>},
-            SortParams { 4, 192, testSort<float, true, true>},
-            SortParams { 4, 192, testSort<float, true, false>},
-            SortParams { 2, 768, testSort<half, true, true>},
-            SortParams { 2, 768, testSort<half, true, false>},
-            SortParams { 4, 768, testSort<float, true, true>},
-            SortParams { 4, 768, testSort<float, true, false>}));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_SORT, SortTestsuite,
+    ::testing::Values(
+        SortParams{2, 128, testSort<half, true, true>}, SortParams{2, 128, testSort<half, true, false>},
+        SortParams{4, 128, testSort<float, true, true>}, SortParams{4, 128, testSort<float, true, false>},
+        SortParams{2, 192, testSort<half, true, true>}, SortParams{2, 192, testSort<half, true, false>},
+        SortParams{4, 512, testSort<float, true, true>}, SortParams{4, 512, testSort<float, true, false>},
+        SortParams{2, 512, testSort<half, true, true>}, SortParams{2, 512, testSort<half, true, false>},
+        SortParams{4, 192, testSort<float, true, true>}, SortParams{4, 192, testSort<float, true, false>},
+        SortParams{2, 768, testSort<half, true, true>}, SortParams{2, 768, testSort<half, true, false>},
+        SortParams{4, 768, testSort<float, true, true>}, SortParams{4, 768, testSort<float, true, false>}));
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 1001)
-    INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_SORT, SortTestsuite,
-        ::testing::Values(SortParams { 2, 128, testSort<half, true, true>},
-            SortParams { 2, 128, testSort<half, true, false>},
-            SortParams { 2, 192, testSort<half, true, true>},
-            SortParams { 2, 192, testSort<half, true, false>},
-            SortParams { 2, 512, testSort<half, true, true>},
-            SortParams { 2, 512, testSort<half, true, false>},
-            SortParams { 2, 768, testSort<half, true, true>},
-            SortParams { 2, 768, testSort<half, true, false>} ));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_SORT, SortTestsuite,
+    ::testing::Values(
+        SortParams{2, 128, testSort<half, true, true>}, SortParams{2, 128, testSort<half, true, false>},
+        SortParams{2, 192, testSort<half, true, true>}, SortParams{2, 192, testSort<half, true, false>},
+        SortParams{2, 512, testSort<half, true, true>}, SortParams{2, 512, testSort<half, true, false>},
+        SortParams{2, 768, testSort<half, true, true>}, SortParams{2, 768, testSort<half, true, false>}));
 #endif
 
 TEST_P(SortTestsuite, testSort)
@@ -208,7 +204,7 @@ TEST_P(SortTestsuite, testSort)
     uint8_t dstValueGm[param.elementCount * param.typeSize] = {0};
     uint8_t dstIndexGm[param.elementCount * sizeof(uint32_t)] = {0};
     param.cal_func(dstValueGm, dstIndexGm, srcValueGm, srcIndexGm, param.elementCount);
-    
+
     for (int32_t i = 0; i < param.elementCount; i++) {
         EXPECT_EQ(dstValueGm[i], 0x00);
         EXPECT_EQ(dstIndexGm[i], 0x00);

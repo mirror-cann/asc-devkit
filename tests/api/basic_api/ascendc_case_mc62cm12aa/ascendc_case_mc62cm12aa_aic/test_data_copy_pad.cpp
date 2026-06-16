@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protect public
@@ -28,8 +28,9 @@ protected:
     void TearDown() {}
 };
 
-template<typename T>
-void main_data_copy_pad_kernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
+template <typename T>
+void main_data_copy_pad_kernel(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> srcGlobal;
@@ -50,7 +51,7 @@ void main_data_copy_pad_kernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_
     DataCopyExtParams copyParams{1, 20 * sizeof(T), 0, 0, 0};
     DataCopyParams copyParams2{1, 32 * sizeof(T), 0, 0};
     DataCopyPadParams datacopyPadParams{false, 0, 0, 0};
-    if constexpr(sizeof(T) == 8) {
+    if constexpr (sizeof(T) == 8) {
         DataCopyPadExtParams<T> padParams{true, 0, 1, 0};
         DataCopyPad<T, PaddingMode::Normal>(inputLocal, srcGlobal, copyParams2, datacopyPadParams);
         DataCopyPad<T, PaddingMode::Normal>(inputLocal, srcGlobal, copyParams, padParams);
@@ -61,14 +62,16 @@ void main_data_copy_pad_kernel(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_
     }
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_DATA_COPY_PAD, TestDataCopyPadSuite,
-    ::testing::Values(TestDataCopyPadParams { 64, 4, main_data_copy_pad_kernel<int32_t> },
-    TestDataCopyPadParams { 64, 2, main_data_copy_pad_kernel<int16_t> },
-    TestDataCopyPadParams { 64, 4, main_data_copy_pad_kernel<float> },
-    TestDataCopyPadParams { 64, 2, main_data_copy_pad_kernel<half> },
-    TestDataCopyPadParams { 64, 1, main_data_copy_pad_kernel<int8_t> },
-    TestDataCopyPadParams { 64, 8, main_data_copy_pad_kernel<int64_t> },
-    TestDataCopyPadParams { 64, 1, main_data_copy_pad_kernel<uint8_t> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_DATA_COPY_PAD, TestDataCopyPadSuite,
+    ::testing::Values(
+        TestDataCopyPadParams{64, 4, main_data_copy_pad_kernel<int32_t>},
+        TestDataCopyPadParams{64, 2, main_data_copy_pad_kernel<int16_t>},
+        TestDataCopyPadParams{64, 4, main_data_copy_pad_kernel<float>},
+        TestDataCopyPadParams{64, 2, main_data_copy_pad_kernel<half>},
+        TestDataCopyPadParams{64, 1, main_data_copy_pad_kernel<int8_t>},
+        TestDataCopyPadParams{64, 8, main_data_copy_pad_kernel<int64_t>},
+        TestDataCopyPadParams{64, 1, main_data_copy_pad_kernel<uint8_t>}));
 
 TEST_P(TestDataCopyPadSuite, TestDataCopyPadCases)
 {

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "test_utils.h"
@@ -22,8 +22,9 @@ namespace AscendC {
 // l0a l0b mmad -> l0c
 // l0c data copy -> out
 template <typename dst_T, typename src0_T, typename src1_T>
-void MainLoad2dL1(__gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restrict__ src0_gm,
-    __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k, __gm__ bool ifTrans)
+void MainLoad2dL1(
+    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
+    __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k, __gm__ bool ifTrans)
 {
     TPipe tpipe;
     // mmad c = a * b
@@ -44,16 +45,16 @@ void MainLoad2dL1(__gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restric
     LOCAL_TENSOR_REGISTER(dst_l0c, dst_T, C2, 0, c_size)
     LOCAL_TENSOR_REGISTER(dst_ub, dst_T, CO2, 0, c_size)
 
-    LoadData(src0_l1, input0_global, { 0, a_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0 });
-    LoadData(src1_l1, input1_global, { 0, b_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0 });
-    LoadData(src0_l0a, src0_l1, { 0, a_size / BYTE_PER_FRACTAL, 0, 0, 0, ifTrans, 0 });
-    LoadData(src1_l0b, src1_l1, { 0, b_size / BYTE_PER_FRACTAL, 0, 0, 0, ifTrans, 0 });
+    LoadData(src0_l1, input0_global, {0, a_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0});
+    LoadData(src1_l1, input1_global, {0, b_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0});
+    LoadData(src0_l0a, src0_l1, {0, a_size / BYTE_PER_FRACTAL, 0, 0, 0, ifTrans, 0});
+    LoadData(src1_l0b, src1_l1, {0, b_size / BYTE_PER_FRACTAL, 0, 0, 0, ifTrans, 0});
 
-    Mmad(dst_l0c, src0_l0a, src1_l0b, { m, n, k, 0, false, true });
+    Mmad(dst_l0c, src0_l0a, src1_l0b, {m, n, k, 0, false, true});
 
     DataCopyEnhancedParams data_copy_enhance;
     data_copy_enhance.blockMode = BlockMode::BLOCK_MODE_MATRIX;
-    DataCopy(dst_ub, dst_l0c, { 1, c_size / BYTE_PER_FRACTAL, 0, 0 }, data_copy_enhance);
+    DataCopy(dst_ub, dst_l0c, {1, c_size / BYTE_PER_FRACTAL, 0, 0}, data_copy_enhance);
     DataCopy(output_global, dst_ub, c_size);
 }
 
@@ -61,8 +62,9 @@ void MainLoad2dL1(__gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restric
 // l0a l0b mmad -> l0c
 // l0c data copy -> out
 template <typename dst_T, typename src0_T, typename src1_T>
-void MainLoad2dOut(__gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restrict__ src0_gm,
-    __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k, __gm__ bool ifTrans)
+void MainLoad2dOut(
+    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
+    __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k, __gm__ bool ifTrans)
 {
     TPipe tpipe;
     // mmad c = a * b
@@ -80,14 +82,14 @@ void MainLoad2dOut(__gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restri
     LOCAL_TENSOR_REGISTER(src1_l0b, src1_T, B2, 0, b_size)
     LOCAL_TENSOR_REGISTER(dst_l0c, dst_T, C2, 0, c_size)
     LOCAL_TENSOR_REGISTER(dst_ub, dst_T, CO2, 0, c_size)
-    LoadData(src0_l0a, input0_global, { 0, a_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0 });
-    LoadData(src1_l0b, input1_global, { 0, b_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0 });
+    LoadData(src0_l0a, input0_global, {0, a_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0});
+    LoadData(src1_l0b, input1_global, {0, b_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0});
 
-    Mmad(dst_l0c, src0_l0a, src1_l0b, { m, n, k, 0, false, true });
+    Mmad(dst_l0c, src0_l0a, src1_l0b, {m, n, k, 0, false, true});
 
     DataCopyEnhancedParams data_copy_enhance;
     data_copy_enhance.blockMode = BlockMode::BLOCK_MODE_MATRIX;
-    DataCopy(dst_ub, dst_l0c, { 1, c_size / BYTE_PER_FRACTAL, 0, 0 }, data_copy_enhance);
+    DataCopy(dst_ub, dst_l0c, {1, c_size / BYTE_PER_FRACTAL, 0, 0}, data_copy_enhance);
     DataCopy(output_global, dst_ub, c_size);
 }
 
@@ -116,8 +118,9 @@ protected:
 // l0a l0b mmad -> l0c
 // l0c data copy -> out
 template <typename dst_T, typename src0_T, typename src1_T>
-void MainLoad3dv1(__gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restrict__ src0_gm,
-    __gm__ uint8_t* __restrict__ src1_gm, __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k, __gm__ uint8_t csize)
+void MainLoad3dv1(
+    __gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restrict__ src0_gm, __gm__ uint8_t* __restrict__ src1_gm,
+    __gm__ uint16_t m, __gm__ uint16_t n, __gm__ uint16_t k, __gm__ uint8_t csize)
 {
     TPipe tpipe;
     // mmad c = a * b
@@ -138,26 +141,28 @@ void MainLoad3dv1(__gm__ uint8_t* __restrict__ dst_gm, __gm__ uint8_t* __restric
     LOCAL_TENSOR_REGISTER(dst_l0c, dst_T, C2, 0, c_size)
     LOCAL_TENSOR_REGISTER(dst_ub, dst_T, CO2, 0, c_size)
 
-    LoadData(src0_l1, input0_global, { 0, a_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0 });
-    LoadData(src1_l1, input1_global, { 0, b_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0 });
+    LoadData(src0_l1, input0_global, {0, a_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0});
+    LoadData(src1_l1, input1_global, {0, b_size / BYTE_PER_FRACTAL, 0, 0, 0, false, 0});
 
     uint8_t padList[PAD_SIZE] = {0, 0, 0, 0};
-    LoadData(src0_l0a, src0_l1,
-        { padList, 2, m / 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, a_size / BYTE_PER_FRACTAL, csize, 1 });
-    LoadData(src1_l0b, src1_l1,
-        { padList, 2, n / 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, b_size / BYTE_PER_FRACTAL, csize, 0 });
+    LoadData(
+        src0_l0a, src0_l1,
+        {padList, 2, m / 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, a_size / BYTE_PER_FRACTAL, csize, 1});
+    LoadData(
+        src1_l0b, src1_l1,
+        {padList, 2, n / 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, b_size / BYTE_PER_FRACTAL, csize, 0});
 
     // l1 -> ub, no purpose
     LOCAL_TENSOR_REGISTER(tmp_l1, src0_T, A1, ALIGN_ADDR(a_size * sizeof(src0_T) + b_size * sizeof(src1_T)), c_size)
     LOCAL_TENSOR_REGISTER(tmp_ub, src0_T, CO2, ALIGN_ADDR(c_size * sizeof(dst_T)), c_size)
-    LoadData(tmp_ub, tmp_l1,
-        { padList, 1, m, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, c_size / BYTE_PER_FRACTAL, csize, 0 });
+    LoadData(
+        tmp_ub, tmp_l1, {padList, 1, m, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, c_size / BYTE_PER_FRACTAL, csize, 0});
 
-    Mmad(dst_l0c, src0_l0a, src1_l0b, { m, n, k, 0, false, true });
+    Mmad(dst_l0c, src0_l0a, src1_l0b, {m, n, k, 0, false, true});
 
     DataCopyEnhancedParams data_copy_enhance;
     data_copy_enhance.blockMode = BlockMode::BLOCK_MODE_MATRIX;
-    DataCopy(dst_ub, dst_l0c, { 1, c_size / BYTE_PER_FRACTAL, 0, 0 }, data_copy_enhance);
+    DataCopy(dst_ub, dst_l0c, {1, c_size / BYTE_PER_FRACTAL, 0, 0}, data_copy_enhance);
     DataCopy(output_global, dst_ub, c_size);
 }
 
@@ -178,23 +183,24 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_LOAD_DATA_2D, LoadData2dTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_LOAD_DATA_2D, LoadData2dTestsuite,
     ::testing::Values(
-    LoadData2dTestParams { 112, 128, 32, false, MainLoad2dL1<int32_t, uint8_t, uint8_t>, 4, 1, 1 },
-    LoadData2dTestParams { 112, 128, 32, false, MainLoad2dL1<int32_t, int8_t, int8_t>, 4, 1, 1 },
-    LoadData2dTestParams { 112, 128, 32, false, MainLoad2dL1<int32_t, uint8_t, int8_t>, 4, 1, 1 },
-    LoadData2dTestParams { 112, 128, 32, false, MainLoad2dL1<half, half, half>, 2, 2, 2 },
-    LoadData2dTestParams { 112, 128, 32, false, MainLoad2dL1<float, half, half>, 4, 2, 2 },
-    LoadData2dTestParams { 112, 128, 32, true, MainLoad2dL1<int32_t, uint8_t, uint8_t>, 4, 1, 1 },
-    LoadData2dTestParams { 112, 128, 32, true, MainLoad2dL1<int32_t, int8_t, int8_t>, 4, 1, 1 },
-    LoadData2dTestParams { 112, 128, 32, true, MainLoad2dL1<int32_t, uint8_t, int8_t>, 4, 1, 1 },
-    LoadData2dTestParams { 112, 128, 32, true, MainLoad2dL1<half, half, half>, 2, 2, 2 },
-    LoadData2dTestParams { 112, 128, 32, true, MainLoad2dL1<float, half, half>, 4, 2, 2 },
-    LoadData2dTestParams { 112, 128, 32, false, MainLoad2dOut<int32_t, uint8_t, uint8_t>, 4, 1, 1 },
-    LoadData2dTestParams { 112, 128, 32, false, MainLoad2dOut<int32_t, int8_t, int8_t>, 4, 1, 1 },
-    LoadData2dTestParams { 112, 128, 32, false, MainLoad2dOut<int32_t, uint8_t, int8_t>, 4, 1, 1 },
-    LoadData2dTestParams { 112, 128, 32, false, MainLoad2dOut<half, half, half>, 2, 2, 2 },
-    LoadData2dTestParams { 112, 128, 32, false, MainLoad2dOut<float, half, half>, 4, 2, 2 }));
+        LoadData2dTestParams{112, 128, 32, false, MainLoad2dL1<int32_t, uint8_t, uint8_t>, 4, 1, 1},
+        LoadData2dTestParams{112, 128, 32, false, MainLoad2dL1<int32_t, int8_t, int8_t>, 4, 1, 1},
+        LoadData2dTestParams{112, 128, 32, false, MainLoad2dL1<int32_t, uint8_t, int8_t>, 4, 1, 1},
+        LoadData2dTestParams{112, 128, 32, false, MainLoad2dL1<half, half, half>, 2, 2, 2},
+        LoadData2dTestParams{112, 128, 32, false, MainLoad2dL1<float, half, half>, 4, 2, 2},
+        LoadData2dTestParams{112, 128, 32, true, MainLoad2dL1<int32_t, uint8_t, uint8_t>, 4, 1, 1},
+        LoadData2dTestParams{112, 128, 32, true, MainLoad2dL1<int32_t, int8_t, int8_t>, 4, 1, 1},
+        LoadData2dTestParams{112, 128, 32, true, MainLoad2dL1<int32_t, uint8_t, int8_t>, 4, 1, 1},
+        LoadData2dTestParams{112, 128, 32, true, MainLoad2dL1<half, half, half>, 2, 2, 2},
+        LoadData2dTestParams{112, 128, 32, true, MainLoad2dL1<float, half, half>, 4, 2, 2},
+        LoadData2dTestParams{112, 128, 32, false, MainLoad2dOut<int32_t, uint8_t, uint8_t>, 4, 1, 1},
+        LoadData2dTestParams{112, 128, 32, false, MainLoad2dOut<int32_t, int8_t, int8_t>, 4, 1, 1},
+        LoadData2dTestParams{112, 128, 32, false, MainLoad2dOut<int32_t, uint8_t, int8_t>, 4, 1, 1},
+        LoadData2dTestParams{112, 128, 32, false, MainLoad2dOut<half, half, half>, 2, 2, 2},
+        LoadData2dTestParams{112, 128, 32, false, MainLoad2dOut<float, half, half>, 4, 2, 2}));
 
 TEST_P(LoadData2dTestsuite, LoadData2dTestCase)
 {
@@ -209,12 +215,13 @@ TEST_P(LoadData2dTestsuite, LoadData2dTestCase)
     }
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_LOAD_DATA_3DV1, LoadData3dv1Testsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_LOAD_DATA_3DV1, LoadData3dv1Testsuite,
     ::testing::Values(
-    LoadData3dv1TestParams { 112, 128, 32, 0, MainLoad3dv1<int32_t, int8_t, int8_t>, 4, 1, 1 },
-    LoadData3dv1TestParams { 112, 128, 32, 0, MainLoad3dv1<half, half, half>, 2, 2, 2 },
-    LoadData3dv1TestParams { 112, 128, 32, 1, MainLoad3dv1<int32_t, int8_t, int8_t>, 4, 1, 1 },
-    LoadData3dv1TestParams { 112, 128, 32, 1, MainLoad3dv1<half, half, half>, 2, 2, 2 }));
+        LoadData3dv1TestParams{112, 128, 32, 0, MainLoad3dv1<int32_t, int8_t, int8_t>, 4, 1, 1},
+        LoadData3dv1TestParams{112, 128, 32, 0, MainLoad3dv1<half, half, half>, 2, 2, 2},
+        LoadData3dv1TestParams{112, 128, 32, 1, MainLoad3dv1<int32_t, int8_t, int8_t>, 4, 1, 1},
+        LoadData3dv1TestParams{112, 128, 32, 1, MainLoad3dv1<half, half, half>, 2, 2, 2}));
 
 TEST_P(LoadData3dv1Testsuite, LoadData3dv1TestCase)
 {

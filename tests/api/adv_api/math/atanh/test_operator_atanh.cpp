@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -21,25 +21,19 @@ enum TestMode {
 
 class TEST_ATANH : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T>
-void main_vec_atanh_level2_demo(__gm__ uint8_t *__restrict__ dstGm, __gm__ uint8_t *__restrict__ src0Gm,
-    uint32_t dataSize, TestMode testMode)
+void main_vec_atanh_level2_demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, uint32_t dataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
     GlobalTensor<T> outputGlobal;
-    input0Global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(src0Gm), dataSize);
-    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), dataSize);
+    input0Global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(src0Gm), dataSize);
+    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dataSize);
 
     TBuf<TPosition::VECCALC> tbuf1;
     tpipe.InitBuffer(tbuf1, dataSize * sizeof(T));
@@ -79,17 +73,17 @@ void main_vec_atanh_level2_demo(__gm__ uint8_t *__restrict__ dstGm, __gm__ uint8
 }
 
 #define VEC_ATANH_LEVEL2_TESTCASE(DATA_TYPE, testMode)                                 \
-    TEST_F(TEST_ATANH, Atanh##DATA_TYPE##testMode##Case)                                \
-    {                                                                                     \
-        uint32_t dataSize = 16384;                                                         \
-        uint8_t input0Gm[dataSize * sizeof(DATA_TYPE)];                                 \
-        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)];                                 \
-                                                                                          \
+    TEST_F(TEST_ATANH, Atanh##DATA_TYPE##testMode##Case)                               \
+    {                                                                                  \
+        uint32_t dataSize = 16384;                                                     \
+        uint8_t input0Gm[dataSize * sizeof(DATA_TYPE)];                                \
+        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)];                                \
+                                                                                       \
         main_vec_atanh_level2_demo<DATA_TYPE>(outputGm, input0Gm, dataSize, testMode); \
-                                                                                          \
-        for (uint32_t i = 0; i < dataSize; i++) {                                        \
-            EXPECT_EQ(outputGm[i], 0x00);                                                \
-        }                                                                                 \
+                                                                                       \
+        for (uint32_t i = 0; i < dataSize; i++) {                                      \
+            EXPECT_EQ(outputGm[i], 0x00);                                              \
+        }                                                                              \
     }
 VEC_ATANH_LEVEL2_TESTCASE(float, LEVEL0_COUNT_MODE);
 VEC_ATANH_LEVEL2_TESTCASE(half, LEVEL0_COUNT_MODE);

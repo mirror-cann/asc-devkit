@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -18,8 +18,8 @@ using namespace std;
 using namespace AscendC;
 
 template <typename T>
-__global__ __aicore__ void MainTranspose(__gm__ uint16_t* __restrict__ dstGm, __gm__ uint16_t* __restrict__ srcGm,
-    int32_t dataSize)
+__global__ __aicore__ void MainTranspose(
+    __gm__ uint16_t* __restrict__ dstGm, __gm__ uint16_t* __restrict__ srcGm, int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> input_global;
@@ -34,7 +34,6 @@ __global__ __aicore__ void MainTranspose(__gm__ uint16_t* __restrict__ dstGm, __
     TBuf<TPosition::CO2> tbuf1;
     tpipe.InitBuffer(tbuf1, dataSize * sizeof(T));
     LocalTensor<T> output_local = tbuf1.Get<T>();
-
 
     DataCopy(input_local, input_global, dataSize);
 
@@ -63,9 +62,11 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_TRANSPOSE, TransposeTestsuite,
-    ::testing::Values(TransposeTestParams { 256, 2, MainTranspose<half> },
-    TransposeTestParams { 256, 2, MainTranspose<int16_t> }, TransposeTestParams { 256, 2, MainTranspose<uint16_t> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_TRANSPOSE, TransposeTestsuite,
+    ::testing::Values(
+        TransposeTestParams{256, 2, MainTranspose<half>}, TransposeTestParams{256, 2, MainTranspose<int16_t>},
+        TransposeTestParams{256, 2, MainTranspose<uint16_t>}));
 
 TEST_P(TransposeTestsuite, TransposeTestCase)
 {

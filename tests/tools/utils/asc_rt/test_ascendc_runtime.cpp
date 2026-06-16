@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <cmath>
 #include <fstream>
@@ -41,9 +41,7 @@ extern "C" {
 class TEST_ASCENDC_RUNTIME : public testing::Test {
 protected:
     void SetUp() {}
-    void TearDown() {
-        GlobalMockObject::verify();
-    }
+    void TearDown() { GlobalMockObject::verify(); }
 };
 
 extern "C" uint32_t g_msprofReportCompactInfoCallCount;
@@ -60,8 +58,9 @@ extern "C" int64_t g_aclrtGetDeviceInfoVectorNum;
 
 static void ResetAscRtStubState();
 
-TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeProfTest){
-    const char *name = "xxx";
+TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeProfTest)
+{
+    const char* name = "xxx";
     uint32_t numBlocks = 1;
     uint32_t taskType = 0;
     const uint64_t startTime = 0;
@@ -70,8 +69,9 @@ TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeProfTest){
     EXPECT_NO_THROW(GlobalMockObject::verify());
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeProfFixTest){
-    const char *name = "xxx";
+TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeProfFixTest)
+{
+    const char* name = "xxx";
     uint32_t numBlocks = 1;
     uint32_t taskType = 10;
     const uint64_t startTime = 0;
@@ -100,9 +100,10 @@ TEST_F(TEST_ASCENDC_RUNTIME, ReportAscendProfNormalTaskDoesNotReportAdditionalIn
 }
 
 #define ASCENDC_DUMP_SIZE 75 * 1024 * 1024
-TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeRegisterTest){
-    const char *name = "sss";
-    void *handle;
+TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeRegisterTest)
+{
+    const char* name = "sss";
+    void* handle;
     size_t fileSize = 3;
     uint32_t type = 0;
     uint32_t ret;
@@ -120,7 +121,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeRegisterTest){
     UnregisterAscendBinary(handle);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeMemoryFailedTest){
+TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeMemoryFailedTest)
+{
     size_t bufsize = 16;
     uint32_t ret;
     MOCKER(aclrtMalloc).expects(once()).will(returnValue(1));
@@ -130,7 +132,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeMemoryFailedTest){
     EXPECT_NE(ret, 0);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeGetProfStatusTest){
+TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeGetProfStatusTest)
+{
     MOCKER(GetAscendProfStatus).expects(once()).will(returnValue(true));
     MOCKER(AscendProfRegister).expects(once());
     GetAscendProfStatus();
@@ -138,7 +141,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, ascendcRuntimeGetProfStatusTest){
     EXPECT_NO_THROW(GlobalMockObject::verify());
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, GetCoreNumForMixVectorCore){
+TEST_F(TEST_ASCENDC_RUNTIME, GetCoreNumForMixVectorCore)
+{
     ResetAscRtStubState();
     g_aclrtGetDeviceInfoAicoreNum = 32;
     g_aclrtGetDeviceInfoVectorNum = 16;
@@ -158,9 +162,9 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendProfRegisterRecordsCallback)
     EXPECT_NE(g_msprofLastRegisterCallback, nullptr);
 }
 
-typedef void *rtEvent_t;
-typedef void *rtStream_t;
-typedef void *rtContext_t;
+typedef void* rtEvent_t;
+typedef void* rtStream_t;
+typedef void* rtContext_t;
 
 typedef struct {
     rtStream_t stream;
@@ -168,21 +172,22 @@ typedef struct {
     rtEvent_t eventB;
 } AscendCStreamForVectorCore;
 
-extern "C" uint32_t LaunchAscendKernelForVectorCore(const char *opType, void *handle, const uint64_t key, void **args, uint32_t size,
-    const void *stream, bool enableProf, uint32_t aicNumBlocks, uint32_t aivNumBlocks, uint32_t aivNumBlocksOffset);
-extern std::unordered_map<const void *, AscendCStreamForVectorCore> g_ascStreamMap;
-extern "C" uint32_t LaunchAscendKernel(void *handle, const uint64_t key, const uint32_t numBlocks, void **args, uint32_t size,
-    const rtStream_t stream);
-extern "C" void StreamStateCallback(aclrtStream stream, aclrtStreamState state, void *args);
+extern "C" uint32_t LaunchAscendKernelForVectorCore(
+    const char* opType, void* handle, const uint64_t key, void** args, uint32_t size, const void* stream,
+    bool enableProf, uint32_t aicNumBlocks, uint32_t aivNumBlocks, uint32_t aivNumBlocksOffset);
+extern std::unordered_map<const void*, AscendCStreamForVectorCore> g_ascStreamMap;
+extern "C" uint32_t LaunchAscendKernel(
+    void* handle, const uint64_t key, const uint32_t numBlocks, void** args, uint32_t size, const rtStream_t stream);
+extern "C" void StreamStateCallback(aclrtStream stream, aclrtStreamState state, void* args);
 extern "C" uint32_t g_aclrtLaunchKernelWithHostArgsCallCount;
 extern "C" uint32_t g_aclrtLaunchKernelWithHostArgsLastNumBlocks;
 extern "C" aclrtStream g_aclrtLaunchKernelWithHostArgsLastStream;
 extern "C" size_t g_aclrtLaunchKernelWithHostArgsLastArgsSize;
 extern "C" uint32_t g_aclrtLaunchKernelWithHostArgsLastCfgAttrNum;
 extern "C" aclrtLaunchKernelAttr g_aclrtLaunchKernelWithHostArgsLastAttrs[4];
-extern "C" const char *g_aclrtRegStreamStateCallbackLastName;
+extern "C" const char* g_aclrtRegStreamStateCallbackLastName;
 extern "C" aclrtStreamStateCallback g_aclrtRegStreamStateCallbackLastCallback;
-extern "C" void *g_aclrtRegStreamStateCallbackLastArg;
+extern "C" void* g_aclrtRegStreamStateCallbackLastArg;
 extern "C" aclrtStream g_aclrtCreateStreamWithConfigLastStream;
 extern "C" aclrtEvent g_aclrtCreateEventExWithFlagLastEventA;
 extern "C" aclrtEvent g_aclrtCreateEventExWithFlagLastEventB;
@@ -243,17 +248,17 @@ static void ResetAscRtStubState()
     memset(&g_msprofLastAdditionalInfo, 0, sizeof(g_msprofLastAdditionalInfo));
 }
 
-
-TEST_F(TEST_ASCENDC_RUNTIME, StreamStateCallbackTest){
+TEST_F(TEST_ASCENDC_RUNTIME, StreamStateCallbackTest)
+{
     ResetAscRtStubState();
-    void *stream = nullptr;
-    void *args = nullptr;
+    void* stream = nullptr;
+    void* args = nullptr;
     aclrtStreamState stateCreate = ACL_RT_STREAM_STATE_CREATE_POST;
     aclrtStreamState stateDestroy = ACL_RT_STREAM_STATE_DESTROY_PRE;
     AscendCStreamForVectorCore streamForVectorCore;
-    streamForVectorCore.stream = reinterpret_cast<void *>(0x1111);
-    streamForVectorCore.eventA = reinterpret_cast<void *>(0x2222);
-    streamForVectorCore.eventB = reinterpret_cast<void *>(0x3333);
+    streamForVectorCore.stream = reinterpret_cast<void*>(0x1111);
+    streamForVectorCore.eventA = reinterpret_cast<void*>(0x2222);
+    streamForVectorCore.eventB = reinterpret_cast<void*>(0x3333);
     StreamStateCallback(stream, stateCreate, args);
     g_ascStreamMap[stream] = streamForVectorCore;
     StreamStateCallback(stream, stateDestroy, args);
@@ -264,15 +269,9 @@ TEST_F(TEST_ASCENDC_RUNTIME, StreamStateCallbackTest){
     EXPECT_EQ(g_aclrtDestroyEventLastEvent, streamForVectorCore.eventB);
 }
 
-const char *fake_rtGetSocVersion()
-{
-    return "ascend910b2";
-}
+const char* fake_rtGetSocVersion() { return "ascend910b2"; }
 
-const char *fake_rtGetSocVersion1()
-{
-    return "ascend910b22";
-}
+const char* fake_rtGetSocVersion1() { return "ascend910b22"; }
 
 TEST_F(TEST_ASCENDC_RUNTIME, TestAscendCheckSoCVersion)
 {
@@ -294,14 +293,15 @@ TEST_F(TEST_ASCENDC_RUNTIME, TestAscendCheckSoCVersion)
     EXPECT_EQ(ret, false);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, LaunchAscendKernelA){
-    void * handle = nullptr;
-    void *stream = nullptr;
-    void **args = nullptr;
+TEST_F(TEST_ASCENDC_RUNTIME, LaunchAscendKernelA)
+{
+    void* handle = nullptr;
+    void* stream = nullptr;
+    void** args = nullptr;
     const uint32_t numBlocks = 0;
     uint32_t size = 0;
     const uint64_t key = 0;
-    aclrtLaunchKernelCfg *cfg = nullptr;
+    aclrtLaunchKernelCfg* cfg = nullptr;
     aclrtLaunchKernelWithConfig(handle, numBlocks, stream, cfg, nullptr, nullptr);
     uint32_t ret = LaunchAscendKernel(handle, key, numBlocks, args, size, stream);
     EXPECT_EQ(ret, 0);
@@ -310,12 +310,11 @@ TEST_F(TEST_ASCENDC_RUNTIME, LaunchAscendKernelA){
 TEST_F(TEST_ASCENDC_RUNTIME, LaunchAscendKernelForVectorCoreLaunchesAicAndAivWithExpectedCfg)
 {
     ResetAscRtStubState();
-    void *handle = nullptr;
-    void *stream = reinterpret_cast<void *>(0x5000);
-    void *arg0 = reinterpret_cast<void *>(0x6000);
-    void **args = &arg0;
-    uint32_t ret = LaunchAscendKernelForVectorCore("mix_vector", handle, 0, args, sizeof(arg0), stream, false,
-        6, 4, 6);
+    void* handle = nullptr;
+    void* stream = reinterpret_cast<void*>(0x5000);
+    void* arg0 = reinterpret_cast<void*>(0x6000);
+    void** args = &arg0;
+    uint32_t ret = LaunchAscendKernelForVectorCore("mix_vector", handle, 0, args, sizeof(arg0), stream, false, 6, 4, 6);
     EXPECT_EQ(ret, 0U);
     EXPECT_EQ(g_aclrtCreateStreamWithConfigCallCount, 1U);
     EXPECT_EQ(g_aclrtCreateEventExWithFlagCallCount, 2U);
@@ -337,12 +336,12 @@ TEST_F(TEST_ASCENDC_RUNTIME, LaunchAscendKernelForVectorCoreLaunchesAicAndAivWit
 TEST_F(TEST_ASCENDC_RUNTIME, LaunchAscendKernelForVectorCoreWithProfilingReportsBothTasks)
 {
     ResetAscRtStubState();
-    void *handle = nullptr;
-    void *stream = reinterpret_cast<void *>(0x7000);
-    void *arg0 = reinterpret_cast<void *>(0x8000);
-    void **args = &arg0;
-    uint32_t ret = LaunchAscendKernelForVectorCore("mix_vector_prof", handle, 0, args, sizeof(arg0), stream, true,
-        3, 5, 3);
+    void* handle = nullptr;
+    void* stream = reinterpret_cast<void*>(0x7000);
+    void* arg0 = reinterpret_cast<void*>(0x8000);
+    void** args = &arg0;
+    uint32_t ret =
+        LaunchAscendKernelForVectorCore("mix_vector_prof", handle, 0, args, sizeof(arg0), stream, true, 3, 5, 3);
     EXPECT_EQ(ret, 0U);
     EXPECT_EQ(g_msprofReportApiCallCount, 2U);
     EXPECT_EQ(g_msprofReportCompactInfoCallCount, 2U);
@@ -354,16 +353,16 @@ TEST_F(TEST_ASCENDC_RUNTIME, LaunchAscendKernelForVectorCoreWithProfilingReports
 TEST_F(TEST_ASCENDC_RUNTIME, LaunchAscendKernelForVectorCoreReusesExistingSubStream)
 {
     ResetAscRtStubState();
-    void *mainStream = reinterpret_cast<void *>(0x9000);
+    void* mainStream = reinterpret_cast<void*>(0x9000);
     AscendCStreamForVectorCore streamForVectorCore;
-    streamForVectorCore.stream = reinterpret_cast<void *>(0x9001);
-    streamForVectorCore.eventA = reinterpret_cast<void *>(0x9002);
-    streamForVectorCore.eventB = reinterpret_cast<void *>(0x9003);
+    streamForVectorCore.stream = reinterpret_cast<void*>(0x9001);
+    streamForVectorCore.eventA = reinterpret_cast<void*>(0x9002);
+    streamForVectorCore.eventB = reinterpret_cast<void*>(0x9003);
     g_ascStreamMap[mainStream] = streamForVectorCore;
-    void *arg0 = reinterpret_cast<void *>(0x9004);
-    void **args = &arg0;
-    uint32_t ret = LaunchAscendKernelForVectorCore("mix_vector_reuse", nullptr, 0, args, sizeof(arg0), mainStream,
-        false, 2, 1, 2);
+    void* arg0 = reinterpret_cast<void*>(0x9004);
+    void** args = &arg0;
+    uint32_t ret =
+        LaunchAscendKernelForVectorCore("mix_vector_reuse", nullptr, 0, args, sizeof(arg0), mainStream, false, 2, 1, 2);
     EXPECT_EQ(ret, 0U);
     EXPECT_EQ(g_aclrtCreateStreamWithConfigCallCount, 0U);
     EXPECT_EQ(g_aclrtCreateEventExWithFlagCallCount, 0U);
@@ -373,7 +372,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, LaunchAscendKernelForVectorCoreReusesExistingSubStr
     EXPECT_EQ(g_aclrtStreamWaitEventLastEvent, streamForVectorCore.eventB);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendDevBinaryLazyRegister) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendDevBinaryLazyRegister)
+{
     const char* binBuf = "test_binary";
     size_t binSize = strlen(binBuf);
     void** handle = nullptr;
@@ -381,7 +381,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendDevBinaryLazyRegister) {
     EXPECT_EQ(ret, 0);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendGetFuncFromBinary) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendGetFuncFromBinary)
+{
     void* const binHandle = nullptr;
     const char* kernelName = "test_kernel";
     void** funcHandle = nullptr;
@@ -409,8 +410,8 @@ typedef struct {
     unsigned short taskRation1;
 } AscendCFunMetaMixCoreTypeUt;
 
-rtError_t RtFunctionGetMetaInfoSuccessStub(const rtFuncHandle funcHandle, const rtFunctionMetaType type, void *data,
-    const uint32_t length)
+rtError_t RtFunctionGetMetaInfoSuccessStub(
+    const rtFuncHandle funcHandle, const rtFunctionMetaType type, void* data, const uint32_t length)
 {
     if (type == RT_FUNCTION_TYPE_KERNEL_TYPE) {
         reinterpret_cast<AscendCFunMetaKTypeUt*>(data)->ktype = K_TYPE_AIV;
@@ -425,199 +426,227 @@ rtError_t RtFunctionGetMetaInfoSuccessStub(const rtFuncHandle funcHandle, const 
     return 1;
 }
 
-aclError AclrtMallocHostFailedStub(void **hostPtr, size_t size)
+aclError AclrtMallocHostFailedStub(void** hostPtr, size_t size) { return 1; }
+
+rtError_t RtFunctionGetMetaInfoSizeFailedStub(
+    const rtFuncHandle funcHandle, const rtFunctionMetaType type, size_t* size)
 {
     return 1;
 }
 
-rtError_t RtFunctionGetMetaInfoSizeFailedStub(const rtFuncHandle funcHandle, const rtFunctionMetaType type,
-    size_t *size)
-{
-    return 1;
-}
-
-uint32_t AscendCFunctionGetMetaInfoKtypeStubMax(void *funcHandle, unsigned int *curKernelType)
+uint32_t AscendCFunctionGetMetaInfoKtypeStubMax(void* funcHandle, unsigned int* curKernelType)
 {
     *curKernelType = K_TYPE_MAX;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKtypeStubAicore(void *funcHandle, unsigned int *curKernelType)
+uint32_t AscendCFunctionGetMetaInfoKtypeStubAicore(void* funcHandle, unsigned int* curKernelType)
 {
     *curKernelType = K_TYPE_AICORE;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKtypeStubAic(void *funcHandle, unsigned int *curKernelType)
+uint32_t AscendCFunctionGetMetaInfoKtypeStubAic(void* funcHandle, unsigned int* curKernelType)
 {
     *curKernelType = K_TYPE_AIC;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKtypeStubAiv(void *funcHandle, unsigned int *curKernelType)
+uint32_t AscendCFunctionGetMetaInfoKtypeStubAiv(void* funcHandle, unsigned int* curKernelType)
 {
     *curKernelType = K_TYPE_AIV;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKtypeStubMixAic(void *funcHandle, unsigned int *curKernelType)
+uint32_t AscendCFunctionGetMetaInfoKtypeStubMixAic(void* funcHandle, unsigned int* curKernelType)
 {
     *curKernelType = K_TYPE_MIX_AIC_MAIN;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKtypeStubMixAiv(void *funcHandle, unsigned int *curKernelType)
+uint32_t AscendCFunctionGetMetaInfoKtypeStubMixAiv(void* funcHandle, unsigned int* curKernelType)
 {
     *curKernelType = K_TYPE_MIX_AIV_MAIN;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKCoreRation0_1(void *funcHandle, unsigned short *coreAicRation,
-    unsigned short *coreAivRation)
+uint32_t AscendCFunctionGetMetaInfoKCoreRation0_1(
+    void* funcHandle, unsigned short* coreAicRation, unsigned short* coreAivRation)
 {
     *coreAicRation = 0;
     *coreAivRation = 1;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKCoreRation1_0(void *funcHandle, unsigned short *coreAicRation,
-    unsigned short *coreAivRation)
+uint32_t AscendCFunctionGetMetaInfoKCoreRation1_0(
+    void* funcHandle, unsigned short* coreAicRation, unsigned short* coreAivRation)
 {
     *coreAicRation = 1;
     *coreAivRation = 0;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKCoreRation1_1(void *funcHandle, unsigned short *coreAicRation,
-    unsigned short *coreAivRation)
+uint32_t AscendCFunctionGetMetaInfoKCoreRation1_1(
+    void* funcHandle, unsigned short* coreAicRation, unsigned short* coreAivRation)
 {
     *coreAicRation = 1;
     *coreAivRation = 1;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKCoreRation1_2(void *funcHandle, unsigned short *coreAicRation,
-    unsigned short *coreAivRation)
+uint32_t AscendCFunctionGetMetaInfoKCoreRation1_2(
+    void* funcHandle, unsigned short* coreAicRation, unsigned short* coreAivRation)
 {
     *coreAicRation = 1;
     *coreAivRation = 2;
     return 0;
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_unknown_soc) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_unknown_soc)
+{
     void* funcHandle = nullptr;
     uint32_t numBlocks = 1;
     void* stream = nullptr;
     void* hostArgs = nullptr;
     size_t argsSize = 0;
     uint32_t ubufDynamicSize = 0;
-    EXPECT_EXIT({
-        MOCKER(aclrtGetSocName).stubs().will(returnValue(static_cast<char const*>(nullptr)));
-        int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
-        exit(ret == 0 ? 0 : 1);
-    }, ::testing::ExitedWithCode(1), "");
+    EXPECT_EXIT(
+        {
+            MOCKER(aclrtGetSocName).stubs().will(returnValue(static_cast<char const*>(nullptr)));
+            int32_t ret =
+                AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
+            exit(ret == 0 ? 0 : 1);
+        },
+        ::testing::ExitedWithCode(1), "");
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_unsupport_soc) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_unsupport_soc)
+{
     void* funcHandle = nullptr;
     uint32_t numBlocks = 1;
     void* stream = nullptr;
     void* hostArgs = nullptr;
     size_t argsSize = 0;
     uint32_t ubufDynamicSize = 0;
-    EXPECT_EXIT({
-        MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"UnsupportedSoc"));
-        int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
-        exit(ret == 0 ? 0 : 1);
-    }, ::testing::ExitedWithCode(1), "");
+    EXPECT_EXIT(
+        {
+            MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"UnsupportedSoc"));
+            int32_t ret =
+                AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
+            exit(ret == 0 ? 0 : 1);
+        },
+        ::testing::ExitedWithCode(1), "");
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_910B) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_910B)
+{
     void* funcHandle = nullptr;
     uint32_t numBlocks = 1;
     void* stream = nullptr;
     void* hostArgs = nullptr;
     size_t argsSize = 0;
     uint32_t ubufDynamicSize = 0;
-    EXPECT_EXIT({
-        MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend910B"));
-        int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, 0);
-        exit(ret == 0 ? 0 : 1);
-    }, ::testing::ExitedWithCode(0), "");
+    EXPECT_EXIT(
+        {
+            MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend910B"));
+            int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, 0);
+            exit(ret == 0 ? 0 : 1);
+        },
+        ::testing::ExitedWithCode(0), "");
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_310P_aicore) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_310P_aicore)
+{
     void* funcHandle = nullptr;
     uint32_t numBlocks = 1;
     void* stream = nullptr;
     void* hostArgs = nullptr;
     size_t argsSize = 0;
     uint32_t ubufDynamicSize = 0;
-    EXPECT_EXIT({
-        MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend310P"));
-        MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAicore));
-        int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
-        exit(ret == 0 ? 0 : 1);
-    }, ::testing::ExitedWithCode(0), "");
+    EXPECT_EXIT(
+        {
+            MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend310P"));
+            MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAicore));
+            int32_t ret =
+                AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
+            exit(ret == 0 ? 0 : 1);
+        },
+        ::testing::ExitedWithCode(0), "");
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_310P_mix_vector_core) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_310P_mix_vector_core)
+{
     void* funcHandle = nullptr;
     uint32_t numBlocks = 1;
     void* stream = nullptr;
     void* hostArgs = nullptr;
     size_t argsSize = 0;
     uint32_t ubufDynamicSize = 0;
-    EXPECT_EXIT({
-        MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend310P"));
-        MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAiv));
-        int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
-        exit(ret == 0 ? 0 : 1);
-    }, ::testing::ExitedWithCode(1), "");
+    EXPECT_EXIT(
+        {
+            MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend310P"));
+            MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAiv));
+            int32_t ret =
+                AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
+            exit(ret == 0 ? 0 : 1);
+        },
+        ::testing::ExitedWithCode(1), "");
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_950) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_950)
+{
     void* funcHandle = nullptr;
     uint32_t numBlocks = 1;
     void* stream = nullptr;
     void* hostArgs = nullptr;
     size_t argsSize = 0;
     uint32_t ubufDynamicSize = 512;
-    EXPECT_EXIT({
-        MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend950"));
-        int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
-        exit(ret == 0 ? 0 : 1);
-    }, ::testing::ExitedWithCode(0), "");
+    EXPECT_EXIT(
+        {
+            MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend950"));
+            int32_t ret =
+                AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
+            exit(ret == 0 ? 0 : 1);
+        },
+        ::testing::ExitedWithCode(0), "");
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_950_without_dynamic_ubuf) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_950_without_dynamic_ubuf)
+{
     void* funcHandle = nullptr;
     uint32_t numBlocks = 2;
     void* stream = nullptr;
     void* hostArgs = nullptr;
     size_t argsSize = 0;
-    EXPECT_EXIT({
-        MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend950"));
-        int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, 0);
-        exit(ret == 0 ? 0 : 1);
-    }, ::testing::ExitedWithCode(0), "");
+    EXPECT_EXIT(
+        {
+            MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend950"));
+            int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, 0);
+            exit(ret == 0 ? 0 : 1);
+        },
+        ::testing::ExitedWithCode(0), "");
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_350) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendLaunchKernelWithHostArgs_350)
+{
     void* funcHandle = nullptr;
     uint32_t numBlocks = 1;
     void* stream = nullptr;
     void* hostArgs = nullptr;
     size_t argsSize = 0;
     uint32_t ubufDynamicSize = 512;
-    EXPECT_EXIT({
-        MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend350"));
-        int32_t ret = AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
-        exit(ret == 0 ? 0 : 1);
-    }, ::testing::ExitedWithCode(0), "");
+    EXPECT_EXIT(
+        {
+            MOCKER(aclrtGetSocName).stubs().will(returnValue((const char*)"Ascend350"));
+            int32_t ret =
+                AscendLaunchKernelWithHostArgs(funcHandle, numBlocks, stream, hostArgs, argsSize, ubufDynamicSize);
+            exit(ret == 0 ? 0 : 1);
+        },
+        ::testing::ExitedWithCode(0), "");
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtype) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtype)
+{
     void* funcHandle = nullptr;
     unsigned int kernelType = 5;
     MOCKER(rtFunctionGetMetaInfo).stubs().will(invoke(RtFunctionGetMetaInfoSuccessStub));
@@ -626,7 +655,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtype) {
     EXPECT_EQ(kernelType, K_TYPE_AIV);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRation) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRation)
+{
     void* funcHandle = nullptr;
     unsigned short aicRation;
     unsigned short aivRation;
@@ -637,7 +667,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRation) {
     EXPECT_EQ(aivRation, 2);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeSizeFailed) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeSizeFailed)
+{
     void* funcHandle = nullptr;
     unsigned int kernelType = 5;
     MOCKER(rtFunctionGetMetaInfoSize).stubs().will(invoke(RtFunctionGetMetaInfoSizeFailedStub));
@@ -645,7 +676,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeSizeFailed) {
     EXPECT_EQ(ret, 1);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationSizeFailed) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationSizeFailed)
+{
     void* funcHandle = nullptr;
     unsigned short aicRation;
     unsigned short aivRation;
@@ -654,7 +686,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationSizeFailed) {
     EXPECT_EQ(ret, 1);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeMallocHostFailed) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeMallocHostFailed)
+{
     void* funcHandle = nullptr;
     unsigned int kernelType = 5;
     MOCKER(aclrtMallocHost).stubs().will(invoke(AclrtMallocHostFailedStub));
@@ -662,7 +695,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeMallocHostFailed) {
     EXPECT_EQ(ret, 1);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationMallocHostFailed) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationMallocHostFailed)
+{
     void* funcHandle = nullptr;
     unsigned short aicRation;
     unsigned short aivRation;
@@ -671,7 +705,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationMallocHostFaile
     EXPECT_EQ(ret, 1);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeFailed) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeFailed)
+{
     void* funcHandle = nullptr;
     unsigned int kernelType = 5;
     MOCKER(rtFunctionGetMetaInfo).stubs().will(returnValue(1));
@@ -679,7 +714,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeFailed) {
     EXPECT_EQ(ret, 1);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationFailed) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationFailed)
+{
     void* funcHandle = nullptr;
     unsigned short aicRation;
     unsigned short aivRation;
@@ -688,14 +724,16 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationFailed) {
     EXPECT_EQ(ret, 1);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplGetKtypeFailed) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplGetKtypeFailed)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(returnValue(1));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
     EXPECT_EQ(ret, 5);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplGetCoreRationFailed) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplGetCoreRationFailed)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMixAic));
     MOCKER(AscendCFunctionGetMetaInfoCoreRation).stubs().will(returnValue(1));
@@ -703,7 +741,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplGetCoreRationFailed) {
     EXPECT_EQ(ret, 5);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAiv1_0) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAiv1_0)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMixAiv));
     MOCKER(AscendCFunctionGetMetaInfoCoreRation).stubs().will(invoke(AscendCFunctionGetMetaInfoKCoreRation0_1));
@@ -711,7 +750,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAiv1_0) {
     EXPECT_EQ(ret, 7);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_0) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_0)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMixAic));
     MOCKER(AscendCFunctionGetMetaInfoCoreRation).stubs().will(invoke(AscendCFunctionGetMetaInfoKCoreRation1_0));
@@ -719,7 +759,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_0) {
     EXPECT_EQ(ret, 8);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_1) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_1)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMixAic));
     MOCKER(AscendCFunctionGetMetaInfoCoreRation).stubs().will(invoke(AscendCFunctionGetMetaInfoKCoreRation1_1));
@@ -727,7 +768,8 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_1) {
     EXPECT_EQ(ret, 9);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_2) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_2)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMixAic));
     MOCKER(AscendCFunctionGetMetaInfoCoreRation).stubs().will(invoke(AscendCFunctionGetMetaInfoKCoreRation1_2));
@@ -735,54 +777,60 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_2) {
     EXPECT_EQ(ret, 10);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAic) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAic)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAic));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
     EXPECT_EQ(ret, 6);
 }
 
-uint32_t AscendCFunctionGetMetaInfoKtypeStubAicRollback(void *funcHandle, unsigned int *curKernelType)
+uint32_t AscendCFunctionGetMetaInfoKtypeStubAicRollback(void* funcHandle, unsigned int* curKernelType)
 {
     *curKernelType = K_TYPE_AIC_ROLLBACK;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKtypeStubAivRollback(void *funcHandle, unsigned int *curKernelType)
+uint32_t AscendCFunctionGetMetaInfoKtypeStubAivRollback(void* funcHandle, unsigned int* curKernelType)
 {
     *curKernelType = K_TYPE_AIV_ROLLBACK;
     return 0;
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAiv) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAiv)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAiv));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
     EXPECT_EQ(ret, 5);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAicRollback) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAicRollback)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAicRollback));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
     EXPECT_EQ(ret, 6);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAivRollback) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAivRollback)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAivRollback));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
     EXPECT_EQ(ret, 5);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAicore) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAicore)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAicore));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
     EXPECT_EQ(ret, 2);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplothers) {
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplothers)
+{
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMax));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);

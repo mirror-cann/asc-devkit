@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file test_m_loop_norm.cpp
@@ -29,15 +29,13 @@
 using namespace std;
 using namespace AscendC;
 
-
 namespace {
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG,
-          class MM_CB, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl :
-    MATMUL_IMPORT_MODULE_PRIVATE(MLoop),
-    MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
-    MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+    MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE_PRIVATE(MLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeInfo),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling) {
     MATMUL_ALLOW_USING_PRIVATE(MLoop);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeInfo);
     MATMUL_ALLOW_USING_PRIVATE(MatmulShapeTiling);
@@ -49,16 +47,16 @@ public:
     MATMUL_USE_MODULE(MatmulShapeTiling);
     MATMUL_USE_MODULE(MatmulShapeInfo);
 
-    MatmulImpl() {
-        InitVar();
-    }
+    MatmulImpl() { InitVar(); }
 
-    void InitVar() {
+    void InitVar()
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
     }
 
-    void SetInitParams(int32_t singleCoreM, int32_t baseM, int32_t stepM) {
+    void SetInitParams(int32_t singleCoreM, int32_t baseM, int32_t stepM)
+    {
         MATMUL_MODULE(MatmulShapeInfo)->SetSingleCoreM(singleCoreM);
         tiling.singleCoreM = singleCoreM;
         tiling.baseM = baseM;
@@ -66,17 +64,14 @@ public:
         tiling.iterateOrder = 0;
     }
 
-    int32_t GetSingleShape()
-    {
-        return MATMUL_MODULE(MatmulShapeInfo)->GetSingleCoreM();
-    }
+    int32_t GetSingleShape() { return MATMUL_MODULE(MatmulShapeInfo)->GetSingleCoreM(); }
 
 private:
     TCubeTiling tiling;
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class TestMLoopNorm : public testing::Test {
 protected:
@@ -92,25 +87,27 @@ private:
     MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM, void> mm;
 };
 
-TEST_F(TestMLoopNorm, first_iter) {
+TEST_F(TestMLoopNorm, first_iter)
+{
     mm.SetInitParams(1793, 128, 4);
-    mm.Init(mm.GetSingleShape());           // SetSingleShape
+    mm.Init(mm.GetSingleShape()); // SetSingleShape
     mm.OuterStart();
     mm.InnerStart();
     // Outer
-    EXPECT_EQ(mm.GetTotalIter(), 15);       // totalIter
+    EXPECT_EQ(mm.GetTotalIter(), 15); // totalIter
     EXPECT_EQ(mm.GetOuterIdx(), 0);
-    EXPECT_EQ(mm.GetOuterIter(), 4);        // outerIter
-    EXPECT_EQ(mm.GetTileShape(), 128);      // mainTileShape
-    EXPECT_EQ(mm.GetTileBlockShape(), 8);   // Ceil(mainTileShape, BLOCK_CUBE)
+    EXPECT_EQ(mm.GetOuterIter(), 4);      // outerIter
+    EXPECT_EQ(mm.GetTileShape(), 128);    // mainTileShape
+    EXPECT_EQ(mm.GetTileBlockShape(), 8); // Ceil(mainTileShape, BLOCK_CUBE)
     // Inner
     EXPECT_EQ(mm.GetInnerIdx(), 0);
-    EXPECT_EQ(mm.GetInnerIter(), 4);        // stepM
-    EXPECT_EQ(mm.GetBaseShape(), 128);      // baseShape
-    EXPECT_EQ(mm.GetBaseBlockShape(), 8);   // Ceil(baseShape, BLOCK_CUBE)
+    EXPECT_EQ(mm.GetInnerIter(), 4);      // stepM
+    EXPECT_EQ(mm.GetBaseShape(), 128);    // baseShape
+    EXPECT_EQ(mm.GetBaseBlockShape(), 8); // Ceil(baseShape, BLOCK_CUBE)
 }
 
-TEST_F(TestMLoopNorm, inner_end) {
+TEST_F(TestMLoopNorm, inner_end)
+{
     mm.SetInitParams(1793, 128, 4);
     mm.Init(mm.GetSingleShape());
     mm.OuterStart();
@@ -129,7 +126,8 @@ TEST_F(TestMLoopNorm, inner_end) {
     EXPECT_TRUE(mm.InnerEnd());
 }
 
-TEST_F(TestMLoopNorm, outer_end) {
+TEST_F(TestMLoopNorm, outer_end)
+{
     mm.SetInitParams(1793, 128, 4);
     mm.Init(mm.GetSingleShape());
     mm.OuterStart();
@@ -146,7 +144,7 @@ TEST_F(TestMLoopNorm, outer_end) {
     EXPECT_FALSE(mm.OuterEnd());
     mm.OuterNext();
     // tail
-    EXPECT_EQ(mm.GetTileShape(), 128);      // tailTileShape
-    EXPECT_EQ(mm.GetTileBlockShape(), 8);   // Ceil(tailTileShape, BLOCK_CUBE)
+    EXPECT_EQ(mm.GetTileShape(), 128);    // tailTileShape
+    EXPECT_EQ(mm.GetTileBlockShape(), 8); // Ceil(tailTileShape, BLOCK_CUBE)
     EXPECT_TRUE(mm.OuterEnd());
 }

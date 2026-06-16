@@ -185,7 +185,7 @@ struct FixpipeInputParams {
         } else {                                                                                                      \
             fixpipeParams = {coutBlocks, static_cast<uint16_t>(howo * 16 * l1OutTSize / 32), 0, 0};                   \
         }                                                                                                             \
-        fixpipeFunc(deqMode, static_cast<uint64_t>(0.5), reluEn, fixpipeParams);                                         \
+        fixpipeFunc(deqMode, static_cast<uint64_t>(0.5), reluEn, fixpipeParams);                                      \
         if (fixpipeParams.quantParams.quantPre == QuantMode_t::VDEQF16 ||                                             \
             fixpipeParams.quantParams.quantPre == QuantMode_t::VQF322B8_PRE ||                                        \
             fixpipeParams.quantParams.quantPre == QuantMode_t::VREQ8) {                                               \

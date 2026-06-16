@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "graph/tensor.h"
 #include <dlfcn.h>
@@ -101,12 +101,16 @@ TEST_F(TestTiling, TestMxMatmulFP8NDTilingCase2)
 
 TEST_F(TestTiling, MultiCoreSmallMNFP4)
 {
-    matmul_tiling::MultiCoreMatmulTiling rnnMatmul3,rnnMatmul4,rnnMatmul5;
-    rnnMatmul3.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT4_E1M2);
-    rnnMatmul3.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT4_E1M2);
-    rnnMatmul3.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul3.SetBiasType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul3.SetSingleRange(-1,-1,-1,-1,-1,-1);
+    matmul_tiling::MultiCoreMatmulTiling rnnMatmul3, rnnMatmul4, rnnMatmul5;
+    rnnMatmul3.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT4_E1M2);
+    rnnMatmul3.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT4_E1M2);
+    rnnMatmul3.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
+    rnnMatmul3.SetBiasType(
+        matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
+    rnnMatmul3.SetSingleRange(-1, -1, -1, -1, -1, -1);
     rnnMatmul3.EnableMultiCoreSplitK(true);
     auto ret = rnnMatmul3.EnableBias(true);
     ret = rnnMatmul3.SetDim(32);
@@ -120,12 +124,16 @@ TEST_F(TestTiling, MultiCoreSmallMNFP4)
 
 TEST_F(TestTiling, MultiCoreSmallMNFP8)
 {
-    matmul_tiling::MultiCoreMatmulTiling rnnMatmul3,rnnMatmul4,rnnMatmul5;
-    rnnMatmul3.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT8_E4M3FN);
-    rnnMatmul3.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT8_E4M3FN);
-    rnnMatmul3.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul3.SetBiasType(matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
-    rnnMatmul3.SetSingleRange(-1,-1,-1,-1,-1,-1);
+    matmul_tiling::MultiCoreMatmulTiling rnnMatmul3, rnnMatmul4, rnnMatmul5;
+    rnnMatmul3.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT8_E4M3FN);
+    rnnMatmul3.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT8_E4M3FN);
+    rnnMatmul3.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::NZ, matmul_tiling::DataType ::DT_FLOAT);
+    rnnMatmul3.SetBiasType(
+        matmul_tiling::TPosition::VECCALC, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType ::DT_FLOAT);
+    rnnMatmul3.SetSingleRange(-1, -1, -1, -1, -1, -1);
     rnnMatmul3.EnableMultiCoreSplitK(true);
     auto ret = rnnMatmul3.EnableBias(true);
     ret = rnnMatmul3.SetDim(32);
@@ -149,7 +157,7 @@ TEST_F(TestTiling, TestMxMatmulFP8NDTiling_CaseTscm)
 
     tiling.SetShape(1, 1920, 64);
     tiling.SetOrgShape(1, 1920, 64);
-    
+
     tiling.SetBias(false);
     tiling.SetBufferSpace(-1, -1, -1, -1);
     tiling.SetMadType(MatrixMadType::MXMODE);
@@ -341,7 +349,7 @@ TEST_F(TestTiling, TestBitwiseNotTiling)
     const platform_ascendc::PlatformAscendC plat = platform_ascendc::PlatformAscendC(&platformInfo);
     uint32_t maxVal = 0;
     uint32_t minVal = 0;
-    std::vector<int64_t> shapeDims = { 128 };
+    std::vector<int64_t> shapeDims = {128};
     auto shape = ge::Shape(shapeDims);
     GetBitwiseNotMaxMinTmpSize(plat, shape, sizeof(float), false, maxVal, minVal);
     EXPECT_EQ(maxVal, 0);
@@ -359,7 +367,7 @@ TEST_F(TestTiling, TestBitwiseOrTiling)
     const platform_ascendc::PlatformAscendC plat = platform_ascendc::PlatformAscendC(&platformInfo);
     uint32_t maxVal = 0;
     uint32_t minVal = 0;
-    std::vector<int64_t> shapeDims = { 128 };
+    std::vector<int64_t> shapeDims = {128};
     auto shape = ge::Shape(shapeDims);
     GetBitwiseOrMaxMinTmpSize(plat, shape, sizeof(float), false, maxVal, minVal);
     EXPECT_EQ(maxVal, 0);
@@ -377,7 +385,7 @@ TEST_F(TestTiling, TestBitwiseXorTiling)
     const platform_ascendc::PlatformAscendC plat = platform_ascendc::PlatformAscendC(&platformInfo);
     uint32_t maxVal = 0;
     uint32_t minVal = 0;
-    std::vector<int64_t> shapeDims = { 128 };
+    std::vector<int64_t> shapeDims = {128};
     auto shape = ge::Shape(shapeDims);
     GetBitwiseXorMaxMinTmpSize(plat, shape, sizeof(float), false, maxVal, minVal);
     EXPECT_EQ(maxVal, 0);
@@ -394,7 +402,7 @@ TEST_F(TestTiling, TestLogicalXorTiling)
     fe::PlatFormInfos platformInfo;
     uint32_t typeSize = 2u;
     auto plat = platform_ascendc::PlatformAscendC(&platformInfo);
-    auto LogicalXorShape = ge::Shape({128,128});
+    auto LogicalXorShape = ge::Shape({128, 128});
     uint32_t maxValue = 0;
     uint32_t minValue = 0;
     GetLogicalXorMaxMinTmpSize(plat, LogicalXorShape, sizeof(float), false, maxValue, minValue);
@@ -406,7 +414,7 @@ TEST_F(TestTiling, TestLogicalXorTiling)
     GetLogicalXorTmpBufferFactorSize(plat, sizeof(float), maxLivedNodesCnt, extraBuf);
     EXPECT_EQ(maxLivedNodesCnt, 0);
     EXPECT_EQ(extraBuf, 0);
-    
+
     GetLogicalXorMaxMinTmpSize(plat, LogicalXorShape, typeSize, false, maxValue, minValue);
     EXPECT_EQ(minValue, 0);
     EXPECT_EQ(maxValue, 0);

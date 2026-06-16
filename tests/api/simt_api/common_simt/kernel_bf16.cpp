@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_bf16.cpp
@@ -17,10 +17,10 @@
 #include "kernel_utils.h"
 
 namespace bfloat16 {
-uint16_t Bf16T::FloatToBf16(const float &fVal) const
+uint16_t Bf16T::FloatToBf16(const float& fVal) const
 {
     float fpVal = fVal;
-    uint32_t ui32Val = AscendC::GetScalarBitcodeValue<float, uint32_t>(fpVal);  // 1:8:23bit sign:exp:man
+    uint32_t ui32Val = AscendC::GetScalarBitcodeValue<float, uint32_t>(fpVal); // 1:8:23bit sign:exp:man
     uint16_t sRet = Fp32ExtracSign(ui32Val);
     if (Fp32IsInf(ui32Val)) {
         return (BF16_EXP_MASK | (sRet << BF16_SIGN_INDEX));
@@ -30,7 +30,7 @@ uint16_t Bf16T::FloatToBf16(const float &fVal) const
         return BF16_ABS_MAX;
     }
     uint32_t expFp = Fp32ExtracExp(ui32Val);
-    uint32_t manFp = (ui32Val & FP32_MAN_MASK);  // 23 bit mantissa dont't need to care about denormal
+    uint32_t manFp = (ui32Val & FP32_MAN_MASK); // 23 bit mantissa dont't need to care about denormal
     manFp = (manFp | FP32_MAN_HIDE_BIT);
 
     uint32_t mLenDelta = FP32_MAN_LEN - BF16_MAN_LEN;
@@ -90,7 +90,7 @@ static float Bf16ToFloat(const uint16_t& fpVal)
     return ret;
 }
 
-Bf16T &Bf16T::operator=(const Bf16T &fp)
+Bf16T& Bf16T::operator=(const Bf16T& fp)
 {
     if (&fp == this) {
         return *this;
@@ -99,7 +99,7 @@ Bf16T &Bf16T::operator=(const Bf16T &fp)
     return *this;
 }
 
-Bf16T &Bf16T::operator=(const float &fVal)
+Bf16T& Bf16T::operator=(const float& fVal)
 {
     val = FloatToBf16(fVal);
     return *this;
@@ -121,8 +121,8 @@ uint16_t Bf16T::Bf16Compute(uint16_t fp1, uint16_t fp2, uint16_t mode) const
     if (nanStatus) {
         return BF16_NAN; // nan
     } else if (infStatus) {
-        return Bf16IsInf(fp1) ? static_cast<uint16_t>(BF16_INFINITY | (Bf16ExtracSign(fp1) << BF16_SIGN_INDEX))
-                              : static_cast<uint16_t>(BF16_INFINITY | (Bf16ExtracSign(fp2) << BF16_SIGN_INDEX));
+        return Bf16IsInf(fp1) ? static_cast<uint16_t>(BF16_INFINITY | (Bf16ExtracSign(fp1) << BF16_SIGN_INDEX)) :
+                                static_cast<uint16_t>(BF16_INFINITY | (Bf16ExtracSign(fp2) << BF16_SIGN_INDEX));
     }
 
     float f1 = Bf16ToFloat(fp1);
@@ -153,7 +153,7 @@ uint16_t Bf16T::Bf16Sub(uint16_t fp1, uint16_t fp2) const
 }
 
 // operate
-Bf16T Bf16T::operator + (const Bf16T fp) const
+Bf16T Bf16T::operator+(const Bf16T fp) const
 {
     uint16_t retVal = Bf16Add(val, fp.val);
     Bf16T ret;
@@ -161,7 +161,7 @@ Bf16T Bf16T::operator + (const Bf16T fp) const
     return ret;
 }
 
-Bf16T Bf16T::operator - (const Bf16T fp) const
+Bf16T Bf16T::operator-(const Bf16T fp) const
 {
     uint16_t retVal = Bf16Sub(val, fp.val);
     Bf16T ret;
@@ -181,13 +181,7 @@ Bf16T Bf16T::operator-=(const Bf16T fp)
     return *this;
 }
 
-Bf16T::operator float() const
-{
-    return Bf16ToFloat(val);
-}
+Bf16T::operator float() const { return Bf16ToFloat(val); }
 
-float Bf16T::ToFloat() const
-{
-    return Bf16ToFloat(val);
-}
-}  // namespace bfloat16
+float Bf16T::ToFloat() const { return Bf16ToFloat(val); }
+} // namespace bfloat16

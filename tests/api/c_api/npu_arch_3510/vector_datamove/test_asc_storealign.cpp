@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include "tests/api/c_api/npu_arch_3510/utils/test_storealign_instr_utils.h"
 
@@ -128,36 +128,66 @@ TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_INTLV_INSTR(Vsts_intlv_offset, asc_storea
 TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_INTLV_INSTR(Vsts_intlv_offset, asc_storealign_intlv, vsts, fp4x2_e2m1_t, 4);
 TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_INTLV_INSTR(Vsts_intlv_offset, asc_storealign_intlv, vsts, fp4x2_e1m2_t, 4);
 TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_INTLV_INSTR_INT4B(Vsts_intlv_offset, asc_storealign_intlv, vsts, int4b_t, 4);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_offset_postupdate, asc_storealign_postupdate, vsts, int8_t, 0);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_offset_postupdate, asc_storealign_postupdate, vsts, uint8_t, 0);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_offset_postupdate, asc_storealign_postupdate, vsts, int16_t, 0);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_offset_postupdate, asc_storealign_postupdate, vsts, uint16_t, 0);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_offset_postupdate, asc_storealign_postupdate, vsts, int32_t, 0);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_offset_postupdate, asc_storealign_postupdate, vsts, uint32_t, 0);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_offset_postupdate, asc_storealign_postupdate, vsts, half, 0);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_offset_postupdate, asc_storealign_postupdate, vsts, float, 0);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_offset_postupdate, asc_storealign_postupdate, vsts, bfloat16_t, 0);
-TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, int8_t, 1);
-TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, uint8_t, 1);
-TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, int16_t, 1);
-TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, uint16_t, 1);
-TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, int32_t, 1);
-TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, uint32_t, 1);
-TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, half, 1);
-TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, float, 1);
-TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, bfloat16_t, 1);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, int16_t, 2);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, uint16_t, 2);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, int32_t, 2);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, uint32_t, 2);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, int64_t, 2);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, uint64_t, 2);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, half, 2);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, float, 2);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, bfloat16_t, 2);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate_v2, asc_storealign_pack_postupdate_v2, vsts, int32_t, 3);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate_v2, asc_storealign_pack_postupdate_v2, vsts, uint32_t, 3);
-TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(Vsts_pack_offset_postupdate_v2, asc_storealign_pack_postupdate_v2, vsts, float, 3);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_offset_postupdate, asc_storealign_postupdate, vsts, int8_t, 0);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_offset_postupdate, asc_storealign_postupdate, vsts, uint8_t, 0);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_offset_postupdate, asc_storealign_postupdate, vsts, int16_t, 0);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_offset_postupdate, asc_storealign_postupdate, vsts, uint16_t, 0);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_offset_postupdate, asc_storealign_postupdate, vsts, int32_t, 0);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_offset_postupdate, asc_storealign_postupdate, vsts, uint32_t, 0);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_offset_postupdate, asc_storealign_postupdate, vsts, half, 0);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_offset_postupdate, asc_storealign_postupdate, vsts, float, 0);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_offset_postupdate, asc_storealign_postupdate, vsts, bfloat16_t, 0);
+TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(
+    Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, int8_t, 1);
+TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(
+    Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, uint8_t, 1);
+TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(
+    Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, int16_t, 1);
+TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(
+    Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, uint16_t, 1);
+TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(
+    Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, int32_t, 1);
+TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(
+    Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, uint32_t, 1);
+TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(
+    Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, half, 1);
+TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(
+    Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, float, 1);
+TEST_VECTOR_DATAMOVE_STOREALIGN_ONEPT_OFFSET_POSTUPDATE_INSTR(
+    Vsts_1st_offset_postupdate, asc_storealign_1st_postupdate, vsts, bfloat16_t, 1);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, int16_t, 2);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, uint16_t, 2);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, int32_t, 2);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, uint32_t, 2);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, int64_t, 2);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, uint64_t, 2);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, half, 2);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, float, 2);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate, asc_storealign_pack_postupdate, vsts, bfloat16_t, 2);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate_v2, asc_storealign_pack_postupdate_v2, vsts, int32_t, 3);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate_v2, asc_storealign_pack_postupdate_v2, vsts, uint32_t, 3);
+TEST_VECTOR_DATAMOVE_STOREALIGN_OFFSET_POSTUPDATE_INSTR(
+    Vsts_pack_offset_postupdate_v2, asc_storealign_pack_postupdate_v2, vsts, float, 3);
 TEST_VECTOR_DATAMOVE_STOREALIGN_INSTR_1(Vst, asc_storealign, vst, int8_t, 0);
 TEST_VECTOR_DATAMOVE_STOREALIGN_INSTR_1(Vst, asc_storealign, vst, uint8_t, 0);
 TEST_VECTOR_DATAMOVE_STOREALIGN_INSTR_1(Vst, asc_storealign, vst, int16_t, 0);

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -20,8 +20,9 @@ enum TestMode {
 };
 
 template <typename T1, typename T2>
-void VecCast(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm,
-    __gm__ int32_t dataSize, RoundMode roundMode, TestMode testMode)
+void VecCast(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, __gm__ int32_t dataSize,
+    RoundMode roundMode, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<T1> inputGlobal;
@@ -53,7 +54,7 @@ void VecCast(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ sr
         if (repeatSize == 128) {
             mask[0] = 0xffffffffffffffff;
             mask[1] = 0xffffffffffffffff;
-        } else if(repeatSize == 64) {
+        } else if (repeatSize == 64) {
             mask[0] = 0xffffffffffffffff;
         } else {
             mask[0] = 0xffffffff;
@@ -92,33 +93,33 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(CastSimpleTestCase, CastSimpleTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    CastSimpleTestCase, CastSimpleTestsuite,
     ::testing::Values(
-        CastTestParams { 256, 1, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<uint8_t, half> },
-        CastTestParams { 256, 1, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<int8_t, half> },
-        CastTestParams { 256, 2, 4, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<half, float> },
-        CastTestParams { 256, 2, 4, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<half, int32_t> },
-        CastTestParams { 256, 2, 4, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<int16_t, float> },
-        CastTestParams { 256, 2, 1, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<half, uint8_t> },
-        CastTestParams { 256, 2, 1, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<half, int8_t> },
-        CastTestParams { 256, 4, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<float, half> },
-        CastTestParams { 256, 4, 2, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<float, int16_t> },
-        CastTestParams { 256, 4, 2, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<int32_t, half> },
-        CastTestParams { 256, 4, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<int32_t, int16_t> },
-        CastTestParams { 256, 2, 2, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<half, int16_t> },
-        CastTestParams { 256, 2, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<int16_t, half> },
-        CastTestParams { 256, 4, 4, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<float, float> },
-        CastTestParams { 256, 4, 4, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<float, int32_t> },
-        CastTestParams { 256, 4, 4, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<int32_t, float> },
-        CastTestParams { 256, 1, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_COUNT_MODE, VecCast<uint8_t, half> },
-        CastTestParams { 256, 2, 4, RoundMode::CAST_NONE, TestMode::LEVEL0_COUNT_MODE, VecCast<half, float> },
-        CastTestParams { 256, 2, 1, RoundMode::CAST_NONE, TestMode::LEVEL0_COUNT_MODE, VecCast<half, uint8_t> },
-        CastTestParams { 256, 4, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_COUNT_MODE, VecCast<float, half> },
-        CastTestParams { 256, 1, 2, RoundMode::CAST_NONE, TestMode::LEVEL2_MODE, VecCast<uint8_t, half> },
-        CastTestParams { 256, 2, 4, RoundMode::CAST_NONE, TestMode::LEVEL2_MODE, VecCast<half, float> },
-        CastTestParams { 256, 2, 1, RoundMode::CAST_NONE, TestMode::LEVEL2_MODE, VecCast<half, uint8_t> },
-        CastTestParams { 256, 4, 2, RoundMode::CAST_NONE, TestMode::LEVEL2_MODE, VecCast<float, half> }
-        ));
+        CastTestParams{256, 1, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<uint8_t, half>},
+        CastTestParams{256, 1, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<int8_t, half>},
+        CastTestParams{256, 2, 4, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<half, float>},
+        CastTestParams{256, 2, 4, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<half, int32_t>},
+        CastTestParams{256, 2, 4, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<int16_t, float>},
+        CastTestParams{256, 2, 1, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<half, uint8_t>},
+        CastTestParams{256, 2, 1, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<half, int8_t>},
+        CastTestParams{256, 4, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<float, half>},
+        CastTestParams{256, 4, 2, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<float, int16_t>},
+        CastTestParams{256, 4, 2, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<int32_t, half>},
+        CastTestParams{256, 4, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<int32_t, int16_t>},
+        CastTestParams{256, 2, 2, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<half, int16_t>},
+        CastTestParams{256, 2, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<int16_t, half>},
+        CastTestParams{256, 4, 4, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<float, float>},
+        CastTestParams{256, 4, 4, RoundMode::CAST_CEIL, TestMode::LEVEL0_BIT_MODE, VecCast<float, int32_t>},
+        CastTestParams{256, 4, 4, RoundMode::CAST_NONE, TestMode::LEVEL0_BIT_MODE, VecCast<int32_t, float>},
+        CastTestParams{256, 1, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_COUNT_MODE, VecCast<uint8_t, half>},
+        CastTestParams{256, 2, 4, RoundMode::CAST_NONE, TestMode::LEVEL0_COUNT_MODE, VecCast<half, float>},
+        CastTestParams{256, 2, 1, RoundMode::CAST_NONE, TestMode::LEVEL0_COUNT_MODE, VecCast<half, uint8_t>},
+        CastTestParams{256, 4, 2, RoundMode::CAST_NONE, TestMode::LEVEL0_COUNT_MODE, VecCast<float, half>},
+        CastTestParams{256, 1, 2, RoundMode::CAST_NONE, TestMode::LEVEL2_MODE, VecCast<uint8_t, half>},
+        CastTestParams{256, 2, 4, RoundMode::CAST_NONE, TestMode::LEVEL2_MODE, VecCast<half, float>},
+        CastTestParams{256, 2, 1, RoundMode::CAST_NONE, TestMode::LEVEL2_MODE, VecCast<half, uint8_t>},
+        CastTestParams{256, 4, 2, RoundMode::CAST_NONE, TestMode::LEVEL2_MODE, VecCast<float, half>}));
 
 TEST_P(CastSimpleTestsuite, CastSimpleTestCase)
 {

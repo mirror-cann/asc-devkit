@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 // #include "model/model_factory.h"
@@ -25,7 +25,7 @@ protected:
 TEST_F(TestScalarInstr, ScalarInstrCase)
 {
     uint64_t u64XnVal = 28;
-    int64_t  s64XnVal = 28;
+    int64_t s64XnVal = 28;
     EXPECT_EQ(ScalarGetCountOfValue<0>(u64XnVal), 61);
     EXPECT_EQ(ScalarGetCountOfValue<1>(u64XnVal), 3);
     EXPECT_EQ(ScalarCountLeadingZero(u64XnVal), 59);
@@ -42,10 +42,10 @@ TEST_F(TestScalarInstr, ScalarInstrCase)
 
     // +inf and -inf
     uint16_t maxValue = 0x7c00;
-    half f16MaxVal = *reinterpret_cast<half *>(&maxValue);
+    half f16MaxVal = *reinterpret_cast<half*>(&maxValue);
 
     uint16_t minValue = 0xfc00;
-    half f16MinVal = *reinterpret_cast<half *>(&minValue);
+    half f16MinVal = *reinterpret_cast<half*>(&minValue);
 
     constexpr int64_t s32Max = 2147483647;
     constexpr int64_t s32Min = -2147483648;
@@ -128,7 +128,7 @@ TEST_F(TestScalarInstr, ScalarInstrCase)
 
     uint32_t maxMinVal = 0;
     GetReduceMaxMinCount<float>(maxMinVal);
-    
+
     float maxMinFp32Val = 0;
     GetReduceMaxMinCount<float>(maxMinFp32Val);
 
@@ -141,7 +141,7 @@ TEST_F(TestScalarInstr, ScalarInstrCase)
 TEST_F(TestScalarInstr, ScalarInstrCastCase)
 {
     uint64_t u64XnVal = 28;
-    int64_t  s64XnVal = 28;
+    int64_t s64XnVal = 28;
     EXPECT_EQ(ScalarGetCountOfValue<0>(u64XnVal), 61);
     EXPECT_EQ(ScalarGetCountOfValue<1>(u64XnVal), 3);
     EXPECT_EQ(ScalarCountLeadingZero(u64XnVal), 59);
@@ -158,10 +158,10 @@ TEST_F(TestScalarInstr, ScalarInstrCastCase)
 
     // +inf and -inf
     uint16_t maxValue = 0x7c00;
-    half f16MaxVal = *reinterpret_cast<half *>(&maxValue);
+    half f16MaxVal = *reinterpret_cast<half*>(&maxValue);
 
     uint16_t minValue = 0xfc00;
-    half f16MinVal = *reinterpret_cast<half *>(&minValue);
+    half f16MinVal = *reinterpret_cast<half*>(&minValue);
 
     constexpr int64_t s32Max = 2147483647;
     constexpr int64_t s32Min = -2147483648;
@@ -244,7 +244,7 @@ TEST_F(TestScalarInstr, ScalarInstrCastCase)
 
     uint32_t maxMinVal = 0;
     GetReduceRepeatMaxMinSpr<float>(maxMinVal);
-    
+
     float maxMinFp32Val = 0;
     GetReduceRepeatMaxMinSpr<float>(maxMinFp32Val);
 

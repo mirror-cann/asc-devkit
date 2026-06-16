@@ -15,14 +15,8 @@
 
 class TestCubeComputeGetL0c2gmConfig : public testing::Test {
 protected:
-    void SetUp()
-    {
-        g_coreType = C_API_AIC_TYPE;
-    }
-    void TearDown()
-    {
-        g_coreType = C_API_AIV_TYPE;
-    }
+    void SetUp() { g_coreType = C_API_AIC_TYPE; }
+    void TearDown() { g_coreType = C_API_AIV_TYPE; }
 };
 
 namespace {
@@ -31,10 +25,7 @@ constexpr uint64_t L0C2GM_QUANT_SHIFT = 8;
 constexpr uint64_t L0C2GM_UNITFLAG_SHIFT = 63;
 uint64_t g_fpcConfigValue = 0;
 
-int64_t get_l0c2gm_config_Stub()
-{
-    return static_cast<int64_t>(g_fpcConfigValue);
-}
+int64_t get_l0c2gm_config_Stub() { return static_cast<int64_t>(g_fpcConfigValue); }
 
 uint64_t build_l0c2gm_config(uint64_t reluUnits = 0, uint64_t quantUnits = 0, uint64_t unitFlag = 0)
 {
@@ -77,4 +68,3 @@ TEST_F(TestCubeComputeGetL0c2gmConfig, get_l0c2gm_unitflag_Succ)
     EXPECT_EQ(expectedValue, result);
     GlobalMockObject::verify();
 }
-

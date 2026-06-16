@@ -63,5 +63,5 @@ private:
     char fileData_[TEMP_BUFFER_SIZE];
 };
 
-}  // namespace CodeHidden
+} // namespace CodeHidden
 #endif

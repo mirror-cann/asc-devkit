@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,19 +15,14 @@ using namespace AscendC;
 
 class TEST_MUL_ADD_DST : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T, typename U>
-void MainVecMulAddDstLevel2Demo(__gm__ uint8_t* __restrict__ dstGm,
-    __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm, uint32_t dataSize)
+void MainVecMulAddDstLevel2Demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    uint32_t dataSize)
 {
     BinaryRepeatParams param;
     constexpr uint64_t maskCount = 256 / sizeof(T);
@@ -79,23 +74,22 @@ void MainVecMulAddDstLevel2Demo(__gm__ uint8_t* __restrict__ dstGm,
     pipe_barrier(PIPE_ALL);
 }
 
-#define VEC_MUL_ADD_DST_LEVEL2_TESTCASE(dataType, srcType)                                              \
-    TEST_F(TEST_MUL_ADD_DST, MulAddDst##dataType##srcType##Case)                                           \
-    {                                                                                                           \
-        uint32_t dataSize = 256;                                                                               \
-        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                         \
-        uint8_t input0Gm[dataSize * sizeof(srcType)];                                                       \
-        uint8_t input1Gm[dataSize * sizeof(srcType)];                                                       \
-        uint8_t outputGm[dataSize * sizeof(dataType)];                                                       \
-                                                                                                                \
-        MainVecMulAddDstLevel2Demo<dataType, srcType>(outputGm, input0Gm, input1Gm, dataSize);     \
-                                                                                                                \
-        for (uint32_t i = 0; i < dataSize; i++) {                                                              \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                      \
-        }                                                                                                       \
+#define VEC_MUL_ADD_DST_LEVEL2_TESTCASE(dataType, srcType)                                     \
+    TEST_F(TEST_MUL_ADD_DST, MulAddDst##dataType##srcType##Case)                               \
+    {                                                                                          \
+        uint32_t dataSize = 256;                                                               \
+        uint32_t selMaskSize = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));           \
+        uint8_t input0Gm[dataSize * sizeof(srcType)];                                          \
+        uint8_t input1Gm[dataSize * sizeof(srcType)];                                          \
+        uint8_t outputGm[dataSize * sizeof(dataType)];                                         \
+                                                                                               \
+        MainVecMulAddDstLevel2Demo<dataType, srcType>(outputGm, input0Gm, input1Gm, dataSize); \
+                                                                                               \
+        for (uint32_t i = 0; i < dataSize; i++) {                                              \
+            EXPECT_EQ(outputGm[i], 0x00);                                                      \
+        }                                                                                      \
     }
 
 VEC_MUL_ADD_DST_LEVEL2_TESTCASE(float, float);
 VEC_MUL_ADD_DST_LEVEL2_TESTCASE(float, half);
 VEC_MUL_ADD_DST_LEVEL2_TESTCASE(half, half);
-

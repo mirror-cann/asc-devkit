@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifdef ASCENDC_CPU_DEBUG
 #include "kernel_simt_cpu.h"
 
@@ -20,10 +20,7 @@
 
 namespace AscendC {
 namespace Simt {
-Warp::~Warp()
-{
-    Done();
-}
+Warp::~Warp() { Done(); }
 
 void Warp::Done()
 {
@@ -34,7 +31,7 @@ void Warp::Done()
     }
 }
 
-ThreadBlock &ThreadBlock::GetBlockInstance()
+ThreadBlock& ThreadBlock::GetBlockInstance()
 {
     static ThreadBlock threadBlock;
     return threadBlock;
@@ -45,7 +42,7 @@ void ThreadBlock::Init(uint32_t num)
     FinishJobs();
     activeThreads = num;
     threadThreshold = num;
-    
+
     uint32_t warpCount = (num + THREAD_PER_WARP - 1) / THREAD_PER_WARP;
     warps_ = std::vector<Warp>(warpCount);
     warpNum_ = warpCount;
@@ -53,38 +50,22 @@ void ThreadBlock::Init(uint32_t num)
 
 void ThreadBlock::FinishJobs()
 {
-    for (Warp &warp : warps_) {
+    for (Warp& warp : warps_) {
         warp.Done();
     }
 }
 
-void ThreadBlock::SyncAllThreads()
-{
-}
+void ThreadBlock::SyncAllThreads() {}
 
-void ThreadBlock::ThreadFinished()
-{
-}
+void ThreadBlock::ThreadFinished() {}
 
-uint32_t GetThreadIdx()
-{
-    return 1024;
-}
+uint32_t GetThreadIdx() { return 1024; }
 
-uint32_t GetLaneId()
-{
-    return 0;
-}
+uint32_t GetLaneId() { return 0; }
 
-uint32_t GetWarpId()
-{
-    return 0;
-}
+uint32_t GetWarpId() { return 0; }
 
-void Sync()
-{
-    ThreadBlock::GetBlockInstance().SyncAllThreads();
-}
-}  // namespace Simt
-}  // namespace AscendC
+void Sync() { ThreadBlock::GetBlockInstance().SyncAllThreads(); }
+} // namespace Simt
+} // namespace AscendC
 #endif

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <mockcpp/mockcpp.hpp>
@@ -15,15 +15,9 @@
 
 class Tensor_Api_Cube_Copy_L12L0ScaleB_3510 : public testing::Test {
 protected:
-    void SetUp() override
-    {
-        AscendC::SetGCoreType(1);
-    }
+    void SetUp() override { AscendC::SetGCoreType(1); }
 
-    void TearDown() override
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void TearDown() override { AscendC::SetGCoreType(0); }
 };
 
 namespace {
@@ -31,7 +25,8 @@ namespace {
 template <typename LocationTag, typename Pointer, typename Layout>
 auto MakeTensorAt(Pointer ptr, const Layout& layout)
 {
-    return AscendC::Te::MakeTensor(AscendC::Te::MakeMemPtr<LocationTag, fp8_e8m0_t>(reinterpret_cast<uint64_t>(ptr) / 16), layout);
+    return AscendC::Te::MakeTensor(
+        AscendC::Te::MakeMemPtr<LocationTag, fp8_e8m0_t>(reinterpret_cast<uint64_t>(ptr) / 16), layout);
 }
 
 template <typename CopyOp, typename Trait, typename DstTensor, typename SrcTensor>
@@ -70,12 +65,14 @@ constexpr uint32_t kScaleBN = 16;
 constexpr uint32_t kScaleBBatchStrideElem = 512;
 uint32_t gScaleBCallIdx = 0;
 
-void load_cbuf_to_cb_mx_batch_stub(uint64_t dst, __cbuf__ void* src, uint16_t xStartPos, uint16_t yStartPos,
-    uint8_t xStep, uint8_t yStep, uint16_t srcStride, uint16_t dstStride)
+void load_cbuf_to_cb_mx_batch_stub(
+    uint64_t dst, __cbuf__ void* src, uint16_t xStartPos, uint16_t yStartPos, uint8_t xStep, uint8_t yStep,
+    uint16_t srcStride, uint16_t dstStride)
 {
     EXPECT_EQ(dst, gExpectedMxDstAddr + gScaleBCallIdx * kScaleBBatchStrideElem);
-    EXPECT_EQ(src, reinterpret_cast<__cbuf__ void*>(
-        reinterpret_cast<fp8_e8m0_t*>(gExpectedMxSrc) + gScaleBCallIdx * kScaleBBatchStrideElem));
+    EXPECT_EQ(
+        src, reinterpret_cast<__cbuf__ void*>(
+                 reinterpret_cast<fp8_e8m0_t*>(gExpectedMxSrc) + gScaleBCallIdx * kScaleBBatchStrideElem));
     EXPECT_EQ(xStartPos, 0);
     EXPECT_EQ(yStartPos, 0);
     EXPECT_EQ(xStep, 1);
@@ -127,8 +124,8 @@ TEST_F(Tensor_Api_Cube_Copy_L12L0ScaleB_3510, CopyL12L0ScaleBBatch)
     gExpectedMxSrc = reinterpret_cast<__cbuf__ void*>(src);
     gScaleBCallIdx = 0;
 
-    MOCKER_CPP(load_cbuf_to_cb_mx,
-        void(uint64_t, __cbuf__ void*, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t, uint16_t))
+    MOCKER_CPP(
+        load_cbuf_to_cb_mx, void(uint64_t, __cbuf__ void*, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t, uint16_t))
         .times(batch)
         .will(invoke(&load_cbuf_to_cb_mx_batch_stub));
 

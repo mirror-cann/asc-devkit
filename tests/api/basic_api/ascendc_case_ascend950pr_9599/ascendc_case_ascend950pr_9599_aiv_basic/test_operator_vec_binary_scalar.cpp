@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "mockcpp/mockcpp.hpp"
@@ -14,7 +14,7 @@
 using namespace std;
 using namespace AscendC;
 
-enum class OpType{
+enum class OpType {
     ADDS = 0, // Adds, Muls, Maxs, Mins
     MULS = 1,
     MAXS = 2,
@@ -24,14 +24,16 @@ enum class OpType{
     LEAKY_RELU = 6, // LeakyRelu
 };
 
-template <typename SrcType, OpType OpType> class KernelBinaryScalar { // 定义kernel类函数
+template <typename SrcType, OpType OpType>
+class KernelBinaryScalar { // 定义kernel类函数
 public:
     __aicore__ inline KernelBinaryScalar() {}
-    __aicore__ inline void Init(GM_ADDR srcGm, GM_ADDR dstGm, uint32_t stackSize, uint32_t dataSize,
-        uint64_t maskCounter, uint64_t maskBitHigh, uint64_t maskBitLow, uint8_t repeatTimes, UnaryRepeatParams& repeatParams)
+    __aicore__ inline void Init(
+        GM_ADDR srcGm, GM_ADDR dstGm, uint32_t stackSize, uint32_t dataSize, uint64_t maskCounter, uint64_t maskBitHigh,
+        uint64_t maskBitLow, uint8_t repeatTimes, UnaryRepeatParams& repeatParams)
     {
         this->stackSize = stackSize; // 占用空间大小，32Bytre对齐，可能含有脏数据
-        this->dataSize = dataSize; // 有效计算数据量
+        this->dataSize = dataSize;   // 有效计算数据量
         this->maskCounter = maskCounter;
         this->maskBit[0] = maskBitHigh;
         this->maskBit[1] = maskBitLow;
@@ -102,7 +104,7 @@ private:
         } else {
             LeakyRelu(dstLocal, srcLocal, scalar, maskBit, repeatTimes, repeatParams);
             LeakyRelu(dstLocal, srcLocal, scalar, maskCounter, repeatTimes, repeatParams);
-            LeakyRelu(dstLocal, srcLocal, scalar, dataSize);            
+            LeakyRelu(dstLocal, srcLocal, scalar, dataSize);
         }
         outQueue.EnQue<SrcType>(dstLocal);
 
@@ -127,7 +129,7 @@ private:
     uint64_t maskBit[2] = {0, 0};
 
     uint8_t repeatTimes = 0;
-    UnaryRepeatParams repeatParams { 1, 1, 8, 8 };
+    UnaryRepeatParams repeatParams{1, 1, 8, 8};
 
     uint32_t stackSize = 0;
     uint32_t dataSize = 0;
@@ -135,8 +137,9 @@ private:
 };
 
 template <typename SrcType, OpType OpType>
-__aicore__ void BinaryScalarTest(GM_ADDR srcGm, GM_ADDR dstGm, uint32_t stackSize, uint32_t dataSize,
-    uint64_t maskCounter, uint64_t maskBitHigh, uint64_t maskBitLow, uint8_t repeatTimes, UnaryRepeatParams& repeatParams)
+__aicore__ void BinaryScalarTest(
+    GM_ADDR srcGm, GM_ADDR dstGm, uint32_t stackSize, uint32_t dataSize, uint64_t maskCounter, uint64_t maskBitHigh,
+    uint64_t maskBitLow, uint8_t repeatTimes, UnaryRepeatParams& repeatParams)
 {
     KernelBinaryScalar<SrcType, OpType> op;
     op.Init(srcGm, dstGm, stackSize, dataSize, maskCounter, maskBitHigh, maskBitLow, repeatTimes, repeatParams);
@@ -156,30 +159,24 @@ struct InputParams {
 
 class BinaryScalarTestsuite : public ::testing::Test {
 protected:
-    static void SetUpTestCase()
-    {
-        std::cout << "BinaryScalarTestsuite SetUpTestCase" << std::endl;
-    }
-    static void TearDownTestCase()
-    {
-        std::cout << "BinaryScalarTestsuite TearDownTestCase" << std::endl;
-    }
+    static void SetUpTestCase() { std::cout << "BinaryScalarTestsuite SetUpTestCase" << std::endl; }
+    static void TearDownTestCase() { std::cout << "BinaryScalarTestsuite TearDownTestCase" << std::endl; }
     virtual void SetUp() {}
-    virtual void TearDown() {GlobalMockObject::verify();}
+    virtual void TearDown() { GlobalMockObject::verify(); }
 };
 
-#define SCALAR_BINARY_FUNC_TEST(testCaseName, dataType, funcName, opType)                              \
-TEST_F(BinaryScalarTestsuite, testCaseName)                                                               \
-{                                                                                                           \
-    InputParams inputParams{1024,  1020,  sizeof(PrimT<dataType>), 11, 22, 0, 3, { 3, 1, 3, 1}};                  \
-    uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize] { 0x00 };                               \
-    uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize] { 0x00 };                            \
-    BinaryScalarTest<dataType, opType>(srcGm, outputGm, inputParams.stackSize, inputParams.dataSize,      \
-        inputParams.maskCounter, inputParams.maskBitHigh, inputParams.maskBitLow,                           \
-        inputParams.repeatTimes, inputParams.repeatParams);                                                 \
-    EXPECT_EQ(outputGm[0], 0x00);                                                                           \
-    EXPECT_EQ(outputGm[1], 0x00);                                                                           \
-}                                                                                                           \
+#define SCALAR_BINARY_FUNC_TEST(testCaseName, dataType, funcName, opType)                                        \
+    TEST_F(BinaryScalarTestsuite, testCaseName)                                                                  \
+    {                                                                                                            \
+        InputParams inputParams{1024, 1020, sizeof(PrimT<dataType>), 11, 22, 0, 3, {3, 1, 3, 1}};                \
+        uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize]{0x00};                                   \
+        uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize]{0x00};                                \
+        BinaryScalarTest<dataType, opType>(                                                                      \
+            srcGm, outputGm, inputParams.stackSize, inputParams.dataSize, inputParams.maskCounter,               \
+            inputParams.maskBitHigh, inputParams.maskBitLow, inputParams.repeatTimes, inputParams.repeatParams); \
+        EXPECT_EQ(outputGm[0], 0x00);                                                                            \
+        EXPECT_EQ(outputGm[1], 0x00);                                                                            \
+    }
 
 SCALAR_BINARY_FUNC_TEST(AddsTestSuite_check_Func_float, float, AddsImpl, OpType::ADDS);
 SCALAR_BINARY_FUNC_TEST(AddsTestSuite_check_Func_half, half, AddsImpl, OpType::ADDS);
@@ -256,18 +253,28 @@ SCALAR_BINARY_FUNC_TEST(MinsTestSuite_check_Func_tensortrait_bfloat16, TensorTra
 SCALAR_BINARY_FUNC_TEST(MinsTestSuite_check_Func_tensortrait_int64, TensorTrait<int64_t>, MinsImpl, OpType::MINS);
 SCALAR_BINARY_FUNC_TEST(MinsTestSuite_check_Func_tensortrait_uint64, TensorTrait<uint64_t>, MinsImpl, OpType::MINS);
 
-SCALAR_BINARY_FUNC_TEST(ShiftLeftTestSuite_check_tensortrait_Func_uint16, TensorTrait<uint16_t>, ShiftLeftImpl, OpType::SHIFTLEFT);
-SCALAR_BINARY_FUNC_TEST(ShiftLeftTestSuite_check_tensortrait_Func_uint32, TensorTrait<uint32_t>, ShiftLeftImpl, OpType::SHIFTLEFT);
-SCALAR_BINARY_FUNC_TEST(ShiftLeftTestSuite_check_tensortrait_Func_int16, TensorTrait<int16_t>, ShiftLeftImpl, OpType::SHIFTLEFT);
-SCALAR_BINARY_FUNC_TEST(ShiftLeftTestSuite_check_tensortrait_Func_int32, TensorTrait<int32_t>, ShiftLeftImpl, OpType::SHIFTLEFT);
+SCALAR_BINARY_FUNC_TEST(
+    ShiftLeftTestSuite_check_tensortrait_Func_uint16, TensorTrait<uint16_t>, ShiftLeftImpl, OpType::SHIFTLEFT);
+SCALAR_BINARY_FUNC_TEST(
+    ShiftLeftTestSuite_check_tensortrait_Func_uint32, TensorTrait<uint32_t>, ShiftLeftImpl, OpType::SHIFTLEFT);
+SCALAR_BINARY_FUNC_TEST(
+    ShiftLeftTestSuite_check_tensortrait_Func_int16, TensorTrait<int16_t>, ShiftLeftImpl, OpType::SHIFTLEFT);
+SCALAR_BINARY_FUNC_TEST(
+    ShiftLeftTestSuite_check_tensortrait_Func_int32, TensorTrait<int32_t>, ShiftLeftImpl, OpType::SHIFTLEFT);
 
-SCALAR_BINARY_FUNC_TEST(ShiftRightTestSuite_checktensortrait_Func_uint16, TensorTrait<uint16_t>, ShiftRightImpl, OpType::SHIFTRIGHT);
-SCALAR_BINARY_FUNC_TEST(ShiftRightTestSuite_checktensortrait_Func_uint32, TensorTrait<uint32_t>, ShiftRightImpl, OpType::SHIFTRIGHT);
-SCALAR_BINARY_FUNC_TEST(ShiftRightTestSuite_checktensortrait_Func_int16, TensorTrait<int16_t>, ShiftRightImpl, OpType::SHIFTRIGHT);
-SCALAR_BINARY_FUNC_TEST(ShiftRightTestSuite_checktensortrait_Func_int32, TensorTrait<int32_t>, ShiftRightImpl, OpType::SHIFTRIGHT);
+SCALAR_BINARY_FUNC_TEST(
+    ShiftRightTestSuite_checktensortrait_Func_uint16, TensorTrait<uint16_t>, ShiftRightImpl, OpType::SHIFTRIGHT);
+SCALAR_BINARY_FUNC_TEST(
+    ShiftRightTestSuite_checktensortrait_Func_uint32, TensorTrait<uint32_t>, ShiftRightImpl, OpType::SHIFTRIGHT);
+SCALAR_BINARY_FUNC_TEST(
+    ShiftRightTestSuite_checktensortrait_Func_int16, TensorTrait<int16_t>, ShiftRightImpl, OpType::SHIFTRIGHT);
+SCALAR_BINARY_FUNC_TEST(
+    ShiftRightTestSuite_checktensortrait_Func_int32, TensorTrait<int32_t>, ShiftRightImpl, OpType::SHIFTRIGHT);
 
-SCALAR_BINARY_FUNC_TEST(LeakyReluTestSuite_check_Func_tensortrait_float, TensorTrait<float>, LeakyReluImpl, OpType::LEAKY_RELU);
-SCALAR_BINARY_FUNC_TEST(LeakyReluTestSuite_check_Func_tensortrait_half, TensorTrait<half>, LeakyReluImpl, OpType::LEAKY_RELU);
+SCALAR_BINARY_FUNC_TEST(
+    LeakyReluTestSuite_check_Func_tensortrait_float, TensorTrait<float>, LeakyReluImpl, OpType::LEAKY_RELU);
+SCALAR_BINARY_FUNC_TEST(
+    LeakyReluTestSuite_check_Func_tensortrait_half, TensorTrait<half>, LeakyReluImpl, OpType::LEAKY_RELU);
 
 template <typename SrcType, OpType OpType>
 bool BinaryScalarCheckSrcValue(__ubuf__ SrcType* src)
@@ -275,51 +282,54 @@ bool BinaryScalarCheckSrcValue(__ubuf__ SrcType* src)
     return (src[0] == static_cast<SrcType>(0));
 }
 
-bool BinaryScalarCheckCalCount(const int32_t& calCount)
-{
-    return (calCount == 1020);
-}
+bool BinaryScalarCheckCalCount(const int32_t& calCount) { return (calCount == 1020); }
 
-#define SCALAR_BINARY_TEST(testCaseName, dataType, funcName, opType)                                   \
-TEST_F(BinaryScalarTestsuite, testCaseName)                                                               \
-{                                                                                                           \
-    InputParams inputParams{1024,  1020,  sizeof(dataType), 11, 22, 0, 3, { 3, 1, 3, 1}};                  \
-    MOCKER(funcName, void(*)(__ubuf__ dataType*, __ubuf__ dataType*, dataType, const int32_t&))         \
-        .times(1);                                                                                          \
-    MOCKER(funcName, void(*)(__ubuf__ dataType*, __ubuf__ dataType*, dataType,                          \
-        const uint64_t*, const uint8_t, const UnaryRepeatParams&))                                          \
-        .times(1);                                                                                          \
-    MOCKER(funcName, void(*)(__ubuf__ dataType*, __ubuf__ dataType*, dataType,                          \
-        const uint64_t, const uint8_t, const UnaryRepeatParams&))                                           \
-        .times(1);                                                                                          \
-    uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize] { 0x00 };                               \
-    uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize] { 0x00 };                            \
-    BinaryScalarTest<dataType, opType>(srcGm, outputGm, inputParams.stackSize, inputParams.dataSize,      \
-        inputParams.maskCounter, inputParams.maskBitHigh, inputParams.maskBitLow,                           \
-        inputParams.repeatTimes, inputParams.repeatParams);                                                 \
-    EXPECT_EQ(outputGm[0], 0x00);                                                                           \
-    EXPECT_EQ(outputGm[1], 0x00);                                                                           \
-}                                                                                                           \
+#define SCALAR_BINARY_TEST(testCaseName, dataType, funcName, opType)                                             \
+    TEST_F(BinaryScalarTestsuite, testCaseName)                                                                  \
+    {                                                                                                            \
+        InputParams inputParams{1024, 1020, sizeof(dataType), 11, 22, 0, 3, {3, 1, 3, 1}};                       \
+        MOCKER(funcName, void (*)(__ubuf__ dataType*, __ubuf__ dataType*, dataType, const int32_t&)).times(1);   \
+        MOCKER(                                                                                                  \
+            funcName, void (*)(                                                                                  \
+                          __ubuf__ dataType*, __ubuf__ dataType*, dataType, const uint64_t*, const uint8_t,      \
+                          const UnaryRepeatParams&))                                                             \
+            .times(1);                                                                                           \
+        MOCKER(                                                                                                  \
+            funcName, void (*)(                                                                                  \
+                          __ubuf__ dataType*, __ubuf__ dataType*, dataType, const uint64_t, const uint8_t,       \
+                          const UnaryRepeatParams&))                                                             \
+            .times(1);                                                                                           \
+        uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize]{0x00};                                   \
+        uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize]{0x00};                                \
+        BinaryScalarTest<dataType, opType>(                                                                      \
+            srcGm, outputGm, inputParams.stackSize, inputParams.dataSize, inputParams.maskCounter,               \
+            inputParams.maskBitHigh, inputParams.maskBitLow, inputParams.repeatTimes, inputParams.repeatParams); \
+        EXPECT_EQ(outputGm[0], 0x00);                                                                            \
+        EXPECT_EQ(outputGm[1], 0x00);                                                                            \
+    }
 
-#define SCALAR_BINARY_SHIFTRIGHT_TEST(testCaseName, dataType, funcName, opType)                        \
-TEST_F(BinaryScalarTestsuite, testCaseName)                                                               \
-{                                                                                                           \
-    InputParams inputParams{1024,  1020,  sizeof(dataType), 11, 22, 0, 3, { 3, 1, 3, 1}};                  \
-    MOCKER(funcName, void(*)(__ubuf__ dataType*, __ubuf__ dataType*, dataType, const int32_t&))         \
-        .times(1);                                                                                          \
-    MOCKER(funcName, void(*)(__ubuf__ dataType*, __ubuf__ dataType*, dataType,                          \
-        const uint64_t*, const uint8_t, const UnaryRepeatParams&, bool))                                    \
-        .times(1);                                                                                          \
-    MOCKER(funcName, void(*)(__ubuf__ dataType*, __ubuf__ dataType*, dataType,                          \
-        const uint64_t, const uint8_t, const UnaryRepeatParams&, bool))                                     \
-        .times(1);                                                                                          \
-    uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize] { 0x00 };                               \
-    uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize] { 0x00 };                            \
-    BinaryScalarTest<dataType, opType>(srcGm, outputGm, inputParams.stackSize, inputParams.dataSize,      \
-        inputParams.maskCounter, inputParams.maskBitHigh, inputParams.maskBitLow,                           \
-        inputParams.repeatTimes, inputParams.repeatParams);                                                 \
-    EXPECT_EQ(outputGm[0], 0x00);                                                                           \
-}
+#define SCALAR_BINARY_SHIFTRIGHT_TEST(testCaseName, dataType, funcName, opType)                                  \
+    TEST_F(BinaryScalarTestsuite, testCaseName)                                                                  \
+    {                                                                                                            \
+        InputParams inputParams{1024, 1020, sizeof(dataType), 11, 22, 0, 3, {3, 1, 3, 1}};                       \
+        MOCKER(funcName, void (*)(__ubuf__ dataType*, __ubuf__ dataType*, dataType, const int32_t&)).times(1);   \
+        MOCKER(                                                                                                  \
+            funcName, void (*)(                                                                                  \
+                          __ubuf__ dataType*, __ubuf__ dataType*, dataType, const uint64_t*, const uint8_t,      \
+                          const UnaryRepeatParams&, bool))                                                       \
+            .times(1);                                                                                           \
+        MOCKER(                                                                                                  \
+            funcName, void (*)(                                                                                  \
+                          __ubuf__ dataType*, __ubuf__ dataType*, dataType, const uint64_t, const uint8_t,       \
+                          const UnaryRepeatParams&, bool))                                                       \
+            .times(1);                                                                                           \
+        uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize]{0x00};                                   \
+        uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize]{0x00};                                \
+        BinaryScalarTest<dataType, opType>(                                                                      \
+            srcGm, outputGm, inputParams.stackSize, inputParams.dataSize, inputParams.maskCounter,               \
+            inputParams.maskBitHigh, inputParams.maskBitLow, inputParams.repeatTimes, inputParams.repeatParams); \
+        EXPECT_EQ(outputGm[0], 0x00);                                                                            \
+    }
 
 SCALAR_BINARY_TEST(AddsTestSuite_check_InputParams_float, float, AddsImpl, OpType::ADDS);
 SCALAR_BINARY_TEST(AddsTestSuite_check_InputParams_half, half, AddsImpl, OpType::ADDS);
@@ -346,8 +356,10 @@ SCALAR_BINARY_TEST(ShiftLeftTestSuite_check_InputParams_uint32, uint32_t, ShiftL
 SCALAR_BINARY_TEST(ShiftLeftTestSuite_check_InputParams_int16, int16_t, ShiftLeftImpl, OpType::SHIFTLEFT);
 SCALAR_BINARY_TEST(ShiftLeftTestSuite_check_InputParams_int32, int32_t, ShiftLeftImpl, OpType::SHIFTLEFT);
 
-SCALAR_BINARY_SHIFTRIGHT_TEST(ShiftRightTestSuite_check_InputParams_uint16, uint16_t, ShiftRightImpl, OpType::SHIFTRIGHT);
-SCALAR_BINARY_SHIFTRIGHT_TEST(ShiftRightTestSuite_check_InputParams_uint32, uint32_t, ShiftRightImpl, OpType::SHIFTRIGHT);
+SCALAR_BINARY_SHIFTRIGHT_TEST(
+    ShiftRightTestSuite_check_InputParams_uint16, uint16_t, ShiftRightImpl, OpType::SHIFTRIGHT);
+SCALAR_BINARY_SHIFTRIGHT_TEST(
+    ShiftRightTestSuite_check_InputParams_uint32, uint32_t, ShiftRightImpl, OpType::SHIFTRIGHT);
 SCALAR_BINARY_SHIFTRIGHT_TEST(ShiftRightTestSuite_check_InputParams_int16, int16_t, ShiftRightImpl, OpType::SHIFTRIGHT);
 SCALAR_BINARY_SHIFTRIGHT_TEST(ShiftRightTestSuite_check_InputParams_int32, int32_t, ShiftRightImpl, OpType::SHIFTRIGHT);
 
@@ -358,67 +370,76 @@ void DataCopyUB2GMImplStub(__gm__ SrcType* dst, __ubuf__ SrcType* src, const Dat
 }
 
 template <typename SrcType>
-void copy_cbuf_to_gm_align_stub(__gm__ SrcType* dst, __ubuf__ SrcType* src, uint8_t sid, uint16_t nBurst,
-    uint32_t lenBurst, uint8_t leftPaddingNum, uint8_t rightPaddingNum, uint32_t srcGap, uint32_t dstGap)
+void copy_cbuf_to_gm_align_stub(
+    __gm__ SrcType* dst, __ubuf__ SrcType* src, uint8_t sid, uint16_t nBurst, uint32_t lenBurst, uint8_t leftPaddingNum,
+    uint8_t rightPaddingNum, uint32_t srcGap, uint32_t dstGap)
 {
     dst[0] = src[0];
 }
 
-#define SCALAR_BINARY_TEST_VALUE(testCaseName, dataType, funcName, opType)                                  \
-    TEST_F(BinaryScalarTestsuite, testCaseName)                                                                \
-    {                                                                                                            \
-        InputParams inputParams{ 1024, 1020, sizeof(dataType), 11, 22, 0, 3, { 3, 1, 3, 1 }};                   \
-        dataType outputStub[inputParams.stackSize]{ 0x03 };                                                     \
-        MOCKER(funcName, void (*)(__ubuf__ dataType *, __ubuf__ dataType *, dataType, const int32_t &))      \
-            .times(1)                                                                                            \
-            .with(outBoundP(outputStub));                                                                        \
-        MOCKER(funcName, void (*)(__ubuf__ dataType *, __ubuf__ dataType *, dataType, const uint64_t *,      \
-            const uint8_t, const UnaryRepeatParams &))                                                           \
-            .times(1)                                                                                            \
-            .with(outBoundP(outputStub));                                                                        \
-        MOCKER(funcName, void (*)(__ubuf__ dataType *, __ubuf__ dataType *, dataType, const uint64_t,        \
-            const uint8_t, const UnaryRepeatParams &))                                                           \
-            .times(1)                                                                                            \
-            .with(outBoundP(outputStub));                                                                        \
-        MOCKER(DataCopyUB2GMImpl,                                                                                \
-            void (*)(__gm__ dataType *, __ubuf__ dataType *, const DataCopyParams &, const uint8_t))           \
-            .times(1)                                                                                            \
-            .will(invoke(DataCopyUB2GMImplStub<dataType>));                                                     \
-        uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize]{ 0x01 };                                 \
-        uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize]{ 0x00 };                              \
-        BinaryScalarTest<dataType, opType>(srcGm, outputGm, inputParams.stackSize, inputParams.dataSize,       \
-            inputParams.maskCounter, inputParams.maskBitHigh, inputParams.maskBitLow, inputParams.repeatTimes,   \
-            inputParams.repeatParams);                                                                           \
-        dataType *out = reinterpret_cast<dataType *>(outputGm);                                                \
-        EXPECT_EQ(out[0], static_cast<dataType>(0x03));                                                                      \
+#define SCALAR_BINARY_TEST_VALUE(testCaseName, dataType, funcName, opType)                                           \
+    TEST_F(BinaryScalarTestsuite, testCaseName)                                                                      \
+    {                                                                                                                \
+        InputParams inputParams{1024, 1020, sizeof(dataType), 11, 22, 0, 3, {3, 1, 3, 1}};                           \
+        dataType outputStub[inputParams.stackSize]{0x03};                                                            \
+        MOCKER(funcName, void (*)(__ubuf__ dataType*, __ubuf__ dataType*, dataType, const int32_t&))                 \
+            .times(1)                                                                                                \
+            .with(outBoundP(outputStub));                                                                            \
+        MOCKER(                                                                                                      \
+            funcName, void (*)(                                                                                      \
+                          __ubuf__ dataType*, __ubuf__ dataType*, dataType, const uint64_t*, const uint8_t,          \
+                          const UnaryRepeatParams&))                                                                 \
+            .times(1)                                                                                                \
+            .with(outBoundP(outputStub));                                                                            \
+        MOCKER(                                                                                                      \
+            funcName, void (*)(                                                                                      \
+                          __ubuf__ dataType*, __ubuf__ dataType*, dataType, const uint64_t, const uint8_t,           \
+                          const UnaryRepeatParams&))                                                                 \
+            .times(1)                                                                                                \
+            .with(outBoundP(outputStub));                                                                            \
+        MOCKER(                                                                                                      \
+            DataCopyUB2GMImpl, void (*)(__gm__ dataType*, __ubuf__ dataType*, const DataCopyParams&, const uint8_t)) \
+            .times(1)                                                                                                \
+            .will(invoke(DataCopyUB2GMImplStub<dataType>));                                                          \
+        uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize]{0x01};                                       \
+        uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize]{0x00};                                    \
+        BinaryScalarTest<dataType, opType>(                                                                          \
+            srcGm, outputGm, inputParams.stackSize, inputParams.dataSize, inputParams.maskCounter,                   \
+            inputParams.maskBitHigh, inputParams.maskBitLow, inputParams.repeatTimes, inputParams.repeatParams);     \
+        dataType* out = reinterpret_cast<dataType*>(outputGm);                                                       \
+        EXPECT_EQ(out[0], static_cast<dataType>(0x03));                                                              \
     }
 
-#define SCALAR_BINARY_SHIFTRIGHT_TEST_VALUE(testCaseName, dataType, funcName, opType)                       \
-    TEST_F(BinaryScalarTestsuite, testCaseName)                                                                \
-    {                                                                                                            \
-        InputParams inputParams{ 1024, 1020, sizeof(dataType), 11, 22, 0, 3, { 3, 1, 3, 1 }};                   \
-        dataType outputStub[inputParams.stackSize]{ 0x03 };                                                     \
-        MOCKER(funcName, void (*)(__ubuf__ dataType *, __ubuf__ dataType *, dataType, const int32_t &))      \
-            .times(1)                                                                                            \
-            .with(outBoundP(outputStub));                                                                        \
-        MOCKER(funcName, void (*)(__ubuf__ dataType *, __ubuf__ dataType *, dataType, const uint64_t *,      \
-            const uint8_t, const UnaryRepeatParams &, bool))                                                     \
-            .times(1)                                                                                            \
-            .with(outBoundP(outputStub));                                                                        \
-        MOCKER(funcName, void (*)(__ubuf__ dataType *, __ubuf__ dataType *, dataType, const uint64_t,        \
-            const uint8_t, const UnaryRepeatParams &, bool))                                                     \
-            .times(1)                                                                                            \
-            .with(outBoundP(outputStub));                                                                        \
-        MOCKER(DataCopyUB2GMImpl,                                                                                \
-            void (*)(__gm__ dataType *, __ubuf__ dataType *, const DataCopyParams &, const uint8_t))           \
-            .times(1)                                                                                            \
-            .will(invoke(DataCopyUB2GMImplStub<dataType>));                                                     \
-        uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize]{ 0x01 };                                 \
-        uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize]{ 0x00 };                              \
-        BinaryScalarTest<dataType, opType>(srcGm, outputGm, inputParams.stackSize, inputParams.dataSize,       \
-            inputParams.maskCounter, inputParams.maskBitHigh, inputParams.maskBitLow, inputParams.repeatTimes,   \
-            inputParams.repeatParams);                                                                           \
-        EXPECT_EQ(outputGm[0], 0x03);                                                                            \
+#define SCALAR_BINARY_SHIFTRIGHT_TEST_VALUE(testCaseName, dataType, funcName, opType)                                \
+    TEST_F(BinaryScalarTestsuite, testCaseName)                                                                      \
+    {                                                                                                                \
+        InputParams inputParams{1024, 1020, sizeof(dataType), 11, 22, 0, 3, {3, 1, 3, 1}};                           \
+        dataType outputStub[inputParams.stackSize]{0x03};                                                            \
+        MOCKER(funcName, void (*)(__ubuf__ dataType*, __ubuf__ dataType*, dataType, const int32_t&))                 \
+            .times(1)                                                                                                \
+            .with(outBoundP(outputStub));                                                                            \
+        MOCKER(                                                                                                      \
+            funcName, void (*)(                                                                                      \
+                          __ubuf__ dataType*, __ubuf__ dataType*, dataType, const uint64_t*, const uint8_t,          \
+                          const UnaryRepeatParams&, bool))                                                           \
+            .times(1)                                                                                                \
+            .with(outBoundP(outputStub));                                                                            \
+        MOCKER(                                                                                                      \
+            funcName, void (*)(                                                                                      \
+                          __ubuf__ dataType*, __ubuf__ dataType*, dataType, const uint64_t, const uint8_t,           \
+                          const UnaryRepeatParams&, bool))                                                           \
+            .times(1)                                                                                                \
+            .with(outBoundP(outputStub));                                                                            \
+        MOCKER(                                                                                                      \
+            DataCopyUB2GMImpl, void (*)(__gm__ dataType*, __ubuf__ dataType*, const DataCopyParams&, const uint8_t)) \
+            .times(1)                                                                                                \
+            .will(invoke(DataCopyUB2GMImplStub<dataType>));                                                          \
+        uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize]{0x01};                                       \
+        uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize]{0x00};                                    \
+        BinaryScalarTest<dataType, opType>(                                                                          \
+            srcGm, outputGm, inputParams.stackSize, inputParams.dataSize, inputParams.maskCounter,                   \
+            inputParams.maskBitHigh, inputParams.maskBitLow, inputParams.repeatTimes, inputParams.repeatParams);     \
+        EXPECT_EQ(outputGm[0], 0x03);                                                                                \
     }
 
 SCALAR_BINARY_TEST_VALUE(AddsTestSuite_check_Output_float, float, AddsImpl, OpType::ADDS);
@@ -446,25 +467,28 @@ SCALAR_BINARY_TEST_VALUE(ShiftLeftTestSuite_check_Output_uint32, uint32_t, Shift
 SCALAR_BINARY_TEST_VALUE(ShiftLeftTestSuite_check_Output_int16, int16_t, ShiftLeftImpl, OpType::SHIFTLEFT);
 SCALAR_BINARY_TEST_VALUE(ShiftLeftTestSuite_check_Output_int32, int32_t, ShiftLeftImpl, OpType::SHIFTLEFT);
 
+SCALAR_BINARY_SHIFTRIGHT_TEST_VALUE(
+    ShiftRightTestSuite_check_Output_uint16, uint16_t, ShiftRightImpl, OpType::SHIFTRIGHT);
+SCALAR_BINARY_SHIFTRIGHT_TEST_VALUE(
+    ShiftRightTestSuite_check_Output_uint32, uint32_t, ShiftRightImpl, OpType::SHIFTRIGHT);
+SCALAR_BINARY_SHIFTRIGHT_TEST_VALUE(
+    ShiftRightTestSuite_check_Output_int16, int16_t, ShiftRightImpl, OpType::SHIFTRIGHT);
+SCALAR_BINARY_SHIFTRIGHT_TEST_VALUE(
+    ShiftRightTestSuite_check_Output_int32, int32_t, ShiftRightImpl, OpType::SHIFTRIGHT);
 
-SCALAR_BINARY_SHIFTRIGHT_TEST_VALUE(ShiftRightTestSuite_check_Output_uint16, uint16_t, ShiftRightImpl, OpType::SHIFTRIGHT);
-SCALAR_BINARY_SHIFTRIGHT_TEST_VALUE(ShiftRightTestSuite_check_Output_uint32, uint32_t, ShiftRightImpl, OpType::SHIFTRIGHT);
-SCALAR_BINARY_SHIFTRIGHT_TEST_VALUE(ShiftRightTestSuite_check_Output_int16, int16_t, ShiftRightImpl, OpType::SHIFTRIGHT);
-SCALAR_BINARY_SHIFTRIGHT_TEST_VALUE(ShiftRightTestSuite_check_Output_int32, int32_t, ShiftRightImpl, OpType::SHIFTRIGHT);
-
-#define SCALAR_BINARY_TEST_UNSUPPORT(testCaseName, dataType, opType)                                    \
-TEST_F(BinaryScalarTestsuite, testCaseName)                                                               \
-{                                                                                                           \
-    InputParams inputParams{1024,  1020,  sizeof(dataType), 11, 22, 0, 3, { 3, 1, 3, 1}};                  \
-    MOCKER(raise, int(*)(int)).times(3).will(returnValue(0));                                               \
-    uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize] { 0x00 };                               \
-    uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize] { 0x00 };                            \
-    BinaryScalarTest<dataType, opType>(srcGm, outputGm, inputParams.stackSize, inputParams.dataSize,      \
-        inputParams.maskCounter, inputParams.maskBitHigh, inputParams.maskBitLow,                           \
-        inputParams.repeatTimes, inputParams.repeatParams);                                                 \
-    EXPECT_EQ(outputGm[0], 0x00);                                                                           \
-    EXPECT_EQ(outputGm[1], 0x00);                                                                           \
-}                                                                                                           \
+#define SCALAR_BINARY_TEST_UNSUPPORT(testCaseName, dataType, opType)                                             \
+    TEST_F(BinaryScalarTestsuite, testCaseName)                                                                  \
+    {                                                                                                            \
+        InputParams inputParams{1024, 1020, sizeof(dataType), 11, 22, 0, 3, {3, 1, 3, 1}};                       \
+        MOCKER(raise, int (*)(int)).times(3).will(returnValue(0));                                               \
+        uint8_t srcGm[inputParams.stackSize * inputParams.dataTypeSize]{0x00};                                   \
+        uint8_t outputGm[inputParams.stackSize * inputParams.dataTypeSize]{0x00};                                \
+        BinaryScalarTest<dataType, opType>(                                                                      \
+            srcGm, outputGm, inputParams.stackSize, inputParams.dataSize, inputParams.maskCounter,               \
+            inputParams.maskBitHigh, inputParams.maskBitLow, inputParams.repeatTimes, inputParams.repeatParams); \
+        EXPECT_EQ(outputGm[0], 0x00);                                                                            \
+        EXPECT_EQ(outputGm[1], 0x00);                                                                            \
+    }
 
 enum TestMode {
     ADDS = 0,
@@ -479,18 +503,14 @@ enum TestMode {
 
 class TEST_BINARY_SCALAR_POS : public testing::Test {
 protected:
-    void SetUp()
-    {
-        SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        SetGCoreType(0);
-    }
+    void SetUp() { SetGCoreType(2); }
+    void TearDown() { SetGCoreType(0); }
 };
 
 template <typename T, int testMode>
-void MainVecBinaryScalarDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm, uint32_t dataSize)
+void MainVecBinaryScalarDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    uint32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -604,14 +624,14 @@ void MainVecBinaryScalarDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t*
     pipe_barrier(PIPE_ALL);
 }
 
-#define VEC_BINARY_SCALAR_POS_TESTCASE(dataType, testMode)                                              \
-    TEST_F(TEST_BINARY_SCALAR_POS, BINARY_SCALAR_##dataType##_##testMode##_##Case)                                               \
-    {                                                                                                               \
-        uint32_t dataSize = 256;                                                                                   \
-        uint8_t input0Gm[dataSize * sizeof(dataType)];                                                           \
-        uint8_t input1Gm[dataSize * sizeof(dataType)];                                                           \
-        uint8_t outputGm[dataSize * sizeof(dataType)];                                                           \
-        MainVecBinaryScalarDemo<dataType, testMode>(outputGm, input0Gm, input1Gm, dataSize);              \
+#define VEC_BINARY_SCALAR_POS_TESTCASE(dataType, testMode)                                   \
+    TEST_F(TEST_BINARY_SCALAR_POS, BINARY_SCALAR_##dataType##_##testMode##_##Case)           \
+    {                                                                                        \
+        uint32_t dataSize = 256;                                                             \
+        uint8_t input0Gm[dataSize * sizeof(dataType)];                                       \
+        uint8_t input1Gm[dataSize * sizeof(dataType)];                                       \
+        uint8_t outputGm[dataSize * sizeof(dataType)];                                       \
+        MainVecBinaryScalarDemo<dataType, testMode>(outputGm, input0Gm, input1Gm, dataSize); \
     }
 
 // Adds
@@ -662,7 +682,8 @@ VEC_BINARY_SCALAR_POS_TESTCASE(int16_t, 7);
 VEC_BINARY_SCALAR_POS_TESTCASE(uint16_t, 7);
 
 template <typename T, int testMode>
-void MainVecBinaryDcalarDemoWrong(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm)
+void MainVecBinaryDcalarDemoWrong(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm)
 {
     uint32_t dataSize = 256;
     TPipe tpipe;
@@ -697,7 +718,8 @@ void MainVecBinaryDcalarDemoWrong(__gm__ uint8_t* __restrict__ dstGm, __gm__ uin
 
     LocalTensor<int16_t> outputLocalS16;
     outputLocalS16.SetAddr(tbuf3);
-    outputLocalS16.InitBuffer(input0LocalS16.GetSize() * sizeof(int16_t) + input0LocalS16.GetSize() * sizeof(int16_t), dataSize);
+    outputLocalS16.InitBuffer(
+        input0LocalS16.GetSize() * sizeof(int16_t) + input0LocalS16.GetSize() * sizeof(int16_t), dataSize);
 
     DataCopy(input0Local, input0Global, dataSize);
     DataCopy(input1Local, input1Global, dataSize);
@@ -736,17 +758,16 @@ void MainVecBinaryDcalarDemoWrong(__gm__ uint8_t* __restrict__ dstGm, __gm__ uin
     pipe_barrier(PIPE_ALL);
 }
 
-#define VEC_BINARY_SCALAR_POS_TESTCASE_WRONG(dataType, testMode)                                                  \
-    TEST_F(TEST_BINARY_SCALAR_POS, BINARY_SCALAR_WRONG_##dataType##_##testMode##_##Case)                          \
-    {                                                                                                               \
-        uint32_t dataSize = 256;                                                                                   \
-        uint8_t input0Gm[dataSize * sizeof(dataType)];                                                           \
-        uint8_t input1Gm[dataSize * sizeof(dataType)];                                                           \
-        uint8_t outputGm[dataSize * sizeof(dataType)];                                                           \
-        MOCKER(raise, int(*)(int)).times(8).will(returnValue(0));                                                   \
-        MainVecBinaryDcalarDemoWrong<dataType, testMode>(outputGm, input0Gm, input1Gm);                   \
+#define VEC_BINARY_SCALAR_POS_TESTCASE_WRONG(dataType, testMode)                         \
+    TEST_F(TEST_BINARY_SCALAR_POS, BINARY_SCALAR_WRONG_##dataType##_##testMode##_##Case) \
+    {                                                                                    \
+        uint32_t dataSize = 256;                                                         \
+        uint8_t input0Gm[dataSize * sizeof(dataType)];                                   \
+        uint8_t input1Gm[dataSize * sizeof(dataType)];                                   \
+        uint8_t outputGm[dataSize * sizeof(dataType)];                                   \
+        MOCKER(raise, int (*)(int)).times(8).will(returnValue(0));                       \
+        MainVecBinaryDcalarDemoWrong<dataType, testMode>(outputGm, input0Gm, input1Gm);  \
     }
 
 // Adds
 VEC_BINARY_SCALAR_POS_TESTCASE_WRONG(half, 0);
- 

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 // #include "model/model_factory.h"
@@ -16,8 +16,9 @@ using namespace std;
 using namespace AscendC;
 
 template <typename T>
-__global__ __aicore__ void MainTransdatato5HD(__gm__ uint16_t* __restrict__ dstGm, __gm__ uint16_t* __restrict__ srcGm,
-    int32_t dataSize, const TransDataTo5HDParams& transdatato5HDParams, const int32_t width)
+__global__ __aicore__ void MainTransdatato5HD(
+    __gm__ uint16_t* __restrict__ dstGm, __gm__ uint16_t* __restrict__ srcGm, int32_t dataSize,
+    const TransDataTo5HDParams& transdatato5HDParams, const int32_t width)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
@@ -77,24 +78,20 @@ struct Transdatato5HDTestParams {
 
 class Transdatato5HDTestSuite : public testing::Test, public testing::WithParamInterface<Transdatato5HDTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_TRANSDATATO5HD, Transdatato5HDTestSuite,
-    ::testing::Values(Transdatato5HDTestParams { 256, 2, false, false, 1, 16, 16, MainTransdatato5HD<half>, 16 },
-    Transdatato5HDTestParams { 512, 2, false, false, 2, 16, 16, MainTransdatato5HD<uint16_t>, 16 },
-    Transdatato5HDTestParams { 512, 2, false, false, 2, 1, 1, MainTransdatato5HD<int16_t>, 32 },
-    Transdatato5HDTestParams { 512, 1, true, true, 1, 16, 16, MainTransdatato5HD<int8_t>, 32 },
-    Transdatato5HDTestParams { 512, 1, true, false, 1, 16, 16, MainTransdatato5HD<int8_t>, 32 },
-    Transdatato5HDTestParams { 1024, 1, false, false, 2, 16, 16, MainTransdatato5HD<uint8_t>, 32 },
-    Transdatato5HDTestParams { 1024, 1, false, true, 2, 1, 1, MainTransdatato5HD<uint8_t>, 64 }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_TRANSDATATO5HD, Transdatato5HDTestSuite,
+    ::testing::Values(
+        Transdatato5HDTestParams{256, 2, false, false, 1, 16, 16, MainTransdatato5HD<half>, 16},
+        Transdatato5HDTestParams{512, 2, false, false, 2, 16, 16, MainTransdatato5HD<uint16_t>, 16},
+        Transdatato5HDTestParams{512, 2, false, false, 2, 1, 1, MainTransdatato5HD<int16_t>, 32},
+        Transdatato5HDTestParams{512, 1, true, true, 1, 16, 16, MainTransdatato5HD<int8_t>, 32},
+        Transdatato5HDTestParams{512, 1, true, false, 1, 16, 16, MainTransdatato5HD<int8_t>, 32},
+        Transdatato5HDTestParams{1024, 1, false, false, 2, 16, 16, MainTransdatato5HD<uint8_t>, 32},
+        Transdatato5HDTestParams{1024, 1, false, true, 2, 1, 1, MainTransdatato5HD<uint8_t>, 64}));
 
 TEST_P(Transdatato5HDTestSuite, Transdatato5HDTestCase)
 {

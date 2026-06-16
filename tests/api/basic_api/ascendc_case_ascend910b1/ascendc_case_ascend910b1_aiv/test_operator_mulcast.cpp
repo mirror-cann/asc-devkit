@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "mockcpp/mockcpp.hpp"
@@ -16,8 +16,8 @@ template <typename T, typename U>
 class MulcastTest {
 public:
     __aicore__ inline MulcastTest() {}
-    __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm,
-        __gm__ uint8_t* src1Gm, const uint32_t calCount)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, const uint32_t calCount)
     {
         mElementCount = calCount;
         mSrc0Global.SetGlobalBuffer((__gm__ U*)src0Gm);
@@ -34,6 +34,7 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
@@ -67,6 +68,7 @@ private:
         DataCopy(mDstGlobal, dstLocal, mElementCount);
         mQueOut.FreeTensor(dstLocal);
     }
+
 private:
     TPipe mPipe;
     uint32_t mElementCount;
@@ -95,25 +97,24 @@ struct mulcastParams {
     void (*CalFunc)(uint8_t*, uint8_t*, uint8_t*, uint32_t);
 };
 
-class MulcastTestsuite : public testing::Test,
-    public testing::WithParamInterface<mulcastParams> {
+class MulcastTestsuite : public testing::Test, public testing::WithParamInterface<mulcastParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown()
+    {
         AscendC::SetGCoreType(0);
         GlobalMockObject::verify();
     }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_MULCAST, MulcastTestsuite,
-    ::testing::Values(mulcastParams { 128, true, 2, 1, testMulcast<int8_t, half>},
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_MULCAST, MulcastTestsuite,
+    ::testing::Values(
+        mulcastParams{128, true, 2, 1, testMulcast<int8_t, half>},
         // src必须为half, dst必须为int8_t / uint8_t
-        mulcastParams { 128, false, 2, 2, testMulcast<uint16_t, half>},
-        mulcastParams { 128, true, 2, 1, testMulcast<uint8_t, half>},
-        mulcastParams { 128, false, 2, 1, testMulcast<int8_t, uint16_t>}
-));
+        mulcastParams{128, false, 2, 2, testMulcast<uint16_t, half>},
+        mulcastParams{128, true, 2, 1, testMulcast<uint8_t, half>},
+        mulcastParams{128, false, 2, 1, testMulcast<int8_t, uint16_t>}));
 
 TEST_P(MulcastTestsuite, testMulcast)
 {
@@ -124,7 +125,7 @@ TEST_P(MulcastTestsuite, testMulcast)
     uint8_t src1Gm[param.calCount * srcTypeSize] = {0};
     uint8_t dstGm[param.calCount * dstTypeSize] = {0};
     if (!param.expectRes) {
-        MOCKER(raise, int(*)(int)).times(3).will(returnValue(0));
+        MOCKER(raise, int (*)(int)).times(3).will(returnValue(0));
     }
     param.CalFunc(dstGm, src0Gm, src1Gm, param.calCount);
     for (int32_t i = 0; i < param.calCount; i++) {

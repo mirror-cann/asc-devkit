@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include "kernel_base_types.h"
 #include "kernel_basic_intf.h"
@@ -70,8 +70,8 @@
 
 static void test_host_kernel_common()
 {
-    using AscendC::Mutex;
     using AscendC::AllocMutexID;
+    using AscendC::Mutex;
     using AscendC::ReleaseMutexID;
     using AscendC::SetAippFunctions;
 }
@@ -79,102 +79,90 @@ static void test_host_kernel_common()
 static void test_host_kernel_operator_atomic_intf()
 {
     using AscendC::AtomicAdd;
-    using AscendC::AtomicMax;
-    using AscendC::AtomicMin;
     using AscendC::AtomicCas;
     using AscendC::AtomicExch;
+    using AscendC::AtomicMax;
+    using AscendC::AtomicMin;
 }
 
-static void test_host_kernel_operator_block_sync_intf()
-{
-    using AscendC::DataSyncBarrier;
-}
+static void test_host_kernel_operator_block_sync_intf() { using AscendC::DataSyncBarrier; }
 
-static void test_host_kernel_operator_cache_intf()
-{
-    using AscendC::DataCacheCleanAndInvalid;
-}
+static void test_host_kernel_operator_cache_intf() { using AscendC::DataCacheCleanAndInvalid; }
 
 static void test_host_kernel_operator_common_intf()
 {
-    using AscendC::SetCtrlSpr;
     using AscendC::GetCtrlSpr;
     using AscendC::ResetCtrlSpr;
+    using AscendC::SetCtrlSpr;
 }
 
 static void test_host_kernel_operator_data_copy_intf()
 {
-    using AscendC::DataCopy;
     using AscendC::Copy;
+    using AscendC::DataCopy;
     using AscendC::NdDmaDci;
-    using AscendC::SetLoopModePara;
     using AscendC::ResetLoopModePara;
+    using AscendC::SetLoopModePara;
 }
 
-static void test_host_kernel_operator_fixpipe_intf()
-{
-    using AscendC::Fixpipe;
-}
+static void test_host_kernel_operator_fixpipe_intf() { using AscendC::Fixpipe; }
 
 static void test_host_kernel_operator_mm_intf()
 {
     using AscendC::LoadData;
+    using AscendC::LoadDataWithSparse;
     using AscendC::LoadDataWithStride;
+    using AscendC::LoadUnzipIndex;
     using AscendC::Mmad;
     using AscendC::MmadWithSparse;
-    using AscendC::LoadDataWithSparse;
-    using AscendC::LoadUnzipIndex;
     using AscendC::SetFmatrix;
     using AscendC::SetLoadDataRepeatWithStride;
 }
 
 static void test_host_kernel_operator_scalar_intf()
 {
-    using AscendC::GetUintDivMagicAndShift;
     using AscendC::Cast;
-    using AscendC::WriteGmByPassDCache;
+    using AscendC::GetUintDivMagicAndShift;
     using AscendC::ReadGmByPassDCache;
+    using AscendC::WriteGmByPassDCache;
 }
 
 static void test_host_kernel_operator_sys_var_intf()
 {
-    using AscendC::GetSpr;
     using AscendC::ClearSpr;
+    using AscendC::GetRuntimeUBSize;
+    using AscendC::GetSpr;
+    using AscendC::GetSsbufBaseAddr;
     using AscendC::GetUBSizeInBytes;
     using AscendC::GetVecLen;
-    using AscendC::GetRuntimeUBSize;
-    using AscendC::GetSsbufBaseAddr;
 }
 
-static void test_host_kernel_operator_utils_intf()
-{
-    using AscendC::Nop;
-}
+static void test_host_kernel_operator_utils_intf() { using AscendC::Nop; }
 
 static void test_host_kernel_operator_vec_binary_intf()
 {
+    using AscendC::AbsSub;
+    using AscendC::ExpSub;
+    using AscendC::FusedAbsSub;
+    using AscendC::FusedExpSub;
+    using AscendC::Mull;
+    using AscendC::Prelu;
     using AscendC::ShiftLeft;
     using AscendC::ShiftRight;
-    using AscendC::Prelu;
-    using AscendC::Mull;
-    using AscendC::AbsSub;
-    using AscendC::FusedAbsSub;
-    using AscendC::ExpSub;
-    using AscendC::FusedExpSub;
 }
 
 static void test_host_kernel_operator_vec_binary_scalar_intf()
 {
     using AscendC::Adds;
-    using AscendC::Muls;
+    using AscendC::Ands;
+    using AscendC::Divs;
+    using AscendC::FusedMulsCast;
     using AscendC::Maxs;
     using AscendC::Mins;
-    using AscendC::Subs;
-    using AscendC::Divs;
-    using AscendC::Ands;
-    using AscendC::Ors;
+    using AscendC::Muls;
     using AscendC::MulsCast;
-    using AscendC::FusedMulsCast;
+    using AscendC::Ors;
+    using AscendC::Subs;
 }
 
 static void test_host_kernel_operator_vec_cmpsel_intf()
@@ -186,9 +174,9 @@ static void test_host_kernel_operator_vec_cmpsel_intf()
 
 static void test_host_kernel_operator_vec_duplicate_intf()
 {
+    using AscendC::DeInterleave;
     using AscendC::Duplicate;
     using AscendC::Interleave;
-    using AscendC::DeInterleave;
 }
 
 static void test_host_kernel_operator_vec_unary_intf()
@@ -197,31 +185,21 @@ static void test_host_kernel_operator_vec_unary_intf()
     using AscendC::Neg;
 }
 
-static void test_host_kernel_operator_vec_vconv_intf()
-{
-    using AscendC::Truncate;
-}
+static void test_host_kernel_operator_vec_vconv_intf() { using AscendC::Truncate; }
 
-static void test_host_kernel_struct_aipp()
-{
-    using AscendC::AippParams;
-}
+static void test_host_kernel_struct_aipp() { using AscendC::AippParams; }
 
 static void test_host_kernel_struct_fixpipe()
 {
-    using AscendC::TransformParams;
     using AscendC::FixpipeParamsArch3510;
     using AscendC::FixpipeParamsC310;
+    using AscendC::TransformParams;
 }
 
-static void test_host_kernel_tensor()
-{
-    using AscendC::GlobalTensor;
-}
+static void test_host_kernel_tensor() { using AscendC::GlobalTensor; }
 
 static void test_host_kernel_tpipe()
 {
     using AscendC::AllocMutexID;
     using AscendC::ReleaseMutexID;
 }
-

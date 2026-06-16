@@ -1,19 +1,18 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <type_traits>
 #include "kernel_operator.h"
 using namespace std;
 using namespace AscendC;
-
 
 #define DType half
 #define DType1 half
@@ -22,15 +21,14 @@ using namespace AscendC;
 template <typename T, typename SCR1_T, int32_t MD>
 class KernelBinary {
 public:
-    __aicore__ inline KernelBinary()
-    {}
-    __aicore__ inline void Init(GM_ADDR dst0_gm, GM_ADDR dst1_gm, GM_ADDR src0_gm, GM_ADDR src1_gm,
-            uint32_t nums, uint32_t vec_mask)
+    __aicore__ inline KernelBinary() {}
+    __aicore__ inline void Init(
+        GM_ADDR dst0_gm, GM_ADDR dst1_gm, GM_ADDR src0_gm, GM_ADDR src1_gm, uint32_t nums, uint32_t vec_mask)
     {
-        src0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(src0_gm), nums);
-        src1_global.SetGlobalBuffer(reinterpret_cast<__gm__ SCR1_T *>(src1_gm), nums);
-        dst0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dst0_gm), nums);
-        dst1_global.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dst1_gm), nums);
+        src0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(src0_gm), nums);
+        src1_global.SetGlobalBuffer(reinterpret_cast<__gm__ SCR1_T*>(src1_gm), nums);
+        dst0_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dst0_gm), nums);
+        dst1_global.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dst1_gm), nums);
 
         pipe.InitBuffer(inQueueX, 1, nums * sizeof(T));
         pipe.InitBuffer(inQueueX2, 1, nums * sizeof(SCR1_T));
@@ -74,8 +72,8 @@ private:
         LocalTensor<SCR1_T> src1Local = inQueueX2.DeQue<SCR1_T>();
         static constexpr Reg::DivSpecificMode divMode = {Reg::MaskMergeMode::ZEROING, true};
         uint16_t mask_bit_size = 256;
-        uint16_t one_rep_size = mask_bit_size/sizeof(T);
-        uint16_t rep = dataSize/one_rep_size;
+        uint16_t one_rep_size = mask_bit_size / sizeof(T);
+        uint16_t rep = dataSize / one_rep_size;
         __ubuf__ T* dstPtr = (__ubuf__ T*)dst0Local.GetPhyAddr();
         __ubuf__ T* dst1Ptr = (__ubuf__ T*)dst1Local.GetPhyAddr();
         __ubuf__ T* src0Ptr = (__ubuf__ T*)src0Local.GetPhyAddr();
@@ -123,15 +121,15 @@ private:
                 } else if constexpr (MD == 12) {
                     carryOut = pset_b8(PAT_ALL);
                     vaddc(carryOut, vDstReg1, vSrcReg0, vSrcReg1, maskReg);
-                    psts(carryOut, (__ubuf__ uint32_t *)dst1Ptr, i * one_rep_size, NORM);
+                    psts(carryOut, (__ubuf__ uint32_t*)dst1Ptr, i * one_rep_size, NORM);
                 } else if constexpr (MD == 13) {
                     carryOut = pset_b8(PAT_ALL);
                     vsubc(carryOut, vDstReg1, vSrcReg0, vSrcReg1, maskReg);
-                    psts(carryOut, (__ubuf__ uint32_t *)dst1Ptr, i * one_rep_size, NORM);
+                    psts(carryOut, (__ubuf__ uint32_t*)dst1Ptr, i * one_rep_size, NORM);
                 } else if constexpr (MD == 14) {
                     carryOut = pset_b8(PAT_ALL);
                     vsubcs(carryOut, vDstReg1, vSrcReg0, vSrcReg1, carrySrc, maskReg);
-                    psts(carryOut, (__ubuf__ uint32_t *)dst1Ptr, i * one_rep_size, NORM);
+                    psts(carryOut, (__ubuf__ uint32_t*)dst1Ptr, i * one_rep_size, NORM);
                 } else if constexpr (MD == 17) {
                     Reg::Div<T, &divMode>(vDstReg0, vSrcReg0, vSrcReg1, maskReg);
                 } else if constexpr (MD == 20) {
@@ -183,8 +181,9 @@ struct MicroBinaryParams {
     void (*CallFunc)();
 };
 
-template<typename T, typename T2, int32_t mode>
-void MicroBinaryRunCase() {
+template <typename T, typename T2, int32_t mode>
+void MicroBinaryRunCase()
+{
     int byte_size = sizeof(T);
     int shape_size = 1024;
     int mask = 256;
@@ -205,106 +204,99 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(MicroBinaryTestCase, MicroBinaryTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    MicroBinaryTestCase, MicroBinaryTestsuite,
     ::testing::Values(
-                      MicroBinaryParams { MicroBinaryRunCase<uint8_t, uint8_t, 0> },
-                      MicroBinaryParams { MicroBinaryRunCase<int8_t, int8_t, 0> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 0> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, uint64_t, 0> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 1> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, uint32_t, 1> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint16_t, uint16_t, 1> },
-                      MicroBinaryParams { MicroBinaryRunCase<int16_t, int16_t, 1> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint8_t, uint8_t, 1> },
-                      MicroBinaryParams { MicroBinaryRunCase<int8_t, int8_t, 1> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 2> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, uint64_t, 2> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, uint32_t, 2> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 2> },
-                      MicroBinaryParams { MicroBinaryRunCase<half, half, 3> },
-                      MicroBinaryParams { MicroBinaryRunCase<float, float, 3> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 8> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, uint64_t, 8> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 8> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, uint32_t, 8> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint16_t, uint16_t, 8> },
-                      MicroBinaryParams { MicroBinaryRunCase<int16_t, int16_t, 8> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint8_t, uint8_t, 8> },
-                      MicroBinaryParams { MicroBinaryRunCase<bool, bool, 8> },
-                      MicroBinaryParams { MicroBinaryRunCase<int8_t, int8_t, 8> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 4> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, uint64_t, 4> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 4> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, uint32_t, 4> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint16_t, uint16_t, 4> },
-                      MicroBinaryParams { MicroBinaryRunCase<int16_t, int16_t, 4> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint8_t, uint8_t, 4> },
-                      MicroBinaryParams { MicroBinaryRunCase<int8_t, int8_t, 4> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 5> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, uint64_t, 5> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 5> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, uint32_t, 5> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint16_t, uint16_t, 5> },
-                      MicroBinaryParams { MicroBinaryRunCase<int16_t, int16_t, 5> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint8_t, uint8_t, 5> },
-                      MicroBinaryParams { MicroBinaryRunCase<int8_t, int8_t, 5> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 9> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, uint64_t, 9> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 9> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, uint32_t, 9> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint16_t, uint16_t, 9> },
-                      MicroBinaryParams { MicroBinaryRunCase<int16_t, int16_t, 9> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint8_t, uint8_t, 9> },
-                      MicroBinaryParams { MicroBinaryRunCase<int8_t, int8_t, 9> },
-                      MicroBinaryParams { MicroBinaryRunCase<bool, bool, 9> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 10> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, uint64_t, 10> },
-                      MicroBinaryParams { MicroBinaryRunCase<int8_t, int8_t, 10> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint8_t, uint8_t, 10> },
-                      MicroBinaryParams { MicroBinaryRunCase<bool, bool, 10> },
-                      MicroBinaryParams { MicroBinaryRunCase<int16_t, int16_t, 10> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint16_t, uint16_t, 10> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, uint32_t, 11> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 11> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 6> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, int64_t, 6> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 6> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, int32_t, 6> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint16_t, int16_t, 6> },
-                      MicroBinaryParams { MicroBinaryRunCase<int16_t, int16_t, 6> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint8_t, int8_t, 6> },
-                      MicroBinaryParams { MicroBinaryRunCase<int8_t, int8_t, 6> },
-                      MicroBinaryParams { MicroBinaryRunCase<int64_t, int64_t, 7> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint64_t, int64_t, 7> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 7> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, int32_t, 7> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint16_t, int16_t, 7> },
-                      MicroBinaryParams { MicroBinaryRunCase<int16_t, int16_t, 7> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint8_t, int8_t, 7> },
-                      MicroBinaryParams { MicroBinaryRunCase<int8_t, int8_t, 7> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, uint32_t, 13> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, uint32_t, 14> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 13> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 14> },
-                      MicroBinaryParams { MicroBinaryRunCase<float, float, 22> },
-                      MicroBinaryParams { MicroBinaryRunCase<half, half, 22> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 15> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 16> },
-                      MicroBinaryParams { MicroBinaryRunCase<float, float, 17> },
-                      MicroBinaryParams { MicroBinaryRunCase<int32_t, int32_t, 19> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint32_t, uint32_t, 19> },
-                      MicroBinaryParams { MicroBinaryRunCase<int16_t, int16_t, 19> },
-                      MicroBinaryParams { MicroBinaryRunCase<uint16_t, uint16_t, 19> },
-                      MicroBinaryParams { MicroBinaryRunCase<float, float, 19> },
-                      MicroBinaryParams { MicroBinaryRunCase<half, half, 19> },
-                      MicroBinaryParams { MicroBinaryRunCase<bfloat16_t, bfloat16_t, 19> },
-                      MicroBinaryParams { MicroBinaryRunCase<float, float, 20> },
-                      MicroBinaryParams { MicroBinaryRunCase<half, half, 20> },
-                      MicroBinaryParams { MicroBinaryRunCase<float, float, 21> },
-                      MicroBinaryParams { MicroBinaryRunCase<half, half, 21> },
-                      MicroBinaryParams { MicroBinaryRunCase<half, half, 23> },
-                      MicroBinaryParams { MicroBinaryRunCase<float, float, 23> }
-                      ));
+        MicroBinaryParams{MicroBinaryRunCase<uint8_t, uint8_t, 0>},
+        MicroBinaryParams{MicroBinaryRunCase<int8_t, int8_t, 0>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 0>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, uint64_t, 0>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 1>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, uint32_t, 1>},
+        MicroBinaryParams{MicroBinaryRunCase<uint16_t, uint16_t, 1>},
+        MicroBinaryParams{MicroBinaryRunCase<int16_t, int16_t, 1>},
+        MicroBinaryParams{MicroBinaryRunCase<uint8_t, uint8_t, 1>},
+        MicroBinaryParams{MicroBinaryRunCase<int8_t, int8_t, 1>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 2>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, uint64_t, 2>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, uint32_t, 2>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 2>},
+        MicroBinaryParams{MicroBinaryRunCase<half, half, 3>}, MicroBinaryParams{MicroBinaryRunCase<float, float, 3>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 8>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, uint64_t, 8>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 8>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, uint32_t, 8>},
+        MicroBinaryParams{MicroBinaryRunCase<uint16_t, uint16_t, 8>},
+        MicroBinaryParams{MicroBinaryRunCase<int16_t, int16_t, 8>},
+        MicroBinaryParams{MicroBinaryRunCase<uint8_t, uint8_t, 8>},
+        MicroBinaryParams{MicroBinaryRunCase<bool, bool, 8>}, MicroBinaryParams{MicroBinaryRunCase<int8_t, int8_t, 8>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 4>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, uint64_t, 4>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 4>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, uint32_t, 4>},
+        MicroBinaryParams{MicroBinaryRunCase<uint16_t, uint16_t, 4>},
+        MicroBinaryParams{MicroBinaryRunCase<int16_t, int16_t, 4>},
+        MicroBinaryParams{MicroBinaryRunCase<uint8_t, uint8_t, 4>},
+        MicroBinaryParams{MicroBinaryRunCase<int8_t, int8_t, 4>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 5>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, uint64_t, 5>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 5>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, uint32_t, 5>},
+        MicroBinaryParams{MicroBinaryRunCase<uint16_t, uint16_t, 5>},
+        MicroBinaryParams{MicroBinaryRunCase<int16_t, int16_t, 5>},
+        MicroBinaryParams{MicroBinaryRunCase<uint8_t, uint8_t, 5>},
+        MicroBinaryParams{MicroBinaryRunCase<int8_t, int8_t, 5>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 9>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, uint64_t, 9>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 9>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, uint32_t, 9>},
+        MicroBinaryParams{MicroBinaryRunCase<uint16_t, uint16_t, 9>},
+        MicroBinaryParams{MicroBinaryRunCase<int16_t, int16_t, 9>},
+        MicroBinaryParams{MicroBinaryRunCase<uint8_t, uint8_t, 9>},
+        MicroBinaryParams{MicroBinaryRunCase<int8_t, int8_t, 9>}, MicroBinaryParams{MicroBinaryRunCase<bool, bool, 9>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 10>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, uint64_t, 10>},
+        MicroBinaryParams{MicroBinaryRunCase<int8_t, int8_t, 10>},
+        MicroBinaryParams{MicroBinaryRunCase<uint8_t, uint8_t, 10>},
+        MicroBinaryParams{MicroBinaryRunCase<bool, bool, 10>},
+        MicroBinaryParams{MicroBinaryRunCase<int16_t, int16_t, 10>},
+        MicroBinaryParams{MicroBinaryRunCase<uint16_t, uint16_t, 10>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, uint32_t, 11>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 11>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 6>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, int64_t, 6>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 6>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, int32_t, 6>},
+        MicroBinaryParams{MicroBinaryRunCase<uint16_t, int16_t, 6>},
+        MicroBinaryParams{MicroBinaryRunCase<int16_t, int16_t, 6>},
+        MicroBinaryParams{MicroBinaryRunCase<uint8_t, int8_t, 6>},
+        MicroBinaryParams{MicroBinaryRunCase<int8_t, int8_t, 6>},
+        MicroBinaryParams{MicroBinaryRunCase<int64_t, int64_t, 7>},
+        MicroBinaryParams{MicroBinaryRunCase<uint64_t, int64_t, 7>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 7>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, int32_t, 7>},
+        MicroBinaryParams{MicroBinaryRunCase<uint16_t, int16_t, 7>},
+        MicroBinaryParams{MicroBinaryRunCase<int16_t, int16_t, 7>},
+        MicroBinaryParams{MicroBinaryRunCase<uint8_t, int8_t, 7>},
+        MicroBinaryParams{MicroBinaryRunCase<int8_t, int8_t, 7>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, uint32_t, 13>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, uint32_t, 14>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 13>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 14>},
+        MicroBinaryParams{MicroBinaryRunCase<float, float, 22>}, MicroBinaryParams{MicroBinaryRunCase<half, half, 22>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 15>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 16>},
+        MicroBinaryParams{MicroBinaryRunCase<float, float, 17>},
+        MicroBinaryParams{MicroBinaryRunCase<int32_t, int32_t, 19>},
+        MicroBinaryParams{MicroBinaryRunCase<uint32_t, uint32_t, 19>},
+        MicroBinaryParams{MicroBinaryRunCase<int16_t, int16_t, 19>},
+        MicroBinaryParams{MicroBinaryRunCase<uint16_t, uint16_t, 19>},
+        MicroBinaryParams{MicroBinaryRunCase<float, float, 19>}, MicroBinaryParams{MicroBinaryRunCase<half, half, 19>},
+        MicroBinaryParams{MicroBinaryRunCase<bfloat16_t, bfloat16_t, 19>},
+        MicroBinaryParams{MicroBinaryRunCase<float, float, 20>}, MicroBinaryParams{MicroBinaryRunCase<half, half, 20>},
+        MicroBinaryParams{MicroBinaryRunCase<float, float, 21>}, MicroBinaryParams{MicroBinaryRunCase<half, half, 21>},
+        MicroBinaryParams{MicroBinaryRunCase<half, half, 23>},
+        MicroBinaryParams{MicroBinaryRunCase<float, float, 23>}));
 
 TEST_P(MicroBinaryTestsuite, MicroBinaryTestCase)
 {

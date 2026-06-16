@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <type_traits>
 #include <random>
@@ -37,7 +37,7 @@ TEST_F(BF16Testsuite, MathApiTest)
     bfloat16_t result = hcos(x_h);
     bfloat16_t expect = bfloat16_t(cosf((float)x_h));
     EXPECT_EQ(expect, result);
-    
+
     result = hsin(x_h);
     expect = bfloat16_t(sinf((float)x_h));
     EXPECT_EQ(expect, result);
@@ -53,7 +53,7 @@ TEST_F(BF16Testsuite, MathApiTest)
     result = hexp2(x_h);
     expect = bfloat16_t(exp2f((float)x_h));
     EXPECT_EQ(expect, result);
-    
+
     result = hexp10(x_h);
     expect = bfloat16_t(powf(10.0, (float)x_h));
     EXPECT_EQ(expect, result);
@@ -90,7 +90,7 @@ TEST_F(BF162Testsuite, MathApiTest_bfloat16x2t)
     bfloat16_t expect2 = bfloat16_t(cosf((float)y_h));
     EXPECT_EQ(expect1, result.x);
     EXPECT_EQ(expect2, result.y);
-    
+
     result = h2sin(xy_h2);
     expect1 = bfloat16_t(sinf((float)x_h));
     expect2 = bfloat16_t(sinf((float)y_h));
@@ -114,7 +114,7 @@ TEST_F(BF162Testsuite, MathApiTest_bfloat16x2t)
     expect2 = bfloat16_t(exp2f((float)y_h));
     EXPECT_EQ(expect1, result.x);
     EXPECT_EQ(expect2, result.y);
-    
+
     result = h2exp10(xy_h2);
     expect1 = bfloat16_t(powf(10.0f, (float)x_h));
     expect2 = bfloat16_t(powf(10.0f, (float)y_h));
@@ -152,7 +152,7 @@ TEST_F(BF162Testsuite, MathApiTest_bfloat16x2t)
         EXPECT_EQ(expect1, result.x);
         EXPECT_EQ(expect2, result.y);
     }
-    
+
     result = h2sqrt(xy_h2);
     if (x_h > bfloat16_t(0) && y_h > bfloat16_t(0)) {
         expect1 = bfloat16_t(sqrt((float)x_h));
@@ -278,7 +278,7 @@ TEST_F(BF162Testsuite, CastApiTest_bfloat16x2t)
     EXPECT_EQ(expect1, res_fp32_2.x);
     EXPECT_EQ(expect2, res_fp32_2.y);
 
-    res_bf16  = __ushort_as_bfloat16((unsigned short)0x3F80U);
+    res_bf16 = __ushort_as_bfloat16((unsigned short)0x3F80U);
     EXPECT_EQ(1, res_bf16);
 }
 // ================================ Test bfloat16_t end ===============================

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -18,17 +18,17 @@ namespace AscendC {
 template <typename srcType>
 class KernelWhere {
 public:
-    __aicore__ inline KernelWhere()
-    {}
-    __aicore__ inline void Init(GM_ADDR src0_gm, GM_ADDR src1_gm, GM_ADDR condition_gm, GM_ADDR dst_gm,
-                                const uint32_t count, const uint32_t mode)
+    __aicore__ inline KernelWhere() {}
+    __aicore__ inline void Init(
+        GM_ADDR src0_gm, GM_ADDR src1_gm, GM_ADDR condition_gm, GM_ADDR dst_gm, const uint32_t count,
+        const uint32_t mode)
     {
         this->mode = mode;
         dataSize = count;
-        src0_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(src0_gm), dataSize);
-        src1_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(src1_gm), dataSize);
-        condition_global.SetGlobalBuffer(reinterpret_cast<__gm__ bool *>(condition_gm), dataSize);
-        dst_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(dst_gm), dataSize);
+        src0_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(src0_gm), dataSize);
+        src1_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(src1_gm), dataSize);
+        condition_global.SetGlobalBuffer(reinterpret_cast<__gm__ bool*>(condition_gm), dataSize);
+        dst_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(dst_gm), dataSize);
 
         pipe.InitBuffer(inQueueX, 1, dataSize * sizeof(srcType));
         pipe.InitBuffer(inQueueY, 1, dataSize * sizeof(srcType));
@@ -108,11 +108,11 @@ private:
     uint32_t dataSize = 0;
     uint32_t mode = 0;
 };
-}
+} // namespace AscendC
 
 template <typename srcType>
-__aicore__ void kernel_where_operator(GM_ADDR src0_gm, GM_ADDR src1_gm, GM_ADDR condition_gm, GM_ADDR dst_gm,
-                                const uint32_t count, const uint32_t mode)
+__aicore__ void kernel_where_operator(
+    GM_ADDR src0_gm, GM_ADDR src1_gm, GM_ADDR condition_gm, GM_ADDR dst_gm, const uint32_t count, const uint32_t mode)
 {
     KernelWhere<srcType> op;
     op.Init(src0_gm, src1_gm, condition_gm, dst_gm, count, mode);
@@ -128,30 +128,27 @@ struct WhereTestParams {
 
 class AdvanceWhereTestSuite : public testing::TestWithParam<WhereTestParams> {
 protected:
-void SetUp() {}
-void TearDown() {}
+    void SetUp() {}
+    void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ADVANCE_API_WHERE, AdvanceWhereTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ADVANCE_API_WHERE, AdvanceWhereTestSuite,
     ::testing::Values(
-        WhereTestParams {4, 32, 0, kernel_where_operator<float>},
-        WhereTestParams {4, 4096, 1, kernel_where_operator<float>},
-        WhereTestParams {4, 64, 2, kernel_where_operator<float>},
-        WhereTestParams {4, 96, 3, kernel_where_operator<float>},
-        WhereTestParams {2, 32, 0, kernel_where_operator<half>},
-        WhereTestParams {2, 4096, 1, kernel_where_operator<half>},
-        WhereTestParams {2, 96, 2, kernel_where_operator<half>},
-        WhereTestParams {2, 64, 3, kernel_where_operator<half>},
-        WhereTestParams {1, 32, 0, kernel_where_operator<int8_t>},
-        WhereTestParams {1, 4096, 1, kernel_where_operator<int8_t>},
-        WhereTestParams {1, 256, 2, kernel_where_operator<int8_t>},
-        WhereTestParams {1, 1024, 3, kernel_where_operator<int8_t>},
-        WhereTestParams {8, 32, 0, kernel_where_operator<int64_t>},
-        WhereTestParams {8, 1024, 1, kernel_where_operator<int64_t>},
-        WhereTestParams {8, 96, 2, kernel_where_operator<int64_t>},
-        WhereTestParams {8, 64, 3, kernel_where_operator<int64_t>}
-    )
-);
+        WhereTestParams{4, 32, 0, kernel_where_operator<float>},
+        WhereTestParams{4, 4096, 1, kernel_where_operator<float>},
+        WhereTestParams{4, 64, 2, kernel_where_operator<float>},
+        WhereTestParams{4, 96, 3, kernel_where_operator<float>}, WhereTestParams{2, 32, 0, kernel_where_operator<half>},
+        WhereTestParams{2, 4096, 1, kernel_where_operator<half>},
+        WhereTestParams{2, 96, 2, kernel_where_operator<half>}, WhereTestParams{2, 64, 3, kernel_where_operator<half>},
+        WhereTestParams{1, 32, 0, kernel_where_operator<int8_t>},
+        WhereTestParams{1, 4096, 1, kernel_where_operator<int8_t>},
+        WhereTestParams{1, 256, 2, kernel_where_operator<int8_t>},
+        WhereTestParams{1, 1024, 3, kernel_where_operator<int8_t>},
+        WhereTestParams{8, 32, 0, kernel_where_operator<int64_t>},
+        WhereTestParams{8, 1024, 1, kernel_where_operator<int64_t>},
+        WhereTestParams{8, 96, 2, kernel_where_operator<int64_t>},
+        WhereTestParams{8, 64, 3, kernel_where_operator<int64_t>}));
 
 TEST_P(AdvanceWhereTestSuite, kernel_where_operator)
 {

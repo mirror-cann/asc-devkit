@@ -22,23 +22,21 @@ struct TestKfcClientParams {
 
 class TestKfcClientSuite : public testing::Test, public testing::WithParamInterface<TestKfcClientParams> {
 public:
-uint8_t* workspace;
-TPipe tpipe;
+    uint8_t* workspace;
+    TPipe tpipe;
+
 protected:
-    void SetUp() {
-        const int size = 16*1024*1024;
+    void SetUp()
+    {
+        const int size = 16 * 1024 * 1024;
         workspace = new uint8_t[size];
         memset_s(workspace, size, static_cast<uint8_t>(MSG_STATE::STATE_INVALID), size);
     }
-    void TearDown() {
-        delete[] workspace;
-    }
+    void TearDown() { delete[] workspace; }
 };
 
-INSTANTIATE_TEST_CASE_P(TestKfcClient, TestKfcClientSuite,
-    ::testing::Values(
-    TestKfcClientParams { 0, 0 * MAX_MSG_COUNT * sizeof(KfcMsg) }
-));
+INSTANTIATE_TEST_CASE_P(
+    TestKfcClient, TestKfcClientSuite, ::testing::Values(TestKfcClientParams{0, 0 * MAX_MSG_COUNT * sizeof(KfcMsg)}));
 
 TEST_P(TestKfcClientSuite, TestKfcClientConstruct)
 {
@@ -56,11 +54,11 @@ TEST_P(TestKfcClientSuite, TestKfcClientConstruct)
     EXPECT_EQ(reinterpret_cast<uint8_t*>(kfcAIV.msgRcvHead), workspace + (param.blockIdx * 2 + 1) * MSG_OFFSET);
     EXPECT_EQ(kfcAIV.msgSendPos, 0);
     EXPECT_EQ(kfcAIV.msgRcvPos, 0);
-    __gm__ KfcMsg * msg = kfcAIV.AllocMessage();
+    __gm__ KfcMsg* msg = kfcAIV.AllocMessage();
     msg->head = 1;
     kfcAIV.PostMessage<false>(msg);
     auto kfcAIVMsg = AllocMessageImpl(kfcAIV.msgRcvHead, kfcAIV.msgSendPos, kfcAIV.msgSendStart);
-    if (1){
+    if (1) {
         KfcCommClient kfcAIVHdWare(workspace, param.blockIdx, 1);
         KfcCommClient kfcAIVNoHdWare(workspace, param.blockIdx, 0);
     }
@@ -73,5 +71,5 @@ TEST_P(TestKfcClientSuite, TestKfcClientConstruct)
     uint32_t KfcMsgState = KfcMsgGetState(flag);
     KFC_Enum funID = KFC_Enum::MMFUN_INIT;
     uint16_t instID = 0x1234;
-    uint32_t KfcMsgFlag =  KfcMsgMakeFlag(funID, instID);
+    uint32_t KfcMsgFlag = KfcMsgMakeFlag(funID, instID);
 }

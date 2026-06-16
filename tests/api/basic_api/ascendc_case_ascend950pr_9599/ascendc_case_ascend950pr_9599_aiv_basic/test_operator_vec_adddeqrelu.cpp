@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -23,7 +23,8 @@ enum TestMode {
 };
 
 template <typename SrcT, typename DstT>
-void VecAddDeqRelu(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+void VecAddDeqRelu(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
     __gm__ int32_t dataSize, TestMode testMode)
 {
     TPipe tpipe;
@@ -61,7 +62,8 @@ void VecAddDeqRelu(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restric
     uint8_t repeatTimes = dataSize / repeatSize;
     half scale = 0.1;
     SetDeqScale(scale);
-    BinaryRepeatParams repeatParams(1, 1, 1, sizeof(DstT) * repeatSize / 32, sizeof(SrcT) * repeatSize / 32,  sizeof(SrcT) * repeatSize / 32);
+    BinaryRepeatParams repeatParams(
+        1, 1, 1, sizeof(DstT) * repeatSize / 32, sizeof(SrcT) * repeatSize / 32, sizeof(SrcT) * repeatSize / 32);
     if (testMode == TestMode::LEVEL0_NORM_MODE || testMode == TestMode::LEVEL0_FMIX_NORM_MODE) {
         uint64_t mask = repeatSize - 2;
         AddDeqRelu(dstUb, src0Ub, src1Ub, mask, repeatTimes, repeatParams);
@@ -100,20 +102,20 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(AddDeqReluSimpleTestCase, AddDeqReluSimpleTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    AddDeqReluSimpleTestCase, AddDeqReluSimpleTestsuite,
     ::testing::Values(
-        AddDeqReluTestParams { 128, 4, 2, TestMode::LEVEL0_NORM_MODE, VecAddDeqRelu<int32_t, half> },
+        AddDeqReluTestParams{128, 4, 2, TestMode::LEVEL0_NORM_MODE, VecAddDeqRelu<int32_t, half>},
 
-        AddDeqReluTestParams { 128, 4, 2, TestMode::LEVEL0_BIT_MODE, VecAddDeqRelu<int32_t, half> },
+        AddDeqReluTestParams{128, 4, 2, TestMode::LEVEL0_BIT_MODE, VecAddDeqRelu<int32_t, half>},
 
-        AddDeqReluTestParams { 256, 4, 2, TestMode::LEVEL0_FMIX_NORM_MODE, VecAddDeqRelu<int32_t, half> },
+        AddDeqReluTestParams{256, 4, 2, TestMode::LEVEL0_FMIX_NORM_MODE, VecAddDeqRelu<int32_t, half>},
 
-        AddDeqReluTestParams { 256, 4, 2, TestMode::LEVEL0_FMIX_BIT_MODE, VecAddDeqRelu<int32_t, half> },
+        AddDeqReluTestParams{256, 4, 2, TestMode::LEVEL0_FMIX_BIT_MODE, VecAddDeqRelu<int32_t, half>},
 
-        AddDeqReluTestParams { 256, 4, 2, TestMode::LEVEL2_COUNTER_MODE, VecAddDeqRelu<int32_t, half> },
+        AddDeqReluTestParams{256, 4, 2, TestMode::LEVEL2_COUNTER_MODE, VecAddDeqRelu<int32_t, half>},
 
-        AddDeqReluTestParams { 256, 4, 2, TestMode::LEVEL2_FMIX_COUNTER_MODE, VecAddDeqRelu<int32_t, half> }
-    ));
+        AddDeqReluTestParams{256, 4, 2, TestMode::LEVEL2_FMIX_COUNTER_MODE, VecAddDeqRelu<int32_t, half>}));
 
 TEST_P(AddDeqReluSimpleTestsuite, AddDeqReluSimpleTestCase)
 {

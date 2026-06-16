@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -20,17 +20,14 @@ enum TestMode {
 
 class TEST_CAST : public testing::Test {
 protected:
-    void SetUp() {
-        g_coreType = AscendC::AIV_TYPE;
-    }
-    void TearDown() {
-        g_coreType = AscendC::MIX_TYPE;
-    }
+    void SetUp() { g_coreType = AscendC::AIV_TYPE; }
+    void TearDown() { g_coreType = AscendC::MIX_TYPE; }
 };
 
 template <typename DstType, typename SrcType>
-void MainVecCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode,
-    uint32_t dstDataSize, uint32_t srcDataSize, TestMode testMode)
+void MainVecCastDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode, uint32_t dstDataSize,
+    uint32_t srcDataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<SrcType> inputGlobal;
@@ -64,8 +61,9 @@ void MainVecCastDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restr
     pipe_barrier(PIPE_ALL);
 }
 
-void MainVecCastF162s4Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode,
-    uint32_t dstDataSize, uint32_t srcDataSize, TestMode testMode)
+void MainVecCastF162s4Demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, RoundMode roundMode, uint32_t dstDataSize,
+    uint32_t srcDataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<half> inputGlobal;
@@ -100,36 +98,35 @@ void MainVecCastF162s4Demo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* _
     pipe_barrier(PIPE_ALL);
 }
 
-#define VEC_CAST_TESTCASE(srcType, dstType, roundMode, testMode)                                      \
-    TEST_F(TEST_CAST, Cast##srcType##2##dstType##roundMode##testMode##Case)                           \
-    {                                                                                                     \
-        uint32_t srcDataSize = 512;                                                                     \
-        uint32_t dstDataSize = 512;                                                                     \
-        uint8_t inputGm[srcDataSize * sizeof(srcType)];                                               \
-        uint8_t outputGm[dstDataSize * sizeof(dstType)];                                              \
-                                                                                                          \
-        MainVecCastDemo<dstType, srcType>(outputGm, inputGm, RoundMode::roundMode, dstDataSize, \
-            srcDataSize, testMode);                                                                    \
-                                                                                                          \
-        for (uint32_t i = 0; i < dstDataSize; i++) {                                                    \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                \
-        }                                                                                                 \
+#define VEC_CAST_TESTCASE(srcType, dstType, roundMode, testMode)                          \
+    TEST_F(TEST_CAST, Cast##srcType##2##dstType##roundMode##testMode##Case)               \
+    {                                                                                     \
+        uint32_t srcDataSize = 512;                                                       \
+        uint32_t dstDataSize = 512;                                                       \
+        uint8_t inputGm[srcDataSize * sizeof(srcType)];                                   \
+        uint8_t outputGm[dstDataSize * sizeof(dstType)];                                  \
+                                                                                          \
+        MainVecCastDemo<dstType, srcType>(                                                \
+            outputGm, inputGm, RoundMode::roundMode, dstDataSize, srcDataSize, testMode); \
+                                                                                          \
+        for (uint32_t i = 0; i < dstDataSize; i++) {                                      \
+            EXPECT_EQ(outputGm[i], 0x00);                                                 \
+        }                                                                                 \
     }
 
-#define VEC_CAST_F162S4_TESTCASE(roundMode, testMode)                                                   \
-    TEST_F(TEST_CAST, CastF162S4##roundMode##testMode##Case)                                            \
-    {                                                                                                     \
-        uint32_t srcDataSize = 128;                                                                     \
-        uint32_t dstDataSize = 128 / INT4_TWO;                                                          \
-        uint8_t inputGm[srcDataSize * sizeof(half)] = {0};                                             \
-        uint8_t outputGm[dstDataSize] = {0};                                                           \
-                                                                                                          \
-        MainVecCastF162s4Demo(outputGm, inputGm, RoundMode::roundMode, dstDataSize,              \
-            srcDataSize, testMode);                                                                    \
-                                                                                                          \
-        for (uint32_t i = 0; i < dstDataSize; i++) {                                                    \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                \
-        }                                                                                                 \
+#define VEC_CAST_F162S4_TESTCASE(roundMode, testMode)                                                       \
+    TEST_F(TEST_CAST, CastF162S4##roundMode##testMode##Case)                                                \
+    {                                                                                                       \
+        uint32_t srcDataSize = 128;                                                                         \
+        uint32_t dstDataSize = 128 / INT4_TWO;                                                              \
+        uint8_t inputGm[srcDataSize * sizeof(half)] = {0};                                                  \
+        uint8_t outputGm[dstDataSize] = {0};                                                                \
+                                                                                                            \
+        MainVecCastF162s4Demo(outputGm, inputGm, RoundMode::roundMode, dstDataSize, srcDataSize, testMode); \
+                                                                                                            \
+        for (uint32_t i = 0; i < dstDataSize; i++) {                                                        \
+            EXPECT_EQ(outputGm[i], 0x00);                                                                   \
+        }                                                                                                   \
     }
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002)

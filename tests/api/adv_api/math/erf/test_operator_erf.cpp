@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -22,25 +22,19 @@ enum TestMode {
 
 class TEST_ERF : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T>
-void MainVecErfDemo(__gm__ uint8_t *__restrict__ dstGm, __gm__ uint8_t *__restrict__ srcGm,
-    uint32_t dataSize, TestMode testMode)
+void MainVecErfDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, uint32_t dataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
     GlobalTensor<T> outputGlobal;
-    inputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm), dataSize);
-    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), dataSize);
+    inputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm), dataSize);
+    outputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dataSize);
 
     TBuf<TPosition::VECCALC> tbuf1;
     tpipe.InitBuffer(tbuf1, dataSize * sizeof(T));
@@ -77,18 +71,18 @@ void MainVecErfDemo(__gm__ uint8_t *__restrict__ dstGm, __gm__ uint8_t *__restri
 
     PipeBarrier<PIPE_ALL>();
 }
-#define VEC_ERF_LEVEL2_TESTCASE(DATA_TYPE, testMode)                                    \
-    TEST_F(TEST_ERF, Erf##DATA_TYPE##testMode##Case)                                   \
-    {                                                                                     \
-        uint32_t dataSize = 512;                                                         \
-        uint8_t inputGm[dataSize * sizeof(DATA_TYPE)] = {0};                                 \
-        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)] = {0};                                 \
-                                                                                          \
+#define VEC_ERF_LEVEL2_TESTCASE(DATA_TYPE, testMode)                      \
+    TEST_F(TEST_ERF, Erf##DATA_TYPE##testMode##Case)                      \
+    {                                                                     \
+        uint32_t dataSize = 512;                                          \
+        uint8_t inputGm[dataSize * sizeof(DATA_TYPE)] = {0};              \
+        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)] = {0};             \
+                                                                          \
         MainVecErfDemo<DATA_TYPE>(outputGm, inputGm, dataSize, testMode); \
-                                                                                          \
-        for (uint32_t i = 0; i < dataSize; i++) {                                        \
-            EXPECT_EQ(outputGm[i], 0x00);                                                \
-        }                                                                                 \
+                                                                          \
+        for (uint32_t i = 0; i < dataSize; i++) {                         \
+            EXPECT_EQ(outputGm[i], 0x00);                                 \
+        }                                                                 \
     }
 
 VEC_ERF_LEVEL2_TESTCASE(float, LEVEL0_COUNT_MODE);

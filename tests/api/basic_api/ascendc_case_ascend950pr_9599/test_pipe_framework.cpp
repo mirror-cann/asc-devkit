@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_tpipe_impl.h"
 #include <vector>
@@ -24,21 +24,23 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(SET_PHY_TYPE, TEST_GET_PHY_TYPE,
-    ::testing::Values(PhyTypeParams { TPosition::GM, Hardware::GM }, PhyTypeParams { TPosition::A1, Hardware::L1 },
-    PhyTypeParams { TPosition::A2, Hardware::L0A }, PhyTypeParams { TPosition::B1, Hardware::L1 },
-    PhyTypeParams { TPosition::B2, Hardware::L0B },
+INSTANTIATE_TEST_CASE_P(
+    SET_PHY_TYPE, TEST_GET_PHY_TYPE,
+    ::testing::Values(
+        PhyTypeParams{TPosition::GM, Hardware::GM}, PhyTypeParams{TPosition::A1, Hardware::L1},
+        PhyTypeParams{TPosition::A2, Hardware::L0A}, PhyTypeParams{TPosition::B1, Hardware::L1},
+        PhyTypeParams{TPosition::B2, Hardware::L0B},
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002)
-    PhyTypeParams { TPosition::C1, Hardware::UB }, PhyTypeParams { TPosition::C2, Hardware::L0C },
-    PhyTypeParams { TPosition::CO2, Hardware::UB },
+        PhyTypeParams{TPosition::C1, Hardware::UB}, PhyTypeParams{TPosition::C2, Hardware::L0C},
+        PhyTypeParams{TPosition::CO2, Hardware::UB},
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201)
-    PhyTypeParams { TPosition::C1, Hardware::L1 }, PhyTypeParams { TPosition::C2, Hardware::BIAS },
-    PhyTypeParams { TPosition::CO2, Hardware::L1 },
+        PhyTypeParams{TPosition::C1, Hardware::L1}, PhyTypeParams{TPosition::C2, Hardware::BIAS},
+        PhyTypeParams{TPosition::CO2, Hardware::L1},
 #endif
-    PhyTypeParams { TPosition::CO1, Hardware::L0C }, PhyTypeParams { TPosition::VECIN, Hardware::UB },
-    PhyTypeParams { TPosition::VECOUT, Hardware::UB }, PhyTypeParams { TPosition::VECCALC, Hardware::UB },
-    PhyTypeParams { TPosition::LCM, Hardware::UB }, PhyTypeParams { TPosition::SPM, Hardware::L1 },
-    PhyTypeParams { TPosition::SHM, Hardware::L1 }));
+        PhyTypeParams{TPosition::CO1, Hardware::L0C}, PhyTypeParams{TPosition::VECIN, Hardware::UB},
+        PhyTypeParams{TPosition::VECOUT, Hardware::UB}, PhyTypeParams{TPosition::VECCALC, Hardware::UB},
+        PhyTypeParams{TPosition::LCM, Hardware::UB}, PhyTypeParams{TPosition::SPM, Hardware::L1},
+        PhyTypeParams{TPosition::SHM, Hardware::L1}));
 
 TEST_P(TEST_GET_PHY_TYPE, GetPhyTypeTest)
 {
@@ -60,26 +62,27 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(GET_POSITION_TYPE, TEST_GET_POSITION,
-    ::testing::Values(GetPositionParams { TPosition::A1, true, TPosition::GM },
-    GetPositionParams { TPosition::A1, false, TPosition::A1 }, GetPositionParams { TPosition::A2, true, TPosition::A1 },
-    GetPositionParams { TPosition::A2, false, TPosition::A2 }, GetPositionParams { TPosition::B1, true, TPosition::GM },
-    GetPositionParams { TPosition::B1, false, TPosition::B1 }, GetPositionParams { TPosition::B2, true, TPosition::B1 },
-    GetPositionParams { TPosition::B2, false, TPosition::B2 }, GetPositionParams { TPosition::C1, true, TPosition::GM },
-    GetPositionParams { TPosition::C1, false, TPosition::C1 }, GetPositionParams { TPosition::C2, true, TPosition::C1 },
-    GetPositionParams { TPosition::C2, false, TPosition::C2 },
-    GetPositionParams { TPosition::CO1, true, TPosition::CO1 },
-    GetPositionParams { TPosition::CO1, false, TPosition::CO2 },
-    GetPositionParams { TPosition::CO2, true, TPosition::CO2 },
-    GetPositionParams { TPosition::CO2, false, TPosition::GM },
-    GetPositionParams { TPosition::VECIN, true, TPosition::GM },
-    GetPositionParams { TPosition::VECIN, false, TPosition::VECIN },
-    GetPositionParams { TPosition::VECOUT, true, TPosition::VECOUT },
-    GetPositionParams { TPosition::VECOUT, false, TPosition::GM },
-    GetPositionParams { TPosition::SPM, true, TPosition::VECOUT },
-    GetPositionParams { TPosition::SPM, false, TPosition::GM },
-    GetPositionParams { TPosition::SHM, true, TPosition::VECOUT },
-    GetPositionParams { TPosition::SHM, false, TPosition::GM }));
+INSTANTIATE_TEST_CASE_P(
+    GET_POSITION_TYPE, TEST_GET_POSITION,
+    ::testing::Values(
+        GetPositionParams{TPosition::A1, true, TPosition::GM}, GetPositionParams{TPosition::A1, false, TPosition::A1},
+        GetPositionParams{TPosition::A2, true, TPosition::A1}, GetPositionParams{TPosition::A2, false, TPosition::A2},
+        GetPositionParams{TPosition::B1, true, TPosition::GM}, GetPositionParams{TPosition::B1, false, TPosition::B1},
+        GetPositionParams{TPosition::B2, true, TPosition::B1}, GetPositionParams{TPosition::B2, false, TPosition::B2},
+        GetPositionParams{TPosition::C1, true, TPosition::GM}, GetPositionParams{TPosition::C1, false, TPosition::C1},
+        GetPositionParams{TPosition::C2, true, TPosition::C1}, GetPositionParams{TPosition::C2, false, TPosition::C2},
+        GetPositionParams{TPosition::CO1, true, TPosition::CO1},
+        GetPositionParams{TPosition::CO1, false, TPosition::CO2},
+        GetPositionParams{TPosition::CO2, true, TPosition::CO2},
+        GetPositionParams{TPosition::CO2, false, TPosition::GM},
+        GetPositionParams{TPosition::VECIN, true, TPosition::GM},
+        GetPositionParams{TPosition::VECIN, false, TPosition::VECIN},
+        GetPositionParams{TPosition::VECOUT, true, TPosition::VECOUT},
+        GetPositionParams{TPosition::VECOUT, false, TPosition::GM},
+        GetPositionParams{TPosition::SPM, true, TPosition::VECOUT},
+        GetPositionParams{TPosition::SPM, false, TPosition::GM},
+        GetPositionParams{TPosition::SHM, true, TPosition::VECOUT},
+        GetPositionParams{TPosition::SHM, false, TPosition::GM}));
 
 TEST_P(TEST_GET_POSITION, GetPositionTest)
 {
@@ -102,31 +105,33 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(GET_Q_EVT, TEST_GET_Q_EVT,
-    ::testing::Values(GetQueEvtParams { Hardware::GM, Hardware::UB, true, HardEvent::MTE2_V },
-    GetQueEvtParams { Hardware::GM, Hardware::UB, false, HardEvent::V_MTE2 },
-    GetQueEvtParams { Hardware::GM, Hardware::L1, true, HardEvent::MTE2_MTE1 },
-    GetQueEvtParams { Hardware::GM, Hardware::L1, false, HardEvent::MTE1_MTE2 },
-    GetQueEvtParams { Hardware::GM, Hardware::L0A, true, HardEvent::MTE2_M },
-    GetQueEvtParams { Hardware::GM, Hardware::L0A, false, HardEvent::M_MTE2 },
-    GetQueEvtParams { Hardware::GM, Hardware::L0B, true, HardEvent::MTE2_M },
-    GetQueEvtParams { Hardware::GM, Hardware::L0B, false, HardEvent::M_MTE2 },
-    GetQueEvtParams { Hardware::UB, Hardware::GM, true, HardEvent::V_MTE3 },
-    GetQueEvtParams { Hardware::UB, Hardware::GM, false, HardEvent::MTE3_V },
-    GetQueEvtParams { Hardware::UB, Hardware::L1, true, HardEvent::MTE3_MTE1 },
-    GetQueEvtParams { Hardware::UB, Hardware::L1, false, HardEvent::MTE1_MTE3 },
-    GetQueEvtParams { Hardware::UB, Hardware::L0C, true, HardEvent::V_V },
-    GetQueEvtParams { Hardware::UB, Hardware::L0C, false, HardEvent::MAX },
-    GetQueEvtParams { Hardware::L1, Hardware::UB, true, HardEvent::MTE1_V },
-    GetQueEvtParams { Hardware::L1, Hardware::UB, false, HardEvent::V_MTE1 },
-    GetQueEvtParams { Hardware::L1, Hardware::L0A, true, HardEvent::MTE1_M },
-    GetQueEvtParams { Hardware::L1, Hardware::L0A, false, HardEvent::M_MTE1 },
-    GetQueEvtParams { Hardware::L1, Hardware::L0B, true, HardEvent::MTE1_M },
-    GetQueEvtParams { Hardware::L1, Hardware::L0B, false, HardEvent::M_MTE1 },
-    GetQueEvtParams { Hardware::L0A, Hardware::L0C, true, HardEvent::M_V },
-    GetQueEvtParams { Hardware::L0A, Hardware::L0C, false, HardEvent::V_M },
-    GetQueEvtParams { Hardware::L0C, Hardware::GM, true, HardEvent::M_FIX },
-    GetQueEvtParams { Hardware::L0C, Hardware::GM, false, HardEvent::FIX_M }));
+INSTANTIATE_TEST_CASE_P(
+    GET_Q_EVT, TEST_GET_Q_EVT,
+    ::testing::Values(
+        GetQueEvtParams{Hardware::GM, Hardware::UB, true, HardEvent::MTE2_V},
+        GetQueEvtParams{Hardware::GM, Hardware::UB, false, HardEvent::V_MTE2},
+        GetQueEvtParams{Hardware::GM, Hardware::L1, true, HardEvent::MTE2_MTE1},
+        GetQueEvtParams{Hardware::GM, Hardware::L1, false, HardEvent::MTE1_MTE2},
+        GetQueEvtParams{Hardware::GM, Hardware::L0A, true, HardEvent::MTE2_M},
+        GetQueEvtParams{Hardware::GM, Hardware::L0A, false, HardEvent::M_MTE2},
+        GetQueEvtParams{Hardware::GM, Hardware::L0B, true, HardEvent::MTE2_M},
+        GetQueEvtParams{Hardware::GM, Hardware::L0B, false, HardEvent::M_MTE2},
+        GetQueEvtParams{Hardware::UB, Hardware::GM, true, HardEvent::V_MTE3},
+        GetQueEvtParams{Hardware::UB, Hardware::GM, false, HardEvent::MTE3_V},
+        GetQueEvtParams{Hardware::UB, Hardware::L1, true, HardEvent::MTE3_MTE1},
+        GetQueEvtParams{Hardware::UB, Hardware::L1, false, HardEvent::MTE1_MTE3},
+        GetQueEvtParams{Hardware::UB, Hardware::L0C, true, HardEvent::V_V},
+        GetQueEvtParams{Hardware::UB, Hardware::L0C, false, HardEvent::MAX},
+        GetQueEvtParams{Hardware::L1, Hardware::UB, true, HardEvent::MTE1_V},
+        GetQueEvtParams{Hardware::L1, Hardware::UB, false, HardEvent::V_MTE1},
+        GetQueEvtParams{Hardware::L1, Hardware::L0A, true, HardEvent::MTE1_M},
+        GetQueEvtParams{Hardware::L1, Hardware::L0A, false, HardEvent::M_MTE1},
+        GetQueEvtParams{Hardware::L1, Hardware::L0B, true, HardEvent::MTE1_M},
+        GetQueEvtParams{Hardware::L1, Hardware::L0B, false, HardEvent::M_MTE1},
+        GetQueEvtParams{Hardware::L0A, Hardware::L0C, true, HardEvent::M_V},
+        GetQueEvtParams{Hardware::L0A, Hardware::L0C, false, HardEvent::V_M},
+        GetQueEvtParams{Hardware::L0C, Hardware::GM, true, HardEvent::M_FIX},
+        GetQueEvtParams{Hardware::L0C, Hardware::GM, false, HardEvent::FIX_M}));
 
 TEST_P(TEST_GET_Q_EVT, GetQueEvtTest)
 {
@@ -154,7 +159,8 @@ TEST_F(TEST_TPIPE, TPipeConstructionTest)
     // for cpu debug, check all space allocated
     for (int32_t i = 0; i < static_cast<int32_t>(Hardware::MAX); i++) {
         EXPECT_TRUE(pipe->g_tpipeImpl.bufPoolBaseAddr_[i].absAddr != nullptr);
-        EXPECT_EQ(pipe->g_tpipeImpl.bufPoolBaseAddr_[i].phySpace, ConstDefiner::Instance().bufferInitLen.at(Hardware(i)));
+        EXPECT_EQ(
+            pipe->g_tpipeImpl.bufPoolBaseAddr_[i].phySpace, ConstDefiner::Instance().bufferInitLen.at(Hardware(i)));
     }
     delete pipe;
 }
@@ -274,7 +280,9 @@ TEST_F(TEST_TPIPE, TPipeGetAbsAddrWithTensorTest)
     EXPECT_EQ(tensor1.GetBufferHandle(), nullptr);
     EXPECT_EQ(tensor1.GetSize(), size);
     EXPECT_EQ(tensor1.GetLength(), size * sizeof(int32_t));
-    EXPECT_EQ(tensor1.GetPhyAddr(), (int32_t*)(pipe.g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(hardPos)].absAddr + offset));
+    EXPECT_EQ(
+        tensor1.GetPhyAddr(),
+        (int32_t*)(pipe.g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint8_t>(hardPos)].absAddr + offset));
 }
 
 /* **************************** TQue MaskTest ****************************** */
@@ -409,7 +417,6 @@ constexpr int32_t R_7 = 7;
 //     AllocEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, R_3, R_2, A, A, A, R_2 + QUE_MAX_EVENT }, 7, 7 }));
 // #endif
 
-
 /* **************************** TPipe FetchEventID ****************************** */
 // struct FetchEventIDParams {
 //     HardEvent evt;
@@ -438,15 +445,14 @@ constexpr int32_t R_7 = 7;
 //     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, R_3, A }, 5 },
 //     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_6, A }, 1 },
 //     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_6, A, R_0 }, 1 },
-//     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_0, R_1, R_2, R_3, R_4, R_5, R_6, R_7 }, 0 },
-//     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_7 }, 0 },
-//     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_7, A, A, A, A, A }, 5 },
-//     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_7, A, A, A, A, A, R_0 + QUE_MAX_EVENT }, 5 },
-//     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_7, A, A, A, A, A, R_1 + QUE_MAX_EVENT }, 5 },
-//     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_7, A, A, A, A, A, R_2 + QUE_MAX_EVENT }, 5 },
-//     FetchEventIDParams{ HardEvent::MTE2_MTE1,
-//     { A, A, A, A, A, A, A, A, R_0, R_1, R_2, R_3, R_4, R_5, R_6, R_7, A },
-//     1 }));
+//     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_0, R_1, R_2, R_3, R_4, R_5, R_6, R_7 }, 0
+//     }, FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_7 }, 0 }, FetchEventIDParams{
+//     HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_7, A, A, A, A, A }, 5 }, FetchEventIDParams{
+//     HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_7, A, A, A, A, A, R_0 + QUE_MAX_EVENT }, 5 },
+//     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_7, A, A, A, A, A, R_1 + QUE_MAX_EVENT }, 5
+//     }, FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_7, A, A, A, A, A, R_2 + QUE_MAX_EVENT },
+//     5 }, FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, A, A, A, A, R_0, R_1, R_2, R_3, R_4, R_5, R_6, R_7,
+//     A }, 1 }));
 // #else
 // INSTANTIATE_TEST_CASE_P(FETCH_EVT_ID, TEST_FETCH_EVT_ID,
 //     ::testing::Values(FetchEventIDParams{ HardEvent::MTE2_MTE1, { A }, 1 },
@@ -464,7 +470,6 @@ constexpr int32_t R_7 = 7;
 //     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, R_3, R_2, A, A, A, R_1 + QUE_MAX_EVENT }, 3 },
 //     FetchEventIDParams{ HardEvent::MTE2_MTE1, { A, A, A, A, R_3, R_2, A, A, A, R_2 + QUE_MAX_EVENT }, 3 }));
 // #endif
-
 
 /* **************************** TQue AllocBuffer / FreeBuffer TBuf ****************************** */
 constexpr int32_t M = 9999;
@@ -486,43 +491,45 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(ALLOC_FREE_BUFFER, TEST_ALLOC_FREE_BUFFER,
-    ::testing::Values(BufferOperateParams{ { M },
-    0,
-    { TBufState::OCCUPIED, TBufState::FREE, TBufState::FREE, TBufState::FREE },
-    { -1, -1, -1, -1 } },
-    BufferOperateParams{ { M, M, M, M },
-    3,
-    { TBufState::OCCUPIED, TBufState::OCCUPIED, TBufState::OCCUPIED, TBufState::OCCUPIED },
-    { -1, -1, -1, -1 } },
-    BufferOperateParams{ { M, F_0 },
-    0,
-    { TBufState::FREE, TBufState::FREE, TBufState::FREE, TBufState::FREE },
-    { 0, -1, -1, -1 } },
-    BufferOperateParams{ { M, F_0, M },
-    1,
-    { TBufState::FREE, TBufState::OCCUPIED, TBufState::FREE, TBufState::FREE },
-    { 0, -1, -1, -1 } },
-    BufferOperateParams{ { M, F_0, M, M },
-    2,
-    { TBufState::FREE, TBufState::OCCUPIED, TBufState::OCCUPIED, TBufState::FREE },
-    { 0, -1, -1, -1 } },
-    BufferOperateParams{ { M, M, M, F_1 },
-    2,
-    { TBufState::OCCUPIED, TBufState::FREE, TBufState::OCCUPIED, TBufState::FREE },
-    { -1, 0, -1, -1 } },
-    BufferOperateParams{ { M, M, M, F_1, F_0 },
-    2,
-    { TBufState::FREE, TBufState::FREE, TBufState::OCCUPIED, TBufState::FREE },
-    { 1, 0, -1, -1 } },
-    BufferOperateParams{ { M, M, M, M, F_0 },
-    3,
-    { TBufState::FREE, TBufState::OCCUPIED, TBufState::OCCUPIED, TBufState::OCCUPIED },
-    { 0, -1, -1, -1 } },
-    BufferOperateParams{ { M, M, M, M, F_0, F_1, F_2, F_3 },
-    3,
-    { TBufState::FREE, TBufState::FREE, TBufState::FREE, TBufState::FREE },
-    { 0, 1, 2, 3 } }));
+INSTANTIATE_TEST_CASE_P(
+    ALLOC_FREE_BUFFER, TEST_ALLOC_FREE_BUFFER,
+    ::testing::Values(
+        BufferOperateParams{
+            {M}, 0, {TBufState::OCCUPIED, TBufState::FREE, TBufState::FREE, TBufState::FREE}, {-1, -1, -1, -1}},
+        BufferOperateParams{
+            {M, M, M, M},
+            3,
+            {TBufState::OCCUPIED, TBufState::OCCUPIED, TBufState::OCCUPIED, TBufState::OCCUPIED},
+            {-1, -1, -1, -1}},
+        BufferOperateParams{
+            {M, F_0}, 0, {TBufState::FREE, TBufState::FREE, TBufState::FREE, TBufState::FREE}, {0, -1, -1, -1}},
+        BufferOperateParams{
+            {M, F_0, M}, 1, {TBufState::FREE, TBufState::OCCUPIED, TBufState::FREE, TBufState::FREE}, {0, -1, -1, -1}},
+        BufferOperateParams{
+            {M, F_0, M, M},
+            2,
+            {TBufState::FREE, TBufState::OCCUPIED, TBufState::OCCUPIED, TBufState::FREE},
+            {0, -1, -1, -1}},
+        BufferOperateParams{
+            {M, M, M, F_1},
+            2,
+            {TBufState::OCCUPIED, TBufState::FREE, TBufState::OCCUPIED, TBufState::FREE},
+            {-1, 0, -1, -1}},
+        BufferOperateParams{
+            {M, M, M, F_1, F_0},
+            2,
+            {TBufState::FREE, TBufState::FREE, TBufState::OCCUPIED, TBufState::FREE},
+            {1, 0, -1, -1}},
+        BufferOperateParams{
+            {M, M, M, M, F_0},
+            3,
+            {TBufState::FREE, TBufState::OCCUPIED, TBufState::OCCUPIED, TBufState::OCCUPIED},
+            {0, -1, -1, -1}},
+        BufferOperateParams{
+            {M, M, M, M, F_0, F_1, F_2, F_3},
+            3,
+            {TBufState::FREE, TBufState::FREE, TBufState::FREE, TBufState::FREE},
+            {0, 1, 2, 3}}));
 
 TEST_P(TEST_ALLOC_FREE_BUFFER, AllocFreeBufferTest)
 {
@@ -707,8 +714,6 @@ TEST_F(TEST_TPIPE, TQueBuf2TensorTest)
 //     true,
 //     false }));
 
-
-
 /* **************************** TQueBind SetUserTag ****************************** */
 TEST_F(TEST_TPIPE, TQueSetUserTagTest)
 {
@@ -723,7 +728,7 @@ TEST_F(TEST_TPIPE, TQueSetUserTagTest)
         bufHandleVec.push_back(tensor);
     }
 
-    vector<TTagType> tagGolden = { 0x1111, 0x2222, 0x3333, 0x4444 };
+    vector<TTagType> tagGolden = {0x1111, 0x2222, 0x3333, 0x4444};
     for (int32_t i = 0; i < num; i++) {
         bufHandleVec[i].SetUserTag(tagGolden[i]);
     }
@@ -768,25 +773,27 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(GET_BUFFER_POS, TEST_GET_BUFFER_POS,
-    ::testing::Values(BufferPosParams { TPosition::GM, TPosition::A1, Hardware::L1 },
-    BufferPosParams { TPosition::GM, TPosition::B1, Hardware::L1 },
-    BufferPosParams { TPosition::GM, TPosition::VECIN, Hardware::UB },
-    BufferPosParams { TPosition::SHM, TPosition::A1, Hardware::L1 },
-    BufferPosParams { TPosition::SHM, TPosition::B1, Hardware::L1 },
-    BufferPosParams { TPosition::SHM, TPosition::VECIN, Hardware::UB },
-    BufferPosParams { TPosition::A1, TPosition::A2, Hardware::L0A },
-    BufferPosParams { TPosition::B1, TPosition::B2, Hardware::L0B },
-    BufferPosParams { TPosition::VECIN, TPosition::VECCALC, Hardware::UB },
-    BufferPosParams { TPosition::VECCALC, TPosition::VECOUT, Hardware::UB },
-    BufferPosParams { TPosition::VECOUT, TPosition::GM, Hardware::UB },
-    BufferPosParams { TPosition::A2, TPosition::CO1, Hardware::L0C },
-    BufferPosParams { TPosition::B2, TPosition::CO1, Hardware::L0C },
-    BufferPosParams { TPosition::VECOUT, TPosition::A1, Hardware::L1 },
-    BufferPosParams { TPosition::VECOUT, TPosition::B1, Hardware::L1 },
-    BufferPosParams { TPosition::CO2, TPosition::A1, Hardware::L1 },
-    BufferPosParams { TPosition::CO2, TPosition::B1, Hardware::L1 },
-    BufferPosParams { TPosition::CO2, TPosition::VECIN, Hardware::UB }));
+INSTANTIATE_TEST_CASE_P(
+    GET_BUFFER_POS, TEST_GET_BUFFER_POS,
+    ::testing::Values(
+        BufferPosParams{TPosition::GM, TPosition::A1, Hardware::L1},
+        BufferPosParams{TPosition::GM, TPosition::B1, Hardware::L1},
+        BufferPosParams{TPosition::GM, TPosition::VECIN, Hardware::UB},
+        BufferPosParams{TPosition::SHM, TPosition::A1, Hardware::L1},
+        BufferPosParams{TPosition::SHM, TPosition::B1, Hardware::L1},
+        BufferPosParams{TPosition::SHM, TPosition::VECIN, Hardware::UB},
+        BufferPosParams{TPosition::A1, TPosition::A2, Hardware::L0A},
+        BufferPosParams{TPosition::B1, TPosition::B2, Hardware::L0B},
+        BufferPosParams{TPosition::VECIN, TPosition::VECCALC, Hardware::UB},
+        BufferPosParams{TPosition::VECCALC, TPosition::VECOUT, Hardware::UB},
+        BufferPosParams{TPosition::VECOUT, TPosition::GM, Hardware::UB},
+        BufferPosParams{TPosition::A2, TPosition::CO1, Hardware::L0C},
+        BufferPosParams{TPosition::B2, TPosition::CO1, Hardware::L0C},
+        BufferPosParams{TPosition::VECOUT, TPosition::A1, Hardware::L1},
+        BufferPosParams{TPosition::VECOUT, TPosition::B1, Hardware::L1},
+        BufferPosParams{TPosition::CO2, TPosition::A1, Hardware::L1},
+        BufferPosParams{TPosition::CO2, TPosition::B1, Hardware::L1},
+        BufferPosParams{TPosition::CO2, TPosition::VECIN, Hardware::UB}));
 
 TEST_P(TEST_GET_BUFFER_POS, GetBufferPosTest)
 {
@@ -808,31 +815,33 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(GET_BUFFER_LOGIC_POS, TEST_GET_BUFFER_LOGIC_POS,
-    ::testing::Values(BufferLogicPosParams { TPosition::GM, TPosition::A1, TPosition::A1 },
-    BufferLogicPosParams { TPosition::GM, TPosition::B1, TPosition::B1 },
-    BufferLogicPosParams { TPosition::GM, TPosition::C1, TPosition::C1 },
-    BufferLogicPosParams { TPosition::GM, TPosition::VECIN, TPosition::VECIN },
-    BufferLogicPosParams { TPosition::SHM, TPosition::A1, TPosition::A1 },
-    BufferLogicPosParams { TPosition::SHM, TPosition::B1, TPosition::B1 },
-    BufferLogicPosParams { TPosition::SHM, TPosition::C1, TPosition::C1 },
-    BufferLogicPosParams { TPosition::SHM, TPosition::VECIN, TPosition::VECIN },
-    BufferLogicPosParams { TPosition::A1, TPosition::A2, TPosition::A2 },
-    BufferLogicPosParams { TPosition::B1, TPosition::B2, TPosition::B2 },
-    BufferLogicPosParams { TPosition::VECIN, TPosition::VECCALC, TPosition::VECCALC },
-    BufferLogicPosParams { TPosition::VECCALC, TPosition::VECOUT, TPosition::VECOUT },
-    BufferLogicPosParams { TPosition::VECOUT, TPosition::GM, TPosition::VECOUT },
-    BufferLogicPosParams { TPosition::A2, TPosition::CO1, TPosition::CO1 },
-    BufferLogicPosParams { TPosition::B2, TPosition::CO1, TPosition::CO1 },
-    BufferLogicPosParams { TPosition::CO1, TPosition::CO2, TPosition::CO1 },
-    BufferLogicPosParams { TPosition::CO2, TPosition::GM, TPosition::CO2 },
-    BufferLogicPosParams { TPosition::VECOUT, TPosition::A1, TPosition::A1 },
-    BufferLogicPosParams { TPosition::VECOUT, TPosition::B1, TPosition::B1 },
-    BufferLogicPosParams { TPosition::VECOUT, TPosition::C1, TPosition::C1 },
-    BufferLogicPosParams { TPosition::CO2, TPosition::A1, TPosition::A1 },
-    BufferLogicPosParams { TPosition::CO2, TPosition::B1, TPosition::B1 },
-    BufferLogicPosParams { TPosition::CO2, TPosition::C1, TPosition::C1 },
-    BufferLogicPosParams { TPosition::CO2, TPosition::VECIN, TPosition::VECIN }));
+INSTANTIATE_TEST_CASE_P(
+    GET_BUFFER_LOGIC_POS, TEST_GET_BUFFER_LOGIC_POS,
+    ::testing::Values(
+        BufferLogicPosParams{TPosition::GM, TPosition::A1, TPosition::A1},
+        BufferLogicPosParams{TPosition::GM, TPosition::B1, TPosition::B1},
+        BufferLogicPosParams{TPosition::GM, TPosition::C1, TPosition::C1},
+        BufferLogicPosParams{TPosition::GM, TPosition::VECIN, TPosition::VECIN},
+        BufferLogicPosParams{TPosition::SHM, TPosition::A1, TPosition::A1},
+        BufferLogicPosParams{TPosition::SHM, TPosition::B1, TPosition::B1},
+        BufferLogicPosParams{TPosition::SHM, TPosition::C1, TPosition::C1},
+        BufferLogicPosParams{TPosition::SHM, TPosition::VECIN, TPosition::VECIN},
+        BufferLogicPosParams{TPosition::A1, TPosition::A2, TPosition::A2},
+        BufferLogicPosParams{TPosition::B1, TPosition::B2, TPosition::B2},
+        BufferLogicPosParams{TPosition::VECIN, TPosition::VECCALC, TPosition::VECCALC},
+        BufferLogicPosParams{TPosition::VECCALC, TPosition::VECOUT, TPosition::VECOUT},
+        BufferLogicPosParams{TPosition::VECOUT, TPosition::GM, TPosition::VECOUT},
+        BufferLogicPosParams{TPosition::A2, TPosition::CO1, TPosition::CO1},
+        BufferLogicPosParams{TPosition::B2, TPosition::CO1, TPosition::CO1},
+        BufferLogicPosParams{TPosition::CO1, TPosition::CO2, TPosition::CO1},
+        BufferLogicPosParams{TPosition::CO2, TPosition::GM, TPosition::CO2},
+        BufferLogicPosParams{TPosition::VECOUT, TPosition::A1, TPosition::A1},
+        BufferLogicPosParams{TPosition::VECOUT, TPosition::B1, TPosition::B1},
+        BufferLogicPosParams{TPosition::VECOUT, TPosition::C1, TPosition::C1},
+        BufferLogicPosParams{TPosition::CO2, TPosition::A1, TPosition::A1},
+        BufferLogicPosParams{TPosition::CO2, TPosition::B1, TPosition::B1},
+        BufferLogicPosParams{TPosition::CO2, TPosition::C1, TPosition::C1},
+        BufferLogicPosParams{TPosition::CO2, TPosition::VECIN, TPosition::VECIN}));
 
 TEST_P(TEST_GET_BUFFER_LOGIC_POS, GetBufferLogicPosTest)
 {
@@ -846,7 +855,7 @@ protected:
     void SetUp() {}
     void TearDown() {}
 };
- 
+
 /* **************************** Tpipe InitBufPool api ****************************** */
 TEST_F(TBufPoolTest, TpipeInitBufPool)
 {
@@ -859,7 +868,7 @@ TEST_F(TBufPoolTest, TpipeInitBufPool)
     uint32_t poolLen = 65536;
     pipe.InitBufPool(tbufPool1, poolLen);
     pipe.InitBufPool(tbufPool2, poolLen, tbufPool1);
- 
+
     tbufPool1.InitBuffer(que1, num, len);
     EXPECT_EQ(tbufPool1.tBufPoolImpl.curBufSize_, 2);
     EXPECT_EQ(tbufPool1.tBufPoolImpl.maxAddr_, num * len);
@@ -870,7 +879,7 @@ TEST_F(TBufPoolTest, TpipeInitBufPool)
     EXPECT_EQ(tbufPool2.tBufPoolImpl.maxLen_, poolLen);
     EXPECT_EQ(tbufPool1.tBufPoolImpl.startAddr_, 0);
     EXPECT_EQ(tbufPool2.tBufPoolImpl.startAddr_, 0);
- 
+
     tbufPool1.Reset();
     EXPECT_EQ(tbufPool1.tBufPoolImpl.curBufSize_, 0);
     EXPECT_EQ(tbufPool1.tBufPoolImpl.maxAddr_, 0);
@@ -878,22 +887,22 @@ TEST_F(TBufPoolTest, TpipeInitBufPool)
     EXPECT_EQ(tbufPool2.tBufPoolImpl.curBufSize_, 0);
     EXPECT_EQ(tbufPool2.tBufPoolImpl.maxAddr_, 0);
 }
- 
+
 /* **************************** TbufPool InitBuffer api ****************************** */
 TEST_F(TBufPoolTest, TbufPoolInitBuffer)
 {
     TPipe pipe;
     TBufPool<TPosition::VECCALC> tbufPool;
     TQue<TPosition::VECOUT, 2> que;
- 
+
     TBuf<TPosition::VECCALC> tbuf;
- 
+
     Hardware hardPos = GetPhyType(TPosition::VECOUT);
     constexpr uint8_t num = 2;
     constexpr uint32_t len = 128;
     constexpr uint32_t poolLen = 65536;
     pipe.InitBufPool(tbufPool, poolLen);
- 
+
     tbufPool.InitBuffer(que, num, len);
     tbufPool.InitBuffer(tbuf, len);
     EXPECT_EQ(tbufPool.tBufPoolImpl.curBufSize_, 3);
@@ -911,7 +920,7 @@ TEST_F(TBufPoolTest, testPosB1)
     static constexpr TQueConfig config = {.bufferNumber = 2, .enableStaticEvtId = true};
     TQue<TPosition::A1, 2, &config> queA1;
     TQue<TPosition::B1, 2, &config> queB1;
- 
+
     constexpr uint8_t num = 2;
     constexpr uint32_t len = 128;
 

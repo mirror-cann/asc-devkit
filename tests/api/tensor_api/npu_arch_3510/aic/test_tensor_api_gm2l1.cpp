@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <vector>
 #include <cstring>
@@ -24,15 +24,9 @@ protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
 
-    void SetUp() override 
-    {
-        AscendC::SetGCoreType(1);
-    }
+    void SetUp() override { AscendC::SetGCoreType(1); }
 
-    void TearDown() override 
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void TearDown() override { AscendC::SetGCoreType(0); }
 };
 
 namespace {
@@ -95,28 +89,29 @@ extern void set_loop1_stride_outtol1(uint64_t config);
 extern void set_loop2_stride_outtol1(uint64_t config);
 extern void set_loop_size_outtol1(uint64_t config);
 extern void set_pad_val_outtol1(uint64_t config);
-extern void copy_gm_to_cbuf_align_v2(half* dst, half* src, uint8_t sid, uint32_t burst_num, uint32_t burst_len,
-                                     uint8_t left_padding_count, uint8_t right_padding_count, bool data_select_bit,
-                                     uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
-extern void copy_gm_to_cbuf_multi_nd2nz(half* dst, half* src, uint8_t sid, uint64_t loop1_src_stride,
-                                        uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-                                        uint64_t loop4_src_stride, bool smallc0_en);
-extern void copy_gm_to_cbuf_multi_dn2nz(half* dst, half* src, uint8_t sid, uint64_t loop1_src_stride,
-                                        uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-                                        uint64_t loop4_src_stride, bool smallc0_en);
+extern void copy_gm_to_cbuf_align_v2(
+    half* dst, half* src, uint8_t sid, uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count,
+    uint8_t right_padding_count, bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride,
+    uint32_t burst_dst_stride);
+extern void copy_gm_to_cbuf_multi_nd2nz(
+    half* dst, half* src, uint8_t sid, uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value,
+    uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en);
+extern void copy_gm_to_cbuf_multi_dn2nz(
+    half* dst, half* src, uint8_t sid, uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value,
+    uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en);
 extern void set_mte2_nz_para(uint64_t para);
 
-#define CAPTURE_GM_TO_L1_DEFINITION(type)                                                                              \
-    void CaptureCopyGmToCbufAlignV2_##type(__cbuf__ type* dst, __gm__ type* src, uint8_t sid, uint32_t blockCount,     \
-                                           uint32_t blockLen, uint8_t leftPaddingCnt, uint8_t rightPaddingCnt,         \
-                                           bool dataSelectBit, uint8_t l2CacheCtl, uint64_t srcStride,                 \
-                                           uint32_t dstStride);                                                        \
-    void CaptureCopyGmToCbufMultiND2nz_##type(__cbuf__ type* dst, __gm__ type* src, uint8_t sid,                       \
-                                              uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value,       \
-                                              uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en);           \
-    void CaptureCopyGmToCbufMultiDN2nz_##type(__cbuf__ type* dst, __gm__ type* src, uint8_t sid,                       \
-                                              uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value,       \
-                                              uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en);
+#define CAPTURE_GM_TO_L1_DEFINITION(type)                                                                            \
+    void CaptureCopyGmToCbufAlignV2_##type(                                                                          \
+        __cbuf__ type* dst, __gm__ type* src, uint8_t sid, uint32_t blockCount, uint32_t blockLen,                   \
+        uint8_t leftPaddingCnt, uint8_t rightPaddingCnt, bool dataSelectBit, uint8_t l2CacheCtl, uint64_t srcStride, \
+        uint32_t dstStride);                                                                                         \
+    void CaptureCopyGmToCbufMultiND2nz_##type(                                                                       \
+        __cbuf__ type* dst, __gm__ type* src, uint8_t sid, uint64_t loop1_src_stride, uint8_t l2_cache_ctl,          \
+        uint16_t n_value, uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en);                             \
+    void CaptureCopyGmToCbufMultiDN2nz_##type(                                                                       \
+        __cbuf__ type* dst, __gm__ type* src, uint8_t sid, uint64_t loop1_src_stride, uint8_t l2_cache_ctl,          \
+        uint16_t n_value, uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en);
 
 CAPTURE_GM_TO_L1_DEFINITION(uint8_t);
 CAPTURE_GM_TO_L1_DEFINITION(half);
@@ -126,18 +121,22 @@ CAPTURE_GM_TO_L1_DEFINITION(uint32_t);
 
 void CaptureSetMTE2NzPara(uint64_t para);
 
-#define MOCKER_GM_TO_L1(type)                                                                                          \
-    MOCKER(copy_gm_to_cbuf_align_v2, void (*)(__cbuf__ type*, __gm__ type*, uint8_t, uint32_t, uint32_t, uint8_t,      \
-                                              uint8_t, bool, uint8_t, uint64_t, uint32_t))                             \
-        .stubs()                                                                                                       \
-        .will(invoke(CaptureCopyGmToCbufAlignV2_##type));                                                              \
-    MOCKER(copy_gm_to_cbuf_multi_nd2nz,                                                                                \
-           void (*)(__cbuf__ type*, __gm__ type*, uint8_t, uint64_t, uint8_t, uint16_t, uint32_t, uint64_t, bool))     \
-        .stubs()                                                                                                       \
-        .will(invoke(CaptureCopyGmToCbufMultiND2nz_##type));                                                           \
-    MOCKER(copy_gm_to_cbuf_multi_dn2nz,                                                                                \
-           void (*)(__cbuf__ type*, __gm__ type*, uint8_t, uint64_t, uint8_t, uint16_t, uint32_t, uint64_t, bool))     \
-        .stubs()                                                                                                       \
+#define MOCKER_GM_TO_L1(type)                                                                                      \
+    MOCKER(                                                                                                        \
+        copy_gm_to_cbuf_align_v2, void (*)(                                                                        \
+                                      __cbuf__ type*, __gm__ type*, uint8_t, uint32_t, uint32_t, uint8_t, uint8_t, \
+                                      bool, uint8_t, uint64_t, uint32_t))                                          \
+        .stubs()                                                                                                   \
+        .will(invoke(CaptureCopyGmToCbufAlignV2_##type));                                                          \
+    MOCKER(                                                                                                        \
+        copy_gm_to_cbuf_multi_nd2nz,                                                                               \
+        void (*)(__cbuf__ type*, __gm__ type*, uint8_t, uint64_t, uint8_t, uint16_t, uint32_t, uint64_t, bool))    \
+        .stubs()                                                                                                   \
+        .will(invoke(CaptureCopyGmToCbufMultiND2nz_##type));                                                       \
+    MOCKER(                                                                                                        \
+        copy_gm_to_cbuf_multi_dn2nz,                                                                               \
+        void (*)(__cbuf__ type*, __gm__ type*, uint8_t, uint64_t, uint8_t, uint16_t, uint32_t, uint64_t, bool))    \
+        .stubs()                                                                                                   \
         .will(invoke(CaptureCopyGmToCbufMultiDN2nz_##type))
 
 void ResetCapture();
@@ -183,8 +182,8 @@ private:
         using TT = Std::conditional_t<sizeof(T) == 2, uint16_t, CastT>;
         std::iota(reinterpret_cast<TT*>(src0Gm), reinterpret_cast<TT*>(src0Gm + GmSize), static_cast<TT>(1));
         std::fill(reinterpret_cast<TT*>(l1ABuf), reinterpret_cast<TT*>(l1ABuf + L1Size), static_cast<TT>(1));
-        std::fill(reinterpret_cast<TT*>(l1ABufGolden), reinterpret_cast<TT*>(l1ABufGolden + L1Size),
-                  static_cast<TT>(1));
+        std::fill(
+            reinterpret_cast<TT*>(l1ABufGolden), reinterpret_cast<TT*>(l1ABufGolden + L1Size), static_cast<TT>(1));
     }
 
 private:
@@ -197,54 +196,54 @@ private:
     int32_t tmpCoreType{0};
 };
 
-#define EXPECT_GM2L1_EQ()                                                                                              \
-    bool result = std::equal(l1ABuf, l1ABuf + L1Size, l1ABufGolden);                                                   \
-    EXPECT_TRUE(result);                                                                                               \
-    if (gDebugPrint || !result) {                                                                                      \
-        PrintCaptureData();                                                                                            \
-        PrintTensor(gmA);                                                                                              \
-        PrintTensor(l1ATensor);                                                                                        \
-        PrintTensor(l1ATensorGolden);                                                                                  \
+#define EXPECT_GM2L1_EQ()                                            \
+    bool result = std::equal(l1ABuf, l1ABuf + L1Size, l1ABufGolden); \
+    EXPECT_TRUE(result);                                             \
+    if (gDebugPrint || !result) {                                    \
+        PrintCaptureData();                                          \
+        PrintTensor(gmA);                                            \
+        PrintTensor(l1ATensor);                                      \
+        PrintTensor(l1ATensorGolden);                                \
     }
 
 #define TEST_GM2L1_CONCAT_IMPL_(a, b, c, d) a##_##b##_##c##_##index##_##d
 #define TEST_GM2L1_CONCAT_(a, b, c, d) TEST_GM2L1_CONCAT_IMPL_(a, b, c, d)
-#define TEST_GM2L1_INNER(type, name, gmALayout, l1ALayout, counter)                                                    \
-    TEST_F(TensorApiGm2L1, TEST_GM2L1_CONCAT_(CopyGm2L1Operation, name, type, counter))                                \
-    {                                                                                                                  \
-        using T = type;                                                                                                \
-        auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), gmALayout);                      \
-        auto l1ATensor = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), l1ALayout);                \
-        auto l1ATensorGolden = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden)), l1ALayout);    \
-        auto atomCopy = MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{});                                                \
-        InitializeData<T>();                                                                                           \
-        atomCopy.Call(l1ATensor, gmA);                                                                                 \
-        DataCopyGm2L1Sim(l1ATensorGolden, gmA);                                                                        \
-        EXPECT_GM2L1_EQ();                                                                                             \
+#define TEST_GM2L1_INNER(type, name, gmALayout, l1ALayout, counter)                                                 \
+    TEST_F(TensorApiGm2L1, TEST_GM2L1_CONCAT_(CopyGm2L1Operation, name, type, counter))                             \
+    {                                                                                                               \
+        using T = type;                                                                                             \
+        auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), gmALayout);                   \
+        auto l1ATensor = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), l1ALayout);             \
+        auto l1ATensorGolden = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden)), l1ALayout); \
+        auto atomCopy = MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{});                                             \
+        InitializeData<T>();                                                                                        \
+        atomCopy.Call(l1ATensor, gmA);                                                                              \
+        DataCopyGm2L1Sim(l1ATensorGolden, gmA);                                                                     \
+        EXPECT_GM2L1_EQ();                                                                                          \
     }
-#define TEST_GM2L1_COORD_INNER(type, name, gmALayout, l1ALayout, makeCoord, counter)                                   \
-    TEST_F(TensorApiGm2L1, TEST_GM2L1_CONCAT_(CopyGm2L1OperationWithCoord, name, type, counter))                       \
-    {                                                                                                                  \
-        using T = type;                                                                                                \
-        auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), gmALayout);                      \
-        auto l1ATensor = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), l1ALayout);                \
-        auto l1ATensorGolden = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden)), l1ALayout);    \
-        auto atomCopy = MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{});                                                \
-        InitializeData<T>();                                                                                           \
-        auto coord = makeCoord;                                                                                        \
-        DataCopyGm2L1Sim(l1ATensorGolden, gmA, coord);                                                                 \
+#define TEST_GM2L1_COORD_INNER(type, name, gmALayout, l1ALayout, makeCoord, counter)                                \
+    TEST_F(TensorApiGm2L1, TEST_GM2L1_CONCAT_(CopyGm2L1OperationWithCoord, name, type, counter))                    \
+    {                                                                                                               \
+        using T = type;                                                                                             \
+        auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), gmALayout);                   \
+        auto l1ATensor = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), l1ALayout);             \
+        auto l1ATensorGolden = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden)), l1ALayout); \
+        auto atomCopy = MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{});                                             \
+        InitializeData<T>();                                                                                        \
+        auto coord = makeCoord;                                                                                     \
+        DataCopyGm2L1Sim(l1ATensorGolden, gmA, coord);                                                              \
     }
 
 #define TEST_GM2L1(type, name, gmALayout, l1ALayout) TEST_GM2L1_INNER(type, name, gmALayout, l1ALayout, __COUNTER__)
 
-#define TEST_GM2L1_COORD(type, name, gmALayout, l1ALayout, makeCoord)                                                  \
+#define TEST_GM2L1_COORD(type, name, gmALayout, l1ALayout, makeCoord) \
     TEST_GM2L1_COORD_INNER(type, name, gmALayout, l1ALayout, makeCoord, __COUNTER__)
 
-#define MAKE_LAYOUT_FUNC(NAME)                                                                                         \
-    template <typename T>                                                                                              \
-    constexpr auto Make##NAME = [](auto row, auto col) {                                                               \
-        constexpr size_t C0 = IsB4Type<T> ? 64 : 32 / sizeof(T);                                                               \
-        return MakeFrameLayout<NAME##LayoutPtn, LayoutTrait<T, Int<C0>>>(row, col);                                  \
+#define MAKE_LAYOUT_FUNC(NAME)                                                      \
+    template <typename T>                                                           \
+    constexpr auto Make##NAME = [](auto row, auto col) {                            \
+        constexpr size_t C0 = IsB4Type<T> ? 64 : 32 / sizeof(T);                    \
+        return MakeFrameLayout<NAME##LayoutPtn, LayoutTrait<T, Int<C0>>>(row, col); \
     };
 
 MAKE_LAYOUT_FUNC(NDExt)
@@ -255,9 +254,9 @@ MAKE_LAYOUT_FUNC(NZ)
 MAKE_LAYOUT_FUNC(ZN)
 #undef MAKE_LAYOUT_FUNC
 
-#define MAKE_LAYOUT_FUNC(NAME)                                                                                         \
-    template <typename T>                                                                                              \
-    constexpr auto Make##NAME =                                                                                        \
+#define MAKE_LAYOUT_FUNC(NAME)  \
+    template <typename T>       \
+    constexpr auto Make##NAME = \
         [](auto row, auto col) { return MakeFrameLayout<NAME##LayoutPtn, LayoutTrait<T, _2>>(row, col); };
 
 MAKE_LAYOUT_FUNC(ZZ)
@@ -273,11 +272,11 @@ MAKE_LAYOUT_FUNC(ScaleBDN)
 // (see commit d2d3dc8): Shape = (B, frameShape), Stride = (M * K, frameStride). Only BMK-contiguous
 // layouts are supported, so M/K must be alignment-friendly (M%16==0, K%c0==0) to make the per-batch
 // stride M*K equal to one aligned NZ/ZN matrix's footprint in L1.
-#define MAKE_BATCH_LAYOUT_FUNC(NAME)                                                                                   \
-    template <typename T>                                                                                             \
-    constexpr auto MakeBatch##NAME = [](auto batch, auto row, auto col) {                                            \
-        constexpr size_t C0 = IsB4Type<T> ? 64 : 32 / sizeof(T);                                                      \
-        return MakeFrameLayout<NAME##LayoutPtn, LayoutTrait<T, Int<C0>>>(batch, row, col);                            \
+#define MAKE_BATCH_LAYOUT_FUNC(NAME)                                                       \
+    template <typename T>                                                                  \
+    constexpr auto MakeBatch##NAME = [](auto batch, auto row, auto col) {                  \
+        constexpr size_t C0 = IsB4Type<T> ? 64 : 32 / sizeof(T);                           \
+        return MakeFrameLayout<NAME##LayoutPtn, LayoutTrait<T, Int<C0>>>(batch, row, col); \
     };
 
 MAKE_BATCH_LAYOUT_FUNC(NDExt)
@@ -289,48 +288,49 @@ MAKE_BATCH_LAYOUT_FUNC(ZN)
 // Builds batched src(GM)/dst(L1) tensors with the official batch MakeFrameLayout and runs the real
 // copy, then verifies against a golden computed per batch by reusing the validated single-matrix
 // DataCopyGm2L1Sim on offset views. Per-batch element stride is M*K for both src and dst (BMK).
-#define TEST_GM2L1_BATCH_INNER(type, name, gmPtn, l1Ptn, batch, M, K, counter)                                        \
-    TEST_F(TensorApiGm2L1, TEST_GM2L1_CONCAT_(CopyGm2L1Batch, name, type, counter))                                   \
-    {                                                                                                                 \
-        using T = type;                                                                                               \
-        const int kBatch = (batch);                                                                                   \
-        const int64_t kMatStride = static_cast<int64_t>(M) * (K);                                                     \
-        auto gmBatched = MakeBatch##gmPtn<T>(kBatch, (M), (K));                                                       \
-        auto l1Batched = MakeBatch##l1Ptn<T>(kBatch, (M), (K));                                                       \
-        auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), gmBatched);                     \
-        auto l1ATensor = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), l1Batched);               \
-        auto atomCopy = MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{});                                               \
-        InitializeData<T>();                                                                                          \
-        atomCopy.Call(l1ATensor, gmA);                                                                                \
-        for (int b = 0; b < kBatch; ++b) {                                                                            \
-            auto gmB = MakeTensor(                                                                                    \
-                MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm) + b * kMatStride), Make##gmPtn<T>((M), (K)));   \
-            auto l1G = MakeTensor(                                                                                    \
-                MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden) + b * kMatStride),                        \
-                Make##l1Ptn<T>((M), (K)));                                                                            \
-            DataCopyGm2L1Sim(l1G, gmB);                                                                               \
-        }                                                                                                             \
-        bool result = std::equal(l1ABuf, l1ABuf + L1Size, l1ABufGolden);                                             \
-        EXPECT_TRUE(result);                                                                                          \
-        if (gDebugPrint || !result) {                                                                                 \
-            PrintCaptureData();                                                                                       \
-            for (int b = 0; b < kBatch; ++b) {                                                                       \
-                std::cout << "==== batch " << b << " ====" << std::endl;                                             \
-                auto gmB = MakeTensor(                                                                                \
-                    MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm) + b * kMatStride),                          \
-                    Make##gmPtn<T>((M), (K)));                                                                        \
-                auto l1B = MakeTensor(                                                                                \
-                    MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf) + b * kMatStride), Make##l1Ptn<T>((M), (K)));\
-                auto l1G = MakeTensor(                                                                                \
-                    MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden) + b * kMatStride),                    \
-                    Make##l1Ptn<T>((M), (K)));                                                                        \
-                PrintTensor(gmB);                                                                                    \
-                PrintTensor(l1B);                                                                                    \
-                PrintTensor(l1G);                                                                                    \
-            }                                                                                                         \
-        }                                                                                                             \
+#define TEST_GM2L1_BATCH_INNER(type, name, gmPtn, l1Ptn, batch, M, K, counter)                                      \
+    TEST_F(TensorApiGm2L1, TEST_GM2L1_CONCAT_(CopyGm2L1Batch, name, type, counter))                                 \
+    {                                                                                                               \
+        using T = type;                                                                                             \
+        const int kBatch = (batch);                                                                                 \
+        const int64_t kMatStride = static_cast<int64_t>(M) * (K);                                                   \
+        auto gmBatched = MakeBatch##gmPtn<T>(kBatch, (M), (K));                                                     \
+        auto l1Batched = MakeBatch##l1Ptn<T>(kBatch, (M), (K));                                                     \
+        auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), gmBatched);                   \
+        auto l1ATensor = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), l1Batched);             \
+        auto atomCopy = MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{});                                             \
+        InitializeData<T>();                                                                                        \
+        atomCopy.Call(l1ATensor, gmA);                                                                              \
+        for (int b = 0; b < kBatch; ++b) {                                                                          \
+            auto gmB = MakeTensor(                                                                                  \
+                MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm) + b * kMatStride), Make##gmPtn<T>((M), (K))); \
+            auto l1G = MakeTensor(                                                                                  \
+                MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden) + b * kMatStride),                      \
+                Make##l1Ptn<T>((M), (K)));                                                                          \
+            DataCopyGm2L1Sim(l1G, gmB);                                                                             \
+        }                                                                                                           \
+        bool result = std::equal(l1ABuf, l1ABuf + L1Size, l1ABufGolden);                                            \
+        EXPECT_TRUE(result);                                                                                        \
+        if (gDebugPrint || !result) {                                                                               \
+            PrintCaptureData();                                                                                     \
+            for (int b = 0; b < kBatch; ++b) {                                                                      \
+                std::cout << "==== batch " << b << " ====" << std::endl;                                            \
+                auto gmB = MakeTensor(                                                                              \
+                    MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm) + b * kMatStride),                        \
+                    Make##gmPtn<T>((M), (K)));                                                                      \
+                auto l1B = MakeTensor(                                                                              \
+                    MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf) + b * kMatStride),                        \
+                    Make##l1Ptn<T>((M), (K)));                                                                      \
+                auto l1G = MakeTensor(                                                                              \
+                    MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden) + b * kMatStride),                  \
+                    Make##l1Ptn<T>((M), (K)));                                                                      \
+                PrintTensor(gmB);                                                                                   \
+                PrintTensor(l1B);                                                                                   \
+                PrintTensor(l1G);                                                                                   \
+            }                                                                                                       \
+        }                                                                                                           \
     }
-#define TEST_GM2L1_BATCH(type, name, gmPtn, l1Ptn, batch, M, K)                                                       \
+#define TEST_GM2L1_BATCH(type, name, gmPtn, l1Ptn, batch, M, K) \
     TEST_GM2L1_BATCH_INNER(type, name, gmPtn, l1Ptn, batch, M, K, __COUNTER__)
 
 // ND -> NZ batched. Aligned M/K so the per-batch stride M*K equals one NZ matrix footprint in L1.
@@ -2092,20 +2092,25 @@ void DataCopyGm2L1Sim(const T& dst, const U& src)
     using DstLayoutPtn = GetLayoutPattern<typename T::layoutType>;
     using SrcLayoutPtn = GetLayoutPattern<typename U::layoutType>;
 
-    if constexpr ((Std::is_same_v<DstLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<DstLayoutPtn, NDLayoutPtn>) &&
-                  (Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>)) {
+    if constexpr (
+        (Std::is_same_v<DstLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<DstLayoutPtn, NDLayoutPtn>) &&
+        (Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>)) {
         SimND2ND(dst, src);
-    } else if constexpr (Std::is_same_v<DstLayoutPtn, NZLayoutPtn> &&
-                         (Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>)) {
+    } else if constexpr (
+        Std::is_same_v<DstLayoutPtn, NZLayoutPtn> &&
+        (Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>)) {
         SimND2Nz(dst, src);
-    } else if constexpr (Std::is_same_v<DstLayoutPtn, ZNLayoutPtn> &&
-                         (Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>)) {
+    } else if constexpr (
+        Std::is_same_v<DstLayoutPtn, ZNLayoutPtn> &&
+        (Std::is_same_v<SrcLayoutPtn, NDExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, NDLayoutPtn>)) {
         SimND2Zn(dst, src);
-    } else if constexpr (Std::is_same_v<DstLayoutPtn, NZLayoutPtn> &&
-                         (Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, DNLayoutPtn>)) {
+    } else if constexpr (
+        Std::is_same_v<DstLayoutPtn, NZLayoutPtn> &&
+        (Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, DNLayoutPtn>)) {
         SimDN2Nz(dst, src);
-    } else if constexpr (Std::is_same_v<DstLayoutPtn, ZNLayoutPtn> &&
-                         (Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, DNLayoutPtn>)) {
+    } else if constexpr (
+        Std::is_same_v<DstLayoutPtn, ZNLayoutPtn> &&
+        (Std::is_same_v<SrcLayoutPtn, DNExtLayoutPtn> || Std::is_same_v<SrcLayoutPtn, DNLayoutPtn>)) {
         SimDN2Zn(dst, src);
     } else if constexpr (Std::is_same_v<DstLayoutPtn, NZLayoutPtn> && Std::is_same_v<SrcLayoutPtn, NZLayoutPtn>) {
         SimNz2Nz(dst, src);
@@ -2229,12 +2234,13 @@ void PrintCaptureData()
     }
 }
 
-extern void copy_gm_to_cbuf_multi_nd2nz(half* dst, half* src, uint8_t sid, uint64_t loop1_src_stride,
-                                        uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-                                        uint64_t loop4_src_stride, bool smallc0_en);
+extern void copy_gm_to_cbuf_multi_nd2nz(
+    half* dst, half* src, uint8_t sid, uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value,
+    uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en);
 template <typename T>
-void SimulateND2nzDataCopy(T* dst, T* src, uint64_t loop1SrcStride, uint16_t nValue, uint32_t dValue,
-                           uint64_t loop4SrcStride, bool enableSmallC0)
+void SimulateND2nzDataCopy(
+    T* dst, T* src, uint64_t loop1SrcStride, uint16_t nValue, uint32_t dValue, uint64_t loop4SrcStride,
+    bool enableSmallC0)
 {
     if (gGm2L1NzParaCaptures.empty()) {
         return;
@@ -2293,12 +2299,13 @@ void SimulateND2nzDataCopy(T* dst, T* src, uint64_t loop1SrcStride, uint16_t nVa
     }
 }
 
-extern void copy_gm_to_cbuf_multi_dn2nz(half* dst, half* src, uint8_t sid, uint64_t loop1_src_stride,
-                                        uint8_t l2_cache_ctl, uint16_t n_value, uint32_t d_value,
-                                        uint64_t loop4_src_stride, bool smallc0_en);
+extern void copy_gm_to_cbuf_multi_dn2nz(
+    half* dst, half* src, uint8_t sid, uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value,
+    uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en);
 template <typename T>
-void SimulateDN2nzDataCopy(T* dst, T* src, uint64_t loop1SrcStride, uint16_t nValue, uint32_t dValue,
-                           uint64_t loop4SrcStride, bool enableSmallC0)
+void SimulateDN2nzDataCopy(
+    T* dst, T* src, uint64_t loop1SrcStride, uint16_t nValue, uint32_t dValue, uint64_t loop4SrcStride,
+    bool enableSmallC0)
 {
     if (gGm2L1NzParaCaptures.empty()) {
         return;
@@ -2357,12 +2364,14 @@ void SimulateDN2nzDataCopy(T* dst, T* src, uint64_t loop1SrcStride, uint16_t nVa
     }
 }
 
-extern void copy_gm_to_cbuf_align_v2(half* dst, half* src, uint8_t sid, uint32_t burst_num, uint32_t burst_len,
-                                     uint8_t left_padding_count, uint8_t right_padding_count, bool data_select_bit,
-                                     uint8_t l2_cache_ctl, uint64_t burst_src_stride, uint32_t burst_dst_stride);
+extern void copy_gm_to_cbuf_align_v2(
+    half* dst, half* src, uint8_t sid, uint32_t burst_num, uint32_t burst_len, uint8_t left_padding_count,
+    uint8_t right_padding_count, bool data_select_bit, uint8_t l2_cache_ctl, uint64_t burst_src_stride,
+    uint32_t burst_dst_stride);
 template <typename T>
-void SimulateAlignV2DataCopy(T* dst, T* src, uint32_t blockCount, uint32_t blockLen, uint8_t leftPaddingCnt,
-                             uint8_t rightPaddingCnt, bool dataSelectBit, uint64_t srcStride, uint32_t dstStride)
+void SimulateAlignV2DataCopy(
+    T* dst, T* src, uint32_t blockCount, uint32_t blockLen, uint8_t leftPaddingCnt, uint8_t rightPaddingCnt,
+    bool dataSelectBit, uint64_t srcStride, uint32_t dstStride)
 {
     bool isLPRPMode = (leftPaddingCnt > 0) || (rightPaddingCnt > 0);
     bool isCompactMode = (dstStride == blockLen);
@@ -2384,8 +2393,9 @@ void SimulateAlignV2DataCopy(T* dst, T* src, uint32_t blockCount, uint32_t block
 
             uint32_t rightPadOffset = leftPaddingCnt * sizeof(T) + blockLen;
             if (rightPaddingCnt > 0) {
-                std::fill(dstBurst + rightPadOffset, dstBurst + rightPadOffset + rightPaddingCnt * sizeof(T),
-                          0); // Padding with zeros
+                std::fill(
+                    dstBurst + rightPadOffset, dstBurst + rightPadOffset + rightPaddingCnt * sizeof(T),
+                    0); // Padding with zeros
             }
 
             uint32_t padOffset = leftPaddingCnt * sizeof(T) + blockLen + rightPaddingCnt * sizeof(T);
@@ -2432,56 +2442,56 @@ void CaptureSetMTE2NzPara(uint64_t para)
     gGm2L1NzParaCaptures.push_back(capture);
 }
 
-#define CAPTURE_GM_TO_L1_IMPL(type)                                                                                    \
-    void CaptureCopyGmToCbufAlignV2_##type(__cbuf__ type* dst, __gm__ type* src, uint8_t sid, uint32_t blockCount,     \
-                                           uint32_t blockLen, uint8_t leftPaddingCnt, uint8_t rightPaddingCnt,         \
-                                           bool dataSelectBit, uint8_t l2CacheCtl, uint64_t srcStride,                 \
-                                           uint32_t dstStride)                                                         \
-    {                                                                                                                  \
-        CopyGm2L1AlignV2Capture capture;                                                                               \
-        capture.dst = reinterpret_cast<void*>(dst);                                                                    \
-        capture.src = reinterpret_cast<void*>(src);                                                                    \
-        capture.blockCount = blockCount;                                                                               \
-        capture.blockLen = blockLen;                                                                                   \
-        capture.leftPaddingCnt = leftPaddingCnt;                                                                       \
-        capture.rightPaddingCnt = rightPaddingCnt;                                                                     \
-        capture.dataSelectBit = dataSelectBit;                                                                         \
-        capture.l2CacheCtl = l2CacheCtl;                                                                               \
-        capture.srcStride = srcStride;                                                                                 \
-        capture.dstStride = dstStride;                                                                                 \
-        gGm2L1AlignV2Captures.push_back(capture);                                                                      \
-        SimulateAlignV2DataCopy(dst, src, blockCount, blockLen, leftPaddingCnt, rightPaddingCnt, dataSelectBit,        \
-                                srcStride, dstStride);                                                                 \
-    }                                                                                                                  \
-    void CaptureCopyGmToCbufMultiND2nz_##type(__cbuf__ type* dst, __gm__ type* src, uint8_t sid,                       \
-                                              uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value,       \
-                                              uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en)            \
-    {                                                                                                                  \
-        CopyGm2L1ND2NzCapture capture;                                                                                 \
-        capture.dst = reinterpret_cast<void*>(dst);                                                                    \
-        capture.src = reinterpret_cast<void*>(src);                                                                    \
-        capture.loop1SrcStride = loop1_src_stride;                                                                     \
-        capture.nValue = n_value;                                                                                      \
-        capture.dValue = d_value;                                                                                      \
-        capture.loop4SrcStride = loop4_src_stride;                                                                     \
-        capture.enableSmallC0 = smallc0_en;                                                                            \
-        gGm2L1ND2NzCaptures.push_back(capture);                                                                        \
-        SimulateND2nzDataCopy(dst, src, loop1_src_stride, n_value, d_value, loop4_src_stride, smallc0_en);             \
-    }                                                                                                                  \
-    void CaptureCopyGmToCbufMultiDN2nz_##type(__cbuf__ type* dst, __gm__ type* src, uint8_t sid,                       \
-                                              uint64_t loop1_src_stride, uint8_t l2_cache_ctl, uint16_t n_value,       \
-                                              uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en)            \
-    {                                                                                                                  \
-        CopyGm2L1DN2NzCapture capture;                                                                                 \
-        capture.dst = reinterpret_cast<void*>(dst);                                                                    \
-        capture.src = reinterpret_cast<void*>(src);                                                                    \
-        capture.loop1SrcStride = loop1_src_stride;                                                                     \
-        capture.nValue = n_value;                                                                                      \
-        capture.dValue = d_value;                                                                                      \
-        capture.loop4SrcStride = loop4_src_stride;                                                                     \
-        capture.enableSmallC0 = smallc0_en;                                                                            \
-        gGm2L1DN2NzCaptures.push_back(capture);                                                                        \
-        SimulateDN2nzDataCopy(dst, src, loop1_src_stride, n_value, d_value, loop4_src_stride, smallc0_en);             \
+#define CAPTURE_GM_TO_L1_IMPL(type)                                                                                  \
+    void CaptureCopyGmToCbufAlignV2_##type(                                                                          \
+        __cbuf__ type* dst, __gm__ type* src, uint8_t sid, uint32_t blockCount, uint32_t blockLen,                   \
+        uint8_t leftPaddingCnt, uint8_t rightPaddingCnt, bool dataSelectBit, uint8_t l2CacheCtl, uint64_t srcStride, \
+        uint32_t dstStride)                                                                                          \
+    {                                                                                                                \
+        CopyGm2L1AlignV2Capture capture;                                                                             \
+        capture.dst = reinterpret_cast<void*>(dst);                                                                  \
+        capture.src = reinterpret_cast<void*>(src);                                                                  \
+        capture.blockCount = blockCount;                                                                             \
+        capture.blockLen = blockLen;                                                                                 \
+        capture.leftPaddingCnt = leftPaddingCnt;                                                                     \
+        capture.rightPaddingCnt = rightPaddingCnt;                                                                   \
+        capture.dataSelectBit = dataSelectBit;                                                                       \
+        capture.l2CacheCtl = l2CacheCtl;                                                                             \
+        capture.srcStride = srcStride;                                                                               \
+        capture.dstStride = dstStride;                                                                               \
+        gGm2L1AlignV2Captures.push_back(capture);                                                                    \
+        SimulateAlignV2DataCopy(                                                                                     \
+            dst, src, blockCount, blockLen, leftPaddingCnt, rightPaddingCnt, dataSelectBit, srcStride, dstStride);   \
+    }                                                                                                                \
+    void CaptureCopyGmToCbufMultiND2nz_##type(                                                                       \
+        __cbuf__ type* dst, __gm__ type* src, uint8_t sid, uint64_t loop1_src_stride, uint8_t l2_cache_ctl,          \
+        uint16_t n_value, uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en)                              \
+    {                                                                                                                \
+        CopyGm2L1ND2NzCapture capture;                                                                               \
+        capture.dst = reinterpret_cast<void*>(dst);                                                                  \
+        capture.src = reinterpret_cast<void*>(src);                                                                  \
+        capture.loop1SrcStride = loop1_src_stride;                                                                   \
+        capture.nValue = n_value;                                                                                    \
+        capture.dValue = d_value;                                                                                    \
+        capture.loop4SrcStride = loop4_src_stride;                                                                   \
+        capture.enableSmallC0 = smallc0_en;                                                                          \
+        gGm2L1ND2NzCaptures.push_back(capture);                                                                      \
+        SimulateND2nzDataCopy(dst, src, loop1_src_stride, n_value, d_value, loop4_src_stride, smallc0_en);           \
+    }                                                                                                                \
+    void CaptureCopyGmToCbufMultiDN2nz_##type(                                                                       \
+        __cbuf__ type* dst, __gm__ type* src, uint8_t sid, uint64_t loop1_src_stride, uint8_t l2_cache_ctl,          \
+        uint16_t n_value, uint32_t d_value, uint64_t loop4_src_stride, bool smallc0_en)                              \
+    {                                                                                                                \
+        CopyGm2L1DN2NzCapture capture;                                                                               \
+        capture.dst = reinterpret_cast<void*>(dst);                                                                  \
+        capture.src = reinterpret_cast<void*>(src);                                                                  \
+        capture.loop1SrcStride = loop1_src_stride;                                                                   \
+        capture.nValue = n_value;                                                                                    \
+        capture.dValue = d_value;                                                                                    \
+        capture.loop4SrcStride = loop4_src_stride;                                                                   \
+        capture.enableSmallC0 = smallc0_en;                                                                          \
+        gGm2L1DN2NzCaptures.push_back(capture);                                                                      \
+        SimulateDN2nzDataCopy(dst, src, loop1_src_stride, n_value, d_value, loop4_src_stride, smallc0_en);           \
     }
 
 CAPTURE_GM_TO_L1_IMPL(uint8_t);
@@ -2490,34 +2500,34 @@ CAPTURE_GM_TO_L1_IMPL(uint16_t);
 CAPTURE_GM_TO_L1_IMPL(float);
 CAPTURE_GM_TO_L1_IMPL(uint32_t);
 
-#define RUN_GM2L1_SCALE_BATCH_COPY(type, batch, gmBaseLayoutExpr, l1BaseLayoutExpr)                                   \
-    using T = type;                                                                                                   \
-    constexpr uint32_t B = batch;                                                                                     \
-    auto gmBaseLayout = (gmBaseLayoutExpr);                                                                           \
-    auto l1BaseLayout = (l1BaseLayoutExpr);                                                                           \
+#define RUN_GM2L1_SCALE_BATCH_COPY(type, batch, gmBaseLayoutExpr, l1BaseLayoutExpr)                                  \
+    using T = type;                                                                                                  \
+    constexpr uint32_t B = batch;                                                                                    \
+    auto gmBaseLayout = (gmBaseLayoutExpr);                                                                          \
+    auto l1BaseLayout = (l1BaseLayoutExpr);                                                                          \
     using GmTrait = GetLayoutTrait<decltype(gmBaseLayout)>;                                                          \
     using L1Trait = GetLayoutTrait<decltype(l1BaseLayout)>;                                                          \
-    using GmPattern = GetLayoutPattern<decltype(gmBaseLayout)>;                                                       \
-    using L1Pattern = GetLayoutPattern<decltype(l1BaseLayout)>;                                                       \
-    auto gmBatchLayout = MakeBatchPatternLayout<GmPattern, GmTrait>(B, gmBaseLayout);                                 \
-    auto l1BatchLayout = MakeBatchPatternLayout<L1Pattern, L1Trait>(B, l1BaseLayout);                                 \
-    auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), gmBatchLayout);                     \
-    auto l1ATensor = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), l1BatchLayout);               \
-    InitializeData<T>();                                                                                              \
-    MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{}).Call(l1ATensor, gmA);                                              \
-    auto srcBatchStride = Get<0>(gmBatchLayout.Stride());                                                             \
-    auto dstBatchStride = Get<0>(l1BatchLayout.Stride());                                                             \
-    for (uint32_t batchIdx = 0; batchIdx < B; ++batchIdx) {                                                           \
-        auto gmSingle = MakeTensor(                                                                                   \
-            MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm) + batchIdx * srcBatchStride), gmBaseLayout);        \
-        auto l1GoldenSingle = MakeTensor(                                                                             \
-            MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden) + batchIdx * dstBatchStride), l1BaseLayout);  \
-        DataCopyGm2L1Sim(l1GoldenSingle, gmSingle);                                                                   \
-    }                                                                                                                 \
-    bool result = std::equal(l1ABuf, l1ABuf + L1Size, l1ABufGolden);                                                  \
-    EXPECT_TRUE(result);                                                                                              \
-    if (gDebugPrint || !result) {                                                                                     \
-        PrintCaptureData();                                                                                           \
+    using GmPattern = GetLayoutPattern<decltype(gmBaseLayout)>;                                                      \
+    using L1Pattern = GetLayoutPattern<decltype(l1BaseLayout)>;                                                      \
+    auto gmBatchLayout = MakeBatchPatternLayout<GmPattern, GmTrait>(B, gmBaseLayout);                                \
+    auto l1BatchLayout = MakeBatchPatternLayout<L1Pattern, L1Trait>(B, l1BaseLayout);                                \
+    auto gmA = MakeTensor(MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm)), gmBatchLayout);                    \
+    auto l1ATensor = MakeTensor(MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABuf)), l1BatchLayout);              \
+    InitializeData<T>();                                                                                             \
+    MakeCopy(CopyGM2L1{}, CopyGM2L1TraitDefault{}).Call(l1ATensor, gmA);                                             \
+    auto srcBatchStride = Get<0>(gmBatchLayout.Stride());                                                            \
+    auto dstBatchStride = Get<0>(l1BatchLayout.Stride());                                                            \
+    for (uint32_t batchIdx = 0; batchIdx < B; ++batchIdx) {                                                          \
+        auto gmSingle = MakeTensor(                                                                                  \
+            MakeMemPtr<Location::GM>(reinterpret_cast<T*>(src0Gm) + batchIdx * srcBatchStride), gmBaseLayout);       \
+        auto l1GoldenSingle = MakeTensor(                                                                            \
+            MakeMemPtr<Location::L1>(reinterpret_cast<T*>(l1ABufGolden) + batchIdx * dstBatchStride), l1BaseLayout); \
+        DataCopyGm2L1Sim(l1GoldenSingle, gmSingle);                                                                  \
+    }                                                                                                                \
+    bool result = std::equal(l1ABuf, l1ABuf + L1Size, l1ABufGolden);                                                 \
+    EXPECT_TRUE(result);                                                                                             \
+    if (gDebugPrint || !result) {                                                                                    \
+        PrintCaptureData();                                                                                          \
     }
 
 TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ScaleAND2Zz_RoutesToSingleDn2Nz)
@@ -2558,8 +2568,7 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ScaleAND2Zz_RoutesToSingleDn2Nz)
     ASSERT_EQ(gGm2L1NzParaCaptures.size(), 1);
     const auto& dn2nz = gGm2L1DN2NzCaptures.back();
     const auto& nzPara = gGm2L1NzParaCaptures.back();
-    auto expectedLoop3DstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(l1BaseLayout) * sizeof(T) /
-        C0_SIZE<>;
+    auto expectedLoop3DstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(l1BaseLayout) * sizeof(T) / C0_SIZE<>;
     auto expectedLoop4DstStride = dstBatchStride * sizeof(T) / C0_SIZE<>;
     auto expectedLoop1SrcStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(gmBaseLayout) * sizeof(T);
     auto expectedLoop4SrcStride = srcBatchStride * sizeof(T);
@@ -2584,8 +2593,7 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ScaleADN2Zz_RoutesToSingleNd2Nz)
     ASSERT_EQ(gGm2L1NzParaCaptures.size(), 1);
     const auto& nd2nz = gGm2L1ND2NzCaptures.back();
     const auto& nzPara = gGm2L1NzParaCaptures.back();
-    auto expectedLoop3DstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(l1BaseLayout) * sizeof(T) /
-        C0_SIZE<>;
+    auto expectedLoop3DstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(l1BaseLayout) * sizeof(T) / C0_SIZE<>;
     auto expectedLoop4DstStride = dstBatchStride * sizeof(T) / C0_SIZE<>;
     auto expectedLoop1SrcStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(gmBaseLayout) * sizeof(T);
     auto expectedLoop4SrcStride = srcBatchStride * sizeof(T);
@@ -2610,8 +2618,8 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ScaleBND2Nn_RoutesToSingleNd2Nz)
     ASSERT_EQ(gGm2L1NzParaCaptures.size(), 1);
     const auto& nd2nz = gGm2L1ND2NzCaptures.back();
     const auto& nzPara = gGm2L1NzParaCaptures.back();
-    auto expectedLoop3DstStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(l1BaseLayout) * sizeof(T) /
-        C0_SIZE<>;
+    auto expectedLoop3DstStride =
+        GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(l1BaseLayout) * sizeof(T) / C0_SIZE<>;
     auto expectedLoop4DstStride = dstBatchStride * sizeof(T) / C0_SIZE<>;
     auto expectedLoop1SrcStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(gmBaseLayout) * sizeof(T);
     auto expectedLoop4SrcStride = srcBatchStride * sizeof(T);
@@ -2636,8 +2644,8 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ScaleBDN2Nn_RoutesToSingleDn2Nz)
     ASSERT_EQ(gGm2L1NzParaCaptures.size(), 1);
     const auto& dn2nz = gGm2L1DN2NzCaptures.back();
     const auto& nzPara = gGm2L1NzParaCaptures.back();
-    auto expectedLoop3DstStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(l1BaseLayout) * sizeof(T) /
-        C0_SIZE<>;
+    auto expectedLoop3DstStride =
+        GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(l1BaseLayout) * sizeof(T) / C0_SIZE<>;
     auto expectedLoop4DstStride = dstBatchStride * sizeof(T) / C0_SIZE<>;
     auto expectedLoop1SrcStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(gmBaseLayout) * sizeof(T);
     auto expectedLoop4SrcStride = srcBatchStride * sizeof(T);
@@ -2662,8 +2670,8 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ScaleAZz2Zz_ContinuousRoutesToPerBatchAlig
     const auto& alignV2 = gGm2L1AlignV2Captures.back();
     auto baseBlockCount = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(gmBaseLayout);
     auto baseBlockLen = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(gmBaseLayout) * sizeof(T) *
-        GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(gmBaseLayout) *
-        GetElement<AttrInfo::Stride, AttrInfo::Row, 0>(gmBaseLayout);
+                        GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(gmBaseLayout) *
+                        GetElement<AttrInfo::Stride, AttrInfo::Row, 0>(gmBaseLayout);
     auto expectedSrcStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(gmBaseLayout) * sizeof(T);
     auto expectedDstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(l1BaseLayout) * sizeof(T);
     EXPECT_EQ(alignV2.blockCount, baseBlockCount);
@@ -2682,8 +2690,8 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ScaleAZz2Zz_NonContinuousDstFallsBackToPer
     const auto& alignV2 = gGm2L1AlignV2Captures.back();
     auto baseBlockCount = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(gmBaseLayout);
     auto baseBlockLen = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(gmBaseLayout) * sizeof(T) *
-        GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(gmBaseLayout) *
-        GetElement<AttrInfo::Stride, AttrInfo::Row, 0>(gmBaseLayout);
+                        GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(gmBaseLayout) *
+                        GetElement<AttrInfo::Stride, AttrInfo::Row, 0>(gmBaseLayout);
     EXPECT_EQ(alignV2.blockCount, baseBlockCount);
     EXPECT_EQ(alignV2.blockLen, baseBlockLen);
 }
@@ -2698,8 +2706,8 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ScaleBNn2Nn_ContinuousRoutesToPerBatchAlig
     const auto& alignV2 = gGm2L1AlignV2Captures.back();
     auto baseBlockCount = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(gmBaseLayout);
     auto baseBlockLen = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(gmBaseLayout) * sizeof(T) *
-        GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(gmBaseLayout) *
-        GetElement<AttrInfo::Stride, AttrInfo::Column, 0>(gmBaseLayout);
+                        GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(gmBaseLayout) *
+                        GetElement<AttrInfo::Stride, AttrInfo::Column, 0>(gmBaseLayout);
     auto expectedSrcStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(gmBaseLayout) * sizeof(T);
     auto expectedDstStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(l1BaseLayout) * sizeof(T);
     EXPECT_EQ(alignV2.blockCount, baseBlockCount);
@@ -2718,8 +2726,8 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ScaleBNn2Nn_NonContinuousDstFallsBackToPer
     const auto& alignV2 = gGm2L1AlignV2Captures.back();
     auto baseBlockCount = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(gmBaseLayout);
     auto baseBlockLen = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(gmBaseLayout) * sizeof(T) *
-        GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(gmBaseLayout) *
-        GetElement<AttrInfo::Stride, AttrInfo::Column, 0>(gmBaseLayout);
+                        GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(gmBaseLayout) *
+                        GetElement<AttrInfo::Stride, AttrInfo::Column, 0>(gmBaseLayout);
     EXPECT_EQ(alignV2.blockCount, baseBlockCount);
     EXPECT_EQ(alignV2.blockLen, baseBlockLen);
 }
@@ -2739,13 +2747,13 @@ TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ScaleBNn2Nn_NonContinuousDstFallsBackToPer
 // =========================================================================
 
 #define EXPECT_GM2L1_BATCH_LAST_CALL(expectBlockCount, expectBlockLen, expectSrcStride, expectDstStride) \
-    do {                                                                                                  \
-        ASSERT_FALSE(gGm2L1AlignV2Captures.empty());                                                      \
-        const auto& last = gGm2L1AlignV2Captures.back();                                                  \
-        EXPECT_EQ(last.blockCount, static_cast<uint32_t>(expectBlockCount));                              \
-        EXPECT_EQ(last.blockLen, static_cast<uint32_t>(expectBlockLen));                                  \
-        EXPECT_EQ(last.srcStride, static_cast<uint64_t>(expectSrcStride));                                \
-        EXPECT_EQ(last.dstStride, static_cast<uint32_t>(expectDstStride));                                \
+    do {                                                                                                 \
+        ASSERT_FALSE(gGm2L1AlignV2Captures.empty());                                                     \
+        const auto& last = gGm2L1AlignV2Captures.back();                                                 \
+        EXPECT_EQ(last.blockCount, static_cast<uint32_t>(expectBlockCount));                             \
+        EXPECT_EQ(last.blockLen, static_cast<uint32_t>(expectBlockLen));                                 \
+        EXPECT_EQ(last.srcStride, static_cast<uint64_t>(expectSrcStride));                               \
+        EXPECT_EQ(last.dstStride, static_cast<uint32_t>(expectDstStride));                               \
     } while (0)
 
 TEST_F(TensorApiGm2L1, CopyGm2L1Batch_ND2ND_Compact_FoldsToSingleBlock)

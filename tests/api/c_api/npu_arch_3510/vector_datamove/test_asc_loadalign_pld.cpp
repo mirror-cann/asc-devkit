@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <mockcpp/mockcpp.hpp>
@@ -20,31 +20,32 @@ protected:
 };
 
 namespace {
-void pld_stub(vector_bool &dst, __ubuf__ uint32_t *src, iter_reg offset, Literal dist) {
-    EXPECT_EQ(src, reinterpret_cast<__ubuf__ uint32_t *>(22));
+void pld_stub(vector_bool& dst, __ubuf__ uint32_t* src, iter_reg offset, Literal dist)
+{
+    EXPECT_EQ(src, reinterpret_cast<__ubuf__ uint32_t*>(22));
     EXPECT_EQ(dist, static_cast<Literal>(Literal::NORM));
 }
 
-void pld_upsample_stub(vector_bool &dst, __ubuf__ uint32_t *src, iter_reg offset, Literal dist) {
-    EXPECT_EQ(src, reinterpret_cast<__ubuf__ uint32_t *>(22));
+void pld_upsample_stub(vector_bool& dst, __ubuf__ uint32_t* src, iter_reg offset, Literal dist)
+{
+    EXPECT_EQ(src, reinterpret_cast<__ubuf__ uint32_t*>(22));
     EXPECT_EQ(dist, static_cast<Literal>(Literal::US));
 }
 
-void pld_downsample_stub(vector_bool &dst, __ubuf__ uint32_t *src, iter_reg offset, Literal dist) {
-    EXPECT_EQ(src, reinterpret_cast<__ubuf__ uint32_t *>(22));
+void pld_downsample_stub(vector_bool& dst, __ubuf__ uint32_t* src, iter_reg offset, Literal dist)
+{
+    EXPECT_EQ(src, reinterpret_cast<__ubuf__ uint32_t*>(22));
     EXPECT_EQ(dist, static_cast<Literal>(Literal::DS));
 }
-}
+} // namespace
 
 TEST_F(TestVectorDatamoveLoadAlignPld, LoadAlignPld_Succ)
 {
     vector_bool dst = asc_create_mask_b16(PAT_ALL);
-    __ubuf__ uint32_t *src = reinterpret_cast<__ubuf__ uint32_t *>(22);
+    __ubuf__ uint32_t* src = reinterpret_cast<__ubuf__ uint32_t*>(22);
     iter_reg offset = asc_create_iter_reg_b32(64);
 
-    MOCKER_CPP(pld, void(vector_bool &, __ubuf__ uint32_t *, iter_reg, Literal))
-        .times(1)
-        .will(invoke(pld_stub));
+    MOCKER_CPP(pld, void(vector_bool&, __ubuf__ uint32_t*, iter_reg, Literal)).times(1).will(invoke(pld_stub));
 
     asc_loadalign(dst, src, offset);
     GlobalMockObject::verify();
@@ -53,12 +54,10 @@ TEST_F(TestVectorDatamoveLoadAlignPld, LoadAlignPld_Succ)
 TEST_F(TestVectorDatamoveLoadAlignPld, LoadAlignPldUpsample_Succ)
 {
     vector_bool dst = asc_create_mask_b16(PAT_ALL);
-    __ubuf__ uint32_t *src = reinterpret_cast<__ubuf__ uint32_t *>(22);
+    __ubuf__ uint32_t* src = reinterpret_cast<__ubuf__ uint32_t*>(22);
     iter_reg offset = asc_create_iter_reg_b32(64);
 
-    MOCKER_CPP(pld, void(vector_bool &, __ubuf__ uint32_t *, iter_reg, Literal))
-        .times(1)
-        .will(invoke(pld_upsample_stub));
+    MOCKER_CPP(pld, void(vector_bool&, __ubuf__ uint32_t*, iter_reg, Literal)).times(1).will(invoke(pld_upsample_stub));
 
     asc_loadalign_upsample(dst, src, offset);
     GlobalMockObject::verify();
@@ -67,10 +66,10 @@ TEST_F(TestVectorDatamoveLoadAlignPld, LoadAlignPldUpsample_Succ)
 TEST_F(TestVectorDatamoveLoadAlignPld, LoadAlignPldDownsample_Succ)
 {
     vector_bool dst = asc_create_mask_b16(PAT_ALL);
-    __ubuf__ uint32_t *src = reinterpret_cast<__ubuf__ uint32_t *>(22);
+    __ubuf__ uint32_t* src = reinterpret_cast<__ubuf__ uint32_t*>(22);
     iter_reg offset = asc_create_iter_reg_b32(64);
 
-    MOCKER_CPP(pld, void(vector_bool &, __ubuf__ uint32_t *, iter_reg, Literal))
+    MOCKER_CPP(pld, void(vector_bool&, __ubuf__ uint32_t*, iter_reg, Literal))
         .times(1)
         .will(invoke(pld_downsample_stub));
 

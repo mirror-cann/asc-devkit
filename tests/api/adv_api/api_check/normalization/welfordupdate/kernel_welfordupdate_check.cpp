@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -20,12 +19,8 @@ class WelfordUpdateAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(WelfordUpdateAPICheck, WelfordUpdateAPICheckTestSuccess)
@@ -68,8 +63,9 @@ TEST_F(WelfordUpdateAPICheck, WelfordUpdateAPICheckTestSuccess)
     para.abComputeLength = 8;
     para.nRec = 1;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(WelfordUpdate, (float, float, false, AscendC::WFUPDATE_DEFAULT_CFG), (
-        outputMean, outputVariance, inputMean, inputVariance, inputX, sharedTmpBuffer, para));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        WelfordUpdate, (float, float, false, AscendC::WFUPDATE_DEFAULT_CFG),
+        (outputMean, outputVariance, inputMean, inputVariance, inputX, sharedTmpBuffer, para));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 0);
 }
 
@@ -93,8 +89,9 @@ TEST_F(WelfordUpdateAPICheck, WelfordUpdateAPICheckTestSubFailure)
     para.abComputeLength = 8;
     para.nRec = 1;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(WelfordUpdate, (uint8_t, uint8_t, false, AscendC::WFUPDATE_DEFAULT_CFG), (
-        dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, para));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        WelfordUpdate, (uint8_t, uint8_t, false, AscendC::WFUPDATE_DEFAULT_CFG),
+        (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, para));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 26);
 }
 
@@ -118,7 +115,8 @@ TEST_F(WelfordUpdateAPICheck, WelfordUpdateAPICheckTestFailure)
     para.abComputeLength = 8;
     para.nRec = 1;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(WelfordUpdate, (uint8_t, uint8_t, true, AscendC::WFUPDATE_DEFAULT_CFG), (
-        dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, para));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        WelfordUpdate, (uint8_t, uint8_t, true, AscendC::WFUPDATE_DEFAULT_CFG),
+        (dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], dstTensor[1], sharedTmpBuffer, para));
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, 52);
 }

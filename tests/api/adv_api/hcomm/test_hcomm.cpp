@@ -40,10 +40,7 @@ protected:
         remoteBuff_.bufferInfo.rma.protectionInfo.memInfo.roce.rkey = 123456;
         channel_.remoteBufferAddr = &remoteBuff_;
     }
-    virtual void TearDown()
-    {
-        block_idx = blockIdxBak_;
-    }
+    virtual void TearDown() { block_idx = blockIdxBak_; }
 
 private:
     int64_t blockIdxBak_;
@@ -61,8 +58,7 @@ TEST_F(HcommCommonTestSuite, Aiv_Read)
 {
     Hcomm<AscendC::COMM_PROTOCOL_ROCE> hcomm;
     ChannelHandle channelHandle = reinterpret_cast<ChannelHandle>(&channel_);
-    int32_t ret = hcomm.ReadNbi(channelHandle,
-        reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1);
+    int32_t ret = hcomm.ReadNbi(channelHandle, reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1);
     EXPECT_EQ(ret, 0);
 }
 
@@ -78,6 +74,8 @@ TEST_F(HcommCommonTestSuite, Aiv_WriteWithNotifyNbi)
 {
     Hcomm<AscendC::COMM_PROTOCOL_ROCE> hcomm;
     ChannelHandle channelHandle = reinterpret_cast<ChannelHandle>(&channel_);
-    int32_t ret = hcomm.WriteWithNotifyNbi(channelHandle, reinterpret_cast<GM_ADDR>(0x11),reinterpret_cast<GM_ADDR>(0x22), 1, reinterpret_cast<GM_ADDR>(0x33), 2);
+    int32_t ret = hcomm.WriteWithNotifyNbi(
+        channelHandle, reinterpret_cast<GM_ADDR>(0x11), reinterpret_cast<GM_ADDR>(0x22), 1,
+        reinterpret_cast<GM_ADDR>(0x33), 2);
     EXPECT_EQ(ret, -1);
 }

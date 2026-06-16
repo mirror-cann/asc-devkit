@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -19,12 +19,11 @@ using namespace std;
 using namespace AscendC;
 
 #define LOCAL_TENSOR_REGISTER(tensorName, type, que_pos, initAddr, dataSize) \
-    LocalTensor<type> tensorName;                                              \
-    TBuffAddr tbuf_##tensorName;                                               \
-    tbuf_##tensorName.logicPos = (uint8_t)(TPosition::que_pos);                \
-    tensorName.SetAddr(tbuf_##tensorName);                                    \
+    LocalTensor<type> tensorName;                                            \
+    TBuffAddr tbuf_##tensorName;                                             \
+    tbuf_##tensorName.logicPos = (uint8_t)(TPosition::que_pos);              \
+    tensorName.SetAddr(tbuf_##tensorName);                                   \
     tensorName.InitBuffer(initAddr, dataSize);
-
 
 template <typename T>
 __global__ __aicore__ void MainMrgSort4(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm)
@@ -45,12 +44,12 @@ __global__ __aicore__ void MainMrgSort4(__gm__ uint8_t* __restrict__ dstGm, __gm
     GlobalTensor<T> srcGlobal4;
     GlobalTensor<T> dstGlobal;
     srcGlobal1.SetGlobalBuffer(reinterpret_cast<__gm__ PrimT<T>*>(srcGm), singleDataSize);
-    srcGlobal2.SetGlobalBuffer(reinterpret_cast<__gm__ PrimT<T>*>(srcGm + singleDataSize * 1 * sizeof(PrimT<T>)),
-        singleDataSize);
-    srcGlobal3.SetGlobalBuffer(reinterpret_cast<__gm__ PrimT<T>*>(srcGm + singleDataSize * 2 * sizeof(PrimT<T>)),
-        singleDataSize);
-    srcGlobal4.SetGlobalBuffer(reinterpret_cast<__gm__ PrimT<T>*>(srcGm + singleDataSize * 3 * sizeof(PrimT<T>)),
-        singleDataSize);
+    srcGlobal2.SetGlobalBuffer(
+        reinterpret_cast<__gm__ PrimT<T>*>(srcGm + singleDataSize * 1 * sizeof(PrimT<T>)), singleDataSize);
+    srcGlobal3.SetGlobalBuffer(
+        reinterpret_cast<__gm__ PrimT<T>*>(srcGm + singleDataSize * 2 * sizeof(PrimT<T>)), singleDataSize);
+    srcGlobal4.SetGlobalBuffer(
+        reinterpret_cast<__gm__ PrimT<T>*>(srcGm + singleDataSize * 3 * sizeof(PrimT<T>)), singleDataSize);
     dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ PrimT<T>*>(dstGm), vmrgsortDstDataSize);
 
     LOCAL_TENSOR_REGISTER(srcUb1, T, CO2, 0, singleDataSize)
@@ -62,8 +61,8 @@ __global__ __aicore__ void MainMrgSort4(__gm__ uint8_t* __restrict__ dstGm, __gm
     LOCAL_TENSOR_REGISTER(vconcatDstUb2, T, CO2, (srcDataSize + dstDataSize) * sizeof(PrimT<T>), dstDataSize)
     LOCAL_TENSOR_REGISTER(vconcatDstUb3, T, CO2, (srcDataSize + dstDataSize * 2) * sizeof(PrimT<T>), dstDataSize)
     LOCAL_TENSOR_REGISTER(vconcatDstUb4, T, CO2, (srcDataSize + dstDataSize * 3) * sizeof(PrimT<T>), dstDataSize)
-    LOCAL_TENSOR_REGISTER(vmrgsortDstUb, T, CO2, (srcDataSize + dstDataSize * 4) * sizeof(PrimT<T>),
-        vmrgsortDstDataSize)
+    LOCAL_TENSOR_REGISTER(
+        vmrgsortDstUb, T, CO2, (srcDataSize + dstDataSize * 4) * sizeof(PrimT<T>), vmrgsortDstDataSize)
     if constexpr (IsSameType<PrimT<T>, T>::value) {
         PrimT<T> zero(0);
         Duplicate(vconcatDstUb1, zero, dstDataSize);
@@ -126,15 +125,13 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_MRGSORT4, MrgSort4Testsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_MRGSORT4, MrgSort4Testsuite,
     ::testing::Values(
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201) // dav-m200
-    MrgSort4TestParams { 4, MainMrgSort4<float> },
-    MrgSort4TestParams { 4, MainMrgSort4<TensorTrait<float>> },
+        MrgSort4TestParams{4, MainMrgSort4<float>}, MrgSort4TestParams{4, MainMrgSort4<TensorTrait<float>>},
 #endif
-    MrgSort4TestParams { 2, MainMrgSort4<half> },
-    MrgSort4TestParams { 2, MainMrgSort4<TensorTrait<half>> }
-    ));
+        MrgSort4TestParams{2, MainMrgSort4<half>}, MrgSort4TestParams{2, MainMrgSort4<TensorTrait<half>>}));
 
 TEST_P(MrgSort4Testsuite, MrgSortOpTestCase)
 {
@@ -194,15 +191,13 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_RPSORT16, RpSort16Testsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_RPSORT16, RpSort16Testsuite,
     ::testing::Values(
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201) // dav-m200
-    RpSort16TestParams { 4, MainRpsort16<float> },
-    RpSort16TestParams { 4, MainRpsort16<TensorTrait<float>> },
+        RpSort16TestParams{4, MainRpsort16<float>}, RpSort16TestParams{4, MainRpsort16<TensorTrait<float>>},
 #endif
-    RpSort16TestParams { 2, MainRpsort16<half> },
-    RpSort16TestParams { 2, MainRpsort16<TensorTrait<half>> }
-    ));
+        RpSort16TestParams{2, MainRpsort16<half>}, RpSort16TestParams{2, MainRpsort16<TensorTrait<half>>}));
 
 TEST_P(RpSort16Testsuite, RpSort16OpTestCase)
 {
@@ -217,8 +212,9 @@ TEST_P(RpSort16Testsuite, RpSort16OpTestCase)
 }
 
 template <typename T>
-__global__ __aicore__ void MainConcatTest(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm,
-    __gm__ int32_t srcDataSize, __gm__ int32_t dstDataSize, __gm__ int32_t mode)
+__global__ __aicore__ void MainConcatTest(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, __gm__ int32_t srcDataSize,
+    __gm__ int32_t dstDataSize, __gm__ int32_t mode)
 {
     TPipe tpipe;
     int32_t repeat = srcDataSize / 16;
@@ -252,8 +248,9 @@ __global__ __aicore__ void MainConcatTest(__gm__ uint8_t* __restrict__ dstGm, __
 }
 
 template <typename T>
-__global__ __aicore__ void MainExtractTest(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm,
-    __gm__ int32_t srcDataSize, __gm__ int32_t dstDataSize, __gm__ int32_t mode)
+__global__ __aicore__ void MainExtractTest(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, __gm__ int32_t srcDataSize,
+    __gm__ int32_t dstDataSize, __gm__ int32_t mode)
 {
     TPipe tpipe;
     int32_t repeat = srcDataSize / 128;
@@ -298,18 +295,20 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_PROPOSAL, ProposalTestsuite,
-    ::testing::Values(ProposalTestParams { 2, MainConcatTest<half>, 32, 256, 5 },
-    ProposalTestParams { 2, MainConcatTest<half>, 16, 128, 3 },
-    ProposalTestParams { 2, MainExtractTest<half>, 128, 16, 3 },
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_PROPOSAL, ProposalTestsuite,
+    ::testing::Values(
+        ProposalTestParams{2, MainConcatTest<half>, 32, 256, 5},
+        ProposalTestParams{2, MainConcatTest<half>, 16, 128, 3},
+        ProposalTestParams{2, MainExtractTest<half>, 128, 16, 3},
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201) // dav-m200
-    ProposalTestParams { 4, MainConcatTest<float>, 16, 128, 4 },
-    ProposalTestParams { 4, MainExtractTest<float>, 256, 32, 4 },
+        ProposalTestParams{4, MainConcatTest<float>, 16, 128, 4},
+        ProposalTestParams{4, MainExtractTest<float>, 256, 32, 4},
 #endif
-    ProposalTestParams { 2, MainExtractTest<half>, 256, 32, 4 },
-    // TensorTrait
-    ProposalTestParams { 2, MainConcatTest<TensorTrait<half>>, 16, 128, 3 },
-    ProposalTestParams { 2, MainExtractTest<TensorTrait<half>>, 128, 16, 3 }));
+        ProposalTestParams{2, MainExtractTest<half>, 256, 32, 4},
+        // TensorTrait
+        ProposalTestParams{2, MainConcatTest<TensorTrait<half>>, 16, 128, 3},
+        ProposalTestParams{2, MainExtractTest<TensorTrait<half>>, 128, 16, 3}));
 
 TEST_P(ProposalTestsuite, ProposalApiTestCase)
 {

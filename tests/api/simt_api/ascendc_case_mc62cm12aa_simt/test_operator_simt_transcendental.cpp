@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <type_traits>
 #include <cmath>
@@ -20,13 +20,14 @@ using namespace AscendC::Simt;
 
 template <typename T>
 class KernelTranscendental {
-    public:
-        __aicore__ KernelTranscendental() {}
-        __aicore__ inline void Process(__gm__ T* out, __gm__ T* src0, __gm__ T* src1, const int mode);
+public:
+    __aicore__ KernelTranscendental() {}
+    __aicore__ inline void Process(__gm__ T* out, __gm__ T* src0, __gm__ T* src1, const int mode);
 };
 
 template <typename T>
-__simt_vf__ LAUNCH_BOUND(1024) inline __aicore__  void KernelTranscendentalCompute(__gm__ T* dst, __gm__ T* src0, __gm__ T* src1, const int mode)
+__simt_vf__ LAUNCH_BOUND(1024) inline __aicore__
+    void KernelTranscendentalCompute(__gm__ T* dst, __gm__ T* src0, __gm__ T* src1, const int mode)
 {
     src0[0] = NAN;
     src1[0] = NAN;
@@ -40,8 +41,7 @@ __simt_vf__ LAUNCH_BOUND(1024) inline __aicore__  void KernelTranscendentalCompu
     src0[5] = -INFINITY;
     src1[6] = INFINITY;
     src1[7] = -INFINITY;
-    for(int idx = GetThreadIdx<0>() + block_idx*GetThreadNum<0>(); idx < 128; idx+=block_num*GetThreadNum<0>())
-    {
+    for (int idx = GetThreadIdx<0>() + block_idx * GetThreadNum<0>(); idx < 128; idx += block_num * GetThreadNum<0>()) {
         if (mode == 0) {
             dst[idx] = Tan(src0[idx]);
         } else if (mode == 1) {
@@ -116,12 +116,12 @@ __simt_vf__ LAUNCH_BOUND(1024) inline __aicore__  void KernelTranscendentalCompu
             float c = 0;
             Sincospi(src0[idx], s, c);
             dst[idx] = c;
-        }else if (mode == 31) {
+        } else if (mode == 31) {
             dst[idx] = Sqrt(src0[idx]);
         } else if (mode == 32) {
             dst[idx] = Rsqrt(src0[idx]);
         } else if (mode == 33) {
-            int32_t exp=0;
+            int32_t exp = 0;
             dst[idx] = Frexp(src0[idx], exp);
         } else if (mode == 34) {
             int exp = src1[idx];
@@ -130,7 +130,7 @@ __simt_vf__ LAUNCH_BOUND(1024) inline __aicore__  void KernelTranscendentalCompu
             dst[idx] = Hypot(src0[idx], src1[idx]);
         } else if (mode == 36) {
             dst[idx] = Rhypot(src0[idx], src1[idx]);
-        }else if (mode == 37) {
+        } else if (mode == 37) {
             int exp = 0;
             Frexp(src0[idx], exp);
             dst[idx] = exp;
@@ -139,7 +139,7 @@ __simt_vf__ LAUNCH_BOUND(1024) inline __aicore__  void KernelTranscendentalCompu
 }
 
 template <typename T>
-__aicore__  inline void KernelTranscendental<T>::Process(__gm__ T* out, __gm__ T* src0, __gm__ T* src1, const int mode)
+__aicore__ inline void KernelTranscendental<T>::Process(__gm__ T* out, __gm__ T* src0, __gm__ T* src1, const int mode)
 {
     AscendC::Simt::VF_CALL<KernelTranscendentalCompute<T>>(Dim3(THREAD_DIM, 1, 1), out, src0, src1, mode);
 }
@@ -154,46 +154,19 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TranscendentalTestCase, TranscendentalTestsuite,
-    ::testing::Values(TranscendentalParams {0},
-    TranscendentalParams {1},
-    TranscendentalParams {2},
-    TranscendentalParams {3},
-    TranscendentalParams {4},
-    TranscendentalParams {5},
-    TranscendentalParams {6},
-    TranscendentalParams {7},
-    TranscendentalParams {8},
-    TranscendentalParams {9},
-    TranscendentalParams {10},
-    TranscendentalParams {11},
-    TranscendentalParams {12},
-    TranscendentalParams {13},
-    TranscendentalParams {14},
-    TranscendentalParams {15},
-    TranscendentalParams {16},
-    TranscendentalParams {17},
-    TranscendentalParams {18},
-    TranscendentalParams {19},
-    TranscendentalParams {20},
-    TranscendentalParams {21},
-    TranscendentalParams {22},
-    TranscendentalParams {23},
-    TranscendentalParams {24},
-    TranscendentalParams {25},
-    TranscendentalParams {26},
-    TranscendentalParams {27},
-    TranscendentalParams {28},
-    TranscendentalParams {29},
-    TranscendentalParams {30},
-    TranscendentalParams {31},
-    TranscendentalParams {32},
-    TranscendentalParams {33},
-    TranscendentalParams {34},
-    TranscendentalParams {35},
-    TranscendentalParams {36},
-    TranscendentalParams {37}
-                      ));
+INSTANTIATE_TEST_CASE_P(
+    TranscendentalTestCase, TranscendentalTestsuite,
+    ::testing::Values(
+        TranscendentalParams{0}, TranscendentalParams{1}, TranscendentalParams{2}, TranscendentalParams{3},
+        TranscendentalParams{4}, TranscendentalParams{5}, TranscendentalParams{6}, TranscendentalParams{7},
+        TranscendentalParams{8}, TranscendentalParams{9}, TranscendentalParams{10}, TranscendentalParams{11},
+        TranscendentalParams{12}, TranscendentalParams{13}, TranscendentalParams{14}, TranscendentalParams{15},
+        TranscendentalParams{16}, TranscendentalParams{17}, TranscendentalParams{18}, TranscendentalParams{19},
+        TranscendentalParams{20}, TranscendentalParams{21}, TranscendentalParams{22}, TranscendentalParams{23},
+        TranscendentalParams{24}, TranscendentalParams{25}, TranscendentalParams{26}, TranscendentalParams{27},
+        TranscendentalParams{28}, TranscendentalParams{29}, TranscendentalParams{30}, TranscendentalParams{31},
+        TranscendentalParams{32}, TranscendentalParams{33}, TranscendentalParams{34}, TranscendentalParams{35},
+        TranscendentalParams{36}, TranscendentalParams{37}));
 
 TEST_P(TranscendentalTestsuite, TranscendentalTestCase)
 {
@@ -230,21 +203,18 @@ struct ErfTestParam {
     float x;
     float yExpected;
 };
- 
+
 class ErfTestSuite : public ::testing::TestWithParam<ErfTestParam> {
 public:
     void SetUp() override {}
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(ErfTestCaseFloat, ErfTestSuite, ::testing::Values(
-    ErfTestParam {0.0f, 0.0f},
-    ErfTestParam {INFINITY, 1.0f},
-    ErfTestParam {-INFINITY, -1.0f},
-    ErfTestParam {NAN, NAN},
-    ErfTestParam {0.5f, 0.52049988f},
-    ErfTestParam {1.5f, 0.96610515f}
-));
+INSTANTIATE_TEST_CASE_P(
+    ErfTestCaseFloat, ErfTestSuite,
+    ::testing::Values(
+        ErfTestParam{0.0f, 0.0f}, ErfTestParam{INFINITY, 1.0f}, ErfTestParam{-INFINITY, -1.0f}, ErfTestParam{NAN, NAN},
+        ErfTestParam{0.5f, 0.52049988f}, ErfTestParam{1.5f, 0.96610515f}));
 
 TEST_P(ErfTestSuite, ErfTestCaseFloat)
 {
@@ -261,21 +231,18 @@ struct ErfcTestParam {
     float x;
     float yExpected;
 };
- 
+
 class ErfcTestSuite : public ::testing::TestWithParam<ErfcTestParam> {
 public:
     void SetUp() override {}
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(ErfcTestCaseFloat, ErfcTestSuite, ::testing::Values(
-    ErfcTestParam {INFINITY, 0.0f},
-    ErfcTestParam {-INFINITY, 2.0f},
-    ErfcTestParam {NAN, NAN},
-    ErfcTestParam {0.0f, 1.0f},
-    ErfcTestParam {0.5f, 0.47950012f},
-    ErfcTestParam {10.5f, 7.03592809e-50f}
-));
+INSTANTIATE_TEST_CASE_P(
+    ErfcTestCaseFloat, ErfcTestSuite,
+    ::testing::Values(
+        ErfcTestParam{INFINITY, 0.0f}, ErfcTestParam{-INFINITY, 2.0f}, ErfcTestParam{NAN, NAN},
+        ErfcTestParam{0.0f, 1.0f}, ErfcTestParam{0.5f, 0.47950012f}, ErfcTestParam{10.5f, 7.03592809e-50f}));
 
 TEST_P(ErfcTestSuite, ErfcTestCaseFloat)
 {
@@ -299,16 +266,12 @@ public:
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(ErfinvTestCaseFloat, ErfinvTestSuite, ::testing::Values(
-    ErfinvTestParam {0.0f, 0.0f},
-    ErfinvTestParam {1.0f, INFINITY},
-    ErfinvTestParam {-1.0f, -INFINITY},
-    ErfinvTestParam {NAN, NAN},
-    ErfinvTestParam {2.0f, NAN},
-    ErfinvTestParam {-2.0f, NAN},
-    ErfinvTestParam {0.5f, 0.47693628f},
-    ErfinvTestParam {0.999f, 2.3267564f}
-));
+INSTANTIATE_TEST_CASE_P(
+    ErfinvTestCaseFloat, ErfinvTestSuite,
+    ::testing::Values(
+        ErfinvTestParam{0.0f, 0.0f}, ErfinvTestParam{1.0f, INFINITY}, ErfinvTestParam{-1.0f, -INFINITY},
+        ErfinvTestParam{NAN, NAN}, ErfinvTestParam{2.0f, NAN}, ErfinvTestParam{-2.0f, NAN},
+        ErfinvTestParam{0.5f, 0.47693628f}, ErfinvTestParam{0.999f, 2.3267564f}));
 
 TEST_P(ErfinvTestSuite, ErfinvTestCaseFloat)
 {
@@ -332,13 +295,11 @@ public:
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(ErfcinvTestCaseFloat, ErfcinvTestSuite, ::testing::Values(
-    ErfcinvTestParam {2.0f, -INFINITY},
-    ErfcinvTestParam {0.0f, INFINITY},
-    ErfcinvTestParam {NAN, NAN},
-    ErfcinvTestParam {1.0f, 0.0f},
-    ErfcinvTestParam {0.5f, 0.47693628f}
-));
+INSTANTIATE_TEST_CASE_P(
+    ErfcinvTestCaseFloat, ErfcinvTestSuite,
+    ::testing::Values(
+        ErfcinvTestParam{2.0f, -INFINITY}, ErfcinvTestParam{0.0f, INFINITY}, ErfcinvTestParam{NAN, NAN},
+        ErfcinvTestParam{1.0f, 0.0f}, ErfcinvTestParam{0.5f, 0.47693628f}));
 
 TEST_P(ErfcinvTestSuite, ErfcinvTestCaseFloat)
 {
@@ -362,14 +323,11 @@ public:
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(ErfcxTestCaseFloat, ErfcxTestSuite, ::testing::Values(
-    ErfcxTestParam {INFINITY, 0.0f},
-    ErfcxTestParam {-INFINITY, INFINITY},
-    ErfcxTestParam {NAN, NAN},
-    ErfcxTestParam {0.5f, 0.61569034f},
-    ErfcxTestParam {-0.5f, 1.95236049f},
-    ErfcxTestParam {10.5f, 0.0534919f}
-));
+INSTANTIATE_TEST_CASE_P(
+    ErfcxTestCaseFloat, ErfcxTestSuite,
+    ::testing::Values(
+        ErfcxTestParam{INFINITY, 0.0f}, ErfcxTestParam{-INFINITY, INFINITY}, ErfcxTestParam{NAN, NAN},
+        ErfcxTestParam{0.5f, 0.61569034f}, ErfcxTestParam{-0.5f, 1.95236049f}, ErfcxTestParam{10.5f, 0.0534919f}));
 
 TEST_P(ErfcxTestSuite, ErfcxTestCaseFloat)
 {
@@ -393,29 +351,17 @@ public:
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(NormcdfTestCaseFloat, NormcdfTestSuite, ::testing::Values(
-    NormcdfTestParam {NAN, NAN},
-    NormcdfTestParam {-INFINITY, 0.0f},
-    NormcdfTestParam {-14.5f, 0.0f},
-    NormcdfTestParam {-2.0f, 0.0227501f},
-    NormcdfTestParam {-1.5f, 0.0668072f},
-    NormcdfTestParam {-1.0f, 0.158655f},
-    NormcdfTestParam {-0.5f, 0.308538f},
-    NormcdfTestParam {-0.1f, 0.460172f},
-    NormcdfTestParam {-0.052734375f, 0.478972f},
-    NormcdfTestParam {-8.248211e-39f, 0.5f},
-    NormcdfTestParam {0.0f, 0.5f},
-    NormcdfTestParam {8.248211e-39f, 0.5f},
-    NormcdfTestParam {0.052734375f, 0.521028f},
-    NormcdfTestParam {0.1f, 0.539828f},
-    NormcdfTestParam {0.5f, 0.691462f},
-    NormcdfTestParam {1.0f, 0.841345f},
-    NormcdfTestParam {1.5f, 0.933193f},
-    NormcdfTestParam {2.0f, 0.97725f},
-    NormcdfTestParam {2.5f, 0.99379f},
-    NormcdfTestParam {14.5f, 1.0f},
-    NormcdfTestParam {INFINITY, 1.0f}
-));
+INSTANTIATE_TEST_CASE_P(
+    NormcdfTestCaseFloat, NormcdfTestSuite,
+    ::testing::Values(
+        NormcdfTestParam{NAN, NAN}, NormcdfTestParam{-INFINITY, 0.0f}, NormcdfTestParam{-14.5f, 0.0f},
+        NormcdfTestParam{-2.0f, 0.0227501f}, NormcdfTestParam{-1.5f, 0.0668072f}, NormcdfTestParam{-1.0f, 0.158655f},
+        NormcdfTestParam{-0.5f, 0.308538f}, NormcdfTestParam{-0.1f, 0.460172f},
+        NormcdfTestParam{-0.052734375f, 0.478972f}, NormcdfTestParam{-8.248211e-39f, 0.5f},
+        NormcdfTestParam{0.0f, 0.5f}, NormcdfTestParam{8.248211e-39f, 0.5f}, NormcdfTestParam{0.052734375f, 0.521028f},
+        NormcdfTestParam{0.1f, 0.539828f}, NormcdfTestParam{0.5f, 0.691462f}, NormcdfTestParam{1.0f, 0.841345f},
+        NormcdfTestParam{1.5f, 0.933193f}, NormcdfTestParam{2.0f, 0.97725f}, NormcdfTestParam{2.5f, 0.99379f},
+        NormcdfTestParam{14.5f, 1.0f}, NormcdfTestParam{INFINITY, 1.0f}));
 
 TEST_P(NormcdfTestSuite, NormcdfTestCaseFloat)
 {
@@ -432,33 +378,23 @@ struct TgammaTestParam {
     float x;
     float yExpected;
 };
- 
+
 class TgammaTestSuite : public ::testing::TestWithParam<TgammaTestParam> {
 public:
     void SetUp() override {}
     void TearDown() override {}
 };
- 
-INSTANTIATE_TEST_CASE_P(TgammaTestCaseFloat, TgammaTestSuite, ::testing::Values(
-    TgammaTestParam {0.5f, 1.77245378f},
-    TgammaTestParam {-0.5f, -3.54490781f},
-    TgammaTestParam {1.0f, 1.0f},
-    TgammaTestParam {-1.0f, NAN},
-    TgammaTestParam {0.9f, 1.06862879f},
-    TgammaTestParam {-0.9f, -10.5705624f},
-    TgammaTestParam {9.929099e-39f, 1.00714069e+38f},
-    TgammaTestParam {-9.929099e-39f, -1.00714069e+38f},
-    TgammaTestParam {3.4e38f, INFINITY},
-    TgammaTestParam {3.14f, 2.28448f},
-    TgammaTestParam {33.14f, 4.28516609e+35f},
-    TgammaTestParam {-33.14f, 5.19573624e-37f},
-    TgammaTestParam {0.0f, INFINITY},
-    TgammaTestParam {-0.0f, -INFINITY},
-    TgammaTestParam {NAN, NAN},
-    TgammaTestParam {INFINITY, INFINITY},
-    TgammaTestParam {-INFINITY, NAN}
-));
- 
+
+INSTANTIATE_TEST_CASE_P(
+    TgammaTestCaseFloat, TgammaTestSuite,
+    ::testing::Values(
+        TgammaTestParam{0.5f, 1.77245378f}, TgammaTestParam{-0.5f, -3.54490781f}, TgammaTestParam{1.0f, 1.0f},
+        TgammaTestParam{-1.0f, NAN}, TgammaTestParam{0.9f, 1.06862879f}, TgammaTestParam{-0.9f, -10.5705624f},
+        TgammaTestParam{9.929099e-39f, 1.00714069e+38f}, TgammaTestParam{-9.929099e-39f, -1.00714069e+38f},
+        TgammaTestParam{3.4e38f, INFINITY}, TgammaTestParam{3.14f, 2.28448f}, TgammaTestParam{33.14f, 4.28516609e+35f},
+        TgammaTestParam{-33.14f, 5.19573624e-37f}, TgammaTestParam{0.0f, INFINITY}, TgammaTestParam{-0.0f, -INFINITY},
+        TgammaTestParam{NAN, NAN}, TgammaTestParam{INFINITY, INFINITY}, TgammaTestParam{-INFINITY, NAN}));
+
 TEST_P(TgammaTestSuite, TgammaTestCaseFloat)
 {
     const auto param = this->GetParam();
@@ -468,44 +404,31 @@ TEST_P(TgammaTestSuite, TgammaTestCaseFloat)
     VerifyFloatNumber(y, yExpected);
 }
 // ================================ Test Tgamma end ==================================
- 
- 
+
 // ================================ Test Lgamma start ================================
 struct LgammaTestParam {
     float x;
     float yExpected;
 };
- 
+
 class LgammaTestSuite : public ::testing::TestWithParam<LgammaTestParam> {
 public:
     void SetUp() override {}
     void TearDown() override {}
 };
- 
-INSTANTIATE_TEST_CASE_P(LgammaTestCaseFloat, LgammaTestSuite, ::testing::Values(
-    LgammaTestParam {0.5f, 0.572365f},
-    LgammaTestParam {-0.5f, 1.26551199f},
-    LgammaTestParam {0.9f, 0.0663762614f},
-    LgammaTestParam {-0.9f, 2.35807276f},
-    LgammaTestParam {1.0f, 0.0f},
-    LgammaTestParam {-1.0f, INFINITY},
-    LgammaTestParam {2.14f, 0.0653329268f},
-    LgammaTestParam {-2.14f, 1.17242455f},
-    LgammaTestParam {3.14f, 0.826139f},
-    LgammaTestParam {-3.14f, 0.0282016397f},
-    LgammaTestParam {4.5f, 2.45373654f},
-    LgammaTestParam {-4.5f, -2.81308413f},
-    LgammaTestParam {10.5f, 13.9406261f},
-    LgammaTestParam {-10.5f, -15.1472721f},
-    LgammaTestParam {3.4e35f, 2.7476849e+37f},
-    LgammaTestParam {-3.4e35f, INFINITY},
-    LgammaTestParam {-1.25e-20f, 45.8285599f},
-    LgammaTestParam {0.0f, INFINITY},
-    LgammaTestParam {NAN, NAN},
-    LgammaTestParam {INFINITY, INFINITY},
-    LgammaTestParam {-INFINITY, INFINITY}
-));
- 
+
+INSTANTIATE_TEST_CASE_P(
+    LgammaTestCaseFloat, LgammaTestSuite,
+    ::testing::Values(
+        LgammaTestParam{0.5f, 0.572365f}, LgammaTestParam{-0.5f, 1.26551199f}, LgammaTestParam{0.9f, 0.0663762614f},
+        LgammaTestParam{-0.9f, 2.35807276f}, LgammaTestParam{1.0f, 0.0f}, LgammaTestParam{-1.0f, INFINITY},
+        LgammaTestParam{2.14f, 0.0653329268f}, LgammaTestParam{-2.14f, 1.17242455f}, LgammaTestParam{3.14f, 0.826139f},
+        LgammaTestParam{-3.14f, 0.0282016397f}, LgammaTestParam{4.5f, 2.45373654f},
+        LgammaTestParam{-4.5f, -2.81308413f}, LgammaTestParam{10.5f, 13.9406261f},
+        LgammaTestParam{-10.5f, -15.1472721f}, LgammaTestParam{3.4e35f, 2.7476849e+37f},
+        LgammaTestParam{-3.4e35f, INFINITY}, LgammaTestParam{-1.25e-20f, 45.8285599f}, LgammaTestParam{0.0f, INFINITY},
+        LgammaTestParam{NAN, NAN}, LgammaTestParam{INFINITY, INFINITY}, LgammaTestParam{-INFINITY, INFINITY}));
+
 TEST_P(LgammaTestSuite, LgammaTestCaseFloat)
 {
     const auto param = this->GetParam();
@@ -515,31 +438,27 @@ TEST_P(LgammaTestSuite, LgammaTestCaseFloat)
     VerifyFloatNumber(y, yExpected);
 }
 // ================================ Test Lgamma end ==================================
- 
- 
+
 // ================================ Test CylBesselI0 start ================================
 struct CylBesselI0TestParam {
     float x;
     float yExpected;
 };
- 
+
 class CylBesselI0TestSuite : public ::testing::TestWithParam<CylBesselI0TestParam> {
 public:
     void SetUp() override {}
     void TearDown() override {}
 };
- 
-INSTANTIATE_TEST_CASE_P(CylBesselI0TestCaseFloat, CylBesselI0TestSuite, ::testing::Values(
-    CylBesselI0TestParam {0.5f, 1.06348336f},
-    CylBesselI0TestParam {-0.5f, 1.06348336f},
-    CylBesselI0TestParam {3.4e35f, INFINITY},
-    CylBesselI0TestParam {13.14f, 56564.625f},
-    CylBesselI0TestParam {0.0f, 1.0f},
-    CylBesselI0TestParam {NAN, NAN},
-    CylBesselI0TestParam {INFINITY, INFINITY},
-    CylBesselI0TestParam {-INFINITY, INFINITY}
-));
- 
+
+INSTANTIATE_TEST_CASE_P(
+    CylBesselI0TestCaseFloat, CylBesselI0TestSuite,
+    ::testing::Values(
+        CylBesselI0TestParam{0.5f, 1.06348336f}, CylBesselI0TestParam{-0.5f, 1.06348336f},
+        CylBesselI0TestParam{3.4e35f, INFINITY}, CylBesselI0TestParam{13.14f, 56564.625f},
+        CylBesselI0TestParam{0.0f, 1.0f}, CylBesselI0TestParam{NAN, NAN}, CylBesselI0TestParam{INFINITY, INFINITY},
+        CylBesselI0TestParam{-INFINITY, INFINITY}));
+
 TEST_P(CylBesselI0TestSuite, CylBesselI0TestCaseFloat)
 {
     const auto param = this->GetParam();
@@ -550,30 +469,26 @@ TEST_P(CylBesselI0TestSuite, CylBesselI0TestCaseFloat)
 }
 // ================================ Test CylBesselI0 end ==================================
 
- 
 // ================================ Test CylBesselI1 start ================================
 struct CylBesselI1TestParam {
     float x;
     float yExpected;
 };
- 
+
 class CylBesselI1TestSuite : public ::testing::TestWithParam<CylBesselI1TestParam> {
 public:
     void SetUp() override {}
     void TearDown() override {}
 };
- 
-INSTANTIATE_TEST_CASE_P(CylBesselI1TestCaseFloat, CylBesselI1TestSuite, ::testing::Values(
-    CylBesselI1TestParam {0.5f, 0.257894307f},
-    CylBesselI1TestParam {-0.5f, -0.257894307f},
-    CylBesselI1TestParam {3.4e35f, INFINITY},
-    CylBesselI1TestParam {13.14f, 54367.7266f},
-    CylBesselI1TestParam {0.0f, 0.0f},
-    CylBesselI1TestParam {NAN, NAN},
-    CylBesselI1TestParam {INFINITY, INFINITY},
-    CylBesselI1TestParam {-INFINITY, -INFINITY}
-));
- 
+
+INSTANTIATE_TEST_CASE_P(
+    CylBesselI1TestCaseFloat, CylBesselI1TestSuite,
+    ::testing::Values(
+        CylBesselI1TestParam{0.5f, 0.257894307f}, CylBesselI1TestParam{-0.5f, -0.257894307f},
+        CylBesselI1TestParam{3.4e35f, INFINITY}, CylBesselI1TestParam{13.14f, 54367.7266f},
+        CylBesselI1TestParam{0.0f, 0.0f}, CylBesselI1TestParam{NAN, NAN}, CylBesselI1TestParam{INFINITY, INFINITY},
+        CylBesselI1TestParam{-INFINITY, -INFINITY}));
+
 TEST_P(CylBesselI1TestSuite, CylBesselI1TestCaseFloat)
 {
     const auto param = this->GetParam();

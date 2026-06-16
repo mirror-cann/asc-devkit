@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "mockcpp/mockcpp.hpp"
@@ -20,8 +20,9 @@ struct SelfTensorDesc : public TensorTrait<T> {
 };
 
 template <typename T>
-void MainVecBinaryOperatorSimpleDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, __gm__ int32_t dataSize)
+void MainVecBinaryOperatorSimpleDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<SelfTensorDesc<T>> input0Global;
@@ -77,8 +78,9 @@ void MainVecBinaryOperatorSimpleDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ 
 }
 
 template <typename T>
-void MainVecBinaryOperatorSimpleErrorDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, __gm__ int32_t dataSize)
+void MainVecBinaryOperatorSimpleErrorDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<SelfTensorDesc<T>> input0Global;
@@ -146,10 +148,10 @@ void MainVecBinaryOperatorSimpleErrorDemo(__gm__ uint8_t* __restrict__ dstGm, __
     pipe_barrier(PIPE_ALL);
 }
 
-
 template <typename T>
-void MainVecBinaryOperatorDivDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, __gm__ int32_t dataSize)
+void MainVecBinaryOperatorDivDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<SelfTensorDesc<T>> input0Global;
@@ -197,8 +199,9 @@ void MainVecBinaryOperatorDivDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uin
 }
 
 template <typename T>
-void MainVecBinaryOperatorDivErrorDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, __gm__ int32_t dataSize)
+void MainVecBinaryOperatorDivErrorDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<SelfTensorDesc<T>> input0Global;
@@ -252,8 +255,9 @@ void MainVecBinaryOperatorDivErrorDemo(__gm__ uint8_t* __restrict__ dstGm, __gm_
 }
 
 template <typename T>
-void MainVecBinaryOperatorAndOrDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, __gm__ int32_t dataSize)
+void MainVecBinaryOperatorAndOrDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<SelfTensorDesc<T>> input0Global;
@@ -303,8 +307,9 @@ void MainVecBinaryOperatorAndOrDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ u
 }
 
 template <typename T>
-void MainVecBinaryOperatorAndOrErrorDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, __gm__ int32_t dataSize)
+void MainVecBinaryOperatorAndOrErrorDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<SelfTensorDesc<T>> input0Global;
@@ -363,8 +368,9 @@ void MainVecBinaryOperatorAndOrErrorDemo(__gm__ uint8_t* __restrict__ dstGm, __g
 }
 
 template <typename T>
-void MainVecBinaryOperatorAddreluDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, __gm__ int32_t dataSize)
+void MainVecBinaryOperatorAddreluDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<SelfTensorDesc<T>> input0Global;
@@ -411,8 +417,9 @@ void MainVecBinaryOperatorAddreluDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__
 }
 
 template <typename T>
-void MainVecBinaryOperatorAddreluSubreluErrorDemo(__gm__ uint8_t* __restrict__ dstGm,
-    __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm, __gm__ int32_t dataSize)
+void MainVecBinaryOperatorAddreluSubreluErrorDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<SelfTensorDesc<T>> input0Global;
@@ -469,8 +476,9 @@ void MainVecBinaryOperatorAddreluSubreluErrorDemo(__gm__ uint8_t* __restrict__ d
 }
 
 template <typename T>
-void MainVecBinaryOperatorSubreluDemo(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm,
-    __gm__ uint8_t* __restrict__ src1Gm, __gm__ int32_t dataSize)
+void MainVecBinaryOperatorSubreluDemo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<SelfTensorDesc<T>> input0Global;
@@ -527,36 +535,36 @@ struct BinaryDescTestParams {
 class BinaryDescSimpleTestsuite : public testing::Test, public testing::WithParamInterface<BinaryDescTestParams> {
 protected:
     void SetUp() {}
-    void TearDown() {GlobalMockObject::verify();}
+    void TearDown() { GlobalMockObject::verify(); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_VEC_BINARY_DESC_SIMPLE, BinaryDescSimpleTestsuite,
-    ::testing::Values(BinaryDescTestParams { 256, 2, true, 0, MainVecBinaryOperatorSimpleDemo<half> },
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorSimpleDemo<float> },
-    BinaryDescTestParams { 256, 2, true, 0, MainVecBinaryOperatorSimpleDemo<int16_t> },
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorSimpleDemo<int32_t> },
+INSTANTIATE_TEST_CASE_P(
+    TEST_VEC_BINARY_DESC_SIMPLE, BinaryDescSimpleTestsuite,
+    ::testing::Values(
+        BinaryDescTestParams{256, 2, true, 0, MainVecBinaryOperatorSimpleDemo<half>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorSimpleDemo<float>},
+        BinaryDescTestParams{256, 2, true, 0, MainVecBinaryOperatorSimpleDemo<int16_t>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorSimpleDemo<int32_t>},
 
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorDivDemo<half> },
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorDivDemo<float> },
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorDivDemo<half>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorDivDemo<float>},
 
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorAndOrDemo<uint16_t> },
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorAndOrDemo<int16_t> },
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorAddreluDemo<half> },
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorAddreluDemo<float> },
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorAddreluDemo<int16_t> },
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorSubreluDemo<half> },
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorSubreluDemo<float> },
-    BinaryDescTestParams { 256, 4, true, 0, MainVecBinaryOperatorSubreluDemo<int16_t>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorAndOrDemo<uint16_t>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorAndOrDemo<int16_t>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorAddreluDemo<half>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorAddreluDemo<float>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorAddreluDemo<int16_t>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorSubreluDemo<half>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorSubreluDemo<float>},
+        BinaryDescTestParams{256, 4, true, 0, MainVecBinaryOperatorSubreluDemo<int16_t>},
 
-    BinaryDescTestParams { 256, 4, false, 15, MainVecBinaryOperatorSimpleErrorDemo<int32_t> }, // Error check
-    BinaryDescTestParams { 256, 4, false, 3, MainVecBinaryOperatorDivErrorDemo<float> },
-    BinaryDescTestParams { 256, 4, false, 6, MainVecBinaryOperatorAndOrErrorDemo<int16_t> },
-    BinaryDescTestParams { 256, 4, false, 6, MainVecBinaryOperatorAddreluSubreluErrorDemo<float>}
-));
+        BinaryDescTestParams{256, 4, false, 15, MainVecBinaryOperatorSimpleErrorDemo<int32_t>}, // Error check
+        BinaryDescTestParams{256, 4, false, 3, MainVecBinaryOperatorDivErrorDemo<float>},
+        BinaryDescTestParams{256, 4, false, 6, MainVecBinaryOperatorAndOrErrorDemo<int16_t>},
+        BinaryDescTestParams{256, 4, false, 6, MainVecBinaryOperatorAddreluSubreluErrorDemo<float>}));
 
 TEST_P(BinaryDescSimpleTestsuite, BinaryDescSimpleTestCase)
 {
-
     TPipe tpipe;
     AscendC::SetGCoreType(2);
     auto param = GetParam();
@@ -564,7 +572,7 @@ TEST_P(BinaryDescSimpleTestsuite, BinaryDescSimpleTestCase)
     uint8_t src1Gm[param.dataSize * param.dataBitSize];
     uint8_t dstGm[param.dataSize * param.dataBitSize];
     if (!param.expectRes) {
-        MOCKER(raise, int(*)(int)).times(param.errorTimes).will(returnValue(0));
+        MOCKER(raise, int (*)(int)).times(param.errorTimes).will(returnValue(0));
     }
     param.cal_func(dstGm, src0Gm, src1Gm, param.dataSize);
     for (int32_t i = 0; i < param.dataSize; i++) {

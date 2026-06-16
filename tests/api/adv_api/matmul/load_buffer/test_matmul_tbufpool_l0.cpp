@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "include/adv_api/matmul/tiling.h"
@@ -23,12 +23,10 @@
 using namespace std;
 using namespace AscendC;
 
-
 namespace {
 
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using LoadToA2 = Impl::Detail::LoadToL0A<IMPL, A_TYPE, MM_CFG>;
     using LoadToB2 = Impl::Detail::LoadToL0B<IMPL, MatmulInputBType<B_TYPE, typename A_TYPE::T>, MM_CFG>;
@@ -36,15 +34,14 @@ public:
     using TBufPoolL0 = Impl::Detail::TBufPoolL0<IMPL, A_TYPE, B_TYPE, MM_CFG>;
 };
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
-MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl
-: MATMUL_IMPORT_MODULE(TBufPoolL0)
-, MATMUL_IMPORT_MODULE(LoadToA2)
-, MATMUL_IMPORT_MODULE(LoadToB2)
-, MATMUL_IMPORT_MODULE(MmadCompute)
-, MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG, class MM_CB,
+    MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE(TBufPoolL0),
+                   MATMUL_IMPORT_MODULE(LoadToA2),
+                   MATMUL_IMPORT_MODULE(LoadToB2),
+                   MATMUL_IMPORT_MODULE(MmadCompute),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling) {
     MATMUL_ALLOW_USING(TBufPoolL0);
     MATMUL_ALLOW_USING(LoadToA2);
     MATMUL_ALLOW_USING(LoadToB2);
@@ -56,9 +53,7 @@ public:
     using IMPL = MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, MM_CB, MATMUL_POLICY>;
     MATMUL_USE_MODULE(LoadToA2);
     MATMUL_USE_MODULE(LoadToB2);
-    MatmulImpl() {
-        pipe = *GetTPipePtr();
-    }
+    MatmulImpl() { pipe = *GetTPipePtr(); }
 
     TPipe pipe;
 
@@ -67,38 +62,32 @@ public:
         MATMUL_MODULE(LoadToA2)->Prepare(isATranspose, aL1K, aL1M);
     }
 
-    void LoadA(LocalTensor<A_T> &l0A, const LocalTensor<A_T> &l1A,
-     uint16_t aL1M, uint16_t aL1K, uint16_t madM, uint16_t madK, uint16_t aL1MOffset, uint16_t aL1KOffset,
-     bool isATranspose)
-     {
+    void LoadA(
+        LocalTensor<A_T>& l0A, const LocalTensor<A_T>& l1A, uint16_t aL1M, uint16_t aL1K, uint16_t madM, uint16_t madK,
+        uint16_t aL1MOffset, uint16_t aL1KOffset, bool isATranspose)
+    {
         MATMUL_MODULE(LoadToA2)->Load(l0A, l1A, aL1M, aL1K, madM, madK, aL1MOffset, aL1KOffset, isATranspose);
-     }
+    }
 
-     void InitB(bool isBTranspose, uint16_t bL1K)
-     {
-        MATMUL_MODULE(LoadToB2)->Prepare(isBTranspose, bL1K);
-     }
+    void InitB(bool isBTranspose, uint16_t bL1K) { MATMUL_MODULE(LoadToB2)->Prepare(isBTranspose, bL1K); }
 
-     void LoadB(LocalTensor<A_T> &l0B, const LocalTensor<A_T> &l1B,
-     uint16_t bL1N, uint16_t bL1K, uint16_t madN, uint16_t madK, uint16_t bL1NOffset, uint16_t bL1KOffset,
-     bool isBTranspose)
-     {
+    void LoadB(
+        LocalTensor<A_T>& l0B, const LocalTensor<A_T>& l1B, uint16_t bL1N, uint16_t bL1K, uint16_t madN, uint16_t madK,
+        uint16_t bL1NOffset, uint16_t bL1KOffset, bool isBTranspose)
+    {
         MATMUL_MODULE(LoadToB2)->Load(l0B, l1B, bL1N, bL1K, madN, madK, bL1NOffset, bL1KOffset, isBTranspose);
-     }
+    }
 };
-}
+} // namespace
 
 class test_matmul_tbufpool_l0 : public testing::Test {
 protected:
-    void SetUp() {
-        SetGCoreType(1);
-    }
-    void TearDown() {
-        SetGCoreType(0);
-    }
+    void SetUp() { SetGCoreType(1); }
+    void TearDown() { SetGCoreType(0); }
 };
 
-TEST_F(test_matmul_tbufpool_l0, case0) {
+TEST_F(test_matmul_tbufpool_l0, case0)
+{
     // input: M : 16, K : 16, N : 16, isATrans : false, isBTrans : false
     using A_TYPE = MatmulType<AscendC::TPosition::TSCM, CubeFormat::ND, half>;
     using B_TYPE = MatmulType<AscendC::TPosition::TSCM, CubeFormat::ND, half>;
@@ -132,7 +121,8 @@ TEST_F(test_matmul_tbufpool_l0, case0) {
     bufferPool.Free();
 }
 
-TEST_F(test_matmul_tbufpool_l0, case1) {
+TEST_F(test_matmul_tbufpool_l0, case1)
+{
     // input: M : 16, K : 32, N : 64, isATrans : true, isBTrans : true
     using A_TYPE = MatmulType<AscendC::TPosition::TSCM, CubeFormat::ND, half>;
     using B_TYPE = MatmulType<AscendC::TPosition::TSCM, CubeFormat::ND, half>;

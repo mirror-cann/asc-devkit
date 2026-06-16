@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -24,8 +24,8 @@ protected:
 };
 
 template <typename T, typename U>
-__global__ __aicore__ void MainAxpy(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm,
-    int32_t dataSize)
+__global__ __aicore__ void MainAxpy(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ srcGm, int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<U> inputGlobal;
@@ -73,19 +73,21 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_AXPY, AxpyTestsuite,
-    ::testing::Values(AxpyTestParams { 32, 2, 2, 0, GenerateMask(32), MainAxpy<half, half> },
-    AxpyTestParams { 32, 4, 2, 0, GenerateMask(32), MainAxpy<float, half> },
-    AxpyTestParams { 32, 4, 4, 0, GenerateMask(32), MainAxpy<float, float> },
-    AxpyTestParams { 64, 2, 2, 0, GenerateMask(64), MainAxpy<half, half> },
-    AxpyTestParams { 64, 4, 2, 0, GenerateMask(64), MainAxpy<float, half> },
-    AxpyTestParams { 64, 4, 4, 0, GenerateMask(64), MainAxpy<float, float> },
-    AxpyTestParams { 128, 2, 2, GenerateMask(64), GenerateMask(64), MainAxpy<half, half> },
-    AxpyTestParams { 128, 4, 2, 0, GenerateMask(64), MainAxpy<float, half> },
-    AxpyTestParams { 128, 4, 4, 0, GenerateMask(64), MainAxpy<float, float> },
-    AxpyTestParams { 288, 2, 2, 0, GenerateMask(32), MainAxpy<half, half> },
-    AxpyTestParams { 288, 4, 2, 0, GenerateMask(32), MainAxpy<float, half> },
-    AxpyTestParams { 288, 4, 4, 0, GenerateMask(32), MainAxpy<float, float> }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_AXPY, AxpyTestsuite,
+    ::testing::Values(
+        AxpyTestParams{32, 2, 2, 0, GenerateMask(32), MainAxpy<half, half>},
+        AxpyTestParams{32, 4, 2, 0, GenerateMask(32), MainAxpy<float, half>},
+        AxpyTestParams{32, 4, 4, 0, GenerateMask(32), MainAxpy<float, float>},
+        AxpyTestParams{64, 2, 2, 0, GenerateMask(64), MainAxpy<half, half>},
+        AxpyTestParams{64, 4, 2, 0, GenerateMask(64), MainAxpy<float, half>},
+        AxpyTestParams{64, 4, 4, 0, GenerateMask(64), MainAxpy<float, float>},
+        AxpyTestParams{128, 2, 2, GenerateMask(64), GenerateMask(64), MainAxpy<half, half>},
+        AxpyTestParams{128, 4, 2, 0, GenerateMask(64), MainAxpy<float, half>},
+        AxpyTestParams{128, 4, 4, 0, GenerateMask(64), MainAxpy<float, float>},
+        AxpyTestParams{288, 2, 2, 0, GenerateMask(32), MainAxpy<half, half>},
+        AxpyTestParams{288, 4, 2, 0, GenerateMask(32), MainAxpy<float, half>},
+        AxpyTestParams{288, 4, 4, 0, GenerateMask(32), MainAxpy<float, float>}));
 
 TEST_P(AxpyTestsuite, AxpyLevel2TestCase)
 {

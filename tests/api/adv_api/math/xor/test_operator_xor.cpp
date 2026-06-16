@@ -1,39 +1,29 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 using namespace std;
 using namespace AscendC;
 
-enum TestMode {
-    NORMAL_MODE,
-    CAL_MODE,
-    BUF_MODE,
-    BUF_CAL_MODE
-};
+enum TestMode { NORMAL_MODE, CAL_MODE, BUF_MODE, BUF_CAL_MODE };
 
 class TEST_XOR : public testing::Test {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
 template <typename T>
-void main_vec_xor_level2_demo(__gm__ uint8_t* __restrict__ dstGm,
-    __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm, uint32_t dataSize,TestMode testMode)
+void main_vec_xor_level2_demo(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+    uint32_t dataSize, TestMode testMode)
 {
     TPipe tpipe;
     GlobalTensor<T> input0Global;
@@ -79,8 +69,7 @@ void main_vec_xor_level2_demo(__gm__ uint8_t* __restrict__ dstGm,
 
         if (testMode == BUF_MODE) {
             Xor(output_local, input0_local, input1_local, tmp_local);
-        }
-        else if (testMode == BUF_CAL_MODE){
+        } else if (testMode == BUF_CAL_MODE) {
             Xor(output_local, input0_local, input1_local, tmp_local, dataSize);
         }
     }
@@ -92,20 +81,20 @@ void main_vec_xor_level2_demo(__gm__ uint8_t* __restrict__ dstGm,
 
     PipeBarrier<PIPE_ALL>();
 }
-#define VEC_XOR_LEVEL2_TESTCASE(DATA_TYPE, TEST_MODE)                                                           \
-    TEST_F(TEST_XOR, Xor##DATA_TYPE##TEST_MODE##Case)                                                           \
-    {                                                                                                           \
-        uint32_t dataSize = 256;                                                                               \
-        uint32_t sel_mask_size = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));                         \
-        uint8_t input0Gm[dataSize * sizeof(DATA_TYPE)];                                                       \
-        uint8_t input1Gm[dataSize * sizeof(DATA_TYPE)];                                                       \
-        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)];                                                       \
-                                                                                                                \
-        main_vec_xor_level2_demo<DATA_TYPE>(outputGm, input0Gm, input1Gm, dataSize, TEST_MODE);             \
-                                                                                                                \
-        for (uint32_t i = 0; i < dataSize; i++) {                                                              \
-            EXPECT_EQ(outputGm[i], 0x00);                                                                      \
-        }                                                                                                       \
+#define VEC_XOR_LEVEL2_TESTCASE(DATA_TYPE, TEST_MODE)                                           \
+    TEST_F(TEST_XOR, Xor##DATA_TYPE##TEST_MODE##Case)                                           \
+    {                                                                                           \
+        uint32_t dataSize = 256;                                                                \
+        uint32_t sel_mask_size = dataSize / AscendCUtils::GetBitSize(sizeof(uint8_t));          \
+        uint8_t input0Gm[dataSize * sizeof(DATA_TYPE)];                                         \
+        uint8_t input1Gm[dataSize * sizeof(DATA_TYPE)];                                         \
+        uint8_t outputGm[dataSize * sizeof(DATA_TYPE)];                                         \
+                                                                                                \
+        main_vec_xor_level2_demo<DATA_TYPE>(outputGm, input0Gm, input1Gm, dataSize, TEST_MODE); \
+                                                                                                \
+        for (uint32_t i = 0; i < dataSize; i++) {                                               \
+            EXPECT_EQ(outputGm[i], 0x00);                                                       \
+        }                                                                                       \
     }
 VEC_XOR_LEVEL2_TESTCASE(int16_t, NORMAL_MODE);
 VEC_XOR_LEVEL2_TESTCASE(int16_t, CAL_MODE);

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #ifndef KERNEL_SIMT_CPU_DEBUG
 #define KERNEL_SIMT_CPU_DEBUG
@@ -37,7 +37,7 @@ struct dim3 {
         z = z_;
     }
 };
-}  // namespace cce
+} // namespace cce
 
 inline cce::dim3 blockDim(1u, 1u, 1u);
 inline cce::dim3 blockIdx(0u, 0u, 0u);
@@ -71,8 +71,8 @@ public:
         // Shared memory in a warp to guarentee data exchange/modification without data race at warp level.
         std::unique_lock<std::mutex> lck(mtx_);
         auto currGeneration = syncGeneration;
-        void* temp = reinterpret_cast<void *>(&data[currGeneration % MEMORY_PIECE]);
-        T &dataToUpdate = *reinterpret_cast<T *>(temp);
+        void* temp = reinterpret_cast<void*>(&data[currGeneration % MEMORY_PIECE]);
+        T& dataToUpdate = *reinterpret_cast<T*>(temp);
 
         return dataToUpdate;
     }
@@ -83,10 +83,10 @@ public:
         std::unique_lock<std::mutex> lck(mtx_);
 
         auto currGeneration = syncGeneration;
-        void* temp = reinterpret_cast<void *>(&shuffleData[laneToWrite][currGeneration % MEMORY_PIECE]);
+        void* temp = reinterpret_cast<void*>(&shuffleData[laneToWrite][currGeneration % MEMORY_PIECE]);
 
-        void* temp2 = reinterpret_cast<void *>(&shuffleData[laneToRead][currGeneration % MEMORY_PIECE]);
-        return *reinterpret_cast<T *>(temp2);
+        void* temp2 = reinterpret_cast<void*>(&shuffleData[laneToRead][currGeneration % MEMORY_PIECE]);
+        return *reinterpret_cast<T*>(temp2);
     }
 
 private:
@@ -103,14 +103,13 @@ private:
 
 class ThreadBlock {
 public:
-    static ThreadBlock &GetBlockInstance();
+    static ThreadBlock& GetBlockInstance();
 
     void Init(uint32_t num);
 
     template <typename Func>
     void Schedule(Func func, uint32_t idx)
-    {
-    }
+    {}
 
     template <typename Func>
     void AtomicOp(Func action)
@@ -127,10 +126,7 @@ public:
 
 public:
     ThreadBlock() : activeThreads(0), syncGeneration(0), threadThreshold(0), warpNum_(0) {}
-    ~ThreadBlock()
-    {
-        FinishJobs();
-    }
+    ~ThreadBlock() { FinishJobs(); }
 
     std::vector<Warp> warps_;
 
@@ -157,8 +153,8 @@ uint32_t GetLaneId();
 uint32_t GetWarpId();
 
 void Sync();
-}  // namespace Simt
-}  // namespace AscendC
+} // namespace Simt
+} // namespace AscendC
 
 #endif
-#endif  // KERNEL_SIMT_CPU_DEBUG
+#endif // KERNEL_SIMT_CPU_DEBUG

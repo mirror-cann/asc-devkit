@@ -23,19 +23,19 @@
 
 namespace HcclSim {
 // 全局流Id和NotifyId生成器
-extern uint32_t notifyIdGen;  // 多卡共同累加计数
-extern uint32_t streamIdGen;  // 每张卡都从0累加
+extern uint32_t notifyIdGen; // 多卡共同累加计数
+extern uint32_t streamIdGen; // 每张卡都从0累加
 
 class SimNpu {
 public:
-    void InitSimNpuRes(const NpuPos &pos);
+    void InitSimNpuRes(const NpuPos& pos);
     uint64_t AllocMemory(BufferType bufferType, uint64_t len);
     MemBlock GetMemBlock(BufferType bufferType);
-    void *AllocMainStream();   // 申请主流
-    void *AllocSlaveStream();  // 申请从流
-    void *AllocNotify();       // 申请Notify
-    void ReleaseStream(void *stream);
-    void ReleaseNotify(void *notify);
+    void* AllocMainStream();  // 申请主流
+    void* AllocSlaveStream(); // 申请从流
+    void* AllocNotify();      // 申请Notify
+    void ReleaseStream(void* stream);
+    void ReleaseNotify(void* notify);
     void SetDevType(DevType devType);
     DevType GetDevType();
     HcclResult GetSlice(uint64_t addr, uint64_t size, DataSlice& dataSlice);
@@ -53,5 +53,5 @@ private:
     std::vector<SimStream> streams_;
     std::vector<SimNotify> notifys_;
 };
-}
+} // namespace HcclSim
 #endif

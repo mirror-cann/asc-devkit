@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,8 +15,8 @@ template <typename DstT, typename SrcT, typename IndexT>
 class GatherTest {
 public:
     __aicore__ inline GatherTest() {}
-    __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-        __gm__ uint8_t* indexOffsetGm, const uint32_t count)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* indexOffsetGm, const uint32_t count)
     {
         m_elementCount = count;
         m_srcGlobal.SetGlobalBuffer((__gm__ SrcT*)srcGm);
@@ -33,6 +33,7 @@ public:
         Compute();
         CopyOut();
     }
+
 private:
     __aicore__ inline void CopyIn()
     {
@@ -81,6 +82,7 @@ private:
         DataCopy(m_dstGlobal, dstLocal, m_elementCount);
         m_queOut.FreeTensor(dstLocal);
     }
+
 private:
     TPipe m_pipe;
     uint32_t m_elementCount;
@@ -94,7 +96,8 @@ private:
 } // namespace AscendC
 
 template <typename DstT, typename SrcT, typename IndexT>
-__global__ __aicore__ void testGather(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* indexOffsetGm, uint32_t elementCount)
+__global__ __aicore__ void testGather(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, __gm__ uint8_t* indexOffsetGm, uint32_t elementCount)
 {
     AscendC::GatherTest<DstT, SrcT, IndexT> op;
     op.Init(dstGm, srcGm, indexOffsetGm, elementCount);
@@ -109,28 +112,24 @@ struct gatherParams {
     void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint32_t);
 };
 
-class GatherTestsuite : public testing::Test,
-    public testing::WithParamInterface<gatherParams> {
+class GatherTestsuite : public testing::Test, public testing::WithParamInterface<gatherParams> {
 protected:
-    void SetUp() {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown() {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_GATHER, GatherTestsuite,
-    ::testing::Values(gatherParams { 2, 1, 2, 128, testGather<int16_t, int8_t, uint16_t>},
-        gatherParams { 2, 1, 2, 128, testGather<uint16_t, uint8_t, uint16_t>},
-        gatherParams { 2, 2, 2, 128, testGather<int16_t, int16_t, uint16_t>},
-        gatherParams { 2, 2, 2, 128, testGather<uint16_t, uint16_t, uint16_t>},
-        gatherParams { 4, 4, 4, 128, testGather<int32_t, int32_t, uint32_t>},
-        gatherParams { 4, 4, 4, 128, testGather<uint32_t, uint32_t, uint32_t>},
-        gatherParams { 2, 2, 2, 128, testGather<half, half, uint16_t>},
-        gatherParams { 4, 4, 4, 128, testGather<float, float, uint32_t>},
-        gatherParams { 2, 2, 2, 128, testGather<bfloat16_t, bfloat16_t, uint16_t>}));
-
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_GATHER, GatherTestsuite,
+    ::testing::Values(
+        gatherParams{2, 1, 2, 128, testGather<int16_t, int8_t, uint16_t>},
+        gatherParams{2, 1, 2, 128, testGather<uint16_t, uint8_t, uint16_t>},
+        gatherParams{2, 2, 2, 128, testGather<int16_t, int16_t, uint16_t>},
+        gatherParams{2, 2, 2, 128, testGather<uint16_t, uint16_t, uint16_t>},
+        gatherParams{4, 4, 4, 128, testGather<int32_t, int32_t, uint32_t>},
+        gatherParams{4, 4, 4, 128, testGather<uint32_t, uint32_t, uint32_t>},
+        gatherParams{2, 2, 2, 128, testGather<half, half, uint16_t>},
+        gatherParams{4, 4, 4, 128, testGather<float, float, uint32_t>},
+        gatherParams{2, 2, 2, 128, testGather<bfloat16_t, bfloat16_t, uint16_t>}));
 
 TEST_P(GatherTestsuite, testGather)
 {
@@ -139,7 +138,7 @@ TEST_P(GatherTestsuite, testGather)
     uint8_t srcGm[param.elementCount * param.srcTypeSize] = {0};
     uint8_t indexOffsetGm[param.elementCount * param.indexTypeSize] = {0};
     param.cal_func(dstGm, srcGm, indexOffsetGm, param.elementCount);
-    
+
     for (int32_t i = 0; i < param.elementCount; i++) {
         EXPECT_EQ(dstGm[i], 0x00);
     }

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,14 +15,12 @@ using namespace AscendC;
 
 template <typename SrcType, typename DstType>
 class KernelVcvt {
-
 public:
-    __aicore__ inline KernelVcvt()
-    {}
+    __aicore__ inline KernelVcvt() {}
     __aicore__ inline void Init(GM_ADDR srcGm, GM_ADDR dstGm, uint32_t srcSize, uint32_t dstSize)
     {
-        srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ SrcType *>(srcGm), srcSize);
-        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ DstType *>(dstGm), dstSize);
+        srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ SrcType*>(srcGm), srcSize);
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ DstType*>(dstGm), dstSize);
 
         pipe.InitBuffer(inQueueX, 1, srcSize * sizeof(SrcType));
         pipe.InitBuffer(outQueue, 1, dstSize * sizeof(DstType));
@@ -49,15 +47,15 @@ private:
 
         LocalTensor<SrcType> srcLocal = inQueueX.DeQue<SrcType>();
         uint32_t oneRepSize = 64;
-        uint32_t rep = srcDataSize/oneRepSize;
+        uint32_t rep = srcDataSize / oneRepSize;
         __VEC_SCOPE__
         {
             Reg::RegTensor<SrcType> vreg0;
             Reg::RegTensor<DstType> vreg1;
             Reg::RegTensor<SrcType> dst0;
             Reg::RegTensor<SrcType> dst1;
-            uint32_t sreg =  static_cast<uint32_t>(dstDataSize);
-            constexpr uint32_t sregLower =  static_cast<uint32_t>(VECTOR_REG_WIDTH / sizeof(float));
+            uint32_t sreg = static_cast<uint32_t>(dstDataSize);
+            constexpr uint32_t sregLower = static_cast<uint32_t>(VECTOR_REG_WIDTH / sizeof(float));
             Reg::MaskReg preg1;
             __ubuf__ DstType* dstPtr = (__ubuf__ DstType*)dstLocal.GetPhyAddr();
             __ubuf__ SrcType* srcPtr = (__ubuf__ SrcType*)srcLocal.GetPhyAddr();
@@ -104,8 +102,7 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(VcvtTestCase, VcvtTestsuite,
-    ::testing::Values(VcvtParams { 128, 64 }));
+INSTANTIATE_TEST_CASE_P(VcvtTestCase, VcvtTestsuite, ::testing::Values(VcvtParams{128, 64}));
 
 TEST_P(VcvtTestsuite, VcvtTestCase)
 {

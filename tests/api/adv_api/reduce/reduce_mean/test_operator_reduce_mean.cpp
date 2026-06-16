@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -15,7 +15,8 @@
 
 namespace AscendC {
 namespace {
-uint32_t utFindK(uint32_t n) {
+uint32_t utFindK(uint32_t n)
+{
     uint32_t ret = 1U;
     while (n > 1U) {
         ret <<= 1U;
@@ -23,73 +24,73 @@ uint32_t utFindK(uint32_t n) {
     }
     return ret;
 }
-}
+} // namespace
 template <typename T, bool isReuse, bool isAr>
 class KernelReduceMean {
 public:
-__aicore__ inline KernelReduceMean() {}
-__aicore__ inline void Init(GM_ADDR srcGm, GM_ADDR dstGm, uint32_t first, uint32_t last)
-{
-    this->first = first;
-    this->last = last;
-    uint32_t padLast = AlignUp(last, ONE_BLK_SIZE / sizeof(T));
-    uint32_t reduceAxis = isAr ? last : first;
-    srcSize = padLast * first;
-    if constexpr (isAr) {
-        uint32_t k = utFindK(last);
-        if (k == last && first > 1U) {
-            k >>= 1U;
-        }
-        if (last <= 64) {
-            tmpSize = 8;
+    __aicore__ inline KernelReduceMean() {}
+    __aicore__ inline void Init(GM_ADDR srcGm, GM_ADDR dstGm, uint32_t first, uint32_t last)
+    {
+        this->first = first;
+        this->last = last;
+        uint32_t padLast = AlignUp(last, ONE_BLK_SIZE / sizeof(T));
+        uint32_t reduceAxis = isAr ? last : first;
+        srcSize = padLast * first;
+        if constexpr (isAr) {
+            uint32_t k = utFindK(last);
+            if (k == last && first > 1U) {
+                k >>= 1U;
+            }
+            if (last <= 64) {
+                tmpSize = 8;
+            } else {
+                tmpSize = (last * k) * sizeof(T);
+            }
         } else {
-            tmpSize = (last * k) * sizeof(T);
+            tmpSize = srcSize * sizeof(T);
         }
-    } else {
-        tmpSize = srcSize * sizeof(T);
-    }
-    padRet = AlignUp(reduceAxis, ONE_BLK_SIZE / sizeof(T));
-    srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm), srcSize * sizeof(T));
-    dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), padRet * sizeof(T));
+        padRet = AlignUp(reduceAxis, ONE_BLK_SIZE / sizeof(T));
+        srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm), srcSize * sizeof(T));
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), padRet * sizeof(T));
 
-    pipe.InitBuffer(inQueue, 1, srcSize * sizeof(T));
-    pipe.InitBuffer(outQueue, 1, padRet * sizeof(T));
-    pipe.InitBuffer(tbuf, tmpSize);
-}
-__aicore__ inline void Process()
-{
-    CopyIn();
-    Compute();
-    CopyOut();
-}
+        pipe.InitBuffer(inQueue, 1, srcSize * sizeof(T));
+        pipe.InitBuffer(outQueue, 1, padRet * sizeof(T));
+        pipe.InitBuffer(tbuf, tmpSize);
+    }
+    __aicore__ inline void Process()
+    {
+        CopyIn();
+        Compute();
+        CopyOut();
+    }
 
 private:
-__aicore__ inline void CopyIn()
-{
-    LocalTensor<T> srcLocal = inQueue.AllocTensor<T>();
-    DataCopy(srcLocal, srcGlobal, srcSize);
-    inQueue.EnQue(srcLocal);
-}
-__aicore__ inline void Compute()
-{
-    LocalTensor<T> dstLocal = outQueue.AllocTensor<T>();
-    LocalTensor<T> srcLocal = inQueue.DeQue<T>();
-    LocalTensor<uint8_t> tmp = tbuf.Get<uint8_t>();
-    uint32_t shape[] = { first, last };
-    if constexpr (isAr) {
-        ReduceMean<T, Pattern::Reduce::AR, isReuse>(dstLocal, srcLocal, tmp, shape, true);
-    } else {
-        ReduceMean<T, Pattern::Reduce::RA, isReuse>(dstLocal, srcLocal, shape, true);
+    __aicore__ inline void CopyIn()
+    {
+        LocalTensor<T> srcLocal = inQueue.AllocTensor<T>();
+        DataCopy(srcLocal, srcGlobal, srcSize);
+        inQueue.EnQue(srcLocal);
     }
-    outQueue.EnQue<T>(dstLocal);
-    inQueue.FreeTensor(srcLocal);
-}
-__aicore__ inline void CopyOut()
-{
-    LocalTensor<T> dstLocal = outQueue.DeQue<T>();
-    DataCopy(dstGlobal, dstLocal, padRet);
-    outQueue.FreeTensor(dstLocal);
-}
+    __aicore__ inline void Compute()
+    {
+        LocalTensor<T> dstLocal = outQueue.AllocTensor<T>();
+        LocalTensor<T> srcLocal = inQueue.DeQue<T>();
+        LocalTensor<uint8_t> tmp = tbuf.Get<uint8_t>();
+        uint32_t shape[] = {first, last};
+        if constexpr (isAr) {
+            ReduceMean<T, Pattern::Reduce::AR, isReuse>(dstLocal, srcLocal, tmp, shape, true);
+        } else {
+            ReduceMean<T, Pattern::Reduce::RA, isReuse>(dstLocal, srcLocal, shape, true);
+        }
+        outQueue.EnQue<T>(dstLocal);
+        inQueue.FreeTensor(srcLocal);
+    }
+    __aicore__ inline void CopyOut()
+    {
+        LocalTensor<T> dstLocal = outQueue.DeQue<T>();
+        DataCopy(dstGlobal, dstLocal, padRet);
+        outQueue.FreeTensor(dstLocal);
+    }
 
 private:
     GlobalTensor<T> srcGlobal;
@@ -108,7 +109,8 @@ private:
 } // namespace AscendC
 
 template <typename T, bool isReuse>
-__global__ __aicore__ void MainReduceMean(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t first, uint32_t last, bool isAr)
+__global__ __aicore__ void MainReduceMean(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, uint32_t first, uint32_t last, bool isAr)
 {
     if (isAr) {
         AscendC::KernelReduceMean<T, isReuse, true> op;
@@ -131,25 +133,20 @@ struct ReduceMeanTestParams {
 
 class ReduceMeanTestsuite : public testing::Test, public testing::WithParamInterface<ReduceMeanTestParams> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
 
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPERATTION_REDUCE_MEAN, ReduceMeanTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPERATTION_REDUCE_MEAN, ReduceMeanTestsuite,
     ::testing::Values(
-        ReduceMeanTestParams { 4, 8, 32, true, MainReduceMean<float, true> },
-        ReduceMeanTestParams { 4, 16, 128, true, MainReduceMean<float, false> },
-        ReduceMeanTestParams { 4, 1, 8, false, MainReduceMean<float, true> },
-        ReduceMeanTestParams { 4, 8, 1, false, MainReduceMean<float, false> },
-        ReduceMeanTestParams { 4, 16, 7, false, MainReduceMean<float, true> },
-        ReduceMeanTestParams { 4, 8, 7, true, MainReduceMean<float, false> }));
+        ReduceMeanTestParams{4, 8, 32, true, MainReduceMean<float, true>},
+        ReduceMeanTestParams{4, 16, 128, true, MainReduceMean<float, false>},
+        ReduceMeanTestParams{4, 1, 8, false, MainReduceMean<float, true>},
+        ReduceMeanTestParams{4, 8, 1, false, MainReduceMean<float, false>},
+        ReduceMeanTestParams{4, 16, 7, false, MainReduceMean<float, true>},
+        ReduceMeanTestParams{4, 8, 7, true, MainReduceMean<float, false>}));
 
 TEST_P(ReduceMeanTestsuite, ReduceMeanOpTestCase)
 {

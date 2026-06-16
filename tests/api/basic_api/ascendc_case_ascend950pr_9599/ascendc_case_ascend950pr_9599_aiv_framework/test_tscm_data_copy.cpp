@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <cstring>
 #include <gtest/gtest.h>
 #include "mockcpp/mockcpp.hpp"
@@ -15,7 +15,8 @@
 
 namespace AscendC {
 // T, U for gm->l1 nd2nz
-template <typename T> class KernelDataCopyGm2L12 {
+template <typename T>
+class KernelDataCopyGm2L12 {
 public:
     __aicore__ inline KernelDataCopyGm2L12() {}
     __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, Nd2NzParams& intriParamsIn)
@@ -31,7 +32,7 @@ public:
 
         DataCopy(srcLocal, srcGlobal, intriParams);
 
-        uint32_t dstSize = ((intriParams.dValue * sizeof(T) -1 ) / 32 + 1) * intriParams.dstNzC0Stride * 32;
+        uint32_t dstSize = ((intriParams.dValue * sizeof(T) - 1) / 32 + 1) * intriParams.dstNzC0Stride * 32;
 
         inQueueTscm.FreeTensor(srcLocal);
     }
@@ -45,8 +46,7 @@ private:
 };
 
 template <typename T>
-__global__ __aicore__ void MainDataCopyGm2L1Nd2Nz(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-    Nd2NzParams intriParams)
+__global__ __aicore__ void MainDataCopyGm2L1Nd2Nz(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, Nd2NzParams intriParams)
 {
     KernelDataCopyGm2L12<T> op;
     op.Init(dstGm, srcGm, intriParams);
@@ -56,10 +56,7 @@ __global__ __aicore__ void MainDataCopyGm2L1Nd2Nz(__gm__ uint8_t* dstGm, __gm__ 
 class TscmGm2L1Nd2NzTestSuite : public ::testing::Test {
 protected:
     virtual void SetUp() {}
-    virtual void TearDown()
-    {
-        GlobalMockObject::verify();
-    }
+    virtual void TearDown() { GlobalMockObject::verify(); }
 };
 
 struct DataCopyGm2L1Nd2NzTestParams {
@@ -69,20 +66,21 @@ struct DataCopyGm2L1Nd2NzTestParams {
 };
 
 class TscmDataCopyGm2L1Nd2NzTestsuite : public testing::Test,
-    public testing::WithParamInterface<DataCopyGm2L1Nd2NzTestParams> {
+                                        public testing::WithParamInterface<DataCopyGm2L1Nd2NzTestParams> {
 protected:
-    void SetUp() {
-        SetGCoreType(2);
-    }
-    void TearDown() {
+    void SetUp() { SetGCoreType(2); }
+    void TearDown()
+    {
         SetGCoreType(0);
         GlobalMockObject::verify();
     }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DATACOPYGM2L1ND2NZ, TscmDataCopyGm2L1Nd2NzTestsuite,
-    ::testing::Values(DataCopyGm2L1Nd2NzTestParams { 2, MainDataCopyGm2L1Nd2Nz<half>, { 1, 32, 32, 0, 32, 32, 1, 0 } },
-    DataCopyGm2L1Nd2NzTestParams { 4, MainDataCopyGm2L1Nd2Nz<float>, {  1, 32, 32, 0, 32, 32, 1, 0 } }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DATACOPYGM2L1ND2NZ, TscmDataCopyGm2L1Nd2NzTestsuite,
+    ::testing::Values(
+        DataCopyGm2L1Nd2NzTestParams{2, MainDataCopyGm2L1Nd2Nz<half>, {1, 32, 32, 0, 32, 32, 1, 0}},
+        DataCopyGm2L1Nd2NzTestParams{4, MainDataCopyGm2L1Nd2Nz<float>, {1, 32, 32, 0, 32, 32, 1, 0}}));
 
 TEST_P(TscmDataCopyGm2L1Nd2NzTestsuite, TscmDataCopyGm2L1Nd2NzTestsuiteOpTestCase)
 {
@@ -101,7 +99,8 @@ TEST_P(TscmDataCopyGm2L1Nd2NzTestsuite, TscmDataCopyGm2L1Nd2NzTestsuiteOpTestCas
 }
 
 // T, U for gm->l1
-template <typename T> class KernelDataCopyGm2L1 {
+template <typename T>
+class KernelDataCopyGm2L1 {
 public:
     __aicore__ inline KernelDataCopyGm2L1() {}
     __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, DataCopyParams& intriParamsIn)
@@ -128,8 +127,7 @@ private:
 };
 
 template <typename T>
-__global__ __aicore__ void MainDataCopyGm2L1(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm,
-    DataCopyParams &intriParams)
+__global__ __aicore__ void MainDataCopyGm2L1(__gm__ uint8_t* dstGm, __gm__ uint8_t* srcGm, DataCopyParams& intriParams)
 {
     KernelDataCopyGm2L1<T> op;
     op.Init(dstGm, srcGm, intriParams);
@@ -138,26 +136,26 @@ __global__ __aicore__ void MainDataCopyGm2L1(__gm__ uint8_t* dstGm, __gm__ uint8
 
 struct DataCopyGm2L1TestParams {
     int32_t typeSize;
-    void (*cal_func)(uint8_t*, uint8_t*, DataCopyParams &);
+    void (*cal_func)(uint8_t*, uint8_t*, DataCopyParams&);
     DataCopyParams intriParams;
 };
 
 class DataCopyGm2L1Testsuite : public testing::Test, public testing::WithParamInterface<DataCopyGm2L1TestParams> {
 public:
 protected:
-    void SetUp() {
-        SetGCoreType(2);
-    }
-    void TearDown() {
+    void SetUp() { SetGCoreType(2); }
+    void TearDown()
+    {
         SetGCoreType(0);
         GlobalMockObject::verify();
     }
-
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_DATACOPYGm2L1, DataCopyGm2L1Testsuite,
-    ::testing::Values(DataCopyGm2L1TestParams { 2, MainDataCopyGm2L1<half>, {1, 32, 0, 0} }, 
-    DataCopyGm2L1TestParams { 4, MainDataCopyGm2L1<int32_t>, {1, 64, 0, 0} }));
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_DATACOPYGm2L1, DataCopyGm2L1Testsuite,
+    ::testing::Values(
+        DataCopyGm2L1TestParams{2, MainDataCopyGm2L1<half>, {1, 32, 0, 0}},
+        DataCopyGm2L1TestParams{4, MainDataCopyGm2L1<int32_t>, {1, 64, 0, 0}}));
 
 TEST_P(DataCopyGm2L1Testsuite, DataCopyGm2L1OpTestCase)
 {
@@ -166,7 +164,7 @@ TEST_P(DataCopyGm2L1Testsuite, DataCopyGm2L1OpTestCase)
     DataCopyParams intriParams = param.intriParams;
     uint8_t srcGm[512 * param.typeSize] = {0};
     uint8_t dstGm[512 * param.typeSize] = {0};
- 
+
     param.cal_func(dstGm, srcGm, intriParams);
     for (int i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {
         EXPECT_EQ(dstGm[i], 0);
@@ -220,7 +218,7 @@ TEST_F(TscmRealMsgTestSuite, ScmDataCopyMsgWritesRealKfcMessage)
     KfcCommClient client(workspace, 0);
     g_kfcClient = &client;
     uint8_t src[256] = {0};
-    DataCopyParams intriParams {2, 4, 6, 8};
+    DataCopyParams intriParams{2, 4, 6, 8};
     auto dst = reinterpret_cast<__cbuf__ void*>(static_cast<uintptr_t>(0x40));
 
     ScmDataCopyMsg(dst, src, intriParams, 123);
@@ -245,7 +243,7 @@ TEST_F(TscmRealMsgTestSuite, ScmDataCopyNd2NzWritesRealKfcMessage)
     KfcCommClient client(workspace, 0);
     g_kfcClient = &client;
     uint8_t src[256] = {0};
-    Nd2NzParams intriParams {1, 32, 32, 0, 32, 32, 1, 0};
+    Nd2NzParams intriParams{1, 32, 32, 0, 32, 32, 1, 0};
     auto dst = reinterpret_cast<__cbuf__ void*>(static_cast<uintptr_t>(0x80));
     sub_block_idx = 1;
     g_taskRation = 2;
@@ -277,7 +275,7 @@ TEST_F(TscmRealMsgTestSuite, DataCopyGmToTscmImplSendsOffsetMessage)
     KfcCommClient client(workspace, 0);
     g_kfcClient = &client;
     uint8_t src[256] = {0};
-    DataCopyParams intriParams {2, 4, 6, 8};
+    DataCopyParams intriParams{2, 4, 6, 8};
     auto* tscmBase = GetBaseAddrCpu(static_cast<int8_t>(TPosition::TSCM));
     ASSERT_NE(tscmBase, nullptr);
     auto* dst = reinterpret_cast<__cbuf__ half*>(tscmBase + 0x40);
@@ -299,7 +297,7 @@ TEST_F(TscmRealMsgTestSuite, DataCopyGmToTscmNd2NzImplSendsOffsetMessage)
     KfcCommClient client(workspace, 0);
     g_kfcClient = &client;
     uint8_t src[512] = {0};
-    Nd2NzParams intriParams {1, 16, 16, 16, 16, 16, 1, 16};
+    Nd2NzParams intriParams{1, 16, 16, 16, 16, 16, 1, 16};
     auto* tscmBase = GetBaseAddrCpu(static_cast<int8_t>(TPosition::TSCM));
     ASSERT_NE(tscmBase, nullptr);
     auto* dst = reinterpret_cast<__cbuf__ half*>(tscmBase + 0x80);

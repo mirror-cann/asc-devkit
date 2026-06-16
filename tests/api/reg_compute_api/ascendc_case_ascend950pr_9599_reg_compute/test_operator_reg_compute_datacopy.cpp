@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -23,8 +23,8 @@ public:
     {
         const int alginSize = static_cast<int>(32 / sizeof(T));
         dstSize = (count + alginSize - 1) / alginSize * alginSize;
-        srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(srcGm), dstSize);
-        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), dstSize);
+        srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(srcGm), dstSize);
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dstSize);
         pipe.InitBuffer(inQueue, 1, dstSize * sizeof(T));
         pipe.InitBuffer(outQueue, 1, dstSize * sizeof(T));
     }
@@ -44,7 +44,7 @@ private:
         inQueue.EnQue<T>(srcLocal);
     }
 
-    __aicore__ inline void ComputeMode0(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode0(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         uint32_t sreg = static_cast<uint32_t>(dstSize);
@@ -58,7 +58,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode1(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode1(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         uint32_t sreg = static_cast<uint32_t>(dstSize);
@@ -72,7 +72,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode2(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode2(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         uint32_t sreg = static_cast<uint32_t>(dstSize);
@@ -87,7 +87,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode3(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode3(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         uint32_t sreg = static_cast<uint32_t>(dstSize);
@@ -102,7 +102,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode301(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode301(__ubuf__ T* dst, __ubuf__ T* src)
     {
         constexpr uint32_t repeatElm = GetVecLen() / sizeof(T) * 2;
         uint16_t repeatTimes = CeilDivision(dstSize, repeatElm);
@@ -115,7 +115,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode302(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode302(__ubuf__ T* dst, __ubuf__ T* src)
     {
         constexpr uint32_t repeatElm = GetVecLen() / sizeof(T) * 2;
         uint16_t repeatTimes = CeilDivision(dstSize, repeatElm);
@@ -129,7 +129,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode4(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode4(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         Reg::MaskReg preg = Reg::CreateMask<T>();
@@ -141,7 +141,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode5(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode5(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         Reg::MaskReg preg = Reg::CreateMask<T>();
@@ -153,7 +153,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode6(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode6(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         Reg::MaskReg preg = Reg::CreateMask<T>();
@@ -165,27 +165,25 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode601(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode601(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         Reg::MaskReg preg = Reg::CreateMask<T>();
         constexpr uint32_t sregLower = static_cast<uint32_t>(VECTOR_REG_WIDTH / sizeof(T));
         uint16_t repeatTimes = CeilDivision(dstSize, sregLower);
         for (uint16_t i = 0; i < static_cast<uint16_t>(repeatTimes); ++i) {
-            Reg::DataCopy<T, DataCopyMode::DATA_BLOCK_COPY, Reg::PostLiteral::POST_MODE_NORMAL>(
-                vreg0, src, 1, 8, preg);
-            Reg::DataCopy<T, DataCopyMode::DATA_BLOCK_COPY, Reg::PostLiteral::POST_MODE_NORMAL>(
-                dst, vreg0, 1, 8, preg);
+            Reg::DataCopy<T, DataCopyMode::DATA_BLOCK_COPY, Reg::PostLiteral::POST_MODE_NORMAL>(vreg0, src, 1, 8, preg);
+            Reg::DataCopy<T, DataCopyMode::DATA_BLOCK_COPY, Reg::PostLiteral::POST_MODE_NORMAL>(dst, vreg0, 1, 8, preg);
         }
     }
 
-    __aicore__ inline void ComputeMode7(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode7(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         Reg::UnalignReg u0;
         Reg::UnalignReg u1;
         Reg::MaskReg preg = Reg::CreateMask<T>();
-        constexpr uint32_t sregLower = 15;  // to process unalign data
+        constexpr uint32_t sregLower = 15; // to process unalign data
         uint16_t repeatTimes = CeilDivision(dstSize, sregLower);
         for (uint16_t i = 0; i < static_cast<uint16_t>(repeatTimes); ++i) {
             auto srcUbT = src + i * sregLower;
@@ -197,13 +195,13 @@ private:
         Reg::DataCopyUnAlignPost(dst, u1, 0);
     }
 
-    __aicore__ inline void ComputeMode8(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode8(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         Reg::UnalignReg u0;
         Reg::UnalignReg u1;
         Reg::MaskReg preg = Reg::CreateMask<T>();
-        constexpr uint32_t sregLower = 15;  // to process unalign data
+        constexpr uint32_t sregLower = 15; // to process unalign data
         uint16_t repeatTimes = CeilDivision(dstSize, sregLower);
         for (uint16_t i = 0; i < static_cast<uint16_t>(repeatTimes); ++i) {
             Reg::DataCopyUnAlignPre(u0, src);
@@ -213,13 +211,13 @@ private:
         Reg::DataCopyUnAlignPost(dst, u1, 0);
     }
 
-    __aicore__ inline void ComputeMode81(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode81(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         Reg::UnalignReg u0;
         Reg::UnalignReg u1;
         Reg::MaskReg preg = Reg::CreateMask<T>();
-        constexpr uint32_t sregLower = 15;  // to process unalign data
+        constexpr uint32_t sregLower = 15; // to process unalign data
         uint16_t repeatTimes = CeilDivision(dstSize, sregLower);
         for (uint16_t i = 0; i < static_cast<uint16_t>(repeatTimes); ++i) {
             vldas(u0, src);
@@ -229,8 +227,7 @@ private:
         vstas(u1, dst, 0);
     }
 
-    __aicore__ inline void  ComputeMode9(
-        __ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode9(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::MaskReg preg = Reg::CreateMask<T>();
         constexpr uint32_t repeatElm = static_cast<uint32_t>(VECTOR_REG_WIDTH / 8 / sizeof(T));
@@ -250,8 +247,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode10(
-        __ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode10(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg;
         Reg::MaskReg preg = Reg::CreateMask<T>();
@@ -272,8 +268,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode11(
-        __ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode11(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0, vreg1;
         Reg::MaskReg preg = Reg::CreateMask<T>();
@@ -286,14 +281,13 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode12(
-        __ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode12(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg;
         Reg::MaskReg preg = Reg::CreateMask<T>();
         Reg::UnalignReg u0, u1;
         Reg::AddrReg aReg0;
-        constexpr uint32_t repeatElm = 15;  // to process unalign data
+        constexpr uint32_t repeatElm = 15; // to process unalign data
         uint16_t repeatTimes = CeilDivision(dstSize, repeatElm);
         if constexpr (sizeof(T) == 8) {
             for (uint16_t i = 0; i < static_cast<uint16_t>(repeatTimes); ++i) {
@@ -313,7 +307,7 @@ private:
         Reg::DataCopyUnAlignPost(dst, u1, aReg0);
     }
 
-    __aicore__ inline void ComputeMode13(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode13(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         constexpr uint32_t count = 15;
@@ -324,7 +318,7 @@ private:
         }
     }
 
-    __aicore__ inline void ComputeMode14(__ubuf__ T *dst, __ubuf__ T *src)
+    __aicore__ inline void ComputeMode14(__ubuf__ T* dst, __ubuf__ T* src)
     {
         Reg::RegTensor<T> vreg0;
         constexpr uint32_t count = GetVecLen() / sizeof(T);
@@ -349,8 +343,8 @@ private:
         LocalTensor<T> dstLocal = outQueue.AllocTensor<T>();
         LocalTensor<T> srcLocal = inQueue.DeQue<T>();
 
-        __ubuf__ T *src = (__ubuf__ T *)srcLocal.GetPhyAddr();
-        __ubuf__ T *dst = (__ubuf__ T *)dstLocal.GetPhyAddr();
+        __ubuf__ T* src = (__ubuf__ T*)srcLocal.GetPhyAddr();
+        __ubuf__ T* dst = (__ubuf__ T*)dstLocal.GetPhyAddr();
         __VEC_SCOPE__
         {
             if constexpr (mode == 0) {
@@ -416,7 +410,7 @@ private:
 };
 
 template <typename T, int mode>
-__global__ __aicore__ void MicroDatacopy(uint8_t *dstGm, uint8_t *srcGm, uint32_t size)
+__global__ __aicore__ void MicroDatacopy(uint8_t* dstGm, uint8_t* srcGm, uint32_t size)
 {
     KernelMicroDataCopy<T, mode> op;
     op.Init(srcGm, dstGm, size);
@@ -425,39 +419,39 @@ __global__ __aicore__ void MicroDatacopy(uint8_t *dstGm, uint8_t *srcGm, uint32_
 
 template <int dim>
 struct MicroDatacopyModeTestParams {
-    void (*cal_func)(uint8_t *, uint8_t *, uint32_t);
+    void (*cal_func)(uint8_t*, uint8_t*, uint32_t);
     uint32_t size;
 };
 
 template <int mode>
-class MicroDatacopyTestsuite
-    : public testing::Test
-    , public testing::WithParamInterface<MicroDatacopyModeTestParams<mode>> {
-};
+class MicroDatacopyTestsuite : public testing::Test,
+                               public testing::WithParamInterface<MicroDatacopyModeTestParams<mode>> {};
 
-#define MICRO_DATACOPY_TEST_CASE(mode)                                                             \
-    using MicroDatacopyTestsuite_mode##mode = MicroDatacopyTestsuite<mode>;                        \
-    INSTANTIATE_TEST_CASE_P(TEST_MicroDatacopy, MicroDatacopyTestsuite_mode##mode,                 \
-        ::testing::Values(MicroDatacopyModeTestParams<mode>{ MicroDatacopy<uint8_t, mode>, 1024 }, \
-        MicroDatacopyModeTestParams<mode>{ MicroDatacopy<int8_t, mode>, 1024 },                    \
-        MicroDatacopyModeTestParams<mode>{ MicroDatacopy<uint16_t, mode>, 1024 },                  \
-        MicroDatacopyModeTestParams<mode>{ MicroDatacopy<int16_t, mode>, 1024 },                   \
-        MicroDatacopyModeTestParams<mode>{ MicroDatacopy<uint32_t, mode>, 1024 },                  \
-        MicroDatacopyModeTestParams<mode>{ MicroDatacopy<int32_t, mode>, 1024 },                   \
-        MicroDatacopyModeTestParams<mode>{ MicroDatacopy<float, mode>, 1024 },                     \
-        MicroDatacopyModeTestParams<mode>{ MicroDatacopy<bfloat16_t, mode>, 1024 },                \
-        MicroDatacopyModeTestParams<mode>{ MicroDatacopy<half, mode>, 1024 },                      \
-        MicroDatacopyModeTestParams<mode>{ MicroDatacopy<bool, mode>, 1024 }));                    \
-                                                                                                   \
-    TEST_P(MicroDatacopyTestsuite_mode##mode, MicroDatacopyTestCase)                               \
-    {                                                                                              \
-        auto param = GetParam();                                                                   \
-        uint8_t srcGm[param.size] = { 0 };                                                         \
-        uint8_t dstGm[param.size] = { 0 };                                                         \
-        param.cal_func(dstGm, srcGm, param.size);                                                  \
-        for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {                         \
-            EXPECT_EQ(dstGm[i], 0x00);                                                             \
-        }                                                                                          \
+#define MICRO_DATACOPY_TEST_CASE(mode)                                                \
+    using MicroDatacopyTestsuite_mode##mode = MicroDatacopyTestsuite<mode>;           \
+    INSTANTIATE_TEST_CASE_P(                                                          \
+        TEST_MicroDatacopy, MicroDatacopyTestsuite_mode##mode,                        \
+        ::testing::Values(                                                            \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<uint8_t, mode>, 1024},    \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<int8_t, mode>, 1024},     \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<uint16_t, mode>, 1024},   \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<int16_t, mode>, 1024},    \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<uint32_t, mode>, 1024},   \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<int32_t, mode>, 1024},    \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<float, mode>, 1024},      \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<bfloat16_t, mode>, 1024}, \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<half, mode>, 1024},       \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<bool, mode>, 1024}));     \
+                                                                                      \
+    TEST_P(MicroDatacopyTestsuite_mode##mode, MicroDatacopyTestCase)                  \
+    {                                                                                 \
+        auto param = GetParam();                                                      \
+        uint8_t srcGm[param.size] = {0};                                              \
+        uint8_t dstGm[param.size] = {0};                                              \
+        param.cal_func(dstGm, srcGm, param.size);                                     \
+        for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {            \
+            EXPECT_EQ(dstGm[i], 0x00);                                                \
+        }                                                                             \
     }
 
 MICRO_DATACOPY_TEST_CASE(0);
@@ -476,22 +470,23 @@ MICRO_DATACOPY_TEST_CASE(13);
 MICRO_DATACOPY_TEST_CASE(14);
 MICRO_DATACOPY_TEST_CASE(601);
 
-#define MICRO_DATACOPY_TEST_CASE_B64(mode)                                                        \
-    using MicroDatacopyTestsuite_mode_b64##mode = MicroDatacopyTestsuite<mode>;                   \
-    INSTANTIATE_TEST_CASE_P(TEST_MicroDatacopyB64,                                                \
-        MicroDatacopyTestsuite_mode_b64##mode,                                                    \
-        ::testing::Values(MicroDatacopyModeTestParams<mode>{MicroDatacopy<uint64_t, mode>, 1024}, \
-            MicroDatacopyModeTestParams<mode>{MicroDatacopy<int64_t, mode>, 1024}));              \
-                                                                                                  \
-    TEST_P(MicroDatacopyTestsuite_mode_b64##mode, MicroDatacopyTestCase)                          \
-    {                                                                                             \
-        auto param = GetParam();                                                                  \
-        uint8_t srcGm[param.size] = {0};                                                          \
-        uint8_t dstGm[param.size] = {0};                                                          \
-        param.cal_func(dstGm, srcGm, param.size);                                                 \
-        for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {                        \
-            EXPECT_EQ(dstGm[i], 0x00);                                                            \
-        }                                                                                         \
+#define MICRO_DATACOPY_TEST_CASE_B64(mode)                                           \
+    using MicroDatacopyTestsuite_mode_b64##mode = MicroDatacopyTestsuite<mode>;      \
+    INSTANTIATE_TEST_CASE_P(                                                         \
+        TEST_MicroDatacopyB64, MicroDatacopyTestsuite_mode_b64##mode,                \
+        ::testing::Values(                                                           \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<uint64_t, mode>, 1024},  \
+            MicroDatacopyModeTestParams<mode>{MicroDatacopy<int64_t, mode>, 1024})); \
+                                                                                     \
+    TEST_P(MicroDatacopyTestsuite_mode_b64##mode, MicroDatacopyTestCase)             \
+    {                                                                                \
+        auto param = GetParam();                                                     \
+        uint8_t srcGm[param.size] = {0};                                             \
+        uint8_t dstGm[param.size] = {0};                                             \
+        param.cal_func(dstGm, srcGm, param.size);                                    \
+        for (int32_t i = 0; i < (sizeof(dstGm) / sizeof(dstGm[0])); i++) {           \
+            EXPECT_EQ(dstGm[i], 0x00);                                               \
+        }                                                                            \
     }
 
 MICRO_DATACOPY_TEST_CASE_B64(0);

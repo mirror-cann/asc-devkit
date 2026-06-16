@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -21,12 +20,8 @@ class WhereAPICheck : public testing::Test {
 protected:
     static void SetUpTestCase() {}
     static void TearDownTestCase() {}
-    virtual void SetUp() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(false);
-    }
-    void TearDown() {
-        AscendC::KernelRaise::GetInstance().SetRaiseMode(true);
-    }
+    virtual void SetUp() { AscendC::KernelRaise::GetInstance().SetRaiseMode(false); }
+    void TearDown() { AscendC::KernelRaise::GetInstance().SetRaiseMode(true); }
 };
 
 TEST_F(WhereAPICheck, WhereAPICheckTestSuccess)
@@ -56,8 +51,9 @@ TEST_F(WhereAPICheck, WhereAPICheckTestSuccess)
 
     uint8_t calCount = 16;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(Where, (float, AscendC::LocalTensor<float>, AscendC::LocalTensor<float>, bool),
-    (dstTensor, src0Tensor, src1Tensor, conditionTensor, calCount));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        Where, (float, AscendC::LocalTensor<float>, AscendC::LocalTensor<float>, bool),
+        (dstTensor, src0Tensor, src1Tensor, conditionTensor, calCount));
     const uint32_t res = 0;
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, res);
 }
@@ -82,7 +78,8 @@ TEST_F(WhereAPICheck, WhereAPICheckTestCountFailure)
 
     uint8_t calCount = 64;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(Where, (float, float, float, bool), (dstTensor, src0, src1, conditionTensor, calCount));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        Where, (float, float, float, bool), (dstTensor, src0, src1, conditionTensor, calCount));
     const uint32_t res = 2;
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, res);
 }
@@ -107,7 +104,8 @@ TEST_F(WhereAPICheck, WhereAPICheckTestPosFailure)
 
     uint8_t calCount = 23;
     uint64_t startCounts = AscendC::KernelRaise::GetInstance().GetRaiseCount();
-    AscendC::CHECK_FUNC_HIGHLEVEL_API(Where, (float, float, float, bool), (dstTensor, src0, src1, conditionTensor, calCount));
+    AscendC::CHECK_FUNC_HIGHLEVEL_API(
+        Where, (float, float, float, bool), (dstTensor, src0, src1, conditionTensor, calCount));
     const uint32_t res = 1;
     EXPECT_EQ(AscendC::KernelRaise::GetInstance().GetRaiseCount() - startCounts, res);
 }

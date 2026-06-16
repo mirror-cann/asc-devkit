@@ -1,34 +1,34 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <cstdint>
 extern "C" void __mstx_dfx_report_stub(int type, uint8_t size, void* desc);
 #define __MSTX_DFX_REPORT__
 #include <gtest/gtest.h>
 #include <string.h>
- 
+
 #include "kernel_log.h"
-static uint8_t g_testRes = 1;      // 全局变量记录运行结果, 如果进入ASCENDC_ASSERT报错，会被置为0
+static uint8_t g_testRes = 1; // 全局变量记录运行结果, 如果进入ASCENDC_ASSERT报错，会被置为0
 // 重定义ASCENDC_ASSERT，不Abort，仅修改全局变量通知进入报错分支
 #undef ASCENDC_ASSERT
 #define ASCENDC_ASSERT(cond, behavior) \
     do {                               \
         if (!(cond)) {                 \
-            g_testRes = 0;              \
+            g_testRes = 0;             \
             behavior;                  \
         }                              \
     } while (0)
 
 #undef ASCENDC_REPORT_CHECK_ERROR
-#define ASCENDC_REPORT_CHECK_ERROR(apiMsg, funcType)   \
-    do {                                                \
-        g_testRes = 0;                                   \
+#define ASCENDC_REPORT_CHECK_ERROR(apiMsg, funcType) \
+    do {                                             \
+        g_testRes = 0;                               \
     } while (0)
 
 #include "kernel_utils.h"
@@ -39,23 +39,23 @@ using namespace std;
 using namespace AscendC;
 using namespace AscendC::MstxTensor;
 
-
-MstxTensor::MstxVecUnaryDesc       g_vec_unary;
-MstxTensor::MstxVecBinaryDesc      g_vec_binary;
+MstxTensor::MstxVecUnaryDesc g_vec_unary;
+MstxTensor::MstxVecBinaryDesc g_vec_binary;
 MstxTensor::MstxVecBilinearInterpolation g_vec_bilinear;
-MstxTensor::MstxVecCastDeqDesc     g_vec_cast_deq;
-MstxTensor::MstxVecSelDesc         g_vec_sel;
-MstxTensor::MstxVecGatherMaskDesc  g_vec_gather_mask;
-MstxTensor::MstxVecTranspose       g_vec_transpose;
-MstxTensor::MstxVecReduceDesc      g_vec_reduce;
+MstxTensor::MstxVecCastDeqDesc g_vec_cast_deq;
+MstxTensor::MstxVecSelDesc g_vec_sel;
+MstxTensor::MstxVecGatherMaskDesc g_vec_gather_mask;
+MstxTensor::MstxVecTranspose g_vec_transpose;
+MstxTensor::MstxVecReduceDesc g_vec_reduce;
 MstxTensor::MstxVecComplexReduceDesc g_vec_cpx_reduce;
-MstxTensor::MstxVecDupDesc         g_vec_dup;
-MstxTensor::MstxVecBrcbDesc        g_vec_brcb;
-MstxTensor::MstxVecCopy            g_vec_copy;
-MstxTensor::MstxDataCopyDesc       g_data_copy;
-MstxTensor::MstxDataCopyPadDesc    g_data_copy_pad;
+MstxTensor::MstxVecDupDesc g_vec_dup;
+MstxTensor::MstxVecBrcbDesc g_vec_brcb;
+MstxTensor::MstxVecCopy g_vec_copy;
+MstxTensor::MstxDataCopyDesc g_data_copy;
+MstxTensor::MstxDataCopyPadDesc g_data_copy_pad;
 
-extern "C" void __mstx_dfx_report_stub(int type, uint8_t size, void* desc) {
+extern "C" void __mstx_dfx_report_stub(int type, uint8_t size, void* desc)
+{
     switch (type) {
         case static_cast<int>(MstxReportType::MSTX_VEC_UNARY):
         case static_cast<int>(MstxReportType::MSTX_VEC_BINARY_SCALAR):
@@ -170,11 +170,10 @@ extern "C" void __mstx_dfx_report_stub(int type, uint8_t size, void* desc) {
     }
 }
 
-
 void CopyNameUt(char b[64], const char* a)
 {
     uint32_t i = 0;
-    for (; i < 63; ++i){
+    for (; i < 63; ++i) {
         b[i] = a[i];
         if (a[i] == '\0') {
             break;
@@ -183,7 +182,7 @@ void CopyNameUt(char b[64], const char* a)
     b[i] = '\0';
 }
 
- template <typename T>
+template <typename T>
 MstxTensor::MstxTensorAddressSpace GetTensorSpace(const LocalTensor<T>& dst)
 {
     Hardware dstHWPos = GetPhyType((TPosition)dst.GetPosition());
@@ -303,7 +302,8 @@ void CheckResult(MstxTensor::MstxVecBrcbDesc& expect_desc, MstxTensor::MstxVecBr
     // EXPECT_EQ(expect_desc.name[1], g_vec_brcb.name[1]);
 }
 
-void CheckResult(MstxTensor::MstxVecComplexReduceDesc& expect_desc, MstxTensor::MstxVecComplexReduceDesc& g_vec_cpx_reduce)
+void CheckResult(
+    MstxTensor::MstxVecComplexReduceDesc& expect_desc, MstxTensor::MstxVecComplexReduceDesc& g_vec_cpx_reduce)
 {
     EXPECT_EQ(expect_desc.dst.space, g_vec_cpx_reduce.dst.space);
     EXPECT_EQ(expect_desc.dst.addr, g_vec_cpx_reduce.dst.addr);
@@ -434,7 +434,8 @@ void CheckResult(MstxTensor::MstxDataCopyPadDesc& expect_desc, MstxTensor::MstxD
     // EXPECT_EQ(expect_desc.name[1], g_data_copy_pad.name[1]);
 }
 
-void CheckResult(MstxTensor::MstxVecBilinearInterpolation& expect_desc, MstxTensor::MstxVecBilinearInterpolation& g_vec_bilinear)
+void CheckResult(
+    MstxTensor::MstxVecBilinearInterpolation& expect_desc, MstxTensor::MstxVecBilinearInterpolation& g_vec_bilinear)
 {
     EXPECT_EQ(expect_desc.dst.space, g_vec_bilinear.dst.space);
     EXPECT_EQ(expect_desc.dst.addr, g_vec_bilinear.dst.addr);
@@ -549,7 +550,6 @@ void CheckResult(MstxTensor::MstxVecGatherMaskDesc& expect_desc, MstxTensor::Mst
     // EXPECT_EQ(expect_desc.name[1], g_vec_gather_mask.name[1]);
 }
 
-
 template <typename T, bool USE_CAST_DEQ>
 void MainVecUnaryMstx01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
@@ -603,8 +603,6 @@ void MainVecUnaryMstx01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     tpipe.InitBuffer(tbuf10, 5 * dataSize * sizeof(half));
     LocalTensor<half> inputLocalHalf = tbuf10.Get<half>();
 
-
-
     AscendCUtils::SetMask<uint8_t>(256);
 
     DataCopy(inputLocal, inputGlobal, dataSize);
@@ -614,7 +612,7 @@ void MainVecUnaryMstx01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
 
     uint64_t maskBit[2] = {0x77, 0x88};
-    uint64_t maskCounter = 123;//mask相等时，mask0是18446744073709551615，mask1是576460752303423487
+    uint64_t maskCounter = 123; // mask相等时，mask0是18446744073709551615，mask1是576460752303423487
     uint8_t repeatTimes = 5;
     UnaryRepeatParams repeatParams = {2, 2, 6, 6};
     int32_t count = 456;
@@ -639,8 +637,8 @@ void MainVecUnaryMstx01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.srcBlockStride = repeatParams.srcBlkStride;
     expect_desc.dstRepeatStride = repeatParams.dstRepStride;
     expect_desc.srcRepeatStride = repeatParams.srcRepStride;
-    
-    //mask是uint64
+
+    // mask是uint64
     expect_desc.wrapper.mask.mask0 = 18446744073709551615;
     expect_desc.wrapper.mask.mask1 = 576460752303423487;
     CopyNameUt(expect_desc.name, "Relu");
@@ -709,7 +707,7 @@ void MainVecUnaryMstx01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.src.addr = reinterpret_cast<uint64_t>(inputLocal.GetPhyAddr());
     expect_desc.src.size = inputLocal.GetSize();
     expect_desc.src.dataBits = static_cast<uint8_t>(8 * sizeof(PrimT<T>));
-    //mask是[]
+    // mask是[]
     expect_desc.wrapper.mask.mask0 = maskBit[0];
     expect_desc.wrapper.mask.mask1 = maskBit[1];
     CopyNameUt(expect_desc.name, "Relu");
@@ -780,7 +778,6 @@ void MainVecUnaryMstx01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     CopyNameUt(expect_desc.name, "Cast");
     Cast(outputLocal, inputLocalInt32, roundMode, maskBit, repeatTimes, repeatParams);
     CheckResult(expect_desc, g_vec_unary);
-
 
     expect_desc.dst.space = GetTensorSpace(outputLocal);
     expect_desc.dst.addr = reinterpret_cast<uint64_t>(outputLocal.GetPhyAddr());
@@ -880,7 +877,8 @@ void MainVecUnaryMstx01(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
 }
 
 template <typename T>
-void MainVecBinaryMstx02(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
+void MainVecBinaryMstx02(
+    __gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
 {
     TPipe tpipe;
     GlobalTensor<T> inputGlobal;
@@ -920,7 +918,6 @@ void MainVecBinaryMstx02(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __r
     tpipe.InitBuffer(tbuf7, 5 * dataSize * sizeof(half));
     LocalTensor<half> inputLocalHalf = tbuf7.Get<half>();
 
-
     AscendCUtils::SetMask<uint8_t>(256);
 
     DataCopy(inputLocal, inputGlobal, dataSize);
@@ -929,9 +926,9 @@ void MainVecBinaryMstx02(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __r
     AscendCUtils::SetMask<uint8_t>(128);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
 
-    BinaryRepeatParams repeatParams = { 2, 2, 2, 6, 6, 6 };
+    BinaryRepeatParams repeatParams = {2, 2, 2, 6, 6, 6};
     uint64_t maskBit[2] = {0x77, 0x88};
-    uint64_t maskCounter = 123;//mask相等时，mask0是18446744073709551615，mask1是576460752303423487
+    uint64_t maskCounter = 123; // mask相等时，mask0是18446744073709551615，mask1是576460752303423487
     uint8_t repeatTimes = 5;
     int32_t count = 456;
     MstxTensor::MstxVecBinaryDesc expect_desc;
@@ -960,8 +957,7 @@ void MainVecBinaryMstx02(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __r
     expect_desc.src0RepeatStride = repeatParams.src0RepStride;
     expect_desc.src1RepeatStride = repeatParams.src1RepStride;
 
-    
-    //mask是uint64
+    // mask是uint64
     expect_desc.wrapper.mask.mask0 = 18446744073709551615;
     expect_desc.wrapper.mask.mask1 = 576460752303423487;
     CopyNameUt(expect_desc.name, "Add");
@@ -1033,8 +1029,6 @@ void MainVecBinaryMstx02(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __r
     MulCast(outputLocalHalf, inputLocalHalf, inputLocalHalf, maskCounter, repeatTimes, repeatParams);
     CheckResult(expect_desc, g_vec_binary);
     expect_desc.wrapper.reserveBufSize = 0;
-    
-
 
     expect_desc.dst.space = GetTensorSpace(outputLocalInt8);
     expect_desc.dst.addr = reinterpret_cast<uint64_t>(outputLocalInt8.GetPhyAddr());
@@ -1076,13 +1070,8 @@ void MainVecBinaryMstx02(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __r
     AddDeqRelu(outputLocalHalf, inputLocalInt32, inputLocalInt32, maskCounter, repeatTimes, repeatParams);
     CheckResult(expect_desc, g_vec_binary);
     expect_desc.wrapper.reserveBufSize = 0;
-    
 
-
-
-
-
-    //mask是[]
+    // mask是[]
     expect_desc.wrapper.mask.mask0 = maskBit[0];
     expect_desc.wrapper.mask.mask1 = maskBit[1];
     expect_desc.dst.space = GetTensorSpace(outputLocal);
@@ -1207,8 +1196,7 @@ void MainVecBinaryMstx02(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __r
     CheckResult(expect_desc, g_vec_binary);
     expect_desc.wrapper.reserveBufSize = 0;
 
-
-    //count
+    // count
     expect_desc.wrapper.mask.mask0 = count;
     expect_desc.wrapper.mask.mask1 = 0;
     expect_desc.blockNum = 8;
@@ -1340,9 +1328,6 @@ void MainVecBinaryMstx02(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __r
     expect_desc.wrapper.reserveBufSize = 8192;
     AddDeqRelu(outputLocalHalf, inputLocalInt32, inputLocalInt32, count);
     CheckResult(expect_desc, g_vec_binary);
-  
-
-  
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -1436,16 +1421,12 @@ void MainVecUnaryMstx03(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.wrapper.mask.mask0 = maskBit[0];
     expect_desc.wrapper.mask.mask1 = maskBit[1];
     CopyNameUt(expect_desc.name, "BilinearInterpolation");
-    BilinearInterpolation(outputLocalInt16, inputLocal, tmpLocal, inputLocal, maskBit, 6, false,
-            9, 3, 3, tmpLocalChar);
+    BilinearInterpolation(outputLocalInt16, inputLocal, tmpLocal, inputLocal, maskBit, 6, false, 9, 3, 3, tmpLocalChar);
     CheckResult(expect_desc, g_vec_bilinear);
 
-    BilinearInterpolation(outputLocalInt16, inputLocal, tmpLocal, inputLocal, maskCounter, 6, false,
-            9, 3, 3, tmpLocalChar);
+    BilinearInterpolation(
+        outputLocalInt16, inputLocal, tmpLocal, inputLocal, maskCounter, 6, false, 9, 3, 3, tmpLocalChar);
     CheckResult(expect_desc, g_vec_bilinear);
-
-
-
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -1487,7 +1468,6 @@ void MainVecUnaryMstx04(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     AscendCUtils::SetMask<uint8_t>(128);
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
 
-
     uint64_t maskBit[2] = {0x77, 0x88};
     uint64_t maskCounter = 123;
     uint8_t repeatTimes = 5;
@@ -1522,21 +1502,21 @@ void MainVecUnaryMstx04(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.srcRepeatStride = repeatParams.srcRepStride;
     expect_desc.halfBlock = false;
 
-    //mask是uint64
+    // mask是uint64
     expect_desc.wrapper.mask.mask0 = 18446744073709551615;
     expect_desc.wrapper.mask.mask1 = 576460752303423487;
     CopyNameUt(expect_desc.name, "CastDeq");
     CastDeq(outputLocalInt8, inputLocalInt16, maskCounter, repeatTimes, repeatParams);
     CheckResult(expect_desc, g_vec_cast_deq);
 
-    //mask是[]
+    // mask是[]
     expect_desc.wrapper.mask.mask0 = maskBit[0];
     expect_desc.wrapper.mask.mask1 = maskBit[1];
     CopyNameUt(expect_desc.name, "CastDeq");
     CastDeq(outputLocalInt8, inputLocalInt16, maskBit, repeatTimes, repeatParams);
     CheckResult(expect_desc, g_vec_cast_deq);
 
-    //count
+    // count
     expect_desc.wrapper.mask.mask0 = count;
     expect_desc.wrapper.mask.mask1 = 0;
     expect_desc.blockNum = 8;
@@ -1549,7 +1529,6 @@ void MainVecUnaryMstx04(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     CopyNameUt(expect_desc.name, "CastDeq");
     CastDeq(outputLocalInt8, inputLocalInt16, count);
     CheckResult(expect_desc, g_vec_cast_deq);
-
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -1586,9 +1565,8 @@ void MainVecUnaryMstx05(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     uint64_t maskBit[2] = {0x77, 0x88};
     uint64_t maskCounter = 123;
     uint8_t repeatTimes = 5;
-    BinaryRepeatParams repeatParams = { 2, 2, 2, 6, 6, 6 };
+    BinaryRepeatParams repeatParams = {2, 2, 2, 6, 6, 6};
     int32_t count = 456;
-
 
     MstxTensor::MstxVecSelDesc expect_desc;
 
@@ -1628,14 +1606,16 @@ void MainVecUnaryMstx05(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.src0RepeatStride = repeatParams.src0RepStride;
     expect_desc.src1RepeatStride = repeatParams.src1RepStride;
 
-    //mask是[]
+    // mask是[]
     expect_desc.wrapper.mask.mask0 = maskBit[0];
     expect_desc.wrapper.mask.mask1 = maskBit[1];
     CopyNameUt(expect_desc.name, "Select");
-    Select(outputLocal, inputLocal, inputLocal, inputLocal, AscendC::SELMODE::VSEL_TENSOR_SCALAR_MODE, maskBit, repeatTimes, repeatParams);
+    Select(
+        outputLocal, inputLocal, inputLocal, inputLocal, AscendC::SELMODE::VSEL_TENSOR_SCALAR_MODE, maskBit,
+        repeatTimes, repeatParams);
     CheckResult(expect_desc, g_vec_sel);
 
-     //mask是0
+    // mask是0
     expect_desc.wrapper.mask.mask0 = 0;
     expect_desc.wrapper.mask.mask1 = 0;
     expect_desc.wrapper.useMask = false;
@@ -1644,11 +1624,13 @@ void MainVecUnaryMstx05(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     CheckResult(expect_desc, g_vec_sel);
     expect_desc.wrapper.useMask = true;
 
-    //mask是uint64
+    // mask是uint64
     expect_desc.wrapper.mask.mask0 = 18446744073709551615;
     expect_desc.wrapper.mask.mask1 = 576460752303423487;
     CopyNameUt(expect_desc.name, "Select");
-    Select(outputLocal, inputLocal, inputLocal, inputLocal, AscendC::SELMODE::VSEL_TENSOR_SCALAR_MODE, maskCounter, repeatTimes, repeatParams);
+    Select(
+        outputLocal, inputLocal, inputLocal, inputLocal, AscendC::SELMODE::VSEL_TENSOR_SCALAR_MODE, maskCounter,
+        repeatTimes, repeatParams);
     CheckResult(expect_desc, g_vec_sel);
 
     expect_desc.wrapper.mask.mask0 = count;
@@ -1665,10 +1647,6 @@ void MainVecUnaryMstx05(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     CopyNameUt(expect_desc.name, "Select");
     Select(outputLocal, inputLocal, inputLocal, inputLocal, AscendC::SELMODE::VSEL_TENSOR_SCALAR_MODE, count);
     CheckResult(expect_desc, g_vec_sel);
-
-
-
-
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -1738,12 +1716,12 @@ void MainVecUnaryMstx06(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.src0RepeatStride = 0;
     expect_desc.src1RepeatStride = 0;
 
-    //mask是uint64
+    // mask是uint64
     expect_desc.wrapper.mask.mask0 = 18446744073709551615;
     expect_desc.wrapper.mask.mask1 = 576460752303423487;
     CopyNameUt(expect_desc.name, "GatherMask");
     uint64_t rsvCnt = 0;
-    GatherMask(outputLocal, inputLocal, 1, false, maskCounter, { 1, 1, 0, 0 }, rsvCnt);
+    GatherMask(outputLocal, inputLocal, 1, false, maskCounter, {1, 1, 0, 0}, rsvCnt);
     CheckResult(expect_desc, g_vec_gather_mask);
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -1868,28 +1846,28 @@ void MainVecUnaryMstx08(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.wrapper.mask.mask0 = 18446744073709551615;
     expect_desc.wrapper.mask.mask1 = 576460752303423487;
     CopyNameUt(expect_desc.name, "WholeReduceSum");
-    WholeReduceSum<T,true>(outputLocal, inputLocal, maskCounter, repeatTimes, 1, 1, 1);
+    WholeReduceSum<T, true>(outputLocal, inputLocal, maskCounter, repeatTimes, 1, 1, 1);
     CheckResult(expect_desc, g_vec_reduce);
     CopyNameUt(expect_desc.name, "WholeReduceMax");
-    WholeReduceMax<T,true>(outputLocal, inputLocal, maskCounter, repeatTimes, 1, 1, 1, ReduceOrder::ORDER_VALUE_INDEX);
+    WholeReduceMax<T, true>(outputLocal, inputLocal, maskCounter, repeatTimes, 1, 1, 1, ReduceOrder::ORDER_VALUE_INDEX);
     CheckResult(expect_desc, g_vec_reduce);
     CopyNameUt(expect_desc.name, "WholeReduceMin");
-    WholeReduceMin<T,true>(outputLocal, inputLocal, maskCounter, repeatTimes, 1, 1, 1, ReduceOrder::ORDER_VALUE_INDEX);
+    WholeReduceMin<T, true>(outputLocal, inputLocal, maskCounter, repeatTimes, 1, 1, 1, ReduceOrder::ORDER_VALUE_INDEX);
     CheckResult(expect_desc, g_vec_reduce);
     CopyNameUt(expect_desc.name, "BlockReduceSum");
-    BlockReduceSum<T,true>(outputLocal, inputLocal, repeatTimes, maskCounter, 1, 1, 1);
+    BlockReduceSum<T, true>(outputLocal, inputLocal, repeatTimes, maskCounter, 1, 1, 1);
     CheckResult(expect_desc, g_vec_reduce);
     CopyNameUt(expect_desc.name, "BlockReduceMax");
-    BlockReduceMax<T,true>(outputLocal, inputLocal, repeatTimes, maskCounter, 1, 1, 1);
+    BlockReduceMax<T, true>(outputLocal, inputLocal, repeatTimes, maskCounter, 1, 1, 1);
     CheckResult(expect_desc, g_vec_reduce);
     CopyNameUt(expect_desc.name, "BlockReduceMin");
-    BlockReduceMin<T,true>(outputLocal, inputLocal, repeatTimes, maskCounter, 1, 1, 1);
+    BlockReduceMin<T, true>(outputLocal, inputLocal, repeatTimes, maskCounter, 1, 1, 1);
     CheckResult(expect_desc, g_vec_reduce);
     CopyNameUt(expect_desc.name, "PairReduceSum");
-    PairReduceSum<T,true>(outputLocal, inputLocal, repeatTimes, maskCounter, 1, 1, 1);
+    PairReduceSum<T, true>(outputLocal, inputLocal, repeatTimes, maskCounter, 1, 1, 1);
     CheckResult(expect_desc, g_vec_reduce);
     CopyNameUt(expect_desc.name, "RepeatReduceSum");
-    RepeatReduceSum<T,true>(outputLocal, inputLocal, repeatTimes, maskCounter, 1, 1, 1, 1);
+    RepeatReduceSum<T, true>(outputLocal, inputLocal, repeatTimes, maskCounter, 1, 1, 1, 1);
     CheckResult(expect_desc, g_vec_reduce);
 
     set_flag(PIPE_V, PIPE_MTE3, EVENT_ID0);
@@ -1958,7 +1936,7 @@ void MainVecUnaryMstx09(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.repeatTimes = repeatTimes;
     expect_desc.srcRepeatStride = 1;
 
-    //mask是[]
+    // mask是[]
     expect_desc.wrapper.mask.mask0 = maskBit[0];
     expect_desc.wrapper.mask.mask1 = maskBit[1];
     CopyNameUt(expect_desc.name, "ReduceMax");
@@ -1971,7 +1949,7 @@ void MainVecUnaryMstx09(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     ReduceSum<T>(outputLocal, inputLocal, inputLocal, maskBit, repeatTimes, 1);
     CheckResult(expect_desc, g_vec_cpx_reduce);
 
-    //mask是uint64
+    // mask是uint64
     expect_desc.wrapper.mask.mask0 = 18446744073709551615;
     expect_desc.wrapper.mask.mask1 = 576460752303423487;
     CopyNameUt(expect_desc.name, "ReduceMax");
@@ -2056,28 +2034,28 @@ void MainVecUnaryMstx10(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.repeatTimes = repeatTimes;
     expect_desc.dstRepeatStride = 1;
 
-    //mask是[]
+    // mask是[]
     expect_desc.wrapper.mask.mask0 = maskBit[0];
     expect_desc.wrapper.mask.mask1 = maskBit[1];
-    
+
     CopyNameUt(expect_desc.name, "Duplicate");
-    Duplicate(outputLocal, static_cast<T>(0), maskBit, repeatTimes,1,1);
+    Duplicate(outputLocal, static_cast<T>(0), maskBit, repeatTimes, 1, 1);
     CheckResult(expect_desc, g_vec_dup);
     expect_desc.wrapper.reserveBufSize = 8192;
     CopyNameUt(expect_desc.name, "CreateVecIndex");
-    CreateVecIndex(outputLocal, static_cast<T>(0), maskBit, repeatTimes,1,1);
+    CreateVecIndex(outputLocal, static_cast<T>(0), maskBit, repeatTimes, 1, 1);
     CheckResult(expect_desc, g_vec_dup);
 
-    //mask是uint64
+    // mask是uint64
     expect_desc.wrapper.mask.mask0 = 18446744073709551615;
     expect_desc.wrapper.mask.mask1 = 576460752303423487;
     expect_desc.wrapper.reserveBufSize = 0;
     CopyNameUt(expect_desc.name, "Duplicate");
-    Duplicate(outputLocal, static_cast<T>(0), maskCounter, repeatTimes,1,1);
+    Duplicate(outputLocal, static_cast<T>(0), maskCounter, repeatTimes, 1, 1);
     CheckResult(expect_desc, g_vec_dup);
     expect_desc.wrapper.reserveBufSize = 8192;
     CopyNameUt(expect_desc.name, "CreateVecIndex");
-    CreateVecIndex(outputLocal, static_cast<T>(0), maskCounter, repeatTimes,1,1);
+    CreateVecIndex(outputLocal, static_cast<T>(0), maskCounter, repeatTimes, 1, 1);
     CheckResult(expect_desc, g_vec_dup);
 
     expect_desc.wrapper.mask.mask0 = count;
@@ -2101,7 +2079,6 @@ void MainVecUnaryMstx10(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     DataCopy(outputGlobal, outputLocal, dataSize);
     pipe_barrier(PIPE_ALL);
 }
-
 
 template <typename T>
 void MainVecUnaryMstx11(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
@@ -2131,7 +2108,7 @@ void MainVecUnaryMstx11(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     uint64_t maskBit[2] = {0x77, 0x88};
     uint64_t maskCounter = 123;
     uint8_t repeatTimes = 5;
-    BrcbRepeatParams repeatParams {1, 8};
+    BrcbRepeatParams repeatParams{1, 8};
     int32_t count = 456;
     T scalar = 2;
     RoundMode roundMode = RoundMode::CAST_ROUND;
@@ -2158,8 +2135,7 @@ void MainVecUnaryMstx11(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.repeatTimes = repeatTimes;
     expect_desc.dstRepeatStride = 8;
 
-
-    //mask是uint64
+    // mask是uint64
     expect_desc.wrapper.mask.mask0 = 0;
     expect_desc.wrapper.mask.mask1 = 0;
     CopyNameUt(expect_desc.name, "Broadcast");
@@ -2172,7 +2148,6 @@ void MainVecUnaryMstx11(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     DataCopy(outputGlobal, outputLocal, dataSize);
     pipe_barrier(PIPE_ALL);
 }
-
 
 template <typename T>
 void MainVecUnaryMstx12(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __restrict__ dstGm, __gm__ int32_t dataSize)
@@ -2231,14 +2206,14 @@ void MainVecUnaryMstx12(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     expect_desc.dstRepeatSize = 8;
     expect_desc.srcRepeatSize = 8;
 
-    //mask是[]
+    // mask是[]
     expect_desc.wrapper.mask.mask0 = maskBit[0];
     expect_desc.wrapper.mask.mask1 = maskBit[1];
     CopyNameUt(expect_desc.name, "Copy");
     Copy(outputLocal, inputLocal, maskBit, repeatTimes, repeatParams);
     CheckResult(expect_desc, g_vec_copy);
 
-    //mask是uint64  
+    // mask是uint64
     expect_desc.wrapper.mask.mask0 = 18446744073709551615;
     expect_desc.wrapper.mask.mask1 = 576460752303423487;
     CopyNameUt(expect_desc.name, "Copy");
@@ -2252,9 +2227,6 @@ void MainVecUnaryMstx12(__gm__ uint8_t* __restrict__ srcGm, __gm__ uint8_t* __re
     pipe_barrier(PIPE_ALL);
 }
 
-
-
-
 struct UnaryTestParamsMstx {
     int32_t dataSize;
     int32_t dataBitSize;
@@ -2263,30 +2235,23 @@ struct UnaryTestParamsMstx {
 
 class UnarySimpleMstxTestsuite : public testing::Test, public testing::WithParamInterface<UnaryTestParamsMstx> {
 protected:
-    void SetUp()
-    {
-        AscendC::SetGCoreType(2);
-    }
-    void TearDown()
-    {
-        AscendC::SetGCoreType(0);
-    }
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_UNARY_SIMPLE_MSTX, UnarySimpleMstxTestsuite,
-    ::testing::Values(UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx01<half, true> }, 
-    UnaryTestParamsMstx { 208, 4, MainVecBinaryMstx02<int32_t> }, 
-    // UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx03<int16_t> },
-    UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx04<int16_t> },
-    // UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx05<half> },
-    UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx06<int32_t> },
-    UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx07<int16_t> },
-    UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx08<half> },
-    UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx09<half> },
-    UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx10<int16_t> },
-    UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx11<uint32_t> },
-    UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx12<int16_t> }
-));
+INSTANTIATE_TEST_CASE_P(
+    TEST_UNARY_SIMPLE_MSTX, UnarySimpleMstxTestsuite,
+    ::testing::Values(
+        UnaryTestParamsMstx{208, 2, MainVecUnaryMstx01<half, true>},
+        UnaryTestParamsMstx{208, 4, MainVecBinaryMstx02<int32_t>},
+        // UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx03<int16_t> },
+        UnaryTestParamsMstx{208, 2, MainVecUnaryMstx04<int16_t>},
+        // UnaryTestParamsMstx { 208, 2, MainVecUnaryMstx05<half> },
+        UnaryTestParamsMstx{208, 2, MainVecUnaryMstx06<int32_t>},
+        UnaryTestParamsMstx{208, 2, MainVecUnaryMstx07<int16_t>}, UnaryTestParamsMstx{208, 2, MainVecUnaryMstx08<half>},
+        UnaryTestParamsMstx{208, 2, MainVecUnaryMstx09<half>}, UnaryTestParamsMstx{208, 2, MainVecUnaryMstx10<int16_t>},
+        UnaryTestParamsMstx{208, 2, MainVecUnaryMstx11<uint32_t>},
+        UnaryTestParamsMstx{208, 2, MainVecUnaryMstx12<int16_t>}));
 
 TEST_P(UnarySimpleMstxTestsuite, UnarySimpleMstxTestCase)
 {

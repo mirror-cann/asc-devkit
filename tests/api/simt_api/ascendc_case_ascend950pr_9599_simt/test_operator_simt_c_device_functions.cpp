@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <type_traits>
 #include <random>
@@ -62,8 +62,8 @@ public:
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(LdStLongTestCase, LdStLongTestSuite,
-                        ::testing::Values(LdStLongTestParam{0, 0}, LdStLongTestParam{-10, -10}));
+INSTANTIATE_TEST_CASE_P(
+    LdStLongTestCase, LdStLongTestSuite, ::testing::Values(LdStLongTestParam{0, 0}, LdStLongTestParam{-10, -10}));
 
 TEST_P(LdStLongTestSuite, LdStLongTestCase)
 {
@@ -93,8 +93,8 @@ public:
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(LdStUlongTestCase, LdStUlongTestSuite,
-                        ::testing::Values(LdStUlongTestParam{0, 0}, LdStUlongTestParam{10, 10}));
+INSTANTIATE_TEST_CASE_P(
+    LdStUlongTestCase, LdStUlongTestSuite, ::testing::Values(LdStUlongTestParam{0, 0}, LdStUlongTestParam{10, 10}));
 
 TEST_P(LdStUlongTestSuite, LdStUlongTestCase)
 {
@@ -123,8 +123,9 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStLonglongTestCase, LdStLonglongTestSuite,
-                        ::testing::Values(LdStLonglongTestParam{0, 0}, LdStLonglongTestParam{10, 10}));
+INSTANTIATE_TEST_CASE_P(
+    LdStLonglongTestCase, LdStLonglongTestSuite,
+    ::testing::Values(LdStLonglongTestParam{0, 0}, LdStLonglongTestParam{10, 10}));
 
 TEST_P(LdStLonglongTestSuite, LdStLonglongTestCase)
 {
@@ -153,8 +154,9 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStUlonglongTestCase, LdStUlonglongTestSuite,
-                        ::testing::Values(LdStUlonglongTestParam{0, 0}, LdStUlonglongTestParam{10, 10}));
+INSTANTIATE_TEST_CASE_P(
+    LdStUlonglongTestCase, LdStUlonglongTestSuite,
+    ::testing::Values(LdStUlonglongTestParam{0, 0}, LdStUlonglongTestParam{10, 10}));
 
 TEST_P(LdStUlonglongTestSuite, LdStUlonglongTestCase)
 {
@@ -183,8 +185,9 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStLong2TestCase, LdStLong2TestSuite,
-                        ::testing::Values(LdStLong2TestParam{{0, 0}, {0, 0}}, LdStLong2TestParam{{10, 10}, {10, 10}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStLong2TestCase, LdStLong2TestSuite,
+    ::testing::Values(LdStLong2TestParam{{0, 0}, {0, 0}}, LdStLong2TestParam{{10, 10}, {10, 10}}));
 
 TEST_P(LdStLong2TestSuite, LdStLong2TestCase)
 {
@@ -213,9 +216,9 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStUlong2TestCase, LdStUlong2TestSuite,
-                        ::testing::Values(LdStUlong2TestParam{{0, 0}, {0, 0}},
-                                          LdStUlong2TestParam{{10, 10}, {10, 10}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStUlong2TestCase, LdStUlong2TestSuite,
+    ::testing::Values(LdStUlong2TestParam{{0, 0}, {0, 0}}, LdStUlong2TestParam{{10, 10}, {10, 10}}));
 
 TEST_P(LdStUlong2TestSuite, LdStUlong2TestCase)
 {
@@ -244,9 +247,10 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStLong4TestCase, LdStLong4TestSuite,
-                        ::testing::Values(LdStLong4TestParam{{0, 0, 0, 0}, {0, 0, 0, 0}},
-                                          LdStLong4TestParam{{10, 10, 10, 10}, {10, 10, 10, 10}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStLong4TestCase, LdStLong4TestSuite,
+    ::testing::Values(
+        LdStLong4TestParam{{0, 0, 0, 0}, {0, 0, 0, 0}}, LdStLong4TestParam{{10, 10, 10, 10}, {10, 10, 10, 10}}));
 
 TEST_P(LdStLong4TestSuite, LdStLong4TestCase)
 {
@@ -275,9 +279,9 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStTestCase, LdStLonglong2TestSuite,
-                        ::testing::Values(LdStLonglong2TestParam{{0, 0}, {0, 0}},
-                                          LdStLonglong2TestParam{{10, 10}, {10, 10}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStTestCase, LdStLonglong2TestSuite,
+    ::testing::Values(LdStLonglong2TestParam{{0, 0}, {0, 0}}, LdStLonglong2TestParam{{10, 10}, {10, 10}}));
 
 TEST_P(LdStLonglong2TestSuite, LdStLonglong2TestCase)
 {
@@ -306,9 +310,9 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStUlonglong2TestCase, LdStUlonglong2TestSuite,
-                        ::testing::Values(LdStUlonglong2TestParam{{0, 0}, {0, 0}},
-                                          LdStUlonglong2TestParam{{10, 10}, {10, 10}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStUlonglong2TestCase, LdStUlonglong2TestSuite,
+    ::testing::Values(LdStUlonglong2TestParam{{0, 0}, {0, 0}}, LdStUlonglong2TestParam{{10, 10}, {10, 10}}));
 
 TEST_P(LdStUlonglong2TestSuite, LdStuLonglong2TestCase)
 {
@@ -337,9 +341,11 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStLonglong4TestCase, LdStLonglong4TestSuite,
-                        ::testing::Values(LdStLonglong4TestParam{{0, 0, 0, 0}, {0, 0, 0, 0}},
-                                          LdStLonglong4TestParam{{10, 10, 10, 10}, {10, 10, 10, 10}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStLonglong4TestCase, LdStLonglong4TestSuite,
+    ::testing::Values(
+        LdStLonglong4TestParam{{0, 0, 0, 0}, {0, 0, 0, 0}},
+        LdStLonglong4TestParam{{10, 10, 10, 10}, {10, 10, 10, 10}}));
 
 TEST_P(LdStLonglong4TestSuite, LdStLonglong4TestCase)
 {
@@ -427,8 +433,8 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStChar2TestCase, LdStChar2TestSuite,
-                        ::testing::Values(LdStChar2TestParam{{'0', '0'}, {'0', '0'}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStChar2TestCase, LdStChar2TestSuite, ::testing::Values(LdStChar2TestParam{{'0', '0'}, {'0', '0'}}));
 
 TEST_P(LdStChar2TestSuite, LdStChar2TestCase)
 {
@@ -457,8 +463,8 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStUchar2TestCase, LdStUchar2TestSuite,
-                        ::testing::Values(LdStUchar2TestParam{{'0', '0'}, {'0', '0'}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStUchar2TestCase, LdStUchar2TestSuite, ::testing::Values(LdStUchar2TestParam{{'0', '0'}, {'0', '0'}}));
 
 TEST_P(LdStUchar2TestSuite, LdStUChar2TestCase)
 {
@@ -487,8 +493,9 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStChar4TestCase, LdStChar4TestSuite,
-                        ::testing::Values(LdStChar4TestParam{{'0', '0', '0', '0'}, {'0', '0', '0', '0'}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStChar4TestCase, LdStChar4TestSuite,
+    ::testing::Values(LdStChar4TestParam{{'0', '0', '0', '0'}, {'0', '0', '0', '0'}}));
 
 TEST_P(LdStChar4TestSuite, LdStChar4TestCase)
 {
@@ -517,8 +524,9 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStUchar4TestCase, LdStUchar4TestSuite,
-                        ::testing::Values(LdStUchar4TestParam{{'0', '0', '0', '0'}, {'0', '0', '0', '0'}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStUchar4TestCase, LdStUchar4TestSuite,
+    ::testing::Values(LdStUchar4TestParam{{'0', '0', '0', '0'}, {'0', '0', '0', '0'}}));
 
 TEST_P(LdStUchar4TestSuite, LdStUChar4TestCase)
 {
@@ -576,8 +584,9 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStUshortTestCase, LdStUshortTestSuite,
-                        ::testing::Values(LdStUshortTestParam{(unsigned short)1, (unsigned short)1}));
+INSTANTIATE_TEST_CASE_P(
+    LdStUshortTestCase, LdStUshortTestSuite,
+    ::testing::Values(LdStUshortTestParam{(unsigned short)1, (unsigned short)1}));
 
 TEST_P(LdStUshortTestSuite, LdStUshortTestCase)
 {
@@ -606,8 +615,8 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStShort2TestCase, LdStShort2TestSuite,
-                        ::testing::Values(LdStShort2TestParam{{1, 2}, {1, 2}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStShort2TestCase, LdStShort2TestSuite, ::testing::Values(LdStShort2TestParam{{1, 2}, {1, 2}}));
 
 TEST_P(LdStShort2TestSuite, LdStShort2TestCase)
 {
@@ -636,8 +645,8 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStShort4TestCase, LdStShort4TestSuite,
-                        ::testing::Values(LdStShort4TestParam{{1, 2, 1, 2}, {1, 2, 1, 2}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStShort4TestCase, LdStShort4TestSuite, ::testing::Values(LdStShort4TestParam{{1, 2, 1, 2}, {1, 2, 1, 2}}));
 
 TEST_P(LdStShort4TestSuite, LdStShort4TestCase)
 {
@@ -666,8 +675,8 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStUshort4TestCase, LdStUshort4TestSuite,
-                        ::testing::Values(LdStUshort4TestParam{{1, 2, 1, 2}, {1, 2, 1, 2}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStUshort4TestCase, LdStUshort4TestSuite, ::testing::Values(LdStUshort4TestParam{{1, 2, 1, 2}, {1, 2, 1, 2}}));
 
 TEST_P(LdStUshort4TestSuite, LdStUshort4TestCase)
 {
@@ -812,8 +821,8 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStInt4TestCase, LdStInt4TestSuite,
-                        ::testing::Values(LdStInt4TestParam{{1, 2, 3, 4}, {1, 2, 3, 4}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStInt4TestCase, LdStInt4TestSuite, ::testing::Values(LdStInt4TestParam{{1, 2, 3, 4}, {1, 2, 3, 4}}));
 
 TEST_P(LdStInt4TestSuite, LdStInt4TestCase)
 {
@@ -842,8 +851,8 @@ public:
     void SetUp() override {}
     void TearDown() override {}
 };
-INSTANTIATE_TEST_CASE_P(LdStUint4TestCase, LdStUint4TestSuite,
-                        ::testing::Values(LdStUint4TestParam{{1, 2, 3, 4}, {1, 2, 3, 4}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStUint4TestCase, LdStUint4TestSuite, ::testing::Values(LdStUint4TestParam{{1, 2, 3, 4}, {1, 2, 3, 4}}));
 
 TEST_P(LdStUint4TestSuite, LdStuint4TestCase)
 {
@@ -903,8 +912,8 @@ public:
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(LdStfloat2TestCase, LdStFloat2TestSuite,
-                        ::testing::Values(LdStFloat2TestParam{{1.0f, 2.0f}, {1.0f, 2.0f}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStfloat2TestCase, LdStFloat2TestSuite, ::testing::Values(LdStFloat2TestParam{{1.0f, 2.0f}, {1.0f, 2.0f}}));
 
 TEST_P(LdStFloat2TestSuite, LdStfloat2TestCase)
 {
@@ -935,8 +944,9 @@ public:
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(LdStFloat4TestSuite, LdStFloat4TestSuite,
-                        ::testing::Values(LdStFloat4TestParam{{1.0f, 2.0f, 3.0f, 4.0f}, {1.0f, 2.0f, 3.0f, 4.0f}}));
+INSTANTIATE_TEST_CASE_P(
+    LdStFloat4TestSuite, LdStFloat4TestSuite,
+    ::testing::Values(LdStFloat4TestParam{{1.0f, 2.0f, 3.0f, 4.0f}, {1.0f, 2.0f, 3.0f, 4.0f}}));
 
 TEST_P(LdStFloat4TestSuite, LdStfloat4TestCase)
 {

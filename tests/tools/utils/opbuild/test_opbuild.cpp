@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <cmath>
 #include <stdlib.h>
@@ -31,11 +31,13 @@ extern int opbuild_main(int argc, std::vector<std::string> args);
 namespace ops {
 class TEST_OPBUILD : public testing::Test {
 protected:
-    void SetUp() {
+    void SetUp()
+    {
         opbuild::Params::GetInstance().optionParams_ = {};
         opbuild::Params::GetInstance().requiredParams_ = {};
     }
-    void TearDown() {
+    void TearDown()
+    {
         GlobalMockObject::verify();
         opbuild::Params::GetInstance().optionParams_ = {};
         opbuild::Params::GetInstance().requiredParams_ = {};
@@ -51,11 +53,11 @@ TEST_F(TEST_OPBUILD, OpBuildCoverage)
     opProtoGen.GenerateCodeSeparate();
     std::string genPath = "";
     Generator::GetGenPath(genPath);
-    EXPECT_EQ(genPath,"/ajofdij/jfoasj");
+    EXPECT_EQ(genPath, "/ajofdij/jfoasj");
     CfgGenerator cfgGen(opsvec);
     cfgGen.GenerateCode();
     Generator::GetGenPath(genPath);
-    EXPECT_EQ(genPath,"/ajofdij/jfoasj");
+    EXPECT_EQ(genPath, "/ajofdij/jfoasj");
 }
 
 TEST_F(TEST_OPBUILD, OpBuildCoverageModeTest)
@@ -67,7 +69,7 @@ TEST_F(TEST_OPBUILD, OpBuildCoverageModeTest)
     opProtoGen.GenerateCodeSeparate();
     std::string genMode = "";
     Generator::GetCPUMode(genMode);
-    EXPECT_EQ(genMode,"--aicore");
+    EXPECT_EQ(genMode, "--aicore");
     CfgGenerator cfgGen(opsvec);
     std::string path = "";
     opbuild::Status status = Generator::SetCPUMode(path);
@@ -82,7 +84,7 @@ TEST_F(TEST_OPBUILD, NotGenerateAclnnInterface)
     setenv("OPS_ACLNN_GEN", "0", 1);
     char* so_path = getenv("OPS_DSO_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     EXPECT_EQ(ret, 0);
     unsetenv("OPS_ACLNN_GEN");
 }
@@ -96,16 +98,16 @@ TEST_F(TEST_OPBUILD, OpBuildFailLogTest)
     EXPECT_TRUE(nullptr != so_path);
     EXPECT_TRUE(nullptr != src_path);
     setenv("ASCEND_VENDOR_NAME", "customize", 1);
-    int ret = opbuild_main(3, { "opbuild", "aabb", cur_path });
+    int ret = opbuild_main(3, {"opbuild", "aabb", cur_path});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 1);
-    ret = opbuild_main(3, { "opbuild", so_path, "" });
+    ret = opbuild_main(3, {"opbuild", so_path, ""});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 1);
     unsetenv("ASCEND_VENDOR_NAME");
-    ret = opbuild_main(3, { "opbuild", so_path, cur_path });
+    ret = opbuild_main(3, {"opbuild", so_path, cur_path});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 0);
@@ -114,9 +116,9 @@ TEST_F(TEST_OPBUILD, OpBuildFailLogTest)
     Generator gen(opvec);
     EXPECT_EQ(gen.GenerateCode(), opbuild::OPBUILD_SUCCESS);
     OpCustomGenerator custGen(opvec);
-    MOCKER(realpath, char *(*)(const char *, char *)).times(2).will(returnValue((char*)nullptr));
+    MOCKER(realpath, char* (*)(const char*, char*)).times(2).will(returnValue((char*)nullptr));
     EXPECT_EQ(custGen.GenerateCode(), opbuild::OPBUILD_FAILED);
-    ret = opbuild_main(3, { "opbuild", so_path, cur_path });
+    ret = opbuild_main(3, {"opbuild", so_path, cur_path});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 1);
@@ -150,13 +152,13 @@ TEST_F(TEST_OPBUILD, OpBuildRun)
     std::cout << "OPS SRC: " << src_path << std::endl;
     EXPECT_TRUE(nullptr != so_path);
     EXPECT_TRUE(nullptr != src_path);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     EXPECT_EQ(ret, 0);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
     std::stringstream src_ss, gen_ss;
-    std::vector<std::string> files = { "/op_proto.cc", "/op_proto.h", "/aic-ascend310p-ops-info.ini",
-        "/aic-ascend910-ops-info.ini" };
+    std::vector<std::string> files = {
+        "/op_proto.cc", "/op_proto.h", "/aic-ascend310p-ops-info.ini", "/aic-ascend910-ops-info.ini"};
     std::string insConvert = "ABcd_Efg";
     std::string covertStr;
     auto convertString = ConvertToSnakeCase(insConvert);
@@ -189,31 +191,31 @@ TEST_F(TEST_OPBUILD, OpBuildRunTest)
     std::cout << "OPS SRC: " << src_path << std::endl;
     EXPECT_TRUE(nullptr != so_path);
     EXPECT_TRUE(nullptr != src_path);
-    int ret = opbuild_main(4, { "opbuild", so_path, "." , "--aicore"});
+    int ret = opbuild_main(4, {"opbuild", so_path, ".", "--aicore"});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 0);
-    ret = opbuild_main(4, { "opbuild", so_path, "." , "--aicpu"});
+    ret = opbuild_main(4, {"opbuild", so_path, ".", "--aicpu"});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 0);
-    ret = opbuild_main(4, { "opbuild", so_path, "." , "--aic"});
+    ret = opbuild_main(4, {"opbuild", so_path, ".", "--aic"});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 1);
-    ret = opbuild_main(5, { "opbuild", so_path, "." , "--aic", "--output_file=./test"});
+    ret = opbuild_main(5, {"opbuild", so_path, ".", "--aic", "--output_file=./test"});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 1);
-    ret = opbuild_main(5, { "opbuild", so_path, "." , "--aicore", "--output_file="});
+    ret = opbuild_main(5, {"opbuild", so_path, ".", "--aicore", "--output_file="});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 1);
-    ret = opbuild_main(4, { "opbuild", so_path, cur_path, "--aic"});
+    ret = opbuild_main(4, {"opbuild", so_path, cur_path, "--aic"});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 1);
-    ret = opbuild_main(5, { "opbuild", so_path, cur_path, cur_path, "--output_file="});
+    ret = opbuild_main(5, {"opbuild", so_path, cur_path, cur_path, "--output_file="});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 1);
@@ -230,12 +232,12 @@ TEST_F(TEST_OPBUILD, CustomOpRegistrySuccess)
     EXPECT_TRUE(nullptr != so_path);
     EXPECT_TRUE(nullptr != src_path);
     setenv("ASCEND_VENDOR_NAME", "customize", 1);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 0);
     setenv("ASCEND_VENDOR_NAME", "", 1);
-    ret = opbuild_main(3, { "opbuild", so_path, "." });
+    ret = opbuild_main(3, {"opbuild", so_path, "."});
     opbuild::Params::GetInstance().optionParams_ = {};
     opbuild::Params::GetInstance().requiredParams_ = {};
     EXPECT_EQ(ret, 0);
@@ -260,8 +262,8 @@ TEST_F(TEST_OPBUILD, CustomOpRegistrySuccess)
 TEST_F(TEST_OPBUILD, AclnnAddTik2RunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -288,8 +290,8 @@ TEST_F(TEST_OPBUILD, AclnnAddTik2RunSuccess)
 TEST_F(TEST_OPBUILD, AclnnValueDependScopeRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -314,12 +316,11 @@ TEST_F(TEST_OPBUILD, AclnnValueDependScopeRunSuccess)
     }
 }
 
-
 TEST_F(TEST_OPBUILD, AclnnOnlyInputRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -342,8 +343,8 @@ TEST_F(TEST_OPBUILD, AclnnOnlyInputRunSuccess)
 TEST_F(TEST_OPBUILD, AclnnOnlyOutputRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -378,30 +379,18 @@ TEST_F(TEST_OPBUILD, OpBuildRunProtoSeparate)
     EXPECT_TRUE(nullptr != so_path);
     EXPECT_TRUE(nullptr != src_path);
     setenv("OPS_PROTO_SEPARATE", "1", 1);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     EXPECT_EQ(ret, 0);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
     std::stringstream src_ss, gen_ss;
     std::vector<std::string> files = {
-        "/add_tik2_proto.cpp",
-        "/add_tik2_proto.h",
-        "/auto_contiguous_test_proto.cpp",
-        "/auto_contiguous_test_proto.h",
-        "/dynamic_ref_test_proto.cpp",
-        "/dynamic_ref_test_proto.h",
-        "/input_test_proto.cpp",
-        "/input_test_proto.h",
-        "/output_test_proto.cpp",
-        "/output_test_proto.h",
-        "/ref_test_proto.cpp",
-        "/ref_test_proto.h",
-        "/scalar_test_proto.cpp",
-        "/scalar_test_proto.h",
-        "/value_depend_test_proto.cpp",
-        "/value_depend_test_proto.h",
-        "/version_test_proto.cpp",
-        "/version_test_proto.h",
+        "/add_tik2_proto.cpp",           "/add_tik2_proto.h",           "/auto_contiguous_test_proto.cpp",
+        "/auto_contiguous_test_proto.h", "/dynamic_ref_test_proto.cpp", "/dynamic_ref_test_proto.h",
+        "/input_test_proto.cpp",         "/input_test_proto.h",         "/output_test_proto.cpp",
+        "/output_test_proto.h",          "/ref_test_proto.cpp",         "/ref_test_proto.h",
+        "/scalar_test_proto.cpp",        "/scalar_test_proto.h",        "/value_depend_test_proto.cpp",
+        "/value_depend_test_proto.h",    "/version_test_proto.cpp",     "/version_test_proto.h",
     };
     for (auto& file : files) {
         src_file = std::string(src_path) + "/op_proto_separate" + file + ".txt";
@@ -423,9 +412,9 @@ TEST_F(TEST_OPBUILD, OpBuildRunProtoSeparate)
 TEST_F(TEST_OPBUILD, AclnnfloatAttrRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *so_path = getenv("OPS_DSO_FILE_PATH");
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* so_path = getenv("OPS_DSO_FILE_PATH");
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     EXPECT_TRUE(nullptr != src_path);
     setenv("OPS_PROJECT_NAME", "test", 1);
@@ -460,33 +449,33 @@ TEST_F(TEST_OPBUILD, AclnnfloatAttrRunSuccess)
 
 TEST_F(TEST_OPBUILD, AclnnFallBackRunSuccess)
 {
-class FallBackTest : public OpDef {
-public:
-    FallBackTest(const char* name) : OpDef(name)
-    {
-        this->Input("x1").DataType({ ge::DT_FLOAT16 }).ParamType(OPTIONAL);
-        this->Input("x2").DataType({ ge::DT_FLOAT16 }).ParamType(DYNAMIC);
-        this->Input("x3").DataType({ ge::DT_FLOAT }).ParamType(REQUIRED).ValueDepend(REQUIRED);
-        this->Input("x4").DataType({ ge::DT_BOOL }).ParamType(REQUIRED).ValueDepend(REQUIRED);
-        this->Input("x5").DataType({ ge::DT_INT64 }).ParamType(REQUIRED).ValueDepend(REQUIRED);
-        this->Input("x6").DataType({ ge::DT_FLOAT16 }).ParamType(OPTIONAL).Scalar();
-        this->Input("x7").DataType({ ge::DT_FLOAT16 }).ParamType(OPTIONAL).ScalarList();
-        this->Output("x1").DataType({ ge::DT_FLOAT16 });
-        this->Output("y1").DataType({ ge::DT_FLOAT16 }).ParamType(DYNAMIC);
-        this->Output("y2").DataType({ ge::DT_FLOAT16 }).OutputShapeDependOnCompute();
-        this->Attr("bias0").AttrType(OPTIONAL).Int(0);
-        this->Attr("bias1").AttrType(REQUIRED).Float(0.0);
-        this->Attr("bias2").AttrType(OPTIONAL).ListBool({ true, false });
-        this->Attr("bias3").AttrType(OPTIONAL).ListFloat({ 0.1, 0.2 });
-        this->Attr("bias4").AttrType(REQUIRED).ListInt({ 1, 2 });
-        this->Attr("bias5").AttrType(OPTIONAL).String("ssss");
-        this->Attr("bias6").AttrType(OPTIONAL).Bool(true);
+    class FallBackTest : public OpDef {
+    public:
+        FallBackTest(const char* name) : OpDef(name)
+        {
+            this->Input("x1").DataType({ge::DT_FLOAT16}).ParamType(OPTIONAL);
+            this->Input("x2").DataType({ge::DT_FLOAT16}).ParamType(DYNAMIC);
+            this->Input("x3").DataType({ge::DT_FLOAT}).ParamType(REQUIRED).ValueDepend(REQUIRED);
+            this->Input("x4").DataType({ge::DT_BOOL}).ParamType(REQUIRED).ValueDepend(REQUIRED);
+            this->Input("x5").DataType({ge::DT_INT64}).ParamType(REQUIRED).ValueDepend(REQUIRED);
+            this->Input("x6").DataType({ge::DT_FLOAT16}).ParamType(OPTIONAL).Scalar();
+            this->Input("x7").DataType({ge::DT_FLOAT16}).ParamType(OPTIONAL).ScalarList();
+            this->Output("x1").DataType({ge::DT_FLOAT16});
+            this->Output("y1").DataType({ge::DT_FLOAT16}).ParamType(DYNAMIC);
+            this->Output("y2").DataType({ge::DT_FLOAT16}).OutputShapeDependOnCompute();
+            this->Attr("bias0").AttrType(OPTIONAL).Int(0);
+            this->Attr("bias1").AttrType(REQUIRED).Float(0.0);
+            this->Attr("bias2").AttrType(OPTIONAL).ListBool({true, false});
+            this->Attr("bias3").AttrType(OPTIONAL).ListFloat({0.1, 0.2});
+            this->Attr("bias4").AttrType(REQUIRED).ListInt({1, 2});
+            this->Attr("bias5").AttrType(OPTIONAL).String("ssss");
+            this->Attr("bias6").AttrType(OPTIONAL).Bool(true);
 
-        this->AICore().AddConfig("ascend910");
-        this->EnableFallBack();
-    }
-};
-OP_ADD(FallBackTest);
+            this->AICore().AddConfig("ascend910");
+            this->EnableFallBack();
+        }
+    };
+    OP_ADD(FallBackTest);
 
     char buf[1024];
     char* cur_path = getcwd(buf, 1023);
@@ -494,7 +483,7 @@ OP_ADD(FallBackTest);
     char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     EXPECT_TRUE(nullptr != src_path);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     EXPECT_EQ(ret, 0);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -524,8 +513,8 @@ TEST_F(TEST_OPBUILD, TestErrorMessage)
 TEST_F(TEST_OPBUILD, AclnnValueDependInputRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -548,8 +537,8 @@ TEST_F(TEST_OPBUILD, AclnnValueDependInputRunSuccess)
 TEST_F(TEST_OPBUILD, AclnnAutoContiguousRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -572,8 +561,8 @@ TEST_F(TEST_OPBUILD, AclnnAutoContiguousRunSuccess)
 TEST_F(TEST_OPBUILD, AclnnRefContiguousRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -605,15 +594,15 @@ TEST_F(TEST_OPBUILD, TestValueDependError)
     char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     EXPECT_TRUE(nullptr != src_path);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     EXPECT_EQ(ret, 1);
 }
 
 TEST_F(TEST_OPBUILD, AclnnScalarRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -636,8 +625,8 @@ TEST_F(TEST_OPBUILD, AclnnScalarRunSuccess)
 TEST_F(TEST_OPBUILD, AclnnRefRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -660,8 +649,8 @@ TEST_F(TEST_OPBUILD, AclnnRefRunSuccess)
 TEST_F(TEST_OPBUILD, AclnnDynamicRefRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -684,22 +673,18 @@ TEST_F(TEST_OPBUILD, AclnnDynamicRefRunSuccess)
 TEST_F(TEST_OPBUILD, AclnnSupportVersionUt)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
     std::stringstream src_ss, gen_ss;
-    std::vector<std::string> src_files = {"/aclnn_version_test.cpp.txt",
-        "/aclnn_version_test_v1.cpp.txt",
-        "/aclnn_version_test_v2.cpp.txt",
-        "/aclnn_version_test_v1.h.txt",
-        "/aclnn_version_test_v2.h.txt"};
-    std::vector<std::string> gen_files = {"/aclnn_version_test.cpp",
-        "/aclnn_version_test_v1.cpp",
-        "/aclnn_version_test_v2.cpp",
-        "/aclnn_version_test_v1.h",
-        "/aclnn_version_test_v2.h"};
+    std::vector<std::string> src_files = {
+        "/aclnn_version_test.cpp.txt", "/aclnn_version_test_v1.cpp.txt", "/aclnn_version_test_v2.cpp.txt",
+        "/aclnn_version_test_v1.h.txt", "/aclnn_version_test_v2.h.txt"};
+    std::vector<std::string> gen_files = {
+        "/aclnn_version_test.cpp", "/aclnn_version_test_v1.cpp", "/aclnn_version_test_v2.cpp",
+        "/aclnn_version_test_v1.h", "/aclnn_version_test_v2.h"};
     for (size_t i = 0U; i < src_files.size(); i++) {
         src_file = std::string(src_path) + src_files[i];
         gen_file = std::string(cur_path) + gen_files[i];
@@ -720,16 +705,14 @@ TEST_F(TEST_OPBUILD, AclnnSupportVersionUt)
 TEST_F(TEST_OPBUILD, AclnnRmsNormGradRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
     std::stringstream src_ss, gen_ss;
-    std::vector<std::string> src_files = {"/aclnn_rms_norm_grad_test.cpp.txt",
-        "/aclnn_rms_norm_grad_test.h.txt"};
-    std::vector<std::string> gen_files = {"/aclnn_rms_norm_grad_test.cpp",
-        "/aclnn_rms_norm_grad_test.h"};
+    std::vector<std::string> src_files = {"/aclnn_rms_norm_grad_test.cpp.txt", "/aclnn_rms_norm_grad_test.h.txt"};
+    std::vector<std::string> gen_files = {"/aclnn_rms_norm_grad_test.cpp", "/aclnn_rms_norm_grad_test.h"};
     for (size_t i = 0U; i < src_files.size(); i++) {
         src_file = std::string(src_path) + src_files[i];
         gen_file = std::string(cur_path) + gen_files[i];
@@ -752,16 +735,14 @@ TEST_F(TEST_OPBUILD, AclnnRmsNormGradRunSuccess)
 TEST_F(TEST_OPBUILD, AclnnSocVersionTest1RunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
     std::stringstream src_ss, gen_ss;
-    std::vector<std::string> src_files = {"/aclnn_soc_version_test1.cpp.txt",
-        "/aclnn_soc_version_test1.h.txt"};
-    std::vector<std::string> gen_files = {"/aclnn_soc_version_test1.cpp",
-        "/aclnn_soc_version_test1.h"};
+    std::vector<std::string> src_files = {"/aclnn_soc_version_test1.cpp.txt", "/aclnn_soc_version_test1.h.txt"};
+    std::vector<std::string> gen_files = {"/aclnn_soc_version_test1.cpp", "/aclnn_soc_version_test1.h"};
     for (size_t i = 0U; i < src_files.size(); i++) {
         src_file = std::string(src_path) + src_files[i];
         gen_file = std::string(cur_path) + gen_files[i];
@@ -784,8 +765,8 @@ TEST_F(TEST_OPBUILD, AclnnSocVersionTest1RunSuccess)
 TEST_F(TEST_OPBUILD, AclnnMC2RunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -808,8 +789,8 @@ TEST_F(TEST_OPBUILD, AclnnMC2RunSuccess)
 TEST_F(TEST_OPBUILD, AclnnMC2DavidRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
@@ -878,9 +859,7 @@ TEST_F(TEST_OPBUILD, OutPutFollowInputUt)
                 .DataTypeList({ge::DT_FLOAT})
                 .FormatList({ge::FORMAT_ND})
                 .ValueDepend(OPTIONAL, DependScope::TILING);
-            this->Output("z")
-                .ParamType(REQUIRED)
-                .Follow("y");
+            this->Output("z").ParamType(REQUIRED).Follow("y");
             OpAICoreConfig aicConfig;
             this->AICore().AddConfig("ascend910b", aicConfig);
         }
@@ -889,9 +868,9 @@ TEST_F(TEST_OPBUILD, OutPutFollowInputUt)
     char* so_path = getenv("OPS_DSO_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     setenv("ENABLE_SOURCE_PACKAGE", "False", 1);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
+    char* cur_path = getcwd(buf, 1023);
     std::string gen_file = std::string(cur_path) + "/op_proto.cc";
     std::ifstream gen_if;
     std::stringstream gen_ss;
@@ -915,12 +894,8 @@ TEST_F(TEST_OPBUILD, InputFollowInputUt)
                 .DataTypeList({ge::DT_FLOAT})
                 .FormatList({ge::FORMAT_ND})
                 .ValueDepend(OPTIONAL, DependScope::TILING);
-            this->Input("y")
-                .ParamType(REQUIRED)
-                .Follow("x");
-            this->Output("z")
-                .ParamType(REQUIRED)
-                .Follow("y");
+            this->Input("y").ParamType(REQUIRED).Follow("x");
+            this->Output("z").ParamType(REQUIRED).Follow("y");
             OpAICoreConfig aicConfig;
             this->AICore().AddConfig("ascend910b", aicConfig);
         }
@@ -929,9 +904,9 @@ TEST_F(TEST_OPBUILD, InputFollowInputUt)
     char* so_path = getenv("OPS_DSO_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     setenv("ENABLE_SOURCE_PACKAGE", "False", 1);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
+    char* cur_path = getcwd(buf, 1023);
     std::string gen_file = std::string(cur_path) + "/op_proto.cc";
     std::ifstream gen_if;
     std::stringstream gen_ss;
@@ -955,13 +930,8 @@ TEST_F(TEST_OPBUILD, ValueDependTilingSinkUt)
                 .DataTypeList({ge::DT_FLOAT})
                 .FormatList({ge::FORMAT_ND})
                 .ValueDepend(OPTIONAL, DependScope::TILING);
-            this->Input("y")
-                .ParamType(REQUIRED)
-                .DataTypeList({ge::DT_FLOAT})
-                .FormatList({ge::FORMAT_ND});
-            this->Output("z")
-                .ParamType(REQUIRED)
-                .Follow("y");
+            this->Input("y").ParamType(REQUIRED).DataTypeList({ge::DT_FLOAT}).FormatList({ge::FORMAT_ND});
+            this->Output("z").ParamType(REQUIRED).Follow("y");
             OpAICoreConfig aicConfig;
             this->AICore().AddConfig("ascend910b", aicConfig);
         }
@@ -971,16 +941,18 @@ TEST_F(TEST_OPBUILD, ValueDependTilingSinkUt)
     char* so_path = getenv("OPS_DSO_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     setenv("ENABLE_SOURCE_PACKAGE", "False", 1);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
+    char* cur_path = getcwd(buf, 1023);
     std::string gen_file = std::string(cur_path) + "/op_proto.cc";
     std::ifstream gen_if;
     std::stringstream gen_ss;
     gen_if.open(gen_file);
     EXPECT_TRUE(gen_if.is_open());
     gen_ss << gen_if.rdbuf();
-    EXPECT_NE(gen_ss.str().find("{gert::TilingPlacement::TILING_ON_HOST, gert::TilingPlacement::TILING_ON_AICPU}"), std::string::npos);
+    EXPECT_NE(
+        gen_ss.str().find("{gert::TilingPlacement::TILING_ON_HOST, gert::TilingPlacement::TILING_ON_AICPU}"),
+        std::string::npos);
     gen_if.close();
     system(("rm -rf " + gen_file).c_str());
     unsetenv("ENABLE_SOURCE_PACKAGE");
@@ -1019,10 +991,8 @@ TEST_F(TEST_OPBUILD, OpDefCommentUt)
                 .DataTypeList({ge::DT_FLOAT})
                 .FormatList({ge::FORMAT_ND})
                 .Comment("Output cmt 1");
-            this->Attr("VIN vin")
-                .Comment("Attr cmt 1");
-            this->Attr("VIN vin2")
-                .Comment("Attr cmt 2");
+            this->Attr("VIN vin").Comment("Attr cmt 1");
+            this->Attr("VIN vin2").Comment("Attr cmt 2");
             OpAICoreConfig aicConfig;
             this->AICore().AddConfig("ascend910b", aicConfig);
         }
@@ -1031,9 +1001,9 @@ TEST_F(TEST_OPBUILD, OpDefCommentUt)
     char* so_path = getenv("OPS_DSO_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     setenv("ENABLE_SOURCE_PACKAGE", "False", 1);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
+    char* cur_path = getcwd(buf, 1023);
     std::string gen_file = std::string(cur_path) + "/op_proto.h";
     std::ifstream gen_if;
     std::stringstream gen_ss;
@@ -1058,13 +1028,8 @@ TEST_F(TEST_OPBUILD, OpDefForBinQueryUt)
                 .DataTypeForBinQuery({ge::DT_FLOAT})
                 .Format({ge::FORMAT_ND, ge::FORMAT_NC})
                 .FormatForBinQuery({ge::FORMAT_ND, ge::FORMAT_ND});
-            this->Input("y")
-                .ParamType(REQUIRED)
-                .Follow("x")
-                .DataTypeForBinQuery({ge::DT_FLOAT});
-            this->Output("z")
-                .ParamType(REQUIRED)
-                .Follow("y");
+            this->Input("y").ParamType(REQUIRED).Follow("x").DataTypeForBinQuery({ge::DT_FLOAT});
+            this->Output("z").ParamType(REQUIRED).Follow("y");
             OpAICoreConfig aicConfig;
             this->AICore().AddConfig("ascend910b", aicConfig);
         }
@@ -1073,9 +1038,9 @@ TEST_F(TEST_OPBUILD, OpDefForBinQueryUt)
     char* so_path = getenv("OPS_DSO_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     setenv("ENABLE_SOURCE_PACKAGE", "False", 1);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
+    char* cur_path = getcwd(buf, 1023);
     std::string gen_file = std::string(cur_path) + "/aic-ascend910b-ops-info.ini";
     std::ifstream gen_if;
     std::stringstream gen_ss;
@@ -1096,18 +1061,9 @@ TEST_F(TEST_OPBUILD, OpDefPathFailTest)
     public:
         OpDefPathFail(const char* name) : OpDef(name)
         {
-            this->Input("x")
-                .ParamType(REQUIRED)
-                .DataTypeList({ge::DT_FLOAT})
-                .FormatList({ge::FORMAT_ND});
-            this->Input("y")
-                .ParamType(REQUIRED)
-                .DataTypeList({ge::DT_FLOAT})
-                .FormatList({ge::FORMAT_ND});
-            this->Output("z")
-                .ParamType(REQUIRED)
-                .DataTypeList({ge::DT_FLOAT})
-                .FormatList({ge::FORMAT_ND});
+            this->Input("x").ParamType(REQUIRED).DataTypeList({ge::DT_FLOAT}).FormatList({ge::FORMAT_ND});
+            this->Input("y").ParamType(REQUIRED).DataTypeList({ge::DT_FLOAT}).FormatList({ge::FORMAT_ND});
+            this->Output("z").ParamType(REQUIRED).DataTypeList({ge::DT_FLOAT}).FormatList({ge::FORMAT_ND});
             OpAICoreConfig aicConfig;
             this->AICore().AddConfig("ascend910b", aicConfig);
         }
@@ -1117,7 +1073,7 @@ TEST_F(TEST_OPBUILD, OpDefPathFailTest)
     OpProtoGenerator generator(opsname);
     std::ofstream opProtoInitH;
     std::ofstream opProtoInitCc;
-    MOCKER(realpath, char *(*)(const char *, char *)).times(1).will(returnValue((char*)nullptr));
+    MOCKER(realpath, char* (*)(const char*, char*)).times(1).will(returnValue((char*)nullptr));
     generator.GetFile(opProtoInitH, opProtoInitCc, "op_proto");
     EXPECT_TRUE(!opProtoInitH.is_open());
     EXPECT_TRUE(!opProtoInitCc.is_open());
@@ -1129,9 +1085,9 @@ TEST_F(TEST_OPBUILD, VirtInputUt)
     public:
         VirtInputTest(const char* name) : OpDef(name)
         {
-            this->Input("x1").ParamType(REQUIRED).DataType({ ge::DT_INT64 });
-            this->Input("x2").ParamType(VIRTUAL).DataType({ ge::DT_INT64 });
-            this->Output("y1").ParamType(REQUIRED).DataType({ ge::DT_INT64 }).InitValue(0);
+            this->Input("x1").ParamType(REQUIRED).DataType({ge::DT_INT64});
+            this->Input("x2").ParamType(VIRTUAL).DataType({ge::DT_INT64});
+            this->Output("y1").ParamType(REQUIRED).DataType({ge::DT_INT64}).InitValue(0);
 
             OpAICoreConfig aicConfig;
             this->AICore().AddConfig("ascend910", aicConfig);
@@ -1143,9 +1099,9 @@ TEST_F(TEST_OPBUILD, VirtInputUt)
     char* so_path = getenv("OPS_DSO_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     setenv("ENABLE_SOURCE_PACKAGE", "False", 1);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
+    char* cur_path = getcwd(buf, 1023);
     std::string gen_file = std::string(cur_path) + "/aic-ascend910-ops-info.ini";
     std::ifstream gen_if;
     std::stringstream gen_ss;
@@ -1165,10 +1121,9 @@ TEST_F(TEST_OPBUILD, VirtInputUtWithInitValue)
     public:
         VirtInputScalarTest(const char* name) : OpDef(name)
         {
-            this->Input("x1").ParamType(REQUIRED).DataType({ ge::DT_INT64 });
-            this->Input("x2").ParamType(VIRTUAL).DataType({ ge::DT_INT64 });
-            this->Output("y1").ParamType(REQUIRED).DataType({ ge::DT_INT64 })
-            .InitValue({ScalarType::FLOAT32, 3.2});
+            this->Input("x1").ParamType(REQUIRED).DataType({ge::DT_INT64});
+            this->Input("x2").ParamType(VIRTUAL).DataType({ge::DT_INT64});
+            this->Output("y1").ParamType(REQUIRED).DataType({ge::DT_INT64}).InitValue({ScalarType::FLOAT32, 3.2});
 
             OpAICoreConfig aicConfig;
             this->AICore().AddConfig("ascend910", aicConfig);
@@ -1180,9 +1135,9 @@ TEST_F(TEST_OPBUILD, VirtInputUtWithInitValue)
     char* so_path = getenv("OPS_DSO_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     setenv("ENABLE_SOURCE_PACKAGE", "False", 1);
-    int ret = opbuild_main(3, { "opbuild", so_path, "." });
+    int ret = opbuild_main(3, {"opbuild", so_path, "."});
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
+    char* cur_path = getcwd(buf, 1023);
     std::string gen_file = std::string(cur_path) + "/aic-ascend910-ops-info.ini";
     std::ifstream gen_if;
     std::stringstream gen_ss;
@@ -1190,8 +1145,8 @@ TEST_F(TEST_OPBUILD, VirtInputUtWithInitValue)
     gen_if.open(gen_file);
     EXPECT_TRUE(gen_if.is_open());
     gen_ss << gen_if.rdbuf();
-    EXPECT_NE(gen_ss.str().find(
-        "output0.initValue={ \"is_list\" : false, \"type\": \"float32\", \"value\": 3.200000}"),
+    EXPECT_NE(
+        gen_ss.str().find("output0.initValue={ \"is_list\" : false, \"type\": \"float32\", \"value\": 3.200000}"),
         std::string::npos);
     gen_if.close();
     system(("rm -rf " + gen_file).c_str());
@@ -1291,13 +1246,12 @@ TEST_F(TEST_OPBUILD, GenMc2Failed02)
 
 TEST_F(TEST_OPBUILD, GenMc2Failed03)
 {
-
     std::string fileName = "mc2_failed_" + std::to_string(getpid()) + ".txt";
     std::ofstream outfile = std::ofstream(fileName);
     OpDef opDef("MC2TestHcclServerTypeFail");
     OpAICoreConfig aicConfig;
-    opDef.Input("x").ParamType(REQUIRED).DataType({ ge::DT_FLOAT }).Format({ ge::FORMAT_ND });
-    opDef.Output("y").ParamType(REQUIRED).DataType({ ge::DT_FLOAT }).Format({ ge::FORMAT_ND });
+    opDef.Input("x").ParamType(REQUIRED).DataType({ge::DT_FLOAT}).Format({ge::FORMAT_ND});
+    opDef.Output("y").ParamType(REQUIRED).DataType({ge::DT_FLOAT}).Format({ge::FORMAT_ND});
     opDef.Attr("group1").AttrType(REQUIRED).String();
     opDef.Attr("group2").AttrType(OPTIONAL).String();
     opDef.AICore().AddConfig("ascend910b", aicConfig);
@@ -1314,8 +1268,8 @@ TEST_F(TEST_OPBUILD, GenMc2Failed03)
 
     std::vector<std::string> errMessage = Generator::GetErrorMessage();
     bool hasErrorMessage = false;
-    const std::string err =
-        "HcclServerType params of op MC2TestHcclServerTypeFail must be an enumeration value of enum class HcclServerType.";
+    const std::string err = "HcclServerType params of op MC2TestHcclServerTypeFail must be an enumeration value of "
+                            "enum class HcclServerType.";
     for (size_t i = 0U; i < errMessage.size(); i++) {
         std::cout << errMessage[i] << std::endl;
         if (errMessage[i] == err) {
@@ -1339,10 +1293,10 @@ TEST_F(TEST_OPBUILD, AclnnGenFailedWithoutSoc)
     outfile.close();
 
     std::ifstream resultFile(fileName);
-    std::string content((std::istreambuf_iterator<char>(resultFile)),
-                         std::istreambuf_iterator<char>());
+    std::string content((std::istreambuf_iterator<char>(resultFile)), std::istreambuf_iterator<char>());
     resultFile.close();
-    bool hasEmptySupportList = (content.find("OpSupportList supportList = {opSocSupportList, 0};") != std::string::npos);
+    bool hasEmptySupportList =
+        (content.find("OpSupportList supportList = {opSocSupportList, 0};") != std::string::npos);
     EXPECT_TRUE(hasEmptySupportList);
     remove(fileName.c_str());
 }
@@ -1420,7 +1374,9 @@ TEST_F(TEST_OPBUILD, AclnnGenVersionFailed03)
     EXPECT_TRUE(hasErrorMessage);
 }
 
-bool AclnnGenValudeDependFailedByCase(const std::vector<ge::DataType>& inputDataTypes, const std::vector<ge::DataType>& ouputDataTypes, const std::string& err, bool isScalar)
+bool AclnnGenValudeDependFailedByCase(
+    const std::vector<ge::DataType>& inputDataTypes, const std::vector<ge::DataType>& ouputDataTypes,
+    const std::string& err, bool isScalar)
 {
     std::string fileName = "depend_failed_" + std::to_string(getpid()) + ".txt";
     std::ofstream outfile = std::ofstream(fileName);
@@ -1454,55 +1410,33 @@ bool AclnnGenValudeDependFailedByCase(const std::vector<ge::DataType>& inputData
 
 TEST_F(TEST_OPBUILD, AclnnGenValueDependFailed)
 {
-    std::string errMsg = "ValueDepend input dtypes of op ValueDependFail must satisfy one of the following conditions:\n"
-                       " 1. All input dtypes are float.\n"
-                       " 2. All input dtypes are bool.\n"
-                       " 3. All input dtypes are integers or unsigned integers form the supported set: [int64, uint64, int32, uint32, int16, uint16, int8, uint8].";
+    std::string errMsg =
+        "ValueDepend input dtypes of op ValueDependFail must satisfy one of the following conditions:\n"
+        " 1. All input dtypes are float.\n"
+        " 2. All input dtypes are bool.\n"
+        " 3. All input dtypes are integers or unsigned integers form the supported set: [int64, uint64, int32, uint32, "
+        "int16, uint16, int8, uint8].";
     std::vector<std::tuple<std::vector<ge::DataType>, std::vector<ge::DataType>, std::string, bool>> testCases = {
-        {
-            {ge::DT_FLOAT16},
-            {ge::DT_FLOAT16},
-            errMsg,
-            false
-        },
-        {
-            {ge::DT_FLOAT, ge::DT_FLOAT16},
-            {ge::DT_FLOAT, ge::DT_FLOAT16},
-            errMsg,
-            false
-        },
-        {
-            {ge::DT_INT64, ge::DT_FLOAT16},
-            {ge::DT_FLOAT, ge::DT_FLOAT16},
-            errMsg,
-            false
-        },
-        {
-            {ge::DT_BOOL, ge::DT_FLOAT},
-            {ge::DT_FLOAT, ge::DT_FLOAT16},
-            errMsg,
-            false
-        },
-        {
-            {ge::DT_UINT32, ge::DT_INT64},
-            {ge::DT_FLOAT, ge::DT_FLOAT16},
-            "One combination of input and output dtypes of op ValueDependFail is [x1: ge::DT_UINT32, x2: ge::DT_FLOAT], the combinations of input and output dtypes should add [x1: ge::DT_INT64, x2: ge::DT_FLOAT], "
-            "because of the ValueDepend input x1.",
-            false
-        },
-        {
-            {ge::DT_FLOAT16},
-            {ge::DT_FLOAT16},
-            "Valuedepend and Scalar/ScalarList of op ValueDependFail cannot be configured at the same time.",
-            true
-        }
-    };
-    for(const auto& testCase : testCases) {
-       const std::vector<ge::DataType> &inputDataTypes = std::get<0>(testCase);
-       const std::vector<ge::DataType> &ouputDataTypes = std::get<1>(testCase);
-       const std::string &err = std::get<2>(testCase);
-       bool isScalar = std::get<3>(testCase);
-       EXPECT_TRUE(AclnnGenValudeDependFailedByCase(inputDataTypes, ouputDataTypes, err, isScalar));
+        {{ge::DT_FLOAT16}, {ge::DT_FLOAT16}, errMsg, false},
+        {{ge::DT_FLOAT, ge::DT_FLOAT16}, {ge::DT_FLOAT, ge::DT_FLOAT16}, errMsg, false},
+        {{ge::DT_INT64, ge::DT_FLOAT16}, {ge::DT_FLOAT, ge::DT_FLOAT16}, errMsg, false},
+        {{ge::DT_BOOL, ge::DT_FLOAT}, {ge::DT_FLOAT, ge::DT_FLOAT16}, errMsg, false},
+        {{ge::DT_UINT32, ge::DT_INT64},
+         {ge::DT_FLOAT, ge::DT_FLOAT16},
+         "One combination of input and output dtypes of op ValueDependFail is [x1: ge::DT_UINT32, x2: ge::DT_FLOAT], "
+         "the combinations of input and output dtypes should add [x1: ge::DT_INT64, x2: ge::DT_FLOAT], "
+         "because of the ValueDepend input x1.",
+         false},
+        {{ge::DT_FLOAT16},
+         {ge::DT_FLOAT16},
+         "Valuedepend and Scalar/ScalarList of op ValueDependFail cannot be configured at the same time.",
+         true}};
+    for (const auto& testCase : testCases) {
+        const std::vector<ge::DataType>& inputDataTypes = std::get<0>(testCase);
+        const std::vector<ge::DataType>& ouputDataTypes = std::get<1>(testCase);
+        const std::string& err = std::get<2>(testCase);
+        bool isScalar = std::get<3>(testCase);
+        EXPECT_TRUE(AclnnGenValudeDependFailedByCase(inputDataTypes, ouputDataTypes, err, isScalar));
     }
 }
 
@@ -1618,7 +1552,7 @@ TEST_F(TEST_OPBUILD, AclnnKirinX90socVersion)
     EXPECT_FALSE(hasErrorMessage);
 }
 
-void setInputHasErrorMessage(bool &hasErrorMessage, std::vector<std::string> errMessage)
+void setInputHasErrorMessage(bool& hasErrorMessage, std::vector<std::string> errMessage)
 {
     const std::string err = "The dtype size of input[0] of op ErrorInput is 0.";
     const std::string errMsg = "Misaligned format and dtype of x1 of op ErrorInput is not support.";
@@ -1640,7 +1574,7 @@ TEST_F(TEST_OPBUILD, AclnnErrorInputDtypeSize)
     std::string fileName = "error_input_dtype_" + std::to_string(getpid()) + ".txt";
     std::ofstream outfile = std::ofstream(fileName);
     OpDef opDef("ErrorInput");
-    opDef.Input("x1").DataType({ge::DT_FLOAT16, ge::DT_FLOAT}).Format({ ge::FORMAT_ND});
+    opDef.Input("x1").DataType({ge::DT_FLOAT16, ge::DT_FLOAT}).Format({ge::FORMAT_ND});
     opDef.AICore().AddConfig("ascend910");
 
     std::vector<std::string> opsvec({"ErrorInput"});
@@ -1655,7 +1589,7 @@ TEST_F(TEST_OPBUILD, AclnnErrorInputDtypeSize)
     EXPECT_EQ(hasErrorMessage, true);
 }
 
-void setOutputHasErrorMessage(bool &hasErrorMessage, std::vector<std::string> errMessage)
+void setOutputHasErrorMessage(bool& hasErrorMessage, std::vector<std::string> errMessage)
 {
     const std::string err = "The dtype size of output[0] of op ErrorOutput is 0.";
     const std::string errMsg = "Misaligned format and dtype of x1 of op ErrorOutput is not support.";
@@ -1677,7 +1611,7 @@ TEST_F(TEST_OPBUILD, AclnnErrorOutputDtypeSize)
     std::string fileName = "error_output_dtype_" + std::to_string(getpid()) + ".txt";
     std::ofstream outfile = std::ofstream(fileName);
     OpDef opDef("ErrorOutput");
-    opDef.Output("x1").DataType({ge::DT_FLOAT16, ge::DT_FLOAT}).Format({ ge::FORMAT_ND});
+    opDef.Output("x1").DataType({ge::DT_FLOAT16, ge::DT_FLOAT}).Format({ge::FORMAT_ND});
     opDef.AICore().AddConfig("ascend910");
 
     std::vector<std::string> opsvec({"ErrorOutput"});
@@ -1697,7 +1631,7 @@ TEST_F(TEST_OPBUILD, AclnnErrorAttrDtype)
     std::string fileName = "error_attr_dtype_" + std::to_string(getpid()) + ".txt";
     std::ofstream outfile = std::ofstream(fileName);
     OpDef opDef("ErrorAttr");
-    opDef.Output("x1").DataType({ge::DT_FLOAT16}).Format({ ge::FORMAT_ND});
+    opDef.Output("x1").DataType({ge::DT_FLOAT16}).Format({ge::FORMAT_ND});
     opDef.Attr("bias").ListListInt();
     opDef.AICore().AddConfig("ascend910");
 
@@ -1751,8 +1685,8 @@ TEST_F(TEST_OPBUILD, GenerateCodeForComputeUnits)
     EXPECT_EQ(res, opbuild::OPBUILD_SUCCESS);
 }
 
-void setContiguousConflictErrorMessage(bool &hasErrorMessage, std::vector<std::string> errMessage,
-                                        const std::string& expectedErr)
+void setContiguousConflictErrorMessage(
+    bool& hasErrorMessage, std::vector<std::string> errMessage, const std::string& expectedErr)
 {
     for (size_t i = 0U; i < errMessage.size(); i++) {
         if (errMessage[i].find(expectedErr) != std::string::npos) {
@@ -1768,9 +1702,9 @@ TEST_F(TEST_OPBUILD, AclnnContiguousConflictBase)
     std::string fileName = "contiguous_conflict_base_" + std::to_string(getpid()) + ".txt";
     std::ofstream outfile = std::ofstream(fileName);
     OpDef opDef("ContiguousConflictBase");
-    opDef.Input("x1").ParamType(REQUIRED).DataType({ ge::DT_INT64 }).AutoContiguous().IgnoreContiguous();
-    opDef.Input("x2").ParamType(REQUIRED).DataType({ ge::DT_INT64 });
-    opDef.Output("y1").ParamType(REQUIRED).DataType({ ge::DT_INT64 });
+    opDef.Input("x1").ParamType(REQUIRED).DataType({ge::DT_INT64}).AutoContiguous().IgnoreContiguous();
+    opDef.Input("x2").ParamType(REQUIRED).DataType({ge::DT_INT64});
+    opDef.Output("y1").ParamType(REQUIRED).DataType({ge::DT_INT64});
     opDef.AICore().AddConfig("ascend910b");
 
     std::vector<std::string> opsvec({"ContiguousConflictBase"});
@@ -1783,7 +1717,8 @@ TEST_F(TEST_OPBUILD, AclnnContiguousConflictBase)
 
     std::vector<std::string> errMessage = Generator::GetErrorMessage();
     bool hasErrorMessage = false;
-    std::string expectedErr = "Input 'x1' of op ContiguousConflictBase has both AutoContiguous and IgnoreContiguous configured, which is conflicting.";
+    std::string expectedErr = "Input 'x1' of op ContiguousConflictBase has both AutoContiguous and IgnoreContiguous "
+                              "configured, which is conflicting.";
     setContiguousConflictErrorMessage(hasErrorMessage, errMessage, expectedErr);
     EXPECT_EQ(hasErrorMessage, true);
 }
@@ -1794,15 +1729,15 @@ TEST_F(TEST_OPBUILD, AclnnContiguousConflictSoc)
     std::string fileName = "contiguous_conflict_soc_" + std::to_string(getpid()) + ".txt";
     std::ofstream outfile = std::ofstream(fileName);
     OpDef opDef("ContiguousConflictSoc");
-    opDef.Input("x1").ParamType(REQUIRED).DataType({ ge::DT_INT64 });
-    opDef.Input("x2").ParamType(REQUIRED).DataType({ ge::DT_INT64 });
-    opDef.Output("y1").ParamType(REQUIRED).DataType({ ge::DT_INT64 });
+    opDef.Input("x1").ParamType(REQUIRED).DataType({ge::DT_INT64});
+    opDef.Input("x2").ParamType(REQUIRED).DataType({ge::DT_INT64});
+    opDef.Output("y1").ParamType(REQUIRED).DataType({ge::DT_INT64});
     opDef.AICore().AddConfig("ascend910");
 
     OpAICoreConfig configConflict;
-    configConflict.Input("x1").ParamType(REQUIRED).DataType({ ge::DT_INT64 }).AutoContiguous().IgnoreContiguous();
-    configConflict.Input("x2").ParamType(REQUIRED).DataType({ ge::DT_INT64 });
-    configConflict.Output("y1").ParamType(REQUIRED).DataType({ ge::DT_INT64 });
+    configConflict.Input("x1").ParamType(REQUIRED).DataType({ge::DT_INT64}).AutoContiguous().IgnoreContiguous();
+    configConflict.Input("x2").ParamType(REQUIRED).DataType({ge::DT_INT64});
+    configConflict.Output("y1").ParamType(REQUIRED).DataType({ge::DT_INT64});
     opDef.AICore().AddConfig("ascend910b", configConflict);
 
     std::vector<std::string> opsvec({"ContiguousConflictSoc"});
@@ -1815,7 +1750,8 @@ TEST_F(TEST_OPBUILD, AclnnContiguousConflictSoc)
 
     std::vector<std::string> errMessage = Generator::GetErrorMessage();
     bool hasErrorMessage = false;
-    std::string expectedErr = "Input 'x1' of op ContiguousConflictSoc has both AutoContiguous and IgnoreContiguous configured on SOC ascend910b, which is conflicting.";
+    std::string expectedErr = "Input 'x1' of op ContiguousConflictSoc has both AutoContiguous and IgnoreContiguous "
+                              "configured on SOC ascend910b, which is conflicting.";
     setContiguousConflictErrorMessage(hasErrorMessage, errMessage, expectedErr);
     EXPECT_EQ(hasErrorMessage, true);
 }
@@ -1824,16 +1760,16 @@ TEST_F(TEST_OPBUILD, AclnnContiguousConflictSoc)
 TEST_F(TEST_OPBUILD, AclnnSocVersionDynamicIgnoreContRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != src_path);
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
     std::stringstream src_ss, gen_ss;
-    std::vector<std::string> src_files = {"/aclnn_soc_version_dynamic_ignore_cont_test.cpp.txt",
-        "/aclnn_soc_version_dynamic_ignore_cont_test.h.txt"};
-    std::vector<std::string> gen_files = {"/aclnn_soc_version_dynamic_ignore_cont_test.cpp",
-        "/aclnn_soc_version_dynamic_ignore_cont_test.h"};
+    std::vector<std::string> src_files = {
+        "/aclnn_soc_version_dynamic_ignore_cont_test.cpp.txt", "/aclnn_soc_version_dynamic_ignore_cont_test.h.txt"};
+    std::vector<std::string> gen_files = {
+        "/aclnn_soc_version_dynamic_ignore_cont_test.cpp", "/aclnn_soc_version_dynamic_ignore_cont_test.h"};
     for (size_t i = 0U; i < src_files.size(); i++) {
         src_file = std::string(src_path) + src_files[i];
         gen_file = std::string(cur_path) + gen_files[i];
@@ -1856,9 +1792,9 @@ TEST_F(TEST_OPBUILD, AclnnSocVersionDynamicIgnoreContRunSuccess)
 TEST_F(TEST_OPBUILD, AclnnAddTik2WithComputeUnitRunSuccess)
 {
     char buf[1024];
-    char *cur_path = getcwd(buf, 1023);
-    char *so_path = getenv("OPS_DSO_FILE_PATH");
-    char *src_path = getenv("OPS_SRC_FILE_PATH");
+    char* cur_path = getcwd(buf, 1023);
+    char* so_path = getenv("OPS_DSO_FILE_PATH");
+    char* src_path = getenv("OPS_SRC_FILE_PATH");
     EXPECT_TRUE(nullptr != so_path);
     EXPECT_TRUE(nullptr != src_path);
     setenv("OPS_PROJECT_NAME", "aclnn_compute_unit", 1);
@@ -1869,10 +1805,8 @@ TEST_F(TEST_OPBUILD, AclnnAddTik2WithComputeUnitRunSuccess)
     std::string src_file, gen_file;
     std::ifstream src_if, gen_if;
     std::stringstream src_ss, gen_ss;
-    std::vector<std::string> src_files = {"/aclnn_compute_unit_add_tik2.h.txt",
-        "/aclnn_compute_unit_add_tik2.cpp.txt"};
-    std::vector<std::string> gen_files = {"/aclnn_compute_unit_add_tik2.h",
-        "/aclnn_compute_unit_add_tik2.cpp"};
+    std::vector<std::string> src_files = {"/aclnn_compute_unit_add_tik2.h.txt", "/aclnn_compute_unit_add_tik2.cpp.txt"};
+    std::vector<std::string> gen_files = {"/aclnn_compute_unit_add_tik2.h", "/aclnn_compute_unit_add_tik2.cpp"};
     for (size_t i = 0U; i < src_files.size(); i++) {
         src_file = std::string(src_path) + src_files[i];
         gen_file = std::string(cur_path) + gen_files[i];

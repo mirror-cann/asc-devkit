@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -17,13 +17,12 @@ namespace AscendC {
 template <typename T, typename U>
 class KernelLogicalOr {
 public:
-    __aicore__ inline KernelLogicalOr()
-    {}
+    __aicore__ inline KernelLogicalOr() {}
     __aicore__ inline void Init(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t srcSize)
     {
-        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(src0Gm), srcSize);
-        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ U *>(src1Gm), srcSize);
-        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T *>(dstGm), srcSize);
+        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(src0Gm), srcSize);
+        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ U*>(src1Gm), srcSize);
+        dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), srcSize);
 
         pipe.InitBuffer(inQueueX0, 1, srcSize * sizeof(U));
         pipe.InitBuffer(inQueueX1, 1, srcSize * sizeof(U));
@@ -84,8 +83,7 @@ private:
     TQue<TPosition::VECOUT, 1> outQueue;
     uint32_t dataSize = 0;
 };
-}
-
+} // namespace AscendC
 
 template <typename T, typename U>
 __aicore__ void testLogicalOr(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uint32_t srcSize)
@@ -95,13 +93,11 @@ __aicore__ void testLogicalOr(GM_ADDR dstGm, GM_ADDR src0Gm, GM_ADDR src1Gm, uin
     op.Process();
 }
 
-
 struct LogicalOrTestParams {
     uint32_t dataTypeSize;
     uint32_t inDataSize;
     void (*calFunc)(GM_ADDR, GM_ADDR, GM_ADDR, uint32_t);
 };
-
 
 class LogicalOrTestSuite : public testing::Test, public testing::WithParamInterface<LogicalOrTestParams> {
 protected:
@@ -109,46 +105,42 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ADVANCE_API_LOGICAL_OR, LogicalOrTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ADVANCE_API_LOGICAL_OR, LogicalOrTestSuite,
     ::testing::Values(
-        LogicalOrTestParams {1, 1024, testLogicalOr<bool, bool> },
-        LogicalOrTestParams {1, 32, testLogicalOr<bool, bool> },
-        LogicalOrTestParams {1, 256, testLogicalOr<bool, bool> },
-        LogicalOrTestParams {1, 1024, testLogicalOr<bool, uint8_t> },
-        LogicalOrTestParams {1, 32, testLogicalOr<bool, uint8_t> },
-        LogicalOrTestParams {1, 256, testLogicalOr<bool, uint8_t> },
-        LogicalOrTestParams {1, 1024, testLogicalOr<bool, int8_t> },
-        LogicalOrTestParams {1, 32, testLogicalOr<bool, int8_t> },
-        LogicalOrTestParams {1, 256, testLogicalOr<bool, int8_t> },
-        LogicalOrTestParams {2, 1024, testLogicalOr<bool, half> },
-        LogicalOrTestParams {2, 32, testLogicalOr<bool, half> },
-        LogicalOrTestParams {2, 256, testLogicalOr<bool, half> },
-        LogicalOrTestParams {2, 1024, testLogicalOr<bool, bfloat16_t> },
-        LogicalOrTestParams {2, 32, testLogicalOr<bool, bfloat16_t> },
-        LogicalOrTestParams {2, 256, testLogicalOr<bool, bfloat16_t> },
-        LogicalOrTestParams {2, 1024, testLogicalOr<bool, uint16_t> },
-        LogicalOrTestParams {2, 32, testLogicalOr<bool, uint16_t> },
-        LogicalOrTestParams {2, 256, testLogicalOr<bool, uint16_t> },
-        LogicalOrTestParams {2, 1024, testLogicalOr<bool, int16_t> },
-        LogicalOrTestParams {2, 32, testLogicalOr<bool, int16_t> },
-        LogicalOrTestParams {2, 256, testLogicalOr<bool, int16_t> },
-        LogicalOrTestParams {4, 1024, testLogicalOr<bool, float> },
-        LogicalOrTestParams {4, 32, testLogicalOr<bool, float> },
-        LogicalOrTestParams {4, 256, testLogicalOr<bool, float> },
-        LogicalOrTestParams {4, 1024, testLogicalOr<bool, uint32_t> },
-        LogicalOrTestParams {4, 32, testLogicalOr<bool, uint32_t> },
-        LogicalOrTestParams {4, 256, testLogicalOr<bool, uint32_t> },
-        LogicalOrTestParams {4, 1024, testLogicalOr<bool, int32_t> },
-        LogicalOrTestParams {4, 32, testLogicalOr<bool, int32_t> },
-        LogicalOrTestParams {4, 256, testLogicalOr<bool, int32_t> },
-        LogicalOrTestParams {8, 1024, testLogicalOr<bool, uint64_t> },
-        LogicalOrTestParams {8, 32, testLogicalOr<bool, uint64_t> },
-        LogicalOrTestParams {8, 256, testLogicalOr<bool, uint64_t> },
-        LogicalOrTestParams {8, 1024, testLogicalOr<bool, int64_t> },
-        LogicalOrTestParams {8, 32, testLogicalOr<bool, int64_t> },
-        LogicalOrTestParams {8, 256, testLogicalOr<bool, int64_t> }
-    )
-);
+        LogicalOrTestParams{1, 1024, testLogicalOr<bool, bool>}, LogicalOrTestParams{1, 32, testLogicalOr<bool, bool>},
+        LogicalOrTestParams{1, 256, testLogicalOr<bool, bool>},
+        LogicalOrTestParams{1, 1024, testLogicalOr<bool, uint8_t>},
+        LogicalOrTestParams{1, 32, testLogicalOr<bool, uint8_t>},
+        LogicalOrTestParams{1, 256, testLogicalOr<bool, uint8_t>},
+        LogicalOrTestParams{1, 1024, testLogicalOr<bool, int8_t>},
+        LogicalOrTestParams{1, 32, testLogicalOr<bool, int8_t>},
+        LogicalOrTestParams{1, 256, testLogicalOr<bool, int8_t>},
+        LogicalOrTestParams{2, 1024, testLogicalOr<bool, half>}, LogicalOrTestParams{2, 32, testLogicalOr<bool, half>},
+        LogicalOrTestParams{2, 256, testLogicalOr<bool, half>},
+        LogicalOrTestParams{2, 1024, testLogicalOr<bool, bfloat16_t>},
+        LogicalOrTestParams{2, 32, testLogicalOr<bool, bfloat16_t>},
+        LogicalOrTestParams{2, 256, testLogicalOr<bool, bfloat16_t>},
+        LogicalOrTestParams{2, 1024, testLogicalOr<bool, uint16_t>},
+        LogicalOrTestParams{2, 32, testLogicalOr<bool, uint16_t>},
+        LogicalOrTestParams{2, 256, testLogicalOr<bool, uint16_t>},
+        LogicalOrTestParams{2, 1024, testLogicalOr<bool, int16_t>},
+        LogicalOrTestParams{2, 32, testLogicalOr<bool, int16_t>},
+        LogicalOrTestParams{2, 256, testLogicalOr<bool, int16_t>},
+        LogicalOrTestParams{4, 1024, testLogicalOr<bool, float>},
+        LogicalOrTestParams{4, 32, testLogicalOr<bool, float>}, LogicalOrTestParams{4, 256, testLogicalOr<bool, float>},
+        LogicalOrTestParams{4, 1024, testLogicalOr<bool, uint32_t>},
+        LogicalOrTestParams{4, 32, testLogicalOr<bool, uint32_t>},
+        LogicalOrTestParams{4, 256, testLogicalOr<bool, uint32_t>},
+        LogicalOrTestParams{4, 1024, testLogicalOr<bool, int32_t>},
+        LogicalOrTestParams{4, 32, testLogicalOr<bool, int32_t>},
+        LogicalOrTestParams{4, 256, testLogicalOr<bool, int32_t>},
+        LogicalOrTestParams{8, 1024, testLogicalOr<bool, uint64_t>},
+        LogicalOrTestParams{8, 32, testLogicalOr<bool, uint64_t>},
+        LogicalOrTestParams{8, 256, testLogicalOr<bool, uint64_t>},
+        LogicalOrTestParams{8, 1024, testLogicalOr<bool, int64_t>},
+        LogicalOrTestParams{8, 32, testLogicalOr<bool, int64_t>},
+        LogicalOrTestParams{8, 256, testLogicalOr<bool, int64_t>}));
 
 TEST_P(LogicalOrTestSuite, testLogicalOr)
 {

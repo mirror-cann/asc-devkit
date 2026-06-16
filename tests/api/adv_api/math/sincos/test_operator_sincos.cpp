@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 #include "kernel_utils.h"
@@ -16,13 +16,12 @@ using namespace AscendC;
 template <typename srcType, uint32_t calCount, uint32_t dataSize, uint32_t apiMode>
 class KernelSinCos {
 public:
-    __aicore__ inline KernelSinCos()
-    {}
+    __aicore__ inline KernelSinCos() {}
     __aicore__ inline void Init(GM_ADDR src_gm, GM_ADDR dst0_gm, GM_ADDR dst1_gm)
     {
-        src_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(src_gm), dataSize);
-        dst0_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(dst0_gm), dataSize);
-        dst1_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType *>(dst1_gm), dataSize);
+        src_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(src_gm), dataSize);
+        dst0_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(dst0_gm), dataSize);
+        dst1_global.SetGlobalBuffer(reinterpret_cast<__gm__ srcType*>(dst1_gm), dataSize);
 
         pipe.InitBuffer(inQueueX, 1, dataSize * sizeof(srcType));
         pipe.InitBuffer(tmpQueue, 1, dataSize * sizeof(uint8_t));
@@ -109,28 +108,21 @@ struct SinCosTestParams {
 
 class AdvanceSinCosTestSuite : public testing::TestWithParam<SinCosTestParams> {
 protected:
-void SetUp()
-{
-    AscendC::SetGCoreType(2);
-}
-void TearDown()
-{
-    AscendC::SetGCoreType(0);
-}
+    void SetUp() { AscendC::SetGCoreType(2); }
+    void TearDown() { AscendC::SetGCoreType(0); }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_OPEARATION_ADVANCE_API_SINCOS, AdvanceSinCosTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_OPEARATION_ADVANCE_API_SINCOS, AdvanceSinCosTestSuite,
     ::testing::Values(
-        SinCosTestParams {4, 32, kernel_sincos_operator<float, 32, 32, 0>},
-        SinCosTestParams {4, 4096, kernel_sincos_operator<float, 32, 4096, 1>},
-        SinCosTestParams {4, 32, kernel_sincos_operator<float, 32, 32, 0>},
-        SinCosTestParams {4, 4096, kernel_sincos_operator<float, 32, 4096, 1>},
-        SinCosTestParams {2, 32, kernel_sincos_operator<half, 32, 32, 0>},
-        SinCosTestParams {2, 4096, kernel_sincos_operator<half, 32, 4096, 1>},
-        SinCosTestParams {2, 32, kernel_sincos_operator<half, 32, 32, 0>},
-        SinCosTestParams {2, 4096, kernel_sincos_operator<half, 32, 4096, 1>}
-    )
-);
+        SinCosTestParams{4, 32, kernel_sincos_operator<float, 32, 32, 0>},
+        SinCosTestParams{4, 4096, kernel_sincos_operator<float, 32, 4096, 1>},
+        SinCosTestParams{4, 32, kernel_sincos_operator<float, 32, 32, 0>},
+        SinCosTestParams{4, 4096, kernel_sincos_operator<float, 32, 4096, 1>},
+        SinCosTestParams{2, 32, kernel_sincos_operator<half, 32, 32, 0>},
+        SinCosTestParams{2, 4096, kernel_sincos_operator<half, 32, 4096, 1>},
+        SinCosTestParams{2, 32, kernel_sincos_operator<half, 32, 32, 0>},
+        SinCosTestParams{2, 4096, kernel_sincos_operator<half, 32, 4096, 1>}));
 
 TEST_P(AdvanceSinCosTestSuite, kernel_sincos_operator)
 {

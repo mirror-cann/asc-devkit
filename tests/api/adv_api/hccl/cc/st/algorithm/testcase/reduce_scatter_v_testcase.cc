@@ -23,24 +23,19 @@ using namespace mc2_ops_hccl;
 
 class ST_REDUCESCATTERV_TEST : public ::testing::Test {
 protected:
-    void SetUp() override
-    {
-        ResetAlgEnvConfigInitState();
-    }
+    void SetUp() override { ResetAlgEnvConfigInitState(); }
     void TearDown() override
     {
         unsetenv("HCCL_OP_EXPANSION_MODE");
         unsetenv("HCCL_ENABLE_OPEN_AICPU");
     }
-    static void SetUpTestCase()
-    {}
-    static void TearDownTestCase()
-    {}
+    static void SetUpTestCase() {}
+    static void TearDownTestCase() {}
 };
 
 TEST_F(ST_REDUCESCATTERV_TEST, st_reducescatterV)
 {
-    TopoMeta topoMeta {{{0, 1}}};  // 三维数组指定超节点-Server-Device信息
+    TopoMeta topoMeta{{{0, 1}}}; // 三维数组指定超节点-Server-Device信息
     SimWorld::Global()->Init(topoMeta, DevType::DEV_TYPE_950);
 
     // 设置展开模式为HOST_TS
@@ -56,8 +51,8 @@ TEST_F(ST_REDUCESCATTERV_TEST, st_reducescatterV)
     vDataDes.dataType = dataType;
     HcclReduceOp reduceOp = HcclReduceOp::HCCL_REDUCE_SUM;
 
-    u64 sendDataCount = 0;  // 数据量转化为字节数
-    for (auto& temp: vDataDes.counts) {
+    u64 sendDataCount = 0; // 数据量转化为字节数
+    for (auto& temp : vDataDes.counts) {
         sendDataCount += temp;
     }
 
@@ -75,17 +70,18 @@ TEST_F(ST_REDUCESCATTERV_TEST, st_reducescatterV)
             HcclComm comm = nullptr;
             CHK_RET(HcclCommInitClusterInfo("./ranktable.json", rankId, &comm));
 
-            void *sendBuf = nullptr;
-            void *recvBuf = nullptr;
-            
+            void* sendBuf = nullptr;
+            void* recvBuf = nullptr;
+
             u64 recvDataCount = vDataDes.counts[rankId];
             // 打桩实现，仿真运行需标记内存是INPUT和OUTPUT
             aclrtMalloc(&sendBuf, sendDataCount * sizeof(float), static_cast<aclrtMemMallocPolicy>(BUFFER_INPUT_MARK));
             aclrtMalloc(&recvBuf, recvDataCount * sizeof(float), static_cast<aclrtMemMallocPolicy>(BUFFER_OUTPUT_MARK));
 
             // 4.算子下发
-            CHK_RET(HcclReduceScatterV(sendBuf, vDataDes.counts.data(), vDataDes.displs.data(),
-                recvBuf, recvDataCount, dataType, reduceOp, comm, stream));
+            CHK_RET(HcclReduceScatterV(
+                sendBuf, vDataDes.counts.data(), vDataDes.displs.data(), recvBuf, recvDataCount, dataType, reduceOp,
+                comm, stream));
             // 5.销毁通信域
             CHK_RET(HcclCommDestroy(comm));
             return HCCL_SUCCESS;

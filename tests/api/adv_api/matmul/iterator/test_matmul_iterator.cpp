@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file test_matmul_iterator.cpp
@@ -24,7 +24,6 @@
 using namespace std;
 using namespace AscendC;
 
-
 using A_TYPE = MatmulType<AscendC::TPosition::TSCM, CubeFormat::ND, half>;
 using B_TYPE = MatmulType<AscendC::TPosition::TSCM, CubeFormat::ND, half>;
 using C_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
@@ -33,33 +32,29 @@ using BIAS_TYPE = MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float>;
 template <typename IMPL, class INPUT_TYPE, const auto& MM_CFG>
 class CustomCopyCubeIn {
 public:
-    void Reset() {
-        clearedCount++;
-    }
+    void Reset() { clearedCount++; }
 
 public:
-    uint32_t clearedCount {0};
+    uint32_t clearedCount{0};
 };
 
 namespace {
 template <const auto& MM_CFG, typename IMPL, typename A_TYPE, typename B_TYPE, typename C_TYPE, typename BIAS_TYPE>
-class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE>
-{
+class CustomMatmulPolicy : public Impl::Detail::MatmulPolicy<MM_CFG, IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE> {
 public:
     using CopyCubeInA = CustomCopyCubeIn<IMPL, MatmulInputAType<A_TYPE, typename A_TYPE::T>, MM_CFG>;
     using CopyCubeInB = CustomCopyCubeIn<IMPL, MatmulInputBType<B_TYPE, typename A_TYPE::T>, MM_CFG>;
 };
 
-template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG,
-          class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-class MatmulImpl :
-    MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling),
-    MATMUL_IMPORT_MODULE(CopyCubeInA),
-    MATMUL_IMPORT_MODULE(CopyCubeInB),
-    MATMUL_IMPORT_MODULE_PRIVATE(MLoop),
-    MATMUL_IMPORT_MODULE_PRIVATE(NLoop),
-    MATMUL_IMPORT_MODULE(Scheduler)
-{
+template <
+    class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE, const MatmulConfig& MM_CFG,
+    class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
+class MatmulImpl : MATMUL_IMPORT_MODULE_PRIVATE(MatmulShapeTiling),
+                   MATMUL_IMPORT_MODULE(CopyCubeInA),
+                   MATMUL_IMPORT_MODULE(CopyCubeInB),
+                   MATMUL_IMPORT_MODULE_PRIVATE(MLoop),
+                   MATMUL_IMPORT_MODULE_PRIVATE(NLoop),
+                   MATMUL_IMPORT_MODULE(Scheduler) {
     using VAR_PARAMS =
         typename Impl::Detail::MatmulParams<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, GetMatmulMode(MM_CFG)>::PARAMS;
 
@@ -79,11 +74,12 @@ public:
     MATMUL_USE_MODULE(NLoop);
 
 public:
-    MatmulImpl() {
-        InitVar();
-    }
+    MatmulImpl() { InitVar(); }
 
-    void SetTiling(IterateOrder order, int32_t stepM, uint32_t stepN, int32_t baseM, int32_t baseN, int32_t singleM, int32_t singleN) {
+    void SetTiling(
+        IterateOrder order, int32_t stepM, uint32_t stepN, int32_t baseM, int32_t baseN, int32_t singleM,
+        int32_t singleN)
+    {
         tiling.iterateOrder = static_cast<int32_t>(order);
         tiling.stepM = stepM;
         tiling.stepN = stepN;
@@ -95,37 +91,28 @@ public:
         this->Reset();
     }
 
-    VAR_PARAMS& GetVar() {
-        return var;
-    }
+    VAR_PARAMS& GetVar() { return var; }
 
-    void InitVar() {
+    void InitVar()
+    {
         MATMUL_MODULE(MatmulShapeTiling)->SetTiling(&tiling);
         var.tpipe_ = &pipe;
     }
 
-    uint32_t GetMLoopInnerIter() {
-        return MATMUL_MODULE(MLoop)->GetInnerIter();
-    }
+    uint32_t GetMLoopInnerIter() { return MATMUL_MODULE(MLoop)->GetInnerIter(); }
 
-    uint32_t GetNLoopInnerIter() {
-        return MATMUL_MODULE(NLoop)->GetInnerIter();
-    }
+    uint32_t GetNLoopInnerIter() { return MATMUL_MODULE(NLoop)->GetInnerIter(); }
 
-    uint32_t GetMLoopInnerIdx() {
-        return MATMUL_MODULE(MLoop)->GetInnerIdx();
-    }
+    uint32_t GetMLoopInnerIdx() { return MATMUL_MODULE(MLoop)->GetInnerIdx(); }
 
-    uint32_t GetNLoopInnerIdx() {
-        return MATMUL_MODULE(NLoop)->GetInnerIdx();
-    }
+    uint32_t GetNLoopInnerIdx() { return MATMUL_MODULE(NLoop)->GetInnerIdx(); }
 
 private:
     TCubeTiling tiling;
     TPipe pipe;
     VAR_PARAMS var;
 };
-}
+} // namespace
 
 class test_matmul_iterator : public testing::Test {
 protected:
@@ -133,14 +120,15 @@ protected:
     void TearDown() {}
 
 private:
-    MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>,
-               CustomMatmulPolicy>
+    MatmulImpl<
+        A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_NORM, MatmulCallBackFunc<nullptr, nullptr, nullptr>, CustomMatmulPolicy>
         mm;
 };
 
-TEST_F(test_matmul_iterator, first_iter_order_M) {
+TEST_F(test_matmul_iterator, first_iter_order_M)
+{
     mm.SetTiling(IterateOrder::ORDER_M, 4, 2, 128, 128, 512, 256);
-    
+
     bool isFinished = mm.MoveNext();
 
     ASSERT_TRUE(isFinished);
@@ -149,9 +137,10 @@ TEST_F(test_matmul_iterator, first_iter_order_M) {
     ASSERT_EQ(mm.GetNLoopInnerIdx(), 0);
 }
 
-TEST_F(test_matmul_iterator, first_iter_order_N) {
+TEST_F(test_matmul_iterator, first_iter_order_N)
+{
     mm.SetTiling(IterateOrder::ORDER_N, 4, 2, 128, 128, 512, 256);
-    
+
     bool isFinished = mm.MoveNext();
 
     ASSERT_TRUE(isFinished);
@@ -160,30 +149,32 @@ TEST_F(test_matmul_iterator, first_iter_order_N) {
     ASSERT_EQ(mm.GetNLoopInnerIdx(), 0);
 }
 
-TEST_F(test_matmul_iterator, order_M_iter_four_times) {
+TEST_F(test_matmul_iterator, order_M_iter_four_times)
+{
     mm.SetTiling(IterateOrder::ORDER_M, 4, 2, 128, 128, 512, 256);
 
     int32_t cnt = 0;
-    while(mm.MoveNext()) {
+    while (mm.MoveNext()) {
         cnt++;
     }
 
     ASSERT_EQ(cnt, 8);
 }
 
-TEST_F(test_matmul_iterator, order_N_iter_four_times) {
+TEST_F(test_matmul_iterator, order_N_iter_four_times)
+{
     mm.SetTiling(IterateOrder::ORDER_N, 4, 2, 128, 128, 512, 256);
 
     int32_t cnt = 0;
-    while(mm.MoveNext()) {
+    while (mm.MoveNext()) {
         cnt++;
     }
 
     ASSERT_EQ(cnt, 8);
 }
 
-
-TEST_F(test_matmul_iterator, order_M_iter_twice) {
+TEST_F(test_matmul_iterator, order_M_iter_twice)
+{
     mm.SetTiling(IterateOrder::ORDER_M, 4, 2, 128, 128, 128, 256);
 
     auto isFinished = mm.MoveNext();
@@ -196,7 +187,8 @@ TEST_F(test_matmul_iterator, order_M_iter_twice) {
     ASSERT_EQ(mm.GetMLoopInnerIdx(), 0);
 }
 
-TEST_F(test_matmul_iterator, order_N_iter_twice) {
+TEST_F(test_matmul_iterator, order_N_iter_twice)
+{
     mm.SetTiling(IterateOrder::ORDER_N, 4, 2, 128, 128, 256, 128);
 
     auto isFinished = mm.MoveNext();
@@ -210,7 +202,8 @@ TEST_F(test_matmul_iterator, order_N_iter_twice) {
 }
 
 // test when n-dimension is finished in OrderM case
-TEST_F(test_matmul_iterator, order_M_n_is_finished) {
+TEST_F(test_matmul_iterator, order_M_n_is_finished)
+{
     mm.SetTiling(IterateOrder::ORDER_M, 4, 2, 128, 128, 256, 256);
 
     // first iter
@@ -226,7 +219,8 @@ TEST_F(test_matmul_iterator, order_M_n_is_finished) {
 }
 
 // test when m-dimension is finished in OrderN case
-TEST_F(test_matmul_iterator, order_N_m_is_finished) {
+TEST_F(test_matmul_iterator, order_N_m_is_finished)
+{
     mm.SetTiling(IterateOrder::ORDER_N, 4, 2, 128, 128, 256, 256);
     // first iter
     auto isFinished = mm.MoveNext();

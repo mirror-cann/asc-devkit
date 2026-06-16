@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 // #include "api_check/kernel_cpu_check.h"
@@ -52,40 +52,40 @@ protected:
 };
 
 class TestReducev2ScalarApiCheckSuite : public testing::Test,
-    public testing::WithParamInterface<TestReducev2ScalarApiCheckParams> {
+                                        public testing::WithParamInterface<TestReducev2ScalarApiCheckParams> {
 protected:
     void SetUp() {}
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_REDUCEV2_API_CHECK, TestReducev2ApiCheckSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_REDUCEV2_API_CHECK, TestReducev2ApiCheckSuite,
     ::testing::Values(
-    // norm模式
-    TestReducev2ApiCheckParams {false, 512, TPosition::VECCALC,           1, 8, 1,   8,  true },
-    TestReducev2ApiCheckParams {false, 512, TPosition::A1,                1, 8, 1,   8,  false },
-    TestReducev2ApiCheckParams {false, 16 * 1024 + 1, TPosition::VECCALC, 1, 8, 1,   8,  true },
-    TestReducev2ApiCheckParams {false, 512, TPosition::VECCALC,           1, 8, 4,   8,  true },
-    // counter模式， 610和910B1不同, repeatTimes不生效
-    TestReducev2ApiCheckParams {true, 8, TPosition::VECCALC,              1, 0, 1,   8, true },  // repeatTimes = 1
-    // repeatTimes > 1 + blkStride > 1
-    // 其实只要算100个数，那么就是200 / 16 = 12 + 8个元素   1个repeat加上4个block + 8个元素
-    // 第一个repeat结束  (4 * 7 + 1) * 32 = 928   repeat结束 + 余数 =  7 * 32 + 4 * 4 * 32 + 16 = 752
-    TestReducev2ApiCheckParams {true, 464, TPosition::VECCALC,              4, 7, 3,   200, true },
-    TestReducev2ApiCheckParams {true, 448, TPosition::VECCALC,              4, 7, 3,   200, false }
-));
+        // norm模式
+        TestReducev2ApiCheckParams{false, 512, TPosition::VECCALC, 1, 8, 1, 8, true},
+        TestReducev2ApiCheckParams{false, 512, TPosition::A1, 1, 8, 1, 8, false},
+        TestReducev2ApiCheckParams{false, 16 * 1024 + 1, TPosition::VECCALC, 1, 8, 1, 8, true},
+        TestReducev2ApiCheckParams{false, 512, TPosition::VECCALC, 1, 8, 4, 8, true},
+        // counter模式， 610和910B1不同, repeatTimes不生效
+        TestReducev2ApiCheckParams{true, 8, TPosition::VECCALC, 1, 0, 1, 8, true}, // repeatTimes = 1
+        // repeatTimes > 1 + blkStride > 1
+        // 其实只要算100个数，那么就是200 / 16 = 12 + 8个元素   1个repeat加上4个block + 8个元素
+        // 第一个repeat结束  (4 * 7 + 1) * 32 = 928   repeat结束 + 余数 =  7 * 32 + 4 * 4 * 32 + 16 = 752
+        TestReducev2ApiCheckParams{true, 464, TPosition::VECCALC, 4, 7, 3, 200, true},
+        TestReducev2ApiCheckParams{true, 448, TPosition::VECCALC, 4, 7, 3, 200, false}));
 
-INSTANTIATE_TEST_CASE_P(TEST_REDUCEV2_SCALAR_API_CHECK, TestReducev2ScalarApiCheckSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_REDUCEV2_SCALAR_API_CHECK, TestReducev2ScalarApiCheckSuite,
     ::testing::Values(
-    // norm模式
-    // norm模式时，mask不生效。所以至少256B
-    TestReducev2ScalarApiCheckParams {false,  32, TPosition::VECCALC,            1, 8, 1,   8, false },
-    TestReducev2ScalarApiCheckParams {false,  128, TPosition::VECCALC,           1, 8, 1,   8, true },
-    TestReducev2ScalarApiCheckParams {false,  512, TPosition::A1,                1, 8, 1,   8, false },
-    TestReducev2ScalarApiCheckParams {false,  16 * 1024 + 1, TPosition::VECCALC, 1, 8, 1,   8, true },
-    // repeatTimes > 1
-    TestReducev2ScalarApiCheckParams {false,  128, TPosition::VECCALC,           1, 8, 4,   8, false },
-    TestReducev2ScalarApiCheckParams {false,  512, TPosition::VECCALC,           1, 8, 4,   8, true }
-));
+        // norm模式
+        // norm模式时，mask不生效。所以至少256B
+        TestReducev2ScalarApiCheckParams{false, 32, TPosition::VECCALC, 1, 8, 1, 8, false},
+        TestReducev2ScalarApiCheckParams{false, 128, TPosition::VECCALC, 1, 8, 1, 8, true},
+        TestReducev2ScalarApiCheckParams{false, 512, TPosition::A1, 1, 8, 1, 8, false},
+        TestReducev2ScalarApiCheckParams{false, 16 * 1024 + 1, TPosition::VECCALC, 1, 8, 1, 8, true},
+        // repeatTimes > 1
+        TestReducev2ScalarApiCheckParams{false, 128, TPosition::VECCALC, 1, 8, 4, 8, false},
+        TestReducev2ScalarApiCheckParams{false, 512, TPosition::VECCALC, 1, 8, 4, 8, true}));
 
 TEST_P(TestReducev2ApiCheckSuite, ReApiCheckTensor)
 {
@@ -123,9 +123,10 @@ TEST_P(TestReducev2ApiCheckSuite, ReApiCheckTensor)
         output = tbuf2.Get<uint16_t>();
     }
 
-    GatherMaskParams repeatParams { param.srcBlkStride, param.repeat, param.srcRptStride, param.srcRptStride };
+    GatherMaskParams repeatParams{param.srcBlkStride, param.repeat, param.srcRptStride, param.srcRptStride};
     uint64_t rsvdCnt = 0;
-    check::VecGatherMaskApiParams chkParams { (uint64_t)output.GetPhyAddr(),
+    check::VecGatherMaskApiParams chkParams{
+        (uint64_t)output.GetPhyAddr(),
         (uint64_t)input0.GetPhyAddr(),
         (uint64_t)input1.GetPhyAddr(),
         (bool)reduceMode,
@@ -142,7 +143,7 @@ TEST_P(TestReducev2ApiCheckSuite, ReApiCheckTensor)
         (uint64_t)(input1.GetLength()),
         (uint8_t)(output.GetPosition()),
         (uint8_t)(input0.GetPosition()),
-        (uint8_t)(input1.GetPosition()) };
+        (uint8_t)(input1.GetPosition())};
     // check::TikcppGatherMaskCheck chkIns { "test_intri", chkParams };
     // bool flag = chkIns.CheckAllLowLevel({ 0, mask });
     // EXPECT_EQ(flag, param.expect);
@@ -175,11 +176,12 @@ TEST_P(TestReducev2ScalarApiCheckSuite, ReApiCheckScalar)
         output = tbuf1.Get<uint16_t>();
     }
 
-    GatherMaskParams repeatParams { param.srcBlkStride, param.repeat, param.srcRptStride, param.srcRptStride };
+    GatherMaskParams repeatParams{param.srcBlkStride, param.repeat, param.srcRptStride, param.srcRptStride};
     uint64_t rsvdCnt = 0;
     uint8_t src1Pattern = 1;
 
-    check::VecGatherMaskApiParams chkParams { (uint64_t)output.GetPhyAddr(),
+    check::VecGatherMaskApiParams chkParams{
+        (uint64_t)output.GetPhyAddr(),
         (uint64_t)input0.GetPhyAddr(),
         (uint8_t)src1Pattern,
         (bool)reduceMode,
@@ -193,7 +195,7 @@ TEST_P(TestReducev2ScalarApiCheckSuite, ReApiCheckScalar)
         (uint64_t)(output.GetLength()),
         (uint64_t)(input0.GetLength()),
         (uint8_t)(output.GetPosition()),
-        (uint8_t)(input0.GetPosition()) };
+        (uint8_t)(input0.GetPosition())};
     // check::TikcppGatherMaskCheck chkIns { "test_intri", chkParams };
     // bool flag = chkIns.CheckAllLowLevel({ 0, mask });
     // EXPECT_EQ(flag, param.expect);

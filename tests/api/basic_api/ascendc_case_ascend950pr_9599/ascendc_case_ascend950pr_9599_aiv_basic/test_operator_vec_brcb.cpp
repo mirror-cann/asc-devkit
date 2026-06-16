@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -57,7 +57,7 @@ void TestVbrcbFunc(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restric
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
 
     SetMaskCount();
-    BrcbRepeatParams params { 1, 8 };
+    BrcbRepeatParams params{1, 8};
     uint8_t repeat = srcLen / 8;
     Brcb(outputLocal, inputLocal, repeat, params);
 
@@ -67,37 +67,30 @@ void TestVbrcbFunc(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restric
     pipe_barrier(PIPE_ALL);
 }
 
-INSTANTIATE_TEST_CASE_P(TEST_BRCB, BrcbTestSuite,
+INSTANTIATE_TEST_CASE_P(
+    TEST_BRCB, BrcbTestSuite,
     ::testing::Values(
-        BrcbTestParams { 32, 1, TestVbrcbFunc<uint8_t> },
-        BrcbTestParams { 32, 1, TestVbrcbFunc<int8_t> },
-        BrcbTestParams { 16, 2, TestVbrcbFunc<uint16_t> },
-        BrcbTestParams { 16, 2, TestVbrcbFunc<half> },
-        BrcbTestParams { 16, 2, TestVbrcbFunc<bfloat16_t> },
-        BrcbTestParams { 32, 2, TestVbrcbFunc<int16_t> }, 
-        BrcbTestParams { 128, 2, TestVbrcbFunc<uint16_t> },
-        BrcbTestParams { 16, 4, TestVbrcbFunc<int32_t> },
-        BrcbTestParams { 16, 4, TestVbrcbFunc<float> }, 
-        BrcbTestParams { 32, 4, TestVbrcbFunc<uint32_t> },
-        BrcbTestParams { 64, 4, TestVbrcbFunc<uint32_t> },
-        BrcbTestParams { 64, 8, TestVbrcbFunc<uint64_t> },
-        BrcbTestParams { 64, 8, TestVbrcbFunc<int64_t> },
+        BrcbTestParams{32, 1, TestVbrcbFunc<uint8_t>}, BrcbTestParams{32, 1, TestVbrcbFunc<int8_t>},
+        BrcbTestParams{16, 2, TestVbrcbFunc<uint16_t>}, BrcbTestParams{16, 2, TestVbrcbFunc<half>},
+        BrcbTestParams{16, 2, TestVbrcbFunc<bfloat16_t>}, BrcbTestParams{32, 2, TestVbrcbFunc<int16_t>},
+        BrcbTestParams{128, 2, TestVbrcbFunc<uint16_t>}, BrcbTestParams{16, 4, TestVbrcbFunc<int32_t>},
+        BrcbTestParams{16, 4, TestVbrcbFunc<float>}, BrcbTestParams{32, 4, TestVbrcbFunc<uint32_t>},
+        BrcbTestParams{64, 4, TestVbrcbFunc<uint32_t>}, BrcbTestParams{64, 8, TestVbrcbFunc<uint64_t>},
+        BrcbTestParams{64, 8, TestVbrcbFunc<int64_t>},
         // TensorTrait
-        BrcbTestParams { 32, 1, TestVbrcbFunc<TensorTrait<uint8_t>> },
-        BrcbTestParams { 32, 1, TestVbrcbFunc<TensorTrait<int8_t>> },
-        BrcbTestParams { 16, 2, TestVbrcbFunc<TensorTrait<uint16_t>> },
-        BrcbTestParams { 16, 2, TestVbrcbFunc<TensorTrait<half>> },
-        BrcbTestParams { 16, 2, TestVbrcbFunc<TensorTrait<bfloat16_t>> },
-        BrcbTestParams { 32, 2, TestVbrcbFunc<TensorTrait<int16_t>> },
-        BrcbTestParams { 128, 2, TestVbrcbFunc<TensorTrait<uint16_t>> },
-        BrcbTestParams { 16, 4, TestVbrcbFunc<TensorTrait<int32_t>> },
-        BrcbTestParams { 16, 4, TestVbrcbFunc<TensorTrait<float>> },
-        BrcbTestParams { 32, 4, TestVbrcbFunc<TensorTrait<uint32_t>> },
-        BrcbTestParams { 64, 4, TestVbrcbFunc<TensorTrait<uint32_t>> },
-        BrcbTestParams { 64, 8, TestVbrcbFunc<TensorTrait<uint64_t>> },
-        BrcbTestParams { 64, 8, TestVbrcbFunc<TensorTrait<int64_t>> }
-    )
-);
+        BrcbTestParams{32, 1, TestVbrcbFunc<TensorTrait<uint8_t>>},
+        BrcbTestParams{32, 1, TestVbrcbFunc<TensorTrait<int8_t>>},
+        BrcbTestParams{16, 2, TestVbrcbFunc<TensorTrait<uint16_t>>},
+        BrcbTestParams{16, 2, TestVbrcbFunc<TensorTrait<half>>},
+        BrcbTestParams{16, 2, TestVbrcbFunc<TensorTrait<bfloat16_t>>},
+        BrcbTestParams{32, 2, TestVbrcbFunc<TensorTrait<int16_t>>},
+        BrcbTestParams{128, 2, TestVbrcbFunc<TensorTrait<uint16_t>>},
+        BrcbTestParams{16, 4, TestVbrcbFunc<TensorTrait<int32_t>>},
+        BrcbTestParams{16, 4, TestVbrcbFunc<TensorTrait<float>>},
+        BrcbTestParams{32, 4, TestVbrcbFunc<TensorTrait<uint32_t>>},
+        BrcbTestParams{64, 4, TestVbrcbFunc<TensorTrait<uint32_t>>},
+        BrcbTestParams{64, 8, TestVbrcbFunc<TensorTrait<uint64_t>>},
+        BrcbTestParams{64, 8, TestVbrcbFunc<TensorTrait<int64_t>>}));
 
 TEST_P(BrcbTestSuite, BrcbTestCase)
 {

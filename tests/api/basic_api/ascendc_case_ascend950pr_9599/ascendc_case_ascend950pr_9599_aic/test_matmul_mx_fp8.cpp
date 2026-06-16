@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -22,7 +22,8 @@ enum class CubeFormat {
     VECTOR,
 };
 
-template <TPosition POSITION, CubeFormat FORMAT, typename Type> struct InputInfo {
+template <TPosition POSITION, CubeFormat FORMAT, typename Type>
+struct InputInfo {
     constexpr static TPosition pos = POSITION;
     constexpr static CubeFormat format = FORMAT;
     using T = Type;
@@ -43,26 +44,29 @@ struct GetL0DataType {
     using Type = T;
 };
 
-template <> struct GetL0DataType<fp8_e5m2_t> {
+template <>
+struct GetL0DataType<fp8_e5m2_t> {
     using Type = mx_fp8_e5m2_t;
 };
- 
-template <> struct GetL0DataType<fp8_e4m3fn_t> {
+
+template <>
+struct GetL0DataType<fp8_e4m3fn_t> {
     using Type = mx_fp8_e4m3_t;
 };
 
-template <class AType, class BType, class CType, class L0CType, class BiasType, bool hasBias1> class E2eCase {
+template <class AType, class BType, class CType, class L0CType, class BiasType, bool hasBias1>
+class E2eCase {
     using SrcT = typename AType::T;
     using Src1T = typename BType::T;
     using DstT = typename CType::T;
     using BiasT = typename BiasType::T;
     using L0cT = typename L0CType::T;
     using L0AType = typename GetL0DataType<SrcT>::Type;
-    using L0BType  = typename GetL0DataType<Src1T>::Type;
+    using L0BType = typename GetL0DataType<Src1T>::Type;
 
 public:
     __aicore__ inline E2eCase() {}
-    __aicore__ inline void Init(TPipe *tpipe, int32_t m, int32_t n, int32_t k, int32_t enableBias)
+    __aicore__ inline void Init(TPipe* tpipe, int32_t m, int32_t n, int32_t k, int32_t enableBias)
     {
         pipe = tpipe;
         mLength = m;
@@ -83,20 +87,17 @@ public:
         }
         pipe->InitBuffer(qidCO1, 1, m * n * sizeof(L0cT));
     }
-    __aicore__ inline void SetTensorA(const GlobalTensor<SrcT> &gm, const GlobalTensor<fp8_e8m0_t> &amgm)
+    __aicore__ inline void SetTensorA(const GlobalTensor<SrcT>& gm, const GlobalTensor<fp8_e8m0_t>& amgm)
     {
         aGlobal1 = gm;
         aMxGlobal = amgm;
     }
-    __aicore__ inline void SetTensorB(const GlobalTensor<Src1T> &gm, const GlobalTensor<fp8_e8m0_t> &bmgm)
+    __aicore__ inline void SetTensorB(const GlobalTensor<Src1T>& gm, const GlobalTensor<fp8_e8m0_t>& bmgm)
     {
         bGlobal1 = gm;
         bMxGlobal = bmgm;
     }
-    __aicore__ inline void SetBias(const GlobalTensor<BiasT> &biasGlobal)
-    {
-        biasGlobal1 = biasGlobal;
-    }
+    __aicore__ inline void SetBias(const GlobalTensor<BiasT>& biasGlobal) { biasGlobal1 = biasGlobal; }
     __aicore__ inline uint16_t CeilDiv(uint16_t num1, uint16_t num2)
     {
         ASSERT(num2 > 0);
@@ -195,7 +196,7 @@ public:
         mmadParams.isBias = enBias;
         auto co1Local = qidCO1.AllocTensor<L0cT>();
         auto a2 = qidA2.DeQue<L0AType>();
-        auto b2 = qidB2.DeQue<L0BType >();
+        auto b2 = qidB2.DeQue<L0BType>();
         pipe_barrier(PIPE_ALL);
         Mmad(co1Local, a2, b2, mmadParams);
         qidA2.FreeTensor(a2);
@@ -213,7 +214,7 @@ public:
 
         auto co1Local = qidCO1.AllocTensor<L0cT>();
         auto a2 = qidA2.DeQue<L0AType>();
-        auto b2 = qidB2.DeQue<L0BType >();
+        auto b2 = qidB2.DeQue<L0BType>();
         auto bias2Local = outQueueC2.DeQue<L0cT>();
         pipe_barrier(PIPE_ALL);
 
@@ -225,12 +226,12 @@ public:
         outQueueC2.FreeTensor(bias2Local);
     }
 
-    __aicore__ inline void CopyL0CToGm(const GlobalTensor<DstT> &gm)
+    __aicore__ inline void CopyL0CToGm(const GlobalTensor<DstT>& gm)
     {
         auto co1Local = qidCO1.DeQue<L0cT>();
         if constexpr (CType::format == CubeFormat::ND) {
             FixpipeParamsArch3510<CO2Layout::ROW_MAJOR> fixpipeParams(nLength, mLength, mLength, nLength);
-            fixpipeParams.params = { 1, 0, 0 };
+            fixpipeParams.params = {1, 0, 0};
             if (IsSameType<DstT, half>::value) {
                 fixpipeParams.quantPre = QuantMode_t::F322F16;
             } else if (IsSameType<DstT, bfloat16_t>::value) {
@@ -262,7 +263,7 @@ public:
         LocalTensor<BiasT> bias1Local = inQueueC1.DeQue<BiasT>();
         LocalTensor<L0cT> bias2Local = outQueueC2.AllocTensor<L0cT>();
         // bt:l1->bt
-        DataCopy(bias2Local, bias1Local, { 1, static_cast<uint16_t>(nLength * sizeof(L0cT) / 32), 0, 0 });
+        DataCopy(bias2Local, bias1Local, {1, static_cast<uint16_t>(nLength * sizeof(L0cT) / 32), 0, 0});
 
         outQueueC2.EnQue<L0cT>(bias2Local);
         inQueueC1.FreeTensor(bias1Local);
@@ -301,7 +302,7 @@ public:
     __aicore__ inline void Load2DA1ToL0B(bool transpose)
     {
         auto rightMatrix = qidB1_.template DeQue<Src1T>();
-        LocalTensor<L0BType > b2 = qidB2.AllocTensor<L0BType >();
+        LocalTensor<L0BType> b2 = qidB2.AllocTensor<L0BType>();
         uint16_t nAlign = CeilDiv(nLength * sizeof(Src1T), 32);
         uint16_t kAlign = CeilDiv(kLength, 16);
         LoadData2DParamsV2 loadDataParams;
@@ -335,14 +336,13 @@ public:
         qidB2.EnQue(b2);
         qidB1_.FreeTensor(rightMatrix);
     }
-    __aicore__ inline void CopyL0CToL1ToGm(const GlobalTensor<DstT> &gm)
+    __aicore__ inline void CopyL0CToL1ToGm(const GlobalTensor<DstT>& gm)
     {
         LocalTensor<DstT> resMatrix = qidA1_.template AllocTensor<DstT>();
         auto co1Local = qidCO1.DeQue<L0cT>();
         if constexpr (CType::format == CubeFormat::ND) {
-            FixpipeParamsArch3510<CO2Layout::ROW_MAJOR> fixpipeParams(nLength,
-                mLength, mLength, nLength);
-            fixpipeParams.params = { 1, 0, 0 };
+            FixpipeParamsArch3510<CO2Layout::ROW_MAJOR> fixpipeParams(nLength, mLength, mLength, nLength);
+            fixpipeParams.params = {1, 0, 0};
             if (IsSameType<DstT, half>::value) {
                 fixpipeParams.quantPre = QuantMode_t::F322F16;
             } else if (IsSameType<DstT, bfloat16_t>::value) {
@@ -350,8 +350,7 @@ public:
             }
             Fixpipe<DstT, L0cT, CFG_ROW_MAJOR>(resMatrix, co1Local, fixpipeParams);
         } else if constexpr (CType::format == CubeFormat::NZ) {
-            FixpipeParamsArch3510<CO2Layout::NZ> fixpipeParams(nLength,
-                mLength, mLength, nLength * BLOCK_CUBE);
+            FixpipeParamsArch3510<CO2Layout::NZ> fixpipeParams(nLength, mLength, mLength, nLength * BLOCK_CUBE);
             if (IsSameType<DstT, half>::value) {
                 fixpipeParams.quantPre = QuantMode_t::F322F16;
             } else if (IsSameType<DstT, bfloat16_t>::value) {
@@ -369,7 +368,7 @@ public:
         pipe_barrier(PIPE_ALL);
     }
 
-    __aicore__ inline void IterateAll(const GlobalTensor<DstT> &gm, bool transpose)
+    __aicore__ inline void IterateAll(const GlobalTensor<DstT>& gm, bool transpose)
     {
         /* 1.非transpose场景(K在内轴) FP8 ND | Data: ND2NZ + Load2d;
                                             | Exp: DN2NZ.B16 + Load_L1_to_L0A/B_MX
@@ -377,9 +376,9 @@ public:
                                              | Exp: ND2NZ.B16 + Load_L1_to_L0A/B_MX
         */
         if constexpr (AType::format == CubeFormat::ND) {
-            CopyGmToA1Nd2Nz(); // matrix A: ND2NZ
+            CopyGmToA1Nd2Nz();       // matrix A: ND2NZ
             CopyScalarGmToA1Dn2Nz(); // scale matrix A : DN2NZ.b16
-            CopyGmToB1Nd2Nz(); // matrix B: ND2NZ + scale matrix B ND2NZ
+            CopyGmToB1Nd2Nz();       // matrix B: ND2NZ + scale matrix B ND2NZ
             Load2DA1ToL0A(transpose);
             Load2DA1ToL0B(transpose);
         } else if constexpr (AType::format == CubeFormat::NZ) {
@@ -390,7 +389,7 @@ public:
             Load2DA1ToL0B(transpose);
         }
 
-        if constexpr(hasBias1) {
+        if constexpr (hasBias1) {
             CopyInBias();
             SplitBias();
             ComputeBt();
@@ -406,7 +405,7 @@ public:
     }
 
 private:
-    TPipe *pipe = nullptr;
+    TPipe* pipe = nullptr;
     int32_t mLength = 0;
     int32_t nLength = 0;
     int32_t kLength = 0;
@@ -434,8 +433,9 @@ private:
 };
 
 template <class AType, class BType, class L0CType, class CType, class BiasType, bool hasBias1>
-__aicore__ inline void E2eKernel(GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_ADDR biasGM, GM_ADDR amxGM, GM_ADDR bmxGM,
-    int32_t m, int32_t n, int32_t k, int32_t usedCoreNum, int hasBias, bool transpose)
+__aicore__ inline void E2eKernel(
+    GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_ADDR biasGM, GM_ADDR amxGM, GM_ADDR bmxGM, int32_t m, int32_t n,
+    int32_t k, int32_t usedCoreNum, int hasBias, bool transpose)
 {
     // cube core cases, ignore vector core
     if (g_coreType == AIV) {
@@ -458,12 +458,12 @@ __aicore__ inline void E2eKernel(GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_ADDR 
     GlobalTensor<BiasT> biasGlobal;
     GlobalTensor<fp8_e8m0_t> amxGlobal;
     GlobalTensor<fp8_e8m0_t> bmxGlobal;
-    aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ A_T *>(aGM), m * k);
-    bGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ B_T *>(bGM), k * n);
-    cGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ C_T *>(cGM), m * n);
-    biasGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ BiasT *>(biasGM), n);
-    amxGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ fp8_e8m0_t *>(amxGM), n);
-    bmxGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ fp8_e8m0_t *>(bmxGM), n);
+    aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ A_T*>(aGM), m * k);
+    bGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ B_T*>(bGM), k * n);
+    cGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ C_T*>(cGM), m * n);
+    biasGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ BiasT*>(biasGM), n);
+    amxGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ fp8_e8m0_t*>(amxGM), n);
+    bmxGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ fp8_e8m0_t*>(bmxGM), n);
 
     int offsetA = 0;
     int offsetB = 0;
@@ -491,48 +491,61 @@ __aicore__ inline void E2eKernel(GM_ADDR aGM, GM_ADDR bGM, GM_ADDR cGM, GM_ADDR 
 }
 class TEST_KERNEL_MATMUL_MX_FP8 : public testing::Test {
 protected:
-    void SetUp()
-    {
-        g_coreType = AIC_TYPE;
-    }
-    void TearDown()
-    {
-        g_coreType = MIX_TYPE;
-    }
+    void SetUp() { g_coreType = AIC_TYPE; }
+    void TearDown() { g_coreType = MIX_TYPE; }
 };
 
-#define KERNEL_MATMUL_MX_FP8(testKernelMatmulMxFp8, coreNum, m1, n1, k1, aPos, bPos, cPos, biasPos, aFormat, bFormat, cFormat, biasFormat,                                                                                                    \
-    aDType, bDType, cDType, biasDType, hasBias1, transpose)                                                                                                                                                              \
-    TEST_F(testKernelMatmulMxFp8,                                                                                                                                                                         \
+#define KERNEL_MATMUL_MX_FP8(                                                                                                                                                                                          \
+    testKernelMatmulMxFp8, coreNum, m1, n1, k1, aPos, bPos, cPos, biasPos, aFormat, bFormat, cFormat, biasFormat,                                                                                                      \
+    aDType, bDType, cDType, biasDType, hasBias1, transpose)                                                                                                                                                            \
+    TEST_F(                                                                                                                                                                                                            \
+        testKernelMatmulMxFp8,                                                                                                                                                                                         \
         kernel_e2e_##coreNum##_##m1##_##n1##_##k1##_##aPos##_##bPos##_##cPos##_##biasPos##_##aFormat##_##bFormat##_##cFormat##_##biasFormat##_##aDType##_##bDType##_##cDType##_##biasDType##_##hasBias1##_##transpose) \
-    {                                                                                                                                                                                                             \
-        typedef InputInfo<TPosition::aPos, CubeFormat::aFormat, aDType> aType;                                                                                                                        \
-        typedef InputInfo<TPosition::bPos, CubeFormat::bFormat, bDType> bType;                                                                                                                        \
-        typedef InputInfo<TPosition::CO1, CubeFormat::cFormat, cDType> l0cType;                                                                                                                        \
-        typedef InputInfo<TPosition::cPos, CubeFormat::cFormat, cDType> cType;                                                                                                                        \
-        typedef InputInfo<TPosition::biasPos, CubeFormat::biasFormat, biasDType> biasType;                                                                                                            \
-        const int32_t leftDataSize = m1 * k1;                                                             \
-        const int32_t rightDataSize = k1 * n1;                                                            \
-        const int32_t biasDataSize = n1;                                                                 \
-        const int32_t outputDataSize = m1 * n1;                                                           \
-        uint8_t aGM[leftDataSize * sizeof(aDType)] = {0};                                              \
-        uint8_t amxGM[leftDataSize / 32 * sizeof(fp8_e8m0_t)] = {0};                                 \
-        uint8_t bGM[rightDataSize * sizeof(bDType)] = {0};                                             \
-        uint8_t bmxGM[rightDataSize / 32 * sizeof(fp8_e8m0_t)] = {0};                                \
-        uint8_t biasGM[biasDataSize * sizeof(biasDType)] = {0};                                        \
-        uint8_t cGM[outputDataSize * sizeof(cDType)] = {0};                                            \
-        E2eKernel<aType, bType, l0cType, cType, biasType, hasBias1>(aGM, bGM, cGM, biasGM,amxGM,bmxGM, m1, n1, k1, coreNum, hasBias1, transpose);                                                                                                     \
-        for (int32_t i = 0; i < outputDataSize * sizeof(cDType); i++) {                                                  \
-            EXPECT_EQ(cGM[i], 0x00);                                                                                        \
-        }                                                                                                                   \
+    {                                                                                                                                                                                                                  \
+        typedef InputInfo<TPosition::aPos, CubeFormat::aFormat, aDType> aType;                                                                                                                                         \
+        typedef InputInfo<TPosition::bPos, CubeFormat::bFormat, bDType> bType;                                                                                                                                         \
+        typedef InputInfo<TPosition::CO1, CubeFormat::cFormat, cDType> l0cType;                                                                                                                                        \
+        typedef InputInfo<TPosition::cPos, CubeFormat::cFormat, cDType> cType;                                                                                                                                         \
+        typedef InputInfo<TPosition::biasPos, CubeFormat::biasFormat, biasDType> biasType;                                                                                                                             \
+        const int32_t leftDataSize = m1 * k1;                                                                                                                                                                          \
+        const int32_t rightDataSize = k1 * n1;                                                                                                                                                                         \
+        const int32_t biasDataSize = n1;                                                                                                                                                                               \
+        const int32_t outputDataSize = m1 * n1;                                                                                                                                                                        \
+        uint8_t aGM[leftDataSize * sizeof(aDType)] = {0};                                                                                                                                                              \
+        uint8_t amxGM[leftDataSize / 32 * sizeof(fp8_e8m0_t)] = {0};                                                                                                                                                   \
+        uint8_t bGM[rightDataSize * sizeof(bDType)] = {0};                                                                                                                                                             \
+        uint8_t bmxGM[rightDataSize / 32 * sizeof(fp8_e8m0_t)] = {0};                                                                                                                                                  \
+        uint8_t biasGM[biasDataSize * sizeof(biasDType)] = {0};                                                                                                                                                        \
+        uint8_t cGM[outputDataSize * sizeof(cDType)] = {0};                                                                                                                                                            \
+        E2eKernel<aType, bType, l0cType, cType, biasType, hasBias1>(                                                                                                                                                   \
+            aGM, bGM, cGM, biasGM, amxGM, bmxGM, m1, n1, k1, coreNum, hasBias1, transpose);                                                                                                                            \
+        for (int32_t i = 0; i < outputDataSize * sizeof(cDType); i++) {                                                                                                                                                \
+            EXPECT_EQ(cGM[i], 0x00);                                                                                                                                                                                   \
+        }                                                                                                                                                                                                              \
     }
 
-KERNEL_MATMUL_MX_FP8(TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e4m3fn_t, fp8_e4m3fn_t, float, float, 0, true)
-KERNEL_MATMUL_MX_FP8(TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e4m3fn_t, fp8_e5m2_t, float, float, 0, false)
-KERNEL_MATMUL_MX_FP8(TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e5m2_t, fp8_e4m3fn_t, float, float, 0, true)
-KERNEL_MATMUL_MX_FP8(TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e5m2_t, fp8_e5m2_t, float, float, 0, false)
+KERNEL_MATMUL_MX_FP8(
+    TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e4m3fn_t, fp8_e4m3fn_t, float, float,
+    0, true)
+KERNEL_MATMUL_MX_FP8(
+    TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e4m3fn_t, fp8_e5m2_t, float, float, 0,
+    false)
+KERNEL_MATMUL_MX_FP8(
+    TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e5m2_t, fp8_e4m3fn_t, float, float, 0,
+    true)
+KERNEL_MATMUL_MX_FP8(
+    TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e5m2_t, fp8_e5m2_t, float, float, 0,
+    false)
 
-KERNEL_MATMUL_MX_FP8(TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e4m3fn_t, fp8_e4m3fn_t, float, float, 1, true)
-KERNEL_MATMUL_MX_FP8(TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e4m3fn_t, fp8_e5m2_t, float, float, 1, false)
-KERNEL_MATMUL_MX_FP8(TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e5m2_t, fp8_e4m3fn_t, float, float, 1, true)
-KERNEL_MATMUL_MX_FP8(TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e5m2_t, fp8_e5m2_t, float, float, 1, false)
+KERNEL_MATMUL_MX_FP8(
+    TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e4m3fn_t, fp8_e4m3fn_t, float, float,
+    1, true)
+KERNEL_MATMUL_MX_FP8(
+    TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e4m3fn_t, fp8_e5m2_t, float, float, 1,
+    false)
+KERNEL_MATMUL_MX_FP8(
+    TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e5m2_t, fp8_e4m3fn_t, float, float, 1,
+    true)
+KERNEL_MATMUL_MX_FP8(
+    TEST_KERNEL_MATMUL_MX_FP8, 1, 32, 64, 64, GM, GM, GM, GM, ND, ND, ND, ND, fp8_e5m2_t, fp8_e5m2_t, float, float, 1,
+    false)

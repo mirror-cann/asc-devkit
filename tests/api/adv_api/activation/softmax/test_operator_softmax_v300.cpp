@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #define private public
 #define protected public
@@ -20,11 +20,12 @@ using namespace std;
 using namespace AscendC;
 
 namespace AscendC {
-template <typename T1, typename T2> class KernelSoftmax {
+template <typename T1, typename T2>
+class KernelSoftmax {
 public:
     __aicore__ inline KernelSoftmax() {}
-    __aicore__ inline void Init(__gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, __gm__ uint8_t* dstGm,
-        uint32_t inheight, uint32_t inwidth)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, __gm__ uint8_t* dstGm, uint32_t inheight, uint32_t inwidth)
     {
         height = inheight;
         width = inwidth;
@@ -80,7 +81,7 @@ private:
         srcLocal2.SetShapeInfo(ShapeInfo(shapeDim, array)); // default ND
         dstLocal.SetShapeInfo(ShapeInfo(shapeDim, array));
 
-        SoftMaxShapeInfo srcShape = { height, width, height, width };
+        SoftMaxShapeInfo srcShape = {height, width, height, width};
         SoftMaxTiling tiling;
         SoftMax<T1, false>(srcLocal1, insumLocal, inmaxLocal, srcLocal1, tiling);
         SimpleSoftMax<T1, false>(srcLocal1, insumLocal, inmaxLocal, srcLocal1, tiling);
@@ -117,8 +118,8 @@ private:
 } // namespace AscendC
 
 template <typename T1, typename T2>
-__global__ __aicore__ void MainSoftmax(__gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm,
-    uint32_t height, uint32_t width)
+__global__ __aicore__ void MainSoftmax(
+    __gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, uint32_t height, uint32_t width)
 {
     AscendC::KernelSoftmax<T1, T2> op;
     op.Init(src0Gm, src1Gm, dstGm, height, width);
@@ -134,89 +135,79 @@ struct SoftMaxTestParams {
 
 class SoftMaxTestsuite : public testing::Test {
 protected:
-    static void SetUpTestCase()
-    {
-        std::cout << "SoftMaxTestsuite SetUpTestCase" << std::endl;
-    }
-    static void TearDownTestCase()
-    {
-        std::cout << "SoftMaxTestsuite TearDownTestCase" << std::endl;
-    }
+    static void SetUpTestCase() { std::cout << "SoftMaxTestsuite SetUpTestCase" << std::endl; }
+    static void TearDownTestCase() { std::cout << "SoftMaxTestsuite TearDownTestCase" << std::endl; }
     virtual void SetUp() {}
-    virtual void TearDown()
-    {
-    }
+    virtual void TearDown() {}
 };
 
-template <typename srcType> bool AddImplCheckSrcValue(__ubuf__ srcType* src)
+template <typename srcType>
+bool AddImplCheckSrcValue(__ubuf__ srcType* src)
 {
     return (src[0] == (srcType)0);
 }
-bool AddImplCheckCalCount(const int32_t& calCount)
-{
-    return (calCount == 1020);
-}
+bool AddImplCheckCalCount(const int32_t& calCount) { return (calCount == 1020); }
 
 TEST_F(SoftMaxTestsuite, SoftMaxTestsuite_half_8_1024)
 {
-    SoftMaxTestParams param{ sizeof(half), 8, 1024 };
+    SoftMaxTestParams param{sizeof(half), 8, 1024};
 
-    uint8_t src0Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t src1Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t dstGm[param.height * param.width * param.typeSize]{ 0x00 };
+    uint8_t src0Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t src1Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t dstGm[param.height * param.width * param.typeSize]{0x00};
 
     MainSoftmax<half, half>(dstGm, src0Gm, src1Gm, param.height, param.width);
 }
 TEST_F(SoftMaxTestsuite, SoftMaxTestsuite_half_64_128)
 {
-    SoftMaxTestParams param{ sizeof(half), 64, 128 };
+    SoftMaxTestParams param{sizeof(half), 64, 128};
 
-    uint8_t src0Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t src1Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t dstGm[param.height * param.width * param.typeSize]{ 0x00 };
+    uint8_t src0Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t src1Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t dstGm[param.height * param.width * param.typeSize]{0x00};
 
     MainSoftmax<half, half>(dstGm, src0Gm, src1Gm, param.height, param.width);
 }
 
 TEST_F(SoftMaxTestsuite, SoftMaxTestsuite_half_60_144)
 {
-    SoftMaxTestParams param{ sizeof(half), 60, 144 };
+    SoftMaxTestParams param{sizeof(half), 60, 144};
 
-    uint8_t src0Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t src1Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t dstGm[param.height * param.width * param.typeSize]{ 0x00 };
+    uint8_t src0Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t src1Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t dstGm[param.height * param.width * param.typeSize]{0x00};
 
     MainSoftmax<half, half>(dstGm, src0Gm, src1Gm, param.height, param.width);
 }
 TEST_F(SoftMaxTestsuite, SoftMaxTestsuite_float_8_1024)
 {
-    SoftMaxTestParams param{ sizeof(float), 8, 1024 };
+    SoftMaxTestParams param{sizeof(float), 8, 1024};
 
-    uint8_t src0Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t src1Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t dstGm[param.height * param.width * param.typeSize]{ 0x00 };
+    uint8_t src0Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t src1Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t dstGm[param.height * param.width * param.typeSize]{0x00};
 
     MainSoftmax<float, float>(dstGm, src0Gm, src1Gm, param.height, param.width);
 }
 
 TEST_F(SoftMaxTestsuite, SoftMaxTestsuite_float_64_128)
 {
-    SoftMaxTestParams param{ sizeof(float), 64, 128 };
+    SoftMaxTestParams param{sizeof(float), 64, 128};
 
-    uint8_t src0Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t src1Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t dstGm[param.height * param.width * param.typeSize]{ 0x00 };
+    uint8_t src0Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t src1Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t dstGm[param.height * param.width * param.typeSize]{0x00};
 
     MainSoftmax<float, float>(dstGm, src0Gm, src1Gm, param.height, param.width);
 }
 
 TEST_F(SoftMaxTestsuite, SoftMaxTestsuite_float_256_56)
 {
-    SoftMaxTestParams param{ sizeof(float), 256, 56 };
+    SoftMaxTestParams param{sizeof(float), 256, 56};
 
-    uint8_t src0Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t src1Gm[param.height * param.width * param.typeSize]{ 0x00 };
-    uint8_t dstGm[param.height * param.width * param.typeSize]{ 0x00 };
+    uint8_t src0Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t src1Gm[param.height * param.width * param.typeSize]{0x00};
+    uint8_t dstGm[param.height * param.width * param.typeSize]{0x00};
 
     MainSoftmax<float, float>(dstGm, src0Gm, src1Gm, param.height, param.width);
 }

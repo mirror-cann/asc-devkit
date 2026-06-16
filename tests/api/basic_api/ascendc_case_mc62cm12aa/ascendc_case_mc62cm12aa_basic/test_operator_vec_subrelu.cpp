@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
 
@@ -23,7 +23,8 @@ enum TestMode {
 };
 
 template <typename SRC_T>
-void VecSubRelu(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
+void VecSubRelu(
+    __gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__ src0Gm, __gm__ uint8_t* __restrict__ src1Gm,
     __gm__ int32_t dataSize, TestMode testMode)
 {
     TPipe tpipe;
@@ -59,7 +60,8 @@ void VecSubRelu(__gm__ uint8_t* __restrict__ dstGm, __gm__ uint8_t* __restrict__
     wait_flag(PIPE_MTE2, PIPE_V, EVENT_ID0);
     uint32_t repeatSize = 256 / max(sizeof(SRC_T), sizeof(SRC_T));
     uint8_t repeatTimes = dataSize / repeatSize;
-    BinaryRepeatParams repeatParams(1, 1, 1, sizeof(SRC_T) * repeatSize / 32, sizeof(SRC_T) * repeatSize / 32,  sizeof(SRC_T) * repeatSize / 32);
+    BinaryRepeatParams repeatParams(
+        1, 1, 1, sizeof(SRC_T) * repeatSize / 32, sizeof(SRC_T) * repeatSize / 32, sizeof(SRC_T) * repeatSize / 32);
     if (testMode == TestMode::LEVEL0_NORM_MODE || testMode == TestMode::LEVEL0_FMIX_NORM_MODE) {
         uint64_t mask = repeatSize - 2;
         SubRelu(dst_ub, src0_ub, src1_ub, mask, repeatTimes, repeatParams);
@@ -98,26 +100,26 @@ protected:
     void TearDown() {}
 };
 
-INSTANTIATE_TEST_CASE_P(SubReluSimpleTestCase, SubReluSimpleTestsuite,
+INSTANTIATE_TEST_CASE_P(
+    SubReluSimpleTestCase, SubReluSimpleTestsuite,
     ::testing::Values(
-        SubReluTestParams { 256, 2, 2, TestMode::LEVEL0_NORM_MODE, VecSubRelu<half> },
-        SubReluTestParams { 128, 2, 2, TestMode::LEVEL0_NORM_MODE, VecSubRelu<half> },
-        SubReluTestParams { 256, 4, 4, TestMode::LEVEL0_NORM_MODE, VecSubRelu<float> },
-        SubReluTestParams { 128, 4, 4, TestMode::LEVEL0_NORM_MODE, VecSubRelu<float> },
-        SubReluTestParams { 256, 4, 4, TestMode::LEVEL0_NORM_MODE, VecSubRelu<int16_t> },
-        SubReluTestParams { 128, 4, 4, TestMode::LEVEL0_NORM_MODE, VecSubRelu<int16_t> },
+        SubReluTestParams{256, 2, 2, TestMode::LEVEL0_NORM_MODE, VecSubRelu<half>},
+        SubReluTestParams{128, 2, 2, TestMode::LEVEL0_NORM_MODE, VecSubRelu<half>},
+        SubReluTestParams{256, 4, 4, TestMode::LEVEL0_NORM_MODE, VecSubRelu<float>},
+        SubReluTestParams{128, 4, 4, TestMode::LEVEL0_NORM_MODE, VecSubRelu<float>},
+        SubReluTestParams{256, 4, 4, TestMode::LEVEL0_NORM_MODE, VecSubRelu<int16_t>},
+        SubReluTestParams{128, 4, 4, TestMode::LEVEL0_NORM_MODE, VecSubRelu<int16_t>},
 
-        SubReluTestParams { 256, 2, 2, TestMode::LEVEL0_BIT_MODE, VecSubRelu<half> },
-        SubReluTestParams { 128, 2, 2, TestMode::LEVEL0_BIT_MODE, VecSubRelu<half> },
-        SubReluTestParams { 256, 4, 4, TestMode::LEVEL0_BIT_MODE, VecSubRelu<float> },
-        SubReluTestParams { 128, 4, 4, TestMode::LEVEL0_BIT_MODE, VecSubRelu<float> },
-        SubReluTestParams { 256, 4, 4, TestMode::LEVEL0_BIT_MODE, VecSubRelu<int16_t> },
-        SubReluTestParams { 128, 4, 4, TestMode::LEVEL0_BIT_MODE, VecSubRelu<int16_t> },
+        SubReluTestParams{256, 2, 2, TestMode::LEVEL0_BIT_MODE, VecSubRelu<half>},
+        SubReluTestParams{128, 2, 2, TestMode::LEVEL0_BIT_MODE, VecSubRelu<half>},
+        SubReluTestParams{256, 4, 4, TestMode::LEVEL0_BIT_MODE, VecSubRelu<float>},
+        SubReluTestParams{128, 4, 4, TestMode::LEVEL0_BIT_MODE, VecSubRelu<float>},
+        SubReluTestParams{256, 4, 4, TestMode::LEVEL0_BIT_MODE, VecSubRelu<int16_t>},
+        SubReluTestParams{128, 4, 4, TestMode::LEVEL0_BIT_MODE, VecSubRelu<int16_t>},
 
-        SubReluTestParams { 256, 2, 2, TestMode::LEVEL2_COUNTER_MODE, VecSubRelu<half> },
-        SubReluTestParams { 256, 4, 4, TestMode::LEVEL2_COUNTER_MODE, VecSubRelu<float> },
-        SubReluTestParams { 256, 4, 4, TestMode::LEVEL2_COUNTER_MODE, VecSubRelu<int16_t> }
-    ));
+        SubReluTestParams{256, 2, 2, TestMode::LEVEL2_COUNTER_MODE, VecSubRelu<half>},
+        SubReluTestParams{256, 4, 4, TestMode::LEVEL2_COUNTER_MODE, VecSubRelu<float>},
+        SubReluTestParams{256, 4, 4, TestMode::LEVEL2_COUNTER_MODE, VecSubRelu<int16_t>}));
 
 TEST_P(SubReluSimpleTestsuite, SubReluSimpleTestCase)
 {

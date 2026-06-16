@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <mockcpp/mockcpp.hpp>
@@ -15,13 +15,15 @@
 
 #include "asc_platform.h"
 
-extern "C" int ASCInitSocSpec(const char* soc_version, const char* core_type, const char* aicore_num, const char* l1FusionFlag);
+extern "C" int ASCInitSocSpec(
+    const char* soc_version, const char* core_type, const char* aicore_num, const char* l1FusionFlag);
 
 extern "C" int ASCSetSocSpec(const char* spec);
 
 extern "C" void ASCGetSocSpec(const char* spec, char* buffer, int buffer_size);
 
-extern "C" int ASCTeUpdateVersion(const char* soc_version, const char* core_type, const char* aicore_num, const char* l1_fusion);
+extern "C" int ASCTeUpdateVersion(
+    const char* soc_version, const char* core_type, const char* aicore_num, const char* l1_fusion);
 
 extern "C" void* CreateStrStrMap();
 
@@ -36,16 +38,14 @@ extern "C" bool ASCSetCoreNumByCoreType(const char* core_type);
 class TEST_ASC_PLATFORM_API : public testing::Test {
 protected:
     void SetUp() {}
-    void TearDown() 
-    {
-        GlobalMockObject::verify();
-    }
+    void TearDown() { GlobalMockObject::verify(); }
 };
 
 std::string core_type_stub;
 
 // stub GetPlatformRes
-bool MockGetPlatformRes(fe::PlatFormInfos *This, const std::string &label, const std::string &key, std::string &val) {
+bool MockGetPlatformRes(fe::PlatFormInfos* This, const std::string& label, const std::string& key, std::string& val)
+{
     val = "";
     static const std::map<std::string, std::string> info_map_stub = {
         {"Short_SoC_version", "Ascend910B"},
@@ -81,13 +81,9 @@ bool MockGetPlatformRes(fe::PlatFormInfos *This, const std::string &label, const
     return true;
 }
 
-std::string MockGetCoreType(fe::OptionalInfos *This) {
-    return core_type_stub;
-}
+std::string MockGetCoreType(fe::OptionalInfos* This) { return core_type_stub; }
 
-void MockSetSocSpec(const std::string& key) {
-    core_type_stub = key;
-}
+void MockSetSocSpec(const std::string& key) { core_type_stub = key; }
 
 TEST_F(TEST_ASC_PLATFORM_API, test_ASCInitSocSpec)
 {
@@ -108,8 +104,14 @@ TEST_F(TEST_ASC_PLATFORM_API, test_ASCGetSocSpec)
     int buffer_size = 100;
     char buffer[buffer_size];
 
-    MOCKER_CPP(&fe::PlatFormInfos::GetPlatformRes, bool(fe::PlatFormInfos::*)(const std::string&, const std::string&, std::string&)).stubs().will(invoke(MockGetPlatformRes));
-    MOCKER_CPP(&fe::OptionalInfos::GetCoreType, std::string(fe::OptionalInfos::*)()).stubs().will(invoke(MockGetCoreType));
+    MOCKER_CPP(
+        &fe::PlatFormInfos::GetPlatformRes,
+        bool(fe::PlatFormInfos::*)(const std::string&, const std::string&, std::string&))
+        .stubs()
+        .will(invoke(MockGetPlatformRes));
+    MOCKER_CPP(&fe::OptionalInfos::GetCoreType, std::string(fe::OptionalInfos::*)())
+        .stubs()
+        .will(invoke(MockGetCoreType));
 
     ASCGetSocSpec("SOC_VERSION", buffer, buffer_size);
     EXPECT_STREQ(buffer, "Ascend910B1");
@@ -133,8 +135,14 @@ TEST_F(TEST_ASC_PLATFORM_API, test_ASCSetSocSpec)
     int buffer_size = 100;
     char buffer[buffer_size];
 
-    MOCKER_CPP(&fe::PlatFormInfos::GetPlatformRes, bool(fe::PlatFormInfos::*)(const std::string&, const std::string&, std::string&)).stubs().will(invoke(MockGetPlatformRes));
-    MOCKER_CPP(&fe::OptionalInfos::GetCoreType, std::string(fe::OptionalInfos::*)()).stubs().will(invoke(MockGetCoreType));
+    MOCKER_CPP(
+        &fe::PlatFormInfos::GetPlatformRes,
+        bool(fe::PlatFormInfos::*)(const std::string&, const std::string&, std::string&))
+        .stubs()
+        .will(invoke(MockGetPlatformRes));
+    MOCKER_CPP(&fe::OptionalInfos::GetCoreType, std::string(fe::OptionalInfos::*)())
+        .stubs()
+        .will(invoke(MockGetCoreType));
 
     ASCGetSocSpec("AICORE_TYPE", buffer, buffer_size);
     EXPECT_STREQ(buffer, "VectorCore");
@@ -146,7 +154,7 @@ TEST_F(TEST_ASC_PLATFORM_API, test_ASCSetSocSpec)
     int result = ASCSetSocSpec("Ascend910");
     result = ASCSetSocSpec("AiCore");
     EXPECT_EQ(result, 0);
-    
+
     ASCGetSocSpec("Compiler_arch", buffer, buffer_size);
     EXPECT_STREQ(buffer, "unknown");
     ASCGetSocSpec("SOC_VERSION", buffer, buffer_size);
@@ -159,14 +167,18 @@ TEST_F(TEST_ASC_PLATFORM_API, test_CceConfBase_1)
 {
     tvm::cceconf::CceConfBase* conf = tvm::cceconf::CceConfBase::GetInstance();
 
-    MOCKER_CPP(&fe::PlatFormInfos::GetPlatformRes, bool(fe::PlatFormInfos::*)(const std::string&, const std::string&, std::string&)).stubs().will(invoke(MockGetPlatformRes));
+    MOCKER_CPP(
+        &fe::PlatFormInfos::GetPlatformRes,
+        bool(fe::PlatFormInfos::*)(const std::string&, const std::string&, std::string&))
+        .stubs()
+        .will(invoke(MockGetPlatformRes));
 
     conf->SetOptionalCoreType("DumpCore");
     conf->SetOptionalSocVersion("Ascend310P");
     EXPECT_EQ(conf->SetOptionalCoreType("AiCore"), true);
     conf->SetOptionalAicoreNum("16");
     conf->SetOptionalL1FusionFlag("");
-    
+
     EXPECT_EQ(conf->SetOptionalCoreType("VectorCore"), false);
     conf->SetOptionalSocVersion("Ascend910B1");
     conf->SetOptionalAicoreNum("");
@@ -174,7 +186,7 @@ TEST_F(TEST_ASC_PLATFORM_API, test_CceConfBase_1)
 
     EXPECT_EQ(conf->SetCoreNumByCoreType("AiCore"), true);
     EXPECT_STREQ(conf->GetSocVersion().c_str(), "Ascend910B1");
-    
+
     EXPECT_EQ(conf->AcquireCubeCoreCnt(), 4);
     EXPECT_EQ(conf->AcquireCubeFreq(), 66);
     EXPECT_EQ(conf->AcquireVectorCoreCnt(), 2);
@@ -198,8 +210,14 @@ TEST_F(TEST_ASC_PLATFORM_API, test_CceConfBase_2)
 {
     tvm::cceconf::CceConfBase* conf = tvm::cceconf::CceConfBase::GetInstance();
 
-    MOCKER_CPP(&fe::PlatFormInfos::GetPlatformRes, bool(fe::PlatFormInfos::*)(const std::string&, const std::string&, std::string&)).stubs().will(invoke(MockGetPlatformRes));
-    MOCKER_CPP(&fe::OptionalInfos::GetSocVersion, std::string(fe::OptionalInfos::*)()).stubs().will(returnValue(std::string("Ascend610Lite")));
+    MOCKER_CPP(
+        &fe::PlatFormInfos::GetPlatformRes,
+        bool(fe::PlatFormInfos::*)(const std::string&, const std::string&, std::string&))
+        .stubs()
+        .will(invoke(MockGetPlatformRes));
+    MOCKER_CPP(&fe::OptionalInfos::GetSocVersion, std::string(fe::OptionalInfos::*)())
+        .stubs()
+        .will(returnValue(std::string("Ascend610Lite")));
 
     EXPECT_TRUE(conf->IsM310());
 
@@ -225,8 +243,16 @@ TEST_F(TEST_ASC_PLATFORM_API, test_NewAPIs)
 
     void* mapPoint = CreateStrStrMap();
     MapInsert(mapPoint, "AiCore", "Ascend310P");
-    MOCKER_CPP(&fe::PlatformInfoManager::GetPlatformInstanceByDevice, uint32_t(fe::PlatformInfoManager::*)(const uint32_t&, fe::PlatFormInfos&)).stubs().will(returnValue((uint32_t)0));
-    MOCKER_CPP(&fe::PlatformInfoManager::GetPlatformInfos, uint32_t(fe::PlatformInfoManager::*)(const std::string, fe::PlatFormInfos&, fe::OptionalInfos&)).stubs().will(returnValue((uint32_t)0));
+    MOCKER_CPP(
+        &fe::PlatformInfoManager::GetPlatformInstanceByDevice,
+        uint32_t(fe::PlatformInfoManager::*)(const uint32_t&, fe::PlatFormInfos&))
+        .stubs()
+        .will(returnValue((uint32_t)0));
+    MOCKER_CPP(
+        &fe::PlatformInfoManager::GetPlatformInfos,
+        uint32_t(fe::PlatformInfoManager::*)(const std::string, fe::PlatFormInfos&, fe::OptionalInfos&))
+        .stubs()
+        .will(returnValue((uint32_t)0));
     EXPECT_EQ(ASCSetPlatformInfoRes(0, mapPoint), true);
     EXPECT_EQ(ASCSetCoreNumByCoreType("VectorCore"), true);
     MapDelete(mapPoint);

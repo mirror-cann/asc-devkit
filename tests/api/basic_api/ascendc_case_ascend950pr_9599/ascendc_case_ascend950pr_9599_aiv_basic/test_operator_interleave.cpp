@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <gtest/gtest.h>
 #include <type_traits>
 #include "kernel_operator.h"
@@ -14,17 +14,16 @@
 template <uint32_t category, typename T>
 class KernelVecInterleave {
 public:
-    __aicore__ inline KernelVecInterleave()
-    {}
+    __aicore__ inline KernelVecInterleave() {}
     __aicore__ inline void Init(GM_ADDR src0Gm, GM_ADDR src1Gm, GM_ADDR dst0Gm, GM_ADDR dst1Gm, uint32_t dstCount)
     {
         count = dstCount;
         const int alginSize = AscendC::GetDataBlockSizeInBytes() / sizeof(AscendC::PrimT<T>);
         dstSize = (dstCount + 256 + alginSize - 1) / alginSize * alginSize;
-        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ AscendC::PrimT<T> *>(src0Gm), dstSize);
-        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ AscendC::PrimT<T> *>(src1Gm), dstSize);
-        dst0Global.SetGlobalBuffer(reinterpret_cast<__gm__ AscendC::PrimT<T> *>(dst0Gm), dstSize);
-        dst1Global.SetGlobalBuffer(reinterpret_cast<__gm__ AscendC::PrimT<T> *>(dst1Gm), dstSize);
+        src0Global.SetGlobalBuffer(reinterpret_cast<__gm__ AscendC::PrimT<T>*>(src0Gm), dstSize);
+        src1Global.SetGlobalBuffer(reinterpret_cast<__gm__ AscendC::PrimT<T>*>(src1Gm), dstSize);
+        dst0Global.SetGlobalBuffer(reinterpret_cast<__gm__ AscendC::PrimT<T>*>(dst0Gm), dstSize);
+        dst1Global.SetGlobalBuffer(reinterpret_cast<__gm__ AscendC::PrimT<T>*>(dst1Gm), dstSize);
         pipe.InitBuffer(in0Queue, 1, dstSize * sizeof(AscendC::PrimT<T>));
         pipe.InitBuffer(in1Queue, 1, dstSize * sizeof(AscendC::PrimT<T>));
         pipe.InitBuffer(out0Queue, 1, dstSize * sizeof(AscendC::PrimT<T>));
@@ -98,7 +97,7 @@ private:
 
 template <uint32_t category, typename T>
 __global__ __aicore__ void MainKernelInterleave(
-    uint8_t *src0Gm, uint8_t *src1Gm, uint8_t *dst0Gm, uint8_t *dst1Gm, uint32_t dstSize)
+    uint8_t* src0Gm, uint8_t* src1Gm, uint8_t* dst0Gm, uint8_t* dst1Gm, uint32_t dstSize)
 {
     KernelVecInterleave<category, T> op;
     op.Init(src0Gm, src1Gm, dst0Gm, dst1Gm, dstSize);
@@ -106,14 +105,16 @@ __global__ __aicore__ void MainKernelInterleave(
 }
 
 struct InterleaveTestParams {
-    void (*cal_func)(uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint32_t);
+    void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint8_t*, uint32_t);
     uint32_t dstSize;
 };
 
 class InterleaveTestsuite : public testing::Test, public testing::WithParamInterface<InterleaveTestParams> {};
 
-INSTANTIATE_TEST_CASE_P(InterleaveTestCase, InterleaveTestsuite,
-    ::testing::Values(InterleaveTestParams{MainKernelInterleave<0, uint8_t>, 2},
+INSTANTIATE_TEST_CASE_P(
+    InterleaveTestCase, InterleaveTestsuite,
+    ::testing::Values(
+        InterleaveTestParams{MainKernelInterleave<0, uint8_t>, 2},
         InterleaveTestParams{MainKernelInterleave<0, int8_t>, 2},
         InterleaveTestParams{MainKernelInterleave<0, uint16_t>, 2},
         InterleaveTestParams{MainKernelInterleave<0, int16_t>, 2},
@@ -255,9 +256,7 @@ INSTANTIATE_TEST_CASE_P(InterleaveTestCase, InterleaveTestsuite,
         InterleaveTestParams{MainKernelInterleave<2, AscendC::TensorTrait<int64_t>>, 258},
         InterleaveTestParams{MainKernelInterleave<2, AscendC::TensorTrait<half>>, 258},
         InterleaveTestParams{MainKernelInterleave<2, AscendC::TensorTrait<bfloat16_t>>, 258},
-        InterleaveTestParams{MainKernelInterleave<2, AscendC::TensorTrait<float>>, 258}
-        ));
-
+        InterleaveTestParams{MainKernelInterleave<2, AscendC::TensorTrait<float>>, 258}));
 
 TEST_P(InterleaveTestsuite, InterleaveTestCase)
 {
