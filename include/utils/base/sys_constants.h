@@ -12,12 +12,29 @@
  * \file sys_constants.h
  * \brief
  */
+#if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
+#define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
+#define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_UTILS_BASE_SYS_CONSTANTS_H__
+#endif
+
 #ifndef INCLUDE_UTILS_BASE_SYS_CONSTANTS_H
 #define INCLUDE_UTILS_BASE_SYS_CONSTANTS_H
 
 #include <cstdint>
 
 #include "impl/utils/sys_constants.h"
+
+#ifdef __ASC_DISABLE_RESERVED_UBUF__
+#define __ASC_DISABLE_RESERVD_UBUF_SIZE 2048
+#else
+#define __ASC_DISABLE_RESERVD_UBUF_SIZE 0
+#endif
+
+#ifdef __ASC_DISABLE_VF_STACK_RESERVED__
+#define __ASC_DISABLE_VF_STACK_RESERVD_UBUF_SIZE 6144
+#else
+#define __ASC_DISABLE_VF_STACK_RESERVD_UBUF_SIZE 0
+#endif
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 1001)
 constexpr uint64_t ASC_UB_SIZE = 256 * 1024;
@@ -62,7 +79,7 @@ constexpr uint64_t ASC_L0B_SIZE = 32 * 1024;
 constexpr uint64_t ASC_L0C_SIZE = 64 * 1024;
 constexpr uint64_t ASC_BT_SIZE = 1 * 1024;
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
-constexpr uint64_t ASC_UB_SIZE = 248 * 1024;
+constexpr uint64_t ASC_UB_SIZE = 248 * 1024 + __ASC_DISABLE_VF_STACK_RESERVD_UBUF_SIZE + __ASC_DISABLE_VF_STACK_RESERVD_UBUF_SIZE;
 constexpr uint64_t ASC_L1_SIZE = 512 * 1024;
 constexpr uint64_t ASC_L0A_SIZE = 64 * 1024;
 constexpr uint64_t ASC_L0B_SIZE = 64 * 1024;
@@ -77,4 +94,9 @@ constexpr uint64_t ASC_L0C_SIZE = 0;
 constexpr uint64_t ASC_BT_SIZE = 0;
 #endif
 
+#endif
+
+#if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_UTILS_BASE_SYS_CONSTANTS_H__)
+#undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
+#undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_UTILS_BASE_SYS_CONSTANTS_H__
 #endif
