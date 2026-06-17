@@ -281,6 +281,24 @@ def normalize_generated_cpp(code: str) -> str:
     return normalized
 
 
+def render_gtest_values_instantiation(api_name: str, api_name_upper: str, test_params: List[str]) -> str:
+    """Render gtest value instantiation in the repository clang-format style."""
+    testsuite = f"{api_name}Testsuite"
+    if len(test_params) == 1:
+        return (
+            "INSTANTIATE_TEST_CASE_P(\n"
+            f"    TEST_{api_name_upper}, {testsuite}, ::testing::Values({test_params[0]}));"
+        )
+
+    values = ",\n        ".join(test_params)
+    return (
+        "INSTANTIATE_TEST_CASE_P(\n"
+        f"    TEST_{api_name_upper}, {testsuite},\n"
+        f"    ::testing::Values(\n"
+        f"        {values}));"
+    )
+
+
 # =============================================================================
 # 内置模板定义
 # =============================================================================
@@ -290,15 +308,14 @@ TEMPLATES = {
     # 版权声明
     # -------------------------------------------------------------------------
     'copyright': '''/**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 ''',
 
     # -------------------------------------------------------------------------
@@ -327,14 +344,14 @@ ${INSTANTIATION}
 ${TEST_CASE}
 ''',
 
-    'aiv_kernel_class': '''
-template <${TEMPLATE_PARAMS}>
+    'aiv_kernel_class': '''template <${TEMPLATE_PARAMS}>
 class Kernel${API_NAME} {
 public:
     __aicore__ inline Kernel${API_NAME}() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm,
-                                 __gm__ uint8_t* src1Gm, uint32_t dataSize) {
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, uint32_t dataSize)
+    {
         this->dataSize = dataSize;
 
         dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dataSize);
@@ -346,14 +363,16 @@ public:
         pipe.InitBuffer(outQueueDst, 1, dataSize * sizeof(T));
     }
 
-    __aicore__ inline void Process() {
+    __aicore__ inline void Process()
+    {
         CopyIn();
         Compute();
         CopyOut();
     }
 
 private:
-    __aicore__ inline void CopyIn() {
+    __aicore__ inline void CopyIn()
+    {
         LocalTensor<T> src0Local = inQueueSrc0.AllocTensor<T>();
         LocalTensor<Src1T> src1Local = inQueueSrc1.AllocTensor<Src1T>();
         DataCopy(src0Local, src0Global, dataSize);
@@ -362,7 +381,8 @@ private:
         inQueueSrc1.EnQue(src1Local);
     }
 
-    __aicore__ inline void Compute() {
+    __aicore__ inline void Compute()
+    {
         LocalTensor<T> src0Local = inQueueSrc0.DeQue<T>();
         LocalTensor<Src1T> src1Local = inQueueSrc1.DeQue<Src1T>();
         LocalTensor<T> dstLocal = outQueueDst.AllocTensor<T>();
@@ -374,7 +394,8 @@ private:
         inQueueSrc1.FreeTensor(src1Local);
     }
 
-    __aicore__ inline void CopyOut() {
+    __aicore__ inline void CopyOut()
+    {
         LocalTensor<T> dstLocal = outQueueDst.DeQue<T>();
         DataCopy(dstGlobal, dstLocal, dataSize);
         outQueueDst.FreeTensor(dstLocal);
@@ -388,58 +409,47 @@ private:
     GlobalTensor<T> src0Global;
     GlobalTensor<Src1T> src1Global;
     uint32_t dataSize;
-};
-''',
+};''',
 
-    'aiv_main_function': '''
-template <typename T, typename Src1T = T>
-__aicore__ inline void main_${API_NAME}(uint8_t* dstGm, uint8_t* src0Gm,
-                                        uint8_t* src1Gm, uint32_t dataSize) {
+    'aiv_main_function': '''template <typename T, typename Src1T = T>
+__aicore__ inline void main_${API_NAME}(uint8_t* dstGm, uint8_t* src0Gm, uint8_t* src1Gm, uint32_t dataSize)
+{
     Kernel${API_NAME}<T, Src1T> op;
     op.Init(dstGm, src0Gm, src1Gm, dataSize);
     op.Process();
-}
-''',
+}''',
 
-    'aiv_init_function': '''
-template <typename T, typename Src1T = T>
-void Init${API_NAME}Inputs(uint8_t* src0Gm, uint8_t* src1Gm, uint32_t dataSize) {
+    'aiv_init_function': '''template <typename T, typename Src1T = T>
+void Init${API_NAME}Inputs(uint8_t* src0Gm, uint8_t* src1Gm, uint32_t dataSize)
+{
     T* src0 = reinterpret_cast<T*>(src0Gm);
     Src1T* src1 = reinterpret_cast<Src1T*>(src1Gm);
     for (uint32_t i = 0; i < dataSize; i++) {
         src0[i] = static_cast<T>(i % 256);
         src1[i] = static_cast<Src1T>((i + 1) % 256);
     }
-}
-''',
+}''',
 
-    'aiv_param_struct': '''
-struct ${API_NAME}TestParams {
+    'aiv_param_struct': '''struct ${API_NAME}TestParams {
     uint32_t data_size;
     uint32_t data_bit_size;
     void (*cal_func)(uint8_t*, uint8_t*, uint8_t*, uint32_t);
     void (*init_func)(uint8_t*, uint8_t*, uint32_t);
-};
-''',
+};''',
 
-    'aiv_test_class': '''
-class ${API_NAME}Testsuite : public testing::Test,
-                              public testing::WithParamInterface<${API_NAME}TestParams> {
+    'aiv_test_class': (
+        '''class ${API_NAME}Testsuite : public testing::Test, '''
+        '''public testing::WithParamInterface<${API_NAME}TestParams> {
 protected:
     void SetUp() { AscendC::SetGCoreType(2); }
     void TearDown() { AscendC::SetGCoreType(0); }
-};
-''',
+};'''
+    ),
 
-    'aiv_instantiation': '''
-INSTANTIATE_TEST_CASE_P(TEST_${API_NAME_UPPER}, ${API_NAME}Testsuite,
-    ::testing::Values(
-        ${TEST_PARAMS}
-    ));
-''',
+    'aiv_instantiation': '''${INSTANTIATION}''',
 
-    'aiv_test_case': '''
-TEST_P(${API_NAME}Testsuite, ${API_NAME}TestCase) {
+    'aiv_test_case': '''TEST_P(${API_NAME}Testsuite, ${API_NAME}TestCase)
+{
     auto param = GetParam();
 
     // 分配 GM 内存
@@ -458,8 +468,7 @@ TEST_P(${API_NAME}Testsuite, ${API_NAME}TestCase) {
         // TODO: 添加实际验证逻辑
         // EXPECT_NEAR(...);
     }
-}
-''',
+}''',
 
     'aiv_scalar_tensor_dispatch_basic': '''${COPYRIGHT}
 #include <gtest/gtest.h>
@@ -482,12 +491,11 @@ ${INSTANTIATION}
 ${TEST_CASE}
 ''',
 
-    'aiv_scalar_tensor_dispatch_kernel_class': '''
-template <typename T>
+    'aiv_scalar_tensor_dispatch_kernel_class': '''template <typename T>
 class Kernel${API_NAME} {
 public:
-    __aicore__ inline void Init(__gm__ uint8_t* srcGm, __gm__ uint8_t* dstGm,
-                                 uint32_t dataSize) {
+    __aicore__ inline void Init(__gm__ uint8_t* srcGm, __gm__ uint8_t* dstGm, uint32_t dataSize)
+    {
         this->dataSize = dataSize;
 
         srcGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ PrimT<T>*>(srcGm), dataSize);
@@ -497,20 +505,23 @@ public:
         pipe.InitBuffer(outQueueDst, 1, dataSize * sizeof(PrimT<T>));
     }
 
-    __aicore__ inline void Process() {
+    __aicore__ inline void Process()
+    {
         CopyIn();
         Compute();
         CopyOut();
     }
 
 private:
-    __aicore__ inline void CopyIn() {
+    __aicore__ inline void CopyIn()
+    {
         LocalTensor<T> srcLocal = inQueueSrc.AllocTensor<T>();
         DataCopy(srcLocal, srcGlobal, dataSize);
         inQueueSrc.EnQue(srcLocal);
     }
 
-    __aicore__ inline void Compute() {
+    __aicore__ inline void Compute()
+    {
         LocalTensor<T> srcLocal = inQueueSrc.DeQue<T>();
         LocalTensor<T> dstLocal = outQueueDst.AllocTensor<T>();
         PrimT<T> scalarValue = srcLocal.GetValue(0);
@@ -529,7 +540,8 @@ private:
         inQueueSrc.FreeTensor(srcLocal);
     }
 
-    __aicore__ inline void CopyOut() {
+    __aicore__ inline void CopyOut()
+    {
         LocalTensor<T> dstLocal = outQueueDst.DeQue<T>();
         DataCopy(dstGlobal, dstLocal, dataSize);
         outQueueDst.FreeTensor(dstLocal);
@@ -541,44 +553,35 @@ private:
     GlobalTensor<T> srcGlobal;
     GlobalTensor<T> dstGlobal;
     uint32_t dataSize;
-};
-''',
+};''',
 
-    'aiv_scalar_tensor_dispatch_main_function': '''
-template <typename T>
-__aicore__ inline void main_${API_NAME}(uint8_t* srcGm, uint8_t* dstGm, uint32_t dataSize) {
+    'aiv_scalar_tensor_dispatch_main_function': '''template <typename T>
+__aicore__ inline void main_${API_NAME}(uint8_t* srcGm, uint8_t* dstGm, uint32_t dataSize)
+{
     Kernel${API_NAME}<T> op;
     op.Init(srcGm, dstGm, dataSize);
     op.Process();
-}
-''',
+}''',
 
-    'aiv_scalar_tensor_dispatch_param_struct': '''
-struct ${API_NAME}TestParams {
+    'aiv_scalar_tensor_dispatch_param_struct': '''struct ${API_NAME}TestParams {
     uint32_t data_size;
     uint32_t data_bit_size;
     void (*cal_func)(uint8_t*, uint8_t*, uint32_t);
-};
-''',
+};''',
 
-    'aiv_scalar_tensor_dispatch_test_class': '''
-class ${API_NAME}Testsuite : public testing::Test,
-                              public testing::WithParamInterface<${API_NAME}TestParams> {
+    'aiv_scalar_tensor_dispatch_test_class': (
+        '''class ${API_NAME}Testsuite : public testing::Test, '''
+        '''public testing::WithParamInterface<${API_NAME}TestParams> {
 protected:
     void SetUp() { AscendC::SetGCoreType(2); }
     void TearDown() { AscendC::SetGCoreType(0); }
-};
-''',
+};'''
+    ),
 
-    'aiv_scalar_tensor_dispatch_instantiation': '''
-INSTANTIATE_TEST_CASE_P(TEST_${API_NAME_UPPER}, ${API_NAME}Testsuite,
-    ::testing::Values(
-        ${TEST_PARAMS}
-    ));
-''',
+    'aiv_scalar_tensor_dispatch_instantiation': '''${INSTANTIATION}''',
 
-    'aiv_scalar_tensor_dispatch_test_case': '''
-TEST_P(${API_NAME}Testsuite, ${API_NAME}TestCase) {
+    'aiv_scalar_tensor_dispatch_test_case': '''TEST_P(${API_NAME}Testsuite, ${API_NAME}TestCase)
+{
     auto param = GetParam();
 
     std::vector<uint8_t> srcGm(param.data_size * param.data_bit_size, 0);
@@ -587,8 +590,7 @@ TEST_P(${API_NAME}Testsuite, ${API_NAME}TestCase) {
     param.cal_func(srcGm.data(), dstGm.data(), param.data_size);
 
     EXPECT_EQ(dstGm[0], 0x00);
-}
-''',
+}''',
 
     # -------------------------------------------------------------------------
     # AIC (Cube 核心) API 模板
@@ -607,15 +609,14 @@ ${TEST_CLASS}
 ${TEST_CASE}
 ''',
 
-    'aic_kernel_class': '''
-template <typename Src0T, typename Src1T, typename DstT, typename L1OutT>
+    'aic_kernel_class': '''template <typename Src0T, typename Src1T, typename DstT, typename L1OutT>
 class Kernel${API_NAME} {
 public:
     __aicore__ inline Kernel${API_NAME}() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b,
-                                 __gm__ uint8_t* c,
-                                 uint16_t mVal, uint16_t kVal, uint16_t nVal) {
+    __aicore__ inline void Init(
+        __gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* c, uint16_t mVal, uint16_t kVal, uint16_t nVal)
+    {
         this->m = mVal;
         this->k = kVal;
         this->n = nVal;
@@ -629,14 +630,16 @@ public:
         pipe.InitBuffer(outQueueCO1, 1, m * n * sizeof(L1OutT));
     }
 
-    __aicore__ inline void Process() {
+    __aicore__ inline void Process()
+    {
         CopyIn();
         Compute();
         CopyOut();
     }
 
 private:
-    __aicore__ inline void CopyIn() {
+    __aicore__ inline void CopyIn()
+    {
         LocalTensor<Src0T> a1Local = inQueueA1.AllocTensor<Src0T>();
         LocalTensor<Src1T> b1Local = inQueueB1.AllocTensor<Src1T>();
         DataCopy(a1Local, aGM, m * k);
@@ -645,7 +648,8 @@ private:
         inQueueB1.EnQue(b1Local);
     }
 
-    __aicore__ inline void Compute() {
+    __aicore__ inline void Compute()
+    {
         LocalTensor<Src0T> a1Local = inQueueA1.DeQue<Src0T>();
         LocalTensor<Src1T> b1Local = inQueueB1.DeQue<Src1T>();
         LocalTensor<L1OutT> co1Local = outQueueCO1.AllocTensor<L1OutT>();
@@ -657,7 +661,8 @@ private:
         inQueueB1.FreeTensor(b1Local);
     }
 
-    __aicore__ inline void CopyOut() {
+    __aicore__ inline void CopyOut()
+    {
         LocalTensor<L1OutT> co1Local = outQueueCO1.DeQue<L1OutT>();
         DataCopy(cGM, co1Local, m * n);
         outQueueCO1.FreeTensor(co1Local);
@@ -671,24 +676,20 @@ private:
     GlobalTensor<Src1T> bGM;
     GlobalTensor<DstT> cGM;
     uint16_t m, k, n;
-};
-''',
+};''',
 
-    'aic_test_class': '''
-class TEST_${API_NAME_UPPER} : public testing::Test {
+    'aic_test_class': '''class TEST_${API_NAME_UPPER} : public testing::Test {
 protected:
-    void SetUp() {
-        g_coreType = AscendC::AIC_TYPE;
-    }
-    void TearDown() {
+    void SetUp() { g_coreType = AscendC::AIC_TYPE; }
+    void TearDown()
+    {
         AscendC::CheckSyncState();
         g_coreType = AscendC::MIX_TYPE;
     }
-};
-''',
+};''',
 
-    'aic_test_case': '''
-TEST_F(TEST_${API_NAME_UPPER}, ${API_NAME}_Basic) {
+    'aic_test_case': '''TEST_F(TEST_${API_NAME_UPPER}, ${API_NAME}_Basic)
+{
     uint16_t m = ${M_SIZE};
     uint16_t n = ${N_SIZE};
     uint16_t k = ${K_SIZE};
@@ -721,8 +722,7 @@ TEST_F(TEST_${API_NAME_UPPER}, ${API_NAME}_Basic) {
         // TODO: 添加实际验证逻辑
         ${DST_TYPE} val = reinterpret_cast<${DST_TYPE}*>(c)[i];
     }
-}
-''',
+}''',
 
     # -------------------------------------------------------------------------
     # C API 模板
@@ -1182,10 +1182,14 @@ class AIVUTGenerator(UTGenerator):
             func_name = f"main_{self.config.api_name}<{tc.dtype}>"
             init_func_name = f"Init{self.config.api_name}Inputs<{tc.dtype}>"
             test_params.append(
-                f"{self.config.api_name}TestParams {{ {tc.data_size}, "
-                f"{dtype_info['size']}, {func_name}, {init_func_name} }}"
+                f"{self.config.api_name}TestParams{{{tc.data_size}, "
+                f"{dtype_info['size']}, {func_name}, {init_func_name}}}"
             )
-        variables['TEST_PARAMS'] = ',\n        '.join(test_params)
+        variables['INSTANTIATION'] = render_gtest_values_instantiation(
+            self.config.api_name,
+            self.config.api_name.upper(),
+            test_params,
+        )
 
         # 渲染各部分
         parts = [
@@ -1220,10 +1224,14 @@ class AIVUTGenerator(UTGenerator):
                 dtype_name = f"TensorTrait<{tc.dtype}>"
             func_name = f"main_{self.config.api_name}<{dtype_name}>"
             test_params.append(
-                f"{self.config.api_name}TestParams {{ {tc.data_size}, "
-                f"{dtype_info['size']}, {func_name} }}"
+                f"{self.config.api_name}TestParams{{{tc.data_size}, "
+                f"{dtype_info['size']}, {func_name}}}"
             )
-        variables['TEST_PARAMS'] = ',\n        '.join(test_params)
+        variables['INSTANTIATION'] = render_gtest_values_instantiation(
+            self.config.api_name,
+            self.config.api_name.upper(),
+            test_params,
+        )
 
         return self.render('aiv_scalar_tensor_dispatch_basic', {
             **variables,

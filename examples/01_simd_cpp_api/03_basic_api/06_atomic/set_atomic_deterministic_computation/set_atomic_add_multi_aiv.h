@@ -21,8 +21,8 @@ class KernelSetAtomicAddMultiAIV {
 public:
     // 数据长度常量（32字节对齐）
     static constexpr int32_t DATA_LENGTH = 8;
-    // gmWorkspace申请的空间最少要求为：3 * 32Bytes + 32Bytes 
-    static constexpr int32_t SYNC_SPACE_LENGTH = 256; 
+    // gmWorkspace申请的空间最少要求为：3 * 32Bytes + 32Bytes
+    static constexpr int32_t SYNC_SPACE_LENGTH = 256;
     __aicore__ inline KernelSetAtomicAddMultiAIV() {}
     __aicore__ inline void Init(
         __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, __gm__ uint8_t* src2Gm, __gm__ uint8_t* src3Gm,

@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include "kernel_operator.h"
@@ -15,15 +14,14 @@
 using namespace std;
 using namespace AscendC;
 
-
 template <typename Src0T, typename Src1T, typename DstT, typename L1OutT>
 class KernelMmad {
 public:
     __aicore__ inline KernelMmad() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b,
-                                 __gm__ uint8_t* c,
-                                 uint16_t mVal, uint16_t kVal, uint16_t nVal) {
+    __aicore__ inline void Init(
+        __gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* c, uint16_t mVal, uint16_t kVal, uint16_t nVal)
+    {
         this->m = mVal;
         this->k = kVal;
         this->n = nVal;
@@ -37,14 +35,16 @@ public:
         pipe.InitBuffer(outQueueCO1, 1, m * n * sizeof(L1OutT));
     }
 
-    __aicore__ inline void Process() {
+    __aicore__ inline void Process()
+    {
         CopyIn();
         Compute();
         CopyOut();
     }
 
 private:
-    __aicore__ inline void CopyIn() {
+    __aicore__ inline void CopyIn()
+    {
         LocalTensor<Src0T> a1Local = inQueueA1.AllocTensor<Src0T>();
         LocalTensor<Src1T> b1Local = inQueueB1.AllocTensor<Src1T>();
         DataCopy(a1Local, aGM, m * k);
@@ -53,7 +53,8 @@ private:
         inQueueB1.EnQue(b1Local);
     }
 
-    __aicore__ inline void Compute() {
+    __aicore__ inline void Compute()
+    {
         LocalTensor<Src0T> a1Local = inQueueA1.DeQue<Src0T>();
         LocalTensor<Src1T> b1Local = inQueueB1.DeQue<Src1T>();
         LocalTensor<L1OutT> co1Local = outQueueCO1.AllocTensor<L1OutT>();
@@ -65,7 +66,8 @@ private:
         inQueueB1.FreeTensor(b1Local);
     }
 
-    __aicore__ inline void CopyOut() {
+    __aicore__ inline void CopyOut()
+    {
         LocalTensor<L1OutT> co1Local = outQueueCO1.DeQue<L1OutT>();
         DataCopy(cGM, co1Local, m * n);
         outQueueCO1.FreeTensor(co1Local);
@@ -81,22 +83,18 @@ private:
     uint16_t m, k, n;
 };
 
-
-
 class TEST_MMAD : public testing::Test {
 protected:
-    void SetUp() {
-        g_coreType = AscendC::AIC_TYPE;
-    }
-    void TearDown() {
+    void SetUp() { g_coreType = AscendC::AIC_TYPE; }
+    void TearDown()
+    {
         AscendC::CheckSyncState();
         g_coreType = AscendC::MIX_TYPE;
     }
 };
 
-
-
-TEST_F(TEST_MMAD, Mmad_Basic) {
+TEST_F(TEST_MMAD, Mmad_Basic)
+{
     uint16_t m = 16;
     uint16_t n = 16;
     uint16_t k = 64;
@@ -130,4 +128,3 @@ TEST_F(TEST_MMAD, Mmad_Basic) {
         float val = reinterpret_cast<float*>(c)[i];
     }
 }
-

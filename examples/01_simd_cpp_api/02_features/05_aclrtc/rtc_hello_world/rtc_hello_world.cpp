@@ -17,18 +17,16 @@
 #define ACL_RTC_NPU_ARCH "dav-2201"
 #endif
 
-#define ASCENDC_CHECK(expr) do {               \
-    aclError ret = (expr);                     \
-    if (ret != ACL_SUCCESS) {                  \
-        fprintf(stderr,                        \
-            "Ascend Error: %s:%d code=%d %s\n",\
-            __FILE__, __LINE__,                \
-            ret, aclGetRecentErrMsg());        \
-        return ret;                            \
-    }                                          \
-} while(0)
+#define ASCENDC_CHECK(expr)                                                                                     \
+    do {                                                                                                        \
+        aclError ret = (expr);                                                                                  \
+        if (ret != ACL_SUCCESS) {                                                                               \
+            fprintf(stderr, "Ascend Error: %s:%d code=%d %s\n", __FILE__, __LINE__, ret, aclGetRecentErrMsg()); \
+            return ret;                                                                                         \
+        }                                                                                                       \
+    } while (0)
 
-const char *src = R""""(
+const char* src = R""""(
 #include "utils/debug/asc_printf.h"
 extern "C" __global__ __vector__ void hello_world()
 {
@@ -36,13 +34,13 @@ extern "C" __global__ __vector__ void hello_world()
 }
 )"""";
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     aclrtcProg prog;
     ASCENDC_CHECK(aclrtcCreateProg(&prog, src, "hello_world.asc", 0, nullptr, nullptr));
 
     // aclrtc流程，传入毕昇编译器的编译选项，调用aclrtcCompileProg进行编译
-    const char *options[] = {
+    const char* options[] = {
         "--npu-arch=" ACL_RTC_NPU_ARCH,
     };
     int numOptions = sizeof(options) / sizeof(options[0]);
@@ -75,12 +73,12 @@ int main(int argc, char *argv[])
     ASCENDC_CHECK(aclrtBinaryLoadFromData(deviceELF.data(), binDataSizeRet, &loadOption, &binHandle));
 
     aclrtFuncHandle funcHandle = nullptr;
-    const char *funcName = "hello_world";
+    const char* funcName = "hello_world";
     ASCENDC_CHECK(aclrtBinaryGetFunction(binHandle, funcName, &funcHandle));
 
     // 核函数执行
     uint32_t numBlocks = 8;
-    void *kernelArgs[] = {};
+    void* kernelArgs[] = {};
     ASCENDC_CHECK(aclrtLaunchKernelWithArgsArray(funcHandle, numBlocks, stream, nullptr, kernelArgs));
     ASCENDC_CHECK(aclrtSynchronizeStream(stream));
 

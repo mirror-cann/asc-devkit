@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <gtest/gtest.h>
 #include <vector>
@@ -16,14 +15,14 @@
 using namespace std;
 using namespace AscendC;
 
-
 template <typename T, typename Src1T>
 class KernelSub {
 public:
     __aicore__ inline KernelSub() {}
 
-    __aicore__ inline void Init(__gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm,
-                                 __gm__ uint8_t* src1Gm, uint32_t dataSize) {
+    __aicore__ inline void Init(
+        __gm__ uint8_t* dstGm, __gm__ uint8_t* src0Gm, __gm__ uint8_t* src1Gm, uint32_t dataSize)
+    {
         this->dataSize = dataSize;
 
         dstGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ T*>(dstGm), dataSize);
@@ -35,14 +34,16 @@ public:
         pipe.InitBuffer(outQueueDst, 1, dataSize * sizeof(T));
     }
 
-    __aicore__ inline void Process() {
+    __aicore__ inline void Process()
+    {
         CopyIn();
         Compute();
         CopyOut();
     }
 
 private:
-    __aicore__ inline void CopyIn() {
+    __aicore__ inline void CopyIn()
+    {
         LocalTensor<T> src0Local = inQueueSrc0.AllocTensor<T>();
         LocalTensor<Src1T> src1Local = inQueueSrc1.AllocTensor<Src1T>();
         DataCopy(src0Local, src0Global, dataSize);
@@ -51,7 +52,8 @@ private:
         inQueueSrc1.EnQue(src1Local);
     }
 
-    __aicore__ inline void Compute() {
+    __aicore__ inline void Compute()
+    {
         LocalTensor<T> src0Local = inQueueSrc0.DeQue<T>();
         LocalTensor<Src1T> src1Local = inQueueSrc1.DeQue<Src1T>();
         LocalTensor<T> dstLocal = outQueueDst.AllocTensor<T>();
@@ -63,7 +65,8 @@ private:
         inQueueSrc1.FreeTensor(src1Local);
     }
 
-    __aicore__ inline void CopyOut() {
+    __aicore__ inline void CopyOut()
+    {
         LocalTensor<T> dstLocal = outQueueDst.DeQue<T>();
         DataCopy(dstGlobal, dstLocal, dataSize);
         outQueueDst.FreeTensor(dstLocal);
@@ -79,20 +82,17 @@ private:
     uint32_t dataSize;
 };
 
-
-
 template <typename T, typename Src1T = T>
-__aicore__ inline void main_Sub(uint8_t* dstGm, uint8_t* src0Gm,
-                                        uint8_t* src1Gm, uint32_t dataSize) {
+__aicore__ inline void main_Sub(uint8_t* dstGm, uint8_t* src0Gm, uint8_t* src1Gm, uint32_t dataSize)
+{
     KernelSub<T, Src1T> op;
     op.Init(dstGm, src0Gm, src1Gm, dataSize);
     op.Process();
 }
 
-
-
 template <typename T, typename Src1T = T>
-void InitSubInputs(uint8_t* src0Gm, uint8_t* src1Gm, uint32_t dataSize) {
+void InitSubInputs(uint8_t* src0Gm, uint8_t* src1Gm, uint32_t dataSize)
+{
     T* src0 = reinterpret_cast<T*>(src0Gm);
     Src1T* src1 = reinterpret_cast<Src1T*>(src1Gm);
     for (uint32_t i = 0; i < dataSize; i++) {
@@ -101,8 +101,6 @@ void InitSubInputs(uint8_t* src0Gm, uint8_t* src1Gm, uint32_t dataSize) {
     }
 }
 
-
-
 struct SubTestParams {
     uint32_t data_size;
     uint32_t data_bit_size;
@@ -110,25 +108,17 @@ struct SubTestParams {
     void (*init_func)(uint8_t*, uint8_t*, uint32_t);
 };
 
-
-
-class SubTestsuite : public testing::Test,
-                              public testing::WithParamInterface<SubTestParams> {
+class SubTestsuite : public testing::Test, public testing::WithParamInterface<SubTestParams> {
 protected:
     void SetUp() { AscendC::SetGCoreType(2); }
     void TearDown() { AscendC::SetGCoreType(0); }
 };
 
+INSTANTIATE_TEST_CASE_P(
+    TEST_SUB, SubTestsuite, ::testing::Values(SubTestParams{128, 2, main_Sub<half>, InitSubInputs<half>}));
 
-
-INSTANTIATE_TEST_CASE_P(TEST_SUB, SubTestsuite,
-    ::testing::Values(
-        SubTestParams { 128, 2, main_Sub<half>, InitSubInputs<half> }
-    ));
-
-
-
-TEST_P(SubTestsuite, SubTestCase) {
+TEST_P(SubTestsuite, SubTestCase)
+{
     auto param = GetParam();
 
     // 分配 GM 内存
@@ -148,4 +138,3 @@ TEST_P(SubTestsuite, SubTestCase) {
         // EXPECT_NEAR(...);
     }
 }
-

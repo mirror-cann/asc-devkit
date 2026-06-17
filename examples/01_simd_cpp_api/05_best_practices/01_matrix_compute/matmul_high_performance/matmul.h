@@ -69,18 +69,20 @@ class MatmulKernel {
 public:
     static constexpr auto MatmulConfig = isMdl ? CFG_MDL : CFG_NORM;
     __aicore__ inline MatmulKernel(){};
-    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, const TCubeTiling& tiling);
+    __aicore__ inline void Init(
+        __gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, const TCubeTiling& tiling);
     __aicore__ inline void Process(AscendC::TPipe* pipe);
 
-    AscendC::Matmul<AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType>,
-                    AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BType>,
-                    AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, CType>,
-                    AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BiasType>, MatmulConfig>
+    AscendC::Matmul<
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BType>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, CType>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BiasType>, MatmulConfig>
         matmulObj;
 
 private:
-    __aicore__ inline void CalcOffset(int32_t blockIdx, int32_t& offsetA, int32_t& offsetB, int32_t& offsetC,
-                                      int32_t& offsetBias);
+    __aicore__ inline void CalcOffset(
+        int32_t blockIdx, int32_t& offsetA, int32_t& offsetB, int32_t& offsetC, int32_t& offsetBias);
 
     AscendC::GlobalTensor<AType> aGlobal;
     AscendC::GlobalTensor<BType> bGlobal;
@@ -90,8 +92,8 @@ private:
 };
 
 template <typename AType, typename BType, typename CType, typename BiasType, bool isMdl>
-__aicore__ inline void MatmulKernel<AType, BType, CType, BiasType, isMdl>::Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias,
-                                                                                __gm__ uint8_t* c, const TCubeTiling& tiling)
+__aicore__ inline void MatmulKernel<AType, BType, CType, BiasType, isMdl>::Init(
+    __gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, const TCubeTiling& tiling)
 {
     this->tiling = tiling;
     aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ AType*>(a), tiling.M * tiling.Ka);
@@ -125,9 +127,8 @@ __aicore__ inline void MatmulKernel<AType, BType, CType, BiasType, isMdl>::Proce
 }
 
 template <typename AType, typename BType, typename CType, typename BiasType, bool isMdl>
-__aicore__ inline void
-MatmulKernel<AType, BType, CType, BiasType, isMdl>::CalcOffset(int32_t blockIdx, int32_t& offsetA, int32_t& offsetB,
-                                                               int32_t& offsetC, int32_t& offsetBias)
+__aicore__ inline void MatmulKernel<AType, BType, CType, BiasType, isMdl>::CalcOffset(
+    int32_t blockIdx, int32_t& offsetA, int32_t& offsetB, int32_t& offsetC, int32_t& offsetBias)
 {
     const TCubeTiling& tiling = this->tiling;
     auto mSingleBlocks = (tiling.M + tiling.singleCoreM - 1) / tiling.singleCoreM;
@@ -160,19 +161,21 @@ template <typename AType, typename BType, typename CType, typename BiasType>
 class MatmulKernelL2Cache {
 public:
     __aicore__ inline MatmulKernelL2Cache(){};
-    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, const TCubeTiling& tiling);
+    __aicore__ inline void Init(
+        __gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, const TCubeTiling& tiling);
     __aicore__ inline void Process(AscendC::TPipe* pipe);
 
     static constexpr auto MatmulConfig = CFG_MDL;
-    AscendC::Matmul<AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType>,
-                    AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BType>,
-                    AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, CType>,
-                    AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BiasType>, MatmulConfig>
+    AscendC::Matmul<
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BType>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, CType>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BiasType>, MatmulConfig>
         matmulObj;
 
 private:
-    __aicore__ inline void CalcOffset(int32_t blockIdx, int32_t& offsetA, int32_t& offsetB, int32_t& offsetC,
-                                      int32_t& offsetBias);
+    __aicore__ inline void CalcOffset(
+        int32_t blockIdx, int32_t& offsetA, int32_t& offsetB, int32_t& offsetC, int32_t& offsetBias);
 
     AscendC::GlobalTensor<AType> aGlobal;
     AscendC::GlobalTensor<BType> bGlobal;
@@ -184,8 +187,8 @@ private:
 };
 
 template <typename AType, typename BType, typename CType, typename BiasType>
-__aicore__ inline void MatmulKernelL2Cache<AType, BType, CType, BiasType>::Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias,
-                                                                                 __gm__ uint8_t* c, const TCubeTiling& tiling)
+__aicore__ inline void MatmulKernelL2Cache<AType, BType, CType, BiasType>::Init(
+    __gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, const TCubeTiling& tiling)
 {
     this->tiling = tiling;
     aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ AType*>(a), tiling.M * tiling.Ka);
@@ -227,9 +230,8 @@ __aicore__ inline void MatmulKernelL2Cache<AType, BType, CType, BiasType>::Proce
 }
 
 template <typename AType, typename BType, typename CType, typename BiasType>
-__aicore__ inline void
-MatmulKernelL2Cache<AType, BType, CType, BiasType>::CalcOffset(int32_t blockIdx, int32_t& offsetA, int32_t& offsetB,
-                                                                int32_t& offsetC, int32_t& offsetBias)
+__aicore__ inline void MatmulKernelL2Cache<AType, BType, CType, BiasType>::CalcOffset(
+    int32_t blockIdx, int32_t& offsetA, int32_t& offsetB, int32_t& offsetC, int32_t& offsetBias)
 {
     const TCubeTiling& tiling = this->tiling;
     constexpr uint32_t mSingleBlocks = 4;
@@ -249,8 +251,9 @@ MatmulKernelL2Cache<AType, BType, CType, BiasType>::CalcOffset(int32_t blockIdx,
     offsetBias = nIdx * tiling.singleCoreN;
 }
 
-template <typename AType, typename BType, typename CType, typename BiasType, uint32_t singleN, uint32_t baseM,
-          uint32_t depthA1Param, uint32_t stepKaParam, bool useUnitFlag = false>
+template <
+    typename AType, typename BType, typename CType, typename BiasType, uint32_t singleN, uint32_t baseM,
+    uint32_t depthA1Param, uint32_t stepKaParam, bool useUnitFlag = false>
 __aicore__ inline constexpr MatmulApiStaticTiling GetCustomConstantCFG()
 {
     // Case 7/8: 编译期生成MatmulApiStaticTiling
@@ -267,12 +270,14 @@ __aicore__ inline constexpr MatmulApiStaticTiling GetCustomConstantCFG()
     return constantCFG;
 }
 
-template <typename AType, typename BType, typename CType, typename BiasType, uint32_t singleN, uint32_t baseM,
-          uint32_t depthA1Param, uint32_t stepKaParam, bool useUnitFlag = false>
+template <
+    typename AType, typename BType, typename CType, typename BiasType, uint32_t singleN, uint32_t baseM,
+    uint32_t depthA1Param, uint32_t stepKaParam, bool useUnitFlag = false>
 class MatmulKernelMdlL2CacheConstant {
 public:
     __aicore__ inline MatmulKernelMdlL2CacheConstant(){};
-    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, __gm__ uint8_t* tiling);
+    __aicore__ inline void Init(
+        __gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, __gm__ uint8_t* tiling);
     __aicore__ inline void Process(AscendC::TPipe* pipe);
 
     using A_TYPE = AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType>;
@@ -281,14 +286,14 @@ public:
     using BIAS_TYPE = AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BiasType>;
 
     // CONSTANT_CFG: 常量Tiling配置，减少运行时Scalar计算
-    constexpr static auto CONSTANT_CFG =
-        GetCustomConstantCFG<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, singleN, baseM, depthA1Param, stepKaParam, useUnitFlag>();
+    constexpr static auto CONSTANT_CFG = GetCustomConstantCFG<
+        A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, singleN, baseM, depthA1Param, stepKaParam, useUnitFlag>();
     AscendC::Matmul<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CONSTANT_CFG> matmulObj;
     MatmulProblemShape shapes;
 
 private:
-    __aicore__ inline void CalcOffset(const MatmulProblemShape& param, uint32_t& offsetA, uint32_t& offsetB,
-                                      uint32_t& offsetC, uint32_t& offsetBias);
+    __aicore__ inline void CalcOffset(
+        const MatmulProblemShape& param, uint32_t& offsetA, uint32_t& offsetB, uint32_t& offsetC, uint32_t& offsetBias);
 
     AscendC::GlobalTensor<AType> aGlobal;
     AscendC::GlobalTensor<BType> bGlobal;
@@ -298,12 +303,12 @@ private:
     uint32_t nIdx;
 };
 
-template <typename AType, typename BType, typename CType, typename BiasType, uint32_t singleN, uint32_t baseM,
-          uint32_t depthA1Param, uint32_t stepKaParam, bool useUnitFlag>
+template <
+    typename AType, typename BType, typename CType, typename BiasType, uint32_t singleN, uint32_t baseM,
+    uint32_t depthA1Param, uint32_t stepKaParam, bool useUnitFlag>
 __aicore__ inline void
-MatmulKernelMdlL2CacheConstant<AType, BType, CType, BiasType, singleN, baseM, depthA1Param, stepKaParam,
-                               useUnitFlag>::Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias,
-                                                  __gm__ uint8_t* c, __gm__ uint8_t* tiling)
+MatmulKernelMdlL2CacheConstant<AType, BType, CType, BiasType, singleN, baseM, depthA1Param, stepKaParam, useUnitFlag>::
+    Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* bias, __gm__ uint8_t* c, __gm__ uint8_t* tiling)
 {
     CopyTiling(&shapes, tiling);
     if (AscendC::GetBlockIdx() >= shapes.usedCoreNum) {
@@ -319,11 +324,12 @@ MatmulKernelMdlL2CacheConstant<AType, BType, CType, BiasType, singleN, baseM, de
     }
 }
 
-template <typename AType, typename BType, typename CType, typename BiasType, uint32_t singleN, uint32_t baseM,
-          uint32_t depthA1Param, uint32_t stepKaParam, bool useUnitFlag>
-__aicore__ inline void
-MatmulKernelMdlL2CacheConstant<AType, BType, CType, BiasType, singleN, baseM, depthA1Param, stepKaParam,
-                               useUnitFlag>::Process(AscendC::TPipe* pipe)
+template <
+    typename AType, typename BType, typename CType, typename BiasType, uint32_t singleN, uint32_t baseM,
+    uint32_t depthA1Param, uint32_t stepKaParam, bool useUnitFlag>
+__aicore__ inline void MatmulKernelMdlL2CacheConstant<
+    AType, BType, CType, BiasType, singleN, baseM, depthA1Param, stepKaParam, useUnitFlag>::Process(AscendC::TPipe*
+                                                                                                        pipe)
 {
     REGIST_MATMUL_OBJ(pipe, GetSysWorkSpacePtr(), matmulObj, (TCubeTiling*)nullptr);
     matmulObj.SetOrgShape(shapes.m, shapes.n, shapes.k);
@@ -351,12 +357,13 @@ MatmulKernelMdlL2CacheConstant<AType, BType, CType, BiasType, singleN, baseM, de
     matmulObj.End();
 }
 
-template <typename AType, typename BType, typename CType, typename BiasType, uint32_t singleN, uint32_t baseM,
-          uint32_t depthA1Param, uint32_t stepKaParam, bool useUnitFlag>
+template <
+    typename AType, typename BType, typename CType, typename BiasType, uint32_t singleN, uint32_t baseM,
+    uint32_t depthA1Param, uint32_t stepKaParam, bool useUnitFlag>
 __aicore__ inline void
-MatmulKernelMdlL2CacheConstant<AType, BType, CType, BiasType, singleN, baseM, depthA1Param, stepKaParam,
-                               useUnitFlag>::CalcOffset(const MatmulProblemShape& param, uint32_t& offsetA,
-                                                        uint32_t& offsetB, uint32_t& offsetC, uint32_t& offsetBias)
+MatmulKernelMdlL2CacheConstant<AType, BType, CType, BiasType, singleN, baseM, depthA1Param, stepKaParam, useUnitFlag>::
+    CalcOffset(
+        const MatmulProblemShape& param, uint32_t& offsetA, uint32_t& offsetB, uint32_t& offsetC, uint32_t& offsetBias)
 {
     auto blockIdx = AscendC::GetBlockIdx();
     constexpr uint32_t mSingleBlocks = 4;
@@ -379,14 +386,14 @@ MatmulKernelMdlL2CacheConstant<AType, BType, CType, BiasType, singleN, baseM, de
 template <typename TilingType, bool isTiling = false, uint32_t baseM = 64>
 inline void SetTilingTypes(TilingType& tilingApi, optiling::TCubeTiling& tilingData)
 {
-    tilingApi.SetAType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16,
-                       IS_TRANS_A);
-    tilingApi.SetBType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16,
-                       IS_TRANS_B);
-    tilingApi.SetCType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND,
-                       matmul_tiling::DataType::DT_FLOAT16);
-    tilingApi.SetBiasType(matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND,
-                          matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetAType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, IS_TRANS_A);
+    tilingApi.SetBType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16, IS_TRANS_B);
+    tilingApi.SetCType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
+    tilingApi.SetBiasType(
+        matmul_tiling::TPosition::GM, matmul_tiling::CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT16);
     tilingApi.SetOrgShape(M, N, K);
     tilingApi.SetShape(M, N, K);
     tilingApi.EnableBias(IS_BIAS);
@@ -414,8 +421,9 @@ void SetL1(optiling::TCubeTiling& tilingData)
 template <uint32_t baseM, bool isTiling = false>
 void GenerateTilingSingleCore(platform_ascendc::PlatformAscendC* ascendcPlatform, uint8_t* tilingBuf);
 
-template <uint32_t singleN, uint32_t singleNSplit, uint32_t baseM, uint32_t depthA1Param, uint32_t stepKaParam,
-          bool isSplit = false, bool isMdl = false, bool isL1Cache = false, bool isL2Cache = false>
+template <
+    uint32_t singleN, uint32_t singleNSplit, uint32_t baseM, uint32_t depthA1Param, uint32_t stepKaParam,
+    bool isSplit = false, bool isMdl = false, bool isL1Cache = false, bool isL2Cache = false>
 void GenerateTilingMultiCore(platform_ascendc::PlatformAscendC* ascendcPlatform, uint8_t* tilingBuf);
 
 #endif

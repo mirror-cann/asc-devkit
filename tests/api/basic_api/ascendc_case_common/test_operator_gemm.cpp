@@ -102,7 +102,8 @@ TEST_P(GemmTestSuite, GemmTestCase)
     half input0Gm[roundm * roundk]{0x0000};
     half input1Gm[roundn * roundk]{0x0000};
     float outputGm[roundm * roundn]{0x00000000};
-    // main_gemm_test(input0Gm, input1Gm, outputGm, param.m, param.k, param.n, param.c0Size, param.initValue, param.mode);
+    // main_gemm_test(input0Gm, input1Gm, outputGm, param.m, param.k, param.n, param.c0Size, param.initValue,
+    // param.mode);
     for (int32_t i = 0; i < param.m * param.n; i++) {
         EXPECT_EQ(outputGm[i], 0x00);
     }

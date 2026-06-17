@@ -96,10 +96,8 @@ private:
         constexpr uint32_t nLoopCount = n / tileN;
         constexpr uint32_t mTileCount = singleCoreM / tileM;
         AscendC::DataCopyParams copyInParams{
-            static_cast<uint16_t>(tileM),
-            static_cast<uint16_t>(tileN * sizeof(half)),
-            static_cast<uint16_t>((n - tileN) * sizeof(half)),
-            0};
+            static_cast<uint16_t>(tileM), static_cast<uint16_t>(tileN * sizeof(half)),
+            static_cast<uint16_t>((n - tileN) * sizeof(half)), 0};
         AscendC::DataCopyPadParams padParams{false, 0, 0, 0};
 
         for (uint32_t mBlockIdx = 0; mBlockIdx < fullMBlockCount; mBlockIdx++) {
@@ -125,10 +123,8 @@ private:
         uint32_t nLoopCount = nCount / tileN;
         constexpr uint32_t mLoopCount = singleCoreM / tileM;
         AscendC::DataCopyParams copyInParams{
-            static_cast<uint16_t>(tileM),
-            static_cast<uint16_t>(tileN * sizeof(half)),
-            static_cast<uint16_t>((n - tileN) * sizeof(half)),
-            0};
+            static_cast<uint16_t>(tileM), static_cast<uint16_t>(tileN * sizeof(half)),
+            static_cast<uint16_t>((n - tileN) * sizeof(half)), 0};
         AscendC::DataCopyPadParams padParams{false, 0, 0, 0};
 
         for (uint32_t repeatIdx = 0; repeatIdx < repeatTimes; repeatIdx++) {

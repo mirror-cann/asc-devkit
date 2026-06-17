@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <algorithm>
 #include <cmath>
@@ -68,21 +67,25 @@ int32_t main(int32_t argc, char** argv)
         goldenData[i] = v >= 0.0f ? v : v * negativeSlope;
     }
 
-    CHECK_ACL(aclrtMemcpy(input0DeviceMem, modelInputSize, input0HostData.data(),
-                          modelInputSize, ACL_MEMCPY_HOST_TO_DEVICE));
+    CHECK_ACL(
+        aclrtMemcpy(input0DeviceMem, modelInputSize, input0HostData.data(), modelInputSize, ACL_MEMCPY_HOST_TO_DEVICE));
     CHECK_ACL(aclmdlExecute(modelId, modelInputDataset, modelOutputDataset));
-    CHECK_ACL(aclrtMemcpy(output0HostData.data(), modelOutputSize, output0DeviceMem,
-                          modelOutputSize, ACL_MEMCPY_DEVICE_TO_HOST));
+    CHECK_ACL(aclrtMemcpy(
+        output0HostData.data(), modelOutputSize, output0DeviceMem, modelOutputSize, ACL_MEMCPY_DEVICE_TO_HOST));
 
     printf("result is:\n");
     const int64_t previewCount = std::min<int64_t>(elementCount, 10);
-    for (int64_t i = 0; i < previewCount; i++) { printf("%.6f ", output0HostData[i]); }
+    for (int64_t i = 0; i < previewCount; i++) {
+        printf("%.6f ", output0HostData[i]);
+    }
     printf("\n");
 
     bool pass = true;
     for (int64_t i = 0; i < elementCount; ++i) {
         if (std::fabs(output0HostData[i] - goldenData[i]) > 1e-5f) {
-            printf("test failed at index %ld, output0HostData[i] = %.6f, goldenData[i] = %.6f\n", i, output0HostData[i], goldenData[i]);
+            printf(
+                "test failed at index %ld, output0HostData[i] = %.6f, goldenData[i] = %.6f\n", i, output0HostData[i],
+                goldenData[i]);
             pass = false;
             break;
         }

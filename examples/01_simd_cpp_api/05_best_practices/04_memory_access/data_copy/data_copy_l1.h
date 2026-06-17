@@ -153,10 +153,7 @@ private:
         AscendC::PipeBarrier<PIPE_ALL>();
     }
 
-    static constexpr uint32_t AlignUp(uint32_t value, uint32_t align)
-    {
-        return (value + align - 1) / align * align;
-    }
+    static constexpr uint32_t AlignUp(uint32_t value, uint32_t align) { return (value + align - 1) / align * align; }
 
     static constexpr uint32_t blockCube = 16;
     static constexpr uint32_t c0Size = 32 / sizeof(half);

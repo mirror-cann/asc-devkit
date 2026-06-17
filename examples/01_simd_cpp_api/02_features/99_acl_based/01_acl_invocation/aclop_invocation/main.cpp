@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <algorithm>
 #include <cstdint>
@@ -79,20 +78,22 @@ int32_t main(int32_t argc, char** argv)
     std::vector<aclFloat16> output0HostData(elementCount, aclFloatToFloat16(0.0));
     std::vector<aclFloat16> goldenData(elementCount, aclFloatToFloat16(3.0));
 
-    CHECK_ACL(aclrtMemcpy(input0DeviceMem, bufferSize, input0HostData.data(),
-                          bufferSize, ACL_MEMCPY_HOST_TO_DEVICE));
-    CHECK_ACL(aclrtMemcpy(input1DeviceMem, bufferSize, input1HostData.data(),
-                          bufferSize, ACL_MEMCPY_HOST_TO_DEVICE));
-    CHECK_ACL(aclopExecuteV2(opType, inputDesc.size(), inputDesc.data(), inputBuffers.data(),
-                             outputDesc.size(), outputDesc.data(), outputBuffers.data(), opAttr, stream));
+    CHECK_ACL(aclrtMemcpy(input0DeviceMem, bufferSize, input0HostData.data(), bufferSize, ACL_MEMCPY_HOST_TO_DEVICE));
+    CHECK_ACL(aclrtMemcpy(input1DeviceMem, bufferSize, input1HostData.data(), bufferSize, ACL_MEMCPY_HOST_TO_DEVICE));
+    CHECK_ACL(aclopExecuteV2(
+        opType, inputDesc.size(), inputDesc.data(), inputBuffers.data(), outputDesc.size(), outputDesc.data(),
+        outputBuffers.data(), opAttr, stream));
     CHECK_ACL(aclrtSynchronizeStream(stream));
-    CHECK_ACL(aclrtMemcpy(output0HostData.data(), bufferSize, output0DeviceMem,
-                          bufferSize, ACL_MEMCPY_DEVICE_TO_HOST));
+    CHECK_ACL(aclrtMemcpy(output0HostData.data(), bufferSize, output0DeviceMem, bufferSize, ACL_MEMCPY_DEVICE_TO_HOST));
 
     printf("result is:\n");
     const int64_t previewCount = std::min<int64_t>(elementCount, 10);
-    for (int64_t i = 0; i < previewCount; i++) { printf("%.1f ", aclFloat16ToFloat(output0HostData[i])); }
-    printf("\ntest %s\n", std::equal(output0HostData.begin(), output0HostData.end(), goldenData.begin()) ? "pass" : "failed");
+    for (int64_t i = 0; i < previewCount; i++) {
+        printf("%.1f ", aclFloat16ToFloat(output0HostData[i]));
+    }
+    printf(
+        "\ntest %s\n",
+        std::equal(output0HostData.begin(), output0HostData.end(), goldenData.begin()) ? "pass" : "failed");
 
     CHECK_ACL(aclDestroyDataBuffer(input0Buffer));
     CHECK_ACL(aclDestroyDataBuffer(input1Buffer));

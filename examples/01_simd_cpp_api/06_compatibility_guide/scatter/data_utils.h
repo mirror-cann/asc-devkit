@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #ifndef DATA_UTILS_H
 #define DATA_UTILS_H
@@ -54,7 +53,7 @@ typedef enum {
         }                                                                                   \
     } while (0);
 
-bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_t bufferSize)
+bool ReadFile(const std::string& filePath, size_t& fileSize, void* buffer, size_t bufferSize)
 {
     struct stat sBuf;
     int fileStatus = stat(filePath.data(), &sBuf);
@@ -74,7 +73,7 @@ bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_
         return false;
     }
 
-    std::filebuf *buf = file.rdbuf();
+    std::filebuf* buf = file.rdbuf();
     size_t size = buf->pubseekoff(0, std::ios::end, std::ios::in);
     if (size == 0) {
         ERROR_LOG("file size is 0");
@@ -87,13 +86,13 @@ bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_
         return false;
     }
     buf->pubseekpos(0, std::ios::in);
-    buf->sgetn(static_cast<char *>(buffer), size);
+    buf->sgetn(static_cast<char*>(buffer), size);
     fileSize = size;
     file.close();
     return true;
 }
 
-bool WriteFile(const std::string &filePath, const void *buffer, size_t size)
+bool WriteFile(const std::string& filePath, const void* buffer, size_t size)
 {
     if (buffer == nullptr) {
         ERROR_LOG("Write file failed. buffer is nullptr");
@@ -107,7 +106,7 @@ bool WriteFile(const std::string &filePath, const void *buffer, size_t size)
     }
 
     auto writeSize = write(fd, buffer, size);
-    (void) close(fd);
+    (void)close(fd);
     if (writeSize != size) {
         ERROR_LOG("Write file Failed.");
         return false;
@@ -116,8 +115,8 @@ bool WriteFile(const std::string &filePath, const void *buffer, size_t size)
     return true;
 }
 
-template<typename T>
-void DoPrintData(const T *data, size_t count, size_t elementsPerRow)
+template <typename T>
+void DoPrintData(const T* data, size_t count, size_t elementsPerRow)
 {
     assert(elementsPerRow != 0);
     for (size_t i = 0; i < count; ++i) {
@@ -128,7 +127,7 @@ void DoPrintData(const T *data, size_t count, size_t elementsPerRow)
     }
 }
 
-void DoPrintHalfData(const aclFloat16 *data, size_t count, size_t elementsPerRow)
+void DoPrintHalfData(const aclFloat16* data, size_t count, size_t elementsPerRow)
 {
     assert(elementsPerRow != 0);
     for (size_t i = 0; i < count; ++i) {
@@ -139,7 +138,7 @@ void DoPrintHalfData(const aclFloat16 *data, size_t count, size_t elementsPerRow
     }
 }
 
-void PrintData(const void *data, size_t count, printDataType dataType, size_t elementsPerRow=16)
+void PrintData(const void* data, size_t count, printDataType dataType, size_t elementsPerRow = 16)
 {
     if (data == nullptr) {
         ERROR_LOG("Print data failed. data is nullptr");
@@ -148,40 +147,40 @@ void PrintData(const void *data, size_t count, printDataType dataType, size_t el
 
     switch (dataType) {
         case BOOL:
-            DoPrintData(reinterpret_cast<const bool *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const bool*>(data), count, elementsPerRow);
             break;
         case INT8_T:
-            DoPrintData(reinterpret_cast<const int8_t *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const int8_t*>(data), count, elementsPerRow);
             break;
         case UINT8_T:
-            DoPrintData(reinterpret_cast<const uint8_t *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const uint8_t*>(data), count, elementsPerRow);
             break;
         case INT16_T:
-            DoPrintData(reinterpret_cast<const int16_t *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const int16_t*>(data), count, elementsPerRow);
             break;
         case UINT16_T:
-            DoPrintData(reinterpret_cast<const uint16_t *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const uint16_t*>(data), count, elementsPerRow);
             break;
         case INT32_T:
-            DoPrintData(reinterpret_cast<const int32_t *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const int32_t*>(data), count, elementsPerRow);
             break;
         case UINT32_T:
-            DoPrintData(reinterpret_cast<const uint32_t *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const uint32_t*>(data), count, elementsPerRow);
             break;
         case INT64_T:
-            DoPrintData(reinterpret_cast<const int64_t *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const int64_t*>(data), count, elementsPerRow);
             break;
         case UINT64_T:
-            DoPrintData(reinterpret_cast<const uint64_t *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const uint64_t*>(data), count, elementsPerRow);
             break;
         case HALF:
-            DoPrintHalfData(reinterpret_cast<const aclFloat16 *>(data), count, elementsPerRow);
+            DoPrintHalfData(reinterpret_cast<const aclFloat16*>(data), count, elementsPerRow);
             break;
         case FLOAT:
-            DoPrintData(reinterpret_cast<const float *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const float*>(data), count, elementsPerRow);
             break;
         case DOUBLE:
-            DoPrintData(reinterpret_cast<const double *>(data), count, elementsPerRow);
+            DoPrintData(reinterpret_cast<const double*>(data), count, elementsPerRow);
             break;
         default:
             ERROR_LOG("Unsupported type: %d", dataType);

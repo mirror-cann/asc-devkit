@@ -41,7 +41,6 @@ public:
         AscendC::LocalTensor<float> src2Local = ubAllocator.Alloc<float, DATA_LENGTH>();
         AscendC::LocalTensor<float> src3Local = ubAllocator.Alloc<float, DATA_LENGTH>();
 
-
         AscendC::DisableDmaAtomic();
         AscendC::DataCopy(src0Local, src0Global, DATA_LENGTH);
         AscendC::DataCopy(src1Local, src1Global, DATA_LENGTH);
@@ -67,7 +66,6 @@ public:
         AscendC::DataCopy(dstGlobal, src1Local, DATA_LENGTH);
 
         AscendC::DisableDmaAtomic();
-
     }
 
 private:

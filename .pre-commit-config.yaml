@@ -12,8 +12,8 @@ repos:
     rev: v18.1.8
     hooks:
       - id: clang-format
-        files: ^tests/.*\.(c|h|cpp|hpp|cc|hh|cxx|hxx|asc)$
-        exclude: ^tests/python/aclrt_launch_kernel/stub_files/
+        files: \.(c|h|cpp|hpp|cc|hh|cxx|hxx|asc)$
+        exclude: ^(tests/python/aclrt_launch_kernel/stub_files/|impl/|include/|tools/)
         args:
           - "--style=file"
           - "--verbose"

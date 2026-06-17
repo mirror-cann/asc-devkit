@@ -22,7 +22,7 @@
 
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
 
-bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_t bufferSize)
+bool ReadFile(const std::string& filePath, size_t& fileSize, void* buffer, size_t bufferSize)
 {
     struct stat sBuf;
     int fileStatus = stat(filePath.data(), &sBuf);
@@ -42,7 +42,7 @@ bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_
         return false;
     }
 
-    std::filebuf *buf = file.rdbuf();
+    std::filebuf* buf = file.rdbuf();
     size_t size = buf->pubseekoff(0, std::ios::end, std::ios::in);
     if (size == 0) {
         ERROR_LOG("file size is 0");
@@ -55,13 +55,13 @@ bool ReadFile(const std::string &filePath, size_t &fileSize, void *buffer, size_
         return false;
     }
     buf->pubseekpos(0, std::ios::in);
-    buf->sgetn(static_cast<char *>(buffer), size);
+    buf->sgetn(static_cast<char*>(buffer), size);
     fileSize = size;
     file.close();
     return true;
 }
 
-bool WriteFile(const std::string &filePath, const void *buffer, size_t size)
+bool WriteFile(const std::string& filePath, const void* buffer, size_t size)
 {
     if (buffer == nullptr) {
         ERROR_LOG("Write file failed. buffer is nullptr");

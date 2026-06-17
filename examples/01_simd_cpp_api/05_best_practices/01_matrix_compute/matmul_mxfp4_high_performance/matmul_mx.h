@@ -126,7 +126,8 @@ public:
         AscendC::Impl::Detail::MatmulWithScalePolicy>
         matmulObj;
 
-    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* as, __gm__ uint8_t* bs, __gm__ uint8_t* c)
+    __aicore__ inline void Init(
+        __gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* as, __gm__ uint8_t* bs, __gm__ uint8_t* c)
     {
         aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ fp4x2_e1m2_t*>(a), kM * kK);
         bGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ fp4x2_e1m2_t*>(b), kK * kN);

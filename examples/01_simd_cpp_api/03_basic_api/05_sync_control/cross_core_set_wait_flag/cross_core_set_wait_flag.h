@@ -79,7 +79,8 @@ public:
         CCUBEGM.SetGlobalBuffer((__gm__ float*)C, C_AIC_BLOCKS_LENGTH);
     }
 
-    __aicore__ inline void InitAIV(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* A, __gm__ uint8_t* B, __gm__ uint8_t* C)
+    __aicore__ inline void InitAIV(
+        __gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* A, __gm__ uint8_t* B, __gm__ uint8_t* C)
     {
         aGM.SetGlobalBuffer((__gm__ uint8_t*)a + A_BLOCKS_LENGTH * (AscendC::GetBlockIdx() / 2), A_BLOCKS_LENGTH);
         bGM.SetGlobalBuffer((__gm__ uint8_t*)b + B_BLOCKS_LENGTH * (AscendC::GetBlockIdx() / 2), B_BLOCKS_LENGTH);

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <iostream>
 #include <fstream>
@@ -21,9 +21,9 @@
 #define ACLRTC_NPU_ARCH "dav-2201"
 #endif
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    const char *src = R""""(
+    const char* src = R""""(
 #include "kernel_operator.h"
 constexpr int32_t TOTAL_LENGTH = 1024;
 
@@ -81,7 +81,7 @@ __global__ __vector__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z)
     const char* kernelNameExpr = "Kernel::add_custom<float>";
     ASCENDC_CHECK(aclrtcAddNameExpr(prog, kernelNameExpr));
 
-    const char *options[] = {
+    const char* options[] = {
         "--npu-arch=" ACLRTC_NPU_ARCH,
     };
 
@@ -111,13 +111,13 @@ __global__ __vector__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z)
     float *xHost, *yHost, *zHost, *golden;
     uint8_t *xDevice, *yDevice, *zDevice;
 
-    ASCENDC_CHECK(aclrtMallocHost((void **)(&xHost), inputByteSize));
-    ASCENDC_CHECK(aclrtMallocHost((void **)(&yHost), inputByteSize));
-    ASCENDC_CHECK(aclrtMallocHost((void **)(&zHost), outputByteSize));
-    ASCENDC_CHECK(aclrtMallocHost((void **)(&golden), outputByteSize));
-    ASCENDC_CHECK(aclrtMalloc((void **)&xDevice, inputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
-    ASCENDC_CHECK(aclrtMalloc((void **)&yDevice, inputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
-    ASCENDC_CHECK(aclrtMalloc((void **)&zDevice, outputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
+    ASCENDC_CHECK(aclrtMallocHost((void**)(&xHost), inputByteSize));
+    ASCENDC_CHECK(aclrtMallocHost((void**)(&yHost), inputByteSize));
+    ASCENDC_CHECK(aclrtMallocHost((void**)(&zHost), outputByteSize));
+    ASCENDC_CHECK(aclrtMallocHost((void**)(&golden), outputByteSize));
+    ASCENDC_CHECK(aclrtMalloc((void**)&xDevice, inputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
+    ASCENDC_CHECK(aclrtMalloc((void**)&yDevice, inputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
+    ASCENDC_CHECK(aclrtMalloc((void**)&zDevice, outputByteSize, ACL_MEM_MALLOC_HUGE_FIRST));
 
     GenTestData(xHost, yHost, golden, dataLen);
 
@@ -136,10 +136,10 @@ __global__ __vector__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z)
 
     ASCENDC_CHECK(aclrtBinaryGetFunction(binHandle, manglingName, &funcHandle));
 
-    void *kernelArgs[] = {
-        static_cast<void *>(&xDevice),
-        static_cast<void *>(&yDevice),
-        static_cast<void *>(&zDevice),
+    void* kernelArgs[] = {
+        static_cast<void*>(&xDevice),
+        static_cast<void*>(&yDevice),
+        static_cast<void*>(&zDevice),
     };
     ASCENDC_CHECK(aclrtLaunchKernelWithArgsArray(funcHandle, numBlocks, stream, nullptr, kernelArgs));
 
