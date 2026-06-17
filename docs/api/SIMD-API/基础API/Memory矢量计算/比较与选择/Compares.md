@@ -175,7 +175,7 @@
 <cann-filter npu-type = "950">
 
 - 针对Ascend 950PR/Ascend 950DT
-    - T支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t、double。
+    - T支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t、double（只支持CMPMODE::EQ）。
     - U支持的数据类型为：uint8_t。
 
 </cann-filter>
@@ -199,7 +199,7 @@
 <cann-filter npu-type = "310b">
 
 - 针对Atlas 200I/500 A2 推理产品
-    - T支持的数据类型为：half、float。
+    - T支持的数据类型为：int16_t、uint16_t、half、int32_t、uint32_t、float。
     - U支持的数据类型为：uint8_t。
 
 </cann-filter>
