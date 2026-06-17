@@ -2,7 +2,7 @@
 ## 概述
 使能双主模式（MixDualMaster）的Matmul样例，AIC和AIV独立运行代码，不依赖消息驱动，用于提升性能。
 
-在Matmul API在默认的MIX模式下，Matmul API通过消息机制由AIV驱动AIC运行；而在双主模式下，双主模式为AIC和AIV独立运行代码，不依赖消息驱动，性能更优。
+Matmul API在默认的MIX模式下，通过消息机制由AIV驱动AIC运行；而在双主模式下，AIC和AIV独立运行代码，不依赖消息驱动，性能更优。
 当满足以下条件之一时，可以开启双主模式：
 - 核函数类型为MIX，且AIC核数：AIV核数=1：1
 - 核函数类型为MIX，且AIC核数：AIV核数=1：2，且A矩阵和B矩阵同时使能IBSHARE参数

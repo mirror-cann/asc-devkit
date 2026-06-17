@@ -126,7 +126,7 @@ $$
     基于Ascend C提供的矢量计算接口`Add`实现。</br>
 
   - tiling实现：</br>
-    TilingData参数设计，`AddCustomTilingData`参数本质上是和并行数据切分相关的参数，本示例样例使用了2个tiling参数：`totalLength`和`tileNum`。`totalLength`是指需要计算的数据量大小，`tileNum`是指每个核上总计算数据分块个数。</br>
+    TilingData参数设计，`AddCustomTilingData`参数本质上是和并行数据切分相关的参数，本样例使用了2个tiling参数：`totalLength`和`tileNum`。`totalLength`是指需要计算的数据量大小，`tileNum`是指每个核上总计算数据分块个数。</br>
 
 - AddCustomTemplate</br>
   - kernel实现：</br>

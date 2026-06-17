@@ -22,7 +22,7 @@
 | [matmul_fp8](./matmul_fp8) |  A、B矩阵为hifloat8、fp8_e4m3fn、fp8_e5m2数据类型输入的Matmul样例 | Ascend 950PR/Ascend 950DT |
 | [matmul_fused](./matmul_fused) |  分核AIC、AIV融合编程实现，主要介绍了Matmul高阶API的MIX模式，Matmul API内部会自动控制AIC、AIV的核间同步 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [matmul_fused_manual](./matmul_fused_manual) |  分核AIC、AIV融合编程实现，主要介绍了Matmul高阶API的纯Cube模式，需要调用相关接口实现手动控制AIC、AIV的核间同步 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
-| [matmul_ibshareAB](./matmul_ibshareAB) |  调开启IBShare功能，复用L1 Buffer上相同的A矩阵或者B矩阵数据的样例，本样例为A矩阵和B矩阵同时复用场景 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [matmul_ibshareAB](./matmul_ibshareAB) |  开启IBShare功能，复用L1 Buffer上相同的A矩阵或者B矩阵数据的样例，本样例为A矩阵和B矩阵同时复用场景 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [matmul_ibshareB](./matmul_ibshareB) |  调开启IBShare功能，复用L1 Buffer上相同的A矩阵或者B矩阵数据的样例，本样例为仅B矩阵复用场景 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [matmul_int4](./matmul_int4) |  A、B矩阵为int4b_t数据类型输入的Matmul样例 | Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [matmul_k_reorder_load](./matmul_k_reorder_load) |  使能K轴错峰加载数据特性的Matmul样例，减少多核对Global Memory地址访问冲突概率 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |

@@ -1,4 +1,4 @@
-# Matmul实现ColumnMajor样例直调样例
+# Matmul实现ColumnMajor直调样例
 
 ## 概述
 

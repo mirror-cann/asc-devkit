@@ -1,8 +1,8 @@
-# Matmul IBShareB样例直调样例
+# Matmul IBShareB直调样例
 
 ## 概述
 
-调开启IBShare功能，复用L1 Buffer上相同的A矩阵或者B矩阵数据的样例，本样例为仅B矩阵复用场景。开启功能可以减少数据搬运开销。支持多种场景，通过环境变量选择场景。
+开启IBShare功能，复用L1 Buffer上相同的A矩阵或者B矩阵数据的样例，本样例为仅B矩阵复用场景。开启功能可以减少数据搬运开销。支持多种场景，通过环境变量选择场景。
     <table>
 	 	<tr>
 	 		<td>scenarioNum</td>

@@ -1,4 +1,4 @@
-# Matmul Gemv样例
+# Matmul GEMV样例
 ## 概述
 实现矩阵向量乘GEMV（General Matrix-Vector multiplication）的Matmul样例。在Matmul计算中M=1，形状为（1，K）的左矩阵A与形状为（K, N）的右矩阵B进行矩阵乘运算的场景，通过在Tiling侧与Kernel侧设置A矩阵的数据格式为VECTOR，开启GEMV模式。
 

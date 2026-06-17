@@ -62,7 +62,7 @@
   ./execute_add_op
   ```
 
-  > AI处理器的型号<soc_version>请通过如下方式获取：
+  > AI处理器的型号`${soc_version}`请通过如下方式获取：
   > - 针对如下产品型号：在安装昇腾AI处理器的服务器执行`npu-smi info`命令进行查询，获取**Name**信息。实际配置值为AscendName，例如**Name**取值为xxxyy，实际配置值为Ascendxxxyy。
   >   - Atlas A2 训练系列产品 / Atlas A2 推理系列产品
   >   - Atlas 200I/500 A2 推理产品

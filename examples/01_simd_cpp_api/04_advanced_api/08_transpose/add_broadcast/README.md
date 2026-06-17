@@ -1,4 +1,4 @@
-# AddBroadCast算子直调样例
+# AddBroadcast算子直调样例
 
 ## 概述
 
@@ -55,7 +55,7 @@
   - Tiling实现  
     TilingData参数设计，TilingData参数本质上是和并行数据切分相关的参数。
 
-    本样例尝试将输入数据均分在给定数目的核上计算，如不能均分，则计算整核和尾核的个数，整核和尾核分别处理不同数据量的数据。定义UB_BLOCK_NUM最为最大可用的UB数据块，对应UB的大小为UB_BLOCK_NUM * 32 Bytes。 并以UB_BLOCK_NUM为粒度进行tiling切分。
+    本样例尝试将输入数据均分在给定数目的核上计算，如不能均分，则计算整核和尾核的个数，整核和尾核分别处理不同数据量的数据。定义UB_BLOCK_NUM为最大可用的UB数据块，对应UB的大小为UB_BLOCK_NUM * 32 Bytes。 并以UB_BLOCK_NUM为粒度进行tiling切分。
 
     本示例算子使用了20个tiling参数： xLen、yLen、dataType为x, y输入数据的总长度和数据类型；coef为需要Broadcast的输入扩维的倍数；axis为输入数据Broadcast的轴；blockLength、tileNum、 tileLength、lastTileLength为核均分场景下每个核上的计算量、tiling切分个数以及整块和尾块长度；former(tail)Num、former(tail)Length、former(tail)TileNum、former(tail)TileLength、former(tail)LastTileLength为核不均分的场景下整核和尾核相关的切分数据，与核均分场景下对应；isEvenCore用来判断当前是否为核均分场景。
 

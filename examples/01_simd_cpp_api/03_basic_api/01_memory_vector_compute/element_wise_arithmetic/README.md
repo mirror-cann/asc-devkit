@@ -28,7 +28,7 @@
 ## 样例描述
 
 - 样例功能：  
-  本样例实现了对输入tensor按元素执行Leaky Relu（Leaky Rectified Liner Unit）操作，返回计算结果的功能。
+  本样例实现了对输入tensor按元素执行Leaky Relu（Leaky Rectified Linear Unit）操作，返回计算结果的功能。
 
   对应的数学表达式为：  
   $$

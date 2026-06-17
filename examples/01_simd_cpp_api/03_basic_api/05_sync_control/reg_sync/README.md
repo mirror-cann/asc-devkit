@@ -87,7 +87,7 @@
 - 同步说明
 1. 上述样例实现的步骤3、步骤5中，StoreAlign和LoadAlign操作同一地址，存在读后写依赖（RAW），需要保证先写UB、后读UB的时序
 2. 手动调用LocalMemBar接口，插入 VEC_STORE 和 VEC_LOAD 之间的同步，以保证指令按代码顺序执行
-3. 若缺少LocalMemBar，步骤5可能先执行，从 tmpLoacl 读到未经步骤3更新的旧数据
+3. 若缺少LocalMemBar，步骤5可能先执行，从 tmpLocal 读到未经步骤3更新的旧数据
 
 - 调用实现  
   使用内核调用符`<<<>>>`调用核函数，启动1个核。

@@ -86,7 +86,7 @@ $$
 | 方式2 | 8 | 3 |
 | 方式3 | 8 | 2 |
 
-令输入UB内存为xLoacal，输出UB内存为yLocal，临时UB内存统一用tmp0、tmp1、tmp2等表示
+令输入UB内存为xLocal，输出UB内存为yLocal，临时UB内存统一用tmp0、tmp1、tmp2等表示
 
 **方式1计算步骤分解**（共13条指令，需5份内存）：
 

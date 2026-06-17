@@ -1,4 +1,4 @@
-# 输入矩阵为VECOUT的Matmul样例直调样例
+# 输入矩阵为VECOUT的Matmul直调样例
 
 ## 概述
 使用用户自定义VECOUT的输入的Matmul样例，开发者可以自主管理Unified Buffer以高效利用硬件资源。

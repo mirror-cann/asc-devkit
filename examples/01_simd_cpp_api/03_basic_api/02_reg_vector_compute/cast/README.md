@@ -45,7 +45,7 @@
   - layoutMode = RegLayout::ZERO: Cast接口从xReg索引2\*N+0的位置读取数据，用于配合LoadAlign接口将输入数据依次搬入xReg的2\*N位置
   - satMode = SatMode::NO_SAT：本场景介绍浮点数转整数的非饱和模式，输入数据超过输出数据类型最值时，结果被截断为输出数据类型的宽度。例如输入half值为4294967297.0，对应整数4294967297（0x100000001），则取低32位，输出int32_t值为1
   - roundMode = RoundMode::CAST_FLOOR：本场景介绍floor（向下取整）舍入模式。例如输入half值为2.5，则输出int32值为2
-  - mask：Cast接口中，mask会按照入输入和输出中，位宽较大的数据类型来筛选，所以本场景按照int32_t数据类型生成MaskReg
+  - mask：Cast接口中，mask会按照输入和输出中，位宽较大的数据类型来筛选，所以本场景按照int32_t数据类型生成MaskReg
 - 样例规格：
   <table>
   <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="3" align="center">AIV样例</td></tr>

@@ -111,7 +111,7 @@
   python3 ../scripts/verify_result.py output/output.bin output/golden.bin   # 验证输出结果是否正确，确认算法逻辑正确
   ```
 
-  使用NPU仿真 模式时，添加`-DCMAKE_ASC_RUN_MODE=sim`参数即可。
+  使用NPU仿真模式时，添加`-DCMAKE_ASC_RUN_MODE=sim`参数即可。
 
   示例如下：
 

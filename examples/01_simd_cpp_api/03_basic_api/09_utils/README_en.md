@@ -1,8 +1,8 @@
-# System Variable Access API Samples
+# Utilities API Samples
 
 ## Overview
 
-This directory contains API samples related to system variable access. The samples are based on Ascend C's `<<<>>>` direct invocation method, supporting implementation of both main function and kernel function in the same file.
+This directory contains API samples related to utilities. The samples are based on Ascend C's `<<<>>>` direct invocation method, supporting implementation of both main function and kernel function in the same file.
 
 ## Sample List
 

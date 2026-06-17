@@ -28,7 +28,7 @@
 ## 样例描述
 
 - 样例功能：  
-  本样例创建MIX模式的Matmul对象，在AIC核实现Matmul计算，中间结果输出至VECIN(Unified Buffer)。AIC核计算完成后，通过Tque的EnQue/DeQue接口控制同步，继续在AIV核对Unified Buffer上的中间结果进行LeakyRelu的计算。
+  本样例创建MIX模式的Matmul对象，在AIC核实现Matmul计算，中间结果输出至VECIN(Unified Buffer)。AIC核计算完成后，通过TQue的EnQue/DeQue接口控制同步，继续在AIV核对Unified Buffer上的中间结果进行LeakyRelu的计算。
 
 - 样例规格：  
   本样例中：M = 1024, N = 640, K = 256

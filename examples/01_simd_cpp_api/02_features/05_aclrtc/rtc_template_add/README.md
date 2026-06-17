@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例展示了如何使用AscendC的 **Aclrtc（运行时编译）** 模式，在Host侧动态编译核函数源码并执行。核函数内部采用 **静态Tensor编程范式**（LocalMemAllocator+SetFlag/WaitFlag事件同步），将核函数源码以字符串形式嵌入Host代码中，通过aclrtcAPI在运行时编译并执行。
+本样例展示了如何使用AscendC的 **Aclrtc（运行时编译）** 模式，在Host侧动态编译核函数源码并执行。核函数内部采用 **静态Tensor编程范式**（LocalMemAllocator+SetFlag/WaitFlag事件同步），将核函数源码以字符串形式嵌入Host代码中，通过aclrtc API在运行时编译并执行。
 
 与传统自定义算子工程不同，Aclrtc无需提前编译算子包（.run），适合快速验证和原型开发。
 
@@ -40,7 +40,7 @@
   <tr><td align="center">x</td><td align="center">[1024]</td><td align="center">float</td><td align="center">ND</td></tr>
   <tr><td align="center">y</td><td align="center">[1024]</td><td align="center">float</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">样例输出</td><td align="center">z</td><td align="center">[1024]</td><td align="center">float</td><td align="center">ND</td></tr>
-  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">Kernel::add_custom&ltfloat&gt</td></tr>
+  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">Kernel::add_custom&lt;float&gt;</td></tr>
   </table>
 
 ### 样例实现

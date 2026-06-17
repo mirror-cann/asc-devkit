@@ -45,8 +45,8 @@
 - 样例功能：  
   调用Matmul高阶API时开启A、B矩阵的IBShare功能，计算过程中同一AIC对应的两个AIV在每次迭代时用到的A、B矩阵在L1 Buffer上的数据一致。
 
-  A矩阵与B矩阵均使能IBShare时，不对k列进行切分计算；均未使能IBSHARE时，按照k列进行切分计算。通过对比两种场景的运行时间，可以得出该特性的性能提升。
-  使能AB矩阵ibshare场景的数据处理说明图示(A矩阵和B矩阵不切分处理)：![alt text](./figures/matmul_ABshare.png)  
+  A矩阵与B矩阵均使能IBShare时，不对k列进行切分计算；均未使能IBShare时，按照k列进行切分计算。通过对比两种场景的运行时间，可以得出该特性的性能提升。
+  使能AB矩阵IBShare场景的数据处理说明图示(A矩阵和B矩阵不切分处理)：![alt text](./figures/matmul_ABshare.png)  
   不使能AB矩阵ibshareAB场景的数据处理说明图示(A矩阵和B矩阵切分处理)：![alt text](./figures/matmul_noABshare.png)  
 
 
@@ -65,7 +65,7 @@
 
   - Kernel关键步骤  
     - 创建Matmul对象：  
-        根据CMakeLists里的SCENARIO_NUM编译选项，配置A、B矩阵IBSHARE参数为true或者false。
+        根据CMakeLists里的SCENARIO_NUM编译选项，配置A、B矩阵IBShare参数为true或者false。
         ```cpp
         #if SCENARIO_NUM == 1
         constexpr bool isABshare = true;

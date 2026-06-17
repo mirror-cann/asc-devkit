@@ -9,7 +9,7 @@
 | Case | SCENARIO_NUM | 实现方式 | 说明 |
 |:---|:---:|:---|:---|
 | Case 0 | 0 | SIMT直接访问GM | 数据访问和计算均通过SIMT实现，SIMT线程直接访问GM，作为纯SIMT实现的对照组。 |
-| Case 1 | 1 | SIMD RegBase | 数据访问和计算均通过SIMD实现，基于Regbase实现FloorMod计算，作为纯SIMD实现的对照组。 |
+| Case 1 | 1 | SIMD RegBase | 数据访问和计算均通过SIMD实现，基于RegBase实现FloorMod计算，作为纯SIMD实现的对照组。 |
 | Case 2 | 2 | SIMT非连续访问UB | 基于SIMD DataCopy接口将GM连续搬运到UB，SIMT每个线程处理一段连续元素，但Warp内相邻线程访问不连续。 |
 | Case 3 | 3 | SIMT连续访问UB | 基于SIMD DataCopy接口将GM连续搬运到UB，调整SIMT线程映射，使Warp内相邻线程访问连续地址。 |
 

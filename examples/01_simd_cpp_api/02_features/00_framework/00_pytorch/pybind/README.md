@@ -47,7 +47,7 @@
 
   本样例在`add_custom.asc`中定义了一个名为`ascendc_ops`的命名空间，并在其中注册了`ascendc_add`函数。
 
-  pybind11可以实现PyTorch框架调用样例Kernel程序，从而实现Ascend C样例在Pytorch框架的集成部署。
+  pybind11可以实现PyTorch框架调用样例Kernel程序，从而实现Ascend C样例在PyTorch框架的集成部署。
 
   `add_custom.asc`使用了`pybind11`库来将c++代码封装成python模块。该代码实现中定义了一个名为`m`的pybind11模块，其中包含一个名为`ascendc_add`的函数。该函数与`ascendc_ops::ascendc_add`函数相同，用于将c++函数转成python函数，例如：
 
@@ -59,7 +59,7 @@
   }
   ```
 
-  在`ascendc_add`函数中通过`c10_npu::getCurrentNPUStream()`函数获取当前NPU上的流，并通过内核调用符<<<>>>调用自定义的Kernel函数`add_custom`，在NPU上执行样例。
+  在`ascendc_add`函数中通过`c10_npu::getCurrentNPUStream()`函数获取当前NPU上的流，并通过内核调用符`<<<>>>`调用自定义的Kernel函数`add_custom`，在NPU上执行样例。
 
 - Python测试脚本
 
