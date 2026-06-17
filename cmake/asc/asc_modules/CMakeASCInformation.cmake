@@ -181,8 +181,13 @@ if(CMAKE_ASC_RUN_MODE STREQUAL "sim")
         math(EXPR _val_index "${_index} + 1")
         list(GET _ARCH_TO_DIR_MAP ${_val_index} _ASC_INTERNAL_DIR)
         set(_ASC_SIM_PATH "$ENV{ASCEND_HOME_PATH}/tools/simulator/${_ASC_INTERNAL_DIR}/lib")
-        string(APPEND CMAKE_ASC_LINK_FLAGS " -Wl,-rpath,${_ASC_SIM_PATH} -Wl,-L${_ASC_SIM_PATH} -Wl,--disable-new-dtags")
-        link_libraries(runtime_camodel npu_drv_camodel)
+        link_libraries(
+            -Wl,-rpath,${_ASC_SIM_PATH}
+            -Wl,-L${_ASC_SIM_PATH}
+            -Wl,--disable-new-dtags
+            runtime_camodel
+            npu_drv_camodel
+        )
         message(STATUS "ASC Simulator enabled: ${_ASC_SIM_PATH}")
     else()
         message(FATAL_ERROR "Unsupported ASC architecture for simulator: ${CMAKE_ASC_ARCHITECTURES}")
