@@ -3,12 +3,12 @@
 ## 概述
 
 本样例以向量加法为例，演示了在Ascend C SIMT编程中，基于短向量的性能调优方法。通过两个场景的对比（Case
-0-1），展示从基础half类型逐元素加法到使用half2类型加法的优化过程。重点对比了原始类型（half）与短向量类型（half2）在数据处理效率上的差异。
+1-2），展示从基础half类型逐元素加法到使用half2类型加法的优化过程。重点对比了原始类型（half）与短向量类型（half2）在数据处理效率上的差异。
 
 **优化路径**：
 
-- Case 0: half类型数据处理（基准）
-- Case 1: half2类型数据处理
+- Case 1: half类型数据处理（基准）
+- Case 2: half2类型数据处理
 
 ## 支持的产品
 
@@ -66,9 +66,9 @@ short_vector_add
 | aiv_main_mem_read_bw(GB/s)  | 主存储器读取其他所有单元数据时，对应的total cycle的带宽速率（所在文件：Memory.csv）。 |
 | aiv_main_mem_write_bw(GB/s) | 主存储器写入其他所有单元数据时，对应的total cycle的带宽速率（所在文件：Memory.csv）。 |
 
-本章节性能数据在Ascend 950系列产品上运行得到。
+本章节性能数据在Ascend 950PR系列产品上运行得到。
 
-### Case 0: half类型数据处理（基准程序）
+### Case 1: half类型数据处理（基准程序）
 
 **实现方式**：
 
@@ -117,7 +117,7 @@ __global__ void add(T* x, T* y, T* z, uint64_t size)
 
 ---
 
-### Case 1: half2类型数据处理
+### Case 2: half2类型数据处理
 
 **实现方式**：
 
@@ -170,7 +170,7 @@ __global__ void add2(T* x, T* y, T* z, uint64_t size)
 **原理说明**：  
 SIMT编程模式下，L2 Cache是以Cache Line=128字节为单位进行访问。
 
-- Case 0（标量 half）：不满行导致 RMW 写放大  
+- Case 1（标量 half）：不满行导致 RMW 写放大  
   使用标量half（2B）。单个Warp（32线程）同时发射指令时，在空间上连续拼出的总宽度为：  
   $$
   32 * 2B = 64B
@@ -178,7 +178,7 @@ SIMT编程模式下，L2 Cache是以Cache Line=128字节为单位进行访问。
   同时发射写指令的总宽度仅为64字节，不满足Cache Line的要求，带宽占用率50%
 
 
-- 在Case 1中，改用短向量类型 half2（4B）。单个Warp（32线程）单次发射写入的总宽度达到：
+- 在Case 2中，改用短向量类型 half2（4B）。单个Warp（32线程）单次发射写入的总宽度达到：
   $$
   32 * 4B = 128B
   $$
@@ -236,11 +236,11 @@ SIMT编程模式下，L2 Cache是以Cache Line=128字节为单位进行访问。
 
 - 编译选项说明
 
-  | 参数                        | 可选值             | 说明                                    |
-  |:--------------------------|:----------------|:--------------------------------------|
-  | `SCENARIO_NUM`            | `1`（默认）、`2`     | 1: half Add计算；<br/>2: 短向量half2 Add计算； |
-  | `CMAKE_ASC_RUN_MODE`      | `npu`（默认）、`sim` | 运行模式：NPU 运行、NPU仿真                     |
-  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510`      | `dav-3510`                            |
+  | 参数                        | 可选值             | 说明                                                |
+  |:--------------------------|:----------------|:--------------------------------------------------|
+  | `SCENARIO_NUM`            | `1`（默认）、`2`     | 1: half Add计算；<br/>2: 短向量half2 Add计算；             |
+  | `CMAKE_ASC_RUN_MODE`      | `npu`（默认）、`sim` | 运行模式：NPU 运行、NPU仿真                                 |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510`      | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
 
 - 执行结果  
   执行结果如下，说明精度对比成功。
