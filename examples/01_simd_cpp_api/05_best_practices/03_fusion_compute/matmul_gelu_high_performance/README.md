@@ -466,7 +466,7 @@ AscendC::printf("matmul blockIdx=%d\n", AscendC::GetBlockIdx());
 
 ### DumpTensor
 
-基于算子工程开发的算子，可以使用该接口Dump指定[LocalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础数据结构/LocalTensor/LocalTensor简介.md)的内容。同时支持打印自定义的附加信息（仅支持uint32\_t数据类型的信息），比如打印当前行号等。
+基于算子工程开发的算子，可以使用该接口Dump指定[LocalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)的内容。同时支持打印自定义的附加信息（仅支持uint32\_t数据类型的信息），比如打印当前行号等。
 
 在算子kernel侧实现代码中需要打印Tensor数据的地方调用DumpTensor接口打印相关内容。样例如下：
 
