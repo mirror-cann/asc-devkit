@@ -1,4 +1,4 @@
-# UnPack<a name="ZH-CN_TOPIC_0000001985577793"></a>
+# Move<a name="ZH-CN_TOPIC_0000001985577785"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
@@ -28,31 +28,31 @@
 
 头文件路径为：basic_api/reg_compute/kernel_reg_compute_maskreg_intf.h。
 
-根据所选的低位模式或高位模式，将源操作数src的低半部分或高半部分，展开到目的操作数dst。展开方式为：将每bit展开为2bit，高位置零。
-
-![UnPack示意图](../../../../figures/reg_unpack.png)
+将src中的元素复制到dst中的对应位置。如果有输入mask，则仅复制被mask选定的有效元素，无效元素填0。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
-```cpp
-template <HighLowPart part = HighLowPart::LOWEST> 
-__simd_callee__ inline void UnPack(MaskReg& dst, MaskReg& src)
-```
+- 有输入mask
+
+    ```cpp
+    __simd_callee__ inline void Move(MaskReg& dst, MaskReg& src, MaskReg& mask)
+    ```
+
+- 无输入mask
+
+    ```cpp
+    __simd_callee__ inline void Move(MaskReg& dst, MaskReg& src)
+    ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表1** 模板参数说明
-
-| 参数名 | 描述 |
-| --- | --- |
-| part | 枚举类型，低位模式或高位模式。<br>&bull; LOWEST低位模式；<br>&bull; HIGHEST高位模式。 |
-
-**表2** 参数说明
+**表1** 参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
 | dst | 目的操作数，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
 | src | 源操作数，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| mask | 指示在复制过程中哪些bit有效，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -66,18 +66,18 @@ __simd_callee__ inline void UnPack(MaskReg& dst, MaskReg& src)
 
 ```cpp
 template <typename T>
-__simd_vf__ inline void UnpackVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
+__simd_vf__ inline void MoveVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
 {
     AscendC::Reg::RegTensor<T> srcReg;
-    AscendC::Reg::MaskReg maskFull = AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::ALL>();
-    AscendC::Reg::MaskReg mask0;
-    AscendC::Reg::MaskReg mask1;
-    AscendC::Reg::UnPack<AscendC::Reg::HighLowPart::LOWEST>(mask0, maskFull);
+    AscendC::Reg::MaskReg src = AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::ALLF>();
+    AscendC::Reg::MaskReg dst;
+    AscendC::Reg::MaskReg mask;
     for (uint16_t i = 0; i < repeatTimes; ++i) {
-        mask1 = AscendC::Reg::UpdateMask<T>(count);
+        mask = AscendC::Reg::UpdateMask<T>(count);
         AscendC::Reg::LoadAlign(srcReg, srcAddr + i * oneRepeatSize);
-        AscendC::Reg::Adds(srcReg, srcReg, 0, mask0);
-        AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, srcReg, mask1);
+        AscendC::Reg::Move(dst, src, mask);
+        AscendC::Reg::Adds(srcReg, srcReg, 0, dst);
+        AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, srcReg, mask);
     }
 }
 ```

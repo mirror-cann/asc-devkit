@@ -2,185 +2,206 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-<a name="table38301303189"></a>
-<table><thead align="left"><tr id="row20831180131817"><th class="cellrowborder" valign="top" width="57.99999999999999%" id="mcps1.1.3.1.1"><p id="p1883113061818"><a name="p1883113061818"></a><a name="p1883113061818"></a><span id="ph20833205312295"><a name="ph20833205312295"></a><a name="ph20833205312295"></a>产品</span></p>
-</th>
-<th class="cellrowborder" align="center" valign="top" width="42%" id="mcps1.1.3.1.2"><p id="p783113012187"><a name="p783113012187"></a><a name="p783113012187"></a>是否支持</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1272474920205"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1914517152717"><a name="p1914517152717"></a><a name="p1914517152717"></a><span id="ph141589125420"><a name="ph141589125420"></a><a name="ph141589125420"></a>Ascend 950PR/Ascend 950DT</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p37256491200"><a name="p37256491200"></a><a name="p37256491200"></a>√</p>
-</td>
-</tr>
-<tr id="row220181016240"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p48327011813"><a name="p48327011813"></a><a name="p48327011813"></a><span id="ph583230201815"><a name="ph583230201815"></a><a name="ph583230201815"></a><term id="zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p7948163910184"><a name="p7948163910184"></a><a name="p7948163910184"></a>x</p>
-</td>
-</tr>
-<tr id="row173226882415"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p14832120181815"><a name="p14832120181815"></a><a name="p14832120181815"></a><span id="ph1483216010188"><a name="ph1483216010188"></a><a name="ph1483216010188"></a><term id="zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p19948143911820"><a name="p19948143911820"></a><a name="p19948143911820"></a>x</p>
-</td>
-</tr>
-<tr id="row103361763242"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1983180181813"><a name="p1983180181813"></a><a name="p1983180181813"></a><span id="ph783112021813"><a name="ph783112021813"></a><a name="ph783112021813"></a><term id="zh-cn_topic_0000001312391781_term354143892110"><a name="zh-cn_topic_0000001312391781_term354143892110"></a><a name="zh-cn_topic_0000001312391781_term354143892110"></a>Atlas 200I/500 A2 推理产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1695483941817"><a name="p1695483941817"></a><a name="p1695483941817"></a>x</p>
-</td>
-</tr>
-<tr id="row18403312418"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p78319051815"><a name="p78319051815"></a><a name="p78319051815"></a><span id="ph163561737112019"><a name="ph163561737112019"></a><a name="ph163561737112019"></a><term id="zh-cn_topic_0000001312391781_term1964153212227"><a name="zh-cn_topic_0000001312391781_term1964153212227"></a><a name="zh-cn_topic_0000001312391781_term1964153212227"></a>Atlas 推理系列产品</term>AI Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1695443971810"><a name="p1695443971810"></a><a name="p1695443971810"></a>x</p>
-</td>
-</tr>
-<tr id="row242332080"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p10519331187"><a name="p10519331187"></a><a name="p10519331187"></a><span id="ph1335623792013"><a name="ph1335623792013"></a><a name="ph1335623792013"></a><term id="zh-cn_topic_0000001312391781_term1463893615224"><a name="zh-cn_topic_0000001312391781_term1463893615224"></a><a name="zh-cn_topic_0000001312391781_term1463893615224"></a>Atlas 推理系列产品</term>Vector Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1851933589"><a name="p1851933589"></a><a name="p1851933589"></a>x</p>
-</td>
-</tr>
-<tr id="row17253142120252"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p38313021813"><a name="p38313021813"></a><a name="p38313021813"></a><span id="ph58317041819"><a name="ph58317041819"></a><a name="ph58317041819"></a><term id="zh-cn_topic_0000001312391781_term71949488213"><a name="zh-cn_topic_0000001312391781_term71949488213"></a><a name="zh-cn_topic_0000001312391781_term71949488213"></a>Atlas 训练系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>x</p>
-</td>
-</tr>
-</tbody>
-</table>
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-支持归约求和、归约取最大值、归约取最小值。
+头文件路径为：basic_api/reg_compute/kernel_reg_compute_vec_reduce_intf.h。
 
-## 定义原型<a name="section620mcpsimp"></a>
+归约指令根据ReduceType，将数据集合简化为单一值或者更小的集合。
 
-```
+ReduceType::SUM：根据mask，计算源操作数srcReg内有效元素的数据总和，将结果写入目的操作数dstReg。
+
+ReduceType::MAX：根据mask，计算源操作数srcReg内有效元素中的最大值和索引，将结果写入目的操作数dstReg，当存在多个最大值时，会将第一个最大值的索引保存在dstReg中。
+
+ReduceType::MIN：根据mask，计算源操作数srcReg内有效元素中的最小值和索引，将结果写入目的操作数dstReg，当存在多个最小值时，会将第一个最小值的索引保存在dstReg中。
+
+## 函数原型<a name="section620mcpsimp"></a>
+
+```cpp
 template <ReduceType type = ReduceType::SUM, typename T = DefaultType, typename U = DefaultType, MaskMergeMode mode = MaskMergeMode::ZEROING, typename S, typename V>
 __simd_callee__ inline void Reduce(S& dstReg, V srcReg, MaskReg mask)
 ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表1**  模板参数说明
+**表1** 模板参数说明
 
-<a name="table4835205712588"></a>
-<table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="13.3%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="86.7%" id="mcps1.2.3.1.2"><p id="p583535795817"><a name="p583535795817"></a><a name="p583535795817"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row137168314214"><td class="cellrowborder" valign="top" width="13.3%" headers="mcps1.2.3.1.1 "><p id="p197161530217"><a name="p197161530217"></a><a name="p197161530217"></a>type</p>
-</td>
-<td class="cellrowborder" valign="top" width="86.7%" headers="mcps1.2.3.1.2 "><p id="p47161338218"><a name="p47161338218"></a><a name="p47161338218"></a>ReduceType类型，支持SUM、MAX、MIN。</p>
-<pre class="screen" id="screen15472194923914"><a name="screen15472194923914"></a><a name="screen15472194923914"></a>enum class ReduceType {
-    SUM = 0,
-    MAX,
-    MIN,
-};</pre>
-</td>
-</tr>
-<tr id="row1835857145817"><td class="cellrowborder" valign="top" width="13.3%" headers="mcps1.2.3.1.1 "><p id="p5835457165816"><a name="p5835457165816"></a><a name="p5835457165816"></a>T</p>
-</td>
-<td class="cellrowborder" valign="top" width="86.7%" headers="mcps1.2.3.1.2 "><p id="p10587154162715"><a name="p10587154162715"></a><a name="p10587154162715"></a>目的操作数dstReg的数据类型。</p>
-<a name="ul177171057447"></a><a name="ul177171057447"></a><ul id="ul177171057447"><li>当type = ReduceType::SUM时，支持的数据类型需与源操作数srcReg匹配，匹配关系如下，下文中的数据类型匹配关系按照&lt;dstReg，srcReg&gt;的顺序排布：<p id="p143901768563"><a name="p143901768563"></a><a name="p143901768563"></a><span id="ph13901568568"><a name="ph13901568568"></a><a name="ph13901568568"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：&lt;int32_t，int16_t&gt;，&lt;int32_t，int32_t&gt;，&lt;half，half&gt;，&lt;uint32_t，uint16_t&gt;，&lt;uint32_t，uint32_t&gt;，&lt;float，float&gt;，&lt;uint64_t， uint64_t&gt;，&lt;int64_t， int64_t&gt;</p>
-</li></ul>
-<a name="ul1768984611616"></a><a name="ul1768984611616"></a><ul id="ul1768984611616"><li>当type = ReduceType::MAX或type = ReduceType::MIN时：<p id="p81921422102412"><a name="p81921422102412"></a><a name="p81921422102412"></a><span id="ph81921522122414"><a name="ph81921522122414"></a><a name="ph81921522122414"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：int16_t/half/int32_t/float/uint16_t/uint32_t/uint64_t/int64_t</p>
-</li></ul>
-</td>
-</tr>
-<tr id="row137401528960"><td class="cellrowborder" valign="top" width="13.3%" headers="mcps1.2.3.1.1 "><p id="p07403281766"><a name="p07403281766"></a><a name="p07403281766"></a>U</p>
-</td>
-<td class="cellrowborder" valign="top" width="86.7%" headers="mcps1.2.3.1.2 "><p id="p1095520521693"><a name="p1095520521693"></a><a name="p1095520521693"></a>源操作数srcReg的数据类型。</p>
-<a name="ul61091217191015"></a><a name="ul61091217191015"></a><ul id="ul61091217191015"><li>当type = ReduceType::SUM时，支持的数据类型需与目的操作数dstReg匹配。</li><li>当type = ReduceType::MAX或type = ReduceType::MIN时，源操作数的数据类型和目的操作数相同。</li></ul>
-<p id="p13317181094510"><a name="p13317181094510"></a><a name="p13317181094510"></a><span id="ph931731012451"><a name="ph931731012451"></a><a name="ph931731012451"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：int16_t/half/int32_t/float/uint16_t/uint32_t/uint64_t/int64_t</p>
-</td>
-</tr>
-<tr id="row3742113618507"><td class="cellrowborder" valign="top" width="13.3%" headers="mcps1.2.3.1.1 "><p id="p1383515717581"><a name="p1383515717581"></a><a name="p1383515717581"></a>mode</p>
-</td>
-<td class="cellrowborder" valign="top" width="86.7%" headers="mcps1.2.3.1.2 "><p id="p77520541653"><a name="p77520541653"></a><a name="p77520541653"></a>选择MERGING模式或ZEROING模式。当前仅支持ZEROING模式。</p>
-<a name="ul1163765616511"></a><a name="ul1163765616511"></a><ul id="ul1163765616511"><li>ZEROING，mask未筛选的元素在dst中置零。</li></ul>
-</td>
-</tr>
-<tr id="row156557341370"><td class="cellrowborder" valign="top" width="13.3%" headers="mcps1.2.3.1.1 "><p id="p916243141912"><a name="p916243141912"></a><a name="p916243141912"></a>S</p>
-</td>
-<td class="cellrowborder" valign="top" width="86.7%" headers="mcps1.2.3.1.2 "><p id="p131047476612"><a name="p131047476612"></a><a name="p131047476612"></a><span id="ph19851723182011"><a name="ph19851723182011"></a><a name="ph19851723182011"></a>目的操作数的RegTensor类型，例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写。</span></p>
-</td>
-</tr>
-<tr id="row1577483812718"><td class="cellrowborder" valign="top" width="13.3%" headers="mcps1.2.3.1.1 "><p id="p1658710511977"><a name="p1658710511977"></a><a name="p1658710511977"></a>V</p>
-</td>
-<td class="cellrowborder" valign="top" width="86.7%" headers="mcps1.2.3.1.2 "><p id="p839055684515"><a name="p839055684515"></a><a name="p839055684515"></a><span id="ph11390135684517"><a name="ph11390135684517"></a><a name="ph11390135684517"></a>源操作数的RegTensor类型，例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写。</span></p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 描述 |
+| --- | --- |
+| type | ReduceType类型，支持SUM、MAX、MIN。<br><pre>enum class ReduceType {<br>    SUM = 0,<br>    MAX,<br>    MIN,<br>};</pre> |
+| T | 目的操作数dstReg的数据类型。 |
+| U | 源操作数srcReg的数据类型。 |
+| mode | [MaskMergeMode](../数据类型/MaskMergeMode.md)，选择MERGING模式或ZEROING模式。<br>&bull; ZEROING，mask未选中的元素在dst中置零。<br>&bull; MERGING，当前不支持。 |
+| S | 目的操作数的RegTensor类型，例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写。 |
+| V | 源操作数的RegTensor类型，例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写。 |
 
-**表2**  函数参数说明
+**表2** 函数参数说明
 
-<a name="zh-cn_topic_0235751031_table33761356"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="10.05%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0235751031_p16609919"><a name="zh-cn_topic_0235751031_p16609919"></a><a name="zh-cn_topic_0235751031_p16609919"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="71.41%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0235751031_p59995477"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row42461942101815"><td class="cellrowborder" valign="top" width="18.54%" headers="mcps1.2.4.1.1 "><p id="p284425844311"><a name="p284425844311"></a><a name="p284425844311"></a>dstReg</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p158449584436"><a name="p158449584436"></a><a name="p158449584436"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.41%" headers="mcps1.2.4.1.3 "><p id="p6389114616514"><a name="p6389114616514"></a><a name="p6389114616514"></a>目的操作数。</p>
-<p id="p1818424418593"><a name="p1818424418593"></a><a name="p1818424418593"></a>类型为<a href="../寄存器数据类型/RegTensor.md">RegTensor</a>。</p>
-</td>
-</tr>
-<tr id="row198393197176"><td class="cellrowborder" valign="top" width="18.54%" headers="mcps1.2.4.1.1 "><p id="p1664684418171"><a name="p1664684418171"></a><a name="p1664684418171"></a>srcReg</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p9839171971716"><a name="p9839171971716"></a><a name="p9839171971716"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.41%" headers="mcps1.2.4.1.3 "><p id="p779095312179"><a name="p779095312179"></a><a name="p779095312179"></a>源操作数。</p>
-<p id="p97903531171"><a name="p97903531171"></a><a name="p97903531171"></a>类型为<a href="../寄存器数据类型/RegTensor.md">RegTensor</a>。</p>
-</td>
-</tr>
-<tr id="row17332152321719"><td class="cellrowborder" valign="top" width="18.54%" headers="mcps1.2.4.1.1 "><p id="p1538745616196"><a name="p1538745616196"></a><a name="p1538745616196"></a>mask</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p73331523101710"><a name="p73331523101710"></a><a name="p73331523101710"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.41%" headers="mcps1.2.4.1.3 "><p id="p11541143920"><a name="p11541143920"></a><a name="p11541143920"></a><span id="ph15776181222"><a name="ph15776181222"></a><a name="ph15776181222"></a>源操作数元素操作的有效指示，详细说明请参考<a href="../寄存器数据类型/MaskReg.md">MaskReg</a>。</span></p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 描述 |
+| --- | --- |
+| dstReg | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| srcReg | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| mask | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+
+## 数据类型
+
+**表3** ReduceType::SUM数据类型支持情况
+
+| dstReg | srcReg |
+| --- | --- |
+| half | half |
+| int32_t | int16_t |
+| uint32_t | uint16_t |
+| int32_t | int32_t |
+| uint32_t | uint32_t |
+| float | float |
+| int64_t | int64_t |
+| uint64_t | uint64_t |
+
+**表4** ReduceType::MAX或ReduceType::MIN数据类型支持情况
+
+| dstReg | srcReg |
+| --- | --- |
+| int16_t | int16_t |
+| uint16_t | uint16_t |
+| half | half |
+| int32_t | int32_t |
+| uint32_t | uint32_t |
+| float | float |
+| int64_t | int64_t |
+| uint64_t | uint64_t |
+
+## 返回值说明
+
+无
 
 ## 约束说明<a name="section177921451558"></a>
 
--   对于归约求最大值，当所有元素均不参与计算时，将该数据类型的最小值写入dstReg，当存在多个最大值时，会将第一个最大值的索引保存在dstReg中。
--   对于归约求最小值，当所有元素均不参与计算时，将该数据类型的最大值写入dstReg，当存在多个最小值时，会将第一个最小值的索引保存在dstReg中。
--   当归约求最小值或者归约求最大值时，源操作数的数据类型和目的操作数相同。
+- 对于归约求最大值，当所有元素均不参与计算时，将该数据类型的最小值写入dstReg，当存在多个最大值时，会将第一个最大值的索引保存在dstReg中，max\(-0, +0\) = +0。
+- 对于归约求最小值，当所有元素均不参与计算时，将该数据类型的最大值写入dstReg，当存在多个最小值时，会将第一个最小值的索引保存在dstReg中，min\(-0, +0\) = -0。
+- 当归约求最小值或者归约求最大值时，源操作数的数据类型和目的操作数相同。
+- mask为空场景异常值处理参考[mask为空与srcReg异常值处理规则](#mask为空与srcReg异常值处理规则)。
+- 指令内累加顺序采用二叉树累加方式，规则参考[ReduceSum累加顺序](#ReduceSum累加顺序)。
+
+## 关键特性<a name="zh-cn_topic_0000002537812548_section18972943153217"></a>
+
+**索引值需要强制类型转换**：
+
+dstReg的最大值/最小值索引按照dstReg的数据类型存储，比如dstReg为half类型时，索引按照half类型存储，因此读取索引需要使用  reinterpret\_cast方法转换到整数类型。若数据类型是half，需要使用reinterpret\_cast\<uint16_t\*\>；若数据类型是float，需要使用reinterpret\_cast\<uint32\_t\*\>。
+
+例如，输入数据是half类型，计算结果为\[1.14, 6.8e-06\]，6.8e-06需要使用reinterpret\_cast<uint16\_t\*\>方法转换得到索引值114。转换伪代码示例如下：
+
+```cpp
+__simd_vf__ inline void ReduceVF(__ubuf__ half* dstAddr, __ubuf__ half* srcAddr, uint32_t count)
+{
+    AscendC::Reg::RegTensor<T> srcReg;
+    AscendC::Reg::RegTensor<T> dstReg;
+    AscendC::Reg::MaskReg mask;    
+    AscendC::Reg::LoadAlign(srcReg, srcAddr + i * oneRepeatSize);
+    mask = AscendC::Reg::UpdateMask<T>(count);
+    AscendC::Reg::Reduce<AscendC::Reg::ReduceType::MAX>(dstReg, srcReg, mask); 
+    AscendC::Reg::StoreAlign(dstAddr, dstReg, mask);
+} // End of Vector Function
+```
+
+```cpp
+// Index强制类型转换保存到Scalar，需要放Vector Function外处理
+AscendC::PipeBarrier<PIPE_V>(); // 需要插入同步，等待归约计算完后才能处理索引
+half maxIndex = *(dstAddr + 1);
+uint16_t realIndex = *reinterpret_cast<uint16_t*>(&maxIndex);
+```
+
+![reg_reduce_sum](../../../../figures/reg_reduce_sum.png)
+
+**ReduceSum累加顺序**<a name="ReduceSum累加顺序"></a>：
+
+以二叉树累加的方式计算源操作数srcReg内有效元素的数据总和。
+
+以half类型的数据求和为例，在srcReg内有128个数，通过二叉树的方式，两两相加，计算过程如下图所示：
+
+1. data1和data2相加得到data01，data3和data4相加得到data02，……，data125和data126相加得到data63，data127和data128相加得到data64；
+2. data01和data02相加得到data001，data03和data04相加得到data002，……，data63和data64相加得到data032；
+3. 以此类推，得到目的操作数为1个half类型的数据sum。
+
+**图1** reg_reduce_index<a name="zh-cn_topic_0000002537812548_fig1630121573314"></a>  
+![reg_reduce_index](../../../../figures/reg_reduce_index.png "reg_reduce_index")
+
+**mask为空与srcReg异常值处理规则：**<a name="mask为空与srcReg异常值处理规则"></a>
+
+- 对于归约求数据总和，当所有元素均不参与计算时，将目的操作数数据类型的0写入dstReg。
+- 对于归约求最大值，当所有元素均不参与计算时，将该数据类型的最小值写入dstReg。
+- 对于归约求最小值，当所有元素均不参与计算时，将该数据类型的最大值写入dstReg。
+- 对于归约求最大值/最小值，如果输入数据存在nan，将该数据类型的nan写入dstReg，将第一个nan的索引保存在dstReg中。
+
+**提取MAX/MIN结果（值+索引）：**
+
+MAX/MIN归约产生两个有效结果，需要分别提取。以下示例中dstAddr为32B对齐地址，如果需要写出到非对齐地址，请参考[连续非对齐搬出\(StoreUnAlign\)](../Reg数据搬运/连续非对齐搬出.md)。
+
+```cpp
+AscendC::Reg::Reduce<AscendC::Reg::ReduceType::MAX>(dstReg, srcReg, pregFull); 
+```
+
+方式一：整体存出后按偏移访问（最直接，适用于需要同时使用值和索引的场景）
+
+```cpp
+AscendC::Reg::MaskReg pregVL2 = AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::VL2>();
+// 后续直接访问// dstAddr[0] -> 最大值// dstAddr[1] -> 最大值索引
+AscendC::Reg::StoreAlign(dstAddr, dstReg, pregVL2);  
+```
+
+方式二：用Mask分离到目标地址
+
+```cpp
+AscendC::Reg::MaskReg pregVL1 = AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::VL1>();
+// 只搬出最大值到目标地址
+AscendC::Reg::StoreAlign(dstAddr, dstReg, pregVL1); 
+```
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
--   归约求和：
+- 归约求和：
 
-    ```
+    ```cpp
     template<typename T, typename U>
     __simd_vf__ inline void ReduceVF(__ubuf__ T* dstAddr, __ubuf__ U* srcAddr, uint32_t count, 
      uint32_t srcRepeatSize, uint32_t dstRepeatSize, uint16_t repeatTimes)
     {
         AscendC::Reg::RegTensor<U> srcReg;
-        AscendC::Reg::RegTensor<T> dsrReg;
+        AscendC::Reg::RegTensor<T> dstReg;
         AscendC::Reg::MaskReg mask;
         for (uint16_t i = 0; i < repeatTimes; i++) {
             AscendC::Reg::LoadAlign(srcReg, srcAddr + i * srcRepeatSize);
             mask = AscendC::Reg::UpdateMask<U>(count);
-            AscendC::Reg::Reduce<AscendC::Reg::ReduceType::SUM>(dsrReg, srcReg, mask);
-            AscendC::Reg::StoreAlign(dstAddr + i * dstRepeatSize, dsrReg, mask);
+            AscendC::Reg::Reduce<AscendC::Reg::ReduceType::SUM>(dstReg, srcReg, mask);
+            AscendC::Reg::StoreAlign(dstAddr + i * dstRepeatSize, dstReg, mask);
         }
     }
     ```
 
--   归约求最大值或者最小值
+- 归约求最大值或者最小值：
 
-    ```
+    ```cpp
     template<typename T>
     __aicore__ inline void ReduceVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
     {
@@ -194,7 +215,7 @@ __simd_callee__ inline void Reduce(S& dstReg, V srcReg, MaskReg mask)
             AscendC::Reg::Reduce<AscendC::Reg::ReduceType::MAX>(dstReg, srcReg, mask);
             // type = ReduceType::MIN
             // AscendC::Reg::Reduce<AscendC::Reg::ReduceType::MIN>(dstReg, srcReg, mask);
-            AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, maskReg);
+            AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, mask);
         }
     }
     ```
