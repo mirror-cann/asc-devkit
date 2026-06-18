@@ -84,6 +84,8 @@
 
 对于BSNGD、SBNGD、BNGS1S2 Layout格式，调用该接口之前需要在host Tiling实现中使用[SetALayout](../Matmul-Tiling侧接口/Matmul-Tiling类/SetALayout.md)、[SetBLayout](../Matmul-Tiling侧接口/Matmul-Tiling类/SetBLayout.md)、[SetCLayout](../Matmul-Tiling侧接口/Matmul-Tiling类/SetCLayout.md)、[SetBatchNum](../Matmul-Tiling侧接口/Matmul-Tiling类/SetBatchNum-88.md)设置A/B/C的Layout轴信息和最大BatchNum数；对于NORMAL  Layout格式则需使用[SetBatchInfoForNormal](../Matmul-Tiling侧接口/Matmul-Tiling类/SetBatchInfoForNormal.md)设置A/B/C的M/N/K轴信息和A/B矩阵的BatchNum数。
 
+<a name="row_width"></a>使用ND格式输入时，是否开启MatmulConfig中的intrinsicsCheck，取决于单个BMM内A或B矩阵的源矩阵内轴长度。该内轴可理解为源ND数据中一行的连续跨度，即一次ND2NZ搬运所使用的源行宽。不同Layout下的取值规则如下：NORMAL Layout下，按普通矩阵内轴判断；BNGS1S2 Layout下，按源ND矩阵一行的实际跨度判断；BSNGD Layout下，A和B矩阵源矩阵内轴分别为ALayoutInfoN \* ALayoutInfoG \* ALayoutInfoD、BLayoutInfoN \* BLayoutInfoG \* BLayoutInfoD；SBNGD Layout下，A和B矩阵源矩阵内轴分别为ALayoutInfoB \* ALayoutInfoN \* ALayoutInfoG \* ALayoutInfoD、BLayoutInfoB \* BLayoutInfoN \* BLayoutInfoG \* BLayoutInfoD。
+
 单个矩阵乘迭代顺序可通过tiling参数iterateOrder调整。
 
 ## 函数原型<a name="section620mcpsimp"></a>
