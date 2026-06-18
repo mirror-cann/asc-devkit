@@ -149,6 +149,7 @@ asc-devkit:
       - impl/simt_api/cpp/dav_3510/kernel_simt_warp_level_impl.h
       - impl/simt_api/cpp/dav_3510/kernel_simt_bessel_impl.h
       - impl/adv_api/detail/matmul/stage/copy_cube_in/copy_tile_to_cube/copy_lut_to_ub.h
+      - impl/adv_api/detail/matmul/stage/split/load_to_l0_utils.h
       - impl/basic_api/dav_3510/kernel_operator_print_impl.h
       - impl/adv_api/detail/matmul/utils/matmul_config_impl.h
       - impl/adv_api/detail/matmul/utils/matmul_type_def.h

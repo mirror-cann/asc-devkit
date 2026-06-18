@@ -617,10 +617,13 @@ using uint4b_t = IntegerSubType<INT4_BIT_NUM, false>;
 using uint3b_t = IntegerSubType<INT3_BIT_NUM, false>;
 using uint2b_t = IntegerSubType<INT2_BIT_NUM, false>;
 #endif
-#if !(defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)))
-using fp8_e8m0_t = uint8_t;
-#elif !defined(ASCENDC_CPU_DEBUG)
-using fp8_e8m0_t = float8_e8m0_t;
+
+#if !defined(ASCENDC_CPU_DEBUG)
+#if (defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3510))) || defined(__NPU_HOST__) || defined(__ASC_NPU_HOST__)
+    using fp8_e8m0_t = float8_e8m0_t;
+#else
+    using fp8_e8m0_t = uint8_t;
+#endif
 #endif
 
 using mx_fp8_e5m2_t = struct {};
