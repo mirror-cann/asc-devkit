@@ -32,7 +32,7 @@
   ```
   C = A * B
   ```
-  其中矩阵B为稠密化后的矩阵，原始B矩阵每4个元素中至少包含2个零元素，通过4选2稠密化策略进行压缩存储，并且B矩阵必须转置，即为[N,K]输入。A、B矩阵数据类型只支持int8_t，index矩阵数据类型为uint8_t
+  其中原始B矩阵shape为[N, K]，每4个元素中至少包含2个零元素，通过4选2稠密化策略压缩为[N, K/2]后输入。B矩阵必须转置存储，即按[N, K]构造并压缩输入。A、B矩阵数据类型只支持int8_t，index矩阵数据类型为uint8_t。
 - 样例规格：
 
 <a name="表1"></a>
@@ -40,8 +40,8 @@
 <caption style="font-weight: normal;">
     <span style="font-weight: bold; font-size: 1.2em;">📌 表1：样例规格表</span></caption>
   <tr><td rowspan="4" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-  <tr><td align="center">a</td><td align="center">[128, 128]</td><td align="center">int8</td><td align="center">NZ</td></tr>
-  <tr><td align="center">b</td><td align="center">[64, 128]</td><td align="center">int8</td><td align="center">NZ</td></tr>
+  <tr><td align="center">a</td><td align="center">[128, 64]</td><td align="center">int8</td><td align="center">NZ</td></tr>
+  <tr><td align="center">b</td><td align="center">[128, 32]</td><td align="center">int8</td><td align="center">ZN</td></tr>
   <tr><td align="center">idx</td><td align="center">[128, 8]</td><td align="center">uint8</td><td align="center">ZN</td></tr>
   <tr><td rowspan="1" align="center">样例输出</td><td align="center">c</td><td align="center">[128, 128]</td><td align="center">int32</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">mmad_with_sparse_custom</td></tr>
@@ -91,6 +91,7 @@
   | 选项 | 可选值 | 说明 |
   |------|--------|------|
   | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`cpu`、`sim` | 运行模式：NPU运行、CPU调试、NPU仿真 |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认） | NPU架构：dav-2201 对应 Atlas A2 训练系列产品/Atlas A2 推理系列产品/Atlas A3 训练系列产品/Atlas A3 推理系列产品 |
 
 - 执行结果
 

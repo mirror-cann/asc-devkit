@@ -49,18 +49,20 @@
         true, BatchMode::BATCH_LESS_THAN_L1, false /* isNBatch, batchMode, isBiasBatch */
       };
       constexpr MatmulConfig CFG_MM = GetMMConfig<configMode>(batchParams);
-      AscendC::Matmul<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_PARTIAL> matmulObj;
+      AscendC::Matmul<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_MM> matmulObj;
       ```
     - 计算nNum大小，根据A、B矩阵的Layout信息和BatchNum计算nNum大小。
       ```cpp
       int32_t g_lay = tiling.ALayoutInfoG > tiling.BLayoutInfoG ? tiling.ALayoutInfoG : tiling.BLayoutInfoG;
       int32_t nNum = tiling.ALayoutInfoB * tiling.ALayoutInfoN * g_lay / tiling.BatchNum;
       ```
-    - 设置workspace。
+    - 当前源码默认 `IS_SYNCH=true`，计算结果先写入 `gm_workspace`，再搬运到输出GM。
       ```cpp
-        matmulObj.SetWorkspace(cGlobal);
+      matmulObj.SetWorkspace(gm_workspace);
+      matmulObj.IterateNBatch(nNum, batchA, batchB, false);
+      DataCopy(bufferC, gm_workspace, sizeC / sizeof(cType));
       ```
-    - 完成多batch矩阵乘操作，并调用GetBatchTensorC接口获取结果。
+    - `IS_SYNCH=false` 时，完成多batch矩阵乘操作，并调用GetBatchTensorC接口获取结果。
       ```cpp
       matmulObj.template IterateNBatch<false>(nNum, batchA, batchB, false);
       for(int32_t j = 0; j < nNum; ++j){
@@ -110,7 +112,7 @@
 
 - 编译选项说明
 
-  | 选项　　　　　 | 可选值　　　　　　　　　　　| 说明　　　　　　　　　　　　　　　　　　　　　　　|
+  | 选项 | 可选值 | 说明 |
   | ----------------| -----------------------------| ---------------------------------------------------|
   | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`cpu`、`sim` | 运行模式：NPU 运行、CPU调试、NPU仿真　　　　　　　|
   | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU 架构：dav-2201 对应 Atlas A2 训练系列产品/Atlas A2 推理系列产品和 Atlas A3 训练系列产品/Atlas A3 推理系列产品，dav-3510 对应 Ascend 950PR/Ascend 950DT |

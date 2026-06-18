@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例基于 `SetAtomicAdd` 和 `SetAtomicMax` 原子操作接口，介绍数据从 VECOUT 向 GM 搬运时，原子累加和原子最大值比较的实现流程。需要注意，在调用原子操作接口完成相关操作后，要调用 `DisableDmaAtomic()` 关闭原子模式，防止后续其他计算受影响。
+本样例基于 `SetAtomicAdd` 和 `SetAtomicMax` 原子操作接口，介绍UB本地张量向GM搬运时，原子累加和原子最大值比较的实现流程。需要注意，在调用原子操作接口完成相关操作后，要调用 `DisableDmaAtomic()` 关闭原子模式，防止后续其他计算受影响。
 
 > **接口提示：** 除本样例使用的 `SetAtomicAdd`、`SetAtomicMax` 接口外，Ascend C还提供了 `SetAtomicMin`接口用于配置 VECOUT到GM的传输规则。`SetAtomicMin` 的调用方式与 `SetAtomicMax` 一致，只需替换函数名即可切换。
 
@@ -49,15 +49,18 @@
 - 输入shape：src0=[1, 256]、src1=[1, 256]、src2=[1, 256]（三个核分别读取 input_x0.bin、input_x1.bin、input_x2.bin）
 - 输出shape：dst=[1, 256]
 - 数据类型：half
-- 说明：三个核通过 `GetBlockIdx()` 获取自身编号，分别读取不同的输入数据（input_x0.bin、input_x1.bin、input_x2.bin），通过 `SetAtomicMax` 开启原子最大值比较模式，每位输出为三个输入中的最大值
+- 说明：三个核通过 `GetBlockIdx()` 获取自身编号，分别读取不同的输入数据（input_x0.bin、input_x1.bin、input_x2.bin）。input_y.bin会先作为GM上已有dst初值拷贝到输出缓冲区，通过 `SetAtomicMax` 开启原子最大值比较模式后，每位输出为三个输入和dst初值中的最大值。
 
 ## 样例描述
 
 - 样例规格：
   <table>
   <caption>表2：样例规格说明</caption>
-  <tr><td rowspan="2" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-  <tr><td rowspan="1" align="center">src</td><td align="center">[1, 256]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td rowspan="5" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
+  <tr><td rowspan="1" align="center">input_x / input_x0</td><td align="center">[1, 256]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">input_x1</td><td align="center">[1, 256]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">input_x2</td><td align="center">[1, 256]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">input_y</td><td align="center">[1, 256]</td><td align="center">half</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">样例输出</td><td align="center">dst</td><td align="center">[1, 256]</td><td align="center">half</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">data_movement_with_atomic_operations_custom</td></tr>
   <tr><td rowspan="1" align="center">并行block数</td><td colspan="4" align="center">3</td></tr>

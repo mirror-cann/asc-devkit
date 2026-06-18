@@ -25,7 +25,7 @@
 
 - 样例功能
 
-  本样例以Add计算为例展示动态Tensor编程模型的使用方法，适用于以下场景：
+  本样例以Add计算为例展示静态Tensor编程模型中ListTensorDesc动态输入参数的使用方法，适用于以下场景：
   1. 多输入参数动态处理：支持模型中多个输入张量的动态组合运算（如多分支网络结构）。
   2. 内存流水线优化：通过静态双缓冲与事件同步机制实现数据搬运与计算的流水线并行，降低内存访问延迟。
   3. 多核并行计算：适配AI处理器的多核架构，支持大规模张量运算的高效分发。
@@ -45,7 +45,7 @@
 
   - Kernel实现
 
-    动态输入特性是指，核函数的入参采用ListTensorDesc的结构存储输入数据信息。构造TensorList数据结构，示例如下。
+    动态输入特性是指，核函数的入参采用ListTensorDesc的结构存储输入数据信息。构造ListTensorDesc数据结构，示例如下。
     ```cpp
     constexpr uint32_t SHAPE_DIM = 2;
     struct TensorDesc {
@@ -122,5 +122,5 @@
 
   执行结果如下，说明精度对比成功：
   ```bash
-  [Success] Case accuracy is verification passed.
+  [Success] Case accuracy verification passed.
   ```

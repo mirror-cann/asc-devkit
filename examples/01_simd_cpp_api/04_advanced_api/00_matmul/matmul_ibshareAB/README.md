@@ -2,7 +2,7 @@
 
 ## 概述
 
-调用Matmul高阶API开启IBShare功能，复用L1 Buffer上相同的A矩阵或者B矩阵数据的样例，本样例为A矩阵和B矩阵同时复用场景。开启功能可以减少数据搬运开销。支持两种场景，通过环境变量选择场景。
+调用Matmul高阶API开启IBShare功能，复用L1 Buffer上相同的A矩阵或者B矩阵数据的样例，本样例为A矩阵和B矩阵同时复用场景。开启功能可以减少数据搬运开销。支持两种场景，通过CMake编译参数 `SCENARIO_NUM` 选择场景。
     <table>
  	<tr>
  		<td>scenarioNum</td>

@@ -33,7 +33,7 @@ def verify_result(real_result, golden):
             and np.sum(result_atol == False) > real_result.size * LOSS:
             print("[ERROR] result error")
             return False
-    print("test pass")
+    print("test pass!")
     return True
 
 if __name__ == '__main__':

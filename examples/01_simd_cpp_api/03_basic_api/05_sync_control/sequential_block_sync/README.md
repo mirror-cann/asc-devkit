@@ -37,7 +37,7 @@
 <caption>表1：样例输入输出规格</caption>
 <tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
 <tr><td align="center">x</td><td align="center">[256]</td><td align="center">float</td><td align="center">ND</td></tr>
-<tr><td align="center">workspace</td><td align="center">[8]</td><td align="center">int32_t</td><td align="center">ND</td></tr>
+<tr><td align="center">workspace</td><td align="center">[256] Bytes</td><td align="center">uint8_t</td><td align="center">ND</td></tr>
 <tr><td rowspan="1" align="center">样例输出</td><td align="center">z</td><td align="center">[256]</td><td align="center">float</td><td align="center">ND</td></tr>
 <tr><td rowspan="1" align="center">核函数名</td><td colspan="5" align="center">kernel_sequential_block_sync</td></tr>
 <tr><td rowspan="1" align="center">核数量</td><td colspan="5" align="center">8</td></tr>

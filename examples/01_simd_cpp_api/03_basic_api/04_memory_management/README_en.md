@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory contains examples for multiple APIs related to resource management. Each example is based on the Ascend C <<<>>> direct call method, supporting implementation of both the main function and kernel function in the same cpp file.
+This directory contains examples for multiple APIs related to resource management. Each example is based on the Ascend C <<<>>> direct call method, supporting implementation of both the main function and kernel function in the same .asc file.
 
 ## Example List
 

@@ -6,6 +6,7 @@
 
 | 产品 | CANN软件版本 |
 |------|-------------|
+| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
 | Atlas A3 训练系列产品/Atlas A3 推理系列产品 | >= CANN 9.0.0 |
 | Atlas A2 训练系列产品/Atlas A2 推理系列产品 | >= CANN 9.0.0 |
 
@@ -244,13 +245,13 @@ Scalar单元访问GM上的信号量，存在两种访问方式：
     <td>2</td>
     <td>多个AIV核间的确定性计算</td>
     <td>set_atomic_add_multi_aiv_custom</td>
-    <td>SetFlag/WaitFlag AIV核间同步</td>
+    <td>IBSet/IBWait AIV核间同步</td>
   </tr>
   <tr>
     <td>3</td>
     <td>多个AIC核间的确定性计算</td>
     <td>set_atomic_add_multi_aic_custom</td>
-    <td>SetFlag/WaitFlag AIC核间同步</td>
+    <td>GM信号量核间同步</td>
   </tr>
 </table>
 

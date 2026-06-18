@@ -65,7 +65,7 @@
   </tr>
 </table>
 
-通常的矩阵乘法计算公式：C = A × B + Bias，其中A、B、Bias、C矩阵的需要满足的shape分别为[M,K]、[K,N]、[N]和[M,N]。Bias的数据类型与C矩阵数据类型的对应关系，如表2所示，其中 bfloat16 仅支持Ascend 950PR/Ascend 950DT。
+通常的矩阵乘法计算公式：C = A × B + Bias，其中A、B、Bias、C矩阵的需要满足的shape分别为[M,K]、[K,N]、[N]和[M,N]。Bias的数据类型与C矩阵数据类型的对应关系，如表2所示，其中Bias在GM/L1上使用 bfloat16 的组合仅支持Ascend 950PR/Ascend 950DT。
 <a name="表2"></a>
 <table border="2" align="center">
 <caption style="font-weight: normal;">

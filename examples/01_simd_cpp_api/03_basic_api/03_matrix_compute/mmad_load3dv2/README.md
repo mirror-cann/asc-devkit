@@ -50,7 +50,7 @@ LoadData3DV2指令以下简称load3dv2，该指令对于二维矩阵的转置能
 | 4 | float | 转置 | 不转置 |
 | 5 | int8_t | 不转置 | 转置 |
 
-注：输入数据类型为b8时且目的地址位于L0B时，不支持load3dv2指令，因此当scenarioNum=5时，SplitB中调用的是load2d指令。
+注：输入数据类型为B8时且目的地址位于L0B时，不支持load3dv2指令，因此当scenarioNum=5时，SplitB中调用的是load2d指令。
 
   本样例中scenarioNum=3和4中A矩阵分别与样例[load_data_l12l0](../load_data_l12l0/README.md)中scenarioNum=12和13场景一致，B矩阵与该样例中scenarioNum=13场景一致，因此load3dv2指令具体的参数配置和示意图可以参考该样例readme的"6. L1到L0（LoadData）"小节中对Load3DV2接口的介绍。
 

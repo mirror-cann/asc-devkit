@@ -1,8 +1,8 @@
-# Resource Management API Examples Introduction
+# TPipe/TQue Resource Management API Sample Introduction
 
 ## Overview
 
-This directory contains examples for multiple APIs related to resource management. Each example is based on the Ascend C <<<>>> direct call method, supporting implementation of both the main function and kernel function in the same cpp file.
+This directory contains examples for multiple APIs related to TPipe/TQue resource management. Each example is based on the Ascend C <<<>>> direct call method and demonstrates TPipe/TQue-related interfaces.
 
 ## Example List
 
