@@ -173,9 +173,9 @@ This example implements Matmul and LeakyRelu fusion computation based on the sta
 
           - **LocalTensor Creation**: Use [LocalMemAllocator](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/资源管理/内存管理/LocalMemAllocator/LocalMemAllocator简介.md) (on-chip memory allocator that automatically allocates in application order, avoiding manual address offset maintenance) to create [LocalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md) (on-chip memory tensor) for each on-chip cache. The temporary space for A and B matrices in L1 is allocated by the same L1 allocator in application order to avoid manual L1 address offset maintenance
           - **GM → L1**: Use [DataCopy](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1随路转换-ND2NZ搬运（DataCopy）.md) to transfer A and B matrices from GM to L1, completing ND to Nz format conversion (Cube computation unit requires Nz fractal layout, so ND format must be converted to Nz format during transfer)
-          - **L1 → L0A/L0B**: Use LoadData to transfer data to L0A and L0B. B matrix requires transpose (Nz→Zn)
-          - **L0A/L0B → L0C**: Use Mmad (matrix multiply-accumulate instruction) to execute matrix multiply-add, accumulating all data blocks along the K axis
-          - **L0C → GM**: Use Fixpipe to transfer results out to GM, completing Nz to ND format conversion and float32 to half type conversion
+          - **L1 → L0A/L0B**: Use [LoadData](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load2D.md) to transfer data to L0A and L0B. B matrix requires transpose (Nz→Zn)
+          - **L0A/L0B → L0C**: Use [Mmad](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md) (matrix multiply-accumulate instruction) to execute matrix multiply-add, accumulating all data blocks along the K axis
+          - **L0C → GM**: Use [Fixpipe](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) to transfer results out to GM, completing Nz to ND format conversion and float32 to half type conversion
 
           Code example:
 
@@ -341,7 +341,7 @@ This example implements Matmul and LeakyRelu fusion computation based on the sta
   ```
   For example, when transferring matrix A with `{1, baseM, baseK, 0, K, baseM, 1, 0}`, it converts baseM×baseK ND data to Nz format.
 
-  **AscendC::LoadData2DParams** — Used by the `LoadData` interface to describe data transfer parameters for matrix A from L1 to L0A and matrix B from L1 to L0B in Atlas A2 Training Series Products/Atlas A2 Inference Series Products and Atlas A3 Training Series Products/Atlas A3 Inference Series Products:
+  **[AscendC::LoadData2DParams](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load2D.md)** — Used by the `LoadData` interface to describe data transfer parameters for matrix A from L1 to L0A and matrix B from L1 to L0B in Atlas A2 Training Series Products/Atlas A2 Inference Series Products and Atlas A3 Training Series Products/Atlas A3 Inference Series Products:
   ```cpp
   struct LoadData2DParams {
       int32_t startIndex;   // Fractal matrix ID (0 is the first), unit: 512B, [0, 65535]
@@ -356,7 +356,7 @@ This example implements Matmul and LeakyRelu fusion computation based on the sta
   For example: In Atlas A2 Training Series Products/Atlas A2 Inference Series Products and Atlas A3 Training Series Products/Atlas A3 Inference Series Products, the layout format on L0A is Zz. When transferring matrix A, use `{0, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, 0, 0, false, 0}`;<br>
   When transferring matrix B, set `ifTranspose=true` to complete Nz to Zn transpose transfer.
 
-  **AscendC::LoadData2DParamsV2** — Used by the `LoadData` interface to describe data transfer parameters for matrix A from L1 to L0A and matrix B from L1 to L0B in Ascend 950PR/Ascend 950DT products:
+  **[AscendC::LoadData2DParamsV2](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load2DV2.md)** — Used by the `LoadData` interface to describe data transfer parameters for matrix A from L1 to L0A and matrix B from L1 to L0B in Ascend 950PR/Ascend 950DT products:
   ```cpp
   struct LoadData2DParamsV2 {
       uint32_t mStartPosition;  // Starting position in M direction, unit: 512B
@@ -371,7 +371,7 @@ This example implements Matmul and LeakyRelu fusion computation based on the sta
   ```
   In Ascend 950PR/Ascend 950DT products, the layout format on L0A is Nz. When transferring matrix A, use `{0, 0, baseM / CUBE_BLOCK, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, baseM / CUBE_BLOCK, false, 0}` to complete A matrix Nz to Nz transfer in one step; when transferring matrix B, use `{0, 0, baseK / CUBE_BLOCK, baseN / CUBE_BLOCK, baseK / CUBE_BLOCK, baseN / CUBE_BLOCK, true, 0}` to complete B matrix Nz to Zn transfer in one step.
 
-  **AscendC::MmadParams** — Used by the `Mmad` interface to describe matrix multiplication parameters:
+  **[AscendC::MmadParams](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md)** — Used by the `Mmad` interface to describe matrix multiplication parameters:
   ```cpp
   struct MmadParams {
       uint16_t m;               // Left matrix Height (M dimension), [0, 4095]
@@ -384,7 +384,7 @@ This example implements Matmul and LeakyRelu fusion computation based on the sta
   ```
   For example, `{baseM, baseN, baseK, 0, false, true}` computes a baseM×baseN output block and accumulates along the K direction for baseK length.
 
-  **AscendC::FixpipeParamsV220** — Used by the `Fixpipe` interface to describe data transfer and precision conversion parameters from L0C to GM:
+  **[AscendC::FixpipeParamsV220](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md)** — Used by the `Fixpipe` interface to describe data transfer and precision conversion parameters from L0C to GM:
   ```cpp
   struct FixpipeParamsV220 {
       int32_t     nSize;        // Source Nz matrix N dimension size, [1, 4095]
@@ -484,10 +484,10 @@ The following table details each step of the Cube core and Vector core operation
 |:---|:---|:---|
 | Initialization | Use [LocalMemAllocator](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/资源管理/内存管理/LocalMemAllocator/LocalMemAllocator简介.md) to allocate [LocalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md) for on-chip caches such as L1, L0A/L0B, L0C | Automatically allocate on-chip memory in application order, avoiding manual address offset maintenance |
 | GM → L1 | [DataCopy](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/GMToL1随路转换-ND2NZ搬运（DataCopy）.md) transfers A/B matrices from GM to L1, simultaneously completing ND→Nz format conversion | Cube computation unit requires Nz fractal layout format, so ND format must be converted to Nz format during transfer to avoid additional conversion overhead |
-| L1 → L0A/L0B | LoadData transfers A matrix from L1 to L0A (Nz→Zz/Nz), B matrix from L1 to L0B (Nz→Zn transpose) | B matrix requires transpose because the Mmad instruction requires B matrix to be input in Zn (transposed Nz) format |
-| L0A/L0B → L0C | Mmad executes matrix multiply-add, accumulating all data blocks along the K direction | Completes A×B matrix multiplication computation, K-direction block accumulation ensures correctness |
+| L1 → L0A/L0B | [LoadData](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/Load2D.md) transfers A matrix from L1 to L0A (Nz→Zz/Nz), B matrix from L1 to L0B (Nz→Zn transpose) | B matrix requires transpose because the Mmad instruction requires B matrix to be input in Zn (transposed Nz) format |
+| L0A/L0B → L0C | [Mmad](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md) executes matrix multiply-add, accumulating all data blocks along the K direction | Completes A×B matrix multiplication computation, K-direction block accumulation ensures correctness |
 | Intra-core Synchronization | [SetFlag](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md)/[WaitFlag](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) ensures data transfer completes before starting the next operation | Avoids LoadData reading data that has not finished transferring, avoids Mmad reading data that has not finished loading |
-| L0C → GM | Fixpipe transfers L0C results out to GM, simultaneously completing Nz→ND format conversion and fp32→fp16 precision conversion | Output results need to return to GM for Vector cores to read, format needs to be converted to ND layout, precision needs to be reduced from fp32 to fp16 to match output requirements |
+| L0C → GM | [Fixpipe](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) transfers L0C results out to GM, simultaneously completing Nz→ND format conversion and fp32→fp16 precision conversion | Output results need to return to GM for Vector cores to read, format needs to be converted to ND layout, precision needs to be reduced from fp32 to fp16 to match output requirements |
 | Inter-core Synchronization | [CrossCoreSetFlag](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核间同步/CrossCoreSetFlag(ISASI).md) notifies Vector cores that data is ready | Ensures Vector cores do not start reading GM data before Fixpipe completes |
 
 ### Vector Core Flow
