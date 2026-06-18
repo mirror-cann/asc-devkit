@@ -52,6 +52,13 @@ def extract_quant_params(quant_pre):
     quant_alpha = (-1) ** sign_bit * (1 + mantissa / 1024) * (2 ** (exponent - exponent_bias))
     return quant_alpha, offset, sign, n, mode_control_bit
 
+def snap_near_half_integer(value, epsilon=1e-5):
+    abs_val = np.abs(value)
+    frac = abs_val - np.floor(abs_val)
+    if 0.5 - epsilon < frac < 0.5:
+        return np.sign(value) * (np.floor(abs_val) + np.float32(0.5))
+    return value
+
 def saturation(value, min_val, max_val, target_type):
     """
     将输入的浮点数进行饱和处理，并转换为目标类型
@@ -93,6 +100,7 @@ def qf322b8_pre(data, quant_pre, relu_pre):
         data = data * quant_alpha
     else:
         data = data * relu_alpha
+    data = snap_near_half_integer(data)
     quant_data = saturation(data, -256, 255, np.int16) + offset
     if sign:
         return saturation(quant_data, -128, 127, np.int8)
@@ -113,6 +121,7 @@ def req8_pre(data, quant_pre, relu_pre):
         data = data * quant_alpha
     else:
         data = data * relu_alpha
+    data = snap_near_half_integer(data)
     quant_data = saturation(data, -256, 255, np.int16) + offset
     if sign:
         return saturation(quant_data, -128, 127, np.int8)

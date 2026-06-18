@@ -18,7 +18,7 @@
   <tr>
     <td align="center">2</td>
     <td align="center">GetRuntimeUBSize</td>
-    <td>返回运行时变量，表示用户最大可使用的UB（Unified Buffer）大小。适用于SIMT和SIMD混合编程场景，SIMT场景会在UB预留一部分空间用于Dcache。例如Ascend 950PR/Ascend 950DT场景，SIMT编程申请32KB空间用于Dcache，系统预留8KB，UB总共256KB，返回216KB</td>
+    <td>返回运行时变量，表示用户最大可使用的UB（Unified Buffer）大小。在SIMT和SIMD混合编程场景下，SIMT场景会在UB预留一部分空间用于Dcache。例如Ascend 950PR/Ascend 950DT场景，SIMT编程申请32KB空间用于Dcache，系统预留8KB，UB总共256KB，返回216KB。在非SIMT和SIMD混合编程场景下，返回固定值248KB</td>
   </tr>
 </table>
 
