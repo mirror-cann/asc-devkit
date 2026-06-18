@@ -237,28 +237,12 @@ __aicore__ inline void HcclImpl<HcclServerType::HCCL_SERVER_TYPE_CCU, config>::C
 {
     ccuUsedXnNum_ = 8; // 算法默认使用的xn num
     FlushDataCache(&handleParamGM_[handleId]);
-    uint8_t algorithmType = 0;
-    for (uint32_t i = 0; i < MAX_CC_TILING_NUM; ++i) {
-        if (hcclContext_->opType[i] == static_cast<uint32_t>(handleParamGM_[handleId].commType.prepareType)) {
-            algorithmType = hcclContext_->algorithmType[i];
-            break;
-        }
-    }
-    KERNEL_LOG(KERNEL_INFO, "ApiClient CcuPrepareForOp algorithmType:%u", algorithmType);
     if (handleParamGM_[handleId].commType.prepareType == HcclCMDType::HCCL_CMD_ALLGATHER) {
-        if (algorithmType == static_cast<uint8_t>(AlgorithmType::CcuAllGatherMeshMem2Mem1D)) {
-            ccuUsedXnNum_ = 9;
-            CcuPrepareForAllGatherM2M(&handleParamGM_[handleId]);
-        } else {
-            CcuPrepareForAllGather(&handleParamGM_[handleId]);
-        }
+        ccuUsedXnNum_ = 9;
+        CcuPrepareForAllGatherM2M(&handleParamGM_[handleId]);
     } else if (handleParamGM_[handleId].commType.prepareType == HcclCMDType::HCCL_CMD_ALLREDUCE) {
-        if (algorithmType == static_cast<uint8_t>(AlgorithmType::CcuAllReduceMeshMem2Mem1D)) {
-            ccuUsedXnNum_ = 15;
-            CcuPrepareForAllReduceM2M(&handleParamGM_[handleId]);
-        } else {
-            CcuPrepareForAllReduce(&handleParamGM_[handleId]);
-        }
+        ccuUsedXnNum_ = 15;
+        CcuPrepareForAllReduceM2M(&handleParamGM_[handleId]);
     } else if (handleParamGM_[handleId].commType.prepareType == HcclCMDType::HCCL_CMD_ALLTOALL) {
         ccuUsedXnNum_ = 11;
         CcuPrepareForAllToAll(&handleParamGM_[handleId]);
@@ -271,12 +255,8 @@ __aicore__ inline void HcclImpl<HcclServerType::HCCL_SERVER_TYPE_CCU, config>::C
         FlushDataCache(reinterpret_cast<__gm__ uint8_t*>(&handleParamGM_[handleId]) + MAX_DCCI_CNT);
         CcuPrepareForAllToAllVWrite(&handleParamGM_[handleId]);
     } else if (handleParamGM_[handleId].commType.prepareType == HcclCMDType::HCCL_CMD_REDUCE_SCATTER) {
-        if (algorithmType == static_cast<uint8_t>(AlgorithmType::CcuReduceScatterMeshMem2Mem1D)) {
-            ccuUsedXnNum_ = 13;
-            CcuPrepareForReduceScatterM2M(&handleParamGM_[handleId]);
-        } else {
-            CcuPrepareForReduceScatter(&handleParamGM_[handleId]);
-        }
+        ccuUsedXnNum_ = 13;
+        CcuPrepareForReduceScatterM2M(&handleParamGM_[handleId]);
     }
 }
 
