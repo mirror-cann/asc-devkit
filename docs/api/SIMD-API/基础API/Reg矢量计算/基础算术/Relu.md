@@ -1,4 +1,4 @@
-# Neg<a name="ZH-CN_TOPIC_0000001956986913"></a>
+# Relu<a name="ZH-CN_TOPIC_0000001929651446"></a>
 
 ## 产品支持情况
 
@@ -28,20 +28,20 @@
 
 头文件路径：`"basic_api/reg_compute/kernel_reg_compute_vec_unary_intf.h"`。
 
-该接口用于根据mask对输入数据srcReg进行取相反数操作，将结果写入dstReg。计算公式如下：
+该接口根据mask对输入数据srcReg进行Relu（线性整流）操作，将结果写入dstReg，计算公式如下：
 
-$$dstReg_i = -srcReg_i$$
+$$dstReg_i = \max(0, srcReg_i)$$
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
 ```cpp
 template <typename T = DefaultType, MaskMergeMode mode = MaskMergeMode::ZEROING, typename U>
-__simd_callee__ inline void Neg(U& dstReg, U& srcReg, MaskReg& mask)
+__simd_callee__ inline void Relu(U& dstReg, U& srcReg, MaskReg& mask)
 ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表1**  模板参数说明
+**表 1**  模板参数说明
 
 | 参数名 | 描述 |
 | --- | --- |
@@ -49,7 +49,7 @@ __simd_callee__ inline void Neg(U& dstReg, U& srcReg, MaskReg& mask)
 | mode | [MaskMergeMode](../数据类型/MaskMergeMode.md)枚举类型，选择MERGING模式或ZEROING模式。<br>&bull; ZEROING模式下，mask未筛选的元素在dstReg中置零。<br>&bull; MERGING模式当前不支持。 |
 | U | 源操作数和目的操作数的RegTensor类型，例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写。 |
 
-**表2**  参数说明
+**表 2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -59,7 +59,7 @@ __simd_callee__ inline void Neg(U& dstReg, U& srcReg, MaskReg& mask)
 
 ## 数据类型
 
-目的操作数与源操作数的数据类型需要保持一致。支持的数据类型为：int8_t、int16_t、half、int32_t、float、int64_t。
+目的操作数与源操作数的数据类型需要保持一致。支持的数据类型为：half、int32_t、float、int64_t。
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -73,7 +73,7 @@ __simd_callee__ inline void Neg(U& dstReg, U& srcReg, MaskReg& mask)
 
 ```cpp
 template<typename T>
-__simd_vf__ inline void NegVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t count, uint16_t oneRepeatSize, uint16_t repeatTimes)
+__simd_vf__ inline void ReluVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t count, uint16_t oneRepeatSize, uint16_t repeatTimes)
 {
     AscendC::Reg::RegTensor<T> srcReg;
     AscendC::Reg::RegTensor<T> dstReg;
@@ -81,8 +81,9 @@ __simd_vf__ inline void NegVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t
     for (uint16_t i = 0; i < repeatTimes; i++) {
         mask = AscendC::Reg::UpdateMask<T>(count);
         AscendC::Reg::LoadAlign(srcReg, srcAddr + i * oneRepeatSize);
-        AscendC::Reg::Neg(dstReg, srcReg, mask);
+        AscendC::Reg::Relu(dstReg, srcReg, mask);
         AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, mask);
     }
 }
 ```
+

@@ -1,4 +1,4 @@
-# Log<a name="ZH-CN_TOPIC_0000001929827648"></a>
+# Ln<a name="ZH-CN_TOPIC_0000002052905730"></a>
 
 ## 产品支持情况
 
@@ -30,13 +30,13 @@
 
 该接口根据mask逐元素对源操作数求自然对数，将结果写入目的操作数。计算公式如下：
 
-$$dstReg_i = \log(srcReg_i)$$
+$$dstReg_i = \ln(srcReg_i)$$
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
 ```cpp
 template <typename T = DefaultType, auto mode = MaskMergeMode::ZEROING, typename U>
-__simd_callee__ inline void Log(U& dstReg, U& srcReg, MaskReg& mask)
+__simd_callee__ inline void Ln(U& dstReg, U& srcReg, MaskReg& mask)
 ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
@@ -46,10 +46,10 @@ __simd_callee__ inline void Log(U& dstReg, U& srcReg, MaskReg& mask)
 | 参数名 | 描述 |
 | --- | --- |
 | T | 操作数数据类型。支持的数据类型请参考[数据类型](#数据类型)。 |
-| mode | 可配置为[MaskMergeMode](../数据类型/MaskMergeMode.md)枚举类型或LogSpecificMode的结构体指针。<br>&bull; 配置MaskMergeMode，选择MERGING模式或ZEROING模式。<br>&nbsp;&nbsp;&bull; ZEROING模式下，mask未筛选的元素在dstReg中置零。<br>&nbsp;&nbsp;&bull; MERGING模式当前不支持。<br>&bull; 配置LogSpecificMode，定义如下：<br><pre><code>enum class LogAlgo {<br>    INTRINSIC = 0,<br>    PRECISION_1ULP_FTZ_TRUE,<br>    PRECISION_1ULP_FTZ_FALSE,<br>};<br>struct LogSpecificMode {<br>    MaskMergeMode mrgMode = MaskMergeMode::ZEROING,<br>    LogAlgo algo = LogAlgo::INTRINSIC;<br>};</code></pre>&bull; mrgMode：选择MERGING模式或ZEROING模式。<br>&bull; algo：用于配置Subnormal模式。<br>&nbsp;&nbsp;&bull; LogAlgo::INTRINSIC、LogAlgo::PRECISION_1ULP_FTZ_TRUE，使用单指令计算得出结果，最大精度误差为1ULP。目前，该算法支持half、float数据类型。<br>&nbsp;&nbsp;&bull; LogAlgo::PRECISION_1ULP_FTZ_FALSE，支持Subnormal数据计算，最大精度误差为1ULP。目前，该算法支持half、float数据类型。 |
+| mode | 可配置为[MaskMergeMode](../数据类型/MaskMergeMode.md)枚举类型或LnSpecificMode的结构体指针。<br>&bull; 配置MaskMergeMode，选择MERGING模式或ZEROING模式。<br>&nbsp;&nbsp;&bull; ZEROING模式下，mask未筛选的元素在dstReg中置零。<br>&nbsp;&nbsp;&bull; MERGING模式当前不支持。<br>&bull; 配置LnSpecificMode，定义如下：<br><pre><code>enum class LnAlgo {<br>    INTRINSIC = 0,<br>    PRECISION_1ULP_FTZ_TRUE,<br>    PRECISION_1ULP_FTZ_FALSE,<br>};<br>struct LnSpecificMode {<br>    MaskMergeMode mrgMode = MaskMergeMode::ZEROING,<br>    LnAlgo algo = LnAlgo::INTRINSIC;<br>};</code></pre>&bull; mrgMode：选择MERGING模式或ZEROING模式。<br>&bull; algo：用于配置Subnormal模式。<br>&nbsp;&nbsp;&bull; LnAlgo::INTRINSIC、LnAlgo::PRECISION_1ULP_FTZ_TRUE，使用单指令计算得出结果，最大精度误差为1ULP。目前，该算法支持half、float数据类型。<br>&nbsp;&nbsp;&bull; LnAlgo::PRECISION_1ULP_FTZ_FALSE，支持Subnormal数据计算，最大精度误差为1ULP。目前，该算法支持half、float数据类型。 |
 | U | 源操作数和目的操作数的RegTensor类型，例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写。 |
 
-**表2**  参数说明
+**表 2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -71,37 +71,38 @@ __simd_callee__ inline void Log(U& dstReg, U& srcReg, MaskReg& mask)
 
 ## 关键特性说明
 
-**最大精度误差**
+**最大精度误差：**
 
-- LogAlgo::INTRINSIC、LogAlgo::PRECISION_1ULP_FTZ_TRUE，最大精度误差为1ULP。
-- LogAlgo::PRECISION_1ULP_FTZ_FALSE，最大精度误差为1ULP。
+- LnAlgo::INTRINSIC、LnAlgo::PRECISION_1ULP_FTZ_TRUE，最大精度误差为1ULP。
+- LnAlgo::PRECISION_1ULP_FTZ_FALSE，最大精度误差为1ULP。
 
 **配置Subnormal模式**：
 <br>
 FTZ（Flush To Zero）：一种浮点运算模式，当结果为Subnormal时，将其直接清零（近似为0），而非保留其精确的微小数值。
 <br>
-只有将algo设置为LogAlgo::PRECISION_1ULP_FTZ_FALSE时，Log接口才会保留并正确输出Subnormal结果；其他模式下Subnormal均被FTZ。
+只有将algo设置为LnAlgo::PRECISION_1ULP_FTZ_FALSE时，Ln接口才会保留并正确输出Subnormal结果；其他模式下Subnormal均被FTZ。
 <br>
-一般场景推荐使用性能更好的LogAlgo::INTRINSIC、LogAlgo::PRECISION_1ULP_FTZ_TRUE；需要精确Subnormal输出的场景（如特定数据精度要求的算法、避免除零错误）使用LogAlgo::PRECISION_1ULP_FTZ_FALSE。
+一般场景推荐使用性能更好的LnAlgo::INTRINSIC、LnAlgo::PRECISION_1ULP_FTZ_TRUE；需要精确Subnormal输出的场景（如特定数据精度要求的算法、避免除零错误）使用LnAlgo::PRECISION_1ULP_FTZ_FALSE。
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
 ```cpp
 template<typename T>
-__simd_vf__ inline void LogVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t count, uint16_t oneRepeatSize, uint16_t repeatTimes)
+__simd_vf__ inline void LnVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t count, uint16_t oneRepeatSize, uint16_t repeatTimes)
 {
     AscendC::Reg::RegTensor<T> srcReg;
     AscendC::Reg::RegTensor<T> dstReg;
     AscendC::Reg::MaskReg mask;
     // Subnormal模式
-    // static constexpr AscendC::Reg::LogSpecificMode mode = {MaskMergeMode::ZEROING, LogAlgo::PRECISION_1ULP_FTZ_FALSE};
+    // static constexpr AscendC::Reg::LnSpecificMode mode = {MaskMergeMode::ZEROING, LnAlgo::PRECISION_1ULP_FTZ_FALSE};
     for (uint16_t i = 0; i < repeatTimes; i++) {
         mask = AscendC::Reg::UpdateMask<T>(count);
         AscendC::Reg::LoadAlign(srcReg, srcAddr + i * oneRepeatSize);
-        AscendC::Reg::Log(dstReg, srcReg, mask);
+        AscendC::Reg::Ln(dstReg, srcReg, mask);
         // Subnormal模式
-        // AscendC::Reg::Log<DTYPE, &mode>(dstReg, srcReg, mask);
+        // AscendC::Reg::Ln<T, &mode>(dstReg, srcReg, mask);
         AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, mask);
     }
 }
 ```
+
