@@ -42,22 +42,6 @@ std::shared_ptr<TransportMem> TransportMem::Create(TpType tpType, const std::uni
 {
     std::shared_ptr<TransportMem> transportMemPtr;
 #if !defined(CCL_KERNEL) || defined(CCL_LLT)
-    // CHK_PRT_RET((netDevCtx == nullptr), HCCL_ERROR("[TransportMem][Create]netDevCtx is null"), nullptr);
-    // HCCL_DEBUG("transportMem create tpType:%u netDevCtx:%p dispatcher:%p localRankId:%u remoteRankId:%u sdid:%u " \
-    //     "serverId:%u trafficClass:%u serviceLevel:%u", tpType, netDevCtx, dispatcher, attrInfo.localRankId,
-    //     attrInfo.remoteRankId, attrInfo.sdid, attrInfo.serverId, attrInfo.trafficClass, attrInfo.serviceLevel);
-    // switch (tpType) {
-    //     case TpType::ROCE:
-    //         transportMemPtr = std::make_unique<TransportRoceMem>(notifyPool, netDevCtx, dispatcher, attrInfo,
-    //             aicpuUnfoldMode);
-    //         break;
-    //     case TpType::IPC:
-    //         transportMemPtr = std::make_unique<TransportIpcMem>(notifyPool, netDevCtx, dispatcher, attrInfo,
-    //             aicpuUnfoldMode);
-    //         break;
-    //     default:
-    //         break;
-    // }
 #else
     HCCL_ERROR("[TransportMem] The Create interface with qpInfo should be used on the AICPU, tpType[%u]", tpType);
 #endif

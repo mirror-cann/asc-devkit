@@ -230,11 +230,6 @@ HcclResult HcclAllocOpResCtx(HcclComm comm, const std::string &ctxTag, const std
 //AllToAll适配AllToAllV
 HcclResult ConvertAlltoAllParam(const u64 recvCount, const u32 rankSize, std::vector<u64> &sdispls, std::vector<u64> &rdispls)
 {
-    // std::vector<u64> sdispls(rankSize, 0);
-    // std::vector<u64> rdispls(rankSize, 0);
-    // std::vector<u64> sendCounts(rankSize, recvCount);
-    // std::vector<u64> recvCounts(rankSize, recvCount);
-    // CHK_RET(ConvertAlltoAllParam(recvCount, rankSize, sdispls, rdispls));
     u64 dataCountOffset = 0;
     for (u64 i = 0; i < rankSize; i++) {
         sdispls[i] = dataCountOffset;
