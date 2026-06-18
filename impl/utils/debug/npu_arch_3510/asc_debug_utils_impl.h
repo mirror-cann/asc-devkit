@@ -70,17 +70,7 @@ __simd_callee__ inline void enable_asc_diagnostics()
 
 __simd_callee__ __ubuf__ inline BlockVFBufInfo* get_printf_ubuf_addr(uint64_t addr, uint16_t blockIdx = 0)
 {
-    constexpr uint32_t safeStaticLen = 32;
-    static __ubuf__ uint64_t info[safeStaticLen];
-    if (addr != 0) {
-        info[0] = addr;
-        // clear data workspace when initializing
-        auto* bufInfo = reinterpret_cast<__ubuf__ BlockVFBufInfo*>(addr);
-        bufInfo->writeLen = 0;
-        bufInfo->pidx = 0;
-        bufInfo->blockIdx = blockIdx;
-    }
-    return reinterpret_cast<__ubuf__ BlockVFBufInfo*>(info[0]);
+    return reinterpret_cast<__ubuf__ BlockVFBufInfo*>(0);
 }
 
 __simd_callee__ inline void asc_copy_ub2gm_align(__gm__ void* dst, __ubuf__ void* src, uint32_t size)

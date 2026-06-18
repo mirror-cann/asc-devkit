@@ -262,9 +262,7 @@ enum class TimeStampId : uint32_t {
 
 template <auto funcPtr, typename... Args> __aicore__ inline void AscVFCallImpl(Args &&... args)
 {
-    AscVFDebugInitUb();
     funcPtr(args...);
-    AscVFDebugTransferUb();
 }
 } // namespace AscendC
 #endif // ASCENDC_MODULE_UTILS_H
