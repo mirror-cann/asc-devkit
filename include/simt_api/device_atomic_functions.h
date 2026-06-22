@@ -165,7 +165,6 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_atomic_xor(__gm__ uint32_t *a
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline int64_t asc_atomic_xor(__gm__ int64_t *address, int64_t val);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t asc_atomic_xor(__gm__ uint64_t *address, uint64_t val);
-}
 
 #else
 #ifndef ASCENDC_CPU_DEBUG
@@ -262,7 +261,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline int64_t asc_atomic_xor(int64_t *address, i
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t asc_atomic_xor(uint64_t *address, uint64_t val);
 #endif
 #endif
-
+}
 #include "impl/simt_api/device_atomic_functions_impl.h"
 
 #endif

@@ -393,7 +393,6 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t asc_atomic_xor(__gm__ uint64_t *a
 {
     return atomicXOr(address, val);
 }
-}
 
 #else
 #ifndef ASCENDC_CPU_DEBUG
@@ -628,6 +627,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t asc_atomic_xor(uint64_t *address,
 }
 #endif
 #endif
+}
 #endif
 #endif  // IMPL_SIMT_API_DEVICE_ATOMIC_FUNCTIONS_IMPL_H
 
