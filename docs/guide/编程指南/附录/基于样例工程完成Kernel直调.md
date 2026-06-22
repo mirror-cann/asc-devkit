@@ -21,7 +21,7 @@
 
 ## 工程目录<a name="section7363202715148"></a>
 
-您可以单击[矢量算子样例](https://gitee.com/ascend/samples/tree/master/operator/ascendc/0_introduction/3_add_kernellaunch/AddKernelInvocationNeo)，获取核函数开发和运行验证的完整样例。样例目录结构如下所示：
+样例目录结构如下所示：
 
 ```
 AddKernelInvocationNeo
