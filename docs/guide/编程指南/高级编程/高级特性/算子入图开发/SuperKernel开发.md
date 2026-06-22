@@ -18,12 +18,12 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
 
     注：SuperKernel启动核数为子Kernel的最大启动核数。假设SuperKernel包括算子a（启动核数为4）和算子b（启动核数为2），此时SuperKernel启动核数为4。
 
-    -   使用[SyncAll](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/SyncAll.md)时，为了解决该问题，可以通过在标定SuperKernel范围时开启feed-sync-all功能，此时系统会在SuperKernel内子Kernel的其余核中插入SyncAll指令，防止卡住超时。
-    -   若使用[CrossCoreSetFlag](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/CrossCoreSetFlag(ISASI).md)和[CrossCoreWaitFlag](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/CrossCoreWaitFlag(ISASI).md)硬同步接口实现全核同步，仅支持子Kernel启动核数与SuperKernel核数相同。
+    -   使用[SyncAll](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0204.html)时，为了解决该问题，可以通过在标定SuperKernel范围时开启feed-sync-all功能，此时系统会在SuperKernel内子Kernel的其余核中插入SyncAll指令，防止卡住超时。
+    -   若使用[CrossCoreSetFlag](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0273.html)和[CrossCoreWaitFlag](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0274.html)硬同步接口实现全核同步，仅支持子Kernel启动核数与SuperKernel核数相同。
 
 -   若自定义算子的Kernel类型设置为KERNEL\_TYPE\_MIX\_AIC\_1\_1，因为SuperKernel会根据启动核数等信息调整SuperKernel的启动比例，此时需特别注意该算子也可以适应SuperKernel的1:2启动比例，确保AIC与AIV之间的硬同步操作正确执行。比如：算子内部使用了AIC与AIV之间的硬同步接口（CrossCoreSetFlag和CrossCoreWaitFlag），不要单独指定某些AIV核调用硬同步接口，使所有AIV核均调用硬同步接口，防止因为硬同步数量不匹配而导致卡死超时；使用Matmul高阶API时，算子逻辑应保证仅有一个AIV0核调用Matmul接口，防止启动两个AIV核之后出现AIV1核消息无法接收导致卡死超时。
 
--   在开发自定义算子时，开发者必须确保所有对GM的标量读写操作都按需正确插入[DataCacheCleanAndInvalid](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/DataCacheCleanAndInvalid.md)指令：在单算子编译场景下，毕昇编译器自动在算子末尾添加DataCacheCleanAndInvalid指令，刷新整个DCache（数据缓存）。在SuperKernel中，子Kernel被当做普通函数处理，编译器不会自动插入该指令来确保数据缓存一致性，开发者需要自行保证避免因容错机制改变而导致错误。
+-   在开发自定义算子时，开发者必须确保所有对GM的标量读写操作都按需正确插入[DataCacheCleanAndInvalid](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0177.html)指令：在单算子编译场景下，毕昇编译器自动在算子末尾添加DataCacheCleanAndInvalid指令，刷新整个DCache（数据缓存）。在SuperKernel中，子Kernel被当做普通函数处理，编译器不会自动插入该指令来确保数据缓存一致性，开发者需要自行保证避免因容错机制改变而导致错误。
 
     出于性能考虑，SuperKernel场景下Cache刷新机制如下：
 
@@ -44,14 +44,14 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
 
     ![](../../../../figures/图1-AI-Core内部并行计算架构抽象示意图-35.png)
 
--   在子Kernel中调用[GetBlockNum](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GetBlockNum.md)接口获取核数时，无论是否融合SuperKernel，获取的核数保持不变，不受SuperKernel启动核数的影响。因此，在使用该接口时，开发者无需特别关注SuperKernel的启动核数，使用方法和开发普通算子时一样。
--   针对Atlas A3 训练系列产品/Atlas A3 推理系列产品中，在不使能SuperKernel场景下，[TPipe::Destroy](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Destroy.md)接口内部最后会插入AscendC::PipeBarrier<PIPE\_ALL\>\(\)指令，额外保障多个TPipe之间的流水同步；模型中绝大部分算子只会使用一个TPipe对象，在对象析构时会调用Destroy，为不阻塞[SetNextTaskStart](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/SetNextTaskStart.md)和[WaitPreTaskEnd](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/WaitPreTaskEnd.md)性能提升，SuperKernel场景下默认关闭了TPipe::Destroy中插入的AscendC::PipeBarrier<PIPE\_ALL\>\(\)指令，所以当算子需要多个TPipe对象并手动调用Destroy函数时，开发者需自行保障TPipe对象间流水的同步。
+-   在子Kernel中调用[GetBlockNum](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0184.html)接口获取核数时，无论是否融合SuperKernel，获取的核数保持不变，不受SuperKernel启动核数的影响。因此，在使用该接口时，开发者无需特别关注SuperKernel的启动核数，使用方法和开发普通算子时一样。
+-   针对Atlas A3 训练系列产品/Atlas A3 推理系列产品中，在不使能SuperKernel场景下，[TPipe::Destroy](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0112.html)接口内部最后会插入AscendC::PipeBarrier<PIPE\_ALL\>\(\)指令，额外保障多个TPipe之间的流水同步；模型中绝大部分算子只会使用一个TPipe对象，在对象析构时会调用Destroy，为不阻塞[SetNextTaskStart](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_00087.html)和[WaitPreTaskEnd](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_00088.html)性能提升，SuperKernel场景下默认关闭了TPipe::Destroy中插入的AscendC::PipeBarrier<PIPE\_ALL\>\(\)指令，所以当算子需要多个TPipe对象并手动调用Destroy函数时，开发者需自行保障TPipe对象间流水的同步。
 
 ## 性能优化建议<a name="section4710047496"></a>
 
 -   任务间同步
 
-    此外，开发者在进行Kernel侧编程时，可以通过调用[SetNextTaskStart](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/SetNextTaskStart.md)和[WaitPreTaskEnd](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/WaitPreTaskEnd.md)两个任务间接口，进一步提升性能。
+    此外，开发者在进行Kernel侧编程时，可以通过调用[SetNextTaskStart](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_00087.html)和[WaitPreTaskEnd](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_00088.html)两个任务间接口，进一步提升性能。
 
     -   调用SetNextTaskStart后的指令可以和后续其他的子Kernel实现并行，提升整体性能。如[图1](#fig37581010773)所示，SuperKernel按序调用子Kernel，为保证子Kernel之间数据互不干扰，会在子Kernel间插入算子间同步进行保序，子Kernel<sub>N-1</sub>调用该接口后，之后的指令会和后续子Kernel<sub>N</sub>实现并行。
 

@@ -10,20 +10,20 @@ AIC和AIV独立运行机制，又称双主模式。在[分离模式](../../../..
 
 ## 约束说明<a name="zh-cn_topic_0000002299608693_section14160134220363"></a>
 
--   该功能仅支持[Norm模板](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulConfig.md)和[MDL模板](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/MatmulConfig.md)。
+-   该功能仅支持[Norm模板](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0616.html)和[MDL模板](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0616.html)。
 -   算子核函数的类型为MIX，同时AIC核数 : AIV核数为1:1。
--   算子核函数的类型为MIX，同时AIC核数 : AIV核数为1:2，且A矩阵和B矩阵同时开启[IBSHARE](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Matmul使用说明.md)参数。
+-   算子核函数的类型为MIX，同时AIC核数 : AIV核数为1:2，且A矩阵和B矩阵同时开启[IBSHARE](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0614.html)参数。
 
 -   同一算子中所有Matmul对象的该参数取值必须保持一致。
 -   A、B、Bias矩阵只支持从Global Memory输入。
--   获取矩阵计算结果只支持调用[IterateAll](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/IterateAll.md)接口输出到[GlobalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GlobalTensor.md)，即计算结果放置于Global Memory的地址，不能调用[GetTensorC](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GetTensorC.md)等接口获取结果。
+-   获取矩阵计算结果只支持调用[IterateAll](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0640.html)接口输出到[GlobalTensor](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0007.html)，即计算结果放置于Global Memory的地址，不能调用[GetTensorC](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0639.html)等接口获取结果。
 
 ## 调用示例<a name="zh-cn_topic_0000002299608693_section15486294368"></a>
 
 完整的算子样例请参考[开启双主模式的算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.3/examples/01_simd_cpp_api/03_libraries/00_matrix/matmul_mixdualmaster)。
 
 ```
-// 修改模板参数enableMixDualMaster=true，Norm模板开启双主模式，MDL模板使用[GetMDLConfig](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GetMDLConfig.md)接口获取模板参数。
+// 修改模板参数enableMixDualMaster=true，Norm模板开启双主模式，MDL模板使用[GetMDLConfig](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0622.html)接口获取模板参数。
 constexpr static MatmulConfig MM_CFG = GetNormalConfig(false, false, false, BatchMode::BATCH_LESS_THAN_L1, true, IterateOrder::ORDER_M, ScheduleType::OUTER_PRODUCT, false, true/*enableMixDualMaster*/);
 Matmul<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG> mm;
 

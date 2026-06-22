@@ -26,7 +26,7 @@ extern "C" __global__ __aicore__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z
 
 提供GET\_TILING\_DATA，用于获取算子kernel入口函数传入的tiling信息，并填入注册的Tiling结构体中，此函数会以宏展开的方式进行编译。注意，对应的算子host实现中需要定义TilingData结构体，实现并注册计算TilingData的Tiling函数。具体请参考[Host侧Tiling实现](Host侧Tiling实现/基本流程.md)。
 
-核函数中调用[GET\_TILING\_DATA](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GET_TILING_DATA.md)获取TilingData的样例如下：
+核函数中调用[GET\_TILING\_DATA](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0214.html)获取TilingData的样例如下：
 
 ```
 extern "C" __global__ __aicore__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z, GM_ADDR workspace, GM_ADDR tiling)
