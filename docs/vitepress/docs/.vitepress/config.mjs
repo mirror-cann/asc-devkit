@@ -445,6 +445,7 @@ export default defineConfig({
   lastUpdated: false,
 
   markdown: {
+    math: true,
     config(md) {
       const originalRender = md.render.bind(md)
       const originalRenderAsync = md.renderAsync ? md.renderAsync.bind(md) : null
@@ -476,6 +477,54 @@ export default defineConfig({
             end() { return '</div>' },
           })
           html = escapeVueInterpolations(html)
+
+          const renderMathTex = (tex, display) => {
+            const rule = display ? 'math_block' : 'math_inline'
+            if (md.renderer.rules[rule]) {
+              try {
+                return md.renderer.rules[rule]([{ content: tex }], 0)
+              } catch {}
+            }
+            return display ? `$$${tex}$$` : `$${tex}$`
+          }
+
+          const codeBlocks = []
+          html = html.replace(/<(code|pre)\b[^>]*>[\s\S]*?<\/\1>/gi, m => {
+            codeBlocks.push(m); return `\x00CB${codeBlocks.length - 1}\x00`
+          })
+
+          html = html.replace(/\$\$([\s\S]*?)\$\$/g, (match) => {
+            let inside = match.slice(2, -2)
+            inside = inside.replace(/<em>/g, '_').replace(/<\/em>/g, '_')
+            inside = inside.replace(/&(amp|gt|lt);/g, (m, e) => ({ amp: '&', gt: '>', lt: '<' })[e])
+            inside = inside.replace(/\\text\{([^}]*)\}/g, (m, c) => '\\text{' + c.replace(/(?<!\\)_/g, '\\_') + '}')
+            inside = inside.replace(
+              /(<\/[a-z][a-z0-9]*\s*>)\s*(<[a-z][a-z0-9]*\b[^>]*>)/gi,
+              '$$$$\n$1\n$2\n$$$$'
+            )
+            return '$$' + inside.trim() + '$$'
+          })
+          html = html.replace(/\$(?!\{)([^$\n]+?)\$/g, (match) => {
+            let inside = match.slice(1, -1)
+            inside = inside.replace(/<em>/g, '_').replace(/<\/em>/g, '_')
+            inside = inside.replace(/<[^>]+>/g, '')
+            inside = inside.replace(/&(amp|gt|lt);/g, (m, e) => ({ amp: '&', gt: '>', lt: '<' })[e])
+            inside = inside.replace(/\\text\{([^}]*)\}/g, (m, c) => '\\text{' + c.replace(/(?<!\\)_/g, '\\_') + '}')
+            return '$' + inside + '$'
+          })
+
+          html = html.replace(/\$\$([\s\S]*?)\$\$/g, (_, tex) => renderMathTex(tex, true))
+          html = html.replace(/\$(?!\{)([^$\n]+?)\$/g, (_, tex) => renderMathTex(tex, false))
+
+          html = html.replace(/<mjx-assistive-mml[\s\S]*?<\/mjx-assistive-mml>/gi, '')
+
+          html = html.replace(/\x00CB(\d+)\x00/g, (_, i) => codeBlocks[+i])
+
+          html = html.replace(
+            /href="https:\/\/gitcode\.com\/cann\/asc-devkit\/blob\/master\/docs\/(api|guide)\/([^"]+)\.md(#[^"]*)?"/gi,
+            (_, type, path, hash) => `href="/${type}/${path}${hash || ''}"`
+          )
+
           return `<div v-pre>\n${html}\n</div>`
         }
         src = processSource(src)
