@@ -94,7 +94,7 @@ sincos_compute/
 
 **核心实现**：
 - 默认线程数为1024，每个Thread仅可用32个寄存器
-- sincosf计算需要更多寄存器，超出32个寄存器限制
+- 每个线程计算元素个数为PER\_THREAD\_LOOP，超出32个寄存器限制
 
 **关键代码**：
 
@@ -104,7 +104,6 @@ __global__ void sincos_thread_1024(float* input, float* output_sin,
 {
     int32_t blk_start_idx = blockIdx.x * THREADS_PER_BLOCK * PER_THREAD_LOOP;
     
-    // 每个核计算 PER_THREAD_LOOP * THREADS_PER_BLOCK 的运算量
     for (int i = 0; i < PER_THREAD_LOOP; i++) {
         int idx = blk_start_idx + i * THREADS_PER_BLOCK + threadIdx.x;
         sincosf(input[idx], output_sin + idx, output_cos + idx);
@@ -146,7 +145,7 @@ __global__ void sincos_thread_1024(float* input, float* output_sin,
 
 **核心优化**：
 - 指定`__launch_bounds__(512)`，每个Thread可用64个寄存器
-- sincosf计算所需的寄存器在限制范围内
+- 每个线程计算元素个数为PER\_THREAD\_LOOP，所需的寄存器在限制范围内
 
 **关键代码**：
 
@@ -157,7 +156,6 @@ __global__ __launch_bounds__(512) void sincos_thread_512(float* input,
 {
     int32_t blk_start_idx = blockIdx.x * THREADS_PER_BLOCK * PER_THREAD_LOOP;
     
-    // 每个核计算 PER_THREAD_LOOP * THREADS_PER_BLOCK 的运算量
     for (int i = 0; i < PER_THREAD_LOOP; i++) {
         int idx = blk_start_idx + i * THREADS_PER_BLOCK + threadIdx.x;
         sincosf(input[idx], output_sin + idx, output_cos + idx);
@@ -201,7 +199,7 @@ __global__ __launch_bounds__(512) void sincos_thread_512(float* input,
 | Case version | Task Duration(μs) | Task Duration相对Case 0 | 优化点                   |
 |--------------|-------------------|-----------------------|-----------------------|
 | Case 0       | 102.47             | **1x**                | 基线版本，寄存器溢出到Global Memory |
-| Case 1       | 96.22            | **0.94x耗时**           | 配置launch bounds避免寄存器溢出 |
+| Case 1       | 96.22            | **0.94x**           | 配置launch bounds避免寄存器溢出 |
 
 ## 调优建议
 
@@ -266,7 +264,7 @@ msprof op ./sincos_compute 1024   # 分析基线case的性能
 msprof op ./sincos_compute 512    # 分析优化case的性能
 ```
 
-命令完成后，会在默认目录下生成以"OPPROF_{timestamp}_XXX"命名的文件夹,性能数据文件夹结构示例如下：
+命令完成后，会在默认目录下生成以"OPPROF_{timestamp}_XXX"命名的文件夹，性能数据文件夹结构示例如下：
 
 ```text
 ├──dump                       # 原始的性能数据，用户无需关注
