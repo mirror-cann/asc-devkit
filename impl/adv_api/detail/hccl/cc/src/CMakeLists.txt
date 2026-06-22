@@ -8,6 +8,7 @@
 # See LICENSE in the root of the software repository for the full text of the License.
 # ----------------------------------------------------------------------------------------------------------
 set(OPS_BASE_DIR ${HCCL_CC_DIR})
+option(MC2_CLIENT_ENABLE_CCU "Build CCU algorithm implementations into mc2_client" OFF)
 
 set(INCLUDE_LIST
     ${HCCL_CC_INCLUDE_DIR}
@@ -187,6 +188,7 @@ if(NOT KERNEL_MODE AND PRODUCT_SIDE STREQUAL "host")
 
     target_compile_definitions(mc2_client PRIVATE
         -DHOST_COMPILE
+        MC2_CLIENT_ENABLE_CCU=$<BOOL:${MC2_CLIENT_ENABLE_CCU}>
     )
 
     target_compile_options(mc2_client PRIVATE

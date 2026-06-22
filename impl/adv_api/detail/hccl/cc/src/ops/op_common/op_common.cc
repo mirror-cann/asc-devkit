@@ -42,6 +42,10 @@
 #include "dlhcomm_function.h"
 #include "cann_host_bridge.h"
 
+#ifndef MC2_CLIENT_ENABLE_CCU
+#define MC2_CLIENT_ENABLE_CCU 0
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -220,6 +224,12 @@ HcclResult SetOpParamFastLaunchTag(OpParam &param)
 
 bool ShouldGoCcuFastLaunch(HcclComm comm, OpParam &param, CcuFastLaunchCtx **ccuFastLaunchCtx)
 {
+#if !MC2_CLIENT_ENABLE_CCU
+    (void)comm;
+    (void)param;
+    (void)ccuFastLaunchCtx;
+    return false;
+#else
     param.hcclComm = comm;
     
     // 1. 是ccu模式
@@ -247,10 +257,18 @@ bool ShouldGoCcuFastLaunch(HcclComm comm, OpParam &param, CcuFastLaunchCtx **ccu
         return true;
     }
     return false;
+#endif
 }
 
 HcclResult HcclExecOpCcuFastLaunch(HcclComm comm, OpParam &param, const CcuFastLaunchCtx *ccuFastLaunchCtx)
 {
+#if !MC2_CLIENT_ENABLE_CCU
+    (void)comm;
+    (void)param;
+    (void)ccuFastLaunchCtx;
+    HCCL_ERROR("[HcclExecOpCcuFastLaunch] CCU fast launch is not supported by mc2_client.");
+    return HCCL_E_NOT_SUPPORT;
+#else
     std::string algName = ccuFastLaunchCtx->algName;
     HCCL_INFO("[asc][AlgoExecute][HcclExecOpCcuFastLaunch] start, opType[%d], algName[%s], "
         "fastLaunchTag[%s], engine[%d], opExecuteConfig[%d].", param.opType, algName.c_str(), param.fastLaunchTag,
@@ -276,6 +294,7 @@ HcclResult HcclExecOpCcuFastLaunch(HcclComm comm, OpParam &param, const CcuFastL
     HCCL_INFO("[asc][AlgoExecute][HcclExecOpCcuFastLaunch] end, opType[%d], algName[%s].", param.opType,
         algName.c_str());
     return HCCL_SUCCESS;
+#endif
 }
 
 HcclResult HcclExecOp(HcclComm comm, OpParam &param,
@@ -1067,6 +1086,18 @@ HcclResult GetAlgResCcu(HcclComm comm, const OpParam& param, AlgResourceRequest&
                         std::unique_ptr<AlgResourceCtxSerializable>& resCtxHost, TopoInfoWithNetLayerDetails* topoInfo,
                         AlgHierarchyInfoForAllLevel& algHierarchyInfo, void **resCtxSequence, uint64_t& ctxSize)
 {
+#if !MC2_CLIENT_ENABLE_CCU
+    (void)comm;
+    (void)param;
+    (void)resRequest;
+    (void)resCtxHost;
+    (void)topoInfo;
+    (void)algHierarchyInfo;
+    (void)resCtxSequence;
+    (void)ctxSize;
+    HCCL_ERROR("[GetAlgResCcu] CCU resource is not supported by mc2_client.");
+    return HCCL_E_NOT_SUPPORT;
+#else
     resCtxHost->topoInfo = *topoInfo;
     resCtxHost->algHierarchyInfo = algHierarchyInfo;
 
@@ -1087,11 +1118,20 @@ HcclResult GetAlgResCcu(HcclComm comm, const OpParam& param, AlgResourceRequest&
     ctxSize = size;
     HCCL_INFO("Execute GetAlgResCCU success.");
     return HCCL_SUCCESS;
+#endif
 }
 
 HcclResult HcclAllocAlgResourceCcu(HcclComm comm, const OpParam& param, AlgResourceRequest& resRequest,
                                    std::unique_ptr<AlgResourceCtxSerializable>& resCtxHost)
 {
+#if !MC2_CLIENT_ENABLE_CCU
+    (void)comm;
+    (void)param;
+    (void)resRequest;
+    (void)resCtxHost;
+    HCCL_ERROR("[HcclAllocAlgResourceCcu] CCU resource is not supported by mc2_client.");
+    return HCCL_E_NOT_SUPPORT;
+#else
     HCCL_INFO("Start to execute AllocAlgResource.");
     void *cclBufferAddr;
     uint64_t cclBufferSize;
@@ -1106,6 +1146,7 @@ HcclResult HcclAllocAlgResourceCcu(HcclComm comm, const OpParam& param, AlgResou
     CHK_RET(HcclGetChannelForCcu(comm, param, resRequest));
     CHK_RET(HcclGetCcuKernel(comm, resRequest, resCtxHost));
     return HCCL_SUCCESS;
+#endif
 }
 
 HcclResult HcclGetChannelForCcu(HcclComm comm, const OpParam &param, AlgResourceRequest &resRequest)
@@ -1131,6 +1172,13 @@ HcclResult HcclGetChannelForCcu(HcclComm comm, const OpParam &param, AlgResource
 HcclResult HcclGetCcuKernel(HcclComm comm, AlgResourceRequest &resRequest,
                           std::unique_ptr<AlgResourceCtxSerializable>& resCtxHost)
 {
+#if !MC2_CLIENT_ENABLE_CCU
+    (void)comm;
+    (void)resRequest;
+    (void)resCtxHost;
+    HCCL_ERROR("[HcclGetCcuKernel] CCU kernel registration is not supported by mc2_client.");
+    return HCCL_E_NOT_SUPPORT;
+#else
     u32 totalKernelNum = 0;
     for (auto t: resRequest.ccuKernelNum) {
         totalKernelNum += t;
@@ -1165,6 +1213,7 @@ HcclResult HcclGetCcuKernel(HcclComm comm, AlgResourceRequest &resRequest,
     }
     resCtxHost->ccuKernelNum = resRequest.ccuKernelNum;
     return HCCL_SUCCESS;
+#endif
 }
 
 HcclResult GetAlgResDPU(HcclComm comm, const OpParam &param, AlgResourceRequest &resRequest,

@@ -11,7 +11,9 @@ add_subdirectory(aicpu)
 add_subdirectory(registry)
 add_subdirectory(wrapper)
 add_subdirectory(dpu)
-add_subdirectory(ccu)
+if(MC2_CLIENT_ENABLE_CCU)
+    add_subdirectory(ccu)
+endif()
 
 set(src_list
     ${CMAKE_CURRENT_SOURCE_DIR}/alg_template_base.cc
@@ -19,8 +21,13 @@ set(src_list
     ${CMAKE_CURRENT_SOURCE_DIR}/aiv_alg_template_base.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/template_utils.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/aiv_alg_template_base.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/ccu_alg_template_base.cc
 )
+
+if(MC2_CLIENT_ENABLE_CCU)
+    list(APPEND src_list
+        ${CMAKE_CURRENT_SOURCE_DIR}/ccu_alg_template_base.cc
+    )
+endif()
 
 target_sources(mc2_client PRIVATE
     ${src_list}
