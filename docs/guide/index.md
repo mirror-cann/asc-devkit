@@ -152,6 +152,8 @@
 
             -   [SIMT协作组](./编程指南/高级编程/高级特性/SIMT协作组.md)
 
+            -   [AOT编译优化](./编程指南/高级编程/高级特性/AOT编译优化.md)
+
     -   [附录](编程指南/附录/show_kernel_debug_data工具.md)
         -   [show_kernel_debug_data工具](编程指南/附录/show_kernel_debug_data工具.md)
         -   [msobjdump工具](编程指南/附录/msobjdump工具.md)
