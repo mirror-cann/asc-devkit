@@ -65,7 +65,7 @@ inline uint32_t asc_ballot(int32_t predicate)
 -   SIMT编程场景：
 
     ```
-    __global___ __launch_bounds__(1024) void KernelBallot(uint32_t* dst)
+    __global__ __launch_bounds__(1024) void KernelBallot(uint32_t* dst)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         int32_t lane_id = idx % 32;

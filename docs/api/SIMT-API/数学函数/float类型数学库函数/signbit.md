@@ -68,29 +68,29 @@ inline int signbit(float x)
 - SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(256) void compute_signbit(float *result, const float *x, uint32_t count)
+    __global__ __launch_bounds__(256) void compute_signbit(int *result, const float *x, uint32_t count)
     {
         const uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
         if (idx >= count) {
             return;
         }
-        result[idx] = static_cast<float>(signbit(x[idx]));
+        result[idx] = signbit(x[idx]);
     }
     ```
 
 - SIMD与SIMT混合编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(256) inline void compute_signbit_vf(__gm__ float *result, __gm__ const float *x, uint32_t count)
+    __simt_vf__ __launch_bounds__(256) inline void compute_signbit_vf(__gm__ int *result, __gm__ const float *x, uint32_t count)
     {
         const uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
         if (idx >= count) {
             return;
         }
-        result[idx] = static_cast<float>(signbit(x[idx]));
+        result[idx] = signbit(x[idx]);
     }
 
-    __global__ __vector__ void run_signbit(__gm__ float *result, __gm__ const float *x, uint32_t count)
+    __global__ __vector__ void run_signbit(__gm__ int *result, __gm__ const float *x, uint32_t count)
     {
         asc_vf_call<compute_signbit_vf>(dim3(256), result, x, count);
     }

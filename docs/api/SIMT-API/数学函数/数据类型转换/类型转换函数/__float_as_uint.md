@@ -65,7 +65,7 @@ inline unsigned int __float_as_uint(const float x)
 -   SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) void kernel__float_as_uint(int32_t* dst, float* x)
+    __global__ __launch_bounds__(1024) void kernel__float_as_uint(uint32_t* dst, float* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = __float_as_uint(x[idx]);
@@ -75,7 +75,7 @@ inline unsigned int __float_as_uint(const float x)
 -   SIMD与SIMT混合编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(1024) inline void kernel__float_as_uint(__gm__ int32_t* dst, __gm__ float* x)
+    __simt_vf__ __launch_bounds__(1024) inline void kernel__float_as_uint(__gm__ uint32_t* dst, __gm__ float* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = __float_as_uint(x[idx]);

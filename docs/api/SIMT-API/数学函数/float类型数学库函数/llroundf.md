@@ -63,29 +63,29 @@ inline long long int llroundf(float x)
 - SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(256) void compute_llroundf(float *result, const float *x, uint32_t count)
+    __global__ __launch_bounds__(256) void compute_llroundf(long long int *result, const float *x, uint32_t count)
     {
         const uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
         if (idx >= count) {
             return;
         }
-        result[idx] = static_cast<float>(llroundf(x[idx]));
+        result[idx] = llroundf(x[idx]);
     }
     ```
 
 - SIMD与SIMT混合编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(256) inline void compute_llroundf_vf(__gm__ float *result, __gm__ const float *x, uint32_t count)
+    __simt_vf__ __launch_bounds__(256) inline void compute_llroundf_vf(__gm__ long long int *result, __gm__ const float *x, uint32_t count)
     {
         const uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
         if (idx >= count) {
             return;
         }
-        result[idx] = static_cast<float>(llroundf(x[idx]));
+        result[idx] = llroundf(x[idx]);
     }
 
-    __global__ __vector__ void run_llroundf(__gm__ float *result, __gm__ const float *x, uint32_t count)
+    __global__ __vector__ void run_llroundf(__gm__ long long int *result, __gm__ const float *x, uint32_t count)
     {
         asc_vf_call<compute_llroundf_vf>(dim3(256), result, x, count);
     }

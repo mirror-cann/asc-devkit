@@ -66,29 +66,29 @@ inline long long int llrintf(float x)
 - SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(256) void compute_llrintf(float *result, const float *x, uint32_t count)
+    __global__ __launch_bounds__(256) void compute_llrintf(long long int *result, const float *x, uint32_t count)
     {
         const uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
         if (idx >= count) {
             return;
         }
-        result[idx] = static_cast<float>(llrintf(x[idx]));
+        result[idx] = llrintf(x[idx]);
     }
     ```
 
 - SIMD与SIMT混合编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(256) inline void compute_llrintf_vf(__gm__ float *result, __gm__ const float *x, uint32_t count)
+    __simt_vf__ __launch_bounds__(256) inline void compute_llrintf_vf(__gm__ long long int *result, __gm__ const float *x, uint32_t count)
     {
         const uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
         if (idx >= count) {
             return;
         }
-        result[idx] = static_cast<float>(llrintf(x[idx]));
+        result[idx] = llrintf(x[idx]);
     }
 
-    __global__ __vector__ void run_llrintf(__gm__ float *result, __gm__ const float *x, uint32_t count)
+    __global__ __vector__ void run_llrintf(__gm__ long long int *result, __gm__ const float *x, uint32_t count)
     {
         asc_vf_call<compute_llrintf_vf>(dim3(256), result, x, count);
     }
