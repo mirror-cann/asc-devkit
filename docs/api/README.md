@@ -307,6 +307,7 @@
                     -   [F32 Channel Split](SIMD-API/基础API/矩阵计算（TensorAPI）/矩阵计算的搬出/关键特性说明/f32_channel_split.md)
                     -   [Int8 Channel Merge](SIMD-API/基础API/矩阵计算（TensorAPI）/矩阵计算的搬出/关键特性说明/int8_channel_merge.md)
                     -   [L0C Buffer到Unified Buffer双目标模式](SIMD-API/基础API/矩阵计算（TensorAPI）/矩阵计算的搬出/关键特性说明/l0c_to_ub_dual_dst.md)
+                    -   [batch搬运](SIMD-API/基础API/矩阵计算（TensorAPI）/矩阵计算的搬出/关键特性说明/batch_copy.md)
                     -   [随路量化](SIMD-API/基础API/矩阵计算（TensorAPI）/矩阵计算的搬出/关键特性说明/quant_pre.md)
                     -   [随路Relu](SIMD-API/基础API/矩阵计算（TensorAPI）/矩阵计算的搬出/关键特性说明/relu_pre.md)
         -   [Memory矢量计算](SIMD-API/基础API/Memory矢量计算/Memory矢量计算.md)
