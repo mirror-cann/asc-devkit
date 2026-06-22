@@ -1,8 +1,35 @@
 # CHANGELOG
 
+## v9.1.0-beta.1
+发布日期：2026/04/30
+| CANN版本 | 版本源码标签   |
+|--|--|
+| [CANN 9.1.0-beta.1](https://www.hiascend.com/developer/download/community/result?module=cann&cann=9.1.0-beta.1) | [v9.1.0-beta.1](https://gitcode.com/cann/asc-devkit/tags/v9.1.0-beta.1) |
+
+### 🚀 关键特性
+- Aclrtc支持global函数为模板参数（[PR#1276](https://gitcode.com/cann/asc-devkit/pull/1276)），融合编译支持msobjdump解析（[PR#235](https://gitcode.com/cann/asc-tools/pull/235)），提升编译工程灵活性和调试能力。
+- Tensor API分支代码合入主线（[PR#1770](https://gitcode.com/cann/asc-devkit/pull/1770)），正式提供Tensor编程支持。
+- C-API新增支持在UB和寄存器之间搬运int4x2_t类型的数据（[PR#1404](https://gitcode.com/cann/asc-devkit/pull/1404) [PR#1504](https://gitcode.com/cann/asc-devkit/pull/1504)），扩展低比特数据搬运能力。
+- SIMT API新增DCCI接口（[PR#1510](https://gitcode.com/cann/asc-devkit/pull/1510)）、浮点比较接口（[PR#1693](https://gitcode.com/cann/asc-devkit/pull/1693)）及浮点运算指令（[PR#1774](https://gitcode.com/cann/asc-devkit/pull/1774)），丰富SIMT编程能力。
+
+### 🎯 样例更新
+- 存量样例整改：涉及基础、高阶的cube、vector、数据搬运等API样例整改（[PR#1200](https://gitcode.com/cann/asc-devkit/pull/1200) [PR#1429](https://gitcode.com/cann/asc-devkit/pull/1429) [PR#1454](https://gitcode.com/cann/asc-devkit/pull/1454) [PR#1311](https://gitcode.com/cann/asc-devkit/pull/1311) [PR#1563](https://gitcode.com/cann/asc-devkit/pull/1563)）。
+- 新增静态Tensor最佳实践：add高性能样例（[PR#1262](https://gitcode.com/cann/asc-devkit/pull/1262)）。
+- 新增低比特cube最佳实践：matmul的高阶、基础API样例，MXFP4基础API样例（[PR#1535](https://gitcode.com/cann/asc-devkit/pull/1535) [PR#1648](https://gitcode.com/cann/asc-devkit/pull/1648) [PR#1788](https://gitcode.com/cann/asc-devkit/pull/1788)）。
+- 新增自定义算子工程多vendors编译样例（[PR#1466](https://gitcode.com/cann/asc-devkit/pull/1466)）。
+- 新增atomic类特性样例（[PR#1688](https://gitcode.com/cann/asc-devkit/pull/1688)）。
+
+### 📖 资料文档
+- 新增C-API API手册内容：补充UB与寄存器的搬运接口资料（[PR#1404](https://gitcode.com/cann/asc-devkit/pull/1404) [PR#1504](https://gitcode.com/cann/asc-devkit/pull/1504)）。
+- 优化入门教程及SIMT编程模型（[PR#1487](https://gitcode.com/cann/asc-devkit/pull/1487)）。
+- 增加CANN包安装及配套说明（[PR#1451](https://gitcode.com/cann/asc-devkit/pull/1451) [PR#1514](https://gitcode.com/cann/asc-devkit/pull/1514)）。
+- 新增AscendC入门教程、编程指南、兼容性迁移指南、算子实践参考文档（[PR#1438](https://gitcode.com/cann/asc-devkit/pull/1438)）。
+
+---
+
 ## v9.0.0-beta.2
 发布日期：2026/03/31
-| CANN版本 | 版本源码标签   | 
+| CANN版本 | 版本源码标签   |
 |--|--|
 | [CANN 9.0.0-beta.2](https://www.hiascend.com/developer/download/community/result?module=cann&cann=9.0.0-beta.2) | [v9.0.0-beta.2](https://gitcode.com/cann/asc-devkit/tags/v9.0.0-beta.2) |
 
@@ -25,7 +52,7 @@
 
 ## v9.0.0-beta.1
 发布日期：2026/02/25
-| CANN版本 | 版本源码标签   | 
+| CANN版本 | 版本源码标签   |
 |--|--|
 | [CANN 9.0.0-beta.1](https://www.hiascend.com/developer/download/community/result?module=cann&cann=9.0.0-beta.1) | [v9.0.0-beta.1](https://gitcode.com/cann/asc-devkit/tags/v9.0.0-beta.1) |
 
@@ -38,7 +65,7 @@
 
 ## v8.5.0
 发布日期：2026/01/23
-| CANN版本 | 版本源码标签   | 
+| CANN版本 | 版本源码标签   |
 |--|--|
 | [CANN 8.5.0](https://www.hiascend.com/developer/download/community/result?module=cann&cann=8.5.0) | [v8.5.0](https://gitcode.com/cann/asc-devkit/tags/v8.5.0) |
 
