@@ -110,7 +110,7 @@
 01_simd_cpp_api/04_advanced_api/01_activation/geglu
 01_simd_cpp_api/04_advanced_api/10_math/acosh
 01_simd_cpp_api/04_advanced_api/07_filter/select
-04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming
+04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming
 01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclnn_invocation
 01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin
 01_simd_cpp_api/02_features/00_framework/03_ge/triple_chevron_notation

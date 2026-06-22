@@ -40,7 +40,7 @@ SPECIAL_PREFIXES = (
 
 CUSTOM_OP_PACKAGE_CASE = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op"
 PARALLEL_OPS_PACKAGE_CASE = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/parallel_ops_package"
-TILING_SINK_PROGRAMMING_CASE = "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming"
+TILING_SINK_PROGRAMMING_CASE = "04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming"
 TILING_SINK_GENERATE_TASK_PATTERN = (
     "GenerateTaskForSinkOp:Node [AddCustomTilingSink, AddCustomTilingSink] starts to generate tasks "
     "for the tiling sink, sk_flag [0]."
@@ -81,7 +81,7 @@ ARCH_OVERRIDES = {
     "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_builtin": ["dav-2201", "dav-3510"],
     "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom": ["dav-2201", "dav-3510"],
     "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin": ["dav-2201", "dav-3510"],
-    "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming": ["dav-2201", "dav-3510"],
+    "04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming": ["dav-2201", "dav-3510"],
     # README "支持的产品" only lists Ascend 950PR/950DT. The option table also
     # mentions dav-2201, but the sample uses FP8/hifloat8 types unavailable on 910B.
     "01_simd_cpp_api/04_advanced_api/00_matmul/matmul_fp8": ["dav-3510"],

@@ -18,19 +18,19 @@ presmoke_case_init "$CASE_REL"
 
 case_build() {
     mkdir -p "$BUILD_DIR"
-    (cd "$BUILD_DIR" && K=40 M=30 N=70 SCENARIO_NUM=4 soc_version=$SOC_VERSION bash -lc 'cmake .. -DSCENARIO_NUM=$SCENARIO_NUM -DM_SIZE=$M -DK_SIZE=$K -DN_SIZE=$N -DCMAKE_ASC_ARCHITECTURES="$ARCH" $RUN_MODE_ARG')
-    (cd "$BUILD_DIR" && K=40 M=30 N=70 SCENARIO_NUM=4 soc_version=$SOC_VERSION bash -lc 'make -j')
-    (cd "$BUILD_DIR" && K=40 M=30 N=70 SCENARIO_NUM=4 soc_version=$SOC_VERSION bash -lc 'python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM -m=$M -k=$K -n=$N')
+    (cd "$BUILD_DIR" && SCENARIO_NUM=4 soc_version=$SOC_VERSION bash -lc 'cmake .. -DSCENARIO_NUM=$SCENARIO_NUM -DCMAKE_ASC_ARCHITECTURES="$ARCH" $RUN_MODE_ARG')
+    (cd "$BUILD_DIR" && SCENARIO_NUM=4 soc_version=$SOC_VERSION bash -lc 'make -j')
+    (cd "$BUILD_DIR" && SCENARIO_NUM=4 soc_version=$SOC_VERSION bash -lc 'python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM')
 }
 
 case_run() {
     mkdir -p "$BUILD_DIR"
-    (cd "$BUILD_DIR" && K=40 M=30 N=70 SCENARIO_NUM=4 soc_version=$SOC_VERSION bash -lc ./demo)
+    (cd "$BUILD_DIR" && SCENARIO_NUM=4 soc_version=$SOC_VERSION bash -lc ./demo)
 }
 
 case_verify() {
     mkdir -p "$BUILD_DIR"
-    (cd "$BUILD_DIR" && K=40 M=30 N=70 SCENARIO_NUM=4 soc_version=$SOC_VERSION bash -lc 'python3 ../scripts/verify_result.py -scenarioNum=$SCENARIO_NUM output/output.bin output/golden.bin')
+    (cd "$BUILD_DIR" && SCENARIO_NUM=4 soc_version=$SOC_VERSION bash -lc 'python3 ../scripts/verify_result.py -scenarioNum=$SCENARIO_NUM output/output.bin output/golden.bin')
 }
 
 case_clean() {

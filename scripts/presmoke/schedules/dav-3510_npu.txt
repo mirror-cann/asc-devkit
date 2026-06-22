@@ -135,7 +135,7 @@
 01_simd_cpp_api/02_features/00_framework/03_ge/triple_chevron_notation
 01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_builtin
 01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom
-04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming
+04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming
 01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_gm2l1
 01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_l0c2gm
 01_simd_cpp_api/00_introduction/02_matrix/matmul_tensor_api

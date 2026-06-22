@@ -70,22 +70,32 @@ LoadData3DV2指令以下简称load3dv2，该指令对于二维矩阵的转置能
 
   在本样例目录下执行如下命令。
   ```bash
-  SCENARIO_NUM=4 M=30 K=40 N=70
+  SCENARIO_NUM=4
   mkdir -p build && cd build;      # 创建并进入build目录
-  cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=$SCENARIO_NUM -DM_SIZE=$M -DK_SIZE=$K -DN_SIZE=$N;make -j;    # 编译工程
-  python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM -m=$M -k=$K -n=$N   # 生成测试输入数据
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j;    # 编译工程，默认npu模式
+  python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM   # 生成测试输入数据
   ./demo                           # 执行编译生成的可执行程序，执行样例
   python3 ../scripts/verify_result.py -scenarioNum=$SCENARIO_NUM output/output.bin output/golden.bin   # 验证输出结果是否正确，确认算法逻辑正确
   ```
+
+  使用 CPU调试 或 NPU仿真 模式时，添加 `-DCMAKE_ASC_RUN_MODE=cpu` 或 `-DCMAKE_ASC_RUN_MODE=sim` 参数即可。
+
+  示例如下：
+
+  ```bash
+  cmake -DCMAKE_ASC_RUN_MODE=cpu -DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j; # CPU调试模式
+  cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j; # NPU仿真模式
+  ```
+
+  > **注意：** 切换编译模式前需清理 cmake 缓存，可在 build 目录下执行 `rm CMakeCache.txt` 后重新 cmake。
+
 - 编译选项说明
 
   | 选项 | 可选值 | 说明 |
   |------|--------|------|
-  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU架构 |
+  | `CMAKE_ASC_RUN_MODE` | `npu`（默认）、`sim`、`cpu` | 运行模式：NPU运行、NPU仿真、CPU调试 |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`（默认）、`dav-3510` | NPU架构：dav-2201对应Atlas A2训练系列产品/Atlas A2推理系列产品/Atlas A3训练系列产品/Atlas A3推理系列产品，dav-3510对应Ascend 950PR/Ascend 950DT |
   | `SCENARIO_NUM` | `1`、`2`、`3`、`4`（默认）、`5` | 场景编号 |
-  | `M_SIZE` | `30`（默认） | M轴元素个数 |
-  | `K_SIZE` | `40`（默认） | K轴元素个数 |
-  | `N_SIZE` | `70`（默认） | N轴元素个数 |
 
 - 执行结果
 

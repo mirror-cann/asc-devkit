@@ -131,7 +131,7 @@ class SchedulerTest(unittest.TestCase):
             "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_builtin",
             "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom",
             "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin",
-            "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming",
+            "04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming",
         ]
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -178,7 +178,7 @@ class SchedulerTest(unittest.TestCase):
     def test_npu_idle_min_delays_custom_op_dependents_until_custom_op_build_ready(self) -> None:
         custom_op = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op"
         static_lib = "01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op_static_lib"
-        dependent = "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming"
+        dependent = "04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming"
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             report = root / "report.json"

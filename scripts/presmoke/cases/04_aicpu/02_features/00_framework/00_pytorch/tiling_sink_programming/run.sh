@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-CASE_REL=04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming
+CASE_REL=04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../../../../_case_entry.sh"
 presmoke_case_init "$CASE_REL"

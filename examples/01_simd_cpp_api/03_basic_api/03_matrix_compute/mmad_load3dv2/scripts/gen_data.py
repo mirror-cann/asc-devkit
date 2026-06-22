@@ -16,7 +16,11 @@ import argparse
 import numpy as np
 np.random.seed(9)
 
-def gen_golden_data(scenarioNum=1,M=0,K=0,N=0):
+M = 30
+K = 40
+N = 70
+
+def gen_golden_data(scenarioNum=1):
     if scenarioNum == 1:
         x1_gm = np.random.uniform(1, 10, [M, K]).astype(np.float16)
         x2_gm = np.random.uniform(1, 10, [K, N]).astype(np.float16)
@@ -54,8 +58,5 @@ def gen_golden_data(scenarioNum=1,M=0,K=0,N=0):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-scenarioNum', type=int, default=1, choices=range(1,6))
-    parser.add_argument('-m', type=int)
-    parser.add_argument('-k', type=int)
-    parser.add_argument('-n', type=int)
     args = parser.parse_args()
-    gen_golden_data(args.scenarioNum, args.m, args.k, args.n)
+    gen_golden_data(args.scenarioNum)

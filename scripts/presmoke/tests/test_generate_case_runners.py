@@ -210,7 +210,7 @@ class GenerateCaseRunnersTest(unittest.TestCase):
 
     def test_tiling_sink_runner_validates_sink_task_generation_log(self) -> None:
         script = render_runner_from_parts(
-            "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming",
+            "04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming",
             [],
             [Command("python3 test_add_custom_tiling_sink.py", "run")],
             [],
@@ -270,7 +270,7 @@ class GenerateCaseRunnersTest(unittest.TestCase):
             "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_builtin",
             "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom",
             "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin",
-            "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming",
+            "04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming",
         ]:
             self.assertEqual(ARCH_OVERRIDES[rel_path], expected)
 

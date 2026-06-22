@@ -11,15 +11,6 @@
 cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_ASC_ARCHITECTURES "dav-2201" CACHE STRING "NPU architecture: dav-2201, dav-3510")
-set(SCENARIO_NUM "4" CACHE STRING "Scene number (1-5)")
-set(M_SIZE "30" CACHE STRING "M size")
-set(K_SIZE "40" CACHE STRING "K size")
-set(N_SIZE "70" CACHE STRING "N size")
-
-
-if(NOT SCENARIO_NUM MATCHES "^[1-5]$")
-    message(FATAL_ERROR "SCENARIO_NUM must be 1, 2, 3, 4 or 5, but got ${SCENARIO_NUM}")
-endif()
 
 find_package(ASC REQUIRED)
 
@@ -29,16 +20,13 @@ add_executable(demo
     mmad_load3dv2.asc
 )
 
-target_link_libraries(demo PRIVATE)
+set(SCENARIO_NUM "4" CACHE STRING "SCENARIO_NUM, e.g. 1 2 3 4 5")
+if(NOT SCENARIO_NUM MATCHES "^[1-5]$")
+    message(FATAL_ERROR "SCENARIO_NUM must be 1, 2, 3, 4 or 5, but got ${SCENARIO_NUM}")
+endif()
 
-message(STATUS "[INFO] M_SIZE is ${M_SIZE}")
-message(STATUS "[INFO] K_SIZE is ${K_SIZE}")
-message(STATUS "[INFO] N_SIZE is ${N_SIZE}")
 message(STATUS "[INFO] SCENARIO_NUM is ${SCENARIO_NUM}")
 target_compile_definitions(demo PRIVATE
-    M_SIZE=${M_SIZE}
-    K_SIZE=${K_SIZE}
-    N_SIZE=${N_SIZE}
     SCENARIO_NUM=${SCENARIO_NUM}
 )
 

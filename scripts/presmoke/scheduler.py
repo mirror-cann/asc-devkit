@@ -31,7 +31,7 @@ CUSTOM_OP_DEPENDENT_CASES = {
     "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_builtin",
     "01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom",
     "01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin",
-    "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming",
+    "04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming",
 }
 
 

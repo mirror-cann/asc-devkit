@@ -2611,9 +2611,9 @@
       "shell_variable_reference"
     ],
     "commands": [
-      "cmake .. -DSCENARIO_NUM=$SCENARIO_NUM -DM_SIZE=$M -DK_SIZE=$K -DN_SIZE=$N -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "cmake -DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=$SCENARIO_NUM ..",
       "make -j",
-      "python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM -m=$M -k=$K -n=$N",
+      "python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM",
       "./demo",
       "python3 ../scripts/verify_result.py -scenarioNum=$SCENARIO_NUM output/output.bin output/golden.bin"
     ]
@@ -7051,8 +7051,8 @@
     ]
   },
   {
-    "case": "04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming",
-    "runner": "scripts/presmoke/cases/04_aicpu/02_features/00_framwork/00_pytorch/tiling_sink_programming/run.sh",
+    "case": "04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming",
+    "runner": "scripts/presmoke/cases/04_aicpu/02_features/00_framework/00_pytorch/tiling_sink_programming/run.sh",
     "source": "readme",
     "confidence": "medium",
     "supported_archs": [

@@ -276,10 +276,10 @@ run_test_case() {
             run_with_params "${code_path}" "${example_name}" "" "" "add" 2>&1 | tee "${log_path}/${case_name}.log"
             ;;
         batch_matmul)
-            run_with_params "${code_path}" "${example_name}" "-DB_SIZE=4 -DM_SIZE=30 -DK_SIZE=40 -DN_SIZE=70" "-b=4 -m=30 -k=40 -n=70" 2>&1 | tee "${log_path}/${case_name}.log"
+            run_with_params "${code_path}" "${example_name}" "-DCMAKE_ASC_ARCHITECTURES=dav-2201 -DCMAKE_ASC_RUN_MODE=npu" "" "demo" "output/output.bin output/golden.bin" 2>&1 | tee "${log_path}/${case_name}.log"
             ;;
         mmad_load3dv2)
-            run_with_params "${code_path}" "${example_name}" "-DSCENARIO_NUM=4 -DM_SIZE=30 -DK_SIZE=40 -DN_SIZE=70" "-scenarioNum=4 -m=30 -k=40 -n=70" "demo" "-scenarioNum=4 output/output.bin output/golden.bin" 2>&1 | tee "${log_path}/${case_name}.log"
+            run_with_params "${code_path}" "${example_name}" "-DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=4" "-scenarioNum=4" "demo" "-scenarioNum=4 output/output.bin output/golden.bin" 2>&1 | tee "${log_path}/${case_name}.log"
             ;;
         load_data_l12l0)
             run_with_params "${code_path}" "${example_name}" "-DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=12" "-scenarioNum=12" "demo" "-scenarioNum=12 output/output.bin output/golden.bin" 2>&1 | tee "${log_path}/${case_name}.log"
