@@ -327,7 +327,7 @@ public:
         // 阻塞本AIV继续往下执行指令，直到其他AIV全部都完成PIPE_MTE3流水操作，才解除阻塞往下执行。
         AscendC::CrossCoreWaitFlag(0);
         // 关闭原子累加
-        AscendC::SetAtomicNone();
+        AscendC::DisableDmaAtomic();
 
         if (AscendC::GetBlockIdx() == 0) {
             AscendC::DataCopy(yLocal, atomicResultGm, this->blockLength); // PIPE_MTE2
@@ -359,7 +359,7 @@ public:
             AscendC::DataCopy(atomicResultGm, xLocal, this->blockLength);
             AscendC::CrossCoreSetFlag<1, PIPE_MTE3>(0);
             AscendC::CrossCoreWaitFlag(0);
-            AscendC::SetAtomicNone();
+            AscendC::DisableDmaAtomic();
 
             if (AscendC::GetBlockIdx() == 2) {
                 AscendC::DataCopy(yLocal, atomicResultGm, this->blockLength);

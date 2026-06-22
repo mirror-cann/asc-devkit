@@ -279,7 +279,7 @@
 </tr>
 <tr id="row96714427439"><td class="cellrowborder" valign="top" width="30.28%" headers="mcps1.2.3.1.1 "><p id="p106711742154319"><a name="p106711742154319"></a><a name="p106711742154319"></a>基础API &gt; 原子操作</p>
 </td>
-<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p17671042164319"><a name="p17671042164319"></a><a name="p17671042164319"></a>SetAtomicAdd、SetAtomicNone</p>
+<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p17671042164319"><a name="p17671042164319"></a><a name="p17671042164319"></a>SetAtomicAdd、DisableDmaAtomic</p>
 </td>
 </tr>
 <tr id="row13671194254311"><td class="cellrowborder" valign="top" width="30.28%" headers="mcps1.2.3.1.1 "><p id="p6671184224317"><a name="p6671184224317"></a><a name="p6671184224317"></a>基础API &gt; 矩阵计算</p>
@@ -455,7 +455,7 @@
 </tr>
 <tr id="row174769538434"><td class="cellrowborder" valign="top" width="29.9%" headers="mcps1.2.4.1.1 "><p id="p14765531438"><a name="p14765531438"></a><a name="p14765531438"></a>基础API &gt; 原子操作</p>
 </td>
-<td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p847615314436"><a name="p847615314436"></a><a name="p847615314436"></a>SetAtomicAdd、SetAtomicType、SetAtomicNone、SetAtomicMax、SetAtomicMin、SetStoreAtomicConfig、GetStoreAtomicConfig</p>
+<td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p847615314436"><a name="p847615314436"></a><a name="p847615314436"></a>SetAtomicAdd、SetAtomicType、DisableDmaAtomic、SetAtomicMax、SetAtomicMin、SetStoreAtomicConfig、GetStoreAtomicConfig</p>
 </td>
 <td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p10476153144316"><a name="p10476153144316"></a><a name="p10476153144316"></a>-</p>
 </td>
@@ -655,7 +655,7 @@
 </tr>
 <tr id="row1170934815213"><td class="cellrowborder" valign="top" width="29.630000000000003%" headers="mcps1.2.4.1.1 "><p id="p938105531011"><a name="p938105531011"></a><a name="p938105531011"></a>基础API &gt; 原子操作</p>
 </td>
-<td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p1738145591014"><a name="p1738145591014"></a><a name="p1738145591014"></a>SetAtomicAdd、SetAtomicType、SetAtomicNone、SetAtomicMax、SetAtomicMin、SetStoreAtomicConfig、GetStoreAtomicConfig</p>
+<td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p1738145591014"><a name="p1738145591014"></a><a name="p1738145591014"></a>SetAtomicAdd、SetAtomicType、DisableDmaAtomic、SetAtomicMax、SetAtomicMin、SetStoreAtomicConfig、GetStoreAtomicConfig</p>
 </td>
 <td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p5388559106"><a name="p5388559106"></a><a name="p5388559106"></a>-</p>
 </td>
