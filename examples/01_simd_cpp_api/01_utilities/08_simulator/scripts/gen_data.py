@@ -2,7 +2,7 @@
 # coding=utf-8
 
 # ----------------------------------------------------------------------------------------------------------
-# Copyright (c) 2025 Huawei Technologies Co., Ltd.
+# Copyright (c) 2026 Huawei Technologies Co., Ltd.
 # This program is free software, you can redistribute it and/or modify it under the terms and conditions of
 # CANN Open Software License Agreement Version 2.0 (the "License").
 # Please refer to the License for details. You may not use this file except in compliance with the License.
@@ -18,19 +18,16 @@ import numpy as np
 
 def gen_golden_data():
     m = 512
-    n = 16
+    n = 128
     k = 128
-    input_a = np.random.randint(1, 10, [m, k]).astype(np.float32)
-    input_b = np.random.randint(1, 10, [k, n]).astype(np.float32)
-    input_bias = np.random.randint(1, 10, [n]).astype(np.float32)
-    alpha = 0.001
-    golden = (np.matmul(input_a.astype(np.float32), input_b.astype(np.float32)) + input_bias).astype(np.float32)
-    golden = np.where(golden >= 0, golden, golden * alpha)
+    x1_gm = np.random.randint(-10, 10, [m, k]).astype(np.float16)
+    x2_gm = np.random.randint(-10, 10, [k, n]).astype(np.float16)
+    golden = np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32)).astype(np.float16)
+    golden = np.where(golden >= 0, golden, golden * 0.001)
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    input_a.tofile("./input/x1_gm.bin")
-    input_b.tofile("./input/x2_gm.bin")
-    input_bias.tofile("./input/bias.bin")
+    x1_gm.tofile("./input/x1_gm.bin")
+    x2_gm.tofile("./input/x2_gm.bin")
     golden.tofile("./output/golden.bin")
 
 

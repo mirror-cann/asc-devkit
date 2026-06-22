@@ -25,30 +25,33 @@
 
 ## 样例描述
 
-- 样例功能
+- 样例功能：
+  实现Matmul和LeakyRelu融合计算，计算公式如下：
 
-  本样例通过高阶Matmul API实现矩阵乘、Bias加法与LeakyRelu激活函数融合计算，计算公式如下：
+  Matmul计算：
+  $$
+  C_{ij} = \sum_{k} A_{ik} \times B_{kj}
+  $$
 
-  ```text
-  C = A * B + Bias
-  C = C > 0 ? C : C * 0.001
-  ```
+  LeakyRelu计算：
+  $$
+  C_{ij} = \begin{cases}
+  C_{ij} & \text{if } C_{ij} \geq 0 \\
+  C_{ij} \times 0.001 & \text{if } C_{ij} < 0
+  \end{cases}
+  $$
 
-  其中，`LeakyRelu`表示：当`Temp >= 0`时输出`Temp`，当`Temp < 0`时输出`Temp * 0.001`。
+  其中，A为左矩阵，形状为[M, K]；B为右矩阵，形状为[K, N]；C为输出矩阵，形状为[M, N]。
 
-  样例中`M = 512`，`K = 128`，`N = 16`。`scripts/gen_data.py`用于生成输入数据和golden数据，样例执行后将结果写入`output/output.bin`，再通过`scripts/verify_result.py`完成结果校验。
+- 样例规格：
+  本样例参数M = 512, K = 128, N = 128，调用2个Cube核和4个Vector核完成计算，输入规格如下表所示：
 
-- 样例规格
-
-  <table border="2">
-  <caption>表1：MatmulLeakyRelu样例规格描述</caption>
-  <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">MatmulLeakyRelu</td></tr>
-  <tr><td align="center"></td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-  <tr><td align="center">样例输入</td><td align="center">A</td><td align="center">[512, 128]</td><td align="center">float</td><td align="center">ND</td></tr>
-  <tr><td align="center">样例输入</td><td align="center">B</td><td align="center">[128, 16]</td><td align="center">float</td><td align="center">ND</td></tr>
-  <tr><td align="center">样例输入</td><td align="center">Bias</td><td align="center">[16]</td><td align="center">float</td><td align="center">ND</td></tr>
-  <tr><td align="center">样例输出</td><td align="center">C</td><td align="center">[512, 16]</td><td align="center">float</td><td align="center">ND</td></tr>
-  <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">matmul_leakyrelu_custom</td></tr>
+  <table>
+  <tr><td rowspan="1" align="center">样例类型(OpType)</td><td colspan="4" align="center">Matmul+LeakyRelu融合</td></tr>
+  <tr><td rowspan="3" align="center">样例输入</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
+  <tr><td align="center">A（左矩阵）</td><td align="center">[512, 128]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td align="center">B（右矩阵）</td><td align="center">[128, 128]</td><td align="center">half</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">样例输出</td><td align="center">C</td><td align="center">[512, 128]</td><td align="center">half</td><td align="center">ND</td></tr>
   </table>
 
 ## 编译运行
