@@ -7,7 +7,7 @@
 
 Ubuntu 24.04 containerized development environment for AscendC NPU kernel development.
 
-## 📋 Prerequisites
+## 📋 Prerequisites<a name="prerequisites"></a>
 
 | Requirement | With NPU | Without NPU |
 | ------------- | :----------: | :-------------: |
@@ -46,7 +46,7 @@ curl -fsSL "https://github.com/docker/buildx/releases/download/${version}/buildx
 chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
 ```
 
-## 🧑‍💻 Quick Start (Human Users)
+## 🧑‍💻 Quick Start (Human Users)<a name="human-quick-start"></a>
 
 > [!NOTE]
 > If you are an AI Agent, skip to [Quick Start (AI Agent)](#quick-start-ai-agent).
@@ -182,7 +182,7 @@ docker run -itd --name ascendc_container ascendc:ubuntu24.04
 > - If the user needs to mount data directories, append each as `-v /host/path:/container/path`.
 > - After the container starts, CANN toolkit and ops packages must be installed manually inside the container. Ask the user for the CANN package paths or installer commands, or refer to the [📥 Download and Install CANN Packages](../docs/quick_start.md#cann-install) section.
 
-## 🐍 Python Environment
+## 🐍 Python Environment<a name="python-env"></a>
 
 The container comes with the following conda environment pre-installed:
 
@@ -192,7 +192,7 @@ The container comes with the following conda environment pre-installed:
 
 Default active environment is `py312`.
 
-## ⚙️ Configuration
+## ⚙️ Configuration<a name="configuration"></a>
 
 ### Mirror Sources
 

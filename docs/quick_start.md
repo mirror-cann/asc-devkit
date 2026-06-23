@@ -6,18 +6,18 @@
 
 | 环境准备 | 社区体验 / 算子开发（CANN商用/社区版） | 生态开发者贡献（CANN master） |
 | :---: | :---: | :---: |
-| **无NPU设备** | [云开发环境](#1️⃣-云开发环境) | [手动下载安装CANN master](#📥-下载安装cann包) + [云开发环境](#1️⃣-云开发环境) |
-| **有NPU设备** | [CANN官方Docker镜像](#2️⃣-cann官方docker镜像) | [手动下载安装CANN master](#📥-下载安装cann包) + [Dev Container](#3️⃣-devcontainer) |
+| **无NPU设备** | [云开发环境](#cloud-dev-env) | [手动下载安装CANN master](#cann-install) + [云开发环境](#cloud-dev-env) |
+| **有NPU设备** | [CANN官方Docker镜像](#cann-docker-image) | [手动下载安装CANN master](#cann-install) + [Dev Container](#devcontainer) |
 
 > [!TIP] 选择建议
 >
 > - 为了保障开发体验环境的质量，推荐用户基于**容器化技术**完成**环境准备**。
 > - 如不希望使用容器，也可在带NPU设备的主机上完成**环境准备**，请参考[CANN软件安装指南 - 在物理机上安装](https://www.hiascend.com/cann/download)。
-> - 针对仅体验"编译安装本开源仓 + 仿真环境运行算子"的用户，不要求主机带NPU设备，可跳过安装NPU驱动和固件，直接安装CANN包，请参考[下载安装CANN包](#📥-下载安装cann包)。
+> - 针对仅体验"编译安装本开源仓 + 仿真环境运行算子"的用户，不要求主机带NPU设备，可跳过安装NPU驱动和固件，直接安装CANN包，请参考[下载安装CANN包](#cann-install)。
 
 <!-- 待加入AI Agent使能的逻辑 -->
 
-### 1️⃣ 云开发环境
+### 1️⃣ 云开发环境<a name="cloud-dev-env"></a>
 
 对于无NPU设备的用户，可使用**云开发环境**提供的NPU计算资源进行开发体验，**云开发环境**提供了在线直接运行的昇腾ARM架构环境。目前仅适用于Atlas A2系列产品，提供两种接入方式：
 
@@ -35,11 +35,11 @@
 > [!NOTE] 使用说明
 >
 > - 环境默认安装了最新的商用版NPU驱动和固件、CANN包，源码下载时注意与软件配套。
-> - 如需下载特定版本的CANN包，请参考[下载安装CANN包](#📥-下载安装cann包)。
+> - 如需下载特定版本的CANN包，请参考[下载安装CANN包](#cann-install)。
 > - 更多关于**WebIDE开发平台**的介绍，请参考[云开发平台介绍](https://gitcode.com/org/cann/discussions/54)。
 > - [Huawei Developer Space插件](https://marketplace.visualstudio.com/items?itemName=HuaweiCloud.developerspace)为VSCode IDE接入**云开发环境**提供技术支持。
 
-### 2️⃣ CANN官方Docker镜像
+### 2️⃣ CANN官方Docker镜像<a name="cann-docker-image"></a>
 
 对于有NPU设备的用户，可使用CANN官方Docker镜像进行开发体验。
 
@@ -102,14 +102,14 @@
     | `<ascend/cann:tag>` | 指定要运行的Docker镜像 | 请确保此镜像名和标签（tag）与您通过`docker pull`拉取的镜像完全一致 |
     | `bash` | 容器启动后立即执行的命令 | - |
 
-### 3️⃣ DevContainer
+### 3️⃣ DevContainer<a name="devcontainer"></a>
 
 对于有NPU设备的用户，推荐使用DevContainer进行生态开发者贡献。
 
 DevContainer基于VS Code Dev Containers，通过仓库内`.devcontainer`配置自动构建一致的容器化开发环境，内置`conda`、`Python`等开发工具链。与宿主机的NPU驱动共享设备访问，适合需要编译源码、运行UT、向本仓贡献代码的场景。详细说明请参考[`.devcontainer/README.md`](../.devcontainer/README.md)。
 
 > [!NOTE] 使用说明
-> DevContainer仅挂载宿主机的NPU驱动（只读），**CANN toolkit和ops包需在容器启动后手动安装**，请参考[下载安装CANN包](#📥-下载安装cann包)。
+> DevContainer仅挂载宿主机的NPU驱动（只读），**CANN toolkit和ops包需在容器启动后手动安装**，请参考[下载安装CANN包](#cann-install)。
 
 ### 📥 下载安装CANN包<a name="cann-install"></a>
 <!-- 待加入AI Agent下载 & 安装CANN包的skill -->
@@ -186,9 +186,9 @@ source /usr/local/Ascend/cann/set_env.sh
 # source ${install_path}/cann/set_env.sh
 ```
 
-## 🔨 源码编译步骤
+## 🔨 源码编译步骤<a name="source-build"></a>
 
-### 📥 下载源码
+### 📥 下载源码<a name="source-download"></a>
 
 开发者可通过如下命令下载本仓源码：
 
@@ -197,7 +197,7 @@ source /usr/local/Ascend/cann/set_env.sh
 git clone https://gitcode.com/cann/asc-devkit.git
 ```
 
-### 📦 依赖检查
+### 📦 依赖检查<a name="dependency-check"></a>
 
 > [!NOTE] 使用前须知
 > 如您使用**容器化技术**，容器中已为您安装好依赖，可跳过此步骤。
@@ -246,7 +246,7 @@ git clone https://gitcode.com/cann/asc-devkit.git
    # ./cann-asc-devkit_${cann_version}_linux-$(uname -m).run --full --install-path=${install_path}
    ```
 
-### 🧪 UT验证
+### 🧪 UT验证<a name="ut-verify"></a>
 
 #### 安装依赖
 
