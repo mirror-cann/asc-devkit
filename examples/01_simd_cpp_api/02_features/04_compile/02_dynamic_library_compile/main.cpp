@@ -18,9 +18,8 @@
 #include <vector>
 #include "acl/acl.h"
 
-extern void run_add_custom(float* x, float* y, float* z,
-                           uint32_t total_length, uint32_t num_blocks,
-                           aclrtStream stream);
+extern void run_add_custom(
+    float* x, float* y, float* z, uint32_t total_length, uint32_t num_blocks, aclrtStream stream);
 
 std::vector<float> add_vectors(std::vector<float>& x, std::vector<float>& y)
 {
@@ -81,7 +80,8 @@ uint32_t verify_result(std::vector<float>& output, std::vector<float>& golden)
     auto print_tensor = [](std::vector<float>& tensor, const char* name) {
         constexpr size_t max_print_size = 20;
         std::cout << name << ": ";
-        std::copy(tensor.begin(), tensor.begin() + std::min(tensor.size(), max_print_size),
+        std::copy(
+            tensor.begin(), tensor.begin() + std::min(tensor.size(), max_print_size),
             std::ostream_iterator<float>(std::cout, " "));
         if (tensor.size() > max_print_size) {
             std::cout << "...";

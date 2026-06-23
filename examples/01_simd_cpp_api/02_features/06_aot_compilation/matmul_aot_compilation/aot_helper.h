@@ -18,7 +18,6 @@
 #include <type_traits>
 #include <cstring>
 
-
 namespace aot {
 
 // ========== 1.1 AOT Holder 基类（C++17 兼容） ==========
@@ -33,7 +32,7 @@ struct AOTHolder {
 
 // ========== 1.3 运行时 Holder（保持兼容） ==========
 
-template<typename T>
+template <typename T>
 struct RuntimeHolder {
     static constexpr T value = {0};
 };
@@ -56,10 +55,10 @@ struct AOTDispatcher;
 // 编译期 O(N²) 实例化代价，同时让模板深度从 O(N) 降到 O(1)。
 template <typename T, typename... Holders>
 struct AOTDispatcher<T, AOTRegistry<Holders...>> {
-
     // 主入口：接收运行时值，自动分发
     template <typename Func>
-    static void dispatch(const uint8_t* value, Func&& kernel_func) {
+    static void dispatch(const uint8_t* value, Func&& kernel_func)
+    {
         // C++17 折叠表达式：(... || try_one<H_i>())，|| 短路保证首次命中即停
         bool matched = (try_one<Holders>(value, kernel_func) || ...);
         if (!matched) {
@@ -71,8 +70,8 @@ struct AOTDispatcher<T, AOTRegistry<Holders...>> {
 private:
     // try_one 必须强制内联：否则 N 个 Holder 会留下 N 份函数体，导致符号表和代码体积线性膨胀
     template <typename Holder, typename Func>
-    __attribute__((always_inline))
-    static inline bool try_one(const uint8_t* value, Func& kernel_func) {
+    __attribute__((always_inline)) static inline bool try_one(const uint8_t* value, Func& kernel_func)
+    {
         if (std::memcmp(value, Holder::value_ptr, sizeof(T)) == 0) {
             kernel_func(Holder{}, *reinterpret_cast<const T*>(value));
             return true;
@@ -82,7 +81,7 @@ private:
 };
 
 template <typename T, typename HT>
-inline __aicore__ const T &GetHolderDataRef(const T &rt_data)
+inline __aicore__ const T& GetHolderDataRef(const T& rt_data)
 {
     if constexpr (std::is_same_v<HT, RuntimeHolder<T>>) {
         return rt_data;

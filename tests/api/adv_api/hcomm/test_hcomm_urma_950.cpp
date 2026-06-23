@@ -65,10 +65,7 @@ public:
 
     AscendC::ChannelHandle GetHandle() { return reinterpret_cast<AscendC::ChannelHandle>(&channel_); }
 
-    uint32_t GetSqHead() const
-    {
-        return sqHead_;
-    }
+    uint32_t GetSqHead() const { return sqHead_; }
 
     void CompleteCurrentSq()
     {
