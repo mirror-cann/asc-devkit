@@ -53,14 +53,6 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void PRINTF(const __gm__ char* fmt, Args&&
 #endif
 }
 
-template <class... Args>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void printf(const __gm__ char* fmt, Args&&... args)
-{
-#if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
-    __asc_simt_vf::simt_printf_impl(__asc_simt_vf::DumpType::DUMP_SIMT_PRINTF, fmt, args...);
-#endif
-}
-
 #endif
 
 #endif

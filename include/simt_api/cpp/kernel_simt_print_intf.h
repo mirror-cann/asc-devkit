@@ -12,6 +12,7 @@
 #define ASCENDC_MODULE_SIMT_PRINT_INTERFACE_H
 
 #include "simt_api/device_types.h"
+#include "utils/debug/asc_printf.h"
 
 namespace AscendC {
 namespace Simt {
@@ -21,8 +22,7 @@ namespace Simt {
 template <class... Args>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline void PRINTF(const __gm__ char* fmt, Args&&... args);
 
-template <class... Args>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void printf(const __gm__ char* fmt, Args&&... args);
+using __asc_simt_vf::printf;    // compatible with interface in asc_printf.h
 
 #endif
 #endif
