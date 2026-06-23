@@ -2,7 +2,7 @@
 
 ## Overview
 
-This sample introduces the usage of Ascend C Basic API, including data movement, matrix computation, memory vector computation, resource management, synchronization control, atomic operations, and scalar computation.
+This sample introduces the usage of Ascend C Basic API, including data movement, memory vector computation, Reg vector computation, matrix computation, resource management, synchronization control, atomic operations, TPipe/TQue, and utility APIs.
 
 ## Sample List
 
