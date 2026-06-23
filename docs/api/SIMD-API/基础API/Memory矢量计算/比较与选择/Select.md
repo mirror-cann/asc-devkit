@@ -221,7 +221,7 @@ Kirin 9030，支持模式0、1、2。
 ## 数据类型
 
 - T支持的数据类型为：
-    - <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，支持的数据类型为：int8_t/uint8_t/int16_t/uint16_t/half/bfloat16_t/float/int32_t/uint32_t/complex32/int64_t/uint64_t/complex64。</cann-filter>
+    - <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，支持的数据类型为：int8_t/uint8_t/int16_t/uint16_t/half/bfloat16_t/int32_t/uint32_t/float/complex32/int64_t/uint64_t/complex64。</cann-filter>
     
     - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的数据类型为：half/float。</cann-filter>
     
@@ -233,9 +233,9 @@ Kirin 9030，支持模式0、1、2。
     
     - <cann-filter npu-type = "910">Atlas 训练系列产品，支持的数据类型为：half/float。</cann-filter>
     
-    - <cann-filter npu-type = "x90">Kirin X90，支持的数据类型为：uint8_t。</cann-filter>
+    - <cann-filter npu-type = "x90">Kirin X90，支持的数据类型为：int8_t/uint8_t/int16_t/uint16_t/half/int32_t/uint32_t/float。</cann-filter>
     
-    - <cann-filter npu-type = "9030">Kirin 9030，支持的数据类型为：uint8_t。</cann-filter>
+    - <cann-filter npu-type = "9030">Kirin 9030，支持的数据类型为：int8_t/uint8_t/int16_t/uint16_t/half/int32_t/uint32_t/float。</cann-filter>
 
 - U支持的数据类型为：uint8_t、uint16_t、uint32_t、uint64_t。
 
@@ -267,7 +267,7 @@ Kirin 9030，支持模式0、1、2。
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-本样例中只展示Compute流程中的部分代码。如果您需要运行样例代码，完整的调用样例可参考[Select样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/07_filter/select)。
+本样例中只展示Compute流程中的部分代码。如果您需要运行样例代码，完整的调用样例可参考[Select样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/select)。
 
 - Select-tensor高维切分计算样例（模式2）
 
@@ -290,6 +290,7 @@ Kirin 9030，支持模式0、1、2。
 - Select-tensor前n个数据计算样例（模式0，每轮repeat迭代中，maskLocal只有前64bit生效）
 
     ```cpp
+    // float类型
     AscendC::Select(dstLocal, maskLocal, src0Local, src1Local, AscendC::SELMODE::VSEL_CMPMASK_SPR, dataSize);
     ```
 
