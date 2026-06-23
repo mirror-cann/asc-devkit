@@ -233,6 +233,14 @@ __simd_callee__ inline void asc_gather_datablock_impl(vector_int64_t& dst, __ubu
     }
 }
 
+__simd_callee__ inline void asc_gather_datablock_impl(vector_uint64_t& dst, __ubuf__  uint64_t* src,
+    vector_uint32_t index)
+{
+    if ASC_IS_AIV {
+        vgatherb(dst, src, index);
+    }
+}
+
 __simd_callee__ inline void asc_gather_datablock_impl(vector_half& dst, __ubuf__  half* src,
     vector_uint32_t index)
 {

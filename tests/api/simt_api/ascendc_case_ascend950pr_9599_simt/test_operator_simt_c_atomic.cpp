@@ -12,6 +12,7 @@
 #include "simt_api/device_atomic_functions.h"
 
 using namespace std;
+using namespace __asc_simt_vf;
 
 class AtomicAddTestsuite : public testing::Test {
 protected:
