@@ -13,8 +13,7 @@
 `GetShape`用于从Layout中提取Shape部分：
 
 - **不指定模板参数Is...**：返回完整的Shape元组。
-- **指定模板参数Is...**：返回Shape中对应索引的子结构。单个索引返回对应维度值或子tuple；多个索引返回由它们组成的新tuple。
-
+- **指定模板参数Is...**：从Shape顶层tuple中选择对应索引的元素。指定单个索引时返回该元素；指定多个索引时返回由这些顶层元素组成的新tuple。
 ## 函数原型
 
 ```cpp
@@ -31,7 +30,7 @@ __aicore__ inline constexpr auto GetShape(Layout<ShapeType, StrideType>& layout)
 
 | 参数名 | 输入/输出 | 描述 |
 | -------- | ----------- | ------ |
-| Is... | 输入 | 可选。多级索引递归选取。 |
+| Is... | 输入 | 可选。用于选择Shape顶层tuple中的一个或多个索引。 |
 | ShapeType | 输入 | Layout的shape类型。 |
 | StrideType | 输入 | Layout的stride类型。 |
 
@@ -43,11 +42,11 @@ __aicore__ inline constexpr auto GetShape(Layout<ShapeType, StrideType>& layout)
 
 ## 返回值说明
 
-返回描述张量形状的Shape对象（或其子结构）。类型与模板参数`Is...`的指定方式相关。
+返回描述张量形状的Shape对象（或其子结构）。
 
 ## 约束说明
 
-Is...必须在Shape底层tuple的有效范围内。
+Is...必须在Shape顶层tuple的有效范围内。
 
 ## 调用示例
 

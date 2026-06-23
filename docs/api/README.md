@@ -77,11 +77,6 @@
                     -   [ViewEngine](SIMD-API/基础API/数据结构/TensorAPI-BasicStructure/tensor_structure/ViewEngine.md)
                 -   [工具函数](SIMD-API/基础API/数据结构/TensorAPI-BasicStructure/utils/tool_functions.md)
                     -   [GetLayoutPattern](SIMD-API/基础API/数据结构/TensorAPI-BasicStructure/utils/GetLayoutPattern.md)
-                    -   [GetLayoutTrait](SIMD-API/基础API/数据结构/TensorAPI-BasicStructure/utils/GetLayoutTrait.md)
-                    -   [IsAttrTensorV](SIMD-API/基础API/数据结构/TensorAPI-BasicStructure/utils/IsAttrTensorV.md)
-                    -   [IsHardwareV](SIMD-API/基础API/数据结构/TensorAPI-BasicStructure/utils/IsHardwareV.md)
-                    -   [IsIntegralConstantV](SIMD-API/基础API/数据结构/TensorAPI-BasicStructure/utils/IsIntegralConstantV.md)
-                    -   [IsLayoutV](SIMD-API/基础API/数据结构/TensorAPI-BasicStructure/utils/IsLayoutV.md)
 
             -   [辅助数据结构](SIMD-API/基础API/数据结构/辅助数据结构/辅助数据结构.md)
                 -   [Coordinate](SIMD-API/基础API/数据结构/辅助数据结构/Coordinate/Coordinate.md)
