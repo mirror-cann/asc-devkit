@@ -1,4 +1,4 @@
-﻿# Xor<a name="ZH-CN_TOPIC_0000001956827101"></a>
+﻿# Or<a name="ZH-CN_TOPIC_0000001929668268"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
@@ -32,30 +32,30 @@
 
 - 对`RegTensor`操作：
 
-  根据mask对输入数据srcReg0、srcReg1按位异或（^）操作，将结果写入dstReg。
+  根据mask对输入数据srcReg0、srcReg1按位求或（|）操作，将结果写入dstReg。
 
 - 对`MaskReg`操作：
 
-  根据mask对两个输入`MaskReg`数据src0、src1按位异或（^）操作，将结果写入dst。
+  根据mask对两个输入`MaskReg`数据src0、src1按位求或（|）操作，将结果写入dst。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
-- 对RegTensor操作
+- 对`RegTensor`操作
 
   ```cpp
   template <typename T = DefaultType, MaskMergeMode mode = MaskMergeMode::ZEROING, typename U>
-  __simd_callee__ inline void Xor(U& dstReg, U& srcReg0, U& srcReg1, MaskReg& mask)
+  __simd_callee__ inline void Or(U& dstReg, U& srcReg0, U& srcReg1, MaskReg& mask)
   ```
 
-- 对MaskReg操作
+- 对`MaskReg`操作
 
   ```cpp
-  __simd_callee__ inline void Xor(MaskReg& dst, MaskReg& src0, MaskReg& src1, MaskReg& mask)
+  __simd_callee__ inline void Or(MaskReg& dst, MaskReg& src0, MaskReg& src1, MaskReg& mask)
   ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-- 对RegTensor操作
+- 对`RegTensor`操作
 
   **表1**  模板参数说明
 
@@ -74,16 +74,16 @@
   | srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。<br>数据类型需要与目的操作数保持一致。 |
   | mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
 
-- 对MaskReg操作
+- 对`MaskReg`操作
 
   **表3**  参数说明
 
   | 参数名 | 描述 |
   | :----- | :--- |
-  | dst | 目的操作数。类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
-  | src0 | 源操作数。类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
-  | src1 | 源操作数。类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
-  | mask | 指示在计算过程中哪些bit有效。类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+  | dst    | 目的操作数。 |
+  | src0   | 源操作数。 |
+  | src1   | 源操作数。 |
+  | mask   | 指示在计算过程中哪些bits有效。 |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -99,41 +99,41 @@
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-- 对RegTensor操作
+- 对`RegTensor`操作
 
   ```cpp
   template <typename T>
-  __simd_vf__ inline void XorVF(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf__ T* src1Addr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
+  __simd_vf__ inline void OrVF(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf__ T* src1Addr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
   {
       AscendC::Reg::RegTensor<T> srcReg0;
       AscendC::Reg::RegTensor<T> srcReg1;
       AscendC::Reg::RegTensor<T> dstReg;
       AscendC::Reg::MaskReg mask;
       for (uint16_t i = 0; i < repeatTimes; i++) {
-          mask = AscendC::Reg::UpdateMask<T>(count);
           AscendC::Reg::LoadAlign(srcReg0, src0Addr + i * oneRepeatSize);
           AscendC::Reg::LoadAlign(srcReg1, src1Addr + i * oneRepeatSize);
-          AscendC::Reg::Xor(dstReg, srcReg0, srcReg1, mask);
+          mask = AscendC::Reg::UpdateMask<T>(count);
+          AscendC::Reg::Or(dstReg, srcReg0, srcReg1, mask);
           AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, mask);
       }
   }
   ```
 
-- 对MaskReg操作
+- 对`MaskReg`操作
 
   ```cpp
   template <typename T>
-  __simd_vf__ inline void XorVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
+  __simd_vf__ inline void OrVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
   {
       AscendC::Reg::RegTensor<T> srcReg;
       AscendC::Reg::MaskReg src0 = AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::ALLF>();
       AscendC::Reg::MaskReg src1 = AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::ALL>();
       AscendC::Reg::MaskReg dst;
       AscendC::Reg::MaskReg mask;
-      for (uint16_t i = 0; i < (uint16_t)repeatTimes; ++i) {
+      for (uint16_t i = 0; i < repeatTimes; ++i) {
           mask = AscendC::Reg::UpdateMask<T>(count);
           AscendC::Reg::LoadAlign(srcReg, srcAddr + i * oneRepeatSize);
-          AscendC::Reg::Xor(dst, src0, src1, mask);
+          AscendC::Reg::Or(dst, src0, src1, mask);
           AscendC::Reg::Adds(srcReg, srcReg, 0, dst);
           AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, srcReg, mask);
       }
