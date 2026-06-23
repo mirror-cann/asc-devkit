@@ -572,7 +572,7 @@ def gen_micro_assign_value_of_tiling(tiling_struct: str, tiling_raw_data: str):
             class_body += \
                 f"    const uint8_t __ascendc_arr_##tiling_data[{tiling_size}] = {{{tiling_arr_data_str}}};   \\\n"
             class_body += \
-                f"    static constexpr {tiling_struct} tiling_data = "
+                f"    const {tiling_struct} tiling_data = "
             class_body += \
                 f"convert_from_bytes<{tiling_struct}>(__ascendc_arr_##tiling_data);\n\n"
 
@@ -581,7 +581,7 @@ def gen_micro_assign_value_of_tiling(tiling_struct: str, tiling_raw_data: str):
         class_body += \
             f"    const uint8_t __ascendc_arr_##tiling_data[{tiling_size}] = {{{tiling_arr_data_str}}};    \\\n"
         class_body += \
-            f"    static constexpr tiling_struct tiling_data = "
+            f"    const tiling_struct tiling_data = "
         class_body += \
             f"convert_from_bytes<tiling_struct>(__ascendc_arr_##tiling_data); \n\n"
 
@@ -589,8 +589,7 @@ def gen_micro_assign_value_of_tiling(tiling_struct: str, tiling_raw_data: str):
         class_body += "    REGISTER_TILINGDATA_SIZE(tiling_type, __COUNTER__);                                  \\\n"
         class_body += f"    const uint8_t __ascendc_arr_##var[{tiling_size}] = {{{tiling_arr_data_str}}}; \\\n"
         class_body += \
-            f"    static constexpr tiling_type __ascendc_point##var = "
-        class_body += f"convert_from_bytes<tiling_type>(__ascendc_arr_##var);\\\n"
+            f"    const tiling_type __ascendc_point##var = convert_from_bytes<tiling_type>(__ascendc_arr_##var);\\\n"
         class_body += "    auto& var = __ascendc_point##var.member;\n\n"
     return class_body, tiling_assign_str
 
