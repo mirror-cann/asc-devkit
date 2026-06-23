@@ -75,9 +75,9 @@ project(kernel LANGUAGES ASC CXX)
 
 # 4、使用CMake接口编译可执行文件
 add_executable(demo
-    gather_compute.asc
-    gather_kernel.asc
-    main.cpp)
+    func.asc
+    kernel.asc
+    host.cpp)
 
 # 5、设置链接器语言为ASC
 set_target_properties(demo PROPERTIES LINKER_LANGUAGE ASC)
