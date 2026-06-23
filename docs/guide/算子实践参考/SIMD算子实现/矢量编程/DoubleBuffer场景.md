@@ -74,7 +74,7 @@ this->lastTileLength = tiling.lastTileLength;
 Init函数实现代码如下：
 
 ```
-__aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, AddCustomTilingData tiling)
+__aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, AddCustomTilingData tiling)
 {
     if (tiling.isEvenCore) {
         this->blockLength = tiling.blockLength;

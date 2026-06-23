@@ -55,7 +55,7 @@ VF融合优化可分为三个阶段：VF浅度融合、VF深度融合和VF内自
     class Kernel {
         public:
         __aicore__ inline Kernel() = default;
-        __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, uint32_t count, AscendC::TPipe* pipeIn){
+        __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, uint32_t count, AscendC::TPipe* pipeIn){
             // ... 
      
         }

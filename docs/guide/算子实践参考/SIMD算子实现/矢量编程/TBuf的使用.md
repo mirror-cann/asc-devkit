@@ -74,7 +74,7 @@
 class KernelAdd {
 public:
     __aicore__ inline KernelAdd() {}
-    __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, AscendC::TPipe* pipeIn){}
+    __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, AscendC::TPipe* pipeIn){}
     __aicore__ inline void Process(){}
 private:
     __aicore__ inline void CopyIn(){}
@@ -96,7 +96,7 @@ private:
 初始化函数阶段除原有步骤外，需要调用[InitBuffer](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TPipe/InitBuffer.md)接口为TBuf变量分配内存，具体的初始化函数代码如下：
 
 ```
- __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, AscendC::TPipe* pipeIn)
+ __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, AscendC::TPipe* pipeIn)
 {
     pipe = pipeIn;
     xGm.SetGlobalBuffer((__gm__ bfloat16_t*)x, TOTAL_LENGTH);

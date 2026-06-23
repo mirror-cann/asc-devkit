@@ -21,7 +21,7 @@ constexpr int32_t TILE_LENGTH = BLOCK_LENGTH / TILE_NUM;
 class KernelSample {
 public:
     __aicore__ inline KernelSample() {}
-    __aicore__ inline void Init(GM_ADDR x)
+    __aicore__ inline void Init(__gm__ uint8_t* x)
     {
         xGm.SetGlobalBuffer((__gm__ half*)x + BLOCK_LENGTH * GetBlockIdx(), BLOCK_LENGTH);
         yGm.SetGlobalBuffer((__gm__ half*)y + BLOCK_LENGTH * GetBlockIdx(), BLOCK_LENGTH);
@@ -87,7 +87,7 @@ constexpr int32_t BLOCK_LENGTH = TILE_LENGTH / USE_CORE_NUM;
 class KernelSample {
 public:
     __aicore__ inline KernelSample() {}
-    __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, int32_t index)
+    __aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, int32_t index)
     {
         xGm.SetGlobalBuffer((__gm__ half*)x + BLOCK_LENGTH * GetBlockIdx() + index * TILE_LENGTH, BLOCK_LENGTH);
         yGm.SetGlobalBuffer((__gm__ half*)y + BLOCK_LENGTH * GetBlockIdx() + index * TILE_LENGTH, BLOCK_LENGTH);

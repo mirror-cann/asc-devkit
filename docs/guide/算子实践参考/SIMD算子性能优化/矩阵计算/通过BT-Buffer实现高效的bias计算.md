@@ -118,7 +118,7 @@ private:
     __aicore__ inline void CopyOut()
     {
         LocalTensor<float> c1Local = outQueueCO1.DeQue<float>();
-        GM_ADDR usrWorkspace = AscendC::GetUserWorkspace(workspace);
+        __gm__ uint8_t* usrWorkspace = AscendC::GetUserWorkspace(workspace);
         xGm.SetGlobalBuffer((__gm__ float *)(usrWorkspace));
         FixpipeParamsV220 fixpipeParams;
         fixpipeParams.nSize = n;

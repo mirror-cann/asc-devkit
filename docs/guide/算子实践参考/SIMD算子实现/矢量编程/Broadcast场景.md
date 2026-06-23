@@ -92,11 +92,11 @@ if (length % ubBlockAligned == 0U || tileNum == 0U) {
 初始化函数代码如下：
 
 ```
-__aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, AddCustomTilingData tiling, AscendC::TPipe* pipeIn)
+__aicore__ inline void Init(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z, AddCustomTilingData tiling, AscendC::TPipe* pipeIn)
 {
     pipe = pipeIn;
-    GM_ADDR longerInputPtr;
-    GM_ADDR shorterInputPtr;
+    __gm__ uint8_t* longerInputPtr;
+    __gm__ uint8_t* shorterInputPtr;
     if (tiling.xLen > tiling.yLen) {
         longerInputPtr = x;
         shorterInputPtr = y;

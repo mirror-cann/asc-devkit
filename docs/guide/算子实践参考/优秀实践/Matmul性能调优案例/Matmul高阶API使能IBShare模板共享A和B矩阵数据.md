@@ -82,7 +82,7 @@ constexpr bool isABshare = true;
 template <typename aType, typename bType, typename cType> class MatmulABshareKernel {
 public:
     __aicore__ inline MatmulABshareKernel(){};
-    __aicore__ inline void Init(GM_ADDR a, GM_ADDR b, GM_ADDR c, GM_ADDR workspace,
+    __aicore__ inline void Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* c, __gm__ uint8_t* workspace,
                                 const TCubeTiling &tiling, AscendC::TPipe *pipe);
     __aicore__ inline void Process(AscendC::TPipe *pipe);
     __aicore__ inline void CalcOffset(int32_t blockIdx, const TCubeTiling &tiling, int32_t &offsetA, int32_t &offsetB,
@@ -97,8 +97,8 @@ public:
     TCubeTiling tiling;
 };
 template <typename aType, typename bType, typename cType>
-__aicore__ inline void MatmulABshareKernel<aType, bType, cType>::Init(GM_ADDR a, GM_ADDR b, GM_ADDR c, 
-                                                                GM_ADDR workspace,const TCubeTiling &tiling, AscendC::TPipe *pipe)
+__aicore__ inline void MatmulABshareKernel<aType, bType, cType>::Init(__gm__ uint8_t* a, __gm__ uint8_t* b, __gm__ uint8_t* c, 
+                                                                __gm__ uint8_t* workspace,const TCubeTiling &tiling, AscendC::TPipe *pipe)
 {
     this->tiling = tiling;
     aGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ aType *>(a), tiling.M * tiling.Ka);
