@@ -114,6 +114,8 @@ for (uint32_t i = 0; i < curLen; i++) {
 
 ---
 
+## 中级性能优化
+
 ### Case 1: 单核向量版本
 
 **实现方式**：参考 `KernelAdd::ProcessSingle()` 函数实现
@@ -350,6 +352,8 @@ UB内存分配（双缓冲）：
 - 可尝试L2 Cache优化来提升搬运效率
 ---
 
+## 高阶性能打磨
+
 ### Case 5: 双缓冲 + L2 Cache bypass
 
 **实现方式**：参考 `KernelAdd::ProcessDoubleBufferL2Bypass()` 函数实现（在该函数内部先设置 `SetL2CacheHint(CACHE_MODE_DISABLE)`，再调用 `ProcessDoubleBuffer()`）
@@ -417,7 +421,7 @@ yGm.SetL2CacheHint(AscendC::CacheMode::CACHE_MODE_DISABLE);
 
 // 优化后的地址布局（避免Bank Conflict）
 static constexpr uint32_t xAddrPingBC = 0;
-static constexpr uint32_t yAddrPingBC = BANK_CONFLICT_DATA_COPY_LEN * sizeof(half);
+static constexpr uint32_t yAddrPingBC = BANK_CONFLICT_DATA_COPY_LEN * sizeof(half);  // 错开256B；注意：sizeof(half)=2B，float场景需调整为sizeof(float)
 static constexpr uint32_t xAddrPongBC = MAX_DATA_COPY_LEN * sizeof(half) * 2;
 static constexpr uint32_t yAddrPongBC = xAddrPongBC + BANK_CONFLICT_DATA_COPY_LEN * sizeof(half);
 static constexpr uint32_t zAddrPingBC = MAX_DATA_COPY_LEN * sizeof(half) * 4;
@@ -510,7 +514,7 @@ $$
 T_{\text{theory}} = \frac{8192 \times 8192}{128 \times 1.85 \times 10^9 \times 48} = \frac{67108864}{1.13664 \times 10^{13}} \approx 5.904 \times 10^{-6} \text{ s} = 5.904 \text{ μs}
 $$
 
-可以看到 Case 6 的 aiv_vec_time 为 6.954 μs，已经很接近 48 核场景下的理论耗时。
+可以看到 Case 6 的 aiv_vec_time 为 6.954 μs，已经很接近 Atlas A2训练系列48核场景下的理论耗时。
 
 Case 0-3 未开启双缓冲，数据搬运串行执行，使用读带宽衡量性能。从 Case 4 开始开启双缓冲，此时 mte2 利用率较高，读写行为并行发生，因此读写混合带宽按总读写数据量除以 $T_{mte2}$ 进行估算。其中，读带宽的计算公式为：
 $$
@@ -646,7 +650,37 @@ Ascend 950系列未达到理论vector耗时峰值的原因如下：
   test pass!
   ```
 
-## 性能分析
+## 功能调试
+
+### printf
+
+该接口提供CPU域/NPU域调试场景下的格式化输出功能。
+
+在算子kernel侧实现代码中需要输出日志信息的地方调用[printf](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/调试接口/上板打印/printf.md)接口打印相关内容。
+
+示例如下：
+
+```cpp
+AscendC::printf("add blockIdx=%d\n", AscendC::GetBlockIdx());
+```
+
+> **注意：** printf（PRINTF）接口打印功能会对算子实际运行的性能带来一定影响，通常在调测阶段使用。开发者可以按需通过设置`ASCENDC_DUMP=0`的方式关闭打印功能。
+
+### DumpTensor
+
+基于算子工程开发的算子，可以使用该接口Dump指定[LocalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)的内容。同时支持打印自定义的附加信息（仅支持uint32\_t数据类型的信息），比如打印当前行号等。
+
+在算子kernel侧实现代码中需要打印Tensor数据的地方调用[DumpTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/调试接口/上板打印/DumpTensor.md)接口打印相关内容。样例如下：
+
+```cpp
+// 向量计算: z = x + y
+AscendC::Add(zLocal, xLocal, yLocal, blockLength);
+AscendC::DumpTensor(zLocal, 1, 32);
+```
+
+> **注意：** DumpTensor接口打印功能会对算子实际运行的性能带来一定影响，通常在调测阶段使用。开发者可以按需通过设置`ASCENDC_DUMP=0`来关闭打印功能。
+
+## 性能调试
 
 使用 `msprof` 工具获取详细性能数据：
 
