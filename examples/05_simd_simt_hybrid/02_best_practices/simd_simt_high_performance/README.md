@@ -1,4 +1,4 @@
-# SIMT与SIMD混合编程高性能优化样例
+# SIMD与SIMT混合编程高性能优化样例
 
 ## 概述
 
@@ -22,7 +22,7 @@
 ## 目录结构介绍
 
 ```
-├── simt_and_simd_high_performance
+├── simd_simt_high_performance
 │   ├── CMakeLists.txt        // 编译工程文件
 │   ├── data_utils.h          // 数据读入写出函数
 │   ├── figures               // 图示
@@ -385,7 +385,7 @@ __aicore__ inline void CopyOut(uint32_t tileIdx, uint32_t count, AscendC::LocalT
 
 - 配置环境变量
 
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../docs/quick_start.md#prepare&install)，配置环境变量。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

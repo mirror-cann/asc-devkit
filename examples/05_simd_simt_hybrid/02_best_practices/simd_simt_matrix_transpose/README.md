@@ -13,7 +13,7 @@
 ## 目录结构介绍
 
 ```text
-├── simt_and_simd_matrix_transpose
+├── simd_simt_matrix_transpose
 │   ├── CMakeLists.txt         // 编译工程文件
 │   ├── matrix_transpose.asc   // 矩阵转置样例实现
 │   ├── figures                // README中的图片资源
@@ -227,7 +227,7 @@ output_tile[tile_col + tile_row * height] = input_tile[tile_col * TILE_DIM + til
 在本样例根目录下执行如下步骤，编译并执行样例。
 
 - 配置环境变量
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../docs/quick_start.md#prepare&install)，配置环境变量。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

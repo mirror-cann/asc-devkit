@@ -11,25 +11,26 @@
 
 set -euo pipefail
 
-CASE_REL=01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_integer_fast_div
+CASE_REL=05_simd_simt_hybrid/02_best_practices/simd_simt_high_performance
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../../../../_case_entry.sh"
+source "$SCRIPT_DIR/../../../_case_entry.sh"
 presmoke_case_init "$CASE_REL"
 
 case_build() {
     mkdir -p "$BUILD_DIR"
-    (cd "$BUILD_DIR" && SCENARIO_NUM=0 soc_version=$SOC_VERSION bash -lc 'cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES="$ARCH" $RUN_MODE_ARG')
-    (cd "$BUILD_DIR" && SCENARIO_NUM=0 soc_version=$SOC_VERSION bash -lc 'make -j')
+    (cd "$BUILD_DIR" && SCENARIO_NUM=1 soc_version=$SOC_VERSION bash -lc 'cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES="$ARCH" $RUN_MODE_ARG')
+    (cd "$BUILD_DIR" && SCENARIO_NUM=1 soc_version=$SOC_VERSION bash -lc 'make -j')
+    (cd "$BUILD_DIR" && SCENARIO_NUM=1 soc_version=$SOC_VERSION bash -lc 'python3 ../scripts/gen_data.py')
 }
 
 case_run() {
     mkdir -p "$BUILD_DIR"
-    (cd "$BUILD_DIR" && SCENARIO_NUM=0 soc_version=$SOC_VERSION bash -lc ./integer_div)
+    (cd "$BUILD_DIR" && SCENARIO_NUM=1 soc_version=$SOC_VERSION bash -lc ./demo)
 }
 
 case_verify() {
     mkdir -p "$BUILD_DIR"
-    :
+    (cd "$BUILD_DIR" && SCENARIO_NUM=1 soc_version=$SOC_VERSION bash -lc 'python3 ../scripts/verify_result.py output/output.bin output/golden.bin')
 }
 
 case_clean() {

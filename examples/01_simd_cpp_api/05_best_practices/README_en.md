@@ -11,4 +11,3 @@ Performance optimization practices based on Ascend C, focusing on tuning key ope
 | [02_reg_compute](./02_reg_compute) | Performance optimization samples based on VF functions, introducing VF loop optimization, VF instruction dual-issue optimization, VF continuous non-aligned scenario optimization, and VF fusion optimization through the <<<>>> direct call implementation. |
 | [03_fusion_compute](./03_fusion_compute) | Performance optimization samples for fusion compute, introducing high-performance implementations of Cube-Vector fusion operators such as QuantGroupMatmul and Matmul+GELU. |
 | [04_memory_access](./04_memory_access) | Optimization samples based on data copy API usage, introducing methods to reduce invalid data copy and reduce data copy instruction count through the <<<>>> direct call implementation. |
-| [08_simd_simt_hybrid](./08_simd_simt_hybrid) | High-performance optimization samples for SIMD and SIMT hybrid programming |

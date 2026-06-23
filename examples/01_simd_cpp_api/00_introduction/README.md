@@ -2,7 +2,7 @@
 
 ## 概述
 
-本目录提供 Ascend C SIMD C++ API 的入门样例，覆盖核函数直调、向量计算、矩阵乘计算、融合计算、SIMT/SIMD 混合编程以及 RegBase 向量编程等基础场景，帮助开发者了解样例工程结构、编译运行流程和常见编程模式。
+本目录提供 Ascend C SIMD C++ API 的入门样例，覆盖核函数直调、向量计算、矩阵乘计算、融合计算以及 RegBase 向量编程等基础场景，帮助开发者了解样例工程结构、编译运行流程和常见编程模式。
 
 ## 样例列表
 
@@ -13,4 +13,3 @@
 | [02_matrix](./02_matrix) | 矩阵乘计算 |
 | [03_fusion_operation](./03_fusion_operation) | 融合计算 |
 | [04_reg_compute](./04_reg_compute) | 基于RegBase编程的向量计算 |
-| [05_simd_simt_hybrid](./05_simd_simt_hybrid) | SIMD与SIMT混合编程示例 |

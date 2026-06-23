@@ -11,20 +11,20 @@
 
 set -euo pipefail
 
-CASE_REL=01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_matrix_transpose
+CASE_REL=05_simd_simt_hybrid/02_best_practices/simd_simt_grid_dim_config
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../../../../_case_entry.sh"
+source "$SCRIPT_DIR/../../../_case_entry.sh"
 presmoke_case_init "$CASE_REL"
 
 case_build() {
     mkdir -p "$BUILD_DIR"
-    (cd "$BUILD_DIR" && SCENARIO_NUM=0 soc_version=$SOC_VERSION bash -lc 'cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES="$ARCH" $RUN_MODE_ARG')
-    (cd "$BUILD_DIR" && SCENARIO_NUM=0 soc_version=$SOC_VERSION bash -lc 'make -j')
+    (cd "$BUILD_DIR" && SCENARIO_NUM=1 soc_version=$SOC_VERSION bash -lc 'cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES="$ARCH" $RUN_MODE_ARG')
+    (cd "$BUILD_DIR" && SCENARIO_NUM=1 soc_version=$SOC_VERSION bash -lc 'make -j')
 }
 
 case_run() {
     mkdir -p "$BUILD_DIR"
-    (cd "$BUILD_DIR" && SCENARIO_NUM=0 soc_version=$SOC_VERSION bash -lc ./demo)
+    (cd "$BUILD_DIR" && SCENARIO_NUM=1 soc_version=$SOC_VERSION bash -lc ./grid_config)
 }
 
 case_verify() {

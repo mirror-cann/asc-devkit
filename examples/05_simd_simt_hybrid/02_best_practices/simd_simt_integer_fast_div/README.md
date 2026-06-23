@@ -22,7 +22,7 @@
 ## 目录结构介绍
 
 ```
-├── simt_and_simd_integer_fast_div
+├── simd_simt_integer_fast_div
 │   ├── CMakeLists.txt          // 编译工程文件
 │   ├── integer_div.asc         // 整数除法样例实现
 │   └── README.md
@@ -235,7 +235,7 @@ uint32_t result = (value + q) >> shift;
 
 - 配置环境变量
 
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../docs/quick_start.md#prepare&install)，配置环境变量。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

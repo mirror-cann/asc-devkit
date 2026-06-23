@@ -255,8 +255,8 @@
     ]
   },
   {
-    "case": "01_simd_cpp_api/00_introduction/05_simd_simt_hybrid/gather_adds_simt_simd_hybrid",
-    "runner": "scripts/presmoke/cases/01_simd_cpp_api/00_introduction/05_simd_simt_hybrid/gather_adds_simt_simd_hybrid/run.sh",
+    "case": "05_simd_simt_hybrid/00_introduction/simd_simt_gather_and_adds",
+    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/00_introduction/simd_simt_gather_and_adds/run.sh",
     "source": "readme",
     "confidence": "medium",
     "supported_archs": [
@@ -6011,8 +6011,8 @@
     ]
   },
   {
-    "case": "01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_grid_dim_config",
-    "runner": "scripts/presmoke/cases/01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_grid_dim_config/run.sh",
+    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_grid_dim_config",
+    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_grid_dim_config/run.sh",
     "source": "readme",
     "confidence": "low",
     "supported_archs": [
@@ -6035,8 +6035,8 @@
     ]
   },
   {
-    "case": "01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_high_performance",
-    "runner": "scripts/presmoke/cases/01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_high_performance/run.sh",
+    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_high_performance",
+    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_high_performance/run.sh",
     "source": "readme",
     "confidence": "low",
     "supported_archs": [
@@ -6062,8 +6062,8 @@
     ]
   },
   {
-    "case": "01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_integer_fast_div",
-    "runner": "scripts/presmoke/cases/01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_integer_fast_div/run.sh",
+    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_integer_fast_div",
+    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_integer_fast_div/run.sh",
     "source": "readme",
     "confidence": "low",
     "supported_archs": [
@@ -6086,8 +6086,8 @@
     ]
   },
   {
-    "case": "01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_matrix_transpose",
-    "runner": "scripts/presmoke/cases/01_simd_cpp_api/05_best_practices/08_simd_simt_hybrid/simt_and_simd_matrix_transpose/run.sh",
+    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_matrix_transpose",
+    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_matrix_transpose/run.sh",
     "source": "readme",
     "confidence": "low",
     "supported_archs": [
