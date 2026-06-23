@@ -54,9 +54,9 @@ bisheng -c host.cpp -o host.o -I${ASCEND_HOME_PATH}/include
 bisheng func.o kernel.o host.o -o demo
 ```
 
-其中，`--npu-arch` 为编译时指定的AI处理器架构，本样例仅支持 `dav-3510`，各产品型号对应的架构版本号请通过[对应关系表](../../../../../docs/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)进行查询。`--enable-simt` 用于指定 SIMT 方式编译。
+其中，`--npu-arch` 为编译时指定的AI处理器架构，本样例仅支持 `dav-3510`，各产品型号对应的架构版本号请通过[对应关系表](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)进行查询。`--enable-simt` 用于指定 SIMT 方式编译。
 
-更多bisheng编译选项及用法说明，请参考[AI-Core算子编译基本用法](../../../../../docs/guide/编程指南/编译与运行/算子编译/AI-Core算子编译基本用法.md)。
+更多bisheng编译选项及用法说明，请参考[AI-Core算子编译基本用法](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编译与运行/算子编译/AI-Core算子编译基本用法.md)。
 
 ### CMake方式编译
 

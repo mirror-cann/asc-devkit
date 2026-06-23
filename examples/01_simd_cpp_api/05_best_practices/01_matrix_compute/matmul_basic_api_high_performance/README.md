@@ -58,7 +58,7 @@
 | aic_mac_ratio | Cube 计算单元的时间占比，反映计算单元利用率 |
 | aic_mte1_time(μs) | MTE1（L1 到 L0A/L0B 搬运）的执行时间 |
 | aic_mte1_ratio | MTE1 的时间占比，反映 L1 到 L0 的数据搬运压力 |
-| aic_mte2_time(μs) | MTE2（[GM](../../../../../docs/guide/编程指南/编程模型/AI-Core-SIMD编程/抽象硬件架构.md)（Global Memory） 到 L1 搬运）的执行时间 |
+| aic_mte2_time(μs) | MTE2（[GM](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编程模型/AI-Core-SIMD编程/抽象硬件架构.md)（Global Memory） 到 L1 搬运）的执行时间 |
 | aic_mte2_ratio | MTE2 的时间占比，反映 GM 到 L1 的数据加载压力 |
 | aic_fixpipe_time(μs) | [Fixpipe](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md)（L0C 到 GM 搬运）的执行时间 |
 | aic_fixpipe_ratio | [Fixpipe](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) 的时间占比，反映结果写回的访存压力 |

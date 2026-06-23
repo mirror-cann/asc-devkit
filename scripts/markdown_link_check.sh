@@ -15,6 +15,7 @@ LYCHEE_VERSION="${LYCHEE_VERSION:-0.23.0}"
 MARKDOWN_LINK_CHECK_FULL="${MARKDOWN_LINK_CHECK_FULL:-0}"
 MARKDOWN_LINK_CHECK_DRY_RUN="${MARKDOWN_LINK_CHECK_DRY_RUN:-0}"
 MARKDOWN_LINK_CHECK_VERBOSE="${MARKDOWN_LINK_CHECK_VERBOSE:-0}"
+MARKDOWN_LINK_CHECK_ONLINE="${MARKDOWN_LINK_CHECK_ONLINE:-0}"
 MARKDOWN_LINK_CHECK_START=$SECONDS
 
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
@@ -34,6 +35,7 @@ By default, checks changed Markdown files and Markdown files that link to them.
 Set MARKDOWN_LINK_CHECK_FULL=1 or pass --full to scan tracked Markdown files in the repository.
 Set MARKDOWN_LINK_CHECK_DRY_RUN=1 to print the computed scan set only.
 Set MARKDOWN_LINK_CHECK_LYCHEE to use a preinstalled lychee binary.
+Set MARKDOWN_LINK_CHECK_ONLINE=1 to check remote HTTP(S) links; remote links are skipped by default.
 Set MARKDOWN_LINK_CHECK_LYCHEE_ARCHIVE_URL, MARKDOWN_LINK_CHECK_CARGO_BINSTALL_INSTALLER_URL, or
 MARKDOWN_LINK_CHECK_LYCHEE_PKG_URL to use mirrors.
 EOF
@@ -194,6 +196,21 @@ full_scan = os.environ.get("FULL_SCAN") == "1"
 full_reason = ""
 
 
+def ci_filelist_inputs():
+    filelist = repo_root / "pr_filelist_precommit.txt"
+    try:
+        return [
+            line.strip()
+            for line in filelist.read_text(encoding="utf-8", errors="ignore").splitlines()
+            if line.strip()
+        ]
+    except OSError:
+        return []
+
+
+input_files = list(dict.fromkeys(input_files + ci_filelist_inputs()))
+
+
 def config_exclude_path_patterns():
     try:
         text = config_file.read_text(encoding="utf-8")
@@ -301,10 +318,41 @@ def staged_markdown_changes():
     return changed, needs_full
 
 
+def markdown_inline_link_targets(text):
+    index = 0
+    while index < len(text):
+        marker = text.find("](", index)
+        if marker == -1:
+            break
+
+        start = marker + 2
+        cursor = start
+        depth = 0
+        escaped = False
+        while cursor < len(text):
+            char = text[cursor]
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == "(":
+                depth += 1
+            elif char == ")":
+                if depth == 0:
+                    raw_target = text[start:cursor].strip()
+                    if raw_target.startswith("<") and ">" in raw_target:
+                        yield raw_target[1:raw_target.find(">")]
+                    elif raw_target:
+                        yield raw_target.split()[0]
+                    break
+                depth -= 1
+            cursor += 1
+        index = cursor + 1 if cursor < len(text) else marker + 2
+
+
 def extract_link_targets(text):
     # Inline Markdown links/images: [text](target) or ![alt](target)
-    for match in re.finditer(r"!?\[[^\]]*\]\(([^)\s]+)(?:\s+[^)]*)?\)", text):
-        yield match.group(1)
+    yield from markdown_inline_link_targets(text)
 
     # Reference definitions: [label]: target
     for match in re.finditer(r"(?m)^\s*\[[^\]]+\]:\s*(\S+)", text):
@@ -339,9 +387,6 @@ if not full_scan:
     if needs_full_for_staged:
         full_scan = True
         full_reason = "staged Markdown rename/delete"
-    elif not input_files and not staged_changes and os.environ.get("PRE_COMMIT") == "1":
-        full_scan = True
-        full_reason = "pre-commit file selection"
 
 if full_scan:
     scan_set = existing_markdown_files()
@@ -352,9 +397,10 @@ else:
         staged_changes, _ = staged_markdown_changes()
         changed = staged_changes
 
+    changed_targets = {path for path in changed if path}
     changed_existing = {
-        path for path in changed
-        if path and (repo_root / path).is_file()
+        path for path in changed_targets
+        if (repo_root / path).is_file()
     }
 
     all_markdown = existing_markdown_files()
@@ -370,7 +416,7 @@ else:
 
         for target in extract_link_targets(text):
             normalized = normalize_target(source, target)
-            if normalized in changed_existing:
+            if normalized in changed_targets:
                 scan_set.add(source)
                 break
 
@@ -422,11 +468,42 @@ repo_root = Path(sys.argv[1])
 scan_set_file = Path(sys.argv[2])
 output_file = Path(sys.argv[3])
 duration = sys.argv[4]
-base_url = "https://gitcode.com/cann/asc-devkit/blob/master/"
+repo_url = "https://gitcode.com/cann/asc-devkit"
 
-link_pattern = re.compile(r"(!?\[[^\]]*\]\()([^\s)]+)((?:\s+[^)]*)?\))")
 reference_pattern = re.compile(r"(?m)^(\s*\[[^\]]+\]:\s*)(\S+)")
 html_href_pattern = re.compile(r"""(?i)(\bhref\s*=\s*["'])([^"']+)(["'])""")
+
+
+def markdown_inline_link_targets(text):
+    index = 0
+    while index < len(text):
+        marker = text.find("](", index)
+        if marker == -1:
+            break
+
+        start = marker + 2
+        cursor = start
+        depth = 0
+        escaped = False
+        while cursor < len(text):
+            char = text[cursor]
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == "(":
+                depth += 1
+            elif char == ")":
+                if depth == 0:
+                    raw_target = text[start:cursor].strip()
+                    if raw_target.startswith("<") and ">" in raw_target:
+                        yield raw_target[1:raw_target.find(">")]
+                    elif raw_target:
+                        yield raw_target.split()[0]
+                    break
+                depth -= 1
+            cursor += 1
+        index = cursor + 1 if cursor < len(text) else marker + 2
 
 
 def source_area(path):
@@ -434,6 +511,8 @@ def source_area(path):
         return "api"
     if path.startswith("docs/guide/"):
         return "guide"
+    if path.startswith("examples/"):
+        return "examples"
     return None
 
 
@@ -470,9 +549,20 @@ def normalize_target(source_file, target):
     return normalized, suffix
 
 
+def gitcode_url(target_path, suffix):
+    view = "tree" if (repo_root / target_path).is_dir() else "blob"
+    return f"{repo_url}/{view}/master/{target_path}{suffix}"
+
+
+def file_url(target_path, suffix):
+    readme_path = (repo_root / target_path / "README.md")
+    if readme_path.is_file():
+        return f"{target_path.rstrip('/')}/README.md{suffix}"
+    return f"{target_path}{suffix}"
+
+
 def iter_links(line):
-    for match in link_pattern.finditer(line):
-        yield match.group(2)
+    yield from markdown_inline_link_targets(line)
     for match in reference_pattern.finditer(line):
         yield match.group(2)
     for match in html_href_pattern.finditer(line):
@@ -506,19 +596,33 @@ for source in scan_files:
                 continue
 
             target_path, suffix = normalized
+            if (repo_root / target_path).is_dir():
+                if source_kind == "examples":
+                    if "#" in suffix:
+                        errors.append(
+                            f"{source}:{line_number}: examples directory link with anchor must target a file: "
+                            f"{target} -> {file_url(target_path, suffix)}"
+                        )
+                else:
+                    errors.append(
+                        f"{source}:{line_number}: docs Markdown link must target a file, "
+                        f"not a directory: {target} -> {file_url(target_path, suffix)}"
+                    )
+                continue
+
             target_kind = source_area(target_path)
             if target_kind is None or target_kind == source_kind:
                 continue
 
             errors.append(
-                f"{source}:{line_number}: api/guide cross link must use HTTPS: "
-                f"{target} -> {base_url}{target_path}{suffix}"
+                f"{source}:{line_number}: docs/examples cross-area link must use HTTPS: "
+                f"{target} -> {gitcode_url(target_path, suffix)}"
             )
 
 with output_file.open("w", encoding="utf-8") as handle:
     if errors:
         handle.write(
-            f"[Markdown check] FAILED: {len(errors)} api/guide cross link item(s), "
+            f"[Markdown check] FAILED: {len(errors)} Markdown link policy item(s), "
             f"{len(scan_files)} file(s) checked, duration={duration}.\n\nFailed:\n"
         )
         for error in errors:
@@ -534,8 +638,12 @@ if [ "$CROSS_LINK_RC" -ne 0 ]; then
 fi
 
 LYCHEE_BIN=$(find_lychee)
+LYCHEE_ARGS=(--no-progress --config "$CONFIG_FILE")
+if [ "$MARKDOWN_LINK_CHECK_ONLINE" != "1" ]; then
+    LYCHEE_ARGS+=(--offline)
+fi
 set +e
-"$LYCHEE_BIN" --no-progress --config "$CONFIG_FILE" "${SCAN_FILES[@]}" >"$LYCHEE_OUTPUT_FILE" 2>&1
+"$LYCHEE_BIN" "${LYCHEE_ARGS[@]}" "${SCAN_FILES[@]}" >"$LYCHEE_OUTPUT_FILE" 2>&1
 LYCHEE_RC=$?
 set -e
 

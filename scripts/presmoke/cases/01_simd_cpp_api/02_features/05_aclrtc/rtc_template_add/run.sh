@@ -24,7 +24,7 @@ case_build() {
 
 case_run() {
     mkdir -p "$BUILD_DIR"
-    (cd "$BUILD_DIR" && soc_version=$SOC_VERSION bash -lc ./main)
+    (cd "$BUILD_DIR" && soc_version=$SOC_VERSION bash -lc ./demo)
 }
 
 case_verify() {

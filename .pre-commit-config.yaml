@@ -41,5 +41,6 @@ repos:
         language: system
         files: \.(md|markdown|mdx)$
         pass_filenames: true
+        always_run: true
         stages: [pre-commit, manual]
         verbose: true

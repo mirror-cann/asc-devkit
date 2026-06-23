@@ -306,6 +306,20 @@ class GenerateCaseRunnersTest(unittest.TestCase):
         self.assertNotIn('ACTION="${1:-all}"', script)
         self.assertNotIn('case "$ACTION" in', script)
 
+    def test_rtc_template_add_runner_uses_cmake_target_name(self) -> None:
+        project_root = Path(__file__).resolve().parents[3]
+        runner = (
+            project_root
+            / "scripts/presmoke/cases/01_simd_cpp_api/02_features/05_aclrtc/rtc_template_add/run.sh"
+        )
+        manifest = json.loads((project_root / "scripts/presmoke/reports/case_runner_manifest.json").read_text())
+        item = next(entry for entry in manifest if entry["case"].endswith("05_aclrtc/rtc_template_add"))
+
+        self.assertIn("bash -lc ./demo", runner.read_text(encoding="utf-8"))
+        self.assertNotIn("bash -lc ./main", runner.read_text(encoding="utf-8"))
+        self.assertIn("./demo", item["commands"])
+        self.assertNotIn("./main", item["commands"])
+
     def test_skip_runner_clean_still_removes_build_directory(self) -> None:
         project_root = Path(__file__).resolve().parents[3]
         runner = project_root / "scripts/presmoke/cases/01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_builtin/run.sh"

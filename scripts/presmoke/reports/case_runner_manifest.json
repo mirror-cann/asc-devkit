@@ -764,7 +764,7 @@
     "commands": [
       "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
       "make -j",
-      "./main"
+      "./demo"
     ]
   },
   {
