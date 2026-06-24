@@ -49,11 +49,12 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-对指定的特殊寄存器进行清零。
+头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_gather_mask_intf.h"`。
 
+该接口用于对指定的特殊目的寄存器（SpecialPurposeReg）进行清零操作。通过模板参数spr指定目标特殊寄存器，调用后该寄存器的值被置为0，当前支持的特殊寄存器见[表 SpecialPurposeReg模板参数说明](#table2)。
 ## 函数原型<a name="section620mcpsimp"></a>
 
-```
+```cpp
 template <SpecialPurposeReg spr>
 __simd_callee__ inline void ClearSpr()
 ```
@@ -62,20 +63,15 @@ __simd_callee__ inline void ClearSpr()
 
 **表1**  模板参数说明
 
-<a name="table4835205712588"></a>
-<table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="18.27%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="81.73%" id="mcps1.2.3.1.2"><p id="p583535795817"><a name="p583535795817"></a><a name="p583535795817"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1835857145817"><td class="cellrowborder" valign="top" width="18.27%" headers="mcps1.2.3.1.1 "><p id="p5835457165816"><a name="p5835457165816"></a><a name="p5835457165816"></a>spr</p>
-</td>
-<td class="cellrowborder" valign="top" width="81.73%" headers="mcps1.2.3.1.2 "><p id="p168351657155818"><a name="p168351657155818"></a><a name="p168351657155818"></a>特殊寄存器，类型为SpecialPurposeReg枚举类。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名称 | 描述 |
+| ------ | ------ |
+| spr | 特殊寄存器，类型为SpecialPurposeReg枚举类。具体的取值请参考[表 SpecialPurposeReg模板参数说明](#table2)。 |
+
+**表2**  SpecialPurposeReg模板参数说明<a id="table2"></a>
+
+| 取值 | 含义 |
+| ------ | ------ |
+| AR | 一个特殊的地址寄存器，通常配合[Squeeze](../比较与选择/Squeeze.md)Reg矢量计算API一起使用，[Squeeze](../比较与选择/Squeeze.md)Reg矢量计算API会存储有效元素的总字节数到AR寄存器。 |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -83,13 +79,13 @@ __simd_callee__ inline void ClearSpr()
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-无。
+本接口只能在VF函数内调用，命名空间为AscendC::Reg，函数标记符为__simd_callee__。如果需要在VF外调用，命名空间为AscendC，函数标记符为__aicore__。
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
 如下示例中Gather Reg矢量计算API会存储有效元素的总字节数到AR寄存器中，在宏函数内for循环开始前通过ClearSpr对AR寄存器进行清零。
 
-```
+```cpp
 template<typename T, typename U>
 __simd_vf__ inline void VFDemo(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf__ U* src1Addr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
 {

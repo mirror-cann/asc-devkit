@@ -580,8 +580,8 @@
 
             -   [数据压缩](SIMD-API/基础API/Reg矢量计算/数据压缩/数据压缩.md)
                 -   [Unsqueeze](SIMD-API/基础API/Reg矢量计算/数据压缩/Unsqueeze.md)
-                -   [Pack](SIMD-API/基础API/Reg矢量计算/数据压缩/Pack-53.md)
-                -   [UnPack](SIMD-API/基础API/Reg矢量计算/数据压缩/UnPack-54.md)
+                -   [Pack](SIMD-API/基础API/Reg矢量计算/数据压缩/Pack.md)
+                -   [UnPack](SIMD-API/基础API/Reg矢量计算/数据压缩/UnPack.md)
 
             -   [直方图计算](SIMD-API/基础API/Reg矢量计算/直方图计算/直方图计算.md)
                 -   [Histograms](SIMD-API/基础API/Reg矢量计算/直方图计算/Histograms.md)

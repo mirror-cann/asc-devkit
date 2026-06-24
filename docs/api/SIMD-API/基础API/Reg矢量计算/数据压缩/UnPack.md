@@ -1,4 +1,4 @@
-# Histograms<a name="ZH-CN_TOPIC_0000002079418145"></a>
+# UnPack<a name="ZH-CN_TOPIC_0000002047032737"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
@@ -47,51 +47,39 @@
 </tbody>
 </table>
 
-## 功能说明<a name="section618mcpsimp"></a>
+## 功能说明<a name="section1922292299"></a>
 
-头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_histograms_intf.h"`。
+头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_pack_intf.h"`。
 
-对直方图数据进行统计，在目的操作数dstReg的基础数据上加上源操作数srcReg数据的统计结果，包括数据的频率统计和累计统计。
+对于无符号整型，将源操作数srcReg中低半部分或高半部分的元素以高位填0扩充位宽的方式写入dstReg。对于有符号整型，将源操作数srcReg中低半部分或高半部分的元素以保持符号位扩充位宽的方式写入dstReg。
 
-- 频率统计  
-    如下图所示，在低位模式下，dstReg用于统计srcReg中index为[0-127]范围内（前半部分）各个值的出现频率；而在高位模式下，dstReg则统计[128-255]范围内（后半部分）的频率。dstReg中的第n位（bit）表示srcReg中数值n的出现次数，并在原始dstReg数据的基础上进行累加。
+**图 1**  UnPack示意图
 
-    **图 1**  频率统计  
-    ![频率统计](../../../../figures/reg_histograms_1.png)
-
-- 累计统计  
-    如下图所示，在低位模式下，目的寄存器dstReg会统计源寄存器srcReg中值落在低位区间[0-127]的数据分布情况；在高位模式下，目的寄存器dstReg则会统计srcReg中值落在高位区间[128-255]的数据分布情况。在dst0 和dst1中，第n位的数据表示srcReg中从0到n的所有数值在对应区间中出现的总频率。最终，统计结果会在目的寄存器原始数据的基础上进行累加。
-
-    **图 2**  累计统计  
-    ![频率统计](../../../../figures/reg_histograms_2.png)
+![UnPack](../../../../figures/reg_unpack_1.png)
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
 ```cpp
-template <typename T = DefaultType, typename U = DefaultType, HistogramsBinType mode, HistogramsType type, typename S, typename V>
-__simd_callee__ inline void Histograms(V& dstReg, S& srcReg, MaskReg& mask)
+template <typename T = DefaultType, typename U = DefaultType, HighLowPart part = HighLowPart::LOWEST, typename S, typename V>
+__simd_callee__ inline void UnPack(S& dstReg, V& srcReg)
 ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表1**  模板参数说明
-
+**表 1**  模板参数说明
 | 参数名称 | 描述 |
 | ------ | ------ |
-| T | 源操作数的数据类型。 |
-| U | 目的操作数的数据类型。 |
-| mode | HistogramsBinType枚举类型，用于控制统计src的低位区间[0-127]（前半部分）或高位区间[128-255]（后半部分）的数据。VL长度为256Byte，dst数据类型为uint16_t，一个dst可以存储128个数据，因此需要两个dst。<br>• BIN0表示低位模式，统计src中[0-127]范围内的数据写入dst0。<br>• BIN1表示高位模式，统计src中[128-255]范围内的数据写入dst1。 |
-| type | HistogramsType 枚举类型，表示统计模式。<br>• FREQUENCY：频率统计模式，统计srcReg中[0, 255]每个数的数量。每个dst有128个元素，其中低位模式dstReg中每个元素对应src中[0, 127]每个元素的累加个数，高位模式dstReg中每个元素对应src中[128,255]每个元素的累加个数。<br>• ACCUMULATE：累计统计模式，统计srcReg中[0, 255]每个数及其之前出现数的数量总和。每个dst有128个元素，其中低位模式dstReg中每个元素对应src中[0, 127]每个元素区间累加个数，高位模式dstReg中每个元素对应src中[128,255]每个元素区间累加个数。 |
-| S | 目的操作数RegTensor类型，由编译器自动推导，用户不需要填写。 |
-| V | 源操作数RegTensor类型，由编译器自动推导，用户不需要填写。 |
+| T | 目的操作数数据类型。<br> 源操作数和目的操作数的数据类型约束参考见[表 源操作数和目的操作数的数据类型对应表](#table3)。|
+| U | 源操作数数据类型。 |
+| part | 枚举类型，用于控制读取srcReg的低半部分还是高半部分。<br>• HighLowPart::LOWEST，低位模式，读取srcReg的低半部分。<br>• HighLowPart::HIGHEST，高位模式，读取srcReg的高半部分。<br>注：RegTraitNumTwo只支持LOWEST模式。|
+| S | 目的操作数RegTensor类型。 |
+| V | 源操作数RegTensor类型。 |
 
-**表2**  参数说明
-
-| 参数名称 | 输入/输出 | 描述 |
-| ------ | ------ | ------ |
-| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| srcReg | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+**表 2**  函数参数说明
+| 参数名称 | 描述 |
+| ------ | ------ |
+| dstReg | 目的操作数。<br> 类型为[RegTensor](../寄存器数据类型/RegTensor.md)。|
+| srcReg | 源操作数。<br> 类型为[RegTensor](../寄存器数据类型/RegTensor.md)。|
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -99,29 +87,36 @@ __simd_callee__ inline void Histograms(V& dstReg, S& srcReg, MaskReg& mask)
 
 ## 数据类型
 
-**表 3**  源操作数和目的操作数的数据类型对应表<a id="table3"></a>  
+**表 3**  源操作数和目的操作数的数据类型对应表<a id="table3"></a> 
 | T数据类型 | U数据类型 |
 | ------ | ------ |
-| uint8_t | uint16_t |
-
+| int16_t | int8_t |
+| uint16_t | uint8_t |
+| int32_t | int16_t |
+| uint32_t | uint16_t |
+| int64_t | int32_t |
+| uint64_t | uint32_t |
 ## 约束说明<a name="section633mcpsimp"></a>
 
-当mask位数为0时，对应位置的src源操作数的数值被忽略，dst对应位置数值为忽略该位置src后计算得到的值。
+无
 
-## 调用示例<a name="section642mcpsimp"></a>
+## 调用示例<a name="section932512912207"></a>
 
 ```cpp
-template <typename T, typename U>
-__simd_vf__ inline void HistogramsVF(__ubuf__ U* dstAddr, __ubuf__ T* srcAddr, uint32_t oneRepeatSize, uint16_t repeatTimes, AscendC::Reg::HistogramsBinType mode, AscendC::Reg::HistogramsType type)
+template<typename T, typename U, int32_t mode>
+__simd_vf__ inline void UnPackVF(__ubuf__ T* dstAddr, __ubuf__ U* srcAddr, uint32_t oneDstRepSize, uint16_t repeatTimes, uint32_t oneSrcRepSize)
 {
-    AscendC::Reg::RegTensor<T> srcReg;
-    AscendC::Reg::RegTensor<U> dstReg;
-    AscendC::Reg::MaskReg mask0 = AscendC::Reg::CreateMask<T>();
-    AscendC::Reg::MaskReg mask1 = AscendC::Reg::CreateMask<T>();
-    for (uint16_t i = 0; i < repeatTimes; ++i){
-        AscendC::Reg::LoadAlign(srcReg, srcAddr + oneRepeatSize * i);
-        AscendC::Reg::Histograms<T, U, mode, type>(dstReg, srcReg, mask0);
-        AscendC::Reg::StoreAlign(dstAddr, dstReg, mask1);
+    AscendC::Reg::RegTensor<U> srcReg;
+    AscendC::Reg::RegTensor<T> dstReg;
+    AscendC::Reg::MaskReg mask = AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::ALL>();
+    for (uint16_t i = 0; i < repeatTimes; i++) {
+        AscendC::Reg::LoadAlign(srcReg, srcAddr + i * oneSrcRepSize);
+        if constexpr (mode == 0) {
+            AscendC::Reg::UnPack<T, U, AscendC::Reg::HighLowPart::LOWEST>(dstReg, srcReg);
+        } else if constexpr (mode == 1) {
+            AscendC::Reg::UnPack<T, U, AscendC::Reg::HighLowPart::HIGHEST>(dstReg, srcReg);
+        }
+        AscendC::Reg::StoreAlign(dstAddr + i * oneDstRepSize, dstReg, mask);
     }
 }
 ```
