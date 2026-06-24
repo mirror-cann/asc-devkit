@@ -74,6 +74,8 @@ protected:
     std::vector<u32>                 notifyIdxSubToMain_;
     // 是否可以直接访问对端input/output memory
     bool                             enableRemoteMemAccess_ = false;
+    // Whether symmetric memory is enabled.
+    bool                             supportSymmetricMemory_ = false;
 };
 } // namespace Hccl
 

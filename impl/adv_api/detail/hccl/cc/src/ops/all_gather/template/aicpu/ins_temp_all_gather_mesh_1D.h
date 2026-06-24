@@ -51,6 +51,10 @@ protected:
     virtual HcclResult LocalDataCopy(const std::vector<ThreadHandle> &threads);
     HcclResult PostLocalCopy(const std::vector<ThreadHandle> &threads);
     TemplateDataParams tempAlgParams_;
+    u64 inputOffset_{0};
+    u64 outputOffset_{0};
+    void *inputSymWindow_{nullptr};
+    void *outputSymWindow_{nullptr};
     u32 channelsPerRank_{1};
 };
 
