@@ -123,7 +123,7 @@ __aicore__ inline void CreateVecIndexCalc(LocalTensor<T> dstLocal, const T first
 
     __ubuf__ T* dstLocalAddr = (__ubuf__ T*)dstLocal.GetPhyAddr();
     uint32_t sreg = (uint32_t)calCount;
-    uint32_t sregLower = (uint32_t)(VECTOR_REG_WIDTH / sizeof(T));
+    int32_t sregLower = (int32_t)(VECTOR_REG_WIDTH / sizeof(T));
     uint16_t repeatTimes = CeilDivision(calCount, sregLower);
 
     __VEC_SCOPE__
