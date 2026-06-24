@@ -32,7 +32,7 @@ namespace cg = cooperative_groups;
 
 **图 1** 线程块中的协作组层次结构图
 
-![线程块中的协作组层次结构](../../../../figures/cooperative_groups.png)
+![线程块中的协作组层次结构](../../figures/cooperative_groups.png)
 
 ### thread_block
 

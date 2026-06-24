@@ -1,12 +1,12 @@
 # 如何进行Tiling调测<a name="ZH-CN_TOPIC_0000002305497828"></a>
 
-在[工程化算子开发](../../高级编程/高级特性/Aclnn算子工程化开发/概述.md)过程中，开发者需实现Tiling函数，该函数原型是固定的，接受TilingContext作为输入。框架负责构造TilingContext并调用Tiling函数。若需单独进行Tiling调测，开发者可通过OpTilingRegistry加载编译后的Tiling动态库，获取Tiling函数的指针并进行调用，调用时Tiling函数的TilingContext入参使用ContextBuilder构建。
+在[工程化算子开发](../../高级编程/Aclnn算子工程化开发/概述.md)过程中，开发者需实现Tiling函数，该函数原型是固定的，接受TilingContext作为输入。框架负责构造TilingContext并调用Tiling函数。若需单独进行Tiling调测，开发者可通过OpTilingRegistry加载编译后的Tiling动态库，获取Tiling函数的指针并进行调用，调用时Tiling函数的TilingContext入参使用ContextBuilder构建。
 
 以下是具体步骤：
 
 1.  参考工程化算子开发的开发步骤，完成算子实现，并通过**算子包编译**或**算子动态库编译**获取对应的Tiling动态库文件。
-    -   算子包编译：Tiling实现对应的动态库为算子包部署目录下的liboptiling.so。具体路径可参考[算子包部署](../../高级编程/高级特性/Aclnn算子工程化开发/算子包编译/算子包部署.md)。
-    -   动态库编译：Tiling实现集成在算子动态库libcust\_opapi.so中。具体路径可参考[算子动态库和静态库编译](../../高级编程/高级特性/Aclnn算子工程化开发/算子动态库和静态库编译.md)。
+    -   算子包编译：Tiling实现对应的动态库为算子包部署目录下的liboptiling.so。具体路径可参考[算子包部署](../../高级编程/Aclnn算子工程化开发/算子包编译/算子包部署.md)。
+    -   动态库编译：Tiling实现集成在算子动态库libcust\_opapi.so中。具体路径可参考[算子动态库和静态库编译](../../高级编程/Aclnn算子工程化开发/算子动态库和静态库编译.md)。
 
 2.  编写测试代码。
 
