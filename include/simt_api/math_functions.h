@@ -251,6 +251,91 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float fdividef(float x, float y);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline int signbit(float x);
 
+#ifndef __NPU_COMPILER_INTERNAL_PURE_SIMT__
+#if (__NPU_ARCH__ == 3510)
+#ifndef ASCENDC_CPU_DEBUG
+static __callee__ long long max(long long x, long long y);
+
+static __callee__ unsigned long long max(unsigned long long x, unsigned long long y);
+
+static __callee__ unsigned int max(unsigned int x, unsigned int y);
+
+static __callee__ long max(long x, long y);
+
+static __callee__ int max(int x, int y);
+
+static __callee__ short max(short x, short y);
+
+static __callee__ char max(char x, char y);
+
+static __callee__ unsigned long max(unsigned long x, unsigned long y);
+
+static __callee__ unsigned short max(unsigned short x, unsigned short y);
+
+static __callee__ unsigned char max(unsigned char x, unsigned char y);
+
+static __callee__ long long min(long long x, long long y);
+
+static __callee__ unsigned long long min(unsigned long long x, unsigned long long y);
+
+static __callee__ unsigned int min(unsigned int x, unsigned int y);
+
+static __callee__ long min(long x, long y);
+
+static __callee__ int min(int x, int y);
+
+static __callee__ short min(short x, short y);
+
+static __callee__ char min(char x, char y);
+
+static __callee__ unsigned long min(unsigned long x, unsigned long y);
+
+static __callee__ unsigned short min(unsigned short x, unsigned short y);
+
+static __callee__ unsigned char min(unsigned char x, unsigned char y);
+#endif
+#endif
+#else
+static __SIMT_DEVICE_FUNCTIONS_DECL__ long long max(long long x, long long y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned long long max(unsigned long long x, unsigned long long y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned int max(unsigned int x, unsigned int y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ long max(long x, long y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ int max(int x, int y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ short max(short x, short y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ char max(char x, char y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned long max(unsigned long x, unsigned long y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned short max(unsigned short x, unsigned short y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned char max(unsigned char x, unsigned char y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ long long min(long long x, long long y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned long long min(unsigned long long x, unsigned long long y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned int min(unsigned int x, unsigned int y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ long min(long x, long y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ int min(int x, int y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ short min(short x, short y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ char min(char x, char y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned long min(unsigned long x, unsigned long y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned short min(unsigned short x, unsigned short y);
+
+static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned char min(unsigned char x, unsigned char y);
+#endif
 #include "impl/simt_api/math_functions_impl.h"
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_MATH_FUNCTIONS_H__)
