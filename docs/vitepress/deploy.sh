@@ -134,7 +134,7 @@ install_deps() {
             pnpm install 2>&1 | tee -a "$LOG_FILE"
         else
             log "pnpm 未安装，使用 npm..."
-            npm install 2>&1 | tee -a "$LOG_FILE"
+            npm install --legacy-peer-deps 2>&1 | tee -a "$LOG_FILE"
         fi
         log "依赖安装完成"
     else
@@ -143,9 +143,9 @@ install_deps() {
 }
 
 # ============================================================
-# 3. 安装 mdparser 依赖 (Python)
+# 3. 安装 Python 依赖
 # ============================================================
-install_mdparser_deps() {
+install_python_deps() {
     log "检查 Python 依赖 (cmarkgfm, pygments)..."
 
     local missing=0
@@ -181,11 +181,8 @@ build_docs() {
     cd "$SCRIPT_DIR"
 
     log "开始构建 VitePress 站点..."
-    if command -v pnpm &>/dev/null; then
-        pnpm run docs:build 2>&1 | tee -a "$LOG_FILE"
-    else
-        npm run docs:build 2>&1 | tee -a "$LOG_FILE"
-    fi
+    npm run docs:prebuild 2>&1 | tee -a "$LOG_FILE"
+    npx cross-env NODE_OPTIONS=--max-old-space-size=14336 vitepress build docs 2>&1 | tee -a "$LOG_FILE"
 
     DIST_DIR="$SCRIPT_DIR/docs/.vitepress/dist"
     if [ ! -d "$DIST_DIR" ]; then
@@ -337,14 +334,14 @@ case "$MODE" in
         fi
         install_nodejs
         install_deps
-        install_mdparser_deps
+        install_python_deps
         build_docs
         deploy_nginx
         ;;
     build)
         install_nodejs
         install_deps
-        install_mdparser_deps
+        install_python_deps
         build_docs
         log "构建完成! 使用以下命令启动服务:"
         log "  sudo $0 --nginx        # Nginx 生产部署"
@@ -355,14 +352,14 @@ case "$MODE" in
     preview)
         install_nodejs
         install_deps
-        install_mdparser_deps
+        install_python_deps
         build_docs
         run_preview
         ;;
     serve)
         install_nodejs
         install_deps
-        install_mdparser_deps
+        install_python_deps
         build_docs
         run_serve
         ;;

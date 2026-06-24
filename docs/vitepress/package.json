@@ -9,7 +9,7 @@
     "docs:genstubs": "node scripts/gen-md-stubs.js",
     "docs:cleanstubs": "node scripts/clean-md-stubs.js",
     "docs:copy-api-sources": "node scripts/copy-api-sources.js",
-    "docs:prebuild": "npm run docs:convert && npm run docs:genstubs && npm run docs:copy-api-sources",
+    "docs:prebuild": "node scripts/install-deps.js && npm run docs:convert && npm run docs:genstubs && npm run docs:copy-api-sources",
     "docs:postbuild": "npm run docs:cleanstubs",
     "docs:build": "npm run docs:prebuild && cross-env NODE_OPTIONS=--max-old-space-size=14336 vitepress build docs",
     "docs:preview": "vitepress preview docs"
@@ -28,7 +28,7 @@
     "@vueuse/shared": "^12.8.2",
     "cheerio": "^1.2.0",
     "cross-env": "^10.1.0",
-    "markdown-it-mathjax3": "^5.2.0",
+    "markdown-it-mathjax3": "^4.3.0",
     "pagefind": "1.0.4",
     "vitepress": "1.6.4",
     "vitepress-plugin-pagefind": "0.4.20",

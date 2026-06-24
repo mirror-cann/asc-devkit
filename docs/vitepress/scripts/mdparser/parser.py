@@ -54,6 +54,62 @@ _OPTIONS = cmarkgfm.Options.CMARK_OPT_UNSAFE
 
 _MD_LINK_RE = re.compile(r'(href|src)="((?!https?:|//)[^"]+)\.md(#[^"]*)?"')
 
+_CANN_OPEN_RE = re.compile(
+    r'<cann-filter\b[^>]*npu[_-]type\s*=\s*"([^"]+)"[^>]*>',
+    re.IGNORECASE,
+)
+
+_CANN_CLOSE_RE = re.compile(
+    r'</cann-filter\b[^>]*>',
+    re.IGNORECASE,
+)
+
+_OTHER_TAG_NAMES = r'term|ph|__gm__|__ubuf__'
+
+_OTHER_TAG_LINE_RE = re.compile(
+    r'^[ \t]*</?(' + _OTHER_TAG_NAMES + r')\b[^>]*>[ \t]*$',
+    re.IGNORECASE,
+)
+
+_OTHER_TAG_WRAP_RE = re.compile(
+    r'<(' + _OTHER_TAG_NAMES + r')\b[^>]*>([\s\S]*?)</\1>',
+    re.IGNORECASE,
+)
+
+_OTHER_TAG_ANY_RE = re.compile(
+    r'</?(' + _OTHER_TAG_NAMES + r')\b[^>]*>',
+    re.IGNORECASE,
+)
+
+
+def _convert_cann_filter(md_text: str) -> str:
+    """将所有 cann-filter 标签转为 HTML 注释，保留筛选信息。
+
+    <cann-filter> 标签（无论独立行还是行内）会被 cmarkgfm 视为 raw HTML，
+    若跨表格单元格/列表项边界则产生非法 HTML 结构。转为注释后 cmarkgfm
+    透传为无害注释，不破坏结构。后续由 config.mjs 将注释还原为 div[data-filter]。
+    """
+    md_text = _CANN_OPEN_RE.sub(r'<!--cann-filter:\1-->', md_text)
+    md_text = _CANN_CLOSE_RE.sub(r'<!--/cann-filter-->', md_text)
+    return md_text
+
+
+def _strip_other_tags(md_text: str) -> str:
+    """清除 term / ph / __gm__ / __ubuf__ 等不参与筛选的标签。
+
+    这些标签同样会被 cmarkgfm 视为 raw HTML block，破坏 markdown 结构。
+    """
+    lines = md_text.split('\n')
+    result = []
+    for line in lines:
+        if _OTHER_TAG_LINE_RE.match(line):
+            continue
+        result.append(line)
+    md_text = '\n'.join(result)
+    md_text = _OTHER_TAG_WRAP_RE.sub(r'\2', md_text)
+    md_text = _OTHER_TAG_ANY_RE.sub('', md_text)
+    return md_text
+
 _CALLOUT_RE = re.compile(
     r"<blockquote>\s*\n<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\](.*?)</p>\s*\n(.*?)</blockquote>",
     re.DOTALL,
@@ -383,6 +439,7 @@ def _highlight_code(html: str) -> str:
 
 
 def parse_string(text: str, gfm: bool = True) -> str:
+    text = _convert_cann_filter(text)
     if gfm:
         html = gfm_to_html(text)
     else:

@@ -26,7 +26,7 @@ const filterOptions = [
   { value: 'x90', label: 'Kirin X90' },
   { value: '9030', label: 'Kirin 9030' },
 ]
-
+  
 const selectedFilter = ref('all')
 
 function loadSavedFilter() {
@@ -51,11 +51,18 @@ function applyFilter() {
     allFilterDivs.forEach(el => { el.style.display = '' })
   } else {
     allFilterDivs.forEach(el => {
+      if (el.tagName === 'TR') return
       const filterValue = el.getAttribute('data-filter')
       const match = filterValue.split(',').map(s => s.trim()).includes(selectedFilter.value)
       el.style.display = match ? '' : 'none'
     })
     content.querySelectorAll('tr').forEach(tr => {
+      if (tr.hasAttribute('data-filter')) {
+        const filterValue = tr.getAttribute('data-filter')
+        const match = filterValue.split(',').map(s => s.trim()).includes(selectedFilter.value)
+        tr.style.display = match ? '' : 'none'
+        return
+      }
       const filterDivs = tr.querySelectorAll('[data-filter]')
       if (filterDivs.length === 0) return
       const anyVisible = Array.from(filterDivs).some(el => el.style.display !== 'none')
