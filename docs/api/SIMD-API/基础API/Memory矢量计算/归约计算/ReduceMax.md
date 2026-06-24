@@ -249,7 +249,7 @@
     int iter3AlignEnd = RoundUp(iter3OutputCount, elementsPerBlock) * elementsPerBlock = 16;   // 第三轮产生的元素个数做向上取整
     // 需要的空间为iter2AlignStart + iter3AlignStart + iter3AlignEnd = 1024 + 16 + 16 = 1056,也就是2112Bytes
     // ReduceMax接口sharedTmpBuffer计算示例四：
-    // dstLocal,srcLocal和sharedTmpBuffer均为half类型，srcLocal的的计算数据量为512，使用tensor高维切分计算接口,repeatTime为4, mask为128,需要索引值
+    // dstLocal,srcLocal和sharedTmpBuffer均为half类型，srcLocal的计算数据量为512，使用tensor高维切分计算接口,repeatTime为4, mask为128,需要索引值
     // tensor高维切分计算接口调用示例为：
     AscendC::ReduceMax<half>(dstLocal, srcLocal, sharedTmpBuffer, 128, 4, 8, true);
     // 此时sharedTmpBuffer所需的最小空间计算过程为：
