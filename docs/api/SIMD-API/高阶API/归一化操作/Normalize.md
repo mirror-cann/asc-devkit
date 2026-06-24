@@ -2,13 +2,25 @@
 
 ## 产品支持情况
 
+<!-- npu="950" id1 -->
 - Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
 - Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
 - Atlas 推理系列产品AI Core：支持
 - Atlas 推理系列产品Vector Core：不支持
+<!-- end id5 -->
+<!-- npu="910" id6 -->
 - Atlas 训练系列产品：不支持
+<!-- end id6 -->
 
 ## 功能说明
 
@@ -53,7 +65,7 @@
 | U | beta，gamma操作数的数据类型。不同型号支持的数据类型请参考[支持的数据类型](#li171091334311)。 |
 | T | output，inputX操作数的数据类型。不同型号支持的数据类型请参考[支持的数据类型](#li171091334311)。 |
 | isReuseSource | 该参数预留，传入默认值false即可。 |
-| config | 配置Normalize接口中输入输出相关信息。NormalizeConfig类型，定义如下方代码所示，其中参数的含义如下。<br>reducePattern：当前仅支持ReducePattern::AR模式，表示输入的内轴R轴为reduce计算轴。<br>aLength：用于描述输入的A轴大小。支持的取值如下：-1：默认值。取[接口参数](#table2087718184450)para中的aLength作为A轴大小。1：支持outputRstd数据非对齐搬出，支持inputMean，inputVariance数据非对齐搬入。aLength为其它取值时，不支持上述三个输入输出的非对齐搬入和非对齐搬出。该取值需要与[接口参数](#table2087718184450)para中的aLength数值一致。请注意，仅在Ascend 950PR/Ascend 950DT上支持该取值。其它值：该值需要与[接口参数](#table2087718184450)para中的aLength数值一致。<br>isNoBeta：计算时，输入beta是否使用。false：默认值，Normalize计算中使用输入beta。true：Normalize计算中不使用输入beta。此时，公式中与beta相关的计算被省略。<br>isNoGamma：可选输入gamma是否使用。false：默认值，Normalize计算中使用可选输入gamma。true：Normalize计算中不使用输入gamma。此时，公式中与gamma相关的计算被省略。<br>isOnlyOutput：是否只输出y，不输出标准差的倒数rstd。当前该参数仅支持取值为false，表示y和rstd的结果全部输出。 |
+| config | 配置Normalize接口中输入输出相关信息。NormalizeConfig类型，定义如下方代码所示，其中参数的含义如下。<br><br>reducePattern：当前仅支持ReducePattern::AR模式，表示输入的内轴R轴为reduce计算轴。<br><br>aLength：用于描述输入的A轴大小。支持的取值如下：<br>-1：默认值。取[接口参数](#table2087718184450)para中的aLength作为A轴大小。<!-- npu="950" id7 --><br>1：支持outputRstd数据非对齐搬出，支持inputMean，inputVariance数据非对齐搬入。aLength为其它取值时，不支持上述三个输入输出的非对齐搬入和非对齐搬出。该取值需要与[接口参数](#table2087718184450)para中的aLength数值一致。请注意，仅在Ascend 950PR/Ascend 950DT上支持该取值。<!-- end id7 --><br>其它值：该值需要与[接口参数](#table2087718184450)para中的aLength数值一致。<br><br>isNoBeta：计算时，输入beta是否使用。false：默认值，Normalize计算中使用输入beta。true：Normalize计算中不使用输入beta。此时，公式中与beta相关的计算被省略。<br><br>isNoGamma：可选输入gamma是否使用。false：默认值，Normalize计算中使用可选输入gamma。true：Normalize计算中不使用输入gamma。此时，公式中与gamma相关的计算被省略。<br><br>isOnlyOutput：是否只输出y，不输出标准差的倒数rstd。当前该参数仅支持取值为false，表示y和rstd的结果全部输出。 |
 
 ```
 struct NormalizeConfig {
@@ -67,6 +79,7 @@ struct NormalizeConfig {
 
 **表2**  接口参数说明
 
+<a name="table2087718184450"></a>
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
 | output | 输出 | 目的操作数，shape为[A, R]，LocalTensor数据结构的定义请参考[LocalTensor](../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)。<br><br>类型为[LocalTensor](../../基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
@@ -101,13 +114,21 @@ struct NormalizePara {
 -   R轴不支持切分。
 -   支持的数据类型<a id="li171091334311"></a>
 
+    <!-- npu="950" id8 -->
     Ascend 950PR/Ascend 950DT，支持的数据类型为：half、bfloat16\_t、float。
+    <!-- end id8 -->
 
+    <!-- npu="A3" id9 -->
     Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的数据类型为: half、float。
+    <!-- end id9 -->
 
+    <!-- npu="910b" id10 -->
     Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的数据类型为: half、float。
+    <!-- end id10 -->
 
+    <!-- npu="310p" id11 -->
     Atlas 推理系列产品AI Core，支持的数据类型为: half、float。
+    <!-- end id11 -->
 
 ## 调用示例
 
