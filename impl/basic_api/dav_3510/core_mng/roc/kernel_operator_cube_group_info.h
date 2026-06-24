@@ -21,6 +21,7 @@
 #define ASCENDC_MODULE_OPERATOR_CUBE_GROUP_INFO_H
 
 #include "../../../utils/kernel_utils_constants.h"
+#include "../../../utils/kernel_utils_cube_group.h"
 
 namespace AscendC {
 
@@ -31,26 +32,11 @@ constexpr uint16_t CACHE_LINE_LEN = 512;  // cacheline length is 512B
 constexpr uint32_t UB_START_ADDR = TOTAL_UB_SIZE - ONE_BLK_SIZE * BARRIER_MAX_AIV;  // GroupBarrier start address in UB
 constexpr uint16_t CACHELINE_BLKNUM = CACHE_LINE_LEN / ONE_BLK_SIZE;                // 1 cacheline = n * 32B block
 
-enum class CubeMsgState : uint8_t {
-    FREE = 0,  // current CubeMsg is empty, allow to AllocMessage
-    VALID,     // current CubeMsg needs aic to read and execute
-    QUIT,      // tell aic that one aiv has ended service
-    FAKE       // current CubeMsg is fake, need aic to FREE that msg when reading msg with skipCnt!=0
-               // ex: aic read aiv0 skipCnt = 4, then aiv1~aiv4 need to be set FAKE first, then aic set to FREE.
-};
-
 struct CubeGroupMsgHead {                                 // 2B
     volatile CubeMsgState msgState = CubeMsgState::FREE;  // indicate aic / aiv current status
     volatile uint8_t aivID;
 };
 
-struct BarrierInfo {
-    volatile uint32_t head;  // counter value for Arrive / Wait
-    uint32_t buffer[15];     // guarantee 64B aligned
-};
-
-// method to update arrive / wait counter
-enum class PipeMode : uint8_t { SCALAR_MODE = 0, MTE3_MODE = 1, MAX };
 
 template <int32_t ActualFuncId, int32_t ExpectFuncId>
 struct IsEqual {};

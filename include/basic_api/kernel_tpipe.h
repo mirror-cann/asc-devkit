@@ -401,8 +401,13 @@ private:                                                                        
 
 class TPipe : public TPipeBase {
 public:
+#if defined(__NPU_ARCH__)
     __aicore__ inline TPipe();
     __aicore__ inline ~TPipe();
+#else
+    __aicore__ inline TPipe(){}
+    __aicore__ inline ~TPipe(){}
+#endif
     __aicore__ inline void Init();
     template <class T> __aicore__ inline bool InitBuffer(T& que, uint8_t num, uint32_t len);
     template <class T, class U, class V, class... Addrs>

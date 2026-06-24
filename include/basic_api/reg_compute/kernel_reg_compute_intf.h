@@ -23,8 +23,6 @@
 
 #include "../../../impl/basic_api/kernel_macros.h"
 
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || \
-    ((__NPU_ARCH__ == 3113))) || defined(__ASC_NPU_HOST__)
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include "stub_def.h"
@@ -51,7 +49,6 @@
 #include "kernel_reg_compute_vec_vconv_intf.h"
 #include "kernel_reg_compute_vec_fused_intf.h"
 #include "kernel_reg_compute_histograms_intf.h"
-#endif
 #endif // ASCENDC_MODULE_REG_COMPUTE_INTERFACE_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_INTF_H__)

@@ -23,6 +23,7 @@
 
 #include "../../../../impl/basic_api/kernel_macros.h"
 #include "../../../../impl/basic_api/utils/kernel_utils_macros.h"
+#include "../../../../impl/basic_api/utils/kernel_utils_cube_group.h"
 #if __NPU_ARCH__ == 2201
 #include "../../../../impl/basic_api/dav_c220/core_mng/roc/kernel_operator_cube_group_info.h"
 #elif __NPU_ARCH__ == 3510

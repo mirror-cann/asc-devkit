@@ -27,6 +27,8 @@
 
 namespace AscendC {
 namespace Reg {
+#if !defined(__NPU_ARCH__) || (defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || \
+    (__NPU_ARCH__ == 3113)) || defined(__ASC_NPU_HOST__))
 template <typename T, const RegTrait& regTrait = RegTraitNumOne>
 __simd_callee__ inline MaskReg UpdateMask(uint32_t& scalarValue);
 
@@ -64,10 +66,14 @@ __simd_callee__ inline void UnPack(MaskReg& dst, MaskReg& src);
 
 template <typename T>
 __simd_callee__ inline MaskReg MoveMask();
+#endif
 } // namespace Reg
 } // namespace AscendC
 
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || \
+    (__NPU_ARCH__ == 3113)) || defined(__ASC_NPU_HOST__)
 #include "../../impl/basic_api/reg_compute/kernel_reg_compute_maskreg_intf_impl.h"
+#endif
 #endif // ASCENDC_MODULE_REG_COMPUTE_MASKREG_INTERFACE_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_MASKREG_INTF_H__)

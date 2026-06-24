@@ -188,6 +188,7 @@ asc-devkit:
       - impl/adv_api/detail/utils/init_global_memory/init_global_memory_v310_impl.h
       - impl/adv_api/detail/select/selectwithbytesmask/selectwithbytesmask_v200_impl.h
       - impl/adv_api/detail/select/selectwithbytesmask/selectwithbytesmask_3510_impl.h
+      - impl/basic_api/utils/kernel_utils_cube_group.h
 
   llt:
     ut_check: true
