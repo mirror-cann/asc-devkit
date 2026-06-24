@@ -42,7 +42,7 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
 
     Cache刷新机制示意图如下图所示：
 
-    ![](../../../../figures/图1-AI-Core内部并行计算架构抽象示意图-35.png)
+    ![](../../../figures/图1-AI-Core内部并行计算架构抽象示意图-35.png)
 
 -   在子Kernel中调用[GetBlockNum](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0184.html)接口获取核数时，无论是否融合SuperKernel，获取的核数保持不变，不受SuperKernel启动核数的影响。因此，在使用该接口时，开发者无需特别关注SuperKernel的启动核数，使用方法和开发普通算子时一样。
 -   针对Atlas A3 训练系列产品/Atlas A3 推理系列产品中，在不启用SuperKernel场景下，[TPipe::Destroy](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_0112.html)接口内部最后会插入AscendC::PipeBarrier<PIPE\_ALL\>\(\)指令，额外保障多个TPipe之间的流水同步；模型中绝大部分算子只会使用一个TPipe对象，在对象析构时会调用Destroy，为不阻塞[SetNextTaskStart](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_00087.html)和[WaitPreTaskEnd](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta3/API/ascendcopapi/atlasascendc_api_07_00088.html)性能提升，SuperKernel场景下默认关闭了TPipe::Destroy中插入的AscendC::PipeBarrier<PIPE\_ALL\>\(\)指令，所以当算子需要多个TPipe对象并手动调用Destroy函数时，开发者需自行保障TPipe对象间流水的同步。
@@ -56,11 +56,11 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
     -   调用SetNextTaskStart后的指令可以和后续其他的子Kernel实现并行，提升整体性能。如[图1](#fig37581010773)所示，SuperKernel按序调用子Kernel，为保证子Kernel之间数据互不干扰，会在子Kernel间插入算子间同步进行保序，子Kernel<sub>N-1</sub>调用该接口后，之后的指令会和后续子Kernel<sub>N</sub>实现并行。
 
         **图 1**  通过SetNextTaskStart实现并行示意图<a name="fig37581010773"></a>  
-        ![](../../../../figures/通过SetNextTaskStart实现并行示意图.png "通过SetNextTaskStart实现并行示意图")
+        ![](../../../figures/通过SetNextTaskStart实现并行示意图.png "通过SetNextTaskStart实现并行示意图")
 
     -   调用WaitPreTaskEnd前的指令可以和前序其他的子Kernel实现并行，提升整体性能。如[图2](#fig99271836191110)所示，SuperKernel按序调用子Kernel，为保证子Kernel之间数据互不干扰，会在子Kernel间插入算子间同步进行保序，子Kernel<sub>N+1</sub>调用该接口之前的指令会和前序子Kernel<sub>N</sub>实现并行。
 
         **图 2**  通过WaitPreTaskEnd实现并行示意图<a name="fig99271836191110"></a>  
-        ![](../../../../figures/通过WaitPreTaskEnd实现并行示意图.png "通过WaitPreTaskEnd实现并行示意图")
+        ![](../../../figures/通过WaitPreTaskEnd实现并行示意图.png "通过WaitPreTaskEnd实现并行示意图")
 
 -   Tiling下沉场景，可以通过--op\_relocatable\_kernel\_binary编译选项，开启二进制复用优化，提升编译性能，具体可参考[LINK](../Aclnn算子工程化开发/算子包编译/算子工程编译.md)。
