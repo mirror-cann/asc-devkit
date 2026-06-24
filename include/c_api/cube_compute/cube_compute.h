@@ -264,6 +264,28 @@ __aicore__ inline void asc_mmad_sync(__cc__ int32_t* c_matrix, __ca__ int8_t* a_
                                      uint16_t left_height, uint16_t n_dim, uint16_t right_width, uint8_t unit_flag,
                                      bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val);
 
+__aicore__ inline void asc_mmad(__cc__ float* c_matrix, __ca__ hifloat8_t* a_matrix, __cb__ hifloat8_t* b_matrix,
+                                        uint16_t left_height, uint16_t n_dim, uint16_t right_width, uint8_t unit_flag,
+                                        bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val);
+        
+__aicore__ inline void asc_mmad_sync(__cc__ float* c_matrix, __ca__ hifloat8_t* a_matrix, __cb__ hifloat8_t* b_matrix,
+                                             uint16_t left_height, uint16_t n_dim, uint16_t right_width, uint8_t unit_flag,
+                                             bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val);
+
+__aicore__ inline void asc_enable_hf32_trans(uint32_t mode);
+
+__aicore__ inline void asc_enable_hf32();
+
+__aicore__ inline void asc_set_fp32_mode();
+
+__aicore__ inline void asc_enable_hif8();
+
+__aicore__ inline void asc_enable_fp8();
+
+__aicore__ inline void asc_set_mmad_direction_m();
+
+__aicore__ inline void asc_set_mmad_direction_n();
+
 #endif
 
 #endif

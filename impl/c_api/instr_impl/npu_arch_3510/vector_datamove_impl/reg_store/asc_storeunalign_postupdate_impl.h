@@ -279,6 +279,31 @@ __simd_callee__ inline void asc_storeunalign_postupdate_impl(__ubuf__  int4b_t* 
     }
 }
 
+__simd_callee__ inline void asc_storeunalign_postupdate_impl(__ubuf__ uint16_t*& dst, vector_store_unalign& src0,
+    vector_bool src1)
+{
+    if ASC_IS_AIV {
+        pstu(src0, src1, dst);
+    }
+}
+
+__simd_callee__ inline void asc_storeunalign_postupdate_impl(__ubuf__ uint32_t*& dst, vector_store_unalign& src0,
+    vector_bool src1)
+{
+    if ASC_IS_AIV {
+        pstu(src0, src1, dst);
+    }
+}
+
+__simd_callee__ inline void asc_storeunalign_postupdate_impl(__ubuf__ uint8_t*& dst, vector_store_unalign& src0,
+    vector_bool src1)
+{
+    if ASC_IS_AIV {
+        __ubuf__ uint32_t*& dst_tmp = reinterpret_cast<__ubuf__ uint32_t*&>(dst);
+        pstu(src0, src1, dst_tmp);
+    }
+}
+
 // ==========通过地址寄存器传入偏移，用户可以选择更新偏移或者更新目的操作数的地址=========
 __simd_callee__ inline void asc_storeunalign_postupdate_impl(__ubuf__  int8_t* dst, vector_store_unalign& src0,
     vector_int8_t src1, iter_reg& count)

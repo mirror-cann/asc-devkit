@@ -530,6 +530,26 @@ inline void rls_buf(pipe_t pipe, uint64_t buf_id, bool mode) {}
 
 inline void psts(vector_bool src, __ubuf__ uint32_t*& base, int32_t offset, Literal dist, Literal post) {}
 
+#if defined(__DAV_VEC__) && defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
+#include "instr_impl/npu_arch_3510/utils_impl/utils_type.h"
+inline void pstu(vector_store_unalign& ureg, vector_bool mask, __ubuf__ uint16_t*& dst) {}
+inline void pstu(vector_store_unalign& ureg, vector_bool mask, __ubuf__ uint32_t*& dst) {}
+#endif
+
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
+// asc_copy_gm2ub_impl uses void*; stub_fun.h void* overload lacks l2_cache_ctl param.
+inline void copy_gm_to_ubuf_align_v2(
+    __ubuf__ void* dst_addr, __gm__ void* src_addr, uint8_t sid, uint32_t burst_num, uint32_t burst_len,
+    uint8_t left_padding_count, uint8_t right_padding_count, bool constant_padding_ctl, uint8_t l2_cache_ctl,
+    uint64_t burst_src_stride, uint32_t burst_dst_stride)
+{}
+// asc_copy_ub2gm_impl uses void*; stub_fun.h void* overload lacks l2_cache_mode param.
+inline void copy_ubuf_to_gm_align_v2(
+    __gm__ void* dst_addr, __ubuf__ void* src_addr, uint8_t sid, uint32_t burst_num, uint32_t burst_len,
+    uint8_t l2_cache_mode, uint64_t burst_dst_stride, uint32_t burst_src_stride)
+{}
+#endif
+
 // ==========vstar===========
 inline void vstar(vector_align data, __ubuf__ fp8_e4m3fn_t* base) {}
 inline void vstar(vector_align data, __ubuf__ fp8_e5m2_t* base) {}

@@ -77,6 +77,24 @@ __simd_callee__ inline iter_reg asc_create_iter_reg_b16(uint32_t offset);
 
 __simd_callee__ inline iter_reg asc_create_iter_reg_b8(uint32_t offset);
 
+__simd_callee__ inline iter_reg asc_create_iter_reg_b32(uint32_t offset0, uint32_t offset1);
+
+__simd_callee__ inline iter_reg asc_create_iter_reg_b16(uint32_t offset0, uint32_t offset1);
+
+__simd_callee__ inline iter_reg asc_create_iter_reg_b8(uint32_t offset0, uint32_t offset1);
+
+__simd_callee__ inline iter_reg asc_create_iter_reg_b32(uint32_t offset0, uint32_t offset1, uint32_t offset2);
+
+__simd_callee__ inline iter_reg asc_create_iter_reg_b16(uint32_t offset0, uint32_t offset1, uint32_t offset2);
+
+__simd_callee__ inline iter_reg asc_create_iter_reg_b8(uint32_t offset0, uint32_t offset1, uint32_t offset2);
+
+__simd_callee__ inline iter_reg asc_create_iter_reg_b32(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3);
+
+__simd_callee__ inline iter_reg asc_create_iter_reg_b16(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3);
+
+__simd_callee__ inline iter_reg asc_create_iter_reg_b8(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3);
+
 // ==========asc_relu(half/int32_t/float)==========
 __simd_callee__ inline void asc_relu(vector_half& dst, vector_half src, vector_bool mask);
 

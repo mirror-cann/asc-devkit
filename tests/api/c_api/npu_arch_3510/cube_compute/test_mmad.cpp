@@ -102,3 +102,4 @@ TEST_CUBE_COMPUTE_MMAD_INSTR(float, float8_e5m2_t, float8_e5m2_t, e5m2_e5m2);
 TEST_CUBE_COMPUTE_MMAD_INSTR(float, half, half, half);
 TEST_CUBE_COMPUTE_MMAD_INSTR(float, float, float, float);
 TEST_CUBE_COMPUTE_MMAD_INSTR(int32_t, int8_t, int8_t, int8);
+TEST_CUBE_COMPUTE_MMAD_INSTR(float, hifloat8_t, hifloat8_t, hif8);

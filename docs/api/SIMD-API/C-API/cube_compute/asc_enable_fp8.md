@@ -1,0 +1,53 @@
+# asc_enable_fp8
+
+## 产品支持情况
+
+| 产品     | 是否支持 |
+| ----------- |:----:|
+|<cann-filter npu_type = "950"> Ascend 950PR/Ascend 950DT | √ </cann-filter>|
+
+## 功能说明
+
+用于设置Mmad计算开启FP8模式。该接口会关闭HiF8模式（与[asc_enable_hif8](./asc_enable_hif8.md)相反），开启该模式后L0A Buffer/L0B Buffer中的FP8数据在参与Mmad计算之前不会被转化为hifloat8_t类型数据。
+
+## 函数原型
+
+ ```cpp
+__aicore__ inline void asc_enable_fp8()
+```
+
+## 返回值说明
+
+无
+
+## 流水类型
+
+PIPE_S
+
+## 约束说明
+
+- 与[asc_enable_hif8](./asc_enable_hif8.md)相反，二者不同时生效。
+- 需在[asc_mmad](./asc_mmad.md)执行前调用。
+
+## 调用示例
+
+```cpp
+constexpr uint64_t total_length = 128;
+__cc__ float c_matrix[total_length];
+__ca__ fp8_e4m3fn_t a_matrix[total_length];
+__cb__ fp8_e4m3fn_t b_matrix[total_length];
+
+uint16_t left_height = 16;  // M
+uint16_t n_dim = 16;        // K
+uint16_t right_width = 16;  // N
+
+// 在 asc_mmad 前调用：以 FP8 格式参与矩阵运算（非 HiF8 转换路径）
+asc_enable_fp8();
+
+uint8_t unit_flag = 0;
+bool disable_gemv = false;
+bool c_matrix_source = false;
+bool c_matrix_init_val = true;
+asc_mmad_sync(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width,
+              unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+```

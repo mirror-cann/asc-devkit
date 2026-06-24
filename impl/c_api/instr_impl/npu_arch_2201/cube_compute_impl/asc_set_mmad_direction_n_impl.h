@@ -26,7 +26,7 @@
 __aicore__ inline void asc_set_mmad_direction_n_impl()
 {
     constexpr int32_t capi_mm_layout_mode_bit = 51;
-    set_ctrl(sbitset0(get_ctrl(), capi_mm_layout_mode_bit));
+    set_ctrl(sbitset1(get_ctrl(), capi_mm_layout_mode_bit));
 }
 
 #endif

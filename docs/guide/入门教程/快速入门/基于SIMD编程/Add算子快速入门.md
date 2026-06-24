@@ -55,8 +55,8 @@
           __ubuf__ float z_local[block_length];
 
           // Copy input data from Global Memory (i.e., Device Memory) to on-chip UB memory
-          asc_copy_gm2ub((__ubuf__ void*)x_local, (__gm__ void*)x_gm, block_length * sizeof(float));
-          asc_copy_gm2ub((__ubuf__ void*)y_local, (__gm__ void*)y_gm, block_length * sizeof(float));
+          asc_copy_gm2ub(x_local, x_gm, block_length * sizeof(float));
+          asc_copy_gm2ub(y_local, y_gm, block_length * sizeof(float));
           asc_sync();
 
           // Call SIMD API to complete the Add operation
@@ -64,7 +64,7 @@
           asc_sync();
 
           // Write the result from on-chip UB memory back to Global Memory
-          asc_copy_ub2gm((__gm__ void*)z_gm, (__ubuf__ void*)z_local, block_length * sizeof(float));
+          asc_copy_ub2gm(z_gm, z_local, block_length * sizeof(float));
           asc_sync();
       }
       ```

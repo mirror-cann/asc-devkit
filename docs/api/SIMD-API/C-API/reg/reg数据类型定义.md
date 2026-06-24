@@ -75,6 +75,7 @@ __simd_vf__ inline void neg_vf(__ubuf__ int8_t* dst_addr, __ubuf__ int8_t* src_a
 
 ### 调用示例<a name="调用示例-4"></a>
 
+#### 单参数版本
 ```cpp
 constexpr uint32_t one_repeat_size = 256 / sizeof(int8_t); // VL / sizeof(T)
 uint32_t total_length = 256;
@@ -94,6 +95,35 @@ __simd_vf__ inline void add_vf(__ubuf__ int8_t* dst_addr, __ubuf__ int8_t* src0_
         asc_loadalign(src1, src1_addr, addr_reg);
         asc_add(dst, src0, src1, mask);
         asc_storealign(dst_addr, dst, addr_reg, mask);
+    }
+}
+```
+
+#### 多参数版本（以4参数为例）
+```cpp
+__simd_vf__ inline void add_4d_vf(
+    __ubuf__ float* dst_addr,
+    __ubuf__ float* src_addr,
+    uint32_t n_stride,    // N间偏移 = C×H×W (float元素数)
+    uint32_t c_stride,    // C间偏移 = H×W (float元素数)
+    uint32_t h_stride,    // H间偏移 = W (float元素数)
+    uint32_t w_stride,    // W间偏移 = 64 (一个VL的float数)
+    uint16_t N, uint16_t C, uint16_t H, uint16_t W)
+{
+    vector_float src_reg, dst_reg;
+    vector_bool mask = asc_create_mask_b32(PAT_ALL);
+    iter_reg a_reg;
+    for (uint16_t n = 0; n < N; n++) {          
+        for (uint16_t c = 0; c < C; c++) {       
+            for (uint16_t h = 0; h < H; h++) {    
+                for (uint16_t w = 0; w < W; w++) {  
+                    a_reg = asc_create_iter_reg_b32(n_stride, c_stride, h_stride, w_stride);
+                    asc_loadalign(src_reg, src_addr, a_reg);
+                    asc_add(dst_reg, src_reg, src_reg, mask);
+                    asc_storealign(dst_addr, dst_reg, a_reg, mask);
+                }
+            }
+        }
     }
 }
 ```

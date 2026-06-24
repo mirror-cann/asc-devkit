@@ -13,48 +13,88 @@
 #include "tests/api/c_api/stub/cce_stub.h"
 #include "include/c_api/asc_simd.h"
 
-#define TEST_VECTOR_COMPUTE_CREATE_ITER_REG(class_name, c_api_name, cce_name)            \
-                                                                                         \
-    class TestVectorCompute##class_name##_CApi : public testing::Test {                  \
-    protected:                                                                           \
-        void SetUp() {}                                                                  \
-        void TearDown() {}                                                               \
-    };                                                                                   \
-                                                                                         \
-    namespace {                                                                          \
-    iter_reg cce_name##_Stub(uint32_t offset) { return vector_address{}; }               \
-    }                                                                                    \
-                                                                                         \
-    TEST_F(TestVectorCompute##class_name##_CApi, c_api_name##_Succ)                      \
-    {                                                                                    \
-        uint32_t offset = 32;                                                            \
-        MOCKER_CPP(cce_name, iter_reg(uint32_t)).times(1).will(invoke(cce_name##_Stub)); \
-                                                                                         \
-        c_api_name(offset);                                                              \
-        GlobalMockObject::verify();                                                      \
+namespace {
+
+constexpr uint32_t OFFSET0 = 32;
+constexpr uint32_t OFFSET1 = 64;
+constexpr uint32_t OFFSET2 = 96;
+constexpr uint32_t OFFSET3 = 128;
+
+#define DEFINE_VAG_STUBS(cce_name)                                                                     \
+    iter_reg cce_name##_stub_1(uint32_t offset)                                                        \
+    {                                                                                                  \
+        EXPECT_EQ(OFFSET0, offset);                                                                    \
+        return iter_reg{};                                                                             \
+    }                                                                                                  \
+    iter_reg cce_name##_stub_2(uint32_t offset0, uint32_t offset1)                                     \
+    {                                                                                                  \
+        EXPECT_EQ(OFFSET0, offset0);                                                                   \
+        EXPECT_EQ(OFFSET1, offset1);                                                                   \
+        return iter_reg{};                                                                             \
+    }                                                                                                  \
+    iter_reg cce_name##_stub_3(uint32_t offset0, uint32_t offset1, uint32_t offset2)                   \
+    {                                                                                                  \
+        EXPECT_EQ(OFFSET0, offset0);                                                                   \
+        EXPECT_EQ(OFFSET1, offset1);                                                                   \
+        EXPECT_EQ(OFFSET2, offset2);                                                                   \
+        return iter_reg{};                                                                             \
+    }                                                                                                  \
+    iter_reg cce_name##_stub_4(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3) \
+    {                                                                                                  \
+        EXPECT_EQ(OFFSET0, offset0);                                                                   \
+        EXPECT_EQ(OFFSET1, offset1);                                                                   \
+        EXPECT_EQ(OFFSET2, offset2);                                                                   \
+        EXPECT_EQ(OFFSET3, offset3);                                                                   \
+        return iter_reg{};                                                                             \
     }
 
-TEST_VECTOR_COMPUTE_CREATE_ITER_REG(Vag_b8, asc_create_iter_reg_b8, vag_b8);
-TEST_VECTOR_COMPUTE_CREATE_ITER_REG(Vag_b16, asc_create_iter_reg_b16, vag_b16);
-TEST_VECTOR_COMPUTE_CREATE_ITER_REG(Vag_b32, asc_create_iter_reg_b32, vag_b32);
+DEFINE_VAG_STUBS(vag_b8)
+DEFINE_VAG_STUBS(vag_b16)
+DEFINE_VAG_STUBS(vag_b32)
 
-#define TEST_VECTOR_COMPUTE_CREATE_ITER_REG_CUBE(class_name, c_api_name, cce_name)       \
-                                                                                         \
-    class TestVectorCompute##class_name##_CApi_Cube : public testing::Test {             \
-    protected:                                                                           \
-        void SetUp() { g_coreType = C_API_AIC_TYPE; }                                    \
-        void TearDown() { g_coreType = C_API_AIV_TYPE; }                                 \
-    };                                                                                   \
-                                                                                         \
-    TEST_F(TestVectorCompute##class_name##_CApi_Cube, c_api_name##_Succ)                 \
-    {                                                                                    \
-        uint32_t offset = 32;                                                            \
-        MOCKER_CPP(cce_name, iter_reg(uint32_t)).times(0).will(invoke(cce_name##_Stub)); \
-                                                                                         \
-        c_api_name(offset);                                                              \
-        GlobalMockObject::verify();                                                      \
+#undef DEFINE_VAG_STUBS
+
+} // namespace
+
+#define TEST_CREATE_ITER_REG_AIV(bxx, cce_name)                                                                \
+    class TestCreateIterReg##bxx : public testing::Test {                                                      \
+    protected:                                                                                                 \
+        void SetUp() {}                                                                                        \
+        void TearDown() {}                                                                                     \
+    };                                                                                                         \
+                                                                                                               \
+    TEST_F(TestCreateIterReg##bxx, asc_create_iter_reg_##bxx##_1param_Succ)                                    \
+    {                                                                                                          \
+        MOCKER_CPP(cce_name, iter_reg(uint32_t)).times(1).will(invoke(cce_name##_stub_1));                     \
+        asc_create_iter_reg_##bxx(OFFSET0);                                                                    \
+        GlobalMockObject::verify();                                                                            \
+    }                                                                                                          \
+                                                                                                               \
+    TEST_F(TestCreateIterReg##bxx, asc_create_iter_reg_##bxx##_2param_Succ)                                    \
+    {                                                                                                          \
+        MOCKER_CPP(cce_name, iter_reg(uint32_t, uint32_t)).times(1).will(invoke(cce_name##_stub_2));           \
+        asc_create_iter_reg_##bxx(OFFSET0, OFFSET1);                                                           \
+        GlobalMockObject::verify();                                                                            \
+    }                                                                                                          \
+                                                                                                               \
+    TEST_F(TestCreateIterReg##bxx, asc_create_iter_reg_##bxx##_3param_Succ)                                    \
+    {                                                                                                          \
+        MOCKER_CPP(cce_name, iter_reg(uint32_t, uint32_t, uint32_t)).times(1).will(invoke(cce_name##_stub_3)); \
+        asc_create_iter_reg_##bxx(OFFSET0, OFFSET1, OFFSET2);                                                  \
+        GlobalMockObject::verify();                                                                            \
+    }                                                                                                          \
+                                                                                                               \
+    TEST_F(TestCreateIterReg##bxx, asc_create_iter_reg_##bxx##_4param_Succ)                                    \
+    {                                                                                                          \
+        MOCKER_CPP(cce_name, iter_reg(uint32_t, uint32_t, uint32_t, uint32_t))                                 \
+            .times(1)                                                                                          \
+            .will(invoke(cce_name##_stub_4));                                                                  \
+        asc_create_iter_reg_##bxx(OFFSET0, OFFSET1, OFFSET2, OFFSET3);                                         \
+        GlobalMockObject::verify();                                                                            \
     }
 
-TEST_VECTOR_COMPUTE_CREATE_ITER_REG_CUBE(Vag_b8, asc_create_iter_reg_b8, vag_b8);
-TEST_VECTOR_COMPUTE_CREATE_ITER_REG_CUBE(Vag_b16, asc_create_iter_reg_b16, vag_b16);
-TEST_VECTOR_COMPUTE_CREATE_ITER_REG_CUBE(Vag_b32, asc_create_iter_reg_b32, vag_b32);
+TEST_CREATE_ITER_REG_AIV(b8, vag_b8)
+TEST_CREATE_ITER_REG_AIV(b16, vag_b16)
+TEST_CREATE_ITER_REG_AIV(b32, vag_b32)
+
+#undef TEST_CREATE_ITER_REG_AIV

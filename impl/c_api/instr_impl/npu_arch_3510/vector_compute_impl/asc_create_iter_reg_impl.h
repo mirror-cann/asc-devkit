@@ -10,7 +10,7 @@
 
 /* !
  * \file asc_create_iter_reg_impl.h
- * \brief
+ * \brief asc_create_iter_reg_{b8,b16,b32}_impl：同名重载 1~4 参，原样转发 vag_{b8,b16,b32}
  */
 
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_ASC_CREATE_ITER_REG_IMPL_H
@@ -18,28 +18,42 @@
 
 #include "../utils_impl.h"
 
-__simd_callee__ inline iter_reg asc_create_iter_reg_b32_impl(uint32_t offset)
-{
-    if ASC_IS_AIV {
-        return vag_b32(offset);
+#define ASC_DEFINE_ITER_REG_IMPL(bxx)                                                                \
+    __simd_callee__ inline iter_reg asc_create_iter_reg_##bxx##_impl(uint32_t offset)                \
+    {                                                                                                \
+        if ASC_IS_AIV {                                                                              \
+            return vag_##bxx(offset);                                                                \
+        }                                                                                            \
+        return iter_reg{};                                                                           \
+    }                                                                                                \
+    __simd_callee__ inline iter_reg asc_create_iter_reg_##bxx##_impl(uint32_t offset0, uint32_t offset1) \
+    {                                                                                                \
+        if ASC_IS_AIV {                                                                              \
+            return vag_##bxx(offset0, offset1);                                                      \
+        }                                                                                            \
+        return iter_reg{};                                                                           \
+    }                                                                                                \
+    __simd_callee__ inline iter_reg asc_create_iter_reg_##bxx##_impl(uint32_t offset0, uint32_t offset1, \
+        uint32_t offset2)                                                                            \
+    {                                                                                                \
+        if ASC_IS_AIV {                                                                              \
+            return vag_##bxx(offset0, offset1, offset2);                                            \
+        }                                                                                            \
+        return iter_reg{};                                                                           \
+    }                                                                                                \
+    __simd_callee__ inline iter_reg asc_create_iter_reg_##bxx##_impl(uint32_t offset0, uint32_t offset1, \
+        uint32_t offset2, uint32_t offset3)                                                          \
+    {                                                                                                \
+        if ASC_IS_AIV {                                                                              \
+            return vag_##bxx(offset0, offset1, offset2, offset3);                                   \
+        }                                                                                            \
+        return iter_reg{};                                                                           \
     }
-    return iter_reg{};
-}
 
-__simd_callee__ inline iter_reg asc_create_iter_reg_b16_impl(uint32_t offset)
-{
-    if ASC_IS_AIV {
-        return vag_b16(offset);
-    }
-    return iter_reg{};
-}
+ASC_DEFINE_ITER_REG_IMPL(b32)
+ASC_DEFINE_ITER_REG_IMPL(b16)
+ASC_DEFINE_ITER_REG_IMPL(b8)
 
-__simd_callee__ inline iter_reg asc_create_iter_reg_b8_impl(uint32_t offset)
-{
-    if ASC_IS_AIV {
-        return vag_b8(offset);
-    }
-    return iter_reg{};
-}
+#undef ASC_DEFINE_ITER_REG_IMPL
 
 #endif

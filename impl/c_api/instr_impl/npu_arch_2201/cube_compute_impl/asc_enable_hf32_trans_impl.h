@@ -26,12 +26,12 @@
 
 __aicore__ inline void asc_enable_hf32_trans_impl(uint32_t mode)
 {
-    constexpr uint64_t hf32_trans_mode_or_bit = 0x0000000000800000ULL;
-    constexpr uint64_t hf32_trans_mode_and_bit = 0xFFFFFFFFFF7FFFFFULL;
-    uint64_t trans_mode = mode;
-    uint64_t ctrl_val = get_ctrl();
-    ctrl_val = trans_mode ? (ctrl_val | hf32_trans_mode_or_bit) : (ctrl_val & hf32_trans_mode_and_bit);
-    set_ctrl(ctrl_val);
+    constexpr int32_t HF32_TRANS_MODE_BIT = 47;
+    if (mode) {
+        set_ctrl(sbitset1(get_ctrl(), HF32_TRANS_MODE_BIT));
+    } else {
+        set_ctrl(sbitset0(get_ctrl(), HF32_TRANS_MODE_BIT));
+    }
 }
 
 #endif
