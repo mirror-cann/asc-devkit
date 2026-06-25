@@ -2,13 +2,25 @@
 
 ## 产品支持情况
 
+<!-- npu="950" id1 -->
 - Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
 - Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
 - Atlas 推理系列产品AI Core：不支持
 - Atlas 推理系列产品Vector Core：不支持
+<!-- end id5 -->
+<!-- npu="910" id6 -->
 - Atlas 训练系列产品：不支持
+<!-- end id6 -->
 
 ## 功能说明
 
@@ -56,6 +68,7 @@ template<typename T>
 __aicore__ inline void asc_dump(__cc__ T* input, uint32_t desc, uint32_t dump_size)
 ```
 
+<!-- npu="950" id7 -->
 以下接口为simd\_vf中所使用的asc\_dump接口，仅支持Ascend 950PR/Ascend 950DT。
 
 ```
@@ -75,6 +88,7 @@ __simd_callee__ inline void asc_dump_ubuf(__ubuf__ T* input, uint32_t desc, uint
 template <typename T>
 __simd_callee__ inline void asc_dump(__ubuf__ T* input, uint32_t desc, uint32_t dump_size)
 ```
+<!-- end id7 -->
 
 ## 参数说明
 
@@ -92,8 +106,9 @@ __simd_callee__ inline void asc_dump(__ubuf__ T* input, uint32_t desc, uint32_t 
 
 ## 约束说明
 
+<!-- npu="950" id8 -->
 -   针对Ascend 950PR/Ascend 950DT，在使用该接口打印L1 Tensor数据时，HDK版本需要至少升级到25.7.0以上。
-
+<!-- end id8 -->
 -   使用该接口时，在每个核上dump的数据总量不能超过1M，请开发者自行控制打印的内容数据量，超出则不会打印。
 -   在计算数据量时，若dump的总长度未对齐，需要考虑padding数据的影响。当进行非对齐dump时，如果实际dump的元素长度不满足32字节对齐，系统会自动在其末尾补充一定数量的padding数据，以满足对齐要求。
 
