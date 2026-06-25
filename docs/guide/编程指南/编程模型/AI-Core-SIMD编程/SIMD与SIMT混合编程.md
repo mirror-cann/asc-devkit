@@ -189,20 +189,20 @@ UB（即Unified Buffer）内存空间总大小为256KB，参考[图3](#fig184031
 -   核函数定义方式
     -   SIMT VF函数定义：
 
-        定义SIMT VF核函数时，[\_\_launch\_bounds\_\_](../../语言扩展层/SIMT-BuiltIn关键字.md#li23861114618)\(thread\_num\)是可选配置，用于在编译期指定核函数启动的最大线程数，如果不配置thread\_num，thread\_num默认为1024。
+        定义SIMT VF函数时，[\_\_launch\_bounds\_\_](../../语言扩展层/SIMT-BuiltIn关键字.md#li23861114618)\(thread\_num\)是可选配置，用于在编译期指定核函数启动的最大线程数，如果不配置thread\_num，thread\_num默认为1024。
 
-        SIMD与SIMT混合编程中SIMT VF核函数定义的[\_\_simt\_vf\_\_](../../语言扩展层/SIMD-BuiltIn关键字.md#li611618392141)、\_\_gm\_\_修饰符需要单独进行标识。关于SIMT VF函数编程的相关约束请参考[附录](../../附录/CPP标准支持/语法限制/函数.md)。
+        SIMD与SIMT混合编程中定义SIMT VF函数需要使用[\_\_simt\_vf\_\_](../../语言扩展层/SIMD-BuiltIn关键字.md#li611618392141)函数标记宏标识。SIMT VF函数支持指针传参，指针变量必须用\_\_gm\_\_或\_\_ubuf\_\_地址空间限定符标识。关于SIMT VF函数编程的相关约束请参考[附录](../../附录/CPP标准支持/语法限制/函数.md)。
 
         ```
-        __simt_vf__ __launch_bounds__(thread_num) inline void simt_vector_function(__ubuf__ float* input, …)
+        __simt_vf__ __launch_bounds__(thread_num) inline void simt_vector_function(__gm__ float* input1, __ubuf__ float* input2, …)
         ```
 
     -   SIMD VF函数定义：
 
-        SIMD VF核函数使用\_\_simd\_vf\_\_修饰符进行标识。
+        SIMD VF函数使用[\_\_simd\_vf\_\_](../../语言扩展层/SIMD-BuiltIn关键字.md#section192521344610)函数标记宏标识，SIMD VF函数支持指针传参，指针变量必须用\_\_ubuf\_\_地址空间限定符标识。
 
         ```
-        __simd_vf__ inline void my_kernel(__gm__ uint8_t* x, __gm__ uint8_t* y, __gm__ uint8_t* z);
+        __simd_vf__ inline void my_kernel(__ubuf__ uint8_t* x, __ubuf__ uint8_t* y, __ubuf__ uint8_t* z);
         ```
 
         >[!NOTE]注意 
