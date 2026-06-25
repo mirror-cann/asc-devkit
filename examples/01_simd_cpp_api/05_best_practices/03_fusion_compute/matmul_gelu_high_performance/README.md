@@ -350,7 +350,7 @@ Fixpipe L0C → UB（通过 `dualDstCtl=0b01` 开启双目标模式，按M维度
 
 ```cpp
 AscendC::FixpipeParamsArch3510<AscendC::CO2Layout::ROW_MAJOR> fixpipeParams;
-fixpipeParams.mSize = AscendC::DivCeil(curM, 2) * 2;
+fixpipeParams.mSize = DivCeil(curM, 2) * 2;
 fixpipeParams.nSize = curN;
 fixpipeParams.srcStride = curMAlign;
 fixpipeParams.dstStride = curN;

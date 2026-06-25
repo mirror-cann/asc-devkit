@@ -52,9 +52,8 @@ This example switches between different scenarios through the build parameter `S
   <tr><td rowspan="1" align="center">Kernel Function Name</td><td colspan="4" align="center">compare</td></tr>
   </table>
 - Example implementation:
-  - Calls the Compare API in GT (greater than) mode to compare the two vectors, outputting to maskReg: if xReg is greater than yReg, the corresponding maskReg bit is set to 1, otherwise 0
-  - Calls the Select API, passing the comparison result maskReg: if the maskReg bit is 1, the element from xReg is selected for that position; otherwise, the element from yReg is selected
-  - For float data type, the MaskReg format stores one mask per 4 bits, so Compare reads data sequentially from xReg and yReg, and writes comparison results sequentially to the 4 * N bit positions of MaskReg; Select decides whether to select data from xReg or yReg based on the 4 * N bits of MaskReg.
+  - Calls the Compare API in GT (greater than) mode to compare the two vectors. For float data type, the MaskReg format stores one mask per 4 bits, so Compare reads data sequentially from xReg and yReg, and writes comparison results sequentially to the 4 * N bit positions of MaskReg: if xReg is greater than yReg, the corresponding maskReg bit is set to 1, otherwise 0
+  - Calls the Select API to select data from xReg or yReg based on the 4 * N bits of MaskReg: if the maskReg bit is 1, the element from xReg is selected for that position; otherwise, the element from yReg is selected
   - Invocation implementation: Uses the kernel invocation syntax <<<>>> to call the kernel function.
   <img src="figures/compare.png">
 
@@ -71,9 +70,8 @@ This example switches between different scenarios through the build parameter `S
   <tr><td rowspan="1" align="center">Kernel Function Name</td><td colspan="4" align="center">compare</td></tr>
   </table>
 - Example implementation:
-  - Calls the Compares API in GT (greater than) mode to compare vector xReg with scalar 0, outputting to maskReg: if xReg is greater than 0, the corresponding maskReg bit is set to 1, otherwise 0
-  - Calls the Select API, passing the comparison result maskReg: if the maskReg bit is 1, the element from xReg is selected for that position; otherwise, the element from yReg is selected
-  - For float data type, the MaskReg format stores one mask per 4 bits, so Compare reads data sequentially from xReg and yReg, and writes comparison results sequentially to the 4 * N bit positions of MaskReg; Select decides whether to select data from xReg or yReg based on the 4 * N bits of MaskReg.
+  - Calls the Compares API in GT (greater than) mode to compare vector xReg with scalar 0. For float data type, the MaskReg format stores one mask per 4 bits, so Compares reads data from xReg and compares with scalar 0, then writes comparison results sequentially to the 4 * N bit positions of MaskReg: if xReg is greater than 0, the corresponding maskReg bit is set to 1, otherwise 0
+  - Calls the Select API to select data from xReg or yReg based on the 4 * N bits of MaskReg: if the maskReg bit is 1, the element from xReg is selected for that position; otherwise, the element from yReg is selected
   - Invocation implementation: Uses the kernel invocation syntax <<<>>> to call the kernel function.
 
 ## Build and Run

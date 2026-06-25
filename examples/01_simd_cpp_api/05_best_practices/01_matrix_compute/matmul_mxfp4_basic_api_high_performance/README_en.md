@@ -139,7 +139,7 @@ Each core only processes its assigned `2048 x 1024` output region. Within the co
 The corresponding core index computation is:
 
 ```cpp
-constexpr uint32_t mIter = AscendC::DivCeil(M, singleCoreM);
+constexpr uint32_t mIter = DivCeil(M, singleCoreM);
 uint32_t mIterIdx = AscendC::GetBlockIdx() % mIter;
 uint32_t nIterIdx = AscendC::GetBlockIdx() / mIter;
 
@@ -166,7 +166,7 @@ Scale transfer granularity is controlled by `scaleFactorKa=4`, `scaleFactorKb=4`
 Taking the A side as example, `DataCopyInA` uses `Nd2NzParams` to transfer `stepKa` K direction base blocks at once, each base block being `baseM * baseK`:
 
 ```cpp
-constexpr uint32_t packedStepK = AscendC::DivCeil(baseK * stepKa, 2);
+constexpr uint32_t packedStepK = DivCeil(baseK * stepKa, 2);
 AscendC::Nd2NzParams nd2nzA1Params;
 nd2nzA1Params.ndNum = 1;
 nd2nzA1Params.nValue = curM;
@@ -180,7 +180,7 @@ AscendC::DataCopy(a1Local, aGM[kChunkIdx * baseK + mBlockIdx * K * baseM], nd2nz
 Scale side transfers as b16. Since `Mmad` requires K direction continuity for minimum fractal data reading, correspondingly scale data must satisfy 2Byte continuity along K direction, so b16 type transfer is used to ensure correct data layout:
 
 ```cpp
-constexpr uint32_t stepScaleK = AscendC::DivCeil(baseK * stepKa * scaleFactorKa, SCALE_CEIL_NUMBER);
+constexpr uint32_t stepScaleK = DivCeil(baseK * stepKa * scaleFactorKa, SCALE_CEIL_NUMBER);
 AscendC::Dn2NzParams dn2nzParams;
 dn2nzParams.dValue = curM;
 dn2nzParams.nValue = stepScaleK / 2;

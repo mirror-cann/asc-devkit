@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example demonstrates how to use the Ascend C SIMT [`asc_atomic_add()`](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMT-API/原子操作/asc_atomic_add.md) interface to efficiently count the frequency of each byte value in an input byte sequence. The function illustration is shown below:</br>
+This example demonstrates how to use the Ascend C SIMT [`asc_atomic_add()`](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMT-API/原子操作/asc_atomic_add.md) interface to efficiently count the frequency of each byte value in an input byte sequence. The function illustration is shown below:<br>
 <img src="figures/introduction.png" alt="intro" style="width: 50%; height: auto;">
 
 ## Supported Products
@@ -60,7 +60,7 @@ Overall flow: Obtain input from GM, then partition the input data and assign it 
 Notes:
   1. Since UB has lower read/write latency, histogram count write operations are performed on UB.
   2. The maximum available UB space is 216KB. The current number of launched cores is 72, and each core uses the default configuration of 1024 threads (that is, 32 Warps). Since each Warp requires 1KB of space, 32 Warps require 32KB total, which can be placed in UB at once.
-  3. If all Warps in a ThreadBlock maintain a single local histogram, it would cause severe thread conflicts and affect performance. Therefore, each Warp maintains its own local histogram. Threads within the current Warp only compete to write to the corresponding local histogram. Threads within a Warp read input in grid-stride and use `asc_atomic_add` to increment the count of the corresponding bin for each byte by 1, then merge all Warp local histograms within the ThreadBlock. The `asc_atomic_add` is used for atomic accumulation of bin counts in the local histogram of the same Warp, ensuring correct update results when multiple threads simultaneously hit the same bin.</br>
+  3. If all Warps in a ThreadBlock maintain a single local histogram, it would cause severe thread conflicts and affect performance. Therefore, each Warp maintains its own local histogram. Threads within the current Warp only compete to write to the corresponding local histogram. Threads within a Warp read input in grid-stride and use `asc_atomic_add` to increment the count of the corresponding bin for each byte by 1, then merge all Warp local histograms within the ThreadBlock. The `asc_atomic_add` is used for atomic accumulation of bin counts in the local histogram of the same Warp, ensuring correct update results when multiple threads simultaneously hit the same bin.<br>
 
 ### Phase 2
 

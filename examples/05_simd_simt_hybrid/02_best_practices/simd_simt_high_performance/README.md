@@ -157,7 +157,7 @@ __simd_vf__ inline void floor_mod_simd(
     __ubuf__ T* zAddr, __ubuf__ T* xAddr, __ubuf__ T* yAddr, const uint32_t count)
 {
     constexpr uint32_t oneRepeatSize = AscendC::GetVecLen() / sizeof(T);
-    uint16_t loopTimes = AscendC::CeilDivision(count, oneRepeatSize);
+    uint16_t loopTimes = DivCeil(count, oneRepeatSize);
     AscendC::Reg::RegTensor<T> xValue, yValue, modValue, tempValue, defaultValue, signValue;
     AscendC::Reg::MaskReg mask, selectMask, adjustMask;
     uint32_t maskCount = count;

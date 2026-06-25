@@ -43,9 +43,9 @@
   - Kernel关键步骤
     - 计算tailM、tailN、tailK，当tailM < singleCoreM || tailN < singleCoreN || tailK < singleCoreK时处理尾块，调用SetTail接口进行设置尾块大小。
       ```cpp
-      auto temp0 = AscendC::Ceil(tiling.M, tiling.singleCoreM);
-      auto temp1 = AscendC::Ceil(tiling.N, tiling.singleCoreN);
-      auto temp2 = AscendC::Ceil(tiling.Ka, tiling.singleCoreK);
+      auto temp0 = DivCeil(tiling.M, tiling.singleCoreM);
+      auto temp1 = DivCeil(tiling.N, tiling.singleCoreN);
+      auto temp2 = DivCeil(tiling.Ka, tiling.singleCoreK);
 
       auto divideKCoreNum = tiling.usedCoreNum / temp2;
       auto mCoreIndex = (blockIdx % divideKCoreNum) % temp0;

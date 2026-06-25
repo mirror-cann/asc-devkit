@@ -344,7 +344,7 @@ Fixpipe L0C → UB (Enable dual destination mode through `dualDstCtl=0b01`, spli
 
 ```cpp
 AscendC::FixpipeParamsArch3510<AscendC::CO2Layout::ROW_MAJOR> fixpipeParams;
-fixpipeParams.mSize = AscendC::DivCeil(curM, 2) * 2;
+fixpipeParams.mSize = DivCeil(curM, 2) * 2;
 fixpipeParams.nSize = curN;
 fixpipeParams.srcStride = curMAlign;
 fixpipeParams.dstStride = curN;

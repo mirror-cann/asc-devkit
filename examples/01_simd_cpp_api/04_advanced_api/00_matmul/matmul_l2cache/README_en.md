@@ -90,8 +90,8 @@ The Matmul example splits the input matrix along the M or N direction, dividing 
         for (int64_t i = maxMajor; i >= L1_MIN_UST_DIM; i--) {
             for (int64_t j = maxMinor; j >= minMinor; j--) {
                 if (GetTotalSize(j * l1M, i * l1N, k_) <= L2_TILE_THRESHOLD) { // Ensure block is below L2 Cache threshold
-                    uint64_t mConflictTmp = AscendC::Ceil(blockNum_, mL2TileNumTailTmp); // Calculate load conflict value
-                    uint64_t nConflictTmp = AscendC::Ceil(blockNum_, nL2TileNumTailTmp);
+                    uint64_t mConflictTmp = DivCeil(blockNum_, mL2TileNumTailTmp); // Calculate load conflict value
+                    uint64_t nConflictTmp = DivCeil(blockNum_, nL2TileNumTailTmp);
                     if (mConflict >= mConflictTmp && nConflict >= nConflictTmp) { // If conflict value is smaller, update block count
                         mConflict = mConflictTmp;
                         nConflict = nConflictTmp;

@@ -90,8 +90,8 @@ Matmul样例M方向或者N方向切分输入的矩阵，将矩阵切分成多块
         for (int64_t i = maxMajor; i >= L1_MIN_UST_DIM; i--) {
             for (int64_t j = maxMinor; j >= minMinor; j--) {
                 if (GetTotalSize(j * l1M, i * l1N, k_) <= L2_TILE_THRESHOLD) { // 确保分块小于L2Cache阈值
-                    uint64_t mConflictTmp = AscendC::Ceil(blockNum_, mL2TileNumTailTmp); // 计算负载冲突值
-                    uint64_t nConflictTmp = AscendC::Ceil(blockNum_, nL2TileNumTailTmp);
+                    uint64_t mConflictTmp = DivCeil(blockNum_, mL2TileNumTailTmp); // 计算负载冲突值
+                    uint64_t nConflictTmp = DivCeil(blockNum_, nL2TileNumTailTmp);
                     if (mConflict >= mConflictTmp && nConflict >= nConflictTmp) { // 若冲突值更小，更新分块数量
                         mConflict = mConflictTmp;
                         nConflict = nConflictTmp;

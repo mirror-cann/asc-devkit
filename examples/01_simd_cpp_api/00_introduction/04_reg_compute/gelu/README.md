@@ -118,7 +118,7 @@ __global__ __vector__ void gelu_custom(__gm__ uint8_t* x, __gm__ uint8_t* y)
 
     // Stage 2: 寄存器计算
     constexpr uint32_t oneRepeatSize = AscendC::GetVecLen() / sizeof(float);
-    uint32_t loopNum = AscendC::CeilDivision(singleCoreLength, oneRepeatSize);
+    uint32_t loopNum = DivCeil(singleCoreLength, oneRepeatSize);
     __ubuf__ float* xAddr = reinterpret_cast<__ubuf__ float*>(xLocal.GetPhyAddr());
     __ubuf__ float* yAddr = reinterpret_cast<__ubuf__ float*>(yLocal.GetPhyAddr());
     asc_vf_call<GeluVfMethod2>(xAddr, yAddr, singleCoreLength, loopNum);

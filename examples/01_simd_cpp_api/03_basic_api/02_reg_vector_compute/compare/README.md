@@ -52,10 +52,9 @@ Compare接口一般与Select接口配合使用，该样例仅演示Compare和Sel
   <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">compare</td></tr>
   </table>
 - 样例实现：
-  - 调用Compare接口的GT（大于）模式比较两个向量的大小，输出至maskReg：若xReg大于yReg，则maskReg相应比特位写入1，否则写入0
-  - 调用Select接口，传入上一步比较结果maskReg选择：若maskReg比特位为1，则对应位置选择xReg的元素，否则选择yReg的元素
-  - float数据类型的MaskReg格式为每4bits保存一个mask，所以Compare从xReg、yReg依次读取数据，比较后依次写入至MaskReg的4 * N的bit位置；Select根据MaskReg的4 * N的bit决定从xReg还是yReg选择数据。
-  - 调用实现：使用内核调用符<<<>>>调用核函数。  
+  - 调用Compare接口的GT（大于）模式比较两个向量的大小，float数据类型的MaskReg格式为每4bits保存一个mask，所以Compare从xReg、yReg依次读取数据，比较后依次写入至MaskReg的4 * N的bit位置，若xReg大于yReg，则maskReg相应比特位写入1，否则写入0
+  - 调用Select接口，根据MaskReg的4 * N的bit决定从xReg还是yReg选择数据：若maskReg比特位为1，则对应位置选择xReg的元素，否则选择yReg的元素
+  - 调用实现：使用内核调用符<<<>>>调用核函数。 
   <img src="figures/compare.png">
 
 **场景2：Compares**  
@@ -71,9 +70,8 @@ Compare接口一般与Select接口配合使用，该样例仅演示Compare和Sel
   <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">compare</td></tr>
   </table>
 - 样例实现：  
-  - 调用Compares接口的GT（大于）模式比较xReg向量和标量0，输出至maskReg：若xReg大于0，则maskReg相应比特位写入1，否则写入0
-  - 调用Select接口，传入上一步比较结果maskReg选择：若maskReg比特位为1，则对应位置选择xReg的元素，否则选择yReg中的元素
-  - float数据类型的MaskReg格式为每4bits保存一个mask，所以Compare从xReg、yReg依次读取数据，比较后依次写入至MaskReg的4 * N的bit位置；Select根据MaskReg的4 * N的bit决定从xReg还是yReg选择数据。
+  - 调用Compares接口的GT（大于）模式比较xReg向量和标量0，float数据类型的MaskReg格式为每4bits保存一个mask，所以Compares从xReg读取数据，与标量0比较后依次写入至MaskReg的4 * N的bit位置，若xReg大于0，则maskReg相应比特位写入1，否则写入0
+  - 调用Select接口，根据MaskReg的4 * N的bit决定从xReg还是yReg选择数据：若maskReg比特位为1，则对应位置选择xReg的元素，否则选择yReg的元素
   - 调用实现：使用内核调用符<<<>>>调用核函数。
 
 ## 编译运行

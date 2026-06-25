@@ -325,6 +325,20 @@ __simd_vf__ inline void GeluVfBasic(__ubuf__ float* xAddr, __ubuf__ float* yAddr
 }
 ```
 
+**VF Function Invocation Context**:
+
+The above VF function defines the GELU computation logic within registers. It is called through `asc_vf_call` in the kernel function. The invocation example is as follows:
+
+```cpp
+// Code snippet for calling VF function in the kernel function
+constexpr uint32_t oneRepeatSize = AscendC::GetVecLen() / sizeof(float);
+uint32_t loopNum = DivCeil(n, oneRepeatSize);
+__ubuf__ float* xAddr = reinterpret_cast<__ubuf__ float*>(xLocal.GetPhyAddr());
+__ubuf__ float* yAddr = reinterpret_cast<__ubuf__ float*>(yLocal.GetPhyAddr());
+// Call VF function through asc_vf_call, passing UB address, element count n, and loop count
+asc_vf_call<GeluVfBasic>(xAddr, yAddr, n, loopNum);
+```
+
 **Example Configuration**:
 - Multi-core splitting: M direction split into 32 parts, N direction 2 parts, totaling 64 data portions distributed across 64 cores
 - `tileLen = 8192` is the number of data elements per transfer and computation

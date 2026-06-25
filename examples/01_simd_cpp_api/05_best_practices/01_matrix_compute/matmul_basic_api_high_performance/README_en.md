@@ -156,7 +156,7 @@ if ((kOffsetInChunkA + 1) == stepKa) {
 Split the matrix evenly along M/N directions to multiple cores for parallel computation. The 4×6 splitting strategy (4 blocks in M direction, 6 blocks in N direction, 24 cores total) satisfies 512B address alignment and reduces same-address access conflicts:
 
 ```cpp
-constexpr uint32_t mIter = AscendC::DivCeil(M, singleCoreM);
+constexpr uint32_t mIter = DivCeil(M, singleCoreM);
 uint32_t mIterIdx = AscendC::GetBlockIdx() % mIter;
 uint32_t nIterIdx = AscendC::GetBlockIdx() / mIter;
 ```
@@ -199,7 +199,7 @@ Before optimization, with `baseK=64`, loop count is 4:
 
 ```cpp
 AscendC::LoadData2DParams loadDataParams;
-for (int i = 0; i < AscendC::DivCeil(baseK, CUBE_BLOCK); ++i) {
+for (int i = 0; i < DivCeil(baseK, CUBE_BLOCK); ++i) {
     AscendC::LoadData(b2Local[i * dstOffset], b1Local[srcAddr + i * srcOffset], loadDataParams);
 }
 ```
@@ -252,8 +252,8 @@ The specific L2Cache splitting implementation is consistent with Case 6 in the [
 
 ```cpp
 // ProcessL2Cache: Split by M direction in rounds, each round 24 cores cover mIterPerRound M sub-blocks
-constexpr uint32_t mIterPerRound = AscendC::DivCeil(M, singleCoreM * 2);
-constexpr uint32_t outerMLoopCount = AscendC::DivCeil(mIterTotal, mIterPerRound);
+constexpr uint32_t mIterPerRound = DivCeil(M, singleCoreM * 2);
+constexpr uint32_t outerMLoopCount = DivCeil(mIterTotal, mIterPerRound);
 
 for (uint32_t outerMIdx = 0; outerMIdx < outerMLoopCount; outerMIdx++) {
     uint32_t mIterIdx = AscendC::GetBlockIdx() % mIterPerRound + outerMIdx * mIterPerRound;
