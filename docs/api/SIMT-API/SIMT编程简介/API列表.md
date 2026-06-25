@@ -232,7 +232,7 @@
 | [__low2float](../数学函数/half类型/half类型精度转换函数/__low2float.md) | 将输入数据的低16位转换为浮点数并返回结果。 |
 | [__lowhigh2highlow](../数学函数/half类型/half类型精度转换函数/__lowhigh2highlow.md) | 将输入数据的高低16位进行交换并返回。 |
 | [__high2half](../数学函数/half类型/half类型精度转换函数/__high2half.md) | 提取输入half2的高16位，并返回 |
-| [__high2half2](../数学函数/half类型/half类型精度转换函数/__high2half2.md) | 将输入数据的的高16位填充到half2并返回结果。 |
+| [__high2half2](../数学函数/half类型/half类型精度转换函数/__high2half2.md) | 将输入数据的高16位填充到half2并返回结果。 |
 | [__high2float](../数学函数/half类型/half类型精度转换函数/__high2float.md) | 将输入数据的高16位转换为float类型并返回结果。 |
 | [__highs2half2](../数学函数/half类型/half类型精度转换函数/__highs2half2.md) | 分别提取两个half2输入的高16位，并填充到half2中。返回填充后的数据。 |
 | [__lows2half2](../数学函数/half类型/half类型精度转换函数/__lows2half2.md) | 分别提取两个half2输入的低16位，并填充到half2中。返回填充后的数据。 |
