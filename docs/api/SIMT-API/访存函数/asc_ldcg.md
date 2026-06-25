@@ -24,7 +24,7 @@
 
 ## 功能说明
 
-从L2 Cache加载缓存的数据，如果缓存命中，则直接返回数据。若未命中，则从Global Memory地址预加载数据缓存至L2 Cache，并返回数据。
+从L2 Cache加载缓存的数据，如果缓存命中，则直接返回数据。L2 Cache与Global Memory之间的数据一致性由硬件保证。若未命中，则从Global Memory地址预加载数据缓存至L2 Cache，并返回数据。
 
 ## 函数原型
 
