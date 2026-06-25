@@ -11,8 +11,8 @@
 <a name="table6981133810309"></a>
 | 模板 | 实现 | 优点 | 推荐使用场景 |
 | --- | --- | --- | --- |
-| Norm | 支持L1缓存多个基本块，MTE2分多次从GM搬运基本块到L1，每次搬运一份基本块，已搬的基本块不清空。（举例说明：Tiling结构体中的[depthA1](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md#p490012584566)=6，代表搬入6份A矩阵基本块到L1，1次搬运一份基本块，MTE2进行6次搬运）。 | 可以提前启动MTE1流水（因为搬1份基本块就可以做MTE1后面的运算）。 | 默认开启Norm模板。 |
-| MDL，SpecialMDL | 支持L1缓存多个基本块，MTE2从GM到L1的搬运为一次性“大包”搬运。（举例说明：Tiling结构体中的[depthA1](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md#p490012584566)=6，代表一次性搬入6份A矩阵基本块到L1，MTE2进行1次搬运）。MDL模板与SpecialMDL模板的差异见[表2](#table1761013213153)。 | 对于一般的大shape场景，可以减少MTE2的循环搬运，提升性能。 | 大shape场景。 |
+| Norm | 支持L1缓存多个基本块，MTE2分多次从GM搬运基本块到L1，每次搬运一份基本块，已搬的基本块不清空。（举例说明：Tiling结构体中的[depthA1](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md#deptha1)=6，代表搬入6份A矩阵基本块到L1，1次搬运一份基本块，MTE2进行6次搬运）。 | 可以提前启动MTE1流水（因为搬1份基本块就可以做MTE1后面的运算）。 | 默认开启Norm模板。 |
+| MDL，SpecialMDL | 支持L1缓存多个基本块，MTE2从GM到L1的搬运为一次性“大包”搬运。（举例说明：Tiling结构体中的[depthA1](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md#deptha1)=6，代表一次性搬入6份A矩阵基本块到L1，MTE2进行1次搬运）。MDL模板与SpecialMDL模板的差异见[表2](#table1761013213153)。 | 对于一般的大shape场景，可以减少MTE2的循环搬运，提升性能。 | 大shape场景。 |
 | IBShare | MIX场景下，A矩阵或B矩阵GM地址相同的时候，通过共享L1 Buffer，减少MTE2搬运。 | 减少MTE2搬运，提升性能。 | MIX场景多个AIV的A矩阵或B矩阵GM地址相同。<br><br>注意：IBShare模板要求多个AIV复用的A/B矩阵必须在L1 Buffer上全载。 |
 | BasicBlock | 在无尾块的场景，基本块大小确定的情况下，通过[GetBasicConfig](GetBasicConfig.md)接口配置输入的基本块大小，固定MTE1每次搬运的矩阵大小及每次矩阵乘计算的矩阵大小，减少参数计算量。 | 减少MTE1矩阵搬运和矩阵乘计算过程中的参数计算开销。 | 无尾块，基本块（baseM,baseN）大小确定。 |
 | SpecialBasicBlock | 在无尾块的场景，基本块和单核内shape大小确定的情况下，通过配置MatmulConfig参数，在BasicBlock模板的基础上进一步消除头开销Scalar计算。 | 减少MTE1矩阵搬运和矩阵乘计算过程中的参数计算开销，并进一步消除头开销Scalar计算。 | 无尾块，基本块（baseM,baseN）和单核内shape（singleCoreM,singleCoreN）大小确定。<br><br>注意：相同场景下，推荐使用[常量化](GetMatmulApiTiling.md)来获得更好的性能收益。 |
@@ -24,7 +24,7 @@
 | --- | --- | --- |
 | doNorm | 开启Norm模板。参数取值如下：<br>true：开启Norm模板。false：不开启Norm模板。<br><br>不指定模板的情况默认开启Norm模板。<!-- npu="9030" id1 --><br><br>Kirin 9030不支持此参数。<!-- end id1 --> | Norm |
 | doBasicBlock | 开启BasicBlock模板。模板参数取值如下：<br>true：开启BasicBlock模板。false：不开启BasicBlock模板。<br><br>调用GetBasicConfig接口获取BasicBlock模板时，该参数被置为true。注意：<br>BasicBlock模板暂不支持输入为int8_t, int4_t数据类型的A、B矩阵，支持half/float/bfloat16_t数据类型的A、B矩阵。<br>BasicBlock模板暂不支持A矩阵为标量数据Scalar或向量数据Vector。<br>BasicBlock模板暂不支持ScheduleType::OUTER_PRODUCT的数据搬运模式。<br><br>除MxMatmul场景外，Ascend 950PR/Ascend 950DT支持该参数。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品支持该参数。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品支持该参数。<br><br>Atlas 推理系列产品AI Core不支持设置为true。<br><br>Atlas 200I/500 A2 推理产品不支持设置为true。<!-- npu="x90" id2 --><br><br>Kirin X90支持该参数。<!-- end id2 --><!-- npu="9030" id3 --><br><br>Kirin 9030不支持此参数。<!-- end id3 --> | BasicBlock |
-| doMultiDataLoad | 开启MDL模板。参数取值如下：<br>true：开启MDL模板。false：不开启MDL模板。 | MDL |
+| doMultiDataLoad<a id="mdl-template"></a> | 开启MDL模板。参数取值如下：<br>true：开启MDL模板。false：不开启MDL模板。 | MDL |
 | basicM | 与[TCubeTiling结构体](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md)中的baseM参数含义相同，Matmul计算时base块M轴长度，以元素为单位。 | BasicBlock、SpecialBasicBlock |
 | basicN | 与[TCubeTiling结构体](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md)中的baseN参数含义相同，Matmul计算时base块N轴长度，以元素为单位。 | BasicBlock、SpecialBasicBlock |
 | basicK | 与[TCubeTiling结构体](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md)中的baseK参数含义相同，Matmul计算时base块K轴长度，以元素为单位。 | BasicBlock、SpecialBasicBlock |

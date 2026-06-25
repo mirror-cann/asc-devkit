@@ -37,7 +37,7 @@ __aicore__ inline void SetSparseIndex(const GlobalTensor<uint8_t>& indexGlobal)
 ## 约束说明
 
 -   索引矩阵的Format格式要求为NZ格式。
--   本接口仅支持在纯Cube模式（只有矩阵计算）且[MDL模板](MatmulConfig.md#li661233281512)的场景使用。
+-   本接口仅支持在纯Cube模式（只有矩阵计算）且[MDL模板](MatmulConfig.md#mdl-template)的场景使用。
 
 ## 调用示例
 

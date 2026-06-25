@@ -49,4 +49,4 @@ enum class ScopeType : uint8_t { ALL, QUEUE, BLOCK, INVALID_TYPE };
 
 ## 调用示例
 
-请参见[BatchWrite的调用示例](BatchWrite.md#li03441128285)。
+请参见[BatchWrite的调用示例](BatchWrite.md#调用示例)。

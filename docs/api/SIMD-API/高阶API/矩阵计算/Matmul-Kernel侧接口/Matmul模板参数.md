@@ -25,6 +25,8 @@
 
     针对Atlas 200I/500 A2 推理产品，当前只支持使用默认的Norm模板。
 
+<a id="matmul-callback-func"></a>
+
 -   MatmulCallBackFunc回调函数信息（可选），用于配置左右矩阵从GM拷贝到A1/B1、计算结果从CO1拷贝到GM的自定义函数。当前支持如下产品型号：
 
     Ascend 950PR/Ascend 950DT
