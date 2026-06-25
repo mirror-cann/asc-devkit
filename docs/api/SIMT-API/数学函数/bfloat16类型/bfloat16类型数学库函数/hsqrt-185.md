@@ -46,6 +46,10 @@ inline bfloat16_t hsqrt(bfloat16_t x)
 
 本接口支持的输入数据范围为x大于等于0，否则返回值为nan。
 
+<!-- npu="950" id7 -->
+针对Ascend 950PR/Ascend 950DT，本接口不支持Subnormal场景：处于Subnormal范围内的输入和输出值，都会被刷新为保留符号的0。
+<!-- end id7 -->
+
 ## 需要包含的头文件
 
 使用bfloat16\_t类型接口需要包含"simt\_api/asc\_bf16.h"头文件。

@@ -41,7 +41,10 @@ inline float y1f(float x)
 
 ## 约束说明
 
-使用本接口时，配置的线程数不应超过256，否则有栈溢出风险。
+-   使用本接口时，配置的线程数不应超过256，否则有栈溢出风险。
+<!-- npu="950" id7 -->
+-   针对Ascend 950PR/Ascend 950DT，本接口不支持Subnormal场景：本接口内部实现使用到了除法运算符。由于除法运算符不支持Subnormal场景，在极少数场景下内部中间计算值的除数为Subnormal数据，会导致本接口最终结果为-inf。
+<!-- end id7 -->
 
 ## 需要包含的头文件
 
@@ -83,6 +86,7 @@ inline float y1f(float x)
         asc_vf_call<compute_y1f_vf>(dim3(256), result, x, count);
     }
     ```
+
 
 输入输出示例如下：
 

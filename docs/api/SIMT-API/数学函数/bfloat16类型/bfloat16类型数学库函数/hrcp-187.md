@@ -43,7 +43,9 @@ inline bfloat16_t hrcp(bfloat16_t x)
 
 ## 约束说明
 
-无
+<!-- npu="950" id7 -->
+针对Ascend 950PR/Ascend 950DT，本接口不支持Subnormal场景：本接口内部实现使用到了除法运算符，由于除法运算符不支持Subnormal场景，当输入x为Subnormal数据时，会导致本接口最终结果为±inf。
+<!-- end id7 -->
 
 ## 需要包含的头文件
 

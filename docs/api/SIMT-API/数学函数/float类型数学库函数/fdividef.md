@@ -40,7 +40,9 @@ inline float fdividef(float x, float y)
 
 ## 约束说明
 
-无
+<!-- npu="950" id7 -->
+针对Ascend 950PR/Ascend 950DT，本接口不支持Subnormal场景：处于Subnormal范围内的输入和输出值，都会被刷新为保留符号的0。
+<!-- end id7 -->
 
 ## 需要包含的头文件
 
