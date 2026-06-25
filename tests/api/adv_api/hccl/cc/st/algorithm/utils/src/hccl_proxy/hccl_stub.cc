@@ -17,6 +17,7 @@
 #include "acl/acl.h"
 #include <memory>
 #include <iostream>
+#include <utility>
 #include "sim_communicator.h"
 #include "sim_task.h"
 #include "sim_world.h"
@@ -31,6 +32,62 @@
 
 using namespace mc2_ops_hccl;
 using namespace HcclSim;
+
+namespace {
+struct SymWinStub {
+    BufferType bufferType;
+};
+
+SymWinStub g_inputSymWinStub{BufferType::INPUT};
+SymWinStub g_outputSymWinStub{BufferType::OUTPUT};
+constexpr size_t SYM_WIN_ST_MAX_SIZE = 1ULL * 1024 * 1024;
+
+bool IsLocalMeshTopo(HcclSim::SimCommunicator* simComm)
+{
+    uint32_t localRankNum = 0;
+    constexpr uint32_t LOCAL_NET_LAYER = 0;
+    simComm->topoModel_->GetInstSizeByNetLayer(simComm->GetRankId(), LOCAL_NET_LAYER, &localRankNum);
+    return localRankNum > 1;
+}
+
+HcclResult GetSymWinStubByPtr(HcclComm comm, void* ptr, size_t size, HcclCommSymWindow* winHandle, size_t* offset)
+{
+    CHK_PTR_NULL(comm);
+    CHK_PTR_NULL(ptr);
+    CHK_PTR_NULL(winHandle);
+    CHK_PTR_NULL(offset);
+    CHK_PRT_RET(size == 0, HCCL_ERROR("[%s] size is 0", __func__), HCCL_E_PARA);
+
+    auto simComm = static_cast<HcclSim::SimCommunicator*>(comm);
+    CHK_PTR_NULL(simComm);
+    CHK_PRT_RET(
+        !IsLocalMeshTopo(simComm), HCCL_INFO("[%s] only local mesh topo supports symmetric memory stub", __func__),
+        HCCL_E_NOT_SUPPORT);
+    CHK_PRT_RET(
+        size > SYM_WIN_ST_MAX_SIZE,
+        HCCL_INFO("[%s] size[%zu] exceeds symmetric memory stub limit[%zu]", __func__, size, SYM_WIN_ST_MAX_SIZE),
+        HCCL_E_NOT_SUPPORT);
+    HcclSim::SimNpu& npu = HcclSim::SimWorld::Global()->GetSimNpuByRankId(simComm->GetRankId());
+    const uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
+    const std::pair<BufferType, SymWinStub*> candidates[] = {
+        {BufferType::INPUT, &g_inputSymWinStub},
+        {BufferType::OUTPUT, &g_outputSymWinStub},
+    };
+
+    for (const auto& candidate : candidates) {
+        const MemBlock memBlock = npu.GetMemBlock(candidate.first);
+        const uintptr_t startAddr = static_cast<uintptr_t>(memBlock.startAddr);
+        const uintptr_t endAddr = startAddr + memBlock.size;
+        if (addr >= startAddr && addr < endAddr && size <= endAddr - addr) {
+            *winHandle = static_cast<HcclCommSymWindow>(candidate.second);
+            *offset = addr - startAddr;
+            return HCCL_SUCCESS;
+        }
+    }
+
+    return HCCL_E_NOT_SUPPORT;
+}
+} // namespace
 
 #ifdef __cplusplus
 extern "C" {
@@ -920,10 +977,31 @@ int32_t HcommChannelFence(ChannelHandle channel)
     return -1;
 }
 
+HcclResult HcclCommSymWinGet(HcclComm comm, void* ptr, size_t size, HcclCommSymWindow* winHandle, size_t* offset)
+{
+    return GetSymWinStubByPtr(comm, ptr, size, winHandle, offset);
+}
+
+HcclResult HcclSymWinGetPeerPointer(HcclCommSymWindow winHandle, size_t offset, uint32_t peerRank, void** ptr)
+{
+    CHK_PTR_NULL(winHandle);
+    CHK_PTR_NULL(ptr);
+
+    auto symWin = static_cast<SymWinStub*>(winHandle);
+    HcclSim::SimNpu& peerNpu = HcclSim::SimWorld::Global()->GetSimNpuByRankId(peerRank);
+    const MemBlock peerMemBlock = peerNpu.GetMemBlock(symWin->bufferType);
+    CHK_PRT_RET(
+        offset > peerMemBlock.size,
+        HCCL_ERROR("[%s] offset[%llu] is out of peer buffer size[%llu]", __func__, offset, peerMemBlock.size),
+        HCCL_E_PARA);
+
+    *ptr = reinterpret_cast<void*>(static_cast<uintptr_t>(peerMemBlock.startAddr) + offset);
+    return HCCL_SUCCESS;
+}
+
 HcclResult HcommSymWinGetPeerPointer(HcclCommSymWindow winHandle, size_t offset, uint32_t peerRank, void** ptr)
 {
-    HCCL_ERROR("[%s] not support.", __func__);
-    return HCCL_E_NOT_SUPPORT;
+    return HcclSymWinGetPeerPointer(winHandle, offset, peerRank, ptr);
 }
 
 #ifdef __cplusplus
