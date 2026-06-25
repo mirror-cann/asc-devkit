@@ -155,7 +155,7 @@ struct BatchWriteItem {
 
         // 省略无关代码
         SdmaBatchWriteCustomTilingData* tiling = context->GetTilingData<SdmaBatchWriteCustomTilingData>();
-        AscendC::Mc2CcTilingConfig mc2CcTilingConfig(groupName, 18, "BatchWrite=level0:fullmesh", 0);
+        AscendC::Mc2CcTilingConfig mc2CcTilingConfig(groupName, HCCL_CMD_BATCH_WRITE, "BatchWrite=level0:fullmesh", 0);
         mc2CcTilingConfig.GetTiling(tiling->mc2InitTiling);
         mc2CcTilingConfig.GetTiling(tiling->mc2CcTiling);
         return ge::GRAPH_SUCCESS;
@@ -250,7 +250,7 @@ struct BatchWriteItem {
 
         // 省略无关代码
         SdmaBatchWriteCustomTilingData* tiling = context->GetTilingData<SdmaBatchWriteCustomTilingData>();
-        AscendC::Mc2CcTilingConfig mc2CcTilingConfig(groupName, 18, "BatchWrite=level0:fullmesh", 0);
+        AscendC::Mc2CcTilingConfig mc2CcTilingConfig(groupName, HCCL_CMD_BATCH_WRITE, "BatchWrite=level0:fullmesh", 0);
         mc2CcTilingConfig.SetCommBlockNum(24U);
         mc2CcTilingConfig.SetQueueNum(2U);
         mc2CcTilingConfig.GetTiling(tiling->mc2InitTiling);
