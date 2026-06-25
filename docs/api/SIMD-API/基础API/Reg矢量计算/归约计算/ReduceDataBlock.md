@@ -56,9 +56,9 @@ __simd_callee__ inline void ReduceDataBlock(U& dstReg, U srcReg, MaskReg mask)
 
 | 参数名 | 描述 |
 | --- | --- |
-| dstReg | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| srcReg | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| mask | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| dstReg | 目的操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| srcReg | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| mask | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
 
 ## 数据类型
 

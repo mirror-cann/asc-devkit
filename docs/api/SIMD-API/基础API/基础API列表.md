@@ -300,10 +300,10 @@
 ### 寄存器数据类型
 | 接口名 | 功能描述 |
 | --- | --- |
-| [RegTensor](Reg矢量计算/寄存器数据类型/RegTensor.md) | Reg矢量计算基本单元，RegTensor位宽为VL（Vector Length），具体值可能因不同AI处理器型号而异。 |
-| [MaskReg](Reg矢量计算/寄存器数据类型/MaskReg.md) | MaskReg用于指示在计算过程中哪些元素参与计算，宽度为RegTensor的八分之一（VL/8）。 |
-| [UnalignRegForLoad & UnalignRegForStore](Reg矢量计算/寄存器数据类型/UnalignRegForLoad-UnalignRegForStore.md) | UnalignRegForLoad、UnalignRegForStore用作缓冲区来优化UB和RegTensor之间连续不对齐地址访问的开销。在读不对齐地址前，UnalignRegForLoad、UnalignRegForStore应该通过LoadUnAlignPre API初始化，然后使用LoadUnAlign API。在写不对齐地址时，先使用StoreUnAlign API， |
-| [AddrReg](Reg矢量计算/寄存器数据类型/AddrReg.md) | AddrReg即为Address Register（地址寄存器），是用于存储地址偏移量的寄存器。AddrReg应该通过CreateAddrReg API初始化，然后在循环中使用AddrReg存储地址偏移量。AddrReg在每层循环中根据所设置的stride进行自增。 |
+| [RegTensor](Reg矢量计算/概述/寄存器数据类型/RegTensor.md) | Reg矢量计算基本单元，RegTensor位宽为VL（Vector Length），具体值可能因不同AI处理器型号而异。 |
+| [MaskReg](Reg矢量计算/概述/寄存器数据类型/MaskReg.md) | MaskReg用于指示在计算过程中哪些元素参与计算，宽度为RegTensor的八分之一（VL/8）。 |
+| [UnalignRegForLoad & UnalignRegForStore](Reg矢量计算/概述/寄存器数据类型/UnalignRegForLoad-UnalignRegForStore.md) | UnalignRegForLoad、UnalignRegForStore用作缓冲区来优化UB和RegTensor之间连续不对齐地址访问的开销。在读不对齐地址前，UnalignRegForLoad、UnalignRegForStore应该通过LoadUnAlignPre API初始化，然后使用LoadUnAlign API。在写不对齐地址时，先使用StoreUnAlign API， |
+| [AddrReg](Reg矢量计算/概述/寄存器数据类型/AddrReg.md) | AddrReg即为Address Register（地址寄存器），是用于存储地址偏移量的寄存器。AddrReg应该通过CreateAddrReg API初始化，然后在循环中使用AddrReg存储地址偏移量。AddrReg在每层循环中根据所设置的stride进行自增。 |
 
 ### Reg数据搬运
 | 接口名 | 功能描述 |

@@ -28,7 +28,7 @@
 
 头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_vec_binary_intf.h"`（对`RegTensor`操作）、`"basic_api/reg_compute/kernel_reg_compute_maskreg_intf.h"`（对`MaskReg`操作）。
 
-本节介绍两种接口，分别用于对[RegTensor](../寄存器数据类型/RegTensor.md)和[MaskReg](../寄存器数据类型/MaskReg.md)进行操作：
+本节介绍两种接口，分别用于对[RegTensor](../概述/寄存器数据类型/RegTensor.md)和[MaskReg](../概述/寄存器数据类型/MaskReg.md)进行操作：
 
 - 对`RegTensor`操作：
 
@@ -69,10 +69,10 @@
 
   | 参数名 | 输入/输出 | 描述 |
   | :----- | :-------- | :--- |
-  | dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-  | srcReg0 | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。<br>数据类型需要与目的操作数保持一致。 |
-  | srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。<br>数据类型需要与目的操作数保持一致。 |
-  | mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+  | dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+  | srcReg0 | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。<br>数据类型需要与目的操作数保持一致。 |
+  | srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。<br>数据类型需要与目的操作数保持一致。 |
+  | mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
 
 - 对MaskReg操作
 
@@ -80,10 +80,10 @@
 
   | 参数名 | 描述 |
   | :----- | :--- |
-  | dst | 目的操作数。类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
-  | src0 | 源操作数。类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
-  | src1 | 源操作数。类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
-  | mask | 指示在计算过程中哪些bit有效。类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+  | dst | 目的操作数。类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
+  | src0 | 源操作数。类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
+  | src1 | 源操作数。类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
+  | mask | 指示在计算过程中哪些bit有效。类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 

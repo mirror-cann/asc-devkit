@@ -57,8 +57,8 @@ __simd_callee__ inline void Squeeze(U& dstReg, U& srcReg, MaskReg& mask)
 
 | 参数名 | 输入/输出 | 描述 |
 | :----- | :-------- | :--- |
-| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| srcReg | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| srcReg | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
 | mask | 输入 | mask用于控制每次迭代内参与计算的元素。 |
 
 ## 返回值说明

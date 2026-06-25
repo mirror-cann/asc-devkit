@@ -56,10 +56,10 @@ __simd_callee__ inline void Axpy(S& dstReg, S& srcReg, const U scalarValue, Mask
 
 | 参数名 | 输入/输出 | 描述 |
 | :----- | :-------- | :--- |
-| dstReg | 输出 | 目的操作数和源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。数据类型需要与源操作数保持一致。 |
-| srcReg | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。<br>数据类型需要与目的操作数保持一致。 |
+| dstReg | 输出 | 目的操作数和源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。数据类型需要与源操作数保持一致。 |
+| srcReg | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。<br>数据类型需要与目的操作数保持一致。 |
 | scalarValue | 输入 | 源操作数。<br>类型为标量。<br>数据类型需要与目的操作数保持一致。 |
-| mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 

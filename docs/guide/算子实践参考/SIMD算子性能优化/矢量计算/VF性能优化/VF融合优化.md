@@ -4,6 +4,17 @@
 
 【描述】VF融合是将代码中多个VF函数融合成一个VF函数，有效提升性能。VF融合特性是优化特性，VF自动融合会借助Loop Fuse算法，将VF转换成Loop形态，然后将控制流等价（Control-Flow-Equivalent）的VF进行融合，最后将VF进行还原。编译器首先会做融合前的合法性检查，判断两个VF是否等价，Main侧中间代码是否能在VF内执行以及融合后是否可产生正收益（不会引起传参寄存器溢出、VF代码不会过大）等，如果满足VF融合条件，编译器会自动执行VF融合优化，为保证融合后的VF执行逻辑与语义与融合前一致，会在原来两个VF之间保守地插入同步指令，编译器还会尝试外提、合并融合后的VF中的指令，对VF代码进行优化。融合策略是能融尽融，用户按照符合融合的合法性检查的模式进行编码，可以增加VF融合的机会。
 
+> [!NOTE] 说明
+>
+> VF并不是写的越长，融合得越多越好。VF融合带来的正向收益包含：
+> - 消除冗余VF启动开销；
+> - 冗余Load/Store指令对消；
+> - Hardware Loop融合；
+>
+> 当存在负向收益，则不满足融合条件:
+> - 寄存器超出限制，数据写回UB引起的性能下降；
+> - 循环内存在依赖关系过多的指令，指令双发几率降低，队列中指令被换出，Icache命中率降低。
+
 ## VF融合原理介绍<a name="section46641606486"></a>
 
 VF融合优化可分为三个阶段：VF浅度融合、VF深度融合和VF内自动同步：
@@ -24,7 +35,7 @@ VF融合优化可分为三个阶段：VF浅度融合、VF深度融合和VF内自
 
     【正例】VF函数DivVF和AddVF会被编译器融合成一个VF函数，并且能优化多余的Load/Store指令。
 
-    ```
+    ```cpp
     template<typename T>
     __simd_vf__ inline void DivVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_t count, uint32_t repeatTime, uint32_t oneRepNum){
         AscendC::Reg::MaskReg mask;
@@ -101,7 +112,7 @@ VF融合优化可分为三个阶段：VF浅度融合、VF深度融合和VF内自
 
     【反例】使用基础API的高维切分模式编写算子，编译器在分析VF融合时受复杂的计算逻辑影响，无法对Add和Mul接口进行VF融合优化。
 
-    ```
+    ```cpp
     template<typename T>
     class Kernel {
         public:
@@ -121,7 +132,7 @@ VF融合优化可分为三个阶段：VF浅度融合、VF深度融合和VF内自
 
     【正例】使用基础API的连续计算模式，编译器分析Add和Mul函数后符合VF融合要求，将Add和Mul融合成一个VF函数。
 
-    ```
+    ```cpp
     template<typename T>
     class Kernel {
         public:
@@ -137,4 +148,3 @@ VF融合优化可分为三个阶段：VF浅度融合、VF深度融合和VF内自
         // ...
     };
     ```
-

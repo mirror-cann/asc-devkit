@@ -53,10 +53,10 @@ __simd_callee__ inline void Prelu(U &dstReg, U &srcReg0, U &srcReg1, MaskReg &ma
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| srcReg0 | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。<br>源操作数的数据类型需要与目的操作数保持一致。 |
-| srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。<br>源操作数的数据类型需要与目的操作数保持一致。 |
-| mask | 输入 | 源操作数中元素有效性的指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| srcReg0 | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。<br>源操作数的数据类型需要与目的操作数保持一致。 |
+| srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。<br>源操作数的数据类型需要与目的操作数保持一致。 |
+| mask | 输入 | 源操作数中元素有效性的指示，详细说明请参考[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
 
 ## 数据类型
 

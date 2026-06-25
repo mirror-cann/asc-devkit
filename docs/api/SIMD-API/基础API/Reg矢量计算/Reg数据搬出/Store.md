@@ -62,7 +62,7 @@ Reg矢量计算数据搬运接口，支持从RegTensor搬出至非32字节对齐
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | dstAddr | 输出 | 目的操作数，UB起始地址，不需要32字节对齐。 |
-| srcReg | 输入 | 源操作数，类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| srcReg | 输入 | 源操作数，类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
 | count | 输入 | 搬运数据量。连续搬运时需手动更新地址：dstAddr = dstAddr + count。|
 
 ## 数据类型
@@ -78,7 +78,7 @@ Reg矢量计算数据搬运接口，支持从RegTensor搬出至非32字节对齐
 ## 约束说明
 
 -   count不能大于一个RegTensor能存储的数据个数，即count <= 256B / sizeof(T)。
--   接口内部定义了一个[UnalignRegForStore](../寄存器数据类型/UnalignRegForLoad-UnalignRegForStore.md)，该寄存器数量上限为4。
+-   接口内部定义了一个[UnalignRegForStore](../概述/寄存器数据类型/UnalignRegForLoad-UnalignRegForStore.md)，该寄存器数量上限为4。
 
 ## 调用示例
 

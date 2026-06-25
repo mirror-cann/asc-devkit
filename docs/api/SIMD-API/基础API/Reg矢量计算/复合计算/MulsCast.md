@@ -58,10 +58,10 @@ __simd_callee__ inline void MulsCast(T3& dstReg, T4& srcReg, T2 scalarValue, Mas
 
 | 参数名 | 输入/输出 | 描述 |
 | :----- | :-------- | :--- |
-| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| srcReg | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| srcReg | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
 | scalarValue | 输入 | 源操作数。<br>类型为标量。 |
-| mask | 输入 | 源操作数元素级操作的有效性指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| mask | 输入 | 源操作数元素级操作的有效性指示，详细说明请参考[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 

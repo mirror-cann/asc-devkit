@@ -78,8 +78,8 @@ __simd_callee__ inline void Unsqueeze(U& dstReg, MaskReg& mask)
 
 | 参数名称 | 输入/输出 | 描述 |
 | ------ | ------ | ------ |
-| dstReg | 输出 | 目的操作数和源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| mask | 输入 | mask用于提供dstReg解压缩信息。<br>类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| dstReg | 输出 | 目的操作数和源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| mask | 输入 | mask用于提供dstReg解压缩信息。<br>类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
 
 ## 返回值说明
 

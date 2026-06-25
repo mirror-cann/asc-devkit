@@ -52,8 +52,8 @@ __simd_callee__ inline void DeInterleave(U& dstReg0, U& dstReg1, U& srcReg0, U& 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| dstReg0<br>dstReg1 | 输出 | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| srcReg0<br>srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。<br>源操作数的数据类型需要与目的操作数保持一致。 |
+| dstReg0<br>dstReg1 | 输出 | 目的操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| srcReg0<br>srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。<br>源操作数的数据类型需要与目的操作数保持一致。 |
 
 ## 数据类型
 

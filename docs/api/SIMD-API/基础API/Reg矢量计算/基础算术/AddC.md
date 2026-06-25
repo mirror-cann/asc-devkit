@@ -60,12 +60,12 @@ __simd_callee__ inline void AddC(MaskReg& carry, U& dstReg, U& srcReg0, U& srcRe
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| carry | 输出 | 目的操作数。输出借位值。<br>类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
-| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| srcReg0 | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
-| carrySrc | 输入 | 输入进位寄存器。<br>类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
-| mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| carry | 输出 | 目的操作数。输出借位值。<br>类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
+| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| srcReg0 | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| carrySrc | 输入 | 输入进位寄存器。<br>类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
+| mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
 
 ## 数据类型
 

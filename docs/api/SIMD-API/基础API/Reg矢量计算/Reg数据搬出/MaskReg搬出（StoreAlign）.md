@@ -28,14 +28,14 @@
 
 头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_datacopy_intf.h"`。
 
-StoreAlign能够实现数据从[MaskReg](../寄存器数据类型/MaskReg.md)搬运至Unified Buffer（UB）。有三类搬运接口：
+StoreAlign能够实现数据从[MaskReg](../概述/寄存器数据类型/MaskReg.md)搬运至Unified Buffer（UB）。有三类搬运接口：
 
 - 普通搬运接口：完成一次搬运后，UB地址不会自动更新，每次迭代需要手动更新地址。
 - PostUpdate扩展搬运接口：
     - POST_MODE_NORMAL模式：不支持。
     - POST_MODE_UPDATE模式：完成一次搬运后，UB地址会自动更新，每次迭代不需要手动更新地址。
 
-- 使用[AddrReg](../寄存器数据类型/AddrReg.md)寄存器存储偏移量场景：在每次迭代中，需要先调用CreateAddrReg手动设定地址偏移量，再调用搬运指令。
+- 使用[AddrReg](../概述/寄存器数据类型/AddrReg.md)寄存器存储偏移量场景：在每次迭代中，需要先调用CreateAddrReg手动设定地址偏移量，再调用搬运指令。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -53,7 +53,7 @@ StoreAlign能够实现数据从[MaskReg](../寄存器数据类型/MaskReg.md)搬
     __simd_callee__ inline void StoreAlign(__ubuf__ T*& dstAddr, MaskReg& mask, int32_t offset)
     ```
 
-- 使用[AddrReg](../寄存器数据类型/AddrReg.md)存储偏移量接口，需要配合CreateAddrReg接口使用
+- 使用[AddrReg](../概述/寄存器数据类型/AddrReg.md)存储偏移量接口，需要配合CreateAddrReg接口使用
 
     ```cpp
     template <typename T, MaskDist dist = MaskDist::DIST_NORM>
@@ -75,7 +75,7 @@ StoreAlign能够实现数据从[MaskReg](../寄存器数据类型/MaskReg.md)搬
 | 参数名 | 输入/输出 | 描述 |
 |-----|-----|-----|
 | dstAddr | 输入/输出 | 目的操作数，UB起始地址，需要32字节对齐。 |
-| mask | 输入 | 源操作数，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| mask | 输入 | 源操作数，类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
 | offset | 输入 | &bull; 当数据类型为AddrReg，为地址偏移寄存器，需要在搬运前调用CreateAddrReg设定地址偏移量，实际搬运UB地址为srcAddr + 寄存器中存储的偏移量。AddrReg寄存器中存储的偏移量 * sizeof(T)的对齐约束请参考[表3 MaskDist参数说明](#表3-MaskDist参数说明)。<br>&bull; 当数据类型为int32_t，为地址更新步长，单位：字节。offset的对齐约束请参考[表3 MaskDist参数说明](#表3-MaskDist参数说明)。根据postMode的取值有两种情况：<br>&nbsp;&nbsp;&bull; POST_MODE_NORMAL：不支持。<br>&nbsp;&nbsp;&bull; POST_MODE_UPDATE：实际搬运UB起始地址为srcAddr，搬运后执行地址更新 srcAddr += offset。 |
 
 <a id="表3-MaskDist参数说明"></a>

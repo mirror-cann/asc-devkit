@@ -28,7 +28,7 @@
 
 头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_datacopy_intf.h"`。
 
-StoreAlign能够实现数据从[RegTensor](../寄存器数据类型/RegTensor.md)非连续搬运至Unified Buffer（UB），有两类接口：
+StoreAlign能够实现数据从[RegTensor](../概述/寄存器数据类型/RegTensor.md)非连续搬运至Unified Buffer（UB），有两类接口：
 
 - 普通搬运接口：完成一次搬运后，UB地址不会自动更新，每次迭代需要手动更新地址。
 - PostUpdate扩展搬运接口：完成一次搬运后，UB地址会自动更新，每次迭代不需要手动更新地址。
@@ -65,10 +65,10 @@ StoreAlign能够实现数据从[RegTensor](../寄存器数据类型/RegTensor.md
 | 参数名 | 输入/输出 | 描述 |
 |-----|-----|-----|
 | dstAddr | 输入/输出 | 目的操作数，UB起始地址，需要32字节对齐。 |
-| srcReg | 输入 | 源操作数，类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| srcReg | 输入 | 源操作数，类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
 | dataBlockStride | 输入 | 单条指令一次搬运8个DataBlock，该参数表示相邻DataBlock间的间隔（前面一个DataBlock的头与后面DataBlock的头的间隔），单位：DataBlock（32B）。 |
 | repeatStride | 输入 | 地址更新步长，单位：DataBlock（32B）。repeatStride * sizeof(T)需要32字节对齐。<br>&bull; POST_MODE_NORMAL：实际搬运的UB起始地址为dstAddr + repeatStride * 32B / sizeof(T)，搬运后地址不会更新。<br>&bull; POST_MODE_UPDATE：实际搬运的UB起始地址为dstAddr，搬运后执行地址更新srcAddr +=  repeatStride * 32B / sizeof(T)。 |
-| mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。<br>&bull; 某个DataBlock在mask寄存器中对应的32bit有任意一位为1，该DataBlock对应的数据会搬入到dst。<br>&bull; 某个DataBlock在mask寄存器中对应的32bit全为0时，该DataBlock对应的数据不会被读取，对应位置的dst设置为0，即使该UB越界也不会报错。 |
+| mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../概述/寄存器数据类型/MaskReg.md)。<br>&bull; 某个DataBlock在mask寄存器中对应的32bit有任意一位为1，该DataBlock对应的数据会搬入到dst。<br>&bull; 某个DataBlock在mask寄存器中对应的32bit全为0时，该DataBlock对应的数据不会被读取，对应位置的dst设置为0，即使该UB越界也不会报错。 |
 
 <a id="表3-DataCopyMode参数说明"></a>
 **表 3**  DataCopyMode参数说明
