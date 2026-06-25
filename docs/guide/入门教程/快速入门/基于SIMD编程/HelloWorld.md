@@ -22,24 +22,28 @@
     
 - **Host端代码实现**：
  
-    Host端通过<<<>>>语法糖调用Device端代码。
+    Host端通过<<<>>>语法糖调用Device端代码片段。
     ```cpp
     int main(int argc, char const* argv[])
     {
-        aclrtSetDevice(0); 
+        ...
+        constexpr uint32_t numBlocks = 8;
+        ...
+        
+        aclrtStream stream = nullptr;
+        aclrtCreateStream(&stream);
         // Launch kernel <<<numBlocks, dynUBufSize, stream>>>
         // numBlocks : Number of blocks. Default to 8 in this example.
         // dynUBufSize : Dynamic unified buffer size. Default to 0 in this example.
-        // nullptr : Runtime stream. Uses default stream in this example.
-        hello_world<<<8, 0, nullptr>>>();
-        aclrtSynchronizeDevice(); 
-        return 0;
+        // stream : Runtime stream. Uses stream created by aclrtCreateStream API in this example.
+        hello_world<<<numBlocks, 0, stream>>>();
+        ...
     }
     ```
 
 - **算子编译与运行**：
  
-    ```
+    ```bash
     bisheng hello_world.asc --npu-arch=dav-2201 -o demo
     ./demo
     ```

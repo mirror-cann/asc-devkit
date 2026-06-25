@@ -117,38 +117,40 @@
 
   - **Host端代码实现**：
 
-    Host端通过`<<<>>>`语法糖调用Device端核函数，示例代码如下：
+    Host端通过`<<<>>>`语法糖调用Device端核函数，示例代码片段如下：
     ```cpp
       int32_t main(int argc, char const *argv[])
       {
           ...
-          constexpr uint32_t num_blocks = 8;
+          constexpr uint32_t numBlocks = 8;
           ...
+
+          // Create runtime stream by aclrtCreateStream API
+          aclrtStream stream = nullptr;
+          aclrtCreateStream(&stream);
           
           // Allocate host and device memory, and copy input data from host to device
-          aclrtMallocHost((void **)(&z_host), total_byte_size);
-          aclrtMalloc((void **)&x_device, total_byte_size, ACL_MEM_MALLOC_HUGE_FIRST);
-          aclrtMalloc((void **)&y_device, total_byte_size, ACL_MEM_MALLOC_HUGE_FIRST);
-          aclrtMalloc((void **)&z_device, total_byte_size, ACL_MEM_MALLOC_HUGE_FIRST);
-          aclrtMemcpy((uint8_t*)x_device, total_byte_size, x_host, total_byte_size, ACL_MEMCPY_HOST_TO_DEVICE);
-          aclrtMemcpy((uint8_t*)y_device, total_byte_size, y_host, total_byte_size, ACL_MEMCPY_HOST_TO_DEVICE);
+          aclrtMalloc((void**)&xDevice, totalByteSize, ACL_MEM_MALLOC_HUGE_FIRST);
+          aclrtMalloc((void**)&yDevice, totalByteSize, ACL_MEM_MALLOC_HUGE_FIRST);
+          aclrtMalloc((void**)&zDevice, totalByteSize, ACL_MEM_MALLOC_HUGE_FIRST);
+          aclrtMallocHost((void**)&zHost, totalByteSize);
+
+          aclrtMemcpy(xDevice, totalByteSize, x.data(), totalByteSize, ACL_MEMCPY_HOST_TO_DEVICE);
+          aclrtMemcpy(yDevice, totalByteSize, y.data(), totalByteSize, ACL_MEMCPY_HOST_TO_DEVICE);
 
           // Launch kernel <<<numBlocks, dynUBufSize, stream>>>
           // numBlocks : Number of blocks. Default to 8 in this example.
           // dynUBufSize : Dynamic unified buffer size. Default to 0 in this example.
-          // nullptr : Runtime stream. Uses default stream in this example.
+          // stream : Runtime stream.
 
-          // Example One：Call add kernel which is implemented by SIMD C API
-          add_custom<<<num_blocks, 0>>>(xDevice, yDevice, zDevice);
-
-          // Example Two：Call add kernel which is implemented by SIMD C++ Basic API
-          // add_custom<blockLength><<<numBlocks, 0, stream>>>(xDevice, yDevice, zDevice);
+          // Example：Call add kernel which is implemented by SIMD C++ Basic API
+          add_custom<blockLength><<<numBlocks, 0, stream>>>(xDevice, yDevice, zDevice);
 
           // Wait for the add_custom kernel to complete
-          aclrtSynchronizeDevice();
+          aclrtSynchronizeStream(stream);
 
           // Copy the result from device memory to host memory
-          aclrtMemcpy(z_host, total_byte_size, (uint8_t*)z_device, total_byte_size, ACL_MEMCPY_DEVICE_TO_HOST);
+          aclrtMemcpy(zHost, totalByteSize, zDevice, totalByteSize, ACL_MEMCPY_DEVICE_TO_HOST);
           ...
       }
     ```
@@ -156,7 +158,7 @@
 - **算子编译与运行**：
 
   CMake配置文件示例：
-  ```
+  ```cmake
   cmake_minimum_required(VERSION 3.16)
 
   find_package(ASC REQUIRED)
@@ -178,7 +180,7 @@
   )
   ```
   编译与执行示例：
-  ```
+  ```bash
   mkdir -p build && cd build;   # 创建并进入build目录
   cmake ..;make -j;             # 编译工程
   ./c_api_add_example           # 运行样例
