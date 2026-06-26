@@ -18,7 +18,7 @@
 如下图所示：
 ![](../figures/asc_deq_int162b8_halfblock.png)
 
-计算公式如下:
+计算公式如下：
 
 $$
 dst_i = (src_i * scale) + offset

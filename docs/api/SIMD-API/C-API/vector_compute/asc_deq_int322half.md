@@ -8,7 +8,7 @@
 | <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> | √ |
 | <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> | √ |
 
-### 功能说明
+## 功能说明
 
 对输入的int32_t类型的数据按元素做量化并转换为half类型。计算公式如下：
 $$
@@ -16,7 +16,7 @@ dst_i = Cast(src_i * scale)
 $$
 其中的scale可通过[asc_set_deq_scale](asc_set_deq_scale.md)设置。
 
-### 函数原型
+## 函数原型
 
 - 前n个数据计算
 
@@ -36,7 +36,7 @@ $$
     __aicore__ inline void asc_deq_int322half_sync(__ubuf__ half* dst, __ubuf__ int32_t* src, uint32_t count)
     ```
 
-### 参数说明
+## 参数说明
 
 | 参数名  | 输入/输出 | 描述 |
 | :----- | :------- | :------- |
@@ -49,21 +49,21 @@ $$
 | dst_repeat_stride | 输入 | 目的操作数相邻迭代间相同DataBlock的地址步长。 |
 | src_repeat_stride | 输入 | 源操作数相邻迭代间相同DataBlock的地址步长。 |
 
-### 返回值说明
+## 返回值说明
 
 无
 
-### 流水类型
+## 流水类型
 
 PIPE_V
 
-### 约束说明
+## 约束说明
 
 - 需配合[asc_set_deq_scale](./asc_set_deq_scale.md)接口的非向量模式使用，该接口用于设置量化参数。
 - dst、src的起始地址需要32字节对齐。
 - 操作数地址重叠约束请参考[通用地址重叠约束](../通用说明和约束.md#通用地址重叠约束)。
 
-### 调用示例
+## 调用示例
 
 ```cpp
 constexpr uint64_t total_length = 128;    // total_length指参与计算的数据长度
