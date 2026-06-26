@@ -849,7 +849,14 @@ class SchedulerTest(unittest.TestCase):
         self.assertEqual(rc, 0)
         self.assertEqual(
             payload["parallel_config"],
-            {"jobs": 22, "npu_slots": 1, "cpu_run_slots": 88, "make_jobs": 4, "cpu_run_timeout": 300},
+            {
+                "jobs": 22,
+                "npu_slots": 1,
+                "cpu_run_slots": 88,
+                "make_jobs": 4,
+                "cpu_run_timeout": 300,
+                "werror": 0,
+            },
         )
 
     def test_detect_cpu_count_prefers_lscpu(self) -> None:

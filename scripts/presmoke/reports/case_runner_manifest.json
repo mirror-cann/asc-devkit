@@ -255,32 +255,6 @@
     ]
   },
   {
-    "case": "05_simd_simt_hybrid/00_introduction/simd_simt_gather_and_adds",
-    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/00_introduction/simd_simt_gather_and_adds/run.sh",
-    "source": "readme",
-    "confidence": "medium",
-    "supported_archs": [
-      "dav-3510"
-    ],
-    "supported_modes": [
-      "npu",
-      "sim"
-    ],
-    "target_runnable": false,
-    "skip": false,
-    "skip_reason": "",
-    "reasons": [
-      "unsupported_on_target_arch_or_mode"
-    ],
-    "commands": [
-      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
-      "make -j",
-      "python3 ../scripts/gen_data.py",
-      "./demo",
-      "python3 ../scripts/verify_result.py output/output.bin output/golden.bin"
-    ]
-  },
-  {
     "case": "01_simd_cpp_api/01_utilities/00_printf/simd_vf_printf",
     "runner": "scripts/presmoke/cases/01_simd_cpp_api/01_utilities/00_printf/simd_vf_printf/run.sh",
     "source": "readme",
@@ -724,6 +698,102 @@
     ]
   },
   {
+    "case": "01_simd_cpp_api/02_features/04_compile/00_basic_compile",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/02_features/04_compile/00_basic_compile/run.sh",
+    "source": "readme",
+    "confidence": "high",
+    "supported_archs": [
+      "dav-2201",
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "cpu",
+      "npu",
+      "sim"
+    ],
+    "target_runnable": true,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [],
+    "commands": [
+      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./demo"
+    ]
+  },
+  {
+    "case": "01_simd_cpp_api/02_features/04_compile/01_separate_compile",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/02_features/04_compile/01_separate_compile/run.sh",
+    "source": "readme",
+    "confidence": "high",
+    "supported_archs": [
+      "dav-2201",
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "cpu",
+      "npu",
+      "sim"
+    ],
+    "target_runnable": true,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [],
+    "commands": [
+      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./demo"
+    ]
+  },
+  {
+    "case": "01_simd_cpp_api/02_features/04_compile/02_dynamic_library_compile",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/02_features/04_compile/02_dynamic_library_compile/run.sh",
+    "source": "readme",
+    "confidence": "high",
+    "supported_archs": [
+      "dav-2201",
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "cpu",
+      "npu",
+      "sim"
+    ],
+    "target_runnable": true,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [],
+    "commands": [
+      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./demo"
+    ]
+  },
+  {
+    "case": "01_simd_cpp_api/02_features/04_compile/03_static_library_compile",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/02_features/04_compile/03_static_library_compile/run.sh",
+    "source": "readme",
+    "confidence": "high",
+    "supported_archs": [
+      "dav-2201",
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "cpu",
+      "npu",
+      "sim"
+    ],
+    "target_runnable": true,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [],
+    "commands": [
+      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./demo"
+    ]
+  },
+  {
     "case": "01_simd_cpp_api/02_features/05_aclrtc/rtc_hello_world",
     "runner": "scripts/presmoke/cases/01_simd_cpp_api/02_features/05_aclrtc/rtc_hello_world/run.sh",
     "source": "readme",
@@ -765,6 +835,29 @@
       "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
       "make -j",
       "./demo"
+    ]
+  },
+  {
+    "case": "01_simd_cpp_api/02_features/06_aot_compilation/matmul_aot_compilation",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/02_features/06_aot_compilation/matmul_aot_compilation/run.sh",
+    "source": "readme",
+    "confidence": "high",
+    "supported_archs": [
+      "dav-2201",
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "npu",
+      "sim"
+    ],
+    "target_runnable": true,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [],
+    "commands": [
+      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./matmul_aot_example"
     ]
   },
   {
@@ -2373,6 +2466,32 @@
     ]
   },
   {
+    "case": "01_simd_cpp_api/03_basic_api/03_matrix_compute/batch_matmul_tensor_api",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/03_basic_api/03_matrix_compute/batch_matmul_tensor_api/run.sh",
+    "source": "readme",
+    "confidence": "medium",
+    "supported_archs": [
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "npu",
+      "sim"
+    ],
+    "target_runnable": false,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [
+      "unsupported_on_target_arch_or_mode"
+    ],
+    "commands": [
+      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "python3 ../scripts/gen_data.py",
+      "./demo",
+      "python3 ../scripts/verify_result.py output/output.bin output/golden.bin"
+    ]
+  },
+  {
     "case": "01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2gm",
     "runner": "scripts/presmoke/cases/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2gm/run.sh",
     "source": "readme",
@@ -2602,7 +2721,9 @@
       "dav-3510"
     ],
     "supported_modes": [
-      "npu"
+      "cpu",
+      "npu",
+      "sim"
     ],
     "target_runnable": true,
     "skip": false,
@@ -2611,7 +2732,7 @@
       "shell_variable_reference"
     ],
     "commands": [
-      "cmake -DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=$SCENARIO_NUM ..",
+      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
       "make -j",
       "python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM",
       "./demo",
@@ -2773,6 +2894,32 @@
       "python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM",
       "./demo",
       "python3 ../scripts/verify_result.py ./output/output.bin ./output/golden.bin"
+    ]
+  },
+  {
+    "case": "01_simd_cpp_api/03_basic_api/04_memory_management/tensor_allocation",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/03_basic_api/04_memory_management/tensor_allocation/run.sh",
+    "source": "readme",
+    "confidence": "low",
+    "supported_archs": [
+      "dav-2201",
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "cpu",
+      "npu",
+      "sim"
+    ],
+    "target_runnable": true,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [
+      "shell_variable_reference"
+    ],
+    "commands": [
+      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./demo"
     ]
   },
   {
@@ -3219,6 +3366,30 @@
       "python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM",
       "./demo",
       "python3 ../scripts/verify_result.py output/output.bin output/golden.bin"
+    ]
+  },
+  {
+    "case": "01_simd_cpp_api/03_basic_api/09_utils/gm_by_dcache",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/03_basic_api/09_utils/gm_by_dcache/run.sh",
+    "source": "readme",
+    "confidence": "high",
+    "supported_archs": [
+      "dav-2201",
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "cpu",
+      "npu",
+      "sim"
+    ],
+    "target_runnable": true,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [],
+    "commands": [
+      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./demo"
     ]
   },
   {
@@ -6011,105 +6182,6 @@
     ]
   },
   {
-    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_grid_dim_config",
-    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_grid_dim_config/run.sh",
-    "source": "readme",
-    "confidence": "low",
-    "supported_archs": [
-      "dav-3510"
-    ],
-    "supported_modes": [
-      "npu"
-    ],
-    "target_runnable": false,
-    "skip": false,
-    "skip_reason": "",
-    "reasons": [
-      "shell_variable_reference",
-      "unsupported_on_target_arch_or_mode"
-    ],
-    "commands": [
-      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
-      "make -j",
-      "./grid_config"
-    ]
-  },
-  {
-    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_high_performance",
-    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_high_performance/run.sh",
-    "source": "readme",
-    "confidence": "low",
-    "supported_archs": [
-      "dav-3510"
-    ],
-    "supported_modes": [
-      "npu",
-      "sim"
-    ],
-    "target_runnable": false,
-    "skip": false,
-    "skip_reason": "",
-    "reasons": [
-      "shell_variable_reference",
-      "unsupported_on_target_arch_or_mode"
-    ],
-    "commands": [
-      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
-      "make -j",
-      "python3 ../scripts/gen_data.py",
-      "./demo",
-      "python3 ../scripts/verify_result.py output/output.bin output/golden.bin"
-    ]
-  },
-  {
-    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_integer_fast_div",
-    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_integer_fast_div/run.sh",
-    "source": "readme",
-    "confidence": "low",
-    "supported_archs": [
-      "dav-3510"
-    ],
-    "supported_modes": [
-      "npu"
-    ],
-    "target_runnable": false,
-    "skip": false,
-    "skip_reason": "",
-    "reasons": [
-      "shell_variable_reference",
-      "unsupported_on_target_arch_or_mode"
-    ],
-    "commands": [
-      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
-      "make -j",
-      "./integer_div"
-    ]
-  },
-  {
-    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_matrix_transpose",
-    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_matrix_transpose/run.sh",
-    "source": "readme",
-    "confidence": "low",
-    "supported_archs": [
-      "dav-3510"
-    ],
-    "supported_modes": [
-      "npu"
-    ],
-    "target_runnable": false,
-    "skip": false,
-    "skip_reason": "",
-    "reasons": [
-      "shell_variable_reference",
-      "unsupported_on_target_arch_or_mode"
-    ],
-    "commands": [
-      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
-      "make -j",
-      "./demo"
-    ]
-  },
-  {
     "case": "01_simd_cpp_api/06_compatibility_guide/data_copy_l1togm",
     "runner": "scripts/presmoke/cases/01_simd_cpp_api/06_compatibility_guide/data_copy_l1togm/run.sh",
     "source": "readme",
@@ -7029,6 +7101,30 @@
     ]
   },
   {
+    "case": "03_simt_api/03_best_practices/02_control_flow/warp_divergence",
+    "runner": "scripts/presmoke/cases/03_simt_api/03_best_practices/02_control_flow/warp_divergence/run.sh",
+    "source": "readme",
+    "confidence": "low",
+    "supported_archs": [
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "npu"
+    ],
+    "target_runnable": false,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [
+      "shell_variable_reference",
+      "unsupported_on_target_arch_or_mode"
+    ],
+    "commands": [
+      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./demo"
+    ]
+  },
+  {
     "case": "04_aicpu/00_introduction/00_device_tiling/aicpu_device_tiling",
     "runner": "scripts/presmoke/cases/04_aicpu/00_introduction/00_device_tiling/aicpu_device_tiling/run.sh",
     "source": "readme",
@@ -7072,6 +7168,131 @@
     ],
     "commands": [
       "python3 test_add_custom_tiling_sink.py"
+    ]
+  },
+  {
+    "case": "05_simd_simt_hybrid/00_introduction/simd_simt_gather_and_adds",
+    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/00_introduction/simd_simt_gather_and_adds/run.sh",
+    "source": "readme",
+    "confidence": "medium",
+    "supported_archs": [
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "npu",
+      "sim"
+    ],
+    "target_runnable": false,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [
+      "unsupported_on_target_arch_or_mode"
+    ],
+    "commands": [
+      "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "python3 ../scripts/gen_data.py",
+      "./demo",
+      "python3 ../scripts/verify_result.py output/output.bin output/golden.bin"
+    ]
+  },
+  {
+    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_grid_dim_config",
+    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_grid_dim_config/run.sh",
+    "source": "readme",
+    "confidence": "low",
+    "supported_archs": [
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "npu"
+    ],
+    "target_runnable": false,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [
+      "shell_variable_reference",
+      "unsupported_on_target_arch_or_mode"
+    ],
+    "commands": [
+      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./grid_config"
+    ]
+  },
+  {
+    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_high_performance",
+    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_high_performance/run.sh",
+    "source": "readme",
+    "confidence": "low",
+    "supported_archs": [
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "npu",
+      "sim"
+    ],
+    "target_runnable": false,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [
+      "shell_variable_reference",
+      "unsupported_on_target_arch_or_mode"
+    ],
+    "commands": [
+      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "python3 ../scripts/gen_data.py",
+      "./demo",
+      "python3 ../scripts/verify_result.py output/output.bin output/golden.bin"
+    ]
+  },
+  {
+    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_integer_fast_div",
+    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_integer_fast_div/run.sh",
+    "source": "readme",
+    "confidence": "low",
+    "supported_archs": [
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "npu"
+    ],
+    "target_runnable": false,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [
+      "shell_variable_reference",
+      "unsupported_on_target_arch_or_mode"
+    ],
+    "commands": [
+      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./integer_div"
+    ]
+  },
+  {
+    "case": "05_simd_simt_hybrid/02_best_practices/simd_simt_matrix_transpose",
+    "runner": "scripts/presmoke/cases/05_simd_simt_hybrid/02_best_practices/simd_simt_matrix_transpose/run.sh",
+    "source": "readme",
+    "confidence": "low",
+    "supported_archs": [
+      "dav-3510"
+    ],
+    "supported_modes": [
+      "npu"
+    ],
+    "target_runnable": false,
+    "skip": false,
+    "skip_reason": "",
+    "reasons": [
+      "shell_variable_reference",
+      "unsupported_on_target_arch_or_mode"
+    ],
+    "commands": [
+      "cmake -DSCENARIO_NUM=$SCENARIO_NUM .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
+      "make -j",
+      "./demo"
     ]
   }
 ]

@@ -34,6 +34,35 @@ class PlannerTest(unittest.TestCase):
         self.assertIn("-DCMAKE_ASC_ARCHITECTURES=dav-2201", cmd)
         self.assertNotIn("CMAKE_ASC_RUN_MODE", cmd)
 
+    def test_rewrite_cmake_appends_only_asc_werror_flag_when_enabled(self) -> None:
+        cmd = rewrite_cmake("cmake ..", "dav-2201", "npu", werror=True)
+
+        self.assertNotIn("CMAKE_C_FLAGS", cmd)
+        self.assertNotIn("CMAKE_CXX_FLAGS", cmd)
+        self.assertIn("-DCMAKE_ASC_FLAGS=-Werror", cmd)
+
+    def test_rewrite_command_sets_host_werror_env_when_enabled(self) -> None:
+        command = Command("cmake ..", "cmake", {"CXXFLAGS": "-O2"})
+
+        rewritten = build_cells_with_skips(
+            [
+                ExampleSpec(
+                    Path("/tmp/example"),
+                    "example",
+                    [command],
+                    ["dav-2201"],
+                    ["npu"],
+                    "readme",
+                )
+            ],
+            "dav-2201",
+            ["npu"],
+            werror=True,
+        )[0][0].commands[0]
+
+        self.assertEqual(rewritten.env["CFLAGS"], "-Werror")
+        self.assertEqual(rewritten.env["CXXFLAGS"], "-O2 -Werror")
+
     def test_unsupported_arch_is_excluded_not_counted_as_skip(self) -> None:
         spec = ExampleSpec(
             Path("/tmp/example"),

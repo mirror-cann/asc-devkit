@@ -25,8 +25,10 @@ from presmoke.generate_case_runners import (
     NO_CMAKE_ARCH_INJECTION_CASES,
     apply_case_overrides,
     command_env_prefix,
+    command_workdir,
     explicit_skip_reason,
     is_atc_prerequisite_command,
+    merge_export_commands_into_run,
     quote_env_value,
     render_runner,
     requires_custom_op_package,
@@ -111,6 +113,30 @@ class GenerateCaseRunnersTest(unittest.TestCase):
 
         self.assertEqual(missing, [])
 
+    def test_manifest_includes_leaf_cmake_executable_cases(self) -> None:
+        project_root = Path(__file__).resolve().parents[3]
+        examples_root = project_root / "examples"
+        manifest_cases = {
+            item["case"]
+            for item in json.loads(
+                (project_root / "scripts/presmoke/reports/case_runner_manifest.json").read_text(encoding="utf-8")
+            )
+        }
+        missing = []
+        for cmake_file in examples_root.rglob("CMakeLists.txt"):
+            text = cmake_file.read_text(encoding="utf-8", errors="ignore")
+            if not re.search(r"\badd_executable\s*\(", text):
+                continue
+            rel_path = cmake_file.parent.relative_to(examples_root).as_posix()
+            if rel_path in manifest_cases:
+                continue
+            readme = cmake_file.parent / "README.md"
+            has_child_case = any(case.startswith(rel_path + "/") for case in manifest_cases)
+            if readme.exists() and not has_child_case:
+                missing.append(rel_path)
+
+        self.assertEqual(missing, [])
+
     def test_atc_prerequisite_python_stays_in_build_before_atc(self) -> None:
         commands = [
             Command("python3 ../leaky_relu.py", "run"),
@@ -175,6 +201,22 @@ class GenerateCaseRunnersTest(unittest.TestCase):
         self.assertIn('(cd "$BUILD_DIR" && soc_version=$SOC_VERSION bash -lc', script)
         self.assertIn('python3 ../torch_library_report_tensor.py', script)
         self.assertNotIn('(cd "$CASE_DIR" && soc_version=$SOC_VERSION bash -lc', script)
+
+    def test_export_command_is_merged_into_first_run_command(self) -> None:
+        build_cmds, run_cmds = merge_export_commands_into_run(
+            [
+                Command("cmake ..", "cmake"),
+                Command('export ASCEND_CUSTOM_OPP_PATH="$(pwd)/output:${ASCEND_CUSTOM_OPP_PATH}"', "shell"),
+            ],
+            [Command("./demo", "run")],
+        )
+
+        self.assertEqual([command.raw for command in build_cmds], ["cmake .."])
+        self.assertEqual(
+            run_cmds[0].raw,
+            'export ASCEND_CUSTOM_OPP_PATH="$(pwd)/output:${ASCEND_CUSTOM_OPP_PATH}"; ./demo',
+        )
+        self.assertEqual(command_workdir(run_cmds[0].raw, default_cd_build=True), "$BUILD_DIR")
 
     def test_env_value_references_are_not_single_quoted(self) -> None:
         self.assertEqual(quote_env_value("$ARCH"), "$ARCH")

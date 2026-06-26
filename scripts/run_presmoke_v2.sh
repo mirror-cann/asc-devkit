@@ -29,6 +29,7 @@ CPU_RUN_TIMEOUT="${CPU_RUN_TIMEOUT:-300}"
 PRIMARY_CARD="${PRIMARY_CARD:-0}"
 RETRY_CARDS="${RETRY_CARDS:-}"
 REPORT_FORMAT="${REPORT_FORMAT:-all}"
+PRESMOKE_WERROR="${PRESMOKE_WERROR:-0}"
 OUT_ROOT="${OUT_ROOT:-${PROJECT_ROOT}/presmoke_reports/presmoke_${ARCH}_$(date +%Y%m%d_%H%M%S)}"
 LOCK_DIR="${LOCK_DIR:-${PROJECT_ROOT}/.presmoke_locks/run_presmoke.lock}"
 
@@ -180,7 +181,7 @@ run_presmoke() {
     shift 2
     local run_dir="$OUT_ROOT/$name"
     mkdir -p "$run_dir"
-    log "run_start name=$name card=$card arch=$ARCH modes=$MODES jobs=$JOBS npu_slots=$NPU_SLOTS cpu_run_slots=$CPU_RUN_SLOTS make_jobs=$MAKE_JOBS timeout=$TIMEOUT cpu_run_timeout=$CPU_RUN_TIMEOUT schedule=$SCHEDULE args=$*"
+    log "run_start name=$name card=$card arch=$ARCH modes=$MODES jobs=$JOBS npu_slots=$NPU_SLOTS cpu_run_slots=$CPU_RUN_SLOTS make_jobs=$MAKE_JOBS timeout=$TIMEOUT cpu_run_timeout=$CPU_RUN_TIMEOUT schedule=$SCHEDULE werror=$PRESMOKE_WERROR args=$*"
     {
         echo "name=$name"
         echo "started_at=$(date_iso)"
@@ -198,6 +199,7 @@ run_presmoke() {
         echo "make_jobs=$MAKE_JOBS"
         echo "timeout=$TIMEOUT"
         echo "cpu_run_timeout=$CPU_RUN_TIMEOUT"
+        echo "werror=$PRESMOKE_WERROR"
         echo "card=$card"
         echo "extra_args=$*"
         source_cann
@@ -216,6 +218,7 @@ run_presmoke() {
         export ASCEND_VISIBLE_DEVICES="$card"
         export ASCEND_DEVICE_ID=0
         export NPU_DEVICE_ID=0
+        export PRESMOKE_WERROR
         args=(
             --runner-mode "$RUNNER_MODE"
             --arch "$ARCH"
@@ -235,6 +238,9 @@ run_presmoke() {
         fi
         if should_strict_schedule "$@"; then
             args+=(--strict-schedule)
+        fi
+        if truthy "$PRESMOKE_WERROR"; then
+            args+=(--werror)
         fi
         run_python_presmoke "${args[@]}" "$@"
     ) > "$run_dir/stdout.log" 2> "$run_dir/stderr.log"

@@ -32,6 +32,68 @@ presmoke_mode() {
     printf '%s\n' "${PRESMOKE_MODE:-npu}"
 }
 
+presmoke_werror_enabled() {
+    case "${PRESMOKE_WERROR:-}" in
+        1|true|TRUE|yes|YES|on|ON) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+presmoke_cmake_is_configure_command() {
+    local arg
+    for arg in "$@"; do
+        case "$arg" in
+            --build|--install|--open|--workflow|-E) return 1 ;;
+        esac
+    done
+    return 0
+}
+
+presmoke_cmake_has_cache_arg() {
+    local key="$1"
+    shift
+    local arg
+    for arg in "$@"; do
+        [[ "$arg" == "-D${key}="* ]] && return 0
+    done
+    return 1
+}
+
+presmoke_werror_cmake_args() {
+    presmoke_werror_enabled || return 0
+    printf '%s\n' "-DCMAKE_ASC_FLAGS=-Werror"
+}
+
+presmoke_append_werror_flag() {
+    local value="${1:-}"
+    if [[ -z "$value" ]]; then
+        printf '%s\n' "-Werror"
+        return
+    fi
+    case " $value " in
+        *" -Werror "*) printf '%s\n' "$value" ;;
+        *) printf '%s\n' "$value -Werror" ;;
+    esac
+}
+
+cmake() {
+    local extra=()
+    if presmoke_werror_enabled && presmoke_cmake_is_configure_command "$@"; then
+        presmoke_cmake_has_cache_arg "CMAKE_ASC_FLAGS" "$@" || extra+=("-DCMAKE_ASC_FLAGS=-Werror")
+        CFLAGS="$(presmoke_append_werror_flag "${CFLAGS:-}")" \
+        CXXFLAGS="$(presmoke_append_werror_flag "${CXXFLAGS:-}")" \
+        command cmake "$@" "${extra[@]}"
+        return
+    fi
+    command cmake "$@" "${extra[@]}"
+}
+
+export -f presmoke_werror_enabled
+export -f presmoke_cmake_is_configure_command
+export -f presmoke_cmake_has_cache_arg
+export -f presmoke_append_werror_flag
+export -f cmake
+
 presmoke_soc_version() {
     if [[ -n "${PRESMOKE_SOC_VERSION:-}" ]]; then
         printf '%s\n' "$PRESMOKE_SOC_VERSION"

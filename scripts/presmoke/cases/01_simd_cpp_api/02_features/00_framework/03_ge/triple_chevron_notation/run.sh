@@ -24,7 +24,7 @@ case_build() {
 
 case_run() {
     mkdir -p "$BUILD_DIR"
-    (cd "$BUILD_DIR" && soc_version=$SOC_VERSION bash -lc 'ASCEND_CUSTOM_OPP_PATH="$BUILD_DIR/output:${ASCEND_CUSTOM_OPP_PATH:-}" ./demo')
+    (cd "$BUILD_DIR" && soc_version=$SOC_VERSION bash -lc 'export ASCEND_CUSTOM_OPP_PATH="$(pwd)/output:${ASCEND_CUSTOM_OPP_PATH}"; ./demo')
 }
 
 case_verify() {

@@ -23,11 +23,21 @@ from .model import Cell, Command, ExampleSpec, RunResult, Suggestion
 
 
 @dataclass
+class CaseRunnerOptions:
+    arch: str
+    modes: Iterable[str]
+    includes: Iterable[str]
+    excludes: Iterable[str]
+    werror: bool = False
+
+
+@dataclass
 class CaseRunnerContext:
     project_root: Path
     runners_root: Path
     arch: str
     modes: List[str]
+    werror: bool
     cells: List[Cell]
     suggestions: List[Suggestion]
     skipped: List[RunResult]
@@ -46,21 +56,19 @@ class RunnerInfo:
 
 def build_case_runner_cells_with_skips(
     project_root: Path,
-    arch: str,
-    modes: Iterable[str],
-    includes: Iterable[str],
-    excludes: Iterable[str],
+    options: CaseRunnerOptions,
 ) -> tuple[List[Cell], List[Suggestion], List[RunResult]]:
     runners_root = project_root / "scripts" / "presmoke" / "cases"
     manifest = load_manifest(project_root)
     runner_dirs = sorted(path.parent for path in runners_root.rglob("run.sh"))
-    runner_dirs = filter_examples(runner_dirs, includes, excludes)
-    modes_list = list(modes)
+    runner_dirs = filter_examples(runner_dirs, options.includes, options.excludes)
+    modes_list = list(options.modes)
     context = CaseRunnerContext(
         project_root=project_root,
         runners_root=runners_root,
-        arch=arch,
+        arch=options.arch,
         modes=modes_list,
+        werror=options.werror,
         cells=[],
         suggestions=[],
         skipped=[],
@@ -153,6 +161,8 @@ def make_runner_cell(context: CaseRunnerContext, runner_dir: Path, info: RunnerI
         "PRESMOKE_ARCH": context.arch,
         "PRESMOKE_MODE": mode,
     }
+    if getattr(context, "werror", False):
+        command_env["PRESMOKE_WERROR"] = "1"
     commands = [
         Command(f"bash {runner} clean", "clean", command_env),
         Command(f"bash {runner} build", "build", command_env),

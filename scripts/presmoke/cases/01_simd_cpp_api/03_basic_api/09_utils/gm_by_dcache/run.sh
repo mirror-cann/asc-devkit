@@ -29,6 +29,7 @@ case_run() {
 
 case_verify() {
     mkdir -p "$BUILD_DIR"
+    :
 }
 
 case_clean() {

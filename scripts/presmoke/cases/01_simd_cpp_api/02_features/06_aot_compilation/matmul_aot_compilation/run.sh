@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-CASE_REL=01_simd_cpp_api/02_features/04_compile/02_dynamic_library_compile
+CASE_REL=01_simd_cpp_api/02_features/06_aot_compilation/matmul_aot_compilation
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../../../_case_entry.sh"
 presmoke_case_init "$CASE_REL"
@@ -24,7 +24,7 @@ case_build() {
 
 case_run() {
     mkdir -p "$BUILD_DIR"
-    (cd "$BUILD_DIR" && soc_version=$SOC_VERSION bash -lc ./demo)
+    (cd "$BUILD_DIR" && soc_version=$SOC_VERSION bash -lc ./matmul_aot_example)
 }
 
 case_verify() {

@@ -21,7 +21,7 @@ import time
 import unittest
 from pathlib import Path
 
-from presmoke.case_runners import build_case_runner_cells_with_skips
+from presmoke.case_runners import CaseRunnerOptions, build_case_runner_cells_with_skips
 from presmoke.cli import parse_args, presmoke_run_lock
 from presmoke.model import Cell, Command, ExampleSpec, RunReport
 from presmoke.pool import NpuSlotPool
@@ -156,7 +156,10 @@ class RunnerPoolTest(unittest.TestCase):
                 '[{"case":"x","skip":true,"skip_reason":"needs TensorFlow 2.6.5","supported_archs":["dav-2201"],"supported_modes":["npu"]}]',
                 encoding="utf-8",
             )
-            cells, suggestions, skipped = build_case_runner_cells_with_skips(root, "dav-2201", ["npu"], [], [])
+            cells, suggestions, skipped = build_case_runner_cells_with_skips(
+                root,
+                CaseRunnerOptions(arch="dav-2201", modes=["npu"], includes=[], excludes=[]),
+            )
         self.assertEqual(cells, [])
         self.assertEqual(len(skipped), 1)
         self.assertEqual(skipped[0].status, "SKIP")
@@ -175,7 +178,10 @@ class RunnerPoolTest(unittest.TestCase):
                 '[{"case":"x","skip":false,"supported_archs":["dav-3510"],"supported_modes":["npu"]}]',
                 encoding="utf-8",
             )
-            cells, suggestions, skipped = build_case_runner_cells_with_skips(root, "dav-2201", ["npu"], [], [])
+            cells, suggestions, skipped = build_case_runner_cells_with_skips(
+                root,
+                CaseRunnerOptions(arch="dav-2201", modes=["npu"], includes=[], excludes=[]),
+            )
         self.assertEqual(cells, [])
         self.assertEqual(skipped, [])
         self.assertEqual(len(suggestions), 1)
@@ -194,7 +200,10 @@ class RunnerPoolTest(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            cells, _, _ = build_case_runner_cells_with_skips(root, "dav-2201", ["npu"], [], [])
+            cells, _, _ = build_case_runner_cells_with_skips(
+                root,
+                CaseRunnerOptions(arch="dav-2201", modes=["npu"], includes=[], excludes=[]),
+            )
 
         self.assertEqual([command.kind for command in cells[0].commands], ["clean", "build", "run", "verify"])
         self.assertTrue(cells[0].commands[0].raw.endswith("run.sh clean"))
