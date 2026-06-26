@@ -202,10 +202,10 @@ inline void asc_stwt(half2* address, half2 val)
 -   SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) void kernel_asc_stwt(float* src, float* val)
+    __global__ __launch_bounds__(1024) void kernel_asc_stwt(float* dst, float* val)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
-        asc_stwt(src + idx, val[idx]);
+        asc_stwt(dst + idx, val[idx]);
     }
     ```
 
@@ -214,10 +214,10 @@ inline void asc_stwt(half2* address, half2 val)
     SIMD与SIMT混合编程场景，需要显式使用地址空间限定符表示地址空间：\_\_gm\_\_表示Global Memory内存空间。
 
     ```
-    __simt_vf__ __launch_bounds__(1024) inline void kernel_asc_stwt(__gm__ float* src, __gm__ float* val)
+    __simt_vf__ __launch_bounds__(1024) inline void kernel_asc_stwt(__gm__ float* dst, __gm__ float* val)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
-        asc_stwt(src + idx, val[idx]);
+        asc_stwt(dst + idx, val[idx]);
     }
     ```
 
