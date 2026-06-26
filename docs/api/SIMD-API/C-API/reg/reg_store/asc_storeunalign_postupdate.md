@@ -153,7 +153,7 @@ PIPE_V
         // 准备本次待搬出的src
         src = asc_update_src_b16(remain_count);
         // 跨32B边界的尾块缓存在ureg中
-        asc_storeunalign(dst, ureg, src);
+        asc_storeunalign_postupdate(dst, ureg, src);
     }
     // 循环结束后调用一次post，将ureg中剩余数据刷至UB；src1_dst已自增至结束位置，offset为0
     asc_storeunalign_post(dst, ureg, 0);
