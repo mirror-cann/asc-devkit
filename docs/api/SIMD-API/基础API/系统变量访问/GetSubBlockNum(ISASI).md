@@ -73,9 +73,22 @@ __aicore__ inline int64_t GetSubBlockNum()
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
-不同Kernel类型下（通过[设置Kernel类型](../Kernel-Tiling/设置Kernel类型.md)设置），在AIC和AIV上调用该接口的返回值如下：
+在融合编译场景下，不同[算子类型](https://gitcode.com/cann/asc-devkit/blob/9.1.0-beta.3/docs/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#section1074418132518)在AIC和AIV上调用该接口的返回值如下：
 
-**表 1**  返回值列表
+**表1** 融合编译场景返回值列表
+
+| 算子类型 | 限定符 | AIC | AIV |
+| --- | --- | --- | --- |
+| Vector算子 | __vector__ | - | 1 |
+| Cube算子 | __cube__ | 1 | - |
+| Mix算子 | __mix__(0, 1) | - | 1 |
+| Mix算子 | __mix__(1, 0) | 1 | - |
+| Mix算子 | __mix__(1, 1) | 1 | 1 |
+| Mix算子 | __mix__(1, 2) | 1 | 2 |
+
+在自定义算子工程和Kernel直调工程场景下，不同Kernel类型（通过[设置Kernel类型](../Kernel-Tiling/设置Kernel类型.md)设置）在AIC和AIV上调用该接口的返回值如下：
+
+**表2** 自定义算子工程和Kernel直调工程场景返回值列表
 
 <a name="table1992694791316"></a>
 <table><thead align="left"><tr id="row19927547201318"><th class="cellrowborder" valign="top" width="7.6284743051389725%" id="mcps1.2.8.1.1"><p id="p992712473130"><a name="p992712473130"></a><a name="p992712473130"></a>Kernel类型</p>
@@ -127,6 +140,8 @@ __aicore__ inline int64_t GetSubBlockNum()
 </tbody>
 </table>
 
+**注意，两种场景中返回值的含义相同，仅设置类型的方式不同，编写算子时推荐使用融合编译。**
+
 ## 约束说明<a name="section633mcpsimp"></a>
 
 无
@@ -136,4 +151,3 @@ __aicore__ inline int64_t GetSubBlockNum()
 ```
 int64_t subBlockNum = AscendC::GetSubBlockNum();
 ```
-

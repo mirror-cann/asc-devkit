@@ -61,6 +61,8 @@
 
 获取AI Core上Vector核的ID。
 
+GetSubBlockIdx在使用`__mix__(1, 2)`作为[函数执行空间限定符](https://gitcode.com/cann/asc-devkit/blob/9.1.0-beta.3/docs/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#section1074418132518)的场景下，可以用于区分同一个核上的两个不同Vector Core，取值分别为0和1。
+
 ## 函数原型<a name="section620mcpsimp"></a>
 
 ```
@@ -84,4 +86,3 @@ __aicore__ inline int64_t GetSubBlockIdx()
 ```
 int64_t subBlockID = AscendC::GetSubBlockIdx();
 ```
-
