@@ -2,7 +2,7 @@
 
 Ascend C提供一组HCCL通信类高阶API，方便算子Kernel开发用户在AI Core侧灵活管理通算融合算子中计算与通信任务的执行顺序。
 
-HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语接口（以下统称为Prepare接口），对标[集合通信C++接口](https://gitcode.com/cann/hccl/blob/master/docs/zh/api_ref/comm_op_interface/README.md)，当前支持[AllReduce](AllReduce.md)、[AllGather](AllGather.md)、[ReduceScatter](ReduceScatter.md)、[AlltoAll](AlltoAll.md)接口等。本章的所有接口运行在AI Core上，且不执行通信任务，而是由用户调用Prepare接口将对应类型的通信任务信息发送给AI CPU或CCU服务端，并在合适的时机通过[Commit](Commit.md)接口通知AI CPU或CCU上的服务端执行对应的通信任务。注意，当前Ascend 950PR/Ascend 950DT上仅支持CCU服务端。
+HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语接口（以下统称为Prepare接口），对标[集合通信C++接口](https://gitcode.com/cann/hccl/blob/master/docs/zh/api_ref/comm_op_interface/README.md)，当前支持[AllReduce](AllReduce.md)、[AllGather](AllGather.md)、[ReduceScatter](ReduceScatter.md)、[AlltoAll](AlltoAll.md)接口等。本章的所有接口运行在AI Core上，且不执行通信任务，而是由用户调用Prepare接口将对应类型的通信任务信息发送给AI CPU或CCU服务端，并在合适的时机通过[Commit](Commit.md)接口通知AI CPU或CCU上的服务端执行对应的通信任务。<!-- npu="950" id1 -->注意，当前Ascend 950PR/Ascend 950DT上仅支持CCU服务端。<!-- end id1 -->
 
 所谓合适的时机，取决于用户编排的是先通信后计算的任务，还是先计算后通信的任务。对于这两种场景，简述如下：
 
@@ -14,11 +14,15 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
 **图1**  AI Core下发HCCL通信任务机制  
 ![](../../../../figures/AI-Core下发HCCL通信任务机制.png "AI-Core下发HCCL通信任务机制")
 
+<!-- npu="950" id3 -->
 **图2** Ascend 950PR/Ascend 950DT  AI Core下发HCCL通信任务机制  
 ![](../../../../figures/Ascend-950PR-Ascend-950DT-AI-Core下发HCCL通信任务机制.png "Ascend-950PR-Ascend-950DT-AI-Core下发HCCL通信任务机制")
+<!-- end id3 -->
 
+<!-- npu="A3" id2 -->
 > [!CAUTION]注意
 >对于Atlas A3 训练系列产品/Atlas A3 推理系列产品，在AI CPU作为服务端的场景中，HCCL通信API的功能依赖开放AI CPU用户态下发调度任务，存在一定的安全风险，用户需要自行确保AI Core自定义算子的安全可靠，防止恶意攻击行为。
+<!-- end id2 -->
 
 实现AI Core下发一个通信任务的具体步骤如下：
 
@@ -133,7 +137,7 @@ HCCL为**集合通信任务客户端**，主要对外提供了集合通信原语
     // }
 
     // 调用核间同步接口，防止部分核执行较快退出，触发Hccl析构，影响执行较慢的核
-    // 开发者可根据实际的业务场景，选择调用[SyncAll](../../../基础API/同步控制/核间同步/SyncAll.md)、[CrossCoreSetFlag(ISASI)](../../../基础API/同步控制/核间同步/CrossCoreSetFlag(ISASI).md)、[CrossCoreWaitFlag(ISASI)](../../../基础API/同步控制/核间同步/CrossCoreWaitFlag(ISASI).md)接口，保证全部核的任务完成后再退出执行
+    // 开发者可根据实际的业务场景，选择调用SyncAll、CrossCoreSetFlag、CrossCoreWaitFlag接口，保证全部核的任务完成后再退出执行
     ```
 
 6.  用户调用[Finalize](Finalize.md)接口，通知服务端后续无通信任务，执行结束后退出；客户端检测并等待最后一个通信任务执行结束。

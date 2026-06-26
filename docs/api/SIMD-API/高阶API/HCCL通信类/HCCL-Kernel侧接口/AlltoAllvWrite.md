@@ -2,13 +2,25 @@
 
 ## 产品支持情况
 
+<!-- npu="950" id1 -->
 - Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
 - Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
 - Atlas 推理系列产品AI Core：不支持
 - Atlas 推理系列产品Vector Core：不支持
+<!-- end id5 -->
+<!-- npu="910" id6 -->
 - Atlas 训练系列产品：不支持
+<!-- end id6 -->
 
 ## 功能说明
 
@@ -52,7 +64,9 @@ __aicore__ inline HcclHandle AlltoAllvWrite(GM_ADDR usrIn, GM_ADDR sendOffsets, 
 -   调用本接口前确保已调用过[InitV2](InitV2.md)和[SetCcTilingV2](SetCcTilingV2.md)接口。
 -   若HCCL对象的[模板参数config](HCCL模板参数.md#p150710476349)未指定下发通信任务的核，则该接口只能在AIC核或者AIV核两者之一上调用。若HCCL对象的[模板参数config](HCCL模板参数.md#p150710476349)指定了下发通信任务的核，则该接口可以在AIC核和AIV核上同时调用，接口内部根据指定的核的类型，在对应的AIC核、AIV核二者之一下发该通信任务。
 -   一个通信域内，所有Prepare接口和InterHcclGroupSync接口的总调用次数不能超过63。
+<!-- npu="950" id7 -->
 -   对于Ascend 950PR/Ascend 950DT，通信服务端为CCU时，单次最大通信数据量不能超过256M。
+<!-- end id7 -->
 
 ## 调用示例
 
