@@ -8,4 +8,4 @@
 
 -   **[Warp Reduce类函数](Warp-Reduce类函数/Warp-Reduce类函数.md)**
 
--   **[LaneID类函数](Lane-ID类函数/Lane-ID类函数.md)**
+-   **[Lane ID类函数](Lane-ID类函数/Lane-ID类函数.md)**

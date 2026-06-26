@@ -12,11 +12,11 @@
 
 ## 功能说明
 
-获取Warp内当前线程LaneId与输入lane\_mask做异或操作（LaneId^lane\_mask）得到的dstLaneId对应线程输入的用于交换的var值；如果目标线程是非活跃状态，获取到寄存器中未初始化的值。其中，参数width用于划分Warp内线程的分组。参数width设置参与交换的32个线程的分组宽度，默认值为32，即所有线程分为1组。
+获取Warp内当前线程Lane ID与输入lane\_mask做异或操作（Lane ID ^ lane\_mask）得到的dstLaneId对应线程输入的用于交换的var值；如果目标线程是非活跃状态，获取到寄存器中未初始化的值。其中，参数width用于划分Warp内线程的分组。参数width设置参与交换的32个线程的分组宽度，默认值为32，即所有线程分为1组。
 
-在多个分组场景（width小于32）下，每个线程获取位于本组内或线程编号更小的组内的dstLaneId对应线程的var值；也就是说，如果dstLaneId小于当前线程所在分组的起始LaneId，dstLaneId对应的线程位于线程编号更小的组内，则可以获取该dstLaneId线程的var值；如果dstLaneId大于当前线程所在分组的最大LaneId，则返回当前线程的var值。
+在多个分组场景（width小于32）下，每个线程获取位于本组内或线程编号更小的组内的dstLaneId对应线程的var值；也就是说，如果dstLaneId小于当前线程所在分组的起始LaneId，dstLaneId对应的线程位于线程编号更小的组内，则可以获取该dstLaneId线程的var值；如果dstLaneId大于当前线程所在分组的最大Lane ID，则返回当前线程的var值。
 
-例如，Warp内32个活跃线程调用asc\_shfl\_xor\(LaneId, 1, 16\)接口，每个线程的返回值为当前线程LaneId^1对应线程的var值。
+例如，Warp内32个活跃线程调用asc\_shfl\_xor\(LaneId, 1, 16\)接口，每个线程的返回值为当前线程Lane ID ^ 1对应线程的var值。
 
 **图 1**  asc\_shfl\_xor结果示意图
 
@@ -67,7 +67,7 @@ inline bfloat16x2_t asc_shfl_xor(bfloat16x2_t var, int32_t lane_mask, int32_t wi
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | var | 输入 | 线程用于交换的输入操作数。 |
-| lane_mask | 输入 | 与当前线程LaneId做异或运算的操作数。取值范围为[0, 32)，且小于width。 |
+| lane_mask | 输入 | 与当前线程Lane ID做异或运算的操作数。取值范围为[0, 32)，且小于width。 |
 | width | 输入 | Warp内参与交换的线程的分组宽度，默认值为32。width的取值范围为(0, 32]，width必须是2的倍数。 |
 
 ## 返回值说明
@@ -96,7 +96,7 @@ Warp内指定线程的var值。
 
 ## 调用示例
 
-以下示例包含两类用法：示例1使用asc\_shfl\_xor获取Warp分组内当前线程LaneId与lane\_mask异或后对应线程的输入值；示例2使用asc\_shfl\_xor在每个Warp内进行归约求和。
+以下示例包含两类用法：示例1使用asc\_shfl\_xor获取Warp分组内当前线程Lane ID与lane\_mask异或后对应线程的输入值；示例2使用asc\_shfl\_xor在每个Warp内进行归约求和。
 
 -   示例1：
 

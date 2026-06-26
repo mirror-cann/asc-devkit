@@ -14,7 +14,7 @@
 
 判断Warp中每个活跃线程的输入是否非零。
 
-当Warp内所有活跃线程执行本接口后，对所有活跃线程的输入操作数predicate进行判断，返回一个32bit的无符号整数，若Warp内活跃线程输入的predicate不为0，则返回值中与线程LaneId对应的bit位为1，否则为0。Warp内所有活跃线程返回相同的结果。
+当Warp内所有活跃线程执行本接口后，对所有活跃线程的输入操作数predicate进行判断，返回一个32bit的无符号整数，若Warp内活跃线程输入的predicate不为0，则返回值中与线程Lane ID对应的bit位为1，否则为0。Warp内所有活跃线程返回相同的结果。
 
 ## 函数原型
 
@@ -32,7 +32,7 @@ inline uint32_t asc_ballot(int32_t predicate)
 
 ## 返回值说明
 
-32bit的无符号整数：若Warp内活跃线程输入的predicate不为0，则返回值中与线程LaneId对应的bit位为1，否则为0。
+32bit的无符号整数：若Warp内活跃线程输入的predicate不为0，则返回值中与线程Lane ID对应的bit位为1，否则为0。
 
 ## 约束说明
 
