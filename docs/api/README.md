@@ -2,9 +2,9 @@
 
 -   [Ascend C API列表](Ascend-C-API列表.md)
 -   [SIMD API](SIMD-API/SIMD-API.md)
-    -   [SIMD API列表](SIMD-API/SIMD-API列表.md)
     -   [通用说明和约束](SIMD-API/通用说明和约束.md)
     -   [基础API](SIMD-API/基础API/基础API.md)
+        -   [基础API列表](SIMD-API/基础API/基础API列表.md)
         -   [数据结构](SIMD-API/基础API/数据结构/数据结构.md)
             -   [内置数据类型](SIMD-API/基础API/数据结构/内置数据类型.md)
             -   [精度转换](SIMD-API/基础API/数据结构/precision_conversion.md)
@@ -1274,6 +1274,7 @@
             -   [asc_init](SIMD-API/C-API/其他操作/asc_init.md)
 
     -   [高阶API](SIMD-API/高阶API/高阶API.md)
+        -   [高阶API列表](SIMD-API/高阶API/高阶API列表.md)
         -   [数学计算](SIMD-API/高阶API/数学计算/数学计算.md)
             -   [Tanh接口](SIMD-API/高阶API/数学计算/Tanh接口/Tanh接口.md)
                 -   [Tanh](SIMD-API/高阶API/数学计算/Tanh接口/Tanh.md)
@@ -2952,5 +2953,11 @@
     -   [DataStoreBarrier](AI-CPU-API/DataStoreBarrier.md)
 
 -   [附录](附录/附录.md)
+    -   [API流水类型汇总](附录/API流水类型汇总.md)
+    -   [Cube指令理论性能汇总](附录/Cube指令理论性能汇总.md)
+    -   [Memory矢量计算接口边界值汇总](附录/Memory矢量计算接口边界值汇总.md)
+    -   [Mmad接口边界值汇总](附录/Mmad接口边界值汇总.md)
+    -   [Vector指令理论性能汇总](附录/Vector指令理论性能汇总.md)
+    -   [原子操作类接口边界值汇总](附录/原子操作类接口边界值汇总.md)
     -   [预留接口](附录/预留接口.md)
     -   [接口变更说明](附录/接口变更说明.md)
