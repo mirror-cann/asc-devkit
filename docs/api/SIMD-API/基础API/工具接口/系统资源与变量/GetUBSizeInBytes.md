@@ -38,7 +38,7 @@ UB空间的大小，单位为Byte。
 
 ## 调用示例
 
-本调用示例通过GetUBSizeInBytes获取的UB空间大小，来计算tileNum的值。完整的算子样例请参考：[get\_ub\_size样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/04_resource_management/get_ub_size)。
+本调用示例通过GetUBSizeInBytes获取的UB空间大小，来计算tileNum的值。完整的算子样例请参考：[get\_ub\_size样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/09_utils/get_ub_size)。
 
 ```cpp
 // totalLength为待处理的总数据长度 (元素个数)

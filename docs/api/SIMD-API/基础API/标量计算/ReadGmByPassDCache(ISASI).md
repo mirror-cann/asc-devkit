@@ -68,4 +68,4 @@ while (target != 0) {
 }
 ```
 
-完整样例请参考[GmByPassDCache类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/09_scalar_computation/gm_by_pass_dcache)。
+完整样例请参考[GmByPassDCache类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/09_utils/gm_by_pass_dcache)。
