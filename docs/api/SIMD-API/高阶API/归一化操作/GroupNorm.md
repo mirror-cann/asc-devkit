@@ -97,8 +97,8 @@
 // outputMean: 输出每个group的均值
 // outputVariance: 输出每个group的方差
 // inputX: 输入数据X，shape为 [N, C, H, W]
-// gamma: LayerNorm的缩放参数 γ，shape为 [C]
-// beta: LayerNorm的偏置参数 β，shape为 [C]
+// gamma: GroupNorm的缩放参数 γ，shape为 [C]
+// beta: GroupNorm的偏置参数 β，shape为 [C]
 // epsilon: 防除零系数ε
 // tiling: 预计算的Tiling信息，包含分组数、维度等参数
 

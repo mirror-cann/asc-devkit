@@ -204,7 +204,7 @@ __aicore__ inline void AscendDequant(const LocalTensor<dstT>& dstTensor, const L
 struct AscendDeQuantConfig {
     bool hasOffset;
     int32_t kDim = 1;
-}
+};
 ```
 
 **表3**  接口参数说明
@@ -242,7 +242,7 @@ struct AscendDeQuantParam {
     uint32_t n;
     uint32_t calCount;
     uint32_t groupSize = 0;
-}
+};
 ```
 
 **表5**  支持的数据类型组合（deqScale为LocalTensor）

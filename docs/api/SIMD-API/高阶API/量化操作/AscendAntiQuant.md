@@ -313,7 +313,7 @@ struct AscendAntiQuantParam {
     uint32_t n;
     uint32_t calCount;
     uint32_t groupSize = 0;
-}
+};
 ```
 
 ## 返回值说明

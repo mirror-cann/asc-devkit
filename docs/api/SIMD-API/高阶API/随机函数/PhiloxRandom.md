@@ -68,7 +68,7 @@ struct PhiloxRandomParams {
     uint32_t stride;
     uint32_t row;
     uint32_t column;
-}
+};
 ```
 
 **图1**  PhiloxRandom示意图  

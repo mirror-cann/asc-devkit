@@ -355,7 +355,7 @@ struct AscendQuantConfig {
     bool hasOffset;
     int32_t kDim = 1;
     RoundMode roundMode = RoundMode::CAST_RINT;
-}
+};
 ```
 
 **表4**  PER\_TOKEN/PER\_GROUP场景支持的数据类型组合
@@ -423,7 +423,7 @@ struct AscendQuantParam {
     uint32_t n;
     uint32_t calCount;
     uint32_t groupSize = 0;
-}
+};
 ```
 
 ## 返回值说明
@@ -491,7 +491,7 @@ struct AscendQuantParam {
 
     const float scale = 0.02; // 量化参数
     const float offset = 0.9; // 量化参数，dstLocal[i] = srcLocal[i] * scale + offset
-    uint32_t calCount = 1022; // srcTensor的前calCount个于元素参与计算
+    uint32_t calCount = 1022; // srcTensor的前calCount个元素参与计算
 
     // dstTensor为int8_t数据类型，通过sharedTmpBuffer入参传入临时空间
     AscendC::AscendQuant<srcType>(dstLocal, srcLocal, sharedTmpBuffer, scale, offset, calCount);
@@ -520,7 +520,7 @@ struct AscendQuantParam {
 
     uint32_t scaleCount = 64;  // 量化参数，要求是32的整数倍
     uint32_t offsetCount = 64; // 量化参数，要求与scaleCount相等
-    uint32_t calCount = 1022;  // srcTensor的前calCount个于元素参与计算
+    uint32_t calCount = 1022;  // srcTensor的前calCount个元素参与计算
 
     // dstTensor为int8_t数据类型，通过sharedTmpBuffer入参传入临时空间
     AscendC::AscendQuant<srcType>(
