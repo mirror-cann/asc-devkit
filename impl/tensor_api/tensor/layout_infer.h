@@ -27,6 +27,16 @@
 namespace AscendC {
 namespace Te {
 
+constexpr size_t INFER_NESTED_LAYOUT_ND_EXT_PRIORITY = 0;
+constexpr size_t INFER_NESTED_LAYOUT_DN_EXT_PRIORITY = 1;
+constexpr size_t INFER_NESTED_LAYOUT_NN_PRIORITY = 2;
+constexpr size_t INFER_NESTED_LAYOUT_NZ_PRIORITY = 3;
+constexpr size_t INFER_NESTED_LAYOUT_ZZ_PRIORITY = 4;
+constexpr size_t INFER_NESTED_LAYOUT_ZN_PRIORITY = 5;
+constexpr size_t INFER_NESTED_LAYOUT_SCALE_ADN_PRIORITY = 6;
+constexpr size_t INFER_NESTED_LAYOUT_SCALE_BND_PRIORITY = 7;
+constexpr size_t INFER_NESTED_LAYOUT_PRIORITY_END = 8;
+
 template <typename RowStride, typename ColumnStride>
 struct InferFlatLayoutPatternImpl {
     using type = Std::ignore_t;
@@ -53,7 +63,7 @@ struct InferFlatLayoutPattern
 
 template <typename ShapeRow0, typename ShapeRow1, typename ShapeColumn0, typename ShapeColumn1,
     typename StrideRow0, typename StrideRow1, typename StrideColumn0, typename StrideColumn1,
-    size_t Priority = 0, typename Enable = void>
+    size_t Priority = INFER_NESTED_LAYOUT_ND_EXT_PRIORITY, typename Enable = void>
 struct InferNestedLayoutPatternImpl {
     using type = typename InferNestedLayoutPatternImpl<ShapeRow0, ShapeRow1, ShapeColumn0, ShapeColumn1,
         StrideRow0, StrideRow1, StrideColumn0, StrideColumn1, Priority + 1>::type;
@@ -62,29 +72,32 @@ struct InferNestedLayoutPatternImpl {
 template <typename ShapeRow0, typename ShapeRow1, typename ShapeColumn0, typename ShapeColumn1,
     typename StrideRow0, typename StrideRow1, typename StrideColumn0, typename StrideColumn1>
 struct InferNestedLayoutPatternImpl<ShapeRow0, ShapeRow1, ShapeColumn0, ShapeColumn1,
-    StrideRow0, StrideRow1, StrideColumn0, StrideColumn1, 8> {
+    StrideRow0, StrideRow1, StrideColumn0, StrideColumn1, INFER_NESTED_LAYOUT_PRIORITY_END> {
     using type = Std::ignore_t;
 };
 
 template <typename ShapeRow1, typename ShapeColumn1, typename StrideRow1>
-struct InferNestedLayoutPatternImpl<_1, ShapeRow1, _1, ShapeColumn1, _0, StrideRow1, _0, _1, 0> {
+struct InferNestedLayoutPatternImpl<_1, ShapeRow1, _1, ShapeColumn1, _0, StrideRow1, _0, _1,
+    INFER_NESTED_LAYOUT_ND_EXT_PRIORITY> {
     using type = NDExtLayoutPtn;
 };
 
 template <typename ShapeRow1, typename ShapeColumn1, typename StrideColumn1>
-struct InferNestedLayoutPatternImpl<_1, ShapeRow1, _1, ShapeColumn1, _0, _1, _0, StrideColumn1, 1> {
+struct InferNestedLayoutPatternImpl<_1, ShapeRow1, _1, ShapeColumn1, _0, _1, _0, StrideColumn1,
+    INFER_NESTED_LAYOUT_DN_EXT_PRIORITY> {
     using type = DNExtLayoutPtn;
 };
 
 template <typename ShapeRow1, typename ShapeColumn1, typename StrideColumn1>
-struct InferNestedLayoutPatternImpl<_2, ShapeRow1, _16, ShapeColumn1, _1, _32, _2, StrideColumn1, 2> {
+struct InferNestedLayoutPatternImpl<_2, ShapeRow1, _16, ShapeColumn1, _1, _32, _2, StrideColumn1,
+    INFER_NESTED_LAYOUT_NN_PRIORITY> {
     using type = NNLayoutPtn;
 };
 
 template <size_t ShapeRow0, typename ShapeRow1, size_t ShapeColumn0, typename ShapeColumn1,
     typename StrideColumn1>
 struct InferNestedLayoutPatternImpl<Std::Int<ShapeRow0>, ShapeRow1, Std::Int<ShapeColumn0>, ShapeColumn1,
-    Std::Int<ShapeColumn0>, Std::Int<ShapeRow0 * ShapeColumn0>, _1, StrideColumn1, 3,
+    Std::Int<ShapeColumn0>, Std::Int<ShapeRow0 * ShapeColumn0>, _1, StrideColumn1, INFER_NESTED_LAYOUT_NZ_PRIORITY,
     Std::enable_if_t<ShapeRow0 == FRACTAL_FIXED>> {
     using type = NZLayoutPtn;
 };
@@ -92,7 +105,7 @@ struct InferNestedLayoutPatternImpl<Std::Int<ShapeRow0>, ShapeRow1, Std::Int<Sha
 template <size_t ShapeRow0, typename ShapeRow1, size_t ShapeColumn0, typename ShapeColumn1,
     typename StrideRow1>
 struct InferNestedLayoutPatternImpl<Std::Int<ShapeRow0>, ShapeRow1, Std::Int<ShapeColumn0>, ShapeColumn1,
-    Std::Int<ShapeColumn0>, StrideRow1, _1, Std::Int<ShapeRow0 * ShapeColumn0>, 4,
+    Std::Int<ShapeColumn0>, StrideRow1, _1, Std::Int<ShapeRow0 * ShapeColumn0>, INFER_NESTED_LAYOUT_ZZ_PRIORITY,
     Std::enable_if_t<ShapeRow0 == FRACTAL_FIXED>> {
     using type = ZZLayoutPtn;
 };
@@ -100,18 +113,20 @@ struct InferNestedLayoutPatternImpl<Std::Int<ShapeRow0>, ShapeRow1, Std::Int<Sha
 template <size_t ShapeRow0, typename ShapeRow1, size_t ShapeColumn0, typename ShapeColumn1,
     typename StrideRow1>
 struct InferNestedLayoutPatternImpl<Std::Int<ShapeRow0>, ShapeRow1, Std::Int<ShapeColumn0>, ShapeColumn1,
-    _1, StrideRow1, Std::Int<ShapeRow0>, Std::Int<ShapeRow0 * ShapeColumn0>, 5,
+    _1, StrideRow1, Std::Int<ShapeRow0>, Std::Int<ShapeRow0 * ShapeColumn0>, INFER_NESTED_LAYOUT_ZN_PRIORITY,
     Std::enable_if_t<ShapeColumn0 == FRACTAL_FIXED>> {
     using type = ZNLayoutPtn;
 };
 
 template <typename ShapeRow1, typename ShapeColumn1, typename StrideColumn1>
-struct InferNestedLayoutPatternImpl<_1, ShapeRow1, _2, ShapeColumn1, _0, _2, _1, StrideColumn1, 6> {
+struct InferNestedLayoutPatternImpl<_1, ShapeRow1, _2, ShapeColumn1, _0, _2, _1, StrideColumn1,
+    INFER_NESTED_LAYOUT_SCALE_ADN_PRIORITY> {
     using type = ScaleADNLayoutPtn;
 };
 
 template <typename ShapeRow1, typename ShapeColumn1, typename StrideRow1>
-struct InferNestedLayoutPatternImpl<_2, ShapeRow1, _1, ShapeColumn1, _1, StrideRow1, _0, _2, 7> {
+struct InferNestedLayoutPatternImpl<_2, ShapeRow1, _1, ShapeColumn1, _1, StrideRow1, _0, _2,
+    INFER_NESTED_LAYOUT_SCALE_BND_PRIORITY> {
     using type = ScaleBNDLayoutPtn;
 };
 
