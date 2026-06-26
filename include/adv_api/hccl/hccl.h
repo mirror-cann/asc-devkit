@@ -411,7 +411,10 @@ private:
 };
 } // namespace AscendC
 
+#if defined(__NPU_ARCH__) && \
+    (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 1001 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201)
 #include "../../../impl/adv_api/detail/hccl/impl/hccl_impl.h"
+#endif
 #endif // LIB_HCCL_HCCL_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_HCCL_H__)
