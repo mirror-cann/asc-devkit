@@ -55,7 +55,7 @@
 | 参数名 | 描述 |
 | --- | --- |
 | T | 操作数数据类型。 |
-| isSetMask | 保留参数，设置无效。 |
+| isSetMask | 是否在接口内部设置mask模式和mask值。<br>&bull; true，表示在接口内部设置。<br>&nbsp; tensor前n个数据计算API内部使用了mask的[Counter模式](../SIMD计算说明/掩码/概述.md#mask-mode)，一般情况下保持isSetMask默认值即可，表示在API内部根据开发者传入的count参数进行mask模式和mask值的设置。<br>&bull; false，表示在接口外部设置。<br>&nbsp; 开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。此时，接口入参中的count不生效，建议设置成1。<br>部分产品型号该参数不生效，详情请参考[约束说明](#约束说明)。 |
 
 **表 2**  参数说明
 
@@ -104,6 +104,27 @@
 
 - <cann-filter npu-type = "950">针对Ascend 950PR/Ascend 950DT，`int64_t`/`uint64_t`数据类型仅支持tensor前n个数据计算接口。</cann-filter>
 - `srcRepStride`取值范围为[0, $2^{16}-1$]，需要结合UB的实际大小避免出现越界。
+<!-- npu="950,910,310p,310b,x90,9030" id1 -->
+- 针对以下型号，模板参数`isSetMask`参数不生效，保持默认值即可：
+  <!-- npu="950" id2 -->
+  - Ascend 950PR/Ascend 950DT
+  <!-- end id2 -->
+  <!-- npu="310b" id3 -->
+  - Atlas 200I/500 A2 推理产品
+  <!-- end id3 -->
+  <!-- npu="310p" id4 -->
+  - Atlas 推理系列产品AI Core
+  <!-- end id4 -->
+  <!-- npu="910" id5 -->
+  - Atlas 训练系列产品
+  <!-- end id5 -->
+  <!-- npu="x90" id6 -->
+  - Kirin X90
+  <!-- end id6 -->
+  <!-- npu="9030" id7 -->
+  - Kirin 9030
+  <!-- end id7 -->
+  <!-- end id1 -->
 
 ## 关键特性说明
 
@@ -132,14 +153,14 @@
 
 **不同硬件形态对应的`ReduceSum`相加方式如下：**
 
-- <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，采用方式一。</cann-filter>
-- <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，tensor前n个数据计算接口采用方式二，tensor高维切分计算接口采用方式一。</cann-filter>
-- <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，tensor前n个数据计算接口采用方式二，tensor高维切分计算接口采用方式一。</cann-filter>
-- <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，采用方式一。</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core，采用方式一。</cann-filter>
-- <cann-filter npu-type = "910">Atlas 训练系列产品，采用方式一。</cann-filter>
-- <cann-filter npu-type = "x90">Kirin X90，采用方式一。</cann-filter>
-- <cann-filter npu-type = "9030">Kirin 9030，采用方式一。</cann-filter>
+- <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，采用方式二。</cann-filter>
+- <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，tensor前n个数据计算接口采用方式一，tensor高维切分计算接口采用方式二。</cann-filter>
+- <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，tensor前n个数据计算接口采用方式一，tensor高维切分计算接口采用方式二。</cann-filter>
+- <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，采用方式二。</cann-filter>
+- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，采用方式二。</cann-filter>
+- <cann-filter npu-type = "910">Atlas 训练系列产品，采用方式二。</cann-filter>
+- <cann-filter npu-type = "x90">Kirin X90，采用方式二。</cann-filter>
+- <cann-filter npu-type = "9030">Kirin 9030，采用方式二。</cann-filter>
 
 ## 调用示例
 
