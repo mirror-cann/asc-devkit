@@ -2,13 +2,25 @@
 
 ## 产品支持情况
 
+<!-- npu="950" id3 -->
 - Ascend 950PR/Ascend 950DT：支持
+<!-- end id3 -->
+<!-- npu="A3" id4 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id4 -->
+<!-- npu="910b" id5 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id5 -->
+<!-- npu="310b" id6 -->
 - Atlas 200I/500 A2 推理产品：支持
+<!-- end id6 -->
+<!-- npu="310p" id7 -->
 - Atlas 推理系列产品AI Core：支持
 - Atlas 推理系列产品Vector Core：不支持
+<!-- end id7 -->
+<!-- npu="910" id8 -->
 - Atlas 训练系列产品：不支持
+<!-- end id8 -->
 <!-- npu="x90" id1 -->
 - Kirin X90：支持
 <!-- end id1 -->
@@ -39,8 +51,12 @@
     template <bool sync = true, typename T> __aicore__ inline bool Iterate(bool enPartialSum, const LocalTensor<T>& localCmatrix)
     ```
 
+    <!-- npu="310p" id9 -->
     -   Atlas 推理系列产品AI Core暂不支持用户自主管理CO1。
+    <!-- end id9 -->
+    <!-- npu="310b" id10 -->
     -   Atlas 200I/500 A2 推理产品暂不支持用户自主管理CO1。
+    <!-- end id10 -->
 
 ## 参数说明
 
@@ -55,7 +71,7 @@
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| enPartialSum | 输入 | 是否将矩阵乘的结果累加于现有的CO1数据，默认值为false。在L0C累加时，只支持C矩阵规格为singleCoreM==baseM && singleCoreN==baseN。<br><br>针对Atlas 200I/500 A2 推理产品，该参数仅支持配置为false。 |
+| enPartialSum | 输入 | 是否将矩阵乘的结果累加于现有的CO1数据，默认值为false。在L0C累加时，只支持C矩阵规格为singleCoreM==baseM && singleCoreN==baseN。<!-- npu="310b" id11 --><br><br>针对Atlas 200I/500 A2 推理产品，该参数仅支持配置为false。<!-- end id11 --> |
 
 **表3**  用户自主管理CO1的函数参数说明
 
