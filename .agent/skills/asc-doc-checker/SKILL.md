@@ -120,7 +120,14 @@ description: |
 ### 8. 芯片过滤标签（多芯片差异内容）
 - [ ] “Atlas A2/A3”是错误的描述，一旦出现务必告警！，正确的做法是将描述拆分为两个版本分别描述，即使这段描述对于两个版本都相同。
 - [ ] 支持的芯片类型：950、910b、A3、910、310p、310b、x90、9030
-- [ ] 标签内需显式说明芯片型号
+- [ ] 标签采用 HTML 注释格式，使用 `<!-- npu="xxx" idN -->` 标记开始，`<!-- end idN -->` 标记结束
+- [ ] 同一文档内，`idN` 必须从 `id1` 开始，且不能重复（即 id1、id2、id3、... 递增）
+- [ ] 开始和结束标签之间的内容使用无序列表（`-`），格式为：
+  ```
+  <!-- npu="芯片型号" idN -->
+  - 产品名称：支持（备注。）
+  <!-- end idN -->
+  ```
 - [ ] `npu-type` 的值与标签内描述的芯片产品名称必须一致，参照以下映射关系（来源：`references/芯片与标签映射关系.md`）：
 
   | `npu-type` | 对应的芯片产品名称 |
@@ -137,43 +144,64 @@ description: |
 
   **错误示例**（标签值与描述不匹配）：
   ```
-  <cann-filter npu-type="310b">
-  Atlas 推理系列产品    ← ❌ 310b 对应的应是 "Atlas 200I/500 A2 推理产品"
-  </cann-filter>
+  <!-- npu="310b" id1 -->
+  - Atlas 推理系列产品：支持（该接口生效。）   ← ❌ 310b 对应的应是 "Atlas 200I/500 A2 推理产品"
+  <!-- end id1 -->
   ```
 
-- [ ] 产品支持情况表格中，芯片的排列顺序应按照 950 → A3 → 910b → 310b → 310p → 910 的顺序排列（即支持的产品优先排列，不支持的产品排列在最后，同类产品中位宽越大越靠前）。当存在多个 `<cann-filter>` 块罗列时，块之间的顺序也应遵循此规则。
+  **错误示例**（id 重复）：
+  ```
+  <!-- npu="950" id1 -->
+  - Ascend 950PR/Ascend 950DT：支持（该接口生效。）
+  <!-- end id1 -->
+  ...
+  <!-- npu="A3" id1 -->   ← ❌ id1 已被使用，应为 id2
+  - Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持（该接口生效。）
+  <!-- end id1 -->
+  ```
 
-  **正确示例（芯片顺序）：**
-  ```
-  | 产品 | 是否支持 |
-  |------|----------|
-  | <cann-filter npu-type="950">... | √</cann-filter> |
-  | <cann-filter npu-type="A3">... | √</cann-filter> |
-  | <cann-filter npu-type="910b">... | √</cann-filter> |
-  | <cann-filter npu-type="310b">... | x</cann-filter> |
-  | <cann-filter npu-type="310p">... | x</cann-filter> |
-  | <cann-filter npu-type="910">... | x</cann-filter> |
-  ```
+- [ ] 同一标签组内（如产品支持情况、功能说明、数据类型等描述同一特性的标签集合），出现的芯片/产品标签应按照 [芯片与标签映射关系.md](./references/芯片与标签映射关系.md) 中定义的顺序保持相对先后关系，即：950 → A3 → 910b → 910 → 310p → 310b → x90 → 9030。不要求组内必须包含所有芯片，只需出现的产品按此相对顺序排列即可。此规则仅约束**同一标签组内部**的顺序，不同标签组之间的顺序不受约束。例如，文档前一个标签组末尾出现 310p，后一个标签组开头出现 950，这是允许的，不需要全局排序。
 
   **错误示例（芯片顺序混乱）：**
   ```
-  | 产品 | 是否支持 |
-  |------|----------|
-  | <cann-filter npu-type="910b">... | √</cann-filter> |   ← ❌ 应为950在前
-  | <cann-filter npu-type="A3">... | √</cann-filter> |
-  | <cann-filter npu-type="950">... | √</cann-filter> |   ← ❌ 950应排在910b之前
-  | <cann-filter npu-type="910">... | x</cann-filter> |
-  | <cann-filter npu-type="310b">... | x</cann-filter> |
-  | <cann-filter npu-type="310p">... | x</cann-filter> |
+  各个产品支持的数据类型情况如下：
+  <!-- npu="910b" id1 -->   ← ❌ 应为950在前
+  - ...
+  <!-- end id1 -->
+  <!-- npu="A3" id2 -->
+  - ...
+  <!-- end id2 -->
+  <!-- npu="950" id3 -->   ← ❌ 950应排在910b之前
+  - ...
+  <!-- end id3 -->
   ```
 
-- [ ] 如果文本中出现了以上这些芯片产品名称，但是这部分文本并没有被相应的 `<cann-filter>` 标签包裹，需要添加该标签。
-  **正确示例：**参数config只有Ascend 950PR/Ascend 950DT支持，需要加上标签
-| <cann-filter npu-type="950"> config | 该参数仅支持如下型号:Ascend 950PR/Ascend 950DT。<br>控制SyncAll函数的行为，在多个AI Core之间进行流水线同步时，指定哪些管道（pipe）用于触发和等待。<br>&bull; **triggerPipe**：指定哪个管道用于"发送触发信号"。<br>&bull; **waitPipe**：指定哪个管道用于"接收等待信号"。<br>默认为SyncAllConfig DEFAULT_SYNC_ALL_CONFIG= {PIPE_ALL, PIPE_ALL}，使用全部管道来进行触发和等待行为。</cann-filter> |
+  **正确示例（芯片顺序符合规范）：**
+  ```
+  各个产品支持的数据类型情况如下：
+  <!-- npu="950" id1 -->   ← ✅ 950 在参考顺序中最靠前，排第一
+  - ...
+  <!-- end id1 -->
+  <!-- npu="A3" id2 -->   ← ✅ A3 在参考顺序中紧跟 950
+  - ...
+  <!-- end id2 -->
+  <!-- npu="910b" id3 --> ← ✅ 910b 在参考顺序中紧跟 A3
+  - ...
+  <!-- end id3 -->
+  ```
 
-  **错误示例：**只有文本中出现了Ascend 950PR/Ascend 950DT产品，但是没有被相应的 `<cann-filter>` 标签包裹，需要添加该标签
-| config | 该参数仅支持如下型号:Ascend 950PR/Ascend 950DT。<br>控制SyncAll函数的行为，在多个AI Core之间进行流水线同步时，指定哪些管道（pipe）用于触发和等待。<br>&bull; **triggerPipe**：指定哪个管道用于"发送触发信号"。<br>&bull; **waitPipe**：指定哪个管道用于"接收等待信号"。<br>默认为SyncAllConfig DEFAULT_SYNC_ALL_CONFIG= {PIPE_ALL, PIPE_ALL}，使用全部管道来进行触发和等待行为。|
+- [ ] 如果文本中出现了以上这些芯片产品名称，但是这部分文本并没有被相应的 `<!-- npu="xxx" idN -->` 和 `<!-- end idN -->` 标签包裹，需要添加该标签。
+  **正确示例：**参数config只有Ascend 950PR/Ascend 950DT支持，需要加上标签
+  ```
+  <!-- npu="950" id1 -->
+  - config：支持（该参数仅支持如下型号：Ascend 950PR/Ascend 950DT。<br>控制SyncAll函数的行为...）
+  <!-- end id1 -->
+  ```
+
+  **错误示例：**只有文本中出现了Ascend 950PR/Ascend 950DT产品，但是没有被相应的标签包裹，需要添加标签
+  ```
+  - config：支持（该参数仅支持如下型号：Ascend 950PR/Ascend 950DT。<br>控制SyncAll函数的行为...）  ← ❌ 缺少标签
+  ```
 
 ### 9. 数据类型规范
 - [ ] 数据类型的写法与代码中保持一致，必须使用标准类型名（如 `int8_t`），不能简写或变体（如 ❌ `Int8` / `int8` / `S8`）
