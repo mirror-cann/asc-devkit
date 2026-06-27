@@ -10,7 +10,10 @@
 
 ## 功能说明
 
-设置对后续的从Unified Buffer/L0C Buffer/L1 Buffer到Global Memory的数据传输开启原子累加。累加的数据类型支持int8_t/int16_t/int32_t/bfloat16_t/half/float。
+设置对后续的从Unified Buffer/L0C Buffer/L1 Buffer到Global Memory的数据传输开启原子累加。累加的数据类型支持int8_t、int16_t、int32_t、bfloat16_t、half、float。
+<!-- npu="950" id1 -->
+特别地，针对Ascend 950PR/Ascend 950DT，不支持L1 Buffer到Global Memory的通路。
+<!-- end id1 -->
 
 ## 函数原型
 
@@ -38,6 +41,9 @@ PIPE_S
 
 - 使用完成后，建议清空原子操作的状态（详见[asc_set_atomic_none](./asc_set_atomic_none.md)），以免影响后续相关指令功能。
 - 该指令执行前不会对GM的数据做清零操作，开发者需在需要时手动添加清零操作。
+<!-- npu="950" id2 -->
+- Ascend 950PR/Ascend 950DT，不支持L1 Buffer到Global Memory的通路。
+<!-- end id2 -->
 
 ## 调用示例
 
