@@ -14,9 +14,9 @@
 
 ## 函数原型
 
-    ```cpp
+  ```cpp
    __aicore__ inline void asc_sync_block_arrive(pipe_t pipe, int64_t flag_id)
-    ```
+  ```
 
 ## 参数说明
 
