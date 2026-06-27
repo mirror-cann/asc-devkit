@@ -140,22 +140,22 @@ __aicore__ inline HcclHandle AlltoAllV(GM_ADDR sendBuf, void *sendCounts, void *
             }
             if(hccl.GetRankId() == 0) {
                 sendCounts[0] = 3; sendCounts[1] = 3; sendCounts[2] = 3; sendCounts[3] = 3;
-                sDisplacements[1] = 3; sDisplacements[2] = 6; sDisplacements[2] = 9;
+                sDisplacements[1] = 3; sDisplacements[2] = 6; sDisplacements[3] = 9;
                 recvCounts[0] = 3; recvCounts[1] = 2; recvCounts[2] = 1; recvCounts[3] = 3;
                 rDisplacements[1] = 3; rDisplacements[2] = 5; rDisplacements[3] = 6;
             } else if(hccl.GetRankId() == 1) {
                 sendCounts[0] = 2; sendCounts[1] = 2; sendCounts[2] = 3; sendCounts[3] = 2;
-                sDisplacements[1] = 2; sDisplacements[2] = 4; sDisplacements[2] = 7;
+                sDisplacements[1] = 2; sDisplacements[2] = 4; sDisplacements[3] = 7;
                 recvCounts[0] = 3; recvCounts[1] = 2; recvCounts[2] = 4; recvCounts[3] = 3;
                 rDisplacements[1] = 3; rDisplacements[2] = 5; rDisplacements[3] = 9;
             } else if(hccl.GetRankId() == 2) {
                 sendCounts[0] = 1; sendCounts[1] = 4; sendCounts[2] = 4; sendCounts[3] = 4;
-                sDisplacements[1] = 1; sDisplacements[2] = 5; sDisplacements[2] = 9;
+                sDisplacements[1] = 1; sDisplacements[2] = 5; sDisplacements[3] = 9;
                 recvCounts[0] = 3; recvCounts[1] = 3; recvCounts[2] = 4; recvCounts[3] = 3;
                 rDisplacements[1] = 3; rDisplacements[2] = 6; rDisplacements[3] = 10;
             } else if(hccl.GetRankId() == 3) {
                 sendCounts[0] = 3; sendCounts[1] = 3; sendCounts[2] = 3; sendCounts[3] = 3;
-                sDisplacements[1] = 3; sDisplacements[2] = 6; sDisplacements[2] = 9;
+                sDisplacements[1] = 3; sDisplacements[2] = 6; sDisplacements[3] = 9;
                 recvCounts[0] = 3; recvCounts[1] = 2; recvCounts[2] = 4; recvCounts[3] = 3;
                 rDisplacements[1] = 3; rDisplacements[2] = 5; rDisplacements[3] = 9;
             }
