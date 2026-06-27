@@ -15,6 +15,8 @@
 #include "sync_impl/asc_sync_wait_impl.h"
 #include "sync_impl/asc_sync_pipe_impl.h"
 #include "sync_impl/asc_sync_block_arrive_impl.h"
+#include "sync_impl/asc_sync_inter_arrive_impl.h"
+#include "sync_impl/asc_sync_subblock_arrive_impl.h"
 #include "sync_impl/asc_sync_data_barrier_impl.h"
 #include "sync_impl/asc_lock_impl.h"
 #include "sync_impl/asc_unlock_impl.h"
