@@ -6,6 +6,7 @@
 01_simd_cpp_api/02_features/06_aot_compilation/matmul_aot_compilation
 01_simd_cpp_api/02_features/05_aclrtc/rtc_hello_world
 01_simd_cpp_api/02_features/05_aclrtc/rtc_template_add
+01_simd_cpp_api/02_features/02_tiling_selector/vector_tiling_strategy
 01_simd_cpp_api/00_introduction/00_quickstart/hello_world
 02_simd_c_api/02_features/03_c_api/00_vector_compute/02_c_api_delicacy_async_add
 02_simd_c_api/02_features/03_c_api/00_vector_compute/01_async_add
