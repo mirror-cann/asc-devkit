@@ -8,11 +8,21 @@
 
 ## 功能说明
 
-对直方图数据进行频率统计。根据低位/高位模式分别统计[0, 127]和[128, 255]区间内的数据，dst数据中的第n位数据代表src中n出现的频率，并在dst源数据基础上累加所统计出的数据。
+对输入数据进行频率统计，生成直方图。统计结果在dst原有数据基础上累加。
 
-Vector Length长度为256Byte，dst数据类型为uint16_t，一个dst可以存储128个数据，因此需要两个dst。BIN0表示低位模式，统计src中[0, 127]范围内的数据写入；BIN1表示高位模式，统计src中[128, 255]范围内的数据写入。
+**工作原理：**
+- 统计src中每个数值的出现频率
+- dst的第n个元素存储数值n在src中出现的次数
+- 结果累加到dst原有数据中，支持多次统计的累加计算
 
-统计方式如下图所示，其中dst0表示低位模式，dst1表示高位模式。
+**分区间统计：**
+由于src数据类型为uint8_t（取值范围0~255），而dst每个元素为uint16_t，且一个Vector Length可存储128个数据，因此将统计范围分为两个区间：
+- **低位模式（BIN0）**：统计src中数值在[0, 127]范围内的出现频率
+- **高位模式（BIN1）**：统计src中数值在[128, 255]范围内的出现频率，统计时将数值减去128，映射到dst的索引位置
+
+**统计方式如下图所示：**
+- dst0：低位模式统计结果，dst0[0]表示数值0的出现次数，dst0[127]表示数值127的出现次数
+- dst1：高位模式统计结果，dst1[0]表示数值128的出现次数，dst1[127]表示数值255的出现次数
 
 ![频率统计](../../figures/频率统计.png)
 
@@ -45,14 +55,35 @@ PIPE_V
 
 ## 约束说明
 
-无
+- 当mask位数为0时，源操作数src对应位置的数数值将被忽略，dst对应位置数值为忽略该位置src后计算得到的值。
+- dst的数据类型为uint16_t，最大值为65535，使用时需注意累加溢出问题。
 
 ## 调用示例
 
 ```cpp
-vector_uint16_t dst;
+// 示例1：完整的频率统计流程
+vector_uint16_t dst0, dst1;  // dst0用于低位统计，dst1用于高位统计
 vector_uint8_t src;
 vector_bool mask = asc_create_mask_b8(PAT_ALL);
-asc_loadalign(src, src_addr); // src_addr是外部输入的UB内存空间地址。
-asc_frequency_histogram_bin0(dst, src, mask);
+
+// 初始化dst为0
+asc_duplicate_scalar(dst0, (uint16_t)0, mask);
+asc_duplicate_scalar(dst1, (uint16_t)0, mask);
+
+// 加载待统计的数据
+asc_loadalign(src, src_addr);  // src_addr是外部输入的UB内存空间地址
+
+// 分别统计低位和高位区间
+asc_frequency_histogram_bin0(dst0, src, mask);  // 统计[0,127]
+asc_frequency_histogram_bin1(dst1, src, mask);  // 统计[128,255]
+
+// dst0[0]表示数值0的出现次数，dst0[127]表示数值127的出现次数
+// dst1[0]表示数值128的出现次数，dst1[127]表示数值255的出现次数
+
+// 示例2：多次累加统计
+// 支持对多批数据进行累加统计
+asc_loadalign(src, src_addr2);  // 加载第二批数据, src_addr2是外部输入的UB内存空间地址
+asc_frequency_histogram_bin0(dst0, src, mask);  // 累加到dst0
+asc_frequency_histogram_bin1(dst1, src, mask);  // 累加到dst1
+// 此时dst0和dst1包含两批数据的累积统计结果
 ```
