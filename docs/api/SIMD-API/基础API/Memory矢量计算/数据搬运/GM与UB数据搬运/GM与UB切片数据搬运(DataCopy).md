@@ -131,7 +131,7 @@
 
 ## 数据类型<a name="zh-cn_topic_0000002565968945_section4219135304818"></a>
 
-源操作数和目的操作数支持的数据类型保持一致，Global Memory -> Unified Buffer和VUB -> Global Memory两个数据通路的数据类型支持情况相同，具体如下：
+源操作数和目的操作数支持的数据类型保持一致，Global Memory -> Unified Buffer和Unified Buffer -> Global Memory两个数据通路的数据类型支持情况相同，具体如下：
 
 <cann-filter npu-type="950">
 

@@ -38,7 +38,7 @@ __aicore__ inline void SetPadValue(T paddingValue)
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
 | T | 输入 | 填充值的数据类型，与DataCopyPad接口搬运的数据类型一致。 |
-| pos | 输入 | 用于指定DataCopyPad接口搬运过程中从Global Memory搬运数据到哪一个目的地址，目的地址通过逻辑位置来表达。支持的取值为：TPosition::VECIN、TPosition::VECOUT、TPosition::MAX，默认值为TPosition::MAX，等效于TPosition::VECIN或TPosition::VECOUT。 |
+| pos | 输入 | 用于指定DataCopyPad接口搬运过程中从Global Memory搬运数据到哪一个目的地址，目的地址通过逻辑位置来表达。默认值为TPosition::MAX，等效于TPosition::VECIN或TPosition::VECOUT。<br>支持的取值为：<br>&bull; TPosition::VECIN、TPosition::VECOUT、TPosition::MAX， |
 
 **表 2**  参数说明
 

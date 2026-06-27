@@ -26,19 +26,19 @@
 *   The parameter pat_mode is defined as follows:
 *
 *    PAT_ALL, // All elements are set to True
-*    PAT_VL1, // The lowest element
-*    PAT_VL2, // The lowest 2 element
-*    PAT_VL3, // The lowest 3 element
-*    PAT_VL4, // The lowest 4 element
-*    PAT_VL8, // The lowest 8 element
-*    PAT_VL16, // The lowest 16 element
-*    PAT_VL32, // The lowest 32 element
-*    PAT_VL64, // The lowest 64 element
-*    PAT_VL128, // The lowest 128 element
-*    PAT_M3, // Multiples of 3
-*    PAT_M4, // Multiples of 4
-*    PAT_H, // The lowest half elements
-*    PAT_Q, // The lowest quarter elements
+*    PAT_VL1, // The lowest element is set to True
+*    PAT_VL2, // The lowest 2 elements are set to True
+*    PAT_VL3, // The lowest 3 elements are set to True
+*    PAT_VL4, // The lowest 4 elements are set to True
+*    PAT_VL8, // The lowest 8 elements are set to True
+*    PAT_VL16, // The lowest 16 elements are set to True
+*    PAT_VL32, // The lowest 32 elements are set to True
+*    PAT_VL64, // The lowest 64 elements are set to True
+*    PAT_VL128, // The lowest 128 elements are set to True
+*    PAT_M3, // Multiples of 3 elements are set to True
+*    PAT_M4, // Multiples of 4 elements are set to True
+*    PAT_H, // The lowest half elements are set to True
+*    PAT_Q, // The lowest quarter elements are set to True
 *    PAT_ALLF = 15 // All elements are set to False
 *
 *   usage example:
