@@ -50,9 +50,9 @@
 
 | 参数名 | 描述 |
 | --- | --- |
-| dst | 目的操作数，类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
-| src | 源操作数，类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
-| mask | 指示在复制过程中哪些bit有效，类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
+| dst | 目的操作数，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| src | 源操作数，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| mask | 指示在复制过程中哪些bit有效，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 

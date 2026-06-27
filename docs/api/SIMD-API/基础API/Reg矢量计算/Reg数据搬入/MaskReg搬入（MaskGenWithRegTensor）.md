@@ -28,7 +28,7 @@
 
 头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_maskreg_intf.h"`。
 
-MaskGenWithRegTensor能够实现数据从[RegTensor](../概述/寄存器数据类型/RegTensor.md)搬运至[MaskReg](../概述/寄存器数据类型/MaskReg.md)。
+MaskGenWithRegTensor能够实现数据从[RegTensor](../寄存器数据类型/RegTensor.md)搬运至[MaskReg](../寄存器数据类型/MaskReg.md)。
 
 - 数据类型为b16时，RegTensor（256B）分成16个数据块（16B），用户通过参数可选择某一个数据块，数据块的每个bit broadcast成2bit后变为32B，即输出的MaskReg。
 - 数据类型为b32时，RegTensor（256B）分成32个数据块（8B），用户通过参数可选择某一个数据块，数据块的每个bit broadcast成4bit后变为32B，即输出的MaskReg。
@@ -56,8 +56,8 @@ __simd_callee__ inline void MaskGenWithRegTensor(MaskReg& dst, U& srcReg)
 
 | 参数名 | 输入/输出 | 描述 |
 |-----|-----|-----|
-| dst | 输出 | 目的操作数，类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
-| srcReg | 输入 | 源操作数，类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| dst | 输出 | 目的操作数，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| srcReg | 输入 | 源操作数，类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
 
 ## 数据类型
 
@@ -69,7 +69,7 @@ __simd_callee__ inline void MaskGenWithRegTensor(MaskReg& dst, U& srcReg)
 
 ## 关键特性说明
 
-由[MaskReg原理](../概述/寄存器数据类型/MaskReg.md)可知，当操作数类型为b16时，每一个element对应2bit的MaskReg，且仅2bit中的最低位是有效的；当操作数类型为b32时，每一个element对应4bit的MaskReg，且仅4bit中的最低位是有效的。
+由[MaskReg原理](../寄存器数据类型/MaskReg.md)可知，当操作数类型为b16时，每一个element对应2bit的MaskReg，且仅2bit中的最低位是有效的；当操作数类型为b32时，每一个element对应4bit的MaskReg，且仅4bit中的最低位是有效的。
 
 MaskGenWithRegTensor支持b16和b32，搬运原理如[图1](#fig-maskgen-b16)、[图2](#fig-maskgen-b32)所示。
 

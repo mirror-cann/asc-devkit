@@ -57,9 +57,9 @@ __simd_callee__ inline void Scatter(__ubuf__ T* baseAddr, S& srcReg, V& index, M
 | 参数名 | 输入/输出 | 描述 |
 |-----|-----|-----|
 | baseAddr | 输出 | 目的操作数，UB中的基地址，需要32字节对齐。 |
-| srcReg | 输入 | 源操作数，类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
-| index | 输入 | 索引值，srcReg中的每个元素在UB中相对于baseAddr的位置，单位：元素个数。类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 <br>注：index中的值必须唯一。若存在重复的index值，系统仅保留其中一个对应的数据，其余将被忽略。无法确定具体保留哪一个，因此必须确保index值不重复。 |
-| mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
+| srcReg | 输入 | 源操作数，类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| index | 输入 | 索引值，srcReg中的每个元素在UB中相对于baseAddr的位置，单位：元素个数。类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 <br>注：index中的值必须唯一。若存在重复的index值，系统仅保留其中一个对应的数据，其余将被忽略。无法确定具体保留哪一个，因此必须确保index值不重复。 |
+| mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
 
 ## 数据类型
 

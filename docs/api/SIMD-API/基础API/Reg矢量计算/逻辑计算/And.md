@@ -28,7 +28,7 @@
 
 头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_vec_binary_intf.h"`（对`RegTensor`操作）、`"basic_api/reg_compute/kernel_reg_compute_maskreg_intf.h"`（对`MaskReg`操作）。
 
-本节介绍两种接口，分别用于对[RegTensor](../概述/寄存器数据类型/RegTensor.md)和[MaskReg](../概述/寄存器数据类型/MaskReg.md)进行操作：
+本节介绍两种接口，分别用于对[RegTensor](../寄存器数据类型/RegTensor.md)和[MaskReg](../寄存器数据类型/MaskReg.md)进行操作：
 
 - 对`RegTensor`操作：
 
@@ -62,17 +62,17 @@
   | 参数名 | 描述 |
   | :----- | :--- |
   | T | 操作数数据类型。 |
-  | mode | [MaskMergeMode](../数据类型/MaskMergeMode.md)枚举类型。选择MERGING模式或ZEROING模式。<br>• ZEROING模式下，mask未筛选的元素在dstReg中置零。<br>• MERGING模式当前不支持。 |
+  | mode | [MaskMergeMode](../辅助数据类型/MaskMergeMode.md)枚举类型。选择MERGING模式或ZEROING模式。<br>• ZEROING模式下，mask未筛选的元素在dstReg中置零。<br>• MERGING模式当前不支持。 |
   | U | 目的操作数和源操作数的`RegTensor`类型，例如`RegTensor<uint32_t>`，由编译器自动推导，用户不需要填写。 |
 
   **表2**  参数说明
 
   | 参数名 | 输入/输出 | 描述 |
   | :----- | :-------- | :--- |
-  | dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
-  | srcReg0 | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。<br>两个源操作数的数据类型需要与目的操作数保持一致。 |
-  | srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。<br>两个源操作数的数据类型需要与目的操作数保持一致。 |
-  | mask | 输入 | 指示源操作数元素操作的有效性，详细说明请参考[MaskReg文档](../概述/寄存器数据类型/MaskReg.md)。 |
+  | dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+  | srcReg0 | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。<br>两个源操作数的数据类型需要与目的操作数保持一致。 |
+  | srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。<br>两个源操作数的数据类型需要与目的操作数保持一致。 |
+  | mask | 输入 | 指示源操作数元素操作的有效性，详细说明请参考[MaskReg文档](../寄存器数据类型/MaskReg.md)。 |
 
 - 对MaskReg操作
 

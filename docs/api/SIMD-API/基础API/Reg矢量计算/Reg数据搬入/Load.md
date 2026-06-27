@@ -46,13 +46,13 @@ __simd_callee__ inline void Load(U& dstReg, __ubuf__ T* srcAddr)
 | 参数名 | 描述 |
 | --- | --- |
 | T | 操作数数据类型。支持的数据类型请参考[数据类型](#数据类型)。 |
-| U | 目的操作数的[RegTensor](../概述/寄存器数据类型/RegTensor.md)类型，例如RegTensor\<half>，由编译器自动推导，用户不需要填写。 |
+| U | 目的操作数的[RegTensor](../寄存器数据类型/RegTensor.md)类型，例如RegTensor\<half>，由编译器自动推导，用户不需要填写。 |
 
 **表2**  参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| dstReg | 输出 | 目的操作数，类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| dstReg | 输出 | 目的操作数，类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
 | srcAddr | 输入 | 源操作数，UB起始地址，不需要32字节对齐。 |
 
 ## 数据类型
@@ -66,7 +66,7 @@ __simd_callee__ inline void Load(U& dstReg, __ubuf__ T* srcAddr)
 ## 约束说明
 
 - dstReg不支持RegTraitNumTwo。
-- 接口内部定义了一个[UnalignRegForLoad](../概述/寄存器数据类型/UnalignRegForLoad-UnalignRegForStore.md)，该寄存器数量上限为4。
+- 接口内部定义了一个[UnalignRegForLoad](../寄存器数据类型/UnalignRegForLoad-UnalignRegForStore.md)，该寄存器数量上限为4。
 
 ## 调用示例
 

@@ -80,8 +80,8 @@ __simd_callee__ inline void Pack(S& dstReg, V& srcReg)
 
 | 参数名称 | 描述 |
 | ------ | ------ |
-| dstReg | 目的操作数。<br> 类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。|
-| srcReg | 源操作数。<br> 类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。|
+| dstReg | 目的操作数。<br> 类型为[RegTensor](../寄存器数据类型/RegTensor.md)。|
+| srcReg | 源操作数。<br> 类型为[RegTensor](../寄存器数据类型/RegTensor.md)。|
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 

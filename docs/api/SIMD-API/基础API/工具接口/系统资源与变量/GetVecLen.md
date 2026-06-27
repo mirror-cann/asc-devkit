@@ -18,7 +18,7 @@
 
 头文件路径为：`"basic_api/kernel_operator_sys_var_intf.h"`。
 
-获取[RegTensor](../../Reg矢量计算/概述/寄存器数据类型/RegTensor.md)位宽VL（Vector Length）的大小。
+获取[RegTensor](../../Reg矢量计算/寄存器数据类型/RegTensor.md)位宽VL（Vector Length）的大小。
 
 ## 函数原型
 

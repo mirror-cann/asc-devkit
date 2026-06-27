@@ -52,7 +52,7 @@ __simd_callee__ inline void Reduce(S& dstReg, V srcReg, MaskReg mask)
 | type | ReduceType类型，支持SUM、MAX、MIN。<br><pre>enum class ReduceType {<br>    SUM = 0,<br>    MAX,<br>    MIN,<br>};</pre> |
 | T | 目的操作数dstReg的数据类型。 |
 | U | 源操作数srcReg的数据类型。 |
-| mode | [MaskMergeMode](../数据类型/MaskMergeMode.md)，选择MERGING模式或ZEROING模式。<br>&bull; ZEROING，mask未选中的元素在dst中置零。<br>&bull; MERGING，当前不支持。 |
+| mode | [MaskMergeMode](../辅助数据类型/MaskMergeMode.md)，选择MERGING模式或ZEROING模式。<br>&bull; ZEROING，mask未选中的元素在dst中置零。<br>&bull; MERGING，当前不支持。 |
 | S | 目的操作数的RegTensor类型，例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写。 |
 | V | 源操作数的RegTensor类型，例如RegTensor&lt;half&gt;，由编译器自动推导，用户不需要填写。 |
 
@@ -60,9 +60,9 @@ __simd_callee__ inline void Reduce(S& dstReg, V srcReg, MaskReg mask)
 
 | 参数名 | 描述 |
 | --- | --- |
-| dstReg | 目的操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
-| srcReg | 源操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
-| mask | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
+| dstReg | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| srcReg | 源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| mask | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../寄存器数据类型/MaskReg.md)。 |
 
 ## 数据类型
 

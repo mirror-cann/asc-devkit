@@ -42,10 +42,10 @@ __simd_callee__ inline void Select(MaskReg& dst, MaskReg& src0, MaskReg& src1, M
 
 | 参数名 | 描述 |
 | --- | --- |
-| dst | 目的操作数，类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
-| src0 | 源操作数，类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
-| src1 | 源操作数，类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
-| mask | 指示选择src0或src1，类型为[MaskReg](../概述/寄存器数据类型/MaskReg.md)。 |
+| dst | 目的操作数，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| src0 | 源操作数，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| src1 | 源操作数，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+| mask | 指示选择src0或src1，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 

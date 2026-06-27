@@ -78,7 +78,7 @@ __simd_callee__ inline void Arange(S& dstReg, U scalarValue);
 
 | 参数名称 | 输入/输出 | 描述 |
 | ------ | ------ | ------ |
-| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../概述/寄存器数据类型/RegTensor.md)。 |
+| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
 | scalarValue | 输入 | 源操作数。<br>类型为标量。 |
 
 ## 数据类型
