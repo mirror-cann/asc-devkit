@@ -106,22 +106,24 @@ __simd_callee__ inline void Histograms(V& dstReg, S& srcReg, MaskReg& mask)
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-当mask位数为0时，对应位置的src源操作数的数值被忽略，dst对应位置数值为忽略该位置src后计算得到的值。
+- 当mask位数为0时，对应位置的src源操作数的数值被忽略，dst对应位置数值为忽略该位置src后计算得到的值。
+- dst的数据类型为uint16_t，最大值为65535，使用时需注意累加溢出问题。
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
 ```cpp
-template <typename T, typename U>
-__simd_vf__ inline void HistogramsVF(__ubuf__ U* dstAddr, __ubuf__ T* srcAddr, uint32_t oneRepeatSize, uint16_t repeatTimes, AscendC::Reg::HistogramsBinType mode, AscendC::Reg::HistogramsType type)
+template <typename T, typename U, AscendC::Reg::HistogramsBinType mode, AscendC::Reg::HistogramsType type>
+__simd_vf__ inline void HistogramsVF(__ubuf__ U* dstAddr, __ubuf__ T* srcAddr, uint32_t oneRepeatSize, uint16_t repeatTimes)
 {
     AscendC::Reg::RegTensor<T> srcReg;
     AscendC::Reg::RegTensor<U> dstReg;
     AscendC::Reg::MaskReg mask0 = AscendC::Reg::CreateMask<T>();
     AscendC::Reg::MaskReg mask1 = AscendC::Reg::CreateMask<T>();
+    AscendC::Reg::Duplicate<U>(dstReg, 0);
     for (uint16_t i = 0; i < repeatTimes; ++i){
         AscendC::Reg::LoadAlign(srcReg, srcAddr + oneRepeatSize * i);
         AscendC::Reg::Histograms<T, U, mode, type>(dstReg, srcReg, mask0);
-        AscendC::Reg::StoreAlign(dstAddr, dstReg, mask1);
     }
+    AscendC::Reg::StoreAlign(dstAddr, dstReg, mask1);
 }
 ```
