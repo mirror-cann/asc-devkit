@@ -102,7 +102,7 @@ def CreateVecIndex(dst, firstValue, count):
 | count | 输入 | 参与计算的元素个数。关于该参数的具体说明请参考[连续计算](../SIMD计算说明/连续计算.md)。|
 | mask/mask[] | 输入 | mask用于控制每次迭代内参与计算的元素。<br>设置详见[掩码操作](../掩码操作/掩码操作.md)。 |
 | repeatTime | 输入 | 指令迭代次数，每次迭代完成8个DataBlock的数据收集，取值范围：repeatTime∈[0,255]。|
-| dstBlockStride | 输入 | 单次迭代内，矢量目的操作数不同DataBlock间地址步长，单位为DataBlock。 |
+| dstBlkStride | 输入 | 单次迭代内，矢量目的操作数不同DataBlock间地址步长，单位为DataBlock。 |
 | dstRepStride | 输入 | 相邻迭代间，矢量目的操作数相同DataBlock地址步长，单位为DataBlock。 |
 
 ## 数据类型
