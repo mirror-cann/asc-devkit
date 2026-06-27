@@ -26,7 +26,7 @@
 
 集合通信AlltoAllvWrite的任务下发接口，返回该任务的标识handleId给用户。
 
-AlltoAllvWrite的功能为：通信域内的卡互相发送和接收数据，并且定制每张卡给其它卡发送的数据量和从其它卡接收的数据量，以及定制发送和接收的数据在内存中的偏移。结合原型中的参数，描述接口功能，具体为：本卡发送地址偏移为sendOffsets\[i\]字节且大小为sendSizes\[i\]字节的数据给第i张卡，remoteWinOffset表示对端卡发送数据的地址偏移，localDataSize表示发送给本卡的数据大小。注意：这里的偏移和数据量均为字节数。
+AlltoAllvWrite的功能为：通信域内的卡互相发送和接收数据，并且定制每张卡给其它卡发送的数据量和从其它卡接收的数据量，以及定制发送和接收的数据在内存中的偏移。结合原型中的参数，描述接口功能，具体为：本卡发送地址偏移为sendOffsets\[i\]字节且大小为sendSizes\[i\]字节的数据给第i张卡，remoteWinOffset表示本卡数据写入对端window的偏移，localDataSize表示各张对端卡写入本卡的数据大小。注意：这里的偏移和数据量均为字节数。
 
 ![](../../../../figures/251208103727744.png)
 
@@ -52,8 +52,8 @@ __aicore__ inline HcclHandle AlltoAllvWrite(GM_ADDR usrIn, GM_ADDR sendOffsets, 
 | usrIn | 输入 | 源数据buffer地址。 |
 | sendOffsets | 输入 | 待发送的每个分片的偏移，以字节为单位。 |
 | sendSizes | 输入 | 待发送的每个分片的数据大小，以字节为单位。 |
-| remoteWinOffset | 输入 | 对端卡发送的数据偏移，以字节为单位。 |
-| localDataSize | 输入 | 发送给本卡的数据大小，以字节为单位。 |
+| remoteWinOffset | 输入 | 本卡数据写入对端window的偏移，以字节为单位。 |
+| localDataSize | 输入 | 各张对端卡写入本卡的数据大小，以字节为单位。 |
 
 ## 返回值说明
 
