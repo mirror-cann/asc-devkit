@@ -163,7 +163,7 @@ __aicore__ inline HcclHandle AlltoAllV(GM_ADDR sendBuf, void* sendCounts, void* 
                 sendCounts[3] = 3;
                 sDisplacements[1] = 3;
                 sDisplacements[2] = 6;
-                sDisplacements[2] = 9;
+                sDisplacements[3] = 9;
                 recvCounts[0] = 3;
                 recvCounts[1] = 2;
                 recvCounts[2] = 1;
@@ -178,7 +178,7 @@ __aicore__ inline HcclHandle AlltoAllV(GM_ADDR sendBuf, void* sendCounts, void* 
                 sendCounts[3] = 2;
                 sDisplacements[1] = 2;
                 sDisplacements[2] = 4;
-                sDisplacements[2] = 7;
+                sDisplacements[3] = 7;
                 recvCounts[0] = 3;
                 recvCounts[1] = 2;
                 recvCounts[2] = 4;
@@ -193,7 +193,7 @@ __aicore__ inline HcclHandle AlltoAllV(GM_ADDR sendBuf, void* sendCounts, void* 
                 sendCounts[3] = 4;
                 sDisplacements[1] = 1;
                 sDisplacements[2] = 5;
-                sDisplacements[2] = 9;
+                sDisplacements[3] = 9;
                 recvCounts[0] = 3;
                 recvCounts[1] = 3;
                 recvCounts[2] = 4;
@@ -208,7 +208,7 @@ __aicore__ inline HcclHandle AlltoAllV(GM_ADDR sendBuf, void* sendCounts, void* 
                 sendCounts[3] = 3;
                 sDisplacements[1] = 3;
                 sDisplacements[2] = 6;
-                sDisplacements[2] = 9;
+                sDisplacements[3] = 9;
                 recvCounts[0] = 3;
                 recvCounts[1] = 2;
                 recvCounts[2] = 4;
