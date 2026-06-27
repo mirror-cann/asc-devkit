@@ -12,10 +12,10 @@ block内同步指令，与[asc_sync_intra_wait](asc_sync_intra_wait.md)配合使
 
 ## 函数原型
 
-    ```cpp
-    __aicore__ inline void asc_sync_intra_arrive(pipe_t pipe, uint8_t sync_id)
-    __aicore__ inline void asc_sync_intra_arrive(pipe_t pipe, uint64_t sync_id)
-    ```
+```cpp
+__aicore__ inline void asc_sync_intra_arrive(pipe_t pipe, uint8_t sync_id)
+__aicore__ inline void asc_sync_intra_arrive(pipe_t pipe, uint64_t sync_id)
+```
 
 ## 参数说明
 
