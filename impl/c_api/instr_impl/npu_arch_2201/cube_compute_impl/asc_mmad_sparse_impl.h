@@ -20,19 +20,19 @@
 #include "../utils_impl/utils_impl.h"
 
 __aicore__ inline void asc_mmad_sparse_impl(__cc__ int32_t* c, __ca__ int8_t* a, __cb__ int8_t* b, uint16_t m,
-                                            uint16_t k, uint16_t n, uint8_t unit_flag, bool cmatrix_source,
-                                            bool cmatrix_init_val)
+                                            uint16_t k, uint16_t n, uint8_t unit_flag, bool c_matrix_source,
+                                            bool c_matrix_init_val)
 {
     if ASC_IS_AIC {
-        mad_sp(c, a, b, m, k, n, unit_flag, cmatrix_source, cmatrix_init_val);
+        mad_sp(c, a, b, m, k, n, unit_flag, c_matrix_source, c_matrix_init_val);
     }
 }
 
 __aicore__ inline void asc_mmad_sparse_sync_impl(__cc__ int32_t* c, __ca__ int8_t* a, __cb__ int8_t* b, uint16_t m,
-                                                 uint16_t k, uint16_t n, uint8_t unit_flag, bool cmatrix_source,
-                                                 bool cmatrix_init_val)
+                                                 uint16_t k, uint16_t n, uint8_t unit_flag, bool c_matrix_source,
+                                                 bool c_matrix_init_val)
 {
-    asc_mmad_sparse_impl(c, a, b, m, k, n, unit_flag, cmatrix_source, cmatrix_init_val);
+    asc_mmad_sparse_impl(c, a, b, m, k, n, unit_flag, c_matrix_source, c_matrix_init_val);
     asc_sync_post_process();
 }
 
