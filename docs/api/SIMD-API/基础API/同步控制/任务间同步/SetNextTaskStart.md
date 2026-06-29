@@ -21,6 +21,8 @@
 
 头文件路径为：`"basic_api/kernel_operator_common_intf.h"`。
 
+算子层面支持SuperKernel特性Early-Start能力的接口，调用后在TorchAir层面：1.GE图模式下进行默认启用; 2.npugraph_ex后端通过early_start选项进行控制启用。
+
 在[SuperKernel](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/高级编程/SuperKernel/原理介绍.md)的子Kernel中调用，调用后的指令可以和后续其他的子Kernel实现并行，提升整体性能。如[图1](#fig37581010773)所示，SuperKernel按序调用子Kernel，为保证子Kernel之间数据互不干扰，会在子Kernel间插入算子间同步进行保序，子Kernel<sub>N-1</sub>调用该接口后，之后的指令会和后续子Kernel<sub>N</sub>实现并行。
 
 SuperKernel是一种算子的二进制融合技术，与源码融合不同，它聚焦于内核函数 \(Kernel\)的二进制的调度方案，展开深度优化，于已编译的二进制代码基础上融合创建一个超级Kernel函数（SuperKernel），以调用子函数的方式调用多个其他内核函数，也就是子Kernel。相对于单算子下发，SuperKernel技术可以减少任务调度等待时间和调度开销，同时利用Task间隙资源进一步优化算子头开销。
@@ -49,7 +51,7 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
     <cann-filter npu-type="9030"> Kirin 9030 </cann-filter>
 
     ```cpp
-    template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX>
+    template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
     __aicore__ inline void SetNextTaskStart()
     ```
 
@@ -66,7 +68,7 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
     <cann-filter npu-type="910"> Atlas 训练系列产品 </cann-filter>
 
     ```cpp
-    template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3>
+    template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3, bool FORCE = false>
     __aicore__ inline void SetNextTaskStart()
     ```
 
@@ -80,6 +82,7 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
 | --- | --- |
 | AIV_PIPE | SetNextTaskStart之后运行的指令，如果位于AIV上的AIV_PIPE流水，可以与后序算子并行。AIV_PIPE的取值范围为PIPE_MTE2、PIPE_MTE3、PIPE_S、PIPE_V。 |
 | AIC_PIPE | SetNextTaskStart之后运行的指令，如果位于AIC上的AIC_PIPE流水，可以与后序算子并行。AIC_PIPE的取值范围为PIPE_MTE1、PIPE_MTE2、PIPE_MTE3、PIPE_FIX、PIPE_M。 |
+| FORCE | 离线编译时是否强制启用Early-Start能力，不影响在线编译。<br>false：离线编译时不强制启用Early-Start能力；<br>true：离线编译时启用Early-Start能力，适用于无在线编译流程的算子（如<<<>>>开发的算子）。 |
 
 > [!NOTE]说明 
 >不同的硬件架构，每一种硬件流水类型包含的具体流水会有所差异，流水类型详细介绍请参考[硬件流水类型](../核内同步/核内同步能力概述.md#zh-cn_topic_0000002542725361_section1272612276459)。

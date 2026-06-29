@@ -14,11 +14,25 @@
 #include "kernel_operator_common_intf.h"
 #endif
 
+// template<pipe_t AIV_PIPE, pipe_t AIC_PIPE, bool FORCE>
 // __aicore__ inline void SetNextTaskStart();
-extern "C" __global__ __aicore__ void KernelTestSetNextTaskStart1() { AscendC::SetNextTaskStart(); }
+extern "C" __global__ __aicore__ void KernelTestSetNextTaskStart1()
+{
+    AscendC::SetNextTaskStart();
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ != 1001) && (__NPU_ARCH__ != 2002)
+    AscendC::SetNextTaskStart<PIPE_MTE3, PIPE_FIX, true>();
+#else
+    AscendC::SetNextTaskStart<PIPE_MTE3, PIPE_MTE3, true>();
+#endif
+}
 
+// template<bool FORCE>
 // __aicore__ inline void WaitPreTaskEnd();
-extern "C" __global__ __aicore__ void KernelTestWaitPreTaskEnd1() { AscendC::WaitPreTaskEnd(); }
+extern "C" __global__ __aicore__ void KernelTestWaitPreTaskEnd1()
+{
+    AscendC::WaitPreTaskEnd();
+    AscendC::WaitPreTaskEnd<true>();
+}
 
 // __aicore__ inline void InitSocState();
 extern "C" __global__ __aicore__ void KernelTestInitSocState1() { AscendC::InitSocState(); }
