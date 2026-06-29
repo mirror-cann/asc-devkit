@@ -2,12 +2,12 @@
 
 在[TilingKey编程](./基本流程.md)章节介绍的TilingKey编程方式中，TilingKey不易于记忆和理解，因为它们通常是较长又没有明确含义的数字。
 
-在涉及多个TilingKey的场景中，开发者依赖TilingKey来管理kernel的实现，无论是在管理还是使用上都会遇到相当大的复杂性。为了简化这一过程，可以采用模板编程的方法来替代传统的TilingKey编程，从而减少对TilingKey数值标识的依赖，使kernel的管理更加直观和高效。使用步骤如下，完整样例请参考[Tiling模板编程样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op)。
+在涉及多个TilingKey的场景中，开发者依赖TilingKey来管理kernel的实现，无论是在管理还是使用上都会遇到相当大的复杂性。为了简化这一过程，可以采用模板编程的方法来替代传统的TilingKey编程，从而减少对TilingKey数值标识的依赖，使kernel的管理更加直观和高效。使用步骤如下，完整样例请参考[Tiling模板编程样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op)。
 
 1.  <a name="li1949014102516"></a>在[自定义算子工程](../../Aclnn算子工程化开发/概述.md)的op\_kernel目录下，新增定义模板参数和模板参数组合的头文件，本示例中头文件命名为tiling\_key\_add\_custom\_template.h。
 
     -   该头文件中需要包含模板头文件ascendc/host\_api/tiling/template\_argument.h。
-    -   定义模板参数ASCENDC\_TPL\_ARGS\_DECL和模板参数组合ASCENDC\_TPL\_ARGS\_SEL（即可使用的模板）。具体API参考见[模板参数定义](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/Utils-API/Tiling模板编程/模板参数定义.md)。
+    -   定义模板参数ASCENDC\_TPL\_ARGS\_DECL和模板参数组合ASCENDC\_TPL\_ARGS\_SEL（即可使用的模板）。具体API参考见[模板参数定义](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/Utils-API/Tiling模板编程/模板参数定义.md)。
 
     ```
     #include "ascendc/host_api/tiling/template_argument.h"

@@ -77,7 +77,7 @@ struct PhiloxRandomParams {
 
 ## 调用示例
 
-完整算子样例请参考[philoxrandom样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/09_random/philoxrandom)。
+完整算子样例请参考[philoxrandom样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/04_advanced_api/09_random/philoxrandom)。
 
 ```
 // dstLocal：存放计算结果的Tensor

@@ -135,7 +135,7 @@ AscendC::TransDataParams&lt;decltype(ncdhwLayout), decltype(fractalzLayout)&gt; 
 
 ## 调用示例
 
-更多样例可参考[TransData样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/08_transpose/transdata)。
+更多样例可参考[TransData样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/04_advanced_api/08_transpose/transdata)。
 
 ```
 // dstLocal：输出Tensor

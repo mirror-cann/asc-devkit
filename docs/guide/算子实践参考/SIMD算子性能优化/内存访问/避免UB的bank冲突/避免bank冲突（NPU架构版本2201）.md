@@ -311,7 +311,7 @@ bank冲突主要可以分为以下三种场景：
 
 -   **优化地址分配**
 
-    实现`8192 × 8192` half ND矩阵到全局紧凑NZ布局的转换，切分后，每个Tile块完成`144 × 128` half数据的转换。通过在内存分配时适当扩大内存，调整单次搬运内相邻Datablock的地址步长，保证在同一个Copy搬运操作内，不同Datablock的写操作不会同时出现在一个bank group内。完整样例可参考[避免bank冲突样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_best_practices/04_memory_access/bank_conflict_nd2nz)。
+    实现`8192 × 8192` half ND矩阵到全局紧凑NZ布局的转换，切分后，每个Tile块完成`144 × 128` half数据的转换。通过在内存分配时适当扩大内存，调整单次搬运内相邻Datablock的地址步长，保证在同一个Copy搬运操作内，不同Datablock的写操作不会同时出现在一个bank group内。完整样例可参考[避免bank冲突样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/05_best_practices/04_memory_access/bank_conflict_nd2nz)。
     实现方案对比如下：
 
     <a name="table839512544411"></a>

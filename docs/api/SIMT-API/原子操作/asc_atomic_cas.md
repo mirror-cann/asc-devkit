@@ -89,7 +89,7 @@ Unified Buffer或Global Memory上的初始数据。
 
 ## 调用示例
 
-完整样例请参考[InsertHashTable算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/02_features/01_api_features/00_memory_access/insert_hash_table/README.md)。
+完整样例请参考[InsertHashTable算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/03_simt_api/02_features/01_api_features/00_memory_access/insert_hash_table/README.md)。
 
 简单示例场景为：多个线程尝试抢占同一个任务，任务初始拥有者ID为0。使用`asc_atomic_cas`接口实现只有一个线程抢占成功，其它线程读到非0后抢占失败。输入输出参数说明如下：
 

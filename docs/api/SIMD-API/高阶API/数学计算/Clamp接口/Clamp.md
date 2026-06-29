@@ -63,7 +63,7 @@ struct ClampConfig {
 
 ## 调用示例
 
-更多示例请参考[Clamp算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/10_math/clamp)。
+更多示例请参考[Clamp算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/04_advanced_api/10_math/clamp)。
 
 ```
 AscendC::LocalTensor<half> dst, src;

@@ -10,16 +10,16 @@ AIC和AIV独立运行机制，又称双主模式。在[分离模式](../../../..
 
 ## 约束说明<a name="zh-cn_topic_0000002299608693_section14160134220363"></a>
 
--   该功能仅支持[Norm模板](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulConfig.md)和[MDL模板](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulConfig.md)。
+-   该功能仅支持[Norm模板](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulConfig.md)和[MDL模板](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulConfig.md)。
 -   算子核函数的类型为MIX，同时AIC核数 : AIV核数为1:1。
--   算子核函数的类型为MIX，同时AIC核数 : AIV核数为1:2，且A矩阵和B矩阵同时开启[IBSHARE](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/Matmul使用说明.md)参数。
+-   算子核函数的类型为MIX，同时AIC核数 : AIV核数为1:2，且A矩阵和B矩阵同时开启[IBSHARE](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/Matmul使用说明.md)参数。
 -   同一算子中所有Matmul对象的该参数取值必须保持一致。
 -   A、B、Bias矩阵只支持从Global Memory输入。
--   获取矩阵计算结果只支持调用[IterateAll](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/IterateAll.md)接口输出到[GlobalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor.md)，即计算结果放置于Global Memory的地址，不能调用[GetTensorC](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/GetTensorC.md)等接口获取结果。
+-   获取矩阵计算结果只支持调用[IterateAll](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/IterateAll.md)接口输出到[GlobalTensor](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor.md)，即计算结果放置于Global Memory的地址，不能调用[GetTensorC](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/GetTensorC.md)等接口获取结果。
 
 ## 调用示例<a name="zh-cn_topic_0000002299608693_section15486294368"></a>
 
-完整的算子样例请参考[开启双主模式的算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_mixdualmaster)。
+完整的算子样例请参考[开启双主模式的算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_mixdualmaster)。
 
 ```
 // 修改模板参数enableMixDualMaster=true，Norm模板开启双主模式，MDL模板使用GetMDLConfig接口获取模板参数。

@@ -63,7 +63,7 @@ Warp内所有线程输入val的和。
 
 ## 调用示例
 
-完整样例请参考[MemoryFence样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/02_features/01_api_features/01_sync_instruction/memory_fence/README.md)。
+完整样例请参考[MemoryFence样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/03_simt_api/02_features/01_api_features/01_sync_instruction/memory_fence/README.md)。
 
 -   SIMT编程场景：
 

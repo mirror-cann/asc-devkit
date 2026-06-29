@@ -1,8 +1,8 @@
 # TBuf的使用<a name="ZH-CN_TOPIC_0000002500548088"></a>
 
-在大多数算子开发时，核函数计算过程需要使用临时内存来存储运算的中间结果，这些中间结果以临时变量表示，临时变量占用的内存可以使用TBuf数据结构来管理，具体介绍请参考[TBuf](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TBuf/TBuf.md)。下文将以输入的数据类型为bfloat16\_t、在单核上运行的Add算子为例，介绍TBuf的使用方式。本样例中介绍的算子完整代码请参见[使用临时内存的Add算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/04_memory_management/tmp_buffer)。
+在大多数算子开发时，核函数计算过程需要使用临时内存来存储运算的中间结果，这些中间结果以临时变量表示，临时变量占用的内存可以使用TBuf数据结构来管理，具体介绍请参考[TBuf](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TBuf/TBuf.md)。下文将以输入的数据类型为bfloat16\_t、在单核上运行的Add算子为例，介绍TBuf的使用方式。本样例中介绍的算子完整代码请参见[使用临时内存的Add算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/03_basic_api/04_memory_management/tmp_buffer)。
 
-在Atlas A2 训练系列产品/Atlas 800I A2 推理产品上，[Add](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory矢量计算/基础算术/Add.md)接口不支持对数据类型bfloat16\_t的源操作数进行求和计算。因此，需要先将算子输入的数据类型转换成Add接口支持的数据类型，再进行计算。为保证计算精度，调用[Cast](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory矢量计算/类型转换/Cast.md)接口将输入bfloat16\_t类型转换为float类型，再进行Add计算，并在计算结束后将float类型转换回bfloat16\_t类型。
+在Atlas A2 训练系列产品/Atlas 800I A2 推理产品上，[Add](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Memory矢量计算/基础算术/Add.md)接口不支持对数据类型bfloat16\_t的源操作数进行求和计算。因此，需要先将算子输入的数据类型转换成Add接口支持的数据类型，再进行计算。为保证计算精度，调用[Cast](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Memory矢量计算/类型转换/Cast.md)接口将输入bfloat16\_t类型转换为float类型，再进行Add计算，并在计算结束后将float类型转换回bfloat16\_t类型。
 
 通过以上分析，得到Ascend C  Add算子的设计规格如下：
 
@@ -93,7 +93,7 @@ private:
 };
 ```
 
-初始化函数阶段除原有步骤外，需要调用[InitBuffer](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TPipe/InitBuffer.md)接口为TBuf变量分配内存，具体的初始化函数代码如下：
+初始化函数阶段除原有步骤外，需要调用[InitBuffer](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TPipe/InitBuffer.md)接口为TBuf变量分配内存，具体的初始化函数代码如下：
 
 ```
  __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, AscendC::TPipe* pipeIn)
@@ -114,13 +114,13 @@ private:
 
 基于矢量编程范式，核函数需要实现3个基本任务：CopyIn，Compute，CopyOut。与[基础矢量算子实现](基础矢量算子.md#zh-cn_topic_0000002201157438_section10423482111)相同，Process函数按顺序调用CopyIn函数，Compute函数，CopyOut函数。其中，CopyIn函数，CopyOut函数与[基础矢量算子的CopyIn函数](基础矢量算子.md#zh-cn_topic_0000002201157438_zh-cn_topic_0000001514531781_li10182173751518)、[基础矢量算子的CopyOut函数](基础矢量算子.md#zh-cn_topic_0000002201157438_zh-cn_topic_0000001514531781_li1134112320247)的实现没有差异，此处不过多赘述。Compute函数的实现步骤如下：
 
-1.  使用[DeQue](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TQue/DeQue.md)从VECIN的Queue中取出LocalTensor。
-2.  使用TBuf.[Get](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TBuf/Get.md)从TBuf上获取全部长度的Tensor作为临时内存。
-3.  使用[Cast](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory矢量计算/类型转换/Cast.md)接口将LocalTensor转换为float类型，并存入临时内存。
-4.  使用[Add](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory矢量计算/基础算术/Add.md)接口完成矢量计算，将计算结果存入临时内存。
-5.  使用[Cast](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory矢量计算/类型转换/Cast.md)接口将临时内存中的计算结果转换为bfloat16\_t类型。
-6.  使用[EnQue](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TQue/EnQue.md)将bfloat16\_t类型的结果LocalTensor放入VECOUT的Queue中。
-7.  使用[FreeTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TQue/FreeTensor.md)释放不再使用的LocalTensor。
+1.  使用[DeQue](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TQue/DeQue.md)从VECIN的Queue中取出LocalTensor。
+2.  使用TBuf.[Get](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TBuf/Get.md)从TBuf上获取全部长度的Tensor作为临时内存。
+3.  使用[Cast](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Memory矢量计算/类型转换/Cast.md)接口将LocalTensor转换为float类型，并存入临时内存。
+4.  使用[Add](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Memory矢量计算/基础算术/Add.md)接口完成矢量计算，将计算结果存入临时内存。
+5.  使用[Cast](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Memory矢量计算/类型转换/Cast.md)接口将临时内存中的计算结果转换为bfloat16\_t类型。
+6.  使用[EnQue](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TQue/EnQue.md)将bfloat16\_t类型的结果LocalTensor放入VECOUT的Queue中。
+7.  使用[FreeTensor](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TQue/FreeTensor.md)释放不再使用的LocalTensor。
 
 ```
 __aicore__ inline void Compute()
@@ -143,4 +143,3 @@ __aicore__ inline void Compute()
     inQueueY.FreeTensor(yLocal);
 }
 ```
-

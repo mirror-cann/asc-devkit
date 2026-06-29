@@ -2,7 +2,7 @@
 
 ## 案例介绍<a name="section5590915836"></a>
 
-本案例呈现了在Matmul计算过程中，输入和输出的数据总量超过L2 Cache大小时，通过L2 Cache数据切分对算子性能的提升效果。开启L2 Cache切分的完整样例请参考[L2 Cache切分的算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_l2cache)。
+本案例呈现了在Matmul计算过程中，输入和输出的数据总量超过L2 Cache大小时，通过L2 Cache数据切分对算子性能的提升效果。开启L2 Cache切分的完整样例请参考[L2 Cache切分的算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_l2cache)。
 
 本案例使用的AI处理器的L2 Cache大小为192MB，L2 Cache纯读带宽约为GM的3到4倍，两者之间存在较大差距。在搬入或搬出相同数据量的情况下，访问L2 Cache内的数据比访问GM更快。若数据无法命中L2 Cache，即需要访问的数据不在L2 Cache内，导致需要访问GM进行读写，带宽利用效率较低，最终算子搬入或搬出数据成为算子整个运行过程的性能瓶颈。
 
@@ -84,7 +84,7 @@
     **图 3**  优化点三示意图<a name="fig12727153717911"></a>  
     ![](../../../figures/优化点三示意图.png "优化点三示意图")
 
-Matmul API开启L2 Cache切分的完整样例请参考[L2 Cache切分的算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_l2cache)。实现L2 Cache切分的关键步骤如下：
+Matmul API开启L2 Cache切分的完整样例请参考[L2 Cache切分的算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_l2cache)。实现L2 Cache切分的关键步骤如下：
 
 1.  判断是否需要进行L2 Cache切分。如果数据总量超过设定的L2 Cache大小，则计算L2 Cache切分数目。
 

@@ -2,7 +2,7 @@
 
 ## 案例介绍<a name="section17413194624510"></a>
 
-本案例呈现了在矩阵乘算子场景中，使用Matmul高阶API进行矩阵乘法计算，开启MTE2 Preload对算子性能的提升效果**。**通过MatmulConfig中的doMTE2Preload参数开启矩阵M或N方向的预加载功能，预加载即在MTE2间隙提前加载A矩阵/B矩阵数据，开启预加载功能后，可以减少MTE2间隙，提升算子性能。doMTE2Preload参数的详细介绍请参考[MatmulConfig](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulConfig.md)。
+本案例呈现了在矩阵乘算子场景中，使用Matmul高阶API进行矩阵乘法计算，开启MTE2 Preload对算子性能的提升效果**。**通过MatmulConfig中的doMTE2Preload参数开启矩阵M或N方向的预加载功能，预加载即在MTE2间隙提前加载A矩阵/B矩阵数据，开启预加载功能后，可以减少MTE2间隙，提升算子性能。doMTE2Preload参数的详细介绍请参考[MatmulConfig](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulConfig.md)。
 
 -   开启MTE2 Preload的适用场景
 
@@ -69,7 +69,7 @@
 
 ## 设计优化方案<a name="section33901368431"></a>
 
-开启MTE2 Preload功能：在创建Matmul对象时，开启doMTE2Preload开关。开启MTE2 Preload的完整样例请参考[M方向预加载Matmul算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_preload)。具体步骤如下：
+开启MTE2 Preload功能：在创建Matmul对象时，开启doMTE2Preload开关。开启MTE2 Preload的完整样例请参考[M方向预加载Matmul算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_preload)。具体步骤如下：
 
 1.  配置MDL模板参数，将其中的doMTE2Preload参数设置为2，开启N方向Preload功能。
 

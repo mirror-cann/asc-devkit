@@ -2,7 +2,7 @@
 
 ## 具体步骤<a name="section17812263817"></a>
 
-在定义Tiling结构体时，可以使用标准C++语法定义一个**POD类型（Plain Old Data）**，即与C语言兼容的数据类型。具体步骤如下。完整样例请参考[标准C++语法定义Tiling结构体样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op)。
+在定义Tiling结构体时，可以使用标准C++语法定义一个**POD类型（Plain Old Data）**，即与C语言兼容的数据类型。具体步骤如下。完整样例请参考[标准C++语法定义Tiling结构体样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op)。
 
 1.  使用C++语法定义Tiling结构体。
 
@@ -54,7 +54,7 @@
 3.  Kernel侧注册Tiling结构体，解析Tiling数据至TilingData结构并使用。
 
     -   需要包含Tiling结构体定义头文件。
-    -   通过[REGISTER\_TILING\_DEFAULT](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Kernel-Tiling/REGISTER_TILING_DEFAULT.md)或者[REGISTER\_TILING\_FOR\_TILINGKEY](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Kernel-Tiling/REGISTER_TILING_FOR_TILINGKEY.md)注册Tiling结构体；通过[GET\_TILING\_DATA](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Kernel-Tiling/GET_TILING_DATA.md)解析Tiling数据至TilingData结构并使用。其中REGISTER\_TILING\_DEFAULT同时也用于标识使用标准C++语法定义TilingData结构体。
+    -   通过[REGISTER\_TILING\_DEFAULT](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Kernel-Tiling/REGISTER_TILING_DEFAULT.md)或者[REGISTER\_TILING\_FOR\_TILINGKEY](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Kernel-Tiling/REGISTER_TILING_FOR_TILINGKEY.md)注册Tiling结构体；通过[GET\_TILING\_DATA](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Kernel-Tiling/GET_TILING_DATA.md)解析Tiling数据至TilingData结构并使用。其中REGISTER\_TILING\_DEFAULT同时也用于标识使用标准C++语法定义TilingData结构体。
 
     ```
     #include "kernel_operator.h"
@@ -350,7 +350,7 @@
     </tbody>
     </table>
 
-3.  **最后**，在Kernel 函数入口处新增[REGISTER\_TILING\_DEFAULT](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Kernel-Tiling/REGISTER_TILING_DEFAULT.md)调用，用于注册Tiling结构体。该注册操作的作用是：告知框架用户已使用标准 C++ 语法定义Tiling结构体，并明确其类型，以便框架在进行Tiling数据解析时能够正确识别和使用该结构体。
+3.  **最后**，在Kernel 函数入口处新增[REGISTER\_TILING\_DEFAULT](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Kernel-Tiling/REGISTER_TILING_DEFAULT.md)调用，用于注册Tiling结构体。该注册操作的作用是：告知框架用户已使用标准 C++ 语法定义Tiling结构体，并明确其类型，以便框架在进行Tiling数据解析时能够正确识别和使用该结构体。
 
     ```
     #include "add_custom_tiling.h"
@@ -362,4 +362,3 @@
         ...
     }
     ```
-

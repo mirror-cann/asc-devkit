@@ -98,7 +98,7 @@ Warp内指定线程的var值。
 
 ## 调用示例
 
-完整样例请参考[Sobel边缘检测样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/02_features/01_api_features/03_warp_instruction/sobel_warp_shfl/README.md)。
+完整样例请参考[Sobel边缘检测样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/03_simt_api/02_features/01_api_features/03_warp_instruction/sobel_warp_shfl/README.md)。
 
 以下示例包含两类用法：示例1使用asc\_shfl\_up获取Warp分组内相对当前线程向前偏移delta的线程的输入值；示例2使用asc\_shfl\_up在每个Warp内进行归约求和。
 

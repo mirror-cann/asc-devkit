@@ -78,7 +78,7 @@
 
     **说明**：硬件删除L1 Buffer到GM的通路，无法将数据从L1 Buffer直接搬运到GM中。现有接口不支持L1 Buffer到GM的直接搬运。
 
-    **兼容方案**：对于纯Cube计算场景：在GM多分配一个单位矩阵，通过Mmad矩阵乘法计算输出到L0C Buffer，再从L0C Buffer通过Fixpipe搬运到GM。对于Vector和Cube计算融合场景，可以通过L1 Buffer搬运到UB，再搬运到GM。以下以纯Cube计算场景为例进行说明，介绍算子核心流程，具体可参考[L1到GM搬运兼容性样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/06_compatibility_guide/data_copy_l1togm)。
+    **兼容方案**：对于纯Cube计算场景：在GM多分配一个单位矩阵，通过Mmad矩阵乘法计算输出到L0C Buffer，再从L0C Buffer通过Fixpipe搬运到GM。对于Vector和Cube计算融合场景，可以通过L1 Buffer搬运到UB，再搬运到GM。以下以纯Cube计算场景为例进行说明，介绍算子核心流程，具体可参考[L1到GM搬运兼容性样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/06_compatibility_guide/data_copy_l1togm)。
 
     1.  将矩阵A从GM搬运到L1 Buffer。
 
@@ -152,7 +152,7 @@
     **兼容方案**：
 
     -   [NPU架构版本2201](../../../编程指南/语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)的接口参数boundaryValue设置为0时与3510架构版本等价。
-    -   如果需要在L1 Buffer上循环读取操作数，需要将对应的Load3D接口手动拆分成多条指令，手动绕回。具体代码可参考[SetLoadDataBoundary兼容性样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/06_compatibility_guide/set_loaddata_boundary)。
+    -   如果需要在L1 Buffer上循环读取操作数，需要将对应的Load3D接口手动拆分成多条指令，手动绕回。具体代码可参考[SetLoadDataBoundary兼容性样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/06_compatibility_guide/set_loaddata_boundary)。
 
     ![](../../../figures/1_zn.png)
 
@@ -262,7 +262,7 @@
 
     **说明**：相较于2201架构版本，3510架构版本的Cube计算单元不支持int4b\_t。相关的基础API有LoadData、Mmad和LoadDataWithTranspose，这些接口不再支持int4b\_t。
 
-    **兼容方案**：算子侧通过编写CV融合算子在Vector Core进行int4b\_t到int8\_t的Cast转换，再通过UB搬运到L1后进行Mmad计算。具体代码可参考[int4数据类型下Matmul兼容性样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/06_compatibility_guide/matmul_s4)。图层面可以在该算子前增加Cast节点进行int4b\_t到int8\_t的转换。
+    **兼容方案**：算子侧通过编写CV融合算子在Vector Core进行int4b\_t到int8\_t的Cast转换，再通过UB搬运到L1后进行Mmad计算。具体代码可参考[int4数据类型下Matmul兼容性样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/06_compatibility_guide/matmul_s4)。图层面可以在该算子前增加Cast节点进行int4b\_t到int8\_t的转换。
 
     1.  在Vector Core进行int4b\_t到int8\_t的Cast转换，转换后的数据保存到新的GM空间中。
 
@@ -421,7 +421,7 @@
 
     **说明**：Fill接口将特定存储位置的LocalTensor初始化为某一具体数值，不支持直接初始化L0A Buffer、L0B Buffer。
 
-    **兼容方案**：先通过Fill接口初始化L1 Buffer，再通过LoadData接口将L1 Buffer上的数据搬运到L0A Buffer、L0B Buffer。具体代码可参考[Fill兼容性样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/06_compatibility_guide/fill)。
+    **兼容方案**：先通过Fill接口初始化L1 Buffer，再通过LoadData接口将L1 Buffer上的数据搬运到L0A Buffer、L0B Buffer。具体代码可参考[Fill兼容性样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/06_compatibility_guide/fill)。
 
     以GM-\>L1 Buffer-\>L0A Buffer的数据通路为例：
 

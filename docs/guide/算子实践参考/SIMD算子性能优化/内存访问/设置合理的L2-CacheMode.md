@@ -32,7 +32,7 @@ L2 Cache的带宽相比GM的带宽有数倍的提升，因此当数据命中L2 C
 
 Ascend C基于GlobalTensor提供了SetL2CacheHint接口，用户可以根据需要指定CacheMode。
 
-考虑如下场景，构造两个Tensor的相加计算，输入x、y和输出z的Shape均为\(8192, 8192\)。下文完整样例请参考[设置合理L2 CacheMode样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_best_practices/00_vector_compute/add_high_performance)。
+考虑如下场景，构造两个Tensor的相加计算，输入x、y和输出z的Shape均为\(8192, 8192\)。下文完整样例请参考[设置合理L2 CacheMode样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/05_best_practices/00_vector_compute/add_high_performance)。
 
 <a name="table12921549195512"></a>
 <table><thead align="left"><tr id="row1229364945511"><th class="cellrowborder" valign="top" width="6.813978389954251%" id="mcps1.1.4.1.1"><p id="p2081249145715"><a name="p2081249145715"></a><a name="p2081249145715"></a>实现方案</p>
@@ -77,4 +77,3 @@ yGm.SetL2CacheHint(AscendC::CacheMode::CACHE_MODE_DISABLE);</pre>
 >msprof op --launch-count=2 --output=./prof ./execute_add_op
 >```
 >重点关注Memory.csv中的aiv\_gm\_to\_ub\_bw\(GB/s\)和aiv\_main\_mem\_write\_bw\(GB/s\)写带宽的速率。
-

@@ -70,7 +70,7 @@ __aicore__ inline void Arange(const LocalTensor<T>& dst, const T firstValue, con
 
 ## 调用示例
 
-完整样例请参考[Arange样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/06_index/arange)。
+完整样例请参考[Arange样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/04_advanced_api/06_index/arange)。
 
 ```
 // dst：输出Tensor
