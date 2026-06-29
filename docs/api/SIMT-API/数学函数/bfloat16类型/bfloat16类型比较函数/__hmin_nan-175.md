@@ -62,7 +62,7 @@ bfloat16_t __hmin_nan(const bfloat16_t x, const bfloat16_t y)
     __global__ __launch_bounds__(1024) void KernelHmin_nan(bfloat16_t* dst, bfloat16_t* x, bfloat16_t* y)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
-        dst[idx] = __hgtu(x[idx], y[idx]);
+        dst[idx] = __hmin_nan(x[idx], y[idx]);
     }
     ```
 
@@ -72,7 +72,6 @@ bfloat16_t __hmin_nan(const bfloat16_t x, const bfloat16_t y)
     __simt_vf__ __launch_bounds__(1024) inline void KernelHmin_nan(__gm__ bfloat16_t* dst, __gm__ bfloat16_t* x, __gm__ bfloat16_t* y)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
-        dst[idx] = __hgtu(x[idx], y[idx]);
+        dst[idx] = __hmin_nan(x[idx], y[idx]);
     }
     ```
-
