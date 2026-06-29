@@ -20,6 +20,7 @@ from pathlib import Path
 from asc_op_compile_base.common.utils.log_utils import LogUtil, AscendCLogLevel
 from asc_op_compile_base.asc_op_compiler.get_op_tiling import load_custom_lib, load_build_in_lib, TilingInfo, \
     generate_dynamic_tiling_struct_file, generate_static_tiling_struct_file
+from asc_op_compile_base.common.platform.platform_info import set_current_compile_soc_info
 
 
 def load_json(op_type, json_file):
@@ -114,12 +115,18 @@ def parse_input_args():
         type=str,
         help="json file for storing info"
     )
+    parser.add_argument(
+        "soc_version",
+        type=str,
+        help="soc version"
+    )
     dump_parse_args = parser.parse_args()
     return dump_parse_args
 
 
 if __name__ == "__main__":
     args = parse_input_args()
+    set_current_compile_soc_info(args.soc_version)
     LogUtil.print_compile_log(args.op_type, f"[Sub process] begin load isolate tiling info.", \
                 AscendCLogLevel.LOG_INFO)
     tiling_info_dict = load_json(args.op_type, args.isolate_json)

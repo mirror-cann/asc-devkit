@@ -1594,8 +1594,8 @@ def get_tiling_info_isolate(op_info: OpInfo, input_tiling_info_dict: dict):
 
         isolate_python_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), \
             "ascendc_gen_tiling_struct_isolate.py")
-
-        result = subprocess.run(["python3", isolate_python_path, op_info.op_type, isolate_json_path])
+        soc_version = get_soc_spec("FULL_SOC_VERSION")
+        result = subprocess.run(["python3", isolate_python_path, op_info.op_type, isolate_json_path, soc_version])
 
         if result.returncode == 0:
             tiling_info = get_isolate_tiling_info(op_info.op_type, isolate_json_path)
