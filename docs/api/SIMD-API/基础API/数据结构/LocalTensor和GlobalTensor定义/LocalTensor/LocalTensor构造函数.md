@@ -69,13 +69,13 @@ LocalTensor构造函数。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
--   适用于[Pipe编程框架](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编程模型/AI-Core-SIMD编程/SIMD编程/基于TPipe和TQue编程.md)，通常情况下开发者不直接调用，该函数不会对LocaTensor成员变量赋初值，均为随机值。
+-   适用于[Pipe编程框架](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编程模型/AI-Core-SIMD编程/基于TPipe-TQue框架编程/TPipe-TQue框架编程原理.md)，通常情况下开发者不直接调用，该函数不会对LocaTensor成员变量赋初值，均为随机值。
 
     ```cpp
     __aicore__ inline LocalTensor<T>() {}
     ```
 
--   适用于[静态Tensor编程](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编程模型/AI-Core-SIMD编程/SIMD编程/静态Tensor编程.md)，根据指定的逻辑位置/地址/长度，返回Tensor对象。
+-   适用于[静态Tensor编程](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编程模型/AI-Core-SIMD编程/基于Tensor的CPP编程/静态Tensor编程.md)，根据指定的逻辑位置/地址/长度，返回Tensor对象。
 
     ```cpp
     __aicore__ inline LocalTensor<T>(TPosition pos, uint32_t addr, uint32_t tileSize)

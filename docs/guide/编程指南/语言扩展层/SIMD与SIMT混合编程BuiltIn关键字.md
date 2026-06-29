@@ -166,7 +166,7 @@ __global__ __vector__ void add_custom(__gm__ float* x, __gm__ float* y, __gm__ f
 ## SIMD VF的asc\_vf\_call调用
 
 使用asc\_vf\_call接口调用SIMD VF入口函数启动VF子任务，详细接口说明参见
-[asc\_vf\_call接口说明](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Reg矢量计算/asc_vf_call.md)。
+[asc\_vf\_call接口说明](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Reg矢量计算/VF调用/asc_vf_call.md)。
 
 ## 内置变量<a name="zh-cn_topic_0000002571575581_section13165113520576"></a>
 当前提供了以下仅在Device上可用的dim3结构的内置变量：  
