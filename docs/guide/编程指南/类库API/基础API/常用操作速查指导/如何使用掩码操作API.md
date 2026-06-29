@@ -168,8 +168,7 @@ Mask操作的使用方式如下：
     ```
 
 >[!NOTE]说明 
->- 前n个数据计算API接口内部会设置工作模式为Counter模式，所以如果前n个数据计算API配合Counter模式使用时，无需手动调用[SetMaskCount](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory矢量计算/掩码操作/SetMaskCount.md)设置Counter模式。
->- 所有手动使用Counter模式的场景，使用完毕后，需要调用[SetMaskNorm](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory矢量计算/掩码操作/SetMaskNorm.md)恢复工作模式。
->- 调用[SetVectorMask](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory矢量计算/掩码操作/SetVectorMask.md)设置Mask，使用完毕后，需要调用[ResetMask](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory矢量计算/掩码操作/ResetMask.md)恢复Mask值为默认值。
+>- 前n个数据计算API接口内部会设置工作模式为Counter模式，所以如果前n个数据计算API配合Counter模式使用时，无需手动调用[SetMaskCount](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Memory矢量计算/掩码操作/SetMaskCount.md)设置Counter模式。
+>- 所有手动使用Counter模式的场景，使用完毕后，需要调用[SetMaskNorm](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Memory矢量计算/掩码操作/SetMaskNorm.md)恢复工作模式。
+>- 调用[SetVectorMask](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Memory矢量计算/掩码操作/SetVectorMask.md)设置Mask，使用完毕后，需要调用[ResetMask](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Memory矢量计算/掩码操作/ResetMask.md)恢复Mask值为默认值。
 >- 使用高维切分计算API配套Counter模式使用时，比前n个数据计算API增加了可间隔的计算，支持dataBlockStride、repeatStride参数。
-

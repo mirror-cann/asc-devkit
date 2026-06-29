@@ -31,7 +31,7 @@
 <td class="cellrowborder" valign="top" width="76.36%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000002298078557_p8779024175813"><a name="zh-cn_topic_0000002298078557_p8779024175813"></a><a name="zh-cn_topic_0000002298078557_p8779024175813"></a>将矩阵乘的计算结果从CO1搬出到Global Memory时，对矩阵元素执行数据量化或反量化操作。</p>
 </td>
 </tr>
-<tr id="zh-cn_topic_0000002298078557_row1320716413201"><td class="cellrowborder" valign="top" width="23.64%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000002298078557_p1854719415227"><a name="zh-cn_topic_0000002298078557_p1854719415227"></a><a name="zh-cn_topic_0000002298078557_p1854719415227"></a><a href=https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulCallBackFunc.md>自定义数据搬入搬出</a></p>
+<tr id="zh-cn_topic_0000002298078557_row1320716413201"><td class="cellrowborder" valign="top" width="23.64%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000002298078557_p1854719415227"><a name="zh-cn_topic_0000002298078557_p1854719415227"></a><a name="zh-cn_topic_0000002298078557_p1854719415227"></a><a href=https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulCallBackFunc.md>自定义数据搬入搬出</a></p>
 </td>
 <td class="cellrowborder" valign="top" width="76.36%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000002298078557_p1820704113201"><a name="zh-cn_topic_0000002298078557_p1820704113201"></a><a name="zh-cn_topic_0000002298078557_p1820704113201"></a>自定义矩阵乘计算前后的数据搬运函数。本功能支持用户实现左矩阵A、右矩阵B从Global Memory分别自定义搬入到A1、B1的过程，输出C矩阵从CO1自定义搬出到Global Memory的过程。</p>
 </td>
@@ -51,14 +51,14 @@
 <td class="cellrowborder" valign="top" width="76.36%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000002298078557_p97799246588"><a name="zh-cn_topic_0000002298078557_p97799246588"></a><a name="zh-cn_topic_0000002298078557_p97799246588"></a>4:2稀疏矩阵乘，又称Sparse Matmul。指对稀疏左矩阵A和4:2稠密化的右矩阵B实现矩阵乘计算。</p>
 </td>
 </tr>
-<tr id="zh-cn_topic_0000002298078557_row16577182820235"><td class="cellrowborder" valign="top" width="23.64%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000002298078557_p13858194593417"><a name="zh-cn_topic_0000002298078557_p13858194593417"></a><a name="zh-cn_topic_0000002298078557_p13858194593417"></a><a href=https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulPolicy.md>上/下三角矩阵乘</a></p>
+<tr id="zh-cn_topic_0000002298078557_row16577182820235"><td class="cellrowborder" valign="top" width="23.64%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000002298078557_p13858194593417"><a name="zh-cn_topic_0000002298078557_p13858194593417"></a><a name="zh-cn_topic_0000002298078557_p13858194593417"></a><a href=https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/MatmulPolicy.md>上/下三角矩阵乘</a></p>
 </td>
 <td class="cellrowborder" valign="top" width="76.36%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000002298078557_p457718285237"><a name="zh-cn_topic_0000002298078557_p457718285237"></a><a name="zh-cn_topic_0000002298078557_p457718285237"></a>忽略位于矩阵中下三角或上三角位置的元素的计算，实现矩阵中上三角或下三角位置的元素的矩阵乘计算。</p>
 </td>
 </tr>
 <tr id="zh-cn_topic_0000002298078557_row2748530162319"><td class="cellrowborder" valign="top" width="23.64%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000002298078557_p141909471896"><a name="zh-cn_topic_0000002298078557_p141909471896"></a><a name="zh-cn_topic_0000002298078557_p141909471896"></a><a href="TSCM输入的矩阵乘.md">TSCM输入的矩阵乘</a></p>
 </td>
-<td class="cellrowborder" valign="top" width="76.36%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000002298078557_p1748143002320"><a name="zh-cn_topic_0000002298078557_p1748143002320"></a><a name="zh-cn_topic_0000002298078557_p1748143002320"></a>对内存逻辑位置为<a href="../../../../编程指南/概念原理和术语/术语表.md#p1392229512">TSCM</a>的左矩阵A或右矩阵B实现矩阵乘计算。</p>
+<td class="cellrowborder" valign="top" width="76.36%" headers="mcps1.2.3.1.2 "><p id="zh-cn_topic_0000002298078557_p1748143002320"><a name="zh-cn_topic_0000002298078557_p1748143002320"></a><a name="zh-cn_topic_0000002298078557_p1748143002320"></a>对内存逻辑位置为<a href="../../../../技术附录/概念原理和术语/术语表.md#p1392229512">TSCM</a>的左矩阵A或右矩阵B实现矩阵乘计算。</p>
 </td>
 </tr>
 <tr id="zh-cn_topic_0000002298078557_row1737123113238"><td class="cellrowborder" valign="top" width="23.64%" headers="mcps1.2.3.1.1 "><p id="zh-cn_topic_0000002298078557_p1218910471691"><a name="zh-cn_topic_0000002298078557_p1218910471691"></a><a name="zh-cn_topic_0000002298078557_p1218910471691"></a><a href="矩阵乘输出的N方向对齐.md">矩阵乘输出的N方向对齐</a></p>

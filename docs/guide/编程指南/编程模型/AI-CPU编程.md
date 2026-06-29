@@ -81,4 +81,4 @@ template extern __global__ __aicpu__ uint32_t hello_world<KernelArgs, 4096>(void
 ## 更多进阶用法<a name="section109268265171"></a>
 
 >[!NOTE]说明 
->更多AI CPU API的使用方法请参考[AI CPU API](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/AI-CPU-API/AI-CPU-API.md)。
+>更多AI CPU API的使用方法请参考[AI CPU API](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/AI-CPU-API/AI-CPU-API.md)。

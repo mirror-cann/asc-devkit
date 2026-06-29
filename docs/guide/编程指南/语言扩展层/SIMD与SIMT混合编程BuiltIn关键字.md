@@ -26,7 +26,7 @@ SIMT VF函数定义中的关键修饰符说明如下：
 | \_\_gm\_\_ | 内存空间修饰符，标识内存空间为GM。 |
 | \_\_ubuf\_\_ | 内存空间修饰符，标识内存空间为UB。 |
 
-只支持在核函数或\_\_aicore\_\_函数中调用SIMT VF函数，调用接口为[asc\_vf\_call](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMT-API/SIMD与SIMT混合编程简介/扩展语法/核函数配置-147.md#asc_vf_call调用)，示例如下：
+只支持在核函数或\_\_aicore\_\_函数中调用SIMT VF函数，调用接口为[asc\_vf\_call](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMT-API/SIMD与SIMT混合编程简介/扩展语法/核函数配置-147.md#asc_vf_call调用)，示例如下：
 
 ```
 asc_vf_call<function_name>(dim3(blockDim), arg1, arg2, ...);
@@ -166,7 +166,7 @@ __global__ __vector__ void add_custom(__gm__ float* x, __gm__ float* y, __gm__ f
 ## SIMD VF的asc\_vf\_call调用
 
 使用asc\_vf\_call接口调用SIMD VF入口函数启动VF子任务，详细接口说明参见
-[asc\_vf\_call接口说明](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Reg矢量计算/asc_vf_call.md)。
+[asc\_vf\_call接口说明](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/Reg矢量计算/asc_vf_call.md)。
 
 ## 内置变量<a name="zh-cn_topic_0000002571575581_section13165113520576"></a>
 当前提供了以下仅在Device上可用的dim3结构的内置变量：  
