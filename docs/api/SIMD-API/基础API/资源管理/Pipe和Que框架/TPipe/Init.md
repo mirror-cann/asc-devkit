@@ -69,7 +69,8 @@ __aicore__ inline void Init()
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-重复申请释放tpipe，要与[Destroy](Destroy.md)接口成对使用，tpipe如果要重复申请需要先Destroy释放后再Init。
+-   Tpipe对象复用时，要与[Destroy](Destroy.md)接口成对使用，每次复用需要先Destroy释放资源，再调用init重新初始化。
+-   Tpipe构造函数内部已调用Init，无需在Tpipe对象初始化后再额外调用。
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -77,25 +78,23 @@ __aicore__ inline void Init()
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-完整算子样例参考：[TPipeReuse](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/07_tpipe_tque/tpipe_reuse)。
 
 ```
 // 实例化一个浮点型的自定义算子对象
 KernelTPipeInit<float> op;
 uint32_t srcSize = 128;
 
-// 第一次执行流程：使用pipeIn管道
-AscendC::TPipe pipeIn;
-pipeIn.Init();  // 初始化pipeIn管道资源
-op.Init(x, z, srcSize, &pipeIn);
-op.Process();
-pipeIn.Destroy();  // 销毁pipeIn管道资源
+// 构造一个Tpipe对象
+AscendC::TPipe tpipe;
 
-// 第二次执行流程：复用算子对象，但更换为pipeCast管道
-AscendC::TPipe pipeCast;
-pipeCast.Init();  // 初始化pipeCast管道资源
-op.Init(x, z, srcSize, &pipeCast);
+// 第一次执行流程
+op.Init(x, z, srcSize, &tpipe);
 op.Process();
-pipeCast.Destroy();  // 销毁pipeCast管道资源
+tpipe.Destroy();  // 重复使用需要先Destory，再进行Init
+
+// 第二次执行流程：复用算子对象和tpipe管道对象
+tpipe.Init();
+op.Init(x, z, srcSize, &tpipe);
+op.Process();
+tpipe.Destroy();  // 销毁tpipe管道资源
 ```
-

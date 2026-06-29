@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例基于TPipe::Init和TPipe::Destroy接口，实现重复申请释放TPipe。
+本样例基于TPipe构造函数和TPipe::Destroy接口，实现重复申请释放TPipe。
 
 > **注意：** 本样例仅适用于基于TPipe和TQue的编程模式。
 
@@ -31,7 +31,7 @@
 
 - 样例功能
 
-  本样例以两次完整的Muls计算为例，展示TPipe的重复申请与释放。前一次计算的TPipe对象先Destroy，后一次计算的TPipe对象才能Init。
+  本样例以两次完整的Muls计算为例，展示TPipe的重复申请与释放。前一次计算的TPipe对象先Destroy，后一次计算的TPipe对象才能进行构造。
 
 - 样例规格
 
@@ -67,9 +67,9 @@
 
   - Kernel实现
 
-    - 创建pipe1对象，调用TPipe::Init接口初始化，计算，并调用TPipe::Destroy接口销毁pipe1对象。
+    - 创建pipe1对象，计算，并调用TPipe::Destroy接口销毁pipe1对象。
 
-    - 创建pipe2对象，调用TPipe::Init接口初始化，计算，并调用TPipe::Destroy接口销毁pipe2对象。
+    - 创建pipe2对象，计算，并调用TPipe::Destroy接口销毁pipe2对象。
 
   - 调用实现
 
