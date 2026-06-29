@@ -77,7 +77,7 @@ $$C = A \times B + C$$
 
 **表 1** 矩阵计算矩阵A、B、C解释说明
 
-| Mmad计算逻辑 | 矩阵计算物理位置 | 维度 | 输入/输出数据格式 | 数据类型 |
+| 矩阵计算逻辑 | 矩阵计算物理位置 | 维度 | 输入/输出数据格式 | 数据类型 |
 | --- | --- | --- | --- | --- |
 | A | L0A Buffer | M x K | Nz | <a href="#zh_cn_topic_mmad_section5">数据类型</a> |
 | B | L0B Buffer | K x N | Zn | <a href="#zh_cn_topic_mmad_section5">数据类型</a> |

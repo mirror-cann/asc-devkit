@@ -39,9 +39,9 @@ __aicore__ inline void SetLoadDataRepeat(const LoadDataRepeatParam& repeatParams
 
 | 参数名称 | 含义 |
 | --- | --- |
-| repeatStride | height/width方向上的前一个迭代与后一个迭代起始地址的距离，取值范围：n∈[0, 65535]，默认值为0。<br>&nbsp;&nbsp;&nbsp;&nbsp;&bull; repeatMode为0，repeatStride的单位为16个元素。<br>&nbsp;&nbsp;&nbsp;&nbsp;&bull; repeatMode为1，repeatStride的单位和具体型号有关。下文中的data_type指Load3Dv2中源操作数的数据类型。 |
-| repeatTime | height/width方向上的迭代次数，取值范围：repeatTime ∈[0, 255]。默认值为1。 |
-| repeatMode | 控制repeat迭代的方向，取值范围：k∈[0, 1]。默认值为0。<br>0：迭代沿height方向；<br>1：迭代沿width方向。 |
+| repeatStride | height/width方向上的前一个迭代与后一个迭代起始地址的距离，取值范围：repeatStride∈[0, 65535]，默认值为0。<br>&nbsp;&nbsp;&nbsp;&nbsp;&bull; repeatMode为0，repeatStride的单位为16个元素。<br>&nbsp;&nbsp;&nbsp;&nbsp;&bull; repeatMode为1，repeatStride的单位和具体型号有关。下文中的data_type指Load3Dv2中源操作数的数据类型。 |
+| repeatTime | height/width方向上的迭代次数，取值范围：repeatTime∈[0, 255]。默认值为1。 |
+| repeatMode | 控制repeat迭代的方向，取值范围：repeatMode∈[0, 1]。默认值为0。<br>&nbsp;&nbsp;&nbsp;&nbsp;&bull; 0：迭代沿height方向；<br>&nbsp;&nbsp;&nbsp;&nbsp;&bull; 1：迭代沿width方向。 |
 | dstStride | 输出矩阵K轴方向偏移，以512B分形为单位。不同的型号，dstStride的支持度不同，请参考[dstStride参数支持度说明](#dstStride参数支持度说明)。 |
 
 ### dstStride参数支持度说明

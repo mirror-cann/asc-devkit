@@ -46,7 +46,7 @@ for (j = 0; j < mSize; j++) {
 ```cpp
 for (j = 0; j < mSize; j++) {
     src_temp_n_addr = src + j * sizeof(L0C_element) * 16;
-    v= dst + j * 16 * sizeof(DST_element);
+    dst_temp_n_addr = dst + j * 16 * sizeof(DST_element);
     for (k = 0; k < ceil(nSize / 16); k++) {
         src_block_addr = src_temp_n_addr + k * srcStride * sizeof(L0C_element) * 16;
         dst_block_addr = dst_temp_n_addr + k * dstStride * sizeof(DST_element);

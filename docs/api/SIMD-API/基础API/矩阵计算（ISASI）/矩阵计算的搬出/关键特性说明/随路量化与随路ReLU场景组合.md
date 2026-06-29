@@ -15,7 +15,7 @@
 <!-- end id2 -->
 
 <!-- npu="950" id3 -->
-**表2** 随路量化与随路ReLU的组合表（[NPU架构版本2201](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md)）
+**表2** 随路量化与随路ReLU的组合表（[NPU架构版本3510](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md)）
 
 | quantPre\reluPre | no ReLU | Normal ReLU |
 | --- | --- | --- |
