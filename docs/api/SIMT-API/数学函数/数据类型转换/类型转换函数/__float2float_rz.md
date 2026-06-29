@@ -42,7 +42,20 @@ inline float __float2float_rz(const float x)
 
 ## 返回值说明
 
-输入遵循CAST\_TRUNC模式取整后的浮点数。
+输入遵循CAST\_TRUNC模式取整后的浮点数。特殊值如下：
+
+| 输入 | 返回值 |
+|---|---|
+| ±0 | 0 |
+| ±0.5 | 0 |
+| 1.5 | 1.0 |
+| -1.5 | -1.0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
+| ASCRT_MAX_NORMAL_F | ASCRT_MAX_NORMAL_F |
+| -ASCRT_MAX_NORMAL_F | -ASCRT_MAX_NORMAL_F |
+| ASCRT_MIN_DENORM_F | 0 |
 
 ## 约束说明
 

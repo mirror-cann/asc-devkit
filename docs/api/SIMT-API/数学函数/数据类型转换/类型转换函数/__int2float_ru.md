@@ -42,7 +42,15 @@ inline float __int2float_ru(const int x)
 
 ## 返回值说明
 
-输入遵循CAST\_CEIL模式转换成的浮点数。
+输入遵循CAST\_CEIL模式转换成的浮点数。特殊值如下：
+
+| x值 | 返回值 |
+|---|---|
+| 0 | 0 |
+| 16777217（2^24+1） | 16777218 |
+| -16777217（-(2^24+1)） | -ASCRT_TWO_TO_24_F |
+| 2147483647 (INT32_MAX) | ASCRT_TWO_TO_31_F |
+| -2147483648 (INT32_MIN) | -ASCRT_TWO_TO_31_F |
 
 ## 约束说明
 

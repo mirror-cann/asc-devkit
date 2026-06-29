@@ -42,7 +42,15 @@ inline float __float2float_ru(const float x)
 
 ## 返回值说明
 
-输入遵循CAST\_CEIL模式取整后的浮点数。
+输入遵循CAST\_CEIL模式取整后的浮点数。特殊值如下：
+
+| x值 | 返回值 |
+|---|---|
+| ±0 | 0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
+| ASCRT_MIN_DENORM_F | 1.0 |
 
 ## 约束说明
 

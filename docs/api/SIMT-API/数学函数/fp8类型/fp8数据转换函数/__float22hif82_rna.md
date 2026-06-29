@@ -42,7 +42,14 @@ inline hifloat8x2_t __float22hif82_rna(const float2 x)
 
 ## 返回值说明
 
-将输入的两个分量遵循CAST\_ROUND模式转换成的hifloat8x2\_t类型数据。
+将输入的两个分量遵循CAST\_ROUND模式转换成的hifloat8x2\_t类型数据。本接口受全局饱和模式影响，特殊值如下：
+
+| x分量值 | 非饱和模式返回值 | 饱和模式返回值 |
+|---|---|---|
+| ±0 | 0 | 0 |
+| nan | nan | 0 |
+| inf | inf | 32768 |
+| -inf | -inf | -32768 |
 
 ## 约束说明
 

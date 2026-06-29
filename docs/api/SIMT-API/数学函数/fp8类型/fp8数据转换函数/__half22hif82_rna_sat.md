@@ -42,7 +42,17 @@ inline hifloat8x2_t __half22hif82_rna_sat(const half2 x)
 
 ## 返回值说明
 
-饱和模式下将输入的两个分量遵循CAST\_ROUND模式转换成的hifloat8x2\_t类型数据。
+饱和模式下将输入的两个分量遵循CAST\_ROUND模式转换成的hifloat8x2\_t类型数据。特殊值如下：
+
+| x分量值 | 非饱和模式返回值 | 饱和模式返回值 |
+|---|---|---|
+| ±0 | 0 | 0|
+| nan | nan | 0 |
+| inf | inf | 32768 |
+| -inf | -inf | -32768 |
+| ASCRT_MAX_NORMAL_FP16 | inf | 32768 |
+| -ASCRT_MAX_NORMAL_FP16 | -inf | -32768 |
+| ASCRT_MIN_DENORM_FP16 | 0 | 0 |
 
 ## 约束说明
 

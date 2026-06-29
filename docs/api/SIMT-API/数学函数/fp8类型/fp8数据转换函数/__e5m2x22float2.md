@@ -42,7 +42,15 @@ inline float2 __e5m2x22float2(const float8_e5m2x2_t x)
 
 ## 返回值说明
 
-将float8\_e5m2x2\_t类型输入转换成的float2类型数据。
+将float8\_e5m2x2\_t类型输入转换成的float2类型数据。特殊值如下：
+
+| x分量值 | 返回值 |
+|---|---|
+| 0 | 0 |
+| -0 | -0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
 
 ## 约束说明
 

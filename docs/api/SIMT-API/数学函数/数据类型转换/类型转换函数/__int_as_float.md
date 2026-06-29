@@ -42,7 +42,18 @@ inline float __int_as_float(const int x)
 
 ## 返回值说明
 
-输入整数中的位重新解释成的浮点数。
+输入整数中的位重新解释成的浮点数。特殊值如下：
+
+| x值 | 返回值 |
+|---|---|
+| 0x00000000 | 0 |
+| 0x80000000 | -0 |
+| 0x7F800000 | inf |
+| 0xFF800000 | -inf |
+| 0x7FFFFFFF | nan |
+| 0x7F7FFFFF | ASCRT_MAX_NORMAL_F |
+| 0xFF7FFFFF | -ASCRT_MAX_NORMAL_F |
+| 0x00000001 | ASCRT_MIN_DENORM_F |
 
 ## 约束说明
 

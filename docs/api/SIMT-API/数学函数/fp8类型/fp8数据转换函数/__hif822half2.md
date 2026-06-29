@@ -42,7 +42,14 @@ inline half2 __hif822half2(const hifloat8x2_t x)
 
 ## 返回值说明
 
-将hifloat8x2\_t类型输入转换成的half2类型数据。
+将hifloat8x2\_t类型输入转换成的half2类型数据。特殊值如下：
+
+| x分量值 | 非饱和模式返回值 | 饱和模式返回值 |
+|---|---|---|
+| ±0 | 0 | 0 |
+| nan | nan | 0 |
+| inf | inf | ASCRT_MAX_NORMAL_FP16 |
+| -inf | -inf | -ASCRT_MAX_NORMAL_FP16 |
 
 ## 约束说明
 

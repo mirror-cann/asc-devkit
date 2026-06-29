@@ -42,7 +42,14 @@ inline float2 __e4m3x22float2(const float8_e4m3x2_t x)
 
 ## 返回值说明
 
-将float8\_e4m3x2\_t类型输入转换成的float2类型数据。
+将float8\_e4m3x2\_t类型输入转换成的float2类型数据。特殊值如下：
+
+| x分量值 | 返回值 |
+|---|---|
+| 0 | 0 |
+| -0 | -0 |
+| nan | nan |
+| 448(最大正规值) | 448.0 |
 
 ## 约束说明
 

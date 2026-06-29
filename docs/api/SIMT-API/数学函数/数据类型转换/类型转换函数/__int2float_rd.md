@@ -42,7 +42,16 @@ inline float __int2float_rd(const int x)
 
 ## 返回值说明
 
-输入遵循CAST\_FLOOR模式转换成的浮点数。
+输入遵循CAST\_FLOOR模式转换成的浮点数。特殊值如下：
+
+| x值 | 返回值 |
+|---|---|
+| 16777217（2^24+1） | ASCRT_TWO_TO_24_F |
+| -16777217（-(2^24+1)） | -16777218 |
+| INT32_MAX | 2147483520 |
+| INT32_MIN | -ASCRT_TWO_TO_31_F |
+| INT32_MAX-1 | 2147483520 |
+| INT32_MIN+1 | -ASCRT_TWO_TO_31_F |
 
 ## 约束说明
 

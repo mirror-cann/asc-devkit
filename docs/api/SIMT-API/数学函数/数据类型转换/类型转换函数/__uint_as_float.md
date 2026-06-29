@@ -42,7 +42,18 @@ inline float __uint_as_float(const unsigned int x)
 
 ## 返回值说明
 
-输入的无符号整数中的位重新解释成的浮点数。
+输入的无符号整数中的位重新解释成的浮点数。特殊值如下：
+
+| x值 | 返回值 |
+|---|---|
+| 0（0 位模式） | 0 |
+| 0x80000000（-0 位模式） | -0 |
+| 0x7F800000（inf 位模式） | inf |
+| 0xFF800000（-inf 位模式） | -inf |
+| 0x7FC00000（nan 位模式） | nan |
+| 0x7F7FFFFF（float 最大有限值位模式） | ASCRT_MAX_NORMAL_F |
+| 0xFF7FFFFF（float 最大负有限值位模式） | -ASCRT_MAX_NORMAL_F |
+| 0x00000001（float 最小非正规正数位模式） | ASCRT_MIN_DENORM_F |
 
 ## 约束说明
 

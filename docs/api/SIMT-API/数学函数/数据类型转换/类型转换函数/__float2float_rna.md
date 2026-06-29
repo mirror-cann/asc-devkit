@@ -42,7 +42,14 @@ inline float __float2float_rna(const float x)
 
 ## 返回值说明
 
-输入遵循CAST\_ROUND模式取整后的浮点数。
+输入遵循CAST\_ROUND模式取整后的浮点数。特殊值如下：
+
+| x值 | 返回值 |
+|---|---|
+| ±0 | 0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
 
 ## 约束说明
 

@@ -42,11 +42,16 @@ inline unsigned long long int __float2ull_rna(const float x)
 
 ## 返回值说明
 
-输入遵循CAST\_ROUND模式转换成的64位无符号整数。特别场景说明如下：
+输入遵循CAST\_ROUND模式转换成的64位无符号整数。特殊值如下：
 
--   当x为nan时，返回值为0。
--   当x为inf时，返回值为18446744073709551615。
--   当x为-inf时，返回值为0。
+| x值 | 返回值 |
+|---|---|
+| ±0 | 0 |
+| nan | 0 |
+| inf | 18446744073709551615（ULLONG_MAX） |
+| -inf | 0 |
+| 负数 | 0 |
+| 超出unsigned long long int范围的正值 | 18446744073709551615（ULLONG_MAX） |
 
 ## 约束说明
 
