@@ -56,7 +56,7 @@ __simd_callee__ inline void StoreUnAlignPost(__ubuf__ T*& dstAddr, UnalignRegFor
 | dstAddr | 输入/输出 | 目的操作数，UB起始地址，不需要32字节对齐。b16数据类型时需要16字节对齐，b32数据类型时需要8字节对齐。 |
 | mask | 输入 | 源操作数，类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
 | ureg | 输入/输出 | 非对齐寄存器，UnalignRegForStore类型，用于存储非32B对齐的数据，寄存器大小为32字节。 |
-| postUpdateStride | 输入 | 地址更新步长，uint32_t类型，单位：元素个数。根据postMode的取值有两种情况：<br>&bull; POST_MODE_NORMAL：实际搬运UB起始地址为srcAddr + postUpdateStride，搬运后地址不会更新。<br>&bull; POST_MODE_UPDATE：实际搬运UB起始地址为srcAddr，搬运后执行地址更新 srcAddr +=  postUpdateStride。 |
+| postUpdateStride | 输入 | 地址更新步长，uint32_t类型，单位：元素个数。根据postMode的取值有两种情况：<br>&bull; POST_MODE_NORMAL：不支持。<br>&bull; POST_MODE_UPDATE：实际搬运UB起始地址为srcAddr，搬运后执行地址更新 srcAddr += postUpdateStride。 |
 
 ## 数据类型
 
@@ -68,8 +68,8 @@ __simd_callee__ inline void StoreUnAlignPost(__ubuf__ T*& dstAddr, UnalignRegFor
 
 ## 约束说明
 
-- 数据类型为b16时，位于Unified Buffer的地址必须16字节对齐。
-- 数据类型为b32时，位于Unified Buffer的地址必须8字节对齐。
+- 数据类型为b16时，位于Unified Buffer的地址必须16字节对齐，搬运完成后UB地址按16B偏移量更新，不需要手动更新地址。
+- 数据类型为b32时，位于Unified Buffer的地址必须8字节对齐，搬运完成后UB地址按8B偏移量更新，不需要手动更新地址。
 
 ## 关键特性说明
 
@@ -92,9 +92,10 @@ __simd_vf__ inline void StoreUnAlignVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr,
     AscendC::Reg::UnalignRegForStore ureg;
     for (uint16_t i = 0; i < repeatTimes; ++i) {
         AscendC::Reg::LoadAlign(mask, srcAddr + i * oneRepeatSize);
-        // 数据类型为b16时，32字节打包成16字节，offset = oneRepeatSize / 2。
-        // 数据类型为b32时，32字节打包成8字节，offset = oneRepeatSize / 4。
-        AscendC::Reg::StoreUnAlign(dstAddr + i * offset, mask, ureg);
+        // MaskReg非对齐搬出会自动进行地址偏移
+        // 数据类型为b16时，32字节打包成16字节，偏移为16字节。
+        // 数据类型为b32时，32字节打包成8字节，偏移为8字节。
+        AscendC::Reg::StoreUnAlign(dstAddr, mask, ureg);
     }
     AscendC::Reg::StoreUnAlignPost(dstAddr, ureg, 0);
 }

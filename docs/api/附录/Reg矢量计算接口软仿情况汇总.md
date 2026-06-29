@@ -25,6 +25,10 @@
 | Mul | complex32、int64_t、uint64_t、complex64 |
 | Mull | - |
 | Muls | complex32、int64_t、uint64_t、complex64 |
+| Abs | complex32、int64_t、complex64 |
+| Relu | int64_t |
+| Prelu | - |
+| LeakyRelu | - |
 
 **表2**  逻辑计算
 

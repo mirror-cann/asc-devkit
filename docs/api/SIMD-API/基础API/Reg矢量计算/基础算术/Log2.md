@@ -79,8 +79,8 @@ __simd_callee__ inline void Log2(U& dstReg, U& srcReg, MaskReg& mask)
 
 **最大精度误差**
 
-- Log2Algo::INTRINSIC、Log2Algo::PRECISION_1ULP_FTZ_TRUE，最大精度误差为1ULP。
-- Log2Algo::PRECISION_1ULP_FTZ_FALSE，最大精度误差为1ULP。
+- Log2Algo::INTRINSIC、Log2Algo::PRECISION_1ULP_FTZ_TRUE，最大精度误差为1ulp。
+- Log2Algo::PRECISION_1ULP_FTZ_FALSE，最大精度误差为1ulp。
 
 **配置Subnormal模式**：
 <br>

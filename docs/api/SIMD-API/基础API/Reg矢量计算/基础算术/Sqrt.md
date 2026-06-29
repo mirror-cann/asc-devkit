@@ -73,9 +73,9 @@ __simd_callee__ inline void Sqrt(U& dstReg, U& srcReg, MaskReg& mask)
 
 **最大精度误差：**
 
-- SqrtAlgo::INTRINSIC、SqrtAlgo::PRECISION_1ULP_FTZ_TRUE，最大精度误差为1ULP。
-- SqrtAlgo::PRECISION_1ULP_FTZ_FALSE，最大精度误差为1ULP。
-- SqrtAlgo::FAST_INVERSE、SqrtAlgo::PRECISION_0ULP_FTZ_FALSE，最大精度误差为0ULP。
+- SqrtAlgo::INTRINSIC、SqrtAlgo::PRECISION_1ULP_FTZ_TRUE，最大精度误差为1ulp。
+- SqrtAlgo::PRECISION_1ULP_FTZ_FALSE，最大精度误差为1ulp。
+- SqrtAlgo::FAST_INVERSE、SqrtAlgo::PRECISION_0ULP_FTZ_FALSE，最大精度误差为0ulp。
 
 **配置Subnormal模式：**
 <br>
