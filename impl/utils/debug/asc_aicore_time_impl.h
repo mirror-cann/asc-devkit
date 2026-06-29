@@ -22,6 +22,7 @@
 namespace __asc_aicore {
 __aicore__ inline void asc_time_stamp_impl(uint32_t desc_id)
 {
+#ifdef ASCENDC_TIME_STAMP_ON 
     __gm__ DebugBlockHeadInfo* block_info = get_block_info();
     if (block_info == nullptr) {
         return;
@@ -47,6 +48,7 @@ __aicore__ inline void asc_time_stamp_impl(uint32_t desc_id)
     __gm__ DebugBlockWriteInfo* write_info = get_block_write_info(block_info);
 
     update_write_info(write_info, tlv_len);
+#endif
 }
 
 __aicore__ inline void asc_time_stamp(uint32_t desc_id)

@@ -88,6 +88,7 @@ __aicore__ inline uint32_t set_dump_tlv_data(U src, __gm__ DumpTensorTlv* dumpTl
 template <AscendC::Hardware hardware, typename T, typename U>
 __aicore__ inline void asc_dump_impl(U src, uint32_t desc, uint32_t dump_size)
 {
+#if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
     __gm__ DebugBlockHeadInfo* blockInfo = get_block_info();
     if (dump_size <= 0 || blockInfo == nullptr) {
         return;
@@ -107,10 +108,12 @@ __aicore__ inline void asc_dump_impl(U src, uint32_t desc, uint32_t dump_size)
 
     __gm__ DebugBlockWriteInfo* writeInfo = get_block_write_info(blockInfo);
     update_write_info(writeInfo, tlvLen);
+#endif
 }
 
 __aicore__ inline void asc_dump_shape_impl(const uint32_t shapeDim, const uint32_t* shape)
 {
+#if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
     __gm__ DebugBlockHeadInfo* blockInfo = get_block_info();
     if (blockInfo == nullptr) {
         return;
@@ -131,6 +134,7 @@ __aicore__ inline void asc_dump_shape_impl(const uint32_t shapeDim, const uint32
 
     __gm__ DebugBlockWriteInfo* writeInfo = get_block_write_info(blockInfo);
     update_write_info(writeInfo, tlvLen);
+#endif
 }
 
 template <AscendC::Hardware hardware, typename T, typename U>

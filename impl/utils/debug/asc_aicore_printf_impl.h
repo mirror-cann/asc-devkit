@@ -239,18 +239,19 @@ __aicore__ inline void printf_impl(__gm__ const char* fmt, Args&&... args)
 template <class... Args>
 __aicore__ inline void printf_impl_assert(__gm__ const char* fmt, Args&&... args)
 {
+#if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
     enable_asc_assert();
     printf_impl_common(DumpType::DUMP_ASSERT, fmt, args...);
+#endif
 }
 
 template <typename... Args>
 inline __aicore__ void printf_impl_assert_msg(const __gm__ char* __assertion, const __gm__ char* __file, unsigned int __line,
     const __gm__ char* __function, const __gm__ char* fmt, Args&&... args) {
+#if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
     uint64_t ctrlValue = get_ctrl();
-
     enable_asc_assert();
     set_atomic_none();
-
 #ifdef __DAV_VEC__
     scalar_printf_impl(DumpType::DUMP_ASSERT, fmt, "[AIV Block %u/%u] ", asc_debug_get_block_idx(), asc_debug_get_block_total_num(), args...);
 #else
@@ -259,6 +260,7 @@ inline __aicore__ void printf_impl_assert_msg(const __gm__ char* __assertion, co
     scalar_printf_impl(DumpType::DUMP_ASSERT, "[ASSERT] %s:%u: %s: Assertion `%s' failed.\n",
                        "", __file, __line, __function, __assertion);
     set_ctrl(ctrlValue);
+#endif
 }
 
 } // namespace __asc_aicore
@@ -281,14 +283,18 @@ __aicore__ inline void printf_impl(__gm__ const char* fmt, Args&&... args)
 template <class... Args>
 __aicore__ inline void printf_impl_assert(__gm__ const char* fmt, Args&&... args)
 {
+#if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
     std::printf(fmt, args...);
+#endif
 }
 
 template <typename... Args>
 inline __aicore__ void printf_impl_assert_msg(const __gm__ char* __assertion, const __gm__ char* __file, unsigned int __line,
     const __gm__ char* __function, const __gm__ char* fmt, Args&&... args) {
+#if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
     std::printf(fmt, args...);
     std::printf("[ASSERT] %s:%u: %s: Assertion `%s' failed.\n",  __file, __line, __function, __assertion);
+#endif
 }
 
 template <class... Args>

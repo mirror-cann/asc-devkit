@@ -159,6 +159,9 @@ __aicore__ inline uint32_t mem_copy_gm_to_gm(__gm__ uint8_t* dst, __gm__ const u
 
 __aicore__ __gm__ inline DebugBlockHeadInfo* get_block_info()
 {
+    if (g_sysPrintFifoSpace == nullptr) {
+        return nullptr;
+    }
     uint32_t blockIdx = asc_debug_get_core_idx();
     uint32_t blockLength = reinterpret_cast<__gm__ DebugBlockHeadInfo*>(g_sysPrintFifoSpace)->length;
     __gm__ DebugBlockHeadInfo* blockInfo =
