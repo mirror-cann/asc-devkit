@@ -43,7 +43,17 @@ inline half2 __halves2half2(const half x, const half y)
 
 ## 返回值说明
 
-输入的数据分别填充为half2前后两个分量的结果。
+输入的数据分别填充为half2前后两个分量的结果。特殊值如下：
+
+| x（y）值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| -0 | -0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

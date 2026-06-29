@@ -43,10 +43,56 @@ bool __hbleux2(half2 x, half2 y)
 
 ## 返回值说明
 
-比较输入各分量是否均满足第一个数小于或等于第二个数的结果。
+比较输入各分量是否均满足第一个数小于或等于第二个数的结果。特殊值如下：
 
--   true：各分量均满足第一个数小于或等于第二个数。任一输入的分量为nan，该分量的比较结果为true。
--   false：任一分量不满足第一个数小于或等于第二个数。
+<table>
+  <tr>
+    <th>x值</th>
+    <th>y值</th>
+    <th>返回值</th>
+  </tr>
+  <tr>
+    <td colspan="2">x、y的某分量含nan，其余分量均满足x≤y</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td colspan="2">各分量均为nan</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td colspan="2">x、y的分量不含nan且不满足x≤y</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td colspan="2">x、y某分量含nan但另一对应分量不满足x≤y</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>±0</td>
+    <td>±0</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>(-inf, -inf)</td>
+    <td>(inf, inf)</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>(inf, inf)</td>
+    <td>(-inf, -inf)</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>(±inf, ±inf)</td>
+    <td>(-inf, -inf)</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>(±inf, ±inf)</td>
+    <td>(±inf, ±inf)</td>
+    <td>true</td>
+  </tr>
+</table>
 
 ## 约束说明
 

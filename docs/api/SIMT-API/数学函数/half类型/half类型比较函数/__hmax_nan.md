@@ -45,14 +45,23 @@ half __hmax_nan(const half x, const half y)
 
 ## 返回值说明
 
-两个输入数据中的最大值。
+两个输入数据中的最大值。特殊值如下：
 
--   x为+0，y为-0时，返回x。
--   x为-0，y为+0时，返回y。
--   x，y任意一个为nan时，返回值为nan。
--   x，y任意一个为inf时，返回值为inf。
--   x为-inf时，返回值为y。
--   y为-inf时，返回值为x。
+| x值 | y值 | 返回值 |
+| --- | --- | --- |
+| 0 | 0 | 0 |
+| 0 | -0 | 0 |
+| -0 | 0 | 0 |
+| -0 | -0 | -0 |
+| inf | 正常值 | inf |
+| -inf | 正常值 | 正常值 |
+| inf | inf | inf |
+| inf | -inf | inf |
+| -inf | -inf | -inf |
+| ASCRT\_MAX\_NORMAL\_FP16 | 正常值 | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | 正常值 | 正常值 |
+| nan | 任意值 | nan |
+| 任意值 | nan | nan |
 
 ## 约束说明
 

@@ -43,8 +43,34 @@ unsigned int __hgtx2_mask(half2 x, half2 y)
 
 ## 返回值说明
 
--   比较输入数据各分量是否满足第一个数大于第二个数的结果：满足时对应16位掩码结果为0xFFFF，不满足时对应16位掩码结果为0x0。
--   任一输入的分量为nan时，该分量的16位掩码结果为0x0。
+比较输入数据各分量是否满足第一个数大于第二个数的结果：满足时对应16位掩码结果为0xFFFF，不满足时对应16位掩码结果为0x0。各分量掩码结果如下：
+
+<table>
+  <tr>
+    <th>x分量</th>
+    <th>y分量</th>
+    <th>返回值</th>
+  </tr>
+  <tr>
+    <td colspan="2">任一分量为nan</td>
+    <td>0x0</td>
+  </tr>
+  <tr>
+    <td>±0</td>
+    <td>±0</td>
+    <td>0x0</td>
+  </tr>
+  <tr>
+    <td>inf</td>
+    <td>有限值</td>
+    <td>0xFFFF</td>
+  </tr>
+  <tr>
+    <td>-inf</td>
+    <td>有限值</td>
+    <td>0x0</td>
+  </tr>
+</table>
 
 ## 约束说明
 

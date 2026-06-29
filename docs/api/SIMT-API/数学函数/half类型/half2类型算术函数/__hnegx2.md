@@ -42,11 +42,16 @@ half2 __hnegx2(const half2 x)
 
 ## 返回值说明
 
-输入数据各分量的负值。
+输入数据各分量的负值。本接口受全局饱和寄存器的影响，特殊值如下：
 
--   当输入元素为±0时，返回值为∓0。
--   当输入元素为±inf时，返回值为∓inf。
--   当输入元素为nan时，返回值为nan。
+| 输入（x分量） | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| ±0 | ∓0 | 0 |
+| nan | nan | 0 |
+| inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

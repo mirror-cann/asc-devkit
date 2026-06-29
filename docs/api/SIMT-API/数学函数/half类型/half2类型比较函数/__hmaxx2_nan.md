@@ -43,14 +43,42 @@ half2 __hmaxx2_nan(const half2 x, const half2 y)
 
 ## 返回值说明
 
-输入数据各分量的最大值。比较的分量a和b满足：
+输入数据各分量的最大值。特殊值如下：
 
--   a为+0，b为-0时，返回a。
--   a为-0，b为+0时，返回b。
--   a，b任意一个为nan时，返回值为nan。
--   a，b任意一个为inf时，返回值为inf。
--   a为-inf时，返回值为b。
--   b为-inf时，返回值为a。
+<table>
+  <tr>
+    <th>x分量</th>
+    <th>y分量</th>
+    <th>返回值（对应分量）</th>
+  </tr>
+  <tr>
+    <td>±0</td>
+    <td>±0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td colspan="2">x或y为nan</td>
+    <td>nan</td>
+  </tr>
+  <tr>
+    <td colspan="2">x或y为inf</td>
+    <td>inf</td>
+  </tr>
+  <tr>
+    <td>-inf</td>
+    <td>有限值</td>
+    <td>有限值</td>
+  </tr>
+  <tr>
+    <td>有限值</td>
+    <td>-inf</td>
+    <td>有限值</td>
+  </tr>
+  <tr>
+    <td colspan="2">x=y=-inf</td>
+    <td>-inf</td>
+  </tr>
+</table>
 
 ## 约束说明
 

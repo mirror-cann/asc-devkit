@@ -44,11 +44,15 @@ inline half2 h2exp10(half2 x)
 
 ## 返回值说明
 
-输入的各元素，10的该元素次方。
+输入的各元素，10的该元素次方。特殊值如下：
 
--   当输入元素为inf时，返回值为inf。
--   当输入元素为-inf时，返回值为0。
--   当输入元素为nan时，返回值为nan。
+| x值 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| ±0 | 1 | 1 |
+| nan | nan | 0 |
+| inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | 0 | 0 |
+| x>ASCRT\_MAX\_NORMAL\_FP16 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 
@@ -56,7 +60,7 @@ inline half2 h2exp10(half2 x)
 
 ## 需要包含的头文件
 
-使用half2类型接口需要包含"simt\_api/asc\_fp16.h"头文件件。
+使用half2类型接口需要包含"simt\_api/asc\_fp16.h"头文件。
 
 ```
 #include "simt_api/asc_fp16.h"

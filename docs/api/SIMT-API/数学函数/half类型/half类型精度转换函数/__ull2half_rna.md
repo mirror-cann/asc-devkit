@@ -42,7 +42,13 @@ inline half __ull2half_rna(const unsigned long long int x)
 
 ## 返回值说明
 
-输入遵循CAST\_ROUND模式转换成的half类型数据。
+输入遵循CAST\_ROUND模式转换成的half类型数据。本接口受全局饱和寄存器影响，特殊值如下：
+
+| x值 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| 0 | 0 | 0 |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| x>ASCRT\_MAX\_NORMAL\_FP16 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

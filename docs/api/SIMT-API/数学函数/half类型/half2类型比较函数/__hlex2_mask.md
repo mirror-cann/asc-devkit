@@ -43,8 +43,18 @@ unsigned int __hlex2_mask(half2 x, half2 y)
 
 ## 返回值说明
 
--   比较输入数据各分量是否满足第一个数小于或等于第二个数的结果：满足时对应16位掩码结果为0xFFFF，不满足时对应16位掩码结果为0x0。
--   任一输入的分量为nan时，该分量的16位掩码结果为0x0。
+比较输入数据各分量是否满足第一个数小于或等于第二个数的结果：满足时对应16位掩码结果为0xFFFF，不满足时对应16位掩码结果为0x0。各分量掩码结果如下：
+
+| x分量 | y分量 | 返回值（对应分量） |
+| --- | --- | --- |
+| nan | 任意值 | 0x0 |
+| 任意值 | nan | 0x0 |
+| inf | inf | 0xFFFF |
+| inf | ASCRT\_MAX\_NORMAL\_FP16 | 0x0 |
+| -inf | -inf | 0xFFFF |
+| -inf | ASCRT\_MAX\_NORMAL\_FP16 | 0xFFFF |
+| -0 | 0 | 0xFFFF |
+| ASCRT\_MAX\_NORMAL\_FP16 | inf | 0xFFFF |
 
 ## 约束说明
 

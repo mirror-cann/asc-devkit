@@ -43,15 +43,75 @@ half2 __hsubx2(const half2 x, const half2 y)
 
 ## 返回值说明
 
-输入数据各分量相减的结果。相减的分量x和y满足：
+输入数据各分量相减的结果。本接口受全局饱和寄存器的影响，特殊值如下：
 
--   x为±inf，y为有限值时，返回值为±inf。
--   x为有限值，y为±inf时，返回值为∓inf。
--   x为±inf，y为±inf时，返回值为nan。
--   x为±inf，y为∓inf时，返回值为±inf。
--   x为±0，y为∓0时，返回值为±0。
--   对有限值x（包括±0），x=y时，返回值为+0。
--   x，y任意一个为nan时，返回值为nan。
+<table>
+  <tr>
+    <th>x分量</th>
+    <th>y分量</th>
+    <th>非饱和模式返回值</th>
+    <th>饱和模式返回值</th>
+  </tr>
+  <tr>
+    <td>inf</td>
+    <td>有限值</td>
+    <td>±inf</td>
+    <td>±ASCRT_MAX_NORMAL_FP16</td>
+  </tr>
+  <tr>
+    <td>有限值</td>
+    <td>±inf</td>
+    <td>∓inf</td>
+    <td>∓ASCRT_MAX_NORMAL_FP16</td>
+  </tr>
+  <tr>
+    <td>±inf</td>
+    <td>±inf</td>
+    <td>nan</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>±inf</td>
+    <td>∓inf</td>
+    <td>±inf</td>
+    <td>±ASCRT_MAX_NORMAL_FP16</td>
+  </tr>
+  <tr>
+    <td>±0</td>
+    <td>∓0</td>
+    <td>±0</td>
+    <td>±0</td>
+  </tr>
+  <tr>
+    <td colspan="2">x=y</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>nan</td>
+    <td>任意值</td>
+    <td>nan</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>任意值</td>
+    <td>nan</td>
+    <td>nan</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>ASCRT_MAX_NORMAL_FP16</td>
+    <td>-ASCRT_MAX_NORMAL_FP16</td>
+    <td>inf</td>
+    <td>ASCRT_MAX_NORMAL_FP16</td>
+  </tr>
+  <tr>
+    <td>-ASCRT_MAX_NORMAL_FP16</td>
+    <td>ASCRT_MAX_NORMAL_FP16</td>
+    <td>-inf</td>
+    <td>-ASCRT_MAX_NORMAL_FP16</td>
+  </tr>
+</table>
 
 ## 约束说明
 

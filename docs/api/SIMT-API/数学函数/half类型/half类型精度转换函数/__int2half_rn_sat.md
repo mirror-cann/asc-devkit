@@ -24,7 +24,7 @@
 
 ## 功能说明
 
-饱和模式下，将int32类型数据转换为half类型数据，并遵循CAST\_RINT模式，返回转换后的值。
+将int32类型数据按照CAST\_RINT模式转换为half类型数据，返回转换后的值。
 
 ## 函数原型
 
@@ -42,7 +42,13 @@ inline half __int2half_rn_sat(const int x)
 
 ## 返回值说明
 
-饱和模式下，遵循CAST\_RINT模式，将输入int32数据转换成的half数据。
+遵循CAST\_RINT模式，将输入int32数据转换成的half数据。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| x≥ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| x≤-ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

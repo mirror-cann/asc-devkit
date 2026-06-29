@@ -42,7 +42,14 @@ inline half __int2half_rna(const int x)
 
 ## 返回值说明
 
-输入遵循CAST\_ROUND模式转换成的half类型数据。
+输入遵循CAST\_ROUND模式转换成的half类型数据。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| ±2049 | ±2050 |
+| x>ASCRT\_MAX\_NORMAL\_FP16 | inf |
+| x<-ASCRT\_MAX\_NORMAL\_FP16 | -inf |
 
 ## 约束说明
 

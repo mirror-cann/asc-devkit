@@ -42,7 +42,16 @@ inline half __int2half_rd(const int x)
 
 ## 返回值说明
 
-输入遵循CAST\_FLOOR模式转换成的half类型数据。
+输入遵循CAST\_FLOOR模式转换成的half类型数据。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| 2049 | 2048 |
+| -2049 | -2050 |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| 2147483647（int32_t最大值） | ASCRT\_MAX\_NORMAL\_FP16 |
+| -2147483648（int32_t最小值） | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

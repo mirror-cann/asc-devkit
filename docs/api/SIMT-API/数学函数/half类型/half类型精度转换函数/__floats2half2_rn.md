@@ -43,7 +43,17 @@ inline half2 __floats2half2_rn(const float x, const float y)
 
 ## 返回值说明
 
-将输入float类型数据遵循CAST\_RINT模式分别转换为half类型，并填充到half2的前后两部分的结果。
+将输入float类型数据遵循CAST\_RINT模式分别转换为half类型，并填充到half2的前后两部分的结果。本接口受全局饱和寄存器影响，特殊值如下：
+
+| x值 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| 0 | 0 | 0 |
+| -0 | -0 | -0 |
+| nan | nan | 0 |
+| inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| x>ASCRT\_MAX\_NORMAL\_FP16 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| x<-ASCRT\_MAX\_NORMAL\_FP16 | -inf | ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

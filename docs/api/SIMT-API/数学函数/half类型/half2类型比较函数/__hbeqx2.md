@@ -43,10 +43,34 @@ bool __hbeqx2(half2 x, half2 y)
 
 ## 返回值说明
 
-比较输入数据各分量是否均相等的结果。
+比较输入数据各分量是否均相等的结果。特殊值如下：
 
--   true：输入数据各分量均相等。
--   false：输入数据任一分量不相等。任一输入的分量为nan，该分量的比较结果为false。
+<table>
+  <tr>
+    <th>x分量</th>
+    <th>y分量</th>
+    <th>返回值（该分量）</th>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>-0</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td colspan="2">任一分量为nan</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>inf</td>
+    <td>inf</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>-inf</td>
+    <td>-inf</td>
+    <td>true</td>
+  </tr>
+</table>
 
 ## 约束说明
 

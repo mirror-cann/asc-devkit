@@ -45,16 +45,17 @@ inline half __hmin(half x, half y)
 
 ## 返回值说明
 
-两个输入数据中的最小值。
+两个输入数据中的最小值。本接口受全局饱和寄存器的影响，特殊值如下：
 
--   x为-0，y为+0时，返回x。
--   x为+0，y为-0时，返回y。
--   x为nan时，返回值为y。
--   y为nan时，返回值为x。
--   x，y同时为nan时，返回值为nan。
--   x，y任意一个为-inf时，返回值为-inf。
--   x为inf时，返回值为y。
--   y为inf时，返回值为x。
+| x值 | y值 | 返回值 |
+| --- | --- | --- |
+| ±0 | ±0 | 0 |
+| nan | normal | normal |
+| nan | nan | nan |
+| -inf | normal | -inf |
+| normal | -inf | -inf |
+| inf | normal | normal |
+| normal | inf | normal |
 
 ## 约束说明
 

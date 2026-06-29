@@ -44,15 +44,15 @@ half2 __hfmax2(const half2 x, const half2 y, const half2 z)
 
 ## 返回值说明
 
-输入数据各分量乘加的结果。计算的分量a、b、c满足：
+输入数据各分量乘加的结果。本接口受全局饱和寄存器的影响，特殊值如下：
 
--   a为±inf，b为±0，返回nan。
--   a为±0，b为±inf，返回nan。
--   a\*b为inf，c为-inf，返回nan。
--   a\*b为-inf，c为inf，返回nan。
--   a\*b+c超出对应类型范围的最大值，返回inf。
--   a\*b+c小于对应类型范围的最小值，返回-inf。
--   a、b、c任意一个为nan，返回nan。
+| 输入（x、y、z各分量） | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| x、y、z任一分量为nan | nan | 0 |
+| x、y任一分量为±inf，另一个为±0 | nan | 0 |
+| x*y与z为相反符号的±inf | nan | 0 |
+| x*y+z>ASCRT\_MAX\_NORMAL\_FP16 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| x*y+z<-ASCRT\_MAX\_NORMAL\_FP16 | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

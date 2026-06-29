@@ -43,14 +43,26 @@ half2 __haddx2(const half2 x, const half2 y)
 
 ## 返回值说明
 
-输入数据各分量相加的结果。相加的分量x和y满足：
+输入数据各分量相加的结果。本接口受全局饱和寄存器的影响，特殊值如下：
 
--   x为有限值，y为±inf时，返回值为±inf。
--   x为±inf，y为±inf时，返回值为±inf。
--   x为±inf，y为∓inf时，返回值为nan。
--   x为±0，y为±0时，返回值为±0。
--   对有限值x（包括±0），x=-y时，返回值为+0。
--   x，y任意一个为nan时，返回值为nan。
+| x分量 | y分量 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 |
+| 0 | -0 | 0 | 0 |
+| -0 | 0 | 0 | 0 |
+| -0 | -0 | -0 | -0 |
+| nan | 任意值 | nan | 0 |
+| 任意值 | nan | nan | 0 |
+| 有限值 | inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| inf | 有限值 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| 有限值 | -inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | ASCRT\_MAX\_NORMAL\_FP16 | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| inf | inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | -inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| inf | -inf | nan | 0 |
+| -inf | inf | nan | 0 |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

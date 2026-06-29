@@ -43,8 +43,45 @@ unsigned int __heqx2_mask(half2 x, half2 y)
 
 ## 返回值说明
 
--   比较输入数据各分量是否相等的结果：满足时对应16位掩码结果为0xFFFF，不满足时对应16位掩码结果为0x0。
--   任一输入的分量为nan时，该分量的16位掩码结果为0x0。
+比较输入数据各分量是否相等的结果：满足时对应16位掩码结果为0xFFFF，不满足时对应16位掩码结果为0x0。特殊值如下：
+
+<table>
+  <tr>
+    <th>x分量</th>
+    <th>y分量</th>
+    <th>返回值（对应分量）</th>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0xFFFF</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>-0</td>
+    <td>0xFFFF</td>
+  </tr>
+  <tr>
+    <td>-0</td>
+    <td>0</td>
+    <td>0xFFFF</td>
+  </tr>
+  <tr>
+    <td>-0</td>
+    <td>-0</td>
+    <td>0xFFFF</td>
+  </tr>
+  <tr>
+    <td>±inf</td>
+    <td>±inf</td>
+    <td>0xFFFF</td>
+  </tr>
+  <tr>
+    <td colspan="2">任一分量为nan</td>
+    <td>0x0</td>
+  </tr>
+</table>
+
 
 ## 约束说明
 

@@ -43,8 +43,39 @@ half2 __hgtx2(half2 x, half2 y)
 
 ## 返回值说明
 
--   比较输入数据各分量是否满足第一个数大于第二个数的结果：满足时对应结果为1.0，不满足时对应结果为0.0。
--   任一输入的分量为nan时，该分量的比较结果为0.0。
+比较输入数据各分量是否满足第一个数大于第二个数的结果：满足时对应结果为1，不满足时对应结果为0。特殊值如下：
+
+<table>
+  <tr>
+    <th>x分量</th>
+    <th>y分量</th>
+    <th>返回值（对应分量）</th>
+  </tr>
+  <tr>
+    <td>±0</td>
+    <td>±0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td colspan="2">任一分量为nan</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>inf</td>
+    <td>有限值</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>inf</td>
+    <td>-inf</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>ASCRT_MIN_DENORM_FP16</td>
+    <td>0</td>
+    <td>1</td>
+  </tr>
+</table>
 
 ## 约束说明
 

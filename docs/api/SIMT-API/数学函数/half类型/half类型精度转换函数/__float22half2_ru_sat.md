@@ -24,7 +24,7 @@
 
 ## 功能说明
 
-饱和模式下，将float2类型数据的两个分量遵循CAST\_CEIL模式转换为半精度浮点数，返回转换后的half2类型数据。
+将float2类型数据的两个分量遵循CAST\_CEIL模式转换为半精度浮点数，返回转换后的half2类型数据。
 
 ## 函数原型
 
@@ -42,7 +42,16 @@ inline half2 __float22half2_ru_sat(const float2 x)
 
 ## 返回值说明
 
-饱和模式下将输入的两个分量遵循CAST\_CEIL模式转换成的half2类型数据。
+将输入的两个分量遵循CAST\_CEIL模式转换成的half2类型数据。本接口受全局饱和寄存器的影响，特殊值如下：
+
+| x值 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| ±0 | ±0 | ±0 |
+| nan | nan | 0 |
+| inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| x>ASCRT\_MAX\_NORMAL\_FP16 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| x<-ASCRT\_MAX\_NORMAL\_FP16 | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

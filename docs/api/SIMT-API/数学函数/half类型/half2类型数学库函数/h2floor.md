@@ -42,11 +42,15 @@ inline half2 h2floor(half2 x)
 
 ## 返回值说明
 
-小于或等于输入数据各元素的最大整数值。特别场景说明如下：
+小于或等于输入数据各元素的最大整数值。本接口受全局饱和寄存器影响，特殊值如下：
 
--   当输入元素为nan时，返回值为nan。
--   当输入元素为inf时，返回值为inf。
--   当输入元素为-inf时，返回值为-inf。
+| x值 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| ±0 | 0 | 0 |
+| nan | nan | 0 |
+| inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| ASCRT\_MIN\_DENORM\_FP16 | 0 | 0 |
 
 ## 约束说明
 

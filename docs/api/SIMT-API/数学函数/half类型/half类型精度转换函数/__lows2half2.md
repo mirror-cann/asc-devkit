@@ -43,7 +43,19 @@ inline half2 __lows2half2(const half2 x, const half2 y)
 
 ## 返回值说明
 
-分别提取两个half2输入的低16位，并填充到half2的结果。
+分别提取两个half2输入的低16位，并填充到half2的结果。特殊值如下：
+
+| x（y）值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| -0 | -0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
+| ASCRT\_MIN\_DENORM\_FP16 | ASCRT\_MIN\_DENORM\_FP16 |
+
 
 ## 约束说明
 

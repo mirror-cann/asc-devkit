@@ -43,10 +43,18 @@ bool __hne(half x, half y)
 
 ## 返回值说明
 
-比较输入数据是否不相等的结果。
+比较输入数据是否不相等的结果。特殊值如下：
 
--   true：输入数据不相等。
--   false：输入数据相等。任一输入为nan时，返回false。
+| x值 | y值 | 返回值 |
+| --- | --- | --- |
+| nan | 任意值 | true |
+| 任意值 | nan | true |
+| nan | nan | true |
+| 0 | -0 | false |
+| -0 | 0 | false |
+| inf | inf | false |
+| -inf | -inf | false |
+| inf | -inf | true |
 
 ## 约束说明
 

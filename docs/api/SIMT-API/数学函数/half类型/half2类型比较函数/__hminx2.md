@@ -43,16 +43,20 @@ half2 __hminx2(const half2 x, const half2 y)
 
 ## 返回值说明
 
-输入数据各分量的最小值。比较的分量a和b满足：
+输入数据各分量的最小值。特殊值如下：
 
--   a为-0，b为+0时，返回a。
--   a为+0，b为-0时，返回b。
--   a为nan时，返回值为b。
--   b为nan时，返回值为a。
--   a，b同时为nan时，返回值为nan。
--   a，b任意一个为-inf时，返回值为-inf。
--   a为inf时，返回值为b。
--   b为inf时，返回值为a。
+| x分量 | y分量 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- | --- |
+| 0 | -0 | -0 | -0 |
+| -0 | 0 | -0 | -0 |
+| -0 | -0 | -0 | -0 |
+| 0 | 0 | 0 | 0 |
+| nan | 任意值 | nan | 0 |
+| 任意值 | nan | nan | 0 |
+| nan | nan | nan | 0 |
+| 任意非nan值 | -inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | 任意非nan值 | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| inf | inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

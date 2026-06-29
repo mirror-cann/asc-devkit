@@ -24,7 +24,7 @@
 
 ## 功能说明
 
-饱和模式下，将浮点数转换为半精度浮点数，并遵循CAST\_ODD模式，返回转换后的值。
+将浮点数转换为半精度浮点数，并遵循CAST\_ODD模式，返回转换后的值。
 
 ## 函数原型
 
@@ -42,7 +42,18 @@ inline half __float2half_ro_sat(const float x)
 
 ## 返回值说明
 
-饱和模式下将输入遵循CAST\_ODD模式转换成的半精度浮点数。
+将输入遵循CAST\_ODD模式转换成的半精度浮点数。本接口受全局饱和寄存器的影响，特殊值如下：
+
+| x值 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| ±0 | 0 | 0 |
+| nan | nan | 0 |
+| inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| x大于且接近ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| x小于且接近-ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
+| x远大于ASCRT\_MAX\_NORMAL\_FP16 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| x远小于-ASCRT\_MAX\_NORMAL\_FP16 | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

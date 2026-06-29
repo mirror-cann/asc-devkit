@@ -42,11 +42,15 @@ inline float __half2float(const half x)
 
 ## 返回值说明
 
-输入转换成的浮点数。特别场景说明如下：
+输入转换成的浮点数。特殊值如下：
 
--   当x为nan时，返回值为nan。
--   当x为inf时，返回值为inf。
--   当x为-inf时，返回值为-inf。
+| x值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| -0 | -0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
 
 ## 约束说明
 

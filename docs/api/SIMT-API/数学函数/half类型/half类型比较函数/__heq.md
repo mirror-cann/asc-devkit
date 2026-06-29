@@ -43,10 +43,47 @@ bool __heq(half x, half y)
 
 ## 返回值说明
 
-比较输入数据是否相等的结果。
+比较输入数据是否相等的结果，饱和与非饱和模式行为一致。特殊值如下：
 
--   true：输入数据相等。
--   false：输入数据不相等。任一输入为nan时，返回false。
+<table>
+  <tr>
+    <th>x值</th>
+    <th>y值</th>
+    <th>返回值</th>
+  </tr>
+  <tr>
+    <td colspan="2">x=y，均为非nan的有限值</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td colspan="2">x≠y，均为非nan的有限值</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>±0</td>
+    <td>±0</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>inf</td>
+    <td>inf</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>-inf</td>
+    <td>-inf</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>inf</td>
+    <td>-inf</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td colspan="2">任一操作数为nan</td>
+    <td>false</td>
+  </tr>
+</table>
 
 ## 约束说明
 

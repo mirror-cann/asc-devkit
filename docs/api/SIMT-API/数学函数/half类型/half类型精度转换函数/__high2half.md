@@ -42,7 +42,13 @@ inline half __high2half(const half2 x)
 
 ## 返回值说明
 
-返回输入half2的高16位。
+返回输入half2的高16位。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| ±0 | ±0 |
+| nan | nan |
+| ±inf | ±inf |
 
 ## 约束说明
 

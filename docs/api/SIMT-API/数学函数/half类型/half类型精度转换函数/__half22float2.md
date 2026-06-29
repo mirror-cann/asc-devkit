@@ -42,7 +42,15 @@ inline float2 __half22float2(const half2 x)
 
 ## 返回值说明
 
-将half2的两个分量分别转换为float，并填充到float2的结果。
+将half2的两个分量分别转换为float，并填充到float2的结果。特殊值如下：
+
+| x值（每个half分量） | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| -0 | -0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
 
 ## 约束说明
 

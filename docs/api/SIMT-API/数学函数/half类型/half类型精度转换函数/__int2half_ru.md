@@ -42,7 +42,17 @@ inline half __int2half_ru(const int x)
 
 ## 返回值说明
 
-输入遵循CAST\_CEIL模式转换成的half类型数据。
+输入遵循CAST\_CEIL模式转换成的half类型数据。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| ASCRT\_MAX\_NORMAL\_FP16 | inf |
+| x>ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | -inf |
+| x<-ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
+| 2049 | 2050 |
+| -2049 | -2048 |
 
 ## 约束说明
 

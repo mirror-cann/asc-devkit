@@ -42,7 +42,14 @@ inline half __float2half_rn_sat(const float x)
 
 ## 返回值说明
 
-将输入遵循CAST\_RINT模式转换成的半精度浮点数。
+将输入遵循CAST\_RINT模式转换成的半精度浮点数。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| ±0 | ±0 |
+| nan | 0 |
+| inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

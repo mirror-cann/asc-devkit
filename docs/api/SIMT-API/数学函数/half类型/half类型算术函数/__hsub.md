@@ -45,14 +45,49 @@ half __hsub(const half x, const half y)
 
 输入数据相减的结果。本接口受全局饱和模式影响，特殊值如下：
 
-| x值 | y值 | 非饱和模式返回值 | 饱和模式返回值 |
-| --- | --- | --- | --- |
-| ±inf | 有限值 | ±inf | ±ASCRT_MAX_NORMAL_FP16 |
-| 有限值 | ±inf | ∓inf | ∓ASCRT_MAX_NORMAL_FP16 |
-| ±inf | ±inf | nan | 0 |
-| ±inf | ∓inf | ±inf | ±ASCRT_MAX_NORMAL_FP16 |
-| 有限值（包括±0） | -x | +0 | +0 |
-| x，y任意一个为nan |  x，y任意一个为nan |nan | 0 |  |
+<table>
+  <tr>
+    <th>x值</th>
+    <th>y值</th>
+    <th>非饱和模式返回值</th>
+    <th>饱和模式返回值</th>
+  </tr>
+  <tr>
+    <td>±inf</td>
+    <td>有限值</td>
+    <td>±inf</td>
+    <td>±ASCRT_MAX_NORMAL_FP16</td>
+  </tr>
+  <tr>
+    <td>有限值</td>
+    <td>±inf</td>
+    <td>∓inf</td>
+    <td>∓ASCRT_MAX_NORMAL_FP16</td>
+  </tr>
+  <tr>
+    <td>±inf</td>
+    <td>±inf</td>
+    <td>nan</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>±inf</td>
+    <td>∓inf</td>
+    <td>±inf</td>
+    <td>±ASCRT_MAX_NORMAL_FP16</td>
+  </tr>
+  <tr>
+    <td>有限值（包括±0）</td>
+    <td>-x</td>
+    <td>+0</td>
+    <td>+0</td>
+  </tr>
+  <tr>
+    <td colspan="2">x，y任意一个为nan</td>
+    <td>nan</td>
+    <td>0</td>
+  </tr>
+</table>
 
 ## 约束说明
 

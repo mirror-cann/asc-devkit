@@ -42,7 +42,17 @@ inline half __uint2half_rna(const unsigned int x)
 
 ## 返回值说明
 
-输入遵循CAST\_ROUND模式转换成的half类型数据。
+输入遵循CAST\_ROUND模式转换成的half类型数据。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| 2049 | 2050 |
+| 4098 | 4100 |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| 65505 | ASCRT\_MAX\_NORMAL\_FP16 |
+| 65520（溢出中点） | inf |
+| 4294967295（uint32_t最大值） | inf |
 
 ## 约束说明
 

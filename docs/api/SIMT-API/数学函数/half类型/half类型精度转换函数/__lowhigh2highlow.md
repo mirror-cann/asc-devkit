@@ -42,7 +42,17 @@ inline half2 __lowhigh2highlow(const half2 x)
 
 ## 返回值说明
 
-输入数据的高低16位进行交换的结果。
+输入数据的高低16位进行交换的结果。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| -0 | -0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

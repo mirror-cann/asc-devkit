@@ -42,7 +42,15 @@ inline float __high2float(const half2 x)
 
 ## 返回值说明
 
-输入数据的高16位转换为float类型的结果。
+输入数据的高16位转换为float类型的结果。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| -0 | -0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
 
 ## 约束说明
 

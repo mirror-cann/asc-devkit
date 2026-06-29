@@ -42,7 +42,17 @@ inline half2 __low2half2(const half2 x)
 
 ## 返回值说明
 
-输入数据的低16位填充到half2的结果。
+输入数据的低16位填充到half2的结果。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| ±0 | ±0 |
+| nan | nan |
+| inf | inf |
+| -inf | -inf |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
+| ASCRT\_MIN\_DENORM\_FP16 | ASCRT\_MIN\_DENORM\_FP16 |
 
 ## 约束说明
 

@@ -24,7 +24,7 @@
 
 ## 功能说明
 
-饱和模式下，将uint32类型数据转换为half类型数据，并遵循CAST\_RINT模式，返回转换后的值。
+将uint32类型数据转换为half类型数据，并遵循CAST\_RINT模式，返回转换后的值。
 
 ## 函数原型
 
@@ -42,7 +42,12 @@ inline half __uint2half_rn_sat(const unsigned int x)
 
 ## 返回值说明
 
-饱和模式下，遵循CAST\_RINT模式，将输入uint32数据转换成的half数据。
+遵循CAST\_RINT模式，将输入uint32数据转换成的half数据。特殊值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| x>4294967295（uint32_t最大值） | ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

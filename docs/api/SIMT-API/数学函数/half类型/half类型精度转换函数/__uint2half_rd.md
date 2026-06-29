@@ -42,7 +42,15 @@ inline half __uint2half_rd(const unsigned int x)
 
 ## 返回值说明
 
-输入遵循CAST\_FLOOR模式转换成的half类型数据。
+输入遵循CAST\_FLOOR模式转换成的half类型数据。返回值如下：
+
+| x值 | 返回值 |
+| --- | --- |
+| 0 | 0 |
+| 2049 | 2048 |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| 65505 | ASCRT\_MAX\_NORMAL\_FP16 |
+| x≥65535 | inf |
 
 ## 约束说明
 

@@ -43,13 +43,19 @@ half2 __hmulx2(const half2 x, const half2 y)
 
 ## 返回值说明
 
-输入数据各分量相乘的结果。相乘的分量x和y满足：
+输入数据各分量相乘的结果。本接口受全局饱和寄存器的影响，特殊值如下：
 
--   当输入和结果都不为nan时，x\*y的符号为x和y符号的异或。
--   x为非0值，y为±inf时，返回值符号由x和y的符号异或决定，值为inf。
--   x为±0，y为±inf时，返回值为nan。
--   x为±0，y为有限值时，返回值符号由x和y的符号异或决定，值为0。
--   x，y任意一个为nan时，返回值为nan。
+| x分量 | y分量 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- | --- |
+| nan | 任意值 | nan | 0 |
+| 任意值 | nan | nan | 0 |
+| ±0 | ±inf | nan | 0 |
+| ±inf | ±0 | nan | 0 |
+| inf | 非零 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| inf | inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | 非零 | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| inf | -inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

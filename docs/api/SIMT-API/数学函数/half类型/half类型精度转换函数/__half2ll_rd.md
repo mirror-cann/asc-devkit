@@ -24,7 +24,7 @@
 
 ## 功能说明
 
-遵循CAST\_FLOOR模式，将half类型数据转换为64位有符号整数，返回转换后的值。
+遵循CAST\_FLOOR模式，将half类型数据转换为long long类型数据，返回转换后的值。
 
 ## 函数原型
 
@@ -42,11 +42,18 @@ inline long long int __half2ll_rd(const half x)
 
 ## 返回值说明
 
-输入遵循CAST\_FLOOR模式转换成的64位有符号整数。特别场景说明如下：
+输入遵循CAST\_FLOOR模式转换成的long long类型数据。特殊值如下：
 
--   当x为nan时，返回值为0。
--   当x为inf时，返回值为9223372036854775807。
--   当x为-inf时，返回值为-9223372036854775808。
+| x值 | 返回值 |
+| --- | --- |
+| ±0 | 0 |
+| nan | 0 |
+| inf | 9223372036854775807（long long最大值） |
+| -inf | -9223372036854775808（long long最小值） |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
+| 1.5 | 1 |
+| -1.5 | -2 |
 
 ## 约束说明
 

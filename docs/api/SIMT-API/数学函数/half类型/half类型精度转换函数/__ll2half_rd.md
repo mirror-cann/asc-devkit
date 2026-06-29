@@ -42,7 +42,18 @@ inline half __ll2half_rd(const long long int x)
 
 ## 返回值说明
 
-输入遵循CAST\_FLOOR模式转换成的half类型数据。
+输入遵循CAST\_FLOOR模式转换成的half类型数据。本接口受全局饱和寄存器影响，特殊值如下：
+
+| x值 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| 9223372036854775807（long long最大值） | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -9223372036854775808（long long最小值） | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| x>9223372036854775807（long long最大值） | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| x<-9223372036854775808（long long最小值） | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
+| 2049 | 2048 | 2048 |
+| 2051 | 2052 | 2052 |
 
 ## 约束说明
 

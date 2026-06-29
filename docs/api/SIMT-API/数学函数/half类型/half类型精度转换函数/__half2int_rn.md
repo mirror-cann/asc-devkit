@@ -24,7 +24,7 @@
 
 ## 功能说明
 
-遵循CAST\_RINT模式，将half类型数据转换为有符号整数，返回转换后的值。
+遵循CAST\_RINT模式，将half类型数据转换为int类型数据，返回转换后的值。
 
 ## 函数原型
 
@@ -42,11 +42,17 @@ inline int __half2int_rn(const half x)
 
 ## 返回值说明
 
-输入遵循CAST\_RINT模式转换成的有符号整数。特别场景说明如下：
+遵循CAST\_RINT模式，将half类型数据转换为int类型数据。特殊值如下：
 
--   当x为nan时，返回值为0。
--   当x为inf时，返回值为2147483647。
--   当x为-inf时，返回值为-2147483648。
+| x值 | 返回值 |
+| --- | --- |
+| ±0 | 0 |
+| nan | 0 |
+| inf | 2147483647（int32_t最大值） |
+| -inf | -2147483648（int32_t最小值） |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
+| ±0.5 | 0 |
 
 ## 约束说明
 

@@ -43,10 +43,59 @@ bool __hbgtux2(half2 x, half2 y)
 
 ## 返回值说明
 
-比较输入各分量是否均满足第一个数大于第二个数的结果。
+比较输入各分量是否均满足第一个数大于第二个数的结果。特殊值如下：
 
--   true：各分量均满足第一个数大于第二个数。任一输入的分量为nan，该分量的比较结果为true。
--   false：任一分量不满足第一个数大于第二个数。
+<table>
+  <tr>
+    <th>x值</th>
+    <th>y值</th>
+    <th>返回值</th>
+  </tr>
+  <tr>
+    <td>(nan, nan)</td>
+    <td>(nan, nan)</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>(nan, 正常值)</td>
+    <td>(正常值, nan)</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>(inf, inf)</td>
+    <td>(有限值, 有限值)</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>(-inf, -inf)</td>
+    <td>(有限正数, 有限正数)</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>(有限正数, 有限正数)</td>
+    <td>(inf, inf)</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>(inf, inf)</td>
+    <td>(-inf, -inf)</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>(±0, ±0)</td>
+    <td>(±0, ±0)</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>(有限值, 有限值)</td>
+    <td>(有限值, 有限值)</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td colspan="2">x各分量等于y</td>
+    <td>false</td>
+  </tr>
+</table>
 
 ## 约束说明
 

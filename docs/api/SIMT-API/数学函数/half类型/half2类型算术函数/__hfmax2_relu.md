@@ -44,15 +44,45 @@ half2 __hfmax2_relu(const half2 x, const half2 y, const half2 z)
 
 ## 返回值说明
 
-输入数据各分量乘加的结果。计算的分量a、b、c满足：
+输入数据各分量乘加的结果。本接口受全局饱和寄存器的影响，特殊值如下：
 
--   a为±inf，b为±0，返回nan。
--   a为±0，b为±inf，返回nan。
--   a\*b为+inf，c为-inf，返回nan。
--   a\*b为-inf，c为+inf，返回nan。
--   a\*b+c超出对应类型范围的最大值，返回+inf。
--   a\*b+c小于对应类型范围的最小值，返回0。
--   a、b、c任意一个为nan，返回nan。
+<table>
+  <tr>
+    <th>x分量</th>
+    <th>y分量</th>
+    <th>z分量</th>
+    <th>非饱和模式返回值</th>
+    <th>饱和模式返回值</th>
+  </tr>
+  <tr>
+    <td colspan="3">任一值为nan</td>
+    <td>nan</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>inf</td>
+    <td>±0</td>
+    <td>任意值</td>
+    <td>nan</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td colspan="2">x*y=±inf</td>
+    <td>同号inf</td>
+    <td>nan</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td colspan="3">x*y+z为inf</td>
+    <td>inf</td>
+    <td>ASCRT_MAX_NORMAL_FP16</td>
+  </tr>
+  <tr>
+    <td colspan="3">x*y+z≤0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+</table>
 
 ## 约束说明
 

@@ -43,10 +43,60 @@ bool __hequ(half x, half y)
 
 ## 返回值说明
 
-比较输入数据是否相等的结果。
+比较输入数据是否相等的结果。特殊值如下：
 
--   true：输入数据不相等。任一输入为nan时返回true。
--   false：输入数据相等。
+<table>
+  <tr>
+    <th>x值</th>
+    <th>y值</th>
+    <th>返回值</th>
+  </tr>
+  <tr>
+    <td>±0</td>
+    <td>±0</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>inf</td>
+    <td>inf</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>-inf</td>
+    <td>-inf</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>inf</td>
+    <td>-inf</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>-inf</td>
+    <td>inf</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>ASCRT_MAX_NORMAL_FP16</td>
+    <td>ASCRT_MAX_NORMAL_FP16</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>ASCRT_MAX_NORMAL_FP16</td>
+    <td>1</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>ASCRT_MAX_NORMAL_FP16</td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td colspan="2">任一值为nan</td>
+    <td>true</td>
+  </tr>
+</table>
+
 
 ## 约束说明
 

@@ -42,7 +42,15 @@ inline half __bfloat162half_ru_sat(const bfloat16_t x)
 
 ## 返回值说明
 
-饱和模式下将输入遵循CAST\_CEIL模式转换成的half类型数据。
+饱和模式下将输入遵循CAST\_CEIL模式转换成的half类型数据。本接口受全局饱和寄存器的影响，特殊值如下：
+
+| x值 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| nan | nan | 0 |
+| inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| x>ASCRT\_MAX\_NORMAL\_FP16 | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| x<-ASCRT\_MAX\_NORMAL\_FP16 | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 

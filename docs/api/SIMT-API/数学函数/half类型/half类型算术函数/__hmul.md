@@ -49,13 +49,49 @@ half __hmul(const half x, const half y)
 -   \_\_hmul\(x, y\)等价于\_\_hmul\(y, x\)。
 -   本接口受全局饱和模式影响，特殊值如下：
 
-    | x值 | y值 | 非饱和模式返回值 | 饱和模式返回值 |
-    | --- | --- | --- | --- |
-    | 非0值 | ±inf | 符号由x和y的符号异或决定，值为inf | 符号由x和y的符号异或决定，值为ASCRT_MAX_NORMAL_FP16 |
-    | ±0 | ±inf | nan | 0 |
-    | ±0 | 有限值 | 返回值符号由x和y的符号异或决定，值为0 | 返回值符号由x和y的符号异或决定，值为0 |
-    | ±inf | ∓inf | ±inf | ±ASCRT_MAX_NORMAL_FP16 |
-    | x，y任意一个为nan |  x，y任意一个为nan |nan | 0 |
+    <table>
+      <tr>
+        <th>x值</th>
+        <th>y值</th>
+        <th>非饱和模式返回值</th>
+        <th>饱和模式返回值</th>
+      </tr>
+      <tr>
+        <td>非0值</td>
+        <td>±inf</td>
+        <td>符号由x和y的符号异或决定，值为inf</td>
+        <td>符号由x和y的符号异或决定，值为ASCRT_MAX_NORMAL_FP16</td>
+      </tr>
+      <tr>
+        <td>±0</td>
+        <td>±inf</td>
+        <td>nan</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>±0</td>
+        <td>有限值</td>
+        <td>返回值符号由x和y的符号异或决定，值为0</td>
+        <td>返回值符号由x和y的符号异或决定，值为0</td>
+      </tr>
+      <tr>
+        <td>inf</td>
+        <td>inf</td>
+        <td>inf</td>
+        <td>ASCRT_MAX_NORMAL_FP16</td>
+      </tr>
+            <tr>
+        <td>inf</td>
+        <td>-inf</td>
+        <td>-inf</td>
+        <td>-ASCRT_MAX_NORMAL_FP16</td>
+      </tr>
+      <tr>
+        <td colspan="2">x，y任意一个为nan</td>
+        <td>nan</td>
+        <td>0</td>
+      </tr>
+    </table>
 
 ## 约束说明
 

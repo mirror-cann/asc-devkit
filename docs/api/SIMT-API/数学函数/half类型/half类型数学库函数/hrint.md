@@ -42,14 +42,16 @@ inline half hrint(half x)
 
 ## 返回值说明
 
-与输入浮点数最接近的整数值。特别场景说明如下：
+与输入浮点数最接近的整数值。本接口受全局饱和寄存器的影响，特殊值如下：
 
--   当x为0时，返回值为0。
--   当x为0.5时，返回值为0。
--   当x为1.5时，返回值为2。
--   当x为nan时，返回值为nan。
--   当x为inf时，返回值为inf。
--   当x为-inf时，返回值为-inf。
+| x值 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- |
+| ±0 | 0 | 0 |
+| nan | nan | 0 |
+| inf | inf | ASCRT\_MAX\_NORMAL\_FP16 |
+| -inf | -inf | -ASCRT\_MAX\_NORMAL\_FP16 |
+| ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 | ASCRT\_MAX\_NORMAL\_FP16 |
+| -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 | -ASCRT\_MAX\_NORMAL\_FP16 |
 
 ## 约束说明
 
