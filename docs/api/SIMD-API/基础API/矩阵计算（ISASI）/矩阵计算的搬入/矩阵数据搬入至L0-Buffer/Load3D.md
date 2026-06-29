@@ -115,8 +115,8 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ----------- | ------ |
-| dst | 输出 | 目的操作数，类型为LocalTensor。<br>数据连续排列顺序由目的操作数所在物理存储位置决定，具体约束如下：<br>针对Atlas A2 训练系列产品/Atlas A2 推理系列产品和Atlas A3 训练系列产品/Atlas A3 推理系列产品：<br>&nbsp;&nbsp;&bull; L0A Buffer(TPosition: A2)：ZZ格式；<br>&nbsp;&nbsp;&bull; L0B Buffer(TPosition: B2)：ZN格式。<br>针对Ascend 950PR/Ascend 950DT：<br>&nbsp;&nbsp;&bull; L0A Buffer(TPosition: A2)：NZ格式；<br>&nbsp;&nbsp;&bull; L0B Buffer(TPosition: B2)：ZN格式。 |
-| src | 输入 | 源操作数，类型为LocalTensor。<br>数据连续排列顺序由目的操作数所在物理存储位置决定：<br>&nbsp;&nbsp;&bull; L1 Buffer(TPosition: A1/B1)：NC1HWC0格式。 |
+| dst | 输出 | 目的操作数，类型为LocalTensor。<br>数据连续排列顺序由目的操作数所在物理存储位置决定，不同产品型号的具体格式约束请参考[约束说明](#zh-cn_topic_0000002512171652_dst_layout)。 |
+| src | 输入 | 源操作数，类型为LocalTensor。<br>数据连续排列顺序由目的操作数所在物理存储位置决定：<br>&nbsp;&nbsp;&bull; L1 Buffer（TPosition: A1/B1）：NC1HWC0格式。 |
 | loadDataParams | 输入 | LoadData参数结构体，类型为：<br>&nbsp;&nbsp;&bull; LoadData3DParamsV1，具体参考[表3](#zh-cn_topic_0000002512171652_table679014222918)。<br>&nbsp;&nbsp;&bull; LoadData3DParamsV2，具体参考[表4](#zh-cn_topic_0000002512171652_table193501032193419)。<br>&nbsp;&nbsp;&bull; LoadData3DParamsV2Pro，具体参考[表5](#zh-cn_topic_0000002512171652_table118027314415)。<br>上述结构体参数定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_mm.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
 
 
@@ -141,7 +141,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 | jumpStride | 迭代之间，目的操作数首地址步长，取值范围：jumpStride∈[1, 127]。 |
 | repeatMode | 迭代模式。<br>&nbsp;&nbsp;&bull;模式0：每次迭代，增加卷积核窗口中的点，对应在目的矩阵上往w维度方向增长。<br>&nbsp;&nbsp;&bull;模式1：每次迭代，增加滑动窗口左上坐标，对应在目的矩阵上往h维度方向增长。<br>取值范围：repeatMode∈[0, 1]。默认为0。 |
 | repeatTime | 迭代次数，每一次源操作数和目的操作数的地址都会改变。取值范围：repeatTime∈[1, 255]。 |
-| cSize | 配置是否开启cSize = 4(b16) / cSize = 8(b8)优化，取值范围：cSize∈[0, 1]。默认为0。 |
+| cSize | 配置是否开启cSize = 4（b16） / cSize = 8（b8）优化，取值范围：cSize∈[0, 1]。默认为0。 |
 | padValue | Pad填充值的数值，数据类型需要与src保持一致。默认为0。若不想开启padding，可将padList设为全0。 |
 
 
@@ -152,7 +152,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 | padList | padding列表 [padding_left, padding_right, padding_top, padding_bottom]，每个元素取值范围：[0, 255]。默认为{0, 0, 0, 0}。 |
 | l1H | 源操作数height，取值范围：l1H∈[0, 32767]。默认为0。<br>**l1H = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | l1W | 源操作数width，取值范围：l1W∈[0, 32767]。默认为0。<br>**l1W = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
-| channelSize | 源操作数的通道数，取值范围：channelSize∈[0, 65535]。默认为0。<br>&nbsp;&nbsp;&bull;针对Atlas 推理系列产品AI Core：对于half，channelSize可取值为4，8，16，N\*16+4，N\*16+8；对于int8_t/uint8_t，channelSize可取值为4，8，16，32，N\*32+4，N\*32+8，N\*32+16；对于int4b_t，channelSize可取值为8，16，32，N\*64，N\*64+8，N\*64+16，N\*64+32。N为正整数。<br>&nbsp;&nbsp;&bull;针对Ascend 950PR/Ascend 950DT、Atlas A3 训练系列产品/Atlas A3 推理系列产品、Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas 200I/500 A2 推理产品、Kirin X90：对于uint32_t/int32_t/float，channelSize可取值为4，N\*8，N\*8+4；对于half/bfloat16，channelSize可取值为4，8，N\*16，N\*16 + 4，N\*16+8；对于int8_t/uint8_t，channelSize可取值为4，8，16，32\*N，N\*32+4，N\*32+8，N\*32+16；对于int4b_t，channelSize可取值为8，16，32，N\*64，N\*64+8，N\*64+16，N\*64+32。N为正整数。<br>**注：channelSize = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
+| channelSize | 源操作数的通道数，取值范围：channelSize∈[0, 65535]。默认为0。不同产品型号支持的channelSize取值不同，具体请参考[约束说明](#zh-cn_topic_0000002512171652_channelsize_constraint)。<br>**注：channelSize = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | kExtension | 该指令在目的操作数width维度的传输长度，如果不覆盖最右侧的分形，对于b32类型，应为8的倍数，对于b16类型，应为16的倍数，对于b8类型，应为32的倍数，对于b4类型，应为64的倍数；覆盖的情况则任何数据类型都无倍数要求。取值范围：kExtension∈[0, 65535]。默认为0。<br>**注：kExtension = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | mExtension | 该指令在目的操作数height维度的传输长度，如果不覆盖最下侧的分形，对于b4、b8、b16类型，应为16的倍数，b32类型无要求；覆盖的情况则任何数据类型都无倍数要求。取值范围：mExtension∈[0, 65535]。默认为0。<br>**注：mExtension = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | kStartPt | 该指令在目的操作数width维度的起点，对于b32类型，应为8的倍数，对于b16类型，应为16的倍数，对于b8类型，应为32的倍数，对于b4类型，应为64的倍数；取值范围[0, 65535]。默认为0。 |
@@ -163,7 +163,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 | filterH | 卷积核height，取值范围：filterH∈[0, 255]。默认为1。<br>**注：filterH=0且filterSizeH=false时表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | dilationFilterW | 卷积核width膨胀系数，取值范围：dilationFilterW∈[0, 255]。默认为1。 |
 | dilationFilterH | 卷积核height膨胀系数，取值范围：dilationFilterH∈[0, 255]。默认为1。 |
-| enTranspose | 是否启用转置功能，对整个目标矩阵进行转置，支持数据类型为bool，默认为false。<br>&nbsp;&nbsp;&bull; true：启用<br>&nbsp;&nbsp;&bull; false：不启用<br>针对Atlas A2 训练系列产品/Atlas A2 推理系列产品和Atlas A3 训练系列产品/Atlas A3 推理系列产品，在目的操作数的物理存储位置为L0A Buffer(TPosition: A2)，且源操作数为b16/b32类型时有效。<br>针对Ascend 950PR/Ascend 950DT，在目的操作数的物理存储位置为L0A Buffer(TPosition: A2)，且源操作数为b8/b16/b32类型时有效。<br>**注：在目的操作数的物理存储位置为L0B Buffer(TPosition: B2)时本参数无效。** |
+| enTranspose | 是否启用转置功能，对整个目标矩阵进行转置，支持数据类型为bool，默认为false。<br>&nbsp;&nbsp;&bull; true：启用<br>&nbsp;&nbsp;&bull; false：不启用<br>不同产品型号下enTranspose的有效条件不同，具体请参考[约束说明](#zh-cn_topic_0000002512171652_entranspose_constraint)。<br>**注：在目的操作数的物理存储位置为L0B Buffer（TPosition: B2）时本参数无效。** |
 | enSmallK | 是否开启small k特性，每个分形矩阵大小为16*4，支持数据类型为bool，默认为false。当前产品形态，该特性已不再支持。 |
 | padValue | Pad填充值的数值，数据类型需要与src保持一致。若不想开启padding，可将padList设为全0。默认为0。 |
 | filterSizeW | 是否在filterW的基础上将卷积核width增加256个元素。true，增加；false，不增加。默认为false。 |
@@ -180,8 +180,8 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 | filterSizeW | 是否在filterW的基础上将卷积核width增加256个元素。true，增加；false，不增加。 |
 | filterSizeH | 是否在filterH的基础上将卷积核height增加256个元素。true，增加；false，不增加。 |
 | fMatrixCtrl | 表示Load3DV2指令从左矩阵还是右矩阵获取FeatureMap的属性描述，与SetFmatrix配合使用，当前只支持设置为false，默认值为false。<br>&nbsp;&nbsp;&bull; true：从右矩阵中获取FeatureMap的属性描述；<br>&nbsp;&nbsp;&bull; false：从左矩阵中获取FeatureMap的属性描述。 |
-| extConfig | 组合参数(uint64_t类型)，默认值为0；<br><pre>extConfig = ((uint64_t)mStartPt << 48)<br>    &#124; ((uint64_t)kStartPt << 32)<br>    &#124; ((uint64_t)mExtension << 16)<br>    &#124; (uint64_t)kExtension;</pre> |
-| filterConfig | 组合参数(uint64_t类型)，默认值为0X10101010101；<br><pre>filterConfig = ((uint64_t)dilationFilterH << 40)<br>    &#124; ((uint64_t)dilationFilterW << 32)<br>    &#124; ((uint64_t)filterH << 24)<br>    &#124; ((uint64_t)filterW << 16)<br>    &#124; ((uint64_t)strideH << 8)<br>    &#124; (uint64_t)strideW;</pre> |
+| extConfig | 组合参数（uint64_t类型），默认值为0；<br><pre>extConfig = ((uint64_t)mStartPt << 48)<br>    &#124; ((uint64_t)kStartPt << 32)<br>    &#124; ((uint64_t)mExtension << 16)<br>    &#124; (uint64_t)kExtension;</pre> |
+| filterConfig | 组合参数（uint64_t类型），默认值为0X10101010101；<br><pre>filterConfig = ((uint64_t)dilationFilterH << 40)<br>    &#124; ((uint64_t)dilationFilterW << 32)<br>    &#124; ((uint64_t)filterH << 24)<br>    &#124; ((uint64_t)filterW << 16)<br>    &#124; ((uint64_t)strideH << 8)<br>    &#124; (uint64_t)strideW;</pre> |
 
 ## 数据类型<a id="zh-cn_topic_0000002512171652_section4219135304818"></a>
 
@@ -265,15 +265,39 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 - LoadData3DParamsV1 cSize特性的开启，需要保证A1/B1中的feature map为4 channel对齐。
 <!-- end id33 -->
 
-- 数据连续排列顺序由目的操作数所在物理存储位置决定，具体约束如下：
-    - L0A Buffer(TPosition: A2)：ZZ格式；
-    - L0B Buffer(TPosition: B2)：ZN格式。
+- 数据连续排列顺序由目的操作数所在物理存储位置决定，具体约束如下：<a id="zh-cn_topic_0000002512171652_dst_layout"></a>
 
-    <!-- npu="950" id34 -->
-    - 特别针对Ascend 950PR/Ascend 950DT：
-        - L0A Buffer(TPosition: A2)：NZ格式；
-        - L0B Buffer(TPosition: B2)：ZN格式。
+    <!-- npu="A3,910b" id34 -->
+    - 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品、Atlas A2 训练系列产品/Atlas A2 推理系列产品：
+        - L0A Buffer（TPosition: A2）：ZZ格式；
+        - L0B Buffer（TPosition: B2）：ZN格式。
     <!-- end id34 -->
+
+    <!-- npu="950" id35 -->
+    - 针对Ascend 950PR/Ascend 950DT：
+        - L0A Buffer（TPosition: A2）：NZ格式；
+        - L0B Buffer（TPosition: B2）：ZN格式。
+    <!-- end id35 -->
+
+- LoadData3DParamsV2结构体中channelSize的取值约束如下：<a id="zh-cn_topic_0000002512171652_channelsize_constraint"></a>
+
+    <!-- npu="310p" id36 -->
+    - 针对Atlas 推理系列产品AI Core：对于half，channelSize可取值为4，8，16，N\*16+4，N\*16+8；对于int8_t/uint8_t，channelSize可取值为4，8，16，32，N\*32+4，N\*32+8，N\*32+16；对于int4b_t，channelSize可取值为8，16，32，N\*64，N\*64+8，N\*64+16，N\*64+32。N为正整数。
+    <!-- end id36 -->
+
+    <!-- npu="950,A3,910b,310b,x90" id37 -->
+    - 针对Ascend 950PR/Ascend 950DT、Atlas A3 训练系列产品/Atlas A3 推理系列产品、Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas 200I/500 A2 推理产品、Kirin X90：对于uint32_t/int32_t/float，channelSize可取值为4，N\*8，N\*8+4；对于half/bfloat16，channelSize可取值为4，8，N\*16，N\*16 + 4，N\*16+8；对于int8_t/uint8_t，channelSize可取值为4，8，16，32\*N，N\*32+4，N\*32+8，N\*32+16；对于int4b_t，channelSize可取值为8，16，32，N\*64，N\*64+8，N\*64+16，N\*64+32。N为正整数。
+    <!-- end id37 -->
+
+- LoadData3DParamsV2结构体中enTranspose的有效条件如下：<a id="zh-cn_topic_0000002512171652_entranspose_constraint"></a>
+
+    <!-- npu="A3,910b" id38 -->
+    - 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品、Atlas A2 训练系列产品/Atlas A2 推理系列产品：在目的操作数的物理存储位置为L0A Buffer（TPosition: A2），且源操作数为b16/b32类型时有效。
+    <!-- end id38 -->
+
+    <!-- npu="950" id39 -->
+    - 针对Ascend 950PR/Ascend 950DT：在目的操作数的物理存储位置为L0A Buffer（TPosition: A2），且源操作数为b8/b16/b32类型时有效。
+    <!-- end id39 -->
 
 ## 关键特性说明<a id="zh-cn_topic_0000002512171652_section102629572045"></a>
 
@@ -283,120 +307,104 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 ![](../../../../../figures/load3d_3d22d_demo.png)
 
-**非转置场景：**
+#### 非转置场景
 
 首先L1 Buffer->L0B Buffer通路不支持非转置场景；而对于L1 Buffer->L0A Buffer通路，根据不同的产品形态有不同的分形排布转换：
 
-<!-- npu="A3,910b" id35 -->
-针对如下产品型号：
+<!-- npu="A3,910b" id40 -->
+- 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品、Atlas A2 训练系列产品/Atlas A2 推理系列产品：
 
-<!-- npu="A3" id36 -->
-Atlas A3 训练系列产品/Atlas A3 推理系列产品；
-<!-- end id36 -->
+    Load3D会自动完成分形的变换，从L1 Buffer上的NZ分形排布转换成L0A Buffer中所需的ZZ分形排布，如下b16类型场景的示意图所示：
 
-<!-- npu="910b" id37 -->
-Atlas A2 训练系列产品/Atlas A2 推理系列产品；
-<!-- end id37 -->
-
-Load3D会自动完成分形的变换，从L1 Buffer上的NZ分形排布转换成L0A Buffer中所需的ZZ分形排布，如下b16类型场景的示意图所示：
-
-![](../../../../../figures/load3d_l1tol0a_b16_nontrans.png)
-<!-- end id35 -->
-
-<!-- npu="950" id38 -->
-针对Ascend 950PR/Ascend 950DT：
-
-L1 Buffer上的分形排布就是L0A Buffer中所需的NZ分形排布，Load3D不会进行分形排布转换，如下b16类型场景的示意图所示：
-
-![](../../../../../figures/load3d_l1tol0a_b16_nontrans_950.png)
-<!-- end id38 -->
-
-**转置场景：**
-
-<!-- npu="A3,910b" id39 -->
-针对如下产品型号：
-
-<!-- npu="A3" id40 -->
-Atlas A3 训练系列产品/Atlas A3 推理系列产品；
+    ![](../../../../../figures/load3d_l1tol0a_b16_nontrans.png)
 <!-- end id40 -->
 
-<!-- npu="910b" id41 -->
-Atlas A2 训练系列产品/Atlas A2 推理系列产品；
+<!-- npu="950" id41 -->
+- 针对Ascend 950PR/Ascend 950DT：
+
+    L1 Buffer上的分形排布就是L0A Buffer中所需的NZ分形排布，Load3D不会进行分形排布转换，如下b16类型场景的示意图所示：
+
+    ![](../../../../../figures/load3d_l1tol0a_b16_nontrans_950.png)
 <!-- end id41 -->
 
-Load3D仅在b16/b32数据类型下支持转置（enTranspose=True），按照类型详细说明：
+#### 转置场景
 
-对于b16场景：每个分形大小是16×16
+<!-- npu="A3,910b" id42 -->
+- 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品、Atlas A2 训练系列产品/Atlas A2 推理系列产品：
 
-L1 Buffer->L0A Buffer通路下，转置场景下，除了每个分形矩阵自身会被转置，每个分形矩阵在整个二维特征图中的位置也会被转置，转置示意图如下：
+    Load3D仅在b16/b32数据类型下支持转置（enTranspose=True），按照类型详细说明：
 
-![](../../../../../figures/load3d_l1tol0a_b16_trans.png)
+    - 对于b16场景：每个分形大小是16×16。
 
-L1 Buffer->L0B Buffer通路下，Load3D接口会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效，转置示意图如下：
+        L1 Buffer->L0A Buffer通路下，转置场景下，除了每个分形矩阵自身会被转置，每个分形矩阵在整个二维特征图中的位置也会被转置，转置示意图如下：
 
-![](../../../../../figures/load3d_l1tol0b_b16_trans.png)
+        ![](../../../../../figures/load3d_l1tol0a_b16_trans.png)
 
-对于b32场景：每个分形大小是16×8
+        L1 Buffer->L0B Buffer通路下，Load3D接口会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效，转置示意图如下：
 
-L1 Buffer->L0A Buffer通路下，需要配置enTranspose参数来开启转置功能，转置示意图如下：
+        ![](../../../../../figures/load3d_l1tol0b_b16_trans.png)
 
-![](../../../../../figures/load3d_l1tol0a_b32_trans.png)
+    - 对于b32场景：每个分形大小是16×8。
 
-L1 Buffer->L0B Buffer通路下，Load3D接口会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效，转置示意图如下：
+        L1 Buffer->L0A Buffer通路下，需要配置enTranspose参数来开启转置功能，转置示意图如下：
 
-![](../../../../../figures/load3d_l1tol0b_b32_trans.png)
-<!-- end id39 -->
+        ![](../../../../../figures/load3d_l1tol0a_b32_trans.png)
 
-<!-- npu="950" id42 -->
-针对Ascend 950PR/Ascend 950DT：
+        L1 Buffer->L0B Buffer通路下，Load3D接口会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效，转置示意图如下：
 
-Load3D在b8/b16/b32数据类型下均支持转置，其中，L1 Buffer->L0A Buffer通路通过开启enTranspose参数开启转置，L1 Buffer->L0B Buffer通路下会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效。下面按照类型详细说明。
-
-对于b8场景：每个分形大小是16×32
-
-L1 Buffer->L0A Buffer通路下，转置场景下，2个连续的16×32的分形拼接为一个32×32的方块矩阵，再进行转置并拆分为2个16×32的分形，转置示意图如下：
-
-![](../../../../../figures/load3d_l1tol0a_b8_trans_950.png)
-
-L1 Buffer->L0B Buffer通路下，Load3D接口会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效，转置示意图如下：
-
-![](../../../../../figures/load3d_l1tol0b_b8_trans_950.png)
-
-对于b16场景：每个分形大小是16×16
-
-L1 Buffer->L0A Buffer通路下，转置场景下，除了每个分形矩阵自身会被转置，每个分形矩阵在整个二维特征图中的位置也会被转置，转置示意图如下：
-
-![](../../../../../figures/load3d_l1tol0a_b16_trans_950.png)
-
-L1 Buffer->L0B Buffer通路下，Load3D接口会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效，转置示意图如下：
-
-![](../../../../../figures/load3d_l1tol0b_b16_trans_950.png)
-
-对于b32场景：每个分形大小是16×8
-
-L1 Buffer->L0A Buffer通路下，转置场景示意图如下：
-
-![](../../../../../figures/load3d_l1tol0a_b32_trans_950.png)
-
-L1 Buffer->L0B Buffer通路下，Load3D接口会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效，转置示意图如下：
-
-![](../../../../../figures/load3d_l1tol0b_b32_trans_950.png)
+        ![](../../../../../figures/load3d_l1tol0b_b32_trans.png)
 <!-- end id42 -->
+
+<!-- npu="950" id43 -->
+- 针对Ascend 950PR/Ascend 950DT：
+
+    Load3D在b8/b16/b32数据类型下均支持转置，其中，L1 Buffer->L0A Buffer通路通过开启enTranspose参数开启转置，L1 Buffer->L0B Buffer通路下会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效。下面按照类型详细说明。
+
+    - 对于b8场景：每个分形大小是16×32。
+
+        L1 Buffer->L0A Buffer通路下，转置场景下，2个连续的16×32的分形拼接为一个32×32的方块矩阵，再进行转置并拆分为2个16×32的分形，转置示意图如下：
+
+        ![](../../../../../figures/load3d_l1tol0a_b8_trans_950.png)
+
+        L1 Buffer->L0B Buffer通路下，Load3D接口会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效，转置示意图如下：
+
+        ![](../../../../../figures/load3d_l1tol0b_b8_trans_950.png)
+
+    - 对于b16场景：每个分形大小是16×16。
+
+        L1 Buffer->L0A Buffer通路下，转置场景下，除了每个分形矩阵自身会被转置，每个分形矩阵在整个二维特征图中的位置也会被转置，转置示意图如下：
+
+        ![](../../../../../figures/load3d_l1tol0a_b16_trans_950.png)
+
+        L1 Buffer->L0B Buffer通路下，Load3D接口会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效，转置示意图如下：
+
+        ![](../../../../../figures/load3d_l1tol0b_b16_trans_950.png)
+
+    - 对于b32场景：每个分形大小是16×8。
+
+        L1 Buffer->L0A Buffer通路下，转置场景示意图如下：
+
+        ![](../../../../../figures/load3d_l1tol0a_b32_trans_950.png)
+
+        L1 Buffer->L0B Buffer通路下，Load3D接口会自动完成转置，不需要配置enTranspose参数，enTranspose参数此时无效，转置示意图如下：
+
+        ![](../../../../../figures/load3d_l1tol0b_b32_trans_950.png)
+<!-- end id43 -->
 
 ### Repeat Mode<a id="zh-cn_topic_0000002512171652_section131671145123912"></a>
 
-Load3D可以通过配置mExtension和kExtension来完成多个方向的数据块搬运，我们把这里的多块数据的搬运看成一次迭代，Load3D支持通过配置repeat mode，能实现在M方向(height)或者K方向(width)进行repeat搬运，也就是说，调用一次Load3D接口可以完成多次迭代的数据搬运，如下图所示，其中repeatStride和repeatTime还有沿哪个方向repeat，我们通过[SetLoadDataRepeat](../辅助配置接口/SetLoadDataRepeat.md)配置。
+Load3D可以通过配置mExtension和kExtension来完成多个方向的数据块搬运，我们把这里的多块数据的搬运看成一次迭代，Load3D支持通过配置repeat mode，能实现在M方向（height）或者K方向（width）进行repeat搬运，也就是说，调用一次Load3D接口可以完成多次迭代的数据搬运，如下图所示，其中repeatStride和repeatTime还有沿哪个方向repeat，我们通过[SetLoadDataRepeat](../辅助配置接口/SetLoadDataRepeat.md)配置。
 
-<!-- npu="A3,910b" id43 -->
+<!-- npu="A3,910b" id44 -->
 针对如下产品型号：
 
-<!-- npu="A3" id44 -->
+<!-- npu="A3" id45 -->
 Atlas A3 训练系列产品/Atlas A3 推理系列产品；
-<!-- end id44 -->
-
-<!-- npu="910b" id45 -->
-Atlas A2 训练系列产品/Atlas A2 推理系列产品；
 <!-- end id45 -->
+
+<!-- npu="910b" id46 -->
+Atlas A2 训练系列产品/Atlas A2 推理系列产品；
+<!-- end id46 -->
 
 M方向repeat示意图：
 
@@ -413,9 +421,9 @@ K方向repeat示意图：
 当我们调用Load3D指令在K方向进行repeat搬运时，如果我们开启转置，则重复过程中的所有分块矩阵也将被视为一个整体大矩阵，并按照我们前文所述的转置场景进行处理。以b32场景为例，下图给出了在K方向进行repeat搬运时的转置示意图，其中repeatMode=1，repeatStride=2，repeatTime=3。
 
 ![](../../../../../figures/load3d_repeatmode_k_trans.png)
-<!-- end id43 -->
+<!-- end id44 -->
 
-<!-- npu="950" id46 -->
+<!-- npu="950" id47 -->
 针对Ascend 950PR/Ascend 950DT：
 
 **M方向repeat示意图：**
@@ -433,7 +441,7 @@ K方向repeat示意图：
 当我们调用Load3D指令在K方向进行repeat搬运时，如果我们开启转置，则重复过程中的所有分块矩阵也将被视为一个整体大矩阵，并按照我们前文所述的转置场景进行处理。以b32场景为例，下图给出了在K方向进行repeat搬运时的转置示意图，其中repeatMode=1，repeatStride=2，repeatTime=3，dstStride=3。
 
 ![](../../../../../figures/load3d_repeatmode_k_trans_950.png)
-<!-- end id46 -->
+<!-- end id47 -->
 
 ### Feature Map、Pad属性描述寄存器设置<a id="zh-cn_topic_0000002512171652_section1881795134015"></a>
 

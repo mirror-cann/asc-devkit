@@ -49,7 +49,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
-| T | 源操作数和目的操作数的数据类型。<br>Ascend 950PR/Ascend 950DT，仅支持L1 Buffer->L0A Buffer、L1 Buffer->L0B Buffer。 |
+| T | 源操作数和目的操作数的数据类型。 |
 | Src | 源操作数存储的逻辑位置（TPosition），支持的取值为A1和B1，仅Load2DBitMode接口使用。 |
 | Dst | 目的操作数存储的逻辑位置（TPosition），支持的取值为A2和B2，仅Load2DBitMode接口使用。 |
 
@@ -146,6 +146,9 @@ Load2DBitModeConfig1结构体参数的含义与LoadData2DParamsV2结构体中的
 ## 约束说明<a id="section633mcpsimp"></a>
 
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../../通用说明和约束.md)。
+<!-- npu="950" id10 -->
+- 针对Ascend 950PR/Ascend 950DT，仅支持L1 Buffer->L0A Buffer、L1 Buffer->L0B Buffer数据通路。
+<!-- end id10 -->
 
 ## 调用示例<a id="section6461234123118"></a>
 
