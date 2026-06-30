@@ -57,10 +57,10 @@ AOT的核心思想是：**将特定Tiling配置以编译期常量的形式固化
 // 根据运行时计算的Tiling结果，匹配常量Tiling
 if (memcmp(&tiling_data, ConstTilingHolder<TilingData>::bytes, sizeof(tiling_data)) == 0) {
     // 匹配上后，调用常量Tiling的Kernel实现
-    add<ConstTilingHolder<TilingData>><<<1, nullptr, stream>>>(x1, x2, tiling_data);
+    add<ConstTilingHolder<TilingData>><<<1, 0, stream>>>(x1, x2, tiling_data);
 } else {
     // 最终常量Tiling都无法匹配的，使用运行时Tiling结果进行兜底
-    add<RuntimeTilingHolder<TilingData>><<<1, nullptr, stream>>>(x1, x2, tiling_data);
+    add<RuntimeTilingHolder<TilingData>><<<1, 0, stream>>>(x1, x2, tiling_data);
 }
 ```
 

@@ -121,7 +121,7 @@ void GenerateTilingData(uint8_t* tilingBuf, uint32_t numBlocks)
     GenerateTilingData(tiling, NUM_BLOCKS);  // 调用tiling参数计算函数
     ....
     
-    tiling_strategy_custom<<<NUM_BLOCKS, nullptr, stream>>>(xDevice, yDevice, zDevice,
+    tiling_strategy_custom<<<NUM_BLOCKS, 0, stream>>>(xDevice, yDevice, zDevice,
                                                *reinterpret_cast<AddCustomTilingData*>(tiling));
     ....
 ```

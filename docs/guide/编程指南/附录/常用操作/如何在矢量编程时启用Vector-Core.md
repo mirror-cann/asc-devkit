@@ -37,7 +37,7 @@
            totalCoreNum = totalCoreNum + ascendcPlatform.GetCoreNumVector();
         }
         ...
-        kernel_name<<<totalCoreNum , l2ctrl, stream>>>(argument list);
+        kernel_name<<<totalCoreNum, 0, stream>>>(argument list);
         ```
 
     -   自定义算子工程

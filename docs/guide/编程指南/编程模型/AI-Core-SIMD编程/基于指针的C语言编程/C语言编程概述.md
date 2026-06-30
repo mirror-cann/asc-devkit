@@ -46,7 +46,7 @@ std::vector<float> kernel_add(std::vector<float> &x, std::vector<float> &y) {
     aclrtMemcpy((uint8_t*)xDevice, totalByteSize, xHost, totalByteSize, ACL_MEMCPY_HOST_TO_DEVICE);
     aclrtMemcpy((uint8_t*)yDevice, totalByteSize, yHost, totalByteSize, ACL_MEMCPY_HOST_TO_DEVICE);
     // Launch kernel via <<<>>>, passing Device memory pointers xDevice, yDevice, zDevice
-    add_custom<<<numBlocks, nullptr, stream>>>(xDevice, yDevice, zDevice);
+    add_custom<<<numBlocks, 0, stream>>>(xDevice, yDevice, zDevice);
     aclrtSynchronizeStream(stream);
     // Release Device memory
     aclrtFree(xDevice);
