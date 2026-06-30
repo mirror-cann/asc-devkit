@@ -69,7 +69,7 @@ inline half __half2half_rna(const half x)
 -   SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) void kernel__half2float(half* dst, half* x)
+    __global__ __launch_bounds__(1024) void kernel_half2half_rna(half* dst, half* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = __half2half_rna(x[idx]);
@@ -79,7 +79,7 @@ inline half __half2half_rna(const half x)
 -   SIMD与SIMT混合编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(1024) inline void kernel__half2float(__gm__ half* dst, __gm__ half* x)
+    __simt_vf__ __launch_bounds__(1024) inline void kernel_half2half_rna(__gm__ half* dst, __gm__ half* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = __half2half_rna(x[idx]);

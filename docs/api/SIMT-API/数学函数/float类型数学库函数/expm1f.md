@@ -52,7 +52,9 @@ e的x次方减1。
 
 ## 约束说明
 
-无
+<!-- npu="950" id7 -->
+针对Ascend 950PR/Ascend 950DT，本接口不支持输入为Subnormal的场景：本接口内部实现使用到了expf，由于expf不支持Subnormal场景，当输入x处于Subnormal范围内时，返回值为0；当x为较大负数且expf的结果处于Subnormal范围内时，本接口最终结果为-1.0。
+<!-- end id7 -->
 
 ## 需要包含的头文件
 

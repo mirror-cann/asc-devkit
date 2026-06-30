@@ -69,7 +69,7 @@ inline bfloat16x2_t h2floor(bfloat16x2_t x)
 -   SIMT编程场景：
 
     ```
-    __global__ __launch_bounds__(1024) void KernelIsFinite(bfloat16x2_t* dst, bfloat16x2_t* x)
+    __global__ __launch_bounds__(1024) void kernel_h2floor(bfloat16x2_t* dst, bfloat16x2_t* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = h2floor(x[idx]);
@@ -79,7 +79,7 @@ inline bfloat16x2_t h2floor(bfloat16x2_t x)
 -   SIMD与SIMT混合编程场景：
 
     ```
-    __simt_vf__ __launch_bounds__(1024) inline void KernelIsFinite(__gm__ bfloat16x2_t* dst, __gm__ bfloat16x2_t* x)
+    __simt_vf__ __launch_bounds__(1024) inline void kernel_h2floor(__gm__ bfloat16x2_t* dst, __gm__ bfloat16x2_t* x)
     {
         int idx = threadIdx.x + blockIdx.x * blockDim.x;
         dst[idx] = h2floor(x[idx]);
