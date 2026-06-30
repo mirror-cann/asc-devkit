@@ -19,13 +19,13 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_VCONV_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_VCONV_IMPL_H
-#include "kernel_utils.h"
-#include "kernel_struct_binary.h"
-#include "kernel_struct_unary.h"
-#include "kernel_struct_vdeq.h"
-#include "kernel_common.h"
-#include "kernel_tpipe.h"
-#include "kernel_operator_block_sync_intf.h"
+#include "../kernel_utils.h"
+#include "../../../include/basic_api/kernel_struct_binary.h"
+#include "../../../include/basic_api/kernel_struct_unary.h"
+#include "../../../include/basic_api/kernel_struct_vdeq.h"
+#include "../../../include/basic_api/kernel_common.h"
+#include "../../../include/basic_api/kernel_tpipe.h"
+#include "../../../include/basic_api/kernel_operator_block_sync_intf.h"
 
 namespace AscendC {
 #define VCVT_U8_TO_F16(roundMode) vcvt(vreg1, vreg0, preg, PART_EVEN)

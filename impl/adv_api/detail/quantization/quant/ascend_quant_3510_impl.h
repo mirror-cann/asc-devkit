@@ -22,11 +22,11 @@
 
 #ifndef LIB_ASCEND_QUANT_ASCEND_QUANT_C310_IMPL_H
 #define LIB_ASCEND_QUANT_ASCEND_QUANT_C310_IMPL_H
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 #include "kernel_tiling/kernel_tiling.h"
 #include "../../common/check.h"
-#include "include/adv_api/quantization/ascend_quant_utils.h"
+#include "../../../../../include/adv_api/quantization/ascend_quant_utils.h"
 
 namespace AscendC {
 constexpr uint32_t ASCENDC_QUANT_B16_VF_LEN = GetVecLen() / sizeof(uint16_t);

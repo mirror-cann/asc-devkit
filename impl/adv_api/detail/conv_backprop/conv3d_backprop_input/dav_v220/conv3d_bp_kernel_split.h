@@ -16,7 +16,7 @@
 #ifndef CONV3D_BP_KERNEL_SPLIT_H
 #define CONV3D_BP_KERNEL_SPLIT_H
 
-#include "kernel_basic_intf.h"
+#include "../../../../../../include/basic_api/kernel_basic_intf.h"
 
 namespace ConvBackpropInputFunc {
 

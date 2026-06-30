@@ -20,7 +20,7 @@
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_TRANSPOSE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_TRANSPOSE_IMPL_H
 
-#include "kernel_operator_block_sync_intf.h"
+#include "../../../include/basic_api/kernel_operator_block_sync_intf.h"
 
 namespace AscendC {
 constexpr int8_t TWO_NUM = 2;

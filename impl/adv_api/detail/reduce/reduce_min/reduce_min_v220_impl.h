@@ -18,8 +18,8 @@
 #ifndef IMPL_REDUCE_REDUCE_MIN_REDUCE_MIN_V220_IMPL_H_
 #define IMPL_REDUCE_REDUCE_MIN_REDUCE_MIN_V220_IMPL_H_
 
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 #include "kernel_tiling/kernel_tiling.h"
 #include "../reduce_common_util_v220_impl.h"
 #include "../../common/check.h"

@@ -21,8 +21,8 @@
 #endif
 #ifndef IMPL_MATH_POWER_POWER_COMMON_IMPL_H
 #define IMPL_MATH_POWER_POWER_COMMON_IMPL_H
-#include "kernel_basic_intf.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 #include "power_int_impl.h"
 #include "power_float_impl.h"
 #include "../../common/check.h"

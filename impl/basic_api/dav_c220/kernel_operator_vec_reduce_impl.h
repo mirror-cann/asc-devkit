@@ -20,7 +20,7 @@
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_REDUCE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_REDUCE_IMPL_H
 
-#include "kernel_tpipe.h"
+#include "../../../include/basic_api/kernel_tpipe.h"
 
 namespace AscendC {
 template <typename T>

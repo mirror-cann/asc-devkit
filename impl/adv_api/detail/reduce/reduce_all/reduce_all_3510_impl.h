@@ -18,8 +18,8 @@
 #ifndef IMPL_REDUCE_REDUCE_ALL_REDUCE_ALL_C310_IMPL_H_
 #define IMPL_REDUCE_REDUCE_ALL_REDUCE_ALL_C310_IMPL_H_
 
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 #include "../../common/check.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/reduce/reduce_all/reduce_all_check.h"

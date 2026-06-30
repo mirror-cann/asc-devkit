@@ -18,8 +18,8 @@
 #ifndef IMPL_REDUCE_REDUCE_COMMON_AR_REUSE_ALIGN_C310_IMPL_H
 #define IMPL_REDUCE_REDUCE_COMMON_AR_REUSE_ALIGN_C310_IMPL_H
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../include/basic_api/kernel_tensor.h"
 #include "reduce_common_util_impl.h"
 #include "reduce_common_util_3510_impl.h"
 #include "reduce_common_ar_reuse_align_less_than_vl_3510_impl.h"

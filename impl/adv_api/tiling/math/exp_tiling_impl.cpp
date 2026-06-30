@@ -13,7 +13,7 @@
  * \brief
  */
 #include <cstdint>
-#include "include/adv_api/math/exp_tiling.h"
+#include "../../../../include/adv_api/math/exp_tiling.h"
 #include "graph/tensor.h"
 
 namespace AscendC {

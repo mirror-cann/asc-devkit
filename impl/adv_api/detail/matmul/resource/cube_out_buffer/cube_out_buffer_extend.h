@@ -23,7 +23,7 @@
 #define IMPL_MATMUL_RESOURCE_CUBE_OUT_BUFFER_CUBE_OUT_BUFFER_EXTEND_H
 
 #include "../../utils/matmul_utils.h"
-#include "include/adv_api/matmul/tiling.h"
+#include "../../../../../../include/adv_api/matmul/tiling.h"
 
 namespace AscendC {
 namespace Impl {

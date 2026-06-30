@@ -22,8 +22,8 @@
 
 #if ASCENDC_CPU_DEBUG
 #include <unordered_set>
-#include "kernel_tensor.h"
-#include "kernel_struct_conv2d.h"
+#include "../../../include/basic_api/kernel_tensor.h"
+#include "../../../include/basic_api/kernel_struct_conv2d.h"
 
 namespace AscendC {
 

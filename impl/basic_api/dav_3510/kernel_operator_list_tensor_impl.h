@@ -20,7 +20,7 @@
 #ifndef ASCENDC_MODULE_OPERATOR_LIST_TENSOR_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_LIST_TENSOR_IMPL_H
 
-#include "kernel_basic_intf.h"
+#include "../../../include/basic_api/kernel_basic_intf.h"
 
 #if defined (ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include <cstdint>

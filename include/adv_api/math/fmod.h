@@ -24,7 +24,7 @@
 
 #include "kernel_tensor.h"
 #include "include/adv_api/math/fmod_utils.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../impl/basic_api/kernel_pop_stack_buffer.h"
 
 #if defined(__NPU_ARCH__) && \
     (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 3510)

@@ -8,7 +8,7 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#include "include/adv_api/reduce/mean_tiling.h"
+#include "../../../../include/adv_api/reduce/mean_tiling.h"
 #include "register/tilingdata_base.h"
 #include "../../detail/host_log.h"
 

@@ -22,7 +22,7 @@
 #ifndef IMPL_API_CHECK_KERNEL_CHECK_QUANTIZATION_QUANT_QUANT_CHECK_H_
 #define IMPL_API_CHECK_KERNEL_CHECK_QUANTIZATION_QUANT_QUANT_CHECK_H_
 
-#include "include/adv_api/quantization/ascend_quant_utils.h"
+#include "../../../../../../../include/adv_api/quantization/ascend_quant_utils.h"
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 1001 || __NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201)
 #include "quant_check_common.h"
 #else

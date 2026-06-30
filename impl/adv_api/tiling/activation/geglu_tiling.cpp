@@ -12,7 +12,7 @@
  * \file geglu_tiling.cpp
  * \brief
  */
-#include "include/adv_api/activation/geglu_tiling.h"
+#include "../../../../include/adv_api/activation/geglu_tiling.h"
 
 #include <cstdint>
 #include <set>

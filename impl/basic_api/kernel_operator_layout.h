@@ -20,9 +20,9 @@
 #ifndef TIKCFW_IMPL_KERNEL_OPERATOR_LAYOUT_H
 #define TIKCFW_IMPL_KERNEL_OPERATOR_LAYOUT_H
 
-#include "include/utils/std/tuple.h"
-#include "include/utils/std/type_traits.h"
-#include "include/utils/std/utility.h"
+#include "../../include/utils/std/tuple.h"
+#include "../../include/utils/std/type_traits.h"
+#include "../../include/utils/std/utility.h"
 
 namespace AscendC {
 namespace LayoutInternal {

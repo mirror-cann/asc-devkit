@@ -22,8 +22,8 @@
 #define ASCENDC_MODULE_OPERATOR_SYS_VAR_IMPL_H
 
 #include <cstdint>
-#include "kernel_log.h"
-#include "kernel_macros.h"
+#include "../kernel_log.h"
+#include "../kernel_macros.h"
 
 namespace AscendC {
 __aicore__ inline int64_t GetSubBlockIdxImpl()

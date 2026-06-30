@@ -21,8 +21,8 @@
 #endif
 #ifndef LIB_MATH_COS_C310_IMPL_H
 #define LIB_MATH_COS_C310_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 #include "../../common/common.h"
 #if defined(__NPU_ARCH__) && \
     (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)

@@ -23,15 +23,15 @@
 #ifndef IMPL_SORT_TOPK_TOPK_COMMON_IMPL_H
 #define IMPL_SORT_TOPK_TOPK_COMMON_IMPL_H
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-#include "kernel_log.h"
+#include "../../../../basic_api/kernel_log.h"
 #endif
 
-#include "kernel_tensor.h"
-#include "kernel_utils.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../basic_api/kernel_utils.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 #include "kernel_tiling/kernel_tiling.h"
 #include "topk_common_utils.h"
-#include "include/adv_api/index/arithprogression.h"
+#include "../../../../../include/adv_api/index/arithprogression.h"
 
 #if defined(__NPU_ARCH__) && __NPU_ARCH__ == 2201
 #include "topk_v220_impl.h"

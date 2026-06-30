@@ -19,11 +19,11 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_BINARY_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_BINARY_IMPL_H
-#include "kernel_utils.h"
+#include "../kernel_utils.h"
 #include "kernel_operator_common_impl.h"
-#include "kernel_struct_binary.h"
-#include "kernel_tpipe.h"
-#include "kernel_common.h"
+#include "../../../include/basic_api/kernel_struct_binary.h"
+#include "../../../include/basic_api/kernel_tpipe.h"
+#include "../../../include/basic_api/kernel_common.h"
 
 namespace AscendC {
 /* **************************************************************************************************

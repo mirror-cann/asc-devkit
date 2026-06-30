@@ -20,11 +20,11 @@
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_CMPSEL_INTERFACE_H
 #define ASCENDC_MODULE_OPERATOR_VEC_CMPSEL_INTERFACE_H
 
-#include "kernel_macros.h"
+#include "../../impl/basic_api/kernel_macros.h"
 #include "kernel_tensor.h"
 #include "kernel_struct_binary.h"
 #include "kernel_struct_unary.h"
-#include "utils/kernel_utils_mode.h"
+#include "../../impl/basic_api/utils/kernel_utils_mode.h"
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include <cstdint>

@@ -23,7 +23,7 @@
 #define IMPL_API_CHECK_KERNEL_CHECK_REDUCE_REDUCE_REDUCE_CHECK_H_
 
 #include "reduce_check_utils.h"
-#include "include/adv_api/reduce/reduce_common.h"
+#include "../../../../../../include/adv_api/reduce/reduce_common.h"
 
 namespace AscendC {
 namespace HighLevelApiCheck {

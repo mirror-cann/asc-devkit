@@ -31,8 +31,8 @@
 #include "utils/kernel_check_func.h"
 #include "utils/kernel_check_conv2d.h"
 #include "utils/kernel_check_data_copy_overflow.h"
-#include "kernel_struct_mm.h"
-#include "kernel_struct_gather.h"
+#include "../../include/basic_api/kernel_struct_mm.h"
+#include "../../include/basic_api/kernel_struct_gather.h"
 
 namespace AscendC {
 

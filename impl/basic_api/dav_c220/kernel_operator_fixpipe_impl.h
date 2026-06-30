@@ -21,9 +21,9 @@
 #define ASCENDC_MODULE_OPERATOR_FIXPIPE_IMPL_H
 
 #include "kernel_operator_set_spr_impl.h"
-#include "kernel_check.h"
-#include "kernel_operator_block_sync_intf.h"
-#include "kernel_process_lock.h"
+#include "../kernel_check.h"
+#include "../../../include/basic_api/kernel_operator_block_sync_intf.h"
+#include "../kernel_process_lock.h"
 
 namespace AscendC {
 /* **************************************************************************************************

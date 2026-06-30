@@ -9,7 +9,7 @@
  */
 
 #include "../../detail/host_log.h"
-#include "include/adv_api/normalization/deepnorm_tiling.h"
+#include "../../../../include/adv_api/normalization/deepnorm_tiling.h"
 
 namespace optiling {
 REGISTER_TILING_DATA_CLASS(DeepNormTilingOpApi, DeepNormTiling);

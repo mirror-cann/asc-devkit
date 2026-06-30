@@ -25,8 +25,8 @@
 #endif
 
 #include <cstdint>
-#include "kernel_macros.h"
-#include "utils/debug/asc_time.h"
+#include "../../impl/basic_api/kernel_macros.h"
+#include "include/utils/debug/asc_time.h"
 
 namespace AscendC {
 __aicore__ inline void MetricsProfStart();

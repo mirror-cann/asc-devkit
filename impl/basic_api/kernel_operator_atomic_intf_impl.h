@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_ATOMIC_INTERFACE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_ATOMIC_INTERFACE_IMPL_H
-#include "kernel_tensor.h"
+#include "../../include/basic_api/kernel_tensor.h"
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510))
 #include "dav_3510/kernel_operator_atomic_impl.h"

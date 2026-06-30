@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_UTILS_STRUCT_CONFUSION_PAD_H
 #define ASCENDC_MODULE_UTILS_STRUCT_CONFUSION_PAD_H
-#include "utils/kernel_utils_mode.h"
+#include "kernel_utils_mode.h"
 
 namespace AscendC {
 struct ConfusionTranspose2NZ012NTiling {

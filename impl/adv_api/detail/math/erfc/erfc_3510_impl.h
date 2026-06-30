@@ -21,8 +21,8 @@
 #endif
 #ifndef IMPL_MATH_ERFC_ERFC_C310_IMPL_H
 #define IMPL_MATH_ERFC_ERFC_C310_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 namespace AscendC {
 namespace ERFC {
 

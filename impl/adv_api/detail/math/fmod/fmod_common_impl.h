@@ -21,9 +21,9 @@
 #endif
 #ifndef IMPL_MATH_FMOD_FMOD_COMMON_IMPL_H
 #define IMPL_MATH_FMOD_FMOD_COMMON_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
-#include "include/adv_api/math/trunc.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/adv_api/math/trunc.h"
 #include "../../common/check.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/fmod/fmod_check.h"

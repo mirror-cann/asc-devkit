@@ -22,7 +22,7 @@
 #ifndef IMPL_MATMUL_MODULES_RESOURCE_CUBE_OUT_BUFFER_CUBE_OUT_BUFFER_NO_UNIT_FLAG_H
 #define IMPL_MATMUL_MODULES_RESOURCE_CUBE_OUT_BUFFER_CUBE_OUT_BUFFER_NO_UNIT_FLAG_H
 
-#include "include/adv_api/matmul/tiling.h"
+#include "../../../../../../include/adv_api/matmul/tiling.h"
 
 #include "../../utils/matmul_utils.h"
 #include "cube_out_buffer_base.h"

@@ -15,11 +15,11 @@
 
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_UNARY_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_UNARY_IMPL_H
-#include "kernel_utils.h"
+#include "../kernel_utils.h"
 #include "kernel_operator_common_impl.h"
-#include "kernel_operator_sys_var_intf.h"
+#include "../../../include/basic_api/kernel_operator_sys_var_intf.h"
 #include "kernel_operator_vec_template_impl.h"
-#include "reg_compute/kernel_reg_compute_intf.h"
+#include "../../../include/basic_api/reg_compute/kernel_reg_compute_intf.h"
 
 namespace AscendC {
 namespace Internal {

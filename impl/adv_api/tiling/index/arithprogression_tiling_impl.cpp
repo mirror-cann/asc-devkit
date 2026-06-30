@@ -8,7 +8,7 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#include "include/adv_api/index/arithprogression_tiling.h"
+#include "../../../../include/adv_api/index/arithprogression_tiling.h"
 
 namespace AscendC {
 // Arange does not require temporary space. Therefore, the obtained maximum and minimum temporary space sizes

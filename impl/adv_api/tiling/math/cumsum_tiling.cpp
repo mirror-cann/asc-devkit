@@ -13,7 +13,7 @@
  * \brief
  */
 
-#include "include/adv_api/math/cumsum_tiling.h"
+#include "../../../../include/adv_api/math/cumsum_tiling.h"
 #include "graph/tensor.h"
 #include "../../detail/host_log.h"
 namespace AscendC {

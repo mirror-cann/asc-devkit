@@ -21,10 +21,10 @@
 #define ASCENDC_MODULE_CHECK_VEC_BINARY_SCALAR_H
 
 #if ASCENDC_CPU_DEBUG
-#include "kernel_check_util.h"
-#include "kernel_common.h"
-#include "kernel_struct_binary.h"
-#include "kernel_struct_unary.h"
+#include "../kernel_check_util.h"
+#include "../../../include/basic_api/kernel_common.h"
+#include "../../../include/basic_api/kernel_struct_binary.h"
+#include "../../../include/basic_api/kernel_struct_unary.h"
 
 namespace AscendC {
 template <typename T, typename U>

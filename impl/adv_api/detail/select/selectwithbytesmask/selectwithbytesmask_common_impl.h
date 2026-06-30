@@ -17,11 +17,11 @@
 #ifndef IMPL_SELECT_SELECT_WITH_BYTES_MASK_COMMON_IMPL_H
 #define IMPL_SELECT_SELECT_WITH_BYTES_MASK_COMMON_IMPL_H
 
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
-#include "kernel_utils.h"
-#include "kernel_operator_vec_cmpsel_intf.h"
-#include "kernel_operator_vec_vconv_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../basic_api/kernel_utils.h"
+#include "../../../../../include/basic_api/kernel_operator_vec_cmpsel_intf.h"
+#include "../../../../../include/basic_api/kernel_operator_vec_vconv_intf.h"
 
 namespace AscendC {
 // Initialize cmpmask before select instr since the scalar value is never changed.

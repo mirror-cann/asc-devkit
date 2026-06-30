@@ -21,7 +21,7 @@
 #ifndef ASCENDC_MODULE_REG_COMPUTE_UTILS_H
 #define ASCENDC_MODULE_REG_COMPUTE_UTILS_H
 
-#include "utils/kernel_utils_mode.h"
+#include "../../../impl/basic_api/utils/kernel_utils_mode.h"
 
 namespace AscendC {
 enum class ExpAlgo {

@@ -23,7 +23,7 @@
 #ifndef IMPL_QUANTIZATION_ANTIQUANT_ASCEND_ANTIQUANT_COMMON_H
 #define IMPL_QUANTIZATION_ANTIQUANT_ASCEND_ANTIQUANT_COMMON_H
 
-#include "include/adv_api/quantization/ascend_antiquant_utils.h"
+#include "../../../../../include/adv_api/quantization/ascend_antiquant_utils.h"
 
 namespace AscendC {
 constexpr uint32_t ANTIQUANT_TWO = 2;

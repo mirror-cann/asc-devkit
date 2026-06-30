@@ -44,7 +44,7 @@ namespace AscendC {
  * \param [in] srcTensor: Input src localTensor.
  * \param [in] scale: Input scale.
  * \param [in] offset: input offset.
- * \param [in] sharedTmpBufferï¿?extra temporary shared space used for intermediate values among calculation process,
+ * \param [in] sharedTmpBufferï¿½?extra temporary shared space used for intermediate values among calculation process,
  *             whose required space size should refer to corresponding tiling API, which is defined at
  *             ascend_dequant_tiling.h. Generally, the more space you allocate, the better performance you will achieve,
  *             and the performance reaches peak when buffer size is maximum(calculated by tiling function). Moreover, it

@@ -21,12 +21,12 @@
 
 #ifndef ASCENDC_MODULE_OPERATOR_MM_INTERFACE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_MM_INTERFACE_IMPL_H
-#include "kernel_tensor.h"
+#include "../../include/basic_api/kernel_tensor.h"
 #include "kernel_check.h"
 #include "kernel_reg.h"
 #include "kernel_npu_debug.h"
 #include "kernel_operator_mm_base_impl.h"
-#include "kernel_struct_mm.h"
+#include "../../include/basic_api/kernel_struct_mm.h"
 
 namespace AscendC {
 

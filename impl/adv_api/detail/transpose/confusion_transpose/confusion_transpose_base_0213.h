@@ -22,8 +22,8 @@
 
 #ifndef IMPL_TRANSPOSE_CONFUSION_TRANSPOSE_CONFUSION_TRANSPOSE_BASE_0213_H
 #define IMPL_TRANSPOSE_CONFUSION_TRANSPOSE_CONFUSION_TRANSPOSE_BASE_0213_H
-#include "kernel_tensor.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 #include "kernel_tiling/kernel_tiling.h"
 
 namespace AscendC {

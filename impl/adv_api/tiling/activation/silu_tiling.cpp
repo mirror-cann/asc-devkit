@@ -14,7 +14,7 @@
  */
 #include <cstdint>
 #include "graph/tensor.h"
-#include "include/adv_api/activation/silu_tiling.h"
+#include "../../../../include/adv_api/activation/silu_tiling.h"
 
 namespace AscendC {
 void GetSiluTmpSize(

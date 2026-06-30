@@ -19,18 +19,18 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_BILINEARINTERPOLATION_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_BILINEARINTERPOLATION_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_struct_brcb.h"
-#include "kernel_struct_gather.h"
-#include "kernel_struct_binary.h"
-#include "kernel_struct_unary.h"
-#include "kernel_operator_vec_binary_intf.h"
-#include "kernel_operator_block_sync_intf.h"
+#include "../../../include/basic_api/kernel_tensor.h"
+#include "../../../include/basic_api/kernel_struct_brcb.h"
+#include "../../../include/basic_api/kernel_struct_gather.h"
+#include "../../../include/basic_api/kernel_struct_binary.h"
+#include "../../../include/basic_api/kernel_struct_unary.h"
+#include "../../../include/basic_api/kernel_operator_vec_binary_intf.h"
+#include "../../../include/basic_api/kernel_operator_block_sync_intf.h"
 #include "kernel_operator_vec_gather_impl.h"
 #include "../../../include/basic_api/kernel_operator_vec_brcb_intf.h"
 #include "../../../include/basic_api/kernel_operator_vec_binary_scalar_intf.h"
 #if ASCENDC_CPU_DEBUG
-#include "kernel_check.h"
+#include "../kernel_check.h"
 #endif
 
 #pragma begin_pipe(V)

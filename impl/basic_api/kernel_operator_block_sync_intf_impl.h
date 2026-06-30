@@ -21,19 +21,19 @@
 #define ASCENDC_MODULE_OPERATOR_BLOCK_SYNC_INTERFACE_IMPL_H
 
 #include "kernel_event.h"
-#include "kernel_tensor.h"
-#include "kernel_tpipe.h"
+#include "../../include/basic_api/kernel_tensor.h"
+#include "../../include/basic_api/kernel_tpipe.h"
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_TPIPE_H__
 #endif
-#include "kernel_struct_mm.h"
-#include "kernel_operator_data_copy_intf.h"
+#include "../../include/basic_api/kernel_struct_mm.h"
+#include "../../include/basic_api/kernel_operator_data_copy_intf.h"
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_DATA_COPY_INTF_H__
 #endif
-#include "kernel_operator_sys_var_intf.h"
+#include "../../include/basic_api/kernel_operator_sys_var_intf.h"
 
 #if __NPU_ARCH__ == 1001
 #include "dav_c100/kernel_operator_sync_impl.h"

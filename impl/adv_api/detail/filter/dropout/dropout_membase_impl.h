@@ -22,9 +22,9 @@
 #ifndef IMPL_FILTER_DROPOUT_DROPOUT_MEMBASE_IMPL_H
 #define IMPL_FILTER_DROPOUT_DROPOUT_MEMBASE_IMPL_H
 
-#include "kernel_tensor.h"
-#include "kernel_vec_intf.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_vec_intf.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 #include "../../common/check.h"
 
 namespace AscendC {

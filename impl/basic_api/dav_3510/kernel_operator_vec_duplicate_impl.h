@@ -17,7 +17,7 @@
 #define ASCENDC_MODULE_OPERATOR_VEC_DUPLICATE_IMPL_H
 #include <type_traits>
 #include "kernel_operator_vec_template_impl.h"
-#include "reg_compute/kernel_reg_compute_intf_impl.h"
+#include "../reg_compute/kernel_reg_compute_intf_impl.h"
 
 namespace AscendC {
 template <typename T> constexpr __aicore__ inline void CheckDuplicateSupportedType()

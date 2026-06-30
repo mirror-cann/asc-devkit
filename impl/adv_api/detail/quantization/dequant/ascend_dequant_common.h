@@ -23,7 +23,7 @@
 #ifndef LIB_ASCEND_DEQUANT_ASCEND_DEQUANT_COMMON_H
 #define LIB_ASCEND_DEQUANT_ASCEND_DEQUANT_COMMON_H
 
-#include "include/adv_api/quantization/ascend_dequant_utils.h"
+#include "../../../../../include/adv_api/quantization/ascend_dequant_utils.h"
 
 namespace AscendC {
 } // namespace AscendC

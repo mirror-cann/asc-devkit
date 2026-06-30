@@ -21,8 +21,8 @@
 #endif
 #ifndef IMPL_MATH_LOGICAL_XOR_LOGICAL_XOR_C310_IMPL_H
 #define IMPL_MATH_LOGICAL_XOR_LOGICAL_XOR_C310_IMPL_H
-#include "kernel_basic_intf.h"
-#include "include/adv_api/math/logical_xor_utils.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/adv_api/math/logical_xor_utils.h"
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
 #include "../logical_template/logical_template.h"
 #ifdef ASCENDC_CPU_DEBUG

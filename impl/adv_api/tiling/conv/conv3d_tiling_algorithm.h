@@ -17,7 +17,7 @@
 #define TILING_CONV_CONV3D_TILING_ALGORITHM_H
 
 #include <cstdint>
-#include "include/adv_api/conv/conv3d/conv3d_tiling_base.h"
+#include "../../../../include/adv_api/conv/conv3d/conv3d_tiling_base.h"
 
 namespace Conv3dTilingApi {
 

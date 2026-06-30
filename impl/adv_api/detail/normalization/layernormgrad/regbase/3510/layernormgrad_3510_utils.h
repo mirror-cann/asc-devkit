@@ -22,10 +22,10 @@
 #ifndef IMPL_NORMALIZATION_LAYERNORMGRAD_REGBASE_C310_LAYERNORMGRAD_C310_UTILS_H_
 #define IMPL_NORMALIZATION_LAYERNORMGRAD_REGBASE_C310_LAYERNORMGRAD_C310_UTILS_H_
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../../../include/basic_api/kernel_tensor.h"
 #include "kernel_tiling/kernel_tiling.h"
-#include "include/adv_api/normalization/layernormgrad_utils.h"
+#include "../../../../../../../include/adv_api/normalization/layernormgrad_utils.h"
 
 namespace AscendC {
 

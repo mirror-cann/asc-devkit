@@ -21,8 +21,8 @@
 #endif
 #ifndef IMPL_MATH_COS_OS_V200_IMPL_H
 #define IMPL_MATH_COS_OS_V200_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 
 namespace AscendC {
 __aicore__ inline void CosCast(

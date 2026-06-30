@@ -12,7 +12,7 @@
  * \file swish_tiling.cpp
  * \brief
  */
-#include "include/adv_api/activation/swish_tiling.h"
+#include "../../../../include/adv_api/activation/swish_tiling.h"
 #include <cstdint>
 #include "graph/tensor.h"
 

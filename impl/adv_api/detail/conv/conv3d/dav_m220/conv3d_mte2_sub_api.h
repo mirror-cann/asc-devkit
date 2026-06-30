@@ -17,11 +17,11 @@
 #define API_CONV3D_MTE2_SUB_API_H
 
 #include "../conv3d_util.h"
-#include "kernel_tpipe.h"
-#include "kernel_operator_data_copy_intf.h"
-#include "kernel_operator_mm_intf.h"
-#include "kernel_operator_fixpipe_intf.h"
-#include "kernel_utils.h"
+#include "../../../../../../include/basic_api/kernel_tpipe.h"
+#include "../../../../../../include/basic_api/kernel_operator_data_copy_intf.h"
+#include "../../../../../../include/basic_api/kernel_operator_mm_intf.h"
+#include "../../../../../../include/basic_api/kernel_operator_fixpipe_intf.h"
+#include "../../../../../basic_api/kernel_utils.h"
 
 namespace Conv3dApiFunc {
 

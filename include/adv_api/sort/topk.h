@@ -23,7 +23,7 @@
 
 #include "include/adv_api/sort/topk_utils.h"
 #include "kernel_tensor.h"
-#include "kernel_utils.h"
+#include "../../../impl/basic_api/kernel_utils.h"
 #include "kernel_tiling/kernel_tiling.h"
 #include "../../../impl/adv_api/detail/sort/topk/topk_common_utils.h"
 #ifdef ASCENDC_CPU_DEBUG

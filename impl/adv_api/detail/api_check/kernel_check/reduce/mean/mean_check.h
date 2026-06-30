@@ -23,7 +23,7 @@
 #ifndef IMPL_API_CHECK_KERNEL_CHECK_REDUCE_MEAN_MEAN_CHECK_H_
 #define IMPL_API_CHECK_KERNEL_CHECK_REDUCE_MEAN_MEAN_CHECK_H_
 
-#include "include/adv_api/reduce/mean_utils.h"
+#include "../../../../../../../include/adv_api/reduce/mean_utils.h"
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201)
 #include "mean_check_common.h"
 #else

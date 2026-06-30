@@ -23,7 +23,7 @@
 #define IMPL_API_CHECK_KERNEL_CHECK_ACTIVATION_SOFTMAX_SOFTMAX_FLASHV3_SOFTMAX_FLASHV3_CHECK_H_
 
 #include "kernel_tiling/kernel_tiling.h"
-#include "include/adv_api/activation/softmax_utils.h"
+#include "../../../../../../../../include/adv_api/activation/softmax_utils.h"
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201)
 #include "softmax_flashv3_check_common.h"
 #else

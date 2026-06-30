@@ -13,7 +13,7 @@
  * \brief
  */
 
-#include "include/adv_api/activation/gelu_tiling.h"
+#include "../../../../include/adv_api/activation/gelu_tiling.h"
 
 #include <set>
 

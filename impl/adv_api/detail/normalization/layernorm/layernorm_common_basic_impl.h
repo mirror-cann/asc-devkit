@@ -21,7 +21,7 @@
 #endif
 #ifndef IMPL_NORMALIZATION_LAYERNORM_LAYERNORM_COMMON_BASIC_IMPL_H
 #define IMPL_NORMALIZATION_LAYERNORM_LAYERNORM_COMMON_BASIC_IMPL_H
-#include "include/adv_api/normalization/layernorm_utils.h"
+#include "../../../../../include/adv_api/normalization/layernorm_utils.h"
 #include "layernorm_normal_config.h"
 namespace AscendC {
 constexpr uint32_t MASK_LOW_6BITS = 0x3f;

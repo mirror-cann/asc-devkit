@@ -20,8 +20,8 @@
 #ifndef ASCENDC_MODULE_OPERATOR_CUBE_GROUP_INFO_H
 #define ASCENDC_MODULE_OPERATOR_CUBE_GROUP_INFO_H
 
-#include "utils/kernel_utils_constants.h"
-#include "utils/kernel_utils_cube_group.h"
+#include "../../../utils/kernel_utils_constants.h"
+#include "../../../utils/kernel_utils_cube_group.h"
 
 namespace AscendC {
 

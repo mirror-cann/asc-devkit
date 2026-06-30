@@ -15,8 +15,8 @@
 #include <cstdint>
 #include "graph/tensor.h"
 #include "../../detail/host_log.h"
-#include "tiling/platform/platform_ascendc.h"
-#include "include/adv_api/math/hypot_tiling.h"
+#include "../../../../include/utils/tiling/platform/platform_ascendc.h"
+#include "../../../../include/adv_api/math/hypot_tiling.h"
 
 namespace AscendC {
 namespace {

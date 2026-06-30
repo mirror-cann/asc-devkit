@@ -20,13 +20,13 @@
 
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_CREATEVECINDEX_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_CREATEVECINDEX_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_common.h"
-#include "kernel_tpipe.h"
-#include "kernel_operator_block_sync_intf.h"
+#include "../../../include/basic_api/kernel_tensor.h"
+#include "../../../include/basic_api/kernel_common.h"
+#include "../../../include/basic_api/kernel_tpipe.h"
+#include "../../../include/basic_api/kernel_operator_block_sync_intf.h"
 
 #if ASCENDC_CPU_DEBUG
-#include "kernel_check.h"
+#include "../kernel_check.h"
 #endif
 
 #pragma begin_pipe(V)

@@ -21,7 +21,7 @@
 #define ASCENDC_MODULE_OPERATOR_FIXPIPE_V2_IMPL_H
 
 #include "kernel_operator_set_spr_impl.h"
-#include "kernel_struct_fixpipe.h"
+#include "../../../include/basic_api/kernel_struct_fixpipe.h"
 
 namespace AscendC {
 __aicore__ inline void SetFixPipeClipReluImpl(uint64_t config)

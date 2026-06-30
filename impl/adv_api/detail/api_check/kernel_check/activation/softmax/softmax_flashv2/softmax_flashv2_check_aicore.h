@@ -23,7 +23,7 @@
 #define IMPL_API_CHECK_KERNEL_CHECK_ACTIVATION_SOFTMAX_SOFTMAX_FLASHV2_SOFTMAX_FLASHV2_CHECK_AICORE_H_
 
 #include "kernel_tiling/kernel_tiling.h"
-#include "include/adv_api/activation/softmax_utils.h"
+#include "../../../../../../../../include/adv_api/activation/softmax_utils.h"
 
 namespace AscendC {
 namespace HighLevelApiCheck {

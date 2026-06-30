@@ -21,8 +21,8 @@
 #endif
 #ifndef IMPL_MATH_ROUND_ROUND_V220_IMPL_H
 #define IMPL_MATH_ROUND_ROUND_V220_IMPL_H
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 #include "kernel_tiling/kernel_tiling.h"
 #include "../../common/check.h"
 

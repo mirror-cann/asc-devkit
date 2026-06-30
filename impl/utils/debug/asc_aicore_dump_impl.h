@@ -179,7 +179,7 @@ __aicore__ inline void asc_dump(__cbuf__ T* input, uint32_t desc, uint32_t dump_
 }
 } // namespace __asc_aicore
 #else
-#include "kernel_log.h"
+#include "../../basic_api/kernel_log.h"
 
 namespace __asc_aicore {
 template<typename T>

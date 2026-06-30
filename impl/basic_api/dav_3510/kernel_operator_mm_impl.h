@@ -17,11 +17,11 @@
 #ifndef ASCENDC_MODULE_OPERATOR_MM_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_MM_IMPL_H
 
-#include "kernel_utils.h"
-#include "kernel_struct_aipp.h"
-#include "kernel_struct_mm.h"
-#include "kernel_operator_mm_bitmode_intf.h"
-#include "kernel_operator_sys_var_intf.h"
+#include "../kernel_utils.h"
+#include "../../../include/basic_api/kernel_struct_aipp.h"
+#include "../../../include/basic_api/kernel_struct_mm.h"
+#include "../../../include/basic_api/kernel_operator_mm_bitmode_intf.h"
+#include "../../../include/basic_api/kernel_operator_sys_var_intf.h"
 
 namespace AscendC {
 /* **************************************************************************************************

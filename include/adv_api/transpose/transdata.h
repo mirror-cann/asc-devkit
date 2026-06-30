@@ -18,12 +18,12 @@
 #include "transdata_common.h"
 #include "kernel_tensor.h"
 #include "kernel_basic_intf.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../impl/basic_api/kernel_pop_stack_buffer.h"
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510)
 #include "../../../impl/adv_api/detail/transpose/transdata/transdata_impl.h"
 #endif
 #if ASCENDC_CPU_DEBUG
-#include "kernel_log.h"
+#include "../../../impl/basic_api/kernel_log.h"
 #include <type_traits>
 #endif
 

@@ -21,15 +21,15 @@
 #endif
 #ifndef IMPL_MATH_CUMSUM_CUMSUM_COMMON_IMPL_H
 #define IMPL_MATH_CUMSUM_CUMSUM_COMMON_IMPL_H
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 #include "../../common/check.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/cumsum/cumsum_check.h"
 #endif // ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_api_check.h"
 #if (__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) 
-#include "include/adv_api/math/cumsum_utils.h"
+#include "../../../../../include/adv_api/math/cumsum_utils.h"
 
 namespace AscendC {
 

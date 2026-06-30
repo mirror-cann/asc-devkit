@@ -22,8 +22,8 @@
 #ifndef IMPL_MATH_BITWISE_OR_BITWISE_OR_C310_IMPL_H
 #define IMPL_MATH_BITWISE_OR_BITWISE_OR_C310_IMPL_H
 #include "../bitwise_template/bitwise_template.h"
-#include "kernel_basic_intf.h"
-#include "include/adv_api/math/bitwise_or_utils.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/adv_api/math/bitwise_or_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/bitwise_or/bitwise_or_check.h"
 #endif // ASCENDC_CPU_DEBUG

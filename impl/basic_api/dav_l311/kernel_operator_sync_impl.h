@@ -20,7 +20,7 @@
 #ifndef ASCENDC_MODULE_OPERATOR_SYNC_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_SYNC_IMPL_H
 
-#include "utils/kernel_utils_constants.h"
+#include "../utils/kernel_utils_constants.h"
 
 namespace AscendC {
 

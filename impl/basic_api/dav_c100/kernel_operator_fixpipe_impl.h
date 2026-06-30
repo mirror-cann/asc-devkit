@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_FIXPIPE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_FIXPIPE_IMPL_H
-#include "kernel_struct_fixpipe.h"
+#include "../../../include/basic_api/kernel_struct_fixpipe.h"
 
 namespace AscendC {
 

@@ -22,9 +22,9 @@
 #ifndef LIB_MATH_RINT_IMPL_H
 #define LIB_MATH_RINT_IMPL_H
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
-#include "include/adv_api/math/rint_utils.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/adv_api/math/rint_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/rint/rint_check.h"
 #endif // ASCENDC_CPU_DEBUG

@@ -23,12 +23,12 @@
 #ifndef IMPL_ACTIVATION_SILU_SILU_COMMON_IMPL_H
 #define IMPL_ACTIVATION_SILU_SILU_COMMON_IMPL_H
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 #include "../../api_check/kernel_api_check.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/activation/silu/silu_check.h"
-#include "kernel_log.h"
+#include "../../../../basic_api/kernel_log.h"
 #include <type_traits>
 #endif
 namespace AscendC {

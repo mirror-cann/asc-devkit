@@ -21,7 +21,7 @@
 #ifndef ASCENDC_MODULE_SWAP_MEM_INTF_H
 #define ASCENDC_MODULE_SWAP_MEM_INTF_H
 
-#include "kernel_macros.h"
+#include "../../impl/basic_api/kernel_macros.h"
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include <cstdint>

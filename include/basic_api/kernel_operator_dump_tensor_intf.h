@@ -20,9 +20,9 @@
 #ifndef ASCENDC_MODULE_OPERATOR_DUMP_TENSOR_INTERFACE_H
 #define ASCENDC_MODULE_OPERATOR_DUMP_TENSOR_INTERFACE_H
 
-#include "kernel_macros.h"
+#include "../../impl/basic_api/kernel_macros.h"
 #include "kernel_tensor.h"
-#include "kernel_log.h"
+#include "../../impl/basic_api/kernel_log.h"
 #include "utils/debug/asc_assert.h"
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1

@@ -21,7 +21,7 @@
 
 #ifndef ASCENDC_MODULE_OPERATOR_MM_BASE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_MM_BASE_IMPL_H
-#include "kernel_tensor.h"
+#include "../../include/basic_api/kernel_tensor.h"
 #include "kernel_npu_debug.h"
 
 #if __NPU_ARCH__ == 1001
@@ -43,7 +43,7 @@
 #endif
 #include "kernel_operator_mm_check.h"
 #include "kernel_operator_mm_load2d_impl.h"
-#include "kernel_struct_mm.h"
+#include "../../include/basic_api/kernel_struct_mm.h"
 namespace AscendC {
 struct IsResetLoad3dConfig {
     __aicore__ constexpr IsResetLoad3dConfig(const bool isSetFMatrixIn, const bool isSetPaddingIn)

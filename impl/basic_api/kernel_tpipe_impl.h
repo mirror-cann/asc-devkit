@@ -30,9 +30,9 @@
 #include "kernel_tquesync_impl.h"
 #include "kernel_tbufpool_impl.h"
 #include "kernel_tbuf_impl.h"
-#include "kernel_struct_data_copy.h"
+#include "../../include/basic_api/kernel_struct_data_copy.h"
 #include "kernel_utils.h"
-#include "kernel_operator_sys_var_intf.h"
+#include "../../include/basic_api/kernel_operator_sys_var_intf.h"
 
 #if defined (ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include <cstdint>

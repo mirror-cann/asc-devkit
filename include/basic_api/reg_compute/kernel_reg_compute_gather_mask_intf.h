@@ -45,7 +45,7 @@ __simd_callee__ inline void Gather(S& dstReg, S& srcReg, V& indexReg);
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || \
     (__NPU_ARCH__ == 3113)) || defined(__ASC_NPU_HOST__)
-#include "../../impl/basic_api/reg_compute/kernel_reg_compute_gather_mask_intf_impl.h"
+#include "../../../impl/basic_api/reg_compute/kernel_reg_compute_gather_mask_intf_impl.h"
 #endif
 #endif // ASCENDC_MODULE_REG_COMPUTE_COPY_INTERFACE_H
 
@@ -53,4 +53,3 @@ __simd_callee__ inline void Gather(S& dstReg, S& srcReg, V& indexReg);
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_GATHER_MASK_INTF_H__
 #endif
-

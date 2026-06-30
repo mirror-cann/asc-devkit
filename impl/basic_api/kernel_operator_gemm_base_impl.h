@@ -22,12 +22,12 @@
 #if ASCENDC_CPU_DEBUG
 #include <unordered_set>
 #endif
-#include "kernel_tensor.h"
+#include "../../include/basic_api/kernel_tensor.h"
 #include "kernel_operator_mm_base_impl.h"
-#include "kernel_struct_conv2d.h"
-#include "kernel_struct_mm.h"
-#include "kernel_tpipe.h"
-#include "kernel_operator_block_sync_intf.h"
+#include "../../include/basic_api/kernel_struct_conv2d.h"
+#include "../../include/basic_api/kernel_struct_mm.h"
+#include "../../include/basic_api/kernel_tpipe.h"
+#include "../../include/basic_api/kernel_operator_block_sync_intf.h"
 
 namespace AscendC {
 #if ASCENDC_CPU_DEBUG

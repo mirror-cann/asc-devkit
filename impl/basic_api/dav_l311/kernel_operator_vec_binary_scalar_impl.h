@@ -19,9 +19,9 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_BINARY_SCALAR_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_BINARY_SCALAR_IMPL_H
-#include "kernel_utils.h"
+#include "../kernel_utils.h"
 #include "kernel_operator_common_impl.h"
-#include "kernel_struct_unary.h"
+#include "../../../include/basic_api/kernel_struct_unary.h"
 
 namespace AscendC {
 #define BIT_BY_BIT_FUNC(OP_NAME, DATA_TYPE, dst, src, scalarValue, mask, repeatTime, repeatParams)                 \

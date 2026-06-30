@@ -23,7 +23,7 @@
 #define IMPL_API_CHECK_KERNEL_CHECK_ACTIVATION_SOFTMAX_SIMPLE_SOFTMAX_SIMPLE_SOFTMAX_CHECK_H_
 
 #include "kernel_tiling/kernel_tiling.h"
-#include "include/adv_api/activation/softmax_utils.h"
+#include "../../../../../../../../include/adv_api/activation/softmax_utils.h"
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3002)
 #include "simple_softmax_check_common.h"
 #else

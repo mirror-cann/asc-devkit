@@ -17,8 +17,8 @@
 #define ASCENDC_MODULE_OPERATOR_VEC_REDUCE_IMPL_H
 
 #include "kernel_operator_vec_template_impl.h"
-#include "kernel_pop_stack_buffer.h"
-#include "reg_compute/kernel_reg_compute_intf.h"
+#include "../kernel_pop_stack_buffer.h"
+#include "../../../include/basic_api/reg_compute/kernel_reg_compute_intf.h"
 
 namespace AscendC {
 

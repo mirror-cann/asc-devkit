@@ -20,8 +20,8 @@
 #ifndef ASCENDC_SCALAR_CONVERT_H
 #define ASCENDC_SCALAR_CONVERT_H
 #include "kernel_type_conversion_utils.h"
-#include "utils/std/type_traits/is_same.h"
-#include "utils/std/type_traits/enable_if.h"
+#include "../utils/std/type_traits/is_same.h"
+#include "../utils/std/type_traits/enable_if.h"
 
 namespace AscendC {
 #if defined(__NPU_ARCH__) &&                                    \

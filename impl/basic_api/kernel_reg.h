@@ -21,7 +21,7 @@
 #define ASCENDC_KERNEL_REG_IMPL_H
 
 #include "kernel_utils.h"
-#include "kernel_struct_aipp.h"
+#include "../../include/basic_api/kernel_struct_aipp.h"
 
 namespace AscendC {
 constexpr uint64_t MASK_PLACEHOLDER = 0;

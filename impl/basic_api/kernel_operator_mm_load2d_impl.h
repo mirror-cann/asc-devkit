@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_MM_LOAD2D_H
 #define ASCENDC_MODULE_OPERATOR_MM_LOAD2D_H
-#include "kernel_struct_mm.h"
+#include "../../include/basic_api/kernel_struct_mm.h"
 
 namespace AscendC {
 /* **************************************************************************************************

@@ -21,7 +21,7 @@
 #ifndef IMPL_API_CHECK_KERNEL_CHECK_QUANTIZATION_QUANT_QUANT_CHECK_AICORE_H_
 #define IMPL_API_CHECK_KERNEL_CHECK_QUANTIZATION_QUANT_QUANT_CHECK_AICORE_H_
 
-#include "include/adv_api/quantization/ascend_quant_utils.h"
+#include "../../../../../../../include/adv_api/quantization/ascend_quant_utils.h"
 
 namespace AscendC {
 namespace HighLevelApiCheck {

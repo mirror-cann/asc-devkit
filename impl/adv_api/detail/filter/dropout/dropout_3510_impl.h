@@ -22,9 +22,9 @@
 #ifndef LIB_DROPOUT_DROPOUT_C310_IMPL_H
 #define LIB_DROPOUT_DROPOUT_C310_IMPL_H
 
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 
 namespace AscendC {
 namespace Internal {

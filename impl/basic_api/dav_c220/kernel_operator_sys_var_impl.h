@@ -20,7 +20,7 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_SYS_VAR_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_SYS_VAR_IMPL_H
-#include "kernel_utils.h"
+#include "../kernel_utils.h"
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include <ctime>
 #endif // ASCENDC_CPU_DEBUG

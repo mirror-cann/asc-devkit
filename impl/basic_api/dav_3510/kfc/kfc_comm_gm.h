@@ -20,17 +20,17 @@
 #ifndef KFC_COMM_GM_H
 #define KFC_COMM_GM_H
  
-#include "kernel_common.h"
-#include "dav_3510/kernel_operator_common_impl.h"
-#include "dav_3510/kernel_operator_set_atomic_impl.h"
-#include "dav_3510/kernel_tpipe_impl_c310.h"
+#include "../../../../include/basic_api/kernel_common.h"
+#include "../kernel_operator_common_impl.h"
+#include "../kernel_operator_set_atomic_impl.h"
+#include "../kernel_tpipe_impl_c310.h"
 #include "kfc_log.h"
-#include "kernel_tpipe.h"
+#include "../../../../include/basic_api/kernel_tpipe.h"
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_TPIPE_H__
 #endif
-#include "kernel_operator_block_sync_intf.h"
+#include "../../../../include/basic_api/kernel_operator_block_sync_intf.h"
  
 namespace AscendC {
 #define MSG_POS __gm__

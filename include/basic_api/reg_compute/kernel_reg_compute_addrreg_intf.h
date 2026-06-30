@@ -25,7 +25,7 @@
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 2103) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3103) || \
            (__NPU_ARCH__ == 3113))
-#include "kernel_macros.h"
+#include "../../../impl/basic_api/kernel_macros.h"
 #endif
 
 namespace AscendC {
@@ -47,7 +47,7 @@ __simd_callee__ inline AddrReg CreateAddrReg(uint16_t index0, uint32_t stride0, 
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || \
     (__NPU_ARCH__ == 3113)) || defined(__ASC_NPU_HOST__)
-#include "../../impl/basic_api/reg_compute/kernel_reg_compute_addrreg_intf_impl.h"
+#include "../../../impl/basic_api/reg_compute/kernel_reg_compute_addrreg_intf_impl.h"
 #endif
 #endif // ASCENDC_MODULE_REG_COMPUTE_ADDRREG_INTERFACE_H
 
@@ -55,4 +55,3 @@ __simd_callee__ inline AddrReg CreateAddrReg(uint16_t index0, uint32_t stride0, 
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_ADDRREG_INTF_H__
 #endif
-

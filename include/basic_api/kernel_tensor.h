@@ -20,14 +20,14 @@
 #ifndef KERNEL_TENSOR_H
 #define KERNEL_TENSOR_H
 
-#include "kernel_macros.h"
-#include "common_types.h"
-#include "kernel_event.h"
-#include "kernel_log.h"
-#include "kernel_operator_tensor_trait.h"
+#include "../../impl/basic_api/kernel_macros.h"
+#include "../../impl/basic_api/common_types.h"
+#include "../../impl/basic_api/kernel_event.h"
+#include "../../impl/basic_api/kernel_log.h"
+#include "../../impl/basic_api/kernel_operator_tensor_trait.h"
 #include "kernel_struct_data_copy.h"
-#include "kernel_tensor_base.h"
-#include "utils/kernel_utils_macros.h"
+#include "../../impl/basic_api/kernel_tensor_base.h"
+#include "../../impl/basic_api/utils/kernel_utils_macros.h"
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include <cstdint>

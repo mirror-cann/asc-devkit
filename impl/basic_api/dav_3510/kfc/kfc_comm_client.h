@@ -21,7 +21,7 @@
 #define __KERNEL_KFC_COMM_CLIENT_H__
 
 #include "kfc_comm.h"
-#include "kernel_tpipe.h"
+#include "../../../../include/basic_api/kernel_tpipe.h"
 
 namespace AscendC {
 

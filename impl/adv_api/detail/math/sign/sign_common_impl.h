@@ -22,10 +22,10 @@
 #ifndef IMPL_MATH_SIGN_SIGN_COMMON_IMPL_H
 #define IMPL_MATH_SIGN_SIGN_COMMON_IMPL_H
 #include <type_traits>
-#include "kernel_basic_intf.h"
-#include "kernel_log.h"
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../basic_api/kernel_log.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 #include "../../common/check.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/sign/sign_check.h"

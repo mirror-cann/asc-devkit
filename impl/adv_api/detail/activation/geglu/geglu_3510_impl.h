@@ -23,8 +23,8 @@
 #ifndef IMPL_ACTIVATION_GEGLU_GEGLU_IMPL_C310_H
 #define IMPL_ACTIVATION_GEGLU_GEGLU_IMPL_C310_H
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 #include "../../common/check.h"
 #include "../../common/common.h"
 

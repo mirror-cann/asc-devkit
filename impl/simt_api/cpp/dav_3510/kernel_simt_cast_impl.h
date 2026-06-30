@@ -15,7 +15,7 @@
 #ifndef IMPL_SIMT_API_CPP_DAV_C310_KERNEL_SIMT_CAST_IMPL_H
 #define IMPL_SIMT_API_CPP_DAV_C310_KERNEL_SIMT_CAST_IMPL_H
 
-#include "kernel_utils.h"
+#include "../../../basic_api/kernel_utils.h"
 #include "impl/simt_api/cpp/dav_3510/kernel_simt_common_impl.h"
 #include "impl/simt_api/cpp/dav_3510/kernel_simt_cast_sat_impl.h"
 

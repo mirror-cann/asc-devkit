@@ -12,7 +12,7 @@
  * \file swiglu_tiling.cpp
  * \brief
  */
-#include "include/adv_api/activation/swiglu_tiling.h"
+#include "../../../../include/adv_api/activation/swiglu_tiling.h"
 
 #include <cstdint>
 

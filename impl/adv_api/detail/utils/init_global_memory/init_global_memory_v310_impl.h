@@ -23,8 +23,8 @@
 #ifndef IMPL_UTILS_INIT_GLOBAL_MEMORY_INIT_GLOBAL_MEMORY_V310_IMPL_H
 #define IMPL_UTILS_INIT_GLOBAL_MEMORY_INIT_GLOBAL_MEMORY_V310_IMPL_H
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 
 namespace AscendC {
 template <typename T>

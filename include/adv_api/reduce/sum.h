@@ -31,7 +31,7 @@
 #include "../../../impl/adv_api/detail/reduce/sum/sum_common_impl.h"
 #endif
 #if ASCENDC_CPU_DEBUG
-#include "kernel_log.h"
+#include "../../../impl/basic_api/kernel_log.h"
 #include <type_traits>
 #endif
 namespace AscendC {

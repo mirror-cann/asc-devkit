@@ -20,7 +20,7 @@
 #ifndef ADV_API_CONV_CONV3D_CONV3D_INTF_H
 #define ADV_API_CONV_CONV3D_CONV3D_INTF_H
 
-#include "kernel_utils.h"
+#include "../../../../impl/basic_api/kernel_utils.h"
 #include "../../../../impl/adv_api/detail/conv/conv3d/conv3d_util.h"
 #include "../../../../impl/adv_api/detail/conv/conv3d/conv3d_common_func.h"
 #include "../../../../impl/adv_api/detail/conv/common/conv_forward_common_func.h"

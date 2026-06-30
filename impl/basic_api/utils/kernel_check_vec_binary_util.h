@@ -22,7 +22,7 @@
 #define ASCENDC_CHECK_VEC_BINARY_UTIL_H
 #if ASCENDC_CPU_DEBUG
 #include <string>
-#include "kernel_utils.h"
+#include "../kernel_utils.h"
 namespace AscendC {
 namespace check {
 
@@ -58,7 +58,7 @@ struct VecBinaryApiParams {
         src1Pos = static_cast<uint8_t>(GetPhyType(static_cast<TPosition>(src1PosIn)));
     }
 
-    // �ⲿ�����޸ģ�����logic_pos�����������ڲ�����log_pos,ԭ�е�pos��������ڲ�ת��
+    // 外部参数修改，传入logic_pos，但是新增内部新增log_pos,原有的pos保留，在内部转换
     VecBinaryApiParams(uint64_t dstAddrIn, uint64_t src0AddrIn, uint64_t src1AddrIn, uint32_t dstDtypeBytesIn,
         uint32_t src0DtypeBytesIn, uint32_t src1DtypeBytesIn, uint64_t dstSizeIn, uint64_t src0SizeIn,
         uint64_t src1SizeIn, uint8_t dstPosIn, uint8_t src0PosIn, uint8_t src1PosIn, uint32_t count)

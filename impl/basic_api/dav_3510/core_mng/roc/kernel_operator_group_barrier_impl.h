@@ -19,9 +19,9 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_GROUP_BARRIER_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_GROUP_BARRIER_IMPL_H
-#include "core_mng/roc/kernel_operator_group_barrier_intf.h"
-#include "kernel_process_lock.h"
-#include "dav_3510/kernel_operator_data_copy_impl.h"
+#include "../../../../../include/basic_api/core_mng/roc/kernel_operator_group_barrier_intf.h"
+#include "../../../kernel_process_lock.h"
+#include "../../kernel_operator_data_copy_impl.h"
 namespace AscendC {
 __aicore__ inline int64_t GetBlockNum();
 template <PipeMode pipeMode>

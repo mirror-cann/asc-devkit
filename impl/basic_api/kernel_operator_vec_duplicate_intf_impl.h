@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_DUPLICATE_INTERFACE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_DUPLICATE_INTERFACE_IMPL_H
-#include "kernel_tensor.h"
+#include "../../include/basic_api/kernel_tensor.h"
 #include "kernel_check.h"
 #include "kernel_npu_debug.h"
 #include "mstx_local_tensor_info.h"
@@ -35,7 +35,7 @@
 #elif __NPU_ARCH__ == 3102
 #include "dav_m310/kernel_operator_vec_duplicate_impl.h"
 #elif __NPU_ARCH__ == 3510
-#include "reg_compute/kernel_reg_compute_intf.h"
+#include "../../include/basic_api/reg_compute/kernel_reg_compute_intf.h"
 #include "dav_3510/kernel_operator_vec_duplicate_impl.h"
 #elif __NPU_ARCH__ == 3003
 #include "dav_l300/kernel_operator_vec_duplicate_impl.h"

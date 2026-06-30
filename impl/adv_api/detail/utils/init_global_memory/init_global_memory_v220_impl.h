@@ -23,8 +23,8 @@
 #ifndef IMPL_UTILS_INIT_GLOBAL_MEMORY_INIT_GLOBAL_MEMORY_V220_IMPL_H
 #define IMPL_UTILS_INIT_GLOBAL_MEMORY_INIT_GLOBAL_MEMORY_V220_IMPL_H
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/utils/init_global_memory/init_global_memory_check.h"
 #endif // ASCENDC_CPU_DEBUG

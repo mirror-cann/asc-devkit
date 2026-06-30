@@ -23,9 +23,9 @@
 #ifndef IMPL_QUANTIZATION_ANTIQUANT_ASCEND_ANTIQUANT_L300_IMPL_H
 #define IMPL_QUANTIZATION_ANTIQUANT_ASCEND_ANTIQUANT_L300_IMPL_H
 
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 #include "ascend_antiquant_common.h"
 #include "../../common/check.h"
 

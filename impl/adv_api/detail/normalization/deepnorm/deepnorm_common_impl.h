@@ -22,8 +22,8 @@
 #ifndef IMPL_NORMALIZATION_DEEPNORM_DEEPNORM_COMMON_IMPL_H
 #define IMPL_NORMALIZATION_DEEPNORM_DEEPNORM_COMMON_IMPL_H
 
-#include "kernel_tensor.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/normalization/deepnorm/deepnorm_check.h"
 #endif // ASCENDC_CPU_DEBUG

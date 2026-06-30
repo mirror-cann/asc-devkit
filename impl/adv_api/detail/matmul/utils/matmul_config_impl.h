@@ -21,7 +21,7 @@
 #ifndef IMPL_MATMUL_UTILS_MATMUL_CONFIG_IMPL_H
 #define IMPL_MATMUL_UTILS_MATMUL_CONFIG_IMPL_H
 
-#include "include/adv_api/matmul/matmul_config.h"
+#include "../../../../../include/adv_api/matmul/matmul_config.h"
 
 template <typename ArgType>
 __aicore__ inline constexpr void GetMMConfigImpl(MatmulConfig& cfg, ArgType arg) {

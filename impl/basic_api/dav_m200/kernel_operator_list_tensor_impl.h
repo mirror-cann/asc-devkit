@@ -20,7 +20,7 @@
 #ifndef ASCENDC_MODULE_OPERATOR_LIST_TENSOR_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_LIST_TENSOR_IMPL_H
 
-#include "kernel_operator.h"
+#include "../../../include/kernel_operator.h"
 
 namespace AscendC {
 constexpr int64_t INIT_PRELOAD_OFFSET = -256;

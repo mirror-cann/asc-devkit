@@ -20,13 +20,13 @@
 #ifndef ASCENDC_MODULE_OPERATOR_DUMP_TENSOR_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_DUMP_TENSOR_IMPL_H
 
-#include "kernel_tpipe_impl.h"
+#include "../kernel_tpipe_impl.h"
 #include "kernel_operator_common_impl.h"
 #include "kernel_operator_data_copy_impl.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../kernel_pop_stack_buffer.h"
 #include "kernel_operator_print_impl.h"
-#include "impl/utils/debug/asc_aicore_dump_impl.h"
-#include "impl/utils/debug/asc_aicore_time_impl.h"
+#include "../../utils/debug/asc_aicore_dump_impl.h"
+#include "../../utils/debug/asc_aicore_time_impl.h"
 
 namespace AscendC {
 template <typename T>

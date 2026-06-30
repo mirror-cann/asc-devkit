@@ -12,13 +12,13 @@
  * \file ascend_dequant_tiling_impl.cpp
  * \brief
  */
-#include "include/adv_api/quantization/ascend_dequant_tiling.h"
+#include "../../../../include/adv_api/quantization/ascend_dequant_tiling.h"
 
 #include <cstdint>
 
 #include "graph/tensor.h"
 #include "../../detail/host_log.h"
-#include "tiling/platform/platform_ascendc.h"
+#include "../../../../include/utils/tiling/platform/platform_ascendc.h"
 
 namespace AscendC {
 namespace {

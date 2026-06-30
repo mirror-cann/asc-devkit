@@ -21,13 +21,13 @@
 #ifndef ASCENDC_MODULE_OPERATOR_CUBE_GROUP_INTERFACE_H
 #define ASCENDC_MODULE_OPERATOR_CUBE_GROUP_INTERFACE_H
 
-#include "kernel_macros.h"
-#include "utils/kernel_utils_macros.h"
-#include "utils/kernel_utils_cube_group.h"
+#include "../../../../impl/basic_api/kernel_macros.h"
+#include "../../../../impl/basic_api/utils/kernel_utils_macros.h"
+#include "../../../../impl/basic_api/utils/kernel_utils_cube_group.h"
 #if __NPU_ARCH__ == 2201
-#include "dav_c220/core_mng/roc/kernel_operator_cube_group_info.h"
+#include "../../../../impl/basic_api/dav_c220/core_mng/roc/kernel_operator_cube_group_info.h"
 #elif __NPU_ARCH__ == 3510
-#include "dav_3510/core_mng/roc/kernel_operator_cube_group_info.h"
+#include "../../../../impl/basic_api/dav_3510/core_mng/roc/kernel_operator_cube_group_info.h"
 #endif
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1

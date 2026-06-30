@@ -8,14 +8,14 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#include "include/adv_api/sort/topk_tilingdata.h"
-#include "include/adv_api/sort/topk_tiling.h"
+#include "../../../../include/adv_api/sort/topk_tilingdata.h"
+#include "../../../../include/adv_api/sort/topk_tiling.h"
 
 #include <set>
 #include <map>
-#include "include/adv_api/sort/sort_tiling_intf.h"
+#include "../../../../include/adv_api/sort/sort_tiling_intf.h"
 #include "../../detail/host_log.h"
-#include "tiling/platform/platform_ascendc.h"
+#include "../../../../include/utils/tiling/platform/platform_ascendc.h"
 #include "register/tilingdata_base.h"
 
 namespace optiling {

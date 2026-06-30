@@ -21,7 +21,7 @@
 #define ASCENDC_MODULE_OPERATOR_VEC_DUPLICATE_IMPL_H
 #include <type_traits>
 #include "kernel_operator_common_impl.h"
-#include "kernel_common.h"
+#include "../../../include/basic_api/kernel_common.h"
 
 namespace AscendC {
 template <typename T> constexpr __aicore__ inline void CheckDuplicateSupportedType()

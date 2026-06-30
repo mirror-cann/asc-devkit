@@ -22,9 +22,9 @@
 #ifndef LIB_MATH_BITWISE_AND_IMPL_H
 #define LIB_MATH_BITWISE_AND_IMPL_H
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
-#include "include/adv_api/math/bitwise_and_utils.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/adv_api/math/bitwise_and_utils.h"
 #include "../bitwise_template/bitwise_template.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/bitwise_and/bitwise_and_check.h"

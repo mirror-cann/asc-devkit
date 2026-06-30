@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_UTILS_DUMP_CONSTANTS_H
 #define ASCENDC_MODULE_UTILS_DUMP_CONSTANTS_H
-#include "utils/kernel_utils_ceil_oom_que.h"
+#include "kernel_utils_ceil_oom_que.h"
 namespace AscendC {
 const int32_t ONE_DUMP_BACKUP_SIZE = 1024;
 const int32_t DUMP_UB_SIZE = 256;

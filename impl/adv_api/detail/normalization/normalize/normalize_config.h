@@ -22,7 +22,7 @@
 #ifndef LIB_NORMALIZATION_NORMALIZE_CONFIG_H
 #define LIB_NORMALIZATION_NORMALIZE_CONFIG_H
 
-#include "include/adv_api/normalization/normalize_utils.h"
+#include "../../../../../include/adv_api/normalization/normalize_utils.h"
 
 namespace AscendC {
 __aicore__ constexpr NormalizeConfig GetNormalizeConfig(bool isNoBeta, bool isNoGamma)

@@ -12,7 +12,7 @@
  * \file sigmoid_tiling_impl.cpp
  * \brief
  */
-#include "include/adv_api/activation/sigmoid_tiling.h"
+#include "../../../../include/adv_api/activation/sigmoid_tiling.h"
 
 #include <cstdint>
 #include <set>

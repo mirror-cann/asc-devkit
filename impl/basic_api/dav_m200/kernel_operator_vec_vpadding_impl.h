@@ -19,8 +19,8 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_VPADDING_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_VPADDING_IMPL_H
-#include "kernel_utils.h"
-#include "kernel_struct_unary.h"
+#include "../kernel_utils.h"
+#include "../../../include/basic_api/kernel_struct_unary.h"
 
 namespace AscendC {
 

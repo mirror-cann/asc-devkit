@@ -23,8 +23,8 @@
 #include <cmath>
 #include <array>
 #include <vector>
-#include "include/adv_api/matmul/matmul_tiling.h"
-#include "include/adv_api/matmul/matmul_tiling_base.h"
+#include "../../../../include/adv_api/matmul/matmul_tiling.h"
+#include "../../../../include/adv_api/matmul/matmul_tiling_base.h"
 
 namespace matmul_tiling {
 constexpr int32_t DB_ON = 2;

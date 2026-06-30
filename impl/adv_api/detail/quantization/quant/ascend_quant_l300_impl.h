@@ -22,9 +22,9 @@
 
 #ifndef LIB_ASCEND_QUANT_ASCEND_QUANT_L300_IMPL_H
 #define LIB_ASCEND_QUANT_ASCEND_QUANT_L300_IMPL_H
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 #include "kernel_tiling/kernel_tiling.h"
-#include "include/adv_api/quantization/ascend_quant_utils.h"
+#include "../../../../../include/adv_api/quantization/ascend_quant_utils.h"
 #include "../../common/check.h"
 
 namespace AscendC {

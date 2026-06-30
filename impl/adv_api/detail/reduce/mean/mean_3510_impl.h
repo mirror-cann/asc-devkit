@@ -23,9 +23,9 @@
 #ifndef IMPL_REDUCE_MEAN_C310_IMPL_H
 #define IMPL_REDUCE_MEAN_C310_IMPL_H
 
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
-#include "include/adv_api/reduce/mean_utils.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/adv_api/reduce/mean_utils.h"
 #include "../../common/common.h"
 
 namespace AscendC {

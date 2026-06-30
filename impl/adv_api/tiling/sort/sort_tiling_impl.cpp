@@ -12,11 +12,11 @@
 #include <set>
 #include <map>
 
-#include "include/adv_api/sort/sort_tiling_intf.h"
+#include "../../../../include/adv_api/sort/sort_tiling_intf.h"
 #include "graph/tensor.h"
 #include "graph/types.h"
 #include "../../detail/host_log.h"
-#include "tiling/platform/platform_ascendc.h"
+#include "../../../../include/utils/tiling/platform/platform_ascendc.h"
 
 namespace AscendC {
 namespace {

@@ -21,7 +21,7 @@
 #define ASCENDC_CHECK_VEC_PADDING_UTIL_H
 #if ASCENDC_CPU_DEBUG
 #include <string>
-#include "kernel_utils.h"
+#include "../kernel_utils.h"
 namespace AscendC {
 namespace check {
 struct VectorPaddingApiParams {

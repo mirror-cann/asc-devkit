@@ -21,7 +21,7 @@
 #ifndef IMPL_API_CHECK_KERNEL_CHECK_NORMALIZATION_NORMALIZE_NORMALIZE_CHECK_AICORE_H_
 #define IMPL_API_CHECK_KERNEL_CHECK_NORMALIZATION_NORMALIZE_NORMALIZE_CHECK_AICORE_H_
 
-#include "include/adv_api/normalization/normalize_utils.h"
+#include "../../../../../../../include/adv_api/normalization/normalize_utils.h"
 
 namespace AscendC {
 namespace HighLevelApiCheck {

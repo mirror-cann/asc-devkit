@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_CUBE_GROUP_HANDLE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_CUBE_GROUP_HANDLE_IMPL_H
-#include "core_mng/roc/kernel_operator_cube_group_intf.h"
+#include "../../../../../include/basic_api/core_mng/roc/kernel_operator_cube_group_intf.h"
 namespace AscendC {
 __aicore__ inline KfcWorkspace::KfcWorkspace(GM_ADDR workspace)
 {

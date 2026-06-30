@@ -90,7 +90,7 @@ asc-devkit:
       - impl/tensor_api/arch/vector/**/routing.h
       - impl/basic_api/dav_c310/kernel_operator_proposal_impl.h
       - impl/basic_api/dav_c310/kfc/kfc_comm_server.h
-      - impl/adv_api/detail/reduce/reduce_mean/reduce_mean_3510_impl.h
+      - impl/adv_api/detail/reduce/**/*_3510_impl.h
       - impl/basic_api/dav_c310/kfc/kfc_comm_client.h
       - impl/basic_api/dav_3510/kernel_operator_reg_others_impl.h
       - impl/basic_api/kernel_operator_mm_bitmode_struct.h
@@ -105,18 +105,44 @@ asc-devkit:
       - impl/basic_api/dav_3510/core_mng/roc/kernel_operator_cube_group_info.h
       - impl/basic_api/kernel_operator_list_tensor_intf_impl.h
       - impl/basic_api/dav_3510/kernel_operator_determine_compute_sync_impl.h
-      - tests/api/basic_api/ascendc_header_checker/kernel_operator_vec_gather_intf.cpp
       - impl/basic_api/utils/kernel_utils_mode.h
       - impl/basic_api/utils/kernel_check_vec_select_util.h
+      - impl/basic_api/utils/kernel_utils_dump_constants.h
+      - impl/basic_api/utils/kernel_check_func.h
       - impl/basic_api/dav_3510/kernel_operator_vec_gather_impl.h
       - impl/basic_api/kernel_operator_vec_gather_intf_impl.h
       - impl/basic_api/dav_c100/kernel_operator_vec_gather_impl.h
+      - impl/basic_api/dav_c100/kernel_operator_cache_impl.h
+      - impl/basic_api/dav_c100/kernel_operator_list_tensor_impl.h
+      - impl/basic_api/dav_c100/kernel_operator_vec_mulcast_impl.h
+      - impl/basic_api/dav_c100/kernel_operator_vec_reduce_impl.h
       - impl/basic_api/dav_m200/kernel_operator_vec_gather_impl.h
-      - impl/basic_api/utils/kernel_check_func.h
-      - include/basic_api/kernel_operator_vec_gather_intf.h
+      - impl/basic_api/dav_m200/kernel_operator_cache_impl.h
+      - impl/basic_api/dav_m200/kernel_operator_common_impl.h
       - impl/basic_api/dav_c220/kernel_operator_vec_gather_impl.h
+      - impl/basic_api/dav_c220/core_mng/roc/*.h
+      - impl/basic_api/dav_c220/kernel_operator_vec_vpadding_impl.h
+      - impl/basic_api/dav_c220/kernel_operator_cache_impl.h
       - impl/basic_api/dav_m300/kernel_operator_vec_gather_impl.h
+      - impl/basic_api/dav_m300/kernel_operator_vec_vpadding_impl.h
+      - impl/basic_api/dav_m300/kernel_operator_determine_compute_sync_impl.h
+      - impl/basic_api/dav_m300/kernel_operator_vec_bilinearinterpolation_impl.h
+      - impl/basic_api/dav_m300/kernel_operator_cache_impl.h
+      - impl/basic_api/dav_c100/kernel_operator_vec_*_impl.h
+      - impl/basic_api/dav_c100/kernel_operator_common_impl.h
+      - impl/basic_api/dav_c100/kernel_operator_determine_compute_sync_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_vec_*_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_mm_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_data_copy_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_determine_compute_sync_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_cache_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_sys_var_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_fixpipe_impl.h
+      - impl/basic_api/dav_3510/kfc/kfc_comm.h
       - impl/simt_api/cpp/kernel_simt_print_intf_impl.h
+      - impl/simt_api/cpp/dav_3510/kernel_simt_atomic_impl.h
+      - impl/simt_api/cpp/dav_3510/kernel_simt_warp_level_impl.h
+      - impl/simt_api/cpp/dav_3510/kernel_simt_bessel_impl.h
       - impl/adv_api/detail/matmul/stage/copy_cube_in/copy_tile_to_cube/copy_lut_to_ub.h
       - impl/adv_api/detail/matmul/stage/split/load_to_l0_utils.h
       - impl/basic_api/dav_3510/kernel_tpipe_impl_c310.h
@@ -126,11 +152,42 @@ asc-devkit:
       - impl/adv_api/detail/matmul/resource/cube_in_buffer/cube_in_buffer.h
       - impl/basic_api/kernel_operator_intf_impl.h
       - impl/adv_api/detail/sort/topk/topk_common_utils.h
-      - impl/basic_api/utils/kernel_utils_dump_constants.h
       - impl/adv_api/detail/conv_backprop/conv3d_backprop_filter/conv3d_bp_filter_impl_base.h
       - impl/adv_api/detail/matmul/stage/copy_cube_in/copy_tile_to_cube/data_copy_wrapper.h
       - impl/basic_api/utils/kernel_utils_cube_group.h
       - impl/basic_api/dav_c220/core_mng/roc/kernel_operator_cube_group_info.h
+      - impl/basic_api/dav_3510/kernel_operator_print_impl.h
+      - impl/adv_api/detail/matmul/utils/matmul_config_impl.h
+      - impl/adv_api/detail/matmul/utils/matmul_type_def.h
+      - impl/adv_api/detail/matmul/resource/cube_out_buffer/cube_out_buffer_co1_shared.h
+      - impl/adv_api/detail/filter/dropout/*.h
+      - impl/adv_api/detail/reduce/*_3510_impl.h
+      - impl/adv_api/detail/sort/sort_common_utils.h
+      - impl/adv_api/detail/sort/sort/sort_impl.h
+      - impl/adv_api/detail/sort/topk/*.h
+      - impl/adv_api/detail/api_check/**/*_aicore.h
+      - impl/adv_api/detail/api_check/**/*_c310.h
+      - impl/adv_api/detail/api_check/kernel_check/normalization/layernorm/layernorm_check_310.h
+      - impl/adv_api/detail/conv/conv3d/dav_m220/conv3d_mte2_sub_api.h
+      - impl/adv_api/detail/conv/conv3d/dav_m220/conv3d_mte2_pointwise_sub_api.h
+      - impl/adv_api/detail/conv/conv3d/dav_m220/conv3d_groupopt_sub_api.h
+      - impl/adv_api/detail/conv/conv3d/conv3d_api_impl.h
+      - impl/adv_api/detail/conv/conv3d/conv3d_util.h
+      - impl/adv_api/detail/conv/conv3d/conv3d_common_init_func.h
+      - impl/adv_api/detail/conv/conv3d/conv3d_common_set_func.h
+      - impl/adv_api/detail/conv/common/conv_*_util.h
+      - impl/adv_api/detail/conv_backprop/common/conv3d_bp_util.h
+      - impl/adv_api/detail/conv_backprop/conv3d_backprop_input/dav_v220/conv3d_bp_kernel_split.h
+      - impl/adv_api/detail/conv_backprop/conv3d_backprop_input/*.h
+      - impl/adv_api/detail/conv_backprop/conv3d_backprop_filter/*.h
+      - impl/adv_api/detail/index/arithprogression/arithprogression_3510_impl.h
+      - impl/adv_api/detail/pad/broadcast/broadcast_3510_impl.h
+      - impl/adv_api/detail/pad/broadcast/broadcast_gather_3510_impl.h
+      - impl/adv_api/detail/pad/pad/pad_v200_impl.h
+      - impl/adv_api/detail/pad/pad/pad_3510_impl.h
+      - impl/adv_api/detail/utils/init_global_memory/init_global_memory_v310_impl.h
+      - impl/adv_api/detail/select/selectwithbytesmask/selectwithbytesmask_v200_impl.h
+      - impl/adv_api/detail/select/selectwithbytesmask/selectwithbytesmask_3510_impl.h
 
   llt:
     ut_check: true

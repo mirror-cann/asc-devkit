@@ -20,9 +20,9 @@
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_DUPLICATE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_DUPLICATE_IMPL_H
 #include <type_traits>
-#include "kernel_utils.h"
-#include "kernel_tpipe.h"
-#include "kernel_common.h"
+#include "../kernel_utils.h"
+#include "../../../include/basic_api/kernel_tpipe.h"
+#include "../../../include/basic_api/kernel_common.h"
 #include "kernel_operator_common_impl.h"
 
 namespace AscendC {

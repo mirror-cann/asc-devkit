@@ -21,7 +21,7 @@
 #define ASCENDC_MODULE_OPERATOR_FIXPIPE_IMPL_H
 
 #include "kernel_operator_set_spr_impl.h"
-#include "kernel_operator_block_sync_intf.h"
+#include "../../../include/basic_api/kernel_operator_block_sync_intf.h"
 
 namespace AscendC {
 /* **************************************************************************************************

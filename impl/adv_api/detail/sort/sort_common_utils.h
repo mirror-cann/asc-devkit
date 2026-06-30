@@ -24,7 +24,7 @@
 #define IMPL_SORT_SORT_COMMON_UTILS_H
 
 #include <cstdint>
-#include "kernel_basic_intf.h"
+#include "../../../../include/basic_api/kernel_basic_intf.h"
 
 namespace AscendC {
 namespace Internal {

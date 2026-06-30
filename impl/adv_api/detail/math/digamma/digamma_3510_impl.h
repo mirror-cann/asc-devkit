@@ -21,9 +21,9 @@
 #endif
 #ifndef IMPL_MATH_DIGAMMA_DIGAMMA_C310_IMPL_H
 #define IMPL_MATH_DIGAMMA_DIGAMMA_C310_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 #include "kernel_tiling/kernel_tiling.h"
 #include "digamma_common_basic_impl.h"
 #include "../../common/check.h"

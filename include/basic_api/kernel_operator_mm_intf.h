@@ -19,13 +19,13 @@
 #ifndef ASCENDC_MODULE_OPERATOR_MM_INTERFACE_H
 #define ASCENDC_MODULE_OPERATOR_MM_INTERFACE_H
 
-#include "kernel_macros.h"
-#include "common_types.h"
-#include "kernel_operator_mm_base_impl.h"
+#include "../../impl/basic_api/kernel_macros.h"
+#include "../../impl/basic_api/common_types.h"
+#include "../../impl/basic_api/kernel_operator_mm_base_impl.h"
 #include "kernel_struct_mm.h"
 #include "kernel_tensor.h"
-#include "utils/kernel_utils_constants.h"
-#include "utils/kernel_utils_macros.h"
+#include "../../impl/basic_api/utils/kernel_utils_constants.h"
+#include "../../impl/basic_api/utils/kernel_utils_macros.h"
 
 #include "kernel_operator_mm_bitmode_intf.h"
 

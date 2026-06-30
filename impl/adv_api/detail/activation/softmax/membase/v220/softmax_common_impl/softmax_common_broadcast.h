@@ -21,7 +21,7 @@
 
 #ifndef IMPL_ACTIVATION_SOFTMAX_V220_SOFTMAX_COMMON_BROADCAST_H
 #define IMPL_ACTIVATION_SOFTMAX_V220_SOFTMAX_COMMON_BROADCAST_H
-#include "kernel_basic_intf.h"
+#include "../../../../../../../../include/basic_api/kernel_basic_intf.h"
 namespace AscendC {
 
 template <typename T>

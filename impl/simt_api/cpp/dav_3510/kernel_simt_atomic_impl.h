@@ -16,8 +16,8 @@
 #define IMPL_SIMT_API_CPP_DAV_C310_KERNEL_SIMT_ATOMIC_IMPL_H
 
 #if defined(ASCENDC_CPU_DEBUG)
-#include "kernel_process_lock.h"
-#include "kernel_utils.h"
+#include "../../../basic_api/kernel_process_lock.h"
+#include "../../../basic_api/kernel_utils.h"
 #include "kernel_simt_cpu.h"
 #include "stub_def.h"
 #endif

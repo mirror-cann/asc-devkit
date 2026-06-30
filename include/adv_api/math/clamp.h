@@ -27,7 +27,7 @@
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
 #include "../../../impl/adv_api/detail/math/clamp/clamp_3510_impl.h"
 #endif
-#include "kernel_pop_stack_buffer.h"
+#include "../../../impl/basic_api/kernel_pop_stack_buffer.h"
  
 namespace AscendC {
 /* !

@@ -21,7 +21,7 @@
 #endif
 #ifndef IMPL_MATH_LGAMMA_LGAMMA_COMMON_UTILS_H
 #define IMPL_MATH_LGAMMA_LGAMMA_COMMON_UTILS_H
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 
 #if defined(__NPU_ARCH__) && \
     (__NPU_ARCH__ == 2002 || __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510)

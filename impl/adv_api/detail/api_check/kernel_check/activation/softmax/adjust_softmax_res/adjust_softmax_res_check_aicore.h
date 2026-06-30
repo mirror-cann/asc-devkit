@@ -22,7 +22,7 @@
 #ifndef IMPL_API_CHECK_KERNEL_CHECK_ACTIVATION_SOFTMAX_ADJUST_SOFTMAX_RES_ADJUST_SOFTMAX_RES_CHECK_AICORE_H_
 #define IMPL_API_CHECK_KERNEL_CHECK_ACTIVATION_SOFTMAX_ADJUST_SOFTMAX_RES_ADJUST_SOFTMAX_RES_CHECK_AICORE_H_
 
-#include "include/adv_api/activation/softmax_utils.h"
+#include "../../../../../../../../include/adv_api/activation/softmax_utils.h"
 
 namespace AscendC {
 namespace HighLevelApiCheck {

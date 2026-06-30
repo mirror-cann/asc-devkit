@@ -24,7 +24,7 @@
 #define IMPL_ACTIVATION_SOFTMAX_C310_SOFTMAX_FLASH_IMPL_H
 
 #include <type_traits>
-#include "kernel_basic_intf.h"
+#include "../../../../../../../include/basic_api/kernel_basic_intf.h"
 #include "softmax_common_impl.h"
 #include "softmax_impl.h"
 

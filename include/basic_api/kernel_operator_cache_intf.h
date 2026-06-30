@@ -21,8 +21,8 @@
 #ifndef ASCENDC_MODULE_OPERATOR_CACHE_INTF_H
 #define ASCENDC_MODULE_OPERATOR_CACHE_INTF_H
 
-#include "kernel_macros.h"
-#include "kernel_reg.h"
+#include "../../impl/basic_api/kernel_macros.h"
+#include "../../impl/basic_api/kernel_reg.h"
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include <cstdint>

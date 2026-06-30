@@ -21,7 +21,7 @@
 #endif
 #ifndef IMPL_NORMALIZATION_LAYERNORM_LAYERNORM_NORMAL_CONFIG_H
 #define IMPL_NORMALIZATION_LAYERNORM_LAYERNORM_NORMAL_CONFIG_H
-#include "include/adv_api/normalization/layernorm_utils.h"
+#include "../../../../../include/adv_api/normalization/layernorm_utils.h"
 
 namespace AscendC {
 

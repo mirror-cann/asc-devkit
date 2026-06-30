@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_REDUCEV2_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_REDUCEV2_IMPL_H
-#include "kernel_struct_gather.h"
+#include "../../../include/basic_api/kernel_struct_gather.h"
 
 namespace AscendC {
 __aicore__ inline void GatherMaskImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src0, __ubuf__ uint16_t* src1,

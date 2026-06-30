@@ -28,7 +28,7 @@
 #include "utils/kernel_utils_struct_norm_sort.h"
 #include "utils/kernel_utils_struct_param.h"
 
-#include "kernel_struct_data_copy.h"
+#include "../../include/basic_api/kernel_struct_data_copy.h"
 #include "kernel_scalar_convert.h"
 
 namespace AscendC {

@@ -20,9 +20,9 @@
 #ifndef __KERNEL_KFC_COMM_H__
 #define __KERNEL_KFC_COMM_H__
 
-#include "kernel_common.h"
+#include "../../../../include/basic_api/kernel_common.h"
 #include "kernel_tiling/kernel_tiling.h"
-#include "dav_3510/kernel_operator_common_impl.h"
+#include "../kernel_operator_common_impl.h"
 #include "kfc_log.h"
 
 using MEM_ADDR = SSBUF_ADDR;

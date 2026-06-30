@@ -13,7 +13,7 @@
  * \brief
  */
 #include <set>
-#include "include/adv_api/math/bitwise_xor_tiling.h"
+#include "../../../../include/adv_api/math/bitwise_xor_tiling.h"
 #include "../../detail/host_log.h"
 #include "graph/tensor.h"
 #include "../../detail/api_check/host_apicheck.h"

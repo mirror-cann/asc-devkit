@@ -14,7 +14,7 @@
  */
 #include "graph/tensor.h"
 #include "graph/types.h"
-#include "include/adv_api/quantization/antiquantize_tiling.h"
+#include "../../../../include/adv_api/quantization/antiquantize_tiling.h"
 
 namespace AscendC {
 void GetAntiQuantizeTmpBufferFactorSize(

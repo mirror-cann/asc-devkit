@@ -22,10 +22,10 @@
 #ifndef IMPL_NORMALIZATION_LAYERNORMGRAD_LAYERNORMGRAD_COMMON_IMPL_H
 #define IMPL_NORMALIZATION_LAYERNORMGRAD_LAYERNORMGRAD_COMMON_IMPL_H
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 #include "kernel_tiling/kernel_tiling.h"
-#include "include/adv_api/normalization/layernormgrad_utils.h"
+#include "../../../../../include/adv_api/normalization/layernormgrad_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/normalization/layernormgrad/layernormgrad_check.h"
 #endif // ASCENDC_CPU_DEBUG

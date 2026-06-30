@@ -24,7 +24,7 @@
 
 #include "kernel_tiling/kernel_tiling.h"
 #include "../../../basic_check/basic_check_utils.h"
-#include "include/adv_api/activation/softmax_utils.h"
+#include "../../../../../../../../include/adv_api/activation/softmax_utils.h"
 
 namespace AscendC {
 namespace HighLevelApiCheck {

@@ -20,7 +20,7 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_SYS_VAR_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_SYS_VAR_IMPL_H
-#include "kernel_utils.h"
+#include "../kernel_utils.h"
 
 namespace AscendC {
 __aicore__ inline int64_t GetSubBlockIdxImpl()

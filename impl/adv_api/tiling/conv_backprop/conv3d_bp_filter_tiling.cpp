@@ -14,7 +14,7 @@
  */
 #include "../../detail/host_log.h"
 #include "conv3d_bp_tiling_util.h"
-#include "include/adv_api/conv_backprop/conv3d_bp_filter_tiling.h"
+#include "../../../../include/adv_api/conv_backprop/conv3d_bp_filter_tiling.h"
 
 namespace {
 constexpr int32_t BLOCK_CUBE = 16;

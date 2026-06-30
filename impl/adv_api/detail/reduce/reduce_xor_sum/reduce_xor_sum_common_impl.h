@@ -23,8 +23,8 @@
 #ifndef IMPL_REDUCE_REDUCE_XOR_SUM_REDUCE_XOR_SUM_COMMON_IMPL_H
 #define IMPL_REDUCE_REDUCE_XOR_SUM_REDUCE_XOR_SUM_COMMON_IMPL_H
 
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 #include "kernel_tiling/kernel_tiling.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/reduce/reduce_xor_sum/reduce_xor_sum_check.h"

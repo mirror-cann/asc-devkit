@@ -24,8 +24,8 @@
 #include "kernel_check.h"
 #include "kernel_npu_debug.h"
 #include "kernel_log.h"
-#include "kernel_struct_mm.h"
-#include "kernel_struct_fixpipe.h"
+#include "../../include/basic_api/kernel_struct_mm.h"
+#include "../../include/basic_api/kernel_struct_fixpipe.h"
 
 namespace AscendC {
 

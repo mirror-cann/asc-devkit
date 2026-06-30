@@ -90,7 +90,7 @@ __aicore__ inline void asc_mark_stamp()
 #endif
 } // namespace __asc_aicore
 #else
-#include "kernel_log.h"
+#include "../../basic_api/kernel_log.h"
 
 namespace __asc_aicore {
 __aicore__ inline void asc_time_stamp(uint32_t desc_id) {

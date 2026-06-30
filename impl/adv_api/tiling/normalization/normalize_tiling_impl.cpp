@@ -8,9 +8,9 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#include "include/adv_api/normalization/normalize_tiling.h"
+#include "../../../../include/adv_api/normalization/normalize_tiling.h"
 #include "../../detail/host_log.h"
-#include "tiling/platform/platform_ascendc.h"
+#include "../../../../include/utils/tiling/platform/platform_ascendc.h"
 
 namespace AscendC {
 namespace {

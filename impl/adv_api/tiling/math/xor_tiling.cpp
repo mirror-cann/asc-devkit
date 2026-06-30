@@ -12,7 +12,7 @@
  * \file xor_tiling.cpp
  * \brief
  */
-#include "include/adv_api/math/xor_tiling.h"
+#include "../../../../include/adv_api/math/xor_tiling.h"
 #include "../../detail/host_log.h"
 #include "graph/tensor.h"
 #include "register/tilingdata_base.h"

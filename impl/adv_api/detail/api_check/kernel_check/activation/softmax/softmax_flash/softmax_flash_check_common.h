@@ -25,7 +25,7 @@
 #include "../../../basic_check/datatype_check.h"
 #include "../../../basic_check/single_tensor_check.h"
 #include "../../../basic_check/multiple_tensor_check.h"
-#include "include/adv_api/activation/softmax_utils.h"
+#include "../../../../../../../../include/adv_api/activation/softmax_utils.h"
 
 namespace AscendC {
 namespace HighLevelApiCheck {

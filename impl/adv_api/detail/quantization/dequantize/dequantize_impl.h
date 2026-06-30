@@ -23,10 +23,10 @@
 #ifndef IMPL_QUANTIZATION_DEQUANTIZE_IMPL_H
 #define IMPL_QUANTIZATION_DEQUANTIZE_IMPL_H
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 #include "../dequant/ascend_dequant_common_impl.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 #include "dequantize_common.h"
 #include "../../common/check.h"
 

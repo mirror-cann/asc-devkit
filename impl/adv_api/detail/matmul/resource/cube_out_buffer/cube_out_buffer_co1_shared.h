@@ -24,7 +24,7 @@
 
 #include "cube_out_buffer_base.h"
 #include "../../utils/matmul_utils.h"
-#include "include/adv_api/matmul/tiling.h"
+#include "../../../../../../include/adv_api/matmul/tiling.h"
 #include "../../feature_trait/matmul_feature_trait.h"
 
 namespace AscendC {

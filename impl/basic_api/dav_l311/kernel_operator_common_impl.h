@@ -19,10 +19,10 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_COMMON_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_COMMON_IMPL_H
-#include "kernel_struct_mm.h"
-#include "utils/kernel_utils_mode.h"
-#include "kernel_common.h"
-#include "kernel_utils.h"
+#include "../../../include/basic_api/kernel_struct_mm.h"
+#include "../utils/kernel_utils_mode.h"
+#include "../../../include/basic_api/kernel_common.h"
+#include "../kernel_utils.h"
 #define GetLoopBoundB8(x) (((x) - 1) / VECTOR_REG_WIDTH)
 #define GetLoopBoundB16(x) (((x) - 1) / (VECTOR_REG_WIDTH / B16_BYTE_SIZE))
 #define GetLoopBoundB32(x) (((x) - 1) / (VECTOR_REG_WIDTH / B32_BYTE_SIZE))

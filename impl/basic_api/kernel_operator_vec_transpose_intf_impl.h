@@ -20,11 +20,11 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_TRANSPOSE_INTERFACE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_TRANSPOSE_INTERFACE_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_tpipe.h"
+#include "../../include/basic_api/kernel_tensor.h"
+#include "../../include/basic_api/kernel_tpipe.h"
 #include "kernel_check.h"
 #include "kernel_npu_debug.h"
-#include "kernel_struct_transpose.h"
+#include "../../include/basic_api/kernel_struct_transpose.h"
 #include "mstx_local_tensor_info.h"
 
 #if __NPU_ARCH__ == 1001

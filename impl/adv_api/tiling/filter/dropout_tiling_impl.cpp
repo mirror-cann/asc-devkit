@@ -14,7 +14,7 @@
  */
 #include "graph/tensor.h"
 #include "register/tilingdata_base.h"
-#include "include/adv_api/filter/dropout_tiling.h"
+#include "../../../../include/adv_api/filter/dropout_tiling.h"
 #include "../../detail/host_log.h"
 
 namespace AscendC {

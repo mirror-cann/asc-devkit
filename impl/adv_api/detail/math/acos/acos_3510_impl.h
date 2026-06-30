@@ -21,8 +21,8 @@
 #endif
 #ifndef IMPL_MATH_ACOS_ACOS_C310_IMPL_H
 #define IMPL_MATH_ACOS_ACOS_C310_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 #include "../asin/asin_3510_impl.h"
 #include "../../common/check.h"
 

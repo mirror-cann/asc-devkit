@@ -19,9 +19,9 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_VPADDING_INTERFACE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_VPADDING_INTERFACE_IMPL_H
-#include "kernel_tensor.h"
+#include "../../include/basic_api/kernel_tensor.h"
 #include "kernel_check.h"
-#include "kernel_struct_unary.h"
+#include "../../include/basic_api/kernel_struct_unary.h"
 
 #if __NPU_ARCH__ == 1001
 #include "dav_c100/kernel_operator_vec_vpadding_impl.h"

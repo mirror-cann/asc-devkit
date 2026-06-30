@@ -22,8 +22,8 @@
 #ifndef LIB_MATH_IS_FINITE_IMPL_H
 #define LIB_MATH_IS_FINITE_IMPL_H
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 // Implementation Process
 // 1. Use vcmp_ne for comparison. If the value is nan, the out should be false.
 // 2. Use vcmps_eq for comparison. If the value is ±inf, the out should be false.

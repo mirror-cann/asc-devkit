@@ -8,8 +8,8 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#include "include/adv_api/reduce/reduce_tiling.h"
-#include "tiling/platform/platform_ascendc.h"
+#include "../../../../include/adv_api/reduce/reduce_tiling.h"
+#include "../../../../include/utils/tiling/platform/platform_ascendc.h"
 
 #include <string>
 #include <cstdint>

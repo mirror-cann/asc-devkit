@@ -20,7 +20,7 @@
 
 #ifndef ASCENDC_MODULE_OPERATOR_SET_ATOMIC_INTERFACE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_SET_ATOMIC_INTERFACE_IMPL_H
-#include "kernel_tensor.h"
+#include "../../include/basic_api/kernel_tensor.h"
 
 #if __NPU_ARCH__ == 1001
 #include "dav_c100/kernel_operator_set_atomic_impl.h"

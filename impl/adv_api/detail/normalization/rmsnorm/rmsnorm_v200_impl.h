@@ -16,8 +16,8 @@
 #endif
 #ifndef IMPL_NORMALIZATION_RMSNORM_RMSNORM_V200_IMPL_H
 #define IMPL_NORMALIZATION_RMSNORM_RMSNORM_V200_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 
 namespace AscendC {
 namespace RmsNormAPI {

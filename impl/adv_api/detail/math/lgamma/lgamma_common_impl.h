@@ -21,11 +21,11 @@
 #endif
 #ifndef IMPL_MATH_LGAMMA_LGAMMA_COMMON_IMPL_H
 #define IMPL_MATH_LGAMMA_LGAMMA_COMMON_IMPL_H
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 #include "kernel_tiling/kernel_tiling.h"
-#include "include/adv_api/math/sin.h"
+#include "../../../../../include/adv_api/math/sin.h"
 #include "lgamma_common_utils.h"
 #include "lgamma_common_basic_impl.h"
 #include "../../common/check.h"

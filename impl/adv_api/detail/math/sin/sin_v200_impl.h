@@ -21,8 +21,8 @@
 #endif
 #ifndef IMPL_MATH_SIN_SIN_V200_IMPL_H
 #define IMPL_MATH_SIN_SIN_V200_IMPL_H
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 
 namespace AscendC {
 __aicore__ inline void SinCast(

@@ -19,9 +19,9 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_COMMON_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_COMMON_IMPL_H
-#include "kernel_utils.h"
-#include "kernel_struct_mm.h"
-#include "kernel_operator_swap_mem_intf.h"
+#include "../kernel_utils.h"
+#include "../../../include/basic_api/kernel_struct_mm.h"
+#include "../../../include/basic_api/kernel_operator_swap_mem_intf.h"
 namespace AscendC {
 
 [[deprecated(

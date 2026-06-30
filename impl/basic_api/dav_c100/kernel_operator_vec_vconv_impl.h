@@ -19,10 +19,10 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_VCONV_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_VCONV_IMPL_H
-#include "kernel_utils.h"
-#include "kernel_struct_binary.h"
-#include "kernel_struct_unary.h"
-#include "kernel_struct_vdeq.h"
+#include "../kernel_utils.h"
+#include "../../../include/basic_api/kernel_struct_binary.h"
+#include "../../../include/basic_api/kernel_struct_unary.h"
+#include "../../../include/basic_api/kernel_struct_vdeq.h"
 
 namespace AscendC {
 __aicore__ inline void CastIntrinsicsImpl(__ubuf__ half* dst, __ubuf__ int32_t* src, const RoundMode& roundMode,

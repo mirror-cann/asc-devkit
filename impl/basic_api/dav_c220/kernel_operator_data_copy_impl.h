@@ -20,8 +20,8 @@
 #ifndef ASCENDC_MODULE_OPERATOR_DATA_COPY_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_DATA_COPY_IMPL_H
 #include "kernel_operator_scm_data_copy_impl.h"
-#include "kernel_common.h"
-#include "kernel_process_lock.h"
+#include "../../../include/basic_api/kernel_common.h"
+#include "../kernel_process_lock.h"
 namespace AscendC {
 __aicore__ inline void ValidateUbL1Address(uint64_t absUbAddr, uint64_t absL1Addr, uint32_t tensorSize)
 {

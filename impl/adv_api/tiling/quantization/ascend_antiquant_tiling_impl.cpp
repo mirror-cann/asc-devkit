@@ -14,9 +14,9 @@
  */
 #include "graph/tensor.h"
 #include "graph/types.h"
-#include "include/adv_api/quantization/ascend_antiquant_tiling.h"
+#include "../../../../include/adv_api/quantization/ascend_antiquant_tiling.h"
 #include "../../detail/host_log.h"
-#include "tiling/platform/platform_ascendc.h"
+#include "../../../../include/utils/tiling/platform/platform_ascendc.h"
 
 namespace AscendC {
 namespace {

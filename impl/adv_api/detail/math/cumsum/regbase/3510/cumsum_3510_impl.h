@@ -21,9 +21,9 @@
 #endif
 #ifndef IMPL_MATH_CUMSUM_CUMSUM_IMPL_C310_H
 #define IMPL_MATH_CUMSUM_CUMSUM_IMPL_C310_H
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
-#include "include/adv_api/math/cumsum_utils.h"
+#include "../../../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../../../include/adv_api/math/cumsum_utils.h"
 #include "cumsum_c310_utils.h"
 
 #ifdef ASCENDC_CPU_DEBUG

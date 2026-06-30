@@ -16,7 +16,7 @@
 #ifndef API_CONV2D_FRAMEWORK_H
 #define API_CONV2D_FRAMEWORK_H
 
-#include "kernel_utils.h"
+#include "../../../../basic_api/kernel_utils.h"
 
 #define CONV_DECLARE_REG_IMPL(MEMBER, args...) namespace __AuxCheckImpl {                                             \
     template<typename T, typename U>                                                                                  \

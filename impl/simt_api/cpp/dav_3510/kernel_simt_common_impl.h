@@ -220,7 +220,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline half RoundInf(half x)
 #if defined(ASCENDC_CPU_DEBUG)
 #include <cmath>
 
-#include "kernel_utils.h"
+#include "../../../basic_api/kernel_utils.h"
 #include "stub_def.h"
 #endif
 

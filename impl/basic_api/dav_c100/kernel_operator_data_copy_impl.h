@@ -19,11 +19,11 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_DATA_COPY_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_DATA_COPY_IMPL_H
-#include "kernel_common.h"
+#include "../../../include/basic_api/kernel_common.h"
 #include "kernel_operator_vec_duplicate_impl.h"
 #include "kernel_operator_vec_binary_scalar_impl.h"
-#include "kernel_struct_unary.h"
-#include "kernel_tpipe.h"
+#include "../../../include/basic_api/kernel_struct_unary.h"
+#include "../../../include/basic_api/kernel_tpipe.h"
 
 namespace AscendC {
 /* **************************************************************************************************

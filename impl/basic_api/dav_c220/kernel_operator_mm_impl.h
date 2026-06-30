@@ -19,8 +19,8 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_MM_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_MM_IMPL_H
-#include "kernel_struct_mm.h"
-#include "kernel_npu_debug.h"
+#include "../../../include/basic_api/kernel_struct_mm.h"
+#include "../kernel_npu_debug.h"
 
 namespace AscendC {
 /* **************************************************************************************************

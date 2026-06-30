@@ -22,7 +22,7 @@
 #ifndef IMPL_ACTIVATION_SOFTMAX_SOFTMAX_COMMON_IMPL_H
 #define IMPL_ACTIVATION_SOFTMAX_SOFTMAX_COMMON_IMPL_H
 
-#include "kernel_pop_stack_buffer.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
 #include "softmax_common/softmax_common_utils.h"
 #include "softmax_common/softmax_common_shape_process.h"
 #include "softmax_common/softmax_tiling_func.h"

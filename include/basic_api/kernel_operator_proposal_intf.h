@@ -20,7 +20,7 @@
 #ifndef ASCENDC_MODULE_OPERATOR_PROPOSAL_INTERFACE_H
 #define ASCENDC_MODULE_OPERATOR_PROPOSAL_INTERFACE_H
 
-#include "kernel_macros.h"
+#include "../../impl/basic_api/kernel_macros.h"
 #include "kernel_tensor.h"
 #include "kernel_struct_proposal.h"
 

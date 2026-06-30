@@ -19,10 +19,10 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_DUMP_TENSOR_INTERFACE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_DUMP_TENSOR_INTERFACE_IMPL_H
-#include "kernel_tensor.h"
+#include "../../include/basic_api/kernel_tensor.h"
 #if __NPU_ARCH__ == 2201 || __NPU_ARCH__ == 3510 || __NPU_ARCH__ == 2002 
-#include "impl/utils/debug/asc_debug_utils.h"
-#include "impl/utils/debug/asc_aicore_printf_impl.h"
+#include "../utils/debug/asc_debug_utils.h"
+#include "../utils/debug/asc_aicore_printf_impl.h"
 #endif
 
 #if __NPU_ARCH__ == 1001

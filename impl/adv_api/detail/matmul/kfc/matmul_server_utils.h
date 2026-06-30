@@ -22,8 +22,8 @@
 #ifndef IMPL_MATMUL_KFC_MATMUL_SERVER_UTILS_H
 #define IMPL_MATMUL_KFC_MATMUL_SERVER_UTILS_H
 
-#include "include/adv_api/matmul/matmul.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/adv_api/matmul/matmul.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 
 namespace AscendC {
 

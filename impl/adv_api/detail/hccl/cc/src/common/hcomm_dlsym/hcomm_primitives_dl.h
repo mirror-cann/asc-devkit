@@ -12,7 +12,7 @@
 
 #include "dlsym_common.h"
 #include "hcomm_primitives.h"   // 原头文件，包含所有类型和定义
-#include "hccl_types.h"          
+#include "hccl_types.h"
 
 #ifdef __cplusplus
 extern "C" {

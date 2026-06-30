@@ -21,7 +21,7 @@
 #ifndef IMPL_MATMUL_UTILS_MATMUL_TYPE_DEF_H
 #define IMPL_MATMUL_UTILS_MATMUL_TYPE_DEF_H
 
-#include "include/adv_api/matmul/tiling.h"
+#include "../../../../../include/adv_api/matmul/tiling.h"
 
 namespace AscendC {
 

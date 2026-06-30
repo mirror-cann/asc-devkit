@@ -23,7 +23,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
-#include "tiling/platform/platform_ascendc.h"
+#include "../../../../include/utils/tiling/platform/platform_ascendc.h"
 #include "../../detail/conv/common/conv_common.h"
 
 namespace Conv3dTilingApi {

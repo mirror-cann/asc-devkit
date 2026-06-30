@@ -20,14 +20,14 @@
 #ifndef ASCENDC_KERNEL_COMMON_H
 #define ASCENDC_KERNEL_COMMON_H
 
-#include "kernel_macros.h"
-#include "kernel_event.h"
-#include "kernel_log.h"
-#include "kernel_reg.h"
-#include "kernel_process_lock.h"
+#include "../../impl/basic_api/kernel_macros.h"
+#include "../../impl/basic_api/kernel_event.h"
+#include "../../impl/basic_api/kernel_log.h"
+#include "../../impl/basic_api/kernel_reg.h"
+#include "../../impl/basic_api/kernel_process_lock.h"
 #include "kernel_struct_aipp.h"
-#include "kernel_utils.h"
-#include "utils/kernel_utils_macros.h"
+#include "../../impl/basic_api/kernel_utils.h"
+#include "../../impl/basic_api/utils/kernel_utils_macros.h"
 #include "kernel_operator_swap_mem_intf.h"
 #include "kernel_operator_sys_var_intf.h"
 

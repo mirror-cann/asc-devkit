@@ -13,7 +13,7 @@
  * \brief
  */
 
-#include "include/adv_api/normalization/groupnorm_tiling.h"
+#include "../../../../include/adv_api/normalization/groupnorm_tiling.h"
 #include "../../detail/host_log.h"
 
 namespace optiling {

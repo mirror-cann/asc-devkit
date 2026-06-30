@@ -22,7 +22,7 @@
 #ifndef IMPL_MATH_DIGAMMA_DIGAMMA_COMMON_BASIC_IMPL_H
 #define IMPL_MATH_DIGAMMA_DIGAMMA_COMMON_BASIC_IMPL_H
 #include <cstdint>
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
 #include "digamma_3510_impl.h"

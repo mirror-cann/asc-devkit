@@ -23,7 +23,7 @@
 #include "kernel_log.h"
 #include "utils/kernel_utils_ceil_oom_que.h"
 #include "utils/kernel_utils_constants.h"
-#include "kernel_tensor.h"
+#include "../../include/basic_api/kernel_tensor.h"
 
 namespace AscendC {
 

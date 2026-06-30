@@ -17,7 +17,7 @@
 #include "math_util.h"
 #include "../../detail/host_log.h"
 #include "matmul_tiling_algorithm.h"
-#include "include/adv_api/matmul/bmm_tiling.h"
+#include "../../../../include/adv_api/matmul/bmm_tiling.h"
 
 using namespace std;
 namespace matmul_tiling {

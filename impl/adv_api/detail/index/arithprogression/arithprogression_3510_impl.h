@@ -22,10 +22,10 @@
 #ifndef IMPL_INDEX_ARITHPROGRESSION_ARITHPROGRESSION_C310_IMPL_H
 #define IMPL_INDEX_ARITHPROGRESSION_ARITHPROGRESSION_C310_IMPL_H
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
-#include "kernel_utils.h"
-#include "kernel_log.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../basic_api/kernel_utils.h"
+#include "../../../../basic_api/kernel_log.h"
 namespace AscendC {
 // Generating an underlying arithmetic sequence through scalar operations.
 template <typename RegT, typename ScalarT>

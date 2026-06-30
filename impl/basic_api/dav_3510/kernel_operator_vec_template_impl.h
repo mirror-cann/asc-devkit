@@ -21,8 +21,8 @@
 #ifndef ASCENDC_MODULE_OPERATOR_VEC_TEMPLATE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_VEC_TEMPLATE_IMPL_H
 
-#include "kernel_utils.h"
-#include "kernel_struct_binary.h"
+#include "../kernel_utils.h"
+#include "../../../include/basic_api/kernel_struct_binary.h"
 
 
 namespace AscendC {
@@ -64,9 +64,9 @@ __aicore__ inline void VecBinaryImplTemplate(__ubuf__ T *dst, __ubuf__ U *src0, 
 } // namespace Internal
 } // namespace AscendC
 
-#include "kernel_operator_sys_var_intf.h"
-#include "kernel_operator_block_sync_intf.h"
-#include "reg_compute/kernel_reg_compute_intf.h"
+#include "../../../include/basic_api/kernel_operator_sys_var_intf.h"
+#include "../../../include/basic_api/kernel_operator_block_sync_intf.h"
+#include "../../../include/basic_api/reg_compute/kernel_reg_compute_intf.h"
 
 namespace AscendC {
 namespace Internal {

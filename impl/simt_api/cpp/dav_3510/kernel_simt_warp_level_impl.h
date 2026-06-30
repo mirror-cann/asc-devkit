@@ -14,7 +14,7 @@
 #if defined(ASCENDC_CPU_DEBUG)
 #include <cmath>
 
-#include "kernel_utils.h"
+#include "../../../basic_api/kernel_utils.h"
 #include "simt_api/cpp/kernel_simt_utils.h"
 #include "stub_def.h"
 #endif

@@ -23,8 +23,8 @@
 #ifndef IMPL_PAD_BROADCAST_BROADCAST_C310_IMPL_H
 #define IMPL_PAD_BROADCAST_BROADCAST_C310_IMPL_H
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
 #include "broadcast_gather_3510_impl.h"
 
 namespace AscendC {

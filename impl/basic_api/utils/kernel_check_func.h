@@ -21,12 +21,12 @@
 #define ASCENDC_MODULE_CHECK_FUNC_H
 
 #if ASCENDC_CPU_DEBUG
-#include "kernel_check_util.h"
-#include "kernel_common.h"
-#include "kernel_struct_brcb.h"
-#include "kernel_struct_gather.h"
-#include "kernel_struct_transpose.h"
-#include "kernel_struct_proposal.h"
+#include "../kernel_check_util.h"
+#include "../../../include/basic_api/kernel_common.h"
+#include "../../../include/basic_api/kernel_struct_brcb.h"
+#include "../../../include/basic_api/kernel_struct_gather.h"
+#include "../../../include/basic_api/kernel_struct_transpose.h"
+#include "../../../include/basic_api/kernel_struct_proposal.h"
 
 namespace AscendC {
 template <typename T>

@@ -14,7 +14,7 @@
  */
 #include "../../detail/host_log.h"
 #include "conv3d_bp_tiling_util.h"
-#include "include/adv_api/conv_backprop/conv3d_bp_filter_tiling_base.h"
+#include "../../../../include/adv_api/conv_backprop/conv3d_bp_filter_tiling_base.h"
 
 namespace ConvBackpropApi {
 constexpr uint64_t L1_SIZE_LOCAL = 524288;

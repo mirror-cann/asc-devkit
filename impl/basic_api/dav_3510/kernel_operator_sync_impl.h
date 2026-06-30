@@ -20,8 +20,8 @@
 #ifndef ASCENDC_MODULE_OPERATOR_SYNC_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_SYNC_IMPL_H
 
-#include "utils/kernel_utils_constants.h"
-#include "kernel_common.h"
+#include "../utils/kernel_utils_constants.h"
+#include "../../../include/basic_api/kernel_common.h"
 
 namespace AscendC {
 __aicore__ inline void ClcSyncCount(__gm__ int32_t* localSyncGM, __ubuf__ int32_t* ubWorkspaceAddr,

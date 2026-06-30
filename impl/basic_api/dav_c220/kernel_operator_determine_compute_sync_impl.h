@@ -17,8 +17,8 @@
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_DETERMINE_COMPUTE_SYNC_IMPL_H__
 #endif
-#include "kernel_operator_common_intf.h"
-#include "kernel_operator_vec_duplicate_intf.h"
+#include "../../../include/basic_api/kernel_operator_common_intf.h"
+#include "../../../include/basic_api/kernel_operator_vec_duplicate_intf.h"
 #ifndef ASCENDC_MODULE_OPERATOR_DETERMINE_COMPUTE_SYNC_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_DETERMINE_COMPUTE_SYNC_IMPL_H
 

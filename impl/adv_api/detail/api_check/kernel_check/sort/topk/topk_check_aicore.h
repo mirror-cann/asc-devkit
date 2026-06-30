@@ -21,7 +21,7 @@
 #ifndef IMPL_API_CHECK_KERNEL_CHECK_SORT_TOPK_TOPK_CHECK_AICORE_H_
 #define IMPL_API_CHECK_KERNEL_CHECK_SORT_TOPK_TOPK_CHECK_AICORE_H_
 
-#include "include/adv_api/sort/topk_utils.h"
+#include "../../../../../../../include/adv_api/sort/topk_utils.h"
 
 namespace AscendC {
 namespace HighLevelApiCheck {

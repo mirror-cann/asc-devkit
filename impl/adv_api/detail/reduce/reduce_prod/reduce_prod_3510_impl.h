@@ -18,8 +18,8 @@
 #ifndef IMPL_REDUCE_REDUCE_PROD_REDUCE_PROD_C310_IMPL_H_
 #define IMPL_REDUCE_REDUCE_PROD_REDUCE_PROD_C310_IMPL_H_
 
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 #include "../reduce_common_util_impl.h"
 #include "../reduce_common_util_3510_impl.h"
 #include "../reduce_common_ar_reuse_align_3510_impl.h"

@@ -22,7 +22,7 @@
 #define ADV_API_CONV_COMMON_CONV_FORWARD_CONFIG_H
 
 #include <climits>
-#include "kernel_utils.h"
+#include "../../../../impl/basic_api/kernel_utils.h"
 #include "conv_common.h"
 #include "../../../../impl/adv_api/detail/conv/common/conv_forward_framework_util.h"
 #include "../../../../impl/adv_api/detail/conv/common/conv_forward_util.h"

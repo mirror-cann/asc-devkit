@@ -22,7 +22,7 @@
 #define LIB_MATMUL_MATMUL_CLIENT_H
 
 #include "kernel_basic_intf.h"
-#include "utils/kernel_utils_constants.h"
+#include "../../../impl/basic_api/utils/kernel_utils_constants.h"
 #include "../../../impl/adv_api/detail/kfc/kfc_register_obj.h"
 #include "include/adv_api/matmul/constant_tiling.h"
 #include "include/adv_api/matmul/tiling.h"

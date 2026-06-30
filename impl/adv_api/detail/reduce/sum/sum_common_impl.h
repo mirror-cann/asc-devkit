@@ -23,9 +23,9 @@
 #ifndef IMPL_REDUCE_SUM_SUM_COMMON_IMPL_H
 #define IMPL_REDUCE_SUM_SUM_COMMON_IMPL_H
 
-#include "kernel_basic_intf.h"
-#include "kernel_tensor.h"
-#include "include/adv_api/reduce/sum_utils.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/adv_api/reduce/sum_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/reduce/sum/sum_check.h"
 #endif // ASCENDC_CPU_DEBUG

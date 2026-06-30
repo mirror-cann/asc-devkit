@@ -19,10 +19,10 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_CONV2D_INTERFACE_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_CONV2D_INTERFACE_IMPL_H
-#include "kernel_tensor.h"
+#include "../../include/basic_api/kernel_tensor.h"
 #include "kernel_operator_conv2d_base_impl.h"
 #include "kernel_operator_data_copy_intf_impl.h"
-#include "kernel_struct_data_copy.h"
+#include "../../include/basic_api/kernel_struct_data_copy.h"
 
 namespace AscendC {
 // T should be featureMap matrix dtype

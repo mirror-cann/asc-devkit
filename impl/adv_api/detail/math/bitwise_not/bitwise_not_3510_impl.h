@@ -21,8 +21,8 @@
 #endif
 #ifndef IMPL_MATH_BITWISE_NOT_BITWISE_NOT_C310_IMPL_H
 #define IMPL_MATH_BITWISE_NOT_BITWISE_NOT_C310_IMPL_H
-#include "kernel_basic_intf.h"
-#include "include/adv_api/math/bitwise_not_utils.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/adv_api/math/bitwise_not_utils.h"
 #ifdef ASCENDC_CPU_DEBUG
 #include "../../api_check/kernel_check/math/bitwise_not/bitwise_not_check.h"
 #endif // ASCENDC_CPU_DEBUG

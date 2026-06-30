@@ -16,7 +16,7 @@
 #ifndef API_CONV_UTIL_H
 #define API_CONV_UTIL_H
 
-#include "kernel_utils.h"
+#include "../../../../basic_api/kernel_utils.h"
 
 namespace ConvApi {
 constexpr static uint32_t K0_BIAS = 8;

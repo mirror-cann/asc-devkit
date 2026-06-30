@@ -19,8 +19,8 @@
 #endif
 #ifndef ASCENDC_MODULE_TPIPE_IMPL_L300_H
 #define ASCENDC_MODULE_TPIPE_IMPL_L300_H
-#include "kernel_tpipe.h"
-#include "kernel_prof_trace_intf.h"
+#include "../../../include/basic_api/kernel_tpipe.h"
+#include "../../../include/basic_api/kernel_prof_trace_intf.h"
 
 namespace AscendC {
 namespace ConstantsInternal {

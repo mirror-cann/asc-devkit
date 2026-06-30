@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_UTILS_STRUCT_DMA_PARAMS_H
 #define ASCENDC_MODULE_UTILS_STRUCT_DMA_PARAMS_H
-#include "utils/kernel_utils_mode.h"
+#include "kernel_utils_mode.h"
 
 namespace AscendC {
 

@@ -12,7 +12,7 @@
  * \file atan_tiling_impl.cpp
  * \brief
  */
-#include "include/adv_api/math/atan_tiling.h"
+#include "../../../../include/adv_api/math/atan_tiling.h"
 #include <cstdint>
 #include "graph/tensor.h"
 #include "../../detail/host_log.h"

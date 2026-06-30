@@ -22,10 +22,10 @@
 #ifndef IMPL_NORMALIZATION_NORMALIZE_NORMALIZE_C310_IMPL_H
 #define IMPL_NORMALIZATION_NORMALIZE_NORMALIZE_C310_IMPL_H
 
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
-#include "kernel_pop_stack_buffer.h"
-#include "include/adv_api/normalization/normalize_utils.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../basic_api/kernel_pop_stack_buffer.h"
+#include "../../../../../include/adv_api/normalization/normalize_utils.h"
 #include "normalize_config.h"
 
 namespace AscendC {

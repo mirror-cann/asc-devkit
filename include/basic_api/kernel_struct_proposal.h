@@ -20,7 +20,7 @@
 #ifndef ASCENDC_MODULE_STRUCT_PROPOSAL_H
 #define ASCENDC_MODULE_STRUCT_PROPOSAL_H
 
-#include "utils/kernel_utils_constants.h"
+#include "../../impl/basic_api/utils/kernel_utils_constants.h"
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include <cstdint>

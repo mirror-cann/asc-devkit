@@ -30,7 +30,7 @@
 #endif
 #include "include/adv_api/math/cumsum_utils.h"
 #if ASCENDC_CPU_DEBUG
-#include "kernel_log.h"
+#include "../../../impl/basic_api/kernel_log.h"
 #endif
 
 namespace AscendC {

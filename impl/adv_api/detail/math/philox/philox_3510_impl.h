@@ -22,8 +22,8 @@
 #ifndef IMPL_MATH_PHILOX_PHILOX_C310_IMPL_H
 #define IMPL_MATH_PHILOX_PHILOX_C310_IMPL_H
 #include <cstdint>
-#include "kernel_basic_intf.h"
-#include "include/adv_api/math/philox_utils.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/adv_api/math/philox_utils.h"
 namespace AscendC {
 namespace PhiloxInternal {
 // philox algorithm constant

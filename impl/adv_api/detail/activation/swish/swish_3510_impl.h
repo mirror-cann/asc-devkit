@@ -20,8 +20,8 @@
 #endif
 #ifndef IMPL_MATH_SWISH_SWISH_C310_IMPL_H
 #define IMPL_MATH_SWISH_SWISH_C310_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 #include "../../common/check.h"
 
 namespace AscendC {

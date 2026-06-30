@@ -12,10 +12,10 @@
  * \file fmod_tiling_impl.cpp
  * \brief
  */
-#include "include/adv_api/math/fmod_tiling.h"
+#include "../../../../include/adv_api/math/fmod_tiling.h"
 #include "graph/tensor.h"
 #include "../../detail/host_log.h"
-#include "include/adv_api/math/trunc_tiling.h"
+#include "../../../../include/adv_api/math/trunc_tiling.h"
 
 namespace AscendC {
 namespace {

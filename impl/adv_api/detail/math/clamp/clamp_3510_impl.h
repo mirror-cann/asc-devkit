@@ -21,9 +21,9 @@
 #endif
 #ifndef IMPL_MATH_CLAMP_CLAMP_C310_IMPL_H
 #define IMPL_MATH_CLAMP_CLAMP_C310_IMPL_H
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
-#include "include/adv_api/math/clamp_utils.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
+#include "../../../../../include/adv_api/math/clamp_utils.h"
 #include "../../common/check.h"
 
 #ifdef ASCENDC_CPU_DEBUG

@@ -17,8 +17,8 @@
 #ifndef IMPL_TRANSPOSE_TRANSDATA_TRANSDATA_IMPL_H
 #define IMPL_TRANSPOSE_TRANSDATA_TRANSDATA_IMPL_H
 
-#include "kernel_tensor.h"
-#include "kernel_basic_intf.h"
+#include "../../../../../include/basic_api/kernel_tensor.h"
+#include "../../../../../include/basic_api/kernel_basic_intf.h"
 #include "kernel_tiling/kernel_tiling.h"
 #include "../../common/check.h"
 #ifdef ASCENDC_CPU_DEBUG

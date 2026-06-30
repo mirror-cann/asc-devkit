@@ -37,14 +37,14 @@
 #elif __NPU_ARCH__ == 3102
 #include "dav_m310/kernel_operator_vec_binary_continuous_impl.h"
 #elif __NPU_ARCH__ == 3510
-#include "reg_compute/kernel_reg_compute_intf.h"
+#include "../../include/basic_api/reg_compute/kernel_reg_compute_intf.h"
 #include "dav_3510/kernel_operator_vec_binary_continuous_impl.h"
 #include "dav_3510/kernel_operator_vec_compare_continuous_impl.h"
 #elif __NPU_ARCH__ == 3003
-#include "reg_compute/kernel_reg_compute_intf.h"
+#include "../../include/basic_api/reg_compute/kernel_reg_compute_intf.h"
 #include "dav_l300/kernel_operator_vec_binary_continuous_impl.h"
 #elif __NPU_ARCH__ == 3113
-#include "reg_compute/kernel_reg_compute_intf.h"
+#include "../../include/basic_api/reg_compute/kernel_reg_compute_intf.h"
 #include "dav_l311/kernel_operator_vec_binary_continuous_impl.h"
 #endif
 #pragma begin_pipe(V)
