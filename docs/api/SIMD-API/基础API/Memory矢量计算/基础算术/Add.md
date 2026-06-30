@@ -188,5 +188,3 @@ $dst_i = src0_i + src1_i$
 输入数据src1Local: [513 514 515 ... 1024]
 输出数据dstLocal: [514 516 518 ... 1536]
 ```
-
-完整样例请参考[双目矢量类计算API样例](https://gitcode.com/cann/asc-devkit/pull/873)。

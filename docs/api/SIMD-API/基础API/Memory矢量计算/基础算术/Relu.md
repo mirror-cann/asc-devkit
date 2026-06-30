@@ -178,5 +178,3 @@ $dst_i = \max(0, src_i)$
 输入数据srcLocal: [6.938 -8.86 -0.2263 ... 1.971 1.778]
 输出数据dstLocal: [6.938 0 0 ... 1.971 1.778]
 ```
-
-完整样例请参考[单目矢量计算类API样例](https://gitcode.com/cann/asc-devkit/pull/873)。

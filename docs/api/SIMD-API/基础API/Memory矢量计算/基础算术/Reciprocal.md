@@ -221,14 +221,13 @@ $dst_i = \frac{1}{src_i}$
     AscendC::Reciprocal(dstLocal, srcLocal, 512);
     ```
 
-
 <!-- npu="950" id32 -->
 以下示例仅支持Ascend 950PR/Ascend 950DT
 
-    ```cpp
-    static constexpr ReciprocalConfig config = { ReciprocalAlgo::PRECISION_1ULP_FTZ_FALSE };
-    AscendC::Reciprocal<T, config>(dstLocal, srcLocal, 512);
-    ```
+```cpp
+static constexpr ReciprocalConfig config = { ReciprocalAlgo::PRECISION_1ULP_FTZ_FALSE };
+AscendC::Reciprocal<T, config>(dstLocal, srcLocal, 512);
+```
 <!-- end id32 -->
 
 结果示例如下：
@@ -237,5 +236,3 @@ $dst_i = \frac{1}{src_i}$
 输入数据srcLocal：[-7.152 -7.24 1.771 ... -1.339 4.473]
 输出数据dstLocal：[-0.1396 -0.1382 0.5645 ... -0.748 0.2231]
 ```
-
-完整样例请参考[单目矢量计算类API样例](https://gitcode.com/cann/asc-devkit/pull/873)。

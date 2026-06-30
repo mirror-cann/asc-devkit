@@ -175,5 +175,3 @@ $dst_i = max(src0_i, src1_i)$
 输入数据src1Local：[513 512 511 ... 2]
 输出数据dstLocal：[513 512 511 ... 512]
 ```
-
-完整样例请参考[双目矢量类计算API样例](https://gitcode.com/cann/asc-devkit/pull/873)。

@@ -188,5 +188,3 @@ $dst_i = src0_i \times src1_i$
 输入数据src1Local：[2 2 2 ... 2]
 输出数据dstLocal：[2 4 6... 1024]
 ```
-
-完整样例请参考[双目矢量类计算API样例](https://gitcode.com/cann/asc-devkit/pull/873)。

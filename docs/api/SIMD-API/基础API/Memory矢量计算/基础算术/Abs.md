@@ -219,5 +219,3 @@ $dst_i = |src_i|$
     输出数据dstLocal：[2.236 3.605 ...]
     ```
 <!-- end id24 -->
-
-完整样例请参考[单目矢量计算类API样例](https://gitcode.com/cann/asc-devkit/pull/873)。
