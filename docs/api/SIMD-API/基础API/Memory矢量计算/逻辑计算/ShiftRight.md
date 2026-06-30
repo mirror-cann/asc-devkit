@@ -95,7 +95,7 @@ dst和src使用[TensorTrait](../../数据结构/辅助数据结构/TensorTrait/T
 |---|---|
 | T | 操作数数据类型。 |
 | U | scalarValue的数据类型。 |
-| isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下：<br>&nbsp;&nbsp;&bull; 针对tensor前n个数据计算接口，接口入参中的count不生效，建议设置成1。<br>&nbsp;&nbsp;&bull; 针对tensor高维切分计算接口，接口入参中的mask值设置为占位符`MASK_PLACEHOLDER`，用于占位，无实际含义。<br><!-- npu="950,310b" id21 -->针对以下型号，tensor前n个数据计算API中的isSetMask参数不生效，保持默认值即可。<br>&bull; <!-- npu="950" id22 -->Ascend 950PR/Ascend 950DT<!-- end id22 --><br>&bull; <!-- npu="310b" id23 -->Atlas 200I/500 A2 推理产品<!-- end id23 --><!-- end id21 --> |
+| isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下：<br>&nbsp;&nbsp;&bull; 针对tensor前n个数据计算接口，接口入参中的count不生效，建议设置成1。<br>&nbsp;&nbsp;&bull; 针对tensor高维切分计算接口，接口入参中的mask值设置为占位符`MASK_PLACEHOLDER`，用于占位，无实际含义。<br><!-- npu="950,310b" id8 -->针对以下型号，tensor前n个数据计算API中的isSetMask参数不生效，保持默认值即可。<br>&bull; <!-- npu="950" id9 -->Ascend 950PR/Ascend 950DT<!-- end id9 --><br>&bull; <!-- npu="310b" id10 -->Atlas 200I/500 A2 推理产品<!-- end id10 --><!-- end id8 --> |
 
 **表2**  参数说明
 
@@ -108,37 +108,37 @@ dst和src使用[TensorTrait](../../数据结构/辅助数据结构/TensorTrait/T
 | mask[]/mask | 输入 | mask用于控制每次迭代内参与计算的元素。详细设置参考[掩码](../SIMD计算说明/掩码/掩码.md)。 |
 | repeatTime | 输入 | 重复迭代次数。矢量计算单元，每次读取连续的256Bytes数据进行计算，为完成对输入数据的处理，必须通过多次迭代（repeat）才能完成所有数据的读取与计算。repeatTime表示迭代的次数。<br>关于该参数的具体说明请参考[高维切分](../SIMD计算说明/高维切分.md)。 |
 | repeatParams | 输入 | 控制操作数地址步长的参数。[UnaryRepeatParams](../../数据结构/辅助数据结构/UnaryRepeatParams.md)类型，包含操作数相邻迭代间相同DataBlock的地址步长，操作数同一迭代内不同DataBlock的地址步长等参数。<br>相邻迭代间的地址步长参数说明请参考[repeatStride](../SIMD计算说明/高维切分.md)；同一迭代内DataBlock的地址步长参数说明请参考[dataBlockStride](../SIMD计算说明/高维切分.md)。 |
-| roundEn | 输入 | 舍入功能开启开关，支持数据类型：bool，true为开启，false为不开启。仅当src为int16\_t/int32\_t类型时开启有效。<br>例：开启舍入功能，src数据类型为int16\_t，将src算术右移5位，如果src\_ele二进制数中的第5位为1，则dst\_ele值为对src\_ele算术右移5后加1。<br>src\_ele = 17 = 0b00000000000**1**0001第五位为1<br>dst\_ele = arithmetic\_right\_shift(src\_ele, 5) + 1 = 0b00000000000**00000** + 1 = 0b00000000000**00001**<br><!-- npu="310b" id24 -->针对Atlas 200I/500 A2 推理产品，不支持开启舍入功能，仅支持传入false。<!-- end id24 --><br><!-- npu="950" id25 -->针对Ascend 950PR/Ascend 950DT，不支持开启舍入功能，仅支持传入false。<!-- end id25 --> |
+| roundEn | 输入 | 舍入功能开启开关，支持数据类型：bool，true为开启，false为不开启。仅当src为int16\_t/int32\_t类型时开启有效。<br>例：开启舍入功能，src数据类型为int16\_t，将src算术右移5位，如果src\_ele二进制数中的第5位为1，则dst\_ele值为对src\_ele算术右移5后加1。<br>src\_ele = 17 = 0b00000000000**1**0001第五位为1<br>dst\_ele = arithmetic\_right\_shift(src\_ele, 5) + 1 = 0b00000000000**00000** + 1 = 0b00000000000**00001**<br><!-- npu="310b" id11 -->针对Atlas 200I/500 A2 推理产品，不支持开启舍入功能，仅支持传入false。<!-- end id11 --><br><!-- npu="950" id12 -->针对Ascend 950PR/Ascend 950DT，不支持开启舍入功能，仅支持传入false。<!-- end id12 --> |
 
 ### scalarValue取值说明
 
-<!-- npu="950" id10 -->
+<!-- npu="950" id13 -->
 - 针对Ascend 950PR/Ascend 950DT，scalarValue的取值应大于等于0。逻辑右移的情况下，如果右移的位数大于src数据类型位宽，dst的全部元素被赋值为0；算术右移的情况下，如果右移的位数大于src数据类型位宽，源操作数元素为正数，对应的目的操作数元素被赋值为0，源操作数元素为负数，对应的目的操作数元素被赋值为-1。
-<!-- end id10 -->
-<!-- npu="A3" id11 -->
-- 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，当src为uint16_t或int16_t类型时，scalarValue的取值范围为[0, 16]；当src为uint32_t或int32_t类型时，scalarValue的取值范围为[0, 32]。
-<!-- end id11 -->
-<!-- npu="910b" id12 -->
-- 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，当src为uint16_t或int16_t类型时，scalarValue的取值范围为[0, 16]；当src为uint32_t或int32_t类型时，scalarValue的取值范围为[0, 32]。
-<!-- end id12 -->
-<!-- npu="310b" id13 -->
-- 针对Atlas 200I/500 A2 推理产品，当src为uint16_t或int16_t类型时，scalarValue的取值范围为[0, 16]；当src为uint32_t或int32_t类型时，scalarValue的取值范围为[0, 32]。
 <!-- end id13 -->
+<!-- npu="A3" id14 -->
+- 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，当src为uint16_t或int16_t类型时，scalarValue的取值范围为[0, 16]；当src为uint32_t或int32_t类型时，scalarValue的取值范围为[0, 32]。
+<!-- end id14 -->
+<!-- npu="910b" id15 -->
+- 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，当src为uint16_t或int16_t类型时，scalarValue的取值范围为[0, 16]；当src为uint32_t或int32_t类型时，scalarValue的取值范围为[0, 32]。
+<!-- end id15 -->
+<!-- npu="310b" id16 -->
+- 针对Atlas 200I/500 A2 推理产品，当src为uint16_t或int16_t类型时，scalarValue的取值范围为[0, 16]；当src为uint32_t或int32_t类型时，scalarValue的取值范围为[0, 32]。
+<!-- end id16 -->
 
 ## 数据类型
 
-<!-- npu="950" id14 -->
+<!-- npu="950" id17 -->
 - 针对Ascend 950PR/Ascend 950DT，T和U支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t。数据类型int8_t、uint8_t、int64_t、uint64_t仅支持tensor前n个数据计算接口。
-<!-- end id14 -->
-<!-- npu="A3" id15 -->
-- 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，T和U支持的数据类型为：int16_t、uint16_t、int32_t、uint32_t。
-<!-- end id15 -->
-<!-- npu="910b" id16 -->
-- 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，T和U支持的数据类型为：int16_t、uint16_t、int32_t、uint32_t。
-<!-- end id16 -->
-<!-- npu="310b" id17 -->
-- 针对Atlas 200I/500 A2 推理产品，T和U支持的数据类型为：int16_t、uint16_t、int32_t、uint32_t。
 <!-- end id17 -->
+<!-- npu="A3" id18 -->
+- 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，T和U支持的数据类型为：int16_t、uint16_t、int32_t、uint32_t。
+<!-- end id18 -->
+<!-- npu="910b" id19 -->
+- 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，T和U支持的数据类型为：int16_t、uint16_t、int32_t、uint32_t。
+<!-- end id19 -->
+<!-- npu="310b" id20 -->
+- 针对Atlas 200I/500 A2 推理产品，T和U支持的数据类型为：int16_t、uint16_t、int32_t、uint32_t。
+<!-- end id20 -->
 
 ## 返回值说明<a name="section194321251175110"></a>
 
@@ -148,15 +148,24 @@ dst和src使用[TensorTrait](../../数据结构/辅助数据结构/TensorTrait/T
 
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md)。
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md)。
-<!-- npu="A3,910b" id18 -->
-- 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
-  <!-- npu="A3" id19 -->
-  - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-  <!-- end id19 -->
-  <!-- npu="910b" id20 -->
-  - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-  <!-- end id20 -->
-<!-- end id18 -->
+<!-- npu="A3,910b,950" id21 -->
+- 当参数count或repeatTime取值为0时，该接口的行为如下：
+  <!-- npu="A3,910b" id22 -->
+  - 针对如下型号，该接口不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
+    <!-- npu="A3" id23 -->
+    - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+    <!-- end id23 -->
+    <!-- npu="910b" id24 -->
+    - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+    <!-- end id24 -->
+  <!-- end id22 -->
+  <!-- npu="950" id25 -->
+  - 针对Ascend 950PR/Ascend 950DT，该接口通过VF调用[Reg矢量计算API](../../Reg矢量计算/Reg矢量计算.md)实现兼容，当参数count或repeatTime取值为0时，不保证该接口将被视为NOP（空操作）。
+  <!-- end id25 -->
+<!-- end id21 -->
+<!-- npu="950" id26 -->
+- 针对Ascend 950PR/Ascend 950DT，tensor前n个数据计算API中的isSetMask参数不生效，保持默认值即可。
+<!-- end id26 -->
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
@@ -191,7 +200,7 @@ dst和src使用[TensorTrait](../../数据结构/辅助数据结构/TensorTrait/T
 
 结果示例如下：
 
-```bash
+```plain
 输入数据srcLocal: [1 2 3 ... 512]
 输入数据scalar = 2
 输出数据dstLocal: [0 0 0 1 1 1 1 ... 128]
