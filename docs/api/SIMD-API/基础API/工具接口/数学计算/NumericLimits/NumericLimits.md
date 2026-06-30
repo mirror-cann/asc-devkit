@@ -1,12 +1,12 @@
 # NumericLimits
 
-- **[简介](简介-76.md)**
+- **[简介](简介.md)**
 
-- **[Max](Max-77.md)**
+- **[Max](Max.md)**
 
 - **[Lowest](Lowest.md)**
 
-- **[Min](Min-78.md)**
+- **[Min](Min.md)**
 
 - **[Infinity](Infinity.md)**
 

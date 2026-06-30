@@ -1,51 +1,28 @@
 # MarkStamp<a name="ZH-CN_TOPIC_0000002491669476"></a>
 
-## 产品支持情况<a name="section7433822121115"></a>
+## 产品支持情况
 
-<a name="table20433122219118"></a>
-<table><thead align="left"><tr id="row543322211114"><th class="cellrowborder" valign="top" width="57.99999999999999%" id="mcps1.1.3.1.1"><p id="p743372211116"><a name="p743372211116"></a><a name="p743372211116"></a><span id="ph043382211112"><a name="ph043382211112"></a><a name="ph043382211112"></a>产品</span></p>
-</th>
-<th class="cellrowborder" align="center" valign="top" width="42%" id="mcps1.1.3.1.2"><p id="p11433122261114"><a name="p11433122261114"></a><a name="p11433122261114"></a>是否支持</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row24331522101118"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p17301775812"><a name="p17301775812"></a><a name="p17301775812"></a><span id="ph2272194216543"><a name="ph2272194216543"></a><a name="ph2272194216543"></a>Ascend 950PR/Ascend 950DT</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p154339229119"><a name="p154339229119"></a><a name="p154339229119"></a>√</p>
-</td>
-</tr>
-<tr id="row1433422151110"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p19433822111113"><a name="p19433822111113"></a><a name="p19433822111113"></a><span id="ph343372217115"><a name="ph343372217115"></a><a name="ph343372217115"></a><term id="zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1361618116717"><a name="p1361618116717"></a><a name="p1361618116717"></a>x</p>
-</td>
-</tr>
-<tr id="row043352216117"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p144341422141117"><a name="p144341422141117"></a><a name="p144341422141117"></a><span id="ph13434822161118"><a name="ph13434822161118"></a><a name="ph13434822161118"></a><term id="zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p32461013716"><a name="p32461013716"></a><a name="p32461013716"></a>x</p>
-</td>
-</tr>
-<tr id="row174347228116"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1643419224111"><a name="p1643419224111"></a><a name="p1643419224111"></a><span id="ph8434422181113"><a name="ph8434422181113"></a><a name="ph8434422181113"></a><term id="zh-cn_topic_0000001312391781_term354143892110"><a name="zh-cn_topic_0000001312391781_term354143892110"></a><a name="zh-cn_topic_0000001312391781_term354143892110"></a>Atlas 200I/500 A2 推理产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p26241212371"><a name="p26241212371"></a><a name="p26241212371"></a>x</p>
-</td>
-</tr>
-<tr id="row043452261112"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1434322111116"><a name="p1434322111116"></a><a name="p1434322111116"></a><span id="ph124341022101117"><a name="ph124341022101117"></a><a name="ph124341022101117"></a><term id="zh-cn_topic_0000001312391781_term1964153212227"><a name="zh-cn_topic_0000001312391781_term1964153212227"></a><a name="zh-cn_topic_0000001312391781_term1964153212227"></a>Atlas 推理系列产品</term>AI Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p173854810714"><a name="p173854810714"></a><a name="p173854810714"></a>x</p>
-</td>
-</tr>
-<tr id="row154341422141111"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p124341322101113"><a name="p124341322101113"></a><a name="p124341322101113"></a><span id="ph1143420225117"><a name="ph1143420225117"></a><a name="ph1143420225117"></a><term id="zh-cn_topic_0000001312391781_term1463893615224"><a name="zh-cn_topic_0000001312391781_term1463893615224"></a><a name="zh-cn_topic_0000001312391781_term1463893615224"></a>Atlas 推理系列产品</term>Vector Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p14434322101116"><a name="p14434322101116"></a><a name="p14434322101116"></a>x</p>
-</td>
-</tr>
-<tr id="row14434112216118"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p15434192251112"><a name="p15434192251112"></a><a name="p15434192251112"></a><span id="ph1743411221113"><a name="ph1743411221113"></a><a name="ph1743411221113"></a><term id="zh-cn_topic_0000001312391781_term71949488213"><a name="zh-cn_topic_0000001312391781_term71949488213"></a><a name="zh-cn_topic_0000001312391781_term71949488213"></a>Atlas 训练系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p55413718719"><a name="p55413718719"></a><a name="p55413718719"></a>x</p>
-</td>
-</tr>
-</tbody>
-</table>
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
 
 ## 功能说明<a name="section165477552317"></a>
 

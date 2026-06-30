@@ -553,9 +553,9 @@
 | --- | --- |
 | [Async](工具接口/执行模式/Async.md) | Async通过模板函数的方式对这种隔离模式进行了封装，提供了一个统一的接口，用于在不同执行单元（AIC或AIV）下执行特定函数，从而避免在代码中使用硬件条件分支。 |
 | [InitSocState](工具接口/系统初始化/InitSocState.md) | 本接口对AI Core的全局状态进行初始化，包括AIC（Cube Core）与AIV（Vector Core）的公共状态及各自特有状态。由于不同产品的实现存在差异，实际执行的初始化项也有所不同。 |
-| [Max](工具接口/数学计算/NumericLimits/Max-77.md) | 返回指定数据类型的最大有限值。 |
+| [Max](工具接口/数学计算/NumericLimits/Max.md) | 返回指定数据类型的最大有限值。 |
 | [Lowest](工具接口/数学计算/NumericLimits/Lowest.md) | 返回指定数据类型的最低有限值，即满足无其他有限值y符合y < x的有限值x。 |
-| [Min](工具接口/数学计算/NumericLimits/Min-78.md) | 返回指定数据类型的最小有限值。 |
+| [Min](工具接口/数学计算/NumericLimits/Min.md) | 返回指定数据类型的最小有限值。 |
 | [Infinity](工具接口/数学计算/NumericLimits/Infinity.md) | 返回指定数据类型的正无穷大值。 |
 | [NegativeInfinity](工具接口/数学计算/NumericLimits/NegativeInfinity.md) | 返回指定数据类型的负无穷大值。 |
 | [QuietNaN](工具接口/数学计算/NumericLimits/QuietNaN.md) | 返回指定数据类型的安静NaN值（浮点尾数最高位为1）。 |

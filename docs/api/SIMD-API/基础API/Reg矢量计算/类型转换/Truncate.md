@@ -26,7 +26,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径：`"basic_api/reg_compute/kernel_reg_compute_vec_vconv_intf_impl.h"`。
+头文件路径：`"basic_api/reg_compute/kernel_reg_compute_vec_vconv_intf.h"`。
 
 将源操作数中的浮点数元素截断为整数值（保留原数据类型），并存入目的操作数。
 
