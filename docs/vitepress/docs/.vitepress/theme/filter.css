@@ -90,6 +90,29 @@
   width: 320px;
 }
 
+/* Sidebar deep-level support (VPSidebarItem patched to remove depth limit) */
+.VPSidebarItem:not(.level-0) .items {
+  border-left: 1px solid var(--vp-c-divider);
+  padding-left: 16px;
+}
+.VPSidebarItem:not(.level-0) .text {
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+}
+.VPSidebarItem:not(.level-0):not(.level-1).is-active > .item > .indicator {
+  background-color: var(--vp-c-brand-1);
+}
+.VPSidebarItem:not(.level-0).is-link > .item > .link:hover .text {
+  color: var(--vp-c-brand-1);
+}
+.VPSidebarItem:not(.level-0).has-active > .item > .text,
+.VPSidebarItem:not(.level-0).has-active > .item > .link > .text {
+  color: var(--vp-c-text-1);
+}
+.VPSidebarItem:not(.level-0).is-active > .item .link > .text {
+  color: var(--vp-c-brand-1);
+}
+
 .home-layout .VPFeatures .items {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

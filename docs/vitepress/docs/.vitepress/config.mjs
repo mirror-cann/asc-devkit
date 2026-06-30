@@ -610,7 +610,7 @@ function balanceDivTags(html) {
 
           html = html.replace(
             /href="https:\/\/gitcode\.com\/cann\/asc-devkit\/blob\/master\/docs\/(api|guide)\/([^"]+)\.md(#[^"]*)?"/gi,
-            (_, type, path, hash) => `href="/${type}/${path}${hash || ''}"`
+            (_, type, path, hash) => `href="/${type}/${path}.html${hash || ''}"`
           )
 
           html = balanceDivTags(html)
@@ -692,6 +692,17 @@ function balanceDivTags(html) {
           },
         },
       }),
+    }, {
+      name: 'patch-vpsidebar-item-depth',
+      enforce: 'pre',
+      transform(code, id) {
+        if (!id.includes('VPSidebarItem') || !id.includes('vitepress')) return null
+        let result = code
+        result = result.replace('depth < 5', 'true')
+        result = result.replace('props.depth + 2 === 7', 'props.depth + 2 >= 7')
+        if (result === code) return null
+        return result
+      },
     }],
     vue: {
       template: {

@@ -247,7 +247,7 @@ def gfm_to_html(text: str) -> str:
 def _fix_links(html: str) -> str:
     html = re.sub(
         r'(href|src)="https://gitcode\.com/cann/asc-devkit/blob/master/docs/(api|guide)/([^"]+)\.md(#[^"]*)?"',
-        r'\1="/\2/\3\4"',
+        r'\1="/\2/\3.html\4"',
         html,
         flags=re.IGNORECASE,
     )
