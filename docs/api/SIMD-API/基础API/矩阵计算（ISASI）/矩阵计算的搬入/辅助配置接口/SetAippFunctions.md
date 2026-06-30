@@ -51,7 +51,7 @@
 
     > 调用数据搬运接口时，若开启了单行读取，设置的目的图片高度参数将无效，如[LoadImageToLocal](LoadImageToLocal.md)接口的loadImageToLocalParams.vertSize。
 
-- **数据类型转换：** 转换像素的数据类型，支持uint8\_t转换为int8\_t或half。当uint8\_t转换成int8\_t的时候，输出数据范围限制在\[-128， 127\]。
+- **数据类型转换：** 转换像素的数据类型，支持uint8\_t转换为int8\_t或half。当uint8\_t转换成int8\_t的时候，输出数据范围限制在\[-128，127\]。
 
     ```cpp
     // 例1：实现uint8_t ->int8_t 的类型转换，同时实现零均值化：设置每个通道mean值为该通道所有数据的平均值（min和var值无效，不用设置）。

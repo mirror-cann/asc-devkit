@@ -70,7 +70,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 | startIndex | 分形矩阵ID，说明搬运起始位置为源操作数中第几个分形（0为源操作数中第1个分形矩阵）。取值范围：startIndex∈[0, 65535]。单位：512字节。默认为0。<br>特性细节可参考：[设置搬运起始位置](#设置搬运起始位置)。 |
 | repeatTimes | 迭代次数，每个迭代可以处理512字节数据。取值范围：repeatTimes∈[0, 255]。<br>**注：repeatTimes=0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | srcStride | 相邻迭代间，源操作数前一个分形与后一个分形起始地址的间隔，单位：512字节。取值范围：srcStride∈[0, 65535]。默认为0。<br>特性细节可参考：[非连续搬入](#非连续搬入)。<br>**注：srcStride=0表示在连续的重复执行周期之间，重复获取相同的分形矩阵。** |
-| sid | 此参数用户无需关注，设置为0即可。<br>注：预留的扩展参数，当前因后续架构升级，该参数已废弃，不对其进行业务处理。 |
+| sid | 此参数用户无需关注，设置为0即可。<br>**注：预留的扩展参数，当前因后续架构升级，该参数已废弃，不对其进行业务处理。** |
 | dstGap | 相邻迭代间，目的操作数前一个分形结束地址与后一个分形起始地址的间隔，单位：512字节。取值范围：dstGap∈[0, 65535]。默认为0。<br>特性细节可参考：[非连续搬入](#非连续搬入)。<br>**注：dstGap=0表示相邻repeat目的操作数起始地址间隔1个数据分形即连续存放。** |
 | ifTranspose | 是否启用转置功能，对每个分形矩阵进行转置，默认为false：<br>&nbsp;&nbsp;&bull; true：启用<br>&nbsp;&nbsp;&bull; false：不启用<br>特性细节可参考：[分形转置](#分形转置)。<br>**注：只有L1 Buffer->L0A Buffer和L1 Buffer->L0B Buffer通路才能开启转置，开启转置功能时，源操作数、目的操作数仅支持b16数据类型。** |
 | addrMode | 用于控制多次迭代场景下，源操作数中每一次迭代的分形矩阵索引ID是递增还是递减：<br>&nbsp;&nbsp;&bull; 0（默认）：递增，下一次repeat index = startIndex + srcStride×repeatTime；<br>&nbsp;&nbsp;&bull; 1：递减，下一次repeat index = startIndex - srcStride×repeatTime。<br>特性细节可参考：[控制地址更新方式](#控制地址更新方式)。<br>**注：目前仅GM->L1 Buffer通路支持配置，保持默认值0即可，该参数不涉及性能。** |

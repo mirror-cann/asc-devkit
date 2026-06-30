@@ -40,7 +40,7 @@ __aicore__ inline void SetHF32Mode(HF32Mode mode)
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| mode | 输入 | Mmad HF32模式控制入参，HF32Mode枚举类型。支持如下两种取值：<br>ENABLE：L0A Buffer/L0B Buffer中的FP32数据将在矩阵乘法之前被舍入为HF32。DISABLE：将执行常规的FP32矩阵乘法。 |
+| mode | 输入 | Mmad HF32模式控制入参，HF32Mode枚举类型。支持如下两种取值：<br>&nbsp;&nbsp;&bull; ENABLE：L0A Buffer/L0B Buffer中的FP32数据将在矩阵乘法之前被舍入为HF32。<br>&nbsp;&nbsp;&bull; DISABLE：将执行常规的FP32矩阵乘法。 |
 
 ## 返回值说明
 

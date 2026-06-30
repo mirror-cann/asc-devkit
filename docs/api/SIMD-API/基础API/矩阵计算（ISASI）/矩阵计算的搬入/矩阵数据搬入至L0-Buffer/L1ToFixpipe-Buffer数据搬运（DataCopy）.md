@@ -50,8 +50,8 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 | ---------- | ---------- | ---------- |
 | dst | 输出 | 目的操作数，类型为LocalTensor。存储位置为Fixpipe Buffer，目的地址需要128字节对齐。 |
 | src | 输入 | 源操作数，类型为LocalTensor，存储位置为L1 Buffer，源地址需要32字节对齐。 |
-| repeatParams | 输入 | 搬运参数，DataCopyParams类型。通过该参数可配置搬运的数据块大小、个数、间隔等信息，同时支持非连续和连续搬运。<br>具体定义请参考"basic_api/interface/kernel_struct_data_copy.h" |
-| count | 输入 | 参与搬运的元素个数。count * sizeof(T) 需要32字节对齐，若未对齐，则搬运量会向下取整到32字节对齐。 |
+| repeatParams | 输入 | 搬运参数，DataCopyParams类型。通过该参数可配置搬运的数据块大小、个数、间隔等信息，同时支持非连续和连续搬运。<br>上述结构体参数定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
+| count | 输入 | 参与搬运的元素个数。count * sizeof(T)需要32字节对齐，若未对齐，则搬运量会向下取整到32字节对齐。 |
 
 **表 3** DataCopyParams结构体参数定义
 
@@ -59,8 +59,8 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 | ---------- | ---------- |
 | blockCount | 待搬运的连续传输数据块个数。uint16_t类型，取值范围：blockCount∈[1, 4095]。<br>**注：blockCount = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
 | blockLen | 待搬运的每个连续传输数据块长度，dst位于Fixpipe Buffer时，单位为128字节。uint16_t类型，取值范围：blockLen∈[1, 65535]。<br>**注：blockLen = 0表示不执行搬运，该接口将被视为NOP（空操作）。** |
-| srcGap | 在L1 Buffer -> Fixpipe Buffer场景中，srcGap特指源操作数相邻连续数据块的间隔（前面一个数据块的头与后面数据块的头的间隔），单位为DataBlock（32字节）。uint16_t类型，srcGap ∈[0, 2^16-1]。<br>&nbsp;&nbsp;&bull; blockCount = 1时，srcGap无意义，设置为0即可。<br>&nbsp;&nbsp;&bull; blockCount ≠ 1时，当srcGap=0时，表示重复搬出源操作数的第一个数据块。 |
-| dstGap | 在L1 Buffer -> Fixpipe Buffer场景中，dstGap特指目的操作数相邻连续数据块的间隔（前面一个数据块的头与后面数据块的头的间隔），单位为DataBlock（128字节）。uint16_t类型，dstGap不要超出该数据类型的取值范围，dstGap  ∈[1, 2^16-1]。<br>&nbsp;&nbsp;&bull; blockCount = 1时，dstGap无意义，设置为0即可。<br>&nbsp;&nbsp;&bull; blockCount ≠ 1时，当dstGap=0时，表示目的矩阵中搬入的每个数据块都会覆盖第一个数据块。 |
+| srcGap | 在L1 Buffer -> Fixpipe Buffer场景中，srcGap特指源操作数相邻连续数据块的间隔（前面一个数据块的头与后面数据块的头的间隔），单位为DataBlock（32字节）。uint16_t类型，srcGap∈[0, 2^16-1]。<br>&nbsp;&nbsp;&bull; blockCount = 1时，srcGap无意义，设置为0即可。<br>&nbsp;&nbsp;&bull; blockCount ≠ 1时，当srcGap=0时，表示重复搬出源操作数的第一个数据块。 |
+| dstGap | 在L1 Buffer -> Fixpipe Buffer场景中，dstGap特指目的操作数相邻连续数据块的间隔（前面一个数据块的头与后面数据块的头的间隔），单位为DataBlock（128字节）。uint16_t类型，dstGap不要超出该数据类型的取值范围，dstGap∈[1, 2^16-1]。<br>&nbsp;&nbsp;&bull; blockCount = 1时，dstGap无意义，设置为0即可。<br>&nbsp;&nbsp;&bull; blockCount ≠ 1时，当dstGap=0时，表示目的矩阵中搬入的每个数据块都会覆盖第一个数据块。 |
 
 ## 数据类型<a id="section_data_type"></a>
 

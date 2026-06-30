@@ -529,7 +529,7 @@ isSetPadding配置为true，表示在接口内部设置Pad属性描述（即padV
 
 要求输入的feature map和filter的格式是NC1HWC0，其中C0是最低维度而且C0是固定值为16（对于u8/s8类型为32），C1=C/C0。
 
-为了简化场景，以下场景假设输入的feature map的channel为4，即Ci=4。输入feature maps在A1中的形状为(Hi,Wi,Ci)，经过Load3D处理后在A2的数据形状为(Wo\*Ho, Hk\*Wk\*Ci)。其中Wo和Ho是卷积后输出的shape，Hk和Wk是filter的shape。
+为了简化场景，以下场景假设输入的feature map的channel为4，即Ci=4。输入feature maps在A1中的形状为（Hi,Wi,Ci），经过Load3D处理后在A2的数据形状为（Wo\*Ho, Hk\*Wk\*Ci）。其中Wo和Ho是卷积后输出的shape，Hk和Wk是filter的shape。
 
 直观地来看，img2col的过程就是filter在feature map上扫过，将对应feature map的数据展开成输出数据的每一行的过程。filter首先在W方向上滑动Wo步，然后在H方向上走一步然后重复以上过程，最终输出Wo\*Ho行数据。下图中红色和黄色的数据分别代表第一行和第二行。数字表示原始输入数据，filter和输出数据三者之间的关联关系。可以看到，Load3D首先在输入数据的Ci维度搬运对应于00的4个数，然后搬运对应于01的四个数，最终这一行的大小为Hk\*Wk\*Ci即3\*3\*4=36个数。
 
@@ -541,7 +541,7 @@ isSetPadding配置为true，表示在接口内部设置Pad属性描述（即padV
 
 对应的filter的格式如下图：
 
-其中n为filter的个数，可以看出维度排布为(Hk,Wk,Ci,n)，但是需要注意的是下图的格式还需要根据Mmad中B矩阵的格式转换。
+其中n为filter的个数，可以看出维度排布为（Hk,Wk,Ci,n），但是需要注意的是下图的格式还需要根据Mmad中B矩阵的格式转换。
 
 **图 3** filter的格式<a id="zh-cn_topic_0000002512171652_fig1395194710496"></a>  
 
@@ -555,7 +555,7 @@ isSetPadding配置为true，表示在接口内部设置Pad属性描述（即padV
 
 对于A2的feature map来说有两种方案，水平分块和垂直分块。分别对应参数中repeatMode的0和1。
 
-注：下图中的分形矩阵大小为4x4，实际应该为16x16 (对于u8/s8类型为16x32)
+注：下图中的分形矩阵大小为4x4，实际应该为16x16（对于u8/s8类型为16x32）
 
 repeatMode =0时，每次repeat会改变在filter窗口中读取数据点的位置，然后跳到下一个C0的位置。
 

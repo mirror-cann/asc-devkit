@@ -40,7 +40,7 @@ __aicore__ inline void SetHF32TransMode(HF32TransMode mode)
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| mode | 输入 | Mmad HF32取整模式控制入参，HF32TransMode类型。支持如下两种取值：<br>NEAREST_ZERO：则FP32将以向零靠近的方式四舍五入为HF32。NEAREST_EVEN：则FP32将以最接近偶数的方式四舍五入为HF32。 |
+| mode | 输入 | Mmad HF32取整模式控制入参，HF32TransMode类型。支持如下两种取值：<br>&nbsp;&nbsp;&bull; NEAREST_ZERO：则FP32将以向零靠近的方式四舍五入为HF32。<br>&nbsp;&nbsp;&bull; NEAREST_EVEN：则FP32将以最接近偶数的方式四舍五入为HF32。 |
 
 ## 返回值说明
 
