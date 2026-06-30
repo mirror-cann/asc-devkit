@@ -2,17 +2,33 @@
 
 ## 产品支持情况<a id="zh-cn_topic_0000002566538879_section796754519912"></a>
 
-| 产品 | 是否支持 |
-| ---------- | :----------: |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
-| <cann-filter npu-type = "x90">Kirin X90 | √ </cann-filter> |
-| <cann-filter npu-type = "9030">Kirin 9030 | √ </cann-filter> |
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：支持
+<!-- end id9 -->
 
 ## 功能说明<a id="zh-cn_topic_0000002566538879_section106841136114319"></a>
 
@@ -22,7 +38,7 @@
 
 ND到NZ的格式转换等价于DN到ZN的格式转换，如[图1](#zh-cn_topic_0000002566538879_fig444462417355)。
 
-**图 1** ND2NZ与DN2ZN示意图<a id="zh-cn_topic_0000002566538879_fig444462417355"></a>
+**图1** ND2NZ与DN2ZN示意图<a id="zh-cn_topic_0000002566538879_fig444462417355"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_copy.png)
 
@@ -33,37 +49,33 @@ template <typename T>
 __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>& src, const Nd2NzParams& intriParams)
 ```
 
-<cann-filter npu-type = "950">
-
+<!-- npu="950" id10 -->
 特别针对Ascend 950PR/Ascend 950DT，函数原型请参考如下：
 
 ```cpp
 template <typename T, bool enableSmallC0 = false>
 __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>& src, const Nd2NzParams& intriParams)
 ```
-
-</cann-filter>
+<!-- end id10 -->
 
 ## 参数说明<a id="zh-cn_topic_0000002566538879_section16128134420472"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | ---------- | ---------- |
 | T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002566538879_section4219135304818)。 |
-| enableSmallC0 | SmallC0模式开关：当dValue小于等于4的时候，C0_SIZE会补齐到4 * sizeof(T)字节。<br>默认不开启。不同的型号，enableSmallC0支持度不同，请参考[enableSmallC0参数支持度说明](#enableSmallC0参数支持度说明)。 |
+| enableSmallC0 | SmallC0模式开关：当dValue小于等于4的时候，C0_SIZE会补齐到4 * sizeof(T)字节。<br>默认不开启。不同的型号，enableSmallC0支持度不同，请参考[enableSmallC0参数支持度说明](#enablesmallc0参数支持度说明)。 |
 
 ### enableSmallC0参数支持度说明
 
-<cann-filter npu-type = "950">
-
+<!-- npu="950" id11 -->
 - 针对Ascend 950PR/Ascend 950DT，新增enableSmallC0参数，调用该接口必须配置参数enableSmallC0；
-
-</cann-filter>
+<!-- end id11 -->
 
 - 其他型号不支持该参数。
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -71,7 +83,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 | src | 输入 | 源操作数，类型为GlobalTensor，存储位置为Global Memory，源地址需要1字节对齐。 |
 | intriParams | 输入 | ND2NZ搬运参数，类型为Nd2NzParams。<br>Nd2NzParams参数说明请参考[表4](#zh-cn_topic_0000002566538879_table144203616291)。 |
 
-**表 3** Nd2NzParams结构体参数定义<a id="zh-cn_topic_0000002566538879_table144203616291"></a>
+**表3** Nd2NzParams结构体参数定义<a id="zh-cn_topic_0000002566538879_table144203616291"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -82,47 +94,35 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 | srcDValue | 源矩阵一行中包含的元素个数，取值范围：srcDValue∈[1, 65535]，单位：元素个数。 |
 | dstNzC0Stride | ND转换为NZ格式后，目的NZ矩阵中相邻Z矩阵起始地址的偏移，取值范围：dstNzC0Stride∈[1, 16384]，单位：C0_SIZE（32字节）。 |
 | dstNzNStride | 目的矩阵中，NZ矩阵中相邻行起始地址的偏移，取值范围：dstNzNStride∈[1, 16384]，单位：C0_SIZE（32字节）。 |
-| dstNzMatrixStride | 目的矩阵中，相邻NZ矩阵起始地址的偏移，取值范围：dstNzMatrixStride∈[0, 65535]，单位：元素个数。<br>&nbsp;&nbsp;&bull; ndNum = 1时，dstNzMatrixStride无意义，设置为0即可。<br>&nbsp;&nbsp;&bull; ndNum ≠ 1时，当dstNzMatrixStride = 0时，表示目的矩阵中搬入的每个NZ矩阵都会覆盖第一个NZ矩阵。 |
+| dstNzMatrixStride | 目的矩阵中，相邻NZ矩阵起始地址的偏移，取值范围：dstNzMatrixStride∈[0, 16384]，单位：元素个数。<br>&nbsp;&nbsp;&bull; ndNum = 1时，dstNzMatrixStride无意义，设置为0即可。<br>&nbsp;&nbsp;&bull; ndNum ≠ 1时，当dstNzMatrixStride = 0时，表示目的矩阵中搬入的每个NZ矩阵都会覆盖第一个NZ矩阵。 |
 
 ## 数据类型<a id="zh-cn_topic_0000002566538879_section4219135304818"></a>
 
 源矩阵和目的矩阵支持的数据类型保持一致。
 
-<cann-filter npu-type = "950">
-
+<!-- npu="950" id12 -->
 针对Ascend 950PR/Ascend 950DT，支持的数据类型为：bool、int8_t、uint8_t、fp4x2_e2m1_t、fp4x2_e1m2_t、hifloat8_t、fp8_e5m2_t、fp8_e4m3fn_t、fp8_e8m0_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、complex32。
+<!-- end id12 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "A3">
-
+<!-- npu="A3" id13 -->
 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持数据类型为：b4（int4b_t）、int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、half、bfloat16_t、float。
+<!-- end id13 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "910b">
-
+<!-- npu="910b" id14 -->
 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持数据类型为：b4（int4b_t）、int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、half、bfloat16_t、float。
+<!-- end id14 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "310p">
-
+<!-- npu="310p" id15 -->
 针对Atlas 推理系列产品AI Core，支持数据类型为：int16_t、uint16_t、int32_t、uint32_t、half、float。
+<!-- end id15 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "x90">
-
+<!-- npu="x90" id16 -->
 Kirin X90，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、half。
+<!-- end id16 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "9030">
-
+<!-- npu="9030" id17 -->
 Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、half。
-
-</cann-filter>
+<!-- end id17 -->
 
 ## 返回值说明
 
@@ -136,7 +136,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - 搬运至L1 Buffer的数据不能重叠，如果存在重叠写入，硬件不会产生任何警告或错误，并且不保证重叠数据的写入顺序。
 - Nd2NzParams结构体参数的值需在取值范围内：
 
-    **表 4** Nd2NzParams结构体参数取值范围
+    **表4** Nd2NzParams结构体参数取值范围
 
     | 参数名称 | 取值范围 |
     | ---------- | ---------- |
@@ -147,13 +147,11 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
     | srcDValue | [1, 65535] |
     | dstNzC0Stride | [1, 16384] |
     | dstNzNStride | [1, 16384] |
-    | dstNzMatrixStride | [0, 65535] |
+    | dstNzMatrixStride | [0, 16384] |
 
-<cann-filter npu-type = "310p">
-
+<!-- npu="310p" id18 -->
 - 针对Atlas 推理系列产品AI Core，使用Global Memory -\> Local Memory通路的ND2NZ搬运接口时，需要预留8K的UB空间，作为接口的临时数据存放区。
-
-</cann-filter>
+<!-- end id18 -->
 
 ## 关键特性说明
 
@@ -170,7 +168,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - dstNzNStride = 1，表示NZ矩阵中相邻行起始地址的偏移。
 - dstNzMatrixStride = 0，只有一个NZ矩阵，该值为0。
 
-**图 2** ND2NZ转换示意图（连续搬运）<a id="zh-cn_topic_0000002566538879_fig7420114233419"></a>
+**图2** ND2NZ转换示意图（连续搬运）<a id="zh-cn_topic_0000002566538879_fig7420114233419"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_continuous_copy.png)
 
@@ -187,7 +185,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 - dstNzNStride = 2，表示NZ矩阵中相邻行起始地址的偏移。
 - dstNzMatrixStride = 320，相邻NZ矩阵起始地址的偏移，每行16个元素，共20行，偏移为16 * 20 = 320个元素。
 
-**图 3** ND2NZ转换示意图（非连续搬运）<a id="zh-cn_topic_0000002566538879_fig19978184883316"></a>
+**图3** ND2NZ转换示意图（非连续搬运）<a id="zh-cn_topic_0000002566538879_fig19978184883316"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_noncontinuous_copy.png)
 
@@ -195,7 +193,7 @@ Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、hal
 
 enableSmallC0开启模式下的ND2NZ转换示意图如下：
 
-**图 4** enableSmallC0开启模式下的ND2NZ转换示意图（half数据类型）<a name="fig07641913195410"></a>  
+**图4** enableSmallC0开启模式下的ND2NZ转换示意图（half数据类型）<a name="fig07641913195410"></a>  
 
 ![](../../../../../figures/enableSmallC0开启模式下的ND2NZ转换示意图-（half数据类型）.png "enableSmallC0开启模式下的ND2NZ转换示意图-（half数据类型）")
 
@@ -207,7 +205,7 @@ enableSmallC0开启模式下的ND2NZ转换示意图如下：
 
 ![](../../../../../figures/datacopy_gm2l1_nd2nz_demo.png)
 
-示例代码片段如下，仅展示样例中的部分代码，完整示例请参考：[DataCopy_GM2L1样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_matrix_compute/load_data_l12l0)。
+示例代码片段如下，仅展示样例中的部分代码，完整示例请参考：[DataCopy_GM2L1样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_l12l0)。
 
 ```cpp
 // m=40,k=56,fractalShape[0] = 16,fractalShape[1] = 16,fractalSize = 16 * fractalShape[1]

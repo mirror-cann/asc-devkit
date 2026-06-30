@@ -2,17 +2,33 @@
 
 ## 产品支持情况<a id="zh-cn_topic_0000002567745223_section796754519912"></a>
 
-| 产品 | 是否支持 |
-| ---------- | :----------: |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "x90">Kirin X90 | √ </cann-filter> |
-| <cann-filter npu-type = "9030">Kirin 9030 | √ </cann-filter> |
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：支持
+<!-- end id9 -->
 
 ## 功能说明<a id="zh-cn_topic_0000002567745223_section106841136114319"></a>
 
@@ -29,7 +45,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 ## 参数说明<a id="zh-cn_topic_0000002567745223_section16128134420472"></a>
 
-**表 1** 通用参数说明
+**表1** 通用参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -37,7 +53,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>
 | src | 输入 | 源操作数，类型为GlobalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考矩阵计算输入搬运约束中的[对齐约束](../矩阵计算输入搬运约束.md)。<br>数据类型和dst的数据类型保持一致。<br>支持的物理存储位置为Global Memory（TPosition为GM）。 |
 | loadDataParams | 输入 | LoadData参数结构体，类型为LoadData2DParams，具体参考[表2](#zh-cn_topic_0000002567745223_table8955841508)。 |
 
-**表 2** LoadData2DParams结构体内参数说明<a id="zh-cn_topic_0000002567745223_table8955841508"></a>
+**表2** LoadData2DParams结构体内参数说明<a id="zh-cn_topic_0000002567745223_table8955841508"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -51,53 +67,37 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 ## 数据类型<a id="zh-cn_topic_0000002567745223_section4219135304818"></a>
 
-<cann-filter npu-type = "950">
-
+<!-- npu="950" id10 -->
 针对Ascend 950PR/Ascend 950DT，支持数据类型为：uint8_t、int8_t、uint16_t、int16_t、half、bfloat16_t、uint32_t、int32_t、float。
+<!-- end id10 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "A3">
-
+<!-- npu="A3" id11 -->
 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持数据类型为：b8、b16、b32。
+<!-- end id11 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "910b">
-
+<!-- npu="910b" id12 -->
 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持数据类型为：b8、b16、b32。
+<!-- end id12 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "310b">
-
+<!-- npu="310b" id13 -->
 针对Atlas 200I/500 A2 推理产品，支持数据类型为：uint8_t、int8_t、uint16_t、int16_t、half、bfloat16_t、uint32_t、int32_t、float。
+<!-- end id13 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "310p">
-
+<!-- npu="310p" id14 -->
 针对Atlas 推理系列产品AI Core，支持数据类型为：uint8_t、int8_t、uint16_t、int16_t、half。
+<!-- end id14 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "910">
-
+<!-- npu="910" id15 -->
 针对Atlas 训练系列产品，支持数据类型为：uint8_t、int8_t、uint16_t、int16_t、half。
+<!-- end id15 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "x90">
-
+<!-- npu="x90" id16 -->
 针对Kirin X90，支持数据类型为：int8_t、half。
+<!-- end id16 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "9030">
-
+<!-- npu="9030" id17 -->
 针对Kirin 9030，支持数据类型为：half。
-
-</cann-filter>
+<!-- end id17 -->
 
 ## 返回值说明
 
@@ -109,9 +109,9 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>
 - 本通路搬运过程中不支持转置。
 - 目的地址必须32字节对齐。源地址必须1字节对齐，指令执行占用的流水为PIPE_MTE2。
 - 当srcStride=0时，表示连续的repeat之间读取的源操作数中的同一块数据分形。
-<cann-filter npu-type = "910">
+<!-- npu="910" id18 -->
 - 针对Atlas 训练系列产品不支持dstGap设置参数。
-</cann-filter>
+<!-- end id18 -->
 
 ## 调用示例<a id="zh-cn_topic_0000002567745223_section088124295117"></a>
 

@@ -2,15 +2,27 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-| 产品 | 是否支持 |
-| ------ | :------: |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：不支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -28,7 +40,7 @@ __aicore__ inline void SetLoadDataBoundary(uint32_t boundaryValue)
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1** 参数说明
+**表1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ------ | ------ | ------ |
@@ -40,10 +52,9 @@ __aicore__ inline void SetLoadDataBoundary(uint32_t boundaryValue)
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-- 用于[Load3Dv1](../矩阵数据搬入至L0-Buffer/Load3D.md)时，boundaryValue的最小值是16（单位：32字节）；用于[Load3Dv2](../矩阵数据搬入至L0-Buffer/Load3D.md)时，boundaryValue的最小值是1024（单位：字节）。
 - 如果使用SetLoadDataBoundary接口设置了边界值，配合Load3D指令使用时，Load3D指令的A1/B1初始地址要在设置的边界内。
 - 如果boundaryValue设置为0，则表示无边界，可使用整个A1/B1。
-- 配合[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)指令使用时，边界值大小最小值要求是1024，如果设置1-1023值是未定义行为。
+- 配合[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)指令使用时，边界值大小最小值要求是1024，如果设置1~1023值是未定义行为。
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../../通用说明和约束.md#section796754519912)。
 
 ## 调用示例<a name="section642mcpsimp"></a>

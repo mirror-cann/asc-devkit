@@ -2,17 +2,33 @@
 
 ## 产品支持情况<a id="zh-cn_topic_0000002566658905_section796754519912"></a>
 
-| 产品 | 是否支持 |
-| ---------- | :----------: |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √ </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "x90">Kirin X90 | √ </cann-filter> |
-| <cann-filter npu-type = "9030">Kirin 9030 | √ </cann-filter> |
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：支持
+<!-- end id9 -->
 
 ## 功能说明<a id="zh-cn_topic_0000002566658905_section106841136114319"></a>
 
@@ -35,13 +51,13 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 ## 参数说明<a id="zh-cn_topic_0000002566658905_section16128134420472"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | ---------- | ---------- |
 | T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#zh-cn_topic_0000002566658905_section4219135304818)。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -49,7 +65,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 | src | 输入 | 源操作数，类型为GlobalTensor，存储位置为Global Memory，源地址需要1字节对齐。 |
 | repeatParams | 输入 | 搬运参数，类型为DataCopyParams。通过该参数可以配置搬运的数据块个数、长度、地址间隔等信息，同时支持非连续和连续搬运。<br>DataCopyParams参数说明请参考[表3](#zh-cn_topic_0000002566658905_table144203616291)。 |
 
-**表 3** DataCopyParams结构体参数定义<a id="zh-cn_topic_0000002566658905_table144203616291"></a>
+**表3** DataCopyParams结构体参数定义<a id="zh-cn_topic_0000002566658905_table144203616291"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -62,47 +78,33 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
 源矩阵和目的矩阵支持的数据类型保持一致。
 
-<cann-filter npu-type = "950">
-
+<!-- npu="950" id10 -->
 针对Ascend 950PR/Ascend 950DT，支持数据类型为：b8、b16、b32、b64。
+<!-- end id10 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "A3">
-
+<!-- npu="A3" id11 -->
 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持数据类型为：b8、b16、b32、b64。
+<!-- end id11 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "910b">
-
+<!-- npu="910b" id12 -->
 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持数据类型为：b8、b16、b32、b64。
+<!-- end id12 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "310p">
-
+<!-- npu="310p" id13 -->
 针对Atlas 推理系列产品AI Core，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、float、double。
+<!-- end id13 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "910">
-
+<!-- npu="910" id14 -->
 针对Atlas 训练系列产品，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、float、double。
+<!-- end id14 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "x90">
-
+<!-- npu="x90" id15 -->
 针对Kirin X90，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、float、double。
+<!-- end id15 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "9030">
-
+<!-- npu="9030" id16 -->
 针对Kirin 9030，支持数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t、half、float、double。
-
-</cann-filter>
+<!-- end id16 -->
 
 ## 返回值说明
 
@@ -114,7 +116,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 - 当DataCopyParams结构体参数blockCount、blockLen任意一个值为0时，表示指令不会执行，该接口将被视为NOP（空操作）。
 - DataCopyParams结构体参数的值需在取值范围内：
 
-    **表 4** DataCopyParams结构体参数取值范围
+    **表4** DataCopyParams结构体参数取值范围
 
     | 参数名称 | 取值范围 |
     | ---------- | ---------- |
@@ -127,25 +129,19 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 
     ![](../../../../../figures/绘图4.png)
 
-<cann-filter npu-type = "A3,910b">
-
+<!-- npu="A3,910b" id17 -->
 - 针对如下产品型号：
 
-    <cann-filter npu-type = "A3">
-
+    <!-- npu="A3" id18 -->
     Atlas A3 训练系列产品/Atlas A3 推理系列产品；
+    <!-- end id18 -->
 
-    </cann-filter>
-
-    <cann-filter npu-type = "910b">
-
+    <!-- npu="910b" id19 -->
     Atlas A2 训练系列产品/Atlas A2 推理系列产品；
-    
-    </cann-filter>
+    <!-- end id19 -->
 
     在跨卡通信算子开发场景，DataCopy类接口支持跨卡数据搬运，仅支持HCCS物理链路，不支持其他通路；开发者开发过程中，需要关注涉及卡间通信的物理通路，可通过npu-smi info -t topo命令查询HCCS物理链路。
-
-</cann-filter>
+<!-- end id17 -->
 
 ## 关键特性说明
 
@@ -162,7 +158,7 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 - srcGap = 0，源操作数相邻数据块之间的间隔为0。
 - dstGap = 0，目的操作数相邻数据块之间的间隔为0。
 
-**图 1** 连续搬运示意图<a id="zh-cn_topic_0000002566658905_fig769164701717"></a>
+**图1** 连续搬运示意图<a id="zh-cn_topic_0000002566658905_fig769164701717"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_continuous_copy_highdim.png)
 
@@ -177,20 +173,48 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const GlobalTensor<T>
 - srcGap= 1，源操作数相邻数据块之间的间隔为1。
 - dstGap= 2，目的操作数相邻数据块之间的间隔为2。
 
-**图 2** 非连续搬运示意图<a id="zh-cn_topic_0000002566658905_fig12371910189"></a>
+**图2** 非连续搬运示意图<a id="zh-cn_topic_0000002566658905_fig12371910189"></a>
 
 ![](../../../../../figures/datacopy_gm2l1_noncontinuous_copy_highdim.png)
 
 ## 调用示例<a id="zh-cn_topic_0000002566658905_section088124295117"></a>
 
-示例代码片段如下：
+连续搬运以[图1 连续搬运示意图](#zh-cn_topic_0000002566658905_fig769164701717)所示场景为例：
 
 ```cpp
-// 使用传入DataCopyParams参数的搬运接口，支持连续和非连续搬运
-DataCopyParams intriParams;
-intriParams.blockCount = 1; // 连续数据块个数为1
-intriParams.blockLen = 512 * sizeof(half) / 32; // 连续数据块长度，单位为DataBlock
-intriParams.srcGap = 0; // 源操作数做连续搬运
-intriParams.dstGap = 0; // 目的操作数连续排布
-AscendC::DataCopy(srcLocal, srcGlobal, intriParams);
+constexpr uint32_t copyCount = 128;
+// 源操作数：GM上连续存放128个half。
+AscendC::GlobalTensor<half> srcGm;
+srcGm.SetGlobalBuffer((__gm__ half *)src, copyCount);
+// 目的操作数：L1 Buffer。
+AscendC::LocalTensor<half> dstLocal(AscendC::TPosition::A1, 0, copyCount);
+
+AscendC::DataCopyParams repeatParams;
+repeatParams.blockCount = 1; // 搬运1个数据块，表示连续搬运。
+repeatParams.blockLen = 8;   // 每个数据块长度为8个DataBlock，即256B，等于128个half。
+repeatParams.srcGap = 0;     // blockCount = 1时，源端间隔无意义，设置为0。
+repeatParams.dstGap = 0;     // blockCount = 1时，目的端间隔无意义，设置为0。
+
+AscendC::DataCopy(dstLocal, srcGm, repeatParams);
+```
+
+非连续搬运以[图2 非连续搬运示意图](#zh-cn_topic_0000002566658905_fig12371910189)所示场景为例：
+
+```cpp
+constexpr uint32_t srcCount = 112;
+constexpr uint32_t dstCount = 128;
+// 源操作数：GM上有112个half，按“48个有效元素+16个跳过元素+48个有效元素”排布。
+AscendC::GlobalTensor<half> srcGm;
+srcGm.SetGlobalBuffer((__gm__ half *)src, srcCount);
+
+// 目的操作数：L1 Buffer，两个数据块之间预留32个half的间隔。
+AscendC::LocalTensor<half> dstLocal(AscendC::TPosition::A1, 0, dstCount);
+
+AscendC::DataCopyParams repeatParams;
+repeatParams.blockCount = 2; // 搬运2个数据块。
+repeatParams.blockLen = 3;   // 每个数据块长度为3个DataBlock，即96B，等于48个half。
+repeatParams.srcGap = 1;     // 源端两个数据块之间跳过1个DataBlock，即16个half。
+repeatParams.dstGap = 2;     // 目的端两个数据块之间间隔2个DataBlock，即32个half。
+
+AscendC::DataCopy(dstLocal, srcGm, repeatParams);
 ```

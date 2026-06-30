@@ -2,17 +2,33 @@
 
 ## 产品支持情况<a id="section1550532418810"></a>
 
-| 产品 | 是否支持 |
-| ---------- | :----------: |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | x </cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | x </cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 Vector Core | x </cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
-| <cann-filter npu-type = "x90">Kirin X90 | x </cann-filter> |
-| <cann-filter npu-type = "9030">Kirin 9030 | x </cann-filter> |
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：不支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：不支持
+<!-- end id9 -->
 
 ## 功能说明<a id="section618mcpsimp"></a>
 
@@ -29,7 +45,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 ## 参数说明<a id="section622mcpsimp"></a>
 
-**表 1** 模板参数说明<a name="table07381635103112"></a>
+**表1** 模板参数说明<a name="table07381635103112"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -37,7 +53,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 | Src | 源操作数存储的逻辑位置（TPosition），仅Load3DBitMode接口使用。 |
 | Dst | 目的操作数存储的逻辑位置（TPosition），仅Load3DBitMode接口使用。 |
 
-**表 2** 通用参数说明<a name="table18368155193919"></a>
+**表2** 通用参数说明<a name="table18368155193919"></a>
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ---------- | ---------- |
@@ -45,7 +61,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 | src | 输入 | 源操作数，类型为LocalTensor。<br>数据类型需要与dst保持一致。 |
 | loadDataParams | 输入 | LoadData参数结构体，类型为：<br>&nbsp;&nbsp;&bull; Load3DBitModeParam，具体参考[表3](#table106611666584)。<br>上述结构体参数定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_mm.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
 
-**表 3** Load3DBitModeParam类参数说明<a name="table106611666584"></a>
+**表3** Load3DBitModeParam类参数说明<a name="table106611666584"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -73,16 +89,16 @@ __aicore__ inline Load3DBitModeParam(const LoadData3DParamsV2<T> &loadData3DPara
 
 也可以使用各参数的Set函数修改参数值，并且由于使用了联合体，还可以对config0和config1直接进行逐bit位修改来修改参数。
 
-**表 4** Load3DBitModeConfig0结构体参数说明<a name="table184321224173"></a>
+**表4** Load3DBitModeConfig0结构体参数说明<a name="table184321224173"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
 | kStep | 该指令在目的操作数width维度的传输长度，如果不覆盖最右侧的分形，对于half类型，应为16的倍数，对于int8_t/uint8_t应为32的倍数；覆盖的情况则无倍数要求。取值范围：kStep∈[1, 65535]。<br>（与[Load3D](Load3D.md)中的kExtension含义相同）。<br>该参数是位域结构体的最低位参数，占用16bit，可以使用Load3DBitModeParam类对象的SetKExtension()函数设置其值，使用GetKExtension()函数获取其值。 |
 | mStep | 该指令在目的操作数height维度的传输长度，如果不覆盖最下侧的分形，对于half/int8_t/uint8_t，应为16的倍数；覆盖的情况则无倍数要求。取值范围：mStep∈[1, 65535]。<br>（与[Load3D](Load3D.md)中的mExtension含义相同）。<br>该参数是位域结构体的第二低位参数，占用16bit，可以使用Load3DBitModeParam类对象的SetMExtension()函数设置其值，使用GetMExtension()函数获取其值。 |
 | kPos | 该指令在目的操作数width维度的起点，对于half类型，应为16的倍数，对于int8_t/uint8_t应为32的倍数。取值范围[0, 65535]。默认为0。<br>（与[Load3D](Load3D.md)中的kStartPt含义相同）。<br>该参数是位域结构体的第三低位参数，占用16bit，可以使用Load3DBitModeParam类对象的SetKStartPt()函数设置其值，使用GetKStartPt()函数获取其值。 |
-| mPos | 该指令在目的操作数height维度的起点，如果不覆盖最下侧的分形，对于half/int8_t/uint8_t，应为16的倍数；覆盖的情况则无倍数要求。取值范围[0, 65535]。默认为0。<br>（与[Load3D](Load3D.md)中的mStartPt含义相同）。<br>该参数是位域结构体的最高位参数，占用16bit，可以使用Load3DBitModeParam类对象的SetMStartPt()函数设置其值，使用GetMStartPt()函数获取其值。 |
+| mPos | 该指令在目的操作数height维度的起点，取值范围[0, 32767]。默认为0。<br>（与[Load3D](Load3D.md)中的mStartPt含义相同）。<br>该参数是位域结构体的最高位参数，占用16bit，可以使用Load3DBitModeParam类对象的SetMStartPt()函数设置其值，使用GetMStartPt()函数获取其值。 |
 
-**表 5** Load3DBitModeConfig1结构体参数说明<a name="table87491086815"></a>
+**表5** Load3DBitModeConfig1结构体参数说明<a name="table87491086815"></a>
 
 | 参数名称 | 含义 |
 | ---------- | ---------- |
@@ -92,7 +108,7 @@ __aicore__ inline Load3DBitModeParam(const LoadData3DParamsV2<T> &loadData3DPara
 | Hk | 卷积核height，取值范围：Hk∈[1, 255]。<br>（与[Load3D](Load3D.md)中的filterH含义相同）。<br>该参数是位域结构体的第四低位参数，占用8bit，可以使用Load3DBitModeParam类对象的SetFilterH()函数设置其值，使用GetFilterH()函数获取其值。 |
 | dilationW | 卷积核width膨胀系数，取值范围：dilationW∈[1, 255]。<br>（与[Load3D](Load3D.md)中的dilationFilterW含义相同）<br>该参数是位域结构体的第五低位参数，占用8bit，可以使用Load3DBitModeParam类对象的SetDilationFilterW()函数设置其值，使用GetDilationFilterW()函数获取其值。 |
 | dilationH | 卷积核height膨胀系数，取值范围：dilationH∈[1, 255]。<br>（与[Load3D](Load3D.md)中的dilationFilterH含义相同）。<br>该参数是位域结构体的第六低位参数，占用8bit，可以使用Load3DBitModeParam类对象的SetDilationFilterH()函数设置其值，使用GetDilationFilterH()函数获取其值。 |
-| filterW | 是否在filterW的基础上将卷积核width增加256 个元素。true，增加；false，不增加。<br>（与[Load3D](Load3D.md)中的filterSizeW含义相同）。<br>该参数是位域结构体的第七低位参数，占用1bit，可以使用Load3DBitModeParam类对象的SetFilterSizeW()函数设置其值，使用GetFilterSizeW()函数获取其值。 |
+| filterW | 是否在filterW的基础上将卷积核width增加256个元素。true，增加；false，不增加。<br>（与[Load3D](Load3D.md)中的filterSizeW含义相同）。<br>该参数是位域结构体的第七低位参数，占用1bit，可以使用Load3DBitModeParam类对象的SetFilterSizeW()函数设置其值，使用GetFilterSizeW()函数获取其值。 |
 | filterH | 是否在filterH的基础上将卷积核height增加256个元素。true，增加；false，不增加。<br>（与[Load3D](Load3D.md)中的filterSizeH含义相同）。<br>该参数是位域结构体的第八低位参数，占用1bit，可以使用Load3DBitModeParam类对象的SetFilterSizeH()函数设置其值，使用GetFilterSizeH()函数获取其值。 |
 | transpose | 是否启用转置功能，对整个目标矩阵进行转置，支持数据类型为bool，仅在目的TPosition为A2，且源操作数为half类型时有效。默认为false。<br>&nbsp;&nbsp;&bull; true：启用<br>&nbsp;&nbsp;&bull; false：不启用<br>（与[Load3D](Load3D.md)中的enTranspose含义相同）。<br>该参数是位域结构体的第九低位参数，占用1bit，可以使用Load3DBitModeParam类对象的SetTranspose()函数设置其值，使用GetTranspose()函数获取其值。 |
 | fmatrixCtrl | 表示LoadData3DV2指令从左矩阵还是右矩阵获取FeatureMap的属性描述，与SetFmatrix配合使用，当前只支持设置为false，默认值为false。<br>&nbsp;&nbsp;&bull; true：从右矩阵中获取FeatureMap的属性描述；<br>&nbsp;&nbsp;&bull; false：从左矩阵中获取FeatureMap的属性描述。<br>（与[Load3D](Load3D.md)中的fMatrixCtrl含义相同）。<br>该参数是位域结构体的第十低位参数，占用1bit，可以使用Load3DBitModeParam类对象的SetFmatrixCtrl()函数设置其值，使用GetFmatrixCtrl()函数获取其值。 |
@@ -115,10 +131,9 @@ __aicore__ inline Load3DBitModeParam(const LoadData3DParamsV2<T> &loadData3DPara
 示例代码片段如下：
 
 ```cpp
-uint16_t C1 = 2;
+// featureMapA1为half类型、位于L1 Buffer，featureMapA2为half类型、位于L0A Buffer
 uint16_t H = 4, W = 4;
 uint8_t Kh = 2, Kw = 2;
-uint16_t Cout = 16;
 uint16_t C0 = 16;
 uint8_t dilationH = 2, dilationW = 2;
 uint8_t padTop = 1, padBottom = 1, padLeft = 1, padRight = 1;

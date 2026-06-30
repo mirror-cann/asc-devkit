@@ -2,17 +2,33 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-| 产品 | 是否支持 |
-| ------ | :------: |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | x </cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | x </cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
-| <cann-filter npu-type = "x90">Kirin X90 | x </cann-filter> |
-| <cann-filter npu-type = "9030">Kirin 9030 | x </cann-filter> |
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：不支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：不支持
+<!-- end id9 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -26,7 +42,7 @@ __aicore__ inline void SetFmatrix(const SetFMatrixBitModeParams& param, const Fm
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1** 参数说明
+**表1** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | --------- | ---------- | ------ |
@@ -34,7 +50,7 @@ __aicore__ inline void SetFmatrix(const SetFMatrixBitModeParams& param, const Fm
 | param | 输入 | 类型为SetFMatrixBitMode，具体参考[表2](#table85031523118)。 |
 
 <a name="table85031523118"></a>
-**表 2** SetFMatrixBitMode类参数说明
+**表2** SetFMatrixBitMode类参数说明
 
 | 参数名称 | 含义 |
 | --------- | --------- |
@@ -49,7 +65,7 @@ SetFMatrixBitMode类参数设计思想说明：
 
 SetFMatrixBitMode类使用union与bit-field方法，采用bit位表达参数类型，使用bit-field结构体自动处理入参的bit位数，并利用union的特性实现多参数融合传递，仅需传递一个入参即可包含全部所需信息，对应底层接口仅需要接收一个参数。同时，当需要修改参数中某一bit位的值时，仅通过循环和位运算即可实现，不需要重新传入参数，减少了scalar计算，实现性能提升。
 
-SetFMatrixBitMode类可以直接使用[LoadData3DParamsV2结构体](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)结构体类型对象初始化：
+SetFMatrixBitMode类可以直接使用[LoadData3DParamsV2结构体](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)类型对象初始化：
 
 ```cpp
 template <typename T>
@@ -59,13 +75,13 @@ __aicore__ inline SetFMatrixBitModeParams(const LoadData3DParamsV2<T> &loadData3
 也可以使用各参数的Set函数修改参数值，并且由于使用了联合体，还可以对config0直接进行逐bit位修改来修改参数。
 
 <a name="table1162220101434"></a>
-**表 3** SetFMatrixBitModeConfig0结构体参数说明
+**表3** SetFMatrixBitModeConfig0结构体参数说明
 
 | 参数名称 | 含义 |
 | --- | --- |
 | l1H | 源操作数height，取值范围：l1H∈[1, 32767]。该参数是位域结构体的最低位参数，占用16bit，可以使用SetFMatrixBitMode类对象的SetL1H()函数设置其值。 |
 | l1W | 源操作数width，取值范围：l1W∈[1, 32767]。该参数是位域结构体的第二低位参数，占用16bit，可以使用SetFMatrixBitMode类对象的SetL1W()函数设置其值。 |
-| padList0 | 对应[表 LoadData3DParamsV2结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)中padding列表中的padding_left值，取值范围：[0,255]。默认为0。该参数是位域结构体的第三低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
+| padList0 | 对应[表LoadData3DParamsV2结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)中padding列表中的padding_left值，取值范围：[0,255]。默认为0。该参数是位域结构体的第三低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
 | padList1 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的padding_right值，取值范围：[0,255]。默认为0。该参数是位域结构体的第四低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
 | padList2 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的padding_top值，取值范围：[0,255]。默认为0。该参数是位域结构体的第五低位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |
 | padList3 | 对应[表1](SetFmatrix.md#table8955841508)中padding列表中的padding_bottom值，取值范围：[0,255]。默认为0。该参数是位域结构体的最高位参数，占用8bit，可以使用SetFMatrixBitMode类对象的SetPadList()函数设置其值。 |

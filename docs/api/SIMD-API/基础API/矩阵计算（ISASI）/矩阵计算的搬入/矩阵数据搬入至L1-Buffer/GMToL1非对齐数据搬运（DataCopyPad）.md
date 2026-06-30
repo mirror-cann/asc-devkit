@@ -4,15 +4,27 @@
 
 <a name="table38301303189"></a>
 
-| 产品 | 是否支持 |
-| --- | :---: |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √ </cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | x </cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | x </cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x </cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -66,8 +78,8 @@ __aicore__ inline void DataCopyPad(const LocalTensor<T>& dst, const GlobalTensor
 | 参数名称 | 含义 |
 | --- | --- |
 | isPad | 是否需要填充用户自定义的数据，取值范围：true，false。<br>&nbsp;&nbsp;&bull; true：填充padding value。<br>&nbsp;&nbsp;&bull; false：表示用户不需要指定填充值，会默认填充随机值。 |
-| leftPadding | 连续搬运数据块左侧需要补充的数据范围，单位为元素个数。<br>**leftPadding、rightPadding所占的字节数均不能超过32字节。** |
-| rightPadding | 连续搬运数据块右侧需要补充的数据范围，单位为元素个数。<br>**leftPadding、rightPadding所占的字节数均不能超过32字节。** |
+| leftPadding | 连续搬运数据块左侧需要补充的数据范围，单位为元素个数。<br>**leftPadding、rightPadding所占的字节数均不能超过32字节。**<br>**Compact模式下leftPadding、rightPadding均不生效，仅在整块数据末尾统一补齐至32字节对齐。** |
+| rightPadding | 连续搬运数据块右侧需要补充的数据范围，单位为元素个数。<br>**leftPadding、rightPadding所占的字节数均不能超过32字节。**<br>**Compact模式下leftPadding、rightPadding均不生效，仅在整块数据末尾统一补齐至32字节对齐。** |
 | paddingValue | 左右两侧需要填充的数据值，需要保证在数据占用字节范围内。<br>数据类型和源操作数保持一致，T数据类型。<br>**当数据类型长度为64位时，该参数只能设置为0。** |
 
 下面给出如下场景的配置示例：
@@ -75,17 +87,19 @@ __aicore__ inline void DataCopyPad(const LocalTensor<T>& dst, const GlobalTensor
 - <a name="li1975762118172"></a>搬运模式的配置示例
     - Normal模式
 
-        blockLen为48，每个连续传输数据块包含48字节；srcStride为0，因为源操作数的逻辑位置为GM，srcStride的单位为字节，即源操作数相邻数据块之间紧密排列；dstStride为0，因为目的操作数的逻辑位置为VECIN、VECOUT，dstStride的单位为DataBlock（32字节），目的操作数相邻数据块之间无间隔，注意数据块包含leftPadding/rightPadding数据。
+        blockLen为48，每个连续传输数据块包含48字节；srcStride为0，因为源操作数的逻辑位置为GM，srcStride的单位为字节，即源操作数相邻数据块之间紧密排列；dstStride为0，因为目的操作数的逻辑位置为L1 Buffer，dstStride的单位为DataBlock（32字节），目的操作数相邻数据块之间无间隔，注意数据块包含leftPadding/rightPadding数据。
 
         blockLen + leftPadding + rightPadding满足32字节对齐，isPad为false，左右两侧填充的数据值会默认为随机值，否则为paddingValue。此处示例中，leftPadding为0，rightPadding为16，每个连续传输数据块都会在右侧填充16字节。目的操作数的总长度为192字节。
 
     - Compact模式
 
-        blockLen为48，每个连续传输数据块包含48字节；srcStride为0，因为源操作数的逻辑位置为GM，srcStride的单位为字节，即源操作数相邻数据块之间紧密排列；dstStride为0，因为目的操作数的逻辑位置为VECIN、VECOUT，dstStride的单位为DataBlock（32字节），目的操作数相邻数据块之间紧密排列，不会填充数据。
+        blockLen为48，每个连续传输数据块包含48字节；srcStride为0，因为源操作数的逻辑位置为GM，srcStride的单位为字节，即源操作数相邻数据块之间紧密排列；dstStride为0，因为目的操作数的逻辑位置为L1 Buffer，dstStride的单位为DataBlock（32字节），目的操作数相邻数据块之间紧密排列，不会填充数据。
 
-        blockLen \* blockCount + leftPadding + rightPadding 满足32字节对齐，isPad为false，左右两侧填充的数据值会默认为随机值，否则为paddingValue。此处示例中，leftPadding为0，rightPadding为16，在最后一个数据块右侧填充16字节。目的操作数的总长度为160字节。
+        **Compact模式下leftPadding、rightPadding均不生效**，有效数据紧密排列后，统一在整块数据末尾补齐至32字节对齐。此处示例中，blockLen \* blockCount = 48 \* 3 = 144字节，在整块数据末尾补齐16字节满足32字节对齐，目的操作数的总长度为160字节。
 
-        ![](../../../../../figures/paddingMode.png)
+**图 1**  Normal模式与Compact模式搬运配置示意图<a id="fig_paddingmode_demo"></a>
+
+![](../../../../../figures/paddingMode.png "Normal模式与Compact模式搬运配置示意图")
 
 ## 数据类型
 
@@ -101,4 +115,75 @@ __aicore__ inline void DataCopyPad(const LocalTensor<T>& dst, const GlobalTensor
 
 ## 调用示例<a name="section177231425115410"></a>
 
-无
+示例场景如[图 1](#fig_paddingmode_demo)所示，该接口仅支持Ascend 950PR/Ascend 950DT。
+
+Normal模式调用示例如下：
+
+```cpp
+constexpr uint32_t srcElemCount = 144;
+constexpr uint32_t dstElemCount = 192;
+
+// 源操作数：GM上连续存放3个数据块，每块48B，共144个int8_t。
+AscendC::GlobalTensor<int8_t> srcGm;
+srcGm.SetGlobalBuffer((__gm__ int8_t *)src, srcElemCount);
+// 目的操作数：L1 Buffer。Normal模式下每块48B有效数据右侧补16B，3块共192B。
+AscendC::LocalTensor<int8_t> dstLocal(AscendC::TPosition::A1, 0, dstElemCount);
+
+AscendC::DataCopyExtParams copyParams;
+// 搬运3个连续传输数据块。
+copyParams.blockCount = 3;
+// 每个连续传输数据块包含48B有效数据。
+copyParams.blockLen = 48;
+// 源操作数在GM，单位为字节；相邻数据块紧密排列，间隔为0B。
+copyParams.srcStride = 0;
+// 目的端A1相邻数据块无额外间隔，dstStride的单位为DataBlock（32字节）。
+copyParams.dstStride = 0;
+// 保留字段，固定填0。
+copyParams.rsv = 0;
+
+AscendC::DataCopyPadExtParams<int8_t> padParams;
+// padding区域使用默认随机值，不使用paddingValue。
+padParams.isPad = false;
+// 左侧不填充，GM数据直接从每个目的数据块起始位置写入。
+padParams.leftPadding = 0;
+// 每块右侧填充16个int8_t，即16B；48B + 16B = 64B，满足32B对齐。
+padParams.rightPadding = 16;
+// isPad = false 时该值不生效，填0保持字段完整。
+padParams.paddingValue = static_cast<int8_t>(0);
+
+AscendC::DataCopyPad<int8_t, AscendC::PaddingMode::Normal>(dstLocal, srcGm, copyParams, padParams);
+```
+
+Compact模式调用示例如下：
+
+```cpp
+constexpr uint32_t srcElemCount = 144;
+constexpr uint32_t dstElemCount = 160;
+
+// 源操作数：GM上连续存放3个数据块，每块48B，共144个int8_t。
+AscendC::GlobalTensor<int8_t> srcGm;
+srcGm.SetGlobalBuffer((__gm__ int8_t *)src, srcElemCount);
+
+// 目的操作数：L1 Buffer的A1位置。Compact模式下3块有效数据共144B，只在最后右侧补16B。
+AscendC::LocalTensor<int8_t> dstLocal(AscendC::TPosition::A1, 0, dstElemCount);
+
+AscendC::DataCopyExtParams copyParams;
+// 搬运3个连续传输数据块。
+copyParams.blockCount = 3;
+// 每个连续传输数据块包含48B有效数据。
+copyParams.blockLen = 48;
+// 源操作数在GM，单位为字节；相邻数据块紧密排列，间隔为0B。
+copyParams.srcStride = 0;
+// Compact模式下目的端有效数据紧密排列，不在每块之间插入padding间隔。
+copyParams.dstStride = 0;
+// 保留字段，固定填0。
+copyParams.rsv = 0;
+
+AscendC::DataCopyPadExtParams<int8_t> padParams;
+// padding区域使用默认随机值，不使用paddingValue。
+padParams.isPad = false;
+// isPad = false时该值不生效，填0保持字段完整。
+padParams.paddingValue = static_cast<int8_t>(0);
+
+AscendC::DataCopyPad<int8_t, AscendC::PaddingMode::Compact>(dstLocal, srcGm, copyParams, padParams);
+```

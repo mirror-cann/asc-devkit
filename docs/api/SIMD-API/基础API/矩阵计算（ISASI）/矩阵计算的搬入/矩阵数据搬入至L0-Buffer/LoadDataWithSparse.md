@@ -2,17 +2,33 @@
 
 ## 产品支持情况<a name="zh-cn_topic_0000002512171654_section796754519912"></a>
 
-| 产品 | 是否支持 |
-| ---------- | :----------: |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | x </cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 AI Core | x </cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品 Vector Core | x </cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | x </cann-filter> |
-| <cann-filter npu-type = "x90">Kirin X90 | x </cann-filter> |
-| <cann-filter npu-type = "9030">Kirin 9030 | x </cann-filter> |
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：不支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：不支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：不支持
+<!-- end id9 -->
 
 ## 功能说明<a name="zh-cn_topic_0000002512171654_section106841136114319"></a>
 
@@ -24,7 +40,7 @@
 
 仅支持如下数据通路的搬运：L1 Buffer->L0B Buffer。
 
-**图 1** L1 Buffer->L0B Buffer LoadDataWithSparse示意图，LoadData2dParams参数配置startIndex = 1，repeatTimes = 5，表示需要从源操作数src中第1块数据分形开始搬运5块连续的数据分形，从源操作数idx中第1块index分形开始搬运5块连续的index分形。<a name="zh-cn_topic_0000002512171654_fig71111314164414"></a>  
+**图1** L1 Buffer->L0B Buffer LoadDataWithSparse示意图，LoadData2dParams参数配置startIndex = 1，repeatTimes = 5，表示需要从源操作数src中第1块数据分形开始搬运5块连续的数据分形，从源操作数idx中第1块index分形开始搬运5块连续的index分形。<a name="zh-cn_topic_0000002512171654_fig71111314164414"></a>  
 
 ![](../../../../../figures/loaddatawithsparse_l12l0b.png)
 
@@ -37,21 +53,23 @@ __aicore__ inline void LoadDataWithSparse(const LocalTensor<T>& dst, const Local
 
 ## 参数说明<a name="zh-cn_topic_0000002512171654_section16128134420472"></a>
 
-**表 1** 模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 | -------- | ------ |
 | T | dst、src的数据类型。 |
-| U | idx的数据类型。<br>&nbsp;&nbsp;&bull; 当dst、src、idx为基础数据类型时，T和U必须为uint8_t类型，否则编译失败。<br>&nbsp;&nbsp;&bull; 当dst、src、idx为TensorTrait类型时，T和U的LiteType必须为int8_t类型，否则编译失败。<br>最后两个模板参数仅用于上述数据类型检查，用户无需关注。 |
+| U | idx的数据类型。 |
+| Std::enable_if\<Std::is_same\<PrimT\<T\>, int8_t\>::value, bool\>::type | 用于T的数据类型检查，用户无需关注。 |
+| Std::enable_if\<Std::is_same\<PrimT\<U\>, uint8_t\>::value, bool\>::type | 用于U的数据类型检查，用户无需关注。 |
 
-**表 2** 参数说明
+**表2** 参数说明
 
 | 参数名称 | 输入/输出 | 含义 |
 | ---------- | ----------- | ------ |
 | dst | 输出 | 目的操作数，类型为LocalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>支持的数据类型为int8_t。<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的物理存储位置为L0B Buffer(TPosition: B2)。<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的物理存储位置为L0B Buffer(TPosition: B2)。 |
 | src | 输入 | 源操作数，类型为LocalTensor。<br>分形约束参考[矩阵计算输入搬运约束](../矩阵计算输入搬运约束.md)。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>支持的数据类型为int8_t。<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。 |
 | idx | 输入 | 源操作数，类型为LocalTensor。<br>数据分形大小为128字节，每个数据分形shape为16 \* 32 \* 2bit。<br>起始地址对齐约束参考[对齐约束](../矩阵计算输入搬运约束.md)。<br>支持的数据类型为uint8_t。<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的物理存储位置为L1 Buffer(TPosition: B1)。 |
-| loadDataParam | 输入 | LoadData参数结构体，类型为：<br>&nbsp;&nbsp;&bull; LoadData2dParams，具体参考[LoadData2dParams结构体内参数说明](Load2D.md)。<br>需要注意的是，本接口仅支持连续的数据分形搬运，不支持跳stride，因此仅支持配置loadDataParam中的startIndex和repeatTimes参数，其余参数未使用，无需配置。 |
+| loadDataParam | 输入 | LoadData参数结构体，类型为：<br>&nbsp;&nbsp;&bull; LoadData2dParams，具体参考[LoadData2dParams结构体内参数说明](Load2D.md#table_load2d_params)。<br>需要注意的是，本接口仅支持连续的数据分形搬运，不支持跳stride，因此仅支持配置loadDataParam中的startIndex和repeatTimes参数，其余参数未使用，无需配置。 |
 
 ## 数据类型<a name="zh-cn_topic_0000002512171654_section4219135304818"></a>
 
@@ -71,4 +89,4 @@ __aicore__ inline void LoadDataWithSparse(const LocalTensor<T>& dst, const Local
 
 ## 调用示例<a name="zh-cn_topic_0000002512171654_section088124295117"></a>
 
-本接口用于配合Sparse Mmad使用，完整示例请参考：[MmadWithSparse调用样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_matrix_compute/mmad_with_sparse)。
+本接口用于配合Sparse Mmad使用，完整示例请参考：[MmadWithSparse调用样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_with_sparse)。
