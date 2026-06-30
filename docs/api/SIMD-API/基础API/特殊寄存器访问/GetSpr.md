@@ -69,13 +69,13 @@ __aicore__ inline int64_t GetSpr()
 
 ```cpp
 template <typename T>
-__simd_vf__ inline void SqueezeVF(ubuf T* xAddr, ubuf T* yAddr, uint32_t repeatTimes, uint32_t oneRepeatSize)
+__simd_vf__ inline void SqueezeVF(__ubuf__ T* xAddr, __ubuf__ T* yAddr, uint32_t repeatTimes, uint32_t oneRepeatSize)
 {
     AscendC::Reg::MaskReg mask = AscendC::Reg::CreateMask<T, AscendC::Reg::MaskPattern::M4>();
-    AscendC::Reg::RegTensor xReg;
-    AscendC::Reg::RegTensor yReg;
+    AscendC::Reg::RegTensor<T> xReg;
+    AscendC::Reg::RegTensor<T> yReg;
     AscendC::Reg::UnalignRegForStore ureg;
-    AscendC::Reg::ClearSprAscendC::SpecialPurposeReg::AR();
+    AscendC::Reg::ClearSpr<AscendC::SpecialPurposeReg::AR>();
     for (uint16_t i = 0; i < repeatTimes; ++i) {
         AscendC::Reg::LoadAlign<T, AscendC::Reg::PostLiteral::POST_MODE_UPDATE>(xReg, xAddr, oneRepeatSize);
         AscendC::Reg::Squeeze<T, AscendC::Reg::GatherMaskMode::STORE_REG>(yReg, xReg, mask);
@@ -84,11 +84,11 @@ __simd_vf__ inline void SqueezeVF(ubuf T* xAddr, ubuf T* yAddr, uint32_t repeatT
     AscendC::Reg::StoreUnAlignPost(yAddr, ureg);
 }
 
-aicore inline void Process()
+__aicore__ inline void Process()
 {
-    AscendC::LocalMemAllocatorAscendC::Hardware::UB ubAllocator;
-    AscendC::LocalTensor xLocal = ubAllocator.Alloc<float, 256>();
-    AscendC::LocalTensor yLocal = ubAllocator.Alloc<float, 64>();
+    AscendC::LocalMemAllocator<AscendC::Hardware::UB> ubAllocator;
+    AscendC::LocalTensor<float> xLocal = ubAllocator.Alloc<float, 256>();
+    AscendC::LocalTensor<float> yLocal = ubAllocator.Alloc<float, 64>();
 
     AscendC::DataCopy(xLocal, xGm, 256);
     AscendC::SetFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
