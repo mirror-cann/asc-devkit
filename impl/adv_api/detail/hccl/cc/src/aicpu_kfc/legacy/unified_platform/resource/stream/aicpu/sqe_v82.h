@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef HCCLV2_SQE_V82_H
 #define HCCLV2_SQE_V82_H
 
@@ -15,54 +15,54 @@
 #include "sqe.h"
 namespace Hccl {
 
-#define UB_DOORBELL_NUM_MIN   (1)
-#define UB_DOORBELL_NUM_MAX   (2)
+#define UB_DOORBELL_NUM_MIN (1)
+#define UB_DOORBELL_NUM_MAX (2)
 
 enum class Rt91095StarsSqeType {
-    RT_91095_SQE_TYPE_AIC             = 0, // AIC
-    RT_91095_SQE_TYPE_AIV             = 1, // AIV
-    RT_91095_SQE_TYPE_FUSION          = 2, // FUSION
-    RT_91095_SQE_TYPE_PLACE_HOLDER    = 3, // PLACE_HOLDER
-    RT_91095_SQE_TYPE_AICPU_H         = 4, // AICPU_H
-    RT_91095_SQE_TYPE_AICPU_D         = 5, // AICPU_D
-    RT_91095_SQE_TYPE_NOTIFY_RECORD   = 6, // NOTIFY_RECORD
-    RT_91095_SQE_TYPE_NOTIFY_WAIT     = 7, // NOTIFY_WAIT
-    RT_91095_SQE_TYPE_WRITE_VALUE     = 8, // WRITE_VALUE
-    RT_91095_SQE_TYPE_UBDMA           = 9, // UBDMA
-    RT_91095_SQE_TYPE_ASYNCDMA        = 10, // ASYNCDMA
-    RT_91095_SQE_TYPE_SDMA            = 11, // SDMA
-    RT_91095_SQE_TYPE_VPC             = 12, // VPC
-    RT_91095_SQE_TYPE_JPEGE           = 13, // JPEGE
-    RT_91095_SQE_TYPE_JPEGD           = 14, // JPEGD
-    RT_91095_SQE_TYPE_CMO             = 15, // CMO
-    RT_91095_SQE_TYPE_COND            = 20, // condition
-    RT_91095_SQE_TYPE_END             = 21,
+    RT_91095_SQE_TYPE_AIC = 0,           // AIC
+    RT_91095_SQE_TYPE_AIV = 1,           // AIV
+    RT_91095_SQE_TYPE_FUSION = 2,        // FUSION
+    RT_91095_SQE_TYPE_PLACE_HOLDER = 3,  // PLACE_HOLDER
+    RT_91095_SQE_TYPE_AICPU_H = 4,       // AICPU_H
+    RT_91095_SQE_TYPE_AICPU_D = 5,       // AICPU_D
+    RT_91095_SQE_TYPE_NOTIFY_RECORD = 6, // NOTIFY_RECORD
+    RT_91095_SQE_TYPE_NOTIFY_WAIT = 7,   // NOTIFY_WAIT
+    RT_91095_SQE_TYPE_WRITE_VALUE = 8,   // WRITE_VALUE
+    RT_91095_SQE_TYPE_UBDMA = 9,         // UBDMA
+    RT_91095_SQE_TYPE_ASYNCDMA = 10,     // ASYNCDMA
+    RT_91095_SQE_TYPE_SDMA = 11,         // SDMA
+    RT_91095_SQE_TYPE_VPC = 12,          // VPC
+    RT_91095_SQE_TYPE_JPEGE = 13,        // JPEGE
+    RT_91095_SQE_TYPE_JPEGD = 14,        // JPEGD
+    RT_91095_SQE_TYPE_CMO = 15,          // CMO
+    RT_91095_SQE_TYPE_COND = 20,         // condition
+    RT_91095_SQE_TYPE_END = 21,
 };
- 
+
 /* stars send interrupt direction */
-MAKE_ENUM(RtStarsSqeIntDirType,
-    RT_STARS_SQE_INT_DIR_NO           , // send no interrupt
-    RT_STARS_SQE_INT_DIR_TO_TSCPU     , // to tscpu
-    RT_STARS_SQE_INT_DIR_TO_CTRLCPU   , // to ctrlcpu
-    RT_STARS_SQE_INT_DIR_TO_HOST      , // to host
-    RT_STARS_SQE_INT_DIR_END          
-)
- 
-MAKE_ENUM(Rt91095UbDmaSqeMode,
-    RT_91095_SQE_DIRECTWQE_MODE        , // direct wqe
-    RT_91095_SQE_DOORBELL_MODE         , // doorbell
-    RT_STARS_SQE_MODE_END              
-)
- 
+MAKE_ENUM(
+    RtStarsSqeIntDirType,
+    RT_STARS_SQE_INT_DIR_NO,         // send no interrupt
+    RT_STARS_SQE_INT_DIR_TO_TSCPU,   // to tscpu
+    RT_STARS_SQE_INT_DIR_TO_CTRLCPU, // to ctrlcpu
+    RT_STARS_SQE_INT_DIR_TO_HOST,    // to host
+    RT_STARS_SQE_INT_DIR_END)
+
+MAKE_ENUM(
+    Rt91095UbDmaSqeMode,
+    RT_91095_SQE_DIRECTWQE_MODE, // direct wqe
+    RT_91095_SQE_DOORBELL_MODE,  // doorbell
+    RT_STARS_SQE_MODE_END)
+
 enum class Rt91095NotifySubType {
-    NOTIFY_SUB_TYPE_SINGLE_NOTIFY_RECORD            = 0U,
-    NOTIFY_SUB_TYPE_SINGLE_NOTIFY_WAIT              = 1U,
-    NOTIFY_SUB_TYPE_COUNT_NOTIFY_RECORD             = 2U,
-    NOTIFY_SUB_TYPE_COUNT_NOTIFY_WAIT               = 3U,
-    NOTIFY_SUB_TYPE_EVENT_USE_SINGLE_NOTIFY_RECORD  = 4U,
-    NOTIFY_SUB_TYPE_EVENT_USE_SINGLE_NOTIFY_WAIT    = 5U,
-    NOTIFY_SUB_TYPE_EVENT_USE_COUNT_NOTIFY_RECORD   = 6U,
-    NOTIFY_SUB_TYPE_EVENT_USE_COUNT_NOTIFY_WAIT     = 7U,
+    NOTIFY_SUB_TYPE_SINGLE_NOTIFY_RECORD = 0U,
+    NOTIFY_SUB_TYPE_SINGLE_NOTIFY_WAIT = 1U,
+    NOTIFY_SUB_TYPE_COUNT_NOTIFY_RECORD = 2U,
+    NOTIFY_SUB_TYPE_COUNT_NOTIFY_WAIT = 3U,
+    NOTIFY_SUB_TYPE_EVENT_USE_SINGLE_NOTIFY_RECORD = 4U,
+    NOTIFY_SUB_TYPE_EVENT_USE_SINGLE_NOTIFY_WAIT = 5U,
+    NOTIFY_SUB_TYPE_EVENT_USE_COUNT_NOTIFY_RECORD = 6U,
+    NOTIFY_SUB_TYPE_EVENT_USE_COUNT_NOTIFY_WAIT = 7U,
     NOTIFY_SUB_TYPE_MAX
 };
 
@@ -76,50 +76,51 @@ enum class Rt91095StarsCondIsaRegister_t {
 };
 
 enum class Rt91095StarsCondIsaLoadImmFunc3_t {
-    RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LB  = 0B000,
-    RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LH  = 0B001,
-    RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LW  = 0B010,
-    RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LD  = 0B011,
+    RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LB = 0B000,
+    RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LH = 0B001,
+    RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LW = 0B010,
+    RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LD = 0B011,
     RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LBU = 0B100,
     RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LHU = 0B101,
     RT_91095_STARS_COND_ISA_LOAD_IMM_FUNC3_LWU = 0B110
 };
 
 enum class Rt91095StarsCondIsaBranchFunc3_t {
-    RT_91095_STARS_COND_ISA_BRANCH_FUNC3_BEQ  = 0B000,
-    RT_91095_STARS_COND_ISA_BRANCH_FUNC3_BNE  = 0B001,
-    RT_91095_STARS_COND_ISA_BRANCH_FUNC3_BLT  = 0B100,
-    RT_91095_STARS_COND_ISA_BRANCH_FUNC3_BGE  = 0B101,
+    RT_91095_STARS_COND_ISA_BRANCH_FUNC3_BEQ = 0B000,
+    RT_91095_STARS_COND_ISA_BRANCH_FUNC3_BNE = 0B001,
+    RT_91095_STARS_COND_ISA_BRANCH_FUNC3_BLT = 0B100,
+    RT_91095_STARS_COND_ISA_BRANCH_FUNC3_BGE = 0B101,
     RT_91095_STARS_COND_ISA_BRANCH_FUNC3_BLTU = 0B110,
     RT_91095_STARS_COND_ISA_BRANCH_FUNC3_BGEU = 0B111
 };
 
 enum class Rt91095StarsCondIsaOpImmFunc3_t {
     RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_ADDI = 0B000,
-    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_NOP  = RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_ADDI, // NOP is using OP_IMM ADDI R0,R0,0
-    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_SLLI  = 0B001,
-    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_SLTI  = 0B010,
+    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_NOP =
+        RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_ADDI, // NOP is using OP_IMM ADDI R0,R0,0
+    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_SLLI = 0B001,
+    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_SLTI = 0B010,
     RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_SLTIU = 0B011,
-    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_XORI  = 0B100,
-    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_SRLI  = 0B101,
-    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_ORI   = 0B110,
-    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_ANDI  = 0B111,
-    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_SRAI  = 0B101 // diff with SRLI by func7
+    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_XORI = 0B100,
+    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_SRLI = 0B101,
+    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_ORI = 0B110,
+    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_ANDI = 0B111,
+    RT_91095_STARS_COND_ISA_OP_IMM_FUNC3_SRAI = 0B101 // diff with SRLI by func7
 };
 
 enum Rt91095StarsCondIsaOpCode_t {
-    RT_91095_STARS_COND_ISA_OP_CODE_OP_IMM = 0B0010011, // Integer Register-immd Instructions
-    RT_91095_STARS_COND_ISA_OP_CODE_NOP    = RT_91095_STARS_COND_ISA_OP_CODE_OP_IMM, // NOP is using OP_IMM ADDI R0,R0,0
-    RT_91095_STARS_COND_ISA_OP_CODE_OP     = 0B0110011,    // Integer Register-Register Operations
-    RT_91095_STARS_COND_ISA_OP_CODE_LWI    = 0B1011011,    // load immd
+    RT_91095_STARS_COND_ISA_OP_CODE_OP_IMM = 0B0010011,                           // Integer Register-immd Instructions
+    RT_91095_STARS_COND_ISA_OP_CODE_NOP = RT_91095_STARS_COND_ISA_OP_CODE_OP_IMM, // NOP is using OP_IMM ADDI R0,R0,0
+    RT_91095_STARS_COND_ISA_OP_CODE_OP = 0B0110011,        // Integer Register-Register Operations
+    RT_91095_STARS_COND_ISA_OP_CODE_LWI = 0B1011011,       // load immd
     RT_91095_STARS_COND_ISA_OP_CODE_BRANCH = 0B1100011,    // Conditional stream-jump
-    RT_91095_STARS_COND_ISA_OP_CODE_LOOP   = 0B1111011,    // LOOP
+    RT_91095_STARS_COND_ISA_OP_CODE_LOOP = 0B1111011,      // LOOP
     RT_91095_STARS_COND_ISA_OP_CODE_STREAM = 0B0101011,    // STREAM
-    RT_91095_STARS_COND_ISA_OP_CODE_LOAD_IMM  = 0B0000111, // LOAD immd
-    RT_91095_STARS_COND_ISA_OP_CODE_LOAD      = 0B0000011, // Load
-    RT_91095_STARS_COND_ISA_OP_CODE_STORE     = 0B0100111, // Store
+    RT_91095_STARS_COND_ISA_OP_CODE_LOAD_IMM = 0B0000111,  // LOAD immd
+    RT_91095_STARS_COND_ISA_OP_CODE_LOAD = 0B0000011,      // Load
+    RT_91095_STARS_COND_ISA_OP_CODE_STORE = 0B0100111,     // Store
     RT_91095_STARS_COND_ISA_OP_CODE_FUNC_CALL = 0B1101011, // FUNC_CALL
-    RT_91095_STARS_COND_ISA_OP_CODE_SYSTEM    = 0B1110011  // CSR
+    RT_91095_STARS_COND_ISA_OP_CODE_SYSTEM = 0B1110011     // CSR
 };
 
 enum class Rt91095StarsCondIsaLwiFunc3_t {
@@ -137,17 +138,17 @@ enum class Rt91095StarsCondIsaStoreFunc3_t {
 
 struct Rt91095StarsSqeHeader {
     /* word0 */
-    uint8_t  type : 6;
-    uint8_t  lock : 1;
-    uint8_t  unlock : 1;
-    uint8_t  ie : 1;
-    uint8_t  preP : 1;
-    uint8_t  postP : 1;
-    uint8_t  wrCqe : 1;
-    uint8_t  ptrMode : 1;
-    uint8_t  rttMode : 1;
-    uint8_t  headUpdate : 1;
-    uint8_t  reserved : 1;
+    uint8_t type : 6;
+    uint8_t lock : 1;
+    uint8_t unlock : 1;
+    uint8_t ie : 1;
+    uint8_t preP : 1;
+    uint8_t postP : 1;
+    uint8_t wrCqe : 1;
+    uint8_t ptrMode : 1;
+    uint8_t rttMode : 1;
+    uint8_t headUpdate : 1;
+    uint8_t reserved : 1;
     uint16_t numBlocks;
 
     /* word1 */
@@ -167,9 +168,9 @@ struct Rt91095StarsUbdmaDBmodeSqe {
 
     /* word3 */
     uint16_t res2;
-    uint8_t  kernelCredit;
-    uint8_t  res3 : 5;
-    uint8_t  sqeLength : 3;
+    uint8_t kernelCredit;
+    uint8_t res3 : 5;
+    uint8_t sqeLength : 3;
 
     /* word4 */
     uint32_t jettyId1 : 16;
@@ -207,9 +208,9 @@ struct Rt91095StarsNotifySqe {
 
     /* word3 */
     uint16_t subType; // This field is reserved and used by software.
-    uint8_t  kernelCredit;
-    uint8_t  res4 : 5;
-    uint8_t  sqeLength : 3;
+    uint8_t kernelCredit;
+    uint8_t res4 : 5;
+    uint8_t sqeLength : 3;
 
     /* word4 */
     uint32_t cntValue;
@@ -313,12 +314,12 @@ struct Rt91095StarsCCoreSqeNotifyWait {
 
     /* word2 */
     uint32_t res0 : 31;
-    uint8_t  csc : 1;
+    uint8_t csc : 1;
 
     /* word3 */
     uint16_t res1;
-    uint8_t  kernelCredit;
-    uint8_t  res2 : 5;
+    uint8_t kernelCredit;
+    uint8_t res2 : 5;
     uint32_t sqeLength : 3;
 
     /* word4-5 */
@@ -331,7 +332,7 @@ struct Rt91095StarsCCoreSqeNotifyWait {
     union {
         // 28B
         Rt91095StarsCondOpClear_t clear;
-        Rt91095StarsCondOpNop_t   nop[7];
+        Rt91095StarsCondOpNop_t nop[7];
     };
 };
 
@@ -341,12 +342,12 @@ struct Rt91095StarsCCoreSqeNotifyRecord {
 
     /* word2 */
     uint32_t res0 : 31;
-    uint8_t  csc : 1;
+    uint8_t csc : 1;
 
     /* word3 */
     uint16_t res1;
-    uint8_t  kernelCredit;
-    uint8_t  res2 : 5;
+    uint8_t kernelCredit;
+    uint8_t res2 : 5;
     uint32_t sqeLength : 3;
 
     /* word4-5 */
@@ -367,12 +368,12 @@ struct Rt91095StarsCCoreSqe {
 
     /* word2 */
     uint32_t res0 : 31;
-    uint8_t  csc : 1;
+    uint8_t csc : 1;
 
     /* word3 */
     uint16_t res1;
-    uint8_t  kernelCredit;
-    uint8_t  res2 : 5;
+    uint8_t kernelCredit;
+    uint8_t res2 : 5;
     uint32_t sqeLength : 3;
 
     /* word4-15 */
@@ -454,8 +455,8 @@ struct Rt91095StarsMemcpySqe {
 
     /* word3 */
     uint16_t res2;
-    uint8_t  kernelCredit;
-    uint8_t  res3;
+    uint8_t kernelCredit;
+    uint8_t res3;
 
     /* word4 */
     uint32_t opcode : 8;
@@ -472,11 +473,11 @@ struct Rt91095StarsMemcpySqe {
 
     /* word5 */
     uint16_t sqeId;
-    uint8_t  mapamPartId;
-    uint8_t  mpamns : 1;
-    uint8_t  pmg : 2;
-    uint8_t  qos : 4;
-    uint8_t  d2dOffsetFlag : 1; // use reserved filed
+    uint8_t mapamPartId;
+    uint8_t mpamns : 1;
+    uint8_t pmg : 2;
+    uint8_t qos : 4;
+    uint8_t d2dOffsetFlag : 1; // use reserved filed
 
     /* word6 */
     uint16_t srcStreamId;
@@ -516,10 +517,10 @@ struct Rt91095StarsWriteValueSqe {
 
     /* word6-7 */
     uint32_t res5;
-    uint32_t subType;  // use reserved filed
+    uint32_t subType; // use reserved filed
 
     /* word8-15 */
-    uint32_t writeValuePart[8];  // write value field
+    uint32_t writeValuePart[8]; // write value field
 };
 } // namespace Hccl
 #endif

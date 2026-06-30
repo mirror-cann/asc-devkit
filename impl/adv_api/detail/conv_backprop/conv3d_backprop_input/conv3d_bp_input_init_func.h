@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv3d_bp_input_init_func.h
@@ -25,7 +24,7 @@
 
 namespace ConvBackpropInputFunc {
 template <class Intf>
-__aicore__ inline void InitStepMParams(Intf *self)
+__aicore__ inline void InitStepMParams(Intf* self)
 {
     if constexpr (Intf::conv3dConfig.enableKernelSplit) {
         self->ctx.mIter_ = ConvBackpropApi::Ceil(self->ctx.splitSingleShapeM_, self->ctx.tiling_->baseM);
@@ -42,7 +41,7 @@ __aicore__ inline void InitStepMParams(Intf *self)
 }
 
 template <class Intf>
-__aicore__ inline void InitStepKParams(Intf *self)
+__aicore__ inline void InitStepKParams(Intf* self)
 {
     uint64_t tmpSingleCoreK = static_cast<uint64_t>(self->ctx.singleShapeCout1_) * self->ctx.HkWkC0_;
     if constexpr (Intf::conv3dConfig.enableKernelSplit) {
@@ -61,7 +60,7 @@ __aicore__ inline void InitStepKParams(Intf *self)
 }
 
 template <class Intf>
-__aicore__ inline void InitStepNParams(Intf *self)
+__aicore__ inline void InitStepNParams(Intf* self)
 {
     uint64_t singleShapeCinAlign = self->ctx.singleShapeCin1_ * self->ctx.tiling_->c0;
     self->ctx.nIter_ = ConvBackpropApi::Ceil(singleShapeCinAlign, self->ctx.tiling_->baseN);
@@ -74,20 +73,19 @@ __aicore__ inline void InitStepNParams(Intf *self)
 }
 
 template <class Intf>
-__aicore__ inline void InitParams(Intf *self)
+__aicore__ inline void InitParams(Intf* self)
 {
     self->ctx.baseMN_ = self->ctx.tiling_->baseM * self->ctx.tiling_->baseN;
     self->ctx.isFirstIter_ = true;
     self->ctx.usingCacheC1Ping_ = true;
     self->ctx.HkWk_ = self->ctx.tiling_->hk * self->ctx.tiling_->wk;
     self->ctx.HkWkC0_ = self->ctx.tiling_->hk * self->ctx.tiling_->wk * self->ctx.tiling_->c0;
-    self->ctx.DkHkWkC0_ = self->ctx.tiling_->dk * self->ctx.tiling_->hk * self->ctx.tiling_->wk *
-        self->ctx.tiling_->c0;
+    self->ctx.DkHkWkC0_ = self->ctx.tiling_->dk * self->ctx.tiling_->hk * self->ctx.tiling_->wk * self->ctx.tiling_->c0;
 
     self->ctx.curCin1Size_ = self->ctx.tiling_->stepN * self->ctx.tiling_->baseN / self->ctx.tiling_->c0;
-    self->ctx.isB1FullLoadFlag_ = (self->ctx.tiling_->dk == 1 && self->ctx.tiling_->bl1Pbuffer == 1 &&
-        self->ctx.tiling_->baseK * self->ctx.tiling_->stepKb >=
-        self->ctx.tiling_->singleCoreCout * self->ctx.HkWk_) &&
+    self->ctx.isB1FullLoadFlag_ =
+        (self->ctx.tiling_->dk == 1 && self->ctx.tiling_->bl1Pbuffer == 1 &&
+         self->ctx.tiling_->baseK * self->ctx.tiling_->stepKb >= self->ctx.tiling_->singleCoreCout * self->ctx.HkWk_) &&
         (self->ctx.curCin1Size_ >= self->ctx.tiling_->singleCoreCin1);
     self->ctx.hwI_ = static_cast<uint64_t>(self->ctx.tiling_->hi) * self->ctx.tiling_->wi;
     self->ctx.hwO_ = static_cast<uint64_t>(self->ctx.tiling_->ho) * self->ctx.tiling_->wo;
@@ -97,10 +95,12 @@ __aicore__ inline void InitParams(Intf *self)
     }
     if constexpr (Intf::conv3dConfig.enableKernelSplit) {
 #ifdef ASCENDC_CPU_DEBUG
-        ASCENDC_ASSERT((self->ctx.tiling_->hk >= self->ctx.tiling_->strideH),
-                       { KERNEL_LOG(KERNEL_ERROR, "kernelH should be GE strideH"); });
-        ASCENDC_ASSERT((self->ctx.tiling_->wk >= self->ctx.tiling_->strideW),
-                       { KERNEL_LOG(KERNEL_ERROR, "kernelW should be GE strideW"); });
+        ASCENDC_ASSERT((self->ctx.tiling_->hk >= self->ctx.tiling_->strideH), {
+            KERNEL_LOG(KERNEL_ERROR, "kernelH should be GE strideH");
+        });
+        ASCENDC_ASSERT((self->ctx.tiling_->wk >= self->ctx.tiling_->strideW), {
+            KERNEL_LOG(KERNEL_ERROR, "kernelW should be GE strideW");
+        });
 #endif
         // Non-divisible scenarios need to be considered when generalizing
         self->ctx.splitHk_ = self->ctx.tiling_->hk / self->ctx.tiling_->strideH;
@@ -118,43 +118,44 @@ __aicore__ inline void InitParams(Intf *self)
     self->ctx.l0aPingPongFlag_ = 0;
     self->ctx.useL0PingPong_ = (self->ctx.tiling_->al0Pbuffer - 1) & (self->ctx.tiling_->bl0Pbuffer - 1);
     InitLoadToA2Params<Intf>(self);
-    if constexpr((std::is_same<typename Intf::SrcT, bfloat16_t>::value) || (std::is_same<typename Intf::SrcT, half>::value)) {
+    if constexpr (
+        (std::is_same<typename Intf::SrcT, bfloat16_t>::value) || (std::is_same<typename Intf::SrcT, half>::value)) {
         InitLoadToB2Params<Intf>(self);
     }
 }
 
 template <class Intf>
-__aicore__ inline void InitTque(Intf *self)
+__aicore__ inline void InitTque(Intf* self)
 {
-    // In the fp32 scenario, baseK may be a multiple of 8, not a multiple of 16, but K0 in GM must be a multiple of 16, but the actual K may only be 8, with additional padding data
+    // In the fp32 scenario, baseK may be a multiple of 8, not a multiple of 16, but K0 in GM must be a multiple of 16,
+    // but the actual K may only be 8, with additional padding data
     uint32_t bMatrixByteSize = 0;
     uint32_t aMatrixByteSize = 0;
     if constexpr (Intf::conv3dConfig.enableKernelSplit) {
         uint32_t hoSize = (self->ctx.curHoSize_ < self->ctx.tiling_->ho) ? self->ctx.curHoSize_ : self->ctx.tiling_->ho;
-        // When generalizing, the size of wo that each small kernel needs to load may be different, maybe wo wo-1 wo-2...
-        aMatrixByteSize = hoSize * (self->ctx.tiling_->wo - 1) *
-                          self->ctx.tiling_->stepKa * self->ctx.tiling_->baseK / self->ctx.splitHkWk_ *
-                          sizeof(typename Intf::SrcT);
+        // When generalizing, the size of wo that each small kernel needs to load may be different, maybe wo wo-1
+        // wo-2...
+        aMatrixByteSize = hoSize * (self->ctx.tiling_->wo - 1) * self->ctx.tiling_->stepKa * self->ctx.tiling_->baseK /
+                          self->ctx.splitHkWk_ * sizeof(typename Intf::SrcT);
     } else {
         uint32_t hoSize = self->ctx.curHoSize_;
         uint64_t hoExpand = static_cast<uint64_t>(self->ctx.tiling_->ho - 1) * self->ctx.tiling_->strideH + 1;
         if (hoExpand < static_cast<uint64_t>(self->ctx.curHoSize_)) {
             hoSize = static_cast<uint32_t>(hoExpand);
         }
-        aMatrixByteSize = hoSize * self->ctx.tiling_->wo * self->ctx.tiling_->strideW *
-                          self->ctx.tiling_->stepKa * self->ctx.tiling_->baseK / self->ctx.HkWk_ *
-                          sizeof(typename Intf::SrcT);
+        aMatrixByteSize = hoSize * self->ctx.tiling_->wo * self->ctx.tiling_->strideW * self->ctx.tiling_->stepKa *
+                          self->ctx.tiling_->baseK / self->ctx.HkWk_ * sizeof(typename Intf::SrcT);
     }
 
-    if constexpr(std::is_same<typename Intf::SrcT, float>::value) {
-        bMatrixByteSize = self->ctx.tiling_->stepN * self->ctx.tiling_->baseN *
-                          AscendC::DivCeil(self->ctx.tiling_->stepKb * self->ctx.tiling_->baseK / self->ctx.HkWkC0_, 2) *
-                          self->ctx.HkWk_ * AscendC::BLOCK_CUBE * sizeof(typename Intf::SrcT);
+    if constexpr (std::is_same<typename Intf::SrcT, float>::value) {
+        bMatrixByteSize =
+            self->ctx.tiling_->stepN * self->ctx.tiling_->baseN *
+            AscendC::DivCeil(self->ctx.tiling_->stepKb * self->ctx.tiling_->baseK / self->ctx.HkWkC0_, 2) *
+            self->ctx.HkWk_ * AscendC::BLOCK_CUBE * sizeof(typename Intf::SrcT);
     } else {
         bMatrixByteSize = self->ctx.tiling_->stepN * self->ctx.tiling_->baseN * self->ctx.tiling_->stepKb *
                           self->ctx.tiling_->baseK * sizeof(typename Intf::SrcT);
     }
-
 
     self->ctx.pipe_.InitBuffer(self->ctx.a1Ping_, 1, aMatrixByteSize);
     self->ctx.pipe_.InitBuffer(self->ctx.b1Ping_, 1, bMatrixByteSize);
@@ -174,13 +175,15 @@ __aicore__ inline void InitTque(Intf *self)
 }
 
 template <class Intf>
-static __aicore__ inline void Compute(Intf *self)
+static __aicore__ inline void Compute(Intf* self)
 {
     // First refresh the value in the h direction to facilitate judging whether it is a valid calculation.
     UpdateLoadToA2ParamsM<Intf>(self);
 
-    // In the skip calculation logic, if there is some operation logic that does not need to be skipped. If you have similar logic in the future, you can continue to add it here
-    // The current existing operation is the case where isFreeB1_ is true (B1 is fully loaded and looped to the last piece of computing space, and the B1 space needs to be released). At this point only the ping space is expected to be used
+    // In the skip calculation logic, if there is some operation logic that does not need to be skipped. If you have
+    // similar logic in the future, you can continue to add it here The current existing operation is the case where
+    // isFreeB1_ is true (B1 is fully loaded and looped to the last piece of computing space, and the B1 space needs to
+    // be released). At this point only the ping space is expected to be used
     if (!self->ctx.needComputeFlag_) {
         if (self->ctx.isFreeB1_ && !self->ctx.isLoadB1_) {
             self->ctx.b1Ping_.FreeTensor(self->ctx.cacheB1BufPing_);
@@ -193,7 +196,8 @@ static __aicore__ inline void Compute(Intf *self)
     }
 
     InitMmadParams<Intf>(self);
-    if constexpr((std::is_same<typename Intf::SrcT, bfloat16_t>::value) || (std::is_same<typename Intf::SrcT, half>::value)) {
+    if constexpr (
+        (std::is_same<typename Intf::SrcT, bfloat16_t>::value) || (std::is_same<typename Intf::SrcT, half>::value)) {
         if (unlikely(self->ctx.curNL0Idx_ == 0 || self->ctx.curNL0Idx_ + 1 == self->ctx.nIter_)) {
             UpdateLoadToB2ParamsN<Intf>(self);
         }
@@ -224,7 +228,9 @@ static __aicore__ inline void Compute(Intf *self)
                 continue;
             }
         } else {
-            // Since dilation convolution changes the position of dk, when solving dout_idx, dk_idx needs to be multiplied by the expansion coefficient and then participate in the calculation to obtain the correct index
+            // Since dilation convolution changes the position of dk, when solving dout_idx, dk_idx needs to be
+            // multiplied by the expansion coefficient and then participate in the calculation to obtain the correct
+            // index
             dTmp = self->ctx.curDinIdx_ + self->ctx.tiling_->padFront - curKdIdx * self->ctx.tiling_->dilationD;
             if (dTmp < 0 || ConvBackpropApi::CalcRemainder(dTmp, self->ctx.tiling_->strideD) > 0 ||
                 dTmp >= self->ctx.tiling_->dout * self->ctx.tiling_->strideD) {
@@ -273,16 +279,15 @@ static __aicore__ inline void Compute(Intf *self)
                 // The default stepM = 1 here
                 a1PingPongFlag = ((self->ctx.curML1Idx_ * self->ctx.stepKaRound_ + kaStepIdx + 1) & 1);
             }
-            ConvBackpropInputFunc::LoadToA1<Intf, typename Intf::SrcT>(self, kIdx, curDoutIdx, a1PingPongFlag,
-                                                                           isLoadA1);
+            ConvBackpropInputFunc::LoadToA1<Intf, typename Intf::SrcT>(
+                self, kIdx, curDoutIdx, a1PingPongFlag, isLoadA1);
 
             bool isLoadB1 = kbIdx == 0;
             if (isLoadB1 && self->ctx.tiling_->bl1Pbuffer > 1) {
                 // The default stepN = 1 here
                 b1PingPongFlag = ((self->ctx.curNL1Idx_ * self->ctx.stepKbRound_ + kbStepIdx + 1) & 1);
             }
-            ConvBackpropInputFunc::LoadToB1<Intf, typename Intf::SrcT>(self, kIdx, curKdIdx, b1PingPongFlag,
-                                                                           isLoadB1);
+            ConvBackpropInputFunc::LoadToB1<Intf, typename Intf::SrcT>(self, kIdx, curKdIdx, b1PingPongFlag, isLoadB1);
 
             l0a = self->ctx.l0aBuf_.template Get<typename Intf::SrcT>();
             if (l0aPingPongFlag) {
@@ -320,8 +325,9 @@ static __aicore__ inline void Compute(Intf *self)
                 l0b = l0b[l0bPingPongAddr];
             }
 
-            if (unlikely(isLoadB1 && (!self->ctx.isB1FullLoadFlag_ || (self->ctx.isB1FullLoadFlag_ &&
-                self->ctx.isLoadB1_)))) {
+            if (unlikely(
+                    isLoadB1 &&
+                    (!self->ctx.isB1FullLoadFlag_ || (self->ctx.isB1FullLoadFlag_ && self->ctx.isLoadB1_)))) {
                 if (b1PingPongFlag) {
                     self->ctx.cacheB1BufPing_ = self->ctx.b1Ping_.template DeQue<typename Intf::SrcT>();
                 } else {
@@ -332,7 +338,9 @@ static __aicore__ inline void Compute(Intf *self)
                 }
             }
 
-            if constexpr((std::is_same<typename Intf::SrcT, bfloat16_t>::value) || (std::is_same<typename Intf::SrcT, half>::value)) {
+            if constexpr (
+                (std::is_same<typename Intf::SrcT, bfloat16_t>::value) ||
+                (std::is_same<typename Intf::SrcT, half>::value)) {
                 if (unlikely(kIdx == 0 || kIdx == self->ctx.kIterStepKbTail)) {
                     UpdateLoadToB2ParamsK<Intf>(self);
                 }
@@ -344,8 +352,8 @@ static __aicore__ inline void Compute(Intf *self)
             }
 
             bool isLastStepKb = kbIdx + 1 == self->ctx.tiling_->stepKb;
-            if ((isLastStepKb || isLastKIdx) && (!self->ctx.isB1FullLoadFlag_ ||
-                (self->ctx.isB1FullLoadFlag_ && self->ctx.isFreeB1_))) {
+            if ((isLastStepKb || isLastKIdx) &&
+                (!self->ctx.isB1FullLoadFlag_ || (self->ctx.isB1FullLoadFlag_ && self->ctx.isFreeB1_))) {
                 if (b1PingPongFlag) {
                     self->ctx.b1Ping_.FreeTensor(self->ctx.cacheB1BufPing_);
                 } else {
@@ -392,5 +400,5 @@ static __aicore__ inline void Compute(Intf *self)
         AscendC::WaitFlag<AscendC::HardEvent::FIX_M>(EVENT_ID2);
     }
 }
-}  // namespace ConvBackpropInputFunc
+} // namespace ConvBackpropInputFunc
 #endif

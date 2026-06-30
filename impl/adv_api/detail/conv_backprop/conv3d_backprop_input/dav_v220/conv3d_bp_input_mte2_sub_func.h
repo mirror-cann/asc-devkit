@@ -1,13 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
-
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv_bp_input_mte2_sub_func.h
@@ -24,7 +23,7 @@ constexpr int32_t MAX_16BITS_STRIDE = 65535;
 
 // Set fmatrix parameters
 template <class Intf>
-__aicore__ inline void CalcSetFmatrixParams(Intf *self, uint32_t fmapH, uint32_t fmapW)
+__aicore__ inline void CalcSetFmatrixParams(Intf* self, uint32_t fmapH, uint32_t fmapW)
 {
     // W
     self->ctx.load3d_.l1W = fmapW;
@@ -40,7 +39,7 @@ __aicore__ inline void CalcSetFmatrixParams(Intf *self, uint32_t fmapH, uint32_t
 }
 
 template <class Intf>
-static __aicore__ inline uint32_t CalcHDstDataSkipLine(Intf *self)
+static __aicore__ inline uint32_t CalcHDstDataSkipLine(Intf* self)
 {
     uint32_t strideH = self->ctx.tiling_->strideH;
     uint32_t hDstDataSkipLine = 0;
@@ -53,9 +52,9 @@ static __aicore__ inline uint32_t CalcHDstDataSkipLine(Intf *self)
 }
 
 template <class Intf, class src0_T>
-__aicore__ inline void CalcLoadToA1DataCopyParams(Intf *self, AscendC::DataCopyParams &dataCopyParams,
-    uint32_t &loadToA1Cout1Loop, uint32_t &loadToA1HLoop, uint64_t &srcDataStride, uint32_t &dstDataStride,
-    uint32_t &padOffset, uint32_t &curHoSize, uint32_t curCout1Idx) 
+__aicore__ inline void CalcLoadToA1DataCopyParams(
+    Intf* self, AscendC::DataCopyParams& dataCopyParams, uint32_t& loadToA1Cout1Loop, uint32_t& loadToA1HLoop,
+    uint64_t& srcDataStride, uint32_t& dstDataStride, uint32_t& padOffset, uint32_t& curHoSize, uint32_t curCout1Idx)
 {
     uint32_t curCout1Size = 0;
     if constexpr (Intf::conv3dConfig.loadB2Condition == ConvBackpropApi::B2Condition::HKWK_EQ_ONE) {
@@ -64,7 +63,8 @@ __aicore__ inline void CalcLoadToA1DataCopyParams(Intf *self, AscendC::DataCopyP
         curCout1Size = self->ctx.curLoadKal1_ / self->ctx.HkWkC0_;
     }
     curCout1Size = (curCout1Size < self->ctx.singleShapeCout1_ - curCout1Idx) ?
-                    curCout1Size : self->ctx.singleShapeCout1_ - curCout1Idx;
+                       curCout1Size :
+                       self->ctx.singleShapeCout1_ - curCout1Idx;
     uint32_t hDstDataSkipLine = CalcHDstDataSkipLine(self);
     uint32_t strideH = self->ctx.tiling_->strideH;
     uint32_t woExpand = self->ctx.tiling_->wo;
@@ -84,7 +84,7 @@ __aicore__ inline void CalcLoadToA1DataCopyParams(Intf *self, AscendC::DataCopyP
         padOffset = hDstDataSkipLine * dstDataStride;
     } else {
         loadToA1HLoop = 1;
-        if (strideH > 1) {  // Datacoy once, copy curHo*Wo c0, copy CurCout 1 time
+        if (strideH > 1) { // Datacoy once, copy curHo*Wo c0, copy CurCout 1 time
             uint32_t curInputHoSize = (curHoSize - hDstDataSkipLine + (strideH - 1)) / strideH;
             dataCopyParams.srcStride = 0;
             // Currently does not support (strideH - 1) * self->ctx.tiling_->wo scenarios exceeding uint16_max
@@ -101,8 +101,9 @@ __aicore__ inline void CalcLoadToA1DataCopyParams(Intf *self, AscendC::DataCopyP
             padOffset = hDstDataSkipLine * wDataStride;
         } else {
             // The interval between the tail and the head of the original data
-            uint64_t dataCoptSrcStride = static_cast<uint64_t>(self->ctx.tiling_->ho - curHoSize) * self->ctx.tiling_->wo;
-            dataCopyParams.dstStride = 0;  // The interval between the tail and the head of the destination data
+            uint64_t dataCoptSrcStride =
+                static_cast<uint64_t>(self->ctx.tiling_->ho - curHoSize) * self->ctx.tiling_->wo;
+            dataCopyParams.dstStride = 0; // The interval between the tail and the head of the destination data
             dataCopyParams.blockLen = curHoSize * self->ctx.tiling_->wo;
             if (dataCoptSrcStride <= UINT16_MAX) {
                 dataCopyParams.srcStride = static_cast<uint16_t>(dataCoptSrcStride);
@@ -121,7 +122,7 @@ __aicore__ inline void CalcLoadToA1DataCopyParams(Intf *self, AscendC::DataCopyP
 }
 
 template <class Intf, class src0_T>
-__aicore__ inline void LoadToA1(Intf *self, uint32_t kIdx, uint32_t curDoutIdx, bool pingPongFlag, bool loadFlag)
+__aicore__ inline void LoadToA1(Intf* self, uint32_t kIdx, uint32_t curDoutIdx, bool pingPongFlag, bool loadFlag)
 {
     if (loadFlag) {
         AscendC::LocalTensor<typename Intf::SrcT> useA1Buf;
@@ -156,25 +157,30 @@ __aicore__ inline void LoadToA1(Intf *self, uint32_t kIdx, uint32_t curDoutIdx, 
         uint32_t curHoSize = self->ctx.curHoSize_;
 
         if constexpr (Intf::conv3dConfig.enableKernelSplit) {
-            CalcLoadToA1ParamsForKernelSplit<Intf, typename Intf::SrcT>(self, dataCopyParams, loadToA1Cout1Loop,
-                loadToA1HLoop, srcDataStride, dstDataStride, padDataOffset, curHoSize, curCout1Idx);
+            CalcLoadToA1ParamsForKernelSplit<Intf, typename Intf::SrcT>(
+                self, dataCopyParams, loadToA1Cout1Loop, loadToA1HLoop, srcDataStride, dstDataStride, padDataOffset,
+                curHoSize, curCout1Idx);
             CalcSetFmatrixParams(self, curHoSize, self->ctx.tiling_->wo - 1);
         } else {
-            CalcLoadToA1DataCopyParams<Intf, typename Intf::SrcT>(self, dataCopyParams, loadToA1Cout1Loop,
-                loadToA1HLoop, srcDataStride, dstDataStride, padDataOffset, curHoSize, curCout1Idx);
+            CalcLoadToA1DataCopyParams<Intf, typename Intf::SrcT>(
+                self, dataCopyParams, loadToA1Cout1Loop, loadToA1HLoop, srcDataStride, dstDataStride, padDataOffset,
+                curHoSize, curCout1Idx);
         }
         if (dataCopyParams.blockCount > 0) {
-            // The absolute address of GM has been calculated outside the API. When absolute coordinates are used here, the starting coordinate needs to be removed
+            // The absolute address of GM has been calculated outside the API. When absolute coordinates are used here,
+            // the starting coordinate needs to be removed
             int64_t curHoStartOffset = self->ctx.curHoStartIdx_ < 0 ? 0 : self->ctx.curHoStartIdx_;
             int64_t curHoIdx = self->ctx.curHoIdx_ < 0 ? 0 : (self->ctx.curHoIdx_ - curHoStartOffset);
-            // Convert back to the relative Ho coordinates before amplification (taking single-core HoStartIdx as the origin)
+            // Convert back to the relative Ho coordinates before amplification (taking single-core HoStartIdx as the
+            // origin)
             int64_t curOriHoIdx = curHoIdx;
 
             if (self->ctx.tiling_->strideH > 1) {
                 int64_t skipHoSize = curHoStartOffset % self->ctx.tiling_->strideH;
                 skipHoSize = skipHoSize > 0 ? (self->ctx.tiling_->strideH - skipHoSize) : skipHoSize;
                 curHoIdx = self->ctx.curHoIdx_ < 0 ? 0 : (self->ctx.curHoIdx_ - curHoStartOffset);
-                // Convert back to the relative Ho coordinates before amplification (taking single-core HoStartIdx as the origin)
+                // Convert back to the relative Ho coordinates before amplification (taking single-core HoStartIdx as
+                // the origin)
                 curOriHoIdx = (curHoIdx - skipHoSize + self->ctx.tiling_->strideH - 1) / self->ctx.tiling_->strideH;
             }
 
@@ -207,15 +213,17 @@ __aicore__ inline void LoadToA1(Intf *self, uint32_t kIdx, uint32_t curDoutIdx, 
 }
 
 template <class Intf, class src1_T>
-__aicore__ inline void LoadToB1Fp32(Intf *self, const uint32_t kIdx, const uint32_t curDkIdx,
-                                    AscendC::LocalTensor<typename Intf::SrcT> &useB1Buf, bool b1PingPongFlag)
+__aicore__ inline void LoadToB1Fp32(
+    Intf* self, const uint32_t kIdx, const uint32_t curDkIdx, AscendC::LocalTensor<typename Intf::SrcT>& useB1Buf,
+    bool b1PingPongFlag)
 {
     // Here is the C0in of the original input, related to dataType: 16 for bf16, 8 for fp32
     uint32_t curCin1Idx = self->ctx.curNL1Idx_ * self->ctx.curCin1Size_;
 
     // C0 here has nothing to do with dataType, but is related to NZ type
     uint32_t curCout1Idx = kIdx * self->ctx.tiling_->baseK / (self->ctx.HkWk_ * AscendC::BLOCK_CUBE);
-    // Record the absolute Cout coordinates loaded into L1 each time, which is used to calculate the offset of load3dv2 in the M direction, involving a 1:2 data loading problem
+    // Record the absolute Cout coordinates loaded into L1 each time, which is used to calculate the offset of load3dv2
+    // in the M direction, involving a 1:2 data loading problem
     if (b1PingPongFlag) {
         self->ctx.curPingCoutIdx_ = curCout1Idx;
     } else {
@@ -224,22 +232,25 @@ __aicore__ inline void LoadToB1Fp32(Intf *self, const uint32_t kIdx, const uint3
 
     // kernel shape: (dk * cin1 * hk * wk, cout1, cout0, cin0)
     // fp32 scene Cout may not be aligned to 16 and needs to be aligned to 16
-    uint64_t out2B1SrcAddrOffset = (static_cast<uint64_t>(curDkIdx) * self->ctx.tiling_->cin1G + curCin1Idx) *
-                                    self->ctx.HkWkC0_ * self->ctx.alignedCout_ +   // Related to dataType
-                                    static_cast<uint64_t>(curCout1Idx) * AscendC::BLOCK_CUBE * self->ctx.tiling_->c0;  // Related to NZ Fractal
+    uint64_t out2B1SrcAddrOffset =
+        (static_cast<uint64_t>(curDkIdx) * self->ctx.tiling_->cin1G + curCin1Idx) * self->ctx.HkWkC0_ *
+            self->ctx.alignedCout_ +                                                      // Related to dataType
+        static_cast<uint64_t>(curCout1Idx) * AscendC::BLOCK_CUBE * self->ctx.tiling_->c0; // Related to NZ Fractal
 
-    // When the K direction is not 16-aligned, the original GM data needs to be padded to 16-aligned, and may contain padding data
-    // When moving data, you need to consider padding data
+    // When the K direction is not 16-aligned, the original GM data needs to be padded to 16-aligned, and may contain
+    // padding data When moving data, you need to consider padding data
     uint32_t curCin1Size = self->ctx.curCin1Size_ < (self->ctx.singleShapeCin1_ - curCin1Idx) ?
-                           self->ctx.curCin1Size_ : (self->ctx.singleShapeCin1_ - curCin1Idx);
+                               self->ctx.curCin1Size_ :
+                               (self->ctx.singleShapeCin1_ - curCin1Idx);
     uint32_t curCout1Size = DivCeil(self->ctx.curLoadKbl1_ / self->ctx.HkWkC0_, 2) * AscendC::BLOCK_CUBE;
-    // Since L1B is fully loaded with HkWKC0, the tiling side has guaranteed HkWKC0 * curCin1Size * dataByte <= L1B, assuming that L1B is up to 512KB
-    // Then HkWK * curCin1Size <= 16384, will not exceed uint16_max
+    // Since L1B is fully loaded with HkWKC0, the tiling side has guaranteed HkWKC0 * curCin1Size * dataByte <= L1B,
+    // assuming that L1B is up to 512KB Then HkWK * curCin1Size <= 16384, will not exceed uint16_max
     uint16_t blockCount = curCin1Size * self->ctx.HkWk_;
 
     AscendC::DataCopyParams dataCopyParams;
     dataCopyParams.blockLen = (curCout1Size < (self->ctx.alignedCout1_ - curCout1Idx) * AscendC::BLOCK_CUBE) ?
-                               curCout1Size : ((self->ctx.alignedCout1_ - curCout1Idx) * AscendC::BLOCK_CUBE);
+                                  curCout1Size :
+                                  ((self->ctx.alignedCout1_ - curCout1Idx) * AscendC::BLOCK_CUBE);
     dataCopyParams.dstStride = 0;
     uint64_t srcStride = self->ctx.alignedCout_ - dataCopyParams.blockLen;
     if (srcStride <= MAX_16BITS_STRIDE) {
@@ -260,7 +271,8 @@ __aicore__ inline void LoadToB1Fp32(Intf *self, const uint32_t kIdx, const uint3
 }
 
 template <class Intf, class src1_T>
-__aicore__ inline void LoadToB1BF16(Intf *self, const uint32_t kIdx, const uint32_t curDkIdx, AscendC::LocalTensor<typename Intf::SrcT> &useB1Buf)
+__aicore__ inline void LoadToB1BF16(
+    Intf* self, const uint32_t kIdx, const uint32_t curDkIdx, AscendC::LocalTensor<typename Intf::SrcT>& useB1Buf)
 {
     uint32_t curCin1Idx = self->ctx.curNL1Idx_ * self->ctx.curCin1Size_;
     uint32_t curCout1Idx = 0;
@@ -276,17 +288,20 @@ __aicore__ inline void LoadToB1BF16(Intf *self, const uint32_t kIdx, const uint3
     // kernel shape: (dk * cin1 * hk * wk, cout1, cout0, cin0)
     // group kernel shape: (group * dk * cin1G * hk * wk, cout1G, cout0, cin0)
     uint64_t out2B1SrcAddrOffset = (static_cast<uint64_t>(curDkIdx) * self->ctx.tiling_->cin1G + curCin1Idx) *
-                                   self->ctx.HkWkC0_ * self->ctx.tiling_->cout1G * self->ctx.tiling_->c0 +
+                                       self->ctx.HkWkC0_ * self->ctx.tiling_->cout1G * self->ctx.tiling_->c0 +
                                    static_cast<uint64_t>(curCout1Idx) * self->ctx.tiling_->c0 * self->ctx.tiling_->c0;
     AscendC::DataCopyParams dataCopyParams;
-    dataCopyParams.blockLen = (curCout1Size < self->ctx.singleShapeCout1_ - curCout1Idx ?
-                               curCout1Size : self->ctx.singleShapeCout1_ - curCout1Idx) * self->ctx.tiling_->c0;
+    dataCopyParams.blockLen =
+        (curCout1Size < self->ctx.singleShapeCout1_ - curCout1Idx ? curCout1Size :
+                                                                    self->ctx.singleShapeCout1_ - curCout1Idx) *
+        self->ctx.tiling_->c0;
     dataCopyParams.dstStride = 0;
     uint32_t curCin1Size = self->ctx.curCin1Size_ < (self->ctx.singleShapeCin1_ - curCin1Idx) ?
-                           self->ctx.curCin1Size_ : (self->ctx.singleShapeCin1_ - curCin1Idx);
+                               self->ctx.curCin1Size_ :
+                               (self->ctx.singleShapeCin1_ - curCin1Idx);
     uint16_t blockCount = curCin1Size * self->ctx.HkWk_;
-    uint64_t srcStride = static_cast<uint64_t>(self->ctx.tiling_->cout1G) * self->ctx.tiling_->c0 -
-                         dataCopyParams.blockLen;
+    uint64_t srcStride =
+        static_cast<uint64_t>(self->ctx.tiling_->cout1G) * self->ctx.tiling_->c0 - dataCopyParams.blockLen;
 
     if (srcStride <= MAX_16BITS_STRIDE) {
         dataCopyParams.blockCount = blockCount;
@@ -294,8 +309,8 @@ __aicore__ inline void LoadToB1BF16(Intf *self, const uint32_t kIdx, const uint3
         DataCopy(useB1Buf, self->ctx.weightGlobal_[out2B1SrcAddrOffset], dataCopyParams);
     } else {
         dataCopyParams.blockCount = 1;
-        uint64_t srcOffsetInterval = static_cast<uint64_t>(self->ctx.tiling_->cout1G) * self->ctx.tiling_->c0 *
-                                     self->ctx.tiling_->c0;
+        uint64_t srcOffsetInterval =
+            static_cast<uint64_t>(self->ctx.tiling_->cout1G) * self->ctx.tiling_->c0 * self->ctx.tiling_->c0;
         uint32_t dstOffsetInterval = static_cast<uint32_t>(dataCopyParams.blockLen) * self->ctx.tiling_->c0;
         uint64_t dstOffset = 0;
         for (uint32_t idx = 0; idx < blockCount; ++idx) {
@@ -307,7 +322,7 @@ __aicore__ inline void LoadToB1BF16(Intf *self, const uint32_t kIdx, const uint3
 }
 
 template <class Intf, class src1_T>
-__aicore__ inline void LoadToB1(Intf *self, uint32_t kIdx, uint32_t curDkIdx, bool pingPongFlag, bool loadFlag)
+__aicore__ inline void LoadToB1(Intf* self, uint32_t kIdx, uint32_t curDkIdx, bool pingPongFlag, bool loadFlag)
 {
     if (unlikely(self->ctx.isB1FullLoadFlag_ && !self->ctx.isLoadB1_)) {
         return;
@@ -324,7 +339,9 @@ __aicore__ inline void LoadToB1(Intf *self, uint32_t kIdx, uint32_t curDkIdx, bo
         if constexpr (Intf::conv3dConfig.enableKernelSplit) {
             LoadToB1ForKernelSplit<Intf>(self, kIdx, curDkIdx, useB1Buf);
         } else {
-            if constexpr ((std::is_same<typename Intf::SrcT, bfloat16_t>::value) || (std::is_same<typename Intf::SrcT, half>::value)) {
+            if constexpr (
+                (std::is_same<typename Intf::SrcT, bfloat16_t>::value) ||
+                (std::is_same<typename Intf::SrcT, half>::value)) {
                 LoadToB1BF16<Intf, src1_T>(self, kIdx, curDkIdx, useB1Buf); // FP16 also reuses this function
             } else if constexpr (std::is_same<typename Intf::SrcT, float>::value) {
                 LoadToB1Fp32<Intf, src1_T>(self, kIdx, curDkIdx, useB1Buf, pingPongFlag);
@@ -338,6 +355,6 @@ __aicore__ inline void LoadToB1(Intf *self, uint32_t kIdx, uint32_t curDkIdx, bo
         }
     }
 }
-}
+} // namespace ConvBackpropInputFunc
 
 #endif

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef __COLL_COMM_AICPU_H__
 #define __COLL_COMM_AICPU_H__
 
@@ -35,11 +35,11 @@
 using namespace hccl;
 class CollCommAicpu {
 public:
-    HcclResult InitAicpuIndOp(CommAicpuParam *commAicpuParam);
-    HcclResult InitThreads(ThreadMgrAicpuParam *param);
-    HcclResult AllocChannelResource(HcclChannelUrmaRes *commParam);
-    HcclResult NotifyFree(NotifyMgrAicpuParam *param);
-    HcclResult NotifyAlloc(NotifyMgrAicpuParam *param);
+    HcclResult InitAicpuIndOp(CommAicpuParam* commAicpuParam);
+    HcclResult InitThreads(ThreadMgrAicpuParam* param);
+    HcclResult AllocChannelResource(HcclChannelUrmaRes* commParam);
+    HcclResult NotifyFree(NotifyMgrAicpuParam* param);
+    HcclResult NotifyAlloc(NotifyMgrAicpuParam* param);
     const std::vector<std::shared_ptr<Thread>>& GetAllThread() { return threads_; };
     const HcclTopoInfo& GetTopoInfo() { return topoInfo_; }
     const std::string& GetIdentifier() { return identifier_; }
@@ -52,7 +52,7 @@ public:
     HcclCommDfxLite* GetHcclCommDfxLite() { return &dfx_; };
 
     // h2d - d2h通道信息交互
-    HcclResult BackGroundGetCmd(Hccl::KfcCommand &cmd);
+    HcclResult BackGroundGetCmd(Hccl::KfcCommand& cmd);
     HcclResult BackGroundSetStatus(Hccl::KfcStatus state);
     u32 UpdateIndex();
 
@@ -62,19 +62,19 @@ public:
     // N秒快恢
     hccl::NsRecoveryLitePtr GetNsRecoveryLitePtr();
     HcclResult Clean();
-    HcclResult Resume(HcclChannelUrmaRes *commParam);
+    HcclResult Resume(HcclChannelUrmaRes* commParam);
 
 private:
-    HcclResult InitUrmaChannel(HcclChannelUrmaRes *commParam);
-    HcclResult ParsePackData(std::vector<char> &data, ChannelHandle &handle);
+    HcclResult InitUrmaChannel(HcclChannelUrmaRes* commParam);
+    HcclResult ParsePackData(std::vector<char>& data, ChannelHandle& handle);
     HcclResult RegisterChannelAddDfxTaskInfo(ChannelHandle channel);
     HcclResult RegisterThreadAddDfxTaskInfo(ThreadHandle thread);
     void InitBackGroundThread();
-    HcclResult ResumePackData(std::vector<char> &data, ChannelHandle &handle);
-    HcclResult ProcessUrmaRes(HcclChannelUrmaRes *commParam, bool isInit);
+    HcclResult ResumePackData(std::vector<char>& data, ChannelHandle& handle);
+    HcclResult ProcessUrmaRes(HcclChannelUrmaRes* commParam, bool isInit);
 
     u32 devId_{0};
-    //通用的通道
+    // 通用的通道
     std::shared_ptr<hccl::HDCommunicate> kfcControlTransferH2D_{nullptr};
     std::shared_ptr<hccl::HDCommunicate> kfcStatusTransferD2H_{nullptr};
 
@@ -95,7 +95,6 @@ private:
     bool isErrorReported_{false}; // 是否上报了taskException信息
     HcclCommDfxLite dfx_;
     u32 index_{0};
-
 };
 
 #endif // __COLL_COMM_AICPU_H__

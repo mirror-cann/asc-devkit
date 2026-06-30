@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef HCCP_ASYNC_CTX_H
 #define HCCP_ASYNC_CTX_H
 
@@ -29,9 +29,9 @@ extern "C" {
  * @see ra_ctx_lmem_unregister_async
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaCtxLmemRegisterAsync(void *ctxHandle, struct MrRegInfoT *lmemInfo,
-    void **lmemHandle, void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaCtxLmemRegisterAsync(
+    void* ctxHandle, struct MrRegInfoT* lmemInfo, void** lmemHandle, void** reqHandle);
 
 /**
  * @ingroup librdma
@@ -44,8 +44,8 @@ HCCP_ATTRI_VISI_DEF int RaCtxLmemRegisterAsync(void *ctxHandle, struct MrRegInfo
  * @see ra_ctx_lmem_register_async
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaCtxLmemUnregisterAsync(void *ctxHandle, void *lmemHandle, void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaCtxLmemUnregisterAsync(void* ctxHandle, void* lmemHandle, void** reqHandle);
 
 /**
  * @ingroup librdma
@@ -60,9 +60,9 @@ HCCP_ATTRI_VISI_DEF int RaCtxLmemUnregisterAsync(void *ctxHandle, void *lmemHand
  * @see ra_ctx_qp_destroy_async
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaCtxQpCreateAsync(void *ctxHandle, struct QpCreateAttr *attr,
-    struct QpCreateInfo *info, void **qpHandle, void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaCtxQpCreateAsync(
+    void* ctxHandle, struct QpCreateAttr* attr, struct QpCreateInfo* info, void** qpHandle, void** reqHandle);
 
 /**
  * @ingroup librdma
@@ -74,8 +74,8 @@ HCCP_ATTRI_VISI_DEF int RaCtxQpCreateAsync(void *ctxHandle, struct QpCreateAttr 
  * @see ra_ctx_qp_create_async
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaCtxQpDestroyAsync(void *qpHandle, void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaCtxQpDestroyAsync(void* qpHandle, void** reqHandle);
 
 /**
  * @ingroup libudma
@@ -88,9 +88,9 @@ HCCP_ATTRI_VISI_DEF int RaCtxQpDestroyAsync(void *qpHandle, void **reqHandle);
  * @see ra_get_async_req_result
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaCtxQpDestroyBatchAsync(void *ctxHandle, void *qpHandle[],
-    unsigned int *num, void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaCtxQpDestroyBatchAsync(
+    void* ctxHandle, void* qpHandle[], unsigned int* num, void** reqHandle);
 
 /**
  * @ingroup librdma
@@ -104,9 +104,9 @@ HCCP_ATTRI_VISI_DEF int RaCtxQpDestroyBatchAsync(void *ctxHandle, void *qpHandle
  * @see ra_ctx_qp_unimport_async
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaCtxQpImportAsync(void *ctxHandle, struct QpImportInfoT *info, void **remQpHandle,
-    void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaCtxQpImportAsync(
+    void* ctxHandle, struct QpImportInfoT* info, void** remQpHandle, void** reqHandle);
 
 /**
  * @ingroup librdma
@@ -118,8 +118,8 @@ HCCP_ATTRI_VISI_DEF int RaCtxQpImportAsync(void *ctxHandle, struct QpImportInfoT
  * @see ra_ctx_qp_import_async
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaCtxQpUnimportAsync(void *remQpHandle, void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaCtxQpUnimportAsync(void* remQpHandle, void** reqHandle);
 
 /**
  * @ingroup libudma
@@ -133,9 +133,9 @@ HCCP_ATTRI_VISI_DEF int RaCtxQpUnimportAsync(void *remQpHandle, void **reqHandle
  * @see ra_get_async_req_result
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaGetTpInfoListAsync(void *ctxHandle, struct GetTpCfg *cfg, struct HccpTpInfo infoList[],
-    unsigned int *num, void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaGetTpInfoListAsync(
+    void* ctxHandle, struct GetTpCfg* cfg, struct HccpTpInfo infoList[], unsigned int* num, void** reqHandle);
 
 /**
  * @ingroup libudma
@@ -149,9 +149,9 @@ HCCP_ATTRI_VISI_DEF int RaGetTpInfoListAsync(void *ctxHandle, struct GetTpCfg *c
  * @see ra_ctx_init
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaGetEidByIpAsync(void *ctxHandle, struct IpInfo ip[], union HccpEid eid[],
-    unsigned int *num, void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaGetEidByIpAsync(
+    void* ctxHandle, struct IpInfo ip[], union HccpEid eid[], unsigned int* num, void** reqHandle);
 
 /**
  * @ingroup libudma
@@ -165,9 +165,9 @@ HCCP_ATTRI_VISI_DEF int RaGetEidByIpAsync(void *ctxHandle, struct IpInfo ip[], u
  * @see ra_get_async_req_result
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaGetTpAttrAsync(void *ctxHandle, uint64_t tpHandle, uint32_t *attrBitmap,
-    struct TpAttr *attr, void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaGetTpAttrAsync(
+    void* ctxHandle, uint64_t tpHandle, uint32_t* attrBitmap, struct TpAttr* attr, void** reqHandle);
 
 /**
  * @ingroup libudma
@@ -181,9 +181,9 @@ HCCP_ATTRI_VISI_DEF int RaGetTpAttrAsync(void *ctxHandle, uint64_t tpHandle, uin
  * @see ra_get_async_req_result
  * @retval #zero Success
  * @retval #non-zero Failure
-*/
-HCCP_ATTRI_VISI_DEF int RaSetTpAttrAsync(void *ctxHandle, uint64_t tpHandle, uint32_t attrBitmap,
-    struct TpAttr *attr, void **reqHandle);
+ */
+HCCP_ATTRI_VISI_DEF int RaSetTpAttrAsync(
+    void* ctxHandle, uint64_t tpHandle, uint32_t attrBitmap, struct TpAttr* attr, void** reqHandle);
 
 #ifdef __cplusplus
 }

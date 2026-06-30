@@ -36,7 +36,8 @@ __aicore__ inline uint32_t HtoNL(uint32_t x)
     constexpr uint32_t byteShift = 8;
     constexpr uint32_t wordShift = 24;
 
-    return (((x & byte3Mask) >> wordShift) | ((x & byte2Mask) >> byteShift) | ((x & byte1Mask) << byteShift) |
+    return (
+        ((x & byte3Mask) >> wordShift) | ((x & byte2Mask) >> byteShift) | ((x & byte1Mask) << byteShift) |
         ((x & byte0Mask) << wordShift));
 }
 
@@ -56,13 +57,13 @@ __aicore__ inline uint64_t HtoNLL(uint64_t x)
     constexpr uint64_t shift40 = 40;
     constexpr uint64_t shift56 = 56;
 
-    return (((x & byte0Mask) << shift56) | ((x & byte1Mask) << shift40) |
-            ((x & byte2Mask) << shift24) | ((x & byte3Mask) << shift8) |
-            ((x & byte4Mask) >> shift8) | ((x & byte5Mask) >> shift24) |
-            ((x & byte6Mask) >> shift40) | ((x & byte7Mask) >> shift56));
+    return (
+        ((x & byte0Mask) << shift56) | ((x & byte1Mask) << shift40) | ((x & byte2Mask) << shift24) |
+        ((x & byte3Mask) << shift8) | ((x & byte4Mask) >> shift8) | ((x & byte5Mask) >> shift24) |
+        ((x & byte6Mask) >> shift40) | ((x & byte7Mask) >> shift56));
 }
 
-template<HardEvent event>
+template <HardEvent event>
 __aicore__ inline void SyncAction()
 {
     auto tPipePtr = GetTPipePtr();
@@ -119,14 +120,16 @@ __aicore__ inline int32_t HcommFindBufferIdx(
         }
         uint64_t offset = targetAddr - baseAddr;
         if (offset <= bufferSize && len <= bufferSize - offset) {
-            KERNEL_LOG(KERNEL_INFO, "HcommFindBufferIdx hit idx=%u addr=%llu len=%llu base=%llu size=%llu\n", i,
-                static_cast<uint64_t>(targetAddr), static_cast<uint64_t>(len),
-                static_cast<uint64_t>(baseAddr), static_cast<uint64_t>(bufferSize));
+            KERNEL_LOG(
+                KERNEL_INFO, "HcommFindBufferIdx hit idx=%u addr=%llu len=%llu base=%llu size=%llu\n", i,
+                static_cast<uint64_t>(targetAddr), static_cast<uint64_t>(len), static_cast<uint64_t>(baseAddr),
+                static_cast<uint64_t>(bufferSize));
             return static_cast<int32_t>(i);
         }
     }
-    KERNEL_LOG(KERNEL_ERROR, "HcommFindBufferIdx failed addr=%llu len=%llu bufferNum=%u\n",
-        static_cast<uint64_t>(targetAddr), static_cast<uint64_t>(len), bufferNum);
+    KERNEL_LOG(
+        KERNEL_ERROR, "HcommFindBufferIdx failed addr=%llu len=%llu bufferNum=%u\n", static_cast<uint64_t>(targetAddr),
+        static_cast<uint64_t>(len), bufferNum);
     return HCOMM_FAILED;
 }
 

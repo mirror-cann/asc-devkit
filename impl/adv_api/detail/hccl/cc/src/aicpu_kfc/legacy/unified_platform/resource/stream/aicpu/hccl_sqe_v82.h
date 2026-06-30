@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef HCCL_V2_AICPU_SQE_V82_H
 #define HCCL_V2_AICPU_SQE_V82_H
 
@@ -47,7 +47,7 @@ class HcclUBNotifyRecordSqe : public HcclSqe {
 public:
     HcclUBNotifyRecordSqe();
     void Config(u16 streamId, u16 taskId, u64 notifyId);
-    u64  GetSqe() override;
+    u64 GetSqe() override;
 
 private:
     std::unique_ptr<Rt91095StarsNotifySqe> sqe;
@@ -105,8 +105,9 @@ class HcclUBMemcpySqe : public HcclSqe {
 public:
     HcclUBMemcpySqe();
 
-    void Config(u16 streamId, u16 taskId, RtDataType rtDataType, RtReduceKind rtReduceOp,
-                        u64 count, const u64 *src, const u64 *dst, u32 partId);
+    void Config(
+        u16 streamId, u16 taskId, RtDataType rtDataType, RtReduceKind rtReduceOp, u64 count, const u64* src,
+        const u64* dst, u32 partId);
 
     u64 GetSqe() override;
 

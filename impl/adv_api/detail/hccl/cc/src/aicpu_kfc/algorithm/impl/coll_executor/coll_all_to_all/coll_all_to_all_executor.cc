@@ -1,22 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "coll_all_to_all_executor.h"
 #include "device_capacity.h"
 
 namespace hccl {
 
-CollAlltoAllExecutor::CollAlltoAllExecutor(const HcclDispatcher dispatcher,
-                                           std::unique_ptr<TopoMatcher> &topoMatcher)
+CollAlltoAllExecutor::CollAlltoAllExecutor(const HcclDispatcher dispatcher, std::unique_ptr<TopoMatcher>& topoMatcher)
     : CollNativeExecutorBase(dispatcher, topoMatcher)
-{
-}
+{}
 
 HcclResult CollAlltoAllExecutor::Orchestrate(OpParam& param, AlgResourceResponse& algRes)
 {
@@ -35,7 +33,7 @@ HcclResult CollAlltoAllExecutor::Orchestrate(OpParam& param, AlgResourceResponse
         execMem.outputMem = algRes.cclOutputMem;
         execMem.scratchMem = algRes.scratchMem;
 
-        auto opMeta = GetOpMeta(param.opType, algRes.paramInputMem.size());   // override
+        auto opMeta = GetOpMeta(param.opType, algRes.paramInputMem.size()); // override
         CHK_RET(InitTask(dispatcher_, param.stream, opMeta.isEnableCache, opMeta.GetCacheKey()));
         bool massTasks = HasMassTasks(allMeshAggregationSendRecvInfo_);
         if (massTasks) {
@@ -48,17 +46,19 @@ HcclResult CollAlltoAllExecutor::Orchestrate(OpParam& param, AlgResourceResponse
         execMem.scratchMem = algRes.scratchMem;
         ret = KernelRun(param, execMem);
     }
-    CHK_PRT_RET(ret != HCCL_SUCCESS,
-        HCCL_ERROR("[CollAlltoAllExecutor][Orchestrate]errNo[0x%016llx]executor run failed",
-            HCCL_ERROR_CODE(ret)), ret);
+    CHK_PRT_RET(
+        ret != HCCL_SUCCESS,
+        HCCL_ERROR("[CollAlltoAllExecutor][Orchestrate]errNo[0x%016llx]executor run failed", HCCL_ERROR_CODE(ret)),
+        ret);
 
     // Enforce task launch at the end of Orchestrate
     // 注意: 不要删除这里的强制launch, 否则会导致aicpu cache功能问题
     HCCL_INFO("%s: enforce task launch at the end of Orchestrate", __func__);
     CHK_RET(LaunchTaskExtend(dispatcher_, param.stream, algResResp_->slaveStreams));
 
-    HCCL_INFO("tag[%s], AlltoAll executor orchestrate success, take time [%lld]us.",
-        param.tag.c_str(), DURATION_US(TIME_NOW() - startut));
+    HCCL_INFO(
+        "tag[%s], AlltoAll executor orchestrate success, take time [%lld]us.", param.tag.c_str(),
+        DURATION_US(TIME_NOW() - startut));
     return HCCL_SUCCESS;
 }
 
@@ -72,7 +72,7 @@ HcclResult CollAlltoAllExecutor::GetAdjInfo(AlgResourceResponse& algRes, AdjInfo
     if (Getlevel1CommRank(levelCommInfo) != HCCL_SUCCESS) {
         return HCCL_SUCCESS;
     }
-    u32 localRank= levelCommInfo.localRank;
+    u32 localRank = levelCommInfo.localRank;
     u32 localRankSize = levelCommInfo.localRankSize;
 
     std::unique_ptr<AlgTemplateBase> levelTempAlg;
@@ -90,15 +90,16 @@ HcclResult CollAlltoAllExecutor::GetAdjInfo(AlgResourceResponse& algRes, AdjInfo
 
     adjInfo.dstRankNum = nslbAdjInfo.dstRankNum;
     HCCL_INFO("[GetAdjInfo-nslbdp] adjInfo.dstRankNum[%u].", adjInfo.dstRankNum);
-    
+
     for (size_t i = 0; i < nslbAdjInfo.nsAdjInfo.size(); i++) {
         NslbDpAdjInfo dpAdjInfo = {0};
         dpAdjInfo.dstLocalRankId = nslbAdjInfo.nsAdjInfo[i].dstLocalRankId;
         dpAdjInfo.phaseId = nslbAdjInfo.nsAdjInfo[i].phaseId;
         dpAdjInfo.rev = 0;
-        adjInfo.nsAdjInfo.push_back(dpAdjInfo); 
-        HCCL_INFO("[nslbdp]GetAdjInfo dstLocalRankId[%u], phaseId[%u].",
-                   nslbAdjInfo.nsAdjInfo[i].dstLocalRankId, nslbAdjInfo.nsAdjInfo[i].phaseId);
+        adjInfo.nsAdjInfo.push_back(dpAdjInfo);
+        HCCL_INFO(
+            "[nslbdp]GetAdjInfo dstLocalRankId[%u], phaseId[%u].", nslbAdjInfo.nsAdjInfo[i].dstLocalRankId,
+            nslbAdjInfo.nsAdjInfo[i].phaseId);
     }
     return HCCL_SUCCESS;
 }
@@ -112,9 +113,8 @@ HcclResult CollAlltoAllExecutor::CalcResRequest(const OpParam& param, AlgResourc
     u32 streamNum = 0U;
     u32 notifyNum = 0U;
     u64 aivBufferRequest = 0U;
-    std::vector<LevelNSubCommTransport> opTransport {
-        std::vector<LevelNSubCommTransport>(static_cast<u32>(COMM_LEVEL_RESERVED))
-    };
+    std::vector<LevelNSubCommTransport> opTransport{
+        std::vector<LevelNSubCommTransport>(static_cast<u32>(COMM_LEVEL_RESERVED))};
 
     CHK_RET(CalcScratchMemSize(scratchMemSize));
     CHK_RET(CalcStreamNum(streamNum));
@@ -123,20 +123,22 @@ HcclResult CollAlltoAllExecutor::CalcResRequest(const OpParam& param, AlgResourc
     CHK_RET(CalcCommInfo(opTransport));
 
     CHK_RET(BuildResourceRequest(scratchMemSize, streamNum, notifyNum, aivBufferRequest, opTransport, resourceRequest));
-    HCCL_INFO("[CollAlltoAllExecutor][%s] streamNum[%u], notifyNum[%u], sctrachMemSize[%llu], aivBufferRequest[%llu]",
+    HCCL_INFO(
+        "[CollAlltoAllExecutor][%s] streamNum[%u], notifyNum[%u], sctrachMemSize[%llu], aivBufferRequest[%llu]",
         __func__, resourceRequest.streamNum, resourceRequest.notifyNum, resourceRequest.scratchMemSize,
         resourceRequest.aivBufferRequest);
     // 打印建链诉求
     for (u32 levelIndex = 0; levelIndex < COMM_LEVEL_RESERVED; levelIndex++) {
-        LevelNSubCommTransport &levelTransport = resourceRequest.opTransport[levelIndex];
+        LevelNSubCommTransport& levelTransport = resourceRequest.opTransport[levelIndex];
         u32 ringSize = levelTransport.size();
         for (u32 ringIndex = 0; ringIndex < ringSize; ringIndex++) {
-            SingleSubCommTransport &subCommTransport = levelTransport[ringIndex];
+            SingleSubCommTransport& subCommTransport = levelTransport[ringIndex];
             u32 rankSize = subCommTransport.transportRequests.size();
             for (u32 rankIndex = 0; rankIndex < rankSize; rankIndex++) {
                 if (subCommTransport.transportRequests[rankIndex].isValid == true) {
-                    HCCL_INFO("[CollAlltoAllExecutor][CalcResRequest]" \
-                        "levelIndex[%u], ringIndex[%u], rankIndex[%u], userRank[%u], remoteRank[%u]" \
+                    HCCL_INFO(
+                        "[CollAlltoAllExecutor][CalcResRequest]"
+                        "levelIndex[%u], ringIndex[%u], rankIndex[%u], userRank[%u], remoteRank[%u]"
                         "isUsedRdma[%d]",
                         levelIndex, ringIndex, rankIndex, subCommTransport.transportRequests[rankIndex].localUserRank,
                         subCommTransport.transportRequests[rankIndex].remoteUserRank,
@@ -150,12 +152,13 @@ HcclResult CollAlltoAllExecutor::CalcResRequest(const OpParam& param, AlgResourc
     return HCCL_SUCCESS;
 }
 
-HcclResult CollAlltoAllExecutor::CheckNeedCreateVirtualLinks(AlgResourceRequest &resourceRequest)
+HcclResult CollAlltoAllExecutor::CheckNeedCreateVirtualLinks(AlgResourceRequest& resourceRequest)
 {
     return HCCL_SUCCESS;
 }
 
-HcclResult CollAlltoAllExecutor::SetExcutorExtraInfo(const std::vector<SendRecvInfo> &allMeshAggregationSendRecvInfo, u64 cclbufferSize)
+HcclResult CollAlltoAllExecutor::SetExcutorExtraInfo(
+    const std::vector<SendRecvInfo>& allMeshAggregationSendRecvInfo, u64 cclbufferSize)
 {
     allMeshAggregationSendRecvInfo_.clear();
     allMeshAggregationSendRecvInfo_ = allMeshAggregationSendRecvInfo;
@@ -165,12 +168,13 @@ HcclResult CollAlltoAllExecutor::SetExcutorExtraInfo(const std::vector<SendRecvI
     return HCCL_SUCCESS;
 }
 
-void CollAlltoAllExecutor::UpdateAlltoAllZCopyMode(std::vector<SendRecvInfo> &allMeshAggregationSendRecvInfo, u64 cclbufferSize)
+void CollAlltoAllExecutor::UpdateAlltoAllZCopyMode(
+    std::vector<SendRecvInfo>& allMeshAggregationSendRecvInfo, u64 cclbufferSize)
 {
     if (workflowMode_ == HcclWorkflowMode::HCCL_WORKFLOW_MODE_OP_BASE) {
         u64 maxSendSize = 0;
         u64 maxRecvSize = 0;
-        for (auto &sendRecvInfo : allMeshAggregationSendRecvInfo) {
+        for (auto& sendRecvInfo : allMeshAggregationSendRecvInfo) {
             for (u32 i = 0; i < topoAttr_.userRankSize; i++) {
                 u64 curSendSize = sendRecvInfo.sendLength[i] + sendRecvInfo.sendOffset[i];
                 maxSendSize = std::max(maxSendSize, curSendSize);
@@ -178,13 +182,14 @@ void CollAlltoAllExecutor::UpdateAlltoAllZCopyMode(std::vector<SendRecvInfo> &al
                 maxRecvSize = std::max(maxRecvSize, curRecvSize);
             }
         }
-        bool isAlltoAllZCopyMode = (maxSendSize <= cclbufferSize) &&
-                                   (maxRecvSize <= cclbufferSize);
+        bool isAlltoAllZCopyMode = (maxSendSize <= cclbufferSize) && (maxRecvSize <= cclbufferSize);
         if (isAlltoAllZCopyMode) {
             isAlltoAllZCopyMode_ = true;
         }
-        HCCL_INFO("[CollAlltoAllExecutor][UpdateAlltoAllZCopyMode] maxSendSize[%llu], maxRecvSize[%llu], "\
-            "cclBufferSize[%llu]", maxSendSize, maxRecvSize, cclbufferSize);
+        HCCL_INFO(
+            "[CollAlltoAllExecutor][UpdateAlltoAllZCopyMode] maxSendSize[%llu], maxRecvSize[%llu], "
+            "cclBufferSize[%llu]",
+            maxSendSize, maxRecvSize, cclbufferSize);
     } else {
         // 图模式走ZCopy实现
         isAlltoAllZCopyMode_ = true;
@@ -192,10 +197,10 @@ void CollAlltoAllExecutor::UpdateAlltoAllZCopyMode(std::vector<SendRecvInfo> &al
     HCCL_DEBUG("UpdateAlltoAllZCopyMode isAlltoAllZCopyMode_[%d]", isAlltoAllZCopyMode_);
 }
 
-void CollAlltoAllExecutor::CalcIntraMeshAggregationSendInfo(const AlltoAllUserRankInfo &userRankInfo,
-    const SendRecvInfo &mySendRecvInfo, const std::vector<SendRecvInfo> &myMeshAggregationSendRecvInfo,
-    u32 rankInMeshAggregation, u32 infoIndex, OneSendRecvAddrInfo &curSendInfo, u32 meshAggregationRankSize,
-    const bool &isSingleMesh)
+void CollAlltoAllExecutor::CalcIntraMeshAggregationSendInfo(
+    const AlltoAllUserRankInfo& userRankInfo, const SendRecvInfo& mySendRecvInfo,
+    const std::vector<SendRecvInfo>& myMeshAggregationSendRecvInfo, u32 rankInMeshAggregation, u32 infoIndex,
+    OneSendRecvAddrInfo& curSendInfo, u32 meshAggregationRankSize, const bool& isSingleMesh)
 {
     if (infoIndex >= mySendRecvInfo.sendOffset.size() || infoIndex >= mySendRecvInfo.sendLength.size()) {
         HCCL_ERROR("[CalcIntraMeshAggregationSendInfo] Invalid infoIndex[%u]", infoIndex);
@@ -213,11 +218,12 @@ void CollAlltoAllExecutor::CalcIntraMeshAggregationSendInfo(const AlltoAllUserRa
                 if (j == infoIndex && k == rankInMeshAggregation) {
                     break;
                 }
-                if (k < myMeshAggregationSendRecvInfo.size() && j <
-                    myMeshAggregationSendRecvInfo[k].sendLength.size()) {
+                if (k < myMeshAggregationSendRecvInfo.size() &&
+                    j < myMeshAggregationSendRecvInfo[k].sendLength.size()) {
                     remoteOffset += myMeshAggregationSendRecvInfo[k].sendLength[j];
                 } else {
-                    HCCL_ERROR("[CalcIntraMeshAggregationSendInfo] invalid MeshAggregationSendRecvInfo size[%zu]",
+                    HCCL_ERROR(
+                        "[CalcIntraMeshAggregationSendInfo] invalid MeshAggregationSendRecvInfo size[%zu]",
                         myMeshAggregationSendRecvInfo.size());
                     return;
                 }
@@ -227,24 +233,27 @@ void CollAlltoAllExecutor::CalcIntraMeshAggregationSendInfo(const AlltoAllUserRa
 
     curSendInfo.remoteOffset = remoteOffset;
     curSendInfo.remoteLength = curSendInfo.localLength;
-    HCCL_DEBUG("[CalcIntraMeshAggregationSendInfo] localOffset[%llu], localLength[%llu], "\
-        "remoteOffset[%llu], remoteLength[%llu]", curSendInfo.localOffset,
-        curSendInfo.localLength, curSendInfo.remoteOffset, curSendInfo.remoteLength);
+    HCCL_DEBUG(
+        "[CalcIntraMeshAggregationSendInfo] localOffset[%llu], localLength[%llu], "
+        "remoteOffset[%llu], remoteLength[%llu]",
+        curSendInfo.localOffset, curSendInfo.localLength, curSendInfo.remoteOffset, curSendInfo.remoteLength);
 }
 
-void CollAlltoAllExecutor::CalcIntraMeshAggregationRecvInfoInMeshAggregation(u32 rankIndex, u32 infoIndex,
-    const std::vector<SendRecvInfo> &myMeshAggregationSendRecvInfo, u64 &localOffset, u32 &offsetCounter,
-    u64 &localLength, u64 &remoteOffset, u32 meshAggregationRankSize)
+void CollAlltoAllExecutor::CalcIntraMeshAggregationRecvInfoInMeshAggregation(
+    u32 rankIndex, u32 infoIndex, const std::vector<SendRecvInfo>& myMeshAggregationSendRecvInfo, u64& localOffset,
+    u32& offsetCounter, u64& localLength, u64& remoteOffset, u32 meshAggregationRankSize)
 {
     // 这里的判断在外部已经保证了，为了应对coverity sc
     if (myMeshAggregationSendRecvInfo.size() < meshAggregationRankSize) {
-        HCCL_ERROR("[CalcIntraMeshAggregationSendInfo] Invalid myMeshAggregationSendRecvInfo[%zu]",
+        HCCL_ERROR(
+            "[CalcIntraMeshAggregationSendInfo] Invalid myMeshAggregationSendRecvInfo[%zu]",
             myMeshAggregationSendRecvInfo.size());
         return;
     }
     if (myMeshAggregationSendRecvInfo[0].sendLength.size() == 0 ||
         myMeshAggregationSendRecvInfo[0].sendOffset.size() == 0) {
-        HCCL_ERROR("[CalcIntraMeshAggregationSendInfo] Invalid sendLength size[%zu] or sendOffset size[%zu]",
+        HCCL_ERROR(
+            "[CalcIntraMeshAggregationSendInfo] Invalid sendLength size[%zu] or sendOffset size[%zu]",
             myMeshAggregationSendRecvInfo[0].sendLength.size(), myMeshAggregationSendRecvInfo[0].sendOffset.size());
         return;
     }
@@ -272,9 +281,9 @@ void CollAlltoAllExecutor::CalcIntraMeshAggregationRecvInfoInMeshAggregation(u32
     HCCL_DEBUG("[%s] process success", __func__);
 }
 
-void CollAlltoAllExecutor::CalcIntraMeshAggregationRecvInfo(const AlltoAllUserRankInfo &userRankInfo,
-    const std::vector<SendRecvInfo> &myMeshAggregationSendRecvInfo, u32 infoIndex, OneSendRecvAddrInfo &curRecvInfo,
-    u32 meshAggregationRankSize, const bool &isSingleMesh)
+void CollAlltoAllExecutor::CalcIntraMeshAggregationRecvInfo(
+    const AlltoAllUserRankInfo& userRankInfo, const std::vector<SendRecvInfo>& myMeshAggregationSendRecvInfo,
+    u32 infoIndex, OneSendRecvAddrInfo& curRecvInfo, u32 meshAggregationRankSize, const bool& isSingleMesh)
 {
     u64 localOffset = 0, localLength = 0, remoteLength = 0, remoteOffset = 0;
     u32 offsetCounter = 0;
@@ -286,9 +295,10 @@ void CollAlltoAllExecutor::CalcIntraMeshAggregationRecvInfo(const AlltoAllUserRa
         remoteOffset = myMeshAggregationSendRecvInfo[infoIndex].sendOffset[userRankInfo.userRank];
     } else {
         for (u32 j = userRankInfo.userRank % meshAggregationRankSize; j < userRankInfo.userRankSize;
-            j += meshAggregationRankSize) {
-            CalcIntraMeshAggregationRecvInfoInMeshAggregation(j, infoIndex, myMeshAggregationSendRecvInfo, localOffset,
-                offsetCounter, localLength, remoteOffset, meshAggregationRankSize);
+             j += meshAggregationRankSize) {
+            CalcIntraMeshAggregationRecvInfoInMeshAggregation(
+                j, infoIndex, myMeshAggregationSendRecvInfo, localOffset, offsetCounter, localLength, remoteOffset,
+                meshAggregationRankSize);
             if (offsetCounter == infoIndex || infoIndex == 0) {
                 break;
             }
@@ -300,21 +310,23 @@ void CollAlltoAllExecutor::CalcIntraMeshAggregationRecvInfo(const AlltoAllUserRa
 
     curRecvInfo.remoteOffset = remoteOffset;
     curRecvInfo.remoteLength = remoteLength;
-    HCCL_DEBUG("[CalcIntraMeshAggregationRecvInfo] localOffset[%llu], localLength[%llu], "\
-        "remoteOffset[%llu], remoteLength[%llu]", localOffset, localLength, remoteOffset, remoteLength);
+    HCCL_DEBUG(
+        "[CalcIntraMeshAggregationRecvInfo] localOffset[%llu], localLength[%llu], "
+        "remoteOffset[%llu], remoteLength[%llu]",
+        localOffset, localLength, remoteOffset, remoteLength);
 }
 
-void CollAlltoAllExecutor::CalcIntraMeshAggregationAlltoAllMemInfo(const AlltoAllUserRankInfo &userRankInfo,
-    const std::vector<SendRecvInfo> &allSendRecvInfo,
-    std::map<u32, std::list<OneSendRecvAddrInfo>> &sendAddrInfosIntra,
-    std::map<u32, std::list<OneSendRecvAddrInfo>> &recvAddrInfosIntra, u32 meshAggregationRankSize,
-    const bool &isSingleMesh)
+void CollAlltoAllExecutor::CalcIntraMeshAggregationAlltoAllMemInfo(
+    const AlltoAllUserRankInfo& userRankInfo, const std::vector<SendRecvInfo>& allSendRecvInfo,
+    std::map<u32, std::list<OneSendRecvAddrInfo>>& sendAddrInfosIntra,
+    std::map<u32, std::list<OneSendRecvAddrInfo>>& recvAddrInfosIntra, u32 meshAggregationRankSize,
+    const bool& isSingleMesh)
 {
     sendAddrInfosIntra.clear();
     recvAddrInfosIntra.clear();
     if (allSendRecvInfo.size() != userRankInfo.userRankSize) {
-        HCCL_ERROR("Invalid All send recv info size[%zu], should be[%u]", allSendRecvInfo.size(),
-            userRankInfo.userRankSize);
+        HCCL_ERROR(
+            "Invalid All send recv info size[%zu], should be[%u]", allSendRecvInfo.size(), userRankInfo.userRankSize);
         return;
     }
     SendRecvInfo mySendRecvInfo = allSendRecvInfo[userRankInfo.userRank];
@@ -330,14 +342,15 @@ void CollAlltoAllExecutor::CalcIntraMeshAggregationAlltoAllMemInfo(const AlltoAl
         // sendInfo 的计算
         OneSendRecvAddrInfo curSendInfo;
         u32 remoteRankInMeshAggregation = i % meshAggregationRankSize;
-        CalcIntraMeshAggregationSendInfo(userRankInfo, mySendRecvInfo, myMeshAggregationSendRecvInfo,
-            rankInMeshAggregation, i, curSendInfo, meshAggregationRankSize, isSingleMesh);
+        CalcIntraMeshAggregationSendInfo(
+            userRankInfo, mySendRecvInfo, myMeshAggregationSendRecvInfo, rankInMeshAggregation, i, curSendInfo,
+            meshAggregationRankSize, isSingleMesh);
         sendAddrInfosIntra[remoteRankInMeshAggregation].push_back(curSendInfo);
 
         // recvInfo 的计算
         OneSendRecvAddrInfo curRecvInfo;
-        CalcIntraMeshAggregationRecvInfo(userRankInfo, myMeshAggregationSendRecvInfo, i,
-            curRecvInfo, meshAggregationRankSize, isSingleMesh);
+        CalcIntraMeshAggregationRecvInfo(
+            userRankInfo, myMeshAggregationSendRecvInfo, i, curRecvInfo, meshAggregationRankSize, isSingleMesh);
         recvAddrInfosIntra[remoteRankInMeshAggregation].push_back(curRecvInfo);
     }
 }
@@ -366,7 +379,7 @@ HcclOpMetaInfo CollAlltoAllExecutor::GetOpMeta(HcclCMDType opType, const u64 siz
     return opMeta;
 }
 
-u64 CollAlltoAllExecutor::CalAlltoAllVScratchMemSize(u64 &workSpaceMemSize)
+u64 CollAlltoAllExecutor::CalAlltoAllVScratchMemSize(u64& workSpaceMemSize)
 {
     u64 scratchMemSize = 0U;
     if (workSpaceMemSize == 0) {
@@ -381,7 +394,7 @@ u64 CollAlltoAllExecutor::CalAlltoAllVScratchMemSize(u64 &workSpaceMemSize)
     return scratchMemSize;
 }
 
-bool CollAlltoAllExecutor::HasMassTasks(std::vector<SendRecvInfo> &allMeshAggregationSendRecvInfo)
+bool CollAlltoAllExecutor::HasMassTasks(std::vector<SendRecvInfo>& allMeshAggregationSendRecvInfo)
 {
     if (isAlltoAllZCopyMode_) {
         return false;
@@ -390,7 +403,7 @@ bool CollAlltoAllExecutor::HasMassTasks(std::vector<SendRecvInfo> &allMeshAggreg
     u64 maxSendTimes = 0;
     u64 maxRecvTimes = 0;
     const u64 cclBufferSize = algResResp_->cclInputMem.size();
-    for (auto &sendRecvInfo : allMeshAggregationSendRecvInfo) {
+    for (auto& sendRecvInfo : allMeshAggregationSendRecvInfo) {
         u64 sendTimes = 0;
         u64 recvTimes = 0;
         for (u32 i = 0; i < topoAttr_.userRankSize; i++) {
@@ -404,8 +417,9 @@ bool CollAlltoAllExecutor::HasMassTasks(std::vector<SendRecvInfo> &allMeshAggreg
     const u64 maxTasksPerStep = 10;  // BCOPY中每次和远端通信最多消耗task数
     const u64 maxTasksBaseCost = 50; // BCOPY中除每步和远端通信外，最多消耗的task数
     u64 maxTasks = (maxSendTimes + maxRecvTimes) * maxTasksPerStep + maxTasksBaseCost;
-    HCCL_DEBUG("[AlltoAll] bcopy maxSendTimes[%llu], maxRecvTimes[%llu], maxTasks[%llu], hasMassTask[%u]",
-        maxSendTimes, maxRecvTimes, maxTasks, (maxTasks > massThreshold));
+    HCCL_DEBUG(
+        "[AlltoAll] bcopy maxSendTimes[%llu], maxRecvTimes[%llu], maxTasks[%llu], hasMassTask[%u]", maxSendTimes,
+        maxRecvTimes, maxTasks, (maxTasks > massThreshold));
     return (maxTasks > massThreshold);
 }
 
@@ -421,40 +435,58 @@ HcclResult CollAlltoAllExecutor::CheckNeedRecreateComm(u64 lastScratchMemSize, b
     return HCCL_SUCCESS;
 }
 
-HcclResult CollAlltoAllExecutor::RunAlltoAllTemplate(const std::unique_ptr<AlgTemplateBase> &executor,
-    const SubCommInfo &commInfo)
+HcclResult CollAlltoAllExecutor::RunAlltoAllTemplate(
+    const std::unique_ptr<AlgTemplateBase>& executor, const SubCommInfo& commInfo)
 {
     HcclResult ret = executor->RunAsync(commInfo.localRank, commInfo.localRankSize, commInfo.links);
-    CHK_PRT_RET(ret == HCCL_E_AGAIN, HCCL_WARNING("[CollAlltoAllExecutor][RunAlltoAllTemplate]" \
-        "group has been destroyed. Break!"), ret);
-    CHK_PRT_RET(ret != HCCL_SUCCESS,
-        HCCL_ERROR("[CollAlltoAllExecutor][RunAlltoAllTemplate]run executor rank[%u] rank size[%u] failed",
-        commInfo.localRank, commInfo.localRankSize), ret);
+    CHK_PRT_RET(
+        ret == HCCL_E_AGAIN,
+        HCCL_WARNING("[CollAlltoAllExecutor][RunAlltoAllTemplate]"
+                     "group has been destroyed. Break!"),
+        ret);
+    CHK_PRT_RET(
+        ret != HCCL_SUCCESS,
+        HCCL_ERROR(
+            "[CollAlltoAllExecutor][RunAlltoAllTemplate]run executor rank[%u] rank size[%u] failed", commInfo.localRank,
+            commInfo.localRankSize),
+        ret);
     return HCCL_SUCCESS;
 }
 
-HcclResult CollAlltoAllExecutor::RunAlltoAllVTemplateStaged(const std::unique_ptr<AlgTemplateBase> &executor,
-    const SubCommInfo &commInfo)
+HcclResult CollAlltoAllExecutor::RunAlltoAllVTemplateStaged(
+    const std::unique_ptr<AlgTemplateBase>& executor, const SubCommInfo& commInfo)
 {
     HcclResult ret = executor->RunAsync(commInfo.localRank, commInfo.localRankSize, commInfo.links);
-    CHK_PRT_RET(ret == HCCL_E_AGAIN, HCCL_WARNING("[CollAlltoAllExecutor][RunAlltoAllVTemplateStaged]" \
-        "group has been destroyed. Break!"), ret);
-    CHK_PRT_RET(ret != HCCL_SUCCESS,
-        HCCL_ERROR("[CollAlltoAllExecutor][RunAlltoAllVTemplateStaged]run executor rank[%u] rank size[%u] failed",
-        commInfo.localRank, commInfo.localRankSize), ret);
+    CHK_PRT_RET(
+        ret == HCCL_E_AGAIN,
+        HCCL_WARNING("[CollAlltoAllExecutor][RunAlltoAllVTemplateStaged]"
+                     "group has been destroyed. Break!"),
+        ret);
+    CHK_PRT_RET(
+        ret != HCCL_SUCCESS,
+        HCCL_ERROR(
+            "[CollAlltoAllExecutor][RunAlltoAllVTemplateStaged]run executor rank[%u] rank size[%u] failed",
+            commInfo.localRank, commInfo.localRankSize),
+        ret);
     return HCCL_SUCCESS;
 }
 
 // deprecated
-HcclResult CollAlltoAllExecutor::RunTemplateWithVirtualLink(const std::unique_ptr<AlgTemplateBase> &executor,
-    const SubCommInfo &commInfo)
+HcclResult CollAlltoAllExecutor::RunTemplateWithVirtualLink(
+    const std::unique_ptr<AlgTemplateBase>& executor, const SubCommInfo& commInfo)
 {
     HcclResult ret = executor->RunAsync(commInfo.localRank, commInfo.localRankSize, commInfo.virtualLinks);
-    CHK_PRT_RET(ret == HCCL_E_AGAIN, HCCL_WARNING("[CollAlltoAllExecutor][RunTemplateWithVirtualLink]" \
-        "group has been destroyed. Break!"), ret);
-    CHK_PRT_RET(ret != HCCL_SUCCESS,
-        HCCL_ERROR("[CollAlltoAllExecutor][RunTemplateWithVirtualLink]run executor rank[%u] rank size[%u] failed",
-        commInfo.localRank, commInfo.localRankSize), ret);
+    CHK_PRT_RET(
+        ret == HCCL_E_AGAIN,
+        HCCL_WARNING("[CollAlltoAllExecutor][RunTemplateWithVirtualLink]"
+                     "group has been destroyed. Break!"),
+        ret);
+    CHK_PRT_RET(
+        ret != HCCL_SUCCESS,
+        HCCL_ERROR(
+            "[CollAlltoAllExecutor][RunTemplateWithVirtualLink]run executor rank[%u] rank size[%u] failed",
+            commInfo.localRank, commInfo.localRankSize),
+        ret);
     return HCCL_SUCCESS;
 }
 

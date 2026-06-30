@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv3d_common_func.h
@@ -40,7 +40,7 @@ template <class Intf, uint32_t ImplType>
 struct GetTensorC {
     template <bool sync = true>
     static __aicore__ inline bool call(
-        Intf *self, const AscendC::GlobalTensor<typename Intf::OutputT> &output, bool enSequentialWrite = false)
+        Intf* self, const AscendC::GlobalTensor<typename Intf::OutputT>& output, bool enSequentialWrite = false)
     {
         self->ctx.copyOutIns.CopyOut(output);
         self->ctx.queueCL0.FreeTensor(self->ctx.cl0);
@@ -61,7 +61,7 @@ template <class Intf, uint32_t ImplType>
 struct IterateAll {
     template <bool sync = true>
     static __aicore__ inline bool call(
-        Intf *self, const AscendC::GlobalTensor<typename Intf::OutputT> &output, bool enPartialSum = false)
+        Intf* self, const AscendC::GlobalTensor<typename Intf::OutputT>& output, bool enPartialSum = false)
     {
         self->ctx.loadBiasL1Ins.SetParams(self);
         self->ctx.loadBL1Ins.SetParams(self);
@@ -84,7 +84,7 @@ struct IterateAll {
     }
 
     static __aicore__ void inline IterateAllBase(
-        Intf *self, const AscendC::GlobalTensor<typename Intf::OutputT> &output, bool enPartialSum = false) 
+        Intf* self, const AscendC::GlobalTensor<typename Intf::OutputT>& output, bool enPartialSum = false)
     {
         if (self->ctx.biasFullLoadFlag && self->ctx.enableBias) {
             self->ctx.biasL1 = self->ctx.queueBiasL1.template AllocTensor<typename Intf::BiasT>();
@@ -109,7 +109,7 @@ struct IterateAll {
     }
 
     static __aicore__ void inline ReCalculationKTilingWithGroups(
-        Intf *self, uint64_t &updateKAL1, uint64_t &updateKBL1, uint64_t &updateKL0)
+        Intf* self, uint64_t& updateKAL1, uint64_t& updateKBL1, uint64_t& updateKL0)
     {
         // Update kaL1/kbL1/kL0 when singleCoreCin changes.
         uint64_t curKAL1Kd = Conv3dApi::GetCurrentKD(
@@ -143,15 +143,15 @@ struct IterateAll {
         }
     }
 
-    static __aicore__ void inline PreProcessGroupOptDimTail(Intf *self)
+    static __aicore__ void inline PreProcessGroupOptDimTail(Intf* self)
     {
         if (!self->ctx.isGroupOptDimTail) {
             return;
         }
 
         if (self->ctx.singleCoreCinTail != 0) {
-            KERNEL_LOG(KERNEL_DEBUG, "[IterateAllWithGroups] singleCoreCin %d update to %d \n",
-                self->ctx.singleCoreCin,
+            KERNEL_LOG(
+                KERNEL_DEBUG, "[IterateAllWithGroups] singleCoreCin %d update to %d \n", self->ctx.singleCoreCin,
                 self->ctx.singleCoreCinTail);
             self->ctx.singleCoreCin = self->ctx.singleCoreCinTail;
             uint64_t updateKAL1 = 0;
@@ -161,22 +161,22 @@ struct IterateAll {
             InitKDirectionBaseValue<Intf>(self, updateKAL1, updateKBL1, updateKL0);
             self->ctx.preloadAL1DbFlag = false;
             self->ctx.preloadABL1DbFlag = false;
-            KERNEL_LOG(KERNEL_DEBUG, "[IterateAllWithGroups] updateKAL1 %d updateKBL1 %d updateKL0 %d \n",
-                updateKAL1,
-                updateKBL1,
-                updateKL0);
+            KERNEL_LOG(
+                KERNEL_DEBUG, "[IterateAllWithGroups] updateKAL1 %d updateKBL1 %d updateKL0 %d \n", updateKAL1,
+                updateKBL1, updateKL0);
         }
         if (self->ctx.singleCoreCoutTail != 0) {
-            KERNEL_LOG(KERNEL_DEBUG, "[IterateAllWithGroups] singleCoreCo %d update to %d \n",
-                self->ctx.singleCoreCo,
+            KERNEL_LOG(
+                KERNEL_DEBUG, "[IterateAllWithGroups] singleCoreCo %d update to %d \n", self->ctx.singleCoreCo,
                 self->ctx.singleCoreCoutTail);
             self->ctx.singleCoreCo = self->ctx.singleCoreCoutTail;
             InitCoutDirectionBaseValue<Intf>(self);
         }
     }
 
-    static __aicore__ void inline PostProcessGroupOptDimTail(Intf *self, const uint64_t &tmpSingleCoreCo,
-        const uint8_t &tmpPreloadAL1DbFlag, const uint8_t &tmpPreloadABL1DbFlag)
+    static __aicore__ void inline PostProcessGroupOptDimTail(
+        Intf* self, const uint64_t& tmpSingleCoreCo, const uint8_t& tmpPreloadAL1DbFlag,
+        const uint8_t& tmpPreloadABL1DbFlag)
     {
         if (!self->ctx.isGroupOptDimTail) {
             return;
@@ -196,7 +196,7 @@ struct IterateAll {
     }
 
     static __aicore__ void inline IterateAllWithGroups(
-        Intf *self, const AscendC::GlobalTensor<typename Intf::OutputT> &output, bool enPartialSum = false)
+        Intf* self, const AscendC::GlobalTensor<typename Intf::OutputT>& output, bool enPartialSum = false)
     {
         uint64_t weightOneGroupOptSize =
             self->ctx.conv3dTiling->cinOpt * self->ctx.kernelHxkernelWxkernelD * self->ctx.conv3dTiling->coutOpt;
@@ -218,6 +218,6 @@ struct IterateAll {
     }
 };
 
-}  // namespace Conv3dApiFunc
+} // namespace Conv3dApiFunc
 
 #endif

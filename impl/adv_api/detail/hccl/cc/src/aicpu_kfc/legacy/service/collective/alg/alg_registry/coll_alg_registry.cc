@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "coll_alg_registry.h"
 
 #include <string>
@@ -16,14 +16,14 @@
 
 namespace Hccl {
 
-CollAlgRegistry *CollAlgRegistry::Global()
+CollAlgRegistry* CollAlgRegistry::Global()
 {
-    static CollAlgRegistry *globalAlgImplRegistry = new CollAlgRegistry;
+    static CollAlgRegistry* globalAlgImplRegistry = new CollAlgRegistry;
     return globalAlgImplRegistry;
 }
 
-HcclResult CollAlgRegistry::Register(const OpType type, const std::string &funcName,
-                                     const CollAlgCreator &collAlgCreator)
+HcclResult CollAlgRegistry::Register(
+    const OpType type, const std::string& funcName, const CollAlgCreator& collAlgCreator)
 {
     const std::lock_guard<std::mutex> lock(mu_);
     if (impls_[type].count(funcName) != 0) {
@@ -36,10 +36,10 @@ HcclResult CollAlgRegistry::Register(const OpType type, const std::string &funcN
 
 void CollAlgRegistry::PrintAllImpls()
 {
-    for (auto &iter : impls_) {
+    for (auto& iter : impls_) {
         HCCL_DEBUG("-------------------------------------");
         HCCL_DEBUG("type name is %s", iter.first.Describe().c_str());
-        for (auto &alg : iter.second) {
+        for (auto& alg : iter.second) {
             HCCL_DEBUG("    alg name is  %s", alg.first.c_str());
             if (alg.second == nullptr) {
                 HCCL_DEBUG("    alg func is nullptr");
@@ -51,11 +51,11 @@ void CollAlgRegistry::PrintAllImpls()
 std::map<OpType, std::vector<std::string>> CollAlgRegistry::GetAvailAlgs()
 {
     std::map<OpType, std::vector<std::string>> algs;
-    for (auto &iter : impls_) {
+    for (auto& iter : impls_) {
         HCCL_DEBUG("-------------------------------------");
         HCCL_DEBUG("type name is %s", iter.first.Describe().c_str());
         std::vector<std::string> tmpAvailAlgs;
-        for (auto &alg : iter.second) {
+        for (auto& alg : iter.second) {
             HCCL_DEBUG("    alg name is  %s", alg.first.c_str());
             tmpAvailAlgs.push_back(alg.first);
             if (alg.second == nullptr) {
@@ -67,7 +67,7 @@ std::map<OpType, std::vector<std::string>> CollAlgRegistry::GetAvailAlgs()
     return algs;
 }
 
-std::shared_ptr<CollAlgBase> CollAlgRegistry::GetAlgImpl(const OpType type, const std::string &funcName)
+std::shared_ptr<CollAlgBase> CollAlgRegistry::GetAlgImpl(const OpType type, const std::string& funcName)
 {
     if (impls_.count(type) == 0 || impls_[type].count(funcName) == 0) {
         HCCL_ERROR("%s:%s is not registered.", type.Describe().c_str(), funcName.c_str());

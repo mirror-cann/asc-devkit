@@ -33,9 +33,11 @@ constexpr std::size_t kSelectorBufSize = 64U;
 // 本地 selector/execute_selector.h 中的 ExecuteSelector 是与 CANN 侧保持同步的镜像类,
 // 以它作为编译期代理: 一旦 CANN 侧(及本地镜像)给该类新增数据成员或更严的对齐要求,
 // 下面的断言会编译失败, 强制同步调大 selBuf, 避免就地构造越界踩栈。
-static_assert(sizeof(mc2_ops_hccl::ExecuteSelector) <= kSelectorBufSize,
+static_assert(
+    sizeof(mc2_ops_hccl::ExecuteSelector) <= kSelectorBufSize,
     "selBuf too small for ExecuteSelector; CANN ABI changed, enlarge kSelectorBufSize");
-static_assert(kSelectorBufAlign % alignof(mc2_ops_hccl::ExecuteSelector) == 0,
+static_assert(
+    kSelectorBufAlign % alignof(mc2_ops_hccl::ExecuteSelector) == 0,
     "selBuf alignment insufficient for ExecuteSelector; raise kSelectorBufAlign");
 
 // ops_hccl::ExecuteSelector::ExecuteSelector()
@@ -46,8 +48,7 @@ constexpr const char* kSymSelectorRun =
 // ops_hccl::CollAlgExecRegistryV2::Instance() — 静态成员, 返回单例引用(取地址作 self)。
 constexpr const char* kSymRegistryInstance = "_ZN8ops_hccl21CollAlgExecRegistryV28InstanceEv";
 // ops_hccl::CollAlgExecRegistryV2::GetAlgExec(HcclCMDType, std::string const&)
-constexpr const char* kSymRegistryGetAlgExec =
-    "_ZN8ops_hccl21CollAlgExecRegistryV210GetAlgExecE11HcclCMDTypeRKSs";
+constexpr const char* kSymRegistryGetAlgExec = "_ZN8ops_hccl21CollAlgExecRegistryV210GetAlgExecE11HcclCMDTypeRKSs";
 
 // ops_hccl::HcclGetAlgRes — 新版(当前 hccl 项目)签名, 末尾新增 const ResPackGraphMode&:
 //   (void*(HcclComm), OpParam&, unique_ptr<InsCollAlgBase>&, TopoInfoWithNetLayerDetails*,
@@ -67,18 +68,16 @@ using SelectorRunFn = HcclResult (*)(
 using RegInstanceFn = void* (*)();
 // CollAlgExecRegistryV2::GetAlgExec(HcclCMDType, const std::string&): 非静态成员, this 作隐式首参。
 // 返回 unique_ptr(non-trivial) 由编译器按 AArch64 间接返回(x8)约定自动处理。
-using RegGetAlgExecFn = std::unique_ptr<InsCollAlgBase> (*)(
-    void* self, HcclCMDType opType, const std::string& algName);
+using RegGetAlgExecFn = std::unique_ptr<InsCollAlgBase> (*)(void* self, HcclCMDType opType, const std::string& algName);
 // HcclGetAlgRes 自由函数: 直接按导出签名映射(comm 为 void*/HcclComm)。
 using HcclGetAlgResFn = HcclResult (*)(
     HcclComm comm, mc2_ops_hccl::OpParam& param, std::unique_ptr<InsCollAlgBase>& executor,
-    mc2_ops_hccl::TopoInfoWithNetLayerDetails* topoInfo,
-    std::unique_ptr<AlgResourceCtxSerializable>& resCtxHost, void** resCtxSequence, bool& isResourceReused,
-    const mc2_ops_hccl::ResPackGraphMode& resPack);
+    mc2_ops_hccl::TopoInfoWithNetLayerDetails* topoInfo, std::unique_ptr<AlgResourceCtxSerializable>& resCtxHost,
+    void** resCtxSequence, bool& isResourceReused, const mc2_ops_hccl::ResPackGraphMode& resPack);
 using HcclGetAlgResLegacyFn = HcclResult (*)(
     HcclComm comm, mc2_ops_hccl::OpParam& param, std::unique_ptr<InsCollAlgBase>& executor,
-    mc2_ops_hccl::TopoInfoWithNetLayerDetails* topoInfo,
-    std::unique_ptr<AlgResourceCtxSerializable>& resCtxHost, void** resCtxSequence, bool& isResourceReused);
+    mc2_ops_hccl::TopoInfoWithNetLayerDetails* topoInfo, std::unique_ptr<AlgResourceCtxSerializable>& resCtxHost,
+    void** resCtxSequence, bool& isResourceReused);
 
 struct CannSyms {
     void* handle = nullptr;
@@ -130,9 +129,8 @@ const CannSyms& LoadCannSyms()
             s.getAlgResOk = true;
         }
         HCCL_RUN_INFO(
-            "[HostCannBridge] loaded %s handle=%p selectorOk=%d getAlgExecOk=%d getAlgResOk=%d",
-            libName, s.handle, static_cast<int>(s.selectorOk), static_cast<int>(s.getAlgExecOk),
-            static_cast<int>(s.getAlgResOk));
+            "[HostCannBridge] loaded %s handle=%p selectorOk=%d getAlgExecOk=%d getAlgResOk=%d", libName, s.handle,
+            static_cast<int>(s.selectorOk), static_cast<int>(s.getAlgExecOk), static_cast<int>(s.getAlgResOk));
         return s;
     }();
     return syms;
@@ -144,8 +142,7 @@ const CannSyms& LoadCannSyms()
 bool UseCannBridge(const OpParam& param)
 {
     return (param.engine == COMM_ENGINE_AICPU_TS || param.engine == COMM_ENGINE_AICPU) &&
-           (param.opType == HcclCMDType::HCCL_CMD_ALLTOALL ||
-            param.opType == HcclCMDType::HCCL_CMD_ALLTOALLV ||
+           (param.opType == HcclCMDType::HCCL_CMD_ALLTOALL || param.opType == HcclCMDType::HCCL_CMD_ALLTOALLV ||
             param.opType == HcclCMDType::HCCL_CMD_ALLREDUCE);
 }
 
@@ -198,21 +195,21 @@ std::unique_ptr<InsCollAlgBase> GetAlgExecViaCann(HcclCMDType opType, const std:
     const cann_abi::CannSyms& syms = cann_abi::LoadCannSyms();
     if (!syms.getAlgExecOk) {
         HCCL_ERROR(
-            "[HostCannBridge][GetAlgExec] symbols not ready. opType[%u] algName[%s]",
-            static_cast<u32>(opType), algName.c_str());
+            "[HostCannBridge][GetAlgExec] symbols not ready. opType[%u] algName[%s]", static_cast<u32>(opType),
+            algName.c_str());
         return nullptr;
     }
 
     void* self = syms.regInstance();
     if (self == nullptr) {
-        HCCL_ERROR("[HostCannBridge][GetAlgExec] registry Instance() returned null. opType[%u]",
-            static_cast<u32>(opType));
+        HCCL_ERROR(
+            "[HostCannBridge][GetAlgExec] registry Instance() returned null. opType[%u]", static_cast<u32>(opType));
         return nullptr;
     }
     std::unique_ptr<InsCollAlgBase> executor = syms.regGetAlgExec(self, opType, algName);
     HCCL_RUN_INFO(
-        "[HostCannBridge][GetAlgExec] opType[%u] algName[%s] executor[%p]",
-        static_cast<u32>(opType), algName.c_str(), reinterpret_cast<void*>(executor.get()));
+        "[HostCannBridge][GetAlgExec] opType[%u] algName[%s] executor[%p]", static_cast<u32>(opType), algName.c_str(),
+        reinterpret_cast<void*>(executor.get()));
     return executor;
 }
 } // namespace mc2_ops_hccl

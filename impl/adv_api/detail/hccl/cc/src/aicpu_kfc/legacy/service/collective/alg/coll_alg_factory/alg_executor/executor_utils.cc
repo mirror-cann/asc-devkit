@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "executor_utils.h"
 
 namespace Hccl {
@@ -22,7 +22,7 @@ bool IsEnableCounterNotifyByDevType(const RankId myRank, const DevType devType)
     }
 }
 
-HcclResult InitOpInfo(const CollAlgOperator &op, OpType &opType, ReduceOp &redOp, u32 &root)
+HcclResult InitOpInfo(const CollAlgOperator& op, OpType& opType, ReduceOp& redOp, u32& root)
 {
     opType = op.opType;
     switch (opType) {
@@ -44,9 +44,9 @@ HcclResult InitOpInfo(const CollAlgOperator &op, OpType &opType, ReduceOp &redOp
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult InitDataInfo(const CollAlgOperator &op, DataType &dataType, DataType &outputDataType, u64 &dataCount)
+HcclResult InitDataInfo(const CollAlgOperator& op, DataType& dataType, DataType& outputDataType, u64& dataCount)
 {
-    dataType  = op.dataType;
+    dataType = op.dataType;
     dataCount = op.dataCount;
     outputDataType = op.outputDataType;
     if (outputDataType == DataType::INVALID) {
@@ -57,8 +57,8 @@ HcclResult InitDataInfo(const CollAlgOperator &op, DataType &dataType, DataType 
 }
 
 // Get Prior Link from virtual topo
-const std::vector<NetInstance::Path> GetPathsFromRankGraph(const RankGraph *rankGraph,
-    const RankId srcRank, const RankId dstRank)
+const std::vector<NetInstance::Path> GetPathsFromRankGraph(
+    const RankGraph* rankGraph, const RankId srcRank, const RankId dstRank)
 {
     // 遍历当前节点的所有层级，返回两个节点间查到到的所有path
     std::vector<NetInstance::Path> pathList;
@@ -70,9 +70,10 @@ const std::vector<NetInstance::Path> GetPathsFromRankGraph(const RankGraph *rank
     return pathList;
 }
 
-HcclResult AddToResLinks(const RankId vNeighborRank, const LinkData &linkData, ResLinks &resLinks)
+HcclResult AddToResLinks(const RankId vNeighborRank, const LinkData& linkData, ResLinks& resLinks)
 {
-    HCCL_DEBUG("RankId [%d] linkData.des[%s] resLinks[%zu]", vNeighborRank, linkData.Describe().c_str(), resLinks.size());
+    HCCL_DEBUG(
+        "RankId [%d] linkData.des[%s] resLinks[%zu]", vNeighborRank, linkData.Describe().c_str(), resLinks.size());
     auto rankLinkIter = resLinks.find(vNeighborRank);
     if (rankLinkIter == resLinks.end()) {
         std::vector<LinkData> tmpLinks = {linkData};
@@ -83,33 +84,38 @@ HcclResult AddToResLinks(const RankId vNeighborRank, const LinkData &linkData, R
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult PrepResLinks(const RankId myRank, const RankGraph *rankGraph,
-                        const std::vector<BasePortType> &linkPriority, const LinkReq &linkReq, ResLinks &resLinks)
+HcclResult PrepResLinks(
+    const RankId myRank, const RankGraph* rankGraph, const std::vector<BasePortType>& linkPriority,
+    const LinkReq& linkReq, ResLinks& resLinks)
 {
     HCCL_DEBUG("PrepResLinks linkPriority.size()[%zu], linkReq.size()[%zu]", linkPriority.size(), linkReq.size());
     for (auto resReqIter = linkReq.begin(); resReqIter != linkReq.end(); resReqIter++) {
-        const std::vector<NetInstance::Path> tmpPaths =
-            GetPathsFromRankGraph(rankGraph, myRank, resReqIter->first);
+        const std::vector<NetInstance::Path> tmpPaths = GetPathsFromRankGraph(rankGraph, myRank, resReqIter->first);
         if (resReqIter->second == 1) {
-            CHK_PRT_RET(tmpPaths.size() == 0,
-                HCCL_ERROR("[CollAlgFactory] Unable to obtain valid link, srcRank [%d], dstRank [%d].", myRank,
-                resReqIter->first), HcclResult::HCCL_E_INTERNAL);
-            LinkData requiredLinkData(tmpPaths[0]);  // 当前只取第一条path
+            CHK_PRT_RET(
+                tmpPaths.size() == 0,
+                HCCL_ERROR(
+                    "[CollAlgFactory] Unable to obtain valid link, srcRank [%d], dstRank [%d].", myRank,
+                    resReqIter->first),
+                HcclResult::HCCL_E_INTERNAL);
+            LinkData requiredLinkData(tmpPaths[0]); // 当前只取第一条path
             // updata res
-            CHK_PRT_RET(AddToResLinks(resReqIter->first, requiredLinkData, resLinks) != HcclResult::HCCL_SUCCESS,
-                        HCCL_ERROR("[CollAlgFactory] Rank [%d], Fail to prepare links.", myRank),
-                        HcclResult::HCCL_E_INTERNAL);
+            CHK_PRT_RET(
+                AddToResLinks(resReqIter->first, requiredLinkData, resLinks) != HcclResult::HCCL_SUCCESS,
+                HCCL_ERROR("[CollAlgFactory] Rank [%d], Fail to prepare links.", myRank), HcclResult::HCCL_E_INTERNAL);
         } else {
-            CHK_PRT_RET(tmpPaths.size() < resReqIter->second,
+            CHK_PRT_RET(
+                tmpPaths.size() < resReqIter->second,
                 HCCL_ERROR("[CollAlgFactory] Rank [%d], available linkNum smaller than required.", myRank),
                 HcclResult::HCCL_E_INTERNAL);
             // 从所有path中选择前resReqIter->second条
             for (u32 linkNum = 0; linkNum < resReqIter->second; linkNum++) {
                 LinkData requiredLinkData(tmpPaths[linkNum]);
                 // updata res
-                CHK_PRT_RET(AddToResLinks(resReqIter->first, requiredLinkData, resLinks) != HcclResult::HCCL_SUCCESS,
-                            HCCL_ERROR("[CollAlgFactory] Rank [%d], Fail to prepare links.", myRank),
-                            HcclResult::HCCL_E_INTERNAL);
+                CHK_PRT_RET(
+                    AddToResLinks(resReqIter->first, requiredLinkData, resLinks) != HcclResult::HCCL_SUCCESS,
+                    HCCL_ERROR("[CollAlgFactory] Rank [%d], Fail to prepare links.", myRank),
+                    HcclResult::HCCL_E_INTERNAL);
             }
         }
     }
@@ -117,7 +123,7 @@ HcclResult PrepResLinks(const RankId myRank, const RankGraph *rankGraph,
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult PrepResLinks(const RankId myRank, const LinkReq &linkReq, ConnectedLinkMgr *linkMgr, ResLinks &resLinks)
+HcclResult PrepResLinks(const RankId myRank, const LinkReq& linkReq, ConnectedLinkMgr* linkMgr, ResLinks& resLinks)
 {
     CHK_PTR_NULL(linkMgr);
     HCCL_DEBUG("PrepResLinks linkReq.size()[%zu]", linkReq.size());
@@ -125,20 +131,22 @@ HcclResult PrepResLinks(const RankId myRank, const LinkReq &linkReq, ConnectedLi
         if (resReqIter->second == 1) {
             auto rankId = resReqIter->first;
             auto links = linkMgr->GetLinks(rankId);
-            CHK_PRT_RET(links.size() == 0, HCCL_ERROR("[PrepResLinks] Rank [%d], Fail to get peer links.", myRank),
+            CHK_PRT_RET(
+                links.size() == 0, HCCL_ERROR("[PrepResLinks] Rank [%d], Fail to get peer links.", myRank),
                 HcclResult::HCCL_E_INTERNAL);
             LinkData requiredLinkData = links[0];
             // updata res
-            CHK_PRT_RET(AddToResLinks(resReqIter->first, requiredLinkData, resLinks) != HcclResult::HCCL_SUCCESS,
-                        HCCL_ERROR("[CollAlgFactory] Rank [%d], Fail to prepare links.", myRank),
-                        HcclResult::HCCL_E_INTERNAL);
+            CHK_PRT_RET(
+                AddToResLinks(resReqIter->first, requiredLinkData, resLinks) != HcclResult::HCCL_SUCCESS,
+                HCCL_ERROR("[CollAlgFactory] Rank [%d], Fail to prepare links.", myRank), HcclResult::HCCL_E_INTERNAL);
         } else {
             for (u32 linkNum = 0; linkNum < resReqIter->second; linkNum++) {
                 LinkData requiredLinkData = linkMgr->GetLinks(resReqIter->first)[linkNum];
                 // updata res
-                CHK_PRT_RET(AddToResLinks(resReqIter->first, requiredLinkData, resLinks) != HcclResult::HCCL_SUCCESS,
-                            HCCL_ERROR("[CollAlgFactory] Rank [%d], Fail to prepare links.", myRank),
-                            HcclResult::HCCL_E_INTERNAL);
+                CHK_PRT_RET(
+                    AddToResLinks(resReqIter->first, requiredLinkData, resLinks) != HcclResult::HCCL_SUCCESS,
+                    HCCL_ERROR("[CollAlgFactory] Rank [%d], Fail to prepare links.", myRank),
+                    HcclResult::HCCL_E_INTERNAL);
             }
         }
     }
@@ -146,22 +154,25 @@ HcclResult PrepResLinks(const RankId myRank, const LinkReq &linkReq, ConnectedLi
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CalcResLinks(const RankId myRank, const RankGraph *rankGraph,
-                        const std::vector<BasePortType> &linkPriority, const LinkReq &linkReq,
-                        std::vector<LinkData> &links)
+HcclResult CalcResLinks(
+    const RankId myRank, const RankGraph* rankGraph, const std::vector<BasePortType>& linkPriority,
+    const LinkReq& linkReq, std::vector<LinkData>& links)
 {
     HCCL_DEBUG("CalcResLinks linkPriority.size()[%zu]", linkPriority.size());
     for (auto resReqIter = linkReq.begin(); resReqIter != linkReq.end(); resReqIter++) {
-        const std::vector<NetInstance::Path> tmpPaths =
-            GetPathsFromRankGraph(rankGraph, myRank, resReqIter->first);
+        const std::vector<NetInstance::Path> tmpPaths = GetPathsFromRankGraph(rankGraph, myRank, resReqIter->first);
         if (resReqIter->second == 1) {
-            CHK_PRT_RET(tmpPaths.size() == 0,
-                HCCL_ERROR("[CollAlgFactory] Unable to obtain valid link, srcRank [%d], dstRank [%d].", myRank,
-                resReqIter->first), HcclResult::HCCL_E_INTERNAL);
+            CHK_PRT_RET(
+                tmpPaths.size() == 0,
+                HCCL_ERROR(
+                    "[CollAlgFactory] Unable to obtain valid link, srcRank [%d], dstRank [%d].", myRank,
+                    resReqIter->first),
+                HcclResult::HCCL_E_INTERNAL);
             // updata res
             links.emplace_back(tmpPaths[0]);
         } else {
-            CHK_PRT_RET(tmpPaths.size() < resReqIter->second,
+            CHK_PRT_RET(
+                tmpPaths.size() < resReqIter->second,
                 HCCL_ERROR("[CollAlgFactory] Rank [%d], available linkNum smaller than required.", myRank),
                 HcclResult::HCCL_E_INTERNAL);
             for (u32 linkNum = 0; linkNum < resReqIter->second; linkNum++) {
@@ -174,8 +185,9 @@ HcclResult CalcResLinks(const RankId myRank, const RankGraph *rankGraph,
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CalcLinkInfo(const RankId myRank, const RankGraph *rankGraph, const LinkReq &linkReq,
-    std::vector<std::pair<u32, RankId>> &algTempLinksInfo)
+HcclResult CalcLinkInfo(
+    const RankId myRank, const RankGraph* rankGraph, const LinkReq& linkReq,
+    std::vector<std::pair<u32, RankId>>& algTempLinksInfo)
 {
     std::set<u32> levelSet = rankGraph->GetLevels(myRank);
     for (auto resReqIter = linkReq.begin(); resReqIter != linkReq.end(); resReqIter++) {

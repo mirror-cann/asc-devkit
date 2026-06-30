@@ -190,6 +190,26 @@ asc-devkit:
       - impl/adv_api/detail/select/selectwithbytesmask/selectwithbytesmask_v200_impl.h
       - impl/adv_api/detail/select/selectwithbytesmask/selectwithbytesmask_3510_impl.h
       - impl/basic_api/utils/kernel_utils_cube_group.h
+      - impl/adv_api/detail/conv/conv3d/dav_m220/conv3d_pointwise_sub_api.h
+      - impl/adv_api/detail/api_check/kernel_check/math/logical_ands/logical_ands_check_common.h
+      - impl/adv_api/detail/hccl/impl/hccl_impl_def.h
+      - impl/adv_api/detail/conv/conv3d/dav_m220/conv3d_mte1_pointwise_sub_api.h
+      - impl/adv_api/detail/conv_backprop/conv3d_backprop_filter/dav_v220/conv3d_bp_filter_sub_func.h
+      - impl/adv_api/detail/conv_backprop/conv3d_backprop_input/dav_v220/conv3d_bp_input_mte2_sub_func.h
+      - impl/adv_api/detail/conv/conv3d/conv3d_common_func.h
+      - impl/adv_api/detail/conv/conv3d/conv3d_common_sub_api.h
+      - impl/adv_api/detail/api_check/kernel_api_check.h
+      - impl/adv_api/detail/hccl/ccu/hccl_ccu_v0_prepare.h
+      - impl/adv_api/detail/hccl/ccu/hccl_ccu_xn_utils.h
+      - impl/adv_api/detail/conv/conv3d/dav_m220/conv3d_sub_api.h
+      - impl/adv_api/detail/conv/conv3d/dav_m220/conv3d_mte1_sub_api.h
+      - impl/adv_api/detail/conv/conv3d/conv3d_iterate_base_impl.h
+      - impl/adv_api/detail/conv/common/conv_forward_common_func.h
+      - impl/adv_api/detail/conv/common/conv_common.h
+      - impl/adv_api/detail/hccl/common/hccl_impl_dfx.h
+      - impl/adv_api/detail/conv/conv3d/conv3d_iterate_impl.h
+      - impl/adv_api/detail/conv_backprop/conv3d_backprop_input/dav_v220/conv3d_bp_input_sub_func.h
+      - impl/adv_api/detail/api_check/kernel_check/math/logical_ands/logical_ands_check.h
 
   llt:
     ut_check: true

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv3d_bp_kernel_split.h
@@ -21,7 +21,7 @@
 namespace ConvBackpropInputFunc {
 
 template <class Intf>
-__aicore__ inline uint32_t CalFmapHForKernelSplit(Intf *self, uint32_t mL1Size)
+__aicore__ inline uint32_t CalFmapHForKernelSplit(Intf* self, uint32_t mL1Size)
 {
     uint32_t hiCal;
     if (mL1Size % self->ctx.splitWi_ == 0) {
@@ -36,11 +36,9 @@ __aicore__ inline uint32_t CalFmapHForKernelSplit(Intf *self, uint32_t mL1Size)
 }
 
 template <class Intf, class src0_T>
-__aicore__ inline void CalcLoadToA1ParamsForKernelSplit(Intf *self, AscendC::DataCopyParams &dataCopyParams,
-                                                               uint32_t &loadToA1Cout1Loop, uint32_t &loadToA1HLoop,
-                                                               uint64_t &srcDataStride, uint32_t &dstDataStride,
-                                                               uint32_t &padOffset, uint32_t &curHoSize,
-                                                               uint32_t curCout1Idx)
+__aicore__ inline void CalcLoadToA1ParamsForKernelSplit(
+    Intf* self, AscendC::DataCopyParams& dataCopyParams, uint32_t& loadToA1Cout1Loop, uint32_t& loadToA1HLoop,
+    uint64_t& srcDataStride, uint32_t& dstDataStride, uint32_t& padOffset, uint32_t& curHoSize, uint32_t curCout1Idx)
 {
     uint32_t strideH = self->ctx.tiling_->strideH;
     uint32_t curCout1Size = self->ctx.curLoadKal1_ / self->ctx.splitHkWkC0_;
@@ -59,8 +57,9 @@ __aicore__ inline void CalcLoadToA1ParamsForKernelSplit(Intf *self, AscendC::Dat
 }
 
 template <class Intf>
-static __aicore__ inline void LoadToB2ForKernelSplit(Intf *self, const AscendC::LocalTensor<typename Intf::SrcT> &l1B1Matrix,
-    uint32_t kRepeat, uint32_t kBlockC0Num, uint32_t blockSize, AscendC::LocalTensor<typename Intf::SrcT> &l0b)
+static __aicore__ inline void LoadToB2ForKernelSplit(
+    Intf* self, const AscendC::LocalTensor<typename Intf::SrcT>& l1B1Matrix, uint32_t kRepeat, uint32_t kBlockC0Num,
+    uint32_t blockSize, AscendC::LocalTensor<typename Intf::SrcT>& l0b)
 {
     uint32_t baseC1outIdx = kBlockC0Num / self->ctx.splitHkWk_;
     uint32_t curL1Cout = self->ctx.curLoadKbl1_ / self->ctx.splitHkWk_;
@@ -71,15 +70,15 @@ static __aicore__ inline void LoadToB2ForKernelSplit(Intf *self, const AscendC::
     for (uint32_t i = 0; i < kRepeat; i++) {
         uint32_t idxC1out = baseC1outIdx + i / self->ctx.splitHkWk_;
         uint32_t srcB1Offset = self->ctx.baseB1Offset_ + idxC1out * blockSize +
-                            (baseHkWkOffset - i % self->ctx.splitHkWk_) * self->ctx.tiling_->c0 * curL1Cout;
+                               (baseHkWkOffset - i % self->ctx.splitHkWk_) * self->ctx.tiling_->c0 * curL1Cout;
         LoadData(l0b[dstB2Offset], l1B1Matrix[srcB1Offset], self->ctx.load2d_);
         dstB2Offset += dstB2Stride;
     }
 }
 
 template <class Intf>
-__aicore__ inline void LoadToB1ForKernelSplit(Intf *self, const uint32_t kIdx, const uint32_t curDkIdx,
-                                              AscendC::LocalTensor<typename Intf::SrcT> &useB1Buf)
+__aicore__ inline void LoadToB1ForKernelSplit(
+    Intf* self, const uint32_t kIdx, const uint32_t curDkIdx, AscendC::LocalTensor<typename Intf::SrcT>& useB1Buf)
 {
     uint32_t dstOffset = 0;
     uint64_t cin1Offset = static_cast<uint64_t>(self->ctx.HkWkC0_) * self->ctx.tiling_->cout1 * self->ctx.tiling_->c0;
@@ -88,39 +87,43 @@ __aicore__ inline void LoadToB1ForKernelSplit(Intf *self, const uint32_t kIdx, c
 
     // kernel shape: (dk * cin1 * hk * wk, cout1, cout0, cin0)
     uint64_t out2B1SrcAddrOffset = (static_cast<uint64_t>(curDkIdx) * self->ctx.tiling_->cin1 + curCin1Idx) *
-                                    self->ctx.HkWkC0_ * self->ctx.tiling_->cout1 * self->ctx.tiling_->c0 +
-                                    static_cast<uint64_t>(curCout1Idx) * self->ctx.tiling_->c0 * self->ctx.tiling_->c0;
+                                       self->ctx.HkWkC0_ * self->ctx.tiling_->cout1 * self->ctx.tiling_->c0 +
+                                   static_cast<uint64_t>(curCout1Idx) * self->ctx.tiling_->c0 * self->ctx.tiling_->c0;
 
     AscendC::DataCopyParams dataCopyParams;
     dataCopyParams.blockCount = self->ctx.splitWk_;
-    dataCopyParams.blockLen =
-        self->ctx.curLoadKbl1_ / self->ctx.splitHkWk_;
-    dataCopyParams.srcStride = (self->ctx.tiling_->cout1 * self->ctx.tiling_->c0) -
-        dataCopyParams.blockLen + (self->ctx.tiling_->cout1 * self->ctx.tiling_->c0);
+    dataCopyParams.blockLen = self->ctx.curLoadKbl1_ / self->ctx.splitHkWk_;
+    dataCopyParams.srcStride = (self->ctx.tiling_->cout1 * self->ctx.tiling_->c0) - dataCopyParams.blockLen +
+                               (self->ctx.tiling_->cout1 * self->ctx.tiling_->c0);
     dataCopyParams.dstStride = 0;
     uint32_t curCin1Size = self->ctx.curCin1Size_ < (self->ctx.tiling_->singleCoreCin1 - curCin1Idx) ?
-                        self->ctx.curCin1Size_ : (self->ctx.tiling_->singleCoreCin1 - curCin1Idx);
+                               self->ctx.curCin1Size_ :
+                               (self->ctx.tiling_->singleCoreCin1 - curCin1Idx);
     for (uint32_t cin1Idx = 0; cin1Idx < curCin1Size; ++cin1Idx) {
         uint64_t cin1AddrOffset = cin1Idx * cin1Offset;
         uint64_t srcAddrOffset = out2B1SrcAddrOffset + cin1AddrOffset;
         for (uint32_t khIdx = 0; khIdx < self->ctx.splitHk_; ++khIdx) {
             DataCopy(useB1Buf[dstOffset], self->ctx.weightGlobal_[srcAddrOffset], dataCopyParams);
             dstOffset += (self->ctx.splitWk_ * dataCopyParams.blockLen * 32 / sizeof(typename Intf::SrcT));
-            srcAddrOffset += (self->ctx.tiling_->strideH * self->ctx.tiling_->wk * self->ctx.tiling_->c0 *
-                self->ctx.tiling_->cout1 * self->ctx.tiling_->c0);
+            srcAddrOffset +=
+                (self->ctx.tiling_->strideH * self->ctx.tiling_->wk * self->ctx.tiling_->c0 * self->ctx.tiling_->cout1 *
+                 self->ctx.tiling_->c0);
         }
     }
 }
 
 template <class Intf>
-__aicore__ inline void LoadL0c2GmForKernelSplit(Intf *self, const AscendC::GlobalTensor<typename Intf::DstT> &output,
-    AscendC::LocalTensor<typename Intf::L0cT> &useC1Buf, QuantMode_t fixPipeQuantMode)
+__aicore__ inline void LoadL0c2GmForKernelSplit(
+    Intf* self, const AscendC::GlobalTensor<typename Intf::DstT>& output,
+    AscendC::LocalTensor<typename Intf::L0cT>& useC1Buf, QuantMode_t fixPipeQuantMode)
 {
     int64_t hiWi = static_cast<int64_t>(self->ctx.tiling_->hi) * self->ctx.tiling_->wi;
-    int64_t outOneComputeDstOffset = static_cast<int64_t>(self->ctx.curML0Idx_) % self->ctx.mIter_ * self->ctx.tiling_->baseM *
-        self->ctx.tiling_->strideH * self->ctx.tiling_->strideW * self->ctx.tiling_->c0 + // M方向偏移
-        static_cast<int64_t>(self->ctx.curNL0Idx_) * self->ctx.tiling_->baseN * hiWi + // N方向偏移
-        static_cast<int64_t>(self->ctx.curDinIdx_) * hiWi * self->ctx.tiling_->cin1 * self->ctx.tiling_->c0; // D方向偏移
+    int64_t outOneComputeDstOffset =
+        static_cast<int64_t>(self->ctx.curML0Idx_) % self->ctx.mIter_ * self->ctx.tiling_->baseM *
+            self->ctx.tiling_->strideH * self->ctx.tiling_->strideW * self->ctx.tiling_->c0 + // M方向偏移
+        static_cast<int64_t>(self->ctx.curNL0Idx_) * self->ctx.tiling_->baseN * hiWi +        // N方向偏移
+        static_cast<int64_t>(self->ctx.curDinIdx_) * hiWi * self->ctx.tiling_->cin1 *
+            self->ctx.tiling_->c0; // D方向偏移
     int64_t inOneComputeDstOffset = 0;
     int64_t dstOffset = 0;
     int srcOffset = 0;
@@ -158,5 +161,5 @@ __aicore__ inline void LoadL0c2GmForKernelSplit(Intf *self, const AscendC::Globa
         }
     }
 }
-}
+} // namespace ConvBackpropInputFunc
 #endif

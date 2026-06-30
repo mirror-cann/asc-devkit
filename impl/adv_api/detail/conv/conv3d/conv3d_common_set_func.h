@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv3d_common_set_func.h
@@ -27,7 +27,7 @@ namespace Conv3dApiFunc {
 
 template <class Intf, uint32_t ImplType>
 struct SetOrgInputShape {
-    static __aicore__ inline void call(Intf *self, uint64_t orgCi, uint64_t orgDi, uint64_t orgHi, uint64_t orgWi)
+    static __aicore__ inline void call(Intf* self, uint64_t orgCi, uint64_t orgDi, uint64_t orgHi, uint64_t orgWi)
     {
         self->ctx.oriCi = orgCi;
         self->ctx.orgDi = orgDi;
@@ -39,7 +39,7 @@ struct SetOrgInputShape {
 template <class Intf, uint32_t ImplType>
 struct SetOrgWeightShape {
     static __aicore__ inline void call(
-        Intf *self, uint64_t orgCo, uint64_t orgCi, uint64_t orgKd, uint64_t orgKh, uint64_t orgKw)
+        Intf* self, uint64_t orgCo, uint64_t orgCi, uint64_t orgKd, uint64_t orgKh, uint64_t orgKw)
     {
         self->ctx.orgCo = orgCo;
         self->ctx.orgCi = orgCi;
@@ -51,7 +51,7 @@ struct SetOrgWeightShape {
 
 template <class Intf, uint32_t ImplType>
 struct SetOrgOutputShape {
-    static __aicore__ inline void call(Intf *self, uint64_t orgCo, uint64_t orgDo, uint64_t orgHo, uint64_t orgWo)
+    static __aicore__ inline void call(Intf* self, uint64_t orgCo, uint64_t orgDo, uint64_t orgHo, uint64_t orgWo)
     {
         self->ctx.orgCo = orgCo;
         self->ctx.orgDo = orgDo;
@@ -63,7 +63,7 @@ struct SetOrgOutputShape {
 template <class Intf, uint32_t ImplType>
 struct SetSingleInputShape {
     static __aicore__ inline void call(
-        Intf *self, uint64_t singleCi, uint64_t singleDi, uint64_t singleHi, uint64_t singleWi)
+        Intf* self, uint64_t singleCi, uint64_t singleDi, uint64_t singleHi, uint64_t singleWi)
     {
         self->ctx.singleCoreCin = singleCi;
         InitKDirectionBaseValue<Intf>(self);
@@ -73,8 +73,7 @@ struct SetSingleInputShape {
 template <class Intf, uint32_t ImplType>
 struct SetSingleOutputShape {
     static __aicore__ inline void call(
-        Intf *self, uint64_t singleCo, uint64_t singleDo, uint64_t singleHo,
-        uint64_t singleWo, uint64_t singleGroupOpt)
+        Intf* self, uint64_t singleCo, uint64_t singleDo, uint64_t singleHo, uint64_t singleWo, uint64_t singleGroupOpt)
     {
         self->ctx.singleCoreCo = singleCo;
         self->ctx.singleCoreDo = singleDo;
@@ -86,7 +85,7 @@ struct SetSingleOutputShape {
     }
 
     static __aicore__ inline void call(
-        Intf *self, uint64_t singleCo, uint64_t singleDo, uint64_t singleCoreM, uint64_t singleGroupOpt)
+        Intf* self, uint64_t singleCo, uint64_t singleDo, uint64_t singleCoreM, uint64_t singleGroupOpt)
     {
         self->ctx.singleCoreCo = singleCo;
         self->ctx.singleCoreDo = singleDo;
@@ -102,12 +101,12 @@ struct SetSingleOutputShape {
 template <class Intf, uint32_t ImplType>
 struct SetInputStartPosition {
     static __aicore__ inline void call(
-        Intf *self, int64_t diStartPos, int64_t hiStartPos, int64_t wiStartPos, int64_t ciStartPos)
+        Intf* self, int64_t diStartPos, int64_t hiStartPos, int64_t wiStartPos, int64_t ciStartPos)
     {
         self->ctx.diStartPos = diStartPos;
     }
 
-    static __aicore__ inline void call(Intf *self, int64_t diStartPos, int64_t mStartPos, int64_t ciStartPos)
+    static __aicore__ inline void call(Intf* self, int64_t diStartPos, int64_t mStartPos, int64_t ciStartPos)
     {
         self->ctx.diStartPos = diStartPos;
         self->ctx.mStartPos = mStartPos;
@@ -117,7 +116,7 @@ struct SetInputStartPosition {
 template <class Intf, uint32_t ImplType>
 struct SetGroupOptInfo {
     static __aicore__ inline void call(
-        Intf *self, uint64_t singleCoreCinTail, uint64_t singleCoreCoutTail, bool isGroupOptDimTail = false)
+        Intf* self, uint64_t singleCoreCinTail, uint64_t singleCoreCoutTail, bool isGroupOptDimTail = false)
     {
         self->ctx.singleCoreCinTail = singleCoreCinTail;
         self->ctx.singleCoreCoutTail = singleCoreCoutTail;
@@ -125,6 +124,6 @@ struct SetGroupOptInfo {
     }
 };
 
-}  // namespace Conv3dApiFunc
+} // namespace Conv3dApiFunc
 
 #endif

@@ -1,18 +1,18 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "coll_reduce_scatter_order_preserved_for_910_93_executor.h"
 
 namespace hccl {
 
-CollReduceScatterOrderPreservedFor91093Executor::CollReduceScatterOrderPreservedFor91093Executor(const HcclDispatcher dispatcher,
-    std::unique_ptr<TopoMatcher> &topoMatcher)
+CollReduceScatterOrderPreservedFor91093Executor::CollReduceScatterOrderPreservedFor91093Executor(
+    const HcclDispatcher dispatcher, std::unique_ptr<TopoMatcher>& topoMatcher)
     : CollReduceScatterExecutor(dispatcher, topoMatcher)
 {
     DMAReduceFlag_ = true;
@@ -57,13 +57,15 @@ HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcStreamNum(u32& s
     u32 level2StreamNum = std::min(CalReduceStreamNum(topoAttr_.superPodNum) - 1, DEVICE_FOUR);
     // 总流数上限：7（alltoall使用，提前的本地拷贝任务不需要并行）+ 4（LocalReduce使用）
     streamNum = std::max(all2allStreamNum + reduceStreamNum - 1, level2StreamNum);
-    
-    HCCL_INFO("[%s]tag[%s] all2allStreamNum[%u], reduceStreamNum[%u], level2StreamNum[%u], streamNum[%u]", __func__, tag_.c_str(),
-        all2allStreamNum, reduceStreamNum, level2StreamNum, streamNum);
+
+    HCCL_INFO(
+        "[%s]tag[%s] all2allStreamNum[%u], reduceStreamNum[%u], level2StreamNum[%u], streamNum[%u]", __func__,
+        tag_.c_str(), all2allStreamNum, reduceStreamNum, level2StreamNum, streamNum);
     return HCCL_SUCCESS;
 }
 
-HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcCommInfo(std::vector<LevelNSubCommTransport>& opTransport)
+HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcCommInfo(
+    std::vector<LevelNSubCommTransport>& opTransport)
 {
     TransportMemType inputType = TransportMemType::RESERVED;
     TransportMemType outputType = TransportMemType::RESERVED;
@@ -73,8 +75,8 @@ HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcCommInfo(std::ve
     return HCCL_SUCCESS;
 }
 
-HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcTransportMemType(TransportMemType &inputType,
-    TransportMemType &outputType) const
+HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcTransportMemType(
+    TransportMemType& inputType, TransportMemType& outputType) const
 {
     // scratchMemFlag_ 对应图模式场景（图模式没有cclbuffer）, PARAM_INPUT -> userInput
     inputType = scratchMemFlag_ ? TransportMemType::PARAM_INPUT : TransportMemType::CCL_INPUT;
@@ -83,16 +85,16 @@ HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcTransportMemType
     return HCCL_SUCCESS;
 }
 
-HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcLevel1CommInfo(TransportMemType inputType,
-    TransportMemType outputType, std::vector<LevelNSubCommTransport>& opTransport)
-{   
+HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcLevel1CommInfo(
+    TransportMemType inputType, TransportMemType outputType, std::vector<LevelNSubCommTransport>& opTransport)
+{
     CommParaInfo commParaLevel1(COMM_COMBINE_L1, CommType::COMM_TAG_MESH);
     CHK_RET(CalcCommPlaneInfo(tag_, commParaLevel1, opTransport[COMM_COMBINE_L1], inputType, outputType));
     return HCCL_SUCCESS;
 }
 
-HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcLevel2CommInfo(TransportMemType inputType,
-    TransportMemType outputType, std::vector<LevelNSubCommTransport>& opTransport)
+HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcLevel2CommInfo(
+    TransportMemType inputType, TransportMemType outputType, std::vector<LevelNSubCommTransport>& opTransport)
 {
     if (topoAttr_.superPodNum > 1) {
         CommParaInfo commParaLevel2(COMM_LEVEL2, CommType::COMM_TAG_MESH);
@@ -103,25 +105,25 @@ HcclResult CollReduceScatterOrderPreservedFor91093Executor::CalcLevel2CommInfo(T
 
 bool CollReduceScatterOrderPreservedFor91093Executor::IsSmallData(const u64 totalSize, const u64 curSize)
 {
-    (void) curSize;
+    (void)curSize;
     // 子图复用的阈值（opmeta全一致时，ffts子图复用）
     return totalSize <= HCCL_SMALL_COUNT_32_KB;
 }
 
-HcclResult CollReduceScatterOrderPreservedFor91093Executor::RunReduceScatterLevel1(const OpParam &param, ExecMem &execMem,
-    SubCommInfo &level1CommInfo)
+HcclResult CollReduceScatterOrderPreservedFor91093Executor::RunReduceScatterLevel1(
+    const OpParam& param, ExecMem& execMem, SubCommInfo& level1CommInfo)
 {
     CHK_RET(ActiveSlaveStreams(param.stream));
 
-    // 切分数据(ReduceScatter分组，记录每组的起始偏移和大小) 
+    // 切分数据(ReduceScatter分组，记录每组的起始偏移和大小)
     GroupSlicesInfo groupSlicesInfoLevel0;
     u64 size = execMem.count * SIZE_TABLE[param.DataDes.dataType];
     for (u32 groupId = 0; groupId < topoAttr_.superPodNum; groupId++) {
         MemBlockInfo memInfo;
-        for (u32 dataId = 0; dataId < level1CommInfo.localRankSize; dataId ++) {
+        for (u32 dataId = 0; dataId < level1CommInfo.localRankSize; dataId++) {
             u64 offset = (dataId + groupId * level1CommInfo.localRankSize) * size;
             u64 userMemInOffset = param.DataDes.count * SIZE_TABLE[param.DataDes.dataType] *
-                (dataId + groupId * level1CommInfo.localRankSize);
+                                  (dataId + groupId * level1CommInfo.localRankSize);
             memInfo.size.push_back(size);
             memInfo.userInputOffsets.push_back(userMemInOffset);
             memInfo.inputOffsets.push_back(offset);
@@ -130,26 +132,27 @@ HcclResult CollReduceScatterOrderPreservedFor91093Executor::RunReduceScatterLeve
         groupSlicesInfoLevel0.push_back(memInfo);
     }
 
-    all2allOffset_ = topoAttr_.superPodNum > 1 ? 1 : 0;  // 多机场景需要偏移1（给L1预留计算位，减少拷贝次数） 
+    all2allOffset_ = topoAttr_.superPodNum > 1 ? 1 : 0; // 多机场景需要偏移1（给L1预留计算位，减少拷贝次数）
     std::unique_ptr<AlgTemplateBase> level1TempAlg = AlgTemplateRegistry::Instance().GetAlgTemplate(
         TemplateType::TEMPLATE_REDUCESCATTER_PLANT_LOCAL_REDUCE, dispatcher_);
     HCCL_CONFIG_INFO(HCCL_ALG, "[%s] Run TEMPLATE_REDUCESCATTER_PLANT_LOCAL_REDUCE in COMM_COMBINE_L1", __func__);
     CHK_SMART_PTR_NULL(level1TempAlg);
 
     // execMem.scratchMem在单算子模式下为cclout，图模式为scrach，因此output传入scrach即可
-    CHK_RET(level1TempAlg->Prepare(execMem.inputPtr, execMem.inputMem, execMem.scratchMem, param.stream, 
-        algResResp_->slaveStreams, algResResp_->notifiesMain, algResResp_->notifiesAux,
-        groupSlicesInfoLevel0, param.reduceType, all2allOffset_, param.DataDes.dataType, false, false, true));
+    CHK_RET(level1TempAlg->Prepare(
+        execMem.inputPtr, execMem.inputMem, execMem.scratchMem, param.stream, algResResp_->slaveStreams,
+        algResResp_->notifiesMain, algResResp_->notifiesAux, groupSlicesInfoLevel0, param.reduceType, all2allOffset_,
+        param.DataDes.dataType, false, false, true));
     CHK_RET(level1TempAlg->RegisterProfiler(
-        (level1CommInfo.localRankSize << PROF_RANKSIZE_OFFSET_OF_PLANEID) + level1CommInfo.localRank,
-        PROF_STAGE_2, HCCL_EXEC_STEP_NOT_SET, param.stream));
+        (level1CommInfo.localRankSize << PROF_RANKSIZE_OFFSET_OF_PLANEID) + level1CommInfo.localRank, PROF_STAGE_2,
+        HCCL_EXEC_STEP_NOT_SET, param.stream));
     CHK_RET(RunTemplate(level1TempAlg, level1CommInfo));
-    
+
     return HCCL_SUCCESS;
 }
 
-HcclResult CollReduceScatterOrderPreservedFor91093Executor::RunReduceScatterLevel2(const OpParam &param, ExecMem &execMem,
-    SubCommInfo &level1CommInfo)
+HcclResult CollReduceScatterOrderPreservedFor91093Executor::RunReduceScatterLevel2(
+    const OpParam& param, ExecMem& execMem, SubCommInfo& level1CommInfo)
 {
     u32 commIndex = level1CommInfo.localRank;
     CHK_RET(CheckCommSize(COMM_LEVEL2, COMM_INDEX_0 + 1));
@@ -159,14 +162,15 @@ HcclResult CollReduceScatterOrderPreservedFor91093Executor::RunReduceScatterLeve
     u64 size = execMem.count * SIZE_TABLE[param.DataDes.dataType];
     MemBlockInfo memInfo;
     u32 level0Ranksize = level1CommInfo.localRankSize;
-    u32 inputBaseIndex = (all2allOffset_ + commIndex) % level0Ranksize; // 多机场景需要偏移1（给L1预留计算位，减少拷贝次数） 
-    for (u32 dataId = 0; dataId < level2CommInfo.localRankSize; dataId ++) {
+    u32 inputBaseIndex =
+        (all2allOffset_ + commIndex) % level0Ranksize; // 多机场景需要偏移1（给L1预留计算位，减少拷贝次数）
+    for (u32 dataId = 0; dataId < level2CommInfo.localRankSize; dataId++) {
         u64 inputIndex = inputBaseIndex + dataId * level0Ranksize;
         memInfo.inputOffsets.push_back(inputIndex * size);
         u64 outputIndex = commIndex + dataId * level0Ranksize;
         memInfo.outputOffsets.push_back(outputIndex * size);
         memInfo.userInputOffsets.push_back(outputIndex * size);
-        memInfo.size.push_back(size);  
+        memInfo.size.push_back(size);
     }
 
     std::unique_ptr<AlgTemplateBase> level2TempAlg = AlgTemplateRegistry::Instance().GetAlgTemplate(
@@ -175,19 +179,21 @@ HcclResult CollReduceScatterOrderPreservedFor91093Executor::RunReduceScatterLeve
     CHK_SMART_PTR_NULL(level2TempAlg);
 
     u32 level0LastRank = level0Ranksize - 1;
-    CHK_RET(level2TempAlg->Prepare(execMem.inputMem, execMem.scratchMem,
-        param.stream, algResResp_->slaveStreams, algResResp_->notifiesMain, algResResp_->notifiesAux,
-        memInfo, param.reduceType, param.DataDes.dataType, commIndex == level0LastRank - 1,
+    CHK_RET(level2TempAlg->Prepare(
+        execMem.inputMem, execMem.scratchMem, param.stream, algResResp_->slaveStreams, algResResp_->notifiesMain,
+        algResResp_->notifiesAux, memInfo, param.reduceType, param.DataDes.dataType, commIndex == level0LastRank - 1,
         commIndex == level0LastRank, false));
-    CHK_RET(level2TempAlg->RegisterProfiler((level0Ranksize << PROF_RANKSIZE_OFFSET_OF_PLANEID) +
-        level1CommInfo.localRank, PROF_STAGE_2, HCCL_EXEC_STEP_NOT_SET, param.stream));
+    CHK_RET(level2TempAlg->RegisterProfiler(
+        (level0Ranksize << PROF_RANKSIZE_OFFSET_OF_PLANEID) + level1CommInfo.localRank, PROF_STAGE_2,
+        HCCL_EXEC_STEP_NOT_SET, param.stream));
     CHK_RET(RunTemplate(level2TempAlg, level2CommInfo));
     return HCCL_SUCCESS;
 }
 
-HcclResult CollReduceScatterOrderPreservedFor91093Executor::KernelRun(const OpParam &param, ExecMem &execMem)
+HcclResult CollReduceScatterOrderPreservedFor91093Executor::KernelRun(const OpParam& param, ExecMem& execMem)
 {
-    HCCL_CONFIG_INFO(HCCL_ALG, "[%s]CollReduceScatterOrderPreservedFor91093Executor starts, tag[%s]", __func__, tag_.c_str());
+    HCCL_CONFIG_INFO(
+        HCCL_ALG, "[%s]CollReduceScatterOrderPreservedFor91093Executor starts, tag[%s]", __func__, tag_.c_str());
     CHK_RET(CheckCommSize(COMM_COMBINE_L1, COMM_INDEX_0 + 1));
     SubCommInfo level1CommInfo = GetSubCommInfo(COMM_COMBINE_L1, COMM_INDEX_0);
 
@@ -208,6 +214,7 @@ HcclResult CollReduceScatterOrderPreservedFor91093Executor::KernelRun(const OpPa
     return HCCL_SUCCESS;
 }
 
-REGISTER_EXEC("ReduceScatterOrderPreservedFor91093Executor", ReduceScatterOrderPreservedFor91093,
+REGISTER_EXEC(
+    "ReduceScatterOrderPreservedFor91093Executor", ReduceScatterOrderPreservedFor91093,
     CollReduceScatterOrderPreservedFor91093Executor);
-}
+} // namespace hccl

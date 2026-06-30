@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv3d_iterate_base_impl.h
@@ -21,25 +21,25 @@
 namespace Conv3dApiFunc {
 
 template <class Intf>
-__aicore__ inline uint64_t CalcL0CurrentN(Intf *self)
+__aicore__ inline uint64_t CalcL0CurrentN(Intf* self)
 {
-    uint64_t n = (self->ctx.nBL1Iter == self->ctx.maxNBL1Iter && self->ctx.nBL0Iter == self->ctx.maxNL0Iter)
-                        ? self->ctx.nL0Tail
-                        : self->ctx.conv3dTiling->nL0;
+    uint64_t n = (self->ctx.nBL1Iter == self->ctx.maxNBL1Iter && self->ctx.nBL0Iter == self->ctx.maxNL0Iter) ?
+                     self->ctx.nL0Tail :
+                     self->ctx.conv3dTiling->nL0;
     return n;
 }
 
 template <class Intf>
-__aicore__ inline uint64_t CalcL0CurrentM(Intf *self)
+__aicore__ inline uint64_t CalcL0CurrentM(Intf* self)
 {
-    uint64_t m = (self->ctx.mAL1Iter == self->ctx.maxMAL1Iter && self->ctx.mAL0Iter == self->ctx.maxML0Iter)
-                        ? self->ctx.mAL0Tail
-                        : self->ctx.conv3dTiling->mL0;
+    uint64_t m = (self->ctx.mAL1Iter == self->ctx.maxMAL1Iter && self->ctx.mAL0Iter == self->ctx.maxML0Iter) ?
+                     self->ctx.mAL0Tail :
+                     self->ctx.conv3dTiling->mL0;
     return m;
 }
 
 template <class Intf>
-__aicore__ void inline FirstIterateImpl(Intf *self)
+__aicore__ void inline FirstIterateImpl(Intf* self)
 {
     self->ctx.nBL0Iter = 0;
     self->ctx.mAL0Iter = 0;
@@ -60,9 +60,10 @@ __aicore__ void inline FirstIterateImpl(Intf *self)
 }
 
 template <class Intf>
-__aicore__ bool inline IterateMFirst(Intf *self)
+__aicore__ bool inline IterateMFirst(Intf* self)
 {
-    // ReorderN: First offset towards the M-axis direction and then offset towards the N-axis direction. Input Reuse Weight.
+    // ReorderN: First offset towards the M-axis direction and then offset towards the N-axis direction. Input Reuse
+    // Weight.
     //    M
     //    |
     //    |
@@ -102,7 +103,7 @@ __aicore__ bool inline IterateMFirst(Intf *self)
 }
 
 template <class Intf>
-__aicore__ bool inline IterateNFirst(Intf *self)
+__aicore__ bool inline IterateNFirst(Intf* self)
 {
     // ReorderM: Shift towards the N axis first and then towards the M axis. Weight reuse Input.
     //    ----------N-------->
@@ -145,7 +146,8 @@ __aicore__ bool inline IterateNFirst(Intf *self)
 }
 
 template <class Intf, bool isFirst = false, bool isLast = false>
-__aicore__ void inline ReduceKNoPingPongBL1ByPass(Intf *self) {
+__aicore__ void inline ReduceKNoPingPongBL1ByPass(Intf* self)
+{
     AscendC::WaitFlag<AscendC::HardEvent::M_MTE1>(event_t::EVENT_ID0);
     self->ctx.kAL0Iter = self->ctx.kIter % self->ctx.multiKAL1;
     self->ctx.loadAL0Ins.LoadAL0();
@@ -165,7 +167,8 @@ __aicore__ void inline ReduceKNoPingPongBL1ByPass(Intf *self) {
 }
 
 template <class Intf, bool isFirst = false, bool isLast = false>
-__aicore__ void inline ReduceKNoPingPongBL1NoByPass(Intf *self) {
+__aicore__ void inline ReduceKNoPingPongBL1NoByPass(Intf* self)
+{
     AscendC::WaitFlag<AscendC::HardEvent::M_MTE1>(event_t::EVENT_ID0);
     self->ctx.kAL0Iter = self->ctx.kIter % self->ctx.multiKAL1;
     self->ctx.loadAL0Ins.LoadAL0();
@@ -180,7 +183,8 @@ __aicore__ void inline ReduceKNoPingPongBL1NoByPass(Intf *self) {
 }
 
 template <class Intf, bool isFirst = false, bool isLast = false>
-__aicore__ void inline ReduceKL0APingPongBL1ByPass(Intf *self, const uint16_t& l0aFlag) {
+__aicore__ void inline ReduceKL0APingPongBL1ByPass(Intf* self, const uint16_t& l0aFlag)
+{
     AscendC::WaitFlag<AscendC::HardEvent::M_MTE1>(l0aFlag);
     self->ctx.al0 = l0aFlag ? self->ctx.al0Pong : self->ctx.al0Ping;
     self->ctx.kAL0Iter = self->ctx.kIter % self->ctx.multiKAL1;
@@ -204,7 +208,8 @@ __aicore__ void inline ReduceKL0APingPongBL1ByPass(Intf *self, const uint16_t& l
 }
 
 template <class Intf, bool isFirst = false, bool isLast = false>
-__aicore__ void inline ReduceKL0APingPongBL1NoByPass(Intf *self, const uint16_t& l0aFlag) {
+__aicore__ void inline ReduceKL0APingPongBL1NoByPass(Intf* self, const uint16_t& l0aFlag)
+{
     AscendC::WaitFlag<AscendC::HardEvent::M_MTE1>(l0aFlag);
     self->ctx.al0 = l0aFlag ? self->ctx.al0Pong : self->ctx.al0Ping;
     self->ctx.kAL0Iter = self->ctx.kIter % self->ctx.multiKAL1;
@@ -221,7 +226,8 @@ __aicore__ void inline ReduceKL0APingPongBL1NoByPass(Intf *self, const uint16_t&
 }
 
 template <class Intf, bool isFirst = false, bool isLast = false>
-__aicore__ void inline ReduceKL0BPingPongBL1ByPass(Intf *self, const uint16_t& l0bFlag) {
+__aicore__ void inline ReduceKL0BPingPongBL1ByPass(Intf* self, const uint16_t& l0bFlag)
+{
     AscendC::WaitFlag<AscendC::HardEvent::M_MTE1>(event_t::EVENT_ID2);
     if (self->ctx.loadAL0Flag) {
         self->ctx.kAL0Iter = self->ctx.kIter % self->ctx.multiKAL1;
@@ -246,7 +252,8 @@ __aicore__ void inline ReduceKL0BPingPongBL1ByPass(Intf *self, const uint16_t& l
 }
 
 template <class Intf, bool isFirst = false, bool isLast = false>
-__aicore__ void inline ReduceKL0BPingPongBL1NoByPass(Intf *self, const uint16_t& l0bFlag) {
+__aicore__ void inline ReduceKL0BPingPongBL1NoByPass(Intf* self, const uint16_t& l0bFlag)
+{
     AscendC::WaitFlag<AscendC::HardEvent::M_MTE1>(event_t::EVENT_ID2);
     if (self->ctx.loadAL0Flag) {
         self->ctx.kAL0Iter = self->ctx.kIter % self->ctx.multiKAL1;
@@ -272,7 +279,8 @@ __aicore__ void inline ReduceKL0BPingPongBL1NoByPass(Intf *self, const uint16_t&
 }
 
 template <class Intf, bool isFirst = false, bool isLast = false>
-__aicore__ void inline ReduceKL0AL0BPingPong(Intf *self, const uint16_t& l0abFlag) {
+__aicore__ void inline ReduceKL0AL0BPingPong(Intf* self, const uint16_t& l0abFlag)
+{
     if (l0abFlag) {
         self->ctx.al0 = self->ctx.al0Pong;
         self->ctx.bl0 = self->ctx.bl0Pong;
@@ -310,31 +318,31 @@ __aicore__ void inline ReduceKL0AL0BPingPong(Intf *self, const uint16_t& l0abFla
 }
 
 template <class Intf>
-__aicore__ void inline LoadAL1Process(Intf *self, uint64_t kAL1Iter)
+__aicore__ void inline LoadAL1Process(Intf* self, uint64_t kAL1Iter)
 {
     self->ctx.al1 = self->ctx.queueAL1.template AllocTensor<typename Intf::InputT>();
     self->ctx.kAL1Iter = kAL1Iter;
     self->ctx.loadAl1Ins.LoadAL1();
     self->ctx.queueAL1.EnQue(self->ctx.al1);
     self->ctx.al1 = self->ctx.queueAL1.template DeQue<typename Intf::InputT>();
-    self->ctx.loadAL1Flag = false;  // Only the K direction in LoopK can be reloaded.
+    self->ctx.loadAL1Flag = false; // Only the K direction in LoopK can be reloaded.
     self->ctx.freeAL1TensorFlag = true;
 }
 
 template <class Intf>
-__aicore__ void inline LoadBL1Process(Intf *self, uint64_t kBL1Iter)
+__aicore__ void inline LoadBL1Process(Intf* self, uint64_t kBL1Iter)
 {
     self->ctx.bl1 = self->ctx.queueBL1.template AllocTensor<typename Intf::WeightT>();
     self->ctx.kBL1Iter = kBL1Iter;
     self->ctx.loadBL1Ins.LoadBL1();
     self->ctx.queueBL1.EnQue(self->ctx.bl1);
     self->ctx.bl1 = self->ctx.queueBL1.template DeQue<typename Intf::WeightT>();
-    self->ctx.loadBL1Flag = false;  // Only the K direction in LoopK can be reloaded.
+    self->ctx.loadBL1Flag = false; // Only the K direction in LoopK can be reloaded.
     self->ctx.freeBL1TensorFlag = true;
 }
 
 template <class Intf>
-__aicore__ void inline LoadAL1PreloadProcess(Intf *self, uint64_t kAL1Iter)
+__aicore__ void inline LoadAL1PreloadProcess(Intf* self, uint64_t kAL1Iter)
 {
     self->ctx.al1 = self->ctx.queueAL1.template AllocTensor<typename Intf::InputT>();
     self->ctx.kAL1Iter = kAL1Iter;
@@ -345,7 +353,7 @@ __aicore__ void inline LoadAL1PreloadProcess(Intf *self, uint64_t kAL1Iter)
 }
 
 template <class Intf>
-__aicore__ void inline LoadBL1PreloadProcess(Intf *self, uint64_t kBL1Iter)
+__aicore__ void inline LoadBL1PreloadProcess(Intf* self, uint64_t kBL1Iter)
 {
     self->ctx.bl1 = self->ctx.queueBL1.template AllocTensor<typename Intf::WeightT>();
     self->ctx.kBL1Iter = kBL1Iter;
@@ -356,9 +364,9 @@ __aicore__ void inline LoadBL1PreloadProcess(Intf *self, uint64_t kBL1Iter)
 }
 
 template <class Intf>
-__aicore__ void inline CalcBias(Intf *self)
+__aicore__ void inline CalcBias(Intf* self)
 {
-    if constexpr(Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0B_OPEN)) {
+    if constexpr (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0B_OPEN)) {
         AscendC::WaitFlag<AscendC::HardEvent::M_MTE1>(event_t::EVENT_ID0);
         AscendC::WaitFlag<AscendC::HardEvent::M_MTE1>(event_t::EVENT_ID2);
         self->ctx.loadBiasBTIns.LoadBiasL0WithBroadcast();
@@ -380,7 +388,7 @@ __aicore__ void inline CalcBias(Intf *self)
 }
 
 template <class Intf>
-__aicore__ void inline InitBiasWithPointWise(Intf *self, uint64_t m, uint64_t n)
+__aicore__ void inline InitBiasWithPointWise(Intf* self, uint64_t m, uint64_t n)
 {
     if (self->ctx.enableBias) {
         self->ctx.loadBiasL1Ins.SetN(ConvApi::AlignB(n, ConvApi::BLOCK_L0_M));
@@ -396,7 +404,7 @@ __aicore__ void inline InitBiasWithPointWise(Intf *self, uint64_t m, uint64_t n)
 }
 
 template <class Intf>
-__aicore__ void inline InitBiasWithNormal(Intf *self, uint64_t m, uint64_t n)
+__aicore__ void inline InitBiasWithNormal(Intf* self, uint64_t m, uint64_t n)
 {
     if (self->ctx.enableBias) {
         self->ctx.loadBiasL1Ins.SetN(n);
@@ -415,22 +423,22 @@ __aicore__ void inline InitBiasWithNormal(Intf *self, uint64_t m, uint64_t n)
 }
 
 template <class Intf>
-__aicore__ void inline UpdateL1TailLoop(Intf *self)
+__aicore__ void inline UpdateL1TailLoop(Intf* self)
 {
-    self->ctx.l12l0LoopM = self->ctx.mAL1Iter == self->ctx.maxMAL1Iter
-                                ? ConvApi::CeilDIV(self->ctx.mAL1Tail, self->ctx.conv3dTiling->mL0)
-                                : self->ctx.conv3dTiling->mAL1DivmL0;
+    self->ctx.l12l0LoopM = self->ctx.mAL1Iter == self->ctx.maxMAL1Iter ?
+                               ConvApi::CeilDIV(self->ctx.mAL1Tail, self->ctx.conv3dTiling->mL0) :
+                               self->ctx.conv3dTiling->mAL1DivmL0;
     self->ctx.maxML0Iter = self->ctx.l12l0LoopM - 1;
 
     if constexpr (Intf::bl1bypass) {
         return;
     }
-    self->ctx.l12l0LoopN = self->ctx.nBL1Iter == self->ctx.maxNBL1Iter
-                                ? ConvApi::CeilDIV(self->ctx.nBL1Tail, self->ctx.conv3dTiling->nL0)
-                                : self->ctx.conv3dTiling->nBL1DivnL0;
+    self->ctx.l12l0LoopN = self->ctx.nBL1Iter == self->ctx.maxNBL1Iter ?
+                               ConvApi::CeilDIV(self->ctx.nBL1Tail, self->ctx.conv3dTiling->nL0) :
+                               self->ctx.conv3dTiling->nBL1DivnL0;
     self->ctx.maxNL0Iter = self->ctx.l12l0LoopN - 1;
 }
 
-}  // namespace Conv3dApiFunc
+} // namespace Conv3dApiFunc
 
 #endif

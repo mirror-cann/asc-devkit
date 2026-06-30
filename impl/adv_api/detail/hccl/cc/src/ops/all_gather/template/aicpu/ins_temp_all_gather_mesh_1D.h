@@ -19,8 +19,9 @@ namespace mc2_ops_hccl {
 class InsTempAllGatherMesh1D : public InsAlgTemplateBase {
 public:
     InsTempAllGatherMesh1D() = default;
-    explicit InsTempAllGatherMesh1D(const OpParam &param, const u32 rankId,  // 传通信域的rankId，userRank
-                                    const std::vector<std::vector<u32>> &subCommRanks);
+    explicit InsTempAllGatherMesh1D(
+        const OpParam& param, const u32 rankId, // 传通信域的rankId，userRank
+        const std::vector<std::vector<u32>>& subCommRanks);
     // Host侧调用
     ~InsTempAllGatherMesh1D() override;
 
@@ -30,34 +31,36 @@ public:
         info += std::to_string(templateRankSize_);
         return info;
     }
-    HcclResult KernelRun(const OpParam &param, const TemplateDataParams &tempAlgParams,
-                         const TemplateResource &templateResource) override;
-    HcclResult CalcRes(HcclComm comm, const OpParam &param, const TopoInfoWithNetLayerDetails *topoInfo,
-                       AlgResourceRequest &resourceRequest) override;
-    virtual HcclResult GetRes(AlgResourceRequest &resourceRequest) const;
+    HcclResult KernelRun(
+        const OpParam& param, const TemplateDataParams& tempAlgParams,
+        const TemplateResource& templateResource) override;
+    HcclResult CalcRes(
+        HcclComm comm, const OpParam& param, const TopoInfoWithNetLayerDetails* topoInfo,
+        AlgResourceRequest& resourceRequest) override;
+    virtual HcclResult GetRes(AlgResourceRequest& resourceRequest) const;
 
     u64 CalcScratchMultiple(BufferType inBuffType, BufferType outBuffType) override;
     virtual u64 GetThreadNum() const;
-    virtual HcclResult CalcDataSplitByPortGroup(const u64 totalDataCount, const u64 dataTypeSize,
-                                                const std::vector<ChannelInfo> &channels,
-                                                std::vector<u64> &elemCountOut, std::vector<u64> &sizeOut,
-                                                std::vector<u64> &elemOffset);
-    virtual HcclResult SetchannelsPerRank(const std::map<u32, std::vector<ChannelInfo>> &channels);
-    void GetNotifyIdxMainToSub(std::vector<u32> &notifyIdxMianToSub) override;
-    void GetNotifyIdxSubToMain(std::vector<u32> &notifyIdxSubToMain) override;
+    virtual HcclResult CalcDataSplitByPortGroup(
+        const u64 totalDataCount, const u64 dataTypeSize, const std::vector<ChannelInfo>& channels,
+        std::vector<u64>& elemCountOut, std::vector<u64>& sizeOut, std::vector<u64>& elemOffset);
+    virtual HcclResult SetchannelsPerRank(const std::map<u32, std::vector<ChannelInfo>>& channels);
+    void GetNotifyIdxMainToSub(std::vector<u32>& notifyIdxMianToSub) override;
+    void GetNotifyIdxSubToMain(std::vector<u32>& notifyIdxSubToMain) override;
+
 protected:
-    virtual HcclResult RunAllGatherMesh(const std::vector<ThreadHandle> &threads,
-                                                        const std::map<u32, std::vector<ChannelInfo>> &channels);
-    virtual HcclResult LocalDataCopy(const std::vector<ThreadHandle> &threads);
-    HcclResult PostLocalCopy(const std::vector<ThreadHandle> &threads);
+    virtual HcclResult RunAllGatherMesh(
+        const std::vector<ThreadHandle>& threads, const std::map<u32, std::vector<ChannelInfo>>& channels);
+    virtual HcclResult LocalDataCopy(const std::vector<ThreadHandle>& threads);
+    HcclResult PostLocalCopy(const std::vector<ThreadHandle>& threads);
     TemplateDataParams tempAlgParams_;
     u64 inputOffset_{0};
     u64 outputOffset_{0};
-    void *inputSymWindow_{nullptr};
-    void *outputSymWindow_{nullptr};
+    void* inputSymWindow_{nullptr};
+    void* outputSymWindow_{nullptr};
     u32 channelsPerRank_{1};
 };
 
-}  // namespace mc2_ops_hccl
+} // namespace mc2_ops_hccl
 
-#endif  // INS_TEMP_ALL_GATHER_MESH_1D_H
+#endif // INS_TEMP_ALL_GATHER_MESH_1D_H

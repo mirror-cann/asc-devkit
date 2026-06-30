@@ -1,15 +1,15 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef HCCLV2_AICPU_WQEMGR_WQE_H
 #define HCCLV2_AICPU_WQEMGR_WQE_H
- 
+
 #include <string>
 #include "string_util.h"
 #include "hccl/base.h"
@@ -19,38 +19,19 @@ namespace Hccl {
 
 #define UDMA_SQE_RMT_EID_SIZE 4
 
-MAKE_ENUM(UdmaSqOpcode,
-        UDMA_OPC_SEND,
-        UDMA_OPC_SEND_WITH_IMM,
-        UDMA_OPC_SEND_WITH_INVALID,
-        UDMA_OPC_WRITE,
-        UDMA_OPC_WRITE_WITH_IMM,
-        UDMA_OPC_READ = 0x6,
-        UDMA_OPC_CAS,
-        UDMA_OPC_FAA = 0xb,
-        UDMA_OPC_NOP = 0x11,
-        UDMA_OPC_INVALID = 0x12
-        )
+MAKE_ENUM(
+    UdmaSqOpcode, UDMA_OPC_SEND, UDMA_OPC_SEND_WITH_IMM, UDMA_OPC_SEND_WITH_INVALID, UDMA_OPC_WRITE,
+    UDMA_OPC_WRITE_WITH_IMM, UDMA_OPC_READ = 0x6, UDMA_OPC_CAS, UDMA_OPC_FAA = 0xb, UDMA_OPC_NOP = 0x11,
+    UDMA_OPC_INVALID = 0x12)
 
-MAKE_ENUM(UdmaDataOp,
-        REDUCE_OP_MAX = 0x8,
-        REDUCE_OP_MIN = 0x9,
-        REDUCE_OP_ADD = 0xA,
-        REDUCE_OP_EQUAL = 0xB,
-        REDUCE_OP_RESEVERD = 0xC
-        )
+MAKE_ENUM(
+    UdmaDataOp, REDUCE_OP_MAX = 0x8, REDUCE_OP_MIN = 0x9, REDUCE_OP_ADD = 0xA, REDUCE_OP_EQUAL = 0xB,
+    REDUCE_OP_RESEVERD = 0xC)
 
-MAKE_ENUM(UdmaDataType,
-        REDUCE_TYPE_INT8        = 0x0,
-        REDUCE_TYPE_INT16       = 0X1,
-        REDUCE_TYPE_INT32       = 0x2,
-        REDUCE_TYPE_UINT32      = 0X5,
-        REDUCE_TYPE_FP16_NORMAL = 0X6,
-        REDUCE_TYPE_FP32        = 0X7,
-        REDUCE_TYPE_FP16        = 0X8,
-        REDUCE_TYPE_FP16_SAT    = 0X9,
-        REDUCE_TYPE_RESEVERD    = 0XA
-        )
+MAKE_ENUM(
+    UdmaDataType, REDUCE_TYPE_INT8 = 0x0, REDUCE_TYPE_INT16 = 0X1, REDUCE_TYPE_INT32 = 0x2, REDUCE_TYPE_UINT32 = 0X5,
+    REDUCE_TYPE_FP16_NORMAL = 0X6, REDUCE_TYPE_FP32 = 0X7, REDUCE_TYPE_FP16 = 0X8, REDUCE_TYPE_FP16_SAT = 0X9,
+    REDUCE_TYPE_RESEVERD = 0XA)
 
 struct UdmaNormalSge {
     uint32_t length;
@@ -60,8 +41,7 @@ struct UdmaNormalSge {
 
     std::string Desc() const
     {
-        return StringFormat("length = %u dataAddrLow = %u dataAddrHigh = %u",
-                    length, dataAddrLow, dataAddrHigh);
+        return StringFormat("length = %u dataAddrLow = %u dataAddrHigh = %u", length, dataAddrLow, dataAddrHigh);
     }
 };
 
@@ -71,8 +51,8 @@ struct UdmaInlineData {
 
 struct UdfExtDate { // UDF扩展数据
     uint32_t udfType : 8;
-    uint32_t reduceType: 4;
-    uint32_t reduceOp: 4;
+    uint32_t reduceType : 4;
+    uint32_t reduceOp : 4;
     uint32_t rsv : 16;
 };
 
@@ -111,7 +91,7 @@ struct UdmaSqe {
     } u;
 };
 
-union LocalValueU{
+union LocalValueU {
     UdmaNormalSge sge;
     UdmaInlineData inlineData;
 };
@@ -126,9 +106,10 @@ struct UdmaSqeNotify {
     uint32_t notifyDataHigh;
     std::string Desc() const
     {
-        return StringFormat("notifyAddrLow = %u notifyAddrHigh %u notifyDataLow = %u "
-                    "notifyDataHigh %u",
-                    notifyAddrLow, notifyAddrHigh, notifyDataLow, notifyDataHigh);
+        return StringFormat(
+            "notifyAddrLow = %u notifyAddrHigh %u notifyDataLow = %u "
+            "notifyDataHigh %u",
+            notifyAddrLow, notifyAddrHigh, notifyDataLow, notifyDataHigh);
     }
 };
 
@@ -181,5 +162,5 @@ struct UdmaSqeRead {
     struct UdmaSqeCommon comm;
     union LocalValueU u;
 };
-}
+} // namespace Hccl
 #endif // HCCL_AICPU_RESOURCE_AI_CPU_RESOUCES_H_

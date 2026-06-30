@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv3d_iterate_impl.h
@@ -22,16 +22,16 @@ namespace Conv3dApiFunc {
 template <class Intf, uint32_t ImplType>
 struct Iterate {
     template <bool sync = true>
-    static __aicore__ inline bool call(Intf *self, bool enPartialSum = false)
+    static __aicore__ inline bool call(Intf* self, bool enPartialSum = false)
     {
         return IterateImpl(self, enPartialSum);
     }
 
     // The first iteration in the K direction (iter==0) loads L0A and L0B
     template <bool isLast = false>
-    static __aicore__ void inline ReduceKFirstIterLoadL0(Intf *self)
+    static __aicore__ void inline ReduceKFirstIterLoadL0(Intf* self)
     {
-        if constexpr(Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_CLOSE)) {
+        if constexpr (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_CLOSE)) {
             // for L0PingPong::ALL_CLOSE, BL1ByPass is always ON
             self->ctx.al0 = self->ctx.al0Ping;
             self->ctx.bl0 = self->ctx.bl0Ping;
@@ -41,7 +41,7 @@ struct Iterate {
             } else {
                 ReduceKNoPingPongBL1NoByPass<Intf, true, isLast>(self);
             }
-        } else if constexpr(Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0A_OPEN)) {
+        } else if constexpr (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0A_OPEN)) {
             // for L0PingPong::L0A_OPEN, BL1ByPass is always ON
             self->ctx.bl0 = self->ctx.bl0Ping;
             if constexpr (Intf::bl1bypass) {
@@ -50,7 +50,7 @@ struct Iterate {
             } else {
                 ReduceKL0APingPongBL1NoByPass<Intf, true, isLast>(self, event_t::EVENT_ID0);
             }
-        } else if constexpr(Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0B_OPEN)) {
+        } else if constexpr (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0B_OPEN)) {
             self->ctx.al0 = self->ctx.al0Ping;
             if constexpr (Intf::bl1bypass) {
                 AscendC::SetFlag<AscendC::HardEvent::M_MTE2>(event_t::EVENT_ID0);
@@ -61,7 +61,7 @@ struct Iterate {
             } else {
                 ReduceKL0BPingPongBL1NoByPass<Intf, true, isLast>(self, event_t::EVENT_ID0);
             }
-        } else if constexpr(Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_OPEN)) {
+        } else if constexpr (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_OPEN)) {
             if constexpr (Intf::bl1bypass) {
                 AscendC::SetFlag<AscendC::HardEvent::M_MTE2>(event_t::EVENT_ID0);
                 AscendC::SetFlag<AscendC::HardEvent::M_MTE2>(event_t::EVENT_ID1);
@@ -75,7 +75,7 @@ struct Iterate {
 
     // K-direction iteration (iter>0) loading L0A, L0B
     template <bool isLast = false>
-    static __aicore__ void inline ReduceKIterLoadL0(Intf *self, const uint16_t& isOdd)
+    static __aicore__ void inline ReduceKIterLoadL0(Intf* self, const uint16_t& isOdd)
     {
         if constexpr (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_CLOSE)) {
             if constexpr (Intf::bl1bypass) {
@@ -83,24 +83,24 @@ struct Iterate {
             } else {
                 ReduceKNoPingPongBL1NoByPass<Intf, false, isLast>(self);
             }
-        } else if constexpr(Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0A_OPEN)) {
+        } else if constexpr (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0A_OPEN)) {
             if constexpr (Intf::bl1bypass) {
                 ReduceKL0APingPongBL1ByPass<Intf, false, isLast>(self, isOdd);
             } else {
                 ReduceKL0APingPongBL1NoByPass<Intf, false, isLast>(self, isOdd);
             }
-        } else if constexpr(Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0B_OPEN)) {
+        } else if constexpr (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0B_OPEN)) {
             if constexpr (Intf::bl1bypass) {
                 ReduceKL0BPingPongBL1ByPass<Intf, false, isLast>(self, isOdd);
             } else {
                 ReduceKL0BPingPongBL1NoByPass<Intf, false, isLast>(self, isOdd);
             }
-        } else if constexpr(Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_OPEN)) {
+        } else if constexpr (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_OPEN)) {
             ReduceKL0AL0BPingPong<Intf, false, isLast>(self, isOdd);
         }
     }
 
-    static __aicore__ void inline ReduceKIterLoadL1(Intf *self)
+    static __aicore__ void inline ReduceKIterLoadL1(Intf* self)
     {
         if (self->ctx.loadAL1Flag || (!self->ctx.kAL1fullload && self->ctx.kIter % self->ctx.multiKAL1 == 0)) {
             self->ctx.queueAL1.FreeTensor(self->ctx.al1);
@@ -117,18 +117,22 @@ struct Iterate {
     }
 
     // Post processing for K-direction iteration, currently only for bl1 bypass, AscendC:: WaitFlag needs to be added
-    static __aicore__ void inline ReduceKPostProcessLoadL0(Intf *self)
+    static __aicore__ void inline ReduceKPostProcessLoadL0(Intf* self)
     {
-        if constexpr((Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_CLOSE)) && Intf::bl1bypass) {
+        if constexpr (
+            (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_CLOSE)) && Intf::bl1bypass) {
             AscendC::WaitFlag<AscendC::HardEvent::M_MTE2>(event_t::EVENT_ID0);
-        } else if constexpr((Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0A_OPEN)) && Intf::bl1bypass) {
+        } else if constexpr (
+            (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0A_OPEN)) && Intf::bl1bypass) {
             AscendC::WaitFlag<AscendC::HardEvent::M_MTE2>(event_t::EVENT_ID2);
-        } else if constexpr((Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0B_OPEN)) && Intf::bl1bypass) {
+        } else if constexpr (
+            (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::L0B_OPEN)) && Intf::bl1bypass) {
             AscendC::WaitFlag<AscendC::HardEvent::M_MTE2>(event_t::EVENT_ID0);
             if (self->ctx.ddr2l1LoopD > 1) {
                 AscendC::WaitFlag<AscendC::HardEvent::M_MTE2>(event_t::EVENT_ID1);
             }
-        } else if constexpr((Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_OPEN)) && Intf::bl1bypass) {
+        } else if constexpr (
+            (Intf::l0pingpong == static_cast<int8_t>(Conv3dApi::ConvL0PingPong::ALL_OPEN)) && Intf::bl1bypass) {
             AscendC::WaitFlag<AscendC::HardEvent::M_MTE2>(event_t::EVENT_ID0);
             AscendC::WaitFlag<AscendC::HardEvent::M_MTE2>(event_t::EVENT_ID1);
             if (self->ctx.ddr2l1LoopD > 1) {
@@ -137,9 +141,10 @@ struct Iterate {
         }
     }
 
-    static __aicore__ void inline ReduceK(Intf *self)
+    static __aicore__ void inline ReduceK(Intf* self)
     {
-        KERNEL_LOG(KERNEL_DEBUG, "no preload in ReduceK: loadAl1Flag: %d, kAL1fullload: %d, freeAL1TensorFlag: %d\n",
+        KERNEL_LOG(
+            KERNEL_DEBUG, "no preload in ReduceK: loadAl1Flag: %d, kAL1fullload: %d, freeAL1TensorFlag: %d\n",
             self->ctx.loadAL1Flag, self->ctx.kAL1fullload, self->ctx.freeAL1TensorFlag);
 
         if (self->ctx.loadAL1Flag || !(self->ctx.kAL1fullload)) {
@@ -181,13 +186,14 @@ struct Iterate {
         ReduceKPostProcessLoadL0(self);
     }
 
-    static __aicore__ void inline ReduceKPreloadDbAllLoadL1(Intf *self, const uint64_t& maxKAL1PreloadIter,
-                                                            const uint64_t& maxKBL1PreloadIter)
+    static __aicore__ void inline ReduceKPreloadDbAllLoadL1(
+        Intf* self, const uint64_t& maxKAL1PreloadIter, const uint64_t& maxKBL1PreloadIter)
     {
         if (self->ctx.kIter == maxKAL1PreloadIter) {
             self->ctx.queueAL1.FreeTensor(self->ctx.al1);
             self->ctx.al1 = self->ctx.queueAL1.template DeQue<typename Intf::InputT>();
-        } else if (self->ctx.kIter < maxKAL1PreloadIter &&
+        } else if (
+            self->ctx.kIter < maxKAL1PreloadIter &&
             (self->ctx.loadAL1Flag || (!self->ctx.kAL1fullload && self->ctx.kIter % self->ctx.multiKAL1 == 0))) {
             self->ctx.queueAL1.FreeTensor(self->ctx.al1);
             LoadAL1Process<Intf>(self, (self->ctx.kIter / self->ctx.multiKAL1) + 1);
@@ -196,14 +202,15 @@ struct Iterate {
         if (self->ctx.kIter == maxKBL1PreloadIter) {
             self->ctx.queueBL1.FreeTensor(self->ctx.bl1);
             self->ctx.bl1 = self->ctx.queueBL1.template DeQue<typename Intf::WeightT>();
-        } else if (self->ctx.kIter < maxKBL1PreloadIter &&
+        } else if (
+            self->ctx.kIter < maxKBL1PreloadIter &&
             (self->ctx.loadBL1Flag || (!self->ctx.kBL1fullload && self->ctx.kIter % self->ctx.multiKBL1 == 0))) {
             self->ctx.queueBL1.FreeTensor(self->ctx.bl1);
             LoadBL1Process<Intf>(self, (self->ctx.kIter / self->ctx.multiKBL1) + 1);
         }
     }
 
-    static __aicore__ void inline ReduceKPreloadDbAll(Intf *self)
+    static __aicore__ void inline ReduceKPreloadDbAll(Intf* self)
     {
         KERNEL_LOG(KERNEL_DEBUG, "AL1 and BL1 db case, preload reduce k\n");
 
@@ -247,7 +254,7 @@ struct Iterate {
         }
     }
 
-    static __aicore__ void inline ReduceKPreloadDbInputLoadL1(Intf *self,  const uint64_t& maxKAL1PreloadIter)
+    static __aicore__ void inline ReduceKPreloadDbInputLoadL1(Intf* self, const uint64_t& maxKAL1PreloadIter)
     {
         if (self->ctx.kIter == maxKAL1PreloadIter) {
             self->ctx.queueAL1.FreeTensor(self->ctx.al1);
@@ -265,7 +272,7 @@ struct Iterate {
         }
     }
 
-    static __aicore__ void inline ReduceKPreloadDbInput(Intf *self)
+    static __aicore__ void inline ReduceKPreloadDbInput(Intf* self)
     {
         KERNEL_LOG(KERNEL_DEBUG, "AL1 db case, preload reduce k\n");
 
@@ -308,7 +315,7 @@ struct Iterate {
         ReduceKPostProcessLoadL0(self);
     }
 
-    static __aicore__ void inline IterateK(Intf *self)
+    static __aicore__ void inline IterateK(Intf* self)
     {
         // in each iterate k, cal current m,n value
         uint64_t n = CalcL0CurrentN<Intf>(self);
@@ -339,15 +346,19 @@ struct Iterate {
         self->ctx.kIter = 0;
     }
 
-    static __aicore__ bool inline IterateImpl(Intf *self, bool enPartialSum)
+    static __aicore__ bool inline IterateImpl(Intf* self, bool enPartialSum)
     {
         if (self->ctx.isFirstIterate) {
             FirstIterateImpl<Intf>(self);
-        } else if (likely(self->ctx.conv3dTiling->iterateMNOrder == static_cast<int>(ConvApi::IterateOrder::ORDER_MTERFIRST))) {
+        } else if (likely(
+                       self->ctx.conv3dTiling->iterateMNOrder ==
+                       static_cast<int>(ConvApi::IterateOrder::ORDER_MTERFIRST))) {
             if (IterateMFirst<Intf>(self) == false) {
                 return false;
             }
-        } else if (likely(self->ctx.conv3dTiling->iterateMNOrder == static_cast<int>(ConvApi::IterateOrder::ORDER_NTERFIRST))) {
+        } else if (likely(
+                       self->ctx.conv3dTiling->iterateMNOrder ==
+                       static_cast<int>(ConvApi::IterateOrder::ORDER_NTERFIRST))) {
             if (IterateNFirst<Intf>(self) == false) {
                 return false;
             }
@@ -358,6 +369,6 @@ struct Iterate {
     }
 };
 
-}  // namespace Conv3dApiFunc
+} // namespace Conv3dApiFunc
 
 #endif

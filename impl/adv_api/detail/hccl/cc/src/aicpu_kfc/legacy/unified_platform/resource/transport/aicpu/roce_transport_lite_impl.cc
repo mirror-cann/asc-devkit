@@ -14,16 +14,11 @@
 
 namespace Hccl {
 
-RoceTransportLiteImpl::RoceTransportLiteImpl(std::vector<char> &uniqueId)
-{
-    Init(uniqueId);
-}
+RoceTransportLiteImpl::RoceTransportLiteImpl(std::vector<char>& uniqueId) { Init(uniqueId); }
 
-RoceTransportLiteImpl::~RoceTransportLiteImpl()
-{
-}
+RoceTransportLiteImpl::~RoceTransportLiteImpl() {}
 
-void RoceTransportLiteImpl::Init(std::vector<char> &uniqueId)
+void RoceTransportLiteImpl::Init(std::vector<char>& uniqueId)
 {
     BinaryStream binaryStream(uniqueId);
     u32 type;
@@ -57,7 +52,7 @@ void RoceTransportLiteImpl::Init(std::vector<char> &uniqueId)
     ParseConnVec(connUniqueIds);
 }
 
-void RoceTransportLiteImpl::ParseLocNotifyVec(std::vector<char> &data)
+void RoceTransportLiteImpl::ParseLocNotifyVec(std::vector<char>& data)
 {
     if (notifyNum_ == 0) {
         HCCL_WARNING("[RoceTransportLiteImpl::%s] notifyNum is 0", __func__);
@@ -67,15 +62,15 @@ void RoceTransportLiteImpl::ParseLocNotifyVec(std::vector<char> &data)
     u32 notifySizePerDto = data.size() / notifyNum_;
 
     for (u32 idx = 0; idx < notifyNum_; idx++) {
-        auto              start = data.begin() + idx * notifySizePerDto;
-        auto              end   = start + notifySizePerDto;
+        auto start = data.begin() + idx * notifySizePerDto;
+        auto end = start + notifySizePerDto;
         std::vector<char> dto(start, end);
         localNotifies_.push_back(std::make_unique<NotifyLite>(dto));
         HCCL_INFO("locNotify idx=%u, %s", idx, localNotifies_.back()->Describe().c_str());
     }
 }
 
-void RoceTransportLiteImpl::ParseRmtNotifyVec(std::vector<char> &data)
+void RoceTransportLiteImpl::ParseRmtNotifyVec(std::vector<char>& data)
 {
     if (notifyNum_ == 0) {
         HCCL_WARNING("[RoceTransportLiteImpl::%s] notifyNum is 0", __func__);
@@ -83,8 +78,9 @@ void RoceTransportLiteImpl::ParseRmtNotifyVec(std::vector<char> &data)
     }
 
     u32 rmtBufferSizePerDto = data.size() / notifyNum_;
-    HCCL_INFO("[RoceTransportLiteImpl::%s] Parse remote notify num=%u, sizePerDto=%u",
-        __func__, notifyNum_, rmtBufferSizePerDto);
+    HCCL_INFO(
+        "[RoceTransportLiteImpl::%s] Parse remote notify num=%u, sizePerDto=%u", __func__, notifyNum_,
+        rmtBufferSizePerDto);
 
     BinaryStream binaryStream(data);
     remoteNotifies_.clear();
@@ -101,7 +97,7 @@ void RoceTransportLiteImpl::ParseRmtNotifyVec(std::vector<char> &data)
     }
 }
 
-void RoceTransportLiteImpl::ParseNotifyValueBuffer(std::vector<char> &data)
+void RoceTransportLiteImpl::ParseNotifyValueBuffer(std::vector<char>& data)
 {
     HCCL_INFO("[RoceTransportLiteImpl::%s] Parse notify value buffer", __func__);
 
@@ -115,7 +111,7 @@ void RoceTransportLiteImpl::ParseNotifyValueBuffer(std::vector<char> &data)
     notifyValueBuffer_ = std::make_unique<RmaBufferLite>(addr, size, lkey);
 }
 
-void RoceTransportLiteImpl::ParseLocBufferVec(std::vector<char> &data)
+void RoceTransportLiteImpl::ParseLocBufferVec(std::vector<char>& data)
 {
     if (bufferNum_ == 0) {
         HCCL_WARNING("[RoceTransportLiteImpl::%s] bufferNum is 0", __func__);
@@ -123,8 +119,9 @@ void RoceTransportLiteImpl::ParseLocBufferVec(std::vector<char> &data)
     }
 
     u32 locBufferSizePerDto = data.size() / bufferNum_;
-    HCCL_INFO("[RoceTransportLiteImpl::%s] Parse local buffer num=%u, sizePerDto=%u",
-        __func__, bufferNum_, locBufferSizePerDto);
+    HCCL_INFO(
+        "[RoceTransportLiteImpl::%s] Parse local buffer num=%u, sizePerDto=%u", __func__, bufferNum_,
+        locBufferSizePerDto);
 
     BinaryStream binaryStream(data);
     locBufferVec_.clear();
@@ -141,7 +138,7 @@ void RoceTransportLiteImpl::ParseLocBufferVec(std::vector<char> &data)
     }
 }
 
-void RoceTransportLiteImpl::ParseRmtBufferVec(std::vector<char> &data)
+void RoceTransportLiteImpl::ParseRmtBufferVec(std::vector<char>& data)
 {
     if (bufferNum_ == 0) {
         HCCL_WARNING("[RoceTransportLiteImpl::%s] bufferNum is 0", __func__);
@@ -149,8 +146,9 @@ void RoceTransportLiteImpl::ParseRmtBufferVec(std::vector<char> &data)
     }
 
     u32 rmtBufferSizePerDto = data.size() / bufferNum_;
-    HCCL_INFO("[RoceTransportLiteImpl::%s] Parse remote buffer num=%u, sizePerDto=%u",
-        __func__, bufferNum_, rmtBufferSizePerDto);
+    HCCL_INFO(
+        "[RoceTransportLiteImpl::%s] Parse remote buffer num=%u, sizePerDto=%u", __func__, bufferNum_,
+        rmtBufferSizePerDto);
 
     BinaryStream binaryStream(data);
     rmtBufferVec_.clear();
@@ -167,7 +165,7 @@ void RoceTransportLiteImpl::ParseRmtBufferVec(std::vector<char> &data)
     }
 }
 
-void RoceTransportLiteImpl::ParseConnVec(std::vector<char> &data)
+void RoceTransportLiteImpl::ParseConnVec(std::vector<char>& data)
 {
     if (connNum_ == 0) {
         HCCL_WARNING("[RoceTransportLiteImpl::%s] connNum is 0", __func__);
@@ -175,11 +173,10 @@ void RoceTransportLiteImpl::ParseConnVec(std::vector<char> &data)
     }
 
     u32 connSizePerDto = data.size() / connNum_;
-    HCCL_INFO("[RoceTransportLiteImpl::%s] Parse conn num=%u, sizePerDto=%u",
-        __func__, connNum_, connSizePerDto);
+    HCCL_INFO("[RoceTransportLiteImpl::%s] Parse conn num=%u, sizePerDto=%u", __func__, connNum_, connSizePerDto);
     for (u32 idx = 0; idx < connNum_; idx++) {
-        auto              start = data.begin() + idx * connSizePerDto;
-        auto              end   = start + connSizePerDto;
+        auto start = data.begin() + idx * connSizePerDto;
+        auto end = start + connSizePerDto;
         std::vector<char> connUniqueId(start, end);
         connUniqueIdVec_.emplace_back(connUniqueId);
         std::unique_ptr<RdmaConnLiteV2> connLite;
@@ -189,7 +186,7 @@ void RoceTransportLiteImpl::ParseConnVec(std::vector<char> &data)
     }
 }
 
-RmaBufSliceLite RoceTransportLiteImpl::GetRmaBufSlicelite(const RmaBufferLite &lite) const
+RmaBufSliceLite RoceTransportLiteImpl::GetRmaBufSlicelite(const RmaBufferLite& lite) const
 {
     return RmaBufSliceLite(lite.GetAddr(), lite.GetSize(), lite.GetLkey(), 0);
 }
@@ -197,14 +194,12 @@ RmaBufSliceLite RoceTransportLiteImpl::GetRmaBufSlicelite(const RmaBufferLite &l
 RmaBufSliceLite RoceTransportLiteImpl::GetNotifySlicelite(u32 index) const
 {
     return RmaBufSliceLite(
-        notifyValueBuffer_->GetAddr(),
-        notifyValueBuffer_->GetSize(),
-        notifyValueBuffer_->GetLkey(), 0);
+        notifyValueBuffer_->GetAddr(), notifyValueBuffer_->GetSize(), notifyValueBuffer_->GetLkey(), 0);
 }
 
-RmtRmaBufSliceLite RoceTransportLiteImpl::GetRmtRmaBufSliceLite(const Buffer &rmtBuf) const
+RmtRmaBufSliceLite RoceTransportLiteImpl::GetRmtRmaBufSliceLite(const Buffer& rmtBuf) const
 {
-    for (auto &it : rmtBufferVec_) {
+    for (auto& it : rmtBufferVec_) {
         Buffer buf(it.GetAddr(), it.GetSize());
         if (buf.Contains(rmtBuf.GetAddr(), rmtBuf.GetSize())) {
             return RmtRmaBufSliceLite(rmtBuf.GetAddr(), rmtBuf.GetSize(), it.GetRkey(), 0, 0);
@@ -215,7 +210,7 @@ RmtRmaBufSliceLite RoceTransportLiteImpl::GetRmtRmaBufSliceLite(const Buffer &rm
 
 RmtRmaBufSliceLite RoceTransportLiteImpl::GetRmtNotifySliceLite(u32 index) const
 {
-    auto &lite = remoteNotifies_[index];
+    auto& lite = remoteNotifies_[index];
     return RmtRmaBufSliceLite(lite.GetAddr(), lite.GetSize(), lite.GetRkey(), 0, 0);
 }
 
@@ -225,35 +220,35 @@ std::string RoceTransportLiteImpl::Describe() const
 
     u32 idx = 0;
     desc += "localNotifies=[";
-    for (auto &it : localNotifies_) {
+    for (auto& it : localNotifies_) {
         desc += StringFormat("idx=%u, %s;", idx, it->Describe().c_str());
         idx++;
     }
 
     idx = 0;
     desc += "], remoteNotifies=[";
-    for (auto &it : remoteNotifies_) {
+    for (auto& it : remoteNotifies_) {
         desc += StringFormat("idx=%u, %s;", idx, it.Describe().c_str());
         idx++;
     }
 
     idx = 0;
     desc += "], locBufferVec=[";
-    for (auto &it : locBufferVec_) {
+    for (auto& it : locBufferVec_) {
         desc += StringFormat("idx=%u, %s;", idx, it.Describe().c_str());
         idx++;
     }
 
     idx = 0;
     desc += "], rmtBufferVec=[";
-    for (auto &it : rmtBufferVec_) {
+    for (auto& it : rmtBufferVec_) {
         desc += StringFormat("idx=%u, %s;", idx, it.Describe().c_str());
         idx++;
     }
 
     idx = 0;
     desc += "], connVec=[";
-    for (auto &it : connVec_) {
+    for (auto& it : connVec_) {
         desc += StringFormat("idx=%u, %s;", idx, it->Describe().c_str());
         idx++;
     }
@@ -262,9 +257,11 @@ std::string RoceTransportLiteImpl::Describe() const
     return desc;
 }
 
-HcclResult RoceTransportLiteImpl::BuildLocRmaBufferLite(const uintptr_t addr, const size_t size, RmaBufferLite &rmaBufferLite)
+HcclResult RoceTransportLiteImpl::BuildLocRmaBufferLite(
+    const uintptr_t addr, const size_t size, RmaBufferLite& rmaBufferLite)
 {
-    HCCL_INFO("[RoceTransportLiteImpl::%s] start to find addr[0x%llx], size[0x%llx] in locBufferVec, whose size is %zu. ",
+    HCCL_INFO(
+        "[RoceTransportLiteImpl::%s] start to find addr[0x%llx], size[0x%llx] in locBufferVec, whose size is %zu. ",
         __func__, addr, size, locBufferVec_.size());
 
     if (locBufferVec_.empty()) {
@@ -273,7 +270,7 @@ HcclResult RoceTransportLiteImpl::BuildLocRmaBufferLite(const uintptr_t addr, co
     }
 
     bool isAddrInRange = false;
-    for (auto &it : locBufferVec_) {
+    for (auto& it : locBufferVec_) {
         Buffer iterBuf(it.GetAddr(), it.GetSize());
         if (iterBuf.Contains(addr, size)) {
             rmaBufferLite = RmaBufferLite(addr, size, it.GetLkey());
@@ -283,7 +280,9 @@ HcclResult RoceTransportLiteImpl::BuildLocRmaBufferLite(const uintptr_t addr, co
     }
 
     if (!isAddrInRange) {
-        HCCL_WARNING("[RoceTransportLiteImpl::%s] addr[0x%llx], size[0x%llx] not in any range of locBufferVec. The token of the first locBuffer is used.",
+        HCCL_WARNING(
+            "[RoceTransportLiteImpl::%s] addr[0x%llx], size[0x%llx] not in any range of locBufferVec. The token of the "
+            "first locBuffer is used.",
             __func__, addr, size);
         rmaBufferLite = RmaBufferLite(addr, size, locBufferVec_[0].GetLkey());
         return HCCL_SUCCESS;
@@ -292,20 +291,20 @@ HcclResult RoceTransportLiteImpl::BuildLocRmaBufferLite(const uintptr_t addr, co
     return HCCL_SUCCESS;
 }
 
-void RoceTransportLiteImpl::Write(const RmaBufferLite &loc, const Buffer &rmt, const StreamLite &stream)
+void RoceTransportLiteImpl::Write(const RmaBufferLite& loc, const Buffer& rmt, const StreamLite& stream)
 {
     u64 dbAddr = 0;
     u64 dbValue = 0;
 
     // Post Wqe && return dbValue
-    connVec_[0]->Write(
-        GetRmaBufSlicelite(loc), GetRmtRmaBufSliceLite(rmt), dbAddr, dbValue);
+    connVec_[0]->Write(GetRmaBufSlicelite(loc), GetRmtRmaBufSliceLite(rmt), dbAddr, dbValue);
 
     // Ring Doorbell
     BuildRdmaDbSendTask(stream, dbAddr, dbValue);
 }
 
-void RoceTransportLiteImpl::WriteWithNotify(const RmaBufferLite &loc, const Buffer &rmt, const WithNotifyIn &withNotify, const StreamLite &stream)
+void RoceTransportLiteImpl::WriteWithNotify(
+    const RmaBufferLite& loc, const Buffer& rmt, const WithNotifyIn& withNotify, const StreamLite& stream)
 {
     u64 dbAddr = 0;
     u64 dbValue = 0;
@@ -313,40 +312,39 @@ void RoceTransportLiteImpl::WriteWithNotify(const RmaBufferLite &loc, const Buff
 
     // Post Wqe && return dbValue
     connVec_[0]->WriteWithNotify(
-        GetRmaBufSlicelite(loc), GetRmtRmaBufSliceLite(rmt),
-        GetNotifySlicelite(notifyIdx), GetRmtNotifySliceLite(notifyIdx), dbAddr, dbValue);
+        GetRmaBufSlicelite(loc), GetRmtRmaBufSliceLite(rmt), GetNotifySlicelite(notifyIdx),
+        GetRmtNotifySliceLite(notifyIdx), dbAddr, dbValue);
 
     // Ring Doorbell
     BuildRdmaDbSendTask(stream, dbAddr, dbValue);
 }
 
-void RoceTransportLiteImpl::Post(u32 index, const StreamLite &stream)
+void RoceTransportLiteImpl::Post(u32 index, const StreamLite& stream)
 {
     u64 dbAddr = 0;
     u64 dbValue = 0;
 
     // Post Wqe && return dbValue
-    connVec_[0]->Write(
-        GetNotifySlicelite(index), GetRmtNotifySliceLite(index), dbAddr, dbValue);
+    connVec_[0]->Write(GetNotifySlicelite(index), GetRmtNotifySliceLite(index), dbAddr, dbValue);
 
     // Ring Doorbell
     BuildRdmaDbSendTask(stream, dbAddr, dbValue);
 }
 
-void RoceTransportLiteImpl::WaitWithTimeout(u32 index, const StreamLite &stream, u32 timeout)
+void RoceTransportLiteImpl::WaitWithTimeout(u32 index, const StreamLite& stream, u32 timeout)
 {
     auto notifyId = localNotifies_[index]->GetId();
     BuildNotifyWaitTask(notifyId, stream, timeout);
 }
 
 // 下发Rtsq sqe, 敲DB
-void RoceTransportLiteImpl::BuildRdmaDbSendTask(const StreamLite &stream, u64 remoteAddr, u64 dbValue)
+void RoceTransportLiteImpl::BuildRdmaDbSendTask(const StreamLite& stream, u64 remoteAddr, u64 dbValue)
 {
     stream.GetRtsq()->RdmaDbSend(remoteAddr, dbValue);
 }
 
 // 下发Rtsq sqe, NotifyWait
-void RoceTransportLiteImpl::BuildNotifyWaitTask(u32 notifyId, const StreamLite &stream, u32 timeout)
+void RoceTransportLiteImpl::BuildNotifyWaitTask(u32 notifyId, const StreamLite& stream, u32 timeout)
 {
     stream.GetRtsq()->NotifyWait(notifyId, timeout);
 }

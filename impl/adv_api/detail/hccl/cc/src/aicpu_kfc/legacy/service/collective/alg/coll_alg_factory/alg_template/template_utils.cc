@@ -1,45 +1,47 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "template_utils.h"
 #include "log.h"
 #include "buffer.h"
 
 namespace Hccl {
-HcclResult GetUnitAllignSize(const AllignInfo &allignInfo, u64 &unitAllignSize)
+HcclResult GetUnitAllignSize(const AllignInfo& allignInfo, u64& unitAllignSize)
 {
     u32 dataSizePerVolume = DataTypeSizeGet(allignInfo.dataType);
 
     if (allignInfo.enableAllign) {
-        CHK_PRT_RET(allignInfo.allignSize < dataSizePerVolume,
-                    HCCL_ERROR("[CollAlgFactory] Invalid input allignSize [%u].", allignInfo.allignSize),
-                    HcclResult::HCCL_E_PARA);
-        unitAllignSize = (allignInfo.allignSize % dataSizePerVolume == 0) ? allignInfo.allignSize
-                                                                          : allignInfo.allignSize * dataSizePerVolume;
+        CHK_PRT_RET(
+            allignInfo.allignSize < dataSizePerVolume,
+            HCCL_ERROR("[CollAlgFactory] Invalid input allignSize [%u].", allignInfo.allignSize),
+            HcclResult::HCCL_E_PARA);
+        unitAllignSize = (allignInfo.allignSize % dataSizePerVolume == 0) ? allignInfo.allignSize :
+                                                                            allignInfo.allignSize * dataSizePerVolume;
     } else {
         unitAllignSize = dataSizePerVolume;
     }
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult GetAlgRank(const RankId virtRank, const std::vector<RankId> &tempVTopo, u32 &algRank)
+HcclResult GetAlgRank(const RankId virtRank, const std::vector<RankId>& tempVTopo, u32& algRank)
 {
     std::vector<RankId>::const_iterator topoVecIter = std::find(tempVTopo.begin(), tempVTopo.end(), virtRank);
-    CHK_PRT_RET(topoVecIter == tempVTopo.end(), HCCL_ERROR("[CollAlgFactory] Invalid virtual Rank!"),
-                HcclResult::HCCL_E_PARA);
+    CHK_PRT_RET(
+        topoVecIter == tempVTopo.end(), HCCL_ERROR("[CollAlgFactory] Invalid virtual Rank!"), HcclResult::HCCL_E_PARA);
     algRank = distance(tempVTopo.begin(), topoVecIter);
 
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CalcRsAgSliceInfoConcurrMesh(const RankId myRank, const std::vector<std::vector<RankId>> &tempVTopo,
-                                        const AllignInfo &allignInfo, const u64 dataSize, RankSliceInfo &sliceInfoVec)
+HcclResult CalcRsAgSliceInfoConcurrMesh(
+    const RankId myRank, const std::vector<std::vector<RankId>>& tempVTopo, const AllignInfo& allignInfo,
+    const u64 dataSize, RankSliceInfo& sliceInfoVec)
 {
     // multi-dimensional mesh
     u64 unitAllignSize;
@@ -47,17 +49,17 @@ HcclResult CalcRsAgSliceInfoConcurrMesh(const RankId myRank, const std::vector<s
 
     u32 dimSize0 = tempVTopo[0].size();
     u32 dimSize1 = tempVTopo[1].size();
-    u64 sliceSize0
-        = min(dataSize, RoundUp(dataSize, ((dimSize0 + dimSize1) * unitAllignSize)) * dimSize0 * unitAllignSize);
-    u64 sliceSize1   = dataSize - sliceSize0;
-    u64 accumOff     = 0;
+    u64 sliceSize0 =
+        min(dataSize, RoundUp(dataSize, ((dimSize0 + dimSize1) * unitAllignSize)) * dimSize0 * unitAllignSize);
+    u64 sliceSize1 = dataSize - sliceSize0;
+    u64 accumOff = 0;
     u32 tempRankSize = dimSize0 * dimSize1;
     for (u32 rankIdx = 0; rankIdx < tempRankSize; rankIdx++) {
-        SliceInfo slice0         = {accumOff, sliceSize0};
+        SliceInfo slice0 = {accumOff, sliceSize0};
         sliceInfoVec[rankIdx][0] = slice0;
         accumOff += sliceSize0;
 
-        SliceInfo slice1         = {accumOff, sliceSize1};
+        SliceInfo slice1 = {accumOff, sliceSize1};
         sliceInfoVec[rankIdx][1] = slice1;
         accumOff += sliceSize1;
     }
@@ -69,13 +71,14 @@ HcclResult CalcRsAgSliceInfoConcurrMesh(const RankId myRank, const std::vector<s
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CalcRsAgSliceInfoMesh(const RankId myRank, const u32 tempRankSize, const AllignInfo &allignInfo,
-                                 const u64 dataSize, RankSliceInfo &sliceInfoVec)
+HcclResult CalcRsAgSliceInfoMesh(
+    const RankId myRank, const u32 tempRankSize, const AllignInfo& allignInfo, const u64 dataSize,
+    RankSliceInfo& sliceInfoVec)
 {
     (void)allignInfo;
     u64 accumOff = 0;
     for (u32 rankIdx = 0; rankIdx < sliceInfoVec.size(); rankIdx++) {
-        SliceInfo slice          = {accumOff, dataSize};
+        SliceInfo slice = {accumOff, dataSize};
         sliceInfoVec[rankIdx][0] = slice;
         accumOff += dataSize;
     }
@@ -86,17 +89,18 @@ HcclResult CalcRsAgSliceInfoMesh(const RankId myRank, const u32 tempRankSize, co
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CalcRsAgSliceInfoRing(const RankId myRank, const std::vector<std::vector<RankId>> &tempVTopo,
-                                 const AllignInfo &allignInfo, const u64 dataSize, RankSliceInfo &sliceInfoVec)
+HcclResult CalcRsAgSliceInfoRing(
+    const RankId myRank, const std::vector<std::vector<RankId>>& tempVTopo, const AllignInfo& allignInfo,
+    const u64 dataSize, RankSliceInfo& sliceInfoVec)
 {
-    u32 queNum       = tempVTopo.size();
+    u32 queNum = tempVTopo.size();
     u32 tempRankSize = tempVTopo[0].size();
     u64 unitAllignSize;
     CHK_RET(GetUnitAllignSize(allignInfo, unitAllignSize));
 
     u64 queSliceSize = RoundUp(dataSize, (queNum * unitAllignSize)) * unitAllignSize;
 
-    u64              resChunkSize = dataSize;
+    u64 resChunkSize = dataSize;
     std::vector<u64> queSlice;
     for (u32 queIdx = 0; queIdx < queNum; queIdx++) {
         // split data on queues
@@ -104,38 +108,41 @@ HcclResult CalcRsAgSliceInfoRing(const RankId myRank, const std::vector<std::vec
         queSlice.push_back(currQueSliceSize);
         resChunkSize -= currQueSliceSize;
     }
-    CHK_PRT_RET(resChunkSize != 0, HCCL_ERROR("[CollAlgFactory] Rank [%d], SliceInfo calculation error!", myRank),
-                HcclResult::HCCL_E_INTERNAL);
+    CHK_PRT_RET(
+        resChunkSize != 0, HCCL_ERROR("[CollAlgFactory] Rank [%d], SliceInfo calculation error!", myRank),
+        HcclResult::HCCL_E_INTERNAL);
 
     u64 accumOff = 0;
     for (u32 rankIdx = 0; rankIdx < tempRankSize; rankIdx++) {
         for (u32 queIdx = 0; queIdx < queNum; queIdx++) {
-            u64       currSliceSize = queSlice[queIdx];
-            SliceInfo currSlice     = {accumOff, currSliceSize};
+            u64 currSliceSize = queSlice[queIdx];
+            SliceInfo currSlice = {accumOff, currSliceSize};
             accumOff += currSliceSize;
             sliceInfoVec[rankIdx][queIdx] = currSlice;
         }
 
-        CHK_PRT_RET((accumOff != dataSize * (rankIdx + 1)),
-                    HCCL_ERROR("[CollAlgFactory] Rank [%d], SliceInfo calculation error!", myRank),
-                    HcclResult::HCCL_E_INTERNAL);
+        CHK_PRT_RET(
+            (accumOff != dataSize * (rankIdx + 1)),
+            HCCL_ERROR("[CollAlgFactory] Rank [%d], SliceInfo calculation error!", myRank),
+            HcclResult::HCCL_E_INTERNAL);
     }
 
-    CHK_PRT_RET((sliceInfoVec[tempRankSize - 1][queNum - 1].offset + sliceInfoVec[tempRankSize - 1][queNum - 1].size
-                 != dataSize * tempRankSize),
-                HCCL_ERROR("[CollAlgFactory] Rank [%d], SliceInfo calculation error!", myRank),
-                HcclResult::HCCL_E_INTERNAL);
+    CHK_PRT_RET(
+        (sliceInfoVec[tempRankSize - 1][queNum - 1].offset + sliceInfoVec[tempRankSize - 1][queNum - 1].size !=
+         dataSize * tempRankSize),
+        HCCL_ERROR("[CollAlgFactory] Rank [%d], SliceInfo calculation error!", myRank), HcclResult::HCCL_E_INTERNAL);
 
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CalcRsAgSliceInfoNHR(const RankId myRank, const u32 tempRankSize, const AllignInfo &allignInfo,
-                                 const u64 dataSize, RankSliceInfo &sliceInfoVec)
+HcclResult CalcRsAgSliceInfoNHR(
+    const RankId myRank, const u32 tempRankSize, const AllignInfo& allignInfo, const u64 dataSize,
+    RankSliceInfo& sliceInfoVec)
 {
     (void)allignInfo;
     u64 accumOff = 0;
     for (u32 rankIdx = 0; rankIdx < sliceInfoVec.size(); rankIdx++) {
-        SliceInfo slice          = {accumOff, dataSize};
+        SliceInfo slice = {accumOff, dataSize};
         sliceInfoVec[rankIdx][0] = slice;
         accumOff += dataSize;
     }
@@ -147,9 +154,9 @@ HcclResult CalcRsAgSliceInfoNHR(const RankId myRank, const u32 tempRankSize, con
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CalcResLinksMesh(const RankId myRank, const u32 tempRankSize,
-                            const std::vector<std::vector<RankId>> &tempVTopo, const u32 linkNumBtwPeers,
-                            AlgTempResReq &tempResReq)
+HcclResult CalcResLinksMesh(
+    const RankId myRank, const u32 tempRankSize, const std::vector<std::vector<RankId>>& tempVTopo,
+    const u32 linkNumBtwPeers, AlgTempResReq& tempResReq)
 {
     u32 myAlgRank;
     CHK_RET(GetAlgRank(myRank, tempVTopo[0], myAlgRank));
@@ -165,8 +172,9 @@ HcclResult CalcResLinksMesh(const RankId myRank, const u32 tempRankSize,
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CalcResLinksMesh2D(const RankId myRank, const std::vector<std::vector<RankId>> &tempVTopo, 
-                            const u32 linkNumBtwPeers, AlgTempResReq &tempResReq)
+HcclResult CalcResLinksMesh2D(
+    const RankId myRank, const std::vector<std::vector<RankId>>& tempVTopo, const u32 linkNumBtwPeers,
+    AlgTempResReq& tempResReq)
 {
     u32 myAlgRank;
     for (u32 dim = 0; dim < tempVTopo.size(); dim++) {
@@ -174,9 +182,11 @@ HcclResult CalcResLinksMesh2D(const RankId myRank, const std::vector<std::vector
         for (u32 queIdx = 0; queIdx < tempVTopo[dim].size() - 1; queIdx++) {
             u32 neighborAlgRank = (myAlgRank + 1 + queIdx) % (tempVTopo[dim].size());
             CHK_PRT_RET(neighborAlgRank > (tempVTopo[dim].size() - 1),
-                HCCL_ERROR("[CalcResLinksMesh2D] neighborAlgRank[%u] is invalid,"\
-                        "the Max rank[%u].", neighborAlgRank, tempVTopo[dim].size() - 1);,
-                HcclResult::HCCL_E_INTERNAL);
+                        HCCL_ERROR(
+                            "[CalcResLinksMesh2D] neighborAlgRank[%u] is invalid,"
+                            "the Max rank[%u].",
+                            neighborAlgRank, tempVTopo[dim].size() - 1);
+                        , HcclResult::HCCL_E_INTERNAL);
             RankId neighborRank = tempVTopo[dim][neighborAlgRank];
             tempResReq.links[neighborRank] = linkNumBtwPeers;
         }
@@ -185,8 +195,9 @@ HcclResult CalcResLinksMesh2D(const RankId myRank, const std::vector<std::vector
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult GetDetourSendRecvLinksIn4P(const RankId myRank, const RankId neighborRank, const ResLinks &tempLinks,
-                                      std::vector<std::vector<LinkDataIterator>> &sendRecvLinks)
+HcclResult GetDetourSendRecvLinksIn4P(
+    const RankId myRank, const RankId neighborRank, const ResLinks& tempLinks,
+    std::vector<std::vector<LinkDataIterator>>& sendRecvLinks)
 {
     HCCL_DEBUG("[CollAlgFactory] [GetDetourSendRecvLinksIn4P] Rank [%d], NeighborRank [%d].", myRank, neighborRank);
     LinkDataIterator neighborLinkDataIter = tempLinks.at(neighborRank).begin();
@@ -205,8 +216,9 @@ HcclResult GetDetourSendRecvLinksIn4P(const RankId myRank, const RankId neighbor
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CalcResLinksRing(const RankId myRank, const u32 tempRankSize,
-                            const std::vector<std::vector<RankId>> &tempVTopo, AlgTempResReq &tempResReq)
+HcclResult CalcResLinksRing(
+    const RankId myRank, const u32 tempRankSize, const std::vector<std::vector<RankId>>& tempVTopo,
+    AlgTempResReq& tempResReq)
 {
     std::vector<std::vector<RankId>>::const_iterator tempVTopoIter;
     for (tempVTopoIter = tempVTopo.begin(); tempVTopoIter != tempVTopo.end(); tempVTopoIter++) {
@@ -215,17 +227,17 @@ HcclResult CalcResLinksRing(const RankId myRank, const u32 tempRankSize,
         CHK_RET(GetAlgRank(myRank, (*tempVTopoIter), myAlgRank));
 
         // find neighbors -> virtualRank
-        RankId sendToRank   = tempVTopoIter->at((myAlgRank + 1) % tempRankSize);
+        RankId sendToRank = tempVTopoIter->at((myAlgRank + 1) % tempRankSize);
         RankId recvFromRank = tempVTopoIter->at((myAlgRank - 1 + tempRankSize) % tempRankSize); // virtualRank
 
         // LinkNum
-        tempResReq.links[sendToRank]   = 1;
+        tempResReq.links[sendToRank] = 1;
         tempResReq.links[recvFromRank] = 1;
     }
     return HcclResult::HCCL_SUCCESS;
 }
 
-u32 GetLinkNum(const RankGraph *rankGraph, RankId srcRank, RankId dstRank)
+u32 GetLinkNum(const RankGraph* rankGraph, RankId srcRank, RankId dstRank)
 {
     std::set<u32> levelSet = rankGraph->GetLevels(srcRank);
     u32 linkNum = 0;
@@ -247,14 +259,17 @@ u32 GetNHRStepNum(u32 rankSize)
     return nSteps;
 }
 
-HcclResult CalcResLinksNHR(const RankId myRank, const u32 tempRankSize,
-                           const std::vector<std::vector<RankId>> &tempVTopo, AlgTempResReq &tempResReq)
+HcclResult CalcResLinksNHR(
+    const RankId myRank, const u32 tempRankSize, const std::vector<std::vector<RankId>>& tempVTopo,
+    AlgTempResReq& tempResReq)
 {
-    CHK_PRT_RET(tempVTopo.size() != 1,
-                HCCL_ERROR("[CollAlgFactory][CalcResLinksNHR] invalid tempVTopo size[%zu]", tempVTopo.size()),
-                HcclResult::HCCL_E_PARA);
-    const std::vector<RankId> &tree = tempVTopo[0];
-    CHK_PRT_RET(tree.size() != tempRankSize,
+    CHK_PRT_RET(
+        tempVTopo.size() != 1,
+        HCCL_ERROR("[CollAlgFactory][CalcResLinksNHR] invalid tempVTopo size[%zu]", tempVTopo.size()),
+        HcclResult::HCCL_E_PARA);
+    const std::vector<RankId>& tree = tempVTopo[0];
+    CHK_PRT_RET(
+        tree.size() != tempRankSize,
         HCCL_ERROR("[CollAlgFactory][CalcResLinksNHR] tempRankSize[%u] != tree.size[%zu]", tempRankSize, tree.size()),
         HcclResult::HCCL_E_PARA);
     u32 nSteps = GetNHRStepNum(tempRankSize);
@@ -271,13 +286,14 @@ HcclResult CalcResLinksNHR(const RankId myRank, const u32 tempRankSize,
         sendToRank = tree[(myAlgRank + (1 << deltaRank)) % tempRankSize];
         // recive Info
         recvFromRank = tree[(myAlgRank + tempRankSize - (1 << deltaRank)) % tempRankSize];
-        tempResReq.links[sendToRank]   = 1;
+        tempResReq.links[sendToRank] = 1;
         tempResReq.links[recvFromRank] = 1;
     }
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult GetLocalSendRecvInfoforAlltoall(const CollAlgOperator &opParam, const u32 userRank, const u32 userRankSize, A2ASendRecvInfo &localSendRecvInfo)
+HcclResult GetLocalSendRecvInfoforAlltoall(
+    const CollAlgOperator& opParam, const u32 userRank, const u32 userRankSize, A2ASendRecvInfo& localSendRecvInfo)
 {
     u64 curSendDispls = 0;
     u64 curSendOffset = 0;
@@ -301,51 +317,56 @@ HcclResult GetLocalSendRecvInfoforAlltoall(const CollAlgOperator &opParam, const
         localSendRecvInfo.recvOffset[j] = curRecvOffset;
         curRecvDispls += curRecvCounts;
         curRecvOffset += curRecvLength;
-        HCCL_DEBUG("[GetLocalSendRecvInfoforAlltoall] rank[%u], sendCounts[%llu], sendDispls[%llu] "\
-            "recvCounts[%llu], recvDispls[%llu], sendLength[%llu], recvLength[%llu]", userRank, localSendRecvInfo.sendCounts[j],
-            localSendRecvInfo.sendDispls[j], localSendRecvInfo.recvCounts[j],
+        HCCL_DEBUG(
+            "[GetLocalSendRecvInfoforAlltoall] rank[%u], sendCounts[%llu], sendDispls[%llu] "
+            "recvCounts[%llu], recvDispls[%llu], sendLength[%llu], recvLength[%llu]",
+            userRank, localSendRecvInfo.sendCounts[j], localSendRecvInfo.sendDispls[j], localSendRecvInfo.recvCounts[j],
             localSendRecvInfo.recvDispls[j], localSendRecvInfo.sendLength[j], localSendRecvInfo.recvLength[j]);
     }
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult GetLocalSendRecvInfoforAlltoallV(const CollAlgOperator &opParam, const u32 userRank, const u32 userRankSize, A2ASendRecvInfo &localSendRecvInfo)
+HcclResult GetLocalSendRecvInfoforAlltoallV(
+    const CollAlgOperator& opParam, const u32 userRank, const u32 userRankSize, A2ASendRecvInfo& localSendRecvInfo)
 {
     CHK_PTR_NULL(opParam.all2AllVDataDes.sendCounts);
     CHK_PTR_NULL(opParam.all2AllVDataDes.sdispls);
     CHK_PTR_NULL(opParam.all2AllVDataDes.recvCounts);
     CHK_PTR_NULL(opParam.all2AllVDataDes.rdispls);
     for (u32 j = 0; j < userRankSize; j++) {
-        u64 curSendCounts = *(static_cast<const u64 *>(opParam.all2AllVDataDes.sendCounts) + j);
-        u64 curSendDispls = *(static_cast<const u64 *>(opParam.all2AllVDataDes.sdispls) + j);
+        u64 curSendCounts = *(static_cast<const u64*>(opParam.all2AllVDataDes.sendCounts) + j);
+        u64 curSendDispls = *(static_cast<const u64*>(opParam.all2AllVDataDes.sdispls) + j);
         localSendRecvInfo.sendCounts[j] = curSendCounts;
         localSendRecvInfo.sendDispls[j] = curSendDispls;
         localSendRecvInfo.sendLength[j] = curSendCounts * DataTypeSizeGet(opParam.all2AllVDataDes.sendType);
         localSendRecvInfo.sendOffset[j] = curSendDispls * DataTypeSizeGet(opParam.all2AllVDataDes.sendType);
 
-        u64 curRecvCounts = *(static_cast<const u64 *>(opParam.all2AllVDataDes.recvCounts) + j);
-        u64 curRecvDispls = *(static_cast<const u64 *>(opParam.all2AllVDataDes.rdispls) + j);
+        u64 curRecvCounts = *(static_cast<const u64*>(opParam.all2AllVDataDes.recvCounts) + j);
+        u64 curRecvDispls = *(static_cast<const u64*>(opParam.all2AllVDataDes.rdispls) + j);
         localSendRecvInfo.recvCounts[j] = curRecvCounts;
         localSendRecvInfo.recvDispls[j] = curRecvDispls;
         localSendRecvInfo.recvLength[j] = curRecvCounts * DataTypeSizeGet(opParam.all2AllVDataDes.recvType);
         localSendRecvInfo.recvOffset[j] = curRecvDispls * DataTypeSizeGet(opParam.all2AllVDataDes.recvType);
 
-        HCCL_DEBUG("[GetLocalSendRecvInfoforAlltoallV] rank[%u], sendCounts[%llu], sendDispls[%llu] "\
-            "recvCounts[%llu], recvDispls[%llu], sendLength[%llu], recvLength[%llu]", userRank, localSendRecvInfo.sendCounts[j],
-            localSendRecvInfo.sendDispls[j], localSendRecvInfo.recvCounts[j], localSendRecvInfo.recvDispls[j],
-            localSendRecvInfo.sendLength[j], localSendRecvInfo.recvLength[j]);
+        HCCL_DEBUG(
+            "[GetLocalSendRecvInfoforAlltoallV] rank[%u], sendCounts[%llu], sendDispls[%llu] "
+            "recvCounts[%llu], recvDispls[%llu], sendLength[%llu], recvLength[%llu]",
+            userRank, localSendRecvInfo.sendCounts[j], localSendRecvInfo.sendDispls[j], localSendRecvInfo.recvCounts[j],
+            localSendRecvInfo.recvDispls[j], localSendRecvInfo.sendLength[j], localSendRecvInfo.recvLength[j]);
     }
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult GetLocalSendRecvInfoforAlltoallVC(const CollAlgOperator &opParam, const u32 userRank, const u32 userRankSize, A2ASendRecvInfo &localSendRecvInfo)
+HcclResult GetLocalSendRecvInfoforAlltoallVC(
+    const CollAlgOperator& opParam, const u32 userRank, const u32 userRankSize, A2ASendRecvInfo& localSendRecvInfo)
 {
     u64 curSendDispls = 0;
     u64 curSendOffset = 0;
     u64 curRecvDispls = 0;
     u64 curRecvOffset = 0;
     for (u32 j = 0; j < userRankSize; j++) {
-        u64 curSendCounts = *(static_cast<const u64 *>(opParam.all2AllVCDataDes.sendCountMatrix) + userRank * userRankSize + j);
+        u64 curSendCounts =
+            *(static_cast<const u64*>(opParam.all2AllVCDataDes.sendCountMatrix) + userRank * userRankSize + j);
         u64 curSendLength = curSendCounts * DataTypeSizeGet(opParam.all2AllVCDataDes.sendType);
         localSendRecvInfo.sendCounts[j] = curSendCounts;
         localSendRecvInfo.sendDispls[j] = curSendDispls;
@@ -354,7 +375,8 @@ HcclResult GetLocalSendRecvInfoforAlltoallVC(const CollAlgOperator &opParam, con
         curSendDispls += curSendCounts;
         curSendOffset += curSendLength;
 
-        u64 curRecvCounts = *(static_cast<const u64 *>(opParam.all2AllVCDataDes.sendCountMatrix) + userRank + userRankSize * j);
+        u64 curRecvCounts =
+            *(static_cast<const u64*>(opParam.all2AllVCDataDes.sendCountMatrix) + userRank + userRankSize * j);
         u64 curRecvLength = curRecvCounts * DataTypeSizeGet(opParam.all2AllVCDataDes.recvType);
         localSendRecvInfo.recvCounts[j] = curRecvCounts;
         localSendRecvInfo.recvDispls[j] = curRecvDispls;
@@ -362,15 +384,17 @@ HcclResult GetLocalSendRecvInfoforAlltoallVC(const CollAlgOperator &opParam, con
         localSendRecvInfo.recvOffset[j] = curRecvOffset;
         curRecvDispls += curRecvCounts;
         curRecvOffset += curRecvLength;
-        HCCL_DEBUG("[GetLocalSendRecvInfoforAlltoallVC] rank[%u], sendCounts[%llu], sendDispls[%llu] "\
-            "recvCounts[%llu], recvDispls[%llu]", userRank, localSendRecvInfo.sendCounts[j],
-            localSendRecvInfo.sendDispls[j], localSendRecvInfo.recvCounts[j],
+        HCCL_DEBUG(
+            "[GetLocalSendRecvInfoforAlltoallVC] rank[%u], sendCounts[%llu], sendDispls[%llu] "
+            "recvCounts[%llu], recvDispls[%llu]",
+            userRank, localSendRecvInfo.sendCounts[j], localSendRecvInfo.sendDispls[j], localSendRecvInfo.recvCounts[j],
             localSendRecvInfo.recvDispls[j]);
     }
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult GetAlltoAllLocalSendRecvInfo(const CollAlgOperator &opParam, const u32 userRank, const u32 userRankSize, A2ASendRecvInfo &localSendRecvInfo)
+HcclResult GetAlltoAllLocalSendRecvInfo(
+    const CollAlgOperator& opParam, const u32 userRank, const u32 userRankSize, A2ASendRecvInfo& localSendRecvInfo)
 {
     HCCL_DEBUG("[GetAlltoAllLocalSendRecvInfo] rank[%u], userRankSize[%u]", userRank, userRankSize);
     localSendRecvInfo.sendCounts.resize(userRankSize, 0);
@@ -388,7 +412,7 @@ HcclResult GetAlltoAllLocalSendRecvInfo(const CollAlgOperator &opParam, const u3
         CHK_RET(GetLocalSendRecvInfoforAlltoall(opParam, userRank, userRankSize, localSendRecvInfo));
     } else if (opParam.opType == OpType::ALLTOALLVC) {
         CHK_RET(GetLocalSendRecvInfoforAlltoallVC(opParam, userRank, userRankSize, localSendRecvInfo));
-    } else if (opParam.opType != OpType::HALFALLTOALLV){
+    } else if (opParam.opType != OpType::HALFALLTOALLV) {
         HCCL_ERROR("Only support optype alltoall , alltoallv, halfalltoallv and alltoallvc !");
     }
     HCCL_DEBUG("[GetAlltoAllLocalSendRecvInfo] GetAlltoAllLocalSendRecvInfo success");
@@ -400,8 +424,8 @@ HcclResult GetAlltoAllLocalSendRecvInfo(const CollAlgOperator &opParam, const u3
  * 输入的 dataSize 是一张卡上完整的数据量
  * 函数会将 dataSize 切分成 rankSize 份，最后一份尾块可能会比其他的切分出来的子块大。
  */
-HcclResult CalcSliceInfoAllReduce(const AllignInfo &allignInfo, const u32 rankSize, const u64 dataSize,
-                                  RankSliceInfo &sliceInfoVec)
+HcclResult CalcSliceInfoAllReduce(
+    const AllignInfo& allignInfo, const u32 rankSize, const u64 dataSize, RankSliceInfo& sliceInfoVec)
 {
     sliceInfoVec.clear();
     sliceInfoVec.resize(rankSize);
@@ -412,36 +436,40 @@ HcclResult CalcSliceInfoAllReduce(const AllignInfo &allignInfo, const u32 rankSi
     u64 unitPerSlice = dataSize / unitAllignSize / rankSize;
     HCCL_DEBUG("unitAllignSize[%llu] unitPerSlice[%llu]", unitAllignSize, unitPerSlice);
 
-    u64       accumOff = 0;
+    u64 accumOff = 0;
     SliceInfo currSlice;
     for (u32 rankIdx = 0; rankIdx < rankSize; rankIdx++) {
         if (rankIdx == rankSize - 1) {
             currSlice.offset = accumOff;
-            currSlice.size   = dataSize - accumOff;
+            currSlice.size = dataSize - accumOff;
         } else {
             currSlice.offset = accumOff;
-            currSlice.size   = unitPerSlice * unitAllignSize;
+            currSlice.size = unitPerSlice * unitAllignSize;
         }
-        CHK_PRT_RET(currSlice.size % dataSizePerVolume != 0,
-                    HCCL_ERROR("[Calc][SliceInfo]rank[%u] slice size[%llu] is invalid, dataSizePerVolume[%llu]",
-                               rankIdx, currSlice.size, dataSizePerVolume),
-                    HcclResult::HCCL_E_INTERNAL);
+        CHK_PRT_RET(
+            currSlice.size % dataSizePerVolume != 0,
+            HCCL_ERROR(
+                "[Calc][SliceInfo]rank[%u] slice size[%llu] is invalid, dataSizePerVolume[%llu]", rankIdx,
+                currSlice.size, dataSizePerVolume),
+            HcclResult::HCCL_E_INTERNAL);
         sliceInfoVec[rankIdx].push_back(currSlice);
         accumOff += currSlice.size;
     }
 
-    CHK_PRT_RET((sliceInfoVec[rankSize - 1][0].offset + sliceInfoVec[rankSize - 1][0].size != dataSize),
-                HCCL_ERROR("[CalcSliceInfoAllReduce] SliceInfo calculation error! DataSize[%llu], "
-                           "lastoffset[%llu], lastsize[%llu]",
-                           dataSize, sliceInfoVec[rankSize - 1][0].offset, sliceInfoVec[rankSize - 1][0].size),
-                HcclResult::HCCL_E_INTERNAL);
+    CHK_PRT_RET(
+        (sliceInfoVec[rankSize - 1][0].offset + sliceInfoVec[rankSize - 1][0].size != dataSize),
+        HCCL_ERROR(
+            "[CalcSliceInfoAllReduce] SliceInfo calculation error! DataSize[%llu], "
+            "lastoffset[%llu], lastsize[%llu]",
+            dataSize, sliceInfoVec[rankSize - 1][0].offset, sliceInfoVec[rankSize - 1][0].size),
+        HcclResult::HCCL_E_INTERNAL);
 
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult BufferTypeToAddr(const BufferType &bufferType, CollAlgOperator &op, uint64_t &addr)
+HcclResult BufferTypeToAddr(const BufferType& bufferType, CollAlgOperator& op, uint64_t& addr)
 {
-    Buffer *buffer = op.GetBuffer(bufferType);
+    Buffer* buffer = op.GetBuffer(bufferType);
     CHK_PTR_NULL(buffer);
     addr = buffer->GetAddr();
     return HcclResult::HCCL_SUCCESS;

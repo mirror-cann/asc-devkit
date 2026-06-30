@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "transport.h"
 #include "dispatcher_pub.h"
 #include "hccl_primitive_remote.h"
@@ -14,30 +14,32 @@
 
 using namespace hccl;
 extern HcclResult GetPubDispatcher(hccl::DispatcherPub** dispatcherPtr);
-HcclResult HcclRemoteWrite(StreamHandle streamHandle, HcclMemTransport memTransport, HcclBuf *rmtBuf, HcclBuf *locBuf)
+HcclResult HcclRemoteWrite(StreamHandle streamHandle, HcclMemTransport memTransport, HcclBuf* rmtBuf, HcclBuf* locBuf)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
     CHK_PTR_NULL(rmtBuf);
     CHK_PTR_NULL(locBuf);
-    HCCL_DEBUG("[HcclRemoteWrite]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p], len[%llu].",
+    HCCL_DEBUG(
+        "[HcclRemoteWrite]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p], len[%llu].",
         streamHandle, memTransport, locBuf->addr, rmtBuf->addr, rmtBuf->len);
-    Stream *stream = reinterpret_cast<Stream*>(streamHandle);
+    Stream* stream = reinterpret_cast<Stream*>(streamHandle);
     struct Transport::Buffer localBuf(locBuf->addr, locBuf->len);
     struct Transport::Buffer remoteBuf(rmtBuf->addr, rmtBuf->len);
 
     return reinterpret_cast<Transport*>(memTransport)->WriteAsync(remoteBuf, localBuf, *stream);
 }
 
-HcclResult HcclRemoteRead(StreamHandle streamHandle, HcclMemTransport memTransport, HcclBuf *locBuf, HcclBuf *rmtBuf)
+HcclResult HcclRemoteRead(StreamHandle streamHandle, HcclMemTransport memTransport, HcclBuf* locBuf, HcclBuf* rmtBuf)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
     CHK_PTR_NULL(locBuf);
     CHK_PTR_NULL(rmtBuf);
-    HCCL_DEBUG("[HcclRemoteRead]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p], len[%llu].",
+    HCCL_DEBUG(
+        "[HcclRemoteRead]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p], len[%llu].",
         streamHandle, memTransport, locBuf->addr, rmtBuf->addr, rmtBuf->len);
-    Stream *stream = reinterpret_cast<Stream*>(streamHandle);
+    Stream* stream = reinterpret_cast<Stream*>(streamHandle);
 
     struct Transport::Buffer localBuf(locBuf->addr, locBuf->len);
     struct Transport::Buffer remoteBuf(rmtBuf->addr, rmtBuf->len);
@@ -45,33 +47,37 @@ HcclResult HcclRemoteRead(StreamHandle streamHandle, HcclMemTransport memTranspo
 }
 
 constexpr uint32_t INVALID_COMPLETE_IDX = INVALID_UINT;
-HcclResult HcclRemoteWriteReduce(StreamHandle streamHandle, HcclMemTransport memTransport,
-    HcclBuf *rmtBuf, HcclBuf *locBuf, HcclReduceInfo reduceInfo)
+HcclResult HcclRemoteWriteReduce(
+    StreamHandle streamHandle, HcclMemTransport memTransport, HcclBuf* rmtBuf, HcclBuf* locBuf,
+    HcclReduceInfo reduceInfo)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
     CHK_PTR_NULL(rmtBuf);
     CHK_PTR_NULL(locBuf);
-    HCCL_DEBUG("[HcclRemoteWriteReduce]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p], len[%llu],"
-        " dataType[%d], reduceOp[%d].", streamHandle, memTransport, locBuf->addr, rmtBuf->addr, rmtBuf->len,
-        reduceInfo.dataType, reduceInfo.reduceOp);
-    Stream *stream = reinterpret_cast<Stream*>(streamHandle);
+    HCCL_DEBUG(
+        "[HcclRemoteWriteReduce]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p], len[%llu],"
+        " dataType[%d], reduceOp[%d].",
+        streamHandle, memTransport, locBuf->addr, rmtBuf->addr, rmtBuf->len, reduceInfo.dataType, reduceInfo.reduceOp);
+    Stream* stream = reinterpret_cast<Stream*>(streamHandle);
     struct Transport::Buffer localBuf(locBuf->addr, locBuf->len);
     struct Transport::Buffer remoteBuf(rmtBuf->addr, rmtBuf->len);
-    return reinterpret_cast<Transport*>(memTransport)->WriteReduceAsync(remoteBuf, localBuf,
-        reduceInfo.dataType, reduceInfo.reduceOp, *stream);
+    return reinterpret_cast<Transport*>(memTransport)
+        ->WriteReduceAsync(remoteBuf, localBuf, reduceInfo.dataType, reduceInfo.reduceOp, *stream);
 }
 
-HcclResult HcclRemoteReadReduce(StreamHandle streamHandle, HcclMemTransport memTransport,
-    HcclBuf *locBuf, HcclBuf *rmtBuf, HcclReduceInfo reduceInfo)
+HcclResult HcclRemoteReadReduce(
+    StreamHandle streamHandle, HcclMemTransport memTransport, HcclBuf* locBuf, HcclBuf* rmtBuf,
+    HcclReduceInfo reduceInfo)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
     CHK_PTR_NULL(locBuf);
     CHK_PTR_NULL(rmtBuf);
-    HCCL_DEBUG("[HcclRemoteReadReduce]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p], len[%llu],"
-        " dataType[%d], reduceOp[%d].", streamHandle, memTransport, locBuf->addr, rmtBuf->addr, rmtBuf->len,
-        reduceInfo.dataType, reduceInfo.reduceOp);
+    HCCL_DEBUG(
+        "[HcclRemoteReadReduce]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p], len[%llu],"
+        " dataType[%d], reduceOp[%d].",
+        streamHandle, memTransport, locBuf->addr, rmtBuf->addr, rmtBuf->len, reduceInfo.dataType, reduceInfo.reduceOp);
 
     // 后续使用transport，p2p支持，rdma不支持
     if (reinterpret_cast<Transport*>(memTransport)->GetLinkType() == LinkType::LINK_ROCE) {
@@ -82,56 +88,62 @@ HcclResult HcclRemoteReadReduce(StreamHandle streamHandle, HcclMemTransport memT
     DispatcherPub* dispatcherPtr = nullptr;
     CHK_RET(GetPubDispatcher(&dispatcherPtr));
 
-    Stream *stream = reinterpret_cast<Stream*>(streamHandle);
-    return dispatcherPtr->InlineReduceAsync(rmtBuf->addr, rmtBuf->len / reduceInfo.dataType,
-        reduceInfo.dataType, reduceInfo.reduceOp,
-        *stream, locBuf->addr, INVALID_VALUE_RANKID, LinkType::LINK_ONCHIP);
+    Stream* stream = reinterpret_cast<Stream*>(streamHandle);
+    return dispatcherPtr->InlineReduceAsync(
+        rmtBuf->addr, rmtBuf->len / reduceInfo.dataType, reduceInfo.dataType, reduceInfo.reduceOp, *stream,
+        locBuf->addr, INVALID_VALUE_RANKID, LinkType::LINK_ONCHIP);
 }
 
 HcclResult HcclRemoteNotifyRecord(StreamHandle streamHandle, HcclMemTransport memTransport, uint32_t notifyIndex)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
-    HCCL_DEBUG("[HcclRemoteNotifyRecord]streamHandle[%p], memTransport[%p], notifyIndex[%d].",
-        streamHandle, memTransport, notifyIndex);
-    Stream *stream = reinterpret_cast<Stream*>(streamHandle);
+    HCCL_DEBUG(
+        "[HcclRemoteNotifyRecord]streamHandle[%p], memTransport[%p], notifyIndex[%d].", streamHandle, memTransport,
+        notifyIndex);
+    Stream* stream = reinterpret_cast<Stream*>(streamHandle);
     return reinterpret_cast<Transport*>(memTransport)->Post(notifyIndex, *stream);
 }
 
-HcclResult HcclRemoteNotifyWait(StreamHandle streamHandle, HcclMemTransport memTransport, uint32_t notifyIndex,
-    const uint32_t timeOut)
+HcclResult HcclRemoteNotifyWait(
+    StreamHandle streamHandle, HcclMemTransport memTransport, uint32_t notifyIndex, const uint32_t timeOut)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
-    HCCL_DEBUG("[HcclRemoteNotifyWait]streamHandle[%p], memTransport[%p], notifyIndex[%u], timeOut[%u].",
-        streamHandle, memTransport, notifyIndex, timeOut);
-    Stream *stream = reinterpret_cast<Stream*>(streamHandle);
+    HCCL_DEBUG(
+        "[HcclRemoteNotifyWait]streamHandle[%p], memTransport[%p], notifyIndex[%u], timeOut[%u].", streamHandle,
+        memTransport, notifyIndex, timeOut);
+    Stream* stream = reinterpret_cast<Stream*>(streamHandle);
     return reinterpret_cast<Transport*>(memTransport)->Wait(notifyIndex, *stream, timeOut);
 }
 
 HcclResult HcclRemoteWriteWithNotify(
-    StreamHandle streamHandle, HcclMemTransport memTransport, HcclBuf *rmtBuf, HcclBuf *locBuf, uint32_t notifyIndex)
+    StreamHandle streamHandle, HcclMemTransport memTransport, HcclBuf* rmtBuf, HcclBuf* locBuf, uint32_t notifyIndex)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
     CHK_PTR_NULL(locBuf);
     CHK_PTR_NULL(rmtBuf);
-    HCCL_DEBUG("[HcclRemoteWriteWithNotify]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p]"
+    HCCL_DEBUG(
+        "[HcclRemoteWriteWithNotify]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p]"
         ", len[%llu], notifyIndex[%u].",
         streamHandle, memTransport, locBuf->addr, rmtBuf->addr, rmtBuf->len, notifyIndex);
     return HCCL_E_NOT_SUPPORT;
 }
 
-HcclResult HcclRemoteWriteReduceWithNotify(StreamHandle streamHandle, HcclMemTransport memTransport, HcclBuf *rmtBuf,
-    HcclBuf *locBuf, HcclReduceInfo reduceInfo, uint32_t notifyIndex)
+HcclResult HcclRemoteWriteReduceWithNotify(
+    StreamHandle streamHandle, HcclMemTransport memTransport, HcclBuf* rmtBuf, HcclBuf* locBuf,
+    HcclReduceInfo reduceInfo, uint32_t notifyIndex)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
     CHK_PTR_NULL(locBuf);
     CHK_PTR_NULL(rmtBuf);
-    HCCL_DEBUG("[HcclRemoteWriteReduceWithNotify]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p],"
-        " len[%llu], dataType[%d], reduceOp[%d], notifyIndex[%u].", streamHandle, memTransport,
-        locBuf->addr, rmtBuf->addr, rmtBuf->len, reduceInfo.dataType, reduceInfo.reduceOp, notifyIndex);
+    HCCL_DEBUG(
+        "[HcclRemoteWriteReduceWithNotify]streamHandle[%p], memTransport[%p], locBuf addr[%p], rmtBuf addr[%p],"
+        " len[%llu], dataType[%d], reduceOp[%d], notifyIndex[%u].",
+        streamHandle, memTransport, locBuf->addr, rmtBuf->addr, rmtBuf->len, reduceInfo.dataType, reduceInfo.reduceOp,
+        notifyIndex);
     return HCCL_E_NOT_SUPPORT;
 }
 
@@ -139,20 +151,21 @@ HcclResult HcclRemoteFence(StreamHandle streamHandle, HcclMemTransport memTransp
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
-    HCCL_DEBUG("[HcclRemoteFence]streamHandle[%p], memTransport[%p], orderFlag[%u].",
-        streamHandle, memTransport, orderFlag);
+    HCCL_DEBUG(
+        "[HcclRemoteFence]streamHandle[%p], memTransport[%p], orderFlag[%u].", streamHandle, memTransport, orderFlag);
     return reinterpret_cast<Transport*>(memTransport)->Fence();
 }
 
 HcclResult HcclRemoteBatchWrite(
-    StreamHandle streamHandle, HcclMemTransport memTransport, HcclBufPair *bufPairs, uint32_t bufPairNum)
+    StreamHandle streamHandle, HcclMemTransport memTransport, HcclBufPair* bufPairs, uint32_t bufPairNum)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
     CHK_PTR_NULL(bufPairs);
-    HCCL_DEBUG("[HcclRemoteBatchWrite]streamHandle[%p], memTransport[%p], bufPairNum[%u].",
-        streamHandle, memTransport, bufPairNum);
-    Stream *stream = reinterpret_cast<Stream*>(streamHandle);
+    HCCL_DEBUG(
+        "[HcclRemoteBatchWrite]streamHandle[%p], memTransport[%p], bufPairNum[%u].", streamHandle, memTransport,
+        bufPairNum);
+    Stream* stream = reinterpret_cast<Stream*>(streamHandle);
     Transport* transport = reinterpret_cast<Transport*>(memTransport);
     for (uint32_t i = 0; i < bufPairNum; i++) {
         CHK_PTR_NULL(bufPairs[i].loc.addr);
@@ -166,14 +179,15 @@ HcclResult HcclRemoteBatchWrite(
 }
 
 HcclResult HcclRemoteBatchRead(
-    StreamHandle streamHandle, HcclMemTransport memTransport, HcclBufPair *bufPairs, uint32_t bufPairNum)
+    StreamHandle streamHandle, HcclMemTransport memTransport, HcclBufPair* bufPairs, uint32_t bufPairNum)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);
     CHK_PTR_NULL(bufPairs);
-    HCCL_DEBUG("[HcclRemoteBatchRead]streamHandle[%p], memTransport[%p], bufPairNum[%u].",
-        streamHandle, memTransport, bufPairNum);
-    Stream *stream = reinterpret_cast<Stream*>(streamHandle);
+    HCCL_DEBUG(
+        "[HcclRemoteBatchRead]streamHandle[%p], memTransport[%p], bufPairNum[%u].", streamHandle, memTransport,
+        bufPairNum);
+    Stream* stream = reinterpret_cast<Stream*>(streamHandle);
     Transport* transport = reinterpret_cast<Transport*>(memTransport);
 
     for (uint32_t i = 0; i < bufPairNum; i++) {
@@ -188,7 +202,8 @@ HcclResult HcclRemoteBatchRead(
 }
 
 HcclResult HcclRemoteBatchTransfer(
-    StreamHandle streamHandle, HcclMemTransport memTransport, const HcclBatchTransferInfo *transferInfo, uint32_t bufPairNum)
+    StreamHandle streamHandle, HcclMemTransport memTransport, const HcclBatchTransferInfo* transferInfo,
+    uint32_t bufPairNum)
 {
     CHK_PTR_NULL(streamHandle);
     CHK_PTR_NULL(memTransport);

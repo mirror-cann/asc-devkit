@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "dfx/task_exception_fun.h"
 
 #include <string>
@@ -16,7 +16,7 @@
 #include "alg_param.h"
 
 namespace mc2_ops_hccl {
-HcclResult CreateScatter(OpParam *param, ScatterOpInfo *opInfo)
+HcclResult CreateScatter(OpParam* param, ScatterOpInfo* opInfo)
 {
     CHK_PTR_NULL(param);
     CHK_PTR_NULL(opInfo);
@@ -33,9 +33,9 @@ HcclResult CreateScatter(OpParam *param, ScatterOpInfo *opInfo)
     return HCCL_SUCCESS;
 }
 
-void GetScatterOpInfo(const void *opInfo, char *outPut, size_t size)
+void GetScatterOpInfo(const void* opInfo, char* outPut, size_t size)
 {
-    const ScatterOpInfo *info = reinterpret_cast<const ScatterOpInfo *>(opInfo);
+    const ScatterOpInfo* info = reinterpret_cast<const ScatterOpInfo*>(opInfo);
     std::stringstream ss;
     ss << "tag:" << info->algTag << ", ";
     ss << "group:" << info->commName << ", ";
@@ -53,4 +53,4 @@ void GetScatterOpInfo(const void *opInfo, char *outPut, size_t size)
     }
 }
 
-}
+} // namespace mc2_ops_hccl

@@ -1,30 +1,25 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "topo_match_multilevel.h"
 
 namespace mc2_ops_hccl {
-TopoMatchMultilevel::TopoMatchMultilevel()
-    : TopoMatchBase()
-{
-}
+TopoMatchMultilevel::TopoMatchMultilevel() : TopoMatchBase() {}
 
-TopoMatchMultilevel::~TopoMatchMultilevel()
-{
-}
+TopoMatchMultilevel::~TopoMatchMultilevel() {}
 
 HcclResult TopoMatchMultilevel::TopoForLayer0(
-    const HcclComm comm, uint32_t& layer0Size, const uint32_t myRank,
-    AlgHierarchyInfoForAllLevel& algHierarchyInfo, uint32_t gcdInstSize) const
+    const HcclComm comm, uint32_t& layer0Size, const uint32_t myRank, AlgHierarchyInfoForAllLevel& algHierarchyInfo,
+    uint32_t gcdInstSize) const
 {
 #ifndef AICPU_COMPILE
-    uint32_t *topoInsts;
+    uint32_t* topoInsts;
     uint32_t topoInstNum = 0;
     CHK_RET(HcclRankGraphGetTopoInstsByLayer(comm, 0, &topoInsts, &topoInstNum));
 
@@ -34,15 +29,15 @@ HcclResult TopoMatchMultilevel::TopoForLayer0(
         uint32_t* ranks;
         uint32_t rankNum = 0;
         CHK_RET(HcclRankGraphGetRanksByTopoInst(comm, 0, topoInsts[0], &ranks, &rankNum));
-        HCCL_DEBUG("[CollAlgFactory] [TopoMatchMultilevel] Rank [%d], all [%u] ranks in this pod: [%s]",
-            myRank,
-            rankNum,
+        HCCL_DEBUG(
+            "[CollAlgFactory] [TopoMatchMultilevel] Rank [%d], all [%u] ranks in this pod: [%s]", myRank, rankNum,
             PrintCArray<uint32_t>(ranks, rankNum).c_str());
         if (gcdInstSize > 0 && gcdInstSize < rankNum) {
             // Asymmetric: split this pod into GCD-sized subgroups
             // ranks guaranteed ascending by HcclRankGraphGetRanksByTopoInst (backed by std::set)
             auto it = std::find(ranks, ranks + rankNum, myRank);
-            CHK_PRT_RET(it == ranks + rankNum,
+            CHK_PRT_RET(
+                it == ranks + rankNum,
                 HCCL_ERROR("[TopoMatchMultilevel] [TopoForLayer0] myRank [%u] not found in ranks array", myRank),
                 HcclResult::HCCL_E_INTERNAL);
 
@@ -51,9 +46,9 @@ HcclResult TopoMatchMultilevel::TopoForLayer0(
             uint32_t startIdx = groupId * gcdInstSize;
             uint32_t endIdx = std::min(startIdx + gcdInstSize, rankNum);
             std::vector<uint32_t> rankVecLayer0(ranks + startIdx, ranks + endIdx);
-            HCCL_DEBUG("[TopoMatchMultilevel] [TopoForLayer0] Rank [%d], GCD subgroup: [%s]",
-                myRank, PrintCArray<uint32_t>(rankVecLayer0.data(),
-                static_cast<u32>(rankVecLayer0.size())).c_str());
+            HCCL_DEBUG(
+                "[TopoMatchMultilevel] [TopoForLayer0] Rank [%d], GCD subgroup: [%s]", myRank,
+                PrintCArray<uint32_t>(rankVecLayer0.data(), static_cast<u32>(rankVecLayer0.size())).c_str());
             algHierarchyInfo.infos[0].push_back({rankVecLayer0});
             layer0Size = gcdInstSize;
         } else {
@@ -74,7 +69,8 @@ HcclResult TopoMatchMultilevel::TopoForLayer0(
         for (uint32_t idx = 0; idx < topoInstNum; idx++) {
             CommTopo topoType;
             CHK_RET(HcclRankGraphGetTopoType(comm, 0, topoInsts[idx], &topoType));
-            if (topoType == CommTopo::COMM_TOPO_CLOS) continue;
+            if (topoType == CommTopo::COMM_TOPO_CLOS)
+                continue;
 
             uint32_t* ranks;
             uint32_t rankNum;
@@ -102,7 +98,7 @@ HcclResult TopoMatchMultilevel::TopoForLayer1(
     HCCL_DEBUG("[TopoMatchMultilevel::MeshNHRTopoForLayer1] layer0Size [%d]", layer0Size);
 #ifndef AICPU_COMPILE
     // 1. 查出layer 1的所有ranks
-    uint32_t *topoInsts;
+    uint32_t* topoInsts;
     uint32_t topoInstNum = 0;
     CHK_RET(HcclRankGraphGetTopoInstsByLayer(comm, 1, &topoInsts, &topoInstNum));
     CHK_PRT_RET(
@@ -126,7 +122,7 @@ HcclResult TopoMatchMultilevel::TopoForLayer1(
         if (rankId % layer0Size != myRank % layer0Size) {
             continue;
         }
-        CommLink *links;
+        CommLink* links;
         uint32_t linkNum = 0;
         HcclRankGraphGetLinks(comm, 1, myRank, rankId, &links, &linkNum);
         if (linkNum == 0) {
@@ -173,50 +169,54 @@ uint32_t TopoMatchMultilevel::GcdOfInstSizeList(const uint32_t* instSizeList, ui
     return result;
 }
 
-HcclResult TopoMatchMultilevel::MatchTopo(const HcclComm comm, TopoInfoWithNetLayerDetails* topoInfo, AlgHierarchyInfoForAllLevel& algHierarchyInfo)
+HcclResult TopoMatchMultilevel::MatchTopo(
+    const HcclComm comm, TopoInfoWithNetLayerDetails* topoInfo, AlgHierarchyInfoForAllLevel& algHierarchyInfo)
 {
 #ifndef AICPU_COMPILE
-    CHK_PRT_RET(topoInfo->topoLevelNums == 0 || topoInfo->topoLevelNums > COMM_LAYER_SIZE_2,
-        HCCL_ERROR("[CalcTopoLevelNums] topoLevelNum[%u] is invalid.",
-            topoInfo->topoLevelNums),
-        HCCL_E_INTERNAL);
+    CHK_PRT_RET(
+        topoInfo->topoLevelNums == 0 || topoInfo->topoLevelNums > COMM_LAYER_SIZE_2,
+        HCCL_ERROR("[CalcTopoLevelNums] topoLevelNum[%u] is invalid.", topoInfo->topoLevelNums), HCCL_E_INTERNAL);
 
     uint32_t myRank;
     CHK_RET(HcclGetRankId(comm, &myRank));
-    #ifdef MACRO_DEV_TYPE_NEW
-    CHK_PRT_RET(topoInfo->deviceType != DevType::DEV_TYPE_950,
-    #else
-    CHK_PRT_RET(topoInfo->deviceType != DevType::DEV_TYPE_910_95,
-    #endif
-        HCCL_ERROR("[CollAlgFactory] [TopoMatchMultilevel] Rank [%d], deviceType not supported yet.",
-            myRank),
+#ifdef MACRO_DEV_TYPE_NEW
+    CHK_PRT_RET(
+        topoInfo->deviceType != DevType::DEV_TYPE_950,
+#else
+    CHK_PRT_RET(
+        topoInfo->deviceType != DevType::DEV_TYPE_910_95,
+#endif
+        HCCL_ERROR("[CollAlgFactory] [TopoMatchMultilevel] Rank [%d], deviceType not supported yet.", myRank),
         HcclResult::HCCL_E_PARA);
     // 1.获取并校验通信层数
-    uint32_t *netLayers;
+    uint32_t* netLayers;
     uint32_t layerNum = 0;
     CHK_RET(HcclRankGraphGetLayers(comm, &netLayers, &layerNum));
 
-    HCCL_DEBUG("[CollAlgFactory] [TopoMatchMultilevel] Rank [%d], netLayers[%u][%s]",
-                myRank, layerNum, PrintCArray<uint32_t>(netLayers, layerNum).c_str());
+    HCCL_DEBUG(
+        "[CollAlgFactory] [TopoMatchMultilevel] Rank [%d], netLayers[%u][%s]", myRank, layerNum,
+        PrintCArray<uint32_t>(netLayers, layerNum).c_str());
 
     // 2. 获取每个pod上rank数量以及pod数量
-    uint32_t *instSizeList;
+    uint32_t* instSizeList;
     uint32_t listSize = 0;
     CHK_RET(HcclRankGraphGetInstSizeListByLayer(comm, 0, &instSizeList, &listSize));
-    HCCL_INFO("[CollAlgFactory] [TopoMatchMultilevel] Rank [%d], [%u] pods ,ranksize on each pod :[%s]",
-        myRank,
-        listSize,
+    HCCL_INFO(
+        "[CollAlgFactory] [TopoMatchMultilevel] Rank [%d], [%u] pods ,ranksize on each pod :[%s]", myRank, listSize,
         PrintCArray<uint32_t>(instSizeList, listSize).c_str());
     bool isSymmetric = CheckVecElementAllSame(instSizeList, listSize);
 
     // 非对称仅支持 Mesh1D，提前校验 topoInstNum
     if (!isSymmetric) {
-        uint32_t *topoInsts;
+        uint32_t* topoInsts;
         uint32_t topoInstNum = 0;
         CHK_RET(HcclRankGraphGetTopoInstsByLayer(comm, 0, &topoInsts, &topoInstNum));
-        CHK_PRT_RET(topoInstNum != NET_INST_NUM_1,
-            HCCL_ERROR("[TopoMatchMultilevel][MatchTopo] Asymmetric mode only supports Mesh1D, "
-                "but topoInstNum [%u]", topoInstNum),
+        CHK_PRT_RET(
+            topoInstNum != NET_INST_NUM_1,
+            HCCL_ERROR(
+                "[TopoMatchMultilevel][MatchTopo] Asymmetric mode only supports Mesh1D, "
+                "but topoInstNum [%u]",
+                topoInstNum),
             HcclResult::HCCL_E_NOT_SUPPORT);
     }
 
@@ -237,4 +237,4 @@ HcclResult TopoMatchMultilevel::MatchTopo(const HcclComm comm, TopoInfoWithNetLa
     return HcclResult::HCCL_SUCCESS;
 }
 
-}  // namespace mc2_ops_hccl
+} // namespace mc2_ops_hccl

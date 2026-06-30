@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef HCCL_ALLOC_CTX_RES_H
 #define HCCL_ALLOC_CTX_RES_H
 
@@ -27,13 +27,13 @@ using namespace mc2_ops_hccl;
 
 // Forward declarations for types that might not be fully defined
 namespace mc2_ops_hccl {
-    struct OpParam;
-    struct TopoInfoWithNetLayerDetails;
-    struct AlgResourceCtxSerializable;
-    class ExecuteSelector;
-    class InsCollAlgBase;
-    class CollAlgExecRegistryV2;
-}
+struct OpParam;
+struct TopoInfoWithNetLayerDetails;
+struct AlgResourceCtxSerializable;
+class ExecuteSelector;
+class InsCollAlgBase;
+class CollAlgExecRegistryV2;
+} // namespace mc2_ops_hccl
 
 constexpr uint32_t MC2_TILING_VERSION = 2U;
 constexpr uint32_t MAX_HCOM_NUM = 3U;
@@ -43,11 +43,11 @@ constexpr uint32_t MAX_CC_TILING_NUM = 8U;
 
 struct Mc2ServerCfg {
     uint32_t version;
-    uint8_t  debugMode;
-    uint8_t  sendArgIndex;
-    uint8_t  recvArgIndex;
-    uint8_t  commOutArgIndex;
-    uint8_t  reserved[8];
+    uint8_t debugMode;
+    uint8_t sendArgIndex;
+    uint8_t recvArgIndex;
+    uint8_t commOutArgIndex;
+    uint8_t reserved[8];
 };
 
 struct Mc2InitTilingInner {
@@ -94,28 +94,31 @@ struct OpResCtx {
 };
 
 HcclResult CheckInputParam(const HcclComm comm, const void* mc2Tiling, const aclrtStream stream)
-{   
+{
     // 检查comm是否为空指针
-    RPT_INPUT_ERR(comm == nullptr, "EI0003", std::vector<std::string>({"ccl_op", "value", "parameter", "expect"}),\
+    RPT_INPUT_ERR(
+        comm == nullptr, "EI0003", std::vector<std::string>({"ccl_op", "value", "parameter", "expect"}),
         std::vector<std::string>({"HcclAllocComResourceByTiling", "nullptr", "comm", "non-null pointer"}));
     CHK_PTR_NULL(comm);
-    
+
     // 检查sendBuf是否为空指针
-    RPT_INPUT_ERR(mc2Tiling == nullptr, "EI0003", std::vector<std::string>({"ccl_op", "value", "parameter", "expect"}),\
+    RPT_INPUT_ERR(
+        mc2Tiling == nullptr, "EI0003", std::vector<std::string>({"ccl_op", "value", "parameter", "expect"}),
         std::vector<std::string>({"HcclAllocComResourceByTiling", "nullptr", "mc2Tiling", "non-null pointer"}));
     CHK_PTR_NULL(mc2Tiling);
-    
+
     // 检查stream是否为空指针
-    RPT_INPUT_ERR(stream == nullptr, "EI0003", std::vector<std::string>({"ccl_op", "value", "parameter", "expect"}),\
+    RPT_INPUT_ERR(
+        stream == nullptr, "EI0003", std::vector<std::string>({"ccl_op", "value", "parameter", "expect"}),
         std::vector<std::string>({"HcclAllocComResourceByTiling", "nullptr", "stream", "non-null pointer"}));
     CHK_PTR_NULL(stream);
 
     return HCCL_SUCCESS;
 }
 
-HcclResult HcclGetTilingList(const void *mc2Tiling, const void *p[], uint32_t &cnt)
+HcclResult HcclGetTilingList(const void* mc2Tiling, const void* p[], uint32_t& cnt)
 {
-    const u32 *versionPtr = static_cast<const u32 *>(mc2Tiling);
+    const u32* versionPtr = static_cast<const u32*>(mc2Tiling);
     const u32 version = *(versionPtr++);
     CHK_PRT_RET(version < MC2_TILING_VERSION, HCCL_ERROR("Invalid tiling version %u.", version), HCCL_E_PARA);
 
@@ -124,13 +127,13 @@ HcclResult HcclGetTilingList(const void *mc2Tiling, const void *p[], uint32_t &c
 
     u64 serverCfgAddr = reinterpret_cast<u64>(versionPtr) + sizeof(Mc2ServerCfg);
     for (uint32_t i = 0U; i < MAX_CC_TILING_NUM; ++i) {
-        p[i] = reinterpret_cast<const void *>(reinterpret_cast<const u8 *>(mc2Tiling) + versionPtr[i]);
+        p[i] = reinterpret_cast<const void*>(reinterpret_cast<const u8*>(mc2Tiling) + versionPtr[i]);
     }
     HCCL_INFO("HcclGetTilingList version[%u] cnt[%u]", version, cnt);
     return HCCL_SUCCESS;
 }
 
-HcclResult CheckIsReduce(const Mc2CcTilingInner *ccTiling, bool *isReduce)
+HcclResult CheckIsReduce(const Mc2CcTilingInner* ccTiling, bool* isReduce)
 {
     if (ccTiling->opType == HcclCMDType::HCCL_CMD_REDUCE_SCATTER || ccTiling->opType == HcclCMDType::HCCL_CMD_REDUCE ||
         ccTiling->opType == HcclCMDType::HCCL_CMD_ALLREDUCE) {
@@ -141,10 +144,10 @@ HcclResult CheckIsReduce(const Mc2CcTilingInner *ccTiling, bool *isReduce)
     return HCCL_SUCCESS;
 }
 
-HcclResult CheckCommEngine(const void *ccTilingList[], uint32_t tilingNum)
+HcclResult CheckCommEngine(const void* ccTilingList[], uint32_t tilingNum)
 {
     for (uint32_t i = 0U; i < tilingNum; ++i) {
-        const Mc2CcTilingInner *ccTiling = static_cast<const Mc2CcTilingInner *>(ccTilingList[i]);
+        const Mc2CcTilingInner* ccTiling = static_cast<const Mc2CcTilingInner*>(ccTilingList[i]);
         if (ccTiling->commEngine != static_cast<uint8_t>(COMM_ENGINE_AICPU)) {
             HCCL_ERROR("Invalid commEngine %u.", ccTiling->commEngine);
             return HCCL_E_NOT_SUPPORT;
@@ -153,11 +156,13 @@ HcclResult CheckCommEngine(const void *ccTilingList[], uint32_t tilingNum)
     return HCCL_SUCCESS;
 }
 
-HcclResult HcclAllocOpResCtx(HcclComm comm, const std::string &ctxTag, const std::vector<OpParam> &opParamVec, void* mc2Tiling, const void *ccTilingList[], void** opResCtxPtr)
+HcclResult HcclAllocOpResCtx(
+    HcclComm comm, const std::string& ctxTag, const std::vector<OpParam>& opParamVec, void* mc2Tiling,
+    const void* ccTilingList[], void** opResCtxPtr)
 {
     CHK_PTR_NULL(opResCtxPtr);
     OpResCtx resCtx{};
-    Mc2InitTilingInner *initTiling = static_cast<Mc2InitTilingInner *>(mc2Tiling);
+    Mc2InitTilingInner* initTiling = static_cast<Mc2InitTilingInner*>(mc2Tiling);
 
     // 1. 申请存放OpParam的内存空间
     std::vector<uint64_t> opParamAddr(opParamVec.size());
@@ -165,19 +170,26 @@ HcclResult HcclAllocOpResCtx(HcclComm comm, const std::string &ctxTag, const std
     for (uint32_t i = 0U; i < opParamVec.size(); ++i) {
         // 申请硬件内存
         std::string tagParam = ctxTag + "_" + std::to_string(i);
-        void *opParamPtr = nullptr;
-        const Mc2CcTilingInner *ccTiling = static_cast<const Mc2CcTilingInner *>(ccTilingList[i]);
-        if (HcclEngineCtxGet(comm, tagParam.c_str(), static_cast<CommEngine>(ccTiling->commEngine), &opParamPtr, &opParamSize) == HCCL_SUCCESS) {
-            HCCL_INFO("HcclEngineCtxGet success, tagParam[%s], opParamAddr[%p], opParamSize[%u]", tagParam.c_str(), opParamPtr, opParamSize);
+        void* opParamPtr = nullptr;
+        const Mc2CcTilingInner* ccTiling = static_cast<const Mc2CcTilingInner*>(ccTilingList[i]);
+        if (HcclEngineCtxGet(
+                comm, tagParam.c_str(), static_cast<CommEngine>(ccTiling->commEngine), &opParamPtr, &opParamSize) ==
+            HCCL_SUCCESS) {
+            HCCL_INFO(
+                "HcclEngineCtxGet success, tagParam[%s], opParamAddr[%p], opParamSize[%u]", tagParam.c_str(),
+                opParamPtr, opParamSize);
             opParamAddr[i] = reinterpret_cast<uint64_t>(opParamPtr);
         } else {
-            CHK_RET(HcclEngineCtxCreate(comm, tagParam.c_str(), static_cast<CommEngine>(ccTiling->commEngine), opParamSize, &opParamPtr));
+            CHK_RET(HcclEngineCtxCreate(
+                comm, tagParam.c_str(), static_cast<CommEngine>(ccTiling->commEngine), opParamSize, &opParamPtr));
             opParamAddr[i] = reinterpret_cast<uint64_t>(opParamPtr);
         }
-        HCCL_INFO("HcclAllocOpResCtx the %dth opParam: opParamAddr[%u], opParamSize[%u]", i, opParamAddr[i], opParamSize);
+        HCCL_INFO(
+            "HcclAllocOpResCtx the %dth opParam: opParamAddr[%u], opParamSize[%u]", i, opParamAddr[i], opParamSize);
 
         // 复制数据到硬件内存
-        aclError aclRet = aclrtMemcpy(reinterpret_cast<void *>(opParamAddr[i]), opParamSize, &opParamVec[i], opParamSize, aclrtMemcpyKind(1));
+        aclError aclRet = aclrtMemcpy(
+            reinterpret_cast<void*>(opParamAddr[i]), opParamSize, &opParamVec[i], opParamSize, aclrtMemcpyKind(1));
         CHK_RET(aclRet == ACL_ERROR_NONE ? HCCL_SUCCESS : HCCL_E_RUNTIME);
         // 记录OpParam的地址
         resCtx.algInfo[i].opParam = opParamAddr[i];
@@ -190,13 +202,18 @@ HcclResult HcclAllocOpResCtx(HcclComm comm, const std::string &ctxTag, const std
     resCtx.workSpaceSize = memSize;
     // 申请硬件内存
     std::string tagWorkSpace = ctxTag + "_workSpace";
-    void *workSpacePtr = nullptr;
-    const Mc2CcTilingInner *ccTiling0 = static_cast<const Mc2CcTilingInner *>(ccTilingList[0]);
-    if (HcclEngineCtxGet(comm, tagWorkSpace.c_str(), static_cast<CommEngine>(ccTiling0->commEngine), &workSpacePtr, &memSize) == HCCL_SUCCESS) {
-        HCCL_INFO("HcclEngineCtxGet success, tagWorkSpace[%s], workSpaceAddr[%p], workSpaceSize[%u]", tagWorkSpace.c_str(), workSpacePtr, memSize);
+    void* workSpacePtr = nullptr;
+    const Mc2CcTilingInner* ccTiling0 = static_cast<const Mc2CcTilingInner*>(ccTilingList[0]);
+    if (HcclEngineCtxGet(
+            comm, tagWorkSpace.c_str(), static_cast<CommEngine>(ccTiling0->commEngine), &workSpacePtr, &memSize) ==
+        HCCL_SUCCESS) {
+        HCCL_INFO(
+            "HcclEngineCtxGet success, tagWorkSpace[%s], workSpaceAddr[%p], workSpaceSize[%u]", tagWorkSpace.c_str(),
+            workSpacePtr, memSize);
         resCtx.workSpace = reinterpret_cast<uint64_t>(workSpacePtr);
     } else {
-        CHK_RET(HcclEngineCtxCreate(comm, tagWorkSpace.c_str(), static_cast<CommEngine>(ccTiling0->commEngine), memSize, &workSpacePtr));
+        CHK_RET(HcclEngineCtxCreate(
+            comm, tagWorkSpace.c_str(), static_cast<CommEngine>(ccTiling0->commEngine), memSize, &workSpacePtr));
         resCtx.workSpace = reinterpret_cast<uint64_t>(workSpacePtr);
     }
     HCCL_INFO("HcclAllocOpResCtx the workSpace: workSpaceAddr[%u], workSpaceSize[%u]", resCtx.workSpace, memSize);
@@ -212,10 +229,15 @@ HcclResult HcclAllocOpResCtx(HcclComm comm, const std::string &ctxTag, const std
     // 4. 申请OpResCtx的内存空间
     std::string tagOpResCtx = ctxTag + "_opResCtx";
     uint64_t opResCtxSize = sizeof(OpResCtx);
-    if (HcclEngineCtxGet(comm, tagOpResCtx.c_str(), static_cast<CommEngine>(ccTiling0->commEngine), opResCtxPtr, &opResCtxSize) == HCCL_SUCCESS) {
-        HCCL_INFO("HcclEngineCtxGet success, tagOpResCtx[%s], opResCtxAddr[%p], opResCtxSize[%u]", tagOpResCtx.c_str(), opResCtxPtr, opResCtxSize);
+    if (HcclEngineCtxGet(
+            comm, tagOpResCtx.c_str(), static_cast<CommEngine>(ccTiling0->commEngine), opResCtxPtr, &opResCtxSize) ==
+        HCCL_SUCCESS) {
+        HCCL_INFO(
+            "HcclEngineCtxGet success, tagOpResCtx[%s], opResCtxAddr[%p], opResCtxSize[%u]", tagOpResCtx.c_str(),
+            opResCtxPtr, opResCtxSize);
     } else {
-        CHK_RET(HcclEngineCtxCreate(comm, tagOpResCtx.c_str(), static_cast<CommEngine>(ccTiling0->commEngine), opResCtxSize, opResCtxPtr));
+        CHK_RET(HcclEngineCtxCreate(
+            comm, tagOpResCtx.c_str(), static_cast<CommEngine>(ccTiling0->commEngine), opResCtxSize, opResCtxPtr));
     }
 
     HCCL_INFO("HcclAllocOpResCtx the opResCtx: opResCtxAddr[%u], opResCtxSize[%u]", opResCtxPtr, opResCtxSize);
@@ -227,8 +249,9 @@ HcclResult HcclAllocOpResCtx(HcclComm comm, const std::string &ctxTag, const std
     return HCCL_SUCCESS;
 }
 
-//AllToAll适配AllToAllV
-HcclResult ConvertAlltoAllParam(const u64 recvCount, const u32 rankSize, std::vector<u64> &sdispls, std::vector<u64> &rdispls)
+// AllToAll适配AllToAllV
+HcclResult ConvertAlltoAllParam(
+    const u64 recvCount, const u32 rankSize, std::vector<u64>& sdispls, std::vector<u64>& rdispls)
 {
     u64 dataCountOffset = 0;
     for (u64 i = 0; i < rankSize; i++) {
@@ -239,7 +262,7 @@ HcclResult ConvertAlltoAllParam(const u64 recvCount, const u32 rankSize, std::ve
     return HCCL_SUCCESS;
 }
 
-HcclResult PrepareOpsCommParam(const std::string &tag, OpParam &param)
+HcclResult PrepareOpsCommParam(const std::string& tag, OpParam& param)
 {
     param.opMode = OpMode::OPBASE;
     DevType deviceType = DevType::DEV_TYPE_COUNT;
@@ -262,11 +285,11 @@ HcclResult PrepareOpsCommParam(const std::string &tag, OpParam &param)
     return HCCL_SUCCESS;
 }
 
-HcclResult PrintOpsCommParam(OpParam &param)
+HcclResult PrintOpsCommParam(OpParam& param)
 {
-    HCCL_INFO("commName: %s",param.commName);
-    HCCL_INFO("tag:%s",param.tag);
-    HCCL_INFO("stream: %p",param.stream);
+    HCCL_INFO("commName: %s", param.commName);
+    HCCL_INFO("tag:%s", param.tag);
+    HCCL_INFO("stream: %p", param.stream);
     HCCL_INFO("inputPtr %p", param.inputPtr);
     HCCL_INFO("outputPtr %p", param.outputPtr);
     HCCL_INFO("inputSize %lu", param.inputSize);
@@ -276,11 +299,12 @@ HcclResult PrintOpsCommParam(OpParam &param)
     return HCCL_SUCCESS;
 }
 
-HcclResult PrepareParamForAllGather(HcclComm comm, const std::string &tag, const Mc2CcTilingInner *ccTiling, OpParam &param)
+HcclResult PrepareParamForAllGather(
+    HcclComm comm, const std::string& tag, const Mc2CcTilingInner* ccTiling, OpParam& param)
 {
     HCCL_INFO("PrepareParamForAllGather, ccTiling[%p]", ccTiling);
     u32 userRankSize;
-    CHK_RET(HcclGetRankSize(comm, &userRankSize));                      // 加上，后面计算outputSize可能使用
+    CHK_RET(HcclGetRankSize(comm, &userRankSize)); // 加上，后面计算outputSize可能使用
 
     HcclResult ret = PrepareOpsCommParam(tag, param);
     if (ret != HCCL_SUCCESS) {
@@ -295,17 +319,18 @@ HcclResult PrepareParamForAllGather(HcclComm comm, const std::string &tag, const
     CHK_RET(PrintOpsCommParam(param));
     HCCL_INFO("opType %u", static_cast<uint32_t>(param.opType));
     HCCL_INFO("DataDes.dataType %u", static_cast<uint32_t>(param.DataDes.dataType));
-    HCCL_INFO("DataDes.count %lu",param.DataDes.count);
+    HCCL_INFO("DataDes.count %lu", param.DataDes.count);
     HCCL_INFO("Execute PrepareParamForAllGather success.");
     return HCCL_SUCCESS;
 }
 
-HcclResult PrepareParamForAllReduce(HcclComm comm, const std::string &tag, const Mc2CcTilingInner *ccTiling, OpParam &param)
+HcclResult PrepareParamForAllReduce(
+    HcclComm comm, const std::string& tag, const Mc2CcTilingInner* ccTiling, OpParam& param)
 {
     HCCL_INFO("PrepareParamForAllReduce, ccTiling[%p]", ccTiling);
     u32 userRankSize;
-    CHK_RET(HcclGetRankSize(comm, &userRankSize));                      // 加上，后面计算outputSize可能使用
-   
+    CHK_RET(HcclGetRankSize(comm, &userRankSize)); // 加上，后面计算outputSize可能使用
+
     HcclResult ret = PrepareOpsCommParam(tag, param);
     if (ret != HCCL_SUCCESS) {
         HCCL_ERROR("failed to fill OpsCommParam");
@@ -321,17 +346,18 @@ HcclResult PrepareParamForAllReduce(HcclComm comm, const std::string &tag, const
     HCCL_INFO("opType %u", static_cast<uint32_t>(param.opType));
     HCCL_INFO("reduceType %u", static_cast<uint32_t>(param.reduceType));
     HCCL_INFO("DataDes.dataType %u", static_cast<uint32_t>(param.DataDes.dataType));
-    HCCL_INFO("DataDes.count %lu",param.DataDes.count);
+    HCCL_INFO("DataDes.count %lu", param.DataDes.count);
     HCCL_INFO("Execute PrepareParamForAllReduce success.");
     return HCCL_SUCCESS;
 }
 
-HcclResult PrepareParamForReduceScatter(HcclComm comm, const std::string &tag, const Mc2CcTilingInner *ccTiling, OpParam &param)
+HcclResult PrepareParamForReduceScatter(
+    HcclComm comm, const std::string& tag, const Mc2CcTilingInner* ccTiling, OpParam& param)
 {
     HCCL_INFO("PrepareParamForReduceScatter, ccTiling[%p]", ccTiling);
     u32 userRankSize;
-    CHK_RET(HcclGetRankSize(comm, &userRankSize));                      // 加上，后面计算outputSize可能使用
-    
+    CHK_RET(HcclGetRankSize(comm, &userRankSize)); // 加上，后面计算outputSize可能使用
+
     HcclResult ret = PrepareOpsCommParam(tag, param);
     if (ret != HCCL_SUCCESS) {
         HCCL_ERROR("failed to fill OpsCommParam");
@@ -339,7 +365,7 @@ HcclResult PrepareParamForReduceScatter(HcclComm comm, const std::string &tag, c
 
     param.opType = HcclCMDType::HCCL_CMD_REDUCE_SCATTER;
     param.reduceType = static_cast<HcclReduceOp>(ccTiling->reduceType);
-    param.DataDes.dataType = static_cast<HcclDataType>(ccTiling->srcDataType); 
+    param.DataDes.dataType = static_cast<HcclDataType>(ccTiling->srcDataType);
     param.DataDes.count = 0;
 
     HCCL_INFO("Print PrepareParamForReduceScatter.");
@@ -347,17 +373,18 @@ HcclResult PrepareParamForReduceScatter(HcclComm comm, const std::string &tag, c
     HCCL_INFO("opType %u", static_cast<uint32_t>(param.opType));
     HCCL_INFO("reduceType %u", static_cast<uint32_t>(param.reduceType));
     HCCL_INFO("DataDes.dataType %u", static_cast<uint32_t>(param.DataDes.dataType));
-    HCCL_INFO("DataDes.count %lu",param.DataDes.count);
+    HCCL_INFO("DataDes.count %lu", param.DataDes.count);
     HCCL_INFO("Execute PrepareParamForReduceScatter success.");
     return HCCL_SUCCESS;
 }
 
-HcclResult PrepareParamForAlltoAll(HcclComm comm, const std::string &tag, const Mc2CcTilingInner *ccTiling, OpParam &param)
+HcclResult PrepareParamForAlltoAll(
+    HcclComm comm, const std::string& tag, const Mc2CcTilingInner* ccTiling, OpParam& param)
 {
     HCCL_INFO("PrepareParamForAlltoAll, ccTiling[%p]", ccTiling);
     u32 userRankSize;
-    CHK_RET(HcclGetRankSize(comm, &userRankSize));                      
-    
+    CHK_RET(HcclGetRankSize(comm, &userRankSize));
+
     HcclResult ret = PrepareOpsCommParam(tag, param);
     if (ret != HCCL_SUCCESS) {
         HCCL_ERROR("failed to fill OpsCommParam");
@@ -383,12 +410,13 @@ HcclResult PrepareParamForAlltoAll(HcclComm comm, const std::string &tag, const 
     return HCCL_SUCCESS;
 }
 
-HcclResult PrepareParamForAlltoAllV(HcclComm comm, const std::string &tag, const Mc2CcTilingInner *ccTiling, OpParam &param)
+HcclResult PrepareParamForAlltoAllV(
+    HcclComm comm, const std::string& tag, const Mc2CcTilingInner* ccTiling, OpParam& param)
 {
     HCCL_INFO("PrepareParamForAlltoAllV, ccTiling[%p]", ccTiling);
     u32 userRankSize;
-    CHK_RET(HcclGetRankSize(comm, &userRankSize));                      
-    
+    CHK_RET(HcclGetRankSize(comm, &userRankSize));
+
     HcclResult ret = PrepareOpsCommParam(tag, param);
     if (ret != HCCL_SUCCESS) {
         HCCL_ERROR("failed to fill OpsCommParam");
@@ -413,7 +441,8 @@ HcclResult PrepareParamForAlltoAllV(HcclComm comm, const std::string &tag, const
     return HCCL_SUCCESS;
 }
 
-typedef HcclResult (*OpParamPrepareFunc)(HcclComm comm, const std::string &tag, const Mc2CcTilingInner *ccTiling, OpParam &param);
+typedef HcclResult (*OpParamPrepareFunc)(
+    HcclComm comm, const std::string& tag, const Mc2CcTilingInner* ccTiling, OpParam& param);
 
 std::unordered_map<HcclCMDType, OpParamPrepareFunc> opParamPrepareFuncMap = {
     {HcclCMDType::HCCL_CMD_ALLGATHER, PrepareParamForAllGather},
@@ -423,7 +452,7 @@ std::unordered_map<HcclCMDType, OpParamPrepareFunc> opParamPrepareFuncMap = {
     {HcclCMDType::HCCL_CMD_ALLTOALLV, PrepareParamForAlltoAllV},
 };
 
-HcclResult PrepareOpParams(HcclComm comm,const std::string &tag, const Mc2CcTilingInner *ccTiling, OpParam &opParam)
+HcclResult PrepareOpParams(HcclComm comm, const std::string& tag, const Mc2CcTilingInner* ccTiling, OpParam& opParam)
 {
     auto it = opParamPrepareFuncMap.find(static_cast<HcclCMDType>(ccTiling->opType));
     if (it != opParamPrepareFuncMap.end()) {
@@ -433,8 +462,8 @@ HcclResult PrepareOpParams(HcclComm comm,const std::string &tag, const Mc2CcTili
     return HCCL_E_INTERNAL;
 }
 
-HcclResult InitOpParamByTiling(HcclComm comm, void *stream, const std::string &tag,
-    const Mc2CcTilingInner *ccTiling, OpParam &opParam)
+HcclResult InitOpParamByTiling(
+    HcclComm comm, void* stream, const std::string& tag, const Mc2CcTilingInner* ccTiling, OpParam& opParam)
 {
     opParam.opType = static_cast<HcclCMDType>(ccTiling->opType);
     opParam.stream = reinterpret_cast<aclrtStream>(stream);
@@ -449,8 +478,8 @@ HcclResult InitOpParamByTiling(HcclComm comm, void *stream, const std::string &t
     return HCCL_SUCCESS;
 }
 
-HcclResult SelectAlgAndPrepareEngine(HcclComm comm, OpParam &opParam, std::string &algName,
-    std::unique_ptr<TopoInfoWithNetLayerDetails> &topoInfo)
+HcclResult SelectAlgAndPrepareEngine(
+    HcclComm comm, OpParam& opParam, std::string& algName, std::unique_ptr<TopoInfoWithNetLayerDetails>& topoInfo)
 {
     opParam.hcclComm = comm;
     CHK_RET(HcclGetOpExpansionMode(comm, opParam));
@@ -466,7 +495,8 @@ HcclResult SelectAlgAndPrepareEngine(HcclComm comm, OpParam &opParam, std::strin
 
     CHK_RET(SetCommEngine(opParam));
     if (GetExternalInputHcclAivOnlyMode() && opParam.engine != COMM_ENGINE_AIV) {
-        HCCL_ERROR("[HcclExecOp] opType[%d] currently do not select aiv mode, aiv only not support.",
+        HCCL_ERROR(
+            "[HcclExecOp] opType[%d] currently do not select aiv mode, aiv only not support.",
             static_cast<int>(opParam.opType));
         return HCCL_E_NOT_SUPPORT;
     }
@@ -478,7 +508,7 @@ HcclResult SelectAlgAndPrepareEngine(HcclComm comm, OpParam &opParam, std::strin
     return HCCL_SUCCESS;
 }
 
-HcclResult HandleSingleRankAndCommMode(HcclComm comm, OpParam &opParam, bool &skipGetRes)
+HcclResult HandleSingleRankAndCommMode(HcclComm comm, OpParam& opParam, bool& skipGetRes)
 {
     uint32_t userRankSize = 0;
     CHK_RET(HcclGetRankSize(comm, &userRankSize));
@@ -500,8 +530,9 @@ HcclResult HandleSingleRankAndCommMode(HcclComm comm, OpParam &opParam, bool &sk
     return HCCL_SUCCESS;
 }
 
-HcclResult GetOpParamResCtx(HcclComm comm, const std::string &algName, OpParam &opParam,
-    TopoInfoWithNetLayerDetails *topoInfo, void **resCtxOut)
+HcclResult GetOpParamResCtx(
+    HcclComm comm, const std::string& algName, OpParam& opParam, TopoInfoWithNetLayerDetails* topoInfo,
+    void** resCtxOut)
 {
     bool useCannResCtx = UseCannBridge(opParam);
 
@@ -511,8 +542,8 @@ HcclResult GetOpParamResCtx(HcclComm comm, const std::string &algName, OpParam &
     } else {
         executor = CollAlgExecRegistryV2::Instance().GetAlgExec(opParam.opType, algName);
     }
-    CHK_PRT_RET(executor.get() == nullptr,
-        HCCL_ERROR("Fail to find executor for algName[%s]", algName.c_str()), HCCL_E_PARA);
+    CHK_PRT_RET(
+        executor.get() == nullptr, HCCL_ERROR("Fail to find executor for algName[%s]", algName.c_str()), HCCL_E_PARA);
 
     std::unique_ptr<AlgResourceCtxSerializable> resCtxHost = std::make_unique<AlgResourceCtxSerializable>();
     bool isResourceReused = false;
@@ -528,7 +559,8 @@ HcclResult GetOpParamResCtx(HcclComm comm, const std::string &algName, OpParam &
     return HCCL_SUCCESS;
 }
 
-HcclResult GetOpParam(HcclComm comm, void* stream, const std::string &tag, const Mc2CcTilingInner *ccTiling, OpParam &opParam)
+HcclResult GetOpParam(
+    HcclComm comm, void* stream, const std::string& tag, const Mc2CcTilingInner* ccTiling, OpParam& opParam)
 {
     CHK_RET(InitOpParamByTiling(comm, stream, tag, ccTiling, opParam));
 
@@ -537,12 +569,12 @@ HcclResult GetOpParam(HcclComm comm, void* stream, const std::string &tag, const
     // 该数组持有在本函数栈帧，覆盖opParam的全部使用范围。
     constexpr uint64_t ALLTOALL_DEFAULT_SEND_COUNTS = 200ULL * 1024 * 1024;
     std::vector<uint64_t> sendCounts;
-    void *origSendCounts = opParam.all2AllVDataDes.sendCounts;
+    void* origSendCounts = opParam.all2AllVDataDes.sendCounts;
     if (opParam.opType == HcclCMDType::HCCL_CMD_ALLTOALL) {
         uint32_t userRankSize = 0;
         CHK_RET(HcclGetRankSize(comm, &userRankSize));
         sendCounts.assign(userRankSize, ALLTOALL_DEFAULT_SEND_COUNTS);
-        opParam.all2AllVDataDes.sendCounts = reinterpret_cast<void *>(sendCounts.data());
+        opParam.all2AllVDataDes.sendCounts = reinterpret_cast<void*>(sendCounts.data());
     }
 
     std::string algName;
@@ -550,8 +582,9 @@ HcclResult GetOpParam(HcclComm comm, void* stream, const std::string &tag, const
     CHK_RET(SelectAlgAndPrepareEngine(comm, opParam, algName, topoInfo));
     int result = sprintf_s(opParam.algName, sizeof(opParam.algName), "%s", algName.c_str());
     CHK_PRT_RET(result <= 0, HCCL_ERROR("failed to fill opParam.algName"), HCCL_E_INTERNAL);
-    HCCL_INFO("[GetOpParam] prepared opParam, opType[%u], algName[%s], algTag[%s].",
-        static_cast<u32>(opParam.opType), opParam.algName, opParam.algTag);
+    HCCL_INFO(
+        "[GetOpParam] prepared opParam, opType[%u], algName[%s], algTag[%s].", static_cast<u32>(opParam.opType),
+        opParam.algName, opParam.algTag);
 
     bool skipGetRes = false;
     CHK_RET(HandleSingleRankAndCommMode(comm, opParam, skipGetRes));
@@ -560,7 +593,7 @@ HcclResult GetOpParam(HcclComm comm, void* stream, const std::string &tag, const
         return HCCL_SUCCESS;
     }
 
-    void *resCtxSequence = nullptr;
+    void* resCtxSequence = nullptr;
     CHK_RET(GetOpParamResCtx(comm, algName, opParam, topoInfo.get(), &resCtxSequence));
     // GetOpParamResCtx执行结束，sendCounts的临时host数组已不再需要，
     // 将指向恢复为原值(大概率为nullptr)，避免遗留指向本函数栈内vector的悬空指针。

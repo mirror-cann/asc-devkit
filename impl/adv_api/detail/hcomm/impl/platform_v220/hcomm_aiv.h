@@ -42,7 +42,7 @@ __aicore__ inline HcommImpl<COMM_PROTOCOL_ROCE>::HcommImpl()
 
 __aicore__ inline HcommImpl<COMM_PROTOCOL_ROCE>::~HcommImpl() {}
 
-template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const &config>
+template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const& config>
 __aicore__ inline int32_t HcommImpl<COMM_PROTOCOL_ROCE>::WriteNbi(
     ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len)
 {
@@ -53,7 +53,7 @@ __aicore__ inline int32_t HcommImpl<COMM_PROTOCOL_ROCE>::WriteNbi(
     return HCOMM_SUCCESS;
 }
 
-template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const &config>
+template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const& config>
 __aicore__ inline int32_t HcommImpl<COMM_PROTOCOL_ROCE>::ReadNbi(
     ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len)
 {
@@ -64,7 +64,7 @@ __aicore__ inline int32_t HcommImpl<COMM_PROTOCOL_ROCE>::ReadNbi(
     return HCOMM_SUCCESS;
 }
 
-template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const &config>
+template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const& config>
 __aicore__ inline int32_t HcommImpl<COMM_PROTOCOL_ROCE>::WriteWithNotifyNbi(
     ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len, GM_ADDR notifyAddr, uint64_t notifyVal)
 {
@@ -82,8 +82,7 @@ __aicore__ inline int32_t HcommImpl<COMM_PROTOCOL_ROCE>::WriteWithNotifyNbi(
     return HCOMM_FAILED;
 }
 
-__aicore__ inline void HcommImpl<COMM_PROTOCOL_ROCE>::doorBell(
-    __gm__ ChannelEntity* channel, uint64_t curHead)
+__aicore__ inline void HcommImpl<COMM_PROTOCOL_ROCE>::doorBell(__gm__ ChannelEntity* channel, uint64_t curHead)
 {
     uint64_t doorBellInfo = 0;
     doorBellInfo |= channel->sqContextAddr[0].contextInfo.roceSq.qpn; // [0:23] DB_TAG (qp_num)
@@ -145,8 +144,7 @@ __aicore__ inline void HcommImpl<COMM_PROTOCOL_ROCE>::PostSend(
     *(__gm__ uint32_t*)(wqeAddr + 8) = 0;          // immtdata is always 0 till we provide poll CQ flow in AIV
     *(__gm__ uint32_t*)(wqeAddr + 12) = 1U << 24U; // [120:127] num_sge = 1
     *(__gm__ uint32_t*)(wqeAddr + 16) = 0;         // [128:151] start_sge_idx = 0;
-    *(__gm__ uint32_t*)(wqeAddr + 20) =
-        channel->remoteBufferAddr[0].bufferInfo.rma.protectionInfo.memInfo.roce.rkey;
+    *(__gm__ uint32_t*)(wqeAddr + 20) = channel->remoteBufferAddr[0].bufferInfo.rma.protectionInfo.memInfo.roce.rkey;
     *(__gm__ uint64_t*)(wqeAddr + 24) = (uint64_t)dst; // destination VA
 
     constexpr uint32_t sgeAddrOffset = 32;

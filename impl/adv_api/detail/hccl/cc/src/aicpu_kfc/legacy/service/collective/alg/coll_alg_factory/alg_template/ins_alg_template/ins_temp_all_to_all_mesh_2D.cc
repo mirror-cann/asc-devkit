@@ -1,30 +1,27 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "log.h"
 #include "alg_data_trans_wrapper.h"
 #include "executor_utils.h"
 #include "ins_temp_all_to_all_mesh_2D.h"
 
 namespace Hccl {
-InsTempAlltoAllMesh2D::InsTempAlltoAllMesh2D(const RankId virtualRank, const u32 tempRankSize,
-                                           const std::vector<std::vector<RankId>> &tempVTopo,
-                                           const std::map<RankId, u32>            &tempVirtRankMap)
+InsTempAlltoAllMesh2D::InsTempAlltoAllMesh2D(
+    const RankId virtualRank, const u32 tempRankSize, const std::vector<std::vector<RankId>>& tempVTopo,
+    const std::map<RankId, u32>& tempVirtRankMap)
     : InsAlgTemplateBase(virtualRank, tempRankSize, tempVTopo, tempVirtRankMap)
-{
-}
+{}
 
-InsTempAlltoAllMesh2D::~InsTempAlltoAllMesh2D()
-{
-}
+InsTempAlltoAllMesh2D::~InsTempAlltoAllMesh2D() {}
 
-HcclResult InsTempAlltoAllMesh2D::CalcRes(AlgTempResReq &tempResReq)
+HcclResult InsTempAlltoAllMesh2D::CalcRes(AlgTempResReq& tempResReq)
 {
     if (tempVTopo_.size() >= TEMPVTOPOSIZE) {
         rankId_ = myRank_;
@@ -40,7 +37,9 @@ HcclResult InsTempAlltoAllMesh2D::CalcRes(AlgTempResReq &tempResReq)
         return HcclResult::HCCL_E_INTERNAL;
     }
 
-    HCCL_DEBUG("rankId_ is [%u], rankSize_ is [%u], xRankSize_ is [%u], yRankSize_ is [%u]", rankId_, rankSize_, xRankSize_, yRankSize_);
+    HCCL_DEBUG(
+        "rankId_ is [%u], rankSize_ is [%u], xRankSize_ is [%u], yRankSize_ is [%u]", rankId_, rankSize_, xRankSize_,
+        yRankSize_);
 
     tempResReq.queNum = tempVTopo_[0].size() + tempVTopo_[1].size();
     tempResReq.streamNum = tempResReq.queNum;
@@ -54,22 +53,23 @@ HcclResult InsTempAlltoAllMesh2D::CalcRes(AlgTempResReq &tempResReq)
     for (u32 dim = 0; dim < tempVTopo_.size(); dim++) {
         CHK_RET(GetAlgRank(myRank_, tempVTopo_[dim], myAlgRank));
         for (u32 queIdx = 0; queIdx < tempVTopo_[dim].size() - 1; queIdx++) {
-            u32    neighborAlgRank = (myAlgRank + 1 + queIdx) % (tempVTopo_[dim].size());
-            RankId neighborRank    = tempVTopo_[dim][neighborAlgRank];
-            HCCL_INFO("InsTempAlltoAllMesh2D::CalcRes Rank[%d], Dim[%u], NeighborRank[%d].", myRank_,
-                       dim, neighborRank);
+            u32 neighborAlgRank = (myAlgRank + 1 + queIdx) % (tempVTopo_[dim].size());
+            RankId neighborRank = tempVTopo_[dim][neighborAlgRank];
+            HCCL_INFO(
+                "InsTempAlltoAllMesh2D::CalcRes Rank[%d], Dim[%u], NeighborRank[%d].", myRank_, dim, neighborRank);
             // LinkNum
             tempResReq.links[neighborRank] = 1;
         }
     }
-    HCCL_INFO("[InsTempAlltoAllMesh2D] Calculate resource, stream number is[%u], queNotifys size is[%u]",
+    HCCL_INFO(
+        "[InsTempAlltoAllMesh2D] Calculate resource, stream number is[%u], queNotifys size is[%u]",
         tempResReq.streamNum, tempResReq.queNotifys.size());
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult InsTempAlltoAllMesh2D::RunMeshX(std::vector<u64> &xDataInAddr, std::vector<u64> &xDataOutAddr, u64 xSize,
-    BufferType srcBufferType, BufferType dstBufferType, DmaMode dmaMode, std::vector<InsQuePtr> &xInsQues,
-    const ResLinks &tempLinks) const
+HcclResult InsTempAlltoAllMesh2D::RunMeshX(
+    std::vector<u64>& xDataInAddr, std::vector<u64>& xDataOutAddr, u64 xSize, BufferType srcBufferType,
+    BufferType dstBufferType, DmaMode dmaMode, std::vector<InsQuePtr>& xInsQues, const ResLinks& tempLinks) const
 {
     HCCL_DEBUG("RunMeshX begin, xSize is [%u]", xSize);
     if (xSize == 0) {
@@ -84,7 +84,7 @@ HcclResult InsTempAlltoAllMesh2D::RunMeshX(std::vector<u64> &xDataInAddr, std::v
         u64 dstOffset = yOffset * xRankSize_ + xOffset;
 
         DataSlice txSrcSlice = DataSlice(srcBufferType, xDataInAddr[i], xSize);
-        DataSlice txDstSlice = DataSlice(dstBufferType, xDataOutAddr[dstOffset] , xSize);
+        DataSlice txDstSlice = DataSlice(dstBufferType, xDataOutAddr[dstOffset], xSize);
         txSrcSlices.push_back(txSrcSlice);
         txDstSlices.push_back(txDstSlice);
 
@@ -98,7 +98,7 @@ HcclResult InsTempAlltoAllMesh2D::RunMeshX(std::vector<u64> &xDataInAddr, std::v
     // 同一列的用一个队列
     std::vector<DataSlice> txLocalSrcSlices, txLocalDstSlices;
     for (u32 i = 0; i < rankSize_; i++) {
-        if ( i % xRankSize_ == xRankId_) {
+        if (i % xRankSize_ == xRankId_) {
             txLocalSrcSlices.push_back(txSrcSlices[i]);
             txLocalDstSlices.push_back(txDstSlices[i]);
         }
@@ -114,7 +114,7 @@ HcclResult InsTempAlltoAllMesh2D::RunMeshX(std::vector<u64> &xDataInAddr, std::v
 
         std::vector<DataSlice> txRmtSrcSlices, txRmtDstSlices, rxRmtSrcSlices, rxRmtDstSlices;
         for (u32 i = 0; i < rankSize_; i++) {
-            if ( i % xRankSize_ == queIdx) {
+            if (i % xRankSize_ == queIdx) {
                 txRmtSrcSlices.push_back(txSrcSlices[i]);
                 txRmtDstSlices.push_back(txDstSlices[i]);
                 rxRmtSrcSlices.push_back(rxSrcSlices[i]);
@@ -124,20 +124,21 @@ HcclResult InsTempAlltoAllMesh2D::RunMeshX(std::vector<u64> &xDataInAddr, std::v
         TxRxSlicesList sendRecvSlicesList({txRmtSrcSlices, txRmtDstSlices}, {rxRmtSrcSlices, rxRmtDstSlices});
 
         RankId rankSendRecv = queIdx + yRankId_ * xRankSize_;
-        const std::vector<LinkData> &linkSendRecv = tempLinks.at(rankSendRecv);
+        const std::vector<LinkData>& linkSendRecv = tempLinks.at(rankSendRecv);
         TxRxLinks sendRecvLinks(linkSendRecv[0], linkSendRecv[0]);
 
         SendRecvInfo sendRecvInfo(sendRecvLinks, sendRecvSlicesList);
-        CHK_PRT_RET(SendRecv(sendRecvInfo, xInsQues[queIdx], 0, true, dmaMode),
+        CHK_PRT_RET(
+            SendRecv(sendRecvInfo, xInsQues[queIdx], 0, true, dmaMode),
             HCCL_ERROR("[InsTempAlltoAllMesh2D] RunMeshX SendRecv failed"), HcclResult::HCCL_E_INTERNAL);
     }
 
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult InsTempAlltoAllMesh2D::RunMeshY(std::vector<u64> &yDataInAddr, std::vector<u64> &yDataOutAddr, u64 ySize,
-    BufferType srcBufferType, BufferType dstBufferType, DmaMode dmaMode, std::vector<InsQuePtr> &yInsQues,
-    const ResLinks &tempLinks) const
+HcclResult InsTempAlltoAllMesh2D::RunMeshY(
+    std::vector<u64>& yDataInAddr, std::vector<u64>& yDataOutAddr, u64 ySize, BufferType srcBufferType,
+    BufferType dstBufferType, DmaMode dmaMode, std::vector<InsQuePtr>& yInsQues, const ResLinks& tempLinks) const
 {
     HCCL_DEBUG("RunMeshX begin, ySize is [%u]", ySize);
     if (ySize == 0) {
@@ -167,7 +168,7 @@ HcclResult InsTempAlltoAllMesh2D::RunMeshY(std::vector<u64> &yDataInAddr, std::v
     // 同一行的用一个队列
     std::vector<DataSlice> txLocalSrcSlices, txLocalDstSlices;
     for (u32 i = 0; i < rankSize_; i++) {
-        if ( i / xRankSize_ == yRankId_) {
+        if (i / xRankSize_ == yRankId_) {
             txLocalSrcSlices.push_back(txSrcSlices[i]);
             txLocalDstSlices.push_back(txDstSlices[i]);
         }
@@ -183,7 +184,7 @@ HcclResult InsTempAlltoAllMesh2D::RunMeshY(std::vector<u64> &yDataInAddr, std::v
 
         std::vector<DataSlice> txRmtSrcSlices, txRmtDstSlices, rxRmtSrcSlices, rxRmtDstSlices;
         for (u32 i = 0; i < rankSize_; i++) {
-            if ( i / xRankSize_ == queIdx) {
+            if (i / xRankSize_ == queIdx) {
                 txRmtSrcSlices.push_back(txSrcSlices[i]);
                 txRmtDstSlices.push_back(txDstSlices[i]);
                 rxRmtSrcSlices.push_back(rxSrcSlices[i]);
@@ -193,19 +194,21 @@ HcclResult InsTempAlltoAllMesh2D::RunMeshY(std::vector<u64> &yDataInAddr, std::v
         TxRxSlicesList sendRecvSlicesList({txRmtSrcSlices, txRmtDstSlices}, {rxRmtSrcSlices, rxRmtDstSlices});
 
         RankId rankSendRecv = queIdx * xRankSize_ + xRankId_;
-        const std::vector<LinkData> &linkSendRecv = tempLinks.at(rankSendRecv);
+        const std::vector<LinkData>& linkSendRecv = tempLinks.at(rankSendRecv);
         TxRxLinks sendRecvLinks(linkSendRecv[0], linkSendRecv[0]);
 
         SendRecvInfo sendRecvInfo(sendRecvLinks, sendRecvSlicesList);
-        CHK_PRT_RET(SendRecv(sendRecvInfo, yInsQues[queIdx], 0, true, dmaMode),
+        CHK_PRT_RET(
+            SendRecv(sendRecvInfo, yInsQues[queIdx], 0, true, dmaMode),
             HCCL_ERROR("[InsTempAlltoAllMesh2D] RunMeshY SendRecv failed"), HcclResult::HCCL_E_INTERNAL);
     }
 
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult InsTempAlltoAllMesh2D::GenExtIns(const TempFuncs &tempFuncs, const TemplateDataParams &tempAlgParams,
-    const ResLinks &tempLinks, std::vector<InsQuePtr> &tempInsQues) const
+HcclResult InsTempAlltoAllMesh2D::GenExtIns(
+    const TempFuncs& tempFuncs, const TemplateDataParams& tempAlgParams, const ResLinks& tempLinks,
+    std::vector<InsQuePtr>& tempInsQues) const
 {
     (void)tempFuncs;
     HCCL_INFO("[InsTempAlltoAllMesh2D] Run algorithm start: rank[%d]", myRank_);
@@ -236,10 +239,12 @@ HcclResult InsTempAlltoAllMesh2D::GenExtIns(const TempFuncs &tempFuncs, const Te
         stage1YDataOutAddr.push_back(tempAlgParams.buffInfo.scratchBuffBaseOff + tempAlgParams.sliceSize * i + xSize);
     }
 
-    CHK_RET(RunMeshX(stage1XDataInAddr, stage1XDataOutAddr, xSize, BufferType::INPUT, BufferType::SCRATCH,
-        DmaMode::PUT, xInsQues, tempLinks));
-    CHK_RET(RunMeshY(stage1YDataInAddr, stage1YDataOutAddr, ySize, BufferType::INPUT, BufferType::SCRATCH,
-        DmaMode::PUT, yInsQues, tempLinks));
+    CHK_RET(RunMeshX(
+        stage1XDataInAddr, stage1XDataOutAddr, xSize, BufferType::INPUT, BufferType::SCRATCH, DmaMode::PUT, xInsQues,
+        tempLinks));
+    CHK_RET(RunMeshY(
+        stage1YDataInAddr, stage1YDataOutAddr, ySize, BufferType::INPUT, BufferType::SCRATCH, DmaMode::PUT, yInsQues,
+        tempLinks));
 
     if (rankSize_ > 1) {
         CHK_RET(PostSyncInterQueues(tempInsQues));
@@ -255,14 +260,15 @@ HcclResult InsTempAlltoAllMesh2D::GenExtIns(const TempFuncs &tempFuncs, const Te
         stage2XDataInAddr.push_back(tempAlgParams.buffInfo.scratchBuffBaseOff + tempAlgParams.sliceSize * i);
         stage2YDataInAddr.push_back(tempAlgParams.buffInfo.scratchBuffBaseOff + tempAlgParams.sliceSize * i + xSize);
         stage2XDataOutAddr.push_back(tempAlgParams.outputSliceStride * i + tempAlgParams.buffInfo.outBuffBaseOff);
-        stage2YDataOutAddr.push_back(tempAlgParams.outputSliceStride * i + tempAlgParams.buffInfo.outBuffBaseOff + xSize);
+        stage2YDataOutAddr.push_back(
+            tempAlgParams.outputSliceStride * i + tempAlgParams.buffInfo.outBuffBaseOff + xSize);
     }
 
     BufferType outType = !tempFuncs.isBottom ? BufferType::SCRATCH : BufferType::OUTPUT;
-    CHK_RET(RunMeshY(stage2XDataInAddr, stage2XDataOutAddr, xSize, BufferType::SCRATCH, outType,
-        DmaMode::GET, yInsQues, tempLinks));
-    CHK_RET(RunMeshX(stage2YDataInAddr, stage2YDataOutAddr, ySize, BufferType::SCRATCH, outType,
-        DmaMode::GET, xInsQues, tempLinks));
+    CHK_RET(RunMeshY(
+        stage2XDataInAddr, stage2XDataOutAddr, xSize, BufferType::SCRATCH, outType, DmaMode::GET, yInsQues, tempLinks));
+    CHK_RET(RunMeshX(
+        stage2YDataInAddr, stage2YDataOutAddr, ySize, BufferType::SCRATCH, outType, DmaMode::GET, xInsQues, tempLinks));
 
     if (rankSize_ > 1) {
         CHK_RET(PostSyncInterQueues(tempInsQues));

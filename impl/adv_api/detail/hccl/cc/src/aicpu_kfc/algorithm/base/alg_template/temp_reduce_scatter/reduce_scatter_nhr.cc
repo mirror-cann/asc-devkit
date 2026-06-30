@@ -1,25 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "reduce_scatter_nhr.h"
 #include "alg_template_register.h"
 
 namespace hccl {
 
-ReduceScatterNHR::ReduceScatterNHR(const HcclDispatcher dispatcher)
-    :NHRBase(dispatcher)
-{
-}
+ReduceScatterNHR::ReduceScatterNHR(const HcclDispatcher dispatcher) : NHRBase(dispatcher) {}
 
-ReduceScatterNHR::~ReduceScatterNHR()
-{
-}
+ReduceScatterNHR::~ReduceScatterNHR() {}
 
 HcclResult ReduceScatterNHR::Prepare(u64 reduceAttrBitMap, bool needMerge)
 {
@@ -28,12 +23,13 @@ HcclResult ReduceScatterNHR::Prepare(u64 reduceAttrBitMap, bool needMerge)
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::RunAsync(const u32 rank, const u32 rankSize, const std::vector<LINK> &links)
+HcclResult ReduceScatterNHR::RunAsync(const u32 rank, const u32 rankSize, const std::vector<LINK>& links)
 {
-   // 基本的检查
+    // 基本的检查
     CHK_RET(SimpleCheck(rank, rankSize, links));
-    HCCL_INFO("[ReduceScatterNHR][RunAsync] rank[%u] ranksize[%u] inputMem[%p] outputMem[%p] count[%llu]",
-        rank, rankSize, inputMem_.ptr(), outputMem_.ptr(), count_);
+    HCCL_INFO(
+        "[ReduceScatterNHR][RunAsync] rank[%u] ranksize[%u] inputMem[%p] outputMem[%p] count[%llu]", rank, rankSize,
+        inputMem_.ptr(), outputMem_.ptr(), count_);
 
     if (isNeedMerge == true) {
         // 获取tree映射，存储到类对象的成员变量中
@@ -49,7 +45,8 @@ HcclResult ReduceScatterNHR::RunAsync(const u32 rank, const u32 rankSize, const 
     }
 
     u32 unitSize = DataUnitSize(dataType_);
-    CHK_PRT_RET(unitSize == 0, HCCL_ERROR("[ReduceScatterNHR][RunAsync] rank[%u] unit data size is zero", rank),
+    CHK_PRT_RET(
+        unitSize == 0, HCCL_ERROR("[ReduceScatterNHR][RunAsync] rank[%u] unit data size is zero", rank),
         HCCL_E_INTERNAL);
 
     std::vector<Slice> outputSlices(slices_);
@@ -68,7 +65,8 @@ HcclResult ReduceScatterNHR::RunAsync(const u32 rank, const u32 rankSize, const 
 
             outputSlices[i].size = sliceSize;
             outputSlices[i].offset = (inputMem_.size() > outputMem_.size()) ? 0 : (i * sliceSize);
-            HCCL_DEBUG("[ReduceScatterNHR][RunAsync] rank[%u], slices[%u].offset=[%llu] slices[%u].size=[%llu] "
+            HCCL_DEBUG(
+                "[ReduceScatterNHR][RunAsync] rank[%u], slices[%u].offset=[%llu] slices[%u].size=[%llu] "
                 "outputSlices[%u].offset=[%llu], outputSlices[%u].size=[%llu] count_[%llu] unitSize[%llu]",
                 rank, i, slices_[i].offset, i, slices_[i].size, i, outputSlices[i].offset, i, outputSlices[i].size,
                 count_, unitSize);
@@ -148,7 +146,7 @@ void ReduceScatterNHR::GetSliceMap(const u32 rankSize)
     return;
 }
 
-void ReduceScatterNHR::Reorder(u32 start, u32 end, u32 len, std::vector<u32> &tree, std::vector<u32> &tmp)
+void ReduceScatterNHR::Reorder(u32 start, u32 end, u32 len, std::vector<u32>& tree, std::vector<u32>& tmp)
 {
     const u32 idxTwo = 2;
 
@@ -162,60 +160,73 @@ void ReduceScatterNHR::Reorder(u32 start, u32 end, u32 len, std::vector<u32> &tr
     }
 }
 
-HcclResult ReduceScatterNHR::SimpleCheck(const u32 rank, const u32 rankSize, const std::vector<LINK> &links)
+HcclResult ReduceScatterNHR::SimpleCheck(const u32 rank, const u32 rankSize, const std::vector<LINK>& links)
 {
     // 判断stream, dispatcher是否为空
     CHK_SMART_PTR_NULL(dispatcher_);
     CHK_PTR_NULL(stream_.ptr());
 
     // 检查memory
-    CHK_PRT_RET(!outputMem_ || !inputMem_,
+    CHK_PRT_RET(
+        !outputMem_ || !inputMem_,
         HCCL_ERROR("[ReduceScatterNHR][RunAsync] rank[%u] inputmem or outputmem is null", rank), HCCL_E_PTR);
 
     // 判断links数量是否正确
-    CHK_PRT_RET(links.size() < rankSize, HCCL_ERROR("[ReduceScatterNHR][RunAsync] rank[%u] link size[%llu] is "
-        "less than rank size[%u]", rank, links.size(), rankSize), HCCL_E_INTERNAL);
+    CHK_PRT_RET(
+        links.size() < rankSize,
+        HCCL_ERROR(
+            "[ReduceScatterNHR][RunAsync] rank[%u] link size[%llu] is "
+            "less than rank size[%u]",
+            rank, links.size(), rankSize),
+        HCCL_E_INTERNAL);
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::CheckSlices(const std::vector<Slice> &checkSlices, const u32 rankSize)
+HcclResult ReduceScatterNHR::CheckSlices(const std::vector<Slice>& checkSlices, const u32 rankSize)
 {
-    CHK_PRT_RET(checkSlices.size() % rankSize != 0,
-        HCCL_ERROR("[ReduceScatterNHR][RunAsync] slices.size[%u] should be divided by rankSize[%u]",
-            checkSlices.size(), rankSize), HCCL_E_INTERNAL);
+    CHK_PRT_RET(
+        checkSlices.size() % rankSize != 0,
+        HCCL_ERROR(
+            "[ReduceScatterNHR][RunAsync] slices.size[%u] should be divided by rankSize[%u]", checkSlices.size(),
+            rankSize),
+        HCCL_E_INTERNAL);
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::InlineReducer(const LINK &linkLeft, const std::vector<ReducerMemoryInfo> &rxReduceMems)
+HcclResult ReduceScatterNHR::InlineReducer(const LINK& linkLeft, const std::vector<ReducerMemoryInfo>& rxReduceMems)
 {
     HcclResult ret = HCCL_SUCCESS;
-    void *remoteMem = nullptr;
+    void* remoteMem = nullptr;
     CHK_RET(linkLeft->GetRemoteMem(UserMemType::INPUT_MEM, &remoteMem));
     for (ReducerMemoryInfo reduceMem : rxReduceMems) {
         const u64 dataBytes = reduceMem.remoteRcvTemp.size();
-        CHK_RET(
-            HcclReduceAsync(dispatcher_, static_cast<s8 *>(remoteMem) + reduceMem.remoteMemOffset,
-            dataBytes / SIZE_TABLE[dataType_], dataType_, reductionOp_, stream_, reduceMem.localsrc.ptr(),
-            linkLeft->GetRemoteRank(), linkLeft->GetLinkType(), INLINE_REDUCE_BIT));
+        CHK_RET(HcclReduceAsync(
+            dispatcher_, static_cast<s8*>(remoteMem) + reduceMem.remoteMemOffset, dataBytes / SIZE_TABLE[dataType_],
+            dataType_, reductionOp_, stream_, reduceMem.localsrc.ptr(), linkLeft->GetRemoteRank(),
+            linkLeft->GetLinkType(), INLINE_REDUCE_BIT));
 
         if (reduceMem.localsrc != reduceMem.localdst) {
             ret = HcclD2DMemcpyAsync(dispatcher_, reduceMem.localdst, reduceMem.localsrc, stream_);
-            CHK_PRT_RET(ret != HCCL_SUCCESS,
-                HCCL_ERROR("[Reducer][Run]memcpy_async localSrc[%p] localDst[%p] failed", reduceMem.localsrc.ptr(),
-                reduceMem.localdst.ptr()), ret);
+            CHK_PRT_RET(
+                ret != HCCL_SUCCESS,
+                HCCL_ERROR(
+                    "[Reducer][Run]memcpy_async localSrc[%p] localDst[%p] failed", reduceMem.localsrc.ptr(),
+                    reduceMem.localdst.ptr()),
+                ret);
         }
     }
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::InlineReduceRx(const LINK &linkLeft, std::vector<Slice> &rxSlices, 
-    std::vector<Slice> &rxSlicestemp)
+HcclResult ReduceScatterNHR::InlineReduceRx(
+    const LINK& linkLeft, std::vector<Slice>& rxSlices, std::vector<Slice>& rxSlicestemp)
 {
     std::vector<ReducerMemoryInfo> rxReduceMems;
     for (u64 i = 0; i < rxSlices.size(); i++) {
         DeviceMem dstMem = inputMem_.range(rxSlices[i].offset, rxSlices[i].size);
         DeviceMem srcMemTemp = scratchMem_.range(rxSlicestemp[i].offset, rxSlicestemp[i].size);
-        HCCL_DEBUG("[ReduceScatterNHR][RunDestReducer] rcv offset[%llu], size[%llu] ,then reduce with "
+        HCCL_DEBUG(
+            "[ReduceScatterNHR][RunDestReducer] rcv offset[%llu], size[%llu] ,then reduce with "
             "offset[%llu] size[%llu] ",
             rxSlicestemp[i].offset, rxSlicestemp[i].size, rxSlices[i].offset, rxSlices[i].size);
         rxReduceMems.emplace_back(ReducerMemoryInfo{baseOffset_ + rxSlices[i].offset, dstMem, dstMem, srcMemTemp});
@@ -224,129 +235,153 @@ HcclResult ReduceScatterNHR::InlineReduceRx(const LINK &linkLeft, std::vector<Sl
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::InlineReduceRxLastStep(const LINK &linkLeft, InterServerAlgoStep &stepInfo,
-    const std::vector<Slice> &inputSlices, const std::vector<Slice> &outputSlices)
+HcclResult ReduceScatterNHR::InlineReduceRxLastStep(
+    const LINK& linkLeft, InterServerAlgoStep& stepInfo, const std::vector<Slice>& inputSlices,
+    const std::vector<Slice>& outputSlices)
 {
     std::vector<ReducerMemoryInfo> rxReduceMems;
-    for (u32 i = 0; i < stepInfo.nSlices; i++) {  // rst算法的reduce scatter最后一步是一个slice，暂不用合并
+    for (u32 i = 0; i < stepInfo.nSlices; i++) { // rst算法的reduce scatter最后一步是一个slice，暂不用合并
         u32 rxSliceIdx = stepInfo.rxSliceIdxs[i];
         DeviceMem dstMem = outputMem_.range(outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size);
         DeviceMem srcMem = inputMem_.range(inputSlices[rxSliceIdx].offset, inputSlices[rxSliceIdx].size);
         DeviceMem tmpMem = scratchMem_.range(outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size);
-        HCCL_DEBUG("[ReduceScatterNHR][RunReduceScatterNHR] final reduce rxSliceIdx[%u] will reduce with "
-            "inputMem_ offset[%llu] to ouput_mem_ offset[%llu] size[%llu]", 
+        HCCL_DEBUG(
+            "[ReduceScatterNHR][RunReduceScatterNHR] final reduce rxSliceIdx[%u] will reduce with "
+            "inputMem_ offset[%llu] to ouput_mem_ offset[%llu] size[%llu]",
             rxSliceIdx, inputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size);
 
         rxReduceMems.emplace_back(
-            ReducerMemoryInfo { baseOffset_ + inputSlices[rxSliceIdx].offset, srcMem, dstMem, tmpMem });
+            ReducerMemoryInfo{baseOffset_ + inputSlices[rxSliceIdx].offset, srcMem, dstMem, tmpMem});
     }
     CHK_RET(InlineReducer(linkLeft, rxReduceMems));
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::TbeReduceRx(const LINK &linkLeft, std::vector<Slice> &rxSlices,
-    std::vector<Slice> &rxSlicestemp)
+HcclResult ReduceScatterNHR::TbeReduceRx(
+    const LINK& linkLeft, std::vector<Slice>& rxSlices, std::vector<Slice>& rxSlicestemp)
 {
-    void *srcMemPtr = nullptr;
+    void* srcMemPtr = nullptr;
     CHK_RET(linkLeft->GetRemoteMem(UserMemType::INPUT_MEM, &srcMemPtr));
     std::vector<RxWithReduceMemoryInfo> rxWithReduceMems;
     for (u64 i = 0; i < rxSlices.size(); i++) {
         DeviceMem dstMem = inputMem_.range(rxSlices[i].offset, rxSlices[i].size);
-        DeviceMem srcMem(static_cast<s8 *>(srcMemPtr) + baseOffset_ + rxSlices[i].offset, rxSlices[i].size);
+        DeviceMem srcMem(static_cast<s8*>(srcMemPtr) + baseOffset_ + rxSlices[i].offset, rxSlices[i].size);
         DeviceMem dstMemScratch = scratchMem_.range(rxSlicestemp[i].offset, rxSlicestemp[i].size);
         u64 dataCount = dstMem.size() / SIZE_TABLE[dataType_];
-        HCCL_DEBUG("[ReduceScatterNHR][RunDestReducer] rcv offset[%llu], size[%llu] ,then reduce with "
+        HCCL_DEBUG(
+            "[ReduceScatterNHR][RunDestReducer] rcv offset[%llu], size[%llu] ,then reduce with "
             "offset[%llu] size[%llu] ",
             rxSlicestemp[i].offset, rxSlicestemp[i].size, rxSlices[i].offset, rxSlices[i].size);
-        CHK_RET(HcclD2DMemcpyAsync(dispatcher_, dstMemScratch, srcMem, stream_, linkLeft->GetRemoteRank(), // left的inputMem拷到本端的scratchMem
-                        linkLeft->GetLinkType()));
-        rxWithReduceMems.emplace_back(RxWithReduceMemoryInfo{ UserMemType::INPUT_MEM, baseOffset_ + rxSlices[i].offset,
-            dstMemScratch.ptr(), dstMemScratch.size(), dstMemScratch.ptr(), dstMem.ptr(), dataCount });
+        CHK_RET(HcclD2DMemcpyAsync(
+            dispatcher_, dstMemScratch, srcMem, stream_,
+            linkLeft->GetRemoteRank(), // left的inputMem拷到本端的scratchMem
+            linkLeft->GetLinkType()));
+        rxWithReduceMems.emplace_back(RxWithReduceMemoryInfo{
+            UserMemType::INPUT_MEM, baseOffset_ + rxSlices[i].offset, dstMemScratch.ptr(), dstMemScratch.size(),
+            dstMemScratch.ptr(), dstMem.ptr(), dataCount});
     }
     for (RxWithReduceMemoryInfo rxReduceMem : rxWithReduceMems) {
-        CHK_RET(HcclReduceAsync(dispatcher_, rxReduceMem.reduceSrc, rxReduceMem.reduceDataCount, dataType_, // 本端scratchMem localReduce到 本端inputMem
-            reductionOp_, stream_, rxReduceMem.reduceDst, INVALID_VALUE_RANKID, LinkType::LINK_ONCHIP,
-            reduceAttr_));
+        CHK_RET(HcclReduceAsync(
+            dispatcher_, rxReduceMem.reduceSrc, rxReduceMem.reduceDataCount,
+            dataType_, // 本端scratchMem localReduce到 本端inputMem
+            reductionOp_, stream_, rxReduceMem.reduceDst, INVALID_VALUE_RANKID, LinkType::LINK_ONCHIP, reduceAttr_));
     }
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::TbeReduceRxLastStep(const LINK &linkLeft, InterServerAlgoStep &stepInfo,
-    const std::vector<Slice> &inputSlices, const std::vector<Slice> &outputSlices)
+HcclResult ReduceScatterNHR::TbeReduceRxLastStep(
+    const LINK& linkLeft, InterServerAlgoStep& stepInfo, const std::vector<Slice>& inputSlices,
+    const std::vector<Slice>& outputSlices)
 {
-    void *srcMemPtr = nullptr;
+    void* srcMemPtr = nullptr;
     CHK_RET(linkLeft->GetRemoteMem(UserMemType::INPUT_MEM, &srcMemPtr));
     std::vector<RxWithReduceMemoryInfo> rxWithReduceMems;
-    for (u32 i = 0; i < stepInfo.nSlices; i++) {  // rst算法的reduce scatter最后一步是一个slice，暂不用合并
+    for (u32 i = 0; i < stepInfo.nSlices; i++) { // rst算法的reduce scatter最后一步是一个slice，暂不用合并
         u32 rxSliceIdx = stepInfo.rxSliceIdxs[i];
-        DeviceMem srcMemRemote(static_cast<s8 *>(srcMemPtr) + baseOffset_ + inputSlices[rxSliceIdx].offset, inputSlices[rxSliceIdx].size); // 对端inputMem
-        DeviceMem dstMem = outputMem_.range(outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size); // 本端outputMem
-        DeviceMem srcMem = inputMem_.range(inputSlices[rxSliceIdx].offset, inputSlices[rxSliceIdx].size); // 本端inputMem 
-        DeviceMem tmpMem = scratchMem_.range(outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size); // 本端scratchMem
+        DeviceMem srcMemRemote(
+            static_cast<s8*>(srcMemPtr) + baseOffset_ + inputSlices[rxSliceIdx].offset,
+            inputSlices[rxSliceIdx].size); // 对端inputMem
+        DeviceMem dstMem =
+            outputMem_.range(outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size); // 本端outputMem
+        DeviceMem srcMem =
+            inputMem_.range(inputSlices[rxSliceIdx].offset, inputSlices[rxSliceIdx].size); // 本端inputMem
+        DeviceMem tmpMem =
+            scratchMem_.range(outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size); // 本端scratchMem
         u64 dataCount = dstMem.size() / SIZE_TABLE[dataType_];
-        HCCL_DEBUG("[ReduceScatterNHR][RunReduceScatterNHR] final reduce rxSliceIdx[%u] will reduce with "
-            "inputMem_ offset[%llu] to ouput_mem_ offset[%llu] size[%llu]", rxSliceIdx,
-            inputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size);
-        CHK_RET(HcclD2DMemcpyAsync(dispatcher_, tmpMem, srcMemRemote, stream_, linkLeft->GetRemoteRank(), // left的inputMem拷到本端的scratchMem
-                        linkLeft->GetLinkType()));
+        HCCL_DEBUG(
+            "[ReduceScatterNHR][RunReduceScatterNHR] final reduce rxSliceIdx[%u] will reduce with "
+            "inputMem_ offset[%llu] to ouput_mem_ offset[%llu] size[%llu]",
+            rxSliceIdx, inputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size);
+        CHK_RET(HcclD2DMemcpyAsync(
+            dispatcher_, tmpMem, srcMemRemote, stream_, linkLeft->GetRemoteRank(), // left的inputMem拷到本端的scratchMem
+            linkLeft->GetLinkType()));
         DeviceMem reduceSrc = (srcMem == dstMem) ? tmpMem : srcMem;
-        rxWithReduceMems.emplace_back(RxWithReduceMemoryInfo{ UserMemType::INPUT_MEM, baseOffset_ + inputSlices[rxSliceIdx].offset,
-            tmpMem.ptr(), tmpMem.size(), reduceSrc.ptr(), dstMem.ptr(), dataCount });
+        rxWithReduceMems.emplace_back(RxWithReduceMemoryInfo{
+            UserMemType::INPUT_MEM, baseOffset_ + inputSlices[rxSliceIdx].offset, tmpMem.ptr(), tmpMem.size(),
+            reduceSrc.ptr(), dstMem.ptr(), dataCount});
     }
     for (RxWithReduceMemoryInfo rxReduceMem : rxWithReduceMems) {
-        CHK_RET(HcclReduceAsync(dispatcher_, rxReduceMem.reduceSrc, rxReduceMem.reduceDataCount, dataType_, // 本端inputMem localReduce到 本端outputMem(之前拷到本端scratch的数据呢？)
-            reductionOp_, stream_, rxReduceMem.reduceDst, INVALID_VALUE_RANKID, LinkType::LINK_ONCHIP,
-            reduceAttr_));
+        CHK_RET(HcclReduceAsync(
+            dispatcher_, rxReduceMem.reduceSrc, rxReduceMem.reduceDataCount,
+            dataType_, // 本端inputMem localReduce到 本端outputMem(之前拷到本端scratch的数据呢？)
+            reductionOp_, stream_, rxReduceMem.reduceDst, INVALID_VALUE_RANKID, LinkType::LINK_ONCHIP, reduceAttr_));
     }
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::RunDestReducerLastStep(const LINK &linkLeft, InterServerAlgoStep &stepInfo,
-    const std::vector<Slice> &inputSlices, const std::vector<Slice> &outputSlices)
+HcclResult ReduceScatterNHR::RunDestReducerLastStep(
+    const LINK& linkLeft, InterServerAlgoStep& stepInfo, const std::vector<Slice>& inputSlices,
+    const std::vector<Slice>& outputSlices)
 {
     HcclResult ret = HCCL_SUCCESS;
     std::vector<ReducerMemoryInfo> rxReduceMems;
-    for (u32 i = 0; i < stepInfo.nSlices; i++) {  // rst算法的reduce scatter最后一步是一个slice，暂不用合并
+    for (u32 i = 0; i < stepInfo.nSlices; i++) { // rst算法的reduce scatter最后一步是一个slice，暂不用合并
         u32 rxSliceIdx = stepInfo.rxSliceIdxs[i];
         DeviceMem dstMem = outputMem_.range(outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size);
         DeviceMem srcMem = inputMem_.range(inputSlices[rxSliceIdx].offset, inputSlices[rxSliceIdx].size);
         DeviceMem tmpMem = scratchMem_.range(outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size);
-        HCCL_DEBUG("[ReduceScatterNHR][RunReduceScatterNHR] final reduce rxSliceIdx[%u] will reduce with "
-            "inputMem_ offset[%llu] to ouput_mem_ offset[%llu] size[%llu]", rxSliceIdx,
-            inputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size);
+        HCCL_DEBUG(
+            "[ReduceScatterNHR][RunReduceScatterNHR] final reduce rxSliceIdx[%u] will reduce with "
+            "inputMem_ offset[%llu] to ouput_mem_ offset[%llu] size[%llu]",
+            rxSliceIdx, inputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].offset, outputSlices[rxSliceIdx].size);
 
         rxReduceMems.emplace_back(
-            ReducerMemoryInfo { baseOffset_ + inputSlices[rxSliceIdx].offset, srcMem, dstMem, tmpMem });
+            ReducerMemoryInfo{baseOffset_ + inputSlices[rxSliceIdx].offset, srcMem, dstMem, tmpMem});
     }
 
     ret = reducerInfo_->run(dispatcher_, linkLeft, rxReduceMems, stream_);
     return ret;
 }
 
- HcclResult ReduceScatterNHR::GetRxSlices(std::vector<Slice> &rxSlices, std::vector<Slice> &rxSlicestemp,
-    InterServerAlgoStep &stepInfo, const std::vector<Slice> &inputSlices, const std::vector<Slice> &outputSlices)
+HcclResult ReduceScatterNHR::GetRxSlices(
+    std::vector<Slice>& rxSlices, std::vector<Slice>& rxSlicestemp, InterServerAlgoStep& stepInfo,
+    const std::vector<Slice>& inputSlices, const std::vector<Slice>& outputSlices)
 {
     for (u32 i = 0; i < stepInfo.nSlices; i++) {
         rxSlices.push_back(inputSlices[stepInfo.rxSliceIdxs[i]]);
         rxSlicestemp.push_back(outputSlices[stepInfo.rxSliceIdxs[i]]);
-        HCCL_DEBUG("[ReduceScatterNHR][RunDestReducer] i[%u] rxSliceIndex[%u] rx offset[%llu] size[%llu]",
-            i, stepInfo.rxSliceIdxs[i], outputSlices[stepInfo.rxSliceIdxs[i]].offset,
+        HCCL_DEBUG(
+            "[ReduceScatterNHR][RunDestReducer] i[%u] rxSliceIndex[%u] rx offset[%llu] size[%llu]", i,
+            stepInfo.rxSliceIdxs[i], outputSlices[stepInfo.rxSliceIdxs[i]].offset,
             outputSlices[stepInfo.rxSliceIdxs[i]].size);
     }
 
-    HCCL_DEBUG("[ReduceScatterNHR][RunDestReducer] rxslices size [%u], rxslices temp size [%u]",
-        rxSlices.size(), rxSlicestemp.size());
+    HCCL_DEBUG(
+        "[ReduceScatterNHR][RunDestReducer] rxslices size [%u], rxslices temp size [%u]", rxSlices.size(),
+        rxSlicestemp.size());
 
     // 合并连续slices
     MergeSlices(rxSlices);
     MergeSlices(rxSlicestemp);
-    HCCL_DEBUG("[ReduceScatterNHR][RunDestReducer] merged rxslices size [%u], merged rxslices temp size [%u]",
-        rxSlices.size(), rxSlicestemp.size());
+    HCCL_DEBUG(
+        "[ReduceScatterNHR][RunDestReducer] merged rxslices size [%u], merged rxslices temp size [%u]", rxSlices.size(),
+        rxSlicestemp.size());
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::SdmaReducer(const u32 nSteps, const LINK &linkLeft, InterServerAlgoStep &stepInfo,
-    const std::vector<Slice> &inputSlices, const std::vector<Slice> &outputSlices)
+HcclResult ReduceScatterNHR::SdmaReducer(
+    const u32 nSteps, const LINK& linkLeft, InterServerAlgoStep& stepInfo, const std::vector<Slice>& inputSlices,
+    const std::vector<Slice>& outputSlices)
 {
     HcclResult ret = HCCL_SUCCESS;
     std::vector<Slice> rxSlices;
@@ -369,18 +404,27 @@ HcclResult ReduceScatterNHR::SdmaReducer(const u32 nSteps, const LINK &linkLeft,
     return ret;
 }
 
-HcclResult ReduceScatterNHR::RunReduceScatterNHR(const u32 rank, const u32 rankSize,
-                                                 const std::vector<LINK>  &links,
-                                                 const std::vector<Slice> &inputSlices,
-                                                 const std::vector<Slice> &outputSlices)
+HcclResult ReduceScatterNHR::RunReduceScatterNHR(
+    const u32 rank, const u32 rankSize, const std::vector<LINK>& links, const std::vector<Slice>& inputSlices,
+    const std::vector<Slice>& outputSlices)
 {
     bool bRetSize = (inputSlices.size() < rankSize);
-    CHK_PRT_RET(bRetSize, HCCL_ERROR("[ReduceScatterNHR][RunReduceScatterNHR] rank[%u] inputslice size[%llu] is less "
-        "than rank size[%u]", rank, outputSlices.size(), rankSize), HCCL_E_INTERNAL);
+    CHK_PRT_RET(
+        bRetSize,
+        HCCL_ERROR(
+            "[ReduceScatterNHR][RunReduceScatterNHR] rank[%u] inputslice size[%llu] is less "
+            "than rank size[%u]",
+            rank, outputSlices.size(), rankSize),
+        HCCL_E_INTERNAL);
 
     bRetSize = (outputSlices.size() < rankSize);
-    CHK_PRT_RET(bRetSize, HCCL_ERROR("[ReduceScatterNHR][RunReduceScatterNHR] rank[%u] outputslice size[%llu] is less "
-        "than rank size[%u]", rank, outputSlices.size(), rankSize), HCCL_E_INTERNAL);
+    CHK_PRT_RET(
+        bRetSize,
+        HCCL_ERROR(
+            "[ReduceScatterNHR][RunReduceScatterNHR] rank[%u] outputslice size[%llu] is less "
+            "than rank size[%u]",
+            rank, outputSlices.size(), rankSize),
+        HCCL_E_INTERNAL);
 
     HcclResult ret = HCCL_SUCCESS;
 
@@ -400,16 +444,18 @@ HcclResult ReduceScatterNHR::RunReduceScatterNHR(const u32 rank, const u32 rankS
         CHK_SMART_PTR_NULL(linkRight);
 
         // 当前每个数据块发送一次ACK、reduce一次、同步一次
-        HCCL_DEBUG("[ReduceScatterNHR][RunReduceScatterNHR] rank[%u] rankSize[%u] from[%u] to[%u] step[%u] nSteps[%u] "
-            "nSlices[%u]", rank, rankSize, stepInfo.fromRank, stepInfo.toRank, step, nSteps, stepInfo.nSlices);
+        HCCL_DEBUG(
+            "[ReduceScatterNHR][RunReduceScatterNHR] rank[%u] rankSize[%u] from[%u] to[%u] step[%u] nSteps[%u] "
+            "nSlices[%u]",
+            rank, rankSize, stepInfo.fromRank, stepInfo.toRank, step, nSteps, stepInfo.nSlices);
 
         if (linkLeft->IsSpInlineReduce() && linkRight->IsSpInlineReduce()) { // SDMA
             CHK_RET(linkRight->TxAck(stream_));
             CHK_RET(linkLeft->RxAck(stream_));
             CHK_RET(SdmaReducer(nSteps, linkLeft, stepInfo, inputSlices, outputSlices));
-            CHK_RET(linkLeft->TxDataSignal(stream_)); // 告知left我读完了
+            CHK_RET(linkLeft->TxDataSignal(stream_));  // 告知left我读完了
             CHK_RET(linkRight->RxDataSignal(stream_)); // 等right读完
-        } else { // RDMA
+        } else {                                       // RDMA
             CHK_RET(linkLeft->TxAck(stream_));
             CHK_RET(linkRight->RxAck(stream_));
             // tx
@@ -425,10 +471,12 @@ HcclResult ReduceScatterNHR::RunReduceScatterNHR(const u32 rank, const u32 rankS
 
             CHK_PRT_RET(ret != HCCL_SUCCESS, HCCL_ERROR("[ReduceScatterNHR][RunReduceScatterNHR] Rx failed"), ret);
             ret = linkLeft->PostFinAck(stream_);
-            CHK_PRT_RET(ret != HCCL_SUCCESS, HCCL_ERROR("[ReduceScatterNHR][RunReduceScatterNHR] PostFinAck failed"), ret);
+            CHK_PRT_RET(
+                ret != HCCL_SUCCESS, HCCL_ERROR("[ReduceScatterNHR][RunReduceScatterNHR] PostFinAck failed"), ret);
 
             ret = linkRight->WaitFinAck(stream_);
-            CHK_PRT_RET(ret != HCCL_SUCCESS, HCCL_ERROR("[ReduceScatterNHR][RunReduceScatterNHR] WaitFinAck failed"), ret);
+            CHK_PRT_RET(
+                ret != HCCL_SUCCESS, HCCL_ERROR("[ReduceScatterNHR][RunReduceScatterNHR] WaitFinAck failed"), ret);
 
             if (barrierSwitchOn_) {
                 CHK_RET(ExecuteBarrier(linkLeft, linkRight));
@@ -438,31 +486,36 @@ HcclResult ReduceScatterNHR::RunReduceScatterNHR(const u32 rank, const u32 rankS
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::RunSourceSender(const LINK &link, InterServerAlgoStep &stepInfo,
-    const std::vector<Slice> &inputSlices, const std::vector<Slice> &outputSlices)
+HcclResult ReduceScatterNHR::RunSourceSender(
+    const LINK& link, InterServerAlgoStep& stepInfo, const std::vector<Slice>& inputSlices,
+    const std::vector<Slice>& outputSlices)
 {
     std::vector<Slice> txSlices;
     std::vector<Slice> txSlicestemp;
     for (u32 i = 0; i < stepInfo.nSlices; i++) {
         txSlices.push_back(inputSlices[stepInfo.txSliceIdxs[i]]);
         txSlicestemp.push_back(outputSlices[stepInfo.txSliceIdxs[i]]);
-        HCCL_DEBUG("[ReduceScatterNHR][RunSourceSender] i[%u] txSliceIndex[%u] tx data offset[%llu] size[%llu]",
-            i, stepInfo.txSliceIdxs[i], outputSlices[stepInfo.txSliceIdxs[i]].offset,
+        HCCL_DEBUG(
+            "[ReduceScatterNHR][RunSourceSender] i[%u] txSliceIndex[%u] tx data offset[%llu] size[%llu]", i,
+            stepInfo.txSliceIdxs[i], outputSlices[stepInfo.txSliceIdxs[i]].offset,
             outputSlices[stepInfo.txSliceIdxs[i]].size);
     }
-    HCCL_DEBUG("[ReduceScatterNHR][RunSourceSender] txSlices size [%u], txSlices temp size [%u]",
-        txSlices.size(), txSlicestemp.size());
-        
+    HCCL_DEBUG(
+        "[ReduceScatterNHR][RunSourceSender] txSlices size [%u], txSlices temp size [%u]", txSlices.size(),
+        txSlicestemp.size());
+
     // 合并连续slices
     MergeSlices(txSlices);
     MergeSlices(txSlicestemp);
-    HCCL_DEBUG("[ReduceScatterNHR][RunSourceSender] merged txSlices size [%u], merged txSlices temp size [%u]",
+    HCCL_DEBUG(
+        "[ReduceScatterNHR][RunSourceSender] merged txSlices size [%u], merged txSlices temp size [%u]",
         txSlices.size(), txSlicestemp.size());
-    
+
     std::vector<SenderMemoryInfo> txMems;
     for (u64 i = 0; i < txSlices.size(); i++) {
         DeviceMem srcMem = inputMem_.range(txSlices[i].offset, txSlices[i].size);
-        HCCL_DEBUG("[ReduceScatterNHR][RunSourceSender] send inputmem range[%llu], size[%llu] tx dstmem offset[%llu]",
+        HCCL_DEBUG(
+            "[ReduceScatterNHR][RunSourceSender] send inputmem range[%llu], size[%llu] tx dstmem offset[%llu]",
             txSlices[i].offset, txSlices[i].size, txSlicestemp[i].offset);
         txMems.emplace_back(SenderMemoryInfo{baseOffset_ + txSlicestemp[i].offset, srcMem});
     }
@@ -471,8 +524,9 @@ HcclResult ReduceScatterNHR::RunSourceSender(const LINK &link, InterServerAlgoSt
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::RunDestReducer(const LINK &link, InterServerAlgoStep &stepInfo,
-    const std::vector<Slice> &inputSlices, const std::vector<Slice> &outputSlices)
+HcclResult ReduceScatterNHR::RunDestReducer(
+    const LINK& link, InterServerAlgoStep& stepInfo, const std::vector<Slice>& inputSlices,
+    const std::vector<Slice>& outputSlices)
 {
     std::vector<Slice> rxSlices;
     std::vector<Slice> rxSlicestemp;
@@ -482,7 +536,8 @@ HcclResult ReduceScatterNHR::RunDestReducer(const LINK &link, InterServerAlgoSte
     for (u64 i = 0; i < rxSlices.size(); i++) {
         DeviceMem dstMem = inputMem_.range(rxSlices[i].offset, rxSlices[i].size);
         DeviceMem srcMemTemp = scratchMem_.range(rxSlicestemp[i].offset, rxSlicestemp[i].size);
-        HCCL_DEBUG("[ReduceScatterNHR][RunDestReducer] rcv offset[%llu], size[%llu] ,then reduce with "
+        HCCL_DEBUG(
+            "[ReduceScatterNHR][RunDestReducer] rcv offset[%llu], size[%llu] ,then reduce with "
             "offset[%llu] size[%llu] ",
             rxSlicestemp[i].offset, rxSlicestemp[i].size, rxSlices[i].offset, rxSlices[i].size);
         rxReduceMems.emplace_back(ReducerMemoryInfo{baseOffset_ + rxSlices[i].offset, dstMem, dstMem, srcMemTemp});
@@ -493,7 +548,7 @@ HcclResult ReduceScatterNHR::RunDestReducer(const LINK &link, InterServerAlgoSte
 }
 
 // NHR每步的算法描述原理函数
-HcclResult ReduceScatterNHR::GetStepInfo(u32 step, u32 nSteps, u32 rank, u32 rankSize, InterServerAlgoStep &stepInfo)
+HcclResult ReduceScatterNHR::GetStepInfo(u32 step, u32 nSteps, u32 rank, u32 rankSize, InterServerAlgoStep& stepInfo)
 {
     (void)nSteps;
     stepInfo.txSliceIdxs.clear();
@@ -521,8 +576,10 @@ HcclResult ReduceScatterNHR::GetStepInfo(u32 step, u32 nSteps, u32 rank, u32 ran
             u32 targetRxSliceIdx = sliceMap_[rxSliceIdx];
             stepInfo.rxSliceIdxs.push_back(targetRxSliceIdx * sliceSize + j);
 
-            HCCL_DEBUG("[ReduceScatterNHR][GetStepInfo] i[%u] txSliceIdx[%u]->targetTxSliceIdx[%u] rxSliceIdx[%u]->"
-                "targetRxSliceIdx[%u]", i, txSliceIdx, targetTxSliceIdx, rxSliceIdx, targetRxSliceIdx);
+            HCCL_DEBUG(
+                "[ReduceScatterNHR][GetStepInfo] i[%u] txSliceIdx[%u]->targetTxSliceIdx[%u] rxSliceIdx[%u]->"
+                "targetRxSliceIdx[%u]",
+                i, txSliceIdx, targetTxSliceIdx, rxSliceIdx, targetRxSliceIdx);
         }
         txSliceIdx = (txSliceIdx + rankSize - deltaSliceIndex) % rankSize;
         rxSliceIdx = (rxSliceIdx + rankSize - deltaSliceIndex) % rankSize;
@@ -534,8 +591,8 @@ HcclResult ReduceScatterNHR::GetStepInfo(u32 step, u32 nSteps, u32 rank, u32 ran
     return HCCL_SUCCESS;
 }
 
-HcclResult ReduceScatterNHR::GetNslbAdjInfo(const u32 rank, const u32 rankSize,
-                                            const std::vector<LINK> &links, AdjInfo& nslbAdjInfo)
+HcclResult ReduceScatterNHR::GetNslbAdjInfo(
+    const u32 rank, const u32 rankSize, const std::vector<LINK>& links, AdjInfo& nslbAdjInfo)
 {
     if (rankSize == 1) {
         return HCCL_SUCCESS;
@@ -543,12 +600,14 @@ HcclResult ReduceScatterNHR::GetNslbAdjInfo(const u32 rank, const u32 rankSize,
     if (links.size() < rankSize) {
         return HCCL_SUCCESS;
     }
-    u32 nSteps  = 0;
-    for(u32 temp = rankSize - 1; temp != 0; temp >>= 1, ++nSteps){}
+    u32 nSteps = 0;
+    for (u32 temp = rankSize - 1; temp != 0; temp >>= 1, ++nSteps) {
+    }
 
     for (u32 step = 0; step < nSteps; step++) {
         u32 deltaRank = 1 << step;
-        u32 sendTo = (rank + rankSize - deltaRank) % rankSize;;
+        u32 sendTo = (rank + rankSize - deltaRank) % rankSize;
+        ;
         LINK linkRight = links[sendTo];
         CHK_SMART_PTR_NULL(linkRight);
 
@@ -562,4 +621,4 @@ HcclResult ReduceScatterNHR::GetNslbAdjInfo(const u32 rank, const u32 rankSize,
     return HCCL_SUCCESS;
 }
 REGISTER_TEMPLATE(TemplateType::TEMPLATE_REDUCESCATTER_NHR, ReduceScatterNHR);
-}   // ~~ namespace hccl
+} // namespace hccl

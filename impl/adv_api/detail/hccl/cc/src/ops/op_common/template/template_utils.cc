@@ -1,21 +1,21 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <algorithm>
 #include "template_utils.h"
 namespace mc2_ops_hccl {
 
-HcclResult GetAlgRank(const u32 virtRank, const std::vector<u32> &rankIds, u32 &algRank)
+HcclResult GetAlgRank(const u32 virtRank, const std::vector<u32>& rankIds, u32& algRank)
 {
     std::vector<u32>::const_iterator topoVecIter = std::find(rankIds.begin(), rankIds.end(), virtRank);
-    CHK_PRT_RET(topoVecIter == rankIds.end(), HCCL_ERROR("[GetAlgRank] Invalid virtual Rank!"),
-                HcclResult::HCCL_E_PARA);
+    CHK_PRT_RET(
+        topoVecIter == rankIds.end(), HCCL_ERROR("[GetAlgRank] Invalid virtual Rank!"), HcclResult::HCCL_E_PARA);
     algRank = distance(rankIds.begin(), topoVecIter);
 
     return HcclResult::HCCL_SUCCESS;
@@ -31,13 +31,9 @@ u32 GetNHRStepNum(u32 rankSize)
     return nSteps;
 }
 
-HcclResult CalcDataSplitByPortGroupCommon(const u64 totalDataCount,
-                                          const u64 dataTypeSize,
-                                          const std::vector<ChannelInfo> &channels,
-                                          std::vector<u64> &elemCountOut,
-                                          std::vector<u64> &sizeOut,
-                                          std::vector<u64> &elemOffset,
-                                          const u32 channelsPerRank)
+HcclResult CalcDataSplitByPortGroupCommon(
+    const u64 totalDataCount, const u64 dataTypeSize, const std::vector<ChannelInfo>& channels,
+    std::vector<u64>& elemCountOut, std::vector<u64>& sizeOut, std::vector<u64>& elemOffset, const u32 channelsPerRank)
 {
     elemCountOut.clear();
     sizeOut.clear();
@@ -45,14 +41,15 @@ HcclResult CalcDataSplitByPortGroupCommon(const u64 totalDataCount,
 
     std::vector<u32> portGroups;
     u32 totalPorts = 0;
-    u32 taskCount = (static_cast<u32>(channels.size()) > channelsPerRank) ? channelsPerRank :
-        static_cast<u32>(channels.size());
+    u32 taskCount =
+        (static_cast<u32>(channels.size()) > channelsPerRank) ? channelsPerRank : static_cast<u32>(channels.size());
     for (u32 i = 0; i < taskCount; i++) {
-        const auto &ch = channels[i];
+        const auto& ch = channels[i];
         portGroups.push_back(ch.portGroupSize);
         totalPorts += ch.portGroupSize;
-        HCCL_INFO("[CalcDataSplitByPortGroup] ch.portGroupSize[%u], totalPorts[%u], channelsPerRank[%u]",
-            ch.portGroupSize, totalPorts, channelsPerRank);
+        HCCL_INFO(
+            "[CalcDataSplitByPortGroup] ch.portGroupSize[%u], totalPorts[%u], channelsPerRank[%u]", ch.portGroupSize,
+            totalPorts, channelsPerRank);
     }
 
     u32 channelSize = portGroups.size();
@@ -63,8 +60,8 @@ HcclResult CalcDataSplitByPortGroupCommon(const u64 totalDataCount,
         if (channelIdx == channelSize - 1) {
             elemCount = totalDataCount - accumCount;
         } else {
-            CHK_PRT_RET(totalPorts == 0,
-                HCCL_ERROR("[CalcDataSplitByPortGroup] totalPorts [%u] is 0.", totalPorts),
+            CHK_PRT_RET(
+                totalPorts == 0, HCCL_ERROR("[CalcDataSplitByPortGroup] totalPorts [%u] is 0.", totalPorts),
                 HcclResult::HCCL_E_INTERNAL);
             elemCount = static_cast<u64>((totalDataCount * portGroups[channelIdx]) / totalPorts);
         }
@@ -79,21 +76,17 @@ HcclResult CalcDataSplitByPortGroupCommon(const u64 totalDataCount,
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CalcDataSplitByPortGroupZAxisDetour(const u64 totalDataCount,
-                                               const u64 dataTypeSize,
-                                               const std::vector<ChannelInfo> &channels,
-                                               std::vector<u64> &elemCountOut,
-                                               std::vector<u64> &sizeOut,
-                                               std::vector<u64> &elemOffset,
-                                               const u32 level0ChannelNumPerRank,
-                                               const u32 level1ChannelNumPerRank,
-                                               const float level0DataRatio)
+HcclResult CalcDataSplitByPortGroupZAxisDetour(
+    const u64 totalDataCount, const u64 dataTypeSize, const std::vector<ChannelInfo>& channels,
+    std::vector<u64>& elemCountOut, std::vector<u64>& sizeOut, std::vector<u64>& elemOffset,
+    const u32 level0ChannelNumPerRank, const u32 level1ChannelNumPerRank, const float level0DataRatio)
 {
     elemCountOut.clear();
     sizeOut.clear();
     elemOffset.clear();
 
-    CHK_PRT_RET(level0DataRatio < 0.0f || level0DataRatio > 1.0f,
+    CHK_PRT_RET(
+        level0DataRatio < 0.0f || level0DataRatio > 1.0f,
         HCCL_ERROR("[CalcDataSplitByPortGroupZAxisDetour] level0DataRatio[%f] is invalid.", level0DataRatio),
         HcclResult::HCCL_E_PARA);
 
@@ -108,21 +101,21 @@ HcclResult CalcDataSplitByPortGroupZAxisDetour(const u64 totalDataCount,
     std::vector<u64> l0ElemCount;
     std::vector<u64> l0Size;
     std::vector<u64> l0Offset;
-    CHK_RET(CalcDataSplitByPortGroupCommon(level0DataCount, dataTypeSize,
-        level0Chs, l0ElemCount, l0Size, l0Offset, level0ChannelNumPerRank));
+    CHK_RET(CalcDataSplitByPortGroupCommon(
+        level0DataCount, dataTypeSize, level0Chs, l0ElemCount, l0Size, l0Offset, level0ChannelNumPerRank));
 
     std::vector<ChannelInfo> level1Chs(channels.begin() + level0ChannelNumPerRank, channels.end());
     std::vector<u64> l1ElemCount;
     std::vector<u64> l1Size;
     std::vector<u64> l1Offset;
-    CHK_RET(CalcDataSplitByPortGroupCommon(level1DataCount, dataTypeSize,
-        level1Chs, l1ElemCount, l1Size, l1Offset, level1ChannelNumPerRank));
+    CHK_RET(CalcDataSplitByPortGroupCommon(
+        level1DataCount, dataTypeSize, level1Chs, l1ElemCount, l1Size, l1Offset, level1ChannelNumPerRank));
 
     u64 level0TotalSize = 0;
     for (auto sz : l0Size) {
         level0TotalSize += sz;
     }
-    for (auto &off : l1Offset) {
+    for (auto& off : l1Offset) {
         off += level0TotalSize;
     }
 
@@ -133,13 +126,13 @@ HcclResult CalcDataSplitByPortGroupZAxisDetour(const u64 totalDataCount,
     elemOffset = l0Offset;
     elemOffset.insert(elemOffset.end(), l1Offset.begin(), l1Offset.end());
 
-    HCCL_INFO("[CalcDataSplitByPortGroupZAxisDetour] totalDataCount[%llu], level0DataCount[%llu], "
+    HCCL_INFO(
+        "[CalcDataSplitByPortGroupZAxisDetour] totalDataCount[%llu], level0DataCount[%llu], "
         "level1DataCount[%llu], level0ChannelNumPerRank[%u], level1ChannelNumPerRank[%u], "
         "level0DataRatio[%f], elemCountOut.size[%zu]",
-        totalDataCount, level0DataCount, level1DataCount,
-        level0ChannelNumPerRank, level1ChannelNumPerRank,
+        totalDataCount, level0DataCount, level1DataCount, level0ChannelNumPerRank, level1ChannelNumPerRank,
         level0DataRatio, elemCountOut.size());
 
     return HcclResult::HCCL_SUCCESS;
 }
-}
+} // namespace mc2_ops_hccl

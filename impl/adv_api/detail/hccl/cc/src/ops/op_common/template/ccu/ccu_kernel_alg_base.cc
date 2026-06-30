@@ -1,21 +1,21 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "ccu_kernel_alg_base.h"
 #include "ccu_kernel_utils.h"
 
 namespace mc2_ops_hccl {
 using namespace hcomm;
 
-HcclResult CcuKernelAlgBase::LocalReduceNb(const std::vector<CcuRep::CcuBuf> &bufs, uint32_t count, HcclDataType dataType,
-                     HcclDataType outputDataType, HcclReduceOp opType,
-                     const CcuRep::Variable &len, CcuRep::CompletedEvent event)
+HcclResult CcuKernelAlgBase::LocalReduceNb(
+    const std::vector<CcuRep::CcuBuf>& bufs, uint32_t count, HcclDataType dataType, HcclDataType outputDataType,
+    HcclReduceOp opType, const CcuRep::Variable& len, CcuRep::CompletedEvent event)
 {
     (void)count;
     return CcuKernel::LocalReduceNb(bufs.data(), bufs.size(), dataType, outputDataType, opType, len, event);
@@ -36,7 +36,8 @@ void CcuKernelAlgBase::AllocGoResource(uint32_t parallelDim, uint32_t msPerLoop)
     // 算法配置的msPerLoop * CcuRep::CCU_MS_SIZE覆盖默认配置，msPerLoop默认为1
     moConfig.memSlice = msPerLoop * CcuRep::CCU_MS_SIZE;
 
-    HCCL_INFO("[AllocGoResource]moConfig: loopCount = %u, msInterleave = %u", moConfig.loopCount, moConfig.msInterleave);
+    HCCL_INFO(
+        "[AllocGoResource]moConfig: loopCount = %u, msInterleave = %u", moConfig.loopCount, moConfig.msInterleave);
 
     // 简单实现,只需要申请一次资源
     if (moRes.executor.size() == 0) {
@@ -56,17 +57,19 @@ void CcuKernelAlgBase::Load(GroupOpSize moSize)
 
 std::vector<uint64_t> CcuKernelAlgBase::CalGoSize(uint64_t size)
 {
-    uint64_t offset        = 0;
-    uint64_t loopIterNum   = 0;
+    uint64_t offset = 0;
+    uint64_t loopIterNum = 0;
     uint64_t loopExtendNum = 0;
-    uint64_t tailSize      = 0;
+    uint64_t tailSize = 0;
 
-    uint64_t loopSize = moConfig.loopCount * moConfig.memSlice;     // loop展开后，一次并行搬运的size
+    uint64_t loopSize = moConfig.loopCount * moConfig.memSlice; // loop展开后，一次并行搬运的size
     uint64_t maxSize = loopSize * (GetMaxLoopIterNum() + 1);
 
-    uint64_t m = size / loopSize;                               // 能被loopSize(所有loop并行一次的大小)整除的部分。m为第一个loopgroup展开后的loop串行次数。
-    uint64_t n = (size - m * loopSize) / moConfig.memSlice;     // 能被一个loop搬运大小整除的部分。n为第二个loopgroup的展开后的并行loop数。
-    uint64_t p = size - m * loopSize - n * moConfig.memSlice;   // 尾数据。p为单独搬运的数据大小。
+    uint64_t m =
+        size / loopSize; // 能被loopSize(所有loop并行一次的大小)整除的部分。m为第一个loopgroup展开后的loop串行次数。
+    uint64_t n = (size - m * loopSize) /
+                 moConfig.memSlice; // 能被一个loop搬运大小整除的部分。n为第二个loopgroup的展开后的并行loop数。
+    uint64_t p = size - m * loopSize - n * moConfig.memSlice; // 尾数据。p为单独搬运的数据大小。
 
     if (size == maxSize) {
         m = GetMaxLoopIterNum();
@@ -87,29 +90,30 @@ std::vector<uint64_t> CcuKernelAlgBase::CalGoSize(uint64_t size)
         // 数据量为256K的整数倍，跳过LoopGroup1
         // 此时tailSize = 0，可以依次做为跳过LoopGroup1的条件
         loopExtendNum = 0; // loopExtendNum 赋值
-        tailSize      = 0; // tailSize 赋值
+        tailSize = 0;      // tailSize 赋值
     } else if (n != 0 && p == 0) {
         // 数据量为256K * m + 4K * n
         // 因为p == 0, 所以只需要使用第一个Loop, 数据量4K, 展开成n次
         loopExtendNum = GetParallelParam(n - 1, 0, 1); // loopExtendNum 赋值
-        tailSize      = moConfig.memSlice;                     // tailSize 赋值
+        tailSize = moConfig.memSlice;                  // tailSize 赋值
     } else if (n == 0 && p != 0) {
         // 数据量为256K * m + p
         // 因为n == 0, 所以只需要使用第一个Loop, 数据量p, 不展开
         loopExtendNum = GetParallelParam(0, 0, 1); // loopExtendNum 赋值
-        tailSize      = p;                                 // tailSize 赋值
+        tailSize = p;                              // tailSize 赋值
     } else {
         loopExtendNum = GetParallelParam(n - 1, 1, 2); // loopExtendNum 赋值, 为2
-        tailSize      = p;                                     // tailSize 赋值
+        tailSize = p;                                  // tailSize 赋值
     }
 
-    HCCL_INFO("[CcuKernelAlgBase::CalGoSize] offset = %lu, loopIterNum = %lu, loopExtendNum = %lu, tailSize = %lu", offset, loopIterNum,
-               loopExtendNum, tailSize);
+    HCCL_INFO(
+        "[CcuKernelAlgBase::CalGoSize] offset = %lu, loopIterNum = %lu, loopExtendNum = %lu, tailSize = %lu", offset,
+        loopIterNum, loopExtendNum, tailSize);
 
     return {offset, loopIterNum, loopExtendNum, tailSize};
 }
 
-HcclResult CcuKernelAlgBase::CreateMultiOpBroadcast(const std::vector<ChannelHandle> &channels)
+HcclResult CcuKernelAlgBase::CreateMultiOpBroadcast(const std::vector<ChannelHandle>& channels)
 {
     AllocGoResource();
 
@@ -128,12 +132,12 @@ HcclResult CcuKernelAlgBase::CreateMultiOpBroadcast(const std::vector<ChannelHan
             CcuRep::LocalAddr tmp = CreateLocalAddr();
             dst.emplace_back(*reinterpret_cast<CcuRep::RemoteAddr*>(&tmp));
         }
-        CcuRep::Variable            len = CreateVariable();
-        CcuRep::LoopBlock           lb(this, loopType + "_loop_" + std::to_string(index));
+        CcuRep::Variable len = CreateVariable();
+        CcuRep::LoopBlock lb(this, loopType + "_loop_" + std::to_string(index));
         lb(src, dst, len);
 
-        CcuRep::CcuBuf &buf = moRes.ccuBuf[index * moConfig.msInterleave];
-        CcuRep::CompletedEvent &event = moRes.completedEvent[index];
+        CcuRep::CcuBuf& buf = moRes.ccuBuf[index * moConfig.msInterleave];
+        CcuRep::CompletedEvent& event = moRes.completedEvent[index];
 
         event.mask = 1;
         LocalCopyNb(buf, src, len, event);
@@ -146,7 +150,7 @@ HcclResult CcuKernelAlgBase::CreateMultiOpBroadcast(const std::vector<ChannelHan
             event.mask = 1 << i;
             CHK_RET(WriteNb(channels[i], dst[i], buf, len, event));
         }
-        CcuRep::LocalAddr &localDst = *reinterpret_cast<CcuRep::LocalAddr*>(&dst[size - 1]);
+        CcuRep::LocalAddr& localDst = *reinterpret_cast<CcuRep::LocalAddr*>(&dst[size - 1]);
         event.mask = 1 << channelSize;
         LocalCopyNb(localDst, buf, len, event);
         event.mask = (1 << size) - 1;
@@ -157,8 +161,9 @@ HcclResult CcuKernelAlgBase::CreateMultiOpBroadcast(const std::vector<ChannelHan
     return HCCL_SUCCESS;
 }
 
-HcclResult CcuKernelAlgBase::GroupBroadcast(const std::vector<ChannelHandle> &channels, std::vector<CcuRep::RemoteAddr> dst,
-                                CcuRep::LocalAddr src, GroupOpSize goSize)
+HcclResult CcuKernelAlgBase::GroupBroadcast(
+    const std::vector<ChannelHandle>& channels, std::vector<CcuRep::RemoteAddr> dst, CcuRep::LocalAddr src,
+    GroupOpSize goSize)
 {
     CHK_RET(CreateMultiOpBroadcast(channels));
 
@@ -172,7 +177,7 @@ HcclResult CcuKernelAlgBase::GroupBroadcast(const std::vector<ChannelHandle> &ch
 
         CcuRep::Variable sliceSize = CreateVariable();
         sliceSize = moConfig.memSlice;
-        auto lc   = Loop("broadcast_loop_0")(src, dst, sliceSize);
+        auto lc = Loop("broadcast_loop_0")(src, dst, sliceSize);
 
         CcuRep::Variable paraCfg = CreateVariable();
         paraCfg = GetParallelParam(moConfig.loopCount - 1, 0, 1);
@@ -182,12 +187,10 @@ HcclResult CcuKernelAlgBase::GroupBroadcast(const std::vector<ChannelHandle> &ch
         LoopGroup({lc}, {loopParam}, paraCfg, offsetCfg);
 #ifdef CcuProfiling
         std::string groupOpSize = "GroupBroadcast";
-        GroupInfoTemp groupInfo {
-            goSize.loopParam.Id(),
-            goSize.parallelParam.Id(),
-            goSize.residual.Id()
-        };
-        AddCcuProfiling(groupInfo, channels, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclReduceOp::HCCL_REDUCE_RESERVED, groupOpSize);
+        GroupInfoTemp groupInfo{goSize.loopParam.Id(), goSize.parallelParam.Id(), goSize.residual.Id()};
+        AddCcuProfiling(
+            groupInfo, channels, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclDataType::HCCL_DATA_TYPE_RESERVED,
+            HcclReduceOp::HCCL_REDUCE_RESERVED, groupOpSize);
 #endif
     }
 
@@ -207,7 +210,7 @@ HcclResult CcuKernelAlgBase::GroupBroadcast(const std::vector<ChannelHandle> &ch
 
         CcuRep::Variable sliceSize = CreateVariable();
         sliceSize = moConfig.memSlice;
-        auto lc1  = Loop("broadcast_loop_1")(src, dst, sliceSize);
+        auto lc1 = Loop("broadcast_loop_1")(src, dst, sliceSize);
 
         CcuRep::Variable loopCfg0 = CreateVariable();
         loopCfg0 = GetLoopParam(0, 0, 1);
@@ -219,19 +222,17 @@ HcclResult CcuKernelAlgBase::GroupBroadcast(const std::vector<ChannelHandle> &ch
         LoopGroup({lc0, lc1}, {loopCfg0, loopCfg1}, goSize.parallelParam, offsetCfg);
 #ifdef CcuProfiling
         std::string groupOpSize = "GroupBroadcast";
-        GroupInfoTemp groupInfo {
-            goSize.loopParam.Id(),
-            goSize.parallelParam.Id(),
-            goSize.residual.Id()
-        };
-        AddCcuProfiling(groupInfo, channels, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclReduceOp::HCCL_REDUCE_RESERVED, groupOpSize);
+        GroupInfoTemp groupInfo{goSize.loopParam.Id(), goSize.parallelParam.Id(), goSize.residual.Id()};
+        AddCcuProfiling(
+            groupInfo, channels, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclDataType::HCCL_DATA_TYPE_RESERVED,
+            HcclReduceOp::HCCL_REDUCE_RESERVED, groupOpSize);
 #endif
     }
     return HCCL_SUCCESS;
 }
 
-HcclResult CcuKernelAlgBase::CreateMultiOpReduce(const std::vector<ChannelHandle> &channels, HcclDataType dataType,
-                                     HcclDataType outputDataType, HcclReduceOp opType)
+HcclResult CcuKernelAlgBase::CreateMultiOpReduce(
+    const std::vector<ChannelHandle>& channels, HcclDataType dataType, HcclDataType outputDataType, HcclReduceOp opType)
 {
     AllocGoResource();
 
@@ -243,7 +244,7 @@ HcclResult CcuKernelAlgBase::CreateMultiOpReduce(const std::vector<ChannelHandle
     uint32_t channelSize = channels.size();
     uint32_t size = channelSize + 1;
     uint32_t expansionNum = GetReduceExpansionNum(opType, dataType, outputDataType);
-    uint32_t usedBufNum   = size > expansionNum ? size : expansionNum;
+    uint32_t usedBufNum = size > expansionNum ? size : expansionNum;
 
     for (int32_t index = 0; index < 2; index++) { // 需要实现化2个Loop
         std::vector<CcuRep::RemoteAddr> src;
@@ -253,20 +254,21 @@ HcclResult CcuKernelAlgBase::CreateMultiOpReduce(const std::vector<ChannelHandle
             src.emplace_back(*reinterpret_cast<CcuRep::RemoteAddr*>(&tmp));
         }
         CcuRep::LocalAddr dst = CreateLocalAddr();
-        CcuRep::Variable  len = CreateVariable();
-        CcuRep::Variable  lenForExpansion = CreateVariable();
+        CcuRep::Variable len = CreateVariable();
+        CcuRep::Variable lenForExpansion = CreateVariable();
         CcuRep::LoopBlock lb(this, loopType + "_loop_" + std::to_string(index));
         lb(src, dst, len, lenForExpansion);
 
-        std::vector<CcuRep::CcuBuf> bufs = {moRes.ccuBuf.begin() + index * moConfig.msInterleave,
-                                               moRes.ccuBuf.begin() + index * moConfig.msInterleave + usedBufNum};
-        CcuRep::CompletedEvent &event = moRes.completedEvent[index];
+        std::vector<CcuRep::CcuBuf> bufs = {
+            moRes.ccuBuf.begin() + index * moConfig.msInterleave,
+            moRes.ccuBuf.begin() + index * moConfig.msInterleave + usedBufNum};
+        CcuRep::CompletedEvent& event = moRes.completedEvent[index];
         for (uint32_t i = 0; i < channels.size(); i++) {
             event.mask = 1 << i;
             ReadNb(channels[i], bufs[i], src[i], len, event);
         }
 
-        CcuRep::LocalAddr &localSrc = *reinterpret_cast<CcuRep::LocalAddr*>(&src[size - 1]);
+        CcuRep::LocalAddr& localSrc = *reinterpret_cast<CcuRep::LocalAddr*>(&src[size - 1]);
         event.mask = 1 << channelSize;
         LocalCopyNb(bufs[size - 1], localSrc, len, event);
         event.mask = (1 << size) - 1;
@@ -287,8 +289,9 @@ HcclResult CcuKernelAlgBase::CreateMultiOpReduce(const std::vector<ChannelHandle
     return HCCL_SUCCESS;
 }
 
-HcclResult CcuKernelAlgBase::CreateMultiOpReduceWithoutMyRank(const std::vector<ChannelHandle> &ccuChannels, HcclDataType dataType,
-                                     HcclDataType outputDataType, HcclReduceOp opType)
+HcclResult CcuKernelAlgBase::CreateMultiOpReduceWithoutMyRank(
+    const std::vector<ChannelHandle>& ccuChannels, HcclDataType dataType, HcclDataType outputDataType,
+    HcclReduceOp opType)
 {
     AllocGoResource();
 
@@ -298,9 +301,9 @@ HcclResult CcuKernelAlgBase::CreateMultiOpReduceWithoutMyRank(const std::vector<
         return HCCL_SUCCESS;
     }
 
-    uint32_t size         = ccuChannels.size();
+    uint32_t size = ccuChannels.size();
     uint32_t expansionNum = GetReduceExpansionNum(opType, dataType, outputDataType);
-    uint32_t usedBufNum   = size > expansionNum ? size : expansionNum;
+    uint32_t usedBufNum = size > expansionNum ? size : expansionNum;
 
     for (int32_t index = 0; index < 2; index++) { // 需要实现化2个Loop
         std::vector<CcuRep::RemoteAddr> src;
@@ -310,14 +313,15 @@ HcclResult CcuKernelAlgBase::CreateMultiOpReduceWithoutMyRank(const std::vector<
             src.emplace_back(*reinterpret_cast<CcuRep::RemoteAddr*>(&tmp));
         }
         CcuRep::LocalAddr dst = CreateLocalAddr();
-        CcuRep::Variable  len = CreateVariable();
-        CcuRep::Variable  lenForExpansion = CreateVariable();
+        CcuRep::Variable len = CreateVariable();
+        CcuRep::Variable lenForExpansion = CreateVariable();
         CcuRep::LoopBlock lb(this, loopType + "_withoutloop_" + std::to_string(index));
         lb(src, dst, len, lenForExpansion);
 
-        std::vector<CcuRep::CcuBuf> bufs = {moRes.ccuBuf.begin() + index * moConfig.msInterleave,
-                                               moRes.ccuBuf.begin() + index * moConfig.msInterleave + usedBufNum};
-        CcuRep::CompletedEvent &event = moRes.completedEvent[index];
+        std::vector<CcuRep::CcuBuf> bufs = {
+            moRes.ccuBuf.begin() + index * moConfig.msInterleave,
+            moRes.ccuBuf.begin() + index * moConfig.msInterleave + usedBufNum};
+        CcuRep::CompletedEvent& event = moRes.completedEvent[index];
         for (uint32_t i = 0; i < ccuChannels.size(); i++) {
             event.mask = 1 << i;
             ReadNb(ccuChannels[i], bufs[i], src[i], len, event);
@@ -341,14 +345,14 @@ HcclResult CcuKernelAlgBase::CreateMultiOpReduceWithoutMyRank(const std::vector<
     return HCCL_SUCCESS;
 }
 
-HcclResult CcuKernelAlgBase::GroupReduce(const std::vector<ChannelHandle> &channels, CcuRep::LocalAddr dst,
-                             std::vector<CcuRep::RemoteAddr> src, GroupOpSize goSize, HcclDataType dataType,
-                             HcclDataType outputDataType, HcclReduceOp opType)
+HcclResult CcuKernelAlgBase::GroupReduce(
+    const std::vector<ChannelHandle>& channels, CcuRep::LocalAddr dst, std::vector<CcuRep::RemoteAddr> src,
+    GroupOpSize goSize, HcclDataType dataType, HcclDataType outputDataType, HcclReduceOp opType)
 {
     CHK_RET(CreateMultiOpReduce(channels, dataType, outputDataType, opType));
 
-    uint32_t         size         = channels.size() + 1;
-    uint32_t         expansionNum = GetReduceExpansionNum(opType, dataType, outputDataType);
+    uint32_t size = channels.size() + 1;
+    uint32_t expansionNum = GetReduceExpansionNum(opType, dataType, outputDataType);
     CcuRep::Variable sliceSizeExpansion = CreateVariable();
 
     if (expansionNum != 1) {
@@ -366,7 +370,7 @@ HcclResult CcuKernelAlgBase::GroupReduce(const std::vector<ChannelHandle> &chann
         loopParam += goSize.loopParam;
 
         CcuRep::Variable sliceSize = CreateVariable();
-        sliceSize          = moConfig.memSlice;
+        sliceSize = moConfig.memSlice;
         sliceSizeExpansion = moConfig.memSlice * expansionNum;
 
         auto lc = Loop(GetReduceTypeStr(dataType, opType) + "_loop_0")(src, dst, sliceSize, sliceSizeExpansion);
@@ -379,11 +383,7 @@ HcclResult CcuKernelAlgBase::GroupReduce(const std::vector<ChannelHandle> &chann
         LoopGroup({lc}, {loopParam}, paraCfg, offsetCfg);
 #ifdef CcuProfiling
         std::string groupOpSize = "GroupReduce";
-        GroupInfoTemp groupInfo {
-            goSize.loopParam.Id(),
-            goSize.parallelParam.Id(),
-            goSize.residual.Id()
-        };
+        GroupInfoTemp groupInfo{goSize.loopParam.Id(), goSize.parallelParam.Id(), goSize.residual.Id()};
         AddCcuProfiling(groupInfo, channels, dataType, outputDataType, opType, groupOpSize);
 #endif
     }
@@ -414,7 +414,7 @@ HcclResult CcuKernelAlgBase::GroupReduce(const std::vector<ChannelHandle> &chann
         }
 
         CcuRep::Variable sliceSize = CreateVariable();
-        sliceSize          = moConfig.memSlice;
+        sliceSize = moConfig.memSlice;
         sliceSizeExpansion = moConfig.memSlice * expansionNum;
 
         auto lc1 = Loop(GetReduceTypeStr(dataType, opType) + "_loop_1")(src, dst, sliceSize, sliceSizeExpansion);
@@ -429,18 +429,14 @@ HcclResult CcuKernelAlgBase::GroupReduce(const std::vector<ChannelHandle> &chann
         LoopGroup({lc0, lc1}, {loopCfg0, loopCfg1}, goSize.parallelParam, offsetCfg);
 #ifdef CcuProfiling
         std::string groupOpSize = "GroupReduce";
-        GroupInfoTemp groupInfo {
-            goSize.loopParam.Id(),
-            goSize.parallelParam.Id(),
-            goSize.residual.Id()
-        };
+        GroupInfoTemp groupInfo{goSize.loopParam.Id(), goSize.parallelParam.Id(), goSize.residual.Id()};
         AddCcuProfiling(groupInfo, channels, dataType, outputDataType, opType, groupOpSize);
 #endif
     }
     return HCCL_SUCCESS;
 }
 
-HcclResult CcuKernelAlgBase::CreateMultiOpBroadcastWithoutMyRank(const std::vector<ChannelHandle> &channels)
+HcclResult CcuKernelAlgBase::CreateMultiOpBroadcastWithoutMyRank(const std::vector<ChannelHandle>& channels)
 {
     AllocGoResource();
 
@@ -458,12 +454,12 @@ HcclResult CcuKernelAlgBase::CreateMultiOpBroadcastWithoutMyRank(const std::vect
             CcuRep::LocalAddr tmp = CreateLocalAddr();
             dst.emplace_back(*reinterpret_cast<CcuRep::RemoteAddr*>(&tmp));
         }
-        CcuRep::Variable            len = CreateVariable();
-        CcuRep::LoopBlock           lb(this, loopType + "_loop_" + std::to_string(index));
+        CcuRep::Variable len = CreateVariable();
+        CcuRep::LoopBlock lb(this, loopType + "_loop_" + std::to_string(index));
         lb(src, dst, len);
 
-        CcuRep::CcuBuf &buf = moRes.ccuBuf[index * moConfig.msInterleave];
-        CcuRep::CompletedEvent &event = moRes.completedEvent[index];
+        CcuRep::CcuBuf& buf = moRes.ccuBuf[index * moConfig.msInterleave];
+        CcuRep::CompletedEvent& event = moRes.completedEvent[index];
 
         event.mask = 1;
         LocalCopyNb(buf, src, len, event);
@@ -476,7 +472,7 @@ HcclResult CcuKernelAlgBase::CreateMultiOpBroadcastWithoutMyRank(const std::vect
             event.mask = 1 << i;
             CHK_RET(WriteNb(channels[i], dst[i], buf, len, event));
         }
-        CcuRep::LocalAddr &localDst = *reinterpret_cast<CcuRep::LocalAddr*>(&dst[size - 1]);
+        CcuRep::LocalAddr& localDst = *reinterpret_cast<CcuRep::LocalAddr*>(&dst[size - 1]);
         event.mask = (1 << (size - 1)) - 1;
         WaitEvent(event);
     }
@@ -485,8 +481,9 @@ HcclResult CcuKernelAlgBase::CreateMultiOpBroadcastWithoutMyRank(const std::vect
     return HCCL_SUCCESS;
 }
 
-HcclResult CcuKernelAlgBase::GroupBroadcastWithoutMyRank(const std::vector<ChannelHandle> &channels, std::vector<CcuRep::RemoteAddr> dst,
-                                CcuRep::LocalAddr src, GroupOpSize goSize)
+HcclResult CcuKernelAlgBase::GroupBroadcastWithoutMyRank(
+    const std::vector<ChannelHandle>& channels, std::vector<CcuRep::RemoteAddr> dst, CcuRep::LocalAddr src,
+    GroupOpSize goSize)
 {
     CHK_RET(CreateMultiOpBroadcastWithoutMyRank(channels));
 
@@ -500,7 +497,7 @@ HcclResult CcuKernelAlgBase::GroupBroadcastWithoutMyRank(const std::vector<Chann
 
         CcuRep::Variable sliceSize = CreateVariable();
         sliceSize = moConfig.memSlice;
-        auto lc   = Loop("broadcast_loop_0")(src, dst, sliceSize);
+        auto lc = Loop("broadcast_loop_0")(src, dst, sliceSize);
 
         CcuRep::Variable paraCfg = CreateVariable();
         paraCfg = GetParallelParam(moConfig.loopCount - 1, 0, 1);
@@ -510,12 +507,10 @@ HcclResult CcuKernelAlgBase::GroupBroadcastWithoutMyRank(const std::vector<Chann
         LoopGroup({lc}, {loopParam}, paraCfg, offsetCfg);
 #ifdef CcuProfiling
         std::string groupOpSize = "GroupBroadcast";
-        GroupInfoTemp groupInfo {
-            goSize.loopParam.Id(),
-            goSize.parallelParam.Id(),
-            goSize.residual.Id()
-        };
-        AddCcuProfiling(groupInfo, channels, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclReduceOp::HCCL_REDUCE_RESERVED, groupOpSize);
+        GroupInfoTemp groupInfo{goSize.loopParam.Id(), goSize.parallelParam.Id(), goSize.residual.Id()};
+        AddCcuProfiling(
+            groupInfo, channels, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclDataType::HCCL_DATA_TYPE_RESERVED,
+            HcclReduceOp::HCCL_REDUCE_RESERVED, groupOpSize);
 #endif
     }
 
@@ -535,7 +530,7 @@ HcclResult CcuKernelAlgBase::GroupBroadcastWithoutMyRank(const std::vector<Chann
 
         CcuRep::Variable sliceSize = CreateVariable();
         sliceSize = moConfig.memSlice;
-        auto lc1  = Loop("broadcast_loop_1")(src, dst, sliceSize);
+        auto lc1 = Loop("broadcast_loop_1")(src, dst, sliceSize);
 
         CcuRep::Variable loopCfg0 = CreateVariable();
         loopCfg0 = GetLoopParam(0, 0, 1);
@@ -547,12 +542,10 @@ HcclResult CcuKernelAlgBase::GroupBroadcastWithoutMyRank(const std::vector<Chann
         LoopGroup({lc0, lc1}, {loopCfg0, loopCfg1}, goSize.parallelParam, offsetCfg);
 #ifdef CcuProfiling
         std::string groupOpSize = "GroupBroadcast";
-        GroupInfoTemp groupInfo {
-            goSize.loopParam.Id(),
-            goSize.parallelParam.Id(),
-            goSize.residual.Id()
-        };
-        AddCcuProfiling(groupInfo, channels, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclReduceOp::HCCL_REDUCE_RESERVED, groupOpSize);
+        GroupInfoTemp groupInfo{goSize.loopParam.Id(), goSize.parallelParam.Id(), goSize.residual.Id()};
+        AddCcuProfiling(
+            groupInfo, channels, HcclDataType::HCCL_DATA_TYPE_RESERVED, HcclDataType::HCCL_DATA_TYPE_RESERVED,
+            HcclReduceOp::HCCL_REDUCE_RESERVED, groupOpSize);
 #endif
     }
     return HCCL_SUCCESS;
@@ -571,14 +564,15 @@ HcclResult CcuKernelAlgBase::CreateMultiOpCopy()
     for (uint32_t index = 0; index < 2; index++) { // 需要实现化2个Loop
         CcuRep::LocalAddr src = CreateLocalAddr();
         CcuRep::LocalAddr dst = CreateLocalAddr();
-        CcuRep::Variable  len = CreateVariable();
+        CcuRep::Variable len = CreateVariable();
         CcuRep::LoopBlock lb(this, loopType + "_loop_" + std::to_string(index));
         lb(src, dst, len);
 
         CcuRep::CompletedEvent event = moRes.completedEvent[index];
 
-        std::vector<CcuRep::CcuBuf> bufs = {moRes.ccuBuf.begin() + index * moConfig.msInterleave,
-                                               moRes.ccuBuf.begin() + index * moConfig.msInterleave + usedBufNum};
+        std::vector<CcuRep::CcuBuf> bufs = {
+            moRes.ccuBuf.begin() + index * moConfig.msInterleave,
+            moRes.ccuBuf.begin() + index * moConfig.msInterleave + usedBufNum};
 
         event.mask = 1;
         LocalCopyNb(bufs[0], src, len, event);
@@ -597,17 +591,17 @@ HcclResult CcuKernelAlgBase::GroupCopy(CcuRep::LocalAddr dst, CcuRep::LocalAddr 
     CCU_IF(goSize.addrOffset != 0)
     {
         CcuRep::Variable loopParam = CreateVariable();
-        loopParam                  = GetLoopParam(0, moConfig.memSlice * moConfig.loopCount, 0);
+        loopParam = GetLoopParam(0, moConfig.memSlice * moConfig.loopCount, 0);
         loopParam += goSize.loopParam;
 
         CcuRep::Variable sliceSize = CreateVariable();
-        sliceSize                  = moConfig.memSlice;
-        auto lc                    = Loop("localcopy_loop_0")(src, dst, sliceSize);
+        sliceSize = moConfig.memSlice;
+        auto lc = Loop("localcopy_loop_0")(src, dst, sliceSize);
 
-        CcuRep::Variable paraCfg   = CreateVariable();
-        paraCfg                    = GetParallelParam(moConfig.loopCount - 1, 0, 1);
+        CcuRep::Variable paraCfg = CreateVariable();
+        paraCfg = GetParallelParam(moConfig.loopCount - 1, 0, 1);
         CcuRep::Variable offsetCfg = CreateVariable();
-        offsetCfg                  = GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
+        offsetCfg = GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
         LoopGroup({lc}, {loopParam}, paraCfg, offsetCfg);
     }
 
@@ -622,15 +616,15 @@ HcclResult CcuKernelAlgBase::GroupCopy(CcuRep::LocalAddr dst, CcuRep::LocalAddr 
         src.addr += goSize.residual;
         dst.addr += goSize.residual;
         CcuRep::Variable sliceSize = CreateVariable();
-        sliceSize                  = moConfig.memSlice;
-        auto lc1                   = Loop("localcopy_loop_1")(src, dst, sliceSize);
+        sliceSize = moConfig.memSlice;
+        auto lc1 = Loop("localcopy_loop_1")(src, dst, sliceSize);
 
-        CcuRep::Variable loopCfg0  = CreateVariable();
-        loopCfg0                   = GetLoopParam(0, 0, 1);
-        CcuRep::Variable loopCfg1  = CreateVariable();
-        loopCfg1                   = GetLoopParam(0, 0, 1);
+        CcuRep::Variable loopCfg0 = CreateVariable();
+        loopCfg0 = GetLoopParam(0, 0, 1);
+        CcuRep::Variable loopCfg1 = CreateVariable();
+        loopCfg1 = GetLoopParam(0, 0, 1);
         CcuRep::Variable offsetCfg = CreateVariable();
-        offsetCfg                  = GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
+        offsetCfg = GetOffsetParam(moConfig.memSlice, moConfig.msInterleave, 1);
         LoopGroup({lc0, lc1}, {loopCfg0, loopCfg1}, goSize.parallelParam, offsetCfg);
     }
     return HCCL_SUCCESS;
@@ -641,8 +635,8 @@ std::string CcuKernelAlgBase::GetLoopBlockTag(std::string loopType, int32_t inde
     return loopType + std::to_string(index);
 }
 
-HcclResult CcuKernelAlgBase::CreateReduceLoop(uint32_t size, HcclDataType dataType, HcclDataType outputDataType,
-    HcclReduceOp opType)
+HcclResult CcuKernelAlgBase::CreateReduceLoop(
+    uint32_t size, HcclDataType dataType, HcclDataType outputDataType, HcclReduceOp opType)
 {
     constexpr uint32_t LOOP_NUM = 16;
     AllocGoResource(LOOP_NUM);
@@ -654,7 +648,7 @@ HcclResult CcuKernelAlgBase::CreateReduceLoop(uint32_t size, HcclDataType dataTy
     }
 
     uint32_t expansionNum = GetReduceExpansionNum(opType, dataType, outputDataType);
-    uint32_t usedBufNum   = size > expansionNum ? size : expansionNum;  // ?
+    uint32_t usedBufNum = size > expansionNum ? size : expansionNum; // ?
 
     for (int32_t index = 0; index < 2; index++) { // 需要实例化2个Loop
         CcuRep::LocalAddr dst = CreateLocalAddr();
@@ -663,14 +657,15 @@ HcclResult CcuKernelAlgBase::CreateReduceLoop(uint32_t size, HcclDataType dataTy
         for (uint32_t i = 0; i < size; i++) {
             scratch.emplace_back(CreateLocalAddr());
         }
-        CcuRep::Variable            len = CreateVariable();
-        CcuRep::Variable            lenForExpansion = CreateVariable();
-        CcuRep::LoopBlock           lb(this, GetLoopBlockTag(loopType, index));
+        CcuRep::Variable len = CreateVariable();
+        CcuRep::Variable lenForExpansion = CreateVariable();
+        CcuRep::LoopBlock lb(this, GetLoopBlockTag(loopType, index));
         lb(dst, scratch, len, lenForExpansion);
 
-        std::vector<CcuRep::CcuBuf> bufs = {moRes.ccuBuf.begin() + index * moConfig.msInterleave,
-                                            moRes.ccuBuf.begin() + index * moConfig.msInterleave + usedBufNum};
-        CcuRep::CompletedEvent     event = moRes.completedEvent[index];
+        std::vector<CcuRep::CcuBuf> bufs = {
+            moRes.ccuBuf.begin() + index * moConfig.msInterleave,
+            moRes.ccuBuf.begin() + index * moConfig.msInterleave + usedBufNum};
+        CcuRep::CompletedEvent event = moRes.completedEvent[index];
 
         for (uint32_t i = 0; i < size; i++) {
             event.SetMask(1 << i);
@@ -694,8 +689,9 @@ HcclResult CcuKernelAlgBase::CreateReduceLoop(uint32_t size, HcclDataType dataTy
     return HCCL_SUCCESS;
 }
 
-HcclResult CcuKernelAlgBase::GroupLocalReduce(CcuRep::LocalAddr outDstOrg, std::vector<CcuRep::LocalAddr> &scratchOrg,
-    GroupOpSize goSize, HcclDataType dataType, HcclDataType outputDataType, HcclReduceOp opType)
+HcclResult CcuKernelAlgBase::GroupLocalReduce(
+    CcuRep::LocalAddr outDstOrg, std::vector<CcuRep::LocalAddr>& scratchOrg, GroupOpSize goSize, HcclDataType dataType,
+    HcclDataType outputDataType, HcclReduceOp opType)
 {
     const uint32_t size = scratchOrg.size();
 
@@ -711,7 +707,7 @@ HcclResult CcuKernelAlgBase::GroupLocalReduce(CcuRep::LocalAddr outDstOrg, std::
     CreateReduceLoop(size, dataType, outputDataType, opType);
 
     std::string loopType = GetReduceTypeStr(dataType, opType) + "_LocalReduce_Loop_";
-    uint32_t         expansionNum = GetReduceExpansionNum(opType, dataType, outputDataType);
+    uint32_t expansionNum = GetReduceExpansionNum(opType, dataType, outputDataType);
     CcuRep::Variable sliceSizeExpansion = CreateVariable();
 
     if (expansionNum != 1) {
@@ -721,14 +717,14 @@ HcclResult CcuKernelAlgBase::GroupLocalReduce(CcuRep::LocalAddr outDstOrg, std::
     }
 
     // m部分
-    CCU_IF(goSize.loopParam != 0)                   // goSize1
+    CCU_IF(goSize.loopParam != 0) // goSize1
     {
         CcuRep::Variable loopParam = CreateVariable();
         loopParam = GetLoopParam(0, moConfig.memSlice * moConfig.loopCount, 0);
         loopParam += goSize.loopParam;
 
         CcuRep::Variable sliceSize = CreateVariable();
-        sliceSize          = moConfig.memSlice;
+        sliceSize = moConfig.memSlice;
         sliceSizeExpansion = moConfig.memSlice * expansionNum;
 
         auto lc = Loop(GetLoopBlockTag(loopType, 0))(dst, scratch, sliceSize, sliceSizeExpansion);
@@ -741,7 +737,7 @@ HcclResult CcuKernelAlgBase::GroupLocalReduce(CcuRep::LocalAddr outDstOrg, std::
         LoopGroup({lc}, {loopParam}, paraCfg, offsetCfg);
     }
 
-    CCU_IF(goSize.parallelParam != 0)               // goSize2
+    CCU_IF(goSize.parallelParam != 0) // goSize2
     {
         // p部分，加m的偏移
         for (uint32_t i = 0; i < size; i++) {
@@ -754,7 +750,7 @@ HcclResult CcuKernelAlgBase::GroupLocalReduce(CcuRep::LocalAddr outDstOrg, std::
 
         sliceSizeExpansion = 0;
         for (uint32_t i = 0; i < expansionNum; i++) {
-            sliceSizeExpansion += goSize.residual;  // goSize3
+            sliceSizeExpansion += goSize.residual; // goSize3
         }
 
         auto lc0 = Loop(GetLoopBlockTag(loopType, 0))(dst, scratch, goSize.residual, sliceSizeExpansion);
@@ -769,7 +765,7 @@ HcclResult CcuKernelAlgBase::GroupLocalReduce(CcuRep::LocalAddr outDstOrg, std::
         }
 
         CcuRep::Variable sliceSize = CreateVariable();
-        sliceSize          = moConfig.memSlice;
+        sliceSize = moConfig.memSlice;
         sliceSizeExpansion = moConfig.memSlice * expansionNum;
 
         auto lc1 = Loop(GetLoopBlockTag(loopType, 1))(dst, scratch, sliceSize, sliceSizeExpansion);
@@ -786,14 +782,14 @@ HcclResult CcuKernelAlgBase::GroupLocalReduce(CcuRep::LocalAddr outDstOrg, std::
     return HCCL_SUCCESS;
 }
 
-HcclResult CcuKernelAlgBase::GroupReduceWithoutMyRank(const std::vector<ChannelHandle> &ccuChannels, CcuRep::LocalAddr dst,
-                             std::vector<CcuRep::RemoteAddr> src, GroupOpSize goSize, HcclDataType dataType,
-                             HcclDataType outputDataType, HcclReduceOp opType)
+HcclResult CcuKernelAlgBase::GroupReduceWithoutMyRank(
+    const std::vector<ChannelHandle>& ccuChannels, CcuRep::LocalAddr dst, std::vector<CcuRep::RemoteAddr> src,
+    GroupOpSize goSize, HcclDataType dataType, HcclDataType outputDataType, HcclReduceOp opType)
 {
     CHK_RET(CreateMultiOpReduceWithoutMyRank(ccuChannels, dataType, outputDataType, opType));
 
-    uint32_t         size         = src.size();
-    uint32_t         expansionNum = GetReduceExpansionNum(opType, dataType, outputDataType);
+    uint32_t size = src.size();
+    uint32_t expansionNum = GetReduceExpansionNum(opType, dataType, outputDataType);
     CcuRep::Variable sliceSizeExpansion = CreateVariable();
 
     if (expansionNum != 1) {
@@ -811,7 +807,7 @@ HcclResult CcuKernelAlgBase::GroupReduceWithoutMyRank(const std::vector<ChannelH
         loopParam += goSize.loopParam;
 
         CcuRep::Variable sliceSize = CreateVariable();
-        sliceSize          = moConfig.memSlice;
+        sliceSize = moConfig.memSlice;
         sliceSizeExpansion = moConfig.memSlice * expansionNum;
 
         auto lc = Loop(GetReduceTypeStr(dataType, opType) + "_withoutloop_0")(src, dst, sliceSize, sliceSizeExpansion);
@@ -824,11 +820,7 @@ HcclResult CcuKernelAlgBase::GroupReduceWithoutMyRank(const std::vector<ChannelH
         LoopGroup({lc}, {loopParam}, paraCfg, offsetCfg);
 #ifdef CcuProfiling
         std::string groupOpSize = "GroupReduce";
-        GroupInfoTemp groupInfo {
-            goSize.loopParam.Id(),
-            goSize.parallelParam.Id(),
-            goSize.residual.Id()
-        };
+        GroupInfoTemp groupInfo{goSize.loopParam.Id(), goSize.parallelParam.Id(), goSize.residual.Id()};
         AddCcuProfiling(groupInfo, ccuChannels, dataType, outputDataType, opType, groupOpSize);
 #endif
     }
@@ -849,7 +841,8 @@ HcclResult CcuKernelAlgBase::GroupReduceWithoutMyRank(const std::vector<ChannelH
             sliceSizeExpansion += goSize.residual;
         }
 
-        auto lc0 = Loop(GetReduceTypeStr(dataType, opType) + "_withoutloop_0")(src, dst, goSize.residual, sliceSizeExpansion);
+        auto lc0 =
+            Loop(GetReduceTypeStr(dataType, opType) + "_withoutloop_0")(src, dst, goSize.residual, sliceSizeExpansion);
 
         for (uint32_t i = 0; i < size; i++) {
             src[i].addr += goSize.residual;
@@ -859,7 +852,7 @@ HcclResult CcuKernelAlgBase::GroupReduceWithoutMyRank(const std::vector<ChannelH
         }
 
         CcuRep::Variable sliceSize = CreateVariable();
-        sliceSize          = moConfig.memSlice;
+        sliceSize = moConfig.memSlice;
         sliceSizeExpansion = moConfig.memSlice * expansionNum;
 
         auto lc1 = Loop(GetReduceTypeStr(dataType, opType) + "_withoutloop_1")(src, dst, sliceSize, sliceSizeExpansion);
@@ -874,21 +867,18 @@ HcclResult CcuKernelAlgBase::GroupReduceWithoutMyRank(const std::vector<ChannelH
         LoopGroup({lc0, lc1}, {loopCfg0, loopCfg1}, goSize.parallelParam, offsetCfg);
 #ifdef CcuProfiling
         std::string groupOpSize = "GroupReduce";
-        GroupInfoTemp groupInfo {
-            goSize.loopParam.Id(),
-            goSize.parallelParam.Id(),
-            goSize.residual.Id()
-        };
+        GroupInfoTemp groupInfo{goSize.loopParam.Id(), goSize.parallelParam.Id(), goSize.residual.Id()};
         AddCcuProfiling(groupInfo, ccuChannels, dataType, outputDataType, opType, groupOpSize);
 #endif
     }
     return HCCL_SUCCESS;
 }
 
-void CcuKernelAlgBase::LoopGroup(const std::vector<CcuRep::LoopCall> &loops, const std::vector<CcuRep::Variable> &loopCfg,
-                           const CcuRep::Variable &paraCfg, const CcuRep::Variable &offsetCfg)
+void CcuKernelAlgBase::LoopGroup(
+    const std::vector<CcuRep::LoopCall>& loops, const std::vector<CcuRep::Variable>& loopCfg,
+    const CcuRep::Variable& paraCfg, const CcuRep::Variable& offsetCfg)
 {
-    auto                          lgc = CcuRep::LoopGroupCall(this);
+    auto lgc = CcuRep::LoopGroupCall(this);
     std::vector<CcuRep::Executor> executors;
     for (size_t i = 0; i < loops.size(); i++) {
         executors.push_back(moRes.executor[i]);
@@ -922,4 +912,4 @@ std::vector<CcuRep::CompletedEvent> CcuKernelAlgBase::CreateBlockCompletedEvent(
     return res;
 }
 
-}
+} // namespace mc2_ops_hccl

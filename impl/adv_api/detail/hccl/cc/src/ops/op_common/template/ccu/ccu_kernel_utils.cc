@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include <vector>
 #include <string>
 #include <sstream>
@@ -21,7 +21,7 @@ constexpr int COMM_LEVEL_SIZE_2 = 2;
 
 uint64_t CalcLGMaxTransSize()
 {
-    return LOC_CPY_LOOP_NUM * 4096 * 8192;  // 单片MS搬4096B，每个loop循环最多8192次
+    return LOC_CPY_LOOP_NUM * 4096 * 8192; // 单片MS搬4096B，每个loop循环最多8192次
 }
 
 constexpr uint64_t SetBits(uint16_t start, uint16_t end)
@@ -29,10 +29,7 @@ constexpr uint64_t SetBits(uint16_t start, uint16_t end)
     return ((uint64_t(1) << (end - start + 1)) - uint64_t(1)) << start;
 }
 
-constexpr uint64_t SetBits(uint16_t end)
-{
-    return ((uint64_t(1) << (end + 1)) - uint64_t(1));
-}
+constexpr uint64_t SetBits(uint16_t end) { return ((uint64_t(1) << (end + 1)) - uint64_t(1)); }
 
 // 辅助函数
 uint64_t GetMaxLoopIterNum()
@@ -43,46 +40,47 @@ uint64_t GetMaxLoopIterNum()
 
 uint64_t GetLoopParam(uint64_t loopCtxId, uint64_t gsaOffset, uint64_t loopIterNum)
 {
-    constexpr uint16_t ctxIdBitNum     = 8;
-    constexpr uint16_t ctxIdShiftBit   = 45;
-    constexpr uint16_t gsaBitNum       = 32;
-    constexpr uint16_t gsaShiftBit     = 13;
-    constexpr uint16_t loopNumBitNum   = 13;
+    constexpr uint16_t ctxIdBitNum = 8;
+    constexpr uint16_t ctxIdShiftBit = 45;
+    constexpr uint16_t gsaBitNum = 32;
+    constexpr uint16_t gsaShiftBit = 13;
+    constexpr uint16_t loopNumBitNum = 13;
     constexpr uint16_t loopNumShiftBit = 0;
-    return ((loopCtxId & SetBits(ctxIdBitNum)) << ctxIdShiftBit) | ((gsaOffset & SetBits(gsaBitNum)) << gsaShiftBit)
-           | ((loopIterNum & SetBits(loopNumBitNum)) << loopNumShiftBit);
+    return ((loopCtxId & SetBits(ctxIdBitNum)) << ctxIdShiftBit) | ((gsaOffset & SetBits(gsaBitNum)) << gsaShiftBit) |
+           ((loopIterNum & SetBits(loopNumBitNum)) << loopNumShiftBit);
 }
 
 uint64_t GetParallelParam(uint64_t repeatNum, uint64_t repeatLoopIndex, uint64_t totalLoopNum)
 {
-    constexpr uint16_t repeatBitNum       = 7;
-    constexpr uint16_t repeatNumShiftBit  = 55;
-    constexpr uint16_t repeatLoopBitNum   = 7;
+    constexpr uint16_t repeatBitNum = 7;
+    constexpr uint16_t repeatNumShiftBit = 55;
+    constexpr uint16_t repeatLoopBitNum = 7;
     constexpr uint16_t repeatLoopShiftBit = 48;
-    constexpr uint16_t totalLoopBitNum    = 7;
-    constexpr uint16_t totalLoopShiftBit  = 41;
-    return ((repeatNum & SetBits(repeatBitNum)) << repeatNumShiftBit)
-           | ((repeatLoopIndex & SetBits(repeatLoopBitNum)) << repeatLoopShiftBit)
-           | ((totalLoopNum & SetBits(totalLoopBitNum)) << totalLoopShiftBit);
+    constexpr uint16_t totalLoopBitNum = 7;
+    constexpr uint16_t totalLoopShiftBit = 41;
+    return ((repeatNum & SetBits(repeatBitNum)) << repeatNumShiftBit) |
+           ((repeatLoopIndex & SetBits(repeatLoopBitNum)) << repeatLoopShiftBit) |
+           ((totalLoopNum & SetBits(totalLoopBitNum)) << totalLoopShiftBit);
 }
 
 uint64_t GetOffsetParam(uint64_t gsaOffset, uint64_t msOffset, uint64_t ckeOffset)
 {
-    constexpr uint16_t gsaBitNum   = 32;
+    constexpr uint16_t gsaBitNum = 32;
     constexpr uint16_t gsaShiftBit = 21;
-    constexpr uint16_t msBitNum    = 11;
-    constexpr uint16_t msShiftBit  = 10;
-    constexpr uint16_t ckeBitNum   = 10;
+    constexpr uint16_t msBitNum = 11;
+    constexpr uint16_t msShiftBit = 10;
+    constexpr uint16_t ckeBitNum = 10;
     constexpr uint16_t ckeShiftBit = 0;
-    return ((gsaOffset & SetBits(gsaBitNum)) << gsaShiftBit) | ((msOffset & SetBits(msBitNum)) << msShiftBit)
-           | ((ckeOffset & SetBits(ckeBitNum)) << ckeShiftBit);
+    return ((gsaOffset & SetBits(gsaBitNum)) << gsaShiftBit) | ((msOffset & SetBits(msBitNum)) << msShiftBit) |
+           ((ckeOffset & SetBits(ckeBitNum)) << ckeShiftBit);
 }
 
 uint64_t GetExpansionParam(uint64_t expansionNum)
 {
-    constexpr uint64_t expansionNum2        = 2;
+    constexpr uint64_t expansionNum2 = 2;
     constexpr uint64_t expansionNumShiftBit = 53;
-    return (expansionNum == expansionNum2 ? uint64_t(1) : uint64_t(2)) << expansionNumShiftBit; // Bit[53-54], 00: 1, 01: 2, 10: 4
+    return (expansionNum == expansionNum2 ? uint64_t(1) : uint64_t(2))
+           << expansionNumShiftBit; // Bit[53-54], 00: 1, 01: 2, 10: 4
 }
 
 uint32_t GetReduceExpansionNum(HcclReduceOp reduceOp, HcclDataType dataType, HcclDataType outputDataType)
@@ -104,10 +102,7 @@ uint32_t GetReduceExpansionNum(HcclReduceOp reduceOp, HcclDataType dataType, Hcc
     return expansionNum;
 }
 
-uint64_t DataTypeSizeGet(HcclDataType type)
-{
-    return SIZE_TABLE[type];
-}
+uint64_t DataTypeSizeGet(HcclDataType type) { return SIZE_TABLE[type]; }
 
 std::string GetReduceTypeStr(HcclDataType dataType, HcclReduceOp opType)
 {
@@ -128,12 +123,12 @@ std::string GetReduceTypeStr(HcclDataType dataType, HcclReduceOp opType)
     return ccuRepDataTypeStr[dataType] + "_" + ccuRepOpTypeStr[opType];
 }
 
-HcclResult GenerateCcuKernelSignature(hcomm::CcuKernelSignature &sig, const std::string &name, const OpParam &opParam,
-    const std::vector<std::vector<uint32_t>> &subCommRanks)
+HcclResult GenerateCcuKernelSignature(
+    hcomm::CcuKernelSignature& sig, const std::string& name, const OpParam& opParam,
+    const std::vector<std::vector<uint32_t>>& subCommRanks)
 {
     sig.Append<std::string>(name);
-    if (opParam.opType == HcclCMDType::HCCL_CMD_REDUCE_SCATTER ||
-        opParam.opType == HcclCMDType::HCCL_CMD_ALLREDUCE ||
+    if (opParam.opType == HcclCMDType::HCCL_CMD_REDUCE_SCATTER || opParam.opType == HcclCMDType::HCCL_CMD_ALLREDUCE ||
         opParam.opType == HcclCMDType::HCCL_CMD_REDUCE) {
         sig.Append<uint8_t>(uint8_t(opParam.reduceType));
         sig.Append<uint8_t>(uint8_t(opParam.DataDes.dataType));
@@ -143,8 +138,7 @@ HcclResult GenerateCcuKernelSignature(hcomm::CcuKernelSignature &sig, const std:
         sig.Append<std::string>(GetReduceTypeStr(opParam.vDataDes.dataType, opParam.reduceType));
         sig.Append<char>('_');
     }
-    if (opParam.opType == HcclCMDType::HCCL_CMD_REDUCE ||
-        opParam.opType == HcclCMDType::HCCL_CMD_BROADCAST ||
+    if (opParam.opType == HcclCMDType::HCCL_CMD_REDUCE || opParam.opType == HcclCMDType::HCCL_CMD_BROADCAST ||
         opParam.opType == HcclCMDType::HCCL_CMD_GATHER) {
         // 带有root属性的算子需要考虑自己与root的关系，暂定直接用root号做区分
         sig.Append<char>('R');
@@ -166,4 +160,4 @@ HcclResult GenerateCcuKernelSignature(hcomm::CcuKernelSignature &sig, const std:
     HCCL_INFO("[GenerateCcuKernelSignature] success: %s", sig.Describe().c_str());
     return HcclResult::HCCL_SUCCESS;
 }
-}
+} // namespace mc2_ops_hccl

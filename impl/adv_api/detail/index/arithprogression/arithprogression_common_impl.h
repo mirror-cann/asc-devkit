@@ -93,8 +93,7 @@ __aicore__ inline void ArithProgressionImpl(
             for (int i = 0; i < DEFAULT_BLK_NUM - 1; i++) {
                 Adds<T, false>(
                     dstLocal[(i + 1) * BLOCK_NUM], dstLocal[i * BLOCK_NUM],
-                    GetArithProgressionStep<T>(diffValue, BLOCK_NUM), MASK_PLACEHOLDER,
-                    (uint16_t)1, addsParamsStride1);
+                    GetArithProgressionStep<T>(diffValue, BLOCK_NUM), MASK_PLACEHOLDER, (uint16_t)1, addsParamsStride1);
                 PipeBarrier<PIPE_V>();
             }
             int32_t repeat = count / REPEAT_NUM;
@@ -105,8 +104,8 @@ __aicore__ inline void ArithProgressionImpl(
             for (int i = 0; i < repeat - 1; i++) {
                 Adds<T, false>(
                     dstLocal[(i + 1) * REPEAT_NUM], dstLocal[i * REPEAT_NUM],
-                    GetArithProgressionStep<T>(diffValue, REPEAT_NUM), MASK_PLACEHOLDER,
-                    (uint16_t)1, addsParamsStride8);
+                    GetArithProgressionStep<T>(diffValue, REPEAT_NUM), MASK_PLACEHOLDER, (uint16_t)1,
+                    addsParamsStride8);
                 PipeBarrier<PIPE_V>();
             }
             if (tail > 0) {
@@ -115,8 +114,8 @@ __aicore__ inline void ArithProgressionImpl(
                 PipeBarrier<PIPE_V>();
                 Adds<T, false>(
                     dstLocal[repeat * REPEAT_NUM], dstLocal[(repeat - 1) * REPEAT_NUM],
-                    GetArithProgressionStep<T>(diffValue, REPEAT_NUM), MASK_PLACEHOLDER,
-                    (uint16_t)1, addsParamsStride8);
+                    GetArithProgressionStep<T>(diffValue, REPEAT_NUM), MASK_PLACEHOLDER, (uint16_t)1,
+                    addsParamsStride8);
                 PipeBarrier<PIPE_V>();
             }
         } else {
@@ -128,8 +127,7 @@ __aicore__ inline void ArithProgressionImpl(
             for (int i = 0; i < repeat - 1; i++) {
                 Adds<T, false>(
                     dstLocal[(i + 1) * BLOCK_NUM], dstLocal[i * BLOCK_NUM],
-                    GetArithProgressionStep<T>(diffValue, BLOCK_NUM), MASK_PLACEHOLDER,
-                    (uint16_t)1, addsParamsStride1);
+                    GetArithProgressionStep<T>(diffValue, BLOCK_NUM), MASK_PLACEHOLDER, (uint16_t)1, addsParamsStride1);
                 PipeBarrier<PIPE_V>();
             }
         }

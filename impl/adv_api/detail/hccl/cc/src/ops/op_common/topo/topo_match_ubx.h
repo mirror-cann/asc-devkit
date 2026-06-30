@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef TOPO_MATCH_UBX
 #define TOPO_MATCH_UBX
 
@@ -17,18 +17,20 @@ class TopoMatchUBX : public TopoMatchBase {
 public:
     explicit TopoMatchUBX();
     ~TopoMatchUBX() override;
-    std::string Describe() const override
-    {
-        return "Topo Match for combined Algorithm: layer 0 Mesh, layer 1 NHR.";
-    }
-    HcclResult MatchTopo(const HcclComm comm, TopoInfoWithNetLayerDetails* topoInfo, AlgHierarchyInfoForAllLevel& algHierarchyInfo) override;
+    std::string Describe() const override { return "Topo Match for combined Algorithm: layer 0 Mesh, layer 1 NHR."; }
+    HcclResult MatchTopo(
+        const HcclComm comm, TopoInfoWithNetLayerDetails* topoInfo,
+        AlgHierarchyInfoForAllLevel& algHierarchyInfo) override;
+
 private:
-    HcclResult TopoForLayer0(const HcclComm comm, uint32_t& layer0Size, const uint32_t myRank,
-                                    AlgHierarchyInfoForAllLevel& algHierarchyInfo) const;
-    HcclResult TopoForLayer1(const HcclComm comm, uint32_t layer0Size, const uint32_t myRank,
-                                    AlgHierarchyInfoForAllLevel& algHierarchyInfo) const;
-    HcclResult CheckVecElementAllSame(const uint32_t *instSizeList, uint32_t listSize) const;
-    template<typename T>
+    HcclResult TopoForLayer0(
+        const HcclComm comm, uint32_t& layer0Size, const uint32_t myRank,
+        AlgHierarchyInfoForAllLevel& algHierarchyInfo) const;
+    HcclResult TopoForLayer1(
+        const HcclComm comm, uint32_t layer0Size, const uint32_t myRank,
+        AlgHierarchyInfoForAllLevel& algHierarchyInfo) const;
+    HcclResult CheckVecElementAllSame(const uint32_t* instSizeList, uint32_t listSize) const;
+    template <typename T>
     std::string PrintCArray(const T* values, const u32 valueNum) const
     {
         std::ostringstream oss;
@@ -38,5 +40,5 @@ private:
         return oss.str();
     }
 };
-}  // namespace Hccl
-#endif  // !TOPO_MATCH_UBX
+} // namespace mc2_ops_hccl
+#endif // !TOPO_MATCH_UBX

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "selector_registry.h"
 
 #include <string>
@@ -16,13 +16,13 @@
 
 namespace mc2_ops_hccl {
 
-SelectorRegistry *SelectorRegistry::Global()
+SelectorRegistry* SelectorRegistry::Global()
 {
-    static SelectorRegistry *globalSelectorRegistry = new SelectorRegistry;
+    static SelectorRegistry* globalSelectorRegistry = new SelectorRegistry;
     return globalSelectorRegistry;
 }
 
-HcclResult SelectorRegistry::Register(u32 priority, AutoSelectorBase *selector)
+HcclResult SelectorRegistry::Register(u32 priority, AutoSelectorBase* selector)
 {
     const std::lock_guard<std::mutex> lock(mu_);
     if (impls_.count(priority) != 0) {
@@ -34,7 +34,7 @@ HcclResult SelectorRegistry::Register(u32 priority, AutoSelectorBase *selector)
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult SelectorRegistry::RegisterByOpType(const HcclCMDType opType, u32 priority, AutoSelectorBase *selector)
+HcclResult SelectorRegistry::RegisterByOpType(const HcclCMDType opType, u32 priority, AutoSelectorBase* selector)
 {
     const std::lock_guard<std::mutex> lock(mu_);
     if (opTypeImpls_[opType].count(priority) != 0) {
@@ -45,7 +45,7 @@ HcclResult SelectorRegistry::RegisterByOpType(const HcclCMDType opType, u32 prio
     return HcclResult::HCCL_SUCCESS;
 }
 
-std::map<u32, AutoSelectorBase *> SelectorRegistry::GetSelectorsByOpType(const HcclCMDType opType)
+std::map<u32, AutoSelectorBase*> SelectorRegistry::GetSelectorsByOpType(const HcclCMDType opType)
 {
     if (opTypeImpls_.count(opType) == 0) {
         HCCL_WARNING("[Algo][Selector] opType %d has no selector registered.", opType);
@@ -54,9 +54,6 @@ std::map<u32, AutoSelectorBase *> SelectorRegistry::GetSelectorsByOpType(const H
     return opTypeImpls_[opType];
 }
 
-std::map<u32, AutoSelectorBase *> SelectorRegistry::GetAllSelectors()
-{
-    return impls_;
-}
+std::map<u32, AutoSelectorBase*> SelectorRegistry::GetAllSelectors() { return impls_; }
 
-} // namespace Hccl
+} // namespace mc2_ops_hccl

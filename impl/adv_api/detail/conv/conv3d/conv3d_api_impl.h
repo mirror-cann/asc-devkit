@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv3d_api_impl.h
@@ -14,7 +14,6 @@
  */
 #ifndef API_CONV3D_API_IMPL_H
 #define API_CONV3D_API_IMPL_H
-
 
 #include "../../../../../include/basic_api/kernel_basic_intf.h"
 #include "kernel_tiling/kernel_tiling.h"
@@ -62,39 +61,43 @@ public:
     struct ContextData : public Config::ContextData {
         __aicore__ inline ContextData(){};
 
-        const struct TConv3DApiTiling *__restrict conv3dTiling;
+        const struct TConv3DApiTiling* __restrict conv3dTiling;
 
         AscendC::TPipe* pipe = nullptr;
 
-        using LoadAL1Tools = typename AscendC::Conditional<Config::formatA == ConvCommonApi::ConvFormat::NCDHW,
-            Conv3dApiFunc::LoadAL1WithPointWiseTools<Intf>, Conv3dApiFunc::LoadAL1Tools<Intf>>::type;
+        using LoadAL1Tools = typename AscendC::Conditional<
+            Config::formatA == ConvCommonApi::ConvFormat::NCDHW, Conv3dApiFunc::LoadAL1WithPointWiseTools<Intf>,
+            Conv3dApiFunc::LoadAL1Tools<Intf>>::type;
 
-        using LoadBL1ToolsTmp = typename AscendC::Conditional<Config::formatA == ConvCommonApi::ConvFormat::NCDHW,
-            Conv3dApiFunc::LoadBL1WithPointWiseTools<Intf>, Conv3dApiFunc::LoadBL1Tools<Intf>>::type;
-        using LoadBL1Tools =
-            typename AscendC::Conditional<groupConvType, Conv3dApiFunc::LoadBL1WithGroupOptTools<Intf>, LoadBL1ToolsTmp>::type;
+        using LoadBL1ToolsTmp = typename AscendC::Conditional<
+            Config::formatA == ConvCommonApi::ConvFormat::NCDHW, Conv3dApiFunc::LoadBL1WithPointWiseTools<Intf>,
+            Conv3dApiFunc::LoadBL1Tools<Intf>>::type;
+        using LoadBL1Tools = typename AscendC::Conditional<
+            groupConvType, Conv3dApiFunc::LoadBL1WithGroupOptTools<Intf>, LoadBL1ToolsTmp>::type;
 
-        using MMadTools = typename AscendC::Conditional<Config::formatA == ConvCommonApi::ConvFormat::NCDHW,
-            Conv3dApiFunc::MMadWithPointWiseTools<Intf>, Conv3dApiFunc::MMadTools<Intf>>::type;
+        using MMadTools = typename AscendC::Conditional<
+            Config::formatA == ConvCommonApi::ConvFormat::NCDHW, Conv3dApiFunc::MMadWithPointWiseTools<Intf>,
+            Conv3dApiFunc::MMadTools<Intf>>::type;
 
-        using LoadBL0ToolsTmp = typename AscendC::Conditional<Config::formatA == ConvCommonApi::ConvFormat::NCDHW,
-            Conv3dApiFunc::LoadBL0WithPointWiseTools<Intf>, Conv3dApiFunc::LoadBL0Tools<Intf>>::type;
-        using LoadBL0Tools =
-            typename AscendC::Conditional<groupConvType, Conv3dApiFunc::LoadBL0WithGroupOptTools<Intf>, LoadBL0ToolsTmp>::type;
+        using LoadBL0ToolsTmp = typename AscendC::Conditional<
+            Config::formatA == ConvCommonApi::ConvFormat::NCDHW, Conv3dApiFunc::LoadBL0WithPointWiseTools<Intf>,
+            Conv3dApiFunc::LoadBL0Tools<Intf>>::type;
+        using LoadBL0Tools = typename AscendC::Conditional<
+            groupConvType, Conv3dApiFunc::LoadBL0WithGroupOptTools<Intf>, LoadBL0ToolsTmp>::type;
 
         using LoadAL0Tools = typename AscendC::Conditional<
-            Config::formatA == ConvCommonApi::ConvFormat::NCDHW,
-            Conv3dApiFunc::LoadAL0WithPointWiseTools<Intf>, Conv3dApiFunc::LoadAL0Tools<Intf>>::type;
+            Config::formatA == ConvCommonApi::ConvFormat::NCDHW, Conv3dApiFunc::LoadAL0WithPointWiseTools<Intf>,
+            Conv3dApiFunc::LoadAL0Tools<Intf>>::type;
         using LoadChannelWiseL1Tools = typename AscendC::Conditional<
             Config::formatA == ConvCommonApi::ConvFormat::NCDHW,
             Conv3dApiFunc::LoadBiasL1WithPointWiseTools<Intf, typename Config::BiasT>,
             Conv3dApiFunc::LoadChannelWiseL1Tools<Intf, typename Config::BiasT>>::type;
         using LoadBiasL0Tools = typename AscendC::Conditional<
-            Config::formatA == ConvCommonApi::ConvFormat::NCDHW,
-            Conv3dApiFunc::LoadBiasL0WithBroadcastTools<Intf>, Conv3dApiFunc::LoadBiasBtTools<Intf>>::type;
+            Config::formatA == ConvCommonApi::ConvFormat::NCDHW, Conv3dApiFunc::LoadBiasL0WithBroadcastTools<Intf>,
+            Conv3dApiFunc::LoadBiasBtTools<Intf>>::type;
         using CopyOutTools = typename AscendC::Conditional<
-            Config::formatA == ConvCommonApi::ConvFormat::NCDHW,
-            Conv3dApiFunc::CopyOutWithPointWiseTools<Intf>, Conv3dApiFunc::CopyOutTools<Intf>>::type;
+            Config::formatA == ConvCommonApi::ConvFormat::NCDHW, Conv3dApiFunc::CopyOutWithPointWiseTools<Intf>,
+            Conv3dApiFunc::CopyOutTools<Intf>>::type;
 
         LoadAL1Tools loadAl1Ins;
         LoadBL1Tools loadBL1Ins;
@@ -135,18 +138,18 @@ public:
             AscendC::LocalTensor<typename Config::L0cT>(AscendC::TPosition::CO1, 0, 0);
 
         // Queue
-        AscendC::TQue<AscendC::QuePosition::A1, QUE_DEPTH_SIZE_TWO> queueAL1;      // AL1
-        AscendC::TQue<AscendC::QuePosition::B1, QUE_DEPTH_SIZE_TWO> queueBL1;      // BL1
-        AscendC::TQue<AscendC::QuePosition::A1, 1> queueBiasL1;   // BiasL1
-        AscendC::TQue<AscendC::TPosition::C2, 1> queueBiasBT;     // BT
-        AscendC::TQue<AscendC::QuePosition::CO1, 1> queueCL0;  // CL0
+        AscendC::TQue<AscendC::QuePosition::A1, QUE_DEPTH_SIZE_TWO> queueAL1; // AL1
+        AscendC::TQue<AscendC::QuePosition::B1, QUE_DEPTH_SIZE_TWO> queueBL1; // BL1
+        AscendC::TQue<AscendC::QuePosition::A1, 1> queueBiasL1;               // BiasL1
+        AscendC::TQue<AscendC::TPosition::C2, 1> queueBiasBT;                 // BT
+        AscendC::TQue<AscendC::QuePosition::CO1, 1> queueCL0;                 // CL0
         // Buffers
         using L0aBufType = typename AscendC::Conditional<
-            Config::formatA == ConvCommonApi::ConvFormat::NCDHW,
-            AscendC::TBuf<AscendC::TPosition::B2>, AscendC::TBuf<AscendC::TPosition::A2>>::type;
+            Config::formatA == ConvCommonApi::ConvFormat::NCDHW, AscendC::TBuf<AscendC::TPosition::B2>,
+            AscendC::TBuf<AscendC::TPosition::A2>>::type;
         using L0bBufType = typename AscendC::Conditional<
-            Config::formatA == ConvCommonApi::ConvFormat::NCDHW,
-            AscendC::TBuf<AscendC::TPosition::A2>, AscendC::TBuf<AscendC::TPosition::B2>>::type;
+            Config::formatA == ConvCommonApi::ConvFormat::NCDHW, AscendC::TBuf<AscendC::TPosition::A2>,
+            AscendC::TBuf<AscendC::TPosition::B2>>::type;
 
         L0aBufType l0aBuf;
         L0bBufType l0bBuf;
@@ -160,7 +163,7 @@ public:
         uint8_t loadAL1Flag = true;
         uint8_t loadBL1Flag = true;
         uint8_t loadAL0Flag = true;
-        uint8_t loadBL0Flag = true; 
+        uint8_t loadBL0Flag = true;
         uint8_t kAL1fullload = false;
         uint8_t kBL1fullload = false;
         uint8_t biasFullLoadFlag = false;
@@ -169,7 +172,7 @@ public:
         uint8_t freeAL1TensorFlag = false;
         uint8_t freeBL1TensorFlag = false;
         uint8_t isGroupOptDimTail = false;
-        
+
         uint64_t kAL1Iter = 0;
         uint64_t kBL1Iter = 0;
         uint64_t mAL1Iter = 0;
@@ -177,8 +180,8 @@ public:
         uint64_t dOutIter = 0;
         uint64_t kIter = 0;
         uint64_t kAL0Iter = 0;
-        uint64_t kBL0Iter = 0;  
-        uint64_t mAL0Iter = 0;  
+        uint64_t kBL0Iter = 0;
+        uint64_t mAL0Iter = 0;
         uint64_t nBL0Iter = 0;
         uint64_t groupOptIter = 0;
 
@@ -277,6 +280,6 @@ public:
     };
 };
 
-}  // namespace Conv3dApi
+} // namespace Conv3dApi
 
 #endif

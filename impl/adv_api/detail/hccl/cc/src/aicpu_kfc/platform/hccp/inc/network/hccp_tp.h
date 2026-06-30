@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef HCCP_TP_H
 #define HCCP_TP_H
 
@@ -42,17 +42,17 @@ union GetTpCfgFlag {
 #pragma pack(1)
 struct TpAttr {
     uint8_t retryTimesInit : 3; // corresponding bitmap bit: 0
-    uint8_t at : 5; // corresponding bitmap bit: 1
-    uint8_t sip[16U]; // corresponding bitmap bit: 2
-    uint8_t dip[16U]; // corresponding bitmap bit: 3
-    uint8_t sma[6U]; // corresponding bitmap bit: 4
-    uint8_t dma[6U]; // corresponding bitmap bit: 5
-    uint16_t vlanId : 12; // corresponding bitmap bit: 6
-    uint8_t vlanEn : 1; // corresponding bitmap bit: 7
-    uint8_t dscp : 6; // corresponding bitmap bit: 8
-    uint8_t atTimes : 5; // corresponding bitmap bit: 9
-    uint8_t sl : 4; // corresponding bitmap bit: 10
-    uint8_t ttl; // corresponding bitmap bit: 11
+    uint8_t at : 5;             // corresponding bitmap bit: 1
+    uint8_t sip[16U];           // corresponding bitmap bit: 2
+    uint8_t dip[16U];           // corresponding bitmap bit: 3
+    uint8_t sma[6U];            // corresponding bitmap bit: 4
+    uint8_t dma[6U];            // corresponding bitmap bit: 5
+    uint16_t vlanId : 12;       // corresponding bitmap bit: 6
+    uint8_t vlanEn : 1;         // corresponding bitmap bit: 7
+    uint8_t dscp : 6;           // corresponding bitmap bit: 8
+    uint8_t atTimes : 5;        // corresponding bitmap bit: 9
+    uint8_t sl : 4;             // corresponding bitmap bit: 10
+    uint8_t ttl;                // corresponding bitmap bit: 11
     uint8_t reserved[78];
 };
 #pragma pack()

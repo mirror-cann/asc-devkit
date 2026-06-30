@@ -40,16 +40,19 @@ public:
     __aicore__ inline int32_t Init(__ubuf__ uint8_t* buff, uint32_t len);
     template <typename T>
     __aicore__ inline int32_t Init(const LocalTensor<T>& buff, uint32_t len);
-    template <bool commit = true, pipe_t commitPipe = PIPE_S, pipe_t reqPipe = PIPE_MTE3,
-        auto const &config = URMA_DEFAULT_CFG>
+    template <
+        bool commit = true, pipe_t commitPipe = PIPE_S, pipe_t reqPipe = PIPE_MTE3,
+        auto const& config = URMA_DEFAULT_CFG>
     __aicore__ inline int32_t WriteNbi(ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len);
-    template <bool commit = true, pipe_t commitPipe = PIPE_S, pipe_t reqPipe = PIPE_MTE3,
-        auto const &config = URMA_DEFAULT_CFG>
+    template <
+        bool commit = true, pipe_t commitPipe = PIPE_S, pipe_t reqPipe = PIPE_MTE3,
+        auto const& config = URMA_DEFAULT_CFG>
     __aicore__ inline int32_t ReadNbi(ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len);
-    template <bool commit = true, pipe_t commitPipe = PIPE_S, pipe_t reqPipe = PIPE_MTE3,
-        auto const &config = URMA_DEFAULT_CFG>
-    __aicore__ inline int32_t WriteWithNotifyNbi(ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len,
-        GM_ADDR notifyAddr, uint64_t notifyVal);
+    template <
+        bool commit = true, pipe_t commitPipe = PIPE_S, pipe_t reqPipe = PIPE_MTE3,
+        auto const& config = URMA_DEFAULT_CFG>
+    __aicore__ inline int32_t WriteWithNotifyNbi(
+        ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len, GM_ADDR notifyAddr, uint64_t notifyVal);
     template <pipe_t pipe = PIPE_S>
     __aicore__ inline int32_t Commit(ChannelHandle channel);
     template <pipe_t pipe = PIPE_MTE3>
@@ -57,19 +60,19 @@ public:
 
 private:
     template <bool commit = true, pipe_t commitPipe = PIPE_S, pipe_t reqPipe = PIPE_MTE3>
-    __aicore__ inline int32_t PostSend(
-        ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len, uint32_t opType);
+    __aicore__ inline int32_t PostSend(ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len, uint32_t opType);
     template <pipe_t pipe>
     __aicore__ inline void KnockDoorBell(__gm__ ChannelEntity* chnlPtr, uint32_t sqHead);
     __aicore__ inline int32_t PollCq(__gm__ ChannelEntity* chnlPtr, uint32_t expectIdx);
-    __aicore__ inline int32_t MakeWqe(__gm__ ChannelEntity* chnlPtr, GM_ADDR dst, GM_ADDR src, uint64_t len,
-        uint32_t opType, uint32_t sqHead, uint32_t sqDepth);
+    __aicore__ inline int32_t MakeWqe(
+        __gm__ ChannelEntity* chnlPtr, GM_ADDR dst, GM_ADDR src, uint64_t len, uint32_t opType, uint32_t sqHead,
+        uint32_t sqDepth);
     __aicore__ inline uint64_t GetDbValue(uint32_t qpn);
 
 private:
-    __ubuf__ uint8_t *wqeAddr_;
-    __ubuf__ uint8_t *cqeAddr_;
-    __ubuf__ uint8_t *dbAddr_;
+    __ubuf__ uint8_t* wqeAddr_;
+    __ubuf__ uint8_t* cqeAddr_;
+    __ubuf__ uint8_t* dbAddr_;
     LocalTensor<uint8_t> wqeUB_;
     LocalTensor<uint8_t> cqeUB_;
     LocalTensor<uint8_t> dbUB_;

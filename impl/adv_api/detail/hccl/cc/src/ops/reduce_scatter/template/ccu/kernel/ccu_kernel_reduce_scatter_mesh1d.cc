@@ -1,35 +1,34 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "ccu_kernel_reduce_scatter_mesh1d.h"
 
 namespace mc2_ops_hccl {
 using namespace hcomm;
 
-constexpr int INPUT_XN_ID  = 0;
-constexpr int TOKEN_XN_ID  = 1;
+constexpr int INPUT_XN_ID = 0;
+constexpr int TOKEN_XN_ID = 1;
 constexpr int POST_SYNC_ID = 2;
-constexpr int CKE_IDX_0    = 0;
+constexpr int CKE_IDX_0 = 0;
 
-CcuKernelReduceScatterMesh1D::CcuKernelReduceScatterMesh1D(const CcuKernelArg &arg)
-    : CcuKernelAlgBase(arg)
+CcuKernelReduceScatterMesh1D::CcuKernelReduceScatterMesh1D(const CcuKernelArg& arg) : CcuKernelAlgBase(arg)
 {
-    const CcuKernelArgReduceScatterMesh1D *kernelArg = dynamic_cast<const CcuKernelArgReduceScatterMesh1D *>(&arg);
-    rankId_        = kernelArg->rankId_;
-    rankSize_      = kernelArg->dimSize_;
-    channels_      = kernelArg->channels;
-    dataType_       = kernelArg->opParam_.DataDes.dataType;
+    const CcuKernelArgReduceScatterMesh1D* kernelArg = dynamic_cast<const CcuKernelArgReduceScatterMesh1D*>(&arg);
+    rankId_ = kernelArg->rankId_;
+    rankSize_ = kernelArg->dimSize_;
+    channels_ = kernelArg->channels;
+    dataType_ = kernelArg->opParam_.DataDes.dataType;
     outputDataType_ = kernelArg->opParam_.DataDes.outputType;
     if (outputDataType_ == HcclDataType::HCCL_DATA_TYPE_RESERVED) {
         outputDataType_ = dataType_;
-        HCCL_DEBUG("[CcuKernelReduceScatterMesh1D] outputDataType is [INVALID], set outputDataType to[%d]",
-            outputDataType_);
+        HCCL_DEBUG(
+            "[CcuKernelReduceScatterMesh1D] outputDataType is [INVALID], set outputDataType to[%d]", outputDataType_);
     }
     reduceOp_ = kernelArg->opParam_.reduceType;
     HCCL_INFO(
@@ -54,8 +53,8 @@ HcclResult CcuKernelReduceScatterMesh1D::Algorithm()
             input_.push_back(CreateVariable());
             token_.push_back(CreateVariable());
         } else {
-            HCCL_DEBUG("[CcuKernelReduceScatterMesh1D] MyRank[%u], PeerId[%llu], ChannelId[%u]",
-                rankId_, peerId, channelIdx);
+            HCCL_DEBUG(
+                "[CcuKernelReduceScatterMesh1D] MyRank[%u], PeerId[%llu], ChannelId[%u]", rankId_, peerId, channelIdx);
             CcuRep::Variable inputVar, tokenVar;
             CHK_RET(CreateVariable(channels_[channelIdx], INPUT_XN_ID, &inputVar));
             input_.push_back(inputVar); // 获取channel中id=0的Var来传递output
@@ -76,8 +75,8 @@ HcclResult CcuKernelReduceScatterMesh1D::Algorithm()
         NotifyRecord(ch, CKE_IDX_0, INPUT_XN_ID, input_[rankId_], 1 << INPUT_XN_ID);
         NotifyRecord(ch, CKE_IDX_0, TOKEN_XN_ID, token_[rankId_], 1 << TOKEN_XN_ID);
     }
-    
-    uint32_t allBit = 1 << INPUT_XN_ID  | 1 << TOKEN_XN_ID;
+
+    uint32_t allBit = 1 << INPUT_XN_ID | 1 << TOKEN_XN_ID;
     for (auto ch : channels_) {
         NotifyWait(ch, CKE_IDX_0, allBit);
     }
@@ -87,7 +86,7 @@ HcclResult CcuKernelReduceScatterMesh1D::Algorithm()
         src.push_back(CreateRemoteAddr());
     }
     CcuRep::LocalAddr dst = CreateLocalAddr();
-    dst.addr  = output_[0];
+    dst.addr = output_[0];
     dst.token = token_[rankId_];
     uint32_t dstId = 0;
     uint32_t curId = 0;
@@ -117,20 +116,21 @@ HcclResult CcuKernelReduceScatterMesh1D::Algorithm()
     return HcclResult::HCCL_SUCCESS;
 }
 
-std::vector<uint64_t> CcuKernelReduceScatterMesh1D::GeneArgs(const CcuTaskArg &arg)
+std::vector<uint64_t> CcuKernelReduceScatterMesh1D::GeneArgs(const CcuTaskArg& arg)
 {
     const CcuTaskArgReduceScatterMesh1D* taskArg = dynamic_cast<const CcuTaskArgReduceScatterMesh1D*>(&arg);
-    
-    uint64_t inputAddr  = taskArg->inputAddr_;
+
+    uint64_t inputAddr = taskArg->inputAddr_;
     uint64_t outputAddr = taskArg->outputAddr_;
-    uint64_t tokenInfo  = taskArg->token_;
-    uint64_t offset     = taskArg->offset_;
-    uint64_t sliceSize  = taskArg->sliceSize_;
-    auto     goSize     = CalGoSize(sliceSize);
-    
-    HCCL_INFO("[CcuKernelReduceScatterMesh1D] TaskArgs: inputAddr[%llu], outputAddr[%llu], "
-               "offset[%llu], sliceSize[%llu]",
-               inputAddr, outputAddr, offset, sliceSize);
+    uint64_t tokenInfo = taskArg->token_;
+    uint64_t offset = taskArg->offset_;
+    uint64_t sliceSize = taskArg->sliceSize_;
+    auto goSize = CalGoSize(sliceSize);
+
+    HCCL_INFO(
+        "[CcuKernelReduceScatterMesh1D] TaskArgs: inputAddr[%llu], outputAddr[%llu], "
+        "offset[%llu], sliceSize[%llu]",
+        inputAddr, outputAddr, offset, sliceSize);
     return {inputAddr, outputAddr, tokenInfo, offset, goSize[0], goSize[1], goSize[2], goSize[3]};
 }
 } // namespace mc2_ops_hccl

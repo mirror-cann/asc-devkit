@@ -46,15 +46,14 @@ __aicore__ inline int32_t Hcomm<commProtocol>::Init(const LocalTensor<T>& buff, 
 }
 
 template <CommProtocol commProtocol>
-template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const &config>
-__aicore__ inline int32_t Hcomm<commProtocol>::WriteNbi(
-    ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len)
+template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const& config>
+__aicore__ inline int32_t Hcomm<commProtocol>::WriteNbi(ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len)
 {
     return impl_.template WriteNbi<commit, commitPipe, reqPipe, config>(channel, dst, src, len);
 }
 
 template <CommProtocol commProtocol>
-template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const &config>
+template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const& config>
 __aicore__ inline int32_t Hcomm<commProtocol>::WriteWithNotifyNbi(
     ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len, GM_ADDR notifyAddr, uint64_t notifyVal)
 {
@@ -63,9 +62,8 @@ __aicore__ inline int32_t Hcomm<commProtocol>::WriteWithNotifyNbi(
 }
 
 template <CommProtocol commProtocol>
-template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const &config>
-__aicore__ inline int32_t Hcomm<commProtocol>::ReadNbi(
-    ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len)
+template <bool commit, pipe_t commitPipe, pipe_t reqPipe, auto const& config>
+__aicore__ inline int32_t Hcomm<commProtocol>::ReadNbi(ChannelHandle channel, GM_ADDR dst, GM_ADDR src, uint64_t len)
 {
     return impl_.template ReadNbi<commit, commitPipe, reqPipe, config>(channel, dst, src, len);
 }

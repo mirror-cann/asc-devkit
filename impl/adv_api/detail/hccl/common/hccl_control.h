@@ -38,10 +38,10 @@ constexpr uint8_t MULTI_COMM_NUM = 2;
 
 __aicore__ inline void GetRestartFromContext(GM_ADDR context, uint8_t& restart)
 {
-    HCCL_CHECK_STATUS(context == nullptr, return );
+    HCCL_CHECK_STATUS(context == nullptr, return);
     __gm__ HcclCombineOpParam* hcclContext = (__gm__ HcclCombineOpParam*)context;
     uint64_t msgAddr = hcclContext->workSpace;
-    HCCL_CHECK_STATUS(msgAddr == 0, return );
+    HCCL_CHECK_STATUS(msgAddr == 0, return);
     __gm__ HcclMsgArea* hcclMsgArea = (__gm__ HcclMsgArea*)msgAddr;
     __gm__ ControlHcclMsg* controlMsgGM = &hcclMsgArea->controlMsg;
     FlushDataCache(controlMsgGM);
@@ -50,10 +50,10 @@ __aicore__ inline void GetRestartFromContext(GM_ADDR context, uint8_t& restart)
 
 __aicore__ inline void ResetRestartFlag(GM_ADDR context)
 {
-    HCCL_CHECK_STATUS(context == nullptr, return );
+    HCCL_CHECK_STATUS(context == nullptr, return);
     __gm__ HcclCombineOpParam* hcclContext = (__gm__ HcclCombineOpParam*)context;
     uint64_t msgAddr = hcclContext->workSpace;
-    HCCL_CHECK_STATUS(msgAddr == 0, return );
+    HCCL_CHECK_STATUS(msgAddr == 0, return);
     __gm__ HcclMsgArea* hcclMsgArea = (__gm__ HcclMsgArea*)msgAddr;
     __gm__ ControlHcclMsg* controlMsgGM = &hcclMsgArea->controlMsg;
     controlMsgGM->restart = 0;

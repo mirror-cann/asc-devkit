@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv3d_groupopt_sub_api.h
@@ -28,13 +28,9 @@ namespace Conv3dApiFunc {
 template <class Intf>
 class LoadBL1WithGroupOptTools {
 public:
-    __aicore__ inline LoadBL1WithGroupOptTools()
-    {}
+    __aicore__ inline LoadBL1WithGroupOptTools() {}
 
-    __aicore__ inline void SetParams(Intf *self)
-    {
-        self_ = self;
-    }
+    __aicore__ inline void SetParams(Intf* self) { self_ = self; }
 
     __aicore__ inline void LoadBL1()
     {
@@ -44,15 +40,18 @@ public:
         }
         if (currentNBL1 >= self_->ctx.orgCo) {
             KERNEL_LOG(KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] Process single instruction weight \n");
-            uint64_t repeatTimes = (currentKBL1 * self_->ctx.conv3dTiling->nBL1) / (ConvApi::BLOCK_L0_N * self_->ctx.cin0);
+            uint64_t repeatTimes =
+                (currentKBL1 * self_->ctx.conv3dTiling->nBL1) / (ConvApi::BLOCK_L0_N * self_->ctx.cin0);
             if (repeatTimes > Conv3dApi::LOAD2D_MAX_REPEAT_TIMES) {
                 dataCopyParams.blockCount = 1;
                 dataCopyParams.srcStride = 0;
-                dataCopyParams.blockLen = ConvApi::CeilDIV(currentKBL1 * self_->ctx.conv3dTiling->nBL1, self_->ctx.cin0);
+                dataCopyParams.blockLen =
+                    ConvApi::CeilDIV(currentKBL1 * self_->ctx.conv3dTiling->nBL1, self_->ctx.cin0);
                 AscendC::DataCopy<typename Intf::WeightT>(self_->ctx.bl1, self_->ctx.bgm[bL1GmOffset], dataCopyParams);
             } else {
                 SetLoadData2DParams(repeatTimes);
-                AscendC::LoadData<typename Intf::WeightT>(self_->ctx.bl1, self_->ctx.bgm[bL1GmOffset], loadData2dParams);
+                AscendC::LoadData<typename Intf::WeightT>(
+                    self_->ctx.bl1, self_->ctx.bgm[bL1GmOffset], loadData2dParams);
             }
         } else {
             KERNEL_LOG(KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] Process multi instruction weight \n");
@@ -61,20 +60,15 @@ public:
             dataCopyParams.srcStride = self_->ctx.orgCoAlignN0 - currentNBL1;
             AscendC::DataCopy<typename Intf::WeightT>(self_->ctx.bl1, self_->ctx.bgm[bL1GmOffset], dataCopyParams);
         }
-        KERNEL_LOG(KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] bL1GmOffset %d self_->ctx.orgCo %d.\n", bL1GmOffset,
+        KERNEL_LOG(
+            KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] bL1GmOffset %d self_->ctx.orgCo %d.\n", bL1GmOffset,
             self_->ctx.orgCo);
     }
 
 private:
-    __aicore__ inline bool IsNTail()
-    {
-        return self_->ctx.nBL1Iter == self_->ctx.maxNBL1Iter;
-    }
+    __aicore__ inline bool IsNTail() { return self_->ctx.nBL1Iter == self_->ctx.maxNBL1Iter; }
 
-    __aicore__ inline bool IsKBL1Tail()
-    {
-        return self_->ctx.kBL1Iter == self_->ctx.maxKBL1Iter;
-    }
+    __aicore__ inline bool IsKBL1Tail() { return self_->ctx.kBL1Iter == self_->ctx.maxKBL1Iter; }
 
     __aicore__ inline void PreProcess()
     {
@@ -82,13 +76,14 @@ private:
                       self_->ctx.nBL1Iter * self_->ctx.conv3dTiling->nBL1 * self_->ctx.cin0;
         currentNBL1 = self_->ctx.conv3dTiling->nBL1;
         if (self_->ctx.isGroupOptDimTail) {
-            currentNBL1 =
-                self_->ctx.singleCoreCo >= currentNBL1 ? currentNBL1 : ConvApi::AlignB(self_->ctx.singleCoreCo, ConvApi::BLOCK_L0_N);
+            currentNBL1 = self_->ctx.singleCoreCo >= currentNBL1 ?
+                              currentNBL1 :
+                              ConvApi::AlignB(self_->ctx.singleCoreCo, ConvApi::BLOCK_L0_N);
         }
         currentNBL1 = IsNTail() ? self_->ctx.nBL1TailAlign : currentNBL1;
         currentKBL1 = IsKBL1Tail() ? self_->ctx.groupKBL1Tail : self_->ctx.groupKBL1;
-        KERNEL_LOG(KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] currentNBL1 %d currentKBL1 %d.\n", currentNBL1,
-            currentKBL1);
+        KERNEL_LOG(
+            KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] currentNBL1 %d currentKBL1 %d.\n", currentNBL1, currentKBL1);
         loadData2dParams.srcStride = 1;
     }
 
@@ -131,10 +126,10 @@ private:
         uint64_t cin1xKhxKw = self_->ctx.cin1 * self_->ctx.kernelHxkernelW;
         if (currentKd == 1) {
             cin1xKhxKw = currentKBL1 / self_->ctx.cin0;
-            uint64_t skipCinRepeats =
-                (self_->ctx.kBL1Iter * self_->ctx.groupKBL1) / (self_->ctx.cin1 * cin0xKhxKw);
-            uint64_t skipCinOffset = (ConvApi::AlignB(self_->ctx.orgCi, self_->ctx.cin0) - self_->ctx.cin1 * self_->ctx.cin0) *
-                                     self_->ctx.kernelHxkernelW * self_->ctx.orgCoAlignN0;
+            uint64_t skipCinRepeats = (self_->ctx.kBL1Iter * self_->ctx.groupKBL1) / (self_->ctx.cin1 * cin0xKhxKw);
+            uint64_t skipCinOffset =
+                (ConvApi::AlignB(self_->ctx.orgCi, self_->ctx.cin0) - self_->ctx.cin1 * self_->ctx.cin0) *
+                self_->ctx.kernelHxkernelW * self_->ctx.orgCoAlignN0;
             if (skipCinRepeats > 0) {
                 bL1GmOffset += (skipCinOffset * skipCinRepeats);
             }
@@ -146,10 +141,12 @@ private:
         KERNEL_LOG(KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] currentKd %d cin1xKhxKw %d\n", currentKd, cin1xKhxKw);
         for (uint64_t i = 0; i < currentKd; i++) {
             bL1GmOffsetTmp = bL1GmOffset + i * ConvApi::AlignB(self_->ctx.orgCi, self_->ctx.cin0) *
-                                               ConvApi::AlignB(self_->ctx.orgCo, self_->ctx.cin0) * self_->ctx.kernelHxkernelW;
+                                               ConvApi::AlignB(self_->ctx.orgCo, self_->ctx.cin0) *
+                                               self_->ctx.kernelHxkernelW;
             for (uint64_t j = 0; j < cin1xKhxKw; j++) {
-                KERNEL_LOG(KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] bL1GmOffsetTmp, bl1Offset %d %d \n",
-                    bL1GmOffsetTmp, bl1Offset);
+                KERNEL_LOG(
+                    KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] bL1GmOffsetTmp, bl1Offset %d %d \n", bL1GmOffsetTmp,
+                    bl1Offset);
                 if (repeatTimes > Conv3dApi::LOAD2D_MAX_REPEAT_TIMES) {
                     LoadData2dWithBeyond255(bl1Offset, bL1GmOffsetTmp, repeatTimes);
                 } else {
@@ -165,15 +162,16 @@ private:
         return true;
     }
 
-    __aicore__ inline void SetLoadData2DParams(const uint64_t &repeatTimes)
+    __aicore__ inline void SetLoadData2DParams(const uint64_t& repeatTimes)
     {
         loadData2dParams.repeatTimes = repeatTimes;
-        KERNEL_LOG(KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] loadData2dParams.repeatTimes %d.\n",
+        KERNEL_LOG(
+            KERNEL_DEBUG, "[LoadBL1WithGroupOptTools] loadData2dParams.repeatTimes %d.\n",
             loadData2dParams.repeatTimes);
     }
 
 private:
-    Intf *self_ = nullptr;
+    Intf* self_ = nullptr;
     uint64_t bL1GmOffset = 0;
     uint64_t currentNBL1 = 0;
     uint64_t currentKBL1 = 0;
@@ -184,10 +182,9 @@ private:
 template <class Intf>
 class LoadBL0WithGroupOptTools {
 public:
-    __aicore__ inline LoadBL0WithGroupOptTools()
-    {}
+    __aicore__ inline LoadBL0WithGroupOptTools() {}
 
-    __aicore__ inline void SetParams(Intf *self)
+    __aicore__ inline void SetParams(Intf* self)
     {
         self_ = self;
         k0_ = AscendC::ONE_BLK_SIZE / self_->ctx.sizeOfWeight;
@@ -204,8 +201,8 @@ public:
         if constexpr (Intf::bl1bypass) {
             currentSrcN_ = self_->ctx.orgCoAlignN0;
         } else {
-            currentSrcN_ = self_->ctx.nBL1Iter == self_->ctx.maxNBL1Iter ? self_->ctx.nBL1TailAlign
-                                                                         : self_->ctx.conv3dTiling->nBL1;
+            currentSrcN_ = self_->ctx.nBL1Iter == self_->ctx.maxNBL1Iter ? self_->ctx.nBL1TailAlign :
+                                                                           self_->ctx.conv3dTiling->nBL1;
         }
         currentKL0 = self_->ctx.kIter == self_->ctx.maxKL0Iter ? self_->ctx.kL0Tail : self_->ctx.singleCoreKL0;
         // set LoadData2DParamsV2
@@ -215,14 +212,15 @@ public:
         if constexpr (!Intf::bl1bypass) {
             if (currentSrcN_ == currentNL0_) {
                 SetLoadData2DParams(loadData2dParams, numNL0Block_ * (currentKL0 / k0_));
-                AscendC::LoadData<typename Intf::WeightT>(self_->ctx.bl0, self_->ctx.bl1[load2dSrcOffset], loadData2dParams);
+                AscendC::LoadData<typename Intf::WeightT>(
+                    self_->ctx.bl0, self_->ctx.bl1[load2dSrcOffset], loadData2dParams);
             } else {
                 SetLoadData2DParams(loadData2dParams, numNL0Block_);
                 uint64_t tmp1 = currentNL0_ * k0_;
                 uint64_t tmp2 = currentSrcN_ * k0_;
                 for (uint32_t copy_part = 0; copy_part < currentKL0 / k0_; ++copy_part) {
-                    AscendC::LoadData<typename Intf::WeightT>(self_->ctx.bl0[copy_part * tmp1],
-                        self_->ctx.bl1[load2dSrcOffset + copy_part * tmp2],
+                    AscendC::LoadData<typename Intf::WeightT>(
+                        self_->ctx.bl0[copy_part * tmp1], self_->ctx.bl1[load2dSrcOffset + copy_part * tmp2],
                         loadData2dParams);
                 }
             }
@@ -233,15 +231,16 @@ public:
             if (currentNL0_ >= self_->ctx.orgCo) {
                 KERNEL_LOG(KERNEL_DEBUG, "[LoadBL0WithGroupOptTools] Process single instruction weight \n");
                 SetLoadData2DParams(loadData2dParams, numNL0Block_ * (currentKL0 / k0_));
-                AscendC::LoadData<typename Intf::WeightT>(self_->ctx.bl0, self_->ctx.bgm[load2dSrcOffset], loadData2dParams);
+                AscendC::LoadData<typename Intf::WeightT>(
+                    self_->ctx.bl0, self_->ctx.bgm[load2dSrcOffset], loadData2dParams);
             } else {
                 KERNEL_LOG(KERNEL_DEBUG, "[LoadBL0WithGroupOptTools] Process multi instruction weight \n");
                 SetLoadData2DParams(loadData2dParams, numNL0Block_);
                 uint64_t tmp1 = currentNL0_ * k0_;
                 uint64_t tmp2 = currentSrcN_ * k0_;
                 for (uint32_t copy_part = 0; copy_part < currentKL0 / k0_; ++copy_part) {
-                    AscendC::LoadData<typename Intf::WeightT>(self_->ctx.bl0[copy_part * tmp1],
-                        self_->ctx.bgm[load2dSrcOffset + copy_part * tmp2],
+                    AscendC::LoadData<typename Intf::WeightT>(
+                        self_->ctx.bl0[copy_part * tmp1], self_->ctx.bgm[load2dSrcOffset + copy_part * tmp2],
                         loadData2dParams);
                 }
             }
@@ -249,11 +248,12 @@ public:
     }
 
 private:
-    __aicore__ inline void SetLoadData2DParams(AscendC::LoadData2DParams &loadData2dParams, const uint64_t &repeatTimes)
+    __aicore__ inline void SetLoadData2DParams(AscendC::LoadData2DParams& loadData2dParams, const uint64_t& repeatTimes)
     {
         loadData2dParams.repeatTimes = repeatTimes;
         loadData2dParams.srcStride = 1;
-        KERNEL_LOG(KERNEL_DEBUG, "[LoadBL0WithGroupOptTools] loadData2dParams.repeatTimes %d.\n",
+        KERNEL_LOG(
+            KERNEL_DEBUG, "[LoadBL0WithGroupOptTools] loadData2dParams.repeatTimes %d.\n",
             loadData2dParams.repeatTimes);
     }
 
@@ -279,8 +279,9 @@ private:
             cin1xKhxKw = currentKL0 / self_->ctx.cin0;
             uint64_t skipCinRepeats =
                 (self_->ctx.kBL0Iter * self_->ctx.conv3dTiling->kL0) / (self_->ctx.cin1 * cin0xKhxKw);
-            uint64_t skipCinOffset = (ConvApi::AlignB(self_->ctx.orgCi, self_->ctx.cin0) - self_->ctx.cin1 * self_->ctx.cin0) *
-                                     self_->ctx.kernelHxkernelW * currentSrcN_;
+            uint64_t skipCinOffset =
+                (ConvApi::AlignB(self_->ctx.orgCi, self_->ctx.cin0) - self_->ctx.cin1 * self_->ctx.cin0) *
+                self_->ctx.kernelHxkernelW * currentSrcN_;
             if (skipCinRepeats > 0) {
                 load2dSrcOffset += (skipCinOffset * skipCinRepeats);
             }
@@ -292,12 +293,13 @@ private:
         KERNEL_LOG(KERNEL_DEBUG, "[LoadBL0WithGroupOptTools] currentKd %d cin1xKhxKw %d\n", currentKd, cin1xKhxKw);
         for (uint32_t copy_part = 0; copy_part < currentKd; copy_part++) {
             bgmOffset = load2dSrcOffset + copy_part * ConvApi::AlignB(self_->ctx.orgCi, self_->ctx.cin0) *
-                                              ConvApi::AlignB(self_->ctx.orgCo, self_->ctx.cin0) * self_->ctx.kernelHxkernelW;
+                                              ConvApi::AlignB(self_->ctx.orgCo, self_->ctx.cin0) *
+                                              self_->ctx.kernelHxkernelW;
             for (uint64_t j = 0; j < cin1xKhxKw; j++) {
                 AscendC::LoadData<typename Intf::WeightT>(
                     self_->ctx.bl0[bl0Offset], self_->ctx.bgm[bgmOffset], loadData2dParams);
-                KERNEL_LOG(KERNEL_DEBUG, "[LoadBL0WithGroupOptTools] bgmOffset, bl0Offset %d %d \n",
-                    bgmOffset, bl0Offset);
+                KERNEL_LOG(
+                    KERNEL_DEBUG, "[LoadBL0WithGroupOptTools] bgmOffset, bl0Offset %d %d \n", bgmOffset, bl0Offset);
                 bgmOffset += tmp2;
                 bl0Offset += tmp1;
             }
@@ -307,7 +309,7 @@ private:
     }
 
 private:
-    Intf *self_ = nullptr;
+    Intf* self_ = nullptr;
     uint64_t currentSrcN_ = 0;
     uint64_t k0_ = 16;
     uint64_t currentNL0_ = 0;
@@ -317,6 +319,6 @@ private:
     AscendC::LoadData2DParams loadData2dParams;
 };
 
-};  // namespace Conv3dApiFunc
+}; // namespace Conv3dApiFunc
 
-#endif  // __API_CONV3D_GROUPOPT_SUB_API_H__
+#endif // __API_CONV3D_GROUPOPT_SUB_API_H__

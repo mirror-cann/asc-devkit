@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef FFTS_COMMON_PUB_H
 #define FFTS_COMMON_PUB_H
 
@@ -22,15 +22,9 @@
 #include "device_capacity.h"
 
 namespace hccl {
-enum class ReduceType {
-    INLINE_REDUCE = 0,
-    TBE_REDUCE
-};
+enum class ReduceType { INLINE_REDUCE = 0, TBE_REDUCE };
 
-enum class CopyPattern {
-    ZCOPY = 0,
-    BCOPY
-};
+enum class CopyPattern { ZCOPY = 0, BCOPY };
 
 using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
     HcclCMDType opType = HcclCMDType::HCCL_CMD_INVALID;
@@ -54,10 +48,11 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
     u8 deterministic = 0;
     bool preloadCopyOpt = false;
 
-    static bool CheckEnableCache(const HcclOpMetaInfoDef &opMetaInfo)
+    static bool CheckEnableCache(const HcclOpMetaInfoDef& opMetaInfo)
     {
-        if (opMetaInfo.opType == HcclCMDType::HCCL_CMD_BATCH_SEND_RECV || opMetaInfo.opType == HcclCMDType::HCCL_CMD_SEND ||
-            opMetaInfo.opType == HcclCMDType::HCCL_CMD_RECEIVE || opMetaInfo.hugeData) {
+        if (opMetaInfo.opType == HcclCMDType::HCCL_CMD_BATCH_SEND_RECV ||
+            opMetaInfo.opType == HcclCMDType::HCCL_CMD_SEND || opMetaInfo.opType == HcclCMDType::HCCL_CMD_RECEIVE ||
+            opMetaInfo.hugeData) {
             return false;
         }
 
@@ -65,16 +60,17 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
             opMetaInfo.alltoallvcSendDataSize > RDMA_SEND_MAX_SIZE) {
             return false;
         }
-        return !((opMetaInfo.opType == HcclCMDType::HCCL_CMD_ALLTOALLV ||
-            opMetaInfo.opType == HcclCMDType::HCCL_CMD_ALLTOALL ||
-            opMetaInfo.opType == HcclCMDType::HCCL_CMD_ALLTOALLVC) &&
+        return !(
+            (opMetaInfo.opType == HcclCMDType::HCCL_CMD_ALLTOALLV ||
+             opMetaInfo.opType == HcclCMDType::HCCL_CMD_ALLTOALL ||
+             opMetaInfo.opType == HcclCMDType::HCCL_CMD_ALLTOALLVC) &&
             (opMetaInfo.copyPattern == CopyPattern::BCOPY));
     }
 
-    static HcclOpMetaInfoDef GetOneForAllReduce(u32 algolevel1Type = 0,
-        HcclDataType dataType = HCCL_DATA_TYPE_RESERVED, ReduceType reduceType = ReduceType::INLINE_REDUCE,
-        bool isSmallCount = false, u32 piplineSliceNum = 1, bool hugeData = false,
-        CopyPattern copyPattern = CopyPattern::BCOPY, u64 sliceNum = 1,
+    static HcclOpMetaInfoDef GetOneForAllReduce(
+        u32 algolevel1Type = 0, HcclDataType dataType = HCCL_DATA_TYPE_RESERVED,
+        ReduceType reduceType = ReduceType::INLINE_REDUCE, bool isSmallCount = false, u32 piplineSliceNum = 1,
+        bool hugeData = false, CopyPattern copyPattern = CopyPattern::BCOPY, u64 sliceNum = 1,
         bool isAivModeConfig = false, bool isDefaultPathConfig = true, bool dataSplitConfig = false,
         u8 deterministicConfig = 0)
     {
@@ -96,7 +92,8 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
         return meta;
     }
 
-    static HcclOpMetaInfoDef GetOneForAllGather(u32 algolevel1Type = 0, bool hugeData = false, bool smallCount = false,
+    static HcclOpMetaInfoDef GetOneForAllGather(
+        u32 algolevel1Type = 0, bool hugeData = false, bool smallCount = false,
         CopyPattern copyPattern = CopyPattern::BCOPY, bool dataSplit = false, bool isAivMode = false)
     {
         HcclOpMetaInfoDef meta;
@@ -104,14 +101,15 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
         meta.copyPattern = copyPattern;
         meta.algolevel1Type = algolevel1Type;
         meta.hugeData = hugeData;
-        meta.isSmallCount = smallCount; 
+        meta.isSmallCount = smallCount;
         meta.isEnableCache = CheckEnableCache(meta);
         meta.dataSplit = dataSplit;
         meta.isAivMode = isAivMode;
         return meta;
     }
 
-    static HcclOpMetaInfoDef GetOneForAllGatherV(u32 algolevel1Type = 0, bool hugeData = false, bool smallCount = false,
+    static HcclOpMetaInfoDef GetOneForAllGatherV(
+        u32 algolevel1Type = 0, bool hugeData = false, bool smallCount = false,
         CopyPattern copyPattern = CopyPattern::BCOPY, bool dataSplit = false)
     {
         HcclOpMetaInfoDef meta;
@@ -119,18 +117,19 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
         meta.copyPattern = copyPattern;
         meta.algolevel1Type = algolevel1Type;
         meta.hugeData = hugeData;
-        meta.isSmallCount = smallCount; 
+        meta.isSmallCount = smallCount;
         meta.isEnableCache = CheckEnableCache(meta);
         meta.dataSplit = dataSplit;
         return meta;
     }
 
-    static HcclOpMetaInfoDef GetOneForBroadcast(bool isRootRank, uint32_t rootRank,
-        bool hugeData = false, bool isSmallCount = false, u64 sliceNum = 1, CopyPattern copyPattern = CopyPattern::BCOPY)
+    static HcclOpMetaInfoDef GetOneForBroadcast(
+        bool isRootRank, uint32_t rootRank, bool hugeData = false, bool isSmallCount = false, u64 sliceNum = 1,
+        CopyPattern copyPattern = CopyPattern::BCOPY)
     {
         HcclOpMetaInfoDef meta;
         meta.opType = HcclCMDType::HCCL_CMD_BROADCAST;
-        meta.isSmallCount = isSmallCount;             // 是否小数据
+        meta.isSmallCount = isSmallCount; // 是否小数据
         meta.isRootRank = isRootRank;
         meta.rootRank = rootRank;
         meta.hugeData = hugeData;
@@ -152,9 +151,9 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
 
     static HcclOpMetaInfoDef GetOneForReduceScatter(
         u32 algolevel1Type = 0, HcclDataType dataType = HCCL_DATA_TYPE_RESERVED,
-        ReduceType reduceType = ReduceType::INLINE_REDUCE, bool hugeData = false,
-        bool isSmallCount = false, CopyPattern copyPattern = CopyPattern::BCOPY, bool dataSplit = false,
-        u8 deterministicConfig = 0, bool isAivModeConfig = false, bool preloadCopyFlag = false)
+        ReduceType reduceType = ReduceType::INLINE_REDUCE, bool hugeData = false, bool isSmallCount = false,
+        CopyPattern copyPattern = CopyPattern::BCOPY, bool dataSplit = false, u8 deterministicConfig = 0,
+        bool isAivModeConfig = false, bool preloadCopyFlag = false)
     {
         HcclOpMetaInfoDef meta;
         meta.opType = HcclCMDType::HCCL_CMD_REDUCE_SCATTER;
@@ -174,9 +173,8 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
 
     static HcclOpMetaInfoDef GetOneForReduceScatterV(
         u32 algolevel1Type = 0, HcclDataType dataType = HCCL_DATA_TYPE_RESERVED,
-        ReduceType reduceType = ReduceType::INLINE_REDUCE, bool hugeData = false,
-        bool isSmallCount = false, CopyPattern copyPattern = CopyPattern::BCOPY, bool dataSplit = false,
-        u8 deterministicConfig = 0)
+        ReduceType reduceType = ReduceType::INLINE_REDUCE, bool hugeData = false, bool isSmallCount = false,
+        CopyPattern copyPattern = CopyPattern::BCOPY, bool dataSplit = false, u8 deterministicConfig = 0)
     {
         HcclOpMetaInfoDef meta;
         meta.opType = HcclCMDType::HCCL_CMD_REDUCE_SCATTER_V;
@@ -192,8 +190,8 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
         return meta;
     }
 
-    static HcclOpMetaInfoDef GetOneForAllToAll(CopyPattern copyPattern, u64 dataSize, bool hugeData = false,
-        bool isAivMode = false)
+    static HcclOpMetaInfoDef GetOneForAllToAll(
+        CopyPattern copyPattern, u64 dataSize, bool hugeData = false, bool isAivMode = false)
     {
         HcclOpMetaInfoDef meta;
         meta.opType = HcclCMDType::HCCL_CMD_ALLTOALL;
@@ -205,15 +203,15 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
         return meta;
     }
 
-    static HcclOpMetaInfoDef GetOneForAllToAllV(CopyPattern copyPattern, u64 dataSize,
-        bool hugeData = false, bool isSmallCount = false)
+    static HcclOpMetaInfoDef GetOneForAllToAllV(
+        CopyPattern copyPattern, u64 dataSize, bool hugeData = false, bool isSmallCount = false)
     {
         HcclOpMetaInfoDef meta;
         meta.opType = HcclCMDType::HCCL_CMD_ALLTOALLV;
         meta.copyPattern = copyPattern;
         meta.alltoallvSendDataSize = dataSize;
         meta.hugeData = hugeData;
-        meta.isSmallCount = isSmallCount;  // 是否小数据
+        meta.isSmallCount = isSmallCount; // 是否小数据
         meta.isEnableCache = CheckEnableCache(meta);
         return meta;
     }
@@ -253,9 +251,9 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
         return meta;
     }
 
-    static HcclOpMetaInfoDef GetOneForReduce(bool isRootRank, uint32_t rootRank, u32 algolevel1Type = 0,
-        HcclDataType dataType = HCCL_DATA_TYPE_RESERVED, ReduceType reduceType = ReduceType::INLINE_REDUCE,
-        bool hugeDataConfig = false, u8 deterministicConfig = 0)
+    static HcclOpMetaInfoDef GetOneForReduce(
+        bool isRootRank, uint32_t rootRank, u32 algolevel1Type = 0, HcclDataType dataType = HCCL_DATA_TYPE_RESERVED,
+        ReduceType reduceType = ReduceType::INLINE_REDUCE, bool hugeDataConfig = false, u8 deterministicConfig = 0)
     {
         HcclOpMetaInfoDef meta;
         meta.opType = HcclCMDType::HCCL_CMD_REDUCE;
@@ -310,5 +308,5 @@ using HcclOpMetaInfo = struct HcclOpMetaInfoDef {
 #endif
     }
 };
-}
+} // namespace hccl
 #endif // FFTS_COMMON_PUB_H

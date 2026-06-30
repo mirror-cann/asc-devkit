@@ -20,9 +20,8 @@
 namespace AscendC {
 template <const auto& config>
 template <bool commit>
-__aicore__ inline HcclHandle
-HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::BatchWrite(GM_ADDR batchWriteInfo, uint32_t itemNum,
-        uint16_t queueID)
+__aicore__ inline HcclHandle HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::BatchWrite(
+    GM_ADDR batchWriteInfo, uint32_t itemNum, uint16_t queueID)
 {
     return CommonPrepareImpl<true>(
         {HcclCMDType::HCCL_CMD_BATCH_WRITE, batchWriteInfo, batchWriteInfo, itemNum, static_cast<HcclDataType>(queueID),
@@ -50,9 +49,9 @@ __aicore__ inline HcclHandle HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, co
     return CommonPrepareImpl<commit>(commonPrepareParam);
 }
 
-template<const auto &config>
-__aicore__ inline void
-HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::InterHcclGroupSync(int8_t srcGroupID, HcclHandle srcHandleID)
+template <const auto& config>
+__aicore__ inline void HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::InterHcclGroupSync(
+    int8_t srcGroupID, HcclHandle srcHandleID)
 {
     ASCENDC_HCCL_API_ASSERT(
         curVersion_ != HcclTilingVersion::INVALID_TILING_VERSION, { return; },
@@ -122,9 +121,9 @@ __aicore__ inline GM_ADDR HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, confi
     }
 }
 
-template <const auto &config>
-__aicore__ inline void
-HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::Init(GM_ADDR context, __gm__ void *initTiling)
+template <const auto& config>
+__aicore__ inline void HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::Init(
+    GM_ADDR context, __gm__ void* initTiling)
 {
     HcclTilingVersion version;
     if (initTiling != nullptr) {
@@ -138,8 +137,9 @@ HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::Init(GM_ADDR context, 
         devType_ = HCCL_ASCEND910B;
     }
 
-    hcclContext_ = (__gm__ HcclCombineOpParam *)context;
-    ASCENDC_HCCL_API_ASSERT(hcclContext_ != nullptr, { return; }, "Init Hccl failed, context addr is nullptr.");
+    hcclContext_ = (__gm__ HcclCombineOpParam*)context;
+    ASCENDC_HCCL_API_ASSERT(
+        hcclContext_ != nullptr, { return; }, "Init Hccl failed, context addr is nullptr.");
     InitInner(hcclContext_->workSpace, version);
 }
 
@@ -147,16 +147,17 @@ template <const auto& config>
 __aicore__ inline void HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::InitV2(
     GM_ADDR context, const void* initTiling)
 {
-    ASCENDC_HCCL_API_ASSERT(initTiling != nullptr, { return; },
-                            "Call InitV2 failed, ensure initTiling is not nullptr!");
-    const Mc2InitTilingInner *initTilingPtr = static_cast<const Mc2InitTilingInner *>(initTiling);
+    ASCENDC_HCCL_API_ASSERT(
+        initTiling != nullptr, { return; }, "Call InitV2 failed, ensure initTiling is not nullptr!");
+    const Mc2InitTilingInner* initTilingPtr = static_cast<const Mc2InitTilingInner*>(initTiling);
     debugMode_ = initTilingPtr->debugMode;
     queueNum_ = initTilingPtr->queueNum;
     devType_ = initTilingPtr->devType;
     tilingBaseAddr_ = reinterpret_cast<uint64_t>(initTiling);
 
-    hcclContext_ = (__gm__ HcclCombineOpParam *)context;
-    ASCENDC_HCCL_API_ASSERT(hcclContext_ != nullptr, { return; }, "Init Hccl failed, context addr is nullptr.");
+    hcclContext_ = (__gm__ HcclCombineOpParam*)context;
+    ASCENDC_HCCL_API_ASSERT(
+        hcclContext_ != nullptr, { return; }, "Init Hccl failed, context addr is nullptr.");
     InitInner(hcclContext_->workSpace, HcclTilingVersion::ONLINE_COMPILATION_TILING_VERSION);
 }
 
@@ -193,10 +194,12 @@ __aicore__ inline int32_t HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, confi
     return HCCL_SUCCESS;
 }
 
-template<const auto &config>
-__aicore__ inline uint32_t HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::GetRankDim() {
-    ASCENDC_HCCL_API_ASSERT(hcclContext_ != nullptr, { return UINT32_MAX; },
-                            "Call GetRankDim failed, ensure InitV2 or Init has been called!");
+template <const auto& config>
+__aicore__ inline uint32_t HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, config>::GetRankDim()
+{
+    ASCENDC_HCCL_API_ASSERT(
+        hcclContext_ != nullptr, { return UINT32_MAX; },
+        "Call GetRankDim failed, ensure InitV2 or Init has been called!");
     return hcclContext_->rankNum;
 }
 
@@ -259,6 +262,6 @@ __aicore__ inline int32_t HcclImpl<HcclServerType::HCCL_SERVER_TYPE_AICPU, confi
     }
     return seqSliceLen;
 }
-}
+} // namespace AscendC
 
 #endif

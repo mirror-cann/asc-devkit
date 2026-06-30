@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "virtual_topo.h"
 #include <algorithm>
 #include <string>
@@ -22,10 +22,10 @@
 
 namespace Hccl {
 
-LinkData::LinkData(vector<char> &data)
+LinkData::LinkData(vector<char>& data)
 {
     BinaryStream binaryStream(data);
-    u32          val;
+    u32 val;
     binaryStream >> val;
     type = static_cast<PortDeploymentType::Value>(val);
     binaryStream >> val;
@@ -58,14 +58,14 @@ LinkData::LinkData(vector<char> &data)
     std::vector<char> rmtAddr;
     std::copy(data.begin() + offset + addrSize, data.end(), std::back_inserter(rmtAddr));
 
-    localAddr_  = IpAddress(locAddr);
+    localAddr_ = IpAddress(locAddr);
     remoteAddr_ = IpAddress(rmtAddr);
 }
 
 std::vector<char> LinkData::GetUniqueId() const
 {
     BinaryStream binaryStream;
-    u32          val = static_cast<u32>(type);
+    u32 val = static_cast<u32>(type);
     binaryStream << val;
     val = static_cast<u32>(linkProtocol_);
     binaryStream << val;
@@ -86,9 +86,11 @@ std::vector<char> LinkData::GetUniqueId() const
 
     auto loc = localAddr_.GetUniqueId();
     auto rmt = remoteAddr_.GetUniqueId();
-    HCCL_INFO("[LinkData::%s] localAddr[%s], remoteAddr[%s].", __func__, localAddr_.Describe().c_str(), remoteAddr_.Describe().c_str());
+    HCCL_INFO(
+        "[LinkData::%s] localAddr[%s], remoteAddr[%s].", __func__, localAddr_.Describe().c_str(),
+        remoteAddr_.Describe().c_str());
 
-    u32 offset   = result.size();
+    u32 offset = result.size();
     u32 addrSize = loc.size();
 
     offset += sizeof(offset) + sizeof(addrSize);

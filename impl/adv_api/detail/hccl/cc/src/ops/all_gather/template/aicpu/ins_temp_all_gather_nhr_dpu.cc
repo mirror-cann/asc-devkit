@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "ins_temp_all_gather_nhr_dpu.h"
 #include "alg_data_trans_wrapper.h"
 #include "dpu_alg_data_trans_wrapper.h"
@@ -14,12 +14,14 @@
 #include "alg_v2_template_register.h"
 
 namespace mc2_ops_hccl {
-InsTempAllGatherNHRDPU::InsTempAllGatherNHRDPU(const OpParam& param, const uint32_t rankId,
-                                               const std::vector<std::vector<uint32_t>> &subCommRanks)
-    : InsAlgTemplateBase(param, rankId, subCommRanks) {}
+InsTempAllGatherNHRDPU::InsTempAllGatherNHRDPU(
+    const OpParam& param, const uint32_t rankId, const std::vector<std::vector<uint32_t>>& subCommRanks)
+    : InsAlgTemplateBase(param, rankId, subCommRanks)
+{}
 
-HcclResult InsTempAllGatherNHRDPU::CalcRes(HcclComm comm, const OpParam& param, const TopoInfoWithNetLayerDetails* topoInfo,
-                                           AlgResourceRequest& resourceRequest)
+HcclResult InsTempAllGatherNHRDPU::CalcRes(
+    HcclComm comm, const OpParam& param, const TopoInfoWithNetLayerDetails* topoInfo,
+    AlgResourceRequest& resourceRequest)
 {
     resourceRequest.slaveThreadNum = 0;
     resourceRequest.notifyNumPerThread = {};
@@ -28,24 +30,23 @@ HcclResult InsTempAllGatherNHRDPU::CalcRes(HcclComm comm, const OpParam& param, 
     std::vector<HcclChannelDesc> level1Channels;
     CHK_RET(CalcChannelRequestNhr(comm, param, topoInfo, subCommRanks_, level1Channels));
     resourceRequest.channels.push_back(level1Channels);
-    HCCL_INFO("[InsTempAllGatherNHRDPU][CalcRes]slaveThreadNum[%u] notifyNumOnMainThread[%u] level1Channels[%u].",
+    HCCL_INFO(
+        "[InsTempAllGatherNHRDPU][CalcRes]slaveThreadNum[%u] notifyNumOnMainThread[%u] level1Channels[%u].",
         resourceRequest.slaveThreadNum, resourceRequest.notifyNumOnMainThread, level1Channels.size());
     return HCCL_SUCCESS;
 }
 
 u64 InsTempAllGatherNHRDPU::CalcScratchMultiple(BufferType inBufferType, BufferType outBufferType)
 {
-    (void) inBufferType;
-    (void) outBufferType;
+    (void)inBufferType;
+    (void)outBufferType;
     u64 scratchMultiple = templateRankSize_;
-    HCCL_INFO(
-        "[InsTempAllGatherNHRDPU][CalcScratchMultiple] templateScratchMultiplier[%llu]", scratchMultiple);
+    HCCL_INFO("[InsTempAllGatherNHRDPU][CalcScratchMultiple] templateScratchMultiplier[%llu]", scratchMultiple);
     return scratchMultiple;
 }
 
-HcclResult InsTempAllGatherNHRDPU::KernelRun(const OpParam& param,
-                                             const TemplateDataParams& tempAlgParams,
-                                             const TemplateResource& templateResource)
+HcclResult InsTempAllGatherNHRDPU::KernelRun(
+    const OpParam& param, const TemplateDataParams& tempAlgParams, const TemplateResource& templateResource)
 {
     HCCL_INFO("[InsTempAllGatherNHRDPU] Run Start");
 
@@ -76,15 +77,16 @@ HcclResult InsTempAllGatherNHRDPU::KernelRun(const OpParam& param,
     auto dpuRunInfoSeqData = dpuRunInfo.Serialize();
 
     u32 sendMsgId = 0;
-    if (HcommSendRequest(reinterpret_cast<uint64_t>(templateResource.npu2DpuShmemPtr), param.algTag,
-        static_cast<void*>(dpuRunInfoSeqData.data()), dpuRunInfoSeqData.size(), &sendMsgId) != 0) {
+    if (HcommSendRequest(
+            reinterpret_cast<uint64_t>(templateResource.npu2DpuShmemPtr), param.algTag,
+            static_cast<void*>(dpuRunInfoSeqData.data()), dpuRunInfoSeqData.size(), &sendMsgId) != 0) {
         HCCL_ERROR("HcommSendRequest failed");
         return HCCL_E_INTERNAL;
     }
     HCCL_INFO("HcommSendRequest run over, sendMsgId[%u]", sendMsgId);
 
     // 等待DPU数据传输，然后回写结果回来
-    void *recvData = nullptr;
+    void* recvData = nullptr;
     u32 recvMsgId = 0;
     if (HcommWaitResponse(reinterpret_cast<uint64_t>(templateResource.dpu2NpuShmemPtr), recvData, 0, &recvMsgId) != 0) {
         HCCL_ERROR("HcommWaitResponse failed");
@@ -109,10 +111,9 @@ HcclResult InsTempAllGatherNHRDPU::KernelRun(const OpParam& param,
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult InsTempAllGatherNHRDPU::DPUKernelRun(const TemplateDataParams& tempAlgParams,
-                                                const std::map<u32, std::vector<ChannelInfo>>& channels,
-                                                const u32 myRank,
-                                                const std::vector<std::vector<uint32_t>>& subCommRanks)
+HcclResult InsTempAllGatherNHRDPU::DPUKernelRun(
+    const TemplateDataParams& tempAlgParams, const std::map<u32, std::vector<ChannelInfo>>& channels, const u32 myRank,
+    const std::vector<std::vector<uint32_t>>& subCommRanks)
 {
     myRank_ = myRank;
     templateRankSize_ = subCommRanks[0].size();
@@ -122,7 +123,7 @@ HcclResult InsTempAllGatherNHRDPU::DPUKernelRun(const TemplateDataParams& tempAl
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult InsTempAllGatherNHRDPU::GetStepInfo(uint32_t step, uint32_t nSteps, AicpuNHRStepInfo &stepInfo) const
+HcclResult InsTempAllGatherNHRDPU::GetStepInfo(uint32_t step, uint32_t nSteps, AicpuNHRStepInfo& stepInfo) const
 {
     uint32_t rankIdx = 0;
     CHK_RET(GetAlgRank(myRank_, subCommRanks_[0], rankIdx));
@@ -150,7 +151,8 @@ HcclResult InsTempAllGatherNHRDPU::GetStepInfo(uint32_t step, uint32_t nSteps, A
         stepInfo.txSliceIdxs.push_back(txSliceIdx);
         stepInfo.rxSliceIdxs.push_back(rxSliceIdx);
 
-        HCCL_DEBUG("[InsTempAllGatherNHRDPU][GetStepInfo] i[%u] txSliceIdx[%u] rxSliceIdx[%u]", i, txSliceIdx, rxSliceIdx);
+        HCCL_DEBUG(
+            "[InsTempAllGatherNHRDPU][GetStepInfo] i[%u] txSliceIdx[%u] rxSliceIdx[%u]", i, txSliceIdx, rxSliceIdx);
 
         txSliceIdx = (txSliceIdx + templateRankSize_ - deltaSliceIndex) % templateRankSize_;
         rxSliceIdx = (rxSliceIdx + templateRankSize_ - deltaSliceIndex) % templateRankSize_;
@@ -158,13 +160,10 @@ HcclResult InsTempAllGatherNHRDPU::GetStepInfo(uint32_t step, uint32_t nSteps, A
     return HcclResult::HCCL_SUCCESS;
 }
 
-u32 InsTempAllGatherNHRDPU::GetRankFromMap(const uint32_t rankIdx) const
-{
-    return subCommRanks_[0].at(rankIdx);
-}
+u32 InsTempAllGatherNHRDPU::GetRankFromMap(const uint32_t rankIdx) const { return subCommRanks_[0].at(rankIdx); }
 
-HcclResult InsTempAllGatherNHRDPU::LocalDataCopy(const TemplateDataParams& tempAlgParams,
-                                                 const TemplateResource& templateResource)
+HcclResult InsTempAllGatherNHRDPU::LocalDataCopy(
+    const TemplateDataParams& tempAlgParams, const TemplateResource& templateResource)
 {
     uint32_t algRankIdx = 0;
     CHK_RET(GetAlgRank(myRank_, subCommRanks_[0], algRankIdx));
@@ -178,15 +177,14 @@ HcclResult InsTempAllGatherNHRDPU::LocalDataCopy(const TemplateDataParams& tempA
         const u64 scOff = tempAlgParams.sliceSize * algRankIdx + scratchBaseoff;
 
         DataSlice srcSlices(tempAlgParams.buffInfo.inputPtr, inOff, tempAlgParams.sliceSize, tempAlgParams.count);
-        DataSlice dstSlice(tempAlgParams.buffInfo.hcclBuff.addr, scOff, tempAlgParams.sliceSize,
-                           tempAlgParams.count);
+        DataSlice dstSlice(tempAlgParams.buffInfo.hcclBuff.addr, scOff, tempAlgParams.sliceSize, tempAlgParams.count);
         LocalCopy(templateResource.threads[0], srcSlices, dstSlice);
     }
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult InsTempAllGatherNHRDPU::RunNHR(const TemplateDataParams& tempAlgParams,
-                                          const std::map<u32, std::vector<ChannelInfo>>& channels) const
+HcclResult InsTempAllGatherNHRDPU::RunNHR(
+    const TemplateDataParams& tempAlgParams, const std::map<u32, std::vector<ChannelInfo>>& channels) const
 {
 #ifndef AICPU_COMPILE
     const uint32_t nSteps = GetNHRStepNum(templateRankSize_);
@@ -199,7 +197,9 @@ HcclResult InsTempAllGatherNHRDPU::RunNHR(const TemplateDataParams& tempAlgParam
             AicpuNHRStepInfo stepInfo;
             CHK_RET(GetStepInfo(step, nSteps, stepInfo));
 
-            HCCL_DEBUG("[InsTempAllGatherNHRDPU] rank[%d] rankSize[%u] recvFrom[%u] sendTo[%u] step[%u] nSteps[%u] nSlices[%u]",
+            HCCL_DEBUG(
+                "[InsTempAllGatherNHRDPU] rank[%d] rankSize[%u] recvFrom[%u] sendTo[%u] step[%u] nSteps[%u] "
+                "nSlices[%u]",
                 myRank_, templateRankSize_, stepInfo.fromRank, stepInfo.toRank, step, nSteps, stepInfo.nSlices);
 
             auto rxChannel = channels.at(GetRankFromMap(stepInfo.fromRank));
@@ -209,8 +209,8 @@ HcclResult InsTempAllGatherNHRDPU::RunNHR(const TemplateDataParams& tempAlgParam
             std::vector<DataSlice> txDstSlices;
             std::vector<DataSlice> rxSrcSlices;
             std::vector<DataSlice> rxDstSlices;
-            void *sendCclBuffAddr = txChannel[0].remoteCclMem.addr;
-            void *recvCclBuffAddr = rxChannel[0].remoteCclMem.addr;
+            void* sendCclBuffAddr = txChannel[0].remoteCclMem.addr;
+            void* recvCclBuffAddr = rxChannel[0].remoteCclMem.addr;
 
             for (u32 i = 0; i < stepInfo.nSlices; ++i) {
                 const u32 txIdx = stepInfo.txSliceIdxs[i];
@@ -219,12 +219,12 @@ HcclResult InsTempAllGatherNHRDPU::RunNHR(const TemplateDataParams& tempAlgParam
                 const u64 txScratchOff = scratchBase + tempAlgParams.sliceSize * txIdx;
                 const u64 rxScratchOff = scratchBase + tempAlgParams.sliceSize * rxIdx;
 
-                txSrcSlices.emplace_back(tempAlgParams.buffInfo.hcclBuff.addr, txScratchOff, tempAlgParams.sliceSize,
-                                         tempAlgParams.count);
+                txSrcSlices.emplace_back(
+                    tempAlgParams.buffInfo.hcclBuff.addr, txScratchOff, tempAlgParams.sliceSize, tempAlgParams.count);
                 txDstSlices.emplace_back(sendCclBuffAddr, txScratchOff, tempAlgParams.sliceSize, tempAlgParams.count);
                 rxSrcSlices.emplace_back(recvCclBuffAddr, rxScratchOff, tempAlgParams.sliceSize, tempAlgParams.count);
-                rxDstSlices.emplace_back(tempAlgParams.buffInfo.hcclBuff.addr, rxScratchOff, tempAlgParams.sliceSize,
-                                         tempAlgParams.count);
+                rxDstSlices.emplace_back(
+                    tempAlgParams.buffInfo.hcclBuff.addr, rxScratchOff, tempAlgParams.sliceSize, tempAlgParams.count);
             }
             // write模式使用tx,rx地址不生效，仅使用对端link做Post/Wait
             // read 模式使用rx, tx地址不生效，仅使用对端link做Post/Wait
@@ -232,7 +232,8 @@ HcclResult InsTempAllGatherNHRDPU::RunNHR(const TemplateDataParams& tempAlgParam
             TxRxSlicesList sendRecvSlicesList({txSrcSlices, txDstSlices}, {rxSrcSlices, rxDstSlices});
             SendRecvInfo sendRecvInfo(sendRecvChannels, sendRecvSlicesList);
 
-            CHK_PRT_RET(SendRecvWrite(sendRecvInfo),
+            CHK_PRT_RET(
+                SendRecvWrite(sendRecvInfo),
                 HCCL_ERROR("[InsTempAllGatherNHRDPU] SendRecvWrite failed (step=%u, rpt=%u)", step, rpt),
                 HcclResult::HCCL_E_INTERNAL);
         }
@@ -241,8 +242,8 @@ HcclResult InsTempAllGatherNHRDPU::RunNHR(const TemplateDataParams& tempAlgParam
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult InsTempAllGatherNHRDPU::PostLocalCopy(const TemplateDataParams& tempAlgParams,
-                                                 const TemplateResource& templateResource)
+HcclResult InsTempAllGatherNHRDPU::PostLocalCopy(
+    const TemplateDataParams& tempAlgParams, const TemplateResource& templateResource)
 {
     for (u32 rpt = 0; rpt < tempAlgParams.repeatNum; ++rpt) {
         const u64 outBaseOff = tempAlgParams.buffInfo.outBuffBaseOff + rpt * tempAlgParams.outputRepeatStride;
@@ -254,10 +255,10 @@ HcclResult InsTempAllGatherNHRDPU::PostLocalCopy(const TemplateDataParams& tempA
             CHK_RET(GetAlgRank(rank, subCommRanks_[0], algRank));
             u64 scratchOffset = tempAlgParams.sliceSize * algRank + scratchBase;
             u64 outOffset = tempAlgParams.outputSliceStride * algRank + outBaseOff;
-            DataSlice srcSlice(tempAlgParams.buffInfo.hcclBuff.addr, scratchOffset, tempAlgParams.sliceSize,
-                               tempAlgParams.count);
-            DataSlice dstSlice(tempAlgParams.buffInfo.outputPtr, outOffset, tempAlgParams.sliceSize,
-                               tempAlgParams.count);
+            DataSlice srcSlice(
+                tempAlgParams.buffInfo.hcclBuff.addr, scratchOffset, tempAlgParams.sliceSize, tempAlgParams.count);
+            DataSlice dstSlice(
+                tempAlgParams.buffInfo.outputPtr, outOffset, tempAlgParams.sliceSize, tempAlgParams.count);
             LocalCopy(templateResource.threads[0], srcSlice, dstSlice);
         }
     }
@@ -265,4 +266,4 @@ HcclResult InsTempAllGatherNHRDPU::PostLocalCopy(const TemplateDataParams& tempA
 }
 
 REGISTER_TEMPLATE_V2("InsTempAllGatherNHRDPU", InsTempAllGatherNHRDPU);
-}
+} // namespace mc2_ops_hccl

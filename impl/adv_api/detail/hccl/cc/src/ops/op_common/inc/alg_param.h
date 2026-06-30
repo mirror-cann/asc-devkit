@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef MC2_OPS_HCCL_SRC_OPS_INC_COLL_ALG_PARAM
 #define MC2_OPS_HCCL_SRC_OPS_INC_COLL_ALG_PARAM
 
@@ -28,16 +28,33 @@
 
 namespace mc2_ops_hccl {
 
-constexpr uint64_t UB_MAX_DATA_SIZE = 256*1024*1024; // Byte, UB协议一次传输的最大size
+constexpr uint64_t UB_MAX_DATA_SIZE = 256 * 1024 * 1024; // Byte, UB协议一次传输的最大size
 
-constexpr uint32_t DATATYPE_SIZE_TABLE[HCCL_DATA_TYPE_RESERVED] = {sizeof(int8_t), sizeof(int16_t), sizeof(int32_t),
-    2, sizeof(float), sizeof(int64_t), sizeof(uint64_t), sizeof(uint8_t), sizeof(uint16_t), sizeof(uint32_t),
-    8, 2, 16, 2, 1, 1, 1, 1, 1};
+constexpr uint32_t DATATYPE_SIZE_TABLE[HCCL_DATA_TYPE_RESERVED] = {
+    sizeof(int8_t),
+    sizeof(int16_t),
+    sizeof(int32_t),
+    2,
+    sizeof(float),
+    sizeof(int64_t),
+    sizeof(uint64_t),
+    sizeof(uint8_t),
+    sizeof(uint16_t),
+    sizeof(uint32_t),
+    8,
+    2,
+    16,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1};
 
 constexpr u32 COMM_INDENTIFIER_MAX_LENGTH = 128;
 constexpr uint32_t OP_NAME_LENGTH = 32;
 constexpr uint32_t TAG_LENGTH = OP_NAME_LENGTH + COMM_INDENTIFIER_MAX_LENGTH; // 算子相关的topo表达
-constexpr uint32_t OP_ALG_LENGTH = 128; // 存放算法 + host/device标记
+constexpr uint32_t OP_ALG_LENGTH = 128;                                       // 存放算法 + host/device标记
 constexpr uint32_t ALG_TAG_LENGTH = TAG_LENGTH + OP_ALG_LENGTH;
 constexpr uint32_t MAX_TAG_LENGTH = 255;
 constexpr uint32_t AICPU_CONTROL_NOTIFY_NUM = 2;
@@ -62,16 +79,16 @@ constexpr u64 ALL_GATHER_V_VECTOR_NUM = 2;
 constexpr u32 MESH_CHANNELS_NUM = 1;
 
 enum class TopoType {
-    TOPO_TYPE_COMMON = 0,           // 普通拓扑类型 ，default单层拓扑使用
-    TOPO_TYPE_8P_RING = 1,          // 特殊场景, 服务器内8 rank组成一个ring，4个逻辑环
-    TOPO_TYPE_4P_MESH = 2,          // 特殊场景, 服务器内4 rank组成MESH
-    TOPO_TYPE_2P_MESH = 3,          // 特殊场景, 服务器内2 rank组成MESH。仅用于测试和自验证
-    TOPO_TYPE_1P_MESH = 4,          // 特殊场景, 服务器内1 rank组成MESH。仅用于测试和自验证
-    TOPO_TYPE_4P_RING = 5,          // 特殊场景，服务器内4 rank组成ring
-    TOPO_TYPE_NP_SINGLE_RING = 6,   // 特殊场景, 服务器内n rank组成单 ring。目前仅用于标卡
-    TOPO_TYPE_8P_MESH = 7,          // 特殊场景, 服务器内8 rank通过RDMA组成MESH
-    TOPO_TYPE_NP_MESH = 8,          // 特殊场景, 服务器内3~8p rank组成MESH
-    TOPO_TYPE_NP_DOUBLE_RING = 9,   // 特殊场景, 910_93场景
+    TOPO_TYPE_COMMON = 0,         // 普通拓扑类型 ，default单层拓扑使用
+    TOPO_TYPE_8P_RING = 1,        // 特殊场景, 服务器内8 rank组成一个ring，4个逻辑环
+    TOPO_TYPE_4P_MESH = 2,        // 特殊场景, 服务器内4 rank组成MESH
+    TOPO_TYPE_2P_MESH = 3,        // 特殊场景, 服务器内2 rank组成MESH。仅用于测试和自验证
+    TOPO_TYPE_1P_MESH = 4,        // 特殊场景, 服务器内1 rank组成MESH。仅用于测试和自验证
+    TOPO_TYPE_4P_RING = 5,        // 特殊场景，服务器内4 rank组成ring
+    TOPO_TYPE_NP_SINGLE_RING = 6, // 特殊场景, 服务器内n rank组成单 ring。目前仅用于标卡
+    TOPO_TYPE_8P_MESH = 7,        // 特殊场景, 服务器内8 rank通过RDMA组成MESH
+    TOPO_TYPE_NP_MESH = 8,        // 特殊场景, 服务器内3~8p rank组成MESH
+    TOPO_TYPE_NP_DOUBLE_RING = 9, // 特殊场景, 910_93场景
     TOPO_TYPE_HETEROG = 10,
     TOPO_TYPE_ES_MESH = 11,
     TOPO_TYPE_RESERVED
@@ -91,13 +108,10 @@ enum class OpExecuteConfig {
     CCU_FAIL
 };
 
-enum class OpMode {
-    OPBASE = 0,
-    OFFLOAD = 1
-};
+enum class OpMode { OPBASE = 0, OFFLOAD = 1 };
 
 enum class Level0Shape {
-    CLOS    = 0,
+    CLOS = 0,
     MESH_1D = 1,
     MESH_1D_CLOS = 2,
 };
@@ -125,23 +139,23 @@ struct TopoInstDetails {
 };
 
 struct TopoInfo {
-    u32 userRank; // rankId
-    u32 userRankSize; // 通信域rankSize
-    u32 serverIdx = INVALID_UINT; // Server在ranktable中的自然顺序
-    u32 superPodIdx = INVALID_UINT; // SuperPod在ranktable中的自然顺序
+    u32 userRank;                                 // rankId
+    u32 userRankSize;                             // 通信域rankSize
+    u32 serverIdx = INVALID_UINT;                 // Server在ranktable中的自然顺序
+    u32 superPodIdx = INVALID_UINT;               // SuperPod在ranktable中的自然顺序
     DevType deviceType = DevType::DEV_TYPE_COUNT; // 硬件类型
-    u32 deviceNumPerModule = 0; // A2 每个module的卡数
-    u32 serverNumPerSuperPod = 0; // 每个超节点的服务器个数
-    u32 serverNum = 0; // 服务器数量
-    u32 moduleNum = 0; // A2 A+X场景moudleNum可能与serverNum不符
-    u32 superPodNum = 0; // 超节点数量
-    u32 moduleIdx = INVALID_UINT; // moduleId
-    bool isDiffDeviceModule = false; // A2 A+X
-    bool multiModuleDiffDeviceNumMode = false;   // Server间卡数不一致
-    bool multiSuperPodDiffServerNumMode = false; // 超节点间Server数不一致
-    bool isHCCSSWNumEqualToTwiceSIONum = false; // A3 Server内链路属性
-    ThreadHandle mainThread;    // 主流对应threadHandle
-    u32 notifyNumOnMainThread = 0;  // mainThread上创建的notify数量
+    u32 deviceNumPerModule = 0;                   // A2 每个module的卡数
+    u32 serverNumPerSuperPod = 0;                 // 每个超节点的服务器个数
+    u32 serverNum = 0;                            // 服务器数量
+    u32 moduleNum = 0;                            // A2 A+X场景moudleNum可能与serverNum不符
+    u32 superPodNum = 0;                          // 超节点数量
+    u32 moduleIdx = INVALID_UINT;                 // moduleId
+    bool isDiffDeviceModule = false;              // A2 A+X
+    bool multiModuleDiffDeviceNumMode = false;    // Server间卡数不一致
+    bool multiSuperPodDiffServerNumMode = false;  // 超节点间Server数不一致
+    bool isHCCSSWNumEqualToTwiceSIONum = false;   // A3 Server内链路属性
+    ThreadHandle mainThread;                      // 主流对应threadHandle
+    u32 notifyNumOnMainThread = 0;                // mainThread上创建的notify数量
 };
 
 // 这个应该是公共的
@@ -204,7 +218,7 @@ struct TopoInfoWithNetLayerDetails : public TopoInfo { // 通信域拓扑ctx
         return result;
     }
 
-    void DeSerialize(std::vector<char> &data)
+    void DeSerialize(std::vector<char>& data)
     {
         BinaryStream binaryStream(data);
         binaryStream >> userRank;
@@ -277,29 +291,23 @@ struct CcuFastLaunchCtx {
     // 紧接ThreadHandle数组
     // 紧接CcuKernelSubmitInfo数组
 
-    ThreadHandle *GetThreadHandlePtr() const
+    ThreadHandle* GetThreadHandlePtr() const
     {
-        size_t offset = offsetof(CcuFastLaunchCtx, ccuKernelNum)
-                        + sizeof(u32) * MAX_TEMP_NUM_IN_ALGO;
-        return reinterpret_cast<ThreadHandle*>(
-                    reinterpret_cast<char*>(const_cast<CcuFastLaunchCtx*>(this)) + offset
-                );
+        size_t offset = offsetof(CcuFastLaunchCtx, ccuKernelNum) + sizeof(u32) * MAX_TEMP_NUM_IN_ALGO;
+        return reinterpret_cast<ThreadHandle*>(reinterpret_cast<char*>(const_cast<CcuFastLaunchCtx*>(this)) + offset);
     }
-    CcuKernelSubmitInfo *GetCcuKernelSubmitInfoPtr() const
+    CcuKernelSubmitInfo* GetCcuKernelSubmitInfoPtr() const
     {
-        size_t offset = offsetof(CcuFastLaunchCtx, ccuKernelNum)
-                        + sizeof(u32) * MAX_TEMP_NUM_IN_ALGO 
-                        + sizeof(ThreadHandle) * threadNum;
+        size_t offset = offsetof(CcuFastLaunchCtx, ccuKernelNum) + sizeof(u32) * MAX_TEMP_NUM_IN_ALGO +
+                        sizeof(ThreadHandle) * threadNum;
         return reinterpret_cast<CcuKernelSubmitInfo*>(
-                    reinterpret_cast<char*>(const_cast<CcuFastLaunchCtx*>(this)) + offset
-                );
+            reinterpret_cast<char*>(const_cast<CcuFastLaunchCtx*>(this)) + offset);
     }
 
     static u64 GetCtxSize(u32 threadNum, u32 totalCcuKernelNum)
     {
-        return sizeof(CcuFastLaunchCtx) 
-               + sizeof(ThreadHandle) * threadNum 
-               + sizeof(CcuKernelSubmitInfo) * totalCcuKernelNum;
+        return sizeof(CcuFastLaunchCtx) + sizeof(ThreadHandle) * threadNum +
+               sizeof(CcuKernelSubmitInfo) * totalCcuKernelNum;
     }
 };
 
@@ -333,26 +341,26 @@ struct ChannelInfo {
     u32 notifyNum = 0;
     u32 portGroupSize = 1; // A5用的, 端口组大小，用于数据分片比例计算
     ChannelHandle handle = 0;
-    HcclMem remoteCclMem; // A5用的
-    HcclMem remoteInputGraphMode;   // A5用的, 图模式下远端sendBuf地址
-    HcclMem remoteOutputGraphMode;  // A5用的，图模式下远端recvBuf地址
-    HcclMem remoteInput;  // A3用的，cclIn
-    HcclMem remoteOutput; // A3用的, cclOut
+    HcclMem remoteCclMem;          // A5用的
+    HcclMem remoteInputGraphMode;  // A5用的, 图模式下远端sendBuf地址
+    HcclMem remoteOutputGraphMode; // A5用的，图模式下远端recvBuf地址
+    HcclMem remoteInput;           // A3用的，cclIn
+    HcclMem remoteOutput;          // A3用的, cclOut
 };
 
 // 算法ctx，key为通信域id+算法名，提前在device上
 // 头部需补充版本号和长度信息
 struct AlgResourceCtx {
-    AlgType algType; // 环境变量设置的算法类型
-    AlgHierarchyInfo algHierarchyInfo; // 算法分层信息
-    HcclMem cclInputMem; // 跨Rank缓存Buffer
-    HcclMem cclOutputMem; // 跨Rank缓存Buffer
-    u32 notifyNumOnMainThread; // 主流上的notify数量
-    u32 slaveThreadNum; // 需要的thread数量
-    u32 notifyNumPerThread; // 每个thread需要的notify数量
-    ThreadHandle opThread;  // 算子stream申请的thread，用于host、device同步
+    AlgType algType;                              // 环境变量设置的算法类型
+    AlgHierarchyInfo algHierarchyInfo;            // 算法分层信息
+    HcclMem cclInputMem;                          // 跨Rank缓存Buffer
+    HcclMem cclOutputMem;                         // 跨Rank缓存Buffer
+    u32 notifyNumOnMainThread;                    // 主流上的notify数量
+    u32 slaveThreadNum;                           // 需要的thread数量
+    u32 notifyNumPerThread;                       // 每个thread需要的notify数量
+    ThreadHandle opThread;                        // 算子stream申请的thread，用于host、device同步
     uint32_t notifyIds[AICPU_CONTROL_NOTIFY_NUM]; // aicpu 模式下控制notify
-    TopoInfo topoInfo; // 提取的拓扑信息
+    TopoInfo topoInfo;                            // 提取的拓扑信息
     void* aivCommInfoPtr = nullptr;
     // 下面是变长数据区
     // ThreadHandle* threads; // threadNum个，主流和从流的thread句柄
@@ -366,14 +374,14 @@ struct AlgHierarchyInfoForAllLevel {
 // 如果能够序列化那么就是下面的结构体
 // 先序列化，把东西考到device，然后把指针存到OpParam，在device侧反序列该指针执行的内存
 struct AlgResourceCtxSerializable {
-    AlgType algType; // 环境变量设置的算法类型
+    AlgType algType;                              // 环境变量设置的算法类型
     AlgHierarchyInfoForAllLevel algHierarchyInfo; // 算法分层信息
-    HcclMem cclMem; // 跨Rank缓存Buffer
-    u32 notifyNumOnMainThread; // 主流上的notify数量
-    u32 slaveThreadNum; // 需要的thread数量
-    u32 waitTimeout = 0; // Device侧notify wait默认超时时间
-    u32 fullTimeout = 0; // Device侧队列满/资源申请超时时间
-    std::vector<u32> notifyNumPerThread; // 每个thread需要的notify数量
+    HcclMem cclMem;                               // 跨Rank缓存Buffer
+    u32 notifyNumOnMainThread;                    // 主流上的notify数量
+    u32 slaveThreadNum;                           // 需要的thread数量
+    u32 waitTimeout = 0;                          // Device侧notify wait默认超时时间
+    u32 fullTimeout = 0;                          // Device侧队列满/资源申请超时时间
+    std::vector<u32> notifyNumPerThread;          // 每个thread需要的notify数量
     void* aivCommInfoPtr = nullptr;
     std::vector<ThreadHandle> threads;
     ThreadHandle unfoldThread = 0; // 展开流thread
@@ -381,8 +389,8 @@ struct AlgResourceCtxSerializable {
     bool isHcommBatchTransferOnThreadSupported = false;
     void* commInfoPtr = nullptr;
     // hostdpu
-    void *npu2DpuShmemPtr = nullptr;
-    void *dpu2NpuShmemPtr = nullptr;
+    void* npu2DpuShmemPtr = nullptr;
+    void* dpu2NpuShmemPtr = nullptr;
     // ccu的
     std::vector<u32> ccuKernelNum;
     std::vector<CcuKernelHandle> ccuKernels;
@@ -422,7 +430,7 @@ struct AlgResourceCtxSerializable {
         return result;
     }
 
-    void DeSerialize(std::vector<char> &data)
+    void DeSerialize(std::vector<char>& data)
     {
         BinaryStream binaryStream(data);
 
@@ -586,9 +594,9 @@ struct OpParamGraphMode {
 
 // 图模式编译阶段申请资源
 struct ResResponseGraphMode {
-    u64 opMemSize = 0;  // 额外申请的scratch数量（不包括cclBuff）
-    u32 streamNum = 0;  // 除用户流以外，额外申请的流（不包括算子device展开申请的流）
-    u32 taskNum = 0;    // task数量，一般为前同步 + kernel + 后同步
+    u64 opMemSize = 0; // 额外申请的scratch数量（不包括cclBuff）
+    u32 streamNum = 0; // 除用户流以外，额外申请的流（不包括算子device展开申请的流）
+    u32 taskNum = 0;   // task数量，一般为前同步 + kernel + 后同步
     u32 aivCoreNum = 0;
 };
 

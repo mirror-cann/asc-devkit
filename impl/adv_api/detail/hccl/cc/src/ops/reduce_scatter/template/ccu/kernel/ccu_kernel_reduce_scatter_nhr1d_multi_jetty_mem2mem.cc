@@ -1,50 +1,50 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "ccu_kernel_reduce_scatter_nhr1d_multi_jetty_mem2mem.h"
 #include "ccu_kernel_alg_base.h"
 
 namespace mc2_ops_hccl {
 using namespace hcomm;
 
-constexpr int INPUT_XN_ID   = 0;
-constexpr int TOKEN_XN_ID   = 1;
+constexpr int INPUT_XN_ID = 0;
+constexpr int TOKEN_XN_ID = 1;
 
 constexpr int CKE_IDX_INPUT = 0;
 constexpr int CKE_IDX_TOKEN = 1;
 constexpr int CKE_IDX_READY = 2;
-constexpr int CKE_IDX_DONE  = 3;
-constexpr int POST_XN_ID    = 4;
+constexpr int CKE_IDX_DONE = 3;
+constexpr int POST_XN_ID = 4;
 constexpr uint16_t BIT_NUM_PER_CKE = 16; // CKE的位数，一个CKE可以处理16种信号
 
-CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::CcuKernelReduceScatterNhrMutilJettyMem2Mem1D(const CcuKernelArg &arg)
+CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::CcuKernelReduceScatterNhrMutilJettyMem2Mem1D(const CcuKernelArg& arg)
     : CcuKernelAlgBase(arg)
 {
-    const CcuKernelArgReduceScatterNhrMutilJettyMem2Mem1D *kernelArg
-        = dynamic_cast<const CcuKernelArgReduceScatterNhrMutilJettyMem2Mem1D *>(&arg);
-    rankId_          = kernelArg->rankId_;
-    dimSize_         = kernelArg->dimSize_;
-    channels_        = kernelArg->channels;
-    dataType_        = kernelArg->opParam_.DataDes.dataType;
-    outputDataType_  = kernelArg->opParam_.DataDes.outputType;
-    stepInfoVector_  = kernelArg->stepInfoVector_;
+    const CcuKernelArgReduceScatterNhrMutilJettyMem2Mem1D* kernelArg =
+        dynamic_cast<const CcuKernelArgReduceScatterNhrMutilJettyMem2Mem1D*>(&arg);
+    rankId_ = kernelArg->rankId_;
+    dimSize_ = kernelArg->dimSize_;
+    channels_ = kernelArg->channels;
+    dataType_ = kernelArg->opParam_.DataDes.dataType;
+    outputDataType_ = kernelArg->opParam_.DataDes.outputType;
+    stepInfoVector_ = kernelArg->stepInfoVector_;
     rank2ChannelIdx_ = kernelArg->rank2ChannelIdx_;
-    localSize_       = rank2ChannelIdx_.size(); // 有多少个对端rank
-    myRankIdx_       = rank2ChannelIdx_.size(); // 本rank的id写成最后一个
-    portNum_         = kernelArg->portNum_;
+    localSize_ = rank2ChannelIdx_.size(); // 有多少个对端rank
+    myRankIdx_ = rank2ChannelIdx_.size(); // 本rank的id写成最后一个
+    portNum_ = kernelArg->portNum_;
     if (outputDataType_ == HcclDataType::HCCL_DATA_TYPE_RESERVED) {
         outputDataType_ = dataType_;
         HCCL_DEBUG(
             "[CcuKernelReduceScatterNhrMutilJettyMem2Mem1D] outputDataType is [INVALID], set outputDataType to[%d]",
             outputDataType_);
     }
-    reduceOp_       = kernelArg->opParam_.reduceType;
+    reduceOp_ = kernelArg->opParam_.reduceType;
     HCCL_INFO(
         "[CcuKernelReduceScatterNhrMutilJettyMem2Mem1D] Init, KernelArgs are rankId[%u], dimSize_[%u], dataType[%d], "
         "outputDataType[%d], reduceOp[%d], portNum[%d]",
@@ -57,16 +57,16 @@ HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::InitResource()
         HCCL_ERROR("[CcuKernelReduceScatterNhrMutilJettyMem2Mem1D] channels is empty!");
         return HcclResult::HCCL_E_INTERNAL;
     }
-    output_             = CreateVariable();//0
-    sliceSize_          = CreateVariable();//1
-    inputSliceStride_   = CreateVariable();//2
-    outputSliceStride_  = CreateVariable();//3
-    inputRepeatStride_  = CreateVariable();//4
-    outputRepeatStride_ = CreateVariable();//5
-    sliceOneJettySize_  = CreateVariable();//6
-    sliceLastJettySize_ = CreateVariable();//7
-    repeatNumVar_       = CreateVariable();//8
-    repeatNumVarTemp_   = CreateVariable();//9
+    output_ = CreateVariable();             // 0
+    sliceSize_ = CreateVariable();          // 1
+    inputSliceStride_ = CreateVariable();   // 2
+    outputSliceStride_ = CreateVariable();  // 3
+    inputRepeatStride_ = CreateVariable();  // 4
+    outputRepeatStride_ = CreateVariable(); // 5
+    sliceOneJettySize_ = CreateVariable();  // 6
+    sliceLastJettySize_ = CreateVariable(); // 7
+    repeatNumVar_ = CreateVariable();       // 8
+    repeatNumVarTemp_ = CreateVariable();   // 9
 
     for (uint32_t channelIdx = 0; channelIdx < localSize_; channelIdx++) {
         CcuRep::Variable inputVar, tokenVar;
@@ -126,15 +126,15 @@ HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::PreSync()
     const uint16_t signalBitToken = GetSignalMask(CKE_IDX_TOKEN);
     const uint32_t signalIndexInput = GetSignalIndex(CKE_IDX_INPUT);
     const uint32_t signalIndexToken = GetSignalIndex(CKE_IDX_TOKEN);
-    
-    for (ChannelHandle &channel : channels_) {
+
+    for (ChannelHandle& channel : channels_) {
         CHK_RET(NotifyRecord(channel, signalIndexInput, CKE_IDX_INPUT, input_[myRankIdx_], signalBitInput));
         CHK_RET(NotifyRecord(channel, signalIndexToken, CKE_IDX_TOKEN, token_[myRankIdx_], signalBitToken));
     }
     // 等所有对端
-    const uint16_t waitMask = signalBitInput | signalBitToken; // 组合一下mask
+    const uint16_t waitMask = signalBitInput | signalBitToken;          // 组合一下mask
     std::set<uint32_t> signalIdxes{signalIndexInput, signalIndexToken}; // 0
-    for (ChannelHandle &channel : channels_) {
+    for (ChannelHandle& channel : channels_) {
         for (uint32_t signalIdx : signalIdxes) {
             CHK_RET(NotifyWait(channel, signalIdx, waitMask));
         }
@@ -151,12 +151,12 @@ HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::PostSync()
     const uint32_t signalIndexInput = GetSignalIndex(POST_XN_ID);
 
     // 通知所有对端
-    for (ChannelHandle &channel : channels_) {
+    for (ChannelHandle& channel : channels_) {
         CHK_RET(NotifyRecord(channel, signalIndexInput, selfBitInput));
     }
 
     // 等待所有需要的对端
-    for (ChannelHandle &channel : channels_) {
+    for (ChannelHandle& channel : channels_) {
         CHK_RET(NotifyWait(channel, signalIndexInput, selfBitInput));
     }
     HCCL_INFO("[CcuKernelReduceScatterNhrMutilJettyMem2Mem1D] PreSync end");
@@ -176,7 +176,7 @@ HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::DoRepeatReduceScatter()
         tmpSliceOffset += inputSliceStride_;
     }
 
-    for (auto &nhrStepInfo : stepInfoVector_) {
+    for (auto& nhrStepInfo : stepInfoVector_) {
         CHK_RET(DoRepeatReduceScatterNHRSingleStep(nhrStepInfo, inputSliceOffset));
     }
     // 因为所有的修改都是在input上进行的，所以最后需要把input上的数据搬到output上
@@ -188,20 +188,18 @@ HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::DoRepeatReduceScatter()
 
     // 不需要重复，所以直接拷贝
     CcuRep::Variable repeatNumAdd2 = CreateVariable();
-    repeatNumAdd2  = 1;
-    CCU_WHILE(repeatNumVar_ != UINT64_MAX) {
+    repeatNumAdd2 = 1;
+    CCU_WHILE(repeatNumVar_ != UINT64_MAX)
+    {
         repeatNumVar_ += repeatNumAdd2;
-        CCU_IF(flag_ == 1) {
+        CCU_IF(flag_ == 1)
+        {
             localSrc_.addr += inputRepeatStride_;
             localDst_.addr += outputRepeatStride_;
         }
         event_.SetMask(1);
-        CCU_IF(sliceSize_ == 0) {
-            CHK_RET(RecordEvent(event_));
-        }
-        CCU_IF(sliceSize_ != 0) {
-            CHK_RET(LocalCopyNb(localDst_, localSrc_, sliceSize_, event_));
-        }
+        CCU_IF(sliceSize_ == 0) { CHK_RET(RecordEvent(event_)); }
+        CCU_IF(sliceSize_ != 0) { CHK_RET(LocalCopyNb(localDst_, localSrc_, sliceSize_, event_)); }
         CHK_RET(WaitEvent(event_)); // 等待拷贝完成，会将Mask清零
         flag_ = 1;
     }
@@ -209,21 +207,21 @@ HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::DoRepeatReduceScatter()
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::DoRepeatReduceScatterNHRSingleStep(const NHRStepInfo &nhrStepInfo,
-    const std::vector<CcuRep::Variable> &inputSliceOffset)
+HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::DoRepeatReduceScatterNHRSingleStep(
+    const NHRStepInfo& nhrStepInfo, const std::vector<CcuRep::Variable>& inputSliceOffset)
 {
     u32& toRankIdx = rank2ChannelIdx_[nhrStepInfo.toRank]; // 和channel形成映射
     u32& fromRankIdx = rank2ChannelIdx_[nhrStepInfo.fromRank];
-    ChannelHandle &sendChannel = channels_[toRankIdx];
-    ChannelHandle &recvChannel = channels_[fromRankIdx];
-    const std::vector<u32> &sendSliceIdxList  = nhrStepInfo.txSliceIdxs; // 发送到那张卡
+    ChannelHandle& sendChannel = channels_[toRankIdx];
+    ChannelHandle& recvChannel = channels_[fromRankIdx];
+    const std::vector<u32>& sendSliceIdxList = nhrStepInfo.txSliceIdxs; // 发送到那张卡
     remoteDst_.token = token_[toRankIdx];
     localSrc_.token = token_[myRankIdx_];
 
     const uint32_t signalIdxReady = GetSignalIndex(CKE_IDX_READY); // 0
-    const uint32_t signalIdxDone = GetSignalIndex(CKE_IDX_DONE); // 0
-    const uint16_t signalBitReady = GetSignalMask(CKE_IDX_READY); // 准备好的信号
-    const uint16_t signalBitDone = GetSignalMask(CKE_IDX_DONE); // 写完的信号
+    const uint32_t signalIdxDone = GetSignalIndex(CKE_IDX_DONE);   // 0
+    const uint16_t signalBitReady = GetSignalMask(CKE_IDX_READY);  // 准备好的信号
+    const uint16_t signalBitDone = GetSignalMask(CKE_IDX_DONE);    // 写完的信号
 
     // // 被写之前告诉fromRank自己准备好了-前同步 第一步时可以跳过
     if (nhrStepInfo.step != 0) {
@@ -231,10 +229,10 @@ HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::DoRepeatReduceScatterNH
         // 等待toRank准备好写入数据
         CHK_RET(NotifyWait(sendChannel, signalIdxReady, signalBitReady));
     }
-    
+
     u32 sendSliceIdx = 0;
     // do srs
-    for (const u32 &sendSliceIdx : sendSliceIdxList) {
+    for (const u32& sendSliceIdx : sendSliceIdxList) {
         remoteDst_.addr = input_[toRankIdx];
         remoteDst_.addr += inputSliceOffset[sendSliceIdx];
         localSrc_.addr = input_[myRankIdx_];
@@ -251,18 +249,18 @@ HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::DoRepeatReduceScatterNH
     return HcclResult::HCCL_SUCCESS;
 }
 
-HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::DoRepeatSendRecvSlices(const u32 &toRank, CcuRep::LocalAddr &src,
-                                                                 CcuRep::RemoteAddr &dst)
+HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::DoRepeatSendRecvSlices(
+    const u32& toRank, CcuRep::LocalAddr& src, CcuRep::RemoteAddr& dst)
 {
     CcuRep::Variable repeatNumAdd = CreateVariable();
-    repeatNumAdd  = 1;
+    repeatNumAdd = 1;
     flag_ = 0;
     repeatNumVarTemp_ = repeatNumVar_;
-    CCU_WHILE(repeatNumVarTemp_ != UINT64_MAX) {
-        CCU_IF(repeatNumVarTemp_ != UINT64_MAX) {
-            repeatNumVarTemp_ += repeatNumAdd;
-        }
-        CCU_IF(flag_ == 1) {
+    CCU_WHILE(repeatNumVarTemp_ != UINT64_MAX)
+    {
+        CCU_IF(repeatNumVarTemp_ != UINT64_MAX) { repeatNumVarTemp_ += repeatNumAdd; }
+        CCU_IF(flag_ == 1)
+        {
             src.addr += inputRepeatStride_;
             dst.addr += inputRepeatStride_;
         }
@@ -272,31 +270,37 @@ HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::DoRepeatSendRecvSlices(
         tempSrc.token = src.token;
         tempDst.addr = dst.addr;
         tempDst.token = dst.token;
-        CCU_IF(sliceOneJettySize_ == 0) {
+        CCU_IF(sliceOneJettySize_ == 0)
+        {
             for (u32 jettyId = 0; jettyId < portNum_ - 1; jettyId++) {
                 jettyEvent_[jettyId].SetMask(1);
                 CHK_RET(RecordEvent(jettyEvent_[jettyId]));
             }
         }
-        CCU_IF(sliceOneJettySize_ != 0) {
+        CCU_IF(sliceOneJettySize_ != 0)
+        {
             for (u32 jettyId = 0; jettyId < portNum_ - 1; jettyId++) {
                 // 用一个tempdst和src
                 jettyEvent_[jettyId].SetMask(1);
-                CHK_RET(WriteReduceNb(channels_[rank2ChannelIdx_[toRank]], tempDst, tempSrc, sliceOneJettySize_,
-                    dataType_, reduceOp_, jettyEvent_[jettyId]));
+                CHK_RET(WriteReduceNb(
+                    channels_[rank2ChannelIdx_[toRank]], tempDst, tempSrc, sliceOneJettySize_, dataType_, reduceOp_,
+                    jettyEvent_[jettyId]));
                 tempDst.addr += sliceOneJettySize_;
                 tempSrc.addr += sliceOneJettySize_;
             }
         }
-        CCU_IF(sliceLastJettySize_ == 0) {
+        CCU_IF(sliceLastJettySize_ == 0)
+        {
             jettyEvent_[portNum_ - 1].SetMask(1);
             CHK_RET(RecordEvent(jettyEvent_[portNum_ - 1]));
         }
-        CCU_IF(sliceLastJettySize_ != 0) {
+        CCU_IF(sliceLastJettySize_ != 0)
+        {
             u32 jettyId = portNum_ - 1;
             jettyEvent_[jettyId].SetMask(1);
-            CHK_RET(WriteReduceNb(channels_[rank2ChannelIdx_[toRank]], tempDst, tempSrc, sliceLastJettySize_,
-                    dataType_, reduceOp_, jettyEvent_[jettyId]));
+            CHK_RET(WriteReduceNb(
+                channels_[rank2ChannelIdx_[toRank]], tempDst, tempSrc, sliceLastJettySize_, dataType_, reduceOp_,
+                jettyEvent_[jettyId]));
         }
         for (u32 jettyId = 0; jettyId < portNum_; jettyId++) {
             CHK_RET(WaitEvent(jettyEvent_[jettyId]));
@@ -322,35 +326,45 @@ HcclResult CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::Algorithm()
     CHK_RET(PostSync());
 
     HCCL_INFO("[CcuKernelReduceScatterNhrMutilJettyMem2Mem1D] CcuKernelReduceScatterNhrMutilJettyMem2Mem1D end");
-    
+
     return HcclResult::HCCL_SUCCESS;
 }
 
-std::vector<uint64_t> CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::GeneArgs(const CcuTaskArg &arg)
+std::vector<uint64_t> CcuKernelReduceScatterNhrMutilJettyMem2Mem1D::GeneArgs(const CcuTaskArg& arg)
 {
-    const CcuTaskArgReduceScatterNhrMutilJettyMem2Mem1D *taskArg
-        = dynamic_cast<const CcuTaskArgReduceScatterNhrMutilJettyMem2Mem1D *>(&arg);
-    uint64_t inputAddr = taskArg->inputAddr_; // 输入地址
+    const CcuTaskArgReduceScatterNhrMutilJettyMem2Mem1D* taskArg =
+        dynamic_cast<const CcuTaskArgReduceScatterNhrMutilJettyMem2Mem1D*>(&arg);
+    uint64_t inputAddr = taskArg->inputAddr_;   // 输入地址
     uint64_t outputAddr = taskArg->outputAddr_; // 输出地址
     uint64_t token = taskArg->token_;
     uint64_t slice = taskArg->sliceSize_;
     uint64_t inputSliceStride = taskArg->inputSliceStride_;
     uint64_t outputSliceStride = taskArg->outputSliceStride_;
-    uint64_t sliceOneJettySize = taskArg->sliceOneJettySize_; // 单个jetty发送的数据长度
+    uint64_t sliceOneJettySize = taskArg->sliceOneJettySize_;   // 单个jetty发送的数据长度
     uint64_t sliceLastJettySize = taskArg->sliceLastJettySize_; // 最后一个jetty发送的数据长度
     uint64_t repeatNum = taskArg->repeatNum_;
-    uint64_t inputRepeatStride  = taskArg->inputRepeatStride_;
-    uint64_t outputRepeatStride  = taskArg->outputRepeatStride_;
+    uint64_t inputRepeatStride = taskArg->inputRepeatStride_;
+    uint64_t outputRepeatStride = taskArg->outputRepeatStride_;
 
     std::vector<uint64_t> taskArgs = {
-        inputAddr, outputAddr, token, slice, inputSliceStride,  outputSliceStride, sliceOneJettySize, sliceLastJettySize,
-        repeatNum, inputRepeatStride, outputRepeatStride};
+        inputAddr,
+        outputAddr,
+        token,
+        slice,
+        inputSliceStride,
+        outputSliceStride,
+        sliceOneJettySize,
+        sliceLastJettySize,
+        repeatNum,
+        inputRepeatStride,
+        outputRepeatStride};
 
-    HCCL_INFO("[CcuKernelReduceScatterNhrMutilJettyMem2Mem1D] TaskArgs: inputAddr[%llu], outputAddr[%llu], "
-               "slice[%llu], inputSliceStride[%llu], outputSliceStride[%llu], sliceOneJettySize[%llu],"
-               "sliceLastJettySize[%llu], repeatNum[%llu], inputRepeatStride[%llu], outputRepeatStride[%llu]",
-               inputAddr, outputAddr, slice, inputSliceStride, outputSliceStride, sliceOneJettySize, sliceLastJettySize,
-               repeatNum, inputRepeatStride, outputRepeatStride);
+    HCCL_INFO(
+        "[CcuKernelReduceScatterNhrMutilJettyMem2Mem1D] TaskArgs: inputAddr[%llu], outputAddr[%llu], "
+        "slice[%llu], inputSliceStride[%llu], outputSliceStride[%llu], sliceOneJettySize[%llu],"
+        "sliceLastJettySize[%llu], repeatNum[%llu], inputRepeatStride[%llu], outputRepeatStride[%llu]",
+        inputAddr, outputAddr, slice, inputSliceStride, outputSliceStride, sliceOneJettySize, sliceLastJettySize,
+        repeatNum, inputRepeatStride, outputRepeatStride);
     return taskArgs;
 }
 

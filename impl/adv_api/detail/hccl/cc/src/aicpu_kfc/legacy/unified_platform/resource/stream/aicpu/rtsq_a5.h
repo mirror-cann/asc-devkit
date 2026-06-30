@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef HCCLV2_RTSQ_A5_H
 #define HCCLV2_RTSQ_A5_H
 #include "rtsq_base.h"
@@ -40,15 +40,15 @@ public:
 
     void SdmaCopy(u64 srcAddr, u64 dstAddr, u32 size, u32 partId) override;
 
-    void SdmaReduce(u64 srcAddr, u64 dstAddr, u32 size, u32 partId, const ReduceIn &reduceIn) override;
+    void SdmaReduce(u64 srcAddr, u64 dstAddr, u32 size, u32 partId, const ReduceIn& reduceIn) override;
 
     void P2PWriteValue(u64 remoteAddr, u32 writeValue) override;
 
-    void UbDbSend(const UbJettyLiteId &jettyLiteId, u16 piValue) override;
+    void UbDbSend(const UbJettyLiteId& jettyLiteId, u16 piValue) override;
 
-    void RdmaDbSend(const uint64_t &dbAddr, const uint64_t &dbValue) override;
+    void RdmaDbSend(const uint64_t& dbAddr, const uint64_t& dbValue) override;
 
-    void UbDirectSend(const UbJettyLiteId &jettyLiteId, u32 dwqeSize, const u8 *wqe) override
+    void UbDirectSend(const UbJettyLiteId& jettyLiteId, u32 dwqeSize, const u8* wqe) override
     {
         // 构造UBDMA的command，这个里面，SQE可能占用 128Byte 或者 192Byte
         (void)jettyLiteId;
@@ -81,12 +81,12 @@ private:
 
     bool launchFlag_ = false;
 
-    static constexpr u32 rtsqSqeSize     = 64;
+    static constexpr u32 rtsqSqeSize = 64;
     static constexpr u32 perLaunchSqeCnt = 128; // 最大launch 128个SQE
 
     u8 locBuf[rtsqSqeSize * perLaunchSqeCnt]{0};
 
-    u8 *GetCurrSqeBuffer();
+    u8* GetCurrSqeBuffer();
 
     void RefreshInfo();
 

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef HCCLV2_CCU_INSTRUCTION_ALL_TO_ALL_V_MESH_2D_H_
 #define HCCLV2_CCU_INSTRUCTION_ALL_TO_ALL_V_MESH_2D_H_
 
@@ -23,9 +23,11 @@ namespace Hccl {
 // 为AllToAllVMesh1D实现的CCUIns、CCUCtxArg与CCUTaskArg
 class CcuCtxArgAllToAllVMesh2D : public CcuCtxArg {
 public:
-    CcuCtxArgAllToAllVMesh2D(const std::vector<uint32_t> &dSize, uint32_t rId, uint64_t aId,
-        const CollAlgOperator &op, const std::vector<std::vector<RankId>> &tempVTopo) :
-            CcuCtxArg(), dimSize(dSize), rankId(rId), axisId(aId), op(op), tempVTopo(tempVTopo) {}
+    CcuCtxArgAllToAllVMesh2D(
+        const std::vector<uint32_t>& dSize, uint32_t rId, uint64_t aId, const CollAlgOperator& op,
+        const std::vector<std::vector<RankId>>& tempVTopo)
+        : CcuCtxArg(), dimSize(dSize), rankId(rId), axisId(aId), op(op), tempVTopo(tempVTopo)
+    {}
 
     ~CcuCtxArgAllToAllVMesh2D() override {}
 
@@ -44,10 +46,17 @@ public:
 
 class CcuTaskArgAllToAllVMesh2D : public CcuTaskArg {
 public:
-    explicit CcuTaskArgAllToAllVMesh2D(uint64_t inputAddr, uint64_t outputAddr, uint64_t scratchAddr,
-        uint64_t token, uint64_t scratchSliceSize, uint64_t scratchSliceBias, const A2ASendRecvInfo& localSendRecvInfo) :
-        inputAddr(inputAddr), outputAddr(outputAddr), scratchAddr(scratchAddr), token(token),
-        scratchSliceSize(scratchSliceSize), scratchSliceBias(scratchSliceBias), localSendRecvInfo(localSendRecvInfo) {}
+    explicit CcuTaskArgAllToAllVMesh2D(
+        uint64_t inputAddr, uint64_t outputAddr, uint64_t scratchAddr, uint64_t token, uint64_t scratchSliceSize,
+        uint64_t scratchSliceBias, const A2ASendRecvInfo& localSendRecvInfo)
+        : inputAddr(inputAddr),
+          outputAddr(outputAddr),
+          scratchAddr(scratchAddr),
+          token(token),
+          scratchSliceSize(scratchSliceSize),
+          scratchSliceBias(scratchSliceBias),
+          localSendRecvInfo(localSendRecvInfo)
+    {}
 
     uint64_t inputAddr;
     uint64_t outputAddr;
@@ -60,11 +69,14 @@ public:
 
 class CcuInstructionAllToAllVMesh2D : public CcuInstruction {
 public:
-    CcuInstructionAllToAllVMesh2D(const CollAlgOperator &op, const std::vector<uint32_t> &dimSize,
-        const std::vector<std::vector<RankId>> &tempVTopo) :
-        CcuInstruction(), op_(op), dimSize_(dimSize), tempVTopo_(tempVTopo) {}
+    CcuInstructionAllToAllVMesh2D(
+        const CollAlgOperator& op, const std::vector<uint32_t>& dimSize,
+        const std::vector<std::vector<RankId>>& tempVTopo)
+        : CcuInstruction(), op_(op), dimSize_(dimSize), tempVTopo_(tempVTopo)
+    {}
 
-    void Init(uint32_t rankId, uint64_t axisId, uint64_t inputAddr, uint64_t outputAddr, uint64_t scratchAddr, uint64_t token, 
+    void Init(
+        uint32_t rankId, uint64_t axisId, uint64_t inputAddr, uint64_t outputAddr, uint64_t scratchAddr, uint64_t token,
         uint64_t scratchSliceSize, uint64_t scratchSliceBias, const A2ASendRecvInfo& localSendRecvInfo)
     {
         axisId_ = axisId;
@@ -87,25 +99,24 @@ public:
 
     std::string Describe() const override
     {
-        return StringFormat("CcuInstructionAllToAllVMesh2D rankId [%u], instType[%s]", rankId_, instType_.Describe().c_str());
+        return StringFormat(
+            "CcuInstructionAllToAllVMesh2D rankId [%u], instType[%s]", rankId_, instType_.Describe().c_str());
     }
 
-    void SetInstType(CcuInstType instType) 
-    { 
-        instType_ = instType; 
-    }
+    void SetInstType(CcuInstType instType) { instType_ = instType; }
 
     std::unique_ptr<CcuCtxArg> GetCtxArg() const override
     {
-        HCCL_INFO("[CcuInstructionAlltoAllVMesh2D][GetCtxArg] dimSize.size[%u], rankId[%u], axisId[%llu], tempVTopo.size[%u]",
+        HCCL_INFO(
+            "[CcuInstructionAlltoAllVMesh2D][GetCtxArg] dimSize.size[%u], rankId[%u], axisId[%llu], tempVTopo.size[%u]",
             dimSize_.size(), rankId_, axisId_, tempVTopo_.size());
         return std::make_unique<CcuCtxArgAllToAllVMesh2D>(dimSize_, rankId_, axisId_, op_, tempVTopo_);
     }
 
     std::unique_ptr<CcuTaskArg> GetTaskArg() const override
     {
-        return std::make_unique<CcuTaskArgAllToAllVMesh2D>(inputAddr_, outputAddr_, scratchAddr_, token_,
-            scratchSliceSize_, scratchSliceBias_, localSendRecvInfo_);
+        return std::make_unique<CcuTaskArgAllToAllVMesh2D>(
+            inputAddr_, outputAddr_, scratchAddr_, token_, scratchSliceSize_, scratchSliceBias_, localSendRecvInfo_);
     }
 
 private:
@@ -125,5 +136,5 @@ private:
     A2ASendRecvInfo localSendRecvInfo_;
 };
 
-}
+} // namespace Hccl
 #endif // HCCLV2_CCU_INSTRUCTION_ALL_TO_ALL_V_MESH_2D_H_

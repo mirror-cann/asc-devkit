@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "task_logic_info.h"
 
 namespace hccl {
@@ -17,8 +17,8 @@ TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFu
     taskFuncType = funcType;
 }
 
-TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFuncType funcType,
-    std::vector<TxMemoryInfo> &txMems)
+TaskLogicInfo::TaskLogicInfo(
+    u32 index, TaskLogicType taskLogicType, TaskLogicFuncType funcType, std::vector<TxMemoryInfo>& txMems)
 {
     taskLogicCmd.taskLogicType = taskLogicType;
     taskLogicCmd.index = index;
@@ -26,8 +26,8 @@ TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFu
     txAsync.txMems = txMems;
 }
 
-TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFuncType funcType,
-    std::vector<RxMemoryInfo> &rxMems)
+TaskLogicInfo::TaskLogicInfo(
+    u32 index, TaskLogicType taskLogicType, TaskLogicFuncType funcType, std::vector<RxMemoryInfo>& rxMems)
 {
     taskLogicCmd.taskLogicType = taskLogicType;
     taskLogicCmd.index = index;
@@ -35,8 +35,9 @@ TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFu
     rxAsync.rxMems = rxMems;
 }
 
-TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFuncType funcType,
-    void *signal, u32 userRank, u32 remoteUserRank, s32 stage)
+TaskLogicInfo::TaskLogicInfo(
+    u32 index, TaskLogicType taskLogicType, TaskLogicFuncType funcType, void* signal, u32 userRank, u32 remoteUserRank,
+    s32 stage)
 {
     taskLogicCmd.taskLogicType = taskLogicType;
     taskLogicCmd.index = index;
@@ -47,8 +48,9 @@ TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFu
     taskLogicPara.dispatcherTaskLogicPara.signalWait.stage = stage;
 }
 
-TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFuncType funcType,
-    void *signal, u32 userRank, u64 offset, s32 stage)
+TaskLogicInfo::TaskLogicInfo(
+    u32 index, TaskLogicType taskLogicType, TaskLogicFuncType funcType, void* signal, u32 userRank, u64 offset,
+    s32 stage)
 {
     taskLogicCmd.taskLogicType = taskLogicType;
     taskLogicCmd.index = index;
@@ -59,8 +61,9 @@ TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFu
     taskLogicPara.dispatcherTaskLogicPara.signalRecord.stage = stage;
 }
 
-TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFuncType funcType, void *dst,
-    uint64_t destMax, void *src, u64 count, HcclRtMemcpyKind kind)
+TaskLogicInfo::TaskLogicInfo(
+    u32 index, TaskLogicType taskLogicType, TaskLogicFuncType funcType, void* dst, uint64_t destMax, void* src,
+    u64 count, HcclRtMemcpyKind kind)
 {
     taskLogicCmd.index = index;
     taskLogicCmd.taskLogicType = taskLogicType;
@@ -71,4 +74,4 @@ TaskLogicInfo::TaskLogicInfo(u32 index, TaskLogicType taskLogicType, TaskLogicFu
     taskLogicPara.dispatcherTaskLogicPara.memAsync.count = count;
     taskLogicPara.dispatcherTaskLogicPara.memAsync.kind = kind;
 }
-}  // namespace hccl
+} // namespace hccl

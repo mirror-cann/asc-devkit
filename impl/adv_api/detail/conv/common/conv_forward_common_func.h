@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv_common_func.h
@@ -32,7 +32,7 @@ using TypeFalse = struct {
 
 template <class Intf, uint32_t ImplType>
 struct SetInput {
-    static __aicore__ inline void call(Intf *self, const AscendC::GlobalTensor<typename Intf::InputT> &input)
+    static __aicore__ inline void call(Intf* self, const AscendC::GlobalTensor<typename Intf::InputT>& input)
     {
         self->ctx.agm.SetGlobalBuffer(input.GetPhyAddr(0), input.GetSize());
     }
@@ -40,7 +40,7 @@ struct SetInput {
 
 template <class Intf, uint32_t ImplType>
 struct SetWeight {
-    static __aicore__ inline void call(Intf *self, const AscendC::GlobalTensor<typename Intf::WeightT> &weight)
+    static __aicore__ inline void call(Intf* self, const AscendC::GlobalTensor<typename Intf::WeightT>& weight)
     {
         self->ctx.bgm.SetGlobalBuffer(weight.GetPhyAddr(0), weight.GetSize());
     }
@@ -48,7 +48,7 @@ struct SetWeight {
 
 template <class Intf, uint32_t ImplType>
 struct SetBias {
-    static __aicore__ inline void call(Intf *self, const AscendC::GlobalTensor<typename Intf::BiasT> &bias)
+    static __aicore__ inline void call(Intf* self, const AscendC::GlobalTensor<typename Intf::BiasT>& bias)
     {
         self->ctx.biasgm.SetGlobalBuffer(bias.GetPhyAddr(0), bias.GetSize());
         self->ctx.enableBias = true;
@@ -57,7 +57,7 @@ struct SetBias {
 
 template <class Intf, uint32_t ImplType>
 struct End {
-    static __aicore__ inline void call(Intf *self)
+    static __aicore__ inline void call(Intf* self)
     {
         if (self->ctx.freeAL1TensorFlag) {
             self->ctx.queueAL1.FreeTensor(self->ctx.al1);
@@ -77,5 +77,5 @@ struct End {
     }
 };
 
-}  // namespace ConvApiFunc
+} // namespace ConvApiFunc
 #endif

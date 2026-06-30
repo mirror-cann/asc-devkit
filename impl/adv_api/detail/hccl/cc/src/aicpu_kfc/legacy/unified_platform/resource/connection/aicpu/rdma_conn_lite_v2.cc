@@ -70,10 +70,8 @@ std::string RdmaConnLiteV2::Describe()
         "SL=%u, SQ_DB_VA=0x%llx, SQ_DB_MODE=%d, CQN=%u, CQ_VA=0x%llx, CQE_SIZE=%u, CQ_DEPTH=%u, "
         "CQ_HEAD_ADDR=0x%llx, CQ_TAIL_ADDR=0x%llx, CQ_DB_VA=0x%llx, CQ_DB_MODE=%d]",
         sqContext.qpn, sqContext.sqVa, sqContext.wqeSize, sqContext.depth, sqContext.headAddr, sqContext.tailAddr,
-        sqContext.sl, sqContext.dbVa, sqContext.dbMode,
-        cqContext.cqn, cqContext.cqVa, cqContext.cqeSize, cqContext.cqDepth,
-        cqContext.headAddr, cqContext.tailAddr, cqContext.dbVa, cqContext.dbMode
-    );
+        sqContext.sl, sqContext.dbVa, sqContext.dbMode, cqContext.cqn, cqContext.cqVa, cqContext.cqeSize,
+        cqContext.cqDepth, cqContext.headAddr, cqContext.tailAddr, cqContext.dbVa, cqContext.dbMode);
 }
 
 void RdmaConnLiteV2::GetVendorOps()
@@ -82,12 +80,12 @@ void RdmaConnLiteV2::GetVendorOps()
         return;
     }
     switch (dmaMode_) {
-        case 0 : {   // [PCIe] QBUF_DMA_MODE_DEFAULT
+        case 0: { // [PCIe] QBUF_DMA_MODE_DEFAULT
             HCCL_INFO("[RdmaConnLiteV2::%s] Now Aicpu NDA doesn't support PCIE !", __func__);
             rdmaOps_ = nullptr;
             break;
         }
-        case 1: {  // [UB] QBUF_DMA_MODE_INDEP_UB
+        case 1: { // [UB] QBUF_DMA_MODE_INDEP_UB
             rdmaOps_ = std::make_unique<Rdma1825Ops>(&sqContext, &cqContext);
             break;
         }
@@ -107,7 +105,7 @@ void RdmaConnLiteV2::CheckVendorOp()
     }
 }
 
-void RdmaConnLiteV2::Write(const RmaBufSliceLite &loc, const RmtRmaBufSliceLite &rmt, u64 &dbAddr, u64 &dbValue)
+void RdmaConnLiteV2::Write(const RmaBufSliceLite& loc, const RmtRmaBufSliceLite& rmt, u64& dbAddr, u64& dbValue)
 {
     HCCL_INFO("[RdmaConnLiteV2::%s] Write start, loc size = %u", __func__, loc.GetSize());
     CheckVendorOp();
@@ -118,12 +116,14 @@ void RdmaConnLiteV2::Write(const RmaBufSliceLite &loc, const RmtRmaBufSliceLite 
     // 构造Doorbell并返回
     rdmaOps_->BuildDoorbell(dbAddr, dbValue);
 
-    HCCL_INFO("[RdmaConnLiteV2::%s] end, dbAddr = %llu, dbValue = %llu, conn[%s]", __func__, dbAddr, dbValue, Describe().c_str());
+    HCCL_INFO(
+        "[RdmaConnLiteV2::%s] end, dbAddr = %llu, dbValue = %llu, conn[%s]", __func__, dbAddr, dbValue,
+        Describe().c_str());
 }
 
 void RdmaConnLiteV2::WriteWithNotify(
-    const RmaBufSliceLite &loc, const RmtRmaBufSliceLite &rmt,
-    const RmaBufSliceLite &locNotify, const RmtRmaBufSliceLite &notify, u64 &dbAddr, u64 &dbValue)
+    const RmaBufSliceLite& loc, const RmtRmaBufSliceLite& rmt, const RmaBufSliceLite& locNotify,
+    const RmtRmaBufSliceLite& notify, u64& dbAddr, u64& dbValue)
 {
     HCCL_INFO("[RdmaConnLiteV2::%s] WriteWithNotify start, loc size = %u", __func__, loc.GetSize());
     CheckVendorOp();
@@ -137,29 +137,31 @@ void RdmaConnLiteV2::WriteWithNotify(
     // 构造Doorbell并返回
     rdmaOps_->BuildDoorbell(dbAddr, dbValue);
 
-    HCCL_INFO("[RdmaConnLiteV2::%s] end, dbAddr = %llu, dbValue = %llu, conn[%s]", __func__, dbAddr, dbValue, Describe().c_str());
+    HCCL_INFO(
+        "[RdmaConnLiteV2::%s] end, dbAddr = %llu, dbValue = %llu, conn[%s]", __func__, dbAddr, dbValue,
+        Describe().c_str());
 }
 
-void RdmaConnLiteV2::DoSliceWrite(const RmaBufSliceLite &loc, const RmtRmaBufSliceLite &rmt)
+void RdmaConnLiteV2::DoSliceWrite(const RmaBufSliceLite& loc, const RmtRmaBufSliceLite& rmt)
 {
     const u64 len = loc.GetSize();
     const u32 fullSlices = static_cast<u32>(len / RDMA_DMA_MAX_SIZE);
-    const u32 remain     = static_cast<u32>(len % RDMA_DMA_MAX_SIZE);
+    const u32 remain = static_cast<u32>(len % RDMA_DMA_MAX_SIZE);
     const u32 totalSlices = fullSlices + (remain > 0 ? 1 : 0);
 
     for (u32 sliceIdx = 0; sliceIdx < totalSlices; sliceIdx++) {
-        const u64 offset     = static_cast<u64>(sliceIdx) * RDMA_DMA_MAX_SIZE;
-        const u64 localAddr  = loc.GetAddr() + offset;
+        const u64 offset = static_cast<u64>(sliceIdx) * RDMA_DMA_MAX_SIZE;
+        const u64 localAddr = loc.GetAddr() + offset;
         const u64 remoteAddr = rmt.GetAddr() + offset;
-        const u32 sliceSize  = (sliceIdx == totalSlices - 1 && remain > 0)
-                               ? remain : RDMA_DMA_MAX_SIZE;
+        const u32 sliceSize = (sliceIdx == totalSlices - 1 && remain > 0) ? remain : RDMA_DMA_MAX_SIZE;
 
-        RmaBufSliceLite    locSlice(localAddr, sliceSize, loc.GetLkey(), 0);
+        RmaBufSliceLite locSlice(localAddr, sliceSize, loc.GetLkey(), 0);
         RmtRmaBufSliceLite rmtSlice(remoteAddr, sliceSize, rmt.GetRkey(), 0, 0);
 
-        HCCL_INFO("[RdmaConnLiteV2::%s] Slice[%u]: offset=0x%llx, localAddr=0x%llx, "
-                  "remoteAddr=0x%llx, size=0x%x",
-                  __func__, sliceIdx, offset, localAddr, remoteAddr, sliceSize);
+        HCCL_INFO(
+            "[RdmaConnLiteV2::%s] Slice[%u]: offset=0x%llx, localAddr=0x%llx, "
+            "remoteAddr=0x%llx, size=0x%x",
+            __func__, sliceIdx, offset, localAddr, remoteAddr, sliceSize);
 
         rdmaOps_->Write(locSlice, rmtSlice);
     }

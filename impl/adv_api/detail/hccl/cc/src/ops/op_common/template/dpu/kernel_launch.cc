@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "kernel_launch.h"
 #include "log.h"
 #include "template_utils.h"
@@ -20,7 +20,7 @@ int32_t HcclLaunchDPUKernel(uint64_t ptr, int32_t size)
         return static_cast<int32_t>(HCCL_E_PTR);
     }
     // 反序列化共享内存
-    auto shmemPtr = reinterpret_cast<char *>(ptr);
+    auto shmemPtr = reinterpret_cast<char*>(ptr);
     std::vector<char> sequenceData(shmemPtr, shmemPtr + size);
     DPURunInfo dpuRunInfo;
     dpuRunInfo.DeSerialize(sequenceData);
@@ -33,11 +33,13 @@ int32_t HcclLaunchDPUKernel(uint64_t ptr, int32_t size)
     }
 
     // dpu算法展开
-    if (templateIns->DPUKernelRun(dpuRunInfo.tempAlgParams, dpuRunInfo.channels, dpuRunInfo.myRank, dpuRunInfo.subCommRanks) != HCCL_SUCCESS) {
+    if (templateIns->DPUKernelRun(
+            dpuRunInfo.tempAlgParams, dpuRunInfo.channels, dpuRunInfo.myRank, dpuRunInfo.subCommRanks) !=
+        HCCL_SUCCESS) {
         HCCL_ERROR("Template[%s] DPUKernelRun failed", dpuRunInfo.templateName.c_str());
         return static_cast<int32_t>(HCCL_E_INTERNAL);
     }
 
     return static_cast<int32_t>(HCCL_SUCCESS);
 }
-}
+} // namespace mc2_ops_hccl

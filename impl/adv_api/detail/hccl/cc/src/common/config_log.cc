@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #include "config_log.h"
 #include "mmpa_api.h"
 
@@ -14,10 +14,7 @@ namespace mc2_ops_hccl {
 
 static u64 g_debugConfig = 0ULL;
 
-u64 GetDebugConfig()
-{
-    return g_debugConfig;
-}
+u64 GetDebugConfig() { return g_debugConfig; }
 
 HcclResult InitDebugConfigByEnv()
 {
@@ -32,7 +29,7 @@ HcclResult InitDebugConfigByEnv()
     bool invert = (env[0] == '^');
     g_debugConfig = invert ? ~0ULL : 0ULL; // 第一个字符是'^', 使用取反模式, 用户配置的项关闭, 未配置的项打开
     char* configValue = (env[0] == '^') ? env + 1 : env; // 去掉'^'符号
-    char* configDup = strdup(configValue); // 需要使用strdup避免修改字符串常量
+    char* configDup = strdup(configValue);               // 需要使用strdup避免修改字符串常量
     CHK_PTR_NULL(configDup);
 
     char* left = nullptr;
@@ -60,4 +57,4 @@ HcclResult InitDebugConfigByEnv()
     return HCCL_SUCCESS;
 }
 
-}  // namespace mc2_ops_hccl
+} // namespace mc2_ops_hccl

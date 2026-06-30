@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef SYMMETRIC_MEMORY_H
 #define SYMMETRIC_MEMORY_H
 
@@ -46,7 +46,7 @@ struct SymmetricWindow {
     void* userVa;
     size_t userSize;
 
-    void* baseVa;               // 对应userVa在对称堆上的地址
+    void* baseVa; // 对应userVa在对称堆上的地址
     size_t alignedHeapOffset;
     size_t alignedSize;
     u32 localRank;
@@ -58,8 +58,8 @@ struct SymmetricWindow {
 };
 
 struct PaMappingInfo {
-    aclrtDrvMemHandle paHandle;             // 唯一标识：PA 句柄
-    aclrtMemFabricHandle shareableHandle;    //  对应的共享句柄
+    aclrtDrvMemHandle paHandle;           // 唯一标识：PA 句柄
+    aclrtMemFabricHandle shareableHandle; //  对应的共享句柄
 
     // 这里需要记录原始 allocation 的起始 VA (例如 0x1000) 和总大小 (100MB)
     void* origAllocBaseVa;
@@ -89,17 +89,18 @@ public:
     HcclResult EnsureInit();
     void* AllocSymmetricMem(size_t size);
     HcclResult FreeSymmetricMem(void* devWin);
-    HcclResult GetMemoryInfo(void* ptr, size_t size, void** baseUserVa, size_t* baseVaSize, aclrtDrvMemHandle* paHandle);
+    HcclResult GetMemoryInfo(
+        void* ptr, size_t size, void** baseUserVa, size_t* baseVaSize, aclrtDrvMemHandle* paHandle);
     HcclResult RegisterSymmetricMem(void* ptr, size_t size, void** devWin);
     HcclResult DeregisterSymmetricMem(void* devWin);
-    HcclResult FindSymmetricWindow(void* ptr, size_t size, void** win, u64 *offset);
+    HcclResult FindSymmetricWindow(void* ptr, size_t size, void** win, u64* offset);
 
 private:
     HcclResult Init();
     HcclResult GetAllRankPid();
-    HcclResult RegisterInternal(aclrtDrvMemHandle &paHandle, size_t offset, size_t mapSize);
-    HcclResult AddSymmetricWindow(std::shared_ptr<SymmetricWindow> &win);
-    HcclResult DeleteSymmetricWindow(std::shared_ptr<SymmetricWindow> &win);
+    HcclResult RegisterInternal(aclrtDrvMemHandle& paHandle, size_t offset, size_t mapSize);
+    HcclResult AddSymmetricWindow(std::shared_ptr<SymmetricWindow>& win);
+    HcclResult DeleteSymmetricWindow(std::shared_ptr<SymmetricWindow>& win);
     HcclResult DeleteSymmetricWindow(void* devWin);
 
 private:
@@ -107,8 +108,8 @@ private:
     std::once_flag init_flag_;
     u32 rank_{0};
     u32 rankSize_{0};
-    size_t stride_{0};      // 每个Rank的VA空间大小
-    void* heapBase_{nullptr};  // 对称VA空间的总基地址 (所有rank相同)
+    size_t stride_{0};        // 每个Rank的VA空间大小
+    void* heapBase_{nullptr}; // 对称VA空间的总基地址 (所有rank相同)
     size_t granularity_{0};
     class SimpleVaAllocator;
     std::unique_ptr<SimpleVaAllocator> vaAllocator_;
@@ -117,16 +118,15 @@ private:
     std::map<void*, std::shared_ptr<SymmetricWindow>> windowMap_; // device指针到host SymmetricWindow 的映射
     std::unordered_map<aclrtDrvMemHandle, std::shared_ptr<PaMappingInfo>> paMappingMap_;
     std::shared_ptr<SymmetricMemoryAgent> symmetricMemoryAgent_;
-    std::vector<int32_t> remoteShareablePids;   // 所有rank进程号
-    aclrtPhysicalMemProp prop = {              // 内存信息，用来获取内存映射的粒度
+    std::vector<int32_t> remoteShareablePids; // 所有rank进程号
+    aclrtPhysicalMemProp prop = {             // 内存信息，用来获取内存映射的粒度
         ACL_MEM_HANDLE_TYPE_NONE,
         ACL_MEM_ALLOCATION_TYPE_PINNED,
         ACL_HBM_MEM_HUGE,
         {0, ACL_MEM_LOCATION_TYPE_DEVICE},
-        0
-    };
-    size_t targetStartTB = 40ULL * 1024ULL * 1024ULL * 1024ULL * 1024ULL;   //  从40TB处预留虚拟内存
-    std::unordered_map<void*, aclrtDrvMemHandle> importAddrs_{};    // 记录虚拟内存映射的物理内存，用于资源释放。
+        0};
+    size_t targetStartTB = 40ULL * 1024ULL * 1024ULL * 1024ULL * 1024ULL; //  从40TB处预留虚拟内存
+    std::unordered_map<void*, aclrtDrvMemHandle> importAddrs_{}; // 记录虚拟内存映射的物理内存，用于资源释放。
     bool isSingleRank_{false};
 };
 

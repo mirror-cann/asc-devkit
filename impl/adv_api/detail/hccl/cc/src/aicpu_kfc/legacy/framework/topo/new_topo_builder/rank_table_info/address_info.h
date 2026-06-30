@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #ifndef ADDRESS_INFO_H
 #define ADDRESS_INFO_H
 
@@ -27,29 +27,26 @@ constexpr unsigned int MAX_VALUE_PORT_LENGTH = 32;
 constexpr unsigned int MIN_VALUE_ADDR_LENGRH = 1;
 constexpr unsigned int MAX_VALUE_ADDR_LENGRH = 256;
 
-class AddressInfo{
+class AddressInfo {
 public:
-    AddressInfo() {};
-    ~AddressInfo() {};
-    
-    IpAddress                  addr;
-    AddrType                   addrType;
-    std::set<std::string>      ports;
-    std::string                planeId{"0"};
-    void                       Deserialize(const nlohmann::json &addressInfoJson);
-    explicit                   AddressInfo(BinaryStream &binStream);
-    void                       GetBinStream(BinaryStream &binStream) const;
-    std::string                Describe() const;
+    AddressInfo(){};
+    ~AddressInfo(){};
 
-    private:
-    static const std::unordered_map<std::string , AddrType> strToAddrType;
+    IpAddress addr;
+    AddrType addrType;
+    std::set<std::string> ports;
+    std::string planeId{"0"};
+    void Deserialize(const nlohmann::json& addressInfoJson);
+    explicit AddressInfo(BinaryStream& binStream);
+    void GetBinStream(BinaryStream& binStream) const;
+    std::string Describe() const;
+
+private:
+    static const std::unordered_map<std::string, AddrType> strToAddrType;
     void EidToAddr(std::string str);
     void IPV4ToAddr(std::string str);
     void IPV6ToAddr(std::string str);
-    static bool IsStringInAddrType(std::string str)
-    {
-        return strToAddrType.count(str) > 0;
-    }
+    static bool IsStringInAddrType(std::string str) { return strToAddrType.count(str) > 0; }
 };
 
 } // namespace Hccl

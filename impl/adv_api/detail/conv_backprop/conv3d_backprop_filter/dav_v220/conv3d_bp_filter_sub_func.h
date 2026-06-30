@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file conv_bp_filter_sub_func.h
@@ -24,21 +24,24 @@ const int32_t MAX_16BITS_STRIDE = 65535;
 const int32_t MAX_L1W = 32767;
 
 template <class Intf>
-static __aicore__ inline void CalOut2L1ScalarParams(Intf *self, Out2L1ScalarParams& params) {
-
+static __aicore__ inline void CalOut2L1ScalarParams(Intf* self, Out2L1ScalarParams& params)
+{
     // to L1A
     if (params.isLoad2L1A) {
         params.out2A1SrcAddr = static_cast<uint64_t>(self->ctx.curML1Idx_) * self->ctx.tiling_->baseM * self->ctx.hwO_;
-        params.isLastMAL1 =
-            ConvBackpropApi::DivStepM((self->ctx.mIter_ - 1), self->ctx.tiling_->stepM) == ConvBackpropApi::DivStepM(self->ctx.curML0Idx_, self->ctx.tiling_->stepM);
+        params.isLastMAL1 = ConvBackpropApi::DivStepM((self->ctx.mIter_ - 1), self->ctx.tiling_->stepM) ==
+                            ConvBackpropApi::DivStepM(self->ctx.curML0Idx_, self->ctx.tiling_->stepM);
     }
 
     // to L1B
-    // Calculate the starting idx of cin on L1, remove the HkWk in cin1HkWkCin, and align the GM to 8 in the fp32 scenario
+    // Calculate the starting idx of cin on L1, remove the HkWk in cin1HkWkCin, and align the GM to 8 in the fp32
+    // scenario
     if (params.isLoad2L1B) {
-        uint64_t localN = ConvBackpropApi::ShiftDivChannelSize<Intf>(self->ctx.tiling_->baseN, self->ctx.tiling_->channelSize);
+        uint64_t localN =
+            ConvBackpropApi::ShiftDivChannelSize<Intf>(self->ctx.tiling_->baseN, self->ctx.tiling_->channelSize);
         uint64_t b1SrCin = ConvBackpropApi::DivHkWk(self->ctx.curNL1Idx_ * localN, self->ctx.hwK_);
-        uint64_t singleShapeHi = self->ctx.singleShapeHo_ * self->ctx.tiling_->strideH + self->ctx.strideKernelDilationH;
+        uint64_t singleShapeHi =
+            self->ctx.singleShapeHo_ * self->ctx.tiling_->strideH + self->ctx.strideKernelDilationH;
         if constexpr (Intf::Config::xType::format == ConvCommonApi::ConvFormat::NCDHW) { // Transdata merge x input
             params.out2B1SrcAddr = b1SrCin * singleShapeHi * self->ctx.tiling_->wi;
         } else {
@@ -48,20 +51,24 @@ static __aicore__ inline void CalOut2L1ScalarParams(Intf *self, Out2L1ScalarPara
         uint32_t bL1cin1CopyLen = ConvBackpropApi::CeilHkWk(bL1N, self->ctx.hwK_);
         if (self->ctx.hwK_ > bL1N) {
             if (self->ctx.hwK_ % bL1N != 0) {
-                ++bL1cin1CopyLen; // If cin1 moves one line, it will be larger than the basic block size. Just move one more line
+                ++bL1cin1CopyLen; // If cin1 moves one line, it will be larger than the basic block size. Just move one
+                                  // more line
             }
         } else if (ConvBackpropApi::RemainderOfHkWk(2 * bL1N, self->ctx.hwK_) != 0) {
-            ++bL1cin1CopyLen; // Unless the tail block is exactly 0.5, you have to move another line to consider the tail
+            ++bL1cin1CopyLen; // Unless the tail block is exactly 0.5, you have to move another line to consider the
+                              // tail
         }
-        uint64_t cin1RemainLen = ConvBackpropApi::ShiftDivChannelSize<Intf>(self->ctx.singleShapeCin_, self->ctx.tiling_->channelSize) - b1SrCin;
-        params.bL1cin1CopyLen = cin1RemainLen > bL1cin1CopyLen ? bL1cin1CopyLen: cin1RemainLen;
+        uint64_t cin1RemainLen =
+            ConvBackpropApi::ShiftDivChannelSize<Intf>(self->ctx.singleShapeCin_, self->ctx.tiling_->channelSize) -
+            b1SrCin;
+        params.bL1cin1CopyLen = cin1RemainLen > bL1cin1CopyLen ? bL1cin1CopyLen : cin1RemainLen;
 
         params.singleShapeHi = self->ctx.tiling_->hi > singleShapeHi ? singleShapeHi : self->ctx.tiling_->hi;
     }
 }
 
 template <class Intf>
-static __aicore__ inline void InitLoadToA2Params(Intf *self)
+static __aicore__ inline void InitLoadToA2Params(Intf* self)
 {
     self->ctx.dstL12L0aOffset_ = 0;
     self->ctx.srcL12L0aOffset_ = 0;
@@ -84,14 +91,15 @@ static __aicore__ inline void InitLoadToA2Params(Intf *self)
 
 // Calculate the instruction parameters of Load2B2
 template <class Intf>
-static __aicore__ inline void InitLoadToB2Params(Intf *self) {
+static __aicore__ inline void InitLoadToB2Params(Intf* self)
+{
     // load3dStepK
     self->ctx.load3dB_.kExtension = self->ctx.tiling_->baseN;
     // load3dStepM
     self->ctx.load3dB_.mExtension = self->ctx.tiling_->baseM;
     // posK
     self->ctx.load3dB_.kStartPt = 0;
-     // posM
+    // posM
     self->ctx.load3dB_.mStartPt = 0;
     self->ctx.load3dB_.strideW = self->ctx.tiling_->strideW;
     self->ctx.load3dB_.strideH = self->ctx.tiling_->strideH;
@@ -107,7 +115,7 @@ static __aicore__ inline void InitLoadToB2Params(Intf *self) {
 }
 
 template <class Intf>
-static __aicore__ inline void InitSetFmatrixParams(Intf *self)
+static __aicore__ inline void InitSetFmatrixParams(Intf* self)
 {
     self->ctx.load3dA_.padList[0] = 0;
     self->ctx.load3dA_.padList[1] = 0;
@@ -125,14 +133,14 @@ static __aicore__ inline void InitSetFmatrixParams(Intf *self)
 }
 
 template <class Intf>
-static __aicore__ inline void CalcParamsMmad(Intf *self, uint64_t kPos)
+static __aicore__ inline void CalcParamsMmad(Intf* self, uint64_t kPos)
 {
     self->ctx.mmad_.m = self->ctx.baseUseM_;
     self->ctx.mmad_.n = self->ctx.baseUseN_;
 }
 
 template <class Intf>
-static __aicore__ inline void InitMmadParams(Intf *self)
+static __aicore__ inline void InitMmadParams(Intf* self)
 {
     self->ctx.dstL0cOffset_ = 0;
     self->ctx.srcL0aOffset_ = 0;
@@ -151,9 +159,9 @@ static __aicore__ inline void InitMmadParams(Intf *self)
 }
 
 template <class Intf>
-static __aicore__ inline void LoadL12L0a(Intf *self, const AscendC::LocalTensor<typename Intf::SrcT> &l1AMatrix,
-                                         uint32_t kPos, AscendC::LocalTensor<typename Intf::SrcT> &l0a,
-                                         const Out2L1ScalarParams& params, uint64_t kaStepIdx)
+static __aicore__ inline void LoadL12L0a(
+    Intf* self, const AscendC::LocalTensor<typename Intf::SrcT>& l1AMatrix, uint32_t kPos,
+    AscendC::LocalTensor<typename Intf::SrcT>& l0a, const Out2L1ScalarParams& params, uint64_t kaStepIdx)
 {
     uint32_t kl1 = self->ctx.kal1_;
     if (self->ctx.stepKaRound == (kaStepIdx + 1)) {
@@ -165,10 +173,13 @@ static __aicore__ inline void LoadL12L0a(Intf *self, const AscendC::LocalTensor<
         self->ctx.load3dA_.l1H = 1;
 
         // load3dStepK
-        self->ctx.load3dA_.kExtension = ConvBackpropApi::Ceil(self->ctx.baseUseM_, self->ctx.tiling_->m0) * self->ctx.tiling_->m0;
+        self->ctx.load3dA_.kExtension =
+            ConvBackpropApi::Ceil(self->ctx.baseUseM_, self->ctx.tiling_->m0) * self->ctx.tiling_->m0;
         // load3dStepM
-        self->ctx.load3dA_.mExtension = ConvBackpropApi::Ceil(self->ctx.baseUseK_, self->ctx.tiling_->k0) * self->ctx.tiling_->k0;
-        self->ctx.load3dA_.channelSize = ConvBackpropApi::Ceil(self->ctx.baseUseM_, self->ctx.tiling_->m0) * self->ctx.tiling_->m0;
+        self->ctx.load3dA_.mExtension =
+            ConvBackpropApi::Ceil(self->ctx.baseUseK_, self->ctx.tiling_->k0) * self->ctx.tiling_->k0;
+        self->ctx.load3dA_.channelSize =
+            ConvBackpropApi::Ceil(self->ctx.baseUseM_, self->ctx.tiling_->m0) * self->ctx.tiling_->m0;
 
         LoadData(l0a, l1AMatrix[self->ctx.srcL12L0aOffset_], self->ctx.load3dA_);
     } else {
@@ -189,23 +200,21 @@ static __aicore__ inline void LoadL12L0a(Intf *self, const AscendC::LocalTensor<
 }
 
 template <class Intf>
-static __aicore__ inline void MmadLocal(Intf *self, const AscendC::LocalTensor<typename Intf::SrcT> &l0a,
-                                        const AscendC::LocalTensor<typename Intf::SrcT> &l0b,
-                                        AscendC::LocalTensor<typename Intf::L0cT> &l0c)
+static __aicore__ inline void MmadLocal(
+    Intf* self, const AscendC::LocalTensor<typename Intf::SrcT>& l0a,
+    const AscendC::LocalTensor<typename Intf::SrcT>& l0b, AscendC::LocalTensor<typename Intf::L0cT>& l0c)
 {
-    MmadImpl(l0c[self->ctx.dstL0cOffset_],
-        l0a[self->ctx.srcL0aOffset_],
-        l0b[self->ctx.srcL0bOffset_],
-        self->ctx.mmad_);
-    // When the MMAD calculation amount baseM*baseN is less than a certain threshold, PIPE_M synchronization needs to be added. The current platform threshold is 10*256
+    MmadImpl(l0c[self->ctx.dstL0cOffset_], l0a[self->ctx.srcL0aOffset_], l0b[self->ctx.srcL0bOffset_], self->ctx.mmad_);
+    // When the MMAD calculation amount baseM*baseN is less than a certain threshold, PIPE_M synchronization needs to be
+    // added. The current platform threshold is 10*256
     if (self->ctx.mmad_.m * self->ctx.mmad_.n < 2560) {
         AscendC::PipeBarrier<PIPE_M>();
     }
 }
 
 template <class Intf, class src0_T>
-__aicore__ inline void LoadToA1(Intf *self, bool cachePosA1, uint64_t kaIdx, const Out2L1ScalarParams& params,
-                                bool isLoadA1, uint64_t kaStepIdx)
+__aicore__ inline void LoadToA1(
+    Intf* self, bool cachePosA1, uint64_t kaIdx, const Out2L1ScalarParams& params, bool isLoadA1, uint64_t kaStepIdx)
 {
     if (!isLoadA1) {
         return;
@@ -234,10 +243,12 @@ __aicore__ inline void LoadToA1(Intf *self, bool cachePosA1, uint64_t kaIdx, con
         uint32_t blockCount = 0;
         if (params.isLastMAL1) {
             // The last piece of mAL1 needs to consider tailM
-            blockCount = ConvBackpropApi::ShiftDivChannelSize<Intf>(((self->ctx.curStepM_ - 1) * self->ctx.tiling_->baseM + self->ctx.tailM_),
-                                        self->ctx.tiling_->channelSize);
+            blockCount = ConvBackpropApi::ShiftDivChannelSize<Intf>(
+                ((self->ctx.curStepM_ - 1) * self->ctx.tiling_->baseM + self->ctx.tailM_),
+                self->ctx.tiling_->channelSize);
         } else {
-            blockCount = ConvBackpropApi::ShiftDivChannelSize<Intf>(self->ctx.curStepM_ * self->ctx.tiling_->baseM, self->ctx.tiling_->channelSize);
+            blockCount = ConvBackpropApi::ShiftDivChannelSize<Intf>(
+                self->ctx.curStepM_ * self->ctx.tiling_->baseM, self->ctx.tiling_->channelSize);
         }
 
         if constexpr (AscendC::IsSameType<typename Intf::SrcT, float>::value) {
@@ -275,19 +286,21 @@ __aicore__ inline void LoadToA1(Intf *self, bool cachePosA1, uint64_t kaIdx, con
 }
 
 template <class Intf, class src1_T>
-__aicore__ inline void LoadToB1(Intf *self, bool cachePosB1, uint64_t kbIdx, const Out2L1ScalarParams& params,
-                                bool isLoadB1, uint64_t kbStepIdx)
+__aicore__ inline void LoadToB1(
+    Intf* self, bool cachePosB1, uint64_t kbIdx, const Out2L1ScalarParams& params, bool isLoadB1, uint64_t kbStepIdx)
 {
     if (!isLoadB1) {
         return;
     }
-    // The condition that needs to be loaded into BL1 is that the calculated BL0 block is the first block of data on BL1, and the entire BL1 size is loaded at one time
-    // At this time, BL1 needs to be loaded if one of the following conditions is metï¼?
-    // 1.There is no db on BL1, and more than one buffer is needed in the K direction, which needs to be loaded every time; BL1 has db, and the number of buffers in the K direction is less than or equal to 2
+    // The condition that needs to be loaded into BL1 is that the calculated BL0 block is the first block of data on
+    // BL1, and the entire BL1 size is loaded at one time At this time, BL1 needs to be loaded if one of the following
+    // conditions is metï¼? 1.There is no db on BL1, and more than one buffer is needed in the K direction, which needs
+    // to be loaded every time; BL1 has db, and the number of buffers in the K direction is less than or equal to 2
     // 2.singleShapeK / stepKb > 2, priority is given to looping in the k direction, and data on BL1 cannot be reused
     // 3.When order_M, AL1 resides on L1, and BL1 data is not reused
     // 4.When order_N, BL1 resides on L1, and K <=
-    // 2ï¼ŒThat is, all Kb can be placed on L1. At this time, the M direction is traversed, and the data on BL1 will not be overwritten. BL1 will only be loaded in the first cycle of the M direction
+    // 2ï¼ŒThat is, all Kb can be placed on L1. At this time, the M direction is traversed, and the data on BL1 will not
+    // be overwritten. BL1 will only be loaded in the first cycle of the M direction
     if (params.isLoad2L1B) {
         AscendC::LocalTensor<typename Intf::SrcT> useB1Buf;
         if (cachePosB1) {
@@ -296,8 +309,9 @@ __aicore__ inline void LoadToB1(Intf *self, bool cachePosB1, uint64_t kbIdx, con
             useB1Buf = self->ctx.b1Pong_.template AllocTensor<typename Intf::SrcT>();
         }
 
-        // The correspondence between L0shape and orgShape, L0 and L1 are 16 aligned, orgShape is Wi aligned, Wo alignment is calculated first and Wi alignment is calculated
-        // First calculate the starting address of the BL1 block where L0B is located, which is 16 aligned
+        // The correspondence between L0shape and orgShape, L0 and L1 are 16 aligned, orgShape is Wi aligned, Wo
+        // alignment is calculated first and Wi alignment is calculated First calculate the starting address of the BL1
+        // block where L0B is located, which is 16 aligned
         uint64_t b1SrcKAlign = kbStepIdx * self->ctx.kbl1_;
         // load3d must have a complete Wo, do Wo alignment, and calculate the Ho where the starting address is
         uint32_t b1SrcHo = b1SrcKAlign / self->ctx.tiling_->wo;
@@ -328,7 +342,7 @@ __aicore__ inline void LoadToB1(Intf *self, bool cachePosB1, uint64_t kbIdx, con
         }
 
         uint32_t hiRemainLen = params.singleShapeHi - b1SrcHi;
-        hiCopyLen = hiRemainLen > hiCopyLen ? hiCopyLen: hiRemainLen;
+        hiCopyLen = hiRemainLen > hiCopyLen ? hiCopyLen : hiRemainLen;
 
         AscendC::DataCopyParams dataCopyParams;
         dataCopyParams.dstStride = 0;
@@ -340,7 +354,8 @@ __aicore__ inline void LoadToB1(Intf *self, bool cachePosB1, uint64_t kbIdx, con
         }
 
         // Get the offset of gm
-        uint64_t srcOffset = (params.out2B1SrcAddr + static_cast<uint64_t>(b1SrcHi) * self->ctx.tiling_->wi) * self->ctx.tiling_->channelSize;
+        uint64_t srcOffset = (params.out2B1SrcAddr + static_cast<uint64_t>(b1SrcHi) * self->ctx.tiling_->wi) *
+                             self->ctx.tiling_->channelSize;
         uint64_t dstOffset = 0;
         if (blockLen <= MAX_BLOCK_LEN && srcStride <= MAX_16BITS_STRIDE) {
             dataCopyParams.srcStride = srcStride;
@@ -350,7 +365,8 @@ __aicore__ inline void LoadToB1(Intf *self, bool cachePosB1, uint64_t kbIdx, con
             uint32_t loop = params.bL1cin1CopyLen / MAX_BLOCK_COUNT;
             for (uint32_t idx = 0; idx < loop; ++idx) {
                 DataCopy(useB1Buf[dstOffset], self->ctx.fmapGlobal_[srcOffset], dataCopyParams);
-                if constexpr (Intf::Config::xType::format == ConvCommonApi::ConvFormat::NCDHW) { // Transdata merge x input
+                if constexpr (Intf::Config::xType::format == ConvCommonApi::ConvFormat::NCDHW) { // Transdata merge x
+                                                                                                 // input
                     srcOffset += MAX_BLOCK_COUNT * blockLen * self->ctx.tiling_->channelSize;
                 } else {
                     srcOffset += MAX_BLOCK_COUNT * self->ctx.hwI_ * self->ctx.tiling_->channelSize;
@@ -368,7 +384,8 @@ __aicore__ inline void LoadToB1(Intf *self, bool cachePosB1, uint64_t kbIdx, con
             dataCopyParams.blockLen = self->ctx.tiling_->wi;
             for (uint32_t idx = 0; idx < params.bL1cin1CopyLen; ++idx) {
                 DataCopy(useB1Buf[dstOffset], self->ctx.fmapGlobal_[srcOffset], dataCopyParams);
-                if constexpr (Intf::Config::xType::format == ConvCommonApi::ConvFormat::NCDHW) { // Transdata merge x input
+                if constexpr (Intf::Config::xType::format == ConvCommonApi::ConvFormat::NCDHW) { // Transdata merge x
+                                                                                                 // input
                     srcOffset += blockLen * self->ctx.tiling_->channelSize;
                 } else {
                     srcOffset += self->ctx.hwI_ * self->ctx.tiling_->channelSize;
@@ -391,7 +408,8 @@ __aicore__ inline void LoadToB1(Intf *self, bool cachePosB1, uint64_t kbIdx, con
 
 template <class Intf>
 static __aicore__ inline void LoadL0c2Gm(
-    Intf *self, const AscendC::GlobalTensor<typename Intf::DstT> &output, uint8_t enAtomic = 0, bool enSequentialWrite = false)
+    Intf* self, const AscendC::GlobalTensor<typename Intf::DstT>& output, uint8_t enAtomic = 0,
+    bool enSequentialWrite = false)
 {
     AscendC::LocalTensor<typename Intf::L0cT> l0c;
     if (self->ctx.l0cPingPongFlag_) {
@@ -414,17 +432,20 @@ static __aicore__ inline void LoadL0c2Gm(
                 alignCoutG * self->ctx.tiling_->channelSize * sizeof(typename Intf::DstT) / AscendC::ONE_BLK_SIZE;
             AscendC::FixpipeParamsV220 fixpipeParams(
                 static_cast<uint16_t>(self->ctx.baseUseN_), static_cast<uint16_t>(self->ctx.baseUseM_),
-                ConvBackpropApi::ShiftCeilM0(self->ctx.baseUseM_, self->ctx.tiling_->m0) * self->ctx.tiling_->m0, dstStrideIn, 0);
+                ConvBackpropApi::ShiftCeilM0(self->ctx.baseUseM_, self->ctx.tiling_->m0) * self->ctx.tiling_->m0,
+                dstStrideIn, 0);
             if constexpr (AscendC::IsSameType<typename Intf::SrcT, float>::value) {
                 fixpipeParams.isChannelSplit = true;
             }
-            AscendC::Fixpipe<typename Intf::DstT, typename Intf::L0cT, AscendC::CFG_NZ>(output[dstOffset], l0c, fixpipeParams);
+            AscendC::Fixpipe<typename Intf::DstT, typename Intf::L0cT, AscendC::CFG_NZ>(
+                output[dstOffset], l0c, fixpipeParams);
         } else {
-            uint64_t dstStrideIn =
-                self->ctx.tiling_->baseM * self->ctx.tiling_->channelSize * sizeof(typename Intf::DstT) / AscendC::ONE_BLK_SIZE;
+            uint64_t dstStrideIn = self->ctx.tiling_->baseM * self->ctx.tiling_->channelSize *
+                                   sizeof(typename Intf::DstT) / AscendC::ONE_BLK_SIZE;
             AscendC::FixpipeParamsV220 fixpipeParams(
                 static_cast<uint16_t>(self->ctx.baseUseN_), static_cast<uint16_t>(self->ctx.tiling_->baseM),
-                ConvBackpropApi::ShiftCeilM0(self->ctx.tiling_->baseM, self->ctx.tiling_->m0) * self->ctx.tiling_->m0, dstStrideIn, 0);
+                ConvBackpropApi::ShiftCeilM0(self->ctx.tiling_->baseM, self->ctx.tiling_->m0) * self->ctx.tiling_->m0,
+                dstStrideIn, 0);
             if constexpr (AscendC::IsSameType<typename Intf::SrcT, float>::value) {
                 fixpipeParams.isChannelSplit = true;
             }
@@ -443,6 +464,6 @@ static __aicore__ inline void LoadL0c2Gm(
         self->ctx.l0cPingPongFlag_ = !self->ctx.l0cPingPongFlag_;
     }
 }
-}  // namespace ConvBackpropFilterFunc
+} // namespace ConvBackpropFilterFunc
 
 #endif
