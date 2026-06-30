@@ -224,7 +224,7 @@ __aicore__ inline void CopyL0CToGM()
 
 using namespace AscendC::Te;
 
-__aicore__ inline void CopyBatchL0CToGM()
+__aicore__ inline void CopyBatchL0CToGM(__gm__ half* gmAddr)
 {
     constexpr uint32_t srcBatch = 3;
     constexpr uint32_t dstBatch = 9;
@@ -232,10 +232,9 @@ __aicore__ inline void CopyBatchL0CToGM()
     constexpr uint32_t n = 64;
 
     __cc__ float l0cBuf[srcBatch * m * n];
-    __gm__ half gmBuf[dstBatch * m * n];
 
     auto l0c = MakeTensor(MakeMemPtr(l0cBuf), MakeFrameLayout<NZLayoutPtn>(srcBatch, m, n));
-    auto gm = MakeTensor(MakeMemPtr(gmBuf), MakeFrameLayout<NDExtLayoutPtn>(dstBatch, m, n));
+    auto gm = MakeTensor(MakeMemPtr(gmAddr), MakeFrameLayout<NDExtLayoutPtn>(dstBatch, m, n));
 
     auto atom = MakeCopy(CopyL0C2GM{}).with(FixpipeParams{});
     for (uint32_t i = 0; i < dstBatch / srcBatch; ++i) {
