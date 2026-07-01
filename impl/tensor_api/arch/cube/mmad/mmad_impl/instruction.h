@@ -35,6 +35,12 @@ __aicore__ inline static void SetCtrlForhifloat8() {
     asc_set_ctrl(config);
 }
 
+__aicore__ inline static void ResetCtrlForhifloat8() {
+    uint64_t oriConfig = asc_get_ctrl();
+    uint64_t config = oriConfig & ~HIFLOAT8_MMAD_CTRL_MASK;
+    asc_set_ctrl(config);
+}
+
 class MmadInstr {
 public:
     template <typename T, typename U, typename S, typename... Params>
@@ -55,6 +61,7 @@ private:
             asc_mmad(dst, reinterpret_cast<__ca__ fp8_e4m3fn_t*>(fm),
                 reinterpret_cast<__cb__ fp8_e4m3fn_t*>(filter), m, k, n, unitFlag, disableGemv, cmatrixSource,
                 cmatrixInitVal);
+            ResetCtrlForhifloat8();
         } else {
             asc_mmad(dst, fm, filter, m, k, n, unitFlag, disableGemv, cmatrixSource, cmatrixInitVal);
         }
@@ -84,6 +91,7 @@ private:
             asc_mmad((__cc__ T*)xd, reinterpret_cast<__ca__ fp8_e4m3fn_t*>(fm),
                 reinterpret_cast<__cb__ fp8_e4m3fn_t*>(filter), m, k, n, unitFlag, disableGemv, cmatrixSource,
                 cmatrixInitVal);
+            ResetCtrlForhifloat8();
         } else {
             asc_mmad((__cc__ T*)xd, fm, filter, m, k, n, unitFlag, disableGemv, cmatrixSource, cmatrixInitVal);
         }
