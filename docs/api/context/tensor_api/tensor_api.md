@@ -61,3 +61,10 @@
             - **[F32 Channel Split](data_movement/f32_channel_split.md)**
             - **[Int8/Int4 Channel Merge](data_movement/int8_int4_channel_merge.md)**
             - **[L0C Buffer到Unified Buffer双目标模式](data_movement/l0c_to_ub_dual_dst.md)**
+- **[向量计算](vector_computation/vector_computation_directory.md)**
+    - **[总体说明](vector_computation/vector_computation.md)**
+    - **[一元计算](vector_computation/unary_computation.md)**
+    - **[二元计算](vector_computation/binary_computation.md)**
+    - **[标量二元计算](vector_computation/binary_scalar_computation.md)**
+    - **[类型转换](vector_computation/cast_computation.md)**
+    - **[双输出计算](vector_computation/dual_computation.md)**
