@@ -330,6 +330,7 @@
                     -   [GM -> UB非对齐数据搬运(DataCopyPad)](SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GMToUB非对齐数据搬运(DataCopyPad).md)
                     -   [UB -> GM非对齐数据搬运(DataCopyPad)](SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/UBToGM非对齐数据搬运(DataCopyPad).md)
                     -   [寄存器配置说明](SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/寄存器配置说明/寄存器配置说明.md)
+                        -   [NdDmaDci](SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/寄存器配置说明/NdDmaDci.md)
                         -   [SetPadValue(ISASI)](SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/寄存器配置说明/SetPadValue(ISASI).md)
                         -   [SetLoopModePara](SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/寄存器配置说明/SetLoopModePara.md)
                         -   [ResetLoopModePara](SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/寄存器配置说明/ResetLoopModePara.md)

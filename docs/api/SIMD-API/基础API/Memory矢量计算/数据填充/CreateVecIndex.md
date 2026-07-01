@@ -85,7 +85,7 @@ def CreateVecIndex(dst, firstValue, count):
 ## 数据类型
 
 <!-- npu="950" id8 -->
-- 针对Ascend 950PR/Ascend 950DT，T支持的数据类型为：int8_t、int16_t、half、int32_t、float、int64_t。
+- 针对Ascend 950PR/Ascend 950DT，T支持的数据类型为：int8_t、int16_t、half、int32_t、float、int64_t。其中，int8_t/int64_t数据类型仅支持tensor前n个数据计算接口。
 <!-- end id8 -->
 <!-- npu="A3" id9 -->
 - 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，T支持的数据类型为：int16_t、half、int32_t、float。
@@ -119,10 +119,6 @@ def CreateVecIndex(dst, firstValue, count):
   - 针对Ascend 950PR/Ascend 950DT，该接口通过VF调用[Reg矢量计算API](../../Reg矢量计算/Reg矢量计算.md)实现兼容，当参数count或repeatTime取值为0时，不保证该接口将被视为NOP（空操作）。
   <!-- end id16 -->
 <!-- end id12 -->
-
-- <!-- npu="950" id17 -->
-  针对Ascend 950PR/Ascend 950DT：int8_t/int64_t数据类型仅支持tensor前n个数据计算接口。
-  <!-- end id17 -->
 
 ## 调用示例<a name="section642mcpsimp"></a>
 

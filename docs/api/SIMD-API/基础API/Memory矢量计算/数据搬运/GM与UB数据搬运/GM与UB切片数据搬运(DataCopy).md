@@ -2,15 +2,27 @@
 
 ## 产品支持情况<a name="zh-cn_topic_0000002565968945_section796754519912"></a>
 
-| 产品 | 是否支持  |
-| :----------------------- | :------: |
-|<cann-filter npu-type="950"> Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-|<cann-filter npu-type="A3"> Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
-|<cann-filter npu-type="910b"> Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
-|<cann-filter npu-type="310b"> Atlas 200I/500 A2 推理产品 | x </cann-filter>|
-|<cann-filter npu-type="310p"> Atlas 推理系列产品AI Core | √ </cann-filter>|
-|<cann-filter npu-type="310p"> Atlas 推理系列产品Vector Core | x </cann-filter>|
-|<cann-filter npu-type="910"> Atlas 训练系列产品 | x </cann-filter>|
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
 
 ## 功能说明<a name="zh-cn_topic_0000002565968945_section106841136114319"></a>
 
@@ -24,7 +36,9 @@
     - GM -> VECIN
 - Unified Buffer -> Global Memory
     - VECOUT -> GM
-    - <cann-filter npu-type="310p">CO2 -> GM（仅Atlas 推理系列产品AI Core支持）</cann-filter>
+    <!-- npu="310p" id8 -->
+    - CO2 -> GM（仅Atlas 推理系列产品AI Core支持）
+    <!-- end id8 -->
 
 ## 函数原型<a name="zh-cn_topic_0000002565968945_section82039854412"></a>
 
@@ -67,11 +81,11 @@
 
 | 参数名 | 描述 |
 | :--- | :--- |
-| startIndex | 切片的起始元素位置，数据类型为uint16_t，单位是元素个数。 |
-| endIndex | 切片的终止元素位置，数据类型为uint16_t，单位是元素个数。 |
-| stride | 切片的间隔元素个数，数据类型为uint16_t。 |
-| burstLen | 横向切片，每一片数据的长度，仅在dimValue = 1时生效，超出1维的情况下，必须配置为1，不支持配置成其他值。数据类型为uint16_t，单位：datablock（32B）。<br>例如，srcSliceInfo的List为 {{16, 70, 7, 3, 87},  {0, 2, 1, 1, 3}}，{16, 70, 7, 3, 87}表示第一维的切片信息，burstLen设置为3，表示一个切片数据段大小为3个datablock；{0, 2, 1, 1, 3}为第二维的切片信息，burstLen仅能设置为1。 |
-| shapeValue | 当前维度的原始长度。数据类型为uint16_t，单位为元素个数。 |
+| startIndex | 切片的起始元素位置，数据类型为uint32_t，单位是元素个数。 |
+| endIndex | 切片的终止元素位置，数据类型为uint32_t，单位是元素个数。 |
+| stride | 切片的间隔元素个数，数据类型为uint32_t。 |
+| burstLen | 横向切片，每一片数据的长度，仅在dimValue = 1时生效，超出1维的情况下，必须配置为1，不支持配置成其他值。数据类型为uint32_t，单位：datablock（32B）。<br>例如，srcSliceInfo的List为 {{16, 70, 7, 3, 87},  {0, 2, 1, 1, 3}}，{16, 70, 7, 3, 87}表示第一维的切片信息，burstLen设置为3，表示一个切片数据段大小为3个datablock；{0, 2, 1, 1, 3}为第二维的切片信息，burstLen仅能设置为1。 |
+| shapeValue | 当前维度的原始长度。数据类型为uint32_t，单位为元素个数。 |
 
 如[图1](#fig1196816115710)所示，以float数据类型为例，切片搬运接口能从shape为3\*87的源操作中，选取四个不连续的横向切片搬运到目的操作数中，下面结合图示对SliceInfo结构体参数进行解析：
 
@@ -133,29 +147,29 @@
 
 源操作数和目的操作数支持的数据类型保持一致，Global Memory -> Unified Buffer和Unified Buffer -> Global Memory两个数据通路的数据类型支持情况相同，具体如下：
 
-<cann-filter npu-type="950">
+<!-- npu="950" id9 -->
 
 - Ascend 950PR/Ascend 950DT：bool、int8_t、uint8_t、hifloat8_t、fp8_e8m0_t、fp8_e5m2_t、fp8_e4m3fn_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、complex32、int64_t、uint64_t、double、complex64。
 
-</cann-filter>
+<!-- end id9 -->
 
-<cann-filter npu-type="A3">
+<!-- npu="A3" id10 -->
 
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。
 
-</cann-filter>
+<!-- end id10 -->
 
-<cann-filter npu-type="910b">
+<!-- npu="910b" id11 -->
 
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。
 
-</cann-filter>
+<!-- end id11 -->
 
-<cann-filter npu-type="310p">
+<!-- npu="310p" id12 -->
 
 - Atlas 推理系列产品AI Core：int8_t、uint8_t、int16_t、uint16_t、half、int32_t、uint32_t、float。
 
-</cann-filter>
+<!-- end id12 -->
 
 ## 返回值说明
 

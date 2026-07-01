@@ -2,62 +2,37 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-<a name="table38301303189"></a>
-<table><thead align="left"><tr id="row20831180131817"><th class="cellrowborder" valign="top" width="57.99999999999999%" id="mcps1.1.3.1.1"><p id="p1883113061818"><a name="p1883113061818"></a><a name="p1883113061818"></a><span id="ph20833205312295"><a name="ph20833205312295"></a><a name="ph20833205312295"></a>产品</span></p>
-</th>
-<th class="cellrowborder" align="center" valign="top" width="42%" id="mcps1.1.3.1.2"><p id="p783113012187"><a name="p783113012187"></a><a name="p783113012187"></a>是否支持</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1272474920205"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p17301775812"><a name="p17301775812"></a><a name="p17301775812"></a><span id="ph2272194216543"><a name="ph2272194216543"></a><a name="ph2272194216543"></a>Ascend 950PR/Ascend 950DT</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p37256491200"><a name="p37256491200"></a><a name="p37256491200"></a>√</p>
-</td>
-</tr>
-<tr id="row220181016240"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p48327011813"><a name="p48327011813"></a><a name="p48327011813"></a><span id="ph583230201815"><a name="ph583230201815"></a><a name="ph583230201815"></a><term id="zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p7948163910184"><a name="p7948163910184"></a><a name="p7948163910184"></a>√</p>
-</td>
-</tr>
-<tr id="row173226882415"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p14832120181815"><a name="p14832120181815"></a><a name="p14832120181815"></a><span id="ph1483216010188"><a name="ph1483216010188"></a><a name="ph1483216010188"></a><term id="zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p19948143911820"><a name="p19948143911820"></a><a name="p19948143911820"></a>√</p>
-</td>
-</tr>
-<tr id="row103361763242"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1983180181813"><a name="p1983180181813"></a><a name="p1983180181813"></a><span id="ph783112021813"><a name="ph783112021813"></a><a name="ph783112021813"></a><term id="zh-cn_topic_0000001312391781_term354143892110"><a name="zh-cn_topic_0000001312391781_term354143892110"></a><a name="zh-cn_topic_0000001312391781_term354143892110"></a>Atlas 200I/500 A2 推理产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1695483941817"><a name="p1695483941817"></a><a name="p1695483941817"></a>√</p>
-</td>
-</tr>
-<tr id="row18403312418"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p78319051815"><a name="p78319051815"></a><a name="p78319051815"></a><span id="ph163561737112019"><a name="ph163561737112019"></a><a name="ph163561737112019"></a><term id="zh-cn_topic_0000001312391781_term1964153212227"><a name="zh-cn_topic_0000001312391781_term1964153212227"></a><a name="zh-cn_topic_0000001312391781_term1964153212227"></a>Atlas 推理系列产品</term>AI Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1695443971810"><a name="p1695443971810"></a><a name="p1695443971810"></a>√</p>
-</td>
-</tr>
-<tr id="row242332080"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p10519331187"><a name="p10519331187"></a><a name="p10519331187"></a><span id="ph1335623792013"><a name="ph1335623792013"></a><a name="ph1335623792013"></a><term id="zh-cn_topic_0000001312391781_term1463893615224"><a name="zh-cn_topic_0000001312391781_term1463893615224"></a><a name="zh-cn_topic_0000001312391781_term1463893615224"></a>Atlas 推理系列产品</term>Vector Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1851933589"><a name="p1851933589"></a><a name="p1851933589"></a>x</p>
-</td>
-</tr>
-<tr id="row17253142120252"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p38313021813"><a name="p38313021813"></a><a name="p38313021813"></a><span id="ph58317041819"><a name="ph58317041819"></a><a name="ph58317041819"></a><term id="zh-cn_topic_0000001312391781_term71949488213"><a name="zh-cn_topic_0000001312391781_term71949488213"></a><a name="zh-cn_topic_0000001312391781_term71949488213"></a>Atlas 训练系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>√</p>
-</td>
-</tr>
-<tr id="row647912164190"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p13480131615199"><a name="p13480131615199"></a><a name="p13480131615199"></a><span id="ph759018526191"><a name="ph759018526191"></a><a name="ph759018526191"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p848051610196"><a name="p848051610196"></a><a name="p848051610196"></a>√</p>
-</td>
-</tr>
-<tr id="row464521820198"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p76451818111913"><a name="p76451818111913"></a><a name="p76451818111913"></a><span id="ph68175542197"><a name="ph68175542197"></a><a name="ph68175542197"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p564513182198"><a name="p564513182198"></a><a name="p564513182198"></a>√</p>
-</td>
-</tr>
-</tbody>
-</table>
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：支持
+<!-- end id9 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
+
+头文件路径为 `"basic_api/kernel_operator_vec_vconv_intf.h"`。
 
 根据源操作数和目的操作数tensor的数据类型进行精度转换。
 
@@ -130,7 +105,7 @@ enum class RoundMode {
 
 不同数据类型转换支持的舍入模式不同，可参考[精度转换规则](../../数据结构/precision_conversion.md)。
 
-<cann-filter npu-type="950">
+<!-- npu="950" id10 -->
 
 **表**  Ascend 950PR/Ascend 950DT支持的数据类型组合情况
 
@@ -201,9 +176,9 @@ enum class RoundMode {
 | complex64 | complex32 | CAST_RINT/CAST_FLOOR/CAST_CEIL/CAST_ROUND/CAST_TRUNC/CAST_ODD/CAST_NONE |
 | complex64 | complex64 | CAST_RINT/CAST_FLOOR/CAST_CEIL/CAST_ROUND/CAST_TRUNC |
 
-</cann-filter>
+<!-- end id10 -->
 
-<cann-filter npu-type="A3">
+<!-- npu="A3" id11 -->
 
 **表**  Atlas A3 训练系列产品/Atlas A3 推理系列产品支持的数据类型组合情况
 
@@ -235,9 +210,9 @@ enum class RoundMode {
 | int64_t | int32_t | CAST_NONE |
 | int64_t | float | CAST_RINT/CAST_FLOOR/CAST_CEIL/CAST_ROUND/CAST_TRUNC |
 
-</cann-filter>
+<!-- end id11 -->
 
-<cann-filter npu-type="910b">
+<!-- npu="910b" id12 -->
 
 **表**  Atlas A2 训练系列产品/Atlas A2 推理系列产品支持的数据类型组合情况
 
@@ -269,9 +244,9 @@ enum class RoundMode {
 | int64_t | int32_t | CAST_NONE |
 | int64_t | float | CAST_RINT/CAST_FLOOR/CAST_CEIL/CAST_ROUND/CAST_TRUNC |
 
-</cann-filter>
+<!-- end id12 -->
 
-<cann-filter npu-type="310b">
+<!-- npu="310b" id13 -->
 
 **表**  Atlas 200I/500 A2 推理产品支持的数据类型组合情况
 
@@ -301,9 +276,9 @@ enum class RoundMode {
 | int64_t | int32_t | CAST_NONE |
 | int64_t | float | CAST_RINT/CAST_FLOOR/CAST_CEIL/CAST_ROUND/CAST_TRUNC |
 
-</cann-filter>
+<!-- end id13 -->
 
-<cann-filter npu-type="310p">
+<!-- npu="310p" id14 -->
 
 **表**  Atlas 推理系列产品AI Core支持的数据类型组合情况
 
@@ -324,9 +299,9 @@ enum class RoundMode {
 | float | half | CAST_ODD/CAST_NONE |
 | float | int64_t | CAST_RINT/CAST_FLOOR/CAST_CEIL/CAST_ROUND/CAST_TRUNC |
 
-</cann-filter>
+<!-- end id14 -->
 
-<cann-filter npu-type="910">
+<!-- npu="910" id15 -->
 
 **表**  Atlas 训练系列产品支持的数据类型组合情况
 
@@ -343,9 +318,9 @@ enum class RoundMode {
 | float | half | CAST_ODD/CAST_NONE |
 | float | int64_t | CAST_RINT/CAST_FLOOR/CAST_CEIL/CAST_ROUND/CAST_TRUNC |
 
-</cann-filter>
+<!-- end id15 -->
 
-<cann-filter npu-type="x90">
+<!-- npu="x90" id16 -->
 
 **表**  Kirin X90支持的数据类型组合情况
 
@@ -357,9 +332,9 @@ enum class RoundMode {
 | float | bfloat16_t | CAST_ROUND |
 | bfloat16_t | float | CAST_NONE |
 
-</cann-filter>
+<!-- end id16 -->
 
-<cann-filter npu-type="9030">
+<!-- npu="9030" id17 -->
 
 **表**  Kirin 9030支持的数据类型组合情况
 
@@ -371,7 +346,7 @@ enum class RoundMode {
 | float | bfloat16_t | CAST_ROUND |
 | bfloat16_t | float | CAST_NONE |
 
-</cann-filter>
+<!-- end id17 -->
 
 ## 返回值说明
 
@@ -386,7 +361,24 @@ enum class RoundMode {
 - 当dst或src为int4b\_t时，由于一个int4b\_t只占半个字节，故申请Tensor空间时，只需申请相同数量的int8\_t数据空间的一半。host侧目前暂不支持int4b\_t，故在申请int4b\_t类型的tensor时，应先申请一个类型为int8\_t的tensor，再用Reinterpretcast接口转化为int4b\_t类型的tensor，接着调用Cast指令。
 - 当dst或src为int4b\_t时，tensor高维切分计算接口的连续模式的mask与tensor前n个数据计算接口的count必须为偶数；对于tensor高维切分计算接口的逐bit模式，对应同一字节的相邻两个比特位的数值必须一致，即0-1位数值一致，2-3位数值一致，4-5位数值一致，以此类推。
 - int32\_t到half数据类型的转换，设置舍入模式无效，需要与[SetDeqScale](寄存器配置说明/SetDeqScale.md)接口配合使用。
-- <cann-filter npu-type="950">针对Ascend 950PR/Ascend 950DT，complex32/complex64/double数据类型仅支持tensor前n个数据计算接口。</cann-filter>
+<!-- npu="950" id18 -->
+- 针对Ascend 950PR/Ascend 950DT，complex32/complex64/double数据类型仅支持tensor前n个数据计算接口。
+<!-- end id18 -->
+<!-- npu="A3,910b,950" id23 -->
+- 当参数count或repeatTime取值为0时，该接口的行为如下：
+    <!-- npu="A3,910b" id21 -->
+    - 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
+       <!-- npu="A3" id19 -->
+       - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+       <!-- end id19 -->
+       <!-- npu="910b" id20 -->
+       - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+       <!-- end id20 -->
+    <!-- end id21 -->
+    <!-- npu="950" id22 -->
+    - 针对Ascend 950PR/Ascend 950DT，该接口通过VF调用[Reg矢量计算](../../Reg矢量计算/Reg矢量计算.md)API实现兼容，当参数count或repeatTime取值为0时，不保证该接口被视为NOP（空操作）。
+    <!-- end id22 -->
+<!-- end id23 -->
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
