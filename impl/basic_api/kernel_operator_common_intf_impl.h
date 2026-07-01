@@ -297,6 +297,16 @@ __aicore__ inline OverrideStrategy GetSaturationStrategy()
     int64_t value = (get_ctrl() >> 60) & 1;
     return value == 0 ? OverrideStrategy::USE_API : OverrideStrategy::USE_GLOBAL;
 }
+
+template <CacheRwMode rwMode, CacheMode cacheMode>
+__aicore__ inline void SetScalarCacheMode(){
+    SetScalarCacheModeImpl<rwMode, cacheMode>();
+}
+
+template <CacheRwMode rwMode>
+__aicore__ inline CacheMode GetScalarCacheMode(){
+    return GetScalarCacheModeImpl<rwMode>();
+}
 #endif
 
 } // namespace AscendC

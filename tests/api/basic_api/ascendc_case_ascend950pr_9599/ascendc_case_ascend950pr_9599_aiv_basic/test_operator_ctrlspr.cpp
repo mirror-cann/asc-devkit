@@ -49,6 +49,94 @@ void CtrlSprKernel()
     EXPECT_EQ((GetCtrlSpr<60, 60>()), 0);
 }
 
+void ScalarCacheModeReadKernel()
+{
+    // test L2Cache read mode: CTRL[19:16]
+    // CACHE_MODE_NORMAL -> 0b0000 (0)
+    SetScalarCacheMode<CacheRwMode::READ, CacheMode::CACHE_MODE_NORMAL>();
+    int64_t value = GetCtrlSpr<16, 19>();
+    EXPECT_EQ(value, 0b0000);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::READ>()), CacheMode::CACHE_MODE_NORMAL);
+
+    // CACHE_MODE_LAST -> 0b0001 (1)
+    SetScalarCacheMode<CacheRwMode::READ, CacheMode::CACHE_MODE_LAST>();
+    value = GetCtrlSpr<16, 19>();
+    EXPECT_EQ(value, 0b0001);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::READ>()), CacheMode::CACHE_MODE_LAST);
+
+    // CACHE_MODE_PERSISTENT -> 0b0010 (2)
+    SetScalarCacheMode<CacheRwMode::READ, CacheMode::CACHE_MODE_PERSISTENT>();
+    value = GetCtrlSpr<16, 19>();
+    EXPECT_EQ(value, 0b0010);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::READ>()), CacheMode::CACHE_MODE_PERSISTENT);
+
+    // CACHE_MODE_DISABLE -> 0b0100 (4)
+    SetScalarCacheMode<CacheRwMode::READ, CacheMode::CACHE_MODE_DISABLE>();
+    value = GetCtrlSpr<16, 19>();
+    EXPECT_EQ(value, 0b0100);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::READ>()), CacheMode::CACHE_MODE_DISABLE);
+}
+
+void ScalarCacheModeWriteKernel()
+{
+    // test L2Cache write mode: CTRL[23:20]
+    // CACHE_MODE_NORMAL -> 0b0000 (0)
+    SetScalarCacheMode<CacheRwMode::WRITE, CacheMode::CACHE_MODE_NORMAL>();
+    int64_t value = GetCtrlSpr<20, 23>();
+    EXPECT_EQ(value, 0b0000);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::WRITE>()), CacheMode::CACHE_MODE_NORMAL);
+
+    // CACHE_MODE_LAST -> 0b0001 (1)
+    SetScalarCacheMode<CacheRwMode::WRITE, CacheMode::CACHE_MODE_LAST>();
+    value = GetCtrlSpr<20, 23>();
+    EXPECT_EQ(value, 0b0001);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::WRITE>()), CacheMode::CACHE_MODE_LAST);
+
+    // CACHE_MODE_PERSISTENT -> 0b0010 (2)
+    SetScalarCacheMode<CacheRwMode::WRITE, CacheMode::CACHE_MODE_PERSISTENT>();
+    value = GetCtrlSpr<20, 23>();
+    EXPECT_EQ(value, 0b0010);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::WRITE>()), CacheMode::CACHE_MODE_PERSISTENT);
+
+    // CACHE_MODE_DISABLE -> 0b0100 (4)
+    SetScalarCacheMode<CacheRwMode::WRITE, CacheMode::CACHE_MODE_DISABLE>();
+    value = GetCtrlSpr<20, 23>();
+    EXPECT_EQ(value, 0b0100);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::WRITE>()), CacheMode::CACHE_MODE_DISABLE);
+}
+
+void ScalarCacheModeCombinedKernel()
+{
+    // test read and write mode independence
+    SetScalarCacheMode<CacheRwMode::READ, CacheMode::CACHE_MODE_LAST>();
+    SetScalarCacheMode<CacheRwMode::WRITE, CacheMode::CACHE_MODE_PERSISTENT>();
+
+    int64_t readValue = GetCtrlSpr<16, 19>();
+    int64_t writeValue = GetCtrlSpr<20, 23>();
+    EXPECT_EQ(readValue, 0b0001);
+    EXPECT_EQ(writeValue, 0b0010);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::READ>()), CacheMode::CACHE_MODE_LAST);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::WRITE>()), CacheMode::CACHE_MODE_PERSISTENT);
+
+    // change read mode, verify write mode unchanged
+    SetScalarCacheMode<CacheRwMode::READ, CacheMode::CACHE_MODE_DISABLE>();
+    readValue = GetCtrlSpr<16, 19>();
+    writeValue = GetCtrlSpr<20, 23>();
+    EXPECT_EQ(readValue, 0b0100);
+    EXPECT_EQ(writeValue, 0b0010);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::READ>()), CacheMode::CACHE_MODE_DISABLE);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::WRITE>()), CacheMode::CACHE_MODE_PERSISTENT);
+
+    // change write mode, verify read mode unchanged
+    SetScalarCacheMode<CacheRwMode::WRITE, CacheMode::CACHE_MODE_NORMAL>();
+    readValue = GetCtrlSpr<16, 19>();
+    writeValue = GetCtrlSpr<20, 23>();
+    EXPECT_EQ(readValue, 0b0100);
+    EXPECT_EQ(writeValue, 0b0000);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::READ>()), CacheMode::CACHE_MODE_DISABLE);
+    EXPECT_EQ((GetScalarCacheMode<CacheRwMode::WRITE>()), CacheMode::CACHE_MODE_NORMAL);
+}
+
 struct CtrlSprTestParams {
     void (*calFunc)();
 };
@@ -63,7 +151,11 @@ protected:
     }
 };
 
-INSTANTIATE_TEST_CASE_P(TEST_CTRL_SPR, CtrlSprTestsuite, ::testing::Values(CtrlSprTestParams{CtrlSprKernel}));
+INSTANTIATE_TEST_CASE_P(
+    TEST_CTRL_SPR, CtrlSprTestsuite,
+    ::testing::Values(
+        CtrlSprTestParams{CtrlSprKernel}, CtrlSprTestParams{ScalarCacheModeReadKernel},
+        CtrlSprTestParams{ScalarCacheModeWriteKernel}, CtrlSprTestParams{ScalarCacheModeCombinedKernel}));
 
 TEST_P(CtrlSprTestsuite, CtrlSprTestCase)
 {
