@@ -47,7 +47,7 @@ Mmad和Copy接口设置unitFlag值为2/3后，系统会启动单元标志位。
 using namespace AscendC::Te;
 
 // 调用kRound次Mmad
-for (auto kIndex = 0; kIndex = kRound; ++kIndex) {
+for (auto kIndex = 0; kIndex < kRound; ++kIndex) {
     if (kIndex != kRound - 1) {
         // 前kRound-1次迭代设置为2，保证Mmad在K迭代循环中可以一直写入L0C Buffer
         mmadParams.unitFlag = 2;
