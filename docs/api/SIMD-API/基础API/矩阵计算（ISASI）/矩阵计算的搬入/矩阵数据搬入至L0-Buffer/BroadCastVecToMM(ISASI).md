@@ -61,7 +61,7 @@ __aicore__ inline void BroadCastVecToMM(const LocalTensor<T> &dst, const LocalTe
 
 ## 数据类型
 
-Atlas 推理系列产品AI Core，支持的数据类型为：int16_t、uint16_t、half。
+Atlas 推理系列产品AI Core，支持的数据类型为：half、int32_t、float。
 
 ## 约束说明<a name="section633mcpsimp"></a>
 

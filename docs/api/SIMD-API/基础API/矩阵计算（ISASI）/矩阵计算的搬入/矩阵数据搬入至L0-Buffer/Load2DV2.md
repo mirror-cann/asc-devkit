@@ -81,16 +81,16 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 | ifTranspose | 是否启用转置功能，对每个分形矩阵进行转置，默认为false：<br>&nbsp;&nbsp;&bull; true：启用<br>&nbsp;&nbsp;&bull; false：不启用<br>注意：只有L1 Buffer（TPosition: A1）->L0A Buffer（TPosition: A2）和L1 Buffer（TPosition: B1）->L0B Buffer（TPosition: B2）通路才能开启转置。开启转置功能时，支持b4、b8、b16、b32数据类型。 |
 | sid | 预留参数，配置为0即可。<br>注：兼容旧款产品接口传入，Ascend 950PR/Ascend 950DT产品不做处理。 |
 
-LoadData2DParamsV2结构体在不启用转置时，示意图如下，参数设置值和解释说明如下：
+以half数据类型，不启用转置为例，LoadData2DParamsV2结构体参数值设置说明及其示意图如下：
 
-- mStartPosition=2，表示源矩阵M轴方向的起始位置为第32个元素（2×16个元素）。
-- kStartPosition=2，表示源矩阵K轴方向的起始位置为第32个元素（2×32字节）。
-- mStep=2，表示源矩阵M轴方向搬运长度为32个元素（2×16个元素）。
-- kStep=3，表示源矩阵K轴方向搬运长度为48个元素（3×32字节）。
-- srcStride=5，表示源矩阵K方向前一个分形起始地址与后一个分形起始地址的间隔为1280个元素（5×512字节）。
-- dstStride=3，表示目的矩阵K方向前一个分形起始地址与后一个分形起始地址的间隔为768个元素（3×512字节）。
-- ifTranspose=false，表示不启用转置。
-- sid=0，预留参数，配置为0即可。
+- mStartPosition = 2，参数单位为16个元素，2*16=32，所以表示源矩阵M轴方向的起始位置为第32个元素。
+- kStartPosition = 2，参数单位为32字节，对应的元素个数为2*32/2=32，所以表示源矩阵K轴方向的起始位置为第32个元素。
+- mStep = 2，参数单位为16个元素，2*16=32，所以表示源矩阵M轴方向搬运长度为32个元素。
+- kStep = 3，参数单位为32字节，对应的元素个数为3*32/2=48，所以表示源矩阵K轴方向搬运长度为48个元素。
+- srcStride = 5，参数单位为512字节，对应的元素个数为5*512/2=1280，所以表示源矩阵K方向前一个分形起始地址与后一个分形起始地址的间隔为1280个元素。
+- dstStride = 3，参数单位为512字节，对应的元素个数为3*512/2=768，所以表示目的矩阵K方向前一个分形起始地址与后一个分形起始地址的间隔为768个元素。
+- ifTranspose = false，表示不启用转置。
+- sid = 0，预留参数，配置为0即可。
 
 **图1** LoadData2DParamsV2结构体参数示例（以half数据类型，不启用转置为例）
 

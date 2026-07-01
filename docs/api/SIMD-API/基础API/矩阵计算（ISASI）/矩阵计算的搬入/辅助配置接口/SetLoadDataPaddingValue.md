@@ -49,7 +49,7 @@ __aicore__ inline void SetLoadDataPaddingValue(const T padValue)
 
 | 参数名称 | 输入/输出 | 含义 |
 | ------ | ------ | ------ |
-| padValue | 输入 | 边界值。<br>Pad填充值的数值。 |
+| padValue | 输入 | Pad填充值的数值。 |
 
 ## 数据类型
 

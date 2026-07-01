@@ -121,8 +121,8 @@ __aicore__ inline void Fill(const LocalTensor<T>& dst, const InitConstValueParam
 ## 调用示例<a name="section642mcpsimp"></a>
 
 ```cpp
-uint32 mLength = 16;
-uint32 kLength = 16;
+uint32_t mLength = 16;
+uint32_t kLength = 16;
 Fill(leftMatrix, {1, static_cast<uint16_t>(mLength * kLength * sizeof(float) / 32), 0, 1}); // 给leftMatrix填充mLength * kLength长度的数据为1，按32B的颗粒度进行填充
 ```
 
