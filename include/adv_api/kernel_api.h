@@ -22,7 +22,6 @@
 #define LIB_KERNEL_API_H
 
 #include "hccl/hccl.h"
-#include "hcomm/hcomm.h"
 
 #include "index/arithprogression.h"
 #include "activation/sigmoid.h"
