@@ -6,7 +6,7 @@
 
 ## 模板参数<a name="section18341144185913"></a>
 
-```
+```cpp
 template <TPosition pos, int32_t depth, auto mask = 0> class TQue{...};
 ```
 
@@ -92,7 +92,7 @@ QUE的Buffer数量最大也分别为8个或4个，即能插入的同步事件的
 
 -   不开启double buffer
 
-    ```
+    ```cpp
     // 能申请的VECIN position上的buffer数量最大为8。如果超出该限制，在后续使用AllocTensor/FreeTensor可能会出现分配资源失败。故当不开启double buffer时，此时最多能申请8个TQue。
     AscendC::TPipe pipe;
     int len = 1024;
@@ -117,7 +117,7 @@ QUE的Buffer数量最大也分别为8个或4个，即能插入的同步事件的
 
 -   开启double buffer
 
-    ```
+    ```cpp
     // 如果开启double buffer，此时每一个TQue分配的内存块个数为2，故最多只能申请4个TQue。
     AscendC::TPipe pipe;
     int len = 1024;
@@ -134,7 +134,7 @@ QUE的Buffer数量最大也分别为8个或4个，即能插入的同步事件的
 
 -   多次申请TQue
 
-    ```
+    ```cpp
     // 如果TQue个数已达最大值，可以调用FreeAllEvent接口来继续申请TQue。
     AscendC::TPipe pipe;
     int len = 1024;
@@ -153,7 +153,7 @@ QUE的Buffer数量最大也分别为8个或4个，即能插入的同步事件的
 
 以下用例通过传入TQueConfig开启bufferNumber的编译期计算。vector算子不涉及数据格式的转换，所以nd2nz和nz2nd是false。
 
-```
+```cpp
 // 用户自定义的构造TQueConfig的元函数
 __aicore__ constexpr AscendC::TQueConfig GetMyTQueConfig(bool nd2nzIn, bool nz2ndIn, bool scmBlockGroupIn,
     uint32_t bufferLenIn, uint32_t bufferNumberIn, uint32_t consumerSizeIn, const AscendC::TPosition consumerIn[])

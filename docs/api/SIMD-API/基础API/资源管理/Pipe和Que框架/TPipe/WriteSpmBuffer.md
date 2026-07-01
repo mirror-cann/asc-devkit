@@ -2,84 +2,76 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-<a name="zh-cn_topic_0000001560400104_table38301303189"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000001560400104_row20831180131817"><th class="cellrowborder" valign="top" width="57.99999999999999%" id="mcps1.1.3.1.1"><p id="zh-cn_topic_0000001560400104_p1883113061818"><a name="zh-cn_topic_0000001560400104_p1883113061818"></a><a name="zh-cn_topic_0000001560400104_p1883113061818"></a><span id="zh-cn_topic_0000001560400104_ph20833205312295"><a name="zh-cn_topic_0000001560400104_ph20833205312295"></a><a name="zh-cn_topic_0000001560400104_ph20833205312295"></a>产品</span></p>
-</th>
-<th class="cellrowborder" align="center" valign="top" width="42%" id="mcps1.1.3.1.2"><p id="zh-cn_topic_0000001560400104_p783113012187"><a name="zh-cn_topic_0000001560400104_p783113012187"></a><a name="zh-cn_topic_0000001560400104_p783113012187"></a>是否支持</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000001560400104_row1272474920205"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000001560400104_p17301775812"><a name="zh-cn_topic_0000001560400104_p17301775812"></a><a name="zh-cn_topic_0000001560400104_p17301775812"></a><span id="zh-cn_topic_0000001560400104_ph2272194216543"><a name="zh-cn_topic_0000001560400104_ph2272194216543"></a><a name="zh-cn_topic_0000001560400104_ph2272194216543"></a>Ascend 950PR/Ascend 950DT</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000001560400104_p37256491200"><a name="zh-cn_topic_0000001560400104_p37256491200"></a><a name="zh-cn_topic_0000001560400104_p37256491200"></a>√</p>
-</td>
-</tr>
-<tr id="zh-cn_topic_0000001560400104_row220181016240"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000001560400104_p48327011813"><a name="zh-cn_topic_0000001560400104_p48327011813"></a><a name="zh-cn_topic_0000001560400104_p48327011813"></a><span id="zh-cn_topic_0000001560400104_ph583230201815"><a name="zh-cn_topic_0000001560400104_ph583230201815"></a><a name="zh-cn_topic_0000001560400104_ph583230201815"></a><term id="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000001560400104_p7948163910184"><a name="zh-cn_topic_0000001560400104_p7948163910184"></a><a name="zh-cn_topic_0000001560400104_p7948163910184"></a>√</p>
-</td>
-</tr>
-<tr id="zh-cn_topic_0000001560400104_row173226882415"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000001560400104_p14832120181815"><a name="zh-cn_topic_0000001560400104_p14832120181815"></a><a name="zh-cn_topic_0000001560400104_p14832120181815"></a><span id="zh-cn_topic_0000001560400104_ph1483216010188"><a name="zh-cn_topic_0000001560400104_ph1483216010188"></a><a name="zh-cn_topic_0000001560400104_ph1483216010188"></a><term id="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000001560400104_p19948143911820"><a name="zh-cn_topic_0000001560400104_p19948143911820"></a><a name="zh-cn_topic_0000001560400104_p19948143911820"></a>√</p>
-</td>
-</tr>
-<tr id="zh-cn_topic_0000001560400104_row103361763242"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000001560400104_p1983180181813"><a name="zh-cn_topic_0000001560400104_p1983180181813"></a><a name="zh-cn_topic_0000001560400104_p1983180181813"></a><span id="zh-cn_topic_0000001560400104_ph783112021813"><a name="zh-cn_topic_0000001560400104_ph783112021813"></a><a name="zh-cn_topic_0000001560400104_ph783112021813"></a><term id="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term354143892110"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term354143892110"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term354143892110"></a>Atlas 200I/500 A2 推理产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000001560400104_p148908121471"><a name="zh-cn_topic_0000001560400104_p148908121471"></a><a name="zh-cn_topic_0000001560400104_p148908121471"></a>x</p>
-</td>
-</tr>
-<tr id="zh-cn_topic_0000001560400104_row18403312418"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000001560400104_p78319051815"><a name="zh-cn_topic_0000001560400104_p78319051815"></a><a name="zh-cn_topic_0000001560400104_p78319051815"></a><span id="zh-cn_topic_0000001560400104_ph163561737112019"><a name="zh-cn_topic_0000001560400104_ph163561737112019"></a><a name="zh-cn_topic_0000001560400104_ph163561737112019"></a><term id="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term1964153212227"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term1964153212227"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term1964153212227"></a>Atlas 推理系列产品</term>AI Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000001560400104_p1695443971810"><a name="zh-cn_topic_0000001560400104_p1695443971810"></a><a name="zh-cn_topic_0000001560400104_p1695443971810"></a>√</p>
-</td>
-</tr>
-<tr id="zh-cn_topic_0000001560400104_row242332080"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000001560400104_p10519331187"><a name="zh-cn_topic_0000001560400104_p10519331187"></a><a name="zh-cn_topic_0000001560400104_p10519331187"></a><span id="zh-cn_topic_0000001560400104_ph1335623792013"><a name="zh-cn_topic_0000001560400104_ph1335623792013"></a><a name="zh-cn_topic_0000001560400104_ph1335623792013"></a><term id="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term1463893615224"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term1463893615224"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term1463893615224"></a>Atlas 推理系列产品</term>Vector Core</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000001560400104_p1851933589"><a name="zh-cn_topic_0000001560400104_p1851933589"></a><a name="zh-cn_topic_0000001560400104_p1851933589"></a>x</p>
-</td>
-</tr>
-<tr id="zh-cn_topic_0000001560400104_row17253142120252"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000001560400104_p38313021813"><a name="zh-cn_topic_0000001560400104_p38313021813"></a><a name="zh-cn_topic_0000001560400104_p38313021813"></a><span id="zh-cn_topic_0000001560400104_ph58317041819"><a name="zh-cn_topic_0000001560400104_ph58317041819"></a><a name="zh-cn_topic_0000001560400104_ph58317041819"></a><term id="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term71949488213"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term71949488213"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000001312391781_term71949488213"></a>Atlas 训练系列产品</term></span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000001560400104_p395243920186"><a name="zh-cn_topic_0000001560400104_p395243920186"></a><a name="zh-cn_topic_0000001560400104_p395243920186"></a>√</p>
-</td>
-</tr>
-<tr id="zh-cn_topic_0000001560400104_row16501528217"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p871618304717"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p871618304717"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p871618304717"></a><span id="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_ph133919917516"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_ph133919917516"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_ph133919917516"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p107166301277"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p107166301277"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p107166301277"></a>√</p>
-</td>
-</tr>
-<tr id="zh-cn_topic_0000001560400104_row9145185510211"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p3272112116474"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p3272112116474"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p3272112116474"></a><span id="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_ph1327212213477"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_ph1327212213477"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_ph1327212213477"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p027232134713"><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p027232134713"></a><a name="zh-cn_topic_0000001560400104_zh-cn_topic_0000002055722337_p027232134713"></a>√</p>
-</td>
-</tr>
-</tbody>
-</table>
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：支持
+<!-- end id7 -->
+<!-- npu="x90" id8 -->
+- Kirin X90：支持
+<!-- end id8 -->
+<!-- npu="9030" id9 -->
+- Kirin 9030：支持
+<!-- end id9 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-将需要溢出暂存的数据拷贝到SPM Buffer中。
+头文件路径为：`"basic_api/kernel_tpipe.h"`。
+
+将因为UB空间不足而需要溢出暂存的数据拷贝到SPM Buffer中。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
 -   适用于连续和不连续的数据暂存：
 
-    ```
+    ```cpp
     template <typename T>
     __aicore__ inline void WriteSpmBuffer(const LocalTensor<T>& writeBuffer, const DataCopyParams& copyParams, int32_t writeOffset = 0)
     ```
 
 -   适用于连续的数据暂存：
 
-    ```
+    ```cpp
     template <typename T>
     __aicore__ inline void WriteSpmBuffer(const LocalTensor<T>& writeBuffer, const int32_t writeSize, int32_t writeOffset = 0)
     ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表1**  接口参数说明
+**表1**  模板参数说明
+
+<a name="table012895562310"></a>
+<table><thead align="left"><tr id="row2128195532318"><th class="cellrowborder" valign="top" width="12.65%" id="mcps1.2.3.1.1"><p id="p1212885512232"><a name="p1212885512232"></a><a name="p1212885512232"></a>参数名称</p>
+</th>
+<th class="cellrowborder" valign="top" width="87.35000000000001%" id="mcps1.2.3.1.2"><p id="p16129155552315"><a name="p16129155552315"></a><a name="p16129155552315"></a>含义</p>
+</th>
+</tr>
+</thead>
+<tbody><tr id="row6129355182310"><td class="cellrowborder" valign="top" width="12.65%" headers="mcps1.2.3.1.1 "><p id="p81291855102318"><a name="p81291855102318"></a><a name="p81291855102318"></a>T</p>
+</td>
+<td class="cellrowborder" valign="top" width="87.35000000000001%" headers="mcps1.2.3.1.2 "><p id="p14983161812418"><a name="p14983161812418"></a><a name="p14983161812418"></a>待获取Tensor的数据类型，支持的类型请见<a href="../../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md">LocalTensor</a>相关描述。</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+**表2**  接口参数说明
 
 <a name="table1794522316251"></a>
 <table><thead align="left"><tr id="row19456238252"><th class="cellrowborder" valign="top" width="12.36%" id="mcps1.2.4.1.1"><p id="p119458239258"><a name="p119458239258"></a><a name="p119458239258"></a>参数名称</p>
@@ -101,7 +93,7 @@
 </td>
 <td class="cellrowborder" valign="top" width="12.379999999999999%" headers="mcps1.2.4.1.2 "><p id="p6249142931114"><a name="p6249142931114"></a><a name="p6249142931114"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="75.26%" headers="mcps1.2.4.1.3 "><p id="p18111121482617"><a name="p18111121482617"></a><a name="p18111121482617"></a>搬运参数，DataCopyParams类型，DataCopyParams结构定义请参考<a href="#table9182515919">表2</a>。</p>
+<td class="cellrowborder" valign="top" width="75.26%" headers="mcps1.2.4.1.3 "><p id="p18111121482617"><a name="p18111121482617"></a><a name="p18111121482617"></a>搬运参数，DataCopyParams类型，DataCopyParams结构定义请参考<a href="#table9182515919">表3</a>。</p>
 </td>
 </tr>
 <tr id="row138643616158"><td class="cellrowborder" valign="top" width="12.36%" headers="mcps1.2.4.1.1 "><p id="p1986436201513"><a name="p1986436201513"></a><a name="p1986436201513"></a>writeSize</p>
@@ -121,7 +113,7 @@
 </tbody>
 </table>
 
-**表2**  DataCopyParams结构体参数定义
+**表3**  DataCopyParams结构体参数定义
 
 <a name="table9182515919"></a>
 <table><thead align="left"><tr id="row151816516917"><th class="cellrowborder" valign="top" width="15%" id="mcps1.2.3.1.1"><p id="p18182513916"><a name="p18182513916"></a><a name="p18182513916"></a>参数名称</p>
@@ -166,30 +158,25 @@
 
 -   使用DataCopyParams搬运
 
-    ```
+    ```cpp
     AscendC::TPipe pipe;
-    int dataSize = 32; // 假设T为half类型，从ub上申请一块内存32 * sizeof(half)字节
-    int offset = 32; // 拷贝到spmBuffer时偏移32字节
-    AscendC::DataCopyParams copyParams{1, 2, 0, 0}; // 从ub上搬运一个连续传输数据块，一个数据块的长度为2个datablock，一个datablock为32bytes
-    // writeLocal为SPM Buffer上的half类型的LocalTensor
-    pipe.WriteSpmBuffer(writeLocal, copyParams, offset); // 将ub上的连续传输数据块搬运到SPM Buffer
-    pipe.ReadSpmBuffer(writeLocal, copyParams, offset); // 将暂存在SPM Buffer的数据读回到local数据
+    int offset = 32; // 拷贝到SPM Buffer时偏移32字节
+    AscendC::DataCopyParams copyParams{2, 2, 1, 1}; // 搬运两个数据块，一个数据块的长度为2个datablock，一个datablock为32字节，源地址和目的地址相邻数据块间均间隔一个数据块
+    // writeLocal为UB上的half类型的LocalTensor
+    pipe.WriteSpmBuffer(writeLocal, copyParams, offset); // 将UB上的数据块搬运到SPM Buffer
     ...
-    // 当ub内存足够时，将暂存在SPM Buffer的数据块搬运回GM上，dstGlobal为half类型的GlobalTensor
-    AscendC::DataCopy(dstGlobal, writeLocal, copyParams);
+    pipe.ReadSpmBuffer(writeLocal, copyParams, offset); // 当UB空间足够时，将暂存在SPM Buffer的数据读回到UB
     ```
 
 -   使用writeSize连续搬运
 
-    ```
+    ```cpp
     AscendC::TPipe pipe;
-    int dataSize = 32; // 假设T为half类型，从ub上申请一块内存32 * sizeof(half)字节
+    int dataSize = 32;
     int offset = 32; // 拷贝到spmBuffer时偏移32字节
     ;
-    // writeLocal为SPM Buffer上的half类型的LocalTensor
-    pipe.WriteSpmBuffer(writeLocal, dataSize, offset); // 将ub上的连续传输数据块搬运到SPM Buffer
-    pipe.ReadSpmBuffer(writeLocal, dataSize, offset); // 将暂存在SPM Buffer的数据读回到local数据
+    // writeLocal为UB上的half类型的LocalTensor
+    pipe.WriteSpmBuffer(writeLocal, dataSize, offset); // 将UB上的连续传输数据块搬运到SPM Buffer
     ...
-    // 当ub内存足够时，将暂存在SPM Buffer的数据块搬运回GM上，dstGlobal为half类型的GlobalTensor
-    AscendC::DataCopy(dstGlobal, writeLocal, dataSize);
+    pipe.ReadSpmBuffer(writeLocal, dataSize, offset); // 当UB空间足够时，将暂存在SPM Buffer的数据读回到UB
     ```

@@ -24,9 +24,6 @@ public:
     template <TPosition pos, class DataType> LocalTensor<DataType> __aicore__ inline Alloc(uint32_t tileSize);
     
     template <class DataType> LocalTensor<DataType> __aicore__ inline Alloc();
-    
-    
-   
 };
 ```
 

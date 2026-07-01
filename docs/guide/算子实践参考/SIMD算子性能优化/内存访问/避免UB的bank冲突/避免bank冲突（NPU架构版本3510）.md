@@ -1,34 +1,54 @@
 # 避免bank冲突（NPU架构版本3510）<a name="ZH-CN_TOPIC_0000002531242067"></a>
 
-为了提高数据访问的效率和吞吐量，Unified Buffer采用了bank（大小相等的内存模块）结构设计。Unified Buffer总大小为256K，划分为16个bank。每个bank由512行组成，每行长度为32B。这16个bank进一步组织为8个bank group，每个bank group包含2个bank，例如bank7和bank15组成一个bank group。
+【优先级】中
+
+>[!NOTE]说明 
+>该性能优化建议适用于如下产品型号：
+>- Ascend 950PR/Ascend 950DT
+
+Unified Buffer缓存总大小为256KB，包含8个bank group，每个bank group包含2个bank。每个bank大小为16KB，由512行组成，每行长度为32B，采用低位地址交织。
+
+UB的地址编码格式：
+```
+UB_ADDR[18:0] = {BANK_DEPTH[8:0], BANK[0], BG[2:0], BANK_WIDTH[4:0]}
+```
 
 **图1**  bank结构示意图（图中箭头方向表示内存排布的顺序）<a name="fig873359165316"></a>  
-![](../../../../figures/bank结构示意图（图中箭头方向表示内存排布的顺序）-71.png "bank结构示意图（图中箭头方向表示内存排布的顺序）-71")
 
-每个bank可以独立地进行数据的读写操作，允许多个数据请求同时进行。然而，当多个读写操作试图同时访问同一个bank，由于硬件资源的限制，这些操作必须排队等待，会导致bank冲突，引起性能下降。
+![](../../../../figures/950_UB内存结构图.png "950_UB内存结构图")
 
-具体来说，Vector计算单元每拍（一个指令周期）能够从每个bank group中读取或写入一行数据。当多个读写操作试图同时访问同一个bank，Vector计算单元无法在同一个周期内处理所有请求，导致这些请求排队等待。这种排队增加了数据访问的延迟，降低了系统的整体性能。
+3510架构使用低位编址，地址排布情况如图所示：
+
+**图2** 低位地址交织排布
+
+![](../../../../figures/低位交织地址排布.png "低位交织地址排布")
+
+每个bank可分为4个subbank，每个subbank宽度为8B，subbank仅在gather/scatter场景被感知，连续读写只感知到bank。
+
+**图3** subbank结构
+
+![](../../../../figures/subbank结构.png "subbank结构")
 
 ## bank冲突的典型场景<a name="section9689957379"></a>
 
-bank冲突主要可以分为以下三种场景：
+每个bank一拍只能完成一读或者一写，每个bank group最多只允许2读0写或者1读1写。根据内存结构，bank冲突主要可以分为以下三种类型：
 
--   **读写冲突**：读操作和写操作同时尝试访问同一个bank。
+-   **读写冲突**：读操作和写操作同时尝试访问同一个bank，或者两个读操作和一个写操作同时尝试访问同一个bank group。
 -   **写写冲突**：多个写操作同时尝试访问同一个bank group。
 -   **读读冲突**：两个读操作同时尝试访问同一个bank，或者两个以上读操作同时尝试访问同一个bank group。
 
-下文给出了一些具体的示例，假设，0x10000地址在bank0上，0x10020在bank1上，如下图所示：
+**注：bank冲突的场景与Unified Buffer的规格密切相关，规格的变化通常会导致bank冲突场景的变化。**
 
-**图2**  地址分配示意图<a name="fig1750123073213"></a>  
-![](../../../../figures/地址分配示意图-72.png "地址分配示意图-72")
+### 基于连续访存的bank冲突分析
+以下对连续访存的冲突类型进行解读：
 
--   读写冲突示例
+-   读写冲突
 
-    Vector指令的源操作数src和目的操作数dst同时读写到同一个bank时造成读写冲突，具体分析如下：
+    同时读写到同一个bank时造成读写冲突，具体分析如下：
 
-    **表1**  读写冲突示例
+    **表1**  一读一写冲突示例
 
-    <a name="table178973521409"></a>
+    <a name="table1789735214010"></a>
     <table><thead align="left"><tr id="row20897752164015"><th class="cellrowborder" valign="top" width="5.9988002399520095%" id="mcps1.2.7.1.1"><p id="p13897195244019"><a name="p13897195244019"></a><a name="p13897195244019"></a>序号</p>
     </th>
     <th class="cellrowborder" valign="top" width="9.948010397920417%" id="mcps1.2.7.1.2"><p id="p3897155224010"><a name="p3897155224010"></a><a name="p3897155224010"></a>src地址</p>
@@ -45,177 +65,200 @@ bank冲突主要可以分为以下三种场景：
     </thead>
     <tbody><tr id="row10897145224010"><td class="cellrowborder" valign="top" width="5.9988002399520095%" headers="mcps1.2.7.1.1 "><p id="p8897185254012"><a name="p8897185254012"></a><a name="p8897185254012"></a>示例1</p>
     </td>
-    <td class="cellrowborder" valign="top" width="9.948010397920417%" headers="mcps1.2.7.1.2 "><p id="p12897155215406"><a name="p12897155215406"></a><a name="p12897155215406"></a>0x10020</p>
+    <td class="cellrowborder" valign="top" width="9.948010397920417%" headers="mcps1.2.7.1.2 "><p id="p12897155215406"><a name="p12897155215406"></a><a name="p12897155215406"></a>0x0000</p>
     </td>
-    <td class="cellrowborder" valign="top" width="10.507898420315936%" headers="mcps1.2.7.1.3 "><p id="p19897165213403"><a name="p19897165213403"></a><a name="p19897165213403"></a>0x10000</p>
+    <td class="cellrowborder" valign="top" width="10.507898420315936%" headers="mcps1.2.7.1.3 "><p id="p19897165213403"><a name="p19897165213403"></a><a name="p19897165213403"></a>0x4000</p>
     </td>
-    <td class="cellrowborder" valign="top" width="25.51489702059588%" headers="mcps1.2.7.1.4 "><p id="p1489705220408"><a name="p1489705220408"></a><a name="p1489705220408"></a><span>bank_id0 != </span><span>bank_id</span><span>1</span></p>
+    <td class="cellrowborder" valign="top" width="25.51489702059588%" headers="mcps1.2.7.1.4 "><p id="p1489705220408"><a name="p1489705220408"></a><a name="p1489705220408"></a><span>bank_id0 == </span><span>bank_id</span><span>1</span></p>
     </td>
-    <td class="cellrowborder" valign="top" width="31.36372725454909%" headers="mcps1.2.7.1.5 "><p id="p4897155264016"><a name="p4897155264016"></a><a name="p4897155264016"></a><span>bank_group_id0 != bank_group_id1</span></p>
+    <td class="cellrowborder" valign="top" width="31.36372725454909%" headers="mcps1.2.7.1.5 "><p id="p4897155264016"><a name="p4897155264016"></a><a name="p4897155264016"></a><span>bank_group_id0 == bank_group_id1</span></p>
     </td>
-    <td class="cellrowborder" valign="top" width="16.666666666666664%" headers="mcps1.2.7.1.6 "><p id="p1589719525406"><a name="p1589719525406"></a><a name="p1589719525406"></a>src地址和dst地址分别属于bank0和bank1，故无冲突。</p>
+    <td class="cellrowborder" valign="top" width="16.666666666666664%" headers="mcps1.2.7.1.6 "><p id="p1589719525406"><a name="p1589719525406"></a><a name="p1589719525406"></a>src地址和dst地址属于同一bank，存在读写冲突。</p>
     </td>
     </tr>
     <tr id="row1489775264016"><td class="cellrowborder" valign="top" width="5.9988002399520095%" headers="mcps1.2.7.1.1 "><p id="p12897152184019"><a name="p12897152184019"></a><a name="p12897152184019"></a>示例2</p>
     </td>
-    <td class="cellrowborder" valign="top" width="9.948010397920417%" headers="mcps1.2.7.1.2 "><p id="p108981152174015"><a name="p108981152174015"></a><a name="p108981152174015"></a>0x10020</p>
+    <td class="cellrowborder" valign="top" width="9.948010397920417%" headers="mcps1.2.7.1.2 "><p id="p108981152174015"><a name="p108981152174015"></a><a name="p108981152174015"></a>0x0000</p>
     </td>
-    <td class="cellrowborder" valign="top" width="10.507898420315936%" headers="mcps1.2.7.1.3 "><p id="p1389811520408"><a name="p1389811520408"></a><a name="p1389811520408"></a>0x10120</p>
+    <td class="cellrowborder" valign="top" width="10.507898420315936%" headers="mcps1.2.7.1.3 "><p id="p1389811520408"><a name="p1389811520408"></a><a name="p1389811520408"></a>0x4100</p>
     </td>
-    <td class="cellrowborder" valign="top" width="25.51489702059588%" headers="mcps1.2.7.1.4 "><p id="p389885274014"><a name="p389885274014"></a><a name="p389885274014"></a><span>bank_id0 </span><span>== </span><span>bank_id1</span></p>
+    <td class="cellrowborder" valign="top" width="25.51489702059588%" headers="mcps1.2.7.1.4 "><p id="p389885274014"><a name="p389885274014"></a><a name="p389885274014"></a><span>bank_id0 </span><span>!= </span><span>bank_id1</span></p>
     </td>
     <td class="cellrowborder" valign="top" width="31.36372725454909%" headers="mcps1.2.7.1.5 "><p id="p7898155214011"><a name="p7898155214011"></a><a name="p7898155214011"></a><span>bank_group_id0 =</span><span>= </span><span>bank_group_id1</span></p>
     </td>
-    <td class="cellrowborder" valign="top" width="16.666666666666664%" headers="mcps1.2.7.1.6 "><p id="p989815214018"><a name="p989815214018"></a><a name="p989815214018"></a>src地址和dst地址的地址都在bank0，故存在冲突。</p>
+    <td class="cellrowborder" valign="top" width="16.666666666666664%" headers="mcps1.2.7.1.6 "><p id="p989815214018"><a name="p989815214018"></a><a name="p989815214018"></a>src地址和dst地址属于同一bank group下的不同bank，无冲突。</p>
     </td>
     </tr>
     </tbody>
     </table>
 
--   写写冲突示例
+    **表2** 两读一写冲突示例
 
-    Vector指令目的操作数dst对应的8个DataBlock（block0-block7）同时写到一个bank group时造成写写冲突，具体分析如下：
-
-    **表2**  写写冲突示例
-
-    <a name="table15913191235615"></a>
-    <table><thead align="left"><tr id="row891371215561"><th class="cellrowborder" valign="top" width="5.789726356216995%" id="mcps1.2.9.1.1"><p id="p1913412195619"><a name="p1913412195619"></a><a name="p1913412195619"></a>序号</p>
+    <table><thead align="left"><tr id="row1767434244710"><th class="cellrowborder" valign="top" width="5.55%" id="mcps1.2.8.1.1"><p id="p17674144211470"><a name="p17674144211470"></a><a name="p17674144211470"></a>序号</p>
     </th>
-    <th class="cellrowborder" valign="top" width="7.959673547767644%" id="mcps1.2.9.1.2"><p id="p19133129560"><a name="p19133129560"></a><a name="p19133129560"></a>dst地址</p>
+    <th class="cellrowborder" valign="top" width="7.53%" id="mcps1.2.8.1.2"><p id="p9674114213473"><a name="p9674114213473"></a><a name="p9674114213473"></a>src0地址</p>
     </th>
-    <th class="cellrowborder" valign="top" width="9.505520883341337%" id="mcps1.2.9.1.3"><p id="p991371215560"><a name="p991371215560"></a><a name="p991371215560"></a>blk_stride</p>
+    <th class="cellrowborder" valign="top" width="7.5200000000000005%" id="mcps1.2.8.1.3"><p id="p1888613260115"><a name="p1888613260115"></a><a name="p1888613260115"></a>src1地址</p>
     </th>
-    <th class="cellrowborder" valign="top" width="8.660585693710996%" id="mcps1.2.9.1.4"><p id="p10913171219568"><a name="p10913171219568"></a><a name="p10913171219568"></a><span>block0_addr </span></p>
+    <th class="cellrowborder" valign="top" width="7.4399999999999995%" id="mcps1.2.8.1.4"><p id="p8674114294712"><a name="p8674114294712"></a><a name="p8674114294712"></a>dst地址</p>
     </th>
-    <th class="cellrowborder" valign="top" width="8.775804128660585%" id="mcps1.2.9.1.5"><p id="p29131712145616"><a name="p29131712145616"></a><a name="p29131712145616"></a><span>block1_addr </span></p>
+    <th class="cellrowborder" valign="top" width="15.409999999999998%" id="mcps1.2.8.1.5"><p id="p17674114244718"><a name="p17674114244718"></a><a name="p17674114244718"></a>bank</p>
     </th>
-    <th class="cellrowborder" valign="top" width="8.967834853576573%" id="mcps1.2.9.1.6"><p id="p4913151218567"><a name="p4913151218567"></a><a name="p4913151218567"></a><span>block2_addr </span></p>
+    <th class="cellrowborder" valign="top" width="23.09%" id="mcps1.2.8.1.6"><p id="p1567444234713"><a name="p1567444234713"></a><a name="p1567444234713"></a>bank group</p>
     </th>
-    <th class="cellrowborder" valign="top" width="6.721075372059531%" id="mcps1.2.9.1.7"><p id="p109131112115617"><a name="p109131112115617"></a><a name="p109131112115617"></a>...</p>
-    </th>
-    <th class="cellrowborder" valign="top" width="43.61977916466635%" id="mcps1.2.9.1.8"><p id="p491301211565"><a name="p491301211565"></a><a name="p491301211565"></a>结论</p>
+    <th class="cellrowborder" valign="top" width="33.46%" id="mcps1.2.8.1.7"><p id="p1767410425479"><a name="p1767410425479"></a><a name="p1767410425479"></a>结论</p>
     </th>
     </tr>
     </thead>
-    <tbody><tr id="row2091314128569"><td class="cellrowborder" valign="top" width="5.789726356216995%" headers="mcps1.2.9.1.1 "><p id="p8913151214562"><a name="p8913151214562"></a><a name="p8913151214562"></a>示例1</p>
+    <tbody><tr id="row126741742144713"><td class="cellrowborder" valign="top" width="5.55%" headers="mcps1.2.8.1.1 "><p id="p1367415427473"><a name="p1367415427473"></a><a name="p1367415427473"></a>示例1</p>
     </td>
-    <td class="cellrowborder" valign="top" width="7.959673547767644%" headers="mcps1.2.9.1.2 "><p id="p129131512125612"><a name="p129131512125612"></a><a name="p129131512125612"></a>0x10000</p>
+    <td class="cellrowborder" valign="top" width="7.53%" headers="mcps1.2.8.1.2 "><p id="p7674134216478"><a name="p7674134216478"></a><a name="p7674134216478"></a>0x0000</p>
     </td>
-    <td class="cellrowborder" valign="top" width="9.505520883341337%" headers="mcps1.2.9.1.3 "><p id="p3913191218564"><a name="p3913191218564"></a><a name="p3913191218564"></a>8</p>
+    <td class="cellrowborder" valign="top" width="7.5200000000000005%" headers="mcps1.2.8.1.3 "><p id="p2036641181111"><a name="p2036641181111"></a><a name="p2036641181111"></a>0x4000</p>
     </td>
-    <td class="cellrowborder" valign="top" width="8.660585693710996%" headers="mcps1.2.9.1.4 "><p id="p1191321220560"><a name="p1191321220560"></a><a name="p1191321220560"></a>0x10000</p>
+    <td class="cellrowborder" valign="top" width="7.4399999999999995%" headers="mcps1.2.8.1.4 "><p id="p1567416428472"><a name="p1567416428472"></a><a name="p1567416428472"></a>0x8000</p>
     </td>
-    <td class="cellrowborder" valign="top" width="8.775804128660585%" headers="mcps1.2.9.1.5 "><p id="p109132012115614"><a name="p109132012115614"></a><a name="p109132012115614"></a>0x10100</p>
+    <td class="cellrowborder" valign="top" width="15.409999999999998%" headers="mcps1.2.8.1.5 "><p id="p16674184212479"><a name="p16674184212479"></a><a name="p16674184212479"></a><span>bank_id0 == </span><span>bank_id</span><span>1</span></p>
+    <p id="p85745331218"><a name="p85745331218"></a><a name="p85745331218"></a>bank_id0 == bank_id2</p>
     </td>
-    <td class="cellrowborder" valign="top" width="8.967834853576573%" headers="mcps1.2.9.1.6 "><p id="p1891371218569"><a name="p1891371218569"></a><a name="p1891371218569"></a>0x10200</p>
+    <td class="cellrowborder" valign="top" width="23.09%" headers="mcps1.2.8.1.6 "><p id="p7674042124711"><a name="p7674042124711"></a><a name="p7674042124711"></a><span>bank_group_id0 == bank_group_id1</span></p>
+    <p id="p1288482941216"><a name="p1288482941216"></a><a name="p1288482941216"></a>bank_group_id0 == bank_group_id2</p>
     </td>
-    <td class="cellrowborder" valign="top" width="6.721075372059531%" headers="mcps1.2.9.1.7 "><p id="p1791371217565"><a name="p1791371217565"></a><a name="p1791371217565"></a>...</p>
+    <td class="cellrowborder" valign="top" width="33.46%" headers="mcps1.2.8.1.7 "><p id="p167515425479"><a name="p167515425479"></a><a name="p167515425479"></a>src0地址与src1地址属于同一bank，存在读读冲突。</p>
+    <p id="p1227485214177"><a name="p1227485214177"></a><a name="p1227485214177"></a>src0地址与dst地址属于同一bank，存在读写冲突。</p>
+    <p id="p15494155717182"><a name="p15494155717182"></a><a name="p15494155717182"></a>同一bank group最多支持两读或者一读一写，当前存在冲突。</p>
     </td>
-    <td class="cellrowborder" valign="top" width="43.61977916466635%" headers="mcps1.2.9.1.8 "><p id="p1691311124564"><a name="p1691311124564"></a><a name="p1691311124564"></a>8个DataBlock均在一个bank group下，故全部冲突，8拍完成一个Repeat的写入。</p>
+    </tr>
+    <tr id="row3675154284710"><td class="cellrowborder" valign="top" width="5.55%" headers="mcps1.2.8.1.1 "><p id="p967514254716"><a name="p967514254716"></a><a name="p967514254716"></a>示例2</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="7.53%" headers="mcps1.2.8.1.2 "><p id="p11927551151718"><a name="p11927551151718"></a><a name="p11927551151718"></a>0x0000</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="7.5200000000000005%" headers="mcps1.2.8.1.3 "><p id="p1088632681119"><a name="p1088632681119"></a><a name="p1088632681119"></a>0x0000</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="7.4399999999999995%" headers="mcps1.2.8.1.4 "><p id="p692705115176"><a name="p692705115176"></a><a name="p692705115176"></a>0x4100</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="15.409999999999998%" headers="mcps1.2.8.1.5 "><p id="p1367534210471"><a name="p1367534210471"></a><a name="p1367534210471"></a><span>bank_id0 </span><span>!= </span><span>bank_id2</span></p>
+    </td>
+    <td class="cellrowborder" valign="top" width="23.09%" headers="mcps1.2.8.1.6 "><p id="p86756421472"><a name="p86756421472"></a><a name="p86756421472"></a><span>bank_group_id0 =</span><span>= </span><span>bank_group_id2</span></p>
+    </td>
+    <td class="cellrowborder" valign="top" width="33.46%" headers="mcps1.2.8.1.7 "><p id="p1667544264720"><a name="p1667544264720"></a><a name="p1667544264720"></a>src0和src1起始地址相同，两读被硬件优化为一读。</p>
+    <p id="p27720182416"><a name="p27720182416"></a><a name="p27720182416"></a>src0地址与dst地址不属于同一bank，无读写冲突。</p>
+    </td>
+    </tr>
+    <tr id="row15280195115245"><td class="cellrowborder" valign="top" width="5.55%" headers="mcps1.2.8.1.1 "><p id="p10280175113242"><a name="p10280175113242"></a><a name="p10280175113242"></a>示例3</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="7.53%" headers="mcps1.2.8.1.2 "><p id="p122801451122413"><a name="p122801451122413"></a><a name="p122801451122413"></a>0x0000</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="7.5200000000000005%" headers="mcps1.2.8.1.3 "><p id="p18861626181115"><a name="p18861626181115"></a><a name="p18861626181115"></a>0x4100</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="7.4399999999999995%" headers="mcps1.2.8.1.4 "><p id="p12280195113249"><a name="p12280195113249"></a><a name="p12280195113249"></a>0x8900</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="15.409999999999998%" headers="mcps1.2.8.1.5 "><p id="p1028035152414"><a name="p1028035152414"></a><a name="p1028035152414"></a>bank_id0 != bank_id1</p>
+    <p id="p14474173217257"><a name="p14474173217257"></a><a name="p14474173217257"></a>bank_id0 != bank_id2</p>
+    <p id="p10927153182716"><a name="p10927153182716"></a><a name="p10927153182716"></a>bank_id1 == bank_id2</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="23.09%" headers="mcps1.2.8.1.6 "><p id="p9280051162413"><a name="p9280051162413"></a><a name="p9280051162413"></a><span>bank_group_id0 =</span><span>= </span><span>bank_group_id1</span></p>
+    <p id="p299119242283"><a name="p299119242283"></a><a name="p299119242283"></a>bank_group_id0 == bank_group_id2</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="33.46%" headers="mcps1.2.8.1.7 "><p id="p828065182410"><a name="p828065182410"></a><a name="p828065182410"></a>src0地址和src1地址属于同一bank group的不同bank，不产生读读冲突。</p>
+    <p id="p7843650172915"><a name="p7843650172915"></a><a name="p7843650172915"></a>src1地址和dst地址属于同一bank，无冲突。</p>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+
+-   写写冲突
+
+    同时写入一个bank group造成写写冲突，具体分析如下：
+
+    **表3**  写写冲突示例
+
+    <table><thead align="left"><tr id="row17580229172710"><th class="cellrowborder" valign="top" width="5.9988002399520095%" id="mcps1.2.7.1.1"><p id="p115801529192712"><a name="p115801529192712"></a><a name="p115801529192712"></a>序号</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="8.138372325534892%" id="mcps1.2.7.1.2"><p id="p1258022919273"><a name="p1258022919273"></a><a name="p1258022919273"></a>dst0地址</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="8.048390321935612%" id="mcps1.2.7.1.3"><p id="p18580172932720"><a name="p18580172932720"></a><a name="p18580172932720"></a>dst1地址</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="16.666666666666664%" id="mcps1.2.7.1.4"><p id="p8580729102716"><a name="p8580729102716"></a><a name="p8580729102716"></a>bank</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="24.96500699860028%" id="mcps1.2.7.1.5"><p id="p18580152942710"><a name="p18580152942710"></a><a name="p18580152942710"></a>bank group</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="36.18276344731054%" id="mcps1.2.7.1.6"><p id="p11580192916275"><a name="p11580192916275"></a><a name="p11580192916275"></a>结论</p>
+    </th>
+    </tr>
+    </thead>
+    <tbody><tr id="row1058082919273"><td class="cellrowborder" valign="top" width="5.9988002399520095%" headers="mcps1.2.7.1.1 "><p id="p8580429102713"><a name="p8580429102713"></a><a name="p8580429102713"></a>示例1</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="8.138372325534892%" headers="mcps1.2.7.1.2 "><p id="p1158092992713"><a name="p1158092992713"></a><a name="p1158092992713"></a>0x0000</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="8.048390321935612%" headers="mcps1.2.7.1.3 "><p id="p3580132919279"><a name="p3580132919279"></a><a name="p3580132919279"></a>0x4100</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="16.666666666666664%" headers="mcps1.2.7.1.4 "><p id="p1858018294272"><a name="p1858018294272"></a><a name="p1858018294272"></a><span>bank_id0 </span><span>!= </span><span>bank_id1</span></p>
+    </td>
+    <td class="cellrowborder" valign="top" width="24.96500699860028%" headers="mcps1.2.7.1.5 "><p id="p165801829132711"><a name="p165801829132711"></a><a name="p165801829132711"></a><span>bank_group_id0 =</span><span>= </span><span>bank_group_id1</span></p>
+    </td>
+    <td class="cellrowborder" valign="top" width="36.18276344731054%" headers="mcps1.2.7.1.6 "><p id="p11580729142715"><a name="p11580729142715"></a><a name="p11580729142715"></a>dst0地址和dst1地址属于同一bank group，故存在冲突。</p>
     </td>
     </tr>
     </tbody>
     </table>
 
 -   读读冲突
-    -   Vector指令两个源操作数同时读到同一个bank时造成读读冲突，具体分析如下：
+    
+    **表4** 读读冲突示例
+    <table><thead align="left"><tr id="row134631185514"><th class="cellrowborder" valign="top" width="5.9988002399520095%" id="mcps1.2.7.1.1"><p id="p16461312553"><a name="p16461312553"></a><a name="p16461312553"></a>序号</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="8.138372325534892%" id="mcps1.2.7.1.2"><p id="p4466118554"><a name="p4466118554"></a><a name="p4466118554"></a>src0地址</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="8.048390321935612%" id="mcps1.2.7.1.3"><p id="p14691125519"><a name="p14691125519"></a><a name="p14691125519"></a>src1地址</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="16.666666666666664%" id="mcps1.2.7.1.4"><p id="p246181165514"><a name="p246181165514"></a><a name="p246181165514"></a>bank</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="24.96500699860028%" id="mcps1.2.7.1.5"><p id="p14463165511"><a name="p14463165511"></a><a name="p14463165511"></a>bank group</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="36.18276344731054%" id="mcps1.2.7.1.6"><p id="p94601175513"><a name="p94601175513"></a><a name="p94601175513"></a>结论</p>
+    </th>
+    </tr>
+    </thead>
+    <tbody><tr id="row13467155518"><td class="cellrowborder" valign="top" width="5.9988002399520095%" headers="mcps1.2.7.1.1 "><p id="p34612175519"><a name="p34612175519"></a><a name="p34612175519"></a>示例1</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="8.138372325534892%" headers="mcps1.2.7.1.2 "><p id="p154619117550"><a name="p154619117550"></a><a name="p154619117550"></a>0x0000</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="8.048390321935612%" headers="mcps1.2.7.1.3 "><p id="p144691175519"><a name="p144691175519"></a><a name="p144691175519"></a>0x4000</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="16.666666666666664%" headers="mcps1.2.7.1.4 "><p id="p124620185513"><a name="p124620185513"></a><a name="p124620185513"></a><span>bank_id0 </span><span>== </span><span>bank_id1</span></p>
+    </td>
+    <td class="cellrowborder" valign="top" width="24.96500699860028%" headers="mcps1.2.7.1.5 "><p id="p15474195517"><a name="p15474195517"></a><a name="p15474195517"></a><span>bank_group_id0 =</span><span>= </span><span>bank_group_id1</span></p>
+    </td>
+    <td class="cellrowborder" valign="top" width="36.18276344731054%" headers="mcps1.2.7.1.6 "><p id="p1471819555"><a name="p1471819555"></a><a name="p1471819555"></a>src0地址和src1地址属于同一bank，故存在冲突。</p>
+    </td>
+    </tr>
+    </tbody>
+    </table>
 
-        **表3**  双src场景读读冲突示例
+### 基于离散访存的bank冲突分析
+以下对离散访存下的冲突进行解读：
 
-        <a name="table983101761813"></a>
-        <table><thead align="left"><tr id="row7834178187"><th class="cellrowborder" valign="top" width="6.5786842631473705%" id="mcps1.2.7.1.1"><p id="p1283121713188"><a name="p1283121713188"></a><a name="p1283121713188"></a>序号</p>
-        </th>
-        <th class="cellrowborder" valign="top" width="12.76744651069786%" id="mcps1.2.7.1.2"><p id="p583117141810"><a name="p583117141810"></a><a name="p583117141810"></a>src0地址</p>
-        </th>
-        <th class="cellrowborder" valign="top" width="14.097180563887221%" id="mcps1.2.7.1.3"><p id="p198312171181"><a name="p198312171181"></a><a name="p198312171181"></a>src1地址</p>
-        </th>
-        <th class="cellrowborder" valign="top" width="18.52629474105179%" id="mcps1.2.7.1.4"><p id="p683917111815"><a name="p683917111815"></a><a name="p683917111815"></a>bank</p>
-        </th>
-        <th class="cellrowborder" valign="top" width="31.36372725454909%" id="mcps1.2.7.1.5"><p id="p1583151719187"><a name="p1583151719187"></a><a name="p1583151719187"></a>bank group</p>
-        </th>
-        <th class="cellrowborder" valign="top" width="16.666666666666664%" id="mcps1.2.7.1.6"><p id="p883171712184"><a name="p883171712184"></a><a name="p883171712184"></a>结论</p>
-        </th>
-        </tr>
-        </thead>
-        <tbody><tr id="row1683121715185"><td class="cellrowborder" valign="top" width="6.5786842631473705%" headers="mcps1.2.7.1.1 "><p id="p13839177184"><a name="p13839177184"></a><a name="p13839177184"></a>示例1</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="12.76744651069786%" headers="mcps1.2.7.1.2 "><p id="p583121718188"><a name="p583121718188"></a><a name="p583121718188"></a>0x10000</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="14.097180563887221%" headers="mcps1.2.7.1.3 "><p id="p198321717189"><a name="p198321717189"></a><a name="p198321717189"></a>0x10100</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="18.52629474105179%" headers="mcps1.2.7.1.4 "><p id="p2836174181"><a name="p2836174181"></a><a name="p2836174181"></a><span>bank_id0 == </span><span>bank_id</span><span>1</span></p>
-        </td>
-        <td class="cellrowborder" valign="top" width="31.36372725454909%" headers="mcps1.2.7.1.5 "><p id="p8831178183"><a name="p8831178183"></a><a name="p8831178183"></a><span>bank_group_id0 == bank_group_id1</span></p>
-        </td>
-        <td class="cellrowborder" valign="top" width="16.666666666666664%" headers="mcps1.2.7.1.6 "><p id="p1841179186"><a name="p1841179186"></a><a name="p1841179186"></a>存在冲突。</p>
-        </td>
-        </tr>
-        <tr id="row1484151719181"><td class="cellrowborder" valign="top" width="6.5786842631473705%" headers="mcps1.2.7.1.1 "><p id="p1084417181817"><a name="p1084417181817"></a><a name="p1084417181817"></a>示例2</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="12.76744651069786%" headers="mcps1.2.7.1.2 "><p id="p10849172181"><a name="p10849172181"></a><a name="p10849172181"></a>0x10000</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="14.097180563887221%" headers="mcps1.2.7.1.3 "><p id="p1284131701810"><a name="p1284131701810"></a><a name="p1284131701810"></a>0x10020</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="18.52629474105179%" headers="mcps1.2.7.1.4 "><p id="p12849176181"><a name="p12849176181"></a><a name="p12849176181"></a><span>bank_id0 </span><span>!= </span><span>bank_id1</span></p>
-        </td>
-        <td class="cellrowborder" valign="top" width="31.36372725454909%" headers="mcps1.2.7.1.5 "><p id="p784181761810"><a name="p784181761810"></a><a name="p784181761810"></a><span>bank_group_id0 !</span><span>= </span><span>bank_group_id1</span></p>
-        </td>
-        <td class="cellrowborder" valign="top" width="16.666666666666664%" headers="mcps1.2.7.1.6 "><p id="p1684121791810"><a name="p1684121791810"></a><a name="p1684121791810"></a>无冲突。</p>
-        </td>
-        </tr>
-        </tbody>
-        </table>
-
-    -   Vector指令某一个源操作数对应的8个DataBlock\(block0-block7）读到同一个bank时造成读读冲突，具体分析如下：
-
-        **表4**  单src场景读读冲突示例
-
-        <a name="table1055918277182"></a>
-        <table><thead align="left"><tr id="row05601327161818"><th class="cellrowborder" valign="top" width="6.117919521374119%" id="mcps1.2.9.1.1"><p id="p856062714185"><a name="p856062714185"></a><a name="p856062714185"></a>序号</p>
-        </th>
-        <th class="cellrowborder" valign="top" width="11.560358969410403%" id="mcps1.2.9.1.2"><p id="p556016272186"><a name="p556016272186"></a><a name="p556016272186"></a>src地址</p>
-        </th>
-        <th class="cellrowborder" valign="top" width="9.910257647399403%" id="mcps1.2.9.1.3"><p id="p1560127181817"><a name="p1560127181817"></a><a name="p1560127181817"></a>blk_stride</p>
-        </th>
-        <th class="cellrowborder" valign="top" width="10.798031458071987%" id="mcps1.2.9.1.4"><p id="p165607278181"><a name="p165607278181"></a><a name="p165607278181"></a><span>block0_addr </span></p>
-        </th>
-        <th class="cellrowborder" valign="top" width="10.633986297404228%" id="mcps1.2.9.1.5"><p id="p856022717184"><a name="p856022717184"></a><a name="p856022717184"></a><span>block1_addr </span></p>
-        </th>
-        <th class="cellrowborder" valign="top" width="9.234777574061564%" id="mcps1.2.9.1.6"><p id="p11560327181814"><a name="p11560327181814"></a><a name="p11560327181814"></a><span>block2_addr </span></p>
-        </th>
-        <th class="cellrowborder" valign="top" width="6.754800733378366%" id="mcps1.2.9.1.7"><p id="p175601827191811"><a name="p175601827191811"></a><a name="p175601827191811"></a>...</p>
-        </th>
-        <th class="cellrowborder" valign="top" width="34.98986779889993%" id="mcps1.2.9.1.8"><p id="p9560327191810"><a name="p9560327191810"></a><a name="p9560327191810"></a>结论</p>
-        </th>
-        </tr>
-        </thead>
-        <tbody><tr id="row1456042701815"><td class="cellrowborder" valign="top" width="6.117919521374119%" headers="mcps1.2.9.1.1 "><p id="p656052771820"><a name="p656052771820"></a><a name="p656052771820"></a>示例1</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="11.560358969410403%" headers="mcps1.2.9.1.2 "><p id="p1256016274187"><a name="p1256016274187"></a><a name="p1256016274187"></a>0x10000</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="9.910257647399403%" headers="mcps1.2.9.1.3 "><p id="p1456022741810"><a name="p1456022741810"></a><a name="p1456022741810"></a>8</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="10.798031458071987%" headers="mcps1.2.9.1.4 "><p id="p1956032761819"><a name="p1956032761819"></a><a name="p1956032761819"></a>0x10000</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="10.633986297404228%" headers="mcps1.2.9.1.5 "><p id="p125607279187"><a name="p125607279187"></a><a name="p125607279187"></a>0x10100</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="9.234777574061564%" headers="mcps1.2.9.1.6 "><p id="p1560152716187"><a name="p1560152716187"></a><a name="p1560152716187"></a>0x10200</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="6.754800733378366%" headers="mcps1.2.9.1.7 "><p id="p11560202719180"><a name="p11560202719180"></a><a name="p11560202719180"></a>...</p>
-        </td>
-        <td class="cellrowborder" valign="top" width="34.98986779889993%" headers="mcps1.2.9.1.8 "><p id="p156052714183"><a name="p156052714183"></a><a name="p156052714183"></a>8个<span>DataBlock</span>均在一个bank下，故全部冲突，8拍完成一个Repeat的读操作。</p>
-        </td>
-        </tr>
-        </tbody>
-        </table>
+-   当gather/scatter访存数据分布在不同的subbank中时，不发生冲突。
+-   当gather/scatter数据存在同一subbank的同一起始地址时，不发生冲突，因此相同索引值的访存不发生冲突。
+-   当gather/scatter数据存在同一subbank的不同起始地址时，发生冲突。
+-   gather/scatter会与连续访存指令/MTE搬运指令冲突。
 
 ## 如何避免bank冲突<a name="section12501642143515"></a>
 
-避免bank冲突的方法有两种：**优化计算逻辑**和**优化地址分配**。
+避免bank冲突的方法如下：
 
--   **优化计算逻辑**
+- 通过地址重叠减少读指令
 
-    对一个数据类型为float，shape为\(16, 64\)的输入每个元素加1。通过将计算逻辑由逐列计算改为逐行计算可避免同一Repeat下的冲突问题，实现方案对比如下：
+  由于一个bank group最多支持两读或者一读一写，在两读一写时会因为读/写口不足而引发bank冲突，当读指令的起始地址重叠时，硬件会将指令优化为一条。
+
+- 离散访存下，将数据分散到不同subbank
+
+  当gather/scatter数据存在同一subbank的不同起始地址时，发生冲突，可通过将数据分散到不同subbank来减少subbank冲突，避免不同起始地址的数据集中在同一subbank下。
+
+- 优化计算逻辑
+
+  对一个数据类型为float，shape为\(8, 64\)的输入每个元素加1。通过将计算逻辑由逐列计算改为逐行计算可避免同一Repeat下的冲突问题，实现方案对比如下：
 
     <a name="table12921549195512"></a>
     <table><thead align="left"><tr id="row1229364945511"><th class="cellrowborder" valign="top" width="6.813978389954251%" id="mcps1.1.4.1.1"><p id="p2081249145715"><a name="p2081249145715"></a><a name="p2081249145715"></a>实现方案</p>
@@ -228,9 +271,9 @@ bank冲突主要可以分为以下三种场景：
     </thead>
     <tbody><tr id="row1629374995517"><td class="cellrowborder" valign="top" width="6.813978389954251%" headers="mcps1.1.4.1.1 "><p id="p108124995710"><a name="p108124995710"></a><a name="p108124995710"></a>实现方法</p>
     </td>
-    <td class="cellrowborder" valign="top" width="42.6652389759564%" headers="mcps1.1.4.1.2 "><p id="p115401884217"><a name="p115401884217"></a><a name="p115401884217"></a>逐列计算，同一Repeat内输入的8个DataBlock都在同一个bank而发生读读冲突。</p>
+    <td class="cellrowborder" valign="top" width="42.6652389759564%" headers="mcps1.1.4.1.2 "><p id="p115401884217"><a name="p115401884217"></a><a name="p115401884217"></a>逐列计算，同一Repeat内输入的8个DataBlock都在同一个bank group而发生读读冲突。</p>
     </td>
-    <td class="cellrowborder" valign="top" width="50.520782634089365%" headers="mcps1.1.4.1.3 "><p id="p6641340414"><a name="p6641340414"></a><a name="p6641340414"></a>逐行计算，同一个Repeat内输入的8个DataBlock不在同一个bank内，避免了同一Repeat内的读读冲突。</p>
+    <td class="cellrowborder" valign="top" width="50.520782634089365%" headers="mcps1.1.4.1.3 "><p id="p6641340414"><a name="p6641340414"></a><a name="p6641340414"></a>逐行计算，同一个Repeat内输入的8个DataBlock不在同一个bank group内，避免了同一Repeat内的读读冲突。</p>
     </td>
     </tr>
     <tr id="row14922142214585"><td class="cellrowborder" valign="top" width="6.813978389954251%" headers="mcps1.1.4.1.1 "><p id="p6922182210587"><a name="p6922182210587"></a><a name="p6922182210587"></a>示意图</p>
@@ -238,80 +281,6 @@ bank冲突主要可以分为以下三种场景：
     <td class="cellrowborder" valign="top" width="42.6652389759564%" headers="mcps1.1.4.1.2 "><p id="p1273333434818"><a name="p1273333434818"></a><a name="p1273333434818"></a><a name="image47338343486"></a><a name="image47338343486"></a><span><img class="eddx" id="image47338343486" src="../../../../figures/矩阵编程逻辑位置示意图-73.png"></span></p>
     </td>
     <td class="cellrowborder" valign="top" width="50.520782634089365%" headers="mcps1.1.4.1.3 "><p id="p1074101154916"><a name="p1074101154916"></a><a name="p1074101154916"></a><a name="image147416115491"></a><a name="image147416115491"></a><span><img class="eddx" id="image147416115491" src="../../../../figures/矩阵编程逻辑位置示意图-74.png"></span></p>
-    </td>
-    </tr>
-    <tr id="row3293124918559"><td class="cellrowborder" valign="top" width="6.813978389954251%" headers="mcps1.1.4.1.1 "><p id="p12812993573"><a name="p12812993573"></a><a name="p12812993573"></a>示例代码</p>
-    </td>
-    <td class="cellrowborder" valign="top" width="42.6652389759564%" headers="mcps1.1.4.1.2 "><a name="screen924835613570"></a><a name="screen924835613570"></a><pre class="screen" codetype="Cpp" id="screen924835613570">uint64_t mask = 64;
-    AscendC::UnaryRepeatParams params;
-    params.dstBlkStride = 8;
-    params.srcBlkStride = 8;
-    for(uint16_t i = 0; i &lt; 8; ++i){
-        AscendC::Adds(dst[i * 8], src[i * 8], 1, mask, 1, params);
-    }</pre>
-    </td>
-    <td class="cellrowborder" valign="top" width="50.520782634089365%" headers="mcps1.1.4.1.3 "><a name="screen271414925813"></a><a name="screen271414925813"></a><pre class="screen" codetype="Cpp" id="screen271414925813">uint64_t mask = 64;
-    AscendC::UnaryRepeatParams params;
-    params.dstBlkStride = 1;
-    params.srcBlkStride = 1;
-    for(uint16_t i = 0; i &lt; 8; ++i){
-        AscendC::Adds(dst[i * 64], src[i * 64], 1, mask, 1, params);
-    }</pre>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-
--   **优化地址分配**
-
-    实现连续4096个float元素的加法z = x + y，通过在内存分配时适当扩大内存，保证在一个Repeat内，x/y和z不会同时出现同一个bank内。
-
-    实现方案对比如下：
-
-    <a name="table82050585313"></a>
-    <table><thead align="left"><tr id="row1320525823115"><th class="cellrowborder" valign="top" width="6.813978389954251%" id="mcps1.1.4.1.1"><p id="p6205125853117"><a name="p6205125853117"></a><a name="p6205125853117"></a>实现方案</p>
-    </th>
-    <th class="cellrowborder" valign="top" width="42.01304390148935%" id="mcps1.1.4.1.2"><p id="p920565815314"><a name="p920565815314"></a><a name="p920565815314"></a>原始实现</p>
-    </th>
-    <th class="cellrowborder" valign="top" width="51.17297770855641%" id="mcps1.1.4.1.3"><p id="p10205105819318"><a name="p10205105819318"></a><a name="p10205105819318"></a>优化实现</p>
-    </th>
-    </tr>
-    </thead>
-    <tbody><tr id="row1220513586316"><td class="cellrowborder" valign="top" width="6.813978389954251%" headers="mcps1.1.4.1.1 "><p id="p320516586313"><a name="p320516586313"></a><a name="p320516586313"></a>实现方法</p>
-    </td>
-    <td class="cellrowborder" valign="top" width="42.01304390148935%" headers="mcps1.1.4.1.2 "><p id="p5205155873113"><a name="p5205155873113"></a><a name="p5205155873113"></a>不做地址优化，直接使用InitBuffer分配内存，各个Tensor的地址分别为：</p>
-    <p id="p120535813115"><a name="p120535813115"></a><a name="p120535813115"></a>x：起始地址0x00000，tensor长度为4096 * sizeof(float)字节</p>
-    <p id="p11205125814318"><a name="p11205125814318"></a><a name="p11205125814318"></a>y：起始地址0x04000，tensor长度为4096 * sizeof(float)字节</p>
-    <p id="p420545893110"><a name="p420545893110"></a><a name="p420545893110"></a>z：起始地址0x08000，tensor长度为4096 * sizeof(float)字节</p>
-    <p id="p10205175810318"><a name="p10205175810318"></a><a name="p10205175810318"></a>在一个Repeat内，x和y同时读同一个bank group，x/y和z同时读写同一个bank。</p>
-    </td>
-    <td class="cellrowborder" valign="top" width="51.17297770855641%" headers="mcps1.1.4.1.3 "><p id="p1720555893117"><a name="p1720555893117"></a><a name="p1720555893117"></a>优化地址，使用InitBuffer分配内存时适当扩大内存申请，各个Tensor的地址分别为：</p>
-    <p id="p1205105810316"><a name="p1205105810316"></a><a name="p1205105810316"></a>x：起始地址0x00000，tensor长度为4096 * sizeof(float)字节</p>
-    <p id="p420575820318"><a name="p420575820318"></a><a name="p420575820318"></a>y：起始地址0x04000，tensor长度为(8 * 16 * 1024 - (4096 * sizeof(float) )字节</p>
-    <p id="p120525813116"><a name="p120525813116"></a><a name="p120525813116"></a>z：起始地址0x20000，tensor长度为4096 * sizeof(float)字节</p>
-    <p id="p162053589314"><a name="p162053589314"></a><a name="p162053589314"></a>y多申请空间，确保z不会和x/y落入同一个bank。</p>
-    </td>
-    </tr>
-    <tr id="row92051958113118"><td class="cellrowborder" valign="top" width="6.813978389954251%" headers="mcps1.1.4.1.1 "><p id="p820614589313"><a name="p820614589313"></a><a name="p820614589313"></a>示意图</p>
-    </td>
-    <td class="cellrowborder" valign="top" width="42.01304390148935%" headers="mcps1.1.4.1.2 "><p id="p11206958143119"><a name="p11206958143119"></a><a name="p11206958143119"></a><a name="image17957162514335"></a><a name="image17957162514335"></a><span><img class="eddx" id="image17957162514335" src="../../../../figures/矩阵编程逻辑位置示意图-75.png"></span></p>
-    </td>
-    <td class="cellrowborder" valign="top" width="51.17297770855641%" headers="mcps1.1.4.1.3 "><p id="p1979513571429"><a name="p1979513571429"></a><a name="p1979513571429"></a><a name="image6795145717421"></a><a name="image6795145717421"></a><span><img class="eddx" id="image6795145717421" src="../../../../figures/矩阵编程逻辑位置示意图-76.png"></span></p>
-    </td>
-    </tr>
-    <tr id="row1520625893111"><td class="cellrowborder" valign="top" width="6.813978389954251%" headers="mcps1.1.4.1.1 "><p id="p22061858183118"><a name="p22061858183118"></a><a name="p22061858183118"></a>示例代码</p>
-    </td>
-    <td class="cellrowborder" valign="top" width="42.01304390148935%" headers="mcps1.1.4.1.2 "><a name="screen62061858143118"></a><a name="screen62061858143118"></a><pre class="screen" codetype="Cpp" id="screen62061858143118">pipe.InitBuffer(inQueueX, 1, 4096 * sizeof(float));
-    pipe.InitBuffer(inQueueY, 1, 4096 * sizeof(float));
-    pipe.InitBuffer(outQueueZ, 1, 4096 * sizeof(float));</pre>
-    </td>
-    <td class="cellrowborder" valign="top" width="51.17297770855641%" headers="mcps1.1.4.1.3 "><a name="screen7206858113117"></a><a name="screen7206858113117"></a><pre class="screen" codetype="Cpp" id="screen7206858113117">constexpr int32_t TOTAL_LENGTH = 1024 * 4;
-    constexpr int32_t BUFFER_NUM = 1;
-    constexpr int32_t BANKGROUP_SIZE  =  1024 * 128; 
-    ...
-    pipe.InitBuffer(inQueueX, BUFFER_NUM, TOTAL_LENGTH * sizeof(float));
-    pipe.InitBuffer(inQueueY, BUFFER_NUM, BANKGROUP_SIZE - TOTAL_LENGTH * sizeof(float));
-    pipe.InitBuffer(outQueueZ, BUFFER_NUM, TOTAL_LENGTH * sizeof(float));</pre>
     </td>
     </tr>
     </tbody>
