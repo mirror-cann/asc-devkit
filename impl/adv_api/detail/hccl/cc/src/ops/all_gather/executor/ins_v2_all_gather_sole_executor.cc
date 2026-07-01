@@ -193,12 +193,6 @@ REGISTER_EXEC_V2(
 REGISTER_EXEC_V2(
     HcclCMDType::HCCL_CMD_ALLGATHER, InsAllGatherNHR, InsV2AllGatherSoleExecutor, TopoMatch1D, InsTempAllGatherNHR);
 
-REGISTER_EXEC_V2(
-    HcclCMDType::HCCL_CMD_ALLGATHER, InsAllGatherMesh1DUBX, InsV2AllGatherSoleExecutor, TopoMatchUBX,
-    InsTempAllGatherMesh1D);
-
-REGISTER_EXEC_V2(
-    HcclCMDType::HCCL_CMD_ALLGATHER, InsAllGatherNHRUBX, InsV2AllGatherSoleExecutor, TopoMatchUBX, InsTempAllGatherNHR);
 #if !defined(AICPU_COMPILE) && MC2_CLIENT_ENABLE_CCU
 REGISTER_EXEC_V2(
     HcclCMDType::HCCL_CMD_ALLGATHER, CcuAllGatherMesh1DMem2Mem, InsV2AllGatherSoleExecutor, TopoMatch1D,

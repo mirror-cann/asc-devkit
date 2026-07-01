@@ -27,8 +27,15 @@ HcclResult InsCollAlgBase::RestoreChannelMap(
     std::vector<std::map<u32, std::vector<ChannelInfo>>>& rankIdToChannelInfo) const
 {
     const AlgHierarchyInfoForAllLevel& algHierarchyInfo = resCtx.algHierarchyInfo;
-    rankIdToChannelInfo.resize(algHierarchyInfo.infos.size());
-    for (u32 level = 0; level < algHierarchyInfo.infos.size(); level++) {
+    const size_t infosSize = algHierarchyInfo.infos.size();
+    const size_t channelsSize = resCtx.channels.size();
+    if (infosSize > channelsSize) {
+        HCCL_ERROR("[MC2_OPEN_DIAG][RestoreChannelMap] channel level out of range, infosSize[%zu], "
+            "channelsSize[%zu]", infosSize, channelsSize);
+        return HcclResult::HCCL_E_INTERNAL;
+    }
+    rankIdToChannelInfo.resize(infosSize);
+    for (u32 level = 0; level < infosSize; level++) {
         for (auto& channel : resCtx.channels[level]) {
             u32 remoteRank = channel.remoteRank;
             rankIdToChannelInfo[level][remoteRank].push_back(channel);
