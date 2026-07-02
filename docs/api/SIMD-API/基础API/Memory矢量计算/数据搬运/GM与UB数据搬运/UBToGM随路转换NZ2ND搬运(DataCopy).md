@@ -33,21 +33,21 @@ __aicore__ inline void DataCopy(const GlobalTensor<T>& dst, const LocalTensor<T>
 
 ## 参数说明<a name="section14983445508"></a>
 
-**表 1**  模板参数说明
+**表1**  模板参数说明
 
 | 参数名 | 描述 |
 | :--- | :--- |
 | T | 源操作数或者目的操作数的数据类型。支持的数据类型请参考[数据类型](#section4219135304818)。 |
 
-**表 2**  接口参数说明
+**表2**  接口参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :---: | :--- |
 | dst | 输出 | 目的操作数，类型为[GlobalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)。 |
 | src | 输入 | 源操作数，类型为[LocalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)。 |
-| intriParams | 输入 | 搬运参数，类型为Nz2NdParamsFul，具体参数请参考[表3](#table_nz2nd_3)。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
+| intriParams | 输入 | 搬运参数，类型为Nz2NdParamsFull，具体参数请参考[表3](#table_nz2nd_3)。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
 
-**表 3**  Nz2NdParamsFull结构体内参数定义<a name="table_nz2nd_3"></a>
+**表3**  Nz2NdParamsFull结构体内参数定义<a name="table_nz2nd_3"></a>
 
 | 参数名 | 描述 |
 | :--- | :--- |
@@ -69,7 +69,7 @@ __aicore__ inline void DataCopy(const GlobalTensor<T>& dst, const LocalTensor<T>
 - dstDStride = 160，表达一个目的ND矩阵的相邻行之间的偏移，即A1和A2之间的距离，即为10个DataBlock，即10 \* 16 = 160个元素。
 - dstNdMatrixStride = 48，表达dst中第x个目的ND矩阵的起点和第x+1个目的ND矩阵的起点的偏移，即A1和C1之间的距离，即为3个DataBlock，3 \* 16 = 48个元素。
 
-**图 1**  NZ2ND转换示意图（half数据类型）<a name="fig15851251122815"></a>  
+**图1**  NZ2ND转换示意图（half数据类型）<a name="fig15851251122815"></a>  
 ![](../../../../../figures/nz2nd_conversion_half.png "NZ2ND转换示意图（half数据类型）")
 
 以float数据类型为例，NZ2ND转换示意图如下，样例中参数设置值和解释说明如下：
@@ -82,7 +82,7 @@ __aicore__ inline void DataCopy(const GlobalTensor<T>& dst, const LocalTensor<T>
 - dstDStride = 144，表示一个目的ND矩阵的相邻行之间的偏移，即A1和A3之间的距离，为18个DataBlock，即18 \* 8 = 144个元素。
 - dstNdMatrixStride = 40，表示dst中第x个目的ND矩阵的起点和第x+1个目的ND矩阵的起点的偏移，即A1和C1之间的距离，为5个DataBlock，5 \* 8 = 40个元素。
 
-**图 2**  NZ2ND转换示意图（float数据类型）<a name="fig5586175192811"></a>  
+**图2**  NZ2ND转换示意图（float数据类型）<a name="fig5586175192811"></a>  
 ![](../../../../../figures/nz2nd_conversion_float.png "NZ2ND转换示意图（float数据类型）")
 
 ## 数据类型<a name="section4219135304818"></a>
@@ -120,7 +120,7 @@ __aicore__ inline void DataCopy(const GlobalTensor<T>& dst, const LocalTensor<T>
 - 该接口为软仿接口，从易用性角度出发进行设计。
 - Nz2NdParamsFull结构体参数的值需在取值范围内：
 
-    **表 4**  Nz2NdParamsFull结构体参数取值范围
+    **表4**  Nz2NdParamsFull结构体参数取值范围
 
     | 参数名 | 取值范围 |
     | --- | --- |
@@ -137,15 +137,15 @@ __aicore__ inline void DataCopy(const GlobalTensor<T>& dst, const LocalTensor<T>
 intriParams参数解析请参考[图1](#fig15851251122815)。
 
 ```cpp
-// dstLocal为half类型的LocalTensor，dstGlobal为half类型的GlobalTensor。
+// srcLocal为half类型的LocalTensor，dstGlobal为half类型的GlobalTensor。
 AscendC::Nz2NdParamsFull intriParams{1, 32, 32, 1, 32, 32, 1};
 // Local Memory -> Global Memory
-AscendC::DataCopy(dstGlobal, dstLocal, intriParams);
+AscendC::DataCopy(dstGlobal, srcLocal, intriParams);
 ```
 
 结果示例：
 
 ```text
-输入数据(srcGlobal): [1 2 3 ... 1024]
+输入数据(srcLocal): [1 2 3 ... 1024]
 输出数据(dstGlobal):[1 2 ... 15 16 513 514 ... 527 528 17 18 ... 31 32 529 530 ... 543 544 ...497 498 ...  511 512  1009 1010... 1023 1024]
 ```
