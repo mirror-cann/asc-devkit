@@ -371,3 +371,5 @@ bank冲突主要可以分为以下三种场景：
     </tr>
     </tbody>
     </table>
+
+更多的UB Bank冲突场景分析可参考[bank冲突分析样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_best_practices/04_memory_access/bank_conflict_ub)。

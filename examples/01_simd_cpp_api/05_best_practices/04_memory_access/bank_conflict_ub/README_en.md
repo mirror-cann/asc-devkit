@@ -109,8 +109,8 @@ Detailed analysis for each scenario is provided in the corresponding sections be
 
 #### Analysis Conclusion
 
-- 1st repeat: src0 (bank_id=0, bg 0-7) and src1 (bank_id=1, bg 8-15): all datablocks in the repeat are located in different bank groups, and subsequent repeats follow the same pattern — **no read-read conflict**.
-- 1st repeat: src0/src1 reads and dst writes (bank_id=2, bg 0-7): all datablocks in the repeat are located in different banks, and subsequent repeats follow the same pattern — **no read-write conflict**.
+- Read-read conflict analysis: In the 1st repeat, src0's (bank_id=0) 8 datablocks are in bg 0-7, src1's (bank_id=1) 8 datablocks are in bg 8-15, with completely non-overlapping bank groups; subsequent repeats follow the same pattern, so **no read-read conflict**.
+- Read-write conflict analysis: In the 1st repeat, dst's (bank_id=2) 8 datablocks are in bg 0-7, with bank_id different from both src0 (bank_id=0) and src1 (bank_id=1), so they are not in the same bank; subsequent repeats follow the same pattern, so **no read-write conflict**.
 
 ### Scenario 2: src0/src1 Base Addresses in the Same Bank — Read-Read Conflict
 
@@ -133,8 +133,8 @@ Detailed analysis for each scenario is provided in the corresponding sections be
 
 #### Analysis Conclusion
 
-- 1st repeat: src0 (bank_id=0, bg 0-7) and src1 (bank_id=0, bg 0-7): all datablocks in the repeat are located in the same bank group with the same bank_id, and subsequent repeats follow the same pattern — **read-read conflict exists**.
-- 1st repeat: src0/src1 reads (bank_id=0, bg 0-7) and dst writes (bank_id=1, bg 0-7): different bank_ids, not in the same bank, and subsequent repeats follow the same pattern — **no read-write conflict**.
+- Read-read conflict analysis: In the 1st repeat, src0's (bank_id=0) and src1's (bank_id=0) 8 datablocks are both in bg 0-7, with the same bank_id and completely overlapping bank groups; subsequent repeats follow the same pattern, so **read-read conflict exists**.
+- Read-write conflict analysis: In the 1st repeat, src0/src1 reads (bank_id=0) and dst writes (bank_id=1) have different bank_ids, so they are not in the same bank; subsequent repeats follow the same pattern, so **no read-write conflict**.
 
 ### Scenario 3: src0/src1 Base Addresses in the Same Bank Group — Read-Read Conflict
 
@@ -157,10 +157,10 @@ Detailed analysis for each scenario is provided in the corresponding sections be
 
 #### Analysis Conclusion
 
-- 1st repeat: src0 (bank_id=0, bg 0-7) and src1 (bank_id=1, bg 0-7): all datablocks in the repeat are located in the same bank group, and subsequent repeats follow the same pattern — **read-read conflict exists**.
-- 1st repeat: src0/src1 reads (bank_id=0/1, bg 0-7) and dst writes (bank_id=1, bg 8-15): all datablocks in the repeat are located in different banks, and subsequent repeats follow the same pattern — **no read-write conflict**.
+- Read-read conflict analysis: In the 1st repeat, src0's (bank_id=0) and src1's (bank_id=1) 8 datablocks are both in bg 0-7; although bank_ids differ, the bank groups completely overlap; subsequent repeats follow the same pattern, so **read-read conflict exists**.
+- Read-write conflict analysis: In the 1st repeat, src0/src1 reads (bank_id=0/1, bg 0-7) and dst writes (bank_id=1, bg 8-15) have non-overlapping bank groups, so they are not in the same bank; subsequent repeats follow the same pattern, so **no read-write conflict**.
 
-> **Comparison with scenario 2**: In scenario 2, src0/src1 are in the same bank (both bank_id and bank_group_id are the same); in scenario 3, they are in the same bank group (only bank_group_id is the same). Both trigger read-read conflicts with identical performance overhead (4195 vs 4195), indicating that read-read conflict detection is based on bank group rather than bank.
+> **Comparison with scenario 2**: In scenario 2, src0/src1 are in the same bank (both bank_id and bank_group_id are the same); in scenario 3, they are in the same bank group (only bank_group_id is the same). Both scenarios trigger read-read conflicts with similar performance overhead.
 
 ### Scenario 4: src0/dst Base Addresses in the Same Bank — No Read-Write Conflict (Hardware Optimization)
 
@@ -183,8 +183,8 @@ Detailed analysis for each scenario is provided in the corresponding sections be
 
 #### Analysis Conclusion
 
-- 1st repeat: src0 (bank_id=0, bg 0-7) and src1 (bank_id=1, bg 8-15): all datablocks in the repeat are located in different bank groups, and subsequent repeats follow the same pattern — **no read-read conflict**.
-- 1st repeat: src0 reads (bank_id=0, bg 0-7) and dst writes (bank_id=0, bg 0-7): all datablocks in the repeat are located in the same bank, theoretically causing a read-write conflict; however, the hardware automatically delays dst writes by 1 repeat, staggering the read and write operations, and subsequent repeats follow the same pattern — **no actual read-write conflict**.
+- Read-read conflict analysis: In the 1st repeat, src0's (bank_id=0, bg 0-7) and src1's (bank_id=1, bg 8-15) bank groups do not overlap at all; subsequent repeats follow the same pattern, so **no read-read conflict**.
+- Read-write conflict analysis: In the 1st repeat, src0 reads (bank_id=0) and dst writes (bank_id=0) have 8 datablocks both in bg 0-7 with the same bank_id, theoretically causing a read-write conflict; however, the hardware automatically delays dst writes by 1 repeat, staggering the read and write operations; subsequent repeats follow the same pattern, so **no actual read-write conflict**.
 
 **Theoretical execution timing** (unoptimized):
 
@@ -227,8 +227,8 @@ Actual result: the hardware delays dst writes by 1 repeat, staggering them with 
 
 #### Analysis Conclusion
 
-- 1st repeat: src0 (bank_id=0, bg 0-7) and src1 (bank_id=1, bg 8-15): all datablocks in the repeat are located in different bank groups, and subsequent repeats follow the same pattern — **no read-read conflict**.
-- 1st repeat: src0 reads (bank_id=0, bg 0-7) and dst writes (bank_id=0, bg 1-8): the repeat accesses the same banks 1-7, and subsequent repeats follow the same pattern — **read-write conflict exists**.
+- Read-read conflict analysis: In the 1st repeat, src0's (bank_id=0, bg 0-7) and src1's (bank_id=1, bg 8-15) bank groups do not overlap at all; subsequent repeats follow the same pattern, so **no read-read conflict**.
+- Read-write conflict analysis: In the 1st repeat, src0 reads (bank_id=0, bg 0-7) and dst writes (bank_id=0, bg 1-8) have the same bank_id with partially overlapping bank groups (bg 1-7), accessing the same banks; subsequent repeats follow the same pattern, so **read-write conflict exists**.
 
 **UB Read/Write Process Illustration**:
 
@@ -260,8 +260,8 @@ Analysis result: src0 and dst access the same banks every repeat, causing read-w
 
 #### Analysis Conclusion
 
-- 1st repeat: src0 (bank_id=0, bg 0-7) and src1 (bank_id=1, bg 8-15): all datablocks in the repeat are located in different bank groups, and subsequent repeats follow the same pattern — **no read-read conflict**.
-- 1st repeat: src1 reads (bank_id=1, bg 8-15) and dst writes (bank_id=1, bg 8-15): the two addresses completely overlap, theoretically posing a read-write conflict risk; however, the hardware automatically delays dst writes by 1 repeat, staggering the read and write operations, and subsequent repeats follow the same pattern — **no actual read-write conflict**.
+- Read-read conflict analysis: In the 1st repeat, src0's (bank_id=0, bg 0-7) and src1's (bank_id=1, bg 8-15) bank groups do not overlap at all; subsequent repeats follow the same pattern, so **no read-read conflict**.
+- Read-write conflict analysis: In the 1st repeat, src1 reads (bank_id=1) and dst writes (bank_id=1) have completely overlapping addresses, theoretically posing a read-write conflict risk; however, the hardware automatically delays dst writes by 1 repeat, staggering the read and write operations; subsequent repeats follow the same pattern, so **no actual read-write conflict**.
 
 **Theoretical execution timing** (unoptimized):
 
@@ -305,8 +305,8 @@ Actual result: the hardware delays dst writes by 1 repeat, staggering them with 
 
 #### Analysis Conclusion
 
-- 1st repeat: src0 (bank_id=0, bg 0) and src1 (bank_id=1, bg 8-15): src0 reads only a single datablock (bg 0), which is not in the same bank group as src1 — no read-read conflict. However, in subsequent repeats, src0's bank group increments sequentially (bg 1, 2, ...), and on every even-numbered repeat it overlaps with src1's bank group range — overall **read-read conflict exists**.
-- 1st repeat: src1 reads (bank_id=1, bg 8-15) and dst writes (bank_id=1, bg 8-15): their addresses completely overlap; the hardware automatically delays dst writes by 1 repeat, staggering the read and write operations, and subsequent repeats follow the same pattern — **no read-write conflict**.
+- Read-read conflict analysis: In the 1st repeat, src0 (bank_id=0) reads only a single datablock (bg 0), which is not in the same bank group as src1 (bank_id=1, bg 8-15), so the first beat has no conflict; however, in subsequent repeats src0's bank group increments sequentially (bg 1, 2, ...), and on every even-numbered repeat it overlaps with src1's bank group range — overall **read-read conflict exists**.
+- Read-write conflict analysis: In the 1st repeat, src1 reads (bank_id=1) and dst writes (bank_id=1) have completely overlapping addresses; the hardware automatically delays dst writes by 1 repeat, staggering the read and write operations; subsequent repeats follow the same pattern, so **no read-write conflict**.
 
 **UB Read/Write Process Illustration**:
 
@@ -344,8 +344,8 @@ Analysis results:
 
 #### Analysis Conclusion
 
-- 1st repeat: src0 (bank_id=0, bg 0) and src1 (bank_id=1, bg 8-15): src0 reads only a single datablock, which is not in the same bank group as src1. In subsequent repeats, src0's bank group alternates as bg 0, 8, 0, 8, ..., always staggered from src1's bank group range — overall **no read-read conflict**.
-- 1st repeat: src1 reads (bank_id=1, bg 8-15) and dst writes (bank_id=1, bg 8-15): their addresses completely overlap; the hardware automatically delays dst writes by 1 repeat, staggering the read and write operations, and subsequent repeats follow the same pattern — **no read-write conflict**.
+- Read-read conflict analysis: In the 1st repeat, src0 (bank_id=0) reads only a single datablock, which is not in the same bank group as src1 (bank_id=1, bg 8-15); in subsequent repeats src0's bank group alternates as bg 0, 8, 0, 8, ..., always staggered from src1's bank group range — overall **no read-read conflict**.
+- Read-write conflict analysis: In the 1st repeat, src1 reads (bank_id=1) and dst writes (bank_id=1) have completely overlapping addresses; the hardware automatically delays dst writes by 1 repeat, staggering the read and write operations; subsequent repeats follow the same pattern, so **no read-write conflict**.
 
 **UB Read/Write Process Illustration**:
 
@@ -369,15 +369,14 @@ Analysis results:
 
 ## Sample Specifications
 
-<table border="2">
-<caption>Table 1: Sample Input/Output Specifications</caption>
-<tr><td rowspan="3" align="center">Sample Input</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-<tr><td align="center">x</td><td align="center">[1, 4096]</td><td align="center">float</td><td align="center">ND</td></tr>
-<tr><td align="center">y</td><td align="center">[1, 4096]</td><td align="center">float</td><td align="center">ND</td></tr>
-<tr><td rowspan="2" align="center">Sample Output</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-<tr><td align="center">z</td><td align="center">[1, 4096]</td><td align="center">float</td><td align="center">ND</td></tr>
-<tr><td rowspan="1" align="center">Kernel Function</td><td colspan="4" align="center">add_custom</td></tr>
-</table>
+**Table 1**  Sample Input/Output Specifications
+
+| Category | name | shape | data type | format |
+| --- | --- | --- | --- | --- |
+| Sample Input | x | [1, 4096] | float | ND |
+| Sample Input | y | [1, 4096] | float | ND |
+| Sample Output | z | [1, 4096] | float | ND |
+| Kernel Function | add_custom | - | - | - |
 
 ## Build and Run
 
