@@ -396,7 +396,7 @@ Kernel侧的关键步骤介绍如下：
 <p id="p15845121173011"><a name="p15845121173011"></a><a name="p15845121173011"></a>scaleA矩阵可设置为CubeFormat::ND，CubeFormat::NZ，CubeFormat::VECTOR</p>
 <p id="p884571116308"><a name="p884571116308"></a><a name="p884571116308"></a>scaleB矩阵可设置为CubeFormat::ND，CubeFormat::NZ</p>
 <p id="zh-cn_topic_0000002270097206_p7332111273413"><a name="zh-cn_topic_0000002270097206_p7332111273413"></a><a name="zh-cn_topic_0000002270097206_p7332111273413"></a>注意：</p>
-<p id="p15352181633019"><a name="p15352181633019"></a><a name="p15352181633019"></a>NZ排布格式请参考<a href="../../../../编程指南/概念原理和术语/神经网络和算子/数据排布格式.md#li19960204116136">NZ</a>。MxMatmul场景，scaleA、scaleB的数据类型为fp8_e8m0_t，分形大小H0=16，W0=2。</p>
+<p id="p15352181633019"><a name="p15352181633019"></a><a name="p15352181633019"></a>NZ排布格式请参考<a href="../../../../技术附录/概念原理和术语/神经网络和算子/数据排布格式.md#li19960204116136">NZ</a>。MxMatmul场景，scaleA、scaleB的数据类型为fp8_e8m0_t，分形大小H0=16，W0=2。</p>
 <p id="p43523162303"><a name="p43523162303"></a><a name="p43523162303"></a>在Scale矩阵为ND格式的场景中，当通过SetTensorScaleA接口设置scaleA矩阵转置时，scaleA内存排布格式必须按照(K/64, M，2)排布，通过SetTensorScaleB接口设置scaleB矩阵不转置时，scaleB内存排布格式必须按照(K/64，N， 2)排布，详细介绍请参考<a href="#zh-cn_topic_0000002270097206_fig76682054103416">数据格式</a>。</p>
 </td>
 </tr>

@@ -1,6 +1,6 @@
 # DoubleBuffer场景<a name="ZH-CN_TOPIC_0000002532228161"></a>
 
-因存在算子中多次搬入搬出数据的场景，为充分利用硬件资源，实现多流水并行，引入[DoubleBuffer](../../../编程指南/概念原理和术语/性能优化技术原理/DoubleBuffer.md)机制。[DoubleBuffer](../../../编程指南/概念原理和术语/性能优化技术原理/DoubleBuffer.md)是通过将输入数据分成大小相等的两块，充分利用AI Core的硬件资源，实现数据搬入、计算、数据搬出的并行执行方式。下面以“核间不均分，核内不均分”的样例为例，介绍算子中DoubleBuffer的实现。一个简单的DoubleBuffer样例代码请参见[使用DoubleBuffer的Add算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.2/examples/01_simd_cpp_api/00_introduction/01_vector/add_tpipe_tque)。
+因存在算子中多次搬入搬出数据的场景，为充分利用硬件资源，实现多流水并行，引入[DoubleBuffer](../../../技术附录/概念原理和术语/性能优化技术原理/DoubleBuffer.md)机制。[DoubleBuffer](../../../技术附录/概念原理和术语/性能优化技术原理/DoubleBuffer.md)是通过将输入数据分成大小相等的两块，充分利用AI Core的硬件资源，实现数据搬入、计算、数据搬出的并行执行方式。下面以“核间不均分，核内不均分”的样例为例，介绍算子中DoubleBuffer的实现。一个简单的DoubleBuffer样例代码请参见[使用DoubleBuffer的Add算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.2/examples/01_simd_cpp_api/00_introduction/01_vector/add_tpipe_tque)。
 
 **图 1**  DoubleBuffer数据切分示意图<a name="zh-cn_topic_0000002236197681_fig68713182104"></a>  
 ![](../../../figures/DoubleBuffer数据切分示意图.png "DoubleBuffer数据切分示意图")
