@@ -11,7 +11,7 @@
 2.  编写测试代码。
 
     -   使用ContextBuilder配置输入输出Tensor的形状、数据类型、格式及平台信息等，构建TilingContext。
-    -   通过OpTilingRegistry的[LoadTilingLibrary](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/LoadTilingLibrary.md)接口加载Tiling动态库；使用[GetTilingFunc](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GetTilingFunc.md)接口获取Tiling函数指针。
+    -   通过OpTilingRegistry的[LoadTilingLibrary](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta2/API/ascendcopapi/atlasascendc_api_07_00075.html)接口加载Tiling动态库；使用[GetTilingFunc](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta2/API/ascendcopapi/atlasascendc_api_07_00074.html)接口获取Tiling函数指针。
     -   执行Tiling函数，验证其正确性。
 
     ```
@@ -82,4 +82,3 @@
     ```
     ./test
     ```
-

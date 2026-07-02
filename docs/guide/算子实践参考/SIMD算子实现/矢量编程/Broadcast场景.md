@@ -1,11 +1,11 @@
 # Broadcast场景<a name="ZH-CN_TOPIC_0000002500548092"></a>
 
-在某些场景下，可能会存在两个输入shape不相同的情况。由于[Add](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Add.md)接口只支持对shape相同的输入进行计算，因此需要先对输入进行shape变换，再进行Add计算。本节将对满足Broadcast条件的输入在算子实现中的Broadcast处理进行介绍，其他场景可以参考本章节中提供的思路。
+在某些场景下，可能会存在两个输入shape不相同的情况。由于[Add](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta2/API/ascendcopapi/atlasascendc_api_07_0035.html)接口只支持对shape相同的输入进行计算，因此需要先对输入进行shape变换，再进行Add计算。本节将对满足Broadcast条件的输入在算子实现中的Broadcast处理进行介绍，其他场景可以参考本章节中提供的思路。
 
 >[!NOTE]注意 
 >Broadcast机制通过扩展较小维度的数据，使得不同shape的输入能够进行运算，从而避免了显式的复制操作，提高了计算效率。数据进行Broadcast需满足：两个输入的维度个数相同，并且仅在某一个维度上的长度不同，某一个输入在此维度的长度为1。比如：shape为\(32, 8\) 和 \(32, 1\) 的两个输入可以进行Broadcast，因为它们都是二维，且第一个维度大小相等，而不相等的维度中第二个输入的维度为1，满足条件。
 
-本节中将使用[Broadcast](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Broadcast.md)接口，因此输入需满足该API相关约束。同时，由于硬件限制，该API的输入地址需满足32字节对齐。本节以输入维度为2、第二个轴（axis = 1）需要Broadcast为例进行说明。完整的样例代码请参见[输入Broadcast的Add算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.2/examples/01_simd_cpp_api/03_libraries/08_tensor_transformation/add_broadcast)。
+本节中将使用[Broadcast](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta2/API/ascendcopapi/atlasascendc_api_07_0853.html)接口，因此输入需满足该API相关约束。同时，由于硬件限制，该API的输入地址需满足32字节对齐。本节以输入维度为2、第二个轴（axis = 1）需要Broadcast为例进行说明。完整的样例代码请参见[输入Broadcast的Add算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0-beta.2/examples/01_simd_cpp_api/03_libraries/08_tensor_transformation/add_broadcast)。
 
 ## Tiling实现<a name="zh-cn_topic_0000002201157446_section598962019342"></a>
 
@@ -141,7 +141,7 @@ __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, AddCustomTilingData
 }
 ```
 
-由于数据是向coef对齐的，在数据拷贝的过程中可能会出现地址不满足32字节对齐的场景，因此CopyIn函数、CopyOut函数中使用[DataCopyPad](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/DataCopyPad(ISASI).md)进行数据拷贝。
+由于数据是向coef对齐的，在数据拷贝的过程中可能会出现地址不满足32字节对齐的场景，因此CopyIn函数、CopyOut函数中使用[DataCopyPad](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta2/API/ascendcopapi/atlasascendc_api_07_0265.html)进行数据拷贝。
 
 CopyIn函数实现代码如下：
 

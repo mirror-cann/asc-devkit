@@ -66,7 +66,7 @@ __aicore__ inline void Compute()
 
 ## Reg矢量计算寄存器<a name="section1910719438134"></a>
 
-Reg矢量计算API操作的基础数据类型介绍如下，具体API请参考[Reg矢量计算](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Reg矢量计算.md)。
+Reg矢量计算API操作的基础数据类型介绍如下，具体API请参考[Reg矢量计算](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta2/API/ascendcopapi/atlasascendc_api_07_0311.html)。
 
 -   **RegTensor**
 

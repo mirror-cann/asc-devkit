@@ -169,7 +169,7 @@ AddKernelInvocationNeo
     >ACLRT_LAUNCH_KERNEL(kernel_name)(numBlocks, stream, argument list);
     >```
     >- kernel\_name：算子核函数的名称。
-    >- numBlocks：规定了核函数将会在几个核上执行。每个执行该核函数的核会被分配一个逻辑ID，即block\_idx，可以在核函数的实现中调用[GetBlockIdx](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/GetBlockIdx.md)来获取block\_idx。
+    >- numBlocks：规定了核函数将会在几个核上执行。每个执行该核函数的核会被分配一个逻辑ID，即block\_idx，可以在核函数的实现中调用[GetBlockIdx](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta2/API/ascendcopapi/atlasascendc_api_07_0185.html)来获取block\_idx。
     >- stream，类型为aclrtStream，stream用于维护一些异步操作的执行顺序，确保按照应用程序中的代码调用顺序在Device上执行。stream创建等管理接口请参考[《Runtime运行时API》](https://hiascend.com/document/redirect/CannCommunityRuntimeApi)。
     >- argument list：参数列表，与核函数的参数列表保持一致。
 
@@ -535,4 +535,3 @@ bash run.sh -r npu  -v <soc_version> -i <install_path> -b Debug -p <install-pref
 >        aclInit、aclFinalize、aclrtGetVersion。
 >    - 运行时管理
 >        aclrtSetDevice、aclrtResetDevice、aclrtCreateStream、aclrtCreateStreamWithConfig、aclrtDestroyStream、aclrtDestroyStreamForce、aclrtSynchronizeStream、aclrtCreateContext、aclrtDestroyContext。
-

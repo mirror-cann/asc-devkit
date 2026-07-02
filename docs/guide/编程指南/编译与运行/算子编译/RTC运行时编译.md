@@ -1,6 +1,6 @@
 # RTC<a name="ZH-CN_TOPIC_0000002462620725"></a>
 
-RTC是Ascend C运行时编译库，通过[aclrtc](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/RTC.md)接口，在程序运行时，将中间代码动态编译成目标机器码，提升程序运行性能。
+RTC是Ascend C运行时编译库，通过[aclrtc](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta2/API/ascendcopapi/atlasascendc_api_07_00162.html)接口，在程序运行时，将中间代码动态编译成目标机器码，提升程序运行性能。
 
 运行时编译库提供以下核心接口：
 -   aclrtcCreateProg：根据输入参数（字符串形式表达的Ascend C源代码等）创建aclrtcProg程序实例。

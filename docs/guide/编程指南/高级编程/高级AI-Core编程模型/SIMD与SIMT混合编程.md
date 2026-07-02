@@ -145,7 +145,7 @@ SIMD与SIMT编程存在以下差异：
 -   所有线程均可通过Data Cache（DCache）访问全局内存（GM），Data Cache是从UB上单独划分出来的一个缓存空间，内存大小可配置范围为32KB到128KB，具体配置方法详见下文[UB内存分配](#section3725125414229)。
 
 在SIMD工作模式下，各个内存的工作流程如下：
--   SIMD的Register File（简称RF）包含多种类型的Reg矢量计算寄存器，用于SIMD VF函数内部存储计算数据，Reg的类型请见[Reg数据类型定义](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/RegTensor.md)。
+-   SIMD的Register File（简称RF）包含多种类型的Reg矢量计算寄存器，用于SIMD VF函数内部存储计算数据，Reg的类型请见[Reg数据类型定义](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/910beta2/API/ascendcopapi/atlasascendc_api_07_0314.html)。
 -   单核内所有VF Reg寄存器共享内存资源UB。
 -   在SIMD模式下，不支持直接从全局内存加载数据到Reg矢量计算寄存器，需先将数据从全局内存GM搬运至UB，再通过显式的Load/Store指令，从UB加载到Reg矢量计算寄存器中执行计算操作。
 
