@@ -228,7 +228,8 @@ typedef struct {
     RegedBufferEntity* remoteBufferAddr;
     SqContext* sqContextAddr;
     CqContext* cqContextAddr;
-    uint8_t reserve[160];
+    uint32_t wqeCnt;
+    uint8_t reserve[156];
 } ChannelEntity;
 
 static_assert(sizeof(ChannelEntity) == 256, "ChannelEntity size must keep aligned with hcomm");

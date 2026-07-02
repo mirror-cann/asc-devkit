@@ -278,3 +278,48 @@ TEST_F(HcommUrmaTestSuite, Aiv_Urma_InitLocalTensor)
     channel.CompleteCurrentSq();
     EXPECT_EQ(hcomm.Drain(channel.GetHandle()), AscendC::HCOMM_SUCCESS);
 }
+
+// Dump helpers: nullptr early-return guards.
+// These guards are never reached through the normal send path, so exercise them directly.
+TEST_F(HcommUrmaTestSuite, Aiv_Urma_DumpHelpers_Nullptr)
+{
+    AscendC::HcommUrmaDumpWqeCtx(nullptr);
+    AscendC::HcommUrmaDumpCqeCtx(nullptr);
+    AscendC::HcommUrmaDumpSgeCtx(nullptr, nullptr);
+
+    // sqeCtx non-null but sgeAddr null still hits the guard
+    std::vector<uint8_t> sqeBuf(sizeof(AscendC::HcommUrmaSqeCtx), 0);
+    auto* sqe = reinterpret_cast<__ubuf__ AscendC::HcommUrmaSqeCtx*>(sqeBuf.data());
+    AscendC::HcommUrmaDumpSgeCtx(sqe, nullptr);
+}
+
+// Dump helpers: full function bodies.
+// HcommUrmaDumpCqeCtx is otherwise unreachable in UT_TEST mode because PollCq's polling
+// loop (the only caller) is compiled out under UT_TEST.
+TEST_F(HcommUrmaTestSuite, Aiv_Urma_DumpHelpers_Valid)
+{
+    // CQE dump: full body over a zero-initialized valid CQE
+    AscendC::HcommUrmaJfcCqeCtx cqe = {};
+    AscendC::HcommUrmaDumpCqeCtx(reinterpret_cast<__ubuf__ AscendC::HcommUrmaJfcCqeCtx*>(&cqe));
+
+    // Notify dump: full body over a zero-initialized valid notify ctx
+    AscendC::HcommUrmaNotifyCtx notify = {};
+    AscendC::HcommUrmaDumpNotifyCtx(reinterpret_cast<__ubuf__ AscendC::HcommUrmaNotifyCtx*>(&notify));
+
+    // SGE dump: drive the loop body with sgeNum > 0 and a matching SGE array
+    constexpr uint32_t sgeNum = 2;
+    std::vector<uint8_t> buf(sizeof(AscendC::HcommUrmaSqeCtx) + sgeNum * sizeof(AscendC::HcommUrmaSgeCtx), 0);
+    auto* sqe = reinterpret_cast<__ubuf__ AscendC::HcommUrmaSqeCtx*>(buf.data());
+    sqe->sgeNum = sgeNum;
+    auto* sgeAddr = reinterpret_cast<__ubuf__ uint8_t*>(buf.data() + sizeof(AscendC::HcommUrmaSqeCtx));
+    AscendC::HcommUrmaDumpSgeCtx(sqe, sgeAddr);
+
+    // WQE dump with WRITE_WITH_NOTIFY opcode: covers the notify branch inside HcommUrmaDumpWqeCtx
+    constexpr uint32_t wqeBufSize =
+        sizeof(AscendC::HcommUrmaSqeCtx) + sizeof(AscendC::HcommUrmaNotifyCtx) + sizeof(AscendC::HcommUrmaSgeCtx);
+    std::vector<uint8_t> wqeBuf(wqeBufSize, 0);
+    auto* wqe = reinterpret_cast<__ubuf__ AscendC::HcommUrmaSqeCtx*>(wqeBuf.data());
+    wqe->opcode = static_cast<uint32_t>(AscendC::HcommUrmaOpCode::WRITE_WITH_NOTIFY);
+    wqe->sgeNum = 1;
+    AscendC::HcommUrmaDumpWqeCtx(wqe);
+}
