@@ -96,7 +96,7 @@
 
 <!-- npu="950" id10 -->
 
-- Ascend 950PR/Ascend 950DT，支持的数据类型为：uint8_t、int8_t、hifloat8_t、fp8_e4m3fn_t、fp8_e5m2_t、fp4x2_e2m1_t、fp4x2_e1m2_t、fp8_e8m0_t、uint16_t、int16_t、half、bfloat16_t、float、uint32_t、int32_t、uint64_t、int64_t。
+- Ascend 950PR/Ascend 950DT，支持的数据类型为：int8_t、uint8_t、fp4x2_e2m1_t、fp4x2_e1m2_t、hifloat8_t、fp8_e8m0_t、fp8_e5m2_t、fp8_e4m3fn_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。
 
 <!-- end id10 -->
 
@@ -168,6 +168,8 @@
 - Copy和矢量计算API一样，支持和掩码操作API配合使用。但Counter模式配合高维切分计算API时，和[通用的Counter模式](../../SIMD计算说明/掩码/接口内设置Mask.md)有一定差异。具体差异如下：
     - 通用的Counter模式：Mask代表**整个矢量计算参与计算的元素个数，迭代次数不生效。**
     - Copy高维切分计算API的Counter模式：Mask代表**每次Repeat中处理的元素个数，迭代次数生效。**
+
+    ![](../../../../../figures/repeat-times-12.png)
 
 ## 调用示例<a name="zh-cn_topic_0000002567699435_section088124295117"></a>
 
