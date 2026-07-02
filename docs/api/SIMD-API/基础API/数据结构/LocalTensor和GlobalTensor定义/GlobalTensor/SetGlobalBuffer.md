@@ -59,7 +59,7 @@
     __aicore__ inline void SetGlobalBuffer(__gm__ PrimType* buffer, uint64_t bufferSize)
     ```
 
--   仅传入全局数据的指针，此时通过[GetSize](GetSize-4.md)获取到的元素个数为0。
+-   仅传入全局数据的指针，此时通过[GetSize](GetSize.md)获取到的元素个数为0。
 
     ```cpp
     __aicore__ inline void SetGlobalBuffer(__gm__ PrimType* buffer)

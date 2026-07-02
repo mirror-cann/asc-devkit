@@ -6,23 +6,23 @@
 
 -   **[SetGlobalBuffer](SetGlobalBuffer.md)**  
 
--   **[GetPhyAddr](GetPhyAddr-0.md)**  
+-   **[GetPhyAddr](GetPhyAddr.md)**  
 
--   **[GetValue](GetValue-1.md)**  
+-   **[GetValue](GetValue.md)**  
 
--   **[operator\(\)](operator()-2.md)**  
+-   **[operator\(\)](operator().md)**  
 
--   **[SetValue](SetValue-3.md)**  
+-   **[SetValue](SetValue.md)**  
 
--   **[GetSize](GetSize-4.md)**  
+-   **[GetSize](GetSize.md)**  
 
--   **[operator\[\]](operator-5.md)**  
+-   **[operator\[\]](operator.md)**  
 
--   **[SetShapeInfo](SetShapeInfo-6.md)**  
+-   **[SetShapeInfo](SetShapeInfo.md)**  
 
--   **[GetShapeInfo](GetShapeInfo-7.md)**  
+-   **[GetShapeInfo](GetShapeInfo.md)**  
 
 -   **[SetL2CacheHint](SetL2CacheHint.md)**  
 
--   **[ReinterpretCast](ReinterpretCast-8.md)**  
+-   **[ReinterpretCast](ReinterpretCast.md)**  
 

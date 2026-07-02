@@ -86,8 +86,7 @@ __aicore__ inline __inout_pipe__(S) PrimType GetValue(const uint64_t offset) con
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
--   如果GetValue的Global Memory地址内容存在被外部改写的可能，需要先调用[DataCacheCleanAndInvalid](../../../缓存控制/DataCacheCleanAndInvalid.md)，确保Data Cache与Global Memory的Cache一致性，之后再调用此接口。
--   标量单元连续读取相同GM地址时，会造成Bus被长期占用，此时会影响其它核向GM该地址上写入，进而引发卡死现象。在此场景下，建议在标量读指令后插入若干空操作指令（Nop）来释放Bus，指令数量建议为800条，通常按“需同步的核数 × 200。具体示例参考[ReadGmByPassDCache](../../../标量计算/ReadGmByPassDCache(ISASI).md)。
+如果GetValue的Global Memory地址内容存在被外部改写的可能，需要先调用[DataCacheCleanAndInvalid](../../../缓存控制/DataCacheCleanAndInvalid.md)，确保Data Cache与Global Memory的Cache一致性，之后再调用此接口。
 
 ## 调用示例<a name="section1956710347119"></a>
 
