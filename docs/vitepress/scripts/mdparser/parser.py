@@ -132,7 +132,9 @@ def _escape_lone_tildes(md_text: str) -> str:
     return '\n'.join(result)
 
 
-_MATH_BLOCK_RE = re.compile(r'\$\$[\s\S]*?\$\$')
+_MATH_BLOCK_RE = re.compile(r'(?<!\\)\$\$[\s\S]*?(?<!\\)\$\$')
+
+_MATH_INLINE_RE = re.compile(r'(?<!\\)(?<!\$)\$(?!\$)[^\n$]+?(?<!\\)\$(?!\$)')
 
 _MATH_PLACEHOLDER_FMT = '@@MATH{n}@@'
 
@@ -208,6 +210,7 @@ def _extract_math_blocks(md_text: str) -> tuple:
 
         stash_math = _make_math_stasher(blocks)
         text = _MATH_BLOCK_RE.sub(stash_math, text)
+        text = _MATH_INLINE_RE.sub(stash_math, text)
 
         for i, code in enumerate(code_spans):
             text = text.replace(f'\x00CODE{i}\x00', code)

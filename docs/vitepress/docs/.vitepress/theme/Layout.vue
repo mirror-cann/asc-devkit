@@ -31,6 +31,7 @@ import EditOnGitcode from './EditOnGitcode.vue'
     <template #layout-bottom>
       <ApiDownload />
       <BackToTop />
+      <SidebarResizer />
     </template>
   </DefaultTheme.Layout>
 </template>

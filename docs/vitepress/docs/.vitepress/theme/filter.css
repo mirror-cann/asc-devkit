@@ -85,9 +85,10 @@
   vertical-align: middle;
 }
 
-/* Wider sidebar */
-.VPSidebar {
-  width: 320px;
+/* Wider sidebar (driven by the resizable --vp-sidebar-width variable,
+   kept in sync with VitePress content padding / nav offsets) */
+:root {
+  --vp-sidebar-width: 320px;
 }
 
 /* Sidebar deep-level support (VPSidebarItem patched to remove depth limit) */

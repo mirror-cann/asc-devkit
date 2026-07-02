@@ -646,7 +646,7 @@ function balanceDivTags(html) {
     code = code.replace(/href="\/\/pagefind/g, 'href="/pagefind')
     code = code.replace(/<body\b/, '<body data-pagefind-body')
     return code.replace(
-      /<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[^>]+>|[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]+/g,
+      /<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<pre[\s\S]*?<\/pre>|<code[\s\S]*?<\/code>|<[^>]+>|[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]+/g,
       m => m.startsWith('<') ? m : m.replace(/(.)(?=.)/g, '$1\u200A')
     )
   },
