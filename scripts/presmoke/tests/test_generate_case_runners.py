@@ -26,7 +26,7 @@ from presmoke.generate_case_runners import (
     apply_case_overrides,
     command_env_prefix,
     command_workdir,
-    explicit_skip_reason,
+    explicit_skip_config,
     is_atc_prerequisite_command,
     merge_export_commands_into_run,
     quote_env_value,
@@ -44,6 +44,8 @@ def render_runner_from_parts(
     verify_cmds: list[Command],
     custom_op_dependency: bool = False,
     custom_op_package_case: bool = False,
+    skip_reason: str = "",
+    skip_modes: list[str] = [],
 ) -> str:
     return render_runner(
         RunnerRenderSpec(
@@ -53,6 +55,8 @@ def render_runner_from_parts(
             verify_cmds=verify_cmds,
             custom_op_dependency=custom_op_dependency,
             custom_op_package_case=custom_op_package_case,
+            skip_reason=skip_reason,
+            skip_modes=skip_modes,
         )
     )
 
@@ -285,7 +289,16 @@ class GenerateCaseRunnersTest(unittest.TestCase):
         self.assertTrue(requires_custom_op_package("01_simd_cpp_api/02_features/99_acl_based/01_acl_invocation/aclnn_invocation"))
         self.assertTrue(requires_custom_op_package("01_simd_cpp_api/02_features/00_framework/02_onnx/onnx_plugin"))
         self.assertTrue(requires_custom_op_package("01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom"))
-        self.assertIn("TensorFlow 2.6.5", explicit_skip_reason("01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom"))
+        reason, modes = explicit_skip_config("01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_custom")
+        self.assertIn("TensorFlow 2.6.5", reason)
+        self.assertEqual(modes, ["npu"])
+        reason, modes = explicit_skip_config("01_simd_cpp_api/02_features/00_framework/01_tensorflow/tensorflow_builtin")
+        self.assertEqual(modes, ["npu"])
+
+    def test_matmul_l2cache_skip_config(self) -> None:
+        reason, modes = explicit_skip_config("01_simd_cpp_api/04_advanced_api/00_matmul/matmul_l2cache")
+        self.assertIn("308M", reason)
+        self.assertEqual(modes, ["cpu"])
 
     def test_matmul_fp8_is_950_only(self) -> None:
         self.assertEqual(
@@ -377,6 +390,17 @@ class GenerateCaseRunnersTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertFalse(build_dir.exists())
+
+    def test_skip_modes_lines_generates_bash_array(self) -> None:
+        script = render_runner_from_parts(
+            "01_simd_cpp_api/04_advanced_api/00_matmul/matmul_l2cache",
+            [],
+            [],
+            [],
+            skip_reason="test skip",
+            skip_modes=["cpu", "sim"],
+        )
+        self.assertIn("SKIP_MODES=(cpu sim)", script)
 
     def test_case_common_maps_950_arch_to_supported_soc_version(self) -> None:
         project_root = Path(__file__).resolve().parents[3]

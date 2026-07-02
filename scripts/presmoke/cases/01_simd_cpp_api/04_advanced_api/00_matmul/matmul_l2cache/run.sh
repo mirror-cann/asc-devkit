@@ -12,6 +12,10 @@
 set -euo pipefail
 
 CASE_REL=01_simd_cpp_api/04_advanced_api/00_matmul/matmul_l2cache
+SKIP_REASON='data size (~308M) causes overtime in cpu mode; cpu mode skipped by presmoke'
+
+SKIP_MODES=(cpu)
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../../../_case_entry.sh"
 presmoke_case_init "$CASE_REL"

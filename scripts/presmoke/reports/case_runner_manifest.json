@@ -606,6 +606,9 @@
     "target_runnable": true,
     "skip": true,
     "skip_reason": "requires TensorFlow 2.6.5 environment; skipped by presmoke",
+    "skip_modes": [
+      "npu"
+    ],
     "reasons": [
       "no_cmake_step",
       "no_make_step",
@@ -631,6 +634,9 @@
     "target_runnable": true,
     "skip": true,
     "skip_reason": "requires TensorFlow 2.6.5 environment; skipped by presmoke",
+    "skip_modes": [
+      "npu"
+    ],
     "reasons": [
       "special_02_features_00_01_02",
       "explicit_skip"
@@ -4091,8 +4097,13 @@
     ],
     "target_runnable": true,
     "skip": false,
-    "skip_reason": "",
-    "reasons": [],
+    "skip_reason": "data size (~308M) causes overtime in cpu mode; cpu mode skipped by presmoke",
+    "skip_modes": [
+      "cpu"
+    ],
+    "reasons": [
+      "partial_mode_skip"
+    ],
     "commands": [
       "cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
       "make -j",

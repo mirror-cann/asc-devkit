@@ -50,6 +50,7 @@ class RunnerInfo:
     supported_modes: List[str]
     skip: bool
     skip_reason: str
+    skip_modes: List[str]
     confidence: str
     reasons: List[str]
 
@@ -98,6 +99,7 @@ def load_runner_info(context: CaseRunnerContext, runner_dir: Path, manifest: dic
         supported_modes=list(info.get("supported_modes") or context.modes or ["npu"]),
         skip=bool(info.get("skip")),
         skip_reason=info.get("skip_reason") or "explicit skip",
+        skip_modes=list(info.get("skip_modes", [])),
         confidence=info.get("confidence", ""),
         reasons=list(info.get("reasons", [])),
     )
@@ -129,6 +131,16 @@ def append_confidence_suggestion(context: CaseRunnerContext, info: RunnerInfo) -
 
 
 def mode_supported(context: CaseRunnerContext, info: RunnerInfo, mode: str) -> bool:
+    if mode in info.skip_modes:
+        context.skipped.append(
+            RunResult(info.rel_path, context.arch, mode, "SKIP",
+                f"Mode {mode} in skip_modes", duration_s=0, source="case-runner")
+        )
+        context.suggestions.append(
+            Suggestion(info.rel_path, "case-runner", "info",
+                f"Excluded on skip_modes list", f"Skip modes: {', '.join(info.skip_modes)}")
+        )
+        return False
     if context.arch not in info.supported_archs:
         context.suggestions.append(
             Suggestion(
