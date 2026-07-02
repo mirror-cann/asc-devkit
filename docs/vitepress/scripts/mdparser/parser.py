@@ -82,6 +82,149 @@ _OTHER_TAG_ANY_RE = re.compile(
 )
 
 
+_FENCE_OPEN_RE = re.compile(r'^[ \t]{0,3}(`{3,}|~{3,})', re.MULTILINE)
+
+_INLINE_CODE_SPAN_RE = re.compile(r'`+[^\n]*?`+')
+
+_LONE_TILDE_RE = re.compile(r'(?<!\\)(?<!~)~(?!~)')
+
+
+def _escape_lone_tildes_in_line(line: str) -> str:
+    result = []
+    last_end = 0
+    for m in _INLINE_CODE_SPAN_RE.finditer(line):
+        before = line[last_end:m.start()]
+        result.append(_LONE_TILDE_RE.sub(r'\\~', before))
+        result.append(m.group())
+        last_end = m.end()
+    remaining = line[last_end:]
+    result.append(_LONE_TILDE_RE.sub(r'\\~', remaining))
+    return ''.join(result)
+
+
+def _escape_lone_tildes(md_text: str) -> str:
+    lines = md_text.split('\n')
+    result = []
+    in_fence = False
+    fence_char = None
+
+    for line in lines:
+        stripped = line.lstrip(' \t')
+
+        if in_fence:
+            result.append(line)
+            if fence_char and re.match(
+                rf'^{re.escape(fence_char)}{{3,}}[ \t]*$', stripped
+            ):
+                in_fence = False
+                fence_char = None
+            continue
+
+        fence_match = re.match(r'^(`{3,}|~{3,})', stripped)
+        if fence_match:
+            in_fence = True
+            fence_char = fence_match.group(1)[0]
+            result.append(line)
+            continue
+
+        result.append(_escape_lone_tildes_in_line(line))
+
+    return '\n'.join(result)
+
+
+_MATH_BLOCK_RE = re.compile(r'\$\$[\s\S]*?\$\$')
+
+_MATH_PLACEHOLDER_FMT = '@@MATH{n}@@'
+
+
+def _split_by_fences(md_text: str):
+    lines = md_text.split('\n')
+    segments = []
+    current = []
+    is_code = False
+    fence_char = None
+
+    for line in lines:
+        stripped = line.lstrip(' \t')
+
+        if is_code:
+            current.append(line)
+            if fence_char and re.match(
+                rf'^{re.escape(fence_char)}{{3,}}[ \t]*$', stripped
+            ):
+                is_code = False
+                fence_char = None
+                segments.append((True, '\n'.join(current)))
+                current = []
+            continue
+
+        fence_match = re.match(r'^(`{3,}|~{3,})', stripped)
+        if fence_match:
+            if current:
+                segments.append((False, '\n'.join(current)))
+                current = []
+            is_code = True
+            fence_char = fence_match.group(1)[0]
+            current.append(line)
+            continue
+
+        current.append(line)
+
+    if current:
+        segments.append((is_code, '\n'.join(current)))
+
+    return segments
+
+
+def _make_code_stasher():
+    spans = []
+
+    def _stash(m):
+        spans.append(m.group(0))
+        return f'\x00CODE{len(spans) - 1}\x00'
+
+    return _stash, spans
+
+
+def _make_math_stasher(blocks):
+    def _stash(m):
+        blocks.append(m.group(0))
+        return _MATH_PLACEHOLDER_FMT.format(n=len(blocks) - 1)
+
+    return _stash
+
+
+def _extract_math_blocks(md_text: str) -> tuple:
+    segments = _split_by_fences(md_text)
+    blocks = []
+    result = []
+    for is_code, content in segments:
+        if is_code:
+            result.append(content)
+            continue
+
+        stash_code, code_spans = _make_code_stasher()
+        text = _INLINE_CODE_SPAN_RE.sub(stash_code, content)
+
+        stash_math = _make_math_stasher(blocks)
+        text = _MATH_BLOCK_RE.sub(stash_math, text)
+
+        for i, code in enumerate(code_spans):
+            text = text.replace(f'\x00CODE{i}\x00', code)
+
+        result.append(text)
+
+    return '\n'.join(result), blocks
+
+
+def _restore_math_blocks(html: str, blocks: list) -> str:
+    for i, block in enumerate(blocks):
+        placeholder = _MATH_PLACEHOLDER_FMT.format(n=i)
+        encoded = block.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+        html = html.replace(placeholder, encoded)
+    return html
+
+
 def _convert_cann_filter(md_text: str) -> str:
     """将所有 cann-filter 标签转为 HTML 注释，保留筛选信息。
 
@@ -441,10 +584,13 @@ def _highlight_code(html: str) -> str:
 
 def parse_string(text: str, gfm: bool = True) -> str:
     text = _convert_cann_filter(text)
+    text = _escape_lone_tildes(text)
+    text, math_blocks = _extract_math_blocks(text)
     if gfm:
         html = gfm_to_html(text)
     else:
         html = markdown_to_html(text)
+    html = _restore_math_blocks(html, math_blocks)
     html = _fix_links(html)
     html = _fix_callouts(html)
     html = _highlight_code(html)
