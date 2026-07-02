@@ -182,8 +182,8 @@
 | [Maxs（灵活标量位置）](Memory矢量计算/基础算术/Maxs（灵活标量位置）.md) | 提供灵活标量位置的接口，支持标量在前和标量在后两种场景。其中标量输入支持配置LocalTensor单点元素。 |
 | [Mins](Memory矢量计算/基础算术/Mins.md) | Mins属于双目标量类计算接口，输入为一个矢量tensor和一个标量scalar，Mins负责将矢量tensor内的每个元素与标量进行求最小值。 |
 | [Mins（灵活标量位置）](Memory矢量计算/基础算术/Mins（灵活标量位置）.md) | 提供灵活标量位置的接口，支持标量在前和标量在后两种场景。其中标量输入支持配置LocalTensor单点元素。 |
-| [Subs](Memory矢量计算/基础算术/Subs.md) | 矢量内每个元素和标量间做减法，支持标量在前和标量在后两种场景，其中标量输入支持配置LocalTensor单点元素。 |
-| [Divs](Memory矢量计算/基础算术/Divs.md) | 矢量内每个元素和标量间做除法，支持标量在前和标量在后两种场景，其中标量输入支持配置LocalTensor单点元素。 |
+| [Subs](Memory矢量计算/基础算术/Subs（灵活标量位置）.md) | 矢量内每个元素和标量间做减法，支持标量在前和标量在后两种场景，其中标量输入支持配置LocalTensor单点元素。 |
+| [Divs](Memory矢量计算/基础算术/Divs（灵活标量位置）.md) | 矢量内每个元素和标量间做除法，支持标量在前和标量在后两种场景，其中标量输入支持配置LocalTensor单点元素。 |
 | [LeakyRelu](Memory矢量计算/基础算术/LeakyRelu.md) | LeakyRelu属于双目标量类计算接口，输入为一个矢量tensor和一个标量scalar，LeakyRelu负责将矢量tensor内的每个元素执行Leaky ReLu（Leaky Rectified Linear Unit）操作。 |
 
 ### 逻辑计算

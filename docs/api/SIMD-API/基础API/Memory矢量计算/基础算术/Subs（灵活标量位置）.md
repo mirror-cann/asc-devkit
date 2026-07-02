@@ -1,4 +1,4 @@
-# Muls（灵活标量位置）<a name="ZH-CN_TOPIC_0000002170200493"></a>
+# Subs<a name="ZH-CN_TOPIC_0000002167791269"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
@@ -28,11 +28,11 @@
 
 头文件路径为：`"basic_api/kernel_operator_vec_binary_scalar_intf.h"`。
 
-Muls属于双目标量类计算接口，矢量内每个元素和标量间做乘法，支持标量在前和标量在后两种场景。其中标量输入支持配置LocalTensor单点元素，计算公式如下：
+Subs属于双目标量类计算接口，矢量内每个元素和标量间做减法，支持标量在前和标量在后两种场景。其中标量输入支持配置LocalTensor单点元素，计算公式如下：
 
-$dst_i = src_i * scalar$
+$dst_i = src_i - scalar$
 
-$dst_i = scalar * src_i$
+$dst_i = scalar - src_i$
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -40,7 +40,7 @@ $dst_i = scalar * src_i$
 
     ```cpp
     template <typename T = BinaryDefaultType, bool isSetMask = true, const BinaryConfig& config = DEFAULT_BINARY_CONFIG, typename U, typename S, typename V>
-    __aicore__ inline void Muls(const U& dst, const S& src0, const V& src1, const int32_t& count)
+    __aicore__ inline void Subs(const U& dst, const S& src0, const V& src1, const int32_t& count)
     ```
 
 - tensor高维切分计算
@@ -48,14 +48,14 @@ $dst_i = scalar * src_i$
 
         ```cpp
         template <typename T = BinaryDefaultType, bool isSetMask = true, const BinaryConfig& config = DEFAULT_BINARY_CONFIG, typename U, typename S, typename V>
-        __aicore__ inline void Muls(const U& dst, const S& src0, const V& src1, uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+        __aicore__ inline void Subs(const U& dst, const S& src0, const V& src1, uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
         ```
 
     - mask连续模式
 
         ```cpp
         template <typename T = BinaryDefaultType, bool isSetMask = true, const BinaryConfig& config = DEFAULT_BINARY_CONFIG, typename U, typename S, typename V>
-        __aicore__ inline void Muls(const U& dst, const S& src0, const V& src1, uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+        __aicore__ inline void Subs(const U& dst, const S& src0, const V& src1, uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
         ```
 
 ## 参数说明<a name="section622mcpsimp"></a>
@@ -92,11 +92,14 @@ $dst_i = scalar * src_i$
 
 无
 
-## 约束说明<a name="section13772125417295"></a>
+## 约束说明<a name="section633mcpsimp"></a>
 
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md)。
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md)。
-- 调用灵活标量位置接口且源操作数为LocalTensor单点元素的场景，不支持源操作数和目的操作数地址重叠。
+- 使用tensor高维切分计算接口时，节省地址空间，开发者可以定义一个Tensor，供源操作数与目的操作数同时使用（即地址重叠），相关约束如下：
+    - 对于单次repeat（repeatTime=1），且源操作数与目的操作数之间要求100%完全重叠，不支持部分重叠。
+    - 对于多次repeat（repeatTime\>1），操作数与目的操作数之间存在依赖的情况下，即第N次迭代的目的操作数是第N+1次的源操作数，不支持地址重叠。
+    - 源操作数为LocalTensor单点元素的场景，不支持源操作和目的操作数地址重叠。
 - 左操作数及右操作数中，必须有一个为矢量；当前不支持左右操作数同时为标量。
 - 本接口传入LocalTensor单点数据作为标量时，idx参数需要传入编译期已知的常量，传入变量时需要声明为constexpr。
 
@@ -108,58 +111,66 @@ $dst_i = scalar * src_i$
 - 针对Ascend 950PR/Ascend 950DT，tensor前n个数据计算API中的isSetMask参数不生效，保持默认值即可。
 <!-- end id9 -->
 
-## 调用示例<a name="section633mcpsimp"></a>
+## 调用示例<a name="section642mcpsimp"></a>
 
 更多样例可参考[LINK](更多样例-9.md)。
 
 - tensor高维切分计算样例-mask连续模式
 
     ```cpp
+    // dstLocal：输出Tensor
+    // src0Local：输入Tensor
+    // src1Local：输入Tensor
+
     uint64_t mask = 128;
     // repeatTime = 4, 单次迭代处理128个数，计算512个数需要迭代4次
     // dstBlkStride, srcBlkStride = 1, 每个迭代内src0参与计算的数据地址间隔为1个datablock，表示单次迭代内数据连续读取和写入
     // dstRepStride, srcRepStride = 8, 相邻迭代间的地址间隔为8个datablock，表示相邻迭代间数据连续读取和写入
-    // 标量在后调用示例
-    AscendC::Muls(dstLocal, src0Local, src1Local[0], mask, 4, { 1, 1, 8, 8 });
-    
-    // 标量在前调用示例
+    // 标量在后示例
+    AscendC::Subs(dstLocal, src0Local, src1Local[0], mask, 4, {1, 1, 8, 8});
+
+    // 标量在前示例
     static constexpr AscendC::BinaryConfig config = { 0 };
-    AscendC::Muls<BinaryDefaultType, true, config>(dstLocal, src0Local[0], src1Local, mask, 4, { 1, 1, 8, 8 });
+    AscendC::Subs<BinaryDefaultType, true, config>(dstLocal, src0Local[0], src1Local, mask, 4, {1, 1, 8, 8});
     ```
 
 - tensor高维切分计算样例-mask逐bit模式
 
     ```cpp
+    // dstLocal：输出Tensor
+    // src0Local：输入Tensor
+    // src1Local：输入Tensor
+
     uint64_t mask[2] = { UINT64_MAX, UINT64_MAX };
     // repeatTime = 4, 单次迭代处理128个数，计算512个数需要迭代4次
     // dstBlkStride, srcBlkStride = 1, 每个迭代内src0参与计算的数据地址间隔为1个datablock，表示单次迭代内数据连续读取和写入
     // dstRepStride, srcRepStride = 8, 相邻迭代间的地址间隔为8个datablock，表示相邻迭代间数据连续读取和写入
-    // 标量在后调用示例
-    AscendC::Muls(dstLocal, src0Local, src1Local[0], mask, 4, {1, 1, 8, 8});
-    
-    // 标量在前调用示例
+    // 标量在后示例
+    AscendC::Subs(dstLocal, src0Local, src1Local[0], mask, 4, {1, 1, 8, 8});
+
+    // 标量在前示例
     static constexpr AscendC::BinaryConfig config = { 0 };
-    AscendC::Muls<BinaryDefaultType, true, config>(dstLocal, src0Local[0], src1Local, mask, 4, { 1, 1, 8, 8 });
+    AscendC::Subs<BinaryDefaultType, true, config>(dstLocal, src0Local[0], src1Local, mask, 4, {1, 1, 8, 8});
     ```
 
 - tensor前n个数据计算样例
 
     ```cpp
-    // 标量在后调用示例
-    AscendC::Muls(dstLocal, src0Local, src1Local[0], 512);
-    
-    // 标量在前调用示例
+    // 标量在后示例
+    AscendC::Subs(dstLocal, src0Local, src1Local[0], 512);
+
+    // 标量在前示例
     static constexpr AscendC::BinaryConfig config = { 0 };
-    AscendC::Muls<BinaryDefaultType, true, config>(dstLocal, src0Local[0], src1Local, 512);
+    AscendC::Subs<BinaryDefaultType, true, config>(dstLocal, src0Local[0], src1Local, 512);
     ```
 
 结果示例如下：
 
 ```bash
 输入数据src0Local：[1 2 3 ... 512]
-输入数据src1Local：[2 2 2 ... 2]
+输入数据src1Local：[1 2 3 ... 512]
 // 标量在前，src0Local[0]作为标量
-输出数据dstLocal：[2 2 2 ... 2]
+输出数据dstLocal：[0 1 2 ... 511]
 // 标量在后，src1Local[0]作为标量
-输出数据dstLocal：[2 4 6 ... 1024]
+输出数据dstLocal：[0 1 2 ... 511]
 ```

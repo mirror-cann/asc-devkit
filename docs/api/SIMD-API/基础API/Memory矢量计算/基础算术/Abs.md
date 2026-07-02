@@ -1,4 +1,4 @@
-# Abs<a name="ZH-CN_TOPIC_0000001429123797"></a>
+﻿# Abs<a name="ZH-CN_TOPIC_0000001429123797"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
@@ -47,7 +47,7 @@ $dst_i = |src_i|$
     __aicore__ inline void Abs(const LocalTensor<T>& dst, const LocalTensor<T>& src, const int32_t& count)
     ```
 
-<!-- npu="950" id21 -->
+<!-- npu="950" id10 -->
 - tensor前n个复数计算
 
     ```cpp
@@ -55,7 +55,7 @@ $dst_i = |src_i|$
     template <typename T, typename U>
     __aicore__ inline void Abs(const LocalTensor<T>& dst, const LocalTensor<U>& src, const int32_t& count)
     ```
-<!-- end id21 -->
+<!-- end id10 -->
 
 - tensor高维切分计算
     - mask逐bit模式
@@ -74,15 +74,15 @@ $dst_i = |src_i|$
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-**表 1**  模板参数说明
+**表1** 模板参数说明
 
 | 参数名 | 描述 |
 |---|---|
 | T | 操作数数据类型。 |
-| <!-- npu="950" id20 -->U | tensor前n个复数计算接口中的源操作数数据类型。<!-- end id20 --> |
+| <!-- npu="950" id11 -->U | tensor前n个复数计算接口中的源操作数数据类型。<!-- end id11 --> |
 | isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下，接口入参中的mask值设置为占位符`MASK_PLACEHOLDER`，用于占位，无实际含义。 |
 
-**表 2**  参数说明
+**表2** 参数说明
 
 | 参数名 | 输入/输出 | 描述 |
 |---|---|---|
@@ -95,32 +95,32 @@ $dst_i = |src_i|$
 
 ## 数据类型
 
-<!-- npu="950" id22 -->
+<!-- npu="950" id12 -->
 - 针对Ascend 950PR/Ascend 950DT
     - T支持的数据类型为：int8_t、int16_t、half、int32_t、float、int64_t。数据类型int8_t、int64_t仅支持tensor前n个数据计算接口。
     - U支持的数据类型为：complex32、complex64；当U为complex32类型时，T必须是half类型；当U为complex64类型时，T必须是float类型。
-<!-- end id22 -->
-<!-- npu="A3" id10 -->
-- 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，T支持的数据类型为：half、float。
-<!-- end id10 -->
-<!-- npu="910b" id11 -->
-- 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，T支持的数据类型为：half、float。
-<!-- end id11 -->
-<!-- npu="310b" id12 -->
-- 针对Atlas 200I/500 A2 推理产品，T支持的数据类型为：int16_t、half、float。
 <!-- end id12 -->
-<!-- npu="310p" id13 -->
-- 针对Atlas 推理系列产品AI Core，T支持的数据类型为：half、float。
+<!-- npu="A3" id13 -->
+- 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，T支持的数据类型为：half、float。
 <!-- end id13 -->
-<!-- npu="910" id14 -->
-- 针对Atlas 训练系列产品，T支持的数据类型为：half、float。
+<!-- npu="910b" id14 -->
+- 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，T支持的数据类型为：half、float。
 <!-- end id14 -->
-<!-- npu="x90" id15 -->
-- 针对Kirin X90，T支持的数据类型为：half、float。
+<!-- npu="310b" id15 -->
+- 针对Atlas 200I/500 A2 推理产品，T支持的数据类型为：int16_t、half、float。
 <!-- end id15 -->
-<!-- npu="9030" id16 -->
-- 针对Kirin 9030，T支持的数据类型为：half、float。
+<!-- npu="310p" id16 -->
+- 针对Atlas 推理系列产品AI Core，T支持的数据类型为：half、float。
 <!-- end id16 -->
+<!-- npu="910" id17 -->
+- 针对Atlas 训练系列产品，T支持的数据类型为：half、float。
+<!-- end id17 -->
+<!-- npu="x90" id18 -->
+- 针对Kirin X90，T支持的数据类型为：half、float。
+<!-- end id18 -->
+<!-- npu="9030" id19 -->
+- 针对Kirin 9030，T支持的数据类型为：half、float。
+<!-- end id19 -->
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -130,15 +130,26 @@ $dst_i = |src_i|$
 
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md)。
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md)。
-<!-- npu="A3,910b" id19 -->
-- 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
-  <!-- npu="A3" id17 -->
-  - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-  <!-- end id17 -->
-  <!-- npu="910b" id18 -->
-  - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-  <!-- end id18 -->
-<!-- end id19 -->
+<!-- npu="A3,910b,950" id20 -->
+- 当参数count或repeatTime取值为0时，该接口的行为如下：
+  <!-- npu="A3,910b" id25 -->
+  - 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
+    <!-- npu="A3" id26 -->
+    - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+    <!-- end id26 -->
+    <!-- npu="910b" id28 -->
+    - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+    <!-- end id28 -->
+  <!-- end id25 -->
+  <!-- npu="950" id27 -->
+  - 针对Ascend 950PR/Ascend 950DT：该接口通过VF调用[Reg矢量计算API](../../Reg矢量计算/Reg矢量计算.md)实现兼容，当参数count或repeatTime取值为0时，软仿行为不保证该接口被视为NOP（空操作）。
+  <!-- end id27 -->
+<!-- end id20 -->
+<!-- npu="950" id21 -->
+- 对UB空间的占用说明。针对Ascend 950PR/Ascend 950DT：
+  - tensor高维切分计算占用8KB Unified Buffer。
+  - tensor前n个数据连续计算不涉及8KB Unified Buffer的占用。
+<!-- end id21 -->
 
 ## 调用示例<a name="section176061616102911"></a>
 
@@ -189,7 +200,7 @@ $dst_i = |src_i|$
     输出数据dstLocal：[0.0 1.0 2.0 3.0 ...]
     ```
 
-<!-- npu="950" id23 -->
+<!-- npu="950" id24 -->
 针对Ascend 950PR/Ascend 950DT：
 
 - tensor前n个复数计算接口样例
@@ -206,5 +217,4 @@ $dst_i = |src_i|$
     输入数据srcLocal：[1+2j  2-3j ...]
     输出数据dstLocal：[2.236 3.605 ...]
     ```
-<!-- end id23 -->
-
+<!-- end id24 -->

@@ -365,8 +365,8 @@
                 -   [Maxs（灵活标量位置）](SIMD-API/基础API/Memory矢量计算/基础算术/Maxs（灵活标量位置）.md)
                 -   [Mins](SIMD-API/基础API/Memory矢量计算/基础算术/Mins.md)
                 -   [Mins（灵活标量位置）](SIMD-API/基础API/Memory矢量计算/基础算术/Mins（灵活标量位置）.md)
-                -   [Subs](SIMD-API/基础API/Memory矢量计算/基础算术/Subs.md)
-                -   [Divs](SIMD-API/基础API/Memory矢量计算/基础算术/Divs.md)
+                -   [Subs](SIMD-API/基础API/Memory矢量计算/基础算术/Subs（灵活标量位置）.md)
+                -   [Divs](SIMD-API/基础API/Memory矢量计算/基础算术/Divs（灵活标量位置）.md)
                 -   [LeakyRelu](SIMD-API/基础API/Memory矢量计算/基础算术/LeakyRelu.md)
                 -   [更多样例](SIMD-API/基础API/Memory矢量计算/基础算术/更多样例-9.md)
 
@@ -858,6 +858,8 @@
             -   [设置Kernel类型](SIMD-API/基础API/Kernel-Tiling/设置Kernel类型.md)
         
         -   [特殊寄存器访问](SIMD-API/基础API/特殊寄存器访问/特殊寄存器访问.md)
+            -   [GetSpr](SIMD-API/基础API/特殊寄存器访问/GetSpr.md)
+            -   [ClearSpr](SIMD-API/基础API/特殊寄存器访问/ClearSpr.md)
             -   [SetCtrlSpr\(ISASI\)](SIMD-API/基础API/特殊寄存器访问/SetCtrlSpr(ISASI).md)
             -   [GetCtrlSpr\(ISASI\)](SIMD-API/基础API/特殊寄存器访问/GetCtrlSpr(ISASI).md)
             -   [ResetCtrlSpr\(ISASI\)](SIMD-API/基础API/特殊寄存器访问/ResetCtrlSpr(ISASI).md)

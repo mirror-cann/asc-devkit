@@ -83,13 +83,13 @@ __simd_callee__ inline void ClearSpr()
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-无。
+本接口只能在VF函数内调用，命名空间为AscendC::Reg，函数标记符为__simd_callee__。如果需要在VF外调用，命名空间为AscendC，函数标记符为__aicore__，具体请参考[ClearSpr](../../特殊寄存器访问/ClearSpr.md)。
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
 如下示例中Gather Reg矢量计算API会存储有效元素的总字节数到AR寄存器中，在宏函数内for循环开始前通过ClearSpr对AR寄存器进行清零。
 
-```
+```cpp
 template<typename T, typename U>
 __simd_vf__ inline void VFDemo(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf__ U* src1Addr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
 {
@@ -106,4 +106,3 @@ __simd_vf__ inline void VFDemo(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf
     }
 }
 ```
-
