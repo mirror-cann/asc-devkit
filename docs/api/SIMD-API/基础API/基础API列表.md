@@ -454,12 +454,11 @@
 ### 数据类型
 | 接口名 | 功能描述 |
 | --- | --- |
-| [PostLiteral](Reg矢量计算/数据类型/PostLiteral.md) | enum class PostLiteral  |
-| [RegLayout](Reg矢量计算/数据类型/RegLayout.md) | enum class RegLayout  |
-| [CastTrait](Reg矢量计算/数据类型/CastTrait.md) | 包括RegLayout、SatMode、MaskMergeMode、RoundMode。 |
-| [SatMode](Reg矢量计算/数据类型/SatMode.md) | 设置Cast类型转换饱和与不饱和模式。 |
-| [MaskMergeMode](Reg矢量计算/数据类型/MaskMergeMode.md) | 决定mask未选择元素对于dst元素是否置0。 |
-| [RoundMode](Reg矢量计算/数据类型/RoundMode.md) | 控制舍入模式。 |
+| [PostLiteral](Reg矢量计算/辅助数据类型/PostLiteral.md) | enum class PostLiteral  |
+| [RegLayout](Reg矢量计算/辅助数据类型/RegLayout.md) | enum class RegLayout  |
+| [SatMode](Reg矢量计算/辅助数据类型/SatMode.md) | 设置Cast类型转换饱和与不饱和模式。 |
+| [MaskMergeMode](Reg矢量计算/辅助数据类型/MaskMergeMode.md) | 决定mask未选择元素对于dst元素是否置0。 |
+| [RoundMode](Reg矢量计算/辅助数据类型/RoundMode.md) | 控制舍入模式。 |
 
 ## 标量计算
 | 接口名 | 功能描述 |

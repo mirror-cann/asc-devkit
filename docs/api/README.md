@@ -477,7 +477,7 @@
                 -   [UnalignRegForLoad & UnalignRegForStore](SIMD-API/基础API/Reg矢量计算/寄存器数据类型/UnalignRegForLoad-UnalignRegForStore.md)
                 -   [AddrReg](SIMD-API/基础API/Reg矢量计算/寄存器数据类型/AddrReg.md)
 
-            -   [asc\_vf\_call](SIMD-API/基础API/Reg矢量计算/asc_vf_call.md)
+            -   [asc\_vf\_call](SIMD-API/基础API/Reg矢量计算/VF调用/asc_vf_call.md)
             -   [Reg数据搬运](SIMD-API/基础API/Reg矢量计算/Reg数据搬运/Reg数据搬运.md)
                 -   [连续对齐搬入](SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续对齐搬入.md)
                 -   [连续对齐搬出](SIMD-API/基础API/Reg矢量计算/Reg数据搬运/连续对齐搬出.md)
@@ -588,13 +588,12 @@
                 -   [GetSpr](SIMD-API/基础API/Reg矢量计算/系统变量访问/GetSpr.md)
                 -   [ClearSpr](SIMD-API/基础API/Reg矢量计算/系统变量访问/ClearSpr.md)
 
-            -   [数据类型](SIMD-API/基础API/Reg矢量计算/数据类型/数据类型.md)
-                -   [PostLiteral](SIMD-API/基础API/Reg矢量计算/数据类型/PostLiteral.md)
-                -   [RegLayout](SIMD-API/基础API/Reg矢量计算/数据类型/RegLayout.md)
-                -   [CastTrait](SIMD-API/基础API/Reg矢量计算/数据类型/CastTrait.md)
-                -   [SatMode](SIMD-API/基础API/Reg矢量计算/数据类型/SatMode.md)
-                -   [MaskMergeMode](SIMD-API/基础API/Reg矢量计算/数据类型/MaskMergeMode.md)
-                -   [RoundMode](SIMD-API/基础API/Reg矢量计算/数据类型/RoundMode.md)
+            -   [辅助数据类型](SIMD-API/基础API/Reg矢量计算/辅助数据类型/辅助数据类型.md)
+                -   [PostLiteral](SIMD-API/基础API/Reg矢量计算/辅助数据类型/PostLiteral.md)
+                -   [RegLayout](SIMD-API/基础API/Reg矢量计算/辅助数据类型/RegLayout.md)
+                -   [SatMode](SIMD-API/基础API/Reg矢量计算/辅助数据类型/SatMode.md)
+                -   [MaskMergeMode](SIMD-API/基础API/Reg矢量计算/辅助数据类型/MaskMergeMode.md)
+                -   [RoundMode](SIMD-API/基础API/Reg矢量计算/辅助数据类型/RoundMode.md)
 
         -   [标量计算](SIMD-API/基础API/标量计算/标量计算.md)
             -   [GetBitCount](SIMD-API/基础API/标量计算/GetBitCount.md)

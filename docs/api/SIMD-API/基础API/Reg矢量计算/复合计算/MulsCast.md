@@ -91,7 +91,7 @@ __simd_callee__ inline void MulsCast(T3& dstReg, T4& srcReg, T2 scalarValue, Mas
 </tr>
 <tr id="row416056114119"><td class="cellrowborder" valign="top" width="18.22%" headers="mcps1.2.3.1.1 "><p id="p95016121914"><a name="p95016121914"></a><a name="p95016121914"></a>layout</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.78%" headers="mcps1.2.3.1.2 "><p id="p1433681723313"><a name="p1433681723313"></a><a name="p1433681723313"></a><a href="../数据类型/RegLayout.md">RegLayout</a>枚举类型。</p>
+<td class="cellrowborder" valign="top" width="81.78%" headers="mcps1.2.3.1.2 "><p id="p1433681723313"><a name="p1433681723313"></a><a name="p1433681723313"></a><a href="../辅助数据类型/RegLayout.md">RegLayout</a>枚举类型。</p>
 <p id="p24515419439"><a name="p24515419439"></a><a name="p24515419439"></a>本接口只支持RegLayout::ZERO，RegLayout::ONE。</p>
 <p id="p150112121614"><a name="p150112121614"></a><a name="p150112121614"></a>src为half类型时使用，float时不生效，half类型时，RegLayout::ZERO表示从b16 RegTensor偶数位读取half元素转换成float，RegLayout::ONE表示从b16 RegTensor奇数位读取half元素转换成float。</p>
 </td>
@@ -179,4 +179,3 @@ __simd_vf__ inline void MulsCastVF(__ubuf__ half* dstAddr, __ubuf__ float* srcAd
     }
 }
 ```
-

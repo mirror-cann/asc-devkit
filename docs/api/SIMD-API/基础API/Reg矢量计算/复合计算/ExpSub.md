@@ -88,7 +88,7 @@ __simd_callee__ inline void ExpSub(S& dstReg, V& srcReg0, V& srcReg1, MaskReg& m
 </tr>
 <tr id="row105019122115"><td class="cellrowborder" valign="top" width="18.48%" headers="mcps1.2.3.1.1 "><p id="p95016121914"><a name="p95016121914"></a><a name="p95016121914"></a>layout</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.52000000000001%" headers="mcps1.2.3.1.2 "><p id="p1433681723313"><a name="p1433681723313"></a><a name="p1433681723313"></a><a href="../数据类型/RegLayout.md">RegLayout</a>枚举类型：</p>
+<td class="cellrowborder" valign="top" width="81.52000000000001%" headers="mcps1.2.3.1.2 "><p id="p1433681723313"><a name="p1433681723313"></a><a name="p1433681723313"></a><a href="../辅助数据类型/RegLayout.md">RegLayout</a>枚举类型：</p>
 <pre class="screen" id="screen18481935171419"><a name="screen18481935171419"></a><a name="screen18481935171419"></a>enum class RegLayout {
     UNKNOWN = -1,
     ZERO,
@@ -192,4 +192,3 @@ static __simd_vf__ inline void ExpSubVF(__ubuf__ T* dstAddr, __ubuf__ U* src0Add
     }
 }
 ```
-

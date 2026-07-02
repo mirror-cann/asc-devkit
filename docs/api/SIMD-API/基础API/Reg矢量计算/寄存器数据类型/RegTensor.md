@@ -1,84 +1,100 @@
 # RegTensor<a name="ZH-CN_TOPIC_0000001928794188"></a>
 
+## 产品支持情况<a name="section1550532418810"></a>
+
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
+
 ## 功能说明<a name="section618mcpsimp"></a>
 
-Reg矢量计算基本单元，RegTensor位宽为VL（Vector Length），具体值可能因不同AI处理器型号而异。
+Reg矢量计算基本单元，RegTensor位宽为VL（Vector Length），长度为256B。b64或complex32类型下，支持通过RegTrait模板参数扩展存储2VL用于复杂计算。
 
 ## 定义原型<a name="section620mcpsimp"></a>
 
-```
+```cpp
 template <typename T, const RegTrait& regTrait = RegTraitNumOne> struct RegTensor;
 ```
 
-## 函数说明<a name="section622mcpsimp"></a>
+## 参数说明<a name="section622mcpsimp"></a>
 
-模板参数T，支持的数据类型\(宽度\)为b8/b16/b32/b64。
+**表1**  模板参数说明
 
-<a name="zh-cn_topic_0235751031_table33761356"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="17.41%" id="mcps1.1.3.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>数据类型宽度</p>
-</th>
-<th class="cellrowborder" valign="top" width="82.59%" id="mcps1.1.3.1.2"><p id="zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0235751031_p59995477"></a>数据类型</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row42461942101815"><td class="cellrowborder" valign="top" width="17.41%" headers="mcps1.1.3.1.1 "><p id="p108051250181214"><a name="p108051250181214"></a><a name="p108051250181214"></a>b8</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.59%" headers="mcps1.1.3.1.2 "><p id="p2366753194920"><a name="p2366753194920"></a><a name="p2366753194920"></a><span id="ph97184323516"><a name="ph97184323516"></a><a name="ph97184323516"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：bool/int8_t/uint8_t/fp4x2_e2m1_t/fp4x2_e1m2_t/hifloat8_t/fp8_e5m2_t/fp8_e4m3fn_t/fp8_e8m0_t（ fp4x2_e2m1_t/fp4x2_e1m2_t这两个b4类型在Vector侧的内存排布需要为两个一组，表现为b8类型；int4b_t也使用b8类型表达；bool数据类型只支持数据搬运）。</p>
-</td>
-</tr>
-<tr id="row2137145181815"><td class="cellrowborder" valign="top" width="17.41%" headers="mcps1.1.3.1.1 "><p id="p19574165615129"><a name="p19574165615129"></a><a name="p19574165615129"></a>b16</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.59%" headers="mcps1.1.3.1.2 "><p id="p045917114420"><a name="p045917114420"></a><a name="p045917114420"></a><span id="ph1379735211382"><a name="ph1379735211382"></a><a name="ph1379735211382"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：int16_t/uint16_t/half/bfloat16_t。</p>
-</td>
-</tr>
-<tr id="row7463133114314"><td class="cellrowborder" valign="top" width="17.41%" headers="mcps1.1.3.1.1 "><p id="p1846343313436"><a name="p1846343313436"></a><a name="p1846343313436"></a>b32</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.59%" headers="mcps1.1.3.1.2 "><p id="p5463183394311"><a name="p5463183394311"></a><a name="p5463183394311"></a><span id="ph157704482402"><a name="ph157704482402"></a><a name="ph157704482402"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：int32_t/uint32_t/float/complex32。</p>
-</td>
-</tr>
-<tr id="row165841599463"><td class="cellrowborder" valign="top" width="17.41%" headers="mcps1.1.3.1.1 "><p id="p95841659104615"><a name="p95841659104615"></a><a name="p95841659104615"></a>b64</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.59%" headers="mcps1.1.3.1.2 "><p id="p358465916469"><a name="p358465916469"></a><a name="p358465916469"></a><span id="ph550610473429"><a name="ph550610473429"></a><a name="ph550610473429"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：int64_t/uint64_t/complex64。</p>
-</td>
-</tr>
-</tbody>
-</table>
-
-模板参数regTrait，表示该RegTensor类型内部包含的矢量Reg数量。regTrait为RegTraitNumOne时，该RegTensor类型中包含1个相应数据类型的矢量Reg，长度为VL。regTrait为RegTraitNumTwo时，该RegTensor类型中包含2个相应数据类型的矢量Reg，总长度为2 \* VL，每个矢量Reg长度为VL。
-
-<a name="table385811403491"></a>
-<table><thead align="left"><tr id="row985815405493"><th class="cellrowborder" valign="top" width="17.65%" id="mcps1.1.3.1.1"><p id="p178581040164916"><a name="p178581040164916"></a><a name="p178581040164916"></a>模板参数regTrait</p>
-</th>
-<th class="cellrowborder" valign="top" width="82.35%" id="mcps1.1.3.1.2"><p id="p117694418586"><a name="p117694418586"></a><a name="p117694418586"></a>支持的数据类型宽度</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row19858940134911"><td class="cellrowborder" valign="top" width="17.65%" headers="mcps1.1.3.1.1 "><p id="p68587404495"><a name="p68587404495"></a><a name="p68587404495"></a>RegTraitNumOne</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.35%" headers="mcps1.1.3.1.2 "><p id="p118581540104918"><a name="p118581540104918"></a><a name="p118581540104918"></a><span id="ph98581740104910"><a name="ph98581740104910"></a><a name="ph98581740104910"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型宽度为：b8/b16/b32/b64。</p>
-</td>
-</tr>
-<tr id="row385894094920"><td class="cellrowborder" valign="top" width="17.65%" headers="mcps1.1.3.1.1 "><p id="p385994018495"><a name="p385994018495"></a><a name="p385994018495"></a>RegTraitNumTwo</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.35%" headers="mcps1.1.3.1.2 "><p id="p17386201612599"><a name="p17386201612599"></a><a name="p17386201612599"></a><span id="ph1045410457315"><a name="ph1045410457315"></a><a name="ph1045410457315"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型宽度为：b64/complex32。</p>
-</td>
-</tr>
-</tbody>
-</table>
-
-## 支持的型号<a name="section633mcpsimp"></a>
-
-Ascend 950PR/Ascend 950DT（VL=256B）
+| 参数名 | 描述 |
+| :-- | :------------ |
+| T | 操作数数据类型，支持的数据类型(宽度)为b8、b16、b32、b64。<br>&bull; b8：bool、int8_t、uint8_t、fp4x2_e2m1_t、fp4x2_e1m2_t、hifloat8_t、fp8_e5m2_t、fp8_e4m3fn_t、fp8_e8m0_t（fp4x2_e2m1_t、fp4x2_e1m2_t这两个b4类型在Vector侧的内存排布需要为两个一组，表现为b8类型；int4b_t也使用b8类型表达；bool数据类型只支持数据搬运）。<br>&bull; b16：int16_t、uint16_t、half、bfloat16_t。<br>&bull; b32：int32_t、uint32_t、float、complex32。<br>&bull; b64：int64_t、uint64_t、complex64。| 
+| regTrait | 类型为RegTrait，支持配置为RegTraitNumOne或RegTraitNumTwo。<br>&bull; RegTraitNumOne：该RegTensor类型中包含1个相应数据类型的矢量Reg，长度为VL。支持的数据类型为：b8、b16、b32、b64。<br>&bull; RegTraitNumTwo：该RegTensor类型中包含2个相应数据类型的矢量Reg，每个矢量Reg长度为VL，总长度为2*VL。支持的数据类型为：complex32、b64。|
 
 ## 约束说明<a name="section177921451558"></a>
 
-无
+-   RegTensor寄存器数量上限为32。超出限制上限的寄存器数据会写入预留的8KUB内存中，可能会引起性能劣化。编译器会自动复用生命周期结束的寄存器和预留内存，若寄存器与预留内存均存在可用空间，将优先复用寄存器。
+-   寄存器的生命周期限定于单个VF内部。
+
+## 关键特性
+
+-   complex32类型RegTensor存储结构
+
+    下图为complex32在RegTraitNumOne和RegTraitNumTwo场景下RegTensor存储情况：
+
+    **图1** RegTensor搬运complex32<a id="fig1"></a>
+
+    ![](../../../../figures/RegTensor搬运complex32.png "RegTensor搬运complex32")
+
+    complex32是一个包含两个half（实部real、虚部imag）类型的复合类型，通常是连续存储，低位为实部高位为虚部。
+    
+    在RegTraitNumOne场景下，从UB（src0Addr）中以DIST_NORM模式搬运VL数据量，在RegTensor中连续存储。
+    
+    在RegTraitNumTwo场景下，从UB（src0Addr）中以DIST_DINTLV_B16双搬入模式读取2*VL数据量，将complex32数据交错搬运，偶数索引（实部）的元素存入reg[0]，将奇数索引（虚部）的元素存入reg[1]，数据类型为uint16_t。两个RegTensor存储512B的数据量，reg[0]存的是128个complex32的前16位（实部），reg[1]存的是128个complex32的后16位（虚部）。
+
+-   complex64类型RegTensor存储结构
+
+    下图为complex64在RegTraitNumOne和RegTraitNumTwo场景下RegTensor存储情况：
+
+    **图2** RegTensor搬运complex64<a id="fig2"></a>
+
+    ![](../../../../figures/RegTensor搬运complex64.png "RegTensor搬运complex64")
+
+    complex64是一个包含两个float（实部real、虚部imag）类型的复合类型，通常是连续存储，低位为实部高位为虚部。
+    
+    在RegTraitNumOne场景下，从UB（src0Addr）中以DIST_NORM模式搬运VL数据量，在RegTensor中连续存储。
+    
+    在RegTraitNumTwo场景下，从UB（src0Addr）中以DIST_DINTLV_B32双搬入模式读取2*VL数据量，将complex64数据交错搬运，偶数索引（实部）的元素存入reg[0]，将奇数索引（虚部）的元素存入reg[1]，数据类型为uint32_t。两个RegTensor存储512B的数据量，reg[0]存的是64个complex64的前32位（实部），reg[1]存的是64个complex64的后32位（虚部）。
+
+-   b64类型RegTensor存储结构
+
+    下图为b64（uint64_t、int64_t）在RegTraitNumOne和RegTraitNumTwo场景下RegTensor存储情况：
+
+    **图3** RegTensor搬运b64<a id="fig3"></a>
+
+    ![](../../../../figures/RegTensor搬运b64.png "RegTensor搬运b64")
+
+    在RegTraitNumOne场景下，从UB（src0Addr）中以DIST_NORM模式搬运VL数据量。
+    
+    在RegTraitNumTwo场景下，从UB（src0Addr）中以DIST_DINTLV_B32双搬入模式读取2*VL数据量，将b64数据交错搬运，偶数索引（低位）的元素存入reg[0]，将奇数索引（高位）的元素存入reg[1]，数据类型为b32。两个RegTensor存储512B的数据量，reg[0]存的是64个b64的前32位（低位），reg[1]存的是64个b64的后32位（高位）。
 
 ## 调用示例<a name="section1398164912391"></a>
 
 -   示例一
 
-    ```
+    ```cpp
     AscendC::Reg::RegTensor<uint32_t> reg;
     AscendC::Reg::MaskReg mask = AscendC::Reg::CreateMask<uint32_t>();
     AscendC::Reg::LoadAlign(reg, src, 0);
@@ -88,10 +104,10 @@ Ascend 950PR/Ascend 950DT（VL=256B）
 
 -   示例二
 
-    ```
+    ```cpp
     // 针对B64,可以传入RegTraitNumTwo
     template<typename T, const AscendC::Reg::RegTrait& Trait = AscendC::Reg::RegTraitNumOne>
-    __simd_vf__ inline void AddVF(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf__ T* src1Addr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
+    __simd_vf__ inline void AddVF(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf__ T* src1Addr, uint32_t count, uint16_t oneRepeatSize, uint16_t repeatTimes)
     {
         AscendC::Reg::RegTensor<T,Trait> srcReg0;
         AscendC::Reg::RegTensor<T,Trait> srcReg1;
@@ -106,4 +122,3 @@ Ascend 950PR/Ascend 950DT（VL=256B）
         }
     }
     ```
-
