@@ -44,6 +44,7 @@ DataStoreBarrier(void)
 在AI CPU算子Kernel侧实现代码中调用AscendC::DataStoreBarrier\(\)，确保AI CPU算子对Tiling数据的修改写入内存，使得AI Core算子能够正确读取Tiling数据：
 
 ```
+namespace KernelInfo {
 struct TilingInfo {
     uint64_t lock; // AI CPU/AI Core之间同步的锁
     int8_t type;
@@ -56,14 +57,15 @@ struct KernelArgs {
     uint32_t *zDevice;
     TilingInfo *ti; // 与AI Core共享的参数，用于同步tiling选择
 };
+}
 
 template<typename T, int8_t mode, int8_t len>
 __aicore__ void hello_world_impl(GM_ADDR m)
 {
     if constexpr (std::is_same_v<T, float>) {
-       AscendC::printf("Hello World: float mode %u len %u.\n", mode, len);
+       AscendC::printf("Hello World: float mode %d len %d.\n", mode, len);
     } else if constexpr (std::is_same_v<T, int>) {
-       AscendC::printf("Hello World: int mode %u len %u.\n", mode, len);
+       AscendC::printf("Hello World: int mode %d len %d.\n", mode, len);
     }
 }
 
@@ -103,14 +105,14 @@ __mix__(1,2) __global__ __aicore__ void hello_world(GM_ADDR m, GM_ADDR TilingPtr
 
 extern "C" __global__ __aicpu__ uint32_t MyAicpuKernel(void *arg)
 {
-    KernelArgs* cfg = (KernelArgs*)arg;
+    KernelInfo::KernelArgs* cfg = (KernelInfo::KernelArgs*)arg;
     AscendC::printf("MyAicpuKernel inited!\n");
     cfg->ti->lock = 1;
     cfg->ti->type = 1;
     cfg->ti->mode = 2;
     cfg->ti->len = 4;
     AscendC::DataStoreBarrier(); // 对tilingInfo进行写同步
-    AscendC::printf("MyAicpuKernel inited type %u mode %u len %u end!\n", cfg->ti->type, cfg->ti->mode, cfg->ti->len);
+    AscendC::printf("MyAicpuKernel inited type %d mode %d len %d end!\n", cfg->ti->type, cfg->ti->mode, cfg->ti->len);
     return 0;
 }
 ```

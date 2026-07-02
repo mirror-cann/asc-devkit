@@ -19,5 +19,10 @@
 <td class="cellrowborder" valign="top" width="62.580000000000005%" headers="mcps1.2.3.1.2 "><p id="p1404204252114"><a name="p1404204252114"></a><a name="p1404204252114"></a><span id="ph040464220211"><a name="ph040464220211"></a><a name="ph040464220211"></a>该接口实现AI CPU算子Kernel调试场景下的assert断言功能。</span></p>
 </td>
 </tr>
+<tr id="row1568314516298"><td class="cellrowborder" valign="top" width="37.419999999999995%" headers="mcps1.2.3.1.1 "><p id="p86839512291"><a name="p86839512291"></a><a name="p86839512291"></a><a href="DataStoreBarrier.md">DataStoreBarrier</a></p>
+</td>
+<td class="cellrowborder" valign="top" width="62.580000000000005%" headers="mcps1.2.3.1.2 "><p id="p7683145172918"><a name="p7683145172918"></a><a name="p7683145172918"></a><span id="ph56837516296"><a name="ph56837516296"></a><a name="ph56837516296"></a>该接口用于AI CPU与AI Core多核之间的数据一致性同步。</span></p>
+</td>
+</tr>
 </tbody>
 </table>
