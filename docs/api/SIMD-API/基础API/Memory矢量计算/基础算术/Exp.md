@@ -173,7 +173,6 @@ T支持的数据类型为：half、float。
 - 对UB空间的占用说明。针对Ascend 950PR/Ascend 950DT：
   - tensor高维切分计算占用8KB Unified Buffer。
   - tensor前n个数据连续计算不涉及8KB Unified Buffer的占用。
-- 针对Ascend 950PR/Ascend 950DT，tensor前n个数据计算API中的isSetMask参数不生效，保持默认值即可。
 <!-- end id21 -->
 
 <!-- npu="950" id24 -->

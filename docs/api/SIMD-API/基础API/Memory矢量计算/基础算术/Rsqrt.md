@@ -154,15 +154,26 @@ T支持的数据类型为：half、float。
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md)。
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md)。
 
-<!-- npu="A3,910b" id20 -->
-- 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
-  <!-- npu="A3" id21 -->
-  - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-  <!-- end id21 -->
-  <!-- npu="910b" id22 -->
-  - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-  <!-- end id22 -->
+<!-- npu="A3,910b,950" id20 -->
+- 当参数count或repeatTime取值为0时，该接口的行为如下：
+  <!-- npu="A3,910b" id26 -->
+  - 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
+    <!-- npu="A3" id27 -->
+    - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+    <!-- end id27 -->
+    <!-- npu="910b" id29 -->
+    - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+    <!-- end id29 -->
+  <!-- end id26 -->
+  <!-- npu="950" id30 -->
+  - 针对Ascend 950PR/Ascend 950DT：该接口通过VF调用[Reg矢量计算API](../../Reg矢量计算/Reg矢量计算.md)实现兼容，当参数count或repeatTime取值为0时，软仿行为不保证该接口被视为NOP（空操作）。
+  <!-- end id30 -->
 <!-- end id20 -->
+<!-- npu="950" id21 -->
+- 对UB空间的占用说明。针对Ascend 950PR/Ascend 950DT：
+  - tensor高维切分计算占用8KB Unified Buffer。
+  - tensor前n个数据连续计算不涉及8KB Unified Buffer的占用。
+<!-- end id21 -->
 
 - 如果src中的数值为非正数，可能会产生未知结果。
 - 使用Rsqrt时，half的算子结果对比误差不满足双千分之一的要求，float的算子结果对比误差不满足双万分之一的要求，如果需要高精度，建议使用[Div](Div.md)和[Sqrt](Sqrt.md)替代实现。

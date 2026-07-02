@@ -154,26 +154,29 @@ T支持的数据类型为：half、float。
 - 操作数地址对齐要求请参见[通用地址对齐约束](../../../通用说明和约束.md)。
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md)。
 
-<!-- npu="A3,910b" id21 -->
-- 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
-  <!-- npu="A3" id19 -->
-  - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-  <!-- end id19 -->
-  <!-- npu="910b" id20 -->
-  - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-  <!-- end id20 -->
+<!-- npu="A3,910b,950" id20 -->
+- 当参数count或repeatTime取值为0时，该接口的行为如下：
+  <!-- npu="A3,910b" id26 -->
+  - 针对如下型号，当参数count或repeatTime取值为0时，不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。
+    <!-- npu="A3" id27 -->
+    - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+    <!-- end id27 -->
+    <!-- npu="910b" id29 -->
+    - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+    <!-- end id29 -->
+  <!-- end id26 -->
+  <!-- npu="950" id30 -->
+  - 针对Ascend 950PR/Ascend 950DT：该接口通过VF调用[Reg矢量计算API](../../Reg矢量计算/Reg矢量计算.md)实现兼容，当参数count或repeatTime取值为0时，软仿行为不保证该接口被视为NOP（空操作）。
+  <!-- end id30 -->
+<!-- end id20 -->
+<!-- npu="950" id21 -->
+- 对UB空间的占用说明。针对Ascend 950PR/Ascend 950DT：
+  - tensor高维切分计算占用8KB Unified Buffer。
+  - tensor前n个数据连续计算不涉及8KB Unified Buffer的占用。
+- 针对Ascend 950PR/Ascend 950DT，SqrtAlgo::FAST\_INVERSE、SqrtAlgo::PRECISION\_0ULP\_FTZ\_FALSE，使用快速求逆算法得出结果。适用于输入值在\[0, 85070596800837026223494223584045301760\]范围内的计算。在该范围内，算法保证输出的最大精度误差为0ulp；当输入值大于85070596800837026223494223584045301760时，输出为0。目前，该算法仅支持float数据类型，并在该模式下支持Subnormal数据计算。
 <!-- end id21 -->
 
 - 如果src中的数值为非正数，可能会产生未知结果。
-
-<!-- npu="950" id23 -->
-- 针对Ascend 950PR/Ascend 950DT，如下约束说明：
-  - SqrtAlgo::FAST\_INVERSE、SqrtAlgo::PRECISION\_0ULP\_FTZ\_FALSE，使用快速求逆算法得出结果。适用于输入值在\[0, 85070596800837026223494223584045301760\]范围内的计算。在该范围内，算法保证输出的最大精度误差为0ulp；当输入值大于85070596800837026223494223584045301760时，输出为0。目前，该算法仅支持float数据类型，并在该模式下支持Subnormal数据计算。
-  - tensor高维切分计算占用8KB Unified Buffer。
-  - tensor前n个数据连续计算不涉及8KB Unified Buffer。
-  - 针对Ascend 950PR/Ascend 950DT，tensor前n个数据计算API中的isSetMask参数不生效，保持默认值即可。
-  - 该接口通过VF调用[Reg矢量计算API](../../Reg矢量计算/Reg矢量计算.md)实现兼容，当参数count或repeatTime取值为0时，软仿行为不保证该接口被视为NOP（空操作）。
-<!-- end id23 -->
 
 <!-- npu="950" id24 -->
 ## 关键特性<a name="section18972943153217"></a>

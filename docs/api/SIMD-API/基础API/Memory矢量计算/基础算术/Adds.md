@@ -43,7 +43,7 @@ $dst_i = src_i + scalarValue$
 - tensor前n个数据连续计算
 
     ```cpp
-    template <typename T>
+    template <typename T, bool isSetMask = true>
     __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, const int32_t& count)
     ```
 
@@ -94,7 +94,7 @@ dst和src使用[TensorTrait](../../数据结构/辅助数据结构/TensorTrait/T
 |---|---|
 | T | 操作数数据类型。 |
 | U | scalarValue的数据类型。 |
-| isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下：<br>&nbsp;&nbsp;&bull; 针对tensor前n个数据计算接口，接口入参中的count不生效，建议设置成1。<br>&nbsp;&nbsp;&bull; 针对tensor高维切分计算接口，接口入参中的mask值设置为占位符`MASK_PLACEHOLDER`，用于占位，无实际含义。<br><!-- npu="950,310b" id23 -->针对以下型号，tensor前n个数据计算API中的isSetMask参数不生效，保持默认值即可。<br>&bull; <!-- npu="950" id21 -->Ascend 950PR/Ascend 950DT<!-- end id21 --><br>&bull; <!-- npu="310b" id22 -->Atlas 200I/500 A2 推理产品<!-- end id22 --><!-- end id23 --> |
+| isSetMask | 是否在接口内部设置mask。<br>&bull; true，表示在接口内部设置mask。<br>&bull; false，表示在接口外部设置mask，开发者需要使用[SetVectorMask](../掩码操作/SetVectorMask.md)接口设置mask值。这种模式下：<br>&nbsp;&nbsp;&bull; 针对tensor前n个数据计算接口，接口入参中的count不生效，建议设置成1。<br>&nbsp;&nbsp;&bull; 针对tensor高维切分计算接口，接口入参中的mask值设置为占位符`MASK_PLACEHOLDER`，用于占位，无实际含义。 |
 
 **表2** 参数说明
 
