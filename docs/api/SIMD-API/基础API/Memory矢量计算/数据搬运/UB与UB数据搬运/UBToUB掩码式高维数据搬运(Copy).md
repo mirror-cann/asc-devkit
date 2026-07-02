@@ -96,7 +96,7 @@
 
 <!-- npu="950" id10 -->
 
-- Ascend 950PR/Ascend 950DT，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。
+- Ascend 950PR/Ascend 950DT，支持的数据类型为：uint8_t、int8_t、hifloat8_t、fp8_e4m3fn_t、fp8_e5m2_t、fp4x2_e2m1_t、fp4x2_e1m2_t、fp8_e8m0_t、uint16_t、int16_t、half、bfloat16_t、float、uint32_t、int32_t、uint64_t、int64_t。
 
 <!-- end id10 -->
 
