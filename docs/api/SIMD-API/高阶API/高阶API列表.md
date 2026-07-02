@@ -171,9 +171,9 @@
 
 | 接口名 | 功能描述 |
 | --- | --- |
-| [Conv3D](卷积计算/Conv3D/Conv3D.md) | 3维卷积正向矩阵运算。 |
-| [Conv3DBackpropInput](卷积计算/Conv3DBackpropInput/Conv3DBackpropInput.md) | 卷积的反向运算，求解特征矩阵的反向传播误差。 |
-| [Conv3DBackpropFilter](卷积计算/Conv3DBackpropFilter/Conv3DBackpropFilter.md) | 卷积的反向运算，求解权重的反向传播误差。 |
+| [Conv3D](卷积计算/Conv3D-Kernel侧接口/Conv3D-Kernel侧接口.md) | 3维卷积正向矩阵运算。 |
+| [Conv3DBackpropInput](卷积计算/Conv3DBackpropInput-Kernel侧接口/Conv3DBackpropInput-Kernel侧接口.md) | 卷积的反向运算，求解特征矩阵的反向传播误差。 |
+| [Conv3DBackpropFilter](卷积计算/Conv3DBackpropFilter-Kernel侧接口/Conv3DBackpropFilter-Kernel侧接口.md) | 卷积的反向运算，求解权重的反向传播误差。 |
 
 ##  随机函数
 
