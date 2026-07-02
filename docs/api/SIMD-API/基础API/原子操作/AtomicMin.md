@@ -74,7 +74,7 @@ address、value、返回值的数据类型相同，支持的数据类型为int32
 ```cpp
 extern "C" __global__ __aicore__ void atomic_min_reduction_kernel(__gm__ int32_t* global_min, __gm__ int32_t* input, int32_t dataSize)
 {
-    // 静态Tensor编程方式下，需手动调用InitSocState初始化全局状态寄存器。
+    // 当不使用TPipe-TQUE框架编程时，需手动调用InitSocState初始化全局状态寄存器。
     AscendC::InitSocState();
 
     // 使用LocalMemAllocator在UB上分配内存。

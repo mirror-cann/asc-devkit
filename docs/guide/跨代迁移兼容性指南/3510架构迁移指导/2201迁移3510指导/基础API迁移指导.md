@@ -42,10 +42,10 @@
     constexpr uint32_t xAddr = 0;
     constexpr uint32_t yAddr = xAddr + DATA_COUNT * sizeof(half);
 
-    // 核函数入口：使用__vector__显式声明Vector核函数，搭配静态Tensor方式编程
+    // 核函数入口：使用__vector__显式声明Vector核函数，搭配C++ Tensor方式编程
     __vector__ __global__ void ln_custom(__gm__ uint8_t* src, __gm__ uint8_t* dst)
     {
-        // 静态Tensor需要手动调用InitSocState初始化全局状态寄存器
+        // C++ Tensor需要手动调用InitSocState初始化全局状态寄存器
         AscendC::InitSocState();
 
         AscendC::GlobalTensor<half> srcGlobal;
@@ -53,7 +53,7 @@
         srcGlobal.SetGlobalBuffer((__gm__ half*)src, DATA_COUNT);
         dstGlobal.SetGlobalBuffer((__gm__ half*)dst, DATA_COUNT);
 
-        // 直接构造指定地址和存储位置的LocalTensor（静态Tensor方式）
+        // 直接构造指定地址和存储位置的LocalTensor（C++ Tensor方式）
         AscendC::LocalTensor<half> srcLocal(AscendC::TPosition::VECCALC, xAddr, DATA_COUNT);
         AscendC::LocalTensor<half> dstLocal(AscendC::TPosition::VECCALC, yAddr, DATA_COUNT);
 
