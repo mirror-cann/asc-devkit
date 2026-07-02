@@ -45,7 +45,7 @@ __aicore__ inline void DataCopy(const GlobalTensor<T>& dst, const LocalTensor<T>
 | :--- | :---: | :--- |
 | dst | 输出 | 目的操作数，类型为[GlobalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)。 |
 | src | 输入 | 源操作数，类型为[LocalTensor](../../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)。 |
-| intriParams | 输入 | 搬运参数，类型为Nz2NdParamsFul，具体参数请参考[表3](#table_nz2nd_3)。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
+| intriParams | 输入 | 搬运参数，类型为Nz2NdParamsFull，具体参数请参考[表3](#table_nz2nd_3)。<br>具体定义请参考\$\{INSTALL\_DIR\}/include/ascendc/basic\_api/interface/kernel\_struct\_data\_copy.h，\$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。 |
 
 **表3**  Nz2NdParamsFull结构体内参数定义<a name="table_nz2nd_3"></a>
 
@@ -137,15 +137,15 @@ __aicore__ inline void DataCopy(const GlobalTensor<T>& dst, const LocalTensor<T>
 intriParams参数解析请参考[图1](#fig15851251122815)。
 
 ```cpp
-// dstLocal为half类型的LocalTensor，dstGlobal为half类型的GlobalTensor。
+// srcLocal为half类型的LocalTensor，dstGlobal为half类型的GlobalTensor。
 AscendC::Nz2NdParamsFull intriParams{1, 32, 32, 1, 32, 32, 1};
 // Local Memory -> Global Memory
-AscendC::DataCopy(dstGlobal, dstLocal, intriParams);
+AscendC::DataCopy(dstGlobal, srcLocal, intriParams);
 ```
 
 结果示例：
 
 ```text
-输入数据(srcGlobal): [1 2 3 ... 1024]
+输入数据(srcLocal): [1 2 3 ... 1024]
 输出数据(dstGlobal):[1 2 ... 15 16 513 514 ... 527 528 17 18 ... 31 32 529 530 ... 543 544 ...497 498 ...  511 512  1009 1010... 1023 1024]
 ```

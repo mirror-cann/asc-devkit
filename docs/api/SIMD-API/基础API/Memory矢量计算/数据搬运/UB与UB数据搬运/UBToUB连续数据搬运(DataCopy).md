@@ -117,6 +117,6 @@ AscendC::DataCopy(dstLocal, srcLocal, 512);
 结果示例：
 
 ```text
-输入数据srcGlobal：[1 2 3 ... 512]
-输出数据dstGlobal：[1 2 3 ... 512]
+输入数据srcLocal：[1 2 3 ... 512]
+输出数据dstLocal：[1 2 3 ... 512]
 ```
