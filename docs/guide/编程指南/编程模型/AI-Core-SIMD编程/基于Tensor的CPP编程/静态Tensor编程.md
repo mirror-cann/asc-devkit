@@ -54,11 +54,11 @@
 
 -   正向同步
 
-    在本次数据搬入和计算之间，插入MTE2\_V（矢量计算流水等待MT2搬运流水）同步事件，确保数据搬入之后再进行计算；在本次数据计算和搬出之间，插入V\_MTE3（MTE3搬运流水等待矢量计算流水）同步事件，确保数据计算完成后再进行搬出。
+    在本次数据搬入和计算之间，插入MTE2\_V（矢量计算流水等待MTE2搬运流水）同步事件，确保数据搬入之后再进行计算；在本次数据计算和搬出之间，插入V\_MTE3（MTE3搬运流水等待矢量计算流水）同步事件，确保数据计算完成后再进行搬出。
 
 -   反向同步
 
-    在上一次的数据计算和本次数据搬入之间，插入V\_MTE2（MT2搬运流水等待矢量计算流水）同步事件，确保上一次的数据计算完成后，本次的数据再进行搬入。防止本次的数据会覆盖掉上一次未计算完成的数据；在上一次的数据搬出和本次数据计算之间，插入MTE3\_V（矢量计算流水等待MT3搬运流水）同步事件，确保上一次的数据搬出后，再进行本次数据的计算。防止本次的数据会覆盖掉上一次未搬出的数据。
+    在上一次的数据计算和本次数据搬入之间，插入V\_MTE2（MTE2搬运流水等待矢量计算流水）同步事件，确保上一次的数据计算完成后，本次的数据再进行搬入。防止本次的数据会覆盖掉上一次未计算完成的数据；在上一次的数据搬出和本次数据计算之间，插入MTE3\_V（矢量计算流水等待MTE3搬运流水）同步事件，确保上一次的数据搬出后，再进行本次数据的计算。防止本次的数据会覆盖掉上一次未搬出的数据。
 
 上述的同步逻辑在使用Pipe编程框架时，框架会使用EnQue/DeQue/AllocTensor/FreeTensor进行封装。您可以通过[TPipe-TQue框架编程原理](../基于TPipe-TQue框架编程/TPipe-TQue框架编程原理.md)来了解应该如何在使用静态Tensor编程方式时手动进行同步控制。
 
@@ -106,7 +106,7 @@
 
 ## 流水优化<a name="section121239188376"></a>
 
-在基于TPipe的编程范式中，开发者只需要在InitBuffer时指定buffer数量为2，即可自动开启Double Buffer。但是静态Tensor编程方式下，开发者需要手动开启Double Buffer，具体示例如下，完整样例请参考[静态Tensor编程样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_best_practices/00_vector_compute/add_high_performance)中的Double Buffer示例。
+在基于TPipe的编程范式中，开发者只需要在InitBuffer时指定buffer数量为2，即可自动开启DoubleBuffer。但是静态Tensor编程方式下，开发者需要手动开启DoubleBuffer，具体示例如下，完整样例请参考[静态Tensor编程样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_best_practices/00_vector_compute/add_high_performance)中的DoubleBuffer示例。
 
 ```
     // ping
@@ -120,7 +120,7 @@
 
     uint32_t totalBlocks = GetTotalBlocks();
 
-    // double buffer
+    // DoubleBuffer
     AscendC::SetFlag<AscendC::HardEvent::V_MTE2>(EVENT_ID0);
     AscendC::SetFlag<AscendC::HardEvent::V_MTE2>(EVENT_ID1);
     AscendC::SetFlag<AscendC::HardEvent::MTE3_V>(EVENT_ID0);
