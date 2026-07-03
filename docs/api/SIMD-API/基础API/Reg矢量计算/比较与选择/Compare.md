@@ -87,21 +87,27 @@ __simd_callee__ inline void Compare(MaskReg& dst, U& srcReg0, U& srcReg1, MaskRe
 ## 调用示例<a name="section642mcpsimp"></a>
 
 ```cpp
+// 示例：逐元素比较src0Addr和src1Addr的数据（EQ模式），再按比较结果掩码选取元素写入dstAddr
+// 输入：src0Addr指向源操作数0（如half类型[1.0, 4.0, 3.0, 2.0, 5.0, 6.0, 7.0, 8.0, 1.0, 2.0, 9.0, 3.0, 4.0, 6.0, 5.0, 7.0, ...]）
+//       src1Addr指向源操作数1（如half类型[1.0, 3.0, 3.0, 5.0, 2.0, 6.0, 9.0, 4.0, 2.0, 5.0, 9.0, 1.0, 8.0, 3.0, 5.0, 6.0, ...]）
+//       对应位置关系：pos0等于(1.0==1.0)、pos1大于(4.0>3.0)、pos2等于(3.0==3.0)、pos3小于(2.0<5.0)...
+// 输出：dstMask为比较结果掩码（EQ模式下[1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, ...]，等于位置为1，其余为0）
+//       dstAddr存储按掩码Select选取的结果
 template<typename T>
 __simd_vf__ inline void CompareVF(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf__ T* src1Addr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
 {
-    AscendC::Reg::RegTensor<T> srcReg0;
-    AscendC::Reg::RegTensor<T> srcReg1;
-    AscendC::Reg::RegTensor<T> dstReg;
+    AscendC::Reg::RegTensor<T> srcReg0;   // 源操作数0
+    AscendC::Reg::RegTensor<T> srcReg1;   // 源操作数1
+    AscendC::Reg::RegTensor<T> dstReg;    // 目的操作数，存储Select选取的结果
     AscendC::Reg::MaskReg mask;
-    AscendC::Reg::MaskReg dstMask;
+    AscendC::Reg::MaskReg dstMask;        // 比较结果掩码，相等位置为1
     for (uint16_t i = 0; i < repeatTimes; i++) {
-        mask = AscendC::Reg::UpdateMask<T>(count);
-        AscendC::Reg::LoadAlign(srcReg0, src0Addr + i * oneRepeatSize);
-        AscendC::Reg::LoadAlign(srcReg1, src1Addr + i * oneRepeatSize);        
-        AscendC::Reg::Compare<T, AscendC::CMPMODE::EQ>(dstMask, srcReg0, srcReg1, mask);
-        AscendC::Reg::Select(dstReg, srcReg0, srcReg1, dstMask);
-        AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, mask);
+        mask = AscendC::Reg::UpdateMask<T>(count);  // 根据实际元素个数更新mask
+        AscendC::Reg::LoadAlign(srcReg0, src0Addr + i * oneRepeatSize);  // 加载源操作数0
+        AscendC::Reg::LoadAlign(srcReg1, src1Addr + i * oneRepeatSize);  // 加载源操作数1
+        AscendC::Reg::Compare<T, AscendC::CMPMODE::EQ>(dstMask, srcReg0, srcReg1, mask);  // 逐元素比较是否相等，结果写入dstMask
+        AscendC::Reg::Select(dstReg, srcReg0, srcReg1, dstMask);  // 按比较结果掩码选取元素
+        AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, mask);  // 将选取结果存回dstAddr
     }
 }
 ```

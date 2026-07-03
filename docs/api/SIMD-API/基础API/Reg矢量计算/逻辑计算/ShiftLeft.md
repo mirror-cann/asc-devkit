@@ -97,19 +97,23 @@ __simd_callee__ inline void ShiftLeft(S& dstReg, S& srcReg0, V& srcReg1, MaskReg
 ## 调用示例<a name="section642mcpsimp"></a>
 
 ```cpp
+// 示例：对src0Addr中的数据，按src1Addr对应元素的值进行左移，结果写入dstAddr
+// 输入：src0Addr指向待移位的数据（如uint16_t类型[1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 9, 3, 4, 6, 5, 7, ...]）
+//       src1Addr指向每个元素左移的位数（如int16_t类型[1, 2, 3, 4, 1, 2, 3, 4, 2, 3, 1, 2, 3, 1, 2, 1, ...]）
+// 输出：dstAddr存储左移结果（如[2, 8, 24, 64, 10, 24, 56, 128, 4, 16, 18, 12, 32, 12, 20, 14, ...]，即1<<1=2, 2<<2=8, 3<<3=24, 4<<4=64...）
 template<typename T, typename U>
 __simd_vf__ inline void ShiftLeftVF(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf__ U* src1Addr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
 {
-    AscendC::Reg::RegTensor<T> srcReg0;
-    AscendC::Reg::RegTensor<U> srcReg1;
-    AscendC::Reg::RegTensor<T> dstReg;
+    AscendC::Reg::RegTensor<T> srcReg0;  // 源操作数，待移位的数据
+    AscendC::Reg::RegTensor<U> srcReg1;  // 源操作数，每个元素左移的位数
+    AscendC::Reg::RegTensor<T> dstReg;   // 目的操作数，存储左移结果
     AscendC::Reg::MaskReg mask;
     for (uint16_t i = 0; i < repeatTimes; i++) {
-        mask = AscendC::Reg::UpdateMask<T>(count);
-        AscendC::Reg::LoadAlign(srcReg0, src0Addr + i * oneRepeatSize);
-        AscendC::Reg::LoadAlign(srcReg1, src1Addr + i * oneRepeatSize);
-        AscendC::Reg::ShiftLeft(dstReg, srcReg0, srcReg1, mask);
-        AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, mask);
+        mask = AscendC::Reg::UpdateMask<T>(count);  // 根据实际元素个数更新mask
+        AscendC::Reg::LoadAlign(srcReg0, src0Addr + i * oneRepeatSize);  // 加载待移位的数据
+        AscendC::Reg::LoadAlign(srcReg1, src1Addr + i * oneRepeatSize);  // 加载每个元素左移的位数
+        AscendC::Reg::ShiftLeft(dstReg, srcReg0, srcReg1, mask);  // 执行左移：dstReg[i] = srcReg0[i] << srcReg1[i]
+        AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, mask);  // 将左移结果存回dstAddr
     }
 }
 ```
