@@ -32,7 +32,7 @@
 
 调用一次IterateNBatch，会进行N次IterateBatch计算，计算出N个多Batch的singleCoreM \* singleCoreN大小的C矩阵。在调用该接口前，需将MatmulConfig中的[isNBatch](MatmulConfig.md#p1960754911593)参数设为true，开启多Batch输入多Batch输出功能，并调用[SetWorkspace](SetWorkspace.md)接口申请临时空间，用于缓存计算结果，即IterateNBatch的结果输出至[SetWorkspace](SetWorkspace.md)指定的Global Memory内存中。
 
-对于BSNGD、SBNGD、BNGS1S2的Layout格式，调用该接口之前需要在tiling中使用SetALayout/SetBLayout/SetCLayout/SetBatchNum设置A/B/C的Layout轴信息和最大BatchNum数；对于Normal数据格式则需使用[SetBatchInfoForNormal](../Matmul-Tiling侧接口/Matmul-Tiling类/SetBatchInfoForNormal.md)设置A/B/C的M/N/K轴信息和A/B矩阵的BatchNum数。实例化Matmul时，通过MatmulType设置Layout类型，当前支持3种Layout类型：BSNGD、SBNGD、BNGS1S2。
+对于BSNGD、SBNGD、BNGS1S2的Layout格式，调用该接口之前需要在tiling中使用SetALayout/SetBLayout/SetCLayout/SetBatchNum设置A/B/C的Layout轴信息和最大BatchNum数；对于Normal数据格式则需使用[SetBatchInfoForNormal](../Matmul-Tiling类/SetBatchInfoForNormal.md)设置A/B/C的M/N/K轴信息和A/B矩阵的BatchNum数。实例化Matmul时，通过MatmulType设置Layout类型，当前支持3种Layout类型：BSNGD、SBNGD、BNGS1S2。
 
 ## 函数原型
 

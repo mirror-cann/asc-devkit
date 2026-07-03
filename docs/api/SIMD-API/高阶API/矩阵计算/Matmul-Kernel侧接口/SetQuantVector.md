@@ -87,7 +87,7 @@ Matmul量化场景：在Matmul计算时，左、右矩阵的输入为half或bflo
 
 ## 约束说明
 
-需与[SetDequantType](../Matmul-Tiling侧接口/Matmul-Tiling类/SetDequantType.md)保持一致。
+需与[SetDequantType](../Matmul-Tiling类/SetDequantType.md)保持一致。
 
 本接口必须在[Iterate](Iterate.md)或者[IterateAll](IterateAll.md)前调用。
 

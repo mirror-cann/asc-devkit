@@ -38,6 +38,7 @@ __aicore__ inline void SetBatchNum(int32_t batchA, int32_t batchB)
 ## 参数说明
 
 **表1**  参数说明
+<a name="table9646134355611"></a>
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |

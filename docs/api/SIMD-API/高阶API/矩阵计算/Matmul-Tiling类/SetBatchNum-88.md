@@ -1,13 +1,13 @@
-# SetCLayout
+# SetBatchNum
 
 ## 功能说明
 
-设置C矩阵的Layout轴信息，包括[B、S、N、G、D轴](../../Matmul-Kernel侧接口/IterateBatch.md)。对于BSNGD、SBNGD、BNGS1S2 Layout格式，调用[IterateBatch](../../Matmul-Kernel侧接口/IterateBatch.md)接口之前，需要在Host侧Tiling实现中通过本接口设置C矩阵的Layout轴信息。
+设置多Batch计算的最大Batch数，最大Batch数为A矩阵[batchA](../Matmul-Kernel侧接口/SetBatchNum.md#table9646134355611)和B矩阵[batchB](../Matmul-Kernel侧接口/SetBatchNum.md#table9646134355611)中的最大值。调用[IterateBatch](../Matmul-Kernel侧接口/IterateBatch.md)接口之前，需要在Host侧Tiling实现中通过本接口设置多Batch计算的Batch数。
 
 ## 函数原型
 
 ```
-int32_t SetCLayout(int32_t b, int32_t s, int32_t n, int32_t g, int32_t d)
+int32_t SetBatchNum(int32_t batch)
 ```
 
 ## 参数说明
@@ -16,11 +16,7 @@ int32_t SetCLayout(int32_t b, int32_t s, int32_t n, int32_t g, int32_t d)
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| b | 输入 | C矩阵Layout的B轴信息 |
-| s | 输入 | C矩阵Layout的S轴信息 |
-| n | 输入 | C矩阵Layout的N轴信息 |
-| g | 输入 | C矩阵Layout的G轴信息 |
-| d | 输入 | C矩阵Layout的D轴信息 |
+| batch | 输入 | 多Batch计算的Batch数，Batch数为A矩阵batchA和B矩阵batchB中的最大值。 |
 
 ## 返回值说明
 
@@ -28,7 +24,7 @@ int32_t SetCLayout(int32_t b, int32_t s, int32_t n, int32_t g, int32_t d)
 
 ## 约束说明
 
-对于BSNGD、SBNGD、BNGS1S2 Layout格式，调用[IterateBatch](../../Matmul-Kernel侧接口/IterateBatch.md)接口之前，需要在Host侧Tiling实现中通过本接口设置C矩阵的Layout轴信息。
+调用[IterateBatch](../Matmul-Kernel侧接口/IterateBatch.md)接口之前，需要在Host侧Tiling实现中通过本接口设置多Batch计算的Batch数。
 
 ## 调用示例
 
@@ -63,8 +59,8 @@ constexpr int32_t C_DNUM = 256;
 constexpr int32_t BATCH_NUM = 3;
 tiling.SetALayout(A_BNUM, A_SNUM, 1, A_GNUM, A_DNUM);
 tiling.SetBLayout(B_BNUM, B_SNUM, 1, B_GNUM, B_DNUM);
-tiling.SetCLayout(C_BNUM, C_SNUM, 1, C_GNUM, C_DNUM); // 设置C矩阵排布
-tiling.SetBatchNum(BATCH_NUM);
+tiling.SetCLayout(C_BNUM, C_SNUM, 1, C_GNUM, C_DNUM);
+tiling.SetBatchNum(BATCH_NUM); // 设置Batch数
 tiling.SetBufferSpace(-1, -1, -1);
 
 optiling::TCubeTiling tilingData;

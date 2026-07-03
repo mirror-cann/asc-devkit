@@ -2,7 +2,7 @@
 
 ## 功能说明
 
-设置A/B矩阵的M/N/K轴信息，以及A/B矩阵的Batch数。Layout类型为NORMAL的场景，调用[IterateBatch](../../Matmul-Kernel侧接口/IterateBatch.md)或者[IterateNBatch](../../Matmul-Kernel侧接口/IterateNBatch.md)接口之前，需要在Host侧Tiling实现中通过本接口设置A/B矩阵的M/N/K轴等信息。
+设置A/B矩阵的M/N/K轴信息，以及A/B矩阵的Batch数。Layout类型为NORMAL的场景，调用[IterateBatch](../Matmul-Kernel侧接口/IterateBatch.md)或者[IterateNBatch](../Matmul-Kernel侧接口/IterateNBatch.md)接口之前，需要在Host侧Tiling实现中通过本接口设置A/B矩阵的M/N/K轴等信息。
 
 ## 函数原型
 
@@ -28,7 +28,7 @@ int32_t SetBatchInfoForNormal(int32_t batchA, int32_t batchB, int32_t m, int32_t
 
 ## 约束说明
 
-Layout类型为NORMAL的场景，调用[IterateBatch](../../Matmul-Kernel侧接口/IterateBatch.md)或者[IterateNBatch](../../Matmul-Kernel侧接口/IterateNBatch.md)接口之前，需要在Host侧Tiling实现中通过本接口设置A/B矩阵的M/N/K轴等信息。
+Layout类型为NORMAL的场景，调用[IterateBatch](../Matmul-Kernel侧接口/IterateBatch.md)或者[IterateNBatch](../Matmul-Kernel侧接口/IterateNBatch.md)接口之前，需要在Host侧Tiling实现中通过本接口设置A/B矩阵的M/N/K轴等信息。
 
 ## 调用示例
 

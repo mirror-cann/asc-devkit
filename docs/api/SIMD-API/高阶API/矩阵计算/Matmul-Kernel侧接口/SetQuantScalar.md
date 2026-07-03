@@ -69,7 +69,7 @@ __aicore__ inline void SetQuantScalar(const uint64_t quantScalar)
 
 ## 约束说明
 
-需与[SetDequantType](../Matmul-Tiling侧接口/Matmul-Tiling类/SetDequantType.md)保持一致。
+需与[SetDequantType](../Matmul-Tiling类/SetDequantType.md)保持一致。
 
 本接口必须在[Iterate](Iterate.md)或者[IterateAll](IterateAll.md)前调用。
 

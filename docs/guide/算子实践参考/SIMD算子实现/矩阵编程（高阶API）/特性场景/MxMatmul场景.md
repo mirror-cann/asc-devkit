@@ -209,7 +209,7 @@ Host侧自动获取Tiling参数的关键步骤介绍如下：
 
 2.  **设置A、B、C、Bias的内存逻辑位置、格式、数据类型以及是否转置的信息，设置scaleA、scaleB的内存逻辑位置、格式以及是否转置的信息。**
 
-    调用[SetScaleAType](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Tiling侧接口/Matmul-Tiling类/SetScaleAType.md)、[SetScaleBType](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Tiling侧接口/Matmul-Tiling类/SetScaleBType.md)接口，设置scaleA、scaleB的内存逻辑位置、格式以及是否转置。
+    调用[SetScaleAType](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Tiling类/SetScaleAType.md)、[SetScaleBType](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Tiling类/SetScaleBType.md)接口，设置scaleA、scaleB的内存逻辑位置、格式以及是否转置。
 
     ```
     cubeTiling.SetAType(AscendC::TPosition::GM, CubeFormat::ND, matmul_tiling::DataType::DT_FLOAT8_E5M2, false);
@@ -222,7 +222,7 @@ Host侧自动获取Tiling参数的关键步骤介绍如下：
 
 3.  **设置MxMatmul场景**。
 
-    调用[SetMadType](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Tiling侧接口/Matmul-Tiling类/SetMadType.md)接口，设置Tiling计算逻辑为MxMatmul场景。
+    调用[SetMadType](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Tiling类/SetMadType.md)接口，设置Tiling计算逻辑为MxMatmul场景。
 
     ```
     cubetiling.SetMadType(MatrixMadType::MXMODE);

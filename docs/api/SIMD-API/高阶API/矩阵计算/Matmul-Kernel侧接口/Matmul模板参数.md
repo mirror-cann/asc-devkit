@@ -112,7 +112,7 @@ using Matmul = AscendC::MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, MM
 <a name="table7939847143412"></a>
 | 参数 | 数据类型 | 说明 |
 | --- | --- | --- |
-| M, N, Ka, Kb,<br><br>singleCoreM, singleCoreN, singleCoreK,<br><br>baseM, baseN, baseK,<br><br>depthA1, depthB1,<br><br>stepM， stepN，stepKa，stepKb,<br><br>isBias,<br><br>transLength,<br><br>iterateOrder,<br><br>dbL0A, dbL0B,<br><br>dbL0C,<br><br>shareMode,<br><br>shareL1Size,<br><br>shareL0CSize,<br><br>shareUbSize,<br><br>batchM,<br><br>batchN,<br><br>singleBatchM,<br><br>singleBatchN,<br><br>mxTypePara | int32_t | 与[TCubeTiling](../Matmul-Tiling侧接口/Matmul-Tiling类/TCubeTiling结构体.md)结构体中各同名参数含义一致。本结构体中的参数是常量化后的常数值。 |
+| M, N, Ka, Kb,<br><br>singleCoreM, singleCoreN, singleCoreK,<br><br>baseM, baseN, baseK,<br><br>depthA1, depthB1,<br><br>stepM， stepN，stepKa，stepKb,<br><br>isBias,<br><br>transLength,<br><br>iterateOrder,<br><br>dbL0A, dbL0B,<br><br>dbL0C,<br><br>shareMode,<br><br>shareL1Size,<br><br>shareL0CSize,<br><br>shareUbSize,<br><br>batchM,<br><br>batchN,<br><br>singleBatchM,<br><br>singleBatchN,<br><br>mxTypePara | int32_t | 与[TCubeTiling](../Matmul-Tiling类/TCubeTiling结构体.md)结构体中各同名参数含义一致。本结构体中的参数是常量化后的常数值。 |
 | cfg | [MatmulConfig](MatmulConfig.md#table1761013213153) | Matmul模板的参数配置。 |
 
 ## 返回值说明
