@@ -174,8 +174,8 @@ AscendC::SetFlag<AscendC::HardEvent::MTE1_M>(EVENT_ID0);
 AscendC::WaitFlag<AscendC::HardEvent::MTE1_M>(EVENT_ID0);
 
 // mmad需要指定矩阵的维度进行计算
-uint32 m = 128;
-uint32 k = 64;
-uint32 n = 128;
+uint32_t m = 128;
+uint32_t k = 64;
+uint32_t n = 128;
 AscendC::MmadWithSparse(c1Local, a2Local, b2Local, { m, n, k, false, 0, false, false, false });
 ```

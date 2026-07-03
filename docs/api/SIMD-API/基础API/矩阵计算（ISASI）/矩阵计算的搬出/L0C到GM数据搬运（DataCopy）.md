@@ -382,7 +382,7 @@ DataCopy矩阵搬出接口支持多种随路能力的组合，需要设置不同
             // intriParams.eltWiseOp = 1;
             // // 需要额外申请element-wise tensor的gm空间，将值搬到eleWiseTensor
             // AscendC::LocalTensor<half> eleWiseTensor = inQueueC1.AllocTensor<half>();
-            // DataCopy(eleWiseTensor, eleWiseGlobal, { 1, static_cast<uint16_t>(sizeof(half) * dst_size / 32), 0, 0 });
+            // DataCopy(eleWiseTensor, eleWiseGlobal, { 1, static_cast<uint16_t>(sizeof(half) * dstSize / 32), 0, 0 });
             // AscendC::PipeBarrier<PIPE_ALL>();
             // // 将存放element-wise tensor的地址设置到寄存器里
             // SetFixPipeAddr(eleWiseTensor, 1);

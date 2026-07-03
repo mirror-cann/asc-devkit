@@ -216,7 +216,7 @@ src和dst分别为源操作数和目的操作数；loadDataParams为搬运参数
 
 ```cpp
 template <typename T>
-__aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData2DParams& loadDataParams)
+__aicore__ inline void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>& src, const LoadData2DParams& loadDataParams)
 ```
 
 ## GMToL0B 2D格式分形矩阵搬运(Load2D)<a name="ZH-CN_TOPIC_0000002543262918"></a>
@@ -234,7 +234,7 @@ src和dst分别为源操作数和目的操作数；loadDataParams为搬运参数
 
 ```cpp
 template <typename T>
-__aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>& src, const LoadData2DParams& loadDataParams)
+__aicore__ inline void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>& src, const LoadData2DParams& loadDataParams)
 ```
 
 ## L0CToGM随路量化激活搬运(DataCopy)<a name="ZH-CN_TOPIC_0000002573902843"></a>

@@ -65,23 +65,41 @@ __aicore__ inline void SetFmatrix(uint16_t l1H, uint16_t l1W, const uint8_t padL
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-完整调用示例参考[SetLoadDataBoundary样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/06_compatibility_guide/set_loaddata_boundary)。
+完整调用示例参考[SetLoadDataBoundary样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/06_compatibility_guide/set_loaddata_boundary)，以下为样例中的关键代码片段示例：
 
 ```cpp
-uint16_t channelSize = 32;
-uint16_t H = 4, W = 4;
-uint8_t Kh = 2, Kw = 2;
-uint16_t Cout = 16;
-uint16_t C0, C1;
-uint8_t dilationH = 2, dilationW = 2;
-
-uint8_t padList[PAD_SIZE] = {0, 0, 0, 0};
-AscendC::SetFmatrix(H, W, padList, FmatrixMode::FMATRIX_LEFT); // 使能FM内存排布模式，从left寄存器获取信息
-AscendC::SetLoadDataPaddingValue(0);
-AscendC::SetLoadDataRepeat({0, 1, 0});
-AscendC::SetLoadDataBoundary((uint32_t)0);
-static constexpr AscendC::IsResetLoad3dConfig LOAD3D_CONFIG = {false,false};
-AscendC::LoadData<fmap_T, LOAD3D_CONFIG>(featureMapA2, featureMapA1,
-    { padList, H, W, channelSize, k, howoRound, 0, 0, 1, 1, Kw, Kh, dilationW, dilationH, false, false, 0 });
-AscendC::LoadData(weightB2, weightB1, { 0, weRepeat, 1, 0, 0, false, 0 });
+    AscendC::LoadData3DParamsV2<U> loadData3dParams;
+    loadData3dParams.l1W = 1;
+    loadData3dParams.l1H = K;
+    loadData3dParams.channelSize = N;
+    loadData3dParams.kExtension = N;
+    loadData3dParams.mExtension = K;
+    loadData3dParams.kStartPt = 0;
+    loadData3dParams.mStartPt = 0;
+    loadData3dParams.strideW = 1;
+    loadData3dParams.strideH = 1;
+    loadData3dParams.filterW = 1;
+    loadData3dParams.filterH = 1;
+    loadData3dParams.dilationFilterW = 1;
+    loadData3dParams.dilationFilterH = 1;
+    loadData3dParams.enTranspose = true;
+    loadData3dParams.enSmallK = false;
+    loadData3dParams.padValue = 0;
+    loadData3dParams.filterSizeW = 0;
+    loadData3dParams.filterSizeH = 0;
+    loadData3dParams.fMatrixCtrl = false;
+    uint8_t padList[AscendC::PAD_SIZE] = {0, 0, 0, 0};
+    static constexpr AscendC::IsResetLoad3dConfig LOAD3D_CONFIG = {false, false};
+    AscendC::SetFmatrix(N, 1, padList, AscendC::FmatrixMode::FMATRIX_LEFT); // 使能FM内存排布模式，从left寄存器获取信息
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201)
+    AscendC::SetLoadDataRepeat({0, 1, 0});
+    AscendC::SetLoadDataBoundary(0);
+    AscendC::SetLoadDataPaddingValue(0);
+    AscendC::LoadData<U, LOAD3D_CONFIG>(b2, rightMatrix, loadData3dParams);
+#elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
+    uint16_t dstStride = DivCeil(N, 16);
+    AscendC::SetLoadDataRepeatWithStride({0, 1, 0, dstStride});
+    AscendC::SetLoadDataPaddingValue(0);
+    AscendC::LoadDataWithStride<U, LOAD3D_CONFIG>(b2, rightMatrix, loadData3dParams);
+#endif
 ```
