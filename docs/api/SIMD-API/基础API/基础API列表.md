@@ -305,18 +305,29 @@
 | [UnalignRegForLoad & UnalignRegForStore](Reg矢量计算/寄存器数据类型/UnalignRegForLoad-UnalignRegForStore.md) | UnalignRegForLoad、UnalignRegForStore用作缓冲区来优化UB和RegTensor之间连续不对齐地址访问的开销。在读不对齐地址前，UnalignRegForLoad、UnalignRegForStore应该通过LoadUnAlignPre API初始化，然后使用LoadUnAlign API。在写不对齐地址时，先使用StoreUnAlign API， |
 | [AddrReg](Reg矢量计算/寄存器数据类型/AddrReg.md) | AddrReg即为Address Register（地址寄存器），是用于存储地址偏移量的寄存器。AddrReg应该通过CreateAddrReg API初始化，然后在循环中使用AddrReg存储地址偏移量。AddrReg在每层循环中根据所设置的stride进行自增。 |
 
-### Reg数据搬运
+### Reg数据搬入
 | 接口名 | 功能描述 |
 | --- | --- |
-| [连续对齐搬入](Reg矢量计算/Reg数据搬运/连续对齐搬入.md) | Reg矢量计算数据搬运接口，适用于从UB连续对齐搬入RegTensor。单搬入模式下，可以将数据从UB搬运到一个目的寄存器，双搬入模式下，可以将数据从UB搬运到两个目的寄存器。 |
-| [连续对齐搬出](Reg矢量计算/Reg数据搬运/连续对齐搬出.md) | Reg矢量计算数据搬运接口，适用于从RegTensor连续对齐搬出到UB。 |
-| [非连续对齐搬入](Reg矢量计算/Reg数据搬运/非连续对齐搬入.md) | Reg矢量计算数据搬运接口，适用于从UB非连续对齐搬入RegTensor（以DataBlock为单位）。 |
-| [非连续对齐搬出](Reg矢量计算/Reg数据搬运/非连续对齐搬出.md) | Reg矢量计算数据搬运接口，适用于从RegTensor非连续对齐搬出到UB（以DataBlock为单位）。 |
-| [连续非对齐搬入](Reg矢量计算/Reg数据搬运/连续非对齐搬入.md) | Reg矢量计算数据搬运接口，适用于从UB非32B对齐地址起始连续搬入RegTensor。 |
-| [连续非对齐搬出](Reg矢量计算/Reg数据搬运/连续非对齐搬出.md) | Reg矢量计算数据搬运接口，适用于从RegTensor连续非对齐搬出到UB。 |
-| [MaskReg搬入](Reg矢量计算/Reg数据搬运/MaskReg搬入.md) | Reg矢量计算数据搬运接口，适用于从UB或RegTensor搬入MaskReg。 |
-| [MaskReg搬出](Reg矢量计算/Reg数据搬运/MaskReg搬出.md) | Reg矢量计算数据搬运接口，适用于从MaskReg搬出到UB。 |
-| [Move](Reg矢量计算/Reg数据搬运/Move.md) | 对srcReg中的有效元素逐个复制写入dstReg中对应位置处。 |
+| [连续对齐搬入（LoadAlign）](Reg矢量计算/Reg数据搬入/连续对齐搬入（LoadAlign）.md) | LoadAlign能够实现数据从Unified Buffer（UB）连续搬运至RegTensor。支持单搬入模式和双搬入模式。 |
+| [非连续对齐搬入（LoadAlign）](Reg矢量计算/Reg数据搬入/非连续对齐搬入（LoadAlign）.md) | LoadAlign能够实现数据从Unified Buffer（UB）非连续搬运至RegTensor，以DataBlock为单位。 |
+| [连续非对齐搬入（LoadUnAlign）](Reg矢量计算/Reg数据搬入/连续非对齐搬入（LoadUnAlign）.md) | LoadUnAlign能够实现数据从非对齐的Unified Buffer（UB）连续搬运至RegTensor，利用非对齐寄存器UnalignRegForLoad作为临时缓存区，暂存跨对齐边界的数据，从而实现高效的连续非对齐数据传输。 |
+| [MaskReg搬入（LoadAlign）](Reg矢量计算/Reg数据搬入/MaskReg搬入（LoadAlign）.md) | LoadAlign能够实现数据从Unified Buffer（UB）搬运至MaskReg。 |
+| [MaskReg搬入（MaskGenWithRegTensor）](Reg矢量计算/Reg数据搬入/MaskReg搬入（MaskGenWithRegTensor）.md) | MaskGenWithRegTensor能够实现数据从RegTensor搬运至MaskReg。 |
+| [离散搬入（Gather）](Reg矢量计算/Reg数据搬入/离散搬入（Gather）.md) | 该指令会根据索引值index将源操作数按元素收集到目的操作数dstReg中。 |
+| [离散搬入（GatherB）](Reg矢量计算/Reg数据搬入/离散搬入（GatherB）.md) | 该指令会根据索引值index将源操作数按DataBlock（32B）收集到目的操作数dstReg中。 |
+| [Load](Reg矢量计算/Reg数据搬入/Load.md) | Reg矢量计算数据搬运接口，支持从UB非32字节对齐的源地址srcAddr搬运至RegTensor，搬运量为VL（256B）。该接口封装了LoadUnAlignPre和LoadUnAlign。 |
+| [Move](Reg矢量计算/Reg数据搬入/Move.md) | 对srcReg中的有效元素逐个复制写入dstReg中对应位置处，无效位置保留dstReg原值。 |
+
+### Reg数据搬出
+| 接口名 | 功能描述 |
+| --- | --- |
+| [连续对齐搬出（StoreAlign）](Reg矢量计算/Reg数据搬出/连续对齐搬出（StoreAlign）.md) | StoreAlign能够实现数据从RegTensor连续搬运至Unified Buffer（UB），支持单搬出模式和双搬出模式。 |
+| [非连续对齐搬出（StoreAlign）](Reg矢量计算/Reg数据搬出/非连续对齐搬出（StoreAlign）.md) | StoreAlign能够实现数据从RegTensor非连续搬运至Unified Buffer（UB），以DataBlock为单位。 |
+| [连续非对齐搬出（StoreUnAlign）](Reg矢量计算/Reg数据搬出/连续非对齐搬出（StoreUnAlign）.md) | StoreUnAlign能够实现数据从RegTensor连续搬运至非对齐Unified Buffer（UB），利用非对齐寄存器UnalignRegForStore作为临时缓存区，暂存跨对齐边界的数据，从而实现高效的连续非对齐数据传输。 |
+| [MaskReg搬出（StoreAlign）](Reg矢量计算/Reg数据搬出/MaskReg搬出（StoreAlign）.md) | StoreAlign能够实现数据从MaskReg搬运至Unified Buffer（UB）。 |
+| [MaskReg非对齐搬出（StoreUnAlign）](Reg矢量计算/Reg数据搬出/MaskReg非对齐搬出（StoreUnAlign）.md) | StoreUnAlign能够实现数据从MaskReg连续搬运至非对齐Unified Buffer（UB），利用非对齐寄存器UnalignRegForStore作为临时缓存区。 |
+| [离散搬出（Scatter）](Reg矢量计算/Reg数据搬出/离散搬出（Scatter）.md) | 该指令会根据索引值index将源操作数srcReg中的元素分散到目的操作数UB中。 |
+| [Store](Reg矢量计算/Reg数据搬出/Store.md) | Reg矢量计算数据搬运接口，支持从RegTensor搬出至非32字节对齐的UB地址dstAddr。该接口封装了StoreUnAlign和StoreUnAlignPost。 |
 
 ### MaskReg计算
 | 接口名 | 功能描述 |
@@ -408,7 +419,7 @@
 ### 离散操作
 | 接口名 | 功能描述 |
 | --- | --- |
-| [Gather](Reg矢量计算/离散与聚合/Gather-50.md) | 该指令会根据索引值indexReg将源操作数srcReg按元素收集到目的操作数dstReg中。 |
+| [Gather](Reg矢量计算/离散操作/Gather.md) | 该指令会根据索引值indexReg将源操作数srcReg按元素收集到目的操作数dstReg中。 |
 
 ### 数据重排
 | 接口名 | 功能描述 |
