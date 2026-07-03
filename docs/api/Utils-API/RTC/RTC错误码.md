@@ -74,7 +74,7 @@
 <td class="cellrowborder" valign="top" width="44.75%" headers="mcps1.2.4.1.3 "><p id="p166051712143013"><a name="p166051712143013"></a><a name="p166051712143013"></a>传入无效的核函数名。</p>
 </td>
 </tr>
-<tr id="row260514124302"><td class="cellrowborder" valign="top" width="43.65%" headers="mcps1.2.4.1.1 "><p id="p156791225203411"><a name="p156791225203411"></a><a name="p156791225203411"></a>ACL_ERROR_RTC_NAME_EXPR_NOT_VALID</p>
+<tr id="row260514124302"><td class="cellrowborder" valign="top" width="43.65%" headers="mcps1.2.4.1.1 "><p id="p156791225203411"><a name="p156791225203411"></a><a name="p156791225203411"></a>ACL_ERROR_RTC_PROG_CREATION_FAILURE</p>
 </td>
 <td class="cellrowborder" valign="top" width="11.600000000000001%" headers="mcps1.2.4.1.2 "><p id="p08341936131220"><a name="p08341936131220"></a><a name="p08341936131220"></a>276000</p>
 </td>
