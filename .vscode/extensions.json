@@ -4,6 +4,7 @@
         "ms-python.python",
         "ms-vscode.cpptools",
         "ms-vscode.cmake-tools",
-        "llvm-vs-code-extensions.vscode-clangd"
+        "llvm-vs-code-extensions.vscode-clangd",
+        "HICANN.ascend-c-toolkit"
     ]
 }
