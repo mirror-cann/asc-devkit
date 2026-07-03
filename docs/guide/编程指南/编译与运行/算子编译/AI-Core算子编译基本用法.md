@@ -9,26 +9,26 @@
 
 bisheng可以通过-I \<path\>指定头文件路径、-L \<path\> 指定链接库路径、-l \<library\>指定需要链接的动态库或静态库、-D\<macro\>=\<value\>指定宏定义，示例如下：
 ```shell
-  bisheng example.asc -I <path_to_include> -L <path_to_library> -l <library> -o <output_file> --npu-arch=dav-<npu architecture>
+  bisheng add_kernel.asc -I <path_to_include> -L <path_to_library> -l <library> -o <output_file> -D<macro>=<value> --npu-arch=dav-<npu architecture>
 ```
 
 AI Core SIMD的基本编译流程如下：Host代码使用Host编译器编译成Host二进制，AI Core SIMD代码分为Cube代码和Vector代码，需分别编译成Cube二进制和Vector二进制，先将Cube二进制和Vector二进制链接成Fatbin文件，再与Host二进制合并生成可执行二进制。
 ![aicore编译流程示意图](../../../figures/aicore_compilation.png)
 
-- 异构编译
+- 异构编译，完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/04_compile/00_basic_compile/README.md)。
   ```shell
-  // ----- example.asc -----
+  // ----- add_kernel.asc -----
   //  指定核函数在AI Core上执行
-  __global__ __aicore__ kernel()
+  __global__ __vector__ add_custom(__gm__ float* x, __gm__ float* y, __gm__ float* z)
 
-  bisheng -c example.asc -o example.o --npu-arch=dav-xxxx
+  bisheng -c add_kernel.asc -o add_kernel.o --npu-arch=dav-xxxx
   bisheng -c main.cpp -o main.o
-  bisheng example.o main.o -o main
+  bisheng add_kernel.o main.o -o main
   // 或
-  bisheng main.cpp example.asc -o main --npu-arch=dav-xxxx
+  bisheng main.cpp add_kernel.asc -o main --npu-arch=dav-xxxx
   ```
 
-- 单独编译
+- 单独编译，完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/04_compile/01_separate_compile/README.md)。
 
   bisheng异构编译默认采用的是全程序编译模式，该模式要求单个源文件X.asc中编译的设备程序没有任何未解析的外部设备函数和变量引用。设备函数可以调用其他编译单元中定义的设备函数或访问其中定义的设备变量，但必须在bisheng命令行中指定`-dc`编译选项，才能启用不同编译单元间设备代码的链接功能。这种支持跨编译单元链接设备代码与符号的能力，被称为单独编译。
 
@@ -39,35 +39,38 @@ AI Core SIMD的基本编译流程如下：Host代码使用Host编译器编译成
   - 所有常量设备变量，定义和跨单元引用时都必须使用extern关键字；
   - 所有Ascend C源文件（.asc）都必须使用`-dc`选项编译。
 
-  下方示例中，definition.asc定义了变量和函数，example.asc对其进行引用；两个文件将分别编译，最终链接为完整可执行文件。
+  下方示例中，add_compute.asc定义了变量和函数，add_kernel.asc对其进行引用；两个文件将分别编译，最终链接为完整可执行文件。
   ```c++
-  // ------- definition.asc -------
+  // ------- add_compute.asc -------
   __gm__ int dev_var = 5;
-  __aicore__ int device_function();
+  __aicore__ void add_compute(...);
 
-  // ------- example.asc -------
+  // ------- add_kernel.asc -------
   extern __gm__ int dev_var;
-  __aicore__  int device_function();
-  __global__  __vector__ void kernel(int *var) {
+  __aicore__  void add_compute(...);
+  __global__  __vector__ void add_custom(__gm__ float* x, __gm__ float* y, __gm__ float* z) {
     dev_var = 0;
-    *var = device_function();
+    add_compute(...);
   }
   ```
 
   ```shell
-  bisheng -dc definition.asc -o definition.o --npu-arch=dav-xxxx
-  bisheng -dc example.asc -o example.o --npu-arch=dav-xxxx
-  bisheng definition.o example.o -o program
+  bisheng -dc add_compute.asc -o add_compute.o --npu-arch=dav-xxxx
+  bisheng -dc add_kernel.asc -o add_kernel.o --npu-arch=dav-xxxx
+  bisheng -c main.cpp -o main.o -I${INSTALL_DIR}/include
+  bisheng add_compute.o add_kernel.o main.o -o program
   ```
+  > [!NOTE] 说明
+  > ${INSTALL_DIR}请替换为CANN软件安装后文件存储路径。以root用户安装为例，安装后文件默认存储路径为：/usr/local/Ascend/cann。
 
-- 动态库编译
+- 动态库编译，完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/04_compile/02_dynamic_library_compile/README.md)。
    ```shell
-  bisheng -shared example.asc -o libexample.so --npu-arch=dav-xxxx -fPIC
+  bisheng -shared add_kernel.asc -o libadd_kernel.so -fPIC --npu-arch=dav-xxxx
   ```
 
-- 静态库编译
+- 静态库编译，完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/04_compile/03_static_library_compile/README.md)。
   ```shell
-  bisheng -lib example.asc -o libexample.a --npu-arch=dav-xxxx
+  bisheng -lib add_kernel.asc -o libadd_kernel.a --npu-arch=dav-xxxx
   ```
 
 ## AI Core SIMT编译
