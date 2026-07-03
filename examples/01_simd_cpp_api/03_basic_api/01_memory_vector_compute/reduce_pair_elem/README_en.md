@@ -48,7 +48,7 @@ Note: `ReducePairElem` is the renamed API after CANN 9.1.0. For CANN 9.0.0 and e
 - Example implementation:  
   This example implements a `ReducePairElem<SUM>` example with fixed input shape x[1, 128] and output shape y[1, 64].
 
-  The Compute task is responsible for summing each pair of adjacent elements (even index and odd index) in srcLocal and storing the results in dstLocal.
+  In the kernel, `ReducePairElem<SUM>` sums each pair of adjacent elements (even index and odd index) in `srcLocal` and stores the results in `dstLocal`.
 
 ## Build and Run
 

@@ -48,7 +48,7 @@
 - 样例实现：  
   本样例中实现的是固定shape为输入x[1, 128]，输出y[1, 64]的`ReducePairElem<SUM>`样例。
 
-  Compute任务负责对srcLocal中每对相邻元素（偶数下标与奇数下标）求和，并将结果存储在dstLocal中。
+  核函数中，`ReducePairElem<SUM>`对`srcLocal`中每对相邻元素（偶数下标与奇数下标）求和，并将结果存储在`dstLocal`中。
 
 ## 编译运行
 
