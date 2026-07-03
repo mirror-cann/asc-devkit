@@ -35,7 +35,7 @@ uint32_t SetCommBlockNum(uint16_t num)
 const char* groupName = "testGroup";
 uint32_t opType = HCCL_CMD_BATCH_WRITE;
 std::string algConfig = "BatchWrite=level0:fullmesh";
-uint32_t reduceType = HCCL_REDUCE_SUM;
+uint32_t reduceType = 0; // BatchWrite无归约语义，此处占位
 AscendC::Mc2CcTilingConfig mc2CcTilingConfig(groupName, opType, algConfig, reduceType);
 mc2CcTilingConfig.SetCommBlockNum(24U);
 ```
