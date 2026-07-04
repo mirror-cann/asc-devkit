@@ -18,7 +18,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_MISC_C_API_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_MISC_C_API_IMPL_H
 
-#include "misc_impl/init_soc_state_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/misc_impl/init_soc_state_impl.h"
 
 __aicore__ inline void asc_init()
 {

@@ -23,7 +23,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_ASC_BFLOAT162INT32_RN_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_ASC_BFLOAT162INT32_RN_IMPL_H
 
-#include "../../../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __simd_callee__ inline void asc_bfloat162int32_rn_impl(vector_int32_t& dst, vector_bfloat16_t src, vector_bool mask)
 {

@@ -11,7 +11,7 @@
 #ifndef INCLUDE_C_API_REG_COMPUTE_REG_LOAD_H
 #define INCLUDE_C_API_REG_COMPUTE_REG_LOAD_H
 
-#include "../../../impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl.h"
 
 // ==========源操作数为起初地址，目的数为寄存器=========
 // ==========asc_gather(u8/s8/half/u16/s16/float/u32/s32/bf16/e4m3/e5m2/e8m0)=========

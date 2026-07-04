@@ -19,14 +19,14 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_SCALAR_COMPUTE_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_SCALAR_COMPUTE_IMPL_H
 
-#include "scalar_compute_impl/asc_clz_impl.h"
-#include "scalar_compute_impl/ffs_impl.h"
-#include "scalar_compute_impl/asc_sflbits_impl.h"
-#include "scalar_compute_impl/asc_zero_bits_cnt_impl.h"
-#include "scalar_compute_impl/asc_ffz_impl.h"
-#include "scalar_compute_impl/asc_popc_impl.h"
-#include "scalar_compute_impl/asc_set_nthbit_impl.h"
-#include "scalar_compute_impl/asc_clear_nthbit_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/asc_clz_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/ffs_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/asc_sflbits_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/asc_zero_bits_cnt_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/asc_ffz_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/asc_popc_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/asc_set_nthbit_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/asc_clear_nthbit_impl.h"
 
 __aicore__ inline int64_t asc_clz(uint64_t value_in)
 {

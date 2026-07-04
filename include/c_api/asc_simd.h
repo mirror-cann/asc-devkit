@@ -17,35 +17,35 @@
 #ifndef INCLUDE_C_API_ASC_SIMD_H
 #define INCLUDE_C_API_ASC_SIMD_H
 
-#include "../../impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201)
 
-#include "cache_ctrl/cache_ctrl.h"
-#include "atomic/atomic.h"
-#include "cube_compute/cube_compute.h"
-#include "cube_datamove/cube_datamove.h"
-#include "misc/misc.h"
-#include "scalar_compute/scalar_compute.h"
-#include "sync/sync.h"
-#include "sys_var/sys_var.h"
-#include "vector_compute/vector_compute.h"
-#include "vector_datamove/vector_datamove.h"
+#include "c_api/cache_ctrl/cache_ctrl.h"
+#include "c_api/atomic/atomic.h"
+#include "c_api/cube_compute/cube_compute.h"
+#include "c_api/cube_datamove/cube_datamove.h"
+#include "c_api/misc/misc.h"
+#include "c_api/scalar_compute/scalar_compute.h"
+#include "c_api/sync/sync.h"
+#include "c_api/sys_var/sys_var.h"
+#include "c_api/vector_compute/vector_compute.h"
+#include "c_api/vector_datamove/vector_datamove.h"
 
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
-#include "atomic/atomic.h"
-#include "cache_ctrl/cache_ctrl.h"
-#include "cube_compute/cube_compute.h"
-#include "cube_datamove/cube_datamove.h"
-#include "misc/misc.h"
-#include "scalar_compute/scalar_compute.h"
-#include "sync/sync.h"
-#include "sys_var/sys_var.h"
-#include "vector_datamove/vector_datamove.h"
-#include "reg_compute/reg_convert.h"
-#include "reg_compute/reg_load.h"
-#include "reg_compute/reg_store.h"
-#include "reg_compute/reg_vector.h"
+#include "c_api/atomic/atomic.h"
+#include "c_api/cache_ctrl/cache_ctrl.h"
+#include "c_api/cube_compute/cube_compute.h"
+#include "c_api/cube_datamove/cube_datamove.h"
+#include "c_api/misc/misc.h"
+#include "c_api/scalar_compute/scalar_compute.h"
+#include "c_api/sync/sync.h"
+#include "c_api/sys_var/sys_var.h"
+#include "c_api/vector_datamove/vector_datamove.h"
+#include "c_api/reg_compute/reg_convert.h"
+#include "c_api/reg_compute/reg_load.h"
+#include "c_api/reg_compute/reg_store.h"
+#include "c_api/reg_compute/reg_vector.h"
 
 #endif
 

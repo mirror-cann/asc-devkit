@@ -11,7 +11,7 @@
 #ifndef INCLUDE_C_API_REG_COMPUTE_REG_STORE_H
 #define INCLUDE_C_API_REG_COMPUTE_REG_STORE_H
 
-#include "../../../impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl.h"
 
 // ==========asc_store=========
 

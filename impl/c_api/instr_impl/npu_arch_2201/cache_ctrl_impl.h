@@ -18,10 +18,10 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CACHE_CTRL_IMPL_CACHE_CTRL_C_API_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CACHE_CTRL_IMPL_CACHE_CTRL_C_API_IMPL_H
 
-#include "cache_ctrl_impl/asc_get_icache_preload_status_impl.h"
-#include "cache_ctrl_impl/asc_data_cache_preload_impl.h"
-#include "cache_ctrl_impl/asc_dcci_impl.h"
-#include "cache_ctrl_impl/asc_icache_preload_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cache_ctrl_impl/asc_get_icache_preload_status_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cache_ctrl_impl/asc_data_cache_preload_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cache_ctrl_impl/asc_dcci_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cache_ctrl_impl/asc_icache_preload_impl.h"
 
 namespace __asc_aicore {
 __aicore__ inline void asc_dcci_single(__gm__ void* dst)

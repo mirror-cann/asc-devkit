@@ -17,7 +17,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CUBE_DATAMOVE_IMPL_ASC_COPY_L0C2GM_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CUBE_DATAMOVE_IMPL_ASC_COPY_L0C2GM_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 __aicore__ inline void asc_copy_l0c2gm_impl(__gm__ half* dst, __cc__ float* src, uint16_t n_size, uint16_t m_size, 
                                             uint32_t dst_stride_dst_d, uint16_t src_stride, uint8_t unit_flag_mode, 

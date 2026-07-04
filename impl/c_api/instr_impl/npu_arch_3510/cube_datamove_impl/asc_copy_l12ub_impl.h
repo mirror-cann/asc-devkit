@@ -17,7 +17,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_CUBE_DATAMOVE_IMPL_ASC_COPY_L12UB_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_CUBE_DATAMOVE_IMPL_ASC_COPY_L12UB_IMPL_H
 
-#include "../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __aicore__ inline void asc_copy_l12ub_impl(__ubuf__ void *dst_addr, __cbuf__ void *src_addr, bool sub_blockid,
                         uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)

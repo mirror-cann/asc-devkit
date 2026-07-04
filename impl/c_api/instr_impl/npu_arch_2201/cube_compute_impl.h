@@ -17,15 +17,15 @@
 #ifndef IMPL_C_API_INSTR_IMPL_CUBE_COMPUTE_IMPL_CUBE_COMPUTE_C_API_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_CUBE_COMPUTE_IMPL_CUBE_COMPUTE_C_API_IMPL_H
 
-#include "cube_compute_impl/asc_mmad_sparse_impl.h"
-#include "cube_compute_impl/asc_set_fp32_mode_impl.h"
-#include "cube_compute_impl/asc_mmad_impl.h"
-#include "cube_compute_impl/asc_set_l0c2gm_config_impl.h"
-#include "cube_compute_impl/asc_set_mmad_direction_m_impl.h"
-#include "cube_compute_impl/asc_set_mmad_direction_n_impl.h"
-#include "cube_compute_impl/asc_enable_hf32_impl.h"
-#include "cube_compute_impl/asc_enable_hf32_trans_impl.h"
-#include "cube_compute_impl/asc_get_l0c2gm_config_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_mmad_sparse_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_set_fp32_mode_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_mmad_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_set_l0c2gm_config_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_set_mmad_direction_m_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_set_mmad_direction_n_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_enable_hf32_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_enable_hf32_trans_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_get_l0c2gm_config_impl.h"
 
 __aicore__ inline void asc_enable_hf32()
 {

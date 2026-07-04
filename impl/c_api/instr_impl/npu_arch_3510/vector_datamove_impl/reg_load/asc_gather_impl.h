@@ -16,7 +16,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_DATAMOVE_IMPL_REG_LOAD_ASC_GATHER_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_DATAMOVE_IMPL_REG_LOAD_ASC_GATHER_IMPL_H
 
-#include "../../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 // ==========源操作数为起初地址，目的数为寄存器=========
 __simd_callee__ inline void asc_gather_impl(vector_int16_t& dst, __ubuf__  int8_t* src,

@@ -18,7 +18,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_VECTOR_COMPUTE_IMPL_ASC_SET_VA_REG_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_VECTOR_COMPUTE_IMPL_ASC_SET_VA_REG_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 __aicore__ inline void asc_set_va_reg_impl(ub_addr8_t addr, __ubuf__ int8_t** src_array)
 {

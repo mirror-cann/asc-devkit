@@ -11,6 +11,6 @@
 #ifndef INCLUDE_C_API_C_API_UTILS_INTF_H
 #define INCLUDE_C_API_C_API_UTILS_INTF_H
 
-#include "utils/union.h"
+#include "c_api/utils/union.h"
 
 #endif

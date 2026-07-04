@@ -16,7 +16,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_DATAMOVE_IMPL_REG_STORE_ASC_STOREUNALIGN_POSTUPDATE_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_DATAMOVE_IMPL_REG_STORE_ASC_STOREUNALIGN_POSTUPDATE_IMPL_H
 
-#include "../../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 // ==========偏移固定传入0，由用户自行更新目的操作数的地址=========
 __simd_callee__ inline void asc_storeunalign_postupdate_impl(__ubuf__  int8_t*& dst, vector_store_unalign& src0,

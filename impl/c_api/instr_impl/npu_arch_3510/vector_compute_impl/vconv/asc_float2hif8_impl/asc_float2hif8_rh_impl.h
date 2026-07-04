@@ -18,7 +18,7 @@
 #ifndef IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_VCON_ASC_FLOAT2HIF8_IMPL_ASC_FLOAT2HIF8_RH_IMPL_H
 #define IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_VCON_ASC_FLOAT2HIF8_IMPL_ASC_FLOAT2HIF8_RH_IMPL_H
 
-#include "../../../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __simd_callee__ inline void asc_float2hif8_rh_sat_impl(vector_hifloat8_t& dst, vector_float src, vector_bool mask)
 {

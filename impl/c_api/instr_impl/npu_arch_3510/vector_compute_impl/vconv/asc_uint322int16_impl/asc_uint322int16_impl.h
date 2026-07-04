@@ -11,7 +11,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_VCONV_ASC_UINT322INT16_IMPL_ASC_UINT322INT16_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_VCONV_ASC_UINT322INT16_IMPL_ASC_UINT322INT16_IMPL_H
 
-#include "../../../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 // part_even
 __simd_callee__ inline void asc_uint322int16_impl(vector_int16_t& dst, vector_uint32_t src, vector_bool mask)

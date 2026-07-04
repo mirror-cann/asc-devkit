@@ -19,11 +19,11 @@
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201)
 
-#include "../../../impl/c_api/instr_impl/npu_arch_2201/cube_datamove_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/cube_datamove_impl.h"
 
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
 
-#include "../../../impl/c_api/instr_impl/npu_arch_3510/cube_datamove_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/cube_datamove_impl.h"
 
 #endif
 

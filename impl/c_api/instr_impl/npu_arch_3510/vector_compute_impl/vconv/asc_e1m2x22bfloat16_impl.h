@@ -11,7 +11,7 @@
 #ifndef IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_VCON_ASC_E1M2X22BFLOAT16_IMPL_H
 #define IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_VCON_ASC_E1M2X22BFLOAT16_IMPL_H
 
-#include "../../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __simd_callee__ inline void asc_e1m2x22bfloat16_impl(vector_bfloat16_t& dst, vector_fp4x2_e1m2_t src, vector_bool mask)
 {
