@@ -218,7 +218,6 @@
     ```
     // Declare a AI CPU kernel function in .asc file
     extern __global__ __aicpu__ uint32_t hello_world(void *args);// OK
-    }
     ```
 
 -   **\_\_inline\_\_**
