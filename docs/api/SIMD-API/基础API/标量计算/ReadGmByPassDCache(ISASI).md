@@ -64,7 +64,7 @@ __aicore__ inline T ReadGmByPassDCache(__gm__ T* addr)
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-标量单元连续读取相同GM地址时，会长期占用总线（Bus），导致其他核无法向该地址写入数据，进而引发系统卡死。在此场景下，建议在标量读指令后插入若干空操作指令（Nop）释放总线，插入Nop指令的数量可按"需同步的核数×200"估算（如4个核时建议插入800条）。
+无
 
 ## 调用示例<a name="section6191129670"></a>
 
