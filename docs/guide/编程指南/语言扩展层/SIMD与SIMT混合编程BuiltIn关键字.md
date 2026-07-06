@@ -36,7 +36,7 @@ SIMT VF函数有以下约束：
 
 -   入参仅支持Ascend C的[内置数据类型](SIMT-BuiltIn关键字.md#section1835494915576)（int32\_t、uint32\_t、float、half等）及其组成的指针、数组、结构体类型，且指针类型必须指向GM或者UB内存。
 -   函数返回类型必须是void。
--   SIMT VF内只能调用\_\_simt\_callee\_\_函数。
+-   SIMT VF内只能调用\_\_simt\_callee\_\_函数或constexpr \_\_callee\_\_函数。
 
 ### \_\_simt\_callee\_\_
 
@@ -56,7 +56,7 @@ uint32_t result = simt_helper(arg1, arg2, ...);
 
 -   入参仅支持Ascend C的[内置数据类型](SIMT-BuiltIn关键字.md#section1835494915576)（int32\_t、uint32\_t、float、half等）及对应的指针类型。
 -   函数返回值只能是Ascend C的[内置数据类型](SIMT-BuiltIn关键字.md#section1835494915576)（int32\_t、uint32\_t、float、half等）及对应的指针类型。
--   函数内只能调用\_\_simt\_callee\_\_函数或constexpr \_\_aicore\_\_函数。
+-   函数内只能调用\_\_simt\_callee\_\_函数或constexpr \_\_callee\_\_函数。
 
 ### \_\_simd\_vf\_\_与\_\_simd\_callee\_\_
 
