@@ -95,13 +95,13 @@
     设置模板参数MatmulPolicy为NBuffer33模板策略，创建Matmul对象。
 
     ```
-    AscendC::MatmulImpl<
-        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, aType>,
-        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, bType>,
-        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, cType>,
-        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, biasType>, CFG_MDL,
-        AscendC::MatmulCallBackFunc<nullptr, nullptr, nullptr>,
-        AscendC::Impl::Detail::NBuffer33MatmulPolicy> matmulObj;
+    AscendC::Matmul<
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, AType, IS_TRANS_A>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BType, IS_TRANS_B>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, CType>,
+        AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, BiasType>, CFG_MDL,
+        AscendC::MatmulCallBackFunc<nullptr, nullptr, nullptr>, AscendC::Impl::Detail::NBuffer33MatmulPolicy>
+        matmulObj;
     ```
 
 ## 验证优化方案性能收益<a name="section19022397498"></a>

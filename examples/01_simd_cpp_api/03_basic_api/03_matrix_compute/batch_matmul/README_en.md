@@ -107,26 +107,26 @@ nd2nzA1Params.dstNzMatrixStride = aSizeAlignL0;
 
 ### L1 -> L0A / L0B Transfer and Matrix Multiplication Mmad Loop B Times
 
-For loop B times, transferring A and B matrices for each batch from L1 -> L0A / L0B each time. The Mmad instruction computes one pair of A and B matrix multiplication results each time.
+For loop B times, transferring A and B matrices for each batch from L1 -> L0A / L0B each time. The Mmad instruction computes one pair of A and B matrix multiplication results each time. Then storing them at corresponding positions in L0C. After the loop completes, the full results on L0C are transferred out to GM.
 
 ```cpp
 for (int32_t batchIndex = 0; batchIndex < B; batchIndex++) {
-        SplitA(a1Local[batchIndex * aSizeAlignL0]);
-        SplitBTranspose(b1Local[batchIndex * bSizeAlignL0]);
-        AscendC::SetFlag<AscendC::HardEvent::MTE1_M>(EVENT_ID0);
-        AscendC::WaitFlag<AscendC::HardEvent::MTE1_M>(EVENT_ID0);
+    SplitA(a1Local[batchIndex * aSizeAlignL0], a2Local);
+    SplitBTranspose(b1Local[batchIndex * bSizeAlignL0], b2Local);
+    AscendC::SetFlag<AscendC::HardEvent::MTE1_M>(EVENT_ID0);
+    AscendC::WaitFlag<AscendC::HardEvent::MTE1_M>(EVENT_ID0);
 
-        Compute(batchIndex, c1Local);
-        AscendC::SetFlag<AscendC::HardEvent::M_MTE1>(EVENT_ID0);
-        AscendC::WaitFlag<AscendC::HardEvent::M_MTE1>(EVENT_ID0);
+    AscendC::MmadParams params;
+    params.m = m;
+    params.n = n;
+    params.k = k;
+    AscendC::Mmad(
+        co1Local[batchIndex * CeilAlign(m, cubeShape[0]) * CeilAlign(n, cubeShape[0])], a2Local, b2Local,
+        params);
+
+    AscendC::SetFlag<AscendC::HardEvent::M_MTE1>(EVENT_ID0);
+    AscendC::WaitFlag<AscendC::HardEvent::M_MTE1>(EVENT_ID0);
 }
-```
-
-The for loop computes matrix results for each batch, storing them at corresponding positions in L0C. After the loop completes, the full results on L0C are transferred out to GM.
-
-```cpp
-AscendC::Mmad(c1Local[batchIndex * CeilAlign(m, cubeShape[0]) * CeilAlign(n, cubeShape[0])],
-              a2Local, b2Local, mmadParams);
 ```
 
 ### Matrix Batch Transfer Out

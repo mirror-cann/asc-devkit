@@ -74,7 +74,7 @@ Where $\otimes$ represents broadcast multiplication. During left/right matrix mu
 
 ### Implementation Key Points
 
-This example unifies tiling parameters to be determined at compile time in `matmul_mx.h`, passing to `MatmulImpl` through template constant `CONSTANT_CFG`:
+This example unifies tiling parameters to be determined at compile time in `matmul_mx.h`, passing to `Matmul` through template constant `CONSTANT_CFG`:
 
 ```cpp
 constexpr static auto CONSTANT_CFG = GetMxConstantCFG<aType, bType, cType, EnableScaleCache>();
