@@ -62,6 +62,8 @@ __aicore__ inline void asc_set_atomic_min_bfloat()
     asc_set_atomic_min_bfloat_impl();
 }
 
+[[deprecated("NOTICE: asc_set_store_atomic_config_v2 is deprecated."
+             "Please use asc_atomic_add instead for atomic add operation.")]]
 __aicore__ inline void asc_set_store_atomic_config_v2(uint16_t type, uint16_t op)
 {
     asc_set_store_atomic_config_v2_impl(type, op);
@@ -83,6 +85,8 @@ __aicore__ inline void asc_set_atomic_none()
 }
 
 //===========asc_get_store_atomic_config===========
+[[deprecated("NOTICE: asc_get_store_atomic_config is deprecated on Ascend 950PR/Ascend 950DT."
+             "Please use asc_atomic_add instead for atomic add operation.")]]
 __aicore__ inline void asc_get_store_atomic_config(asc_store_atomic_config& config)
 {
     asc_get_store_atomic_config_impl(config);
