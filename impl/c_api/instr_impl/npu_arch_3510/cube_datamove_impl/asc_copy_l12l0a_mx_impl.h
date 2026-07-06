@@ -23,7 +23,7 @@
 #ifndef IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_CUBE_DATAMOVE_IMPL_ASC_COPY_L12L0A_MX_IMPL_H
 #define IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_CUBE_DATAMOVE_IMPL_ASC_COPY_L12L0A_MX_IMPL_H
 
-#include "../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __aicore__ inline void asc_copy_l12l0a_mx_impl(uint64_t dst, __cbuf__ fp8_e8m0_t* src, uint16_t x_start_pos,
     uint16_t y_start_pos, uint8_t x_step, uint8_t y_step, uint16_t src_stride, uint16_t dst_stride)

@@ -17,7 +17,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CUBE_COMPUTE_IMPL_ASC_MMAD_SPARSE_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CUBE_COMPUTE_IMPL_ASC_MMAD_SPARSE_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 __aicore__ inline void asc_mmad_sparse_impl(__cc__ int32_t* c, __ca__ int8_t* a, __cb__ int8_t* b, uint16_t m,
                                             uint16_t k, uint16_t n, uint8_t unit_flag, bool c_matrix_source,

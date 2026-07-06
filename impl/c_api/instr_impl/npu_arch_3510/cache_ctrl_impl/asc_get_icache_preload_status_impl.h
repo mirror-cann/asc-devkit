@@ -18,7 +18,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_CACHE_CTRL_IMPL_ASC_GET_ICACHE_PRL_ST_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_CACHE_CTRL_IMPL_ASC_GET_ICACHE_PRL_ST_IMPL_H
 
-#include "../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __aicore__ inline int64_t asc_get_icache_preload_status_impl()
 {

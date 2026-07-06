@@ -23,7 +23,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_VECTOR_DATAMOVE_IMPL_ASC_SET_COPY_PAD_VAL_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_VECTOR_DATAMOVE_IMPL_ASC_SET_COPY_PAD_VAL_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 //===========asc_set_copy_pad_val(int8/uint8/int16/uint16/half/bfloat16/int32/uint32/float)===========
 __aicore__ inline void asc_set_copy_pad_val_impl(int8_t pad_value)

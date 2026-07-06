@@ -11,15 +11,15 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_SYNC_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_SYNC_IMPL_H
 
-#include "sync_impl/asc_sync_notify_impl.h"
-#include "sync_impl/asc_sync_wait_impl.h"
-#include "sync_impl/asc_sync_pipe_impl.h"
-#include "sync_impl/asc_sync_block_arrive_impl.h"
-#include "sync_impl/asc_sync_inter_arrive_impl.h"
-#include "sync_impl/asc_sync_subblock_arrive_impl.h"
-#include "sync_impl/asc_sync_data_barrier_impl.h"
-#include "sync_impl/asc_lock_impl.h"
-#include "sync_impl/asc_unlock_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/sync_impl/asc_sync_notify_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/sync_impl/asc_sync_wait_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/sync_impl/asc_sync_pipe_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/sync_impl/asc_sync_block_arrive_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/sync_impl/asc_sync_inter_arrive_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/sync_impl/asc_sync_subblock_arrive_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/sync_impl/asc_sync_data_barrier_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/sync_impl/asc_lock_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/sync_impl/asc_unlock_impl.h"
 
 __aicore__ inline void asc_sync_vec()
 {

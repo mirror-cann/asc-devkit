@@ -23,7 +23,7 @@
 #ifndef IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_VECTOR_DATAMOVE_IMPL_REG_LOAD_ASC_LOADUNALIGN_PRE_IMPL_H
 #define IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_VECTOR_DATAMOVE_IMPL_REG_LOAD_ASC_LOADUNALIGN_PRE_IMPL_H
 
-#include "../../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __simd_callee__ inline void asc_loadunalign_pre_impl(vector_load_unalign& dst, __ubuf__ int8_t* src)
 {

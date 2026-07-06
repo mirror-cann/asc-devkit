@@ -23,7 +23,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_VECTOR_COMPUTE_VCONV_ASC_FLOAT2FLOAT_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_VECTOR_COMPUTE_VCONV_ASC_FLOAT2FLOAT_IMPL_H
 
-#include "../../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 // asc_float2float_rn
 __aicore__ inline void asc_float2float_rn_impl(__ubuf__ float* dst, __ubuf__ float* src, uint8_t repeat,

@@ -22,7 +22,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CUBE_DATAMOVE_IMPL_ASC_COPY_GM2L1_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CUBE_DATAMOVE_IMPL_ASC_COPY_GM2L1_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 // PAD_NONE
 __aicore__ inline void asc_copy_gm2l1_impl(__cbuf__ void* dst, __gm__ void* src, uint16_t n_burst,

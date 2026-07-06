@@ -23,7 +23,7 @@
 #ifndef IMPL_C_API_INSTR_VECTOR_COMPUTE_IMPL_NPU_ARCH_3510_ASC_MIN_SCALAR_IMPL_H
 #define IMPL_C_API_INSTR_VECTOR_COMPUTE_IMPL_NPU_ARCH_3510_ASC_MIN_SCALAR_IMPL_H
 
-#include "../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 //asc_min_scalar int32_t
 __simd_callee__ inline void asc_min_scalar_impl(vector_int32_t& dst, vector_int32_t src, int32_t value, vector_bool mask)

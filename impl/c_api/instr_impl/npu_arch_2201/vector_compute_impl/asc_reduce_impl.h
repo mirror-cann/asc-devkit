@@ -23,7 +23,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_VECTOR_COMPUTE_IMPL_ASC_REDUCE_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_VECTOR_COMPUTE_IMPL_ASC_REDUCE_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 // asc_reduce uint16_t
 __aicore__ inline void asc_reduce_impl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src0, __ubuf__ uint16_t* src1,

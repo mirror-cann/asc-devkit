@@ -11,7 +11,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_UTILS_IMPL_UTILS_C_API_TYPE_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_UTILS_IMPL_UTILS_C_API_TYPE_H
 
-#include "../../../../utils/common_types.h"
+#include "impl/utils/common_types.h"
 
 #ifndef INT4X2_T_STRUCT
 #define INT4X2_T_STRUCT

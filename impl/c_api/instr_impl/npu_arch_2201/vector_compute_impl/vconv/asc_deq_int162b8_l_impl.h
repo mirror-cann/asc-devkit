@@ -22,7 +22,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_VECTOR_COMPUTE_VCONV_ASC_DEQ_INT162B8_L_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_VECTOR_COMPUTE_VCONV_ASC_DEQ_INT162B8_L_IMPL_H
 
-#include "../../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 // asc_deq_int162b8_l int8_t
 __aicore__ inline void asc_deq_int162b8_l_impl(__ubuf__ int8_t* dst, __ubuf__ int16_t* src, uint8_t repeat,

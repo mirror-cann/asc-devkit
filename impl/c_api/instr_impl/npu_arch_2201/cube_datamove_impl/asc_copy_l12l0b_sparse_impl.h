@@ -17,7 +17,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CUBE_DATAMOVE_IMPL_ASC_COPY_L12L0B_SPARSE_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CUBE_DATAMOVE_IMPL_ASC_COPY_L12L0B_SPARSE_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 __aicore__ inline void asc_copy_l12l0b_sparse_impl(__cb__ int8_t* dst, __cbuf__ int8_t* src, __cbuf__ int8_t* index,
                                                    uint16_t start_index, uint8_t repeat)

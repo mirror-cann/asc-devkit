@@ -23,7 +23,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_SYNC_IMPL_ASC_LOCK_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_SYNC_IMPL_ASC_LOCK_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl/utils_impl.h"
 
 #define asc_lock_impl(pipe, mutex_id, mode)       \
     do {                                          \

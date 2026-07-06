@@ -22,7 +22,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CUBE_DATAMOVE_IMPL_ASC_SET_L0C_COPY_PARAMS_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_2201_CUBE_DATAMOVE_IMPL_ASC_SET_L0C_COPY_PARAMS_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 __aicore__ inline void set_l0c_copy_params_impl(uint16_t nd_num, uint16_t src_nd_stride, uint16_t dst_nd_stride)
 {

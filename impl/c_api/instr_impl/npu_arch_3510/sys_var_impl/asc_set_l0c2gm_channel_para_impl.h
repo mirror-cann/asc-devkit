@@ -18,7 +18,7 @@
 #ifndef IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_SYS_VAR_IMPL_ASC_L0C2GM_CHANNEL_PARA_IMPL_H
 #define IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_SYS_VAR_IMPL_ASC_L0C2GM_CHANNEL_PARA_IMPL_H
 
-#include "../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __aicore__ inline void asc_set_l0c2gm_channel_para_impl(uint64_t config)
 {

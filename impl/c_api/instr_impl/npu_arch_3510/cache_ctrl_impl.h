@@ -11,11 +11,11 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_CACHE_CTRL_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_CACHE_CTRL_IMPL_H
 
-#include "cache_ctrl_impl/asc_icache_preload_impl.h"
-#include "cache_ctrl_impl/asc_data_cache_preload_impl.h"
-#include "cache_ctrl_impl/asc_dcci_impl.h"
-#include "cache_ctrl_impl/asc_get_icache_preload_status_impl.h"
-#include "cache_ctrl_impl/asc_dci_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/cache_ctrl_impl/asc_icache_preload_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/cache_ctrl_impl/asc_data_cache_preload_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/cache_ctrl_impl/asc_dcci_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/cache_ctrl_impl/asc_get_icache_preload_status_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/cache_ctrl_impl/asc_dci_impl.h"
 
 // ==========asc_icache_preload==========
 __aicore__ inline void asc_icache_preload(const void* addr, int64_t prefetch_len)

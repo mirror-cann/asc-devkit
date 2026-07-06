@@ -23,7 +23,7 @@
 #ifndef IMPL_C_API_INSTR_VECTOR_COMPUTE_ASC_HALF2UINT8_RNA_IMPL_H
 #define IMPL_C_API_INSTR_VECTOR_COMPUTE_ASC_HALF2UINT8_RNA_IMPL_H
 
-#include "../../../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __simd_callee__ inline void asc_half2uint8_rna_impl(vector_uint8_t& dst, vector_half src, vector_bool mask)
 {

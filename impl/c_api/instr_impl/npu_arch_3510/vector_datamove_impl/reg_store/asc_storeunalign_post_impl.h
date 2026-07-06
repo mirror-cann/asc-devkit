@@ -16,7 +16,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_VECTOR_DATAMOVE_IMPL_NPU_ARCH_3510_ASC_STOREUNALIGN_POST_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_VECTOR_DATAMOVE_IMPL_NPU_ARCH_3510_ASC_STOREUNALIGN_POST_IMPL_H
 
-#include "../../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __simd_callee__ inline void asc_storeunalign_post_impl(__ubuf__ int8_t* dst, vector_store_unalign src, int32_t offset)
 {

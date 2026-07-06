@@ -11,7 +11,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_SCALAR_COMPUTE_IMPL_ASC_FLOAT2INT32_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_SCALAR_COMPUTE_IMPL_ASC_FLOAT2INT32_IMPL_H
 
-#include "../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 __aicore__ inline int32_t asc_float2int32_rd_impl(float value)
 {

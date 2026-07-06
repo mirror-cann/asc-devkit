@@ -22,7 +22,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_CUBE_COMPUTE_IMPL_ASC_MMAD_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_CUBE_COMPUTE_IMPL_ASC_MMAD_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl/utils_impl.h"
 
 __aicore__ inline void asc_mmad_impl(__cc__ float* c_matrix, __ca__ bfloat16_t* a_matrix, __cb__ bfloat16_t* b_matrix,
                                      uint16_t left_height, uint16_t n_dim, uint16_t right_width, uint8_t unit_flag,

@@ -11,7 +11,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_VCONV_ASC_HALF2INT4X2_IMPL_ASC_HALF2INT4X2_RNA_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_VCONV_ASC_HALF2INT4X2_IMPL_ASC_HALF2INT4X2_RNA_IMPL_H
 
-#include "../../../utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 // rna - sat:dis/en - v1 v2 v3 v4
 __simd_callee__ inline void asc_half2int4x2_rna_impl(vector_int4x2_t& dst, vector_half src, vector_bool mask)

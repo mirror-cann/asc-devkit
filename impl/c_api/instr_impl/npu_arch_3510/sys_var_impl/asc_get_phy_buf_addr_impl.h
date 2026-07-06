@@ -18,7 +18,7 @@
 #ifndef IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_SYS_VAR_IMPL_ASC_GET_PHY_BUF_ADDR_IMPL_H
 #define IMPL_C_API_INSTR_IMPL_NPU_ARCH_3510_SYS_VAR_IMPL_ASC_GET_PHY_BUF_ADDR_IMPL_H
 
-#include "../utils_impl/utils_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/utils_impl/utils_impl.h"
 
 __aicore__ inline uint64_t asc_get_phy_buf_addr_impl(uint64_t offset)
 {
