@@ -366,7 +366,6 @@ file(GLOB ASCENDC_TEST_ascend950pr_9599_AIV_CASE_SRC_FILES
     transpose/confusion_transpose/test_operator_confusion_transpose_c310.cpp
     # hccl
     hccl/test_hccl_aicpu_950.cpp
-    ain/test_ain_urma_950.cpp
     hcomm/test_hcomm_roce_950.cpp
     hcomm/test_hcomm_urma_950.cpp
 )
