@@ -116,9 +116,9 @@ AscendC::BatchNorm<dataType, isReuseSource, isBasicBlock>(
   40 41 42 43 44 45 46 47
   48 49 50 51 52 53 54 55
   56 57 58 59 60 61 62 63 ]
-输入数据(gammaLocal, shape:[4]):
+输入数据(gammaLocal, shape:[8]):
 [ 0 1 2 3 4 5 6 7 ]
-输入数据(betaLocal, shape:[4]):
+输入数据(betaLocal, shape:[8]):
 [ 0 1 2 3 4 5 6 7 ]
 输出数据(dstLocal):
 [ 0. 0. 0. 0. 0. 0. 0. 0.
