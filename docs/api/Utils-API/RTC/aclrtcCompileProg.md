@@ -89,7 +89,7 @@ aclError aclrtcCompileProg(aclrtcProg prog, int numOptions, const char **options
 <td class="cellrowborder" valign="top" width="15.559999999999999%" headers="mcps1.2.4.1.2 "><p id="p107431119474"><a name="p107431119474"></a><a name="p107431119474"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="66.86%" headers="mcps1.2.4.1.3 "><p id="p2743311144712"><a name="p2743311144712"></a><a name="p2743311144712"></a>编译选项数组，保存具体的编译选项（默认添加-std=c++17）。</p>
-<p id="li196189152610p0"><a name="li196189152610p0"></a><a name="li196189152610p0"></a>支持的编译选项可以参考。</p>
+<p id="li196189152610p0"><a name="li196189152610p0"></a><a name="li196189152610p0"></a>支持的编译选项可以参考[《毕昇编译器用户指南》](https://www.hiascend.com/document/redirect/CannCommunityBiSheng)。</p>
 </td>
 </tr>
 </tbody>
