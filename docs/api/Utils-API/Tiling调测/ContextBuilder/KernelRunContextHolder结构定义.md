@@ -13,7 +13,7 @@ struct KernelRunContextHolder {
     template<typename T>
     T *GetContext() const
     {
-        return reinterpret_cast<T*>(context);
+        return reinterpret_cast<T*>(kernelContext);
     }
     gert::ComputeNodeInfo *MutableComputeNodeInfo()
     {

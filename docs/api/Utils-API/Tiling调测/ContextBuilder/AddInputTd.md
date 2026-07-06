@@ -98,7 +98,7 @@ gert::StorageShape bias1_shape = {{16, 0}, {16, 0}};
 
 std::vector<float> x_const_value (1024 * 5120, 2.f);
 std::vector<float> bias_value (16 * 5120, 3.f);
-context_ascendc::ContextBuilder builder
+context_ascendc::ContextBuilder builder;
 (void)builder.NodeIoNum(5, 1) // 声明算子有5个输入，1个输出
     .IrInstanceNum({1, 1, 2, 1, 1}) // 声明index 2的算子tensor有两个dynamic实例
     .SetOpNameType("tmpName", "tmpType")
