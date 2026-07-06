@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例介绍了调用`ReduceRepeat<SUM>`和`ReduceDataBlock<SUM>`高阶API实现reduce算子，实现了连续内存上数据元素的累加，返回累加结果的功能。
+本样例介绍了调用`ReduceRepeat<SUM>`和`ReduceDataBlock<SUM>`基础API实现reduce算子，实现了连续内存上数据元素的累加，返回累加结果的功能。
 
 注：`ReduceRepeat`和`ReduceDataBlock`为 CANN 9.1.0 重命名后的 API。CANN 9.0.0 及之前版本请使用`WholeReduceSum`，`BlockReduceSum`。
 
@@ -60,13 +60,13 @@
 
       - 3、长度在float输入(2KB,16KB]，或者half输入(4KB,32KB]时，ComputeKey = 3。由于一条ReduceRepeat<SUM>的累加效率比使用两条ReduceDataBlock<SUM>的累加效率更高。所以采用两条ReduceRepeat<SUM>（而不是两条ReduceDataBlock<SUM>+一条ReduceRepeat<SUM>），得到这段buffer的累加和。
 
-      - 4、长度在float输入为10000时，ComputeKey = 4，对应WholeReduceSumImpl中的处理方法，在Counter模式下，采用ReduceRepeat<SUM>指令，循环处理二维数据中的每一行，得到每一行的归约运行结果。
+      - 4、长度在float输入为10000时，ComputeKey = 4，对应ReduceRepeatSumImpl中的处理方法，在Counter模式下，采用ReduceRepeat<SUM>指令，循环处理二维数据中的每一行，得到每一行的归约运行结果。
 
       - 5、长度在float输入为20000时，ComputeKey = 5，对应BinaryReduceSumImpl中的处理方法，在Counter模式下，先将运算数据一分为二，使用Add指令将两部分数据相加，循环往复，最后一条ReduceRepeat<SUM>指令得到归约的运行结果。此种操作方式，相比较ReduceRepeat<SUM>单指令操作的方式，在数据量较大，循环次数较多的场景下，性能更优。  
       注意代码中使用了Counter模式。
 
   - Kernel实现  
-    计算逻辑是：Ascend C提供的矢量计算接口的操作元素都为LocalTensor，输入数据需要先搬运进片上存储，然后使用Reduce高阶API接口完成reduce计算，得到最终结果，再搬出到外部存储上。
+    计算逻辑是：Ascend C提供的矢量计算接口的操作元素都为LocalTensor，输入数据需要先搬运进片上存储，然后使用Reduce基础API接口完成reduce计算，得到最终结果，再搬出到外部存储上。
 
     ReduceCustom算子的实现流程分为3个基本任务：CopyIn，Compute，CopyOut。CopyIn任务负责将Global Memory上的输入Tensor xGm存储在xLocal中，Compute任务对xLocal执行reduce计算，计算的方式通过ComputeKey参数决定，ComputeKey由输入的长度决定，计算结果存储在zLocal中，CopyOut任务负责将输出数据从zLocal搬运至Global Memory上的输出Tensor zGm。
 

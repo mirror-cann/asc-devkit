@@ -195,7 +195,7 @@
 </thead>
 <tbody><tr id="row146691342124318"><td class="cellrowborder" valign="top" width="30.28%" headers="mcps1.2.3.1.1 "><p id="p1669154234318"><a name="p1669154234318"></a><a name="p1669154234318"></a>基础API &gt; 标量计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p0669164213434"><a name="p0669164213434"></a><a name="p0669164213434"></a>ScalarGetCountOfValue、ScalarCountLeadingZero、ScalarCast、CountBitsCntSameAsSignBit、ScalarGetSFFValue</p>
+<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p0669164213434"><a name="p0669164213434"></a><a name="p0669164213434"></a>GetBitCount、CountLeadingZero、Cast、CountBitsCntSameAsSignBit、GetSFFValue</p>
 </td>
 </tr>
 <tr id="row1966914211437"><td class="cellrowborder" valign="top" width="30.28%" headers="mcps1.2.3.1.1 "><p id="p7669174224314"><a name="p7669174224314"></a><a name="p7669174224314"></a>基础API &gt; 矢量计算 &gt; 基础算术</p>
@@ -210,12 +210,12 @@
 </tr>
 <tr id="row46691542124317"><td class="cellrowborder" valign="top" width="30.28%" headers="mcps1.2.3.1.1 "><p id="p766994224314"><a name="p766994224314"></a><a name="p766994224314"></a>基础API &gt; 矢量计算 &gt; 复合计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p1559917570124"><a name="p1559917570124"></a><a name="p1559917570124"></a>Axpy、CastDequant、AddRelu、AddReluCast、AddDeqRelu、SubRelu、SubReluCast、MulAddDst、MulCast、FusedMulAdd、FusedMulAddRelu</p>
+<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p1559917570124"><a name="p1559917570124"></a><a name="p1559917570124"></a>Axpy、CastDequant、AddRelu、AddReluCast、AddDeqRelu、SubRelu、SubReluCast、MulAddDst、MulCast、FusedMulAdd、MulAddRelu</p>
 </td>
 </tr>
 <tr id="row176691942154313"><td class="cellrowborder" valign="top" width="30.28%" headers="mcps1.2.3.1.1 "><p id="p126691442184311"><a name="p126691442184311"></a><a name="p126691442184311"></a>基础API &gt; 矢量计算 &gt; 比较与选择</p>
 </td>
-<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p1670442104314"><a name="p1670442104314"></a><a name="p1670442104314"></a>Compare、Compare（结果存入寄存器）、CompareScalar、GetCmpMask、SetCmpMask、</p>
+<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p1670442104314"><a name="p1670442104314"></a><a name="p1670442104314"></a>Compare、Compare（结果存入寄存器）、Compares、GetCmpMask、SetCmpMask、</p>
 <p id="p367013429431"><a name="p367013429431"></a><a name="p367013429431"></a>Select、GatherMask</p>
 </td>
 </tr>
@@ -226,7 +226,7 @@
 </tr>
 <tr id="row267074213433"><td class="cellrowborder" valign="top" width="30.28%" headers="mcps1.2.3.1.1 "><p id="p1167094274316"><a name="p1167094274316"></a><a name="p1167094274316"></a>基础API &gt; 矢量计算 &gt; 归约计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p156703427434"><a name="p156703427434"></a><a name="p156703427434"></a>WholeReduceMax、WholeReduceMin、WholeReduceSum、BlockReduceMax、BlockReduceMin、BlockReduceSum、PairReduceSum、RepeatReduceSum、GetReduceMaxMinCount</p>
+<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p156703427434"><a name="p156703427434"></a><a name="p156703427434"></a>ReduceRepeat、ReduceDataBlock、ReducePairElem、GetReduceRepeatMaxMinSpr</p>
 </td>
 </tr>
 <tr id="row067015420439"><td class="cellrowborder" valign="top" width="30.28%" headers="mcps1.2.3.1.1 "><p id="p667094294319"><a name="p667094294319"></a><a name="p667094294319"></a>基础API &gt; 矢量计算 &gt; 数据转换</p>
@@ -286,7 +286,7 @@
 </tr>
 <tr id="row13671194254311"><td class="cellrowborder" valign="top" width="30.28%" headers="mcps1.2.3.1.1 "><p id="p6671184224317"><a name="p6671184224317"></a><a name="p6671184224317"></a>基础API &gt; 矩阵计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p147142311613"><a name="p147142311613"></a><a name="p147142311613"></a>InitConstValue、LoadData、SetAippFunctions、LoadImageToLocal、LoadUnzipIndex、LoadDataUnzip、SetLoadDataBoundary、SetLoadDataPaddingValue、Mmad</p>
+<td class="cellrowborder" valign="top" width="69.72%" headers="mcps1.2.3.1.2 "><p id="p147142311613"><a name="p147142311613"></a><a name="p147142311613"></a>Fill、LoadData、SetAippFunctions、LoadImageToLocal、LoadUnzipIndex、LoadDataUnzip、SetLoadDataBoundary、SetLoadDataPaddingValue、Mmad</p>
 </td>
 </tr>
 </tbody>
@@ -326,7 +326,7 @@
 </tr>
 <tr id="row1247575318435"><td class="cellrowborder" valign="top" width="29.9%" headers="mcps1.2.4.1.1 "><p id="p164751053124316"><a name="p164751053124316"></a><a name="p164751053124316"></a>基础API &gt; 矢量计算 &gt; 复合计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p1169817233416"><a name="p1169817233416"></a><a name="p1169817233416"></a>Axpy、CastDequant、AddRelu、AddReluCast、SubRelu、SubReluCast、MulAddDst、MulCast、FusedMulAdd、FusedMulAddRelu</p>
+<td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p1169817233416"><a name="p1169817233416"></a><a name="p1169817233416"></a>Axpy、CastDequant、AddRelu、AddReluCast、SubRelu、SubReluCast、MulAddDst、MulCast、FusedMulAdd、MulAddRelu</p>
 </td>
 <td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p5475153164312"><a name="p5475153164312"></a><a name="p5475153164312"></a>-</p>
 </td>
@@ -347,7 +347,7 @@
 </tr>
 <tr id="row1047545324316"><td class="cellrowborder" valign="top" width="29.9%" headers="mcps1.2.4.1.1 "><p id="p14475165364311"><a name="p14475165364311"></a><a name="p14475165364311"></a>基础API &gt; 矢量计算 &gt; 归约计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p847595312435"><a name="p847595312435"></a><a name="p847595312435"></a>WholeReduceMax、WholeReduceMin、WholeReduceSum、BlockReduceMax、BlockReduceMin、BlockReduceSum、PairReduceSum、RepeatReduceSum、GetReduceRepeatSumSpr、GetReduceRepeatMaxMinSpr</p>
+<td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p847595312435"><a name="p847595312435"></a><a name="p847595312435"></a>ReduceRepeat、ReduceDataBlock、ReducePairElem、GetReduceRepeatSumSpr、GetReduceRepeatMaxMinSpr</p>
 </td>
 <td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p18475115318430"><a name="p18475115318430"></a><a name="p18475115318430"></a>-</p>
 </td>
@@ -464,7 +464,7 @@
 </tr>
 <tr id="row7476053114311"><td class="cellrowborder" valign="top" width="29.9%" headers="mcps1.2.4.1.1 "><p id="p747710531433"><a name="p747710531433"></a><a name="p747710531433"></a>基础API &gt; 矩阵计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p847713536432"><a name="p847713536432"></a><a name="p847713536432"></a>Mmad、MmadWithSparse、SetHF32Mode、SetHF32TransMode、SetMMLayoutTransform、SetFixPipeConfig、SetFixpipeNz2ndFlag、SetFixpipePreQuantFlag、InitConstValue、LoadData、LoadDataWithTranspose、SetAippFunctions、LoadImageToLocal、LoadDataWithSparse、SetFmatrix、SetLoadDataBoundary、SetLoadDataRepeat、SetLoadDataPaddingValue、Fixpipe</p>
+<td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p847713536432"><a name="p847713536432"></a><a name="p847713536432"></a>Mmad、MmadWithSparse、SetHF32Mode、SetHF32TransMode、SetMMRowMajor、SetMMColumnMajor、SetFixPipeConfig、SetFixpipeNz2ndFlag、SetFixpipePreQuantFlag、Fill、LoadData、LoadDataWithTranspose、SetAippFunctions、LoadImageToLocal、LoadDataWithSparse、SetFmatrix、SetLoadDataBoundary、SetLoadDataRepeat、SetLoadDataPaddingValue、Fixpipe</p>
 </td>
 <td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p154771853144319"><a name="p154771853144319"></a><a name="p154771853144319"></a>-</p>
 </td>
@@ -527,7 +527,7 @@
 </tr>
 <tr id="row137061481120"><td class="cellrowborder" valign="top" width="29.630000000000003%" headers="mcps1.2.4.1.1 "><p id="p53695511016"><a name="p53695511016"></a><a name="p53695511016"></a>基础API &gt; 矢量计算 &gt; 复合计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p6361255131014"><a name="p6361255131014"></a><a name="p6361255131014"></a>Axpy、CastDequant、AddRelu、AddReluCast、SubRelu、SubReluCast、MulAddDst、MulCast、FusedMulAdd、FusedMulAddRelu</p>
+<td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p6361255131014"><a name="p6361255131014"></a><a name="p6361255131014"></a>Axpy、CastDequant、AddRelu、AddReluCast、SubRelu、SubReluCast、MulAddDst、MulCast、FusedMulAdd、MulAddRelu</p>
 </td>
 <td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p153610555105"><a name="p153610555105"></a><a name="p153610555105"></a>-</p>
 </td>
@@ -548,7 +548,7 @@
 </tr>
 <tr id="row1570618486213"><td class="cellrowborder" valign="top" width="29.630000000000003%" headers="mcps1.2.4.1.1 "><p id="p33635571010"><a name="p33635571010"></a><a name="p33635571010"></a>基础API &gt; 矢量计算 &gt; 归约计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p103612558107"><a name="p103612558107"></a><a name="p103612558107"></a>WholeReduceMax、WholeReduceMin、WholeReduceSum、BlockReduceMax、BlockReduceMin、BlockReduceSum、PairReduceSum、RepeatReduceSum、GetReduceRepeatSumSpr、GetReduceRepeatMaxMinSpr</p>
+<td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p103612558107"><a name="p103612558107"></a><a name="p103612558107"></a>ReduceRepeat、ReduceDataBlock、ReducePairElem、GetReduceRepeatSumSpr、GetReduceRepeatMaxMinSpr</p>
 </td>
 <td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p1736195513103"><a name="p1736195513103"></a><a name="p1736195513103"></a>-</p>
 </td>
@@ -664,7 +664,7 @@
 </tr>
 <tr id="row67096482218"><td class="cellrowborder" valign="top" width="29.630000000000003%" headers="mcps1.2.4.1.1 "><p id="p93875511014"><a name="p93875511014"></a><a name="p93875511014"></a>基础API &gt; 矩阵计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p53919552100"><a name="p53919552100"></a><a name="p53919552100"></a>Mmad、MmadWithSparse、SetHF32Mode、SetHF32TransMode、SetMMLayoutTransform、SetFixPipeConfig、SetFixpipeNz2ndFlag、SetFixpipePreQuantFlag、InitConstValue、LoadData、LoadDataWithTranspose、SetAippFunctions、LoadImageToLocal、LoadDataWithSparse、SetFmatrix、SetLoadDataBoundary、SetLoadDataRepeat、SetLoadDataPaddingValue、Fixpipe</p>
+<td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p53919552100"><a name="p53919552100"></a><a name="p53919552100"></a>Mmad、MmadWithSparse、SetHF32Mode、SetHF32TransMode、SetMMRowMajor、SetMMColumnMajor、SetFixPipeConfig、SetFixpipeNz2ndFlag、SetFixpipePreQuantFlag、Fill、LoadData、LoadDataWithTranspose、SetAippFunctions、LoadImageToLocal、LoadDataWithSparse、SetFmatrix、SetLoadDataBoundary、SetLoadDataRepeat、SetLoadDataPaddingValue、Fixpipe</p>
 </td>
 <td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p153985521019"><a name="p153985521019"></a><a name="p153985521019"></a>-</p>
 </td>
@@ -762,7 +762,7 @@
 </tr>
 <tr id="row7987193534118"><td class="cellrowborder" valign="top" width="29.630000000000003%" headers="mcps1.2.4.1.1 "><p id="p898712358414"><a name="p898712358414"></a><a name="p898712358414"></a>基础API &gt; 矢量计算 &gt; 归约计算</p>
 </td>
-<td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p675915224145"><a name="p675915224145"></a><a name="p675915224145"></a>ReduceMax、ReduceMin、WholeReduceSum、BlockReduceMax、BlockReduceMin、BlockReduceSum、PairReduceSum、RepeatReduceSum、</p>
+<td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p675915224145"><a name="p675915224145"></a><a name="p675915224145"></a>ReduceMax、ReduceMin、ReduceRepeat、ReduceDataBlock、ReducePairElem</p>
 </td>
 <td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p1398713564110"><a name="p1398713564110"></a><a name="p1398713564110"></a>-</p>
 </td>
@@ -945,10 +945,10 @@
 | 基础API > Memory数据搬运 | Copy |
 | 基础API > 基础算术 | Exp、Ln、Abs、Reciprocal、Sqrt、Rsqrt、Relu、Add、Sub、Mul、Div、Max、Min、Adds、Muls、Maxs、Mins、LeakyRelu、Subs、Divs |
 | 基础API > 逻辑计算 | Not、And、Or、ShiftLeft、ShiftRight、Ands、Ors |
-| 基础API > 复合计算 | Axpy、CastDequant、CastDeq、AddRelu、AddReluCast、AddDeqRelu、SubRelu、SubReluCast、MulAddDst、MulCast、FusedMulAdd、FusedMulAddRelu、MulAddRelu |
-| 基础API > 比较与选择 | Compare、Compares、CompareScalar、Select、GatherMask |
+| 基础API > 复合计算 | Axpy、CastDequant、AddRelu、AddReluCast、AddDeqRelu、SubRelu、SubReluCast、MulAddDst、MulCast、FusedMulAdd、MulAddRelu |
+| 基础API > 比较与选择 | Compare、Compares、Select、GatherMask |
 | 基础API > 类型转换 | Cast |
-| 基础API > 归约计算 | ReduceRepeat、ReduceDataBlock、ReducePairElem、BlockReduceMax、BlockReduceMin、BlockReduceSum、PairReduceSum、RepeatReduceSum、WholeReduceMax、WholeReduceMin、WholeReduceSum |
+| 基础API > 归约计算 | ReduceRepeat、ReduceDataBlock、ReducePairElem |
 | 基础API > 数据填充 | Duplicate |
 | 基础API > Kernel-Tiling | GET_TILING_DATA、GET_TILING_DATA_WITH_STRUCT、GET_TILING_DATA_MEMBER |
 | Utils API > 调测接口（SIMD VF） | printf、asc_dump_reg、asc_dump、asc_dump_ubuf |

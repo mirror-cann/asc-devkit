@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example describes how to call the `ReduceRepeat<SUM>` and `ReduceDataBlock<SUM>` high-level APIs to implement the reduce operator, which accumulates data elements in contiguous memory and returns the accumulation result.
+This example describes how to call the `ReduceRepeat<SUM>` and `ReduceDataBlock<SUM>` basic APIs to implement the reduce operator, which accumulates data elements in contiguous memory and returns the accumulation result.
 
 Note: `ReduceRepeat` and `ReduceDataBlock` are APIs renamed in CANN 9.1.0. For CANN 9.0.0 and earlier versions, use `WholeReduceSum` and `BlockReduceSum` instead.
 
@@ -60,13 +60,13 @@ Note: `ReduceRepeat` and `ReduceDataBlock` are APIs renamed in CANN 9.1.0. For C
 
       - 3. When the length is in float input (2KB, 16KB] or half input (4KB, 32KB], ComputeKey = 3. Since the accumulation efficiency of one ReduceRepeat<SUM> is higher than that of two ReduceDataBlock<SUM> instructions, two ReduceRepeat<SUM> instructions (rather than two ReduceDataBlock<SUM> + one ReduceRepeat<SUM>) are used to obtain the accumulation sum of this buffer.
 
-      - 4. When the float input length is 10000, ComputeKey = 4, corresponding to the processing method in WholeReduceSumImpl. In Counter mode, ReduceRepeat<SUM> instructions are used in a loop to process each row of the 2D data, obtaining the reduction result for each row.
+      - 4. When the float input length is 10000, ComputeKey = 4, corresponding to the processing method in ReduceRepeatSumImpl. In Counter mode, ReduceRepeat<SUM> instructions are used in a loop to process each row of the 2D data, obtaining the reduction result for each row.
 
       - 5. When the float input length is 20000, ComputeKey = 5, corresponding to the processing method in BinaryReduceSumImpl. In Counter mode, the operation data is first split in half, the Add instruction is used to add the two parts together, and this process repeats. Finally, one ReduceRepeat<SUM> instruction obtains the reduction result. This approach delivers better performance compared to single ReduceRepeat<SUM> instruction operations in scenarios with large data volumes and many loop iterations.  
       Note that the code uses Counter mode.
 
   - Kernel implementation  
-    The computation logic is: The vector computation APIs provided by Ascend C operate on LocalTensor elements. Input data must first be transferred to on-chip storage, then the Reduce high-level API is used to complete the reduce computation, obtain the final result, and transfer it to external storage.
+    The computation logic is: The vector computation APIs provided by Ascend C operate on LocalTensor elements. Input data must first be transferred to on-chip storage, then the Reduce basic API is used to complete the reduce computation, obtain the final result, and transfer it to external storage.
 
     The implementation process of the ReduceCustom operator consists of three basic tasks: CopyIn, Compute, and CopyOut. The CopyIn task stores the input tensor xGm from Global Memory into xLocal. The Compute task performs reduce computation on xLocal, with the computation method determined by the ComputeKey parameter, which is determined by the input length. The computation result is stored in zLocal. The CopyOut task transfers the output data from zLocal to the output tensor zGm in Global Memory.
 

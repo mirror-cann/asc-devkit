@@ -45,7 +45,7 @@ The Scalar unit accesses Global Memory by first accessing the Data Cache within 
     **Step 1: Each core performs reduction computation separately**
 
     - Move input data from GM (Global Memory) (corresponding row of 1024 elements) to UB (Unified Buffer)
-    - Call WholeReduceSum interface, reducing every 256B data to one sum element, resulting in 16 floats total
+    - Call `ReduceRepeat<AscendC::ReduceType::SUM>` interface, reducing every 256B data to one sum element, resulting in 16 floats total
     - Move the computation result to workspace on GM
 
     **Step 2: Each core writes a flag**
@@ -58,7 +58,7 @@ The Scalar unit accesses Global Memory by first accessing the Data Cache within 
     - All cores except core 0 return and stop running
     - Core 0 calls DataCacheCleanAndInvalid interface to get the latest data
     - Read all cores' flags through the Scalar unit sequentially, checking whether other cores have completed computation
-    - If all other cores' flags meet expectations, call WholeReduceSum interface again to complete the final reduction computation
+    - If all other cores' flags meet expectations, call `ReduceRepeat<AscendC::ReduceType::SUM>` interface again to complete the final reduction computation
 
   - Invocation implementation
     Use the kernel invocation syntax <<<>>> to call the kernel function, starting 4 cores for parallel execution.

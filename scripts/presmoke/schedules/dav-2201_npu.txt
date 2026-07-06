@@ -74,7 +74,7 @@
 01_simd_cpp_api/04_advanced_api/10_math/erf
 01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2l1
 01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_with_sparse
-01_simd_cpp_api/04_advanced_api/04_reduce/reduce
+01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce
 01_simd_cpp_api/01_utilities/01_assert
 01_simd_cpp_api/04_advanced_api/08_transpose/fill
 01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce_repeat

@@ -5038,8 +5038,8 @@
     ]
   },
   {
-    "case": "01_simd_cpp_api/04_advanced_api/04_reduce/reduce",
-    "runner": "scripts/presmoke/cases/01_simd_cpp_api/04_advanced_api/04_reduce/reduce/run.sh",
+    "case": "01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce",
+    "runner": "scripts/presmoke/cases/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce/run.sh",
     "source": "readme",
     "confidence": "high",
     "supported_archs": [

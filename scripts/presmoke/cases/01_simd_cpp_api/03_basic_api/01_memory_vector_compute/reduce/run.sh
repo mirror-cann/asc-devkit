@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-CASE_REL=01_simd_cpp_api/04_advanced_api/04_reduce/reduce
+CASE_REL=01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../../../_case_entry.sh"
 presmoke_case_init "$CASE_REL"
