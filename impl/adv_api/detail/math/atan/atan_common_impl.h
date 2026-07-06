@@ -162,6 +162,7 @@ __aicore__ inline void AtanFormulaImpl(
     Adds<float, false>(tmpTensor2, tmpTensor2, piByEight, MASK_PLACEHOLDER, 1, unaryParams);
     PipeBarrier<PIPE_V>();
     Min<float, false>(dstTensor, dstTensor, tmpTensor2, MASK_PLACEHOLDER, 1, binParams);
+    PipeBarrier<PIPE_V>();
 
     // x in (tan(pi/4), +âˆ?, atan(x) = pi/4 + atan((x-1)/(x+1))
     // calculate |(x-1)/(x+1)|, normalize x to (0, tan(pi/4))
@@ -181,6 +182,7 @@ __aicore__ inline void AtanFormulaImpl(
     Adds<float, false>(tmpTensor2, tmpTensor2, piByFour, MASK_PLACEHOLDER, 1, unaryParams);
     PipeBarrier<PIPE_V>();
     Min<float, false>(dstTensor, dstTensor, tmpTensor2, MASK_PLACEHOLDER, 1, binParams);
+    PipeBarrier<PIPE_V>();
 
     // 4.reuse the transform result in step 3, and calculate (x-tan(pi/8)) / (1 + x*tan(pi/8))
     AtanTransform(tmpTensor2, tmpTensor, squareTensor, tanPiByEight);
