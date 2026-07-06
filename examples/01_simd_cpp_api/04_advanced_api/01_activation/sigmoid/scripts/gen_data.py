@@ -36,10 +36,11 @@ def gen_golden_data_simple():
     else:
         src_tmp = src
 
-    if api_mode == 1 or api_mode == 2:
-        golden[:calcount] = (1.0 / (1.0 + np.exp(-src_tmp[:calcount]))).astype(src_type)
-    else:
-        golden = (1.0 / (1.0 + np.exp(-src_tmp))).astype(src_type)
+    with np.errstate(over='ignore'):
+        if api_mode == 1 or api_mode == 2:
+            golden[:calcount] = (1.0 / (1.0 + np.exp(-src_tmp[:calcount]))).astype(src_type)
+        else:
+            golden = (1.0 / (1.0 + np.exp(-src_tmp))).astype(src_type)
 
     if src_type in [np.float16]:
         golden = golden.astype(src_type)
