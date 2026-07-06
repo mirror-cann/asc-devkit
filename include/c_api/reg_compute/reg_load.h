@@ -2182,9 +2182,6 @@ __simd_callee__ inline void asc_loadalign_brc_elem2datablock(vector_int32_t& dst
 
 __simd_callee__ inline void asc_loadalign_brc_elem2datablock(vector_float& dst, __ubuf__ float* src, iter_reg offset);
 
-
-
-
 // ==========asc_loadalign_brc_elem_postupdate==========
 __simd_callee__ inline void asc_loadalign_brc_elem_postupdate(vector_int8_t& dst, __ubuf__ int8_t*& src, int32_t offset);
 

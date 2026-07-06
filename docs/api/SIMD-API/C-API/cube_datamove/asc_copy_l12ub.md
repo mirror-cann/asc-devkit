@@ -16,12 +16,12 @@
 
 - 高维切分搬运
     ```cpp
-    __aicore__ inline void asc_copy_l12ub(__ubuf__ void * dst_addr, __cbuf__ void * src_addr, bool sub_blockid, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
+    __aicore__ inline void asc_copy_l12ub(__ubuf__ void* dst_addr, __cbuf__ void* src_addr, bool sub_blockid, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
     ```
 
 - 同步搬运
     ```cpp
-    __aicore__ inline void asc_copy_l12ub_sync(__ubuf__ void * dst_addr, __cbuf__ void * src_addr, bool sub_blockid, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
+    __aicore__ inline void asc_copy_l12ub_sync(__ubuf__ void* dst_addr, __cbuf__ void* src_addr, bool sub_blockid, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
     ```
 
 ## 参数说明
@@ -57,7 +57,7 @@ constexpr uint16_t n_burst = 1;
 constexpr uint16_t len_burst = 1;
 constexpr uint16_t src_gap = 0;
 constexpr uint16_t dst_gap = 1;
-__cbuf__ void src[256];
-__ubuf__ void dst[256];
+__cbuf__ half src[256];
+__ubuf__ half dst[256];
 asc_copy_l12ub(dst, src, false, n_burst, len_burst, src_gap, dst_gap);
 ```

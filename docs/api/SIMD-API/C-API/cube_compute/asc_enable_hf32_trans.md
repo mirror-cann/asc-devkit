@@ -18,7 +18,7 @@
 ## 函数原型
 
  ```cpp
-   __aicore__ inline void asc_enable_hf32_trans(uint32_t mode);
+   __aicore__ inline void asc_enable_hf32_trans(uint32_t mode)
 ```
 
 

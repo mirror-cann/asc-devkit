@@ -12,9 +12,9 @@
 
 用于在进行非对齐数据搬入前的初始化，需配合[asc_loadunalign](./asc_loadunalign.md)接口使用。
 
-- asc_loadunalign_pre（不带iter_reg入参）：配合asc_loadunalign（不带iter_reg入参）接口使用。
+- asc_loadunalign_pre（不带iter_reg入参）：配合asc_loadunalign（不带iter_reg入参）接口或asc_loadunalign_postupdate（不带iter_reg入参）使用。
 
-- asc_loadunalign_pre（带iter_reg入参）：配合asc_loadunalign（带iter_reg入参）接口使用。
+- asc_loadunalign_pre（带iter_reg入参）：配合asc_loadunalign_postupdate（带iter_reg入参）接口使用。
 
 ## 函数原型
 

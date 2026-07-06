@@ -60,94 +60,94 @@ quant_post可选量化模式分别为：
     ```cpp
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ bfloat16_t *dst_addr, __cc__ float *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ half *dst_addr, __cc__ float *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ fp8_e4m3fn_t *dst_addr, __cc__ float *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ fp8_e5m2_t *dst_addr, __cc__ float *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ hifloat8_t *dst_addr, __cc__ float *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ int8_t *dst_addr, __cc__ float *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ uint8_t *dst_addr, __cc__ float *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ float *dst_addr, __cc__ float *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ bfloat16_t *dst_addr, __cc__ int32_t *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ half *dst_addr, __cc__ int32_t *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ fp8_e4m3fn_t *dst_addr, __cc__ int32_t *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ fp8_e5m2_t *dst_addr, __cc__ int32_t *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ hifloat8_t *dst_addr, __cc__ int32_t *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ int8_t *dst_addr, __cc__ int32_t *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ uint8_t *dst_addr, __cc__ int32_t *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ int32_t *dst_addr, __cc__ int32_t *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ void *dst_addr, __cc__ float *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub(__ubuf__ void *dst_addr, __cc__ int32_t *src_addr, uint16_t n_size, uint16_t m_size,
                                 uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                                uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                                 uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                                bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                                bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     ```
 
 - 同步搬运
@@ -155,94 +155,94 @@ quant_post可选量化模式分别为：
     ```cpp
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ bfloat16_t* dst_addr, __cc__ float* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ half* dst_addr, __cc__ float* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ fp8_e4m3fn_t* dst_addr, __cc__ float* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ fp8_e5m2_t* dst_addr, __cc__ float* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ hifloat8_t* dst_addr, __cc__ float* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ int8_t* dst_addr, __cc__ float* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ uint8_t* dst_addr, __cc__ float* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ float* dst_addr, __cc__ float* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ bfloat16_t* dst_addr, __cc__ int32_t* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ half* dst_addr, __cc__ int32_t* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ fp8_e4m3fn_t* dst_addr, __cc__ int32_t* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ fp8_e5m2_t* dst_addr, __cc__ int32_t* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ hifloat8_t* dst_addr, __cc__ int32_t* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ int8_t* dst_addr, __cc__ int32_t* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ uint8_t* dst_addr, __cc__ int32_t* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ int32_t* dst_addr, __cc__ int32_t* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ void* dst_addr, __cc__ float* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     __aicore__ inline void asc_copy_l0c2ub_sync(__ubuf__ void* dst_addr, __cc__ int32_t* src_addr, uint16_t n_size, uint16_t m_size,
                             uint32_t loop_dst_stride, uint16_t loop_src_stride, uint8_t dual_dst_ctl, bool sub_blockid, uint8_t clip_relu_pre,
-                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool NZ2ND_en, uint64_t quant_post,
+                            uint8_t unit_flag_ctl, uint64_t quant_pre, uint8_t relu_pre, bool split_en, bool nz2nd_en, uint64_t quant_post,
                             uint8_t relu_post, bool clip_relu_post, uint8_t eltwise_op, bool eltwise_antq_en,
-                            bool C0_pad_en, bool broadcast_en, bool NZ2DN_en)
+                            bool c0_pad_en, bool broadcast_en, bool nz2dn_en)
     ```
 
 ## 参数说明
@@ -262,15 +262,15 @@ quant_post可选量化模式分别为：
 | quant_pre        | 输入    | 预处理阶段量化参数。取值见[功能说明](#功能说明)。                                                                        |
 | relu_pre         | 输入    | 预处理阶段开启relu。                                                                                                                     |
 | split_en    | 输入    | 是否开启通道拆分的功能，默认false，不开启该功能。仅在src_addr和dst_addr都为float时才能开启通道拆分，且不能同时开启split_en和NZ2ND功能。                                               |
-| NZ2ND_en         | 输入    | 开启NZ2ND开关。<br/>&bull;false：不开启；<br/>&bull;true：开启。                                                                               |
+| nz2nd_en         | 输入    | 开启NZ2ND开关。<br/>&bull;false：不开启；<br/>&bull;true：开启。                                                                               |
 | quant_post       | 输入    | 后处理阶段量化参数。取值见[功能说明](#功能说明)。                                                                        |
 | relu_post        | 输入    | 后处理阶段开启relu。                                                                                                                     |
 | clip_relu_post   | 输入    | 后处理阶段开启clip_relu，需搭配normal relu一起使用，且需要开启量化功能。                                                                                   |
 | eltwise_op       | 输入    | 定义数据从l0c搬运至ub时的目的操作数地址和通道步长。                                                                                                     |
 | eltwise_antq_en | 输入    | 按位开启元素的反量化操作。                                                                                                                    |
-| C0_pad_en        | 输入    | 开启为C0配置填充位，C0是通道循环的目标步长。                                                                                                        |
+| c0_pad_en        | 输入    | 开启为C0配置填充位，C0是通道循环的目标步长。                                                                                                        |
 | broadcast_en        | 输入    | 是否开启广播能力。<br/>&bull;false：不开启；<br/>&bull;true：开启，在数据搬运时沿M轴方向进行数据广播。                                                                                                         |
-| NZ2DN_en        | 输入    |  开启NZ2DN开关。<br/>&bull;false：不开启；<br/>&bull;true：开启。                                                                                       |
+| nz2dn_en        | 输入    |  开启NZ2DN开关。<br/>&bull;false：不开启；<br/>&bull;true：开启。                                                                                       |
 
 ## 返回值说明
 
@@ -301,16 +301,16 @@ uint8_t unit_flag_ctl = 0;
 uint64_t quant_pre = QuantMode_t::F322BF16;
 uint8_t relu_pre = 0;
 bool split_en = false;
-bool NZ2ND_en = true;
+bool nz2nd_en = true;
 uint64_t quant_post = QuantMode_t::NoConv;
 uint8_t relu_post = 0;
 bool clip_relu_post = false;
 uint8_t eltwise_op = 0;
 bool eltwise_antq_en = true;
-bool C0_pad_en = true;
+bool c0_pad_en = true;
 bool broadcast_en = false;
-bool NZ2DN_en = false;
+bool nz2dn_en = false;
 asc_copy_l0c2ub(dst, src, n_size, m_size, loop_dst_stride, loop_src_stride, dual_dst_ctl, sub_blockid, clip_relu_pre,
-        unit_flag_ctl, quant_pre, relu_pre, split_en, NZ2ND_en, quant_post, relu_post, clip_relu_post,
-        eltwise_op, eltwise_antq_en, C0_pad_en, broadcast_en, NZ2DN_en);
+        unit_flag_ctl, quant_pre, relu_pre, split_en, nz2nd_en, quant_post, relu_post, clip_relu_post,
+        eltwise_op, eltwise_antq_en, c0_pad_en, broadcast_en, nz2dn_en);
 ```
