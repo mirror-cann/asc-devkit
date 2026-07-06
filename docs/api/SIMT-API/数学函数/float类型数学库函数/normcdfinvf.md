@@ -100,5 +100,5 @@ inline float normcdfinvf(float x)
 
 ```
 x：-0.75, -0.25, 0.25, 0.75
-result: -0.6744897 0.6744897 nan nan
+result: nan nan -0.6744897 0.6744897
 ```
