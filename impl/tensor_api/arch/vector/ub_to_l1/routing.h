@@ -54,6 +54,11 @@ struct CopyUB2L1Routing<Version, NZLayoutPtn, NZLayoutPtn> {
     using type = DataCopyUB2L1;
 };
 
+template <uint32_t Version>
+struct CopyUB2L1Routing<Version, ZNLayoutPtn, ZNLayoutPtn> {
+    using type = DataCopyUB2L1;
+};
+
 } // namespace Te
 } // namespace AscendC
 
