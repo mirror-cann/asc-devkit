@@ -14,19 +14,17 @@
 #include <vector>
 namespace Hccl {
 
-template <typename T>
-class CircularQueue : public Queue<T> {
+template <typename T> class CircularQueue : public QueueWithSize<T> {
 private:
     std::vector<T> elems_;
-    size_t head_;
-    size_t tail_;
-    size_t size_;
-    size_t capacity_;
+    size_t         head_;
+    size_t         tail_;
+    size_t         capacity_;
 
 public:
     class Iterator : public Queue<T>::Iterator {
     private:
-        CircularQueue* queue_{nullptr};
+        CircularQueue *queue_{nullptr};
 
     protected:
         void check() override
@@ -47,21 +45,22 @@ public:
                 THROW<InternalException>(StringFormat("CircularQueue<T>::Iterator out of range"));
             }
             const size_t start_point = 0;
-            if ((queue_->tail_ <= queue_->head_) &&
-                !((start_point <= now && now < queue_->tail_) || (queue_->head_ <= now && now < queue_->capacity_))) {
+            if ((queue_->tail_ <= queue_->head_)
+                && !((start_point <= now && now < queue_->tail_)
+                     || (queue_->head_ <= now && now < queue_->capacity_))) {
                 THROW<InternalException>(StringFormat("CircularQueue<T>::Iterator out of range"));
             }
         }
 
     public:
-        Iterator(typename std::vector<T>::iterator it, CircularQueue* queue) : Queue<T>::Iterator(it), queue_(queue)
+        Iterator(typename std::vector<T>::iterator it, CircularQueue *queue) : Queue<T>::Iterator(it), queue_(queue)
         {
             check();
         }
 
         ~Iterator() override = default;
 
-        typename Queue<T>::Iterator& operator++() override
+        typename Queue<T>::Iterator &operator++() override
         {
             (this->it_) = ((this->it_) - queue_->elems_.begin() + 1) % queue_->capacity_ + queue_->elems_.begin();
             check();
@@ -71,99 +70,112 @@ public:
         typename Queue<T>::Iterator operator++(int) override
         {
             Iterator temp = *this;
-            (this->it_) = ((this->it_) - queue_->elems_.begin() + 1) % queue_->capacity_ + queue_->elems_.begin();
+            (this->it_)   = ((this->it_) - queue_->elems_.begin() + 1) % queue_->capacity_ + queue_->elems_.begin();
             check();
             return temp;
         }
 
-        typename Queue<T>::Iterator& operator--() override
+        typename Queue<T>::Iterator &operator--() override
         {
-            if (this->it_ == queue_->elems_.begin() + queue_->head_) {
+            if (this->it_  == queue_->elems_.begin() + queue_->head_) {
                 THROW<InternalException>(StringFormat("CircularQueue<T>::Iterator out of range"));
             }
-            if (this->it_ == this->queue_->elems_.end()) {
+            if (this->it_  == this->queue_->elems_.end()) {
                 (this->it_) = queue_->elems_.begin() + queue_->tail_;
             }
-            (this->it_) = ((this->it_) - queue_->elems_.begin() - 1 + queue_->capacity_) % queue_->capacity_ +
-                          queue_->elems_.begin();
+            (this->it_) = ((this->it_) - queue_->elems_.begin() - 1 + queue_->capacity_) % queue_->capacity_
+                          + queue_->elems_.begin();
             check();
             return *this;
         }
 
         typename Queue<T>::Iterator operator--(int) override
         {
-            if (this->it_ == queue_->elems_.begin() + queue_->head_) {
+            if (this->it_  == queue_->elems_.begin() + queue_->head_) {
                 THROW<InternalException>(StringFormat("CircularQueue<T>::Iterator out of range"));
             }
             Iterator temp = *this;
-            if (this->it_ == this->queue_->elems_.end()) {
+            if (this->it_  == this->queue_->elems_.end()) {
                 (this->it_) = queue_->elems_.begin() + queue_->tail_;
             }
-            (this->it_) = ((this->it_) - queue_->elems_.begin() - 1 + queue_->capacity_) % queue_->capacity_ +
-                          queue_->elems_.begin();
+            (this->it_)   = ((this->it_) - queue_->elems_.begin() - 1 + queue_->capacity_) % queue_->capacity_
+                          + queue_->elems_.begin();
             check();
             return temp;
         }
     };
 
     explicit CircularQueue(size_t capacity)
-        : elems_(capacity + 1), head_(0), tail_(0), size_(0), capacity_(capacity + 1)
+        : elems_(capacity + 1), head_(0), tail_(0), capacity_(capacity + 1)
     {
         if (capacity_ == 0) {
             THROW<InternalException>(StringFormat("CircularQueue capacity cannot be zero"));
         }
     }
 
-    ~CircularQueue() override { HCCL_INFO("[CircularQueue]Destroy"); }
+    ~CircularQueue() override
+    {
+        HCCL_INFO("[CircularQueue]Destroy");
+    }
 
-    void Append(const T& value) override
+    void Append(T &&value) override
     {
         if (IsFull()) {
             head_ = (head_ + 1) % capacity_;
-            size_--;
+            this->size_--;
         }
-        elems_[tail_] = value;
+        elems_[tail_] = std::move(value);
+        tail_         = (tail_ + 1) % capacity_;
+        this->size_++;
+    }
+
+    T& GetAndUpdate() override
+    {
+        if (IsFull()) {
+            head_ = (head_ + 1) % capacity_;
+            this->size_--;
+        }
+        auto curTail = tail_;
         tail_ = (tail_ + 1) % capacity_;
-        size_++;
-        HCCL_INFO(
-            "[CircularQueue][Append] head_[%u] tail_[%u] size_[%u] capacity_[%u]", head_, tail_, size_, capacity_);
+        this->size_++;
+        return elems_[curTail];
     }
 
     void PopFront() override
     {
-        if (IsEmpty()) {
+        if (this->IsEmpty()) {
             THROW<InternalException>(StringFormat("CircularQueue<T>::PopFront Queue is empty!"));
         }
         head_ = (head_ + 1) % capacity_;
-        size_--;
-        HCCL_INFO(
-            "[CircularQueue][PopFront] head_[%u] tail_[%u] size_[%u] capacity_[%u]", head_, tail_, size_, capacity_);
+        this->size_--;
     }
 
-    void Traverse(std::function<void(const T&)> action) override
+    void Traverse(std::function<void(const T &)> action) override
     {
-        size_t i = head_;
+        size_t i     = head_;
         size_t count = 0;
-        while (count < size_) {
+        while (count < this->size_) {
             action(elems_[i]);
             i = (i + 1) % capacity_;
             count++;
         }
     }
 
-    size_t Size() const override { return size_; }
-
-    bool IsEmpty() const override { return size_ == 0; }
-
-    bool IsFull() const override { return size_ == Capacity(); }
-
-    size_t Capacity() const override { return capacity_ - 1; }
-
-    std::shared_ptr<typename Queue<T>::Iterator> Find(std::function<bool(const T&)> cond) override
+    bool IsFull() const override
     {
-        size_t i = head_;
+        return this->size_ == Capacity();
+    }
+
+    size_t Capacity() const override
+    {
+        return capacity_ - 1;
+    }
+
+    std::shared_ptr<typename Queue<T>::Iterator> Find(std::function<bool(const T &)> cond) override
+    {
+        size_t i     = head_;
         size_t count = 0;
-        while (count < size_) {
+        while (count < this->size_) {
             if (cond(elems_[i])) {
                 return std::make_shared<Iterator>(elems_.begin() + i, this);
             }
@@ -175,7 +187,7 @@ public:
 
     std::shared_ptr<typename Queue<T>::Iterator> Begin() override
     {
-        if (IsEmpty()) {
+        if (this->IsEmpty()) {
             HCCL_WARNING("[CircularQueue][Begin] Queue is empty!");
             return std::make_shared<Iterator>(elems_.begin() + tail_, this);
         }
@@ -184,7 +196,7 @@ public:
 
     std::shared_ptr<typename Queue<T>::Iterator> Tail() override
     {
-        if (IsEmpty()) {
+        if (this->IsEmpty()) {
             HCCL_WARNING("[CircularQueue][Tail] Queue is empty!");
             return std::make_shared<Iterator>(elems_.begin() + tail_, this);
         }

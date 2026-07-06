@@ -13,6 +13,7 @@
 #include "drv_api_exception.h"
 #include "exception_util.h"
 #include "internal_exception.h"
+#include "sqe_v82.h"
 #include <unordered_map>
 namespace Hccl {
 
@@ -128,6 +129,21 @@ void RtsqBase::ConfigDisableToEnable(u32 value)
 {
     HCCL_INFO("RtsqBase::%s, value=%u", __func__, value);
     ConfigSqStatusByType(drvSqCqPropType_t::DRV_SQCQ_PROP_SQ_DISABLE_TO_ENABLE, value);
+}
+
+HcclResult RtsqBase::GetStreamIdAndTaskIdBySqIdx(u32 sqIdx, uint16_t& streamId, uint16_t& taskId) const
+{
+    if (sqBaseAddr_ == 0 || sqIdx >= sqDepth_) {
+        HCCL_ERROR("[%s]fail, sqBaseAddr_[0x%llu], sqIdx[%u], sqDepth[%u]",
+            __func__, sqBaseAddr_, sqIdx, sqDepth_);
+        return HCCL_E_PARA;
+    }
+
+    Rt91095StarsNotifySqe* sqe = reinterpret_cast<Rt91095StarsNotifySqe*>(sqBaseAddr_ + sqIdx * RTSQ_SQE_SIZE);
+    streamId = sqe->header.rtStreamId;
+    taskId = sqe->header.taskId;
+    HCCL_INFO("[%s]sqId:%u, streamId:%u, taskId:%u", __func__, sqId_, streamId, taskId);
+    return HCCL_SUCCESS;
 }
 
 HcclResult RtsqBase::SetTaskIdBySqeId()

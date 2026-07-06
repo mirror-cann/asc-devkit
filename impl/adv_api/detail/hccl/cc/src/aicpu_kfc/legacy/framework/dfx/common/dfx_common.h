@@ -7,6 +7,7 @@
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
+
 #ifndef HCCL_DFX_COMMON_H
 #define HCCL_DFX_COMMON_H
 
@@ -19,12 +20,14 @@
 namespace Hccl {
 constexpr u32 DEVICE_MAX_NUM = 32;
 constexpr u32 MAX_CIRCULAR_QUEUE_LENGTH = 2048;
+// aicpu先生成sqe并储存到dfx队列，后下发到rtsq（最多缓存128个sqe），为避免还未下发到rtsq的sqe覆盖dfx队列里对应rtsq队列的sqe数据，延长dfx队列128个sqe
+constexpr u32 MAX_AICPU_CIRCULAR_QUEUE_LENGTH = 2048 + 128;
 
 MAKE_ENUM(QueueType, Circular_Queue, Vector_Queue)
 
-using TaskInfoQueue = Queue<std::shared_ptr<TaskInfo>>;
-using TaskInfoQueueMap = std::map<u32, std::unique_ptr<TaskInfoQueue>>;
+using TaskInfoQueue    = Queue<std::unique_ptr<TaskInfo>>;
+using TaskInfoQueueMap = std::unordered_map<u32, std::unique_ptr<TaskInfoQueue>>;
 
-} // namespace Hccl
+}  // namespace Hccl
 
-#endif // HCCL_DFX_COMMON_H
+#endif //HCCL_DFX_COMMON_H

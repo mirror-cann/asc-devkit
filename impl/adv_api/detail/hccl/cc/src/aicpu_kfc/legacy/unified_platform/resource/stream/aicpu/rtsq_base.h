@@ -28,6 +28,8 @@ GetSqeId(const uint32_t num, uint32_t& start, uint32_t& end);
 }
 
 namespace Hccl {
+constexpr u32 RTSQ_SQE_SIZE = 64;
+
 class RtsqBase {
 public:
     RtsqBase(u32 devPhyId, u32 streamId, u32 sqId);
@@ -192,6 +194,8 @@ public:
     }
 
     virtual bool GetPreStreamSyncStatus() { return false; }
+
+    HcclResult GetStreamIdAndTaskIdBySqIdx(u32 sqIdx, uint16_t& streamId, uint16_t& taskId) const;
 
 protected:
     u32 devPhyId_{0};

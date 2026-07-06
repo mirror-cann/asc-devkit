@@ -9,11 +9,18 @@
 # ----------------------------------------------------------------------------------------------------------
 set(src_list
     ${CMAKE_CURRENT_SOURCE_DIR}/env_config.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/aicpu_indop_env.cc
 )
 
 if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
     target_sources(asc_ccl_kernel PRIVATE
         ${src_list}
         ${CMAKE_CURRENT_SOURCE_DIR}/env_config_aicpu.cc
+    )
+endif()
+
+if(TARGET mc2_server)
+    add_mc2_server_ccl_object(mc2_server_common_config
+        ${CMAKE_CURRENT_SOURCE_DIR}/aicpu_indop_env.cc
     )
 endif()

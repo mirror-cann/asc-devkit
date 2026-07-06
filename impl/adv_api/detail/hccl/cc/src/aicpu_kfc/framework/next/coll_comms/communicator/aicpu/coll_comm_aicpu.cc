@@ -23,9 +23,6 @@
 #include "coll_comm_aicpu_destroy_func.h"
 
 constexpr u32 NOTIFY_SIZE_EIGHT = 8;
-HcclResult __attribute__((weak)) HcommChannelRegisterDfx(
-    ChannelHandle channel,
-    std::function<HcclResult(u32, u32, const Hccl::TaskParam&, u64)> callback); // 临时，后续移动至Op.h
 HcclResult CollCommAicpu::InitAicpuIndOp(CommAicpuParam* commAicpuParam)
 {
     if (commStatus_ == HcclCommStatus::HCCL_COMM_STATUS_READY) {
@@ -45,7 +42,7 @@ HcclResult CollCommAicpu::InitAicpuIndOp(CommAicpuParam* commAicpuParam)
     CHK_RET(hrtSetlocalDevice(topoInfo_.deviceLogicId));
     CHK_RET(hrtSetlocalDeviceType(topoInfo_.deviceType));
     CHK_RET(hrtDrvGetLocalDevIDByHostDevID(topoInfo_.devicePhyId, &devId_));
-    CHK_RET(dfx_.Init(devId_, identifier_));
+    CHK_RET(dfx_.Init(devId_, identifier_, topoInfo_.userRankSize));
     CHK_RET(RegisterProfCallBack());
     if (commAicpuParam->kfcControlTransferH2DParams.buffLen != 0 && kfcControlTransferH2D_ == nullptr) {
         EXECEPTION_CATCH((kfcControlTransferH2D_ = std::make_shared<hccl::HDCommunicate>()), return HCCL_E_PTR);
@@ -102,7 +99,7 @@ HcclResult CollCommAicpu::InitThreads(ThreadMgrAicpuParam* param)
     }
 
     ThreadHandle* threadArray = static_cast<ThreadHandle*>(param->deviceHandle);
-    // 空指针校验
+    // 空指针� �验
     CHK_PTR_NULL(threadArray);
     for (size_t i = 0; i < outThreads.size(); ++i) {
         threadArray[i] = reinterpret_cast<ThreadHandle>(outThreads[i].get()); // 拷贝裸指针
@@ -242,7 +239,7 @@ HcclResult CollCommAicpu::NotifyFree(NotifyMgrAicpuParam* param)
     u32 notifyNum = param->notifyNum;
     NotifyHandle* notifyArray = static_cast<NotifyHandle*>(param->deviceHandle);
     std::string hcomId(param->hcomId);
-    // 空指针校验
+    // 空指针� �验
     CHK_PTR_NULL(notifyArray);
     for (size_t i = 0; i < notifyNum; ++i) {
         LocalNotify* notify = reinterpret_cast<LocalNotify*>(notifyArray[i]);
@@ -286,7 +283,7 @@ HcclResult CollCommAicpu::NotifyAlloc(NotifyMgrAicpuParam* param)
         hcomId.c_str(), notifyNum, notifys_.size());
     NotifyHandle* notifyArray = static_cast<NotifyHandle*>(param->deviceHandle);
     CHK_PTR_NULL(notifyArray);
-    // 空指针校验
+    // 空指针� �验
     for (size_t i = 0; i < notifyNum; ++i) {
         notifyArray[i] = reinterpret_cast<NotifyHandle>(notifys_[i + notifySize].get()); // 拷贝裸指针
         HCCL_INFO("[CollCommAicpu][%s] notifyArray[%u] = [%lu]", __func__, i + notifySize, notifyArray[i]);

@@ -7,27 +7,20 @@
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
-#ifndef HCCL_COMM_PROFILING_LITE_H
-#define HCCL_COMM_PROFILING_LITE_H
-#include "mirror_task_manager_lite.h"
-#include "profiling_reporter_lite.h"
-#include "types.h"
+#include "aicpu_indop_env.h"
 
-namespace hccl {
+namespace hcomm {
+static bool g_taskExceptionEnable = true;
 
-class HcclCommProfilingLite {
-public:
-    HcclCommProfilingLite(Hccl::DevId deviceId, Hccl::MirrorTaskManagerLite* mirrorTaskManagerLite);
-    HcclResult Init();
-    void ReportAllTasks();
-    void UpdateProfStat();
-    Hccl::MirrorTaskManagerLite* GetMirrorTaskManagerLite() const;
-
-private:
-    Hccl::MirrorTaskManagerLite* mirrorTaskManagerLite_;
-    std::unique_ptr<Hccl::ProfilingReporterLite> profilingReporterLite_;
-    bool initializedFlag_{false};
-};
+void SetTaskExceptionEnable(bool taskExceptionEnable)
+{
+    g_taskExceptionEnable = taskExceptionEnable;
+    HCCL_INFO("[%s] taskExceptionEnable[%d]", __func__, taskExceptionEnable);
 }
 
-#endif
+const bool& GetTaskExceptionEnable()
+{
+    return g_taskExceptionEnable;
+}
+
+}  // namespace hcomm

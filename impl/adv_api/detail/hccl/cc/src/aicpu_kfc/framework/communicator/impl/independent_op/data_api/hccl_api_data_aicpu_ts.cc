@@ -1279,7 +1279,7 @@ HcclResult HcommProfilingReportDeviceOp(const char* groupname)
 {
     HCCL_INFO("[%s] START.", __func__);
     CHK_PTR_NULL(groupname);
-    CHK_RET(AicpuIndopProcess::ProfilingReportDeviceOp(groupname));
+    CHK_RET(AicpuIndopProcess::ProfilingReportDeviceOp());
     return HCCL_SUCCESS;
 }
 
