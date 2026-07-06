@@ -9,40 +9,25 @@
 */
 
 /*!
- * \file Int.h
+ * \file int_impl.h
  * \brief
  */
-#ifndef IMPL_STD_ASCENDC_STD_INT_IMPL_H
-#define IMPL_STD_ASCENDC_STD_INT_IMPL_H
-#include "integral_constant.h"
-#include "enable_if.h"
-#include "is_const.h"
-#include "../algorithm/max.h"
-#include "../algorithm/min.h"
-#include "../cmath/divide.h"
-#include "../cmath/ceil_division.h"
-#include "../cmath/ceil_align.h"
-#include "../cmath/sqrt.h"
-#include "is_integral.h"
+#ifndef IMPL_TENSOR_API_UTILS_INT_IMPL_H
+#define IMPL_TENSOR_API_UTILS_INT_IMPL_H
+
+#include "impl/utils/std/type_traits/integral_constant.h"
+#include "impl/utils/std/type_traits/enable_if.h"
+#include "impl/utils/std/type_traits/is_const.h"
+#include "impl/utils/std/algorithm/max.h"
+#include "impl/utils/std/algorithm/min.h"
+#include "impl/utils/std/cmath/divide.h"
+#include "impl/utils/std/cmath/ceil_division.h"
+#include "impl/utils/std/cmath/ceil_align.h"
+#include "impl/utils/std/cmath/sqrt.h"
+#include "impl/utils/std/type_traits/is_integral.h"
 
 namespace AscendC {
 namespace Std {
-template <size_t v>
-using Int = integral_constant<size_t, v>;
-
-
-#define STD_INT_BINARY_OP(OP) \
-template <auto t, auto u> \
-__aicore__ inline constexpr Int<(t OP u)> operator OP (Int<t>, Int<u>) { \
-    return {}; \
-}
-
-STD_INT_BINARY_OP(+);
-STD_INT_BINARY_OP(-);
-STD_INT_BINARY_OP(*);
-STD_INT_BINARY_OP(/);
-STD_INT_BINARY_OP(%);
-#undef STD_INT_BINARY_OP
 
 #define STD_INT_NAMED_BINARY_FN(OP, CMP) \
 template <auto t, auto u> \
@@ -80,6 +65,7 @@ STD_INT_BINARY_FN(divide, (t / u));
 STD_INT_BINARY_FN(ceil_division, ((t + u - 1) / u));
 STD_INT_BINARY_FN(ceil_align, (((t + u - 1) / u) * u));
 #undef STD_INT_BINARY_FN
+
 }
 }
-#endif
+#endif // IMPL_TENSOR_API_UTILS_INT_IMPL_H
