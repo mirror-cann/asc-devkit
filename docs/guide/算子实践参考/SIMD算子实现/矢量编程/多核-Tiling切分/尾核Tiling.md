@@ -62,7 +62,7 @@ void GenerateTilingData(uint8_t* tilingBuf, uint32_t numBlocks)
     // 整核计算的数据长度：totalLengthAligned / NUM_BLOCKS为每个核上计算的元素个数，formerLength为上述元素个数向上32字节对齐的结果
     uint32_t formerLength =
             static_cast<uint32_t>(((totalLengthAligned + numBlocks - 1) / numBlocks + ALIGN_NUM - 1) / ALIGN_NUM) * ALIGN_NUM;
-    // 尾核计算的数据长度：totalLengthAligned / NUM_BLOCKS为每个核上计算的元素个数，tailLength 为上述元素个数向下32字节对齐的结果
+    // 尾核计算的数据长度：totalLengthAligned / NUM_BLOCKS为每个核上计算的元素个数，tailLength为上述元素个数向下32字节对齐的结果
     uint32_t tailLength = (totalLengthAligned / numBlocks / ALIGN_NUM) * ALIGN_NUM;
     ...
 }

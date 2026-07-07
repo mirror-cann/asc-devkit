@@ -43,17 +43,17 @@
 AscendC::TPipe pipe;                                // 创建全局资源管理器
 AscendC::TQue<AscendC::TPosition::VecIn, 1> queIn;  // 创建CopyIn阶段队列
 AscendC::TQue<AscendC::TPosition::VecOut, 1> queOut;// 创建CopyOut阶段队列
-// Init 阶段
+// Init阶段
 pipe.InitBuffer(queIn, 2, 1024);                    // 开启DoubleBuffer，将待处理数据一分为二，实现流水并行
 pipe.InitBuffer(queOut, 2, 1024);
 for-loop {
-    // CopyIn 阶段
+    // CopyIn阶段
     {
         auto tensor = queIn.AllocTensor<half>();   // 从队列申请资源，长度1024
         AscendC::DataCopy(tensor, gm, 1024);       // 将数据从GM搬运至VECIN
         queIn.EnQue(tensor);
     }
-    // Compute 阶段
+    // Compute阶段
     {
         auto tensor = queIn.DeQue<half>();
         auto tensorOut = queOut.AllocTensor<half>();
@@ -61,7 +61,7 @@ for-loop {
         queIn.FreeTensor(tensor);
         queOut.EnQue(tensorOut);
     }
-    // CopyOut 阶段
+    // CopyOut阶段
     {
         auto tensor = queOut.DeQue<half>();
         AscendC::DataCopy(gmOut, tensor, 1024);   // 将数据从VECOUT搬运至GM

@@ -13,7 +13,7 @@
 这种模式下存在三个典型瓶颈：
 
 - **UB读写带宽被反复占用**：中间结果在UB上往返，访存压力随着矢量计算增加而线性放大。
-- **UB Bank 冲突严重**：对UB的反复读写，极大增加了UB Bank冲突的概率。
+- **UB Bank冲突严重**：对UB的反复读写，极大增加了UB Bank冲突的概率。
 - **关键路径被访存拉长**：当计算指令执行时间很短，整体耗时会被UB读写时间占用。
 
 这种“每步落地UB”的开销会成为优化的天花板。
@@ -235,7 +235,7 @@ asc_add(dst_reg, src0_reg, src1_reg, mask_reg);
 // vector_bool dst_mask_reg作为x计算参数与vector_* src0_vector_reg计算
 asc_select(dst_mask_reg, src0_vector_reg, src1_vector_reg, mask_reg);
 
-// vector_bool src0_mask_reg, src1_mask_reg, dst_mask_reg 作为参数计算
+// vector_bool src0_mask_reg, src1_mask_reg, dst_mask_reg作为参数计算
 asc_and(dst_mask_reg, src0_mask_reg, src1_mask_reg, mask_reg);
 ```
 
@@ -557,7 +557,7 @@ Hardware Loop是VF循环性能优化的基础。VF中的循环如果满足硬件
 对编译时分支和尾块场景，可使用以下方式替代`if`：
 
 ```cpp
-// 编译时分支：if constexpr 无运行时开销
+// 编译时分支：if constexpr无运行时开销
 if constexpr (has_bias) {
     asc_add(dst_reg, src_reg, bias_reg, mask);
 }

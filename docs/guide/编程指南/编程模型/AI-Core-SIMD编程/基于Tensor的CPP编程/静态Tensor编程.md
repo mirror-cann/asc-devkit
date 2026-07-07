@@ -422,7 +422,7 @@
 </td>
 <td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p4476135364311"><a name="p4476135364311"></a><a name="p4476135364311"></a>Copy、DataCopyPad、SetPadValue</p>
 </td>
-<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p8476165374314"><a name="p8476165374314"></a><a name="p8476165374314"></a>DataCopyPad 不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p8476165374314"><a name="p8476165374314"></a><a name="p8476165374314"></a>DataCopyPad不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row114761053204315"><td class="cellrowborder" valign="top" width="29.9%" headers="mcps1.2.4.1.1 "><p id="p2047615394311"><a name="p2047615394311"></a><a name="p2047615394311"></a>基础API &gt; 同步控制 &gt; 核内同步</p>
@@ -622,7 +622,7 @@
 </tr>
 <tr id="row370817486213"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p103895521010"><a name="p103895521010"></a><a name="p103895521010"></a>Copy、DataCopyPad、SetPadValue</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1338185515107"><a name="p1338185515107"></a><a name="p1338185515107"></a>DataCopyPad 不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1338185515107"><a name="p1338185515107"></a><a name="p1338185515107"></a>DataCopyPad不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row177081648422"><td class="cellrowborder" valign="top" width="29.630000000000003%" headers="mcps1.2.4.1.1 "><p id="p113885518108"><a name="p113885518108"></a><a name="p113885518108"></a>基础API &gt; 同步控制 &gt; 核内同步</p>
@@ -851,7 +851,7 @@
 </td>
 <td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p16956102014187"><a name="p16956102014187"></a><a name="p16956102014187"></a>Copy、DataCopyPad、SetPadValue</p>
 </td>
-<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p2702434251"><a name="p2702434251"></a><a name="p2702434251"></a>DataCopyPad 不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p2702434251"><a name="p2702434251"></a><a name="p2702434251"></a>DataCopyPad不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row6778713162710"><td class="cellrowborder" valign="top" width="29.630000000000003%" headers="mcps1.2.4.1.1 "><p id="p20882139162713"><a name="p20882139162713"></a><a name="p20882139162713"></a>基础API &gt; 同步控制 &gt; 核内同步</p>

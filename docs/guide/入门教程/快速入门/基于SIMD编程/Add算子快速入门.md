@@ -28,7 +28,7 @@
         - 数据搬出：使用 `aclrtMemcpy`将计算结果从Device Memory拷贝回Host Memory。
       
       > [!NOTE] 说明
-      > - 请参见[Ascend-C概述与学习路径](../../Ascend-C概述与学习路径.md)技术附录章节，获取`Ascend C API 参考`和`CANN运行时接口`链接，以查阅更多接口信息。
+      > - 请参见[Ascend-C概述与学习路径](../../Ascend-C概述与学习路径.md)技术附录章节，获取`Ascend C API参考`和`CANN运行时接口`链接，以查阅更多接口信息。
 
 - **算子代码实现**：
 

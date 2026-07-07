@@ -142,7 +142,7 @@
     </td>
     <td class="cellrowborder" valign="top" width="40.82591740825918%" headers="mcps1.2.4.1.2 "><a name="ol9152163610615"></a><a name="ol9152163610615"></a><ol id="ol9152163610615"><li>MTE2循环搬运次数多的大shape场景。</li><li>输入和输出的数据量超过L2 Cache大小的场景。</li></ol>
     </td>
-    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><a name="ol0907154317615"></a><a name="ol0907154317615"></a><ol id="ol0907154317615"><li><a href="Matmul高阶API使能MDL模板.md">Matmul 高阶API开启MDL模板</a></li><li><a href="Matmul高阶API使能L2-Cache切分.md">Matmul高阶API开启L2 Cache切分</a></li></ol>
+    <td class="cellrowborder" valign="top" width="29.087091290870916%" headers="mcps1.2.4.1.3 "><a name="ol0907154317615"></a><a name="ol0907154317615"></a><ol id="ol0907154317615"><li><a href="Matmul高阶API使能MDL模板.md">Matmul高阶API开启MDL模板</a></li><li><a href="Matmul高阶API使能L2-Cache切分.md">Matmul高阶API开启L2 Cache切分</a></li></ol>
     </td>
     </tr>
     <tr id="row1542174715511"><td class="cellrowborder" valign="top" width="30.086991300869915%" headers="mcps1.2.4.1.1 "><p id="p10421347185119"><a name="p10421347185119"></a><a name="p10421347185119"></a>预加载搬运：预加载需要搬运的数据块，减少流水之间的间隙。</p>

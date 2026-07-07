@@ -88,7 +88,7 @@ mssanitizer --tool=memcheck --tool=racecheck --tool=initcheck --tool=synccheck .
 
 msDebug是一款面向昇腾设备的算子调试工具，用于调试NPU侧运行的算子程序，为算子开发人员提供调试手段，当前只支持SIMD编程场景的程序调试，暂不支持SIMT编程场景的程序调试。msDebug工具支持调试所有的昇腾算子，包含Ascend C算子（Vector、Cube以及融合算子）程序。具体功能包括断点设置、打印变量和内存、单步调试、中断运行、核切换、检查程序状态、调试信息展示、解析Core dump文件，用户可根据实际情况进行选择。
 
-### msdebug 调试进程
+### msdebug调试进程
 
 #### 调试程序编译
 ```shell

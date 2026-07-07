@@ -139,7 +139,7 @@ __aicore__ inline void Compute()
 }
 ```
 
-这种写法使基础API 能够与`__aicore__`中`LocalTensor`流程衔接。
+这种写法使基础API能够与`__aicore__`中`LocalTensor`流程衔接。
 
 > 📌 **提示**：使用LocalTensor作为VF函数参数时，不能使用引用LocalTensor &。因为在`__aicore__`和`__simd_vf__`是两个相互隔离的执行域，无法通过跨执行域通过引用访问。
 
