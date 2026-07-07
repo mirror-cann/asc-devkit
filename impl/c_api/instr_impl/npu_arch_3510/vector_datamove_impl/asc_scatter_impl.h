@@ -26,74 +26,74 @@
 #include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
 //asc_scatter int8_t
-__simd_callee__ inline void asc_scatter_impl(vector_int8_t& dst, __ubuf__ int8_t* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter_impl(vector_int8_t& src, __ubuf__ int8_t* dst, vector_uint16_t index, vector_bool mask)
 {
     if ASC_IS_AIV{
-        vscatter(dst, src, index, mask);
+        vscatter(src, dst, index, mask);
     }
 }
 
 //asc_scatter uint8_t
-__simd_callee__ inline void asc_scatter_impl(vector_uint8_t& dst, __ubuf__ uint8_t* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter_impl(vector_uint8_t& src, __ubuf__ uint8_t* dst, vector_uint16_t index, vector_bool mask)
 {
     if ASC_IS_AIV{
-        vscatter(dst, src, index, mask);
+        vscatter(src, dst, index, mask);
     }
 }
 
 //asc_scatter int16_t
-__simd_callee__ inline void asc_scatter_impl(vector_int16_t& dst, __ubuf__ int16_t* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter_impl(vector_int16_t& src, __ubuf__ int16_t* dst, vector_uint16_t index, vector_bool mask)
 {
     if ASC_IS_AIV{
-        vscatter(dst, src, index, mask);
+        vscatter(src, dst, index, mask);
     }
 }
 
 //asc_scatter uint16_t
-__simd_callee__ inline void asc_scatter_impl(vector_uint16_t& dst, __ubuf__ uint16_t* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter_impl(vector_uint16_t& src, __ubuf__ uint16_t* dst, vector_uint16_t index, vector_bool mask)
 {
     if ASC_IS_AIV{
-        vscatter(dst, src, index, mask);
+        vscatter(src, dst, index, mask);
     }
 }
 
 //asc_scatter int32_t
-__simd_callee__ inline void asc_scatter_impl(vector_int32_t& dst, __ubuf__ int32_t* src, vector_uint32_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter_impl(vector_int32_t& src, __ubuf__ int32_t* dst, vector_uint32_t index, vector_bool mask)
 {
     if ASC_IS_AIV{
-        vscatter(dst, src, index, mask);
+        vscatter(src, dst, index, mask);
     }
 }
 
 //asc_scatter uint32_t
-__simd_callee__ inline void asc_scatter_impl(vector_uint32_t& dst, __ubuf__ uint32_t* src, vector_uint32_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter_impl(vector_uint32_t& src, __ubuf__ uint32_t* dst, vector_uint32_t index, vector_bool mask)
 {
     if ASC_IS_AIV{
-        vscatter(dst, src, index, mask);
+        vscatter(src, dst, index, mask);
     }
 }
 
 //asc_scatter bfloat16_t
-__simd_callee__ inline void asc_scatter_impl(vector_bfloat16_t& dst, __ubuf__ bfloat16_t* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter_impl(vector_bfloat16_t& src, __ubuf__ bfloat16_t* dst, vector_uint16_t index, vector_bool mask)
 {
     if ASC_IS_AIV{
-        vscatter(dst, src, index, mask);
+        vscatter(src, dst, index, mask);
     }
 }
 
 //asc_scatter float16_t
-__simd_callee__ inline void asc_scatter_impl(vector_half& dst, __ubuf__ half* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter_impl(vector_half& src, __ubuf__ half* dst, vector_uint16_t index, vector_bool mask)
 {
     if ASC_IS_AIV{
-        vscatter(dst, src, index, mask);
+        vscatter(src, dst, index, mask);
     }
 }
 
 //asc_scatter float32_t
-__simd_callee__ inline void asc_scatter_impl(vector_float& dst, __ubuf__ float* src, vector_uint32_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter_impl(vector_float& src, __ubuf__ float* dst, vector_uint32_t index, vector_bool mask)
 {
     if ASC_IS_AIV{
-        vscatter(dst, src, index, mask);
+        vscatter(src, dst, index, mask);
     }
 }
 

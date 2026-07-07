@@ -13,6 +13,25 @@
 
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl.h"
 
+//==============asc_scatter=============
+__simd_callee__ inline void asc_scatter(__ubuf__ int8_t* dst, vector_int8_t src, vector_uint16_t index, vector_bool mask);
+
+__simd_callee__ inline void asc_scatter(__ubuf__ uint8_t* dst, vector_uint8_t src, vector_uint16_t index, vector_bool mask);
+
+__simd_callee__ inline void asc_scatter(__ubuf__ int16_t* dst, vector_int16_t src, vector_uint16_t index, vector_bool mask);
+
+__simd_callee__ inline void asc_scatter(__ubuf__ uint16_t* dst, vector_uint16_t src, vector_uint16_t index, vector_bool mask);
+
+__simd_callee__ inline void asc_scatter(__ubuf__ int32_t* dst, vector_int32_t src, vector_uint32_t index, vector_bool mask);
+
+__simd_callee__ inline void asc_scatter(__ubuf__ uint32_t* dst, vector_uint32_t src, vector_uint32_t index, vector_bool mask);
+
+__simd_callee__ inline void asc_scatter(__ubuf__ bfloat16_t* dst, vector_bfloat16_t src, vector_uint16_t index, vector_bool mask);
+
+__simd_callee__ inline void asc_scatter(__ubuf__ half* dst, vector_half src, vector_uint16_t index, vector_bool mask);
+
+__simd_callee__ inline void asc_scatter(__ubuf__ float* dst, vector_float src, vector_uint32_t index, vector_bool mask);
+
 // ==========asc_store=========
 
 // ==========偏移固定传入0，由用户自行更新src地址=========

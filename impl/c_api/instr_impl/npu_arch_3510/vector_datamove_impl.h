@@ -38,6 +38,7 @@
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/asc_set_ndim_pad_value_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/asc_set_copy_pad_val_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/reg_store/asc_store_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/reg_store/asc_scatter_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/asc_scatter_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/asc_copy_gm2ub_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/asc_copy_ub2gm_impl.h"
@@ -6558,49 +6559,112 @@ __aicore__ inline void asc_ndim_copy_gm2ub(__ubuf__ float* dst, __gm__ float* sr
 }
 
 //==============asc_scatter=============
-__simd_callee__ inline void asc_scatter(vector_int8_t& dst, __ubuf__ int8_t* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter(__ubuf__ int8_t* dst, vector_int8_t src, vector_uint16_t index, vector_bool mask)
 {
     asc_scatter_impl(dst, src, index, mask);
 }
 
-__simd_callee__ inline void asc_scatter(vector_uint8_t& dst, __ubuf__ uint8_t* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter(__ubuf__ uint8_t* dst, vector_uint8_t src, vector_uint16_t index, vector_bool mask)
 {
     asc_scatter_impl(dst, src, index, mask);
 }
 
-__simd_callee__ inline void asc_scatter(vector_int16_t& dst, __ubuf__ int16_t* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter(__ubuf__ int16_t* dst, vector_int16_t src, vector_uint16_t index, vector_bool mask)
 {
     asc_scatter_impl(dst, src, index, mask);
 }
 
-__simd_callee__ inline void asc_scatter(vector_uint16_t& dst, __ubuf__ uint16_t* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter(__ubuf__ uint16_t* dst, vector_uint16_t src, vector_uint16_t index, vector_bool mask)
 {
     asc_scatter_impl(dst, src, index, mask);
 }
 
-__simd_callee__ inline void asc_scatter(vector_int32_t& dst, __ubuf__ int32_t* src, vector_uint32_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter(__ubuf__ int32_t* dst, vector_int32_t src, vector_uint32_t index, vector_bool mask)
 {
     asc_scatter_impl(dst, src, index, mask);
 }
 
-__simd_callee__ inline void asc_scatter(vector_uint32_t& dst, __ubuf__ uint32_t* src, vector_uint32_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter(__ubuf__ uint32_t* dst, vector_uint32_t src, vector_uint32_t index, vector_bool mask)
 {
     asc_scatter_impl(dst, src, index, mask);
 }
 
-__simd_callee__ inline void asc_scatter(vector_bfloat16_t& dst, __ubuf__ bfloat16_t* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter(__ubuf__ bfloat16_t* dst, vector_bfloat16_t src, vector_uint16_t index, vector_bool mask)
 {
     asc_scatter_impl(dst, src, index, mask);
 }
 
-__simd_callee__ inline void asc_scatter(vector_half& dst, __ubuf__ half* src, vector_uint16_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter(__ubuf__ half* dst, vector_half src, vector_uint16_t index, vector_bool mask)
 {
     asc_scatter_impl(dst, src, index, mask);
 }
 
-__simd_callee__ inline void asc_scatter(vector_float& dst, __ubuf__ float* src, vector_uint32_t index, vector_bool mask)
+__simd_callee__ inline void asc_scatter(__ubuf__ float* dst, vector_float src, vector_uint32_t index, vector_bool mask)
 {
     asc_scatter_impl(dst, src, index, mask);
+}
+
+[[deprecated("NOTICE: asc_scatter(vector_int8_t& src, __ubuf__ int8_t* dst, vector_uint16_t index, vector_bool mask) is deprecated. "
+             "Please use asc_scatter(__ubuf__ int8_t* dst, vector_int8_t src, vector_uint16_t index, vector_bool mask) instead.")]]
+__simd_callee__ inline void asc_scatter(vector_int8_t& src, __ubuf__ int8_t* dst, vector_uint16_t index, vector_bool mask)
+{
+    asc_scatter_impl(src, dst, index, mask);
+}
+
+[[deprecated("NOTICE: asc_scatter(vector_uint8_t& src, __ubuf__ uint8_t* dst, vector_uint16_t index, vector_bool mask) is deprecated. "
+             "Please use asc_scatter(__ubuf__ uint8_t* dst, vector_uint8_t src, vector_uint16_t index, vector_bool mask) instead.")]]
+__simd_callee__ inline void asc_scatter(vector_uint8_t& src, __ubuf__ uint8_t* dst, vector_uint16_t index, vector_bool mask)
+{
+    asc_scatter_impl(src, dst, index, mask);
+}
+
+[[deprecated("NOTICE: asc_scatter(vector_int16_t& src, __ubuf__ int16_t* dst, vector_uint16_t index, vector_bool mask) is deprecated. "
+             "Please use asc_scatter(__ubuf__ int16_t* dst, vector_int16_t src, vector_uint16_t index, vector_bool mask) instead.")]]
+__simd_callee__ inline void asc_scatter(vector_int16_t& src, __ubuf__ int16_t* dst, vector_uint16_t index, vector_bool mask)
+{
+    asc_scatter_impl(src, dst, index, mask);
+}
+
+[[deprecated("NOTICE: asc_scatter(vector_uint16_t& src, __ubuf__ uint16_t* dst, vector_uint16_t index, vector_bool mask) is deprecated. "
+             "Please use asc_scatter(__ubuf__ uint16_t* dst, vector_uint16_t src, vector_uint16_t index, vector_bool mask) instead.")]]
+__simd_callee__ inline void asc_scatter(vector_uint16_t& src, __ubuf__ uint16_t* dst, vector_uint16_t index, vector_bool mask)
+{
+    asc_scatter_impl(src, dst, index, mask);
+}
+
+[[deprecated("NOTICE: asc_scatter(vector_int32_t& src, __ubuf__ int32_t* dst, vector_uint32_t index, vector_bool mask) is deprecated. "
+             "Please use asc_scatter(__ubuf__ int32_t* dst, vector_int32_t src, vector_uint32_t index, vector_bool mask) instead.")]]
+__simd_callee__ inline void asc_scatter(vector_int32_t& src, __ubuf__ int32_t* dst, vector_uint32_t index, vector_bool mask)
+{
+    asc_scatter_impl(src, dst, index, mask);
+}
+
+[[deprecated("NOTICE: asc_scatter(vector_uint32_t& src, __ubuf__ uint32_t* dst, vector_uint32_t index, vector_bool mask) is deprecated. "
+             "Please use asc_scatter(__ubuf__ uint32_t* dst, vector_uint32_t src, vector_uint32_t index, vector_bool mask) instead.")]]
+__simd_callee__ inline void asc_scatter(vector_uint32_t& src, __ubuf__ uint32_t* dst, vector_uint32_t index, vector_bool mask)
+{
+    asc_scatter_impl(src, dst, index, mask);
+}
+
+[[deprecated("NOTICE: asc_scatter(vector_bfloat16_t& src, __ubuf__ bfloat16_t* dst, vector_uint16_t index, vector_bool mask) is deprecated. "
+             "Please use asc_scatter(__ubuf__ bfloat16_t* dst, vector_bfloat16_t src, vector_uint16_t index, vector_bool mask) instead.")]]
+__simd_callee__ inline void asc_scatter(vector_bfloat16_t& src, __ubuf__ bfloat16_t* dst, vector_uint16_t index, vector_bool mask)
+{
+    asc_scatter_impl(src, dst, index, mask);
+}
+
+[[deprecated("NOTICE: asc_scatter(vector_half& src, __ubuf__ half* dst, vector_uint16_t index, vector_bool mask) is deprecated. "
+             "Please use asc_scatter(__ubuf__ half* dst, vector_half src, vector_uint16_t index, vector_bool mask) instead.")]]
+__simd_callee__ inline void asc_scatter(vector_half& src, __ubuf__ half* dst, vector_uint16_t index, vector_bool mask)
+{
+    asc_scatter_impl(src, dst, index, mask);
+}
+
+[[deprecated("NOTICE: asc_scatter(vector_float& src, __ubuf__ float* dst, vector_uint32_t index, vector_bool mask) is deprecated. "
+             "Please use asc_scatter(__ubuf__ float* dst, vector_float src, vector_uint32_t index, vector_bool mask) instead.")]]
+__simd_callee__ inline void asc_scatter(vector_float& src, __ubuf__ float* dst, vector_uint32_t index, vector_bool mask)
+{
+    asc_scatter_impl(src, dst, index, mask);
 }
 
 // ==========asc_copy_gm2ub_align(int8_t/uint8_t/fp8_e5m2_t/fp8_e4m3fn_t/hifloat8_t/int16_t/uint16_t/half/bfloat16_t/int32_t/uint32_t/float)==========

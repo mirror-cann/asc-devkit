@@ -50,4 +50,4 @@
 
 - **[asc_loadunalign_postupdate](asc_loadunalign_postupdate.md)**
 
-- **[asc_scatter](asc_scatter.md)**
+- **[asc_scatter（废弃）](asc_scatter_deprecated.md)**
