@@ -247,7 +247,6 @@ public:
         if constexpr (sizeof(T) == sizeof(void*)) { // Skip previous invalid pointer for compatibility
             InitObj(b...);
         } else {
-            ASSERT(kfcCommSrv != nullptr && "kfc comm server cannot be nullptr when init obj");
             auto ptr = reinterpret_cast<KFC_COMM_SERVER_PTR>(kfcCommSrv);
             for (int i = 0; i < MIX_NUM; i++, ptr++) {
                 InitObjAux(tpipe, ptr, i, 0, a, b...);
