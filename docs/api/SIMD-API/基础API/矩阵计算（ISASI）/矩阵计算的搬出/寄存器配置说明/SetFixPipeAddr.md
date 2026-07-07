@@ -61,7 +61,7 @@ LocalTensor支持的数据类型为：half。
 DataCopy随路量化搬运后，可以逐个元素加/减一个大小为mSize \* nSize的LocalTensor，具体LocalTensor地址相关参数需要调用`SetFixPipeAddr`来设置。
 
 ```cpp
-__aicore__ inline void SetEleSrcPara(const LocalTensor <half>& eleWiseData, uint16_t c0ChStride)
+__aicore__ inline void SetEleSrcPara(const LocalTensor<half>& eleWiseData, uint16_t c0ChStride)
 {
     AscendC::SetFixPipeAddr(eleWiseData, c0ChStride);
 }

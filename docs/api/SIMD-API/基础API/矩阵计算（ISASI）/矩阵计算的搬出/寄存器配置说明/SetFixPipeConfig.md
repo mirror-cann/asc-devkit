@@ -60,7 +60,7 @@ __aicore__ inline void SetFixPipeConfig(const LocalTensor<T>& preData, bool isUn
 | reluPre | 输入 | 源操作数，ReLU操作时参与计算的tensor，类型为LocalTensor，支持的物理内存为Fixpipe Buffer（TPosition为C2PIPE2GM），为后续的功能扩展做保留，传入一个空LocalTensor即可。 |
 | quantPre | 输入 | 源操作数，quant tensor，量化操作时参与计算的tensor，类型为LocalTensor，支持的物理内存为Fixpipe Buffer（TPosition为C2PIPE2GM）。 |
 | isUnitFlag | 输入 | unitFlag清空标志位，类型为bool。如果设为true，L0C Buffer中所有内存块的单元标志位都会设为0。旨在消除之前操作中unitFlag产生的多余影响。 |
-| preData | 输入 | 支持设置一个Tensor，通过开关控制是ReLU Tensor还是Quant Tensor，支持的物理内存为Fixpipe Buffer（TPosition为C2PIPE2GM）。当前仅支持传入quant Tensor。对于单独设置unitFlag清空标志位isUnitFlag的场景，支持的物理地址为L0C Buffer（TPosition设置为CO1）。 |
+| preData | 输入 | 支持设置一个tensor，通过开关控制是ReLU tensor还是Quant tensor，支持的物理内存为Fixpipe Buffer（TPosition为C2PIPE2GM）。当前仅支持传入quant tensor。对于单独设置unitFlag清空标志位isUnitFlag的场景，支持的物理地址为L0C Buffer（TPosition设置为CO1）。 |
 
 ## 数据类型
 
@@ -72,7 +72,7 @@ __aicore__ inline void SetFixPipeConfig(const LocalTensor<T>& preData, bool isUn
 
 ## 约束说明<a name="zh-cn_topic_0000002547729135_section633mcpsimp"></a>
 
-quantPre和reluPre必须是Fixpipe Buffer上的Tensor。
+quantPre和reluPre必须是Fixpipe Buffer上的tensor。
 
 ## 调用示例<a name="section642mcpsimp"></a>
 

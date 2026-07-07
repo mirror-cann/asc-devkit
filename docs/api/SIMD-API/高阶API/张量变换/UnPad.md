@@ -78,7 +78,7 @@ struct UnPadParams {
 ```
 // dstLocal：输出Tensor
 // srcLocal：输入Tensor
-// unPadParams：控制填充的参数
+// unPadParams：控制去除填充的参数
 AscendC::UnPadParams unPadParams{0, 1}; // 左边去掉0列，右边去掉1列，当前暂不支持左边unpad
 AscendC::UnPad(dstLocal, srcLocal, unPadParams, tilingData.unpadTilingData);
 ```

@@ -40,33 +40,33 @@ __aicore__ inline GemmTiling GetGemmTiling(uint32_t m, uint32_t k, uint32_t n)
         c0 = 16;
         dSize = 2;
     }
-    GemmTiling tilling;
-    tilling.c0Size = c0;
-    tilling.dtypeSize = dSize;
-    tilling.mNum = m;
-    tilling.nNum = n;
-    tilling.kNum = k;
-    tilling.roundM = DivCeil(m, tilling.blockSize) * tilling.blockSize; // blockSize = 16 * 16
-    tilling.roundN = DivCeil(n, tilling.blockSize) * tilling.blockSize;
-    tilling.roundK = DivCeil(k, tilling.c0Size) * tilling.c0Size; // c0Size = 16 || c0Size = 32
-    uint32_t k0a = TOTAL_L0A_SIZE / 2 / (tilling.roundM * dSize);
-    uint32_t k0b = TOTAL_L0B_SIZE / 2 / (tilling.roundN * dSize);
+    GemmTiling tiling;
+    tiling.c0Size = c0;
+    tiling.dtypeSize = dSize;
+    tiling.mNum = m;
+    tiling.nNum = n;
+    tiling.kNum = k;
+    tiling.roundM = DivCeil(m, tiling.blockSize) * tiling.blockSize; // blockSize = 16 * 16
+    tiling.roundN = DivCeil(n, tiling.blockSize) * tiling.blockSize;
+    tiling.roundK = DivCeil(k, tiling.c0Size) * tiling.c0Size; // c0Size = 16 || c0Size = 32
+    uint32_t k0a = TOTAL_L0A_SIZE / 2 / (tiling.roundM * dSize);
+    uint32_t k0b = TOTAL_L0B_SIZE / 2 / (tiling.roundN * dSize);
     uint32_t k0 = k0a > k0b ? k0b : k0a;
     k0 = k0 > k ? k : k0;
 
-    tilling.kTileBlock = k0 / tilling.c0Size;
-    if (tilling.kTileBlock == 0) {
-        tilling.kTileBlock = 1;
+    tiling.kTileBlock = k0 / tiling.c0Size;
+    if (tiling.kTileBlock == 0) {
+        tiling.kTileBlock = 1;
     }
-    tilling.loopMode = LoopMode::MODE_NM;
+    tiling.loopMode = LoopMode::MODE_NM;
 
-    tilling.mBlockNum = DivCeil(m, tilling.blockSize);
-    tilling.nBlockNum = DivCeil(n, tilling.blockSize);
-    tilling.kBlockNum = DivCeil(k, tilling.c0Size);
+    tiling.mBlockNum = DivCeil(m, tiling.blockSize);
+    tiling.nBlockNum = DivCeil(n, tiling.blockSize);
+    tiling.kBlockNum = DivCeil(k, tiling.c0Size);
 
-    CalculateGemmTiling(tilling);
+    CalculateGemmTiling(tiling);
 
-    return tilling;
+    return tiling;
 }
 
 /*
@@ -78,20 +78,20 @@ __aicore__ inline GemmTiling GetGemmTiling(uint32_t m, uint32_t k, uint32_t n)
  * @param [in] m Number of rows of src0
  * @param [in] n Number of rows of src1
  * @param [in] k Number of columns of src1
- * @param [in] tilling.blockSize size of block
- * @param [in] tilling.mNum args of m
- * @param [in] tilling.nNum args of n
- * @param [in] tilling.kNum args of k
- * @param [in] tilling.roundM/N/K Rounding parameter
- * @param [in] tilling.c0Size The byte length of a block
- * @param [in] tilling.dtypeSize Byte length of the incoming data type
- * @param [in] tilling.m/n/kBlockNum Number of blocks of m/n/k axis
- * @param [in] tilling.m/n/kIterNum Number of traversal dimensions
- * @param [in] tilling.m/k/nTileBlock Number of M/N/K axis cutting blocks
- * @param [in] tilling.m/n/kHasTailNumber of tail blocks of M/K/N axis
- * @param [in] tilling.kHasTileEle Judge whether the tail block exists
- * @param [in] tilling.KtailEle K-axis tail block element
- * @param [in] tilling.kThreadNum K-axis passes
+ * @param [in] tiling.blockSize size of block
+ * @param [in] tiling.mNum args of m
+ * @param [in] tiling.nNum args of n
+ * @param [in] tiling.kNum args of k
+ * @param [in] tiling.roundM/N/K Rounding parameter
+ * @param [in] tiling.c0Size The byte length of a block
+ * @param [in] tiling.dtypeSize Byte length of the incoming data type
+ * @param [in] tiling.m/n/kBlockNum Number of blocks of m/n/k axis
+ * @param [in] tiling.m/n/kIterNum Number of traversal dimensions
+ * @param [in] tiling.m/k/nTileBlock Number of M/N/K axis cutting blocks
+ * @param [in] tiling.m/n/kHasTailNumber of tail blocks of M/K/N axis
+ * @param [in] tiling.kHasTileEle Judge whether the tail block exists
+ * @param [in] tiling.KtailEle K-axis tail block element
+ * @param [in] tiling.kThreadNum K-axis passes
  * @param [in] partialsum judge whether the calculation result is moved out
  * @param [in] initValue Initialization parameters
  */
@@ -99,11 +99,11 @@ template <typename T, typename U, typename S>
 [[deprecated("NOTICE: Gemm has been deprecated and will be removed in the next version. "
         "Please do not use it!")]]
 __aicore__ inline __inout_pipe__(V) void Gemm(const LocalTensor<T>& dst, const LocalTensor<U>& src0,
-    const LocalTensor<S>& src1, const uint32_t m, const uint32_t k, const uint32_t n, GemmTiling tilling,
+    const LocalTensor<S>& src1, const uint32_t m, const uint32_t k, const uint32_t n, GemmTiling tiling,
     bool partialsum, int32_t initValue)
 {
 #if ASCENDC_CPU_DEBUG
-    bool flag = CheckParams(dst, src0, src1, m, k, n, tilling);
+    bool flag = CheckParams(dst, src0, src1, m, k, n, tiling);
     if (!flag) {
         return;
     }
@@ -132,10 +132,10 @@ __aicore__ inline __inout_pipe__(V) void Gemm(const LocalTensor<T>& dst, const L
 #endif
     }
 
-    if (tilling.loopMode == LoopMode::MODE_NM) {
-        GemmExecNm(l0c, src0, src1, tilling, initValue);
-    } else if (tilling.loopMode == LoopMode::MODE_MN) {
-        GemmExecMn(l0c, src0, src1, tilling, initValue);
+    if (tiling.loopMode == LoopMode::MODE_NM) {
+        GemmExecNm(l0c, src0, src1, tiling, initValue);
+    } else if (tiling.loopMode == LoopMode::MODE_MN) {
+        GemmExecMn(l0c, src0, src1, tiling, initValue);
     } else {
         // other mode are not supported
     }
@@ -143,7 +143,7 @@ __aicore__ inline __inout_pipe__(V) void Gemm(const LocalTensor<T>& dst, const L
 #if (__NPU_ARCH__ == 1001) || (__NPU_ARCH__ == 2002)
     if (dstScope == Hardware::UB) {
         pipe_barrier(PIPE_ALL);
-        dataCopyParams.blockLen = tilling.roundM * tilling.roundN * sizeof(PrimT<T>) / 1024;
+        dataCopyParams.blockLen = tiling.roundM * tiling.roundN * sizeof(PrimT<T>) / 1024;
         DataCopy(dst, l0c, dataCopyParams, enhancedParams);
     }
 #endif

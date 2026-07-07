@@ -27,15 +27,15 @@ void UnPadTilingFunc(const ge::Shape srcShape, const uint32_t stackBufferSize, c
 | ascendcPlatform | 输入 | 传入硬件平台的信息，PlatformAscendC定义请参见[构造及析构函数](../../../Utils-API/平台信息获取/PlatformAscendC/构造及析构函数.md)。 |
 | srcShape | 输入 | 输入Tensor的shape信息，shape为二维。 |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
-| maxValue | 输出 | UnPad接口能完成计算所需最大临时空间大小。<br><br>UnPad接口能完成计算所需的最大临时空间大小，超出该值的空间不会被该接口使用。在最小临时空间-最大临时空间范围内，随着临时空间增大，kernel侧接口计算性能会有一定程度的优化提升。为了达到更好的性能，开发者可以根据实际的内存使用情况进行空间预留/申请。最大空间大小为0表示计算不需要临时空间。 <br>maxValue仅作为参考值，有可能大于Unified Buffer剩余空间的大小，该场景下，开发者需要根据Unified Buffer剩余空间的大小来选取合适的临时空间大小。 |
-| minValue | 输出 | UnPad接口能完成计算所需最小临时空间大小。<br><br>Pad接口能完成计算所需最小临时空间大小。为保证功能正确，接口计算时预留/申请的临时空间不能小于该数值。最小空间大小为0表示计算不需要临时空间。 |
+| maxValue | 输出 | UnPad接口能完成计算所需的最大临时空间大小，超出该值的空间不会被该接口使用。在最小临时空间-最大临时空间范围内，随着临时空间增大，kernel侧接口计算性能会有一定程度的优化提升。为了达到更好的性能，开发者可以根据实际的内存使用情况进行空间预留/申请。最大空间大小为0表示计算不需要临时空间。<br>maxValue仅作为参考值，有可能大于Unified Buffer剩余空间的大小，该场景下，开发者需要根据Unified Buffer剩余空间的大小来选取合适的临时空间大小。 |
+| minValue | 输出 | UnPad接口能完成计算所需最小临时空间大小。为保证功能正确，接口计算时预留/申请的临时空间不能小于该数值。最小空间大小为0表示计算不需要临时空间。 |
 
 **表2** **UnPadTilingFunc接口参数说明**
 
 | 参数名 | 输入/输出 | 含义 |
 | --- | --- | --- |
 | srcShape | 输入 | 输入Tensor的shape信息，shape为二维。 |
-| stackBufferSize | 输入 | 可供UnPad接口计算的空间大小。 |
+| stackBufferSize | 输入 | 可供UnPad接口计算的临时空间大小，单位为Byte。 |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | tiling | 输出 | 输出UnPad接口所需的tiling信息。 |
 
@@ -49,7 +49,7 @@ void UnPadTilingFunc(const ge::Shape srcShape, const uint32_t stackBufferSize, c
 
 ## 调用示例
 
-如下样例介绍了使用UnPad高阶API时host侧获取Tiling参数的流程以及该参数如何在kernel侧使用。样例中原始shape的大小为\[320, 64\]，需要unpad的目标shape大小为\[320, 63\]，输入的数据类型为half。
+如下样例介绍了使用UnPad高阶API时host侧获取Tiling参数的流程以及该参数如何在kernel侧使用。样例中原始shape的大小为\[320, 64\]，unpad后的目标shape大小为\[320, 63\]，输入的数据类型为half。
 
 1.  将UnPadTiling结构体参数增加至TilingData结构体，作为TilingData结构体的一个字段。
 
@@ -62,7 +62,7 @@ void UnPadTilingFunc(const ge::Shape srcShape, const uint32_t stackBufferSize, c
     END_TILING_DATA_DEF;
     ```
 
-2.  Tiling实现函数中，首先调用**GetUnPadMaxMinTmpSize**接口获取UnPad接口能完成计算所需最大/最小临时空间大小，根据该范围结合实际的内存使用情况设置合适的空间大小；然后根据输入shape、剩余的可供计算的空间大小等信息获取UnPad kernel侧接口所需tiling参数。
+2.  Tiling实现函数中，首先调用**GetUnPadMaxMinTmpSize**接口获取UnPad接口能完成计算所需最大和最小临时空间大小，根据该范围结合实际的内存使用情况设置合适的空间大小；然后根据输入shape、剩余的可供计算的空间大小等信息获取UnPad kernel侧接口所需tiling参数。
 
     ```
     namespace optiling {
@@ -84,7 +84,7 @@ void UnPadTilingFunc(const ge::Shape srcShape, const uint32_t stackBufferSize, c
         auto platformInfo = context->GetPlatformInfo();
         auto ascendcPlatform = platform_ascendc::PlatformAscendC(platformInfo);
         AscendC::GetUnPadMaxMinTmpSize(ascendcPlatform, srcShape, sizeof(half), maxValue, minValue);
-        // 本样例中仅作为样例说明，获取最小值并传入，来保证功能正确，开发者可以根据需要传入合适的空间大小
+        // 本样例仅用于说明，获取最小值并传入，来保证功能正确，开发者可以根据需要传入合适的空间大小
         const uint32_t localWorkSpaceSize = minValue;
         AscendC::UnPadTilingFunc(srcShape, localWorkSpaceSize , sizeof(half), tiling.unpadTilingData);
          ...

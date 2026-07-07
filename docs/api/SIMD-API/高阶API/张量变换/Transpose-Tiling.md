@@ -89,7 +89,7 @@
     END_TILING_DATA_DEF;
     ```
 
-2.  Tiling实现函数中，根据输入shape、可供计算的空间大小\(stackBufferSize\)等信息获取Transpose kernel侧接口所需tiling参数。
+2.  Tiling实现函数中，首先调用**GetTransposeMaxMinTmpSize**接口获取Transpose接口能完成计算所需最大和最小临时空间大小，根据该范围结合实际的内存使用情况设置合适的空间大小；然后根据输入shape、剩余的可供计算的空间大小等信息获取Transpose kernel侧接口所需Tiling参数。
 
     ```
     namespace optiling {
@@ -110,11 +110,13 @@
         uint32_t maxValue = 0;
         uint32_t minValue = 0;
         AscendC::GetTransposeMaxMinTmpSize(srcShape, sizeof(half), transposeTypeIn, maxValue, minValue);
-        // 本样例中仅作为样例说明，获取最小值并传入，来保证功能正确，开发者可以根据需要传入合适的空间大小
+        // 本样例为保证功能正确，传入最小临时空间大小，开发者可以根据需要传入合适的空间大小
         const uint32_t stackBufferSize = minValue;
-        // 获取Transpose Tiling参数
-        AscendC::GetTransposeTilingInfo(srcShape, stackBufferSize, sizeof(half), transposeTypeIn, tiling.confusionTransposeTilingData);
-         ... // 其他逻辑
+        // 获取Transpose接口所需的Tiling参数
+        AscendC::GetTransposeTilingInfo(
+            srcShape, stackBufferSize, sizeof(half), transposeTypeIn, tiling.confusionTransposeTilingData);
+        ...
+        // 其他逻辑
         tiling.SaveToBuffer(context->GetRawTilingData()->GetData(), context->GetRawTilingData()->GetCapacity());
         context->GetRawTilingData()->SetDataSize(tiling.GetDataSize());
         context->SetTilingKey(1);

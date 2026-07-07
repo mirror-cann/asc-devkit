@@ -76,49 +76,14 @@ __simd_callee__ inline void Histograms(V& dstReg, S& srcReg, MaskReg& mask)
 
 **表1**  模板参数说明
 
-<a name="table4835205712588"></a>
-<table><thead align="left"><tr id="row118356578583"><th class="cellrowborder" valign="top" width="17.94%" id="mcps1.2.3.1.1"><p id="p48354572582"><a name="p48354572582"></a><a name="p48354572582"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="82.06%" id="mcps1.2.3.1.2"><p id="p583535795817"><a name="p583535795817"></a><a name="p583535795817"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1835857145817"><td class="cellrowborder" valign="top" width="17.94%" headers="mcps1.2.3.1.1 "><p id="p5835457165816"><a name="p5835457165816"></a><a name="p5835457165816"></a>T</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.06%" headers="mcps1.2.3.1.2 "><p id="p168351657155818"><a name="p168351657155818"></a><a name="p168351657155818"></a>源操作数的数据类型。</p>
-<p id="p188929596549"><a name="p188929596549"></a><a name="p188929596549"></a><span id="ph1479120155519"><a name="ph1479120155519"></a><a name="ph1479120155519"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：uint8_t</p>
-</td>
-</tr>
-<tr id="row18835145716587"><td class="cellrowborder" valign="top" width="17.94%" headers="mcps1.2.3.1.1 "><p id="p1383515717581"><a name="p1383515717581"></a><a name="p1383515717581"></a>U</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.06%" headers="mcps1.2.3.1.2 "><p id="p1775118537244"><a name="p1775118537244"></a><a name="p1775118537244"></a>目的操作数的数据类型。</p>
-<p id="p18114175555419"><a name="p18114175555419"></a><a name="p18114175555419"></a><span id="ph811495510548"><a name="ph811495510548"></a><a name="ph811495510548"></a>Ascend 950PR/Ascend 950DT</span>，支持的数据类型为：uint16_t</p>
-</td>
-</tr>
-<tr id="row18128134152619"><td class="cellrowborder" valign="top" width="17.94%" headers="mcps1.2.3.1.1 "><p id="p2012917416262"><a name="p2012917416262"></a><a name="p2012917416262"></a>mode</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.06%" headers="mcps1.2.3.1.2 "><p id="p9905165812547"><a name="p9905165812547"></a><a name="p9905165812547"></a>HistogramsBinType枚举类型，用于控制统计src的低位区间[0-127]（前半部分）或高位区间[128-255]（后半部分）的数据。VL长度为256Byte，dst数据类型为uint16_t，一个dst可以存储128个数据，因此需要两个dst。</p>
-<a name="ul59931348346"></a><a name="ul59931348346"></a><ul id="ul59931348346"><li>BIN0表示低位模式，统计src中[0-127]范围内的数据写入dst0。</li><li>BIN1表示高位模式，统计src中[128-255]范围内的数据写入dst1。</li></ul>
-</td>
-</tr>
-<tr id="row134244441918"><td class="cellrowborder" valign="top" width="17.94%" headers="mcps1.2.3.1.1 "><p id="p916243141912"><a name="p916243141912"></a><a name="p916243141912"></a>type</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.06%" headers="mcps1.2.3.1.2 "><div class="p" id="p1663311238518"><a name="p1663311238518"></a><a name="p1663311238518"></a>HistogramsType枚举类型，表示统计模式。<a name="ul36112038046"></a><a name="ul36112038046"></a><ul id="ul36112038046"><li>FREQUENCY：频率统计模式，统计src中[0, 255]每个数的数量。每个dst有128个元素，其中dst0中每个元素对应src中[0, 127]每个元素的累加个数，dst1中每个元素对应src中[128,255]每个元素的累加个数。</li><li>ACCUMULATE：累计统计模式，统计src中x&lt;=0、x&lt;=1、x&lt;=2、x&lt;=3......x&lt;=254、x&lt;=255每个区间的元素个数。每个dst有128个元素，其中dst0中每个元素对应src中[0, 127]每个元素区间累加个数，dst1中每个元素对应src中[128，255]每个元素区间累加个数。</li></ul>
-</div>
-</td>
-</tr>
-<tr id="row1237743311380"><td class="cellrowborder" valign="top" width="17.94%" headers="mcps1.2.3.1.1 "><p id="p6377173353817"><a name="p6377173353817"></a><a name="p6377173353817"></a>S</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.06%" headers="mcps1.2.3.1.2 "><p id="p2304311103410"><a name="p2304311103410"></a><a name="p2304311103410"></a>目的操作数RegTensor类型，由编译器自动推导，用户不需要填写。</p>
-</td>
-</tr>
-<tr id="row175751956133812"><td class="cellrowborder" valign="top" width="17.94%" headers="mcps1.2.3.1.1 "><p id="p357565618387"><a name="p357565618387"></a><a name="p357565618387"></a>V</p>
-</td>
-<td class="cellrowborder" valign="top" width="82.06%" headers="mcps1.2.3.1.2 "><p id="p12801441174416"><a name="p12801441174416"></a><a name="p12801441174416"></a>源操作数RegTensor类型，由编译器自动推导，用户不需要填写。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名称 | 描述 |
+| ------ | ------ |
+| T | 源操作数的数据类型。 |
+| U | 目的操作数的数据类型。 |
+| mode | HistogramsBinType枚举类型，用于选择统计srcReg的低位区间或高位区间。Histograms将uint8_t类型srcReg的[0, 255]取值范围划分为低位、高位两个区间；每个区间包含128个取值，对应uint16_t类型dstReg在一个VL（256Byte）内可保存的128个统计结果。单次调用只统计其中一个区间，并将该区间的统计结果写入传入的dstReg。若需要获得完整[0, 255]范围的统计结果，需要分别以BIN0和BIN1调用两次接口，并使用两个目的寄存器保存结果，例如dst0保存低位区间结果，dst1保存高位区间结果。<br>• BIN0：统计srcReg中[0, 127]范围内的数据，结果写入传入的dstReg。<br>• BIN1：统计srcReg中[128, 255]范围内的数据，结果写入传入的dstReg。 |
+| type | HistogramsType 枚举类型，表示统计模式。<br>• FREQUENCY：频率统计模式，统计srcReg中[0, 255]每个数的数量。每个dst有128个元素，其中低位模式dstReg中每个元素对应src中[0, 127]每个元素的累加个数，高位模式dstReg中每个元素对应src中[128,255]每个元素的累加个数。<br>• ACCUMULATE：累计统计模式，统计srcReg中[0, 255]每个数及其之前出现数的数量总和。每个dst有128个元素，其中低位模式dstReg中每个元素对应src中[0, 127]每个元素区间累加个数，高位模式dstReg中每个元素对应src中[128,255]每个元素区间累加个数。 |
+| S | 源操作数RegTensor类型，由编译器自动推导，用户不需要填写。 |
+| V | 目的操作数RegTensor类型，由编译器自动推导，用户不需要填写。 |
 
 **表2**  参数说明
 

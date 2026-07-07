@@ -49,12 +49,12 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-将dstReg中数据根据mask进行解压缩。解压缩方式：dstReg中第0个元素置为0，dstReg中的第i个元素等于mask中从第0个到第\(i-1\)个元素中1的数量。mask最高位被忽略不参与统计。以uint8\_t类型为例，算法逻辑表示如下：
+以dstReg为源操作数和目的操作数，根据mask进行解压缩。解压缩方式：dstReg中第0个元素置为0，dstReg中的第i个元素等于mask中从第0个到第\(i-1\)个元素中1的数量。mask最高位被忽略不参与统计。以uint8\_t类型为例，算法逻辑表示如下：
 
 ```
 dstReg[0] = 0;
 for(int i = 1; i < AscendC::GetVecLen() / sizeof(uint8_t); i++){
-dstReg[i] = mask[i - 1] ? (dstReg[i - 1] + 1) : dstReg[i - 1];
+    dstReg[i] = mask[i - 1] ? (dstReg[i - 1] + 1) : dstReg[i - 1];
 }
 ```
 
@@ -94,33 +94,18 @@ __simd_callee__ inline void Unsqueeze(U& dstReg, MaskReg& mask)
 
 **表2**  函数参数说明
 
-<a name="zh-cn_topic_0235751031_table33761356"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0235751031_row27598891"><th class="cellrowborder" valign="top" width="18.54%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0235751031_p20917673"><a name="zh-cn_topic_0235751031_p20917673"></a><a name="zh-cn_topic_0235751031_p20917673"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="10.05%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0235751031_p16609919"><a name="zh-cn_topic_0235751031_p16609919"></a><a name="zh-cn_topic_0235751031_p16609919"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="71.41%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0235751031_p59995477"><a name="zh-cn_topic_0235751031_p59995477"></a><a name="zh-cn_topic_0235751031_p59995477"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row42461942101815"><td class="cellrowborder" valign="top" width="18.54%" headers="mcps1.2.4.1.1 "><p id="p284425844311"><a name="p284425844311"></a><a name="p284425844311"></a>dstReg</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p158449584436"><a name="p158449584436"></a><a name="p158449584436"></a>输出</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.41%" headers="mcps1.2.4.1.3 "><p id="p6389114616514"><a name="p6389114616514"></a><a name="p6389114616514"></a>目的操作数和源操作数。</p>
-<p id="p1818424418593"><a name="p1818424418593"></a><a name="p1818424418593"></a>类型为<a href="../寄存器数据类型/RegTensor.md">RegTensor</a>。</p>
-</td>
-</tr>
-<tr id="row17332152321719"><td class="cellrowborder" valign="top" width="18.54%" headers="mcps1.2.4.1.1 "><p id="p1538745616196"><a name="p1538745616196"></a><a name="p1538745616196"></a>mask</p>
-</td>
-<td class="cellrowborder" valign="top" width="10.05%" headers="mcps1.2.4.1.2 "><p id="p73331523101710"><a name="p73331523101710"></a><a name="p73331523101710"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="71.41%" headers="mcps1.2.4.1.3 "><p id="p1559991025517"><a name="p1559991025517"></a><a name="p1559991025517"></a>mask用于提供dstReg解压缩信息。</p>
-<p id="p911252842816"><a name="p911252842816"></a><a name="p911252842816"></a>类型为MaskReg。</p>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名称 | 输入/输出 | 描述 |
+| ------ | ------ | ------ |
+| dstReg | 输入/输出 | 源操作数和目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| mask | 输入 | mask用于提供dstReg解压缩信息。<br>类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
+
+## 返回值说明
+
+无
+
+## 数据类型
+
+支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t。
 
 ## 约束说明<a name="section177921451558"></a>
 
@@ -141,4 +126,3 @@ __simd_vf__ inline void UnsqueezeVF(__ubuf__ T* dstAddr, uint32_t oneRepeatSize,
     }
 }
 ```
-
