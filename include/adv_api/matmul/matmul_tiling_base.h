@@ -303,13 +303,12 @@ struct MatmulConfigParams {
         int32_t mmConfigTypeIn = 1, bool enableL1CacheUBIn = false,
         ScheduleType scheduleTypeIn = ScheduleType::INNER_PRODUCT, MatrixTraverse traverseIn = MatrixTraverse::NOSET,
         bool enVecND2NZIn = false)
-    {
-        mmConfigType = mmConfigTypeIn;       ///< Set matrix multiplication configuration type
-        enableL1CacheUB = enableL1CacheUBIn; ///< Set whether to enable L1 cache
-        scheduleType = scheduleTypeIn;       ///< Set schedule type
-        traverse = traverseIn;               ///< Set matrix traversal method
-        enVecND2NZ = enVecND2NZIn;           ///< Set whether to enable vector ND2NZ
-    }
+        : mmConfigType(mmConfigTypeIn),
+          enableL1CacheUB(enableL1CacheUBIn),
+          scheduleType(scheduleTypeIn),
+          traverse(traverseIn),
+          enVecND2NZ(enVecND2NZIn)
+    {}
 };
 
 class MatmulApiTilingBase {
