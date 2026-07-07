@@ -72,7 +72,7 @@ PIPE_V
 
 ```c++
 constexpr uint64_t total_length = 64;
-//total_length 指参与计算的数据长度
+//total_length指参与计算的数据长度
 __ubuf__ int16_t src0[total_length];
 __ubuf__ int16_t src1[total_length];
 __ubuf__ int16_t dst[total_length];

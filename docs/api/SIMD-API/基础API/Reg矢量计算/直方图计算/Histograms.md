@@ -103,7 +103,7 @@ __simd_callee__ inline void Histograms(V& dstReg, S& srcReg, MaskReg& mask)
 </tr>
 <tr id="row134244441918"><td class="cellrowborder" valign="top" width="17.94%" headers="mcps1.2.3.1.1 "><p id="p916243141912"><a name="p916243141912"></a><a name="p916243141912"></a>type</p>
 </td>
-<td class="cellrowborder" valign="top" width="82.06%" headers="mcps1.2.3.1.2 "><div class="p" id="p1663311238518"><a name="p1663311238518"></a><a name="p1663311238518"></a>HistogramsType 枚举类型，表示统计模式。<a name="ul36112038046"></a><a name="ul36112038046"></a><ul id="ul36112038046"><li>FREQUENCY：频率统计模式，统计src中[0, 255]每个数的数量。每个dst有128个元素，其中dst0中每个元素对应src中[0, 127]每个元素的累加个数，dst1中每个元素对应src中[128,255]每个元素的累加个数。</li><li>ACCUMULATE：累计统计模式，统计src中x&lt;=0、x&lt;=1、x&lt;=2、x&lt;=3......x&lt;=254、x&lt;=255每个区间的元素个数。每个dst有128个元素，其中dst0中每个元素对应src中[0, 127]每个元素区间累加个数，dst1中每个元素对应src中[128，255]每个元素区间累加个数。</li></ul>
+<td class="cellrowborder" valign="top" width="82.06%" headers="mcps1.2.3.1.2 "><div class="p" id="p1663311238518"><a name="p1663311238518"></a><a name="p1663311238518"></a>HistogramsType枚举类型，表示统计模式。<a name="ul36112038046"></a><a name="ul36112038046"></a><ul id="ul36112038046"><li>FREQUENCY：频率统计模式，统计src中[0, 255]每个数的数量。每个dst有128个元素，其中dst0中每个元素对应src中[0, 127]每个元素的累加个数，dst1中每个元素对应src中[128,255]每个元素的累加个数。</li><li>ACCUMULATE：累计统计模式，统计src中x&lt;=0、x&lt;=1、x&lt;=2、x&lt;=3......x&lt;=254、x&lt;=255每个区间的元素个数。每个dst有128个元素，其中dst0中每个元素对应src中[0, 127]每个元素区间累加个数，dst1中每个元素对应src中[128，255]每个元素区间累加个数。</li></ul>
 </div>
 </td>
 </tr>

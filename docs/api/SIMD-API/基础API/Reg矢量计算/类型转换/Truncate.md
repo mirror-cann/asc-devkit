@@ -89,7 +89,7 @@ __simd_callee__ inline void Truncate(S& dstReg, S& srcReg, MaskReg& mask)
 </tr>
 <tr id="row6323202343820"><td class="cellrowborder" valign="top" width="18.48%" headers="mcps1.2.3.1.1 "><p id="p432372303816"><a name="p432372303816"></a><a name="p432372303816"></a>S</p>
 </td>
-<td class="cellrowborder" valign="top" width="81.52000000000001%" headers="mcps1.2.3.1.2 "><p id="p93238232385"><a name="p93238232385"></a><a name="p93238232385"></a>srcReg/dstReg 类型，例如RegTensor&lt;float&gt;，由编译器自动推导，用户不需要填写。</p>
+<td class="cellrowborder" valign="top" width="81.52000000000001%" headers="mcps1.2.3.1.2 "><p id="p93238232385"><a name="p93238232385"></a><a name="p93238232385"></a>srcReg/dstReg类型，例如RegTensor&lt;float&gt;，由编译器自动推导，用户不需要填写。</p>
 </td>
 </tr>
 </tbody>

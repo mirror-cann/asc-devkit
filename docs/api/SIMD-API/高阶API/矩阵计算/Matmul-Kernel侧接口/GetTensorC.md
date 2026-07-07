@@ -181,7 +181,7 @@ __aicore__ inline void GetTensorC(const LocalTensor<DstT>& c, uint8_t enAtomic =
         for(int j = 0; j < 4; ++j) {
             LocalTensor local = que.AllocTensor<half>(); // 分配64*128大小的UB空间
             DataCopy(local, global[64 * 128 * i], 64 * 128); // 将GM的数据拷贝进UB中，进行后续的Vector操作
-            // 其他Vector 操作
+            // 其他Vector操作
         }
     }
     ```

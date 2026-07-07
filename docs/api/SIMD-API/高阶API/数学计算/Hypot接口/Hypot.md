@@ -97,7 +97,7 @@ Hypot\(3.0, 4.0\) = 5.0
 ```
 AscendC::TPipe pipe;
 AscendC::TQue<AscendC::TPosition::VECCALC, 1> tmpQue;
-pipe.InitBuffer(tmpQue, 1, bufferSize);  // bufferSize 通过Host侧tiling参数获取
+pipe.InitBuffer(tmpQue, 1, bufferSize);  // bufferSize通过Host侧tiling参数获取
 AscendC::LocalTensor<uint8_t> sharedTmpBuffer = tmpQue.AllocTensor<uint8_t>();
 // 输入tensor长度为1024, 算子输入的数据类型为half, 实际计算个数为512
 AscendC::Hypot(dstLocal, src0Local, src1Local, sharedTmpBuffer, 512); // sharedTmpBuffer入参传入，使用该tensor作为临时空间进行处理

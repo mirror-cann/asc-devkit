@@ -91,7 +91,7 @@ __aicore__ inline void SetBufferLen(uint32_t dataLen)
 ## 调用示例<a name="section17531157161314"></a>
 
 ```cpp
-// 示例SetBufferLen 如下示例将申请的Tensor长度修改为1024(单位为字节)
+// 示例SetBufferLen如下示例将申请的Tensor长度修改为1024(单位为字节)
 AscendC::LocalTensor<float> tmpBuffer2 = tempBmm2Queue.AllocTensor<float>();
 tmpBuffer2.SetBufferLen(1024);
 ```

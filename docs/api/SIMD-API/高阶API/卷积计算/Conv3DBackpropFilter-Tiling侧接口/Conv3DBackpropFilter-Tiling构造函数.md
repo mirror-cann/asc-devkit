@@ -2,7 +2,7 @@
 
 ## 功能说明
 
-用于创建一个Conv3DBackpropFilter 单核Tiling对象。
+用于创建一个Conv3DBackpropFilter单核Tiling对象。
 
 ## 函数原型
 

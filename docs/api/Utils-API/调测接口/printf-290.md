@@ -53,7 +53,7 @@ __simd_callee__ inline void printf( const __ubuf__ char* fmt, Args&&... args)
 -   SIMD场景下，单次调用本接口打印的数据总量不可超过打印大小限制，默认为32KB。使用时应注意，如果超出这个限制，则数据不会被打印。您可以通过acl.json中的"simd\_printf\_fifo\_size\_per\_core"字段进行配置，配置范围最小为1KB，最大为64MB。当打印数据量较大时，建议增加缓存空间。pytorch调用和算子入图场景暂不支持该配置。
 -   SIMD场景下，根据算子执行方式的不同，printf的打印结果输出方式不同。动态图或者单算子直调场景下，待输出内容会被解析并打印在屏幕上；静态图场景下，整图算子需要全下沉到NPU侧执行，无法直接调用接口打印出单个算子的信息，因此需要在模型执行完毕后，将待输出内容落盘在dump文件中，dump文件需要通过工具解析为可读内容。
     -   dump文件落盘路径按照优先级排列如下：
-        -   如果开启了Data Dump功能，dump文件落盘到开发者配置的dump\_path路径下。如何开启Dump功能依赖于具体的网络运行方式。以TensorFlow在线推理为例，通过enable\_dump、dump\_path、dump\_mode等参数进行配置。配置方式可参考《TensorFlow 2.6.5模型迁移》中的API参考 \> TF Adapter 接口（2.x）\> npu.global\_options \> 配置参数说明章节。
+        -   如果开启了Data Dump功能，dump文件落盘到开发者配置的dump\_path路径下。如何开启Dump功能依赖于具体的网络运行方式。以TensorFlow在线推理为例，通过enable\_dump、dump\_path、dump\_mode等参数进行配置。配置方式可参考《TensorFlow 2.6.5模型迁移》中的API参考 \> TF Adapter接口（2.x）\> npu.global\_options \> 配置参数说明章节。
         -   如果未开启Data Dump功能，但配置了ASCEND\_WORK\_PATH环境变量，dump文件落盘到ASCEND\_WORK\_PATH下的printf目录下。
         -   如果未开启Data Dump功能也没有配置ASCEND\_WORK\_PATH环境变量，dump文件落盘到当前程序执行目录下的printf路径下。
 

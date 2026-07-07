@@ -263,10 +263,10 @@ struct AscendAntiQuantConfig {
 
 ```
 struct AntiQuantShapeInfo {
-    uint32_t offsetHeight{0};  // offset 的高
-    uint32_t offsetWidth{0};  // offset 的宽
-    uint32_t scaleHeight{0};  // scale 的高
-    uint32_t scaleWidth{0};  // scale 的宽
+    uint32_t offsetHeight{0};  // offset的高
+    uint32_t offsetWidth{0};  // offset的宽
+    uint32_t scaleHeight{0};  // scale的高
+    uint32_t scaleWidth{0};  // scale的宽
 };
 ```
 

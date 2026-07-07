@@ -115,23 +115,23 @@ uint8_t mutexId1 = AscendC::AllocMutexID();
 for (int32_t i = 0; i < loopCount; i++) {
     uint8_t mutexId = (i % 2 == 0) ? mutexId0 : mutexId1;
 
-    // 锁住MTE2 流水，保证当前tile 的搬入按该MutexID 顺序执行。
+    // 锁住MTE2 流水，保证当前tile的搬入按该MutexID顺序执行。
     AscendC::Mutex::Lock<PIPE_MTE2>(mutexId);
     AscendC::DataCopy(xLocal, src0Global[TILE_LENGTH * progress], TILE_LENGTH);
     AscendC::DataCopy(yLocal, src1Global[TILE_LENGTH * progress], TILE_LENGTH);
     // 搬入完成后解锁MTE2 流水，允许后续阶段继续推进。
     AscendC::Mutex::Unlock<PIPE_MTE2>(mutexId);
 
-    // 锁住V 流水，等待对应tile 的搬入完成后再开始计算。
+    // 锁住V流水，等待对应tile的搬入完成后再开始计算。
     AscendC::Mutex::Lock<PIPE_V>(mutexId);
     AscendC::Add(zLocal, xLocal, yLocal, TILE_LENGTH);
-    // 计算完成后解锁V 流水，放行后续计算或搬出。
+    // 计算完成后解锁V流水，放行后续计算或搬出。
     AscendC::Mutex::Unlock<PIPE_V>(mutexId);
 
     // 锁住MTE3 流水，确保计算结果完成后再写回GM。
     AscendC::Mutex::Lock<PIPE_MTE3>(mutexId);
     AscendC::DataCopy(dstGlobal[TILE_LENGTH * progress], zLocal, TILE_LENGTH);
-    // 搬出完成后解锁MTE3 流水，结束当前tile 的处理。
+    // 搬出完成后解锁MTE3 流水，结束当前tile的处理。
     AscendC::Mutex::Unlock<PIPE_MTE3>(mutexId);
 }
 

@@ -71,7 +71,7 @@ using Int = integral_constant<size_t, v>;
     // 以下示例为基于googletest的UT示例
     using IntTrue = AscendC::Std::integral_constant<int, 1>;
     using IntFalse = AscendC::Std::integral_constant<int, 0>;
-    // 测试value 静态常量
+    // 测试value静态常量
     EXPECT_EQ(IntTrue::value, 1);
     EXPECT_EQ(IntFalse::value, 0);
     // 测试()操作符重载
@@ -88,7 +88,7 @@ using Int = integral_constant<size_t, v>;
     // 以下示例为基于googletest的UT示例
     using TrueType = AscendC::Std::true_type;
     using FalseType = AscendC::Std::false_type;
-    // 测试value 静态常量
+    // 测试value静态常量
     EXPECT_TRUE(TrueType::value);
     EXPECT_FALSE(FalseType::value);
     // 测试()操作符重载
@@ -107,7 +107,7 @@ using Int = integral_constant<size_t, v>;
     using Zero = AscendC::Std::Int<0>;
     using One = AscendC::Std::Int<1>;
     using Large = AscendC::Std::Int<0xFFFFFFFF>;
-    // 验证value 静态常量
+    // 验证value静态常量
     EXPECT_EQ(Zero::value, 0);
     EXPECT_EQ(One::value, 1);
     EXPECT_EQ(Large::value, 0xFFFFFFFF);

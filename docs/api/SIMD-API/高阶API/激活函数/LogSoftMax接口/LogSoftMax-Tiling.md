@@ -64,7 +64,7 @@ LogSoftMaxTilingFunc接口无返回值。
 // shape：输入的shape信息
 // dtypesize：输入的数据类型大小，单位为字节
 
-// 定义LogSoftMax 算子的Tiling 参数结构体实例
+// 定义LogSoftMax算子的Tiling参数结构体实例
 AscendC::tiling::LogSoftMaxTiling tilingData;
 // 是否复用源操作数输入的空间，与LogSoftMax接口一致
 bool isReuseSource = false;

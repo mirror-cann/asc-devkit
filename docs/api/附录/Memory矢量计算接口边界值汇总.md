@@ -1495,10 +1495,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0.0 |
 | half | 全为inf | inf | 65504.0 |
 | half | 全为-inf | -inf | -65504.0 |
-| half | inf，-inf，nan 交替 | nan | 0.0 |
-| half | inf，-inf 交替 | inf | 65504.0 |
-| half | inf，nan 交替 | nan | 0.0 |
-| half | -inf，nan 交替 | nan | 0.0 |
+| half | inf，-inf，nan交替 | nan | 0.0 |
+| half | inf，-inf交替 | inf | 65504.0 |
+| half | inf，nan交替 | nan | 0.0 |
+| half | -inf，nan交替 | nan | 0.0 |
 | half | 15个1.0加1个inf | inf | 65504.0 |
 | half | 15个1.0加1个-inf | 1.0 | 1.0 |
 | half | 15个1.0加1个nan | nan | 0.0 |
@@ -1509,10 +1509,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | inf | inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | inf | inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 7个1.0加1个inf | inf | inf |
 | float | 7个1.0加1个-inf | 1.0 | 1.0 |
 | float | 7个1.0加1个nan | nan | nan |
@@ -1531,10 +1531,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0.0 |
 | half | 全为inf | inf | 65504.0 |
 | half | 全为-inf | -inf | -65504.0 |
-| half | inf，-inf，nan 交替 | nan | 0.0 |
-| half | inf，-inf 交替 | -inf | -65504 |
-| half | inf，nan 交替 | nan | 0.0 |
-| half | -inf，nan 交替 | nan | 0.0 |
+| half | inf，-inf，nan交替 | nan | 0.0 |
+| half | inf，-inf交替 | -inf | -65504 |
+| half | inf，nan交替 | nan | 0.0 |
+| half | -inf，nan交替 | nan | 0.0 |
 | half | 15个1.0加1个inf | 1.0 | 1.0 |
 | half | 15个1.0加1个-inf | -inf | -65504.0 |
 | half | 15个1.0加1个nan | nan | 0.0 |
@@ -1545,10 +1545,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | -inf | -inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | -inf | -inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 7个1.0加1个inf | 1.0 | 1.0 |
 | float | 7个1.0加1个-inf | -inf | -inf |
 | float | 7个1.0加1个nan | nan | nan |
@@ -1567,10 +1567,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0.0 |
 | half | 全为inf | inf | 65504.0 |
 | half | 全为-inf | -inf | -65504.0 |
-| half | inf，-inf，nan 交替 | nan | 0.0 |
-| half | inf，-inf 交替 | nan | 0.0 |
-| half | inf，nan 交替 | nan | 0.0 |
-| half | -inf，nan 交替 | nan | 0.0 |
+| half | inf，-inf，nan交替 | nan | 0.0 |
+| half | inf，-inf交替 | nan | 0.0 |
+| half | inf，nan交替 | nan | 0.0 |
+| half | -inf，nan交替 | nan | 0.0 |
 | half | 15个1.0加1个inf | inf | 65344.0 |
 | half | 15个1.0加1个-inf | -inf | -65344.0 |
 | half | 15个1.0加1个nan | nan | 14.0 |
@@ -1581,10 +1581,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | nan | nan |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | nan | nan |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 7个1.0加1个inf | inf | inf |
 | float | 7个1.0加1个-inf | -inf | -inf |
 | float | 7个1.0加1个nan | nan | nan |
@@ -1603,10 +1603,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0.0 |
 | half | 全为inf | inf | 65504.0 |
 | half | 全为-inf | -inf | -65504.0 |
-| half | inf，-inf，nan 交替 | nan | 0.0 |
-| half | inf，-inf 交替 | inf | 65504.0 |
-| half | inf，nan 交替 | nan | 0.0 |
-| half | -inf，nan 交替 | nan | 0.0 |
+| half | inf，-inf，nan交替 | nan | 0.0 |
+| half | inf，-inf交替 | inf | 65504.0 |
+| half | inf，nan交替 | nan | 0.0 |
+| half | -inf，nan交替 | nan | 0.0 |
 | half | 127个1.0加1个inf | inf | 65504.0 |
 | half | 127个1.0加1个-inf | 1 | 1.0 |
 | half | 127个1.0加1个nan | nan | 0.0 |
@@ -1617,10 +1617,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | inf | inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | inf | inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | inf | inf |
 | float | 63个1.0加1个-inf | 1 | 1 |
 | float | 63个1.0加1个nan | nan | nan |
@@ -1639,10 +1639,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0 |
 | half | 全为inf | inf | 65504 |
 | half | 全为-inf | -inf | -65504 |
-| half | inf，-inf，nan 交替 | nan | 0 |
-| half | inf，-inf 交替 | -inf | -65504 |
-| half | inf，nan 交替 | nan | 0 |
-| half | -inf，nan 交替 | nan | 0 |
+| half | inf，-inf，nan交替 | nan | 0 |
+| half | inf，-inf交替 | -inf | -65504 |
+| half | inf，nan交替 | nan | 0 |
+| half | -inf，nan交替 | nan | 0 |
 | half | 127个1.0加1个inf | 1 | 1 |
 | half | 127个1.0加1个-inf | -inf | -65504 |
 | half | 127个1.0加1个nan | nan | 0 |
@@ -1653,10 +1653,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | -inf | -inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | -inf | -inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | 1.0 | 1.0 |
 | float | 63个1.0加1个-inf | -inf | -inf |
 | float | 63个1.0加1个nan | nan | nan |
@@ -1675,10 +1675,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | half | 全为nan | nan | 0.0 |
 | half | 全为inf | inf | 65504.0 |
 | half | 全为-inf | -inf | -65504.0 |
-| half | inf，-inf，nan 交替 | nan | 0.0 |
-| half | inf，-inf 交替 | nan | 0.0 |
-| half | inf，nan 交替 | nan | 0.0 |
-| half | -inf，nan 交替 | nan | 0.0 |
+| half | inf，-inf，nan交替 | nan | 0.0 |
+| half | inf，-inf交替 | nan | 0.0 |
+| half | inf，nan交替 | nan | 0.0 |
+| half | -inf，nan交替 | nan | 0.0 |
 | half | 127个1.0加1个inf | inf | 65504.0 |
 | half | 127个1.0加1个-inf | -inf | -65376.0 |
 | half | 127个1.0加1个nan | nan | 126.0 |
@@ -1689,10 +1689,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | nan | nan |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | nan | nan |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | inf | inf |
 | float | 63个1.0加1个-inf | -inf | -inf |
 | float | 63个1.0加1个nan | nan | nan |
@@ -1725,10 +1725,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | inf | inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | inf | inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | inf | inf |
 | float | 63个1.0加1个-inf | 1.0 | 1.0 |
 | float | 63个1.0加1个nan | nan | nan |
@@ -1761,10 +1761,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | -inf | -inf |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | -inf | -inf |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | 1.0 | 1.0 |
 | float | 63个1.0加1个-inf | -inf | -inf |
 | float | 63个1.0加1个nan | nan | nan |
@@ -1797,10 +1797,10 @@ Memory矢量计算接口在边界值输入下，有两类输出结果：
 | float | 全为nan | nan | nan |
 | float | 全为inf | inf | inf |
 | float | 全为-inf | -inf | -inf |
-| float | inf，-inf，nan 交替 | nan | nan |
-| float | inf，-inf 交替 | nan | nan |
-| float | inf，nan 交替 | nan | nan |
-| float | -inf，nan 交替 | nan | nan |
+| float | inf，-inf，nan交替 | nan | nan |
+| float | inf，-inf交替 | nan | nan |
+| float | inf，nan交替 | nan | nan |
+| float | -inf，nan交替 | nan | nan |
 | float | 63个1.0加1个inf | inf | inf |
 | float | 63个1.0加1个-inf | -inf | -inf |
 | float | 63个1.0加1个nan | nan | nan |

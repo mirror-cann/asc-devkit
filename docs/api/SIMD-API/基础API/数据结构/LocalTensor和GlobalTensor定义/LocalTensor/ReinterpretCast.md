@@ -89,7 +89,7 @@ __aicore__ inline LocalTensor<CAST_T> ReinterpretCast() const
 
 ```cpp
 // 示例
-// input_local为int32_t 类型，包含16个元素(64字节)
+// input_local为int32_t类型，包含16个元素(64字节)
 for (int32_t i = 0; i < 16; ++i) {
     inputLocal.SetValue(i, i); // 对inputLocal中第i个位置进行赋值为i
 }

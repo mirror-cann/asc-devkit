@@ -190,33 +190,33 @@ PIPE_MTE1
 
 要求输入的feature map和filter的格式是NC1HWC0，其中C0 是最低维度而且C0 是固定值为16（对于u8/s8类型为32），C1=C/C0。
 
-为了简化场景，以下场景假设输入的feature map 的channel 为4，即Ci=4。输入feature maps 在A1 中的形状为 (Hi,Wi,Ci)，经过load3dv1 处理后在A2 的数据形状为(Wo*Ho, Hk*Wk*Ci)。其中Wo 和Ho 是卷积后输出的shape，Hk 和Wk 是filter 的shape。
+为了简化场景，以下场景假设输入的feature map的channel为4，即Ci=4。输入feature maps在A1 中的形状为 (Hi,Wi,Ci)，经过load3dv1 处理后在A2 的数据形状为(Wo*Ho, Hk*Wk*Ci)。其中Wo和Ho是卷积后输出的shape，Hk和Wk是filter的shape。
 
-直观的来看，img2col 的过程就是filter 在feature map 上扫过，将对应feature map 的数据展开成输出数据的每一行的过程。filter 首先在W方向上滑动Wo 步，然后在H 方向上走一步然后重复以上过程，最终输出Wo * Ho 行数据。下图中红色和黄色的数据分别代表第一行和第二行。数字表示原始输入数据，filter 和输出数据三者之间的关联关系。可以看到，load3dv1 首先在输入数据的Ci 维度搬运对应于00 的4 个数，然后搬运对应于01 的四个数，最终这一行的大小为Hk*Wk*Ci 即3*3*4=36 个数。
+直观的来看，img2col的过程就是filter在feature map上扫过，将对应feature map的数据展开成输出数据的每一行的过程。filter首先在W方向上滑动Wo步，然后在H方向上走一步然后重复以上过程，最终输出Wo * Ho行数据。下图中红色和黄色的数据分别代表第一行和第二行。数字表示原始输入数据，filter和输出数据三者之间的关联关系。可以看到，load3dv1 首先在输入数据的Ci维度搬运对应于00 的4 个数，然后搬运对应于01 的四个数，最终这一行的大小为Hk*Wk*Ci即3*3*4=36 个数。
 
 - 对应的feature map格式如下图：
 
 ![ ](../../figures/load3d_01.png)
 
-- 对应的filter 的格式如下图：
+- 对应的filter的格式如下图：
 
 ![ ](../../figures/load3d_02.png)
 
-其中n 为filter 的个数，可以看出维度排布为 (Hk,Wk,Ci,n)，但是需要注意的是下图的格式还需要根据Mmad中B矩阵的格式转换。
+其中n为filter的个数，可以看出维度排布为 (Hk,Wk,Ci,n)，但是需要注意的是下图的格式还需要根据Mmad中B矩阵的格式转换。
 
 实际操作中，由于存储空间或者计算能力限制，我们通常会将整个卷积计算分块，一次只搬运并计算一小块数据。
 
 ![ ](../../figures/load3d_03.png)
 
-对于A2 的feature map 来说有两种方案，水平分块和垂直分块。分别对应参数中repeatMode 的0 和1。
+对于A2 的feature map来说有两种方案，水平分块和垂直分块。分别对应参数中repeatMode的0 和1。
 
 注：下图中的分形矩阵大小为4x4，实际应该为16x16 (对于u8/s8 类型为16x32)
 
-repeatMode =0 时，每次repeat 会改变在filter 窗口中读取数据点的位置，然后跳到下一个C0 的位置。
+repeatMode =0 时，每次repeat会改变在filter窗口中读取数据点的位置，然后跳到下一个C0 的位置。
 
 ![ ](../../figures/load3d_04.png)
 
-repeatMode =1 的时候filter 窗口中读取数据的位置保持不变，每个repeat 在feature map 中前进C0 个元素。
+repeatMode =1 的时候filter窗口中读取数据的位置保持不变，每个repeat在feature map中前进C0 个元素。
 
 ![ ](../../figures/load3d_05.png)
 

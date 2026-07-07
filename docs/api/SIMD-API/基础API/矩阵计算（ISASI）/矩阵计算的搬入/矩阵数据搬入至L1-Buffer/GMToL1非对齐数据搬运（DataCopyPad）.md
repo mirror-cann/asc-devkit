@@ -148,7 +148,7 @@ padParams.isPad = false;
 padParams.leftPadding = 0;
 // 每块右侧填充16个int8_t，即16B；48B + 16B = 64B，满足32B对齐。
 padParams.rightPadding = 16;
-// isPad = false 时该值不生效，填0保持字段完整。
+// isPad = false时该值不生效，填0保持字段完整。
 padParams.paddingValue = static_cast<int8_t>(0);
 
 AscendC::DataCopyPad<int8_t, AscendC::PaddingMode::Normal>(dstLocal, srcGm, copyParams, padParams);

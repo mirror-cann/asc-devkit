@@ -67,7 +67,7 @@ PIPE_V
 ## 调用示例
 
 ```cpp
-//total_length 指参与计算的数据长度
+//total_length指参与计算的数据长度
 constexpr uint32_t total_length = 128;
 __ubuf__ half src[total_length];
 __ubuf__ half dst[total_length];

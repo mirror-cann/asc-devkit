@@ -91,7 +91,7 @@ __aicore__ inline void SetSize(const uint32_t size)
 ## 调用示例<a name="section17531157161314"></a>
 
 ```cpp
-// 示例1 SetSize 如下示例将申请的Tensor长度修改为256(单位为元素)
+// 示例1 SetSize如下示例将申请的Tensor长度修改为256(单位为元素)
 AscendC::LocalTensor<float> tmpBuffer3 = tempBmm2Queue.AllocTensor<float>();
 tmpBuffer3.SetSize(256);
 ```

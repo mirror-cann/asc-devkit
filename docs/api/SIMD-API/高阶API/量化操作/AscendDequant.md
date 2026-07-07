@@ -178,7 +178,7 @@ __aicore__ inline void AscendDequant(const LocalTensor<dstT>& dstTensor, const L
 | --- | --- |
 | srcT | 源操作数的数据类型。 |
 | config | 量化接口配置参数，AscendDeQuantConfig类型，定义如下方代码所示，其中参数的含义如下。<br>hasOffset：量化参数offset是否参与计算。True：表示offset参数参与计算。False：表示offset参数不参与计算。<br>kDim：group的计算方向，即k方向。仅在PER_GROUP场景有效，支持的取值如下。0：k轴是第0轴，即m方向为group的计算方向；1：k轴是第1轴，即n方向为group的计算方向。 |
-| policy | 量化策略配置参数，AscendDeQuantPolicy 枚举类型，可取值如下：<br>PER_TOKEN：配置为PER_TOKEN模式。<br>PER_GROUP：配置为PER_GROUP模式。<br>PER_CHANNEL_PER_GROUP：预留参数，暂不支持。<br>PER_TOKEN_PER_GROUP：预留参数，暂不支持。 |
+| policy | 量化策略配置参数，AscendDeQuantPolicy枚举类型，可取值如下：<br>PER_TOKEN：配置为PER_TOKEN模式。<br>PER_GROUP：配置为PER_GROUP模式。<br>PER_CHANNEL_PER_GROUP：预留参数，暂不支持。<br>PER_TOKEN_PER_GROUP：预留参数，暂不支持。 |
 
 ```
 struct AscendDeQuantConfig {

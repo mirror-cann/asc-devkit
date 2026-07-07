@@ -213,13 +213,13 @@
     ```
     AscendC::LayerNorm<float, false>(
         output,           // [输出] 归一化后的结果y，shape [B, S, H]
-        mean,             // [输出] 每个 (B, S) 位置上H 维度的均值，shape [B, S]
-        variance,         // [输出] 每个 (B, S) 位置上H 维度的方差，shape [B, S]
+        mean,             // [输出] 每个 (B, S) 位置上H维度的均值，shape [B, S]
+        variance,         // [输出] 每个 (B, S) 位置上H维度的方差，shape [B, S]
         inputX,           // [输入] 原始输入数据x，shape [B, S, H]，将被归一化
         gamma,            // [输入] 缩放系数 γ，shape [H]，用于缩放归一化后的数据
         beta,             // [输入] 平移系数 β，shape [H]，用于偏移归一化后的数据
         (float)epsilon,   // [输入] 防除零系数 ε，避免方差为0时除以0
-        tiling            // [输入] Tiling 信息，包含硬件计算分块策略（如block、thread 等）
+        tiling            // [输入] Tiling信息，包含硬件计算分块策略（如block、thread等）
     );
     ```
 
@@ -257,21 +257,21 @@
 -   输入数据的shape为\[A，R\]，输出归一化结果、均值、标准差的倒数或方差的接口调用示例
 
     ```
-    // config：编译期常量，定义LayerNorm 的行为配置
+    // config：编译期常量，定义LayerNorm的行为配置
     constexpr auto config = AscendC::LayerNormConfig{false, false, false, true};
     // para：运行时参数，描述输入张量的维度信息
     AscendC::LayerNormPara para = {aLength, rLength, rLengthWithPadding};
 
-    // LayerNorm 接口调用
+    // LayerNorm接口调用
     AscendC::LayerNorm<float, float, false, config>(
         output,           // [输出] 归一化后的结果y，shape [A, R]
-        mean,             // [输出] 每个A 位置上R 维度的均值，shape [A]
+        mean,             // [输出] 每个A位置上R维度的均值，shape [A]
         output1,          // [输出] 标准差的倒数rstd（或方差），shape [A]
         inputX,           // [输入] 原始输入数据x，shape [A, R]
         gamma,            // [输入] 缩放系数 γ，shape [R]
         beta,             // [输入] 平移系数 β，shape [R]
         (float)epsilon,   // [输入] 防除零系数 ε
-        para,             // [输入] 包含A 和R 轴长度等信息的结构体
-        tiling            // [输入] Tiling 策略信息
+        para,             // [输入] 包含A和R轴长度等信息的结构体
+        tiling            // [输入] Tiling策略信息
     );
     ```

@@ -111,19 +111,19 @@ struct LayerNormGradShapeInfo {
 本样例中，输入inputX和inputDy的shape为\[2, 32, 16\]，inputVariance和inputMean的shape为\[2, 32\]，inputGamma的shape为\[16\]。输出outputPdX和resForGamma的shape为\[2, 32, 16\]。数据排布均为ND格式，数据类型均为float，不复用源操作数的内存空间。
 
 ```
-// outputPdX: 输出对输入X 的梯度，即dX，shape 为 [B, S, H]
-// resForGamma: 输出用于计算gamma 和beta 梯度的中间结果（如dy * normalized_x），shape 为 [B, S, H]
-// inputDy: 输入的上层梯度dy，shape 为 [B, S, H]
-// inputX: 前向传播时的输入X，shape 为 [B, S, H]
-// inputVariance: 前向LayerNorm 计算得到的方差variance，shape 为 [B, S]
-// inputMean: 前向LayerNorm 计算得到的均值mean，shape 为 [B, S]
-// inputGamma: LayerNorm 中的缩放参数gamma，shape 为 [H]
+// outputPdX: 输出对输入X的梯度，即dX，shape为 [B, S, H]
+// resForGamma: 输出用于计算gamma和beta梯度的中间结果（如dy * normalized_x），shape为 [B, S, H]
+// inputDy: 输入的上层梯度dy，shape为 [B, S, H]
+// inputX: 前向传播时的输入X，shape为 [B, S, H]
+// inputVariance: 前向LayerNorm计算得到的方差variance，shape为 [B, S]
+// inputMean: 前向LayerNorm计算得到的均值mean，shape为 [B, S]
+// inputGamma: LayerNorm中的缩放参数gamma，shape为 [H]
 // sharedTmpBuffer: 开发者管理的临时缓冲区，用于存放内部计算中的中间变量
 // epsilon: 防除零小量，例如1e-5
-// tiling: 包含计算所需Tiling 信息的结构体（如block、thread 等划分）
-// shapeInfo: 可选参数，描述输入张量的数据排布格式，当前仅支持ND 格式
+// tiling: 包含计算所需Tiling信息的结构体（如block、thread等划分）
+// shapeInfo: 可选参数，描述输入张量的数据排布格式，当前仅支持ND格式
 
-// 使用LayerNormGrad 接口执行Layer Normalization 的反向传播计算：
+// 使用LayerNormGrad接口执行Layer Normalization的反向传播计算：
 AscendC::LayerNormGrad<float, isReuseSource>(
     outputPdX,        // 输出：输入梯度dX，shape [B, S, H]
     resForGamma,      // 输出：中间结果，用于计算dgamma/dbeta
@@ -132,9 +132,9 @@ AscendC::LayerNormGrad<float, isReuseSource>(
     inputVariance,    // 输入：前向计算的方差variance，shape [B, S]
     inputMean,        // 输入：前向计算的均值mean，shape [B, S]
     inputGamma,       // 输入：缩放参数gamma，shape [H]
-    sharedTmpBuffer,  // 输入：开发者提供的临时空间（需通过GetLayerNormGradMaxMinTmpSize 获取大小）
+    sharedTmpBuffer,  // 输入：开发者提供的临时空间（需通过GetLayerNormGradMaxMinTmpSize获取大小）
     epsilon,          // 输入：防除零系数ε
-    tiling,           // 输入：Tiling 信息，由Tiling 工具生成
+    tiling,           // 输入：Tiling信息，由Tiling工具生成
     {DataFormat::ND}  // 输入：shapeInfo，默认为DataFormat::ND
 );
 ```

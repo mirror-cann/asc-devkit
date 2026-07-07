@@ -224,7 +224,7 @@ TransDataTo5HD接口数据格式转换，一般用于将NCHW格式转换成[NC1H
   constexpr uint32_t loopCount = N * C /NCHW_CONV_ADDR_LIST_SIZE; // 4
   // 设置转换参数：NCHW → NC1HWC0
   AscendC::TransDataTo5HDParams transParams;
-  transParams.repeatTimes = 16;  // hSize * wSize / elems_per_block 处理整个HW平面需要的repeat次数
+  transParams.repeatTimes = 16;  // hSize * wSize / elems_per_block处理整个HW平面需要的repeat次数
   transParams.dstRepStride = 16; // 循环间dstList间隔NCHW_CONV_ADDR_LIST_SIZE个DataBlock
   transParams.srcRepStride = 1;  // 循环间同一HW平面srcList连续
   // 循环处理数据

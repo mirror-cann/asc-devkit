@@ -715,7 +715,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p178861155131415"><a name="p178861155131415"></a><a name="p178861155131415"></a>float_exponet = 0b10000101 = 133</p>
 <p id="p1776105720134"><a name="p1776105720134"></a><a name="p1776105720134"></a>half_exponet - 15 = 133 - 127</p>
 <p id="p11403113213156"><a name="p11403113213156"></a><a name="p11403113213156"></a>half_exponet  = 21 = 0b10101</p>
-<p id="p593102015168"><a name="p593102015168"></a><a name="p593102015168"></a>float_mantissa 第14位为1奇数，所以不进位，舍弃后面13位</p>
+<p id="p593102015168"><a name="p593102015168"></a><a name="p593102015168"></a>float_mantissa第14位为1奇数，所以不进位，舍弃后面13位</p>
 <p id="p196421781177"><a name="p196421781177"></a><a name="p196421781177"></a>111011001<span>1</span>1011101110111</p>
 <p id="p1018984491719"><a name="p1018984491719"></a><a name="p1018984491719"></a>得到half_mantissa = 111011001<span>1</span></p>
 <p id="p37914513187"><a name="p37914513187"></a><a name="p37914513187"></a>所以half二进制为</p>
@@ -727,7 +727,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </td>
 <td class="cellrowborder" valign="top" width="16.53165316531653%" headers="mcps1.2.4.1.2 "><p id="p1140816114190"><a name="p1140816114190"></a><a name="p1140816114190"></a>bfloat16_t</p>
 </td>
-<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p24081211101917"><a name="p24081211101917"></a><a name="p24081211101917"></a>float 二进制规则为</p>
+<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p24081211101917"><a name="p24081211101917"></a><a name="p24081211101917"></a>float二进制规则为</p>
 <p id="p1752119271715"><a name="p1752119271715"></a><a name="p1752119271715"></a>sign:1bit,exponent:8bit mantissa:23bit</p>
 <p id="p681771429"><a name="p681771429"></a><a name="p681771429"></a>bfloat16_t二进制规则为</p>
 <p id="p102653137211"><a name="p102653137211"></a><a name="p102653137211"></a>sign:1bit,exponent:8bit,mantissa:7bit</p>
@@ -849,7 +849,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p5207161418618"><a name="p5207161418618"></a><a name="p5207161418618"></a><strong id="b61451528566"><a name="b61451528566"></a><a name="b61451528566"></a>完整举例</strong>：</p>
 <p id="p19694291663"><a name="p19694291663"></a><a name="p19694291663"></a>输入bfloat16为2.90573e-06，二进制为</p>
 <p id="p166211313915"><a name="p166211313915"></a><a name="p166211313915"></a>sign:0, exponent:01101100, mantissa:1000011</p>
-<p id="p21931943394"><a name="p21931943394"></a><a name="p21931943394"></a>bfloat16_exponent = 108-127 = -19 &lt; -14，float16_exponent最小为-14，所以bfloat16_exponent += 5，bfloat16_mantissa 小数点左移</p>
+<p id="p21931943394"><a name="p21931943394"></a><a name="p21931943394"></a>bfloat16_exponent = 108-127 = -19 &lt; -14，float16_exponent最小为-14，所以bfloat16_exponent += 5，bfloat16_mantissa小数点左移</p>
 <p id="p527714569142"><a name="p527714569142"></a><a name="p527714569142"></a>5位，1.1000011 -&gt; 0.000011000<span>0</span><span>11</span></p>
 <p id="p16811749171516"><a name="p16811749171516"></a><a name="p16811749171516"></a>CAST_RINT模式</p>
 <p id="p181042231613"><a name="p181042231613"></a><a name="p181042231613"></a>舍弃精度<span>11</span>大于<span>舍弃精度中间值10</span>，所以进位</p>
@@ -929,7 +929,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </td>
 <td class="cellrowborder" valign="top" width="16.53165316531653%" headers="mcps1.2.4.1.2 "><p id="p9752193852218"><a name="p9752193852218"></a><a name="p9752193852218"></a>fp8_e4m3fn_t</p>
 </td>
-<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p7832184583112"><a name="p7832184583112"></a><a name="p7832184583112"></a>float 二进制规则为</p>
+<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p7832184583112"><a name="p7832184583112"></a><a name="p7832184583112"></a>float二进制规则为</p>
 <p id="p883215456314"><a name="p883215456314"></a><a name="p883215456314"></a>sign:1bit,exponent:8bit mantissa:23bit</p>
 <p id="p397555417315"><a name="p397555417315"></a><a name="p397555417315"></a>fp8_e4m3fn_t二进制规则为</p>
 <p id="p98322458315"><a name="p98322458315"></a><a name="p98322458315"></a>sign:1bit,exponent:4bit,mantissa:3bit</p>
@@ -968,7 +968,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 </td>
 <td class="cellrowborder" valign="top" width="16.53165316531653%" headers="mcps1.2.4.1.2 "><p id="p46181139115"><a name="p46181139115"></a><a name="p46181139115"></a>fp8_e5m2_t</p>
 </td>
-<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p26646114217"><a name="p26646114217"></a><a name="p26646114217"></a>float 二进制规则为</p>
+<td class="cellrowborder" valign="top" width="63.14631463146314%" headers="mcps1.2.4.1.3 "><p id="p26646114217"><a name="p26646114217"></a><a name="p26646114217"></a>float二进制规则为</p>
 <p id="p196641912023"><a name="p196641912023"></a><a name="p196641912023"></a>sign:1bit,exponent:8bit mantissa:23bit</p>
 <p id="p196641912218"><a name="p196641912218"></a><a name="p196641912218"></a>fp8_e5m2_t二进制规则为</p>
 <p id="p1966420115217"><a name="p1966420115217"></a><a name="p1966420115217"></a>sign:1bit,exponent:5bit,mantissa:2bit</p>
@@ -1061,7 +1061,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p168387681414"><a name="p168387681414"></a><a name="p168387681414"></a><strong id="b683815651415"><a name="b683815651415"></a><a name="b683815651415"></a>完整举例</strong>：</p>
 <p id="p8838106141416"><a name="p8838106141416"></a><a name="p8838106141416"></a>输入bfloat16为0.761719，二进制为</p>
 <p id="p11838156161415"><a name="p11838156161415"></a><a name="p11838156161415"></a>sign:0, exponent:<span>01111110</span>, mantissa:1000011</p>
-<p id="p583816191419"><a name="p583816191419"></a><a name="p583816191419"></a>bfloat16_exponent = <span>126</span>-127 = -1 &lt; 0，float16_exponent最小为0，所以bfloat16_exponent += 1，bfloat16_mantissa 小数点左移</p>
+<p id="p583816191419"><a name="p583816191419"></a><a name="p583816191419"></a>bfloat16_exponent = <span>126</span>-127 = -1 &lt; 0，float16_exponent最小为0，所以bfloat16_exponent += 1，bfloat16_mantissa小数点左移</p>
 <p id="p78386651417"><a name="p78386651417"></a><a name="p78386651417"></a>1位，1.1000011 -&gt; 0.<span>1</span><span>1000011</span></p>
 <p id="p68381063149"><a name="p68381063149"></a><a name="p68381063149"></a>CAST_RINT模式</p>
 <p id="p118381462149"><a name="p118381462149"></a><a name="p118381462149"></a>舍弃精度<span>1000011</span>大于<span>舍弃精度中间值1000000</span>，所以进位</p>
@@ -1130,7 +1130,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 <p id="p149061016134516"><a name="p149061016134516"></a><a name="p149061016134516"></a><strong id="b20907316174512"><a name="b20907316174512"></a><a name="b20907316174512"></a>完整举例</strong>：</p>
 <p id="p49071216174514"><a name="p49071216174514"></a><a name="p49071216174514"></a>输入bfloat16为0.761719，二进制为</p>
 <p id="p49078166455"><a name="p49078166455"></a><a name="p49078166455"></a>sign:0, exponent:<span>01111110</span>, mantissa:1000011</p>
-<p id="p14907151674516"><a name="p14907151674516"></a><a name="p14907151674516"></a>bfloat16_exponent = <span>126</span>-127 = -1 &lt; 0，float16_exponent最小为0，所以bfloat16_exponent += 1，bfloat16_mantissa 小数点左移</p>
+<p id="p14907151674516"><a name="p14907151674516"></a><a name="p14907151674516"></a>bfloat16_exponent = <span>126</span>-127 = -1 &lt; 0，float16_exponent最小为0，所以bfloat16_exponent += 1，bfloat16_mantissa小数点左移</p>
 <p id="p690717162451"><a name="p690717162451"></a><a name="p690717162451"></a>1位，1.1000011 -&gt; 0.1<span>1</span><span>000011</span></p>
 <p id="p1890711664518"><a name="p1890711664518"></a><a name="p1890711664518"></a>CAST_RINT模式</p>
 <p id="p11907916184513"><a name="p11907916184513"></a><a name="p11907916184513"></a>舍弃精度<span>000011</span>小于<span>舍弃精度中间值100000</span>，所以不进位</p>
@@ -1288,7 +1288,7 @@ __simd_callee__ inline void Cast(S& dstReg, V& srcReg, MaskReg& mask)
 
         输入bfloat16\_t +/-inf或绝对值超出fp8\_e8m0\_t类型最值，则返回fp8\_e8m0\_t最大值0b11111110；
 
-        输入bfloat16\_t nan 输出fp8\_e8m0\_t nan = 0b11111111。
+        输入bfloat16\_t nan输出fp8\_e8m0\_t nan = 0b11111111。
 
 -   整数转整数
 

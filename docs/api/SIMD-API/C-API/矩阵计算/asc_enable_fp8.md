@@ -41,7 +41,7 @@ uint16_t left_height = 16;  // M
 uint16_t n_dim = 16;        // K
 uint16_t right_width = 16;  // N
 
-// 在asc_mmad 前调用：以FP8 格式参与矩阵运算（非HiF8 转换路径）
+// 在asc_mmad前调用：以FP8 格式参与矩阵运算（非HiF8 转换路径）
 asc_enable_fp8();
 
 uint8_t unit_flag = 0;

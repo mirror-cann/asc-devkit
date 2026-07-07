@@ -55,7 +55,7 @@ asc_sync_block_wait(PIPE_S, flag_id);
 <cann-filter npu_type="950">
 
 ```cpp
-// 在Ascend 950PR/Ascend 950DT 产品上，无需进行核间同步基地址ffts_addr的设置
+// 在Ascend 950PR/Ascend 950DT产品上，无需进行核间同步基地址ffts_addr的设置
 int64_t flag_id = 1;
 asc_sync_block_arrive(PIPE_S, flag_id);
 asc_sync_block_wait(PIPE_S, flag_id);  

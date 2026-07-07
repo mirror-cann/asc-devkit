@@ -126,15 +126,15 @@ struct WelfordUpdateParam {
 ## 调用示例
 
 ```
-// outputMean: 输出更新后的均值Meant，shape 为 [1, abLength]
-// outputVariance: 输出更新后的方差中间结果Mi，shape 为 [1, abLength]
+// outputMean: 输出更新后的均值Meant，shape为 [1, abLength]
+// outputVariance: 输出更新后的方差中间结果Mi，shape为 [1, abLength]
 // inputMean: 上一时刻的均值Meant-1，作为输入
 // inputVariance: 上一时刻的方差中间结果Mi-1，作为输入
-// inputX: 当前时间步的输入数据xi，shape 为 [1, abLength]
+// inputX: 当前时间步的输入数据xi，shape为 [1, abLength]
 // sharedTmpBuffer: 开发者管理的临时空间，用于内部复杂计算
-// para: 包含Reduce 轴分块信息和归一化系数的参数结构
+// para: 包含Reduce轴分块信息和归一化系数的参数结构
 
-// 使用WelfordUpdate 接口执行Welford 在线算法更新
+// 使用WelfordUpdate接口执行Welford在线算法更新
 struct AscendC::WelfordUpdateParam para = { nLength, rLength, abComputeLength, 0.3 };
 AscendC::WelfordUpdate<T, U, false, WELFORD_UPDATE_ENABLE_INPLACE_CFG>(
     outputMean,        // 输出：更新后的均值
@@ -143,7 +143,7 @@ AscendC::WelfordUpdate<T, U, false, WELFORD_UPDATE_ENABLE_INPLACE_CFG>(
     inputVariance,     // 输入：上一时刻方差中间结果
     inputX,            // 输入：当前输入xi
     sharedTmpBuffer,   // 输入：临时缓冲区（由开发者提供）
-    para               // 输入：Welford 更新参数
+    para               // 输入：Welford更新参数
 );
 ```
 

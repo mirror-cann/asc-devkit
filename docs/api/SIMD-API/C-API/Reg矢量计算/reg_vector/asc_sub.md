@@ -17,14 +17,14 @@ $$
 dst_i = src0_i - src1_i
 $$
 
-carry 输出借位值示例说明：
+carry输出借位值示例说明：
 
 | 数据类型  | 是否借位 | 示例说明 |
 | :----- | :------- | :------- |
-| uint32_t 数据类型 | 不产生借位 | src0_i = 5, src1_i = 2 <br> dst_i = src0_i - src1_i = 3 <br> carry中对应位置4bit的最低位写1：carry_i = 1 |
-| uint32_t 数据类型 | 产生借位 | src0_i = 5, src1_i = 7 <br> dst_i = src0_i - src1_i = -2 <br> carry中对应位置4bit的最低位写0：carry_i = 0 |
-| int32_t 数据类型 | 不产生借位 | src0_i = 5, src1_i = 2 <br> dst_i = src0_i - src1_i = 3 <br> carry中对应位置4bit的最低位写1：carry_i = 1 |
-| int32_t 数据类型 | 产生借位 | src0_i = 5, src1_i = -7 <br> dst_i = src0_i - src1_i = 12 <br> carry中对应位置4bit的最低位写0：carry_i = 0 |
+| uint32_t数据类型 | 不产生借位 | src0_i = 5, src1_i = 2 <br> dst_i = src0_i - src1_i = 3 <br> carry中对应位置4bit的最低位写1：carry_i = 1 |
+| uint32_t数据类型 | 产生借位 | src0_i = 5, src1_i = 7 <br> dst_i = src0_i - src1_i = -2 <br> carry中对应位置4bit的最低位写0：carry_i = 0 |
+| int32_t数据类型 | 不产生借位 | src0_i = 5, src1_i = 2 <br> dst_i = src0_i - src1_i = 3 <br> carry中对应位置4bit的最低位写1：carry_i = 1 |
+| int32_t数据类型 | 产生借位 | src0_i = 5, src1_i = -7 <br> dst_i = src0_i - src1_i = 12 <br> carry中对应位置4bit的最低位写0：carry_i = 0 |
 
 ## 函数原型
 

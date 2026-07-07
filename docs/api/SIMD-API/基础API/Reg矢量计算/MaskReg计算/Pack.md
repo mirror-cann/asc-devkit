@@ -72,7 +72,7 @@ __simd_callee__ inline void Pack(MaskReg& dst, MaskReg& src)
 <tbody><tr id="row1835857145817"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.3.1.1 "><p id="p5835457165816"><a name="p5835457165816"></a><a name="p5835457165816"></a>part</p>
 </td>
 <td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.3.1.2 "><p id="p168351657155818"><a name="p168351657155818"></a><a name="p168351657155818"></a>枚举类型，低位模式或高位模式。</p>
-<a name="ul1188693111513"></a><a name="ul1188693111513"></a><ul id="ul1188693111513"><li>LOWEST  低位模式；</li><li>HIGHEST 高位模式。</li></ul>
+<a name="ul1188693111513"></a><a name="ul1188693111513"></a><ul id="ul1188693111513"><li>LOWEST低位模式；</li><li>HIGHEST高位模式。</li></ul>
 </td>
 </tr>
 </tbody>

@@ -81,16 +81,16 @@
 ## 调用示例
 
 ```
-// output: 存放GroupNorm 计算结果的Tensor
-// outputMean: 输出每个group 的均值
-// outputVariance: 输出每个group 的方差
-// inputX: 输入数据X，shape 为 [N, C, H, W]
-// gamma: LayerNorm 的缩放参数 γ，shape 为 [C]
-// beta: LayerNorm 的偏置参数 β，shape 为 [C]
+// output: 存放GroupNorm计算结果的Tensor
+// outputMean: 输出每个group的均值
+// outputVariance: 输出每个group的方差
+// inputX: 输入数据X，shape为 [N, C, H, W]
+// gamma: LayerNorm的缩放参数 γ，shape为 [C]
+// beta: LayerNorm的偏置参数 β，shape为 [C]
 // epsilon: 防除零系数ε
-// tiling: 预计算的Tiling 信息，包含分组数、维度等参数
+// tiling: 预计算的Tiling信息，包含分组数、维度等参数
 
-// 使用GroupNorm 接口实现Group Normalization
+// 使用GroupNorm接口实现Group Normalization
 // 若数据类型T为float且允许修改inputX，可设置isReuseSource = true复用inputX内存空间以节省内存
 AscendC::GroupNorm<T, isReuseSource>(
     output,           // 输出：归一化并缩放平移后的结果
@@ -100,7 +100,7 @@ AscendC::GroupNorm<T, isReuseSource>(
     gamma,            // 输入：缩放参数 γ
     beta,             // 输入：偏置参数 β
     epsilon,          // 输入：防止除零的系数 ε
-    tiling            // 输入：Tiling 调度信息
+    tiling            // 输入：Tiling调度信息
 );
 ```
 

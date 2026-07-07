@@ -166,7 +166,7 @@ for (int32_t i = 0; i < srcLen; ++i) {
     auto element = inputLocal.GetValue(i); // 获取inputLocal中第i个位置的数值
 }
 // 示例2结果如下：
-// element 为100
+// element为100
 
 // 示例3
 for (int32_t i = 0; i < srcLen; ++i) {
@@ -180,7 +180,7 @@ for (int32_t i = 0; i < srcLen; ++i) {
     auto element = inputLocal(i); // 获取inputLocal中第i个位置的数值
 }
 // 示例4结果如下：
-// element 为100
+// element为100
 
 // 示例5
 auto size = inputLocal.GetSize(); // 获取inputLocal的长度，size大小为inputLocal有多少个元素
@@ -210,7 +210,7 @@ if ((tag1 <= 10) && (tag2 >= 9)) {
     AscendC::Add(tensor3, tensor1, tensor2, TILE_LENGTH); // 当tag1小于等于10，tag2大于等于9的时候，才能进行相加操作。
 }
 // 示例9
-// input_local为int32_t 类型，包含16个元素(64字节)
+// input_local为int32_t类型，包含16个元素(64字节)
 for (int32_t i = 0; i < 16; ++i) {
     inputLocal.SetValue(i, i); // 对inputLocal中第i个位置进行赋值为i
 }
@@ -265,11 +265,11 @@ AscendC::LocalTensor<float> tmpBuffer1 = tempBmm2Queue.AllocTensor<float>();
 AscendC::LocalTensor<half> tmpHalfBuffer;
 tmpHalfBuffer.SetAddrWithOffset(tmpBuffer1, calcSize * 2);
 
-// 示例16 SetBufferLen 如下示例将申请的Tensor长度修改为1024(单位为字节)
+// 示例16 SetBufferLen如下示例将申请的Tensor长度修改为1024(单位为字节)
 AscendC::LocalTensor<float> tmpBuffer2 = tempBmm2Queue.AllocTensor<float>();
 tmpBuffer2.SetBufferLen(1024);
 
-// 示例17 SetSize 如下示例将申请的Tensor长度修改为256(单位为元素)
+// 示例17 SetSize如下示例将申请的Tensor长度修改为256(单位为元素)
 AscendC::LocalTensor<float> tmpBuffer3 = tempBmm2Queue.AllocTensor<float>();
 tmpBuffer3.SetSize(256);
 

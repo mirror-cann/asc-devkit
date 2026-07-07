@@ -83,9 +83,9 @@ selectType<true>();
 // 条件为false，选择TypeB
 selectType<false>();
 
-// 测试条件为true 的情况
+// 测试条件为true的情况
 selectOtherType<true>();
-// 测试条件为false 的情况
+// 测试条件为false的情况
 selectOtherType<false>();
 ```
 

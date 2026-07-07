@@ -11,10 +11,10 @@
 
 对每个Repeat内所有元素求最小值，以及Repeat内的首个最小值元素在当前Repeat中的索引index。一次Repeat计算256字节。
 
-index_value 接口：表示index位于低半部，返回结果存储顺序为[index, value]。输入数据类型为half时，index数据类型为uint16；输入数据类型为float时，index数据类型为uint32。
-value_index 接口：表示value位于低半部，返回结果存储顺序为[value, index]。输入数据类型为half时，index数据类型为uint16；输入数据类型为float时，index数据类型为uint32。
-only_value  接口：表示只返回最值，返回结果存储顺序为[value]。
-only_index  接口：表示只返回最值索引，返回结果存储顺序为[index]。index数据类型固定为uint32
+index_value接口：表示index位于低半部，返回结果存储顺序为[index, value]。输入数据类型为half时，index数据类型为uint16；输入数据类型为float时，index数据类型为uint32。
+value_index接口：表示value位于低半部，返回结果存储顺序为[value, index]。输入数据类型为half时，index数据类型为uint16；输入数据类型为float时，index数据类型为uint32。
+only_value接口：表示只返回最值，返回结果存储顺序为[value]。
+only_index接口：表示只返回最值索引，返回结果存储顺序为[index]。index数据类型固定为uint32
 
 执行此接口后，可以继续执行[asc_get_reduce_min_cnt](./asc_get_reduce_min_cnt.md)获取全部repeat内的最小值，以及第一个最小值时的索引。
 

@@ -35,7 +35,7 @@ PIPE_S
 
 ```cpp
 constexpr uint64_t total_length = 128;
-// 左/右矩阵以int8_t 存放于L0A/L0B（需先完成GM/L1→L0 搬运）
+// 左/右矩阵以int8_t存放于L0A/L0B（需先完成GM/L1→L0 搬运）
 __cc__ int32_t c_matrix[total_length];
 __ca__ int8_t a_matrix[total_length];
 __cb__ int8_t b_matrix[total_length];
@@ -44,7 +44,7 @@ uint16_t left_height = 16;  // M
 uint16_t n_dim = 16;        // K
 uint16_t right_width = 16;  // N
 
-// 在asc_mmad 前调用：将L0 中的8bit 操作数转换为hifloat8_t 后参与矩阵运算
+// 在asc_mmad前调用：将L0 中的8bit操作数转换为hifloat8_t后参与矩阵运算
 asc_enable_hif8();
 
 uint8_t unit_flag = 0;

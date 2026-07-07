@@ -163,7 +163,7 @@
 // srcLocal：输入Tensor
 const uint32_t srcShape[2] = {1, 16}; // 源数据shape
 const uint32_t dstShape[2] = {16, 16};// broadcast数据shape
-AscendC::Broadcast<float, 2, 1>(dstLocal, srcLocal, dstShape, srcShape); // broadcast 数据类型为float，源数据是2维， broadcast第1维度
+AscendC::Broadcast<float, 2, 1>(dstLocal, srcLocal, dstShape, srcShape); // broadcast数据类型为float，源数据是2维， broadcast第1维度
 ```
 
 结果示例如下：

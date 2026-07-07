@@ -73,7 +73,7 @@ PIPE_V
 ## 调用示例
 
 ```c++
-//total_length 指参与计算的数据长度
+//total_length指参与计算的数据长度
 constexpr uint64_t total_length = 64;
 half alpha = 0.1;
 __ubuf__ half src[total_length];

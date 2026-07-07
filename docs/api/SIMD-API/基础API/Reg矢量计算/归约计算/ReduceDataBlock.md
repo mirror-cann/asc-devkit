@@ -49,11 +49,11 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-当ReduceType 为SUM，将每个DataBlock（32B）中参与计算的元素相加，并将最终的计算结果依次保存在dstReg的最低位。
+当ReduceType为SUM，将每个DataBlock（32B）中参与计算的元素相加，并将最终的计算结果依次保存在dstReg的最低位。
 
-当ReduceType 为MAX，将每个DataBlock（32B）中的最大值依次保存在dstReg中的最低位。
+当ReduceType为MAX，将每个DataBlock（32B）中的最大值依次保存在dstReg中的最低位。
 
-当ReduceType 为MIN，将每个DataBlock（32B）中的最小值依次保存在dstReg中的最低位。
+当ReduceType为MIN，将每个DataBlock（32B）中的最小值依次保存在dstReg中的最低位。
 
 ## 定义原型<a name="section620mcpsimp"></a>
 

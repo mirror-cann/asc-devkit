@@ -48,17 +48,17 @@ class Base {};
 class Derived : public Base {};
 class Unrelated {};
 
-// 检查int 是否可以隐式转换为double
+// 检查int是否可以隐式转换为double
 AscendC::PRINTF("Is int convertible to double? %d\n", AscendC::Std::is_convertible<int, double>::value);
 
-// 检查double 是否可以隐式转换为int
+// 检查double是否可以隐式转换为int
 AscendC::PRINTF("Is double convertible to int? %d\n", AscendC::Std::is_convertible<double, int>::value);
 
-// 检查Derived 是否可以转换为Base
+// 检查Derived是否可以转换为Base
 AscendC::PRINTF("Is Derived callable with Base? %d\n", AscendC::Std::is_convertible<Derived, Base>::value);
-// 检查Base 是否可以转换为Derived
+// 检查Base是否可以转换为Derived
 AscendC::PRINTF("Is Base callable with Derived? %d\n", AscendC::Std::is_convertible<Base, Derived>::value);
-// 检查Derived 是否可以转换为Unrelated
+// 检查Derived是否可以转换为Unrelated
 AscendC::PRINTF("Is Derived callable with Unrelated? %d\n", AscendC::Std::is_convertible<Derived, Unrelated>::value);
 ```
 

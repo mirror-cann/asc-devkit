@@ -96,7 +96,7 @@ inputGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ int32_t *>(src_gm), dataSize
 AscendC::LocalTensor<int32_t> inputLocal = inQueueX.AllocTensor<int32_t>();    
 AscendC::DataCopy(inputLocal, inputGlobal, dataSize); // 将Global Memory上的inputGlobal拷贝到Local Memory的inputLocal上
 ...
-// 假设inputGlobal为int32_t 类型，包含16个元素（64字节）
+// 假设inputGlobal为int32_t类型，包含16个元素（64字节）
 // 调用ReinterpretCast将inputGlobal重解释为int16_t类型
 AscendC::GlobalTensor<int16_t> interpreTensor = inputGlobal.template ReinterpretCast<int16_t>();
 // 示例结果如下，二者数据完全一致，在物理内存上也是同一地址，仅根据不同类型进行了重解释

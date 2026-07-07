@@ -196,7 +196,7 @@
 
 ```
 uint32_t COUNT = 128;
-AscendC::Scatter(dstLocal, srcLocal, dstOffsetLocal, (uint32_t)0, COUNT); // dstOffsetLocal 用于存储源操作数的每个元素在dst中对应的地址偏移
+AscendC::Scatter(dstLocal, srcLocal, dstOffsetLocal, (uint32_t)0, COUNT); // dstOffsetLocal用于存储源操作数的每个元素在dst中对应的地址偏移
 ```
 
 结果示例：

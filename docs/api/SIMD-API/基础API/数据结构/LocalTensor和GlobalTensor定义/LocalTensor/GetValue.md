@@ -105,13 +105,13 @@ using PrimType = PrimT<T>;
 auto element = inputLocal.GetValue(2); // 获取inputLocal中第i个位置的数值
 
 // 示例1结果如下：
-// element 为200
+// element为200
 
 
 // 示例2
 // 数据(inputLocal): [0 100 200  ... ]
 auto element = inputLocal(1); // 获取inputLocal中第i个位置的数值
 // 示例2结果如下：
-// element 为100
+// element为100
 ```
 
