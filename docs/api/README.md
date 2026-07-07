@@ -907,6 +907,7 @@
             -   [asc_set_gm2ub_loop_size](SIMD-API/C-API/vector_datamove/asc_set_gm2ub_loop_size.md)
             -   [asc_set_gm2ub_loop1_stride](SIMD-API/C-API/vector_datamove/asc_set_gm2ub_loop1_stride.md)
             -   [asc_set_gm2ub_loop2_stride](SIMD-API/C-API/vector_datamove/asc_set_gm2ub_loop2_stride.md)
+            -   [asc_set_gm2ub_pad（废弃）](SIMD-API/C-API/vector_datamove/asc_set_gm2ub_pad_deprecated.md)
             -   [asc_set_ndim_loop_stride](SIMD-API/C-API/vector_datamove/asc_set_ndim_loop_stride.md)
             -   [asc_set_ndim_pad_count](SIMD-API/C-API/vector_datamove/asc_set_ndim_pad_count.md)
             -   [asc_set_ndim_pad_value](SIMD-API/C-API/vector_datamove/asc_set_ndim_pad_value.md)

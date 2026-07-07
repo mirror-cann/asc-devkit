@@ -481,6 +481,11 @@ __aicore__ inline void asc_copy_ub2ub(__ubuf__ void* dst, __ubuf__ void* src, ui
 
 __aicore__ inline void asc_copy_ub2ub_sync(__ubuf__ void* dst, __ubuf__ void* src, uint32_t size);
 
+//======asc_set_gm2ub_pad=======
+[[deprecated("NOTICE: asc_set_gm2ub_pad is deprecated. "
+             "Please use asc_set_copy_pad_val instead for pad value setting")]]
+__aicore__ inline void asc_set_gm2ub_pad(uint32_t pad_val);
+
 #endif
 
 #endif
@@ -489,4 +494,3 @@ __aicore__ inline void asc_copy_ub2ub_sync(__ubuf__ void* dst, __ubuf__ void* sr
 #undef ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS  
 #undef UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC_C_API_H  
 #endif    
-
