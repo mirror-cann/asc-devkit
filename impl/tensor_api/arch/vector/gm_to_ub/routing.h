@@ -54,6 +54,10 @@ struct CopyGM2UBRouting<Version, NZLayoutPtn, NZLayoutPtn> {
     using type = DataCopyGM2UB;
 };
 
+template <uint32_t Version>
+struct CopyGM2UBRouting<Version, ZNLayoutPtn, ZNLayoutPtn> {
+    using type = DataCopyGM2UB;
+};
 } // namespace Te
 } // namespace AscendC
 
