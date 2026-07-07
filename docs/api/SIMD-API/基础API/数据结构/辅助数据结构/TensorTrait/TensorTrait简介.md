@@ -141,7 +141,7 @@ template <typename T> struct is_tensorTrait
     </tr>
     <tr id="row2480185119548"><td class="cellrowborder" valign="top" width="36.69%" headers="mcps1.2.3.1.1 "><p id="p1748015518541"><a name="p1748015518541"></a><a name="p1748015518541"></a>基础API&gt;矢量计算&gt;归约计算</p>
     </td>
-    <td class="cellrowborder" valign="top" width="63.31%" headers="mcps1.2.3.1.2 "><p id="p948010513543"><a name="p948010513543"></a><a name="p948010513543"></a>ReduceMax、BlockReduceMax、WholeReduceMax、ReduceMin、BlockReduceMin、WholeReduceMin、ReduceSum、BlockReduceSum、WholeReduceSum、RepeatReduceSum、PairReduceSum</p>
+    <td class="cellrowborder" valign="top" width="63.31%" headers="mcps1.2.3.1.2 "><p id="p948010513543"><a name="p948010513543"></a><a name="p948010513543"></a>ReduceMax、ReduceMin、ReduceSum、ReduceDataBlock、ReduceRepeat、ReducePairElem</p>
     </td>
     </tr>
     <tr id="row19583512577"><td class="cellrowborder" valign="top" width="36.69%" headers="mcps1.2.3.1.1 "><p id="p45841411577"><a name="p45841411577"></a><a name="p45841411577"></a>基础API&gt;矢量计算&gt;数据转换</p>

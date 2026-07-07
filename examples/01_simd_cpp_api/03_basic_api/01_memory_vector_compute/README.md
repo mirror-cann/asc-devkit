@@ -19,6 +19,7 @@
 | [gather](./gather) |  本样例基于GatherMask、Gather、Gatherb等接口完成多种场景模式下的数据选择功能，实现从源操作数中选取元素写入目的操作数。 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [interleave_pair](./interleave_pair) |  本样例基于Interleave和DeInterleave接口实现元素交织和解交织功能 | Ascend 950PR/Ascend 950DT |
 | [mrg_sort](./mrg_sort) |  本样例基于Sort32和MrgSort基础API实现将已排好序的最多4条队列，合并成1条队列，结果按照score域由大到小排序 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
+| [reduce](./reduce) |  本样例介绍了调用`ReduceRepeat<SUM>`和`ReduceDataBlock<SUM>`基础API实现reduce算子，实现了连续内存上数据元素的累加，返回累加结果的功能 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [reduce_data_block](./reduce_data_block) |  本样例基于`ReduceDataBlock`实现归约计算 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [reduce_repeat](./reduce_repeat) |  本样例介绍归约类接口`ReduceRepeat`在多种场景下的使用方法。 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
 | [reduce_pair_elem](./reduce_pair_elem) |  本样例基于`ReducePairElem<SUM>`实现相邻奇偶元素对求和归约 | Ascend 950PR/Ascend 950DT<br>Atlas A3 训练系列产品/Atlas A3 推理系列产品<br>Atlas A2 训练系列产品/Atlas A2 推理系列产品 |
