@@ -2735,6 +2735,7 @@
         -   [asc\_stwt](SIMT-API/访存函数/asc_stwt.md)
         -   [asc\_dcci\_single](SIMT-API/访存函数/asc_dcci_single.md)
         -   [asc\_dcci\_entire](SIMT-API/访存函数/asc_dcci_entire.md)
+        -   [asc\_nop](SIMT-API/访存函数/asc_nop.md)
 
 
 -   [Utils API](Utils-API/Utils-API.md)
