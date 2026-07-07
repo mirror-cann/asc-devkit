@@ -69,15 +69,12 @@ __aicore__ inline T ReadGmByPassDCache(__gm__ T* addr)
 ## 调用示例<a name="section6191129670"></a>
 
 ```cpp
-__gm__ int32_t *addr = const_cast<__gm__ int32_t *>(srcGlobal.GetPhyAddr());
-int32_t value = AscendC::ReadGmByPassDCache<int32_t>(addr);
-
-// 通过Scalar读写相同GM时，需要让读操作，空出总线，避免长时占用。
-int target = -1;
-while (target != 0) {
-     target = ReadGmByPassDCache(addr);
-     Nop<800>();
-}
+__gm__ T* srcAddr = const_cast<__gm__ T*>(srcGlobal.GetPhyAddr());
+T value = AscendC::ReadGmByPassDCache<T>(srcAddr);
+// 同步指令：用于阻塞后续的指令执行，直到所有之前的内存访问指令（需要等待的内存位置可通过参数控制）执行结束
+AscendC::DataSyncBarrier<AscendC::MemDsbT::DDR>(); // DDR，等待GM访问指令
+__gm__ T* dstAddr = const_cast<__gm__ T*>(dstGlobal.GetPhyAddr());
+AscendC::WriteGmByPassDCache<T>(dstAddr, value + ADD_VALUE);
 ```
 
 完整样例请参考[GmByPassDCache类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/09_utils/gm_by_pass_dcache)。

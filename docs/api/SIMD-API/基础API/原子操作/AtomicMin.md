@@ -72,40 +72,20 @@ address、value、返回值的数据类型相同，支持的数据类型为int32
 ## 调用示例<a name="section191505489122"></a>
 
 ```cpp
-extern "C" __global__ __aicore__ void atomic_min_reduction_kernel(__gm__ int32_t* global_min, __gm__ int32_t* input, int32_t dataSize)
-{
-    // 当不使用TPipe-TQUE框架编程时，需手动调用InitSocState初始化全局状态寄存器。
-    AscendC::InitSocState();
+AscendC::LocalMemAllocator<AscendC::Hardware::UB> ubAllocator;
+AscendC::LocalTensor<uint32_t> yLocal = ubAllocator.Alloc<uint32_t>(DATA_SIZE);
 
-    // 使用LocalMemAllocator在UB上分配内存。
-    AscendC::LocalMemAllocator<AscendC::Hardware::UB> ubAllocator;
-    AscendC::LocalTensor<int32_t> srcLocal = ubAllocator.Alloc<int32_t>(dataSize);
-    AscendC::LocalTensor<int32_t> dstLocal = ubAllocator.Alloc<int32_t>(1);
+AscendC::GlobalTensor<uint32_t> yGlobal;
+yGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ uint32_t*>(y), DATA_SIZE);
 
-    // 使用GlobalTensor封装GM输入数据。
-    AscendC::GlobalTensor<int32_t> inputGlobal;
-    inputGlobal.SetGlobalBuffer(input, dataSize);
+// AtomicMin：三个核分别对GM首个元素原子取最小值。
+uint32_t value = 1;
+AscendC::AtomicMin(reinterpret_cast<__gm__ uint32_t*>(y), value);
 
-    constexpr uint32_t EVENT_ID0 = 0;
-
-    // 将数据从GM拷贝到UB。
-    AscendC::DataCopy(srcLocal, inputGlobal, dataSize);
-
-    // 等待MTE2搬运完成后再进行矢量计算。
-    AscendC::SetFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
-    AscendC::WaitFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
-
-    // 使用矢量归约接口[ReduceMin](../Memory矢量计算/归约计算/ReduceMin.md)计算局部最小值，不获取索引。
-    // Ascend 950PR/Ascend 950DT无需sharedTmpBuffer，可传入srcLocal。
-    AscendC::ReduceMin<int32_t>(dstLocal, srcLocal, srcLocal, dataSize, false);
-
-    // 等待矢量计算完成后再通过标量读取结果。
-    AscendC::SetFlag<AscendC::HardEvent::V_S>(EVENT_ID0);
-    AscendC::WaitFlag<AscendC::HardEvent::V_S>(EVENT_ID0);
-
-    // 使用AtomicMin将局部最小值原子地更新到全局最小值中。
-    AscendC::AtomicMin(global_min, dstLocal.GetValue(0));
-}
+// 原子操作后插入同步。
+AscendC::SetFlag<AscendC::HardEvent::S_MTE2>(EVENT_ID0);
+AscendC::WaitFlag<AscendC::HardEvent::S_MTE2>(EVENT_ID0);
+AscendC::DataCopy(yLocal, yGlobal, DATA_SIZE);
 ```
 
-假设上述函数在多个核上执行，每个核先通过矢量归约接口[ReduceMin](../Memory矢量计算/归约计算/ReduceMin.md)计算各自分片数据的局部最小值，再通过AtomicMin合并到global_min中，最终得到全局最小值。
+完整样例请参考[scalar_atomic_operations样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/06_atomic/scalar_atomic_operations)。

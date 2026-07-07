@@ -118,7 +118,7 @@ CACHE_MODE_PERSISTENT = 4,  // 启用L2 Cache驻留模式
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-使用mssanitizer工具时，默认启用L2 Cache，无法通过本接口设置L2 Cache模式为CACHE\_MODE\_DISABLE和CACHE\_MODE\_PERSISTENT。
+无
 
 ## 调用示例<a name="section17531157161314"></a>
 

@@ -72,14 +72,20 @@ GM地址上做原子操作前的数据。
 ## 调用示例<a name="section191505489122"></a>
 
 ```cpp
-extern "C" __global__ __aicore__ void atomic_histogram_kernel(__gm__ uint32_t* hist, __gm__ uint8_t* input, uint32_t dataSize)
-{
-    // 每个核遍历输入数据，统计各灰度值出现的频次。
-    for (uint32_t i = blockIdx.x; i < dataSize; i += blockDim.x) {
-        // 使用AtomicAdd将对应bin的计数原子地加1。
-        AscendC::AtomicAdd(&hist[input[i]], 1);
-    }
-}
+AscendC::LocalMemAllocator<AscendC::Hardware::UB> ubAllocator;
+AscendC::LocalTensor<uint32_t> yLocal = ubAllocator.Alloc<uint32_t>(DATA_SIZE);
+
+AscendC::GlobalTensor<uint32_t> yGlobal;
+yGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ uint32_t*>(y), DATA_SIZE);
+
+// AtomicAdd：三个核分别对GM首个元素原子加1。
+uint32_t value = 1;
+AscendC::AtomicAdd(reinterpret_cast<__gm__ uint32_t*>(y), value);
+
+// 原子操作后插入同步。
+AscendC::SetFlag<AscendC::HardEvent::S_MTE2>(EVENT_ID0);
+AscendC::WaitFlag<AscendC::HardEvent::S_MTE2>(EVENT_ID0);
+AscendC::DataCopy(yLocal, yGlobal, DATA_SIZE);
 ```
 
-假设上述函数在多个核上执行，每个核处理各自分片数据，通过AtomicAdd原子地累加到直方图数组hist中，最终得到全局直方图统计结果。
+完整样例请参考[scalar_atomic_operations样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/06_atomic/scalar_atomic_operations)。

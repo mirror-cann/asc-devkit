@@ -76,18 +76,21 @@ GM地址上做原子操作前的数据。
 ## 调用示例<a name="section191505489122"></a>
 
 ```cpp
-__gm__ uint32_t lock = 0;  // 0 表示未锁定，1 表示已锁定。
+AscendC::LocalMemAllocator<AscendC::Hardware::UB> ubAllocator;
+AscendC::LocalTensor<uint32_t> yLocal = ubAllocator.Alloc<uint32_t>(DATA_SIZE);
 
-extern "C" __global__ __aicore__ void atomic_lock_acquire_kernel(__gm__ int32_t* shared_data)
-{
-    // 使用AtomicCas尝试获取锁：当lock为0时将其原子地置为1。
-    while (AscendC::AtomicCas(&lock, 0, 1) != 0) {
-        // 自旋等待，直到成功获取锁。
-    }
-    // 获取锁后，在临界区中安全地操作共享数据。
-    shared_data[0] = shared_data[0] + 1;
-    // 注意：解锁需要配合AtomicExch将lock置为0。
-}
+AscendC::GlobalTensor<uint32_t> yGlobal;
+yGlobal.SetGlobalBuffer(reinterpret_cast<__gm__ uint32_t*>(y), DATA_SIZE);
+
+// AtomicCas：三个核分别对GM首个元素原子比较交换。
+uint32_t expected = 1;
+uint32_t newValue = 2;
+AscendC::AtomicCas(reinterpret_cast<__gm__ uint32_t*>(y), expected, newValue);
+
+// 原子操作后插入同步。
+AscendC::SetFlag<AscendC::HardEvent::S_MTE2>(EVENT_ID0);
+AscendC::WaitFlag<AscendC::HardEvent::S_MTE2>(EVENT_ID0);
+AscendC::DataCopy(yLocal, yGlobal, DATA_SIZE);
 ```
 
-在上述示例中，多个核并发执行atomic_lock_acquire_kernel，每次只有一个核能成功将lock从0变为1并进入临界区，其他核自旋等待，从而保证shared_data的互斥访问。在实现自旋锁时，AtomicCas一般与AtomicExch配对使用，以确保锁的正确释放，释放锁的示例请参考[AtomicExch调用示例](AtomicExch.md#调用示例)。
+完整样例请参考[scalar_atomic_operations样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/06_atomic/scalar_atomic_operations)。
