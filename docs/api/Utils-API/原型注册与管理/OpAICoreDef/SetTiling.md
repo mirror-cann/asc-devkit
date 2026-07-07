@@ -2,7 +2,7 @@
 
 ## 功能说明<a name="zh-cn_topic_0000001549507408_zh-cn_topic_0000001576923281_zh-cn_topic_0000001525424352_section36583473819"></a>
 
-注册Tiling函数。Tiling函数的原型是固定的，接受一个作为输入，在此context上可以获取到输入、输出的Shape指针等内容。注册的Tiling函数由框架调用，调用时会传入TilingContext参数。
+注册Tiling函数。Tiling函数的原型是固定的，接受一个TilingContext作为输入，在此context上可以获取到输入、输出的Shape指针等内容。注册的Tiling函数由框架调用，调用时会传入TilingContext参数。
 
 ## 函数原型<a name="zh-cn_topic_0000001549507408_zh-cn_topic_0000001576923281_zh-cn_topic_0000001525424352_section13230182415108"></a>
 

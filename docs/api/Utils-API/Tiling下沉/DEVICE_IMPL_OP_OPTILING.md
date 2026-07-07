@@ -70,7 +70,7 @@ public:
 </td>
 <td class="cellrowborder" valign="top" width="15.340000000000002%" headers="mcps1.2.4.1.2 "><p id="p16606124294310"><a name="p16606124294310"></a><a name="p16606124294310"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="67.44%" headers="mcps1.2.4.1.3 "><p id="p25503505020"><a name="p25503505020"></a><a name="p25503505020"></a>需要注册的Tiling函数，该函数接受一个 gert::TilingContext* 作为输入，以 ge::graphStatus 为返回值。</p>
+<td class="cellrowborder" valign="top" width="67.44%" headers="mcps1.2.4.1.3 "><p id="p25503505020"><a name="p25503505020"></a><a name="p25503505020"></a>需要注册的Tiling函数，该函数接受一个gert::TilingContext*作为输入，以ge::graphStatus为返回值。</p>
 </td>
 </tr>
 </tbody>

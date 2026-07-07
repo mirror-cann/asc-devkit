@@ -4,7 +4,7 @@
 
 通过该host侧接口设置算子输出的初始值，设置后会在算子执行前对算子输出的GM空间进行清零操作或者插入memset类算子进行初始值设置。
 
-**InitValue和接口配合使用，SetNeedAtomic接口需要配置为true。**
+**InitValue和SetNeedAtomic接口配合使用，SetNeedAtomic接口需要配置为true。**
 
 ## 函数原型<a name="zh-cn_topic_0000001960169216_zh-cn_topic_0000001526594958_zh-cn_topic_0000001525424352_section13230182415108"></a>
 

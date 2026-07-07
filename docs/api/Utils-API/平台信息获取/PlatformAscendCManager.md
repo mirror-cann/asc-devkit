@@ -19,11 +19,6 @@
 >          platform
 >        )
 >        ```
->-   当前该类仅支持如下型号：
->    -   Atlas 推理系列产品
->    -   Atlas 训练系列产品
->    -   Atlas A2 训练系列产品/Atlas A2 推理系列产品
->    -   Atlas A3 训练系列产品/Atlas A3 推理系列产品
 
 ## 函数原型<a name="zh-cn_topic_0000001796358754_section7979556121414"></a>
 
@@ -40,31 +35,43 @@ private:
 
 ## 参数说明<a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_section189014013619"></a>
 
-<a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_table111938719446"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_row6223476444"><th class="cellrowborder" valign="top" width="17.22%" id="mcps1.1.4.1.1"><p id="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p10223674448"><a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p10223674448"></a><a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p10223674448"></a>参数</p>
-</th>
-<th class="cellrowborder" valign="top" width="15.340000000000002%" id="mcps1.1.4.1.2"><p id="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p645511218169"><a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p645511218169"></a><a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p645511218169"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="67.44%" id="mcps1.1.4.1.3"><p id="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p1922337124411"><a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p1922337124411"></a><a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p1922337124411"></a>说明</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_row152234713443"><td class="cellrowborder" valign="top" width="17.22%" headers="mcps1.1.4.1.1 "><p id="zh-cn_topic_0000001796358754_p4871895189"><a name="zh-cn_topic_0000001796358754_p4871895189"></a><a name="zh-cn_topic_0000001796358754_p4871895189"></a>customSocVersion</p>
-</td>
-<td class="cellrowborder" valign="top" width="15.340000000000002%" headers="mcps1.1.4.1.2 "><p id="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p167701536957"><a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p167701536957"></a><a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p167701536957"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="67.44%" headers="mcps1.1.4.1.3 "><p id="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p4611154016587"><a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p4611154016587"></a><a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_p4611154016587"></a>AI处理器型号。</p>
-<a name="zh-cn_topic_0000001796358754_ul1124912113117"></a><a name="zh-cn_topic_0000001796358754_ul1124912113117"></a><ul id="zh-cn_topic_0000001796358754_ul1124912113117"><li>针对如下产品：在安装<span id="zh-cn_topic_0000001265392790_ph196874123168"><a name="zh-cn_topic_0000001265392790_ph196874123168"></a><a name="zh-cn_topic_0000001265392790_ph196874123168"></a>AI处理器</span>的服务器执行<strong id="zh-cn_topic_0000001265392790_b17687612191618"><a name="zh-cn_topic_0000001265392790_b17687612191618"></a><a name="zh-cn_topic_0000001265392790_b17687612191618"></a>npu-smi info</strong>命令进行查询，获取<strong id="zh-cn_topic_0000001265392790_b10161437131915"><a name="zh-cn_topic_0000001265392790_b10161437131915"></a><a name="zh-cn_topic_0000001265392790_b10161437131915"></a>Name</strong>信息。实际配置值为AscendName，例如<strong id="zh-cn_topic_0000001265392790_b16284944181920"><a name="zh-cn_topic_0000001265392790_b16284944181920"></a><a name="zh-cn_topic_0000001265392790_b16284944181920"></a>Name</strong>取值为<em id="zh-cn_topic_0000001265392790_i1478775919179"><a name="zh-cn_topic_0000001265392790_i1478775919179"></a><a name="zh-cn_topic_0000001265392790_i1478775919179"></a>xxxyy</em>，实际配置值为Ascend<em id="zh-cn_topic_0000001265392790_i1678775901719"><a name="zh-cn_topic_0000001265392790_i1678775901719"></a><a name="zh-cn_topic_0000001265392790_i1678775901719"></a>xxxyy</em>。<p id="zh-cn_topic_0000001265392790_p3529538154519"><a name="zh-cn_topic_0000001265392790_p3529538154519"></a><a name="zh-cn_topic_0000001265392790_p3529538154519"></a><span id="zh-cn_topic_0000001265392790_ph1483216010188"><a name="zh-cn_topic_0000001265392790_ph1483216010188"></a><a name="zh-cn_topic_0000001265392790_ph1483216010188"></a><term id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term11962195213215"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term11962195213215"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term11962195213215"></a>Atlas A2 训练系列产品</term>/<term id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term184716139811"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term184716139811"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term184716139811"></a>Atlas A2 推理系列产品</term></span></p>
-<p id="zh-cn_topic_0000001265392790_p1193517020467"><a name="zh-cn_topic_0000001265392790_p1193517020467"></a><a name="zh-cn_topic_0000001265392790_p1193517020467"></a><span id="zh-cn_topic_0000001265392790_ph783112021813"><a name="zh-cn_topic_0000001265392790_ph783112021813"></a><a name="zh-cn_topic_0000001265392790_ph783112021813"></a><term id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term354143892110"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term354143892110"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term354143892110"></a>Atlas 200I/500 A2 推理产品</term></span></p>
-<p id="zh-cn_topic_0000001265392790_p78319051815"><a name="zh-cn_topic_0000001265392790_p78319051815"></a><a name="zh-cn_topic_0000001265392790_p78319051815"></a><span id="zh-cn_topic_0000001265392790_ph1383116081815"><a name="zh-cn_topic_0000001265392790_ph1383116081815"></a><a name="zh-cn_topic_0000001265392790_ph1383116081815"></a><term id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term4363218112215"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term4363218112215"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term4363218112215"></a>Atlas 推理系列产品</term></span></p>
-<p id="zh-cn_topic_0000001265392790_p38313021813"><a name="zh-cn_topic_0000001265392790_p38313021813"></a><a name="zh-cn_topic_0000001265392790_p38313021813"></a><span id="zh-cn_topic_0000001265392790_ph58317041819"><a name="zh-cn_topic_0000001265392790_ph58317041819"></a><a name="zh-cn_topic_0000001265392790_ph58317041819"></a><term id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term71949488213"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term71949488213"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term71949488213"></a>Atlas 训练系列产品</term></span></p>
-</li><li>针对<span id="zh-cn_topic_0000001265392790_ph48741016324"><a name="zh-cn_topic_0000001265392790_ph48741016324"></a><a name="zh-cn_topic_0000001265392790_ph48741016324"></a><term id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term1253731311225"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term1253731311225"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term1253731311225"></a>Atlas A3 训练系列产品</term>/<term id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term131434243115"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term131434243115"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001312391781_term131434243115"></a>Atlas A3 推理系列产品</term></span>，在安装<span id="zh-cn_topic_0000001265392790_ph17911124171120"><a name="zh-cn_topic_0000001265392790_ph17911124171120"></a><a name="zh-cn_topic_0000001265392790_ph17911124171120"></a>AI处理器</span>的服务器执行<strong id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_b206066255591"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_b206066255591"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_b206066255591"></a>npu-smi info -t board -i </strong><em id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_i16609202515915"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_i16609202515915"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_i16609202515915"></a>id</em><strong id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_b14358631175910"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_b14358631175910"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_b14358631175910"></a> -c </strong><em id="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_i16269732165915"><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_i16269732165915"></a><a name="zh-cn_topic_0000001265392790_zh-cn_topic_0000001264656721_zh-cn_topic_0000001117597244_i16269732165915"></a>chip_id</em>命令进行查询，获取<strong id="zh-cn_topic_0000001265392790_b11257114917192"><a name="zh-cn_topic_0000001265392790_b11257114917192"></a><a name="zh-cn_topic_0000001265392790_b11257114917192"></a>Chip Name</strong>和<strong id="zh-cn_topic_0000001265392790_b72671651121916"><a name="zh-cn_topic_0000001265392790_b72671651121916"></a><a name="zh-cn_topic_0000001265392790_b72671651121916"></a>NPU Name</strong>信息，实际配置值为Chip Name_NPU Name。例如<strong id="zh-cn_topic_0000001265392790_b13136111611203"><a name="zh-cn_topic_0000001265392790_b13136111611203"></a><a name="zh-cn_topic_0000001265392790_b13136111611203"></a>Chip Name</strong>取值为Ascend<em id="zh-cn_topic_0000001265392790_i68701996189"><a name="zh-cn_topic_0000001265392790_i68701996189"></a><a name="zh-cn_topic_0000001265392790_i68701996189"></a>xxx</em>，<strong id="zh-cn_topic_0000001265392790_b51347352112"><a name="zh-cn_topic_0000001265392790_b51347352112"></a><a name="zh-cn_topic_0000001265392790_b51347352112"></a>NPU Name</strong>取值为1234，实际配置值为Ascend<em id="zh-cn_topic_0000001265392790_i82901912141813"><a name="zh-cn_topic_0000001265392790_i82901912141813"></a><a name="zh-cn_topic_0000001265392790_i82901912141813"></a>xxx</em><em id="zh-cn_topic_0000001265392790_i154501458102213"><a name="zh-cn_topic_0000001265392790_i154501458102213"></a><a name="zh-cn_topic_0000001265392790_i154501458102213"></a>_</em>1234。其中：<a name="zh-cn_topic_0000001265392790_ul2747601334"></a><a name="zh-cn_topic_0000001265392790_ul2747601334"></a><ul id="zh-cn_topic_0000001265392790_ul2747601334"><li>id：设备id，通过<strong id="zh-cn_topic_0000001265392790_b83171930133314"><a name="zh-cn_topic_0000001265392790_b83171930133314"></a><a name="zh-cn_topic_0000001265392790_b83171930133314"></a>npu-smi info -l</strong>命令查出的NPU ID即为设备id。</li><li>chip_id：芯片id，通过<strong id="zh-cn_topic_0000001265392790_b18888204343317"><a name="zh-cn_topic_0000001265392790_b18888204343317"></a><a name="zh-cn_topic_0000001265392790_b18888204343317"></a>npu-smi info -m</strong>命令查出的Chip ID即为芯片id。</li></ul>
-</li><li>针对<span id="zh-cn_topic_0000001265392790_ph1670732853114"><a name="zh-cn_topic_0000001265392790_ph1670732853114"></a><a name="zh-cn_topic_0000001265392790_ph1670732853114"></a>Ascend 950PR/Ascend 950DT</span>，在安装<span id="zh-cn_topic_0000001265392790_ph0799113316265"><a name="zh-cn_topic_0000001265392790_ph0799113316265"></a><a name="zh-cn_topic_0000001265392790_ph0799113316265"></a>AI处理器</span>的服务器执行<strong id="zh-cn_topic_0000001265392790_b1579913333269"><a name="zh-cn_topic_0000001265392790_b1579913333269"></a><a name="zh-cn_topic_0000001265392790_b1579913333269"></a>npu-smi info -t board -i </strong><em id="zh-cn_topic_0000001265392790_i0800933202618"><a name="zh-cn_topic_0000001265392790_i0800933202618"></a><a name="zh-cn_topic_0000001265392790_i0800933202618"></a>id</em>命令进行查询，获取<strong id="zh-cn_topic_0000001265392790_b11800033122619"><a name="zh-cn_topic_0000001265392790_b11800033122619"></a><a name="zh-cn_topic_0000001265392790_b11800033122619"></a>Chip Name</strong>和<strong id="zh-cn_topic_0000001265392790_b138009332263"><a name="zh-cn_topic_0000001265392790_b138009332263"></a><a name="zh-cn_topic_0000001265392790_b138009332263"></a>NPU Name</strong>信息，实际配置值为Chip Name_NPU Name。例如<strong id="zh-cn_topic_0000001265392790_b9800153311266"><a name="zh-cn_topic_0000001265392790_b9800153311266"></a><a name="zh-cn_topic_0000001265392790_b9800153311266"></a>Chip Name</strong>取值为Ascend<em id="zh-cn_topic_0000001265392790_i1080003317269"><a name="zh-cn_topic_0000001265392790_i1080003317269"></a><a name="zh-cn_topic_0000001265392790_i1080003317269"></a>xxx</em>，<strong id="zh-cn_topic_0000001265392790_b128007339263"><a name="zh-cn_topic_0000001265392790_b128007339263"></a><a name="zh-cn_topic_0000001265392790_b128007339263"></a>NPU Name</strong>取值为1234，实际配置值为Ascend<em id="zh-cn_topic_0000001265392790_i1480083320265"><a name="zh-cn_topic_0000001265392790_i1480083320265"></a><a name="zh-cn_topic_0000001265392790_i1480083320265"></a>xxx</em><em id="zh-cn_topic_0000001265392790_i178001933162610"><a name="zh-cn_topic_0000001265392790_i178001933162610"></a><a name="zh-cn_topic_0000001265392790_i178001933162610"></a>_</em>1234。<p id="zh-cn_topic_0000001265392790_p1626445563114"><a name="zh-cn_topic_0000001265392790_p1626445563114"></a><a name="zh-cn_topic_0000001265392790_p1626445563114"></a>其中，id为设备id，通过<strong id="zh-cn_topic_0000001265392790_b10800103312614"><a name="zh-cn_topic_0000001265392790_b10800103312614"></a><a name="zh-cn_topic_0000001265392790_b10800103312614"></a>npu-smi info -l</strong>命令查出的NPU ID即为设备id。</p>
-</li></ul>
-</td>
-</tr>
-</tbody>
-</table>
+| 参数名 | 描述 |
+|:------|:-----|
+|customSocVersion|AI处理器型号。 |
+
+AI处理器的型号请通过如下方式获取：
+
+<!-- npu="910b,910,310p,310b" id1 -->
+-   针对如下产品：在安装AI处理器的服务器执行**npu-smi info**命令进行查询，获取**Name**信息。实际配置值为AscendName，例如**Name**取值为_xxxyy_，实际配置值为Ascend_xxxyy_。
+
+    <!-- npu="910b" id2 -->
+    Atlas A2 训练系列产品/Atlas A2 推理系列产品
+    <!-- end id2 -->
+
+    <!-- npu="310b" id3 -->
+    Atlas 200I/500 A2 推理产品
+    <!-- end id3 -->
+
+    <!-- npu="310p" id4 -->
+    Atlas 推理系列产品
+    <!-- end id4 -->
+
+    <!-- npu="910" id5 -->
+    Atlas 训练系列产品
+    <!-- end id5 -->
+<!-- end id1 -->
+
+<!-- npu="A3" id6 -->
+-   针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，在安装AI处理器的服务器执行**npu-smi info -t board -i **_id_** -c **_chip\_id_命令进行查询，获取**Chip Name**和**NPU Name**信息，实际配置值为Chip Name\_NPU Name。例如**Chip Name**取值为Ascend_xxx_，**NPU Name**取值为1234，实际配置值为Ascend_xxx__\__1234。其中：
+    -   id：设备id，通过**npu-smi info -l**命令查出的NPU ID即为设备id。
+    -   chip\_id：芯片id，通过**npu-smi info -m**命令查出的Chip ID即为芯片id。
+<!-- end id6 -->
+
+<!-- npu="950" id7 -->
+-   针对Ascend 950PR/Ascend 950DT，在安装AI处理器的服务器执行**npu-smi info -t board -i **_id_命令进行查询，获取**Chip Name**和**NPU Name**信息，实际配置值为Chip Name\_NPU Name。例如**Chip Name**取值为Ascend_xxx_，**NPU Name**取值为1234，实际配置值为Ascend_xxx__\__1234。
+
+    其中，id为设备id，通过**npu-smi info -l**命令查出的NPU ID即为设备id。
+<!-- end id7 -->
 
 ## 返回值说明<a name="zh-cn_topic_0000001796358754_zh-cn_topic_0000001442758437_section25791320141317"></a>
 
