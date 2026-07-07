@@ -9416,7 +9416,7 @@
     "runner": "scripts/presmoke/cases/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce/run.sh",
     "source": "readme",
     "confidence": "high",
-    "source_case": "01_simd_cpp_api/04_advanced_api/04_reduce/reduce",
+    "source_case": "01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce",
     "supported_archs": [
       "dav-2201",
       "dav-3510"
