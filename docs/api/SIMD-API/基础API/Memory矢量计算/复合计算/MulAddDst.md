@@ -44,16 +44,6 @@
 <td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>x</p>
 </td>
 </tr>
-<tr id="row13880134911916"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p78811349111920"><a name="p78811349111920"></a><a name="p78811349111920"></a><span id="ph467615203200"><a name="ph467615203200"></a><a name="ph467615203200"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p148811449101913"><a name="p148811449101913"></a><a name="p148811449101913"></a>√</p>
-</td>
-</tr>
-<tr id="row616765231920"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p13167145216192"><a name="p13167145216192"></a><a name="p13167145216192"></a><span id="ph661613239204"><a name="ph661613239204"></a><a name="ph661613239204"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p516716528192"><a name="p516716528192"></a><a name="p516716528192"></a>√</p>
-</td>
-</tr>
 </tbody>
 </table>
 
@@ -172,30 +162,6 @@ PAR列表示矢量计算单元一个迭代能够处理的元素个数。
 <cann-filter npu-type="310p">
 
 **表**  Atlas 推理系列产品AI Core支持的数据类型约束
-
-| src0数据类型 | src1数据类型 | dst数据类型 | PAR  |
-| :----------- | :----------- | :---------- | :--- |
-| half         | half         | half        | 128  |
-| float        | float        | float       | 64   |
-| half         | half         | float       | 64   |
-
-</cann-filter>
-
-<cann-filter npu-type="x90">
-
-**表**  Kirin X90支持的数据类型约束
-
-| src0数据类型 | src1数据类型 | dst数据类型 | PAR  |
-| :----------- | :----------- | :---------- | :--- |
-| half         | half         | half        | 128  |
-| float        | float        | float       | 64   |
-| half         | half         | float       | 64   |
-
-</cann-filter>
-
-<cann-filter npu-type="9030">
-
-**表**  Kirin 9030支持的数据类型约束
 
 | src0数据类型 | src1数据类型 | dst数据类型 | PAR  |
 | :----------- | :----------- | :---------- | :--- |

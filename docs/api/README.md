@@ -215,7 +215,7 @@
 
                     </cann-filter>
 
-                    <cann-filter npu-type="910b,A3,x90,9030">
+                    <cann-filter npu-type="910b,A3">
 
                     -   [K方向对齐约束](SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/关键特性说明/K-方向对齐约束.md)
 

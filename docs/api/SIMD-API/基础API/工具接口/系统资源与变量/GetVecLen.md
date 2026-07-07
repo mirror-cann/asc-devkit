@@ -11,8 +11,6 @@
 | <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | x </cann-filter>|
 | <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
 | <cann-filter npu-type="910">Atlas 训练系列产品 | x </cann-filter>|
-| <cann-filter npu-type="x90">Kirin X90 | x </cann-filter>|
-| <cann-filter npu-type="9030">Kirin 9030 | x </cann-filter>|
 
 ## 功能说明
 

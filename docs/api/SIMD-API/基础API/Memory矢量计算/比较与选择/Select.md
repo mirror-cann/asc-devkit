@@ -44,16 +44,6 @@
 <td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>√</p>
 </td>
 </tr>
-<tr id="row14675144065419"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p1467514085412"><a name="p1467514085412"></a><a name="p1467514085412"></a><span id="ph790517129551"><a name="ph790517129551"></a><a name="ph790517129551"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p15675184013542"><a name="p15675184013542"></a><a name="p15675184013542"></a>√</p>
-</td>
-</tr>
-<tr id="row1940518429541"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p840584285415"><a name="p840584285415"></a><a name="p840584285415"></a><span id="ph16452121625518"><a name="ph16452121625518"></a><a name="ph16452121625518"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p15405154211548"><a name="p15405154211548"></a><a name="p15405154211548"></a>√</p>
-</td>
-</tr>
 </tbody>
 </table>
 
@@ -116,18 +106,6 @@ Atlas 推理系列产品AI Core，支持模式0、1、2。
 <cann-filter npu-type = "910">
 
 Atlas 训练系列产品，仅支持模式0。
-
-</cann-filter>
-
-<cann-filter npu-type = "x90">
-
-Kirin X90，支持模式0、1、2。
-
-</cann-filter>
-
-<cann-filter npu-type = "9030">
-
-Kirin 9030，支持模式0、1、2。
 
 </cann-filter>
 
@@ -233,9 +211,7 @@ Kirin 9030，支持模式0、1、2。
     
     - <cann-filter npu-type = "910">Atlas 训练系列产品，支持的数据类型为：half/float。</cann-filter>
     
-    - <cann-filter npu-type = "x90">Kirin X90，支持的数据类型为：int8_t/uint8_t/int16_t/uint16_t/half/int32_t/uint32_t/float。</cann-filter>
     
-    - <cann-filter npu-type = "9030">Kirin 9030，支持的数据类型为：int8_t/uint8_t/int16_t/uint16_t/half/int32_t/uint32_t/float。</cann-filter>
 
 - U支持的数据类型为：uint8_t、uint16_t、uint32_t、uint64_t。
 

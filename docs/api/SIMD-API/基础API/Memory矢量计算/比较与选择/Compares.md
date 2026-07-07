@@ -44,16 +44,6 @@
 <td class="cellrowborder" align="center" valign="top" width="42.03%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>x</p>
 </td>
 </tr>
-<tr id="row12213164324515"><td class="cellrowborder" valign="top" width="57.97%" headers="mcps1.1.3.1.1 "><p id="p19213114313453"><a name="p19213114313453"></a><a name="p19213114313453"></a><span id="ph1967911204465"><a name="ph1967911204465"></a><a name="ph1967911204465"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42.03%" headers="mcps1.1.3.1.2 "><p id="p8213194317453"><a name="p8213194317453"></a><a name="p8213194317453"></a>√</p>
-</td>
-</tr>
-<tr id="row436824615455"><td class="cellrowborder" valign="top" width="57.97%" headers="mcps1.1.3.1.1 "><p id="p136894614454"><a name="p136894614454"></a><a name="p136894614454"></a><span id="ph39361723194619"><a name="ph39361723194619"></a><a name="ph39361723194619"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42.03%" headers="mcps1.1.3.1.2 "><p id="p6368104619457"><a name="p6368104619457"></a><a name="p6368104619457"></a>√</p>
-</td>
-</tr>
 </tbody>
 </table>
 
@@ -158,18 +148,6 @@
 
 </cann-filter>
 
-<cann-filter npu-type = "x90">
-
-- 针对Kirin X90，保留参数，设置无效。
-
-</cann-filter>
-
-<cann-filter npu-type = "9030">
-
-- 针对Kirin 9030，保留参数，设置无效。
-
-</cann-filter>
-
 ## 数据类型
 
 <cann-filter npu-type = "950">
@@ -208,22 +186,6 @@
 
 - 针对Atlas 推理系列产品AI Core
     - T支持的数据类型为：half、float。
-    - U支持的数据类型为：uint8_t。
-
-</cann-filter>
-
-<cann-filter npu-type = "x90">
-
-- 针对Kirin X90
-    - T支持的数据类型为：half（所有CMPMODE都支持）、float（所有CMPMODE都支持）、int32_t（只支持CMPMODE::EQ）。
-    - U支持的数据类型为：uint8_t。
-
-</cann-filter>
-
-<cann-filter npu-type = "9030">
-
-- 针对Kirin 9030
-    - T支持的数据类型为：half（所有CMPMODE都支持）、float（所有CMPMODE都支持）、int32_t（只支持CMPMODE::EQ）。
     - U支持的数据类型为：uint8_t。
 
 </cann-filter>

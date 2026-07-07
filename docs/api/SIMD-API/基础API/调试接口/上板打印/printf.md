@@ -44,16 +44,6 @@
 <td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>x</p>
 </td>
 </tr>
-<tr id="row1366313262011"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p96633267020"><a name="p96633267020"></a><a name="p96633267020"></a><span id="ph19776102013"><a name="ph19776102013"></a><a name="ph19776102013"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p126631426809"><a name="p126631426809"></a><a name="p126631426809"></a>√</p>
-</td>
-</tr>
-<tr id="row1384052317020"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p16841192315017"><a name="p16841192315017"></a><a name="p16841192315017"></a><span id="ph697516141113"><a name="ph697516141113"></a><a name="ph697516141113"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1984110231706"><a name="p1984110231706"></a><a name="p1984110231706"></a>√</p>
-</td>
-</tr>
 </tbody>
 </table>
 

@@ -44,16 +44,6 @@
 <td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>√</p>
 </td>
 </tr>
-<tr id="row1358310813817"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000002055722337_p871618304717"><a name="zh-cn_topic_0000002055722337_p871618304717"></a><a name="zh-cn_topic_0000002055722337_p871618304717"></a><span id="zh-cn_topic_0000002055722337_ph133919917516"><a name="zh-cn_topic_0000002055722337_ph133919917516"></a><a name="zh-cn_topic_0000002055722337_ph133919917516"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000002055722337_p107166301277"><a name="zh-cn_topic_0000002055722337_p107166301277"></a><a name="zh-cn_topic_0000002055722337_p107166301277"></a>√</p>
-</td>
-</tr>
-<tr id="row149221715385"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="zh-cn_topic_0000002055722337_p3272112116474"><a name="zh-cn_topic_0000002055722337_p3272112116474"></a><a name="zh-cn_topic_0000002055722337_p3272112116474"></a><span id="zh-cn_topic_0000002055722337_ph1327212213477"><a name="zh-cn_topic_0000002055722337_ph1327212213477"></a><a name="zh-cn_topic_0000002055722337_ph1327212213477"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="zh-cn_topic_0000002055722337_p027232134713"><a name="zh-cn_topic_0000002055722337_p027232134713"></a><a name="zh-cn_topic_0000002055722337_p027232134713"></a>√</p>
-</td>
-</tr>
 </tbody>
 </table>
 

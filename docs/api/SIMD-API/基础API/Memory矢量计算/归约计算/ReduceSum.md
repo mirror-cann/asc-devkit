@@ -11,8 +11,6 @@
 | <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ </cann-filter>|
 | <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
 | <cann-filter npu-type="910">Atlas 训练系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="x90">Kirin X90 | √ </cann-filter>|
-| <cann-filter npu-type="9030">Kirin 9030 | √ </cann-filter>|
 
 ## 功能说明
 
@@ -81,8 +79,6 @@
 - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持half、float。</cann-filter>
 - <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持half、float。</cann-filter>
 - <cann-filter npu-type = "910">Atlas 训练系列产品，支持half。</cann-filter>
-- <cann-filter npu-type = "x90">Kirin X90，支持half、float。</cann-filter>
-- <cann-filter npu-type = "9030">Kirin 9030，支持half、float。</cann-filter>
 
 ## 返回值说明
 
@@ -104,7 +100,7 @@
 
 - <cann-filter npu-type = "950">针对Ascend 950PR/Ascend 950DT，`int64_t`/`uint64_t`数据类型仅支持tensor前n个数据计算接口。</cann-filter>
 - `srcRepStride`取值范围为[0, $2^{16}-1$]，需要结合UB的实际大小避免出现越界。
-<!-- npu="950,910,310p,310b,x90,9030" id1 -->
+<!-- npu="950,910,310p,310b" id1 -->
 - 针对以下型号，模板参数`isSetMask`参数不生效，保持默认值即可：
   <!-- npu="950" id2 -->
   - Ascend 950PR/Ascend 950DT
@@ -118,13 +114,7 @@
   <!-- npu="910" id5 -->
   - Atlas 训练系列产品
   <!-- end id5 -->
-  <!-- npu="x90" id6 -->
-  - Kirin X90
-  <!-- end id6 -->
-  <!-- npu="9030" id7 -->
-  - Kirin 9030
-  <!-- end id7 -->
-  <!-- end id1 -->
+    <!-- end id1 -->
 
 ## 关键特性说明
 
@@ -159,8 +149,6 @@
 - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，采用方式二。</cann-filter>
 - <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，采用方式二。</cann-filter>
 - <cann-filter npu-type = "910">Atlas 训练系列产品，采用方式二。</cann-filter>
-- <cann-filter npu-type = "x90">Kirin X90，采用方式二。</cann-filter>
-- <cann-filter npu-type = "9030">Kirin 9030，采用方式二。</cann-filter>
 
 ## 调用示例
 

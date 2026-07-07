@@ -11,8 +11,6 @@
 | <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ </cann-filter>|
 | <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
 | <cann-filter npu-type="910">Atlas 训练系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="x90">Kirin X90 | √ </cann-filter>|
-| <cann-filter npu-type="9030">Kirin 9030 | √ </cann-filter>|
 
 ## 功能说明
 
@@ -83,8 +81,6 @@
 - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持half、float。</cann-filter>
 - <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持half、float。</cann-filter>
 - <cann-filter npu-type = "910">Atlas 训练系列产品，支持half。</cann-filter>
-- <cann-filter npu-type = "x90">Kirin X90，支持half、float。</cann-filter>
-- <cann-filter npu-type = "9030">Kirin 9030，支持half、float。</cann-filter>
 
 ## 返回值说明
 
@@ -112,7 +108,7 @@
 - <cann-filter npu-type = "950">针对Ascend 950PR/Ascend 950DT，`int64_t`/`uint64_t`数据类型仅支持tensor前n个数据计算接口。</cann-filter>
 - <cann-filter npu-type = "950">对于Ascend 950PR/Ascend 950DT，因接口内部算法实现不同，无需使用`sharedTmpBuffer`，可以直接传入`src`或者任意大小的`sharedTmpBuffer`。</cann-filter>
 
-<cann-filter npu-type = "A3,910b,310b,310p,910,x90,9030">
+<cann-filter npu-type = "A3,910b,310b,310p,910">
 
 - 针对如下型号，需要使用`sharedTmpBuffer`。
   - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
@@ -120,8 +116,6 @@
   - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品</cann-filter>
   - <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core</cann-filter>
   - <cann-filter npu-type = "910">Atlas 训练系列产品</cann-filter>
-  - <cann-filter npu-type = "x90">Kirin X90</cann-filter>
-  - <cann-filter npu-type = "9030">Kirin 9030</cann-filter>
 
 </cann-filter>
 

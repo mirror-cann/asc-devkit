@@ -23,13 +23,6 @@
 <!-- npu="910" id7 -->
 - Atlas 训练系列产品：不支持
 <!-- end id7 -->
-<!-- npu="x90" id8 -->
-- Kirin X90：支持
-<!-- end id8 -->
-<!-- npu="9030" id9 -->
-- Kirin 9030：支持
-<!-- end id9 -->
-
 ## 功能说明<a name="zh-cn_topic_0000002516049318_section618mcpsimp"></a>
 
 DataCopy数据搬运（[L0C Buffer-\>GM](../L0C到GM数据搬运（DataCopy）.md)、[L0C Buffer-\>L1 Buffer](../L0C到L1数据搬运（DataCopy）.md)）过程中进行随路量化时，通过调用该接口设置scalar量化参数。

@@ -44,16 +44,6 @@
 <td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>x</p>
 </td>
 </tr>
-<tr id="row105910577232"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p4591757202312"><a name="p4591757202312"></a><a name="p4591757202312"></a>Kirin X90</p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p9591257172316"><a name="p9591257172316"></a><a name="p9591257172316"></a>√</p>
-</td>
-</tr>
-<tr id="row3127759162315"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p101271359112319"><a name="p101271359112319"></a><a name="p101271359112319"></a>Kirin 9030</p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p51279598236"><a name="p51279598236"></a><a name="p51279598236"></a>√</p>
-</td>
-</tr>
 </tbody>
 </table>
 
@@ -123,9 +113,7 @@ $$
 
 <cann-filter npu-type="310p">Atlas 推理系列产品AI Core，支持的数据类型为：half、float。</cann-filter>
 
-<cann-filter npu-type="x90">Kirin X90，支持的数据类型为：half、float。</cann-filter>
 
-<cann-filter npu-type="9030">Kirin 9030，支持的数据类型为：half、float。</cann-filter>
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 

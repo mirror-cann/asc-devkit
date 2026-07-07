@@ -44,16 +44,6 @@
 <td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>√</p>
 </td>
 </tr>
-<tr id="row134818471256"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p07746191307"><a name="p07746191307"></a><a name="p07746191307"></a><span id="ph880814542020"><a name="ph880814542020"></a><a name="ph880814542020"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p18774619608"><a name="p18774619608"></a><a name="p18774619608"></a>√</p>
-</td>
-</tr>
-<tr id="row361684714257"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p4336317115"><a name="p4336317115"></a><a name="p4336317115"></a><span id="ph115418716"><a name="ph115418716"></a><a name="ph115418716"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p73313312117"><a name="p73313312117"></a><a name="p73313312117"></a>√</p>
-</td>
-</tr>
 </tbody>
 </table>
 
@@ -187,30 +177,6 @@ dst_nchw = np.transpose(src_nhwc, axes=(0,3,1,2))
 
 </cann-filter>
 
-<cann-filter npu-type="x90">
-
-**表**  Kirin X90 sharedTmpBuffer所需的内存<a id="table4"></a>
-
-| transposeType | sharedTmpBuffer所需的大小 |
-| :-- | :-- |
-| TRANSPOSE_ND2ND_B16 | 不需要临时Buffer。 |
-| TRANSPOSE_NCHW2NHWC | 临时Buffer的大小按照下述计算规则（伪代码）进行计算。<pre>auto h0 = 16; // 当数据类型的位宽为8时，h0 = 32；其他情况下，h0 = 16<br/>auto w0 = 32 / sizeof(type);  // type代表数据类型<br/>auto tmpBufferSize = (cSize + 2)  * h0 \* w0 \* sizeof(type);</pre> |
-| TRANSPOSE_NHWC2NCHW | 临时Buffer的大小按照下述计算规则（伪代码）进行计算。<pre>auto h0 = 16; // 当数据类型的位宽为8时，h0 = 32；其他情况下，h0 = 16<br/>auto w0 = 32 / sizeof(type);  // type代表数据类型<br/>auto tmpBufferSize = (cSize \* 2 + 1) \* h0 \* w0 \* sizeof(type);</pre> |
-
-</cann-filter>
-
-<cann-filter npu-type="9030">
-
-**表**  Kirin 9030 sharedTmpBuffer所需的内存<a id="table4"></a>
-
-| transposeType | sharedTmpBuffer所需的大小 |
-| :-- | :-- |
-| TRANSPOSE_ND2ND_B16 | 不需要临时Buffer。 |
-| TRANSPOSE_NCHW2NHWC | 临时Buffer的大小按照下述计算规则（伪代码）进行计算。<pre>auto h0 = 16; // 当数据类型的位宽为8时，h0 = 32；其他情况下，h0 = 16<br/>auto w0 = 32 / sizeof(type);  // type代表数据类型<br/>auto tmpBufferSize = (cSize + 2)  * h0 \* w0 \* sizeof(type);</pre> |
-| TRANSPOSE_NHWC2NCHW | 临时Buffer的大小按照下述计算规则（伪代码）进行计算。<pre>auto h0 = 16; // 当数据类型的位宽为8时，h0 = 32；其他情况下，h0 = 16<br/>auto w0 = 32 / sizeof(type);  // type代表数据类型<br/>auto tmpBufferSize = (cSize \* 2 + 1) \* h0 \* w0 \* sizeof(type);</pre> |
-
-</cann-filter>
-
 ## 数据类型
 
 - 普通转置：
@@ -227,9 +193,7 @@ dst_nchw = np.transpose(src_nhwc, axes=(0,3,1,2))
 
   <cann-filter npu-type="910">Atlas 训练系列产品，操作数支持的数据类型为：int16_t、uint16_t、half。</cann-filter>
 
-  <cann-filter npu-type="x90">Kirin X90，操作数支持的数据类型为：int16_t、uint16_t、half。</cann-filter>
 
-  <cann-filter npu-type="9030">Kirin 9030，操作数支持的数据类型为：int16_t、uint16_t、half。</cann-filter>
 
 - 增强转置：
   - transposeType为TRANSPOSE\_ND2ND\_B16：
@@ -254,9 +218,7 @@ dst_nchw = np.transpose(src_nhwc, axes=(0,3,1,2))
 
     <cann-filter npu-type="310p">Atlas 推理系列产品AI Core，操作数支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、int32_t、uint32_t、float。</cann-filter>
 
-    <cann-filter npu-type="x90">Kirin X90，操作数支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、int32_t、uint32_t、float。</cann-filter>
 
-    <cann-filter npu-type="9030">Kirin 9030，操作数支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、int32_t、uint32_t、float。</cann-filter>
 
 ## 返回值说明
 

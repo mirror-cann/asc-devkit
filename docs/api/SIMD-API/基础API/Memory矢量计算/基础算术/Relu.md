@@ -23,13 +23,6 @@
 <!-- npu="910" id7 -->
 - Atlas 训练系列产品：支持
 <!-- end id7 -->
-<!-- npu="x90" id8 -->
-- Kirin X90：支持
-<!-- end id8 -->
-<!-- npu="9030" id9 -->
-- Kirin 9030：支持
-<!-- end id9 -->
-
 ## 功能说明<a name="section618mcpsimp"></a>
 
 头文件路径为：`"basic_api/kernel_operator_vec_unary_intf.h"`。
@@ -106,13 +99,6 @@ $dst_i = \max(0, src_i)$
 <!-- npu="910" id15 -->
 - 针对Atlas 训练系列产品，T支持的数据类型为：half。
 <!-- end id15 -->
-<!-- npu="x90" id16 -->
-- 针对Kirin X90，T支持的数据类型为：half、int32_t、float。
-<!-- end id16 -->
-<!-- npu="9030" id17 -->
-- 针对Kirin 9030，T支持的数据类型为：half、int32_t、float。
-<!-- end id17 -->
-
 ## 返回值说明<a name="section38228281712"></a>
 
 无

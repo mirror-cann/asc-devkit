@@ -44,16 +44,6 @@
 <td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>x</p>
 </td>
 </tr>
-<tr id="row99904249214"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p96633267020"><a name="p96633267020"></a><a name="p96633267020"></a><span id="ph19776102013"><a name="ph19776102013"></a><a name="ph19776102013"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p126631426809"><a name="p126631426809"></a><a name="p126631426809"></a>√</p>
-</td>
-</tr>
-<tr id="row78336273213"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p16841192315017"><a name="p16841192315017"></a><a name="p16841192315017"></a><span id="ph697516141113"><a name="ph697516141113"></a><a name="ph697516141113"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p1984110231706"><a name="p1984110231706"></a><a name="p1984110231706"></a>√</p>
-</td>
-</tr>
 </tbody>
 </table>
 
@@ -112,9 +102,7 @@ __aicore__ inline void DumpAccChkPoint(const GlobalTensor<T> &tensor, uint32_t i
 
 <cann-filter npu-type="910">Atlas 训练系列产品，T支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
 
-<cann-filter npu-type="x90">Kirin X90，T支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
 
-<cann-filter npu-type="9030">Kirin 9030，T支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 

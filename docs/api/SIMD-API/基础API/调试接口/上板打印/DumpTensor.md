@@ -44,16 +44,6 @@
 <td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>x</p>
 </td>
 </tr>
-<tr id="row642614275543"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p174261627145415"><a name="p174261627145415"></a><a name="p174261627145415"></a><span id="ph10431448105519"><a name="ph10431448105519"></a><a name="ph10431448105519"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p105174311543"><a name="p105174311543"></a><a name="p105174311543"></a>√</p>
-</td>
-</tr>
-<tr id="row179128308544"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p17912153017549"><a name="p17912153017549"></a><a name="p17912153017549"></a><span id="ph37692538557"><a name="ph37692538557"></a><a name="ph37692538557"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p12477164414543"><a name="p12477164414543"></a><a name="p12477164414543"></a>√</p>
-</td>
-</tr>
 </tbody>
 </table>
 
@@ -136,9 +126,7 @@ DumpTensor: desc=5, addr=0, data_type=float16, position=UB, dump_size=32
 
 <cann-filter npu-type="910">Atlas 训练系列产品，T支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
 
-<cann-filter npu-type="x90">Kirin X90，T支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
 
-<cann-filter npu-type="9030">Kirin 9030，T支持的数据类型为：bool、int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
 
 ## 约束说明<a name="section794123819592"></a>
 

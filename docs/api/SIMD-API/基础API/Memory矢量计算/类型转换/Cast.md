@@ -44,16 +44,6 @@
 <td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p395243920186"><a name="p395243920186"></a><a name="p395243920186"></a>√</p>
 </td>
 </tr>
-<tr id="row647912164190"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p13480131615199"><a name="p13480131615199"></a><a name="p13480131615199"></a><span id="ph759018526191"><a name="ph759018526191"></a><a name="ph759018526191"></a>Kirin X90</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p848051610196"><a name="p848051610196"></a><a name="p848051610196"></a>√</p>
-</td>
-</tr>
-<tr id="row464521820198"><td class="cellrowborder" valign="top" width="57.99999999999999%" headers="mcps1.1.3.1.1 "><p id="p76451818111913"><a name="p76451818111913"></a><a name="p76451818111913"></a><span id="ph68175542197"><a name="ph68175542197"></a><a name="ph68175542197"></a>Kirin 9030</span></p>
-</td>
-<td class="cellrowborder" align="center" valign="top" width="42%" headers="mcps1.1.3.1.2 "><p id="p564513182198"><a name="p564513182198"></a><a name="p564513182198"></a>√</p>
-</td>
-</tr>
 </tbody>
 </table>
 
@@ -342,34 +332,6 @@ enum class RoundMode {
 | int32_t | float | CAST_NONE |
 | float | half | CAST_ODD/CAST_NONE |
 | float | int64_t | CAST_RINT/CAST_FLOOR/CAST_CEIL/CAST_ROUND/CAST_TRUNC |
-
-</cann-filter>
-
-<cann-filter npu-type="x90">
-
-**表**  Kirin X90支持的数据类型组合情况
-
-| src数据类型 | dst数据类型 | 支持的roundMode |
-| :---------- | :---------- | :-------------- |
-| half | uint8_t | CAST_CEIL |
-| half | int32_t | CAST_FLOOR |
-| int32_t | float | CAST_CEIL |
-| float | bfloat16_t | CAST_ROUND |
-| bfloat16_t | float | CAST_NONE |
-
-</cann-filter>
-
-<cann-filter npu-type="9030">
-
-**表**  Kirin 9030支持的数据类型组合情况
-
-| src数据类型 | dst数据类型 | 支持的roundMode |
-| :---------- | :---------- | :-------------- |
-| half | uint8_t | CAST_CEIL |
-| half | int32_t | CAST_FLOOR |
-| int32_t | float | CAST_CEIL |
-| float | bfloat16_t | CAST_ROUND |
-| bfloat16_t | float | CAST_NONE |
 
 </cann-filter>
 

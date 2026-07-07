@@ -14,8 +14,6 @@
 | <cann-filter npu-type="310p"> Atlas 推理系列产品AI Core | √ | 仅保证编译兼容，实际功能不生效。</cann-filter> |
 | <cann-filter npu-type="310p"> Atlas 推理系列产品Vector Core | √ | 仅保证编译兼容，实际功能不生效。</cann-filter> |
 | <cann-filter npu-type="910"> Atlas 训练系列产品 | √ | 仅保证编译兼容，实际功能不生效。</cann-filter> |
-| <cann-filter npu-type="x90"> Kirin X90 | √ | 仅保证编译兼容，实际功能不生效。</cann-filter> |
-| <cann-filter npu-type="9030"> Kirin 9030 | √ | 仅保证编译兼容，实际功能不生效。</cann-filter> |
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -34,7 +32,7 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
-<cann-filter npu-type="950,A3,910b,310b,x90,9030">
+<cann-filter npu-type="950,A3,910b,310b">
 
 - 该原型支持如下产品型号：
 
@@ -46,9 +44,7 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
 
     <cann-filter npu-type="310b"> Atlas 200I/500 A2 推理产品 </cann-filter>
 
-    <cann-filter npu-type="x90"> Kirin X90 </cann-filter>
 
-    <cann-filter npu-type="9030"> Kirin 9030 </cann-filter>
 
     ```cpp
     template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
