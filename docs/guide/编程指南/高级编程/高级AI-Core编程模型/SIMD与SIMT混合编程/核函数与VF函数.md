@@ -88,7 +88,8 @@ SIMT VF函数定义中的关键修饰符说明如下：
 通过SIMT的[asc\_vf\_call](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMT-API/SIMD%E4%B8%8ESIMT%E6%B7%B7%E5%90%88%E7%BC%96%E7%A8%8B%E7%AE%80%E4%BB%8B/%E6%89%A9%E5%B1%95%E8%AF%AD%E6%B3%95/%E6%A0%B8%E5%87%BD%E6%95%B0%E9%85%8D%E7%BD%AE-147.md#asc_vf_call%E8%B0%83%E7%94%A8)接口在核函数或\_\_aicore\_\_函数中调用，调用示例如下：
 
 ```
-asc_vf_call<function_name>(dim3(blockDim), arg1, arg2, ...);
+uint32_t thread_num = 1024;
+asc_vf_call<function_name>(dim3(thread_num), arg1, arg2, ...);
 ```
 
 > [!NOTE]说明 
