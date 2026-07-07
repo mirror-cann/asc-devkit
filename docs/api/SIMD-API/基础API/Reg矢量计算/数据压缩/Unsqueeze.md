@@ -51,8 +51,8 @@
 
 头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_gather_mask_intf.h"`。
 
-将dstReg中数据根据mask进行解压缩。解压缩方式：dstReg中第0个元素置为0，dstReg中的第i个元素等于mask中从第0个到第(i-1)个元素中1的数量。mask最高位被忽略不参与统计。
-具体算法如下图所示，DstReg的首位为0，后续mask[i]对应mask值为1时，dst0[i]的值为dst[i-1] + 1；mask[i]对应mask值为0时，dst0[i]的值为dst[i-1]。
+以dstReg为源操作数和目的操作数，根据mask进行解压缩。解压缩方式：dstReg中第0个元素置为0，dstReg中的第i个元素等于mask中从第0个到第(i-1)个元素中1的数量。mask最高位被忽略不参与统计。
+具体算法如下图所示，dstReg的首位为0，后续mask[i]对应mask值为1时，dstReg[i]的值为dstReg[i-1] + 1；mask[i]对应mask值为0时，dstReg[i]的值为dstReg[i-1]。
 
 **图 1**  Unsqueeze示意图
 
@@ -78,7 +78,7 @@ __simd_callee__ inline void Unsqueeze(U& dstReg, MaskReg& mask)
 
 | 参数名称 | 输入/输出 | 描述 |
 | ------ | ------ | ------ |
-| dstReg | 输出 | 目的操作数和源操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
+| dstReg | 输入/输出 | 源操作数和目的操作数。<br>类型为[RegTensor](../寄存器数据类型/RegTensor.md)。 |
 | mask | 输入 | mask用于提供dstReg解压缩信息。<br>类型为[MaskReg](../寄存器数据类型/MaskReg.md)。 |
 
 ## 返回值说明

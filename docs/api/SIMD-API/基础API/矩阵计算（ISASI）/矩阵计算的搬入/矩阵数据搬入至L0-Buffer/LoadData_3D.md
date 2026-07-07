@@ -506,7 +506,7 @@ repeatMode =1的时候filter窗口中读取数据的位置保持不变，每个r
 
 ## 调用示例<a id="zh-cn_topic_0000002512171652_section088124295117"></a>
 
-如下示例中：A矩阵转置，shape为[k,m]，b32数据类型下，GM->L1 Buffer->L0A Buffer数据排布分别是ND、NZ和ZZ。但是L1 Buffer->L0A Buffer的时候，无法调用LoadDataWithTranspose指令对进行转置，因为在K轴方向两个连续的分形并不能合并为一个16\*16的方块，示意图如下：
+如下示例中：A矩阵转置，shape为[k,m]，b32数据类型下，GM->L1 Buffer->L0A Buffer数据排布分别是ND、NZ和ZZ。但是L1 Buffer->L0A Buffer的时候，无法调用LoadDataWithTranspose指令对其进行转置，因为在K轴方向两个连续的分形并不能合并为一个16\*16的方块，示意图如下：
 
 ![](../../../../../figures/load3d_l1tol0a_b32demo.png)
 

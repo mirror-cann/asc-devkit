@@ -42,26 +42,26 @@ template <typename T> __aicore__ inline GemmTiling GetGemmTiling(uint32_t m, uin
  * @param [in] m Number of rows of src0
  * @param [in] n Number of rows of src1
  * @param [in] k Number of columns of src1
- * @param [in] tilling.blockSize size of block
- * @param [in] tilling.mNum args of m
- * @param [in] tilling.nNum args of n
- * @param [in] tilling.kNum args of k
- * @param [in] tilling.roundM/N/K Rounding parameter
- * @param [in] tilling.c0Size The byte length of a block
- * @param [in] tilling.dtypeSize Byte length of the incoming data type
- * @param [in] tilling.m/n/kBlockNum Number of blocks of m/n/k axis
- * @param [in] tilling.m/n/kIterNum Number of traversal dimensions
- * @param [in] tilling.m/k/nTileBlock Number of M/N/K axis cutting blocks
- * @param [in] tilling.m/n/kHasTailNumber of tail blocks of M/K/N axis
- * @param [in] tilling.kHasTileEle Judge whether the tail block exists
- * @param [in] tilling.KtailEle K-axis tail block element
- * @param [in] tilling.kThreadNum K-axis passes
+ * @param [in] tiling.blockSize size of block
+ * @param [in] tiling.mNum args of m
+ * @param [in] tiling.nNum args of n
+ * @param [in] tiling.kNum args of k
+ * @param [in] tiling.roundM/N/K Rounding parameter
+ * @param [in] tiling.c0Size The byte length of a block
+ * @param [in] tiling.dtypeSize Byte length of the incoming data type
+ * @param [in] tiling.m/n/kBlockNum Number of blocks of m/n/k axis
+ * @param [in] tiling.m/n/kIterNum Number of traversal dimensions
+ * @param [in] tiling.m/k/nTileBlock Number of M/N/K axis cutting blocks
+ * @param [in] tiling.m/n/kHasTailNumber of tail blocks of M/K/N axis
+ * @param [in] tiling.kHasTileEle Judge whether the tail block exists
+ * @param [in] tiling.KtailEle K-axis tail block element
+ * @param [in] tiling.kThreadNum K-axis passes
  * @param [in] partialsum judge whether the calculation result is moved out
  * @param [in] initValue Initialization parameters
  */
 template <typename T, typename U, typename S>
 __aicore__ inline __inout_pipe__(V) void Gemm(const LocalTensor<T>& dst, const LocalTensor<U>& src0,
-    const LocalTensor<S>& src1, const uint32_t m, const uint32_t k, const uint32_t n, GemmTiling tilling,
+    const LocalTensor<S>& src1, const uint32_t m, const uint32_t k, const uint32_t n, GemmTiling tiling,
     bool partialsum = true, int32_t initValue = 0);
 } // namespace AscendC
 

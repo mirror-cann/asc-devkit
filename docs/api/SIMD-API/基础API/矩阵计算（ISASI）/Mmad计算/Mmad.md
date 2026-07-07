@@ -164,10 +164,10 @@ Atlas A2 训练系列产品/Atlas A2 推理系列产品
 
 | 参数名称 | 含义 |
 | --- | --- |
-| m | 左矩阵Height，取值范围：m∈[0，4095]。默认值为0。 |
-| n | 右矩阵Width，取值范围：n∈[0，4095]。默认值为0。 |
-| k | 左矩阵Width、右矩阵Height，取值范围：k∈[0，4095]。默认值为0。 |
-| cmatrixInitVal | 是否开启C矩阵默认初始化清零操作。默认值true。<br>&nbsp;&nbsp;&bull; true：C矩阵默认初始化为0；<br>&nbsp;&nbsp;&bull; false：C矩阵不进行默认操作，通过设置cmatrixSource参数进行初始化。 |
+| m | 左矩阵Height，取值范围：m∈[0, 4095]。默认值为0。 |
+| n | 右矩阵Width，取值范围：n∈[0, 4095]。默认值为0。 |
+| k | 左矩阵Width、右矩阵Height，取值范围：k∈[0, 4095]。默认值为0。 |
+| cmatrixInitVal | 是否开启C矩阵默认初始化清零操作。默认值为 true。<br>&nbsp;&nbsp;&bull; true：C矩阵默认初始化为0；<br>&nbsp;&nbsp;&bull; false：C矩阵不进行默认操作，通过设置cmatrixSource参数进行初始化。 |
 | cmatrixSource | 配置C矩阵初始值是否来源于BT Buffer。默认值为false。<br>&nbsp;&nbsp;&bull; false：不对L0C Buffer进行初始化操作；<br>&nbsp;&nbsp;&bull; true：使用BT Buffer(TPosition:C2)的数据对L0C Buffer进行初始化操作。<br><br>Atlas 训练系列产品，仅支持配置为false。<br><br>Atlas 推理系列产品AI Core，仅支持配置为false。<br><br>Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持配置为true/false。<br><br>Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持配置为true/false。<br><br>Atlas 200I/500 A2 推理产品，支持配置为true/false。<br><br>Ascend 950PR/Ascend 950DT，支持配置为true/false。<br><br>Kirin X90仅支持配置为false。<br><br>Kirin 9030仅支持配置为false。<br><br>注意：带Bias输入的接口配置该参数无效，会根据bias输入的位置来判断C矩阵初始值是否来源于BT Buffer。 |
 | isBias | 该参数废弃，新开发内容不要使用该参数。如果需要累加初始矩阵，请使用带Bias的接口来实现；也可以通过cmatrixInitVal和cmatrixSource参数配置C矩阵的初始值来源来实现。推荐使用带Bias的接口，相比于配置cmatrixInitVal和cmatrixSource参数更加简单方便。<br><br>配置是否需要累加初始矩阵，默认值为false，取值说明如下：<br>&nbsp;&nbsp;&bull; false：矩阵乘，无需累加初始矩阵，C = A \* B。<br>&nbsp;&nbsp;&bull; true：矩阵乘加，需要累加初始矩阵，C += A \* B。 |
 | disableGemv | M=1时，该参数用来配置Mmad计算是否开启[GEMV](关键特性说明/GEMV.md#ZH-CN_TOPIC_0000002538231187)模式。<br>&nbsp;&nbsp;&bull; false：开启GEMV模式。<br>&nbsp;&nbsp;&bull; true：关闭GEMV模式。<br><br>该参数仅支持如下型号：<br><br>Ascend 950PR/Ascend 950DT |

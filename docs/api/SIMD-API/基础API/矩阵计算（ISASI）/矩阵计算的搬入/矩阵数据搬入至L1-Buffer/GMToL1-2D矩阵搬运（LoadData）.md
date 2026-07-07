@@ -63,7 +63,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const GlobalTensor<T>
 | sid | 此参数用户无需关注，设置为0即可。 |
 | dstGap | 相邻迭代间，目的操作数前一个分形**结束地址**与后一个分形**起始地址**的间隔，单位：512字节。取值范围：dstGap∈[0, 65535]。默认为0。<br>**注：dstGap = 0表示相邻repeat目的操作数起始地址间隔1个数据分形即连续存放。** |
 | ifTranspose | 是否启用转置功能，对每个分形矩阵进行转置，默认为false：<br>&nbsp;&nbsp;&bull; true：启用。<br>&nbsp;&nbsp;&bull; false：不启用。<br>**注：本通路场景下不支持转置，参数无意义，保持默认即可。** |
-| addrMode | 用于控制多次迭代场景下，源操作数中每一次迭代的分形矩阵索引ID是递增还是递减，0表示递增，下一次repeat index = startIndex + srcStride \* repeatTime。1表示递减，下一次repeat index = startIndex - srcStride \* repeatTime。 |
+| addrMode | 用于控制多次迭代场景下，源操作数中每一次迭代的分形矩阵索引ID是递增还是递减，0表示递增，下一次repeat index = startIndex + srcStride \* repeatTimes。1表示递减，下一次repeat index = startIndex - srcStride \* repeatTimes。 |
 
 ## 数据类型<a id="zh-cn_topic_0000002567745223_section4219135304818"></a>
 

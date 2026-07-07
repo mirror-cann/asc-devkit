@@ -66,7 +66,7 @@ __aicore__ inline void SetFixPipeClipRelu(uint64_t config)
 
 ```cpp
 uint64_t clipReluMaxVal = 0x3c00;
-SetFixPipeClipRelu(clipReluMaxVal); // 开启ReLU的情况下，先进行ReLU操作，再进行clip，clipReluMaxVal为通过该接口设置的最大值
+SetFixPipeClipRelu(clipReluMaxVal); // 开启ReLU的情况下，先进行ReLU操作，再进行ClipReLU，clipReluMaxVal为通过该接口设置的最大值
 ```
 
 - 针对Atlas 200I/500 A2 推理产品，完整示例如下。随路格式转换数据搬运，通路：L0C Buffer-\>GM。
@@ -222,7 +222,7 @@ SetFixPipeClipRelu(clipReluMaxVal); // 开启ReLU的情况下，先进行ReLU操
             // AscendC::PipeBarrier<PIPE_FIX>();
             // // mov l0c to gm，量化操作后开启ClipReLU操作
             // intriParams.clipReluPre = 1; 
-            // // 设置clip ReLU的值到寄存器
+            // // 设置ClipReLU的值到寄存器
             // uint64_t clipReluVal = 0x3c00; // value 1, half
             // SetFixPipeClipRelu(clipReluVal);
             // //mov l0c to gm，量化操作后，设置element-wise操作，Add

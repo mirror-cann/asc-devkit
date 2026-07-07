@@ -53,9 +53,9 @@ extern "C" __global__ __aicore__ void main_gemm_test(
     copy_gm_to_cbuf((__cbuf__ half*)input0.GetPhyAddr(), input0Gm, 0, 1, roundm * roundk * 2 / 32, 0, 0, PAD_NONE);
     copy_gm_to_cbuf((__cbuf__ half*)input1.GetPhyAddr(), input1Gm, 0, 1, roundk * roundn * 2 / 32, 0, 0, PAD_NONE);
     pipe_barrier(PIPE_ALL);
-    GemmTiling tilling = GetGemmTiling<half>(m, k, n);
-    tilling.loopMode = mode;
-    Gemm(output, input0, input1, m, k, n, tilling, false, initValue);
+    GemmTiling tiling = GetGemmTiling<half>(m, k, n);
+    tiling.loopMode = mode;
+    Gemm(output, input0, input1, m, k, n, tiling, false, initValue);
 
     pipe_barrier(PIPE_ALL);
     copy_matrix_cc_to_ubuf(
