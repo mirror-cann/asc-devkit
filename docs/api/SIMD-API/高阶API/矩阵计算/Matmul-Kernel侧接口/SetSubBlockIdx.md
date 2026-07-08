@@ -40,11 +40,14 @@ __aicore__ inline void SetSubBlockIdx(uint8_t subBlockIdx)
 ## 调用示例
 
 ```
+#define ASCENDC_CUBE_ONLY
+#include "lib/matmul_intf.h"
+
 typedef AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, half> aType;
 typedef AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, half> bType;
 typedef AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float> cType;
 typedef AscendC::MatmulType<AscendC::TPosition::GM, CubeFormat::ND, float> biasType;
 
-MatmulImpl<aType, bType, cType, biasType, CFG_NORM> mm;
+Matmul<aType, bType, cType, biasType, CFG_NORM> mm;
 mm.SetSubBlockIdx(0);  // 子核ID设置为0
 ```

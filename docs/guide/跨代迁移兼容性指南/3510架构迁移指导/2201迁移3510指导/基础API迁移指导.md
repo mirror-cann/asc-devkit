@@ -309,7 +309,7 @@
             auto gmB = bGlobal[offsetB];
             auto gmC = cGlobal[offsetC];
 
-            AscendC::MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_MDL> mm;
+            AscendC::Matmul<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, CFG_MDL> mm;
             mm.SetSubBlockIdx(0);
             mm.Init(&tiling, pipe);
             mm.SetTensorA(gmA, false);

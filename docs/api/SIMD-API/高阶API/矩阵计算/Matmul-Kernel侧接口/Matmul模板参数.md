@@ -41,9 +41,9 @@
 
 ## 函数原型
 
+Matmul模板参数如下：
 ```
 template <class A_TYPE, class B_TYPE, class C_TYPE, class BIAS_TYPE = C_TYPE, const auto& MM_CFG = CFG_NORM, class MM_CB = MatmulCallBackFunc<nullptr, nullptr, nullptr>, MATMUL_POLICY_DEFAULT_OF(MatmulPolicy)>
-using Matmul = AscendC::MatmulImpl<A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, MM_CB, MATMUL_POLICY>;
 ```
 
 -   A\_TYPE、B\_TYPE、C\_TYPE类型信息通过[MatmulType](Matmul使用说明.md#table1188045714378)来定义。

@@ -75,7 +75,7 @@ $$
 
 ### 实现要点
 
-本样例将 tiling 参数统一在 `matmul_mx.h` 中编译期确定，通过模板常量 `CONSTANT_CFG` 传给 `MatmulImpl`：
+本样例将 tiling 参数统一在 `matmul_mx.h` 中编译期确定，通过模板常量 `CONSTANT_CFG` 传给 `Matmul`：
 
 ```cpp
 constexpr static auto CONSTANT_CFG = GetMxConstantCFG<aType, bType, cType, EnableScaleCache>();
