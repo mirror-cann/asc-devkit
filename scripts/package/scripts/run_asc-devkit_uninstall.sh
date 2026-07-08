@@ -124,7 +124,7 @@ new_uninstall() {
         return 1
     fi
     if [ -d "$common_parse_dir/tools/ascendc_tools" ];then
-        chmod 550 "$common_parse_dir/tools/ascendc_tools"
+        chmod 555 "$common_parse_dir/tools/ascendc_tools"
     fi
     if [ -n "$latest_path" ] && [ -d "$latest_path" ] && [ "x$(ls -A $latest_path 2>&1)" = "x" ]; then
         rm -rf "$latest_path"
