@@ -26,6 +26,7 @@
 #include "coll_comm_aicpu_mgr.h"
 #include "stream_lite.h"
 #include "thread.h"
+#include "aicpu_ts_thread.h"
 
 using namespace HcclApi;
 namespace {

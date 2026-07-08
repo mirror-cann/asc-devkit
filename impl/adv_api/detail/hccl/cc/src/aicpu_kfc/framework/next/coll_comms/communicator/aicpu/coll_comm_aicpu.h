@@ -13,6 +13,7 @@
 
 #include "common.h"
 #include "aicpu_init_param.h"
+#include "topo_matcher.h"
 #include "hcomm_primitives.h"
 #include "transport_pub.h"
 #include "thread.h"
