@@ -51,6 +51,7 @@ PIPE_V
 vector_int64_t dst;
 vector_int32_t src;
 vector_bool mask;
+mask = asc_create_mask_b32(PAT_ALL);
 asc_int322int64(dst, src, mask);    // 将src的上半部分转换成vector_int64_t类型并写入dst
 asc_int322int64_v2(dst, src, mask);    // 将src的下半部分转换成vector_int64_t类型并写入dst
 ```

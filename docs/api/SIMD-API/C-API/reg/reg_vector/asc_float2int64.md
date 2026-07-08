@@ -89,5 +89,6 @@ PIPE_V
 vector_float src;
 vector_int64_t dst;
 vector_bool mask;
+mask = asc_create_mask_b32(PAT_ALL);
 asc_float2int64_rn(dst, src, mask);
 ```

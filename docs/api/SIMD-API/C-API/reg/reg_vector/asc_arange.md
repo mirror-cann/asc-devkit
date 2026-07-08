@@ -63,6 +63,6 @@ PIPE_V
 
 ```cpp
 vector_int8_t dst;
-int8_t value;
+int8_t value = 0;
 asc_arange(dst, value);
 ```
