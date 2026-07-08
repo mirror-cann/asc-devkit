@@ -227,13 +227,14 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void ring_buffer_wait(__simt_gm__ RingBufR
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t check_and_wait_ring_buf_space(
-    __simt_gm__ BlockRingBufInfo* block_ring_buf_info, uint64_t tlv_len)
+    __simt_gm__ BlockRingBufInfo* block_ring_buf_info, uint32_t& tlv_len)
 {
     __simt_gm__ RingBufReadInfo* read_info = get_ring_buf_read_info(block_ring_buf_info);
     __simt_gm__ RingBufWriteInfo* write_info = get_ring_buf_write_info(block_ring_buf_info);
 
     uint64_t start_offset = 0;
     uint32_t active_thread = __activemask();
+    tlv_len = __reduce_max(tlv_len);
     uint64_t total_len = __popc(active_thread) * tlv_len;
     int32_t lane_id = __ffs(static_cast<int32_t>(active_thread)) - 1;
     if (laneid() == lane_id) {
