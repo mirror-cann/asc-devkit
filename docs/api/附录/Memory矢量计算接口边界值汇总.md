@@ -1,21 +1,15 @@
 # Memory矢量计算接口边界值汇总<a name="ZH-CN_TOPIC_0000002533514388"></a>
 
-<cann-filter npu-type="A3,910b">
-
 ## 概述<a name="section3674181114910"></a>
 
 本节汇总介绍了Memory矢量计算接口在边界值输入下的两类输出结果，以下内容针对如下型号生效：
 
-<cann-filter npu-type="A3">
-
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-
-</cann-filter>
-<cann-filter npu-type="910b">
-
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-</cann-filter>
+<!-- end id3 -->
 
 Memory矢量计算接口在边界值输入下，有两类输出结果：
 
@@ -1829,4 +1823,3 @@ Gather和Gatherb属于搬运类接口，不涉及特殊值/边界值。
 
 SetMaskCount、SetMaskNorm、SetVectorMask和ResetMask为掩码配置接口，不涉及特殊值/边界值。
 
-</cann-filter>

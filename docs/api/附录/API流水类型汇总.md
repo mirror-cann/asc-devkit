@@ -1,19 +1,13 @@
 # API流水类型汇总<a name="ZH-CN_TOPIC_0000002533354434"></a>
 
-<cann-filter npu-type="A3,910b">
-
 本节汇总介绍了一些主要的API的流水类型，以下内容针对如下型号生效：
 
-<cann-filter npu-type="A3">
-
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-
-</cann-filter>
-<cann-filter npu-type="910b">
-
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-</cann-filter>
+<!-- end id3 -->
 
 **表1**  Memory矢量计算API流水类型汇总
 
@@ -192,4 +186,3 @@
 | ICachePreLoad(ISASI) | PIPE_S |
 | GetICachePreloadStatus(ISASI) | PIPE_S |
 
-</cann-filter>

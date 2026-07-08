@@ -1,19 +1,13 @@
 # Mmad接口边界值汇总<a name="ZH-CN_TOPIC_0000002607849175"></a>
 
-<cann-filter npu-type="A3,910b">
-
 本节汇总介绍了Mmad计算接口在边界值输入下的输出结果，以下内容针对如下型号生效：
 
-<cann-filter npu-type="A3">
-
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-
-</cann-filter>
-<cann-filter npu-type="910b">
-
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-
-</cann-filter>
+<!-- end id3 -->
 
 **表1**  Mmad特殊值/边界值输入的计算结果说明
 
@@ -46,4 +40,3 @@
 
 （2）饱和模式下，+inf按照数据类型取对应max，-inf按照数据类型取对应min值参与计算，nan值按照0参与计算。
 
-</cann-filter>
