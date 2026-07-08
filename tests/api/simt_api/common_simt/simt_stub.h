@@ -36,24 +36,71 @@ static half __hmax_nan(half x, half y) { return half(0); }
 
 static half __hmin_nan(half x, half y) { return half(0); }
 
-template <typename T, typename U>
-T __shfl(T var, U mask)
+template <typename T>
+T __shfl(T var, int32_t src_lane, int32_t width)
 {
     return var;
 }
 
-// bfloat16_t / bfloat16x2_t warp-shuffle stubs are defined in
-// device_warp_functions_debug.cpp (the released stub_fun.h only declares up to
-// half/half2). Declare them here so the asc_bf16 impl resolves them in the
-// CPU-debug twin build.
-bfloat16_t __shfl(bfloat16_t var, int32_t num);
-bfloat16x2_t __shfl(bfloat16x2_t var, int32_t num);
-bfloat16_t __shfl_up(bfloat16_t var, int32_t num);
-bfloat16x2_t __shfl_up(bfloat16x2_t var, int32_t num);
-bfloat16_t __shfl_down(bfloat16_t var, int32_t num);
-bfloat16x2_t __shfl_down(bfloat16x2_t var, int32_t num);
-bfloat16_t __shfl_xor(bfloat16_t var, int32_t num);
-bfloat16x2_t __shfl_xor(bfloat16x2_t var, int32_t num);
+template <typename T>
+T __shfl_up(T var, int32_t delta, int32_t width)
+{
+    return var;
+}
+
+template <typename T>
+T __shfl_down(T var, int32_t delta, int32_t width)
+{
+    return var;
+}
+
+template <typename T>
+T __shfl_xor(T var, int32_t lane_mask, int32_t width)
+{
+    return var;
+}
+
+int32_t __shfl(int32_t var, int32_t src_lane, int32_t width);
+uint32_t __shfl(uint32_t var, int32_t src_lane, int32_t width);
+float __shfl(float var, int32_t src_lane, int32_t width);
+int64_t __shfl(int64_t var, int32_t src_lane, int32_t width);
+uint64_t __shfl(uint64_t var, int32_t src_lane, int32_t width);
+half __shfl(half var, int32_t src_lane, int32_t width);
+half2 __shfl(half2 var, int32_t src_lane, int32_t width);
+
+int32_t __shfl_up(int32_t var, int32_t delta, int32_t width);
+uint32_t __shfl_up(uint32_t var, int32_t delta, int32_t width);
+float __shfl_up(float var, int32_t delta, int32_t width);
+int64_t __shfl_up(int64_t var, int32_t delta, int32_t width);
+uint64_t __shfl_up(uint64_t var, int32_t delta, int32_t width);
+
+int32_t __shfl_down(int32_t var, int32_t delta, int32_t width);
+uint32_t __shfl_down(uint32_t var, int32_t delta, int32_t width);
+float __shfl_down(float var, int32_t delta, int32_t width);
+int64_t __shfl_down(int64_t var, int32_t delta, int32_t width);
+uint64_t __shfl_down(uint64_t var, int32_t delta, int32_t width);
+
+int32_t __shfl_xor(int32_t var, int32_t lane_mask, int32_t width);
+uint32_t __shfl_xor(uint32_t var, int32_t lane_mask, int32_t width);
+float __shfl_xor(float var, int32_t lane_mask, int32_t width);
+int64_t __shfl_xor(int64_t var, int32_t lane_mask, int32_t width);
+uint64_t __shfl_xor(uint64_t var, int32_t lane_mask, int32_t width);
+
+half __shfl_up(half var, int32_t delta, int32_t width);
+half2 __shfl_up(half2 var, int32_t delta, int32_t width);
+half __shfl_down(half var, int32_t delta, int32_t width);
+half2 __shfl_down(half2 var, int32_t delta, int32_t width);
+half __shfl_xor(half var, int32_t lane_mask, int32_t width);
+half2 __shfl_xor(half2 var, int32_t lane_mask, int32_t width);
+
+bfloat16_t __shfl(bfloat16_t var, int32_t src_lane, int32_t width);
+bfloat16x2_t __shfl(bfloat16x2_t var, int32_t src_lane, int32_t width);
+bfloat16_t __shfl_up(bfloat16_t var, int32_t delta, int32_t width);
+bfloat16x2_t __shfl_up(bfloat16x2_t var, int32_t delta, int32_t width);
+bfloat16_t __shfl_down(bfloat16_t var, int32_t delta, int32_t width);
+bfloat16x2_t __shfl_down(bfloat16x2_t var, int32_t delta, int32_t width);
+bfloat16_t __shfl_xor(bfloat16_t var, int32_t lane_mask, int32_t width);
+bfloat16x2_t __shfl_xor(bfloat16x2_t var, int32_t lane_mask, int32_t width);
 
 static inline unsigned int __brev(unsigned int x)
 {

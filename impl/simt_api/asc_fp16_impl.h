@@ -1041,50 +1041,42 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_stwt(half2* address, half2 val)
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half asc_shfl(half var, int32_t src_lane, int32_t width)
 {
-    return __shfl(var,
-        ((warpSize - width) << __INTERNAL_LANE_MASK_START_POS) | (__INTERNAL_MAX_OFFSET_OF_MODE << __INTERNAL_MAX_OFFSET_START_POS) | (src_lane));
+    return __shfl(var, src_lane, width);
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half2 asc_shfl(half2 var, int32_t src_lane, int32_t width)
 {
-    return __shfl(var,
-        ((warpSize - width) << __INTERNAL_LANE_MASK_START_POS) | (__INTERNAL_MAX_OFFSET_OF_MODE << __INTERNAL_MAX_OFFSET_START_POS) | (src_lane));
+    return __shfl(var, src_lane, width);
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half asc_shfl_up(half var, uint32_t delta, int32_t width)
 {
-    return __shfl_up(var,
-        ((warpSize - width) << __INTERNAL_LANE_MASK_START_POS) | (__INTERNAL_MAX_OFFSET_OF_UP_MODE << __INTERNAL_MAX_OFFSET_START_POS) | (delta));
+    return __shfl_up(var, delta, width);
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half2 asc_shfl_up(half2 var, uint32_t delta, int32_t width)
 {
-    return __shfl_up(var,
-        ((warpSize - width) << __INTERNAL_LANE_MASK_START_POS) | (__INTERNAL_MAX_OFFSET_OF_UP_MODE << __INTERNAL_MAX_OFFSET_START_POS) | (delta));
+    return __shfl_up(var, delta, width);
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half asc_shfl_down(half var, uint32_t delta, int32_t width)
 {
-    return __shfl_down(var,
-                       ((warpSize - width) << __INTERNAL_LANE_MASK_START_POS) | (__INTERNAL_MAX_OFFSET_OF_MODE << __INTERNAL_MAX_OFFSET_START_POS) | (delta));
+    return __shfl_down(var, delta, width);
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half2 asc_shfl_down(half2 var, uint32_t delta, int32_t width)
 {
-    return __shfl_down(var,
-                       ((warpSize - width) << __INTERNAL_LANE_MASK_START_POS) | (__INTERNAL_MAX_OFFSET_OF_MODE << __INTERNAL_MAX_OFFSET_START_POS) | (delta));
+    return __shfl_down(var, delta, width);
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half asc_shfl_xor(half var, int32_t lane_mask, int32_t width)
 {
-    return __shfl_xor(var,
-                      ((warpSize - width) << __INTERNAL_LANE_MASK_START_POS) | (__INTERNAL_MAX_OFFSET_OF_MODE << __INTERNAL_MAX_OFFSET_START_POS) | (lane_mask));
+    return __shfl_xor(var, lane_mask, width);
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half2 asc_shfl_xor(half2 var, int32_t lane_mask, int32_t width)
 {
-    return __shfl_xor(var,
-                      ((warpSize - width) << __INTERNAL_LANE_MASK_START_POS) | (__INTERNAL_MAX_OFFSET_OF_MODE << __INTERNAL_MAX_OFFSET_START_POS) | (lane_mask));
+    return __shfl_xor(var, lane_mask, width);
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half asc_reduce_add(half val)
