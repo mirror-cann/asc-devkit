@@ -1139,9 +1139,9 @@ def compile_sk_bind(compile_info: CompileInfo, compile_info_origin: CompileInfo,
 
     # bitmap definition: bit0:wait_flag(1), bit1:set_flag(2), bit2:dcci_disable(4), default:0
     cap_bitmap = 0
-    if compile_info.super_kernel_early_start_wait_flag:
+    if global_var_storage.get_variable("ascendc_sub_super_kernel_early_start_wait_flag") is True:
         cap_bitmap |= 1
-    if compile_info.super_kernel_early_start_set_flag:
+    if global_var_storage.get_variable("ascendc_sub_super_kernel_early_start_set_flag") is True:
         cap_bitmap |= 2
     cap_bitmap |= _get_dcci_disable_cap_bitmap(compile_info, compile_info_origin.global_kernel_symbols)
 
