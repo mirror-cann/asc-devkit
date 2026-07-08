@@ -399,12 +399,17 @@ def do_op_tiling(optype, compile_info, inputs, outputs, compile_info_hash=None, 
         error_list = []
         for idx in ret_json["error_messages"]:
             dict_args2 = {}
-            dict_args2["type"] = idx["type"]
-            dict_args2["errCode"] = idx["errorcode"]
-            dict_args2["detailed_cause"] = idx["errormsg"]
-            error_list.append(dict_args2)
+            if ("EZ0008" <= idx["errorcode"] <= "EZ0038"):
+                dict_args2 = idx["errormsg"]
+                dict_args2["errCode"] = idx["errorcode"]
+            else:
+                dict_args2["type"] = idx["type"]
+                dict_args2["errCode"] = idx["errorcode"]
+                dict_args2["detailed_cause"] = idx["errormsg"]
 
+            error_list.append(dict_args2)
         error_list.append(dict_args1)
+
         raise RuntimeError(tuple(error_list))
 
     run_info = json.loads(_TILING_DATA.buf.value)
