@@ -225,7 +225,7 @@
 | [__ll2half_rd](../数学函数/half类型/half类型精度转换函数/__ll2half_rd.md) | 获取输入遵循CAST_FLOOR模式转换成的half类型数据。 |
 | [__ll2half_ru](../数学函数/half类型/half类型精度转换函数/__ll2half_ru.md) | 获取输入遵循CAST_CEIL模式转换成的half类型数据。 |
 | [__ll2half_rna](../数学函数/half类型/half类型精度转换函数/__ll2half_rna.md) | 获取输入遵循CAST_ROUND模式转换成的half类型数据。 |
-| [__floats2half2_rn](../数学函数/half类型/half类型精度转换函数/__floats2half2_rn.md) | 将输入的数据x，y遵循CAST_RINT模式分别转换为bfloat16类型并填充到half2的前后两部分，返回转换后的half2类型数据。 |
+| [__floats2half2_rn](../数学函数/half类型/half类型精度转换函数/__floats2half2_rn.md) | 将输入的数据x，y遵循CAST_RINT模式分别转换为half类型并填充到half2的前后两部分，返回转换后的half2类型数据。 |
 | [__float22half2_rn](../数学函数/half类型/half类型精度转换函数/__float22half2_rn.md) | 将float2类型数据遵循CAST_RINT模式转换为half2类型，返回转换后的half2类型数据。 |
 | [__low2half](../数学函数/half类型/half类型精度转换函数/__low2half.md) | 返回输入数据的低16位。 |
 | [__low2half2](../数学函数/half类型/half类型精度转换函数/__low2half2.md) | 将输入数据的低16位填充到half2并返回。 |
@@ -726,7 +726,6 @@
 | [__usad](../数学函数/整型数学库函数/__usad.md) | 对输入数据x、y、z，计算|x - y|+z的结果，即第一个入参和第二个入参之差的绝对值与第三个入参的和。 |
 | [__mul24](../数学函数/整型数学库函数/__mul24.md) | 获取输入int32类型数据x和y低24位乘积的低32位结果。x和y的高8位被忽略。 |
 | [__umul24](../数学函数/整型数学库函数/__umul24.md) | 获取输入uint32类型数据x和y低24位乘积的低32位结果。x和y的高8位被忽略。 |
-|  |  |
 | [__hadd](../数学函数/整型数学库函数/__hadd-259.md) | 获取输入int32类型数据x和y的平均值，避免中间求和溢出。 |
 | [__rhadd](../数学函数/整型数学库函数/__rhadd.md) | 获取输入int32类型数据x和y的向上取整平均值，避免中间求和溢出。 |
 | [__uhadd](../数学函数/整型数学库函数/__uhadd.md) | 获取输入uint32类型数据x和y的平均值，避免中间求和溢出。 |
