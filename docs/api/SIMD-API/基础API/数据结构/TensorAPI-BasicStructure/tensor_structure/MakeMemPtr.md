@@ -20,28 +20,26 @@ MakeMemPtr提供三种调用形式：
 
 ## 函数原型
 
-    - 指定物理位置和数据类型，根据原始地址构造：
+- 指定物理位置和数据类型，根据原始地址构造：
 
-    ```cpp
-    template <typename Hardware, typename DataType, typename Addr,
-        EnableMakePtrByTrait<Hardware, Addr> Enable>
-    __aicore__ inline constexpr auto MakeMemPtr(Addr addr)
-    ```
+  ```cpp
+  template <typename Hardware, typename DataType, typename Addr, EnableMakePtrByTrait<Hardware, Addr> Enable>
+  __aicore__ inline constexpr auto MakeMemPtr(Addr addr)
+  ``` 
 
-    - 指定物理位置，从已有迭代器构造：
+- 指定物理位置，从已有迭代器构造：
 
-    ```cpp
-    template <typename Hardware, typename Iterator,
-        EnableMakeHardwarePtr<Hardware, Iterator> Enable>
-    __aicore__ inline constexpr auto MakeMemPtr(Iterator iterator)
-    ```
+  ```cpp
+  template <typename Hardware, typename Iterator, EnableMakeHardwarePtr<Hardware, Iterator> Enable>
+  __aicore__ inline constexpr auto MakeMemPtr(Iterator iterator)
+  ```
 
-    - 从已有迭代器中自动推导物理位置：
+- 从已有迭代器中自动推导物理位置：
 
-    ```cpp
-    template <typename Iterator, EnableMakePtrByIter<Iterator> Enable>
-    __aicore__ inline constexpr auto MakeMemPtr(Iterator iterator)
-    ```
+  ```cpp
+  template <typename Iterator, EnableMakePtrByIter<Iterator> Enable>
+  __aicore__ inline constexpr auto MakeMemPtr(Iterator iterator)
+  ```
 
 ## 参数说明
 
@@ -66,14 +64,14 @@ MakeMemPtr提供三种调用形式：
 | :--- | :---: | :--- |
 | Hardware | 输入 | 物理存储位置类型。 |
 | DataType | 输入 | 数据类型。 |
-| Addr | 输入 | 原始地址类型。 |
+| Addr | 输入 | 偏移量数值的类型。 |
 | Iterator | 输入 | 迭代器类型或已有指针适配器类型。 |
 
 **表3** 参数说明
 
 | 参数名 | 类型 | 描述 |
 | :--- | :---: | :--- |
-| addr | 输入 | 原始地址或地址偏移量。 |
+| addr | 输入 | 地址偏移量，即相对于基地址的偏移大小。 |
 | iterator | 输入 | 已有的硬件地址迭代器或指针适配器对象。 |
 
 ## 返回值说明
@@ -81,7 +79,7 @@ MakeMemPtr提供三种调用形式：
 返回HardwareMemPtr<PtrPattern, Pointer>类型的指针适配器对象，其中：
 
 - PtrPattern表示指定或推导得到的物理位置；
-- Pointer表示对应地址空间下的指针类型，例如__gm__ float*、__cbuf__ half*等。
+- Pointer表示对应地址空间下的指针类型，例如__gm__ float*、\_\_cbuf_\_ half*等。
 
 ## 约束说明
 

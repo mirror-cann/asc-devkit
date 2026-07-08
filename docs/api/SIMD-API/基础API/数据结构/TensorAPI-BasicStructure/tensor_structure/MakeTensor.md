@@ -49,6 +49,6 @@ __aicore__ inline constexpr auto MakeTensor(const Iterator& iter, const Args&...
   auto layout = MakeFrameLayout<NZLayoutPtn, half>(32, 32);
   auto tensor = MakeTensor(ptr, layout);
   
-  // 示例3：使用指针和形状创建张量（自动计算步幅）
+  // 示例3：使用指针和布局形状创建张量
   auto tensor2 = MakeTensor(ptr, MakeShape(32, 32), MakeStride(32, 32));
   ```
