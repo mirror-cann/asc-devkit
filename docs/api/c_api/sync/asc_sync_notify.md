@@ -10,7 +10,7 @@
 
 ## 功能说明
 
-设置同步标志，通知目标流水线。
+设置同步标志，通知目标流水线。需和[asc_sync_wait](asc_sync_wait.md)指令配对使用。
 
 ## 函数原型
 
@@ -24,7 +24,7 @@ __aicore__ inline void asc_sync_notify(pipe_t pipe, pipe_t tpipe, event_t id)
 | :--- | :--- | :--- |
 | pipe | 输入 | 源流水线类型。需传入编译期常量。 |
 | tpipe | 输入 | 目标流水线类型。需传入编译期常量。 |
-| id | 输入 | 同步ID。 |
+| id | 输入 | 同步ID。取值范围：EVENT_ID0 ~ EVENT_ID7。 |
 
 ## 返回值说明
 
@@ -47,8 +47,8 @@ __ubuf__ float src0[total_length];
 __ubuf__ float src1[total_length];
 __ubuf__ float dst[total_length];
 
-asc_copy_gm2ub((__ubuf__ void*)src0, (__gm__ void*)src0_gm, total_length * sizeof(float));
-asc_copy_gm2ub((__ubuf__ void*)src1, (__gm__ void*)src1_gm, total_length * sizeof(float));
+asc_copy_gm2ub(src0, src0_gm, total_length * sizeof(float));
+asc_copy_gm2ub(src1, src1_gm, total_length * sizeof(float));
 
 // 同步操作：数据搬运操作（GM到UB，PIPE_MTE2流水）完成后才能启动计算操作（PIPE_V流水）。
 asc_sync_notify(PIPE_MTE2, PIPE_V, EVENT_ID0);
@@ -60,5 +60,5 @@ asc_add(dst, src1, src0, total_length);
 asc_sync_notify(PIPE_V, PIPE_MTE3, EVENT_ID0);
 asc_sync_wait(PIPE_V, PIPE_MTE3, EVENT_ID0);
 
-asc_copy_ub2gm((__gm__ void*)dst_gm, (__ubuf__ void*)dst, blockLength * sizeof(float));
+asc_copy_ub2gm(dst_gm, dst, total_length * sizeof(float));
 ```

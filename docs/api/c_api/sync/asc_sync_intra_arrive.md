@@ -12,10 +12,10 @@ block内同步指令，与[asc_sync_intra_wait](asc_sync_intra_wait.md)配合使
 
 ## 函数原型
 
-    ```cpp
-    __aicore__ inline void asc_sync_intra_arrive(pipe_t pipe, uint8_t sync_id)
-    __aicore__ inline void asc_sync_intra_arrive(pipe_t pipe, uint64_t sync_id)
-    ```
+```cpp
+__aicore__ inline void asc_sync_intra_arrive(pipe_t pipe, uint8_t sync_id)
+__aicore__ inline void asc_sync_intra_arrive(pipe_t pipe, uint64_t sync_id)
+```
 
 ## 参数说明
 
@@ -38,16 +38,16 @@ PIPE_S
 - 需要保证相同的ID只会被一个流水线控制。
 - 每个ID对应一个计数器，特定CORE的同步ID计数器可通过其他CORE发起的asc_sync_intra_arrive递增；也可通过本身发起的asc_sync_intra_wait递减。 
 - 三个CORE的ID映射规则如下：
-    - ID为0~15的VECC0RE0的asc_sync_intra_arrive指令会被映射到CUBECORE的0~15的ID。 
-    - ID为0~15的VECC0RE1的asc_sync_intra_arrive指令会被映射到CUBECORE的16~31的ID。 
-    - ID为0~15的CUBECORE的asc_sync_intra_arrive指令会被映射到VECC0RE0的0~15的ID。 
-    - ID为16~31的CUBECORE的asc_sync_intra_arrive指令会被映射到VECC0RE0的0~15的ID。 
+    - ID为0~15的VECCORE0的asc_sync_intra_arrive指令会被映射到CUBECORE的0~15的ID。 
+    - ID为0~15的VECCORE1的asc_sync_intra_arrive指令会被映射到CUBECORE的16~31的ID。 
+    - ID为0~15的CUBECORE的asc_sync_intra_arrive指令会被映射到VECCORE0的0~15的ID。 
+    - ID为16~31的CUBECORE的asc_sync_intra_arrive指令会被映射到VECCORE1的0~15的ID。 
 
 ## 调用示例
 
 ```cpp
 //设置同步指令事件标号为1
-int64_t sync_id = 1;
+uint64_t sync_id = 1;
 asc_sync_intra_arrive(PIPE_S, sync_id);
 asc_sync_intra_wait(PIPE_S, sync_id);  
 ```

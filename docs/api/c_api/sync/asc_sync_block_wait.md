@@ -10,14 +10,14 @@
 
 ## 功能说明
 
-和[asc_sync_block_arrive](asc_sync_block_arrive.md)配合使用（通过flagID关联），用于等待所有同步对象到达flagID对应的同步点。如果flagID所对应的计数器数值为0则阻塞不执行；如果对应的计数器大于0，则计数器减一，同时后续指令开始执行。
+和[asc_sync_block_arrive](asc_sync_block_arrive.md)配合使用（通过flag_id关联），用于等待所有同步对象到达flag_id对应的同步点。如果flag_id所对应的计数器数值为0则阻塞不执行；如果对应的计数器大于0，则计数器减一，同时后续指令开始执行。
 
 ## 函数原型
 
-    ```cpp
-    __aicore__ inline void asc_sync_block_wait(pipe_t pipe, uint8_t flag_id)
-    __aicore__ inline void asc_sync_block_wait(pipe_t pipe, int64_t flag_id)
-    ```
+```cpp
+__aicore__ inline void asc_sync_block_wait(pipe_t pipe, uint8_t flag_id)
+__aicore__ inline void asc_sync_block_wait(pipe_t pipe, int64_t flag_id)
+```
 
 ## 参数说明
 
