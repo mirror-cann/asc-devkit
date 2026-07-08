@@ -12,7 +12,7 @@
 
 ## 获取性能数据<a name="section327528143615"></a>
 
-使用msProf工具获取算子的Profiling数据，重点分析MTE2，Cube，Scalar pipeline的流水情况。
+使用msOpProf工具获取算子的Profiling数据，重点分析MTE2，Cube，Scalar pipeline的流水情况。
 
 ## 分析主要瓶颈点<a name="section788333916369"></a>
 

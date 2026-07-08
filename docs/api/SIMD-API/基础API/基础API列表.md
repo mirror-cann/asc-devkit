@@ -554,8 +554,8 @@
 | [ICPU_SET_TILING_KEY](调试接口/CPU孪生调试/ICPU_SET_TILING_KEY.md) | 用于指定本次CPU调测使用的tilingKey。调测执行时，将只执行算子核函数中该tilingKey对应的分支。 |
 | [GmFree](调试接口/CPU孪生调试/GmFree.md) | 进行核函数的CPU侧运行验证时，用于释放通过GmAlloc申请的共享内存。 |
 | [SetKernelMode](调试接口/CPU孪生调试/SetKernelMode.md) | 针对分离模式，CPU调测时，设置内核模式为单AIV模式，单AIC模式或者MIX模式，以分别支持单AIV矢量算子，单AIC矩阵算子，MIX混合算子的CPU调试。不调用该接口的情况下，默认为MIX模式。为保证算子代码在多个硬件平台兼容，耦合模式下也可以调用，该场景下接口不会生效，不影响正常调试。 |
-| [MetricsProfStart](调试接口/性能统计/MetricsProfStart.md) | 用于设置性能数据采集信号启动，和MetricsProfStop配合使用。使用msProf工具进行算子上板调优时，可在kernel侧代码段前后分别调用MetricsProfStart和MetricsProfStop来指定需要调优的代码段范围。 |
-| [MetricsProfStop](调试接口/性能统计/MetricsProfStop.md) | 设置性能数据采集信号停止，和MetricsProfStart配合使用。使用msProf工具进行算子上板调优时，可在kernel侧代码段前后分别调用MetricsProfStart和MetricsProfStop来指定需要调优的代码段范围。 |
+| [MetricsProfStart](调试接口/性能统计/MetricsProfStart.md) | 用于设置性能数据采集信号启动，和MetricsProfStop配合使用。使用msOpProf工具进行算子上板调优时，可在kernel侧代码段前后分别调用MetricsProfStart和MetricsProfStop来指定需要调优的代码段范围。 |
+| [MetricsProfStop](调试接口/性能统计/MetricsProfStop.md) | 设置性能数据采集信号停止，和MetricsProfStart配合使用。使用msOpProf工具进行算子上板调优时，可在kernel侧代码段前后分别调用MetricsProfStart和MetricsProfStop来指定需要调优的代码段范围。 |
 | [MarkStamp](调试接口/性能统计/MarkStamp.md) | 用户通过调用接口，用于在算子执行过程中标记特定位置，便于后期通过流水图分析代码执行路径与性能热点。 |
 
 ## 工具接口

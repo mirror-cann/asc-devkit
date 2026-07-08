@@ -72,8 +72,8 @@ yGm.SetL2CacheHint(AscendC::CacheMode::CACHE_MODE_DISABLE);</pre>
 </table>
 
 >[!NOTE]说明 
->你可以通过执行如下命令行，通过msprof工具获取上述示例的性能数据并进行对比。
+>你可以通过执行如下命令行，通过msOpProf工具获取上述示例的性能数据并进行对比。
 >```
->msprof op --launch-count=2 --output=./prof ./execute_add_op
+>msopprof --launch-count=2 --output=./prof ./execute_add_op
 >```
 >重点关注Memory.csv中的aiv\_gm\_to\_ub\_bw\(GB/s\)和aiv\_main\_mem\_write\_bw\(GB/s\)写带宽的速率。

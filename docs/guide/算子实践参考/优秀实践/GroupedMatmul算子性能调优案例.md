@@ -105,19 +105,19 @@ for i in range(g):
 
 固定8核测试，即当前性能和后续优化tiling中numBlocks固定设置为8。
 
-通过msProf算子调优工具获取算子性能数据：
+通过msOpProf算子调优工具获取算子性能数据：
 
 -   获取真实环境执行的性能数据（指令的cycle占比数据ArithmeticUtilization.csv），包含各个流水的占比情况；
 -   获取仿真性能数据（指令流水图），包含各个流水的占用区间，可观察流水间依赖情况，从而优化并行效率。
 
 ## 分析主要瓶颈点<a name="section371410542511"></a>
 
-固定8核进行测试的情况下，通过msprof op命令获取指令的cycle占比数据如下：
+固定8核进行测试的情况下，通过msopprof命令获取指令的cycle占比数据如下：
 
 **图1**  指令的cycle占比数据ArithmeticUtilization.csv（性能总耗时为218.1us）<a name="fig394318012515"></a>  
 ![](../../figures/指令的cycle占比数据ArithmeticUtilization-csv（性能总耗时为218-1us）.png "指令的cycle占比数据ArithmeticUtilization-csv（性能总耗时为218-1us）")
 
-通过msprof op simulator获取到的指令流水图如下图所示：
+通过msopprof simulator获取到的指令流水图如下图所示：
 
 **图2**  指令流水图<a name="fig1566120572287"></a>  
 ![](../../figures/指令流水图.png "指令流水图")
@@ -237,4 +237,3 @@ for i in range(g):
 -   在Vector计算为主要瓶颈点时，将AI Core中的AIC核和AIV核启动比例设置为1:2；
 -   Cube、Vector计算时间接近，且两者都有因相互等待导致的间隙时，采用4份workspace优化；
 -   观察数据搬运是否与计算相互掩盖，多轮计算没有数据依赖，且buffer够大时，开启double buffer，增加并行效率。
-

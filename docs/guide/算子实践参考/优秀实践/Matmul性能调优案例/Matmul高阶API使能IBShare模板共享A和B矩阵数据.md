@@ -49,7 +49,7 @@
 
 ## 获取性能数据<a name="section4647105095111"></a>
 
-使用msProf工具获取算子的Profiling的数据，重点分析MTE2，Cube，Scalar的流水情况。
+使用msOpProf工具获取算子的Profiling的数据，重点分析MTE2，Cube，Scalar的流水情况。
 
 ## 分析主要瓶颈点<a name="section371410542511"></a>
 
