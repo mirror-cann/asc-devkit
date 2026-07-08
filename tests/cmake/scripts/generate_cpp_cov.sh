@@ -52,12 +52,12 @@ generate_coverage() {
   EXTRA_ARGS=""
   # 版本比较，>=2.0，加参数忽略编译和运行行号不一致导致的lcov执行失败
   if [ -n "$LCOV_MAJOR" ] && [ "$LCOV_MAJOR" -ge 2 ]; then
-    REMOVE_ARGS="--ignore-errors unused"
+    REMOVE_ARGS="--ignore-errors unused --ignore-errors mismatch --ignore-errors source"
     EXTRA_ARGS="--ignore-errors mismatch --ignore-errors source"
   fi
 
-  lcov -c -d "${_source_dir}" -o "${_coverage_file}" $EXTRA_ARGS 2>/dev/null
-  lcov -r "${_coverage_file}" "${_cann_pkg_path}/*" "/home/jenkins/opensource/*" "${_src}/build/*" "${_src}/build_out/*" "${_src}/output/*" "${_src}/tests/*" -o "${_coverage_file}" $REMOVE_ARGS 2>/dev/null
+  lcov -c -d "${_source_dir}" -o "${_coverage_file}" $EXTRA_ARGS
+  lcov -r "${_coverage_file}" "${_cann_pkg_path}/*" "/home/jenkins/opensource/*" "${_src}/build/*" "${_src}/build_out/*" "${_src}/output/*" "${_src}/tests/*" -o "${_coverage_file}" $REMOVE_ARGS
   logging "generated coverage file ${_coverage_file}"
 }
 
@@ -88,10 +88,10 @@ filter_coverage() {
   REMOVE_ARGS=""
   # 版本比较，>=2.0，加参数忽略编译和运行行号不一致导致的lcov执行失败
   if [ -n "$LCOV_MAJOR" ] && [ "$LCOV_MAJOR" -ge 2 ]; then
-    REMOVE_ARGS="--ignore-errors unused"
+    REMOVE_ARGS="--ignore-errors unused --ignore-errors mismatch --ignore-errors source"
   fi
 
-  lcov --remove "${_coverage_file}" '/usr/include/*' '/usr/local/include/*' -o "${_filtered_file}" $REMOVE_ARGS 2>/dev/null
+  lcov --remove "${_coverage_file}" '/usr/include/*' '/usr/local/include/*' -o "${_filtered_file}" $REMOVE_ARGS
 }
 
 # generate html report

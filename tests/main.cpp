@@ -8,9 +8,19 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 #include <gtest/gtest.h>
+#include <cstdlib>
+
+#ifdef ENABLE_GCOV
+extern "C" void __gcov_dump(void);
+#endif
 
 int32_t main(int32_t argc, char** argv)
 {
     testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    int32_t ret = RUN_ALL_TESTS();
+#ifdef ENABLE_GCOV
+    __gcov_dump();
+#endif
+    std::quick_exit(ret);
+    return ret;
 }
