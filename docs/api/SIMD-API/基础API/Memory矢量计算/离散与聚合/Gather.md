@@ -157,7 +157,7 @@ def Gather(src, dst, count, srcOffset, srcBaseAddr):
 
 ## 调用示例<a name="section11276201527"></a>
 
-本样例中只展示Compute流程中的部分代码。如果您需要运行样例代码，请将该代码段拷贝并替换[Gather类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/gather)场景三中Compute函数的部分代码即可。
+本样中只展示部分关键代码。如果您需要运行样例代码，请将该代码段拷贝并替换[Gather类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/gather)场景三中Compute函数的部分代码即可。
 
 - tensor高维切分计算样例-mask连续模式。
 

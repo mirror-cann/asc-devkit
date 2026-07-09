@@ -1,6 +1,6 @@
 # DoubleBuffer场景<a name="ZH-CN_TOPIC_0000002532228161"></a>
 
-因存在算子中多次搬入搬出数据的场景，为充分利用硬件资源，实现多流水并行，引入[DoubleBuffer](../../../技术附录/概念原理和术语/性能优化技术原理/DoubleBuffer.md)机制。[DoubleBuffer](../../../技术附录/概念原理和术语/性能优化技术原理/DoubleBuffer.md)是通过将输入数据分成大小相等的两块，充分利用AI Core的硬件资源，实现数据搬入、计算、数据搬出的并行执行方式。下面以“核间不均分，核内不均分”的样例为例，介绍算子中DoubleBuffer的实现。一个简单的DoubleBuffer样例代码请参见[使用DoubleBuffer的Add算子样例](https://gitcode.com/cann/asc-devkit/tree/9.1.0/examples/01_simd_cpp_api/00_introduction/01_add/add_tpipe_tque)。
+因存在算子中多次搬入搬出数据的场景，为充分利用硬件资源，实现多流水并行，引入[DoubleBuffer](../../../技术附录/概念原理和术语/性能优化技术原理/DoubleBuffer.md)机制。[DoubleBuffer](../../../技术附录/概念原理和术语/性能优化技术原理/DoubleBuffer.md)是通过将输入数据分成大小相等的两块，充分利用AI Core的硬件资源，实现数据搬入、计算、数据搬出的并行执行方式。下面以“核间不均分，核内不均分”的样例为例，介绍算子中DoubleBuffer的实现。
 
 **图1**  DoubleBuffer数据切分示意图<a name="zh-cn_topic_0000002236197681_fig68713182104"></a>  
 ![](../../../figures/DoubleBuffer数据切分示意图.png "DoubleBuffer数据切分示意图")
@@ -115,7 +115,7 @@ __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, AddCustomTilingData
 }
 ```
 
-由于开启DoubleBuffer后，切分后的主块数据块个数翻倍，在Process函数中，需要将BUFFER\_NUM带入计算循环次数；尾块独立计算，不开启DoubleBuffer。后续主尾块在CopyIn、Compute、CopyOut函数中的处理，与[尾块tiling处理](多核-Tiling切分/尾块Tiling.md)相同。
+由于开启DoubleBuffer后，切分后的主块数据块个数翻倍，在Process函数中，需要将BUFFER\_NUM带入计算循环次数；尾块独立计算，不开启DoubleBuffer。后续主尾块在CopyIn、Compute、CopyOut阶段中的处理，与[尾块tiling处理](多核-Tiling切分/尾块Tiling.md)相同。
 
 ```
 __aicore__ inline void Process()
@@ -123,15 +123,17 @@ __aicore__ inline void Process()
     // 主块进行DoubleBuffer计算，所以loopCount得乘以2
     uint32_t loopCount = this->tileNum * BUFFER_NUM;
     for (uint32_t i = 0; i < loopCount; i++) {
-        CopyIn(i, this->tileLength);
-        Compute(i, this->tileLength);
-        CopyOut(i, this->tileLength);
+        // CopyIn：DataCopy(xLocal, xGm[i * this->tileLength], this->tileLength);
+        //         DataCopy(yLocal, yGm[i * this->tileLength], this->tileLength);
+        // Compute：Add(zLocal, xLocal, yLocal, this->tileLength);;
+        // CopyOut：DataCopy(zGm[i * this->tileLength], zLocal, this->tileLength);;
     }
     // 尾块进行计算, 不做DoubleBuffer操作
     if (this->lastTileLength > 0U) {
-        CopyIn(loopCount, this->lastTileLength);
-        Compute(loopCount, this->lastTileLength);
-        CopyOut(loopCount, this->lastTileLength);
+        // CopyIn：DataCopy(xLocal, xGm[loopCount], this->lastTileLength);
+        //         DataCopy(yLocal, yGm[loopCount], this->lastTileLength);
+        // Compute：Add(zLocal, xLocal, yLocal, this->lastTileLength);;
+        // CopyOut：DataCopy(zGm[loopCount], zLocal, this->lastTileLength);;
     }
 }
 ```

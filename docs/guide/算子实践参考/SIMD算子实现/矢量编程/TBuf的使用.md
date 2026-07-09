@@ -68,51 +68,32 @@
 **图1**  输入为bfloat16\_t类型的Add计算流程<a name="zh-cn_topic_0000002201317266_fig816618211471"></a>  
 ![](../../../figures/输入为bfloat16_t类型的Add计算流程.png "输入为bfloat16_t类型的Add计算流程")
 
-在Compute任务中，表示Cast转换结果、Add计算结果的临时变量均需要使用临时内存存储。与[基础矢量算子实现](基础矢量算子.md#zh-cn_topic_0000002201157438_section10423482111)的KernelAdd算子类相比，本样例新增两个TBuf类型的成员变量tmpBuf0、tmpBuf1，用于管理计算过程中使用的临时内存，代码如下。
+在计算过程中，表示Cast转换结果、Add计算结果的临时变量均需要使用临时内存存储。与[基础矢量算子实现](基础矢量算子.md#zh-cn_topic_0000002201157438_section10423482111)的KernelAdd算子类相比，本样例新增两个TBuf类型的成员变量tmpBuf0、tmpBuf1，用于管理计算过程中使用的临时内存，因此初始化阶段除原有步骤外，需要调用[InitBuffer](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TPipe/InitBuffer.md)接口为TBuf变量分配内存，具体的初始化阶段代码如下：
 
 ```
-class KernelAdd {
-public:
-    __aicore__ inline KernelAdd() {}
-    __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, AscendC::TPipe* pipeIn){}
-    __aicore__ inline void Process(){}
-private:
-    __aicore__ inline void CopyIn(){}
-    __aicore__ inline void Compute(){}
-    __aicore__ inline void CopyOut(){}
-private:
-    AscendC::TPipe* pipe;
-    AscendC::TQue<AscendC::TPosition::VECIN, 1> inQueueX;
-    AscendC::TQue<AscendC::TPosition::VECIN, 1> inQueueY;
-    AscendC::TQue<AscendC::TPosition::VECOUT, 1> outQueueZ;
-    AscendC::TBuf<AscendC::TPosition::VECCALC> tmpBuf0;     
-    AscendC::TBuf<AscendC::TPosition::VECCALC> tmpBuf1;
-    AscendC::GlobalTensor<bfloat16_t> xGm; 
-    AscendC::GlobalTensor<bfloat16_t> yGm;
-    AscendC::GlobalTensor<bfloat16_t> zGm;
-};
+// Init阶段
+AscendC::GlobalTensor<bfloat16_t> xGm;
+AscendC::GlobalTensor<bfloat16_t> yGm;
+AscendC::GlobalTensor<bfloat16_t> zGm;
+xGm.SetGlobalBuffer((__gm__ bfloat16_t*)x, totalLength);
+yGm.SetGlobalBuffer((__gm__ bfloat16_t*)y, totalLength);
+zGm.SetGlobalBuffer((__gm__ bfloat16_t*)z, totalLength);
+
+AscendC::TQue<AscendC::TPosition::VECIN, 1> inQueueX;
+AscendC::TQue<AscendC::TPosition::VECIN, 1> inQueueY;
+AscendC::TQue<AscendC::TPosition::VECOUT, 1> outQueueZ;
+pipe.InitBuffer(inQueueX, 1, totalLength * sizeof(bfloat16_t));
+pipe.InitBuffer(inQueueY, 1, totalLength * sizeof(bfloat16_t));
+pipe.InitBuffer(outQueueZ, 1, totalLength * sizeof(bfloat16_t));
+
+// 初始化TBuf临时缓冲区，用于存储类型转换后的float数据
+AscendC::TBuf<AscendC::TPosition::VECCALC> tmpBuf0;
+AscendC::TBuf<AscendC::TPosition::VECCALC> tmpBuf1;
+pipe.InitBuffer(tmpBuf0, totalLength * sizeof(float));
+pipe.InitBuffer(tmpBuf1, totalLength * sizeof(float));
 ```
 
-初始化函数阶段除原有步骤外，需要调用[InitBuffer](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TPipe/InitBuffer.md)接口为TBuf变量分配内存，具体的初始化函数代码如下：
-
-```
- __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR z, AscendC::TPipe* pipeIn)
-{
-    pipe = pipeIn;
-    xGm.SetGlobalBuffer((__gm__ bfloat16_t*)x, TOTAL_LENGTH);
-    yGm.SetGlobalBuffer((__gm__ bfloat16_t*)y, TOTAL_LENGTH);
-    zGm.SetGlobalBuffer((__gm__ bfloat16_t*)z, TOTAL_LENGTH);
-
-    pipe->InitBuffer(inQueueX, 1, TOTAL_LENGTH * sizeof(bfloat16_t));
-    pipe->InitBuffer(inQueueY, 1, TOTAL_LENGTH * sizeof(bfloat16_t));
-    pipe->InitBuffer(outQueueZ, 1, TOTAL_LENGTH * sizeof(bfloat16_t));
- 
-    pipe->InitBuffer(tmpBuf0, TOTAL_LENGTH * sizeof(float));
-    pipe->InitBuffer(tmpBuf1, TOTAL_LENGTH * sizeof(float));
-}
-```
-
-基于矢量编程范式，核函数需要实现3个基本任务：CopyIn，Compute，CopyOut。与[基础矢量算子实现](基础矢量算子.md#zh-cn_topic_0000002201157438_section10423482111)相同，Process函数按顺序调用CopyIn函数，Compute函数，CopyOut函数。其中，CopyIn函数，CopyOut函数与[基础矢量算子的CopyIn函数](基础矢量算子.md#zh-cn_topic_0000002201157438_zh-cn_topic_0000001514531781_li10182173751518)、[基础矢量算子的CopyOut函数](基础矢量算子.md#zh-cn_topic_0000002201157438_zh-cn_topic_0000001514531781_li1134112320247)的实现没有差异，此处不过多赘述。Compute函数的实现步骤如下：
+基于矢量编程范式，核函数需要实现3个基本任务：CopyIn，Compute，CopyOut。与[基础矢量算子实现](基础矢量算子.md#zh-cn_topic_0000002201157438_section10423482111)相同，核函数按顺序进行CopyIn，Compute，CopyOut。其中，CopyIn，CopyOut与[基础矢量算子的CopyIn](基础矢量算子.md#copyin-implementation)、[基础矢量算子的CopyOut](基础矢量算子.md#copyout-implementation)的实现没有差异，此处不过多赘述。Compute的实现步骤如下：
 
 1.  使用[DeQue](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TQue/DeQue.md)从VECIN的Queue中取出LocalTensor。
 2.  使用TBuf.[Get](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TBuf/Get.md)从TBuf上获取全部长度的Tensor作为临时内存。
@@ -123,23 +104,18 @@ private:
 7.  使用[FreeTensor](https://gitcode.com/cann/asc-devkit/blob/9.1.0/docs/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TQue/FreeTensor.md)释放不再使用的LocalTensor。
 
 ```
-__aicore__ inline void Compute()
-{
-    AscendC::LocalTensor<bfloat16_t> xLocal = inQueueX.DeQue<bfloat16_t> ();
-    AscendC::LocalTensor<bfloat16_t> yLocal = inQueueY.DeQue<bfloat16_t> ();
-    AscendC::LocalTensor<bfloat16_t> zLocal = outQueueZ.AllocTensor<bfloat16_t> ();
- 
-    AscendC::LocalTensor<float> tmpTensor0 = tmpBuf0.Get<float>();
-    AscendC::LocalTensor<float> tmpTensor1 = tmpBuf1.Get<float>();
-    
-    AscendC::Cast(tmpTensor0, xLocal, AscendC::RoundMode::CAST_NONE, TOTAL_LENGTH);
-    AscendC::Cast(tmpTensor1, yLocal, AscendC::RoundMode::CAST_NONE, TOTAL_LENGTH);
- 
-    AscendC::Add(tmpTensor0, tmpTensor0, tmpTensor1, TOTAL_LENGTH);
-    AscendC::Cast(zLocal, tmpTensor0, AscendC::RoundMode::CAST_RINT, TOTAL_LENGTH);
- 
-    outQueueZ.EnQue<bfloat16_t>(zLocal);
-    inQueueX.FreeTensor(xLocal);
-    inQueueY.FreeTensor(yLocal);
-}
+// Compute阶段
+xLocal = inQueueX.DeQue<bfloat16_t>();
+yLocal = inQueueY.DeQue<bfloat16_t>();
+AscendC::LocalTensor<bfloat16_t> zLocal = outQueueZ.AllocTensor<bfloat16_t>();
+AscendC::LocalTensor<float> tmpTensor0 = tmpBuf0.Get<float>();
+AscendC::LocalTensor<float> tmpTensor1 = tmpBuf1.Get<float>();
+// 使用Cast接口将bfloat16_t转换为float类型，存入TBuf临时缓冲区
+AscendC::Cast(tmpTensor0, xLocal, AscendC::RoundMode::CAST_NONE, totalLength);
+AscendC::Cast(tmpTensor1, yLocal, AscendC::RoundMode::CAST_NONE, totalLength);
+AscendC::Add(tmpTensor0, tmpTensor0, tmpTensor1, totalLength);
+AscendC::Cast(zLocal, tmpTensor0, AscendC::RoundMode::CAST_RINT, totalLength);
+outQueueZ.EnQue<bfloat16_t>(zLocal);
+inQueueX.FreeTensor(xLocal);
+inQueueY.FreeTensor(yLocal);
 ```

@@ -131,8 +131,6 @@ __aicore__ inline void Interleave(const LocalTensor<T>& dst0, const LocalTensor<
 
 ## 调用示例<a name="section176061616102911"></a>
 
-本样例中只展示Compute流程中的部分代码。
-
 ```
 AscendC::Interleave(dst0Local, dst1Local, src0Local, src1Local, 512);
 ```
