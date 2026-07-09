@@ -9,7 +9,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "tensor_api/stub/cce_stub.h"
+#include "c_api/stub/cce_stub.h"
 #include "tensor_api/tensor.h"
 
 class Tensor_Api_Vector_Dual_3510 : public testing::Test {
