@@ -26,7 +26,7 @@ asc_arange(dst, index);
 
 ## 掩码寄存器
 
-掩码寄存器的数据类型为vector_bool，用于矢量计算中选择参与计算的元素，其位宽为VL/8。
+掩码寄存器的数据类型为vector_bool，用于矢量计算中选择参与计算的元素，其位宽为VL/8。当搬运掩码寄存器时，ubuf中地址偏移单位为字节。
 
 ![vector_bool](../figures/vector_bool.png)
 

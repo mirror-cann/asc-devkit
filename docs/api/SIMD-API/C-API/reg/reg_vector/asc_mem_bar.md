@@ -80,6 +80,7 @@ vector_half dst;
 vector_half src0;
 vector_half src1;
 vector_bool mask;
+mask = asc_create_mask_b16(PAT_ALL);
 
 uint16_t repeatTime = 8;
 uint16_t repeatSize = 64;

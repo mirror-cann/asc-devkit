@@ -80,5 +80,6 @@ PIPE_V
 vector_half src;
 vector_half dst;
 vector_bool mask;
+mask = asc_create_mask_b16(PAT_ALL);
 asc_rint(dst, src, mask);
 ```

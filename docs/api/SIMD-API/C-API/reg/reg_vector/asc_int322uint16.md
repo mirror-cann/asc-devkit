@@ -55,6 +55,7 @@ PIPE_V
 vector_uint16_t dst;
 vector_int32_t src;
 vector_bool mask;
+mask = asc_create_mask_b32(PAT_ALL);
 asc_int322uint16(dst, src, mask);    // 不饱和模式，将src转换成vector_uint16_t类型并写入dst的上半部分
 asc_int322uint16_sat(dst, src, mask);    // 饱和模式，将src转换成vector_uint16_t类型并写入dst的上半部分
 asc_int322uint16_v2(dst, src, mask);    // 不饱和模式，将src转换成vector_uint16_t类型并写入dst的下半部分

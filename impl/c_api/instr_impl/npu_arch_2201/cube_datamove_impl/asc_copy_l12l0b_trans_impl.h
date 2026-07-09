@@ -43,7 +43,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ half* dst, __cbuf_
 
 __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ bfloat16_t* dst, __cbuf__ bfloat16_t* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
@@ -52,7 +52,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ bfloat16_t* dst, __cbuf
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ bfloat16_t* dst, __cbuf__ bfloat16_t* src,
                                                        uint16_t index_id, uint8_t repeat, uint16_t src_stride,
-                                                       uint16_t dst_gap, bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                       uint16_t dst_gap, bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
@@ -60,7 +60,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ bfloat16_t* dst, _
 
 __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ float* dst, __cbuf__ float* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
@@ -69,7 +69,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ float* dst, __cbuf__ fl
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ float* dst, __cbuf__ float* src, uint16_t index_id,
                                                        uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
@@ -77,7 +77,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ float* dst, __cbuf
 
 __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ int32_t* dst, __cbuf__ int32_t* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
@@ -86,7 +86,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ int32_t* dst, __cbuf__ 
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ int32_t* dst, __cbuf__ int32_t* src, uint16_t index_id,
                                                        uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
@@ -94,7 +94,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ int32_t* dst, __cb
 
 __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ int8_t* dst, __cbuf__ int8_t* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
@@ -103,7 +103,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ int8_t* dst, __cbuf__ i
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ int8_t* dst, __cbuf__ int8_t* src, uint16_t index_id,
                                                        uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
@@ -111,7 +111,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ int8_t* dst, __cbu
 
 __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ uint32_t* dst, __cbuf__ uint32_t* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
@@ -120,7 +120,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ uint32_t* dst, __cbuf__
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ uint32_t* dst, __cbuf__ uint32_t* src, uint16_t index_id,
                                                        uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
@@ -128,7 +128,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ uint32_t* dst, __c
 
 __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ uint8_t* dst, __cbuf__ uint8_t* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
@@ -137,7 +137,7 @@ __aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ uint8_t* dst, __cbuf__ 
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ uint8_t* dst, __cbuf__ uint8_t* src, uint16_t index_id,
                                                        uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();

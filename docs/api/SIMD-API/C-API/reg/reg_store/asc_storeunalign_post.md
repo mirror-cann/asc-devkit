@@ -8,11 +8,13 @@
 
 ## 功能说明
 
+头文件路径：`"c_api/reg_compute/reg_store.h"`。
+
 reg计算数据搬运接口，适用于从矢量数据寄存器连续非32B对齐的起始地址连续搬出到UB的尾块场景。
 
 需要先调用下列接口之一后，再调用本接口。
 - [asc_storeunalign](./asc_storeunalign.md)接口。
-- [asc_storeunalign_postupdate](./asc_storeunalign_postupdate.md)使用iter_reg作为存储偏移量的接口。
+- [asc_storeunalign_postupdate](./asc_storeunalign_postupdate.md)接口。
 
 搬运原理如下：
 记目的操作数的起始地址为dst_start，结束地址为dst_end，尾块元素个数为unalign_count = (dst_end - dst_end / 32 * 32) / sizeof(T)。
@@ -126,7 +128,7 @@ PIPE_V
 ## 约束说明
 
 - 该接口中的dst不需要32B对齐，但数据类型为T的dst需要sizeof(T) Byte对齐。
-- 调用本接口之前，需要调用[asc_storeunalign](./asc_storeunalign.md)接口，或者[asc_storeunalign_postupdate](./asc_storeunalign_postupdate.md)使用iter_reg作为存储偏移量的接口，且本接口与前序接口的非对齐寄存器要保持一致。
+- 调用本接口之前，需要调用[asc_storeunalign](./asc_storeunalign.md)接口，或者[asc_storeunalign_postupdate](./asc_storeunalign_postupdate.md)接口，且本接口与前序接口的非对齐寄存器要保持一致。
 - 需要保证目的操作数的地址加上offset对应的偏移地址，结果等于数据搬运的结束地址，具体见调用示例。
 
 ## 调用示例
@@ -171,9 +173,9 @@ PIPE_V
     __ubuf__ uint32_t* dst = (__ubuf__ uint32_t*)asc_get_phy_buf_addr(8);
     vector_store_unalign ureg;
     vector_uint32_t src;
-    iter_reg count = asc_create_iter_reg_b32(64);
     uint32_t repeat = 2;
     for (uint32_t i = 0; i < repeat; i++) {
+        iter_reg count = asc_create_iter_reg_b32(64);
         // 其他reg操作
 
         // 第一次：src[0:62] 写入dst[0:62]（即UB[8:256]）；同时src[62:64] 写入ureg[0:2]；同时dst自增为dst[64]（即UB[264]）

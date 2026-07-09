@@ -57,5 +57,6 @@ PIPE_V
 vector_uint32_t src;
 vector_uint16_t dst;
 vector_bool mask;
+mask = asc_create_mask_b32(PAT_ALL);
 asc_uint322uint16(dst, src, mask);
 ```

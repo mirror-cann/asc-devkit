@@ -61,7 +61,7 @@ __aicore__ inline int64_t asc_get_sub_block_id();
 
 __aicore__ inline int64_t asc_get_program_counter();
 
-__aicore__ inline void asc_get_arch_ver(uint32_t& coreVersion);
+__aicore__ inline void asc_get_arch_ver(uint32_t& core_version);
 
 __aicore__ inline int64_t asc_get_ar_spr();
 
@@ -73,7 +73,7 @@ __aicore__ inline constexpr int64_t asc_get_vf_len();
 
 __aicore__ inline uint64_t asc_get_phy_buf_addr(uint64_t offset);
 
-__aicore__ inline void asc_get_arch_ver(uint32_t& coreVersion);
+__aicore__ inline void asc_get_arch_ver(uint32_t& core_version);
 
 __aicore__ inline int64_t asc_get_core_id();
 

@@ -9,7 +9,7 @@
 
 ## 功能说明
 
-reg数据搬运接口，适用于从UB搬入MaskReg。开启post mode，每调用一次接口更新目的操作数在UB上的地址。
+reg数据搬运接口，适用于从UB搬入MaskReg。开启post mode，每调用一次接口更新源操作数在UB上的地址。
 
 ## 函数原型
 

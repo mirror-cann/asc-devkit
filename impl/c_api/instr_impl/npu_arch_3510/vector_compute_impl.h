@@ -2668,7 +2668,7 @@ __simd_callee__ inline void asc_half2int4x2_rz_v2(vector_int4x2_t& dst, vector_h
 
 __simd_callee__ inline void asc_half2int4x2_rz_sat_v2(vector_int4x2_t& dst, vector_half src, vector_bool mask)
 {
-    asc_half2int4x2_rd_sat_v2_impl(dst, src, mask);
+    asc_half2int4x2_rz_sat_v2_impl(dst, src, mask);
 }
 
 __simd_callee__ inline void asc_half2int4x2_rz_v3(vector_int4x2_t& dst, vector_half src, vector_bool mask)
@@ -2765,7 +2765,7 @@ __simd_callee__ inline void asc_half2int4x2_rna_sat_v3(vector_int4x2_t& dst, vec
 
 __simd_callee__ inline void asc_half2int4x2_rna_v4(vector_int4x2_t& dst, vector_half src, vector_bool mask)
 {
-    asc_half2int4x2_rna_sat_v4_impl(dst, src, mask);
+    asc_half2int4x2_rna_v4_impl(dst, src, mask);
 }
 
 __simd_callee__ inline void asc_half2int4x2_rna_sat_v4(vector_int4x2_t& dst, vector_half src, vector_bool mask)

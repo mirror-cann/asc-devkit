@@ -10,7 +10,10 @@
 
 ## 功能说明
 
-设置计算结果以原子比较的方式传输到GM。在拷贝前，将待传输的数据与GM中已有数据进行逐元素比较，并将最小值写入GM。数据类型支持int8_t/int16_t/int32_t/bfloat16_t/half/float。
+设置对后续的从Unified Buffer/L0C Buffer/L1 Buffer到Global Memory的数据传输开启原子比较取小操作。数据类型支持int8_t、int16_t、int32_t、bfloat16_t、half、float。
+<!-- npu="950" id1 -->
+特别地，针对Ascend 950PR/Ascend 950DT，不支持L1 Buffer到Global Memory的通路。
+<!-- end id1 -->
 
 ## 函数原型
 
@@ -37,7 +40,10 @@ PIPE_S
 
 ## 约束说明
 
-使用结束后，建议通过[asc_set_atomic_none](./asc_set_atomic_none.md)关闭原子最小操作，以免影响后续相关指令功能。
+- 使用结束后，建议通过[asc_set_atomic_none](./asc_set_atomic_none.md)关闭原子最小操作，以免影响后续相关指令功能。
+<!-- npu="950" id2 -->
+- 针对Ascend 950PR/Ascend 950DT，不支持L1 Buffer到Global Memory的通路。
+<!-- end id2 -->
 
 ## 调用示例
 

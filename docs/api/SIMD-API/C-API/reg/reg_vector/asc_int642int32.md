@@ -55,6 +55,7 @@ PIPE_V
 vector_int32_t dst;
 vector_int64_t src;
 vector_bool mask;
+mask = asc_create_mask_b32(PAT_ALL); // 当前mask仅支持b8, b16, b32模式的mask，低位宽的fullmask可以给高位宽数据类型作为fullmask使用
 asc_int642int32(dst, src, mask);    // 不饱和模式，将src转换成vector_int32_t类型并写入dst的上半部分
 asc_int642int32_sat(dst, src, mask);    // 饱和模式，将src转换成vector_int32_t类型并写入dst的上半部分
 asc_int642int32_v2(dst, src, mask);    // 不饱和模式，将src转换成vector_int32_t类型并写入dst的下半部分

@@ -169,8 +169,8 @@ for (uint16_t i = 0; i < repeat_times; i++) {
 ### 地址寄存器偏移寻址接口
 
 ```cpp
-iter_reg addr_reg = asc_create_iter_reg_b32(one_repeat_size);
 for (uint16_t i = 0; i < repeat_times; i++) {
+    iter_reg addr_reg = asc_create_iter_reg_b32(one_repeat_size);
     asc_loadalign_deintlv(reg0, reg1, src, addr_reg);
     ...
 }

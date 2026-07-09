@@ -1171,49 +1171,49 @@ __aicore__ inline void asc_copy_l12l0b_trans(__cb__ half* dst, __cbuf__ half* sr
 
 __aicore__ inline void asc_copy_l12l0b_trans(__cb__ bfloat16_t* dst, __cbuf__ bfloat16_t* src, uint16_t index_id,
                                              uint8_t repeat, uint16_t src_stride, uint16_t dst_gap, bool enable_addr_decrement,
-                                             uint64_t dst_frac_gap)
+                                             uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync(__cb__ bfloat16_t* dst, __cbuf__ bfloat16_t* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_sync_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
 
 __aicore__ inline void asc_copy_l12l0b_trans(__cb__ float* dst, __cbuf__ float* src, uint16_t index_id, uint8_t repeat,
                                              uint16_t src_stride, uint16_t dst_gap, bool enable_addr_decrement,
-                                             uint64_t dst_frac_gap)
+                                             uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
 
 __aicore__ inline void asc_copy_l12l0b_trans(__cb__ int32_t* dst, __cbuf__ int32_t* src, uint16_t index_id,
                                              uint8_t repeat, uint16_t src_stride, uint16_t dst_gap, bool enable_addr_decrement,
-                                             uint64_t dst_frac_gap)
+                                             uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
 
 __aicore__ inline void asc_copy_l12l0b_trans(__cb__ int8_t* dst, __cbuf__ int8_t* src, uint16_t index_id,
                                              uint8_t repeat, uint16_t src_stride, uint16_t dst_gap, bool enable_addr_decrement,
-                                             uint64_t dst_frac_gap)
+                                             uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
 
 __aicore__ inline void asc_copy_l12l0b_trans(__cb__ uint32_t* dst, __cbuf__ uint32_t* src, uint16_t index_id,
                                              uint8_t repeat, uint16_t src_stride, uint16_t dst_gap, bool enable_addr_decrement,
-                                             uint64_t dst_frac_gap)
+                                             uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
 
 __aicore__ inline void asc_copy_l12l0b_trans(__cb__ uint8_t* dst, __cbuf__ uint8_t* src, uint16_t index_id,
                                              uint8_t repeat, uint16_t src_stride, uint16_t dst_gap, bool enable_addr_decrement,
-                                             uint64_t dst_frac_gap)
+                                             uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
@@ -1227,35 +1227,35 @@ __aicore__ inline void asc_copy_l12l0b_trans_sync(__cb__ half* dst, __cbuf__ hal
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync(__cb__ float* dst, __cbuf__ float* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_sync_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync(__cb__ int32_t* dst, __cbuf__ int32_t* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_sync_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync(__cb__ int8_t* dst, __cbuf__ int8_t* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_sync_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync(__cb__ uint32_t* dst, __cbuf__ uint32_t* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_sync_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
 
 __aicore__ inline void asc_copy_l12l0b_trans_sync(__cb__ uint8_t* dst, __cbuf__ uint8_t* src, uint16_t index_id,
                                                   uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint64_t dst_frac_gap)
+                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_sync_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
 }
@@ -1774,146 +1774,146 @@ __aicore__ inline void asc_copy_l0c2gm_sync(__gm__ int32_t* dst, __cc__ int32_t*
 // ==========asc_copy_l0c2l1==========
 __aicore__ inline void asc_copy_l0c2l1(__cbuf__ half* dst, __cc__ float* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode,
-                            quant_pre, relu_pre, enable_channel_split, enable_nd2nz);
+                            quant_pre, relu_pre, enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1_sync(__cbuf__ half* dst, __cc__ float* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_sync_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre, relu_pre,
-                        enable_channel_split, enable_nd2nz);
+                        enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1(__cbuf__ bfloat16_t* dst, __cc__ float* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode,
-                            quant_pre, relu_pre, enable_channel_split, enable_nd2nz);
+                            quant_pre, relu_pre, enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1_sync(__cbuf__ bfloat16_t* dst, __cc__ float* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_sync_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre, relu_pre,
-                        enable_channel_split, enable_nd2nz);
+                        enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1(__cbuf__ int8_t* dst, __cc__ float* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode,
-                            quant_pre, relu_pre, enable_channel_split, enable_nd2nz);
+                            quant_pre, relu_pre, enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1_sync(__cbuf__ int8_t* dst, __cc__ float* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_sync_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre, relu_pre,
-                        enable_channel_split, enable_nd2nz);
+                        enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1(__cbuf__ half* dst, __cc__ int32_t* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode,
-                            quant_pre, relu_pre, enable_channel_split, enable_nd2nz);
+                            quant_pre, relu_pre, enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1_sync(__cbuf__ half* dst, __cc__ int32_t* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_sync_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre, relu_pre,
-                        enable_channel_split, enable_nd2nz);
+                        enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1(__cbuf__ int16_t* dst, __cc__ int32_t* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode,
-                            quant_pre, relu_pre, enable_channel_split, enable_nd2nz);
+                            quant_pre, relu_pre, enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1_sync(__cbuf__ int16_t* dst, __cc__ int32_t* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_sync_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre, relu_pre,
-                        enable_channel_split, enable_nd2nz);
+                        enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1(__cbuf__ int8_t* dst, __cc__ int32_t* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode,
-                            quant_pre, relu_pre, enable_channel_split, enable_nd2nz);
+                            quant_pre, relu_pre, enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1_sync(__cbuf__ int8_t* dst, __cc__ int32_t* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_sync_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre, relu_pre,
-                        enable_channel_split, enable_nd2nz);
+                        enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1(__cbuf__ uint8_t* dst, __cc__ int32_t* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode,
-                            quant_pre, relu_pre, enable_channel_split, enable_nd2nz);
+                            quant_pre, relu_pre, enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1_sync(__cbuf__ uint8_t* dst, __cc__ int32_t* src, uint16_t n_size,uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode,
-                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nd2nz)
+                                        uint64_t quant_pre, uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_sync_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre, relu_pre,
-                        enable_channel_split, enable_nd2nz);
+                        enable_channel_split, enable_nz2nd);
 }
 
 
 __aicore__ inline void asc_copy_l0c2l1(__cbuf__ void* dst, __cc__ float* src, uint16_t n_size, uint16_t m_size,
                                       uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode, uint64_t quant_pre,
-                                      uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd_en)
+                                      uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre,
-                        relu_pre, enable_channel_split, enable_nz2nd_en);
+                        relu_pre, enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1_sync(__cbuf__ void* dst, __cc__ float* src, uint16_t n_size, uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode, uint64_t quant_pre,
-                                        uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd_en)
+                                        uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_sync_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre,
-                            relu_pre, enable_channel_split, enable_nz2nd_en);
+                            relu_pre, enable_channel_split, enable_nz2nd);
 }
 __aicore__ inline void asc_copy_l0c2l1(__cbuf__ void* dst, __cc__ int32_t* src, uint16_t n_size, uint16_t m_size,
                                       uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode, uint64_t quant_pre,
-                                      uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd_en)
+                                      uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre,
-                        relu_pre, enable_channel_split, enable_nz2nd_en);
+                        relu_pre, enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_copy_l0c2l1_sync(__cbuf__ void* dst, __cc__ int32_t* src, uint16_t n_size, uint16_t m_size,
                                         uint32_t dst_stride, uint16_t src_stride, uint8_t unit_flag_mode, uint64_t quant_pre,
-                                        uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd_en)
+                                        uint8_t relu_pre, bool enable_channel_split, bool enable_nz2nd)
 {
     asc_copy_l0c2l1_sync_impl(dst, src, n_size, m_size, dst_stride, src_stride, unit_flag_mode, quant_pre,
-                            relu_pre, enable_channel_split, enable_nz2nd_en);
+                            relu_pre, enable_channel_split, enable_nz2nd);
 }
 
 __aicore__ inline void asc_set_l13d_fmatrix(asc_l13d_fmatrix_config& config)

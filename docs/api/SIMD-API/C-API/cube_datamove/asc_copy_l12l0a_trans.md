@@ -115,7 +115,7 @@ PIPE_MTE1
 // 设置源操作数和目的操作数，total_length指参与计算的数据长度
 constexpr uint64_t total_length = 512;
 __cbuf__ int32_t src[total_length];
-__cb__ int32_t dst[total_length];
+__ca__ int32_t dst[total_length];
 
 // 设置搬运过程中的配置
 uint8_t n = 64;
