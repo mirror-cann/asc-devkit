@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
 using namespace mc2_ops_hccl;
 
@@ -478,21 +479,18 @@ HcclResult InitOpParamByTiling(
     return HCCL_SUCCESS;
 }
 
-HcclResult SelectAlgAndPrepareEngine(
-    HcclComm comm, OpParam& opParam, std::string& algName, std::unique_ptr<TopoInfoWithNetLayerDetails>& topoInfo)
+HcclResult PrepareTopoInfoForOp(
+    HcclComm comm, OpParam& opParam, std::unique_ptr<TopoInfoWithNetLayerDetails>& topoInfo)
 {
     opParam.hcclComm = comm;
     CHK_RET(HcclGetOpExpansionMode(comm, opParam));
     CHK_RET(HcclCalcTopoInfo(comm, opParam, topoInfo));
     CHK_RET(CheckAsymmetricTopoSupport(opParam.opType, topoInfo.get()));
+    return HCCL_SUCCESS;
+}
 
-    std::shared_ptr<ExecuteSelector> collAlgSelector = std::make_shared<ExecuteSelector>(ExecuteSelector());
-    CHK_RET(collAlgSelector->Run(opParam, topoInfo.get(), algName));
-    if (algName.empty()) {
-        HCCL_ERROR("[Selector] select algname fail!");
-        return HCCL_E_PTR;
-    }
-
+HcclResult PrepareEngineForAlg(OpParam& opParam, const std::string& algName)
+{
     CHK_RET(SetCommEngine(opParam));
     if (GetExternalInputHcclAivOnlyMode() && opParam.engine != COMM_ENGINE_AIV) {
         HCCL_ERROR(
@@ -505,6 +503,127 @@ HcclResult SelectAlgAndPrepareEngine(
         CHK_RET(LoadAICPUKernel());
     }
     CHK_RET(SetOpParamAlgTag(opParam, algName));
+    return HCCL_SUCCESS;
+}
+
+std::unique_ptr<InsCollAlgBase> GetAlgExecutorForOp(const OpParam& opParam, const std::string& algName)
+{
+    if (UseCannBridge(opParam)) {
+        return GetAlgExecViaCann(opParam.opType, algName);
+    }
+    return CollAlgExecRegistryV2::Instance().GetAlgExec(opParam.opType, algName);
+}
+
+HcclResult CheckForcedAlgResource(
+    HcclComm comm, const OpParam& opParam, TopoInfoWithNetLayerDetails* topoInfo, const std::string& algName)
+{
+    std::unique_ptr<InsCollAlgBase> executor = GetAlgExecutorForOp(opParam, algName);
+    CHK_PRT_RET(
+        executor == nullptr,
+        HCCL_WARNING(
+            "[MC2_FORCE_ALG] fallback, algName[%s] is not registered for opType[%u].", algName.c_str(),
+            static_cast<u32>(opParam.opType)),
+        HCCL_E_NOT_SUPPORT);
+
+    AlgHierarchyInfoForAllLevel algHierarchyInfo;
+    HcclResult ret = executor->CalcAlgHierarchyInfo(comm, topoInfo, algHierarchyInfo);
+    CHK_PRT_RET(
+        ret != HCCL_SUCCESS,
+        HCCL_WARNING(
+            "[MC2_FORCE_ALG] fallback, CalcAlgHierarchyInfo failed, algName[%s], ret[%d].", algName.c_str(),
+            static_cast<int>(ret)),
+        HCCL_E_NOT_SUPPORT);
+
+    AlgResourceRequest resRequest;
+    ret = executor->CalcRes(comm, opParam, topoInfo, algHierarchyInfo, resRequest);
+    CHK_PRT_RET(
+        ret != HCCL_SUCCESS,
+        HCCL_WARNING(
+            "[MC2_FORCE_ALG] fallback, CalcRes failed, algName[%s], ret[%d].", algName.c_str(),
+            static_cast<int>(ret)),
+        HCCL_E_NOT_SUPPORT);
+    return HCCL_SUCCESS;
+}
+
+bool GetForcedAlgName(const Mc2CcTilingInner* ccTiling, std::string& algName)
+{
+    if (ccTiling == nullptr || ccTiling->algConfig[0] == '\0') {
+        return false;
+    }
+
+    std::string algConfig(ccTiling->algConfig);
+    if (algConfig.find('=') != std::string::npos) {
+        HCCL_INFO("[MC2_FORCE_ALG] legacy algConfig[%s], use default selector.", algConfig.c_str());
+        return false;
+    }
+
+    algName = algConfig;
+    return true;
+}
+
+HcclResult TryForcedAlgAndPrepareEngine(
+    HcclComm comm, const Mc2CcTilingInner* ccTiling, OpParam& opParam, std::string& algName,
+    std::unique_ptr<TopoInfoWithNetLayerDetails>& topoInfo, bool& forcedAlgAccepted)
+{
+    forcedAlgAccepted = false;
+    std::string forcedAlgName;
+    if (!GetForcedAlgName(ccTiling, forcedAlgName)) {
+        return HCCL_SUCCESS;
+    }
+
+    OpParam opParamBackup = opParam;
+    CHK_RET(PrepareTopoInfoForOp(comm, opParam, topoInfo));
+    HcclResult ret = PrepareEngineForAlg(opParam, forcedAlgName);
+    if (ret != HCCL_SUCCESS) {
+        opParam = opParamBackup;
+        HCCL_ERROR(
+            "[MC2_FORCE_ALG] prepare engine failed, algName[%s], ret[%d].", forcedAlgName.c_str(),
+            static_cast<int>(ret));
+        return ret;
+    }
+
+    ret = CheckForcedAlgResource(comm, opParam, topoInfo.get(), forcedAlgName);
+    if (ret != HCCL_SUCCESS) {
+        opParam = opParamBackup;
+        topoInfo = std::make_unique<TopoInfoWithNetLayerDetails>();
+        algName.clear();
+        forcedAlgAccepted = false;
+        HCCL_WARNING(
+            "[MC2_FORCE_ALG] fallback to default selector, opType[%u], algConfig[%s].",
+            static_cast<u32>(opParam.opType), forcedAlgName.c_str());
+        return HCCL_SUCCESS;
+    }
+
+    algName = forcedAlgName;
+    forcedAlgAccepted = true;
+    HCCL_INFO(
+        "[MC2_FORCE_ALG] accepted, opType[%u], algName[%s].", static_cast<u32>(opParam.opType), algName.c_str());
+    return HCCL_SUCCESS;
+}
+
+HcclResult SelectAlgAndPrepareEngine(
+    HcclComm comm, OpParam& opParam, std::string& algName, std::unique_ptr<TopoInfoWithNetLayerDetails>& topoInfo)
+{
+    CHK_RET(PrepareTopoInfoForOp(comm, opParam, topoInfo));
+
+    std::shared_ptr<ExecuteSelector> collAlgSelector = std::make_shared<ExecuteSelector>(ExecuteSelector());
+    CHK_RET(collAlgSelector->Run(opParam, topoInfo.get(), algName));
+    if (algName.empty()) {
+        HCCL_ERROR("[Selector] select algname fail!");
+        return HCCL_E_PTR;
+    }
+
+    CHK_RET(PrepareEngineForAlg(opParam, algName));
+    return HCCL_SUCCESS;
+}
+
+HcclResult FillOpParamAlgName(OpParam& opParam, const std::string& algName)
+{
+    int result = sprintf_s(opParam.algName, sizeof(opParam.algName), "%s", algName.c_str());
+    CHK_PRT_RET(result <= 0, HCCL_ERROR("failed to fill opParam.algName"), HCCL_E_INTERNAL);
+    HCCL_INFO(
+        "[GetOpParam] prepared opParam, opType[%u], algName[%s], algTag[%s].", static_cast<u32>(opParam.opType),
+        opParam.algName, opParam.algTag);
     return HCCL_SUCCESS;
 }
 
@@ -579,12 +698,13 @@ HcclResult GetOpParam(
 
     std::string algName;
     std::unique_ptr<TopoInfoWithNetLayerDetails> topoInfo = std::make_unique<TopoInfoWithNetLayerDetails>();
-    CHK_RET(SelectAlgAndPrepareEngine(comm, opParam, algName, topoInfo));
-    int result = sprintf_s(opParam.algName, sizeof(opParam.algName), "%s", algName.c_str());
-    CHK_PRT_RET(result <= 0, HCCL_ERROR("failed to fill opParam.algName"), HCCL_E_INTERNAL);
-    HCCL_INFO(
-        "[GetOpParam] prepared opParam, opType[%u], algName[%s], algTag[%s].", static_cast<u32>(opParam.opType),
-        opParam.algName, opParam.algTag);
+    bool forcedAlgAccepted = false;
+    OpParam opParamBeforeAlg = opParam;
+    CHK_RET(TryForcedAlgAndPrepareEngine(comm, ccTiling, opParam, algName, topoInfo, forcedAlgAccepted));
+    if (!forcedAlgAccepted) {
+        CHK_RET(SelectAlgAndPrepareEngine(comm, opParam, algName, topoInfo));
+    }
+    CHK_RET(FillOpParamAlgName(opParam, algName));
 
     bool skipGetRes = false;
     CHK_RET(HandleSingleRankAndCommMode(comm, opParam, skipGetRes));
@@ -594,7 +714,25 @@ HcclResult GetOpParam(
     }
 
     void* resCtxSequence = nullptr;
-    CHK_RET(GetOpParamResCtx(comm, algName, opParam, topoInfo.get(), &resCtxSequence));
+    HcclResult resRet = GetOpParamResCtx(comm, algName, opParam, topoInfo.get(), &resCtxSequence);
+    if (resRet != HCCL_SUCCESS && forcedAlgAccepted && resCtxSequence == nullptr) {
+        HCCL_WARNING(
+            "[MC2_FORCE_ALG] fallback to default selector after resource failure, algName[%s], ret[%d].",
+            algName.c_str(), static_cast<int>(resRet));
+        opParam = opParamBeforeAlg;
+        algName.clear();
+        topoInfo = std::make_unique<TopoInfoWithNetLayerDetails>();
+        CHK_RET(SelectAlgAndPrepareEngine(comm, opParam, algName, topoInfo));
+        CHK_RET(FillOpParamAlgName(opParam, algName));
+        CHK_RET(HandleSingleRankAndCommMode(comm, opParam, skipGetRes));
+        if (skipGetRes) {
+            opParam.all2AllVDataDes.sendCounts = origSendCounts;
+            return HCCL_SUCCESS;
+        }
+        CHK_RET(GetOpParamResCtx(comm, algName, opParam, topoInfo.get(), &resCtxSequence));
+    } else {
+        CHK_RET(resRet);
+    }
     // GetOpParamResCtx执行结束，sendCounts的临时host数组已不再需要，
     // 将指向恢复为原值(大概率为nullptr)，避免遗留指向本函数栈内vector的悬空指针。
     opParam.all2AllVDataDes.sendCounts = origSendCounts;
