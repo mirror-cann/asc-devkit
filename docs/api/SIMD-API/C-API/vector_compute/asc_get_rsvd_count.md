@@ -39,9 +39,9 @@ PIPE_S
 ```cpp
 // 初始化dst、src0、src1和total_length(参与计算的数据长度)
 int total_length = 256;
-__ubuf__ float src0[total_length];
-__ubuf__ float src1[total_length];
-__ubuf__ float dst[total_length];
+__ubuf__ uint32_t src0[total_length];
+__ubuf__ uint32_t src1[total_length];
+__ubuf__ uint32_t dst[total_length];
 asc_reduce(dst, src0, src1, total_length);
 asc_sync_notify(PIPE_V, PIPE_S, 0); // 设置等待和同步信号
 asc_sync_wait(PIPE_V, PIPE_S, 0);

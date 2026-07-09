@@ -44,5 +44,14 @@ constexpr uint32_t total_length = 128; //total_length指参与计算的数据总
 __ubuf__ half src0[total_length];
 __ubuf__ half src1[total_length];
 __ubuf__ half dst[total_length];
-asc_add(dst, src0, src1, total_length);
+
+uint8_t repeat = 1; // 1个repeat可以处理128个half类型的数据
+uint8_t dst_block_stride = 1;
+uint8_t src0_block_stride = 1;
+uint8_t src1_block_stride = 1;
+uint8_t dst_repeat_stride = 8;
+uint8_t src0_repeat_stride = 8;
+uint8_t src1_repeat_stride = 8;
+asc_add(dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride,
+    dst_repeat_stride, src0_repeat_stride, src1_repeat_stride);
 ```
