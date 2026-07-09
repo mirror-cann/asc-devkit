@@ -7,7 +7,7 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
- 
+
 /*!
  * \file kernel_operator_vec_gather_mask_impl.h
  * \brief
@@ -21,7 +21,7 @@
 #define ASCENDC_MODULE_OPERATOR_VEC_REDUCEV2_IMPL_H
 #include "../../../include/basic_api/kernel_struct_gather.h"
 #include "../../../include/basic_api/kernel_tpipe.h"
- 
+
 namespace AscendC {
 template <typename T>
 __aicore__ inline void GatherMaskCal(__ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ uint16_t* src1, const bool reduceMode,
@@ -29,7 +29,7 @@ __aicore__ inline void GatherMaskCal(__ubuf__ T* dst, __ubuf__ T* src0, __ubuf__
 {
     ASSERT(false && "unsupported Gather on current device");
 }
- 
+
 template <typename T>
 __aicore__ inline void GatherMaskCal(__ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ uint32_t* src1, const bool reduceMode,
     const uint32_t mask, const GatherMaskParams& gatherMaskParams, uint64_t& rsvdCnt)

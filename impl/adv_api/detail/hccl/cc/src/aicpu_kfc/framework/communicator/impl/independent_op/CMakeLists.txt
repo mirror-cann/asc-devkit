@@ -18,7 +18,7 @@ set(src_list
     ${CMAKE_CURRENT_SOURCE_DIR}/hccl_independent_rank_graph.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/hccl_independent_op_engine.cc
 )
- 
+
 add_subdirectory(channel)
 add_subdirectory(data_api)
 add_subdirectory(resource)

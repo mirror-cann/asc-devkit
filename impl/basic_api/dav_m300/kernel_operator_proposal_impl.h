@@ -7,7 +7,7 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
- 
+
 /*!
  * \file kernel_operator_proposal_impl.h
  * \brief
@@ -22,7 +22,7 @@
 #include "../kernel_operator_proposal_base_impl.h"
 #include "../../../include/basic_api/kernel_struct_proposal.h"
 #include "../../../include/basic_api/kernel_operator_block_sync_intf.h"
- 
+
 namespace AscendC {
 constexpr uint32_t regionProposalDataSize = 8;
 constexpr uint32_t singleSortElementCount = 32;
@@ -32,13 +32,13 @@ __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dstLocal, __ubuf__ T* addrArray[
 {
     ASSERT(false && "unsupported Vbitsort on current device");
 }
- 
+
 template <typename T>
 __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const ProposalIntriParams& intriParams)
 {
     ASSERT(false && "unsupported Vbitsort on current device");
 }
- 
+
 template <typename T>
 __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* src0Local, __ubuf__ uint32_t* src1Local,
     const ProposalIntriParams& intriParams)
@@ -50,20 +50,20 @@ __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* src0Local, 
     vbs(dstLocal, src0Local, src1Local, config);
     #endif
 }
- 
+
 template <typename T>
 __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dstLocal, __ubuf__ T* addrArray[MRG_SORT_ELEMENT_LEN], uint64_t src1,
     uint64_t config)
 {
     vmrgsort4(dstLocal, addrArray, src1, config);
 }
- 
+
 template <typename T>
 __aicore__ inline void VconcatCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const ProposalIntriParams& intriParams)
 {
     ASSERT(false && "unsupported VCONCAT on current device");
 }
- 
+
 template <typename T>
 __aicore__ inline void VextractCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const ProposalIntriParams& intriParams)
 {

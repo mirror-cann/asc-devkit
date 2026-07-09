@@ -68,7 +68,7 @@ using FormatTraitSet = TupleMap<
     Std::tuple<ScaleADNLayoutPtn, LayoutTrait<fp8_e8m0_t, _2>>,
     Std::tuple<ScaleBNDLayoutPtn, LayoutTrait<fp8_e8m0_t, _2>>,
     Std::tuple<ScaleBDNLayoutPtn, LayoutTrait<fp8_e8m0_t, _2>>>;
-    
+
 template <typename T, typename = void>
 struct IsFrameLayoutTrait : Std::false_type {};
 

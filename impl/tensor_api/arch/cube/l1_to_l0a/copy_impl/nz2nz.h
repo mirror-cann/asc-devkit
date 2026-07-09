@@ -79,7 +79,7 @@ private:
         uint16_t mStartPosition = 0;
         uint16_t kStartPosition = 0;
         auto mStep = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(dstNoBatchLayout);
-        auto kStep = Get<0>(dstLayout.Shape()) * 
+        auto kStep = Get<0>(dstLayout.Shape()) *
                      GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(dstNoBatchLayout);
         // Nz -> Nz
         constexpr uint32_t STRIDE_UNIT = C0_ELEMENT<DstType> * FRACTAL_FIXED;

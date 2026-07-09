@@ -211,7 +211,7 @@ __aicore__ inline void CubeResGroupHandle<T>::SetSkipMsg(uint8_t skipCnt)
 {
     if ASCEND_IS_AIC {
         aivWork += skipCnt;
-        ASCENDC_DEBUG_ASSERT((aivWork < aivNumForCurAic), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((aivWork < aivNumForCurAic), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "aivWork + skipCnt(%u) is %u, it cannot be larger than aivNumForCurAic (%u)",
             skipCnt,
             aivWork,

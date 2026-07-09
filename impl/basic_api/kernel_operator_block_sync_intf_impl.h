@@ -250,7 +250,7 @@ __aicore__ inline void SyncAll()
 template<uint8_t modeId, pipe_t pipe>
 __aicore__ inline void CrossCoreSetFlag(uint16_t flagId)
 {
-    NotifyEventImpl<modeId, pipe>(flagId);    
+    NotifyEventImpl<modeId, pipe>(flagId);
 }
 
 template <uint8_t modeId, pipe_t pipe>

@@ -21,7 +21,7 @@
 
 namespace AscendC {
 namespace Std {
- 
+
 template <typename T>
 struct IsTupleImpl {
     private:
@@ -30,7 +30,7 @@ struct IsTupleImpl {
 
         template <typename Ts>
         ASCENDC_HOST_AICORE inline static auto HasTupleSize(uint32_t) -> false_type;
-    
+
     public:
         static constexpr bool value = decltype(HasTupleSize<T>(static_cast<int32_t>(0)))::value;
 };
@@ -40,7 +40,7 @@ struct is_tuple : bool_constant<IsTupleImpl<T>::value> {};
 
 template <typename T>
 constexpr bool is_tuple_v = is_tuple<T>::value;
- 
+
 }
 }
 

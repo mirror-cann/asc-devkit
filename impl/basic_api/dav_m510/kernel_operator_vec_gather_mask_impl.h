@@ -7,7 +7,7 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
- 
+
 /*!
  * \file kernel_operator_vec_gather_mask_impl.h
  * \brief
@@ -314,7 +314,7 @@ __aicore__ inline void GatherMaskCal(__ubuf__ T *dst, __ubuf__ T *src0, const ui
 template <typename T, typename U>
 __aicore__ inline void GatherMaskReduce(__ubuf__ T *dst, __ubuf__ T *src0, __ubuf__ U* src1,
     const uint32_t mask, const GatherMaskParams &reducev2Params, uint64_t &rsvdCnt)
-{   
+{
     constexpr uint8_t ElePerBlkT = GetDataBlockSizeInBytes() / sizeof(T);
     constexpr uint8_t ElePerBlkU = GetDataBlockSizeInBytes() / sizeof(U);
     constexpr uint32_t ElePerVec = GetVecLen() / sizeof(T);

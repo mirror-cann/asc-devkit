@@ -145,9 +145,9 @@ __aicore__ inline void CastIntrinsicsB64ImplVF(__ubuf__ DST_TYPE *dst, __ubuf__ 
             for (uint16_t i = 0; i < repeatTime; ++i) {
                 preg = Reg::UpdateMask<int64_t, Reg::RegTraitNumTwo>(sreg);
                 Reg::LoadAlign(srcVreg, src + i * oneRepSize);
-                Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[0], 
+                Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[0],
                     (Reg::RegTensor<typename SRC_TYPE::EleType> &)srcVreg.reg[0], preg);
-                Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[1], 
+                Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[1],
                     (Reg::RegTensor<typename SRC_TYPE::EleType> &)srcVreg.reg[1], preg);
                 Reg::Pack((Reg::RegTensor<uint16_t> &)dstVreg.reg[0], (Reg::RegTensor<uint32_t> &)dstVreg.reg[0]);
                 Reg::Pack((Reg::RegTensor<uint16_t> &)dstVreg.reg[1], (Reg::RegTensor<uint32_t> &)dstVreg.reg[1]);
@@ -164,9 +164,9 @@ __aicore__ inline void CastIntrinsicsB64ImplVF(__ubuf__ DST_TYPE *dst, __ubuf__ 
             for (uint16_t i = 0; i < repeatTime; ++i) {
                 preg = Reg::UpdateMask<int64_t, Reg::RegTraitNumTwo>(sreg);
                 Reg::LoadAlign(srcVreg, src + i * oneRepSize);
-                Reg::Truncate<float, roundMode>((Reg::RegTensor<float> &)dstVreg.reg[0], 
+                Reg::Truncate<float, roundMode>((Reg::RegTensor<float> &)dstVreg.reg[0],
                     (Reg::RegTensor<float> &)srcVreg.reg[0], preg);
-                Reg::Truncate<float, roundMode>((Reg::RegTensor<float> &)dstVreg.reg[1], 
+                Reg::Truncate<float, roundMode>((Reg::RegTensor<float> &)dstVreg.reg[1],
                     (Reg::RegTensor<float> &)srcVreg.reg[1], preg);
                 Reg::StoreAlign(dst + i * oneRepSize, dstVreg, preg);
             }
@@ -182,9 +182,9 @@ __aicore__ inline void CastIntrinsicsB64ImplVF(__ubuf__ DST_TYPE *dst, __ubuf__ 
                 Reg::LoadAlign(srcVreg, src + i * oneRepSize);
                 Reg::UnPack((Reg::RegTensor<uint32_t> &)srcVreg.reg[0], (Reg::RegTensor<uint16_t> &)srcVreg.reg[0]);
                 Reg::UnPack((Reg::RegTensor<uint32_t> &)srcVreg.reg[1], (Reg::RegTensor<uint16_t> &)srcVreg.reg[1]);
-                Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[0], 
+                Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[0],
                     (Reg::RegTensor<typename SRC_TYPE::EleType> &)srcVreg.reg[0], preg);
-                Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[1], 
+                Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[1],
                     (Reg::RegTensor<typename SRC_TYPE::EleType> &)srcVreg.reg[1], preg);
                 Reg::StoreAlign(dst + i * oneRepSize, dstVreg, preg);
             }
@@ -1270,7 +1270,7 @@ __aicore__ inline void GenVecCastDeqParam(uint64_t deqScaleAddr, Reg::RegTensor<
     Reg::Pack((Reg::RegTensor<uint16_t> &)offsetReg, (Reg::RegTensor<uint32_t> &)offsetReg);
 
     Reg::LoadAlign(signModeReg, (__ubuf__ int16_t *)deqScaleAddr);
-    Reg::ShiftRights((Reg::RegTensor<uint64_t> &)signModeReg, (Reg::RegTensor<uint64_t> &)signModeReg, 
+    Reg::ShiftRights((Reg::RegTensor<uint64_t> &)signModeReg, (Reg::RegTensor<uint64_t> &)signModeReg,
         signModeShiftRightScalar, signMask);
     Reg::Pack((Reg::RegTensor<uint32_t> &)signModeReg, (Reg::RegTensor<uint64_t> &)signModeReg);
     Reg::Pack((Reg::RegTensor<uint16_t> &)signModeReg, (Reg::RegTensor<uint32_t> &)signModeReg);
@@ -1331,7 +1331,7 @@ __aicore__ inline void CastVecDeqImplVF(
     Reg::RegTensor<int32_t> tmpReg;
     Reg::RegTensor<uint8_t> mrg2ChnIndexReg;
     Reg::MaskReg maskReg0, maskReg1, maskReg2, fullMask, signMask, unSignMask;
- 
+
     constexpr int16_t s9MaxValue = 255;
     constexpr int16_t s9MinValue = -256;
     constexpr int16_t unRollConstant = 2;
@@ -1504,7 +1504,7 @@ __aicore__ inline void CastVecDeqLevel0ImplVF(__ubuf__ U *dst, __ubuf__ T *src, 
             static_cast<uint32_t>(repeatParams.srcBlkStride), maskReg1);
         Reg::UnPack((Reg::RegTensor<uint32_t> &)srcReg0, (Reg::RegTensor<uint16_t> &)srcReg0);
         CastVecDeqMulsCal<T, Reg::HighLowPart::LOWEST>(tmpReg, srcReg0, maskReg1, scaleReg);
-        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg1, src + i * blockElm * repeatParams.srcRepStride + halfRepStride, 
+        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg1, src + i * blockElm * repeatParams.srcRepStride + halfRepStride,
             static_cast<uint32_t>(repeatParams.srcBlkStride), maskReg2);
         Reg::UnPack((Reg::RegTensor<uint32_t> &)srcReg1, (Reg::RegTensor<uint16_t> &)srcReg1);
         CastVecDeqMulsCal<T, Reg::HighLowPart::HIGHEST>(tmpReg, srcReg1, maskReg2, scaleReg);

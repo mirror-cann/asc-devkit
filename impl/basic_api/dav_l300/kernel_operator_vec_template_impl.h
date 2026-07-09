@@ -33,7 +33,7 @@ __aicore__ inline bool IsCounterMode()
     constexpr uint32_t CTRL_COUNTER = 56;
     return ((get_ctrl() >> CTRL_COUNTER) & 0x1) == 0x1;
 }
- 
+
 template <bool isSetMask = true, bool isNormalMode = true, bool isMaskBitMode = true>
 __simd_callee__ inline uint32_t VecMicroGetCount(const uint64_t maskArray[], const uint64_t maskCount,
     __ubuf__ uint64_t *maskBuf)
@@ -63,7 +63,7 @@ __simd_callee__ inline uint32_t VecMicroGetCount(const uint64_t maskArray[], con
     }
     return count;
 }
- 
+
 template <typename T, bool isNormalMode = true>
 __simd_callee__ inline uint16_t VecMicroGetRepeatTimes(uint32_t count, const uint8_t repeatTimes)
 {
@@ -72,7 +72,7 @@ __simd_callee__ inline uint16_t VecMicroGetRepeatTimes(uint32_t count, const uin
     }
     return CeilDivision(count, GetVecLen() / sizeof(T));
 }
- 
+
 template <typename T, bool isSetMask = true, bool isNormalMode = true, bool isMaskBitMode = true>
 __simd_callee__ inline Reg::MaskReg VecMicroGetMaskReg(__ubuf__ uint64_t *maskBuf, uint32_t &count)
 {
@@ -94,7 +94,7 @@ __simd_callee__ inline Reg::MaskReg VecMicroGetMaskReg(__ubuf__ uint64_t *maskBu
     }
     return maskReg;
 }
- 
+
 enum class BinaryFuncMode {
     NORMAL,        // Add, Sub, Mul, Div, Max, Min, And, Or etc..
     DST_SRC_INPUT, // FusedMulAdd, FusedMulAddRelu, MulAddDst
@@ -159,7 +159,7 @@ __simd_vf__ inline void VecBinaryVFImpl(__ubuf__ T *dst, __ubuf__ U *src0, __ubu
             dst + index * repeatParams.dstRepStride * ElePerBlkT, dstVreg, repeatParams.dstBlkStride, maskRegDst);
     }
 }
- 
+
 template <auto func, bool isSetMask, bool isMaskBitMode, BinaryFuncMode funcMode = BinaryFuncMode::NORMAL, typename T,
     typename U>
 __aicore__ inline void VecBinaryImplTemplate(__ubuf__ T *dst, __ubuf__ U *src0, __ubuf__ U *src1,

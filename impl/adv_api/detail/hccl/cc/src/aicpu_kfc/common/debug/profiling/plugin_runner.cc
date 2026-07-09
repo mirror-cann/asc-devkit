@@ -16,9 +16,9 @@ PluginRunner::PluginRunner(ProfilerBase *profiler) : profiler_(profiler) {}
 
 PluginRunner::~PluginRunner() {}
 
-template <typename T> 
+template <typename T>
 void PluginRunner::operator () (rtStream_t stream, TaskType taskType, const T &para) const
-{   
+{
     //capture模式下hrtGetStreamId获取的是原来的流对应ID，与实际执行流不是同一个
     //capture模式下hrtGetTaskIdAndStreamID获取实际执行的streamID和taskID
     u32 threadLastTaskID = 0;

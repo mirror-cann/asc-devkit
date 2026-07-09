@@ -14,31 +14,31 @@
  */
  #ifndef IMPL_STD_ASCENDC_STD_IS_CONSTANT_IMPL__H
  #define IMPL_STD_ASCENDC_STD_IS_CONSTANT_IMPL__H
- 
+
  #include "integral_constant.h"
- 
+
  namespace AscendC {
  namespace Std {
- 
+
  template <auto n, typename T>
  struct is_constant : false_type {};
- 
+
  template <auto n, typename T>
  struct is_constant<n, T const> : is_constant<n,T> {};
- 
+
  template <auto n, typename T>
  struct is_constant<n, T const&> : is_constant<n,T> {};
- 
+
  template <auto n, typename T>
  struct is_constant<n, T &> : is_constant<n,T> {};
- 
+
  template <auto n, typename T>
  struct is_constant<n, T &&> : is_constant<n,T> {};
- 
+
  template <auto n, typename T, T v>
  struct is_constant<n, integral_constant<T,v>> : bool_constant<v == n> {};
- 
+
  }
  }
- 
+
  #endif // IMPL_STD_ASCENDC_STD_IS_CONSTANT_IMPL__H

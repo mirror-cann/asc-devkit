@@ -28,7 +28,7 @@ namespace AscendC {
 namespace Impl {
 namespace Detail {
 template <typename IMPL, class INPUT_TYPE, const auto& MM_CFG>
-class LoadToL0B<IMPL, INPUT_TYPE, MM_CFG, 
+class LoadToL0B<IMPL, INPUT_TYPE, MM_CFG,
     enable_if_t<!(DoMatmulBasicBlock(MM_CFG) || DoMatmulSpecialBasicBlock(MM_CFG)) &&
                 (GetLoadInstrType<typename INPUT_TYPE::T, MM_CFG>() == LoadInstrType::LOAD2D)>>
 {

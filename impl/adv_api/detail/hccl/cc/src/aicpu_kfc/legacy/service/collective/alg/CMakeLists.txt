@@ -10,4 +10,4 @@
 add_subdirectory(coll_alg_factory)
 add_subdirectory(alg_registry)
 add_subdirectory(interface)
-add_subdirectory(selector) 
+add_subdirectory(selector)

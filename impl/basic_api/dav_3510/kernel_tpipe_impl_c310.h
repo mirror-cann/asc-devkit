@@ -188,7 +188,7 @@ __aicore__ inline void TPipe::AllocAddrs(TBufType* ptr, const First& addr, const
         ptr->address = Std::get<0>(addr);
         ptr->dataLen = Std::get<1>(addr);
     }
-    
+
 #ifdef ASCENDC_CPU_DEBUG
     int32_t maxLen = ptr->address + ptr->dataLen;
     Hardware pool = GetBufferPos(T::srcPosition, T::dstPosition);

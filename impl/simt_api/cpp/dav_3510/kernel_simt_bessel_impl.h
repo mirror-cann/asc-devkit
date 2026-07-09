@@ -151,7 +151,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalJ0XLess8(float x)
 {
     float d1 = x - 2.4048254f;
     d1 = d1 - 1.087059e-7f;
-    float res = 9.619266247e-13f;                    
+    float res = 9.619266247e-13f;
     res = FmaImpl(res, d1, 5.702105547e-12f);
     res = FmaImpl(res, d1, -4.398487105e-10f);
     res = FmaImpl(res, d1, 4.604940853e-10f);
@@ -171,7 +171,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalJ0XLess8(float x)
     float d3 = x - 8.653728f;
     d3 = d3 - 3.8147791e-7f;
     res = d3 * res;
-    return res;  
+    return res;
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalJ1XLess8(float x)
@@ -196,7 +196,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalJ1XLess8(float x)
     d2 = d2 + 1.8321172e-7f;
     res = d2 * res;
     res = res * x;
-    return res;  
+    return res;
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float JnYnAsymptoticBesselAmplitude(int n, float x, int index)
@@ -337,7 +337,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float J0XLess8(float x)
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalY0XLessdot5(float x)
-{        
+{
     float part1 = 0.636619772367f * J0XLess8(x) * LogImpl(x);
     float part2 = FmaImpl(0.0007977247950890495f, x, -0.016524315326267768f);
     part2 = FmaImpl(part2, x, 0.0001196180186f);
@@ -386,14 +386,14 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalY0XPart2(float x)
     res = FmaImpl(res, d3, -3.743254148e-02f);
     res = FmaImpl(res, d3, 9.592770584e-02f);
     res = d3 * res;
-    float d2 = x - 3.95767832f;   
+    float d2 = x - 3.95767832f;
     d2 = d2 - 1.01291178e-7f;
     res = d2 * res;
     return res;
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalY0XLarger8(float x)
-{  
+{
     if (IsInfImpl(x)) {
         return 0.0f;
     }
@@ -415,7 +415,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalY0XLarger8(float x)
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalY1XLess1dot2(float x, float minus_two_over_pi_mul_inv_x)
-{        
+{
     float part1 = 0.636619772367f * CalJ1XLess8(x) * LogImpl(x);
     float part2 = FmaImpl(0.0002798307076f, x, -0.0034028867918f);
     part2 = FmaImpl(part2, x, 0.0003643335439f);
@@ -448,7 +448,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalY1XPart1(float x)
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CalY1XPart2(float x)
-{ 
+{
     float d2 = x - 5.42968082f;
     d2 = d2 - 2.16514351e-7f;
     float res = -4.575132868e-10f;
@@ -519,7 +519,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float YnCase3(int n, float x)
 
     int k = 1;
     float mult = 2 * k / x;
-    float value = mult * current - prev;  
+    float value = mult * current - prev;
     prev = current;
     current = value;
     k += 1;
@@ -554,9 +554,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T J0Impl(T x)
     }
     float res;
     if (f1 > 8.0f) {
-        res = CalJ0XLarger8(f1); 
+        res = CalJ0XLarger8(f1);
     } else {
-        res = CalJ0XLess8(f1);   
+        res = CalJ0XLess8(f1);
     }
     return res;
 }
@@ -629,7 +629,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Y0Impl(T x)
     if (f1 > 1e13f && IsFiniteImpl(f1)) {
         return 0;
     }
-    float res;     
+    float res;
     if (f1 < 0.5f) {
         res = CalY0XLessdot5(f1);
     } else if (f1 < 2.1971413260310170351f) {
@@ -654,10 +654,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Y1Impl(T x)
         return 0;
     }
     if (x == 0.0f) {
-        return -ConstantsInternal::SIMT_FP32_INF;  
+        return -ConstantsInternal::SIMT_FP32_INF;
     }
-    float minus_two_over_pi_mul_inv_x = -0.636619772367f / f1;                
-    float res;     
+    float minus_two_over_pi_mul_inv_x = -0.636619772367f / f1;
+    float res;
     if (f1 < 1.17549435e-38f) {
         res = minus_two_over_pi_mul_inv_x;
     }

@@ -188,7 +188,7 @@ template <typename Arg0, typename... Args>
             using ResultTensor = typename MakeTensorResult<Location, Engine, Layout>::type;
             return ResultTensor{Engine{arg0}, MakeLayout(args...)};
         } else {
-            static_assert(sizeof...(Args) != sizeof...(Args), 
+            static_assert(sizeof...(Args) != sizeof...(Args),
                 "MakeTensor expected a hardware memory pointer and data structure like Layout or Shape and Stride");
         }
     }

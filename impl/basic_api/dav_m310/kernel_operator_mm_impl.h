@@ -338,7 +338,7 @@ __aicore__ inline void LoadDataWithSparseCal(const LocalTensor<T> &dst, const Lo
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "not support LoadDataWithSparse calculate on current device"); });
 }
 
-template <typename T = int8_t, typename std::enable_if<IsSameType<PrimT<T>, int8_t>::value, bool>::type = true> 
+template <typename T = int8_t, typename std::enable_if<IsSameType<PrimT<T>, int8_t>::value, bool>::type = true>
 __aicore__ inline void LoadUnzipIndexCal(const GlobalTensor<T>& src, uint32_t numOfIndexTabEntry)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "not support LoadUnzipIndex on current device"); });
@@ -443,7 +443,7 @@ __aicore__ inline void LoadData3DV2L12L0BCal(__cb__ T* dst, __cbuf__ T* src,
             loadDataParams.filterSizeW, loadDataParams.filterSizeH, loadDataParams.enTranspose,
             loadDataParams.fMatrixCtrl, loadDataParams.channelSize);
     } else {
-        ASCENDC_ASSERT(false, 
+        ASCENDC_ASSERT(false,
             { KERNEL_LOG(KERNEL_ERROR, "unsupported data type for loaddata_3d_v2 on current device"); });
     }
 }

@@ -104,7 +104,7 @@ KernelRunContextHolder::~KernelRunContextHolder()
 
 ContextBuilder::ContextBuilder()
 {
-    impl_.reset(new ContextBuilderImpl); 
+    impl_.reset(new ContextBuilderImpl);
 }
 
 ContextBuilder::~ContextBuilder() = default;
@@ -301,7 +301,7 @@ ContextBuilder &ContextBuilder::AddPlatformInfo(const char *customSocVersion)
             return *this;
         }
     }
-    
+
     static fe::PlatFormInfos platformInfoIns;
     fe::PlatformInfoManager::Instance().InitRuntimePlatformInfos(std::string(socVersion));
     fe::PlatformInfoManager::Instance().GetRuntimePlatformInfosByDevice(0, platformInfoIns);

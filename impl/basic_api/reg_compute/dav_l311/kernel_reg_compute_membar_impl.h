@@ -66,4 +66,3 @@ template <MemType src, MemType dst> __simd_callee__ inline void LocalMemBarImpl(
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_MEMBAR_IMPL__
 #endif
-

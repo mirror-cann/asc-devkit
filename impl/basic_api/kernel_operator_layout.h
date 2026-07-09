@@ -71,7 +71,7 @@ private:
 
     __aicore__ inline static constexpr auto TestStaticLayout()
     {
-        if constexpr (nesting_depth_v<T> == Dim && 
+        if constexpr (nesting_depth_v<T> == Dim &&
             !(include_dynamic_type<T>::value || include_dynamic_type<U>::value)) {
             return true;
         }
@@ -84,7 +84,7 @@ public:
 template<typename T, typename U>
 struct StaticLayoutSize {
 private:
-    __aicore__ inline static constexpr auto GetFourDimStaticLayoutSize() 
+    __aicore__ inline static constexpr auto GetFourDimStaticLayoutSize()
     {
         using rowShapeType = typename Std::tuple_element<0, T>::type;
         using colShapeType = typename Std::tuple_element<1, T>::type;
@@ -96,18 +96,18 @@ private:
         using outterColNumType = typename Std::tuple_element<1, colShapeType>::type;
         using outterColStrideType = typename Std::tuple_element<1, colStrideType>::type;
 
-        return (outterRowNumType {} * outterRowStrideType {}) > (outterColNumType {} * outterColStrideType {}) ? 
+        return (outterRowNumType {} * outterRowStrideType {}) > (outterColNumType {} * outterColStrideType {}) ?
             (outterRowNumType {} * outterRowStrideType {}) : (outterColNumType {} * outterColStrideType {});
     }
 
-    __aicore__ inline static constexpr auto GetTwoDimStaticLayoutSize() 
+    __aicore__ inline static constexpr auto GetTwoDimStaticLayoutSize()
     {
         using rowNumType = typename Std::tuple_element<0, T>::type;
         using colNumType = typename Std::tuple_element<1, T>::type;
         using rowStrideType = typename Std::tuple_element<0, U>::type;
         using colStrideType = typename Std::tuple_element<1, U>::type;
 
-        return (rowNumType {} * rowStrideType {}) > (colNumType {} * colStrideType {}) ? 
+        return (rowNumType {} * rowStrideType {}) > (colNumType {} * colStrideType {}) ?
             (rowNumType {} * rowStrideType {}) : (colNumType {} * colStrideType {});
     }
 

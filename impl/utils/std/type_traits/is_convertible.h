@@ -34,14 +34,14 @@ private:
     ASCENDC_HOST_AICORE inline static auto TestReturnable(uint32_t) -> false_type;
 
     template <typename F, typename T>
-    ASCENDC_HOST_AICORE inline static auto TestImplicitlyConvertible(int32_t) -> 
+    ASCENDC_HOST_AICORE inline static auto TestImplicitlyConvertible(int32_t) ->
         decltype(void(declval<void (&)(T)>()(declval<F>())), true_type{});
 
     template <typename F, typename T>
     ASCENDC_HOST_AICORE inline static auto TestImplicitlyConvertible(uint32_t) -> false_type;
 
 public:
-    static constexpr bool value = 
+    static constexpr bool value =
         decltype(TestReturnable<To>(0))::value && decltype(TestImplicitlyConvertible<From, To>(0))::value;
 };
 

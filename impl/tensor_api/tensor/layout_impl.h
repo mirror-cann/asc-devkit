@@ -49,7 +49,7 @@ struct DiffOp {
 };
 
 template <typename Coord, typename LayoutType>
-__aicore__ inline decltype(auto) MakeCoordLayout(const Coord& coord, const LayoutType& layout) 
+__aicore__ inline decltype(auto) MakeCoordLayout(const Coord& coord, const LayoutType& layout)
 {
     using ShapeType = Std::remove_cvref_t<decltype(layout.Shape())>;
     using CoordType = Std::remove_cvref_t<Coord>;
@@ -119,7 +119,7 @@ __aicore__ inline decltype(auto) MakeFiveDimSliceLayout(
 }
 
 template <typename Coord, typename LayoutType, typename SliceShape, Std::enable_if_t<!IsLayoutV<SliceShape>, int> = 0>
-__aicore__ inline decltype(auto) MakeSliceLayout(const Coord& coord, const LayoutType& layout, const SliceShape& sliceShape) 
+__aicore__ inline decltype(auto) MakeSliceLayout(const Coord& coord, const LayoutType& layout, const SliceShape& sliceShape)
 {
     static_assert(IsLayoutV<LayoutType>, "LayoutType must be Layout");
     static_assert(Std::is_tuple_v<Std::remove_cvref_t<SliceShape>>, "SliceShape must be a tuple");
@@ -145,7 +145,7 @@ __aicore__ inline decltype(auto) MakeSliceLayout(const Coord& coord, const Layou
 }
 
 template <typename Coord, typename SrcLayoutType, typename DstLayoutType, Std::enable_if_t<IsLayoutV<DstLayoutType>, int> = 0>
-__aicore__ inline decltype(auto) MakeSliceLayout(const Coord& coord, const SrcLayoutType& srcLayout, const DstLayoutType& dstLayout) 
+__aicore__ inline decltype(auto) MakeSliceLayout(const Coord& coord, const SrcLayoutType& srcLayout, const DstLayoutType& dstLayout)
 {
     static_assert(IsLayoutV<SrcLayoutType>, "SrcLayoutType must be Layout");
     static_assert(SrcLayoutType::rank == DstLayoutType::rank,

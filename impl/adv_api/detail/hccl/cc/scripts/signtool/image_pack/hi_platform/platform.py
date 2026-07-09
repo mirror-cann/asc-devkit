@@ -16,7 +16,7 @@ import binascii
 from ctypes import *
 import os
 
-def __construct_header(N_buf, E_buf, hash_buf, code_len, suffix, head_type, version, nvcnt, tag, certtype, before_header=False, 
+def __construct_header(N_buf, E_buf, hash_buf, code_len, suffix, head_type, version, nvcnt, tag, certtype, before_header=False,
                        large_packet=False, enc=False, pss=False, bcm=False, gcm = False, gm = False):
 
     # if rootfs/app.img is large_packet(>4G), stub code_len 0 (invalid value)

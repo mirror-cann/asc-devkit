@@ -33,10 +33,10 @@ def gen_golden_data_scenario0():
     num_blocks = 8
     value_x = 1.0
     data_type = np.float32
-    
+
     input_x = np.full(total_length, value_x, dtype=data_type)
     golden = np.full(total_length, value_x * (0 + num_blocks * 2 - 1) * num_blocks, dtype=data_type)
-    
+
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
     input_x.tofile("./input/input_x.bin")
@@ -52,10 +52,10 @@ def gen_golden_data_scenario1():
     total_length = 32
     value_x = 1.0
     data_type = np.float32
-    
+
     input_x = np.full(total_length, value_x, dtype=data_type)
     golden = np.full(total_length, value_x * (2 + 3), dtype=data_type)
-    
+
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
     input_x.tofile("./input/input_x.bin")
@@ -76,20 +76,20 @@ def gen_golden_data_scenario2():
     num_blocks = 8
     input_type = np.uint8
     output_type = np.float32
-    
+
     x1_gm = np.random.uniform(0, 1, [M, K]).astype(input_type)
     x2_gm = np.random.uniform(0, 1, [K, N]).astype(input_type)
-    
+
     x11_gm = np.zeros_like(x1_gm).astype(np.half)
     x22_gm = np.zeros_like(x2_gm).astype(np.half)
-    
+
     golden = leaky_relu(np.matmul(x1_gm.astype(output_type), x2_gm.astype(output_type))).astype(output_type)
-    
+
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    
+
     x1_gm = x1_gm.reshape(M, num_blocks, K // num_blocks).transpose(1, 0, 2)
-    
+
     x1_gm.tofile("./input/x1_gm.bin")
     x2_gm.tofile("./input/x2_gm.bin")
     x11_gm.tofile("./input/x11_gm.bin")

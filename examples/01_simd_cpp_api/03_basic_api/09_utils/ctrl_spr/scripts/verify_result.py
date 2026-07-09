@@ -34,7 +34,7 @@ def verify_ctrl(real_result, golden):
 def verify_sat(real_result, golden):
     real_result = np.fromfile(real_result, dtype=np.float16)
     golden = np.fromfile(golden, dtype=np.float16)
-    
+
     for i in range(len(real_result)):
         if np.isinf(golden[i]):
             if not np.isinf(real_result[i]):
@@ -52,11 +52,11 @@ if __name__ == '__main__':
     ctrl_pass = verify_ctrl("./output/output_ctrl.bin", "./output/golden_ctrl.bin")
     if not ctrl_pass:
         print("[ERROR] output_ctrl.bin failed")
-    
+
     sat_pass = verify_sat("./output/output_sat.bin", "./output/golden_sat.bin")
     if not sat_pass:
         print("[ERROR] output_sat.bin failed")
-    
+
     if ctrl_pass and sat_pass:
         print("test pass!")
     else:

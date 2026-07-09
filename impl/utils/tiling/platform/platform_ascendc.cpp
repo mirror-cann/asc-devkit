@@ -77,9 +77,9 @@ static inline SocVersion SocVersionStrMap(const char *socVersionStr)
     return SocVersion::RESERVED_VERSION;
 }
 
-uint32_t PlatformAscendC::GetVecRegLen(void) const 
+uint32_t PlatformAscendC::GetVecRegLen(void) const
 {
-    std::string sizeStr; 
+    std::string sizeStr;
     bool ret = this->GetPlatFormInfo()->GetPlatformResWithLock("AICoreSpec", "vector_reg_width", sizeStr);
     if(!ret){
         PF_LOGE("platform do not support get vector_reg_width size !");
@@ -175,7 +175,7 @@ void PlatformAscendC::GetCoreMemSize(const CoreMemType &memType, uint64_t &size)
         }
         size = sizeStr.empty() ? 0 : std::stoull(sizeStr);
     }
- 
+
     if (memType == CoreMemType::BT) {
         std::string sizeStr;
         bool ret = this->GetPlatFormInfo()->GetPlatformResWithLock("AICoreSpec", "bt_size", sizeStr);
@@ -459,7 +459,7 @@ bool GetShortSocVersion(std::string &shortSocVersion)
 }
 #else
 bool GetRealSocVersion(std::string &realSocVersion)
-{    
+{
     void *handle = dlopen("libruntime.so", RTLD_LAZY);
     if (handle == nullptr) {
         PF_LOGE("Failed to get short soc version, cannot dlopen runtime so");

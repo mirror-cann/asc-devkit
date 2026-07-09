@@ -153,12 +153,12 @@ template <typename T>
 struct unwrap_refwrapper {
     using type = T;
 };
- 
+
 template <typename T>
 struct unwrap_refwrapper<std::reference_wrapper<T>> {
     using type = T&;
 };
- 
+
 template <typename T>
 using unwrap_decay_t = typename unwrap_refwrapper<decay_t<T>>::type;
 
@@ -168,7 +168,7 @@ ASCENDC_HOST_AICORE inline constexpr tuple<unwrap_decay_t<Tps>...> make_tuple(Tp
     tuple_static_assert<0, Tps...>();
     return tuple<unwrap_decay_t<Tps>...>(forward<Tps>(args)...);
 }
- 
+
 // tie
 template <typename ...Tps>
 ASCENDC_HOST_AICORE inline constexpr tuple<Tps& ...> tie(Tps& ...args) noexcept

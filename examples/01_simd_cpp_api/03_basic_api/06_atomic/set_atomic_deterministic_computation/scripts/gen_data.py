@@ -46,7 +46,7 @@ def gen_golden_data():
     # 创建目录
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    
+
     # 保存数据
     input_x.tofile("./input/input_x.bin")
     input_y.tofile("./input/input_y.bin")
@@ -55,6 +55,6 @@ def gen_golden_data():
     input_gm.tofile("./input/input_gm.bin")
     input_sync.tofile("./input/input_sync.bin")
 
-    
+
 if __name__ == "__main__":
     gen_golden_data()

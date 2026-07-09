@@ -158,7 +158,7 @@ template <typename T>
 __aicore__ inline MstxVecWrapper WrapperFrom(MstxMaskMode maskMode, uint64_t mask, bool isSetMask, uint32_t reserveBufSize) {
     int32_t typeLen = 0;
     constexpr int32_t halfTypeLen = 64;  // 1 register -> 64 bits -> 64 elements
-    constexpr int32_t lenCoeff = 2; 
+    constexpr int32_t lenCoeff = 2;
     uint64_t trueMask0, trueMask1;
     if constexpr (IsSameType<T, int4b_t>::value) {
         typeLen = DEFAULT_BLOCK_SIZE * INT4_TWO;
@@ -168,13 +168,13 @@ __aicore__ inline MstxVecWrapper WrapperFrom(MstxMaskMode maskMode, uint64_t mas
     if (mask == halfTypeLen) {
         trueMask0 = FULL_MASK;
         trueMask1 = 0;
-    } else if (mask == typeLen || mask >= halfTypeLen * lenCoeff) { 
+    } else if (mask == typeLen || mask >= halfTypeLen * lenCoeff) {
         trueMask0 = FULL_MASK;
         trueMask1 = FULL_MASK;
     } else {
         trueMask0 = (mask > halfTypeLen) ? FULL_MASK : (((static_cast<uint64_t>(1)) << static_cast<uint32_t>(mask)) - 1);
         trueMask1 = (mask > halfTypeLen) ? (((static_cast<uint64_t>(1)) << static_cast<uint32_t>(mask - halfTypeLen)) - 1) : 0;
-    } 
+    }
 
     return MstxVecWrapper{
         maskMode,
@@ -411,7 +411,7 @@ __aicore__ inline void GetMstxVecUnaryInfo(const LocalTensor<T>& dst, const Loca
 }
 
 template <typename T, typename U, bool isSetMask>
-__aicore__ inline void GetMstxVecUnaryInfo(const LocalTensor<T>& dst, const LocalTensor<U>& src, __gm__ const char* name, 
+__aicore__ inline void GetMstxVecUnaryInfo(const LocalTensor<T>& dst, const LocalTensor<U>& src, __gm__ const char* name,
     const int32_t count)
 {
     MstxVecUnaryDesc mstxVecUnaryDesc;
@@ -468,7 +468,7 @@ __aicore__ inline void GetMstxVecUnaryTenaryInfo(const LocalTensor<T>& dst, cons
 }
 
 template <typename T, typename U, bool isSetMask>
-__aicore__ inline void GetMstxVecUnaryTenaryInfo(const LocalTensor<T>& dst, const LocalTensor<U>& src, __gm__ const char* name, 
+__aicore__ inline void GetMstxVecUnaryTenaryInfo(const LocalTensor<T>& dst, const LocalTensor<U>& src, __gm__ const char* name,
     const int32_t count)
 {
     MstxVecUnaryDesc mstxVecUnaryDesc;
@@ -529,7 +529,7 @@ __aicore__ inline void GetMstxVecUnaryCastInfo(const LocalTensor<T>& dst, const 
 }
 
 template <typename T, typename U, bool isSetMask>
-__aicore__ inline void GetMstxVecUnaryCastInfo(const LocalTensor<T>& dst, const LocalTensor<U>& src, __gm__ const char* name, 
+__aicore__ inline void GetMstxVecUnaryCastInfo(const LocalTensor<T>& dst, const LocalTensor<U>& src, __gm__ const char* name,
     const int32_t count)
 {
     MstxVecUnaryDesc mstxVecUnaryDesc;
@@ -606,7 +606,7 @@ __aicore__ inline void GetMstxVecUnaryCastDeqInfo(const LocalTensor<T>& dst, con
 }
 
 template <typename T, typename U, bool isSetMask>
-__aicore__ inline void GetMstxVecUnaryCastDeqInfo(const LocalTensor<T>& dst, const LocalTensor<U>& src, __gm__ const char* name, 
+__aicore__ inline void GetMstxVecUnaryCastDeqInfo(const LocalTensor<T>& dst, const LocalTensor<U>& src, __gm__ const char* name,
     const int32_t count, bool halfBlock)
 {
     MstxVecCastDeqDesc mstxVecCastDeqDesc;
@@ -686,7 +686,7 @@ __aicore__ inline void GetMstxVecUnaryCmpsInfo(const LocalTensor<T>& dst, const 
 }
 
 template <typename T, typename U, bool isSetMask>
-__aicore__ inline void GetMstxVecUnaryCmpsInfo(const LocalTensor<T>& dst, const LocalTensor<U>& src, __gm__ const char* name, 
+__aicore__ inline void GetMstxVecUnaryCmpsInfo(const LocalTensor<T>& dst, const LocalTensor<U>& src, __gm__ const char* name,
     const int32_t count)
 {
     MstxVecUnaryDesc mstxVecUnaryDesc;
@@ -905,7 +905,7 @@ __aicore__ inline void GetMstxVecTransposeInfo(const LocalTensor<T>& dst, const 
 }
 
 template <typename T, typename U>
-__aicore__ inline void GetMstxVecTransposeTempInfo(const LocalTensor<T>& dst, const LocalTensor<T>& src, 
+__aicore__ inline void GetMstxVecTransposeTempInfo(const LocalTensor<T>& dst, const LocalTensor<T>& src,
     const LocalTensor<U> &sharedTmpBuffer, __gm__ const char* name)
 {
     MstxVecTranspose mstxVecTranspose;
@@ -1008,7 +1008,7 @@ __aicore__ inline void GetMstxVecIndexInfo(const LocalTensor<T>& dst, uint32_t c
 
 //软仿
 template <typename T, typename U>
-__aicore__ inline void GetMstxVecReduceComplexInfo(const LocalTensor<U>& dst, const LocalTensor<T>& src, 
+__aicore__ inline void GetMstxVecReduceComplexInfo(const LocalTensor<U>& dst, const LocalTensor<T>& src,
     const LocalTensor<T>& sharedTmpBuffer, const int32_t mask0, const int32_t mask1,
     const int32_t repeatTime, const int32_t srcRepStride, __gm__ const char* name)
 {
@@ -1025,7 +1025,7 @@ __aicore__ inline void GetMstxVecReduceComplexInfo(const LocalTensor<U>& dst, co
 }
 
 template <typename T, typename U>
-__aicore__ inline void GetMstxVecReduceComplexInfo(const LocalTensor<U>& dst, const LocalTensor<T>& src, 
+__aicore__ inline void GetMstxVecReduceComplexInfo(const LocalTensor<U>& dst, const LocalTensor<T>& src,
     const LocalTensor<T>& sharedTmpBuffer, const int32_t mask,
     const int32_t repeatTime, const int32_t srcRepStride, __gm__ const char* name)
 {
@@ -1042,7 +1042,7 @@ __aicore__ inline void GetMstxVecReduceComplexInfo(const LocalTensor<U>& dst, co
 }
 
 template <typename T, typename U>
-__aicore__ inline void GetMstxVecReduceComplexInfo(const LocalTensor<U>& dst, const LocalTensor<T>& src, 
+__aicore__ inline void GetMstxVecReduceComplexInfo(const LocalTensor<U>& dst, const LocalTensor<T>& src,
     const LocalTensor<T>& sharedTmpBuffer, const int32_t count, __gm__ const char* name)
 {
     MstxVecComplexReduceDesc mstxVecComplexReduceDesc;
@@ -1230,7 +1230,7 @@ __aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const 
 }
 
 template <typename T>
-__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<T>& src0, 
+__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<T>& src0,
     const LocalTensor<T>& src1, const uint8_t repeatTime,
     const BinaryRepeatParams& repeatParams, SELMODE selMode, __gm__ const char* name)
 {
@@ -1258,7 +1258,7 @@ __aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const 
 }
 
 template <typename T, typename U>
-__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<U>& selMask, 
+__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<U>& selMask,
     const LocalTensor<T>& src0, const uint8_t repeatTime,
     const BinaryRepeatParams& repeatParams, SELMODE selMode, __gm__ const char* name)
 {
@@ -1286,7 +1286,7 @@ __aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const 
 }
 
 template <typename T, typename U>
-__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<U>& selMask, 
+__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<U>& selMask,
     const LocalTensor<T>& src0, const LocalTensor<T>& src1, uint32_t count, bool isSetMask, SELMODE selMode, __gm__ const char* name)
 {
     MstxVecSelDesc mstxVecSelDesc;
@@ -1314,7 +1314,7 @@ __aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const 
 }
 
 template <typename T, typename U>
-__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<U>& selMask, 
+__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<U>& selMask,
     const LocalTensor<T>& src0, uint64_t mask0, uint64_t mask1, const uint8_t repeatTime,
     const BinaryRepeatParams& repeatParams, bool isSetMask, SELMODE selMode, __gm__ const char* name)
 {
@@ -1338,7 +1338,7 @@ __aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const 
 }
 
 template <typename T, typename U>
-__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<U>& selMask, 
+__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<U>& selMask,
     const LocalTensor<T>& src0, uint64_t mask, const uint8_t repeatTime,
     const BinaryRepeatParams& repeatParams, bool isSetMask, SELMODE selMode, __gm__ const char* name)
 {
@@ -1362,7 +1362,7 @@ __aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const 
 }
 
 template <typename T, typename U>
-__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<U>& selMask, 
+__aicore__ inline void GetMstxVecBinarySelInfo(const LocalTensor<T>& dst, const LocalTensor<U>& selMask,
     const LocalTensor<T>& src0, uint32_t count, bool isSetMask, SELMODE selMode, __gm__ const char* name)
 {
     MstxVecSelDesc mstxVecSelDesc;

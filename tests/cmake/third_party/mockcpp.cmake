@@ -34,14 +34,14 @@ if (NOT EXISTS "${CMAKE_INSTALL_PREFIX}/mockcpp/lib/libmockcpp.a")
         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/mockcpp
     )
     set(MOCKCPP_LOCAL_SRC "${CANN_3RD_LIB_PATH}/../llt/third_party/mockcpp_src")
-    if(EXISTS ${MOCKCPP_LOCAL_SRC})	 
-        message("Found local mockcpp source: ${MOCKCPP_LOCAL_SRC}")	 
+    if(EXISTS ${MOCKCPP_LOCAL_SRC})
+        message("Found local mockcpp source: ${MOCKCPP_LOCAL_SRC}")
         file(COPY ${MOCKCPP_LOCAL_SRC}/ DESTINATION "${MOCKCPP_SRC_PATH}/")
         include(ExternalProject)
-        ExternalProject_Add(mockcpp	 
-            SOURCE_DIR ${MOCKCPP_SRC_PATH}	 
-            CONFIGURE_COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ${MOCKCPP_OPTS} <SOURCE_DIR>	 
-            BUILD_COMMAND make install -j 16	 
+        ExternalProject_Add(mockcpp
+            SOURCE_DIR ${MOCKCPP_SRC_PATH}
+            CONFIGURE_COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ${MOCKCPP_OPTS} <SOURCE_DIR>
+            BUILD_COMMAND make install -j 16
         )
     else()
         set(MOCKCPP_NAME "mockcpp")
@@ -68,23 +68,23 @@ if (NOT EXISTS "${CMAKE_INSTALL_PREFIX}/mockcpp/lib/libmockcpp.a")
         # 处理源码包：检查本地 tar.gz 包是否存在
         if (EXISTS "${MOCKCPP_LOCAL_TAR}")
             message(STATUS "Found local mockcpp source tar.gz: ${MOCKCPP_LOCAL_TAR}, extracting...")
-            
+
             # 创建目标目录（如果不存在）
             file(MAKE_DIRECTORY "${MOCKCPP_SRC_PATH}")
-            
+
             # 解压本地的 tar.gz 包
             execute_process(
                 COMMAND tar xzf "${MOCKCPP_LOCAL_TAR}" -C "${MOCKCPP_SRC_PATH}" --strip-components=1
                 RESULT_VARIABLE EXTRACT_RESULT
                 ERROR_VARIABLE EXTRACT_ERROR
             )
-            
+
             if(NOT EXTRACT_RESULT EQUAL 0)
                 message(FATAL_ERROR "Failed to extract local mockcpp tar.gz: ${EXTRACT_ERROR}")
             endif()
-            
+
             message(STATUS "Local mockcpp tar.gz extracted successfully to ${MOCKCPP_SRC_PATH}")
-            
+
             # 解压后，使用本地源码路径（因为已经解压好了）
             set(REQ_URL "")  # 清空 URL，因为不需要下载
             set(SOURCE_DIR_ARG SOURCE_DIR ${MOCKCPP_SRC_PATH})

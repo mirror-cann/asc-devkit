@@ -21,7 +21,7 @@
 namespace AscendC {
 namespace Std {
 
-template <typename T> 
+template <typename T>
 struct is_floating_point {
 private:
     template <typename Head, typename... Args>

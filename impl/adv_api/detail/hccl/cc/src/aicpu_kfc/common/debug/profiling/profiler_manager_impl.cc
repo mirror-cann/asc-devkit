@@ -216,7 +216,7 @@ void ProfilerManagerImpl::TaskProfilerHandle(void *param, u32 length)
     if (taskPara->isFftsDispatcher) {
         profilingManager.SetFftsDispatcherMode();
     }
-    
+
     HandleTask(taskPara, ctxId, profTaskType);
 
     if (taskPara->isFftsDispatcher) {
@@ -242,7 +242,7 @@ void ProfilerManagerImpl::TaskAivProfilerHandle(void *param, u32 length)
     }
 
     TaskAivProfiler(ProfilerType::TASK_ALL, taskParaGeneral->stream, taskParaGeneral->aiv);
-    
+
     if (GetIfProfile()){
         auto &profilingManager = hccl::ProfilingManager::Instance();
         (void)profilingManager.CallMsprofReportTaskApi(taskParaGeneral->isMainStream, taskParaGeneral->beginTime, ProfTaskType::TASK_AIV);

@@ -31,7 +31,7 @@ struct IsReferenceableImpl
 };
 
 template <typename Tp>
-struct is_referenceable 
+struct is_referenceable
     : integral_constant<bool, IsNotSame<decltype(IsReferenceableImpl::Test<Tp>(0)), false_type>::value> {};
 
 }

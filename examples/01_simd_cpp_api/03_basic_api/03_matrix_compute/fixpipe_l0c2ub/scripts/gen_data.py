@@ -42,7 +42,7 @@ def gen_golden_data(scenarioNum=1):
     x1_gm.astype(input_type).tofile("./input/x1_gm.bin")
     x2_gm.astype(input_type).tofile("./input/x2_gm.bin")
     golden.astype(output_type).tofile("./output/golden.bin")
-    
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

@@ -70,7 +70,7 @@ enum class VEC_WAIT_INTRA_Enum : uint16_t {
     WAIT_FIXP, // fixp比较特殊，有多条通路
     MAX
 };
- 
+
 enum class CUBE_WAIT_INTRA_Enum : uint16_t {
     L1_L0AB_UB_L1 = 0,
     GM_L1_UB_GM,
@@ -84,7 +84,7 @@ constexpr int32_t MIX_NUM = 2; // david 1:2
 #endif
 constexpr int MAX_MSG_MASK = 3;
 constexpr int MAX_MSG_COUNT_Arch3510 = (1 << MAX_MSG_MASK);  // 2KB支持16个消息，每个消息大小128B，给两个v用，每个V可分得8个消息
-constexpr int BIDIRECTION_NUM = 1;  // 单向    
+constexpr int BIDIRECTION_NUM = 1;  // 单向
 constexpr int MAX_MATMUL_OBJ = 4;
 constexpr uint64_t INC_PROCESS_CHECK = 14;
 constexpr uint8_t VALID_ADDR_BITS_NUM = 56;

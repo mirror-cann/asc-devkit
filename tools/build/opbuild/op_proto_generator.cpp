@@ -39,8 +39,9 @@ void OpProtoGenerator::GenOpRegImplDeclBegin(std::ofstream& outfile, bool isOpPr
 
 void OpProtoGenerator::GenOpRegImplDeclEnd(std::ofstream& outfile, bool isOpProtoH) const
 {
-    outfile << "}" << std::endl << std::endl;
+    outfile << "}" << std::endl;
     if (isOpProtoH) {
+        outfile << std::endl;
         outfile << "#endif" << std::endl;
     }
 }

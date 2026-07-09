@@ -412,7 +412,7 @@ template <typename T> struct IsLocalTensor<LocalTensor<T>> : public TrueType {};
 template <typename T> __aicore__ constexpr bool IsLocalTensorType()
 {
     if constexpr (IsLocalTensor<T>::value) {
-        return SupportType<typename T::PrimType, bool, int8_t, uint8_t, int16_t, uint16_t, half, bfloat16_t, float, 
+        return SupportType<typename T::PrimType, bool, int8_t, uint8_t, int16_t, uint16_t, half, bfloat16_t, float,
             fp8_e5m2_t, fp8_e4m3fn_t, fp8_e8m0_t, int32_t, uint32_t, int64_t, uint64_t, complex32, complex64, double>();
     } else {
         return false;

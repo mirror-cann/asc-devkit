@@ -31,13 +31,13 @@ def gen_golden_data_simple():
     min_val, max_val = get_range_by_dtype(input_type)
     block_length = 256
     one_data_block_size = 32 # 一个datablock能处理32B数据
-    
+
     input_shape = [block_length * input_type.itemsize // one_data_block_size]
     output_shape = [block_length]
     input_x = np.random.uniform(min_val, max_val, input_shape).astype(input_type)
     golden = np.zeros(output_shape).astype(output_type)
     for i in range(len(input_x)):
-        golden[i * (one_data_block_size // input_type.itemsize) : 
+        golden[i * (one_data_block_size // input_type.itemsize) :
         (i + 1) * (one_data_block_size // input_type.itemsize)] = input_x[i]
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)

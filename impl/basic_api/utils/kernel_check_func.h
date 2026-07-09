@@ -107,7 +107,7 @@ bool CheckFuncGatherb(const LocalTensor<T>& dst, const LocalTensor<T>& src0, con
 }
 
 template <typename T, typename U>
-check::VecGatherApiParams BuildVecGatherApiParams(const LocalTensor<T>& dst, const LocalTensor<T>& src0, 
+check::VecGatherApiParams BuildVecGatherApiParams(const LocalTensor<T>& dst, const LocalTensor<T>& src0,
     const LocalTensor<U>& offset, const uint32_t srcBaseOffset, const uint8_t repeatTime, const uint16_t dstRepStride)
 {
     return check::VecGatherApiParams { static_cast<uint64_t>(reinterpret_cast<uintptr_t>(dst.GetPhyAddr())),
@@ -265,7 +265,7 @@ bool CheckFuncBilinearInterpolation(const LocalTensor<T>& dst, const LocalTensor
     const uint8_t hRepeat, const bool repeatMode, const uint16_t dstBlkStride, const uint16_t vROffset,
     const uint8_t vRepeat, const char* intriName)
 {
-    auto chkParams = BuildVecBilinearInterpolationApiParams(dst, src0, src0Offset, src1, hRepeat, repeatMode, 
+    auto chkParams = BuildVecBilinearInterpolationApiParams(dst, src0, src0Offset, src1, hRepeat, repeatMode,
         dstBlkStride, vROffset, vRepeat);
     return CheckFuncBilinearInterpolationImpl(chkParams, mask, intriName);
 }
@@ -276,7 +276,7 @@ bool CheckFuncBilinearInterpolation(const LocalTensor<T>& dst, const LocalTensor
     const uint8_t hRepeat, const bool repeatMode, const uint16_t dstBlkStride, const uint16_t vROffset,
     const uint8_t vRepeat, const char* intriName)
 {
-    auto chkParams = BuildVecBilinearInterpolationApiParams(dst, src0, src0Offset, src1, hRepeat, repeatMode, 
+    auto chkParams = BuildVecBilinearInterpolationApiParams(dst, src0, src0Offset, src1, hRepeat, repeatMode,
         dstBlkStride, vROffset, vRepeat);
     return CheckFuncBilinearInterpolationImpl(chkParams, mask, intriName);
 }

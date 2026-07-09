@@ -82,4 +82,3 @@ __simd_callee__ inline void Gather(S& dstReg, S& srcReg, V& indexReg)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_GATHER_MASK_INTF_IMPL__
 #endif
-

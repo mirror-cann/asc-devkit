@@ -61,7 +61,7 @@ __aicore__ inline void LoadData2DL12L0ACal(__ca__ T* dst, __cbuf__ T* src, const
 }
 
 /****************************L1 To L0B******************************************/
-template <typename T>	
+template <typename T>
 __aicore__ inline void LoadData2DL12L0BTransposeCal(__cb__ T* dst, __cbuf__ T* src,
     const LoadData2dTransposeParams& loadDataParam)
 {

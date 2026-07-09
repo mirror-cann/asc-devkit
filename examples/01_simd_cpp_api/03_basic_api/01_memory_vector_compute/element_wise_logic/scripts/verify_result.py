@@ -26,14 +26,14 @@ def verify_result(output, golden):
     output_type = np.uint16
     output = np.fromfile(output, dtype=output_type).reshape(-1)
     golden = np.fromfile(golden, dtype=output_type).reshape(-1)
-    
+
     different = np.isclose(output, golden, rtol=RELATIVE_TOL, atol=ABSOLUTE_TOL, equal_nan=True)
-    
+
     diff_idx = np.where(different == False)[0]
-    
+
     for idx in diff_idx[:100]:
         print("index: %06d, expected: %d, actual: %d" % (idx, golden[idx], output[idx]))
-    
+
     error_ratio = float(diff_idx.size) / golden.size
     print("error ratio: %.4f, tolerance: %.4f" % (error_ratio, ERROR_TOL))
     return error_ratio <= ERROR_TOL
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     parser.add_argument('output_file', help='Output file path')
     parser.add_argument('golden_file', help='Golden file path')
     args = parser.parse_args()
-    
+
     try:
         res = verify_result(args.output_file, args.golden_file)
         if not res:

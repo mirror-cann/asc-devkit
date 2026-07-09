@@ -54,7 +54,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-scenario_num', type=int, default=1, choices=range(1, 5))
     args, unknown_args = parser.parse_known_args()
-    
+
     try:
         res = verify_result(sys.argv[1], sys.argv[2], args.scenario_num)
         if not res:

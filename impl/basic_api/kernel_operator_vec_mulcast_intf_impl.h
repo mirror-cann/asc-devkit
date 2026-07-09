@@ -55,7 +55,7 @@ __aicore__ inline void MulCast(const LocalTensor<T> &dst, const LocalTensor<U> &
     using SrcPrimType = PrimT<U>;
     using MaskCheckType = typename Conditional<(sizeof(DstPrimType) >= sizeof(SrcPrimType)),
         DstPrimType, SrcPrimType>::type;
-    ASCENDC_DEBUG_ASSERT((SupportType<SrcPrimType, half>() && SupportType<DstPrimType, int8_t, uint8_t>()), 
+    ASCENDC_DEBUG_ASSERT((SupportType<SrcPrimType, half>() && SupportType<DstPrimType, int8_t, uint8_t>()),
         KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed "
         "to check dtype in MulCast, current api support dtype combination is src: half, dst: int8_t / uint8_t"));
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -82,7 +82,7 @@ __aicore__ inline void MulCast(const LocalTensor<T> &dst, const LocalTensor<U> &
     using SrcPrimType = PrimT<U>;
     using MaskCheckType = typename Conditional<(sizeof(DstPrimType) >= sizeof(SrcPrimType)),
         DstPrimType, SrcPrimType>::type;
-    ASCENDC_DEBUG_ASSERT((SupportType<SrcPrimType, half>() && SupportType<DstPrimType, int8_t, uint8_t>()), 
+    ASCENDC_DEBUG_ASSERT((SupportType<SrcPrimType, half>() && SupportType<DstPrimType, int8_t, uint8_t>()),
         KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed "
         "to check dtype in MulCast, current api support dtype combination is src: half, dst: int8_t / uint8_t"));
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)

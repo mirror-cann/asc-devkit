@@ -197,4 +197,3 @@ __simd_callee__ inline void B32TraitTwoToTraitOne(T& dstReg, U& srcReg)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_COMMON_IMPL__
 #endif
-

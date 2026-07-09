@@ -94,7 +94,7 @@ __aicore__ inline void DataCopyUB2GMImpl(__gm__ T* dst, __ubuf__ T* src, const D
     if ASCEND_IS_AIV {
         ASCENDC_ASSERT((dst != nullptr), { KERNEL_LOG(KERNEL_ERROR, "dst ptr can not be nullptr"); });
         ASCENDC_ASSERT((src != nullptr), { KERNEL_LOG(KERNEL_ERROR, "src ptr can not be nullptr"); });
-        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "src address should be 32B aligned \n"));
 
         if constexpr (g_gm_overflow_check) {
@@ -110,9 +110,9 @@ template <typename T>
 __aicore__ inline void DataCopyUB2UBImpl(__ubuf__ T* dst, __ubuf__ T* src, const DataCopyParams& intriParams)
 {
     if ASCEND_IS_AIV {
-        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "src address should be 32B aligned \n"));
-        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(dst)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(dst)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "dst address should be 32B aligned \n"));
         copy_ubuf_to_ubuf((__ubuf__ void*)dst, (__ubuf__ void*)src, 0, intriParams.blockCount, intriParams.blockLen,
             intriParams.srcStride, intriParams.dstStride);
@@ -130,7 +130,7 @@ __aicore__ inline void DataCopyUB2L1Impl(__cbuf__ T* dst, __ubuf__ T* src, const
         ASCENDC_DEBUG_ASSERT((GetKfcClient() != nullptr), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
         "DataCopy from UB to L1 is software-emulated on this device and works with Matmul API. Use "
         "REGISTER_MATMUL_OBJ to enable Matmul API first.\n"));
-        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "src address should be 32B aligned \n"));
         // 1.获取GM的地址
         uint32_t tensorSize = intriParams.blockCount * intriParams.blockLen * 32;
@@ -179,7 +179,7 @@ __aicore__ inline void DataCopyUB2L1ND2NZImpl(__cbuf__ T* dst, __ubuf__ T* src, 
         ASCENDC_DEBUG_ASSERT((GetKfcClient() != nullptr), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
         "DataCopy UB to L1 with ND2NZ is software-emulated on this device and works with Matmul API. Use "
         "REGISTER_MATMUL_OBJ to enable Matmul API first.\n"));
-        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "src address should be 32B aligned \n"));
         uint32_t tensorSize = intriParams.nValue * intriParams.dValue;
         int32_t ubAddr = -1;
@@ -388,7 +388,7 @@ __aicore__ inline void DataCopyUB2L0CImpl(__cc__ T* dst, __ubuf__ U* src, const 
 template <typename T>
 __aicore__ inline void DataCopySliceGm2UBImpl(__ubuf__ T* dst, __gm__ T* src, const DataCopyParams& intriParamsIn)
 {
-    ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(dst)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+    ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(dst)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
         "dst address should be 32B aligned \n"));
     DataCopyPadExtParams<T> padParams{ false, 0, 0, 0 };
     uint16_t burstLen = intriParamsIn.blockLen * ONE_BLK_SIZE;
@@ -404,7 +404,7 @@ __aicore__ inline void DataCopyPadGm2UBImpl(__ubuf__ T* dst, __gm__ T* src, cons
     if ASCEND_IS_AIC {
         return;
     }
-    ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(dst)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+    ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(dst)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
         "Failed to check dst tensor address alignment in DataCopyPad from GM to VECIN / VECOUT, it should be 32B aligned.\n"));
     if (padParams.isPad) {
         set_mov_pad_val(padParams.paddingValue);
@@ -472,7 +472,7 @@ __aicore__ inline void DataCopyPadGm2UBImpl(__ubuf__ T* dst, __gm__ T* src, cons
 template <typename T>
 __aicore__ inline void DataCopySliceUB2GMImpl(__gm__ T* dst, __ubuf__ T* src, const DataCopyParams& intriParamsIn)
 {
-    ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+    ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
         "src address should be 32B aligned \n"));
     uint32_t burstLen = intriParamsIn.blockLen * ONE_BLK_SIZE;
     DataCopyExtParams intriParams{ intriParamsIn.blockCount, burstLen, intriParamsIn.srcStride, intriParamsIn.dstStride,
@@ -550,7 +550,7 @@ __aicore__ inline void DataCopyPadUB2L1Impl(__cbuf__ T* dst, __ubuf__ T* src, co
         ASCENDC_DEBUG_ASSERT((GetKfcClient() != nullptr), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
         "DataCopyPad from UB to L1 is software-emulated on this device and works with Matmul API. Use "
         "REGISTER_MATMUL_OBJ to enable Matmul API first.\n"));
-        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "Failed to check src tensor address alignment in DataCopyPad from VECIN / VECOUT to TSCM, it should be 32B "
             "aligned.\n"));
         uint32_t tensorSize = nd2nzParams.nValue * nd2nzParams.dValue;
@@ -600,7 +600,7 @@ __aicore__ inline void DataCopyPadUB2L1Impl(__cbuf__ T* dst, __ubuf__ T* src, co
         ASCENDC_DEBUG_ASSERT((GetKfcClient() != nullptr), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
         "DataCopyPad from UB to L1 is software-emulated on this device and works with Matmul API. Use "
         "REGISTER_MATMUL_OBJ to enable Matmul API first.\n"));
-        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "Failed to check src tensor address alignment in DataCopyPad from VECIN / VECOUT to TSCM, it should be 32B "
             "aligned.\n"));
         uint32_t tensorSize = nd2nzParams.nValue * nd2nzParams.dValue;

@@ -615,7 +615,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_payne_hanek_radian_reduct
         quotient += 1;
     }
 
-    // Step 9: Split product into high and low 
+    // Step 9: Split product into high and low
     int64_t product_int64 = static_cast<int64_t>(product);
     int64_t high_float = static_cast<float>(product_int64);
     product_int64 = product_int64 - static_cast<int64_t>(high_float);
@@ -850,11 +850,11 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_sin_poly(float x)
 {
     float y = x * x;
     float m = fmaf(x, y, 0.0f);
-    
+
     float z = fmaf(y, 2.86567956e-6f, -1.98559923e-4f); //  2.86567956e-6f:  1/9! * x^2 -1.98559923e-4f: -1/7!
     z = fmaf(y, z, 8.33338592e-3f); // 8.33338592e-3f: 1/5! * x^2
     z = fmaf(y, z, -1.66666672e-1f); // -1.66666672e-1f: -1/3! * x^2
-    
+
     return fmaf(z, m, x); // * x^3 + x
 }
 
@@ -2443,7 +2443,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_cal_j0_x_less8(float x)
 {
     float d1 = x - 2.4048254f;
     d1 = d1 - 1.087059e-7f;
-    float res = 9.619266247e-13f;                    
+    float res = 9.619266247e-13f;
     res = fmaf(res, d1, 5.702105547e-12f);
     res = fmaf(res, d1, -4.398487105e-10f);
     res = fmaf(res, d1, 4.604940853e-10f);
@@ -2463,7 +2463,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_cal_j0_x_less8(float x)
     float d3 = x - 8.653728f;
     d3 = d3 - 3.8147791e-7f;
     res = d3 * res;
-    return res;  
+    return res;
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_cal_j1_x_less8(float x)
@@ -2488,7 +2488,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_cal_j1_x_less8(float x)
     d2 = d2 + 1.8321172e-7f;
     res = d2 * res;
     res = res * x;
-    return res;  
+    return res;
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_jn_yn_asymptotic_bessel_amplitude(int n, float x, int index)
@@ -2629,7 +2629,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_j0_x_less8(float x)
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_cal_y0_x_lessdot5(float x)
-{        
+{
     float part1 = 0.636619772367f * __internal_j0_x_less8(x) * logf(x);
     float part2 = fmaf(0.0007977247950890495f, x, -0.016524315326267768f);
     part2 = fmaf(part2, x, 0.0001196180186f);
@@ -2678,27 +2678,27 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_cal_y0_x_part2(float x)
     res = fmaf(res, d3, -3.743254148e-02f);
     res = fmaf(res, d3, 9.592770584e-02f);
     res = d3 * res;
-    float d2 = x - 3.95767832f;   
+    float d2 = x - 3.95767832f;
     d2 = d2 - 1.01291178e-7f;
     res = d2 * res;
     return res;
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_cal_y0_x_larger8(float x)
-{  
+{
     if (isinf(x)) {
         return 0.0f;
     }
     float inv_x = 1.0f / x;
     float inv_x2 = inv_x * inv_x;
-    float alpha = __internal_cal_j0_y0_alpha(x, inv_x, inv_x2); 
+    float alpha = __internal_cal_j0_y0_alpha(x, inv_x, inv_x2);
     float after_coeff = __internal_sin_cosf_minus_pi_over_four(alpha, 1); // 1:Calculate SinfMinusPIOverFour
     float pre_coeff = __internal_cal_j0_y0_pre_coeff(x, inv_x, inv_x2);
     return after_coeff * pre_coeff;
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_cal_y1_x_less1dot2(float x, float minus_two_over_pi_mul_inv_x)
-{        
+{
     float part1 = 0.636619772367f * __internal_cal_j1_x_less8(x) * logf(x);
     float part2 = fmaf(0.0002798307076f, x, -0.0034028867918f);
     part2 = fmaf(part2, x, 0.0003643335439f);
@@ -2731,7 +2731,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_cal_y1_x_part1(float x)
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float __internal_cal_y1_x_part2(float x)
-{ 
+{
     float d2 = x - 5.42968082f;
     d2 = d2 - 2.16514351e-7f;
     float res = -4.575132868e-10f;
@@ -2840,9 +2840,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float j0f(float x)
         return 0;
     }
     if (f1 > 8.0f) {
-        return __internal_cal_j0_x_larger8(f1); 
+        return __internal_cal_j0_x_larger8(f1);
     } else {
-        return __internal_cal_j0_x_less8(f1);   
+        return __internal_cal_j0_x_less8(f1);
     }
 }
 
@@ -2907,7 +2907,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float y0f(float x)
     if (f1 > 1e13f && isfinite(f1)) {
         return 0;
     }
-    float res;     
+    float res;
     if (f1 < 0.5f) {
         res = __internal_cal_y0_x_lessdot5(f1);
     } else if (f1 < 2.1971413260310170351f) {
@@ -2930,10 +2930,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float y1f(float x)
         return 0;
     }
     if (x == 0.0f) {
-        return -ASCRT_INF_F;  
+        return -ASCRT_INF_F;
     }
-    float minus_two_over_pi_mul_inv_x = -0.636619772367f / f1;                
-    float res;     
+    float minus_two_over_pi_mul_inv_x = -0.636619772367f / f1;
+    float res;
     if (f1 < 1.17549435e-38f) {
         res = minus_two_over_pi_mul_inv_x;
     }

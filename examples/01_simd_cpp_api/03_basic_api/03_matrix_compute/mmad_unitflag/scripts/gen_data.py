@@ -36,6 +36,6 @@ def gen_golden_data():
     x1_gm.tofile("./input/x1_gm.bin")
     x2_gm.tofile("./input/x2_gm.bin")
     golden.tofile("./output/golden.bin")
-    
+
 if __name__ == "__main__":
     gen_golden_data()

@@ -45,7 +45,7 @@ struct IterRef {
 
 template <typename T>
 struct IterRef<T, void_t<typename T::reference>> {
-    using type = typename T::reference; 
+    using type = typename T::reference;
 };
 
 template <typename T, typename = void>

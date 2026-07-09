@@ -125,7 +125,7 @@ def gen_golden_data(scenarioNum=1):
     x1_gm = np.random.uniform(-2, 2, [M, K]).astype(input_type)
     x2_gm = np.random.uniform(-2, 2, [K, N]).astype(input_type)
     golden = np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32)).astype(np.float32)
-    
+
     l1_input_type_half = np.dtype("float16")
     x3_gm_half = np.eye(N, dtype=l1_input_type_half)
     l1_input_type_int8 = np.dtype("int8")

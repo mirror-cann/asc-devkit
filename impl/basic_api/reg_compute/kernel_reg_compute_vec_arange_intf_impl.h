@@ -48,4 +48,3 @@ __simd_callee__ inline void Arange(S& dstReg, U scalarValue)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_VEC_ARANGE_INTF_IMPL__
 #endif
-

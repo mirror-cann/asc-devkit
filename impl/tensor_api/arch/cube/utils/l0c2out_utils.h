@@ -246,7 +246,7 @@ private:
         if ASCEND_IS_AIV {
             return;
         }
-        
+
         asc_set_l0c_copy_prequant(quant);
     }
 
@@ -285,7 +285,7 @@ __aicore__ inline void SetFpc(const __fbuf__ T* deqTensorTempBuf)
     if ASCEND_IS_AIV {
         return;
     }
-   
+
     uint64_t deqTensorAddr = (reinterpret_cast<uint64_t>(deqTensorTempBuf) >> 7) << 8;
     asc_set_l0c_copy_prequant(deqTensorAddr);
 }
@@ -295,7 +295,7 @@ __aicore__ inline void InsertSync()
     if ASCEND_IS_AIV {
         return;
     }
-   
+
     asc_sync_pipe(PIPE_FIX);
 }
 

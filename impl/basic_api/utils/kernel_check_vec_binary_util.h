@@ -102,7 +102,7 @@ struct VecBinaryApiParams {
     uint8_t src1LogicPos = 0;
     uint8_t dstPos = 0;
     uint8_t src0Pos = 0;
-    uint8_t src1Pos = 0;    
+    uint8_t src1Pos = 0;
     uint32_t calCount = 0;
 };
 

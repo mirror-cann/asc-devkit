@@ -144,7 +144,7 @@ def gen_golden_data(scenarioNum=1):
     if scenarioNum == 4:
         bias_gm.tofile("./input/bias_gm.bin")
     golden.astype(output_type).tofile("./output/golden.bin")
-    
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

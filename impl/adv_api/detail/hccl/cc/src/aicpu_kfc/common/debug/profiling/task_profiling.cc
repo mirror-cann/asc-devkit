@@ -75,7 +75,7 @@ double TaskProfiling::GetTaskTime(TaskType taskType, const TaskData &taskData) c
             // Notify Wait按0.02us估计
             estimatedUs = DURATION_NOTIFY_WAIT;
             break;
-        
+
         default:
             break;
     }
@@ -320,8 +320,8 @@ HcclResult TaskProfiling::Save(u32 captureStreamID, u32 streamID, u32 taskID)
     return HCCL_SUCCESS;
 }
 
-HcclResult TaskProfiling::Save(u32 captureStreamID, u32 streamID, u32 taskID, const TaskParaAiv &paraAiv) 
-{   
+HcclResult TaskProfiling::Save(u32 captureStreamID, u32 streamID, u32 taskID, const TaskParaAiv &paraAiv)
+{
     HCCLReportData hcclReportData{};
     auto &profilingManager = hccl::ProfilingManager::Instance();
     HcclResult is_subscribe = profilingManager.GetAddtionInfoState();

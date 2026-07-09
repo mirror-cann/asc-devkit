@@ -319,8 +319,8 @@ string TaskInfo::GetParaAiv()
     string retStr;
     stringstream paraStr;
     paraStr << "cmdType:[" << static_cast<int>(taskPara.Aiv.cmdType) << "], "
-            << "tag:[" << taskPara.Aiv.tag << "], " 
-            << "size:[" << taskPara.Aiv.size << "], " 
+            << "tag:[" << taskPara.Aiv.tag << "], "
+            << "size:[" << taskPara.Aiv.size << "], "
             << "numBlocks:[" << taskPara.Aiv.numBlocks << "], "
             << "rankSize:[" << taskPara.Aiv.rankSize << "], "
             << "aivRdmaStep:[" << taskPara.Aiv.aivRdmaStep <<"], "
@@ -773,7 +773,7 @@ bool TaskExceptionHandler::DealExceptionCtx(rtExceptionInfo *exceptionInfo)
     if (!FindAndValidateContext(exceptionInfo)) {
         return false;
     }
-	
+
 	auto mapIt = opCtxInfo[exceptionInfo->deviceid].find(exceptionInfo->streamid);
 	auto &queIt = mapIt->second;
 	auto fftsOpInfo = *(queIt->front().first);
@@ -857,7 +857,7 @@ bool TaskExceptionHandler::ProcessContext(rtExceptionInfo *exceptionInfo, std::s
                     "base opInformation is %s", stageErrInfo.c_str(), fftsOpInfo.GetBaseInfoStr().c_str());
             } else if (exceptionInfo->expandInfo.u.fftsPlusInfo.contextId >= queIt->back().second->size()) {
                 HCCL_ERROR("%sTask run failed, contextId[%u] is out of vector "
-                    "size[%zu], base opInformation is %s", stageErrInfo.c_str(), 
+                    "size[%zu], base opInformation is %s", stageErrInfo.c_str(),
                     exceptionInfo->expandInfo.u.fftsPlusInfo.contextId, queIt->back().second->size(),
                     fftsOpInfo.GetBaseInfoStr().c_str());
             } else {
@@ -960,7 +960,7 @@ void TaskExceptionHandler::PrintTaskContextInfo(const std::shared_ptr<std::deque
 }
 
 void TaskExceptionHandler::ParseTaskSyncFlag(s32 *flagMem, u32 flagMemSize, u32 rankSize, u32 rank, u32 index)
-{    
+{
     u32 chips1v1 = std::min(rankSize * NUM_BLOCKS_PER_RANK, MAX_RANK_SIZE_SUPERPOD) * NOTIFY_NUM * INTERVAL_1V1;
     u32 cores1v1 = MAX_NUM_BLOCKS * NOTIFY_GROUPS_1V1 * INTERVAL_1V1;
     u32 chips1vN = PRINT_1VN_NUM * INTERVAL_1VN * NOTIFY_GROUPS_1V1;
@@ -977,7 +977,7 @@ void TaskExceptionHandler::ParseTaskSyncFlag(s32 *flagMem, u32 flagMemSize, u32 
 
     s32 *buf = flagMem;
     u32 offset = 0;
-    
+
     const std::string PREFIX[PING_PONG_NUM] = {"ping", "pong"};
     std::string str;
     for (u32 i = 0; i < PING_PONG_NUM; ++i) {
@@ -1027,7 +1027,7 @@ void TaskExceptionHandler::PrintTaskAivBuffer(const std::shared_ptr<std::deque<T
         return;
     }
     // width参考aiv_communication_base.cc的MAX_FLAG_SIZE_PER_KERNEL
-    
+
     u32 flagMemSize = 1024*1024;
     auto& taskInfo = taskQue->back();
     u32 realRankSize = taskInfo.taskPara.Aiv.rankSize;
@@ -1036,7 +1036,7 @@ void TaskExceptionHandler::PrintTaskAivBuffer(const std::shared_ptr<std::deque<T
         return;
     }
     s32* flagMem = static_cast<s32*>(tmpFlagMem);
-    hrtMemSyncCopy(flagMem, flagMemSize, reinterpret_cast<u8 *>(taskInfo.taskPara.Aiv.flagMem), flagMemSize, 
+    hrtMemSyncCopy(flagMem, flagMemSize, reinterpret_cast<u8 *>(taskInfo.taskPara.Aiv.flagMem), flagMemSize,
                    HcclRtMemcpyKind::HCCL_RT_MEMCPY_KIND_DEVICE_TO_HOST);
 
     ParseTaskSyncFlag(flagMem, flagMemSize, realRankSize, taskInfo.taskPara.Aiv.rank, taskInfo.index);
@@ -1051,7 +1051,7 @@ void TaskExceptionHandler::PrintTaskAivInfo(const std::shared_ptr<std::deque<Tas
     for(auto it = taskQue->end()-1; it >= taskQue->begin(); --it){
         if(!it->isAlgInfo){
             continue;
-        }        
+        }
         if(cnt <= 0){
             break;
         }
@@ -1149,13 +1149,13 @@ bool TaskExceptionHandler::DealExceptionTask(rtExceptionInfo *exceptionInfo)
         HCCL_RUN_INFO("stream not found. the fail task is not from HCCL. streamid[%u]", exceptionInfo->streamid), false);
     auto &queIt = mapIt->second;
     CHK_PRT_RET(queIt->size() == 0, HCCL_ERROR("[TaskExceptionHandler][Callback] TaskInfo queue size 0"), false);
-    
+
     // 从后往前匹配最后下发的相同taskId
     auto exceptionTaskInfo = queIt->back();
     while (queIt->size() > 0) {
         if (exceptionInfo->taskid == queIt->back().taskID) {
             exceptionTaskInfo = queIt->back();
-            taskFound = true;   
+            taskFound = true;
             break;
         }
         queIt->pop_back();
@@ -1187,7 +1187,7 @@ bool TaskExceptionHandler::DealExceptionTask(rtExceptionInfo *exceptionInfo)
         PrintTaskAivBuffer(queIt);
         PrintTaskAivInfo(queIt);
         DumpAivPrintWorkSpace(queIt);
-    }else if(exceptionTaskInfo.taskType == TaskType::TASK_NOTIFY_WAIT) { 
+    }else if(exceptionTaskInfo.taskType == TaskType::TASK_NOTIFY_WAIT) {
         queIt->pop_back();
         // 只在出错task为NotifyWait时打印前序task序列
         PrintTaskContextInfo(queIt, stageErrInfo);

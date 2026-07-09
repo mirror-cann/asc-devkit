@@ -26,7 +26,7 @@ namespace Std {
 template <typename T>
 __aicore__ inline T abs(const T src)
 {
-    static_assert(is_one_of<T, int8_t, int16_t, int32_t, float, int64_t>(), 
+    static_assert(is_one_of<T, int8_t, int16_t, int32_t, float, int64_t>(),
                 "current data type is not supported on current device!");
     return ::abs(src);
 }

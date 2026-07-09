@@ -12,7 +12,7 @@
 # ----------------------------------------------------------------------------------------------------------
 
 
-import numpy as np 
+import numpy as np
 
 dtype_size = 2 # b16数据类型
 fractal_shape = [16, 32 // dtype_size] # 分形形状
@@ -21,14 +21,14 @@ fractal_size = fractal_shape[0] * fractal_shape[1] # 分形元素数量
 def load2D(src, dst, repeatTimes, srcStride, dstGap, startIndex=0, addrMode=0, ifTranspose=False):
     addr_calc_mode = 1 if addrMode == 0 else -1
     for i in range(repeatTimes):
-        src_tmp_addr = startIndex * fractal_size + addr_calc_mode * srcStride * fractal_size * i  
+        src_tmp_addr = startIndex * fractal_size + addr_calc_mode * srcStride * fractal_size * i
         dst_tmp_addr = (dstGap + 1) * fractal_size * i
         for j in range(fractal_shape[0]):
             dst_block_addr = dst_tmp_addr + fractal_shape[1] * j
             if ifTranspose is False:
-                src_block_addr = src_tmp_addr + fractal_shape[1] * j 
+                src_block_addr = src_tmp_addr + fractal_shape[1] * j
                 dst[dst_block_addr:dst_block_addr + fractal_shape[1]] = src[src_block_addr:src_block_addr + fractal_shape[1]]
-            else:  
+            else:
                 src_block_addr = src_tmp_addr + j
                 dst[dst_block_addr:dst_block_addr + fractal_shape[1]] = src[src_block_addr:src_block_addr + fractal_size][::fractal_shape[1]]
 

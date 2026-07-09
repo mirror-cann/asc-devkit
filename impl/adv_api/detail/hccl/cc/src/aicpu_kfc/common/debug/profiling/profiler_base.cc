@@ -156,7 +156,7 @@ HcclResult ProfilerBase::AddOpData(const std::string &tag, u64 count, const void
     }
     return HCCL_SUCCESS;
 }
- 
+
 HcclResult ProfilerBase::DelOpData(const std::string &tag)
 {
     s32 deviceLogicId = -1;

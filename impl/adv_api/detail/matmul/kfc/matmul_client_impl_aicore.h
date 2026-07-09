@@ -71,7 +71,7 @@ public:
     {
         mul.SetTensorA(aScalar);
     }
-    
+
     __aicore__ inline void SetTensorB(const GlobalTensor<SrcBT>& gm, bool isTransposeB = false)
     {
         mul.SetTensorB(gm, isTransposeB);
@@ -168,13 +168,13 @@ public:
         mul.ClearBias();
     }
 
-    template <bool sync = true> 
+    template <bool sync = true>
     __aicore__ inline bool Iterate(bool enPartialSum = false)
     {
         return mul.Iterate(enPartialSum);
     }
 
-    template <bool sync = true, typename T> 
+    template <bool sync = true, typename T>
     __aicore__ inline bool Iterate(bool enPartialSum, const LocalTensor<T>& localCmatrix)
     {
         return mul.Iterate(enPartialSum, localCmatrix);
@@ -241,7 +241,7 @@ public:
     {
         mul.SetLocalWorkspace(tmpBuffer);
     }
-    
+
     __aicore__ inline void SetAntiQuantScalar(const SrcT offsetScalar, const SrcT scaleScalar)
     {
         mul.SetAntiQuantScalar(offsetScalar, scaleScalar);

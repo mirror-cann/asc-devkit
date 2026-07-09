@@ -54,7 +54,7 @@ public :
         return curL1LowerHalfAddr_;
     }
 
-    __aicore__ inline void SetCurrentAddress(uint32_t upperHalfSize, uint32_t lowerHalfSize = 0) 
+    __aicore__ inline void SetCurrentAddress(uint32_t upperHalfSize, uint32_t lowerHalfSize = 0)
     {
         curL1UpperHalfAddr_ += upperHalfSize;
         curL1LowerHalfAddr_ += lowerHalfSize;

@@ -144,7 +144,7 @@ private:
                 nSize = MAIN_LOOP_N_SIZE;
             }
         }
-        
+
         const uint32_t srcStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout) / FRACTAL_FIXED;
         uint32_t dstStride = 0;
         if constexpr (isNdFormat) {

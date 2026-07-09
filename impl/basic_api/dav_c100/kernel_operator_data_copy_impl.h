@@ -983,7 +983,7 @@ __aicore__ inline void DataCopyUB2L0CIntf(const LocalTensor<T> &dst,
     DataCopyUB2L0CImpl((__cc__ PrimT<T>*)dst.GetPhyAddr(), (__ubuf__ PrimT<T>*)src.GetPhyAddr(),
         intriParams, enhancedParams);
 }
- 
+
 template <typename T>
 __aicore__ inline void DataCopyUB2UBIntf(
     const LocalTensor<T> &dst, const LocalTensor<T> &src, const DataCopyParams &intriParams)

@@ -25,10 +25,10 @@ namespace Std {
 template <typename Base, typename Derived>
 struct IsBaseOfImpl {
 private:
-    template <typename B> 
+    template <typename B>
     ASCENDC_HOST_AICORE inline static true_type TestPtrConv(const volatile B *);
 
-    template <typename B> 
+    template <typename B>
     ASCENDC_HOST_AICORE inline static false_type TestPtrConv(const volatile void *);
 
     template <typename B, typename D>

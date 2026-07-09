@@ -79,7 +79,7 @@ __simd_vf__ inline void VecUnaryLevel0VFImpl(__ubuf__ T *dst, __ubuf__ T *src, c
             dst + index * repeatParams.dstRepStride * ElePerBlkT, dstVreg, repeatParams.dstBlkStride, maskReg);
     }
 }
- 
+
 template <auto func, bool isSetMask, bool isMaskBitMode, typename T>
 __aicore__ inline void VecUnaryLevel0Template(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t maskArray[],
     const uint64_t maskCount, const uint8_t repeatTimes, const UnaryRepeatParams repeatParams)
@@ -362,17 +362,17 @@ __simd_callee__ inline void Rsqrt(RegT &dstReg, RegT &srcReg, Reg::MaskReg &mask
         Reg::Select(dstReg, srcReg, dstReg, cmpMask);
     } else {
         if constexpr (SupportType<T, half>()) {
-            static constexpr AscendC::Reg::SqrtSpecificMode SqrtMode = 
+            static constexpr AscendC::Reg::SqrtSpecificMode SqrtMode =
                                     {Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_1ULP_FTZ_FALSE};
             Reg::Sqrt<T, &SqrtMode>(srcReg, srcReg, mask);
-            static constexpr AscendC::Reg::DivSpecificMode divMode = 
+            static constexpr AscendC::Reg::DivSpecificMode divMode =
                                     {Reg::MaskMergeMode::ZEROING, false, DivAlgo::PRECISION_1ULP_FTZ_FALSE};
             Reg::Div<T, &divMode>(dstReg, dstReg, srcReg, mask);
         } else {
-            static constexpr AscendC::Reg::SqrtSpecificMode SqrtMode = 
+            static constexpr AscendC::Reg::SqrtSpecificMode SqrtMode =
                                     {Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_0ULP_FTZ_FALSE};
             Reg::Sqrt<T, &SqrtMode>(srcReg, srcReg, mask);
-            static constexpr AscendC::Reg::DivSpecificMode divMode = 
+            static constexpr AscendC::Reg::DivSpecificMode divMode =
                                     {Reg::MaskMergeMode::ZEROING, false, DivAlgo::PRECISION_0ULP_FTZ_FALSE};
             Reg::Div<T, &divMode>(dstReg, dstReg, srcReg, mask);
         }
@@ -388,7 +388,7 @@ __aicore__ inline void RsqrtImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_
     if constexpr (config.algo == RsqrtAlgo::INTRINSIC || config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = RegRsqrt::Rsqrt<T, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
-    } else if constexpr (config.algo == RsqrtAlgo::FAST_INVERSE || config.algo == RsqrtAlgo::PRECISION_0ULP_FTZ_FALSE || 
+    } else if constexpr (config.algo == RsqrtAlgo::FAST_INVERSE || config.algo == RsqrtAlgo::PRECISION_0ULP_FTZ_FALSE ||
                         config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_FALSE) {
         constexpr auto func = RegRsqrt::Rsqrt<T, Reg::RegTensor<T>, true>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
@@ -403,7 +403,7 @@ __aicore__ inline void RsqrtImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_
     if constexpr (config.algo == RsqrtAlgo::INTRINSIC || config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = RegRsqrt::Rsqrt<T, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
-    } else if constexpr (config.algo == RsqrtAlgo::FAST_INVERSE || config.algo == RsqrtAlgo::PRECISION_0ULP_FTZ_FALSE || 
+    } else if constexpr (config.algo == RsqrtAlgo::FAST_INVERSE || config.algo == RsqrtAlgo::PRECISION_0ULP_FTZ_FALSE ||
                         config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_FALSE) {
         constexpr auto func = RegRsqrt::Rsqrt<T, Reg::RegTensor<T>, true>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);

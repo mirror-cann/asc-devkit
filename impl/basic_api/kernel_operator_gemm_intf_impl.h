@@ -26,7 +26,7 @@
 
 namespace AscendC {
 // T should be left matrix dtype
-template <typename T> 
+template <typename T>
 [[deprecated("NOTICE: GetGemmTiling has been deprecated and will be removed in the next version. "
         "Please do not use it!")]]
 __aicore__ inline GemmTiling GetGemmTiling(uint32_t m, uint32_t k, uint32_t n)

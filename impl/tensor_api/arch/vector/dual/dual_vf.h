@@ -17,7 +17,7 @@
 
 /*!
 * \file dual_vf.h
-* \brief 
+* \brief
 */
 #ifndef IMPL_TENSOR_API_ARCH_VECTOR_DUAL_DUAL_VF_H
 #define IMPL_TENSOR_API_ARCH_VECTOR_DUAL_DUAL_VF_H

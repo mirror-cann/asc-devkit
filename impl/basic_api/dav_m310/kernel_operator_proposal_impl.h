@@ -7,7 +7,7 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
- 
+
 /*!
  * \file kernel_operator_proposal_impl.h
  * \brief
@@ -19,40 +19,40 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_PROPOSAL_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_PROPOSAL_IMPL_H
- 
+
 namespace AscendC {
 template <typename T>
 __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dstLocal, __ubuf__ T* addrArray[MRG_SORT_ELEMENT_LEN], uint64_t config)
 {
     ASSERT(false && "unsupported Vbitsort on current device");
 }
- 
+
 template <typename T>
 __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const ProposalIntriParams& intriParams)
 {
     ASSERT(false && "unsupported Vbitsort on current device");
 }
- 
+
 template <typename T>
 __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* src0Local, __ubuf__ uint32_t* src1Local,
     const ProposalIntriParams& intriParams)
 {
     ASSERT(false && "unsupported Vbitsort on current device");
 }
- 
+
 template <typename T>
 __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dstLocal, __ubuf__ T* addrArray[MRG_SORT_ELEMENT_LEN], uint64_t src1,
     uint64_t config)
 {
     ASSERT(false && "unsupported Vmrgsort on current device");
 }
- 
+
 template <typename T>
 __aicore__ inline void VconcatCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const ProposalIntriParams& intriParams)
 {
     ASSERT(false && "unsupported VCONCAT on current device");
 }
- 
+
 template <typename T>
 __aicore__ inline void VextractCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const ProposalIntriParams& intriParams)
 {

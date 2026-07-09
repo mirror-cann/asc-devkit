@@ -24,7 +24,7 @@ def gen_data_1():
     Output: 32 uint8 mask bytes (256 bits)
     """
     total_length = 64
-    
+
     cond = np.zeros([1, total_length], dtype=np.uint32)
     cond[0, 0] = 0x00000001
     cond[0, 1] = 0xFFFFFFFF
@@ -67,7 +67,7 @@ def gen_data_2():
 
     dtype_size = np.dtype(data_type).itemsize
     mask_length = total_length // 8 // dtype_size
-    
+
     x = np.random.uniform(0, 2, [1, total_length]).astype(data_type)
     y = np.random.uniform(0, 2, [1, total_length]).astype(data_type)
     mask = np.random.randint(0, 255, [1, mask_length * dtype_size]).astype(np.uint8)
@@ -76,7 +76,7 @@ def gen_data_2():
     for i in range(total_length):
         mask_i = (mask[0, i // 8] >> (i % 8)) & 1
         golden[0, i] = x[0, i] if mask_i == 1 else y[0, i]
-    
+
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
     x.tofile('./input/input_x.bin')

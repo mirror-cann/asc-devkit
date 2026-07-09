@@ -94,7 +94,7 @@ public:
      * @return: void
      */
     __aicore__ inline void EnQue() {};
-    
+
     /**
      * @description: Fetch tensor from que
      * @return: void

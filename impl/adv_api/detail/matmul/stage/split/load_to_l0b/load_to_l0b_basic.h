@@ -38,7 +38,7 @@ class LoadToL0B<IMPL, INPUT_TYPE, MM_CFG,
 public:
     __aicore__ inline LoadToL0B() {};
     __aicore__ inline ~LoadToL0B() {};
-    
+
     __aicore__ inline void Prepare(bool isBTranspose, uint16_t bL1K) const
     {
         if (!isBTranspose) {

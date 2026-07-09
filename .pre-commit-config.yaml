@@ -12,10 +12,10 @@ repos:
     rev: v4.6.0
     hooks:
       - id: trailing-whitespace
-        files: ^(tests/api/c_api/|include/adv_api/|include/basic_api/|impl/c_api/instr_impl/npu_arch_3510/|include/c_api/|impl/adv_api/(?!detail/(matmul|hccl)/))
+        files: ^(tests/api/c_api/|include/adv_api/|include/basic_api/|impl/c_api/instr_impl/npu_arch_3510/|include/c_api/|impl/adv_api/(?!detail/(?:matmul|hccl)/)|impl/(?!adv_api/|c_api/)|tests/api/(?!adv_api/|basic_api/|c_api/)|impl/adv_api/detail/(?:matmul|hccl)/|tests/(?!api/|python/)|tests/api/basic_api/|examples/01_simd_cpp_api/03_basic_api/)
         exclude: \.md$
       - id: end-of-file-fixer
-        files: ^(tests/api/c_api/|include/adv_api/|include/basic_api/|impl/c_api/instr_impl/npu_arch_3510/|include/c_api/|impl/adv_api/(?!detail/(matmul|hccl)/))
+        files: ^(tests/api/c_api/|include/adv_api/|include/basic_api/|impl/c_api/instr_impl/npu_arch_3510/|include/c_api/|impl/adv_api/(?!detail/(?:matmul|hccl)/)|impl/(?!adv_api/|c_api/)|tests/api/(?!adv_api/|basic_api/|c_api/)|impl/adv_api/detail/(?:matmul|hccl)/|tests/(?!api/|python/)|tests/api/basic_api/|examples/01_simd_cpp_api/03_basic_api/)
         exclude: \.md$
       - id: check-yaml
         args: ["--allow-multiple-documents"]

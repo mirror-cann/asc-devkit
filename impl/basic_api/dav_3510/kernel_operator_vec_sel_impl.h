@@ -274,7 +274,7 @@ __simd_vf__ inline void SelectMode2Level0(__ubuf__ T* dst, __ubuf__ U* sel, __ub
                 maskReg = Reg::UpdateMask<T>(sreg);
             }
         }
-        
+
         Reg::MaskReg selMask0, selMask1, tmpMask0;
         Reg::MaskReg tmpMask1 = Reg::CreateMask<uint8_t, Reg::MaskPattern::ALL>();
         uint16_t tail = newRepeatTimes % unRollConstant;
@@ -1165,7 +1165,7 @@ __simd_vf__ inline void SelectSrc0ScalarMode1Level2(__ubuf__ T* dst, __ubuf__ U*
 }
 
 template <typename T, typename U>
-__aicore__ inline void VselImpl(__ubuf__ T* dst, __ubuf__ U* sel, T src0,__ubuf__ T* src1, 
+__aicore__ inline void VselImpl(__ubuf__ T* dst, __ubuf__ U* sel, T src0,__ubuf__ T* src1,
     SELMODE selMode, uint32_t calCount)
 {
     static_assert(SupportType<T, uint8_t, int8_t, bfloat16_t, half, int16_t, uint16_t, int32_t, uint32_t, float, uint64_t, int64_t, complex32, complex64>(),
@@ -1195,7 +1195,7 @@ __simd_vf__ inline void SelectBothTensorMode1Level2(__ubuf__ T* dst, __ubuf__ U*
             // Unalign DataCopy do not support TraitNumTwo right now
             Reg::LoadUnAlignPre(uregDup, (__ubuf__ T *)src0);
             Reg::LoadUnAlign(tmpReg, uregDup, (__ubuf__ T *)src0);
-            Reg::DeInterleave<uint32_t>((Reg::RegTensor<uint32_t>&)tmpReg.reg[0], (Reg::RegTensor<uint32_t>&)tmpReg.reg[1], 
+            Reg::DeInterleave<uint32_t>((Reg::RegTensor<uint32_t>&)tmpReg.reg[0], (Reg::RegTensor<uint32_t>&)tmpReg.reg[1],
                 (Reg::RegTensor<uint32_t>&)tmpReg.reg[0], (Reg::RegTensor<uint32_t>&)tmpReg.reg[0]);
             Reg::MaskReg maskFull = Reg::CreateMask<uint32_t, Reg::MaskPattern::ALL>();
             Reg::Duplicate(src0Reg, tmpReg, maskFull);
@@ -1269,7 +1269,7 @@ __simd_vf__ inline void SelectBothTensorMode1Level2(__ubuf__ T* dst, __ubuf__ U*
             Reg::LoadUnAlignPre(uregDup, (__ubuf__ T *)src1);
             Reg::LoadUnAlign(tmpReg, uregDup, (__ubuf__ T *)src1);
             Reg::MaskReg maskFull = Reg::CreateMask<uint32_t, Reg::MaskPattern::ALL>();
-            Reg::DeInterleave<uint32_t>((Reg::RegTensor<uint32_t>&)tmpReg.reg[0], (Reg::RegTensor<uint32_t>&)tmpReg.reg[1], 
+            Reg::DeInterleave<uint32_t>((Reg::RegTensor<uint32_t>&)tmpReg.reg[0], (Reg::RegTensor<uint32_t>&)tmpReg.reg[1],
                 (Reg::RegTensor<uint32_t>&)tmpReg.reg[0], (Reg::RegTensor<uint32_t>&)tmpReg.reg[0]);
             Reg::Duplicate(src1Reg, tmpReg, maskFull);
             Reg::LoadUnAlignPre(ureg, (__ubuf__ uint8_t *)sel);
@@ -1336,7 +1336,7 @@ __simd_vf__ inline void SelectBothTensorMode1Level2(__ubuf__ T* dst, __ubuf__ U*
 }
 
 template <typename T, typename U, uint8_t scalarIdx>
-__aicore__ inline void VselImpl(__ubuf__ T* dst, __ubuf__ U* sel, __ubuf__ T* src0,__ubuf__ T* src1, 
+__aicore__ inline void VselImpl(__ubuf__ T* dst, __ubuf__ U* sel, __ubuf__ T* src0,__ubuf__ T* src1,
     SELMODE selMode, uint32_t calCount)
 {
     static_assert(SupportType<T, uint8_t, int8_t, bfloat16_t, half, int16_t, uint16_t, int32_t, uint32_t, float, uint64_t, int64_t, complex32, complex64>(),

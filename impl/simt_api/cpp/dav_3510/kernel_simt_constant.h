@@ -68,7 +68,7 @@ namespace ConstantsInternal
     constexpr uint32_t SIMT_DUMP_SIZE = 2048;
     constexpr uint32_t SIMT_MAX_THREAD_NUM = 2048;
 
-    constexpr float TWO_OVER_PI = 0.63661975f; 
+    constexpr float TWO_OVER_PI = 0.63661975f;
     constexpr float MINUS_PI_OVER_TWO_HI = -1.5707964f;
     constexpr float MINUS_PI_OVER_TWO_LO = 4.371139e-8f;
 } // namespace SimtConstantsInternal

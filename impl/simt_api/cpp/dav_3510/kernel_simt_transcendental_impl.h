@@ -100,7 +100,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float PayneHanekRadianReduction(float x, i
         quotient += 1;
     }
 
-    // Step 9: Split product into high and low 
+    // Step 9: Split product into high and low
     int64_t productInt64 = static_cast<int64_t>(product);
     int64_t highFloat = static_cast<float>(productInt64);
     productInt64 = productInt64 - static_cast<int64_t>(highFloat);
@@ -174,7 +174,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CosPoly(float x)
     y = FmaImpl(x, y, -5.00000000e-1f); // -5.00000000e-1f: -1/2!
     return FmaImpl(x, y, 1.00000000e+0f); //  1.00000000e+0f: 1
 }
- 
+
 /**
  * Computes the sine of an angle using a polynomial approximation.
  * Formula: sin(x) = x-(1/3!)x^3+(1/5!)x^5+...+((-1)^n/(2n+1)!)x^{2n+1}+O(x^{2n+3})
@@ -187,11 +187,11 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float SinPoly(float x)
 {
     float y = x * x;
     float m = FmaImpl(x, y, 0.0f);
-    
+
     float z = FmaImpl(y, 2.86567956e-6f, -1.98559923e-4f); //  2.86567956e-6f:  1/9! * x^2 -1.98559923e-4f: -1/7!
     z = FmaImpl(y, z, 8.33338592e-3f); // 8.33338592e-3f: 1/5! * x^2
     z = FmaImpl(y, z, -1.66666672e-1f); // -1.66666672e-1f: -1/3! * x^2
-    
+
     return FmaImpl(z, m, x); // * x^3 + x
 }
 
@@ -278,7 +278,7 @@ template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline void SinCosImpl(T x, T &s, T &c)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type of input only supports float.");
- 
+
     int quadrant;
     float t;
     float y = TrigRadianReduction(x, 71476.0625f, &quadrant);  // 71476.0625f: threshold for reduce algorithm
@@ -1526,7 +1526,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T ErfcImpl(T x)
         result = 0.0f;
     }
 
-    return (x < 0) ? (2.0f - result) : result;  
+    return (x < 0) ? (2.0f - result) : result;
 }
 #endif
 

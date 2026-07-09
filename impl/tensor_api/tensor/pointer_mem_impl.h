@@ -58,17 +58,17 @@ struct IsHardwareMemPtr<HardwareMemPtr<PtrPattern, Pointer>> : Std::true_type {}
 template <typename T>
 constexpr bool IsHardwareMemPtrV = IsHardwareMemPtr<Std::remove_cvref_t<T>>::value;
 
-template <typename T, typename = void> 
-struct IsMemPtrIterator : Std::false_type {}; 
+template <typename T, typename = void>
+struct IsMemPtrIterator : Std::false_type {};
 
-template <typename T> 
-struct IsMemPtrIterator<T, void_t<decltype(*Std::declval<T&>())>> : Std::true_type {}; 
+template <typename T>
+struct IsMemPtrIterator<T, void_t<decltype(*Std::declval<T&>())>> : Std::true_type {};
 
-template <typename PtrPattern, typename Iterator> 
-__aicore__ inline auto MakeLocationMemPtr(Iterator iter) 
-{ 
-    return HardwareMemPtr<PtrPattern, Iterator>{iter}; 
-} 
+template <typename PtrPattern, typename Iterator>
+__aicore__ inline auto MakeLocationMemPtr(Iterator iter)
+{
+    return HardwareMemPtr<PtrPattern, Iterator>{iter};
+}
 } // namespace Te
 } // namespace AscendC
 

@@ -81,16 +81,16 @@ struct GetTypeFromNDimTrait<
     using ShapeColTuple = typename ToTuple<typename Selector::Cols>::type;
     using StrideRowTuple = typename ToTuple<typename Selector::StrideRowsT>::type;
     using StrideColTuple = typename ToTuple<typename Selector::StrideColsT>::type;
-    
+
     template <size_t Dim>
     using ShapeRowDim = typename Std::tuple_element<Dim, ShapeRowTuple>::type;
-    
+
     template <size_t Dim>
     using ShapeColDim = typename Std::tuple_element<Dim, ShapeColTuple>::type;
-    
+
     template <size_t Dim>
     using StrideRowDim = typename Std::tuple_element<Dim, StrideRowTuple>::type;
-    
+
     template <size_t Dim>
     using StrideColDim = typename Std::tuple_element<Dim, StrideColTuple>::type;
 };
@@ -125,7 +125,7 @@ struct GetNDimType<T, AttrInfo::Stride, AttrInfo::Column, dim> {
     using type = Std::remove_cvref_t<typename GetTypeFromNDimTrait<Std::remove_cvref_t<T>>::template StrideColDim<dim>>;
 };
 
-template <typename TensorType, typename TargetLayoutPtn> 
+template <typename TensorType, typename TargetLayoutPtn>
 struct IsSatisfiedPtnFormat {
     using LayoutPattern = GetLayoutPattern<typename Std::remove_cvref_t<TensorType>::layoutType>;
     static constexpr bool value = Std::is_same_v<LayoutPattern, TargetLayoutPtn>;

@@ -33,10 +33,10 @@ global_fmatrix_config = GlobalFMatrixConfig()
 def pad_to_16(length: int) -> int:
     """
     计算向上补齐到16倍数所需的填充长度
-    
+
     Args:
         length: 原始长度(正整数)
-    
+
     Returns:
         int: 需填充的长度(0表示已对齐)
     """
@@ -48,10 +48,10 @@ def pad_to_16(length: int) -> int:
 def ceil_aligned_to_16(length: int) -> int:
     """
     计算向上对齐到16倍数的结果
-    
+
     Args:
         length: 原始长度(正整数)
-    
+
     Returns:
         int: 对齐后的长度
     """
@@ -63,7 +63,7 @@ def ceil_aligned_to_16(length: int) -> int:
 def set_fmatrix(l1h: int, l1w: int, pad_list: list, fmatrix_mode: int) -> None:
     """
     设置FMatrix全局配置
-    
+
     Args:
         l1h: L1高度
         l1w: L1宽度
@@ -82,7 +82,7 @@ def set_fmatrix(l1h: int, l1w: int, pad_list: list, fmatrix_mode: int) -> None:
 def set_load_data_padding_value(pad_value: Union[np.int8, np.int16, np.int32]) -> None:
     """
     设置填充值
-    
+
     Args:
         pad_value: 填充值
     """
@@ -210,7 +210,7 @@ def _prepare_src_slice(
 ) -> tuple[np.ndarray, np.ndarray]:
     """
     预处理: 从im2col结果中提取切片并重塑为分形格式
-    
+
     Args:
         im2col_out: im2col展开结果, shape=[N, C1, Hk*Wk, Hout*Wout, C0]
         m_start_pt: M维度起始位置
@@ -218,7 +218,7 @@ def _prepare_src_slice(
         m_extension: M维度扩展长度
         k_extension: K维度扩展长度
         c0: C0维度大小
-    
+
     Returns:
         tuple: (src_slice, src_fractal_z)
             - src_slice: 提取的切片, shape=[N, k_ext//C0, m_ext, C0]
@@ -227,7 +227,7 @@ def _prepare_src_slice(
     # 重塑为2D格式
     n, c1, kernel_flat_dim, hw_out, c0 = im2col_out.shape
     src_2d = im2col_out.reshape(n, c1 * kernel_flat_dim, hw_out, c0)
-    
+
     # 提取切片
     src_slice = src_2d[
         :,
@@ -235,7 +235,7 @@ def _prepare_src_slice(
         m_start_pt : m_start_pt + m_extension,
         :
     ]
-    
+
     # 重塑为分形格式
     m_aligned = ceil_aligned_to_16(src_slice.shape[2])
     src_fractal_z = src_slice.reshape(
@@ -245,16 +245,16 @@ def _prepare_src_slice(
         16,
         c0
     )
-    
+
     return src_slice, src_fractal_z
 
 def _process_b32_transpose(src_fractal_z: np.ndarray) -> np.ndarray:
     """
     B32格式转置处理(核心维度变换+填充)
-    
+
     Args:
         src_fractal_z: 分形格式张量, shape=[N, C1*Hk*Wk, Wout_Hout//16, 16, C0]
-    
+
     Returns:
         np.ndarray: 处理后的张量(含维度变换+填充)
     """
@@ -263,7 +263,7 @@ def _process_b32_transpose(src_fractal_z: np.ndarray) -> np.ndarray:
     src_fractal_z_transposed = tmp.reshape(
         tmp.shape[0], tmp.shape[1], tmp.shape[2], tmp.shape[3] * tmp.shape[4]
     )
-    
+
     # 16对齐填充
     dim3 = src_fractal_z_transposed.shape[3]
     pad_dim3 = pad_to_16(dim3)
@@ -272,7 +272,7 @@ def _process_b32_transpose(src_fractal_z: np.ndarray) -> np.ndarray:
         pad_width=((0, 0), (0, 0), (0, 0), (0, pad_dim3)),
         mode="constant"
     )
-    
+
     # 维度拆分: 16 -> 2×8
     tmp_shape = src_fractal_z_padded.reshape(
         src_fractal_z_padded.shape[0],
@@ -281,10 +281,10 @@ def _process_b32_transpose(src_fractal_z: np.ndarray) -> np.ndarray:
         8,
         src_fractal_z_padded.shape[3]
     )
-    
+
     # 维度重排: [N, Wout_Hout//16, 2, 8, C1*Hk*Wk*C0] -> [N, Wout_Hout//16, 2, C1*Hk*Wk*C0, 8]
     src_transposed = tmp_shape.transpose(0, 1, 2, 4, 3)
-    
+
     return src_transposed, dim3, pad_dim3
 
 def move_to_l0a(
@@ -298,7 +298,7 @@ def move_to_l0a(
 ) -> np.ndarray:
     """
     数据搬运到L0A
-    
+
     Args:
         dst: 目标数组
         im2col_out: im2col展开结果
@@ -307,7 +307,7 @@ def move_to_l0a(
         m_extension: M维度扩展长度
         k_extension: K维度扩展长度
         en_transpose: 是否启用转置
-    
+
     Returns:
         np.ndarray: 填充后的目标数组
     """
@@ -315,7 +315,7 @@ def move_to_l0a(
     _, src_fractal_z = _prepare_src_slice(
         im2col_out, m_start_pt, k_start_pt, m_extension, k_extension, c0
     )
-    
+
     if not en_transpose:
         dst = src_fractal_z.transpose(0, 2, 1, 3, 4)
     else:
@@ -324,7 +324,7 @@ def move_to_l0a(
             dst = src_fractal_z.transpose(0, 1, 2, 4, 3)
         elif dtype_size == DTYPE_SIZE_B32:
             src_transposed, dim3, pad_dim3 = _process_b32_transpose(src_fractal_z)
-            
+
             # 进一步维度变换
             src_reshape = src_transposed.reshape(
                 src_transposed.shape[0],
@@ -335,7 +335,7 @@ def move_to_l0a(
                 8
             )
             dst_tmp = src_reshape.transpose(0, 3, 1, 2, 4, 5)
-            
+
             # 重塑目标数组并写入(跳过填充区)
             dst = dst.reshape(dst_tmp.shape)
             mask = np.ones(dst_tmp.shape, dtype=bool)
@@ -344,7 +344,7 @@ def move_to_l0a(
             dst[mask] = dst_tmp[mask]
         else:
             raise ValueError(f"不支持的数据类型字节数: {dtype_size}")
-    
+
     return dst
 
 def move_to_l0b(
@@ -358,7 +358,7 @@ def move_to_l0b(
 ) -> np.ndarray:
     """
     数据搬运到L0B
-    
+
     Args:
         dst: 目标数组
         im2col_out: im2col展开结果
@@ -367,7 +367,7 @@ def move_to_l0b(
         m_extension: M维度扩展长度
         k_extension: K维度扩展长度
         en_transpose: 是否启用转置
-    
+
     Returns:
         np.ndarray: 填充后的目标数组
     """
@@ -375,13 +375,13 @@ def move_to_l0b(
     _, src_fractal_z = _prepare_src_slice(
         im2col_out, m_start_pt, k_start_pt, m_extension, k_extension, c0
     )
-    
+
     dtype_size = im2col_out.dtype.itemsize
     if dtype_size == DTYPE_SIZE_B16:
         dst = src_fractal_z.transpose(0, 2, 1, 4, 3)
     elif dtype_size == DTYPE_SIZE_B32:
         src_transposed, dim3, pad_dim3 = _process_b32_transpose(src_fractal_z)
-        
+
         # 重塑目标数组并写入(跳过填充区)
         dst = dst.reshape(src_transposed.shape)
         mask = np.ones(src_transposed.shape, dtype=bool)
@@ -390,7 +390,7 @@ def move_to_l0b(
         dst[mask] = src_transposed[mask]
     else:
         raise ValueError(f"不支持的数据类型字节数: {dtype_size}")
-    
+
     return dst
 
 
@@ -421,7 +421,7 @@ def load3d_to_l0a(
 ) -> np.ndarray:
     """
     3D数据从L1加载到L0A
-    
+
     Args:
         nc1hwc0_input: 输入feature map, NC1HWC0格式张量
         dst: 目标输出
@@ -446,7 +446,7 @@ def load3d_to_l0a(
         fmatrix_ctrl: FMatrix控制位
         is_set_fmatrix: 是否在接口内部设置FMatrix属性描述
         is_set_padding: 是否在接口内部设置填充值
-    
+
     Returns:
         np.ndarray: 填充后的目标数组
     """
@@ -460,10 +460,10 @@ def load3d_to_l0a(
             l1h = global_fmatrix_config.right_l1h
             l1w = global_fmatrix_config.right_l1w
             pad_list = global_fmatrix_config.right_pad_list
-    
+
     if not is_set_padding:
         pad_value = global_fmatrix_config.pad_value
-    
+
     # 执行im2col + 搬运
     im2col_out = nc1hwc0_im2col(
         nc1hwc0_input, pad_list, pad_value, l1h, l1w, channel_size,
@@ -516,10 +516,10 @@ def load3d_to_l0b(
             l1h = global_fmatrix_config.right_l1h
             l1w = global_fmatrix_config.right_l1w
             pad_list = global_fmatrix_config.right_pad_list
-    
+
     if not is_set_padding:
         pad_value = global_fmatrix_config.pad_value
-    
+
     # 执行im2col + 搬运
     im2col_out = nc1hwc0_im2col(
         nc1hwc0_input, pad_list, pad_value, l1h, l1w, channel_size,
@@ -543,7 +543,7 @@ def test_load3d_l1_to_l0a_b8_no_transpose():
     nc1hwc0_input = np.random.randint(
         1, 10, size=(n, c1, h, w, c0)
     ).astype(input_dtype)
-    
+
     pad_list = (0, 0, 0, 0)
     pad_value = 0
     l1h, l1w, channel_size = 8, 8, c1 * c0
@@ -555,7 +555,7 @@ def test_load3d_l1_to_l0a_b8_no_transpose():
     en_transpose = False
     fmatrix_ctrl = False
     is_set_fmatrix, is_set_padding = True, True
-    
+
     # 初始化目标数组
     dst = np.random.randint(
         1, 2, size=(
@@ -565,7 +565,7 @@ def test_load3d_l1_to_l0a_b8_no_transpose():
             c0
         )
     ).astype(input_dtype)
-    
+
     # 执行加载
     dst = load3d_to_l0a(
         nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
@@ -584,7 +584,7 @@ def test_load3d_l1_to_l0a_b16_no_transpose():
     nc1hwc0_input = np.random.randint(
         1, 10, size=(n, c1, h, w, c0)
     ).astype(input_dtype)
-    
+
     pad_list = (0, 0, 0, 0)
     pad_value = 0
     l1h, l1w, channel_size = 8, 8, c1 * c0
@@ -596,7 +596,7 @@ def test_load3d_l1_to_l0a_b16_no_transpose():
     en_transpose = False
     fmatrix_ctrl = False
     is_set_fmatrix, is_set_padding = True, True
-    
+
     # 初始化目标数组
     dst = np.random.randint(
         1, 2, size=(
@@ -606,7 +606,7 @@ def test_load3d_l1_to_l0a_b16_no_transpose():
             c0
         )
     ).astype(input_dtype)
-    
+
     # 执行加载
     dst = load3d_to_l0a(
         nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
@@ -625,7 +625,7 @@ def test_load3d_l1_to_l0a_b16_with_transpose():
     nc1hwc0_input = np.random.randint(
         1, 10, size=(n, c1, h, w, c0)
     ).astype(input_dtype)
-    
+
     pad_list = (0, 0, 0, 0)
     pad_value = 0
     l1h, l1w, channel_size = 8, 8, c1 * c0
@@ -637,7 +637,7 @@ def test_load3d_l1_to_l0a_b16_with_transpose():
     en_transpose = True
     fmatrix_ctrl = False
     is_set_fmatrix, is_set_padding = True, True
-    
+
     # 初始化目标数组
     dst = np.random.randint(
         1, 2, size=(
@@ -647,7 +647,7 @@ def test_load3d_l1_to_l0a_b16_with_transpose():
             c0
         )
     ).astype(input_dtype)
-    
+
     # 执行加载
     dst = load3d_to_l0a(
         nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
@@ -666,7 +666,7 @@ def test_load3d_l1_to_l0a_b32_no_transpose():
     nc1hwc0_input = np.random.randint(
         1, 10, size=(n, c1, h, w, c0)
     ).astype(input_dtype)
-    
+
     pad_list = (0, 0, 0, 0)
     pad_value = 0
     l1h, l1w, channel_size = 8, 8, c1 * c0
@@ -678,7 +678,7 @@ def test_load3d_l1_to_l0a_b32_no_transpose():
     en_transpose = False
     fmatrix_ctrl = False
     is_set_fmatrix, is_set_padding = True, True
-    
+
     # 初始化目标数组
     dst = np.random.randint(
         1, 2, size=(
@@ -688,7 +688,7 @@ def test_load3d_l1_to_l0a_b32_no_transpose():
             c0
         )
     ).astype(input_dtype)
-    
+
     # 执行加载
     dst = load3d_to_l0a(
         nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
@@ -707,7 +707,7 @@ def test_load3d_l1_to_l0a_b32_with_transpose():
     nc1hwc0_input = np.random.randint(
         1, 10, size=(n, c1, h, w, c0)
     ).astype(input_dtype)
-    
+
     pad_list = (0, 0, 0, 0)
     pad_value = 0
     l1h, l1w, channel_size = 8, 8, c1 * c0
@@ -719,7 +719,7 @@ def test_load3d_l1_to_l0a_b32_with_transpose():
     en_transpose = True
     fmatrix_ctrl = False
     is_set_fmatrix, is_set_padding = True, True
-    
+
     # 初始化目标数组
     dst = np.random.randint(
         1, 2, size=(
@@ -729,7 +729,7 @@ def test_load3d_l1_to_l0a_b32_with_transpose():
             c0
         )
     ).astype(input_dtype)
-    
+
     # 执行加载
     dst = load3d_to_l0a(
         nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
@@ -748,7 +748,7 @@ def test_load3d_l1_to_l0b_b16_with_transpose():
     nc1hwc0_input = np.random.randint(
         1, 10, size=(n, c1, h, w, c0)
     ).astype(input_dtype)
-    
+
     pad_list = (0, 0, 0, 0)
     pad_value = 0
     l1h, l1w, channel_size = 8, 8, c1 * c0
@@ -760,7 +760,7 @@ def test_load3d_l1_to_l0b_b16_with_transpose():
     en_transpose = False
     fmatrix_ctrl = False
     is_set_fmatrix, is_set_padding = True, True
-    
+
     # 初始化目标数组
     dst = np.random.randint(
         1, 2, size=(
@@ -770,7 +770,7 @@ def test_load3d_l1_to_l0b_b16_with_transpose():
             c0
         )
     ).astype(input_dtype)
-    
+
     # 执行加载
     dst = load3d_to_l0b(
         nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
@@ -789,7 +789,7 @@ def test_load3d_l1_to_l0b_b32_with_transpose():
     nc1hwc0_input = np.random.randint(
         1, 10, size=(n, c1, h, w, c0)
     ).astype(input_dtype)
-    
+
     pad_list = (0, 0, 0, 0)
     pad_value = 0
     l1h, l1w, channel_size = 8, 8, c1 * c0
@@ -801,7 +801,7 @@ def test_load3d_l1_to_l0b_b32_with_transpose():
     en_transpose = False
     fmatrix_ctrl = False
     is_set_fmatrix, is_set_padding = True, True
-    
+
     # 初始化目标数组
     dst = np.random.randint(
         1, 2, size=(
@@ -811,7 +811,7 @@ def test_load3d_l1_to_l0b_b32_with_transpose():
             c0
         )
     ).astype(input_dtype)
-    
+
     # 执行加载
     dst = load3d_to_l0b(
         nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
@@ -826,7 +826,7 @@ def test_load3d_l1_to_l0b_b32_with_transpose():
 if __name__ == "__main__":
     np.set_printoptions(threshold=np.inf)
     np.random.seed(0)  # 固定随机种子
-    
+
     # 运行测试
     test_load3d_l1_to_l0a_b8_no_transpose()
     test_load3d_l1_to_l0a_b16_no_transpose()

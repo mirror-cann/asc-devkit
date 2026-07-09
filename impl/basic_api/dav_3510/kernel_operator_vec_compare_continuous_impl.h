@@ -88,7 +88,7 @@ __simd_callee__ inline void IsNanFull(Reg::MaskReg &dstMask, U &low, U &high, Re
     // scenario that cmpMask = true
     // mantissa_high = exp_and_mantissa_high & 0xfffff
     Reg::And(resReg, tmpReg, scalar2, cmpMask);
-    // return (mantissa_high != 0) || (low != 0) 
+    // return (mantissa_high != 0) || (low != 0)
     Reg::CompareScalar<uint32_t, CMPMODE::NE>(cmpMask0, resReg, static_cast<uint32_t>(0), cmpMask);
     Reg::CompareScalar<uint32_t, CMPMODE::NE>(cmpMask1, low, static_cast<uint32_t>(0), cmpMask);
     // scenario that cmpMask = false, return false

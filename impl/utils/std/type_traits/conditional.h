@@ -25,7 +25,7 @@ struct IfImpl;
 
 template <>
 struct IfImpl<true>
-{ 
+{
     template <typename IfRes, typename ElseRes>
     using Select = IfRes;
 };

@@ -56,7 +56,7 @@ def gen_golden_data(scenario_num):
     min_val, max_val = get_range_by_dtype(input_type)
     input_x = np.random.uniform(min_val, max_val, input_shape).astype(input_type)
     input_y = np.random.uniform(min_val, max_val, input_y_shape).astype(input_type)
-    
+
     golden = np.ones(output_shape).astype(output_type)
 
     for i in range(input_size):
@@ -71,7 +71,7 @@ def gen_golden_data(scenario_num):
             golden[i] = input_x[i]
         else:
             golden[i] = input_y[i] if (scenario_num == 1 or scenario_num == 3) else input_y[0]
-    
+
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
     input_x.tofile("./input/input_x.bin")

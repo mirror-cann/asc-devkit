@@ -39,7 +39,7 @@ public:
         }
     }
 };
-}}} 
+}}}
 
 #endif // IMPL_TENSOR_API_ARCH_VECTOR_DUAL_INSTRUCTION_H
 

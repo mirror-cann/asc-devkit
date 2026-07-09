@@ -39,9 +39,9 @@ struct CopyUB2L1 {
 public:
     template <typename Tp, const Tp& traits, typename... Args>
     __aicore__ inline static void Copy(const Args& ...args)
-    { 
+    {
         if ASCEND_IS_AIV {
-            DataCopyImpl<traits, Args...>(args...); 
+            DataCopyImpl<traits, Args...>(args...);
         }
     }
 

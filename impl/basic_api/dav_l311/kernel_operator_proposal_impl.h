@@ -7,7 +7,7 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
- 
+
 /*!
  * \file kernel_operator_proposal_impl.h
  * \brief
@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_PROPOSAL_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_PROPOSAL_IMPL_H
- 
+
 namespace AscendC {
 constexpr uint32_t singleSortElementCountL311 = 32;
 constexpr uint32_t regionProposalDataSize = 8;
@@ -29,33 +29,33 @@ __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dst, __ubuf__ T* addrArray[MRG_S
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "unsupported Vbitsort"); });
 }
- 
+
 template <typename T>
 __aicore__ inline void VbitsortCal(__ubuf__ T* dst, __ubuf__ T* src, const ProposalIntriParams& intriParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "unsupported Vbitsort"); });
 }
- 
+
 template <typename T>
 __aicore__ inline void VbitsortCal(__ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ uint32_t* src1,
     const ProposalIntriParams& intriParams)
 {
     vbitsort(dst, src0, src1, intriParams.repeat);
 }
- 
+
 template <typename T>
 __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dst, __ubuf__ T* addrArray[MRG_SORT_ELEMENT_LEN], uint64_t src1,
     uint64_t config)
 {
     vmrgsort4(dst, addrArray, src1, config);
 }
- 
+
 template <typename T>
 __aicore__ inline void VconcatCal(__ubuf__ T* dst, __ubuf__ T* src, const ProposalIntriParams& intriParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "unsupported VCONCAT"); });
 }
- 
+
 template <typename T>
 __aicore__ inline void VextractCal(__ubuf__ T* dst, __ubuf__ T* src, const ProposalIntriParams& intriParams)
 {

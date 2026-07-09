@@ -522,7 +522,7 @@ __aicore__ inline void SetLoopModeUBParaImpl(const LoopModeParams& loopParams)
         { KERNEL_LOG(KERNEL_ERROR, "loopParams.loop2DstStride is too big and needs to be less than 2^40"); });
     uint64_t loopSizePara = static_cast<uint64_t>(loopParams.loop2Size) << 21;  // LOOP_SIZE_UBTOOUT[42:21]
     loopSizePara |= static_cast<uint64_t>(loopParams.loop1Size);  // LOOP_SIZE_UBTOOUT[20:0]
-    
+
     // LOOP1_STRIDE_UBTOOUT[60:40], must be 32B aligned
     ASCENDC_ASSERT((loopParams.loop1SrcStride % GetDataBlockSizeInBytes() == 0),
         { KERNEL_LOG(KERNEL_ERROR, "loop1SrcStride must be 32B aligned"); });
@@ -589,7 +589,7 @@ __aicore__ inline __in_pipe__(MTE3)
     ASCENDC_ASSERT((src != nullptr), { KERNEL_LOG(KERNEL_ERROR, "src ptr can not be nullptr"); });
     if ASCEND_IS_AIV {
         ASCENDC_ASSERT((GetKfcClient() != nullptr), { KERNEL_LOG(KERNEL_ERROR, "kfc client ptr can not be nullptr"); });
-        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "src address should be 32B aligned \n"));
         // 1.get GM addr
         uint32_t tensorSize = intriParams.blockCount * intriParams.blockLen * 32;
@@ -748,7 +748,7 @@ __aicore__ inline void DataCopyUB2L1ND2NZImpl(__cbuf__ T* dst, __ubuf__ T* src, 
     ASCENDC_ASSERT((src != nullptr), { KERNEL_LOG(KERNEL_ERROR, "src ptr can not be nullptr"); });
     if ASCEND_IS_AIV {
         ASSERT(GetKfcClient() != nullptr);
-        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((TransUBAddr<TPosition::VECIN>(reinterpret_cast<uint64_t>(src)) % ONE_BLK_SIZE == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "src address should be 32B aligned \n"));
         uint32_t tensorSize = intriParams.nValue * intriParams.dValue;
         int32_t ubAddr = -1;
@@ -1213,7 +1213,7 @@ __aicore__ inline void DataCopyPadUB2L1ImplCommon(__cbuf__ T* dst, __ubuf__ T* s
                        { KERNEL_LOG(KERNEL_ERROR, "intriParams.blockCount can not be 0"); });
         ASCENDC_ASSERT((intriParams.blockLen != 0), { KERNEL_LOG(KERNEL_ERROR, "intriParams.blockLen can not be 0"); });
         DataCopyPadUB2GMImpl((__gm__ T*)gmAddr, (__ubuf__ T*)src, intriParams);
- 
+
 #if ASCENDC_CPU_DEBUG
         ScmDataCopyND2NZMsg((__cbuf__ void*)absL1Addr, (__gm__ void*)gmAddr, sizeof(T), nd2nzParams, ubAddr);
 #else

@@ -996,7 +996,7 @@ __simd_callee__ inline void CastDoubleToInt32Impl(V &dstVreg, V &int32Max, V &in
         if S == 1:
             if result = 0x80000000:
                 return INT32_MIN
-            
+
             result = -result
             if result < INT32_MIN:
                 return INT32_MIN
@@ -1140,7 +1140,7 @@ __simd_callee__ inline void NegateDual32(Reg::RegTensor<int32_t> &dstVregLow, Re
         high = ~high
         if low == 0:
             high += 1
-        
+
         return (high, low)
     */
     Reg::Neg(tmpReg0, dstVregLow, mask);
@@ -1210,10 +1210,10 @@ __simd_callee__ inline void CastDoubleToInt64Impl(Reg::RegTensor<int32_t> &dstVr
     Reg::CompareScalar<int32_t, CMPMODE::LT>(cmpMask2, tmpReg0, static_cast<int32_t>(52), mask);
     Reg::Select(dstVregLow, dstVregLow, resRegLow, cmpMask2);
     Reg::Select(dstVregHigh, dstVregHigh, resRegHigh, cmpMask2);
-    
+
     /*
         neg_hi, neg_lo = negate_dual32(result_high, result_low)
-        
+
         res_hi = neg_hi if S == 1 else raw_hi
         res_lo = neg_lo if S == 1 else raw_lo
 
@@ -1224,7 +1224,7 @@ __simd_callee__ inline void CastDoubleToInt64Impl(Reg::RegTensor<int32_t> &dstVr
     NegateDual32(dstVregLow, dstVregHigh, tmpReg1, tmpReg2, cmpMask1, cmpMask0);
     Reg::Select(tmpReg3, negInfLow, posInfLow, cmpMask0);
     Reg::Select(tmpReg4, negInfHigh, posInfHigh, cmpMask0);
-    
+
     /*
         is_inf = (E == 0x7ff) and ((m_high | m_low) == 0)
         is_large = exp >= 63
@@ -1237,7 +1237,7 @@ __simd_callee__ inline void CastDoubleToInt64Impl(Reg::RegTensor<int32_t> &dstVr
 
         is_nan = (E == 0x7ff) and ((m_high | m_low) != 0)
         is_not_zero = (E != 0) and (exp >= 0) and !is_nan
-        
+
         fin_hi = fin_hi if is_not_zero else 0
         fin_lo = fin_lo if is_not_zero else 0
 
@@ -1464,32 +1464,32 @@ __simd_vf__ inline void CastIntrinsicsB64ImplVF2(__ubuf__ DST_TYPE *dst, __ubuf_
     Reg::MaskInterleave<uint32_t>(b64Preg, tmpPreg, b32Preg, b32Preg);
     Reg::Duplicate(zeroVreg, 0, fullPreg);
     for (uint16_t i = 0; i < repeatTime; ++i) {
-        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {	 
-            // b32->b64	 
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t> &)srcVreg, 
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b32Preg); 
-            Reg::Interleave( 
-                (Reg::RegTensor<uint32_t> &)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)srcVreg, zeroVreg); 
-        } else { 
-            // b64->b32 
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t>&)srcVreg, 
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b64Preg); 
-        } 
-        Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, b64Preg); 
-        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) { 
-            // b32->b64 
-            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>(); 
-            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>( 
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk, 
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b64Preg); 
-        } else { 
-            // b64->b32 
-            Reg::DeInterleave( 
-                (Reg::RegTensor<uint32_t> &)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)dstVreg, zeroVreg); 
-            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>(); 
-            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>( 
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk, 
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b32Preg); 
+        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
+            // b32->b64
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t> &)srcVreg,
+                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b32Preg);
+            Reg::Interleave(
+                (Reg::RegTensor<uint32_t> &)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)srcVreg, zeroVreg);
+        } else {
+            // b64->b32
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t>&)srcVreg,
+                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b64Preg);
+        }
+        Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, b64Preg);
+        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
+            // b32->b64
+            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
+            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b64Preg);
+        } else {
+            // b64->b32
+            Reg::DeInterleave(
+                (Reg::RegTensor<uint32_t> &)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)dstVreg, zeroVreg);
+            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
+            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b32Preg);
         }
     }
 }
@@ -1641,35 +1641,35 @@ __simd_vf__ inline void CastIntrinsicsB64ImplCounterVF(__ubuf__ DST_TYPE *dst, _
     Reg::MaskReg fullPreg = Reg::CreateMask<uint32_t, Reg::MaskPattern::ALL>();
     Reg::Duplicate(zeroVreg, 0, fullPreg);
     for (uint16_t i = 0; i < newRepeatTimes; ++i) {
-        b32Preg = Reg::UpdateMask<uint32_t>(countSreg);	 
-        Reg::MaskInterleave<uint32_t>(b64Preg, tmpPreg, b32Preg, b32Preg);	 
-        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) { 
-            // b32->b64 
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t> &)srcVreg, 
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b32Preg); 
-            Reg::Interleave( 
-                (Reg::RegTensor<uint32_t> &)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)srcVreg, zeroVreg); 
-        } else { 
-            // b64->b32 
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t>&)srcVreg, 
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b64Preg); 
-        } 
-        Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, b64Preg); 
-        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) { 
-            // b32->b64 
-            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>(); 
-            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>( 
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk, 
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b64Preg); 
-        } else { 
-            // b64->b32 
-            Reg::DeInterleave( 
-                (Reg::RegTensor<uint32_t> &)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)dstVreg, zeroVreg); 
-            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>(); 
-            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>( 
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk, 
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b32Preg); 
-        }       
+        b32Preg = Reg::UpdateMask<uint32_t>(countSreg);
+        Reg::MaskInterleave<uint32_t>(b64Preg, tmpPreg, b32Preg, b32Preg);
+        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
+            // b32->b64
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t> &)srcVreg,
+                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b32Preg);
+            Reg::Interleave(
+                (Reg::RegTensor<uint32_t> &)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)srcVreg, zeroVreg);
+        } else {
+            // b64->b32
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t>&)srcVreg,
+                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b64Preg);
+        }
+        Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, b64Preg);
+        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
+            // b32->b64
+            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
+            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b64Preg);
+        } else {
+            // b64->b32
+            Reg::DeInterleave(
+                (Reg::RegTensor<uint32_t> &)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)dstVreg, zeroVreg);
+            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
+            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b32Preg);
+        }
     }
 }
 
@@ -1925,32 +1925,32 @@ __simd_vf__ inline void CastIntrinsicsB64ImplVF1(__ubuf__ DST_TYPE *dst, __ubuf_
     Reg::MaskReg fullPreg = Reg::CreateMask<uint32_t, Reg::MaskPattern::ALL>();
     Reg::Duplicate(zeroVreg, 0, fullPreg);
     for (uint16_t i = 0; i < repeatTime; ++i) {
-        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {	 
-            // b32 -> b64	 
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t> &)srcVreg, 
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b32Preg); 
-            Reg::Interleave( 
-                (Reg::RegTensor<uint32_t> &)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)srcVreg, zeroVreg); 
-        } else { 
-            // b64 -> b32 
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t>&)srcVreg, 
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b64Preg); 
-        } 
-        Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, b64Preg); 
-        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) { 
-            // b32 -> b64 
-            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>(); 
-            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>( 
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk, 
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b64Preg); 
-        } else { 
-            // b64 -> b32 
-            Reg::DeInterleave( 
-                (Reg::RegTensor<uint32_t> &)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)dstVreg, zeroVreg); 
-            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>(); 
-            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>( 
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk, 
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b32Preg); 
+        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
+            // b32 -> b64
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t> &)srcVreg,
+                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b32Preg);
+            Reg::Interleave(
+                (Reg::RegTensor<uint32_t> &)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)srcVreg, zeroVreg);
+        } else {
+            // b64 -> b32
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t>&)srcVreg,
+                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b64Preg);
+        }
+        Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, b64Preg);
+        if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
+            // b32 -> b64
+            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
+            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b64Preg);
+        } else {
+            // b64 -> b32
+            Reg::DeInterleave(
+                (Reg::RegTensor<uint32_t> &)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)dstVreg, zeroVreg);
+            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
+            Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b32Preg);
         }
     }
 }
@@ -2399,26 +2399,26 @@ __simd_vf__ inline void CastVecDeqLevel0ImplVF(__ubuf__ U *dst, __ubuf__ T *src,
     uint32_t sreg = static_cast<uint32_t>(mask);
     GenVecCastDeqParam(deqScaleAddr, scaleReg, offsetReg, signMask, unSignMask, tmpReg, fullMask);
     GenGatherIndex((Reg::RegTensor<int8_t>&)mrg2ChnIndexReg);
-    if constexpr (isCounterMode) {	 
-        if constexpr (!isSetMask) { 
-            maskReg0 = Reg::MoveMask<uint16_t>(); 
-            Reg::StoreAlign<uint64_t, Reg::MaskDist::DIST_PACK>(tempBuf, maskReg0); 
-            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::SCALAR_LOAD>(); 
-            sreg = static_cast<uint32_t>(tempBuf[0]); 
-        } 
-        repeatTime = CeilDivision(sreg, oneRepSize); 
-    } else { 
-        if constexpr (isBitMap) { 
-            maskReg0 = Reg::MoveMask<T>(); 
-        } else { 
-            if constexpr (isSetMask) { 
-                uint32_t sreg = static_cast<uint32_t>(mask); 
-                maskReg0 = Reg::UpdateMask<T>(sreg); 
-            } else { 
-                maskReg0 = Reg::MoveMask<T>(); 
-            } 
-        } 
-    }    
+    if constexpr (isCounterMode) {
+        if constexpr (!isSetMask) {
+            maskReg0 = Reg::MoveMask<uint16_t>();
+            Reg::StoreAlign<uint64_t, Reg::MaskDist::DIST_PACK>(tempBuf, maskReg0);
+            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::SCALAR_LOAD>();
+            sreg = static_cast<uint32_t>(tempBuf[0]);
+        }
+        repeatTime = CeilDivision(sreg, oneRepSize);
+    } else {
+        if constexpr (isBitMap) {
+            maskReg0 = Reg::MoveMask<T>();
+        } else {
+            if constexpr (isSetMask) {
+                uint32_t sreg = static_cast<uint32_t>(mask);
+                maskReg0 = Reg::UpdateMask<T>(sreg);
+            } else {
+                maskReg0 = Reg::MoveMask<T>();
+            }
+        }
+    }
     fullMask = Reg::CreateMask<U, Reg::MaskPattern::ALL>();
     for (uint16_t i = 0; i < repeatTime; ++i) {
         if constexpr (isCounterMode) {
@@ -2470,25 +2470,25 @@ __simd_vf__ inline void CastDeqLevel0ImplVF(__ubuf__ U *dst, __ubuf__ T *src, co
     constexpr int8_t zero = 0;
     uint32_t halfRepStride = halfRepBlkSize * blockElm * repeatParams.srcBlkStride;
     uint32_t sreg = static_cast<uint32_t>(mask);
-    if constexpr (isCounterMode) {	 
-        if constexpr (!isSetMask) { 
-            maskReg0 = Reg::MoveMask<uint16_t>(); 
-            Reg::StoreAlign<uint64_t, Reg::MaskDist::DIST_PACK>(tempBuf, maskReg0); 
-            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::SCALAR_LOAD>(); 
-            sreg = static_cast<uint32_t>(tempBuf[0]); 
-        } 
-        repeatTime = CeilDivision(sreg, oneRepSize); 
-    } else { 
-        if constexpr (isBitMap) { 
-            maskReg0 = Reg::MoveMask<T>(); 
-        } else { 
-            if constexpr (isSetMask) { 
-                uint32_t sreg = static_cast<uint32_t>(mask); 
-                maskReg0 = Reg::UpdateMask<T>(sreg); 
-            } else { 
-                maskReg0 = Reg::MoveMask<T>(); 
-            } 
-        } 
+    if constexpr (isCounterMode) {
+        if constexpr (!isSetMask) {
+            maskReg0 = Reg::MoveMask<uint16_t>();
+            Reg::StoreAlign<uint64_t, Reg::MaskDist::DIST_PACK>(tempBuf, maskReg0);
+            Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::SCALAR_LOAD>();
+            sreg = static_cast<uint32_t>(tempBuf[0]);
+        }
+        repeatTime = CeilDivision(sreg, oneRepSize);
+    } else {
+        if constexpr (isBitMap) {
+            maskReg0 = Reg::MoveMask<T>();
+        } else {
+            if constexpr (isSetMask) {
+                uint32_t sreg = static_cast<uint32_t>(mask);
+                maskReg0 = Reg::UpdateMask<T>(sreg);
+            } else {
+                maskReg0 = Reg::MoveMask<T>();
+            }
+        }
     }
     fullMask = Reg::CreateMask<U, Reg::MaskPattern::ALL>();
     GenGatherIndex((Reg::RegTensor<int8_t>&)mrg2ChnIndexReg);

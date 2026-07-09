@@ -60,7 +60,7 @@ __aicore__ inline void InitDetermineComputeWorkspaceCalc(GlobalTensor<int32_t> &
         PipeBarrier<PIPE_ALL>();
     }
 }
- 
+
 __aicore__ inline bool CheckUBWorkspace(LocalTensor<int32_t> &ubWorkspace, int64_t blockIdx, int64_t blockNum)
 {
     int32_t repeatTime = ubWorkspace.GetValue(blockNum * B32_DATA_NUM_PER_BLOCK);

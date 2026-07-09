@@ -23,7 +23,7 @@ add_executable(demo
 )
 
 message(STATUS "[INFO] SCENARIO_NUM is ${SCENARIO_NUM}")
-  	 
+
 if(NOT DEFINED SCENARIO_NUM)
     message(FATAL_ERROR "SCENARIO_NUM is not set. Please specify -DSCENARIO_NUM=1/2/3/4")
 endif()

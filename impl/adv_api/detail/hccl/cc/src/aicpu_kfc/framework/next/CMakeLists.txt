@@ -10,4 +10,3 @@
 add_subdirectory(coll_comms)
 add_subdirectory(comms)
 # add_subdirectory(comm_primitives)
-

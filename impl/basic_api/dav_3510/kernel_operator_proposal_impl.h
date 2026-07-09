@@ -7,7 +7,7 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
- 
+
 /*!
  * \file kernel_operator_proposal_impl.h
  * \brief
@@ -34,7 +34,7 @@
 #include "stub_def.h"
 #include "stub_fun.h"
 #endif // ASCENDC_CPU_DEBUG
- 
+
 namespace AscendC {
 constexpr uint32_t singleSortElementCountArch3510 = 32;
 constexpr uint32_t regionProposalDataSize = 8;
@@ -45,7 +45,7 @@ __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dstLocal, __ubuf__ T* addrArray[
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "MrgSort4");
 }
- 
+
 template <typename T>
 [[deprecated("NOTICE: RpSort16 is not deprecated. Currently, RpSort16 is an unsupported API on current device."
              "Please check your code!")]]
@@ -53,7 +53,7 @@ __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, c
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "RpSort16");
 }
- 
+
 template <typename T>
 __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* src0Local, __ubuf__ uint32_t* src1Local,
     const ProposalIntriParams& intriParams)
@@ -64,7 +64,7 @@ __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* src0Local, 
         vbs(dstLocal, src0Local, src1Local, config);
     }
 }
- 
+
 template <typename T>
 __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dstLocal, __ubuf__ T* addrArray[MRG_SORT_ELEMENT_LEN], uint64_t src1,
     uint64_t config)
@@ -73,7 +73,7 @@ __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dstLocal, __ubuf__ T* addrArray[
         vmrgsort4(dstLocal, addrArray, src1, config);
     }
 }
- 
+
 template <typename T>
 [[deprecated(
     "NOTICE: ProposalConcat is not deprecated. Currently, ProposalConcat is an unsupported API on current device."
@@ -82,7 +82,7 @@ __aicore__ inline void VconcatCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, co
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "ProposalConcat");
 }
- 
+
 template <typename T>
 [[deprecated(
     "NOTICE: ProposalExtract is not deprecated. Currently, ProposalExtract is an unsupported API on current device."

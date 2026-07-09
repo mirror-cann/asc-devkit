@@ -45,7 +45,7 @@ __aicore__ inline void LoadData2DL12L0ACal(__ca__ T *dst, __cbuf__ T *src, const
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     if constexpr (IsSameType<T, int4b_t>::value) {
         if (loadDataParam.GetIfTranspose()) {
-            load_cbuf_to_ca_s4((__ca__ void *)dst,	
+            load_cbuf_to_ca_s4((__ca__ void *)dst,
                 (__cbuf__ void *)src,
                 loadDataParam.GetMStartPosition(),
                 loadDataParam.GetKStartPosition(),
@@ -55,7 +55,7 @@ __aicore__ inline void LoadData2DL12L0ACal(__ca__ T *dst, __cbuf__ T *src, const
                 loadDataParam.GetDstStride(),
                 1);
         } else {
-            load_cbuf_to_ca_s4((__ca__ void *)dst,	
+            load_cbuf_to_ca_s4((__ca__ void *)dst,
                 (__cbuf__ void *)src,
                 loadDataParam.GetMStartPosition(),
                 loadDataParam.GetKStartPosition(),
@@ -117,7 +117,7 @@ __aicore__ inline void LoadData2DL12L0BCal(__cb__ T *dst, __cbuf__ T *src, const
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     if constexpr (IsSameType<T, int4b_t>::value) {
         if (loadDataParam.GetIfTranspose()) {
-            load_cbuf_to_cb_s4((__cb__ void *)dst,	
+            load_cbuf_to_cb_s4((__cb__ void *)dst,
                 (__cbuf__ void *)src,
                 loadDataParam.GetMStartPosition(),
                 loadDataParam.GetKStartPosition(),
@@ -127,7 +127,7 @@ __aicore__ inline void LoadData2DL12L0BCal(__cb__ T *dst, __cbuf__ T *src, const
                 loadDataParam.GetDstStride(),
                 1);
         } else {
-            load_cbuf_to_cb_s4((__cb__ void *)dst,	
+            load_cbuf_to_cb_s4((__cb__ void *)dst,
                 (__cbuf__ void *)src,
                 loadDataParam.GetMStartPosition(),
                 loadDataParam.GetKStartPosition(),
@@ -229,7 +229,7 @@ __aicore__ inline void LoadData2DL12L0ACal(__ca__ T *dst, __cbuf__ T *src, const
                 loadDataParam.srcStride,
                 loadDataParam.dstStride,
                 0);
-        }	 
+        }
     }
 }
 
@@ -295,7 +295,7 @@ __aicore__ inline void LoadData2DGM2L1Cal(__cbuf__ T *dst, __gm__ U *src, const 
         ((IsSameType<T, int8_t>::value && IsSameType<U, int4b_t>::value) ||
          (IsSameType<T, int4b_t>::value && IsSameType<U, int2b_t>::value) ||
          (IsSameType<T, int8_t>::value && IsSameType<U, int2b_t>::value) ||
-         (IsSameType<T, int4b_t>::value && IsSameType<U, uint1b_t>::value)), 
+         (IsSameType<T, int4b_t>::value && IsSameType<U, uint1b_t>::value)),
         "LoadData dst type or src type is not supported on current device!");
     set_mte2_qtable0(nd2nzParams.lookupTable0);
     set_mte2_src_para(uint64_t(loadDataParam.srcStride));

@@ -25,7 +25,7 @@
 namespace AscendC {
 namespace Impl {
 namespace Detail {
-    
+
 template <typename CType, typename AType>
 __aicore__ inline constexpr static bool IsQuantSenario()
 {

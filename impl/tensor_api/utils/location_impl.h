@@ -56,7 +56,7 @@ namespace Te {
     M(fp8_e5m2_t    , __VA_ARGS__)  \
     M(fp8_e4m3fn_t  , __VA_ARGS__)  \
     M(fp8_e8m0_t  , __VA_ARGS__)
-    
+
 #define TENSOR_API_TYPE_ALIAS(qual, type) qual##_##type
 
 #define TENSOR_API_MAKE_COMBO(qual, type) _##qual type*
@@ -79,7 +79,7 @@ namespace Te {
 #define TENSOR_API_GEN_BASE_MAP(qual, loc) \
     TENSOR_API_USER_TYPES(TENSOR_API_MAP_BASE, qual, loc)
 
-struct LocationTypeCombo 
+struct LocationTypeCombo
 {
     TENSOR_API_QUAL_LOC_PAIRS(TENSOR_API_GENERATE_ALL_TYPES)
 

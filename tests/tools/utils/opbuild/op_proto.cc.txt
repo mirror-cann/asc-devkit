@@ -7,4 +7,3 @@ IMPL_OP(ValueDependScopeTest).InputsDataDependency({2})
 IMPL_OP(OutShapeDepOnCompute).InputsDataDependency({0, 1})
                              .OutputShapeDependOnCompute({0});
 }
-

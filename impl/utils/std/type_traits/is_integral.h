@@ -22,7 +22,7 @@
 namespace AscendC {
 namespace Std {
 
-template <typename T> 
+template <typename T>
 struct is_integral {
 private:
     template <typename Tp, typename... Tps>

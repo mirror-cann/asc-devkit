@@ -7,7 +7,7 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
- 
+
 /*!
  * \file kfc_comm_gm.h
  * \brief
@@ -19,7 +19,7 @@
 #endif
 #ifndef KFC_COMM_GM_H
 #define KFC_COMM_GM_H
- 
+
 #include "../../../../include/basic_api/kernel_common.h"
 #include "../kernel_operator_common_impl.h"
 #include "../kernel_operator_set_atomic_impl.h"
@@ -31,10 +31,10 @@
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_TPIPE_H__
 #endif
 #include "../../../../include/basic_api/kernel_operator_block_sync_intf.h"
- 
+
 namespace AscendC {
 #define MSG_POS __gm__
- 
+
 __aicore__ inline void Barrier()
 {
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
@@ -43,7 +43,7 @@ __aicore__ inline void Barrier()
     __asm__ __volatile__("");
 #endif
 }
- 
+
 enum class KFC_Enum : uint16_t {
     SERVICE_ID_MASK = 0xFF00,
     SERVICE_ID_SCM = 0x0100,
@@ -75,12 +75,12 @@ enum class KFC_Enum : uint16_t {
     SERVICE_BALANCE = 0xfe00,
     SERVICE_ID_NONE = 0xff00
 };
- 
+
 enum class MSG_STATE : uint8_t {
     STATE_INVALID,
     STATE_SET,
 };
- 
+
 // The message length is 128 bytes and must be 512 bytes aligned.
 // Therefore, MAX_MSG_COUNT must be an integer multiple of 8.
 #ifdef __MIX_CORE_AIC_RATION__
@@ -117,7 +117,7 @@ struct SuperKernelWaitEventCnt {
 struct TilingInfo {
     GM_ADDR tilingAddr;  // the GM address of the tiling.
 };
- 
+
 struct MatmulOrgShape {
     uint32_t orgM;
     uint32_t orgN;
@@ -125,7 +125,7 @@ struct MatmulOrgShape {
     uint32_t orgKb;
     uint32_t orgKc;
 };
- 
+
 #ifdef __MSTX_DFX_REPORT__
 struct MstxCrossRecord {
     uint64_t addr;
@@ -135,7 +135,7 @@ struct MstxCrossRecord {
     bool isMerge;
 };
 #endif
- 
+
 struct MatmulConfigParams {
     // offset->8
     uint32_t enAtomic : 8;
@@ -158,13 +158,13 @@ struct MatmulConfigParams {
     uint32_t waitIterateAll : 1;
     uint32_t waitIterateBatch : 1;
     uint32_t iterateFakeMsg : 1;
- 
+
     uint32_t singleM;
     uint32_t singleN;
     uint32_t singleK;
     uint32_t sizeAmatrix;
     uint32_t sizeBmatrix;
- 
+
     uint64_t aAddr;
     uint64_t bAddr;
     uint64_t cAddr;
@@ -183,7 +183,7 @@ struct MatmulConfigParams {
     uint32_t reserved0;
     uint64_t dataPtr; // 120 bytes
 };
- 
+
 struct Conv3DBpInputConfigParams {
     uint32_t enAtomic : 8;
     uint32_t enSequentialWrite : 1;
@@ -195,23 +195,23 @@ struct Conv3DBpInputConfigParams {
     uint32_t setSingleShape : 1;
     uint32_t setStartIdx : 1;
     uint32_t enPartialSum : 1;
- 
+
     uint32_t singleShapeN;
     uint32_t singleShapeD;
     uint32_t curDinStartIdx;
- 
+
     uint32_t singleShapeM;
     uint32_t singleShapeK;
- 
+
     uint64_t weightAddr;
     uint64_t outBackpropAddr;
     uint64_t outputAddr;
- 
+
     int32_t curHoStartIdx;
     uint32_t res;
     uint32_t res1[16];
 };
- 
+
 struct Conv3DBpFilterConfigParams {
     uint32_t enAtomic : 8;
     uint32_t enSequentialWrite : 1;
@@ -222,23 +222,23 @@ struct Conv3DBpFilterConfigParams {
     uint32_t isFirstIter : 1;
     uint32_t waitIterateAll : 1;
     uint32_t enPartialSum : 1;
- 
+
     uint32_t singleShapeM;
     uint32_t singleShapeN;
     uint32_t singleShapeK;
- 
+
     uint64_t fmapAddr;
     uint64_t outBackpropAddr;
     uint64_t outputAddr;
- 
+
     uint32_t curHoStartIdx;
     uint32_t fmapSize;
     uint32_t outBackpropSize;
     uint32_t res;
- 
+
     uint32_t res1[16];
 };
- 
+
 struct Conv3DForwardConfigParams {
     uint32_t enAtomic: 8; // for enable atomic add
     uint32_t enSequentialWrite: 1;
@@ -251,12 +251,12 @@ struct Conv3DForwardConfigParams {
     uint32_t waitIterateAll: 1;
     uint32_t enPartialSum: 1; // for part of results of L0C write to gm
     uint32_t fmapSize;
- 
+
     uint64_t fmapAddr;
     uint64_t weightAddr;
     uint64_t biasAddr;
     uint64_t outputAddr;
- 
+
     uint32_t weightSize;
     uint32_t biasSize;
     uint32_t singleCoreBatch;
@@ -269,11 +269,11 @@ struct Conv3DForwardConfigParams {
     uint32_t ciStartPos;
     uint32_t res[10]; // Reserved，for 120Byte ailgn
 };
- 
+
 struct MatmulUserDefInfo {
     uint64_t tilingPtr;
 };
- 
+
 constexpr uint16_t KFC_MSG_BYTE_OFFSET = 16;
 // AIC->AIV, set the event count.
 __aicore__ inline uint16_t KfcMsgGetEvtCnt(uint32_t flag)
@@ -297,7 +297,7 @@ __aicore__ inline uint32_t KfcMsgMakeFlag(KFC_Enum funID, uint16_t instID)
 {
     return (((static_cast<uint16_t>(funID) << KFC_MSG_BYTE_OFFSET) + 0x8000) + (instID));
 }
- 
+
 // Currently, the maximum message size is 64 bytes, which is the same as the size of a CacheLine.
 struct KfcMsg {
     uint32_t head = 0;
@@ -323,26 +323,26 @@ struct MsgMatmulCnt {
     uint32_t res;
     uint8_t buffer[56];
 };
- 
+
 struct QuitCnt {
     int32_t head;
     uint32_t res;
     uint8_t buffer[56];
 };
- 
+
 struct MmTaskCnt {
     uint32_t head;
     uint32_t res;
     uint8_t buffer[56];
 };
- 
+
 struct MsgGroupSync {
     int32_t syncCount; // current sync aiv number
     uint8_t res[28];
     uint32_t allNumber; // aiv number in one group
     uint8_t buffer[28];
 };
- 
+
 struct MsgGroupSyncAux {
     // for reliable and dfx
     int32_t curNumber; // number of aiv has been in group
@@ -350,12 +350,12 @@ struct MsgGroupSyncAux {
     uint32_t idField; // curBlockID << 16 + groupID
     uint8_t buffer[28];
 };
- 
+
 __aicore__ inline constexpr int AlignTo32(int size)
 {
     return (size + ALIGN_SIZE - 1) / ALIGN_SIZE * ALIGN_SIZE;
 }
- 
+
 struct SysWorkspaceDesc {
     KfcMsg kfcMsg[MAX_AIV_NUM * BIDIRECTION_NUM * MAX_MSG_COUNT * MIX_COEFFICIENT];
     MsgMatmulCnt cntMsg[MAX_AIV_NUM * MIX_COEFFICIENT][MAX_MATMUL_OBJ];
@@ -366,7 +366,7 @@ struct SysWorkspaceDesc {
     MsgGroupSync groupSyncMsg[MAX_GROUP_ID];
     MsgGroupSyncAux groupSyncAuxMsg[MAX_GROUP_ID];
 };
- 
+
 __aicore__ inline void ClearWorkspaceImpl(__gm__ uint8_t* workspace)
 {
     // v0 清除  vec0: 0~size;v1 清除 vec1:size1 ~ size2; v2 清除 vec3:size2 ~ size3
@@ -395,17 +395,17 @@ __aicore__ inline void ClearWorkspaceImpl(__gm__ uint8_t* workspace)
     for (int i = 0; i < 16; i++) {
         *(ubMsg + i) = 0;
     };
-    
+
     // 硬件时间类型需修改为 S_MTE3
     SetFlag<HardEvent::S_MTE3>(EVENT_ID0);
     WaitFlag<HardEvent::S_MTE3>(EVENT_ID0);
- 
+
     for (size_t i = 0; i < block; i++) {
         // 第四参数：blockCount: 16 ; 第五参数： burstLength: 128; 第七参数: dstStride: 128
         copy_ubuf_to_gm_align_v2((__gm__ void *)msgStartAddr, (__ubuf__ void *)ubMsg, 0, 16, 128, 0, 128, 0);
         msgStartAddr += 2048;
     }
-    
+
     copy_ubuf_to_gm_align_v2((__gm__ void *)ubMsgStartAddr, (__ubuf__ void *)ubMsg, 0, 1, sizeUbmsg, 0, 0, 0);
     PipeBarrier<PIPE_ALL>();
 }
@@ -417,18 +417,18 @@ __aicore__ inline GM_ADDR GetMsgHead(GM_ADDR workspace, int i)
     //  MSG1 AIV0<--AIC0   GetBlockIdx()=0,  GetSubBlockIdx()=0,
     //  MSG2 AIV1-->AIC0   GetBlockIdx()=0,  GetSubBlockIdx()=1,
     //  MSG3 AIV1<--AIC0   GetBlockIdx()=0,  GetSubBlockIdx()=1,
- 
+
     ASCENDC_ASSERT((i >= 0 && i < MIX_NUM),
                    { KERNEL_LOG(KERNEL_ERROR, "input i is %d, which should be in range [0, %d)", i, MIX_NUM); });
     ASCENDC_ASSERT((workspace != nullptr),
                    { KERNEL_LOG(KERNEL_ERROR, "workspace can not be nullptr"); });
- 
+
     auto ptr = reinterpret_cast<__gm__ struct SysWorkspaceDesc *>(workspace);
     // Initialize based on the input i value on AIC.
     auto flatBlockID = get_block_idx() * MAX_BLOCK_AIV_NUM + i;
     return reinterpret_cast<GM_ADDR>(&ptr->kfcMsg[flatBlockID * BIDIRECTION_NUM * MAX_MSG_COUNT]);
 }
- 
+
 __aicore__ inline GM_ADDR GetUBMapAddr(GM_ADDR workspace, int i = 0)
 {
     // Retrieve the corresponding UB mapped address
@@ -439,12 +439,12 @@ __aicore__ inline GM_ADDR GetUBMapAddr(GM_ADDR workspace, int i = 0)
     //  ...
     ASCENDC_ASSERT((workspace != nullptr),
                    { KERNEL_LOG(KERNEL_ERROR, "workspace can not be nullptr"); });
- 
+
     auto flatBlockID = get_block_idx() * MAX_BLOCK_AIV_NUM + i;
     auto ptr = reinterpret_cast<__gm__ struct SysWorkspaceDesc *>(workspace);
     return reinterpret_cast<GM_ADDR>(ptr->ubMap[flatBlockID]);
 }
- 
+
 __aicore__ inline GM_ADDR GetMatmulIncAddr(GM_ADDR workspace, uint32_t flatBlockID, uint32_t instID)
 {
     // Maximum MAX_MATMUL_OBJ Matmul objects can be created
@@ -455,7 +455,7 @@ __aicore__ inline GM_ADDR GetMatmulIncAddr(GM_ADDR workspace, uint32_t flatBlock
     auto ptr = reinterpret_cast<__gm__ struct SysWorkspaceDesc *>(workspace);
     return reinterpret_cast<GM_ADDR>(&(ptr->cntMsg[flatBlockID][instID]));
 }
- 
+
 __aicore__ inline GM_ADDR GetUBAvailableAddr(GM_ADDR workspace, uint32_t i = 0)
 {
     ASSERT(workspace != nullptr);
@@ -463,7 +463,7 @@ __aicore__ inline GM_ADDR GetUBAvailableAddr(GM_ADDR workspace, uint32_t i = 0)
     auto ptr = reinterpret_cast<__gm__ struct SysWorkspaceDesc *>(workspace);
     return reinterpret_cast<GM_ADDR>(&(ptr->ubMsg[flatBlockID]));
 }
- 
+
 __aicore__ inline __gm__ KfcMsg *AllocMessageImpl(
     __gm__ KfcMsg *&msgSendHead, uint8_t &msgSendPos, __gm__ KfcMsg *&msgSendStart)
 {
@@ -491,7 +491,7 @@ __aicore__ inline __gm__ KfcMsg *AllocMessageImpl(
     }
     return msg;
 }
- 
+
 __aicore__ inline __gm__ KfcMsg *RcvMessageImpl(
     __gm__ KfcMsg *&msgRcvHead, uint8_t &msgRcvPos, __gm__ KfcMsg *&msgRcvStart)
 {
@@ -508,9 +508,9 @@ __aicore__ inline __gm__ KfcMsg *RcvMessageImpl(
     Barrier();
     dcci(reinterpret_cast<__gm__ int64_t *>(msg), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
     Barrier();
- 
+
     dc_preload((__gm__ uint64_t*)msg, int64_t(0));
- 
+
 #ifdef __MSTX_DFX_REPORT__
     MstxCrossRecord record = {
         .addr = reinterpret_cast<uint64_t>(msg),
@@ -520,7 +520,7 @@ __aicore__ inline __gm__ KfcMsg *RcvMessageImpl(
     };
     __mstx_dfx_report_stub(1, sizeof(MstxCrossRecord), &record);
 #endif
- 
+
     if (!(static_cast<bool>(KfcMsgGetState(msg->head)))) {
         return nullptr;
     }
@@ -533,7 +533,7 @@ __aicore__ inline __gm__ KfcMsg *RcvMessageImpl(
     }
     return msg;
 }
- 
+
 __aicore__ inline void FreeMessageImpl(__gm__ KfcMsg *msg)
 {
     ASCENDC_ASSERT((msg != nullptr),
@@ -544,7 +544,7 @@ __aicore__ inline void FreeMessageImpl(__gm__ KfcMsg *msg)
     dcci(reinterpret_cast<__gm__ int64_t *>(msg), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
     Barrier();
 }
- 
+
 __aicore__ inline void RollBackMsgImpl(__gm__ KfcMsg *&msgRcvHead, uint8_t &msgRcvPos)
 {
     if (msgRcvPos == 0) {
@@ -555,7 +555,7 @@ __aicore__ inline void RollBackMsgImpl(__gm__ KfcMsg *&msgRcvHead, uint8_t &msgR
         msgRcvHead--;
     }
 }
- 
+
 }  // namespace AscendC
 #endif  // __KFC_COMM_GM_H__
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KFC_COMM_GM_H__)

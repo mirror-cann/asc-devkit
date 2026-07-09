@@ -62,7 +62,7 @@ decltype(MODULE().MODULE::FUNC(std::forward<Args>(args)...))>> {                
     DfxHandler::PreCall(info, std::forward<Args>(args)...);                       \
     M_.MODULE::FUNC(std::forward<Args>(args)...);                                 \
     DfxHandler::PostCall(info);                                                   \
-}   
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 #define MATMUL_COUNT_ARGS_IMPL(_1, _2, _3, _4, _5, _6, _7, _8, _9, N, ...) N

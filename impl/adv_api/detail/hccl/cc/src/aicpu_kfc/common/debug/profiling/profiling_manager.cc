@@ -258,7 +258,7 @@ HcclResult ProfilingManager::CallMsprofReportHostNodeBasicInfo(
     reporterData.data.nodeBasicInfo.opType = itemId;
     reporterData.data.nodeBasicInfo.blockDim = numBlocks;
     reporterData.data.nodeBasicInfo.opFlag = 0;
-    
+
     // 图下沉场景或者acl graph场景，缓存对应数据
     auto mode = GetWorkflowMode();
     if ((mode == HcclWorkflowMode::HCCL_WORKFLOW_MODE_OPS_KERNEL_INFO_LIB) || GetThreadCaptureStatus()) {
@@ -283,7 +283,7 @@ HcclResult ProfilingManager::CallMsprofReportHostNodeBasicInfo(
 
 HcclResult ProfilingManager::CallMsprofReportHostHcclOpApi(
     uint64_t beginTime, uint64_t endTime, uint64_t itemId, uint32_t threadId) const
-{   
+{
     auto mode = GetWorkflowMode();
     if ((isHostHcclOpSubscribe_ != HCCL_SUCCESS || GetExternalInputHcclAicpuUnfold() ||
          GetExternalInputHcclEnableFfts()) &&
@@ -300,7 +300,7 @@ HcclResult ProfilingManager::CallMsprofReportHostHcclOpApi(
     reporterData.beginTime = beginTime;
     reporterData.endTime = endTime;
     reporterData.itemId = itemId;
-    
+
     // 静态图场景或者acl graph场景, 一次下发，多次执行; 缓存对应数据
     if ((mode == HcclWorkflowMode::HCCL_WORKFLOW_MODE_OPS_KERNEL_INFO_LIB) || GetThreadCaptureStatus()) {
         HCCL_INFO("CallMsprofReportOpApi, storageOpApi");
@@ -686,7 +686,7 @@ Prof_Status ProfilingManager::GetHashKey(MsprofHashData &data) const
 }
 
 HcclResult ProfilingManager::ReportStoragedTaskApi()
-{   
+{
     if (isTaskApiSubscribe_ != HCCL_SUCCESS && isHostApiSubscribe_ != HCCL_SUCCESS) {
         return HCCL_SUCCESS;
     }
@@ -705,12 +705,12 @@ HcclResult ProfilingManager::ReportStoragedTaskApi()
 }
 
 HcclResult ProfilingManager::ReportStoragedOpApi()
-{   
+{
     if (isHostHcclOpSubscribe_ != HCCL_SUCCESS || GetExternalInputHcclAicpuUnfold() ||
         GetExternalInputHcclEnableFfts()) {
         return HCCL_SUCCESS;
     }
-    
+
     std::unique_lock<std::mutex> lock(reportDataOpQueueMutex_);
     HCCL_INFO("[ReportStoragedOpApi] opApiQueueSize is [%u]", storageOpApi_.size());
     if (!storageOpApi_.empty()) {
@@ -953,7 +953,7 @@ bool ProfilingManager::GetThreadCaptureStatus()
     if (devType == DevType::DEV_TYPE_310P1 || devType == DevType::DEV_TYPE_310P3) {
         return false;
     }
-    
+
     s32 threadID = SalGetTid();
     std::unique_lock<std::mutex> lockMap(captureStatusMapMutex_);
     if (captureStatusThreadIDMap_.count(threadID) == 0) {

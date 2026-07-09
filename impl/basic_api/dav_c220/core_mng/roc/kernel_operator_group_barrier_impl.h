@@ -31,11 +31,11 @@ __aicore__ inline GroupBarrier<pipeMode>::GroupBarrier(
             (pipeMode == PipeMode::MTE3_MODE), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Currently GroupBarrier only support PipeMode::MTE3_MODE"));
         ASCENDC_DEBUG_ASSERT((arriveSizeIn > 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "arriveSizeIn is %u, which should be larger than 0", arriveSizeIn));
         ASCENDC_DEBUG_ASSERT((waitSizeIn > 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "waitSizeIn is %u, which should be larger than 0", waitSizeIn));
-        ASCENDC_DEBUG_ASSERT((waitSizeIn <= GetBlockNum()), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((waitSizeIn <= GetBlockNum()), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "waitSizeIn %u is larger than max waitSize is %lld \n",
             waitSizeIn,
             GetBlockNum()));
-        ASCENDC_DEBUG_ASSERT((arriveSizeIn <= GetBlockNum()), KERNEL_LOG_INTERNAL(KERNEL_ERROR, 
+        ASCENDC_DEBUG_ASSERT((arriveSizeIn <= GetBlockNum()), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
             "waitSize is %u is larger than max arriveSize is %lld \n", arriveSizeIn,
             GetBlockNum()));
         this->barrierInfoArrive = reinterpret_cast<__gm__ BarrierInfo *>(groupWorkspace);

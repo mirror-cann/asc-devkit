@@ -452,10 +452,10 @@ __aicore__ inline void CastAdaptor(RegTensor<T> &dstReg, RegTensor<U> &srcReg, M
 #define REGISTER_CAST_LOWER_QUATER(rndStr, rndMode, srcType, dstType,                                   \
         srcBits, dstBits, satMode, mode)                                                                \
     CAST_LOWER_QUATER(srcType, dstType, srcBits, dstBits, rndStr, rndMode, satMode, mode)
- 
+
 #define REGISTER_CAST_S322HALF(rndStr, rndMode, srcType, dstType, srcBits, dstBits, satMode, mode) \
     CAST_S322HALF(srcType, dstType, srcBits, dstBits, rndStr, rndMode, satMode, mode)
- 
+
 #define REGISTER_CAST_HALF2S4(rndStr, rndMode, srcType, dstType, srcBits, dstBits, satMode, mode) \
     CAST_HALF2S4(srcType, dstType, srcBits, dstBits, rndStr, rndMode, satMode, mode)
 
@@ -646,7 +646,7 @@ __simd_vf__ inline void CastIntrinsicsB64ImplVF2(__ubuf__ DST_TYPE *dst, __ubuf_
 template <typename DST_TYPE, typename SRC_TYPE>
 __simd_callee__ inline void GenLoadL0(Reg::RegTensor<SRC_TYPE> &srcVreg, __ubuf__ SRC_TYPE *&srcAddr,
     Reg::MaskReg &preg, const UnaryRepeatParams &repeatParams)
- 
+
 {
     Reg::DataCopy<SRC_TYPE, Reg::DataCopyMode::DATA_BLOCK_COPY, Reg::PostLiteral::POST_MODE_UPDATE>(
         srcVreg, srcAddr,
@@ -683,7 +683,7 @@ __simd_callee__ inline void GenLoadL0(Reg::RegTensor<SRC_TYPE> &srcVreg, __ubuf_
         }
     }
 }
- 
+
 template <typename DST_TYPE, typename SRC_TYPE>
 __simd_callee__ inline void GenStoreL0(__ubuf__ DST_TYPE *&dstAddr, Reg::RegTensor<DST_TYPE> &dstVreg,
     Reg::MaskReg &preg, const UnaryRepeatParams &repeatParams)
@@ -709,7 +709,7 @@ __simd_callee__ inline void GenStoreL0(__ubuf__ DST_TYPE *&dstAddr, Reg::RegTens
         dstAddr, dstVreg,
         static_cast<uint32_t>(repeatParams.dstBlkStride), static_cast<uint32_t>(repeatParams.dstRepStride), preg);
 }
- 
+
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
 __simd_vf__ inline void CastIntrinsicsImplVF2(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const BasicAPIMaskStruct maskArrayStruct,
     uint8_t repeatTimes, const UnaryRepeatParams repeatParams)
@@ -763,7 +763,7 @@ __simd_vf__ inline void CastIntrinsicsImplVF2(__ubuf__ DST_TYPE *dst, __ubuf__ S
         GenStoreL0<DST_TYPE, SRC_TYPE>(dst, dstVreg, stPreg, repeatParams);
     }
 }
- 
+
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode, bool isSetMask>
 __simd_vf__ inline void CastIntrinsicsImplCounterVF(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint64_t mask,
     __ubuf__ uint64_t *maskBuf, uint8_t repeatTimes, const UnaryRepeatParams repeatParams)
@@ -933,7 +933,7 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
         }
     }
 }
- 
+
 // Cast::Level 0 - mask bit mode
 template <typename DST_TYPE, typename SRC_TYPE, bool isSetMask = true>
 __aicore__ inline void CastImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const RoundMode &roundMode,
@@ -943,7 +943,7 @@ __aicore__ inline void CastImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, 
                                           Tuple<int16_t, float>, Tuple<int32_t, half>, Tuple<int16_t, half>, Tuple<int8_t, half>,
                                           Tuple<uint8_t, half>, Tuple<int4b_t, half>, Tuple<half, int16_t>, Tuple<float, int32_t>,
                                           Tuple<half, int32_t>, Tuple<int64_t, float>, Tuple<float, int64_t>>();
- 
+
     constexpr bool cast_none = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<float, half>,
                                         Tuple<half, int4b_t>, Tuple<half, uint8_t>, Tuple<uint16_t, uint8_t>, Tuple<uint32_t, uint8_t>,
                                         Tuple<half, int8_t>, Tuple<int16_t, int8_t>, Tuple<int32_t, int8_t>, Tuple<uint8_t, uint16_t>,
@@ -951,7 +951,7 @@ __aicore__ inline void CastImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, 
                                         Tuple<int32_t, int16_t>, Tuple<uint8_t, uint32_t>, Tuple<uint16_t, uint32_t>, Tuple<int16_t, uint32_t>,
                                         Tuple<int16_t, int32_t>, Tuple<uint8_t, int32_t>, Tuple<uint16_t, int32_t>, Tuple<int64_t, int32_t>,
                                         Tuple<int32_t, int64_t>>();
- 
+
     constexpr bool using_cast_rint = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4b_t, half>,
                                             Tuple<half, float>, Tuple<half, int16_t>, Tuple<float, int32_t>>();
     constexpr bool cast_odd = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, float>>();
@@ -1164,7 +1164,7 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
         }
     }
 }
- 
+
 // Cast::Level 0 - mask count mode
 template <typename DST_TYPE, typename SRC_TYPE, bool isSetMask = true>
 __aicore__ inline void CastImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const RoundMode &roundMode,
@@ -1174,7 +1174,7 @@ __aicore__ inline void CastImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, 
                                           Tuple<int16_t, float>, Tuple<int32_t, half>, Tuple<int16_t, half>, Tuple<int8_t, half>,
                                           Tuple<uint8_t, half>, Tuple<int4b_t, half>, Tuple<half, int16_t>, Tuple<float, int32_t>,
                                           Tuple<half, int32_t>, Tuple<int64_t, float>, Tuple<float, int64_t>>();
- 
+
     constexpr bool cast_none = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<float, half>,
                                         Tuple<half, int4b_t>, Tuple<half, uint8_t>, Tuple<uint16_t, uint8_t>, Tuple<uint32_t, uint8_t>,
                                         Tuple<half, int8_t>, Tuple<int16_t, int8_t>, Tuple<int32_t, int8_t>, Tuple<uint8_t, uint16_t>,
@@ -1182,10 +1182,10 @@ __aicore__ inline void CastImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, 
                                         Tuple<int32_t, int16_t>, Tuple<uint8_t, uint32_t>, Tuple<uint16_t, uint32_t>, Tuple<int16_t, uint32_t>,
                                         Tuple<int16_t, int32_t>, Tuple<uint8_t, int32_t>, Tuple<uint16_t, int32_t>, Tuple<int64_t, int32_t>,
                                         Tuple<int32_t, int64_t>>();
- 
+
     constexpr bool using_cast_rint = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4b_t, half>,
                                             Tuple<half, float>, Tuple<half, int16_t>, Tuple<float, int32_t>>();
- 
+
     constexpr bool cast_odd = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, float>>();
     switch (roundMode) {
         case RoundMode::CAST_RINT:
@@ -1329,7 +1329,7 @@ __aicore__ inline uint64_t MakeDeqScaleConfig(float scale, int16_t offset, bool 
                        *(reinterpret_cast<uint32_t *>(&scale)));
     return config;
 }
- 
+
 __aicore__ inline void SetDeqScaleImpl(float scale, int16_t offset, bool signMode)
 {
     Internal::g_deqScale = MakeDeqScaleConfig(scale, offset, signMode);

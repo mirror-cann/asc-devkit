@@ -45,7 +45,7 @@ __aicore__ inline void BilinearInterpolationRepeatModeLevel0VFImpl(__ubuf__ T* d
             Reg::LoadAlign(indexReg, src0Offset + i * hRepeat * DEFAULT_REPEAT_STRIDE +
                                 j * DEFAULT_REPEAT_STRIDE);
             Reg::GatherB(srcReg0, src0, indexReg, maskFull);
-            
+
             Reg::LoadAlign<T,  Reg::LoadDist::DIST_E2B_B16>(srcReg1, src1 +
                                 i * hRepeat * DEFAULT_BLK_NUM + j * DEFAULT_BLK_NUM);
 
@@ -77,7 +77,7 @@ __aicore__ inline void BilinearInterpolationNoRepeatModeLevel0VFImpl(__ubuf__ T*
             Reg::LoadAlign(indexReg, src0Offset + i * hRepeat * DEFAULT_REPEAT_STRIDE +
                                 j * DEFAULT_REPEAT_STRIDE);
             Reg::GatherB(srcReg0, src0, indexReg, maskFull);
-            
+
             Reg::LoadAlign<T,  Reg::LoadDist::DIST_BRC_B16>(srcReg1, src1 + i * hRepeat + j);
             Reg::Mul(tmpReg, srcReg0, srcReg1, maskReg);
             Reg::Add(dstReg, tmpReg, dstReg, maskReg);
@@ -86,7 +86,7 @@ __aicore__ inline void BilinearInterpolationNoRepeatModeLevel0VFImpl(__ubuf__ T*
             dst + i * vROffset, dstReg, dstBlkStride, maskReg);
     }
 }
- 
+
 template <bool isMaskBitMode, typename T>
 __aicore__ inline void VecBilinearInterpolationLevel0Template(__ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ uint32_t* src0Offset,
     __ubuf__ T* src1, const uint64_t maskArray[], const uint64_t maskCount, const uint8_t hRepeat, const uint8_t vRepeat,

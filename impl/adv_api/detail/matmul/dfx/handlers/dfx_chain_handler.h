@@ -28,7 +28,7 @@ namespace Detail {
 
 struct DfxFuncInfo;
 
-template <typename ...HANDLERS> 
+template <typename ...HANDLERS>
 struct DfxChainHandler {
     template <typename... Args>
     __aicore__ inline static void PreCall(const DfxFuncInfo& info, Args&&... args) {

@@ -27,7 +27,7 @@ def densify_and_generate_index(B):
         dense_row = []
         index_row = []
         index_mask_row = []
-        
+
         for i in range(0, K, 4):
             block = B[row, i:i+4]
             nonzero_positions = [j for j in range(4) if block[j] != 0]
@@ -45,19 +45,19 @@ def densify_and_generate_index(B):
                 index_1 = nonzero_positions[0]
                 index_2 = nonzero_positions[1] - 1
                 index_mask_row.extend([nonzero_positions[0] + i, nonzero_positions[1] + i])
-            
+
             # 记录稠密化后的块
             dense_block = [block[pos] for pos in nonzero_positions[:2]]
             if len(dense_block) < 2:
                 dense_block += [0] * (2 - len(dense_block))
             dense_row.extend(dense_block)
-            
+
             # 记录索引
             index_row.extend([index_1, index_2])
         dense_B[row, :] = dense_row
         index_matrix[row, :] = index_row
         index_mask_matrix[row, :] = index_mask_row
-    
+
     return dense_B, index_matrix, index_mask_matrix
 
 
@@ -65,16 +65,16 @@ def construct_sparse_matrix_B(shape):
     """生成一个指定形状的稀疏矩阵B, 每行的每4个元素块至少包含2个零"""
     N, K = shape
     B = np.zeros((N, K), dtype=np.int8)  # 初始化矩阵B为全零
-    
+
     for row in range(N):
         for i in range(0, K, 4):
-            block = np.zeros(4, dtype=np.int8)    
+            block = np.zeros(4, dtype=np.int8)
             # 随机选择2个位置放置非零元素
             non_zero_positions = np.random.choice(4, 2, replace=False)
             block[non_zero_positions[0]] = np.random.randint(1, 10, dtype=np.int8)
             block[non_zero_positions[1]] = np.random.randint(1, 10, dtype=np.int8)
             # 放置到矩阵B的当前行
-            B[row, i:i+4] = block 
+            B[row, i:i+4] = block
     return B
 
 
@@ -88,7 +88,7 @@ def gen_sparse_golden(A, dense_B, index_mask_matrix):
         # 从 a 中根据 index 的第 r 行提取数据
         selected_columns = index_mask_matrix[r]  # 第 r 行的索引
         a_selected = A[:, selected_columns]  # 提取对应列
-        
+
         # 当前 b 第 r 行与提取后的 a_selected 计算矩阵乘法
         C[:, r] = np.dot(a_selected.astype(result_type), dense_B[r].astype(result_type)).astype(result_type)
     return C
@@ -107,7 +107,7 @@ def gen_uint2_zn_idx(index_matrix):
             indices = index_row[j : j + 4]
             uint8_value = sum((index << (2 * k)) for k, index in enumerate(indices))
             index_bytes.append(uint8_value)
-        
+
         index[row, :] = index_bytes
 
     # nd->nz 等价 dn->zn

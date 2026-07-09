@@ -691,14 +691,14 @@ __simd_vf__ inline void CompareScalarLevel2(__ubuf__ U *dst, __ubuf__ T *src0, c
         if constexpr (Std::is_same_v<T, double>) {
 	        Reg::RegTensor<uint64_t, Reg::RegTraitNumTwo> src1Reg;
             Reg::RegTensor<double, Reg::RegTraitNumTwo> src0Reg;
-            Reg::Duplicate(src1Reg, GetScalarBitcodeValue<double, uint64_t>(src1)); 
+            Reg::Duplicate(src1Reg, GetScalarBitcodeValue<double, uint64_t>(src1));
             for (uint16_t i = 0; i < repeatTime; ++i) {
                 maskReg = Reg::UpdateMask<T, Reg::RegTraitNumTwo>(sreg);
                 Reg::LoadAlign(src0Reg, src0 + i * repeatElm);
-                CompareEqualDouble<uint64_t>(dstReg, (Reg::RegTensor<uint64_t, Reg::RegTraitNumTwo>&)src0Reg, src1Reg, maskReg);  
+                CompareEqualDouble<uint64_t>(dstReg, (Reg::RegTensor<uint64_t, Reg::RegTraitNumTwo>&)src0Reg, src1Reg, maskReg);
                 Reg::StoreUnAlign((__ubuf__ uint32_t *&)dst, dstReg, uReg);
             }
-        } else {        
+        } else {
             Reg::RegTensor<T, Reg::RegTraitNumTwo> src0Reg;
             for (uint16_t i = 0; i < repeatTime; ++i) {
                 maskReg = Reg::UpdateMask<T, Reg::RegTraitNumTwo>(sreg);
@@ -1015,7 +1015,7 @@ __simd_vf__ inline void CompareSrc0ScalarLevel2(__ubuf__ U *dst, const T src0, _
                 Reg::LoadAlign(src1Reg, src1 + i * repeatElm);
                 CompareEqualDouble<uint64_t>(dstReg, (Reg::RegTensor<uint64_t, Reg::RegTraitNumTwo>&)src1Reg, src0Reg, maskReg);
                 Reg::StoreUnAlign((__ubuf__ uint32_t *&)dst, dstReg, uReg);
-            }        
+            }
         } else {
             Reg::RegTensor<T, Reg::RegTraitNumTwo> src0Reg, src1Reg;
             Reg::Duplicate(src0Reg, src0);
@@ -1224,7 +1224,7 @@ __simd_vf__ inline void CompareScalarLevel2B64(
         for (uint16_t i = 0; i < repeatTime; ++i) {
             maskReg = Reg::UpdateMask<double, Reg::RegTraitNumTwo>(sreg);
             Reg::LoadAlign(src1Reg, src1 + i * repeatElm);
-            CompareEqualDouble<uint64_t>(dstReg, src0Reg, (Reg::RegTensor<uint64_t, Reg::RegTraitNumTwo>&)src1Reg, maskReg);   
+            CompareEqualDouble<uint64_t>(dstReg, src0Reg, (Reg::RegTensor<uint64_t, Reg::RegTraitNumTwo>&)src1Reg, maskReg);
             Reg::StoreUnAlign((__ubuf__ uint32_t *&)dst, dstReg, uReg);
         }
     } else {
@@ -1239,10 +1239,10 @@ __simd_vf__ inline void CompareScalarLevel2B64(
         for (uint16_t i = 0; i < repeatTime; ++i) {
             maskReg = Reg::UpdateMask<double, Reg::RegTraitNumTwo>(sreg);
             Reg::LoadAlign(src0Reg, src0 + i * repeatElm);
-            CompareEqualDouble<uint64_t>(dstReg, (Reg::RegTensor<uint64_t, Reg::RegTraitNumTwo>&)src0Reg, src1Reg, maskReg);   
+            CompareEqualDouble<uint64_t>(dstReg, (Reg::RegTensor<uint64_t, Reg::RegTraitNumTwo>&)src0Reg, src1Reg, maskReg);
             Reg::StoreUnAlign((__ubuf__ uint32_t *&)dst, dstReg, uReg);
         }
-    }        
+    }
     Reg::StoreUnAlignPost<U, Reg::PostLiteral::POST_MODE_NORMAL>(dst, uReg, 0);
 }
 

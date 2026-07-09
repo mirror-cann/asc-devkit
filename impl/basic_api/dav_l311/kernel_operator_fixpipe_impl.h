@@ -487,7 +487,7 @@ __aicore__ inline void TransFixpipeParamsV220ToFixpipeParamsL311(
     if constexpr (format == CO2Layout::ROW_MAJOR) {
         dstParams.params.ndNum = intriParams.ndNum;
         dstParams.params.dstNdStride = intriParams.dstNdStride;
-        dstParams.params.srcNdStride =  intriParams.srcNdStride;       
+        dstParams.params.srcNdStride =  intriParams.srcNdStride;
     } else if constexpr(format == CO2Layout::COLUMN_MAJOR) {
         dstParams.params.ndNum = intriParams.ndNum;
         dstParams.params.dstNdStride = intriParams.srcNdStride;

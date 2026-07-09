@@ -28,7 +28,7 @@ namespace AscendC {
 namespace Impl {
 namespace Detail {
 template <typename IMPL, typename A_TYPE, const auto& MM_CFG>
-class LoadToL0A<IMPL, A_TYPE, MM_CFG, 
+class LoadToL0A<IMPL, A_TYPE, MM_CFG,
     enable_if_t<GetGemvMode<A_TYPE>() == GemvMode::MATRIX &&
                 (DoMatmulBasicBlock(MM_CFG) || DoMatmulSpecialBasicBlock(MM_CFG)) &&
                 MatmulFeatureTrait<MM_CFG>::IsSupportLoad3dV2() &&

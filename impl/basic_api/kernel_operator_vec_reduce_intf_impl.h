@@ -138,7 +138,7 @@ __aicore__ inline void CheckReduceRepeatSumParams(const LocalTensor<T>& dst, con
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
     if (!CheckFunVecReduceOther(dst, src, repeatTime, mask, dstRepStride, srcBlkStride, srcRepStride, "WholeReduceSum")) {
-        ASCENDC_REPORT_CHECK_ERROR(apiName, 
+        ASCENDC_REPORT_CHECK_ERROR(apiName,
             (Std::is_same_v<MaskType, int32_t> ? KernelFuncType::MASK_COUNT_MODE : KernelFuncType::MASK_BIT_MODE));
     }
 #endif
@@ -166,15 +166,15 @@ __aicore__ inline void CheckReduceRepeatMaxMinParams(const LocalTensor<T>& dst, 
     MaskSetter::Instance().SetMask(isSetMask);
     if (!CheckFunVecReduceOtherWhl(dst, src, repeatTime, mask, dstRepStride, srcBlkStride, srcRepStride,
             order, "WholeReduceMax")) { // WholeReduceMin has same check as WholeReduceMax in cpudebug
-        ASCENDC_REPORT_CHECK_ERROR(apiName, 
+        ASCENDC_REPORT_CHECK_ERROR(apiName,
             (Std::is_same_v<MaskType, int32_t> ? KernelFuncType::MASK_COUNT_MODE : KernelFuncType::MASK_BIT_MODE));
     }
 #endif
 #if ASCENDC_CPU_DEBUG && (__NPU_ARCH__ == 3002 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
     MaskSetter::Instance().SetMask(isSetMask);
     if (!CheckFunVecReduceOther(dst, src, repeatTime, mask, dstRepStride, srcBlkStride, srcRepStride,
-            "WholeReduceMax")) { // WholeReduceMin has same check as WholeReduceMax in cpudebug 
-        ASCENDC_REPORT_CHECK_ERROR(apiName, 
+            "WholeReduceMax")) { // WholeReduceMin has same check as WholeReduceMax in cpudebug
+        ASCENDC_REPORT_CHECK_ERROR(apiName,
             (Std::is_same_v<MaskType, int32_t> ? KernelFuncType::MASK_COUNT_MODE : KernelFuncType::MASK_BIT_MODE));
     }
 #endif

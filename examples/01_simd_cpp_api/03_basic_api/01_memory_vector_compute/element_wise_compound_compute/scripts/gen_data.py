@@ -22,7 +22,7 @@ np.random.seed(9)
 def gen_golden_data(scenario=1):
     """
     根据场景编号生成输入数据和Golden数据
-    
+
     Args:
         scenario: 场景编号
             1 - AddRelu: half -> half 加法与ReLU激活

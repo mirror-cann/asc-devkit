@@ -719,7 +719,7 @@ template <typename T, typename U, bool isSetMask = true>
 __aicore__ inline void VcmpvsImpl(
     __ubuf__ U *dst, __ubuf__ T *src0, const T src1, CMPMODE cmpMode, const uint32_t calCount)
 {
-    static_assert(SupportType<T, uint8_t, int8_t, bfloat16_t, half, int16_t, uint16_t, int32_t, uint32_t, float, 
+    static_assert(SupportType<T, uint8_t, int8_t, bfloat16_t, half, int16_t, uint16_t, int32_t, uint32_t, float,
         uint64_t, int64_t>(), "current data type is not supported!");
     static_assert(SupportType<U, uint8_t>(), "current data type is not supported!");
     switch (cmpMode) {
@@ -1428,7 +1428,7 @@ __aicore__ inline void SelectWithoutMaskMode0ImplVF(
     } else if constexpr (sizeof(T) == 4) {
         Reg::LoadUnAlignPre(ureg, (__ubuf__ uint32_t *)tempBuf);
         Reg::LoadUnAlign(selReg, ureg, (__ubuf__ uint32_t *)tempBuf);
-        Reg::MaskGenWithRegTensor<uint32_t, 0>(selMask, selReg); 
+        Reg::MaskGenWithRegTensor<uint32_t, 0>(selMask, selReg);
     }
     if constexpr (isCounterMode) {
         maskReg = Reg::MoveMask<uint16_t>();
@@ -1443,12 +1443,12 @@ __aicore__ inline void SelectWithoutMaskMode0ImplVF(
         if constexpr (isCounterMode) {
             maskReg = Reg::UpdateMask<T>(sreg);
         }
-        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg0, 
+        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg0,
             src0 + i * blockElm * repeatParams.src0RepStride, static_cast<uint32_t>(repeatParams.src0BlkStride), maskReg);
-        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg1, 
+        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg1,
             src1 + i * blockElm * repeatParams.src1RepStride, static_cast<uint32_t>(repeatParams.src1BlkStride), maskReg);
         Reg::Select(dstReg, srcReg0, srcReg1, selMask);
-        Reg::StoreAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(dst + i * blockElm * repeatParams.dstRepStride, 
+        Reg::StoreAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(dst + i * blockElm * repeatParams.dstRepStride,
             dstReg, static_cast<uint32_t>(repeatParams.dstBlkStride), maskReg);
     }
 }
@@ -1484,7 +1484,7 @@ __aicore__ inline void SelectWithoutMaskMode2ImplVF(
         } else if constexpr (sizeof(T) == 4) {
             Reg::LoadUnAlignPre(ureg, (__ubuf__ uint8_t *)selAddr + i * selOffset);
             Reg::LoadUnAlign(selReg, ureg, (__ubuf__ uint8_t *)selAddr + i * selOffset);
-            Reg::MaskGenWithRegTensor<uint32_t, 0>(selMask, (Reg::RegTensor<uint32_t> &)selReg);   
+            Reg::MaskGenWithRegTensor<uint32_t, 0>(selMask, (Reg::RegTensor<uint32_t> &)selReg);
         }
         Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
             srcReg0, src0 + i * blockElm * repeatParams.src0RepStride, static_cast<uint32_t>(repeatParams.src0BlkStride), maskReg);
@@ -1569,7 +1569,7 @@ __aicore__ inline void SelectWithoutMaskMode1ImplVF(
         } else if constexpr (sizeof(T) == 4) {
             Reg::LoadUnAlignPre(ureg, (__ubuf__ uint8_t *)sel + i * selOffset);
             Reg::LoadUnAlign(selReg, ureg, (__ubuf__ uint8_t *)sel + i * selOffset);
-            Reg::MaskGenWithRegTensor<uint32_t, 0>(selMask, (Reg::RegTensor<uint32_t> &)selReg);   
+            Reg::MaskGenWithRegTensor<uint32_t, 0>(selMask, (Reg::RegTensor<uint32_t> &)selReg);
         }
         Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
             srcReg0, src0 + i * blockElm * repeatParams.src0RepStride, static_cast<uint32_t>(repeatParams.src0BlkStride), maskReg);
@@ -1664,7 +1664,7 @@ __aicore__ inline void SelectMode2Level0(__ubuf__ T* dst, __ubuf__ U* sel, __ubu
                 maskReg = Reg::UpdateMask<T>(sreg);
             }
         }
-        
+
         Reg::MaskReg selMask0, selMask1, tmpMask0;
         Reg::MaskReg tmpMask1 = Reg::CreateMask<uint8_t, Reg::MaskPattern::ALL>();
         uint16_t tail = newRepeatTimes % unRollConstant;
@@ -1698,7 +1698,7 @@ __aicore__ inline void SelectMode2Level0(__ubuf__ T* dst, __ubuf__ U* sel, __ubu
         uint32_t offset0 = newRepeatTimes * unRollConstant * repeatParams.src0RepStride * blockElm;
         uint32_t offset1 = newRepeatTimes * unRollConstant * repeatParams.src1RepStride * blockElm;
         uint32_t offset2 = newRepeatTimes * unRollConstant * repeatParams.dstRepStride * blockElm;
-        uint32_t newSelOffset = newRepeatTimes * selOffset; 
+        uint32_t newSelOffset = newRepeatTimes * selOffset;
         uint32_t tailSreg = sreg - unRollConstant * newRepeatTimes * oneRepSize;
         for (uint16_t i = 0; i < (uint16_t)tail; ++i) {
             if constexpr (isCounterMode) {
@@ -2262,7 +2262,7 @@ __aicore__ inline void SelectMode0Level2(__ubuf__ T* dst, __ubuf__ U* sel, __ubu
             Reg::LoadAlign<T>(src1Reg, src1 + i * repeatElm);
             Reg::Select(dstReg, src0Reg, src1Reg, selMask);
             Reg::StoreAlign<T>(dst + i * repeatElm, dstReg, maskReg);
-        }          
+        }
     } else {
         Reg::RegTensor<T> src0Reg, src1Reg, dstReg;
         Reg::MaskReg maskReg, selMask;
@@ -2546,7 +2546,7 @@ __aicore__ inline void SelectSrc0ScalarMode1Level2(__ubuf__ T* dst, __ubuf__ U* 
 }
 
 template <typename T, typename U>
-__aicore__ inline void VselImpl(__ubuf__ T* dst, __ubuf__ U* sel, T src0,__ubuf__ T* src1, 
+__aicore__ inline void VselImpl(__ubuf__ T* dst, __ubuf__ U* sel, T src0,__ubuf__ T* src1,
     SELMODE selMode, uint32_t calCount)
 {
     static_assert(SupportType<T, uint8_t, int8_t, bfloat16_t, half, int16_t, uint16_t, int32_t, uint32_t, float, uint64_t, int64_t, complex32, complex64>(),
@@ -2710,7 +2710,7 @@ __aicore__ inline void SelectBothTensorMode1Level2(__ubuf__ T* dst, __ubuf__ U* 
 }
 
 template <typename T, typename U, uint8_t scalarIdx>
-__aicore__ inline void VselImpl(__ubuf__ T* dst, __ubuf__ U* sel, __ubuf__ T* src0,__ubuf__ T* src1, 
+__aicore__ inline void VselImpl(__ubuf__ T* dst, __ubuf__ U* sel, __ubuf__ T* src0,__ubuf__ T* src1,
     SELMODE selMode, uint32_t calCount)
 {
     static_assert(SupportType<T, uint8_t, int8_t, bfloat16_t, half, int16_t, uint16_t, int32_t, uint32_t, float, uint64_t, int64_t, complex32, complex64>(),

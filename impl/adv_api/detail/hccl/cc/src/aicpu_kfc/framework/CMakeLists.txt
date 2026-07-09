@@ -203,7 +203,7 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         ${HCCL_BASE_DIR}/algorithm/base/alg_template/temp_all_gather/all_gather_hd_stage.cc
         ${HCCL_BASE_DIR}/algorithm/base/alg_template/temp_all_gather/all_gather_hccs_sio.cc
         ${HCCL_BASE_DIR}/algorithm/base/alg_template/temp_all_gather/all_gather_graph_pipeline.cc
-        
+
 
         ${HCCL_BASE_DIR}/algorithm/base/alg_template/temp_all_reduce/all_reduce_recursive_hd.cc
         ${HCCL_BASE_DIR}/algorithm/base/alg_template/temp_all_reduce/all_reduce_ring.cc
@@ -384,7 +384,7 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         ${HCCL_BASE_DIR}/algorithm/impl/coll_executor/coll_reduce_scatter/coll_reduce_scatter_order_preserved_executor.cc
         ${HCCL_BASE_DIR}/algorithm/impl/coll_executor/coll_reduce_scatter/coll_reduce_scatter_ars_for_910_93_executor.cc
         ${HCCL_BASE_DIR}/algorithm/impl/coll_executor/coll_reduce_scatter/coll_reduce_scatter_order_preserved_for_910_93_executor.cc
-        
+
         ${HCCL_BASE_DIR}/algorithm/impl/coll_executor/coll_reduce_scatter_v/coll_reduce_scatter_v_executor.cc
         ${HCCL_BASE_DIR}/algorithm/impl/coll_executor/coll_reduce_scatter_v/coll_reduce_scatter_v_aiv_big_count_executor.cc
         ${HCCL_BASE_DIR}/algorithm/impl/coll_executor/coll_reduce_scatter_v/coll_reduce_scatter_v_mesh_aiv_smallcount_executor.cc
@@ -471,7 +471,7 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
     -Wl,-z,noexecstack
     -s
 )
-    
+
     target_compile_definitions(asc_ccl_kernel PRIVATE
         HCCD
         CCL_KERNEL_AICPU
@@ -550,7 +550,7 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         ${HCCL_BASE_DIR}/framework/communicator/impl/independent_op/channel
         ${HCCL_BASE_DIR}/framework/communicator/impl/independent_op/channel/device
         ${HCCL_BASE_DIR}/framework/communicator/impl/independent_op/data_api
-    
+
         ${HCCL_BASE_DIR}/algorithm/base/alg_template/temp_all_gather
         ${HCCL_BASE_DIR}/algorithm/base/alg_template/temp_all_reduce
         ${HCCL_BASE_DIR}/algorithm/base/alg_template/temp_alltoall
@@ -608,7 +608,7 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
         ${RDMA_CORE_INCLUDE_DIR}
         ${THIRD_PARTY_NLOHMANN_PATH}
 
-        
+
 
         ${HCCL_BASE_DIR}/platform/hccp/inc/network/
         ${HCCL_BASE_DIR}/platform/hccp/inc/
@@ -648,10 +648,10 @@ if(NOT BUILD_OPEN_PROJECT OR (BUILD_OPEN_PROJECT AND KERNEL_MODE))
             )
             target_link_libraries(${target_name} PRIVATE
                 rdma_core_headers
-                ascend_hal 
-                c_sec 
-                unified_dlog 
-                runtime_headers 
+                ascend_hal
+                c_sec
+                unified_dlog
+                runtime_headers
                 acl_rt_headers
             )
             if(TARGET json)
@@ -937,7 +937,7 @@ if(BUILD_OPEN_PROJECT AND KERNEL_MODE)
         target_compile_definitions(asc_ccl_kernel PRIVATE
             OPEN_BUILD_PROJECT
             -D_GLIBCXX_USE_CXX11_ABI=1) # 链接ascendalog需要LOG_CPP，链接slog不需要
- 
+
         set(CCL_KERNEL_PLF_PATH
             -Wl,--whole-archive
             asc_ccl_kernel_plf_a
@@ -1037,8 +1037,8 @@ if(DEVICE_MODE AND KERNEL_MODE)
     target_link_libraries(asc_aicpu_custom PRIVATE
         ${AICPU_CUSTOM_LINK_LIBRARIES}
         rdma_core_headers
-        ascend_hal 
-        c_sec 
+        ascend_hal
+        c_sec
         unified_dlog
     )
 

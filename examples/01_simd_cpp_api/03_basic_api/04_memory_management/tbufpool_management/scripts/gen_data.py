@@ -44,7 +44,7 @@ def gen_golden_data(scenarioNum):
     y = np.random.uniform(1, 10, [total_size]).astype(np.float16)
     golden = np.zeros(total_size, dtype=np.float16)
     golden[0:mask] = x[0:mask] + y[0:mask]
-    
+
     x.tofile("./input/input_x.bin")
     y.tofile("./input/input_y.bin")
     golden.tofile("./output/golden.bin")

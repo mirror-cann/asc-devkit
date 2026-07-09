@@ -171,14 +171,14 @@ for shape in "${SHAPES[@]}"; do
     # 解析 shape 参数
     read M K N <<< "$shape"
     shape_str="${M}_${K}_${N}"
-    
+
     echo -e "${YELLOW}----------------------------------------${NC}"
     echo -e "${YELLOW}测试 ${test_id}: Shape [${M}, ${K}, ${N}]${NC}"
     echo -e "${YELLOW}----------------------------------------${NC}"
-    
+
     # 清理之前的 msprof 输出目录
     rm -rf OPPROF_* 2>/dev/null || true
-    
+
     # 使用 msprof 采集性能数据
     echo -e "${GREEN}开始 msprof 性能采集...${NC}"
     # 检查 msprof 执行结果。该命令可能返回非 0，不能被 set -e 提前中断。
@@ -192,33 +192,33 @@ for shape in "${SHAPES[@]}"; do
         test_id=$((test_id + 1))
         continue
     fi
-    
+
     # 查找 msprof 生成的性能数据目录
     msprof_dir=$(ls -dt OPPROF_* 2>/dev/null | head -n 1 || true)
-    
+
     if [ -z "$msprof_dir" ] || [ ! -d "$msprof_dir" ]; then
         echo -e "${RED}未找到 msprof 输出目录 OPPROF_*${NC}"
         echo "${test_id},${M},${K},${N},${shape_str},N/A,N/A,N/A" >> "${RESULT_CSV}"
         test_id=$((test_id + 1))
         continue
     fi
-    
+
     echo -e "${GREEN}msprof 输出目录: ${msprof_dir}${NC}"
-    
+
     # 根据场景选择要提取的性能指标（动态搜索列名）
     perf_time="N/A"
-    
+
     if [ -f "${msprof_dir}/PipeUtilization.csv" ]; then
         echo -e "${GREEN}找到 PipeUtilization.csv${NC}"
-        
+
         # 显示 PipeUtilization.csv 内容（便于调试）
         echo -e "${YELLOW}PipeUtilization.csv 内容:${NC}"
         head -n 2 "${msprof_dir}/PipeUtilization.csv"
-        
+
         # PipeUtilization.csv 格式：
         # 第1行：列名（如 aic_mte1_time(us), aic_fixpipe_time(us)）
         # 第2行：数据（对应列的数值）
-        
+
         # 确定 CPU核类型（cube或vector）
         # PipeUtilization.csv可能有多行数据（多个block），需要找到cube行
         cpu_type="cube"
@@ -229,41 +229,41 @@ for shape in "${SHAPES[@]}"; do
         elif grep -q "vec" "${msprof_dir}/PipeUtilization.csv"; then
             cpu_type="vec"
         fi
-        
+
         # 方法1：优先使用动态查找列索引（根据关键字搜索）
         # 搜索列名（带或不带单位）
         metric_col_index=""
-        
+
         if [ "$PERF_METRIC" = "aic_fixpipe_time" ]; then
             # 场景9/19：查找 aic_fixpipe_time 列
             # 尝试多种列名格式
             metric_col_index=$(awk -F ',' 'NR==1 {for(i=1;i<=NF;i++) if($i=="aic_fixpipe_time(us)" || $i=="aic_fixpipe_time") print i}' "${msprof_dir}/PipeUtilization.csv" | head -n 1)
-            
+
             if [ ! -z "$metric_col_index" ]; then
                 # 提取对应行的数据（cube行）
                 perf_time=$(awk -F ',' -v col="$metric_col_index" -v type="$cpu_type" '$2==type {print $col}' "${msprof_dir}/PipeUtilization.csv" | sed 's/[[:space:]]//g')
                 echo -e "${GREEN}动态搜索列名: aic_fixpipe_time 列索引=${metric_col_index}${NC}"
             fi
-            
+
             echo -e "${GREEN}从 PipeUtilization.csv 提取: aic_fixpipe_time = ${perf_time} us${NC}"
         else
             # 其他场景：查找 aic_mte1_time 列
             # 尝试多种列名格式
             metric_col_index=$(awk -F ',' 'NR==1 {for(i=1;i<=NF;i++) if($i=="aic_mte1_time(us)" || $i=="aic_mte1_time") print i}' "${msprof_dir}/PipeUtilization.csv" | head -n 1)
-            
+
             if [ ! -z "$metric_col_index" ]; then
                 # 提取对应行的数据（cube行）
                 perf_time=$(awk -F ',' -v col="$metric_col_index" -v type="$cpu_type" '$2==type {print $col}' "${msprof_dir}/PipeUtilization.csv" | sed 's/[[:space:]]//g')
                 echo -e "${GREEN}动态搜索列名: aic_mte1_time 列索引=${metric_col_index}${NC}"
             fi
-            
+
             echo -e "${GREEN}从 PipeUtilization.csv 提取: aic_mte1_time = ${perf_time} us${NC}"
         fi
-        
+
         # 方法2备用：如果动态搜索失败，尝试简单的第二行提取
         if [ -z "$perf_time" ] || [ "$perf_time" = "NA" ]; then
             echo -e "${YELLOW}动态搜索失败，尝试备用方法...${NC}"
-            
+
             if [ "$PERF_METRIC" = "aic_fixpipe_time" ]; then
                 # 备用：直接提取第二行，查找包含 fixpipe 的列
                 perf_time=$(awk -F ',' 'NR==2 {for(i=1;i<=NF;i++) if($i ~ /^aic_fixpipe_time/ || $i ~ /^[0-9.]+$/) print $i}' "${msprof_dir}/PipeUtilization.csv" | grep -E '^[0-9.]+$' | head -n 1 | sed 's/[[:space:]]//g' || true)
@@ -271,7 +271,7 @@ for shape in "${SHAPES[@]}"; do
                 # 备用：直接提取第二行，查找包含 mte1 的列
                 perf_time=$(awk -F ',' 'NR==2 {for(i=1;i<=NF;i++) if($i ~ /^aic_mte1_time/ || $i ~ /^[0-9.]+$/) print $i}' "${msprof_dir}/PipeUtilization.csv" | grep -E '^[0-9.]+$' | head -n 1 | sed 's/[[:space:]]//g' || true)
             fi
-            
+
             if [ ! -z "$perf_time" ] && [ "$perf_time" != "NA" ]; then
                 echo -e "${GREEN}备用方法提取成功: ${perf_time} us${NC}"
             else
@@ -283,7 +283,7 @@ for shape in "${SHAPES[@]}"; do
         echo -e "${YELLOW}列出 msprof 输出目录内容:${NC}"
         ls -la "${msprof_dir}/" || true
     fi
-    
+
     # 验证提取的数据是否为有效数值
     if [ "$perf_time" = "N/A" ] || [ -z "$perf_time" ] || [ "$perf_time" = "NA" ]; then
         echo -e "${RED}未能提取有效的性能数据${NC}"
@@ -296,19 +296,19 @@ for shape in "${SHAPES[@]}"; do
             perf_time="N/A"
         fi
     fi
-    
+
     # 计算性能指标
     cycle_count="N/A"
     bandwidth="N/A"
-    
+
     if [ "$perf_time" != "N/A" ] && [[ "$perf_time" =~ ^[0-9.]+$ ]]; then
         # 计算 Cycle 数
         cycle_count=$(awk "BEGIN {printf \"%.2f\", ${perf_time} * ${FREQUENCY}}")
-        
+
         # 根据场景计算数据搬运量
         # 默认：bfloat16 (2 bytes)
         data_type_size=2
-        
+
         # 场景9/19: LoadFixBuffer
         # FixPipe搬运数据量：N * sizeof(data_type)
         # 场景9: uint64_t (8 bytes)
@@ -348,10 +348,10 @@ for shape in "${SHAPES[@]}"; do
             data_size_bytes=$((M * K * data_type_size))
             data_desc="默认 A矩阵 M*K"
         fi
-        
+
         # 计算带宽
         bandwidth=$(awk "BEGIN {printf \"%.3f\", ${data_size_bytes} / ${perf_time} / 1e3}")
-        
+
         echo -e "${GREEN}性能指标计算:${NC}"
         echo -e "${GREEN}  性能指标: ${PERF_METRIC} (${PERF_METRIC_DESC})${NC}"
         echo -e "${GREEN}  数据类型大小: ${data_type_size} bytes${NC}"
@@ -359,27 +359,27 @@ for shape in "${SHAPES[@]}"; do
         echo -e "${GREEN}  Cycle数: ${cycle_count} cycles${NC}"
         echo -e "${GREEN}  带宽: ${bandwidth} GB/s${NC}"
     fi
-    
+
     # 记录结果到 CSV
     echo "${test_id},${M},${K},${N},${shape_str},${perf_time},${cycle_count},${bandwidth}" >> "${RESULT_CSV}"
-    
+
     # 显示性能指标名称
     perf_metric_name="AIC_MTE1_Time"
     if [ "$PERF_METRIC" = "aic_fixpipe_time" ]; then
         perf_metric_name="AIC_FixPipe_Time"
     fi
-    
+
     echo -e "${GREEN}测试 ${test_id} 完成${NC}"
     echo -e "${GREEN}  Shape: [${M}, ${K}, ${N}]${NC}"
     echo -e "${GREEN}  ${perf_metric_name}: ${perf_time} us${NC}"
     echo -e "${GREEN}  Cycle: ${cycle_count} cycles${NC}"
     echo -e "${GREEN}  Bandwidth: ${bandwidth} GB/s${NC}"
-    
+
     # 保存 msprof 输出目录
     if [ "$perf_time" != "N/A" ]; then
         mv "${msprof_dir}" "${PERF_DATA_DIR}/test_${test_id}_${shape_str}" 2>/dev/null || true
     fi
-    
+
     test_id=$((test_id + 1))
 done
 

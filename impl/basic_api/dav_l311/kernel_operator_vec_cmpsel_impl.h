@@ -1757,7 +1757,7 @@ __simd_callee__ inline void SelectMode2Level0(__ubuf__ T* dst, __ubuf__ U* sel, 
                 maskReg = Reg::UpdateMask<T>(sreg);
             }
         }
-        
+
         Reg::MaskReg selMask0, selMask1, tmpMask0;
         Reg::MaskReg tmpMask1 = Reg::CreateMask<uint8_t, Reg::MaskPattern::ALL>();
         uint16_t tail = newRepeatTimes % unRollConstant;

@@ -217,7 +217,7 @@ __aicore__ inline void Fixpipe(const LocalTensor<T>& dst, const LocalTensor<U>& 
         ConstDefiner::Instance().logicNameMap.at(static_cast<uint8_t>(dst.GetPosition())));
     CheckTensorPos(cbufWorkspace, Hardware::L1, "cbufWorkspace", "A1", "Fixpipe");
     if constexpr (config.isToUB) {
-        FixpipeL0C2UBImpl<DstPrimType, SrcPrimType, config>((__ubuf__ DstPrimType*)dst.GetPhyAddr(), 
+        FixpipeL0C2UBImpl<DstPrimType, SrcPrimType, config>((__ubuf__ DstPrimType*)dst.GetPhyAddr(),
             (__cc__ SrcPrimType*)src.GetPhyAddr(), (__cbuf__ uint64_t *)cbufWorkspace.GetPhyAddr(), intriParams);
     } else {
         FixpipeL0C2L1Impl<DstPrimType, SrcPrimType, config>((__cbuf__ DstPrimType*)dst.GetPhyAddr(),
@@ -268,7 +268,7 @@ __aicore__ inline void Fixpipe(const GlobalTensor<T> &dst, const LocalTensor<U> 
     CheckTensorPos(cbufWorkspace, Hardware::L1, "cbufWorkspace", "A1", "Fixpipe");
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
     const uint8_t cacheMode = ExtractCacheMode(dst);
-    FixpipeL0C2GMImpl<DstPrimType, SrcPrimType, config>((__gm__ DstPrimType *)dst.GetPhyAddr(), 
+    FixpipeL0C2GMImpl<DstPrimType, SrcPrimType, config>((__gm__ DstPrimType *)dst.GetPhyAddr(),
         (__cc__ SrcPrimType *)src.GetPhyAddr(), (__cbuf__ uint64_t *)cbufWorkspace.GetPhyAddr(), intriParams,
         cacheMode);
 #else

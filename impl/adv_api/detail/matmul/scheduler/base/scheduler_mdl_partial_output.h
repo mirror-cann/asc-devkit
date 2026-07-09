@@ -7,7 +7,7 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
- 
+
 /*!
  * \file scheduler_mdl_partial_output.h
  * \brief partial output, only for aicore like 310
@@ -20,13 +20,13 @@
 
 #ifndef IMPL_MATMUL_SCHEDULER_BASE_SCHEDULER_MDL_PARTIAL_OUTPUT_H
 #define IMPL_MATMUL_SCHEDULER_BASE_SCHEDULER_MDL_PARTIAL_OUTPUT_H
- 
+
 #include "scheduler_intf.h"
 #include "scheduler_mdl_common.h"
 namespace AscendC {
 namespace Impl {
 namespace Detail {
- 
+
 /*
     MatmulScheduler is considered entirely experimental.
     We retain the freedom to make incompatible changes, but do not guarantee the stability.
@@ -44,13 +44,13 @@ class MatmulScheduler<IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, POLICY_TY
     MATMUL_USE_MODULE(TBufPoolL0);
     MATMUL_USE_MODULE(BiasScheduler);
     MATMUL_USE_MODULE(CubeOutBuffer);
- 
+
     using TransAT = typename A_TYPE::T;
     using TransBT = typename decltype(GetTransBDataType<A_TYPE, B_TYPE, MM_CFG>())::T;
     using BiasT = typename BIAS_TYPE::T;
     using DstT = typename C_TYPE::T;
     using L0cT = typename GetMmDstType<typename A_TYPE::T>::Type;
- 
+
 public:
     using BASE_MODULE =
         AscendC::Impl::Detail::MatmulMDLSchedulerCommon<IMPL, A_TYPE, B_TYPE, C_TYPE, BIAS_TYPE, MM_CFG, POLICY_TYPE>;
@@ -67,7 +67,7 @@ public:
         PartialK(enPartialSum);
         return true;
     }
- 
+
 private:
     __aicore__ inline bool MoveNext()
     {
@@ -99,7 +99,7 @@ private:
             }
         }
     }
- 
+
     __aicore__ inline void PartialK(bool enPartialSum)
     {
         PartialKMultiIter(enPartialSum);
@@ -129,7 +129,7 @@ private:
         BASE_MODULE::ResetCopyInBuffer();
     }
 
-    __aicore__ inline void Compute(const LocalTensor<TransAT>& a1, const LocalTensor<TransBT>& b1, LocalTensor<BiasT>& bias, 
+    __aicore__ inline void Compute(const LocalTensor<TransAT>& a1, const LocalTensor<TransBT>& b1, LocalTensor<BiasT>& bias,
         const bool enPartialSum, const bool isATranspose, const bool isBTranspose, SplitParams& aL0Params, SplitParams& bL0Params)
     {
         // sL0CInit and sL0CLast are used for Split
@@ -142,7 +142,7 @@ private:
         bL0Params.kAxisL1Offset += MATMUL_MODULE(KLoop)->GetStepInnerIdx() * kL1Stride;
         ComputeKDB(a1, b1, aL0Params, bL0Params, isATranspose, isBTranspose, sL0CInit, sL0CLast);
     }
- 
+
     __aicore__ inline void ComputeKDB(const LocalTensor<TransAT>& a1, const LocalTensor<TransBT>& b1,
         const SplitParams& aL0Params, const SplitParams& bL0Params,
         const bool isATranspose, const bool isBTranspose, const bool sL0CInit, const bool sL0CLast)

@@ -278,7 +278,7 @@ __aicore__ inline bool check_ringbuf_space(__gm__ DebugBlockHeadInfo* blockInfo,
             return false;
         }
     }
-    
+
     return true;
 }
 

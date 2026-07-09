@@ -297,7 +297,7 @@ __aicore__ inline void SetWaitFlagMte1ToM()
     WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
     PipeBarrier<PIPE_M>();
 }
- 
+
 __aicore__ inline void PingPongReleaseEvent(event_t eventId0, event_t eventId1)
 {
     WaitFlag<HardEvent::M_MTE1>(eventId0);

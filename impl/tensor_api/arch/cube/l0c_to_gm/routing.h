@@ -32,8 +32,8 @@ class CopyL0C2GMIgnore {
 public:
     template <const CopyL0C2GMTrait& trait, typename... Args>
     __aicore__ inline static void Run(const Args&... args)
-    { 
-        static_assert(Std::is_same_v<Args..., void>, "CopyL0C2GMIgnore should not be called"); 
+    {
+        static_assert(Std::is_same_v<Args..., void>, "CopyL0C2GMIgnore should not be called");
     }
 };
 

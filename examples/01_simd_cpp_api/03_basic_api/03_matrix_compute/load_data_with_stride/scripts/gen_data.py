@@ -48,7 +48,7 @@ def gen_golden_data(scenarioNum=1):
         x2_gm = np.random.uniform(1, 10, [K, N]).astype(np.float32)
         golden = (np.matmul(x1_gm, x2_gm)).astype(np.float32)
         x1_gm = x1_gm.transpose()
-    
+
     os.system("mkdir -p input")
     os.system("mkdir -p output")
     x1_gm.tofile("./input/x1_gm.bin")

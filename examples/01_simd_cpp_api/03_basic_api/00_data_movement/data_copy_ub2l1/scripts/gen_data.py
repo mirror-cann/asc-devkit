@@ -23,15 +23,15 @@ def nd_to_nz_for_matrix_a(data_nd):
     """
     m, k = data_nd.shape
     BLOCK_CUBE = 16
-    
+
     # 计算对齐后的维度
     m_aligned = ((m + BLOCK_CUBE - 1) // BLOCK_CUBE) * BLOCK_CUBE
     k_aligned = ((k + BLOCK_CUBE - 1) // BLOCK_CUBE) * BLOCK_CUBE
-    
+
     # 创建NZ格式数组（填充对齐）
     data_nz = np.zeros((m_aligned, k_aligned), dtype=data_nd.dtype)
     data_nz[:m, :k] = data_nd
-    
+
     # 按BLOCK_CUBE x BLOCK_CUBE块重排数据
     for m_block in range(0, m_aligned, BLOCK_CUBE):
         for k_block in range(0, k_aligned, BLOCK_CUBE):
@@ -39,7 +39,7 @@ def nd_to_nz_for_matrix_a(data_nd):
             # NZ格式：块内按列主序排列
             block_flat = block.T.flatten()
             data_nz[m_block:m_block+BLOCK_CUBE, k_block:k_block+BLOCK_CUBE] = block_flat.reshape((BLOCK_CUBE, BLOCK_CUBE))
-    
+
     return data_nz
 
 
@@ -51,15 +51,15 @@ def nd_to_nz_for_matrix_b(data_nd):
     """
     k, n = data_nd.shape
     BLOCK_CUBE = 16
-    
+
     # 计算对齐后的维度
     k_aligned = ((k + BLOCK_CUBE - 1) // BLOCK_CUBE) * BLOCK_CUBE
     n_aligned = ((n + BLOCK_CUBE - 1) // BLOCK_CUBE) * BLOCK_CUBE
-    
+
     # 创建NZ格式数组（填充对齐）
     data_nz = np.zeros((k_aligned, n_aligned), dtype=data_nd.dtype)
     data_nz[:k, :n] = data_nd
-    
+
     # 按BLOCK_CUBE x BLOCK_CUBE块重排数据
     for k_block in range(0, k_aligned, BLOCK_CUBE):
         for n_block in range(0, n_aligned, BLOCK_CUBE):
@@ -67,7 +67,7 @@ def nd_to_nz_for_matrix_b(data_nd):
             # NZ格式：块内按行主序排列（转置）
             block_flat = block.flatten()
             data_nz[k_block:k_block+BLOCK_CUBE, n_block:n_block+BLOCK_CUBE] = block_flat.reshape((BLOCK_CUBE, BLOCK_CUBE))
-    
+
     return data_nz
 
 
@@ -82,14 +82,14 @@ def gen_golden_data_simple():
     # 生成ND格式的数据
     x1_nd = np.ones(m * k).reshape([m, k]).astype(np.float16)
     x2_nd = np.ones(k * n).reshape([k, n]).astype(np.float16)
-    
+
     # 转换为NZ格式
     x1_nz = nd_to_nz_for_matrix_a(x1_nd)
     x2_nz = nd_to_nz_for_matrix_b(x2_nd)
-    
+
     # 计算golden数据（使用ND格式计算）
     golden = (np.matmul(x1_nd.astype(np.float32), x2_nd.astype(np.float32))).astype(np.float32)
-    
+
     # 保存NZ格式的输入数据
     x1_nz.tofile("./input/input_x.bin")
     x2_nz.tofile("./input/input_y.bin")

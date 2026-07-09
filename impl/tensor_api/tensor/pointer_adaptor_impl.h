@@ -62,7 +62,7 @@ struct IterAdaptor
     }
 
     __aicore__ inline constexpr iterator Get() const {
-        return ptr; 
+        return ptr;
     }
 
     __aicore__ inline constexpr friend bool operator==(const DerivedType& x, const DerivedType& y) {
@@ -74,19 +74,19 @@ struct IterAdaptor
     }
 
     __aicore__ inline constexpr friend bool operator< (const DerivedType& x, const DerivedType& y) {
-        return x.ptr <  y.ptr; 
+        return x.ptr <  y.ptr;
     }
 
     __aicore__ inline constexpr friend bool operator<=(const DerivedType& x, const DerivedType& y) {
-        return x.ptr <= y.ptr; 
+        return x.ptr <= y.ptr;
     }
 
     __aicore__ inline constexpr friend bool operator> (const DerivedType& x, const DerivedType& y) {
-        return x.ptr >  y.ptr; 
+        return x.ptr >  y.ptr;
     }
 
     __aicore__ inline constexpr friend bool operator>=(const DerivedType& x, const DerivedType& y) {
-        return x.ptr >= y.ptr; 
+        return x.ptr >= y.ptr;
     }
 private:
     template <typename Index>

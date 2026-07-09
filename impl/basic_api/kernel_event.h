@@ -1174,7 +1174,7 @@ __aicore__ inline void WaitFlagImpl(const HardEvent event, int32_t eventID)
             break;
         case HardEvent::M_S:
             WaitFlagInternal<PIPE_M, PIPE_S>(e);
-            break; 
+            break;
         case HardEvent::S_V:
             WaitFlagInternal<PIPE_S, PIPE_V>(e);
             break;

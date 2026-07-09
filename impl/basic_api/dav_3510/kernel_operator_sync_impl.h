@@ -733,7 +733,7 @@ template <bool isAIVOnly = true> __aicore__ inline void SuperKernelAutoSyncAllIm
         set_intra_block(PIPE_S, AscendC::SYNC_AIC_AIV_FLAG + AscendC::SYNC_FLAG_ID_MAX);
         return;
     }
-    
+
     if ASCEND_IS_AIV {
         set_intra_block(PIPE_MTE3, AscendC::SYNC_AIV_FLAG);
         wait_intra_block(PIPE_S, AscendC::SYNC_AIC_AIV_FLAG);

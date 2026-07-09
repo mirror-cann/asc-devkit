@@ -109,4 +109,3 @@ __simd_callee__ inline AddrReg CreateAddrRegImpl(uint16_t index0, uint32_t strid
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_ADDRREG_IMPL__
 #endif
-

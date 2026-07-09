@@ -702,7 +702,7 @@ template <typename T = float>
 __aicore__ inline void AddReluImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
 {
     static_assert(SupportType<T, float>(), "AddRelu level-2 api only support half/float on current device");
-    
+
     __VEC_SCOPE__
     {
         vector_f32 vreg0;
@@ -763,7 +763,7 @@ template <typename T = float>
 __aicore__ inline void FusedMulAddImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
 {
     static_assert(SupportType<T, float>(), "FusedMulAdd level-2 api only support half/float on current device");
-    
+
     __VEC_SCOPE__
     {
         vector_f32 vreg0;
@@ -825,7 +825,7 @@ template <typename T = float>
 __aicore__ inline void FusedMulAddReluImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
 {
     static_assert(SupportType<T, float>(), "FusedMulAddRelu level-2 api only support half/float on current device");
-    
+
     __VEC_SCOPE__
     {
         vector_f32 vreg0;
@@ -940,7 +940,7 @@ __aicore__ inline void MulAddDstImpl(__ubuf__ float* dst, __ubuf__ float* src0, 
 {
     static_assert(SupportType<U, float>(), "MulAddDst level-2 api only support b16/b32 on current device");
     static_assert(SupportType<T, float>(), "MulAddDst level-2 api only support b16/b32 on current device");
-    
+
     __VEC_SCOPE__
     {
         vector_f32 vreg0;
@@ -966,7 +966,7 @@ __aicore__ inline void MulAddDstImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* sr
 {
     static_assert(SupportType<U, int32_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
     static_assert(SupportType<T, int32_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
-    
+
     __VEC_SCOPE__
     {
         vector_s32 vreg0;
@@ -992,7 +992,7 @@ __aicore__ inline void MulAddDstImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* 
 {
     static_assert(SupportType<U, uint32_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
     static_assert(SupportType<T, uint32_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
-    
+
     __VEC_SCOPE__
     {
         vector_u32 vreg0;

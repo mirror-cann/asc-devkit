@@ -170,7 +170,7 @@ __aicore__ inline void SetScalarCacheModeImpl()
     // READ mode: CTRL[19:16], WRITE mode: CTRL[23:20]
     constexpr uint8_t startBit = (rwMode == CacheRwMode::READ) ? 16 : 20;
     constexpr uint8_t cacheBits = GetCacheModeBits<cacheMode>();
-    
+
     uint64_t mask = ~((uint64_t(0xF) << startBit));
     int64_t ctrlValue = get_ctrl() & mask;
     ctrlValue |= (static_cast<uint64_t>(cacheBits) << startBit);
@@ -186,7 +186,7 @@ __aicore__ inline CacheMode GetScalarCacheModeImpl()
     constexpr uint8_t startBit = (rwMode == CacheRwMode::READ) ? 16 : 20;
     int64_t ctrlValue = get_ctrl();
     uint8_t cacheBits = static_cast<uint8_t>((ctrlValue >> startBit) & 0xF);
-    
+
     switch (cacheBits) {
         case 0:  return CacheMode::CACHE_MODE_NORMAL;
         case 1:  return CacheMode::CACHE_MODE_LAST;

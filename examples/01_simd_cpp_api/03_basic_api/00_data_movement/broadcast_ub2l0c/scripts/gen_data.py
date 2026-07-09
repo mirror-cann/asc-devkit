@@ -22,7 +22,7 @@ def gen_golden_data_simple():
     block_num = 16
 
     input_shape = [block_length]
-    output_shape = [block_num, block_length] 
+    output_shape = [block_num, block_length]
     input_x = np.random.uniform(-100, 100, input_shape).astype(input_type)
     golden = np.zeros(output_shape).astype(output_type)
     for i in range(block_num):

@@ -33,33 +33,33 @@ def save_data(src0, src1, golden_dst0, golden_dst1):
 def gen_golden_data_interleave():
     count = 512
     data_type = np.float16
-    
+
     src0 = np.arange(1, count + 1).astype(data_type)
     src1 = np.arange(count + 1, count * 2 + 1).astype(data_type)
-    
+
     golden_dst0 = np.zeros(count).astype(data_type)
     golden_dst1 = np.zeros(count).astype(data_type)
-    
+
     half_count = count // 2
     for i in range(half_count):
         golden_dst0[i * 2] = src0[i]
         golden_dst0[i * 2 + 1] = src1[i]
         golden_dst1[i * 2] = src0[half_count + i]
         golden_dst1[i * 2 + 1] = src1[half_count + i]
-    
+
     save_data(src0, src1, golden_dst0, golden_dst1)
 
 
 def gen_golden_data_deinterleave():
     count = 512
     data_type = np.float16
-    
+
     src0 = np.arange(1, count + 1).astype(data_type)
     src1 = np.arange(count + 1, count * 2 + 1).astype(data_type)
-    
+
     golden_dst0 = np.zeros(count).astype(data_type)
     golden_dst1 = np.zeros(count).astype(data_type)
-    
+
     for i in range(count):
         if i < count // 2:
             golden_dst0[i] = src0[i * 2]
@@ -67,7 +67,7 @@ def gen_golden_data_deinterleave():
         else:
             golden_dst0[i] = src1[(i - count // 2) * 2]
             golden_dst1[i] = src1[(i - count // 2) * 2 + 1]
-    
+
     save_data(src0, src1, golden_dst0, golden_dst1)
 
 

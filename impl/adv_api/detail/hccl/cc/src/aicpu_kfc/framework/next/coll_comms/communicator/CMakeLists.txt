@@ -14,4 +14,3 @@ set(src_list
 
 add_subdirectory(aicpu)
 add_subdirectory(ns_recovery)
-

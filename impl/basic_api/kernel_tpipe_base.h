@@ -273,7 +273,7 @@ public:
     static constexpr Hardware srcHardType = GetPhyType(srcPos);
     static constexpr Hardware dstHardType = GetPhyType(dstPos);
     static constexpr HardEvent freeBufEvt = GetQueEvt(srcHardType, dstHardType, false, 0, 0);
-    static constexpr int32_t bufSize = bufIDSize;                                             
+    static constexpr int32_t bufSize = bufIDSize;
 
     __aicore__ inline TBufPoolExtImpl();
     __aicore__ inline ~TBufPoolExtImpl() = default;

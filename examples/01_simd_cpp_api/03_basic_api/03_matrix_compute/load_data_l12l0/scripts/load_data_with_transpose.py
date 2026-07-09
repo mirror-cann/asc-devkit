@@ -97,7 +97,7 @@ def load_data_with_transpose_b32(src, dst, startIndex, repeatTimes, srcStride, d
     dst_addr = 0
     offset = fractal_shape[1] * fractal_shape[1]
     for i in range(repeatTimes):
-        src_square_addr = src_addr + srcStride * i * square_size 
+        src_square_addr = src_addr + srcStride * i * square_size
         dst_square_addr = dst_addr + (dstGap + 1) * i * fractal_size
         # 搬运左z分形的上半部分
         for k in range(fractal_shape[1]):
@@ -107,7 +107,7 @@ def load_data_with_transpose_b32(src, dst, startIndex, repeatTimes, srcStride, d
         # 搬运左z分形的下半部分
         for k in range(fractal_shape[1]):
             src_block_addr = src_square_addr + k + offset
-            dst_block_addr = dst_square_addr + (dstFracGap + 1) * fractal_size + fractal_shape[1] * k 
+            dst_block_addr = dst_square_addr + (dstFracGap + 1) * fractal_size + fractal_shape[1] * k
             dst[dst_block_addr:dst_block_addr + fractal_shape[1]] = src[src_block_addr:src_block_addr+offset][::fractal_shape[1]]
         # 搬运右z分形的上半部分
         for k in range(fractal_shape[1]):
@@ -134,5 +134,5 @@ if __name__ == "__main__":
         load_data_with_transpose_b16(src, dst, startIndex=0, repeatTimes=1, srcStride=0, dstGap=0)
     elif data_type == data_type_dict.b32:
         load_data_with_transpose_b32(src, dst, startIndex=0, repeatTimes=2, srcStride=1, dstGap=2, dstFracGap=0)
-    
+
     print("dst", dst)

@@ -43,7 +43,7 @@ HcclResult ProfilingManagerPub::CallMsprofReportMc2CommInfo(uint64_t timeStamp, 
     CHK_PTR_NULL(data);
     return ProfilingManager::Instance().CallMsprofReportMc2CommInfo(timeStamp, data, len);
 }
- 
+
 HcclResult ProfilingManagerPub::CallMsprofReportHostNodeApi(uint64_t beginTime, uint64_t endTime,
     const std::string profName, uint32_t threadId)
 {

@@ -12,7 +12,7 @@ set(src_list
     hccl_primitive_remote.cc
     hccl_dispatcher_ctx.cc
 )
- 
+
 target_sources(asc_ccl_kernel_plf PRIVATE
     ${src_list}
 )

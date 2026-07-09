@@ -7,7 +7,7 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
- 
+
 /*!
  * \file kernel_operator_proposal_impl.h
  * \brief
@@ -19,7 +19,7 @@
 #endif
 #ifndef ASCENDC_MODULE_OPERATOR_PROPOSAL_IMPL_H
 #define ASCENDC_MODULE_OPERATOR_PROPOSAL_IMPL_H
- 
+
 namespace AscendC {
 constexpr uint32_t singleSortElementCountL300 = 32;
 constexpr uint32_t regionProposalDataSize = 8;
@@ -28,13 +28,13 @@ __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dstLocal, __ubuf__ T* addrArray[
 {
     ASCENDC_ASSERT((false), {KERNEL_LOG(KERNEL_ERROR, "unsupported Vbitsort");});
 }
- 
+
 template <typename T>
 __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const ProposalIntriParams& intriParams)
 {
     ASCENDC_ASSERT((false), {KERNEL_LOG(KERNEL_ERROR, "unsupported Vbitsort");});
 }
- 
+
 template <typename T>
 __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* src0Local, __ubuf__ uint32_t* src1Local,
     const ProposalIntriParams& intriParams)
@@ -42,20 +42,20 @@ __aicore__ inline void VbitsortCal(__ubuf__ T* dstLocal, __ubuf__ T* src0Local, 
     uint64_t config = static_cast<uint64_t>(intriParams.repeat) << 56;
     vbs(dstLocal, src0Local, src1Local, config);
 }
- 
+
 template <typename T>
 __aicore__ inline void Vmrgsort4Cal(__ubuf__ T* dstLocal, __ubuf__ T* addrArray[MRG_SORT_ELEMENT_LEN], uint64_t src1,
     uint64_t config)
 {
     vmrgsort4(dstLocal, addrArray, src1, config);
 }
- 
+
 template <typename T>
 __aicore__ inline void VconcatCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const ProposalIntriParams& intriParams)
 {
     ASCENDC_ASSERT((false), {KERNEL_LOG(KERNEL_ERROR, "unsupported VCONCAT");});
 }
- 
+
 template <typename T>
 __aicore__ inline void VextractCal(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const ProposalIntriParams& intriParams)
 {
@@ -77,18 +77,18 @@ __aicore__ inline void MrgSortCal(const LocalTensor<T> &dstLocal, const MrgSortS
     config |= (mrgSortInfo.repeatTimes & 0xFF);
     config |= (uint64_t(mrgSortInfo.validBit & 0xF) << 8);
     config |= (uint64_t(mrgSortInfo.ifExhaustedSuspension & 0x1) << 12);
- 
+
     uint64_t src1 = 0;
     src1 |= (uint64_t(mrgSortInfo.elementLengths[0] & 0xFFFF));
     src1 |= (uint64_t(mrgSortInfo.elementLengths[1] & 0xFFFF) << 16);
     src1 |= (uint64_t(mrgSortInfo.elementLengths[2] & 0xFFFF) << 32);
     src1 |= (uint64_t(mrgSortInfo.elementLengths[3] & 0xFFFF) << 48);
- 
+
     __ubuf__ T *addrArray[MRG_SORT_ELEMENT_LEN] = {(__ubuf__ T *)sortList.src1.GetPhyAddr(),
         (__ubuf__ T *)sortList.src2.GetPhyAddr(),
         (__ubuf__ T *)sortList.src3.GetPhyAddr(),
         (__ubuf__ T *)sortList.src4.GetPhyAddr()};
- 
+
     Vmrgsort4Cal((__ubuf__ T *)dstLocal.GetPhyAddr(), addrArray, src1, config);
 }
 
@@ -109,7 +109,7 @@ __aicore__ inline void GetMrgSortResultImpl(
     // VMS4_SR[63:48], number of finished region proposals in list3
     mrgSortList4 = (static_cast<uint64_t>(mrgSortResult) >> sortList4Bit) & resMask;
 }
- 
+
 template <typename T>
 __aicore__ inline void FullSortInnerLoop(const LocalTensor<T> &dstLocal, const LocalTensor<T> &tmpLocal,
     const uint32_t baseOffset, const uint16_t singleMergeTmpElementCount, const int32_t mergeTmpRepeatTimes)
@@ -124,7 +124,7 @@ __aicore__ inline void FullSortInnerLoop(const LocalTensor<T> &dstLocal, const L
     uint32_t sortedNum[MRG_SORT_ELEMENT_LEN];
     MrgSortCal<T>(dstLocal, sortList, elementCountList, sortedNum, 0b1111, mergeTmpRepeatTimes);
 }
- 
+
 template <typename T>
 __aicore__ inline void FullSortInnerLoopTail(const LocalTensor<T> &dstLocal, const LocalTensor<T> &tmpLocal,
     const uint32_t baseOffset, const uint16_t singleMergeTmpElementCount, const uint32_t elementCountTail,
@@ -173,7 +173,7 @@ __aicore__ inline void FullSortInnerLoopTail(const LocalTensor<T> &dstLocal, con
         }
     }
 }
- 
+
 __aicore__ inline uint32_t GetFullSortInnerLoopTimes(const int32_t repeatTimes)
 {
     uint32_t loopTimes = 0;
@@ -184,7 +184,7 @@ __aicore__ inline uint32_t GetFullSortInnerLoopTimes(const int32_t repeatTimes)
     }
     return loopTimes;
 }
- 
+
 template <typename T>
 __aicore__ inline void DoFullSort(const LocalTensor<T> &dstLocal, const LocalTensor<T> &concatLocal,
     const LocalTensor<uint32_t> &indexLocal, LocalTensor<T> &tmpLocal, const int32_t repeatTimes)

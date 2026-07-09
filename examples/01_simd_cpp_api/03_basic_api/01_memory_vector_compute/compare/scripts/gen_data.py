@@ -64,7 +64,7 @@ def compare(input_x, input_y, input_size, output_size):
                 if bits[k] == 1:
                     byte_val |= (1<<k)
             golden[i, j] = byte_val
-    
+
     os.makedirs("output", exist_ok=True)
     golden.tofile("./output/golden.bin")
 

@@ -46,7 +46,7 @@ __aicore__ inline constexpr auto MakePatternLayout(const ShapeType& shape, const
 {
     using LayoutT = Layout<ShapeType, StrideType, Std::tuple<LayoutPattern, TraitType>>;
     return LayoutT(shape, stride);
-} 
+}
 
 template <typename LayoutPattern, typename TraitType, typename Batch, typename LayoutType>
 __aicore__ inline constexpr auto MakeBatchPatternLayout(const Batch& batch, const LayoutType& layout)

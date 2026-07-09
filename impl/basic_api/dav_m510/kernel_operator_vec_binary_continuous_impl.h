@@ -718,7 +718,7 @@ __aicore__ inline void FusedAbsSubImpl(__ubuf__ T *dst, __ubuf__ T *src0, __ubuf
 template <typename T, typename U>
 __aicore__ inline void FusedExpSubImpl(__ubuf__ T *dst, __ubuf__ U *src0, __ubuf__ U *src1, const uint32_t calCount)
 {
-    static_assert(SupportType<Tuple<T, U>, Tuple<half, half>, Tuple<float, float>>(), "Failed to check dtype in " 
+    static_assert(SupportType<Tuple<T, U>, Tuple<half, half>, Tuple<float, float>>(), "Failed to check dtype in "
         "FusedExpSub, current api support dtype combination is src and dst both: half / float.");
     constexpr uint32_t sregLower = static_cast<uint32_t>(VECTOR_REG_WIDTH / sizeof(T));
     const uint16_t repeatTimes = static_cast<uint16_t>(CeilDivision(calCount, sregLower));

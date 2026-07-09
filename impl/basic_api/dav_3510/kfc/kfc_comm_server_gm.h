@@ -7,7 +7,7 @@
 * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 * See LICENSE in the root of the software repository for the full text of the License.
 */
- 
+
 /*!
  * \file kfc_comm_server_gm.h
  * \brief
@@ -19,9 +19,9 @@
 #endif
 #ifndef KFC_COMM_SERVER_GM_H
 #define KFC_COMM_SERVER_GM_H
- 
+
 #include "kfc_comm_gm.h"
- 
+
 namespace AscendC {
 class KfcCommServer {
 public:
@@ -49,7 +49,7 @@ public:
         // the Rcv on the server is the same as the Send on the client. The addresses of aic and aiv are swap.
         this->msgRcvStart = (__gm__ KfcMsg*)GetMsgHead(workspace, i);
         this->msgSendStart = this->msgRcvStart + MAX_MSG_COUNT;
-        
+
 #ifdef __ASCENDC_ENABLE_SUPER_KERNEL__
         // vec0 stores the sendEvent and eventId of the vec1, and the vec1 same as vec0.
         // Therefore, the address position of the other party is taken for writing
@@ -85,7 +85,7 @@ public:
         event_t eventID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE2));
         SetFlag<HardEvent::MTE3_MTE2>(eventID);
         WaitFlag<HardEvent::MTE3_MTE2>(eventID);
-        
+
         eventID = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_MTE3));
         SetFlag<HardEvent::S_MTE3>(eventID);
         WaitFlag<HardEvent::S_MTE3>(eventID);
@@ -122,7 +122,7 @@ public:
         return;
     }
 };
- 
+
 typedef KfcCommServer* KFC_COMM_SERVER_PTR;
 #define KFC_COMM_SERVER KfcCommServer
 } // namespace AscendC

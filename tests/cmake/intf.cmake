@@ -59,9 +59,9 @@ if (NOT EXISTS "${KERNEL_TILING_FILE}")
         DEPENDS ${GEN_TILING_SCRIPT} ${TILING_DEF_DIR}
         COMMENT "Generating kernel tiling configuration header"
     )
-    add_custom_target(generate_kernel_headers ALL	 
-        DEPENDS ${KERNEL_TILING_FILE}	 
-        COMMENT "Ensuring kernel headers are generated"	 
+    add_custom_target(generate_kernel_headers ALL
+        DEPENDS ${KERNEL_TILING_FILE}
+        COMMENT "Ensuring kernel headers are generated"
     )
     set_source_files_properties(
         ${KERNEL_TILING_FILE}

@@ -9,7 +9,7 @@
 */
 #ifndef PROFILER_BASE_PUB_EXTEND_H
 #define PROFILER_BASE_PUB_EXTEND_H
- 
+
 #include <memory>
 #include <mutex>
 #include <string>

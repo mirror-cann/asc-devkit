@@ -19,23 +19,23 @@ import numpy as np
 def gen_golden_data(scenario_num):
     input_length = 1024
     data_type = np.float16  # half类型
-    
+
     # 生成输入数据：两个[1, 1024]向量
     input_x = np.arange(input_length, dtype=data_type).reshape(1, input_length)
     input_y = np.arange(input_length, dtype=data_type).reshape(1, input_length)
-    
+
     # 创建目录
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    
+
     # 保存输入数据
     input_x.tofile('./input/input_x.bin')
     input_y.tofile('./input/input_y.bin')
-    
+
     # 根据场景计算golden数据和输出长度（z = x + y）
     output_length = 1024
     z = input_x + input_y  # 计算z = x + y
-    
+
     if scenario_num == 1:
         # 场景1：使用开发者自定义的迭代间偏移，计算1021个元素，不足1024的置零
         output_length = 1024
@@ -65,7 +65,7 @@ def gen_golden_data(scenario_num):
         golden = np.array([z, z]).transpose().reshape(1, output_length)
     else:
         raise ValueError(f"不支持的场景编号: {scenario_num}")
-    
+
     # 保存golden数据
     golden.tofile('./output/golden.bin')
     print(f"生成完成: input_length={input_length}, output_length={output_length}")

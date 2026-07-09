@@ -44,9 +44,9 @@ def save_data(input_x, input_y=None, golden=None):
 
 def gen_golden_data(scenario_num):
     """
-    根据场景编号生成输入数据和Golden数据 
+    根据场景编号生成输入数据和Golden数据
     """
-    
+
     if scenario_num == 1:
         input_x = np.arange(1, 257).astype(np.uint32)
         gdst = np.arange(2, 257, 2).astype(np.uint32)

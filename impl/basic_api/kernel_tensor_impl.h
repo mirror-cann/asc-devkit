@@ -1695,7 +1695,7 @@ __aicore__ inline LocalTensor<DataType> LocalMemAllocator<hard>::Alloc()
 
 template <Hardware hard>
 template <class DataType, typename LayoutType>
-__aicore__ inline typename Std::enable_if<is_layout_v<LayoutType>, LocalTensor<DataType>>::type 
+__aicore__ inline typename Std::enable_if<is_layout_v<LayoutType>, LocalTensor<DataType>>::type
     LocalMemAllocator<hard>::Alloc(const LayoutType& layout)
 {
     static_assert(is_tensorTrait_v<DataType>, "only support TensorTrait type!");

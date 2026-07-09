@@ -228,7 +228,7 @@ static uint64_t EncodeParam(uint64_t val, const ParamStruct &paramStruct)
 
 uint64_t EncodeTilingKey(TilingDeclareParams declareParams, TilingSelectParams selectParamsVec,
     std::vector<uint64_t> tilingParams)
-{   
+{
     // STEP 1: Copy static variable, and convert ASCENDC_TPL_UINT to readable vector value
     if (declareParams.empty() || selectParamsVec.empty()) {
         printf("[ERROR] ASCENDC_TPL params is empty!\n");

@@ -50,27 +50,27 @@ def pack_fp4_to_fp4x2(fp4_data):
 def mx_decompress(fp_data, scale_data, block_size=32):
     scale_exp = scale_data.astype(np.float32) - 127.0
     scale_factor = np.power(2.0, scale_exp)
-    
+
     result = np.zeros(fp_data.shape, dtype=np.float32)
-    
+
     for i in range(fp_data.shape[1]):
         block_idx = i // block_size
         result[:, i] = fp_data[:, i].astype(np.float32) * scale_factor[:, block_idx]
-    
+
     return result
 
 
 def mx_decompress_b(fp_data, scale_data, block_size=32):
     scale_exp = scale_data.astype(np.float32) - 127.0
     scale_factor = np.power(2.0, scale_exp)
-    
+
     result = np.zeros(fp_data.shape, dtype=np.float32)
-    
+
     for row in range(fp_data.shape[0]):
         for col in range(fp_data.shape[1]):
             block_idx = row // block_size
             result[row, col] = fp_data[row, col].astype(np.float32) * scale_factor[block_idx, col]
-    
+
     return result
 
 
@@ -104,7 +104,7 @@ def gen_golden_data_fp4(scenario_num, m, n, k):
 
     x1_gm = np.random.uniform(-2, 2, [m, k]).astype(a_dtype)
     x2_gm = np.random.uniform(-2, 2, [k, n]).astype(b_dtype)
-    
+
     x1_scale_gm = np.random.randint(127, 130, [m, sk]).astype(np.uint8)
     x2_scale_gm = np.random.randint(127, 130, [sk, n]).astype(np.uint8)
 
@@ -151,7 +151,7 @@ def gen_golden_data_fp8(scenario_num, m, n, k):
 
     x1_gm = np.random.uniform(-10, 10, [m, k]).astype(a_dtype)
     x2_gm = np.random.uniform(-10, 10, [k, n]).astype(b_dtype)
-    
+
     x1_scale_gm = np.random.randint(127, 130, [m, sk]).astype(np.uint8)
     x2_scale_gm = np.random.randint(127, 130, [sk, n]).astype(np.uint8)
 
@@ -183,7 +183,7 @@ if __name__ == "__main__":
     scenario_num = 1
     if len(sys.argv) > 1:
         scenario_num = int(sys.argv[1].split("=")[1])
-    
+
     if scenario_num in [1, 2]:
         gen_golden_data_fp4(scenario_num, m, n, k)
     elif scenario_num in [3, 4]:

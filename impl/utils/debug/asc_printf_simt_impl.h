@@ -36,7 +36,7 @@
 #define __simt_gm__ __gm__
 #else
 #include "__clang_cce_simt_atomic.h"
-#define __simt_gm__ 
+#define __simt_gm__
 #endif
 
 inline __gm__ uint8_t* __simt_gm__ g_sysSimtPrintFifoSpace = nullptr;

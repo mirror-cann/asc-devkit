@@ -108,4 +108,3 @@ __simd_callee__ inline void Not(U& dstReg, U& srcReg, MaskReg& mask)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_VEC_UNARY_INTF_IMPL__
 #endif
-
