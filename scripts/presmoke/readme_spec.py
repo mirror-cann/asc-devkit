@@ -58,7 +58,7 @@ def readme_commands(
     text: str,
     suggestions: List[Suggestion],
 ) -> tuple[List[Command], str, str]:
-    run_section = _section(text, "编译运行")
+    run_section = _section(text, "编译运行") or _section(text, "运行方式")
     if not run_section:
         suggestions.append(
             _suggest(rel_path, "structure", "warn", "README has no 编译运行 section", "Add a runnable 编译运行 section.")
@@ -116,6 +116,24 @@ def _section(text: str, title: str) -> str:
     end = len(lines)
     for idx in range(start, len(lines)):
         if re.match(r"^##\s+", lines[idx].strip()):
+            end = idx
+            break
+    return "\n".join(lines[start:end])
+
+
+def _section_by_heading(text: str, pattern: str) -> str:
+    lines = text.splitlines()
+    start = None
+    for idx, line in enumerate(lines):
+        heading = line.strip()
+        if re.match(r"^##+\s+", heading) and re.search(pattern, heading):
+            start = idx + 1
+            break
+    if start is None:
+        return ""
+    end = len(lines)
+    for idx in range(start, len(lines)):
+        if re.match(r"^##+\s+", lines[idx].strip()):
             end = idx
             break
     return "\n".join(lines[start:end])
@@ -318,7 +336,7 @@ def parse_archs(text: str, command_block: str, example_dir: Path) -> List[str]:
 
 
 def _archs_from_supported_products(text: str) -> List[str]:
-    support_section = _section(text, "支持的产品") or _section(text, "支持产品")
+    support_section = _section_by_heading(text, r"支持.*产品")
     if not support_section:
         return []
 
