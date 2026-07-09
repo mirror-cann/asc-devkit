@@ -47,6 +47,7 @@
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/asc_copy_ub2l1_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/asc_copy_ub2ub_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/asc_ndim_copy_dci_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl/asc_set_gm2ub_pad_impl.h"
 
 // ==========偏移固定传入0，由用户自行更新目的操作数的地址=========
 // ==========asc_storealign(u8/s8/half/u16/s16/float/u32/s32/bf16/e4m3/e5m2/e8m0/e1m2/e2m1)=========
@@ -7003,6 +7004,14 @@ __aicore__ inline void asc_set_copy_pad_val(uint32_t pad_value)
 __aicore__ inline void asc_set_copy_pad_val(float pad_value)
 {
     asc_set_copy_pad_val_impl(pad_value);
+}
+
+// ========== asc_set_gm2ub_pad ==========
+[[deprecated("NOTICE: asc_set_gm2ub_pad is deprecated. "
+             "Please use asc_set_copy_pad_val instead for pad value setting")]]
+__aicore__ inline void asc_set_gm2ub_pad(uint32_t pad_val)
+{
+    asc_set_gm2ub_pad_impl(pad_val);
 }
 
 #endif

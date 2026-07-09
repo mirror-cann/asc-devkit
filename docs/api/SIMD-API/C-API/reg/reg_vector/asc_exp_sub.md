@@ -8,6 +8,8 @@
 
 ## 功能说明
 
+**`__simd_callee__ inline void asc_exp_sub_v2(vector_float& dst, vector_float src0, vector_float src1, vector_bool mask)`接口已废弃，请使用`asc_exp_sub`进行计算。**
+
 将src0与src1相减，差值作为e的指数计算，i为元素索引。计算公式如下：
 
 - 当src0和src1为float类型时：
@@ -31,6 +33,7 @@ __simd_callee__ inline void asc_exp_sub(vector_float& dst, vector_float src0, ve
 
 // 从源操作数的奇数位读取元素
 __simd_callee__ inline void asc_exp_sub_v2(vector_float& dst, vector_half src0, vector_half src1, vector_bool mask)
+__simd_callee__ inline void asc_exp_sub_v2(vector_float& dst, vector_float src0, vector_float src1, vector_bool mask)
 ```
 
 ## 参数说明
