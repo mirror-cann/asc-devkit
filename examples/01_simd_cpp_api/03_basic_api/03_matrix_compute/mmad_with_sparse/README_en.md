@@ -48,7 +48,7 @@ This example introduces the basic API MmadWithSparse invocation example.
 </table>
 
 - Example implementation:
-  The example implementation flow is divided into the following steps:
+  The example implementation is divided into the following stages:
   - **CopyIn**: Transfer input data from Global Memory to Local Memory L1, and load the index matrix into L1. The Index fractal and B matrix fractal must be Zn fractals, meaning the B matrix on GM must be transposed, and the Index must be generated offline in Zn layout
   - **SplitB**: Use LoadDataWithSparse to transfer the B matrix and index matrix from L1 to L0B and the built-in index buffer
   - **SplitA**: Transfer the A matrix from L1 to L0A
@@ -58,14 +58,14 @@ This example introduces the basic API MmadWithSparse invocation example.
 ## Build and Run
 
 Run the following steps in the root directory of this example to build and run the example.
-- Configure environment variables  
+- Configure environment variables
   Configure environment variables according to the [installation method](../../../../../docs/quick_start.md#prepare&install) of the CANN development kit in the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```
 
   > **Note:** `${install_path}` is the CANN package installation directory. When no installation directory is specified, the default installation path is `/usr/local/Ascend`.
-  
+
 - Run the example
 
   Run the following commands in the example directory.
@@ -107,10 +107,10 @@ Run the following steps in the root directory of this example to build and run t
 
 1. **Construct sparse matrix B**: Generate a sparse matrix of the specified shape, with at least 2 zero elements in every 4-element block of each row
 2. **Densification**: Densify the sparse matrix B through the 2:4 strategy to generate the dense matrix dense_B
-3. **Index matrix generation**: 
+3. **Index matrix generation**:
    - Generate index_matrix: record the relative positions of selected elements in each block (for NPU computation)
    - Generate index_mask_matrix: record the absolute indices of selected elements (for golden computation)
 4. **Generate golden data**: Use the densified matrix and index matrix to compute the ground truth for sparse matrix multiplication
-5. **Data format conversion**: 
+5. **Data format conversion**:
    - Convert the index matrix from uint8 to uint2 format
    - Perform ND to NZ block transposition on input matrices
