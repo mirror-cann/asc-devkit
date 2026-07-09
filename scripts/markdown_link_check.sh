@@ -63,7 +63,7 @@ download_lychee_archive() {
     if [ -n "${MARKDOWN_LINK_CHECK_LYCHEE_ARCHIVE_URL:-}" ]; then
         archive_url="$MARKDOWN_LINK_CHECK_LYCHEE_ARCHIVE_URL"
     else
-        archive_url="https://gh.llkk.cc/https://github.com/lycheeverse/lychee/releases/download/lychee-v{version}/lychee-{target}.tar.gz"
+        archive_url="https://cann-3rd.obs.cn-north-4.myhuaweicloud.com/lychee-v{version}/lychee-{target}.tar.gz"
     fi
     version_placeholder="{version}"
     target_placeholder="{target}"
