@@ -143,8 +143,7 @@ C API文档目录，整体使用时可以引入asc_simd.h，C API列表如下：
 | [asc_set_l13d_size](cube_datamove/asc_set_l13d_size.md)                                                                     | 设置[asc_copy_l12l0a](cube_datamove/asc_copy_l12l0a/asc_copy_l12l0a_arch_2201.md)/[asc_copy_l12l0b](cube_datamove/asc_copy_l12l0b/asc_copy_l12l0b_arch_2201.md)的3D格式搬运接口在L1 Buffer的边界值。 |
 | [asc_load_image_to_cbuf](cube_datamove/asc_load_image_to_cbuf.md)                                                           | 将图像数据从Global Memory搬运到L1 Buffer。 |
 | [asc_copy_l12bt](cube_datamove/asc_copy_l12bt/asc_copy_l12bt.md)                                                                              | 将MMAD指令的Bias数据从L1 Buffer搬运到BiasTable Buffer中。 |
-| [asc_copy_l12fb_arch_2201](cube_datamove/asc_copy_l12fb/asc_copy_l12fb_arch_2201.md)                                                                              | 将数据从L1 Buffer搬运到Fixpipe Buffer中，Fixpipe Buffer用于存放量化参数。 |
-| [asc_copy_l12fb_arch_3510](cube_datamove/asc_copy_l12fb/asc_copy_l12fb_arch_3510.md)                                                                     | 将数据从L1 Buffer搬运到Fixpipe Buffer中，Fixpipe Buffer用于存放量化参数。 |
+| [asc_copy_l12fb](cube_datamove/asc_copy_l12fb/asc_copy_l12fb.md)                                                                              | 将数据从L1 Buffer搬运到Fixpipe Buffer中，Fixpipe Buffer用于存放量化参数。 |
 | [asc_copy_l12l0a](cube_datamove/asc_copy_l12l0a/asc_copy_l12l0a.md)                                                                            | 用于搬运存放在L1 Buffer里的512B大小的矩阵到L0A Buffer里。 |
 | <cann-filter npu_type = "950"> [asc_copy_l12ub](cube_datamove/asc_copy_l12ub.md)                                            | 将数据从L1 Buffer搬运到Unified Buffer中。</cann-filter> |
 | [asc_copy_l12l0b](cube_datamove/asc_copy_l12l0b/asc_copy_l12l0b.md)                                                                            | 用于搬运存放在L1 Buffer里的512B大小的矩阵到L0B Buffer里。 |
@@ -212,8 +211,8 @@ C API文档目录，整体使用时可以引入asc_simd.h，C API列表如下：
 
 |   API名称   |   说明   |
 |----------|-----------|
-| [asc_set_mmad_direction_m](cube_compute/asc_set_mmad_direction_m.md)| 设置mmad计算时优先通过M/N中的N方向，然后通过M方向产生结果，M为矩阵的行，N为矩阵的列。 |
-| [asc_set_mmad_direction_n](cube_compute/asc_set_mmad_direction_n.md)| 设置mmad计算时优先通过M/N中的M方向，然后通过N方向产生结果，M为矩阵的行，N为矩阵的列。 |
+| [asc_set_mmad_direction_m](cube_compute/asc_set_mmad_direction_m.md)| 设置mmad计算时优先通过M/N中的M方向生成结果，然后通过N方向产生结果，M为矩阵的行，N为矩阵的列。 |
+| [asc_set_mmad_direction_n](cube_compute/asc_set_mmad_direction_n.md)| 设置mmad计算时优先通过M/N中的N方向生成结果，然后通过M方向产生结果，M为矩阵的行，N为矩阵的列。 |
 | [asc_enable_hf32_trans](cube_compute/asc_enable_hf32_trans.md)| 设置HF32模式取整方式，需要先使用asc_enable_hf32开启HF32取整模式。 |
 | <cann-filter npu_type = "950"> [asc_enable_hif8](cube_compute/asc_enable_hif8.md) | 用于设置Mmad计算开启HiF8模式，开启该模式后L0A Buffer/L0B Buffer中的8bit数据将在参与矩阵乘法运算前被转化为hifloat8_t类型数据。 </cann-filter> |
 | <cann-filter npu_type = "950"> [asc_enable_fp8](cube_compute/asc_enable_fp8.md) | 用于设置Mmad计算开启FP8模式，开启该模式后L0A Buffer/L0B Buffer中的FP8数据在参与Mmad计算之前不会被转化为hifloat8_t类型数据。 </cann-filter> |
@@ -247,8 +246,8 @@ C API文档目录，整体使用时可以引入asc_simd.h，C API列表如下：
 | [asc_sync_block_wait](sync/asc_sync_block_wait.md) | 和[asc_sync_block_arrive](sync/asc_sync_block_arrive.md)配合使用（通过flag_id关联），用于等待所有同步对象到达flag_id对应的同步点。 |
 | <cann-filter npu_type = "950"> [asc_sync_intra_wait](sync/asc_sync_intra_wait.md)| 等待核间同步寄存器同步标志。 </cann-filter> |
 | <cann-filter npu_type = "950"> [asc_sync_intra_arrive](sync/asc_sync_intra_arrive.md)| 向核间同步寄存器发送同步信号。 </cann-filter> |
-|[asc_sync_inter_arrive](sync/asc_sync_inter_arrive.md)| 和[asc_sync_inter_wait](sync/asc_sync_inter_wait.md)配合使用（通过flag_id关联），用于组间block的信号同步。|
-|[asc_sync_inter_wait](sync/asc_sync_inter_wait.md)| 等待block内同步标志。|
+| [asc_sync_inter_arrive](sync/asc_sync_inter_arrive.md)| 和[asc_sync_inter_wait](sync/asc_sync_inter_wait.md)配合使用（通过flag_id关联），用于组间block的信号同步。|
+| [asc_sync_inter_wait](sync/asc_sync_inter_wait.md)| 等待block内同步标志。|
 | [asc_sync_subblock_arrive](sync/asc_sync_subblock_arrive.md)| 和[asc_sync_subblock_wait](sync/asc_sync_subblock_wait.md)配合使用（通过flag_id关联），用于组内subblock间的信号同步。 |
 | [asc_sync_subblock_wait](sync/asc_sync_subblock_wait.md)| 等待subblock间同步标志。 |
 
