@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file asc_aicore_dump_impl.h
@@ -32,7 +32,8 @@
 namespace __asc_aicore {
 
 template <AscendC::Hardware hardware, typename T, typename U>
-__aicore__ inline void set_dump_tlv_info(U src, __gm__ DumpTensorTlv* dumpTlv, uint32_t alignDumpLen, uint32_t desc, uint32_t dump_size)
+__aicore__ inline void set_dump_tlv_info(
+    U src, __gm__ DumpTensorTlv* dumpTlv, uint32_t alignDumpLen, uint32_t desc, uint32_t dump_size)
 {
     dumpTlv->type = static_cast<uint32_t>(DumpType::DUMP_TENSOR);
     dumpTlv->length = sizeof(DumpTensorTlv) - sizeof(uint32_t[2]) + alignDumpLen;
@@ -51,7 +52,8 @@ __aicore__ inline void set_dump_tlv_info(U src, __gm__ DumpTensorTlv* dumpTlv, u
     asc_entire_dcci(reinterpret_cast<__gm__ uint64_t*>(dumpTlv));
 }
 
-__aicore__ inline void set_dump_shape_info(__gm__ DumpTensorTlv* dumpTlv, const uint32_t shapeDim, const uint32_t* shape)
+__aicore__ inline void set_dump_shape_info(
+    __gm__ DumpTensorTlv* dumpTlv, const uint32_t shapeDim, const uint32_t* shape)
 {
     if (shapeDim <= 0 || shapeDim > K_MAX_SHAPE_DIM || shape == nullptr) {
         return;
@@ -64,7 +66,8 @@ __aicore__ inline void set_dump_shape_info(__gm__ DumpTensorTlv* dumpTlv, const 
 }
 
 template <AscendC::Hardware hardware, typename T, typename U>
-__aicore__ inline uint32_t set_dump_tlv_data(U src, __gm__ DumpTensorTlv* dumpTlv, uint32_t alignDumpLen, uint32_t dump_size)
+__aicore__ inline uint32_t set_dump_tlv_data(
+    U src, __gm__ DumpTensorTlv* dumpTlv, uint32_t alignDumpLen, uint32_t dump_size)
 {
     __gm__ T* dumpDstAddr = reinterpret_cast<__gm__ T*>(dumpTlv + 1);
 
@@ -80,7 +83,8 @@ __aicore__ inline uint32_t set_dump_tlv_data(U src, __gm__ DumpTensorTlv* dumpTl
     uint32_t dumpLen = 0;
     if constexpr (hardware == AscendC::Hardware::GM) {
         dumpLen = dump_size * sizeof(T);
-        ret = mem_copy_gm_to_gm(reinterpret_cast<__gm__ uint8_t*>(dumpDstAddr), reinterpret_cast<__gm__ const uint8_t*>(src), dumpLen);
+        ret = mem_copy_gm_to_gm(
+            reinterpret_cast<__gm__ uint8_t*>(dumpDstAddr), reinterpret_cast<__gm__ const uint8_t*>(src), dumpLen);
     } else if constexpr (hardware == AscendC::Hardware::UB) {
         dumpLen = alignDumpLen / ASC_ONE_DATABLOCK_SIZE;
         ret = mem_copy_ub_to_gm_impl(dumpDstAddr, src, static_cast<uint16_t>(dumpLen));
@@ -98,8 +102,8 @@ __aicore__ inline uint32_t set_dump_tlv_data(U src, __gm__ DumpTensorTlv* dumpTl
 }
 
 template <AscendC::Hardware hardware, typename T, typename U>
-__aicore__ inline void asc_dump_impl(U src, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim)
+__aicore__ inline void asc_dump_impl(
+    U src, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
 {
 #if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
     __gm__ DebugBlockHeadInfo* blockInfo = get_block_info();
@@ -152,8 +156,8 @@ __aicore__ inline void asc_dump_shape_impl(const uint32_t shapeDim, const uint32
 }
 
 template <AscendC::Hardware hardware, typename T, typename U>
-__aicore__ inline void asc_dump_local_impl(U input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim)
+__aicore__ inline void asc_dump_local_impl(
+    U input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
 {
     uint64_t ctrlValue = get_ctrl();
     set_atomic_none();
@@ -164,103 +168,103 @@ __aicore__ inline void asc_dump_local_impl(U input, uint32_t desc, uint32_t dump
     set_ctrl(ctrlValue);
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_gm(__gm__ T* input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim)
+template <typename T>
+__aicore__ inline void asc_dump_gm(
+    __gm__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
 {
     asc_dump_local_impl<AscendC::Hardware::GM, T>(input, desc, dump_size, shape, shapeDim);
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_ubuf(__ubuf__ T* input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim)
+template <typename T>
+__aicore__ inline void asc_dump_ubuf(
+    __ubuf__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
 {
     asc_dump_local_impl<AscendC::Hardware::UB, T>(input, desc, dump_size, shape, shapeDim);
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_abuf(__ca__ T* input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim)
+template <typename T>
+__aicore__ inline void asc_dump_abuf(
+    __ca__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
 {
     asc_dump_local_impl<AscendC::Hardware::L0A, T>(input, desc, dump_size, shape, shapeDim);
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_bbuf(__cb__ T* input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim)
+template <typename T>
+__aicore__ inline void asc_dump_bbuf(
+    __cb__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
 {
     asc_dump_local_impl<AscendC::Hardware::L0B, T>(input, desc, dump_size, shape, shapeDim);
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_cbuf(__cc__ T* input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim)
+template <typename T>
+__aicore__ inline void asc_dump_cbuf(
+    __cc__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
 {
     asc_dump_local_impl<AscendC::Hardware::L0C, T>(input, desc, dump_size, shape, shapeDim);
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_l1buf(__cbuf__ T* input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim)
+template <typename T>
+__aicore__ inline void asc_dump_l1buf(
+    __cbuf__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
 {
     asc_dump_local_impl<AscendC::Hardware::L1, T>(input, desc, dump_size, shape, shapeDim);
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void asc_dump_gm(__gm__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_local_impl<AscendC::Hardware::GM, T>(input, desc, dump_size, nullptr, 0);
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void asc_dump_ubuf(__ubuf__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_local_impl<AscendC::Hardware::UB, T>(input, desc, dump_size, nullptr, 0);
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void asc_dump_abuf(__ca__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_local_impl<AscendC::Hardware::L0A, T>(input, desc, dump_size, nullptr, 0);
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void asc_dump_bbuf(__cb__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_local_impl<AscendC::Hardware::L0B, T>(input, desc, dump_size, nullptr, 0);
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void asc_dump_cbuf(__cc__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_local_impl<AscendC::Hardware::L0C, T>(input, desc, dump_size, nullptr, 0);
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void asc_dump_l1buf(__cbuf__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_local_impl<AscendC::Hardware::L1, T>(input, desc, dump_size, nullptr, 0);
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void asc_dump(__gm__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_gm(input, desc, dump_size);
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void asc_dump(__ubuf__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_ubuf(input, desc, dump_size);
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void asc_dump(__cc__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_cbuf(input, desc, dump_size);
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void asc_dump(__cbuf__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_l1buf(input, desc, dump_size);
@@ -270,52 +274,61 @@ __aicore__ inline void asc_dump(__cbuf__ T* input, uint32_t desc, uint32_t dump_
 #include <cstdio>
 
 namespace __asc_aicore {
-template<typename T>
-__aicore__ inline void asc_dump_gm(__gm__ T* input, uint32_t desc, uint32_t dump_size) {
+template <typename T>
+__aicore__ inline void asc_dump_gm(__gm__ T* input, uint32_t desc, uint32_t dump_size)
+{
     assert(false && "asc_dump_gm is not supported in cpu mode.");
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_ubuf(__ubuf__ T* input, uint32_t desc, uint32_t dump_size) {
+template <typename T>
+__aicore__ inline void asc_dump_ubuf(__ubuf__ T* input, uint32_t desc, uint32_t dump_size)
+{
     assert(false && "asc_dump_ubuf is not supported in cpu mode.");
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_cbuf(__cc__ T* input, uint32_t desc, uint32_t dump_size) {
+template <typename T>
+__aicore__ inline void asc_dump_cbuf(__cc__ T* input, uint32_t desc, uint32_t dump_size)
+{
     assert(false && "asc_dump_cbuf is not supported in cpu mode.");
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_l1buf(__cbuf__ T* input, uint32_t desc, uint32_t dump_size) {
+template <typename T>
+__aicore__ inline void asc_dump_l1buf(__cbuf__ T* input, uint32_t desc, uint32_t dump_size)
+{
     assert(false && "asc_dump_l1buf is not supported in cpu mode.");
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_gm(__gm__ T* input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim) {
+template <typename T>
+__aicore__ inline void asc_dump_gm(
+    __gm__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
+{
     assert(false && "asc_dump_gm is not supported in cpu mode.");
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_ubuf(__ubuf__ T* input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim) {
+template <typename T>
+__aicore__ inline void asc_dump_ubuf(
+    __ubuf__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
+{
     assert(false && "asc_dump_ubuf is not supported in cpu mode.");
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_cbuf(__cc__ T* input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim) {
+template <typename T>
+__aicore__ inline void asc_dump_cbuf(
+    __cc__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
+{
     assert(false && "asc_dump_cbuf is not supported in cpu mode.");
 }
 
-template<typename T>
-__aicore__ inline void asc_dump_l1buf(__cbuf__ T* input, uint32_t desc, uint32_t dump_size,
-    const uint32_t* shape, const uint32_t shapeDim) {
+template <typename T>
+__aicore__ inline void asc_dump_l1buf(
+    __cbuf__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
+{
     assert(false && "asc_dump_l1buf is not supported in cpu mode.");
 }
 
-template<typename T>
-__aicore__ inline void asc_dump(T* input, uint32_t desc, uint32_t dump_size) {
+template <typename T>
+__aicore__ inline void asc_dump(T* input, uint32_t desc, uint32_t dump_size)
+{
     assert(false && "asc_dump is not supported in cpu mode.");
 }
 

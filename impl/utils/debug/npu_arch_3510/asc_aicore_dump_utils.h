@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file asc_aicore_dump_utils.h
@@ -109,7 +109,7 @@ __aicore__ inline uint32_t debug_bus_copy_local_to_gm_impl(
     constexpr uint32_t asc_debug_bus_chunk_shift = 5; // 32 bytes per chunk
     constexpr uint32_t modelBase = get_debug_bus_model_base<hardware>();
     uint64_t dstGlobalAddr = reinterpret_cast<uint64_t>(dst);
-    uint64_t curLocalBaseAddr  = reinterpret_cast<uint64_t>(src);
+    uint64_t curLocalBaseAddr = reinterpret_cast<uint64_t>(src);
 
     uint64_t srcLocalAddr = 0;
     uint64_t localStep = 0;
@@ -132,43 +132,37 @@ __aicore__ inline uint32_t debug_bus_copy_local_to_gm_impl(
     return 0;
 }
 
-template<typename T>
-__aicore__ inline uint32_t mem_copy_l1buf_to_gm_impl(
-    __gm__ T* dst, __cbuf__ T* src, const uint32_t alignDumpBytes)
+template <typename T>
+__aicore__ inline uint32_t mem_copy_l1buf_to_gm_impl(__gm__ T* dst, __cbuf__ T* src, const uint32_t alignDumpBytes)
 {
 #if defined(__DAV_CUBE__)
-    return debug_bus_copy_local_to_gm_impl<AscendC::Hardware::L1>(
-                dst, src, alignDumpBytes, get_debug_bus_addr_impl());
+    return debug_bus_copy_local_to_gm_impl<AscendC::Hardware::L1>(dst, src, alignDumpBytes, get_debug_bus_addr_impl());
 #else
     return 1;
 #endif
 }
 
-template<typename T>
-__aicore__ inline uint32_t mem_copy_abuf_to_gm_impl(
-    __gm__ T* dst, __ca__ T* src, const uint32_t alignDumpBytes)
+template <typename T>
+__aicore__ inline uint32_t mem_copy_abuf_to_gm_impl(__gm__ T* dst, __ca__ T* src, const uint32_t alignDumpBytes)
 {
 #if defined(__DAV_CUBE__)
-    return debug_bus_copy_local_to_gm_impl<AscendC::Hardware::L0A>(
-                dst, src, alignDumpBytes, get_debug_bus_addr_impl());
+    return debug_bus_copy_local_to_gm_impl<AscendC::Hardware::L0A>(dst, src, alignDumpBytes, get_debug_bus_addr_impl());
 #else
     return 1;
 #endif
 }
 
-template<typename T>
-__aicore__ inline uint32_t mem_copy_bbuf_to_gm_impl(
-    __gm__ T* dst, __cb__ T* src, const uint32_t alignDumpBytes)
+template <typename T>
+__aicore__ inline uint32_t mem_copy_bbuf_to_gm_impl(__gm__ T* dst, __cb__ T* src, const uint32_t alignDumpBytes)
 {
 #if defined(__DAV_CUBE__)
-    return debug_bus_copy_local_to_gm_impl<AscendC::Hardware::L0B>(
-                dst, src, alignDumpBytes, get_debug_bus_addr_impl());
+    return debug_bus_copy_local_to_gm_impl<AscendC::Hardware::L0B>(dst, src, alignDumpBytes, get_debug_bus_addr_impl());
 #else
     return 1;
 #endif
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline uint32_t mem_copy_cbuf_to_gm_impl(__gm__ T* dst, __cc__ T* src, const uint32_t& dumpSize)
 {
     if ASCEND_IS_NOT_AIC {
@@ -181,18 +175,20 @@ __aicore__ inline uint32_t mem_copy_cbuf_to_gm_impl(__gm__ T* dst, __cc__ T* src
 
     uint16_t align = (dumpSize % defaultOneBlockSize == 0) ? 0 : 1;
     uint16_t countBlks = align + dumpSize / defaultOneBlockSize;
-    uint16_t burstLen = static_cast<uint16_t>(srcBurstLenSizeEle * srcBurstLenSizeEle * sizeof(float) / ASC_ONE_DATABLOCK_SIZE);
+    uint16_t burstLen =
+        static_cast<uint16_t>(srcBurstLenSizeEle * srcBurstLenSizeEle * sizeof(float) / ASC_ONE_DATABLOCK_SIZE);
     uint16_t n = countBlks * blockCube;
     uint16_t m = (burstLen * ASC_ONE_DATABLOCK_SIZE / b32ByteSize) / blockCube;
     bool nz2ndEn = true;
 
-    copy_matrix_cc_to_gm((__gm__ float*)dst, (__cc__ float*)src, 0, n, m, m * blockCube, m, 0, 0, 0,
-        static_cast<uint64_t>(QuantMode_t::NoQuant), static_cast<uint8_t>(false), false, false, static_cast<uint64_t>(QuantMode_post::NoConv),
-        0, false, false, 0, false, false, true, false, false, false);
+    copy_matrix_cc_to_gm(
+        (__gm__ float*)dst, (__cc__ float*)src, 0, n, m, m * blockCube, m, 0, 0, 0,
+        static_cast<uint64_t>(QuantMode_t::NoQuant), static_cast<uint8_t>(false), false, false,
+        static_cast<uint64_t>(QuantMode_post::NoConv), 0, false, false, 0, false, false, true, false, false, false);
     return 0;
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline uint32_t mem_copy_ub_to_gm_impl(__gm__ T* dst, __ubuf__ T* src, const uint32_t& len)
 {
 #if defined(__DAV_VEC__)
@@ -207,7 +203,8 @@ __aicore__ inline uint32_t mem_copy_ub_to_gm_impl(__gm__ T* dst, __ubuf__ T* src
     uint32_t srcStride1 = srcStride * byte_32_align + burstLen;
     srcStride1 = div_ceil(srcStride1, byte_32_align) * byte_32_align;
     uint64_t dstStride1 = dstStride * unitOfBytes + burstLen;
-    copy_ubuf_to_gm_align_v2((__gm__ void*)dst, (__ubuf__ void*)src, 0, blockCount, burstLen, 0, dstStride1, srcStride1);
+    copy_ubuf_to_gm_align_v2(
+        (__gm__ void*)dst, (__ubuf__ void*)src, 0, blockCount, burstLen, 0, dstStride1, srcStride1);
     return 0;
 #else
     return 1;
@@ -217,29 +214,19 @@ __aicore__ inline uint32_t mem_copy_ub_to_gm_impl(__gm__ T* dst, __ubuf__ T* src
 } // namespace __asc_aicore
 
 namespace __asc_simd_vf {
-enum class DumpTensorPosition : uint16_t {
-    GM = 0,
-    UB,
-    L1,
-    L0A,
-    L0B,
-    L0C,
-    BIAS,
-    FIXBUF,
-    REG,
-    MAX
-};
+enum class DumpTensorPosition : uint16_t { GM = 0, UB, L1, L0A, L0B, L0C, BIAS, FIXBUF, REG, MAX };
 
 template <DumpTensorPosition dumpPosition, typename T, typename U>
-__simd_callee__ inline void set_dump_tlv_info_vf(U& src, __ubuf__ DumpTensorTlv* dump_tlv,
-    uint32_t align_dump_len, uint32_t desc, uint32_t dump_size, uint16_t block_idx)
+__simd_callee__ inline void set_dump_tlv_info_vf(
+    U& src, __ubuf__ DumpTensorTlv* dump_tlv, uint32_t align_dump_len, uint32_t desc, uint32_t dump_size,
+    uint16_t block_idx)
 {
     dump_tlv->type = static_cast<uint32_t>(DumpType::DUMP_TENSOR);
     dump_tlv->length = sizeof(DumpTensorTlv) - sizeof(uint32_t[2]) + align_dump_len;
     dump_tlv->tensorAddr = 0U; // set in aicore
     dump_tlv->dataType = static_cast<uint32_t>(get_dump_datatype<T>());
     dump_tlv->desc = desc;
-    dump_tlv->blockIdx = block_idx;  // set in aicore
+    dump_tlv->blockIdx = block_idx; // set in aicore
     dump_tlv->bufferId = static_cast<uint32_t>(0U);
     dump_tlv->position = static_cast<uint16_t>(dumpPosition);
     dump_tlv->dim = static_cast<uint32_t>(0U);
@@ -251,8 +238,8 @@ __simd_callee__ inline void set_dump_tlv_info_vf(U& src, __ubuf__ DumpTensorTlv*
 }
 
 template <typename T, typename U>
-__simd_callee__ inline void set_dump_tlv_data_vf(U& src, __ubuf__ DumpTensorTlv* dump_tlv,
-    uint32_t align_dump_len, uint32_t dump_size)
+__simd_callee__ inline void set_dump_tlv_data_vf(
+    U& src, __ubuf__ DumpTensorTlv* dump_tlv, uint32_t align_dump_len, uint32_t dump_size)
 {
     __ubuf__ T* dump_dst_addr = reinterpret_cast<__ubuf__ T*>(dump_tlv + 1);
 
@@ -263,8 +250,8 @@ __simd_callee__ inline void set_dump_tlv_data_vf(U& src, __ubuf__ DumpTensorTlv*
 }
 
 template <typename T, typename U>
-__simd_callee__ inline void set_dump_tlv_data_reg(U& src, __ubuf__ DumpTensorTlv* dump_tlv,
-    uint32_t align_dump_len, uint32_t dump_size)
+__simd_callee__ inline void set_dump_tlv_data_reg(
+    U& src, __ubuf__ DumpTensorTlv* dump_tlv, uint32_t align_dump_len, uint32_t dump_size)
 {
     __ubuf__ T* dump_dst_addr = reinterpret_cast<__ubuf__ T*>(dump_tlv + 1);
 
@@ -278,7 +265,7 @@ __simd_callee__ inline void set_dump_tlv_data_reg(U& src, __ubuf__ DumpTensorTlv
 template <DumpTensorPosition dumpPosition, typename T, typename U>
 __simd_callee__ inline void asc_dump_impl_reg(U& src, uint32_t desc, uint32_t dump_size)
 {
-    __ubuf__ BlockVFBufInfo *block_info = get_printf_ubuf_addr(0);
+    __ubuf__ BlockVFBufInfo* block_info = get_printf_ubuf_addr(0);
 
     constexpr uint16_t data_block_size = 32;
     uint32_t align_dump_len = align_up(dump_size * sizeof(T), data_block_size);
@@ -297,7 +284,7 @@ __simd_callee__ inline void asc_dump_impl_reg(U& src, uint32_t desc, uint32_t du
 template <DumpTensorPosition dumpPosition, typename T, typename U>
 __simd_callee__ inline void asc_dump_impl(U& src, uint32_t desc, uint32_t dump_size)
 {
-    __ubuf__ BlockVFBufInfo *block_info = get_printf_ubuf_addr(0);
+    __ubuf__ BlockVFBufInfo* block_info = get_printf_ubuf_addr(0);
 
     constexpr uint16_t data_block_size = 32;
     uint32_t align_dump_len = align_up(dump_size * sizeof(T), data_block_size);
@@ -314,8 +301,8 @@ __simd_callee__ inline void asc_dump_impl(U& src, uint32_t desc, uint32_t dump_s
 }
 
 template <typename T, typename U>
-__ASC_USE_RESERVED_UBUF__(3510,
-    "asc_dump_reg is forbidden when compile option --cce-disable-asc-reserved-ubuf is enabled")
+__ASC_USE_RESERVED_UBUF__(
+    3510, "asc_dump_reg is forbidden when compile option --cce-disable-asc-reserved-ubuf is enabled")
 __simd_callee__ inline void asc_dump_reg(U& input, uint32_t desc, uint32_t dump_size)
 {
     enable_asc_diagnostics();
@@ -323,16 +310,16 @@ __simd_callee__ inline void asc_dump_reg(U& input, uint32_t desc, uint32_t dump_
 }
 
 template <typename T>
-__ASC_USE_RESERVED_UBUF__(3510,
-    "asc_dump_ubuf is forbidden when compile option --cce-disable-asc-reserved-ubuf is enabled")
-__simd_callee__ inline void asc_dump_ubuf(__ubuf__ T* input, uint32_t desc, uint32_t dump_size) {
+__ASC_USE_RESERVED_UBUF__(
+    3510, "asc_dump_ubuf is forbidden when compile option --cce-disable-asc-reserved-ubuf is enabled")
+__simd_callee__ inline void asc_dump_ubuf(__ubuf__ T* input, uint32_t desc, uint32_t dump_size)
+{
     enable_asc_diagnostics();
     asc_dump_impl<DumpTensorPosition::UB, T>(input, desc, dump_size);
 }
 
 template <typename T, typename U>
-__ASC_USE_RESERVED_UBUF__(3510,
-    "asc_dump is forbidden when compile option --cce-disable-asc-reserved-ubuf is enabled")
+__ASC_USE_RESERVED_UBUF__(3510, "asc_dump is forbidden when compile option --cce-disable-asc-reserved-ubuf is enabled")
 __simd_callee__ inline void asc_dump(U& input, uint32_t desc, uint32_t dump_size)
 {
     enable_asc_diagnostics();
@@ -340,8 +327,7 @@ __simd_callee__ inline void asc_dump(U& input, uint32_t desc, uint32_t dump_size
 }
 
 template <typename T>
-__ASC_USE_RESERVED_UBUF__(3510,
-    "asc_dump is forbidden when compile option --cce-disable-asc-reserved-ubuf is enabled")
+__ASC_USE_RESERVED_UBUF__(3510, "asc_dump is forbidden when compile option --cce-disable-asc-reserved-ubuf is enabled")
 __simd_callee__ inline void asc_dump(__ubuf__ T* input, uint32_t desc, uint32_t dump_size)
 {
     enable_asc_diagnostics();

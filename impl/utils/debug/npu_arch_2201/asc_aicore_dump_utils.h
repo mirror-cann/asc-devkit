@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file asc_aicore_dump_utils.h
@@ -18,7 +18,8 @@
 #include "impl/utils/debug/asc_debug_utils.h"
 namespace __asc_aicore {
 
-__aicore__ inline void get_matrix_copy_param(uint32_t dumpSize, uint16_t& n, uint16_t& m, uint16_t& dstStrideDstD, uint16_t& srcStride)
+__aicore__ inline void get_matrix_copy_param(
+    uint32_t dumpSize, uint16_t& n, uint16_t& m, uint16_t& dstStrideDstD, uint16_t& srcStride)
 {
     constexpr int32_t blockCube = 16;
     constexpr int32_t defaultOneBlockSize = 256;
@@ -26,7 +27,8 @@ __aicore__ inline void get_matrix_copy_param(uint32_t dumpSize, uint16_t& n, uin
 
     uint16_t align = (dumpSize % defaultOneBlockSize == 0) ? 0 : 1;
     uint16_t countBlks = align + dumpSize / defaultOneBlockSize;
-    uint16_t burstLen = static_cast<uint16_t>(srcBurstLenSizeEle * srcBurstLenSizeEle * sizeof(float) / ASC_ONE_DATABLOCK_SIZE);
+    uint16_t burstLen =
+        static_cast<uint16_t>(srcBurstLenSizeEle * srcBurstLenSizeEle * sizeof(float) / ASC_ONE_DATABLOCK_SIZE);
     n = countBlks * blockCube;
     m = (burstLen * ASC_ONE_DATABLOCK_SIZE / sizeof(float)) / blockCube;
     uint16_t howo = (burstLen * ASC_ONE_DATABLOCK_SIZE / sizeof(float)) / blockCube;
@@ -34,21 +36,22 @@ __aicore__ inline void get_matrix_copy_param(uint32_t dumpSize, uint16_t& n, uin
     dstStrideDstD = burstLen;
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline uint32_t mem_copy_cbuf_to_gm_impl(__gm__ T* dst, __cc__ T* src, const uint32_t& len)
 {
 #if defined(__DAV_CUBE__)
     uint16_t nSize, mSize, dstStrideDstD, srcStride;
     get_matrix_copy_param(len, nSize, mSize, dstStrideDstD, srcStride);
-    copy_matrix_cc_to_gm((__gm__ float*)dst, (__cc__ float *)src, 0, nSize, mSize, dstStrideDstD, srcStride, 0,
-                         QuantMode_t::NoQuant, static_cast<uint8_t>(false), false, false);
+    copy_matrix_cc_to_gm(
+        (__gm__ float*)dst, (__cc__ float*)src, 0, nSize, mSize, dstStrideDstD, srcStride, 0, QuantMode_t::NoQuant,
+        static_cast<uint8_t>(false), false, false);
     return 0;
 #else
     return 1;
 #endif
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline uint32_t mem_copy_l1buf_to_gm_impl(__gm__ T* dst, __cbuf__ T* src, const uint32_t& len)
 {
 #if defined(__DAV_CUBE__)
@@ -59,7 +62,7 @@ __aicore__ inline uint32_t mem_copy_l1buf_to_gm_impl(__gm__ T* dst, __cbuf__ T* 
 #endif
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline uint32_t mem_copy_ub_to_gm_impl(__gm__ T* dst, __ubuf__ T* src, const uint32_t& len)
 {
 #if defined(__DAV_VEC__)
@@ -70,13 +73,17 @@ __aicore__ inline uint32_t mem_copy_ub_to_gm_impl(__gm__ T* dst, __ubuf__ T* src
 #endif
 }
 
-template<typename T>
-__aicore__ inline uint32_t mem_copy_abuf_to_gm_impl(
-    __gm__ T* dst, __ca__ T* src, const uint32_t alignDumpBytes) { return 1; }
+template <typename T>
+__aicore__ inline uint32_t mem_copy_abuf_to_gm_impl(__gm__ T* dst, __ca__ T* src, const uint32_t alignDumpBytes)
+{
+    return 1;
+}
 
-template<typename T>
-__aicore__ inline uint32_t mem_copy_bbuf_to_gm_impl(
-    __gm__ T* dst, __cb__ T* src, const uint32_t alignDumpBytes) { return 1; }
+template <typename T>
+__aicore__ inline uint32_t mem_copy_bbuf_to_gm_impl(__gm__ T* dst, __cb__ T* src, const uint32_t alignDumpBytes)
+{
+    return 1;
+}
 
 } // namespace __asc_aicore
 

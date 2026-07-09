@@ -9,7 +9,7 @@
  */
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/nd2nz.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -46,9 +46,9 @@ public:
     // instruction. ndNum/srcNdMatrixStride/dstNzMatrixStride carry the batch dimension (1/0/0 when
     // there is no batch). The src/dst pattern is read from the original tensor type U/T.
     template <typename T, typename U, typename SrcLayout, typename DstLayout>
-    __aicore__ inline static void EmitCopy(const T& dst, const U& src, const SrcLayout& srcLayout,
-                                           const DstLayout& dstLayout, uint16_t ndNum,
-                                           uint64_t srcNdMatrixStride, uint32_t dstNzMatrixStride)
+    __aicore__ inline static void EmitCopy(
+        const T& dst, const U& src, const SrcLayout& srcLayout, const DstLayout& dstLayout, uint16_t ndNum,
+        uint64_t srcNdMatrixStride, uint32_t dstNzMatrixStride)
     {
         using type = typename U::elementType;
 
@@ -85,8 +85,9 @@ public:
         uint16_t loop4DstStride = static_cast<uint16_t>(dstNzMatrixStride / C0_ELEMENT<type>);
         uint8_t cacheMode = src.Engine().GetCacheMode();
 
-        CopyGmToCbufMultiNd2nzInstr::DataCopy(dst, src, ndNum, loop2DstStride, loop3DstStride, loop4DstStride,
-                                              loop1SrcStride, cacheMode, nValue, dValue, loop4SrcStride, false);
+        CopyGmToCbufMultiNd2nzInstr::DataCopy(
+            dst, src, ndNum, loop2DstStride, loop3DstStride, loop4DstStride, loop1SrcStride, cacheMode, nValue, dValue,
+            loop4SrcStride, false);
     }
 };
 

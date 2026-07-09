@@ -16,7 +16,8 @@
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_COOPERATIVE_GROUPS_IMPL__
-#warning "impl/simt_api/cooperative_groups_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use \"simt_api/cooperative_groups.h\" and use public functions or variables defined in interface header files."
+#warning \
+    "impl/simt_api/cooperative_groups_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use \"simt_api/cooperative_groups.h\" and use public functions or variables defined in interface header files."
 #endif
 
 #ifndef IMPL_SIMT_API_COOPERATIVE_GROUPS_IMPL_H
@@ -27,10 +28,7 @@ namespace cooperative_groups {
 template <typename T, typename... Args>
 constexpr bool SupportTypeSimtInternel = (std::is_same_v<T, Args> || ...);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void __trap_internal()
-{
-    *((uint8_t*)-1) = 0;
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void __trap_internal() { *((uint8_t*)-1) = 0; }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int __fns_internal(unsigned int mask, unsigned int base, int offset)
 {
@@ -90,10 +88,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long thread_group::size() co
     }
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long thread_group::num_threads() const
-{
-    return size();
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long thread_group::num_threads() const { return size(); }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long thread_group::thread_rank() const
 {
@@ -315,7 +310,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl(T var, int src_ran
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, "
+        "bfloat16x2_t.");
     int lane = src_rank % static_cast<int>(num_threads());
     if (num_threads() != warpSize) {
         lane = __fns_internal(_tiled_info.mask, 0, lane + 1);
@@ -328,7 +324,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl_up(T var, unsigned
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, "
+        "bfloat16x2_t.");
     if (num_threads() == warpSize) {
         return asc_shfl_up(var, delta, warpSize);
     }
@@ -346,7 +343,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T coalesced_group::shfl_down(T var, unsign
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, "
+        "bfloat16x2_t.");
     if (num_threads() == warpSize) {
         return asc_shfl_down(var, delta, warpSize);
     }
@@ -421,7 +419,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl(T var
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, "
+        "bfloat16x2_t.");
     return asc_shfl(var, src_rank, static_cast<int32_t>(numThreads));
 }
 
@@ -431,7 +430,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl_up(T 
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, "
+        "bfloat16x2_t.");
     return asc_shfl_up(var, delta, static_cast<int32_t>(numThreads));
 }
 
@@ -441,7 +441,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl_down(
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, "
+        "bfloat16x2_t.");
     return asc_shfl_down(var, delta, static_cast<int32_t>(numThreads));
 }
 
@@ -451,7 +452,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T thread_block_tile_base<Size>::shfl_xor(T
 {
     static_assert(
         SupportTypeSimtInternel<T, int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t>,
-        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, bfloat16x2_t.");
+        "Input type T only supports int32_t, uint32_t, int64_t, uint64_t, float, half, half2, bfloat16_t, "
+        "bfloat16x2_t.");
     return asc_shfl_xor(var, static_cast<int32_t>(lane_mask), static_cast<int32_t>(numThreads));
 }
 

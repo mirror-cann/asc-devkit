@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_simt_math_impl.h
@@ -34,15 +34,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T AbsImpl(T x)
     return abs(x);
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int64_t AbsImpl(int64_t x)
-{
-    return llabs(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int64_t AbsImpl(int64_t x) { return llabs(x); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float AbsImpl(float x)
-{
-    return fabs(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float AbsImpl(float x) { return fabs(x); }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half AbsImpl(half x)
 {
@@ -104,11 +98,13 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T UintDivImpl(T dividend, T magic, T shift
     static_assert(SupportTypeSimtInternel<T, uint32_t, uint64_t>, "Input type T only supports uint32_t, uint64_t.");
 #ifdef ASCENDC_CPU_DEBUG
     if constexpr (std::is_same<T, uint32_t>::value) {
-        ASCENDC_ASSERT(dividend <= ConstantsInternal::U32_MAX_VAL,
-                       { KERNEL_LOG(KERNEL_ERROR, "dividend must not be greater than UINT32_MAX"); });
+        ASCENDC_ASSERT(dividend <= ConstantsInternal::U32_MAX_VAL, {
+            KERNEL_LOG(KERNEL_ERROR, "dividend must not be greater than UINT32_MAX");
+        });
     } else if constexpr (std::is_same<T, uint64_t>::value) {
-        ASCENDC_ASSERT(dividend <= ConstantsInternal::U64_MAX_VAL,
-                       { KERNEL_LOG(KERNEL_ERROR, "dividend must not be greater than UINT_64_MAX"); });
+        ASCENDC_ASSERT(dividend <= ConstantsInternal::U64_MAX_VAL, {
+            KERNEL_LOG(KERNEL_ERROR, "dividend must not be greater than UINT_64_MAX");
+        });
     }
 
     T q = UMulHi(dividend, magic);
@@ -157,15 +153,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T FmaImpl(T x, T y, T z)
     return x * y + z;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float FmaImpl(float x, float y, float z)
-{
-    return __fma(x, y, z);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float FmaImpl(float x, float y, float z) { return __fma(x, y, z); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline half FmaImpl(half x, half y, half z)
-{
-    return __fma(x, y, z);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline half FmaImpl(half x, half y, half z) { return __fma(x, y, z); }
 #endif
 
 #if defined(ASCENDC_CPU_DEBUG)
@@ -178,9 +168,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T MaxImpl(T x, T y)
 template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T MaxImpl(T x, T y)
 {
-    if constexpr (std::is_same_v<T, int8_t> || std::is_same_v<T, int16_t> || std::is_same_v<T, int32_t> ||
-                  std::is_same_v<T, int64_t> || std::is_same_v<T, uint8_t> || std::is_same_v<T, uint16_t> ||
-                  std::is_same_v<T, uint32_t> || std::is_same_v<T, uint64_t>) {
+    if constexpr (
+        std::is_same_v<T, int8_t> || std::is_same_v<T, int16_t> || std::is_same_v<T, int32_t> ||
+        std::is_same_v<T, int64_t> || std::is_same_v<T, uint8_t> || std::is_same_v<T, uint16_t> ||
+        std::is_same_v<T, uint32_t> || std::is_same_v<T, uint64_t>) {
         return max(x, y);
     } else if constexpr (std::is_same_v<T, float>) {
         if (IsNan(x)) {
@@ -210,9 +201,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T MinImpl(T x, T y)
 template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T MinImpl(T x, T y)
 {
-    if constexpr (std::is_same_v<T, int8_t> || std::is_same_v<T, int16_t> || std::is_same_v<T, int32_t> ||
-                  std::is_same_v<T, int64_t> || std::is_same_v<T, uint8_t> || std::is_same_v<T, uint16_t> ||
-                  std::is_same_v<T, uint32_t> || std::is_same_v<T, uint64_t>) {
+    if constexpr (
+        std::is_same_v<T, int8_t> || std::is_same_v<T, int16_t> || std::is_same_v<T, int32_t> ||
+        std::is_same_v<T, int64_t> || std::is_same_v<T, uint8_t> || std::is_same_v<T, uint16_t> ||
+        std::is_same_v<T, uint32_t> || std::is_same_v<T, uint64_t>) {
         return min(x, y);
     } else if constexpr (std::is_same_v<T, float>) {
         if (IsNan(x)) {
@@ -243,7 +235,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float DimImpl(float x, float y)
 }
 
 #if defined(ASCENDC_CPU_DEBUG)
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float RemQuoImpl(float x, float y, int *quo)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float RemQuoImpl(float x, float y, int* quo)
 {
     *quo = 0;
     int32_t negE = -8;
@@ -264,17 +256,14 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float RemQuoImpl(float x, float y, int *qu
     return remainder;
 }
 #else
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float SetNegX(float absX)
-{
-    return -absX;
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float SetNegX(float absX) { return -absX; }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float SubSetResPos(float absX, float absY)
 {
     return (absX < absY) ? absX - absY : absY - absX;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void SetQuo(int32_t *quo, int32_t nSign)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void SetQuo(int32_t* quo, int32_t nSign)
 {
     int32_t negE = -8;
     int32_t maxS32 = 0xffffffff;
@@ -290,8 +279,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void SetQuo(int32_t *quo, int32_t nSign)
     }
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float XLeY(float absX, float tmpVal, float absY, bool isXPos, uint32_t signFlag, float res,
-                             int32_t *quo, int32_t nSign)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float XLeY(
+    float absX, float tmpVal, float absY, bool isXPos, uint32_t signFlag, float res, int32_t* quo, int32_t nSign)
 {
     float doubleX = absX + absX;
     float sign = (isXPos) ? 1.0 : -1.0;
@@ -315,7 +304,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float XLeY(float absX, float tmpVal, float
     return sign * SubSetResPos(absX, absY);
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float RemQuoImpl(float x, float y, int *quo)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float RemQuoImpl(float x, float y, int* quo)
 {
     bool isXPos = x >= 0;
     float absX = AbsImpl(x);
@@ -341,12 +330,12 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float RemQuoImpl(float x, float y, int *qu
         return XLeY(absX, tmpVal, absY, isXPos, signFlag, res, quo, nSign);
     }
 
-    uint32_t *uAbsY = (uint32_t *)(&absY);
+    uint32_t* uAbsY = (uint32_t*)(&absY);
     uint32_t uY = (*uAbsY) & ConstantsInternal::MAN_BIT_FLOAT;
-    uint32_t *uAbsX = (uint32_t *)(&absX);
+    uint32_t* uAbsX = (uint32_t*)(&absX);
     uint32_t uX = (*uAbsX) & ConstantsInternal::EXP_BIT_FLOAT;
     float xYVal = 0.0;
-    uint32_t *uf26 = (uint32_t *)(&xYVal);
+    uint32_t* uf26 = (uint32_t*)(&xYVal);
     *uf26 = uY | uX;
     bool isGtAbsX = xYVal > absX && !IsNanImpl(xYVal);
     res = 0.0;
@@ -399,14 +388,11 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float RemQuoImpl(float x, float y, int *qu
 #endif
 
 #if defined(ASCENDC_CPU_DEBUG)
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float ModImpl(float x, float y)
-{
-    return fmodf(x, y);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float ModImpl(float x, float y) { return fmodf(x, y); }
 #else
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float SetResModNeg(float modRes)
 {
-    uint32_t *uModRes = (uint32_t *)(&modRes);
+    uint32_t* uModRes = (uint32_t*)(&modRes);
     *uModRes = (*uModRes) | ConstantsInternal::NEG_SIGN_BIT;
     return modRes;
 }
@@ -431,14 +417,14 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float ModImpl(float x, float y)
         return (ltZeroOrNan) ? (xyVal + x) : xyVal;
     }
 
-    uint32_t *uAbsY = (uint32_t *)&absY;
+    uint32_t* uAbsY = (uint32_t*)&absY;
     uint32_t yManBits = (*uAbsY) & ConstantsInternal::MAN_BIT_FLOAT;
-    uint32_t *uAbsX = (uint32_t *)(&absX);
+    uint32_t* uAbsX = (uint32_t*)(&absX);
     uint32_t xExpBits = (*uAbsX) & ConstantsInternal::EXP_BIT_FLOAT;
     uint32_t xyBits = yManBits | xExpBits;
 
     float xyVal = 0;
-    uint32_t *uxyVal = (uint32_t *)&xyVal;
+    uint32_t* uxyVal = (uint32_t*)&xyVal;
     *uxyVal = xyBits;
     bool isGtX = (xyVal > absX) && !IsNanImpl(xyVal) && !isXNan;
     float halfXyVal = xyVal * 0.5f;
@@ -469,10 +455,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float ModImpl(float x, float y)
 #endif
 
 #if defined(ASCENDC_CPU_DEBUG)
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float RemainderImpl(float x, float y)
-{
-    return remainder(x, y);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float RemainderImpl(float x, float y) { return remainder(x, y); }
 #else
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float RemainderImpl(float x, float y)
 {
@@ -496,11 +479,11 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float NearByIntImpl(float x)
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float NextAfterImpl(float x, float y)
 {
-    uint32_t *f = (uint32_t *)&x;
+    uint32_t* f = (uint32_t*)&x;
     if (x > 0) {
-        if (x < y) {  // when x < src, x bit +1
+        if (x < y) { // when x < src, x bit +1
             (*f)++;
-        } else if (x > y) {  // when x > src, x bit -1
+        } else if (x > y) { // when x > src, x bit -1
             (*f)--;
         }
     } else {
@@ -591,10 +574,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t BrevImpl(uint64_t x)
     return __brev(static_cast<unsigned long long>(x));
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t BrevImpl(uint32_t x)
-{
-    return __brev(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t BrevImpl(uint32_t x) { return __brev(x); }
 #endif
 
 #if defined(ASCENDC_CPU_DEBUG)
@@ -616,8 +596,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzIntrinsics(uint8_t bitLen, T x,
 template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzImpl(T x)
 {
-    static_assert(SupportTypeSimtInternel<T, int32_t, int64_t, uint32_t, uint64_t>,
-                  "Input type of Clz function only supports int32_t, uint32_t, int64_t, uint64_t.");
+    static_assert(
+        SupportTypeSimtInternel<T, int32_t, int64_t, uint32_t, uint64_t>,
+        "Input type of Clz function only supports int32_t, uint32_t, int64_t, uint64_t.");
     if constexpr (SupportTypeSimtInternel<T, uint32_t>) {
         return ClzIntrinsics(ConstantsInternal::FOUR_BYTE_LEN, x, ConstantsInternal::ONE_UINT32);
     } else if constexpr (SupportTypeSimtInternel<T, uint64_t>) {
@@ -629,32 +610,21 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzImpl(T x)
     }
 }
 #else
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzIntrinsics(uint32_t x)
-{
-    return __clz(static_cast<int32_t>(x));
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzIntrinsics(uint32_t x) { return __clz(static_cast<int32_t>(x)); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzIntrinsics(int32_t x)
-{
-    return __clz(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzIntrinsics(int32_t x) { return __clz(x); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzIntrinsics(uint64_t x)
-{
-    return __clz(static_cast<long long>(x));
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzIntrinsics(uint64_t x) { return __clz(static_cast<long long>(x)); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzIntrinsics(int64_t x)
-{
-    return __clz(static_cast<long long>(x));
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzIntrinsics(int64_t x) { return __clz(static_cast<long long>(x)); }
 
 // count the leading zero bits
 template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t ClzImpl(T x)
 {
-    static_assert(SupportTypeSimtInternel<T, int32_t, int64_t, uint32_t, uint64_t>,
-                  "Input type of Clz function only supports int32_t, uint32_t, int64_t, uint64_t.");
+    static_assert(
+        SupportTypeSimtInternel<T, int32_t, int64_t, uint32_t, uint64_t>,
+        "Input type of Clz function only supports int32_t, uint32_t, int64_t, uint64_t.");
     return ClzIntrinsics(x);
 }
 #endif
@@ -682,10 +652,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t PopcImpl(uint64_t x)
     return PopcIntrinsics(ConstantsInternal::EIGHT_BYTE_LEN, x, ConstantsInternal::ONE_UINT64);
 }
 #else
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t PopcImpl(uint32_t x)
-{
-    return __popc(static_cast<unsigned int>(x));
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t PopcImpl(uint32_t x) { return __popc(static_cast<unsigned int>(x)); }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t PopcImpl(uint64_t x)
 {
@@ -705,10 +672,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t BytePermImpl(uint32_t x, uint32_t
     uint8_t byte1 = (tmp64 >> (selector1 * ConstantsInternal::ONE_BYTE_LEN)) & 0xFF;
     uint8_t byte2 = (tmp64 >> (selector2 * ConstantsInternal::ONE_BYTE_LEN)) & 0xFF;
     uint8_t byte3 = (tmp64 >> (selector3 * ConstantsInternal::ONE_BYTE_LEN)) & 0xFF;
-    return byte0 |
-        (byte1 << ConstantsInternal::ONE_BYTE_LEN) |
-            (byte2 << ConstantsInternal::TWO_BYTE_LEN) |
-                (byte3 << ConstantsInternal::THREE_BYTE_LEN);
+    return byte0 | (byte1 << ConstantsInternal::ONE_BYTE_LEN) | (byte2 << ConstantsInternal::TWO_BYTE_LEN) |
+           (byte3 << ConstantsInternal::THREE_BYTE_LEN);
 }
 #else
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t BytePermImpl(uint32_t x, uint32_t y, uint32_t s)
@@ -736,15 +701,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t FfsImpl(int64_t x)
     return __builtin_ctz(lsb) + 1;
 }
 #else
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t FfsImpl(int32_t x)
-{
-    return __ffs(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t FfsImpl(int32_t x) { return __ffs(x); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t FfsImpl(int64_t x)
-{
-    return __ffs(static_cast<long long>(x));
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t FfsImpl(int64_t x) { return __ffs(static_cast<long long>(x)); }
 #endif
 
 #if defined(ASCENDC_CPU_DEBUG)
@@ -766,16 +725,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T MulHiImpl(T x, T y)
     }
 }
 #else
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t MulHiImpl(uint32_t x, uint32_t y)
-{
-    return __umulhi(x, y);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t MulHiImpl(uint32_t x, uint32_t y) { return __umulhi(x, y); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t MulHiImpl(int32_t x, int32_t y)
-{
-    return __mulhi(x, y);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t MulHiImpl(int32_t x, int32_t y) { return __mulhi(x, y); }
 #endif
-}  // namespace Simt
-}  // namespace AscendC
-#endif  // IMPL_SIMT_API_CPP_DAV_C310_KERNEL_SIMT_MATH_IMPL_H
+} // namespace Simt
+} // namespace AscendC
+#endif // IMPL_SIMT_API_CPP_DAV_C310_KERNEL_SIMT_MATH_IMPL_H

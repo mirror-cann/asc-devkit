@@ -9,7 +9,7 @@
  */
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/tensor_api/arch/cube/utils/l0c2out_utils.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -93,13 +93,12 @@ __aicore__ inline static constexpr L0COutCopyParams MakeL0COutCopyParams(
         auto srcNoBatchLayout = RemoveBatchDim(srcLayout);
         auto dstNoBatchLayout = RemoveBatchDim(dstLayout);
         return {
-            static_cast<uint32_t>(Std::min(Get<0>(srcLayout.Shape()) * GetTotalColumnShape(srcNoBatchLayout),
-                                           Get<0>(dstLayout.Shape()) * GetTotalColumnShape(dstNoBatchLayout))),
+            static_cast<uint32_t>(Std::min(
+                Get<0>(srcLayout.Shape()) * GetTotalColumnShape(srcNoBatchLayout),
+                Get<0>(dstLayout.Shape()) * GetTotalColumnShape(dstNoBatchLayout))),
             static_cast<uint32_t>(Std::min(GetTotalRowShape(srcNoBatchLayout), GetTotalRowShape(dstNoBatchLayout))),
-            static_cast<uint32_t>(GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcNoBatchLayout) /
-                                  FRACTAL_FIXED),
-            static_cast<uint32_t>(GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstNoBatchLayout))
-        };
+            static_cast<uint32_t>(GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcNoBatchLayout) / FRACTAL_FIXED),
+            static_cast<uint32_t>(GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstNoBatchLayout))};
     } else {
         const uint32_t nSize =
             static_cast<uint32_t>(Std::min(GetTotalColumnShape(srcLayout), GetTotalColumnShape(dstLayout)));
@@ -113,8 +112,9 @@ __aicore__ inline static constexpr L0COutCopyParams MakeL0COutCopyParams(
         } else if constexpr (IsL0COutDNFormatV<T>) {
             return {nSize, mSize, srcStride, GetL0COutDNStride<T>(dstLayout)};
         } else {
-            return {nSize, mSize, srcStride,
-                    static_cast<uint32_t>(GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstLayout))};
+            return {
+                nSize, mSize, srcStride,
+                static_cast<uint32_t>(GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstLayout))};
         }
     }
 }
@@ -196,8 +196,9 @@ __aicore__ inline constexpr QuantMode_t GetQuantMode()
     constexpr bool isScalar = Std::is_same_v<S, uint64_t>;
 
     if constexpr (roundMode == RoundMode::HYBRID) {
-        static_assert((IsOneOfAttrV<srcType, float> && IsOneOfAttrV<dstType, hifloat8_t>),
-                      "Only when L0CType is float and output Type is hifloat8_t support RoundMode::HYBRID in Fixpipe");
+        static_assert(
+            (IsOneOfAttrV<srcType, float> && IsOneOfAttrV<dstType, hifloat8_t>),
+            "Only when L0CType is float and output Type is hifloat8_t support RoundMode::HYBRID in Fixpipe");
     }
     if constexpr (isTensor) {
         return GetVectorQuantMode<roundMode, dstType, srcType>();
@@ -208,18 +209,17 @@ __aicore__ inline constexpr QuantMode_t GetQuantMode()
     }
 }
 
-
 class SetRegisterInstr {
 public:
-    __aicore__ inline static void SetRegister(uint64_t quant, uint32_t ndNum, uint32_t dstNDStride,
-                                              uint32_t srcNDStride)
+    __aicore__ inline static void SetRegister(
+        uint64_t quant, uint32_t ndNum, uint32_t dstNDStride, uint32_t srcNDStride)
     {
         SetQuantPre(quant);
         SetLoop3Para<uint64_t>(ndNum, dstNDStride, srcNDStride);
     }
 
-    __aicore__ inline static void SetRegister(uint64_t quant, uint32_t dnNum, uint32_t dstDNStride,
-                                              uint32_t srcNZMatrixStride, uint32_t srcNZC0Stride)
+    __aicore__ inline static void SetRegister(
+        uint64_t quant, uint32_t dnNum, uint32_t dstDNStride, uint32_t srcNZMatrixStride, uint32_t srcNZC0Stride)
     {
         SetQuantPre(quant);
         SetLoop3Para<uint64_t>(dnNum, dstDNStride, srcNZMatrixStride);
@@ -227,10 +227,12 @@ public:
     }
 
     __aicore__ inline static void SetRegister(uint32_t ndNum, uint32_t dstNDStride, uint32_t srcNDStride)
-    { SetLoop3Para<uint64_t>(ndNum, dstNDStride, srcNDStride); }
+    {
+        SetLoop3Para<uint64_t>(ndNum, dstNDStride, srcNDStride);
+    }
 
-    __aicore__ inline static void SetRegister(uint32_t dnNum, uint32_t dstDNStride, uint32_t srcNZMatrixStride,
-                                              uint32_t srcNZC0Stride)
+    __aicore__ inline static void SetRegister(
+        uint32_t dnNum, uint32_t dstDNStride, uint32_t srcNZMatrixStride, uint32_t srcNZC0Stride)
     {
         SetLoop3Para<uint64_t>(dnNum, dstDNStride, srcNZMatrixStride);
         SetChannelPara<uint64_t>(srcNZC0Stride);
@@ -299,16 +301,15 @@ __aicore__ inline void InsertSync()
     asc_sync_pipe(PIPE_FIX);
 }
 
-
 template <typename T, typename U>
-__aicore__ inline static void EmitSetRegister(const U& srcLayout, uint32_t batchNum, uint32_t dstBatchStride,
-                                              uint32_t srcBatchStride)
+__aicore__ inline static void EmitSetRegister(
+    const U& srcLayout, uint32_t batchNum, uint32_t dstBatchStride, uint32_t srcBatchStride)
 {
     if constexpr (IsL0COutNDFormatV<T>) {
         SetRegisterInstr::SetRegister(batchNum, dstBatchStride, srcBatchStride);
     } else {
-        SetRegisterInstr::SetRegister(batchNum, dstBatchStride, srcBatchStride,
-                                      GetElement<AttrInfo::Stride, AttrInfo::Column, 0>(srcLayout));
+        SetRegisterInstr::SetRegister(
+            batchNum, dstBatchStride, srcBatchStride, GetElement<AttrInfo::Stride, AttrInfo::Column, 0>(srcLayout));
     }
 }
 
@@ -319,8 +320,9 @@ __aicore__ inline static void EmitSetRegister(
     if constexpr (IsL0COutNDFormatV<T>) {
         SetRegisterInstr::SetRegister(quant, batchNum, dstBatchStride, srcBatchStride);
     } else {
-        SetRegisterInstr::SetRegister(quant, batchNum, dstBatchStride, srcBatchStride,
-                                      GetElement<AttrInfo::Stride, AttrInfo::Column, 0>(srcLayout));
+        SetRegisterInstr::SetRegister(
+            quant, batchNum, dstBatchStride, srcBatchStride,
+            GetElement<AttrInfo::Stride, AttrInfo::Column, 0>(srcLayout));
     }
 }
 
@@ -331,8 +333,9 @@ __aicore__ inline static void SetRegisterImpl(const T& dst, const U& src)
         if constexpr (IsL0COutSrcBatchLayoutV<U>) {
             auto srcLayout = src.Layout();
             auto dstLayout = dst.Layout();
-            EmitSetRegister<T>(Get<1>(srcLayout), Get<0>(srcLayout.Shape()), Get<0>(dstLayout.Stride()),
-                               Get<0>(srcLayout.Stride()) / FRACTAL_FIXED);
+            EmitSetRegister<T>(
+                Get<1>(srcLayout), Get<0>(srcLayout.Shape()), Get<0>(dstLayout.Stride()),
+                Get<0>(srcLayout.Stride()) / FRACTAL_FIXED);
         } else {
             EmitSetRegister<T>(src.Layout(), 1, 0, 0);
         }
@@ -348,8 +351,9 @@ __aicore__ inline static void SetRegisterImpl(const T& dst, const U& src, uint64
         if constexpr (IsL0COutSrcBatchLayoutV<U>) {
             auto srcLayout = src.Layout();
             auto dstLayout = dst.Layout();
-            EmitSetRegister<T>(Get<1>(srcLayout), quant, Get<0>(srcLayout.Shape()), Get<0>(dstLayout.Stride()),
-                               Get<0>(srcLayout.Stride()) / FRACTAL_FIXED);
+            EmitSetRegister<T>(
+                Get<1>(srcLayout), quant, Get<0>(srcLayout.Shape()), Get<0>(dstLayout.Stride()),
+                Get<0>(srcLayout.Stride()) / FRACTAL_FIXED);
         } else {
             EmitSetRegister<T>(src.Layout(), quant, 1, 0, 0);
         }
@@ -367,9 +371,9 @@ __aicore__ inline static constexpr bool CheckVectorQuantBatchConsistency()
     constexpr bool srcBatched = IsL0COutSrcBatchLayoutV<U>;
     constexpr bool dstBatched = IsL0COutBatchedLayoutV<T>;
     constexpr bool quantBatched = IsL0COutBatchedLayoutV<V>;
-    static_assert(srcBatched == dstBatched,
-        "src and dst tensors must both carry a batch axis or both omit it.");
-    static_assert(!quantBatched || srcBatched,
+    static_assert(srcBatched == dstBatched, "src and dst tensors must both carry a batch axis or both omit it.");
+    static_assert(
+        !quantBatched || srcBatched,
         "Vector quant with batched quant tensor requires batched src and dst tensors as well.");
     return quantBatched;
 }

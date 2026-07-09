@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file platform_ascendc.cpp
@@ -41,7 +41,7 @@ const static std::string LABEL_CORE_CNT_VEC = "vector_core_cnt";
 const static std::string LABEL_CORE_CNT_AICORE = "ai_core_cnt";
 const static std::string NPU_ARCH = "NpuArch";
 
-static const std::map<std::string, SocVersion> convertMap {
+static const std::map<std::string, SocVersion> convertMap{
     {"Ascend310P", SocVersion::ASCEND310P},
     {"Ascend910", SocVersion::ASCEND910},
     {"Ascend910B", SocVersion::ASCEND910B},
@@ -67,9 +67,9 @@ static const std::map<std::string, SocVersion> convertMap {
     {"MC32DM11A", SocVersion::MC32DM11A},
 };
 
-static inline SocVersion SocVersionStrMap(const char *socVersionStr)
+static inline SocVersion SocVersionStrMap(const char* socVersionStr)
 {
-    const auto &iter = convertMap.find(socVersionStr);
+    const auto& iter = convertMap.find(socVersionStr);
     if (iter != convertMap.end()) {
         return iter->second;
     }
@@ -81,28 +81,30 @@ uint32_t PlatformAscendC::GetVecRegLen(void) const
 {
     std::string sizeStr;
     bool ret = this->GetPlatFormInfo()->GetPlatformResWithLock("AICoreSpec", "vector_reg_width", sizeStr);
-    if(!ret){
+    if (!ret) {
         PF_LOGE("platform do not support get vector_reg_width size !");
         return 0u;
     }
-    bool isDecimalNumber = !sizeStr.empty() && std::all_of(sizeStr.begin(), sizeStr.end(), [](unsigned char ch){ return std::isdigit(ch); });
-    if(isDecimalNumber){
+    bool isDecimalNumber = !sizeStr.empty() && std::all_of(sizeStr.begin(), sizeStr.end(), [](unsigned char ch) {
+        return std::isdigit(ch);
+    });
+    if (isDecimalNumber) {
         uint64_t size = std::stoull(sizeStr);
-        if(size > UINT32_MAX){
+        if (size > UINT32_MAX) {
             PF_LOGE("The bit width exceeds the maximum value of uint32!");
             return 0u;
         }
-        if(size == 0){
+        if (size == 0) {
             PF_LOGE("The bit width equals zero!");
         }
         return static_cast<uint32_t>(size);
-    }else{
+    } else {
         PF_LOGE("The sizeStr is invalid.");
         return 0u;
     }
 }
 
-static inline uint32_t GetCoreNumByType(fe::PlatFormInfos *platformInfo, bool isAiv)
+static inline uint32_t GetCoreNumByType(fe::PlatFormInfos* platformInfo, bool isAiv)
 {
     std::string key;
     std::string val;
@@ -138,28 +140,18 @@ uint32_t PlatformAscendC::GetCoreNumVector(void) const
     return 0;
 }
 
-uint32_t PlatformAscendC::GetCoreNumAic(void) const
-{
-    return GetCoreNumByType(this->GetPlatFormInfo(), false);
-}
+uint32_t PlatformAscendC::GetCoreNumAic(void) const { return GetCoreNumByType(this->GetPlatFormInfo(), false); }
 
-uint32_t PlatformAscendC::GetCoreNumAiv(void) const
-{
-    return GetCoreNumByType(this->GetPlatFormInfo(), true);
-}
+uint32_t PlatformAscendC::GetCoreNumAiv(void) const { return GetCoreNumByType(this->GetPlatFormInfo(), true); }
 
-uint32_t PlatformAscendC::GetCoreNum(void) const
-{
-    return this->GetPlatFormInfo()->GetCoreNum();
-}
+uint32_t PlatformAscendC::GetCoreNum(void) const { return this->GetPlatFormInfo()->GetCoreNum(); }
 
-void PlatformAscendC::GetCoreMemSize(const CoreMemType &memType, uint64_t &size) const
+void PlatformAscendC::GetCoreMemSize(const CoreMemType& memType, uint64_t& size) const
 {
     const fe::LocalMemType localType = static_cast<fe::LocalMemType>(memType);
     this->GetPlatFormInfo()->GetLocalMemSize(localType, size);
     // only ascend910B need UB/L1 local reserved buf for kfc
-    if ((memType == CoreMemType::UB || memType == CoreMemType::L1)
-         && GetSocVersion() == SocVersion::ASCEND910B) {
+    if ((memType == CoreMemType::UB || memType == CoreMemType::L1) && GetSocVersion() == SocVersion::ASCEND910B) {
         size -= LOCAL_RESERV_SIZE;
     }
     if (memType == CoreMemType::UB) {
@@ -235,7 +227,7 @@ NpuArch PlatformAscendC::GetCurNpuArch(void) const
     return static_cast<NpuArch>(npuArchInt);
 }
 
-void PlatformAscendC::GetCoreMemBw(const CoreMemType &memType, uint64_t &bwSize) const
+void PlatformAscendC::GetCoreMemBw(const CoreMemType& memType, uint64_t& bwSize) const
 {
     const fe::LocalMemType localType = static_cast<fe::LocalMemType>(memType);
     this->GetPlatFormInfo()->GetLocalMemBw(localType, bwSize);
@@ -256,7 +248,8 @@ uint32_t PlatformAscendC::CalcTschNumBlocks(uint32_t sliceNum, uint32_t aicCoreN
     uint32_t numBlocks = (sliceNum + (ration - 1)) / ration;
     // in mix case: 910B1(ration = 2), numBlocks should not be greater than physical aic core num
     if ((ration == MIX_AIC_AIV_RATION_910B1) && (numBlocks > aicCoreNum)) {
-        PF_LOGE("CalcTschNumBlocks failed, calc numBlocks %u should not be greater than aicCoreNum %u", numBlocks,
+        PF_LOGE(
+            "CalcTschNumBlocks failed, calc numBlocks %u should not be greater than aicCoreNum %u", numBlocks,
             aicCoreNum);
         return 0;
     }
@@ -266,7 +259,7 @@ uint32_t PlatformAscendC::CalcTschNumBlocks(uint32_t sliceNum, uint32_t aicCoreN
 uint32_t PlatformAscendC::CalcTschBlockDim(uint32_t sliceNum, uint32_t aicCoreNum, uint32_t aivCoreNum) const
 {
     PF_LOGW("CalcTschBlockDim has been deprecated and will be removed in the next version. "
-             "Please do not use it!");
+            "Please do not use it!");
     return this->CalcTschNumBlocks(sliceNum, aicCoreNum, aivCoreNum);
 }
 
@@ -308,10 +301,7 @@ uint32_t PlatformAscendC::GetResGroupBarrierWorkSpaceSize(void) const
 
 PlatformAscendC* PlatformAscendCManager::platformInfo = nullptr;
 std::mutex PlatformAscendCManager::platformInitMtx;
-SocVersion PlatformAscendCManager::SocVersionMap(const char *socVersionStr)
-{
-    return SocVersionStrMap(socVersionStr);
-}
+SocVersion PlatformAscendCManager::SocVersionMap(const char* socVersionStr) { return SocVersionStrMap(socVersionStr); }
 
 namespace {
 #ifdef ASCEND_IS_AICPU
@@ -328,11 +318,11 @@ const static std::map<std::string, std::string> convertMapInAicpu = {
     {"Ascend910_9392", "Ascend910B"},
     {"Ascend910_9382", "Ascend910B"},
     {"Ascend910_9362", "Ascend910B"},
-    {"Ascend910A","Ascend910"}, // ascend910_list
-    {"Ascend910ProA","Ascend910"},
-    {"Ascend910B","Ascend910"},
-    {"Ascend910ProB","Ascend910"},
-    {"Ascend910PremiumA","Ascend910"},
+    {"Ascend910A", "Ascend910"}, // ascend910_list
+    {"Ascend910ProA", "Ascend910"},
+    {"Ascend910B", "Ascend910"},
+    {"Ascend910ProB", "Ascend910"},
+    {"Ascend910PremiumA", "Ascend910"},
     {"Ascend310P1", "Ascend310P"}, // ascend310p_list
     {"Ascend310P3", "Ascend310P"},
     {"Ascend310B1", "Ascend310B"}, // ascend310b_list
@@ -375,7 +365,7 @@ const static std::map<std::string, std::string> convertMapInAicpu = {
     {"Ascend950DT_9577", "Ascend950"},
     {"Ascend950DT_9578", "Ascend950"}, // ascend950_list
     {"Ascend350_354f", "Ascend350"},
- 	{"Ascend350_355e", "Ascend350"}, // ascend350_list
+    {"Ascend350_355e", "Ascend350"}, // ascend350_list
     {"MC62CM12AA", "MC62"},
     {"MC62DM22AA", "MC62"},
     {"MC62CM13AA", "MC62"},
@@ -401,20 +391,14 @@ const static std::map<std::string, std::string> convertMapInAicpu = {
 
 const static std::map<std::string, std::string> AICPUshortVersionToNpuArchMap = {
     {"Ascend910B", "2201"}, // ascend910b_list
-    {"Ascend910", "1001"},
-    {"Ascend310P", "2002"},
-    {"Ascend310B", "3002"},
-    {"Ascend950", "3510"},
-    {"Ascend350", "3510"},
-    {"MC62", "5102"},
-    {"KirinX90", "3003"},
-    {"Kirin9030", "3113"},
-    {"MC32DM11A", "5102"},
+    {"Ascend910", "1001"},  {"Ascend310P", "2002"}, {"Ascend310B", "3002"},
+    {"Ascend950", "3510"},  {"Ascend350", "3510"},  {"MC62", "5102"},
+    {"KirinX90", "3003"},   {"Kirin9030", "3113"},  {"MC32DM11A", "5102"},
 };
 
-bool SwitchIntoShortSocVersion(const char *socVersionStr, std::string &shortSocVersion)
+bool SwitchIntoShortSocVersion(const char* socVersionStr, std::string& shortSocVersion)
 {
-    const auto &iter = convertMapInAicpu.find(socVersionStr);
+    const auto& iter = convertMapInAicpu.find(socVersionStr);
     if (iter != convertMapInAicpu.end()) {
         shortSocVersion = iter->second;
         return true;
@@ -423,16 +407,15 @@ bool SwitchIntoShortSocVersion(const char *socVersionStr, std::string &shortSocV
     return false;
 }
 
-bool GetShortSocVersion(std::string &shortSocVersion)
+bool GetShortSocVersion(std::string& shortSocVersion)
 {
     void* handle = dlopen("libascend_hal.so", RTLD_LAZY);
     if (handle == nullptr) {
         PF_LOGE("Failed to get short soc version in aicpu, cannot dlopen ascend_hal so");
         return false;
     }
-    int (*rtGetSocVersion)(uint32_t, char *, uint32_t);
-    rtGetSocVersion =
-        reinterpret_cast<int(*)(uint32_t, char *, uint32_t)>(dlsym(handle, "halGetSocVersion"));
+    int (*rtGetSocVersion)(uint32_t, char*, uint32_t);
+    rtGetSocVersion = reinterpret_cast<int (*)(uint32_t, char*, uint32_t)>(dlsym(handle, "halGetSocVersion"));
     if (rtGetSocVersion == nullptr) {
         dlclose(handle);
         PF_LOGE("Failed to get short soc version in aicpu, cannot dlsym symbol halGetSocVersion");
@@ -444,31 +427,34 @@ bool GetShortSocVersion(std::string &shortSocVersion)
     int32_t ret = rtGetSocVersion(deviceId, socVersionStr, len);
     dlclose(handle);
     if (ret != 0) {
-        PF_LOGW("Failed to get short soc version in aicpu len = [%d], socVersionStr = [%s], "
-                "set soc version to Ascend310P by default", static_cast<int32_t>(len), socVersionStr);
+        PF_LOGW(
+            "Failed to get short soc version in aicpu len = [%d], socVersionStr = [%s], "
+            "set soc version to Ascend310P by default",
+            static_cast<int32_t>(len), socVersionStr);
         shortSocVersion = "Ascend310P";
     } else {
         bool retShort = SwitchIntoShortSocVersion(socVersionStr, shortSocVersion);
         if (!retShort) {
-            PF_LOGE("Failed to get short soc version in aicpu, "
-                    "cannot switch into short soc version, socVersionStr = [%s]", socVersionStr);
+            PF_LOGE(
+                "Failed to get short soc version in aicpu, "
+                "cannot switch into short soc version, socVersionStr = [%s]",
+                socVersionStr);
             return false;
         }
     }
     return true;
 }
 #else
-bool GetRealSocVersion(std::string &realSocVersion)
+bool GetRealSocVersion(std::string& realSocVersion)
 {
-    void *handle = dlopen("libruntime.so", RTLD_LAZY);
+    void* handle = dlopen("libruntime.so", RTLD_LAZY);
     if (handle == nullptr) {
         PF_LOGE("Failed to get short soc version, cannot dlopen runtime so");
         return false;
     }
 
-    void (*rtGetSocVersion)(char *, const uint32_t);
-    rtGetSocVersion =
-        reinterpret_cast<void(*)(char *, const uint32_t)>(dlsym(handle, "rtGetSocVersion"));
+    void (*rtGetSocVersion)(char*, const uint32_t);
+    rtGetSocVersion = reinterpret_cast<void (*)(char*, const uint32_t)>(dlsym(handle, "rtGetSocVersion"));
     if (rtGetSocVersion == nullptr) {
         dlclose(handle);
         PF_LOGE("Failed to get short soc version, cannot dlsym symbol rtGetSocVersion");
@@ -484,7 +470,7 @@ bool GetRealSocVersion(std::string &realSocVersion)
 } // namespace
 
 #ifdef ASCEND_IS_AICPU
-fe::PlatFormInfos* PlatformAscendCManager::PlatformAscendCInit(const char *customSocVersion)
+fe::PlatFormInfos* PlatformAscendCManager::PlatformAscendCInit(const char* customSocVersion)
 {
     std::string shortSocVersion;
     if (customSocVersion == nullptr) {
@@ -496,16 +482,20 @@ fe::PlatFormInfos* PlatformAscendCManager::PlatformAscendCInit(const char *custo
     } else {
         bool retShort = SwitchIntoShortSocVersion(customSocVersion, shortSocVersion);
         if (!retShort) {
-            PF_LOGE("Failed to PlatformAscendCInit in aicpu, "
-                    "cannot switch into short soc version, customSocVersion = [%s]", customSocVersion);
+            PF_LOGE(
+                "Failed to PlatformAscendCInit in aicpu, "
+                "cannot switch into short soc version, customSocVersion = [%s]",
+                customSocVersion);
             return nullptr;
         }
     }
     auto iter = AICPUshortVersionToNpuArchMap.find(shortSocVersion);
     std::string curNpuArch;
     if (iter == AICPUshortVersionToNpuArchMap.end()) {
-        PF_LOGE("Failed to PlatformAscendCInit in aicpu, "
-                "cannot switch into NPUARCH, shortSocVersion = [%s]", shortSocVersion.c_str());
+        PF_LOGE(
+            "Failed to PlatformAscendCInit in aicpu, "
+            "cannot switch into NPUARCH, shortSocVersion = [%s]",
+            shortSocVersion.c_str());
         return nullptr;
     }
     curNpuArch = iter->second;
@@ -518,7 +508,7 @@ fe::PlatFormInfos* PlatformAscendCManager::PlatformAscendCInit(const char *custo
     return &gPlatformInfo;
 }
 #else
-fe::PlatFormInfos* PlatformAscendCManager::PlatformAscendCInit(const char *customSocVersion)
+fe::PlatFormInfos* PlatformAscendCManager::PlatformAscendCInit(const char* customSocVersion)
 {
     std::string socVersion;
     if (customSocVersion == nullptr) {
@@ -554,7 +544,7 @@ fe::PlatFormInfos* PlatformAscendCManager::PlatformAscendCInit(const char *custo
 }
 #endif
 
-PlatformAscendC* PlatformAscendCManager::PlatformAscendCManagerInit(const char *customSocVersion)
+PlatformAscendC* PlatformAscendCManager::PlatformAscendCManagerInit(const char* customSocVersion)
 {
     static fe::PlatFormInfos* gPlatformAscendCInfo = PlatformAscendCInit(customSocVersion);
     if (gPlatformAscendCInfo == nullptr) {
@@ -564,4 +554,4 @@ PlatformAscendC* PlatformAscendCManager::PlatformAscendCManagerInit(const char *
     platformInfo = &tmp;
     return platformInfo;
 }
-}
+} // namespace platform_ascendc

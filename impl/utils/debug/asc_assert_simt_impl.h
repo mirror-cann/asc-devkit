@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file asc_assert_simt_impl.h
@@ -29,22 +29,23 @@ namespace __asc_simt_vf {
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline void __trap()
 {
 #ifndef ASCENDC_CPU_DEBUG
-    *((uint8_t *)-1) = 0;
+    *((uint8_t*)-1) = 0;
 #endif
 }
 
-static __attribute__((noinline)) __SIMT_DEVICE_FUNCTIONS_DECL__ void __assert_fail(const char* __assertion,
-    const char* __file, unsigned int __line, const char* __function) noexcept
+static __attribute__((noinline)) __SIMT_DEVICE_FUNCTIONS_DECL__ void __assert_fail(
+    const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
 {
-    simt_printf_impl(DumpType::DUMP_SIMT_ASSERT, "[ASSERT] %s:%u: %s: Assertion `%s' failed.\n", __file, __line,
-                     __function, __assertion);
+    simt_printf_impl(
+        DumpType::DUMP_SIMT_ASSERT, "[ASSERT] %s:%u: %s: Assertion `%s' failed.\n", __file, __line, __function,
+        __assertion);
     __trap();
 }
 
 template <typename... Args>
-static __attribute__((noinline)) __SIMT_DEVICE_FUNCTIONS_DECL__ void __assert_fail_msg(const char* __assertion,
-    const char* __file, unsigned int __line, const char* __function,
-    const char* fmt, Args&&... args) noexcept
+static __attribute__((noinline)) __SIMT_DEVICE_FUNCTIONS_DECL__ void __assert_fail_msg(
+    const char* __assertion, const char* __file, unsigned int __line, const char* __function, const char* fmt,
+    Args&&... args) noexcept
 {
     __assert_fail(__assertion, __file, __line, __function);
 }
@@ -56,17 +57,19 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void __trap()
 #endif
 }
 
-static __attribute__((noinline)) __SIMT_DEVICE_FUNCTIONS_DECL__ void __assert_fail(const __gm__ char* __assertion,
-    const __gm__ char* __file, unsigned int __line, const __gm__ char* __function) noexcept
+static __attribute__((noinline)) __SIMT_DEVICE_FUNCTIONS_DECL__ void __assert_fail(
+    const __gm__ char* __assertion, const __gm__ char* __file, unsigned int __line,
+    const __gm__ char* __function) noexcept
 {
-    simt_printf_impl(DumpType::DUMP_SIMT_ASSERT, "[ASSERT] %s:%u: %s: Assertion `%s' failed.\n", __file, __line,
-                     __function, __assertion);
+    simt_printf_impl(
+        DumpType::DUMP_SIMT_ASSERT, "[ASSERT] %s:%u: %s: Assertion `%s' failed.\n", __file, __line, __function,
+        __assertion);
     __trap();
 }
 
 template <typename... Args>
-static __attribute__((noinline)) __SIMT_DEVICE_FUNCTIONS_DECL__ void __assert_fail_msg(const __gm__ char* __assertion,
-    const __gm__ char* __file, unsigned int __line, const __gm__ char* __function,
+static __attribute__((noinline)) __SIMT_DEVICE_FUNCTIONS_DECL__ void __assert_fail_msg(
+    const __gm__ char* __assertion, const __gm__ char* __file, unsigned int __line, const __gm__ char* __function,
     const __gm__ char* fmt, Args&&... args) noexcept
 {
     __assert_fail(__assertion, __file, __line, __function);

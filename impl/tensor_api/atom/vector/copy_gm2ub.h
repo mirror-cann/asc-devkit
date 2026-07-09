@@ -9,7 +9,7 @@
  */
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/tensor_api/atom/vector/copy_gm2ub.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -30,8 +30,7 @@ namespace AscendC {
 namespace Te {
 
 template <typename Traits>
-struct CopyTraits<CopyGM2UB, Traits> : public CopyTraits<CopyGM2UB, Traits, CopyGM2UB, Traits> {
-};
+struct CopyTraits<CopyGM2UB, Traits> : public CopyTraits<CopyGM2UB, Traits, CopyGM2UB, Traits> {};
 
 template <>
 struct CopyTraits<CopyGM2UB> : public CopyTraits<CopyGM2UB, CopyGM2UBTraitDefault> {};

@@ -36,25 +36,13 @@ constexpr int32_t __INTERNAL_MAX_OFFSET_OF_UP_MODE = 0;
 constexpr int32_t __INTERNAL_MAX_OFFSET_START_POS = 8;
 constexpr int32_t __INTERNAL_LANE_MASK_START_POS = 16;
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_all(int32_t predicate)
-{
-    return __all(predicate);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_all(int32_t predicate) { return __all(predicate); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_any(int32_t predicate)
-{
-    return __any(predicate);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_any(int32_t predicate) { return __any(predicate); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_ballot(int32_t predicate)
-{
-    return __ballot(predicate);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_ballot(int32_t predicate) { return __ballot(predicate); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_activemask()
-{
-    return __activemask();
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_activemask() { return __activemask(); }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_shfl(int32_t var, int32_t src_lane, int32_t width)
 {
@@ -156,53 +144,26 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t asc_shfl_xor(uint64_t var, int32_
     return __shfl_xor(var, lane_mask, width);
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_reduce_add(int32_t val)
-{
-    return __reduce_add(val);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_reduce_add(int32_t val) { return __reduce_add(val); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_reduce_add(uint32_t val)
-{
-    return __reduce_add(val);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_reduce_add(uint32_t val) { return __reduce_add(val); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float asc_reduce_add(float val)
-{
-    return __reduce_add(val);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float asc_reduce_add(float val) { return __reduce_add(val); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_reduce_max(int32_t val)
-{
-    return __reduce_max(val);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_reduce_max(int32_t val) { return __reduce_max(val); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_reduce_max(uint32_t val)
-{
-    return __reduce_max(val);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_reduce_max(uint32_t val) { return __reduce_max(val); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float asc_reduce_max(float val)
-{
-    return __reduce_max(val);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float asc_reduce_max(float val) { return __reduce_max(val); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_reduce_min(int32_t val)
-{
-    return __reduce_min(val);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t asc_reduce_min(int32_t val) { return __reduce_min(val); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_reduce_min(uint32_t val)
-{
-    return __reduce_min(val);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t asc_reduce_min(uint32_t val) { return __reduce_min(val); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float asc_reduce_min(float val)
-{
-    return __reduce_min(val);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float asc_reduce_min(float val) { return __reduce_min(val); }
 
 #endif
-#endif  // IMPL_SIMT_API_DEVICE_WARP_FUNCTIONS_IMPL_H
+#endif // IMPL_SIMT_API_DEVICE_WARP_FUNCTIONS_IMPL_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_DEVICE_WARP_FUNCTIONS_IMPL__)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__

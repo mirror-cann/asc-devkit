@@ -1,15 +1,15 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/tensor_api/arch/cube/l1_to_l0scalea/copy_impl/scalea.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -30,14 +30,16 @@ namespace Te {
 class LoadDataL12L0MxScaleA3510 {
 public:
     template <const CopyL12L0ScaleATrait& trait, typename T, typename U>
-    __aicore__ inline static void Run(const T& dst, const U& src) {
+    __aicore__ inline static void Run(const T& dst, const U& src)
+    {
         CheckTemplate<trait, T, U>();
         if constexpr (T::layoutType::depth == FIVE_DIM_DATA) {
             BatchLoadDataImpl<trait, T, U>(dst, src);
         } else if constexpr (T::layoutType::depth == FOUR_DIM_DATA) {
             LoadDataImpl<trait, T, U>(dst, src);
         } else {
-            static_assert(T::layoutType::depth == FOUR_DIM_DATA || T::layoutType::depth == FIVE_DIM_DATA,
+            static_assert(
+                T::layoutType::depth == FOUR_DIM_DATA || T::layoutType::depth == FIVE_DIM_DATA,
                 "LoadDataL12L0MxScaleA3510 only supports the plain fractal layout "
                 "((row0,row1),(col0,col1)) or the batch layout (B,((row0,row1),(col0,col1))).");
         }
@@ -52,8 +54,8 @@ private:
     }
 
     template <typename DstT, typename SrcT, typename DstLayoutT, typename SrcLayoutT>
-    __aicore__ inline static void LoadDataFractal(const DstT& dst, const SrcT& src,
-        const DstLayoutT& dstLayout, const SrcLayoutT& srcLayout)
+    __aicore__ inline static void LoadDataFractal(
+        const DstT& dst, const SrcT& src, const DstLayoutT& dstLayout, const SrcLayoutT& srcLayout)
     {
         uint16_t mStartPosition = 0;
         uint16_t kStartPosition = 0;
@@ -62,8 +64,8 @@ private:
         auto srcStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout) >> 5;
         auto dstStride = kStep;
         uint64_t mxDstAddr = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(dst.Data().Get()));
-        LoadCbufToL0MxScaleA3510::LoadData(mxDstAddr, src, mStartPosition, kStartPosition, mStep, kStep,
-            srcStride, dstStride);
+        LoadCbufToL0MxScaleA3510::LoadData(
+            mxDstAddr, src, mStartPosition, kStartPosition, mStep, kStep, srcStride, dstStride);
     }
 
     template <const CopyL12L0ScaleATrait& trait, typename T, typename U>
@@ -81,8 +83,7 @@ private:
         for (uint32_t i = 0; i < batchNum; ++i) {
             LoadDataFractal(
                 dst(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))),
-                src(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))),
-                dstNoBatchLayout, srcNoBatchLayout);
+                src(MakeCoord(i, MakeCoord(MakeCoord(0, 0), MakeCoord(0, 0)))), dstNoBatchLayout, srcNoBatchLayout);
         }
     }
 };

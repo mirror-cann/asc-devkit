@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file asc_debug_utils_impl.h
@@ -46,21 +46,11 @@ __aicore__ inline uint32_t asc_debug_get_core_idx_impl()
     return get_coreid() % dumpCoreNums;
 }
 
-__aicore__ inline int64_t get_task_ration()
-{
-    return get_subblockdim();
-}
+__aicore__ inline int64_t get_task_ration() { return get_subblockdim(); }
 
-__aicore__ inline uint64_t asc_debug_get_block_idx_impl()
-{
-    return get_block_idx();
-}
+__aicore__ inline uint64_t asc_debug_get_block_idx_impl() { return get_block_idx(); }
 
-__aicore__ inline void sync_all_impl()
-{
-    pipe_barrier(pipe_t::PIPE_ALL);
-}
-
+__aicore__ inline void sync_all_impl() { pipe_barrier(pipe_t::PIPE_ALL); }
 
 template <typename T>
 __aicore__ constexpr inline DumpTensorDataType get_dump_datatype_impl()

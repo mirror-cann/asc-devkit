@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_simt_transcendental_impl.h
@@ -41,10 +41,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T ExpImpl(T x)
     return __expf(x);
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline half2 ExpImpl(half2 x)
-{
-    return __exp(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline half2 ExpImpl(half2 x) { return __exp(x); }
 #endif
 
 /**
@@ -55,19 +52,17 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline half2 ExpImpl(half2 x)
  * @param outputQuadrant Pointer to store the quadrant information.
  * @return The reduced angle in the range [0, pi/2).
  */
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float PayneHanekRadianReduction(float x, int *outputQuadrant)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float PayneHanekRadianReduction(float x, int* outputQuadrant)
 {
     // Step 1: Extract raw bits of the input angle
-    uint32_t inputBits = reinterpret_cast<uint32_t &>(x);
+    uint32_t inputBits = reinterpret_cast<uint32_t&>(x);
 
     // Step 2: Extract exponent and compute index into 2/pi table
     int32_t exponent = ((inputBits & 0x7F800000) >> 23) - 127;
     uint32_t exponentIndex = static_cast<uint32_t>(exponent) >> 5;
 
     // Step 3: Get the 2/pi table entries for this exponent index
-    constexpr uint32_t twoOverPiTable[] = {
-        0x517cc1b7, 0x27220a94, 0xfe13abe8, 0xfa9a6ee0, 0x6db14acc, 0x9e21c820
-    };
+    constexpr uint32_t twoOverPiTable[] = {0x517cc1b7, 0x27220a94, 0xfe13abe8, 0xfa9a6ee0, 0x6db14acc, 0x9e21c820};
     uint32_t highTerm = exponentIndex ? twoOverPiTable[exponentIndex - 1] : 0;
     uint32_t midTerm = twoOverPiTable[exponentIndex];
     uint32_t lowTerm = twoOverPiTable[exponentIndex + 1];
@@ -76,14 +71,15 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float PayneHanekRadianReduction(float x, i
     // Step 4: Compute exponent remainder and shift table entries accordingly
     int32_t exponentRemainder = static_cast<uint32_t>(exponent) & 0x1F;
     if (exponentRemainder != 0) {
-        highTerm = (highTerm << exponentRemainder) | (midTerm >> (ConstantsInternal::FOUR_BYTE_LEN - exponentRemainder));
+        highTerm =
+            (highTerm << exponentRemainder) | (midTerm >> (ConstantsInternal::FOUR_BYTE_LEN - exponentRemainder));
         midTerm = (midTerm << exponentRemainder) | (lowTerm >> (ConstantsInternal::FOUR_BYTE_LEN - exponentRemainder));
         lowTerm = (lowTerm << exponentRemainder) | (lastTerm >> (ConstantsInternal::FOUR_BYTE_LEN - exponentRemainder));
     }
 
     // Step 5: Extract and normalize the mantissa
     uint32_t mantissa = (inputBits & 0x007FFFFF) | 0x4F000000;
-    uint32_t normalizedMantissa = static_cast<uint32_t>(reinterpret_cast<float &>(mantissa));
+    uint32_t normalizedMantissa = static_cast<uint32_t>(reinterpret_cast<float&>(mantissa));
 
     // Step 6: Compute product = (mantissa * highTerm) << 32 + mantissa * midTerm + mantissa * lowTerm
     uint64_t product = static_cast<uint64_t>(normalizedMantissa) * lowTerm;
@@ -107,7 +103,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float PayneHanekRadianReduction(float x, i
     int64_t lowFloat = static_cast<float>(productInt64);
 
     // Step 10: Compute final result = (high + low) * pi/2 * 2^-62
-    float piOverTwoLow = 3.4061215800865545e-19f;  // pi/2 * 2^-62
+    float piOverTwoLow = 3.4061215800865545e-19f; // pi/2 * 2^-62
     float reducedAngle = (highFloat + lowFloat) * piOverTwoLow;
 
     // Step 11: Handle negative input
@@ -129,14 +125,14 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float PayneHanekRadianReduction(float x, i
  * @param quadrant Pointer to store the quadrant information.
  * @return The reduced angle in the range [0, pi/2).
  */
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float CodyWaiteRadianReduction(float x, int *quadrant)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float CodyWaiteRadianReduction(float x, int* quadrant)
 {
-    float y = FmaImpl(x, 0.636619747f, 12582912.0f);    // 0.636619747f: 2/pi
-    *quadrant = reinterpret_cast<int &>(y);
-    y = y - 12582912.0f;                                // 12582912.0f: used to truncate mantissa of x*(2/pi)
-    x = FmaImpl(y, -1.57079601e+00f, x);                // 1.57079601e+00f: high of pi/2
-    x = FmaImpl(y, -3.13916473e-07f, x);                // 3.13916473e-07f: middle of pi/2
-    return FmaImpl(y, -5.39030253e-15f, x);             // 5.39030253e-15f: low of pi/2
+    float y = FmaImpl(x, 0.636619747f, 12582912.0f); // 0.636619747f: 2/pi
+    *quadrant = reinterpret_cast<int&>(y);
+    y = y - 12582912.0f;                    // 12582912.0f: used to truncate mantissa of x*(2/pi)
+    x = FmaImpl(y, -1.57079601e+00f, x);    // 1.57079601e+00f: high of pi/2
+    x = FmaImpl(y, -3.13916473e-07f, x);    // 3.13916473e-07f: middle of pi/2
+    return FmaImpl(y, -5.39030253e-15f, x); // 5.39030253e-15f: low of pi/2
 }
 
 /**
@@ -148,7 +144,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CodyWaiteRadianReduction(float x, in
  * @param quadrant Pointer to store the quadrant information.
  * @return The reduced angle in the range [0, pi/2).
  */
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float TrigRadianReduction(float x, float threshold, int *quadrant)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float TrigRadianReduction(float x, float threshold, int* quadrant)
 {
     x = FmaImpl(x, 0.0f, x);
     if (AbsImpl(x) > threshold) {
@@ -170,9 +166,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float CosPoly(float x)
 {
     x = x * x;
     float y = FmaImpl(x, 2.44677067e-5f, -1.38877297e-3f); // 2.44677067e-5f: 1/8! -1.38877297e-3f: -1/6!
-    y = FmaImpl(x, y, 4.16666567e-2f); //  4.16666567e-2f: 1/4!
-    y = FmaImpl(x, y, -5.00000000e-1f); // -5.00000000e-1f: -1/2!
-    return FmaImpl(x, y, 1.00000000e+0f); //  1.00000000e+0f: 1
+    y = FmaImpl(x, y, 4.16666567e-2f);                     //  4.16666567e-2f: 1/4!
+    y = FmaImpl(x, y, -5.00000000e-1f);                    // -5.00000000e-1f: -1/2!
+    return FmaImpl(x, y, 1.00000000e+0f);                  //  1.00000000e+0f: 1
 }
 
 /**
@@ -189,8 +185,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float SinPoly(float x)
     float m = FmaImpl(x, y, 0.0f);
 
     float z = FmaImpl(y, 2.86567956e-6f, -1.98559923e-4f); //  2.86567956e-6f:  1/9! * x^2 -1.98559923e-4f: -1/7!
-    z = FmaImpl(y, z, 8.33338592e-3f); // 8.33338592e-3f: 1/5! * x^2
-    z = FmaImpl(y, z, -1.66666672e-1f); // -1.66666672e-1f: -1/3! * x^2
+    z = FmaImpl(y, z, 8.33338592e-3f);                     // 8.33338592e-3f: 1/5! * x^2
+    z = FmaImpl(y, z, -1.66666672e-1f);                    // -1.66666672e-1f: -1/3! * x^2
 
     return FmaImpl(z, m, x); // * x^3 + x
 }
@@ -212,18 +208,18 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CosImpl(T x)
 
     // Step 1: Reduce the angle to the range [0, pi/2) and determine the quadrant
     int quadrant;
-    float y = TrigRadianReduction(x, 71476.0625f, &quadrant);  // 71476.0625f: Threshold for reduction algorithm
+    float y = TrigRadianReduction(x, 71476.0625f, &quadrant); // 71476.0625f: Threshold for reduction algorithm
 
     // Step 2: Compute cosine and sine of the reduced angle using polynomial approximations
     float c = CosPoly(y);
     float s = SinPoly(y);
 
     // Step 3: Adjust the cosine value based on the quadrant
-    if (quadrant & 2) {  // Quadrants 2 and 3: cos(pi + x) = -cos(x)
+    if (quadrant & 2) { // Quadrants 2 and 3: cos(pi + x) = -cos(x)
         s = -s;
         c = -c;
     }
-    if (quadrant & 1) {  // Quadrants 1 and 3: cos(pi/2 + x) = -sin(x)
+    if (quadrant & 1) { // Quadrants 1 and 3: cos(pi/2 + x) = -sin(x)
         c = -s;
     }
 
@@ -248,18 +244,18 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T SinImpl(T x)
 
     // Step 1: Reduce the angle to the range [0, pi/2) and determine the quadrant
     int quadrant;
-    float y = TrigRadianReduction(x, 71476.0625f, &quadrant);  // 71476.0625f: Threshold for reduction algorithm
+    float y = TrigRadianReduction(x, 71476.0625f, &quadrant); // 71476.0625f: Threshold for reduction algorithm
 
     // Step 2: Compute cosine and sine of the reduced angle using polynomial approximations
     float c = CosPoly(y);
     float s = SinPoly(y);
 
     // Step 3: Adjust the sine value based on the quadrant
-    if (quadrant & 2) {  // Quadrants 2 and 3: sin(pi + x) = -sin(x)
+    if (quadrant & 2) { // Quadrants 2 and 3: sin(pi + x) = -sin(x)
         s = -s;
         c = -c;
     }
-    if (quadrant & 1) {  // Quadrants 1 and 3: sin(pi/2 + x) = cos(x)
+    if (quadrant & 1) { // Quadrants 1 and 3: sin(pi/2 + x) = cos(x)
         s = c;
     }
 
@@ -275,20 +271,20 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T SinImpl(T x)
  * @param c Reference to store the cosine of the input angle.
  */
 template <typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void SinCosImpl(T x, T &s, T &c)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void SinCosImpl(T x, T& s, T& c)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type of input only supports float.");
 
     int quadrant;
     float t;
-    float y = TrigRadianReduction(x, 71476.0625f, &quadrant);  // 71476.0625f: threshold for reduce algorithm
+    float y = TrigRadianReduction(x, 71476.0625f, &quadrant); // 71476.0625f: threshold for reduce algorithm
     float cos = CosPoly(y);
     float sin = SinPoly(y);
-    if (quadrant & 2) {  // 2: sin(pi+x) = -sin(x), cos(pi+x) = -cos(x)
+    if (quadrant & 2) { // 2: sin(pi+x) = -sin(x), cos(pi+x) = -cos(x)
         sin = -sin;
         cos = -cos;
     }
-    if (quadrant & 1) {  // 1: sin(pi/2+x) = cos(x), cos(pi/2+x) = -sin(x)
+    if (quadrant & 1) { // 1: sin(pi/2+x) = cos(x), cos(pi/2+x) = -sin(x)
         t = -sin;
         sin = cos;
         cos = t;
@@ -309,12 +305,12 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void SinCosImpl(T x, T &s, T &c)
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float TanPoly(float x)
 {
     x = x * x;
-    float y = FmaImpl(x, 4.38117981e-3f, 8.94600598e-5f);  // 4.38117981e-3f: 8.94600598e-5f:
-    y = FmaImpl(x, y, 1.08341556e-2f);  // 1.08341556e-2f:
-    y = FmaImpl(x, y, 2.12811474e-2f);  // 2.12811474e-2f: 62/2838
-    y = FmaImpl(x, y, 5.40602170e-2f);  // 5.40602170e-2f: 17/315
-    y = FmaImpl(x, y, 1.33326918e-1f);  // 1.33326918e-1f: 2/15
-    y = FmaImpl(x, y, 3.33333433e-1f);  // 3.33333433e-1f: 1/3
+    float y = FmaImpl(x, 4.38117981e-3f, 8.94600598e-5f); // 4.38117981e-3f: 8.94600598e-5f:
+    y = FmaImpl(x, y, 1.08341556e-2f);                    // 1.08341556e-2f:
+    y = FmaImpl(x, y, 2.12811474e-2f);                    // 2.12811474e-2f: 62/2838
+    y = FmaImpl(x, y, 5.40602170e-2f);                    // 5.40602170e-2f: 17/315
+    y = FmaImpl(x, y, 1.33326918e-1f);                    // 1.33326918e-1f: 2/15
+    y = FmaImpl(x, y, 3.33333433e-1f);                    // 3.33333433e-1f: 1/3
     return x * y;
 }
 
@@ -332,7 +328,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T TanImpl(T x)
 
     // Step 1: Reduce the angle to the range [0, pi/2) and determine the quadrant
     int quadrant;
-    float y = TrigRadianReduction(x, 252.898206f, &quadrant);  // 252.898206f: Threshold for reduction algorithm
+    float y = TrigRadianReduction(x, 252.898206f, &quadrant); // 252.898206f: Threshold for reduction algorithm
 
     // Step 2: Compute the tangent using polynomial approximation
     float t = TanPoly(y);
@@ -341,7 +337,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T TanImpl(T x)
     float z = FmaImpl(t, y, y);
 
     // Step 4: Adjust the tangent value based on the quadrant
-    if (quadrant & 1) {  // Quadrants 1 and 3: tan(pi/2 + x) = -cot(x)
+    if (quadrant & 1) { // Quadrants 1 and 3: tan(pi/2 + x) = -cot(x)
         float s = y - z;
         s = FmaImpl(t, y, s);
         t = -1.0f / z;
@@ -354,15 +350,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T TanImpl(T x)
 }
 
 #if defined(ASCENDC_CPU_DEBUG)
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float TanhImpl(float x)
-{
-    return tanh(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float TanhImpl(float x) { return tanh(x); }
 #else
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float TanhImpl(float x)
-{
-    return 1.0f - (2.0f / (ExpImpl(2.0f * x) + 1.0f));
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float TanhImpl(float x) { return 1.0f - (2.0f / (ExpImpl(2.0f * x) + 1.0f)); }
 #endif
 
 template <typename T>
@@ -372,7 +362,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float TanPiImpl(T x)
     return TanImpl(x * ConstantsInternal::PI);
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void TaylorExpand(float &dst, float &src, float &squareV, uint32_t expandLevel, float *factor)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void TaylorExpand(
+    float& dst, float& src, float& squareV, uint32_t expandLevel, float* factor)
 {
     squareV = src * src;
     dst = src * src;
@@ -385,7 +376,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void TaylorExpand(float &dst, float &src, 
     dst = dst * src;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void TaylorExpand(float &dst, float &src, float &squareV, uint32_t expandLevel)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void TaylorExpand(float& dst, float& src, float& squareV, uint32_t expandLevel)
 {
     float factor[] = {1,
                       -0.3333333333333333,
@@ -398,12 +389,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void TaylorExpand(float &dst, float &src, 
 }
 
 #if defined(ASCENDC_CPU_DEBUG)
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float AtanImpl(float x)
-{
-    return atan(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float AtanImpl(float x) { return atan(x); }
 #else
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void AtanExpand(float &dst, float &src, float &tmp, float transFactor)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void AtanExpand(float& dst, float& src, float& tmp, float transFactor)
 {
     dst = src * transFactor;
     dst = dst + 1.0f;
@@ -412,18 +400,18 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void AtanExpand(float &dst, float &src, fl
     dst = AbsImpl(dst);
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sign(float &dst, float &src, float &denominator)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sign(float& dst, float& src, float& denominator)
 {
-    dst = src * 4611686018427387904.0f; //4611686018427387904 : ATAN_FP32_MAX
+    dst = src * 4611686018427387904.0f; // 4611686018427387904 : ATAN_FP32_MAX
     denominator = AbsImpl(dst);
-    denominator = denominator +  2.168404344971009e-19f;// 2.168404344971009e-19 : ATAN_FP32_MIN
+    denominator = denominator + 2.168404344971009e-19f; // 2.168404344971009e-19 : ATAN_FP32_MIN
     dst = dst / denominator;
 }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float AtanImpl(float x)
 {
     float clip = MinImpl(x, 10000.0f); // 10000 : MAX_INPUT_VALUE
-    clip = MaxImpl(clip, -10000.0f); // -10000 : MIN_INPUT_VALUE
+    clip = MaxImpl(clip, -10000.0f);   // -10000 : MIN_INPUT_VALUE
     float absV = AbsImpl(clip);
 
     float dst = 0;
@@ -431,9 +419,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float AtanImpl(float x)
     float tmp = 0;
     float tmp2 = 0;
 
-    TaylorExpand(dst, absV, squareV, 4); //4 : Taylor expansion count
+    TaylorExpand(dst, absV, squareV, 4);             // 4 : Taylor expansion count
     AtanExpand(tmp, absV, tmp2, 0.4142135623730950); // 0.4142135623730950 : TAN_PI_OF_8
-    TaylorExpand(tmp2, tmp, squareV, 4); //4 : Taylor expansion count
+    TaylorExpand(tmp2, tmp, squareV, 4);             // 4 : Taylor expansion count
 
     tmp2 = tmp2 + ConstantsInternal::PI_OF_8;
     dst = MinImpl(dst, tmp2);
@@ -443,12 +431,12 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float AtanImpl(float x)
     tmp = tmp / tmp2;
     tmp = AbsImpl(tmp);
 
-    TaylorExpand(tmp2, tmp, squareV, 4); //4 : Taylor expansion count
+    TaylorExpand(tmp2, tmp, squareV, 4); // 4 : Taylor expansion count
     tmp2 = tmp2 + ConstantsInternal::PI_OF_4;
     dst = MinImpl(dst, tmp2);
 
     AtanExpand(tmp2, tmp, squareV, 0.4142135623730950); // 0.4142135623730950 : TAN_PI_OF_8
-    TaylorExpand(tmp, tmp2, squareV, 6); //6 : Taylor expansion count
+    TaylorExpand(tmp, tmp2, squareV, 6);                // 6 : Taylor expansion count
 
     tmp = tmp + ConstantsInternal::PI_OF_8;
     tmp = tmp + ConstantsInternal::PI_OF_4;
@@ -462,10 +450,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float AtanImpl(float x)
 #endif
 
 #if defined(ASCENDC_CPU_DEBUG)
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Atan2Impl(float y, float x)
-{
-    return atan2(y, x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Atan2Impl(float y, float x) { return atan2(y, x); }
 #else
 /*
 atan2(y, x) =
@@ -532,22 +517,13 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T LogImpl(T x)
     return __logf(x);
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline half2 LogImpl(half2 x)
-{
-    return __log(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline half2 LogImpl(half2 x) { return __log(x); }
 #endif
 
 #if defined(ASCENDC_CPU_DEBUG)
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float AtanhImpl(float x)
-{
-    return atanh(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float AtanhImpl(float x) { return atanh(x); }
 #else
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float AtanhImpl(float x)
-{
-    return LogImpl((1.0f + x) / (1.0f - x)) / 2.0f;
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float AtanhImpl(float x) { return LogImpl((1.0f + x) / (1.0f - x)) / 2.0f; }
 #endif
 
 /**
@@ -666,7 +642,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T AsinImpl(T x)
         0.01735276442307692307692307692308,
         0.01396484375,
     };
-    if (AbsImpl(x) <= 0.7071067811865476f) { // 0.7071067811865476 : SCALAR_ACOS_MAX_LIMIT
+    if (AbsImpl(x) <= 0.7071067811865476f) {        // 0.7071067811865476 : SCALAR_ACOS_MAX_LIMIT
         TaylorExpand(dst, src, squareV, 7, factor); // 7 : Taylor expansion count
         return dst;
     } else if (x < -0.7071067811865476f) { // -0.7071067811865476 : SCALAR_ACOS_MIN_LIMIT
@@ -737,12 +713,13 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T SinhImpl(T x)
         float squareV = 0;
         float dst = 0;
         float src = x;
-        float factor[] = {1.0,
-                          0.16666666666666666666666666666667,
-                          0.00833333333333333333333333333333,
-                          0.0001984126984126984,
-                          2.7557319223985893e-06,
-                          2.505210838544172e-08};
+        float factor[] = {
+            1.0,
+            0.16666666666666666666666666666667,
+            0.00833333333333333333333333333333,
+            0.0001984126984126984,
+            2.7557319223985893e-06,
+            2.505210838544172e-08};
         TaylorExpand(dst, src, squareV, 5, factor); // 5: Taylor expansion count
         return dst;
     }
@@ -802,7 +779,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T AsinhImpl(T x)
 }
 
 template <typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void SinCospiImpl(T x, T &s, T &c)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void SinCospiImpl(T x, T& s, T& c)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type of input only supports float.");
     return SinCosImpl(x * ConstantsInternal::PI, s, c);
@@ -873,7 +850,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T RhypotImpl(T x, T y)
  *      if x is -inf, return x itself, exp=0;
  */
 template <typename T1, typename T2>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline T1 FrexpImpl(T1 x, T2 &exp)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T1 FrexpImpl(T1 x, T2& exp)
 {
     static_assert(SupportTypeSimtInternel<T1, float>, "Input type of input(x) only supports float.");
     static_assert(SupportTypeSimtInternel<T2, int>, "Input type of input(exp) only supports int.");
@@ -881,12 +858,12 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T1 FrexpImpl(T1 x, T2 &exp)
         exp = 0;
         return x;
     }
-    uint32_t u32 = reinterpret_cast<uint32_t &>(x);
-    int32_t exponent = u32 & 0x7f800000;  // 0x7f800000: get exponent
-    int32_t f32ExpVal = exponent >> 23;   // 23: mantissa bit count
-    uint32_t manU32 = u32 & 0x007fffff;   // 0x007fffff: get mantissa
+    uint32_t u32 = reinterpret_cast<uint32_t&>(x);
+    int32_t exponent = u32 & 0x7f800000; // 0x7f800000: get exponent
+    int32_t f32ExpVal = exponent >> 23;  // 23: mantissa bit count
+    uint32_t manU32 = u32 & 0x007fffff;  // 0x007fffff: get mantissa
     float f32ManU32 = static_cast<float>(manU32);
-    f32ManU32 = f32ManU32 / (1 << 23);  // 23: mantissa bit count
+    f32ManU32 = f32ManU32 / (1 << 23); // 23: mantissa bit count
     if (f32ExpVal == 0) {
         if (f32ManU32 < 0.5f) {
             while (f32ManU32 < 0.5f) {
@@ -897,7 +874,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T1 FrexpImpl(T1 x, T2 &exp)
     } else {
         f32ManU32 = f32ManU32 / 2 + 0.5f;
     }
-    exp = f32ExpVal - 126;  // 126: subnormal float exp
+    exp = f32ExpVal - 126; // 126: subnormal float exp
     return CopySignImpl(f32ManU32, x);
 }
 
@@ -921,10 +898,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T1 LdexpImpl(T1 x, T2 exp)
     if (x == 0.0f || IsPositiveInfImpl(AbsImpl(x)) || IsNanImpl(x) || exp == 0) {
         return x;
     }
-    if (exp > 280) {  // 280: 1e-45*(2^280) = inf
+    if (exp > 280) { // 280: 1e-45*(2^280) = inf
         return CopySignImpl(ConstantsInternal::SIMT_FP32_INF, x);
     }
-    if (exp < -280) {  // -280: 3.4028234e+38*(2^-280) = 0
+    if (exp < -280) { // -280: 3.4028234e+38*(2^-280) = 0
         return CopySignImpl(0.0f, x);
     }
     int32_t shift = 30;
@@ -935,7 +912,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T1 LdexpImpl(T1 x, T2 exp)
         }
         x *= (1 << exp);
     } else {
-        while (exp < -30) {  // -30: exp < -30, move 30
+        while (exp < -30) { // -30: exp < -30, move 30
             x *= 1.0f / (1 << shift);
             exp += shift;
         }
@@ -1163,49 +1140,25 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T PowImpl(T x, T y)
 #endif
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Exp2Impl(float x)
-{
-    return PowImpl(2.0f, x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Exp2Impl(float x) { return PowImpl(2.0f, x); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Exp10Impl(float x)
-{
-    return PowImpl(10.0f, x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Exp10Impl(float x) { return PowImpl(10.0f, x); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Expm1Impl(float x)
-{
-    return ExpImpl(x) - 1.0f;
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Expm1Impl(float x) { return ExpImpl(x) - 1.0f; }
 
 #if defined(ASCENDC_CPU_DEBUG)
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Log2Impl(float x)
-{
-    return log2(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Log2Impl(float x) { return log2(x); }
 #else
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Log2Impl(float x)
-{
-    return LogImpl(x) / LogImpl(2.0f);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Log2Impl(float x) { return LogImpl(x) / LogImpl(2.0f); }
 #endif
 
 #if defined(ASCENDC_CPU_DEBUG)
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Log10Impl(float x)
-{
-    return log10(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Log10Impl(float x) { return log10(x); }
 #else
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Log10Impl(float x)
-{
-    return LogImpl(x) / LogImpl(10.0f);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Log10Impl(float x) { return LogImpl(x) / LogImpl(10.0f); }
 #endif
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Log1pImpl(float x)
-{
-    return LogImpl(1.0f + x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float Log1pImpl(float x) { return LogImpl(1.0f + x); }
 
 #if defined(ASCENDC_CPU_DEBUG)
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float LogbImpl(float x)
@@ -1236,7 +1189,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float LogbImpl(float x)
     uint32_t fp32DecimalBit = 23;
     uint32_t fp32SignBit = 256;
     uint32_t fp32ExponentH = 127;
-    uint32_t *exponent = (uint32_t *)&x;
+    uint32_t* exponent = (uint32_t*)&x;
     (*exponent) >>= fp32DecimalBit;
     uint32_t sign = fp32SignBit;
     if ((*exponent) > sign) {
@@ -1293,7 +1246,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CbrtImpl(T x)
     static_assert(SupportTypeSimtInternel<T, float>, "Input value type only supports float.");
 
     // get the exponent part of x
-    uint32_t xBits = *reinterpret_cast<uint32_t *>(&x);
+    uint32_t xBits = *reinterpret_cast<uint32_t*>(&x);
     int32_t expBits = (xBits >> 23) & 0xFF;
     if (x == 0.0f || expBits == 0xFF) {
         return x;
@@ -1315,7 +1268,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CbrtImpl(T x)
     // get the adjusted x value
     int32_t expAdjustedBits = exponent - 3 * k + 127;
     uint32_t xAdjustedBits = (xBits & 0x7FFFFF) | (expAdjustedBits << 23);
-    float xAdjusted = *reinterpret_cast<float *>(&xAdjustedBits);
+    float xAdjusted = *reinterpret_cast<float*>(&xAdjustedBits);
 
     // Newton's iteration method,f(x) = x^3 - b, x_i+1 = x_i - f(x_i)/f'(x_i) = (2*x_i + b/x_i^2)/3
     // the initial value of x_i = 1.0
@@ -1327,10 +1280,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CbrtImpl(T x)
     y = (2.0f * y + xAdjusted / (y * y)) / 3.0f;
 
     // adjust the exponent of y by k
-    uint32_t yBits = *reinterpret_cast<uint32_t *>(&y);
+    uint32_t yBits = *reinterpret_cast<uint32_t*>(&y);
     int32_t yExpBits = ((yBits >> 23) & 0xFF) + k;
     yBits = (yBits & 0x807FFFFF) | ((yExpBits & 0xFF) << 23) | (xBits & 0x80000000);
-    return *reinterpret_cast<float *>(&yBits);
+    return *reinterpret_cast<float*>(&yBits);
 }
 
 /**
@@ -1359,7 +1312,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T RcbrtImpl(T x)
     }
 
     // get the exponent part of x
-    uint32_t xBits = *reinterpret_cast<uint32_t *>(&x);
+    uint32_t xBits = *reinterpret_cast<uint32_t*>(&x);
     int32_t expBits = (xBits >> 23) & 0xFF;
 
     // Depending on the computer's float number storage structure
@@ -1370,7 +1323,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T RcbrtImpl(T x)
     // Assume that the initial value of the Newton's iteration method is y, the exponent bits of y is E'
     int32_t yExpBits = (508 - expBits) / 3;
     uint32_t yBits = (xBits & 0x80000000) | (yExpBits << 23);
-    float y = *reinterpret_cast<float *>(&yBits);
+    float y = *reinterpret_cast<float*>(&yBits);
 
     // The Newton's iteration method, f(x) = x^(-3) - b;
     // x_i+1 = x_i - f(x_i)/f'(x_i)
@@ -1426,10 +1379,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T ErfImpl(T x)
         float result = FmaImpl(polyTerm, -absX, -absX);
         float expResult = Exp2Impl(result);
         float adjustedExp = 1.0f - expResult;
-        uint32_t signBit = *reinterpret_cast<uint32_t *>(&x) & 0x80000000;
-        uint32_t finalBits = signBit | *reinterpret_cast<uint32_t *>(&adjustedExp);
+        uint32_t signBit = *reinterpret_cast<uint32_t*>(&x) & 0x80000000;
+        uint32_t finalBits = signBit | *reinterpret_cast<uint32_t*>(&adjustedExp);
 
-        return *reinterpret_cast<float *>(&finalBits);
+        return *reinterpret_cast<float*>(&finalBits);
     } else {
         float term = xSquared;
         const float a1 = 0.000084834944f;
@@ -1505,17 +1458,17 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T ErfcImpl(T x)
     float scaled = negX2 * f1;
     float intPart = TruncImpl(scaled);
     float absPart = AbsImpl(intPart);
-    uint32_t signBit = *reinterpret_cast<uint32_t *>(&intPart) & 0x80000000;
+    uint32_t signBit = *reinterpret_cast<uint32_t*>(&intPart) & 0x80000000;
     float clampedBits = signBit | 0x42FC0000;
-    float clamped = *reinterpret_cast<float *>(&clampedBits);
+    float clamped = *reinterpret_cast<float*>(&clampedBits);
     float safeInt = (absPart > 126.0f) ? clamped : intPart;
 
     float remainder = FmaImpl(safeInt, -0.6931472f, negX2);
     remainder = FmaImpl(safeInt, 1.9046542e-9f, remainder);
     float exponentArg = remainder * f1;
     float exponentBase = safeInt + 12583039.0f;
-    uint32_t exponentBits = *reinterpret_cast<uint32_t *>(&exponentBase) << 23;
-    float exponentScale = *reinterpret_cast<float *>(&exponentBits);
+    uint32_t exponentBits = *reinterpret_cast<uint32_t*>(&exponentBase) << 23;
+    float exponentScale = *reinterpret_cast<float*>(&exponentBits);
     float expVal = Exp2Impl(exponentArg) * exponentScale;
 
     float term3 = FmaImpl(-absX, absX, xSquared);
@@ -1558,9 +1511,9 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T ErfinvImpl(T x)
         float denominator = 1.0f / rsqrtNegLog;
         float finalTerm = denominator * poly;
 
-        uint32_t signBit = *reinterpret_cast<uint32_t *>(&x) & 0x80000000;
-        uint32_t resultBits = signBit | *reinterpret_cast<uint32_t *>(&finalTerm);
-        return *reinterpret_cast<float *>(&resultBits);
+        uint32_t signBit = *reinterpret_cast<uint32_t*>(&x) & 0x80000000;
+        uint32_t resultBits = signBit | *reinterpret_cast<uint32_t*>(&finalTerm);
+        return *reinterpret_cast<float*>(&resultBits);
     } else {
         float poly = FmaImpl(-2.5172708e-10f, negLog2, 9.427429e-9f);
         poly = FmaImpl(poly, negLog2, -1.2054752e-7f);
@@ -1678,14 +1631,14 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T ErfcxImpl(T x)
         float negX2 = -xSq;
         float term4 = FmaImpl(absX, absX, negX2);
         float term5 = FmaImpl(xSq, 0.00572498f, 0.5f);
-        term5 = MinImpl(term5, ConstantsInternal::SIMT_FP32_INF);  // prevent overflow
+        term5 = MinImpl(term5, ConstantsInternal::SIMT_FP32_INF); // prevent overflow
         float term6 = FmaImpl(term5, 252.0f, 12582913.0f);
-        float term7 = term6 -12583039.0f;
+        float term7 = term6 - 12583039.0f;
         float negTerm7 = -term7;
         float term8 = FmaImpl(xSq, 1.442695f, negTerm7);
         float term9 = FmaImpl(xSq, 1.925963e-8f, term8);
-        uint32_t exponent = *reinterpret_cast<uint32_t *>(&term6) << 23;  // Extract exponent bits from term6
-        float exponentScale = *reinterpret_cast<float *>(&exponent);
+        uint32_t exponent = *reinterpret_cast<uint32_t*>(&term6) << 23; // Extract exponent bits from term6
+        float exponentScale = *reinterpret_cast<float*>(&exponent);
         float term9Exp = Exp2Impl(term9);
         float scaledExp = term9Exp * exponentScale;
         float expApprox = FmaImpl(term9Exp, exponentScale, scaledExp);
@@ -1721,22 +1674,22 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float ComputeSinpi(float x)
     float y = 0.0f;
     if ((i & 1) != 0) {
         //  (2k + 1 + f) * pi
-        y = 2.42795795e-05f;                         // 2.42795795e-05f : 1/8!
-        y = FmaImpl(y, fPiSquare, -0.00138878601f);  // -0.001388786f   : -1/6!
-        y = FmaImpl(y, fPiSquare, 0.0416667275f);    // 0.041666727f    : 1/4!
-        y = FmaImpl(y, fPiSquare, -0.49999997f);     // -0.49999997f    : -1/2!
+        y = 2.42795795e-05f;                        // 2.42795795e-05f : 1/8!
+        y = FmaImpl(y, fPiSquare, -0.00138878601f); // -0.001388786f   : -1/6!
+        y = FmaImpl(y, fPiSquare, 0.0416667275f);   // 0.041666727f    : 1/4!
+        y = FmaImpl(y, fPiSquare, -0.49999997f);    // -0.49999997f    : -1/2!
         float y2 = FmaImpl(fPiSquare, 1.0f, 0.0f);
         y = FmaImpl(y, y2, 1.0f);
     } else {
         //  (2k + f) * pi
-        y = -0.000195746587f;                       // -0.000195746587f : 1/7!
-        y = FmaImpl(y, fPiSquare, 0.00833270326f);  // 0.008332703f     : 1/5!
-        y = FmaImpl(y, fPiSquare, -0.166666627f);   // -0.16666662f     : 1/3!
+        y = -0.000195746587f;                      // -0.000195746587f : 1/7!
+        y = FmaImpl(y, fPiSquare, 0.00833270326f); // 0.008332703f     : 1/5!
+        y = FmaImpl(y, fPiSquare, -0.166666627f);  // -0.16666662f     : 1/3!
         float y2 = FmaImpl(fPiSquare, fPi, 0.0f);
         y = FmaImpl(y, y2, fPi);
     }
 
-    if ((i & 2) != 0) {     //  2: sin(pi+x) = -sin(x)
+    if ((i & 2) != 0) { //  2: sin(pi+x) = -sin(x)
         y = FmaImpl(y, -1.0f, 0.0f);
     }
     return y;
@@ -1747,8 +1700,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float ComputeLn(float x)
     float offset = 0;
     // sub-norm - > norm
     if (x < 1.17549435e-38f) {
-        offset = -23;       //  -23 : sub-norm   - > norm
-        x = x * 8388608;    //  8388608 : 2^23
+        offset = -23;    //  -23 : sub-norm   - > norm
+        x = x * 8388608; //  8388608 : 2^23
     }
     uint32_t u32 = *reinterpret_cast<uint32_t*>(&x);
     int32_t y1 = (u32 - 1059760811) & -8388608; //  -8388608 : -2^23
@@ -1758,20 +1711,20 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float ComputeLn(float x)
     float exponent = FmaImpl(static_cast<float>(y1), 1.1920929e-07f, offset); // 1.1920929e-07: 2^-23
 
     //  ln(mantissa)
-    float y = -0.130188569f;                   // -0.130188569f   :   Coefficient of O(10)
-    y = FmaImpl(y, mantissa, 0.140846103f);    //  0.140846103f    :   Coefficient of O(9)
-    y = FmaImpl(y, mantissa, -0.121486276f);   //  -0.121486276f  :   Coefficient of O(8)
-    y = FmaImpl(y, mantissa, 0.139806107f);    //  0.139806107f    :   Coefficient of O(7)
-    y = FmaImpl(y, mantissa, -0.166842356f);   //  -0.166842356f  :   -1/6
-    y = FmaImpl(y, mantissa, 0.200122997f);    //  0.200122997f     :   1/5
-    y = FmaImpl(y, mantissa, -0.249996692f);   //  -0.249996692f  :   -1/4
-    y = FmaImpl(y, mantissa, 0.333331823f);    //  0.333331823f   :   1/3
-    y = FmaImpl(y, mantissa, -0.5f);           //  -0.5f         :   -1/2
+    float y = -0.130188569f;                 // -0.130188569f   :   Coefficient of O(10)
+    y = FmaImpl(y, mantissa, 0.140846103f);  //  0.140846103f    :   Coefficient of O(9)
+    y = FmaImpl(y, mantissa, -0.121486276f); //  -0.121486276f  :   Coefficient of O(8)
+    y = FmaImpl(y, mantissa, 0.139806107f);  //  0.139806107f    :   Coefficient of O(7)
+    y = FmaImpl(y, mantissa, -0.166842356f); //  -0.166842356f  :   -1/6
+    y = FmaImpl(y, mantissa, 0.200122997f);  //  0.200122997f     :   1/5
+    y = FmaImpl(y, mantissa, -0.249996692f); //  -0.249996692f  :   -1/4
+    y = FmaImpl(y, mantissa, 0.333331823f);  //  0.333331823f   :   1/3
+    y = FmaImpl(y, mantissa, -0.5f);         //  -0.5f         :   -1/2
     y = mantissa * y;
     y = FmaImpl(y, mantissa, mantissa);
 
     // ln(mantissa) + exponent*ln(2)
-    y = FmaImpl(exponent, 0.693147182f, y);     // 0.693147182f     :   ln2
+    y = FmaImpl(exponent, 0.693147182f, y); // 0.693147182f     :   ln2
 
     if (u32 >= ConstantsInternal::SIMT_INT32_INF || x == 0) {
         y = FmaImpl(x, ConstantsInternal::SIMT_FP32_INF, ConstantsInternal::SIMT_FP32_INF);
@@ -1790,14 +1743,14 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float EulerGammaFunction(float x)
     float frac = x - NearByIntImpl(x);
     //  1/gamma(x + 1)
     //  = 1 + γx + (γ^2 - pi^2/6) * x^2/2! + O(3)
-    float y = -0.00107286568f;                    // -0.00107286568f  : Coefficient of O(8)
-    y = FmaImpl(y, frac, 0.00711105345f);         // 0.00711105345f   : Coefficient of O(7)
-    y = FmaImpl(frac, y, -0.0096437186f);         // -0.0096437186f   : Coefficient of O(6)
-    y = FmaImpl(frac, y, -0.042180188f);          // -0.042180188f    : Coefficient of O(5)
-    y = FmaImpl(frac, y, 0.166540906f);           // 0.166540906f     : Coefficient of O(4)
-    y = FmaImpl(frac, y, -0.0420036502f);         // -0.0420036502f   : Coefficient of O(3)
-    y = FmaImpl(frac, y, -0.655878186f);          // -0.655878186f    : [0.577*0.577-pi*pi/6]/2
-    y = FmaImpl(frac, y, 0.577215672f);           // 0.577215672f     : Euler-Mascheroni constant
+    float y = -0.00107286568f;            // -0.00107286568f  : Coefficient of O(8)
+    y = FmaImpl(y, frac, 0.00711105345f); // 0.00711105345f   : Coefficient of O(7)
+    y = FmaImpl(frac, y, -0.0096437186f); // -0.0096437186f   : Coefficient of O(6)
+    y = FmaImpl(frac, y, -0.042180188f);  // -0.042180188f    : Coefficient of O(5)
+    y = FmaImpl(frac, y, 0.166540906f);   // 0.166540906f     : Coefficient of O(4)
+    y = FmaImpl(frac, y, -0.0420036502f); // -0.0420036502f   : Coefficient of O(3)
+    y = FmaImpl(frac, y, -0.655878186f);  // -0.655878186f    : [0.577*0.577-pi*pi/6]/2
+    y = FmaImpl(frac, y, 0.577215672f);   // 0.577215672f     : Euler-Mascheroni constant
     y = FmaImpl(frac, y, 1.0f);
 
     if (x < -0.5f) {
@@ -1833,7 +1786,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float EulerGammaFunction(float x)
  */
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float StirlingAndEulerReflection(float x)
 {
-    float absX= AbsImpl(x);
+    float absX = AbsImpl(x);
     if (absX > 41.0999985f) {
         x = CopySignImpl(41.0999985f, x);
         absX = AbsImpl(x);
@@ -1852,36 +1805,36 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float StirlingAndEulerReflection(float x)
     //          let y01 = (x-0.5)log(x), y02 = xlog(e), then y0 = y01 - y02
     //  = sqrt(2*pi) * 2^[i+f]
     //  = sqrt(2*pi) * 2^f * 2^i
-    uint32_t u32 = reinterpret_cast<uint32_t &>(absX);
-    int32_t expU32 = (u32 - 1060439283) & 0xFF800000;   // 0xFF800000: 2^128
+    uint32_t u32 = reinterpret_cast<uint32_t&>(absX);
+    int32_t expU32 = (u32 - 1060439283) & 0xFF800000; // 0xFF800000: 2^128
     int32_t manU32 = u32 - expU32;
-    float mantissa = *reinterpret_cast<float *>(&manU32);
-    float exponent = FmaImpl(static_cast<float>(expU32), 1.1920929e-07f, 0.0f);    // 1.1920929e-07 : 2^-23
+    float mantissa = *reinterpret_cast<float*>(&manU32);
+    float exponent = FmaImpl(static_cast<float>(expU32), 1.1920929e-07f, 0.0f); // 1.1920929e-07 : 2^-23
     float lnMantissa = 2.0f / (mantissa + 1.0f) * (mantissa - 1.0f);
 
     //  log(x) = log(m*2^exp) = log(m) + exp= ln(m)/loge + exp
-    float logX = FmaImpl(lnMantissa, 1.44269502f, exponent);    //  1.44269502f : log_2(e)
+    float logX = FmaImpl(lnMantissa, 1.44269502f, exponent); //  1.44269502f : log_2(e)
 
     //  Calculates log(x)'s error-value
-    float logXDiff = FmaImpl(lnMantissa, 1.44269502f, exponent - logX);     //  1.44269502f : log_2(e)
+    float logXDiff = FmaImpl(lnMantissa, 1.44269502f, exponent - logX); //  1.44269502f : log_2(e)
 
     float y3 = 0.000656886259f;
-    y3 = FmaImpl(y3, lnMantissa * lnMantissa, 0.00321816537f);  // 0.00321816537f : Coefficient of O(3)
-    y3 = FmaImpl(y3, lnMantissa * lnMantissa, 0.0180337187f);   // 0.0180337187f : Coefficient of O(2)
-    y3 = FmaImpl(y3, lnMantissa * lnMantissa, 0.120224588f);    // 0.120224588f : Coefficient of O(1)
+    y3 = FmaImpl(y3, lnMantissa * lnMantissa, 0.00321816537f); // 0.00321816537f : Coefficient of O(3)
+    y3 = FmaImpl(y3, lnMantissa * lnMantissa, 0.0180337187f);  // 0.0180337187f : Coefficient of O(2)
+    y3 = FmaImpl(y3, lnMantissa * lnMantissa, 0.120224588f);   // 0.120224588f : Coefficient of O(1)
     y3 = FmaImpl(y3, lnMantissa * lnMantissa, 0.0f);
 
-    float r = 2.0f * (mantissa - 1.0f - lnMantissa) - lnMantissa * (mantissa - 1.0f);   // 2.0 :
-    logXDiff = FmaImpl(1.0f / (mantissa + 1.0f) * r, 1.44269502f, logXDiff);   //  1.44269502f : log_2(e)
-    logXDiff = FmaImpl(lnMantissa, 1.92513667e-08f, logXDiff);  // 1.92513667e-08f : Coefficient of O(1)
+    float r = 2.0f * (mantissa - 1.0f - lnMantissa) - lnMantissa * (mantissa - 1.0f); // 2.0 :
+    logXDiff = FmaImpl(1.0f / (mantissa + 1.0f) * r, 1.44269502f, logXDiff);          //  1.44269502f : log_2(e)
+    logXDiff = FmaImpl(lnMantissa, 1.92513667e-08f, logXDiff); // 1.92513667e-08f : Coefficient of O(1)
     logXDiff = FmaImpl(y3, lnMantissa, logXDiff);
 
     float diff0 = logX - (logX + logXDiff) + logXDiff;
     logX = logX + logXDiff;
 
     //  Calculates the exponent of Stirling's approximation
-    float y01 = logX * (absX - 0.5f);                //  0.5f : Coefficient of sqrt(x)
-    float y02 = 1.44269502f * absX;                  //  1.44269502f : log_2(e)
+    float y01 = logX * (absX - 0.5f); //  0.5f : Coefficient of sqrt(x)
+    float y02 = 1.44269502f * absX;   //  1.44269502f : log_2(e)
     float y0 = y01 - y02;
 
     //  Calculates the exponent[y01] error-value
@@ -1889,12 +1842,12 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float StirlingAndEulerReflection(float x)
     diff1 = FmaImpl(diff0, absX - 0.5f, diff1);
 
     //  Calculates the exponent[y02] error-value
-    float diff2 = FmaImpl(1.44269502f, absX, -y02);   //  1.44269502f : log_2(e)
+    float diff2 = FmaImpl(1.44269502f, absX, -y02); //  1.44269502f : log_2(e)
     diff2 = FmaImpl(1.92596303e-08f, absX, diff2);
     float y0Diff = (diff1 - diff2) - (y0 - y01 + y02);
 
     float offset = 0.0f;
-    if (absX > 33.0f) {        // 33.0f : threshold
+    if (absX > 33.0f) { // 33.0f : threshold
         offset = 48.0f;
     }
     if (x < 0.0f) {
@@ -1907,19 +1860,19 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float StirlingAndEulerReflection(float x)
     float f = y0 - i + y0Diff;
 
     // 2^f * 2^i * sqrt(2*pi)
-    float y5 = PowImpl(2.0f, f) * PowImpl(2.0f, i) * 2.5066282f;    //  2.5066282f : sqrt(2*PI)
+    float y5 = PowImpl(2.0f, f) * PowImpl(2.0f, i) * 2.5066282f; //  2.5066282f : sqrt(2*PI)
 
     //  Calculate Stirling's approximation remainder minus 1
     //  y6 = {[1 + 1/(12*x) + 1/(288*x^2) - 139/(51840*x^3) - 571/(2488320*x^4)] - 1}*x^-1
     float recAbsX = 1.0f / absX;
-    float y6 = 0.000068413915f;                         //  0.000068413915f    : Coefficient of O(8)
-    y6 = FmaImpl(y6, recAbsX, -0.000050603266f);        //  -0.000050603266f   : Coefficient of O(7)
-    y6 = FmaImpl(y6, recAbsX, -0.00042276637f);         //  -0.00042276637f    : Coefficient of O(6)
-    y6 = FmaImpl(y6, recAbsX, 0.0009921414f);           //  0.0009921414f      : Coefficient of O(5)
-    y6 = FmaImpl(y6, recAbsX, -0.00027855476f);         //  -0.00027855476f    : -571/2488320
-    y6 = FmaImpl(y6, recAbsX, -0.002674901f);           //  -0.002674901f      : -139/51840
-    y6 = FmaImpl(y6, recAbsX, 0.0034718033f);           //  0.0034718033f      : 1/288
-    y6 = FmaImpl(y6, recAbsX, 0.08333334f);             //  0.08333334f        : 1/12
+    float y6 = 0.000068413915f;                  //  0.000068413915f    : Coefficient of O(8)
+    y6 = FmaImpl(y6, recAbsX, -0.000050603266f); //  -0.000050603266f   : Coefficient of O(7)
+    y6 = FmaImpl(y6, recAbsX, -0.00042276637f);  //  -0.00042276637f    : Coefficient of O(6)
+    y6 = FmaImpl(y6, recAbsX, 0.0009921414f);    //  0.0009921414f      : Coefficient of O(5)
+    y6 = FmaImpl(y6, recAbsX, -0.00027855476f);  //  -0.00027855476f    : -571/2488320
+    y6 = FmaImpl(y6, recAbsX, -0.002674901f);    //  -0.002674901f      : -139/51840
+    y6 = FmaImpl(y6, recAbsX, 0.0034718033f);    //  0.0034718033f      : 1/288
+    y6 = FmaImpl(y6, recAbsX, 0.08333334f);      //  0.08333334f        : 1/12
     y6 = FmaImpl(y6, recAbsX, 0.0f);
     if (x > 0) {
         //  y5 * (1.0f + y6)
@@ -1951,7 +1904,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float StirlingAndEulerReflection(float x)
         //  y5 / [sin(pi*x) * 2 * x * y6]
         float y = FmaImpl(y5, y7, -y5 * y7 * yDiff * y7);
         y = y * 0.5f;
-        if (absX > 33) {    //  33 : threshold
+        if (absX > 33) {            //  33 : threshold
             y = y * 3.5527136e-15f; // 3.5527136e-15 : 2^-48
         }
         return y;
@@ -1968,8 +1921,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float StirlingAndEulerReflection(float x)
  *      if x is Inf, return Inf;
  *      if x is -Inf, return nan;
  */
-template<typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__  inline T TgammaImpl(T x)
+template <typename T>
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T TgammaImpl(T x)
 {
     if (x == 0.0f) {
         return 1.0f / x;
@@ -1985,7 +1938,6 @@ __SIMT_DEVICE_FUNCTIONS_DECL__  inline T TgammaImpl(T x)
     }
 }
 
-
 /**
  * Calculates lgamma value by input x.
  * @param x a value
@@ -1996,8 +1948,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__  inline T TgammaImpl(T x)
  *      if x is Inf, return Inf;
  *      if x is -Inf, return Inf;
  */
-template<typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__  inline T LgammaImpl(T x)
+template <typename T>
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T LgammaImpl(T x)
 {
     float absX = AbsImpl(x);
     float result = 0.0f;
@@ -2005,13 +1957,13 @@ __SIMT_DEVICE_FUNCTIONS_DECL__  inline T LgammaImpl(T x)
         return absX;
     } else if (absX < 0.7f) {
         //  1/[gamma(x)] = 1/[gamma(x+1) * x]
-        float y0 = 0.0035875155f;                   //  0.0035875155f    :   Coefficient of O(7)
-        y0 = FmaImpl(y0, absX, -0.0054712854f);     //  -0.0054712854f   :   Coefficient of O(6)
-        y0 = FmaImpl(y0, absX, -0.044627126f);      //  -0.044627126f    :   Coefficient of O(5)
-        y0 = FmaImpl(y0, absX, 0.1673177f);         //  0.1673177f       :   Coefficient of O(4)
-        y0 = FmaImpl(y0, absX, -0.04213598f);       //  -0.04213598f     :   Coefficient of O(3)
-        y0 = FmaImpl(y0, absX, -0.6558673f);        //  -0.6558673f      :   Coefficient of O(2)
-        y0 = FmaImpl(y0, absX, 0.5772154f);         //  0.5772154f       :   Euler-Mascheroni constant
+        float y0 = 0.0035875155f;               //  0.0035875155f    :   Coefficient of O(7)
+        y0 = FmaImpl(y0, absX, -0.0054712854f); //  -0.0054712854f   :   Coefficient of O(6)
+        y0 = FmaImpl(y0, absX, -0.044627126f);  //  -0.044627126f    :   Coefficient of O(5)
+        y0 = FmaImpl(y0, absX, 0.1673177f);     //  0.1673177f       :   Coefficient of O(4)
+        y0 = FmaImpl(y0, absX, -0.04213598f);   //  -0.04213598f     :   Coefficient of O(3)
+        y0 = FmaImpl(y0, absX, -0.6558673f);    //  -0.6558673f      :   Coefficient of O(2)
+        y0 = FmaImpl(y0, absX, 0.5772154f);     //  0.5772154f       :   Euler-Mascheroni constant
         y0 = FmaImpl(y0, absX, 0.0f);
         y0 = FmaImpl(y0, absX, absX);
 
@@ -2031,32 +1983,32 @@ __SIMT_DEVICE_FUNCTIONS_DECL__  inline T LgammaImpl(T x)
         //  = −γ(x-1) + ∑(n=2 to inf)[(-1)^n*h(n)/n](x-1)^n
         //  = γ(1-x) + ∑(n=2 to inf)[h(n)/n](-x+1)^n
         float oneMinusX = 1.0f - absX;
-        result = 0.045882664f;                              //  0.045882664f    :  Coefficient of O(11)
-        result = FmaImpl(result, oneMinusX, 0.10373967f);   //  0.10373967f     :   Coefficient of O(10)
-        result = FmaImpl(result, oneMinusX, 0.122803635f);  //  0.122803635f    :   Coefficient of O(9)
-        result = FmaImpl(result, oneMinusX, 0.12752421f);   //  0.12752421f     :   Coefficient of O(8)
-        result = FmaImpl(result, oneMinusX, 0.14321668f);   //  0.14321668f     :   Coefficient of O(7)
-        result = FmaImpl(result, oneMinusX, 0.16934357f);   //  0.16934357f     :   Coefficient of O(6)
-        result = FmaImpl(result, oneMinusX, 0.20740793f);   //  0.20740793f     :   Coefficient of O(5)
-        result = FmaImpl(result, oneMinusX, 0.2705875f);    //  0.2705875f      :   pi^4/360
-        result = FmaImpl(result, oneMinusX, 0.40068542f);   //  0.40068542f     :   1.20/3
-        result = FmaImpl(result, oneMinusX, 0.82246696f);   //  0.82246696f     :   (pi^2)/12
-        result = FmaImpl(result, oneMinusX, 0.5772157f);    //  0.5772157f      :   Euler-Mascheroni constant
+        result = 0.045882664f;                             //  0.045882664f    :  Coefficient of O(11)
+        result = FmaImpl(result, oneMinusX, 0.10373967f);  //  0.10373967f     :   Coefficient of O(10)
+        result = FmaImpl(result, oneMinusX, 0.122803635f); //  0.122803635f    :   Coefficient of O(9)
+        result = FmaImpl(result, oneMinusX, 0.12752421f);  //  0.12752421f     :   Coefficient of O(8)
+        result = FmaImpl(result, oneMinusX, 0.14321668f);  //  0.14321668f     :   Coefficient of O(7)
+        result = FmaImpl(result, oneMinusX, 0.16934357f);  //  0.16934357f     :   Coefficient of O(6)
+        result = FmaImpl(result, oneMinusX, 0.20740793f);  //  0.20740793f     :   Coefficient of O(5)
+        result = FmaImpl(result, oneMinusX, 0.2705875f);   //  0.2705875f      :   pi^4/360
+        result = FmaImpl(result, oneMinusX, 0.40068542f);  //  0.40068542f     :   1.20/3
+        result = FmaImpl(result, oneMinusX, 0.82246696f);  //  0.82246696f     :   (pi^2)/12
+        result = FmaImpl(result, oneMinusX, 0.5772157f);   //  0.5772157f      :   Euler-Mascheroni constant
         result = FmaImpl(result, oneMinusX, 0.0f);
     } else if (absX < 3.0f) {
         //  log[gamma(x)]
         //  = (1−γ)(x-2) + [(pi^2-6)/12](x-2)^2 + O(3)
         float xMinusTwo = absX - 2.0f;
-        result = 0.0000495984932f;                              //  -0.000049598493f    :   Coefficient of O(10)
-        result = FmaImpl(result, xMinusTwo, -0.00022089484f);   //  -0.000220894843f    :   Coefficient of O(9)
-        result = FmaImpl(result, xMinusTwo, 0.000541314250f);   //   0.00054131424f    :   Coefficient of O(8)
-        result = FmaImpl(result, xMinusTwo, -0.00120451697f);   //  -0.001204517f      :   Coefficient of O(7)
-        result = FmaImpl(result, xMinusTwo, 0.00288425176f);    //  0.0028842517f      :   Coefficient of O(6)
-        result = FmaImpl(result, xMinusTwo, -0.00738275796f);   //  -0.007382758f      :   Coefficient of O(5)
-        result = FmaImpl(result, xMinusTwo, 0.0205813199f);     //  0.02058132f        :   Coefficient of O(4)
-        result = FmaImpl(result, xMinusTwo, -0.0673524886f);    //  -0.06735249f       :   Coefficient of O(3)
-        result = FmaImpl(result, xMinusTwo, 0.322467029f);      //  0.32246702f        :   (pi^2-6)/12
-        result = FmaImpl(result, xMinusTwo, 0.42278432f);       //  0.42278432f        :   1-γ
+        result = 0.0000495984932f;                            //  -0.000049598493f    :   Coefficient of O(10)
+        result = FmaImpl(result, xMinusTwo, -0.00022089484f); //  -0.000220894843f    :   Coefficient of O(9)
+        result = FmaImpl(result, xMinusTwo, 0.000541314250f); //   0.00054131424f    :   Coefficient of O(8)
+        result = FmaImpl(result, xMinusTwo, -0.00120451697f); //  -0.001204517f      :   Coefficient of O(7)
+        result = FmaImpl(result, xMinusTwo, 0.00288425176f);  //  0.0028842517f      :   Coefficient of O(6)
+        result = FmaImpl(result, xMinusTwo, -0.00738275796f); //  -0.007382758f      :   Coefficient of O(5)
+        result = FmaImpl(result, xMinusTwo, 0.0205813199f);   //  0.02058132f        :   Coefficient of O(4)
+        result = FmaImpl(result, xMinusTwo, -0.0673524886f);  //  -0.06735249f       :   Coefficient of O(3)
+        result = FmaImpl(result, xMinusTwo, 0.322467029f);    //  0.32246702f        :   (pi^2-6)/12
+        result = FmaImpl(result, xMinusTwo, 0.42278432f);     //  0.42278432f        :   1-γ
         result = FmaImpl(result, absX, -result - result);
     } else if (absX < 7.8f) {
         float xMinusThree = absX - 3.0f;
@@ -2087,21 +2039,21 @@ __SIMT_DEVICE_FUNCTIONS_DECL__  inline T LgammaImpl(T x)
         //  [(1/12) - (1/360)/(1/x^2) + (1/1260)/((1/x^2)^2)] * (1/x)
         float y0 = (1.0f / absX);
         float y1 = y0 * y0;
-        float y2 = 0.00077783066f;                  //  0.00077783066f  : 1/1260
-        y2 = FmaImpl(y2, y1, -0.0027776553f);       //  -0.0027776553f  : -1/360
-        y2 = FmaImpl(y2, y1, 0.083333276f);         //  0.083333276     : 1/12
+        float y2 = 0.00077783066f;            //  0.00077783066f  : 1/1260
+        y2 = FmaImpl(y2, y1, -0.0027776553f); //  -0.0027776553f  : -1/360
+        y2 = FmaImpl(y2, y1, 0.083333276f);   //  0.083333276     : 1/12
         y2 = FmaImpl(y2, y0, 0.0f);
 
         //  ln(x) * 0.5 * (|x| - 0.5)
         float y3 = ComputeLn(absX) * 0.5f * (absX - 0.5f);
 
         //  (x-0.5) * ln(x) * 0.5 -|x| + (x-0.5) * ln(x) * 0.5 + y2 + ln(sqrt(2*pi))
-        result = y3 - absX + y3 + y2 + 0.9189385f;          //  0.9189385f : ln[(2*pi)/2]
+        result = y3 - absX + y3 + y2 + 0.9189385f; //  0.9189385f : ln[(2*pi)/2]
     }
     if (x < 0) {
         if (FloorIntrinsicsImpl(absX) == absX) {
             return ConstantsInternal::SIMT_FP32_INF;
-        } else if (absX < 9.9999996e-20f) {                 // 9.9999996e-20 : minimum-value
+        } else if (absX < 9.9999996e-20f) { // 9.9999996e-20 : minimum-value
             //  According Euler's Reflection Formula
             //  As x ~ 0 : then sin(pi*x) ~ pi*x
             //  ln(|gamma(x)|)
@@ -2130,7 +2082,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__  inline T LgammaImpl(T x)
             //  = ln(pi) - ln(|sin(pi*|x|)|*|x|]) - ln(gamma(|x|))
             float sinpi = ComputeSinpi(absX);
             float lnXSinpi = ComputeLn(absX * AbsImpl(sinpi));
-            float y = 1.14472985f - lnXSinpi;   //  1.1447298f : ln(pi)
+            float y = 1.14472985f - lnXSinpi; //  1.1447298f : ln(pi)
             result = FmaImpl(y, 1.0f, -result);
         }
     }
@@ -2147,8 +2099,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__  inline T LgammaImpl(T x)
  *      if x is Inf, return Inf;
  *      if x is -Inf, return Inf;
  */
-template<typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__  inline T CylBesselI0Impl(T x)
+template <typename T>
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T CylBesselI0Impl(T x)
 {
     float absX = AbsImpl(x);
     if (IsInfImpl(absX)) {
@@ -2157,27 +2109,27 @@ __SIMT_DEVICE_FUNCTIONS_DECL__  inline T CylBesselI0Impl(T x)
     if (absX >= 9) {
         //  I(x) ~ exp(x) * 1/sqrt(2*pi*x) * [1 + 1/(8x) + 9/(128x^2) + O(3)]
         float reciprocalX = 1.0f / absX;
-        float y = 0.34872168f;                            // 0.34872168f     : Coefficient of O(5)
-        y = FmaImpl(y, reciprocalX, -0.0054563344f);       //  -0.0054563344f  : Coefficient of O(4)
-        y = FmaImpl(y, reciprocalX, 0.033347155f);         //  0.033347155f    : Coefficient of O(3)
-        y = FmaImpl(y, reciprocalX, 0.027889195f);         //  0.027889195f    : 9/[sqrt(2*pi)*128]
-        y = FmaImpl(y, reciprocalX, 0.04987063f);          //  0.04987063f     : 1/[sqrt(2*pi)*8]
-        y = FmaImpl(y, reciprocalX, 0.39894226f);          //  0.39894226f     : 1/sqrt(2*pi)
+        float y = 0.34872168f;                       // 0.34872168f     : Coefficient of O(5)
+        y = FmaImpl(y, reciprocalX, -0.0054563344f); //  -0.0054563344f  : Coefficient of O(4)
+        y = FmaImpl(y, reciprocalX, 0.033347155f);   //  0.033347155f    : Coefficient of O(3)
+        y = FmaImpl(y, reciprocalX, 0.027889195f);   //  0.027889195f    : 9/[sqrt(2*pi)*128]
+        y = FmaImpl(y, reciprocalX, 0.04987063f);    //  0.04987063f     : 1/[sqrt(2*pi)*8]
+        y = FmaImpl(y, reciprocalX, 0.39894226f);    //  0.39894226f     : 1/sqrt(2*pi)
         y = y * RsqrtImpl(absX);
         return y * (ExpImpl(absX * 0.5f) - 1) * (ExpImpl(absX * 0.5f) + 1) + y;
     } else {
         //  I_0(x) = ∑(k=0 to inf)[1/k!Γ(k+1)*(x/2)^2k ]
         float squareX = absX * absX;
-        float y = 1.551427e-19;                       // 1.551427e-19        : Coefficient of O(10)
-        y = FmaImpl(y, squareX, 1.4492505e-17f);      // 1.4492505e-17        : Coefficient of O(9)
-        y = FmaImpl(y, squareX, 1.0687647e-14f);      // 1.0687647e-14f       : Coefficient of O(8)
-        y = FmaImpl(y, squareX, 2.3349575e-12f);      // 2.3349575e-12f       : 1/25401600*16384
-        y = FmaImpl(y, squareX, 4.7306625e-10f);      // 4.7306625e-10f       : 1/518400*4096
-        y = FmaImpl(y, squareX, 6.7778003e-8f);       // 6.7778003e-8f        : 1/(14400*1024)
-        y = FmaImpl(y, squareX, 0.0000067820783f);    // 0.0000067820783f     : 1/(576*256)
-        y = FmaImpl(y, squareX, 0.00043402583f);      // 0.00043402583f       : 1/(36*64)
-        y = FmaImpl(y, squareX, 0.015625f);           // 0.015625             : 1/(4*16)
-        y = FmaImpl(y, squareX, 0.25f);               // 0.25f                : 1/(1*4)
+        float y = 1.551427e-19;                    // 1.551427e-19        : Coefficient of O(10)
+        y = FmaImpl(y, squareX, 1.4492505e-17f);   // 1.4492505e-17        : Coefficient of O(9)
+        y = FmaImpl(y, squareX, 1.0687647e-14f);   // 1.0687647e-14f       : Coefficient of O(8)
+        y = FmaImpl(y, squareX, 2.3349575e-12f);   // 2.3349575e-12f       : 1/25401600*16384
+        y = FmaImpl(y, squareX, 4.7306625e-10f);   // 4.7306625e-10f       : 1/518400*4096
+        y = FmaImpl(y, squareX, 6.7778003e-8f);    // 6.7778003e-8f        : 1/(14400*1024)
+        y = FmaImpl(y, squareX, 0.0000067820783f); // 0.0000067820783f     : 1/(576*256)
+        y = FmaImpl(y, squareX, 0.00043402583f);   // 0.00043402583f       : 1/(36*64)
+        y = FmaImpl(y, squareX, 0.015625f);        // 0.015625             : 1/(4*16)
+        y = FmaImpl(y, squareX, 0.25f);            // 0.25f                : 1/(1*4)
         y = FmaImpl(y, squareX, 1);
         return y;
     }
@@ -2193,8 +2145,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__  inline T CylBesselI0Impl(T x)
  *      if x is Inf, return Inf;
  *      if x is -Inf, return -Inf;
  */
-template<typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__  inline T CylBesselI1Impl(T x)
+template <typename T>
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T CylBesselI1Impl(T x)
 {
     float absX = AbsImpl(x);
     if (IsInfImpl(absX)) {
@@ -2206,55 +2158,54 @@ __SIMT_DEVICE_FUNCTIONS_DECL__  inline T CylBesselI1Impl(T x)
     if (absX >= 8.085f) {
         //  I(x) ~ exp(x) * 1/sqrt(2*pi*x) * [1 - 3/(8x) -15/(128x^2) + O(3)]
         float reciprocalX = 1.0f / absX;
-        float y = -0.5028813f;                        //  -0.5028813   : Coefficient of O(5)
-        y = FmaImpl(y, reciprocalX, 0.028471555f);     //  0.028471555  : Coefficient of O(4)
-        y = FmaImpl(y, reciprocalX, -0.04873671f);     //  -0.04873671  : Coefficient of O(3)
-        y = FmaImpl(y, reciprocalX, -0.04641596f);     //  -0.04641596  : -15/[sqrt(2*pi)*128]
-        y = FmaImpl(y, reciprocalX, -0.14960973f);     //  -0.14960973  : -3/[sqrt(2*pi)*8]
-        y = FmaImpl(y, reciprocalX, 0.39894232f);      //  0.39894232   : 1/sqrt(2*pi)
+        float y = -0.5028813f;                     //  -0.5028813   : Coefficient of O(5)
+        y = FmaImpl(y, reciprocalX, 0.028471555f); //  0.028471555  : Coefficient of O(4)
+        y = FmaImpl(y, reciprocalX, -0.04873671f); //  -0.04873671  : Coefficient of O(3)
+        y = FmaImpl(y, reciprocalX, -0.04641596f); //  -0.04641596  : -15/[sqrt(2*pi)*128]
+        y = FmaImpl(y, reciprocalX, -0.14960973f); //  -0.14960973  : -3/[sqrt(2*pi)*8]
+        y = FmaImpl(y, reciprocalX, 0.39894232f);  //  0.39894232   : 1/sqrt(2*pi)
         y = y * RsqrtImpl(absX);
         y = y * (ExpImpl(absX * 0.5f) - 1) * (ExpImpl(absX * 0.5f) + 1) + y;
         return CopySignImpl(y, x);
     } else {
         //  I(x) = x * [1/2 + (x^2)/16 + (x^2)^2/384 + (x^2)^3/18432 + (x^2)^4/1474560 + (x^2)^5/176947200 + O(6)]
         float squareX = x * x;
-        float y = 2.7848253e-18f;                     // 2.7848253e-18f    :  Coefficient of O(9)
-        y = FmaImpl(y, squareX, 3.4224707e-16f);      // 3.4224707e-16f     : Coefficient of O(8)
-        y = FmaImpl(y, squareX, 1.6258002e-13f);      // 1.6258002e-13f     : Coefficient of O(7)
-        y = FmaImpl(y, squareX, 3.3142173e-11f);      // 3.3142173e-11f     : Coefficient of O(6)
-        y = FmaImpl(y, squareX, 5.6632734e-9f);       // 5.6632734e-9f      : 1/176947200
-        y = FmaImpl(y, squareX, 6.780027e-7f);        // 6.780027e-7f       : 1/1474560
-        y = FmaImpl(y, squareX, 0.00005425474f);      // 0.00005425474f     : 1/18432
-        y = FmaImpl(y, squareX, 0.002604162f);        // 0.002604162f       : 1/384
-        y = FmaImpl(y, squareX, 0.0625000f);          // 0.06250001f        : 1/16
-        y = FmaImpl(y, squareX, 0.5f);                // 0.5f               : 1/2
+        float y = 2.7848253e-18f;                // 2.7848253e-18f    :  Coefficient of O(9)
+        y = FmaImpl(y, squareX, 3.4224707e-16f); // 3.4224707e-16f     : Coefficient of O(8)
+        y = FmaImpl(y, squareX, 1.6258002e-13f); // 1.6258002e-13f     : Coefficient of O(7)
+        y = FmaImpl(y, squareX, 3.3142173e-11f); // 3.3142173e-11f     : Coefficient of O(6)
+        y = FmaImpl(y, squareX, 5.6632734e-9f);  // 5.6632734e-9f      : 1/176947200
+        y = FmaImpl(y, squareX, 6.780027e-7f);   // 6.780027e-7f       : 1/1474560
+        y = FmaImpl(y, squareX, 0.00005425474f); // 0.00005425474f     : 1/18432
+        y = FmaImpl(y, squareX, 0.002604162f);   // 0.002604162f       : 1/384
+        y = FmaImpl(y, squareX, 0.0625000f);     // 0.06250001f        : 1/16
+        y = FmaImpl(y, squareX, 0.5f);           // 0.5f               : 1/2
         return y * x;
     }
 }
 
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T NormcdfImpl(T x)
 {
     if (AbsImpl(x) > 14.5f) {
         x = CopySignImpl(14.5f, x);
     }
 
-    float oneOverSqrt2High = -0.707106769f;  // -0.707106769f: -1/sqrt(2) high
+    float oneOverSqrt2High = -0.707106769f; // -0.707106769f: -1/sqrt(2) high
     float xOverSqrt2High = x * oneOverSqrt2High;
     float compensateValue = FmaImpl(x, oneOverSqrt2High, -xOverSqrt2High);
 
-    float oneOverSqrt2Low = -1.21016175e-8f;  // -1.21016175e-8f: -1/sqrt(2) low
+    float oneOverSqrt2Low = -1.21016175e-8f; // -1.21016175e-8f: -1/sqrt(2) low
     float xOverSqrt2Low = FmaImpl(x, oneOverSqrt2Low, compensateValue);
     float xOverSqrt2 = xOverSqrt2High + xOverSqrt2Low;
 
     float erfcValue = ErfcImpl(xOverSqrt2);
     if (x <= -1.0f) {
-        erfcValue = FmaImpl(-2.0f * xOverSqrt2 * erfcValue,
-                            xOverSqrt2High - xOverSqrt2 + xOverSqrt2Low, erfcValue);
+        erfcValue = FmaImpl(-2.0f * xOverSqrt2 * erfcValue, xOverSqrt2High - xOverSqrt2 + xOverSqrt2Low, erfcValue);
     }
     return 0.5f * erfcValue;
 }
 
-}  // namespace Simt
-}  // namespace AscendC
-#endif  // IMPL_SIMT_API_CPP_DAV_C310_KERNEL_SIMT_TRANSCENDENTAL_IMPL_H
+} // namespace Simt
+} // namespace AscendC
+#endif // IMPL_SIMT_API_CPP_DAV_C310_KERNEL_SIMT_TRANSCENDENTAL_IMPL_H

@@ -70,8 +70,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline ushort3 make_ushort3(unsigned short x, uns
     return tmp;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline ushort4 make_ushort4(unsigned short x, unsigned short y, unsigned short z,
-                                                           unsigned short w)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline ushort4 make_ushort4(
+    unsigned short x, unsigned short y, unsigned short z, unsigned short w)
 {
     ushort4 tmp;
     tmp.x = x;
@@ -125,8 +125,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline uchar3 make_uchar3(unsigned char x, unsign
     return tmp;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uchar4 make_uchar4(unsigned char x, unsigned char y, unsigned char z,
-                                                         unsigned char w)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uchar4 make_uchar4(
+    unsigned char x, unsigned char y, unsigned char z, unsigned char w)
 {
     uchar4 tmp;
     tmp.x = x;
@@ -207,8 +207,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline ulong3 make_ulong3(unsigned long int x, un
     return tmp;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulong4 make_ulong4(unsigned long int x, unsigned long int y, unsigned long int z,
-                                                         unsigned long int w)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulong4 make_ulong4(
+    unsigned long int x, unsigned long int y, unsigned long int z, unsigned long int w)
 {
     ulong4 tmp;
     tmp.x = x;
@@ -235,8 +235,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline longlong3 make_longlong3(long long int x, 
     return tmp;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline longlong4 make_longlong4(long long int x, long long int y, long long int z,
-                                                               long long int w)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline longlong4 make_longlong4(
+    long long int x, long long int y, long long int z, long long int w)
 {
     longlong4 tmp;
     tmp.x = x;
@@ -254,8 +254,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong2 make_ulonglong2(unsigned long l
     return tmp;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong3 make_ulonglong3(unsigned long long int x, unsigned long long int y,
-                                                                 unsigned long long int z)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong3 make_ulonglong3(
+    unsigned long long int x, unsigned long long int y, unsigned long long int z)
 {
     ulonglong3 tmp;
     tmp.x = x;
@@ -264,8 +264,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong3 make_ulonglong3(unsigned long l
     return tmp;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong4 make_ulonglong4(unsigned long long int x, unsigned long long int y,
-                                                                 unsigned long long int z, unsigned long long int w)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong4 make_ulonglong4(
+    unsigned long long int x, unsigned long long int y, unsigned long long int z, unsigned long long int w)
 {
     ulonglong4 tmp;
     tmp.x = x;

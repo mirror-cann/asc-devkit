@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_simt_common_impl.h
@@ -22,17 +22,14 @@ namespace AscendC {
 
 namespace Simt {
 
-template<typename T, typename... Args>
+template <typename T, typename... Args>
 constexpr bool SupportTypeSimtInternel = (std::is_same_v<T, Args> || ...);
 
 typedef bfloat16_t bhalf;
 
 constexpr int32_t THREAD_GROUP_SIZE = 32;
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t GetWarpSizeImpl()
-{
-    return THREAD_GROUP_SIZE;
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t GetWarpSizeImpl() { return THREAD_GROUP_SIZE; }
 
 template <int32_t dim = 0>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t GetThreadNumImpl()
@@ -61,17 +58,12 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t GetThreadIdxImpl()
     return 0;
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t GetBlockIdxImpl()
-{
-    return blockIdx.x;
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t GetBlockIdxImpl() { return blockIdx.x; }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t GetBlockNumImpl()
-{
-    return gridDim.x;
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t GetBlockNumImpl() { return gridDim.x; }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t GetBf16U16(float f32, uint32_t u16, uint32_t u32, uint32_t bf16LastBit, RoundMode rnd)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uint32_t GetBf16U16(
+    float f32, uint32_t u16, uint32_t u32, uint32_t bf16LastBit, RoundMode rnd)
 {
     uint32_t carryOutBit = 0x10000;
     uint32_t topU32 = (u32 & ConstantsInternal::HIGH_16_BIT) + carryOutBit;
@@ -120,7 +112,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t F32ToBf16(float f32, RoundMode 
         }
         return f32;
     }
-    uint32_t *u32ptr = (uint32_t *)&f32;
+    uint32_t* u32ptr = (uint32_t*)&f32;
     uint32_t u32 = *u32ptr;
     uint32_t bf16LastBit = (u32 >> ConstantsInternal::U16_BIT) & 0x1;
     bfloat16_t sign = (f32 >= 0) ? 1 : -1;
@@ -137,7 +129,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t F32ToBf16(float f32, RoundMode 
     }
     u16 = GetBf16U16(f32, u16, u32, bf16LastBit, rnd);
     bfloat16_t bf16 = 0;
-    uint16_t *u16ptr = (uint16_t *)&bf16;
+    uint16_t* u16ptr = (uint16_t*)&bf16;
     *u16ptr = u16;
     if (((u16 == ConstantsInternal::B_HALF_INF) || (u16 == ConstantsInternal::B_HALF_NEG_INF))) {
         if (satMode) {
@@ -151,7 +143,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t F32ToBf16(float f32, RoundMode 
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half F32Tof16(float f32, RoundMode rnd)
 {
-    uint32_t *u32Ptr = (uint32_t *)&f32;
+    uint32_t* u32Ptr = (uint32_t*)&f32;
     uint32_t u32 = *u32Ptr;
     int32_t exponent = u32 & ConstantsInternal::INF;
     uint32_t f32ManU32 = u32 & 0x7fffff;
@@ -203,19 +195,16 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline half F32Tof16(float f32, RoundMode rnd)
         u16 = sign ^ ((f16ExpVal << ConstantsInternal::F16_MAN_BIT_LEN) + f16Man);
     }
     half f16 = 0;
-    uint16_t *u16ptr = (uint16_t *)&f16;
+    uint16_t* u16ptr = (uint16_t*)&f16;
     *u16ptr = u16;
     return f16;
 }
 
 #if defined(ASCENDC_CPU_DEBUG)
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline half RoundInf(half x)
-{
-    return x;
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline half RoundInf(half x) { return x; }
 #endif
-}  // namespace Simt
-}  // namespace AscendC
+} // namespace Simt
+} // namespace AscendC
 
 #if defined(ASCENDC_CPU_DEBUG)
 #include <cmath>
@@ -244,7 +233,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t FloorIntrinsicsImpl(bfloat16_t 
     if (IsInfImpl(x)) {
         return x;
     }
-    uint16_t *uintX = (uint16_t *)(&x);
+    uint16_t* uintX = (uint16_t*)(&x);
     uint16_t bf16Sign15Bit = 0xf;
     uint16_t bf16Frac7Bit = 0x7;
     int8_t sign = ((((*uintX) >> bf16Sign15Bit) & 0x1) == 0) ? 1 : -1;
@@ -299,10 +288,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T FloorIntrinsicsImpl(T x)
     }
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float FloorIntrinsicsImpl(float x)
-{
-    return floor(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float FloorIntrinsicsImpl(float x) { return floor(x); }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half FloorIntrinsicsImpl(half x)
 {
@@ -360,7 +346,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline DstType Floor_(SrcType x)
     }
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Floor_(half2 &dst, float2 &src)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Floor_(half2& dst, float2& src)
 {
     dst = __cvt_half2<ROUND::F, RoundingSaturation::RS_DISABLE_VALUE>(src);
 }
@@ -386,10 +372,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t RoundIntrinsicsImpl(bfloat16_t 
     }
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float RoundIntrinsicsImpl(float x)
-{
-    return round(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float RoundIntrinsicsImpl(float x) { return round(x); }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half RoundIntrinsicsImpl(half x)
 {
@@ -450,10 +433,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t RintIntrinsicsImpl(bfloat16_t x
     }
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float RintIntrinsicsImpl(float x)
-{
-    return rint(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float RintIntrinsicsImpl(float x) { return rint(x); }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half RintIntrinsicsImpl(half x)
 {
@@ -518,7 +498,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline DstType Rint_(SrcType x)
     }
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Rint_(half2 &dst, float2 &src)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Rint_(half2& dst, float2& src)
 {
     dst = __cvt_half2<ROUND::R, RoundingSaturation::RS_DISABLE_VALUE>(src);
 }
@@ -542,10 +522,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CeilIntrinsicsImpl(T x)
     }
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float CeilIntrinsicsImpl(float x)
-{
-    return ceil(x);
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float CeilIntrinsicsImpl(float x) { return ceil(x); }
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline half CeilIntrinsicsImpl(half x)
 {
@@ -603,14 +580,14 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline DstType Ceil_(SrcType x)
     }
 }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Ceil_(half2 &dst, float2 &src)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Ceil_(half2& dst, float2& src)
 {
     dst = __cvt_half2<ROUND::C, RoundingSaturation::RS_DISABLE_VALUE>(src);
 }
 #endif
 
 #ifndef ASCENDC_CPU_DEBUG
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Trunc_(half2 &dst, float2 &src)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Trunc_(half2& dst, float2& src)
 {
     dst = __cvt_half2<ROUND::Z, RoundingSaturation::RS_DISABLE_VALUE>(src);
 }
@@ -652,9 +629,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline DstType Trunc_(SrcType x)
 }
 
 #ifndef ASCENDC_CPU_DEBUG
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void CastNone_(half2 &dst, float2 &src)
-{
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void CastNone_(half2& dst, float2& src) {}
 #endif
 
 template <typename DstType, typename SrcType>
@@ -670,6 +645,6 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline DstType CastNone_(SrcType x)
     return (DstType)(x);
 }
 
-}  // namespace Simt
-}  // namespace AscendC
-#endif  // IMPL_SIMT_API_CPP_DAV_C310_KERNEL_SIMT_COMMON_IMPL_H
+} // namespace Simt
+} // namespace AscendC
+#endif // IMPL_SIMT_API_CPP_DAV_C310_KERNEL_SIMT_COMMON_IMPL_H

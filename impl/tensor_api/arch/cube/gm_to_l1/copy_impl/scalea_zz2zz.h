@@ -9,7 +9,7 @@
  */
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/scalea_zz2zz.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -50,7 +50,8 @@ private:
         if constexpr (U::layoutType::depth == FIVE_DIM_DATA) {
             auto srcLayout = src.Layout();
             auto dstLayout = dst.Layout();
-            EmitCopy(dst, src, RemoveBatchDim(srcLayout), RemoveBatchDim(dstLayout), Get<0>(srcLayout.Shape()),
+            EmitCopy(
+                dst, src, RemoveBatchDim(srcLayout), RemoveBatchDim(dstLayout), Get<0>(srcLayout.Shape()),
                 Get<0>(srcLayout.Stride()), Get<0>(dstLayout.Stride()));
         } else {
             EmitCopy(dst, src, src.Layout(), dst.Layout(), 1, 0, 0);
@@ -58,8 +59,9 @@ private:
     }
 
     template <typename T, typename U, typename SrcLayout, typename DstLayout>
-    __aicore__ inline static void EmitCopy(const T& dst, const U& src, const SrcLayout& srcLayout,
-        const DstLayout& dstLayout, uint16_t batchNum, uint64_t srcBatchStride, uint64_t dstBatchStride)
+    __aicore__ inline static void EmitCopy(
+        const T& dst, const U& src, const SrcLayout& srcLayout, const DstLayout& dstLayout, uint16_t batchNum,
+        uint64_t srcBatchStride, uint64_t dstBatchStride)
     {
         using type = typename U::elementType;
 
@@ -87,8 +89,8 @@ private:
         for (uint16_t batchIndex = 0; batchIndex < batchNum; ++batchIndex) {
             CopyGmToCbufAlignV2Base::CopyGmToCbufAlignV2(
                 (__cbuf__ half*)((dst.Data() + batchIndex * dstBatchStride).Get()),
-                (__gm__ half*)((src.Data() + batchIndex * srcBatchStride).Get()), blockCount, blockLen,
-                leftPaddingCnt, rightPaddingCnt, cacheMode, srcStride, dstStride);
+                (__gm__ half*)((src.Data() + batchIndex * srcBatchStride).Get()), blockCount, blockLen, leftPaddingCnt,
+                rightPaddingCnt, cacheMode, srcStride, dstStride);
         }
     }
 };

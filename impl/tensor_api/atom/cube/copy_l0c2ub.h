@@ -9,7 +9,7 @@
  */
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/tensor_api/atom/cube/copy_l0c2ub.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -36,13 +36,14 @@ struct CopyTraits<CopyL0C2UBWith, TraitStruct> {
 
     template <const TraitType& trait = defaultTrait, typename... Args>
     __aicore__ inline void CopyUnpack(const Args&... args) const
-    { CopyL0C2UBWith::Copy<TraitType, trait, Args...>(args..., params); }
+    {
+        CopyL0C2UBWith::Copy<TraitType, trait, Args...>(args..., params);
+    }
     FixpipeParams params;
 };
 
 template <typename Traits>
-struct CopyTraits<CopyL0C2UB, Traits> : public CopyTraits<CopyL0C2UB, Traits, CopyL0C2UBWith, Traits> {
-};
+struct CopyTraits<CopyL0C2UB, Traits> : public CopyTraits<CopyL0C2UB, Traits, CopyL0C2UBWith, Traits> {};
 
 template <>
 struct CopyTraits<CopyL0C2UB> : public CopyTraits<CopyL0C2UB, CopyL0C2UBTraitDefault> {};

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #ifndef IMPL_SIMT_API_CPP_KERNEL_SIMT_MATH_INTERFACE_IMPL_H
 #define IMPL_SIMT_API_CPP_KERNEL_SIMT_MATH_INTERFACE_IMPL_H
@@ -18,7 +18,9 @@ namespace Simt {
 template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Abs(T x)
 {
-    static_assert(SupportTypeSimtInternel<T, int32_t, int64_t, half, float>, "Input type only supports int32_t, int64_t, half, float.");
+    static_assert(
+        SupportTypeSimtInternel<T, int32_t, int64_t, half, float>,
+        "Input type only supports int32_t, int64_t, half, float.");
     return AbsImpl(x);
 }
 
@@ -40,8 +42,10 @@ template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Max(T x, T y)
 {
     static_assert(
-        SupportTypeSimtInternel<T, int8_t, int16_t, int32_t, int64_t, uint8_t, uint16_t, uint32_t, uint64_t, half, float>,
-        "Input type only supports int8_t, int16_t, int32_t, int64_t, uint8_t, uint16_t, uint32_t, uint64_t, half, float.");
+        SupportTypeSimtInternel<
+            T, int8_t, int16_t, int32_t, int64_t, uint8_t, uint16_t, uint32_t, uint64_t, half, float>,
+        "Input type only supports int8_t, int16_t, int32_t, int64_t, uint8_t, uint16_t, uint32_t, uint64_t, half, "
+        "float.");
     return MaxImpl(x, y);
 }
 
@@ -49,8 +53,10 @@ template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Min(T x, T y)
 {
     static_assert(
-    SupportTypeSimtInternel<T, int8_t, int16_t, int32_t, int64_t, uint8_t, uint16_t, uint32_t, uint64_t, half, float>,
-    "Input type only supports int8_t, int16_t, int32_t, int64_t, uint8_t, uint16_t, uint32_t, uint64_t, half, float.");
+        SupportTypeSimtInternel<
+            T, int8_t, int16_t, int32_t, int64_t, uint8_t, uint16_t, uint32_t, uint64_t, half, float>,
+        "Input type only supports int8_t, int16_t, int32_t, int64_t, uint8_t, uint16_t, uint32_t, uint64_t, half, "
+        "float.");
     return MinImpl(x, y);
 }
 
@@ -62,7 +68,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Fdim(T x, T y)
 }
 
 template <typename T, typename U>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline T RemQuo(T x, T y, U *quo)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T RemQuo(T x, T y, U* quo)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type T only supports float.");
     static_assert(SupportTypeSimtInternel<U, int32_t>, "Input type U only supports int32_t.");
@@ -123,7 +129,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Brev(T x)
 template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline int32_t Clz(T x)
 {
-    static_assert(SupportTypeSimtInternel<T, int32_t, int64_t, uint32_t, uint64_t>,
+    static_assert(
+        SupportTypeSimtInternel<T, int32_t, int64_t, uint32_t, uint64_t>,
         "Input type of Clz function only supports int32_t, uint32_t, int64_t, uint64_t.");
     return ClzImpl(x);
 }
@@ -156,6 +163,6 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T MulHi(T x, T y)
     static_assert(SupportTypeSimtInternel<T, int32_t, uint32_t>, "Input type T only supports int32_t, uint32_t.");
     return MulHiImpl(x, y);
 }
-}  // namespace Simt
-}  // namespace AscendC
-#endif  // IMPL_SIMT_API_CPP_KERNEL_SIMT_MATH_INTERFACE_IMPL_H
+} // namespace Simt
+} // namespace AscendC
+#endif // IMPL_SIMT_API_CPP_KERNEL_SIMT_MATH_INTERFACE_IMPL_H

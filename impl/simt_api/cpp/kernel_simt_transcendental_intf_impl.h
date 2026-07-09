@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #ifndef IMPL_SIMT_API_CPP_KERNEL_SIMT_TRANSCENDENTAL_INTERFACE_IMPL_H
 #define IMPL_SIMT_API_CPP_KERNEL_SIMT_TRANSCENDENTAL_INTERFACE_IMPL_H
@@ -129,14 +129,14 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Asinh(T x)
 }
 
 template <typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sincos(T x, T &s, T &c)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sincos(T x, T& s, T& c)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type of input only supports float.");
     SinCosImpl(x, s, c);
 }
 
 template <typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sincospi(T x, T &s, T &c)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sincospi(T x, T& s, T& c)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type of input only supports float.");
     SinCospiImpl(x, s, c);
@@ -185,7 +185,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Rsqrt(T x)
 }
 
 template <typename T, typename U>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline T Frexp(T x, U &exp)
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T Frexp(T x, U& exp)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type of input(x) only supports float.");
     static_assert(SupportTypeSimtInternel<U, int>, "Input type of input(exp) only supports int.");
@@ -246,7 +246,8 @@ template <typename T, typename U>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline U Norm(T n, U* a)
 {
     static_assert(SupportTypeSimtInternel<T, int>, "Input(n) type only supports int.");
-    static_assert(SupportTypeSimtInternel<U *, float *, __ubuf__ float *, __gm__ float *>,
+    static_assert(
+        SupportTypeSimtInternel<U*, float*, __ubuf__ float*, __gm__ float*>,
         "Input(a) type only supports float*, gm float*, ubuf float*.");
     return NormImpl(n, a);
 }
@@ -255,7 +256,8 @@ template <typename T, typename U>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline U Rnorm(T n, U* a)
 {
     static_assert(SupportTypeSimtInternel<T, int>, "Input(n) type only supports int.");
-    static_assert(SupportTypeSimtInternel<U *, float *, __ubuf__ float *, __gm__ float *>,
+    static_assert(
+        SupportTypeSimtInternel<U*, float*, __ubuf__ float*, __gm__ float*>,
         "Input(a) type only supports float*, gm float*, ubuf float*.");
     return RnormImpl(n, a);
 }
@@ -358,41 +360,41 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Erfcx(T x)
     return ErfcxImpl(x);
 }
 
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Tgamma(T x)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type only supports float.");
     return TgammaImpl(x);
 }
 
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Lgamma(T x)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type only supports float.");
     return LgammaImpl(x);
 }
 
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CylBesselI0(T x)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type only supports float.");
     return CylBesselI0Impl(x);
 }
 
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CylBesselI1(T x)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type only supports float.");
     return CylBesselI1Impl(x);
 }
 
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Normcdf(T x)
 {
     static_assert(SupportTypeSimtInternel<T, float>, "Input type only supports float.");
     return NormcdfImpl(x);
 }
 
-}  // namespace Simt
-}  // namespace AscendC
-#endif  // IMPL_SIMT_API_CPP_KERNEL_SIMT_TRANSCENDENTAL_INTERFACE_IMPL_H
+} // namespace Simt
+} // namespace AscendC
+#endif // IMPL_SIMT_API_CPP_KERNEL_SIMT_TRANSCENDENTAL_INTERFACE_IMPL_H

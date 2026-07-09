@@ -9,7 +9,7 @@
  */
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/tensor_api/arch/cube/l1_to_fb/copy_impl/instruction.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -41,8 +41,9 @@ public:
 
 private:
     template <typename T>
-    __aicore__ inline static void CopyL12FB(__fbuf__ T* dst, __cbuf__ T* src, uint16_t blockCount,
-        uint16_t blockLen, uint16_t srcStride, uint16_t dstStride)
+    __aicore__ inline static void CopyL12FB(
+        __fbuf__ T* dst, __cbuf__ T* src, uint16_t blockCount, uint16_t blockLen, uint16_t srcStride,
+        uint16_t dstStride)
     {
         if ASCEND_IS_AIV {
             return;

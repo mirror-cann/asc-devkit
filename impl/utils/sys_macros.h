@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file sys_macros.h
@@ -40,7 +40,7 @@ using float8_e8m0_t = fp8_e8m0_t;
 #endif // __aicore__
 
 #ifndef __host_aicore__
-#define __host_aicore__ [host, aicore]
+#define __host_aicore__ [ host, aicore ]
 #endif // __host_aicore__
 
 #ifndef __disable_kernel_type_autoinfer__
@@ -106,7 +106,8 @@ constexpr int32_t g_coreType = AscendC::MIX;
 
 #define __ASC_RESERVED_UBUF_PRAGMA__(x) _Pragma(#x)
 #define __ASC_RESERVED_UBUF_UNSUPPORTED_ARCH_ERROR__() \
-    __ASC_RESERVED_UBUF_PRAGMA__(GCC error \
+    __ASC_RESERVED_UBUF_PRAGMA__(                      \
+        GCC error                                      \
         "unsupported chip architecture in __ASC_USE_RESERVED_UBUF__; supported architectures are 2201 and 3510")
 
 #if defined(__ASC_DISABLE_RESERVED_UBUF__) && defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201)
@@ -124,10 +125,8 @@ constexpr int32_t g_coreType = AscendC::MIX;
 // Dispatch one architecture: unsupported chips fail fast, supported chips expand to the
 // architecture-specific unavailable attribute only when __ASC_DISABLE_RESERVED_UBUF__ matches.
 #define __ASC_USE_RESERVED_UBUF_SUPPORTED_0(arch, msg) __ASC_RESERVED_UBUF_UNSUPPORTED_ARCH_ERROR__()
-#define __ASC_USE_RESERVED_UBUF_SUPPORTED_1(arch, msg) \
-    __ASC_RESERVED_UBUF_CAT__(__ASC_USE_RESERVED_UBUF_, arch)(msg)
-#define __ASC_USE_RESERVED_UBUF_CALL__(supported, arch, msg) \
-    __ASC_USE_RESERVED_UBUF_CALL_IMPL__(supported, arch, msg)
+#define __ASC_USE_RESERVED_UBUF_SUPPORTED_1(arch, msg) __ASC_RESERVED_UBUF_CAT__(__ASC_USE_RESERVED_UBUF_, arch)(msg)
+#define __ASC_USE_RESERVED_UBUF_CALL__(supported, arch, msg) __ASC_USE_RESERVED_UBUF_CALL_IMPL__(supported, arch, msg)
 #define __ASC_USE_RESERVED_UBUF_CALL_IMPL__(supported, arch, msg) \
     __ASC_RESERVED_UBUF_CAT__(__ASC_USE_RESERVED_UBUF_SUPPORTED_, supported)(arch, msg)
 #define __ASC_USE_RESERVED_UBUF_IMPL__(arch, msg) \
@@ -137,24 +136,23 @@ constexpr int32_t g_coreType = AscendC::MIX;
 // Example: __ASC_USE_RESERVED_UBUF__(2201, 3510, "API is forbidden ...")
 #define __ASC_USE_RESERVED_UBUF_1(arch1, msg) __ASC_USE_RESERVED_UBUF_IMPL__(arch1, msg)
 #define __ASC_USE_RESERVED_UBUF_2(arch1, arch2, msg) \
-    __ASC_USE_RESERVED_UBUF_IMPL__(arch1, msg)        \
+    __ASC_USE_RESERVED_UBUF_IMPL__(arch1, msg)       \
     __ASC_USE_RESERVED_UBUF_IMPL__(arch2, msg)
 #define __ASC_USE_RESERVED_UBUF_3(arch1, arch2, arch3, msg) \
-    __ASC_USE_RESERVED_UBUF_2(arch1, arch2, msg)             \
+    __ASC_USE_RESERVED_UBUF_2(arch1, arch2, msg)            \
     __ASC_USE_RESERVED_UBUF_IMPL__(arch3, msg)
 #define __ASC_USE_RESERVED_UBUF_4(arch1, arch2, arch3, arch4, msg) \
-    __ASC_USE_RESERVED_UBUF_3(arch1, arch2, arch3, msg)             \
+    __ASC_USE_RESERVED_UBUF_3(arch1, arch2, arch3, msg)            \
     __ASC_USE_RESERVED_UBUF_IMPL__(arch4, msg)
 #define __ASC_USE_RESERVED_UBUF_5(arch1, arch2, arch3, arch4, arch5, msg) \
-    __ASC_USE_RESERVED_UBUF_4(arch1, arch2, arch3, arch4, msg)             \
+    __ASC_USE_RESERVED_UBUF_4(arch1, arch2, arch3, arch4, msg)            \
     __ASC_USE_RESERVED_UBUF_IMPL__(arch5, msg)
 
-#define __ASC_USE_RESERVED_UBUF_PICK__( \
-    _1, _2, _3, _4, _5, _6, NAME, ...) NAME
-#define __ASC_USE_RESERVED_UBUF__(...)                                                \
-    __ASC_USE_RESERVED_UBUF_PICK__(                                                   \
-        __VA_ARGS__, __ASC_USE_RESERVED_UBUF_5, __ASC_USE_RESERVED_UBUF_4,            \
-        __ASC_USE_RESERVED_UBUF_3, __ASC_USE_RESERVED_UBUF_2,                         \
-        __ASC_USE_RESERVED_UBUF_1)(__VA_ARGS__)
+#define __ASC_USE_RESERVED_UBUF_PICK__(_1, _2, _3, _4, _5, _6, NAME, ...) NAME
+#define __ASC_USE_RESERVED_UBUF__(...)                                                                \
+    __ASC_USE_RESERVED_UBUF_PICK__(                                                                   \
+        __VA_ARGS__, __ASC_USE_RESERVED_UBUF_5, __ASC_USE_RESERVED_UBUF_4, __ASC_USE_RESERVED_UBUF_3, \
+        __ASC_USE_RESERVED_UBUF_2, __ASC_USE_RESERVED_UBUF_1)                                         \
+    (__VA_ARGS__)
 
 #endif

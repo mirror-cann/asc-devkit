@@ -256,6 +256,11 @@ asc-devkit:
       - impl/adv_api/detail/conv/conv3d/conv3d_iterate_impl.h
       - impl/adv_api/detail/conv_backprop/conv3d_backprop_input/dav_v220/conv3d_bp_input_sub_func.h
       - impl/adv_api/detail/api_check/kernel_check/math/logical_ands/logical_ands_check.h
+      - impl/simt_api/cpp/kernel_simt_warp_level_intf_impl.h
+      - impl/simt_api/cpp/kernel_simt_bessel_intf_impl.h
+      - impl/simt_api/cpp/kernel_simt_cast_intf_impl.h
+      - impl/simt_api/cpp/kernel_simt_atomic_intf_impl.h
+
 
   llt:
     ut_check: true

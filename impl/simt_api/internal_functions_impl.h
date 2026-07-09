@@ -16,7 +16,8 @@
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_INTERNAL_FUNCTIONS_IMPL__
-#warning "impl/simt_api/internal_functions_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use public functions or variables defined in interface header files."
+#warning \
+    "impl/simt_api/internal_functions_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use public functions or variables defined in interface header files."
 #endif
 
 #ifndef IMPL_SIMT_API_INTERNAL_FUNCTIONS_IMPL_H

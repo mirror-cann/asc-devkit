@@ -1,24 +1,24 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/tensor_api/arch/vector/cast/cast_trait_map.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
 
 /*!
-* \file cast_trait_map.h
-* \brief
-*/
+ * \file cast_trait_map.h
+ * \brief
+ */
 #ifndef IMPL_TENSOR_API_ARCH_VECTOR_CAST_CAST_TRAIT_MAP_H
 #define IMPL_TENSOR_API_ARCH_VECTOR_CAST_CAST_TRAIT_MAP_H
 
@@ -30,8 +30,7 @@ namespace Te {
 // From instruction/bfloat16_float.h
 using CastSub_bfloat16_t_to_float = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::BF162FloatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::BF162FloatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::BF162FloatOdd> >;
 
 using CastSub_float_to_bfloat16_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::Float2BF16RDNoSatEven>,
@@ -53,8 +52,7 @@ using CastSub_float_to_bfloat16_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Float2BF16RZNoSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::Float2BF16RZSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::Float2BF16RZNoSatOdd>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Float2BF16RZSatOdd>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Float2BF16RZSatOdd> >;
 
 // From instruction/bfloat16_half.h
 using CastSub_bfloat16_t_to_half = TupleMap<
@@ -67,16 +65,14 @@ using CastSub_bfloat16_t_to_half = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RU, Std::ignore_t, Std::ignore_t>, Inst::BF162HalfRUNoSat>,
     Std::tuple<Std::tuple<CastRoundMode::RU, CastSatMode::Sat, Std::ignore_t>, Inst::BF162HalfRUSat>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::BF162HalfRZNoSat>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::BF162HalfRZSat>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::BF162HalfRZSat> >;
 
 using CastSub_half_to_bfloat16_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::Half2BF16RD>,
     Std::tuple<Std::tuple<CastRoundMode::RN, Std::ignore_t, Std::ignore_t>, Inst::Half2BF16RN>,
     Std::tuple<Std::tuple<CastRoundMode::RNA, Std::ignore_t, Std::ignore_t>, Inst::Half2BF16RNA>,
     Std::tuple<Std::tuple<CastRoundMode::RU, Std::ignore_t, Std::ignore_t>, Inst::Half2BF16RU>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Half2BF16RZ>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Half2BF16RZ> >;
 
 // From instruction/bfloat16_int.h
 using CastSub_bfloat16_t_to_int32_t = TupleMap<
@@ -99,8 +95,7 @@ using CastSub_bfloat16_t_to_int32_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::BF162Int32RZNoSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::BF162Int32RZSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::BF162Int32RZNoSatOdd>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::BF162Int32RZSatOdd>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::BF162Int32RZSatOdd> >;
 
 // From instruction/float_half.h
 using CastSub_float_to_half = TupleMap<
@@ -127,13 +122,11 @@ using CastSub_float_to_half = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Float2HalfRZNoSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::Float2HalfRZSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::Float2HalfRZNoSatOdd>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Float2HalfRZSatOdd>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Float2HalfRZSatOdd> >;
 
 using CastSub_half_to_float = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Half2FloatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Half2FloatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Half2FloatOdd> >;
 
 // From instruction/float_int.h
 using CastSub_float_to_int16_t = TupleMap<
@@ -156,8 +149,7 @@ using CastSub_float_to_int16_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Float2Int16RZNoSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::Float2Int16RZSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::Float2Int16RZNoSatOdd>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Float2Int16RZSatOdd>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Float2Int16RZSatOdd> >;
 
 using CastSub_float_to_int32_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::Float2Int32RDNoSatEven>,
@@ -169,8 +161,7 @@ using CastSub_float_to_int32_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RU, Std::ignore_t, Std::ignore_t>, Inst::Float2Int32RUNoSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RU, CastSatMode::Sat, Std::ignore_t>, Inst::Float2Int32RUSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Float2Int32RZNoSatEven>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::Float2Int32RZSatEven>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::Float2Int32RZSatEven> >;
 
 using CastSub_float_to_int64_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::Float2Int64RDNoSatEven>,
@@ -192,21 +183,18 @@ using CastSub_float_to_int64_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Float2Int64RZNoSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::Float2Int64RZSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::Float2Int64RZNoSatOdd>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Float2Int64RZSatOdd>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Float2Int64RZSatOdd> >;
 
 using CastSub_int16_t_to_float = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int162FloatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int162FloatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int162FloatOdd> >;
 
 using CastSub_int32_t_to_float = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::Int322FloatRDEven>,
     Std::tuple<Std::tuple<CastRoundMode::RN, Std::ignore_t, Std::ignore_t>, Inst::Int322FloatRNEven>,
     Std::tuple<Std::tuple<CastRoundMode::RNA, Std::ignore_t, Std::ignore_t>, Inst::Int322FloatRNAEven>,
     Std::tuple<Std::tuple<CastRoundMode::RU, Std::ignore_t, Std::ignore_t>, Inst::Int322FloatRUEven>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Int322FloatRZEven>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Int322FloatRZEven> >;
 
 using CastSub_int64_t_to_float = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::Int642FloatRDEven>,
@@ -218,8 +206,7 @@ using CastSub_int64_t_to_float = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RU, Std::ignore_t, Std::ignore_t>, Inst::Int642FloatRUEven>,
     Std::tuple<Std::tuple<CastRoundMode::RU, Std::ignore_t, CastIndexPos::Odd>, Inst::Int642FloatRUOdd>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Int642FloatRZEven>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::Int642FloatRZOdd>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::Int642FloatRZOdd> >;
 
 using CastSub_half_to_int8_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::Half2Int8RDNoSatEven>,
@@ -241,21 +228,18 @@ using CastSub_half_to_int8_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Half2Int8RZNoSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::Half2Int8RZSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::Half2Int8RZNoSatOdd>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Half2Int8RZSatOdd>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Half2Int8RZSatOdd> >;
 
 using CastSub_int16_t_to_half = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::Int162HalfRDNoSat>,
     Std::tuple<Std::tuple<CastRoundMode::RN, Std::ignore_t, Std::ignore_t>, Inst::Int162HalfRNNoSat>,
     Std::tuple<Std::tuple<CastRoundMode::RNA, Std::ignore_t, Std::ignore_t>, Inst::Int162HalfRNANoSat>,
     Std::tuple<Std::tuple<CastRoundMode::RU, Std::ignore_t, Std::ignore_t>, Inst::Int162HalfRUNoSat>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Int162HalfRZNoSat>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Int162HalfRZNoSat> >;
 
 using CastSub_int8_t_to_half = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int82HalfNoSatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int82HalfNoSatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int82HalfNoSatOdd> >;
 
 // From instruction/half_uint.h
 using CastSub_half_to_uint8_t = TupleMap<
@@ -278,70 +262,59 @@ using CastSub_half_to_uint8_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Half2UInt8RZNoSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::Half2UInt8RZSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::Half2UInt8RZNoSatOdd>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Half2UInt8RZSatOdd>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Half2UInt8RZSatOdd> >;
 
 using CastSub_uint8_t_to_half = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::U82HalfNoSatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::U82HalfNoSatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::U82HalfNoSatOdd> >;
 
 // From instruction/int_int.h
 using CastSub_int16_t_to_int32_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int162Int32NoSatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int162Int32NoSatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int162Int32NoSatOdd> >;
 
 using CastSub_int32_t_to_int16_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int322Int16NoSatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, Std::ignore_t>, Inst::Int322Int16SatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int322Int16NoSatOdd>,
-    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Int322Int16SatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Int322Int16SatOdd> >;
 
 using CastSub_int32_t_to_int64_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int322Int64NoSatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int322Int64NoSatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int322Int64NoSatOdd> >;
 
 using CastSub_int64_t_to_int32_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int642Int32NoSatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, Std::ignore_t>, Inst::Int642Int32SatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int642Int32NoSatOdd>,
-    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Int642Int32SatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Int642Int32SatOdd> >;
 
 using CastSub_int8_t_to_int16_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int82Int16NoSatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int82Int16NoSatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int82Int16NoSatOdd> >;
 
 using CastSub_int8_t_to_int32_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int82Int32NoSatP0>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP1>, Inst::Int82Int32NoSatP1>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::Int82Int32NoSatP2>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Int82Int32NoSatP3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Int82Int32NoSatP3> >;
 
 // From instruction/int_uint.h
 using CastSub_int16_t_to_uint32_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int162UInt32NoSatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int162UInt32NoSatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int162UInt32NoSatOdd> >;
 
 using CastSub_int16_t_to_uint8_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int162UInt8NoSatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, Std::ignore_t>, Inst::Int162UInt8SatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int162UInt8NoSatOdd>,
-    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Int162UInt8SatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Int162UInt8SatOdd> >;
 
 using CastSub_int32_t_to_uint16_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int322UInt16NoSatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, Std::ignore_t>, Inst::Int322UInt16SatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Int322UInt16NoSatOdd>,
-    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Int322UInt16SatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Int322UInt16SatOdd> >;
 
 using CastSub_int32_t_to_uint8_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int322UInt8NoSatP0>,
@@ -351,35 +324,30 @@ using CastSub_int32_t_to_uint8_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::Int322UInt8NoSatP2>,
     Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::PartP2>, Inst::Int322UInt8SatP2>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Int322UInt8NoSatP3>,
-    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::Int322UInt8SatP3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::Int322UInt8SatP3> >;
 
 using CastSub_uint32_t_to_int16_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::U322Int16NoSatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, Std::ignore_t>, Inst::U322Int16SatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::U322Int16NoSatOdd>,
-    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::U322Int16SatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::U322Int16SatOdd> >;
 
 // From instruction/uint_uint.h
 using CastSub_uint16_t_to_uint32_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::U162UInt32NoSatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::U162UInt32NoSatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::U162UInt32NoSatOdd> >;
 
 using CastSub_uint16_t_to_uint8_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::U162UInt8NoSatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, Std::ignore_t>, Inst::U162UInt8SatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::U162UInt8NoSatOdd>,
-    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::U162UInt8SatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::U162UInt8SatOdd> >;
 
 using CastSub_uint32_t_to_uint16_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::U322UInt16NoSatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, Std::ignore_t>, Inst::U322UInt16SatEven>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::U322UInt16NoSatOdd>,
-    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::U322UInt16SatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::Odd>, Inst::U322UInt16SatOdd> >;
 
 using CastSub_uint32_t_to_uint8_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::U322UInt8NoSatP0>,
@@ -389,20 +357,17 @@ using CastSub_uint32_t_to_uint8_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::U322UInt8NoSatP2>,
     Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::PartP2>, Inst::U322UInt8SatP2>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::U322UInt8NoSatP3>,
-    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::U322UInt8SatP3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::U322UInt8SatP3> >;
 
 using CastSub_uint8_t_to_uint16_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::U82UInt16NoSatEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::U82UInt16NoSatOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::U82UInt16NoSatOdd> >;
 
 using CastSub_uint8_t_to_uint32_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::U82UInt32NoSatP0>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP1>, Inst::U82UInt32NoSatP1>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::U82UInt32NoSatP2>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::U82UInt32NoSatP3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::U82UInt32NoSatP3> >;
 
 // From instruction/half_int.h
 using CastSub_half_to_int16_t = TupleMap<
@@ -415,8 +380,7 @@ using CastSub_half_to_int16_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RU, Std::ignore_t, Std::ignore_t>, Inst::Half2Int16RUNoSat>,
     Std::tuple<Std::tuple<CastRoundMode::RU, CastSatMode::Sat, Std::ignore_t>, Inst::Half2Int16RUSat>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Half2Int16RZNoSat>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::Half2Int16RZSat>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, Std::ignore_t>, Inst::Half2Int16RZSat> >;
 
 using CastSub_half_to_int32_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::Half2Int32RDNoSatEven>,
@@ -428,8 +392,7 @@ using CastSub_half_to_int32_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RU, Std::ignore_t, Std::ignore_t>, Inst::Half2Int32RUNoSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RU, Std::ignore_t, CastIndexPos::Odd>, Inst::Half2Int32RUNoSatOdd>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::Half2Int32RZNoSatEven>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::Half2Int32RZNoSatOdd>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::Odd>, Inst::Half2Int32RZNoSatOdd> >;
 
 // From instruction/rounding_ops.h
 using CastRoundingMap = TupleMap<
@@ -437,8 +400,7 @@ using CastRoundingMap = TupleMap<
     Std::tuple<Std::tuple<Inst::Round, Std::ignore_t, Std::ignore_t>, Inst::Round>,
     Std::tuple<Std::tuple<Inst::Floor, Std::ignore_t, Std::ignore_t>, Inst::Floor>,
     Std::tuple<Std::tuple<Inst::Ceil, Std::ignore_t, Std::ignore_t>, Inst::Ceil>,
-    Std::tuple<Std::tuple<Inst::Trunc, Std::ignore_t, Std::ignore_t>, Inst::Trunc>
->;
+    Std::tuple<Std::tuple<Inst::Trunc, Std::ignore_t, Std::ignore_t>, Inst::Trunc> >;
 
 #if !defined(ASCENDC_CPU_DEBUG)
 #if (defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)) || defined(__ASC_NPU_HOST__)
@@ -459,15 +421,13 @@ using CastSub_float_to_hifloat8_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RNA, Std::ignore_t, CastIndexPos::PartP2>, Inst::Float2Hif8RNANoSatP2>,
     Std::tuple<Std::tuple<CastRoundMode::RNA, CastSatMode::Sat, CastIndexPos::PartP2>, Inst::Float2Hif8RNASatP2>,
     Std::tuple<Std::tuple<CastRoundMode::RNA, Std::ignore_t, CastIndexPos::PartP3>, Inst::Float2Hif8RNANoSatP3>,
-    Std::tuple<Std::tuple<CastRoundMode::RNA, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::Float2Hif8RNASatP3>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RNA, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::Float2Hif8RNASatP3> >;
 
 using CastSub_hifloat8_t_to_float = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Hif82FloatP0>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP1>, Inst::Hif82FloatP1>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::Hif82FloatP2>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Hif82FloatP3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Hif82FloatP3> >;
 
 using CastSub_half_to_hifloat8_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RH, Std::ignore_t, Std::ignore_t>, Inst::Half2Hif8RHNoSatEven>,
@@ -477,13 +437,11 @@ using CastSub_half_to_hifloat8_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RNA, Std::ignore_t, Std::ignore_t>, Inst::Half2Hif8RNANoSatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RNA, CastSatMode::Sat, Std::ignore_t>, Inst::Half2Hif8RNASatEven>,
     Std::tuple<Std::tuple<CastRoundMode::RNA, Std::ignore_t, CastIndexPos::Odd>, Inst::Half2Hif8RNANoSatOdd>,
-    Std::tuple<Std::tuple<CastRoundMode::RNA, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Half2Hif8RNASatOdd>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RNA, CastSatMode::Sat, CastIndexPos::Odd>, Inst::Half2Hif8RNASatOdd> >;
 
 using CastSub_hifloat8_t_to_half = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Hif82HalfEven>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Hif82HalfOdd>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::Odd>, Inst::Hif82HalfOdd> >;
 using CastSub_half_to_int4x2_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::Half2Int4x2RDNoSatP0>,
     Std::tuple<Std::tuple<CastRoundMode::RD, CastSatMode::Sat, Std::ignore_t>, Inst::Half2Int4x2RDSatP0>,
@@ -524,43 +482,37 @@ using CastSub_half_to_int4x2_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::PartP2>, Inst::Half2Int4x2RZNoSatP2>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::PartP2>, Inst::Half2Int4x2RZSatP2>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::PartP3>, Inst::Half2Int4x2RZNoSatP3>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::Half2Int4x2RZSatP3>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::Half2Int4x2RZSatP3> >;
 
 using CastSub_int4x2_t_to_half = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int4x22HalfNoSatP0>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP1>, Inst::Int4x22HalfNoSatP1>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::Int4x22HalfNoSatP2>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Int4x22HalfNoSatP3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Int4x22HalfNoSatP3> >;
 
 using CastSub_int4x2_t_to_int16_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int4x22Int16NoSatP0>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP1>, Inst::Int4x22Int16NoSatP1>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::Int4x22Int16NoSatP2>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Int4x22Int16NoSatP3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Int4x22Int16NoSatP3> >;
 
 using CastSub_fp4x2_e1m2_t_to_bfloat16_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::E1M22BF16P0>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP1>, Inst::E1M22BF16P1>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::E1M22BF16P2>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::E1M22BF16P3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::E1M22BF16P3> >;
 
 using CastSub_fp4x2_e2m1_t_to_bfloat16_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::E2M12BF16P0>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP1>, Inst::E2M12BF16P1>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::E2M12BF16P2>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::E2M12BF16P3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::E2M12BF16P3> >;
 
 using CastSub_int4x2_t_to_bfloat16_t = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::Int4x22BF16P0>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP1>, Inst::Int4x22BF16P1>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::Int4x22BF16P2>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Int4x22BF16P3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::Int4x22BF16P3> >;
 
 // From instruction/float_fp8.h
 using CastSub_float_to_fp8_e4m3fn_t = TupleMap<
@@ -571,8 +523,7 @@ using CastSub_float_to_fp8_e4m3fn_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RN, Std::ignore_t, CastIndexPos::PartP2>, Inst::Float2E4M3RNNoSatP2>,
     Std::tuple<Std::tuple<CastRoundMode::RN, CastSatMode::Sat, CastIndexPos::PartP2>, Inst::Float2E4M3RNSatP2>,
     Std::tuple<Std::tuple<CastRoundMode::RN, Std::ignore_t, CastIndexPos::PartP3>, Inst::Float2E4M3RNNoSatP3>,
-    Std::tuple<Std::tuple<CastRoundMode::RN, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::Float2E4M3RNSatP3>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RN, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::Float2E4M3RNSatP3> >;
 
 using CastSub_float_to_fp8_e5m2_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RN, Std::ignore_t, Std::ignore_t>, Inst::Float2E5M2RNNoSatP0>,
@@ -582,22 +533,19 @@ using CastSub_float_to_fp8_e5m2_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RN, Std::ignore_t, CastIndexPos::PartP2>, Inst::Float2E5M2RNNoSatP2>,
     Std::tuple<Std::tuple<CastRoundMode::RN, CastSatMode::Sat, CastIndexPos::PartP2>, Inst::Float2E5M2RNSatP2>,
     Std::tuple<Std::tuple<CastRoundMode::RN, Std::ignore_t, CastIndexPos::PartP3>, Inst::Float2E5M2RNNoSatP3>,
-    Std::tuple<Std::tuple<CastRoundMode::RN, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::Float2E5M2RNSatP3>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RN, CastSatMode::Sat, CastIndexPos::PartP3>, Inst::Float2E5M2RNSatP3> >;
 
 using CastSub_fp8_e4m3fn_t_to_float = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::E4M32FloatP0>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP1>, Inst::E4M32FloatP1>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::E4M32FloatP2>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::E4M32FloatP3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::E4M32FloatP3> >;
 
 using CastSub_fp8_e5m2_t_to_float = TupleMap<
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, Std::ignore_t>, Inst::E5M22FloatP0>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP1>, Inst::E5M22FloatP1>,
     Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP2>, Inst::E5M22FloatP2>,
-    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::E5M22FloatP3>
->;
+    Std::tuple<Std::tuple<Std::ignore_t, Std::ignore_t, CastIndexPos::PartP3>, Inst::E5M22FloatP3> >;
 
 using CastSub_bfloat16_t_to_fp4x2_e1m2_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::BF162E1M2RDP0>,
@@ -619,8 +567,7 @@ using CastSub_bfloat16_t_to_fp4x2_e1m2_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::BF162E1M2RZP0>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::PartP1>, Inst::BF162E1M2RZP1>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::PartP2>, Inst::BF162E1M2RZP2>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::PartP3>, Inst::BF162E1M2RZP3>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::PartP3>, Inst::BF162E1M2RZP3> >;
 
 using CastSub_bfloat16_t_to_fp4x2_e2m1_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RD, Std::ignore_t, Std::ignore_t>, Inst::BF162E2M1RDP0>,
@@ -642,8 +589,7 @@ using CastSub_bfloat16_t_to_fp4x2_e2m1_t = TupleMap<
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, Std::ignore_t>, Inst::BF162E2M1RZP0>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::PartP1>, Inst::BF162E2M1RZP1>,
     Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::PartP2>, Inst::BF162E2M1RZP2>,
-    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::PartP3>, Inst::BF162E2M1RZP3>
->;
+    Std::tuple<Std::tuple<CastRoundMode::RZ, Std::ignore_t, CastIndexPos::PartP3>, Inst::BF162E2M1RZP3> >;
 
 #endif
 #endif
@@ -658,9 +604,9 @@ struct CastSubMap {
 };
 
 #define ASCENDC_CAST_SUB_MAP_NAME(SRC_TYPE, DST_TYPE) CastSub_##SRC_TYPE##_to_##DST_TYPE
-#define ASCENDC_CAST_SUB_MAP(SRC_TYPE, DST_TYPE)           \
-    template <>                                            \
-    struct CastSubMap<SRC_TYPE, DST_TYPE> {                \
+#define ASCENDC_CAST_SUB_MAP(SRC_TYPE, DST_TYPE)                    \
+    template <>                                                     \
+    struct CastSubMap<SRC_TYPE, DST_TYPE> {                         \
         using type = ASCENDC_CAST_SUB_MAP_NAME(SRC_TYPE, DST_TYPE); \
     };
 

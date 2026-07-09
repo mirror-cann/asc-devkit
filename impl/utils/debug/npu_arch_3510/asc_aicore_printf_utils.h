@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file asc_aicore_printf_utils.h
@@ -22,23 +22,23 @@ namespace __asc_aicore {
 template <typename T>
 __aicore__ inline void set_scalar_param_impl(__gm__ uint8_t* paramAddr, uint32_t paramIdx, T scalar)
 {
-    __gm__ uint64_t *scalarAddr = (__gm__ uint64_t *)paramAddr + paramIdx;
+    __gm__ uint64_t* scalarAddr = (__gm__ uint64_t*)paramAddr + paramIdx;
     *scalarAddr = 0;
 
     if constexpr (is_same_in_list<T, half, float>()) {
-        *((__gm__ float *)scalarAddr) = static_cast<float>(scalar);
+        *((__gm__ float*)scalarAddr) = static_cast<float>(scalar);
     } else if constexpr (is_same_in_list<T, double>()) {
-        *((__gm__ double *)scalarAddr) = static_cast<double>(scalar);
+        *((__gm__ double*)scalarAddr) = static_cast<double>(scalar);
     } else if constexpr (std::is_signed<T>::value) {
-        *((__gm__ int64_t *)scalarAddr) = static_cast<int64_t>(scalar);
-    } else if constexpr(std::is_unsigned<T>::value) {
-        *((__gm__ uint64_t *)scalarAddr) = static_cast<uint64_t>(scalar);
-    } else if constexpr(is_same_in_list<T, bfloat16_t, float8_e5m2_t, float8_e8m0_t, float8_e4m3_t, hifloat8_t>()) {
-        *((__gm__ float *)scalarAddr) = to_float(scalar);
-    } else if constexpr(std::is_pointer<T>::value) {
-        *((__gm__ uint64_t *)scalarAddr) = (uintptr_t)scalar;
-    } else if constexpr(std::is_enum<T>::value) {
-        *((__gm__ uint64_t *)scalarAddr) = static_cast<uint64_t>(scalar);
+        *((__gm__ int64_t*)scalarAddr) = static_cast<int64_t>(scalar);
+    } else if constexpr (std::is_unsigned<T>::value) {
+        *((__gm__ uint64_t*)scalarAddr) = static_cast<uint64_t>(scalar);
+    } else if constexpr (is_same_in_list<T, bfloat16_t, float8_e5m2_t, float8_e8m0_t, float8_e4m3_t, hifloat8_t>()) {
+        *((__gm__ float*)scalarAddr) = to_float(scalar);
+    } else if constexpr (std::is_pointer<T>::value) {
+        *((__gm__ uint64_t*)scalarAddr) = (uintptr_t)scalar;
+    } else if constexpr (std::is_enum<T>::value) {
+        *((__gm__ uint64_t*)scalarAddr) = static_cast<uint64_t>(scalar);
     }
     asc_entire_dcci((__gm__ uint64_t*)scalarAddr);
 }
@@ -49,23 +49,23 @@ namespace __asc_simd_vf {
 template <typename T>
 __simd_callee__ inline void set_scalar_param_vf_impl(__ubuf__ uint8_t* param_addr, uint32_t param_idx, T scalar)
 {
-    __ubuf__ uint64_t *scalar_addr = (__ubuf__ uint64_t *)param_addr + param_idx;
+    __ubuf__ uint64_t* scalar_addr = (__ubuf__ uint64_t*)param_addr + param_idx;
     *scalar_addr = 0;
 
     if constexpr (is_same_in_list<T, half, float>()) {
-        *((__ubuf__ float *)scalar_addr) = static_cast<float>(scalar);
+        *((__ubuf__ float*)scalar_addr) = static_cast<float>(scalar);
     } else if constexpr (is_same_in_list<T, double>()) {
-        *((__ubuf__ double *)scalar_addr) = static_cast<double>(scalar);
+        *((__ubuf__ double*)scalar_addr) = static_cast<double>(scalar);
     } else if constexpr (std::is_signed<T>::value) {
-        *((__ubuf__ int64_t *)scalar_addr) = static_cast<int64_t>(scalar);
-    } else if constexpr(std::is_unsigned<T>::value) {
-        *((__ubuf__ uint64_t *)scalar_addr) = static_cast<uint64_t>(scalar);
-    } else if constexpr(is_same_in_list<T, bfloat16_t, float8_e5m2_t, float8_e8m0_t, float8_e4m3_t, hifloat8_t>()) {
-        *((__ubuf__ float *)scalar_addr) = to_float(scalar);
-    } else if constexpr(std::is_pointer<T>::value) {
-        *((__ubuf__ uint64_t *)scalar_addr) = (uintptr_t)scalar;
-    } else if constexpr(std::is_enum<T>::value) {
-        *((__ubuf__ uint64_t *)scalar_addr) = static_cast<uint64_t>(scalar);
+        *((__ubuf__ int64_t*)scalar_addr) = static_cast<int64_t>(scalar);
+    } else if constexpr (std::is_unsigned<T>::value) {
+        *((__ubuf__ uint64_t*)scalar_addr) = static_cast<uint64_t>(scalar);
+    } else if constexpr (is_same_in_list<T, bfloat16_t, float8_e5m2_t, float8_e8m0_t, float8_e4m3_t, hifloat8_t>()) {
+        *((__ubuf__ float*)scalar_addr) = to_float(scalar);
+    } else if constexpr (std::is_pointer<T>::value) {
+        *((__ubuf__ uint64_t*)scalar_addr) = (uintptr_t)scalar;
+    } else if constexpr (std::is_enum<T>::value) {
+        *((__ubuf__ uint64_t*)scalar_addr) = static_cast<uint64_t>(scalar);
     }
 }
 
@@ -175,11 +175,12 @@ __simd_callee__ inline uint32_t get_print_tlv_len_simd(uint32_t& args_num, __ubu
 }
 
 __simd_callee__ inline void set_print_tlv_info_vf(
-    DumpType debug_type, __ubuf__ PrintTlv* print_tlv, const uint32_t& tlv_len, const uint32_t& args_num, uint16_t block_idx)
+    DumpType debug_type, __ubuf__ PrintTlv* print_tlv, const uint32_t& tlv_len, const uint32_t& args_num,
+    uint16_t block_idx)
 {
     print_tlv->type = static_cast<uint32_t>(debug_type);
     print_tlv->length = tlv_len - sizeof(uint32_t[2]); // exclude type and length
-    print_tlv->blockIdx = block_idx;  // set in aicore
+    print_tlv->blockIdx = block_idx;                   // set in aicore
     print_tlv->resv = static_cast<uint32_t>(0U);
     print_tlv->fmtOffset = (args_num + 1) * sizeof(uint64_t); // include fmt offset
 }

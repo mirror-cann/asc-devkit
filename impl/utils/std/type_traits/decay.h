@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /* !
  * \file decay.h
@@ -33,16 +33,15 @@ struct DecayImpl {
 };
 
 template <typename Up>
-struct DecayImpl<Up, true>
-{
+struct DecayImpl<Up, true> {
 public:
-    using type = conditional_t<is_array<Up>::value, remove_extent_t<Up>*,
-    conditional_t<is_function<Up>::value, add_pointer_t<Up>, remove_cv_t<Up>>>;
+    using type = conditional_t<
+        is_array<Up>::value, remove_extent_t<Up>*,
+        conditional_t<is_function<Up>::value, add_pointer_t<Up>, remove_cv_t<Up>>>;
 };
 
 template <typename Tp>
-struct decay
-{
+struct decay {
 private:
     using Up = remove_reference_t<Tp>;
 
@@ -53,7 +52,7 @@ public:
 template <typename Tp>
 using decay_t = typename decay<Tp>::type;
 
-}
-}
+} // namespace Std
+} // namespace AscendC
 
 #endif // IMPL_STD_ASCENDC_STD_DECAY_IMPL__H

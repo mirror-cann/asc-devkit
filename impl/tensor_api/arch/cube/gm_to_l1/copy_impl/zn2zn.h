@@ -9,7 +9,7 @@
  */
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/zn2zn.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "tensor_api/tensor.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -53,9 +53,8 @@ private:
 
         using type = typename U::elementType;
 
-        auto smallFractalSize =
-            GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(srcLayout)
-            * GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
+        auto smallFractalSize = GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(srcLayout) *
+                                GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
         auto bigFractalSize = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
         auto srcStrideSize = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout);
         auto dstStrideSize = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstLayout);
@@ -73,8 +72,8 @@ private:
             srcStride = srcStride >> 1;
             dstStride = dstStride >> 1;
         }
-        CopyGmToCbufAlignV2Base::DataCopy(dst, src, blockCount, blockLen, leftPaddingCnt, rightPaddingCnt, cacheMode,
-                                          srcStride, dstStride);
+        CopyGmToCbufAlignV2Base::DataCopy(
+            dst, src, blockCount, blockLen, leftPaddingCnt, rightPaddingCnt, cacheMode, srcStride, dstStride);
     }
 };
 } // namespace Te

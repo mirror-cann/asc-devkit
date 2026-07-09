@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #include <inttypes.h>
 #include <algorithm>
@@ -14,7 +14,7 @@
 #include "debug/stub_util.h"
 namespace {
 const int64_t UNKNOWN_DIM_SIZE = -1;
-}  // namespace
+} // namespace
 
 namespace ge {
 // If not overflow return true
@@ -48,10 +48,10 @@ class ShapeImpl {
 public:
     ShapeImpl() = default;
     ~ShapeImpl() = default;
-    explicit ShapeImpl(const std::vector<int64_t> &dims)
+    explicit ShapeImpl(const std::vector<int64_t>& dims)
     {
         bool isUnknownDimNum = false;
-        for (const auto &dim : dims) {
+        for (const auto& dim : dims) {
             if (dim == UNKNOWN_DIM_NUM) {
                 isUnknownDimNum = true;
                 break;
@@ -65,21 +65,15 @@ private:
     friend class Shape;
 };
 
-Shape::Shape()
-{
-    impl_ = ComGraphMakeShared<ShapeImpl>();
-}
+Shape::Shape() { impl_ = ComGraphMakeShared<ShapeImpl>(); }
 
-Shape::Shape(const std::vector<int64_t> &dims)
-{
-    impl_ = ComGraphMakeShared<ShapeImpl>(dims);
-}
+Shape::Shape(const std::vector<int64_t>& dims) { impl_ = ComGraphMakeShared<ShapeImpl>(dims); }
 
 size_t Shape::GetDimNum() const
 {
     if (impl_ != nullptr) {
-        const bool isDimUnknown = std::any_of(std::begin(impl_->dims_), std::end(impl_->dims_),
-            [](const int64_t i) { return i == UNKNOWN_DIM_NUM; });
+        const bool isDimUnknown = std::any_of(
+            std::begin(impl_->dims_), std::end(impl_->dims_), [](const int64_t i) { return i == UNKNOWN_DIM_NUM; });
         if (isDimUnknown) {
             GELOGI("Dim num is unknown, return 0U.");
             return 0U;
@@ -133,4 +127,4 @@ int64_t Shape::GetShapeSize() const
     return 0;
 }
 
-}
+} // namespace ge

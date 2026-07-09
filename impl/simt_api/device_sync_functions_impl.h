@@ -26,23 +26,14 @@
 
 #if (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_syncthreads()
-{
-    __sync_workitems();
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_syncthreads() { __sync_workitems(); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_threadfence()
-{
-    __threadfence();
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_threadfence() { __threadfence(); }
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_threadfence_block()
-{
-    __threadfence_block();
-}
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_threadfence_block() { __threadfence_block(); }
 
 #endif
-#endif  // IMPL_SIMT_API_DEVICE_SYNC_FUNCTIONS_IMPL_H
+#endif // IMPL_SIMT_API_DEVICE_SYNC_FUNCTIONS_IMPL_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_DEVICE_SYNC_FUNCTIONS_IMPL__)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
