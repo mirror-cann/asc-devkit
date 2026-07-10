@@ -1,6 +1,6 @@
-# UnitFlag<a name="ZH-CN_TOPIC_00000025690709788"></a>
+# UnitFlag
 
-## **特性说明：**
+## 特性说明
 
 unitFlag的核心功能体现为：Mmad和Copy接口引入了单元标志（unit-flag）机制，通过以内存块为粒度实现精细化的数据同步，从而有效降低同步延迟，提升系统整体性能。当UnitFlag开关打开后，对于L0C Buffer中的每个内存块（512B），提供一个单元标志位，用于指示该块是否可读或可写。
 
@@ -22,7 +22,7 @@ Mmad和Copy接口设置unitFlag值为2/3后，系统会启动单元标志位。
 - 最后1次Mmad设置成3，写入后将单元标志位设置成1，保证Fixpipe可以读取L0C Buffer。
 - Fixpipe的unitFlag设置为3，读取后将单元标记位设置为0，保证后续Mmad接口可以顺利写入L0C Buffer数据。
 
-如果用户需要单次Mmad的结果分多次搬出时，譬如Mmad计算结果的L0C Buffer为M\(128\) x N\(256\)，沿N轴分两次搬出，这样一次Mmad会对应两次Fixpipe。
+如果用户需要单次Mmad的结果分多次搬出时，譬如Mmad计算结果的L0C Buffer为M\(128\) × N\(256\)，沿N轴分两次搬出，这样一次Mmad会对应两次Fixpipe。
 
 - Mmad的时候需要设置unitFlag = 3，保证Fixpipe可以读取L0C Buffer数据。
 - 每一次Fixpipe的unitFlag都设置为3，读取后将单元标记位设置为0，保证后续其他Mmad接口在复用这块L0C Buffer地址时可以顺利写入数据。
@@ -33,33 +33,34 @@ Mmad和Copy接口设置unitFlag值为2/3后，系统会启动单元标志位。
 
 **图1**  Mmad和Fixpipe同时沿M方向写/读
 
-![](../../../../../figures/mmad_unitflag.png)
+![Mmad-Fixpipe读写示意图](../../../../../figures/mmad_unitflag.png)
 
-**特性约束：**
+## 特性约束
 
 - Mmad和Copy接口均提供了unitFlag参数来控制该功能的启用，需确保两者同步开启，才能正常生效。
 - 当希望控制同一块L0C Buffer内存空间能持续只被多条Mmad或多条Fixpipe指令操作时，需将对应的前n-1条指令的unitFlag值设置为2，维持被操作内存空间的持续占用状态，最后一条指令设置为3，解除被占用状态。
 - 当启用unitFlag功能后，建议Mmad的计算数据量与Fixpipe搬出的数据量保持一致。若Mmad计算了大块数据（M × N = 128 × 128），但Fixpipe只搬出了其中一部分数据（M × N = 64 × 64），则可能会导致执行异常，可以通过`SetFixPipeConfig`接口重置L0C Buffer的状态。
 
-**沿K轴迭代循环使用示例片段：**
+## 沿K轴迭代循环使用示例片段
 
 ```cpp
 using namespace AscendC::Te;
 
-// 调用kRound次Mmad
+// 调用kRound次Mmad。
 for (auto kIndex = 0; kIndex < kRound; ++kIndex) {
     if (kIndex != kRound - 1) {
-        // 前kRound-1次迭代设置为2，保证Mmad在K迭代循环中可以一直写入L0C Buffer
+        // 前kRound-1次迭代设置为2，保证Mmad在K迭代循环中可以一直写入L0C Buffer。
         mmadParams.unitFlag = 2;
     } else {
-        // 最后一次迭代设置为3，将单元标志位设成1,保证Fixpipe可以读L0C Buffer
+        // 最后一次迭代设置为3，将单元标志位设成1，保证Fixpipe可以读L0C Buffer。
         mmadParams.unitFlag = 3;
     }
     auto mmadAtom = MakeMmad(MmadOperation{}).with(mmadParams);
     Mmad(mmadAtom, l0C, l0A, l0B);
 }
-// Fixpipe一次搬出
-// Fixpipe的unitFlag设置为3，读取后将单元标记位设置为0，保证后续Mmad接口可以顺利写入L0C Buffer数据
+// Fixpipe一次搬出。
+// Fixpipe的unitFlag设置为3，读取后将单元标记位设置为0，保证后续Mmad接口可以顺利写入L0C Buffer数据。
+FixpipeParams fixpipeParams;
 fixpipeParams.unitFlag = 3;
 auto fixpipeAtom = MakeCopy(CopyL0C2GM{}).with(fixpipeParams);
 Copy(fixpipeAtom, gm, l0C);

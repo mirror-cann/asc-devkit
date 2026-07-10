@@ -1,16 +1,16 @@
 # F32 Channel Split
 
-F32 Channel Split是矩阵计算结果搬出过程中的通道拆分能力。当源类型和目的类型均为`float`、目的格式为NZ，且`CopyL0C2GMTrait::enableChannelSplit`或`CopyL0C2UBTrait::enableChannelSplit`设置为`true`时，硬件会将16 x 16的分形矩阵拆分为两个独立的16 x 8小Z分形矩阵。
+F32 Channel Split是矩阵计算结果搬出过程中的通道拆分能力。当源类型和目的类型均为`float`、目的格式为NZ，且`CopyL0C2GMTrait::enableChannelSplit`或`CopyL0C2UBTrait::enableChannelSplit`设置为`true`时，硬件会将16×16的分形矩阵拆分为两个独立的16×8小Z分形矩阵。
 
-启用该能力后，目的NZ输出的C0按8处理，N方向大小必须为8的倍数。如下图所示，当源操作数shape为`[64, 32]`时，搬出结果会被拆分为16个独立的16 x 8分形矩阵。当源操作数shape为`[64, 24]`时，搬出结果会被拆分为3列16 x 8分形矩阵。
+启用该能力后，目的NZ输出的C0按8处理，N方向大小必须为8的倍数。如下图所示，当源操作数shape为`[64, 32]`时，搬出结果会被拆分为16个独立的16×8分形矩阵。当源操作数shape为`[64, 24]`时，搬出结果会被拆分为3列16×8分形矩阵。
 
-**图1**  F32 channel split示意图1
+**图1**  F32 Channel Split示意图1
 
-![](../../../../../figures/Fixpipe_Channel_Split.png)
+![F32 Channel Split示意图1](../../../../../figures/Fixpipe_Channel_Split.png)
 
-**图2**  F32 channel split示意图2
+**图2**  F32 Channel Split示意图2
 
-![](../../../../../figures/Fixpipe_Channel_Split_with_dirty.png)
+![F32 Channel Split示意图2](../../../../../figures/Fixpipe_Channel_Split_with_dirty.png)
 
 ## 调用形式
 
