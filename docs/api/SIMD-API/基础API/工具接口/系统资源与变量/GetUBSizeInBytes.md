@@ -44,9 +44,9 @@ __aicore__ inline constexpr uint32_t GetUBSizeInBytes()
 
 UB空间的大小。
 
-<!-- npu="950" id1 -->
+<!-- npu="950" id8 -->
 Ascend 950PR/Ascend 950DT架构下，返回常量248KB，单位为Byte。
-<!-- end id1 -->
+<!-- end id8 -->
 
 ## 约束说明
 

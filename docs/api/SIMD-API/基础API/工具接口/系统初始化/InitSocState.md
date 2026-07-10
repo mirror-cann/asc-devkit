@@ -46,8 +46,7 @@
 
 **各产品实际执行的初始化项如下：**
 
-<cann-filter npu-type = "950">
-
+<!-- npu="950" id8 -->
 **表1** 针对Ascend 950PR/Ascend 950DT本接口执行的初始化项
 
 | 状态类别 | 初始化内容 |
@@ -60,11 +59,9 @@
 | AIC | LoadData（卷积数据搬运）接口调用时Pad填充的数值 |
 | AIV | Mask |
 | AIV | loop mode的参数 |
+<!-- end id8 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "A3">
-
+<!-- npu="A3" id9 -->
 **表2** 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品本接口执行的初始化项
 
 | 状态类别 | 初始化内容 |
@@ -74,11 +71,9 @@
 | AIC | LoadData（卷积数据搬运）接口调用时Pad填充的数值 |
 | AIC | 使用LoadData（卷积数据搬运）时A1/B1的边界值 |
 | AIV | Mask |
+<!-- end id9 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "910b">
-
+<!-- npu="910b" id10 -->
 **表3** 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品本接口执行的初始化项
 
 | 状态类别 | 初始化内容 |
@@ -88,18 +83,15 @@
 | AIC | LoadData（卷积数据搬运）接口调用时Pad填充的数值 |
 | AIC | 使用LoadData（卷积数据搬运）时A1/B1的边界值 |
 | AIV | Mask |
+<!-- end id10 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "310p">
-
+<!-- npu="310p" id11 -->
 **表4** 针对Atlas 推理系列产品AI Core和Atlas 推理系列产品Vector Core本接口执行的初始化项
 
 | 状态类别 | 初始化内容 |
 | ---- | ---- |
 | 公共状态 | 原子累加状态 |
-
-</cann-filter>
+<!-- end id11 -->
 
 ## 函数原型
 

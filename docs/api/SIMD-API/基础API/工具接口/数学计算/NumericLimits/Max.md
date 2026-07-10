@@ -55,7 +55,9 @@
 
 ## 数据类型
 
-<cann-filter npu-type="950">针对Ascend 950PR/Ascend 950DT，支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。</cann-filter>
+<!-- npu="950" id8 -->
+针对Ascend 950PR/Ascend 950DT，支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。
+<!-- end id8 -->
 
 ## 返回值说明
 
