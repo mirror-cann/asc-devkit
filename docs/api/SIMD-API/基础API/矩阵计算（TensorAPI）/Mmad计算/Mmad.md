@@ -8,7 +8,7 @@
 
 ## 功能说明
 
-头文件路径为：`"tensor_api/tensor.h"`。
+头文件路径为：`tensor_api/tensor.h`。
 
 `Mmad`接口用于完成L0A Buffer上左矩阵A和L0B Buffer上右矩阵B的矩阵乘加，结果写入L0C Buffer上结果矩阵C。默认模式为普通矩阵计算。数学表达式为：
 
@@ -24,11 +24,15 @@ C = A * B + Bias
 
 Mmad的矩阵乘加关系可参考下图：
 
-![](../../../../figures/mmad_formula.png)
+**图1**  Mmad矩阵乘加公式
+
+![Mmad矩阵乘加公式](../../../../figures/mmad_formula.png)
 
 `Mmad`使用显式传入的`MmadAtom`配置矩阵计算功能。左矩阵A、右矩阵B、结果矩阵C的图示说明如下：
 
-![](../../../../figures/mmad_matrix_layout.png)
+**图2**  Mmad矩阵布局
+
+![Mmad矩阵布局](../../../../figures/mmad_matrix_layout.png)
 
 ## 函数原型
 
@@ -75,7 +79,7 @@ Mmad的矩阵乘加关系可参考下图：
 | dst | 输出 | 结果矩阵C，存储位置为`Location::L0C`，数据格式为NZ。 |
 | fm | 输入 | 左矩阵A，存储位置为`Location::L0A`，数据格式为NZ。 |
 | filter | 输入 | 右矩阵B，存储位置为`Location::L0B`，数据格式为ZN。 |
-| bias | 输入 | bias张量，存储位置为`Location::BIAS`，数据格式为ND。 |
+| bias | 输入 | bias张量，存储位置为`Location::BIAS`或`Location::L0C`，数据格式为ND。 |
 
 **表2**  `MakeMmad`接口参数说明
 
@@ -92,7 +96,7 @@ Mmad的矩阵乘加关系可参考下图：
 | n | `uint16_t` | `0` | 右矩阵B的宽度，结果矩阵C的宽度。 |
 | k | `uint16_t` | `0` | 左矩阵A的宽度，右矩阵B的高度。 |
 | unitFlag | `uint8_t` | `0` | 控制`Mmad`和后续矩阵数据搬出的细粒度并行。`0`表示不使能，`2`表示使能且执行后不复位单元标记位，`3`表示使能且执行后复位单元标记位。 |
-| cmatrixInitVal | `bool` | `false` | 不传bias时，控制是否初始化结果矩阵C。`true`表示初始化后为零计算，`false`表示基于结果矩阵C原始值累加计算。 |
+| cmatrixInitVal | `bool` | `false` | 不传bias时，控制是否初始化结果矩阵C。`true`表示C矩阵默认初始化为0，`false`表示C矩阵不进行默认操作，通过设置`cmatrixSource`参数进行初始化。 |
 
 **表4**  `MmadTrait`参数说明
 
@@ -100,13 +104,13 @@ Mmad的矩阵乘加关系可参考下图：
 | :--- | :--- | :--- | :--- |
 | fmOffset | `int32_t` | `0` | 左矩阵offset，当前Tensor API实现中作为兼容参数保留。 |
 | kDirectionAlign | `bool` | `false` | K方向对齐控制，当前Tensor API实现中作为兼容参数保留。 |
-| cmatrixSource | `bool` | `false` | 不传bias时，配合`cmatrixInitVal`指示结果矩阵C初始值来源。带bias调用时该配置无效。 |
+| cmatrixSource | `bool` | `false` | 配置C矩阵初始值是否来源于BT Buffer，带bias调用时该配置无效。`false`表示C矩阵不进行初始化操作，`true`表示使用BT Buffer的数据对C矩阵进行初始化操作。|
 | disableGemv | `bool` | `true` | M=1场景下是否关闭GEMV模式。`false`表示开启GEMV，`true`表示关闭GEMV。 |
 | mmadType | `MmadType` | `MmadType::NORMAL` | 矩阵计算类型。默认使用`MmadType::NORMAL`。使用`MmadType::MX`表示MX场景Mmad计算。 |
 
 ## 数据类型
 
-支持如下左矩阵A、右矩阵B、结果矩阵C的数据类型组合如下：
+支持如下左矩阵A、右矩阵B、结果矩阵C的数据类型组合：
 
 | 左矩阵A | 右矩阵B | 结果矩阵C |
 | :--- | :--- | :--- |
@@ -131,21 +135,26 @@ Mmad的矩阵乘加关系可参考下图：
 - `dst`必须位于L0C Buffer，`fm`必须位于L0A Buffer，`filter`必须位于L0B Buffer。
 - 结果矩阵C起始地址需要满足64Byte地址对齐要求。
 - 左矩阵A和右矩阵B起始地址需要满足512Byte地址对齐要求。
+- 上述地址对齐要求属于硬件访问约束，编译器和运行时不对所有场景单独检查，用户需要保证入参满足约束。
 - `m`、`n`、`k`需要与实际参与`Mmad`计算的数据尺寸一致。
 - 开启`unitFlag`功能时，需要结果矩阵C搬出接口的`FixpipeParams::unitFlag`与`Mmad`计算的`MmadParams::unitFlag`参数配合设置。
-- 当M、K、N不是16的倍数时，硬件仍以16*16分形块组织数据，尾块中的无效数据会占用分形块空间但不参与有效计算。有效数据与无效数据排布方式如下图所示：
+- 当M、K、N不是16的倍数时，硬件仍以16×16分形块组织数据，尾块中的无效数据会占用分形块空间但不参与有效计算。有效数据与无效数据排布方式如下图所示：
 
-![](../../../../figures/mmad_tail_valid_data.png)
+**图3**  尾块有效数据排布
+
+![尾块有效数据排布](../../../../figures/mmad_tail_valid_data.png)
 
 ## 关键特性说明
 
 ### 结果矩阵C初始化
 
-不传bias时，`cmatrixInitVal`控制是否初始化结果矩阵C。通常第一次K方向累加时设置为`true`，后续K分块累加设置为`false`。
+不传bias时，`cmatrixInitVal`控制是否初始化结果矩阵C。通常第一次K方向累加时设置为`true`，后续K分块累加设置为`false`。如果多K分块累加场景中首次`Mmad`如果设为`false`，将导致C矩阵包含L0C Buffer残留数据，计算结果错误。
 
 连续两次`Mmad`沿K方向累加时，通常需要关注中间结果的写读依赖。同步优化的阈值关系可参考下图：
 
-![](../../../../figures/mmad_pipebarrier_threshold.png)
+**图4**  PipeBarrier阈值关系
+
+![PipeBarrier阈值关系](../../../../figures/mmad_pipebarrier_threshold.png)
 
 ### UnitFlag
 

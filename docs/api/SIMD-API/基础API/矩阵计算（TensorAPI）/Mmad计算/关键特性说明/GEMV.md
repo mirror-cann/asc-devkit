@@ -1,54 +1,54 @@
-# GEMV<a name="ZH-CN_TOPIC_0000002538231187"></a>
+# GEMV
 
-## **特性说明：**
+## 特性说明
 
-Gemv的核心功能体现为：当矩阵A的维度M取值为1时，接口可以手动启用Gemv功能，该操作退化为1×K维度的行向量与K×N维度矩阵之间的乘法运算。
+GEMV的核心功能体现为：当矩阵A的维度M取值为1时，接口可以手动启用GEMV功能，该操作退化为1×K维度的行向量与K×N维度矩阵之间的乘法运算。
 
 <cann-filter npu-type="950">
 
-针对Ascend 950PR/Ascend 950DT产品，可以通过设置`MmadTrait::disableGemv`参数为true，将该功能关闭。
+针对Ascend 950PR/Ascend 950DT产品，GEMV模式默认关闭。如需启用GEMV模式，需要设置`MmadTrait::disableGemv`参数为`false`。
 
 </cann-filter>
 
-**特性约束：**
+## 特性约束
 
-- 1×K矩阵A需满足512B地址对齐，K个数据连续存储。以half类型为例，当K=256时，软件侧可视作16×16分块，配置m=1后硬件解析为1×256向量，可通过Copy接口将256个half数据从L1 Buffer搬至L0A Buffer。
+- 1×K矩阵A需满足512B地址对齐，K个数据连续存储。以`half`类型为例，当K=256时，软件侧可视作16×16分块，配置m=1后硬件解析为1×256向量，可通过`Copy`接口将256个`half`数据从L1 Buffer搬至L0A Buffer。
 
-- C矩阵是一个1×N的向量，当1×N向量被划分为多个1×16子向量时，每个子向量在L0C Buffer中占用1024B（u8/s8/f162f32）。但实际有效数据仅占最低32B或64B。例如，当N=50时，共划分4个1×16子向量，占用4×512B=2048B（f162f16），其中有效数据仅为4×32B=128B。
+- C矩阵是一个1×N的向量，当1×N向量被划分为多个1×16子向量时，每个子向量在L0C Buffer中占用1024B（`uint8_t`/`int8_t`/`f162f32`）。但实际有效数据仅占最低32B或64B。例如，当N=50时，共划分4个1×16子向量，占用4×512B=2048B（`f162f16`），其中有效数据仅为4×32B=128B。
 
-**图1**  GEMV模式，矩阵乘示意图
+**图1**  GEMV模式矩阵乘示意图
 
-![](../../../../../figures/mmad_gemv.png)
+![GEMV模式矩阵乘示意图](../../../../../figures/mmad_gemv.png)
 
-**使用优势：**
+## 使用优势
 
-M=1时开启GEMV模式，则矩阵乘法将M方向作为非对齐场景进行处理。GEMV模式相较于非对齐处理方式，搬运数据量更少，性能更好。下面以M=1，K=256，N=32，左右矩阵数据类型为half的矩阵乘示例说明。
+M=1时开启GEMV模式，则矩阵乘法将M方向作为非对齐场景进行处理。GEMV模式相较于非对齐处理方式，搬运数据量更少，性能更好。下面以M=1、K=256、N=32，左右矩阵数据类型为`half`的矩阵乘示例说明。
 
 - GEMV模式
 
-    将A矩阵从L1 Buffer搬运到L0A Buffer时，1\*256的向量被当作16\*16的矩阵进行处理，调用Copy接口一次完成16\*16分形大小的矩阵搬运。B矩阵的搬运以及矩阵乘计算跟基础场景相同，如下图所示。
+    将A矩阵从L1 Buffer搬运到L0A Buffer时，1×256的向量被当作16×16的矩阵进行处理，调用`Copy`接口一次完成16×16分形大小的矩阵搬运。B矩阵的搬运以及矩阵乘计算跟基础场景相同，如下图所示。
 
     **图2**  GEMV模式M=1的矩阵乘计算示意图
 
-    ![](../../../../../figures/mmad_gemv_compare.png)
+    ![GEMV模式M=1的矩阵乘计算示意图](../../../../../figures/mmad_gemv_compare.png)
 
 - 非GEMV模式
 
-    将A矩阵从L1 Buffer搬运到L0A Buffer时，1\*256的向量被当作非对齐矩阵数据进行处理，将M方向对齐到32字节后进行搬运。调用Copy接口每次搬运16\*16分形大小的矩阵，一共搬运K/16=16次，导致搬运数据量增加，性能相较于GEMV模式差，如下图所示。
+    将A矩阵从L1 Buffer搬运到L0A Buffer时，1×256的向量被当作非对齐矩阵数据进行处理，将M方向对齐到32字节后进行搬运。调用`Copy`接口每次搬运16×16分形大小的矩阵，一共搬运K/16=16次，导致搬运数据量增加，性能相较于GEMV模式差，如下图所示。
 
-    **图3**  非GEMV模式M!=1的矩阵乘计算示意图
+    **图3**  非GEMV模式M不等于1的矩阵乘计算示意图
 
-    ![](../../../../../figures/mmad_nongemv_compare.png)
+    ![非GEMV模式M不等于1的矩阵乘计算示意图](../../../../../figures/mmad_nongemv_compare.png)
 
-## **使用示例：**
+## 使用示例
 
 本GEMV场景示例的规格如下：
 
 | 矩阵 | 维度大小 | 数据类型 | 格式 |
 | --- | --- | --- | --- |
-| A | 1 * 4096 | half | ND |
-| B | 4096 * 256 | half | NZ |
-| C | 1 * 256 | float | ND |
+| A | 1×4096 | half | ND |
+| B | 4096×256 | half | NZ |
+| C | 1×256 | float | ND |
 
 通过`Copy`接口将输入矩阵A从Global Memory搬运到L1 Buffer上并保持ND格式不变，然后在L1 Buffer上将A矩阵转换为NZ格式，再通过`Copy`接口搬运到L0A Buffer，从而以GEMV模式执行矩阵乘。另外注意GEMV模式默认是关闭的，需要自定义`MmadTrait`来开启。
 
@@ -59,7 +59,7 @@ using namespace AscendC::Te;
 
 struct MmadTraitCustom {
     using TraitType = MmadTrait;
-    // 设置MmadTrait::disableGemv参数为false，开启GEMV
+    // 设置MmadTrait::disableGemv参数为false，开启GEMV。
     static constexpr const TraitType value = MmadTrait(0, false, false, false, MmadType::NORMAL);
 };
 

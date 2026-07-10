@@ -8,19 +8,19 @@
 
 ## 功能说明
 
-头文件路径为：`"tensor_api/tensor.h"`。
+头文件路径为：`tensor_api/tensor.h`。
 
 Tensor API通过`Copy`接口统一执行不同通路数据搬运。该接口用于将L0C Buffer中的矩阵计算结果搬运到Unified Buffer。L0C Buffer中的数据通常为`Mmad`的输出，数据格式为`NZ`。搬运到Unified Buffer时，接口会根据目的张量格式自动选择`NZ`到`ND`、`NZ`到`DN`或`NZ`到`NZ`的随路格式转换。
 
-L0C Buffer到Unified Buffer搬运支持不量化输出、float到half或bfloat16_t的直接转换输出，以及配合标量或张量量化参数的随路量化输出。随路Relu、双目的模式和舍入方式通过`CopyL0C2UBTrait`配置。`Mmad`与`Fixpipe`细粒度并行相关的`unitFlag`通过`FixpipeParams`配置。
+L0C Buffer到Unified Buffer搬运支持不量化输出、`float`到`half`或`bfloat16_t`的直接转换输出，以及配合标量或张量量化参数的随路量化输出。随路Relu、双目的模式和舍入方式通过`CopyL0C2UBTrait`配置。`Mmad`与`Fixpipe`细粒度并行相关的`unitFlag`通过`FixpipeParams`配置。
 
-接口支持batch模式。batch模式用于一次完成多块矩阵计算结果的搬运。Layout在原矩阵Layout最外层增加Batch维度。源张量为`NZ`格式，分形固定为16×16，可通过`MakeFrameLayout<NZLayoutPtn>(batch, m, n)`构造。目的张量可通过`MakeFrameLayout<NDLayoutPtn>(batch, m, n)`、`MakeFrameLayout<DNLayoutPtn>(batch, m, n)`、`MakeFrameLayout<NDExtLayoutPtn>(batch, m, n)`、`MakeFrameLayout<DNExtLayoutPtn>(batch, m, n)`或`MakeFrameLayout<NZLayoutPtn, DstType>(batch, m, n)`构造。`NZ`格式可通过模板参数`DstType`指定目的数据类型，`C0`默认为16；
+接口支持batch模式。batch模式用于一次完成多块矩阵计算结果的搬运。Layout在原矩阵Layout最外层增加Batch维度。源张量为`NZ`格式，分形固定为16×16，可通过`MakeFrameLayout<NZLayoutPtn>(batch, m, n)`构造。目的张量可通过`MakeFrameLayout<NDLayoutPtn>(batch, m, n)`、`MakeFrameLayout<DNLayoutPtn>(batch, m, n)`、`MakeFrameLayout<NDExtLayoutPtn>(batch, m, n)`、`MakeFrameLayout<DNExtLayoutPtn>(batch, m, n)`或`MakeFrameLayout<NZLayoutPtn, DstType>(batch, m, n)`构造。`NZ`格式可通过模板参数`DstType`指定目的数据类型，`C0`表示NZ格式的列分形大小，默认为16。
 
 随路量化、随路Relu、随路格式转换、随路通道拆分以及随路通道合并的有效组合、中间数据类型和数据路径如下图所示。图中的F32到F16、F32到BF16为非量化模式，仅进行cast。其余路径为不量化、随路scalar或tensor量化模式。针对Ascend 950PR/Ascend 950DT，还支持NZ2DN随路格式转换。
 
 **图1**  L0C2UB流程图
 
-![](../../../../figures/l0c2ub_flowchart.png)
+![L0C2UB流程图](../../../../figures/l0c2ub_flowchart.png)
 
 ## 函数原型
 
@@ -86,6 +86,8 @@ struct CopyL0C2UBTrait {
 };
 ```
 
+**表3**  `CopyL0C2UBTrait`成员说明
+
 |成员|默认值|描述|
 |--------|--------|--------|
 |roundMode|`RoundMode::DEFAULT`|舍入模式。`RoundMode::HYBRID`仅在源类型为`float`、目的类型为`hifloat8_t`的量化输出场景支持。|
@@ -120,6 +122,8 @@ struct FixpipeParams {
 };
 ```
 
+**表4**  `FixpipeParams`成员说明
+
 |成员|默认值|描述|
 |--------|--------|--------|
 |unitFlag|`0`|控制`Mmad`指令和`Fixpipe`指令的细粒度并行。`0`表示不使能，`2`表示使能且执行后不复位单元标记位，`3`表示使能且执行后复位单元标记位。使能时，`MmadParams`和`FixpipeParams`中的`unitFlag`需要配套设置为`2`或`3`。|
@@ -128,6 +132,8 @@ struct FixpipeParams {
 ## 数据类型
 
 L0C Buffer到Unified Buffer搬运根据是否传入量化参数自动选择量化模式。
+
+**表5**  数据类型说明
 
 |源张量类型（L0C Buffer）|目的张量类型（Unified Buffer）|调用形式|说明|
 |--------|--------|--------|--------|
