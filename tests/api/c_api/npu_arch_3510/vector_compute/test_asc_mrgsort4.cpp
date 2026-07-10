@@ -13,74 +13,68 @@
 #include "c_api/stub/cce_stub.h"
 #include "c_api/asc_simd.h"
 
-class TestMrgsort4CAPI : public testing::Test {
-protected:
-    void SetUp() {}
-    void TearDown() {}
-};
-
-#define TEST_MRGSORT4_PARAMS(type)                                                                                     \
+#define TEST_VECTOR_COMPUTE_MRGSORT4_INSTR_3510(class_name, c_api_name, cce_name, data_type)                           \
+                                                                                                                       \
+    class TestVectorCompute3510##class_name##data_type : public testing::Test {                                        \
+    protected:                                                                                                         \
+        void SetUp() {}                                                                                                \
+        void TearDown() {}                                                                                             \
+    };                                                                                                                 \
+                                                                                                                       \
     namespace {                                                                                                        \
-    void vmrgsort4_##type##_params_Stub(__ubuf__ type* dst, __ubuf__ type* src, uint8_t repeat,                        \
-                                        uint16_t element_length_0, uint16_t element_length_1,                          \
-                                        uint16_t element_length_2, uint16_t element_length_3,                          \
-                                        bool if_exhausted_suspension, uint8_t valid_bit)                               \
+    void c_api_name##_##data_type##_Stub(                                                                              \
+        __ubuf__ data_type* dst, __ubuf__ data_type** src, uint8_t repeat, uint16_t element_length_0,                  \
+        uint16_t element_length_1, uint16_t element_length_2, uint16_t element_length_3, bool if_exhausted_suspension, \
+        uint8_t valid_bit)                                                                                             \
+                                                                                                                       \
     {                                                                                                                  \
-        EXPECT_EQ(dst, reinterpret_cast<__ubuf__ type*>(1));                                                           \
-        EXPECT_EQ(src, reinterpret_cast<__ubuf__ type*>(2));                                                           \
-        EXPECT_EQ(repeat, static_cast<uint8_t>(3));                                                                    \
-        EXPECT_EQ(element_length_0, static_cast<uint16_t>(4));                                                         \
-        EXPECT_EQ(element_length_1, static_cast<uint16_t>(5));                                                         \
-        EXPECT_EQ(element_length_2, static_cast<uint16_t>(6));                                                         \
-        EXPECT_EQ(element_length_3, static_cast<uint16_t>(7));                                                         \
-        EXPECT_EQ(if_exhausted_suspension, true);                                                                      \
-        EXPECT_EQ(valid_bit, static_cast<uint8_t>(8));                                                                 \
+        EXPECT_EQ(dst, reinterpret_cast<__ubuf__ data_type*>(11));                                                     \
+        EXPECT_EQ(src[0], reinterpret_cast<__ubuf__ data_type*>(22));                                                  \
+        EXPECT_EQ(src[1], reinterpret_cast<__ubuf__ data_type*>(33));                                                  \
+        EXPECT_EQ(src[2], reinterpret_cast<__ubuf__ data_type*>(44));                                                  \
+        EXPECT_EQ(src[3], reinterpret_cast<__ubuf__ data_type*>(55));                                                  \
+        EXPECT_EQ(repeat, static_cast<uint8_t>(1));                                                                    \
+        EXPECT_EQ(element_length_0, static_cast<uint16_t>(2));                                                         \
+        EXPECT_EQ(element_length_1, static_cast<uint16_t>(3));                                                         \
+        EXPECT_EQ(element_length_2, static_cast<uint16_t>(4));                                                         \
+        EXPECT_EQ(element_length_3, static_cast<uint16_t>(5));                                                         \
+        EXPECT_EQ(if_exhausted_suspension, static_cast<bool>(0));                                                      \
+        EXPECT_EQ(valid_bit, static_cast<uint8_t>(6));                                                                 \
     }                                                                                                                  \
     }                                                                                                                  \
                                                                                                                        \
-    TEST_F(TestMrgsort4CAPI, asc_mrgsort4_##type##_params_Succ)                                                        \
+    TEST_F(TestVectorCompute3510##class_name##data_type, c_api_name##_##data_type##_Succ)                              \
     {                                                                                                                  \
-        __ubuf__ type* dst = reinterpret_cast<__ubuf__ type*>(1);                                                      \
-        __ubuf__ type* src = reinterpret_cast<__ubuf__ type*>(2);                                                      \
-        uint8_t repeat = 3;                                                                                            \
-        uint16_t element_length_0 = 4;                                                                                 \
-        uint16_t element_length_1 = 5;                                                                                 \
-        uint16_t element_length_2 = 6;                                                                                 \
-        uint16_t element_length_3 = 7;                                                                                 \
-        bool if_exhausted_suspension = true;                                                                           \
-        uint8_t valid_bit = 8;                                                                                         \
+        __ubuf__ data_type* dst = reinterpret_cast<__ubuf__ data_type*>(11);                                           \
+        __ubuf__ data_type* src[ASC_C_API_MRGSORT_ELEMENT_LEN];                                                        \
+        src[0] = reinterpret_cast<__ubuf__ data_type*>(22);                                                            \
+        src[1] = reinterpret_cast<__ubuf__ data_type*>(33);                                                            \
+        src[2] = reinterpret_cast<__ubuf__ data_type*>(44);                                                            \
+        src[3] = reinterpret_cast<__ubuf__ data_type*>(55);                                                            \
                                                                                                                        \
-        MOCKER_CPP(vmrgsort4, void(__ubuf__ type*, __ubuf__ type*, uint8_t, uint16_t, uint16_t, uint16_t, uint16_t,    \
-                                   bool, uint8_t))                                                                     \
+        uint8_t repeat = 1;                                                                                            \
+        uint16_t element_length_0 = 2;                                                                                 \
+        uint16_t element_length_1 = 3;                                                                                 \
+        uint16_t element_length_2 = 4;                                                                                 \
+        uint16_t element_length_3 = 5;                                                                                 \
+        bool if_exhausted_suspension = 0;                                                                              \
+        uint8_t valid_bit = 6;                                                                                         \
+                                                                                                                       \
+        MOCKER_CPP(                                                                                                    \
+            cce_name, void(                                                                                            \
+                          __ubuf__ data_type*, __ubuf__ data_type**, uint8_t, uint16_t, uint16_t, uint16_t, uint16_t,  \
+                          bool, uint8_t))                                                                              \
             .times(1)                                                                                                  \
-            .will(invoke(vmrgsort4_##type##_params_Stub));                                                             \
+            .will(invoke(c_api_name##_##data_type##_Stub));                                                            \
                                                                                                                        \
-        asc_mrgsort4(dst, src, repeat, element_length_0, element_length_1, element_length_2, element_length_3,         \
-                     if_exhausted_suspension, valid_bit);                                                              \
-        GlobalMockObject::verify();                                                                                    \
-    }                                                                                                                  \
-                                                                                                                       \
-    TEST_F(TestMrgsort4CAPI, asc_mrgsort4_sync_##type##_params_Succ)                                                   \
-    {                                                                                                                  \
-        __ubuf__ type* dst = reinterpret_cast<__ubuf__ type*>(1);                                                      \
-        __ubuf__ type* src = reinterpret_cast<__ubuf__ type*>(2);                                                      \
-        uint8_t repeat = 3;                                                                                            \
-        uint16_t element_length_0 = 4;                                                                                 \
-        uint16_t element_length_1 = 5;                                                                                 \
-        uint16_t element_length_2 = 6;                                                                                 \
-        uint16_t element_length_3 = 7;                                                                                 \
-        bool if_exhausted_suspension = true;                                                                           \
-        uint8_t valid_bit = 8;                                                                                         \
-                                                                                                                       \
-        MOCKER_CPP(vmrgsort4, void(__ubuf__ type*, __ubuf__ type*, uint8_t, uint16_t, uint16_t, uint16_t, uint16_t,    \
-                                   bool, uint8_t))                                                                     \
-            .times(1)                                                                                                  \
-            .will(invoke(vmrgsort4_##type##_params_Stub));                                                             \
-                                                                                                                       \
-        asc_mrgsort4_sync(dst, src, repeat, element_length_0, element_length_1, element_length_2, element_length_3,    \
-                          if_exhausted_suspension, valid_bit);                                                         \
+        c_api_name(                                                                                                    \
+            dst, src, repeat, element_length_0, element_length_1, element_length_2, element_length_3,                  \
+            if_exhausted_suspension, valid_bit);                                                                       \
         GlobalMockObject::verify();                                                                                    \
     }
 
-TEST_MRGSORT4_PARAMS(half)
-TEST_MRGSORT4_PARAMS(float)
+// ==========asc_mrgsort4(half/float)==========
+TEST_VECTOR_COMPUTE_MRGSORT4_INSTR_3510(Mrgsort4, asc_mrgsort4, vmrgsort4, half);
+TEST_VECTOR_COMPUTE_MRGSORT4_INSTR_3510(Mrgsort4Sync, asc_mrgsort4_sync, vmrgsort4, half);
+TEST_VECTOR_COMPUTE_MRGSORT4_INSTR_3510(Mrgsort4, asc_mrgsort4, vmrgsort4, float);
+TEST_VECTOR_COMPUTE_MRGSORT4_INSTR_3510(Mrgsort4Sync, asc_mrgsort4_sync, vmrgsort4, float);

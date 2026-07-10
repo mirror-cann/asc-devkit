@@ -167,24 +167,6 @@ __aicore__ inline void asc_bitsort(__ubuf__ float* dst, __ubuf__ float* src0, __
 __aicore__ inline void asc_bitsort_sync(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ uint32_t* src1,
                                         int32_t repeat);
 
-__aicore__ inline void asc_mrgsort4(__ubuf__ half* dst, __ubuf__ half* src, uint8_t repeat, uint16_t element_length_0,
-                                    uint16_t element_length_1, uint16_t element_length_2, uint16_t element_length_3,
-                                    bool if_exhausted_suspension, uint8_t valid_bit);
-
-__aicore__ inline void asc_mrgsort4_sync(__ubuf__ half* dst, __ubuf__ half* src, uint8_t repeat,
-                                         uint16_t element_length_0, uint16_t element_length_1,
-                                         uint16_t element_length_2, uint16_t element_length_3,
-                                         bool if_exhausted_suspension, uint8_t valid_bit);
-
-__aicore__ inline void asc_mrgsort4(__ubuf__ float* dst, __ubuf__ float* src, uint8_t repeat, uint16_t element_length_0,
-                                    uint16_t element_length_1, uint16_t element_length_2, uint16_t element_length_3,
-                                    bool if_exhausted_suspension, uint8_t valid_bit);
-
-__aicore__ inline void asc_mrgsort4_sync(__ubuf__ float* dst, __ubuf__ float* src, uint8_t repeat,
-                                         uint16_t element_length_0, uint16_t element_length_1,
-                                         uint16_t element_length_2, uint16_t element_length_3,
-                                         bool if_exhausted_suspension, uint8_t valid_bit);
-
 // ==========asc_transpose(int16_t/uint16_t)==========
 __aicore__ inline void asc_transpose(__ubuf__ int16_t* dst, __ubuf__ int16_t* src);
 
