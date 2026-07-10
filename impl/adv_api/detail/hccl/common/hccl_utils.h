@@ -58,7 +58,7 @@ template <typename T>
 __aicore__ inline T ReadHBMData(__gm__ T* addr)
 {
     Barrier();
-    Nop();
+    Nop<800>();
 
     if constexpr (SupportBytes<T, 8>()) {
         return ReadGmByPassDCache(reinterpret_cast<__gm__ uint64_t*>(addr));
