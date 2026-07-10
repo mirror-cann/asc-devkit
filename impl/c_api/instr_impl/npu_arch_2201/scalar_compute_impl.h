@@ -10,7 +10,7 @@
  */
 
 #if !defined(ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/scalar_compute_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -28,46 +28,22 @@
 #include "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/asc_set_nthbit_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_2201/scalar_compute_impl/asc_clear_nthbit_impl.h"
 
-__aicore__ inline int64_t asc_clz(uint64_t value_in)
-{
-    return asc_clz_impl(value_in);
-}
+__aicore__ inline int64_t asc_clz(uint64_t value_in) { return asc_clz_impl(value_in); }
 
-__aicore__ inline int64_t asc_ffs(uint64_t value)
-{
-    return asc_ffs_impl(value);
-}
+__aicore__ inline int64_t asc_ffs(uint64_t value) { return asc_ffs_impl(value); }
 
-__aicore__ inline int64_t asc_sflbits(int64_t value)
-{
-    return asc_sflbits_impl(value);
-}
+__aicore__ inline int64_t asc_sflbits(int64_t value) { return asc_sflbits_impl(value); }
 
-__aicore__ inline int64_t asc_zero_bits_cnt(uint64_t value)
-{
-    return asc_zero_bits_cnt_impl(value);
-}
+__aicore__ inline int64_t asc_zero_bits_cnt(uint64_t value) { return asc_zero_bits_cnt_impl(value); }
 
-__aicore__ inline int64_t asc_ffz(uint64_t value)
-{
-    return asc_ffz_impl(value);
-}
+__aicore__ inline int64_t asc_ffz(uint64_t value) { return asc_ffz_impl(value); }
 
-__aicore__ inline int64_t asc_popc(uint64_t value)
-{
-    return asc_popc_impl(value);
-}
+__aicore__ inline int64_t asc_popc(uint64_t value) { return asc_popc_impl(value); }
 
 // ==========asc_set_nthbit==========
-__aicore__ inline uint64_t asc_set_nthbit(uint64_t bits, int64_t idx)
-{
-    return asc_set_nthbit_impl(bits, idx);
-}
+__aicore__ inline uint64_t asc_set_nthbit(uint64_t bits, int64_t idx) { return asc_set_nthbit_impl(bits, idx); }
 
-__aicore__ inline uint64_t asc_clear_nthbit(uint64_t bits, int64_t idx)
-{
-    return asc_clear_nthbit_impl(bits, idx);
-}
+__aicore__ inline uint64_t asc_clear_nthbit(uint64_t bits, int64_t idx) { return asc_clear_nthbit_impl(bits, idx); }
 
 #endif
 

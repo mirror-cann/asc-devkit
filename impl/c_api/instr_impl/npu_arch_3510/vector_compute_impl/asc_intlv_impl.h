@@ -14,7 +14,7 @@
  */
 
 #if !defined(ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_intlv_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -46,42 +46,48 @@ __simd_callee__ inline void asc_intlv_b32_impl(vector_bool& dst0, vector_bool& d
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_uint8_t& dst0, vector_uint8_t& dst1, vector_uint8_t src0, vector_uint8_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_uint8_t& dst0, vector_uint8_t& dst1, vector_uint8_t src0, vector_uint8_t src1)
 {
     if ASC_IS_AIV {
         vintlv(dst0, dst1, src0, src1);
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_int8_t& dst0, vector_int8_t& dst1, vector_int8_t src0, vector_int8_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_int8_t& dst0, vector_int8_t& dst1, vector_int8_t src0, vector_int8_t src1)
 {
     if ASC_IS_AIV {
         vintlv(dst0, dst1, src0, src1);
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_uint16_t& dst0, vector_uint16_t& dst1, vector_uint16_t src0, vector_uint16_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_uint16_t& dst0, vector_uint16_t& dst1, vector_uint16_t src0, vector_uint16_t src1)
 {
     if ASC_IS_AIV {
         vintlv(dst0, dst1, src0, src1);
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_int16_t& dst0, vector_int16_t& dst1, vector_int16_t src0, vector_int16_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_int16_t& dst0, vector_int16_t& dst1, vector_int16_t src0, vector_int16_t src1)
 {
     if ASC_IS_AIV {
         vintlv(dst0, dst1, src0, src1);
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_uint32_t& dst0, vector_uint32_t& dst1, vector_uint32_t src0, vector_uint32_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_uint32_t& dst0, vector_uint32_t& dst1, vector_uint32_t src0, vector_uint32_t src1)
 {
     if ASC_IS_AIV {
         vintlv(dst0, dst1, src0, src1);
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_int32_t& dst0, vector_int32_t& dst1, vector_int32_t src0, vector_int32_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_int32_t& dst0, vector_int32_t& dst1, vector_int32_t src0, vector_int32_t src1)
 {
     if ASC_IS_AIV {
         vintlv(dst0, dst1, src0, src1);
@@ -102,36 +108,42 @@ __simd_callee__ inline void asc_intlv_impl(vector_float& dst0, vector_float& dst
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_fp8_e4m3fn_t& dst0, vector_fp8_e4m3fn_t& dst1, vector_fp8_e4m3fn_t src0, vector_fp8_e4m3fn_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_fp8_e4m3fn_t& dst0, vector_fp8_e4m3fn_t& dst1, vector_fp8_e4m3fn_t src0, vector_fp8_e4m3fn_t src1)
 {
     if ASC_IS_AIV {
         vintlv(dst0, dst1, src0, src1);
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_hifloat8_t& dst0, vector_hifloat8_t& dst1, vector_hifloat8_t src0, vector_hifloat8_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_hifloat8_t& dst0, vector_hifloat8_t& dst1, vector_hifloat8_t src0, vector_hifloat8_t src1)
 {
     if ASC_IS_AIV {
-        vintlv(reinterpret_cast<vector_uint8_t&>(dst0), reinterpret_cast<vector_uint8_t&>(dst1),
+        vintlv(
+            reinterpret_cast<vector_uint8_t&>(dst0), reinterpret_cast<vector_uint8_t&>(dst1),
             *reinterpret_cast<vector_uint8_t*>(&src0), *reinterpret_cast<vector_uint8_t*>(&src1));
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_fp8_e5m2_t& dst0, vector_fp8_e5m2_t& dst1, vector_fp8_e5m2_t src0, vector_fp8_e5m2_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_fp8_e5m2_t& dst0, vector_fp8_e5m2_t& dst1, vector_fp8_e5m2_t src0, vector_fp8_e5m2_t src1)
 {
     if ASC_IS_AIV {
         vintlv(dst0, dst1, src0, src1);
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_fp8_e8m0_t& dst0, vector_fp8_e8m0_t& dst1, vector_fp8_e8m0_t src0, vector_fp8_e8m0_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_fp8_e8m0_t& dst0, vector_fp8_e8m0_t& dst1, vector_fp8_e8m0_t src0, vector_fp8_e8m0_t src1)
 {
     if ASC_IS_AIV {
         vintlv(dst0, dst1, src0, src1);
     }
 }
 
-__simd_callee__ inline void asc_intlv_impl(vector_bfloat16_t& dst0, vector_bfloat16_t& dst1, vector_bfloat16_t src0, vector_bfloat16_t src1)
+__simd_callee__ inline void asc_intlv_impl(
+    vector_bfloat16_t& dst0, vector_bfloat16_t& dst1, vector_bfloat16_t src0, vector_bfloat16_t src1)
 {
     if ASC_IS_AIV {
         vintlv(dst0, dst1, src0, src1);

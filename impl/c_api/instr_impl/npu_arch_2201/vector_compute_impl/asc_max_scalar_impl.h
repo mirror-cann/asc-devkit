@@ -9,7 +9,7 @@
  */
 
 #if !defined(ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/c_api/instr_impl/npu_arch_2201/vector_compute_impl/asc_max_scalar_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -20,9 +20,9 @@
 
 #include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
-__aicore__ inline void asc_max_scalar_impl(__ubuf__ half* dst, __ubuf__ half* src, half value, uint8_t repeat,
-                                           uint16_t dst_block_stride, uint16_t src_block_stride,
-                                           uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
+__aicore__ inline void asc_max_scalar_impl(
+    __ubuf__ half* dst, __ubuf__ half* src, half value, uint8_t repeat, uint16_t dst_block_stride,
+    uint16_t src_block_stride, uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
 {
     if ASC_IS_AIV {
         vmaxs(dst, src, value, repeat, dst_block_stride, src_block_stride, dst_repeat_stride, src_repeat_stride);
@@ -32,9 +32,9 @@ __aicore__ inline void asc_max_scalar_impl(__ubuf__ half* dst, __ubuf__ half* sr
 __aicore__ inline void asc_max_scalar_impl(__ubuf__ half* dst, __ubuf__ half* src, half value, uint32_t count)
 {
     asc_set_mask_count_begin(count);
-    asc_max_scalar_impl(dst, src, value, ASC_C_API_DEFAULT_REPEAT.U8, ASC_C_API_DEFAULT_BLOCK_STRIDE.U16,
-                        ASC_C_API_DEFAULT_BLOCK_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16,
-                        ASC_C_API_DEFAULT_REPEAT_STRIDE.U16);
+    asc_max_scalar_impl(
+        dst, src, value, ASC_C_API_DEFAULT_REPEAT.U8, ASC_C_API_DEFAULT_BLOCK_STRIDE.U16,
+        ASC_C_API_DEFAULT_BLOCK_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16);
     asc_set_mask_count_end();
 }
 
@@ -44,9 +44,9 @@ __aicore__ inline void asc_max_scalar_sync_impl(__ubuf__ half* dst, __ubuf__ hal
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_max_scalar_impl(__ubuf__ float* dst, __ubuf__ float* src, float value, uint8_t repeat,
-                                           uint16_t dst_block_stride, uint16_t src_block_stride,
-                                           uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
+__aicore__ inline void asc_max_scalar_impl(
+    __ubuf__ float* dst, __ubuf__ float* src, float value, uint8_t repeat, uint16_t dst_block_stride,
+    uint16_t src_block_stride, uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
 {
     if ASC_IS_AIV {
         vmaxs(dst, src, value, repeat, dst_block_stride, src_block_stride, dst_repeat_stride, src_repeat_stride);
@@ -56,9 +56,9 @@ __aicore__ inline void asc_max_scalar_impl(__ubuf__ float* dst, __ubuf__ float* 
 __aicore__ inline void asc_max_scalar_impl(__ubuf__ float* dst, __ubuf__ float* src, float value, uint32_t count)
 {
     asc_set_mask_count_begin(count);
-    asc_max_scalar_impl(dst, src, value, ASC_C_API_DEFAULT_REPEAT.U8, ASC_C_API_DEFAULT_BLOCK_STRIDE.U16,
-                        ASC_C_API_DEFAULT_BLOCK_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16,
-                        ASC_C_API_DEFAULT_REPEAT_STRIDE.U16);
+    asc_max_scalar_impl(
+        dst, src, value, ASC_C_API_DEFAULT_REPEAT.U8, ASC_C_API_DEFAULT_BLOCK_STRIDE.U16,
+        ASC_C_API_DEFAULT_BLOCK_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16);
     asc_set_mask_count_end();
 }
 
@@ -68,9 +68,9 @@ __aicore__ inline void asc_max_scalar_sync_impl(__ubuf__ float* dst, __ubuf__ fl
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_max_scalar_impl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t value, uint8_t repeat,
-                                           uint16_t dst_block_stride, uint16_t src_block_stride,
-                                           uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
+__aicore__ inline void asc_max_scalar_impl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t value, uint8_t repeat, uint16_t dst_block_stride,
+    uint16_t src_block_stride, uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
 {
     if ASC_IS_AIV {
         vmaxs(dst, src, value, repeat, dst_block_stride, src_block_stride, dst_repeat_stride, src_repeat_stride);
@@ -80,22 +80,22 @@ __aicore__ inline void asc_max_scalar_impl(__ubuf__ int16_t* dst, __ubuf__ int16
 __aicore__ inline void asc_max_scalar_impl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t value, uint32_t count)
 {
     asc_set_mask_count_begin(count);
-    asc_max_scalar_impl(dst, src, value, ASC_C_API_DEFAULT_REPEAT.U8, ASC_C_API_DEFAULT_BLOCK_STRIDE.U16,
-                        ASC_C_API_DEFAULT_BLOCK_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16,
-                        ASC_C_API_DEFAULT_REPEAT_STRIDE.U16);
+    asc_max_scalar_impl(
+        dst, src, value, ASC_C_API_DEFAULT_REPEAT.U8, ASC_C_API_DEFAULT_BLOCK_STRIDE.U16,
+        ASC_C_API_DEFAULT_BLOCK_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16);
     asc_set_mask_count_end();
 }
 
-__aicore__ inline void asc_max_scalar_sync_impl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t value,
-                                                uint32_t count)
+__aicore__ inline void asc_max_scalar_sync_impl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t value, uint32_t count)
 {
     asc_max_scalar_impl(dst, src, value, count);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_max_scalar_impl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t value, uint8_t repeat,
-                                           uint16_t dst_block_stride, uint16_t src_block_stride,
-                                           uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
+__aicore__ inline void asc_max_scalar_impl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t value, uint8_t repeat, uint16_t dst_block_stride,
+    uint16_t src_block_stride, uint16_t dst_repeat_stride, uint16_t src_repeat_stride)
 {
     if ASC_IS_AIV {
         vmaxs(dst, src, value, repeat, dst_block_stride, src_block_stride, dst_repeat_stride, src_repeat_stride);
@@ -105,14 +105,14 @@ __aicore__ inline void asc_max_scalar_impl(__ubuf__ int32_t* dst, __ubuf__ int32
 __aicore__ inline void asc_max_scalar_impl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t value, uint32_t count)
 {
     asc_set_mask_count_begin(count);
-    asc_max_scalar_impl(dst, src, value, ASC_C_API_DEFAULT_REPEAT.U8, ASC_C_API_DEFAULT_BLOCK_STRIDE.U16,
-                        ASC_C_API_DEFAULT_BLOCK_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16,
-                        ASC_C_API_DEFAULT_REPEAT_STRIDE.U16);
+    asc_max_scalar_impl(
+        dst, src, value, ASC_C_API_DEFAULT_REPEAT.U8, ASC_C_API_DEFAULT_BLOCK_STRIDE.U16,
+        ASC_C_API_DEFAULT_BLOCK_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16, ASC_C_API_DEFAULT_REPEAT_STRIDE.U16);
     asc_set_mask_count_end();
 }
 
-__aicore__ inline void asc_max_scalar_sync_impl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t value,
-                                                uint32_t count)
+__aicore__ inline void asc_max_scalar_sync_impl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t value, uint32_t count)
 {
     asc_max_scalar_impl(dst, src, value, count);
     asc_sync_post_process();

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #ifndef IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_VCON_ASC_E1M2X22BFLOAT16_IMPL_H
 #define IMPL_CAPI_INSTR_IMPL_NPU_ARCH_3510_VECTOR_COMPUTE_IMPL_VCON_ASC_E1M2X22BFLOAT16_IMPL_H
@@ -20,21 +20,24 @@ __simd_callee__ inline void asc_e1m2x22bfloat16_impl(vector_bfloat16_t& dst, vec
     }
 }
 
-__simd_callee__ inline void asc_e1m2x22bfloat16_v2_impl(vector_bfloat16_t& dst, vector_fp4x2_e1m2_t src, vector_bool mask)
+__simd_callee__ inline void asc_e1m2x22bfloat16_v2_impl(
+    vector_bfloat16_t& dst, vector_fp4x2_e1m2_t src, vector_bool mask)
 {
     if ASC_IS_AIV {
         vcvt(dst, src, mask, PART_P1, MODE_ZEROING);
     }
 }
 
-__simd_callee__ inline void asc_e1m2x22bfloat16_v3_impl(vector_bfloat16_t& dst, vector_fp4x2_e1m2_t src, vector_bool mask)
+__simd_callee__ inline void asc_e1m2x22bfloat16_v3_impl(
+    vector_bfloat16_t& dst, vector_fp4x2_e1m2_t src, vector_bool mask)
 {
     if ASC_IS_AIV {
         vcvt(dst, src, mask, PART_P2, MODE_ZEROING);
     }
 }
 
-__simd_callee__ inline void asc_e1m2x22bfloat16_v4_impl(vector_bfloat16_t& dst, vector_fp4x2_e1m2_t src, vector_bool mask)
+__simd_callee__ inline void asc_e1m2x22bfloat16_v4_impl(
+    vector_bfloat16_t& dst, vector_fp4x2_e1m2_t src, vector_bool mask)
 {
     if ASC_IS_AIV {
         vcvt(dst, src, mask, PART_P3, MODE_ZEROING);

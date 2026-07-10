@@ -14,7 +14,7 @@
  */
 
 #if !defined(ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_transto5hd_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -25,50 +25,56 @@
 
 #include "impl/c_api/instr_impl/npu_arch_3510/utils_impl/utils_impl.h"
 
-// __aicore__ inline void asc_transto5hd_b8_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride, bool dst_high_half, bool src_high_half)
-#define asc_transto5hd_b8_impl(dst, src, repeat, dst_stride, src_stride, dst_high_half, src_high_half)                 \
-    do {                                                                                                               \
-        if ASC_IS_AIV {                                                                                                \
-            scatter_vnchwconv_b8((dst), (src), (repeat), (dst_stride), (src_stride), (dst_high_half),                  \
-                                 (src_high_half));                                                                     \
-        }                                                                                                              \
+// __aicore__ inline void asc_transto5hd_b8_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride,
+// uint16_t src_stride, bool dst_high_half, bool src_high_half)
+#define asc_transto5hd_b8_impl(dst, src, repeat, dst_stride, src_stride, dst_high_half, src_high_half) \
+    do {                                                                                               \
+        if ASC_IS_AIV {                                                                                \
+            scatter_vnchwconv_b8(                                                                      \
+                (dst), (src), (repeat), (dst_stride), (src_stride), (dst_high_half), (src_high_half)); \
+        }                                                                                              \
     } while (0)
 
-// __aicore__ inline void asc_transto5hd_b8_sync_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride, bool dst_high_half, bool src_high_half)
-#define asc_transto5hd_b8_sync_impl(dst, src, repeat, dst_stride, src_stride, dst_high_half, src_high_half)            \
-    do {                                                                                                               \
-        asc_transto5hd_b8_impl((dst), (src), (repeat), (dst_stride), (src_stride), (dst_high_half), (src_high_half));  \
-        asc_sync_post_process();                                                                                       \
+// __aicore__ inline void asc_transto5hd_b8_sync_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t
+// dst_stride, uint16_t src_stride, bool dst_high_half, bool src_high_half)
+#define asc_transto5hd_b8_sync_impl(dst, src, repeat, dst_stride, src_stride, dst_high_half, src_high_half)           \
+    do {                                                                                                              \
+        asc_transto5hd_b8_impl((dst), (src), (repeat), (dst_stride), (src_stride), (dst_high_half), (src_high_half)); \
+        asc_sync_post_process();                                                                                      \
     } while (0)
 
-// __aicore__ inline void asc_transto5hd_b16_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride)
-#define asc_transto5hd_b16_impl(dst, src, repeat, dst_stride, src_stride)                                              \
-    do {                                                                                                               \
-        if ASC_IS_AIV {                                                                                                \
-            scatter_vnchwconv_b16((dst), (src), (repeat), (dst_stride), (src_stride));                                 \
-        }                                                                                                              \
+// __aicore__ inline void asc_transto5hd_b16_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride,
+// uint16_t src_stride)
+#define asc_transto5hd_b16_impl(dst, src, repeat, dst_stride, src_stride)              \
+    do {                                                                               \
+        if ASC_IS_AIV {                                                                \
+            scatter_vnchwconv_b16((dst), (src), (repeat), (dst_stride), (src_stride)); \
+        }                                                                              \
     } while (0)
 
-// __aicore__ inline void asc_transto5hd_b16_sync_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride)
-#define asc_transto5hd_b16_sync_impl(dst, src, repeat, dst_stride, src_stride)                                         \
-    do {                                                                                                               \
-        asc_transto5hd_b16_impl((dst), (src), (repeat), (dst_stride), (src_stride));                                   \
-        asc_sync_post_process();                                                                                       \
+// __aicore__ inline void asc_transto5hd_b16_sync_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t
+// dst_stride, uint16_t src_stride)
+#define asc_transto5hd_b16_sync_impl(dst, src, repeat, dst_stride, src_stride)       \
+    do {                                                                             \
+        asc_transto5hd_b16_impl((dst), (src), (repeat), (dst_stride), (src_stride)); \
+        asc_sync_post_process();                                                     \
     } while (0)
 
-// __aicore__ inline void asc_transto5hd_b32_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride)
-#define asc_transto5hd_b32_impl(dst, src, repeat, dst_stride, src_stride)                                              \
-    do {                                                                                                               \
-        if ASC_IS_AIV {                                                                                                \
-            scatter_vnchwconv_b32((dst), (src), (repeat), (dst_stride), (src_stride));                                 \
-        }                                                                                                              \
+// __aicore__ inline void asc_transto5hd_b32_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride,
+// uint16_t src_stride)
+#define asc_transto5hd_b32_impl(dst, src, repeat, dst_stride, src_stride)              \
+    do {                                                                               \
+        if ASC_IS_AIV {                                                                \
+            scatter_vnchwconv_b32((dst), (src), (repeat), (dst_stride), (src_stride)); \
+        }                                                                              \
     } while (0)
 
-// __aicore__ inline void asc_transto5hd_b32_sync_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t dst_stride, uint16_t src_stride)
-#define asc_transto5hd_b32_sync_impl(dst, src, repeat, dst_stride, src_stride)                                         \
-    do {                                                                                                               \
-        asc_transto5hd_b32_impl((dst), (src), (repeat), (dst_stride), (src_stride));                                   \
-        asc_sync_post_process();                                                                                       \
+// __aicore__ inline void asc_transto5hd_b32_sync_impl(ub_addr8_t dst, ub_addr8_t src, uint8_t repeat, uint16_t
+// dst_stride, uint16_t src_stride)
+#define asc_transto5hd_b32_sync_impl(dst, src, repeat, dst_stride, src_stride)       \
+    do {                                                                             \
+        asc_transto5hd_b32_impl((dst), (src), (repeat), (dst_stride), (src_stride)); \
+        asc_sync_post_process();                                                     \
     } while (0)
 
 #endif

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /* !
  * \file asc_gt_impl.h
@@ -14,8 +14,8 @@
  */
 
 #if !defined(ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
-"impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_gt_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
+#warning \
+    "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_gt_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
@@ -25,74 +25,75 @@
 
 #include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 
-//asc_gt(vcmp) uint8_t
+// asc_gt(vcmp) uint8_t
 __simd_callee__ inline void asc_gt_impl(vector_bool& dst, vector_uint8_t src0, vector_uint8_t src1, vector_bool mask)
 {
-    if ASC_IS_AIV{
+    if ASC_IS_AIV {
         vcmp_gt(dst, src0, src1, mask);
     }
 }
 
-//asc_gt(vcmp) int8_t
+// asc_gt(vcmp) int8_t
 __simd_callee__ inline void asc_gt_impl(vector_bool& dst, vector_int8_t src0, vector_int8_t src1, vector_bool mask)
 {
-    if ASC_IS_AIV{
+    if ASC_IS_AIV {
         vcmp_gt(dst, src0, src1, mask);
     }
 }
 
-//asc_gt(vcmp) half
+// asc_gt(vcmp) half
 __simd_callee__ inline void asc_gt_impl(vector_bool& dst, vector_half src0, vector_half src1, vector_bool mask)
 {
-    if ASC_IS_AIV{
+    if ASC_IS_AIV {
         vcmp_gt(dst, src0, src1, mask);
     }
 }
 
-//asc_gt(vcmp) float
+// asc_gt(vcmp) float
 __simd_callee__ inline void asc_gt_impl(vector_bool& dst, vector_float src0, vector_float src1, vector_bool mask)
 {
-    if ASC_IS_AIV{
+    if ASC_IS_AIV {
         vcmp_gt(dst, src0, src1, mask);
     }
 }
 
-//asc_gt(vcmp) uint16_t
+// asc_gt(vcmp) uint16_t
 __simd_callee__ inline void asc_gt_impl(vector_bool& dst, vector_uint16_t src0, vector_uint16_t src1, vector_bool mask)
 {
-    if ASC_IS_AIV{
+    if ASC_IS_AIV {
         vcmp_gt(dst, src0, src1, mask);
     }
 }
 
-//asc_gt(vcmp) int16_t
+// asc_gt(vcmp) int16_t
 __simd_callee__ inline void asc_gt_impl(vector_bool& dst, vector_int16_t src0, vector_int16_t src1, vector_bool mask)
 {
-    if ASC_IS_AIV{
+    if ASC_IS_AIV {
         vcmp_gt(dst, src0, src1, mask);
     }
 }
 
-//asc_gt(vcmp) uint32_t
+// asc_gt(vcmp) uint32_t
 __simd_callee__ inline void asc_gt_impl(vector_bool& dst, vector_uint32_t src0, vector_uint32_t src1, vector_bool mask)
 {
-    if ASC_IS_AIV{
+    if ASC_IS_AIV {
         vcmp_gt(dst, src0, src1, mask);
     }
 }
 
-//asc_gt(vcmp) int32_t
+// asc_gt(vcmp) int32_t
 __simd_callee__ inline void asc_gt_impl(vector_bool& dst, vector_int32_t src0, vector_int32_t src1, vector_bool mask)
 {
-    if ASC_IS_AIV{
+    if ASC_IS_AIV {
         vcmp_gt(dst, src0, src1, mask);
     }
 }
 
-//asc_gt(vcmp) bfloat16
-__simd_callee__ inline void asc_gt_impl(vector_bool& dst, vector_bfloat16_t src0, vector_bfloat16_t src1, vector_bool mask)
+// asc_gt(vcmp) bfloat16
+__simd_callee__ inline void asc_gt_impl(
+    vector_bool& dst, vector_bfloat16_t src0, vector_bfloat16_t src1, vector_bool mask)
 {
-    if ASC_IS_AIV{
+    if ASC_IS_AIV {
         vcmp_gt(dst, src0, src1, mask);
     }
 }

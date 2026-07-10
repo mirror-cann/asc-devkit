@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /* !
  * \file utils_c_api_impl.h
@@ -14,7 +14,8 @@
  */
 
 #if !defined(ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning "impl/c_api/c_api_instr_impl/utils_c_api_impl/utils_c_api_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
+#warning \
+    "impl/c_api/c_api_instr_impl/utils_c_api_impl/utils_c_api_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
@@ -100,10 +101,7 @@ __aicore__ inline void asc_set_mask_count_end()
     }
 }
 
-__aicore__ inline void asc_sync_post_process()
-{
-    pipe_barrier(pipe_t::PIPE_ALL);
-}
+__aicore__ inline void asc_sync_post_process() { pipe_barrier(pipe_t::PIPE_ALL); }
 
 union asc_capi_arch_version {
     uint64_t full;
@@ -113,7 +111,6 @@ union asc_capi_arch_version {
         uint64_t reserved : 20;
     };
 };
-
 
 union asc_capi_fpc_reg_config {
     uint64_t config;
@@ -126,11 +123,11 @@ union asc_capi_fpc_reg_config {
 };
 
 union asc_scalar_bitcode {
-        __aicore__ asc_scalar_bitcode() {}
-        half input_half;
-        int16_t input_int16_t;
-        uint16_t input_uint16_t;
-        uint64_t output;
+    __aicore__ asc_scalar_bitcode() {}
+    half input_half;
+    int16_t input_int16_t;
+    uint16_t input_uint16_t;
+    uint64_t output;
 };
 
 #endif // IMPL_C_API_C_API_INSTR_IMPL_UTILS_C_API_IMPL_UTILS_C_API_IMPL_H

@@ -9,7 +9,8 @@
  */
 
 #if !defined(ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning "impl/c_api/instr_impl/npu_arch_3510/cube_compute_impl/asc_mmad_mx_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
+#warning \
+    "impl/c_api/instr_impl/npu_arch_3510/cube_compute_impl/asc_mmad_mx_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
@@ -19,171 +20,203 @@
 
 #include "impl/c_api/instr_impl/npu_arch_3510/utils_impl/utils_impl.h"
 
-__aicore__ inline void asc_mmad_mx_impl(__cc__ float* c_matrix, __ca__ fp4x2_e1m2_t* a_matrix,
-    __cb__ fp4x2_e1m2_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_impl(
+    __cc__ float* c_matrix, __ca__ fp4x2_e1m2_t* a_matrix, __cb__ fp4x2_e1m2_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
     if ASC_IS_AIC {
         __ca__ float4_e1m2x2_t* a_matrix_tmp = reinterpret_cast<__ca__ float4_e1m2x2_t*>(a_matrix);
         __cb__ float4_e1m2x2_t* b_matrix_tmp = reinterpret_cast<__cb__ float4_e1m2x2_t*>(b_matrix);
-        mad_mx(c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width,
-            unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+        mad_mx(
+            c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width, unit_flag, disable_gemv,
+            c_matrix_source, c_matrix_init_val);
     }
 }
 
-__aicore__ inline void asc_mmad_mx_sync_impl(__cc__ float* c_matrix, __ca__ fp4x2_e1m2_t* a_matrix,
-    __cb__ fp4x2_e1m2_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_sync_impl(
+    __cc__ float* c_matrix, __ca__ fp4x2_e1m2_t* a_matrix, __cb__ fp4x2_e1m2_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
-    asc_mmad_mx_impl(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width,
-        unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+    asc_mmad_mx_impl(
+        c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv, c_matrix_source,
+        c_matrix_init_val);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_mmad_mx_impl(__cc__ float* c_matrix, __ca__ fp4x2_e1m2_t* a_matrix,
-    __cb__ fp4x2_e2m1_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_impl(
+    __cc__ float* c_matrix, __ca__ fp4x2_e1m2_t* a_matrix, __cb__ fp4x2_e2m1_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
     if ASC_IS_AIC {
         __ca__ float4_e1m2x2_t* a_matrix_tmp = reinterpret_cast<__ca__ float4_e1m2x2_t*>(a_matrix);
         __cb__ float4_e2m1x2_t* b_matrix_tmp = reinterpret_cast<__cb__ float4_e2m1x2_t*>(b_matrix);
-        mad_mx(c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width,
-            unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+        mad_mx(
+            c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width, unit_flag, disable_gemv,
+            c_matrix_source, c_matrix_init_val);
     }
 }
 
-__aicore__ inline void asc_mmad_mx_sync_impl(__cc__ float* c_matrix, __ca__ fp4x2_e1m2_t* a_matrix,
-    __cb__ fp4x2_e2m1_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_sync_impl(
+    __cc__ float* c_matrix, __ca__ fp4x2_e1m2_t* a_matrix, __cb__ fp4x2_e2m1_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
-    asc_mmad_mx_impl(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width,
-        unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+    asc_mmad_mx_impl(
+        c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv, c_matrix_source,
+        c_matrix_init_val);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_mmad_mx_impl(__cc__ float* c_matrix, __ca__ fp4x2_e2m1_t* a_matrix,
-    __cb__ fp4x2_e1m2_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_impl(
+    __cc__ float* c_matrix, __ca__ fp4x2_e2m1_t* a_matrix, __cb__ fp4x2_e1m2_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
     if ASC_IS_AIC {
         __ca__ float4_e2m1x2_t* a_matrix_tmp = reinterpret_cast<__ca__ float4_e2m1x2_t*>(a_matrix);
         __cb__ float4_e1m2x2_t* b_matrix_tmp = reinterpret_cast<__cb__ float4_e1m2x2_t*>(b_matrix);
-        mad_mx(c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width,
-            unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+        mad_mx(
+            c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width, unit_flag, disable_gemv,
+            c_matrix_source, c_matrix_init_val);
     }
 }
 
-__aicore__ inline void asc_mmad_mx_sync_impl(__cc__ float* c_matrix, __ca__ fp4x2_e2m1_t* a_matrix,
-    __cb__ fp4x2_e1m2_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_sync_impl(
+    __cc__ float* c_matrix, __ca__ fp4x2_e2m1_t* a_matrix, __cb__ fp4x2_e1m2_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
-    asc_mmad_mx_impl(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width,
-        unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+    asc_mmad_mx_impl(
+        c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv, c_matrix_source,
+        c_matrix_init_val);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_mmad_mx_impl(__cc__ float* c_matrix, __ca__ fp4x2_e2m1_t* a_matrix,
-    __cb__ fp4x2_e2m1_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_impl(
+    __cc__ float* c_matrix, __ca__ fp4x2_e2m1_t* a_matrix, __cb__ fp4x2_e2m1_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
     if ASC_IS_AIC {
         __ca__ float4_e2m1x2_t* a_matrix_tmp = reinterpret_cast<__ca__ float4_e2m1x2_t*>(a_matrix);
         __cb__ float4_e2m1x2_t* b_matrix_tmp = reinterpret_cast<__cb__ float4_e2m1x2_t*>(b_matrix);
-        mad_mx(c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width,
-            unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+        mad_mx(
+            c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width, unit_flag, disable_gemv,
+            c_matrix_source, c_matrix_init_val);
     }
 }
 
-__aicore__ inline void asc_mmad_mx_sync_impl(__cc__ float* c_matrix, __ca__ fp4x2_e2m1_t* a_matrix,
-    __cb__ fp4x2_e2m1_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_sync_impl(
+    __cc__ float* c_matrix, __ca__ fp4x2_e2m1_t* a_matrix, __cb__ fp4x2_e2m1_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
-    asc_mmad_mx_impl(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width,
-        unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+    asc_mmad_mx_impl(
+        c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv, c_matrix_source,
+        c_matrix_init_val);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_mmad_mx_impl(__cc__ float* c_matrix, __ca__ fp8_e4m3fn_t* a_matrix,
-    __cb__ fp8_e4m3fn_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_impl(
+    __cc__ float* c_matrix, __ca__ fp8_e4m3fn_t* a_matrix, __cb__ fp8_e4m3fn_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
     if ASC_IS_AIC {
         __ca__ float8_e4m3_t* a_matrix_tmp = reinterpret_cast<__ca__ float8_e4m3_t*>(a_matrix);
         __cb__ float8_e4m3_t* b_matrix_tmp = reinterpret_cast<__cb__ float8_e4m3_t*>(b_matrix);
-        mad_mx(c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width,
-            unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+        mad_mx(
+            c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width, unit_flag, disable_gemv,
+            c_matrix_source, c_matrix_init_val);
     }
 }
 
-__aicore__ inline void asc_mmad_mx_sync_impl(__cc__ float* c_matrix, __ca__ fp8_e4m3fn_t* a_matrix,
-    __cb__ fp8_e4m3fn_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_sync_impl(
+    __cc__ float* c_matrix, __ca__ fp8_e4m3fn_t* a_matrix, __cb__ fp8_e4m3fn_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
-    asc_mmad_mx_impl(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width,
-        unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+    asc_mmad_mx_impl(
+        c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv, c_matrix_source,
+        c_matrix_init_val);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_mmad_mx_impl(__cc__ float* c_matrix, __ca__ fp8_e4m3fn_t* a_matrix,
-    __cb__ fp8_e5m2_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_impl(
+    __cc__ float* c_matrix, __ca__ fp8_e4m3fn_t* a_matrix, __cb__ fp8_e5m2_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
     if ASC_IS_AIC {
         __ca__ float8_e4m3_t* a_matrix_tmp = reinterpret_cast<__ca__ float8_e4m3_t*>(a_matrix);
         __cb__ float8_e5m2_t* b_matrix_tmp = reinterpret_cast<__cb__ float8_e5m2_t*>(b_matrix);
-        mad_mx(c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width,
-            unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+        mad_mx(
+            c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width, unit_flag, disable_gemv,
+            c_matrix_source, c_matrix_init_val);
     }
 }
 
-__aicore__ inline void asc_mmad_mx_sync_impl(__cc__ float* c_matrix, __ca__ fp8_e4m3fn_t* a_matrix,
-    __cb__ fp8_e5m2_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_sync_impl(
+    __cc__ float* c_matrix, __ca__ fp8_e4m3fn_t* a_matrix, __cb__ fp8_e5m2_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
-    asc_mmad_mx_impl(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width,
-        unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+    asc_mmad_mx_impl(
+        c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv, c_matrix_source,
+        c_matrix_init_val);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_mmad_mx_impl(__cc__ float* c_matrix, __ca__ fp8_e5m2_t* a_matrix,
-    __cb__ fp8_e4m3fn_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_impl(
+    __cc__ float* c_matrix, __ca__ fp8_e5m2_t* a_matrix, __cb__ fp8_e4m3fn_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
     if ASC_IS_AIC {
         __ca__ float8_e5m2_t* a_matrix_tmp = reinterpret_cast<__ca__ float8_e5m2_t*>(a_matrix);
         __cb__ float8_e4m3_t* b_matrix_tmp = reinterpret_cast<__cb__ float8_e4m3_t*>(b_matrix);
-        mad_mx(c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width,
-            unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+        mad_mx(
+            c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width, unit_flag, disable_gemv,
+            c_matrix_source, c_matrix_init_val);
     }
 }
 
-__aicore__ inline void asc_mmad_mx_sync_impl(__cc__ float* c_matrix, __ca__ fp8_e5m2_t* a_matrix,
-    __cb__ fp8_e4m3fn_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_sync_impl(
+    __cc__ float* c_matrix, __ca__ fp8_e5m2_t* a_matrix, __cb__ fp8_e4m3fn_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
-    asc_mmad_mx_impl(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width,
-        unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+    asc_mmad_mx_impl(
+        c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv, c_matrix_source,
+        c_matrix_init_val);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_mmad_mx_impl(__cc__ float* c_matrix, __ca__ fp8_e5m2_t* a_matrix,
-    __cb__ fp8_e5m2_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_impl(
+    __cc__ float* c_matrix, __ca__ fp8_e5m2_t* a_matrix, __cb__ fp8_e5m2_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
     if ASC_IS_AIC {
         __ca__ float8_e5m2_t* a_matrix_tmp = reinterpret_cast<__ca__ float8_e5m2_t*>(a_matrix);
         __cb__ float8_e5m2_t* b_matrix_tmp = reinterpret_cast<__cb__ float8_e5m2_t*>(b_matrix);
-        mad_mx(c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width,
-            unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+        mad_mx(
+            c_matrix, a_matrix_tmp, b_matrix_tmp, left_height, n_dim, right_width, unit_flag, disable_gemv,
+            c_matrix_source, c_matrix_init_val);
     }
 }
 
-__aicore__ inline void asc_mmad_mx_sync_impl(__cc__ float* c_matrix, __ca__ fp8_e5m2_t* a_matrix,
-    __cb__ fp8_e5m2_t* b_matrix, uint16_t left_height, uint16_t n_dim, uint16_t right_width,
-    uint8_t unit_flag, bool disable_gemv, bool c_matrix_source, bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_mx_sync_impl(
+    __cc__ float* c_matrix, __ca__ fp8_e5m2_t* a_matrix, __cb__ fp8_e5m2_t* b_matrix, uint16_t left_height,
+    uint16_t n_dim, uint16_t right_width, uint8_t unit_flag, bool disable_gemv, bool c_matrix_source,
+    bool c_matrix_init_val)
 {
-    asc_mmad_mx_impl(c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width,
-        unit_flag, disable_gemv, c_matrix_source, c_matrix_init_val);
+    asc_mmad_mx_impl(
+        c_matrix, a_matrix, b_matrix, left_height, n_dim, right_width, unit_flag, disable_gemv, c_matrix_source,
+        c_matrix_init_val);
     asc_sync_post_process();
 }
 #endif

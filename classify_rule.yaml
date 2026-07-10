@@ -260,7 +260,7 @@ asc-devkit:
       - impl/simt_api/cpp/kernel_simt_bessel_intf_impl.h
       - impl/simt_api/cpp/kernel_simt_cast_intf_impl.h
       - impl/simt_api/cpp/kernel_simt_atomic_intf_impl.h
-
+      - impl/c_api/instr_impl/npu_arch_2201/vector_compute_impl/asc_set_vector_mask_impl.h
 
   llt:
     ut_check: true

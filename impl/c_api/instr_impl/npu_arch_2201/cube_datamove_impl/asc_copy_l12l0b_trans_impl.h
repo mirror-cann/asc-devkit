@@ -14,7 +14,8 @@
  */
 
 #if !defined(ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning "impl/c_api/instr_impl/npu_arch_2201/npu_arch_2201/cube_datamove_impl/asc_copy_l12l0b_trans_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
+#warning \
+    "impl/c_api/instr_impl/npu_arch_2201/npu_arch_2201/cube_datamove_impl/asc_copy_l12l0b_trans_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
@@ -24,120 +25,120 @@
 
 #include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
-__aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ half* dst, __cbuf__ half* src, uint16_t index_id,
-                                                  uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_impl(
+    __cb__ half* dst, __cbuf__ half* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
+    bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     }
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ half* dst, __cbuf__ half* src, uint16_t index_id,
-                                                       uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(
+    __cb__ half* dst, __cbuf__ half* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
+    bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ bfloat16_t* dst, __cbuf__ bfloat16_t* src, uint16_t index_id,
-                                                  uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_impl(
+    __cb__ bfloat16_t* dst, __cbuf__ bfloat16_t* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride,
+    uint16_t dst_gap, bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     }
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ bfloat16_t* dst, __cbuf__ bfloat16_t* src,
-                                                       uint16_t index_id, uint8_t repeat, uint16_t src_stride,
-                                                       uint16_t dst_gap, bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(
+    __cb__ bfloat16_t* dst, __cbuf__ bfloat16_t* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride,
+    uint16_t dst_gap, bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ float* dst, __cbuf__ float* src, uint16_t index_id,
-                                                  uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_impl(
+    __cb__ float* dst, __cbuf__ float* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
+    bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     }
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ float* dst, __cbuf__ float* src, uint16_t index_id,
-                                                       uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(
+    __cb__ float* dst, __cbuf__ float* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
+    bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ int32_t* dst, __cbuf__ int32_t* src, uint16_t index_id,
-                                                  uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_impl(
+    __cb__ int32_t* dst, __cbuf__ int32_t* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride,
+    uint16_t dst_gap, bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     }
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ int32_t* dst, __cbuf__ int32_t* src, uint16_t index_id,
-                                                       uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(
+    __cb__ int32_t* dst, __cbuf__ int32_t* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride,
+    uint16_t dst_gap, bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ int8_t* dst, __cbuf__ int8_t* src, uint16_t index_id,
-                                                  uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_impl(
+    __cb__ int8_t* dst, __cbuf__ int8_t* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
+    bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     }
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ int8_t* dst, __cbuf__ int8_t* src, uint16_t index_id,
-                                                       uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(
+    __cb__ int8_t* dst, __cbuf__ int8_t* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
+    bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ uint32_t* dst, __cbuf__ uint32_t* src, uint16_t index_id,
-                                                  uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_impl(
+    __cb__ uint32_t* dst, __cbuf__ uint32_t* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride,
+    uint16_t dst_gap, bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     }
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ uint32_t* dst, __cbuf__ uint32_t* src, uint16_t index_id,
-                                                       uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(
+    __cb__ uint32_t* dst, __cbuf__ uint32_t* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride,
+    uint16_t dst_gap, bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_impl(__cb__ uint8_t* dst, __cbuf__ uint8_t* src, uint16_t index_id,
-                                                  uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                  bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_impl(
+    __cb__ uint8_t* dst, __cbuf__ uint8_t* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride,
+    uint16_t dst_gap, bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     if ASC_IS_AIC {
         load_cbuf_to_cb_transpose(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     }
 }
 
-__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(__cb__ uint8_t* dst, __cbuf__ uint8_t* src, uint16_t index_id,
-                                                       uint8_t repeat, uint16_t src_stride, uint16_t dst_gap,
-                                                       bool enable_addr_decrement, uint16_t dst_frac_gap)
+__aicore__ inline void asc_copy_l12l0b_trans_sync_impl(
+    __cb__ uint8_t* dst, __cbuf__ uint8_t* src, uint16_t index_id, uint8_t repeat, uint16_t src_stride,
+    uint16_t dst_gap, bool enable_addr_decrement, uint16_t dst_frac_gap)
 {
     asc_copy_l12l0b_trans_impl(dst, src, index_id, repeat, src_stride, dst_gap, enable_addr_decrement, dst_frac_gap);
     asc_sync_post_process();

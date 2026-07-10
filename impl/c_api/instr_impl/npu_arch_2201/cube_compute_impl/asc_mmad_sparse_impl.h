@@ -9,7 +9,8 @@
  */
 
 #if !defined(ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_mmad_sparse_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
+#warning \
+    "impl/c_api/instr_impl/npu_arch_2201/cube_compute_impl/asc_mmad_sparse_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
 #endif
@@ -19,18 +20,18 @@
 
 #include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
-__aicore__ inline void asc_mmad_sparse_impl(__cc__ int32_t* c, __ca__ int8_t* a, __cb__ int8_t* b, uint16_t m,
-                                            uint16_t k, uint16_t n, uint8_t unit_flag, bool c_matrix_source,
-                                            bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_sparse_impl(
+    __cc__ int32_t* c, __ca__ int8_t* a, __cb__ int8_t* b, uint16_t m, uint16_t k, uint16_t n, uint8_t unit_flag,
+    bool c_matrix_source, bool c_matrix_init_val)
 {
     if ASC_IS_AIC {
         mad_sp(c, a, b, m, k, n, unit_flag, c_matrix_source, c_matrix_init_val);
     }
 }
 
-__aicore__ inline void asc_mmad_sparse_sync_impl(__cc__ int32_t* c, __ca__ int8_t* a, __cb__ int8_t* b, uint16_t m,
-                                                 uint16_t k, uint16_t n, uint8_t unit_flag, bool c_matrix_source,
-                                                 bool c_matrix_init_val)
+__aicore__ inline void asc_mmad_sparse_sync_impl(
+    __cc__ int32_t* c, __ca__ int8_t* a, __cb__ int8_t* b, uint16_t m, uint16_t k, uint16_t n, uint8_t unit_flag,
+    bool c_matrix_source, bool c_matrix_init_val)
 {
     asc_mmad_sparse_impl(c, a, b, m, k, n, unit_flag, c_matrix_source, c_matrix_init_val);
     asc_sync_post_process();

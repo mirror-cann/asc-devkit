@@ -69,7 +69,8 @@ __simd_callee__ inline void asc_lt_impl(vector_bool& dst, vector_int32_t src0, v
     }
 }
 
-__simd_callee__ inline void asc_lt_impl(vector_bool& dst, vector_bfloat16_t src0, vector_bfloat16_t src1, vector_bool mask)
+__simd_callee__ inline void asc_lt_impl(
+    vector_bool& dst, vector_bfloat16_t src0, vector_bfloat16_t src1, vector_bool mask)
 {
     if ASC_IS_AIV {
         vcmp_lt(dst, src0, src1, mask);

@@ -29,42 +29,21 @@ __aicore__ inline void asc_datacache_preload(__gm__ uint64_t* address, int64_t o
 }
 
 namespace __asc_aicore {
-__aicore__ inline void asc_dcci_single(__gm__ void* dst)
-{
-    asc_dcci_single_impl(dst);
-}
-}
+__aicore__ inline void asc_dcci_single(__gm__ void* dst) { asc_dcci_single_impl(dst); }
+} // namespace __asc_aicore
 
-__aicore__ inline void asc_ub_dcci_single(__ubuf__ void* dst)
-{
-    asc_ub_dcci_single_impl(dst);
-}
+__aicore__ inline void asc_ub_dcci_single(__ubuf__ void* dst) { asc_ub_dcci_single_impl(dst); }
 
-__aicore__ inline void asc_dcci_entire_all()
-{
-    asc_dcci_entire_all_impl();
-}
+__aicore__ inline void asc_dcci_entire_all() { asc_dcci_entire_all_impl(); }
 
-__aicore__ inline void asc_dcci_entire_out()
-{
-    asc_dcci_entire_out_impl();
-}
+__aicore__ inline void asc_dcci_entire_out() { asc_dcci_entire_out_impl(); }
 
-__aicore__ inline void asc_dcci_entire_atomic()
-{
-    asc_dcci_entire_atomic_impl();
-}
+__aicore__ inline void asc_dcci_entire_atomic() { asc_dcci_entire_atomic_impl(); }
 
 //=========asc_get_icache_preload_status========
-__aicore__ inline int64_t asc_get_icache_preload_status()
-{
-    return asc_get_icache_preload_status_impl();
-}
+__aicore__ inline int64_t asc_get_icache_preload_status() { return asc_get_icache_preload_status_impl(); }
 
 //==============asc_dci===============
-__aicore__ inline void asc_dci()
-{
-    asc_dci_impl();
-}
+__aicore__ inline void asc_dci() { asc_dci_impl(); }
 
 #endif

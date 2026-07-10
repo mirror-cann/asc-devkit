@@ -14,7 +14,7 @@
  */
 
 #if !defined(ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
-#warning                                                                                                               \
+#warning \
     "impl/c_api/instr_impl/npu_arch_2201/vector_compute_impl/asc_ne_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use "#include "c_api/asc_simd.h"" and use public functions or variables defined in interface headers files."
 #define ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS
 #define UNDEF_ASCENDC_C_API_INCLUDE_COMPILER_INTERNAL_HEADERS_ASCENDC
@@ -26,86 +26,94 @@
 #include "impl/c_api/instr_impl/npu_arch_2201/utils_impl/utils_impl.h"
 
 // vcmp_ne(half, half)
-__aicore__ inline void asc_ne_impl(__ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat, uint8_t dst_block_stride,
-                                   uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride,
-                                   uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
+__aicore__ inline void asc_ne_impl(
+    __ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat, uint8_t dst_block_stride, uint8_t src0_block_stride,
+    uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
     if ASC_IS_AIV {
-        vcmp_ne(src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
-                src0_repeat_stride, src1_repeat_stride);
+        vcmp_ne(
+            src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
+            src0_repeat_stride, src1_repeat_stride);
     }
 }
 
-__aicore__ inline void asc_ne_sync_impl(__ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat,
-                                        uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride,
-                                        uint8_t dst_repeat_stride, uint8_t src0_repeat_stride,
-                                        uint8_t src1_repeat_stride)
+__aicore__ inline void asc_ne_sync_impl(
+    __ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat, uint8_t dst_block_stride, uint8_t src0_block_stride,
+    uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
-    asc_ne_impl(src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
-                src0_repeat_stride, src1_repeat_stride);
+    asc_ne_impl(
+        src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
+        src0_repeat_stride, src1_repeat_stride);
     asc_sync_post_process();
 }
 
 // vcmp_ne(float, float)
-__aicore__ inline void asc_ne_impl(__ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat, uint8_t dst_block_stride,
-                                   uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride,
-                                   uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
+__aicore__ inline void asc_ne_impl(
+    __ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat, uint8_t dst_block_stride, uint8_t src0_block_stride,
+    uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
     if ASC_IS_AIV {
-        vcmp_ne(src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
-                src0_repeat_stride, src1_repeat_stride);
+        vcmp_ne(
+            src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
+            src0_repeat_stride, src1_repeat_stride);
     }
 }
 
-__aicore__ inline void asc_ne_sync_impl(__ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat,
-                                        uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride,
-                                        uint8_t dst_repeat_stride, uint8_t src0_repeat_stride,
-                                        uint8_t src1_repeat_stride)
+__aicore__ inline void asc_ne_sync_impl(
+    __ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat, uint8_t dst_block_stride, uint8_t src0_block_stride,
+    uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
 {
-    asc_ne_impl(src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
-                src0_repeat_stride, src1_repeat_stride);
+    asc_ne_impl(
+        src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
+        src0_repeat_stride, src1_repeat_stride);
     asc_sync_post_process();
 }
 
 // vcmpv_ne(uint8, half, half)
-__aicore__ inline void asc_ne_impl(__ubuf__ uint8_t* dst, __ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat,
-                                   uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride,
-                                   uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
+__aicore__ inline void asc_ne_impl(
+    __ubuf__ uint8_t* dst, __ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat, uint8_t dst_block_stride,
+    uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride,
+    uint8_t src1_repeat_stride)
 {
     if ASC_IS_AIV {
-        vcmpv_ne(dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
-                 src0_repeat_stride, src1_repeat_stride);
+        vcmpv_ne(
+            dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
+            src0_repeat_stride, src1_repeat_stride);
     }
 }
 
-__aicore__ inline void asc_ne_sync_impl(__ubuf__ uint8_t* dst, __ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat,
-                                        uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride,
-                                        uint8_t dst_repeat_stride, uint8_t src0_repeat_stride,
-                                        uint8_t src1_repeat_stride)
+__aicore__ inline void asc_ne_sync_impl(
+    __ubuf__ uint8_t* dst, __ubuf__ half* src0, __ubuf__ half* src1, uint8_t repeat, uint8_t dst_block_stride,
+    uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride,
+    uint8_t src1_repeat_stride)
 {
-    asc_ne_impl(dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
-                src0_repeat_stride, src1_repeat_stride);
+    asc_ne_impl(
+        dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
+        src0_repeat_stride, src1_repeat_stride);
     asc_sync_post_process();
 }
 
 // vcmpv_ne(uint8, float, float)
-__aicore__ inline void asc_ne_impl(__ubuf__ uint8_t* dst, __ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat,
-                                   uint8_t dst_block_stride, uint8_t src0_block_stride, uint8_t src1_block_stride,
-                                   uint8_t dst_repeat_stride, uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
+__aicore__ inline void asc_ne_impl(
+    __ubuf__ uint8_t* dst, __ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat, uint8_t dst_block_stride,
+    uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride,
+    uint8_t src1_repeat_stride)
 {
     if ASC_IS_AIV {
-        vcmpv_ne(dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
-                 src0_repeat_stride, src1_repeat_stride);
+        vcmpv_ne(
+            dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
+            src0_repeat_stride, src1_repeat_stride);
     }
 }
 
-__aicore__ inline void asc_ne_sync_impl(__ubuf__ uint8_t* dst, __ubuf__ float* src0, __ubuf__ float* src1,
-                                        uint8_t repeat, uint8_t dst_block_stride, uint8_t src0_block_stride,
-                                        uint8_t src1_block_stride, uint8_t dst_repeat_stride,
-                                        uint8_t src0_repeat_stride, uint8_t src1_repeat_stride)
+__aicore__ inline void asc_ne_sync_impl(
+    __ubuf__ uint8_t* dst, __ubuf__ float* src0, __ubuf__ float* src1, uint8_t repeat, uint8_t dst_block_stride,
+    uint8_t src0_block_stride, uint8_t src1_block_stride, uint8_t dst_repeat_stride, uint8_t src0_repeat_stride,
+    uint8_t src1_repeat_stride)
 {
-    asc_ne_impl(dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
-                src0_repeat_stride, src1_repeat_stride);
+    asc_ne_impl(
+        dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride, dst_repeat_stride,
+        src0_repeat_stride, src1_repeat_stride);
     asc_sync_post_process();
 }
 
