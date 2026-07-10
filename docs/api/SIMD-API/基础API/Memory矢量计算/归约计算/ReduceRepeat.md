@@ -42,7 +42,6 @@
 
 ![](../../../../figures/ReduceRepeat.png "ReduceRepeat计算示意图")
 
-
 ## 函数原型
 
 - `mask`逐bit模式：
@@ -78,7 +77,7 @@
 | src | 输入 | 源操作数。<br>类型为[LocalTensor](../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN、VECCALC、VECOUT（存储位置为Unified Buffer）。 |
 | mask[]/mask | 输入 | `mask`用于控制每次迭代内参与计算的源操作数。详细设置参考[掩码概述](../SIMD计算说明/掩码/概述.md)。 |
 | repeatTime | 输入 | 迭代次数。取值范围为[0, 255]。 |
-| dstRepStride | 输入 | 目的操作数相邻迭代间的地址步长，以一个repeatTime归约后的长度为单位。取值范围为[0, $2^{16}-1$]。<br>**注意：dstRepStride的单位受操作数数据类型、`reduceType`和`order`参数的影响**，参考[表3](#tab3)：<br>&bull;返回索引和最值时，单位为dst数据类型所占字节长度的两倍；<br>&bull;仅返回最值时，单位为dst数据类型所占字节长度；<br>&bull;仅返回索引时，单位为uint32_t类型所占字节长度。<cann-filter npu-type = "910"><br>**注意：Atlas 训练系列产品不支持配置0。**</cann-filter> |
+| dstRepStride | 输入 | 目的操作数相邻迭代间的地址步长，以一个repeatTime归约后的长度为单位。取值范围为[0, $2^{16}-1$]。<br>**注意：dstRepStride的单位受操作数数据类型、`reduceType`和`order`参数的影响**，参考[表3](#tab3)：<br>&bull;返回索引和最值时，单位为dst数据类型所占字节长度的两倍；<br>&bull;仅返回最值时，单位为dst数据类型所占字节长度；<br>&bull;仅返回索引时，单位为uint32_t类型所占字节长度。<!-- npu="910" id46 --><br>**注意：Atlas 训练系列产品不支持配置0。**<!-- end id46 --> |
 | srcBlkStride | 输入 | 单次迭代内DataBlock的地址步长，单位为32字节。取值范围为[0, $2^{16}-1$]。 |
 | srcRepStride | 输入 | 源操作数相邻迭代间的地址步长，即源操作数每次迭代跳过的DataBlock数目。取值范围为[0, $2^{16}-1$]。 |
 | order | 输入 | 在归约操作类型为MAX或MIN时，指定dst中最大值value和索引值index的相对位置以及返回结果行为，参数类型为`ReduceOrder`枚举类型，默认值为`ORDER_VALUE_INDEX`。<br>`ReduceOrder`取值如下：<br>&bull; `ORDER_VALUE_INDEX`：表示value位于低半部，返回结果存储顺序为[value, index]。<br>&bull; `ORDER_INDEX_VALUE`：表示index位于低半部，返回结果存储顺序为[index, value]。<br>&bull; `ORDER_ONLY_VALUE`：表示只返回最值，返回结果存储顺序为[value]。<br>&bull; `ORDER_ONLY_INDEX`：表示只返回最值索引，返回结果存储顺序为[index]。<br>**注：归约操作类型为SUM时，该参数不生效。** |
@@ -267,7 +266,6 @@
     <!-- end id43 -->
 
     <!-- end id41 -->
-
 
 - 归约操作类型取`SUM`时接口以二叉树累加的方式完成每个repeat内的求和，详情请参考[ReduceDataBlock关键特性说明](./ReduceDataBlock.md#关键特性说明)。
 

@@ -2,17 +2,33 @@
 
 ## 产品支持情况<a name="zh-cn_topic_0000002567699435_section796754519912"></a>
 
-| 产品 | 是否支持 |
-| :--- | :---: |
-|<cann-filter npu-type = "950"> Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-|<cann-filter npu-type = "A3"> Atlas A3 训练系列产品/Atlas A3 推理系列产品 | x </cann-filter>|
-|<cann-filter npu-type = "910b"> Atlas A2 训练系列产品/Atlas A2 推理系列产品 | x </cann-filter>|
-|<cann-filter npu-type = "310b"> Atlas 200I/500 A2 推理产品 | x </cann-filter>|
-|<cann-filter npu-type = "310p"> Atlas 推理系列产品AI Core | x </cann-filter>|
-|<cann-filter npu-type = "310p"> Atlas 推理系列产品Vector Core | x </cann-filter>|
-|<cann-filter npu-type = "910"> Atlas 训练系列产品 | x </cann-filter>|
-|<cann-filter npu-type = "x90"> Kirin X90 | x </cann-filter>|
-|<cann-filter npu-type = "9030"> Kirin 9030 | x </cann-filter>|
+<!-- npu="950" id11 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id11 -->
+<!-- npu="A3" id12 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持
+<!-- end id12 -->
+<!-- npu="910b" id13 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持
+<!-- end id13 -->
+<!-- npu="310b" id14 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id14 -->
+<!-- npu="310p" id15 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id15 -->
+<!-- npu="310p" id16 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id16 -->
+<!-- npu="910" id17 -->
+- Atlas 训练系列产品：不支持
+<!-- end id17 -->
+<!-- npu="x90" id18 -->
+- Kirin X90：不支持
+<!-- end id18 -->
+<!-- npu="9030" id19 -->
+- Kirin 9030：不支持
+<!-- end id19 -->
 
 ## 功能说明<a name="zh-cn_topic_0000002567699435_section106841136114319"></a>
 
@@ -57,11 +73,9 @@ __aicore__ inline void Copy(const LocalTensor<T>& dst, const LocalTensor<T>& src
 ## 数据类型<a name="zh-cn_topic_0000002567699435_section42191353048181"></a>
 
 源操作数和目的操作数支持的数据类型保持一致。
-<cann-filter npu-type="950">
-
+<!-- npu="950" id1 -->
 Ascend 950PR/Ascend 950DT，支持的数据类型为：int8_t、uint8_t、fp4x2_e2m1_t、fp4x2_e1m2_t、hifloat8_t、fp8_e8m0_t、fp8_e5m2_t、fp8_e4m3fn_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t。
-
-</cann-filter>
+<!-- end id1 -->
 
 ## 返回值说明
 

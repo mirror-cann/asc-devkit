@@ -101,105 +101,77 @@
 
 ### mask/mask[]参数说明
 
-<cann-filter npu-type = "950">
-
+<!-- npu="950" id10 -->
 - 针对Ascend 950PR/Ascend 950DT，设置有效。
+<!-- end id10 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "A3">
-
+<!-- npu="A3" id11 -->
 - 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，保留参数，设置无效。
+<!-- end id11 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "910b">
-
+<!-- npu="910b" id12 -->
 - 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，保留参数，设置无效。
+<!-- end id12 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "310b">
-
+<!-- npu="310b" id13 -->
 - 针对Atlas 200I/500 A2 推理产品，设置有效。
+<!-- end id13 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "310p">
-
+<!-- npu="310p" id14 -->
 - 针对Atlas 推理系列产品AI Core，保留参数，设置无效。
+<!-- end id14 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "x90">
-
+<!-- npu="x90" id15 -->
 - 针对Kirin X90，保留参数，设置无效。
+<!-- end id15 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "9030">
-
+<!-- npu="9030" id16 -->
 - 针对Kirin 9030，保留参数，设置无效。
-
-</cann-filter>
+<!-- end id16 -->
 
 ## 数据类型
 
-<cann-filter npu-type = "950">
-
+<!-- npu="950" id17 -->
 - 针对Ascend 950PR/Ascend 950DT
     - T支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t、double（只支持CMPMODE::EQ）。其中，int8\_t/uint8\_t/uint64\_t/int64\_t/double数据类型仅支持tensor前n个数据计算接口。
     - U支持的数据类型为：uint8_t。
+<!-- end id17 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "A3">
-
+<!-- npu="A3" id18 -->
 - 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品
     - T支持的数据类型为：half（所有CMPMODE都支持）、float（所有CMPMODE都支持）、int32_t（只支持CMPMODE::EQ）。
     - U支持的数据类型为：uint8_t。
+<!-- end id18 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "910b">
-
+<!-- npu="910b" id19 -->
 - 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品
     - T支持的数据类型为：half（所有CMPMODE都支持）、float（所有CMPMODE都支持）、int32_t（只支持CMPMODE::EQ）。
     - U支持的数据类型为：uint8_t。
+<!-- end id19 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "310b">
-
+<!-- npu="310b" id20 -->
 - 针对Atlas 200I/500 A2 推理产品
     - T支持的数据类型为：int16_t、uint16_t、half、int32_t、uint32_t、float。
     - U支持的数据类型为：uint8_t。
+<!-- end id20 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "310p">
-
+<!-- npu="310p" id21 -->
 - 针对Atlas 推理系列产品AI Core
     - T支持的数据类型为：half、float。
     - U支持的数据类型为：uint8_t。
+<!-- end id21 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "x90">
-
+<!-- npu="x90" id22 -->
 - 针对Kirin X90
     - T支持的数据类型为：half（所有CMPMODE都支持）、float（所有CMPMODE都支持）、int32_t（只支持CMPMODE::EQ）。
     - U支持的数据类型为：uint8_t。
+<!-- end id22 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "9030">
-
+<!-- npu="9030" id23 -->
 - 针对Kirin 9030
     - T支持的数据类型为：half（所有CMPMODE都支持）、float（所有CMPMODE都支持）、int32_t（只支持CMPMODE::EQ）。
     - U支持的数据类型为：uint8_t。
-
-</cann-filter>
+<!-- end id23 -->
 
 ## 返回值说明<a name="section128671456102513"></a>
 

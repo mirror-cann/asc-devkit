@@ -88,11 +88,9 @@
 
 - 该接口仅在矢量计算API的isSetMask模板参数为false时生效，使用完成后需要使用[ResetMask](ResetMask.md)将mask恢复为默认值。
 
-<cann-filter npu-type="910b,A3">
-
+<!-- npu="910b,A3" id10 -->
 - 针对Atlas A3 训练系列产品/Atlas A3 推理系列产品、Atlas A2 训练系列产品/Atlas A2 推理系列产品，mask = 0表示指令不会执行计算操作，该接口将被视为NOP（空操作）。
-
-</cann-filter>
+<!-- end id10 -->
 
 ## 调用示例<a name="section837496171220"></a>
 
