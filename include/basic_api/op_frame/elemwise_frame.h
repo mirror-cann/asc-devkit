@@ -12,6 +12,11 @@
  * \file elemwise_frame.h
  * \brief
  */
+
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "elemwise_frame.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_ELEMWISE_FRAME_H__

@@ -21,6 +21,10 @@
  * Q(x) = ((((x^2+0.31212858877e2)x^2+0.39856963806e3)x^2+0.30231248150e4)x^2+0.13243365831e5)x^2+0.26267224157e5
  */
 
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "erf.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_ERF_H__

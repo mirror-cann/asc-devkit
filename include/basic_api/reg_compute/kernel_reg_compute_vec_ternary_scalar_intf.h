@@ -12,6 +12,10 @@
  * \file kernel_reg_compute_vec_ternary_scalar_intf.h
  */
 
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "kernel_reg_compute_vec_ternary_scalar_intf.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_VEC_TERNARY_SCALAR_INTF_H__

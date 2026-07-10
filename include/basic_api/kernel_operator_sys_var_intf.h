@@ -12,6 +12,11 @@
  * \file kernel_operator_sys_var_intf.h
  * \brief
  */
+
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "kernel_operator_sys_var_intf.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_SYS_VAR_INTF_H__

@@ -13,6 +13,10 @@
  * \brief
  */
 
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "conv3d_bp_input_config.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #ifndef CONV3D_BP_INPUT_CONFIG_H
 #define CONV3D_BP_INPUT_CONFIG_H
 

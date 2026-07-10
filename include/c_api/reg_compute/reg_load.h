@@ -8,6 +8,10 @@
 * See LICENSE in the root of the software repository for the full text of the License.
 */
 
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "reg_load.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #ifndef INCLUDE_C_API_REG_COMPUTE_REG_LOAD_H
 #define INCLUDE_C_API_REG_COMPUTE_REG_LOAD_H
 

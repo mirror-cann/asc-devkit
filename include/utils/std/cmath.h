@@ -12,6 +12,11 @@
  * \file cmath.h
  * \brief
  */
+
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "cmath.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #ifndef AICORE_UTILS_STD_CMATH_H
 #define AICORE_UTILS_STD_CMATH_H
 

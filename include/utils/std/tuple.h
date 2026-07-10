@@ -12,6 +12,11 @@
  * \file tuple.h
  * \brief
  */
+
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "tuple.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #ifndef AICORE_UTILS_STD_TUPLE_H
 #define AICORE_UTILS_STD_TUPLE_H
 

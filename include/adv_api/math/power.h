@@ -14,6 +14,10 @@
  * Mathematical formulas: Power(x, y) = x ^ y
  */
 
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "power.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_POWER_H__

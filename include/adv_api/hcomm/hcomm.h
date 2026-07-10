@@ -12,6 +12,11 @@
  * \file hcomm.h
  * \brief Hcomm interface
  */
+
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "hcomm.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #ifndef INCLUDE_ADV_API_HCOMM_HCOMM_H
 #define INCLUDE_ADV_API_HCOMM_HCOMM_H
 

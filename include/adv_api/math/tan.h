@@ -40,6 +40,10 @@
  *  R3 = -24.8048928861126769186219
  */
 
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "tan.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_TAN_H__

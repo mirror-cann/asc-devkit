@@ -12,6 +12,11 @@
  * \file type_traits.h
  * \brief
  */
+
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "type_traits.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #ifndef AICORE_UTILS_STD_TYPE_TRAITS_H
 #define AICORE_UTILS_STD_TYPE_TRAITS_H
 

@@ -12,6 +12,11 @@
  * \file algorithm.h
  * \brief
  */
+
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#error "algorithm.h cannot be used with compile flag --enable-simt enabled."
+#endif
+
 #ifndef AICORE_UTILS_STD_ALGORITHM_H
 #define AICORE_UTILS_STD_ALGORITHM_H
 
