@@ -2,15 +2,27 @@
 
 ## 产品支持情况
 
-| 产品 | 是否支持 |
-| ---- | -------- |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √</cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √</cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √</cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x</cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | √</cann-filter> |
+<!-- npu="950" id25 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id25 -->
+<!-- npu="A3" id26 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id26 -->
+<!-- npu="910b" id27 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id27 -->
+<!-- npu="310b" id28 -->
+- Atlas 200I/500 A2 推理产品：支持
+<!-- end id28 -->
+<!-- npu="310p" id29 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id29 -->
+<!-- npu="310p" id30 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id30 -->
+<!-- npu="910" id31 -->
+- Atlas 训练系列产品：支持
+<!-- end id31 -->
 
 ## 功能说明
 
@@ -59,7 +71,7 @@
 | src | 输入 | 源操作数。<br>类型为[LocalTensor](../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN、VECCALC、VECOUT（存储位置为Unified Buffer）。 |
 | mask[]/mask | 输入 | `mask`用于控制每次迭代内参与计算的源操作数。详细设置参考[掩码概述](../SIMD计算说明/掩码/概述.md)。 |
 | repeatTime | 输入 | 迭代次数。取值范围为[0, 255]。 |
-| dstRepStride | 输入 | 目的操作数相邻迭代间的地址步长，以一个repeatTime归约后的长度为单位，即128字节。取值范围为[0, $2^{16}-1$]。<cann-filter npu-type = "910"><br>**注意，Atlas 训练系列产品不支持此参数值配为0。**</cann-filter> |
+| dstRepStride | 输入 | 目的操作数相邻迭代间的地址步长，以一个repeatTime归约后的长度为单位，即128字节。取值范围为[0, $2^{16}-1$]。<!-- npu="910" id24 --><br>**注意，Atlas 训练系列产品不支持此参数值配为0。** <!-- end id24 -->|
 | srcBlkStride | 输入 | 单次迭代内DataBlock的地址步长，单位为32字节。取值范围为[0, $2^{16}-1$]。 |
 | srcRepStride | 输入 | 源操作数相邻迭代间的地址步长，即源操作数每次迭代跳过的DataBlock数目。取值范围为[0, $2^{16}-1$]。 |
 
@@ -69,12 +81,24 @@
 
 支持的数据类型如下：
 
-- <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，支持half、float。</cann-filter>
-- <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持half、float。</cann-filter>
-- <cann-filter npu-type = "910">Atlas 训练系列产品，支持half。</cann-filter>
+<!-- npu="950" id8 -->
+- Ascend 950PR/Ascend 950DT，支持half、float。
+<!-- end id8 -->
+<!-- npu="A3" id9 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持half、float。
+<!-- end id9 -->
+<!-- npu="910b" id10 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持half、float。
+<!-- end id10 -->
+<!-- npu="310b" id11 -->
+- Atlas 200I/500 A2 推理产品，支持half、float。
+<!-- end id11 -->
+<!-- npu="310p" id12 -->
+- Atlas 推理系列产品AI Core，支持half、float。
+<!-- end id12 -->
+<!-- npu="910" id13 -->
+- Atlas 训练系列产品，支持half。
+<!-- end id13 -->
 
 目的操作数与源操作数的数据类型需要保持一致。
 
@@ -88,13 +112,15 @@
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md#通用地址重叠约束)。
 - `dstRepStride`、`srcBlkStride`、`srcRepStride`取值范围为[0, $2^{16}-1$]，需要结合UB的实际大小避免出现越界。
 
-<cann-filter npu-type = "A3,910b">
-
+<!-- npu="A3,910b" id16 -->
 - 针对如下型号，当`mask=0`或`repeatTime=0`时，不会执行归约操作，不会对目的操作数进行写入，该接口将被视为`NOP`（空操作）。
-  - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
-  - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品</cann-filter>
-
-</cann-filter>
+  <!-- npu="A3" id14 -->
+  - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+  <!-- end id14 -->
+  <!-- npu="910b" id15 -->
+  - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+  <!-- end id15 -->
+<!-- end id16 -->
 
 <!-- npu="A3,910b,310p" id1 -->
 - 针对如下型号，当一对相邻元素的掩码均为0，对应的目的元素将跳过写入，保持不变。

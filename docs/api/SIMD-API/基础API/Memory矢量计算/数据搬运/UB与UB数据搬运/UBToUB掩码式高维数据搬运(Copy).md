@@ -2,15 +2,27 @@
 
 ## 产品支持情况<a name="zh-cn_topic_0000002567699435_section796754519912"></a>
 
-| 产品 | 是否支持 |
-| :--- | :---: |
-|<cann-filter npu-type = "950"> Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-|<cann-filter npu-type = "A3"> Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
-|<cann-filter npu-type = "910b"> Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
-|<cann-filter npu-type = "310b"> Atlas 200I/500 A2 推理产品 | √ </cann-filter>|
-|<cann-filter npu-type = "310p"> Atlas 推理系列产品AI Core | x </cann-filter>|
-|<cann-filter npu-type = "310p"> Atlas 推理系列产品Vector Core | x </cann-filter>|
-|<cann-filter npu-type = "910"> Atlas 训练系列产品 | x </cann-filter>|
+<!-- npu="950" id15 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id15 -->
+<!-- npu="A3" id16 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id16 -->
+<!-- npu="910b" id17 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id17 -->
+<!-- npu="310b" id18 -->
+- Atlas 200I/500 A2 推理产品：支持
+<!-- end id18 -->
+<!-- npu="310p" id19 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id19 -->
+<!-- npu="310p" id20 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id20 -->
+<!-- npu="910" id21 -->
+- Atlas 训练系列产品：不支持
+<!-- end id21 -->
 
 ## 功能说明<a name="zh-cn_topic_0000002567699435_section106841136114319"></a>
 
@@ -76,29 +88,21 @@
 
 源操作数和目的操作数支持的数据类型保持一致。
 
-<cann-filter npu-type="950">
-
+<!-- npu="950" id1 -->
 - Ascend 950PR/Ascend 950DT，支持的数据类型为：uint8_t、int8_t、hifloat8_t、fp8_e4m3fn_t、fp8_e5m2_t、fp4x2_e2m1_t、fp4x2_e1m2_t、fp8_e8m0_t、uint16_t、int16_t、half、bfloat16_t、float、uint32_t、int32_t、uint64_t、int64_t。
+<!-- end id1 -->
 
-</cann-filter>
-
-<cann-filter npu-type="A3">
-
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。
+<!-- end id2 -->
 
-</cann-filter>
-
-<cann-filter npu-type="910b">
-
+<!-- npu="910b" id3 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。
+<!-- end id3 -->
 
-</cann-filter>
-
-<cann-filter npu-type="310b">
-
+<!-- npu="310b" id4 -->
 - Atlas 200I/500 A2 推理产品，支持的数据类型为：int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float。
-
-</cann-filter>
+<!-- end id4 -->
 
 ## 返回值说明
 
@@ -119,10 +123,15 @@
     | dstRepeatSize | [0, 4095] |
     | srcRepeatSize | [0, 4095] |
 
-- <cann-filter npu-type = "A3,910b">repeatTime = 0表示不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。该说明针对如下型号生效：
-  - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
-  - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品</cann-filter>
-</cann-filter>
+<!-- npu="A3,910b" id7 -->
+- repeatTime = 0表示不会执行计算操作，不会对目的操作数进行写入，该接口将被视为NOP（空操作）。该说明针对如下型号生效：
+  <!-- npu="A3" id5 -->
+  - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+  <!-- end id5 -->
+  <!-- npu="910b" id6 -->
+  - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+  <!-- end id6 -->
+<!-- end id7 -->
 
 - Copy和矢量计算API一样，支持和掩码操作API配合使用。但Counter模式配合高维切分计算API时，和[通用的Counter模式](../../SIMD计算说明/掩码/接口内设置Mask.md)有一定差异。具体差异如下：
     - 通用的Counter模式：Mask代表**整个矢量计算参与计算的元素个数，迭代次数不生效。**

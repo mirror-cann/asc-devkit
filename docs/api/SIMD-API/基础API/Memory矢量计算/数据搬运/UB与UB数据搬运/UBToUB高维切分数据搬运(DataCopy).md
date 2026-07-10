@@ -2,15 +2,27 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-| 产品 | 是否支持 |
-| :--- | :---: |
-|<cann-filter npu-type="950"> Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-|<cann-filter npu-type="A3"> Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
-|<cann-filter npu-type="910b"> Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
-|<cann-filter npu-type="310b"> Atlas 200I/500 A2 推理产品 | x </cann-filter>|
-|<cann-filter npu-type="310p"> Atlas 推理系列产品AI Core | √ </cann-filter>|
-|<cann-filter npu-type="310p"> Atlas 推理系列产品Vector Core | x </cann-filter>|
-|<cann-filter npu-type="910"> Atlas 训练系列产品 | √ </cann-filter>|
+<!-- npu="950" id17 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id17 -->
+<!-- npu="A3" id18 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id18 -->
+<!-- npu="910b" id19 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id19 -->
+<!-- npu="310b" id20 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id20 -->
+<!-- npu="310p" id21 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id21 -->
+<!-- npu="310p" id22 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id22 -->
+<!-- npu="910" id23 -->
+- Atlas 训练系列产品：支持
+<!-- end id23 -->
 
 ## 功能说明<a name="section474617392321"></a>
 
@@ -92,35 +104,25 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 
 ## 数据类型<a name="section4219135304818"></a>
 
-<cann-filter npu-type="950">
-
+<!-- npu="950" id1 -->
 - Ascend 950PR/Ascend 950DT，支持的数据类型为：bool、int8_t、uint8_t、hifloat8_t、fp8_e8m0_t、fp8_e5m2_t、fp8_e4m3fn_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、complex32、int64_t、uint64_t、double、complex64。
+<!-- end id1 -->
 
-</cann-filter>
-
-<cann-filter npu-type="A3">
-
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t、double。
+<!-- end id2 -->
 
-</cann-filter>
-
-<cann-filter npu-type="910b">
-
+<!-- npu="910b" id3 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、bfloat16_t、int32_t、uint32_t、float、int64_t、uint64_t、double。
+<!-- end id3 -->
 
-</cann-filter>
-
-<cann-filter npu-type="310p">
-
+<!-- npu="310p" id4 -->
 - Atlas 推理系列产品AI Core，支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、int32_t、uint32_t、float、int64_t、uint64_t、double。
+<!-- end id4 -->
 
-</cann-filter>
-
-<cann-filter npu-type="910">
-
+<!-- npu="910" id5 -->
 - Atlas 训练系列产品，支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、half、int32_t、uint32_t、float、int64_t、uint64_t、double。
-
-</cann-filter>
+<!-- end id5 -->
 
 ## 返回值说明<a name="section44801012174220"></a>
 
@@ -129,10 +131,15 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
 ## 约束说明<a name="section633mcpsimp"></a>
 
 - 位于Unified Buffer的地址必须32字节对齐。
-- <cann-filter npu-type = "A3,910b">当DataCopyParams结构体参数blockCount、blockLen任意一个值为0时，该接口将被视为NOP（空操作）。该说明针对如下型号生效：
-  - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
-  - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品</cann-filter>
-</cann-filter>
+<!-- npu="A3,910b" id9 -->
+- 当DataCopyParams结构体参数blockCount、blockLen任意一个值为0时，该接口将被视为NOP（空操作）。该说明针对如下型号生效：
+  <!-- npu="A3" id6 -->
+  - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+  <!-- end id6 -->
+  <!-- npu="910b" id7 -->
+  - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+  <!-- end id7 -->
+<!-- end id9 -->
 - DataCopyParams结构体参数的值需在取值范围内：
 
     **表4**  DataCopyParams结构体参数取值范围
@@ -144,15 +151,13 @@ __aicore__ inline void DataCopy(const LocalTensor<T>& dst, const LocalTensor<T>&
     | srcGap | [0, 65535] |
     | dstGap | [0, 65535] |
 
-<cann-filter npu-type="910b,A3">
-
+<!-- npu="910b,A3" id8 -->
 - 针对如下产品型号：
     - Atlas A2 训练系列产品/Atlas A2 推理系列产品
     - Atlas A3 训练系列产品/Atlas A3 推理系列产品
 
     在跨卡通信算子开发场景，DataCopy类接口支持跨卡数据搬运，仅支持HCCS物理链路，不支持其他通路；开发者开发过程中，需要关注涉及卡间通信的物理通路，可通过`npu-smi info -t topo`命令查询HCCS物理链路。
-
-</cann-filter>
+<!-- end id8 -->
 
 ## 调用示例<a name="section122101199486"></a>
 

@@ -2,15 +2,27 @@
 
 ## 产品支持情况
 
-| 产品 | 是否支持 |
-| --- | --- |
-| <cann-filter npu-type="950">Ascend 950PR/Ascend 950DT | √ </cann-filter>|
-| <cann-filter npu-type="A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ </cann-filter>|
-| <cann-filter npu-type="310b">Atlas 200I/500 A2 推理产品 | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品AI Core | √ </cann-filter>|
-| <cann-filter npu-type="310p">Atlas 推理系列产品Vector Core | x </cann-filter>|
-| <cann-filter npu-type="910">Atlas 训练系列产品 | √ </cann-filter>|
+<!-- npu="950" id25 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id25 -->
+<!-- npu="A3" id26 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id26 -->
+<!-- npu="910b" id27 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id27 -->
+<!-- npu="310b" id28 -->
+- Atlas 200I/500 A2 推理产品：支持
+<!-- end id28 -->
+<!-- npu="310p" id29 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id29 -->
+<!-- npu="310p" id30 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id30 -->
+<!-- npu="910" id31 -->
+- Atlas 训练系列产品：支持
+<!-- end id31 -->
 
 ## 功能说明
 
@@ -75,12 +87,24 @@
 
 支持的数据类型如下：
 
-- <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，支持int16_t、uint16_t、half、int32_t、uint32_t、float、int64_t、uint64_t。</cann-filter>
-- <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持half、float。</cann-filter>
-- <cann-filter npu-type = "910">Atlas 训练系列产品，支持half。</cann-filter>
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT，支持int16_t、uint16_t、half、int32_t、uint32_t、float、int64_t、uint64_t。
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持half、float。
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持half、float。
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品，支持half、float。
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core，支持half、float。
+<!-- end id5 -->
+<!-- npu="910" id6 -->
+- Atlas 训练系列产品，支持half。
+<!-- end id6 -->
 
 ## 返回值说明
 
@@ -92,32 +116,46 @@
 - 操作数地址重叠约束请参考[通用地址重叠约束](../../../通用说明和约束.md#通用地址重叠约束)。
 - 需要使用`sharedTmpBuffer`的情况下，支持`dst`与`sharedTmpBuffer`地址重叠（通常情况下`dst`比`sharedTmpBuffer`所需的空间要小），此时`sharedTmpBuffer`必须满足所需空间要求，详情请参考[关键特性说明](#关键特性说明)。
 
-<cann-filter npu-type = "A3,910b">
-
+<!-- npu="A3,910b" id16 -->
 - 针对如下型号，当`mask=0`或`repeatTime=0`时，不会执行归约操作，不会对目的操作数进行写入，该接口将被视为`NOP`（空操作）。
-  - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
-  - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品</cann-filter>
-
-</cann-filter>
+  <!-- npu="A3" id7 -->
+  - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+  <!-- end id7 -->
+  <!-- npu="910b" id8 -->
+  - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+  <!-- end id8 -->
+<!-- end id16 -->
 
 - `srcRepStride`取值范围为[0, $2^{16}-1$]，需要结合UB的实际大小避免出现越界。
 - 如果存在多个最小值，该指令会将最小索引写入目的操作数。
 - `dst`结果存储顺序为最小值，最小值索引，若不需要索引，只会存储最小值。
 - 当输入类型是`half`的时候，只支持获取最大不超过65535（`uint16_t`能表示的最大值）的索引值。
 - 索引按操作数的数据类型存储，读取索引需要将类型转换到整型。请参考[ReduceRepeat关键特性说明](./ReduceRepeat.md#关键特性说明)。
-- <cann-filter npu-type = "950">针对Ascend 950PR/Ascend 950DT，`int64_t`/`uint64_t`数据类型仅支持tensor前n个数据计算接口。</cann-filter>
-- <cann-filter npu-type = "950">对于Ascend 950PR/Ascend 950DT，因接口内部算法实现不同，无需使用`sharedTmpBuffer`，可以直接传入`src`或者任意大小的`sharedTmpBuffer`。</cann-filter>
+<!-- npu="950" id9 -->
+- 针对Ascend 950PR/Ascend 950DT，`int64_t`/`uint64_t`数据类型仅支持tensor前n个数据计算接口。
+<!-- end id9 -->
+<!-- npu="950" id10 -->
+- 对于Ascend 950PR/Ascend 950DT，因接口内部算法实现不同，无需使用`sharedTmpBuffer`，可以直接传入`src`或者任意大小的`sharedTmpBuffer`。
+<!-- end id10 -->
 
-<cann-filter npu-type = "A3,910b,310b,310p,910">
-
+<!-- npu="A3,910b,310b,310p,910" id17 -->
 - 针对如下型号，需要使用`sharedTmpBuffer`。
-  - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
-  - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品</cann-filter>
-  - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品</cann-filter>
-  - <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core</cann-filter>
-  - <cann-filter npu-type = "910">Atlas 训练系列产品</cann-filter>
-
-</cann-filter>
+  <!-- npu="A3" id11 -->
+  - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+  <!-- end id11 -->
+  <!-- npu="910b" id12 -->
+  - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+  <!-- end id12 -->
+  <!-- npu="310b" id13 -->
+  - Atlas 200I/500 A2 推理产品
+  <!-- end id13 -->
+  <!-- npu="310p" id14 -->
+  - Atlas 推理系列产品AI Core
+  <!-- end id14 -->
+  <!-- npu="910" id15 -->
+  - Atlas 训练系列产品
+  <!-- end id15 -->
+<!-- end id17 -->
 
 ## 关键特性说明
 

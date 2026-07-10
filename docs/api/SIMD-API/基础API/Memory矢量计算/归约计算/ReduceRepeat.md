@@ -2,15 +2,27 @@
 
 ## 产品支持情况
 
-| 产品 | 是否支持 |
-| ---- | -------- |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √</cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √</cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √</cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | √</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | √</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x</cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | √</cann-filter> |
+<!-- npu="950" id36 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id36 -->
+<!-- npu="A3" id37 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id37 -->
+<!-- npu="910b" id38 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id38 -->
+<!-- npu="310b" id39 -->
+- Atlas 200I/500 A2 推理产品：支持
+<!-- end id39 -->
+<!-- npu="310p" id40 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id40 -->
+<!-- npu="310p" id41 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id41 -->
+<!-- npu="910" id42 -->
+- Atlas 训练系列产品：支持
+<!-- end id42 -->
 
 ## 功能说明
 
@@ -23,7 +35,6 @@
 **图1**  ReduceRepeat计算示意图
 
 ![](../../../../figures/ReduceRepeat.png "ReduceRepeat计算示意图")
-
 
 ## 函数原型
 
@@ -60,7 +71,7 @@
 | src | 输入 | 源操作数。<br>类型为[LocalTensor](../../数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md)，支持的TPosition为VECIN、VECCALC、VECOUT（存储位置为Unified Buffer）。 |
 | mask[]/mask | 输入 | `mask`用于控制每次迭代内参与计算的源操作数。详细设置参考[掩码概述](../SIMD计算说明/掩码/概述.md)。 |
 | repeatTime | 输入 | 迭代次数。取值范围为[0, 255]。 |
-| dstRepStride | 输入 | 目的操作数相邻迭代间的地址步长，以一个repeatTime归约后的长度为单位。取值范围为[0, $2^{16}-1$]。<br>**注意：dstRepStride的单位受操作数数据类型、`reduceType`和`order`参数的影响**，参考[表3](#tab3)：<br>&bull; 返回索引和最值时，单位为dst数据类型所占字节长度的两倍；<br>&bull; 仅返回最值时，单位为dst数据类型所占字节长度；<br>&bull; 仅返回索引时，单位为uint32_t类型所占字节长度。<cann-filter npu-type = "910"><br>**注意：Atlas 训练系列产品不支持配置0。**</cann-filter> |
+| dstRepStride | 输入 | 目的操作数相邻迭代间的地址步长，以一个repeatTime归约后的长度为单位。取值范围为[0, $2^{16}-1$]。<br>**注意：dstRepStride的单位受操作数数据类型、`reduceType`和`order`参数的影响**，参考[表3](#tab3)：<br>&bull; 返回索引和最值时，单位为dst数据类型所占字节长度的两倍；<br>&bull; 仅返回最值时，单位为dst数据类型所占字节长度；<br>&bull; 仅返回索引时，单位为uint32_t类型所占字节长度。<!-- npu="910" id35 --><br>**注意：Atlas 训练系列产品不支持配置0。** <!-- end id35 -->|
 | srcBlkStride | 输入 | 单次迭代内DataBlock的地址步长，单位为32字节。取值范围为[0, $2^{16}-1$]。 |
 | srcRepStride | 输入 | 源操作数相邻迭代间的地址步长，即源操作数每次迭代跳过的DataBlock数目。取值范围为[0, $2^{16}-1$]。 |
 | order | 输入 | 在归约操作类型为MAX或MIN时，指定dst中最大值value和索引值index的相对位置以及返回结果行为，参数类型为`ReduceOrder`枚举类型，默认值为`ORDER_VALUE_INDEX`。<br>`ReduceOrder`取值如下：<br>&bull; `ORDER_VALUE_INDEX`：表示value位于低半部，返回结果存储顺序为[value, index]。<br>&bull; `ORDER_INDEX_VALUE`：表示index位于低半部，返回结果存储顺序为[index, value]。<br>&bull; `ORDER_ONLY_VALUE`：表示只返回最值，返回结果存储顺序为[value]。<br>&bull; `ORDER_ONLY_INDEX`：表示只返回最值索引，返回结果存储顺序为[index]。<br>**注：归约操作类型为SUM时，该参数不生效。** |
@@ -71,15 +82,26 @@
 
 **支持的数据类型如下：**
 
-- <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，支持int16_t、uint16_t、half、int32_t、uint32_t、float。</cann-filter>
-- <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持half、float。</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持half、float。</cann-filter>
-- <cann-filter npu-type = "910">Atlas 训练系列产品，支持half。</cann-filter>
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT，支持int16_t、uint16_t、half、int32_t、uint32_t、float。
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持half、float。
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持half、float。
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品，支持half、float。
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core，支持half、float。
+<!-- end id5 -->
+<!-- npu="910" id6 -->
+- Atlas 训练系列产品，支持half。
+<!-- end id6 -->
 
-<cann-filter npu-type = "950">
-
+<!-- npu="950" id7 -->
 **针对Ascend 950PR/Ascend 950DT：**
 
 - 在`reduceType`取`MAX`或`MIN`时目的操作数与源操作数的数据类型需要保持一致。
@@ -91,20 +113,27 @@
     | `uint32_t` | `uint16_t`，`uint32_t` |
     | `half` | `half` |
     | `float` | `float` |
+<!-- end id7 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "A3,910b,310b,310p,910">
-
+<!-- npu="A3,910b,310b,310p,910" id24 -->
 **针对如下型号，目的操作数与源操作数的数据类型需要保持一致。**
 
-- <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
-- <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品</cann-filter>
-- <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品</cann-filter>
-- <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core</cann-filter>
-- <cann-filter npu-type = "910">Atlas 训练系列产品</cann-filter>
-
-</cann-filter>
+<!-- npu="A3" id8 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品
+<!-- end id8 -->
+<!-- npu="910b" id9 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品
+<!-- end id9 -->
+<!-- npu="310b" id10 -->
+- Atlas 200I/500 A2 推理产品
+<!-- end id10 -->
+<!-- npu="310p" id11 -->
+- Atlas 推理系列产品AI Core
+<!-- end id11 -->
+<!-- npu="910" id12 -->
+- Atlas 训练系列产品
+<!-- end id12 -->
+<!-- end id24 -->
 
 ## 返回值说明
 
@@ -137,24 +166,38 @@
 
 - `dstRepStride`、`srcBlkStride`、`srcRepStride`取值范围为[0, $2^{16}-1$]，需要结合UB的实际大小避免出现越界。
 
-<cann-filter npu-type = "A3,910b">
-
+<!-- npu="A3,910b" id25 -->
 - 针对如下型号，当`mask=0`或`repeatTime=0`时，不会执行归约操作，不会对目的操作数进行写入，该接口将被视为`NOP`（空操作）。
-  - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
-  - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品</cann-filter>
-
-</cann-filter>
+  <!-- npu="A3" id13 -->
+  - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+  <!-- end id13 -->
+  <!-- npu="910b" id14 -->
+  - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+  <!-- end id14 -->
+<!-- end id25 -->
 
 - 归约操作类型取MAX或MIN时的约束：
   - 如果存在多个最值，该指令会将最小索引写入目的操作数。
   - 索引按操作数的数据类型存储，读取索引需要将类型转换到整型，请参考[关键特性说明](#关键特性说明)。
   - 不同芯片支持的`ReduceOrder`如下：
-    - <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`、`ORDER_ONLY_VALUE`、`ORDER_ONLY_INDEX`。</cann-filter>
-    - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`、`ORDER_ONLY_VALUE`、`ORDER_ONLY_INDEX`。</cann-filter>
-    - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`、`ORDER_ONLY_VALUE`、`ORDER_ONLY_INDEX`。</cann-filter>
-    - <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品，支持`ORDER_VALUE_INDEX`、`ORDER_ONLY_VALUE`。</cann-filter>
-    - <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`。</cann-filter>
-    - <cann-filter npu-type = "910">Atlas 训练系列产品，支持`ORDER_VALUE_INDEX`。</cann-filter>
+    <!-- npu="950" id15 -->
+    - Ascend 950PR/Ascend 950DT，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`、`ORDER_ONLY_VALUE`、`ORDER_ONLY_INDEX`。
+    <!-- end id15 -->
+    <!-- npu="A3" id16 -->
+    - Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`、`ORDER_ONLY_VALUE`、`ORDER_ONLY_INDEX`。
+    <!-- end id16 -->
+    <!-- npu="910b" id17 -->
+    - Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`、`ORDER_ONLY_VALUE`、`ORDER_ONLY_INDEX`。
+    <!-- end id17 -->
+    <!-- npu="310b" id18 -->
+    - Atlas 200I/500 A2 推理产品，支持`ORDER_VALUE_INDEX`、`ORDER_ONLY_VALUE`。
+    <!-- end id18 -->
+    <!-- npu="310p" id19 -->
+    - Atlas 推理系列产品AI Core，支持`ORDER_VALUE_INDEX`、`ORDER_INDEX_VALUE`。
+    <!-- end id19 -->
+    <!-- npu="910" id20 -->
+    - Atlas 训练系列产品，支持`ORDER_VALUE_INDEX`。
+    <!-- end id20 -->
 
 ## 关键特性说明
 
@@ -169,20 +212,22 @@
     uint16_t realIndex = *reinterpret_cast<uint16_t*>(&maxIndex);
     ```
 
-    <cann-filter npu-type = "950,A3,910b">
-
+    <!-- npu="950,A3,910b" id27 -->
     特别地
-    - <cann-filter npu-type = "950">针对Ascend 950PR/Ascend 950DT，`ORDER_ONLY_INDEX`（仅返回最值索引）情况下，当操作数数据类型为`int16_t`，`uint16_t`，`half`时，读取index都需要使用`reinterpret_cast<uint32_t*>`。</cann-filter>
+    <!-- npu="950" id21 -->
+    - 针对Ascend 950PR/Ascend 950DT，`ORDER_ONLY_INDEX`（仅返回最值索引）情况下，当操作数数据类型为`int16_t`，`uint16_t`，`half`时，读取index都需要使用`reinterpret_cast<uint32_t*>`。
+    <!-- end id21 -->
 
-    <cann-filter npu-type = "A3,910b">
-
+    <!-- npu="A3,910b" id26 -->
     - 针对如下型号，`ORDER_ONLY_INDEX`（仅返回最值索引）情况下，读取索引值index时都需要使用`reinterpret_cast<uint32_t*>`。
-      - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品</cann-filter>
-      - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品</cann-filter>
-
-    </cann-filter>
-
-    </cann-filter>
+      <!-- npu="A3" id22 -->
+      - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+      <!-- end id22 -->
+      <!-- npu="910b" id23 -->
+      - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+      <!-- end id23 -->
+    <!-- end id26 -->
+    <!-- end id27 -->
 
 - 归约操作类型取`SUM`时接口以二叉树累加的方式完成每个repeat内的求和，详情请参考[ReduceDataBlock关键特性说明](./ReduceDataBlock.md#关键特性说明)。
 
