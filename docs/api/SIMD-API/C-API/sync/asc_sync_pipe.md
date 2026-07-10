@@ -10,7 +10,7 @@
 
 ## 功能说明
 
-等待指定流水线操作完成。
+完成同一流水线内的同步控制，用于在同一流水线内部约束执行顺序。其作用是保证前序指令中所有数据的读写工作全部完成，后序指令才能执行。
 
 ## 函数原型
 
@@ -22,7 +22,7 @@ __aicore__ inline void asc_sync_pipe(pipe_t pipe)
 
 | 参数名 | 输入/输出 | 描述 |
 | :--- | :--- | :--- |
-| pipe | 输入 | 指定需要同步的流水线。需传入编译期常量。 |
+| pipe | 输入 | 阻塞的流水类别。不支持PIPE_S。如果不关注流水类别，希望阻塞所有流水，可以传入PIPE_ALL。 |
 
 ## 返回值说明
 
@@ -34,27 +34,30 @@ PIPE_S
 
 ## 约束说明
 
-无
+- Scalar流水之间的同步由硬件自动保证，asc_sync_pipe接口不支持PIPE_S单流水的同步。
+- asc_sync_pipe(PIPE_ALL)会等待所有流水线中所有先前提交的接口完成，这会对性能产生影响。若仅阻塞单条流水线即可解决问题，应避免随意调用asc_sync_pipe(PIPE_ALL)。
+- PIPE_MTE2/PIPE_MTE3在搬运地址有重叠的情况下需要开发者插入同步。
 
 ## 调用示例
 
 ```cpp
-// 本例中total_length指参与计算的数据总长度。src0_gm，src1_gm，dst_gm是外部输入的float类型的源操作数、目的操作数，指向GM内存空间。
-constexpr uint32_t total_length = 128;
-__ubuf__ float src0[total_length];
-__ubuf__ float src1[total_length];
-__ubuf__ float dst[total_length];
+// src0_gm，src1_gm是外部输入的指向GM内存空间的float类型的指针，有效数据个数分别为128和32。需要将src0_gm中的连续32个数据替换成src1_gm中的数据。
+__ubuf__ float src0_ub[128];            // 接收src0_gm中的128个数据。
+__ubuf__ float* src1_ub = src0_ub + 64; // 接收src1_gm中的32个数据。位于src0_ub的有效空间内部。
 
-asc_copy_gm2ub((__ubuf__ void*)src0, (__gm__ void*)src0_gm, total_length * sizeof(float));
-asc_copy_gm2ub((__ubuf__ void*)src1, (__gm__ void*)src1_gm, total_length * sizeof(float));
+asc_copy_gm2ub(src0_ub, src0_gm, 128 * sizeof(float));
 
-// 同步操作：数据搬运操作（GM到UB，PIPE_MTE2流水）完成后才能启动后续操作。
+// 插入同步，确保重叠区域以src1_gm中的数据为准。
 asc_sync_pipe(PIPE_MTE2);
 
-asc_add(dst, src1, src0, total_length);
+asc_copy_gm2ub(src1_ub, src1_gm, 32 * sizeof(float));
 
-// 同步操作：计算操作（PIPE_V流水）完成后才能启动后续操作。
-asc_sync_pipe(PIPE_V);
+/*
+ * PIPE_ALL可以阻塞所有流水，确保GM -> UB的搬运操作完成。
+ * 注意，此处使用asc_sync_pipe(PIPE_ALL)目的是说明其作用。实际应用场景下请灵活选用asc_sync_mte2、asc_sync_notify/asc_sync_wait等接口精准控制，以提升性能。
+ */
+asc_sync_pipe(PIPE_ALL);
 
-asc_copy_ub2gm((__gm__ void*)dst_gm, (__ubuf__ void*)dst, total_length * sizeof(float));
+// 完成数据替换，搬出到src0_gm中。
+asc_copy_ub2gm(src0_gm, src0_ub, 128 * sizeof(float));
 ```

@@ -86,10 +86,10 @@ uint16_t repeatTime = 8;
 uint16_t repeatSize = 64;
 for (uint16_t i = 1; i < repeatTime; i++) {
     asc_mem_bar(VST_VLD);
-    asc_loadalign(src0, ub_addr[0]);
-    asc_loadalign(src1, ub_addr[i * repeatSize]);
+    asc_loadalign(src0, ub_addr);
+    asc_loadalign(src1, ub_addr + i * repeatSize);
     asc_add(dst, src0, src1, mask);
-    asc_storealign(ub_addr[0], dst, mask);
+    asc_storealign(ub_addr, dst, mask);
 }
 
 ```

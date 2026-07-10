@@ -13,7 +13,7 @@
 
 - asc_vdeq_int162b8_h：将数据存放在每个DataBlock的上半块。
 - asc_vdeq_int162b8_l：将数据存放在每个DataBlock的下半块。
-计算公式如下:
+计算公式如下：
 
 $$
 dst_i = (src_i * scale_j) + offset_j

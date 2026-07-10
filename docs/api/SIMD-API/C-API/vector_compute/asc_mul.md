@@ -7,7 +7,7 @@
 | <term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> | √ |
 | <term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> | √ |
 
-### 功能说明
+## 功能说明
 
 执行矢量乘法运算。计算公式如下
 
@@ -15,7 +15,7 @@ $$
 dst_i = src0_i * src1_i
 $$
 
-### 函数原型
+## 函数原型
 
 - 前n个数据计算
 
@@ -52,7 +52,7 @@ __aicore__ inline void asc_mul_sync(__ubuf__ int32_t* dst, __ubuf__ int32_t* src
 __aicore__ inline void asc_mul_sync(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, uint32_t count)
 ```
 
-### 参数说明
+## 参数说明
 
 | 参数名  | 输入/输出 | 描述 |
 | :----- | :------- | :------- |
@@ -67,20 +67,20 @@ __aicore__ inline void asc_mul_sync(__ubuf__ float* dst, __ubuf__ float* src0, _
 | src1_repeat_stride |输入| 源操作数1相邻迭代间相同DataBlock的地址步长。 |
 | count | 输入 | 参与计算的元素个数。 |
 
-### 返回值说明
+## 返回值说明
 
 无
 
-### 流水类型
+## 流水类型
 
 PIPE_V
 
-### 约束说明
+## 约束说明
 
 - dst、src0、src1的起始地址需要32字节对齐。
 - 操作数地址重叠约束请参考[通用地址重叠约束](../通用说明和约束.md#通用地址重叠约束)。
 
-### 调用示例
+## 调用示例
 
 ```cpp
 constexpr uint64_t total_length = 64;
