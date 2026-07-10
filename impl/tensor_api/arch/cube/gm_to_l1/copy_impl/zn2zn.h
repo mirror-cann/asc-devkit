@@ -22,7 +22,7 @@
 #ifndef IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_ZN2ZN_H
 #define IMPL_TENSOR_API_ARCH_CUBE_GM_TO_L1_COPY_IMPL_ZN2ZN_H
 
-#include "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/instruction.h"
+#include "impl/tensor_api/arch/cube/gm_to_l1/copy_impl/copy_common.h"
 
 namespace AscendC {
 namespace Te {
@@ -32,10 +32,9 @@ public:
     template <const CopyGM2L1Trait& trait, typename T, typename U>
     __aicore__ inline static void Run(const T& dst, const U& src)
     {
-        DataCopyImpl<trait, T, U>(dst, src);
+        RunGmToL1Batched<trait, CopyGmToCbufAlignV2ZN, T, U>(dst, src);
     }
 
-private:
     template <const CopyGM2L1Trait& trait, typename T, typename U>
     __aicore__ inline static constexpr void CheckTemplate()
     {
@@ -43,14 +42,18 @@ private:
         CheckDataType::CheckGm2L1AlignV2NDDataType<T, U>();
     }
 
-    template <const CopyGM2L1Trait& trait, typename T, typename U>
-    __aicore__ inline static void DataCopyImpl(const T& dst, const U& src)
+    // Extracts single-matrix parameters from the (batch-stripped) src/dst layouts and emits the
+    // copy. matrixNum carries the batch dimension (1 when there is no batch). The align_v2
+    // instruction has no hardware batch loop, so the batch axis is folded into blockCount: ZN
+    // matrices are laid out along the row (big-fractal) direction, so matrixNum matrices of
+    // bigFractalSize big-fractals each become matrixNum * bigFractalSize contiguous blocks that
+    // share the same per-big-fractal stride. srcNdMatrixStride/dstNzMatrixStride are unused here
+    // because that contiguity makes the single srcStride/dstStride describe the whole sequence.
+    template <typename T, typename U, typename SrcLayout, typename DstLayout>
+    __aicore__ inline static void EmitCopy(const T& dst, const U& src, const SrcLayout& srcLayout,
+                                           const DstLayout& dstLayout, uint16_t matrixNum,
+                                           uint64_t srcNdMatrixStride, uint32_t dstNzMatrixStride)
     {
-        CheckTemplate<trait, T, U>();
-
-        auto dstLayout = dst.Layout();
-        auto srcLayout = src.Layout();
-
         using type = typename U::elementType;
 
         auto smallFractalSize = GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(srcLayout) *
@@ -63,7 +66,7 @@ private:
         uint8_t rightPaddingCnt = 0;
         uint8_t cacheMode = src.Engine().GetCacheMode();
 
-        auto blockCount = bigFractalSize;
+        auto blockCount = bigFractalSize * matrixNum;
         auto blockLen = smallFractalSize * C0_SIZE<>;
         auto srcStride = srcStrideSize * sizeof(type);
         auto dstStride = dstStrideSize * sizeof(type);
