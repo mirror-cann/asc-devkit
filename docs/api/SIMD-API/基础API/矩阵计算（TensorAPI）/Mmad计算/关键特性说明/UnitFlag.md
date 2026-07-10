@@ -18,14 +18,14 @@ Mmad和Copy接口设置unitFlag值为2/3后，系统会启动单元标志位。
 
 根据上述特性，如果用户在进行A矩阵维度为128×1024、B矩阵维度为1024×128的矩阵乘计算时，需要沿着K轴进行迭代循环，假设每次迭代K长度为128，则需要迭代8次，此时8次Mmad指令对应1次Fixpipe指令。
 
-- 前7次Mmad的unitFlag都设置成2，写入后将单元标记位始终为0，保证后续Mmad可以写入L0C Buffer。
+- 前7次Mmad的unitFlag都设置成2，写入后将单元标志位始终为0，保证后续Mmad可以写入L0C Buffer。
 - 最后1次Mmad设置成3，写入后将单元标志位设置成1，保证Fixpipe可以读取L0C Buffer。
-- Fixpipe的unitFlag设置为3，读取后将单元标记位设置为0，保证后续Mmad接口可以顺利写入L0C Buffer数据。
+- Fixpipe的unitFlag设置为3，读取后将单元标志位设置为0，保证后续Mmad接口可以顺利写入L0C Buffer数据。
 
 如果用户需要单次Mmad的结果分多次搬出时，譬如Mmad计算结果的L0C Buffer为M\(128\) × N\(256\)，沿N轴分两次搬出，这样一次Mmad会对应两次Fixpipe。
 
 - Mmad的时候需要设置unitFlag = 3，保证Fixpipe可以读取L0C Buffer数据。
-- 每一次Fixpipe的unitFlag都设置为3，读取后将单元标记位设置为0，保证后续其他Mmad接口在复用这块L0C Buffer地址时可以顺利写入数据。
+- 每一次Fixpipe的unitFlag都设置为3，读取后将单元标志位设置为0，保证后续其他Mmad接口在复用这块L0C Buffer地址时可以顺利写入数据。
 
 当开启unitFlag后，Mmad和Fixpipe会对同一块分形的L0C Buffer进行读写操作，因此Mmad计算和Fixpipe保持一致的读写顺序，有助于获得更优的性能表现。
 
@@ -41,7 +41,17 @@ Mmad和Copy接口设置unitFlag值为2/3后，系统会启动单元标志位。
 - 当希望控制同一块L0C Buffer内存空间能持续只被多条Mmad或多条Fixpipe指令操作时，需将对应的前n-1条指令的unitFlag值设置为2，维持被操作内存空间的持续占用状态，最后一条指令设置为3，解除被占用状态。
 - 当启用unitFlag功能后，建议Mmad的计算数据量与Fixpipe搬出的数据量保持一致。若Mmad计算了大块数据（M × N = 128 × 128），但Fixpipe只搬出了其中一部分数据（M × N = 64 × 64），则可能会导致执行异常，可以通过`SetFixPipeConfig`接口重置L0C Buffer的状态。
 
+## 相关接口
+
+- [Mmad](../Mmad.md)
+- [L0C到GM数据搬运（Copy）](../../矩阵计算的搬出/L0C到GM数据搬运（Copy）.md)
+- [L0C到UB数据搬运（Copy）](../../矩阵计算的搬出/L0C到UB数据搬运（Copy）.md)
+- [SetFixPipeConfig](../../../矩阵计算（ISASI）/矩阵计算的搬出/寄存器配置说明/SetFixPipeConfig.md)
+- [SetMMColumnMajor/SetMMRowMajor](../../../矩阵计算（ISASI）/Mmad计算/寄存器配置说明/SetMMColumnMajor-SetMMRowMajor.md)
+
 ## 沿K轴迭代循环使用示例片段
+
+以下示例仅展示`unitFlag`在K轴迭代循环中的设置方式，省略张量构造和参数初始化。
 
 ```cpp
 using namespace AscendC::Te;
@@ -59,7 +69,7 @@ for (auto kIndex = 0; kIndex < kRound; ++kIndex) {
     Mmad(mmadAtom, l0C, l0A, l0B);
 }
 // Fixpipe一次搬出。
-// Fixpipe的unitFlag设置为3，读取后将单元标记位设置为0，保证后续Mmad接口可以顺利写入L0C Buffer数据。
+// Fixpipe的unitFlag设置为3，读取后将单元标志位设置为0，保证后续Mmad接口可以顺利写入L0C Buffer数据。
 FixpipeParams fixpipeParams;
 fixpipeParams.unitFlag = 3;
 auto fixpipeAtom = MakeCopy(CopyL0C2GM{}).with(fixpipeParams);
