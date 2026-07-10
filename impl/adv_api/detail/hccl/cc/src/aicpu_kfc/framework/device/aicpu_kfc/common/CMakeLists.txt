@@ -7,15 +7,6 @@
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
 # ----------------------------------------------------------------------------------------------------------
-set(src_list
-    aicpu_sqe_context.cc
-    aicpu_kfc_utils.cc
-)
-
-target_sources(asc_ccl_kernel PRIVATE
-    ${src_list}
-)
-
 if(TARGET mc2_server)
     add_mc2_server_ccl_object(mc2_server_aicpu_kfc_common
         ${CMAKE_CURRENT_SOURCE_DIR}/aicpu_kfc_utils.cc
