@@ -2,7 +2,7 @@
 
 ## Overview
 
-Using memory access optimization with direct `<<<>>>` invocation, this section introduces memory access tuning approaches based on  SIMT programming, including global memory access coalescing, on-chip cache reuse (e.g., UB), bank conflict avoidance, and improving memory bandwidth utilization via short vector such as half2.
+Using memory access optimization with direct `<<<>>>` invocation, this section introduces memory access tuning approaches based on  SIMT programming, including global memory access coalescing, on-chip cache reuse (e.g., UB), Bank conflict avoidance, and improving memory bandwidth utilization via short vector such as half2.
 
 ## Example List
 

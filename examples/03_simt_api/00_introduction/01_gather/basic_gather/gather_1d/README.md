@@ -18,7 +18,7 @@
 ├── gather_1d
 │   ├── CMakeLists.txt         # cmake编译文件
 │   ├── gather_1d.asc          # SIMT实现一维gather调用样例
-|   └── README.md
+│   └── README.md
 ```
 
 ## 算子描述

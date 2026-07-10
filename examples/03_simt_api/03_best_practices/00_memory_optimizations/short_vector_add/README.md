@@ -50,12 +50,12 @@ short_vector_add
 
 ### 性能指标说明
 
-**表1 AI Core 性能指标字段说明表**
+**表1 AI Core性能指标字段说明表**
 
 |             字段名             | 字段含义                                             |
 |:---------------------------:|:-------------------------------------------------|
 |      Task Duration(μs)      | Task整体耗时，包含调度到加速器的时间、加速器上的执行时间以及响应结束时间。          |
-|      aiv_total_cycles       | Task在 Vector Core上执行所消耗的CPU周期（Cycle）总数。          |
+|      aiv_total_cycles       | Task在Vector Core上执行所消耗的CPU周期（Cycle）总数。          |
 |          aiv_time           | Task在AI Vector Core上的理论执行时间，单位为μs。               |
 |      aiv_vec_time(μs)       | vec类型指令（向量类运算指令）耗时，单位μs。                         |
 |        aiv_vec_ratio        | vec类型指令（向量类运算指令）的cycle数在total cycle数中的占用比。       |
@@ -80,7 +80,7 @@ short_vector_add
 template<typename T>
 __global__ void add(T* x, T* y, T* z, uint64_t size)
 {
-    // gridDim.x * blockDim.x 线程总数 (64 * 1024)
+    // gridDim.x * blockDim.x线程总数 (64 * 1024)
     int32_t stride = gridDim.x * blockDim.x;
     // 每个线程从自己的全局idx开始，每次递增总线程数，直到处理完所有元素
     for (int32_t idx = blockIdx.x * blockDim.x + threadIdx.x; idx < size; idx += stride) {
@@ -108,7 +108,7 @@ __global__ void add(T* x, T* y, T* z, uint64_t size)
 - 端到端耗时：**86.478 μs**
 - 写Cache命中率：**49.3%**
 - 读写带宽：**7.77(GB/s) | 6.24(GB/s)**
-- 性能分析：Add算子进行简单的X+Y=Z，在回写结果时命中率低于50%，说明写Cache未命中率超过50%，触发额外的内存回读（RMW）操作，被判定为写未命中。一般原因为数据未对齐或者数据类型小导致Warp不能填满。
+- 性能分析：Add算子进行简单的X+Y=Z，在回写结果时命中率低于50%，说明写Cache未命中率超过50%，触发额外的内存回读（RMW）操作，被判定为写未命中。一般原因为数据未对齐或者数据类型位宽较小导致Warp不能填满。
 
 **性能优化建议**：
 > 💡 **引入half2类型**
@@ -170,7 +170,7 @@ __global__ void add2(T* x, T* y, T* z, uint64_t size)
 **原理说明**：  
 SIMT编程模式下，L2 Cache是以Cache Line=128字节为单位进行访问。
 
-- Case 1（标量 half）：不满行导致 RMW 写放大  
+- Case 1（标量half）：无法填满整行导致RMW写放大  
   使用标量half（2B）。单个Warp（32线程）同时发射指令时，在空间上连续拼出的总宽度为：  
   $$
   32 * 2B = 64B
@@ -178,11 +178,11 @@ SIMT编程模式下，L2 Cache是以Cache Line=128字节为单位进行访问。
   同时发射写指令的总宽度仅为64字节，不满足Cache Line的要求，带宽占用率50%
 
 
-- 在Case 2中，改用短向量类型 half2（4B）。单个Warp（32线程）单次发射写入的总宽度达到：
+- 在Case 2中，改用短向量类型half2（4B）。单个Warp（32线程）单次发射写入的总宽度达到：
   $$
   32 * 4B = 128B
   $$
-  这个宽度覆盖了一整行物理 Cache Line 的边界，带宽占用率100%，传输效率达到最大化，在同样的物理拉取周期下，读带宽由 7.77 GB/s 拉升至 14.51 GB/s。
+  这个宽度覆盖了一整行物理Cache Line的边界，带宽占用率100%，传输效率达到最大化，在同样的物理拉取周期下，读带宽由7.77 GB/s拉升至14.51 GB/s。
 
 
 **最终性能总结**：
@@ -229,18 +229,18 @@ SIMT编程模式下，L2 Cache是以Cache Line=128字节为单位进行访问。
   示例如下：
 
   ```bash
-  cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..;make -j;   # NPU仿真模式
+  cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 ..; make -j;   # NPU仿真模式
   ```
 
-  > **注意：** 切换编译模式前需清理 cmake 缓存，可在 build 目录下执行 `rm CMakeCache.txt` 后重新 cmake。
+  > **注意：** 切换编译模式前需清理cmake缓存，可在build目录下执行 `rm CMakeCache.txt` 后重新cmake。
 
 - 编译选项说明
 
   | 参数                        | 可选值             | 说明                                                |
   |:--------------------------|:----------------|:--------------------------------------------------|
   | `SCENARIO_NUM`            | `1`（默认）、`2`     | 1: half Add计算；<br/>2: 短向量half2 Add计算；             |
-  | `CMAKE_ASC_RUN_MODE`      | `npu`（默认）、`sim` | 运行模式：NPU 运行、NPU仿真                                 |
-  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510`      | NPU 架构：本样例仅支持 dav-3510（Ascend 950PR/Ascend 950DT） |
+  | `CMAKE_ASC_RUN_MODE`      | `npu`（默认）、`sim` | 运行模式：NPU运行、NPU仿真                                 |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510`      | NPU架构：本样例仅支持dav-3510（Ascend 950PR/Ascend 950DT） |
 
 - 执行结果  
   执行结果如下，说明精度对比成功。
@@ -257,7 +257,7 @@ SIMT编程模式下，L2 Cache是以Cache Line=128字节为单位进行访问。
 msprof op ./demo   # 分析case的性能
 ```
 
-命令完成后，会在默认目录下生成以“OPPROF_{timestamp}_XXX”命名的文件夹,性能数据文件夹结构示例如下：
+命令完成后，会在默认目录下生成以“OPPROF_{timestamp}_XXX”命名的文件夹，性能数据文件夹结构示例如下：
 
 ```text
 ├──dump                       # 原始的性能数据，用户无需关注
@@ -268,7 +268,7 @@ msprof op ./demo   # 分析case的性能
 ├──MemoryUB.csv               # Vector和Scalar到UB的读写带宽速率
 ├──OpBasicInfo.csv            # 算子基础信息
 ├──PipeUtilization.csv        # 采集计算单元和搬运单元耗时和占比
-├──ResourceConflictRatio.csv  # UB上的 bank group、bank conflict和资源冲突率在所有指令中的占比
+├──ResourceConflictRatio.csv  # UB上的bank group、bank conflict和资源冲突率在所有指令中的占比
 └──visualize_data.bin         # MindStudio Insight呈现文件
 ```
 

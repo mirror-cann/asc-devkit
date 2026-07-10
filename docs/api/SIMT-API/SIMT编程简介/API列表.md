@@ -114,7 +114,7 @@
 
 | 接口名 | 功能描述 |
 | --- | --- |
-| [htanh](../数学函数/half类型/half类型数学库函数/htanh.md) | 获取输入数据的三角函数双曲正切值。 |
+| [htanh](../数学函数/half类型/half类型数学库函数/htanh.md) | 获取输入数据的双曲正切值。 |
 | [hexp](../数学函数/half类型/half类型数学库函数/hexp.md) | 指定输入x，获取e的x次方。 |
 | [hexp2](../数学函数/half类型/half类型数学库函数/hexp2.md) | 指定输入x，获取2的x次方。 |
 | [hexp10](../数学函数/half类型/half类型数学库函数/hexp10.md) | 指定输入x，获取10的x次方。 |
@@ -304,7 +304,7 @@
 
 | 接口名 | 功能描述 |
 | --- | --- |
-| [h2tanh](../数学函数/half类型/half2类型数学库函数/h2tanh.md) | 获取输入数据各元素的三角函数双曲正切值。 |
+| [h2tanh](../数学函数/half类型/half2类型数学库函数/h2tanh.md) | 获取输入数据各元素的双曲正切值。 |
 | [h2exp](../数学函数/half类型/half2类型数学库函数/h2exp.md) | 指定输入x，对x的各元素，获取e的该元素次方。 |
 | [h2exp2](../数学函数/half类型/half2类型数学库函数/h2exp2.md) | 指定输入x，对x的各元素，获取2的该元素次方。 |
 | [h2exp10](../数学函数/half类型/half2类型数学库函数/h2exp10.md) | 指定输入x，对x的各元素，获取10的该元素次方。 |
@@ -361,7 +361,7 @@
 
 | 接口名 | 功能描述 |
 | --- | --- |
-| [htanh](../数学函数/bfloat16类型/bfloat16类型数学库函数/htanh-176.md) | 获取输入数据的三角函数双曲正切值。 |
+| [htanh](../数学函数/bfloat16类型/bfloat16类型数学库函数/htanh-176.md) | 获取输入数据的双曲正切值。 |
 | [hexp](../数学函数/bfloat16类型/bfloat16类型数学库函数/hexp-177.md) | 指定输入x，获取e的x次方。 |
 | [hexp2](../数学函数/bfloat16类型/bfloat16类型数学库函数/hexp2-178.md) | 指定输入x，获取2的x次方。 |
 | [hexp10](../数学函数/bfloat16类型/bfloat16类型数学库函数/hexp10-179.md) | 指定输入x，获取10的x次方。 |
@@ -456,7 +456,7 @@
 | [__float2bfloat162_rn](../数学函数/bfloat16类型/bfloat16类型精度转换函数/__float2bfloat162_rn.md) | 将float类型数据遵循CAST_RINT模式转换为bfloat16类型并填充到bfloat16x2的前后两部分，返回填充后的bfloat16x2类型数据。 |
 | [__floats2bfloat162_rn](../数学函数/bfloat16类型/bfloat16类型精度转换函数/__floats2bfloat162_rn.md) | 将输入的数据x，y遵循CAST_RINT模式分别转换为bfloat16类型并填充到bfloat16x2的前后两部分，返回转换后的bfloat16x2类型数据。 |
 | [__float22bfloat162_rn](../数学函数/bfloat16类型/bfloat16类型精度转换函数/__float22bfloat162_rn.md) | 将float2类型数据遵循CAST_RINT模式转换为bfloat16x2类型，返回转换后的bfloat16x2类型数据。 |
-| [__bfloat162bfloat162](../数学函数/bfloat16类型/bfloat16类型精度转换函数/__bfloat162bfloat162.md) | 将输入的数据的填充为bfloat16x2前后两个分量，返回转换后的bfloat16x2类型数据。 |
+| [__bfloat162bfloat162](../数学函数/bfloat16类型/bfloat16类型精度转换函数/__bfloat162bfloat162.md) | 将输入的数据填充为bfloat16x2前后两个分量，返回转换后的bfloat16x2类型数据。 |
 | [__halves2bfloat162](../数学函数/bfloat16类型/bfloat16类型精度转换函数/__halves2bfloat162.md) | 将输入的数据分别填充为bfloat16x2前后两个分量，返回填充后数据。 |
 | [__high2bfloat16](../数学函数/bfloat16类型/bfloat16类型精度转换函数/__high2bfloat16.md) | 提取输入bfloat16x2的高16位，并返回。 |
 | [__high2bfloat162](../数学函数/bfloat16类型/bfloat16类型精度转换函数/__high2bfloat162.md) | 将输入数据的高16位填充到bfloat16x2并返回结果。 |
@@ -534,7 +534,7 @@
 
 | 接口名 | 功能描述 |
 | --- | --- |
-| [h2tanh](../数学函数/bfloat16类型/bfloat16x2类型数学库函数/h2tanh-242.md) | 获取输入数据各元素的三角函数双曲正切值。 |
+| [h2tanh](../数学函数/bfloat16类型/bfloat16x2类型数学库函数/h2tanh-242.md) | 获取输入数据各元素的双曲正切值。 |
 | [h2exp](../数学函数/bfloat16类型/bfloat16x2类型数学库函数/h2exp-243.md) | 指定输入x，对x的各元素，获取e的该元素次方。 |
 | [h2exp2](../数学函数/bfloat16类型/bfloat16x2类型数学库函数/h2exp2-244.md) | 指定输入x，对x的各元素，获取2的该元素次方。 |
 | [h2exp10](../数学函数/bfloat16类型/bfloat16x2类型数学库函数/h2exp10-245.md) | 指定输入x，对x的各元素，获取10的该元素次方。 |
@@ -556,7 +556,7 @@
 | 接口名 | 功能描述 |
 | --- | --- |
 | [tanf](../数学函数/float类型数学库函数/tanf.md) | 获取输入数据的三角函数正切值。 |
-| [tanhf](../数学函数/float类型数学库函数/tanhf.md) | 获取输入数据的三角函数双曲正切值。 |
+| [tanhf](../数学函数/float类型数学库函数/tanhf.md) | 获取输入数据的双曲正切值。 |
 | [tanpif](../数学函数/float类型数学库函数/tanpif.md) | 获取输入数据与π相乘的正切值。 |
 | [atanf](../数学函数/float类型数学库函数/atanf.md) | 获取输入数据的反正切值。 |
 | [atan2f](../数学函数/float类型数学库函数/atan2f.md) | 获取输入数据y/x的反正切值。 |
