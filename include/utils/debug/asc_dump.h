@@ -52,6 +52,12 @@ __aicore__ inline void asc_dump(__cc__ T* input, uint32_t desc, uint32_t dump_si
 
 template<typename T>
 __aicore__ inline void asc_dump(__cbuf__ T* input, uint32_t desc, uint32_t dump_size);
+
+template<typename T>
+__aicore__ inline void asc_dump(__biasbuf__ T* input, uint32_t desc, uint32_t dump_size);
+
+template<typename T>
+__aicore__ inline void asc_dump(__fbuf__ T* input, uint32_t desc, uint32_t dump_size);
 }
 
 namespace __asc_simd_vf {

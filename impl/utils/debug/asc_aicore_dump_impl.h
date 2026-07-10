@@ -96,6 +96,10 @@ __aicore__ inline uint32_t set_dump_tlv_data(
         ret = mem_copy_bbuf_to_gm_impl(dumpDstAddr, src, alignDumpLen);
     } else if constexpr (hardware == AscendC::Hardware::L0C) {
         ret = mem_copy_cbuf_to_gm_impl(dumpDstAddr, src, alignDumpLen);
+    } else if constexpr (hardware == AscendC::Hardware::BIAS) {
+        ret = mem_copy_biasbuf_to_gm_impl(dumpDstAddr, src, alignDumpLen);
+    } else if constexpr (hardware == AscendC::Hardware::FIXBUF) {
+        ret = mem_copy_fbuf_to_gm_impl(dumpDstAddr, src, alignDumpLen);
     }
     sync_all();
     return ret;
@@ -211,6 +215,20 @@ __aicore__ inline void asc_dump_l1buf(
 }
 
 template <typename T>
+__aicore__ inline void asc_dump(
+    __biasbuf__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
+{
+    asc_dump_local_impl<AscendC::Hardware::BIAS, T>(input, desc, dump_size, shape, shapeDim);
+}
+
+template <typename T>
+__aicore__ inline void asc_dump(
+    __fbuf__ T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
+{
+    asc_dump_local_impl<AscendC::Hardware::FIXBUF, T>(input, desc, dump_size, shape, shapeDim);
+}
+
+template <typename T>
 __aicore__ inline void asc_dump_gm(__gm__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_local_impl<AscendC::Hardware::GM, T>(input, desc, dump_size, nullptr, 0);
@@ -268,6 +286,18 @@ template <typename T>
 __aicore__ inline void asc_dump(__cbuf__ T* input, uint32_t desc, uint32_t dump_size)
 {
     asc_dump_l1buf(input, desc, dump_size);
+}
+
+template <typename T>
+__aicore__ inline void asc_dump(__biasbuf__ T* input, uint32_t desc, uint32_t dump_size)
+{
+    asc_dump(input, desc, dump_size, nullptr, 0);
+}
+
+template <typename T>
+__aicore__ inline void asc_dump(__fbuf__ T* input, uint32_t desc, uint32_t dump_size)
+{
+    asc_dump(input, desc, dump_size, nullptr, 0);
 }
 } // namespace __asc_aicore
 #else
@@ -328,6 +358,13 @@ __aicore__ inline void asc_dump_l1buf(
 
 template <typename T>
 __aicore__ inline void asc_dump(T* input, uint32_t desc, uint32_t dump_size)
+{
+    assert(false && "asc_dump is not supported in cpu mode.");
+}
+
+template <typename T>
+__aicore__ inline void asc_dump(
+    T* input, uint32_t desc, uint32_t dump_size, const uint32_t* shape, const uint32_t shapeDim)
 {
     assert(false && "asc_dump is not supported in cpu mode.");
 }

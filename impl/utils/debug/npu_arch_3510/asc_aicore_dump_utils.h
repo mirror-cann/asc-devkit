@@ -29,9 +29,11 @@ constexpr uint32_t ASC_DEBUG_BUS_UNLOCK_VALUE = 0x19101920;
 constexpr uint32_t ASC_DEBUG_BUS_READ_MASK = 0x2;
 constexpr uint32_t ASC_DEBUG_BUS_CHUNK_WORDS = 8;
 constexpr uint32_t ASC_DEBUG_BUS_CHUNK_BYTES = ASC_DEBUG_BUS_CHUNK_WORDS * sizeof(uint32_t);
+constexpr uint32_t ASC_DEBUG_BUS_FBUF_TYPE_SHIFT = 16;
+constexpr uint32_t ASC_DEBUG_BUS_FBUF_ADDR_MASK = 0xFFFFU;
 
 template <AscendC::Hardware hardware>
-__aicore__ constexpr inline uint32_t get_debug_bus_model_base()
+__aicore__ inline constexpr uint32_t get_debug_bus_model_base()
 {
     if constexpr (hardware == AscendC::Hardware::L1) {
         return 0x620000U;
@@ -41,9 +43,49 @@ __aicore__ constexpr inline uint32_t get_debug_bus_model_base()
         return 0x420000U;
     } else if constexpr (hardware == AscendC::Hardware::L0C) {
         return 0x430000U;
+    } else if constexpr (hardware == AscendC::Hardware::BIAS || hardware == AscendC::Hardware::FIXBUF) {
+        return 0x480000U;
     } else {
         return 0U;
     }
+}
+
+template <AscendC::Hardware hardware>
+__aicore__ inline constexpr uint64_t get_debug_bus_loop_shift()
+{
+    if constexpr (hardware == AscendC::Hardware::BIAS || hardware == AscendC::Hardware::FIXBUF) {
+        return 3U; // 8 bytes
+    } else {
+        return 5U; // 32 bytes
+    }
+}
+
+template <AscendC::Hardware hardware>
+__aicore__ inline constexpr uint64_t get_debug_bus_loop_steplen()
+{
+    return 1U << get_debug_bus_loop_shift<hardware>();
+}
+
+template <AscendC::Hardware hardware>
+__aicore__ inline constexpr uint32_t get_debug_bus_local_addr_shift()
+{
+    if constexpr (hardware == AscendC::Hardware::L1) {
+        return 5U; // 32 bytes
+    } else {
+        return 0U; // 1 byte
+    }
+}
+
+template <AscendC::Hardware hardware>
+__aicore__ inline constexpr uint64_t get_debug_bus_local_addr_steplen()
+{
+    return 1U << get_debug_bus_local_addr_shift<hardware>();
+}
+
+template <AscendC::Hardware hardware>
+__aicore__ inline constexpr uint64_t get_debug_bus_local_step()
+{
+    return get_debug_bus_loop_steplen<hardware>() / get_debug_bus_local_addr_steplen<hardware>();
 }
 
 __aicore__ inline void debug_bus_write_reg(uint64_t debugBusAddr, uint16_t offset, uint32_t value)
@@ -61,6 +103,7 @@ __aicore__ inline volatile uint32_t debug_bus_read_reg(uint64_t debugBusAddr, ui
     return value;
 }
 
+template <uint64_t readLen>
 __aicore__ inline void debug_bus_read_chunk(
     const uint64_t debugBusAddr, uint32_t localOffset, const uint32_t modelBase, uint64_t dataDst)
 {
@@ -84,7 +127,8 @@ __aicore__ inline void debug_bus_read_chunk(
         counter++;
     }
     ringbuf_wait_rts_sync<wait_time_cycle>();
-    for (uint32_t i = 0; i < ASC_DEBUG_BUS_CHUNK_WORDS; ++i) {
+    constexpr uint32_t read_loop = readLen / sizeof(uint32_t);
+    for (uint32_t i = 0; i < read_loop; ++i) {
         debug_bus_write_reg(
             dataDst, i * sizeof(uint32_t),
             debug_bus_read_reg(debugBusAddr, ASC_DEBUG_BUS_DATA_OFFSET + i * sizeof(uint32_t)));
@@ -105,29 +149,32 @@ __aicore__ inline uint32_t debug_bus_copy_local_to_gm_impl(
     if (debugBusAddr == 0U) {
         return 1;
     }
-
-    constexpr uint32_t asc_debug_bus_chunk_shift = 5; // 32 bytes per chunk
     constexpr uint32_t modelBase = get_debug_bus_model_base<hardware>();
+    constexpr uint64_t localStep = get_debug_bus_local_step<hardware>();
+    constexpr uint64_t readLen = get_debug_bus_loop_steplen<hardware>();
+
     uint64_t dstGlobalAddr = reinterpret_cast<uint64_t>(dst);
     uint64_t curLocalBaseAddr = reinterpret_cast<uint64_t>(src);
-
     uint64_t srcLocalAddr = 0;
-    uint64_t localStep = 0;
-    constexpr uint64_t globalStep = ASC_DEBUG_BUS_CHUNK_BYTES;
-    if constexpr (hardware == AscendC::Hardware::L1) {
-        srcLocalAddr = curLocalBaseAddr >> asc_debug_bus_chunk_shift;
-        localStep = 1;
+
+    if constexpr (hardware == AscendC::Hardware::FIXBUF) {
+        const bool isRelu = (curLocalBaseAddr >> ASC_DEBUG_BUS_FBUF_TYPE_SHIFT) == 0x1;
+        const bool isQuant = (curLocalBaseAddr >> ASC_DEBUG_BUS_FBUF_TYPE_SHIFT) == 0x0;
+        srcLocalAddr = (curLocalBaseAddr & ASC_DEBUG_BUS_FBUF_ADDR_MASK) >> get_debug_bus_local_addr_shift<hardware>();
+        if (isQuant) {
+            srcLocalAddr += 0x2000U;
+        } else if (isRelu) {
+            srcLocalAddr += 0x1000U;
+        }
     } else {
-        srcLocalAddr = curLocalBaseAddr;
-        localStep = ASC_DEBUG_BUS_CHUNK_BYTES;
+        srcLocalAddr = curLocalBaseAddr >> get_debug_bus_local_addr_shift<hardware>();
     }
 
-    const int32_t loopCount = alignDumpBytes >> asc_debug_bus_chunk_shift;
-
+    const int32_t loopCount = alignDumpBytes >> get_debug_bus_loop_shift<hardware>();
     for (uint32_t idx = 0; idx < loopCount; ++idx) {
-        debug_bus_read_chunk(debugBusAddr, srcLocalAddr, modelBase, dstGlobalAddr);
+        debug_bus_read_chunk<readLen>(debugBusAddr, srcLocalAddr, modelBase, dstGlobalAddr);
         srcLocalAddr += localStep;
-        dstGlobalAddr += globalStep;
+        dstGlobalAddr += readLen;
     }
     return 0;
 }
@@ -186,6 +233,28 @@ __aicore__ inline uint32_t mem_copy_cbuf_to_gm_impl(__gm__ T* dst, __cc__ T* src
         static_cast<uint64_t>(QuantMode_t::NoQuant), static_cast<uint8_t>(false), false, false,
         static_cast<uint64_t>(QuantMode_post::NoConv), 0, false, false, 0, false, false, true, false, false, false);
     return 0;
+}
+
+template <typename T>
+__aicore__ inline uint32_t mem_copy_biasbuf_to_gm_impl(__gm__ T* dst, __biasbuf__ T* src, const uint32_t alignDumpBytes)
+{
+#if defined(__DAV_CUBE__)
+    return debug_bus_copy_local_to_gm_impl<AscendC::Hardware::BIAS>(
+        dst, src, alignDumpBytes, get_debug_bus_addr_impl());
+#else
+    return 1;
+#endif
+}
+
+template <typename T>
+__aicore__ inline uint32_t mem_copy_fbuf_to_gm_impl(__gm__ T* dst, __fbuf__ T* src, const uint32_t alignDumpBytes)
+{
+#if defined(__DAV_CUBE__)
+    return debug_bus_copy_local_to_gm_impl<AscendC::Hardware::FIXBUF>(
+        dst, src, alignDumpBytes, get_debug_bus_addr_impl());
+#else
+    return 1;
+#endif
 }
 
 template <typename T>
