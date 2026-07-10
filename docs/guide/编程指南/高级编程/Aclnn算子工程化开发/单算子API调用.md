@@ -194,7 +194,7 @@ CHECK_ACL(aclnnFinalize());
 
 ## 编译与运行<a name="section1129535885018"></a>
 
-1.  开发环境上，设置环境变量，配置单算子验证程序编译依赖的头文件与库文件路径，如下为设置环境变量的示例。$\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。以root用户安装为例，安装后文件默认存储路径为：/usr/local/Ascend/cann。_\{arch-os\}_为运行环境的架构和操作系统，_arch_表示操作系统架构，_os_表示操作系统，例如x86\_64-linux或aarch64-linux。
+1.  开发环境上，设置环境变量，配置单算子验证程序编译依赖的头文件与库文件路径，如下为设置环境变量的示例。`${INSTALL_DIR}`请替换为CANN软件安装后文件存储路径。以root用户安装为例，安装后文件默认存储路径为：/usr/local/Ascend/cann。_\{arch-os\}_为运行环境的架构和操作系统，_arch_表示操作系统架构，_os_表示操作系统，例如x86\_64-linux或aarch64-linux。
 
     ```
     export DDK_PATH=${INSTALL_DIR}

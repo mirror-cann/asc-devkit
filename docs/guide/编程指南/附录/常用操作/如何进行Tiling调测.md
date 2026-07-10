@@ -68,7 +68,7 @@
     g++ test.cpp -I${INSTALL_DIR}/include  -L${INSTALL_DIR}/lib64 -Wl,-rpath,${INSTALL_DIR}/lib64 -ltiling_api -lc_sec -lgraph_base -lregister -lunified_dlog -lplatform -o test
     ```
 
-    -   $\{INSTALL\_DIR\}请替换为CANN软件安装后文件存储路径。以root用户安装为例，安装后文件默认存储路径为：/usr/local/Ascend/cann。
+    -   `${INSTALL_DIR}`请替换为CANN软件安装后文件存储路径。以root用户安装为例，安装后文件默认存储路径为：/usr/local/Ascend/cann。
     -   开发者根据需要链接依赖的动态库，必需链接的动态库有：
         -   libtiling\_api.so：Tiling功能相关的动态库，包含ContextBuilder类、OpTilingRegistry类等。
         -   libc\_sec.so：安全函数库，libtiling\_api.so依赖该库。
