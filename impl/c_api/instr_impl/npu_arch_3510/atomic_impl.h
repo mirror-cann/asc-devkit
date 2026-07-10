@@ -26,6 +26,12 @@
 #include "impl/c_api/instr_impl/npu_arch_3510/atomic_impl/asc_set_atomic_add_int_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/atomic_impl/asc_set_atomic_add_int8_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/atomic_impl/asc_set_atomic_add_int16_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/atomic_impl/asc_set_atomic_max_int_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/atomic_impl/asc_set_atomic_max_int8_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/atomic_impl/asc_set_atomic_max_int16_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/atomic_impl/asc_set_atomic_min_int_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/atomic_impl/asc_set_atomic_min_int8_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/atomic_impl/asc_set_atomic_min_int16_impl.h"
 
  // ==========asc_set_atomic_add_float16==========
 __aicore__ inline void asc_set_atomic_add_float16()
@@ -114,6 +120,42 @@ __aicore__ inline void asc_set_atomic_add_int8()
 __aicore__ inline void asc_set_atomic_add_int16()
 {
     asc_set_atomic_add_int16_impl();
+}
+
+// ==========asc_set_atomic_max_int==========
+__aicore__ inline void asc_set_atomic_max_int()
+{
+    asc_set_atomic_max_int_impl();
+}
+
+// ==========asc_set_atomic_max_int8==========
+__aicore__ inline void asc_set_atomic_max_int8()
+{
+    asc_set_atomic_max_int8_impl();
+}
+
+// ==========asc_set_atomic_max_int16==========
+__aicore__ inline void asc_set_atomic_max_int16()
+{
+    asc_set_atomic_max_int16_impl();
+}
+
+// ==========asc_set_atomic_min_int==========
+__aicore__ inline void asc_set_atomic_min_int()
+{
+    asc_set_atomic_min_int_impl();
+}
+
+// ==========asc_set_atomic_min_int8==========
+__aicore__ inline void asc_set_atomic_min_int8()
+{
+    asc_set_atomic_min_int8_impl();
+}
+
+// ==========asc_set_atomic_min_int16==========
+__aicore__ inline void asc_set_atomic_min_int16()
+{
+    asc_set_atomic_min_int16_impl();
 }
 
 #endif

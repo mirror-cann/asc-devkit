@@ -52,7 +52,7 @@ PIPE_V
 vector_float src;
 vector_half dst;
 float value = 1.0f;
-vector_bool mask = asc_create_mask_b16(PAT_ALL);
+vector_bool mask = asc_create_mask_b32(PAT_ALL);
 asc_loadalign(src, src_addr);  // src_addr是外部输入的UB内存空间地址
 asc_muls(dst, src, value, mask);
 ```
