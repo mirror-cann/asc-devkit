@@ -39,6 +39,10 @@ using float8_e8m0_t = fp8_e8m0_t;
 #define __aicore__ [aicore]
 #endif // __aicore__
 
+#ifndef __host__
+#define __host__ __attribute__((cce_host))
+#endif // __host__
+
 #ifndef __host_aicore__
 #define __host_aicore__ [ host, aicore ]
 #endif // __host_aicore__
