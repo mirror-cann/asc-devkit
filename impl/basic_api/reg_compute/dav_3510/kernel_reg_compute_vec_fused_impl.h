@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /* !
  * \file kernel_reg_compute_vec_cmpsel_impl.h
@@ -14,7 +14,8 @@
  */
 
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic/reg_compute/dav_3510/kernel_reg_compute_vec_fused_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use \"#include \"reg_compute/kernel_reg_compute_vec_fused_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic/reg_compute/dav_3510/kernel_reg_compute_vec_fused_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use \"#include \"reg_compute/kernel_reg_compute_vec_fused_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_VEC_FUSED_IMPL__
 #endif
@@ -34,10 +35,12 @@ __simd_callee__ inline void FusedMulsCastImpl(T3& dstReg, T4& srcReg, T2 scalarV
     using ActualU = typename T4::ActualT;
     static_assert(Std::is_same_v<T0, DefaultType> || Std::is_same_v<T0, ActualT>, "T0 type is not correct!");
     static_assert(Std::is_same_v<T1, DefaultType> || Std::is_same_v<T1, ActualU>, "T1 type is not correct!");
-    static_assert(SupportType<Tuple<ActualT, ActualU, T2>, Tuple<half, float, float>>(),
-                  "current data type is not supported on current device!");
-    static_assert(SupportEnum<layout, RegLayout::ZERO, RegLayout::ONE>(),
-                  "current MulsCast api only supported RegLayout ZERO, ONE on current device!");
+    static_assert(
+        SupportType<Tuple<ActualT, ActualU, T2>, Tuple<half, float, float>>(),
+        "current data type is not supported on current device!");
+    static_assert(
+        SupportEnum<layout, RegLayout::ZERO, RegLayout::ONE>(),
+        "current MulsCast api only supported RegLayout ZERO, ONE on current device!");
 
     constexpr auto partModeValue = std::integral_constant<::Part, static_cast<::Part>(layout)>();
     vmulscvt(dstReg, srcReg, scalarValue, mask, partModeValue);
@@ -48,11 +51,12 @@ __simd_callee__ inline void FusedAbsSubImpl(U& dstReg, U& srcReg0, U& srcReg1, M
 {
     using ActualT = typename U::ActualT;
     static_assert(Std::is_same_v<T, DefaultType> || Std::is_same_v<T, ActualT>, "T type is not correct!");
-    static_assert(SupportType<ActualT, half, float, int64_t>(),
-                  "current data type is not supported on current device!");
-    static_assert(SupportEnum<mode, MaskMergeMode::ZEROING>(),
-                  "current AbsSub api only supported Mode ZEROING on current device!");
-    if constexpr(sizeof(ActualT) == 8) {
+    static_assert(
+        SupportType<ActualT, half, float, int64_t>(), "current data type is not supported on current device!");
+    static_assert(
+        SupportEnum<mode, MaskMergeMode::ZEROING>(),
+        "current AbsSub api only supported Mode ZEROING on current device!");
+    if constexpr (sizeof(ActualT) == 8) {
         if constexpr (CheckRegTrait<U, RegTraitNumOne>()) {
             MaskReg maskTrait2;
             MaskPack(maskTrait2, mask);
@@ -68,8 +72,7 @@ __simd_callee__ inline void FusedAbsSubImpl(U& dstReg, U& srcReg0, U& srcReg1, M
             Sub(dstReg, srcReg0, srcReg1, mask);
             Abs(dstReg, dstReg, mask);
         }
-    }
-    else {
+    } else {
         constexpr auto modeValue = GetMaskMergeMode<mode>();
         vabsdif(dstReg, srcReg0, srcReg1, mask, modeValue);
     }
@@ -83,16 +86,20 @@ __simd_callee__ inline void FusedExpSubImpl(S& dstReg, V& srcReg0, V& srcReg1, M
     static_assert(Std::is_same_v<T, DefaultType> || Std::is_same_v<T, ActualT>, "T type is not correct!");
     static_assert(Std::is_same_v<U, DefaultType> || Std::is_same_v<U, ActualU>, "U type is not correct!");
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 5102)
-    static_assert(SupportType<Tuple<ActualT, ActualU>, Tuple<half, half>, Tuple<float, float>>(),
-                  "current data type is not supported on current device!");
+    static_assert(
+        SupportType<Tuple<ActualT, ActualU>, Tuple<half, half>, Tuple<float, float>>(),
+        "current data type is not supported on current device!");
 #else
-    static_assert(SupportType<Tuple<ActualT, ActualU>, Tuple<float, float>, Tuple<float, half>>(),
-                  "current data type is not supported on current device!");
+    static_assert(
+        SupportType<Tuple<ActualT, ActualU>, Tuple<float, float>, Tuple<float, half>>(),
+        "current data type is not supported on current device!");
 #endif
-    static_assert(SupportEnum<layout, RegLayout::ZERO, RegLayout::ONE>(),
-                  "current ExpSub api only supported RegLayout ZERO, ONE on current device!");
-    static_assert(SupportEnum<mode, MaskMergeMode::ZEROING>(),
-                  "current ExpSub api only supported Mode ZEROING on current device!");
+    static_assert(
+        SupportEnum<layout, RegLayout::ZERO, RegLayout::ONE>(),
+        "current ExpSub api only supported RegLayout ZERO, ONE on current device!");
+    static_assert(
+        SupportEnum<mode, MaskMergeMode::ZEROING>(),
+        "current ExpSub api only supported Mode ZEROING on current device!");
     constexpr auto modeValue = GetMaskMergeMode<mode>();
     constexpr auto partModeValue = std::integral_constant<::Part, static_cast<::Part>(layout)>();
     vexpdif(dstReg, srcReg0, srcReg1, mask, partModeValue);
@@ -103,8 +110,8 @@ __simd_callee__ inline void FusedMulDstAddImpl(U& dstReg, U& srcReg0, U& srcReg1
 {
     using ActualT = typename U::ActualT;
     static_assert(Std::is_same_v<T, DefaultType> || Std::is_same_v<T, ActualT>, "T type is not correct!");
-    static_assert(SupportType<ActualT, half, float, bfloat16_t>(),
-                  "current data type is not supported on current device!");
+    static_assert(
+        SupportType<ActualT, half, float, bfloat16_t>(), "current data type is not supported on current device!");
     static_assert(SupportEnum<mode, MaskMergeMode::ZEROING>(), "MulDstAdd only support Mode ZEROING");
     constexpr auto modeValue = GetMaskMergeMode<mode>();
     vmadd(dstReg, srcReg0, srcReg1, mask, modeValue);

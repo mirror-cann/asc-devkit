@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_scalar.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_scalar.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_scalar_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_scalar.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_scalar_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_SCALAR_H__
 #endif
@@ -34,13 +35,10 @@ __aicore__ inline int64_t GetBitCountImpl(uint64_t valueIn)
     }
 }
 
-__aicore__ inline int64_t CountLeadingZeroImpl(uint64_t valueIn)
-{
-    return clz(valueIn);
-}
+__aicore__ inline int64_t CountLeadingZeroImpl(uint64_t valueIn) { return clz(valueIn); }
 
 #if (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
-__aicore__ inline uint64_t GetUintDivMagic(uint64_t dividend,  uint64_t divisor)
+__aicore__ inline uint64_t GetUintDivMagic(uint64_t dividend, uint64_t divisor)
 {
     uint64_t quotient = 0;
     uint64_t remainder = dividend;
@@ -75,12 +73,16 @@ __aicore__ inline void GetUintDivMagicAndShiftImpl(T& magic, T& shift, T divisor
 
     if constexpr (std::is_same<T, uint32_t>::value) {
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-        ASCENDC_ASSERT(divisor <= ConstantsInternal::INT_32_MAX && divisor > 0, { KERNEL_LOG(KERNEL_ERROR, "divisor must not be greater than INT32_MAX"); });
+        ASCENDC_ASSERT(divisor <= ConstantsInternal::INT_32_MAX && divisor > 0, {
+            KERNEL_LOG(KERNEL_ERROR, "divisor must not be greater than INT32_MAX");
+        });
 #endif
         magic = (1l << ConstantsInternal::BIT_32_LEN) * ((1l << shift) - divisor) / divisor + 1;
     } else if constexpr (std::is_same<T, uint64_t>::value) {
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-        ASCENDC_ASSERT(divisor <= ConstantsInternal::INT_64_MAX && divisor > 0, { KERNEL_LOG(KERNEL_ERROR, "divisor must not be greater than INT_64_MAX"); });
+        ASCENDC_ASSERT(divisor <= ConstantsInternal::INT_64_MAX && divisor > 0, {
+            KERNEL_LOG(KERNEL_ERROR, "divisor must not be greater than INT_64_MAX");
+        });
 #endif
         uint64_t dividend = 0;
         if (shift < ConstantsInternal::BIT_64_LEN) {
@@ -97,10 +99,7 @@ __aicore__ inline void GetUintDivMagicAndShiftImpl(T& magic, T& shift, T divisor
 }
 #endif
 
-__aicore__ inline int64_t CountBitsCntSameAsSignBitImpl(int64_t valueIn)
-{
-    return sflbits(valueIn);
-}
+__aicore__ inline int64_t CountBitsCntSameAsSignBitImpl(int64_t valueIn) { return sflbits(valueIn); }
 
 template <int countValue>
 __aicore__ inline int64_t GetSFFValueImpl(uint64_t valueIn)
@@ -119,9 +118,10 @@ __aicore__ inline int64_t GetSFFValueImpl(uint64_t valueIn)
 template <typename T>
 __aicore__ inline void WriteGmByPassDCacheImpl(__gm__ T* addr, T value)
 {
-    static_assert(SupportType<T, int8_t, uint8_t, int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t>(),
-                  "WriteGmByPassDCache only support int8_t/uint8_t/int16_t/uint16_t/int32_t/uint32_t/int64_t/uint64_t "
-                  "data type on current device!");
+    static_assert(
+        SupportType<T, int8_t, uint8_t, int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t>(),
+        "WriteGmByPassDCache only support int8_t/uint8_t/int16_t/uint16_t/int32_t/uint32_t/int64_t/uint64_t "
+        "data type on current device!");
 
     if constexpr (SupportBytes<T, 8>()) {
         st_dev(*(reinterpret_cast<uint64_t*>(&value)), reinterpret_cast<__gm__ uint64_t*>(addr), 0);
@@ -137,9 +137,10 @@ __aicore__ inline void WriteGmByPassDCacheImpl(__gm__ T* addr, T value)
 template <typename T>
 __aicore__ inline T ReadGmByPassDCacheImpl(__gm__ T* addr)
 {
-    static_assert(SupportType<T, int8_t, uint8_t, int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t>(),
-                  "ReadGmByPassDCache only support int8_t/uint8_t/int16_t/uint16_t/int32_t/uint32_t/int64_t/uint64_t "
-                  "data type on current device!");
+    static_assert(
+        SupportType<T, int8_t, uint8_t, int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t>(),
+        "ReadGmByPassDCache only support int8_t/uint8_t/int16_t/uint16_t/int32_t/uint32_t/int64_t/uint64_t "
+        "data type on current device!");
 
     if constexpr (SupportBytes<T, 8>()) {
         return ld_dev(reinterpret_cast<__gm__ uint64_t*>(addr), 0);
@@ -188,17 +189,15 @@ __aicore__ inline int32_t CastF322S32Impl(float valueIn)
 template <typename T, typename U, RoundMode roundMode>
 __aicore__ inline U CastImpl(T valueIn)
 {
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 2201) ||                         \
-    (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 5102) ||                         \
-    (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3003) ||                         \
-    (__NPU_ARCH__ == 3510))
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 5102) || \
+                              (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3510))
     if constexpr (std::is_same<U, half>::value) {
         return CastF322F16Impl<roundMode>(valueIn);
     } else if constexpr (std::is_same<U, int32_t>::value) {
         return CastF322S32Impl<roundMode>(valueIn);
     } else {
-        static_assert(((sizeof(U) == sizeof(half)) || (sizeof(U) == sizeof(int32_t))),
-            "U only support half or int32_t");
+        static_assert(
+            ((sizeof(U) == sizeof(half)) || (sizeof(U) == sizeof(int32_t))), "U only support half or int32_t");
         return 0;
     }
 #else
@@ -210,11 +209,9 @@ __aicore__ inline U CastImpl(T valueIn)
 template <typename T, typename U, RoundMode roundMode>
 __aicore__ inline U ScalarCastImpl(T valueIn)
 {
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 2201) ||                         \
-    (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 5102) ||                         \
-    (__NPU_ARCH__ == 2103) || (__NPU_ARCH__ == 3103) ||                         \
-    (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3003) ||                         \
-    (__NPU_ARCH__ == 3510))
+#if defined(__NPU_ARCH__) &&                                                                                 \
+    ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 2103) || \
+     (__NPU_ARCH__ == 3103) || (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3510))
     return CastImpl<T, U, roundMode>(valueIn);
 #else
     ASCENDC_ASSERT((false), "ScalarCast is not supported on current device");

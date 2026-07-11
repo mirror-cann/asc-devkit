@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_bilinearinterpolation_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_c220/kernel_operator_vec_bilinearinterpolation_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_c220/kernel_operator_vec_bilinearinterpolation_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_BILINEARINTERPOLATION_IMPL_H__
 #endif
@@ -38,10 +39,10 @@ namespace AscendC {
 constexpr uint32_t brcbEleNum = 8;
 
 template <typename T>
-__aicore__ inline void BilinearInterpolationCalc(const LocalTensor<T> &dst, const LocalTensor<T> &src0,
-    const LocalTensor<uint32_t> &src0Offset, const LocalTensor<T> &src1, uint64_t mask, uint8_t hRepeat,
-    bool repeatMode, uint16_t dstBlkStride, uint16_t vROffset, uint8_t vRepeat,
-    const LocalTensor<uint8_t> &sharedTmpBuffer)
+__aicore__ inline void BilinearInterpolationCalc(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src0, const LocalTensor<uint32_t>& src0Offset,
+    const LocalTensor<T>& src1, uint64_t mask, uint8_t hRepeat, bool repeatMode, uint16_t dstBlkStride,
+    uint16_t vROffset, uint8_t vRepeat, const LocalTensor<uint8_t>& sharedTmpBuffer)
 {
     using PrimType = PrimT<T>;
     auto sharedTmpBufferT = sharedTmpBuffer.ReinterpretCast<T>();
@@ -49,8 +50,9 @@ __aicore__ inline void BilinearInterpolationCalc(const LocalTensor<T> &dst, cons
     uint8_t innerRepeatTimes = hRepeat * vRepeat;
     constexpr uint32_t eleCntOfOneRep = DEFAULT_REPEAT_STRIDE * ONE_BLK_SIZE / sizeof(PrimType);
     // gatherb
-    GatherbImpl((__ubuf__ uint16_t *)sharedTmpBufferT.GetPhyAddr(), (__ubuf__ uint16_t *)src0.GetPhyAddr(),
-        (__ubuf__ uint32_t *)src0Offset.GetPhyAddr(), src0.GetSize(), innerRepeatTimes, gatherbRepeatParams);
+    GatherbImpl(
+        (__ubuf__ uint16_t*)sharedTmpBufferT.GetPhyAddr(), (__ubuf__ uint16_t*)src0.GetPhyAddr(),
+        (__ubuf__ uint32_t*)src0Offset.GetPhyAddr(), src0.GetSize(), innerRepeatTimes, gatherbRepeatParams);
     uint32_t posSrc1Brcb = hRepeat * vRepeat * DEFAULT_REPEAT_STRIDE * ONE_BLK_SIZE / sizeof(PrimType);
     BrcbRepeatParams brcbRepeatParams;
     Brcb(sharedTmpBufferT[posSrc1Brcb], src1, src1.GetSize() / brcbEleNum, brcbRepeatParams);
@@ -64,8 +66,8 @@ __aicore__ inline void BilinearInterpolationCalc(const LocalTensor<T> &dst, cons
 
     SetMaskCount();
     SetVectorMask<PrimType, MaskMode::COUNTER>(0, innerRepeatTimes * eleCntOfOneRep);
-    Mul<T, false>(sharedTmpBufferT, sharedTmpBufferT[posSrc1Brcb], sharedTmpBufferT, mask, innerRepeatTimes,
-        mulRepeatParams);
+    Mul<T, false>(
+        sharedTmpBufferT, sharedTmpBufferT[posSrc1Brcb], sharedTmpBufferT, mask, innerRepeatTimes, mulRepeatParams);
     SetMaskNorm();
     ResetMask();
     PipeBarrier<PIPE_V>();
@@ -89,10 +91,10 @@ __aicore__ inline void BilinearInterpolationCalc(const LocalTensor<T> &dst, cons
 }
 
 template <typename T>
-__aicore__ inline void BilinearInterpolationCalc(const LocalTensor<T> &dst, const LocalTensor<T> &src0,
-    const LocalTensor<uint32_t> &src0Offset, const LocalTensor<T> &src1, uint64_t mask[], uint8_t hRepeat,
-    bool repeatMode, uint16_t dstBlkStride, uint16_t vROffset, uint8_t vRepeat,
-    const LocalTensor<uint8_t> &sharedTmpBuffer)
+__aicore__ inline void BilinearInterpolationCalc(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src0, const LocalTensor<uint32_t>& src0Offset,
+    const LocalTensor<T>& src1, uint64_t mask[], uint8_t hRepeat, bool repeatMode, uint16_t dstBlkStride,
+    uint16_t vROffset, uint8_t vRepeat, const LocalTensor<uint8_t>& sharedTmpBuffer)
 {
     using PrimType = PrimT<T>;
     auto sharedTmpBufferT = sharedTmpBuffer.ReinterpretCast<T>();
@@ -100,8 +102,9 @@ __aicore__ inline void BilinearInterpolationCalc(const LocalTensor<T> &dst, cons
     uint8_t innerRepeatTimes = hRepeat * vRepeat;
     constexpr uint32_t eleCntOfOneRep = DEFAULT_REPEAT_STRIDE * ONE_BLK_SIZE / sizeof(PrimType);
     // gatherb
-    GatherbImpl((__ubuf__ uint16_t *)sharedTmpBufferT.GetPhyAddr(), (__ubuf__ uint16_t *)src0.GetPhyAddr(),
-        (__ubuf__ uint32_t *)src0Offset.GetPhyAddr(), src0.GetSize(), innerRepeatTimes, gatherbRepeatParams);
+    GatherbImpl(
+        (__ubuf__ uint16_t*)sharedTmpBufferT.GetPhyAddr(), (__ubuf__ uint16_t*)src0.GetPhyAddr(),
+        (__ubuf__ uint32_t*)src0Offset.GetPhyAddr(), src0.GetSize(), innerRepeatTimes, gatherbRepeatParams);
     uint32_t posSrc1Brcb = hRepeat * vRepeat * DEFAULT_REPEAT_STRIDE * ONE_BLK_SIZE / sizeof(PrimType);
     BrcbRepeatParams brcbRepeatParams;
     Brcb(sharedTmpBufferT[posSrc1Brcb], src1, src1.GetSize() / brcbEleNum, brcbRepeatParams);
@@ -115,8 +118,8 @@ __aicore__ inline void BilinearInterpolationCalc(const LocalTensor<T> &dst, cons
 
     SetMaskCount();
     SetVectorMask<PrimType, MaskMode::COUNTER>(0, innerRepeatTimes * eleCntOfOneRep);
-    Mul<T, false>(sharedTmpBufferT, sharedTmpBufferT[posSrc1Brcb], sharedTmpBufferT, mask, innerRepeatTimes,
-        mulRepeatParams);
+    Mul<T, false>(
+        sharedTmpBufferT, sharedTmpBufferT[posSrc1Brcb], sharedTmpBufferT, mask, innerRepeatTimes, mulRepeatParams);
     SetMaskNorm();
     ResetMask();
     PipeBarrier<PIPE_V>();

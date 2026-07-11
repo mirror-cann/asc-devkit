@@ -1,14 +1,15 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_3510/kernel_operator_vec_unary_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_vec_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_3510/kernel_operator_vec_unary_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_vec_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_UNARY_IMPL_H__
 #endif
@@ -24,7 +25,7 @@
 namespace AscendC {
 namespace Internal {
 template <auto func, typename T, typename RegType>
-__simd_vf__ inline void VecUnaryLevel2VFImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+__simd_vf__ inline void VecUnaryLevel2VFImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
     RegType srcReg;
     RegType dstReg;
@@ -41,7 +42,7 @@ __simd_vf__ inline void VecUnaryLevel2VFImpl(__ubuf__ T *dst, __ubuf__ T *src, c
 }
 
 template <auto func, typename T>
-__aicore__ inline void VecUnaryLevel2ImplTemplate(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+__aicore__ inline void VecUnaryLevel2ImplTemplate(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
     if constexpr (SupportBytes<T, 8>()) {
         VecUnaryLevel2VFImpl<func, T, Reg::RegTensor<T, Reg::RegTraitNumTwo>>(dst, src, count);
@@ -51,9 +52,11 @@ __aicore__ inline void VecUnaryLevel2ImplTemplate(__ubuf__ T *dst, __ubuf__ T *s
 }
 
 template <typename T>
-__simd_vf__ inline void VecUnaryLevel2ImplFloat(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count) {
-    static_assert(SupportType<T, float>(), "Failed to check dtype in Rsqrt FAST_INVERSE mode, "
-        "current api only supports float. ");
+__simd_vf__ inline void VecUnaryLevel2ImplFloat(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
+{
+    static_assert(
+        SupportType<T, float>(), "Failed to check dtype in Rsqrt FAST_INVERSE mode, "
+                                 "current api only supports float. ");
     constexpr uint32_t sregLower = static_cast<uint32_t>(GetVecLen() / sizeof(T));
     constexpr uint32_t posZero = 0x00000000u;
     constexpr uint32_t negZero = 0x80000000u;
@@ -72,27 +75,27 @@ __simd_vf__ inline void VecUnaryLevel2ImplFloat(__ubuf__ T *dst, __ubuf__ T *src
     NotNumUnion notNum1;
     notNum1.i = F32_NEG_INF;
     /*
-    * Improves Basic Api with high precision mode by using fast_inverse approach with following formula.
-    * if x == float("inf"):
-    * return 0.0f
-    * if x == 0.0f:
-    * return float("inf")
-    * float r, r1, y, s, t, e;
-    * bool p;
-    * p = (x < 1.1754944e-38);
-    * if (p)
-    * x = x*16777216.0f;
-    * r = errdiv(1.0, x); // div 指令
-    * y = errsqrt(r); // sqrt 指令
-    * y = y*(1.5 - 0.5*x*y*y);
-    * s = 1 - x*r;
-    * t = r - y*y;
-    * e = s + x*t;
-    * y = y + y*e*0.5;
-    * if (p)
-    * y = y*4096.0f; // y = y*2**12, 返回input是subnorma的结果
-    * return y;
-    */
+     * Improves Basic Api with high precision mode by using fast_inverse approach with following formula.
+     * if x == float("inf"):
+     * return 0.0f
+     * if x == 0.0f:
+     * return float("inf")
+     * float r, r1, y, s, t, e;
+     * bool p;
+     * p = (x < 1.1754944e-38);
+     * if (p)
+     * x = x*16777216.0f;
+     * r = errdiv(1.0, x); // div 指令
+     * y = errsqrt(r); // sqrt 指令
+     * y = y*(1.5 - 0.5*x*y*y);
+     * s = 1 - x*r;
+     * t = r - y*y;
+     * e = s + x*t;
+     * y = y + y*e*0.5;
+     * if (p)
+     * y = y*4096.0f; // y = y*2**12, 返回input是subnorma的结果
+     * return y;
+     */
     Reg::RegTensor<T> regZero;
     Reg::RegTensor<T> srcReg;
     Reg::RegTensor<T> dstReg;
@@ -144,11 +147,11 @@ __simd_vf__ inline void VecUnaryLevel2ImplFloat(__ubuf__ T *dst, __ubuf__ T *src
         Reg::Muls(tmpReg, resReg, multiplyFactor1, mask);
         Reg::Select(dstReg, tmpReg, resReg, cmpMask);
 
-        Reg::CompareScalar(isInfMask, (Reg::RegTensor<uint32_t> &)srcReg, posInf, mask);
+        Reg::CompareScalar(isInfMask, (Reg::RegTensor<uint32_t>&)srcReg, posInf, mask);
         Reg::Select(dstReg, regZero, dstReg, isInfMask);
-        Reg::CompareScalar(isPosZeroMask, (Reg::RegTensor<uint32_t> &)srcReg, posZero, mask);
+        Reg::CompareScalar(isPosZeroMask, (Reg::RegTensor<uint32_t>&)srcReg, posZero, mask);
         Reg::Select(dstReg, posInfReg, dstReg, isPosZeroMask);
-        Reg::CompareScalar(isNegZeroMask, (Reg::RegTensor<uint32_t> &)srcReg, negZero, mask);
+        Reg::CompareScalar(isNegZeroMask, (Reg::RegTensor<uint32_t>&)srcReg, negZero, mask);
         Reg::Select(dstReg, negInfReg, dstReg, isNegZeroMask);
 
         Reg::StoreAlign(dst + i * sregLower, dstReg, mask);
@@ -156,7 +159,8 @@ __simd_vf__ inline void VecUnaryLevel2ImplFloat(__ubuf__ T *dst, __ubuf__ T *src
 }
 
 template <typename T>
-__simd_vf__ inline void VecUnaryLevel2ImplB64(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count) {
+__simd_vf__ inline void VecUnaryLevel2ImplB64(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
+{
     Reg::RegTensor<T, Reg::RegTraitNumTwo> vSrcReg0;
     Reg::RegTensor<T, Reg::RegTraitNumTwo> vDstReg0;
     Reg::RegTensor<T, Reg::RegTraitNumTwo> vRegOne, vRegNegOne, vRegZero, vRegF;
@@ -184,11 +188,12 @@ __simd_vf__ inline void VecUnaryLevel2ImplB64(__ubuf__ T *dst, __ubuf__ T *src, 
 }
 
 template <auto func, bool isSetMask, bool isMaskBitMode, bool isNormalMode, typename T>
-__simd_vf__ inline void VecUnaryLevel0VFImpl(__ubuf__ T *dst, __ubuf__ T *src, const BasicAPIMaskStruct maskArrayStruct,
-    const uint64_t maskCount, const uint8_t repeatTime, const UnaryRepeatParams repeatParams,
-    __ubuf__ uint64_t *maskBuf)
+__simd_vf__ inline void VecUnaryLevel0VFImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const BasicAPIMaskStruct maskArrayStruct, const uint64_t maskCount,
+    const uint8_t repeatTime, const UnaryRepeatParams repeatParams, __ubuf__ uint64_t* maskBuf)
 {
-    uint32_t count = VecMicroGetCount<isSetMask, isNormalMode, isMaskBitMode>(maskArrayStruct.maskArray, maskCount, maskBuf);
+    uint32_t count =
+        VecMicroGetCount<isSetMask, isNormalMode, isMaskBitMode>(maskArrayStruct.maskArray, maskCount, maskBuf);
     uint16_t newRepeatTimes = 0;
     newRepeatTimes = VecMicroGetRepeatTimes<T, isNormalMode>(count, repeatTime);
     Reg::MaskReg maskReg;
@@ -205,8 +210,8 @@ __simd_vf__ inline void VecUnaryLevel0VFImpl(__ubuf__ T *dst, __ubuf__ T *src, c
 #ifndef NO_OVERLAP_IN_MULTI_REPEAT
         Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_LOAD>();
 #endif
-        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcVreg,
-            src + index * repeatParams.srcRepStride * ElePerBlkT, repeatParams.srcBlkStride, maskReg);
+        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+            srcVreg, src + index * repeatParams.srcRepStride * ElePerBlkT, repeatParams.srcBlkStride, maskReg);
         func(dstVreg, srcVreg, maskReg);
         Reg::StoreAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
             dst + index * repeatParams.dstRepStride * ElePerBlkT, dstVreg, repeatParams.dstBlkStride, maskReg);
@@ -214,8 +219,9 @@ __simd_vf__ inline void VecUnaryLevel0VFImpl(__ubuf__ T *dst, __ubuf__ T *src, c
 }
 
 template <auto func, bool isSetMask, bool isMaskBitMode, typename T>
-__aicore__ inline void VecUnaryLevel0Template(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t maskArray[],
-    const uint64_t maskCount, const uint8_t repeatTime, const UnaryRepeatParams &repeatParams)
+__aicore__ inline void VecUnaryLevel0Template(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t maskArray[], const uint64_t maskCount, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     BasicAPIMaskStruct maskArrayStruct;
     if constexpr (isMaskBitMode) {
@@ -224,14 +230,15 @@ __aicore__ inline void VecUnaryLevel0Template(__ubuf__ T *dst, __ubuf__ T *src, 
     } else {
         ASCENDC_ASSERT(maskArray == nullptr, "maskArray must be nullptr when isMaskBitMode is false.");
     }
-    __ubuf__ uint64_t *maskBuf = nullptr;
+    __ubuf__ uint64_t* maskBuf = nullptr;
 
     if (Internal::IsCounterMode()) {
         if constexpr (!isSetMask) {
-            maskBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 2); // maskReg 256bit PK-> 128bit
+            maskBuf =
+                AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 2); // maskReg 256bit PK-> 128bit
         }
-        VecUnaryLevel0VFImpl<func, isSetMask, isMaskBitMode, false, T>(dst, src, maskArrayStruct, maskCount,
-            repeatTime, repeatParams, maskBuf);
+        VecUnaryLevel0VFImpl<func, isSetMask, isMaskBitMode, false, T>(
+            dst, src, maskArrayStruct, maskCount, repeatTime, repeatParams, maskBuf);
         if constexpr (!isSetMask) {
             AscendCUtils::FreeTemporaryBuffer<uint64_t>(maskBuf);
         }
@@ -255,8 +262,8 @@ __aicore__ inline void VecUnaryLevel0Template(__ubuf__ T *dst, __ubuf__ T *src, 
             }
         }
         // when isSetMask is false, normal mode, maskBuf = nullptr, not support B8
-        VecUnaryLevel0VFImpl<func, isSetMask, isMaskBitMode, true, T>(dst, src, maskArrayStruct, maskCount,
-            repeatTime, repeatParams, maskBuf);
+        VecUnaryLevel0VFImpl<func, isSetMask, isMaskBitMode, true, T>(
+            dst, src, maskArrayStruct, maskCount, repeatTime, repeatParams, maskBuf);
         if constexpr (isMaskBitMode && SupportBytes<T, 1>()) {
             AscendC::AscendCUtils::FreeTemporaryBuffer<uint64_t>(maskBuf);
         }
@@ -265,102 +272,109 @@ __aicore__ inline void VecUnaryLevel0Template(__ubuf__ T *dst, __ubuf__ T *src, 
 } // namespace Internal
 
 template <typename T, bool isSetMask = true, const ExpConfig& config = DEFAULT_EXP_CONFIG>
-__aicore__ inline void ExpImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask[], const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void ExpImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == ExpAlgo::INTRINSIC || config.algo == ExpAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = Reg::Exp<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
     } else if constexpr (config.algo == ExpAlgo::PRECISION_1ULP_FTZ_FALSE) {
-        static constexpr Reg::ExpSpecificMode mode = { Reg::MaskMergeMode::ZEROING, ExpAlgo::PRECISION_1ULP_FTZ_FALSE };
+        static constexpr Reg::ExpSpecificMode mode = {Reg::MaskMergeMode::ZEROING, ExpAlgo::PRECISION_1ULP_FTZ_FALSE};
         constexpr auto func = Reg::Exp<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
     }
 }
 
 template <typename T, bool isSetMask = true, const ExpConfig& config = DEFAULT_EXP_CONFIG>
-__aicore__ inline void ExpImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask, const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void ExpImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == ExpAlgo::INTRINSIC || config.algo == ExpAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = Reg::Exp<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
     } else if constexpr (config.algo == ExpAlgo::PRECISION_1ULP_FTZ_FALSE) {
-        static constexpr Reg::ExpSpecificMode mode = { Reg::MaskMergeMode::ZEROING, ExpAlgo::PRECISION_1ULP_FTZ_FALSE };
+        static constexpr Reg::ExpSpecificMode mode = {Reg::MaskMergeMode::ZEROING, ExpAlgo::PRECISION_1ULP_FTZ_FALSE};
         constexpr auto func = Reg::Exp<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
     }
 }
 
 template <typename T, bool isSetMask = true, const LnConfig& config = DEFAULT_LN_CONFIG>
-__aicore__ inline void LnImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask[], const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void LnImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == LnAlgo::INTRINSIC || config.algo == LnAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = Reg::Ln<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
     } else if constexpr (config.algo == LnAlgo::PRECISION_1ULP_FTZ_FALSE) {
-        static constexpr Reg::LnSpecificMode mode = { Reg::MaskMergeMode::ZEROING, LnAlgo::PRECISION_1ULP_FTZ_FALSE };
+        static constexpr Reg::LnSpecificMode mode = {Reg::MaskMergeMode::ZEROING, LnAlgo::PRECISION_1ULP_FTZ_FALSE};
         constexpr auto func = Reg::Ln<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
     }
 }
 
 template <typename T, bool isSetMask = true, const LnConfig& config = DEFAULT_LN_CONFIG>
-__aicore__ inline void LnImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask, const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void LnImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == LnAlgo::INTRINSIC || config.algo == LnAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = Reg::Ln<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
     } else if constexpr (config.algo == LnAlgo::PRECISION_1ULP_FTZ_FALSE) {
-        static constexpr Reg::LnSpecificMode mode = { Reg::MaskMergeMode::ZEROING, LnAlgo::PRECISION_1ULP_FTZ_FALSE };
+        static constexpr Reg::LnSpecificMode mode = {Reg::MaskMergeMode::ZEROING, LnAlgo::PRECISION_1ULP_FTZ_FALSE};
         constexpr auto func = Reg::Ln<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
     }
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void AbsImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask[], const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void AbsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
-    static_assert((SupportType<T, half, int16_t, float, int32_t>()),
-        "current data type is not supported on current device!");
+    static_assert(
+        (SupportType<T, half, int16_t, float, int32_t>()), "current data type is not supported on current device!");
     constexpr auto func = Reg::Abs<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
     Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void AbsImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask, const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void AbsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
-    static_assert((SupportType<T, half, int16_t, float, int32_t>()),
-        "current data type is not supported on current device!");
+    static_assert(
+        (SupportType<T, half, int16_t, float, int32_t>()), "current data type is not supported on current device!");
     constexpr auto func = Reg::Abs<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
     Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
 }
 
 namespace RegReciprocal {
 template <typename T, typename RegT, bool precisionMode = false>
-__aicore__ inline void Reciprocal(RegT &dstReg, RegT &srcReg, Reg::MaskReg &mask)
+__aicore__ inline void Reciprocal(RegT& dstReg, RegT& srcReg, Reg::MaskReg& mask)
 {
     Reg::Duplicate(dstReg, 1.0f, mask);
     if constexpr (!precisionMode) {
         Reg::Div(dstReg, dstReg, srcReg, mask);
     } else {
-        static constexpr AscendC::Reg::DivSpecificMode mode =
-                                        {Reg::MaskMergeMode::ZEROING, false, DivAlgo::PRECISION_1ULP_FTZ_FALSE};
+        static constexpr AscendC::Reg::DivSpecificMode mode = {
+            Reg::MaskMergeMode::ZEROING, false, DivAlgo::PRECISION_1ULP_FTZ_FALSE};
         Reg::Div<T, &mode>(dstReg, dstReg, srcReg, mask);
     }
 }
 } // namespace RegReciprocal
 template <typename T, bool isSetMask = true, const ReciprocalConfig& config = DEFAULT_RECIPROCAL_CONFIG>
-__aicore__ inline void ReciprocalImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams &repeatParams)
+__aicore__ inline void ReciprocalImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == ReciprocalAlgo::INTRINSIC || config.algo == ReciprocalAlgo::PRECISION_1ULP_FTZ_TRUE) {
@@ -373,8 +387,9 @@ __aicore__ inline void ReciprocalImpl(__ubuf__ T *dst, __ubuf__ T *src, const ui
 }
 
 template <typename T, bool isSetMask = true, const ReciprocalConfig& config = DEFAULT_RECIPROCAL_CONFIG>
-__aicore__ inline void ReciprocalImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask, const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void ReciprocalImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == ReciprocalAlgo::INTRINSIC || config.algo == ReciprocalAlgo::PRECISION_1ULP_FTZ_TRUE) {
@@ -387,46 +402,52 @@ __aicore__ inline void ReciprocalImpl(__ubuf__ T *dst, __ubuf__ T *src, const ui
 }
 
 template <typename T, bool isSetMask = true, const SqrtConfig& config = DEFAULT_SQRT_CONFIG>
-__aicore__ inline void SqrtImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask[], const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void SqrtImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == SqrtAlgo::INTRINSIC || config.algo == SqrtAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = Reg::Sqrt<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
     } else if constexpr (config.algo == SqrtAlgo::FAST_INVERSE) {
-        static constexpr Reg::SqrtSpecificMode mode = { Reg::MaskMergeMode::ZEROING, true, SqrtAlgo::FAST_INVERSE };
+        static constexpr Reg::SqrtSpecificMode mode = {Reg::MaskMergeMode::ZEROING, true, SqrtAlgo::FAST_INVERSE};
         constexpr auto func = Reg::Sqrt<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
     } else if constexpr (config.algo == SqrtAlgo::PRECISION_0ULP_FTZ_FALSE) {
-        static constexpr Reg::SqrtSpecificMode mode = { Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_0ULP_FTZ_FALSE };
+        static constexpr Reg::SqrtSpecificMode mode = {
+            Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_0ULP_FTZ_FALSE};
         constexpr auto func = Reg::Sqrt<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
     } else if constexpr (config.algo == SqrtAlgo::PRECISION_1ULP_FTZ_FALSE) {
-        static constexpr Reg::SqrtSpecificMode mode = { Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_1ULP_FTZ_FALSE };
+        static constexpr Reg::SqrtSpecificMode mode = {
+            Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_1ULP_FTZ_FALSE};
         constexpr auto func = Reg::Sqrt<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
     }
 }
 
 template <typename T, bool isSetMask = true, const SqrtConfig& config = DEFAULT_SQRT_CONFIG>
-__aicore__ inline void SqrtImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask, const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void SqrtImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == SqrtAlgo::INTRINSIC || config.algo == SqrtAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = Reg::Sqrt<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
     } else if constexpr (config.algo == SqrtAlgo::FAST_INVERSE) {
-        static constexpr Reg::SqrtSpecificMode mode = { Reg::MaskMergeMode::ZEROING, true, SqrtAlgo::FAST_INVERSE };
+        static constexpr Reg::SqrtSpecificMode mode = {Reg::MaskMergeMode::ZEROING, true, SqrtAlgo::FAST_INVERSE};
         constexpr auto func = Reg::Sqrt<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
     } else if constexpr (config.algo == SqrtAlgo::PRECISION_0ULP_FTZ_FALSE) {
-        static constexpr Reg::SqrtSpecificMode mode = { Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_0ULP_FTZ_FALSE };
+        static constexpr Reg::SqrtSpecificMode mode = {
+            Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_0ULP_FTZ_FALSE};
         constexpr auto func = Reg::Sqrt<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
     } else if constexpr (config.algo == SqrtAlgo::PRECISION_1ULP_FTZ_FALSE) {
-        static constexpr Reg::SqrtSpecificMode mode = { Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_1ULP_FTZ_FALSE };
+        static constexpr Reg::SqrtSpecificMode mode = {
+            Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_1ULP_FTZ_FALSE};
         constexpr auto func = Reg::Sqrt<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
     }
@@ -434,7 +455,7 @@ __aicore__ inline void SqrtImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t
 
 namespace RegRsqrt {
 template <typename T, typename RegT, bool precisionMode = false>
-__simd_callee__ inline void Rsqrt(RegT &dstReg, RegT &srcReg, Reg::MaskReg &mask)
+__simd_callee__ inline void Rsqrt(RegT& dstReg, RegT& srcReg, Reg::MaskReg& mask)
 {
     Reg::MaskReg cmpMask;
     Reg::Duplicate(dstReg, static_cast<T>(1.0f), mask);
@@ -445,18 +466,18 @@ __simd_callee__ inline void Rsqrt(RegT &dstReg, RegT &srcReg, Reg::MaskReg &mask
         Reg::Select(dstReg, srcReg, dstReg, cmpMask);
     } else {
         if constexpr (SupportType<T, half>()) {
-            static constexpr AscendC::Reg::SqrtSpecificMode SqrtMode =
-                                    {Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_1ULP_FTZ_FALSE};
+            static constexpr AscendC::Reg::SqrtSpecificMode SqrtMode = {
+                Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_1ULP_FTZ_FALSE};
             Reg::Sqrt<T, &SqrtMode>(srcReg, srcReg, mask);
-            static constexpr AscendC::Reg::DivSpecificMode divMode =
-                                    {Reg::MaskMergeMode::ZEROING, false, DivAlgo::PRECISION_1ULP_FTZ_FALSE};
+            static constexpr AscendC::Reg::DivSpecificMode divMode = {
+                Reg::MaskMergeMode::ZEROING, false, DivAlgo::PRECISION_1ULP_FTZ_FALSE};
             Reg::Div<T, &divMode>(dstReg, dstReg, srcReg, mask);
         } else {
-            static constexpr AscendC::Reg::SqrtSpecificMode SqrtMode =
-                                    {Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_0ULP_FTZ_FALSE};
+            static constexpr AscendC::Reg::SqrtSpecificMode SqrtMode = {
+                Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_0ULP_FTZ_FALSE};
             Reg::Sqrt<T, &SqrtMode>(srcReg, srcReg, mask);
-            static constexpr AscendC::Reg::DivSpecificMode divMode =
-                                    {Reg::MaskMergeMode::ZEROING, false, DivAlgo::PRECISION_0ULP_FTZ_FALSE};
+            static constexpr AscendC::Reg::DivSpecificMode divMode = {
+                Reg::MaskMergeMode::ZEROING, false, DivAlgo::PRECISION_0ULP_FTZ_FALSE};
             Reg::Div<T, &divMode>(dstReg, dstReg, srcReg, mask);
         }
     }
@@ -464,58 +485,67 @@ __simd_callee__ inline void Rsqrt(RegT &dstReg, RegT &srcReg, Reg::MaskReg &mask
 } // namespace RegRsqrt
 
 template <typename T, bool isSetMask = true, const RsqrtConfig& config = DEFAULT_RSQRT_CONFIG>
-__aicore__ inline void RsqrtImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask[], const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void RsqrtImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == RsqrtAlgo::INTRINSIC || config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = RegRsqrt::Rsqrt<T, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
-    } else if constexpr (config.algo == RsqrtAlgo::FAST_INVERSE || config.algo == RsqrtAlgo::PRECISION_0ULP_FTZ_FALSE ||
-                        config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_FALSE) {
+    } else if constexpr (
+        config.algo == RsqrtAlgo::FAST_INVERSE || config.algo == RsqrtAlgo::PRECISION_0ULP_FTZ_FALSE ||
+        config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_FALSE) {
         constexpr auto func = RegRsqrt::Rsqrt<T, Reg::RegTensor<T>, true>;
         Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
     }
 }
 
 template <typename T, bool isSetMask = true, const RsqrtConfig& config = DEFAULT_RSQRT_CONFIG>
-__aicore__ inline void RsqrtImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask, const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void RsqrtImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == RsqrtAlgo::INTRINSIC || config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = RegRsqrt::Rsqrt<T, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
-    } else if constexpr (config.algo == RsqrtAlgo::FAST_INVERSE || config.algo == RsqrtAlgo::PRECISION_0ULP_FTZ_FALSE ||
-                        config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_FALSE) {
+    } else if constexpr (
+        config.algo == RsqrtAlgo::FAST_INVERSE || config.algo == RsqrtAlgo::PRECISION_0ULP_FTZ_FALSE ||
+        config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_FALSE) {
         constexpr auto func = RegRsqrt::Rsqrt<T, Reg::RegTensor<T>, true>;
         Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
     }
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void NotImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask[], const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void NotImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
-    static_assert((SupportType<T, half, float, uint16_t, int16_t, uint32_t, int32_t>()),
+    static_assert(
+        (SupportType<T, half, float, uint16_t, int16_t, uint32_t, int32_t>()),
         "current data type is not supported on current device!");
     constexpr auto func = Reg::Not<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
     Internal::VecUnaryLevel0Template<func, isSetMask, true>(dst, src, mask, 0, repeatTime, repeatParams);
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void NotImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask, const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void NotImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
-    static_assert((SupportType<T, half, float, uint16_t, int16_t, uint32_t, int32_t>()),
+    static_assert(
+        (SupportType<T, half, float, uint16_t, int16_t, uint32_t, int32_t>()),
         "current data type is not supported on current device!");
     constexpr auto func = Reg::Not<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
     Internal::VecUnaryLevel0Template<func, isSetMask, false>(dst, src, nullptr, mask, repeatTime, repeatParams);
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void ReluImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask[], const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void ReluImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float, int32_t>()), "current data type is not supported on current device!");
     constexpr auto func = Reg::Relu<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
@@ -523,8 +553,9 @@ __aicore__ inline void ReluImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void ReluImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t mask, const uint8_t repeatTime,
-    const UnaryRepeatParams &repeatParams)
+__aicore__ inline void ReluImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert((SupportType<T, half, float, int32_t>()), "current data type is not supported on current device!");
     constexpr auto func = Reg::Relu<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
@@ -532,40 +563,41 @@ __aicore__ inline void ReluImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint64_t
 }
 
 template <typename T, const ExpConfig& config = DEFAULT_EXP_CONFIG>
-__aicore__ inline void ExpImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+__aicore__ inline void ExpImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == ExpAlgo::INTRINSIC || config.algo == ExpAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = Reg::Exp<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     } else if constexpr (config.algo == ExpAlgo::PRECISION_1ULP_FTZ_FALSE) {
-        static constexpr Reg::ExpSpecificMode mode = { Reg::MaskMergeMode::ZEROING, ExpAlgo::PRECISION_1ULP_FTZ_FALSE };
+        static constexpr Reg::ExpSpecificMode mode = {Reg::MaskMergeMode::ZEROING, ExpAlgo::PRECISION_1ULP_FTZ_FALSE};
         constexpr auto func = Reg::Exp<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     }
 }
 
 template <typename T, const LnConfig& config = DEFAULT_LN_CONFIG>
-__aicore__ inline void LnImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+__aicore__ inline void LnImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == LnAlgo::INTRINSIC || config.algo == LnAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = Reg::Ln<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     } else if constexpr (config.algo == LnAlgo::PRECISION_1ULP_FTZ_FALSE) {
-        static constexpr Reg::LnSpecificMode mode = { Reg::MaskMergeMode::ZEROING, LnAlgo::PRECISION_1ULP_FTZ_FALSE };
+        static constexpr Reg::LnSpecificMode mode = {Reg::MaskMergeMode::ZEROING, LnAlgo::PRECISION_1ULP_FTZ_FALSE};
         constexpr auto func = Reg::Ln<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     }
 }
 
-template <typename T> __aicore__ inline void AbsImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+template <typename T>
+__aicore__ inline void AbsImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
-    static_assert((SupportType<T, int8_t, half, int16_t, float, int32_t, int64_t>()),
+    static_assert(
+        (SupportType<T, int8_t, half, int16_t, float, int32_t, int64_t>()),
         "current data type is not supported on current device!");
     if constexpr (SupportBytes<T, 8>()) {
-        constexpr auto func =
-            Reg::Abs<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T, Reg::RegTraitNumTwo>>;
+        constexpr auto func = Reg::Abs<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T, Reg::RegTraitNumTwo>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     } else {
         constexpr auto func = Reg::Abs<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
@@ -574,11 +606,13 @@ template <typename T> __aicore__ inline void AbsImpl(__ubuf__ T *dst, __ubuf__ T
 }
 
 template <typename T, typename U, typename std::enable_if<!IsSameType<T, U>::value, bool>::type = true>
-__simd_vf__ inline void AbsImpl(__ubuf__ T *dst, __ubuf__ U *src, const uint32_t count)
+__simd_vf__ inline void AbsImpl(__ubuf__ T* dst, __ubuf__ U* src, const uint32_t count)
 {
-    static_assert(SupportType<T, half, float>() && SupportType<U, complex32, complex64>(),
+    static_assert(
+        SupportType<T, half, float>() && SupportType<U, complex32, complex64>(),
         "current data type is not supported on current device!");
-    static_assert(AscendC::Std::is_same<T, typename U::EleType>::value, "dst type do not match with src complex elements' type");
+    static_assert(
+        AscendC::Std::is_same<T, typename U::EleType>::value, "dst type do not match with src complex elements' type");
     Reg::RegTensor<U, Reg::RegTraitNumTwo> vSrcReg0;
     Reg::RegTensor<T, Reg::RegTraitNumOne> vDstReg0;
     uint32_t sreg = static_cast<uint32_t>(count);
@@ -589,20 +623,22 @@ __simd_vf__ inline void AbsImpl(__ubuf__ T *dst, __ubuf__ U *src, const uint32_t
     for (uint16_t i = 0; i < repeatTime; ++i) {
         preg = Reg::UpdateMask<U, Reg::RegTraitNumTwo>(sreg);
         Reg::LoadAlign(vSrcReg0, src + i * repeatStride);
-        Reg::Abs<T, U, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T, Reg::RegTraitNumOne>,
+        Reg::Abs<
+            T, U, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T, Reg::RegTraitNumOne>,
             Reg::RegTensor<U, Reg::RegTraitNumTwo>>(vDstReg0, vSrcReg0, preg);
         Reg::StoreAlign(dst + i * repeatStride, vDstReg0, preg);
     }
 }
 
 template <typename T, const ReciprocalConfig& config = DEFAULT_RECIPROCAL_CONFIG>
-__aicore__ inline void ReciprocalImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+__aicore__ inline void ReciprocalImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
-    static_assert((SupportType<T, half, float, int64_t, uint64_t>()),
-        "current data type is not supported on current device!");
+    static_assert(
+        (SupportType<T, half, float, int64_t, uint64_t>()), "current data type is not supported on current device!");
 
     if constexpr (SupportType<T, half, float>()) {
-        if constexpr (config.algo == ReciprocalAlgo::INTRINSIC || config.algo == ReciprocalAlgo::PRECISION_1ULP_FTZ_TRUE) {
+        if constexpr (
+            config.algo == ReciprocalAlgo::INTRINSIC || config.algo == ReciprocalAlgo::PRECISION_1ULP_FTZ_TRUE) {
             constexpr auto func = RegReciprocal::Reciprocal<T, Reg::RegTensor<T>>;
             Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
         } else if constexpr (config.algo == ReciprocalAlgo::PRECISION_1ULP_FTZ_FALSE) {
@@ -615,29 +651,31 @@ __aicore__ inline void ReciprocalImpl(__ubuf__ T *dst, __ubuf__ T *src, const ui
 }
 
 template <typename T, const SqrtConfig& config = DEFAULT_SQRT_CONFIG>
-__aicore__ inline void SqrtImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+__aicore__ inline void SqrtImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == SqrtAlgo::INTRINSIC || config.algo == SqrtAlgo::PRECISION_1ULP_FTZ_TRUE) {
         constexpr auto func = Reg::Sqrt<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     } else if constexpr (config.algo == SqrtAlgo::FAST_INVERSE) {
-        static constexpr Reg::SqrtSpecificMode mode = { Reg::MaskMergeMode::ZEROING, true, SqrtAlgo::FAST_INVERSE };
+        static constexpr Reg::SqrtSpecificMode mode = {Reg::MaskMergeMode::ZEROING, true, SqrtAlgo::FAST_INVERSE};
         constexpr auto func = Reg::Sqrt<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     } else if constexpr (config.algo == SqrtAlgo::PRECISION_0ULP_FTZ_FALSE) {
-        static constexpr Reg::SqrtSpecificMode mode = { Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_0ULP_FTZ_FALSE };
+        static constexpr Reg::SqrtSpecificMode mode = {
+            Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_0ULP_FTZ_FALSE};
         constexpr auto func = Reg::Sqrt<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     } else if constexpr (config.algo == SqrtAlgo::PRECISION_1ULP_FTZ_FALSE) {
-        static constexpr Reg::SqrtSpecificMode mode = { Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_1ULP_FTZ_FALSE };
+        static constexpr Reg::SqrtSpecificMode mode = {
+            Reg::MaskMergeMode::ZEROING, false, SqrtAlgo::PRECISION_1ULP_FTZ_FALSE};
         constexpr auto func = Reg::Sqrt<T, &mode, Reg::RegTensor<T>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     }
 }
 
 template <typename T>
-__aicore__ inline void RsqrtPrecisionModeImpl(__ubuf__ T *dst, __ubuf__ T *src, const int32_t &count)
+__aicore__ inline void RsqrtPrecisionModeImpl(__ubuf__ T* dst, __ubuf__ T* src, const int32_t& count)
 {
     if constexpr (IsSameType<T, half>::value) {
         constexpr auto func = RegRsqrt::Rsqrt<T, Reg::RegTensor<T>, true>;
@@ -648,7 +686,7 @@ __aicore__ inline void RsqrtPrecisionModeImpl(__ubuf__ T *dst, __ubuf__ T *src, 
 }
 
 template <typename T, const RsqrtConfig& config = DEFAULT_RSQRT_CONFIG>
-__aicore__ inline void RsqrtImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+__aicore__ inline void RsqrtImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
     static_assert((SupportType<T, half, float>()), "current data type is not supported on current device!");
     if constexpr (config.algo == RsqrtAlgo::INTRINSIC || config.algo == RsqrtAlgo::PRECISION_1ULP_FTZ_TRUE) {
@@ -659,14 +697,14 @@ __aicore__ inline void RsqrtImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_
     }
 }
 
-template <typename T> __aicore__ inline void NotImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+template <typename T>
+__aicore__ inline void NotImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
     static_assert(
         (SupportType<T, int8_t, uint8_t, half, float, uint16_t, int16_t, uint32_t, int32_t, uint64_t, int64_t>()),
         "current data type is not supported on current device!");
     if constexpr (SupportBytes<T, 8>()) {
-        constexpr auto func =
-            Reg::Not<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T, Reg::RegTraitNumTwo>>;
+        constexpr auto func = Reg::Not<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T, Reg::RegTraitNumTwo>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     } else {
         constexpr auto func = Reg::Not<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
@@ -674,13 +712,13 @@ template <typename T> __aicore__ inline void NotImpl(__ubuf__ T *dst, __ubuf__ T
     }
 }
 
-template <typename T> __aicore__ inline void ReluImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+template <typename T>
+__aicore__ inline void ReluImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
-    static_assert((SupportType<T, half, float, int32_t, int64_t>()),
-        "current data type is not supported on current device!");
+    static_assert(
+        (SupportType<T, half, float, int32_t, int64_t>()), "current data type is not supported on current device!");
     if constexpr (SupportBytes<T, 8>()) {
-        constexpr auto func =
-            Reg::Relu<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T, Reg::RegTraitNumTwo>>;
+        constexpr auto func = Reg::Relu<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T, Reg::RegTraitNumTwo>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     } else {
         constexpr auto func = Reg::Relu<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;
@@ -692,13 +730,14 @@ template <typename T> __aicore__ inline void ReluImpl(__ubuf__ T *dst, __ubuf__ 
  * Neg                                            *
  * ************************************************************************************************* */
 // Neg::Level 2
-template <typename T> __aicore__ inline void NegImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t count)
+template <typename T>
+__aicore__ inline void NegImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t count)
 {
-    static_assert((SupportType<T, int8_t, int16_t, int32_t, half, float, int64_t>()),
+    static_assert(
+        (SupportType<T, int8_t, int16_t, int32_t, half, float, int64_t>()),
         "current data type is not supported on current device!");
     if constexpr (SupportBytes<T, 8>()) {
-        constexpr auto func =
-            Reg::Neg<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T, Reg::RegTraitNumTwo>>;
+        constexpr auto func = Reg::Neg<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T, Reg::RegTraitNumTwo>>;
         Internal::VecUnaryLevel2ImplTemplate<func, T>(dst, src, count);
     } else {
         constexpr auto func = Reg::Neg<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>;

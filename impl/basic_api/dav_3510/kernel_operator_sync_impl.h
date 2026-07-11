@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_sync_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_3510/kernel_operator_sync_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_3510/kernel_operator_sync_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_SYNC_IMPL_H__
 #endif
@@ -24,20 +25,16 @@
 #include "../../../include/basic_api/kernel_common.h"
 
 namespace AscendC {
-__aicore__ inline void ClcSyncCount(__gm__ int32_t* localSyncGM, __ubuf__ int32_t* ubWorkspaceAddr,
-    const int32_t blockIdx, const int32_t totalBlocks, bool isFirst, int32_t& count)
+__aicore__ inline void ClcSyncCount(
+    __gm__ int32_t* localSyncGM, __ubuf__ int32_t* ubWorkspaceAddr, const int32_t blockIdx, const int32_t totalBlocks,
+    bool isFirst, int32_t& count)
 {
     if (isFirst) {
         *(reinterpret_cast<__ubuf__ int32_t*>(ubWorkspaceAddr)) = 1;
         set_flag(PIPE_S, PIPE_MTE3, EVENT_ID0);
         wait_flag(PIPE_S, PIPE_MTE3, EVENT_ID0);
-        copy_ubuf_to_gm_align_v2(static_cast<__gm__ int32_t *>(localSyncGM),
-            static_cast<__ubuf__ int32_t *>(ubWorkspaceAddr),
-            0,
-            1,
-            32,
-            0,
-            32,
+        copy_ubuf_to_gm_align_v2(
+            static_cast<__gm__ int32_t*>(localSyncGM), static_cast<__ubuf__ int32_t*>(ubWorkspaceAddr), 0, 1, 32, 0, 32,
             32);
         count = 1;
         for (int32_t i = 0; i < totalBlocks; i++) {
@@ -52,9 +49,9 @@ __aicore__ inline void ClcSyncCount(__gm__ int32_t* localSyncGM, __ubuf__ int32_
     }
 }
 
-template<bool isAIVOnly = true>
-__aicore__ inline void SoftSyncAllImpl(__gm__ int32_t* gmWorkspaceAddr, __ubuf__ int32_t* ubWorkspaceAddr,
-    const int usedCores)
+template <bool isAIVOnly = true>
+__aicore__ inline void SoftSyncAllImpl(
+    __gm__ int32_t* gmWorkspaceAddr, __ubuf__ int32_t* ubWorkspaceAddr, const int usedCores)
 {
     if ASCEND_IS_AIC {
         return;
@@ -66,48 +63,27 @@ __aicore__ inline void SoftSyncAllImpl(__gm__ int32_t* gmWorkspaceAddr, __ubuf__
     int32_t blockIdx = isAIVOnly ? get_block_idx() : GetBlockIdxImpl();
 
     __gm__ int32_t* localSyncGM = gmWorkspaceAddr + (blockIdx * DEFAULT_BLK_NUM);
-    copy_gm_to_ubuf_align_v2(static_cast<__ubuf__ int32_t *>(ubWorkspaceAddr),
-        static_cast<__gm__ int32_t *>(localSyncGM),
-        0,
-        1,
-        32,
-        0,
-        0,
-        false,
-        0,
-        32,
-        32);
+    copy_gm_to_ubuf_align_v2(
+        static_cast<__ubuf__ int32_t*>(ubWorkspaceAddr), static_cast<__gm__ int32_t*>(localSyncGM), 0, 1, 32, 0, 0,
+        false, 0, 32, 32);
     set_flag(PIPE_MTE2, PIPE_S, EVENT_ID0);
     wait_flag(PIPE_MTE2, PIPE_S, EVENT_ID0);
-    int32_t curValue = *(reinterpret_cast<__ubuf__ int32_t *>(ubWorkspaceAddr)) + 1;
+    int32_t curValue = *(reinterpret_cast<__ubuf__ int32_t*>(ubWorkspaceAddr)) + 1;
     bool isFirst = curValue == 1 ? true : false;
-    *(reinterpret_cast<__ubuf__ int32_t *>(ubWorkspaceAddr)) = curValue;
+    *(reinterpret_cast<__ubuf__ int32_t*>(ubWorkspaceAddr)) = curValue;
     set_flag(PIPE_S, PIPE_MTE3, EVENT_ID0);
     wait_flag(PIPE_S, PIPE_MTE3, EVENT_ID0);
-    copy_ubuf_to_gm_align_v2(static_cast<__gm__ int32_t *>(localSyncGM),
-        static_cast<__ubuf__ int32_t *>(ubWorkspaceAddr),
-        0,
-        1,
-        32,
-        0,
-        32,
+    copy_ubuf_to_gm_align_v2(
+        static_cast<__gm__ int32_t*>(localSyncGM), static_cast<__ubuf__ int32_t*>(ubWorkspaceAddr), 0, 1, 32, 0, 32,
         32);
     set_flag(PIPE_MTE3, PIPE_MTE2, EVENT_ID0);
     wait_flag(PIPE_MTE3, PIPE_MTE2, EVENT_ID0);
     int32_t totalBlockCount = ONE_BLK_FLOAT_NUM * totalBlocks;
     uint16_t blockLen = totalBlockCount / AscendCUtils::GetC0Count(sizeof(int32_t));
     while (true) {
-        copy_gm_to_ubuf_align_v2(static_cast<__ubuf__ int32_t *>(ubWorkspaceAddr),
-            static_cast<__gm__ int32_t *>(gmWorkspaceAddr),
-            0,
-            1,
-            blockLen * 32,
-            0,
-            0,
-            false,
-            0,
-            blockLen * 32,
-            blockLen * 32);
+        copy_gm_to_ubuf_align_v2(
+            static_cast<__ubuf__ int32_t*>(ubWorkspaceAddr), static_cast<__gm__ int32_t*>(gmWorkspaceAddr), 0, 1,
+            blockLen * 32, 0, 0, false, 0, blockLen * 32, blockLen * 32);
         set_flag(PIPE_MTE2, PIPE_S, EVENT_ID0);
         wait_flag(PIPE_MTE2, PIPE_S, EVENT_ID0);
         int32_t count = 0;
@@ -138,7 +114,7 @@ __aicore__ inline uint8_t GetIntraFlagId(uint8_t instID, uint8_t eventType, uint
     return (instID + eventType + subBlockId * INTRA_NUM);
 }
 
-template<bool isAIVOnly, pipe_t triggerPipe, pipe_t waitPipe>
+template <bool isAIVOnly, pipe_t triggerPipe, pipe_t waitPipe>
 __aicore__ inline void SyncAllImpl()
 {
 #if defined(__ASCENDC_SUPERKERNEL_AUTO_SYNC_ALL__)
@@ -147,21 +123,25 @@ __aicore__ inline void SyncAllImpl()
             g_superKernelAutoSyncAllSyncIdx += 1;
             // |    32bits  |   16bits  |   8bits   |   8bits   |
             // |  sync idx  | sync type |   is end  | is valid  |
-            *reinterpret_cast<__gm__ uint64_t *>(g_superKernelAutoSyncAllConfigGmAddr) =
-                (static_cast<uint64_t>(g_superKernelAutoSyncAllSyncIdx) << SK_AUTO_SYNC_ALL_SYNC_IDX_CONFIG_BIT_OFFSET) |
+            *reinterpret_cast<__gm__ uint64_t*>(g_superKernelAutoSyncAllConfigGmAddr) =
+                (static_cast<uint64_t>(g_superKernelAutoSyncAllSyncIdx)
+                 << SK_AUTO_SYNC_ALL_SYNC_IDX_CONFIG_BIT_OFFSET) |
                 (static_cast<uint64_t>(isAIVOnly) << SK_AUTO_SYNC_ALL_SYNC_TYPE_CONFIG_BIT_OFFSET) |
                 static_cast<uint64_t>(SK_AUTO_SYNC_ALL_VALID_MAGIC_NUM);
-            dcci(reinterpret_cast<__gm__ uint64_t *>(g_superKernelAutoSyncAllConfigGmAddr),
-                        cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
+            dcci(
+                reinterpret_cast<__gm__ uint64_t*>(g_superKernelAutoSyncAllConfigGmAddr),
+                cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
         }
     }
 #endif
 
     if constexpr (isAIVOnly) {
         if ASCEND_IS_AIV {
-            static_assert(SupportEnum<triggerPipe, PIPE_ALL, PIPE_MTE2, PIPE_MTE3>(),
+            static_assert(
+                SupportEnum<triggerPipe, PIPE_ALL, PIPE_MTE2, PIPE_MTE3>(),
                 "SyncAllConfig triggerPipe only supports PIPE_MTE2, PIPE_MTE3, PIPE_ALL on current device!");
-            static_assert(SupportEnum<waitPipe, PIPE_ALL, PIPE_MTE2, PIPE_MTE3>(),
+            static_assert(
+                SupportEnum<waitPipe, PIPE_ALL, PIPE_MTE2, PIPE_MTE3>(),
                 "SyncAllConfig waitPipe only supports PIPE_MTE2, PIPE_MTE3, PIPE_ALL on current device!");
             PipeBarrier<triggerPipe>();
             if constexpr (triggerPipe == PIPE_ALL) {
@@ -212,7 +192,7 @@ __aicore__ inline void SyncAllImpl()
 #endif
 }
 
-template<pipe_t AIV_PIPE, pipe_t AIC_PIPE>
+template <pipe_t AIV_PIPE, pipe_t AIC_PIPE>
 __aicore__ inline void SetNextTaskStartV3Impl(uint32_t earlyStartConfig)
 {
     if ASCEND_IS_AIC {
@@ -227,7 +207,7 @@ __aicore__ inline void SetNextTaskStartV3Impl(uint32_t earlyStartConfig)
     }
 }
 
-template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
+template <pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
 __aicore__ inline void SetNextTaskStartImpl()
 {
 #if defined(__ASCENDC_SUPERKERNEL_EARLY_START_V1) || defined(__ASCENDC_SUPERKERNEL_EARLY_START_V2)
@@ -246,10 +226,10 @@ __aicore__ inline void SetNextTaskStartImpl()
 #endif
 }
 
-template<int8_t enableTightSync = -1>
+template <int8_t enableTightSync = -1>
 __aicore__ inline void WaitPreTaskEndV1Impl()
 {
-    if constexpr(enableTightSync){
+    if constexpr (enableTightSync) {
         if ASCEND_IS_AIC {
             wait_flag_dev(PIPE_S, AscendC::SYNC_AIC_FLAG);
             set_intra_block(PIPE_MTE3, AscendC::SYNC_AIC_AIV_FLAG);
@@ -362,7 +342,7 @@ __aicore__ inline void WaitPreTaskEndTightV2DefaultImpl()
 #endif
 }
 
-template<int8_t earlyStartConfig = -1>
+template <int8_t earlyStartConfig = -1>
 __aicore__ inline void WaitPreTaskEndTightV2Impl()
 {
 #if defined(__ASCENDC_SUPERKERNEL_EARLY_START_V2)
@@ -450,7 +430,7 @@ __aicore__ inline void WaitPreTaskEndTightV2Impl()
 #endif
 }
 
-template<int8_t earlyStartConfig = -1>
+template <int8_t earlyStartConfig = -1>
 __aicore__ inline void WaitPreTaskEndTightImpl()
 {
 #ifdef __ASCENDC_SUPERKERNEL_EARLY_START_V1
@@ -538,7 +518,7 @@ __aicore__ inline void WaitPreTaskEndLooseV2DefaultImpl()
 #endif
 }
 
-template<int8_t earlyStartConfig = -1>
+template <int8_t earlyStartConfig = -1>
 __aicore__ inline void WaitPreTaskEndLooseV2Impl()
 {
 #if defined(__ASCENDC_SUPERKERNEL_EARLY_START_V2)
@@ -618,7 +598,7 @@ __aicore__ inline void WaitPreTaskEndLooseV2Impl()
 #endif
 }
 
-template<int8_t earlyStartConfig = -1>
+template <int8_t earlyStartConfig = -1>
 __aicore__ inline void WaitPreTaskEndLooseImpl()
 {
 #ifdef __ASCENDC_SUPERKERNEL_EARLY_START_V1
@@ -692,7 +672,7 @@ __aicore__ inline void WaitPreTaskEndV3Impl(uint32_t earlyStartConfig)
 }
 
 // optimize if-else scalar cost, will be called only in superkernel.cpp
-template<int8_t earlyStartConfig = -1, bool FORCE = false>
+template <int8_t earlyStartConfig = -1, bool FORCE = false>
 __aicore__ inline void WaitPreTaskEndImpl()
 {
 #if defined(__ASCENDC_SUPERKERNEL_EARLY_START_V1) || defined(__ASCENDC_SUPERKERNEL_EARLY_START_V2)
@@ -711,7 +691,8 @@ __aicore__ inline void WaitPreTaskEndImpl()
 }
 
 #if defined(__ASCENDC_SUPERKERNEL_AUTO_SYNC_ALL__)
-template <bool isAIVOnly = true> __aicore__ inline void SuperKernelAutoSyncAllImpl()
+template <bool isAIVOnly = true>
+__aicore__ inline void SuperKernelAutoSyncAllImpl()
 {
     if constexpr (isAIVOnly) {
         if ASCEND_IS_AIV {
@@ -741,19 +722,22 @@ template <bool isAIVOnly = true> __aicore__ inline void SuperKernelAutoSyncAllIm
     }
 }
 
-template <bool isAIVOnly = true> __aicore__ inline void SuperKernelAutoSyncAllEndImpl()
+template <bool isAIVOnly = true>
+__aicore__ inline void SuperKernelAutoSyncAllEndImpl()
 {
     if (g_superKernelAutoSyncAllEnable) {
         if (GetBlockIdxImpl() == 0) {
             g_superKernelAutoSyncAllSyncIdx += 1;
             // |    32bits  |   16bits  |   8bits   |   8bits   |
             // |  sync idx  | sync type |   is end  | is valid  |
-            *reinterpret_cast<__gm__ uint64_t *>(g_superKernelAutoSyncAllConfigGmAddr) =
-                (static_cast<uint64_t>(g_superKernelAutoSyncAllSyncIdx) << SK_AUTO_SYNC_ALL_SYNC_IDX_CONFIG_BIT_OFFSET) |
+            *reinterpret_cast<__gm__ uint64_t*>(g_superKernelAutoSyncAllConfigGmAddr) =
+                (static_cast<uint64_t>(g_superKernelAutoSyncAllSyncIdx)
+                 << SK_AUTO_SYNC_ALL_SYNC_IDX_CONFIG_BIT_OFFSET) |
                 (static_cast<uint64_t>(1) << SK_AUTO_SYNC_ALL_IS_END_CONFIG_BIT_OFFSET) |
                 static_cast<uint64_t>(SK_AUTO_SYNC_ALL_VALID_MAGIC_NUM);
-            dcci(reinterpret_cast<__gm__ uint64_t *>(g_superKernelAutoSyncAllConfigGmAddr),
-                        cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
+            dcci(
+                reinterpret_cast<__gm__ uint64_t*>(g_superKernelAutoSyncAllConfigGmAddr),
+                cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
         }
     }
 }
@@ -765,14 +749,18 @@ __aicore__ inline void SuperKernelAutoSyncAllComplementImpl()
     }
     while (1) {
         SuperKernelAutoSyncAllDcciBarrier();
-        dcci(reinterpret_cast<__gm__ uint64_t *>(g_superKernelAutoSyncAllConfigGmAddr),
-            cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
+        dcci(
+            reinterpret_cast<__gm__ uint64_t*>(g_superKernelAutoSyncAllConfigGmAddr), cache_line_t::SINGLE_CACHE_LINE,
+            dcci_dst_t::CACHELINE_OUT);
         SuperKernelAutoSyncAllDcciBarrier();
 
-        uint64_t tmpAutoSyncAllConfig = *reinterpret_cast<__gm__ uint64_t *>(g_superKernelAutoSyncAllConfigGmAddr);
-        uint32_t currentSyncIdx = static_cast<uint32_t>(tmpAutoSyncAllConfig >> SK_AUTO_SYNC_ALL_SYNC_IDX_CONFIG_BIT_OFFSET);
-        uint16_t syncType = static_cast<uint16_t>((tmpAutoSyncAllConfig & 0xffff0000) >> SK_AUTO_SYNC_ALL_SYNC_TYPE_CONFIG_BIT_OFFSET);
-        uint8_t isSyncEnd = static_cast<uint8_t>((tmpAutoSyncAllConfig & 0xff00) >> SK_AUTO_SYNC_ALL_IS_END_CONFIG_BIT_OFFSET);
+        uint64_t tmpAutoSyncAllConfig = *reinterpret_cast<__gm__ uint64_t*>(g_superKernelAutoSyncAllConfigGmAddr);
+        uint32_t currentSyncIdx =
+            static_cast<uint32_t>(tmpAutoSyncAllConfig >> SK_AUTO_SYNC_ALL_SYNC_IDX_CONFIG_BIT_OFFSET);
+        uint16_t syncType =
+            static_cast<uint16_t>((tmpAutoSyncAllConfig & 0xffff0000) >> SK_AUTO_SYNC_ALL_SYNC_TYPE_CONFIG_BIT_OFFSET);
+        uint8_t isSyncEnd =
+            static_cast<uint8_t>((tmpAutoSyncAllConfig & 0xff00) >> SK_AUTO_SYNC_ALL_IS_END_CONFIG_BIT_OFFSET);
         uint8_t validNum = static_cast<uint8_t>(tmpAutoSyncAllConfig & 0xff);
         if (validNum != SK_AUTO_SYNC_ALL_VALID_MAGIC_NUM) {
             trap();
@@ -801,13 +789,13 @@ __aicore__ inline void SuperKernelAutoSyncAllComplementImpl()
 template <uint8_t modeId, pipe_t pipe>
 __aicore__ inline void NotifyEventImpl(uint16_t flagId)
 {
-    if constexpr(modeId == 4) {
+    if constexpr (modeId == 4) {
         if constexpr (IsSplitVectorPipe<pipe>()) {
             if ASCEND_IS_AIV {
                 set_intra_block(pipe, flagId);
             }
         }
-        if constexpr (IsSplitCubePipe<pipe>()){
+        if constexpr (IsSplitCubePipe<pipe>()) {
             if ASCEND_IS_AIC {
                 set_intra_block(pipe, flagId);
             }
@@ -818,7 +806,7 @@ __aicore__ inline void NotifyEventImpl(uint16_t flagId)
                 ffts_cross_core_sync(pipe, GetffstMsg(modeId, flagId));
             }
         }
-        if constexpr (IsSplitCubePipe<pipe>()){
+        if constexpr (IsSplitCubePipe<pipe>()) {
             if ASCEND_IS_AIC {
                 ffts_cross_core_sync(pipe, GetffstMsg(modeId, flagId));
             }
@@ -829,13 +817,13 @@ __aicore__ inline void NotifyEventImpl(uint16_t flagId)
 template <uint8_t modeId, pipe_t pipe>
 __aicore__ inline void WaitEventImpl(uint16_t flagId)
 {
-    if constexpr(modeId == 4) {
+    if constexpr (modeId == 4) {
         if constexpr (IsSplitVectorPipe<pipe>()) {
             if ASCEND_IS_AIV {
                 wait_intra_block(pipe, flagId);
             }
         }
-        if constexpr (IsSplitCubePipe<pipe>()){
+        if constexpr (IsSplitCubePipe<pipe>()) {
             if ASCEND_IS_AIC {
                 wait_intra_block(pipe, flagId);
             }
@@ -846,7 +834,7 @@ __aicore__ inline void WaitEventImpl(uint16_t flagId)
                 wait_flag_dev(pipe, flagId);
             }
         }
-        if constexpr (IsSplitCubePipe<pipe>()){
+        if constexpr (IsSplitCubePipe<pipe>()) {
             if ASCEND_IS_AIC {
                 wait_flag_dev(pipe, flagId);
             }
@@ -854,15 +842,9 @@ __aicore__ inline void WaitEventImpl(uint16_t flagId)
     }
 }
 
-__aicore__ inline void SetSyncBaseAddrImpl(uint64_t config)
-{
-    return;
-}
+__aicore__ inline void SetSyncBaseAddrImpl(uint64_t config) { return; }
 
-__aicore__ inline void SetSyncBaseAddr(uint64_t config)
-{
-    SetSyncBaseAddrImpl(config);
-}
+__aicore__ inline void SetSyncBaseAddr(uint64_t config) { SetSyncBaseAddrImpl(config); }
 } // namespace AscendC
 #endif // ASCENDC_MODULE_OPERATOR_SYNC_IMPL_H
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_SYNC_IMPL_H__)

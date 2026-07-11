@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_scalar_convert.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_scalar_convert.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_scalar_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_scalar_convert.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_scalar_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_SCALAR_CONVERT_H__
 #endif
@@ -24,9 +25,8 @@
 #include "../utils/std/type_traits/enable_if.h"
 
 namespace AscendC {
-#if defined(__NPU_ARCH__) &&                                    \
-        ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3002) ||    \
-         (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
+#if defined(__NPU_ARCH__) && \
+    ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
 __aicore__ inline bfloat16_t Cast(const float& fVal)
 {
     constexpr uint32_t fp32SignIdx = 31;
@@ -54,7 +54,7 @@ __aicore__ inline bfloat16_t Cast(const float& fVal)
         u16Num = bf16AbsMax;
         return GetScalarBitcodeValue<uint16_t, bfloat16_t>(u16Num);
     }
-    uint32_t expFp = ((u32Val) & FP32_EXP_PART_MASK) >> fp32ManLen;
+    uint32_t expFp = ((u32Val)&FP32_EXP_PART_MASK) >> fp32ManLen;
     uint32_t manFp = (u32Val & FP32_MAN_PART_MASK); // 23 bit mantissa don't need to care about denormal
     manFp = (manFp | fp32ManHideBit);
 
@@ -74,27 +74,27 @@ __aicore__ inline bfloat16_t Cast(const float& fVal)
     if (mRet > (bf16ManHideBit | bf16ManMask)) {
         ++eRet;
     }
-    u16Num = ((sign) << bf16SignIndex) | ((eRet) << bf16ManLen) | ((mRet) & bf16MaxMan);
+    u16Num = ((sign) << bf16SignIndex) | ((eRet) << bf16ManLen) | ((mRet)&bf16MaxMan);
     return GetScalarBitcodeValue<uint16_t, bfloat16_t>(u16Num);
 }
 
 // ToBfloat16 has been updated, please use Cast instead.
-__aicore__ inline bfloat16_t ToBfloat16(const float& fVal)
-{
-    return Cast(fVal);
-}
+__aicore__ inline bfloat16_t ToBfloat16(const float& fVal) { return Cast(fVal); }
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-template <typename T, typename U = float,
-          typename = Std::enable_if_t<
-          (Std::is_same<T, bfloat16_t>::value || Std::is_same<T, hifloat8_t>::value ||
-           Std::is_same<T, fp8_e5m2_t>::value || Std::is_same<T, fp8_e4m3fn_t>::value ||
-           Std::is_same<T, fp4x2_e1m2_t>::value || Std::is_same<T, fp4x2_e2m1_t>::value),
-          void>>
+template <
+    typename T, typename U = float,
+    typename = Std::enable_if_t<
+        (Std::is_same<T, bfloat16_t>::value || Std::is_same<T, hifloat8_t>::value ||
+         Std::is_same<T, fp8_e5m2_t>::value || Std::is_same<T, fp8_e4m3fn_t>::value ||
+         Std::is_same<T, fp4x2_e1m2_t>::value || Std::is_same<T, fp4x2_e2m1_t>::value),
+        void>>
 __aicore__ constexpr inline U Cast(T bVal)
 {
-    static_assert(SupportType<T, bfloat16_t, hifloat8_t, fp8_e5m2_t, fp8_e4m3fn_t, fp4x2_e1m2_t, fp4x2_e2m1_t>(),
-        "Cast to float only support bfloat16_t/hifloat8_t/fp8_e5m2_t/fp8_e4m3fn_t/fp4x2_e1m2_t/fp4x2_e2m1_t data type on current device!");
+    static_assert(
+        SupportType<T, bfloat16_t, hifloat8_t, fp8_e5m2_t, fp8_e4m3fn_t, fp4x2_e1m2_t, fp4x2_e2m1_t>(),
+        "Cast to float only support bfloat16_t/hifloat8_t/fp8_e5m2_t/fp8_e4m3fn_t/fp4x2_e1m2_t/fp4x2_e2m1_t data type "
+        "on current device!");
     static_assert(SupportType<U, float>(), "Cast to float only support return float");
     uint8_t uiNum = 0;
     uint32_t result = 0;
@@ -108,7 +108,7 @@ __aicore__ constexpr inline U Cast(T bVal)
         return GetScalarBitcodeValue<uint32_t, float>(result);
     } else if constexpr (IsSameType<T, fp8_e5m2_t>::value) {
         uiNum = GetScalarBitcodeValue<fp8_e5m2_t, uint8_t>(bVal);
-        result  = FPTranslation::Fp8e5m2ToFp32(uiNum);
+        result = FPTranslation::Fp8e5m2ToFp32(uiNum);
         return GetScalarBitcodeValue<uint32_t, float>(result);
     } else if constexpr (IsSameType<T, fp8_e4m3fn_t>::value) {
         uiNum = GetScalarBitcodeValue<fp8_e4m3fn_t, uint8_t>(bVal);
@@ -130,8 +130,10 @@ __aicore__ constexpr inline U Cast(T bVal)
 template <typename T>
 __aicore__ constexpr inline float ToFloat(const T& bVal)
 {
-    static_assert(SupportType<T, bfloat16_t, hifloat8_t, fp8_e5m2_t, fp8_e4m3fn_t, fp4x2_e1m2_t, fp4x2_e2m1_t>(),
-        "ToFloat only support bfloat16_t/hifloat8_t/fp8_e5m2_t/fp8_e4m3fn_t/fp4x2_e1m2_t/fp4x2_e2m1_t data type on current device!");
+    static_assert(
+        SupportType<T, bfloat16_t, hifloat8_t, fp8_e5m2_t, fp8_e4m3fn_t, fp4x2_e1m2_t, fp4x2_e2m1_t>(),
+        "ToFloat only support bfloat16_t/hifloat8_t/fp8_e5m2_t/fp8_e4m3fn_t/fp4x2_e1m2_t/fp4x2_e2m1_t data type on "
+        "current device!");
     return Cast<T, float>(bVal);
 }
 
@@ -155,10 +157,7 @@ __aicore__ inline float Cast(const bfloat16_t& bVal)
 }
 
 // ToFloat has been updated, please use Cast instead.
-__aicore__ inline float ToFloat(const bfloat16_t& bVal)
-{
-    return Cast(bVal);
-}
+__aicore__ inline float ToFloat(const bfloat16_t& bVal) { return Cast(bVal); }
 #endif
 #elif defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113))
 template <typename T>

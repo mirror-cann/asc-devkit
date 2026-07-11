@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_reduce_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_m310/kernel_operator_vec_reduce_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tpipe.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_m310/kernel_operator_vec_reduce_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tpipe.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_REDUCE_IMPL_H__
 #endif
@@ -38,10 +39,10 @@ namespace AscendC {
         vector_##vregType vreg0;                                                  \
         vector_##vregType vreg1;                                                  \
         vector_align ureg;                                                        \
-        uint32_t sreg = static_cast<uint32_t>(mask);                                           \
+        uint32_t sreg = static_cast<uint32_t>(mask);                              \
         vector_bool preg = plt_##pltType(sreg, POST_UPDATE);                      \
-        uint32_t strideConfig = ((static_cast<uint32_t>(srcBlkStride)) << 16);                 \
-        for (uint16_t i = 0; i < static_cast<uint16_t>(newRepeat); ++i) {                      \
+        uint32_t strideConfig = ((static_cast<uint32_t>(srcBlkStride)) << 16);    \
+        for (uint16_t i = 0; i < static_cast<uint16_t>(newRepeat); ++i) {         \
             vsldb(vreg0, newSrc + i * srcStrideOffset, strideConfig, preg);       \
             reduceFunc();                                                         \
             vstus(ureg, dstStrideOffset, vreg1, dst, POST_UPDATE);                \
@@ -57,8 +58,8 @@ namespace AscendC {
         vector_align ureg;                                                        \
         vector_bool preg;                                                         \
         plds(preg, ((__ubuf__ uint32_t*)tempBuf), 0, US);                         \
-        uint32_t strideConfig = ((static_cast<uint32_t>(srcBlkStride)) << 16);                 \
-        for (uint16_t i = 0; i < static_cast<uint16_t>(newRepeat); ++i) {                      \
+        uint32_t strideConfig = ((static_cast<uint32_t>(srcBlkStride)) << 16);    \
+        for (uint16_t i = 0; i < static_cast<uint16_t>(newRepeat); ++i) {         \
             vsldb(vreg0, newSrc + i * srcStrideOffset, strideConfig, preg);       \
             reduceFunc();                                                         \
             vstus(ureg, dstStrideOffset, vreg1, dst, POST_UPDATE);                \
@@ -76,8 +77,8 @@ namespace AscendC {
         vector_bool preg1;                                                        \
         plds(preg1, ((__ubuf__ uint32_t*)tempBuf), 0, US);                        \
         punpack(preg, preg1, LOWER);                                              \
-        uint32_t strideConfig = ((static_cast<uint32_t>(srcBlkStride)) << 16);                 \
-        for (uint16_t i = 0; i < static_cast<uint16_t>(newRepeat); ++i) {                      \
+        uint32_t strideConfig = ((static_cast<uint32_t>(srcBlkStride)) << 16);    \
+        for (uint16_t i = 0; i < static_cast<uint16_t>(newRepeat); ++i) {         \
             vsldb(vreg0, newSrc + i * srcStrideOffset, strideConfig, preg);       \
             reduceFunc();                                                         \
             vstus(ureg, dstStrideOffset, vreg1, dst, POST_UPDATE);                \
@@ -87,22 +88,25 @@ namespace AscendC {
 
 /* **************************************** Pair Reduce Impl ****************************************** */
 template <typename T, bool isSetMask = true>
-__aicore__ inline void PairReduceSumImpl(__ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const int32_t mask,
-    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void PairReduceSumImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void PairReduceSumImpl(__ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const uint64_t mask[],
-    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void PairReduceSumImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void PairReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void PairReduceSumImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -126,8 +130,9 @@ __aicore__ inline void PairReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src,
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void PairReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void PairReduceSumImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime, const uint64_t mask[],
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -151,8 +156,9 @@ __aicore__ inline void PairReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* sr
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void PairReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime,
-    const int32_t mask, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void PairReduceSumImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_HALF_NUM;
@@ -168,8 +174,9 @@ __aicore__ inline void PairReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src,
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void PairReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime,
-    const int32_t mask, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void PairReduceSumImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_FLOAT_NUM;
@@ -186,21 +193,24 @@ __aicore__ inline void PairReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* sr
 
 /* **************************************** Block Reduce Impl ****************************************** */
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceSumImpl(__ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceSumImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceSumImpl(__ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const int32_t mask,
-    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceSumImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void BlockReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceSumImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -225,8 +235,9 @@ __aicore__ inline void BlockReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void BlockReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceSumImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime, const uint64_t mask[],
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -251,8 +262,9 @@ __aicore__ inline void BlockReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void BlockReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime,
-    const int32_t mask, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceSumImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_HALF_NUM;
@@ -268,8 +280,9 @@ __aicore__ inline void BlockReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void BlockReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime,
-    const int32_t mask, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceSumImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_FLOAT_NUM;
@@ -285,22 +298,25 @@ __aicore__ inline void BlockReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceMaxImpl(__ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMaxImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceMaxImpl(__ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const int32_t mask,
-    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMaxImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void BlockReduceMaxImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMaxImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -324,8 +340,9 @@ __aicore__ inline void BlockReduceMaxImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void BlockReduceMaxImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime,
-    const int32_t mask, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMaxImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_HALF_NUM;
@@ -341,8 +358,9 @@ __aicore__ inline void BlockReduceMaxImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void BlockReduceMaxImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMaxImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime, const uint64_t mask[],
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -366,8 +384,9 @@ __aicore__ inline void BlockReduceMaxImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void BlockReduceMaxImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime,
-    const int32_t mask, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMaxImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_FLOAT_NUM;
@@ -383,22 +402,25 @@ __aicore__ inline void BlockReduceMaxImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceMinImpl(__ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMinImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceMinImpl(__ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const int32_t mask,
-    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMinImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void BlockReduceMinImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMinImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -423,8 +445,9 @@ __aicore__ inline void BlockReduceMinImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void BlockReduceMinImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime,
-    const int32_t mask, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMinImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_HALF_NUM;
@@ -440,8 +463,9 @@ __aicore__ inline void BlockReduceMinImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void BlockReduceMinImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMinImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime, const uint64_t mask[],
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -465,8 +489,9 @@ __aicore__ inline void BlockReduceMinImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void BlockReduceMinImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime,
-    const int32_t mask, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMinImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t repeatTime, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_FLOAT_NUM;
@@ -482,34 +507,34 @@ __aicore__ inline void BlockReduceMinImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void RepeatReduceSumImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const int32_t repeatTime,
-    const int32_t elemsInOneRepeat, const int32_t dstBlkStride, const int32_t srcBlkStride, const int32_t dstRepStride,
-    const int32_t srcRepStride)
+__aicore__ inline void RepeatReduceSumImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const int32_t repeatTime, const int32_t elemsInOneRepeat,
+    const int32_t dstBlkStride, const int32_t srcBlkStride, const int32_t dstRepStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 /* **************************************** Whole Reduce Interface ****************************************** */
 template <typename T, bool isSetMask = true>
-__aicore__ inline void WholeReduceMaxImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMaxImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void WholeReduceMaxImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMaxImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void WholeReduceMaxImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t mask,
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMaxImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t mask, const int32_t repeatTime, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_HALF_NUM;
@@ -541,9 +566,9 @@ __aicore__ inline void WholeReduceMaxImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void WholeReduceMaxImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t mask,
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMaxImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t mask, const int32_t repeatTime, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_FLOAT_NUM;
@@ -575,9 +600,9 @@ __aicore__ inline void WholeReduceMaxImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void WholeReduceMaxImpl(__ubuf__ half* dst, __ubuf__ half* src, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMaxImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const uint64_t mask[], const int32_t repeatTime, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -618,9 +643,9 @@ __aicore__ inline void WholeReduceMaxImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void WholeReduceMaxImpl(__ubuf__ float* dst, __ubuf__ float* src, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMaxImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -663,25 +688,25 @@ __aicore__ inline void WholeReduceMaxImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void WholeReduceMinImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMinImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void WholeReduceMinImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMinImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void WholeReduceMinImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t mask,
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMinImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t mask, const int32_t repeatTime, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_HALF_NUM;
@@ -713,9 +738,9 @@ __aicore__ inline void WholeReduceMinImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void WholeReduceMinImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t mask,
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMinImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t mask, const int32_t repeatTime, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_FLOAT_NUM;
@@ -747,9 +772,9 @@ __aicore__ inline void WholeReduceMinImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void WholeReduceMinImpl(__ubuf__ half* dst, __ubuf__ half* src, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMinImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const uint64_t mask[], const int32_t repeatTime, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -791,9 +816,9 @@ __aicore__ inline void WholeReduceMinImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void WholeReduceMinImpl(__ubuf__ float* dst, __ubuf__ float* src, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMinImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -836,22 +861,25 @@ __aicore__ inline void WholeReduceMinImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void WholeReduceSumImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void WholeReduceSumImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void WholeReduceSumImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void WholeReduceSumImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void WholeReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src, const int32_t mask,
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void WholeReduceSumImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const int32_t mask, const int32_t repeatTime, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_HALF_NUM;
@@ -867,8 +895,9 @@ __aicore__ inline void WholeReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void WholeReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* src, const int32_t mask,
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void WholeReduceSumImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const int32_t mask, const int32_t repeatTime, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     int32_t newRepeat = repeatTime;
     uint32_t srcStrideOffset = srcRepStride * ONE_BLK_FLOAT_NUM;
@@ -884,8 +913,9 @@ __aicore__ inline void WholeReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* s
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void WholeReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void WholeReduceSumImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, const uint64_t mask[], const int32_t repeatTime, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -910,8 +940,9 @@ __aicore__ inline void WholeReduceSumImpl(__ubuf__ half* dst, __ubuf__ half* src
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void WholeReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* src, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void WholeReduceSumImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     (*(__ubuf__ uint64_t*)((__ubuf__ uint64_t*)tempBuf)) = (static_cast<uint64_t>(mask[0]));
@@ -937,21 +968,24 @@ __aicore__ inline void WholeReduceSumImpl(__ubuf__ float* dst, __ubuf__ float* s
 
 /* **************************************** Reduce Interface ****************************************** */
 template <typename T>
-__aicore__ inline void ReduceMaxIntrinsicsImpl(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMaxIntrinsicsImpl(
+    __ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "ReduceMaxIntrinsicsImpl is not supported!"); });
 }
 
 template <typename T>
-__aicore__ inline void ReduceMaxIntrinsicsImpl(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMaxIntrinsicsImpl(
+    __ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "ReduceMaxIntrinsicsImpl is not supported!"); });
 }
 
-__aicore__ inline void ReduceMaxIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMaxIntrinsicsImpl(
+    __ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __VEC_SCOPE__
     {
@@ -971,8 +1005,9 @@ __aicore__ inline void ReduceMaxIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, _
     }
 }
 
-__aicore__ inline void ReduceMaxIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal,
-    const uint64_t mask[], const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMaxIntrinsicsImpl(
+    __ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tempBuf) = mask[0];
@@ -1000,8 +1035,9 @@ __aicore__ inline void ReduceMaxIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, _
     AscendCUtils::FreeTemporaryBuffer<uint8_t>(tempBuf);
 }
 
-__aicore__ inline void ReduceMaxIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMaxIntrinsicsImpl(
+    __ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __VEC_SCOPE__
     {
@@ -1021,8 +1057,9 @@ __aicore__ inline void ReduceMaxIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, 
     }
 }
 
-__aicore__ inline void ReduceMaxIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal,
-    const uint64_t mask[], const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMaxIntrinsicsImpl(
+    __ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tempBuf) = mask[0];
@@ -1053,21 +1090,24 @@ __aicore__ inline void ReduceMaxIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, 
 }
 
 template <typename T>
-__aicore__ inline void ReduceMinIntrinsicsImpl(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMinIntrinsicsImpl(
+    __ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "ReduceMinIntrinsicsImpl is not supported!"); });
 }
 
 template <typename T>
-__aicore__ inline void ReduceMinIntrinsicsImpl(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMinIntrinsicsImpl(
+    __ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "ReduceMinIntrinsicsImpl is not supported!"); });
 }
 
-__aicore__ inline void ReduceMinIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMinIntrinsicsImpl(
+    __ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __VEC_SCOPE__
     {
@@ -1087,8 +1127,9 @@ __aicore__ inline void ReduceMinIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, _
     }
 }
 
-__aicore__ inline void ReduceMinIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal,
-    const uint64_t mask[], const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMinIntrinsicsImpl(
+    __ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tempBuf) = mask[0];
@@ -1116,8 +1157,9 @@ __aicore__ inline void ReduceMinIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, _
     AscendCUtils::FreeTemporaryBuffer<uint8_t>(tempBuf);
 }
 
-__aicore__ inline void ReduceMinIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMinIntrinsicsImpl(
+    __ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __VEC_SCOPE__
     {
@@ -1137,8 +1179,9 @@ __aicore__ inline void ReduceMinIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, 
     }
 }
 
-__aicore__ inline void ReduceMinIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal,
-    const uint64_t mask[], const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceMinIntrinsicsImpl(
+    __ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tempBuf) = mask[0];
@@ -1169,21 +1212,24 @@ __aicore__ inline void ReduceMinIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, 
 }
 
 template <typename T>
-__aicore__ inline void ReduceSumIntrinsicsImpl(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceSumIntrinsicsImpl(
+    __ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "ReduceSumIntrinsicsImpl is not supported!"); });
 }
 
 template <typename T>
-__aicore__ inline void ReduceSumIntrinsicsImpl(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const uint64_t mask[],
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceSumIntrinsicsImpl(
+    __ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "ReduceSumIntrinsicsImpl is not supported!"); });
 }
 
-__aicore__ inline void ReduceSumIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceSumIntrinsicsImpl(
+    __ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __VEC_SCOPE__
     {
@@ -1203,8 +1249,9 @@ __aicore__ inline void ReduceSumIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, _
     }
 }
 
-__aicore__ inline void ReduceSumIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal,
-    const uint64_t mask[], const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceSumIntrinsicsImpl(
+    __ubuf__ half* sharedTmpBuffer, __ubuf__ half* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tempBuf) = mask[0];
@@ -1232,8 +1279,9 @@ __aicore__ inline void ReduceSumIntrinsicsImpl(__ubuf__ half* sharedTmpBuffer, _
     AscendCUtils::FreeTemporaryBuffer<uint8_t>(tempBuf);
 }
 
-__aicore__ inline void ReduceSumIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal, const int32_t mask,
-    const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceSumIntrinsicsImpl(
+    __ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal, const int32_t mask, const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __VEC_SCOPE__
     {
@@ -1253,8 +1301,9 @@ __aicore__ inline void ReduceSumIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, 
     }
 }
 
-__aicore__ inline void ReduceSumIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal,
-    const uint64_t mask[], const int32_t repeatTime, const int32_t srcRepStride)
+__aicore__ inline void ReduceSumIntrinsicsImpl(
+    __ubuf__ float* sharedTmpBuffer, __ubuf__ float* srcLocal, const uint64_t mask[], const int32_t repeatTime,
+    const int32_t srcRepStride)
 {
     __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tempBuf) = mask[0];
@@ -1285,8 +1334,8 @@ __aicore__ inline void ReduceSumIntrinsicsImpl(__ubuf__ float* sharedTmpBuffer, 
 }
 
 template <typename T>
-__aicore__ inline void ReduceSumSecondStep(__ubuf__ T* dstLocal, __ubuf__ T* sharedTmpBuffer,
-    struct ReduceRepeatParams& params)
+__aicore__ inline void ReduceSumSecondStep(
+    __ubuf__ T* dstLocal, __ubuf__ T* sharedTmpBuffer, struct ReduceRepeatParams& params)
 {
     int32_t dstOffset = 0;
     int32_t srcOffset = 0;
@@ -1295,7 +1344,8 @@ __aicore__ inline void ReduceSumSecondStep(__ubuf__ T* dstLocal, __ubuf__ T* sha
     int32_t leftData = params.repeatTimes % elementNumPerRep;
 
     if (newRepeatTimes != 0) {
-        ReduceSumIntrinsicsImpl(sharedTmpBuffer, sharedTmpBuffer, elementNumPerRep, newRepeatTimes, DEFAULT_REPEAT_STRIDE);
+        ReduceSumIntrinsicsImpl(
+            sharedTmpBuffer, sharedTmpBuffer, elementNumPerRep, newRepeatTimes, DEFAULT_REPEAT_STRIDE);
     }
 
     if (leftData > 0) { // has_tail
@@ -1330,22 +1380,22 @@ __aicore__ inline void CreateSpecialFormatMask(const int32_t& maskLen, uint64_t&
 }
 
 template <typename T>
-__aicore__ inline void ReduceOperation(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, struct ReduceRepeatParams& params,
-    const ReduceMode& mode)
+__aicore__ inline void ReduceOperation(
+    __ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, struct ReduceRepeatParams& params, const ReduceMode& mode)
 {
     if (params.maskMode == 1) {
         switch (mode) {
             case ReduceMode::REDUCE_MAX:
-                ReduceMaxIntrinsicsImpl(sharedTmpBuffer, srcLocal, params.normalMask, params.repeatTimes,
-                    params.srcRepStride);
+                ReduceMaxIntrinsicsImpl(
+                    sharedTmpBuffer, srcLocal, params.normalMask, params.repeatTimes, params.srcRepStride);
                 break;
             case ReduceMode::REDUCE_MIN:
-                ReduceMinIntrinsicsImpl(sharedTmpBuffer, srcLocal, params.normalMask, params.repeatTimes,
-                    params.srcRepStride);
+                ReduceMinIntrinsicsImpl(
+                    sharedTmpBuffer, srcLocal, params.normalMask, params.repeatTimes, params.srcRepStride);
                 break;
             case ReduceMode::REDUCE_SUM:
-                ReduceSumIntrinsicsImpl(sharedTmpBuffer, srcLocal, params.normalMask, params.repeatTimes,
-                    params.srcRepStride);
+                ReduceSumIntrinsicsImpl(
+                    sharedTmpBuffer, srcLocal, params.normalMask, params.repeatTimes, params.srcRepStride);
                 break;
             default:
                 break;
@@ -1353,13 +1403,16 @@ __aicore__ inline void ReduceOperation(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* 
     } else {
         switch (mode) {
             case ReduceMode::REDUCE_MAX:
-                ReduceMaxIntrinsicsImpl(sharedTmpBuffer, srcLocal, params.bitMask, params.repeatTimes, params.srcRepStride);
+                ReduceMaxIntrinsicsImpl(
+                    sharedTmpBuffer, srcLocal, params.bitMask, params.repeatTimes, params.srcRepStride);
                 break;
             case ReduceMode::REDUCE_MIN:
-                ReduceMinIntrinsicsImpl(sharedTmpBuffer, srcLocal, params.bitMask, params.repeatTimes, params.srcRepStride);
+                ReduceMinIntrinsicsImpl(
+                    sharedTmpBuffer, srcLocal, params.bitMask, params.repeatTimes, params.srcRepStride);
                 break;
             case ReduceMode::REDUCE_SUM:
-                ReduceSumIntrinsicsImpl(sharedTmpBuffer, srcLocal, params.bitMask, params.repeatTimes, params.srcRepStride);
+                ReduceSumIntrinsicsImpl(
+                    sharedTmpBuffer, srcLocal, params.bitMask, params.repeatTimes, params.srcRepStride);
                 break;
             default:
                 break;
@@ -1368,8 +1421,9 @@ __aicore__ inline void ReduceOperation(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* 
 }
 
 template <typename T>
-__aicore__ inline void ReduceImplFirstStep(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal,
-    struct ReduceRepeatParams& params, const ReduceMode& mode, int32_t& curData)
+__aicore__ inline void ReduceImplFirstStep(
+    __ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, struct ReduceRepeatParams& params, const ReduceMode& mode,
+    int32_t& curData)
 {
     int32_t dstOffset = 0;
     int32_t srcOffset = 0;
@@ -1394,8 +1448,8 @@ __aicore__ inline void ReduceImplFirstStep(__ubuf__ T* sharedTmpBuffer, __ubuf__
 }
 
 template <typename T>
-__aicore__ inline void ReduceImplSecondStep(__ubuf__ T* sharedTmpBuffer, const ReduceMode& mode, int32_t& curData,
-    int32_t preStartPos, int32_t secondStartPos)
+__aicore__ inline void ReduceImplSecondStep(
+    __ubuf__ T* sharedTmpBuffer, const ReduceMode& mode, int32_t& curData, int32_t preStartPos, int32_t secondStartPos)
 {
     int32_t dstOffset = 0;
     int32_t srcOffset = 0;
@@ -1413,8 +1467,8 @@ __aicore__ inline void ReduceImplSecondStep(__ubuf__ T* sharedTmpBuffer, const R
         lowMask = 0x5555555555555555;
         newMask[0] = lowMask;
         newMask[1] = highMask;
-        struct ReduceRepeatParams newParams(newMask, newRepeatTimes, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE,
-            DEFAULT_REPEAT_STRIDE);
+        struct ReduceRepeatParams newParams(
+            newMask, newRepeatTimes, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
 
         ReduceOperation<T>(sharedTmpBuffer + secondStartPos, sharedTmpBuffer + preStartPos, newParams, mode);
         bodyOutputCount = newRepeatTimes * VREDUCE_PER_REP_OUTPUT;
@@ -1428,8 +1482,8 @@ __aicore__ inline void ReduceImplSecondStep(__ubuf__ T* sharedTmpBuffer, const R
         CreateSpecialFormatMask<T>(newMaskLen, highMask, lowMask);
         newMask[0] = lowMask;
         newMask[1] = highMask;
-        struct ReduceRepeatParams leftParams(newMask, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE,
-            DEFAULT_REPEAT_STRIDE);
+        struct ReduceRepeatParams leftParams(
+            newMask, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
 
         dstOffset = secondStartPos + bodyOutputCount;
         srcOffset = preStartPos + newRepeatTimes * elementNumPerRep;
@@ -1441,8 +1495,8 @@ __aicore__ inline void ReduceImplSecondStep(__ubuf__ T* sharedTmpBuffer, const R
 }
 
 template <typename T>
-__aicore__ inline void GetIndex(__ubuf__ T* sharedTmpBuffer, int32_t secondStartPos, int32_t& secondIndex,
-    int32_t& thirdIndex)
+__aicore__ inline void GetIndex(
+    __ubuf__ T* sharedTmpBuffer, int32_t secondStartPos, int32_t& secondIndex, int32_t& thirdIndex)
 {
     int32_t elementNumPerRep = ONE_REPEAT_BYTE_SIZE / sizeof(T);
     if (sizeof(T) == sizeof(half)) {
@@ -1463,8 +1517,9 @@ __aicore__ inline void GetIndex(__ubuf__ T* sharedTmpBuffer, int32_t secondStart
 }
 
 template <typename T>
-__aicore__ inline void GetIndex(__ubuf__ T* sharedTmpBuffer, int32_t secondStartPos, int32_t thirdStartPos,
-    int32_t& firstIndex, int32_t& secondIndex, int32_t& thirdIndex)
+__aicore__ inline void GetIndex(
+    __ubuf__ T* sharedTmpBuffer, int32_t secondStartPos, int32_t thirdStartPos, int32_t& firstIndex,
+    int32_t& secondIndex, int32_t& thirdIndex)
 {
     int32_t elementNumPerRep = ONE_REPEAT_BYTE_SIZE / sizeof(T);
     if (sizeof(T) == sizeof(half)) {
@@ -1474,8 +1529,8 @@ __aicore__ inline void GetIndex(__ubuf__ T* sharedTmpBuffer, int32_t secondStart
         secondIndex = *reinterpret_cast<__ubuf__ uint16_t*>(sharedTmpBuffer + secondStartPos + thirdIndex + 1);
         ASSERT(secondIndex >= 0);
         ASSERT(secondIndex < elementNumPerRep);
-        firstIndex = *reinterpret_cast<__ubuf__ uint16_t*>(sharedTmpBuffer +
-            elementNumPerRep * (thirdIndex / VREDUCE_PER_REP_OUTPUT) + secondIndex + 1);
+        firstIndex = *reinterpret_cast<__ubuf__ uint16_t*>(
+            sharedTmpBuffer + elementNumPerRep * (thirdIndex / VREDUCE_PER_REP_OUTPUT) + secondIndex + 1);
         ASSERT(firstIndex >= 0);
         ASSERT(firstIndex < elementNumPerRep);
     } else {
@@ -1485,16 +1540,17 @@ __aicore__ inline void GetIndex(__ubuf__ T* sharedTmpBuffer, int32_t secondStart
         secondIndex = *reinterpret_cast<__ubuf__ uint32_t*>(sharedTmpBuffer + secondStartPos + thirdIndex + 1);
         ASSERT(secondIndex >= 0);
         ASSERT(secondIndex < elementNumPerRep);
-        firstIndex = *reinterpret_cast<__ubuf__ uint32_t*>(sharedTmpBuffer +
-            elementNumPerRep * (thirdIndex / VREDUCE_PER_REP_OUTPUT) + secondIndex + 1);
+        firstIndex = *reinterpret_cast<__ubuf__ uint32_t*>(
+            sharedTmpBuffer + elementNumPerRep * (thirdIndex / VREDUCE_PER_REP_OUTPUT) + secondIndex + 1);
         ASSERT(firstIndex >= 0);
         ASSERT(firstIndex < elementNumPerRep);
     }
 }
 
 template <typename T>
-__aicore__ inline void GetIndex(__ubuf__ T* sharedTmpBuffer, int32_t secondStartPos, int32_t thirdStartPos,
-    int32_t fourthStartPos, int32_t& firstIndex, int32_t& secondIndex, int32_t& thirdIndex, int32_t& fourthIndex)
+__aicore__ inline void GetIndex(
+    __ubuf__ T* sharedTmpBuffer, int32_t secondStartPos, int32_t thirdStartPos, int32_t fourthStartPos,
+    int32_t& firstIndex, int32_t& secondIndex, int32_t& thirdIndex, int32_t& fourthIndex)
 {
     int32_t elementNumPerRep = ONE_REPEAT_BYTE_SIZE / sizeof(T);
     if (sizeof(T) == sizeof(half)) {
@@ -1504,13 +1560,15 @@ __aicore__ inline void GetIndex(__ubuf__ T* sharedTmpBuffer, int32_t secondStart
         thirdIndex = *reinterpret_cast<__ubuf__ uint16_t*>(sharedTmpBuffer + thirdStartPos + fourthIndex + 1);
         ASSERT(thirdIndex >= 0);
         ASSERT(thirdIndex < elementNumPerRep);
-        secondIndex = *reinterpret_cast<__ubuf__ uint16_t*>(sharedTmpBuffer + secondStartPos +
-            elementNumPerRep * (fourthIndex / VREDUCE_PER_REP_OUTPUT) + thirdIndex + 1);
+        secondIndex = *reinterpret_cast<__ubuf__ uint16_t*>(
+            sharedTmpBuffer + secondStartPos + elementNumPerRep * (fourthIndex / VREDUCE_PER_REP_OUTPUT) + thirdIndex +
+            1);
         ASSERT(secondIndex >= 0);
         ASSERT(secondIndex < elementNumPerRep);
-        firstIndex = *reinterpret_cast<__ubuf__ uint16_t*>(sharedTmpBuffer +
+        firstIndex = *reinterpret_cast<__ubuf__ uint16_t*>(
+            sharedTmpBuffer +
             elementNumPerRep * (elementNumPerRep * (fourthIndex / VREDUCE_PER_REP_OUTPUT) + thirdIndex) /
-            VREDUCE_PER_REP_OUTPUT +
+                VREDUCE_PER_REP_OUTPUT +
             secondIndex + 1);
         ASSERT(firstIndex >= 0);
         ASSERT(firstIndex < elementNumPerRep);
@@ -1521,13 +1579,15 @@ __aicore__ inline void GetIndex(__ubuf__ T* sharedTmpBuffer, int32_t secondStart
         thirdIndex = *reinterpret_cast<__ubuf__ uint32_t*>(sharedTmpBuffer + thirdStartPos + fourthIndex + 1);
         ASSERT(thirdIndex >= 0);
         ASSERT(thirdIndex < elementNumPerRep);
-        secondIndex = *reinterpret_cast<__ubuf__ uint32_t*>(sharedTmpBuffer + secondStartPos +
-            elementNumPerRep * (fourthIndex / VREDUCE_PER_REP_OUTPUT) + thirdIndex + 1);
+        secondIndex = *reinterpret_cast<__ubuf__ uint32_t*>(
+            sharedTmpBuffer + secondStartPos + elementNumPerRep * (fourthIndex / VREDUCE_PER_REP_OUTPUT) + thirdIndex +
+            1);
         ASSERT(secondIndex >= 0);
         ASSERT(secondIndex < elementNumPerRep);
-        firstIndex = *reinterpret_cast<__ubuf__ uint32_t*>(sharedTmpBuffer +
+        firstIndex = *reinterpret_cast<__ubuf__ uint32_t*>(
+            sharedTmpBuffer +
             elementNumPerRep * (elementNumPerRep * (fourthIndex / VREDUCE_PER_REP_OUTPUT) + thirdIndex) /
-            VREDUCE_PER_REP_OUTPUT +
+                VREDUCE_PER_REP_OUTPUT +
             secondIndex + 1);
         ASSERT(firstIndex >= 0);
         ASSERT(firstIndex < elementNumPerRep);
@@ -1535,8 +1595,9 @@ __aicore__ inline void GetIndex(__ubuf__ T* sharedTmpBuffer, int32_t secondStart
 }
 
 template <typename T>
-__aicore__ inline void ReduceImplThirdStep(__ubuf__ T* dstLocal, __ubuf__ T* sharedTmpBuffer, const int32_t srcRepStride,
-    const ReduceMode& mode, int32_t& curData, int32_t& secondStartPos, int32_t& thirdStartPos)
+__aicore__ inline void ReduceImplThirdStep(
+    __ubuf__ T* dstLocal, __ubuf__ T* sharedTmpBuffer, const int32_t srcRepStride, const ReduceMode& mode,
+    int32_t& curData, int32_t& secondStartPos, int32_t& thirdStartPos)
 {
     int32_t preNum = 0;
     int32_t firstIndex = 0;
@@ -1579,26 +1640,27 @@ __aicore__ inline void ReduceImplThirdStep(__ubuf__ T* dstLocal, __ubuf__ T* sha
             (((thirdStartPos + curData) * sizeof(T) + ONE_BLK_SIZE - 1) / ONE_BLK_SIZE) * ONE_BLK_SIZE / sizeof(T);
         dstOffset = fourthStartPos;
         srcOffset = thirdStartPos;
-        struct ReduceRepeatParams newParams(newMask, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE,
-            DEFAULT_REPEAT_STRIDE);
+        struct ReduceRepeatParams newParams(
+            newMask, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
 
         ReduceOperation<T>(sharedTmpBuffer + dstOffset, sharedTmpBuffer + srcOffset, newParams, mode);
         SetFlag<HardEvent::V_S>(eventIdVToS);
         WaitFlag<HardEvent::V_S>(eventIdVToS);
         *dstLocal = *(sharedTmpBuffer + dstOffset);
 
-        GetIndex<T>(sharedTmpBuffer, secondStartPos, thirdStartPos, fourthStartPos, firstIndex, secondIndex, thirdIndex,
+        GetIndex<T>(
+            sharedTmpBuffer, secondStartPos, thirdStartPos, fourthStartPos, firstIndex, secondIndex, thirdIndex,
             fourthIndex);
         preNum = offsetNumPerRep *
-            (elementNumPerRep * (elementNumPerRep * (fourthIndex / VREDUCE_PER_REP_OUTPUT) + thirdIndex) /
-            VREDUCE_PER_REP_OUTPUT +
-            secondIndex) /
-            VREDUCE_PER_REP_OUTPUT;
+                 (elementNumPerRep * (elementNumPerRep * (fourthIndex / VREDUCE_PER_REP_OUTPUT) + thirdIndex) /
+                      VREDUCE_PER_REP_OUTPUT +
+                  secondIndex) /
+                 VREDUCE_PER_REP_OUTPUT;
     } else {
         dstOffset = thirdStartPos;
         srcOffset = secondStartPos;
-        struct ReduceRepeatParams newParams(newMask, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE,
-            DEFAULT_REPEAT_STRIDE);
+        struct ReduceRepeatParams newParams(
+            newMask, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
         ReduceOperation<T>(sharedTmpBuffer + dstOffset, sharedTmpBuffer + srcOffset, newParams, mode);
         SetFlag<HardEvent::V_S>(eventIdVToS);
         WaitFlag<HardEvent::V_S>(eventIdVToS);
@@ -1606,7 +1668,7 @@ __aicore__ inline void ReduceImplThirdStep(__ubuf__ T* dstLocal, __ubuf__ T* sha
 
         GetIndex<T>(sharedTmpBuffer, secondStartPos, thirdStartPos, firstIndex, secondIndex, thirdIndex);
         preNum = offsetNumPerRep * (elementNumPerRep * (thirdIndex / VREDUCE_PER_REP_OUTPUT) + secondIndex) /
-            VREDUCE_PER_REP_OUTPUT;
+                 VREDUCE_PER_REP_OUTPUT;
     }
 
     int32_t resultIndex = firstIndex + preNum;
@@ -1618,8 +1680,8 @@ __aicore__ inline void ReduceImplThirdStep(__ubuf__ T* dstLocal, __ubuf__ T* sha
 }
 
 template <typename T>
-__aicore__ inline void ReduceSumFirstStep(__ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal,
-    struct ReduceRepeatParams& params)
+__aicore__ inline void ReduceSumFirstStep(
+    __ubuf__ T* sharedTmpBuffer, __ubuf__ T* srcLocal, struct ReduceRepeatParams& params)
 {
     int32_t dstOffset = 0;
     int32_t srcOffset = 0;
@@ -1659,15 +1721,15 @@ __aicore__ inline void ReduceSumFinalStep(__ubuf__ T* dstLocal, __ubuf__ T* shar
         SetFlag<HardEvent::S_MTE3>(eventIdSToMTE3);
         WaitFlag<HardEvent::S_MTE3>(eventIdSToMTE3);
     } else {
-        struct ReduceRepeatParams newParams(secondResultNum, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE,
-            DEFAULT_REPEAT_STRIDE);
+        struct ReduceRepeatParams newParams(
+            secondResultNum, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
         ReduceOperation<T>(dstLocal, sharedTmpBuffer, newParams, ReduceMode::REDUCE_SUM);
     }
 }
 
 template <typename T>
-__aicore__ inline void ReduceSumImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* sharedTmpBuffer,
-    struct ReduceRepeatParams& params)
+__aicore__ inline void ReduceSumImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* sharedTmpBuffer, struct ReduceRepeatParams& params)
 {
     ReduceSumFirstStep<T>(sharedTmpBuffer, srcLocal, params);
     ReduceSumSecondStep<T>(dstLocal, sharedTmpBuffer, params);
@@ -1676,7 +1738,8 @@ __aicore__ inline void ReduceSumImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal,
 }
 
 template <typename T>
-__aicore__ inline void ReduceImplSecondStepNoIndex(__ubuf__ T* sharedTmpBuffer, const ReduceMode& mode, int32_t& curData)
+__aicore__ inline void ReduceImplSecondStepNoIndex(
+    __ubuf__ T* sharedTmpBuffer, const ReduceMode& mode, int32_t& curData)
 {
     int32_t elementNumPerRep = ONE_REPEAT_BYTE_SIZE / sizeof(T); // fp16=128,fp32=64
     int32_t newRepeatTimes = curData / elementNumPerRep;
@@ -1688,8 +1751,8 @@ __aicore__ inline void ReduceImplSecondStepNoIndex(__ubuf__ T* sharedTmpBuffer, 
         CreateSpecialFormatMask<T>(elementNumPerRep / VREDUCE_PER_REP_OUTPUT, highMask, lowMask);
         newMask[0] = lowMask;
         newMask[1] = highMask;
-        struct ReduceRepeatParams newParams(newMask, newRepeatTimes, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE,
-            DEFAULT_REPEAT_STRIDE);
+        struct ReduceRepeatParams newParams(
+            newMask, newRepeatTimes, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
         ReduceOperation<T>(sharedTmpBuffer, sharedTmpBuffer, newParams, mode);
     }
     highMask = 0;
@@ -1698,9 +1761,10 @@ __aicore__ inline void ReduceImplSecondStepNoIndex(__ubuf__ T* sharedTmpBuffer, 
         CreateSpecialFormatMask<T>(leftData / VREDUCE_PER_REP_OUTPUT, highMask, lowMask);
         newMask[0] = lowMask;
         newMask[1] = highMask;
-        struct ReduceRepeatParams leftParams(newMask, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE,
-            DEFAULT_REPEAT_STRIDE);
-        ReduceOperation<T>(sharedTmpBuffer + newRepeatTimes * VREDUCE_PER_REP_OUTPUT,
+        struct ReduceRepeatParams leftParams(
+            newMask, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
+        ReduceOperation<T>(
+            sharedTmpBuffer + newRepeatTimes * VREDUCE_PER_REP_OUTPUT,
             sharedTmpBuffer + newRepeatTimes * elementNumPerRep, leftParams, mode);
         newRepeatTimes += 1;
     }
@@ -1708,8 +1772,8 @@ __aicore__ inline void ReduceImplSecondStepNoIndex(__ubuf__ T* sharedTmpBuffer, 
 }
 
 template <typename T>
-__aicore__ inline void ReduceImplThirdStepNoIndex(__ubuf__ T* dstLocal, __ubuf__ T* sharedTmpBuffer, const ReduceMode& mode,
-    int32_t& curData)
+__aicore__ inline void ReduceImplThirdStepNoIndex(
+    __ubuf__ T* dstLocal, __ubuf__ T* sharedTmpBuffer, const ReduceMode& mode, int32_t& curData)
 {
     uint64_t highMask = 0;
     uint64_t lowMask = 0;
@@ -1717,8 +1781,8 @@ __aicore__ inline void ReduceImplThirdStepNoIndex(__ubuf__ T* dstLocal, __ubuf__
     CreateSpecialFormatMask<T>(curData / VREDUCE_PER_REP_OUTPUT, highMask, lowMask);
     newMask[0] = lowMask;
     newMask[1] = highMask;
-    struct ReduceRepeatParams newParams(newMask, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE,
-        DEFAULT_REPEAT_STRIDE);
+    struct ReduceRepeatParams newParams(
+        newMask, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
     ReduceOperation<T>(sharedTmpBuffer, sharedTmpBuffer, newParams, mode);
     event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
     SetFlag<HardEvent::V_S>(eventIdVToS);
@@ -1733,8 +1797,9 @@ __aicore__ inline void ReduceImplThirdStepNoIndex(__ubuf__ T* dstLocal, __ubuf__
 }
 
 template <typename T>
-__aicore__ inline void ReduceImplWithIndex(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* sharedTmpBuffer,
-    struct ReduceRepeatParams& params, const ReduceMode& mode)
+__aicore__ inline void ReduceImplWithIndex(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* sharedTmpBuffer, struct ReduceRepeatParams& params,
+    const ReduceMode& mode)
 {
     if (params.repeatTimes == 1) {
         ReduceOperation<T>(dstLocal, srcLocal, params, mode);
@@ -1752,13 +1817,15 @@ __aicore__ inline void ReduceImplWithIndex(__ubuf__ T* dstLocal, __ubuf__ T* src
 
         int32_t thirdStartPos =
             (((secondStartPos + curData) * sizeof(T) + ONE_BLK_SIZE - 1) / ONE_BLK_SIZE) * ONE_BLK_SIZE / sizeof(T);
-        ReduceImplThirdStep<T>(dstLocal, sharedTmpBuffer, params.srcRepStride, mode, curData, secondStartPos, thirdStartPos);
+        ReduceImplThirdStep<T>(
+            dstLocal, sharedTmpBuffer, params.srcRepStride, mode, curData, secondStartPos, thirdStartPos);
     }
 }
 
 template <typename T>
-__aicore__ inline void ReduceImplNoIndex(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* sharedTmpBuffer,
-    struct ReduceRepeatParams& params, const ReduceMode& mode)
+__aicore__ inline void ReduceImplNoIndex(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* sharedTmpBuffer, struct ReduceRepeatParams& params,
+    const ReduceMode& mode)
 {
     event_t eventIdVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));
     event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
@@ -1803,8 +1870,9 @@ __aicore__ inline void ReduceImplNoIndex(__ubuf__ T* dstLocal, __ubuf__ T* srcLo
 }
 
 template <typename T>
-__aicore__ inline void ReduceImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* sharedTmpBuffer,
-    struct ReduceRepeatParams& params, bool calIndex, const ReduceMode& mode)
+__aicore__ inline void ReduceImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* sharedTmpBuffer, struct ReduceRepeatParams& params,
+    bool calIndex, const ReduceMode& mode)
 {
     if (calIndex) {
         ReduceImplWithIndex<T>(dstLocal, srcLocal, sharedTmpBuffer, params, mode);
@@ -1814,8 +1882,9 @@ __aicore__ inline void ReduceImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __
 }
 
 template <typename T>
-__aicore__ inline void ReduceTailCompute(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LocalTensor<T>& work, const int32_t count, bool calIndex, const ReduceMode& mode)
+__aicore__ inline void ReduceTailCompute(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LocalTensor<T>& work, const int32_t count,
+    bool calIndex, const ReduceMode& mode)
 {
     using PrimType = PrimT<T>;
     int32_t elementNumPerRep = ONE_REPEAT_BYTE_SIZE / sizeof(PrimType); // fp16=128 , fp32=64
@@ -1827,10 +1896,11 @@ __aicore__ inline void ReduceTailCompute(const LocalTensor<T>& dst, const LocalT
     PrimType bodyValue = dst.GetValue(0);
     PrimType bodyIndex = dst.GetValue(1);
 
-    struct ReduceRepeatParams tailParams(tailCount, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE,
-        DEFAULT_REPEAT_STRIDE);
+    struct ReduceRepeatParams tailParams(
+        tailCount, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
 
-    ReduceImpl<PrimType>((__ubuf__ PrimType*)dst.GetPhyAddr(), // 复用dst
+    ReduceImpl<PrimType>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), // 复用dst
         (__ubuf__ PrimType*)src.GetPhyAddr(elementNumPerRep * repeatTime), (__ubuf__ PrimType*)work.GetPhyAddr(),
         tailParams, calIndex, mode);
     SetFlag<HardEvent::V_S>(eventIdVToS);
@@ -1839,14 +1909,16 @@ __aicore__ inline void ReduceTailCompute(const LocalTensor<T>& dst, const LocalT
     PrimType tailIndex = dst.GetValue(1);
 
     // bodyresult tailresult need vcmin/vcmax again
-    struct ReduceRepeatParams lastParams(2, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
+    struct ReduceRepeatParams lastParams(
+        2, 1, DEFAULT_REDUCE_DST_REP_STRIDE, DEFAULT_BLK_STRIDE, DEFAULT_REPEAT_STRIDE);
     work.SetValue(0, bodyValue);
     work.SetValue(1, tailValue);
     event_t eventIdSToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::S_V));
     SetFlag<HardEvent::S_V>(eventIdSToV);
     WaitFlag<HardEvent::S_V>(eventIdSToV);
 
-    ReduceImpl<PrimType>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)work.GetPhyAddr(),
+    ReduceImpl<PrimType>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)work.GetPhyAddr(),
         (__ubuf__ PrimType*)work.GetPhyAddr(), lastParams, calIndex, mode);
     if (calIndex) {
         SetFlag<HardEvent::V_S>(eventIdVToS);
@@ -1875,25 +1947,25 @@ __aicore__ inline void ReduceTailCompute(const LocalTensor<T>& dst, const LocalT
 }
 
 template <typename T>
-__aicore__ inline void GetReduceMaxMinCountImpl(uint32_t &maxMinValue, uint32_t &maxMinIndex)
+__aicore__ inline void GetReduceMaxMinCountImpl(uint32_t& maxMinValue, uint32_t& maxMinIndex)
 {
     ASCENDC_ASSERT((false), "GetReduceMaxMinCount is not supported on current device");
 }
 
 template <typename T>
-__aicore__ inline void GetReduceMaxMinCountImpl(uint32_t &maxMinValue)
+__aicore__ inline void GetReduceMaxMinCountImpl(uint32_t& maxMinValue)
 {
     ASCENDC_ASSERT((false), "GetReduceMaxMinCount is not supported on current device");
 }
 
 template <typename T>
-__aicore__ inline void GetReduceMaxMinCountImpl(T &maxMinValue, T &maxMinIndex)
+__aicore__ inline void GetReduceMaxMinCountImpl(T& maxMinValue, T& maxMinIndex)
 {
     ASCENDC_ASSERT((false), "GetReduceMaxMinCount is not supported on current device");
 }
 
 template <typename T>
-__aicore__ inline void GetReduceMaxMinCountImpl(T &maxMinValue)
+__aicore__ inline void GetReduceMaxMinCountImpl(T& maxMinValue)
 {
     ASCENDC_ASSERT((false), "GetReduceMaxMinCount is not supported on current device");
 }

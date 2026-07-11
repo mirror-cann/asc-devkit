@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_binary_continuous_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_m300/kernel_operator_vec_binary_continuous_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_vec_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_m300/kernel_operator_vec_binary_continuous_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_vec_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_BINARY_CONTINUOUS_IMPL_H__
 #endif
@@ -53,8 +54,8 @@ __aicore__ inline void AddImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     }
 }
 
-__aicore__ inline void AddImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1,
-    const int32_t& count)
+__aicore__ inline void AddImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -75,8 +76,8 @@ __aicore__ inline void AddImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     }
 }
 
-__aicore__ inline void AddImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1,
-    const int32_t& count)
+__aicore__ inline void AddImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -149,8 +150,8 @@ __aicore__ inline void SubImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     }
 }
 
-__aicore__ inline void SubImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1,
-    const int32_t& count)
+__aicore__ inline void SubImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -171,8 +172,8 @@ __aicore__ inline void SubImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     }
 }
 
-__aicore__ inline void SubImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1,
-    const int32_t& count)
+__aicore__ inline void SubImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -245,8 +246,8 @@ __aicore__ inline void MulImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     }
 }
 
-__aicore__ inline void MulImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1,
-    const int32_t& count)
+__aicore__ inline void MulImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -267,8 +268,8 @@ __aicore__ inline void MulImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     }
 }
 
-__aicore__ inline void MulImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1,
-    const int32_t& count)
+__aicore__ inline void MulImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -393,8 +394,8 @@ __aicore__ inline void MaxImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     }
 }
 
-__aicore__ inline void MaxImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1,
-    const int32_t& count)
+__aicore__ inline void MaxImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -415,8 +416,8 @@ __aicore__ inline void MaxImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     }
 }
 
-__aicore__ inline void MaxImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1,
-    const int32_t& count)
+__aicore__ inline void MaxImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -489,8 +490,8 @@ __aicore__ inline void MinImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__
     }
 }
 
-__aicore__ inline void MinImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1,
-    const int32_t& count)
+__aicore__ inline void MinImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -511,8 +512,8 @@ __aicore__ inline void MinImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     }
 }
 
-__aicore__ inline void MinImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1,
-    const int32_t& count)
+__aicore__ inline void MinImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -564,8 +565,8 @@ __aicore__ inline void AndImpl(__ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ T* sr
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
-__aicore__ inline void AndImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1,
-    const int32_t& count)
+__aicore__ inline void AndImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -586,8 +587,8 @@ __aicore__ inline void AndImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __
     }
 }
 
-__aicore__ inline void AndImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src0, __ubuf__ uint16_t* src1,
-    const int32_t& count)
+__aicore__ inline void AndImpl(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src0, __ubuf__ uint16_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -618,8 +619,8 @@ __aicore__ inline void OrImpl(__ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ T* src
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
-__aicore__ inline void OrImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1,
-    const int32_t& count)
+__aicore__ inline void OrImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -640,8 +641,8 @@ __aicore__ inline void OrImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __u
     }
 }
 
-__aicore__ inline void OrImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src0, __ubuf__ uint16_t* src1,
-    const int32_t& count)
+__aicore__ inline void OrImpl(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src0, __ubuf__ uint16_t* src1, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -699,7 +700,8 @@ __aicore__ inline void AddReluImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ub
 }
 
 template <typename T = float>
-__aicore__ inline void AddReluImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
+__aicore__ inline void AddReluImpl(
+    __ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
 {
     static_assert(SupportType<T, float>(), "AddRelu level-2 api only support half/float on current device");
 
@@ -735,7 +737,8 @@ __aicore__ inline void FusedMulAddImpl(__ubuf__ T* dst, __ubuf__ T* src0, __ubuf
 }
 
 template <typename T = half>
-__aicore__ inline void FusedMulAddImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__ half* src1, const int32_t& count)
+__aicore__ inline void FusedMulAddImpl(
+    __ubuf__ half* dst, __ubuf__ half* src0, __ubuf__ half* src1, const int32_t& count)
 {
     static_assert(SupportType<T, half>(), "FusedMulAdd level-2 api only support half/float on current device");
 
@@ -760,7 +763,8 @@ __aicore__ inline void FusedMulAddImpl(__ubuf__ half* dst, __ubuf__ half* src0, 
 }
 
 template <typename T = float>
-__aicore__ inline void FusedMulAddImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
+__aicore__ inline void FusedMulAddImpl(
+    __ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
 {
     static_assert(SupportType<T, float>(), "FusedMulAdd level-2 api only support half/float on current device");
 
@@ -795,7 +799,8 @@ __aicore__ inline void FusedMulAddReluImpl(__ubuf__ T* dst, __ubuf__ T* src0, __
 }
 
 template <typename T = half>
-__aicore__ inline void FusedMulAddReluImpl(__ubuf__ half* dst, __ubuf__ half* src0, __ubuf__ half* src1, const int32_t& count)
+__aicore__ inline void FusedMulAddReluImpl(
+    __ubuf__ half* dst, __ubuf__ half* src0, __ubuf__ half* src1, const int32_t& count)
 {
     static_assert(SupportType<T, half>(), "FusedMulAddRelu level-2 api only support half/float on current device");
 
@@ -822,7 +827,8 @@ __aicore__ inline void FusedMulAddReluImpl(__ubuf__ half* dst, __ubuf__ half* sr
 }
 
 template <typename T = float>
-__aicore__ inline void FusedMulAddReluImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
+__aicore__ inline void FusedMulAddReluImpl(
+    __ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
 {
     static_assert(SupportType<T, float>(), "FusedMulAddRelu level-2 api only support half/float on current device");
 
@@ -884,7 +890,8 @@ __aicore__ inline void MulAddDstImpl(__ubuf__ half* dst, __ubuf__ half* src0, __
 }
 
 template <typename T = int16_t, typename U = int16_t>
-__aicore__ inline void MulAddDstImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1, const int32_t& count)
+__aicore__ inline void MulAddDstImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src0, __ubuf__ int16_t* src1, const int32_t& count)
 {
     static_assert(SupportType<U, int16_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
     static_assert(SupportType<T, int16_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
@@ -910,7 +917,8 @@ __aicore__ inline void MulAddDstImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* sr
 }
 
 template <typename T = uint16_t, typename U = uint16_t>
-__aicore__ inline void MulAddDstImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src0, __ubuf__ uint16_t* src1, const int32_t& count)
+__aicore__ inline void MulAddDstImpl(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src0, __ubuf__ uint16_t* src1, const int32_t& count)
 {
     static_assert(SupportType<U, uint16_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
     static_assert(SupportType<T, uint16_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
@@ -936,7 +944,8 @@ __aicore__ inline void MulAddDstImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* 
 }
 
 template <typename T = float, typename U = float>
-__aicore__ inline void MulAddDstImpl(__ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
+__aicore__ inline void MulAddDstImpl(
+    __ubuf__ float* dst, __ubuf__ float* src0, __ubuf__ float* src1, const int32_t& count)
 {
     static_assert(SupportType<U, float>(), "MulAddDst level-2 api only support b16/b32 on current device");
     static_assert(SupportType<T, float>(), "MulAddDst level-2 api only support b16/b32 on current device");
@@ -962,7 +971,8 @@ __aicore__ inline void MulAddDstImpl(__ubuf__ float* dst, __ubuf__ float* src0, 
 }
 
 template <typename T = int32_t, typename U = int32_t>
-__aicore__ inline void MulAddDstImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1, const int32_t& count)
+__aicore__ inline void MulAddDstImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src0, __ubuf__ int32_t* src1, const int32_t& count)
 {
     static_assert(SupportType<U, int32_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
     static_assert(SupportType<T, int32_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
@@ -988,7 +998,8 @@ __aicore__ inline void MulAddDstImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* sr
 }
 
 template <typename T = uint32_t, typename U = uint32_t>
-__aicore__ inline void MulAddDstImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src0, __ubuf__ uint32_t* src1, const int32_t& count)
+__aicore__ inline void MulAddDstImpl(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src0, __ubuf__ uint32_t* src1, const int32_t& count)
 {
     static_assert(SupportType<U, uint32_t>(), "MulAddDst level-2 api only support b16/b32 on current device");
     static_assert(SupportType<T, uint32_t>(), "MulAddDst level-2 api only support b16/b32 on current device");

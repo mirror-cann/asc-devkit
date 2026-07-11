@@ -261,6 +261,14 @@ asc-devkit:
       - impl/simt_api/cpp/kernel_simt_cast_intf_impl.h
       - impl/simt_api/cpp/kernel_simt_atomic_intf_impl.h
       - impl/c_api/instr_impl/npu_arch_2201/vector_compute_impl/asc_set_vector_mask_impl.h
+      - impl/basic_api/dav_c220/kernel_operator_reg_others_impl.h
+      - impl/basic_api/dav_c220/kernel_operator_vec_others_impl.h
+      - impl/basic_api/dav_m510/kfc/kfc_log.h
+      - impl/basic_api/dav_c220/kernel_operator_cube_others_impl.h
+      - impl/basic_api/dav_c220/kfc/kfc_log.h
+      - impl/basic_api/kernel_operator_intf_impl.h
+      - impl/basic_api/dav_c220/kernel_operator_vec_scatter_impl.h
+      - impl/basic_api/dav_m310/kernel_operator_set_atomic_impl.h
 
   llt:
     ut_check: true

@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_utils_struct_confusion_pad.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/utils/kernel_utils_struct_confusion_pad.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/utils/kernel_utils_struct_confusion_pad.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_UTILS_STRUCT_CONFUSION_PAD_H__
 #endif
@@ -44,10 +45,11 @@ struct ConfusionTranspose2NZ012NTiling {
         srcBatchOffset = 0;
     }
 
-    __aicore__ ConfusionTranspose2NZ012NTiling(uint32_t blockSizeIn, uint32_t shapeBIn, uint32_t shapeNIn,
-        uint32_t hnDivIn, uint32_t blockNumIn, uint32_t shapeHIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn,
-        uint32_t alignHIn, uint32_t alignSIn, uint32_t hnDivBlockNumIn, uint32_t alignHnDivIn, uint32_t gapIn,
-        uint32_t alignsBlockCubeIn, uint32_t prehBlockNumIn, uint32_t dstBatchOffsetIn, uint32_t srcBatchOffsetIn)
+    __aicore__ ConfusionTranspose2NZ012NTiling(
+        uint32_t blockSizeIn, uint32_t shapeBIn, uint32_t shapeNIn, uint32_t hnDivIn, uint32_t blockNumIn,
+        uint32_t shapeHIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, uint32_t alignHIn, uint32_t alignSIn,
+        uint32_t hnDivBlockNumIn, uint32_t alignHnDivIn, uint32_t gapIn, uint32_t alignsBlockCubeIn,
+        uint32_t prehBlockNumIn, uint32_t dstBatchOffsetIn, uint32_t srcBatchOffsetIn)
     {
         blockSize = blockSizeIn;
         shapeB = shapeBIn;
@@ -109,11 +111,11 @@ struct ConfusionTranspose2ND012NTiling {
         blockNum = 0;
     }
 
-    __aicore__ ConfusionTranspose2ND012NTiling(uint32_t blockSizeIn, uint32_t shapeBIn, uint32_t shapeNIn,
-        uint32_t hnDivIn, uint32_t shapeHIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, uint32_t hnDivBlockNumIn,
-        uint32_t alignHnDivIn, uint32_t gapIn, uint32_t alignsCubeIn, uint32_t prehBlockNumIn,
-        uint32_t alignsMulAlignHnDivIn, uint32_t alignHnDivCubeIn, uint32_t alignHnDivBlockSizeIn,
-        uint32_t dstBatchOffsetIn, uint32_t srcBatchOffsetIn, uint32_t blockNumIn)
+    __aicore__ ConfusionTranspose2ND012NTiling(
+        uint32_t blockSizeIn, uint32_t shapeBIn, uint32_t shapeNIn, uint32_t hnDivIn, uint32_t shapeHIn,
+        uint32_t hBlockNumIn, uint32_t sBlockNumIn, uint32_t hnDivBlockNumIn, uint32_t alignHnDivIn, uint32_t gapIn,
+        uint32_t alignsCubeIn, uint32_t prehBlockNumIn, uint32_t alignsMulAlignHnDivIn, uint32_t alignHnDivCubeIn,
+        uint32_t alignHnDivBlockSizeIn, uint32_t dstBatchOffsetIn, uint32_t srcBatchOffsetIn, uint32_t blockNumIn)
     {
         blockSize = blockSizeIn;
         shapeB = shapeBIn;
@@ -174,10 +176,11 @@ struct ConfusionTranspose012Tiling {
         blockNum = 0;
     }
 
-    __aicore__ ConfusionTranspose012Tiling(uint32_t blockSizeIn, uint32_t shapeBIn, uint32_t shapeNIn, uint32_t hnDivIn,
-        uint32_t shapeHIn, uint32_t hBlockNumIn, uint32_t sBlockNumIn, uint32_t hnDivBlockNumIn, uint32_t alignHIn,
-        uint32_t alignsCubeIn, uint32_t alignhBlockCubeIn, uint32_t blockSizeMulAlignHIn, uint32_t srcBatchOffsetIn,
-        uint32_t dstBatchOffsetIn, uint32_t blockNumIn)
+    __aicore__ ConfusionTranspose012Tiling(
+        uint32_t blockSizeIn, uint32_t shapeBIn, uint32_t shapeNIn, uint32_t hnDivIn, uint32_t shapeHIn,
+        uint32_t hBlockNumIn, uint32_t sBlockNumIn, uint32_t hnDivBlockNumIn, uint32_t alignHIn, uint32_t alignsCubeIn,
+        uint32_t alignhBlockCubeIn, uint32_t blockSizeMulAlignHIn, uint32_t srcBatchOffsetIn, uint32_t dstBatchOffsetIn,
+        uint32_t blockNumIn)
     {
         blockSize = blockSizeIn;
         shapeB = shapeBIn;
@@ -223,8 +226,9 @@ struct ConfusionTransposeOnlyTiling {
         repeat = 0;
     }
 
-    __aicore__ ConfusionTransposeOnlyTiling(uint32_t blockSizeIn, uint32_t heightIn, uint32_t widthIn,
-        uint32_t highBlockIn, uint32_t strideIn, uint32_t repeatIn)
+    __aicore__ ConfusionTransposeOnlyTiling(
+        uint32_t blockSizeIn, uint32_t heightIn, uint32_t widthIn, uint32_t highBlockIn, uint32_t strideIn,
+        uint32_t repeatIn)
     {
         blockSize = blockSizeIn;
         height = heightIn;
@@ -262,10 +266,11 @@ struct ConfusionTranspose0213Tiling {
         mainOffset = 0;
     }
 
-    __aicore__ ConfusionTranspose0213Tiling(uint32_t blockSizeIn, uint32_t shapeBIn, uint32_t shapeA1In,
-        uint32_t alignA3In, uint32_t alignA2In, uint32_t widthTilingIn, uint32_t newPopSizeIn, uint32_t newPopHIn,
-        uint32_t needSizeIn, uint32_t mainBlocksIn, uint32_t tailSizeIn, uint32_t alignA2MulAlignA3In,
-        uint32_t batchOffsetIn, uint32_t alignA3MulA1In, uint32_t shapeA1BlockCubeIn, uint32_t mainOffsetIn)
+    __aicore__ ConfusionTranspose0213Tiling(
+        uint32_t blockSizeIn, uint32_t shapeBIn, uint32_t shapeA1In, uint32_t alignA3In, uint32_t alignA2In,
+        uint32_t widthTilingIn, uint32_t newPopSizeIn, uint32_t newPopHIn, uint32_t needSizeIn, uint32_t mainBlocksIn,
+        uint32_t tailSizeIn, uint32_t alignA2MulAlignA3In, uint32_t batchOffsetIn, uint32_t alignA3MulA1In,
+        uint32_t shapeA1BlockCubeIn, uint32_t mainOffsetIn)
     {
         blockSize = blockSizeIn;
         shapeB = shapeBIn;
@@ -360,11 +365,11 @@ struct ConfusionTranspose210Tiling {
 };
 
 struct IntriInfo {
-    uint32_t c0Count{ 0 };
-    uint32_t repeat{ 0 };
-    uint32_t repeatRounding{ 0 };
-    uint32_t repeatRemaining{ 0 };
-    uint32_t tail{ 0 };
+    uint32_t c0Count{0};
+    uint32_t repeat{0};
+    uint32_t repeatRounding{0};
+    uint32_t repeatRemaining{0};
+    uint32_t tail{0};
 };
 
 enum class PaddingMode : uint8_t {

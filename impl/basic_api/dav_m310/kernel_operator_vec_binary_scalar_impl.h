@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_binary_scalar_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_m310/kernel_operator_vec_binary_scalar_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tpipe.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_m310/kernel_operator_vec_binary_scalar_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tpipe.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_BINARY_SCALAR_IMPL_H__
 #endif
@@ -31,15 +32,17 @@ namespace AscendC {
  * ************************************************************************************************* */
 // Adds::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void AddsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -65,8 +68,9 @@ __aicore__ inline void AddsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void AddsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -94,8 +98,9 @@ __aicore__ inline void AddsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
 }
 
 template <>
-__aicore__ inline void AddsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -123,8 +128,9 @@ __aicore__ inline void AddsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void AddsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -150,15 +156,17 @@ __aicore__ inline void AddsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void AddsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -177,8 +185,9 @@ __aicore__ inline void AddsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void AddsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -197,8 +206,9 @@ __aicore__ inline void AddsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void AddsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -217,8 +227,9 @@ __aicore__ inline void AddsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void AddsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -244,8 +255,8 @@ __aicore__ inline void AddsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue,
 }
 
 template <>
-__aicore__ inline void AddsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const int32_t& count)
+__aicore__ inline void AddsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -265,8 +276,8 @@ __aicore__ inline void AddsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void AddsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const int32_t& count)
+__aicore__ inline void AddsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -286,8 +297,8 @@ __aicore__ inline void AddsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
 }
 
 template <>
-__aicore__ inline void AddsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void AddsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -307,8 +318,8 @@ __aicore__ inline void AddsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void AddsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void AddsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -332,15 +343,17 @@ __aicore__ inline void AddsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
  * ************************************************************************************************* */
 // Muls::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void MulsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -366,8 +379,9 @@ __aicore__ inline void MulsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void MulsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -395,8 +409,9 @@ __aicore__ inline void MulsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
 }
 
 template <>
-__aicore__ inline void MulsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -424,8 +439,9 @@ __aicore__ inline void MulsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MulsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -451,15 +467,17 @@ __aicore__ inline void MulsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void MulsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -478,8 +496,9 @@ __aicore__ inline void MulsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void MulsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -498,8 +517,9 @@ __aicore__ inline void MulsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MulsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -518,8 +538,9 @@ __aicore__ inline void MulsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MulsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -545,8 +566,8 @@ __aicore__ inline void MulsImpl(__ubuf__ T* dst, __ubuf__ T* src, const T scalar
 }
 
 template <>
-__aicore__ inline void MulsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const int32_t& count)
+__aicore__ inline void MulsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -566,8 +587,8 @@ __aicore__ inline void MulsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void MulsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const int32_t& count)
+__aicore__ inline void MulsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -587,8 +608,8 @@ __aicore__ inline void MulsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
 }
 
 template <>
-__aicore__ inline void MulsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MulsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -608,8 +629,8 @@ __aicore__ inline void MulsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MulsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MulsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -633,15 +654,17 @@ __aicore__ inline void MulsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
  * ************************************************************************************************* */
 // Maxs::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void MaxsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -667,8 +690,9 @@ __aicore__ inline void MaxsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void MaxsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -696,8 +720,9 @@ __aicore__ inline void MaxsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
 }
 
 template <>
-__aicore__ inline void MaxsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -725,8 +750,9 @@ __aicore__ inline void MaxsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MaxsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -752,15 +778,17 @@ __aicore__ inline void MaxsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void MaxsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -779,8 +807,9 @@ __aicore__ inline void MaxsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void MaxsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -799,8 +828,9 @@ __aicore__ inline void MaxsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MaxsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -819,8 +849,9 @@ __aicore__ inline void MaxsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MaxsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -846,8 +877,8 @@ __aicore__ inline void MaxsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue,
 }
 
 template <>
-__aicore__ inline void MaxsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const int32_t& count)
+__aicore__ inline void MaxsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -867,8 +898,8 @@ __aicore__ inline void MaxsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void MaxsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const int32_t& count)
+__aicore__ inline void MaxsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -888,8 +919,8 @@ __aicore__ inline void MaxsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
 }
 
 template <>
-__aicore__ inline void MaxsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MaxsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -909,8 +940,8 @@ __aicore__ inline void MaxsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MaxsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MaxsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -934,15 +965,17 @@ __aicore__ inline void MaxsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
  * ************************************************************************************************* */
 // Mins::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void MinsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -968,8 +1001,9 @@ __aicore__ inline void MinsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void MinsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -997,8 +1031,9 @@ __aicore__ inline void MinsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
 }
 
 template <>
-__aicore__ inline void MinsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1026,8 +1061,9 @@ __aicore__ inline void MinsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MinsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1053,15 +1089,17 @@ __aicore__ inline void MinsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void MinsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1080,8 +1118,9 @@ __aicore__ inline void MinsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void MinsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1100,8 +1139,9 @@ __aicore__ inline void MinsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MinsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1120,8 +1160,9 @@ __aicore__ inline void MinsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MinsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1147,8 +1188,8 @@ __aicore__ inline void MinsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue,
 }
 
 template <>
-__aicore__ inline void MinsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const int32_t& count)
+__aicore__ inline void MinsImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1168,8 +1209,8 @@ __aicore__ inline void MinsImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* s
 }
 
 template <>
-__aicore__ inline void MinsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const int32_t& count)
+__aicore__ inline void MinsImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1189,8 +1230,8 @@ __aicore__ inline void MinsImpl<float, true>(__ubuf__ float* dst, __ubuf__ float
 }
 
 template <>
-__aicore__ inline void MinsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MinsImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1210,8 +1251,8 @@ __aicore__ inline void MinsImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ i
 }
 
 template <>
-__aicore__ inline void MinsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MinsImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1235,15 +1276,17 @@ __aicore__ inline void MinsImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ i
  * ************************************************************************************************* */
 // ShiftLeft::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl<uint16_t, true>(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1269,8 +1312,9 @@ __aicore__ inline void ShiftLeftImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __u
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl<uint32_t, true>(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1298,8 +1342,9 @@ __aicore__ inline void ShiftLeftImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __u
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1327,8 +1372,9 @@ __aicore__ inline void ShiftLeftImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubu
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1354,15 +1400,17 @@ __aicore__ inline void ShiftLeftImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubu
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl<uint16_t, true>(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1381,8 +1429,9 @@ __aicore__ inline void ShiftLeftImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __u
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1401,8 +1450,9 @@ __aicore__ inline void ShiftLeftImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubu
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1421,8 +1471,9 @@ __aicore__ inline void ShiftLeftImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubu
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl<uint32_t, true>(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1448,8 +1499,8 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarV
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const int32_t& count)
+__aicore__ inline void ShiftLeftImpl<uint16_t, true>(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1469,8 +1520,8 @@ __aicore__ inline void ShiftLeftImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __u
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const int32_t& count)
+__aicore__ inline void ShiftLeftImpl<uint32_t, true>(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1490,8 +1541,8 @@ __aicore__ inline void ShiftLeftImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __u
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftLeftImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1511,8 +1562,8 @@ __aicore__ inline void ShiftLeftImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubu
 }
 
 template <>
-__aicore__ inline void ShiftLeftImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftLeftImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1536,16 +1587,17 @@ __aicore__ inline void ShiftLeftImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubu
  * ************************************************************************************************* */
 // ShiftRight::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams,
-    bool roundEn)
+__aicore__ inline void ShiftRightImpl<uint16_t, true>(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1571,9 +1623,9 @@ __aicore__ inline void ShiftRightImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams,
-    bool roundEn)
+__aicore__ inline void ShiftRightImpl<uint32_t, true>(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1601,8 +1653,9 @@ __aicore__ inline void ShiftRightImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1630,8 +1683,9 @@ __aicore__ inline void ShiftRightImpl<int32_t, true>(__ubuf__ int32_t* dst, __ub
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1657,16 +1711,17 @@ __aicore__ inline void ShiftRightImpl<int16_t, true>(__ubuf__ int16_t* dst, __ub
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams,
-    bool roundEn)
+__aicore__ inline void ShiftRightImpl<uint16_t, true>(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __VEC_SCOPE__
     {
@@ -1685,8 +1740,9 @@ __aicore__ inline void ShiftRightImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __VEC_SCOPE__
     {
@@ -1705,8 +1761,9 @@ __aicore__ inline void ShiftRightImpl<int16_t, true>(__ubuf__ int16_t* dst, __ub
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __VEC_SCOPE__
     {
@@ -1725,9 +1782,9 @@ __aicore__ inline void ShiftRightImpl<int32_t, true>(__ubuf__ int32_t* dst, __ub
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams,
-    bool roundEn)
+__aicore__ inline void ShiftRightImpl<uint32_t, true>(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __VEC_SCOPE__
     {
@@ -1753,8 +1810,8 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ T* dst, __ubuf__ T* src, const T 
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const int32_t& count)
+__aicore__ inline void ShiftRightImpl<uint16_t, true>(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1774,8 +1831,8 @@ __aicore__ inline void ShiftRightImpl<uint16_t, true>(__ubuf__ uint16_t* dst, __
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const int32_t& count)
+__aicore__ inline void ShiftRightImpl<uint32_t, true>(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1795,8 +1852,8 @@ __aicore__ inline void ShiftRightImpl<uint32_t, true>(__ubuf__ uint32_t* dst, __
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<int16_t, true>(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftRightImpl<int16_t, true>(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1816,8 +1873,8 @@ __aicore__ inline void ShiftRightImpl<int16_t, true>(__ubuf__ int16_t* dst, __ub
 }
 
 template <>
-__aicore__ inline void ShiftRightImpl<int32_t, true>(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftRightImpl<int32_t, true>(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1841,15 +1898,17 @@ __aicore__ inline void ShiftRightImpl<int32_t, true>(__ubuf__ int32_t* dst, __ub
  * ************************************************************************************************* */
 // LeakyRelu::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void LeakyReluImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void LeakyReluImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1877,8 +1936,9 @@ __aicore__ inline void LeakyReluImpl<float, true>(__ubuf__ float* dst, __ubuf__ 
 }
 
 template <>
-__aicore__ inline void LeakyReluImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -1904,15 +1964,17 @@ __aicore__ inline void LeakyReluImpl<half, true>(__ubuf__ half* dst, __ubuf__ ha
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void LeakyReluImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void LeakyReluImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1931,8 +1993,9 @@ __aicore__ inline void LeakyReluImpl<float, true>(__ubuf__ float* dst, __ubuf__ 
 }
 
 template <>
-__aicore__ inline void LeakyReluImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1958,8 +2021,8 @@ __aicore__ inline void LeakyReluImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarV
 }
 
 template <>
-__aicore__ inline void LeakyReluImpl<float, true>(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const int32_t& count)
+__aicore__ inline void LeakyReluImpl<float, true>(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1979,8 +2042,8 @@ __aicore__ inline void LeakyReluImpl<float, true>(__ubuf__ float* dst, __ubuf__ 
 }
 
 template <>
-__aicore__ inline void LeakyReluImpl<half, true>(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const int32_t& count)
+__aicore__ inline void LeakyReluImpl<half, true>(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {

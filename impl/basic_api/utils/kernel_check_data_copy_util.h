@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_check_data_copy_util.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/utils/kernel_check_data_copy_util.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/utils/kernel_check_data_copy_util.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_CHECK_DATA_COPY_UTIL_H__
 #endif
@@ -26,7 +27,8 @@ namespace AscendC {
 namespace check {
 struct CopyApiParams {
     CopyApiParams() {}
-    CopyApiParams(uint64_t dstAddrIn, uint64_t srcAddrIn, uint8_t repeatIn, uint16_t dstStrideIn, uint16_t srcStrideIn,
+    CopyApiParams(
+        uint64_t dstAddrIn, uint64_t srcAddrIn, uint8_t repeatIn, uint16_t dstStrideIn, uint16_t srcStrideIn,
         uint16_t dstRepeatSizeIn, uint16_t srcRepeatSizeIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn,
         uint64_t dstSizeIn, uint64_t srcSizeIn, uint8_t dstPosIn, uint8_t srcPosIn)
     {
@@ -46,8 +48,9 @@ struct CopyApiParams {
         dstPos = static_cast<uint8_t>(GetPhyType(static_cast<TPosition>(dstPosIn)));
         srcPos = static_cast<uint8_t>(GetPhyType(static_cast<TPosition>(srcPosIn)));
     }
-    CopyApiParams(uint64_t dstAddrIn, uint64_t srcAddrIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn,
-        uint64_t dstSizeIn, uint64_t srcSizeIn, uint8_t dstPosIn, uint8_t srcPosIn, uint32_t calCountIn)
+    CopyApiParams(
+        uint64_t dstAddrIn, uint64_t srcAddrIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn, uint64_t dstSizeIn,
+        uint64_t srcSizeIn, uint8_t dstPosIn, uint8_t srcPosIn, uint32_t calCountIn)
     {
         dstAddr = dstAddrIn;
         srcAddr = srcAddrIn;
@@ -82,9 +85,9 @@ struct CopyApiParams {
 
 struct DataCopyBaseParams {
     DataCopyBaseParams() {}
-    DataCopyBaseParams(uint64_t dstAddrIn, uint64_t srcAddrIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn,
-        uint8_t dstPosIn, uint8_t srcPosIn, uint16_t blockCountIn, uint16_t blockLenIn, uint16_t srcStrideIn,
-        uint16_t dstStrideIn)
+    DataCopyBaseParams(
+        uint64_t dstAddrIn, uint64_t srcAddrIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn, uint8_t dstPosIn,
+        uint8_t srcPosIn, uint16_t blockCountIn, uint16_t blockLenIn, uint16_t srcStrideIn, uint16_t dstStrideIn)
     {
         dstAddr = dstAddrIn;
         srcAddr = srcAddrIn;
@@ -116,21 +119,29 @@ struct DataCopyBaseParams {
 
 struct DataCopyApiParams : public DataCopyBaseParams {
     DataCopyApiParams() : DataCopyBaseParams() {}
-    DataCopyApiParams(uint64_t dstAddrIn, uint64_t srcAddrIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn,
-        uint8_t dstPosIn, uint8_t srcPosIn, uint16_t blockCountIn, uint16_t blockLenIn, uint16_t srcStrideIn,
-        uint16_t dstStrideIn)
-        : DataCopyBaseParams(dstAddrIn, srcAddrIn, dstDtypeBytesIn, srcDtypeBytesIn,
-                            dstPosIn, srcPosIn, blockCountIn, blockLenIn, srcStrideIn, dstStrideIn) {}
+    DataCopyApiParams(
+        uint64_t dstAddrIn, uint64_t srcAddrIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn, uint8_t dstPosIn,
+        uint8_t srcPosIn, uint16_t blockCountIn, uint16_t blockLenIn, uint16_t srcStrideIn, uint16_t dstStrideIn)
+        : DataCopyBaseParams(
+              dstAddrIn, srcAddrIn, dstDtypeBytesIn, srcDtypeBytesIn, dstPosIn, srcPosIn, blockCountIn, blockLenIn,
+              srcStrideIn, dstStrideIn)
+    {}
 };
 
 struct DataCopyPadApiParams : public DataCopyBaseParams {
     DataCopyPadApiParams() : DataCopyBaseParams(), isPad(false), leftPadding(0), rightPadding(0), paddingValue(0) {}
-    DataCopyPadApiParams(uint64_t dstAddrIn, uint64_t srcAddrIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn,
-        uint8_t dstPosIn, uint8_t srcPosIn, uint16_t blockCountIn, uint16_t blockLenIn, uint64_t srcStrideIn,
-        uint64_t dstStrideIn, bool isPadIn, uint8_t leftPaddingIn, uint8_t rightPaddingIn, uint64_t paddingValueIn)
-        : DataCopyBaseParams(dstAddrIn, srcAddrIn, dstDtypeBytesIn, srcDtypeBytesIn,
-                            dstPosIn, srcPosIn, blockCountIn, blockLenIn, srcStrideIn, dstStrideIn),
-          isPad(isPadIn), leftPadding(leftPaddingIn), rightPadding(rightPaddingIn), paddingValue(paddingValueIn) {}
+    DataCopyPadApiParams(
+        uint64_t dstAddrIn, uint64_t srcAddrIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn, uint8_t dstPosIn,
+        uint8_t srcPosIn, uint16_t blockCountIn, uint16_t blockLenIn, uint64_t srcStrideIn, uint64_t dstStrideIn,
+        bool isPadIn, uint8_t leftPaddingIn, uint8_t rightPaddingIn, uint64_t paddingValueIn)
+        : DataCopyBaseParams(
+              dstAddrIn, srcAddrIn, dstDtypeBytesIn, srcDtypeBytesIn, dstPosIn, srcPosIn, blockCountIn, blockLenIn,
+              srcStrideIn, dstStrideIn),
+          isPad(isPadIn),
+          leftPadding(leftPaddingIn),
+          rightPadding(rightPaddingIn),
+          paddingValue(paddingValueIn)
+    {}
 
     bool isPad = false;
     uint8_t leftPadding = 0;
@@ -140,8 +151,9 @@ struct DataCopyPadApiParams : public DataCopyBaseParams {
 
 struct DataCopySliceApiParams {
     DataCopySliceApiParams() {}
-    DataCopySliceApiParams(uint64_t dstAddrIn, uint64_t srcAddrIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn,
-        uint64_t sizeIn, uint8_t posIn, uint32_t dimValueIn, uint32_t shapeDstIn[], uint32_t shapeSrcIn[],
+    DataCopySliceApiParams(
+        uint64_t dstAddrIn, uint64_t srcAddrIn, uint32_t dstDtypeBytesIn, uint32_t srcDtypeBytesIn, uint64_t sizeIn,
+        uint8_t posIn, uint32_t dimValueIn, uint32_t shapeDstIn[], uint32_t shapeSrcIn[],
         const SliceInfo dstSliceInfoIn[], const SliceInfo srcSliceInfoIn[], bool isGM2UBIn)
     {
         dstAddr = dstAddrIn;
@@ -176,14 +188,16 @@ struct DataCopySliceApiParams {
     SliceInfo srcSliceInfo[K_MAX_SHAPE_DIM];
 };
 
-inline uint8_t IsBiasConv(const std::vector<Hardware> srcDstHardware) {
+inline uint8_t IsBiasConv(const std::vector<Hardware> srcDstHardware)
+{
     if (ConstDefiner::Instance().biasDataCopy.find(srcDstHardware) != ConstDefiner::Instance().biasDataCopy.cend()) {
         return 1;
     }
     return 0;
 }
 
-inline BlockMode GetBlockMode(std::vector<Hardware> srcDstHardware, BlockMode mode = BlockMode::BLOCK_MODE_NORMAL) {
+inline BlockMode GetBlockMode(std::vector<Hardware> srcDstHardware, BlockMode mode = BlockMode::BLOCK_MODE_NORMAL)
+{
     if (ConstDefiner::Instance().quantDataCopy.find(srcDstHardware) != ConstDefiner::Instance().quantDataCopy.cend()) {
         return mode;
     }
@@ -193,57 +207,75 @@ inline BlockMode GetBlockMode(std::vector<Hardware> srcDstHardware, BlockMode mo
     return BlockMode::BLOCK_MODE_NORMAL;
 }
 
-inline bool ReportTensorSizeOverflow(Hardware srcPos, Hardware dstPos, uint64_t srcSizeBytes, uint64_t dstSizeBytes,
-    uint64_t srcMaxOffsetBytes, uint64_t dstMaxOffsetBytes, std::string apiInfo) {
+inline bool ReportTensorSizeOverflow(
+    Hardware srcPos, Hardware dstPos, uint64_t srcSizeBytes, uint64_t dstSizeBytes, uint64_t srcMaxOffsetBytes,
+    uint64_t dstMaxOffsetBytes, std::string apiInfo)
+{
     if (srcPos != Hardware::GM) {
-        ASCENDC_ASSERT((srcMaxOffsetBytes <= srcSizeBytes), { KERNEL_LOG(KERNEL_ERROR, "Failed to check srcLocal size "
-            "in %s, tensor size needs to be at least %lu bytes, while current tensor size is only %lu bytes.",
-            apiInfo.c_str(), srcMaxOffsetBytes, srcSizeBytes); });
+        ASCENDC_ASSERT((srcMaxOffsetBytes <= srcSizeBytes), {
+            KERNEL_LOG(
+                KERNEL_ERROR,
+                "Failed to check srcLocal size "
+                "in %s, tensor size needs to be at least %lu bytes, while current tensor size is only %lu bytes.",
+                apiInfo.c_str(), srcMaxOffsetBytes, srcSizeBytes);
+        });
     }
     if (dstPos != Hardware::GM) {
-        ASCENDC_ASSERT((dstMaxOffsetBytes <= dstSizeBytes), { KERNEL_LOG(KERNEL_ERROR, "Failed to check dstLocal size "
-            "in %s, tensor size needs to be at least %lu bytes, while current tensor size is only %lu bytes.",
-            apiInfo.c_str(), dstMaxOffsetBytes, dstSizeBytes); });
+        ASCENDC_ASSERT((dstMaxOffsetBytes <= dstSizeBytes), {
+            KERNEL_LOG(
+                KERNEL_ERROR,
+                "Failed to check dstLocal size "
+                "in %s, tensor size needs to be at least %lu bytes, while current tensor size is only %lu bytes.",
+                apiInfo.c_str(), dstMaxOffsetBytes, dstSizeBytes);
+        });
     }
     return true;
 }
 
 template <typename T, typename U>
-inline bool IsConv(DeqScale deqScale) {
+inline bool IsConv(DeqScale deqScale)
+{
     (void)(deqScale);
     return false;
 }
 
 template <>
-inline bool IsConv<int32_t, half>(DeqScale deqScale) {
-    return (deqScale == DeqScale::DEQ || deqScale == DeqScale::DEQ16 ||
-        deqScale == DeqScale::VDEQ || deqScale == DeqScale::VDEQ16);
+inline bool IsConv<int32_t, half>(DeqScale deqScale)
+{
+    return (
+        deqScale == DeqScale::DEQ || deqScale == DeqScale::DEQ16 || deqScale == DeqScale::VDEQ ||
+        deqScale == DeqScale::VDEQ16);
 }
 
 template <>
-inline bool IsConv<float, half>(DeqScale deqScale) {
+inline bool IsConv<float, half>(DeqScale deqScale)
+{
     (void)(deqScale);
     return true;
 }
 
 template <>
-inline bool IsConv<half, half>(DeqScale deqScale) {
+inline bool IsConv<half, half>(DeqScale deqScale)
+{
     (void)(deqScale);
     return false;
 }
 
 template <>
-inline bool IsConv<int32_t, int8_t>(DeqScale deqScale) {
+inline bool IsConv<int32_t, int8_t>(DeqScale deqScale)
+{
     return (deqScale == DeqScale::DEQ8 || deqScale == DeqScale::VDEQ8);
 }
 
 template <>
-inline bool IsConv<int32_t, uint8_t>(DeqScale deqScale) {
+inline bool IsConv<int32_t, uint8_t>(DeqScale deqScale)
+{
     return (deqScale == DeqScale::DEQ8 || deqScale == DeqScale::VDEQ8);
 }
 
 template <>
-inline bool IsConv<int32_t, int16_t>(DeqScale deqScale) {
+inline bool IsConv<int32_t, int16_t>(DeqScale deqScale)
+{
     return (deqScale == DeqScale::DEQ16 || deqScale == DeqScale::VDEQ16);
 }
 
@@ -253,15 +285,16 @@ inline std::string GetSrcIDString(Hardware srcScope, BlockMode blockMode)
     std::string srcIDString = "";
     if ((srcScope == Hardware::UB) || (srcScope == Hardware::L1) || (srcScope == Hardware::GM)) {
         srcIDString += ConstDefiner::Instance().hardwareMap.at(srcScope);
-    } else if ((std::is_same<T, float>::value || std::is_same<T, half>::value) &&
-       (blockMode == BlockMode::BLOCK_MODE_DEPTHWISE)) {
+    } else if (
+        (std::is_same<T, float>::value || std::is_same<T, half>::value) &&
+        (blockMode == BlockMode::BLOCK_MODE_DEPTHWISE)) {
         srcIDString += ConstDefiner::Instance().hardwareMap.at(srcScope) +
-            ConstDefiner::Instance().blockModeMap.at(blockMode) + "f" +
-            std::to_string(sizeof(T) * ONE_BYTE_BIT_SIZE);
+                       ConstDefiner::Instance().blockModeMap.at(blockMode) + "f" +
+                       std::to_string(sizeof(T) * ONE_BYTE_BIT_SIZE);
     } else {
         srcIDString += ConstDefiner::Instance().hardwareMap.at(srcScope) +
-            ConstDefiner::Instance().blockModeMap.at(blockMode) +
-            std::to_string(sizeof(T) * ONE_BYTE_BIT_SIZE);
+                       ConstDefiner::Instance().blockModeMap.at(blockMode) +
+                       std::to_string(sizeof(T) * ONE_BYTE_BIT_SIZE);
     }
     return srcIDString;
 }
@@ -270,9 +303,9 @@ template <typename T>
 inline std::string GetDstIDString(Hardware dstScope, BlockMode blockMode)
 {
     std::string dstIDString = "";
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3002) ||                       \
-    (__NPU_ARCH__ == 3102) || (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) ||                       \
-	(__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113))
+#if defined(__NPU_ARCH__) &&                                                                                 \
+    ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3102) || (__NPU_ARCH__ == 3510) || \
+     (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113))
     if ((dstScope == Hardware::UB) || (dstScope == Hardware::L1) || (dstScope == Hardware::GM) ||
         (dstScope == Hardware::BIAS) || (dstScope == Hardware::FIXBUF)) {
 #else
@@ -281,8 +314,8 @@ inline std::string GetDstIDString(Hardware dstScope, BlockMode blockMode)
         dstIDString += ConstDefiner::Instance().hardwareMap.at(dstScope);
     } else {
         dstIDString += ConstDefiner::Instance().hardwareMap.at(dstScope) +
-            ConstDefiner::Instance().blockModeMap.at(blockMode) +
-            std::to_string(sizeof(T) * ONE_BYTE_BIT_SIZE);
+                       ConstDefiner::Instance().blockModeMap.at(blockMode) +
+                       std::to_string(sizeof(T) * ONE_BYTE_BIT_SIZE);
     }
     return dstIDString;
 }
@@ -291,8 +324,8 @@ inline std::string GetDstIDString(Hardware dstScope, BlockMode blockMode)
 inline uint16_t GetBurstLenUnit(std::string srcDstId, bool isConv, bool isSrc)
 {
     uint16_t burstLenUnit = 0;
-    auto burstLenUnitMap = isSrc ? ConstDefiner::Instance().srcBurstLenUnitMap :
-        ConstDefiner::Instance().dstBurstLenUnitMap;
+    auto burstLenUnitMap =
+        isSrc ? ConstDefiner::Instance().srcBurstLenUnitMap : ConstDefiner::Instance().dstBurstLenUnitMap;
     if (burstLenUnitMap.find(srcDstId) != burstLenUnitMap.end()) {
         burstLenUnit = burstLenUnitMap.at(srcDstId);
         if (isConv) {
@@ -307,8 +340,7 @@ inline uint16_t GetBurstLenUnit(std::string srcDstId, bool isConv, bool isSrc)
 // get unit of dst src stride, unit is byte
 inline uint16_t GetStrideUnit(std::string srcDstId, bool isSrc)
 {
-    auto strideUnitMap = isSrc ? ConstDefiner::Instance().srcStrideUnitMap :
-        ConstDefiner::Instance().dstStrideUnitMap;
+    auto strideUnitMap = isSrc ? ConstDefiner::Instance().srcStrideUnitMap : ConstDefiner::Instance().dstStrideUnitMap;
     if (strideUnitMap.find(srcDstId) != strideUnitMap.end()) {
         return strideUnitMap.at(srcDstId);
     }
@@ -316,10 +348,10 @@ inline uint16_t GetStrideUnit(std::string srcDstId, bool isSrc)
 }
 
 template <typename T, typename U>
-inline void CalculateDataCopyMaxOffset(const DataCopyParams& repeatParams,
-    const Hardware srcHardware, const Hardware dstHardware, const BlockMode blockMode,
-    uint64_t& srcMaxOffset, uint64_t& dstMaxOffset,
-    DeqScale deqScale = DeqScale::DEQ_NONE, const uint8_t biasConvFlag = 0, const uint8_t sidStoreMode = 0)
+inline void CalculateDataCopyMaxOffset(
+    const DataCopyParams& repeatParams, const Hardware srcHardware, const Hardware dstHardware,
+    const BlockMode blockMode, uint64_t& srcMaxOffset, uint64_t& dstMaxOffset, DeqScale deqScale = DeqScale::DEQ_NONE,
+    const uint8_t biasConvFlag = 0, const uint8_t sidStoreMode = 0)
 {
     // L1->L0C and UB->L0C are not recommended to customer, so we do not check it here.
     if ((srcHardware == Hardware::L1 && dstHardware == Hardware::L0C) ||
@@ -358,8 +390,9 @@ inline void CalculateDataCopyMaxOffset(const DataCopyParams& repeatParams,
 }
 
 template <typename T, typename U>
-inline void CalculateDataCopyMaxOffset(Hardware srcPos, Hardware dstPos, const DataCopyCO12DstParams& intriParams,
-    uint64_t& srcMaxOffset, uint64_t& dstMaxOffset)
+inline void CalculateDataCopyMaxOffset(
+    Hardware srcPos, Hardware dstPos, const DataCopyCO12DstParams& intriParams, uint64_t& srcMaxOffset,
+    uint64_t& dstMaxOffset)
 {
     uint16_t c0 = BLOCK_CUBE;
     if (intriParams.channelSplit) {
@@ -372,15 +405,16 @@ inline void CalculateDataCopyMaxOffset(Hardware srcPos, Hardware dstPos, const D
     uint16_t loop3SrcStride = (ndPara & 0xFFFF0000) >> 16;     // ND_PARA[31:16] in unit of fractal size
     uint16_t loop3DstStride = (ndPara & 0xFFFF00000000) >> 32; // ND_PARA[47:32] in unit of elements
     if (srcPos == Hardware::L0C && dstPos == Hardware::GM && intriParams.nz2ndEn) {
-        ASCENDC_ASSERT((ndPara != 0), { KERNEL_LOG(KERNEL_ERROR,
-            "SetFixpipeNz2ndFlag was not called before DataCopy with DataCopyCO12DstParams."); });
+        ASCENDC_ASSERT((ndPara != 0), {
+            KERNEL_LOG(KERNEL_ERROR, "SetFixpipeNz2ndFlag was not called before DataCopy with DataCopyCO12DstParams.");
+        });
         uint16_t fractalSize = BLOCK_CUBE * c0 * sizeof(T);
         // loop3SrcStride in unit of fractal_size, srcStride in unit of C0_Size
-        srcMaxOffset = (ndNum - 1) * loop3SrcStride * fractalSize +
-            cburstNum * intriParams.srcStride * c0 * sizeof(T);
+        srcMaxOffset = (ndNum - 1) * loop3SrcStride * fractalSize + cburstNum * intriParams.srcStride * c0 * sizeof(T);
         // in unit of element Loop2_dst_stride
-        dstMaxOffset = ((ndNum - 1) * loop3DstStride +
-            (intriParams.mSize - 1) * intriParams.dstStride + intriParams.nSize) * sizeof(U);
+        dstMaxOffset =
+            ((ndNum - 1) * loop3DstStride + (intriParams.mSize - 1) * intriParams.dstStride + intriParams.nSize) *
+            sizeof(U);
     } else {
         srcMaxOffset = (intriParams.mSize + (cburstNum - 1) * intriParams.srcStride) * c0 * sizeof(T);
         dstMaxOffset = intriParams.mSize * c0 * sizeof(U) + (cburstNum - 1) * intriParams.dstStride * ONE_BLK_SIZE;
@@ -393,7 +427,7 @@ bool CheckFuncCopyImpl(CopyApiParams& chkParams, const char* intriName);
 
 bool CheckFuncDataCopyImpl(DataCopyApiParams& chkParams, const char* intriName);
 bool CheckFuncDataCopyPadImpl(DataCopyPadApiParams& chkParams, const char* intriName);
-bool CheckFuncDataCopySliceImpl(DataCopySliceApiParams &chkParams, const char* intriName);
+bool CheckFuncDataCopySliceImpl(DataCopySliceApiParams& chkParams, const char* intriName);
 } // namespace check
 } // namespace AscendC
 #endif

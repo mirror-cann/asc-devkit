@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_utils_constants.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/utils/kernel_utils_constants.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/utils/kernel_utils_constants.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_UTILS_CONSTANTS_H__
 #endif
@@ -54,9 +55,9 @@ const uint32_t F32_INF = 0x7f800000;
 const uint32_t F32_NEG_INF = 0xff800000;
 const uint32_t F32_NAN = 0x7fc00000;
 
-const uint16_t VALUE_512 = 512;         // align with 512B / value range [0, 512]
-const uint16_t UINT12_MAX = 4095;       // 12 bit range is [0, 4095]
-const uint16_t UINT15_MAX = 32767;      // 15 bit range is [0, 32767]
+const uint16_t VALUE_512 = 512;    // align with 512B / value range [0, 512]
+const uint16_t UINT12_MAX = 4095;  // 12 bit range is [0, 4095]
+const uint16_t UINT15_MAX = 32767; // 15 bit range is [0, 32767]
 
 // Ctrl bit Pos
 constexpr int32_t CTRL_46_BIT = 46;
@@ -229,8 +230,7 @@ const int32_t SRC_GAP_SIZE_BYTE = 32;
 const int32_t DST_BURST_LEN_SIZE_ELE = 256;
 const int32_t VREDUCE_PER_REP_OUTPUT = 2;
 const uint16_t ONE_PARAM_SIZE = 8;
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3003) || \
-    (__NPU_ARCH__ == 3113))
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113))
 const int32_t BLOCK_COUT = 16;
 const uint16_t TWO_BLK_SIZE = 64;
 #endif
@@ -458,17 +458,21 @@ constexpr uint8_t REGION_PROPOSAL_ELEMENT_NUM = 8;
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 
-template <typename T> std::string ScalarToString(T scalarValue);
-template <> inline std::string ScalarToString(half scalarValue)
+template <typename T>
+std::string ScalarToString(T scalarValue);
+template <>
+inline std::string ScalarToString(half scalarValue)
 {
     return std::to_string(scalarValue.ToFloat());
 }
-template <> inline std::string ScalarToString(bfloat16_t scalarValue)
+template <>
+inline std::string ScalarToString(bfloat16_t scalarValue)
 {
     return std::to_string(scalarValue.ToFloat());
 }
 
-template <typename T> uint64_t GetScalarBitcode(T scalarValue);
+template <typename T>
+uint64_t GetScalarBitcode(T scalarValue);
 // deq tensor ptr could not be passed by cce instructions, so pass ptr to model by this function
 void SetModelDeqTensor(void* deqTensor);
 #if __NPU_ARCH__ == 3002
@@ -489,34 +493,41 @@ void SetModelScatterDst0Tensor(uint64_t dst0, const uint32_t length);
 
 #endif // ASCENDC_CPU_DEBUG
 
-template <typename T> struct GetPadValueType {
+template <typename T>
+struct GetPadValueType {
     using Type = T;
 };
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
 // To support FP8 datacopypad, pad type needs transfer to b8
-template <> struct GetPadValueType<fp8_e5m2_t> {
+template <>
+struct GetPadValueType<fp8_e5m2_t> {
     using Type = uint8_t;
 };
 
-template <> struct GetPadValueType<fp8_e4m3fn_t> {
+template <>
+struct GetPadValueType<fp8_e4m3fn_t> {
     using Type = uint8_t;
 };
 
-template <> struct GetPadValueType<fp8_e8m0_t> {
+template <>
+struct GetPadValueType<fp8_e8m0_t> {
     using Type = uint8_t;
 };
 
-template <> struct GetPadValueType<hifloat8_t> {
+template <>
+struct GetPadValueType<hifloat8_t> {
     using Type = uint8_t;
 };
 
 // To support FP4 datacopypad, pad type needs transfer to b8
-template <> struct GetPadValueType<fp4x2_e1m2_t> {
+template <>
+struct GetPadValueType<fp4x2_e1m2_t> {
     using Type = uint8_t;
 };
 
-template <> struct GetPadValueType<fp4x2_e2m1_t> {
+template <>
+struct GetPadValueType<fp4x2_e2m1_t> {
     using Type = uint8_t;
 };
 #endif
@@ -531,8 +542,10 @@ struct Conditional<false, T1, T2> {
     using type = T2;
 };
 
-template <bool condition1, bool condition2, class T1, class T2, class T3, class T4> struct ConditionalMulti {
-    using type = typename Conditional<condition1, typename Conditional<condition2, T1, T2>::type,
+template <bool condition1, bool condition2, class T1, class T2, class T3, class T4>
+struct ConditionalMulti {
+    using type = typename Conditional<
+        condition1, typename Conditional<condition2, T1, T2>::type,
         typename Conditional<condition2, T3, T4>::type>::type;
 };
 
@@ -548,11 +561,9 @@ struct IntegerSubType {
     Storage storage;
     __aicore__ inline IntegerSubType() = default;
 
-    __aicore__ inline IntegerSubType(uint32_t value)
-        : storage(reinterpret_cast<Storage const &>(value) & mask) {}
+    __aicore__ inline IntegerSubType(uint32_t value) : storage(reinterpret_cast<Storage const&>(value) & mask) {}
 
-    __aicore__ inline IntegerSubType(int32_t value)
-        : storage(reinterpret_cast<Storage const &>(value) & mask) {}
+    __aicore__ inline IntegerSubType(int32_t value) : storage(reinterpret_cast<Storage const&>(value) & mask) {}
 
     __aicore__ inline operator T() const
     {
@@ -563,17 +574,11 @@ struct IntegerSubType {
         return T(storage);
     }
 
-    __aicore__ inline bool operator == (IntegerSubType const &rhs) const
-    {
-        return storage == rhs.storage;
-    }
+    __aicore__ inline bool operator==(IntegerSubType const& rhs) const { return storage == rhs.storage; }
 
-    __aicore__ inline bool operator != (IntegerSubType const &rhs) const
-    {
-        return storage != rhs.storage;
-    }
+    __aicore__ inline bool operator!=(IntegerSubType const& rhs) const { return storage != rhs.storage; }
 
-    __aicore__ inline bool operator > (IntegerSubType const &rhs) const
+    __aicore__ inline bool operator>(IntegerSubType const& rhs) const
     {
         bool lhsIsNeg = (this->storage & (static_cast<uint64_t>(1) << static_cast<uint32_t>(this->kBits - 1)));
         bool rhsIsNeg = (rhs.storage & (static_cast<uint64_t>(1) << static_cast<uint32_t>(rhs.kBits - 1)));
@@ -583,7 +588,7 @@ struct IntegerSubType {
         return this->storage > rhs.storage;
     }
 
-    __aicore__ inline bool operator >= (IntegerSubType const &rhs) const
+    __aicore__ inline bool operator>=(IntegerSubType const& rhs) const
     {
         bool lhsIsNeg = (this->storage & (static_cast<uint64_t>(1) << static_cast<uint32_t>(this->kBits - 1)));
         bool rhsIsNeg = (rhs.storage & (static_cast<uint64_t>(1) << static_cast<uint32_t>(rhs.kBits - 1)));
@@ -593,15 +598,9 @@ struct IntegerSubType {
         return storage >= rhs.storage;
     }
 
-    __aicore__ inline bool operator < (IntegerSubType const &rhs) const
-    {
-        return !(*this >= rhs);
-    }
+    __aicore__ inline bool operator<(IntegerSubType const& rhs) const { return !(*this >= rhs); }
 
-    __aicore__ inline bool operator <= (IntegerSubType const &rhs) const
-    {
-        return !(*this > rhs);
-    }
+    __aicore__ inline bool operator<=(IntegerSubType const& rhs) const { return !(*this > rhs); }
 };
 
 using int4b_t = integer_sub_type<INT4_BIT_NUM, true>;
@@ -617,7 +616,9 @@ using uint4b_t = IntegerSubType<INT4_BIT_NUM, false>;
 using uint3b_t = IntegerSubType<INT3_BIT_NUM, false>;
 using uint2b_t = IntegerSubType<INT2_BIT_NUM, false>;
 #endif
-#if !((defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))) || defined(__NPU_HOST__) || defined(__ASC_NPU_HOST__))
+#if !(                                                                                                        \
+    (defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))) || defined(__NPU_HOST__) || \
+    defined(__ASC_NPU_HOST__))
 using fp8_e8m0_t = uint8_t;
 #elif !defined(ASCENDC_CPU_DEBUG)
 using fp8_e8m0_t = float8_e8m0_t;
@@ -632,20 +633,23 @@ struct GetDstType {
     using Type = T;
 };
 
-template <> struct GetDstType<mx_fp8_e5m2_t> {
+template <>
+struct GetDstType<mx_fp8_e5m2_t> {
     using Type = fp8_e5m2_t;
 };
 
-template <> struct GetDstType<mx_fp8_e4m3_t> {
+template <>
+struct GetDstType<mx_fp8_e4m3_t> {
     using Type = fp8_e4m3fn_t;
 };
 
-template <> struct GetDstType<mx_fp8_e8m0_t> {
+template <>
+struct GetDstType<mx_fp8_e8m0_t> {
     using Type = fp8_e8m0_t;
 };
 
 struct BasicAPIMaskStruct {
-    uint64_t maskArray[MASK_ARRAY_SIZE] = { 0 };
+    uint64_t maskArray[MASK_ARRAY_SIZE] = {0};
 };
 
 template <typename T>
@@ -658,7 +662,8 @@ __aicore__ constexpr bool IsHalfByteDataType()
 #endif
 }
 
-template <typename T> struct SizeOfBits {
+template <typename T>
+struct SizeOfBits {
     static constexpr uint32_t value = sizeof(T) * ONE_BYTE_BIT_SIZE;
 };
 
@@ -697,16 +702,19 @@ struct SizeOfBits<uint2b_t> {
 #endif
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-template <> struct SizeOfBits<fp4x2_e2m1_t> {
+template <>
+struct SizeOfBits<fp4x2_e2m1_t> {
     static constexpr uint32_t value = INT4_BIT_NUM;
 };
-template <> struct SizeOfBits<fp4x2_e1m2_t> {
+template <>
+struct SizeOfBits<fp4x2_e1m2_t> {
     static constexpr uint32_t value = INT4_BIT_NUM;
 };
 #endif
 
-__aicore__ inline bool CheckCastOverlappingHigh(const uint64_t dstAddr, const uint64_t srcAddr,
-    const uint32_t dstTypeSize, const uint32_t srcTypeSize, const uint32_t count)
+__aicore__ inline bool CheckCastOverlappingHigh(
+    const uint64_t dstAddr, const uint64_t srcAddr, const uint32_t dstTypeSize, const uint32_t srcTypeSize,
+    const uint32_t count)
 {
     uint64_t addrLow = dstAddr > srcAddr ? srcAddr : dstAddr;
     uint64_t addrHigh = dstAddr > srcAddr ? dstAddr : srcAddr;

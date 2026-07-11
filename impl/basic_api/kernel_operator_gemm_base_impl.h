@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_gemm_base_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_operator_gemm_base_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_gemm_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_operator_gemm_base_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_gemm_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_GEMM_BASE_IMPL_H__
 #endif
@@ -32,9 +33,10 @@
 namespace AscendC {
 #if ASCENDC_CPU_DEBUG
 
-const std::unordered_set<std::string> MATMUL_SUPPORT_TYPE { "s8s8s32", "f16f16f32", "f16f16f16" };
+const std::unordered_set<std::string> MATMUL_SUPPORT_TYPE{"s8s8s32", "f16f16f32", "f16f16f16"};
 
-template <typename T> __aicore__ inline std::string GetTypeStr(const LocalTensor<T>& input)
+template <typename T>
+__aicore__ inline std::string GetTypeStr(const LocalTensor<T>& input)
 {
     if (std::is_same<PrimT<T>, uint8_t>::value) {
         return "u8";
@@ -61,8 +63,9 @@ __aicore__ inline bool CheckRange(std::pair<uint32_t, uint32_t>& range, const ui
 }
 
 template <typename T, typename U, typename S>
-__aicore__ inline bool CheckOverflow(const LocalTensor<T>& dst, const LocalTensor<U>& src0,
-    const LocalTensor<S>& src1, const uint32_t m, const uint32_t k, const uint32_t n, GemmTiling& tiling)
+__aicore__ inline bool CheckOverflow(
+    const LocalTensor<T>& dst, const LocalTensor<U>& src0, const LocalTensor<S>& src1, const uint32_t m,
+    const uint32_t k, const uint32_t n, GemmTiling& tiling)
 {
     // check l0c
     uint32_t roundM = DivCeil(m, tiling.blockSize) * tiling.blockSize;
@@ -87,8 +90,9 @@ __aicore__ inline bool CheckOverflow(const LocalTensor<T>& dst, const LocalTenso
 }
 
 template <typename T, typename U, typename S>
-__aicore__ inline bool CheckParams(const LocalTensor<T>& dst, const LocalTensor<U>& src0,
-    const LocalTensor<S>& src1, const uint32_t m, const uint32_t k, const uint32_t n, GemmTiling& tiling)
+__aicore__ inline bool CheckParams(
+    const LocalTensor<T>& dst, const LocalTensor<U>& src0, const LocalTensor<S>& src1, const uint32_t m,
+    const uint32_t k, const uint32_t n, GemmTiling& tiling)
 {
     // check c0Size
     if (tiling.c0Size != 16 && tiling.c0Size != 32) {
@@ -160,8 +164,9 @@ __aicore__ inline void CalculateGemmTiling(GemmTiling& tiling)
 }
 
 template <typename T>
-__aicore__ inline void LoadL0B(uint32_t kBlocks, uint32_t nBlocks, GemmTiling tiling, uint32_t i, uint32_t j,
-    const LocalTensor<T>& src1, const LocalTensor<T>& l0b)
+__aicore__ inline void LoadL0B(
+    uint32_t kBlocks, uint32_t nBlocks, GemmTiling tiling, uint32_t i, uint32_t j, const LocalTensor<T>& src1,
+    const LocalTensor<T>& l0b)
 {
     if (tiling.nIterNum == 1) {
         uint32_t wSize = tiling.blockSize * tiling.c0Size;
@@ -188,8 +193,9 @@ __aicore__ inline void LoadL0B(uint32_t kBlocks, uint32_t nBlocks, GemmTiling ti
 }
 
 template <typename T>
-__aicore__ inline void LoadL0A(uint32_t kBlocks, uint32_t mBlocks, GemmTiling tiling, uint32_t i, uint32_t t,
-    const LocalTensor<T>& src0, const LocalTensor<T>& l0a)
+__aicore__ inline void LoadL0A(
+    uint32_t kBlocks, uint32_t mBlocks, GemmTiling tiling, uint32_t i, uint32_t t, const LocalTensor<T>& src0,
+    const LocalTensor<T>& l0a)
 {
     if (kBlocks == 1) {
         uint32_t l1aSize = i * tiling.kTileBlock * tiling.mBlockNum * tiling.blockSize * tiling.c0Size;
@@ -204,7 +210,7 @@ __aicore__ inline void LoadL0A(uint32_t kBlocks, uint32_t mBlocks, GemmTiling ti
         for (size_t index = 0; index < mBlocks; index++) {
             uint32_t l0aOffset = index * kBlocks * tiling.blockSize * tiling.c0Size;
             uint32_t l1aOffset = (t * tiling.mTileBlock + index) * tiling.blockSize * tiling.c0Size +
-                i * tiling.kTileBlock * tiling.mBlockNum * tiling.blockSize * tiling.c0Size;
+                                 i * tiling.kTileBlock * tiling.mBlockNum * tiling.blockSize * tiling.c0Size;
             LoadData2DParams params;
             params.startIndex = 0;
             params.repeatTimes = kBlocks;
@@ -215,8 +221,9 @@ __aicore__ inline void LoadL0A(uint32_t kBlocks, uint32_t mBlocks, GemmTiling ti
 }
 
 template <typename T, typename U, typename S>
-__aicore__ inline void MmadFunc(const LocalTensor<U>& l0a, const LocalTensor<S>& l0b,
-    const LocalTensor<T>& l0c, int32_t initValue, GemmTiling tiling, size_t i)
+__aicore__ inline void MmadFunc(
+    const LocalTensor<U>& l0a, const LocalTensor<S>& l0b, const LocalTensor<T>& l0c, int32_t initValue,
+    GemmTiling tiling, size_t i)
 {
     MmadParams mmadParams;
     mmadParams.m = tiling.mTileBlock * tiling.blockSize;
@@ -261,8 +268,8 @@ __aicore__ inline void MmadFunc(const LocalTensor<U>& l0a, const LocalTensor<S>&
 }
 
 template <typename T, typename U>
-__aicore__ inline void GetPingPongBuffer(LocalTensor<T>& l0aPing, LocalTensor<T>& l0aPong,
-    LocalTensor<U>& l0bPing, LocalTensor<U>& l0bPong)
+__aicore__ inline void GetPingPongBuffer(
+    LocalTensor<T>& l0aPing, LocalTensor<T>& l0aPong, LocalTensor<U>& l0bPing, LocalTensor<U>& l0bPong)
 {
     // L0Abuffer
     TBuffAddr tbufaPing;
@@ -306,8 +313,9 @@ __aicore__ inline void GetSingleThreadBuffer(LocalTensor<T>& l0a, LocalTensor<U>
 }
 
 template <typename T, typename U, typename S>
-__aicore__ inline void GemmExecNmNopingpong(const LocalTensor<T>& l0c, const LocalTensor<U>& src0,
-    const LocalTensor<S>& src1, GemmTiling tiling, const int32_t initValue)
+__aicore__ inline void GemmExecNmNopingpong(
+    const LocalTensor<T>& l0c, const LocalTensor<U>& src0, const LocalTensor<S>& src1, GemmTiling tiling,
+    const int32_t initValue)
 {
     LocalTensor<U> l0a;
     LocalTensor<S> l0b;
@@ -339,8 +347,9 @@ __aicore__ inline void GemmExecNmNopingpong(const LocalTensor<T>& l0c, const Loc
 }
 
 template <typename T, typename U, typename S>
-__aicore__ inline void GemmExecNmPingPong(const LocalTensor<T>& l0c, const LocalTensor<U>& src0,
-    const LocalTensor<S>& src1, GemmTiling tiling, const int32_t initValue)
+__aicore__ inline void GemmExecNmPingPong(
+    const LocalTensor<T>& l0c, const LocalTensor<U>& src0, const LocalTensor<S>& src1, GemmTiling tiling,
+    const int32_t initValue)
 {
     uint32_t ping = 1;
     LocalTensor<U> l0aPing;
@@ -407,8 +416,9 @@ __aicore__ inline void GemmExecNmPingPong(const LocalTensor<T>& l0c, const Local
 }
 
 template <typename T, typename U, typename S>
-__aicore__ inline void GemmExecNm(const LocalTensor<T>& l0c, const LocalTensor<U>& src0,
-    const LocalTensor<S>& src1, GemmTiling tiling, const int32_t initValue)
+__aicore__ inline void GemmExecNm(
+    const LocalTensor<T>& l0c, const LocalTensor<U>& src0, const LocalTensor<S>& src1, GemmTiling tiling,
+    const int32_t initValue)
 {
     uint32_t needL0Asize = tiling.roundM * tiling.dtypeSize * tiling.c0Size * tiling.kTileBlock * 2;
     uint32_t needL0Bsize = tiling.roundN * tiling.dtypeSize * tiling.c0Size * tiling.kTileBlock * 2;
@@ -420,8 +430,9 @@ __aicore__ inline void GemmExecNm(const LocalTensor<T>& l0c, const LocalTensor<U
 }
 
 template <typename T, typename U, typename S>
-__aicore__ inline void GemmExecMnNopingpong(const LocalTensor<T>& l0c, const LocalTensor<U>& src0,
-    const LocalTensor<S>& src1, GemmTiling tiling, const int32_t initValue)
+__aicore__ inline void GemmExecMnNopingpong(
+    const LocalTensor<T>& l0c, const LocalTensor<U>& src0, const LocalTensor<S>& src1, GemmTiling tiling,
+    const int32_t initValue)
 {
     LocalTensor<S> l0b;
     LocalTensor<U> l0a;
@@ -453,8 +464,9 @@ __aicore__ inline void GemmExecMnNopingpong(const LocalTensor<T>& l0c, const Loc
 }
 
 template <typename T, typename U, typename S>
-__aicore__ inline void GemmExecMnPingPong(const LocalTensor<T>& l0c, const LocalTensor<U>& src0,
-    const LocalTensor<S>& src1, GemmTiling tiling, const int32_t initValue)
+__aicore__ inline void GemmExecMnPingPong(
+    const LocalTensor<T>& l0c, const LocalTensor<U>& src0, const LocalTensor<S>& src1, GemmTiling tiling,
+    const int32_t initValue)
 {
     uint32_t ping = 1;
     LocalTensor<U> l0aPing;
@@ -517,8 +529,9 @@ __aicore__ inline void GemmExecMnPingPong(const LocalTensor<T>& l0c, const Local
 }
 
 template <typename T, typename U, typename S>
-__aicore__ inline void GemmExecMn(const LocalTensor<T>& l0c, const LocalTensor<U>& src0,
-    const LocalTensor<S>& src1, GemmTiling tiling, const int32_t initValue)
+__aicore__ inline void GemmExecMn(
+    const LocalTensor<T>& l0c, const LocalTensor<U>& src0, const LocalTensor<S>& src1, GemmTiling tiling,
+    const int32_t initValue)
 {
     uint32_t needL0Bsize = tiling.roundN * tiling.dtypeSize * tiling.c0Size * tiling.kTileBlock * 2;
     uint32_t needL0Asize = tiling.roundM * tiling.dtypeSize * tiling.c0Size * tiling.kTileBlock * 2;

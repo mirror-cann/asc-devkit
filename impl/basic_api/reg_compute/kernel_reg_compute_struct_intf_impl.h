@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /* !
  * \file kernel_reg_compute_struct_intf_impl.h
@@ -14,7 +14,8 @@
  */
 
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic/reg_compute/kernel_reg_compute_struct_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use \"#include \"reg_compute/kernel_reg_compute_struct_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic/reg_compute/kernel_reg_compute_struct_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use \"#include \"reg_compute/kernel_reg_compute_struct_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_STRUCT_INTF_IMPL__
 #endif
@@ -55,9 +56,9 @@ __aicore__ void RegTensor<T, regTrait>::Print() const
             for (uint32_t j = 0; j < blockNum; j++) {
                 if constexpr ((sizeof(T) == sizeof(int8_t)) || (sizeof(T) == sizeof(bool))) {
                     os << static_cast<int32_t>(reg[regIdx][i * blockNum + j]) << " ";
-                } else if constexpr (Std::is_same_v<T, half> || Std::is_same_v<T, bfloat16_t> ||
-                                    Std::is_same_v<T, fp8_e4m3fn_t> || Std::is_same_v<T, fp8_e5m2_t> ||
-                                    Std::is_same_v<T, hifloat8_t>) {
+                } else if constexpr (
+                    Std::is_same_v<T, half> || Std::is_same_v<T, bfloat16_t> || Std::is_same_v<T, fp8_e4m3fn_t> ||
+                    Std::is_same_v<T, fp8_e5m2_t> || Std::is_same_v<T, hifloat8_t>) {
                     os << reg[regIdx][i * blockNum + j].ToFloat() << " ";
                 } else if constexpr (Std::is_same_v<T, fp4x2_e2m1_t> || Std::is_same_v<T, fp4x2_e1m2_t>) {
                     os << ((bfloat16_t)reg[regIdx][i * blockNum + j]).ToFloat() << " ";
@@ -74,7 +75,7 @@ __aicore__ void RegTensor<T, regTrait>::Print() const
 #endif
                 } else if constexpr (Std::is_same_v<T, int4x2_t>) {
                     os << static_cast<int16_t>(reg[regIdx][i * blockNum + j].data & 0xf) << " "
-                    << static_cast<int16_t>((reg[regIdx][i * blockNum + j].data >> 4) & 0xf) << " ";
+                       << static_cast<int16_t>((reg[regIdx][i * blockNum + j].data >> 4) & 0xf) << " ";
                 } else {
                     os << reg[regIdx][i * blockNum + j] << " ";
                 }

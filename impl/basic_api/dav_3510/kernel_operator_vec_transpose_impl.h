@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_transpose_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_3510/kernel_operator_vec_transpose_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_3510/kernel_operator_vec_transpose_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_TRANSPOSE_IMPL_H__
 #endif
@@ -24,178 +25,198 @@
 
 namespace AscendC {
 constexpr int8_t TWO_NUM = 2;
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl(__ubuf__ float* dstList[16], __ubuf__ float* srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl(
+    __ubuf__ float* dstList[16], __ubuf__ float* srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b32(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b32(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl(__ubuf__ int32_t* dstList[16], __ubuf__ int32_t* srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl(
+    __ubuf__ int32_t* dstList[16], __ubuf__ int32_t* srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b32(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b32(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl(__ubuf__ uint32_t* dstList[16], __ubuf__ uint32_t* srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl(
+    __ubuf__ uint32_t* dstList[16], __ubuf__ uint32_t* srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b32(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b32(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl(__ubuf__ int16_t* dstList[16], __ubuf__ int16_t* srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl(
+    __ubuf__ int16_t* dstList[16], __ubuf__ int16_t* srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b16(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b16(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl(__ubuf__ uint16_t* dstList[16], __ubuf__ uint16_t* srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl(
+    __ubuf__ uint16_t* dstList[16], __ubuf__ uint16_t* srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b16(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b16(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl(__ubuf__ half* dstList[16], __ubuf__ half* srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl(
+    __ubuf__ half* dstList[16], __ubuf__ half* srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b16(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b16(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl(__ubuf__ bfloat16_t* dstList[16], __ubuf__ bfloat16_t* srcList[16],
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl(
+    __ubuf__ bfloat16_t* dstList[16], __ubuf__ bfloat16_t* srcList[16],
     const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b16(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b16(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
 __aicore__ inline void TransDataTo5HDB8IntrinsicsCommonImpl(const TransDataTo5HDParams& transDataTo5HDParams)
 {
     if ((transDataTo5HDParams.dstHighHalf == false) && (transDataTo5HDParams.srcHighHalf == false)) {
-        scatter_vnchwconv_b8(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+        scatter_vnchwconv_b8(
+            VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
             transDataTo5HDParams.srcRepStride, false, false);
     } else if ((transDataTo5HDParams.dstHighHalf == false) && (transDataTo5HDParams.srcHighHalf == true)) {
-        scatter_vnchwconv_b8(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+        scatter_vnchwconv_b8(
+            VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
             transDataTo5HDParams.srcRepStride, false, true);
     } else if ((transDataTo5HDParams.dstHighHalf == true) && (transDataTo5HDParams.srcHighHalf == true)) {
-        scatter_vnchwconv_b8(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+        scatter_vnchwconv_b8(
+            VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
             transDataTo5HDParams.srcRepStride, true, true);
     } else {
-        scatter_vnchwconv_b8(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+        scatter_vnchwconv_b8(
+            VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
             transDataTo5HDParams.srcRepStride, true, false);
     }
 }
 
 template <typename T>
-__aicore__ inline void TransDataTo5HDB8IntrinsicsImpl(__ubuf__ T* dstList[16], __ubuf__ T* srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDB8IntrinsicsImpl(
+    __ubuf__ T* dstList[16], __ubuf__ T* srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
     TransDataTo5HDB8IntrinsicsCommonImpl(transDataTo5HDParams);
 }
 
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl(__ubuf__ int8_t* dstList[16], __ubuf__ int8_t* srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl(
+    __ubuf__ int8_t* dstList[16], __ubuf__ int8_t* srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
     TransDataTo5HDB8IntrinsicsImpl(dstList, srcList, transDataTo5HDParams);
 }
 
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl(__ubuf__ uint8_t* dstList[16], __ubuf__ uint8_t* srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl(
+    __ubuf__ uint8_t* dstList[16], __ubuf__ uint8_t* srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
     TransDataTo5HDB8IntrinsicsImpl(dstList, srcList, transDataTo5HDParams);
 }
 
-template<typename T>
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+template <typename T>
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    static_assert((SupportType<T, half, bfloat16_t, float, int16_t,
-                    uint16_t, int32_t, uint32_t, int8_t, uint8_t>()),
-                    "TransDataTo5HD does not support current datatype!");
+    static_assert(
+        (SupportType<T, half, bfloat16_t, float, int16_t, uint16_t, int32_t, uint32_t, int8_t, uint8_t>()),
+        "TransDataTo5HD does not support current datatype!");
 }
 
-template<>
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl<float>(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+template <>
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl<float>(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b32(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b32(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
 template <>
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl<int32_t>(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl<int32_t>(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b32(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b32(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
 template <>
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl<uint32_t>(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl<uint32_t>(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b32(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b32(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
 template <>
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl<int16_t>(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl<int16_t>(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b16(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b16(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
 template <>
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl<uint16_t>(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl<uint16_t>(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b16(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b16(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
 template <>
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl<half>(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl<half>(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b16(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b16(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
 template <>
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl<bfloat16_t>(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl<bfloat16_t>(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    scatter_vnchwconv_b16(VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
+    scatter_vnchwconv_b16(
+        VA0, VA2, transDataTo5HDParams.repeatTimes, transDataTo5HDParams.dstRepStride,
         transDataTo5HDParams.srcRepStride);
 }
 
 template <typename T>
-__aicore__ inline void TransDataTo5HDB8IntrinsicsImpl(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDB8IntrinsicsImpl(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
     TransDataTo5HDB8IntrinsicsCommonImpl(transDataTo5HDParams);
 }
 
 template <>
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl<int8_t>(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl<int8_t>(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
     TransDataTo5HDB8IntrinsicsImpl<int8_t>(dstList, srcList, transDataTo5HDParams);
 }
 
 template <>
-__aicore__ inline void TransDataTo5HDIntrinsicsImpl<uint8_t>(uint64_t dstList[16], uint64_t srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDIntrinsicsImpl<uint8_t>(
+    uint64_t dstList[16], uint64_t srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
     TransDataTo5HDB8IntrinsicsImpl<uint8_t>(dstList, srcList, transDataTo5HDParams);
 }
 
-template <typename T> __aicore__ inline void SetVaReg(__ubuf__ T* dstList[16], __ubuf__ T* srcList[16])
+template <typename T>
+__aicore__ inline void SetVaReg(__ubuf__ T* dstList[16], __ubuf__ T* srcList[16])
 {
     uint64_t vaRegArray1[VA_REG_ARRAY_LEN];
     uint64_t vaRegArray2[VA_REG_ARRAY_LEN];
@@ -215,8 +236,7 @@ template <typename T> __aicore__ inline void SetVaReg(__ubuf__ T* dstList[16], _
     set_va_reg_sb(VA3, vaRegArray4);
 }
 
-__aicore__ inline void SetVaReg(uint64_t dst[NCHW_CONV_ADDR_LIST_SIZE],
-    uint64_t src[NCHW_CONV_ADDR_LIST_SIZE])
+__aicore__ inline void SetVaReg(uint64_t dst[NCHW_CONV_ADDR_LIST_SIZE], uint64_t src[NCHW_CONV_ADDR_LIST_SIZE])
 {
     set_va_reg_sb(VA0, dst);
     set_va_reg_sb(VA1, dst + VA_REG_ARRAY_LEN);
@@ -227,18 +247,18 @@ __aicore__ inline void SetVaReg(uint64_t dst[NCHW_CONV_ADDR_LIST_SIZE],
 __aicore__ inline void VldVaReg(__ubuf__ uint64_t* dst, __ubuf__ uint64_t* src)
 {
     ldva(VA0, (uint64_t)dst, false); // false refers to low 128 bit;
-    ldva(VA1, (uint64_t)dst, true); // true refers to high 128 bit;
+    ldva(VA1, (uint64_t)dst, true);  // true refers to high 128 bit;
     ldva(VA2, (uint64_t)src, false);
     ldva(VA3, (uint64_t)src, true);
 }
 
 template <typename T>
-__aicore__ inline void TransDataTo5HDImpl(__ubuf__ T* dstList[16], __ubuf__ T* srcList[16],
-    const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDImpl(
+    __ubuf__ T* dstList[16], __ubuf__ T* srcList[16], const TransDataTo5HDParams& transDataTo5HDParams)
 {
-    static_assert((SupportType<T, half, bfloat16_t, float, int16_t,
-                    uint16_t, int32_t, uint32_t, int8_t, uint8_t>()),
-                    "TransDataTo5HD does not support current datatype!");
+    static_assert(
+        (SupportType<T, half, bfloat16_t, float, int16_t, uint16_t, int32_t, uint32_t, int8_t, uint8_t>()),
+        "TransDataTo5HD does not support current datatype!");
     if ASCEND_IS_AIV {
         SetVaReg(dstList, srcList);
         TransDataTo5HDIntrinsicsImpl(dstList, srcList, transDataTo5HDParams);
@@ -246,8 +266,9 @@ __aicore__ inline void TransDataTo5HDImpl(__ubuf__ T* dstList[16], __ubuf__ T* s
 }
 
 template <typename T>
-__aicore__ inline void TransDataTo5HDImpl(uint64_t dstList[NCHW_CONV_ADDR_LIST_SIZE],
-    uint64_t srcList[NCHW_CONV_ADDR_LIST_SIZE], const TransDataTo5HDParams& transDataTo5HDParams)
+__aicore__ inline void TransDataTo5HDImpl(
+    uint64_t dstList[NCHW_CONV_ADDR_LIST_SIZE], uint64_t srcList[NCHW_CONV_ADDR_LIST_SIZE],
+    const TransDataTo5HDParams& transDataTo5HDParams)
 {
     if ASCEND_IS_AIV {
         SetVaReg(dstList, srcList);
@@ -261,21 +282,23 @@ __aicore__ inline void TransDataTo5HDVldVaRegImpl(
 {
     if ASCEND_IS_AIV {
         VldVaReg(dst, src);
-        uint64_t dstList[NCHW_CONV_ADDR_LIST_SIZE] = { 0 };
-        uint64_t srcList[NCHW_CONV_ADDR_LIST_SIZE] = { 0 };
+        uint64_t dstList[NCHW_CONV_ADDR_LIST_SIZE] = {0};
+        uint64_t srcList[NCHW_CONV_ADDR_LIST_SIZE] = {0};
         TransDataTo5HDIntrinsicsImpl<T>(dstList, srcList, transDataTo5HDParams);
     }
 }
 
-template <typename T> __aicore__ inline void TransposeImpl(__ubuf__ T* dst, __ubuf__ T* src)
+template <typename T>
+__aicore__ inline void TransposeImpl(__ubuf__ T* dst, __ubuf__ T* src)
 {
     if ASCEND_IS_AIV {
         vtranspose((__ubuf__ uint16_t*)dst, (__ubuf__ uint16_t*)src);
     }
 }
 
-template <typename T> struct Transpose4dParams {
-    __aicore__ Transpose4dParams(){};
+template <typename T>
+struct Transpose4dParams {
+    __aicore__ Transpose4dParams() {};
 
     uint8_t blockSize = 1;
     uint16_t tmp1RemainRowCount = 0;
@@ -315,27 +338,30 @@ template <typename T> struct Transpose4dParams {
     __ubuf__ T* srcList2[NCHW_CONV_ADDR_LIST_SIZE];
 };
 
-template <uint32_t size = sizeof(uint8_t)> struct ExtractTransposeTypeBySize {
+template <uint32_t size = sizeof(uint8_t)>
+struct ExtractTransposeTypeBySize {
     using T = uint8_t;
 };
 
-template <> struct ExtractTransposeTypeBySize<sizeof(uint16_t)> {
+template <>
+struct ExtractTransposeTypeBySize<sizeof(uint16_t)> {
     using T = uint16_t;
 };
 
-template <> struct ExtractTransposeTypeBySize<sizeof(uint32_t)> {
+template <>
+struct ExtractTransposeTypeBySize<sizeof(uint32_t)> {
     using T = uint32_t;
 };
 
 template <typename T>
-__aicore__ inline void TransBroadCastForB8Cal(const LocalTensor<T> &dstLocal, const LocalTensor<T> &srcLocal,
-    Transpose4dParams<T> &params)
+__aicore__ inline void TransBroadCastForB8Cal(
+    const LocalTensor<T>& dstLocal, const LocalTensor<T>& srcLocal, Transpose4dParams<T>& params)
 {
     for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m++) {
-        params.dstList1[m] = (__ubuf__ T *)dstLocal[m * params.blockSize].GetPhyAddr();
+        params.dstList1[m] = (__ubuf__ T*)dstLocal[m * params.blockSize].GetPhyAddr();
     }
     for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE; n++) {
-        params.srcList1[n] = (__ubuf__ T *)srcLocal[params.srcBlockIndex * params.blockSize].GetPhyAddr();
+        params.srcList1[n] = (__ubuf__ T*)srcLocal[params.srcBlockIndex * params.blockSize].GetPhyAddr();
     }
     params.transDataParams1.dstRepStride = params.transDataParams1.repeatTimes > 1 ? ONE_BLK_SIZE : 0;
     params.transDataParams1.srcRepStride = params.transDataParams1.repeatTimes > 1 ? (params.imageBlockNum) : 0;
@@ -349,10 +375,10 @@ __aicore__ inline void TransBroadCastForB8Cal(const LocalTensor<T> &dstLocal, co
     PipeBarrier<PIPE_V>();
 
     for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m++) {
-        params.dstList1[m] = (__ubuf__ T *)dstLocal[B8_TRANS_FRACTAL + m * params.blockSize].GetPhyAddr();
+        params.dstList1[m] = (__ubuf__ T*)dstLocal[B8_TRANS_FRACTAL + m * params.blockSize].GetPhyAddr();
     }
     for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE; n++) {
-        params.srcList1[n] = (__ubuf__ T *)srcLocal[params.srcBlockIndex * params.blockSize].GetPhyAddr();
+        params.srcList1[n] = (__ubuf__ T*)srcLocal[params.srcBlockIndex * params.blockSize].GetPhyAddr();
     }
     params.transDataParams1.dstRepStride = params.transDataParams1.repeatTimes > 1 ? ONE_BLK_SIZE : 0;
     params.transDataParams1.srcRepStride = params.transDataParams1.repeatTimes > 1 ? (params.imageBlockNum) : 0;
@@ -366,27 +392,27 @@ __aicore__ inline void TransBroadCastForB8Cal(const LocalTensor<T> &dstLocal, co
 }
 
 template <typename T>
-__aicore__ inline void TransBroadCastCal(const LocalTensor<T> &dstLocal, const LocalTensor<T> &srcLocal,
-    Transpose4dParams<T> &params)
+__aicore__ inline void TransBroadCastCal(
+    const LocalTensor<T>& dstLocal, const LocalTensor<T>& srcLocal, Transpose4dParams<T>& params)
 {
     if constexpr (sizeof(T) == sizeof(half)) {
         for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m++) {
-            params.dstList1[m] = (__ubuf__ T *)dstLocal[m * params.blockSize].GetPhyAddr();
+            params.dstList1[m] = (__ubuf__ T*)dstLocal[m * params.blockSize].GetPhyAddr();
         }
         for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE; n++) {
-            params.srcList1[n] = (__ubuf__ T *)srcLocal[params.srcBlockIndex * params.blockSize].GetPhyAddr();
+            params.srcList1[n] = (__ubuf__ T*)srcLocal[params.srcBlockIndex * params.blockSize].GetPhyAddr();
         }
         TransDataTo5HDImpl<T>(params.dstList1, params.srcList1, params.transDataParams1);
     } else if constexpr (sizeof(T) == sizeof(uint8_t)) {
         TransBroadCastForB8Cal(dstLocal, srcLocal, params);
     } else {
         for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m = m + TWO_NUM) {
-            params.dstList1[m] = (__ubuf__ T *)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM)].GetPhyAddr();
+            params.dstList1[m] = (__ubuf__ T*)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM)].GetPhyAddr();
             params.dstList1[m + 1] =
-                (__ubuf__ T *)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM) + params.blockSize].GetPhyAddr();
+                (__ubuf__ T*)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM) + params.blockSize].GetPhyAddr();
         }
         for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE; n++) {
-            params.srcList1[n] = (__ubuf__ T *)srcLocal[params.srcBlockIndex * params.blockSize].GetPhyAddr();
+            params.srcList1[n] = (__ubuf__ T*)srcLocal[params.srcBlockIndex * params.blockSize].GetPhyAddr();
         }
         TransDataTo5HDImpl<T>(params.dstList1, params.srcList1, params.transDataParams1);
     }
@@ -394,8 +420,9 @@ __aicore__ inline void TransBroadCastCal(const LocalTensor<T> &dstLocal, const L
 }
 
 template <typename T>
-__aicore__ inline void CopyFirstBlockCal(const LocalTensor<T> &dstLocal, const LocalTensor<T> &srcLocal,
-    const TransposeParamsExt &transposeParams, Transpose4dParams<T> &params, DataCopyParams &dataCopyParams)
+__aicore__ inline void CopyFirstBlockCal(
+    const LocalTensor<T>& dstLocal, const LocalTensor<T>& srcLocal, const TransposeParamsExt& transposeParams,
+    Transpose4dParams<T>& params, DataCopyParams& dataCopyParams)
 {
     if ((params.dstNeedBlockNum != 0) && (params.tmp3RemainRowCount != 0)) {
         DataCopy(dstLocal[params.dstBlockNum * (params.blockSize)], srcLocal, dataCopyParams);
@@ -406,7 +433,7 @@ __aicore__ inline void CopyFirstBlockCal(const LocalTensor<T> &dstLocal, const L
 }
 
 template <typename T>
-__aicore__ inline void UpdateCopyToTmp2ParamCal(Transpose4dParams<T> &params, const TransposeParamsExt &transposeParams)
+__aicore__ inline void UpdateCopyToTmp2ParamCal(Transpose4dParams<T>& params, const TransposeParamsExt& transposeParams)
 {
     params.copyCIndex += 1;
     params.tmp2NeedRowCount -= 1;
@@ -419,14 +446,14 @@ __aicore__ inline void UpdateCopyToTmp2ParamCal(Transpose4dParams<T> &params, co
 }
 
 template <typename T>
-__aicore__ inline void TransFracForB8Cal(const LocalTensor<T> &dstLocal, const LocalTensor<T> &srcLocal,
-    Transpose4dParams<T> &params)
+__aicore__ inline void TransFracForB8Cal(
+    const LocalTensor<T>& dstLocal, const LocalTensor<T>& srcLocal, Transpose4dParams<T>& params)
 {
     for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m++) {
-        params.dstList2[m] = (__ubuf__ T *)dstLocal[m * params.blockSize].GetPhyAddr();
+        params.dstList2[m] = (__ubuf__ T*)dstLocal[m * params.blockSize].GetPhyAddr();
     }
     for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE; n++) {
-        params.srcList2[n] = (__ubuf__ T *)srcLocal[n * params.blockSize].GetPhyAddr();
+        params.srcList2[n] = (__ubuf__ T*)srcLocal[n * params.blockSize].GetPhyAddr();
     }
     params.transDataParams2.dstHighHalf = false;
     params.transDataParams2.srcHighHalf = false;
@@ -434,10 +461,10 @@ __aicore__ inline void TransFracForB8Cal(const LocalTensor<T> &dstLocal, const L
     PipeBarrier<PIPE_V>();
 
     for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m++) {
-        params.dstList2[m] = (__ubuf__ T *)dstLocal[B8_TRANS_FRACTAL + m * params.blockSize].GetPhyAddr();
+        params.dstList2[m] = (__ubuf__ T*)dstLocal[B8_TRANS_FRACTAL + m * params.blockSize].GetPhyAddr();
     }
     for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE; n++) {
-        params.srcList2[n] = (__ubuf__ T *)srcLocal[n * params.blockSize].GetPhyAddr();
+        params.srcList2[n] = (__ubuf__ T*)srcLocal[n * params.blockSize].GetPhyAddr();
     }
     params.transDataParams2.dstHighHalf = false;
     params.transDataParams2.srcHighHalf = true;
@@ -445,10 +472,10 @@ __aicore__ inline void TransFracForB8Cal(const LocalTensor<T> &dstLocal, const L
     PipeBarrier<PIPE_V>();
 
     for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m++) {
-        params.dstList2[m] = (__ubuf__ T *)dstLocal[m * params.blockSize].GetPhyAddr();
+        params.dstList2[m] = (__ubuf__ T*)dstLocal[m * params.blockSize].GetPhyAddr();
     }
     for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE; n++) {
-        params.srcList2[n] = (__ubuf__ T *)srcLocal[B8_TRANS_FRACTAL + n * params.blockSize].GetPhyAddr();
+        params.srcList2[n] = (__ubuf__ T*)srcLocal[B8_TRANS_FRACTAL + n * params.blockSize].GetPhyAddr();
     }
     params.transDataParams2.dstHighHalf = true;
     params.transDataParams2.srcHighHalf = false;
@@ -456,10 +483,10 @@ __aicore__ inline void TransFracForB8Cal(const LocalTensor<T> &dstLocal, const L
     PipeBarrier<PIPE_V>();
 
     for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m++) {
-        params.dstList2[m] = (__ubuf__ T *)dstLocal[B8_TRANS_FRACTAL + m * params.blockSize].GetPhyAddr();
+        params.dstList2[m] = (__ubuf__ T*)dstLocal[B8_TRANS_FRACTAL + m * params.blockSize].GetPhyAddr();
     }
     for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE; n++) {
-        params.srcList2[n] = (__ubuf__ T *)srcLocal[B8_TRANS_FRACTAL + n * params.blockSize].GetPhyAddr();
+        params.srcList2[n] = (__ubuf__ T*)srcLocal[B8_TRANS_FRACTAL + n * params.blockSize].GetPhyAddr();
     }
     params.transDataParams2.dstHighHalf = true;
     params.transDataParams2.srcHighHalf = true;
@@ -467,27 +494,27 @@ __aicore__ inline void TransFracForB8Cal(const LocalTensor<T> &dstLocal, const L
 }
 
 template <typename T>
-__aicore__ inline void TransFracCal(const LocalTensor<T> &dstLocal, const LocalTensor<T> &srcLocal,
-    Transpose4dParams<T> &params)
+__aicore__ inline void TransFracCal(
+    const LocalTensor<T>& dstLocal, const LocalTensor<T>& srcLocal, Transpose4dParams<T>& params)
 {
     if constexpr (sizeof(T) == sizeof(half)) {
         for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m++) {
-            params.dstList2[m] = (__ubuf__ T *)dstLocal[m * params.blockSize].GetPhyAddr();
+            params.dstList2[m] = (__ubuf__ T*)dstLocal[m * params.blockSize].GetPhyAddr();
         }
         for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE; n++) {
-            params.srcList2[n] = (__ubuf__ T *)srcLocal[n * params.blockSize].GetPhyAddr();
+            params.srcList2[n] = (__ubuf__ T*)srcLocal[n * params.blockSize].GetPhyAddr();
         }
         TransDataTo5HDImpl<T>(params.dstList2, params.srcList2, params.transDataParams2);
     } else if constexpr (sizeof(T) == sizeof(uint8_t)) {
         TransFracForB8Cal(dstLocal, srcLocal, params);
     } else {
         for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m = m + TWO_NUM) {
-            params.dstList2[m] = (__ubuf__ T *)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM)].GetPhyAddr();
+            params.dstList2[m] = (__ubuf__ T*)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM)].GetPhyAddr();
             params.dstList2[m + 1] =
-                (__ubuf__ T *)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM) + params.blockSize].GetPhyAddr();
+                (__ubuf__ T*)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM) + params.blockSize].GetPhyAddr();
         }
         for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE; n++) {
-            params.srcList2[n] = (__ubuf__ T *)srcLocal[n * params.blockSize].GetPhyAddr();
+            params.srcList2[n] = (__ubuf__ T*)srcLocal[n * params.blockSize].GetPhyAddr();
         }
         TransDataTo5HDImpl<T>(params.dstList2, params.srcList2, params.transDataParams2);
     }
@@ -495,16 +522,16 @@ __aicore__ inline void TransFracCal(const LocalTensor<T> &dstLocal, const LocalT
 }
 
 template <typename T>
-__aicore__ inline void UpdateTransToTmp3ParamCal(Transpose4dParams<T> &params, const uint16_t cSize,
-    const TransposeType transposeType)
+__aicore__ inline void UpdateTransToTmp3ParamCal(
+    Transpose4dParams<T>& params, const uint16_t cSize, const TransposeType transposeType)
 {
     if (transposeType == TransposeType::TRANSPOSE_NCHW2NHWC) {
         params.tmp3RemainRowCount = 1;
         params.tmp2Count = 0;
         if (params.dstNeedBlockNum == 1) {
             params.tmp2NeedRowCount = params.imageSize % params.transRowCount == 0 ?
-                params.transRowCount :
-                (params.imageSize % params.transRowCount);
+                                          params.transRowCount :
+                                          (params.imageSize % params.transRowCount);
         } else {
             params.tmp2NeedRowCount = params.transRowCount;
         }
@@ -523,8 +550,9 @@ __aicore__ inline void UpdateTransToTmp3ParamCal(Transpose4dParams<T> &params, c
 }
 
 template <typename T>
-__aicore__ inline void Transpose2HwcCal(const LocalTensor<T> &dstLocal, const LocalTensor<T> &srcLocal,
-    const LocalTensor<T> &sharedTmpBuffer, const TransposeParamsExt &transposeParams, Transpose4dParams<T> &params)
+__aicore__ inline void Transpose2HwcCal(
+    const LocalTensor<T>& dstLocal, const LocalTensor<T>& srcLocal, const LocalTensor<T>& sharedTmpBuffer,
+    const TransposeParamsExt& transposeParams, Transpose4dParams<T>& params)
 {
     LocalTensor<T> tempTensorA = sharedTmpBuffer;
     LocalTensor<T> tempTensorB = sharedTmpBuffer[transposeParams.cSize * params.preTmpLen];
@@ -540,8 +568,8 @@ __aicore__ inline void Transpose2HwcCal(const LocalTensor<T> &dstLocal, const Lo
             if (params.dstNeedBlockNum == 1) {
                 // update last tail block section
                 params.tmp1RemainRowCount = params.oneChwSize % params.tmp1NeedRowCount == 0 ?
-                    transposeParams.cSize * params.tmp1NeedRowCount :
-                    (params.oneChwSize % params.tmp1NeedRowCount);
+                                                transposeParams.cSize * params.tmp1NeedRowCount :
+                                                (params.oneChwSize % params.tmp1NeedRowCount);
             } else {
                 params.tmp1RemainRowCount = transposeParams.cSize * params.tmp1NeedRowCount;
             }
@@ -554,7 +582,8 @@ __aicore__ inline void Transpose2HwcCal(const LocalTensor<T> &dstLocal, const Lo
 
             params.preCinnerOffset = (params.copyColCount * (params.tmp1CopyCount / transposeParams.cSize));
             params.preCoffset = (params.transLen) * (params.copyCIndex % transposeParams.cSize);
-            DataCopy(tempTensorB[(params.tmp2Count % params.transRowCount) * (params.blockSize)],
+            DataCopy(
+                tempTensorB[(params.tmp2Count % params.transRowCount) * (params.blockSize)],
                 tempTensorA[params.preCoffset + params.preCinnerOffset], params.dataCopyParams1);
             // update params
             UpdateCopyToTmp2ParamCal(params, transposeParams);
@@ -581,7 +610,7 @@ __aicore__ inline void Transpose2HwcCal(const LocalTensor<T> &dstLocal, const Lo
 }
 
 template <typename T>
-__aicore__ inline void UpdateTransToTmp1ParamCal(Transpose4dParams<T> &params)
+__aicore__ inline void UpdateTransToTmp1ParamCal(Transpose4dParams<T>& params)
 {
     // update the start address of src
     params.srcBlockIndex += 1;
@@ -589,38 +618,37 @@ __aicore__ inline void UpdateTransToTmp1ParamCal(Transpose4dParams<T> &params)
     if (params.dstNeedBlockNum == 1) {
         // update last tail block section
         params.tmp1RemainRowCount = params.oneChwSize % params.tmp1NeedRowCount == 0 ?
-            params.tmp1NeedRowCount :
-            (params.oneChwSize % params.tmp1NeedRowCount);
+                                        params.tmp1NeedRowCount :
+                                        (params.oneChwSize % params.tmp1NeedRowCount);
     } else {
         params.tmp1RemainRowCount = params.tmp1NeedRowCount;
     }
 }
 
 template <typename T>
-__aicore__ inline void TransLastFracCal(const LocalTensor<T> &dstLocal, const LocalTensor<T> &srcLocal,
-    Transpose4dParams<T> &params)
+__aicore__ inline void TransLastFracCal(
+    const LocalTensor<T>& dstLocal, const LocalTensor<T>& srcLocal, Transpose4dParams<T>& params)
 {
     for (int32_t m = 0; m < NCHW_CONV_ADDR_LIST_SIZE; m = m + TWO_NUM) {
-        params.dstList2[m] = (__ubuf__ T *)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM)].GetPhyAddr();
+        params.dstList2[m] = (__ubuf__ T*)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM)].GetPhyAddr();
         params.dstList2[m + 1] =
-            (__ubuf__ T *)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM) + params.blockSize].GetPhyAddr();
+            (__ubuf__ T*)dstLocal[NCHW_CONV_ADDR_LIST_SIZE * (m / TWO_NUM) + params.blockSize].GetPhyAddr();
     }
     for (int32_t n = 0; n < NCHW_CONV_ADDR_LIST_SIZE / TWO_NUM; n++) {
-        params.srcList2[n] = (__ubuf__ T *)srcLocal[n * params.blockSize].GetPhyAddr();
+        params.srcList2[n] = (__ubuf__ T*)srcLocal[n * params.blockSize].GetPhyAddr();
         params.srcList2[n + NCHW_CONV_ADDR_LIST_SIZE / TWO_NUM] =
-            (__ubuf__ T *)srcLocal[n * params.blockSize].GetPhyAddr();
+            (__ubuf__ T*)srcLocal[n * params.blockSize].GetPhyAddr();
     }
     TransDataTo5HDImpl<T>(params.dstList2, params.srcList2, params.transDataParams2);
 }
 
 template <typename T>
-__aicore__ inline void CopyTodstForChwCal(const LocalTensor<T> &dstLocal, const LocalTensor<T> &srcLocal,
-    const uint16_t cSize, Transpose4dParams<T> &params)
+__aicore__ inline void CopyTodstForChwCal(
+    const LocalTensor<T>& dstLocal, const LocalTensor<T>& srcLocal, const uint16_t cSize, Transpose4dParams<T>& params)
 {
     params.dataCopyParams2.blockCount = cSize;
     params.dataCopyParams2.blockLen = params.tmp3RemainRowCount;
-    params.dataCopyParams2.srcStride =
-        params.preTmpLen * sizeof(T) / ONE_BLK_SIZE - params.tmp3RemainRowCount;
+    params.dataCopyParams2.srcStride = params.preTmpLen * sizeof(T) / ONE_BLK_SIZE - params.tmp3RemainRowCount;
     params.dataCopyParams2.dstStride = params.imageBlockNum - params.tmp3RemainRowCount;
 
     if ((params.dstNeedBlockNum != 0) && (params.tmp3RemainRowCount != 0)) {
@@ -638,8 +666,9 @@ __aicore__ inline void CopyTodstForChwCal(const LocalTensor<T> &dstLocal, const 
 }
 
 template <typename T>
-__aicore__ inline void Transpose2ChwCal(const LocalTensor<T> &dstLocal, const LocalTensor<T> &srcLocal,
-    const LocalTensor<T> &sharedTmpBuffer, const TransposeParamsExt &transposeParams, Transpose4dParams<T> &params)
+__aicore__ inline void Transpose2ChwCal(
+    const LocalTensor<T>& dstLocal, const LocalTensor<T>& srcLocal, const LocalTensor<T>& sharedTmpBuffer,
+    const TransposeParamsExt& transposeParams, Transpose4dParams<T>& params)
 {
     LocalTensor<T> tempTensorA = sharedTmpBuffer;                   // size: params.preTmpLen;
     LocalTensor<T> tempTensorB = sharedTmpBuffer[params.preTmpLen]; // size: transposeParams.cSize * params.preTmpLen;
@@ -658,7 +687,8 @@ __aicore__ inline void Transpose2ChwCal(const LocalTensor<T> &dstLocal, const Lo
             params.dataCopyParams1.blockLen = 1;
             params.preCinnerOffset = (params.copyColCount * (params.tmp2Count / transposeParams.cSize));
             params.preCoffset = params.transLen * (params.copyCIndex % transposeParams.cSize);
-            DataCopy(tempTensorB[params.preCoffset + params.preCinnerOffset],
+            DataCopy(
+                tempTensorB[params.preCoffset + params.preCinnerOffset],
                 tempTensorA[(params.tmp2Count % params.blockSize) * params.transRowCount], params.dataCopyParams1);
             // update params
             UpdateCopyToTmp2ParamCal(params, transposeParams);
@@ -689,7 +719,7 @@ __aicore__ inline void Transpose2ChwCal(const LocalTensor<T> &dstLocal, const Lo
 }
 
 template <typename T>
-__aicore__ inline void GetTransposeParamCal(const TransposeParamsExt &transposeParams, Transpose4dParams<T> &params)
+__aicore__ inline void GetTransposeParamCal(const TransposeParamsExt& transposeParams, Transpose4dParams<T>& params)
 {
     params.imageSize = transposeParams.hSize * transposeParams.wSize;
     params.imageBlockNum = params.imageSize * sizeof(T) / ONE_BLK_SIZE;
@@ -723,8 +753,9 @@ __aicore__ inline void TransposeUB2UBImpl(__ubuf__ T* dst, __ubuf__ T* src, cons
 }
 
 template <typename T>
-__aicore__ inline void Transpose4DImpl(const LocalTensor<T> &dstLocal, const LocalTensor<T> &srcLocal,
-    const LocalTensor<uint8_t> &sharedTmpBuffer, const TransposeParamsExt &transposeParams)
+__aicore__ inline void Transpose4DImpl(
+    const LocalTensor<T>& dstLocal, const LocalTensor<T>& srcLocal, const LocalTensor<uint8_t>& sharedTmpBuffer,
+    const TransposeParamsExt& transposeParams)
 {
     static_assert((SupportBytes<PrimT<T>, 1, 2, 4>()), "Transpose only supports type fp4/b8/b16/b32 on current device");
     ASCENDC_ASSERT((sharedTmpBuffer.GetSize() > 0), { KERNEL_LOG(KERNEL_ERROR, "sharedTmpBuffer size must > 0!"); });
@@ -746,8 +777,9 @@ __aicore__ inline void Transpose4DImpl(const LocalTensor<T> &dstLocal, const Loc
             params.dstNeedBlockNum = params.oneChwSize * sizeof(PrimT<T>) / ONE_BLK_SIZE;
             params.tmp2NeedRowCount =
                 params.dstNeedBlockNum == 1 ? (params.imageSize % params.transRowCount) : params.transRowCount;
-            Transpose2HwcCal<Transpose4DType>(dstTmpLocal[i * params.oneChwSize], srcTmpLocal[i * params.oneChwSize], stackBuffer,
-                transposeParams, params);
+            Transpose2HwcCal<Transpose4DType>(
+                dstTmpLocal[i * params.oneChwSize], srcTmpLocal[i * params.oneChwSize], stackBuffer, transposeParams,
+                params);
         }
     } else if (transposeParams.transposeType == TransposeType::TRANSPOSE_NHWC2NCHW) {
         for (int16_t i = 0; i < transposeParams.nSize; i++) {
@@ -761,16 +793,18 @@ __aicore__ inline void Transpose4DImpl(const LocalTensor<T> &dstLocal, const Loc
             params.dstNeedBlockNum =
                 params.imageBlockNum; // In the copy->dst part, repeat is used to transfer dimension C. Therefore,
                                       // dstNeedBlockNum is calculated as h x w.
-            params.tmp2NeedRowCount = params.oneChwSize * sizeof(PrimT<T>) / ONE_BLK_SIZE == 1 ?
-                (params.imageSize % params.transRowCount) :
-                transposeParams.cSize * params.transRowCount; // In tmp2, c transposed fractals need to be collected,
-                                                              // and then transposing is performed.
+            params.tmp2NeedRowCount =
+                params.oneChwSize * sizeof(PrimT<T>) / ONE_BLK_SIZE == 1 ?
+                    (params.imageSize % params.transRowCount) :
+                    transposeParams.cSize * params.transRowCount; // In tmp2, c transposed fractals need to be
+                                                                  // collected, and then transposing is performed.
             // float type: when H x W = 8, tmp2NeedRowCount = c x 8.
             if ((sizeof(PrimT<T>) == sizeof(float)) && (params.dstNeedBlockNum == 1)) {
                 params.tmp2NeedRowCount = transposeParams.cSize * params.blockSize;
             }
-            Transpose2ChwCal<Transpose4DType>(dstTmpLocal[i * params.oneChwSize], srcTmpLocal[i * params.oneChwSize], stackBuffer,
-                transposeParams, params);
+            Transpose2ChwCal<Transpose4DType>(
+                dstTmpLocal[i * params.oneChwSize], srcTmpLocal[i * params.oneChwSize], stackBuffer, transposeParams,
+                params);
         }
     }
 }

@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kfc_comm.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_m510/kfc/kfc_comm.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_m510/kfc/kfc_comm.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KFC_COMM_H__
 #endif
@@ -44,8 +45,8 @@ enum class KFC_Enum : uint16_t {
     SCMFUN_GM2L1,
     SCMFUN_GM2L1ND2NZ,
     SERVICE_ID_MATMUL = 0x0300,
-    MMFUN_MASK = 0x0380,     // Indicates that Iterate needs to be invoked.
-    MMFUN_ITERATE = 0x0380,  // Iterate and IterateAll occupy 2 bits to save the cost of judgment.
+    MMFUN_MASK = 0x0380,    // Indicates that Iterate needs to be invoked.
+    MMFUN_ITERATE = 0x0380, // Iterate and IterateAll occupy 2 bits to save the cost of judgment.
     MMFUN_ITERATE_ALL = 0x0381,
     MMFUN_INIT = 0x0301,
     MMFUN_GET_TENSOR_C,
@@ -83,8 +84,9 @@ constexpr int32_t MIX_NUM = __MIX_CORE_AIC_RATION__;
 constexpr int32_t MIX_NUM = 2; // david 1:2
 #endif
 constexpr int MAX_MSG_MASK = 3;
-constexpr int MAX_MSG_COUNT_Arch3510 = (1 << MAX_MSG_MASK);  // 2KB支持16个消息，每个消息大小128B，给两个v用，每个V可分得8个消息
-constexpr int BIDIRECTION_NUM = 1;  // 单向
+constexpr int MAX_MSG_COUNT_Arch3510 =
+    (1 << MAX_MSG_MASK); // 2KB支持16个消息，每个消息大小128B，给两个v用，每个V可分得8个消息
+constexpr int BIDIRECTION_NUM = 1; // 单向
 constexpr int MAX_MATMUL_OBJ = 4;
 constexpr uint64_t INC_PROCESS_CHECK = 14;
 constexpr uint8_t VALID_ADDR_BITS_NUM = 56;
@@ -130,9 +132,9 @@ struct MatmulConfigParams {
     uint32_t singleM; // tail
     uint32_t singleN;
     uint32_t singleK;
-    uint64_t biasAddr;  // 56 bytes, but access to the maximum message size (64 bytes)
-    uint64_t quantAddr; // 64 bytes
-    uint64_t quantScalar;        // 80 bytes
+    uint64_t biasAddr;    // 56 bytes, but access to the maximum message size (64 bytes)
+    uint64_t quantAddr;   // 64 bytes
+    uint64_t quantScalar; // 80 bytes
     uint32_t quantSize;
     uint32_t batchA;
     uint32_t batchB;
@@ -150,27 +152,19 @@ struct MatmulUserDefInfo {
 constexpr uint16_t KFC_MSG_BYTE_OFFSET = 16;
 constexpr uint16_t KFC_MSG_BYTE_OFFSET_8 = 8;
 // AIV->AIC, set the instance ID
-__aicore__ inline uint16_t KfcMsgGetInstID(uint32_t flag)
-{
-    return flag & 0x000000ff;
-}
+__aicore__ inline uint16_t KfcMsgGetInstID(uint32_t flag) { return flag & 0x000000ff; }
 __aicore__ inline KFC_Enum KfcMsgGetFunID(uint32_t flag)
 {
     return static_cast<KFC_Enum>((flag & 0xffff0000) >> KFC_MSG_BYTE_OFFSET);
 }
-__aicore__ inline uint32_t KfcMsgGetState(uint32_t flag)
-{
-    return (flag & 0x00008000);
-}
+__aicore__ inline uint32_t KfcMsgGetState(uint32_t flag) { return (flag & 0x00008000); }
 __aicore__ inline uint32_t KfcMsgMakeFlag(KFC_Enum funID, uint16_t instID, uint16_t isSameAB = 0)
 {
-    return (((static_cast<uint16_t>(funID) << KFC_MSG_BYTE_OFFSET) + 0x8000) + (isSameAB << KFC_MSG_BYTE_OFFSET_8) +
+    return (
+        ((static_cast<uint16_t>(funID) << KFC_MSG_BYTE_OFFSET) + 0x8000) + (isSameAB << KFC_MSG_BYTE_OFFSET_8) +
         (instID));
 }
-__aicore__ inline uint32_t KfcMsgGetIsSameAB(uint32_t flag)
-{
-    return (flag & 0x00000100);
-}
+__aicore__ inline uint32_t KfcMsgGetIsSameAB(uint32_t flag) { return (flag & 0x00000100); }
 
 // Currently, the maximum message size is 64 bytes, which is the same as the size of a CacheLine.
 struct KfcMsg {
@@ -197,7 +191,7 @@ struct MsgMatmulL1Addr {
 struct TilingInfo {
     volatile uint32_t valid = 0;
     uint32_t res;
-    TCubeTiling tCubeTiling;  // tiling的GM地址
+    TCubeTiling tCubeTiling; // tiling的GM地址
 };
 
 struct SsbufWorkspaceDesc {
@@ -209,9 +203,9 @@ struct SsbufWorkspaceDesc {
 __aicore__ inline MEM_ADDR GetTilingAddr(int subblockID)
 {
 #if ASCENDC_CPU_DEBUG
-    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc *>(ConstDefiner::Instance().cpuSSbuf);
+    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc*>(ConstDefiner::Instance().cpuSSbuf);
 #else
-    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc *>(0);
+    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc*>(0);
 #endif
     return reinterpret_cast<MEM_ADDR>(&ptr->tilingInfo[subblockID]);
 }
@@ -222,9 +216,9 @@ __aicore__ inline MEM_ADDR GetMsgHead(int subblockID)
         KERNEL_LOG(KERNEL_ERROR, "input i is %d, which should be in range [0, %d)", subblockID, MIX_NUM);
     });
 #if ASCENDC_CPU_DEBUG
-    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc *>(ConstDefiner::Instance().cpuSSbuf);
+    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc*>(ConstDefiner::Instance().cpuSSbuf);
 #else
-    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc *>(0);
+    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc*>(0);
 #endif
     return reinterpret_cast<MEM_ADDR>(&ptr->kfcMsg[subblockID * BIDIRECTION_NUM * MAX_MSG_COUNT_Arch3510]);
 }
@@ -238,9 +232,9 @@ __aicore__ inline MEM_ADDR GetMatmulL1AddrMsg(int subblockID, uint16_t instID)
         KERNEL_LOG(KERNEL_ERROR, "input instID is %d, which should be in range [0, %d)", subblockID, MAX_MATMUL_OBJ);
     });
 #if ASCENDC_CPU_DEBUG
-    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc *>(ConstDefiner::Instance().cpuSSbuf);
+    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc*>(ConstDefiner::Instance().cpuSSbuf);
 #else
-    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc *>(0);
+    auto ptr = reinterpret_cast<__ssbuf__ struct SsbufWorkspaceDesc*>(0);
 #endif
     return reinterpret_cast<MEM_ADDR>(&ptr->matmulL1AddrMsg[subblockID * MAX_MSG_COUNT_Arch3510 + instID]);
 }
@@ -248,9 +242,9 @@ __aicore__ inline MEM_ADDR GetMatmulL1AddrMsg(int subblockID, uint16_t instID)
 __aicore__ inline void ClearSSbufImpl()
 {
 #if ASCENDC_CPU_DEBUG
-    auto ptr = reinterpret_cast<__ssbuf__ uint32_t *>(ConstDefiner::Instance().cpuSSbuf);
+    auto ptr = reinterpret_cast<__ssbuf__ uint32_t*>(ConstDefiner::Instance().cpuSSbuf);
 #else
-    auto ptr = reinterpret_cast<__ssbuf__ uint32_t *>(0);
+    auto ptr = reinterpret_cast<__ssbuf__ uint32_t*>(0);
 #endif
     constexpr uint32_t kfcSSbufSize =
         MIX_NUM * BIDIRECTION_NUM * MAX_MSG_COUNT_Arch3510 * sizeof(KfcMsg) / sizeof(uint32_t);
@@ -265,8 +259,8 @@ __aicore__ inline void ClearSSbufImpl()
     *(ptr + kfcSSbufSize + l1MsgSize + tilingSize) = 0;
     return;
 }
-}  // namespace AscendC
-#endif  // __KERNEL_KFC_COMM_H__
+} // namespace AscendC
+#endif // __KERNEL_KFC_COMM_H__
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KFC_COMM_H__)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KFC_COMM_H__

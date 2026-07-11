@@ -100,9 +100,9 @@ __aicore__ inline void LoadData2DL12L0BCal(__cb__ T* dst, __cbuf__ T* src, const
 
         if (loadDataParam.ifTranspose) {
             for (uint8_t i = 0; i < kStep; i++) {
- 	            load_cbuf_to_cb(
- 	                dst + i * VALUE_512 / sizeof(T) * dstStride, src, mStartPosition, i, 1, 1, srcStride, dstStride, 1);
- 	        }
+                load_cbuf_to_cb(
+                    dst + i * VALUE_512 / sizeof(T) * dstStride, src, mStartPosition, i, 1, 1, srcStride, dstStride, 1);
+            }
         } else {
             load_cbuf_to_cb(dst, src, mStartPosition, kStartPosition, 1, kStep, srcStride, dstStride, 0);
         }

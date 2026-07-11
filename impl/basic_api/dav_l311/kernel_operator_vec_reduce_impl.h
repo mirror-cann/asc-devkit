@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_reduce_impl.h
  * \brief AscendC l311 support reduce api.
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_l311/kernel_operator_vec_reduce_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_l311/kernel_operator_vec_reduce_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_REDUCE_IMPL_H__
 #endif
@@ -30,7 +31,7 @@ __BLOCK_LOCAL__ __inline__ float accValFloat;
 __BLOCK_LOCAL__ __inline__ half accValHalf;
 
 template <bool isBitMask, typename T>
-__simd_callee__ inline void GenPredicate(Reg::MaskReg &preg, uint32_t maskReg)
+__simd_callee__ inline void GenPredicate(Reg::MaskReg& preg, uint32_t maskReg)
 {
     if constexpr (isBitMask) {
         preg = Reg::MoveMask<T>();
@@ -40,8 +41,8 @@ __simd_callee__ inline void GenPredicate(Reg::MaskReg &preg, uint32_t maskReg)
 }
 
 template <bool isSetMask, bool isBitMask, bool isCounterMode, typename T>
-__simd_callee__ inline void ReduceCommonCall(Reg::MaskReg& mask, uint16_t& newRepeatTimes, uint32_t& countSreg,
-                                        uint32_t maskReg, __ubuf__ uint64_t* maskBuf)
+__simd_callee__ inline void ReduceCommonCall(
+    Reg::MaskReg& mask, uint16_t& newRepeatTimes, uint32_t& countSreg, uint32_t maskReg, __ubuf__ uint64_t* maskBuf)
 {
     if constexpr (isCounterMode) {
         if constexpr (!isSetMask) {
@@ -55,9 +56,9 @@ __simd_callee__ inline void ReduceCommonCall(Reg::MaskReg& mask, uint16_t& newRe
         constexpr uint16_t oneRepSize = GetVecLen() / sizeof(T);
         newRepeatTimes = CeilDivision(countSreg, oneRepSize);
     } else {
-        if constexpr (isBitMask) {  // mask[]
+        if constexpr (isBitMask) { // mask[]
             mask = Reg::MoveMask<T>();
-        } else {  // mask
+        } else { // mask
             if constexpr (!isSetMask) {
                 mask = Reg::MoveMask<T>();
             } else {
@@ -68,8 +69,9 @@ __simd_callee__ inline void ReduceCommonCall(Reg::MaskReg& mask, uint16_t& newRe
 }
 
 template <bool isSetMask, bool isBitMask, bool isCounterMode, auto func, typename T>
-__simd_vf__ inline void ReduceAlignCall(__ubuf__ T *dst, __ubuf__ T *src, int32_t repeat, uint32_t dstRepOffset,
-    uint32_t srcBlkStride, uint32_t srcRepStride, uint32_t maskReg, __ubuf__ uint64_t *maskBuf)
+__simd_vf__ inline void ReduceAlignCall(
+    __ubuf__ T* dst, __ubuf__ T* src, int32_t repeat, uint32_t dstRepOffset, uint32_t srcBlkStride,
+    uint32_t srcRepStride, uint32_t maskReg, __ubuf__ uint64_t* maskBuf)
 {
     Reg::MaskReg stMask = Reg::CreateMask<T, Reg::MaskPattern::H>();
     Reg::MaskReg mask;
@@ -90,8 +92,9 @@ __simd_vf__ inline void ReduceAlignCall(__ubuf__ T *dst, __ubuf__ T *src, int32_
 }
 
 template <bool isSetMask, bool isBitMask, bool isCounterMode, bool withStride, auto func, typename T, typename U = T>
-__simd_vf__ inline void ReduceUnalignCall(__ubuf__ U *dst, __ubuf__ T *src, int32_t repeat, uint32_t oneRepOffset,
-    uint32_t dstRepOffsetPost, uint32_t srcBlkStride, uint32_t srcRepStride, uint32_t maskReg, __ubuf__ uint64_t *maskBuf)
+__simd_vf__ inline void ReduceUnalignCall(
+    __ubuf__ U* dst, __ubuf__ T* src, int32_t repeat, uint32_t oneRepOffset, uint32_t dstRepOffsetPost,
+    uint32_t srcBlkStride, uint32_t srcRepStride, uint32_t maskReg, __ubuf__ uint64_t* maskBuf)
 {
     Reg::MaskReg mask;
     uint16_t newRepeatTimes = static_cast<uint16_t>(repeat);
@@ -118,9 +121,9 @@ __simd_vf__ inline void ReduceUnalignCall(__ubuf__ U *dst, __ubuf__ T *src, int3
 }
 
 template <bool isSetMask, bool isBitMask, bool isCounterMode, bool withStride, auto func, typename T, typename U = T>
-__simd_vf__ inline void WholeReduceUnalignCall(__ubuf__ U *dst, __ubuf__ T *src, int32_t repeat, uint32_t oneRepOffset,
-    uint32_t dstRepOffsetPost, uint32_t srcBlkStride, uint32_t srcRepStride, uint32_t maskReg,
-    __ubuf__ uint64_t *maskBuf, const ReduceOrder order)
+__simd_vf__ inline void WholeReduceUnalignCall(
+    __ubuf__ U* dst, __ubuf__ T* src, int32_t repeat, uint32_t oneRepOffset, uint32_t dstRepOffsetPost,
+    uint32_t srcBlkStride, uint32_t srcRepStride, uint32_t maskReg, __ubuf__ uint64_t* maskBuf, const ReduceOrder order)
 {
     Reg::MaskReg mask;
     uint16_t newRepeatTimes = static_cast<uint16_t>(repeat);
@@ -158,20 +161,21 @@ __simd_vf__ inline void WholeReduceUnalignCall(__ubuf__ U *dst, __ubuf__ T *src,
 }
 
 template <bool isSetMask, bool isBitMask, auto func, typename T>
-__aicore__ inline void PairReduceTemplate(__ubuf__ T *dst, __ubuf__ T *src, int32_t repeat, int32_t dstRepStride,
-    uint32_t oneRepOffset, int32_t srcBlkStride, int32_t srcRepStride, uint32_t maskReg)
+__aicore__ inline void PairReduceTemplate(
+    __ubuf__ T* dst, __ubuf__ T* src, int32_t repeat, int32_t dstRepStride, uint32_t oneRepOffset, int32_t srcBlkStride,
+    int32_t srcRepStride, uint32_t maskReg)
 {
     constexpr uint32_t ONE_BLK_ELEMENT_NUM = GetDataBlockSizeInBytes() / sizeof(T);
     uint32_t dstRepOffset = oneRepOffset * dstRepStride;
     int32_t newRepeat = repeat;
-    __ubuf__ T *newSrc = src;
+    __ubuf__ T* newSrc = src;
     if (dstRepStride == 0 && repeat > 0) {
         uint32_t srcStrideOffset = srcRepStride * ONE_BLK_ELEMENT_NUM;
         newSrc += (srcStrideOffset * (repeat - 1));
         newRepeat = 1;
     }
     bool isCounterMode = Internal::IsCounterMode();
-     __ubuf__ uint64_t *maskBuf = nullptr;
+    __ubuf__ uint64_t* maskBuf = nullptr;
     if (isCounterMode) {
         if constexpr (!isSetMask) {
             maskBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(TMP_UB_OFFSET, 2);
@@ -188,19 +192,20 @@ __aicore__ inline void PairReduceTemplate(__ubuf__ T *dst, __ubuf__ T *src, int3
 }
 
 template <bool isSetMask, bool isBitMask, auto func, typename T, typename U = T>
-__aicore__ inline void ReduceTemplate(__ubuf__ U *dst, __ubuf__ T *src, int32_t repeat, int32_t dstRepStride,
-    uint32_t oneRepOffset, int32_t srcBlkStride, int32_t srcRepStride, uint32_t maskReg)
+__aicore__ inline void ReduceTemplate(
+    __ubuf__ U* dst, __ubuf__ T* src, int32_t repeat, int32_t dstRepStride, uint32_t oneRepOffset, int32_t srcBlkStride,
+    int32_t srcRepStride, uint32_t maskReg)
 {
     constexpr uint32_t ONE_BLK_ELEMENT_NUM = GetDataBlockSizeInBytes() / sizeof(T);
     bool isCounterMode = Internal::IsCounterMode();
-    __ubuf__ uint64_t *maskBuf = nullptr;
+    __ubuf__ uint64_t* maskBuf = nullptr;
     if (isCounterMode) {
         if constexpr (!isSetMask) {
             maskBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(TMP_UB_OFFSET, 2);
         }
         if (dstRepStride == 0 && repeat > 0) {
             uint32_t srcStrideOffset = srcRepStride * ONE_BLK_ELEMENT_NUM;
-            __ubuf__ T *newSrc = src + srcStrideOffset * (repeat - 1);
+            __ubuf__ T* newSrc = src + srcStrideOffset * (repeat - 1);
             ReduceUnalignCall<isSetMask, isBitMask, true, true, func, T, U>(
                 dst, newSrc, 1, oneRepOffset, 0, srcBlkStride, srcRepStride, maskReg, maskBuf);
         } else if (dstRepStride == 1 && repeat > 0) {
@@ -217,7 +222,7 @@ __aicore__ inline void ReduceTemplate(__ubuf__ U *dst, __ubuf__ T *src, int32_t 
     } else {
         if (dstRepStride == 0 && repeat > 0) {
             uint32_t srcStrideOffset = srcRepStride * ONE_BLK_ELEMENT_NUM;
-            __ubuf__ T *newSrc = src + srcStrideOffset * (repeat - 1);
+            __ubuf__ T* newSrc = src + srcStrideOffset * (repeat - 1);
             ReduceUnalignCall<isSetMask, isBitMask, false, true, func, T, U>(
                 dst, newSrc, 1, oneRepOffset, 0, srcBlkStride, srcRepStride, maskReg, maskBuf);
         } else if (dstRepStride == 1 && repeat > 0) {
@@ -232,19 +237,20 @@ __aicore__ inline void ReduceTemplate(__ubuf__ U *dst, __ubuf__ T *src, int32_t 
 }
 
 template <bool isSetMask, bool isBitMask, auto func, typename T, typename U = T>
-__aicore__ inline void ReduceTemplate(__ubuf__ U *dst, __ubuf__ T *src, int32_t repeat, int32_t dstRepStride,
-    uint32_t oneRepOffset, int32_t srcBlkStride, int32_t srcRepStride, uint32_t maskReg, const ReduceOrder order)
+__aicore__ inline void ReduceTemplate(
+    __ubuf__ U* dst, __ubuf__ T* src, int32_t repeat, int32_t dstRepStride, uint32_t oneRepOffset, int32_t srcBlkStride,
+    int32_t srcRepStride, uint32_t maskReg, const ReduceOrder order)
 {
     constexpr uint32_t ONE_BLK_ELEMENT_NUM = GetDataBlockSizeInBytes() / sizeof(T);
     bool isCounterMode = Internal::IsCounterMode();
-    __ubuf__ uint64_t *maskBuf = nullptr;
+    __ubuf__ uint64_t* maskBuf = nullptr;
     if (isCounterMode) {
         if constexpr (!isSetMask) {
             maskBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(TMP_UB_OFFSET, 2);
         }
         if (dstRepStride == 0 && repeat > 0) {
             uint32_t srcStrideOffset = srcRepStride * ONE_BLK_ELEMENT_NUM;
-            __ubuf__ T *newSrc = src + srcStrideOffset * (repeat - 1);
+            __ubuf__ T* newSrc = src + srcStrideOffset * (repeat - 1);
             WholeReduceUnalignCall<isSetMask, isBitMask, true, true, func, T, U>(
                 dst, newSrc, 1, oneRepOffset, 0, srcBlkStride, srcRepStride, maskReg, maskBuf, order);
         } else if (dstRepStride == 1 && repeat > 0) {
@@ -261,7 +267,7 @@ __aicore__ inline void ReduceTemplate(__ubuf__ U *dst, __ubuf__ T *src, int32_t 
     } else {
         if (dstRepStride == 0 && repeat > 0) {
             uint32_t srcStrideOffset = srcRepStride * ONE_BLK_ELEMENT_NUM;
-            __ubuf__ T *newSrc = src + srcStrideOffset * (repeat - 1);
+            __ubuf__ T* newSrc = src + srcStrideOffset * (repeat - 1);
             WholeReduceUnalignCall<isSetMask, isBitMask, false, true, func, T, U>(
                 dst, newSrc, 1, oneRepOffset, 0, srcBlkStride, srcRepStride, maskReg, maskBuf, order);
         } else if (dstRepStride == 1 && repeat > 0) {
@@ -277,8 +283,9 @@ __aicore__ inline void ReduceTemplate(__ubuf__ U *dst, __ubuf__ T *src, int32_t 
 
 /* **************************************** Pair Reduce Impl ****************************************** */
 template <typename T, bool isSetMask = true>
-__aicore__ inline void PairReduceSumImpl(__ubuf__ T *dst, __ubuf__ T *src, const int32_t repeat, const int32_t mask,
-    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void PairReduceSumImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     static_assert((SupportType<T, half, float>()), "PairReduceSum current data type is not supported!");
     constexpr uint32_t oneRepOffset = (ONE_REPEAT_BYTE_SIZE / sizeof(T)) / HALF_FACTOR;
@@ -288,8 +295,9 @@ __aicore__ inline void PairReduceSumImpl(__ubuf__ T *dst, __ubuf__ T *src, const
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void PairReduceSumImpl(__ubuf__ T *dst, __ubuf__ T *src, const int32_t repeat, const uint64_t mask[],
-    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void PairReduceSumImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     static_assert((SupportType<T, half, float>()), "PairReduceSum current data type is not supported!");
     constexpr uint32_t oneRepOffset = (ONE_REPEAT_BYTE_SIZE / sizeof(T)) / HALF_FACTOR;
@@ -302,8 +310,9 @@ __aicore__ inline void PairReduceSumImpl(__ubuf__ T *dst, __ubuf__ T *src, const
 
 /* **************************************** Block Reduce Impl ****************************************** */
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceSumImpl(__ubuf__ T *dst, __ubuf__ T *src, const int32_t repeat,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceSumImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     static_assert((SupportType<T, half, float>()), "BlockReduceSum not support current datatype!");
     if constexpr (isSetMask) {
@@ -314,19 +323,20 @@ __aicore__ inline void BlockReduceSumImpl(__ubuf__ T *dst, __ubuf__ T *src, cons
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceSumImpl(__ubuf__ T *dst, __ubuf__ T *src, const int32_t repeat, const int32_t mask,
-    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceSumImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     static_assert((SupportType<T, half, float>()), "BlockReduceSum not support current datatype!");
     uint32_t maskReg = static_cast<uint32_t>(mask);
-    ReduceTemplate<isSetMask, false,
-        Reg::ReduceSumWithDataBlock<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>>(
+    ReduceTemplate<isSetMask, false, Reg::ReduceSumWithDataBlock<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>>(
         dst, src, repeat, dstRepStride, DEFAULT_BLK_NUM, srcBlkStride, srcRepStride, maskReg);
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceMaxImpl(__ubuf__ T *dst, __ubuf__ T *src, const int32_t repeat,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMaxImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     static_assert((SupportType<T, half, float>()), "BlockReduceMax current data type is not supported!");
     if constexpr (isSetMask) {
@@ -337,19 +347,20 @@ __aicore__ inline void BlockReduceMaxImpl(__ubuf__ T *dst, __ubuf__ T *src, cons
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceMaxImpl(__ubuf__ T *dst, __ubuf__ T *src, const int32_t repeat, const int32_t mask,
-    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMaxImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     static_assert((SupportType<T, half, float>()), "BlockReduceMax current data type is not supported!");
     uint32_t maskReg = static_cast<uint32_t>(mask);
-    ReduceTemplate<isSetMask, false,
-        Reg::ReduceMaxWithDataBlock<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>>(
+    ReduceTemplate<isSetMask, false, Reg::ReduceMaxWithDataBlock<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>>(
         dst, src, repeat, dstRepStride, DEFAULT_BLK_NUM, srcBlkStride, srcRepStride, maskReg);
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceMinImpl(__ubuf__ T *dst, __ubuf__ T *src, const int32_t repeat,
-    const uint64_t mask[], const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMinImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const uint64_t mask[], const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     static_assert((SupportType<T, half, float>()), "BlockReduceMin not support current datatype!");
     if constexpr (isSetMask) {
@@ -360,43 +371,45 @@ __aicore__ inline void BlockReduceMinImpl(__ubuf__ T *dst, __ubuf__ T *src, cons
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void BlockReduceMinImpl(__ubuf__ T *dst, __ubuf__ T *src, const int32_t repeat, const int32_t mask,
-    const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void BlockReduceMinImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const int32_t mask, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
     static_assert((SupportType<T, half, float>()), "BlockReduceMin not support current datatype!");
     uint32_t maskReg = static_cast<uint32_t>(mask);
-    ReduceTemplate<isSetMask, false,
-        Reg::ReduceMinWithDataBlock<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>>(
+    ReduceTemplate<isSetMask, false, Reg::ReduceMinWithDataBlock<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>>(
         dst, src, repeat, dstRepStride, DEFAULT_BLK_NUM, srcBlkStride, srcRepStride, maskReg);
 }
 
 template <typename T, bool isSetMask = true, typename U = T>
-__aicore__ inline void RepeatReduceSumImpl(__ubuf__ U *dstLocal, __ubuf__ T *srcLocal, const int32_t repeat,
-    const int32_t elemsInOneRepeat, const int32_t dstBlkStride, const int32_t srcBlkStride, const int32_t dstRepStride,
-    const int32_t srcRepStride)
+__aicore__ inline void RepeatReduceSumImpl(
+    __ubuf__ U* dstLocal, __ubuf__ T* srcLocal, const int32_t repeat, const int32_t elemsInOneRepeat,
+    const int32_t dstBlkStride, const int32_t srcBlkStride, const int32_t dstRepStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "RepeatReduceSum current data type is not supported!");
     static_assert(
         (SupportType<U, int32_t, uint32_t, half, float>()), "RepeatReduceSum current data type is not supported!");
     uint32_t maskReg = static_cast<uint32_t>(elemsInOneRepeat);
-    ReduceTemplate<isSetMask, false,
-        Reg::ReduceSum<U, T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<U>, Reg::RegTensor<T>>,
-        T,
+    ReduceTemplate<
+        isSetMask, false, Reg::ReduceSum<U, T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<U>, Reg::RegTensor<T>>, T,
         U>(dstLocal, srcLocal, repeat, dstRepStride, 1, srcBlkStride, srcRepStride, maskReg);
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void WholeReduceMaxImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, const uint64_t mask[],
-    const int32_t repeat, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMaxImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const uint64_t mask[], const int32_t repeat, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "WholeReduceMax current data type is not supported!");
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
     }
-    uint32_t oneRepOffset = (order == ReduceOrder::ORDER_VALUE_INDEX || order == ReduceOrder::ORDER_INDEX_VALUE) ? 2 : 1;
+    uint32_t oneRepOffset =
+        (order == ReduceOrder::ORDER_VALUE_INDEX || order == ReduceOrder::ORDER_INDEX_VALUE) ? 2 : 1;
 
     // save the src address and count for GetReduceMaxMinCountImpl
     LocalTensor<uint64_t> popBuffer;
@@ -422,15 +435,17 @@ __aicore__ inline void WholeReduceMaxImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcL
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void WholeReduceMaxImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, const int32_t mask,
-    const int32_t repeat, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMaxImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const int32_t mask, const int32_t repeat, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "WholeReduceMax current data type is not supported!");
 
     uint32_t maskReg = static_cast<uint32_t>(mask);
-    uint32_t oneRepOffset = (order == ReduceOrder::ORDER_VALUE_INDEX || order == ReduceOrder::ORDER_INDEX_VALUE) ? 2 : 1;
+    uint32_t oneRepOffset =
+        (order == ReduceOrder::ORDER_VALUE_INDEX || order == ReduceOrder::ORDER_INDEX_VALUE) ? 2 : 1;
 
     // save the src address and count for GetReduceMaxMinCountImpl
     LocalTensor<uint64_t> popBuffer;
@@ -454,16 +469,18 @@ __aicore__ inline void WholeReduceMaxImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcL
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void WholeReduceMinImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, const uint64_t mask[],
-    const int32_t repeat, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMinImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const uint64_t mask[], const int32_t repeat, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "WholeReduceMin current data type is not supported!");
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
     }
-    uint32_t oneRepOffset = (order == ReduceOrder::ORDER_VALUE_INDEX || order == ReduceOrder::ORDER_INDEX_VALUE) ? 2 : 1;
+    uint32_t oneRepOffset =
+        (order == ReduceOrder::ORDER_VALUE_INDEX || order == ReduceOrder::ORDER_INDEX_VALUE) ? 2 : 1;
 
     // save the src address and count for GetReduceMaxMinCountImpl
     LocalTensor<uint64_t> popBuffer;
@@ -490,14 +507,16 @@ __aicore__ inline void WholeReduceMinImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcL
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void WholeReduceMinImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, const int32_t mask,
-    const int32_t repeat, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride,
-    const ReduceOrder order)
+__aicore__ inline void WholeReduceMinImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, const int32_t mask, const int32_t repeat, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride, const ReduceOrder order)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "WholeReduceMin current data type is not supported!");
     uint32_t maskReg = static_cast<uint32_t>(mask);
-    uint32_t oneRepOffset = (order == ReduceOrder::ORDER_VALUE_INDEX || order == ReduceOrder::ORDER_INDEX_VALUE) ? 2 : 1;
+    uint32_t oneRepOffset =
+        (order == ReduceOrder::ORDER_VALUE_INDEX || order == ReduceOrder::ORDER_INDEX_VALUE) ? 2 : 1;
 
     // save the src address and count for GetReduceMaxMinCountImpl
     LocalTensor<uint64_t> popBuffer;
@@ -522,41 +541,43 @@ __aicore__ inline void WholeReduceMinImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcL
 
 // WholeReduceSum mask连续模式
 template <typename T, bool isSetMask = true, typename U = T>
-__aicore__ inline void WholeReduceSumImpl(__ubuf__ U *dstLocal, __ubuf__ T *srcLocal, const uint64_t mask[],
-    const int32_t repeat, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void WholeReduceSumImpl(
+    __ubuf__ U* dstLocal, __ubuf__ T* srcLocal, const uint64_t mask[], const int32_t repeat, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "WholeReduceSum current data type is not supported!");
     static_assert(
         (SupportType<U, int32_t, uint32_t, half, float>()), "WholeReduceSum current data type is not supported!");
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
     }
-    ReduceTemplate<isSetMask, true,
-        Reg::ReduceSum<U, T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<U>, Reg::RegTensor<T>>,
-        T,
-        U>(dstLocal, srcLocal, repeat, dstRepStride, 1, srcBlkStride, srcRepStride, mask[0]);
+    ReduceTemplate<
+        isSetMask, true, Reg::ReduceSum<U, T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<U>, Reg::RegTensor<T>>, T, U>(
+        dstLocal, srcLocal, repeat, dstRepStride, 1, srcBlkStride, srcRepStride, mask[0]);
 }
 
 template <typename T, bool isSetMask = true, typename U = T>
-__aicore__ inline void WholeReduceSumImpl(__ubuf__ U *dstLocal, __ubuf__ T *srcLocal, const int32_t mask,
-    const int32_t repeat, const int32_t dstRepStride, const int32_t srcBlkStride, const int32_t srcRepStride)
+__aicore__ inline void WholeReduceSumImpl(
+    __ubuf__ U* dstLocal, __ubuf__ T* srcLocal, const int32_t mask, const int32_t repeat, const int32_t dstRepStride,
+    const int32_t srcBlkStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "WholeReduceSum current data type is not supported!");
     static_assert(
         (SupportType<U, int32_t, uint32_t, half, float>()), "WholeReduceSum current data type is not supported!");
     uint32_t maskReg = static_cast<uint32_t>(mask);
-    ReduceTemplate<isSetMask, false,
-        Reg::ReduceSum<U, T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<U>, Reg::RegTensor<T>>,
-        T,
+    ReduceTemplate<
+        isSetMask, false, Reg::ReduceSum<U, T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<U>, Reg::RegTensor<T>>, T,
         U>(dstLocal, srcLocal, repeat, dstRepStride, 1, srcBlkStride, srcRepStride, maskReg);
 }
 
 // level 0 ReduceSum
 template <typename T>
 __simd_callee__ inline void ReduceSumCount(
-    __ubuf__ T *dstLocal, __ubuf__ T *srcLocal, uint32_t count, int32_t repeat, const int32_t srcRepStride)
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, uint32_t count, int32_t repeat, const int32_t srcRepStride)
 {
     uint32_t srcRepOffset = srcRepStride * GetDataBlockSizeInBytes() / sizeof(T);
     Reg::MaskReg preg;
@@ -574,7 +595,7 @@ __simd_callee__ inline void ReduceSumCount(
 
 template <typename T, bool isBitMask>
 __simd_callee__ inline void ReduceSumMask(
-    __ubuf__ T *dstLocal, __ubuf__ T *srcLocal, uint32_t mask, int32_t repeat, const int32_t srcRepStride)
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, uint32_t mask, int32_t repeat, const int32_t srcRepStride)
 {
     uint32_t srcRepOffset = srcRepStride * GetDataBlockSizeInBytes() / sizeof(T);
     Reg::MaskReg preg;
@@ -592,7 +613,7 @@ __simd_callee__ inline void ReduceSumMask(
 
 template <typename T, int shapeScope>
 __simd_vf__ inline void ReduceSumCounterMode(
-    __ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal, uint32_t count, const int32_t srcRepStride)
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t count, const int32_t srcRepStride)
 {
     constexpr uint32_t oneRepSize = GetVecLen() / sizeof(T);
     if constexpr (shapeScope == 1) {
@@ -615,7 +636,8 @@ __simd_vf__ inline void ReduceSumCounterMode(
 
 template <typename T, int shapeScope, bool isBitMask>
 __simd_vf__ inline void ReduceSumNormalMode(
-    __ubuf__ T *dstLocal, __ubuf__ T *srcLocal,  __ubuf__ T *workLocal, uint32_t mask, int32_t repeat, const int32_t srcRepStride)
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t mask, int32_t repeat,
+    const int32_t srcRepStride)
 {
     constexpr uint32_t oneRepSize = GetVecLen() / sizeof(T);
     if constexpr (shapeScope == 1) {
@@ -635,8 +657,9 @@ __simd_vf__ inline void ReduceSumNormalMode(
 }
 
 template <typename T>
-__aicore__ inline void ReduceSumImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal,
-    const uint64_t mask[], const int32_t repeat, const int32_t srcRepStride)
+__aicore__ inline void ReduceSumImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, const uint64_t mask[], const int32_t repeat,
+    const int32_t srcRepStride)
 {
     static_assert((SupportType<T, half, float>()), "ReduceSum current data type is not supported!");
     constexpr uint32_t oneRepSize = GetVecLen() / sizeof(T);
@@ -663,8 +686,9 @@ __aicore__ inline void ReduceSumImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal,
 }
 
 template <typename T>
-__aicore__ inline void ReduceSumImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal,
-    const int32_t mask, const int32_t repeat, const int32_t srcRepStride)
+__aicore__ inline void ReduceSumImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, const int32_t mask, const int32_t repeat,
+    const int32_t srcRepStride)
 {
     static_assert((SupportType<T, half, float>()), "ReduceSum current data type is not supported!");
     constexpr uint32_t oneRepSize = GetVecLen() / sizeof(T);
@@ -690,7 +714,8 @@ __aicore__ inline void ReduceSumImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal,
 }
 
 template <typename T>
-__simd_vf__ inline void ReduceB64SumImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal, uint32_t count)
+__simd_vf__ inline void ReduceB64SumImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t count)
 {
     constexpr uint32_t oneRepSize = 2 * GetVecLen() / sizeof(T);
     uint16_t repeatTime = CeilDivision(count, oneRepSize);
@@ -715,7 +740,7 @@ __simd_vf__ inline void ReduceB64SumImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLo
 }
 
 template <typename T>
-__aicore__ inline void ReduceSumImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal, uint32_t count)
+__aicore__ inline void ReduceSumImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t count)
 {
     static_assert((SupportType<T, half, float, uint64_t, int64_t>()), "ReduceSum current data type is not supported!");
     if constexpr (SupportType<T, uint64_t, int64_t>()) {
@@ -790,8 +815,9 @@ __aicore__ inline T GetMaxValue()
 }
 
 template <ReduceMode mode, typename T>
-__simd_vf__ inline void ReduceNoIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal,
-    uint32_t count, const int32_t srcRepStride, T initValue)
+__simd_vf__ inline void ReduceNoIndexTemplate(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t count, const int32_t srcRepStride,
+    T initValue)
 {
     constexpr uint16_t oneRepSize = GetVecLen() / sizeof(T);
     uint16_t repeat = CeilDivision(count, oneRepSize);
@@ -823,7 +849,7 @@ __simd_vf__ inline void ReduceNoIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *
 
 template <ReduceMode mode, typename T>
 __simd_vf__ inline void ReduceB64NoIndexTemplate(
-    __ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal, uint32_t count, T initValue)
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t count, T initValue)
 {
     constexpr uint16_t oneRepSize = 2 * GetVecLen() / sizeof(T);
     uint16_t repeat = CeilDivision(count, oneRepSize);
@@ -853,8 +879,9 @@ __simd_vf__ inline void ReduceB64NoIndexTemplate(
 }
 
 template <ReduceMode mode, bool isBitMask, typename T>
-__simd_vf__ inline void ReduceNoIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal,
-    uint32_t maskReg, const int32_t repeat, const int32_t srcRepStride, T initValue)
+__simd_vf__ inline void ReduceNoIndexTemplate(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t maskReg, const int32_t repeat,
+    const int32_t srcRepStride, T initValue)
 {
     Reg::MaskReg preg;
     GenPredicate<isBitMask, T>(preg, maskReg);
@@ -880,8 +907,9 @@ __simd_vf__ inline void ReduceNoIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *
 }
 
 template <ReduceMode mode, typename T, typename IndexT>
-__simd_vf__ inline void ReduceIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal,
-    uint32_t count, const int32_t srcRepStride, T initValue)
+__simd_vf__ inline void ReduceIndexTemplate(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t count, const int32_t srcRepStride,
+    T initValue)
 {
     constexpr uint16_t oneRepSize = GetVecLen() / sizeof(T);
     uint16_t repeat = CeilDivision(count, oneRepSize);
@@ -896,9 +924,9 @@ __simd_vf__ inline void ReduceIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *sr
     Reg::Duplicate(maskIndexVreg, (IndexT)0);
     Reg::Duplicate(dstValueVreg, initValue);
     if constexpr (Std::is_same_v<IndexT, uint16_t>) {
-        Reg::Arange((Reg::RegTensor<int16_t> &)tmpIndexVreg, 1);
+        Reg::Arange((Reg::RegTensor<int16_t>&)tmpIndexVreg, 1);
     } else {
-        Reg::Arange((Reg::RegTensor<int32_t> &)tmpIndexVreg, 1);
+        Reg::Arange((Reg::RegTensor<int32_t>&)tmpIndexVreg, 1);
     }
     dstIndexVreg = tmpIndexVreg;
     // step1: from [count] to [oneRepSize] value index pair
@@ -927,7 +955,7 @@ __simd_vf__ inline void ReduceIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *sr
     } else {
         Reg::ReduceMin(tmpValueVreg, dstValueVreg, pregFull);
     }
-    Reg::DataCopyUnAlign(dstLocal, tmpValueVreg, ureg, 1);  // store value
+    Reg::DataCopyUnAlign(dstLocal, tmpValueVreg, ureg, 1); // store value
     // get dst value mask and squeeze dst index
     Reg::Duplicate(tmpValueVreg, tmpValueVreg, pregFull);
     Reg::Compare<T, CMPMODE::EQ>(pregCond, dstValueVreg, tmpValueVreg, pregFull);
@@ -936,13 +964,13 @@ __simd_vf__ inline void ReduceIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *sr
     Reg::Compare<IndexT, CMPMODE::NE>(pregCond, tmpIndexVreg, maskIndexVreg, pregIndexFull);
     Reg::ReduceMin(tmpIndexVreg, tmpIndexVreg, pregCond);
     Reg::Sub(tmpIndexVreg, tmpIndexVreg, subIndexVreg, pregIndexFull);
-    Reg::DataCopyUnAlign((__ubuf__ IndexT *&)dstLocal, tmpIndexVreg, ureg, 1);
+    Reg::DataCopyUnAlign((__ubuf__ IndexT*&)dstLocal, tmpIndexVreg, ureg, 1);
     Reg::DataCopyUnAlignPost(dstLocal, ureg, 0);
 }
 
 template <ReduceMode mode, typename T, typename IndexT>
 __simd_vf__ inline void ReduceB64IndexTemplate(
-    __ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal, uint32_t count, T initValue)
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t count, T initValue)
 {
     constexpr uint16_t oneRepSize = 2 * GetVecLen() / sizeof(T);
     uint16_t repeat = CeilDivision(count, oneRepSize);
@@ -956,7 +984,7 @@ __simd_vf__ inline void ReduceB64IndexTemplate(
     Reg::Duplicate(maskIndexVreg, (IndexT)0);
     Reg::Duplicate(subIndexVreg, (IndexT)1);
     // b64 type, index is uint32_t
-    Reg::Arange((Reg::RegTensor<int32_t> &)tmpIndexVreg, 1);
+    Reg::Arange((Reg::RegTensor<int32_t>&)tmpIndexVreg, 1);
     dstIndexVreg = tmpIndexVreg;
     // step1: from [count] to [oneRepSize] value index pair
     for (uint16_t i = 0; i < repeat; ++i) {
@@ -984,7 +1012,7 @@ __simd_vf__ inline void ReduceB64IndexTemplate(
     } else {
         Reg::ReduceMin(b64TmpValueVreg, b64DstValueVreg, pregFull);
     }
-    Reg::DataCopyUnAlign(dstLocal, b64TmpValueVreg, ureg, 1);  // store value
+    Reg::DataCopyUnAlign(dstLocal, b64TmpValueVreg, ureg, 1); // store value
     // get dst value mask and squeeze dst index
     Reg::Duplicate(b64TmpValueVreg, b64TmpValueVreg, pregFull);
     Reg::Compare<T, CMPMODE::EQ>(pregCond, b64DstValueVreg, b64TmpValueVreg, pregFull);
@@ -994,15 +1022,16 @@ __simd_vf__ inline void ReduceB64IndexTemplate(
     Reg::Compare<IndexT, CMPMODE::NE>(pregCond, tmpIndexVreg, maskIndexVreg, pregIndexFull);
     Reg::ReduceMin(tmpIndexVreg, tmpIndexVreg, pregCond);
     Reg::Sub(tmpIndexVreg, tmpIndexVreg, subIndexVreg, pregIndexFull);
-    Reg::DataCopyUnAlign((__ubuf__ IndexT *&)dstLocal, tmpIndexVreg, ureg, 1);
+    Reg::DataCopyUnAlign((__ubuf__ IndexT*&)dstLocal, tmpIndexVreg, ureg, 1);
     // for b64 type, pad 0 to b64 bytes, which is 4 bytes
-    Reg::DataCopyUnAlign((__ubuf__ IndexT *&)dstLocal, maskIndexVreg, ureg, 1);
+    Reg::DataCopyUnAlign((__ubuf__ IndexT*&)dstLocal, maskIndexVreg, ureg, 1);
     Reg::DataCopyUnAlignPost(dstLocal, ureg, 0);
 }
 
 template <ReduceMode mode, bool isBitMask, typename T, typename IndexT>
-__simd_vf__ inline void ReduceIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal,
-    uint32_t maskReg, const int32_t repeat, const int32_t srcRepStride, T initValue)
+__simd_vf__ inline void ReduceIndexTemplate(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t maskReg, const int32_t repeat,
+    const int32_t srcRepStride, T initValue)
 {
     Reg::MaskReg preg, pregCond;
     GenPredicate<isBitMask, T>(preg, maskReg);
@@ -1014,9 +1043,9 @@ __simd_vf__ inline void ReduceIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *sr
     Reg::Duplicate(maskIndexVreg, (IndexT)0);
     Reg::Duplicate(subIndexVreg, (IndexT)1);
     if constexpr (Std::is_same_v<IndexT, uint16_t>) {
-        Reg::Arange((Reg::RegTensor<int16_t> &)tmpIndexVreg, 1);
+        Reg::Arange((Reg::RegTensor<int16_t>&)tmpIndexVreg, 1);
     } else {
-        Reg::Arange((Reg::RegTensor<int32_t> &)tmpIndexVreg, 1);
+        Reg::Arange((Reg::RegTensor<int32_t>&)tmpIndexVreg, 1);
     }
     dstIndexVreg = tmpIndexVreg;
     int32_t postUpdateStride = srcRepStride * GetDataBlockSizeInBytes() / sizeof(T);
@@ -1043,7 +1072,7 @@ __simd_vf__ inline void ReduceIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *sr
     } else {
         Reg::ReduceMin(tmpValueVreg, dstValueVreg, preg);
     }
-    Reg::DataCopyUnAlign(dstLocal, tmpValueVreg, ureg, 1);  // store value
+    Reg::DataCopyUnAlign(dstLocal, tmpValueVreg, ureg, 1); // store value
     // get dst value mask and squeeze dst index
     Reg::Duplicate(tmpValueVreg, tmpValueVreg, preg);
     Reg::Compare<T, CMPMODE::EQ>(pregCond, dstValueVreg, tmpValueVreg, preg);
@@ -1053,15 +1082,16 @@ __simd_vf__ inline void ReduceIndexTemplate(__ubuf__ T *dstLocal, __ubuf__ T *sr
     Reg::Compare<IndexT, CMPMODE::NE>(pregCond, tmpIndexVreg, maskIndexVreg, pregIndexFull);
     Reg::ReduceMin(tmpIndexVreg, tmpIndexVreg, pregCond);
     Reg::Sub(tmpIndexVreg, tmpIndexVreg, subIndexVreg, pregIndexFull);
-    Reg::DataCopyUnAlign((__ubuf__ IndexT *&)dstLocal, tmpIndexVreg, ureg, 1);
+    Reg::DataCopyUnAlign((__ubuf__ IndexT*&)dstLocal, tmpIndexVreg, ureg, 1);
     Reg::DataCopyUnAlignPost(dstLocal, ureg, 0);
 }
 
 template <typename T>
 __aicore__ inline void ReduceMaxImpl(
-    __ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal, uint32_t count, bool calIndex)
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t count, bool calIndex)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float, uint64_t, int64_t>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float, uint64_t, int64_t>()),
         "ReduceMax current data type is not supported!");
     T initValue = GetMinValue<T>();
     if constexpr (sizeof(T) == 8) {
@@ -1069,33 +1099,32 @@ __aicore__ inline void ReduceMaxImpl(
             ReduceB64IndexTemplate<ReduceMode::REDUCE_MAX, T, uint32_t>(
                 dstLocal, srcLocal, workLocal, count, initValue);
         } else {
-            ReduceB64NoIndexTemplate<ReduceMode::REDUCE_MAX, T>(
-                dstLocal, srcLocal, workLocal, count, initValue);
+            ReduceB64NoIndexTemplate<ReduceMode::REDUCE_MAX, T>(dstLocal, srcLocal, workLocal, count, initValue);
         }
     } else if constexpr (sizeof(T) == 4) {
         if (calIndex) {
             ReduceIndexTemplate<ReduceMode::REDUCE_MAX, T, uint32_t>(
                 dstLocal, srcLocal, workLocal, count, 8, initValue);
         } else {
-            ReduceNoIndexTemplate<ReduceMode::REDUCE_MAX, T>(
-                dstLocal, srcLocal, workLocal, count, 8, initValue);
+            ReduceNoIndexTemplate<ReduceMode::REDUCE_MAX, T>(dstLocal, srcLocal, workLocal, count, 8, initValue);
         }
     } else {
         if (calIndex) {
             ReduceIndexTemplate<ReduceMode::REDUCE_MAX, T, uint16_t>(
                 dstLocal, srcLocal, workLocal, count, 8, initValue);
         } else {
-            ReduceNoIndexTemplate<ReduceMode::REDUCE_MAX, T>(
-                dstLocal, srcLocal, workLocal, count, 8, initValue);
+            ReduceNoIndexTemplate<ReduceMode::REDUCE_MAX, T>(dstLocal, srcLocal, workLocal, count, 8, initValue);
         }
     }
 }
 
 template <typename T>
-__aicore__ inline void ReduceMaxImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal,
-    const uint64_t mask[], const int32_t repeat, const int32_t srcRepStride, bool calIndex)
+__aicore__ inline void ReduceMaxImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, const uint64_t mask[], const int32_t repeat,
+    const int32_t srcRepStride, bool calIndex)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "ReduceMax current data type is not supported!");
     T initValue = GetMinValue<T>();
     uint32_t count = static_cast<uint32_t>(mask[0]);
@@ -1141,10 +1170,12 @@ __aicore__ inline void ReduceMaxImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal,
 }
 
 template <typename T>
-__aicore__ inline void ReduceMaxImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal,
-    const int32_t mask, const int32_t repeat, const int32_t srcRepStride, bool calIndex)
+__aicore__ inline void ReduceMaxImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, const int32_t mask, const int32_t repeat,
+    const int32_t srcRepStride, bool calIndex)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "ReduceMax current data type is not supported!");
     T initValue = GetMinValue<T>();
     uint32_t maskReg = static_cast<uint32_t>(mask);
@@ -1190,9 +1221,10 @@ __aicore__ inline void ReduceMaxImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal,
 
 template <typename T>
 __aicore__ inline void ReduceMinImpl(
-    __ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal, uint32_t count, bool calIndex)
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t count, bool calIndex)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float, uint64_t, int64_t>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float, uint64_t, int64_t>()),
         "ReduceMin current data type is not supported!");
     T initValue = GetMaxValue<T>();
     if constexpr (sizeof(T) == 8) {
@@ -1200,33 +1232,32 @@ __aicore__ inline void ReduceMinImpl(
             ReduceB64IndexTemplate<ReduceMode::REDUCE_MIN, T, uint32_t>(
                 dstLocal, srcLocal, workLocal, count, initValue);
         } else {
-            ReduceB64NoIndexTemplate<ReduceMode::REDUCE_MIN, T>(
-                dstLocal, srcLocal, workLocal, count, initValue);
+            ReduceB64NoIndexTemplate<ReduceMode::REDUCE_MIN, T>(dstLocal, srcLocal, workLocal, count, initValue);
         }
     } else if constexpr (sizeof(T) == 4) {
         if (calIndex) {
             ReduceIndexTemplate<ReduceMode::REDUCE_MIN, T, uint32_t>(
                 dstLocal, srcLocal, workLocal, count, 8, initValue);
         } else {
-            ReduceNoIndexTemplate<ReduceMode::REDUCE_MIN, T>(
-                dstLocal, srcLocal, workLocal, count, 8, initValue);
+            ReduceNoIndexTemplate<ReduceMode::REDUCE_MIN, T>(dstLocal, srcLocal, workLocal, count, 8, initValue);
         }
     } else {
         if (calIndex) {
             ReduceIndexTemplate<ReduceMode::REDUCE_MIN, T, uint16_t>(
                 dstLocal, srcLocal, workLocal, count, 8, initValue);
         } else {
-            ReduceNoIndexTemplate<ReduceMode::REDUCE_MIN, T>(
-                dstLocal, srcLocal, workLocal, count, 8, initValue);
+            ReduceNoIndexTemplate<ReduceMode::REDUCE_MIN, T>(dstLocal, srcLocal, workLocal, count, 8, initValue);
         }
     }
 }
 
 template <typename T>
-__aicore__ inline void ReduceMinImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal,
-    const uint64_t mask[], const int32_t repeat, const int32_t srcRepStride, bool calIndex)
+__aicore__ inline void ReduceMinImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, const uint64_t mask[], const int32_t repeat,
+    const int32_t srcRepStride, bool calIndex)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "ReduceMin current data type is not supported!");
     T initValue = GetMaxValue<T>();
     uint32_t count = static_cast<uint32_t>(mask[0]);
@@ -1272,10 +1303,12 @@ __aicore__ inline void ReduceMinImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal,
 }
 
 template <typename T>
-__aicore__ inline void ReduceMinImpl(__ubuf__ T *dstLocal, __ubuf__ T *srcLocal, __ubuf__ T *workLocal,
-    const int32_t mask, const int32_t repeat, const int32_t srcRepStride, bool calIndex)
+__aicore__ inline void ReduceMinImpl(
+    __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, const int32_t mask, const int32_t repeat,
+    const int32_t srcRepStride, bool calIndex)
 {
-    static_assert((SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
+    static_assert(
+        (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
         "ReduceMin current data type is not supported!");
     T initValue = GetMaxValue<T>();
     uint32_t maskReg = static_cast<uint32_t>(mask);
@@ -1332,8 +1365,9 @@ __aicore__ inline bool isMasked(uint32_t inRepeatIndex, uint64_t mask0, uint64_t
 }
 
 template <typename T>
-__aicore__ inline void IterateSrc(__ubuf__ T* src, uint32_t repeat, uint32_t srcRepStride, uint32_t srcBlkStride, uint64_t mask0, uint64_t mask1,
-    bool isCounterMode, bool bitwiseMask, bool isMax, uint32_t &maxMinInd, T &maxMinValue)
+__aicore__ inline void IterateSrc(
+    __ubuf__ T* src, uint32_t repeat, uint32_t srcRepStride, uint32_t srcBlkStride, uint64_t mask0, uint64_t mask1,
+    bool isCounterMode, bool bitwiseMask, bool isMax, uint32_t& maxMinInd, T& maxMinValue)
 {
     constexpr uint32_t blockLen = 32 / sizeof(T);
     uint32_t blockCount = 8;
@@ -1342,8 +1376,8 @@ __aicore__ inline void IterateSrc(__ubuf__ T* src, uint32_t repeat, uint32_t src
     for (uint32_t i = 0; i < repeat; ++i) {
         uint32_t repeatOffset = i * srcRepStride * blockLen;
         // jump over block if needed
-        for (uint32_t j= 0; j < blockCount; j += srcBlkStride) {
-            for (uint32_t k = 0; k < blockLen; ++ k) {
+        for (uint32_t j = 0; j < blockCount; j += srcBlkStride) {
+            for (uint32_t k = 0; k < blockLen; ++k) {
                 uint32_t inRepeatIndex = j * blockLen + k;
                 uint32_t realIndex = repeatOffset + inRepeatIndex;
                 // filter by mask
@@ -1385,7 +1419,7 @@ __aicore__ inline void IterateSrc(__ubuf__ T* src, uint32_t repeat, uint32_t src
 }
 
 template <typename T>
-__aicore__ inline void GetReduceMaxMinCountImpl(T &maxMinValue, T &maxMinIndex)
+__aicore__ inline void GetReduceMaxMinCountImpl(T& maxMinValue, T& maxMinIndex)
 {
     // retrieve saved src address and count
     LocalTensor<uint64_t> popBuffer;
@@ -1396,7 +1430,7 @@ __aicore__ inline void GetReduceMaxMinCountImpl(T &maxMinValue, T &maxMinIndex)
     bool bitwiseMask = static_cast<uint16_t>(reduceMaxMinProperty >> 32) == 110;
     bool isSetMask = static_cast<uint16_t>(reduceMaxMinProperty >> 16);
     uint32_t repeat = static_cast<uint32_t>(static_cast<uint16_t>(reduceMaxMinProperty));
-    __ubuf__ T* src =reinterpret_cast<__ubuf__ T*>(popBuffer.GetValue(1));
+    __ubuf__ T* src = reinterpret_cast<__ubuf__ T*>(popBuffer.GetValue(1));
     uint64_t strideConfig = popBuffer.GetValue(2);
     uint32_t srcRepStride = static_cast<uint32_t>(strideConfig >> 32);
     uint32_t srcBlkStride = static_cast<uint32_t>(strideConfig & 0xFFFFFFFFULL);
@@ -1429,7 +1463,8 @@ __aicore__ inline void GetReduceMaxMinCountImpl(T &maxMinValue, T &maxMinIndex)
 
     uint32_t maxMinInd = -1;
     IterateSrc<T>(
-        src, repeat, srcRepStride, srcBlkStride, mask0, mask1, isCounterMode, bitwiseMask, isMax, maxMinInd, maxMinValue);
+        src, repeat, srcRepStride, srcBlkStride, mask0, mask1, isCounterMode, bitwiseMask, isMax, maxMinInd,
+        maxMinValue);
 
     if constexpr (sizeof(T) == 2) {
         uint16_t maxMinIndTmp = static_cast<uint16_t>(maxMinInd);
@@ -1440,7 +1475,7 @@ __aicore__ inline void GetReduceMaxMinCountImpl(T &maxMinValue, T &maxMinIndex)
 }
 
 template <typename T>
-__aicore__ inline void GetReduceMaxMinCountImpl(T &maxMinValue)
+__aicore__ inline void GetReduceMaxMinCountImpl(T& maxMinValue)
 {
     T maxMinInd;
     GetReduceMaxMinCountImpl(maxMinValue, maxMinInd);

@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_fixpipe_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_m300/kernel_operator_fixpipe_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_m300/kernel_operator_fixpipe_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_FIXPIPE_IMPL_H__
 #endif
@@ -28,25 +29,24 @@ namespace AscendC {
  * SPR                                             *
  * ************************************************************************************************* */
 template <typename T>
-__aicore__ inline void SetFixPipeConfigImpl(const LocalTensor<T> &reluPre, const LocalTensor<T> &quantPre,
-    bool isUnitFlag = false)
+__aicore__ inline void SetFixPipeConfigImpl(
+    const LocalTensor<T>& reluPre, const LocalTensor<T>& quantPre, bool isUnitFlag = false)
 {
     uint64_t config = 0;
     config = config | ((uint64_t)reluPre.GetPhyAddr() >> 6);         // align with 64bit, FPC[7:0], ReluPreAddr
     config = config | (((uint64_t)quantPre.GetPhyAddr() >> 7) << 8); // align with 128bit, FPC[15:8], QuantPreAddr.
-    config = config | (static_cast<uint64_t>(isUnitFlag) << 63);                  // FPC[63], UnitFlag.
+    config = config | (static_cast<uint64_t>(isUnitFlag) << 63);     // FPC[63], UnitFlag.
     set_fpc(config);
 }
 
 template <typename T, bool setRelu = false>
-__aicore__ inline void SetFixPipeConfigImpl(const LocalTensor<T> &pre, bool isUnitFlag = false)
+__aicore__ inline void SetFixPipeConfigImpl(const LocalTensor<T>& pre, bool isUnitFlag = false)
 {
     uint64_t config = 0;
     if constexpr (setRelu) {
         config = config | ((uint64_t)pre.GetPhyAddr() >> 6); // align with 64bit, FPC[7:0], ReluPreAddr.
     } else {
-        config =
-            config | (((uint64_t)pre.GetPhyAddr() >> 7) << 8); // align with 128bit, FPC[15:8], QuantPreAddr.
+        config = config | (((uint64_t)pre.GetPhyAddr() >> 7) << 8); // align with 128bit, FPC[15:8], QuantPreAddr.
     }
     config = config | (static_cast<uint64_t>(isUnitFlag) << 63); // FPC[63], UnitFlag.
     set_fpc(config);
@@ -58,14 +58,11 @@ __aicore__ inline void SetFixpipeNz2ndFlagImpl(uint16_t ndNum, uint16_t srcNdStr
     // ND_PARA[31:16], src nd stride in uint of C0_SIZE
     // ND_PARA[15:0], nd number.
     uint64_t config = (static_cast<uint64_t>(dstNdStride) << 32) | (static_cast<uint64_t>(srcNdStride) << 16) |
-                        (static_cast<uint64_t>(ndNum));
+                      (static_cast<uint64_t>(ndNum));
     set_loop3_para(config);
 }
 
-__aicore__ inline void SetFixpipePreQuantFlagImpl(uint64_t config)
-{
-    set_quant_pre(config);
-}
+__aicore__ inline void SetFixpipePreQuantFlagImpl(uint64_t config) { set_quant_pre(config); }
 
 /* **************************************************************************************************
  * Fixpipe                                             *
@@ -100,7 +97,8 @@ __aicore__ inline FixpipeTiling GenFixpipeTiling(uint16_t n)
     return tiling;
 }
 
-template <typename T> struct FixpipeInfoParams {
+template <typename T>
+struct FixpipeInfoParams {
     __aicore__ inline FixpipeInfoParams() {}
 
     __aicore__ inline FixpipeInfoParams(const FixpipeParams<T>& intriParams, const uint8_t dstByteSize)
@@ -136,8 +134,8 @@ template <typename T> struct FixpipeInfoParams {
         } else {
             // If NZ2ND is disabled, it is the destination stride between the start addresses of different bursts in
             // unit of element, Loop1_dst_stride
-            dstStride = (intriParams.dstStride + intriParams.burstLen * dstTypeSize / srcTypeSize) *
-                ONE_BLK_SIZE / dstTypeSize;
+            dstStride =
+                (intriParams.dstStride + intriParams.burstLen * dstTypeSize / srcTypeSize) * ONE_BLK_SIZE / dstTypeSize;
         }
 
         sid = 0;
@@ -319,8 +317,8 @@ __aicore__ inline void FixpipeL0C2UBImpl(__ubuf__ T* dst, __cc__ U* src, Fixpipe
 }
 
 template <typename T, typename U>
-__aicore__ inline void FixpipeL0C2L1ImplN(__cbuf__ T* dst, __cc__ U* src,
-    const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex)
+__aicore__ inline void FixpipeL0C2L1ImplN(
+    __cbuf__ T* dst, __cc__ U* src, const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex)
 {
     // mov deq tensor from L1 to FB
     CopyDeqTensorToFbuf(fixpipeInfo, calNSize, nIterIndex);
@@ -330,8 +328,8 @@ __aicore__ inline void FixpipeL0C2L1ImplN(__cbuf__ T* dst, __cc__ U* src,
 }
 
 template <typename T, typename U>
-__aicore__ inline void FixpipeL0C2GMImplN(__gm__ T* dst, __cc__ U* src,
-    const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex)
+__aicore__ inline void FixpipeL0C2GMImplN(
+    __gm__ T* dst, __cc__ U* src, const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex)
 {
     // mov deq tensor from L1 to FB
     CopyDeqTensorToFbuf(fixpipeInfo, calNSize, nIterIndex);
@@ -341,8 +339,8 @@ __aicore__ inline void FixpipeL0C2GMImplN(__gm__ T* dst, __cc__ U* src,
 }
 
 template <typename T, typename U>
-__aicore__ inline void FixpipeL0C2UBImplN(__ubuf__ T* dst, __cc__ U* src,
-    const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex)
+__aicore__ inline void FixpipeL0C2UBImplN(
+    __ubuf__ T* dst, __cc__ U* src, const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex)
 {
     // mov deq tensor from L1 to FB
     CopyDeqTensorToFbuf(fixpipeInfo, calNSize, nIterIndex);
@@ -354,8 +352,8 @@ __aicore__ inline void FixpipeL0C2UBImplN(__ubuf__ T* dst, __cc__ U* src,
 // contains loop info and cal n size for each loop
 // move data L0C->L1
 template <typename T, typename U>
-__aicore__ inline void FixpipeL0cToL1(__cbuf__ T* dst, __cc__ U* src,
-    const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex = 0)
+__aicore__ inline void FixpipeL0cToL1(
+    __cbuf__ T* dst, __cc__ U* src, const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex = 0)
 {
     uint16_t cburstNum = fixpipeInfo.tiling.nSize / 16;
     uint32_t srcOffset = cburstNum * nIterIndex * fixpipeInfo.srcStride * fixpipeInfo.c0;
@@ -370,50 +368,50 @@ __aicore__ inline void FixpipeL0cToL1(__cbuf__ T* dst, __cc__ U* src,
     // 310b soc, dst_stride in unit of 32B, input dst_stride in unit of 32B.
     switch (fixpipeInfo.quantPre) {
         case QuantMode_t::NoQuant:
-            return copy_matrix_cc_to_cbuf((__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::NoQuant, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_cbuf(
+                (__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::NoQuant,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::F322F16:
-            return copy_matrix_cc_to_cbuf((__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::F322F16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_cbuf(
+                (__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::F322F16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::F322BF16:
-            return copy_matrix_cc_to_cbuf((__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::F322BF16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_cbuf(
+                (__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::F322BF16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::DEQF16:
-            return copy_matrix_cc_to_cbuf((__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::DEQF16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_cbuf(
+                (__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::DEQF16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::VDEQF16:
-            return copy_matrix_cc_to_cbuf((__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::VDEQF16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_cbuf(
+                (__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::VDEQF16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::QF322B8_PRE:
-            return copy_matrix_cc_to_cbuf((__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::QF322B8_PRE, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_cbuf(
+                (__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::QF322B8_PRE,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::VQF322B8_PRE:
-            return copy_matrix_cc_to_cbuf((__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::VQF322B8_PRE, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_cbuf(
+                (__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::VQF322B8_PRE,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::REQ8:
-            return copy_matrix_cc_to_cbuf((__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::REQ8, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_cbuf(
+                (__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::REQ8,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::VREQ8:
-            return copy_matrix_cc_to_cbuf((__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::VREQ8, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_cbuf(
+                (__cbuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::VREQ8,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         default:
             ASCENDC_ASSERT(false, {
                 KERNEL_LOG(KERNEL_ERROR, "Instruction fixpipe doesn't support with the input quantize mode");
@@ -422,19 +420,18 @@ __aicore__ inline void FixpipeL0cToL1(__cbuf__ T* dst, __cc__ U* src,
 }
 
 template <typename T>
-__aicore__ inline uint64_t GetGMLen(const FixpipeInfoParams<T>& fixpipeInfo,
-                                    const uint16_t& calNSize, const uint16_t& dstEleSize)
+__aicore__ inline uint64_t GetGMLen(
+    const FixpipeInfoParams<T>& fixpipeInfo, const uint16_t& calNSize, const uint16_t& dstEleSize)
 {
     constexpr uint16_t dstStrideUnit = 32;
     constexpr uint16_t fractalNsize = 16;
     uint64_t cburstNum = calNSize / fractalNsize;
-    uint64_t gmLen = (cburstNum - 1) * fixpipeInfo.dstStride * dstStrideUnit +
-                     fixpipeInfo.m * fractalNsize * dstEleSize;
+    uint64_t gmLen =
+        (cburstNum - 1) * fixpipeInfo.dstStride * dstStrideUnit + fixpipeInfo.m * fractalNsize * dstEleSize;
     if (fixpipeInfo.nz2ndEn) {
         // dstStride is dst_D
         gmLen = (static_cast<uint64_t>(fixpipeInfo.ndNum) - 1) * dstEleSize * fixpipeInfo.dstNdStride +
-                (fixpipeInfo.m - 1) * fixpipeInfo.dstStride * dstEleSize +
-                cburstNum * fractalNsize * dstEleSize;
+                (fixpipeInfo.m - 1) * fixpipeInfo.dstStride * dstEleSize + cburstNum * fractalNsize * dstEleSize;
     }
     return gmLen;
 }
@@ -442,8 +439,8 @@ __aicore__ inline uint64_t GetGMLen(const FixpipeInfoParams<T>& fixpipeInfo,
 // contains loop info and cal n size for each loop
 // move data L0C->GM
 template <typename T, typename U>
-__aicore__ inline void FixpipeL0cToOut(__gm__ T* dst, __cc__ U* src,
-    const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex = 0)
+__aicore__ inline void FixpipeL0cToOut(
+    __gm__ T* dst, __cc__ U* src, const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex = 0)
 {
     uint16_t cburstNum = fixpipeInfo.tiling.nSize / 16;
     uint32_t srcOffset = cburstNum * nIterIndex * fixpipeInfo.srcStride * fixpipeInfo.c0;
@@ -457,50 +454,50 @@ __aicore__ inline void FixpipeL0cToOut(__gm__ T* dst, __cc__ U* src,
     // 310b soc, dst_stride in unit of 32B, input dst_stride in unit of 32B.
     switch (fixpipeInfo.quantPre) {
         case QuantMode_t::NoQuant:
-            return copy_matrix_cc_to_gm((__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::NoQuant, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_gm(
+                (__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::NoQuant,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::F322F16:
-            return copy_matrix_cc_to_gm((__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::F322F16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_gm(
+                (__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::F322F16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::F322BF16:
-            return copy_matrix_cc_to_gm((__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::F322BF16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_gm(
+                (__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::F322BF16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::DEQF16:
-            return copy_matrix_cc_to_gm((__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::DEQF16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_gm(
+                (__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::DEQF16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::VDEQF16:
-            return copy_matrix_cc_to_gm((__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::VDEQF16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_gm(
+                (__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::VDEQF16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::QF322B8_PRE:
-            return copy_matrix_cc_to_gm((__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::QF322B8_PRE, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_gm(
+                (__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::QF322B8_PRE,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::VQF322B8_PRE:
-            return copy_matrix_cc_to_gm((__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::VQF322B8_PRE, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_gm(
+                (__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::VQF322B8_PRE,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::REQ8:
-            return copy_matrix_cc_to_gm((__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::REQ8, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_gm(
+                (__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::REQ8,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::VREQ8:
-            return copy_matrix_cc_to_gm((__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::VREQ8, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_gm(
+                (__gm__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::VREQ8,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         default:
             ASCENDC_ASSERT(false, {
                 KERNEL_LOG(KERNEL_ERROR, "Instruction fixpipe doesn't support with the input quantize mode");
@@ -511,8 +508,8 @@ __aicore__ inline void FixpipeL0cToOut(__gm__ T* dst, __cc__ U* src,
 // contains loop info and cal n size for each loop
 // move data L0C->UB
 template <typename T, typename U>
-__aicore__ inline void FixpipeL0cToUb(__ubuf__ T* dst, __cc__ U* src,
-    const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex = 0)
+__aicore__ inline void FixpipeL0cToUb(
+    __ubuf__ T* dst, __cc__ U* src, const FixpipeInfoParams<U>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex = 0)
 {
     uint16_t cburstNum = fixpipeInfo.tiling.nSize / 16;
     uint32_t srcOffset = cburstNum * nIterIndex * fixpipeInfo.srcStride * fixpipeInfo.c0;
@@ -526,50 +523,50 @@ __aicore__ inline void FixpipeL0cToUb(__ubuf__ T* dst, __cc__ U* src,
     // 310b soc, dst_stride in unit of 32B, input dst_stride in unit of 32B.
     switch (fixpipeInfo.quantPre) {
         case QuantMode_t::NoQuant:
-            return copy_matrix_cc_to_ub((__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::NoQuant, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_ub(
+                (__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::NoQuant,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::F322F16:
-            return copy_matrix_cc_to_ub((__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::F322F16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_ub(
+                (__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::F322F16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::F322BF16:
-            return copy_matrix_cc_to_ub((__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::F322BF16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_ub(
+                (__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::F322BF16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::DEQF16:
-            return copy_matrix_cc_to_ub((__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::DEQF16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_ub(
+                (__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::DEQF16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::VDEQF16:
-            return copy_matrix_cc_to_ub((__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::VDEQF16, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_ub(
+                (__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::VDEQF16,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::QF322B8_PRE:
-            return copy_matrix_cc_to_ub((__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::QF322B8_PRE, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_ub(
+                (__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::QF322B8_PRE,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::VQF322B8_PRE:
-            return copy_matrix_cc_to_ub((__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::VQF322B8_PRE, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_ub(
+                (__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::VQF322B8_PRE,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::REQ8:
-            return copy_matrix_cc_to_ub((__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::REQ8, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_ub(
+                (__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::REQ8,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         case QuantMode_t::VREQ8:
-            return copy_matrix_cc_to_ub((__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset),
-                fixpipeInfo.sid, calNSize, fixpipeInfo.m, fixpipeInfo.dstStride, fixpipeInfo.srcStride,
-                0, fixpipeInfo.unitFlag, QuantMode_t::VREQ8, static_cast<uint8_t>(fixpipeInfo.reluEn),
-                fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
+            return copy_matrix_cc_to_ub(
+                (__ubuf__ T*)(dst + dstOffset), (__cc__ U*)(src + srcOffset), fixpipeInfo.sid, calNSize, fixpipeInfo.m,
+                fixpipeInfo.dstStride, fixpipeInfo.srcStride, 0, fixpipeInfo.unitFlag, QuantMode_t::VREQ8,
+                static_cast<uint8_t>(fixpipeInfo.reluEn), fixpipeInfo.channelSplit, fixpipeInfo.nz2ndEn, false);
         default:
             ASCENDC_ASSERT(false, {
                 KERNEL_LOG(KERNEL_ERROR, "Instruction fixpipe doesn't support with the input quantize mode");
@@ -578,8 +575,8 @@ __aicore__ inline void FixpipeL0cToUb(__ubuf__ T* dst, __cc__ U* src,
 }
 
 template <typename T>
-__aicore__ inline void CopyDeqTensorToFbuf(const FixpipeInfoParams<T>& fixpipeInfo, uint16_t calNSize,
-    uint16_t nIterIndex)
+__aicore__ inline void CopyDeqTensorToFbuf(
+    const FixpipeInfoParams<T>& fixpipeInfo, uint16_t calNSize, uint16_t nIterIndex)
 {
     uint16_t deqDataSize = DivCeil(calNSize * sizeof(uint64_t), 128) * 128;
     __fbuf__ uint64_t* deqTensorTempBuf =
@@ -594,44 +591,44 @@ __aicore__ inline void CopyDeqTensorToFbuf(const FixpipeInfoParams<T>& fixpipeIn
     AscendCUtils::FreeTemporaryFbBuffer<uint64_t>(deqTensorTempBuf);
 }
 // L0C->L1
-template <typename T, typename U, typename S = PrimT<U>,
+template <
+    typename T, typename U, typename S = PrimT<U>,
     typename std::enable_if<IsSameType<PrimT<U>, S>::value, bool>::type = true>
-__aicore__ inline void Fixpipe(const LocalTensor<T>& dst, const LocalTensor<U>& src,
-    const FixpipeParams<S>& intriParams)
+__aicore__ inline void Fixpipe(
+    const LocalTensor<T>& dst, const LocalTensor<U>& src, const FixpipeParams<S>& intriParams)
 {
     FixpipeInfoParams<PrimT<U>> fixpipeInfo(intriParams, sizeof(PrimT<T>));
     const Hardware dstHWPos = GetPhyType((TPosition)dst.GetPosition());
     if (dstHWPos == Hardware::UB) {
-        FixpipeL0C2UBImpl((__ubuf__ PrimT<T>*)dst.GetPhyAddr(),
-            (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
+        FixpipeL0C2UBImpl((__ubuf__ PrimT<T>*)dst.GetPhyAddr(), (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
     } else {
-        FixpipeL0C2L1Impl((__cbuf__ PrimT<T>*)dst.GetPhyAddr(),
-            (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
+        FixpipeL0C2L1Impl((__cbuf__ PrimT<T>*)dst.GetPhyAddr(), (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
     }
 }
 // L0C->L1 deq tensor quant
-template <typename T, typename U, typename S, typename V = PrimT<U>,
+template <
+    typename T, typename U, typename S, typename V = PrimT<U>,
     typename std::enable_if<IsSameType<PrimT<U>, V>::value, bool>::type = true>
-__aicore__ inline void Fixpipe(const LocalTensor<T>& dst, const LocalTensor<U>& src,
-    const LocalTensor<S>& cbufWorkspace, const FixpipeParams<V>& intriParams)
+__aicore__ inline void Fixpipe(
+    const LocalTensor<T>& dst, const LocalTensor<U>& src, const LocalTensor<S>& cbufWorkspace,
+    const FixpipeParams<V>& intriParams)
 {
     FixpipeInfoParams<PrimT<U>> fixpipeInfo(intriParams, sizeof(PrimT<T>));
     fixpipeInfo.cbufWorkspace = (__cbuf__ uint64_t*)cbufWorkspace.GetPhyAddr();
     const Hardware dstHWPos = GetPhyType((TPosition)dst.GetPosition());
     if (dstHWPos == Hardware::UB) {
-        FixpipeL0C2UBImpl((__ubuf__ PrimT<T>*)dst.GetPhyAddr(),
-            (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
+        FixpipeL0C2UBImpl((__ubuf__ PrimT<T>*)dst.GetPhyAddr(), (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
     } else {
-        FixpipeL0C2L1Impl((__cbuf__ PrimT<T>*)dst.GetPhyAddr(),
-            (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
+        FixpipeL0C2L1Impl((__cbuf__ PrimT<T>*)dst.GetPhyAddr(), (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
     }
 }
 
 // L0C->GM
-template <typename T, typename U, typename S = PrimT<U>,
+template <
+    typename T, typename U, typename S = PrimT<U>,
     typename std::enable_if<IsSameType<PrimT<U>, S>::value, bool>::type = true>
-__aicore__ inline void Fixpipe(const GlobalTensor<T>& dst, const LocalTensor<U>& src,
-    const FixpipeParams<S>& intriParams)
+__aicore__ inline void Fixpipe(
+    const GlobalTensor<T>& dst, const LocalTensor<U>& src, const FixpipeParams<S>& intriParams)
 {
 #ifdef ASCENDC_CPU_DEBUG
     bool isUsedProcessLock = false;
@@ -642,8 +639,7 @@ __aicore__ inline void Fixpipe(const GlobalTensor<T>& dst, const LocalTensor<U>&
 #endif // ASCENDC_CPU_DEBUG
     FixpipeInfoParams<PrimT<U>> fixpipeInfo(intriParams, sizeof(PrimT<T>));
 
-    FixpipeL0C2GMImpl((__gm__ PrimT<T>*)dst.GetPhyAddr(),
-        (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
+    FixpipeL0C2GMImpl((__gm__ PrimT<T>*)dst.GetPhyAddr(), (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
 #ifdef ASCENDC_CPU_DEBUG
     if (isUsedProcessLock == true) {
         isUsedProcessLock = false;
@@ -653,15 +649,16 @@ __aicore__ inline void Fixpipe(const GlobalTensor<T>& dst, const LocalTensor<U>&
 }
 
 // L0C->GM deq tensor quant
-template <typename T, typename U, typename S, typename V = PrimT<U>,
+template <
+    typename T, typename U, typename S, typename V = PrimT<U>,
     typename std::enable_if<IsSameType<PrimT<U>, V>::value, bool>::type = true>
-__aicore__ inline void Fixpipe(const GlobalTensor<T> &dst, const LocalTensor<U> &src,
-    const LocalTensor<S> &cbufWorkspace, const FixpipeParams<V> &intriParams)
+__aicore__ inline void Fixpipe(
+    const GlobalTensor<T>& dst, const LocalTensor<U>& src, const LocalTensor<S>& cbufWorkspace,
+    const FixpipeParams<V>& intriParams)
 {
     FixpipeInfoParams<PrimT<U>> fixpipeInfo(intriParams, sizeof(PrimT<T>));
-    fixpipeInfo.cbufWorkspace = (__cbuf__ uint64_t *)cbufWorkspace.GetPhyAddr();
-    FixpipeL0C2GMImpl(
-        (__gm__ PrimT<T> *)dst.GetPhyAddr(), (__cc__ PrimT<U> *)src.GetPhyAddr(), fixpipeInfo);
+    fixpipeInfo.cbufWorkspace = (__cbuf__ uint64_t*)cbufWorkspace.GetPhyAddr();
+    FixpipeL0C2GMImpl((__gm__ PrimT<T>*)dst.GetPhyAddr(), (__cc__ PrimT<U>*)src.GetPhyAddr(), fixpipeInfo);
 }
 } // namespace AscendC
 #endif // ASCENDC_MODULE_OPERATOR_FIXPIPE_IMPL_H

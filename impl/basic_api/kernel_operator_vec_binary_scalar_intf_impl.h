@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_binary_scalar_intf_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_operator_vec_binary_scalar_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_vec_binary_scalar_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_operator_vec_binary_scalar_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_vec_binary_scalar_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_BINARY_SCALAR_INTF_IMPL_H__
 #endif
@@ -63,8 +64,9 @@ namespace AscendC {
  * @param [in] intriParams.src0RepStride src repeat stride
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Adds(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Adds", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -79,13 +81,14 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "Adds");
 #endif
-    AddsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask,
-        repeatTime, repeatParams);
+    AddsImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
 }
 
-template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same< PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
+__aicore__ inline void Adds(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -101,13 +104,15 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "Adds");
 #endif
-    AddsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, mask, repeatTime, repeatParams);
+    AddsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
 }
 
 template <typename T, bool isSetMask>
-__aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Adds(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Adds", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -122,13 +127,14 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "Adds");
 #endif
-    AddsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask,
-        repeatTime, repeatParams);
+    AddsImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
 }
 
-template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same< PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
+__aicore__ inline void Adds(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -144,8 +150,9 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "Adds");
 #endif
-    AddsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, mask, repeatTime, repeatParams);
+    AddsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
 }
 
 /*
@@ -157,8 +164,8 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
  * @param [in] count number Number of data involved in calculation
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    const int32_t& count)
+__aicore__ inline void Adds(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, const int32_t& count)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Adds", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -173,13 +180,12 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "Adds", count);
 #endif
-    AddsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        count);
+    AddsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, count);
 }
 
-template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same< PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    const int32_t& count)
+template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
+__aicore__ inline void Adds(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, const int32_t& count)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -195,8 +201,8 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "Adds", count);
 #endif
-    AddsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, count);
+    AddsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, count);
 }
 
 /* **************************************************************************************************
@@ -216,8 +222,9 @@ __aicore__ inline void Adds(const LocalTensor<T>& dst, const LocalTensor<T>& src
  * @param [in] intriParams.src0RepStride src repeat stride
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Muls(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Muls", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -232,56 +239,60 @@ __aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "Muls");
 #endif
-    MulsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask,
-        repeatTime, repeatParams);
-}
-
-template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same< PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
-{
-    using PrimType = PrimT<T>;
-#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
-    CheckVectorTensor("Muls", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "Muls");
-#endif
-#if ASCENDC_CPU_DEBUG
-    MaskSetter::Instance().SetMask(isSetMask);
-    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "Muls")) {
-        ASCENDC_REPORT_CHECK_ERROR("Muls", KernelFuncType::MASK_BIT_MODE);
-    }
-#endif
-#ifdef __MSTX_DFX_REPORT__
-    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "Muls");
-#endif
-    MulsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, mask, repeatTime, repeatParams);
-}
-
-template <typename T, bool isSetMask>
-__aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
-{
-#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
-    CheckVectorTensor("Muls", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Muls");
-#endif
-#if ASCENDC_CPU_DEBUG
-    MaskSetter::Instance().SetMask(isSetMask);
-    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "Muls")) {
-        ASCENDC_REPORT_CHECK_ERROR("Muls", KernelFuncType::MASK_COUNT_MODE);
-    }
-#endif
-#ifdef __MSTX_DFX_REPORT__
-    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "Muls");
-#endif
-    MulsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask,
-        repeatTime, repeatParams);
+    MulsImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Muls(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+{
+    using PrimType = PrimT<T>;
+#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
+    CheckVectorTensor("Muls", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "Muls");
+#endif
+#if ASCENDC_CPU_DEBUG
+    MaskSetter::Instance().SetMask(isSetMask);
+    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "Muls")) {
+        ASCENDC_REPORT_CHECK_ERROR("Muls", KernelFuncType::MASK_BIT_MODE);
+    }
+#endif
+#ifdef __MSTX_DFX_REPORT__
+    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "Muls");
+#endif
+    MulsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
+}
+
+template <typename T, bool isSetMask>
+__aicore__ inline void Muls(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
+{
+#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
+    CheckVectorTensor("Muls", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Muls");
+#endif
+#if ASCENDC_CPU_DEBUG
+    MaskSetter::Instance().SetMask(isSetMask);
+    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "Muls")) {
+        ASCENDC_REPORT_CHECK_ERROR("Muls", KernelFuncType::MASK_COUNT_MODE);
+    }
+#endif
+#ifdef __MSTX_DFX_REPORT__
+    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "Muls");
+#endif
+    MulsImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
+}
+
+template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
+__aicore__ inline void Muls(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -297,8 +308,9 @@ __aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "Muls");
 #endif
-    MulsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask,
-        repeatTime, repeatParams);
+    MulsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
 }
 
 /*
@@ -310,8 +322,8 @@ __aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src
  * @param [in] count number Number of data involved in calculation
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    const int32_t& count)
+__aicore__ inline void Muls(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, const int32_t& count)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Muls", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -326,13 +338,12 @@ __aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "Muls", count);
 #endif
-    MulsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        count);
+    MulsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, count);
 }
 
-template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same< PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    const int32_t& count)
+template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
+__aicore__ inline void Muls(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, const int32_t& count)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -348,8 +359,8 @@ __aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "Muls", count);
 #endif
-    MulsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, count);
+    MulsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, count);
 }
 
 /* **************************************************************************************************
@@ -369,8 +380,9 @@ __aicore__ inline void Muls(const LocalTensor<T>& dst, const LocalTensor<T>& src
  * @param [in] intriParams.src0RepStride src repeat stride
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Maxs(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Maxs", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -385,13 +397,14 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "Maxs");
 #endif
-    MaxsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask,
-        repeatTime, repeatParams);
+    MaxsImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Maxs(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -407,13 +420,15 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "Maxs");
 #endif
-    MaxsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, mask, repeatTime, repeatParams);
+    MaxsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
 }
 
 template <typename T, bool isSetMask>
-__aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Maxs(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Maxs", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -428,13 +443,14 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "Maxs");
 #endif
-    MaxsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask,
-        repeatTime, repeatParams);
+    MaxsImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Maxs(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -450,8 +466,9 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "Maxs");
 #endif
-    MaxsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, mask, repeatTime, repeatParams);
+    MaxsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
 }
 
 /*
@@ -463,8 +480,8 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
  * @param [in] count number Number of data involved in calculation
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    const int32_t& count)
+__aicore__ inline void Maxs(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, const int32_t& count)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Maxs", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -479,13 +496,12 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "Maxs", count);
 #endif
-    MaxsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        count);
+    MaxsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, count);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    const int32_t& count)
+__aicore__ inline void Maxs(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, const int32_t& count)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -501,8 +517,8 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "Maxs", count);
 #endif
-    MaxsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, count);
+    MaxsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, count);
 }
 
 /* **************************************************************************************************
@@ -522,8 +538,9 @@ __aicore__ inline void Maxs(const LocalTensor<T>& dst, const LocalTensor<T>& src
  * @param [in] intriParams.src0RepStride src repeat stride
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Mins(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Mins", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -538,13 +555,14 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "Mins");
 #endif
-    MinsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask,
-        repeatTime, repeatParams);
+    MinsImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Mins(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -560,13 +578,15 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "Mins");
 #endif
-    MinsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, mask, repeatTime, repeatParams);
+    MinsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
 }
 
 template <typename T, bool isSetMask>
-__aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Mins(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Mins", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -581,13 +601,14 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "Mins");
 #endif
-    MinsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask,
-        repeatTime, repeatParams);
+    MinsImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void Mins(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -603,8 +624,9 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "Mins");
 #endif
-    MinsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, mask, repeatTime, repeatParams);
+    MinsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
 }
 
 /*
@@ -616,8 +638,8 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
  * @param [in] count number Number of data involved in calculation
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    const int32_t& count)
+__aicore__ inline void Mins(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, const int32_t& count)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Mins", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -632,13 +654,12 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "Mins", count);
 #endif
-    MinsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        count);
+    MinsImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, count);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    const int32_t& count)
+__aicore__ inline void Mins(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, const int32_t& count)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -654,8 +675,8 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "Mins", count);
 #endif
-    MinsImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
-        scalarValue, count);
+    MinsImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, count);
 }
 
 /* **************************************************************************************************
@@ -675,8 +696,9 @@ __aicore__ inline void Mins(const LocalTensor<T>& dst, const LocalTensor<T>& src
  * @param [in] intriParams.src0RepStride src repeat stride
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeft(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftLeft", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -691,56 +713,60 @@ __aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "ShiftLeft");
 #endif
-    ShiftLeftImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        mask, repeatTime, repeatParams);
-}
-
-template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type >
-__aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
-{
-    using PrimType = PrimT<T>;
-#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
-    CheckVectorTensor("ShiftLeft", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "ShiftLeft");
-#endif
-#if ASCENDC_CPU_DEBUG
-    MaskSetter::Instance().SetMask(isSetMask);
-    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "ShiftLeft")) {
-        ASCENDC_REPORT_CHECK_ERROR("ShiftLeft", KernelFuncType::MASK_BIT_MODE);
-    }
-#endif
-#ifdef __MSTX_DFX_REPORT__
-    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "ShiftLeft");
-#endif
-    ShiftLeftImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(),
-        (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
-}
-
-template <typename T, bool isSetMask>
-__aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
-{
-#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
-    CheckVectorTensor("ShiftLeft", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "ShiftLeft");
-#endif
-#if ASCENDC_CPU_DEBUG
-    MaskSetter::Instance().SetMask(isSetMask);
-    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "ShiftLeft")) {
-        ASCENDC_REPORT_CHECK_ERROR("ShiftLeft", KernelFuncType::MASK_COUNT_MODE);
-    }
-#endif
-#ifdef __MSTX_DFX_REPORT__
-    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "ShiftLeft");
-#endif
-    ShiftLeftImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        mask, repeatTime, repeatParams);
+    ShiftLeftImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeft(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+{
+    using PrimType = PrimT<T>;
+#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
+    CheckVectorTensor("ShiftLeft", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "ShiftLeft");
+#endif
+#if ASCENDC_CPU_DEBUG
+    MaskSetter::Instance().SetMask(isSetMask);
+    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "ShiftLeft")) {
+        ASCENDC_REPORT_CHECK_ERROR("ShiftLeft", KernelFuncType::MASK_BIT_MODE);
+    }
+#endif
+#ifdef __MSTX_DFX_REPORT__
+    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "ShiftLeft");
+#endif
+    ShiftLeftImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
+}
+
+template <typename T, bool isSetMask>
+__aicore__ inline void ShiftLeft(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
+{
+#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
+    CheckVectorTensor("ShiftLeft", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "ShiftLeft");
+#endif
+#if ASCENDC_CPU_DEBUG
+    MaskSetter::Instance().SetMask(isSetMask);
+    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "ShiftLeft")) {
+        ASCENDC_REPORT_CHECK_ERROR("ShiftLeft", KernelFuncType::MASK_COUNT_MODE);
+    }
+#endif
+#ifdef __MSTX_DFX_REPORT__
+    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "ShiftLeft");
+#endif
+    ShiftLeftImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
+}
+
+template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
+__aicore__ inline void ShiftLeft(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -756,8 +782,9 @@ __aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "ShiftLeft");
 #endif
-    ShiftLeftImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(),
-        (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
+    ShiftLeftImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
 }
 
 /*
@@ -769,8 +796,8 @@ __aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>
  * @param [in] count number Number of data involved in calculation
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftLeft(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, const int32_t& count)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftLeft", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -785,13 +812,12 @@ __aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "ShiftLeft", count);
 #endif
-    ShiftLeftImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        count);
+    ShiftLeftImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, count);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftLeft(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, const int32_t& count)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -807,8 +833,8 @@ __aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "ShiftLeft", count);
 #endif
-    ShiftLeftImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(),
-        (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, count);
+    ShiftLeftImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, count);
 }
 
 /* **************************************************************************************************
@@ -828,8 +854,9 @@ __aicore__ inline void ShiftLeft(const LocalTensor<T>& dst, const LocalTensor<T>
  * @param [in] intriParams.src0RepStride src repeat stride
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRight(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftRight", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -842,15 +869,18 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
     }
 #endif
 #ifdef __MSTX_DFX_REPORT__
-    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "ShiftRight");
+    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(
+        dst, src, mask[0], mask[1], repeatTime, repeatParams, "ShiftRight");
 #endif
-    ShiftRightImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        mask, repeatTime, repeatParams, roundEn);
+    ShiftRightImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams,
+        roundEn);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRight(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -864,15 +894,18 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
     }
 #endif
 #ifdef __MSTX_DFX_REPORT__
-    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "ShiftRight");
+    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(
+        dst, src, mask[0], mask[1], repeatTime, repeatParams, "ShiftRight");
 #endif
-    ShiftRightImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(),
-        (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams, roundEn);
+    ShiftRightImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams, roundEn);
 }
 
 template <typename T, bool isSetMask>
-__aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRight(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftRight", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -887,13 +920,15 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "ShiftRight");
 #endif
-    ShiftRightImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        mask, repeatTime, repeatParams, roundEn);
+    ShiftRightImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams,
+        roundEn);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRight(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -909,8 +944,9 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "ShiftRight");
 #endif
-    ShiftRightImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(),
-        (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams, roundEn);
+    ShiftRightImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams, roundEn);
 }
 
 /*
@@ -922,8 +958,8 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
  * @param [in] count number Number of data involved in calculation
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftRight(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, const int32_t& count)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("ShiftRight", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -938,13 +974,12 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "ShiftRight", count);
 #endif
-    ShiftRightImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        count);
+    ShiftRightImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, count);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftRight(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, const int32_t& count)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -960,8 +995,8 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "ShiftRight", count);
 #endif
-    ShiftRightImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(),
-        (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, count);
+    ShiftRightImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, count);
 }
 
 /* **************************************************************************************************
@@ -981,8 +1016,9 @@ __aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T
  * @param [in] intriParams.src0RepStride src repeat stride
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyRelu(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("LeakyRelu", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -997,56 +1033,60 @@ __aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "LeakyRelu");
 #endif
-    LeakyReluImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        mask, repeatTime, repeatParams);
-}
-
-template < typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type >
-__aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
-{
-    using PrimType = PrimT<T>;
-#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
-    CheckVectorTensor("LeakyRelu", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "LeakyRelu");
-#endif
-#if ASCENDC_CPU_DEBUG
-    MaskSetter::Instance().SetMask(isSetMask);
-    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "LeakyRelu")) {
-        ASCENDC_REPORT_CHECK_ERROR("LeakyRelu", KernelFuncType::MASK_BIT_MODE);
-    }
-#endif
-#ifdef __MSTX_DFX_REPORT__
-    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "LeakyRelu");
-#endif
-    LeakyReluImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(),
-        (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
-}
-
-template <typename T, bool isSetMask>
-__aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
-{
-#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
-    CheckVectorTensor("LeakyRelu", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
-    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "LeakyRelu");
-#endif
-#if ASCENDC_CPU_DEBUG
-    MaskSetter::Instance().SetMask(isSetMask);
-    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "LeakyRelu")) {
-        ASCENDC_REPORT_CHECK_ERROR("LeakyRelu", KernelFuncType::MASK_COUNT_MODE);
-    }
-#endif
-#ifdef __MSTX_DFX_REPORT__
-    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "LeakyRelu");
-#endif
-    LeakyReluImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        mask, repeatTime, repeatParams);
+    LeakyReluImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
 }
 
 template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
-__aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyRelu(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+{
+    using PrimType = PrimT<T>;
+#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
+    CheckVectorTensor("LeakyRelu", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
+    CheckMaskRepeat<PrimType, isSetMask>(mask, repeatTime, "LeakyRelu");
+#endif
+#if ASCENDC_CPU_DEBUG
+    MaskSetter::Instance().SetMask(isSetMask);
+    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "LeakyRelu")) {
+        ASCENDC_REPORT_CHECK_ERROR("LeakyRelu", KernelFuncType::MASK_BIT_MODE);
+    }
+#endif
+#ifdef __MSTX_DFX_REPORT__
+    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask[0], mask[1], repeatTime, repeatParams, "LeakyRelu");
+#endif
+    LeakyReluImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
+}
+
+template <typename T, bool isSetMask>
+__aicore__ inline void LeakyRelu(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
+{
+#if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
+    CheckVectorTensor("LeakyRelu", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
+    CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "LeakyRelu");
+#endif
+#if ASCENDC_CPU_DEBUG
+    MaskSetter::Instance().SetMask(isSetMask);
+    if (!CheckFunVecBinaryScalar(dst, src, scalarValue, mask, repeatTime, repeatParams, "LeakyRelu")) {
+        ASCENDC_REPORT_CHECK_ERROR("LeakyRelu", KernelFuncType::MASK_COUNT_MODE);
+    }
+#endif
+#ifdef __MSTX_DFX_REPORT__
+    MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "LeakyRelu");
+#endif
+    LeakyReluImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
+}
+
+template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
+__aicore__ inline void LeakyRelu(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -1062,8 +1102,9 @@ __aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, mask, repeatTime, repeatParams, "LeakyRelu");
 #endif
-    LeakyReluImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(),
-        (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime, repeatParams);
+    LeakyReluImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, mask, repeatTime,
+        repeatParams);
 }
 
 /*
@@ -1075,8 +1116,8 @@ __aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>
  * @param [in] count number Number of data involved in calculation
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue,
-    const int32_t& count)
+__aicore__ inline void LeakyRelu(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const T& scalarValue, const int32_t& count)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("LeakyRelu", NamedTensor(dst, "dst"), NamedTensor(src, "src"));
@@ -1091,13 +1132,12 @@ __aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "LeakyRelu", count);
 #endif
-    LeakyReluImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue,
-        count);
+    LeakyReluImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), (__ubuf__ T*)src.GetPhyAddr(), scalarValue, count);
 }
 
-template < typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type >
-__aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue,
-    const int32_t& count)
+template <typename T, typename U, bool isSetMask, typename Std::enable_if<Std::is_same<PrimT<T>, U>::value, bool>::type>
+__aicore__ inline void LeakyRelu(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const U& scalarValue, const int32_t& count)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -1113,45 +1153,50 @@ __aicore__ inline void LeakyRelu(const LocalTensor<T>& dst, const LocalTensor<T>
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecUnaryInfo<T, T, isSetMask>(dst, src, "LeakyRelu", count);
 #endif
-    LeakyReluImpl<PrimType, isSetMask>((__ubuf__ PrimType*)dst.GetPhyAddr(),
-        (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, count);
+    LeakyReluImpl<PrimType, isSetMask>(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(), scalarValue, count);
 }
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
 /* **************************************************************************************************
  * Adds                                             *
  * ************************************************************************************************* */
-template <bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V, typename MaskType>
-__aicore__ inline void AddsCommon(const U& dst, const S& src0, const V& src1, MaskType mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V, typename MaskType>
+__aicore__ inline void AddsCommon(
+    const U& dst, const S& src0, const V& src1, MaskType mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "Adds API: One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
-    static_assert(SupportType<typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t,
-        int64_t, uint64_t>());
+    static_assert(
+        SupportType<
+            typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        AddsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        AddsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime, repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        AddsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        AddsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, mask, repeatTime,
+            repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        AddsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, mask, repeatTime, repeatParams);
+        AddsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, mask, repeatTime,
+            repeatParams);
     }
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Adds(const U& dst, const S& src0, const V& src1, uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Adds(
+    const U& dst, const S& src0, const V& src1, uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1162,9 +1207,10 @@ __aicore__ inline void Adds(const U& dst, const S& src0, const V& src1, uint64_t
     AddsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Adds(const U& dst, const S& src0, const V& src1, uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Adds(
+    const U& dst, const S& src0, const V& src1, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1175,7 +1221,7 @@ __aicore__ inline void Adds(const U& dst, const S& src0, const V& src1, uint64_t
     AddsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
 __aicore__ inline void Adds(const U& dst, const S& src0, const V& src1, const int32_t& count)
 {
 #if ASCENDC_CPU_DEBUG
@@ -1186,60 +1232,66 @@ __aicore__ inline void Adds(const U& dst, const S& src0, const V& src1, const in
 #endif
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
-    static_assert(SupportType<typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t,
-        int64_t, uint64_t, complex32, complex64>());
+    static_assert(SupportType<
+                  typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t,
+                  complex32, complex64>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        AddsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        AddsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        AddsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0,
-            count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        AddsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        AddsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1,
-            count);
+        AddsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, count);
     }
 }
 
 /* **************************************************************************************************
  * Muls                                             *
  * ************************************************************************************************* */
-template <bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V, typename MaskType>
-__aicore__ inline void MulsCommon(const U& dst, const S& src0, const V& src1, MaskType mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V, typename MaskType>
+__aicore__ inline void MulsCommon(
+    const U& dst, const S& src0, const V& src1, MaskType mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "Muls API: One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
     static_assert(SupportType<typename U::PrimType, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        MulsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        MulsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime, repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        MulsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        MulsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, mask, repeatTime,
+            repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        MulsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, mask, repeatTime, repeatParams);
+        MulsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, mask, repeatTime,
+            repeatParams);
     }
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Muls(const U& dst, const S& src0, const V& src1, uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Muls(
+    const U& dst, const S& src0, const V& src1, uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1250,9 +1302,10 @@ __aicore__ inline void Muls(const U& dst, const S& src0, const V& src1, uint64_t
     MulsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Muls(const U& dst, const S& src0, const V& src1, uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Muls(
+    const U& dst, const S& src0, const V& src1, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1263,7 +1316,7 @@ __aicore__ inline void Muls(const U& dst, const S& src0, const V& src1, uint64_t
     MulsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
 __aicore__ inline void Muls(const U& dst, const S& src0, const V& src1, const int32_t& count)
 {
 #if ASCENDC_CPU_DEBUG
@@ -1274,60 +1327,68 @@ __aicore__ inline void Muls(const U& dst, const S& src0, const V& src1, const in
 #endif
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
-    static_assert(SupportType<typename U::PrimType, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t,
-        complex32, complex64>());
+    static_assert(SupportType<
+                  typename U::PrimType, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t, complex32,
+                  complex64>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        MulsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        MulsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        MulsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        MulsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        MulsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, count);
+        MulsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, count);
     }
 }
 
 /* **************************************************************************************************
  * Maxs                                             *
  * ************************************************************************************************* */
-template <bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V, typename MaskType>
-__aicore__ inline void MaxsCommon(const U& dst, const S& src0, const V& src1, MaskType mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V, typename MaskType>
+__aicore__ inline void MaxsCommon(
+    const U& dst, const S& src0, const V& src1, MaskType mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "Maxs API: One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
-    static_assert(SupportType<typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t,
-        int64_t, uint64_t>());
+    static_assert(
+        SupportType<
+            typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        MaxsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        MaxsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime, repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        MaxsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        MaxsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, mask, repeatTime,
+            repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        MaxsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, mask, repeatTime, repeatParams);
+        MaxsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, mask, repeatTime,
+            repeatParams);
     }
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Maxs(const U& dst, const S& src0, const V& src1, uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Maxs(
+    const U& dst, const S& src0, const V& src1, uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1338,9 +1399,10 @@ __aicore__ inline void Maxs(const U& dst, const S& src0, const V& src1, uint64_t
     MaxsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Maxs(const U& dst, const S& src0, const V& src1, uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Maxs(
+    const U& dst, const S& src0, const V& src1, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1351,7 +1413,7 @@ __aicore__ inline void Maxs(const U& dst, const S& src0, const V& src1, uint64_t
     MaxsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
 __aicore__ inline void Maxs(const U& dst, const S& src0, const V& src1, const int32_t& count)
 {
 #if ASCENDC_CPU_DEBUG
@@ -1362,61 +1424,68 @@ __aicore__ inline void Maxs(const U& dst, const S& src0, const V& src1, const in
 #endif
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
-    static_assert(SupportType<typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t,
-        int64_t, uint64_t>());
+    static_assert(
+        SupportType<
+            typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        MaxsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        MaxsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        MaxsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        MaxsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        MaxsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, count);
+        MaxsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, count);
     }
 }
 
 /* **************************************************************************************************
  * Mins                                             *
  * ************************************************************************************************* */
-template <bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V, typename MaskType>
-__aicore__ inline void MinsCommon(const U& dst, const S& src0, const V& src1, MaskType mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V, typename MaskType>
+__aicore__ inline void MinsCommon(
+    const U& dst, const S& src0, const V& src1, MaskType mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "Mins API: One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
-    static_assert(SupportType<typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t,
-        int64_t, uint64_t>());
+    static_assert(
+        SupportType<
+            typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        MinsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        MinsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime, repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        MinsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        MinsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, mask, repeatTime,
+            repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        MinsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, mask, repeatTime, repeatParams);
+        MinsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, mask, repeatTime,
+            repeatParams);
     }
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Mins(const U& dst, const S& src0, const V& src1, uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Mins(
+    const U& dst, const S& src0, const V& src1, uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1427,9 +1496,10 @@ __aicore__ inline void Mins(const U& dst, const S& src0, const V& src1, uint64_t
     MinsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Mins(const U& dst, const S& src0, const V& src1, uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Mins(
+    const U& dst, const S& src0, const V& src1, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1440,7 +1510,7 @@ __aicore__ inline void Mins(const U& dst, const S& src0, const V& src1, uint64_t
     MinsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
 __aicore__ inline void Mins(const U& dst, const S& src0, const V& src1, const int32_t& count)
 {
 #if ASCENDC_CPU_DEBUG
@@ -1451,60 +1521,66 @@ __aicore__ inline void Mins(const U& dst, const S& src0, const V& src1, const in
 #endif
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
-    static_assert(SupportType<typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t,
-        int64_t, uint64_t>());
+    static_assert(
+        SupportType<
+            typename U::PrimType, uint8_t, int8_t, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        MinsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        MinsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        MinsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        MinsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        MinsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, count);
+        MinsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, count);
     }
 }
 
 /* **************************************************************************************************
  * Ands                                             *
  * ************************************************************************************************* */
-template <bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V, typename MaskType>
-__aicore__ inline void AndsCommon(const U& dst, const S& src0, const V& src1, MaskType mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V, typename MaskType>
+__aicore__ inline void AndsCommon(
+    const U& dst, const S& src0, const V& src1, MaskType mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "Ands API: One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
     static_assert(SupportType<typename U::PrimType, uint16_t, int16_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        AndsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        AndsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime, repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        AndsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        AndsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, mask, repeatTime,
+            repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        AndsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, mask, repeatTime, repeatParams);
+        AndsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, mask, repeatTime,
+            repeatParams);
     }
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Ands(const U& dst, const S& src0, const V& src1, uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Ands(
+    const U& dst, const S& src0, const V& src1, uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1515,9 +1591,10 @@ __aicore__ inline void Ands(const U& dst, const S& src0, const V& src1, uint64_t
     AndsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Ands(const U& dst, const S& src0, const V& src1, uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Ands(
+    const U& dst, const S& src0, const V& src1, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1528,7 +1605,7 @@ __aicore__ inline void Ands(const U& dst, const S& src0, const V& src1, uint64_t
     AndsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
 __aicore__ inline void Ands(const U& dst, const S& src0, const V& src1, const int32_t& count)
 {
 #if ASCENDC_CPU_DEBUG
@@ -1541,57 +1618,62 @@ __aicore__ inline void Ands(const U& dst, const S& src0, const V& src1, const in
     static_assert(TypeUtils::IsLocalTensorType<U>());
     static_assert(SupportType<typename U::PrimType, uint16_t, int16_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        AndsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        AndsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        AndsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        AndsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        AndsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, count);
+        AndsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, count);
     }
 }
 
 /* **************************************************************************************************
  * Ors                                             *
  * ************************************************************************************************* */
-template <bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V, typename MaskType>
-__aicore__ inline void OrsCommon(const U& dst, const S& src0, const V& src1, MaskType mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V, typename MaskType>
+__aicore__ inline void OrsCommon(
+    const U& dst, const S& src0, const V& src1, MaskType mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "Ors API: One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
     static_assert(SupportType<typename U::PrimType, uint16_t, int16_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        OrsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        OrsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime, repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        OrsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        OrsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, mask, repeatTime,
+            repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        OrsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, mask, repeatTime, repeatParams);
+        OrsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, mask, repeatTime,
+            repeatParams);
     }
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Ors(const U& dst, const S& src0, const V& src1, uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Ors(
+    const U& dst, const S& src0, const V& src1, uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1602,9 +1684,10 @@ __aicore__ inline void Ors(const U& dst, const S& src0, const V& src1, uint64_t 
     OrsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Ors(const U& dst, const S& src0, const V& src1, uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Ors(
+    const U& dst, const S& src0, const V& src1, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1615,7 +1698,7 @@ __aicore__ inline void Ors(const U& dst, const S& src0, const V& src1, uint64_t 
     OrsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
 __aicore__ inline void Ors(const U& dst, const S& src0, const V& src1, const int32_t& count)
 {
 #if ASCENDC_CPU_DEBUG
@@ -1628,57 +1711,62 @@ __aicore__ inline void Ors(const U& dst, const S& src0, const V& src1, const int
     static_assert(TypeUtils::IsLocalTensorType<U>());
     static_assert(SupportType<typename U::PrimType, uint16_t, int16_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        OrsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        OrsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        OrsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            src0, count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        OrsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), src0, count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        OrsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
-            src1, count);
+        OrsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, count);
     }
 }
 
 /* **************************************************************************************************
  * Subs                                             *
  * ************************************************************************************************* */
-template <bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V, typename MaskType>
-__aicore__ inline void SubsCommon(const U& dst, const S& src0, const V& src1, MaskType mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V, typename MaskType>
+__aicore__ inline void SubsCommon(
+    const U& dst, const S& src0, const V& src1, MaskType mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "Subs API: One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
     static_assert(SupportType<typename U::PrimType, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        SubsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        SubsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime, repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        SubsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), src0, (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        SubsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), src0, (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime,
+            repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        SubsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1,
-            mask, repeatTime, repeatParams);
+        SubsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, mask, repeatTime,
+            repeatParams);
     }
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Subs(const U& dst, const S& src0, const V& src1, uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Subs(
+    const U& dst, const S& src0, const V& src1, uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1689,9 +1777,10 @@ __aicore__ inline void Subs(const U& dst, const S& src0, const V& src1, uint64_t
     SubsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Subs(const U& dst, const S& src0, const V& src1, uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Subs(
+    const U& dst, const S& src0, const V& src1, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1702,7 +1791,7 @@ __aicore__ inline void Subs(const U& dst, const S& src0, const V& src1, uint64_t
     SubsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
 __aicore__ inline void Subs(const U& dst, const S& src0, const V& src1, const int32_t& count)
 {
 #if ASCENDC_CPU_DEBUG
@@ -1713,60 +1802,66 @@ __aicore__ inline void Subs(const U& dst, const S& src0, const V& src1, const in
 #endif
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
-    static_assert(SupportType<typename U::PrimType, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t,
-        complex32, complex64>());
+    static_assert(SupportType<
+                  typename U::PrimType, half, bfloat16_t, int16_t, float, int32_t, int64_t, uint64_t, complex32,
+                  complex64>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        SubsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
-        static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        SubsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), src0,
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        SubsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
             (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
+        SubsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), src0, (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        SubsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, count);
+        SubsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, count);
     }
 }
 
 /* **************************************************************************************************
  * Divs                                             *
  * ************************************************************************************************* */
-template <bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V, typename MaskType>
-__aicore__ inline void DivsCommon(const U& dst, const S& src0, const V& src1, MaskType mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V, typename MaskType>
+__aicore__ inline void DivsCommon(
+    const U& dst, const S& src0, const V& src1, MaskType mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     static_assert(!TypeUtils::IsInnerDefaultType<S, V>(), "Divs API: One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<U>());
     static_assert(SupportType<typename U::PrimType, half, float, int64_t, uint64_t>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        DivsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        DivsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
+            (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime, repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
         static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        DivsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), src0, (__ubuf__ ActualT*)src1.GetPhyAddr(),
-            mask, repeatTime, repeatParams);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+        DivsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), src0, (__ubuf__ ActualT*)src1.GetPhyAddr(), mask, repeatTime,
+            repeatParams);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        DivsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1,
-            mask, repeatTime, repeatParams);
+        DivsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, mask, repeatTime,
+            repeatParams);
     }
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Divs(const U& dst, const S& src0, const V& src1, uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Divs(
+    const U& dst, const S& src0, const V& src1, uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1777,9 +1872,10 @@ __aicore__ inline void Divs(const U& dst, const S& src0, const V& src1, uint64_t
     DivsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
-__aicore__ inline void Divs(const U& dst, const S& src0, const V& src1, uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
+__aicore__ inline void Divs(
+    const U& dst, const S& src0, const V& src1, uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
 #if ASCENDC_CPU_DEBUG
     MaskSetter::Instance().SetMask(isSetMask);
@@ -1790,7 +1886,7 @@ __aicore__ inline void Divs(const U& dst, const S& src0, const V& src1, uint64_t
     DivsCommon<isSetMask, config>(dst, src0, src1, mask, repeatTime, repeatParams);
 }
 
-template <typename T, bool isSetMask, const BinaryConfig &config, typename U, typename S, typename V>
+template <typename T, bool isSetMask, const BinaryConfig& config, typename U, typename S, typename V>
 __aicore__ inline void Divs(const U& dst, const S& src0, const V& src1, const int32_t& count)
 {
 #if ASCENDC_CPU_DEBUG
@@ -1803,21 +1899,22 @@ __aicore__ inline void Divs(const U& dst, const S& src0, const V& src1, const in
     static_assert(TypeUtils::IsLocalTensorType<U>());
     static_assert(SupportType<typename U::PrimType, half, float, int64_t, uint64_t, complex32, complex64>());
     using ActualT = typename U::PrimType;
-    if constexpr(TypeUtils::IsLocalTensorType<S, V>()) {
+    if constexpr (TypeUtils::IsLocalTensorType<S, V>()) {
         static_assert(Std::is_same<S, V>::value);
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1),
-                      "scalarTensorIndex out of range");
-        DivsImpl<ActualT, isSetMask, config.scalarTensorIndex>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
-        static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
-        DivsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(), src0,
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        DivsImpl<ActualT, isSetMask, config.scalarTensorIndex>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(),
             (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
+    } else if constexpr (TypeUtils::IsLocalTensorType<V>() && TypeUtils::IsInnerDefaultType<S>()) {
+        static_assert(Std::is_same<ActualT, typename V::PrimType>::value);
+        DivsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), src0, (__ubuf__ ActualT*)src1.GetPhyAddr(), count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<S>() && TypeUtils::IsInnerDefaultType<V>()) {
         static_assert(Std::is_same<ActualT, typename S::PrimType>::value);
-        DivsImpl<ActualT, isSetMask>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, count);
+        DivsImpl<ActualT, isSetMask>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualT*)src0.GetPhyAddr(), src1, count);
     }
 }
 
@@ -1832,8 +1929,8 @@ __aicore__ inline void Divs(const U& dst, const S& src0, const V& src1, const in
  * @param [in] src1 input LocalTensor
  * @param [in] count number Number of data involved in calculation
  */
-template <typename T0, typename T1, const BinaryConfig &config, typename T2, typename T3, typename T4>
-__aicore__ inline void MulsCast(const T2 &dst, const T3 &src0, const T4 &src1, const uint32_t count)
+template <typename T0, typename T1, const BinaryConfig& config, typename T2, typename T3, typename T4>
+__aicore__ inline void MulsCast(const T2& dst, const T3& src0, const T4& src1, const uint32_t count)
 {
     using ActualT = typename T2::PrimType;
     CheckTensorPos<ActualT>(dst, Hardware::UB, "dst", "VECIN / VECCALC / VECOUT", "MulsCast");
@@ -1841,48 +1938,49 @@ __aicore__ inline void MulsCast(const T2 &dst, const T3 &src0, const T4 &src1, c
     static_assert(!TypeUtils::IsInnerDefaultType<T3, T4>(), "One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<T2>());
     static_assert(SupportType<typename T2::PrimType, half>());
-    if constexpr(Std::is_same<T3, T4>::value) {
+    if constexpr (Std::is_same<T3, T4>::value) {
         ASCENDC_ASSERT((count <= src0.GetSize() && count <= src1.GetSize() && count <= dst.GetSize()), {
-            KERNEL_LOG(KERNEL_ERROR,
-                    "count is %u, which should not larger than tensor size of dst / src0 / src1", count);
+            KERNEL_LOG(
+                KERNEL_ERROR, "count is %u, which should not larger than tensor size of dst / src0 / src1", count);
         });
         using ActualU = typename T3::PrimType;
         CheckTensorPos<ActualU>(src0, Hardware::UB, "src0", "VECIN / VECCALC / VECOUT", "MulsCast");
         CheckTensorPos<ActualU>(src1, Hardware::UB, "src1", "VECIN / VECCALC / VECOUT", "MulsCast");
         static_assert(Std::is_same<T3, T4>::value);
         static_assert(Std::is_same<ActualT, typename T2::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
         if constexpr (config.scalarTensorIndex == 0) {
-            FusedMulsCastImpl<ActualT, ActualU>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-                (__ubuf__ ActualU*)src1.GetPhyAddr(), (__ubuf__ ActualU*)src0.GetPhyAddr(), count);
+            FusedMulsCastImpl<ActualT, ActualU>(
+                (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualU*)src1.GetPhyAddr(),
+                (__ubuf__ ActualU*)src0.GetPhyAddr(), count);
         } else {
-            FusedMulsCastImpl<ActualT, ActualU>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-                (__ubuf__ ActualU*)src0.GetPhyAddr(), (__ubuf__ ActualU*)src1.GetPhyAddr(), count);
+            FusedMulsCastImpl<ActualT, ActualU>(
+                (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualU*)src0.GetPhyAddr(),
+                (__ubuf__ ActualU*)src1.GetPhyAddr(), count);
         }
-    } else if constexpr(TypeUtils::IsLocalTensorType<T4>() && TypeUtils::IsInnerDefaultType<T3>()) {
+    } else if constexpr (TypeUtils::IsLocalTensorType<T4>() && TypeUtils::IsInnerDefaultType<T3>()) {
         ASCENDC_ASSERT((count <= src1.GetSize() && count <= dst.GetSize()), {
-            KERNEL_LOG(KERNEL_ERROR,
-                    "count is %u, which should not larger than tensor size of dst / src1", count);
+            KERNEL_LOG(KERNEL_ERROR, "count is %u, which should not larger than tensor size of dst / src1", count);
         });
         using ActualU = typename T4::PrimType;
         CheckTensorPos<ActualU>(src1, Hardware::UB, "src1", "VECIN / VECCALC / VECOUT", "MulsCast");
         static_assert(Std::is_same<ActualT, typename T2::PrimType>::value);
         static_assert(Std::is_same<ActualU, typename T4::PrimType>::value);
         static_assert(Std::is_same<ActualU, T3>::value);
-        FusedMulsCastImpl<ActualT, ActualU>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualU*)src1.GetPhyAddr(), src0, count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<T3>() && TypeUtils::IsInnerDefaultType<T4>()) {
+        FusedMulsCastImpl<ActualT, ActualU>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualU*)src1.GetPhyAddr(), src0, count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<T3>() && TypeUtils::IsInnerDefaultType<T4>()) {
         ASCENDC_ASSERT((count <= src0.GetSize() && count <= dst.GetSize()), {
-            KERNEL_LOG(KERNEL_ERROR,
-                    "count is %u, which should not larger than tensor size of dst / src0", count);
+            KERNEL_LOG(KERNEL_ERROR, "count is %u, which should not larger than tensor size of dst / src0", count);
         });
         using ActualU = typename T3::PrimType;
         CheckTensorPos<ActualU>(src0, Hardware::UB, "src0", "VECIN / VECCALC / VECOUT", "MulsCast");
         static_assert(Std::is_same<ActualT, typename T2::PrimType>::value);
         static_assert(Std::is_same<ActualU, typename T3::PrimType>::value);
         static_assert(Std::is_same<ActualU, T4>::value);
-        FusedMulsCastImpl<ActualT, ActualU>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualU*)src0.GetPhyAddr(), src1, count);
+        FusedMulsCastImpl<ActualT, ActualU>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualU*)src0.GetPhyAddr(), src1, count);
     }
 #else
     ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "MulsCast not supported on current device."); });
@@ -1890,8 +1988,8 @@ __aicore__ inline void MulsCast(const T2 &dst, const T3 &src0, const T4 &src1, c
 }
 
 // FusedMulsCast has been updated, please use MulsCast instead.
-template <typename T0, typename T1, const BinaryConfig &config, typename T2, typename T3, typename T4>
-__aicore__ inline void FusedMulsCast(const T2 &dst, const T3 &src0, const T4 &src1, const uint32_t count)
+template <typename T0, typename T1, const BinaryConfig& config, typename T2, typename T3, typename T4>
+__aicore__ inline void FusedMulsCast(const T2& dst, const T3& src0, const T4& src1, const uint32_t count)
 {
     using ActualT = typename T2::PrimType;
     CheckTensorPos<ActualT>(dst, Hardware::UB, "dst", "VECIN / VECCALC / VECOUT", "FusedMulsCast");
@@ -1899,48 +1997,49 @@ __aicore__ inline void FusedMulsCast(const T2 &dst, const T3 &src0, const T4 &sr
     static_assert(!TypeUtils::IsInnerDefaultType<T3, T4>(), "One of src0 and src1 should be Tensor");
     static_assert(TypeUtils::IsLocalTensorType<T2>());
     static_assert(SupportType<typename T2::PrimType, half>());
-    if constexpr(Std::is_same<T3, T4>::value) {
+    if constexpr (Std::is_same<T3, T4>::value) {
         ASCENDC_ASSERT((count <= src0.GetSize() && count <= src1.GetSize() && count <= dst.GetSize()), {
-            KERNEL_LOG(KERNEL_ERROR,
-                    "count is %u, which should not larger than tensor size of dst / src0 / src1", count);
+            KERNEL_LOG(
+                KERNEL_ERROR, "count is %u, which should not larger than tensor size of dst / src0 / src1", count);
         });
         using ActualU = typename T3::PrimType;
         CheckTensorPos<ActualU>(src0, Hardware::UB, "src0", "VECIN / VECCALC / VECOUT", "FusedMulsCast");
         CheckTensorPos<ActualU>(src1, Hardware::UB, "src1", "VECIN / VECCALC / VECOUT", "FusedMulsCast");
         static_assert(Std::is_same<T3, T4>::value);
         static_assert(Std::is_same<ActualT, typename T2::PrimType>::value);
-        static_assert((config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
+        static_assert(
+            (config.scalarTensorIndex == 0 || config.scalarTensorIndex == 1), "scalarTensorIndex out of range");
         if constexpr (config.scalarTensorIndex == 0) {
-            FusedMulsCastImpl<ActualT, ActualU>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-                (__ubuf__ ActualU*)src1.GetPhyAddr(), (__ubuf__ ActualU*)src0.GetPhyAddr(), count);
+            FusedMulsCastImpl<ActualT, ActualU>(
+                (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualU*)src1.GetPhyAddr(),
+                (__ubuf__ ActualU*)src0.GetPhyAddr(), count);
         } else {
-            FusedMulsCastImpl<ActualT, ActualU>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-                (__ubuf__ ActualU*)src0.GetPhyAddr(), (__ubuf__ ActualU*)src1.GetPhyAddr(), count);
+            FusedMulsCastImpl<ActualT, ActualU>(
+                (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualU*)src0.GetPhyAddr(),
+                (__ubuf__ ActualU*)src1.GetPhyAddr(), count);
         }
-    } else if constexpr(TypeUtils::IsLocalTensorType<T4>() && TypeUtils::IsInnerDefaultType<T3>()) {
+    } else if constexpr (TypeUtils::IsLocalTensorType<T4>() && TypeUtils::IsInnerDefaultType<T3>()) {
         ASCENDC_ASSERT((count <= src1.GetSize() && count <= dst.GetSize()), {
-            KERNEL_LOG(KERNEL_ERROR,
-                    "count is %u, which should not larger than tensor size of dst / src1", count);
+            KERNEL_LOG(KERNEL_ERROR, "count is %u, which should not larger than tensor size of dst / src1", count);
         });
         using ActualU = typename T4::PrimType;
         CheckTensorPos<ActualU>(src1, Hardware::UB, "src1", "VECIN / VECCALC / VECOUT", "FusedMulsCast");
         static_assert(Std::is_same<ActualT, typename T2::PrimType>::value);
         static_assert(Std::is_same<ActualU, typename T4::PrimType>::value);
         static_assert(Std::is_same<ActualU, T3>::value);
-        FusedMulsCastImpl<ActualT, ActualU>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualU*)src1.GetPhyAddr(), src0, count);
-    } else if constexpr(TypeUtils::IsLocalTensorType<T3>() && TypeUtils::IsInnerDefaultType<T4>()) {
+        FusedMulsCastImpl<ActualT, ActualU>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualU*)src1.GetPhyAddr(), src0, count);
+    } else if constexpr (TypeUtils::IsLocalTensorType<T3>() && TypeUtils::IsInnerDefaultType<T4>()) {
         ASCENDC_ASSERT((count <= src0.GetSize() && count <= dst.GetSize()), {
-            KERNEL_LOG(KERNEL_ERROR,
-                    "count is %u, which should not larger than tensor size of dst / src0", count);
+            KERNEL_LOG(KERNEL_ERROR, "count is %u, which should not larger than tensor size of dst / src0", count);
         });
         using ActualU = typename T3::PrimType;
         CheckTensorPos<ActualU>(src0, Hardware::UB, "src0", "VECIN / VECCALC / VECOUT", "FusedMulsCast");
         static_assert(Std::is_same<ActualT, typename T2::PrimType>::value);
         static_assert(Std::is_same<ActualU, typename T3::PrimType>::value);
         static_assert(Std::is_same<ActualU, T4>::value);
-        FusedMulsCastImpl<ActualT, ActualU>((__ubuf__ ActualT*)dst.GetPhyAddr(),
-            (__ubuf__ ActualU*)src0.GetPhyAddr(), src1, count);
+        FusedMulsCastImpl<ActualT, ActualU>(
+            (__ubuf__ ActualT*)dst.GetPhyAddr(), (__ubuf__ ActualU*)src0.GetPhyAddr(), src1, count);
     }
 #else
     ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "FusedMulsCast not supported on current device."); });

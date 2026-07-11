@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_utils.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_utils.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_utils_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_utils.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_utils_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_UTILS_H__
 #endif
@@ -53,7 +54,8 @@ __BLOCK_LOCAL__ __inline__ uint64_t g_rptConfig;
 }
 #endif
 
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
+#if defined(__NPU_ARCH__) && \
+    (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102 || __NPU_ARCH__ == 3003 || __NPU_ARCH__ == 3113)
 namespace Internal {
 // global variables g_cmpMaskLow and g_cmpMaskHigh are used to simulate the register CMPMASK in 1971
 // both of them are 64 bits and they are used to store the result of API Compare
@@ -88,11 +90,7 @@ __BLOCK_LOCAL__ __inline__ int64_t g_accVal;
 #endif
 
 #ifdef ASCENDC_CPU_DEBUG
-enum AtomicType {
-    SUM,
-    MAX,
-    MIN
-};
+enum AtomicType { SUM, MAX, MIN };
 extern bool g_isAtomic;
 extern AtomicType g_atomicType;
 
@@ -116,11 +114,11 @@ __aicore__ inline void DataCopyWithAtomic(__gm__ T* dst, __ubuf__ T* src, const 
                 *(static_cast<T*>(src) + srcOffset + indexJ) =
                     *(static_cast<T*>(dst) + dstOffset + indexJ) + *(static_cast<T*>(src) + srcOffset + indexJ);
             } else if (g_atomicType == MAX) {
-                *(static_cast<T*>(src) + srcOffset + indexJ) = std::max(*(static_cast<T*>(dst) + dstOffset + indexJ),
-                    *(static_cast<T*>(src) + srcOffset + indexJ));
+                *(static_cast<T*>(src) + srcOffset + indexJ) = std::max(
+                    *(static_cast<T*>(dst) + dstOffset + indexJ), *(static_cast<T*>(src) + srcOffset + indexJ));
             } else {
-                *(static_cast<T*>(src) + srcOffset + indexJ) = std::min(*(static_cast<T*>(dst) + dstOffset + indexJ),
-                    *(static_cast<T*>(src) + srcOffset + indexJ));
+                *(static_cast<T*>(src) + srcOffset + indexJ) = std::min(
+                    *(static_cast<T*>(dst) + dstOffset + indexJ), *(static_cast<T*>(src) + srcOffset + indexJ));
             }
         }
         dstOffset += ((lenBurst + dstStride) * ONE_BLK_SIZE) / sizeof(T);
@@ -155,13 +153,16 @@ __aicore__ inline void DataCopyWithAtomicCom(__gm__ T* dst, __ubuf__ T* src, con
         if (repeatTime > 0) {
             AscendCUtils::SetMask<T>(countInRepeat);
             if (g_atomicType == SUM) {
-                vadd(static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), repeatTime, 1, 1, 1,
+                vadd(
+                    static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), repeatTime, 1, 1, 1,
                     DEFAULT_BLK_NUM, DEFAULT_BLK_NUM, DEFAULT_BLK_NUM);
             } else if (g_atomicType == MAX) {
-                vmax(static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), repeatTime, 1, 1, 1,
+                vmax(
+                    static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), repeatTime, 1, 1, 1,
                     DEFAULT_BLK_NUM, DEFAULT_BLK_NUM, DEFAULT_BLK_NUM);
             } else {
-                vmin(static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), repeatTime, 1, 1, 1,
+                vmin(
+                    static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), repeatTime, 1, 1, 1,
                     DEFAULT_BLK_NUM, DEFAULT_BLK_NUM, DEFAULT_BLK_NUM);
             }
             AscendCUtils::ResetMask();
@@ -172,13 +173,16 @@ __aicore__ inline void DataCopyWithAtomicCom(__gm__ T* dst, __ubuf__ T* src, con
             src1Addr = src1Addr + repeatTime * countInRepeat;
             AscendCUtils::SetMask<T>(tail);
             if (g_atomicType == SUM) {
-                vadd(static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), 1, 1, 1, 1,
+                vadd(
+                    static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), 1, 1, 1, 1,
                     DEFAULT_BLK_NUM, DEFAULT_BLK_NUM, DEFAULT_BLK_NUM);
             } else if (g_atomicType == MAX) {
-                vmax(static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), 1, 1, 1, 1,
+                vmax(
+                    static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), 1, 1, 1, 1,
                     DEFAULT_BLK_NUM, DEFAULT_BLK_NUM, DEFAULT_BLK_NUM);
             } else {
-                vmin(static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), 1, 1, 1, 1,
+                vmin(
+                    static_cast<T*>(dstAddr), static_cast<T*>(src0Addr), static_cast<T*>(src1Addr), 1, 1, 1, 1,
                     DEFAULT_BLK_NUM, DEFAULT_BLK_NUM, DEFAULT_BLK_NUM);
             }
             AscendCUtils::ResetMask();
@@ -267,7 +271,8 @@ enum class TimeStampId : uint32_t {
     TIME_STAMP_MAX = 0xffff,
 };
 
-template <auto funcPtr, typename... Args> __aicore__ inline void AscVFCallImpl(Args &&... args)
+template <auto funcPtr, typename... Args>
+__aicore__ inline void AscVFCallImpl(Args&&... args)
 {
     AscVFDebugInitUb();
     funcPtr(args...);

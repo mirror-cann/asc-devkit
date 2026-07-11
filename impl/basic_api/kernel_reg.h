@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_reg.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_reg.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_common.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_reg.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_common.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_H__
 #endif
@@ -27,10 +28,7 @@ namespace AscendC {
 constexpr uint64_t MASK_PLACEHOLDER = 0;
 constexpr uint64_t MASK_PLACEHOLDER_LIST[2] = {0, 0};
 
-enum class MaskMode : uint8_t {
-    NORMAL = 0,
-    COUNTER
-};
+enum class MaskMode : uint8_t { NORMAL = 0, COUNTER };
 
 template <typename T, MaskMode mode>
 __aicore__ static inline void SetVectorMaskImpl(const uint64_t maskHigh, const uint64_t maskLow)
@@ -58,7 +56,8 @@ __aicore__ inline void ResetMaskImpl()
 }
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-template <pipe_t pipe> __aicore__ inline void PipeBarrierImpl()
+template <pipe_t pipe>
+__aicore__ inline void PipeBarrierImpl()
 {
 #if (__NPU_ARCH__ == 5102)
     if constexpr (pipe == PIPE_MTE3) {
@@ -78,7 +77,8 @@ template <pipe_t pipe> __aicore__ inline void PipeBarrierImpl()
     return;
 }
 #else
-template <pipe_t pipe> __aicore__ inline void PipeBarrierImpl()
+template <pipe_t pipe>
+__aicore__ inline void PipeBarrierImpl()
 {
 #if __NPU_ARCH__ == 3102
     return;
@@ -94,7 +94,8 @@ template <pipe_t pipe> __aicore__ inline void PipeBarrierImpl()
     }
 #endif
 #if (__NPU_ARCH__ == 2201)
-    ASCENDC_DEBUG_ASSERT(pipe != PIPE_S, KERNEL_LOG_INTERNAL(KERNEL_ERROR, "PipeBarrier<PIPE_S> is not supported on current device!"));
+    ASCENDC_DEBUG_ASSERT(
+        pipe != PIPE_S, KERNEL_LOG_INTERNAL(KERNEL_ERROR, "PipeBarrier<PIPE_S> is not supported on current device!"));
     if ASCEND_IS_AIC {
         if constexpr (pipe == PIPE_V) {
             return;
@@ -105,47 +106,38 @@ template <pipe_t pipe> __aicore__ inline void PipeBarrierImpl()
 }
 #endif
 
-enum class CacheLine : uint64_t {
-    SINGLE_CACHE_LINE = 0,
-    ENTIRE_DATA_CACHE
-};
+enum class CacheLine : uint64_t { SINGLE_CACHE_LINE = 0, ENTIRE_DATA_CACHE };
 
-enum class DcciDst : uint64_t {
-    CACHELINE_ALL = 0,
-    CACHELINE_UB,
-    CACHELINE_OUT,
-    CACHELINE_ATOMIC
-};
+enum class DcciDst : uint64_t { CACHELINE_ALL = 0, CACHELINE_UB, CACHELINE_OUT, CACHELINE_ATOMIC };
 
-#if defined(__NPU_ARCH__) &&                                                \
-     ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3002) ||                   \
-      (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113))
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3510) || \
+                              (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113))
 template <typename T, CacheLine entireType, DcciDst dcciDst>
 __aicore__ inline void DcciGMImpl(__gm__ T* dst)
 {
-    dcci(static_cast<__gm__ void *>(dst), static_cast<uint64_t>(entireType), static_cast<uint64_t>(dcciDst));
+    dcci(static_cast<__gm__ void*>(dst), static_cast<uint64_t>(entireType), static_cast<uint64_t>(dcciDst));
 }
 
 template <typename T, CacheLine entireType, DcciDst dcciDst>
 __aicore__ inline void DcciUBImpl(__ubuf__ T* dst)
 {
-    dcci(static_cast<__ubuf__ void *>(dst), static_cast<uint64_t>(entireType), static_cast<uint64_t>(dcciDst));
+    dcci(static_cast<__ubuf__ void*>(dst), static_cast<uint64_t>(entireType), static_cast<uint64_t>(dcciDst));
 }
 #endif
 
-#if defined(__NPU_ARCH__ ) &&                                                           \
-     ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 3002) ||     \
-      (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113))
+#if defined(__NPU_ARCH__) &&                                                                                 \
+    ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3510) || \
+     (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113))
 template <typename T, CacheLine entireType>
 __aicore__ inline void DcciGMImpl(__gm__ T* dst)
 {
-    dcci(static_cast<__gm__ void *>(dst), static_cast<uint64_t>(entireType));
+    dcci(static_cast<__gm__ void*>(dst), static_cast<uint64_t>(entireType));
 }
 #endif
 
 __aicore__ inline void SetMaskCountImpl()
 {
-#if defined (__NPU_ARCH__) && (__NPU_ARCH__ == 3113)
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3113)
     constexpr uint32_t CTRL_COUNTER = 56;
     set_ctrl(sbitset1(get_ctrl(), CTRL_COUNTER));
 #else
@@ -155,7 +147,7 @@ __aicore__ inline void SetMaskCountImpl()
 
 __aicore__ inline void SetMaskNormImpl()
 {
-#if defined (__NPU_ARCH__) && (__NPU_ARCH__ == 3113)
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3113)
     constexpr uint32_t CTRL_COUNTER = 56;
     set_ctrl(sbitset0(get_ctrl(), CTRL_COUNTER));
 #else
@@ -209,9 +201,8 @@ __aicore__ inline void SetCastOverflowModeImpl()
     }
 }
 
-#if defined(__NPU_ARCH__) &&                                                        \
-    ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 3002) ||  \
-     (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 2002) || (__NPU_ARCH__ == 3002) || \
+                              (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
 template <typename T>
 __aicore__ inline void SetAippFunctionsImpl0(__gm__ T* src0)
 {
@@ -282,7 +273,7 @@ __aicore__ inline void SetAippFunctionsImpl3(AippParams<T>& config)
 #else
     uint64_t aippConfig3 = static_cast<uint64_t>(cscMatrixR1C1);
     aippConfig3 |= static_cast<uint64_t>(cscMatrixR1C2) << AIPP_OFFSET_CH1;
-    aippConfig3 |= static_cast<uint64_t>(cscMatrixR2C0)  << AIPP_OFFSET_CH2;
+    aippConfig3 |= static_cast<uint64_t>(cscMatrixR2C0) << AIPP_OFFSET_CH2;
     aippConfig3 |= static_cast<uint64_t>(cscMatrixR2C1) << AIPP_OFFSET_CH3;
 
     set_aipp_spr_3(aippConfig3);
@@ -394,7 +385,7 @@ template <typename T>
 __aicore__ inline void SetAippFunctionsImpl8(AippParams<T>& config)
 {
     uint64_t aippConfig8 = 0;
-    if constexpr(IsSameType<T, int8_t>::value || IsSameType<T, uint8_t>::value) {
+    if constexpr (IsSameType<T, int8_t>::value || IsSameType<T, uint8_t>::value) {
         uint8_t paddingValueCh0 = GetScalarBitcodeValue(config.paddingParams.paddingValueCh0);
         uint8_t paddingValueCh1 = GetScalarBitcodeValue(config.paddingParams.paddingValueCh1);
         uint8_t paddingValueCh2 = GetScalarBitcodeValue(config.paddingParams.paddingValueCh2);
@@ -440,7 +431,7 @@ __aicore__ inline void SetAippFunctionsImpl9(AippInputFormat format, AippParams<
 {
     uint64_t aippConfig9 = 0;
 
-    if constexpr(IsSameType<T, int8_t>::value || IsSameType<T, uint8_t>::value) {
+    if constexpr (IsSameType<T, int8_t>::value || IsSameType<T, uint8_t>::value) {
         uint8_t cPaddingValue = GetScalarBitcodeValue(config.cPaddingParams.cPaddingValue);
         aippConfig9 |= static_cast<uint64_t>(cPaddingValue);
     } else {
@@ -539,7 +530,7 @@ template <typename T>
 __aicore__ inline void SetAippFunctionsImpl22(AippInputFormat format, AippParams<T>& config)
 {
     Internal::g_aippArgs = 0;
-    if constexpr(IsSameType<T, int8_t>::value || IsSameType<T, uint8_t>::value) {
+    if constexpr (IsSameType<T, int8_t>::value || IsSameType<T, uint8_t>::value) {
         uint8_t cPaddingValue = GetScalarBitcodeValue(config.cPaddingParams.cPaddingValue);
         Internal::g_aippArgs |= static_cast<uint64_t>(cPaddingValue);
     } else {
@@ -565,13 +556,14 @@ __aicore__ inline void SetAippFunctionsImpl22(AippInputFormat format, AippParams
 
     Internal::g_aippArgs |= (static_cast<uint64_t>(config.paddingParams.paddingMode) & 0x3) << AIPP_OFFSET_PADDING_MODE;
 
-    Internal::g_aippArgs |= (static_cast<uint64_t>(config.cPaddingParams.cPaddingMode) & 0x1) << AIPP_OFFSET_CPADDING_MODE;
+    Internal::g_aippArgs |= (static_cast<uint64_t>(config.cPaddingParams.cPaddingMode) & 0x1)
+                            << AIPP_OFFSET_CPADDING_MODE;
 }
 #endif
 
 template <typename T, typename U>
-__aicore__ inline void SetAippFunctionsImpl(__gm__ T* src0, __gm__ T* src1,
-    AippInputFormat format, AippParams<U>& config)
+__aicore__ inline void SetAippFunctionsImpl(
+    __gm__ T* src0, __gm__ T* src1, AippInputFormat format, AippParams<U>& config)
 {
 #if __NPU_ARCH__ == 2201
     if ASCEND_IS_AIV {
@@ -580,7 +572,8 @@ __aicore__ inline void SetAippFunctionsImpl(__gm__ T* src0, __gm__ T* src1,
 #endif // __NPU_ARCH__ == 2201
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
     static_assert(SupportType<T, uint8_t>(), "Input type T only supports uint8_t on current device.");
-    static_assert(SupportType<U, uint8_t, int8_t, half>(), "Input type T only supports uint8_t, int8_t, half on current device.");
+    static_assert(
+        SupportType<U, uint8_t, int8_t, half>(), "Input type T only supports uint8_t, int8_t, half on current device.");
 #endif
 #if __NPU_ARCH__ == 3002
     SetAippFunctionsImpl0<T>(src0);

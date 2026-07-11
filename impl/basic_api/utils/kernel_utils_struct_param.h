@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_utils_struct_param.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/utils/kernel_utils_struct_param.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/utils/kernel_utils_struct_param.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_UTILS_STRUCT_PARAM_H__
 #endif
@@ -33,12 +34,12 @@ struct ReduceRepeatParams {
         srcRepStride = DEFAULT_REPEAT_STRIDE; // src Stride Unit is 32B
     }
 
-    __aicore__ ReduceRepeatParams(const int32_t mask, const int32_t repeatTimesIn, const int32_t dstRepStrideIn,
-        const int32_t srcBlkStrideIn, const int32_t srcRepStrideIn)
+    __aicore__ ReduceRepeatParams(
+        const int32_t mask, const int32_t repeatTimesIn, const int32_t dstRepStrideIn, const int32_t srcBlkStrideIn,
+        const int32_t srcRepStrideIn)
     {
-#if defined(__NPU_ARCH__) &&                                                        \
-    ((__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3102) ||                            \
-     (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3510))
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3102) || (__NPU_ARCH__ == 5102) || \
+                              (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3510))
         normalMask = mask;
         maskMode = 1;
 #else
@@ -50,8 +51,8 @@ struct ReduceRepeatParams {
             lowMask = FULL_MASK;
         } else {
             highMask = (mask > HALF_MASK_LEN) ?
-                (((static_cast<uint64_t>(1)) << static_cast<uint32_t>(mask - HALF_MASK_LEN)) - 1) :
-                0;
+                           (((static_cast<uint64_t>(1)) << static_cast<uint32_t>(mask - HALF_MASK_LEN)) - 1) :
+                           0;
             lowMask =
                 (mask > HALF_MASK_LEN) ? FULL_MASK : (((static_cast<uint64_t>(1)) << static_cast<uint32_t>(mask)) - 1);
         }
@@ -62,12 +63,12 @@ struct ReduceRepeatParams {
         srcRepStride = srcRepStrideIn;
     }
 
-    __aicore__ ReduceRepeatParams(const uint64_t mask[2], const int32_t repeatTimesIn, const int32_t dstRepStrideIn,
-        const int32_t srcBlkStrideIn, const int32_t srcRepStrideIn)
+    __aicore__ ReduceRepeatParams(
+        const uint64_t mask[2], const int32_t repeatTimesIn, const int32_t dstRepStrideIn, const int32_t srcBlkStrideIn,
+        const int32_t srcRepStrideIn)
     {
-#if defined(__NPU_ARCH__) &&                                                        \
-    ((__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3102) ||                            \
-     (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3510))
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3102) || (__NPU_ARCH__ == 5102) || \
+                              (__NPU_ARCH__ == 3113) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3510))
         bitMask[0] = mask[0];
         bitMask[1] = mask[1];
 #else
@@ -104,8 +105,9 @@ struct DumpMessageHead {
         dumpSize = 0;
     }
 
-    __aicore__ DumpMessageHead(uint32_t typeIn, uint32_t lengthIn, uint32_t addrIn, uint32_t dataTypeIn, uint32_t descIn,
-        uint32_t bufferIdIn, uint32_t positionIn, uint32_t dumpSizeIn)
+    __aicore__ DumpMessageHead(
+        uint32_t typeIn, uint32_t lengthIn, uint32_t addrIn, uint32_t dataTypeIn, uint32_t descIn, uint32_t bufferIdIn,
+        uint32_t positionIn, uint32_t dumpSizeIn)
     {
         type = typeIn;
         length = lengthIn;
@@ -124,7 +126,7 @@ struct DumpMessageHead {
     uint32_t desc = 0;     // for usr to add info or tag
     uint32_t bufferId = 0; // DumpScalar: Blockid, DumpTensor: UB adddr ()
     uint32_t position = 0; // DumpScalar: 0: MIX, 1: AIC 2: AIV; DumpTensor: 1:UB, 2:L1
-    uint32_t dumpSize = 0;      // actual dump size
+    uint32_t dumpSize = 0; // actual dump size
 };
 
 struct DumpShapeMessageHead {
@@ -155,7 +157,7 @@ struct DumpShapeMessageHead {
 
     uint32_t dim = 0;
     uint32_t shape[K_MAX_SHAPE_DIM];
-    uint32_t rsv = 0;      // reserved information
+    uint32_t rsv = 0; // reserved information
 };
 
 // dump TLV for L1 to UB
@@ -174,7 +176,7 @@ struct ProposalIntriParams {
 
     __aicore__ ProposalIntriParams(const int32_t repeatTime, const int32_t modeNumberIn)
     {
-        repeat = repeatTime;      // [1,255]
+        repeat = repeatTime;       // [1,255]
         modeNumber = modeNumberIn; // modeNumberIn: 0: x1, 1: y1, 2: x2, 3: y2, 4: score, 5:label
     }
 
@@ -193,8 +195,9 @@ struct BlockInfo {
         rsv = 0;
         dumpAddr = 0;
     }
-    __aicore__ BlockInfo(uint64_t dumpAddrIn, uint32_t lenIn, uint32_t coreIn, uint32_t blockNumIn,
-        uint32_t dumpOffsetIn, uint32_t magicIn, uint32_t rsvIn)
+    __aicore__ BlockInfo(
+        uint64_t dumpAddrIn, uint32_t lenIn, uint32_t coreIn, uint32_t blockNumIn, uint32_t dumpOffsetIn,
+        uint32_t magicIn, uint32_t rsvIn)
     {
         len = lenIn;
         core = coreIn;
@@ -224,28 +227,28 @@ struct BlockInfo {
 };
 
 struct BlockRingBufInfo {
-    uint32_t length = 0U;        // total size per block (include head and r/w info)
-    uint32_t coreId = 0U;        // current core id
-    uint32_t blockNum = 0U;      // total core num
-    uint32_t ringBufLen = 0U;    // fifo buff size (print tlv storage)
-    uint16_t magic = 0U;         // magic number
-    uint16_t flag = 0U;          // 0: aic, 1: aiv, 2: simt
-    uint32_t rsv = 0U;           // reserve
-    uint64_t ringBufAddr = 0U;   // start addr of fifo buff
-    uint32_t resvMem[6];        // reserved
+    uint32_t length = 0U;      // total size per block (include head and r/w info)
+    uint32_t coreId = 0U;      // current core id
+    uint32_t blockNum = 0U;    // total core num
+    uint32_t ringBufLen = 0U;  // fifo buff size (print tlv storage)
+    uint16_t magic = 0U;       // magic number
+    uint16_t flag = 0U;        // 0: aic, 1: aiv, 2: simt
+    uint32_t rsv = 0U;         // reserve
+    uint64_t ringBufAddr = 0U; // start addr of fifo buff
+    uint32_t resvMem[6];       // reserved
 };
 
 struct RingBufWriteInfo {
     uint32_t type = static_cast<uint32_t>(DumpType::DUMP_BUFI); // DumpType = DUMP_BUFI
-    uint32_t length = 0U;       // u64 + u64
-    uint64_t bufOffset = 0U;    // the offset of write addr relative to ringBufAddr
-    uint64_t packIdx = 0U;      // print pack counter
+    uint32_t length = 0U;                                       // u64 + u64
+    uint64_t bufOffset = 0U;                                    // the offset of write addr relative to ringBufAddr
+    uint64_t packIdx = 0U;                                      // print pack counter
 };
 
 struct RingBufReadInfo {
     uint32_t type = static_cast<uint32_t>(DumpType::DUMP_BUFO); // DumpType = DUMP_BUFO
-    uint32_t length = 0U;       // u64 + u64
-    uint64_t bufOffset = 0U;    // the offset of read addr relative to ringBufAddr
+    uint32_t length = 0U;                                       // u64 + u64
+    uint64_t bufOffset = 0U;                                    // the offset of read addr relative to ringBufAddr
     uint64_t resv = 0U;
 };
 
@@ -257,9 +260,9 @@ struct SkipTlvInfo {
 struct PrintTlvInfoHead {
     uint32_t type = static_cast<uint32_t>(DumpType::DUMP_SCALAR);
     uint32_t length = 0U;
-    uint32_t blockIdx = 0U;             // blockIdx
-    uint32_t resv = 0U;                 // reserved
-    uint64_t fmtOffset = 0U;            // offset of fmt string from the start of fmtOffset addr
+    uint32_t blockIdx = 0U;  // blockIdx
+    uint32_t resv = 0U;      // reserved
+    uint64_t fmtOffset = 0U; // offset of fmt string from the start of fmtOffset addr
 };
 
 struct DumpTensorTlvInfoHead {
@@ -280,9 +283,9 @@ struct DumpTensorTlvInfoHead {
 
 struct DumpShapeTlvInfo {
     uint32_t type = static_cast<uint32_t>(DumpType::DUMP_SHAPE); // DumpType = DUMP_SHAPE
-    uint32_t length = 0U;           // Length of (dim shape rsv)
-    uint32_t dim = 0U;                  // shapeInfo.dim
-    uint32_t shape[K_MAX_SHAPE_DIM];    // dim <= 8
+    uint32_t length = 0U;                                        // Length of (dim shape rsv)
+    uint32_t dim = 0U;                                           // shapeInfo.dim
+    uint32_t shape[K_MAX_SHAPE_DIM];                             // dim <= 8
     uint32_t resv;
 };
 

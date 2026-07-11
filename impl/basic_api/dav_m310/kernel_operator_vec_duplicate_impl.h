@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_duplicate_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_m310/kernel_operator_vec_duplicate_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tpipe.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_m310/kernel_operator_vec_duplicate_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tpipe.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_DUPLICATE_IMPL_H__
 #endif
@@ -26,23 +27,27 @@
 #include "kernel_operator_common_impl.h"
 
 namespace AscendC {
-template <typename T> constexpr __aicore__ inline void CheckDuplicateSupportedType()
+template <typename T>
+constexpr __aicore__ inline void CheckDuplicateSupportedType()
 {
-    static_assert(std::is_same<T, half>::value || std::is_same<T, int16_t>::value || std::is_same<T, uint16_t>::value ||
-        std::is_same<T, int32_t>::value || std::is_same<T, uint32_t>::value || std::is_same<T, float>::value,
+    static_assert(
+        std::is_same<T, half>::value || std::is_same<T, int16_t>::value || std::is_same<T, uint16_t>::value ||
+            std::is_same<T, int32_t>::value || std::is_same<T, uint32_t>::value || std::is_same<T, float>::value,
         "Duplicate instr only support half/int16_t/uint16_t/int32_t/uint32_t/float type on current device");
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void DuplicateImpl(__ubuf__ T* dstLocal, const T& scalarValue, uint64_t mask,
-    const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl(
+    __ubuf__ T* dstLocal, const T& scalarValue, uint64_t mask, const uint8_t repeatTime, const uint16_t dstBlockStride,
+    const uint8_t dstRepeatStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<half, true>(__ubuf__ half* dstLocal, const half& scalarValue, uint64_t mask,
-    const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<half, true>(
+    __ubuf__ half* dstLocal, const half& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __VEC_SCOPE__
     {
@@ -58,8 +63,9 @@ __aicore__ inline void DuplicateImpl<half, true>(__ubuf__ half* dstLocal, const 
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<float, true>(__ubuf__ float* dstLocal, const float& scalarValue, uint64_t mask,
-    const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<float, true>(
+    __ubuf__ float* dstLocal, const float& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __VEC_SCOPE__
     {
@@ -74,10 +80,10 @@ __aicore__ inline void DuplicateImpl<float, true>(__ubuf__ float* dstLocal, cons
     }
 }
 
-
 template <>
-__aicore__ inline void DuplicateImpl<int16_t, true>(__ubuf__ int16_t* dstLocal, const int16_t& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<int16_t, true>(
+    __ubuf__ int16_t* dstLocal, const int16_t& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __VEC_SCOPE__
     {
@@ -93,8 +99,9 @@ __aicore__ inline void DuplicateImpl<int16_t, true>(__ubuf__ int16_t* dstLocal, 
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<uint16_t, true>(__ubuf__ uint16_t* dstLocal, const uint16_t& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<uint16_t, true>(
+    __ubuf__ uint16_t* dstLocal, const uint16_t& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __VEC_SCOPE__
     {
@@ -110,8 +117,9 @@ __aicore__ inline void DuplicateImpl<uint16_t, true>(__ubuf__ uint16_t* dstLocal
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<int32_t, true>(__ubuf__ int32_t* dstLocal, const int32_t& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<int32_t, true>(
+    __ubuf__ int32_t* dstLocal, const int32_t& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __VEC_SCOPE__
     {
@@ -127,8 +135,9 @@ __aicore__ inline void DuplicateImpl<int32_t, true>(__ubuf__ int32_t* dstLocal, 
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<uint32_t, true>(__ubuf__ uint32_t* dstLocal, const uint32_t& scalarValue,
-    uint64_t mask, const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<uint32_t, true>(
+    __ubuf__ uint32_t* dstLocal, const uint32_t& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __VEC_SCOPE__
     {
@@ -144,15 +153,17 @@ __aicore__ inline void DuplicateImpl<uint32_t, true>(__ubuf__ uint32_t* dstLocal
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void DuplicateImpl(__ubuf__ T* dstLocal, const T& scalarValue, uint64_t mask[],
-    const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl(
+    __ubuf__ T* dstLocal, const T& scalarValue, uint64_t mask[], const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported on current device"); });
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<half, true>(__ubuf__ half* dstLocal, const half& scalarValue, uint64_t mask[],
-    const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<half, true>(
+    __ubuf__ half* dstLocal, const half& scalarValue, uint64_t mask[], const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -177,8 +188,9 @@ __aicore__ inline void DuplicateImpl<half, true>(__ubuf__ half* dstLocal, const 
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<float, true>(__ubuf__ float* dstLocal, const float& scalarValue, uint64_t mask[],
-    const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<float, true>(
+    __ubuf__ float* dstLocal, const float& scalarValue, uint64_t mask[], const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -204,8 +216,9 @@ __aicore__ inline void DuplicateImpl<float, true>(__ubuf__ float* dstLocal, cons
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<int16_t, true>(__ubuf__ int16_t* dstLocal, const int16_t& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<int16_t, true>(
+    __ubuf__ int16_t* dstLocal, const int16_t& scalarValue, uint64_t mask[], const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -230,8 +243,9 @@ __aicore__ inline void DuplicateImpl<int16_t, true>(__ubuf__ int16_t* dstLocal, 
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<uint16_t, true>(__ubuf__ uint16_t* dstLocal, const uint16_t& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<uint16_t, true>(
+    __ubuf__ uint16_t* dstLocal, const uint16_t& scalarValue, uint64_t mask[], const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -256,8 +270,9 @@ __aicore__ inline void DuplicateImpl<uint16_t, true>(__ubuf__ uint16_t* dstLocal
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<int32_t, true>(__ubuf__ int32_t* dstLocal, const int32_t& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<int32_t, true>(
+    __ubuf__ int32_t* dstLocal, const int32_t& scalarValue, uint64_t mask[], const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];
@@ -284,8 +299,9 @@ __aicore__ inline void DuplicateImpl<int32_t, true>(__ubuf__ int32_t* dstLocal, 
 }
 
 template <>
-__aicore__ inline void DuplicateImpl<uint32_t, true>(__ubuf__ uint32_t* dstLocal, const uint32_t& scalarValue,
-    uint64_t mask[], const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void DuplicateImpl<uint32_t, true>(
+    __ubuf__ uint32_t* dstLocal, const uint32_t& scalarValue, uint64_t mask[], const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
     __ubuf__ uint8_t* tmpBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(TMP_UB_OFFSET, 16);
     *((__ubuf__ uint64_t*)tmpBuf) = mask[0];

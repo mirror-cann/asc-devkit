@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_gather_intf_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_operator_vec_gather_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_vec_gather_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_operator_vec_gather_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_vec_gather_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_GATHER_INTF_IMPL_H__
 #endif
@@ -57,8 +58,9 @@ namespace AscendC {
  * @param [in] repeatParams.dstRepStride dst repeat stride
  */
 template <typename T>
-__aicore__ inline void Gatherb(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LocalTensor<uint32_t>& offset, const uint8_t repeatTime, const GatherRepeatParams& repeatParams)
+__aicore__ inline void Gatherb(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LocalTensor<uint32_t>& offset, const uint8_t repeatTime,
+    const GatherRepeatParams& repeatParams)
 {
     using PrimType = PrimT<T>;
 #if ASCENDC_CPU_DEBUG
@@ -67,12 +69,13 @@ __aicore__ inline void Gatherb(const LocalTensor<T>& dst, const LocalTensor<T>& 
     }
 #endif
     uint32_t srcLength = src.GetSize();
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3003) || \
-    (__NPU_ARCH__ == 3113))
-    GatherImpl((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
+#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113))
+    GatherImpl(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
         (__ubuf__ uint32_t*)offset.GetPhyAddr(), srcLength, repeatTime, repeatParams);
 #else
-    GatherbImpl((__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
+    GatherbImpl(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
         (__ubuf__ uint32_t*)offset.GetPhyAddr(), srcLength, repeatTime, repeatParams);
 #endif
 }
@@ -89,9 +92,9 @@ __aicore__ inline void Gatherb(const LocalTensor<T>& dst, const LocalTensor<T>& 
  * @param [in] dstRepStride dst repeat stride
  */
 template <typename T>
-__aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LocalTensor<uint32_t>& srcOffset, const uint32_t srcBaseOffset, const uint64_t mask, const uint8_t repeatTime,
-    const uint16_t dstRepStride)
+__aicore__ inline void Gather(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LocalTensor<uint32_t>& srcOffset,
+    const uint32_t srcBaseOffset, const uint64_t mask, const uint8_t repeatTime, const uint16_t dstRepStride)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -100,9 +103,13 @@ __aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& s
     // srcBaseOffset should not exceed the size of src tensor
     CheckValueRange<uint32_t>(srcBaseOffset, 0, src.GetSize() * sizeof(PrimType) - 1, "srcBaseOffset", "Gather");
     // srcBaseOffset should be aligned with src dtype
-    ASCENDC_DEBUG_ASSERT((srcBaseOffset % sizeof(PrimType) == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check "
-        "srcBaseOffset value in Gather, it must be divisible by sizeof(T), current srcBaseOffset is %u, sizeof(T) is %u.\n",
-        srcBaseOffset, sizeof(PrimType)));
+    ASCENDC_DEBUG_ASSERT(
+        (srcBaseOffset % sizeof(PrimType) == 0), KERNEL_LOG_INTERNAL(
+                                                     KERNEL_ERROR,
+                                                     "Failed to check "
+                                                     "srcBaseOffset value in Gather, it must be divisible by "
+                                                     "sizeof(T), current srcBaseOffset is %u, sizeof(T) is %u.\n",
+                                                     srcBaseOffset, sizeof(PrimType)));
 #endif
 #if ASCENDC_CPU_DEBUG
     if (!CheckFuncGather(dst, src, srcOffset, srcBaseOffset, mask, repeatTime, dstRepStride, "Gather")) {
@@ -110,8 +117,9 @@ __aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& s
     }
 #endif
     const uint32_t srcLength = src.GetSize();
-    GatherImpl((__ubuf__ PrimType *)dst.GetPhyAddr(), (__ubuf__ PrimType *)src.GetPhyAddr(),
-        (__ubuf__ uint32_t *)srcOffset.GetPhyAddr(), srcLength, srcBaseOffset, mask, repeatTime, dstRepStride);
+    GatherImpl(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
+        (__ubuf__ uint32_t*)srcOffset.GetPhyAddr(), srcLength, srcBaseOffset, mask, repeatTime, dstRepStride);
 }
 
 /*
@@ -126,9 +134,9 @@ __aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& s
  * @param [in] dstRepStride dst repeat stride
  */
 template <typename T>
-__aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LocalTensor<uint32_t>& srcOffset, const uint32_t srcBaseOffset, const uint64_t mask[], const uint8_t repeatTime,
-    const uint16_t dstRepStride)
+__aicore__ inline void Gather(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LocalTensor<uint32_t>& srcOffset,
+    const uint32_t srcBaseOffset, const uint64_t mask[], const uint8_t repeatTime, const uint16_t dstRepStride)
 {
     using PrimType = PrimT<T>;
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
@@ -137,9 +145,13 @@ __aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& s
     // srcBaseOffset should not exceed the size of src tensor
     CheckValueRange<uint32_t>(srcBaseOffset, 0, src.GetSize() * sizeof(PrimType) - 1, "srcBaseOffset", "Gather");
     // srcBaseOffset should be aligned with src dtype
-    ASCENDC_DEBUG_ASSERT((srcBaseOffset % sizeof(PrimType) == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check "
-        "srcBaseOffset value in Gather, it must be divisible by sizeof(T), current srcBaseOffset is %u, sizeof(T) is %u.\n",
-        srcBaseOffset, sizeof(PrimType)));
+    ASCENDC_DEBUG_ASSERT(
+        (srcBaseOffset % sizeof(PrimType) == 0), KERNEL_LOG_INTERNAL(
+                                                     KERNEL_ERROR,
+                                                     "Failed to check "
+                                                     "srcBaseOffset value in Gather, it must be divisible by "
+                                                     "sizeof(T), current srcBaseOffset is %u, sizeof(T) is %u.\n",
+                                                     srcBaseOffset, sizeof(PrimType)));
 #endif
 #if ASCENDC_CPU_DEBUG
     if (!CheckFuncGather(dst, src, srcOffset, srcBaseOffset, mask, repeatTime, dstRepStride, "Gather")) {
@@ -147,8 +159,9 @@ __aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& s
     }
 #endif
     const uint32_t srcLength = src.GetSize();
-    GatherImpl((__ubuf__ PrimType *)dst.GetPhyAddr(), (__ubuf__ PrimType *)src.GetPhyAddr(),
-        (__ubuf__ uint32_t *)srcOffset.GetPhyAddr(), srcLength, srcBaseOffset, mask, repeatTime, dstRepStride);
+    GatherImpl(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
+        (__ubuf__ uint32_t*)srcOffset.GetPhyAddr(), srcLength, srcBaseOffset, mask, repeatTime, dstRepStride);
 }
 
 /*
@@ -161,17 +174,23 @@ __aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& s
  * @param [in] count element count
  */
 template <typename T>
-__aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const LocalTensor<uint32_t>& srcOffset, const uint32_t srcBaseOffset, const uint32_t count)
+__aicore__ inline void Gather(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const LocalTensor<uint32_t>& srcOffset,
+    const uint32_t srcBaseOffset, const uint32_t count)
 {
     using PrimType = PrimT<T>;
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3102) ||                       \
-      (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-    ASCENDC_ASSERT((SupportType<PrimType, uint8_t, int8_t, half, bfloat16_t, uint16_t, int16_t, float, uint32_t, int32_t>()),
-        {KERNEL_LOG(KERNEL_ERROR, "Failed to check dtype in Gather, current api support dtype combination is src and "
-        "dst both: uint8 / int8 / half / bfloat16_t / uint16_t / int16_t / float / uint32_t / int32_t");});
-    GatherImpl((__ubuf__ PrimType *)dst.GetPhyAddr(), (__ubuf__ PrimType *)src.GetPhyAddr(),
-        (__ubuf__ uint32_t *)srcOffset.GetPhyAddr(), srcBaseOffset, count);
+#if defined(__NPU_ARCH__) && \
+    ((__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3102) || (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
+    ASCENDC_ASSERT(
+        (SupportType<PrimType, uint8_t, int8_t, half, bfloat16_t, uint16_t, int16_t, float, uint32_t, int32_t>()), {
+            KERNEL_LOG(
+                KERNEL_ERROR,
+                "Failed to check dtype in Gather, current api support dtype combination is src and "
+                "dst both: uint8 / int8 / half / bfloat16_t / uint16_t / int16_t / float / uint32_t / int32_t");
+        });
+    GatherImpl(
+        (__ubuf__ PrimType*)dst.GetPhyAddr(), (__ubuf__ PrimType*)src.GetPhyAddr(),
+        (__ubuf__ uint32_t*)srcOffset.GetPhyAddr(), srcBaseOffset, count);
 #else
 #if ASCENDC_CPU_DEBUG
     if (!CheckFuncGather(dst, src, srcOffset, srcBaseOffset, count, "Gather")) {
@@ -179,8 +198,7 @@ __aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& s
     }
 #endif
     uint32_t vectorRegWidth = 256;
-#if (__NPU_ARCH__ == 3003) || \
-    ((__NPU_ARCH__ == 3113))
+#if (__NPU_ARCH__ == 3003) || ((__NPU_ARCH__ == 3113))
     vectorRegWidth = VECTOR_REG_WIDTH;
 #endif
     uint32_t elementCountSingleRepeat;
@@ -189,32 +207,30 @@ __aicore__ inline void Gather(const LocalTensor<T>& dst, const LocalTensor<T>& s
     } else {
         elementCountSingleRepeat = 64;
     }
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3003) || \
-    (__NPU_ARCH__ == 3113)
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113)
     elementCountSingleRepeat = vectorRegWidth / sizeof(T);
     uint32_t repeatStride = vectorRegWidth / ONE_BLK_SIZE;
 #endif
     const uint32_t elementCountTail = count % elementCountSingleRepeat;
     const uint8_t repeatTime = count / elementCountSingleRepeat;
-#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3003) || \
-    (__NPU_ARCH__ == 3113)
+#if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113)
     if (repeatTime > 0) {
-        Gather(dst, src, srcOffset, srcBaseOffset, (uint64_t)elementCountSingleRepeat, repeatTime,
-            repeatStride);
+        Gather(dst, src, srcOffset, srcBaseOffset, (uint64_t)elementCountSingleRepeat, repeatTime, repeatStride);
     }
     if (elementCountTail > 0) {
         const uint32_t offset = count - elementCountTail;
-        Gather(dst[offset], src, srcOffset[offset], srcBaseOffset, (uint64_t)elementCountTail, 1,
-            repeatStride);
+        Gather(dst[offset], src, srcOffset[offset], srcBaseOffset, (uint64_t)elementCountTail, 1, repeatStride);
     }
 #else
     if (repeatTime > 0) {
-        Gather(dst, src, srcOffset, srcBaseOffset, static_cast<uint64_t>(elementCountSingleRepeat), repeatTime,
+        Gather(
+            dst, src, srcOffset, srcBaseOffset, static_cast<uint64_t>(elementCountSingleRepeat), repeatTime,
             DEFAULT_REPEAT_STRIDE);
     }
     if (elementCountTail > 0) {
         const uint32_t offset = count - elementCountTail;
-        Gather(dst[offset], src, srcOffset[offset], srcBaseOffset, static_cast<uint64_t>(elementCountTail), 1,
+        Gather(
+            dst[offset], src, srcOffset[offset], srcBaseOffset, static_cast<uint64_t>(elementCountTail), 1,
             DEFAULT_REPEAT_STRIDE);
     }
 #endif

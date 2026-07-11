@@ -1,14 +1,15 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_3510/kernel_operator_vec_vconv_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_3510/kernel_operator_vec_vconv_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_VCONV_IMPL_H__
 #endif
@@ -19,80 +20,80 @@
 #include "kernel_operator_vec_template_impl.h"
 #include "../../../include/basic_api/reg_compute/kernel_reg_compute_intf.h"
 namespace AscendC {
-constexpr Reg::CastTrait layoutZMrgZ = { Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN,
-                                              Reg::MaskMergeMode::ZEROING, RoundMode::UNKNOWN };
+constexpr Reg::CastTrait layoutZMrgZ = {
+    Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::UNKNOWN};
 
-constexpr Reg::CastTrait layoutZSatSMrgZ = { Reg::RegLayout::ZERO, Reg::SatMode::SAT,
-                                                      Reg::MaskMergeMode::ZEROING, RoundMode::UNKNOWN };
+constexpr Reg::CastTrait layoutZSatSMrgZ = {
+    Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::UNKNOWN};
 
-constexpr Reg::CastTrait layoutZSatSMrgZRndA = { Reg::RegLayout::ZERO, Reg::SatMode::SAT,
-                                                      Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND };
+constexpr Reg::CastTrait layoutZSatSMrgZRndA = {
+    Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND};
 
-constexpr Reg::CastTrait layoutZSatSMrgZRndH = { Reg::RegLayout::ZERO, Reg::SatMode::SAT,
-                                                      Reg::MaskMergeMode::ZEROING, RoundMode::CAST_HYBRID };
+constexpr Reg::CastTrait layoutZSatSMrgZRndH = {
+    Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_HYBRID};
 
-constexpr Reg::CastTrait layoutZSatSMrgZRndR = { Reg::RegLayout::ZERO, Reg::SatMode::SAT,
-                                                      Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT };
+constexpr Reg::CastTrait layoutZSatSMrgZRndR = {
+    Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT};
 
-constexpr Reg::CastTrait layoutZMrgZRndR = { Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN,
-                                                  Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT };
+constexpr Reg::CastTrait layoutZMrgZRndR = {
+    Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT};
 
-constexpr Reg::CastTrait layoutZMrgZRndA = { Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN,
-                                                  Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND };
+constexpr Reg::CastTrait layoutZMrgZRndA = {
+    Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND};
 
-constexpr Reg::CastTrait layoutZMrgZRndC = { Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN,
-                                                  Reg::MaskMergeMode::ZEROING, RoundMode::CAST_CEIL };
+constexpr Reg::CastTrait layoutZMrgZRndC = {
+    Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_CEIL};
 
-constexpr Reg::CastTrait layoutZMrgZRndF = { Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN,
-                                                  Reg::MaskMergeMode::ZEROING, RoundMode::CAST_FLOOR };
+constexpr Reg::CastTrait layoutZMrgZRndF = {
+    Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_FLOOR};
 
-constexpr Reg::CastTrait layoutZMrgZRndZ = { Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN,
-                                                  Reg::MaskMergeMode::ZEROING, RoundMode::CAST_TRUNC };
+constexpr Reg::CastTrait layoutZMrgZRndZ = {
+    Reg::RegLayout::ZERO, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_TRUNC};
 
-constexpr Reg::CastTrait MrgZRndR = { Reg::RegLayout::UNKNOWN, Reg::SatMode::UNKNOWN,
-                                           Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT };
+constexpr Reg::CastTrait MrgZRndR = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT};
 
-constexpr Reg::CastTrait MrgZRndA = { Reg::RegLayout::UNKNOWN, Reg::SatMode::UNKNOWN,
-                                           Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND };
+constexpr Reg::CastTrait MrgZRndA = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND};
 
-constexpr Reg::CastTrait MrgZRndF = { Reg::RegLayout::UNKNOWN, Reg::SatMode::UNKNOWN,
-                                           Reg::MaskMergeMode::ZEROING, RoundMode::CAST_CEIL };
+constexpr Reg::CastTrait MrgZRndF = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_CEIL};
 
-constexpr Reg::CastTrait MrgZRndC = { Reg::RegLayout::UNKNOWN, Reg::SatMode::UNKNOWN,
-                                           Reg::MaskMergeMode::ZEROING, RoundMode::CAST_FLOOR };
+constexpr Reg::CastTrait MrgZRndC = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_FLOOR};
 
-constexpr Reg::CastTrait MrgZRndZ = { Reg::RegLayout::UNKNOWN, Reg::SatMode::UNKNOWN,
-                                           Reg::MaskMergeMode::ZEROING, RoundMode::CAST_TRUNC };
+constexpr Reg::CastTrait MrgZRndZ = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::UNKNOWN, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_TRUNC};
 
-constexpr Reg::CastTrait MrgZRndRSatS = { Reg::RegLayout::UNKNOWN, Reg::SatMode::SAT,
-                                               Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT };
+constexpr Reg::CastTrait MrgZRndRSatS = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT};
 
-constexpr Reg::CastTrait MrgZRndASatS = { Reg::RegLayout::UNKNOWN, Reg::SatMode::SAT,
-                                               Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND };
+constexpr Reg::CastTrait MrgZRndASatS = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND};
 
-constexpr Reg::CastTrait MrgZRndFSatS = { Reg::RegLayout::UNKNOWN, Reg::SatMode::SAT,
-                                               Reg::MaskMergeMode::ZEROING, RoundMode::CAST_CEIL };
+constexpr Reg::CastTrait MrgZRndFSatS = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_CEIL};
 
-constexpr Reg::CastTrait MrgZRndCSatS = { Reg::RegLayout::UNKNOWN, Reg::SatMode::SAT,
-                                               Reg::MaskMergeMode::ZEROING, RoundMode::CAST_FLOOR };
+constexpr Reg::CastTrait MrgZRndCSatS = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_FLOOR};
 
-constexpr Reg::CastTrait MrgZRndZSatS = { Reg::RegLayout::UNKNOWN, Reg::SatMode::SAT,
-                                               Reg::MaskMergeMode::ZEROING, RoundMode::CAST_TRUNC };
+constexpr Reg::CastTrait MrgZRndZSatS = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_TRUNC};
 
-constexpr Reg::CastTrait LayoutZMrgZRndRSatS = { Reg::RegLayout::ZERO, Reg::SatMode::SAT,
-                                                       Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT };
+constexpr Reg::CastTrait LayoutZMrgZRndRSatS = {
+    Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT};
 
-constexpr Reg::CastTrait LayoutZMrgZRndASatS = { Reg::RegLayout::ZERO, Reg::SatMode::SAT,
-                                                       Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND };
+constexpr Reg::CastTrait LayoutZMrgZRndASatS = {
+    Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND};
 
-constexpr Reg::CastTrait LayoutZMrgZRndRSatNS = { Reg::RegLayout::ZERO, Reg::SatMode::NO_SAT,
-                                                       Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT };
+constexpr Reg::CastTrait LayoutZMrgZRndRSatNS = {
+    Reg::RegLayout::ZERO, Reg::SatMode::NO_SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT};
 
-constexpr Reg::CastTrait LayoutZMrgZRndASatNS = { Reg::RegLayout::ZERO, Reg::SatMode::NO_SAT,
-                                                       Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND };
+constexpr Reg::CastTrait LayoutZMrgZRndASatNS = {
+    Reg::RegLayout::ZERO, Reg::SatMode::NO_SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_ROUND};
 
-constexpr Reg::CastTrait MrgZRndRSatNS = { Reg::RegLayout::UNKNOWN, Reg::SatMode::NO_SAT,
-                                                Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT };
+constexpr Reg::CastTrait MrgZRndRSatNS = {
+    Reg::RegLayout::UNKNOWN, Reg::SatMode::NO_SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT};
 
 namespace CastParam {
 constexpr Reg::CastTrait AddReluCastTrait = {
@@ -127,58 +128,65 @@ template <>
 struct CastTypeTrait<int4b_t> {
     using RealType = int4x2_t;
 };
-}  // namespace CastParam
+} // namespace CastParam
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__simd_vf__ inline void CastIntrinsicsB64ImplVF(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint32_t calCount)
+__simd_vf__ inline void CastIntrinsicsB64ImplVF(__ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint32_t calCount)
 {
     constexpr uint16_t oneRepSize = 2 * GetVecLen() / sizeof(int64_t);
     uint16_t repeatTime = CeilDivision(calCount, oneRepSize);
     uint32_t sreg = static_cast<uint32_t>(calCount);
     static constexpr Reg::CastTrait castTrait = {
         Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, roundMode};
-    if constexpr (AscendC::Std::is_same<SRC_TYPE, complex64>::value && AscendC::Std::is_same<DST_TYPE, complex32>::value) {
+    if constexpr (
+        AscendC::Std::is_same<SRC_TYPE, complex64>::value && AscendC::Std::is_same<DST_TYPE, complex32>::value) {
         Reg::MaskReg preg;
         Reg::RegTensor<SRC_TYPE, Reg::RegTraitNumTwo> srcVreg;
         Reg::RegTensor<DST_TYPE, Reg::RegTraitNumTwo> dstVreg;
         for (uint16_t i = 0; i < repeatTime; ++i) {
             preg = Reg::UpdateMask<int64_t, Reg::RegTraitNumTwo>(sreg);
             Reg::LoadAlign(srcVreg, src + i * oneRepSize);
-            Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[0],
-                (Reg::RegTensor<typename SRC_TYPE::EleType> &)srcVreg.reg[0], preg);
-            Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[1],
-                (Reg::RegTensor<typename SRC_TYPE::EleType> &)srcVreg.reg[1], preg);
-            Reg::Pack((Reg::RegTensor<uint16_t> &)dstVreg.reg[0], (Reg::RegTensor<uint32_t> &)dstVreg.reg[0]);
-            Reg::Pack((Reg::RegTensor<uint16_t> &)dstVreg.reg[1], (Reg::RegTensor<uint32_t> &)dstVreg.reg[1]);
+            Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>(
+                (Reg::RegTensor<typename DST_TYPE::EleType>&)dstVreg.reg[0],
+                (Reg::RegTensor<typename SRC_TYPE::EleType>&)srcVreg.reg[0], preg);
+            Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>(
+                (Reg::RegTensor<typename DST_TYPE::EleType>&)dstVreg.reg[1],
+                (Reg::RegTensor<typename SRC_TYPE::EleType>&)srcVreg.reg[1], preg);
+            Reg::Pack((Reg::RegTensor<uint16_t>&)dstVreg.reg[0], (Reg::RegTensor<uint32_t>&)dstVreg.reg[0]);
+            Reg::Pack((Reg::RegTensor<uint16_t>&)dstVreg.reg[1], (Reg::RegTensor<uint32_t>&)dstVreg.reg[1]);
             Reg::MaskPack(preg, preg);
             Reg::StoreAlign(dst + i * oneRepSize, dstVreg, preg);
         }
-    } else if constexpr (AscendC::Std::is_same<SRC_TYPE, complex64>::value && AscendC::Std::is_same<DST_TYPE, complex64>::value) {
+    } else if constexpr (
+        AscendC::Std::is_same<SRC_TYPE, complex64>::value && AscendC::Std::is_same<DST_TYPE, complex64>::value) {
         Reg::MaskReg preg;
         Reg::RegTensor<SRC_TYPE, Reg::RegTraitNumTwo> srcVreg;
         Reg::RegTensor<DST_TYPE, Reg::RegTraitNumTwo> dstVreg;
         for (uint16_t i = 0; i < repeatTime; ++i) {
             preg = Reg::UpdateMask<int64_t, Reg::RegTraitNumTwo>(sreg);
             Reg::LoadAlign(srcVreg, src + i * oneRepSize);
-            Reg::Truncate<float, roundMode>((Reg::RegTensor<float> &)dstVreg.reg[0],
-                (Reg::RegTensor<float> &)srcVreg.reg[0], preg);
-            Reg::Truncate<float, roundMode>((Reg::RegTensor<float> &)dstVreg.reg[1],
-                (Reg::RegTensor<float> &)srcVreg.reg[1], preg);
+            Reg::Truncate<float, roundMode>(
+                (Reg::RegTensor<float>&)dstVreg.reg[0], (Reg::RegTensor<float>&)srcVreg.reg[0], preg);
+            Reg::Truncate<float, roundMode>(
+                (Reg::RegTensor<float>&)dstVreg.reg[1], (Reg::RegTensor<float>&)srcVreg.reg[1], preg);
             Reg::StoreAlign(dst + i * oneRepSize, dstVreg, preg);
         }
-    } else if constexpr (AscendC::Std::is_same<SRC_TYPE, complex32>::value && AscendC::Std::is_same<DST_TYPE, complex64>::value) {
+    } else if constexpr (
+        AscendC::Std::is_same<SRC_TYPE, complex32>::value && AscendC::Std::is_same<DST_TYPE, complex64>::value) {
         Reg::MaskReg preg;
         Reg::RegTensor<SRC_TYPE, Reg::RegTraitNumTwo> srcVreg;
         Reg::RegTensor<DST_TYPE, Reg::RegTraitNumTwo> dstVreg;
         for (uint16_t i = 0; i < repeatTime; ++i) {
             preg = Reg::UpdateMask<int64_t, Reg::RegTraitNumTwo>(sreg);
             Reg::LoadAlign(srcVreg, src + i * oneRepSize);
-            Reg::UnPack((Reg::RegTensor<uint32_t> &)srcVreg.reg[0], (Reg::RegTensor<uint16_t> &)srcVreg.reg[0]);
-            Reg::UnPack((Reg::RegTensor<uint32_t> &)srcVreg.reg[1], (Reg::RegTensor<uint16_t> &)srcVreg.reg[1]);
-            Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[0],
-                (Reg::RegTensor<typename SRC_TYPE::EleType> &)srcVreg.reg[0], preg);
-            Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>((Reg::RegTensor<typename DST_TYPE::EleType> &)dstVreg.reg[1],
-                (Reg::RegTensor<typename SRC_TYPE::EleType> &)srcVreg.reg[1], preg);
+            Reg::UnPack((Reg::RegTensor<uint32_t>&)srcVreg.reg[0], (Reg::RegTensor<uint16_t>&)srcVreg.reg[0]);
+            Reg::UnPack((Reg::RegTensor<uint32_t>&)srcVreg.reg[1], (Reg::RegTensor<uint16_t>&)srcVreg.reg[1]);
+            Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>(
+                (Reg::RegTensor<typename DST_TYPE::EleType>&)dstVreg.reg[0],
+                (Reg::RegTensor<typename SRC_TYPE::EleType>&)srcVreg.reg[0], preg);
+            Reg::Cast<typename DST_TYPE::EleType, typename SRC_TYPE::EleType, castTrait>(
+                (Reg::RegTensor<typename DST_TYPE::EleType>&)dstVreg.reg[1],
+                (Reg::RegTensor<typename SRC_TYPE::EleType>&)srcVreg.reg[1], preg);
             Reg::StoreAlign(dst + i * oneRepSize, dstVreg, preg);
         }
     } else if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
@@ -205,11 +213,11 @@ __simd_vf__ inline void CastIntrinsicsB64ImplVF(__ubuf__ DST_TYPE *dst, __ubuf__
 }
 
 template <typename DST_TYPE, typename SRC_TYPE>
-__simd_callee__ inline void GenLoadL2(Reg::RegTensor<SRC_TYPE> &srcVreg, __ubuf__ SRC_TYPE *srcAddr, Reg::MaskReg &preg)
+__simd_callee__ inline void GenLoadL2(Reg::RegTensor<SRC_TYPE>& srcVreg, __ubuf__ SRC_TYPE* srcAddr, Reg::MaskReg& preg)
 {
     if constexpr (SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) {
         Reg::LoadAlign<uint8_t, Reg::LoadDist::DIST_UNPACK4_B8>(
-            (Reg::RegTensor<uint8_t> &)srcVreg, (__ubuf__ uint8_t *)srcAddr);
+            (Reg::RegTensor<uint8_t>&)srcVreg, (__ubuf__ uint8_t*)srcAddr);
     } else if constexpr (sizeof(SRC_TYPE) == 1 && sizeof(DST_TYPE) == 2) {
         Reg::LoadAlign<SRC_TYPE, Reg::LoadDist::DIST_UNPACK_B8>(srcVreg, srcAddr);
     } else if constexpr (sizeof(SRC_TYPE) == 2 && sizeof(DST_TYPE) == 4) {
@@ -222,11 +230,12 @@ __simd_callee__ inline void GenLoadL2(Reg::RegTensor<SRC_TYPE> &srcVreg, __ubuf_
 }
 
 template <typename DST_TYPE, typename SRC_TYPE>
-__simd_callee__ inline void GenStoreL2(__ubuf__ DST_TYPE *dstAddr, Reg::RegTensor<DST_TYPE> &dstVreg, Reg::MaskReg &preg)
+__simd_callee__ inline void GenStoreL2(
+    __ubuf__ DST_TYPE* dstAddr, Reg::RegTensor<DST_TYPE>& dstVreg, Reg::MaskReg& preg)
 {
     if constexpr (SupportType<DST_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(SRC_TYPE) == 2) {
         Reg::StoreAlign<uint8_t, Reg::StoreDist::DIST_PACK4_B32>(
-            (__ubuf__ uint8_t *)dstAddr, (Reg::RegTensor<uint8_t> &)dstVreg, preg);
+            (__ubuf__ uint8_t*)dstAddr, (Reg::RegTensor<uint8_t>&)dstVreg, preg);
     } else if constexpr (sizeof(DST_TYPE) == 1 && sizeof(SRC_TYPE) == 2) {
         Reg::StoreAlign<DST_TYPE, Reg::StoreDist::DIST_PACK_B16>(dstAddr, dstVreg, preg);
     } else if constexpr (sizeof(DST_TYPE) == 2 && sizeof(SRC_TYPE) == 4) {
@@ -239,7 +248,8 @@ __simd_callee__ inline void GenStoreL2(__ubuf__ DST_TYPE *dstAddr, Reg::RegTenso
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__simd_vf__ inline void CastIntrinsicsImplVF(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint32_t calCount, const half scale)
+__simd_vf__ inline void CastIntrinsicsImplVF(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint32_t calCount, const half scale)
 {
     uint16_t oneRepSize = GetVecLen() / sizeof(SRC_TYPE);
     if constexpr (sizeof(SRC_TYPE) < sizeof(DST_TYPE)) {
@@ -270,7 +280,8 @@ __simd_vf__ inline void CastIntrinsicsImplVF(__ubuf__ DST_TYPE *dst, __ubuf__ SR
             Reg::Muls(tmpVreg, tmpVreg, static_cast<float>(scale), preg);
             Reg::Muls(tmpVreg, tmpVreg, DEQ_SHIFT_LEFT_17_BIT, preg);
             Reg::Cast<DST_TYPE, float, CastParam::f322F16CastTrait>(dstVreg, tmpVreg, preg);
-        } else if constexpr (AscendC::Std::is_same<SRC_TYPE, float>::value && AscendC::Std::is_same<DST_TYPE, float>::value) {
+        } else if constexpr (
+            AscendC::Std::is_same<SRC_TYPE, float>::value && AscendC::Std::is_same<DST_TYPE, float>::value) {
             Reg::Truncate<DST_TYPE, roundMode>(dstVreg, srcVreg, preg);
         } else {
             Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, preg);
@@ -284,15 +295,11 @@ __simd_vf__ inline void CastIntrinsicsImplVF(__ubuf__ DST_TYPE *dst, __ubuf__ SR
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint32_t calCount)
+__aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint32_t calCount)
 {
-    constexpr bool b64Cast = SupportType<Tuple<DST_TYPE, SRC_TYPE>,
-        Tuple<float, int64_t>,
-        Tuple<int64_t, float>,
-        Tuple<int32_t, int64_t>,
-        Tuple<int64_t, int32_t>,
-        Tuple<complex64, complex64>,
-        Tuple<complex64, complex32>,
+    constexpr bool b64Cast = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<float, int64_t>, Tuple<int64_t, float>, Tuple<int32_t, int64_t>,
+        Tuple<int64_t, int32_t>, Tuple<complex64, complex64>, Tuple<complex64, complex32>,
         Tuple<complex32, complex64>>();
     half scale = 0;
     if constexpr (b64Cast) {
@@ -312,7 +319,9 @@ __aicore__ inline bool GetOverflow()
 }
 
 template <RoundMode roundMode>
-__simd_callee__  inline void DealMantissa0(Reg::MaskReg &dstMask, Reg::RegTensor<uint64_t> &src, Reg::MaskReg &mask, Reg::MaskReg &maskInf, Reg::MaskReg &maskMax)
+__simd_callee__ inline void DealMantissa0(
+    Reg::MaskReg& dstMask, Reg::RegTensor<uint64_t>& src, Reg::MaskReg& mask, Reg::MaskReg& maskInf,
+    Reg::MaskReg& maskMax)
 {
     Reg::MaskReg mask0, mask1, maskReg;
     Reg::Xor(maskReg, maskInf, mask, mask);
@@ -322,9 +331,9 @@ __simd_callee__  inline void DealMantissa0(Reg::MaskReg &dstMask, Reg::RegTensor
     constexpr uint64_t scalar3 = 0x8000000000000000;
     constexpr uint64_t scalar0 = 0x0;
     constexpr uint64_t scalar1 = 0x1;
-    constexpr int16_t shiftScalar0 = 0x23;//35
-    constexpr int16_t shiftScalar1 = 0x3f;//63
-    constexpr int16_t shiftScalar3 = 0x22;//34
+    constexpr int16_t shiftScalar0 = 0x23; // 35
+    constexpr int16_t shiftScalar1 = 0x3f; // 63
+    constexpr int16_t shiftScalar3 = 0x22; // 34
     if constexpr (roundMode == RoundMode::CAST_RINT) {
         Reg::ShiftLefts(dst0, src, shiftScalar0, maskReg);
         Reg::CompareScalar<uint64_t, CMPMODE::GT>(mask0, dst0, scalar3, maskReg);
@@ -350,16 +359,17 @@ __simd_callee__  inline void DealMantissa0(Reg::MaskReg &dstMask, Reg::RegTensor
     }
 }
 
-__simd_callee__ inline void TruncateForDoubleToFloat(Reg::MaskReg &maskNan, Reg::MaskReg &maskInf, Reg::MaskReg &maskZero,
-    Reg::MaskReg &maskMax, Reg::RegTensor<uint64_t> &dst, Reg::RegTensor<uint64_t> &src, Reg::MaskReg &preg)
+__simd_callee__ inline void TruncateForDoubleToFloat(
+    Reg::MaskReg& maskNan, Reg::MaskReg& maskInf, Reg::MaskReg& maskZero, Reg::MaskReg& maskMax,
+    Reg::RegTensor<uint64_t>& dst, Reg::RegTensor<uint64_t>& src, Reg::MaskReg& preg)
 {
-    constexpr int16_t shiftScalar0 = 0x1;//1
-    constexpr int16_t shiftScalar1 = 0x3f;//63
-    constexpr int16_t shiftScalar2 = 0x35;//53
-    constexpr int16_t shiftScalar3 = 0x1f;//31
-    constexpr int16_t shiftScalar4 = 0xc;//12
-    constexpr int16_t shiftScalar5 = 0x29;//41
-    constexpr int16_t shiftScalar6 = 0x17;//23
+    constexpr int16_t shiftScalar0 = 0x1;  // 1
+    constexpr int16_t shiftScalar1 = 0x3f; // 63
+    constexpr int16_t shiftScalar2 = 0x35; // 53
+    constexpr int16_t shiftScalar3 = 0x1f; // 31
+    constexpr int16_t shiftScalar4 = 0xc;  // 12
+    constexpr int16_t shiftScalar5 = 0x29; // 41
+    constexpr int16_t shiftScalar6 = 0x17; // 23
     constexpr uint64_t zero = 0x0;
     Reg::MaskReg mask0, mask1, maskPositive;
     Reg::RegTensor<uint64_t> tmpSrcSign0, tmpSrcExponent0, tmpSrcMantissa0, tmpReg;
@@ -396,8 +406,9 @@ __simd_callee__ inline void TruncateForDoubleToFloat(Reg::MaskReg &maskNan, Reg:
     Reg::Select(dst, tmpSrcMantissa0, tmpSrcExponent0, maskPositive);
 }
 
-__simd_callee__ inline void SelectNanInfZero0(Reg::MaskReg &preg, Reg::MaskReg &maskNan, Reg::MaskReg &maskInf, Reg::MaskReg &maskZero,
-    Reg::MaskReg &maskMax, Reg::RegTensor<uint32_t> &dst)
+__simd_callee__ inline void SelectNanInfZero0(
+    Reg::MaskReg& preg, Reg::MaskReg& maskNan, Reg::MaskReg& maskInf, Reg::MaskReg& maskZero, Reg::MaskReg& maskMax,
+    Reg::RegTensor<uint32_t>& dst)
 {
     constexpr uint32_t num0 = 0x0;
     Reg::MaskReg maskInfNegative, maskInfPositive;
@@ -429,8 +440,9 @@ __simd_callee__ inline void SelectNanInfZero0(Reg::MaskReg &preg, Reg::MaskReg &
     Reg::Select(dst, dstZero, dst, maskZero);
 }
 
-__simd_callee__ inline void SelectNanInfZero00(Reg::MaskReg &preg, Reg::MaskReg &maskNan, Reg::MaskReg &maskInf, Reg::MaskReg &maskZero,
-    Reg::MaskReg &maskMax, Reg::RegTensor<uint32_t> &dst)
+__simd_callee__ inline void SelectNanInfZero00(
+    Reg::MaskReg& preg, Reg::MaskReg& maskNan, Reg::MaskReg& maskInf, Reg::MaskReg& maskZero, Reg::MaskReg& maskMax,
+    Reg::RegTensor<uint32_t>& dst)
 {
     constexpr uint32_t num0 = 0x0;
     constexpr uint32_t num1 = 0x80000000;
@@ -458,8 +470,8 @@ __simd_callee__ inline void SelectNanInfZero00(Reg::MaskReg &preg, Reg::MaskReg 
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__simd_vf__ inline void CastDoubleToFloat(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint32_t calCount,
-    bool isGetOverflow)
+__simd_vf__ inline void CastDoubleToFloat(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint32_t calCount, bool isGetOverflow)
 {
     constexpr uint16_t oneRepSize = GetVecLen() / sizeof(double);
     uint16_t repeatTime = CeilDivision(calCount, oneRepSize);
@@ -479,8 +491,7 @@ __simd_vf__ inline void CastDoubleToFloat(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
         Reg::LoadAlign(tmpSrcReg0, (__ubuf__ uint64_t*&)src + i * oneRepSize);
         TruncateForDoubleToFloat(maskNan0, maskInf0, maskZero0, maskMax0, srvVreg0, tmpSrcReg0, preg);
         DealMantissa0<roundMode>(mask0, tmpSrcReg0, preg, maskInf0, maskMax0);
-        Reg::DeInterleave(dstVreg, dstZero, (Reg::RegTensor<uint32_t> &)srvVreg0,
-            (Reg::RegTensor<uint32_t> &)srvVreg0);
+        Reg::DeInterleave(dstVreg, dstZero, (Reg::RegTensor<uint32_t>&)srvVreg0, (Reg::RegTensor<uint32_t>&)srvVreg0);
         Reg::MaskDeInterleave<uint32_t>(preg, dstMask0, preg, dstMask0);
         Reg::MaskDeInterleave<uint32_t>(mask0, dstMask0, mask0, dstMask0);
         Reg::MaskDeInterleave<uint32_t>(maskNan0, dstMask0, maskNan0, dstMask0);
@@ -500,7 +511,9 @@ __simd_vf__ inline void CastDoubleToFloat(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
 }
 
 template <RoundMode roundMode>
-__simd_callee__ inline void DealMantissa1(Reg::MaskReg &dstMask, Reg::RegTensor<uint64_t> &src, Reg::MaskReg &mask, Reg::MaskReg &maskInf, Reg::MaskReg &maskMax)
+__simd_callee__ inline void DealMantissa1(
+    Reg::MaskReg& dstMask, Reg::RegTensor<uint64_t>& src, Reg::MaskReg& mask, Reg::MaskReg& maskInf,
+    Reg::MaskReg& maskMax)
 {
     Reg::MaskReg mask0, mask1, mask2;
     Reg::Xor(mask2, maskInf, mask, mask);
@@ -509,9 +522,9 @@ __simd_callee__ inline void DealMantissa1(Reg::MaskReg &dstMask, Reg::RegTensor<
     constexpr uint64_t scalar3 = 0x8000000000000000;
     constexpr uint64_t scalar0 = 0x0;
     constexpr uint64_t scalar1 = 0x1;
-    constexpr int16_t shiftScalar0 = 0x13;//19..
-    constexpr int16_t shiftScalar1 = 0x3f;//63
-    constexpr int16_t shiftScalar3 = 0x12;//18..
+    constexpr int16_t shiftScalar0 = 0x13; // 19..
+    constexpr int16_t shiftScalar1 = 0x3f; // 63
+    constexpr int16_t shiftScalar3 = 0x12; // 18..
     if constexpr (roundMode == RoundMode::CAST_RINT) {
         Reg::ShiftLefts(dst0, src, shiftScalar0, mask2);
         Reg::CompareScalar<uint64_t, CMPMODE::GT>(mask0, dst0, scalar3, mask2);
@@ -537,16 +550,17 @@ __simd_callee__ inline void DealMantissa1(Reg::MaskReg &dstMask, Reg::RegTensor<
     }
 }
 
-__simd_callee__ inline void TruncateForDoubleToBf16(Reg::MaskReg &maskNan, Reg::MaskReg &maskInf, Reg::MaskReg &maskZero,
-    Reg::MaskReg &maskMax, Reg::RegTensor<uint64_t> &dst, Reg::RegTensor<uint64_t> &src, Reg::MaskReg &preg)
+__simd_callee__ inline void TruncateForDoubleToBf16(
+    Reg::MaskReg& maskNan, Reg::MaskReg& maskInf, Reg::MaskReg& maskZero, Reg::MaskReg& maskMax,
+    Reg::RegTensor<uint64_t>& dst, Reg::RegTensor<uint64_t>& src, Reg::MaskReg& preg)
 {
-    constexpr int16_t shiftScalar0 = 0x1;//1
-    constexpr int16_t shiftScalar1 = 0x3f;//63
-    constexpr int16_t shiftScalar2 = 0x35;//53
-    constexpr int16_t shiftScalar3 = 0xf;//15..
-    constexpr int16_t shiftScalar4 = 0xc;//12
-    constexpr int16_t shiftScalar5 = 0x39;//57..
-    constexpr int16_t shiftScalar6 = 0x7;//7..
+    constexpr int16_t shiftScalar0 = 0x1;  // 1
+    constexpr int16_t shiftScalar1 = 0x3f; // 63
+    constexpr int16_t shiftScalar2 = 0x35; // 53
+    constexpr int16_t shiftScalar3 = 0xf;  // 15..
+    constexpr int16_t shiftScalar4 = 0xc;  // 12
+    constexpr int16_t shiftScalar5 = 0x39; // 57..
+    constexpr int16_t shiftScalar6 = 0x7;  // 7..
     constexpr uint64_t zero = 0x0;
     Reg::MaskReg maskPositive;
     Reg::RegTensor<uint64_t> tmpSrcSign0, tmpSrcExponent0, tmpSrcMantissa0, tmpReg;
@@ -584,8 +598,9 @@ __simd_callee__ inline void TruncateForDoubleToBf16(Reg::MaskReg &maskNan, Reg::
     Reg::Select(dst, tmpSrcMantissa0, tmpSrcExponent0, maskPositive);
 }
 
-__simd_callee__ inline void SelectNanInfZero1(Reg::MaskReg &preg, Reg::MaskReg &maskNan, Reg::MaskReg &maskInf, Reg::MaskReg &maskZero,
-    Reg::MaskReg &maskMax, Reg::RegTensor<uint16_t> &dst)
+__simd_callee__ inline void SelectNanInfZero1(
+    Reg::MaskReg& preg, Reg::MaskReg& maskNan, Reg::MaskReg& maskInf, Reg::MaskReg& maskZero, Reg::MaskReg& maskMax,
+    Reg::RegTensor<uint16_t>& dst)
 {
     constexpr uint16_t num0 = 0x0;
     constexpr uint16_t num = 0x8000;
@@ -614,8 +629,9 @@ __simd_callee__ inline void SelectNanInfZero1(Reg::MaskReg &preg, Reg::MaskReg &
     Reg::Select(dst, dstInfNegative, dst, maskInfNegative);
 }
 
-__simd_callee__ inline void SelectNanInfZero10(Reg::MaskReg &preg, Reg::MaskReg &maskNan, Reg::MaskReg &maskInf, Reg::MaskReg &maskZero,
-    Reg::MaskReg &maskMax, Reg::RegTensor<uint16_t> &dst)
+__simd_callee__ inline void SelectNanInfZero10(
+    Reg::MaskReg& preg, Reg::MaskReg& maskNan, Reg::MaskReg& maskInf, Reg::MaskReg& maskZero, Reg::MaskReg& maskMax,
+    Reg::RegTensor<uint16_t>& dst)
 {
     constexpr uint16_t num0 = 0x0;
     constexpr uint16_t num = 0x8000;
@@ -643,8 +659,8 @@ __simd_callee__ inline void SelectNanInfZero10(Reg::MaskReg &preg, Reg::MaskReg 
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__simd_vf__ inline void CastDoubleToBf16(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint32_t calCount,
-    bool isGetOverflow)
+__simd_vf__ inline void CastDoubleToBf16(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint32_t calCount, bool isGetOverflow)
 {
     constexpr uint16_t oneRepSize = GetVecLen() / sizeof(double);
     uint16_t repeatTime = CeilDivision(calCount, oneRepSize);
@@ -669,10 +685,8 @@ __simd_vf__ inline void CastDoubleToBf16(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TY
         Reg::LoadAlign(tmpSrcReg0, (__ubuf__ uint64_t*&)src + i * oneRepSize);
         TruncateForDoubleToBf16(maskNan0, maskInf0, maskZero0, maskMax0, srvVreg0, tmpSrcReg0, preg);
         DealMantissa1<roundMode>(mask0, tmpSrcReg0, preg, maskInf0, maskMax0);
-        Reg::DeInterleave(dstVreg0, dstZero, (Reg::RegTensor<uint16_t> &)srvVreg0,
-            (Reg::RegTensor<uint16_t> &)dstZero);
-        Reg::DeInterleave(dstVreg, dstZero, (Reg::RegTensor<uint16_t> &)dstVreg0,
-            (Reg::RegTensor<uint16_t> &)dstZero);
+        Reg::DeInterleave(dstVreg0, dstZero, (Reg::RegTensor<uint16_t>&)srvVreg0, (Reg::RegTensor<uint16_t>&)dstZero);
+        Reg::DeInterleave(dstVreg, dstZero, (Reg::RegTensor<uint16_t>&)dstVreg0, (Reg::RegTensor<uint16_t>&)dstZero);
         Reg::MaskDeInterleave<uint32_t>(preg, dstMask0, preg, dstMask0);
         Reg::MaskDeInterleave<uint16_t>(preg, dstMask0, preg, dstMask0);
         Reg::MaskDeInterleave<uint32_t>(mask0, dstMask0, mask0, dstMask0);
@@ -700,7 +714,8 @@ __simd_vf__ inline void CastDoubleToBf16(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TY
     }
 }
 
-__simd_callee__ inline void Clz(Reg::MaskReg &preg, Reg::RegTensor<uint64_t> &srcReg, Reg::RegTensor<uint64_t> &countZero)
+__simd_callee__ inline void Clz(
+    Reg::MaskReg& preg, Reg::RegTensor<uint64_t>& srcReg, Reg::RegTensor<uint64_t>& countZero)
 {
     constexpr uint64_t num1 = 0;
     constexpr int16_t shiftScalarZero = 32;
@@ -770,7 +785,8 @@ __simd_callee__ inline void Clz(Reg::MaskReg &preg, Reg::RegTensor<uint64_t> &sr
     Reg::Select(countZero, tmpAdd, countZero, tempMask);
 }
 
-__simd_callee__ inline void DealLowerThan52(Reg::MaskReg &tmpMask1, Reg::RegTensor<uint64_t> &srcReg, Reg::RegTensor<uint64_t> &countZero)
+__simd_callee__ inline void DealLowerThan52(
+    Reg::MaskReg& tmpMask1, Reg::RegTensor<uint64_t>& srcReg, Reg::RegTensor<uint64_t>& countZero)
 {
     constexpr uint64_t dupNum0 = 1023;
     Reg::RegTensor<uint64_t> tmpReg1, expReg, tmpReg2;
@@ -794,7 +810,9 @@ __simd_callee__ inline void DealLowerThan52(Reg::MaskReg &tmpMask1, Reg::RegTens
 }
 
 template <RoundMode roundMode>
-__simd_callee__ inline void DealHigherThan52(Reg::MaskReg &tmpMask1, Reg::MaskReg &tmpNegative, Reg::RegTensor<uint64_t> &srcReg, Reg::RegTensor<uint64_t> &countZero)
+__simd_callee__ inline void DealHigherThan52(
+    Reg::MaskReg& tmpMask1, Reg::MaskReg& tmpNegative, Reg::RegTensor<uint64_t>& srcReg,
+    Reg::RegTensor<uint64_t>& countZero)
 {
     constexpr uint64_t dupNum0 = 1;
     Reg::MaskReg tmpMask;
@@ -852,7 +870,7 @@ __simd_callee__ inline void DealHigherThan52(Reg::MaskReg &tmpMask1, Reg::MaskRe
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__simd_vf__ inline void CastInt64ToDouble(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint32_t calCount)
+__simd_vf__ inline void CastInt64ToDouble(__ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint32_t calCount)
 {
     constexpr uint16_t oneRepSize = GetVecLen() / sizeof(double);
     uint16_t repeatTime = CeilDivision(calCount, oneRepSize);
@@ -897,25 +915,25 @@ __simd_vf__ inline void CastInt64ToDouble(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
 }
 
 template <typename T = Reg::DefaultType, typename U = Reg::DefaultType, typename S, typename V>
-__simd_callee__ inline void CastDoubleToInt32Impl(V &dstVreg, V &int32Max, V &int32Min, S &srcReg,
-    Reg::RegTensor<int32_t> &scalar0, Reg::RegTensor<int32_t> &scalar1, Reg::RegTensor<int32_t> &scalar2,
-    Reg::MaskReg &mask)
+__simd_callee__ inline void CastDoubleToInt32Impl(
+    V& dstVreg, V& int32Max, V& int32Min, S& srcReg, Reg::RegTensor<int32_t>& scalar0, Reg::RegTensor<int32_t>& scalar1,
+    Reg::RegTensor<int32_t>& scalar2, Reg::MaskReg& mask)
 {
     Reg::RegTensor<int64_t, Reg::RegTraitNumTwo> tmpSrcReg = (Reg::RegTensor<int64_t, Reg::RegTraitNumTwo>&)srcReg;
-	Reg::RegTensor<int32_t> sign, mLow, mHigh, exponent;
-	Reg::RegTensor<int32_t> tmpReg, resReg, tmpReg0, resReg0, scalar;
+    Reg::RegTensor<int32_t> sign, mLow, mHigh, exponent;
+    Reg::RegTensor<int32_t> tmpReg, resReg, tmpReg0, resReg0, scalar;
     Reg::MaskReg cmpMask, cmpMask0, cmpMask1, cmpMask2;
     Reg::Duplicate(dstVreg, static_cast<int32_t>(0));
 
     // m_low = bits_low
-    Reg::Copy(mLow, (Reg::RegTensor<int32_t> &)tmpSrcReg.reg[0], mask);
+    Reg::Copy(mLow, (Reg::RegTensor<int32_t>&)tmpSrcReg.reg[0], mask);
     // exponent = (bits_high >> 20) & 0x7ff
-    Reg::ShiftRights(exponent, (Reg::RegTensor<int32_t> &)tmpSrcReg.reg[1], static_cast<int16_t>(20), mask);
+    Reg::ShiftRights(exponent, (Reg::RegTensor<int32_t>&)tmpSrcReg.reg[1], static_cast<int16_t>(20), mask);
     Reg::And(exponent, exponent, scalar1, mask);
     // sign = (bits_high >> 31) & 1
-    Reg::ShiftRights(sign, (Reg::RegTensor<int32_t> &)tmpSrcReg.reg[1], static_cast<int16_t>(31), mask);
+    Reg::ShiftRights(sign, (Reg::RegTensor<int32_t>&)tmpSrcReg.reg[1], static_cast<int16_t>(31), mask);
     // m_high = bits_high & 0xfffff
-    Reg::And(mHigh, (Reg::RegTensor<int32_t> &)tmpSrcReg.reg[1], scalar2, mask);
+    Reg::And(mHigh, (Reg::RegTensor<int32_t>&)tmpSrcReg.reg[1], scalar2, mask);
 
     /*
         if E == 0:
@@ -988,7 +1006,7 @@ __simd_callee__ inline void CastDoubleToInt32Impl(V &dstVreg, V &int32Max, V &in
     Reg::MaskNot(cmpMask1, cmpMask0, cmpMask);
     Reg::Sub(tmpReg0, scalar, exponent, cmpMask1);
     Reg::ShiftLeft(resReg0, tmpReg, tmpReg0, cmpMask1);
-    Reg::ShiftRight((Reg::RegTensor<uint32_t> &)tmpReg0, (Reg::RegTensor<uint32_t> &)mLow, exponent, cmpMask1);
+    Reg::ShiftRight((Reg::RegTensor<uint32_t>&)tmpReg0, (Reg::RegTensor<uint32_t>&)mLow, exponent, cmpMask1);
     Reg::Or(resReg0, resReg0, tmpReg0, cmpMask1);
     Reg::Or(resReg, resReg0, resReg, cmpMask);
 
@@ -1022,7 +1040,7 @@ __simd_callee__ inline void CastDoubleToInt32Impl(V &dstVreg, V &int32Max, V &in
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__simd_vf__ inline void CastDoubleToInt32(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint32_t calCount)
+__simd_vf__ inline void CastDoubleToInt32(__ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint32_t calCount)
 {
     constexpr uint16_t oneRepSize = 2 * GetVecLen() / sizeof(double);
     uint16_t repeatTime = CeilDivision(calCount, oneRepSize);
@@ -1045,10 +1063,11 @@ __simd_vf__ inline void CastDoubleToInt32(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
     }
 }
 
-__simd_callee__ inline void ShiftRightDual32(Reg::RegTensor<int32_t> &dstVregLow, Reg::RegTensor<int32_t> &dstVregHigh,
-    Reg::RegTensor<int32_t> &mLow, Reg::RegTensor<int32_t> &mHigh, Reg::RegTensor<int32_t> &shiftReg, Reg::RegTensor<int32_t> &tmpReg0,
-    Reg::RegTensor<int32_t> &tmpReg1, Reg::RegTensor<int32_t> &scalar, Reg::MaskReg &cmpMask0, Reg::MaskReg &cmpMask1,
-    Reg::MaskReg &mask)
+__simd_callee__ inline void ShiftRightDual32(
+    Reg::RegTensor<int32_t>& dstVregLow, Reg::RegTensor<int32_t>& dstVregHigh, Reg::RegTensor<int32_t>& mLow,
+    Reg::RegTensor<int32_t>& mHigh, Reg::RegTensor<int32_t>& shiftReg, Reg::RegTensor<int32_t>& tmpReg0,
+    Reg::RegTensor<int32_t>& tmpReg1, Reg::RegTensor<int32_t>& scalar, Reg::MaskReg& cmpMask0, Reg::MaskReg& cmpMask1,
+    Reg::MaskReg& mask)
 {
     constexpr int32_t i32 = 32;
     constexpr int32_t in32 = -32;
@@ -1073,7 +1092,7 @@ __simd_callee__ inline void ShiftRightDual32(Reg::RegTensor<int32_t> &dstVregLow
     Reg::ShiftRight(tmpReg0, mHigh, tmpReg0, cmpMask0);
     Reg::Select(dstVregLow, tmpReg0, dstVregLow, cmpMask0);
 
-    Reg::ShiftRight((Reg::RegTensor<uint32_t> &)tmpReg0, (Reg::RegTensor<uint32_t> &)mLow, shiftReg, cmpMask1);
+    Reg::ShiftRight((Reg::RegTensor<uint32_t>&)tmpReg0, (Reg::RegTensor<uint32_t>&)mLow, shiftReg, cmpMask1);
     Reg::Duplicate(tmpReg1, static_cast<int32_t>(1), cmpMask1);
     Reg::ShiftLeft(tmpReg1, tmpReg1, shiftReg, cmpMask1);
     Reg::Adds(tmpReg1, tmpReg1, static_cast<int32_t>(-1), cmpMask1);
@@ -1091,10 +1110,11 @@ __simd_callee__ inline void ShiftRightDual32(Reg::RegTensor<int32_t> &dstVregLow
     Reg::Select(dstVregHigh, mHigh, dstVregHigh, cmpMask0);
 }
 
-__simd_callee__ inline void ShiftLeftDual32(Reg::RegTensor<int32_t> &dstVregLow, Reg::RegTensor<int32_t> &dstVregHigh,
-    Reg::RegTensor<int32_t> &mLow, Reg::RegTensor<int32_t> &mHigh, Reg::RegTensor<int32_t> &shiftReg, Reg::RegTensor<int32_t> &tmpReg0,
-    Reg::RegTensor<int32_t> &tmpReg1, Reg::RegTensor<int32_t> &scalar, Reg::MaskReg &cmpMask0, Reg::MaskReg &cmpMask1,
-    Reg::MaskReg &mask)
+__simd_callee__ inline void ShiftLeftDual32(
+    Reg::RegTensor<int32_t>& dstVregLow, Reg::RegTensor<int32_t>& dstVregHigh, Reg::RegTensor<int32_t>& mLow,
+    Reg::RegTensor<int32_t>& mHigh, Reg::RegTensor<int32_t>& shiftReg, Reg::RegTensor<int32_t>& tmpReg0,
+    Reg::RegTensor<int32_t>& tmpReg1, Reg::RegTensor<int32_t>& scalar, Reg::MaskReg& cmpMask0, Reg::MaskReg& cmpMask1,
+    Reg::MaskReg& mask)
 {
     constexpr int32_t i32 = 32;
     constexpr int32_t in32 = -32;
@@ -1121,7 +1141,7 @@ __simd_callee__ inline void ShiftLeftDual32(Reg::RegTensor<int32_t> &dstVregLow,
     Reg::ShiftLeft(tmpReg0, mHigh, shiftReg, cmpMask1);
     Reg::Duplicate(scalar, i32, cmpMask1);
     Reg::Sub(scalar, scalar, shiftReg, cmpMask1);
-    Reg::ShiftRight((Reg::RegTensor<uint32_t> &)tmpReg1, (Reg::RegTensor<uint32_t> &)mLow, scalar, cmpMask1);
+    Reg::ShiftRight((Reg::RegTensor<uint32_t>&)tmpReg1, (Reg::RegTensor<uint32_t>&)mLow, scalar, cmpMask1);
     Reg::Or(tmpReg0, tmpReg1, tmpReg0, cmpMask1);
     Reg::ShiftLeft(tmpReg1, mLow, shiftReg, cmpMask1);
     Reg::Select(dstVregLow, tmpReg1, dstVregLow, cmpMask1);
@@ -1132,8 +1152,9 @@ __simd_callee__ inline void ShiftLeftDual32(Reg::RegTensor<int32_t> &dstVregLow,
     Reg::Select(dstVregHigh, mHigh, dstVregHigh, cmpMask0);
 }
 
-__simd_callee__ inline void NegateDual32(Reg::RegTensor<int32_t> &dstVregLow, Reg::RegTensor<int32_t> &dstVregHigh,
-    Reg::RegTensor<int32_t> &tmpReg0, Reg::RegTensor<int32_t> &tmpReg1, Reg::MaskReg &cmpMask0, Reg::MaskReg &mask)
+__simd_callee__ inline void NegateDual32(
+    Reg::RegTensor<int32_t>& dstVregLow, Reg::RegTensor<int32_t>& dstVregHigh, Reg::RegTensor<int32_t>& tmpReg0,
+    Reg::RegTensor<int32_t>& tmpReg1, Reg::MaskReg& cmpMask0, Reg::MaskReg& mask)
 {
     /*
         low = -low
@@ -1153,14 +1174,15 @@ __simd_callee__ inline void NegateDual32(Reg::RegTensor<int32_t> &dstVregLow, Re
 }
 
 template <typename T = Reg::DefaultType, typename U>
-__simd_callee__ inline void CastDoubleToInt64Impl(Reg::RegTensor<int32_t> &dstVregLow, Reg::RegTensor<int32_t> &dstVregHigh,
-    U &srcReg, Reg::RegTensor<int32_t> &scalar0, Reg::RegTensor<int32_t> &scalar1, Reg::RegTensor<int32_t> &scalar2,
-    Reg::RegTensor<int32_t> &posInfLow, Reg::RegTensor<int32_t> &posInfHigh, Reg::RegTensor<int32_t> &negInfLow,
-    Reg::RegTensor<int32_t> &negInfHigh, Reg::RegTensor<int32_t> &zeroReg, Reg::MaskReg &mask)
+__simd_callee__ inline void CastDoubleToInt64Impl(
+    Reg::RegTensor<int32_t>& dstVregLow, Reg::RegTensor<int32_t>& dstVregHigh, U& srcReg,
+    Reg::RegTensor<int32_t>& scalar0, Reg::RegTensor<int32_t>& scalar1, Reg::RegTensor<int32_t>& scalar2,
+    Reg::RegTensor<int32_t>& posInfLow, Reg::RegTensor<int32_t>& posInfHigh, Reg::RegTensor<int32_t>& negInfLow,
+    Reg::RegTensor<int32_t>& negInfHigh, Reg::RegTensor<int32_t>& zeroReg, Reg::MaskReg& mask)
 {
     Reg::RegTensor<int64_t, Reg::RegTraitNumTwo> tmpSrcReg = (Reg::RegTensor<int64_t, Reg::RegTraitNumTwo>&)srcReg;
-	Reg::RegTensor<int32_t> sign, mLow, mHigh, exponent;
-	Reg::RegTensor<int32_t> tmpReg, tmpReg0, tmpReg1, tmpReg2, tmpReg3, tmpReg4, resRegLow, resRegHigh, scalar;
+    Reg::RegTensor<int32_t> sign, mLow, mHigh, exponent;
+    Reg::RegTensor<int32_t> tmpReg, tmpReg0, tmpReg1, tmpReg2, tmpReg3, tmpReg4, resRegLow, resRegHigh, scalar;
     Reg::MaskReg cmpMask0, cmpMask1, cmpMask2;
     Reg::Duplicate(dstVregLow, static_cast<int32_t>(0));
     Reg::Duplicate(dstVregHigh, static_cast<int32_t>(0));
@@ -1168,14 +1190,14 @@ __simd_callee__ inline void CastDoubleToInt64Impl(Reg::RegTensor<int32_t> &dstVr
     Reg::Duplicate(resRegHigh, static_cast<int32_t>(0));
 
     // m_low = bits_low
-    Reg::Copy(mLow, (Reg::RegTensor<int32_t> &)tmpSrcReg.reg[0], mask);
+    Reg::Copy(mLow, (Reg::RegTensor<int32_t>&)tmpSrcReg.reg[0], mask);
     // exponent = (bits_high >> 20) & 0x7ff
-    Reg::ShiftRights(exponent, (Reg::RegTensor<int32_t> &)tmpSrcReg.reg[1], static_cast<int16_t>(20), mask);
+    Reg::ShiftRights(exponent, (Reg::RegTensor<int32_t>&)tmpSrcReg.reg[1], static_cast<int16_t>(20), mask);
     Reg::And(exponent, exponent, scalar1, mask);
     // sign = (bits_high >> 31) & 1
-    Reg::ShiftRights(sign, (Reg::RegTensor<int32_t> &)tmpSrcReg.reg[1], static_cast<int16_t>(31), mask);
+    Reg::ShiftRights(sign, (Reg::RegTensor<int32_t>&)tmpSrcReg.reg[1], static_cast<int16_t>(31), mask);
     // m_high = bits_high & 0xfffff
-    Reg::And(mHigh, (Reg::RegTensor<int32_t> &)tmpSrcReg.reg[1], scalar2, mask);
+    Reg::And(mHigh, (Reg::RegTensor<int32_t>&)tmpSrcReg.reg[1], scalar2, mask);
 
     /*
         mantissa_high = 0x100000 | m_high
@@ -1204,7 +1226,8 @@ __simd_callee__ inline void CastDoubleToInt64Impl(Reg::RegTensor<int32_t> &dstVr
     Reg::Or(tmpReg1, tmpReg1, zeroReg, cmpMask0);
     Reg::CompareScalar<int32_t, CMPMODE::GT>(cmpMask1, tmpReg2, static_cast<int32_t>(0), mask);
     Reg::Or(tmpReg2, tmpReg2, zeroReg, cmpMask1);
-    ShiftRightDual32(dstVregLow, dstVregHigh, mLow, tmpReg, tmpReg1, tmpReg3, tmpReg4, scalar, cmpMask0, cmpMask1, mask);
+    ShiftRightDual32(
+        dstVregLow, dstVregHigh, mLow, tmpReg, tmpReg1, tmpReg3, tmpReg4, scalar, cmpMask0, cmpMask1, mask);
     ShiftLeftDual32(resRegLow, resRegHigh, mLow, tmpReg, tmpReg2, tmpReg3, tmpReg4, scalar, cmpMask0, cmpMask1, mask);
 
     Reg::CompareScalar<int32_t, CMPMODE::LT>(cmpMask2, tmpReg0, static_cast<int32_t>(52), mask);
@@ -1272,7 +1295,7 @@ __simd_callee__ inline void CastDoubleToInt64Impl(Reg::RegTensor<int32_t> &dstVr
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__simd_vf__ inline void CastDoubleToInt64(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint32_t calCount)
+__simd_vf__ inline void CastDoubleToInt64(__ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint32_t calCount)
 {
     constexpr uint16_t oneRepSize = 2 * GetVecLen() / sizeof(double);
     uint16_t repeatTime = CeilDivision(calCount, oneRepSize);
@@ -1282,7 +1305,7 @@ __simd_vf__ inline void CastDoubleToInt64(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
     Reg::RegTensor<SRC_TYPE, Reg::RegTraitNumTwo> srcVreg;
     Reg::RegTensor<DST_TYPE, Reg::RegTraitNumTwo> dstVreg, tmpVreg;
     Reg::RegTensor<int32_t> dstVregLow;
-	Reg::RegTensor<int32_t> dstVregHigh;
+    Reg::RegTensor<int32_t> dstVregHigh;
     Reg::RegTensor<int32_t> scalar0, scalar1, scalar2, zeroReg;
     Reg::RegTensor<int32_t> posInfLow, posInfHigh, negInfLow, negInfHigh;
 
@@ -1297,20 +1320,21 @@ __simd_vf__ inline void CastDoubleToInt64(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
     for (uint16_t i = 0; i < repeatTime; ++i) {
         mask = Reg::UpdateMask<uint64_t, Reg::RegTraitNumTwo>(sreg);
         Reg::LoadAlign(srcVreg, src + i * oneRepSize);
-        CastDoubleToInt64Impl(dstVregLow, dstVregHigh, srcVreg, scalar0, scalar1, scalar2,
-                                posInfLow, posInfHigh, negInfLow, negInfHigh, zeroReg, mask);
+        CastDoubleToInt64Impl(
+            dstVregLow, dstVregHigh, srcVreg, scalar0, scalar1, scalar2, posInfLow, posInfHigh, negInfLow, negInfHigh,
+            zeroReg, mask);
         /*
             result = (result_high << 32) | result_low
             return result
         */
-        Reg::Copy((Reg::RegTensor<int32_t> &)dstVreg.reg[0], dstVregLow, mask);
-        Reg::Copy((Reg::RegTensor<int32_t> &)dstVreg.reg[1], dstVregHigh, mask);
+        Reg::Copy((Reg::RegTensor<int32_t>&)dstVreg.reg[0], dstVregLow, mask);
+        Reg::Copy((Reg::RegTensor<int32_t>&)dstVreg.reg[1], dstVregHigh, mask);
         Reg::StoreAlign(dst + i * oneRepSize, dstVreg, mask);
     }
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__aicore__ inline void CastDouble(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint32_t calCount)
+__aicore__ inline void CastDouble(__ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint32_t calCount)
 {
     bool isGetOverflow = GetOverflow();
     constexpr bool cast_DoubleToFloat = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<float, double>>();
@@ -1336,20 +1360,22 @@ __aicore__ inline void CastDouble(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src
 // Cast::Level 2
 template <typename ORI_DST_TYPE, typename ORI_SRC_TYPE>
 __aicore__ inline void CastImpl(
-    __ubuf__ ORI_DST_TYPE *oriDst, __ubuf__ ORI_SRC_TYPE *oriSrc, const RoundMode &roundMode, const uint32_t calCount)
+    __ubuf__ ORI_DST_TYPE* oriDst, __ubuf__ ORI_SRC_TYPE* oriSrc, const RoundMode& roundMode, const uint32_t calCount)
 {
     using DST_TYPE = typename CastParam::CastTypeTrait<ORI_DST_TYPE>::RealType;
     using SRC_TYPE = typename CastParam::CastTypeTrait<ORI_SRC_TYPE>::RealType;
     __ubuf__ DST_TYPE* dst = reinterpret_cast<__ubuf__ DST_TYPE*>(oriDst);
     __ubuf__ SRC_TYPE* src = reinterpret_cast<__ubuf__ SRC_TYPE*>(oriSrc);
 
-    constexpr bool cast_round_all = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, float>, Tuple<int64_t, float>,
-        Tuple<int32_t, float>, Tuple<int16_t, float>, Tuple<bfloat16_t, float>, Tuple<int32_t, half>,
-        Tuple<int16_t, half>, Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4x2_t, half>, Tuple<bfloat16_t, half>,
-        Tuple<half, int16_t>, Tuple<float, int32_t>,Tuple<float, int64_t>, Tuple<int32_t, bfloat16_t>,
-        Tuple<half, bfloat16_t>, Tuple<fp4x2_e1m2_t, bfloat16_t>,Tuple<fp4x2_e2m1_t, bfloat16_t>,
-        Tuple<half, int32_t>, Tuple<float, float>, Tuple<complex64, complex64>, Tuple<complex32, complex64>>();
-    constexpr bool cast_none = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, int32_t>, Tuple<float, half>, Tuple<float, bfloat16_t>,
+    constexpr bool cast_round_all = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, float>, Tuple<int64_t, float>, Tuple<int32_t, float>,
+        Tuple<int16_t, float>, Tuple<bfloat16_t, float>, Tuple<int32_t, half>, Tuple<int16_t, half>,
+        Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4x2_t, half>, Tuple<bfloat16_t, half>, Tuple<half, int16_t>,
+        Tuple<float, int32_t>, Tuple<float, int64_t>, Tuple<int32_t, bfloat16_t>, Tuple<half, bfloat16_t>,
+        Tuple<fp4x2_e1m2_t, bfloat16_t>, Tuple<fp4x2_e2m1_t, bfloat16_t>, Tuple<half, int32_t>, Tuple<float, float>,
+        Tuple<complex64, complex64>, Tuple<complex32, complex64>>();
+    constexpr bool cast_none = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, int32_t>, Tuple<float, half>, Tuple<float, bfloat16_t>,
         Tuple<half, int4x2_t>, Tuple<half, uint8_t>, Tuple<uint16_t, uint8_t>, Tuple<uint32_t, uint8_t>,
         Tuple<half, int8_t>, Tuple<int16_t, int8_t>, Tuple<int32_t, int8_t>, Tuple<uint8_t, uint16_t>,
         Tuple<uint32_t, uint16_t>, Tuple<float, int16_t>, Tuple<uint8_t, int16_t>, Tuple<uint32_t, int16_t>,
@@ -1358,20 +1384,21 @@ __aicore__ inline void CastImpl(
         Tuple<int32_t, int64_t>, Tuple<half, hifloat8_t>, Tuple<float, hifloat8_t>, Tuple<float, fp8_e4m3fn_t>,
         Tuple<float, fp8_e5m2_t>, Tuple<bfloat16_t, fp4x2_e1m2_t>, Tuple<bfloat16_t, fp4x2_e2m1_t>,
         Tuple<int4x2_t, int16_t>, Tuple<int16_t, int4x2_t>, Tuple<bfloat16_t, int4x2_t>, Tuple<complex64, complex32>>();
-    constexpr bool using_cast_rint =
-        SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4x2_t, half>,
-        Tuple<half, float>, Tuple<half, int16_t>, Tuple<float, int32_t>, Tuple<complex32, complex64>>();
-    constexpr bool cast_odd = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, float>, Tuple<complex32, complex64>, Tuple<half, int32_t>>();
-    constexpr bool cast_rint = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<fp8_e5m2_t, float>,
-        Tuple<fp8_e4m3fn_t, float>>();
+    constexpr bool using_cast_rint = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4x2_t, half>, Tuple<half, float>,
+        Tuple<half, int16_t>, Tuple<float, int32_t>, Tuple<complex32, complex64>>();
+    constexpr bool cast_odd =
+        SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, float>, Tuple<complex32, complex64>, Tuple<half, int32_t>>();
+    constexpr bool cast_rint =
+        SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<fp8_e5m2_t, float>, Tuple<fp8_e4m3fn_t, float>>();
     constexpr bool cast_round =
         SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<hifloat8_t, float>, Tuple<hifloat8_t, half>>();
-    constexpr bool cast_hybrid =
-        SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<hifloat8_t, float>, Tuple<hifloat8_t, half>, Tuple<half, int32_t>>();
-    constexpr bool cast_double = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<float, double>,
-        Tuple<double, int64_t>, Tuple<bfloat16_t, double>>();
-    constexpr bool cast_double0 = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<int32_t, double>,
-        Tuple<int64_t, double>>();
+    constexpr bool cast_hybrid = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<hifloat8_t, float>, Tuple<hifloat8_t, half>, Tuple<half, int32_t>>();
+    constexpr bool cast_double = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<float, double>, Tuple<double, int64_t>, Tuple<bfloat16_t, double>>();
+    constexpr bool cast_double0 =
+        SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<int32_t, double>, Tuple<int64_t, double>>();
     switch (roundMode) {
         case RoundMode::CAST_RINT:
             if constexpr (cast_round_all || cast_rint) {
@@ -1449,8 +1476,9 @@ __aicore__ inline void CastImpl(
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__simd_vf__ inline void CastIntrinsicsB64ImplVF2(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const BasicAPIMaskStruct maskArrayStruct,
-    uint8_t repeatTime, const UnaryRepeatParams repeatParams)
+__simd_vf__ inline void CastIntrinsicsB64ImplVF2(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const BasicAPIMaskStruct maskArrayStruct, uint8_t repeatTime,
+    const UnaryRepeatParams repeatParams)
 {
     static constexpr Reg::CastTrait castTrait = {
         Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, roundMode};
@@ -1466,103 +1494,96 @@ __simd_vf__ inline void CastIntrinsicsB64ImplVF2(__ubuf__ DST_TYPE *dst, __ubuf_
     for (uint16_t i = 0; i < repeatTime; ++i) {
         if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
             // b32->b64
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t> &)srcVreg,
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b32Preg);
-            Reg::Interleave(
-                (Reg::RegTensor<uint32_t> &)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)srcVreg, zeroVreg);
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (Reg::RegTensor<uint32_t>&)srcVreg,
+                (__ubuf__ uint32_t*&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride,
+                b32Preg);
+            Reg::Interleave((Reg::RegTensor<uint32_t>&)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t>&)srcVreg, zeroVreg);
         } else {
             // b64->b32
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t>&)srcVreg,
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b64Preg);
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (Reg::RegTensor<uint32_t>&)srcVreg,
+                (__ubuf__ uint32_t*&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride,
+                b64Preg);
         }
         Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, b64Preg);
         if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
             // b32->b64
             Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
             Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b64Preg);
+                (__ubuf__ uint32_t*&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t>&)dstVreg, repeatParams.dstBlkStride, b64Preg);
         } else {
             // b64->b32
             Reg::DeInterleave(
-                (Reg::RegTensor<uint32_t> &)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)dstVreg, zeroVreg);
+                (Reg::RegTensor<uint32_t>&)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t>&)dstVreg, zeroVreg);
             Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
             Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b32Preg);
+                (__ubuf__ uint32_t*&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t>&)dstVreg, repeatParams.dstBlkStride, b32Preg);
         }
     }
 }
 
 template <typename DST_TYPE, typename SRC_TYPE>
-__simd_callee__ inline void GenLoadL0(Reg::RegTensor<SRC_TYPE> &srcVreg, __ubuf__ SRC_TYPE *&srcAddr,
-    Reg::MaskReg &preg, const UnaryRepeatParams &repeatParams, uint16_t index)
+__simd_callee__ inline void GenLoadL0(
+    Reg::RegTensor<SRC_TYPE>& srcVreg, __ubuf__ SRC_TYPE*& srcAddr, Reg::MaskReg& preg,
+    const UnaryRepeatParams& repeatParams, uint16_t index)
 {
     constexpr uint8_t elePerBlk = GetDataBlockSizeInBytes() / sizeof(SRC_TYPE);
-    Reg::LoadAlign<SRC_TYPE, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcVreg,
-        srcAddr + index * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, preg);
+    Reg::LoadAlign<SRC_TYPE, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+        srcVreg, srcAddr + index * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, preg);
     if constexpr (SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) {
-        Reg::UnPack<uint16_t, uint8_t>(
-            (Reg::RegTensor<uint16_t> &)srcVreg, (Reg::RegTensor<uint8_t> &)srcVreg);
-        Reg::UnPack<uint32_t, uint16_t>(
-            (Reg::RegTensor<uint32_t> &)srcVreg, (Reg::RegTensor<uint16_t> &)srcVreg);
+        Reg::UnPack<uint16_t, uint8_t>((Reg::RegTensor<uint16_t>&)srcVreg, (Reg::RegTensor<uint8_t>&)srcVreg);
+        Reg::UnPack<uint32_t, uint16_t>((Reg::RegTensor<uint32_t>&)srcVreg, (Reg::RegTensor<uint16_t>&)srcVreg);
     } else if constexpr (sizeof(SRC_TYPE) == 1 && sizeof(DST_TYPE) == 2) {
         if constexpr (AscendC::Std::is_same<SRC_TYPE, int8_t>::value) {
-            Reg::UnPack<int16_t, int8_t>((Reg::RegTensor<int16_t> &)srcVreg, srcVreg);
+            Reg::UnPack<int16_t, int8_t>((Reg::RegTensor<int16_t>&)srcVreg, srcVreg);
         } else {
-            Reg::UnPack<uint16_t, uint8_t>(
-                (Reg::RegTensor<uint16_t> &)srcVreg, (Reg::RegTensor<uint8_t> &)srcVreg);
+            Reg::UnPack<uint16_t, uint8_t>((Reg::RegTensor<uint16_t>&)srcVreg, (Reg::RegTensor<uint8_t>&)srcVreg);
         }
     } else if constexpr (sizeof(SRC_TYPE) == 2 && sizeof(DST_TYPE) == 4) {
         if constexpr (AscendC::Std::is_same<SRC_TYPE, int16_t>::value) {
-            Reg::UnPack<int32_t, int16_t>((Reg::RegTensor<int32_t> &)srcVreg, srcVreg);
+            Reg::UnPack<int32_t, int16_t>((Reg::RegTensor<int32_t>&)srcVreg, srcVreg);
         } else {
-            Reg::UnPack<uint32_t, uint16_t>(
-                (Reg::RegTensor<uint32_t> &)srcVreg, (Reg::RegTensor<uint16_t> &)srcVreg);
+            Reg::UnPack<uint32_t, uint16_t>((Reg::RegTensor<uint32_t>&)srcVreg, (Reg::RegTensor<uint16_t>&)srcVreg);
         }
     } else if constexpr (sizeof(SRC_TYPE) == 1 && sizeof(DST_TYPE) == 4) {
         if constexpr (AscendC::Std::is_same<SRC_TYPE, int8_t>::value) {
-            Reg::UnPack<int16_t, int8_t>((Reg::RegTensor<int16_t> &)srcVreg, srcVreg);
-            Reg::UnPack<int32_t, int16_t>(
-                (Reg::RegTensor<int32_t> &)srcVreg, (Reg::RegTensor<int16_t> &)srcVreg);
+            Reg::UnPack<int16_t, int8_t>((Reg::RegTensor<int16_t>&)srcVreg, srcVreg);
+            Reg::UnPack<int32_t, int16_t>((Reg::RegTensor<int32_t>&)srcVreg, (Reg::RegTensor<int16_t>&)srcVreg);
         } else {
-            Reg::UnPack<uint16_t, uint8_t>(
-                (Reg::RegTensor<uint16_t> &)srcVreg, (Reg::RegTensor<uint8_t> &)srcVreg);
-            Reg::UnPack<uint32_t, uint16_t>(
-                (Reg::RegTensor<uint32_t> &)srcVreg, (Reg::RegTensor<uint16_t> &)srcVreg);
+            Reg::UnPack<uint16_t, uint8_t>((Reg::RegTensor<uint16_t>&)srcVreg, (Reg::RegTensor<uint8_t>&)srcVreg);
+            Reg::UnPack<uint32_t, uint16_t>((Reg::RegTensor<uint32_t>&)srcVreg, (Reg::RegTensor<uint16_t>&)srcVreg);
         }
     }
 }
 
 template <typename DST_TYPE, typename SRC_TYPE>
-__simd_callee__ inline void GenStoreL0(__ubuf__ DST_TYPE *&dstAddr, Reg::RegTensor<DST_TYPE> &dstVreg,
-    Reg::MaskReg &preg, const UnaryRepeatParams &repeatParams, uint16_t index)
+__simd_callee__ inline void GenStoreL0(
+    __ubuf__ DST_TYPE*& dstAddr, Reg::RegTensor<DST_TYPE>& dstVreg, Reg::MaskReg& preg,
+    const UnaryRepeatParams& repeatParams, uint16_t index)
 {
     constexpr uint8_t elePerBlk = GetDataBlockSizeInBytes() / sizeof(DST_TYPE);
     if constexpr (SupportType<DST_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(SRC_TYPE) == 2) {
-        Reg::Pack<uint16_t, uint32_t>(
-            (Reg::RegTensor<uint16_t> &)dstVreg, (Reg::RegTensor<uint32_t> &)dstVreg);
-        Reg::Pack<uint8_t, uint16_t>(
-            (Reg::RegTensor<uint8_t> &)dstVreg, (Reg::RegTensor<uint16_t> &)dstVreg);
+        Reg::Pack<uint16_t, uint32_t>((Reg::RegTensor<uint16_t>&)dstVreg, (Reg::RegTensor<uint32_t>&)dstVreg);
+        Reg::Pack<uint8_t, uint16_t>((Reg::RegTensor<uint8_t>&)dstVreg, (Reg::RegTensor<uint16_t>&)dstVreg);
     } else if constexpr (sizeof(DST_TYPE) == 1 && sizeof(SRC_TYPE) == 2) {
-        Reg::Pack<uint8_t, uint16_t>(
-            (Reg::RegTensor<uint8_t> &)dstVreg, (Reg::RegTensor<uint16_t> &)dstVreg);
+        Reg::Pack<uint8_t, uint16_t>((Reg::RegTensor<uint8_t>&)dstVreg, (Reg::RegTensor<uint16_t>&)dstVreg);
     } else if constexpr (sizeof(DST_TYPE) == 2 && sizeof(SRC_TYPE) == 4) {
-        Reg::Pack<uint16_t, uint32_t>(
-            (Reg::RegTensor<uint16_t> &)dstVreg, (Reg::RegTensor<uint32_t> &)dstVreg);
+        Reg::Pack<uint16_t, uint32_t>((Reg::RegTensor<uint16_t>&)dstVreg, (Reg::RegTensor<uint32_t>&)dstVreg);
     } else if constexpr (sizeof(DST_TYPE) == 1 && sizeof(SRC_TYPE) == 4) {
-        Reg::Pack<uint16_t, uint32_t>(
-            (Reg::RegTensor<uint16_t> &)dstVreg, (Reg::RegTensor<uint32_t> &)dstVreg);
-        Reg::Pack<uint8_t, uint16_t>(
-            (Reg::RegTensor<uint8_t> &)dstVreg, (Reg::RegTensor<uint16_t> &)dstVreg);
+        Reg::Pack<uint16_t, uint32_t>((Reg::RegTensor<uint16_t>&)dstVreg, (Reg::RegTensor<uint32_t>&)dstVreg);
+        Reg::Pack<uint8_t, uint16_t>((Reg::RegTensor<uint8_t>&)dstVreg, (Reg::RegTensor<uint16_t>&)dstVreg);
     }
     Reg::StoreAlign<DST_TYPE, Reg::DataCopyMode::DATA_BLOCK_COPY>(
-      dstAddr + index * repeatParams.dstRepStride * elePerBlk, dstVreg, repeatParams.dstBlkStride, preg);
+        dstAddr + index * repeatParams.dstRepStride * elePerBlk, dstVreg, repeatParams.dstBlkStride, preg);
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode>
-__simd_vf__ inline void CastIntrinsicsImplVF2(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const BasicAPIMaskStruct maskArrayStruct,
-    uint8_t repeatTime, const UnaryRepeatParams repeatParams, const half scale)
+__simd_vf__ inline void CastIntrinsicsImplVF2(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const BasicAPIMaskStruct maskArrayStruct, uint8_t repeatTime,
+    const UnaryRepeatParams repeatParams, const half scale)
 {
     static constexpr Reg::CastTrait castTrait = {
         Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, roundMode};
@@ -1581,16 +1602,18 @@ __simd_vf__ inline void CastIntrinsicsImplVF2(__ubuf__ DST_TYPE *dst, __ubuf__ S
         ldPreg = Reg::MoveMask<SRC_TYPE>();
         exPreg = ldPreg;
         Reg::MaskPack(stPreg, ldPreg);
-        if constexpr ((SupportType<DST_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(SRC_TYPE) == 2) ||
-                      (sizeof(DST_TYPE) == 1 && sizeof(SRC_TYPE) == 4)) {
+        if constexpr (
+            (SupportType<DST_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(SRC_TYPE) == 2) ||
+            (sizeof(DST_TYPE) == 1 && sizeof(SRC_TYPE) == 4)) {
             Reg::MaskPack(stPreg, stPreg);
         }
     } else if constexpr (sizeof(DST_TYPE) > sizeof(SRC_TYPE)) {
         stPreg = Reg::MoveMask<DST_TYPE>();
         exPreg = stPreg;
         Reg::MaskPack(ldPreg, stPreg);
-        if constexpr ((SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) ||
-                      (sizeof(SRC_TYPE) == 1 && sizeof(DST_TYPE) == 4)) {
+        if constexpr (
+            (SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) ||
+            (sizeof(SRC_TYPE) == 1 && sizeof(DST_TYPE) == 4)) {
             Reg::MaskPack(ldPreg, ldPreg);
             if constexpr (SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) {
                 Reg::MaskUnPack(stPreg, ldPreg);
@@ -1607,7 +1630,8 @@ __simd_vf__ inline void CastIntrinsicsImplVF2(__ubuf__ DST_TYPE *dst, __ubuf__ S
             Reg::Muls(tmpVreg, tmpVreg, static_cast<float>(scale), exPreg);
             Reg::Muls(tmpVreg, tmpVreg, DEQ_SHIFT_LEFT_17_BIT, exPreg);
             Reg::Cast<DST_TYPE, float, CastParam::f322F16CastTrait>(dstVreg, tmpVreg, exPreg);
-        } else if constexpr (AscendC::Std::is_same<SRC_TYPE, float>::value && AscendC::Std::is_same<DST_TYPE, float>::value) {
+        } else if constexpr (
+            AscendC::Std::is_same<SRC_TYPE, float>::value && AscendC::Std::is_same<DST_TYPE, float>::value) {
             Reg::Truncate<DST_TYPE, roundMode>(dstVreg, srcVreg, exPreg);
         } else {
             Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, exPreg);
@@ -1617,8 +1641,9 @@ __simd_vf__ inline void CastIntrinsicsImplVF2(__ubuf__ DST_TYPE *dst, __ubuf__ S
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode, bool isSetMask>
-__simd_vf__ inline void CastIntrinsicsB64ImplCounterVF(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint64_t mask,
-    __ubuf__ uint64_t *maskBuf, uint8_t repeatTime, const UnaryRepeatParams repeatParams)
+__simd_vf__ inline void CastIntrinsicsB64ImplCounterVF(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint64_t mask, __ubuf__ uint64_t* maskBuf, uint8_t repeatTime,
+    const UnaryRepeatParams repeatParams)
 {
     static constexpr Reg::CastTrait castTrait = {
         Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, roundMode};
@@ -1645,37 +1670,41 @@ __simd_vf__ inline void CastIntrinsicsB64ImplCounterVF(__ubuf__ DST_TYPE *dst, _
         Reg::MaskInterleave<uint32_t>(b64Preg, tmpPreg, b32Preg, b32Preg);
         if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
             // b32->b64
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t> &)srcVreg,
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b32Preg);
-            Reg::Interleave(
-                (Reg::RegTensor<uint32_t> &)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)srcVreg, zeroVreg);
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (Reg::RegTensor<uint32_t>&)srcVreg,
+                (__ubuf__ uint32_t*&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride,
+                b32Preg);
+            Reg::Interleave((Reg::RegTensor<uint32_t>&)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t>&)srcVreg, zeroVreg);
         } else {
             // b64->b32
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t>&)srcVreg,
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b64Preg);
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (Reg::RegTensor<uint32_t>&)srcVreg,
+                (__ubuf__ uint32_t*&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride,
+                b64Preg);
         }
         Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, b64Preg);
         if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
             // b32->b64
             Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
             Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b64Preg);
+                (__ubuf__ uint32_t*&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t>&)dstVreg, repeatParams.dstBlkStride, b64Preg);
         } else {
             // b64->b32
             Reg::DeInterleave(
-                (Reg::RegTensor<uint32_t> &)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)dstVreg, zeroVreg);
+                (Reg::RegTensor<uint32_t>&)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t>&)dstVreg, zeroVreg);
             Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
             Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b32Preg);
+                (__ubuf__ uint32_t*&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t>&)dstVreg, repeatParams.dstBlkStride, b32Preg);
         }
     }
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode, bool isSetMask>
-__simd_vf__ inline void CastIntrinsicsImplCounterVF(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint64_t mask,
-    __ubuf__ uint64_t *maskBuf, uint8_t repeatTime, const UnaryRepeatParams repeatParams, const half scale)
+__simd_vf__ inline void CastIntrinsicsImplCounterVF(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint64_t mask, __ubuf__ uint64_t* maskBuf, uint8_t repeatTime,
+    const UnaryRepeatParams repeatParams, const half scale)
 {
     static constexpr Reg::CastTrait castTrait = {
         Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, roundMode};
@@ -1709,16 +1738,18 @@ __simd_vf__ inline void CastIntrinsicsImplCounterVF(__ubuf__ DST_TYPE *dst, __ub
             ldPreg = Reg::UpdateMask<SRC_TYPE>(countSreg);
             exPreg = ldPreg;
             Reg::MaskPack(stPreg, ldPreg);
-            if constexpr ((SupportType<DST_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(SRC_TYPE) == 2) ||
-                          (sizeof(DST_TYPE) == 1 && sizeof(SRC_TYPE) == 4)) {
+            if constexpr (
+                (SupportType<DST_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(SRC_TYPE) == 2) ||
+                (sizeof(DST_TYPE) == 1 && sizeof(SRC_TYPE) == 4)) {
                 Reg::MaskPack(stPreg, stPreg);
             }
         } else if constexpr (sizeof(DST_TYPE) > sizeof(SRC_TYPE)) {
             stPreg = Reg::UpdateMask<DST_TYPE>(countSreg);
             exPreg = stPreg;
             Reg::MaskPack(ldPreg, stPreg);
-            if constexpr ((SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) ||
-                          (sizeof(SRC_TYPE) == 1 && sizeof(DST_TYPE) == 4)) {
+            if constexpr (
+                (SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) ||
+                (sizeof(SRC_TYPE) == 1 && sizeof(DST_TYPE) == 4)) {
                 Reg::MaskPack(ldPreg, ldPreg);
                 if constexpr (SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) {
                     Reg::MaskUnPack(stPreg, ldPreg);
@@ -1734,7 +1765,8 @@ __simd_vf__ inline void CastIntrinsicsImplCounterVF(__ubuf__ DST_TYPE *dst, __ub
             Reg::Muls(tmpVreg, tmpVreg, static_cast<float>(scale), exPreg);
             Reg::Muls(tmpVreg, tmpVreg, DEQ_SHIFT_LEFT_17_BIT, exPreg);
             Reg::Cast<DST_TYPE, float, CastParam::f322F16CastTrait>(dstVreg, tmpVreg, exPreg);
-        } else if constexpr (AscendC::Std::is_same<SRC_TYPE, float>::value && AscendC::Std::is_same<DST_TYPE, float>::value) {
+        } else if constexpr (
+            AscendC::Std::is_same<SRC_TYPE, float>::value && AscendC::Std::is_same<DST_TYPE, float>::value) {
             Reg::Truncate<DST_TYPE, roundMode>(dstVreg, srcVreg, exPreg);
         } else {
             Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, exPreg);
@@ -1744,15 +1776,17 @@ __simd_vf__ inline void CastIntrinsicsImplCounterVF(__ubuf__ DST_TYPE *dst, __ub
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode, bool isSetMask>
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint64_t mask[],
-    uint8_t repeatTime, const UnaryRepeatParams &repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint64_t mask[], uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
-    constexpr bool b64Cast = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<float, int64_t>, Tuple<int64_t, float>,
-        Tuple<int32_t, int64_t>, Tuple<int64_t, int32_t>>();
+    constexpr bool b64Cast = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<float, int64_t>, Tuple<int64_t, float>, Tuple<int32_t, int64_t>,
+        Tuple<int64_t, int32_t>>();
     bool isCounterMode = Internal::IsCounterMode();
     half scale = 0;
     if (isCounterMode) {
-        __ubuf__ uint64_t *maskBuf = nullptr;
+        __ubuf__ uint64_t* maskBuf = nullptr;
         if constexpr (!isSetMask) {
             maskBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 2);
         }
@@ -1760,7 +1794,8 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
             CastIntrinsicsB64ImplCounterVF<DST_TYPE, SRC_TYPE, roundMode, isSetMask>(
                 dst, src, mask[0], maskBuf, repeatTime, repeatParams);
         } else {
-            if constexpr (AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
+            if constexpr (
+                AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
                 scale = Internal::g_deqValue;
             }
             CastIntrinsicsImplCounterVF<DST_TYPE, SRC_TYPE, roundMode, isSetMask>(
@@ -1775,7 +1810,8 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
             if constexpr (isSetMask) {
                 SetVectorMask<uint32_t>(mask[1], mask[0]);
             }
-            CastIntrinsicsB64ImplVF2<DST_TYPE, SRC_TYPE, roundMode>(dst, src, maskArrayStruct, repeatTime, repeatParams);
+            CastIntrinsicsB64ImplVF2<DST_TYPE, SRC_TYPE, roundMode>(
+                dst, src, maskArrayStruct, repeatTime, repeatParams);
         } else {
             if constexpr (isSetMask) {
                 if constexpr (sizeof(DST_TYPE) < sizeof(SRC_TYPE)) {
@@ -1784,7 +1820,8 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
                     SetVectorMask<DST_TYPE>(mask[1], mask[0]);
                 }
             }
-            if constexpr (AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
+            if constexpr (
+                AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
                 scale = Internal::g_deqValue;
             }
             CastIntrinsicsImplVF2<DST_TYPE, SRC_TYPE, roundMode>(
@@ -1794,21 +1831,23 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
 }
 
 template <typename ORI_DST_TYPE, typename ORI_SRC_TYPE, bool isSetMask = true, typename MaskType>
-__aicore__ inline void CastImplCommon(__ubuf__ ORI_DST_TYPE *oriDst, __ubuf__ ORI_SRC_TYPE *oriSrc,
-    const RoundMode &roundMode, MaskType mask, uint8_t repeatTime, const UnaryRepeatParams &repeatParams)
+__aicore__ inline void CastImplCommon(
+    __ubuf__ ORI_DST_TYPE* oriDst, __ubuf__ ORI_SRC_TYPE* oriSrc, const RoundMode& roundMode, MaskType mask,
+    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
     using SRC_TYPE = typename CastParam::CastTypeTrait<ORI_SRC_TYPE>::RealType;
     using DST_TYPE = typename CastParam::CastTypeTrait<ORI_DST_TYPE>::RealType;
     __ubuf__ SRC_TYPE* src = reinterpret_cast<__ubuf__ SRC_TYPE*>(oriSrc);
     __ubuf__ DST_TYPE* dst = reinterpret_cast<__ubuf__ DST_TYPE*>(oriDst);
 
-    constexpr bool cast_round_all = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, float>, Tuple<int64_t, float>,
-        Tuple<int32_t, float>, Tuple<int16_t, float>, Tuple<bfloat16_t, float>, Tuple<int32_t, half>,
-        Tuple<int16_t, half>, Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4x2_t, half>, Tuple<bfloat16_t, half>,
-        Tuple<half, int16_t>, Tuple<float, int32_t>,Tuple<float, int64_t>, Tuple<int32_t, bfloat16_t>,
-        Tuple<half, bfloat16_t>, Tuple<fp4x2_e1m2_t, bfloat16_t>,Tuple<fp4x2_e2m1_t, bfloat16_t>,
-        Tuple<half, int32_t>, Tuple<float, float>>();
-    constexpr bool cast_none = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, int32_t>, Tuple<float, half>, Tuple<float, bfloat16_t>,
+    constexpr bool cast_round_all = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, float>, Tuple<int64_t, float>, Tuple<int32_t, float>,
+        Tuple<int16_t, float>, Tuple<bfloat16_t, float>, Tuple<int32_t, half>, Tuple<int16_t, half>,
+        Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4x2_t, half>, Tuple<bfloat16_t, half>, Tuple<half, int16_t>,
+        Tuple<float, int32_t>, Tuple<float, int64_t>, Tuple<int32_t, bfloat16_t>, Tuple<half, bfloat16_t>,
+        Tuple<fp4x2_e1m2_t, bfloat16_t>, Tuple<fp4x2_e2m1_t, bfloat16_t>, Tuple<half, int32_t>, Tuple<float, float>>();
+    constexpr bool cast_none = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, int32_t>, Tuple<float, half>, Tuple<float, bfloat16_t>,
         Tuple<half, int4x2_t>, Tuple<half, uint8_t>, Tuple<uint16_t, uint8_t>, Tuple<uint32_t, uint8_t>,
         Tuple<half, int8_t>, Tuple<int16_t, int8_t>, Tuple<int32_t, int8_t>, Tuple<uint8_t, uint16_t>,
         Tuple<uint32_t, uint16_t>, Tuple<float, int16_t>, Tuple<uint8_t, int16_t>, Tuple<uint32_t, int16_t>,
@@ -1817,71 +1856,80 @@ __aicore__ inline void CastImplCommon(__ubuf__ ORI_DST_TYPE *oriDst, __ubuf__ OR
         Tuple<int32_t, int64_t>, Tuple<half, hifloat8_t>, Tuple<float, hifloat8_t>, Tuple<float, fp8_e4m3fn_t>,
         Tuple<float, fp8_e5m2_t>, Tuple<bfloat16_t, fp4x2_e1m2_t>, Tuple<bfloat16_t, fp4x2_e2m1_t>,
         Tuple<int4x2_t, int16_t>, Tuple<int16_t, int4x2_t>, Tuple<bfloat16_t, int4x2_t>>();
-    constexpr bool using_cast_rint =
-        SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4x2_t, half>,
-        Tuple<half, float>, Tuple<half, int16_t>, Tuple<float, int32_t>>();
+    constexpr bool using_cast_rint = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4x2_t, half>, Tuple<half, float>,
+        Tuple<half, int16_t>, Tuple<float, int32_t>>();
     constexpr bool cast_odd = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<half, float>, Tuple<half, int32_t>>();
-    constexpr bool cast_rint = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<fp8_e5m2_t, float>,
-        Tuple<fp8_e4m3fn_t, float>>();
+    constexpr bool cast_rint =
+        SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<fp8_e5m2_t, float>, Tuple<fp8_e4m3fn_t, float>>();
     constexpr bool cast_round =
         SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<hifloat8_t, float>, Tuple<hifloat8_t, half>>();
-    constexpr bool cast_hybrid =
-        SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<hifloat8_t, float>, Tuple<hifloat8_t, half>, Tuple<half, int32_t>>();
+    constexpr bool cast_hybrid = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<hifloat8_t, float>, Tuple<hifloat8_t, half>, Tuple<half, int32_t>>();
     switch (roundMode) {
         case RoundMode::CAST_RINT:
             if constexpr (cast_round_all || cast_rint) {
-                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_RINT, isSetMask>(dst, src, mask, repeatTime, repeatParams);
+                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_RINT, isSetMask>(
+                    dst, src, mask, repeatTime, repeatParams);
             } else {
                 ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "illegal type for cast rint"); });
             }
             break;
         case RoundMode::CAST_FLOOR:
             if constexpr (cast_round_all) {
-                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_FLOOR, isSetMask>(dst, src, mask, repeatTime, repeatParams);
+                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_FLOOR, isSetMask>(
+                    dst, src, mask, repeatTime, repeatParams);
             } else {
                 ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "illegal type for cast floor"); });
             }
             break;
         case RoundMode::CAST_CEIL:
             if constexpr (cast_round_all) {
-                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_CEIL, isSetMask>(dst, src, mask, repeatTime, repeatParams);
+                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_CEIL, isSetMask>(
+                    dst, src, mask, repeatTime, repeatParams);
             } else {
                 ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "illegal type for cast ceil"); });
             }
             break;
         case RoundMode::CAST_ROUND:
             if constexpr (cast_round_all || cast_round) {
-                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_ROUND, isSetMask>(dst, src, mask, repeatTime, repeatParams);
+                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_ROUND, isSetMask>(
+                    dst, src, mask, repeatTime, repeatParams);
             } else {
                 ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "illegal type for cast round"); });
             }
             break;
         case RoundMode::CAST_TRUNC:
             if constexpr (cast_round_all) {
-                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_TRUNC, isSetMask>(dst, src, mask, repeatTime, repeatParams);
+                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_TRUNC, isSetMask>(
+                    dst, src, mask, repeatTime, repeatParams);
             } else {
                 ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "illegal type for cast trunc"); });
             }
             break;
         case RoundMode::CAST_ODD:
             if constexpr (cast_odd) {
-                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_ODD, isSetMask>(dst, src, mask, repeatTime, repeatParams);
+                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_ODD, isSetMask>(
+                    dst, src, mask, repeatTime, repeatParams);
             } else {
                 ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "illegal type for cast odd"); });
             }
             break;
         case RoundMode::CAST_NONE:
             if constexpr (cast_none) {
-                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_NONE, isSetMask>(dst, src, mask, repeatTime, repeatParams);
+                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_NONE, isSetMask>(
+                    dst, src, mask, repeatTime, repeatParams);
             } else if constexpr (using_cast_rint) {
-                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_RINT, isSetMask>(dst, src, mask, repeatTime, repeatParams);
+                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_RINT, isSetMask>(
+                    dst, src, mask, repeatTime, repeatParams);
             } else {
                 ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "illegal type for cast none"); });
             }
             break;
         case RoundMode::CAST_HYBRID:
             if constexpr (cast_hybrid) {
-                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_HYBRID, isSetMask>(dst, src, mask, repeatTime, repeatParams);
+                CastIntrinsicsImpl<DST_TYPE, SRC_TYPE, RoundMode::CAST_HYBRID, isSetMask>(
+                    dst, src, mask, repeatTime, repeatParams);
             } else {
                 ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "illegal type for cast hybrid"); });
             }
@@ -1895,15 +1943,17 @@ __aicore__ inline void CastImplCommon(__ubuf__ ORI_DST_TYPE *oriDst, __ubuf__ OR
 
 // Cast::Level 0 - mask bit mode
 template <typename ORI_DST_TYPE, typename ORI_SRC_TYPE, bool isSetMask = true>
-__aicore__ inline void CastImpl(__ubuf__ ORI_DST_TYPE *oriDst, __ubuf__ ORI_SRC_TYPE *oriSrc, const RoundMode &roundMode,
-    const uint64_t mask[], uint8_t repeatTime, const UnaryRepeatParams &repeatParams)
+__aicore__ inline void CastImpl(
+    __ubuf__ ORI_DST_TYPE* oriDst, __ubuf__ ORI_SRC_TYPE* oriSrc, const RoundMode& roundMode, const uint64_t mask[],
+    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
     CastImplCommon<ORI_DST_TYPE, ORI_SRC_TYPE, isSetMask>(oriDst, oriSrc, roundMode, mask, repeatTime, repeatParams);
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode, bool isSetMask>
-__simd_vf__ inline void CastIntrinsicsB64ImplVF1(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint64_t mask,
-    uint8_t repeatTime, const UnaryRepeatParams repeatParams)
+__simd_vf__ inline void CastIntrinsicsB64ImplVF1(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint64_t mask, uint8_t repeatTime,
+    const UnaryRepeatParams repeatParams)
 {
     static constexpr Reg::CastTrait castTrait = {
         Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, roundMode};
@@ -1927,37 +1977,41 @@ __simd_vf__ inline void CastIntrinsicsB64ImplVF1(__ubuf__ DST_TYPE *dst, __ubuf_
     for (uint16_t i = 0; i < repeatTime; ++i) {
         if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
             // b32 -> b64
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t> &)srcVreg,
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b32Preg);
-            Reg::Interleave(
-                (Reg::RegTensor<uint32_t> &)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)srcVreg, zeroVreg);
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (Reg::RegTensor<uint32_t>&)srcVreg,
+                (__ubuf__ uint32_t*&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride,
+                b32Preg);
+            Reg::Interleave((Reg::RegTensor<uint32_t>&)srcVreg, tmpVreg, (Reg::RegTensor<uint32_t>&)srcVreg, zeroVreg);
         } else {
             // b64 -> b32
-            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>((Reg::RegTensor<uint32_t>&)srcVreg,
-                (__ubuf__ uint32_t *&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride, b64Preg);
+            Reg::LoadAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                (Reg::RegTensor<uint32_t>&)srcVreg,
+                (__ubuf__ uint32_t*&)src + i * repeatParams.srcRepStride * elePerBlk, repeatParams.srcBlkStride,
+                b64Preg);
         }
         Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, b64Preg);
         if constexpr (sizeof(DST_TYPE) == sizeof(int64_t)) {
             // b32 -> b64
             Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
             Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b64Preg);
+                (__ubuf__ uint32_t*&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t>&)dstVreg, repeatParams.dstBlkStride, b64Preg);
         } else {
             // b64 -> b32
             Reg::DeInterleave(
-                (Reg::RegTensor<uint32_t> &)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t> &)dstVreg, zeroVreg);
+                (Reg::RegTensor<uint32_t>&)dstVreg, tmpVreg, (Reg::RegTensor<uint32_t>&)dstVreg, zeroVreg);
             Reg::LocalMemBar<Reg::MemType::VEC_STORE, Reg::MemType::VEC_STORE>();
             Reg::StoreAlign<uint32_t, Reg::DataCopyMode::DATA_BLOCK_COPY>(
-                (__ubuf__ uint32_t *&)dst + i * repeatParams.dstRepStride * elePerBlk,
-                (Reg::RegTensor<uint32_t> &)dstVreg, repeatParams.dstBlkStride, b32Preg);
+                (__ubuf__ uint32_t*&)dst + i * repeatParams.dstRepStride * elePerBlk,
+                (Reg::RegTensor<uint32_t>&)dstVreg, repeatParams.dstBlkStride, b32Preg);
         }
     }
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode, bool isSetMask>
-__simd_vf__ inline void CastIntrinsicsImplVF1(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint64_t mask,
-    uint8_t repeatTime, const UnaryRepeatParams repeatParams, const half scale)
+__simd_vf__ inline void CastIntrinsicsImplVF1(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint64_t mask, uint8_t repeatTime,
+    const UnaryRepeatParams repeatParams, const half scale)
 {
     static constexpr Reg::CastTrait castTrait = {
         Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, roundMode};
@@ -1985,8 +2039,9 @@ __simd_vf__ inline void CastIntrinsicsImplVF1(__ubuf__ DST_TYPE *dst, __ubuf__ S
         }
         exPreg = ldPreg;
         Reg::MaskPack(stPreg, ldPreg);
-        if constexpr ((SupportType<DST_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(SRC_TYPE) == 2) ||
-                      (sizeof(DST_TYPE) == 1 && sizeof(SRC_TYPE) == 4)) {
+        if constexpr (
+            (SupportType<DST_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(SRC_TYPE) == 2) ||
+            (sizeof(DST_TYPE) == 1 && sizeof(SRC_TYPE) == 4)) {
             Reg::MaskPack(stPreg, stPreg);
         }
     } else if constexpr (sizeof(DST_TYPE) > sizeof(SRC_TYPE)) {
@@ -1997,8 +2052,9 @@ __simd_vf__ inline void CastIntrinsicsImplVF1(__ubuf__ DST_TYPE *dst, __ubuf__ S
         }
         exPreg = stPreg;
         Reg::MaskPack(ldPreg, stPreg);
-        if constexpr ((SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) ||
-                      (sizeof(SRC_TYPE) == 1 && sizeof(DST_TYPE) == 4)) {
+        if constexpr (
+            (SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) ||
+            (sizeof(SRC_TYPE) == 1 && sizeof(DST_TYPE) == 4)) {
             Reg::MaskPack(ldPreg, ldPreg);
             if constexpr (SupportType<SRC_TYPE, int4x2_t, fp4x2_e2m1_t, fp4x2_e1m2_t>() && sizeof(DST_TYPE) == 2) {
                 Reg::MaskUnPack(stPreg, ldPreg);
@@ -2015,7 +2071,8 @@ __simd_vf__ inline void CastIntrinsicsImplVF1(__ubuf__ DST_TYPE *dst, __ubuf__ S
             Reg::Muls(tmpVreg, tmpVreg, static_cast<float>(scale), exPreg);
             Reg::Muls(tmpVreg, tmpVreg, DEQ_SHIFT_LEFT_17_BIT, exPreg);
             Reg::Cast<DST_TYPE, float, CastParam::f322F16CastTrait>(dstVreg, tmpVreg, exPreg);
-        } else if constexpr (AscendC::Std::is_same<SRC_TYPE, float>::value && AscendC::Std::is_same<DST_TYPE, float>::value) {
+        } else if constexpr (
+            AscendC::Std::is_same<SRC_TYPE, float>::value && AscendC::Std::is_same<DST_TYPE, float>::value) {
             Reg::Truncate<DST_TYPE, roundMode>(dstVreg, srcVreg, exPreg);
         } else {
             Reg::Cast<DST_TYPE, SRC_TYPE, castTrait>(dstVreg, srcVreg, exPreg);
@@ -2025,15 +2082,17 @@ __simd_vf__ inline void CastIntrinsicsImplVF1(__ubuf__ DST_TYPE *dst, __ubuf__ S
 }
 
 template <typename DST_TYPE, typename SRC_TYPE, RoundMode roundMode, bool isSetMask>
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_TYPE *src, const uint64_t mask,
-    uint8_t repeatTime, const UnaryRepeatParams &repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ DST_TYPE* dst, __ubuf__ SRC_TYPE* src, const uint64_t mask, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
-    constexpr bool b64Cast = SupportType<Tuple<DST_TYPE, SRC_TYPE>, Tuple<float, int64_t>, Tuple<int64_t, float>,
-        Tuple<int32_t, int64_t>, Tuple<int64_t, int32_t>>();
+    constexpr bool b64Cast = SupportType<
+        Tuple<DST_TYPE, SRC_TYPE>, Tuple<float, int64_t>, Tuple<int64_t, float>, Tuple<int32_t, int64_t>,
+        Tuple<int64_t, int32_t>>();
     bool isCounterMode = Internal::IsCounterMode();
     half scale = 0;
     if (isCounterMode) {
-        __ubuf__ uint64_t *maskBuf = nullptr;
+        __ubuf__ uint64_t* maskBuf = nullptr;
         if constexpr (!isSetMask) {
             maskBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 2);
         }
@@ -2041,7 +2100,8 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
             CastIntrinsicsB64ImplCounterVF<DST_TYPE, SRC_TYPE, roundMode, isSetMask>(
                 dst, src, mask, maskBuf, repeatTime, repeatParams);
         } else {
-            if constexpr (AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
+            if constexpr (
+                AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
                 scale = Internal::g_deqValue;
             }
             CastIntrinsicsImplCounterVF<DST_TYPE, SRC_TYPE, roundMode, isSetMask>(
@@ -2052,7 +2112,8 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
             CastIntrinsicsB64ImplVF1<DST_TYPE, SRC_TYPE, roundMode, isSetMask>(
                 dst, src, mask, repeatTime, repeatParams);
         } else {
-            if constexpr (AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
+            if constexpr (
+                AscendC::Std::is_same<SRC_TYPE, int32_t>::value && AscendC::Std::is_same<DST_TYPE, half>::value) {
                 scale = Internal::g_deqValue;
             }
             CastIntrinsicsImplVF1<DST_TYPE, SRC_TYPE, roundMode, isSetMask>(
@@ -2063,8 +2124,9 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ DST_TYPE *dst, __ubuf__ SRC_T
 
 // Cast::Level 0 - mask count mode
 template <typename ORI_DST_TYPE, typename ORI_SRC_TYPE, bool isSetMask = true>
-__aicore__ inline void CastImpl(__ubuf__ ORI_DST_TYPE *oriDst, __ubuf__ ORI_SRC_TYPE *oriSrc, const RoundMode &roundMode,
-    const uint64_t mask, uint8_t repeatTime, const UnaryRepeatParams &repeatParams)
+__aicore__ inline void CastImpl(
+    __ubuf__ ORI_DST_TYPE* oriDst, __ubuf__ ORI_SRC_TYPE* oriSrc, const RoundMode& roundMode, const uint64_t mask,
+    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
     CastImplCommon<ORI_DST_TYPE, ORI_SRC_TYPE, isSetMask>(oriDst, oriSrc, roundMode, mask, repeatTime, repeatParams);
 }
@@ -2077,7 +2139,7 @@ __simd_callee__ inline float GetCastDeqScale(const uint64_t deqScale)
 {
     uint32_t tmp = static_cast<uint32_t>(deqScale & 0xffffffff);
     tmp = tmp & 0xffffe000;
-    float ret = *(reinterpret_cast<float *>(&tmp));
+    float ret = *(reinterpret_cast<float*>(&tmp));
     return ret;
 }
 
@@ -2095,29 +2157,26 @@ __simd_callee__ inline bool GetCastDeqSignMode(const uint64_t deqScale)
 
 template <typename T, Reg::HighLowPart part>
 __simd_callee__ inline void CastDeqMulsCal(
-    Reg::RegTensor<float> &tmpReg, Reg::RegTensor<T> &srcReg, Reg::MaskReg &maskReg, const float scale)
+    Reg::RegTensor<float>& tmpReg, Reg::RegTensor<T>& srcReg, Reg::MaskReg& maskReg, const float scale)
 {
     Reg::Cast<float, T, CastParam::s162f32CastTrait>(tmpReg, srcReg, maskReg);
     Reg::Muls(tmpReg, tmpReg, scale, maskReg);
     Reg::Cast<T, float, CastParam::f322s16CastTrait>(srcReg, tmpReg, maskReg);
-    Reg::Pack<uint16_t, uint32_t, part>(
-        (Reg::RegTensor<uint16_t> &)srcReg, (Reg::RegTensor<uint32_t> &)srcReg);
+    Reg::Pack<uint16_t, uint32_t, part>((Reg::RegTensor<uint16_t>&)srcReg, (Reg::RegTensor<uint32_t>&)srcReg);
 }
 
 template <typename T, Reg::HighLowPart part>
-__simd_callee__ inline void CastVecDeqMulsCal(Reg::RegTensor<int32_t> &tmpReg, Reg::RegTensor<T> &srcReg,
-    Reg::MaskReg &maskReg, Reg::RegTensor<float> &scaleReg)
+__simd_callee__ inline void CastVecDeqMulsCal(
+    Reg::RegTensor<int32_t>& tmpReg, Reg::RegTensor<T>& srcReg, Reg::MaskReg& maskReg, Reg::RegTensor<float>& scaleReg)
 {
-    Reg::Cast<float, T, CastParam::s162f32CastTrait>((Reg::RegTensor<float> &)tmpReg, srcReg, maskReg);
-    Reg::Mul((Reg::RegTensor<float> &)tmpReg, (Reg::RegTensor<float> &)tmpReg, scaleReg, maskReg);
-    Reg::Cast<T, float, CastParam::f322s16CastTrait>(srcReg, (Reg::RegTensor<float> &)tmpReg, maskReg);
-    Reg::Pack<uint16_t, uint32_t, part>(
-        (Reg::RegTensor<uint16_t> &)srcReg, (Reg::RegTensor<uint32_t> &)srcReg);
+    Reg::Cast<float, T, CastParam::s162f32CastTrait>((Reg::RegTensor<float>&)tmpReg, srcReg, maskReg);
+    Reg::Mul((Reg::RegTensor<float>&)tmpReg, (Reg::RegTensor<float>&)tmpReg, scaleReg, maskReg);
+    Reg::Cast<T, float, CastParam::f322s16CastTrait>(srcReg, (Reg::RegTensor<float>&)tmpReg, maskReg);
+    Reg::Pack<uint16_t, uint32_t, part>((Reg::RegTensor<uint16_t>&)srcReg, (Reg::RegTensor<uint32_t>&)srcReg);
 }
 
 template <typename U, typename T, bool halfBlock, bool signMode>
-__simd_callee__ inline void CastFromS92B8(
-    Reg::RegTensor<T> &srcReg, Reg::RegTensor<U> &dstReg, Reg::MaskReg &maskReg)
+__simd_callee__ inline void CastFromS92B8(Reg::RegTensor<T>& srcReg, Reg::RegTensor<U>& dstReg, Reg::MaskReg& maskReg)
 {
     if constexpr (signMode) {
         if constexpr (halfBlock) {
@@ -2133,7 +2192,8 @@ __simd_callee__ inline void CastFromS92B8(
         if constexpr (halfBlock) {
             Reg::Cast<uint8_t, T, CastParam::TrueHalfBlockCastTrait>((Reg::RegTensor<uint8_t>&)dstReg, srcReg, maskReg);
         } else {
-            Reg::Cast<uint8_t, T, CastParam::FalseHalfBlockCastTrait>((Reg::RegTensor<uint8_t>&)dstReg, srcReg, maskReg);
+            Reg::Cast<uint8_t, T, CastParam::FalseHalfBlockCastTrait>(
+                (Reg::RegTensor<uint8_t>&)dstReg, srcReg, maskReg);
         }
     }
 }
@@ -2174,9 +2234,9 @@ __simd_callee__ inline void GenGatherIndex(Reg::RegTensor<int8_t>& dstReg)
     Reg::Add(dstReg, lowHalfReg, baseOffsetReg, mask);
 }
 
-__simd_callee__ inline void GenVecCastDeqParam(uint64_t deqScaleAddr, Reg::RegTensor<float> &scaleReg,
-    Reg::RegTensor<int16_t> &offsetReg, Reg::MaskReg &signMask, Reg::MaskReg &unSignMask,
-    Reg::RegTensor<int32_t> &tmpReg, Reg::MaskReg &fullMask)
+__simd_callee__ inline void GenVecCastDeqParam(
+    uint64_t deqScaleAddr, Reg::RegTensor<float>& scaleReg, Reg::RegTensor<int16_t>& offsetReg, Reg::MaskReg& signMask,
+    Reg::MaskReg& unSignMask, Reg::RegTensor<int32_t>& tmpReg, Reg::MaskReg& fullMask)
 {
     constexpr int16_t offsetShiftLeftScalar = 18;
     constexpr int16_t offsetShiftRightScalar = 55;
@@ -2188,21 +2248,24 @@ __simd_callee__ inline void GenVecCastDeqParam(uint64_t deqScaleAddr, Reg::RegTe
     Reg::RegTensor<int32_t> scaleIndexReg;
     Reg::RegTensor<int16_t> offsetIndexReg;
     Reg::RegTensor<int16_t> signModeReg;
-    Reg::LoadAlign(scaleReg, (__ubuf__ float *)deqScaleAddr);
-    Reg::Pack((Reg::RegTensor<uint32_t> &)scaleReg, (Reg::RegTensor<uint64_t> &)scaleReg);
+    Reg::LoadAlign(scaleReg, (__ubuf__ float*)deqScaleAddr);
+    Reg::Pack((Reg::RegTensor<uint32_t>&)scaleReg, (Reg::RegTensor<uint64_t>&)scaleReg);
 
-    Reg::LoadAlign(offsetReg, (__ubuf__ int16_t *)deqScaleAddr);
+    Reg::LoadAlign(offsetReg, (__ubuf__ int16_t*)deqScaleAddr);
     signMask = Reg::CreateMask<uint64_t, Reg::MaskPattern::VL16>();
-    Reg::ShiftLefts((Reg::RegTensor<uint64_t> &)offsetReg, (Reg::RegTensor<uint64_t> &)offsetReg, offsetShiftLeftScalar, signMask);
-    Reg::ShiftRights((Reg::RegTensor<uint64_t> &)offsetReg, (Reg::RegTensor<uint64_t> &)offsetReg, offsetShiftRightScalar, signMask);
-    Reg::Pack((Reg::RegTensor<uint32_t> &)offsetReg, (Reg::RegTensor<uint64_t> &)offsetReg);
-    Reg::Pack((Reg::RegTensor<uint16_t> &)offsetReg, (Reg::RegTensor<uint32_t> &)offsetReg);
+    Reg::ShiftLefts(
+        (Reg::RegTensor<uint64_t>&)offsetReg, (Reg::RegTensor<uint64_t>&)offsetReg, offsetShiftLeftScalar, signMask);
+    Reg::ShiftRights(
+        (Reg::RegTensor<uint64_t>&)offsetReg, (Reg::RegTensor<uint64_t>&)offsetReg, offsetShiftRightScalar, signMask);
+    Reg::Pack((Reg::RegTensor<uint32_t>&)offsetReg, (Reg::RegTensor<uint64_t>&)offsetReg);
+    Reg::Pack((Reg::RegTensor<uint16_t>&)offsetReg, (Reg::RegTensor<uint32_t>&)offsetReg);
 
-    Reg::LoadAlign(signModeReg, (__ubuf__ int16_t *)deqScaleAddr);
-    Reg::ShiftRights((Reg::RegTensor<uint64_t> &)signModeReg, (Reg::RegTensor<uint64_t> &)signModeReg,
-        signModeShiftRightScalar, signMask);
-    Reg::Pack((Reg::RegTensor<uint32_t> &)signModeReg, (Reg::RegTensor<uint64_t> &)signModeReg);
-    Reg::Pack((Reg::RegTensor<uint16_t> &)signModeReg, (Reg::RegTensor<uint32_t> &)signModeReg);
+    Reg::LoadAlign(signModeReg, (__ubuf__ int16_t*)deqScaleAddr);
+    Reg::ShiftRights(
+        (Reg::RegTensor<uint64_t>&)signModeReg, (Reg::RegTensor<uint64_t>&)signModeReg, signModeShiftRightScalar,
+        signMask);
+    Reg::Pack((Reg::RegTensor<uint32_t>&)signModeReg, (Reg::RegTensor<uint64_t>&)signModeReg);
+    Reg::Pack((Reg::RegTensor<uint16_t>&)signModeReg, (Reg::RegTensor<uint32_t>&)signModeReg);
 
     // Gen b32 fullMask to deal scaleReg (which datatype is float)
     fullMask = Reg::CreateMask<uint32_t, Reg::MaskPattern::ALL>();
@@ -2211,38 +2274,46 @@ __simd_callee__ inline void GenVecCastDeqParam(uint64_t deqScaleAddr, Reg::RegTe
     Reg::Div(tmpReg, scaleIndexReg, tmpReg, fullMask);
     Reg::Muls(tmpReg, tmpReg, gatherConstant, fullMask);
     Reg::Sub(scaleIndexReg, scaleIndexReg, tmpReg, fullMask);
-    Reg::Gather((Reg::RegTensor<uint32_t> &)scaleReg, (Reg::RegTensor<uint32_t> &)scaleReg, (Reg::RegTensor<uint32_t> &)scaleIndexReg);
+    Reg::Gather(
+        (Reg::RegTensor<uint32_t>&)scaleReg, (Reg::RegTensor<uint32_t>&)scaleReg,
+        (Reg::RegTensor<uint32_t>&)scaleIndexReg);
     Reg::Duplicate(tmpReg, scaleMask);
-    Reg::And((Reg::RegTensor<int32_t> &)scaleReg, (Reg::RegTensor<int32_t> &)scaleReg, tmpReg, fullMask);
+    Reg::And((Reg::RegTensor<int32_t>&)scaleReg, (Reg::RegTensor<int32_t>&)scaleReg, tmpReg, fullMask);
 
-    // Pack lowest 16bit of mrg2ChnIndexReg, because in API "Gather", the sizeof(offsetReg) should be the same as sizeof(mrg2ChnIndexReg)
+    // Pack lowest 16bit of mrg2ChnIndexReg, because in API "Gather", the sizeof(offsetReg) should be the same as
+    // sizeof(mrg2ChnIndexReg)
     fullMask = Reg::CreateMask<uint16_t, Reg::MaskPattern::ALL>();
     Reg::Arange(offsetIndexReg, zero);
-    Reg::Duplicate((Reg::RegTensor<int16_t> &)tmpReg, gatherConstant);
-    Reg::Div((Reg::RegTensor<int16_t> &)tmpReg, offsetIndexReg, (Reg::RegTensor<int16_t> &)tmpReg, fullMask);
-    Reg::Muls((Reg::RegTensor<int16_t> &)tmpReg, (Reg::RegTensor<int16_t> &)tmpReg, gatherConstant, fullMask);
-    Reg::Sub(offsetIndexReg, offsetIndexReg, (Reg::RegTensor<int16_t> &)tmpReg, fullMask);
-    Reg::Gather((Reg::RegTensor<uint16_t> &)offsetReg, (Reg::RegTensor<uint16_t> &)offsetReg, (Reg::RegTensor<uint16_t> &)offsetIndexReg);
+    Reg::Duplicate((Reg::RegTensor<int16_t>&)tmpReg, gatherConstant);
+    Reg::Div((Reg::RegTensor<int16_t>&)tmpReg, offsetIndexReg, (Reg::RegTensor<int16_t>&)tmpReg, fullMask);
+    Reg::Muls((Reg::RegTensor<int16_t>&)tmpReg, (Reg::RegTensor<int16_t>&)tmpReg, gatherConstant, fullMask);
+    Reg::Sub(offsetIndexReg, offsetIndexReg, (Reg::RegTensor<int16_t>&)tmpReg, fullMask);
+    Reg::Gather(
+        (Reg::RegTensor<uint16_t>&)offsetReg, (Reg::RegTensor<uint16_t>&)offsetReg,
+        (Reg::RegTensor<uint16_t>&)offsetIndexReg);
 
-    Reg::Gather((Reg::RegTensor<uint16_t> &)signModeReg, (Reg::RegTensor<uint16_t> &)signModeReg, (Reg::RegTensor<uint16_t> &)offsetIndexReg);
+    Reg::Gather(
+        (Reg::RegTensor<uint16_t>&)signModeReg, (Reg::RegTensor<uint16_t>&)signModeReg,
+        (Reg::RegTensor<uint16_t>&)offsetIndexReg);
     // Gen mask for elements which cast to sign and cast to unsign
-    Reg::Duplicate((Reg::RegTensor<int16_t> &)tmpReg, one);
-    Reg::Compare(signMask, signModeReg, (Reg::RegTensor<int16_t> &)tmpReg, fullMask);
-    Reg::Duplicate((Reg::RegTensor<int16_t> &)tmpReg, zero);
-    Reg::Compare(unSignMask, signModeReg, (Reg::RegTensor<int16_t> &)tmpReg, fullMask);
+    Reg::Duplicate((Reg::RegTensor<int16_t>&)tmpReg, one);
+    Reg::Compare(signMask, signModeReg, (Reg::RegTensor<int16_t>&)tmpReg, fullMask);
+    Reg::Duplicate((Reg::RegTensor<int16_t>&)tmpReg, zero);
+    Reg::Compare(unSignMask, signModeReg, (Reg::RegTensor<int16_t>&)tmpReg, fullMask);
 }
 
 template <bool halfBlock>
-__simd_callee__ inline void GenLevel0StoreMask(Reg::MaskReg &srcMask, Reg::MaskReg &dstMask,
-    Reg::RegTensor<uint8_t> &mrg2ChnIndexReg, Reg::RegTensor<uint8_t> &tmpReg, Reg::MaskReg &fullMask)
+__simd_callee__ inline void GenLevel0StoreMask(
+    Reg::MaskReg& srcMask, Reg::MaskReg& dstMask, Reg::RegTensor<uint8_t>& mrg2ChnIndexReg,
+    Reg::RegTensor<uint8_t>& tmpReg, Reg::MaskReg& fullMask)
 {
     constexpr uint8_t cmpScalar = 1;
     if constexpr (halfBlock) {
         constexpr uint16_t scalar = 0x0100;
-        Reg::Duplicate((Reg::RegTensor<uint16_t> &)tmpReg, scalar, srcMask);
+        Reg::Duplicate((Reg::RegTensor<uint16_t>&)tmpReg, scalar, srcMask);
     } else {
         constexpr uint16_t scalar = 0x0001;
-        Reg::Duplicate((Reg::RegTensor<uint16_t> &)tmpReg, scalar, srcMask);
+        Reg::Duplicate((Reg::RegTensor<uint16_t>&)tmpReg, scalar, srcMask);
     }
     Reg::Gather(tmpReg, tmpReg, mrg2ChnIndexReg);
     Reg::CompareScalar(dstMask, tmpReg, cmpScalar, fullMask);
@@ -2250,7 +2321,7 @@ __simd_callee__ inline void GenLevel0StoreMask(Reg::MaskReg &srcMask, Reg::MaskR
 
 template <typename U, typename T, bool halfBlock>
 __simd_vf__ inline void CastVecDeqImplVF(
-    __ubuf__ U *dst, __ubuf__ T *src, const uint32_t calCount, uint64_t deqScaleAddr)
+    __ubuf__ U* dst, __ubuf__ T* src, const uint32_t calCount, uint64_t deqScaleAddr)
 {
     Reg::RegTensor<U> dstReg;
     Reg::RegTensor<T> srcReg0, srcReg1;
@@ -2269,7 +2340,7 @@ __simd_vf__ inline void CastVecDeqImplVF(
     uint16_t repeatTime = CeilDivision(calCount, oneRepSize);
     GenVecCastDeqParam(deqScaleAddr, scaleReg, offsetReg, signMask, unSignMask, tmpReg, fullMask);
     uint32_t sreg = static_cast<uint32_t>(calCount);
-    Reg::Duplicate((Reg::RegTensor<int16_t> &)vAndReg, 0x00ff);
+    Reg::Duplicate((Reg::RegTensor<int16_t>&)vAndReg, 0x00ff);
     GenGatherIndex((Reg::RegTensor<int8_t>&)mrg2ChnIndexReg);
     for (uint16_t i = 0; i < repeatTime; ++i) {
         maskReg0 = Reg::UpdateMask<T>(sreg);
@@ -2283,16 +2354,16 @@ __simd_vf__ inline void CastVecDeqImplVF(
         Reg::Maxs(srcReg0, srcReg0, s9MinValue, maskReg0);
         Reg::Mins(srcReg0, srcReg0, s9MaxValue, maskReg0);
         Reg::Add(srcReg0, srcReg0, offsetReg, maskReg0);
-        CastFromS92B8<int8_t, T, halfBlock, true>(srcReg0, (Reg::RegTensor<int8_t> &)signDstReg, signMask);
-        CastFromS92B8<uint8_t, T, halfBlock, false>(srcReg0, (Reg::RegTensor<uint8_t> &)unSignDstReg, unSignMask);
-        Reg::Select((Reg::RegTensor<int16_t> &)dstReg, signDstReg, (Reg::RegTensor<int16_t> &)unSignDstReg, signMask);
+        CastFromS92B8<int8_t, T, halfBlock, true>(srcReg0, (Reg::RegTensor<int8_t>&)signDstReg, signMask);
+        CastFromS92B8<uint8_t, T, halfBlock, false>(srcReg0, (Reg::RegTensor<uint8_t>&)unSignDstReg, unSignMask);
+        Reg::Select((Reg::RegTensor<int16_t>&)dstReg, signDstReg, (Reg::RegTensor<int16_t>&)unSignDstReg, signMask);
         Gather(dstReg, dstReg, mrg2ChnIndexReg);
-        Reg::StoreAlign((__ubuf__ T*)dst + i * oneRepSize, (Reg::RegTensor<T> &)dstReg, fullMask);
+        Reg::StoreAlign((__ubuf__ T*)dst + i * oneRepSize, (Reg::RegTensor<T>&)dstReg, fullMask);
     }
 }
 
 template <typename U, typename T, bool halfBlock, bool signMode>
-__simd_vf__ inline void CastDeqImplVF(__ubuf__ U *dst, __ubuf__ T *src, const uint32_t calCount, uint64_t deqScale)
+__simd_vf__ inline void CastDeqImplVF(__ubuf__ U* dst, __ubuf__ T* src, const uint32_t calCount, uint64_t deqScale)
 {
     Reg::RegTensor<T> srcReg0, srcReg1;
     Reg::RegTensor<float> tmpReg;
@@ -2329,7 +2400,8 @@ __simd_vf__ inline void CastDeqImplVF(__ubuf__ U *dst, __ubuf__ T *src, const ui
 }
 
 template <typename U, typename T>
-__simd_vf__ inline void CastDeqS322f16ImplVF(__ubuf__ U *dst, __ubuf__ T *src, const uint32_t calCount, const half deqScale)
+__simd_vf__ inline void CastDeqS322f16ImplVF(
+    __ubuf__ U* dst, __ubuf__ T* src, const uint32_t calCount, const half deqScale)
 {
     Reg::RegTensor<T> srcReg;
     Reg::RegTensor<float> tmpVreg;
@@ -2351,10 +2423,12 @@ __simd_vf__ inline void CastDeqS322f16ImplVF(__ubuf__ U *dst, __ubuf__ T *src, c
 }
 
 template <typename U, typename T, bool isVecDeq, bool halfBlock>
-__aicore__ inline void CastDeqImpl(__ubuf__ U *dst, __ubuf__ T *src, const uint32_t calCount)
+__aicore__ inline void CastDeqImpl(__ubuf__ U* dst, __ubuf__ T* src, const uint32_t calCount)
 {
-    static_assert(SupportType<Tuple<T, U>, Tuple<int16_t, int8_t>, Tuple<int16_t, uint8_t>, Tuple<int32_t, half>>(),
-        "Failed to check dtype in CastDeqImpl, current api support dtype combination is src: int16_t dst: int8_t/uint8_t"
+    static_assert(
+        SupportType<Tuple<T, U>, Tuple<int16_t, int8_t>, Tuple<int16_t, uint8_t>, Tuple<int32_t, half>>(),
+        "Failed to check dtype in CastDeqImpl, current api support dtype combination is src: int16_t dst: "
+        "int8_t/uint8_t"
         ", src:int32_t dst:half.");
     if constexpr (IsSameType<T, int32_t>::value) {
         half scale = Internal::g_deqValue;
@@ -2375,8 +2449,9 @@ __aicore__ inline void CastDeqImpl(__ubuf__ U *dst, __ubuf__ T *src, const uint3
 }
 
 template <typename U, typename T, bool isCounterMode, bool isBitMap, bool isSetMask, bool halfBlock>
-__simd_vf__ inline void CastVecDeqLevel0ImplVF(__ubuf__ U *dst, __ubuf__ T *src, const int32_t mask,
-    __ubuf__ uint64_t *tempBuf, uint8_t repeatTime, const UnaryRepeatParams repeatParams, uint64_t deqScaleAddr)
+__simd_vf__ inline void CastVecDeqLevel0ImplVF(
+    __ubuf__ U* dst, __ubuf__ T* src, const int32_t mask, __ubuf__ uint64_t* tempBuf, uint8_t repeatTime,
+    const UnaryRepeatParams repeatParams, uint64_t deqScaleAddr)
 {
     Reg::RegTensor<U> dstReg;
     Reg::RegTensor<T> srcReg0, srcReg1;
@@ -2425,32 +2500,36 @@ __simd_vf__ inline void CastVecDeqLevel0ImplVF(__ubuf__ U *dst, __ubuf__ T *src,
             maskReg0 = Reg::UpdateMask<T>(sreg);
         }
         Reg::MaskInterleave<T>(maskReg1, maskReg2, maskReg0, fullMask);
-        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg0, src + i * blockElm * repeatParams.srcRepStride,
-            static_cast<uint32_t>(repeatParams.srcBlkStride), maskReg1);
-        Reg::UnPack((Reg::RegTensor<uint32_t> &)srcReg0, (Reg::RegTensor<uint16_t> &)srcReg0);
+        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+            srcReg0, src + i * blockElm * repeatParams.srcRepStride, static_cast<uint32_t>(repeatParams.srcBlkStride),
+            maskReg1);
+        Reg::UnPack((Reg::RegTensor<uint32_t>&)srcReg0, (Reg::RegTensor<uint16_t>&)srcReg0);
         CastVecDeqMulsCal<T, Reg::HighLowPart::LOWEST>(tmpReg, srcReg0, maskReg1, scaleReg);
-        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg1, src + i * blockElm * repeatParams.srcRepStride + halfRepStride,
+        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+            srcReg1, src + i * blockElm * repeatParams.srcRepStride + halfRepStride,
             static_cast<uint32_t>(repeatParams.srcBlkStride), maskReg2);
-        Reg::UnPack((Reg::RegTensor<uint32_t> &)srcReg1, (Reg::RegTensor<uint16_t> &)srcReg1);
+        Reg::UnPack((Reg::RegTensor<uint32_t>&)srcReg1, (Reg::RegTensor<uint16_t>&)srcReg1);
         CastVecDeqMulsCal<T, Reg::HighLowPart::HIGHEST>(tmpReg, srcReg1, maskReg2, scaleReg);
         maskReg1 = Reg::CreateMask<T, Reg::MaskPattern::H>();
         Reg::Select(srcReg0, srcReg0, srcReg1, maskReg1);
         Reg::Maxs(srcReg0, srcReg0, s9MinValue, maskReg0);
         Reg::Mins(srcReg0, srcReg0, s9MaxValue, maskReg0);
         Reg::Add(srcReg0, srcReg0, offsetReg, maskReg0);
-        CastFromS92B8<int8_t, T, halfBlock, true>(srcReg0, (Reg::RegTensor<int8_t> &)signDstReg, signMask);
-        CastFromS92B8<uint8_t, T, halfBlock, false>(srcReg0, (Reg::RegTensor<uint8_t> &)unSignDstReg, unSignMask);
-        Reg::Select((Reg::RegTensor<int16_t> &)dstReg, signDstReg, (Reg::RegTensor<int16_t> &)unSignDstReg, signMask);
+        CastFromS92B8<int8_t, T, halfBlock, true>(srcReg0, (Reg::RegTensor<int8_t>&)signDstReg, signMask);
+        CastFromS92B8<uint8_t, T, halfBlock, false>(srcReg0, (Reg::RegTensor<uint8_t>&)unSignDstReg, unSignMask);
+        Reg::Select((Reg::RegTensor<int16_t>&)dstReg, signDstReg, (Reg::RegTensor<int16_t>&)unSignDstReg, signMask);
         Reg::Gather(dstReg, dstReg, mrg2ChnIndexReg);
-        GenLevel0StoreMask<halfBlock>(maskReg0, dstMask, mrg2ChnIndexReg, (Reg::RegTensor<uint8_t> &)tmpReg, fullMask);
-        Reg::StoreAlign<U, Reg::DataCopyMode::DATA_BLOCK_COPY>(dst + i * dstBlockElm * repeatParams.dstRepStride,
-            dstReg, static_cast<uint32_t>(repeatParams.dstBlkStride), dstMask);
+        GenLevel0StoreMask<halfBlock>(maskReg0, dstMask, mrg2ChnIndexReg, (Reg::RegTensor<uint8_t>&)tmpReg, fullMask);
+        Reg::StoreAlign<U, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+            dst + i * dstBlockElm * repeatParams.dstRepStride, dstReg, static_cast<uint32_t>(repeatParams.dstBlkStride),
+            dstMask);
     }
 }
 
 template <typename U, typename T, bool isCounterMode, bool isBitMap, bool isSetMask, bool halfBlock, bool signMode>
-__simd_vf__ inline void CastDeqLevel0ImplVF(__ubuf__ U *dst, __ubuf__ T *src, const int32_t mask,
-    __ubuf__ uint64_t *tempBuf, uint8_t repeatTime, const UnaryRepeatParams repeatParams, uint64_t deqScale)
+__simd_vf__ inline void CastDeqLevel0ImplVF(
+    __ubuf__ U* dst, __ubuf__ T* src, const int32_t mask, __ubuf__ uint64_t* tempBuf, uint8_t repeatTime,
+    const UnaryRepeatParams repeatParams, uint64_t deqScale)
 {
     Reg::RegTensor<T> srcReg0, srcReg1;
     Reg::RegTensor<float> tmpReg;
@@ -2497,29 +2576,33 @@ __simd_vf__ inline void CastDeqLevel0ImplVF(__ubuf__ U *dst, __ubuf__ T *src, co
             maskReg0 = Reg::UpdateMask<T>(sreg);
         }
         Reg::MaskInterleave<T>(maskReg1, maskReg2, maskReg0, fullMask);
-        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg0, src + i * blockElm * repeatParams.srcRepStride,
-            static_cast<uint32_t>(repeatParams.srcBlkStride), maskReg1);
-        Reg::UnPack((Reg::RegTensor<uint32_t> &)srcReg0, (Reg::RegTensor<uint16_t> &)srcReg0);
+        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+            srcReg0, src + i * blockElm * repeatParams.srcRepStride, static_cast<uint32_t>(repeatParams.srcBlkStride),
+            maskReg1);
+        Reg::UnPack((Reg::RegTensor<uint32_t>&)srcReg0, (Reg::RegTensor<uint16_t>&)srcReg0);
         CastDeqMulsCal<T, Reg::HighLowPart::LOWEST>(tmpReg, srcReg0, maskReg1, scale);
-        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg1, src + i * blockElm * repeatParams.srcRepStride + halfRepStride,
+        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+            srcReg1, src + i * blockElm * repeatParams.srcRepStride + halfRepStride,
             static_cast<uint32_t>(repeatParams.srcBlkStride), maskReg2);
-        Reg::UnPack((Reg::RegTensor<uint32_t> &)srcReg1, (Reg::RegTensor<uint16_t> &)srcReg1);
+        Reg::UnPack((Reg::RegTensor<uint32_t>&)srcReg1, (Reg::RegTensor<uint16_t>&)srcReg1);
         CastDeqMulsCal<T, Reg::HighLowPart::HIGHEST>(tmpReg, srcReg1, maskReg2, scale);
         Reg::Or(srcReg0, srcReg0, srcReg1, maskReg0);
         Reg::Maxs(srcReg0, srcReg0, s9MinValue, maskReg0);
         Reg::Mins(srcReg0, srcReg0, s9MaxValue, maskReg0);
         Reg::Adds(srcReg0, srcReg0, offset, maskReg0);
         CastFromS92B8<U, T, halfBlock, signMode>(srcReg0, dstReg, maskReg0);
-        Reg::Gather((Reg::RegTensor<uint8_t> &)dstReg, (Reg::RegTensor<uint8_t> &)dstReg, mrg2ChnIndexReg);
-        GenLevel0StoreMask<halfBlock>(maskReg0, dstMask, mrg2ChnIndexReg, (Reg::RegTensor<uint8_t> &)tmpReg, fullMask);
-        Reg::StoreAlign<U, Reg::DataCopyMode::DATA_BLOCK_COPY>(dst + i * dstBlockElm * repeatParams.dstRepStride, dstReg,
-            static_cast<uint32_t>(repeatParams.dstBlkStride), dstMask);
+        Reg::Gather((Reg::RegTensor<uint8_t>&)dstReg, (Reg::RegTensor<uint8_t>&)dstReg, mrg2ChnIndexReg);
+        GenLevel0StoreMask<halfBlock>(maskReg0, dstMask, mrg2ChnIndexReg, (Reg::RegTensor<uint8_t>&)tmpReg, fullMask);
+        Reg::StoreAlign<U, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+            dst + i * dstBlockElm * repeatParams.dstRepStride, dstReg, static_cast<uint32_t>(repeatParams.dstBlkStride),
+            dstMask);
     }
 }
 
 template <typename U, typename T, bool isCounterMode, bool isBitMap, bool isSetMask>
-__simd_vf__ inline void CastDeqS322f16Level0ImplVF(__ubuf__ U *dst, __ubuf__ T *src, const int32_t mask,
-    __ubuf__ uint64_t *tempBuf, uint8_t repeatTime, const UnaryRepeatParams repeatParams, const half deqScale)
+__simd_vf__ inline void CastDeqS322f16Level0ImplVF(
+    __ubuf__ U* dst, __ubuf__ T* src, const int32_t mask, __ubuf__ uint64_t* tempBuf, uint8_t repeatTime,
+    const UnaryRepeatParams repeatParams, const half deqScale)
 {
     Reg::RegTensor<T> srcReg;
     Reg::RegTensor<float> tmpVreg;
@@ -2556,28 +2639,32 @@ __simd_vf__ inline void CastDeqS322f16Level0ImplVF(__ubuf__ U *dst, __ubuf__ T *
             maskReg = Reg::UpdateMask<T>(sreg);
             Reg::MaskPack(dstMask, maskReg);
         }
-        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg, src + i * srcBlockElm * repeatParams.srcRepStride,
-            static_cast<uint32_t>(repeatParams.srcBlkStride), maskReg);
+        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+            srcReg, src + i * srcBlockElm * repeatParams.srcRepStride, static_cast<uint32_t>(repeatParams.srcBlkStride),
+            maskReg);
         Reg::Cast<float, T, CastParam::s322F32CastTrait>(tmpVreg, srcReg, maskReg);
         Reg::Muls(tmpVreg, tmpVreg, DEQ_SHIFT_RIGHT_17_BIT, maskReg);
         Reg::Muls(tmpVreg, tmpVreg, static_cast<float>(deqScale), maskReg);
         Reg::Muls(tmpVreg, tmpVreg, DEQ_SHIFT_LEFT_17_BIT, maskReg);
         Reg::Cast<U, float, CastParam::f322F16CastTrait>(dstReg, tmpVreg, maskReg);
         Reg::Pack((Reg::RegTensor<uint16_t>&)dstReg, (Reg::RegTensor<uint32_t>&)dstReg);
-        Reg::StoreAlign<U, Reg::DataCopyMode::DATA_BLOCK_COPY>(dst + i * dstBlockElm * repeatParams.dstRepStride, dstReg,
-            static_cast<uint32_t>(repeatParams.dstBlkStride), dstMask);
+        Reg::StoreAlign<U, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+            dst + i * dstBlockElm * repeatParams.dstRepStride, dstReg, static_cast<uint32_t>(repeatParams.dstBlkStride),
+            dstMask);
     }
 }
 
 template <typename U, typename T, bool isSetMask = true, bool isVecDeq, bool halfBlock>
 __aicore__ inline void CastDeqImpl(
-    __ubuf__ U *dst, __ubuf__ T *src, const uint64_t mask[], uint8_t repeatTime, const UnaryRepeatParams &repeatParams)
+    __ubuf__ U* dst, __ubuf__ T* src, const uint64_t mask[], uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
-    static_assert(SupportType<Tuple<T, U>, Tuple<int16_t, int8_t>, Tuple<int16_t, uint8_t>, Tuple<int32_t, half>>(),
-        "Failed to check dtype in CastDeqImpl, current api support dtype combination is src: int16_t dst: int8_t/uint8_t"
+    static_assert(
+        SupportType<Tuple<T, U>, Tuple<int16_t, int8_t>, Tuple<int16_t, uint8_t>, Tuple<int32_t, half>>(),
+        "Failed to check dtype in CastDeqImpl, current api support dtype combination is src: int16_t dst: "
+        "int8_t/uint8_t"
         ", src:int32_t dst:half.");
     bool isCounterMode = Internal::IsCounterMode();
-    __ubuf__ uint64_t *tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 4);
+    __ubuf__ uint64_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 4);
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
     }
@@ -2626,13 +2713,15 @@ __aicore__ inline void CastDeqImpl(
 
 template <typename U, typename T, bool isSetMask = true, bool isVecDeq, bool halfBlock>
 __aicore__ inline void CastDeqImpl(
-    __ubuf__ U *dst, __ubuf__ T *src, const int32_t mask, uint8_t repeatTime, const UnaryRepeatParams &repeatParams)
+    __ubuf__ U* dst, __ubuf__ T* src, const int32_t mask, uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
-    static_assert(SupportType<Tuple<T, U>, Tuple<int16_t, int8_t>, Tuple<int16_t, uint8_t>, Tuple<int32_t, half>>(),
-        "Failed to check dtype in CastDeqImpl, current api support dtype combination is src: int16_t dst: int8_t/uint8_t"
+    static_assert(
+        SupportType<Tuple<T, U>, Tuple<int16_t, int8_t>, Tuple<int16_t, uint8_t>, Tuple<int32_t, half>>(),
+        "Failed to check dtype in CastDeqImpl, current api support dtype combination is src: int16_t dst: "
+        "int8_t/uint8_t"
         ", src:int32_t dst:half.");
     bool isCounterMode = Internal::IsCounterMode();
-    __ubuf__ uint64_t *tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 4);
+    __ubuf__ uint64_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint64_t>(GetRuntimeUBSize(), 4);
     if constexpr (IsSameType<T, int32_t>::value) {
         half scale = Internal::g_deqValue;
         if (isCounterMode) {
@@ -2678,14 +2767,14 @@ __aicore__ inline void CastDeqImpl(
 
 namespace RegAddReluCast {
 template <typename T1, typename T2, typename RegT, typename RegU>
-__simd_callee__ inline void AddReluCast(RegT &dstReg, RegU &src0Reg, RegU &src1Reg, Reg::MaskReg &mask)
+__simd_callee__ inline void AddReluCast(RegT& dstReg, RegU& src0Reg, RegU& src1Reg, Reg::MaskReg& mask)
 {
     Reg::Add(src0Reg, src0Reg, src1Reg, mask);
     Reg::Maxs(src0Reg, src0Reg, static_cast<T2>(0), mask);
     if constexpr (IsSameType<T2, float>::value) {
         Reg::Cast<T1, T2, CastParam::AddReluCastTrait>(dstReg, src0Reg, mask);
         Reg::Pack<uint16_t, uint32_t, Reg::HighLowPart::LOWEST>(
-            (Reg::RegTensor<uint16_t> &)dstReg, (Reg::RegTensor<uint32_t> &)dstReg);
+            (Reg::RegTensor<uint16_t>&)dstReg, (Reg::RegTensor<uint32_t>&)dstReg);
     } else {
         if constexpr (IsSameType<T2, int16_t>::value) {
             Reg::RegTensor<half> tmpReg;
@@ -2695,21 +2784,24 @@ __simd_callee__ inline void AddReluCast(RegT &dstReg, RegU &src0Reg, RegU &src1R
             Reg::Cast<T1, T2, CastParam::AddReluCastTrait>(dstReg, src0Reg, mask);
         }
         Reg::Pack<uint8_t, uint16_t, Reg::HighLowPart::LOWEST>(
-            (Reg::RegTensor<uint8_t> &)dstReg, (Reg::RegTensor<uint16_t> &)dstReg);
+            (Reg::RegTensor<uint8_t>&)dstReg, (Reg::RegTensor<uint16_t>&)dstReg);
     }
 }
-}  // namespace RegAddReluCast
+} // namespace RegAddReluCast
 
-template <typename T1, typename T2> constexpr __aicore__ inline void CheckAddReluCastSupportType()
+template <typename T1, typename T2>
+constexpr __aicore__ inline void CheckAddReluCastSupportType()
 {
-    static_assert(SupportType<Tuple<T1, T2>, Tuple<half, float>, Tuple<int8_t, half>, Tuple<int8_t, int16_t>>(),
+    static_assert(
+        SupportType<Tuple<T1, T2>, Tuple<half, float>, Tuple<int8_t, half>, Tuple<int8_t, int16_t>>(),
         "Failed to check dtype in AddReluCast, current api support dtype combination is src: float, dst: half; "
         "src: half, dst: int8_t; src: int16_t, dst: int8_t.");
 }
 // AddReluCast::Level 0 - mask count mode
 template <typename T1, typename T2, bool isSetMask = true>
-__aicore__ inline void AddReluCastImpl(__ubuf__ T1 *dst, __ubuf__ T2 *src0, __ubuf__ T2 *src1, const uint64_t mask,
-    uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
+__aicore__ inline void AddReluCastImpl(
+    __ubuf__ T1* dst, __ubuf__ T2* src0, __ubuf__ T2* src1, const uint64_t mask, uint8_t repeatTime,
+    const BinaryRepeatParams& repeatParams)
 {
     CheckAddReluCastSupportType<T1, T2>();
     constexpr auto func = RegAddReluCast::AddReluCast<T1, T2, Reg::RegTensor<T1>, Reg::RegTensor<T2>>;
@@ -2718,8 +2810,9 @@ __aicore__ inline void AddReluCastImpl(__ubuf__ T1 *dst, __ubuf__ T2 *src0, __ub
 
 // AddReluCast::Level 0 - mask bit mode
 template <typename T1, typename T2, bool isSetMask = true>
-__aicore__ inline void AddReluCastImpl(__ubuf__ T1 *dst, __ubuf__ T2 *src0, __ubuf__ T2 *src1, const uint64_t mask[],
-    uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
+__aicore__ inline void AddReluCastImpl(
+    __ubuf__ T1* dst, __ubuf__ T2* src0, __ubuf__ T2* src1, const uint64_t mask[], uint8_t repeatTime,
+    const BinaryRepeatParams& repeatParams)
 {
     CheckAddReluCastSupportType<T1, T2>();
     constexpr auto func = RegAddReluCast::AddReluCast<T1, T2, Reg::RegTensor<T1>, Reg::RegTensor<T2>>;
@@ -2728,12 +2821,15 @@ __aicore__ inline void AddReluCastImpl(__ubuf__ T1 *dst, __ubuf__ T2 *src0, __ub
 
 // AddReluCast::Level 2
 template <typename T1, typename T2>
-__simd_vf__ inline void AddReluCastImpl(__ubuf__ T1 *dst, __ubuf__ T2 *src0, __ubuf__ T2 *src1, const uint32_t calCount)
+__simd_vf__ inline void AddReluCastImpl(__ubuf__ T1* dst, __ubuf__ T2* src0, __ubuf__ T2* src1, const uint32_t calCount)
 {
-    static_assert(SupportType<Tuple<T1, T2>, Tuple<half, float>, Tuple<int8_t, half>, Tuple<int8_t, int16_t>,
-            Tuple<float, int64_t>, Tuple<int32_t, int64_t>>(), "Failed to check dtype in AddReluCast, current api "
-            "support dtype combination is src: float, dst: half; src: half, dst: int8_t; src: int16_t, dst: int8_t; "
-            "src: int64_t, dst : int32_t / float.");
+    static_assert(
+        SupportType<
+            Tuple<T1, T2>, Tuple<half, float>, Tuple<int8_t, half>, Tuple<int8_t, int16_t>, Tuple<float, int64_t>,
+            Tuple<int32_t, int64_t>>(),
+        "Failed to check dtype in AddReluCast, current api "
+        "support dtype combination is src: float, dst: half; src: half, dst: int8_t; src: int16_t, dst: int8_t; "
+        "src: int64_t, dst : int32_t / float.");
     uint32_t sreg = static_cast<uint32_t>(calCount);
     const T2 scalarValue = 0;
     if constexpr (sizeof(T2) == 8) {
@@ -2786,13 +2882,13 @@ __simd_vf__ inline void AddReluCastImpl(__ubuf__ T1 *dst, __ubuf__ T2 *src0, __u
 
 namespace RegSubReluCast {
 template <typename T1, typename T2, typename RegT, typename RegU>
-__simd_callee__ inline void SubReluCast(RegT &dstReg, RegU &src0Reg, RegU &src1Reg, Reg::MaskReg &mask)
+__simd_callee__ inline void SubReluCast(RegT& dstReg, RegU& src0Reg, RegU& src1Reg, Reg::MaskReg& mask)
 {
     Reg::Sub(src0Reg, src0Reg, src1Reg, mask);
     Reg::Maxs<T2>(src0Reg, src0Reg, static_cast<T2>(0), mask);
     if constexpr (IsSameType<T2, float>::value) {
         Reg::Cast<T1, T2, layoutZSatSMrgZRndR>(dstReg, src0Reg, mask);
-        Reg::Pack((Reg::RegTensor<uint16_t> &)dstReg, (Reg::RegTensor<uint32_t> &)dstReg);
+        Reg::Pack((Reg::RegTensor<uint16_t>&)dstReg, (Reg::RegTensor<uint32_t>&)dstReg);
     } else {
         if constexpr (IsSameType<T2, int16_t>::value) {
             Reg::RegTensor<half> tmpReg;
@@ -2801,23 +2897,25 @@ __simd_callee__ inline void SubReluCast(RegT &dstReg, RegU &src0Reg, RegU &src1R
         } else {
             Reg::Cast<T1, T2, layoutZSatSMrgZRndR>(dstReg, src0Reg, mask);
         }
-        Reg::Pack((Reg::RegTensor<uint8_t> &)dstReg, (Reg::RegTensor<uint16_t> &)dstReg);
+        Reg::Pack((Reg::RegTensor<uint8_t>&)dstReg, (Reg::RegTensor<uint16_t>&)dstReg);
     }
 }
-}  // namespace RegSubReluCast
+} // namespace RegSubReluCast
 
 template <typename T1, typename T2>
 constexpr __aicore__ inline void CheckSubReluCastSupportType()
 {
-    static_assert(SupportType<Tuple<T1, T2>, Tuple<half, float>, Tuple<int8_t, half>, Tuple<int8_t, int16_t>>(),
+    static_assert(
+        SupportType<Tuple<T1, T2>, Tuple<half, float>, Tuple<int8_t, half>, Tuple<int8_t, int16_t>>(),
         "Failed to check dtype in SubReluCast, current api support dtype combination is src: float, dst: half; "
         "src: half, dst: int8_t; src: int16_t, dst: int8_t.");
 }
 
 // SubReluCast::Level 0 - mask count mode
 template <typename T1, typename T2, bool isSetMask = true>
-__aicore__ inline void SubReluCastImpl(__ubuf__ T1 *dst, __ubuf__ T2 *src0, __ubuf__ T2 *src1, const uint64_t mask,
-    uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
+__aicore__ inline void SubReluCastImpl(
+    __ubuf__ T1* dst, __ubuf__ T2* src0, __ubuf__ T2* src1, const uint64_t mask, uint8_t repeatTime,
+    const BinaryRepeatParams& repeatParams)
 {
     CheckSubReluCastSupportType<T1, T2>();
     constexpr auto func = RegSubReluCast::SubReluCast<T1, T2, Reg::RegTensor<T1>, Reg::RegTensor<T2>>;
@@ -2826,8 +2924,9 @@ __aicore__ inline void SubReluCastImpl(__ubuf__ T1 *dst, __ubuf__ T2 *src0, __ub
 
 // SubReluCast::Level 0 - mask bit mode
 template <typename T1, typename T2, bool isSetMask = true>
-__aicore__ inline void SubReluCastImpl(__ubuf__ T1 *dst, __ubuf__ T2 *src0, __ubuf__ T2 *src1, const uint64_t mask[],
-    uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
+__aicore__ inline void SubReluCastImpl(
+    __ubuf__ T1* dst, __ubuf__ T2* src0, __ubuf__ T2* src1, const uint64_t mask[], uint8_t repeatTime,
+    const BinaryRepeatParams& repeatParams)
 {
     CheckSubReluCastSupportType<T1, T2>();
     constexpr auto func = RegSubReluCast::SubReluCast<T1, T2, Reg::RegTensor<T1>, Reg::RegTensor<T2>>;
@@ -2838,8 +2937,11 @@ __aicore__ inline void SubReluCastImpl(__ubuf__ T1 *dst, __ubuf__ T2 *src0, __ub
 template <typename T1, typename T2>
 __simd_vf__ inline void SubReluCastImpl(__ubuf__ T1* dst, __ubuf__ T2* src0, __ubuf__ T2* src1, const uint32_t calCount)
 {
-    static_assert(SupportType<Tuple<T1, T2>, Tuple<half, float>, Tuple<int8_t, half>, Tuple<int8_t, int16_t>,
-        Tuple<float, int64_t>, Tuple<int32_t, int64_t>>(), "Failed to check dtype in SubReluCast, current api support "
+    static_assert(
+        SupportType<
+            Tuple<T1, T2>, Tuple<half, float>, Tuple<int8_t, half>, Tuple<int8_t, int16_t>, Tuple<float, int64_t>,
+            Tuple<int32_t, int64_t>>(),
+        "Failed to check dtype in SubReluCast, current api support "
         "dtype combination is src: float, dst: half; src: half, dst: int8_t; src: int16_t, dst: int8_t; src: int64_t, "
         "dst : int32_t / float.");
     uint32_t sreg = static_cast<uint32_t>(calCount);
@@ -2901,8 +3003,9 @@ __aicore__ inline uint64_t MakeDeqScaleConfig(float scale, int16_t offset, bool 
     constexpr uint64_t signModeBit = 46;
     constexpr uint64_t offsetMask = 0x1ff;
     constexpr uint64_t offsetBit = 37;
-    uint64_t config = ((static_cast<uint64_t>(signMode) << signModeBit) | ((offset & offsetMask) << offsetBit) |
-                       *(reinterpret_cast<uint32_t *>(&scale)));
+    uint64_t config =
+        ((static_cast<uint64_t>(signMode) << signModeBit) | ((offset & offsetMask) << offsetBit) |
+         *(reinterpret_cast<uint32_t*>(&scale)));
     return config;
 }
 
@@ -2911,7 +3014,8 @@ __aicore__ inline void SetDeqScaleImpl(float scale, int16_t offset, bool signMod
     Internal::g_deqScale = MakeDeqScaleConfig(scale, offset, signMode);
 }
 
-template <typename T> __aicore__ inline void SetDeqScaleImpl(const LocalTensor<T> &vdeqTensor, const VdeqInfo &vdeqInfo)
+template <typename T>
+__aicore__ inline void SetDeqScaleImpl(const LocalTensor<T>& vdeqTensor, const VdeqInfo& vdeqInfo)
 {
     for (uint8_t i = 0; i < VDEQ_TENSOR_SIZE; ++i) {
         float scale = vdeqInfo.vdeqScale[i];
@@ -2922,18 +3026,23 @@ template <typename T> __aicore__ inline void SetDeqScaleImpl(const LocalTensor<T
     Internal::g_deqScale = reinterpret_cast<uint64_t>(vdeqTensor.GetPhyAddr());
 }
 
-template <typename T> __aicore__ inline void SetDeqScaleImpl(T config)
+template <typename T>
+__aicore__ inline void SetDeqScaleImpl(T config)
 {
     Internal::g_deqValue = config;
 }
 // Truncate::Level2
 template <typename T, RoundMode roundMode>
-__simd_vf__ inline void TruncateImpl(__ubuf__ T *dst, __ubuf__ T *src, const uint32_t calCount)
+__simd_vf__ inline void TruncateImpl(__ubuf__ T* dst, __ubuf__ T* src, const uint32_t calCount)
 {
-    static_assert(SupportType<T, half, float, bfloat16_t>(), "Failed to check dtype in Truncate, current api "
-        "support dtype is src and dst both: half, float, bfloat16_t.");
-    static_assert(SupportEnum<roundMode, RoundMode::CAST_RINT, RoundMode::CAST_FLOOR, RoundMode::CAST_CEIL,
-        RoundMode::CAST_ROUND, RoundMode::CAST_TRUNC>(), "Failed to check dtype in Truncate, "
+    static_assert(
+        SupportType<T, half, float, bfloat16_t>(), "Failed to check dtype in Truncate, current api "
+                                                   "support dtype is src and dst both: half, float, bfloat16_t.");
+    static_assert(
+        SupportEnum<
+            roundMode, RoundMode::CAST_RINT, RoundMode::CAST_FLOOR, RoundMode::CAST_CEIL, RoundMode::CAST_ROUND,
+            RoundMode::CAST_TRUNC>(),
+        "Failed to check dtype in Truncate, "
         "current api support roundMode is CAST_RINT, CAST_FLOOR, CAST_CEIL, CAST_ROUND, CAST_TRUNC.");
     constexpr uint32_t sregLower = static_cast<uint32_t>(GetVecLen() / sizeof(T));
     const uint16_t repeatTime = static_cast<uint16_t>(CeilDivision(calCount, sregLower));

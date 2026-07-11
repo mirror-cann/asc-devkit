@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_conv2d_base_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_operator_conv2d_base_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_conv2d_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_operator_conv2d_base_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_conv2d_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_CONV2D_BASE_IMPL_H__
 #endif
@@ -30,7 +31,8 @@
 
 namespace AscendC {
 
-template <typename T> __aicore__ inline void GetTypeforC0(Conv2dParams& conv2dParams, Conv2dTilling& tilling)
+template <typename T>
+__aicore__ inline void GetTypeforC0(Conv2dParams& conv2dParams, Conv2dTilling& tilling)
 {
     if (IsSameType<PrimT<T>, int8_t>::value) {
         tilling.c0Size = 32;
@@ -85,8 +87,9 @@ __aicore__ inline void CalculateConv2dTiling(Conv2dTilling& tilling)
 }
 
 template <typename T>
-__aicore__ inline void LoadL0AForConv2DV1(uint32_t kBlocks, uint32_t indexK, uint32_t mBlocks, uint32_t indexM,
-    Conv2dParams& conv2dParams, Conv2dTilling& tilling, const LocalTensor<T>& src0, const LocalTensor<T>& l0a)
+__aicore__ inline void LoadL0AForConv2DV1(
+    uint32_t kBlocks, uint32_t indexK, uint32_t mBlocks, uint32_t indexM, Conv2dParams& conv2dParams,
+    Conv2dTilling& tilling, const LocalTensor<T>& src0, const LocalTensor<T>& l0a)
 {
     uint32_t cinPos = indexK * tilling.kTileBlock;
     // load by column
@@ -133,8 +136,9 @@ __aicore__ inline void LoadL0AForConv2DV1(uint32_t kBlocks, uint32_t indexK, uin
 }
 
 template <typename T>
-__aicore__ inline void LoadL0AForConv2DV2(uint32_t kBlocks, uint32_t indexK, uint32_t mBlocks, uint32_t indexM,
-    Conv2dParams& conv2dParams, Conv2dTilling& tilling, const LocalTensor<T>& src0, const LocalTensor<T>& l0a)
+__aicore__ inline void LoadL0AForConv2DV2(
+    uint32_t kBlocks, uint32_t indexK, uint32_t mBlocks, uint32_t indexM, Conv2dParams& conv2dParams,
+    Conv2dTilling& tilling, const LocalTensor<T>& src0, const LocalTensor<T>& l0a)
 {
     // data l0a size only need hw_actual_size * cin_actual blocks,
     // but for performance of ping pong with tail block, apply m_tile_block * cin_actual blocks
@@ -172,8 +176,9 @@ __aicore__ inline void LoadL0AForConv2DV2(uint32_t kBlocks, uint32_t indexK, uin
 }
 
 template <typename T>
-__aicore__ inline void LoadL0AForConv2D(uint32_t kBlocks, uint32_t indexK, uint32_t mBlocks, uint32_t indexM,
-    Conv2dParams& conv2dParams, Conv2dTilling& tilling, const LocalTensor<T>& src0, const LocalTensor<T>& l0a)
+__aicore__ inline void LoadL0AForConv2D(
+    uint32_t kBlocks, uint32_t indexK, uint32_t mBlocks, uint32_t indexM, Conv2dParams& conv2dParams,
+    Conv2dTilling& tilling, const LocalTensor<T>& src0, const LocalTensor<T>& l0a)
 {
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ != 1001) && (__NPU_ARCH__ != 2002)
     LoadL0AForConv2DV2(kBlocks, indexK, mBlocks, indexM, conv2dParams, tilling, src0, l0a);
@@ -183,8 +188,9 @@ __aicore__ inline void LoadL0AForConv2D(uint32_t kBlocks, uint32_t indexK, uint3
 }
 
 template <typename T>
-__aicore__ inline void LoadL0BForConv2D(uint32_t kBlocks, uint32_t nBlocks, uint32_t indexK, uint32_t indexN,
-    Conv2dTilling& tilling, const LocalTensor<T>& src1, const LocalTensor<T>& l0b)
+__aicore__ inline void LoadL0BForConv2D(
+    uint32_t kBlocks, uint32_t nBlocks, uint32_t indexK, uint32_t indexN, Conv2dTilling& tilling,
+    const LocalTensor<T>& src1, const LocalTensor<T>& l0b)
 {
     if (tilling.nIterNum == 1) {
         // load one column at once
@@ -212,9 +218,10 @@ __aicore__ inline void LoadL0BForConv2D(uint32_t kBlocks, uint32_t nBlocks, uint
 }
 
 template <typename T, typename U>
-__aicore__ inline void MmadFuncForConv2D(const LocalTensor<U>& l0a, const LocalTensor<U>& l0b,
-    const LocalTensor<T>& l0c, const LocalTensor<T>& bias, Conv2dParams& conv2dParams, Conv2dTilling tilling,
-    uint32_t kBlocks, uint32_t mBlocks, uint32_t nBlocks, uint32_t indexK, uint32_t indexM, uint32_t indexN)
+__aicore__ inline void MmadFuncForConv2D(
+    const LocalTensor<U>& l0a, const LocalTensor<U>& l0b, const LocalTensor<T>& l0c, const LocalTensor<T>& bias,
+    Conv2dParams& conv2dParams, Conv2dTilling tilling, uint32_t kBlocks, uint32_t mBlocks, uint32_t nBlocks,
+    uint32_t indexK, uint32_t indexM, uint32_t indexN)
 {
     // only care data in K dim
     uint32_t bSize = tilling.blockSize * tilling.blockSize;
@@ -256,9 +263,9 @@ __aicore__ inline void MmadFuncForConv2D(const LocalTensor<U>& l0a, const LocalT
 }
 
 template <typename T, typename U>
-__aicore__ inline void Conv2DExecNmNopingpong(const LocalTensor<T>& l0c, const LocalTensor<T>& bias,
-    const LocalTensor<U>& src0, const LocalTensor<U>& src1, Conv2dParams& conv2dParams,
-    Conv2dTilling& tilling)
+__aicore__ inline void Conv2DExecNmNopingpong(
+    const LocalTensor<T>& l0c, const LocalTensor<T>& bias, const LocalTensor<U>& src0, const LocalTensor<U>& src1,
+    Conv2dParams& conv2dParams, Conv2dTilling& tilling)
 {
     LocalTensor<U> l0b;
     LocalTensor<U> l0a;
@@ -281,8 +288,9 @@ __aicore__ inline void Conv2DExecNmNopingpong(const LocalTensor<T>& l0c, const L
                 SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 PipeBarrier<PIPE_M>();
-                MmadFuncForConv2D(l0a, l0b, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums,
-                    tilling.nTileBlock, indexK, indexM, indexN);
+                MmadFuncForConv2D(
+                    l0a, l0b, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums, tilling.nTileBlock, indexK,
+                    indexM, indexN);
             }
         }
         SetFlag<HardEvent::M_MTE1>(eventIdMToMte1);
@@ -307,9 +315,9 @@ __aicore__ inline void PingPongReleaseEvent(event_t eventId0, event_t eventId1)
 }
 
 template <typename T, typename U>
-__aicore__ inline void Conv2DExecNmPingPong(const LocalTensor<T>& l0c, const LocalTensor<T>& bias,
-    const LocalTensor<U>& src0, const LocalTensor<U>& src1, Conv2dParams& conv2dParams,
-    Conv2dTilling& tilling)
+__aicore__ inline void Conv2DExecNmPingPong(
+    const LocalTensor<T>& l0c, const LocalTensor<T>& bias, const LocalTensor<U>& src0, const LocalTensor<U>& src1,
+    Conv2dParams& conv2dParams, Conv2dTilling& tilling)
 {
     uint32_t ping = 1;
     LocalTensor<U> l0aPing;
@@ -336,10 +344,10 @@ __aicore__ inline void Conv2DExecNmPingPong(const LocalTensor<T>& l0c, const Loc
                 LoadL0BForConv2D(kBlocks, tilling.nTileBlock, indexK, indexN, tilling, src1, l0bPing);
                 for (size_t indexM = 0; indexM < tilling.mIterNum; indexM++) {
                     // load data from l1 to l0a
-                    LoadL0AForConv2D(kBlocks, indexK, tilling.mTileNums, indexM, conv2dParams, tilling, src0,
-                        l0aPing);
+                    LoadL0AForConv2D(kBlocks, indexK, tilling.mTileNums, indexM, conv2dParams, tilling, src0, l0aPing);
                     SetWaitFlagMte1ToM();
-                    MmadFuncForConv2D(l0aPing, l0bPing, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums,
+                    MmadFuncForConv2D(
+                        l0aPing, l0bPing, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums,
                         tilling.nTileBlock, indexK, indexM, indexN);
                 }
             }
@@ -351,10 +359,10 @@ __aicore__ inline void Conv2DExecNmPingPong(const LocalTensor<T>& l0c, const Loc
                 LoadL0BForConv2D(kBlocks, tilling.nTileBlock, indexK, indexN, tilling, src1, l0bPong);
                 for (size_t indexM = 0; indexM < tilling.mIterNum; indexM++) {
                     // load data from l1 to l0a
-                    LoadL0AForConv2D(kBlocks, indexK, tilling.mTileNums, indexM, conv2dParams, tilling, src0,
-                        l0aPong);
+                    LoadL0AForConv2D(kBlocks, indexK, tilling.mTileNums, indexM, conv2dParams, tilling, src0, l0aPong);
                     SetWaitFlagMte1ToM();
-                    MmadFuncForConv2D(l0aPong, l0bPong, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums,
+                    MmadFuncForConv2D(
+                        l0aPong, l0bPong, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums,
                         tilling.nTileBlock, indexK, indexM, indexN);
                 }
             }
@@ -367,9 +375,9 @@ __aicore__ inline void Conv2DExecNmPingPong(const LocalTensor<T>& l0c, const Loc
 }
 
 template <typename T, typename U>
-__aicore__ inline void Conv2DExecNm(const LocalTensor<T>& l0c, const LocalTensor<T>& bias,
-    const LocalTensor<U>& src0, const LocalTensor<U>& src1, Conv2dParams& conv2dParams,
-    Conv2dTilling& tilling)
+__aicore__ inline void Conv2DExecNm(
+    const LocalTensor<T>& l0c, const LocalTensor<T>& bias, const LocalTensor<U>& src0, const LocalTensor<U>& src1,
+    Conv2dParams& conv2dParams, Conv2dTilling& tilling)
 {
     uint32_t needL0Asize = tilling.roundM * tilling.dTypeSize * tilling.c0Size * tilling.kTileBlock * 2;
     uint32_t needL0Bsize = tilling.roundN * tilling.dTypeSize * tilling.c0Size * tilling.kTileBlock * 2;
@@ -381,9 +389,9 @@ __aicore__ inline void Conv2DExecNm(const LocalTensor<T>& l0c, const LocalTensor
 }
 
 template <typename T, typename U>
-__aicore__ inline void Conv2DExecMnNopingpong(const LocalTensor<T>& l0c, const LocalTensor<T>& bias,
-    const LocalTensor<U>& src0, const LocalTensor<U>& src1, Conv2dParams& conv2dParams,
-    Conv2dTilling& tilling)
+__aicore__ inline void Conv2DExecMnNopingpong(
+    const LocalTensor<T>& l0c, const LocalTensor<T>& bias, const LocalTensor<U>& src0, const LocalTensor<U>& src1,
+    Conv2dParams& conv2dParams, Conv2dTilling& tilling)
 {
     LocalTensor<U> l0a;
     LocalTensor<U> l0b;
@@ -406,8 +414,9 @@ __aicore__ inline void Conv2DExecMnNopingpong(const LocalTensor<T>& l0c, const L
                 SetFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 WaitFlag<HardEvent::MTE1_M>(eventIdMte1ToM);
                 PipeBarrier<PIPE_M>();
-                MmadFuncForConv2D(l0a, l0b, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums,
-                    tilling.nTileBlock, indexK, indexM, indexN);
+                MmadFuncForConv2D(
+                    l0a, l0b, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums, tilling.nTileBlock, indexK,
+                    indexM, indexN);
             }
         }
         SetFlag<HardEvent::M_MTE1>(eventIdMToMte1);
@@ -416,9 +425,9 @@ __aicore__ inline void Conv2DExecMnNopingpong(const LocalTensor<T>& l0c, const L
 }
 
 template <typename T, typename U>
-__aicore__ inline void Conv2DExecMnPingPong(const LocalTensor<T>& l0c, const LocalTensor<T>& bias,
-    const LocalTensor<U>& src0, const LocalTensor<U>& src1, Conv2dParams& conv2dParams,
-    Conv2dTilling& tilling)
+__aicore__ inline void Conv2DExecMnPingPong(
+    const LocalTensor<T>& l0c, const LocalTensor<T>& bias, const LocalTensor<U>& src0, const LocalTensor<U>& src1,
+    Conv2dParams& conv2dParams, Conv2dTilling& tilling)
 {
     uint32_t ping = 1;
     LocalTensor<U> l0aPing;
@@ -446,7 +455,8 @@ __aicore__ inline void Conv2DExecMnPingPong(const LocalTensor<T>& l0c, const Loc
                     // load data from l1 to l0b
                     LoadL0BForConv2D(kBlocks, tilling.nTileBlock, indexK, indexN, tilling, src1, l0bPing);
                     SetWaitFlagMte1ToM();
-                    MmadFuncForConv2D(l0aPing, l0bPing, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums,
+                    MmadFuncForConv2D(
+                        l0aPing, l0bPing, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums,
                         tilling.nTileBlock, indexK, indexM, indexN);
                 }
             }
@@ -460,7 +470,8 @@ __aicore__ inline void Conv2DExecMnPingPong(const LocalTensor<T>& l0c, const Loc
                     // load data from l1 to l0b
                     LoadL0BForConv2D(kBlocks, tilling.nTileBlock, indexK, indexN, tilling, src1, l0bPong);
                     SetWaitFlagMte1ToM();
-                    MmadFuncForConv2D(l0aPong, l0bPong, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums,
+                    MmadFuncForConv2D(
+                        l0aPong, l0bPong, l0c, bias, conv2dParams, tilling, kBlocks, tilling.mTileNums,
                         tilling.nTileBlock, indexK, indexM, indexN);
                 }
             }
@@ -473,9 +484,9 @@ __aicore__ inline void Conv2DExecMnPingPong(const LocalTensor<T>& l0c, const Loc
 }
 
 template <typename T, typename U>
-__aicore__ inline void Conv2DExecMn(const LocalTensor<T>& l0c, const LocalTensor<T>& bias,
-    const LocalTensor<U>& src0, const LocalTensor<U>& src1, Conv2dParams& conv2dParams,
-    Conv2dTilling& tilling)
+__aicore__ inline void Conv2DExecMn(
+    const LocalTensor<T>& l0c, const LocalTensor<T>& bias, const LocalTensor<U>& src0, const LocalTensor<U>& src1,
+    Conv2dParams& conv2dParams, Conv2dTilling& tilling)
 {
     uint32_t needL0Bsize = tilling.roundN * tilling.dTypeSize * tilling.c0Size * tilling.kTileBlock * 2;
     uint32_t needL0Asize = tilling.roundM * tilling.dTypeSize * tilling.c0Size * tilling.kTileBlock * 2;

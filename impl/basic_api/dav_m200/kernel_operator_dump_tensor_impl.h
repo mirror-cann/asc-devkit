@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_dump_tensor_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_m200/kernel_operator_dump_tensor_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tpipe.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_m200/kernel_operator_dump_tensor_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tpipe.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_DUMP_TENSOR_IMPL_H__
 #endif
@@ -37,19 +38,20 @@ __BLOCK_LOCAL__ __inline__ __gm__ uint8_t* g_dumpWorkspaceReserved;
 template <typename T>
 __aicore__ constexpr inline Internal::DumpTensorDataType GetTensorDataType();
 
-template <typename T> __aicore__ inline uint32_t GetDataType(T data)
+template <typename T>
+__aicore__ inline uint32_t GetDataType(T data)
 {
     return static_cast<uint32_t>(GetTensorDataType<T>());
 }
 
 template <typename T>
-__aicore__ inline void InitTmpTensor(LocalTensor<T> &tmp, uint8_t quePos)
+__aicore__ inline void InitTmpTensor(LocalTensor<T>& tmp, uint8_t quePos)
 {
     TBuffAddr tbufTmpLocal;
     tbufTmpLocal.logicPos = quePos;
     tmp.SetAddr(tbufTmpLocal);
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    tmp.address_.absAddr = reinterpret_cast<uint8_t *>(ConstDefiner::Instance().cpuUB);
+    tmp.address_.absAddr = reinterpret_cast<uint8_t*>(ConstDefiner::Instance().cpuUB);
 #else
     tmp.address_.bufferAddr = get_imm(0);
 #endif
@@ -57,9 +59,7 @@ __aicore__ inline void InitTmpTensor(LocalTensor<T> &tmp, uint8_t quePos)
 }
 
 __aicore__ inline int64_t GetBlockNum();
-__aicore__ inline void InitDumpImpl(bool mixFlag, uint32_t gmLen)
-{
-}
+__aicore__ inline void InitDumpImpl(bool mixFlag, uint32_t gmLen) {}
 
 /***********************************每个core内存分配示意图*************************************************
 
@@ -70,12 +70,12 @@ __aicore__ inline void InitDumpImpl(bool mixFlag, uint32_t gmLen)
 **********************************************************************************************************/
 
 template <template <typename> class Tensor, typename T>
-__aicore__ inline void DumpTensorRingBufImpl(const Tensor<T>& src, uint32_t desc, uint32_t dumpSize,
-                                                const uint32_t* shape, const uint32_t shapeDim);
+__aicore__ inline void DumpTensorRingBufImpl(
+    const Tensor<T>& src, uint32_t desc, uint32_t dumpSize, const uint32_t* shape, const uint32_t shapeDim);
 
 template <typename T>
-__aicore__ inline void DumpTensorLocal2GMImpl(const LocalTensor<T>& src, uint32_t desc, uint32_t dumpSize,
-                                                const uint32_t* shape, const uint32_t shapeDim)
+__aicore__ inline void DumpTensorLocal2GMImpl(
+    const LocalTensor<T>& src, uint32_t desc, uint32_t dumpSize, const uint32_t* shape, const uint32_t shapeDim)
 {
     uint64_t ctrlValue = get_ctrl();
     set_atomic_none();
@@ -101,8 +101,8 @@ __aicore__ inline void DumpTensorLocal2GMImpl(const LocalTensor<T>& src, uint32_
 **********************************************************************************************************/
 
 template <typename T>
-__aicore__ inline void DumpTensorGM2GMImpl(const GlobalTensor<T>& src, uint32_t desc, uint32_t dumpSize,
-                                            const uint32_t* shape, const uint32_t shapeDim)
+__aicore__ inline void DumpTensorGM2GMImpl(
+    const GlobalTensor<T>& src, uint32_t desc, uint32_t dumpSize, const uint32_t* shape, const uint32_t shapeDim)
 {
     uint64_t ctrlValue = get_ctrl();
     set_atomic_none();
@@ -119,9 +119,9 @@ __aicore__ inline void DumpTensorGM2GMImpl(const GlobalTensor<T>& src, uint32_t 
     DumpTensorGM2GMImpl(src, desc, dumpSize, nullptr, 0);
 }
 
-__aicore__ inline void WriteRingBufShapeInfo(const ShapeInfo &shapeInfo);
+__aicore__ inline void WriteRingBufShapeInfo(const ShapeInfo& shapeInfo);
 
-__aicore__ inline void DumpShapeImpl(const ShapeInfo &shapeInfo)
+__aicore__ inline void DumpShapeImpl(const ShapeInfo& shapeInfo)
 {
     dcci((__gm__ uint64_t*)g_sysPrintFifoSpace, cache_line_t::ENTIRE_DATA_CACHE);
     if (g_sysPrintFifoSpace != nullptr) {
@@ -147,8 +147,8 @@ __aicore__ inline void PrintfImpl(DumpType printType, __gm__ const char* fmt, Ar
 __aicore__ inline void EnablePrintf()
 {
 #if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0) || defined(ASCENDC_TIME_STAMP_ON)
-    static const struct BinaryMetaAscFeature __asc_feature_print__ __attribute__ ((used, section (".ascend.meta"))) =
-    {4, 4, 1};
+    static const struct BinaryMetaAscFeature __asc_feature_print__
+        __attribute__((used, section(".ascend.meta"))) = {4, 4, 1};
 #endif // defined(ASCENDC_DUMP) || defined(ASCENDC_TIME_STAMP_ON)
 }
 
@@ -211,8 +211,8 @@ __aicore__ inline void SkipRingBufWithInfo(
     return;
 }
 
-__aicore__ inline bool RingBufferWait(volatile __gm__ RingBufReadInfo* readInfo,
-    volatile __gm__ RingBufWriteInfo* writeInfo, const uint32_t& tlvLen)
+__aicore__ inline bool RingBufferWait(
+    volatile __gm__ RingBufReadInfo* readInfo, volatile __gm__ RingBufWriteInfo* writeInfo, const uint32_t& tlvLen)
 {
     constexpr uint32_t maxCounter = 15;
     volatile uint32_t counter = 0;
@@ -250,8 +250,7 @@ __aicore__ inline bool CheckAndWaitRingBufSpace(__gm__ BlockRingBufInfo* blockRi
         }
         SkipRingBufWithInfo(writeInfo, ringBufAddr, ringBufLen);
     }
-    if (writeInfo->packIdx > 0 &&
-        writeInfo->bufOffset < readInfo->bufOffset &&
+    if (writeInfo->packIdx > 0 && writeInfo->bufOffset < readInfo->bufOffset &&
         writeInfo->bufOffset + tlvLen >= readInfo->bufOffset) {
         return RingBufferWait(readInfo, writeInfo, tlvLen);
     }
@@ -283,8 +282,7 @@ __aicore__ inline void UpdateWriteInfo(__gm__ RingBufWriteInfo* writeInfo, const
 
 __aicore__ inline void MemCopyGm2Gm(__gm__ uint8_t* dst, __gm__ const uint8_t* src, const uint32_t& len)
 {
-    if (dst == nullptr || src == nullptr)
-    {
+    if (dst == nullptr || src == nullptr) {
         return;
     }
     for (uint32_t i = 0; i < len; i++) {
@@ -293,13 +291,14 @@ __aicore__ inline void MemCopyGm2Gm(__gm__ uint8_t* dst, __gm__ const uint8_t* s
     dcci((__gm__ uint64_t*)(dst), cache_line_t::ENTIRE_DATA_CACHE);
 }
 
-__aicore__ inline void SetStringArg(__gm__ uint8_t* paramAddr, uint32_t paramIdx, __gm__ const char* s, uint32_t& offset)
+__aicore__ inline void SetStringArg(
+    __gm__ uint8_t* paramAddr, uint32_t paramIdx, __gm__ const char* s, uint32_t& offset)
 {
-    __gm__ uint64_t *stringAddr = reinterpret_cast<__gm__ uint64_t *>(paramAddr) + paramIdx;
-    __gm__ uint64_t *dstStrAddr = reinterpret_cast<__gm__ uint64_t *>(paramAddr + offset);
+    __gm__ uint64_t* stringAddr = reinterpret_cast<__gm__ uint64_t*>(paramAddr) + paramIdx;
+    __gm__ uint64_t* dstStrAddr = reinterpret_cast<__gm__ uint64_t*>(paramAddr + offset);
 
     // write string value offset
-    *((__gm__ uint64_t *)stringAddr) = static_cast<uint64_t>(offset - ONE_PARAM_SIZE * paramIdx);
+    *((__gm__ uint64_t*)stringAddr) = static_cast<uint64_t>(offset - ONE_PARAM_SIZE * paramIdx);
     dcci((__gm__ uint64_t*)stringAddr, cache_line_t::ENTIRE_DATA_CACHE);
 
     // write string content
@@ -314,43 +313,40 @@ __aicore__ inline void SetValueArg(__gm__ uint8_t* paramAddr, uint32_t paramIdx,
 {
     static_assert(!SupportType<T, double>(), "printf unsupport double type");
 
-    __gm__ uint64_t *scalarAddr = (__gm__ uint64_t *)paramAddr + paramIdx;
+    __gm__ uint64_t* scalarAddr = (__gm__ uint64_t*)paramAddr + paramIdx;
     *scalarAddr = 0;
 
     if constexpr (SupportType<T, half, float>()) {
-        *((__gm__ float *)scalarAddr) = static_cast<float>(scalar);
+        *((__gm__ float*)scalarAddr) = static_cast<float>(scalar);
     } else if constexpr (std::is_signed<T>::value) {
-        *((__gm__ int64_t *)scalarAddr) = static_cast<int64_t>(scalar);
-    } else if constexpr(std::is_unsigned<T>::value) {
-        *((__gm__ uint64_t *)scalarAddr) = static_cast<uint64_t>(scalar);
-    } else if constexpr(std::is_pointer<T>::value) {
-        *((__gm__ uint64_t *)scalarAddr) = (uintptr_t)scalar;
-    } else if constexpr(std::is_enum<T>::value) {
-        *((__gm__ uint64_t *)scalarAddr) = static_cast<uint64_t>(scalar);
+        *((__gm__ int64_t*)scalarAddr) = static_cast<int64_t>(scalar);
+    } else if constexpr (std::is_unsigned<T>::value) {
+        *((__gm__ uint64_t*)scalarAddr) = static_cast<uint64_t>(scalar);
+    } else if constexpr (std::is_pointer<T>::value) {
+        *((__gm__ uint64_t*)scalarAddr) = (uintptr_t)scalar;
+    } else if constexpr (std::is_enum<T>::value) {
+        *((__gm__ uint64_t*)scalarAddr) = static_cast<uint64_t>(scalar);
     }
 
     dcci((__gm__ uint64_t*)scalarAddr, cache_line_t::ENTIRE_DATA_CACHE);
 }
 
-__aicore__ inline void SetArgsData(__gm__ uint8_t* paramAddr, uint32_t paramIdx, uint32_t& offset)
-{
-    return;
-}
+__aicore__ inline void SetArgsData(__gm__ uint8_t* paramAddr, uint32_t paramIdx, uint32_t& offset) { return; }
 
 template <typename... Args>
 __aicore__ inline void SetArgsData(__gm__ uint8_t* paramAddr, uint32_t paramIdx, uint32_t& offset, Args&&... args);
 
 template <typename... Args>
-__aicore__ inline void SetArgsDataImpl(__gm__ uint8_t *paramAddr, uint32_t paramIdx, uint32_t &offset,
-                                    __gm__ const char *s, Args&&... args)
+__aicore__ inline void SetArgsDataImpl(
+    __gm__ uint8_t* paramAddr, uint32_t paramIdx, uint32_t& offset, __gm__ const char* s, Args&&... args)
 {
     SetStringArg(paramAddr, paramIdx, s, offset);
     SetArgsData(paramAddr, paramIdx + 1, offset, args...);
 }
 
 template <typename T, typename... Args>
-__aicore__ inline void SetArgsDataImpl(__gm__ uint8_t* paramAddr, uint32_t paramIdx, uint32_t& offset, T scalar,
-                                    Args&&... args)
+__aicore__ inline void SetArgsDataImpl(
+    __gm__ uint8_t* paramAddr, uint32_t paramIdx, uint32_t& offset, T scalar, Args&&... args)
 {
     SetValueArg(paramAddr, paramIdx, scalar);
     SetArgsData(paramAddr, paramIdx + 1, offset, args...);
@@ -366,8 +362,7 @@ template <typename... Args>
 __aicore__ inline void WriteRingBufTlvData(__gm__ PrintTlvInfoHead* printTlv, __gm__ const char* fmt, Args&&... args)
 {
     const uint32_t& strLen = GetStringLength(fmt);
-    __gm__ uint8_t* paramAddr =
-        reinterpret_cast<__gm__ uint8_t*>(printTlv + 1);
+    __gm__ uint8_t* paramAddr = reinterpret_cast<__gm__ uint8_t*>(printTlv + 1);
     __gm__ uint8_t* fmtAddr = paramAddr + printTlv->fmtOffset - sizeof(uint64_t);
     __gm__ uint8_t* strParamAddr = reinterpret_cast<__gm__ uint8_t*>(fmtAddr) + strLen;
     MemCopyGm2Gm(fmtAddr, reinterpret_cast<__gm__ const uint8_t*>(fmt), strLen);
@@ -415,9 +410,10 @@ __aicore__ constexpr inline Internal::DumpTensorDataType GetTensorDataType()
     }
 }
 
-template <template<typename> class Tensor, typename T>
-__aicore__ inline void WriteRingBufTlvHead(const Tensor<T>& src, __gm__ DumpTensorTlvInfoHead* dumpTensorTlv,
-    const uint32_t& alignDumpDataLen, const uint32_t& desc, const uint32_t& dumpSize)
+template <template <typename> class Tensor, typename T>
+__aicore__ inline void WriteRingBufTlvHead(
+    const Tensor<T>& src, __gm__ DumpTensorTlvInfoHead* dumpTensorTlv, const uint32_t& alignDumpDataLen,
+    const uint32_t& desc, const uint32_t& dumpSize)
 {
     Hardware position;
     if constexpr (IsSameType<Tensor<T>, LocalTensor<T>>::value) {
@@ -442,8 +438,8 @@ __aicore__ inline void WriteRingBufTlvHead(const Tensor<T>& src, __gm__ DumpTens
     dcci((__gm__ uint64_t*)(dumpTensorTlv), cache_line_t::ENTIRE_DATA_CACHE);
 }
 
-__aicore__ inline void WriteRingBufTlvShape(__gm__ DumpTensorTlvInfoHead* dumpTensorTlv,
-    const uint32_t shapeDim, const uint32_t* shape)
+__aicore__ inline void WriteRingBufTlvShape(
+    __gm__ DumpTensorTlvInfoHead* dumpTensorTlv, const uint32_t shapeDim, const uint32_t* shape)
 {
     if (shapeDim <= 0 || shapeDim >= K_MAX_SHAPE_DIM || shape == nullptr) {
         return;
@@ -457,8 +453,7 @@ __aicore__ inline void WriteRingBufTlvShape(__gm__ DumpTensorTlvInfoHead* dumpTe
 
 __aicore__ inline void ClearGmData(__gm__ uint8_t* dst, uint32_t len)
 {
-    if (dst == nullptr)
-    {
+    if (dst == nullptr) {
         return;
     }
     for (uint32_t i = 0; i < len; i++) {
@@ -474,17 +469,21 @@ __aicore__ inline void SetDumpDataL12GM(__gm__ uint8_t* dst, const LocalTensor<T
     __gm__ uint8_t* gmBackAddr = dst + alignDumpDataLen;
     LocalTensor<uint8_t> tmp;
     InitTmpTensor(tmp, static_cast<uint8_t>(TPosition::VECIN));
-    DataCopyUB2GMImpl(reinterpret_cast<__gm__ uint8_t*>(gmBackAddr),
-        reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()), param); // backup data in UB
+    DataCopyUB2GMImpl(
+        reinterpret_cast<__gm__ uint8_t*>(gmBackAddr), reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()),
+        param); // backup data in UB
     PipeBarrier<PIPE_ALL>();
-    DataCopyL12UBImpl(reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()),
-        reinterpret_cast<__cbuf__ uint8_t*>(src.GetPhyAddr()), param); // L1 to UB
+    DataCopyL12UBImpl(
+        reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()), reinterpret_cast<__cbuf__ uint8_t*>(src.GetPhyAddr()),
+        param); // L1 to UB
     PipeBarrier<PIPE_ALL>();
-    DataCopyUB2GMImpl(reinterpret_cast<__gm__ uint8_t*>(dst), reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()),
-                        param); // UB to GM
+    DataCopyUB2GMImpl(
+        reinterpret_cast<__gm__ uint8_t*>(dst), reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()),
+        param); // UB to GM
     PipeBarrier<PIPE_ALL>();
-    DataCopyGM2UBImpl(reinterpret_cast<__ubuf__ uint32_t*>(tmp.GetPhyAddr()),
-        reinterpret_cast<__gm__ uint32_t*>(gmBackAddr), param); // recover data in UB
+    DataCopyGM2UBImpl(
+        reinterpret_cast<__ubuf__ uint32_t*>(tmp.GetPhyAddr()), reinterpret_cast<__gm__ uint32_t*>(gmBackAddr),
+        param); // recover data in UB
     PipeBarrier<PIPE_ALL>();
     ClearGmData(gmBackAddr, alignDumpDataLen);
 }
@@ -503,28 +502,31 @@ __aicore__ inline void SetDumpDataL0C2GM(__gm__ uint8_t* dst, const LocalTensor<
     backupParamsL0C.blockLen = copyLen / blockSize;
     LocalTensor<uint8_t> tmp;
     InitTmpTensor(tmp, static_cast<uint8_t>(TPosition::VECIN));
-    DataCopyUB2GMImpl(reinterpret_cast<__gm__ uint8_t*>(gmBackAddr),
-        reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()), param); // backup data in UB
+    DataCopyUB2GMImpl(
+        reinterpret_cast<__gm__ uint8_t*>(gmBackAddr), reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()),
+        param); // backup data in UB
     PipeBarrier<PIPE_ALL>();
-    DataCopyL0C2UBImpl( reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()),
-                        reinterpret_cast<__cc__ int32_t*>(src.GetPhyAddr()),
-                        backupParamsL0C,
-                        enhancedParams); // L0C to UB
+    DataCopyL0C2UBImpl(
+        reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()), reinterpret_cast<__cc__ int32_t*>(src.GetPhyAddr()),
+        backupParamsL0C,
+        enhancedParams); // L0C to UB
     PipeBarrier<PIPE_ALL>();
-    DataCopyUB2GMImpl(  reinterpret_cast<__gm__ uint8_t*>(dst),
-                        reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()),
-                        param); // UB to GM
+    DataCopyUB2GMImpl(
+        reinterpret_cast<__gm__ uint8_t*>(dst), reinterpret_cast<__ubuf__ uint8_t*>(tmp.GetPhyAddr()),
+        param); // UB to GM
     PipeBarrier<PIPE_ALL>();
-    DataCopyGM2UBImpl(reinterpret_cast<__ubuf__ uint32_t*>(tmp.GetPhyAddr()),
-        reinterpret_cast<__gm__ uint32_t*>(gmBackAddr), param); // recover data in UB
+    DataCopyGM2UBImpl(
+        reinterpret_cast<__ubuf__ uint32_t*>(tmp.GetPhyAddr()), reinterpret_cast<__gm__ uint32_t*>(gmBackAddr),
+        param); // recover data in UB
     PipeBarrier<PIPE_ALL>();
     uint32_t tailLen = copyLen * 2 - alignDumpDataLen;
     ClearGmData(gmBackAddr + alignDumpDataLen, tailLen);
 }
 
 template <typename T>
-__aicore__ inline void WriteRingBufTlvData(const LocalTensor<T>& src, __gm__ DumpTensorTlvInfoHead* dumpTensorTlv,
-    const uint32_t& alignDumpDataLen, const uint32_t& dumpSize)
+__aicore__ inline void WriteRingBufTlvData(
+    const LocalTensor<T>& src, __gm__ DumpTensorTlvInfoHead* dumpTensorTlv, const uint32_t& alignDumpDataLen,
+    const uint32_t& dumpSize)
 {
     __gm__ T* dumpDataAddr = reinterpret_cast<__gm__ T*>(dumpTensorTlv + 1);
 
@@ -554,14 +556,13 @@ __aicore__ inline void WriteRingBufTlvData(
 }
 
 template <template <typename> class Tensor, typename T>
-__aicore__ inline void DumpTensorRingBufImpl(const Tensor<T>& src, uint32_t desc, uint32_t dumpSize,
-                                                const uint32_t* shape, const uint32_t shapeDim)
+__aicore__ inline void DumpTensorRingBufImpl(
+    const Tensor<T>& src, uint32_t desc, uint32_t dumpSize, const uint32_t* shape, const uint32_t shapeDim)
 {
 #if !(defined(ASCENDC_DUMP) && ASCENDC_DUMP == 0)
     EnablePrintf();
     if constexpr (GetTensorDataType<T>() == Internal::DumpTensorDataType::ACL_MAX) {
-        ASCENDC_ASSERT((false),
-                   { KERNEL_LOG(KERNEL_ERROR, "dump tensor not support this data type"); });
+        ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "dump tensor not support this data type"); });
         return;
     }
     if (dumpSize == 0) {
@@ -569,8 +570,8 @@ __aicore__ inline void DumpTensorRingBufImpl(const Tensor<T>& src, uint32_t desc
     }
     if constexpr (IsSameType<Tensor<T>, LocalTensor<T>>::value) {
         if (CheckDumpTensorPosition(src) == Hardware::MAX) {
-            ASCENDC_ASSERT((false),
-                    { KERNEL_LOG(KERNEL_ERROR, "dump tensor only support dump tensor from local to gm"); });
+            ASCENDC_ASSERT(
+                (false), { KERNEL_LOG(KERNEL_ERROR, "dump tensor only support dump tensor from local to gm"); });
             return;
         }
     }
@@ -603,7 +604,7 @@ __aicore__ inline void DumpTensorRingBufImpl(const Tensor<T>& src, uint32_t desc
 #endif // ASCENDC_DUMP
 }
 
-__aicore__ inline void WriteRingBufShapeInfo(const ShapeInfo &shapeInfo)
+__aicore__ inline void WriteRingBufShapeInfo(const ShapeInfo& shapeInfo)
 {
     __gm__ BlockRingBufInfo* blockRingBufInfo = GetBlockRingBufInfo();
     if (blockRingBufInfo == nullptr) {
@@ -613,15 +614,15 @@ __aicore__ inline void WriteRingBufShapeInfo(const ShapeInfo &shapeInfo)
     if (!CheckAndWaitRingBufSpace(blockRingBufInfo, tlvLen)) {
         return;
     }
-    __gm__ DumpShapeTlvInfo* shapeTlv =
-        reinterpret_cast<__gm__ DumpShapeTlvInfo*>(GetRingBufTlv(blockRingBufInfo));
+    __gm__ DumpShapeTlvInfo* shapeTlv = reinterpret_cast<__gm__ DumpShapeTlvInfo*>(GetRingBufTlv(blockRingBufInfo));
     shapeTlv->type = static_cast<uint32_t>(DumpType::DUMP_SHAPE);
     shapeTlv->length = tlvLen - sizeof(uint32_t[2]);
     shapeTlv->dim = shapeInfo.shapeDim;
     for (uint32_t i = 0; i < K_MAX_SHAPE_DIM; ++i) {
         shapeTlv->shape[i] = shapeInfo.shape[i];
     }
-    shapeTlv->resv = static_cast<uint32_t>(0U);;
+    shapeTlv->resv = static_cast<uint32_t>(0U);
+    ;
     dcci((__gm__ uint64_t*)shapeTlv, cache_line_t::ENTIRE_DATA_CACHE);
 
     __gm__ RingBufWriteInfo* writeInfo = GetRingBufWriteInfo(blockRingBufInfo);
@@ -629,22 +630,12 @@ __aicore__ inline void WriteRingBufShapeInfo(const ShapeInfo &shapeInfo)
     UpdateWriteInfo(writeInfo, tlvLen);
 }
 
-__aicore__ inline void DumpTimeStampImpl(uint32_t descId)
-{
-    return;
-}
+__aicore__ inline void DumpTimeStampImpl(uint32_t descId) { return; }
 
-__aicore__ inline void AscendCTimeStamp(uint32_t descId, uint64_t pcPtr = 0)
-{
-    return;
-}
-__aicore__ inline void InitDump(bool mixFlag, uint32_t gmLen)
-{
-}
-__aicore__ inline void InitDump(bool mixFlag, GM_ADDR dumpStartAddr, uint32_t gmLen)
-{
-}
-}
+__aicore__ inline void AscendCTimeStamp(uint32_t descId, uint64_t pcPtr = 0) { return; }
+__aicore__ inline void InitDump(bool mixFlag, uint32_t gmLen) {}
+__aicore__ inline void InitDump(bool mixFlag, GM_ADDR dumpStartAddr, uint32_t gmLen) {}
+} // namespace AscendC
 #endif
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_DUMP_TENSOR_IMPL_H__)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__

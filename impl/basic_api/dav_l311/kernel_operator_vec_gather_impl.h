@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_gather_impl.h
  * \brief AscendC l311 support vector gather api.
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_l311/kernel_operator_vec_gather_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_vec_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_l311/kernel_operator_vec_gather_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_vec_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_GATHER_IMPL_H__
 #endif
@@ -23,9 +24,10 @@
 namespace AscendC {
 
 template <typename T, bool isNormalMode>
-__aicore__ inline void VfGatherApi0B16(__ubuf__ T *dst, __ubuf__ T *src, __ubuf__ uint32_t *srcOffset,
-    const uint32_t srcBaseIndex, const uint8_t repeatTime, const uint16_t &dstRepStride, uint32_t dstRepeatCount,
-    uint32_t u32OffsetRepeatCount, uint32_t blkCount, const uint64_t maskCount)
+__aicore__ inline void VfGatherApi0B16(
+    __ubuf__ T* dst, __ubuf__ T* src, __ubuf__ uint32_t* srcOffset, const uint32_t srcBaseIndex,
+    const uint8_t repeatTime, const uint16_t& dstRepStride, uint32_t dstRepeatCount, uint32_t u32OffsetRepeatCount,
+    uint32_t blkCount, const uint64_t maskCount)
 {
     Reg::RegTensor<uint32_t> offsetReg0;
     Reg::RegTensor<uint32_t> offsetReg1;
@@ -52,34 +54,34 @@ __aicore__ inline void VfGatherApi0B16(__ubuf__ T *dst, __ubuf__ T *src, __ubuf_
         // 0x00FF00FE00FD... ->0xFFFEFD...000000...
         // for offsetReg1, pack every higher 16-bit into the higher half of the vreg:
         // 0x001100120013... -> 0x000000...111213...
-        Reg::Pack<uint16_t, uint32_t, Reg::HighLowPart::LOWEST>((Reg::RegTensor<uint16_t> &)offsetReg0,
-            offsetReg0);
-        Reg::Pack<uint16_t, uint32_t, Reg::HighLowPart::HIGHEST>((Reg::RegTensor<uint16_t> &)offsetReg1,
-            offsetReg1);
+        Reg::Pack<uint16_t, uint32_t, Reg::HighLowPart::LOWEST>((Reg::RegTensor<uint16_t>&)offsetReg0, offsetReg0);
+        Reg::Pack<uint16_t, uint32_t, Reg::HighLowPart::HIGHEST>((Reg::RegTensor<uint16_t>&)offsetReg1, offsetReg1);
         // Select the effective data in offsetReg0 and offsetReg1 and joint them into a complete uint16_t type
         // indexReg£º0xFFFEFD...111213...
-        Select(indexReg, (Reg::RegTensor<uint16_t> &)offsetReg0, (Reg::RegTensor<uint16_t> &)offsetReg1,
-            selectMask);
-        DataCopyGather(dstReg, (__ubuf__ uint16_t *)src + srcBaseIndex, indexReg, dstMask);
-        DataCopy((__ubuf__ uint16_t *)dst + i * dstRepStride * blkCount, dstReg, dstMask);
+        Select(indexReg, (Reg::RegTensor<uint16_t>&)offsetReg0, (Reg::RegTensor<uint16_t>&)offsetReg1, selectMask);
+        DataCopyGather(dstReg, (__ubuf__ uint16_t*)src + srcBaseIndex, indexReg, dstMask);
+        DataCopy((__ubuf__ uint16_t*)dst + i * dstRepStride * blkCount, dstReg, dstMask);
     }
 }
 
 template <typename T, bool isNormalMode>
-__aicore__ inline void GatherApi0B16Impl(__ubuf__ T *dst, __ubuf__ T *src, __ubuf__ uint32_t *srcOffset,
-    const uint32_t srcBaseIndex, const uint8_t repeatTime, const uint16_t &dstRepStride, const uint64_t maskCount)
+__aicore__ inline void GatherApi0B16Impl(
+    __ubuf__ T* dst, __ubuf__ T* src, __ubuf__ uint32_t* srcOffset, const uint32_t srcBaseIndex,
+    const uint8_t repeatTime, const uint16_t& dstRepStride, const uint64_t maskCount)
 {
     uint32_t dstRepeatCount = static_cast<uint32_t>(VECTOR_REG_WIDTH / sizeof(T));
     uint32_t u32OffsetRepeatCount = static_cast<uint32_t>(VECTOR_REG_WIDTH / sizeof(uint32_t));
     uint32_t blkCount = static_cast<uint32_t>(ONE_BLK_SIZE / sizeof(T));
-    VF_CALL<VfGatherApi0B16<T, isNormalMode>>(dst, src, srcOffset, srcBaseIndex, repeatTime, dstRepStride,
-        dstRepeatCount, u32OffsetRepeatCount, blkCount, maskCount);
+    VF_CALL<VfGatherApi0B16<T, isNormalMode>>(
+        dst, src, srcOffset, srcBaseIndex, repeatTime, dstRepStride, dstRepeatCount, u32OffsetRepeatCount, blkCount,
+        maskCount);
 }
 
 template <typename T, bool isNormalMode>
-__aicore__ inline void VfGatherApi0B32(__ubuf__ T *dst, __ubuf__ T *src, __ubuf__ uint32_t *srcOffset,
-    const uint32_t srcBaseIndex, const uint8_t repeatTime, const uint16_t &dstRepStride, uint32_t dstRepeatCount,
-    uint32_t u32OffsetRepeatCount, uint32_t blkCount, const uint64_t maskCount)
+__aicore__ inline void VfGatherApi0B32(
+    __ubuf__ T* dst, __ubuf__ T* src, __ubuf__ uint32_t* srcOffset, const uint32_t srcBaseIndex,
+    const uint8_t repeatTime, const uint16_t& dstRepStride, uint32_t dstRepeatCount, uint32_t u32OffsetRepeatCount,
+    uint32_t blkCount, const uint64_t maskCount)
 {
     Reg::RegTensor<uint32_t> offsetReg;
     Reg::RegTensor<uint32_t> indexReg;
@@ -98,20 +100,22 @@ __aicore__ inline void VfGatherApi0B32(__ubuf__ T *dst, __ubuf__ T *src, __ubuf_
         DataCopy(offsetReg, srcOffset + i * u32OffsetRepeatCount);
         // convert addr offset into B32 element index: divide by 4 (implemented by ShiftRight 2 bit)
         ShiftRights(indexReg, offsetReg, (int16_t)2, indexMask);
-        DataCopyGather(dstReg, (__ubuf__ uint32_t *)src + srcBaseIndex, indexReg, dstMask);
-        DataCopy((__ubuf__ uint32_t *)dst + i * dstRepStride * blkCount, dstReg, dstMask);
+        DataCopyGather(dstReg, (__ubuf__ uint32_t*)src + srcBaseIndex, indexReg, dstMask);
+        DataCopy((__ubuf__ uint32_t*)dst + i * dstRepStride * blkCount, dstReg, dstMask);
     }
 }
 
 template <typename T, bool isNormalMode>
-__aicore__ inline void GatherApi0B32Impl(__ubuf__ T *dst, __ubuf__ T *src, __ubuf__ uint32_t *srcOffset,
-    const uint32_t srcBaseIndex, const uint8_t repeatTime, const uint16_t &dstRepStride, const uint64_t maskCount)
+__aicore__ inline void GatherApi0B32Impl(
+    __ubuf__ T* dst, __ubuf__ T* src, __ubuf__ uint32_t* srcOffset, const uint32_t srcBaseIndex,
+    const uint8_t repeatTime, const uint16_t& dstRepStride, const uint64_t maskCount)
 {
     uint32_t dstRepeatCount = static_cast<uint32_t>(VECTOR_REG_WIDTH / sizeof(T));
     uint32_t u32OffsetRepeatCount = static_cast<uint32_t>(VECTOR_REG_WIDTH / sizeof(uint32_t));
     uint32_t blkCount = static_cast<uint32_t>(ONE_BLK_SIZE / sizeof(T));
-    VF_CALL<VfGatherApi0B32<T, isNormalMode>>(dst, src, srcOffset, srcBaseIndex, repeatTime, dstRepStride,
-        dstRepeatCount, u32OffsetRepeatCount, blkCount, maskCount);
+    VF_CALL<VfGatherApi0B32<T, isNormalMode>>(
+        dst, src, srcOffset, srcBaseIndex, repeatTime, dstRepStride, dstRepeatCount, u32OffsetRepeatCount, blkCount,
+        maskCount);
 }
 
 /* **************************************************************************************************
@@ -119,8 +123,9 @@ __aicore__ inline void GatherApi0B32Impl(__ubuf__ T *dst, __ubuf__ T *src, __ubu
  * **************************************************************************************************/
 // gatherb::Level 0
 template <typename T>
-__aicore__ inline void GatherImpl(__ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ uint32_t* offset,
-    const uint32_t srcLength, uint8_t repeatTime, const GatherRepeatParams& repeatParams)
+__aicore__ inline void GatherImpl(
+    __ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ uint32_t* offset, const uint32_t srcLength, uint8_t repeatTime,
+    const GatherRepeatParams& repeatParams)
 {
     uint32_t repeatStride = VECTOR_REG_WIDTH / ONE_BLK_SIZE;
     __VEC_SCOPE__
@@ -142,9 +147,9 @@ __aicore__ inline void GatherImpl(__ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ ui
 
 // Gather::Level 0 Normal mode
 template <typename T>
-__aicore__ inline void GatherImpl(__ubuf__ T *dst, __ubuf__ T *src, __ubuf__ uint32_t *srcOffset,
-    const uint32_t srcLength, const uint32_t srcBaseAddr, const uint64_t mask, const uint8_t repeatTime,
-    const uint16_t &dstRepStride)
+__aicore__ inline void GatherImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, __ubuf__ uint32_t* srcOffset, const uint32_t srcLength,
+    const uint32_t srcBaseAddr, const uint64_t mask, const uint8_t repeatTime, const uint16_t& dstRepStride)
 {
     static_assert(SupportBytes<T, 2, 4>(), "Gather only support type b16/b32 on current device");
 
@@ -183,9 +188,9 @@ __aicore__ inline void GatherImpl(__ubuf__ T *dst, __ubuf__ T *src, __ubuf__ uin
  * ************************************************************************************************* */
 // Gather::Level 0 Bit-wise mode
 template <typename T>
-__aicore__ inline void GatherImpl(__ubuf__ T *dst, __ubuf__ T *src, __ubuf__ uint32_t *srcOffset,
-    const uint32_t srcLength, const uint32_t srcBaseAddr, const uint64_t mask[], const uint8_t repeatTime,
-    const uint16_t &dstRepStride)
+__aicore__ inline void GatherImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, __ubuf__ uint32_t* srcOffset, const uint32_t srcLength,
+    const uint32_t srcBaseAddr, const uint64_t mask[], const uint8_t repeatTime, const uint16_t& dstRepStride)
 {
     static_assert(SupportBytes<T, 2, 4>(), "Gather only support type b16/b32 on current device");
 

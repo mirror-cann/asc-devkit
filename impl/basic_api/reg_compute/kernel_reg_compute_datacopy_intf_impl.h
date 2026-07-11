@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /* !
  * \file kernel_reg_compute_datacopy_intf_impl.h
@@ -14,7 +14,8 @@
  */
 
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic/reg_compute/kernel_reg_compute_datacopy_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use \"#include \"reg_compute/kernel_reg_compute_datacopy_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic/reg_compute/kernel_reg_compute_datacopy_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file maybe removed in the future. Please use \"#include \"reg_compute/kernel_reg_compute_datacopy_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_DATACOPY_INTF_IMPL__
 #endif
@@ -153,14 +154,12 @@ __simd_callee__ inline void StoreAlign(__ubuf__ T* dstAddr, U& srcReg0, U& srcRe
 }
 
 template <typename T = DefaultType, StoreDist dist, typename U>
-__simd_callee__ inline void DataCopy(__ubuf__ T* dstAddr, U& srcReg0, U& srcReg1, AddrReg offset,
-                                     MaskReg& mask)
+__simd_callee__ inline void DataCopy(__ubuf__ T* dstAddr, U& srcReg0, U& srcReg1, AddrReg offset, MaskReg& mask)
 {
     DataCopyImpl<T, dist, U>(dstAddr, srcReg0, srcReg1, offset, mask);
 }
 template <typename T, StoreDist dist, typename U>
-__simd_callee__ inline void StoreAlign(__ubuf__ T* dstAddr, U& srcReg0, U& srcReg1, AddrReg offset,
-                                       MaskReg& mask)
+__simd_callee__ inline void StoreAlign(__ubuf__ T* dstAddr, U& srcReg0, U& srcReg1, AddrReg offset, MaskReg& mask)
 {
     DataCopyImpl<T, dist, U>(dstAddr, srcReg0, srcReg1, offset, mask);
 }
@@ -178,14 +177,14 @@ __simd_callee__ inline void LoadAlign(U& dstReg, __ubuf__ T* srcAddr, uint32_t d
 }
 
 template <typename T = DefaultType, DataCopyMode dataMode, PostLiteral postMode, typename U>
-__simd_callee__ inline void DataCopy(U& dstReg, __ubuf__ T*& srcAddr, uint32_t dataBlockStride,
-                                     uint32_t repeatStride, MaskReg& mask)
+__simd_callee__ inline void DataCopy(
+    U& dstReg, __ubuf__ T*& srcAddr, uint32_t dataBlockStride, uint32_t repeatStride, MaskReg& mask)
 {
     DataCopyImpl<T, dataMode, postMode, U>(dstReg, srcAddr, dataBlockStride, repeatStride, mask);
 }
 template <typename T, DataCopyMode dataMode, PostLiteral postMode, typename U>
-__simd_callee__ inline void LoadAlign(U& dstReg, __ubuf__ T*& srcAddr, uint32_t dataBlockStride,
-                                      uint32_t repeatStride, MaskReg& mask)
+__simd_callee__ inline void LoadAlign(
+    U& dstReg, __ubuf__ T*& srcAddr, uint32_t dataBlockStride, uint32_t repeatStride, MaskReg& mask)
 {
     DataCopyImpl<T, dataMode, postMode, U>(dstReg, srcAddr, dataBlockStride, repeatStride, mask);
 }
@@ -203,14 +202,14 @@ __simd_callee__ inline void StoreAlign(__ubuf__ T* dstAddr, U& srcReg, uint32_t 
 }
 
 template <typename T = DefaultType, DataCopyMode dataMode, PostLiteral postMode, typename U>
-__simd_callee__ inline void DataCopy(__ubuf__ T*& dstAddr, U& srcReg, uint32_t dataBlockStride,
-                                     uint32_t repeatStride, MaskReg& mask)
+__simd_callee__ inline void DataCopy(
+    __ubuf__ T*& dstAddr, U& srcReg, uint32_t dataBlockStride, uint32_t repeatStride, MaskReg& mask)
 {
     DataCopyImpl<T, dataMode, postMode, U>(dstAddr, srcReg, dataBlockStride, repeatStride, mask);
 }
 template <typename T, DataCopyMode dataMode, PostLiteral postMode, typename U>
-__simd_callee__ inline void StoreAlign(__ubuf__ T*& dstAddr, U& srcReg, uint32_t dataBlockStride,
-                                       uint32_t repeatStride, MaskReg& mask)
+__simd_callee__ inline void StoreAlign(
+    __ubuf__ T*& dstAddr, U& srcReg, uint32_t dataBlockStride, uint32_t repeatStride, MaskReg& mask)
 {
     DataCopyImpl<T, dataMode, postMode, U>(dstAddr, srcReg, dataBlockStride, repeatStride, mask);
 }
@@ -228,12 +227,14 @@ __simd_callee__ inline void LoadUnAlignPre(UnalignRegForLoad& ureg, __ubuf__ T* 
 }
 
 template <typename T = DefaultType, PostLiteral postMode = PostLiteral::POST_MODE_UPDATE, typename U>
-__simd_callee__ inline void DataCopyUnAlign(U& dstReg, UnalignReg& ureg, __ubuf__ T*& srcAddr, uint32_t postUpdateStride)
+__simd_callee__ inline void DataCopyUnAlign(
+    U& dstReg, UnalignReg& ureg, __ubuf__ T*& srcAddr, uint32_t postUpdateStride)
 {
     DataCopyUnAlignImpl<T, postMode, U>(dstReg, ureg, srcAddr, postUpdateStride);
 }
 template <typename T, PostLiteral postMode, typename U>
-__simd_callee__ inline void LoadUnAlign(U& dstReg, UnalignRegForLoad& ureg, __ubuf__ T*& srcAddr, uint32_t postUpdateStride)
+__simd_callee__ inline void LoadUnAlign(
+    U& dstReg, UnalignRegForLoad& ureg, __ubuf__ T*& srcAddr, uint32_t postUpdateStride)
 {
     DataCopyUnAlignImpl<T, postMode, U>(dstReg, ureg, srcAddr, postUpdateStride);
 }
@@ -268,26 +269,28 @@ __simd_callee__ inline void LoadUnAlignPre(UnalignRegForLoad& ureg, __ubuf__ T* 
 }
 
 template <typename T = DefaultType, typename U>
-__simd_callee__ inline void DataCopyUnAlign(U& dstReg, UnalignReg& ureg, __ubuf__ T*& srcAddr, AddrReg& areg,
-                                            uint32_t inc)
+__simd_callee__ inline void DataCopyUnAlign(
+    U& dstReg, UnalignReg& ureg, __ubuf__ T*& srcAddr, AddrReg& areg, uint32_t inc)
 {
     DataCopyUnAlignImpl<T, U>(dstReg, ureg, srcAddr, areg, inc);
 }
 template <typename T, typename U>
-__simd_callee__ inline void LoadUnAlign(U& dstReg, UnalignRegForLoad& ureg, __ubuf__ T*& srcAddr, AddrReg& areg,
-                                        uint32_t inc)
+__simd_callee__ inline void LoadUnAlign(
+    U& dstReg, UnalignRegForLoad& ureg, __ubuf__ T*& srcAddr, AddrReg& areg, uint32_t inc)
 {
     DataCopyUnAlignImpl<T, U>(dstReg, ureg, srcAddr, areg, inc);
 }
 
 // vstus/vstas
 template <typename T = DefaultType, PostLiteral postMode = PostLiteral::POST_MODE_UPDATE, typename U>
-__simd_callee__ inline void DataCopyUnAlign(__ubuf__ T*& dstAddr, U& srcReg, UnalignReg& ureg, uint32_t postUpdateStride)
+__simd_callee__ inline void DataCopyUnAlign(
+    __ubuf__ T*& dstAddr, U& srcReg, UnalignReg& ureg, uint32_t postUpdateStride)
 {
     DataCopyUnAlignImpl<T, postMode, U>(dstAddr, srcReg, ureg, postUpdateStride);
 }
 template <typename T, PostLiteral postMode, typename U>
-__simd_callee__ inline void StoreUnAlign(__ubuf__ T*& dstAddr, U& srcReg, UnalignRegForStore& ureg, uint32_t postUpdateStride)
+__simd_callee__ inline void StoreUnAlign(
+    __ubuf__ T*& dstAddr, U& srcReg, UnalignRegForStore& ureg, uint32_t postUpdateStride)
 {
     DataCopyUnAlignImpl<T, postMode, U>(dstAddr, srcReg, ureg, postUpdateStride);
 }
@@ -362,8 +365,7 @@ __simd_callee__ inline void StoreUnAlignPost(__ubuf__ T* dstAddr, UnalignRegForS
 }
 
 // vgather2
-template <typename T0 = DefaultType, typename T1, typename T2 = DefaultType, typename T3,
-          typename T4>
+template <typename T0 = DefaultType, typename T1, typename T2 = DefaultType, typename T3, typename T4>
 __simd_callee__ inline void DataCopyGather(T3& dstReg, __ubuf__ T1* baseAddr, T4& index, MaskReg& mask)
 {
     DataCopyGatherImpl<T0, T1, T2, T3, T4>(dstReg, baseAddr, index, mask);
@@ -388,14 +390,12 @@ __simd_callee__ inline void GatherB(U& dstReg, __ubuf__ T* baseAddr, S& index, M
 
 // vscatter
 template <typename T = DefaultType, typename U = DefaultType, typename S, typename V>
-__simd_callee__ inline void DataCopyScatter(__ubuf__ T* baseAddr, S& srcReg, V& index,
-                                            MaskReg& mask)
+__simd_callee__ inline void DataCopyScatter(__ubuf__ T* baseAddr, S& srcReg, V& index, MaskReg& mask)
 {
     DataCopyScatterImpl<T, U, S, V>(baseAddr, srcReg, index, mask);
 }
 template <typename T, typename U, typename S, typename V>
-__simd_callee__ inline void Scatter(__ubuf__ T* baseAddr, S& srcReg, V& index,
-                                    MaskReg& mask)
+__simd_callee__ inline void Scatter(__ubuf__ T* baseAddr, S& srcReg, V& index, MaskReg& mask)
 {
     DataCopyScatterImpl<T, U, S, V>(baseAddr, srcReg, index, mask);
 }
@@ -482,9 +482,9 @@ __simd_callee__ inline void StoreUnAlign(__ubuf__ T*& dstAddr, MaskReg& mask, Un
     return DataCopyUnAlignImpl<T>(dstAddr, mask, ureg);
 }
 
-}  // namespace Reg
-}  // namespace AscendC
-#endif  // ASCENDC_KERNEL_REG_COMPUTE_DATACOPY_INTERFACE_IMPL_H
+} // namespace Reg
+} // namespace AscendC
+#endif // ASCENDC_KERNEL_REG_COMPUTE_DATACOPY_INTERFACE_IMPL_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_REG_COMPUTE_DATACOPY_INTF_IMPL__)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__

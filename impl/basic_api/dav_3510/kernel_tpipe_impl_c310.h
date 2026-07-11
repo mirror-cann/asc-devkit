@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_tpipe_impl_c310.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_3510/kernel_tpipe_impl_c310.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tpipe.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_3510/kernel_tpipe_impl_c310.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tpipe.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_TPIPE_IMPL_C310_H__
 #endif
@@ -49,7 +50,7 @@
 #include "../utils/kernel_utils_constants.h"
 #include "../utils/kernel_utils_mode_cpu.h"
 
-#if defined (ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
+#if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 #include <cstdint>
 #include <map>
 #include <random>
@@ -70,11 +71,11 @@ __aicore__ inline void PrintTimeStamp(uint32_t descId);
 inline uint8_t* GetBaseAddrCpu(int8_t logicPos)
 {
     auto positionHardMap = ConstDefiner::Instance().positionHardMap;
-    ASCENDC_ASSERT((positionHardMap.find((TPosition)logicPos) != positionHardMap.end()),
-                    { KERNEL_LOG(KERNEL_ERROR, "illegal logicPos %d ", int32_t(logicPos)); });
+    ASCENDC_ASSERT((positionHardMap.find((TPosition)logicPos) != positionHardMap.end()), {
+        KERNEL_LOG(KERNEL_ERROR, "illegal logicPos %d ", int32_t(logicPos));
+    });
     Hardware hardType = positionHardMap.at((TPosition)logicPos);
-    ASCENDC_ASSERT((hardType != Hardware::GM),
-                    { KERNEL_LOG(KERNEL_ERROR, "hardware position can not be gm"); });
+    ASCENDC_ASSERT((hardType != Hardware::GM), { KERNEL_LOG(KERNEL_ERROR, "hardware position can not be gm"); });
     return ConstDefiner::Instance().GetHardwareBaseAddr(hardType);
 }
 #endif
@@ -98,7 +99,9 @@ __aicore__ inline void TPipe::Init()
 {
 // disabled on CPU mode for compatiablilty
 #if defined(ASCENDC_DEBUG) && !defined(ASCENDC_CPU_DEBUG)
-    ASCENDC_DEBUG_ASSERT(GetTPipePtr() == nullptr, KERNEL_LOG_INTERNAL(KERNEL_ERROR, "TPipe has already been constructed at %p!\n", (void*)g_lastTpipeInitPos));
+    ASCENDC_DEBUG_ASSERT(
+        GetTPipePtr() == nullptr,
+        KERNEL_LOG_INTERNAL(KERNEL_ERROR, "TPipe has already been constructed at %p!\n", (void*)g_lastTpipeInitPos));
     g_lastTpipeInitPos = get_pc();
 #endif
     ResetPool();
@@ -122,25 +125,26 @@ __aicore__ inline void TPipe::Init()
         SetBufferCtx((Hardware)i, &g_tpipeImpl.bufPoolBaseAddr_[i]);
     }
     auto bufferInitLen = ConstDefiner::Instance().bufferInitLen;
-    AscendCBufAbsAddr(uint8_t(Hardware::UB),
-        static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuUB)),
+    AscendCBufAbsAddr(
+        uint8_t(Hardware::UB), static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuUB)),
         bufferInitLen.at(Hardware::UB));
-    AscendCBufAbsAddr(uint8_t(Hardware::L1),
-        static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuL1)),
+    AscendCBufAbsAddr(
+        uint8_t(Hardware::L1), static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuL1)),
         bufferInitLen.at(Hardware::L1));
-    AscendCBufAbsAddr(uint8_t(Hardware::L0A),
-        static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuL0A)),
+    AscendCBufAbsAddr(
+        uint8_t(Hardware::L0A), static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuL0A)),
         bufferInitLen.at(Hardware::L0A));
-    AscendCBufAbsAddr(uint8_t(Hardware::L0B),
-        static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuL0B)),
+    AscendCBufAbsAddr(
+        uint8_t(Hardware::L0B), static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuL0B)),
         bufferInitLen.at(Hardware::L0B));
-    AscendCBufAbsAddr(uint8_t(Hardware::L0C),
-        static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuL0C)),
+    AscendCBufAbsAddr(
+        uint8_t(Hardware::L0C), static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuL0C)),
         bufferInitLen.at(Hardware::L0C));
-    AscendCBufAbsAddr(uint8_t(Hardware::BIAS),
-        static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuBIAS)),
+    AscendCBufAbsAddr(
+        uint8_t(Hardware::BIAS), static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuBIAS)),
         bufferInitLen.at(Hardware::BIAS));
-    AscendCBufAbsAddr(uint8_t(Hardware::FIXBUF),
+    AscendCBufAbsAddr(
+        uint8_t(Hardware::FIXBUF),
         static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ConstDefiner::Instance().cpuFIXBUF)),
         bufferInitLen.at(Hardware::FIXBUF));
 #endif
@@ -157,8 +161,9 @@ __aicore__ inline void TPipe::Init()
 template <class T, class First, class... Rest>
 __aicore__ inline void TPipe::AllocAddrs(TBufType* ptr, const First& addr, const Rest&... addrs)
 {
-    static_assert(Std::is_tuple_v<First> && Std::tuple_size_v<First> == 2,
-                  "input Addrs must be Std::tuple type and tuple_size must be 2");
+    static_assert(
+        Std::is_tuple_v<First> && Std::tuple_size_v<First> == 2,
+        "input Addrs must be Std::tuple type and tuple_size must be 2");
     constexpr bool useAltBufId = T::config.consumerSize > 1;
     ptr->state = TBufState::FREE;
     ptr->freeBufEvt = T::freeBufEvt;
@@ -209,8 +214,9 @@ __aicore__ inline bool TPipe::InitBuffer(T& que, const Std::tuple<U, V>& addr0, 
     static_assert((T::isTQue), "TPipe::InitBuffer(T& que, Addrs ...addrs) not supports T as TBuf");
     constexpr uint32_t num = sizeof...(addrs) + 1;
     ASCENDC_ASSERT((que.config.bufferNumber == 0 || que.config.bufferNumber == num), {
-        KERNEL_LOG(KERNEL_ERROR, "buffer number is %u, which should be the same as TQueConfig::bufferNumber(%u)", num,
-                   que.config.bufferNumber);
+        KERNEL_LOG(
+            KERNEL_ERROR, "buffer number is %u, which should be the same as TQueConfig::bufferNumber(%u)", num,
+            que.config.bufferNumber);
     });
     static_assert(T::dstPosition != TPosition::TSCM, "Init Buffer is not supported Postion TSCM");
     Hardware pool = GetBufferPos(T::srcPosition, T::dstPosition);
@@ -222,16 +228,19 @@ __aicore__ inline bool TPipe::InitBuffer(T& que, const Std::tuple<U, V>& addr0, 
     AllocAddrs<T>(ptr, addr0, addrs...);
     this->g_tpipeImpl.curBufSize_ += num;
     // total buffer num created by InitBuffer must be <= 64
-    ASCENDC_DEBUG_ASSERT((this->g_tpipeImpl.curBufSize_ <= QBUF_MAX_LEN && this->g_tpipeImpl.curBufSize_ > 0),
-                         KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Total buffer num managed by TPipe is %d, should be in range (0, %d]\n",
-                         this->g_tpipeImpl.curBufSize_, QBUF_MAX_LEN));
+    ASCENDC_DEBUG_ASSERT(
+        (this->g_tpipeImpl.curBufSize_ <= QBUF_MAX_LEN && this->g_tpipeImpl.curBufSize_ > 0),
+        KERNEL_LOG_INTERNAL(
+            KERNEL_ERROR, "Total buffer num managed by TPipe is %d, should be in range (0, %d]\n",
+            this->g_tpipeImpl.curBufSize_, QBUF_MAX_LEN));
 #ifdef ASCENDC_TIME_STAMP_ON
     PrintTimeStamp(static_cast<uint32_t>(TimeStampId::TIME_STAMP_BUFFER));
 #endif
     return true;
 }
 
-template <class T> __aicore__ inline bool TPipe::InitBuffer(T& que, uint8_t num, uint32_t len)
+template <class T>
+__aicore__ inline bool TPipe::InitBuffer(T& que, uint8_t num, uint32_t len)
 {
     static_assert((T::isTQue), "TPipe::InitBuffer(T& que, uint8_t num, uint32_t len) not supports T as TBuf");
 
@@ -245,11 +254,13 @@ template <class T> __aicore__ inline bool TPipe::InitBuffer(T& que, uint8_t num,
         constexpr bool useAltBufId = T::config.consumerSize > 1;
         len = (len + ONE_BLK_SIZE - MIN_BLOCK_LEN) / ONE_BLK_SIZE * ONE_BLK_SIZE;
         ASCENDC_ASSERT((T::config.bufferLen == 0 || T::config.bufferLen == len), {
-            KERNEL_LOG(KERNEL_ERROR, "init buffer len %d must > 0 and <= bufferLen %d if bufferLen is > 0",
+            KERNEL_LOG(
+                KERNEL_ERROR, "init buffer len %d must > 0 and <= bufferLen %d if bufferLen is > 0",
                 static_cast<int32_t>(len), static_cast<int32_t>(T::config.bufferLen));
         });
         ASCENDC_ASSERT((num > 0 && (T::config.bufferNumber == 0 || T::config.bufferNumber == num)), {
-            KERNEL_LOG(KERNEL_ERROR, "init buffer num %d must > 0 and <= bufferNumber %d if bufferNumber is > 0",
+            KERNEL_LOG(
+                KERNEL_ERROR, "init buffer num %d must > 0 and <= bufferNumber %d if bufferNumber is > 0",
                 static_cast<int32_t>(num), static_cast<int32_t>(T::config.bufferNumber));
         });
 
@@ -265,7 +276,8 @@ template <class T> __aicore__ inline bool TPipe::InitBuffer(T& que, uint8_t num,
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
         auto bufferInitLen = ConstDefiner::Instance().bufferInitLen;
         ASCENDC_ASSERT((num * len <= bufferInitLen.at(pool)), {
-            KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", num * len, bufferInitLen.at(pool)); });
+            KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", num * len, bufferInitLen.at(pool));
+        });
         auto pos_ = GetPosition(T::srcPosition, T::dstPosition);
         auto absAddr = GetBaseAddr(static_cast<int8_t>(pos_));
         AscendCBufInit(static_cast<uint8_t>(pos_), 0, num, reinterpret_cast<uint64_t>(curPoolAddr + absAddr), len);
@@ -286,7 +298,7 @@ template <class T> __aicore__ inline bool TPipe::InitBuffer(T& que, uint8_t num,
                     ptr->enQueEvtID = AllocEventID<T::enQueEvt>();
                     ptr->freeBufEvtID = AllocEventID<T::freeBufEvt>();
                     SetFlag<T::freeBufEvt>(ptr->freeBufEvtID);
-                } else if constexpr(T::config.enableStaticEvtId) {
+                } else if constexpr (T::config.enableStaticEvtId) {
                     ptr->bufId = AllocMutexID();
                     ptr->bufIdAlt = INVALID_TBUFID;
                 } else {
@@ -300,25 +312,27 @@ template <class T> __aicore__ inline bool TPipe::InitBuffer(T& que, uint8_t num,
             curPoolAddr += len;
         }
         ASCENDC_ASSERT((curPoolAddr <= bufferInitLen.at(pool)), {
-            KERNEL_LOG(KERNEL_ERROR, "curPoolAddr is %d, limits is %d", curPoolAddr, bufferInitLen.at(pool)); });
+            KERNEL_LOG(KERNEL_ERROR, "curPoolAddr is %d, limits is %d", curPoolAddr, bufferInitLen.at(pool));
+        });
         this->g_tpipeImpl.bufPool_[static_cast<uint8_t>(pool)].maxAddr = curPoolAddr;
         this->g_tpipeImpl.curBufSize_ += num;
         ASCENDC_ASSERT((this->g_tpipeImpl.curBufSize_ < QBUF_MAX_LEN), {
             KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, limits is %d", this->g_tpipeImpl.curBufSize_, QBUF_MAX_LEN);
         });
-        ASCENDC_ASSERT((this->g_tpipeImpl.bufPool_[static_cast<uint8_t>(Hardware::L1)].maxAddr <=
-                           this->g_tpipeImpl.tscmBufferPtr_),
+        ASCENDC_ASSERT(
+            (this->g_tpipeImpl.bufPool_[static_cast<uint8_t>(Hardware::L1)].maxAddr <=
+             this->g_tpipeImpl.tscmBufferPtr_),
             {
-                KERNEL_LOG(KERNEL_ERROR,
-                    "tscm addr is %d, limits is %d",
-                    this->g_tpipeImpl.tscmBufferPtr_,
+                KERNEL_LOG(
+                    KERNEL_ERROR, "tscm addr is %d, limits is %d", this->g_tpipeImpl.tscmBufferPtr_,
                     this->g_tpipeImpl.bufPool_[static_cast<uint8_t>(Hardware::L1)].maxAddr);
             });
         return true;
     }
 }
 
-template <TPosition pos> __aicore__ inline bool TPipe::InitBuffer(TBuf<pos>& buf, uint32_t len)
+template <TPosition pos>
+__aicore__ inline bool TPipe::InitBuffer(TBuf<pos>& buf, uint32_t len)
 {
     ASCENDC_ASSERT((len > 0), { KERNEL_LOG(KERNEL_ERROR, "buffer length is %u, which should be larger than 0", len); });
     len = (len + ONE_BLK_SIZE - MIN_BLOCK_LEN) / ONE_BLK_SIZE * ONE_BLK_SIZE;
@@ -333,8 +347,9 @@ template <TPosition pos> __aicore__ inline bool TPipe::InitBuffer(TBuf<pos>& buf
     auto ptr = buf.bufStart;
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     auto bufferInitLen = ConstDefiner::Instance().bufferInitLen;
-    ASCENDC_ASSERT((len <= bufferInitLen.at(pool)),
-                   { KERNEL_LOG(KERNEL_ERROR, "len is %u, exceeds the limit %d", len, bufferInitLen.at(pool)); });
+    ASCENDC_ASSERT((len <= bufferInitLen.at(pool)), {
+        KERNEL_LOG(KERNEL_ERROR, "len is %u, exceeds the limit %d", len, bufferInitLen.at(pool));
+    });
     auto absAddr = GetBaseAddr(static_cast<int8_t>(pos));
     AscendCBufInit(static_cast<uint8_t>(pos), 1, 1, reinterpret_cast<uint64_t>(curPoolAddr + absAddr), len);
 #endif
@@ -352,14 +367,15 @@ template <TPosition pos> __aicore__ inline bool TPipe::InitBuffer(TBuf<pos>& buf
     this->g_tpipeImpl.bufPool_[static_cast<uint8_t>(pool)].maxAddr = curPoolAddr;
     this->g_tpipeImpl.curBufSize_ += 1;
     ASCENDC_ASSERT((this->g_tpipeImpl.curBufSize_ < QBUF_MAX_LEN), {
-        KERNEL_LOG(KERNEL_ERROR, "current total buffer num is %d, exceeds the limit %d", this->g_tpipeImpl.curBufSize_,
+        KERNEL_LOG(
+            KERNEL_ERROR, "current total buffer num is %d, exceeds the limit %d", this->g_tpipeImpl.curBufSize_,
             QBUF_MAX_LEN);
     });
     return true;
 }
 
 template <class T>
-__aicore__ inline bool TPipe::InitBufPool(T &bufPool, uint32_t len)
+__aicore__ inline bool TPipe::InitBufPool(T& bufPool, uint32_t len)
 {
     static_assert(
         (T::isTbufPool), "TPipe::InitBufPool(T& bufPool, uint32_t len, U& shareBuf) only supports T as TbufPool");
@@ -381,39 +397,41 @@ __aicore__ inline bool TPipe::InitBufPool(T &bufPool, uint32_t len)
 
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     auto bufferInitLen = ConstDefiner::Instance().bufferInitLen;
-    ASCENDC_ASSERT((len <= bufferInitLen.at(pool)),
-        { KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", len, bufferInitLen.at(pool)); });
+    ASCENDC_ASSERT((len <= bufferInitLen.at(pool)), {
+        KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", len, bufferInitLen.at(pool));
+    });
     auto pos = T::poolPos;
     auto absAddr = GetBaseAddr(static_cast<int8_t>(pos));
-    AscendCTBufPoolInit(static_cast<uint8_t>(pos),
-        reinterpret_cast<uint64_t>(curPoolAddr + absAddr),
-        len,
+    AscendCTBufPoolInit(
+        static_cast<uint8_t>(pos), reinterpret_cast<uint64_t>(curPoolAddr + absAddr), len,
         reinterpret_cast<uint64_t>(&bufPool.tBufPoolImpl));
 #endif
     curPoolAddr += len;
-    ASCENDC_ASSERT((curPoolAddr <= bufferInitLen.at(pool)),
-        { KERNEL_LOG(KERNEL_ERROR, "curPoolAddr is %d, limits is %d", curPoolAddr, bufferInitLen.at(pool)); });
+    ASCENDC_ASSERT((curPoolAddr <= bufferInitLen.at(pool)), {
+        KERNEL_LOG(KERNEL_ERROR, "curPoolAddr is %d, limits is %d", curPoolAddr, bufferInitLen.at(pool));
+    });
     this->g_tpipeImpl.bufPool_[static_cast<uint8_t>(pool)].maxAddr = curPoolAddr;
     ASCENDC_ASSERT(
         (this->g_tpipeImpl.bufPool_[static_cast<uint8_t>(Hardware::L1)].maxAddr <= this->g_tpipeImpl.tscmBufferPtr_), {
-            KERNEL_LOG(KERNEL_ERROR,
-                "tscm addr is %d, limits is %d",
-                this->g_tpipeImpl.tscmBufferPtr_,
+            KERNEL_LOG(
+                KERNEL_ERROR, "tscm addr is %d, limits is %d", this->g_tpipeImpl.tscmBufferPtr_,
                 this->g_tpipeImpl.bufPool_[static_cast<uint8_t>(Hardware::L1)].maxAddr);
         });
     return true;
 }
 
 template <class T, class U>
-__aicore__ inline bool TPipe::InitBufPool(T &bufPool, uint32_t len, U &shareBuf)
+__aicore__ inline bool TPipe::InitBufPool(T& bufPool, uint32_t len, U& shareBuf)
 {
-    static_assert((T::isTbufPool && U::isTbufPool),
+    static_assert(
+        (T::isTbufPool && U::isTbufPool),
         "TPipe::InitBufPool(T& bufPool, uint32_t len, U& shareBuf) only supports T and U as TBufPool");
     ASCENDC_ASSERT((len > 0), { KERNEL_LOG(KERNEL_ERROR, "buffer length is %u, which should be larger than 0", len); });
     len = AlignUp(len, ONE_BLK_SIZE);
     constexpr auto pool = GetPhyType(T::poolPos);
-    ASCENDC_ASSERT((pool == GetPhyType(U::poolPos)),
-        { KERNEL_LOG(KERNEL_ERROR, "Hardware type of input bufPool should be same as shareBuf"); });
+    ASCENDC_ASSERT((pool == GetPhyType(U::poolPos)), {
+        KERNEL_LOG(KERNEL_ERROR, "Hardware type of input bufPool should be same as shareBuf");
+    });
     static_assert((T::bufSize <= U::bufSize), "U bufIDSize must be > T bufIDSize");
 
     bufPool.tBufPoolImpl.startAddr_ = shareBuf.tBufPoolImpl.startAddr_;
@@ -422,42 +440,45 @@ __aicore__ inline bool TPipe::InitBufPool(T &bufPool, uint32_t len, U &shareBuf)
     bufPool.tBufPoolImpl.bufIdPool_ = shareBuf.tBufPoolImpl.bufIdPool_ & shareBuf.tBufPoolImpl.availableIdMask_;
     bufPool.tBufPoolImpl.availableIdMask_ = bufPool.tBufPoolImpl.bufIdPool_;
     ASCENDC_ASSERT((len <= shareBuf.tBufPoolImpl.maxLen_), {
-        KERNEL_LOG(KERNEL_ERROR,
-            "Length of input bufPool should be shorter than len of shareBuf, which is %u",
+        KERNEL_LOG(
+            KERNEL_ERROR, "Length of input bufPool should be shorter than len of shareBuf, which is %u",
             shareBuf.tBufPoolImpl.maxLen_);
     });
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     auto bufferInitLen = ConstDefiner::Instance().bufferInitLen;
-    ASCENDC_ASSERT((len <= bufferInitLen.at(pool)),
-        { KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", len, bufferInitLen.at(pool)); });
+    ASCENDC_ASSERT((len <= bufferInitLen.at(pool)), {
+        KERNEL_LOG(KERNEL_ERROR, "buffer size is %d, exceeds the limit %d", len, bufferInitLen.at(pool));
+    });
     auto pos = T::poolPos;
     auto absAddr = GetBaseAddr(static_cast<int8_t>(pos));
-    AscendCTBufPoolInit(static_cast<uint8_t>(pos),
-        reinterpret_cast<uint64_t>(bufPool.tBufPoolImpl.startAddr_ + absAddr),
-        len,
+    AscendCTBufPoolInit(
+        static_cast<uint8_t>(pos), reinterpret_cast<uint64_t>(bufPool.tBufPoolImpl.startAddr_ + absAddr), len,
         reinterpret_cast<uint64_t>(&bufPool.tBufPoolImpl));
 #endif
     return true;
 }
 
-template <HardEvent evt> __aicore__ inline TEventID TPipe::AllocEventID()
+template <HardEvent evt>
+__aicore__ inline TEventID TPipe::AllocEventID()
 {
-    ASCENDC_ASSERT((evt < HardEvent::MAX),
-                   { KERNEL_LOG(KERNEL_ERROR, "illegal event %d", static_cast<int32_t>(evt)); });
+    ASCENDC_ASSERT(
+        (evt < HardEvent::MAX), { KERNEL_LOG(KERNEL_ERROR, "illegal event %d", static_cast<int32_t>(evt)); });
     auto ptr = this->g_tpipeImpl.eventPool_ + EventToIndex(evt);
     auto lastId = sff0(ptr->eventOccupy);
     ASCENDC_ASSERT((lastId < QUE_MAX_EVENT && lastId >= 0), {
-        KERNEL_LOG(KERNEL_ERROR, "current id is %ld, max buffer number in same queue position is %d", lastId,
-            QUE_MAX_EVENT);
+        KERNEL_LOG(
+            KERNEL_ERROR, "current id is %ld, max buffer number in same queue position is %d", lastId, QUE_MAX_EVENT);
     });
     ptr->eventOccupy = sbitset1(ptr->eventOccupy, lastId);
     return lastId;
 }
 
-template <HardEvent evt> __aicore__ inline void TPipe::ReleaseEventID(TEventID id)
+template <HardEvent evt>
+__aicore__ inline void TPipe::ReleaseEventID(TEventID id)
 {
     ASCENDC_ASSERT((id >= 0 && id < QUE_MAX_EVENT), {
-        KERNEL_LOG(KERNEL_ERROR, "current id is %d, which should be larger than 0, and smaller than %d",
+        KERNEL_LOG(
+            KERNEL_ERROR, "current id is %d, which should be larger than 0, and smaller than %d",
             static_cast<int32_t>(id), QUE_MAX_EVENT);
     });
     ASCENDC_ASSERT((evt != HardEvent::MAX), { KERNEL_LOG(KERNEL_ERROR, "evt cannot be HardEvent::MAX"); });
@@ -471,25 +492,27 @@ __aicore__ inline TEventID TPipe::FetchEventID(HardEvent evt)
     auto ptr = this->g_tpipeImpl.eventPool_ + EventToIndex(evt);
     auto lastId = sff0(ptr->eventOccupy);
     ASCENDC_ASSERT((lastId < QUE_MAX_EVENT && lastId >= 0), {
-        KERNEL_LOG(KERNEL_ERROR, "current id is %ld, max buffer number in same queue position is %d", lastId,
-            QUE_MAX_EVENT);
+        KERNEL_LOG(
+            KERNEL_ERROR, "current id is %ld, max buffer number in same queue position is %d", lastId, QUE_MAX_EVENT);
     });
     return lastId;
 }
 
-template <HardEvent evt> __aicore__ inline TEventID TPipe::FetchEventID()
+template <HardEvent evt>
+__aicore__ inline TEventID TPipe::FetchEventID()
 {
     auto ptr = this->g_tpipeImpl.eventPool_ + EventToIndex(evt);
     auto lastId = sff0(ptr->eventOccupy);
     ASCENDC_ASSERT((lastId < QUE_MAX_EVENT && lastId >= 0), {
-        KERNEL_LOG(KERNEL_ERROR, "current id is %ld, max buffer number in same queue position is %d", lastId,
-            QUE_MAX_EVENT);
+        KERNEL_LOG(
+            KERNEL_ERROR, "current id is %ld, max buffer number in same queue position is %d", lastId, QUE_MAX_EVENT);
     });
     return lastId;
 }
 
 // NOTICE: GetAbsAddr has been deprecated and will be removed in the next version. Please do not use it!
-template <TPosition pos> __aicore__ inline TBuffAddr TPipe::GetAbsAddr(int32_t offset, int32_t len) const
+template <TPosition pos>
+__aicore__ inline TBuffAddr TPipe::GetAbsAddr(int32_t offset, int32_t len) const
 {
     TBuffAddr addr;
     addr.logicPos = static_cast<uint8_t>(pos);
@@ -519,27 +542,26 @@ __aicore__ inline __sync_noalias__ LocalTensor<T> TPipe::GetAbsAddr(int32_t offs
     return tensor;
 }
 
-__aicore__ inline void InitShareBufStart(TPipe* tpipe, uint32_t mode, uint32_t* shareLens,
-    uint32_t lens, uint8_t subBlockIdx)
+__aicore__ inline void InitShareBufStart(
+    TPipe* tpipe, uint32_t mode, uint32_t* shareLens, uint32_t lens, uint8_t subBlockIdx)
 {
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     ASCENDC_ASSERT((lens == static_cast<uint32_t>(TShareBuf::ShareHard::MAX)), {
-        KERNEL_LOG(KERNEL_ERROR, "lens is %d, which should be %d", lens,
-            static_cast<uint32_t>(TShareBuf::ShareHard::MAX));
+        KERNEL_LOG(
+            KERNEL_ERROR, "lens is %d, which should be %d", lens, static_cast<uint32_t>(TShareBuf::ShareHard::MAX));
     });
 #else
     (void)(lens);
 #endif
 
-    ASCENDC_ASSERT((subBlockIdx == 0 || subBlockIdx == 1),
-                   { KERNEL_LOG(KERNEL_ERROR, "subBlockIdx is %d, which should only be 0/1", subBlockIdx); });
-    tpipe->AuxShareBufStart(mode, shareLens, static_cast<uint8_t>(TShareBuf::ShareHard::L1),
-        Hardware::L1, subBlockIdx);
-    tpipe->AuxShareBufStart(mode, shareLens, static_cast<uint8_t>(TShareBuf::ShareHard::L0C),
-        Hardware::L0C, subBlockIdx);
+    ASCENDC_ASSERT((subBlockIdx == 0 || subBlockIdx == 1), {
+        KERNEL_LOG(KERNEL_ERROR, "subBlockIdx is %d, which should only be 0/1", subBlockIdx);
+    });
+    tpipe->AuxShareBufStart(mode, shareLens, static_cast<uint8_t>(TShareBuf::ShareHard::L1), Hardware::L1, subBlockIdx);
+    tpipe->AuxShareBufStart(
+        mode, shareLens, static_cast<uint8_t>(TShareBuf::ShareHard::L0C), Hardware::L0C, subBlockIdx);
 #if (__NPU_ARCH__ == 1001) || (__NPU_ARCH__ == 2002)
-    tpipe->AuxShareBufStart(mode, shareLens, static_cast<uint8_t>(TShareBuf::ShareHard::UB),
-        Hardware::UB, subBlockIdx);
+    tpipe->AuxShareBufStart(mode, shareLens, static_cast<uint8_t>(TShareBuf::ShareHard::UB), Hardware::UB, subBlockIdx);
 #endif
     tpipe->g_tpipeImpl.bufPool_[static_cast<uint8_t>(Hardware::L0A)].maxAddr = 0;
     tpipe->g_tpipeImpl.bufPool_[static_cast<uint8_t>(Hardware::L0B)].maxAddr = 0;
@@ -580,13 +602,12 @@ __aicore__ inline void TPipe::InitSpmBuffer(const GlobalTensor<T>& workspace, co
 __aicore__ inline void TPipe::InitSpmBuffer(const int32_t bufferSize)
 {
     (void)(bufferSize);
-    ASCENDC_ASSERT((false),
-                   { KERNEL_LOG(KERNEL_ERROR, "only support platform ascend910, ascend310p"); });
+    ASCENDC_ASSERT((false), { KERNEL_LOG(KERNEL_ERROR, "only support platform ascend910, ascend310p"); });
 }
 
 template <typename T>
-__aicore__ inline void TPipe::WriteSpmBuffer(const LocalTensor<T>& writeLocal, const DataCopyParams& copyParams,
-    int32_t writeOffset)
+__aicore__ inline void TPipe::WriteSpmBuffer(
+    const LocalTensor<T>& writeLocal, const DataCopyParams& copyParams, int32_t writeOffset)
 {
     /*
      * before write, the local may come from MTE2/V, so need insert MTE3 wait V/MTE2
@@ -599,15 +620,18 @@ __aicore__ inline void TPipe::WriteSpmBuffer(const LocalTensor<T>& writeLocal, c
     SetFlag<HardEvent::MTE2_MTE3>(eventIDMTE2ToMTE3);
     WaitFlag<HardEvent::MTE2_MTE3>(eventIDMTE2ToMTE3);
     if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::GM)) {
-        DataCopyUB2GMImpl(reinterpret_cast<__gm__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
+        DataCopyUB2GMImpl(
+            reinterpret_cast<__gm__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
             reinterpret_cast<__ubuf__ T*>(writeLocal.GetPhyAddr()), copyParams);
         event_t eventIDMTE3ToMTE2 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE2));
         SetFlag<HardEvent::MTE3_MTE2>(eventIDMTE3ToMTE2);
         WaitFlag<HardEvent::MTE3_MTE2>(eventIDMTE3ToMTE2);
     } else if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::L1)) {
-        ASCENDC_ASSERT((writeOffset % ONE_BLK_SIZE == 0),
-                       { KERNEL_LOG(KERNEL_ERROR, "writeOffset is %d, which must be 32B aligned", writeOffset); });
-        DataCopyUB2L1Impl(reinterpret_cast<__cbuf__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
+        ASCENDC_ASSERT((writeOffset % ONE_BLK_SIZE == 0), {
+            KERNEL_LOG(KERNEL_ERROR, "writeOffset is %d, which must be 32B aligned", writeOffset);
+        });
+        DataCopyUB2L1Impl(
+            reinterpret_cast<__cbuf__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
             reinterpret_cast<__ubuf__ T*>(writeLocal.GetPhyAddr()), copyParams);
         event_t eventIDMTE3ToMTE1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE1));
         SetFlag<HardEvent::MTE3_MTE1>(eventIDMTE3ToMTE1);
@@ -619,8 +643,8 @@ __aicore__ inline void TPipe::WriteSpmBuffer(const LocalTensor<T>& writeLocal, c
 }
 
 template <typename T>
-__aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, const DataCopyParams& copyParams,
-    int32_t readOffset)
+__aicore__ inline void TPipe::ReadSpmBuffer(
+    const LocalTensor<T>& readLocal, const DataCopyParams& copyParams, int32_t readOffset)
 {
     /*
      * before read, the local may be calculate, so need insert MTE wait V
@@ -632,7 +656,8 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
         event_t eventIDMTE2ToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_MTE3));
         SetFlag<HardEvent::V_MTE2>(eventIDVToMTE2);
         WaitFlag<HardEvent::V_MTE2>(eventIDVToMTE2);
-        DataCopyGM2UBImpl(reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
+        DataCopyGM2UBImpl(
+            reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
             reinterpret_cast<__gm__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + readOffset, copyParams);
         SetFlag<HardEvent::MTE2_V>(eventIDMTE2ToV);
         WaitFlag<HardEvent::MTE2_V>(eventIDMTE2ToV);
@@ -640,14 +665,16 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
         SetFlag<HardEvent::MTE2_MTE3>(eventIDMTE2ToMTE3);
         WaitFlag<HardEvent::MTE2_MTE3>(eventIDMTE2ToMTE3);
     } else if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::L1)) {
-        ASCENDC_ASSERT((readOffset % ONE_BLK_SIZE == 0),
-                       { KERNEL_LOG(KERNEL_ERROR, "readOffset is %d, which must be 32B aligned", readOffset); });
+        ASCENDC_ASSERT((readOffset % ONE_BLK_SIZE == 0), {
+            KERNEL_LOG(KERNEL_ERROR, "readOffset is %d, which must be 32B aligned", readOffset);
+        });
         event_t eventIDVToMTE1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE1));
         event_t eventIDMTE1ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_V));
         event_t eventIDMTE1ToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_MTE3));
         SetFlag<HardEvent::V_MTE1>(eventIDVToMTE1);
         WaitFlag<HardEvent::V_MTE1>(eventIDVToMTE1);
-        DataCopyL12UBImpl(reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
+        DataCopyL12UBImpl(
+            reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
             reinterpret_cast<__cbuf__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + readOffset, copyParams);
 
         SetFlag<HardEvent::MTE1_V>(eventIDMTE1ToV);
@@ -659,8 +686,8 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
 }
 
 template <typename T>
-__aicore__ inline void TPipe::WriteSpmBuffer(const LocalTensor<T>& writeLocal, const int32_t writeSize,
-    int32_t writeOffset)
+__aicore__ inline void TPipe::WriteSpmBuffer(
+    const LocalTensor<T>& writeLocal, const int32_t writeSize, int32_t writeOffset)
 {
     /*
      * before write, the local may come from MTE2/V, so need insert MTE3 wait V/MTE2
@@ -678,17 +705,21 @@ __aicore__ inline void TPipe::WriteSpmBuffer(const LocalTensor<T>& writeLocal, c
     SetFlag<HardEvent::MTE2_MTE3>(eventIDMTE2ToMTE3);
     WaitFlag<HardEvent::MTE2_MTE3>(eventIDMTE2ToMTE3);
     if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::GM)) {
-        DataCopyUB2GMImpl(reinterpret_cast<__gm__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
+        DataCopyUB2GMImpl(
+            reinterpret_cast<__gm__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
             reinterpret_cast<__ubuf__ T*>(writeLocal.GetPhyAddr()), repeatParams);
         event_t eventIDMTE3ToMTE2 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE2));
         SetFlag<HardEvent::MTE3_MTE2>(eventIDMTE3ToMTE2);
         WaitFlag<HardEvent::MTE3_MTE2>(eventIDMTE3ToMTE2);
     } else if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::L1)) {
-        ASCENDC_ASSERT((writeOffset % ONE_BLK_SIZE == 0),
-                       { KERNEL_LOG(KERNEL_ERROR, "writeOffset is %d, which must be 32B aligned", writeOffset); });
-        ASCENDC_ASSERT((writeSize % ONE_BLK_SIZE == 0),
-                       { KERNEL_LOG(KERNEL_ERROR, "writeSize is %d, which must be 32B aligned", writeSize); });
-        DataCopyUB2L1Impl(reinterpret_cast<__cbuf__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
+        ASCENDC_ASSERT((writeOffset % ONE_BLK_SIZE == 0), {
+            KERNEL_LOG(KERNEL_ERROR, "writeOffset is %d, which must be 32B aligned", writeOffset);
+        });
+        ASCENDC_ASSERT((writeSize % ONE_BLK_SIZE == 0), {
+            KERNEL_LOG(KERNEL_ERROR, "writeSize is %d, which must be 32B aligned", writeSize);
+        });
+        DataCopyUB2L1Impl(
+            reinterpret_cast<__cbuf__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + writeOffset,
             reinterpret_cast<__ubuf__ T*>(writeLocal.GetPhyAddr()), repeatParams);
         event_t eventIDMTE3ToMTE1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE3_MTE1));
         SetFlag<HardEvent::MTE3_MTE1>(eventIDMTE3ToMTE1);
@@ -715,7 +746,8 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
         event_t eventIDMTE2ToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE2_MTE3));
         SetFlag<HardEvent::V_MTE2>(eventIDVToMTE2);
         WaitFlag<HardEvent::V_MTE2>(eventIDVToMTE2);
-        DataCopyGM2UBImpl(reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
+        DataCopyGM2UBImpl(
+            reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
             reinterpret_cast<__gm__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + readOffset, repeatParams);
 
         SetFlag<HardEvent::MTE2_V>(eventIDMTE2ToV);
@@ -724,16 +756,19 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
         SetFlag<HardEvent::MTE2_MTE3>(eventIDMTE2ToMTE3);
         WaitFlag<HardEvent::MTE2_MTE3>(eventIDMTE2ToMTE3);
     } else if (g_tpipeImpl.spmInfo_.spmBufType == static_cast<uint8_t>(Hardware::L1)) {
-        ASCENDC_ASSERT((readOffset % ONE_BLK_SIZE == 0),
-                       { KERNEL_LOG(KERNEL_ERROR, "readOffset is %d, which must be 32B aligned", readOffset); });
-        ASCENDC_ASSERT((readSize % ONE_BLK_SIZE == 0),
-                       { KERNEL_LOG(KERNEL_ERROR, "readSize is %d, which must be 32B aligned", readSize); });
+        ASCENDC_ASSERT((readOffset % ONE_BLK_SIZE == 0), {
+            KERNEL_LOG(KERNEL_ERROR, "readOffset is %d, which must be 32B aligned", readOffset);
+        });
+        ASCENDC_ASSERT((readSize % ONE_BLK_SIZE == 0), {
+            KERNEL_LOG(KERNEL_ERROR, "readSize is %d, which must be 32B aligned", readSize);
+        });
         event_t eventIDVToMTE1 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_MTE1));
         event_t eventIDMTE1ToV = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_V));
         event_t eventIDMTE1ToMTE3 = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::MTE1_MTE3));
         SetFlag<HardEvent::V_MTE1>(eventIDVToMTE1);
         WaitFlag<HardEvent::V_MTE1>(eventIDVToMTE1);
-        DataCopyL12UBImpl(reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
+        DataCopyL12UBImpl(
+            reinterpret_cast<__ubuf__ T*>(readLocal.GetPhyAddr()),
             reinterpret_cast<__cbuf__ T*>(g_tpipeImpl.spmInfo_.spmAddr) + readOffset, repeatParams);
 
         SetFlag<HardEvent::MTE1_V>(eventIDMTE1ToV);
@@ -744,7 +779,8 @@ __aicore__ inline void TPipe::ReadSpmBuffer(const LocalTensor<T>& readLocal, con
     }
 }
 
-template <TPosition pos> __aicore__ inline uint64_t TPipe::GetQueueEndAddress()
+template <TPosition pos>
+__aicore__ inline uint64_t TPipe::GetQueueEndAddress()
 {
     Hardware hardType = GetPhyType(pos);
     ASCENDC_ASSERT((hardType == Hardware::UB), { KERNEL_LOG(KERNEL_ERROR, "hardType should be UB"); });
@@ -815,62 +851,70 @@ __aicore__ inline void TPipe::Reset()
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
 template <typename T>
 [[deprecated("NOTICE: GetAbsAddr has been deprecated and will be removed in the next version. "
-        "Please do not use it!")]]
-inline uint64_t TPipe::GetAbsAddr(const LocalTensor<T>& tensor)
+             "Please do not use it!")]] inline uint64_t
+TPipe::GetAbsAddr(const LocalTensor<T>& tensor)
 {
     // Translates the CPU address to the actual physical address.
     // Currently, only L1 or UB address translation is supported.
     int8_t logicPos = tensor.GetPosition();
     auto positionHardMap = ConstDefiner::Instance().positionHardMap;
-    ASCENDC_ASSERT((positionHardMap.find((TPosition)logicPos) != positionHardMap.end()),
-                    { KERNEL_LOG(KERNEL_ERROR, "illegal logicPos %d ", static_cast<int32_t>(logicPos)); });
+    ASCENDC_ASSERT((positionHardMap.find((TPosition)logicPos) != positionHardMap.end()), {
+        KERNEL_LOG(KERNEL_ERROR, "illegal logicPos %d ", static_cast<int32_t>(logicPos));
+    });
     Hardware hardType = positionHardMap.at((TPosition)logicPos);
-    ASCENDC_ASSERT(((hardType == Hardware::UB) || (hardType == Hardware::L1)),
-                    { KERNEL_LOG(KERNEL_ERROR, "illegal hardType %d ", static_cast<int32_t>(hardType)); });
+    ASCENDC_ASSERT(((hardType == Hardware::UB) || (hardType == Hardware::L1)), {
+        KERNEL_LOG(KERNEL_ERROR, "illegal hardType %d ", static_cast<int32_t>(hardType));
+    });
     uint8_t* phyAddr = reinterpret_cast<uint8_t*>(tensor.GetPhyAddr());
-    uint8_t* baseAddr =
-        static_cast<uint8_t*>(g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint32_t>(hardType)].absAddr);
+    uint8_t* baseAddr = static_cast<uint8_t*>(g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint32_t>(hardType)].absAddr);
     ASCENDC_ASSERT((phyAddr >= baseAddr), {
-        KERNEL_LOG(KERNEL_ERROR, "phyAddr is %p, baseAddr is %p, phyAddr should be larger than baseAddr", phyAddr,
-                   baseAddr);
+        KERNEL_LOG(
+            KERNEL_ERROR, "phyAddr is %p, baseAddr is %p, phyAddr should be larger than baseAddr", phyAddr, baseAddr);
     });
     uint64_t delta = phyAddr - baseAddr;
     if (hardType == Hardware::UB) {
-        ASCENDC_ASSERT((delta < TMP_UB_OFFSET),
-                       { KERNEL_LOG(KERNEL_ERROR, "addr %lu exceed ub limits %lu ", delta, TMP_UB_OFFSET); });
+        ASCENDC_ASSERT((delta < TMP_UB_OFFSET), {
+            KERNEL_LOG(KERNEL_ERROR, "addr %lu exceed ub limits %lu ", delta, TMP_UB_OFFSET);
+        });
     } else {
-        ASCENDC_ASSERT((delta < TOTAL_L1_SIZE),
-                       { KERNEL_LOG(KERNEL_ERROR, "addr %lu exceed l1 limits %lu", delta, TOTAL_L1_SIZE); });
+        ASCENDC_ASSERT((delta < TOTAL_L1_SIZE), {
+            KERNEL_LOG(KERNEL_ERROR, "addr %lu exceed l1 limits %lu", delta, TOTAL_L1_SIZE);
+        });
     }
     return delta;
 }
 
 // NOTICE: GetAbsAddr has been deprecated and will be removed in the next version. Please do not use it!
-template <typename T> inline uint64_t GetAbsAddr(TPipe* tpipe, const LocalTensor<T>& tensor)
+template <typename T>
+inline uint64_t GetAbsAddr(TPipe* tpipe, const LocalTensor<T>& tensor)
 {
     // Translates the CPU address to the actual physical address.
     // Currently, only L1 or UB address translation is supported.
     int8_t logicPos = tensor.GetPosition();
     auto positionHardMap = ConstDefiner::Instance().positionHardMap;
-    ASCENDC_ASSERT((positionHardMap.find((TPosition)logicPos) != positionHardMap.end()),
-                    { KERNEL_LOG(KERNEL_ERROR, "illegal logicPos %d ", static_cast<int32_t>(logicPos)); });
+    ASCENDC_ASSERT((positionHardMap.find((TPosition)logicPos) != positionHardMap.end()), {
+        KERNEL_LOG(KERNEL_ERROR, "illegal logicPos %d ", static_cast<int32_t>(logicPos));
+    });
     Hardware hardType = positionHardMap.at((TPosition)logicPos);
-    ASCENDC_ASSERT(((hardType == Hardware::UB) || (hardType == Hardware::L1)),
-                    { KERNEL_LOG(KERNEL_ERROR, "illegal hardType %d ", static_cast<int32_t>(hardType)); });
+    ASCENDC_ASSERT(((hardType == Hardware::UB) || (hardType == Hardware::L1)), {
+        KERNEL_LOG(KERNEL_ERROR, "illegal hardType %d ", static_cast<int32_t>(hardType));
+    });
     uint8_t* phyAddr = reinterpret_cast<uint8_t*>(tensor.GetPhyAddr());
     uint8_t* baseAddr =
         static_cast<uint8_t*>(tpipe->g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint32_t>(hardType)].absAddr);
     ASCENDC_ASSERT((phyAddr >= baseAddr), {
-        KERNEL_LOG(KERNEL_ERROR, "phyAddr is %p, baseAddr is %p, phyAddr should be larger than baseAddr", phyAddr,
-            baseAddr);
+        KERNEL_LOG(
+            KERNEL_ERROR, "phyAddr is %p, baseAddr is %p, phyAddr should be larger than baseAddr", phyAddr, baseAddr);
     });
     uint64_t delta = phyAddr - baseAddr;
     if (hardType == Hardware::UB) {
-        ASCENDC_ASSERT((delta < TMP_UB_OFFSET),
-                        { KERNEL_LOG(KERNEL_ERROR, "addr %lu exceed ub limits %lu ", delta, TMP_UB_OFFSET); });
+        ASCENDC_ASSERT((delta < TMP_UB_OFFSET), {
+            KERNEL_LOG(KERNEL_ERROR, "addr %lu exceed ub limits %lu ", delta, TMP_UB_OFFSET);
+        });
     } else {
-        ASCENDC_ASSERT((delta < TOTAL_L1_SIZE),
-                        { KERNEL_LOG(KERNEL_ERROR, "addr %lu exceed l1 limits %lu", delta, TOTAL_L1_SIZE); });
+        ASCENDC_ASSERT((delta < TOTAL_L1_SIZE), {
+            KERNEL_LOG(KERNEL_ERROR, "addr %lu exceed l1 limits %lu", delta, TOTAL_L1_SIZE);
+        });
     }
     return delta;
 }
@@ -878,23 +922,22 @@ template <typename T> inline uint64_t GetAbsAddr(TPipe* tpipe, const LocalTensor
 inline uint8_t* TPipe::GetBaseAddr(int8_t logicPos)
 {
     auto positionHardMap = ConstDefiner::Instance().positionHardMap;
-    ASCENDC_ASSERT((positionHardMap.find((TPosition)logicPos) != positionHardMap.end()),
-                    { KERNEL_LOG(KERNEL_ERROR, "illegal logicPos %d ", int32_t(logicPos)); });
+    ASCENDC_ASSERT((positionHardMap.find((TPosition)logicPos) != positionHardMap.end()), {
+        KERNEL_LOG(KERNEL_ERROR, "illegal logicPos %d ", int32_t(logicPos));
+    });
     Hardware hardType = positionHardMap.at((TPosition)logicPos);
-    ASCENDC_ASSERT((hardType != Hardware::GM),
-                    { KERNEL_LOG(KERNEL_ERROR, "hardware position can not be gm"); });
-    uint8_t* baseAddr =
-        static_cast<uint8_t*>(g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint32_t>(hardType)].absAddr);
+    ASCENDC_ASSERT((hardType != Hardware::GM), { KERNEL_LOG(KERNEL_ERROR, "hardware position can not be gm"); });
+    uint8_t* baseAddr = static_cast<uint8_t*>(g_tpipeImpl.bufPoolBaseAddr_[static_cast<uint32_t>(hardType)].absAddr);
     return baseAddr;
 }
 
 void inline TPipe::SetBufferCtx(Hardware hard, struct BufPoolExtra* bufPool)
 {
-    ASCENDC_ASSERT((hard != Hardware::MAX),
-                    { KERNEL_LOG(KERNEL_ERROR, "hard type can not be Hardware::MAX"); });
+    ASCENDC_ASSERT((hard != Hardware::MAX), { KERNEL_LOG(KERNEL_ERROR, "hard type can not be Hardware::MAX"); });
     auto bufferInitLen = ConstDefiner::Instance().bufferInitLen;
-    ASCENDC_ASSERT((bufferInitLen.find(hard) != bufferInitLen.end()),
-                    { KERNEL_LOG(KERNEL_ERROR, "illegal hard type %d", static_cast<int32_t>(hard)); });
+    ASCENDC_ASSERT((bufferInitLen.find(hard) != bufferInitLen.end()), {
+        KERNEL_LOG(KERNEL_ERROR, "illegal hard type %d", static_cast<int32_t>(hard));
+    });
     uint8_t* ptr;
     if (hard == Hardware::GM) {
         ptr = ConstDefiner::Instance().cpuGM;
@@ -915,10 +958,7 @@ void inline TPipe::SetBufferCtx(Hardware hard, struct BufPoolExtra* bufPool)
 }
 #endif
 
-__aicore__ inline void TPipe::InitSocState() const
-{
-    AscendCUtils::InitSocStateImpl();
-}
+__aicore__ inline void TPipe::InitSocState() const { AscendCUtils::InitSocStateImpl(); }
 
 __aicore__ inline void TPipe::ResetPool()
 {
@@ -952,11 +992,13 @@ __aicore__ inline void TPipe::ResetPool()
     g_tpipeImpl.shareBufPool_.start[static_cast<uint8_t>(TShareBuf::ShareHard::L0C)] = -1;
 }
 
-template <class T> __aicore__ inline bool TPipe::TscmInitBuffer(T& que, uint8_t num, uint32_t len)
+template <class T>
+__aicore__ inline bool TPipe::TscmInitBuffer(T& que, uint8_t num, uint32_t len)
 {
     ASCENDC_ASSERT(((num * len) < TOTAL_L1_SIZE), {
-        KERNEL_LOG(KERNEL_ERROR, "tscm buffer length is %u bytes, which is larger than total l1 size %u bytes",
-            len * num, TOTAL_L1_SIZE);
+        KERNEL_LOG(
+            KERNEL_ERROR, "tscm buffer length is %u bytes, which is larger than total l1 size %u bytes", len * num,
+            TOTAL_L1_SIZE);
     });
     len = (len + ONE_BLK_SIZE - MIN_BLOCK_LEN) / ONE_BLK_SIZE * ONE_BLK_SIZE;
     que.value = num;
@@ -997,17 +1039,19 @@ template <class T> __aicore__ inline bool TPipe::TscmInitBuffer(T& que, uint8_t 
     }
     ASCENDC_ASSERT(
         (this->g_tpipeImpl.bufPool_[static_cast<uint8_t>(pool)].maxAddr <= this->g_tpipeImpl.tscmBufferPtr_), {
-            KERNEL_LOG(KERNEL_ERROR, "tscm addr %d overlapped with maxAddr %d", this->g_tpipeImpl.tscmBufferPtr_,
+            KERNEL_LOG(
+                KERNEL_ERROR, "tscm addr %d overlapped with maxAddr %d", this->g_tpipeImpl.tscmBufferPtr_,
                 this->g_tpipeImpl.bufPool_[static_cast<uint8_t>(pool)].maxAddr);
         });
     this->g_tpipeImpl.curBufSize_ += num;
     ASCENDC_ASSERT((this->g_tpipeImpl.curBufSize_ <= QBUF_MAX_LEN), {
-        KERNEL_LOG(KERNEL_ERROR, "max buffer num is %d, current buf size %d exceed this limits", QBUF_MAX_LEN,
+        KERNEL_LOG(
+            KERNEL_ERROR, "max buffer num is %d, current buf size %d exceed this limits", QBUF_MAX_LEN,
             this->g_tpipeImpl.curBufSize_);
     });
     return true;
 }
-}
+} // namespace AscendC
 #endif // ASCENDC_MODULE_TPIPE_IMPL_C310_H
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_TPIPE_IMPL_C310_H__)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__

@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_vconv_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_m200/kernel_operator_vec_vconv_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_m200/kernel_operator_vec_vconv_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_VCONV_IMPL_H__
 #endif
@@ -25,102 +26,125 @@
 #include "../../../include/basic_api/kernel_struct_vdeq.h"
 
 namespace AscendC {
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ half* dst, __ubuf__ int32_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ half* dst, __ubuf__ int32_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
-    vconv_deq(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+    vconv_deq(
+        dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
         repeatParams.srcRepStride);
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ half* dst, __ubuf__ int8_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ half* dst, __ubuf__ int8_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if (roundMode == RoundMode::CAST_NONE) {
-        vconv_s82f16(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+        vconv_s82f16(
+            dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+            repeatParams.srcRepStride);
     } else {
         ASCENDC_ASSERT(false, {
-            KERNEL_LOG(KERNEL_ERROR,
-                "Current RoundMode of Cast from int8_t to half is not supported on current device, only "
-                "RoundMode::CAST_NONE support!");});
+            KERNEL_LOG(
+                KERNEL_ERROR, "Current RoundMode of Cast from int8_t to half is not supported on current device, only "
+                              "RoundMode::CAST_NONE support!");
+        });
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ half* dst, __ubuf__ uint8_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ half* dst, __ubuf__ uint8_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if (roundMode == RoundMode::CAST_NONE) {
-        vconv_u82f16(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+        vconv_u82f16(
+            dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+            repeatParams.srcRepStride);
     } else {
         ASCENDC_ASSERT(false, {
-            KERNEL_LOG(KERNEL_ERROR,
-                "Current RoundMode of Cast from uint8_t to half is not supported on current device, only "
-                "RoundMode::CAST_NONE support!");});
+            KERNEL_LOG(
+                KERNEL_ERROR, "Current RoundMode of Cast from uint8_t to half is not supported on current device, only "
+                              "RoundMode::CAST_NONE support!");
+        });
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ float* dst, __ubuf__ int32_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ float* dst, __ubuf__ int32_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if (roundMode == RoundMode::CAST_NONE) {
-        vconv_s322f32(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+        vconv_s322f32(
+            dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+            repeatParams.srcRepStride);
     } else {
         ASCENDC_ASSERT(false, {
-            KERNEL_LOG(KERNEL_ERROR,
+            KERNEL_LOG(
+                KERNEL_ERROR,
                 "Current RoundMode of Cast from int32_t to float is not supported on current device, only "
-                "RoundMode::CAST_NONE support!");});
+                "RoundMode::CAST_NONE support!");
+        });
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ float* dst, __ubuf__ half* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ float* dst, __ubuf__ half* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if (roundMode == RoundMode::CAST_NONE) {
-        vconv_f162f32(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+        vconv_f162f32(
+            dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+            repeatParams.srcRepStride);
     } else {
         ASCENDC_ASSERT(false, {
-            KERNEL_LOG(KERNEL_ERROR,
-                "Current RoundMode of Cast from half to float is not supported on current device, only "
-                "RoundMode::CAST_NONE support!");});
+            KERNEL_LOG(
+                KERNEL_ERROR, "Current RoundMode of Cast from half to float is not supported on current device, only "
+                              "RoundMode::CAST_NONE support!");
+        });
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int32_t* dst, __ubuf__ half* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ half* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     switch (roundMode) {
         case RoundMode::CAST_RINT:
-            vconv_f162s32r(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162s32r(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_FLOOR:
-            vconv_f162s32f(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162s32f(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_CEIL:
-            vconv_f162s32c(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162s32c(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_ROUND:
-            vconv_f162s32a(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162s32a(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_TRUNC:
-            vconv_f162s32z(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162s32z(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_ODD:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_ODD of Cast from half to int32_t is not supported on current device!");
             });
             break;
         case RoundMode::CAST_NONE:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_NONE of Cast from half to int32_t is not supported on current device!");
             });
             break;
@@ -130,39 +154,47 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ int32_t* dst, __ubuf__ half* 
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int8_t* dst, __ubuf__ half* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int8_t* dst, __ubuf__ half* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     switch (roundMode) {
         case RoundMode::CAST_FLOOR:
-            vconv_f162s8f(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162s8f(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_CEIL:
-            vconv_f162s8c(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162s8c(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_ROUND:
-            vconv_f162s8a(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162s8a(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_TRUNC:
-            vconv_f162s8z(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162s8z(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_NONE:
-            vconv_f162s8(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162s8(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_ODD:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_ODD of Cast from half to int8_t is not supported on current device!");
             });
             break;
         case RoundMode::CAST_RINT:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_RINT of Cast from half to int8_t is not supported on current device!");
             });
             break;
@@ -172,39 +204,47 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ int8_t* dst, __ubuf__ half* s
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ uint8_t* dst, __ubuf__ half* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ uint8_t* dst, __ubuf__ half* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     switch (roundMode) {
         case RoundMode::CAST_RINT:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_RINT of Cast from half to uint8_t is not supported on current device!");
             });
             break;
         case RoundMode::CAST_FLOOR:
-            vconv_f162u8f(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162u8f(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_CEIL:
-            vconv_f162u8c(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162u8c(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_ROUND:
-            vconv_f162u8a(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162u8a(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_TRUNC:
-            vconv_f162u8z(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162u8z(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_NONE:
-            vconv_f162u8(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f162u8(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_ODD:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_ODD of Cast from half to uint8_t is not supported on current device!");
             });
             break;
@@ -214,45 +254,53 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ uint8_t* dst, __ubuf__ half* 
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ half* dst, __ubuf__ float* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ half* dst, __ubuf__ float* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     switch (roundMode) {
         case RoundMode::CAST_ODD:
-            vconv_f322f16o(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f322f16o(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_NONE:
-            vconv_f322f16(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f322f16(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_RINT:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_RINT of Cast from float to half is not supported on current device!");
             });
             break;
         case RoundMode::CAST_FLOOR:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_FLOOR of Cast from float to half is not supported on current device!");
             });
             break;
         case RoundMode::CAST_CEIL:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_CEIL of Cast from float to half is not supported on current device!");
             });
             break;
         case RoundMode::CAST_ROUND:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_ROUND of Cast from float to half is not supported on current device!");
             });
             break;
         case RoundMode::CAST_TRUNC:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_TRUNC of Cast from float to half is not supported on current device!");
             });
             break;
@@ -262,39 +310,47 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ half* dst, __ubuf__ float* sr
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int32_t* dst, __ubuf__ float* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ float* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     switch (roundMode) {
         case RoundMode::CAST_RINT:
-            vconv_f322s32r(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f322s32r(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_FLOOR:
-            vconv_f322s32f(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f322s32f(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_CEIL:
-            vconv_f322s32c(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f322s32c(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_ROUND:
-            vconv_f322s32a(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f322s32a(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_TRUNC:
-            vconv_f322s32z(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride);
+            vconv_f322s32z(
+                dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+                repeatParams.srcRepStride);
             break;
         case RoundMode::CAST_ODD:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_ODD of Cast from float to int32_t is not supported on current device!");
             });
             break;
         case RoundMode::CAST_NONE:
             ASCENDC_ASSERT(false, {
-                KERNEL_LOG(KERNEL_ERROR,
+                KERNEL_LOG(
+                    KERNEL_ERROR,
                     "RoundMode::CAST_NONE of Cast from float to int32_t is not supported on current device!");
             });
             break;
@@ -304,142 +360,164 @@ __aicore__ inline void CastIntrinsicsImpl(__ubuf__ int32_t* dst, __ubuf__ float*
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int16_t* dst, __ubuf__ half* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ half* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if (roundMode == RoundMode::CAST_RINT) {
-        vconv_f162s16r(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride, repeatParams.repeatStrideMode,
-                repeatParams.strideSizeMode);
+        vconv_f162s16r(
+            dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+            repeatParams.srcRepStride, repeatParams.repeatStrideMode, repeatParams.strideSizeMode);
     } else {
         ASCENDC_ASSERT(false, {
-            KERNEL_LOG(KERNEL_ERROR,
-                "Current RoundMode of Cast from half to int16_t is not supported on current device, only "
-                "RoundMode::CAST_NONE "
-                "support!");
+            KERNEL_LOG(
+                KERNEL_ERROR, "Current RoundMode of Cast from half to int16_t is not supported on current device, only "
+                              "RoundMode::CAST_NONE "
+                              "support!");
         });
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ uint8_t* dst, __ubuf__ int16_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ uint8_t* dst, __ubuf__ int16_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "Cast from type int16_t to uint8_t");
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int8_t* dst, __ubuf__ int16_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int8_t* dst, __ubuf__ int16_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "Cast from type int16_t to int8_t");
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ half* dst, __ubuf__ int16_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ half* dst, __ubuf__ int16_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if (roundMode == RoundMode::CAST_NONE) {
-        vconv_s162f16(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride, repeatParams.repeatStrideMode,
-                repeatParams.strideSizeMode);
+        vconv_s162f16(
+            dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+            repeatParams.srcRepStride, repeatParams.repeatStrideMode, repeatParams.strideSizeMode);
     } else {
         ASCENDC_ASSERT(false, {
-            KERNEL_LOG(KERNEL_ERROR,
-                "Current RoundMode of Cast from int16_t to half is not supported on current device, only "
-                "RoundMode::CAST_NONE "
-                "support!");
+            KERNEL_LOG(
+                KERNEL_ERROR, "Current RoundMode of Cast from int16_t to half is not supported on current device, only "
+                              "RoundMode::CAST_NONE "
+                              "support!");
         });
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ float* dst, __ubuf__ float* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "Cast from type float to float");
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int64_t* dst, __ubuf__ float* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int64_t* dst, __ubuf__ float* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "Cast from type float to int64_t");
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int16_t* dst, __ubuf__ float* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ float* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "Cast from type float to int16_t");
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ float* dst, __ubuf__ int16_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ float* dst, __ubuf__ int16_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "Cast from type int16_t to float");
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int64_t* dst, __ubuf__ int32_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int64_t* dst, __ubuf__ int32_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "Cast from type int32_t to int64_t");
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ float* dst, __ubuf__ int64_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ float* dst, __ubuf__ int64_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "Cast from type int64_t to float");
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int32_t* dst, __ubuf__ int64_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int64_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_REPORT_NOT_SUPPORT(false, "Cast from type int64_t to int32_t");
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int4b_t* dst, __ubuf__ half* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int4b_t* dst, __ubuf__ half* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if (roundMode == RoundMode::CAST_NONE) {
-        vconv_f162s4(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride, repeatParams.repeatStrideMode,
-                repeatParams.strideSizeMode);
+        vconv_f162s4(
+            dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+            repeatParams.srcRepStride, repeatParams.repeatStrideMode, repeatParams.strideSizeMode);
     } else {
         ASCENDC_ASSERT(false, {
-            KERNEL_LOG(KERNEL_ERROR,
-                "Current RoundMode of Cast from half to int4b_t is not supported on current device, only "
-                "RoundMode::CAST_NONE support!");});
+            KERNEL_LOG(
+                KERNEL_ERROR, "Current RoundMode of Cast from half to int4b_t is not supported on current device, only "
+                              "RoundMode::CAST_NONE support!");
+        });
     }
 }
 
-__aicore__ inline void CastIntrinsicsImpl(__ubuf__ int16_t* dst, __ubuf__ int32_t* src, const RoundMode& roundMode,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastIntrinsicsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int32_t* src, const RoundMode& roundMode, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if (roundMode == RoundMode::CAST_NONE) {
-        vcbd_s322s16(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-                repeatParams.dstRepStride, repeatParams.srcRepStride, repeatParams.repeatStrideMode,
-                repeatParams.strideSizeMode);
+        vcbd_s322s16(
+            dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+            repeatParams.srcRepStride, repeatParams.repeatStrideMode, repeatParams.strideSizeMode);
     } else {
         ASCENDC_ASSERT(false, {
-            KERNEL_LOG(KERNEL_ERROR,
+            KERNEL_LOG(
+                KERNEL_ERROR,
                 "Current RoundMode of Cast from int32_t to int16_t is not supported on current device, only "
-                "RoundMode::CAST_NONE support!");});
+                "RoundMode::CAST_NONE support!");
+        });
     }
 }
 
 // check Cast datatype
 template <typename T, typename U>
-__aicore__ static inline void CheckCastDatatype() {
-    ASCENDC_ASSERT((SupportType<Tuple<T, U>, Tuple<int32_t, half>, Tuple<int16_t, half>, Tuple<float, half>,
-        Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int4b_t, half>, Tuple<float, float>, Tuple<int32_t, float>,
-        Tuple<half, float>, Tuple<int64_t, float>, Tuple<int16_t, float>, Tuple<half, uint8_t>, Tuple<half, int8_t>,
-        Tuple<half, int16_t>, Tuple<float, int16_t>, Tuple<float, int32_t>, Tuple<int16_t, int32_t>,
-        Tuple<int64_t, int32_t>, Tuple<half, int32_t>, Tuple<int32_t, int64_t>, Tuple<float, int64_t>>()), {
-        KERNEL_LOG(KERNEL_ERROR,
-        "Failed to check dtype in Cast, current api support dtype combination is src: half, dst: int32_t / int16_t / "
-        "float / int8_t / uint8_t / int4b_t; src: float, dst: int32_t / half; src: uint8_t, dst: half; src: int8_t, "
-        "dst: half; src: int16_t, dst: half; src: int32_t, dst: float / half");});
+__aicore__ static inline void CheckCastDatatype()
+{
+    ASCENDC_ASSERT(
+        (SupportType<
+            Tuple<T, U>, Tuple<int32_t, half>, Tuple<int16_t, half>, Tuple<float, half>, Tuple<int8_t, half>,
+            Tuple<uint8_t, half>, Tuple<int4b_t, half>, Tuple<float, float>, Tuple<int32_t, float>, Tuple<half, float>,
+            Tuple<int64_t, float>, Tuple<int16_t, float>, Tuple<half, uint8_t>, Tuple<half, int8_t>,
+            Tuple<half, int16_t>, Tuple<float, int16_t>, Tuple<float, int32_t>, Tuple<int16_t, int32_t>,
+            Tuple<int64_t, int32_t>, Tuple<half, int32_t>, Tuple<int32_t, int64_t>, Tuple<float, int64_t>>()),
+        {
+            KERNEL_LOG(
+                KERNEL_ERROR, "Failed to check dtype in Cast, current api support dtype combination is src: half, dst: "
+                              "int32_t / int16_t / "
+                              "float / int8_t / uint8_t / int4b_t; src: float, dst: int32_t / half; src: uint8_t, dst: "
+                              "half; src: int8_t, "
+                              "dst: half; src: int16_t, dst: half; src: int32_t, dst: float / half");
+        });
 }
 
 // Cast::Level 2
 template <typename T, typename U>
-__aicore__ inline void CastImpl(__ubuf__ T* dst, __ubuf__ U* src, const RoundMode& roundMode,
-    const uint32_t count)
+__aicore__ inline void CastImpl(__ubuf__ T* dst, __ubuf__ U* src, const RoundMode& roundMode, const uint32_t count)
 {
     CheckCastDatatype<T, U>();
     struct UnaryRepeatParams repeatParams;
@@ -461,8 +539,9 @@ __aicore__ inline void CastImpl(__ubuf__ T* dst, __ubuf__ U* src, const RoundMod
 
 // Cast::Level 0 - mask bit mode
 template <typename T, typename U, bool isSetMask = true>
-__aicore__ inline void CastImpl(__ubuf__ T* dst, __ubuf__ U* src, const RoundMode& roundMode,
-    const uint64_t mask[], uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastImpl(
+    __ubuf__ T* dst, __ubuf__ U* src, const RoundMode& roundMode, const uint64_t mask[], uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     CheckCastDatatype<T, U>();
     if constexpr (isSetMask) {
@@ -477,8 +556,9 @@ __aicore__ inline void CastImpl(__ubuf__ T* dst, __ubuf__ U* src, const RoundMod
 
 // Cast::Level 0 - mask count mode
 template <typename T, typename U, bool isSetMask = true>
-__aicore__ inline void CastImpl(__ubuf__ T* dst, __ubuf__ U* src, const RoundMode& roundMode,
-    const uint64_t mask, uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastImpl(
+    __ubuf__ T* dst, __ubuf__ U* src, const RoundMode& roundMode, const uint64_t mask, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     CheckCastDatatype<T, U>();
     if constexpr (isSetMask) {
@@ -493,30 +573,31 @@ __aicore__ inline void CastImpl(__ubuf__ T* dst, __ubuf__ U* src, const RoundMod
 
 // CastDeq ccec intrinsics
 template <typename T, bool halfBlock>
-__aicore__ inline void CastDeqIntrinsicsImpl(__ubuf__ T* dst, __ubuf__ int16_t* src, uint8_t repeatTime,
-    const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastDeqIntrinsicsImpl(
+    __ubuf__ T* dst, __ubuf__ int16_t* src, uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
-    vconv_deqs162b8(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-        repeatParams.dstRepStride, repeatParams.srcRepStride, repeatParams.repeatStrideMode,
-        repeatParams.strideSizeMode, halfBlock);
+    vconv_deqs162b8(
+        dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+        repeatParams.srcRepStride, repeatParams.repeatStrideMode, repeatParams.strideSizeMode, halfBlock);
 }
 template <typename T, bool halfBlock>
-__aicore__ inline void CastVDeqIntrinsicsImpl(__ubuf__ T* dst, __ubuf__ int16_t* src, uint8_t repeatTime,
-    const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastVDeqIntrinsicsImpl(
+    __ubuf__ T* dst, __ubuf__ int16_t* src, uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
-    vconv_vdeqs162b8(dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride,
-        repeatParams.dstRepStride, repeatParams.srcRepStride, repeatParams.repeatStrideMode,
-        repeatParams.strideSizeMode, halfBlock);
+    vconv_vdeqs162b8(
+        dst, src, repeatTime, repeatParams.dstBlkStride, repeatParams.srcBlkStride, repeatParams.dstRepStride,
+        repeatParams.srcRepStride, repeatParams.repeatStrideMode, repeatParams.strideSizeMode, halfBlock);
 }
 
 // CastDeq::Level 2
 template <typename T, typename U, bool isVecDeq, bool halfBlock>
-__aicore__ inline void CastDeqImpl(__ubuf__ T* dst, __ubuf__ U* src,
-    const uint32_t count)
+__aicore__ inline void CastDeqImpl(__ubuf__ T* dst, __ubuf__ U* src, const uint32_t count)
 {
-    ASCENDC_ASSERT((SupportType<T, int8_t, uint8_t>() && SupportType<U, int16_t>()),
-        {KERNEL_LOG(KERNEL_ERROR, "Failed to check dtype in CastDeq, current api support dtype combination is dst: "
-        "int8_t / uint8_t, src: int16_t");});
+    ASCENDC_ASSERT((SupportType<T, int8_t, uint8_t>() && SupportType<U, int16_t>()), {
+        KERNEL_LOG(
+            KERNEL_ERROR, "Failed to check dtype in CastDeq, current api support dtype combination is dst: "
+                          "int8_t / uint8_t, src: int16_t");
+    });
     set_mask_count();
     set_vector_mask(0, count);
     struct UnaryRepeatParams repeatParams;
@@ -531,12 +612,14 @@ __aicore__ inline void CastDeqImpl(__ubuf__ T* dst, __ubuf__ U* src,
 
 // CastDeq::Level 0 - mask bit mode
 template <typename T, typename U, bool isSetMask, bool isVecDeq, bool halfBlock>
-__aicore__ inline void CastDeqImpl(__ubuf__ T* dst, __ubuf__ U* src,
-    const uint64_t mask[], uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastDeqImpl(
+    __ubuf__ T* dst, __ubuf__ U* src, const uint64_t mask[], uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
-    ASCENDC_ASSERT((SupportType<T, int8_t, uint8_t>() && SupportType<U, int16_t>()),
-        {KERNEL_LOG(KERNEL_ERROR, "Failed to check dtype in CastDeq, current api support dtype combination is dst: "
-        "int8_t / uint8_t, src: int16_t");});
+    ASCENDC_ASSERT((SupportType<T, int8_t, uint8_t>() && SupportType<U, int16_t>()), {
+        KERNEL_LOG(
+            KERNEL_ERROR, "Failed to check dtype in CastDeq, current api support dtype combination is dst: "
+                          "int8_t / uint8_t, src: int16_t");
+    });
     AscendCUtils::SetMask<U, isSetMask>(mask[1], mask[0]);
     if constexpr (isVecDeq) {
         CastVDeqIntrinsicsImpl<T, halfBlock>(dst, src, repeatTime, repeatParams);
@@ -547,12 +630,14 @@ __aicore__ inline void CastDeqImpl(__ubuf__ T* dst, __ubuf__ U* src,
 
 // CastDeq::Level 0 - mask count mode
 template <typename T, typename U, bool isSetMask, bool isVecDeq, bool halfBlock>
-__aicore__ inline void CastDeqImpl(__ubuf__ T* dst, __ubuf__ U* src,
-    const int32_t mask, uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void CastDeqImpl(
+    __ubuf__ T* dst, __ubuf__ U* src, const int32_t mask, uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
-    ASCENDC_ASSERT((SupportType<T, int8_t, uint8_t>() && SupportType<U, int16_t>()),
-        {KERNEL_LOG(KERNEL_ERROR, "Failed to check dtype in CastDeq, current api support dtype combination is dst: "
-        "int8_t / uint8_t, src: int16_t");});
+    ASCENDC_ASSERT((SupportType<T, int8_t, uint8_t>() && SupportType<U, int16_t>()), {
+        KERNEL_LOG(
+            KERNEL_ERROR, "Failed to check dtype in CastDeq, current api support dtype combination is dst: "
+                          "int8_t / uint8_t, src: int16_t");
+    });
     AscendCUtils::SetMask<U, isSetMask>(mask);
     if constexpr (isVecDeq) {
         CastVDeqIntrinsicsImpl<T, halfBlock>(dst, src, repeatTime, repeatParams);
@@ -561,24 +646,27 @@ __aicore__ inline void CastDeqImpl(__ubuf__ T* dst, __ubuf__ U* src,
     }
 }
 
-
 template <typename T, typename U>
-__aicore__ inline void AddReluCastIntrinsicsImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, uint8_t repeatTime,
-    const BinaryRepeatParams& repeatParams)
+__aicore__ inline void AddReluCastIntrinsicsImpl(
+    __ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, uint8_t repeatTime, const BinaryRepeatParams& repeatParams)
 {
-    static_assert(SupportType<Tuple<U, T>, Tuple<half, int8_t>, Tuple<float, half>, Tuple<int16_t, int8_t>>(),
+    static_assert(
+        SupportType<Tuple<U, T>, Tuple<half, int8_t>, Tuple<float, half>, Tuple<int16_t, int8_t>>(),
         "Failed to check dtype in AddReluCast, current api support dtype combination is src: half, dst: int8_t; src: "
         "float, dst: half; src: int16_t, dst: int8_t.");
     if constexpr (SupportType<Tuple<U, T>, Tuple<half, int8_t>>()) {
-        vaddreluconv_f162s8(dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
+        vaddreluconv_f162s8(
+            dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
             repeatParams.src1BlkStride, repeatParams.dstRepStride, repeatParams.src0RepStride,
             repeatParams.src1RepStride, 0, 0, false);
     } else if constexpr (SupportType<Tuple<U, T>, Tuple<float, half>>()) {
-        vaddreluconv_f322f16(dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
+        vaddreluconv_f322f16(
+            dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
             repeatParams.src1BlkStride, repeatParams.dstRepStride, repeatParams.src0RepStride,
             repeatParams.src1RepStride, 0, 0, false);
     } else {
-        vaddreluconv_s162s8(dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
+        vaddreluconv_s162s8(
+            dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
             repeatParams.src1BlkStride, repeatParams.dstRepStride, repeatParams.src0RepStride,
             repeatParams.src1RepStride, 0, 0, false);
     }
@@ -586,8 +674,9 @@ __aicore__ inline void AddReluCastIntrinsicsImpl(__ubuf__ T* dst, __ubuf__ U* sr
 
 // AddReluCast::Level 0 - mask count mode
 template <typename T, typename U, bool isSetMask = true>
-__aicore__ inline void AddReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1,
-    const uint64_t mask, uint8_t repeatTime, const BinaryRepeatParams& repeatParams)
+__aicore__ inline void AddReluCastImpl(
+    __ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, const uint64_t mask, uint8_t repeatTime,
+    const BinaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         if constexpr (sizeof(T) >= sizeof(U)) {
@@ -601,8 +690,9 @@ __aicore__ inline void AddReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf
 
 // AddReluCast::Level 0 - mask bit mode
 template <typename T, typename U, bool isSetMask = true>
-__aicore__ inline void AddReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1,
-    const uint64_t mask[], uint8_t repeatTime, const BinaryRepeatParams& repeatParams)
+__aicore__ inline void AddReluCastImpl(
+    __ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, const uint64_t mask[], uint8_t repeatTime,
+    const BinaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         if constexpr (sizeof(T) >= sizeof(U)) {
@@ -616,42 +706,47 @@ __aicore__ inline void AddReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf
 
 // AddReluCast::Level 2
 template <typename T, typename U>
-__aicore__ inline void AddReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1,
-    const uint32_t count)
+__aicore__ inline void AddReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, const uint32_t count)
 {
     set_mask_count();
     set_vector_mask(0, count);
     if constexpr (sizeof(T) > sizeof(U)) {
-        AddReluCastIntrinsicsImpl(dst, src0, src1, 1, {1, 1, 1, DEFAULT_REPEAT_STRIDE,
-            DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE / HALF_FACTOR});
+        AddReluCastIntrinsicsImpl(
+            dst, src0, src1, 1,
+            {1, 1, 1, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE / HALF_FACTOR});
     } else if constexpr (sizeof(T) < sizeof(U)) {
-        AddReluCastIntrinsicsImpl(dst, src0, src1, 1, {1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR,
-            DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE});
+        AddReluCastIntrinsicsImpl(
+            dst, src0, src1, 1,
+            {1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE});
     } else {
-        AddReluCastIntrinsicsImpl(dst, src0, src1, 1, {1, 1, 1, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE,
-            DEFAULT_REPEAT_STRIDE});
+        AddReluCastIntrinsicsImpl(
+            dst, src0, src1, 1, {1, 1, 1, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE});
     }
     set_mask_norm();
     set_vector_mask(static_cast<uint64_t>(-1), static_cast<uint64_t>(-1));
 }
 
 template <typename T, typename U>
-__aicore__ inline void SubReluCastIntrinsicsImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, uint8_t repeatTime,
-    const BinaryRepeatParams& repeatParams)
+__aicore__ inline void SubReluCastIntrinsicsImpl(
+    __ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, uint8_t repeatTime, const BinaryRepeatParams& repeatParams)
 {
-    static_assert(SupportType<Tuple<U, T>, Tuple<half, int8_t>, Tuple<float, half>, Tuple<int16_t, int8_t>>(),
+    static_assert(
+        SupportType<Tuple<U, T>, Tuple<half, int8_t>, Tuple<float, half>, Tuple<int16_t, int8_t>>(),
         "Failed to check dtype in SubReluCast, current api support dtype combination is src: half, dst: int8_t; src: "
         "float, dst: half; src: int16_t, dst: int8_t.");
     if constexpr (SupportType<Tuple<U, T>, Tuple<half, int8_t>>()) {
-        vsubreluconv_f162s8(dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
+        vsubreluconv_f162s8(
+            dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
             repeatParams.src1BlkStride, repeatParams.dstRepStride, repeatParams.src0RepStride,
             repeatParams.src1RepStride, false, false, false);
     } else if constexpr (SupportType<Tuple<U, T>, Tuple<float, half>>()) {
-        vsubreluconv_f322f16(dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
+        vsubreluconv_f322f16(
+            dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
             repeatParams.src1BlkStride, repeatParams.dstRepStride, repeatParams.src0RepStride,
             repeatParams.src1RepStride, false, false, false);
     } else {
-        vsubreluconv_s162s8(dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
+        vsubreluconv_s162s8(
+            dst, src0, src1, repeatTime, repeatParams.dstBlkStride, repeatParams.src0BlkStride,
             repeatParams.src1BlkStride, repeatParams.dstRepStride, repeatParams.src0RepStride,
             repeatParams.src1RepStride, false, false, false);
     }
@@ -659,20 +754,21 @@ __aicore__ inline void SubReluCastIntrinsicsImpl(__ubuf__ T* dst, __ubuf__ U* sr
 
 // SubReluCast::Level 2
 template <typename T, typename U>
-__aicore__ inline void SubReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1,
-    const uint32_t count)
+__aicore__ inline void SubReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, const uint32_t count)
 {
     set_mask_count();
     set_vector_mask(0, count);
     if constexpr (sizeof(T) > sizeof(U)) {
-        SubReluCastIntrinsicsImpl(dst, src0, src1, 1, {1, 1, 1, DEFAULT_REPEAT_STRIDE,
-            DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE / HALF_FACTOR});
+        SubReluCastIntrinsicsImpl(
+            dst, src0, src1, 1,
+            {1, 1, 1, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE / HALF_FACTOR});
     } else if constexpr (sizeof(T) < sizeof(U)) {
-        SubReluCastIntrinsicsImpl(dst, src0, src1, 1, {1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR,
-            DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE});
+        SubReluCastIntrinsicsImpl(
+            dst, src0, src1, 1,
+            {1, 1, 1, DEFAULT_REPEAT_STRIDE / HALF_FACTOR, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE});
     } else {
-        SubReluCastIntrinsicsImpl(dst, src0, src1, 1, {1, 1, 1, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE,
-            DEFAULT_REPEAT_STRIDE});
+        SubReluCastIntrinsicsImpl(
+            dst, src0, src1, 1, {1, 1, 1, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE, DEFAULT_REPEAT_STRIDE});
     }
     set_mask_norm();
     set_vector_mask(static_cast<uint64_t>(-1), static_cast<uint64_t>(-1));
@@ -680,8 +776,9 @@ __aicore__ inline void SubReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf
 
 // SubReluCast::Level 0 - mask count mode
 template <typename T, typename U, bool isSetMask = true>
-__aicore__ inline void SubReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1,
-    const uint64_t mask, uint8_t repeatTime, const BinaryRepeatParams& repeatParams)
+__aicore__ inline void SubReluCastImpl(
+    __ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, const uint64_t mask, uint8_t repeatTime,
+    const BinaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         if constexpr (sizeof(T) >= sizeof(U)) {
@@ -695,8 +792,9 @@ __aicore__ inline void SubReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf
 
 // SubReluCast::Level 0 - mask bit mode
 template <typename T, typename U, bool isSetMask = true>
-__aicore__ inline void SubReluCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1,
-    const uint64_t mask[], uint8_t repeatTime, const BinaryRepeatParams& repeatParams)
+__aicore__ inline void SubReluCastImpl(
+    __ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, const uint64_t mask[], uint8_t repeatTime,
+    const BinaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         if constexpr (sizeof(T) >= sizeof(U)) {
@@ -713,8 +811,9 @@ __aicore__ inline uint64_t MakeDeqScaleConfig(float scale, int16_t offset, bool 
     constexpr uint64_t signModeBit = 46;
     constexpr uint64_t offsetMask = 0x1ff;
     constexpr uint64_t offsetBit = 37;
-    uint64_t config = ((static_cast<uint64_t>(signMode) << signModeBit) | ((offset & offsetMask) << offsetBit) |
-                       *(reinterpret_cast<uint32_t *>(&scale)));
+    uint64_t config =
+        ((static_cast<uint64_t>(signMode) << signModeBit) | ((offset & offsetMask) << offsetBit) |
+         *(reinterpret_cast<uint32_t*>(&scale)));
     return config;
 }
 
@@ -740,7 +839,7 @@ __aicore__ inline void SetDeqScaleImpl(const LocalTensor<T>& vdeq, const VdeqInf
 #endif
 }
 
-template<typename T>
+template <typename T>
 __aicore__ inline void SetDeqScaleImpl(T config)
 {
     set_deqscale(config);

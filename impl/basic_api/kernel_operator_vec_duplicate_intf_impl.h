@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_duplicate_intf_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_operator_vec_duplicate_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_vec_duplicate_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_operator_vec_duplicate_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_vec_duplicate_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_DUPLICATE_INTF_IMPL_H__
 #endif
@@ -62,8 +63,9 @@ namespace AscendC {
  * @param [in] dstRepeatStride dst repeat stride
  */
 template <typename T, bool isSetMask>
-__aicore__ inline void Duplicate(const LocalTensor<T>& dst, const T& scalarValue, uint64_t mask,
-    const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void Duplicate(
+    const LocalTensor<T>& dst, const T& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Duplicate", NamedTensor(dst, "dst"));
@@ -79,20 +81,22 @@ __aicore__ inline void Duplicate(const LocalTensor<T>& dst, const T& scalarValue
         ASCENDC_REPORT_CHECK_ERROR("Duplicate", KernelFuncType::MASK_COUNT_MODE);
     }
 #endif
-    DuplicateImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), scalarValue, mask, repeatTime, dstBlockStride,
-        dstRepeatStride);
+    DuplicateImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), scalarValue, mask, repeatTime, dstBlockStride, dstRepeatStride);
 }
 
 template <typename T, bool isSetMask>
-__aicore__ inline void Duplicate(const LocalTensor<T>& dst, const T& scalarValue, uint64_t mask[],
-    const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
+__aicore__ inline void Duplicate(
+    const LocalTensor<T>& dst, const T& scalarValue, uint64_t mask[], const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Duplicate", NamedTensor(dst, "dst"));
     CheckMaskRepeat<T, isSetMask>(mask, repeatTime, "Duplicate");
 #endif
 #ifdef __MSTX_DFX_REPORT__
-    MstxTensor::GetMstxVecDupInfo(dst, mask[0], mask[1], repeatTime, dstBlockStride, dstRepeatStride, isSetMask, "Duplicate");
+    MstxTensor::GetMstxVecDupInfo(
+        dst, mask[0], mask[1], repeatTime, dstBlockStride, dstRepeatStride, isSetMask, "Duplicate");
 #endif
     CheckDuplicateSupportedType<T>();
 #if ASCENDC_CPU_DEBUG
@@ -101,8 +105,8 @@ __aicore__ inline void Duplicate(const LocalTensor<T>& dst, const T& scalarValue
         ASCENDC_REPORT_CHECK_ERROR("Duplicate", KernelFuncType::MASK_BIT_MODE);
     }
 #endif
-    DuplicateImpl<T, isSetMask>((__ubuf__ T*)dst.GetPhyAddr(), scalarValue, mask, repeatTime, dstBlockStride,
-        dstRepeatStride);
+    DuplicateImpl<T, isSetMask>(
+        (__ubuf__ T*)dst.GetPhyAddr(), scalarValue, mask, repeatTime, dstBlockStride, dstRepeatStride);
 }
 
 /*
@@ -140,8 +144,7 @@ __aicore__ inline void Duplicate(const LocalTensor<T>& dst, const T& scalarValue
  * @param [in] count number Number of data involved in calculation
  */
 template <typename T>
-__aicore__ inline void Duplicate(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const int32_t& count)
+__aicore__ inline void Duplicate(const LocalTensor<T>& dst, const LocalTensor<T>& src, const int32_t& count)
 {
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecDupInfo(dst, count, "Duplicate");
@@ -169,15 +172,14 @@ __aicore__ inline void Duplicate(const LocalTensor<T>& dst, const LocalTensor<T>
  * @param [count] count number of data calculation, must be even number
  */
 template <typename T>
-__aicore__ inline void Interleave(const LocalTensor<T> &dst0, const LocalTensor<T> &dst1,
-    const LocalTensor<T> &src0, const LocalTensor<T> &src1, const int32_t count)
+__aicore__ inline void Interleave(
+    const LocalTensor<T>& dst0, const LocalTensor<T>& dst1, const LocalTensor<T>& src0, const LocalTensor<T>& src1,
+    const int32_t count)
 {
     using PrimType = PrimT<T>;
-    InterleaveImpl<PrimType>((__ubuf__ PrimType *)dst0.GetPhyAddr(),
-        (__ubuf__ PrimType *)dst1.GetPhyAddr(),
-        (__ubuf__ PrimType *)src0.GetPhyAddr(),
-        (__ubuf__ PrimType *)src1.GetPhyAddr(),
-        count);
+    InterleaveImpl<PrimType>(
+        (__ubuf__ PrimType*)dst0.GetPhyAddr(), (__ubuf__ PrimType*)dst1.GetPhyAddr(),
+        (__ubuf__ PrimType*)src0.GetPhyAddr(), (__ubuf__ PrimType*)src1.GetPhyAddr(), count);
 }
 
 /* **************************************************************************************************
@@ -193,15 +195,14 @@ __aicore__ inline void Interleave(const LocalTensor<T> &dst0, const LocalTensor<
  * @param [count] count number of data calculation, must be even number
  */
 template <typename T>
-__aicore__ inline void DeInterleave(const LocalTensor<T> &dst0, const LocalTensor<T> &dst1,
-    const LocalTensor<T> &src0, const LocalTensor<T> &src1, const int32_t count)
+__aicore__ inline void DeInterleave(
+    const LocalTensor<T>& dst0, const LocalTensor<T>& dst1, const LocalTensor<T>& src0, const LocalTensor<T>& src1,
+    const int32_t count)
 {
     using PrimType = PrimT<T>;
-    DeInterleaveImpl<PrimType>((__ubuf__ PrimType *)dst0.GetPhyAddr(),
-        (__ubuf__ PrimType *)dst1.GetPhyAddr(),
-        (__ubuf__ PrimType *)src0.GetPhyAddr(),
-        (__ubuf__ PrimType *)src1.GetPhyAddr(),
-        count);
+    DeInterleaveImpl<PrimType>(
+        (__ubuf__ PrimType*)dst0.GetPhyAddr(), (__ubuf__ PrimType*)dst1.GetPhyAddr(),
+        (__ubuf__ PrimType*)src0.GetPhyAddr(), (__ubuf__ PrimType*)src1.GetPhyAddr(), count);
 }
 
 /*
@@ -213,14 +214,13 @@ __aicore__ inline void DeInterleave(const LocalTensor<T> &dst0, const LocalTenso
  * @param [srcCount] srcCount number of data calculation, must be even number
  */
 template <typename T>
-__aicore__ inline void DeInterleave(const LocalTensor<T> &dst0, const LocalTensor<T> &dst1,
-    const LocalTensor<T> &src, const int32_t srcCount)
+__aicore__ inline void DeInterleave(
+    const LocalTensor<T>& dst0, const LocalTensor<T>& dst1, const LocalTensor<T>& src, const int32_t srcCount)
 {
     using PrimType = PrimT<T>;
-    DeInterleaveImpl<PrimType>((__ubuf__ PrimType *)dst0.GetPhyAddr(),
-        (__ubuf__ PrimType *)dst1.GetPhyAddr(),
-        (__ubuf__ PrimType *)src.GetPhyAddr(),
-        srcCount);
+    DeInterleaveImpl<PrimType>(
+        (__ubuf__ PrimType*)dst0.GetPhyAddr(), (__ubuf__ PrimType*)dst1.GetPhyAddr(),
+        (__ubuf__ PrimType*)src.GetPhyAddr(), srcCount);
 }
 #endif
 } // namespace AscendC

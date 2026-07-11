@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /* !
  * \file kernel_operator_vec_mulcast_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_m510/kernel_operator_vec_mulcast_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_m510/kernel_operator_vec_mulcast_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_tensor.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_MULCAST_IMPL_H__
 #endif
@@ -24,30 +25,34 @@
 #include "kernel_operator_vec_template_impl.h"
 
 namespace AscendC {
-template <typename T, typename U> constexpr __aicore__ inline void CheckMulCastSupportType()
+template <typename T, typename U>
+constexpr __aicore__ inline void CheckMulCastSupportType()
 {
-    static_assert(SupportType<Tuple<T, U>, Tuple<int8_t, half>, Tuple<uint8_t, half>>(), "Failed to check dtype in "
+    static_assert(
+        SupportType<Tuple<T, U>, Tuple<int8_t, half>, Tuple<uint8_t, half>>(),
+        "Failed to check dtype in "
         "MulCast, current api support dtype combination is src: half, dst: int8_t, uint8_t.");
 }
 namespace CastParam {
-constexpr Reg::CastTrait MulCastTrait = { Reg::RegLayout::ZERO, Reg::SatMode::SAT,
-    Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT };
+constexpr Reg::CastTrait MulCastTrait = {
+    Reg::RegLayout::ZERO, Reg::SatMode::SAT, Reg::MaskMergeMode::ZEROING, RoundMode::CAST_RINT};
 }
 
 namespace RegMulCast {
 template <typename T, typename U, typename RegT, typename RegU>
-__aicore__ inline void MulCast(RegT &dstReg, RegU &src0Reg, RegU &src1Reg, Reg::MaskReg &mask)
+__aicore__ inline void MulCast(RegT& dstReg, RegU& src0Reg, RegU& src1Reg, Reg::MaskReg& mask)
 {
     Reg::Mul<U>(src0Reg, src0Reg, src1Reg, mask);
     Reg::Cast<T, U, CastParam::MulCastTrait>(dstReg, src0Reg, mask);
-    Reg::Pack<uint8_t, uint16_t, Reg::HighLowPart::LOWEST>((Reg::RegTensor<uint8_t> &)dstReg,
-        (Reg::RegTensor<uint16_t> &)dstReg);
+    Reg::Pack<uint8_t, uint16_t, Reg::HighLowPart::LOWEST>(
+        (Reg::RegTensor<uint8_t>&)dstReg, (Reg::RegTensor<uint16_t>&)dstReg);
 }
 } // namespace RegMulCast
 
 template <typename T, typename U, bool isSetMask = true>
-__aicore__ inline void MulCastImpl(__ubuf__ T *dst, __ubuf__ U *src0, __ubuf__ U *src1, uint64_t mask,
-    const uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
+__aicore__ inline void MulCastImpl(
+    __ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, uint64_t mask, const uint8_t repeatTime,
+    const BinaryRepeatParams& repeatParams)
 {
     CheckMulCastSupportType<T, U>();
     constexpr auto func = RegMulCast::MulCast<T, U, Reg::RegTensor<T>, Reg::RegTensor<U>>;
@@ -55,8 +60,9 @@ __aicore__ inline void MulCastImpl(__ubuf__ T *dst, __ubuf__ U *src0, __ubuf__ U
 }
 
 template <typename T, typename U, bool isSetMask = true>
-__aicore__ inline void MulCastImpl(__ubuf__ T *dst, __ubuf__ U *src0, __ubuf__ U *src1, uint64_t mask[],
-    const uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
+__aicore__ inline void MulCastImpl(
+    __ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, uint64_t mask[], const uint8_t repeatTime,
+    const BinaryRepeatParams& repeatParams)
 {
     CheckMulCastSupportType<T, U>();
     constexpr auto func = RegMulCast::MulCast<T, U, Reg::RegTensor<T>, Reg::RegTensor<U>>;
@@ -64,10 +70,11 @@ __aicore__ inline void MulCastImpl(__ubuf__ T *dst, __ubuf__ U *src0, __ubuf__ U
 }
 
 template <typename T, typename U>
-__aicore__ inline void MulCastImpl(__ubuf__ T *dst, __ubuf__ U *src0, __ubuf__ U *src1, uint32_t calCount)
+__aicore__ inline void MulCastImpl(__ubuf__ T* dst, __ubuf__ U* src0, __ubuf__ U* src1, uint32_t calCount)
 {
-    static_assert(SupportType<Tuple<T, U>, Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int32_t, int64_t>,
-        Tuple<float, int64_t>>(),
+    static_assert(
+        SupportType<
+            Tuple<T, U>, Tuple<int8_t, half>, Tuple<uint8_t, half>, Tuple<int32_t, int64_t>, Tuple<float, int64_t>>(),
         "Failed to check dtype in MulCast, current api support dtype combination is src: "
         "half, dst: int8_t, uint8_t; src: int64_t, dst: int32_t / float.");
     uint32_t sreg = static_cast<uint32_t>(calCount);
@@ -113,34 +120,38 @@ __aicore__ inline void MulCastImpl(__ubuf__ T *dst, __ubuf__ U *src0, __ubuf__ U
 }
 
 template <typename T, typename U, bool isSetMask = true>
-__aicore__ inline void MulCastCalc(const LocalTensor<T> &dstLocal, const LocalTensor<U> &src0Local,
-    const LocalTensor<U> &src1Local, uint64_t mask, const uint8_t repeatTime, const BinaryRepeatParams &repeatParams)
+__aicore__ inline void MulCastCalc(
+    const LocalTensor<T>& dstLocal, const LocalTensor<U>& src0Local, const LocalTensor<U>& src1Local, uint64_t mask,
+    const uint8_t repeatTime, const BinaryRepeatParams& repeatParams)
 {
     using DstPrimType = PrimT<T>;
     using SrcPrimType = PrimT<U>;
-    MulCastImpl<DstPrimType, SrcPrimType, isSetMask>((__ubuf__ DstPrimType *)dstLocal.GetPhyAddr(), (__ubuf__ SrcPrimType *)src0Local.GetPhyAddr(),
-        (__ubuf__ SrcPrimType *)src1Local.GetPhyAddr(), mask, repeatTime, repeatParams);
+    MulCastImpl<DstPrimType, SrcPrimType, isSetMask>(
+        (__ubuf__ DstPrimType*)dstLocal.GetPhyAddr(), (__ubuf__ SrcPrimType*)src0Local.GetPhyAddr(),
+        (__ubuf__ SrcPrimType*)src1Local.GetPhyAddr(), mask, repeatTime, repeatParams);
 }
 
 template <typename T, typename U, bool isSetMask = true>
-__aicore__ inline void MulCastCalc(const LocalTensor<T> &dstLocal, const LocalTensor<U> &src0Local,
-    const LocalTensor<U> &src1Local, uint64_t mask[2], const uint8_t repeatTime,
-    const BinaryRepeatParams &repeatParams)
+__aicore__ inline void MulCastCalc(
+    const LocalTensor<T>& dstLocal, const LocalTensor<U>& src0Local, const LocalTensor<U>& src1Local, uint64_t mask[2],
+    const uint8_t repeatTime, const BinaryRepeatParams& repeatParams)
 {
     using DstPrimType = PrimT<T>;
     using SrcPrimType = PrimT<U>;
-    MulCastImpl<DstPrimType, SrcPrimType, isSetMask>((__ubuf__ DstPrimType *)dstLocal.GetPhyAddr(), (__ubuf__ SrcPrimType *)src0Local.GetPhyAddr(),
-        (__ubuf__ SrcPrimType *)src1Local.GetPhyAddr(), mask, repeatTime, repeatParams);
+    MulCastImpl<DstPrimType, SrcPrimType, isSetMask>(
+        (__ubuf__ DstPrimType*)dstLocal.GetPhyAddr(), (__ubuf__ SrcPrimType*)src0Local.GetPhyAddr(),
+        (__ubuf__ SrcPrimType*)src1Local.GetPhyAddr(), mask, repeatTime, repeatParams);
 }
 
 template <typename T, typename U>
-__aicore__ inline void MulCastCalc(const LocalTensor<T> &dstLocal, const LocalTensor<U> &src0Local,
-    const LocalTensor<U> &src1Local, uint32_t calCount)
+__aicore__ inline void MulCastCalc(
+    const LocalTensor<T>& dstLocal, const LocalTensor<U>& src0Local, const LocalTensor<U>& src1Local, uint32_t calCount)
 {
     using DstPrimType = PrimT<T>;
     using SrcPrimType = PrimT<U>;
-    MulCastImpl<DstPrimType, SrcPrimType>((__ubuf__ DstPrimType *)dstLocal.GetPhyAddr(), (__ubuf__ SrcPrimType *)src0Local.GetPhyAddr(),
-        (__ubuf__ SrcPrimType *)src1Local.GetPhyAddr(), calCount);
+    MulCastImpl<DstPrimType, SrcPrimType>(
+        (__ubuf__ DstPrimType*)dstLocal.GetPhyAddr(), (__ubuf__ SrcPrimType*)src0Local.GetPhyAddr(),
+        (__ubuf__ SrcPrimType*)src1Local.GetPhyAddr(), calCount);
 }
 } // namespace AscendC
 #endif // ASCENDC_MODULE_OPERATOR_VEC_MULCAST_IMPL_H

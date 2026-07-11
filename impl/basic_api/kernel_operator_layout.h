@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_layout.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_operator_layout.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_operator_layout.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_LAYOUT_H__
 #endif
@@ -28,7 +29,7 @@ namespace AscendC {
 namespace LayoutInternal {
 constexpr size_t TWO_DIM_DEPTH = 2;
 constexpr size_t FOUR_DIM_DEPTH = 4;
-}
+} // namespace LayoutInternal
 
 template <typename T, typename U, typename S>
 __aicore__ inline constexpr auto Crd2Idx(const T& coord, const U& shape, const S& stride);
@@ -60,28 +61,30 @@ constexpr size_t nesting_depth_v = nesting_depth<T>::value;
 template <size_t Dim, typename T, typename U>
 struct IsStaticLayout {
 private:
-    template<typename T1>
+    template <typename T1>
     struct include_dynamic_type : Std::true_type {};
 
-    template<size_t v>
+    template <size_t v>
     struct include_dynamic_type<Std::Int<v>> : Std::false_type {};
 
     template <typename... Args>
-    struct include_dynamic_type<Std::tuple<Args...>> : Std::bool_constant<(include_dynamic_type<Args>::value || ...)> {};
+    struct include_dynamic_type<Std::tuple<Args...>> : Std::bool_constant<(include_dynamic_type<Args>::value || ...)> {
+    };
 
     __aicore__ inline static constexpr auto TestStaticLayout()
     {
-        if constexpr (nesting_depth_v<T> == Dim &&
-            !(include_dynamic_type<T>::value || include_dynamic_type<U>::value)) {
+        if constexpr (
+            nesting_depth_v<T> == Dim && !(include_dynamic_type<T>::value || include_dynamic_type<U>::value)) {
             return true;
         }
         return false;
     }
+
 public:
     static constexpr bool value = TestStaticLayout();
 };
 
-template<typename T, typename U>
+template <typename T, typename U>
 struct StaticLayoutSize {
 private:
     __aicore__ inline static constexpr auto GetFourDimStaticLayoutSize()
@@ -96,8 +99,9 @@ private:
         using outterColNumType = typename Std::tuple_element<1, colShapeType>::type;
         using outterColStrideType = typename Std::tuple_element<1, colStrideType>::type;
 
-        return (outterRowNumType {} * outterRowStrideType {}) > (outterColNumType {} * outterColStrideType {}) ?
-            (outterRowNumType {} * outterRowStrideType {}) : (outterColNumType {} * outterColStrideType {});
+        return (outterRowNumType{} * outterRowStrideType{}) > (outterColNumType{} * outterColStrideType{}) ?
+                   (outterRowNumType{} * outterRowStrideType{}) :
+                   (outterColNumType{} * outterColStrideType{});
     }
 
     __aicore__ inline static constexpr auto GetTwoDimStaticLayoutSize()
@@ -107,11 +111,12 @@ private:
         using rowStrideType = typename Std::tuple_element<0, U>::type;
         using colStrideType = typename Std::tuple_element<1, U>::type;
 
-        return (rowNumType {} * rowStrideType {}) > (colNumType {} * colStrideType {}) ?
-            (rowNumType {} * rowStrideType {}) : (colNumType {} * colStrideType {});
+        return (rowNumType{} * rowStrideType{}) > (colNumType{} * colStrideType{}) ? (rowNumType{} * rowStrideType{}) :
+                                                                                     (colNumType{} * colStrideType{});
     }
 
-    __aicore__ inline static constexpr auto GetStaticLayoutSize() {
+    __aicore__ inline static constexpr auto GetStaticLayoutSize()
+    {
         if constexpr (IsStaticLayout<LayoutInternal::FOUR_DIM_DEPTH, T, U>::value) {
             return GetFourDimStaticLayoutSize();
         } else if constexpr (IsStaticLayout<LayoutInternal::TWO_DIM_DEPTH, T, U>::value) {
@@ -120,6 +125,7 @@ private:
             return Std::Int<0>{};
         }
     }
+
 public:
     static constexpr size_t size = GetStaticLayoutSize();
 };
@@ -137,30 +143,19 @@ __aicore__ inline constexpr Stride<Ts...> MakeStride(const Ts&... t)
 }
 
 template <typename T, typename U>
-struct Layout : private Std::tuple<T, U>
-{
+struct Layout : private Std::tuple<T, U> {
     static constexpr auto size = StaticLayoutSize<T, U>::size;
 
-    __aicore__ inline constexpr Layout(const T& shape  = {}, const U& stride = {})
-        : Std::tuple<T, U>(shape, stride)
+    __aicore__ inline constexpr Layout(const T& shape = {}, const U& stride = {}) : Std::tuple<T, U>(shape, stride)
     {
         static_assert(Std::is_tuple_v<T> && Std::is_tuple_v<U>, "Shape or Stride is not tuple!");
     }
 
-    __aicore__ inline constexpr decltype(auto) GetSize() const
-    {
-        return GetLayoutSize();
-    }
+    __aicore__ inline constexpr decltype(auto) GetSize() const { return GetLayoutSize(); }
 
-    __aicore__ inline constexpr decltype(auto) layout()
-    {
-        return *this;
-    }
+    __aicore__ inline constexpr decltype(auto) layout() { return *this; }
 
-    __aicore__ inline constexpr decltype(auto) layout() const
-    {
-        return *this;
-    }
+    __aicore__ inline constexpr decltype(auto) layout() const { return *this; }
 
     template <size_t... I>
     __aicore__ inline constexpr decltype(auto) GetShape()
@@ -193,27 +188,27 @@ struct Layout : private Std::tuple<T, U>
     }
 
 private:
-    template<size_t index, size_t I, size_t... Is, typename Tuple>
+    template <size_t index, size_t I, size_t... Is, typename Tuple>
     __aicore__ inline constexpr decltype(auto) GetValue(const Tuple& t)
     {
         auto tupleEle = Std::get<index>(t);
         return Std::make_tuple(Std::get<I>(tupleEle), Std::get<Is>(tupleEle)...);
     }
 
-    template<size_t index, size_t I, size_t... Is, typename Tuple>
+    template <size_t index, size_t I, size_t... Is, typename Tuple>
     __aicore__ inline constexpr decltype(auto) GetValue(const Tuple& t) const
     {
         auto tupleEle = Std::get<index>(t);
         return Std::make_tuple(Std::get<I>(tupleEle), Std::get<Is>(tupleEle)...);
     }
 
-    template<size_t index, typename Tuple>
+    template <size_t index, typename Tuple>
     __aicore__ inline constexpr decltype(auto) GetValue(const Tuple& t)
     {
         return Std::get<index>(t);
     }
 
-    template<size_t index, typename Tuple>
+    template <size_t index, typename Tuple>
     __aicore__ inline constexpr decltype(auto) GetValue(const Tuple& t) const
     {
         return Std::get<index>(t);

@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_binary_scalar_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_m300/kernel_operator_vec_binary_scalar_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_vec_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_m300/kernel_operator_vec_binary_scalar_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_vec_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_BINARY_SCALAR_IMPL_H__
 #endif
@@ -30,15 +31,17 @@ namespace AscendC {
  * ************************************************************************************************* */
 // Adds::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -61,8 +64,9 @@ __aicore__ inline void AddsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -85,8 +89,9 @@ __aicore__ inline void AddsImpl(__ubuf__ float* dst, __ubuf__ float* src, float 
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -109,8 +114,9 @@ __aicore__ inline void AddsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -133,15 +139,17 @@ __aicore__ inline void AddsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -160,8 +168,9 @@ __aicore__ inline void AddsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -180,8 +189,9 @@ __aicore__ inline void AddsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -200,8 +210,9 @@ __aicore__ inline void AddsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void AddsImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -227,8 +238,7 @@ __aicore__ inline void AddsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue,
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const int32_t& count)
+__aicore__ inline void AddsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -248,8 +258,7 @@ __aicore__ inline void AddsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const int32_t& count)
+__aicore__ inline void AddsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -269,8 +278,7 @@ __aicore__ inline void AddsImpl(__ubuf__ float* dst, __ubuf__ float* src, float 
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void AddsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -290,8 +298,7 @@ __aicore__ inline void AddsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void AddsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void AddsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -315,15 +322,17 @@ __aicore__ inline void AddsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
  * ************************************************************************************************* */
 // Muls::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -346,8 +355,9 @@ __aicore__ inline void MulsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -371,8 +381,9 @@ __aicore__ inline void MulsImpl(__ubuf__ float* dst, __ubuf__ float* src, float 
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -396,8 +407,9 @@ __aicore__ inline void MulsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -420,15 +432,17 @@ __aicore__ inline void MulsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -447,8 +461,9 @@ __aicore__ inline void MulsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -467,8 +482,9 @@ __aicore__ inline void MulsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -487,8 +503,9 @@ __aicore__ inline void MulsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MulsImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -514,8 +531,7 @@ __aicore__ inline void MulsImpl(__ubuf__ T* dst, __ubuf__ T* src, const T scalar
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const int32_t& count)
+__aicore__ inline void MulsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -535,8 +551,7 @@ __aicore__ inline void MulsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const int32_t& count)
+__aicore__ inline void MulsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -556,8 +571,7 @@ __aicore__ inline void MulsImpl(__ubuf__ float* dst, __ubuf__ float* src, float 
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MulsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -577,8 +591,7 @@ __aicore__ inline void MulsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void MulsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MulsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -602,15 +615,17 @@ __aicore__ inline void MulsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
  * ************************************************************************************************* */
 // Maxs::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -633,8 +648,9 @@ __aicore__ inline void MaxsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -657,8 +673,9 @@ __aicore__ inline void MaxsImpl(__ubuf__ float* dst, __ubuf__ float* src, float 
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -681,8 +698,9 @@ __aicore__ inline void MaxsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -705,15 +723,17 @@ __aicore__ inline void MaxsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -732,8 +752,9 @@ __aicore__ inline void MaxsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -752,8 +773,9 @@ __aicore__ inline void MaxsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -772,8 +794,9 @@ __aicore__ inline void MaxsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MaxsImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -799,8 +822,7 @@ __aicore__ inline void MaxsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue,
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const int32_t& count)
+__aicore__ inline void MaxsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -820,8 +842,7 @@ __aicore__ inline void MaxsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const int32_t& count)
+__aicore__ inline void MaxsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -841,8 +862,7 @@ __aicore__ inline void MaxsImpl(__ubuf__ float* dst, __ubuf__ float* src, float 
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MaxsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -862,8 +882,7 @@ __aicore__ inline void MaxsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void MaxsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MaxsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -887,15 +906,17 @@ __aicore__ inline void MaxsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
  * ************************************************************************************************* */
 // Mins::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -918,8 +939,9 @@ __aicore__ inline void MinsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -942,8 +964,9 @@ __aicore__ inline void MinsImpl(__ubuf__ float* dst, __ubuf__ float* src, float 
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -966,8 +989,9 @@ __aicore__ inline void MinsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -990,15 +1014,17 @@ __aicore__ inline void MinsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1017,8 +1043,9 @@ __aicore__ inline void MinsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1037,8 +1064,9 @@ __aicore__ inline void MinsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1057,8 +1085,9 @@ __aicore__ inline void MinsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void MinsImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1084,8 +1113,7 @@ __aicore__ inline void MinsImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue,
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const int32_t& count)
+__aicore__ inline void MinsImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1105,8 +1133,7 @@ __aicore__ inline void MinsImpl(__ubuf__ half* dst, __ubuf__ half* src, half sca
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const int32_t& count)
+__aicore__ inline void MinsImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1126,8 +1153,7 @@ __aicore__ inline void MinsImpl(__ubuf__ float* dst, __ubuf__ float* src, float 
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MinsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1147,8 +1173,7 @@ __aicore__ inline void MinsImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, in
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void MinsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void MinsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1172,15 +1197,17 @@ __aicore__ inline void MinsImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, in
  * ************************************************************************************************* */
 // ShiftLeft::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = uint16_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -1203,8 +1230,9 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* 
 }
 
 template <typename T = uint32_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -1227,8 +1255,9 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* 
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -1251,8 +1280,9 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* sr
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -1275,15 +1305,17 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* sr
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = uint16_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1302,8 +1334,9 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* 
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1322,8 +1355,9 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* sr
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1342,8 +1376,9 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* sr
 }
 
 template <typename T = uint32_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1369,8 +1404,8 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarV
 }
 
 template <typename T = uint16_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const int32_t& count)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1390,8 +1425,8 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* 
 }
 
 template <typename T = uint32_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const int32_t& count)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1411,8 +1446,8 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* 
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1432,8 +1467,8 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* sr
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void ShiftLeftImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftLeftImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1457,16 +1492,17 @@ __aicore__ inline void ShiftLeftImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* sr
  * ************************************************************************************************* */
 // ShiftRight::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = uint16_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams,
-    bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -1489,9 +1525,9 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t*
 }
 
 template <typename T = uint32_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams,
-    bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const uint64_t mask[],
+    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -1514,8 +1550,9 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t*
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -1538,8 +1575,9 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* s
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -1562,16 +1600,17 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* s
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = uint16_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams,
-    bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __VEC_SCOPE__
     {
@@ -1590,8 +1629,9 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t*
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __VEC_SCOPE__
     {
@@ -1610,8 +1650,9 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* s
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams, bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __VEC_SCOPE__
     {
@@ -1630,9 +1671,9 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* s
 }
 
 template <typename T = uint32_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams,
-    bool roundEn)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams, bool roundEn)
 {
     __VEC_SCOPE__
     {
@@ -1658,8 +1699,8 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ T* dst, __ubuf__ T* src, const T 
 }
 
 template <typename T = uint16_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t* src,
-    uint16_t scalarValue, const int32_t& count)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ uint16_t* dst, __ubuf__ uint16_t* src, uint16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1679,8 +1720,8 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ uint16_t* dst, __ubuf__ uint16_t*
 }
 
 template <typename T = uint32_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t* src,
-    uint32_t scalarValue, const int32_t& count)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ uint32_t* dst, __ubuf__ uint32_t* src, uint32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1700,8 +1741,8 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ uint32_t* dst, __ubuf__ uint32_t*
 }
 
 template <typename T = int16_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ int16_t* dst, __ubuf__ int16_t* src, int16_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1721,8 +1762,8 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ int16_t* dst, __ubuf__ int16_t* s
 }
 
 template <typename T = int32_t, bool isSetMask = true>
-__aicore__ inline void ShiftRightImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue,
-    const int32_t& count)
+__aicore__ inline void ShiftRightImpl(
+    __ubuf__ int32_t* dst, __ubuf__ int32_t* src, int32_t scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1746,15 +1787,17 @@ __aicore__ inline void ShiftRightImpl(__ubuf__ int32_t* dst, __ubuf__ int32_t* s
  * ************************************************************************************************* */
 // LeakyRelu::Level 0
 template <typename T, bool isSetMask = true>
-__aicore__ inline void LeakyReluImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[],
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask[], uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void LeakyReluImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -1777,8 +1820,9 @@ __aicore__ inline void LeakyReluImpl(__ubuf__ float* dst, __ubuf__ float* src, f
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void LeakyReluImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask[], const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask[], const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -1801,15 +1845,17 @@ __aicore__ inline void LeakyReluImpl(__ubuf__ half* dst, __ubuf__ half* src, hal
 }
 
 template <typename T, bool isSetMask = true>
-__aicore__ inline void LeakyReluImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask,
-    uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl(
+    __ubuf__ T* dst, __ubuf__ T* src, T scalarValue, const uint64_t mask, uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     ASCENDC_ASSERT(false, { KERNEL_LOG(KERNEL_ERROR, "current data type is not supported!"); });
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void LeakyReluImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl(
+    __ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1828,8 +1874,9 @@ __aicore__ inline void LeakyReluImpl(__ubuf__ float* dst, __ubuf__ float* src, f
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void LeakyReluImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const uint64_t mask, const uint8_t repeatTime, const UnaryRepeatParams& repeatParams)
+__aicore__ inline void LeakyReluImpl(
+    __ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const uint64_t mask, const uint8_t repeatTime,
+    const UnaryRepeatParams& repeatParams)
 {
     __VEC_SCOPE__
     {
@@ -1855,8 +1902,7 @@ __aicore__ inline void LeakyReluImpl(__ubuf__ T* dst, __ubuf__ T* src, T scalarV
 }
 
 template <typename T = float, bool isSetMask = true>
-__aicore__ inline void LeakyReluImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue,
-    const int32_t& count)
+__aicore__ inline void LeakyReluImpl(__ubuf__ float* dst, __ubuf__ float* src, float scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {
@@ -1876,8 +1922,7 @@ __aicore__ inline void LeakyReluImpl(__ubuf__ float* dst, __ubuf__ float* src, f
 }
 
 template <typename T = half, bool isSetMask = true>
-__aicore__ inline void LeakyReluImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue,
-    const int32_t& count)
+__aicore__ inline void LeakyReluImpl(__ubuf__ half* dst, __ubuf__ half* src, half scalarValue, const int32_t& count)
 {
     __VEC_SCOPE__
     {

@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_cube_group_handle_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_c220/core_mng/roc/kernel_operator_cube_group_handle_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_c220/core_mng/roc/kernel_operator_cube_group_handle_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_CUBE_GROUP_H__ANDLE_IMPL_H
 #endif
@@ -30,15 +31,9 @@ __aicore__ inline KfcWorkspace::KfcWorkspace(GM_ADDR workspace)
     }
 }
 
-__aicore__ inline void KfcWorkspace::UpdateKfcWorkspace(uint32_t offset)
-{
-    msgStart += offset;
-}
+__aicore__ inline void KfcWorkspace::UpdateKfcWorkspace(uint32_t offset) { msgStart += offset; }
 
-__aicore__ inline GM_ADDR KfcWorkspace::GetKfcWorkspace()
-{
-    return msgStart;
-}
+__aicore__ inline GM_ADDR KfcWorkspace::GetKfcWorkspace() { return msgStart; }
 
 __aicore__ inline KfcWorkspace::~KfcWorkspace()
 {
@@ -48,17 +43,18 @@ __aicore__ inline KfcWorkspace::~KfcWorkspace()
     }
 }
 
-__aicore__ inline uint8_t GetEventId(KfcWorkspace &kfcWorkspace)
-{
-    return kfcWorkspace.evtID;
-}
+__aicore__ inline uint8_t GetEventId(KfcWorkspace& kfcWorkspace) { return kfcWorkspace.evtID; }
 
 template <typename T>
 __aicore__ inline CubeResGroupHandle<T>::CubeResGroupHandle(
     GM_ADDR workspace, uint8_t blockStart, uint8_t blockSize, uint8_t msgQueueSize, uint8_t evtIDIn)
 {
-    ASCENDC_DEBUG_ASSERT(((blockStart % MIX_NUM) == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "blockStart is %u, must be even number.", blockStart));
-    ASCENDC_DEBUG_ASSERT(((blockSize % MIX_NUM) == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "blockSize is %u, must be even number.", blockSize));
+    ASCENDC_DEBUG_ASSERT(
+        ((blockStart % MIX_NUM) == 0),
+        KERNEL_LOG_INTERNAL(KERNEL_ERROR, "blockStart is %u, must be even number.", blockStart));
+    ASCENDC_DEBUG_ASSERT(
+        ((blockSize % MIX_NUM) == 0),
+        KERNEL_LOG_INTERNAL(KERNEL_ERROR, "blockSize is %u, must be even number.", blockSize));
     aicSize = blockSize / MIX_NUM;
     aivSize = msgQueueSize;
 
@@ -70,17 +66,16 @@ __aicore__ inline CubeResGroupHandle<T>::CubeResGroupHandle(
     aivWorkState = (static_cast<uint64_t>(1) << aivNumForCurAic) - 1;
 
     msgSize = aivPerAic * aicSize * MAX_MSG_PER_AIV;
-    msgHead = (__gm__ T *)__GetAicMsgHead(workspace, blockStart / MIX_NUM, aivPerAic * MAX_MSG_PER_AIV);
+    msgHead = (__gm__ T*)__GetAicMsgHead(workspace, blockStart / MIX_NUM, aivPerAic * MAX_MSG_PER_AIV);
     msgCurrent = msgHead;
     if ASCEND_IS_AIV {
         eventID = evtIDIn;
         uint32_t ubMsgAddr = TOTAL_UB_SIZE - ONE_BLK_SIZE * AIV_CORE_NUM - sizeof(T);
 
 #if ASCENDC_CPU_DEBUG
-        ubMsg =
-            reinterpret_cast<__ubuf__ T *>(GetTPipePtr()->GetBaseAddr((int8_t)TPosition::VECOUT) + ubMsgAddr);
+        ubMsg = reinterpret_cast<__ubuf__ T*>(GetTPipePtr()->GetBaseAddr((int8_t)TPosition::VECOUT) + ubMsgAddr);
 #else
-        ubMsg = reinterpret_cast<__ubuf__ T *>(ubMsgAddr);
+        ubMsg = reinterpret_cast<__ubuf__ T*>(ubMsgAddr);
 #endif
     }
 }
@@ -91,23 +86,28 @@ __aicore__ inline CubeResGroupHandle<T>::CubeResGroupHandle(
 template <typename T>
 __aicore__ inline void CubeResGroupHandle<T>::AssignQueue(uint8_t queueIdIn)
 {
-    ASCENDC_DEBUG_ASSERT((queueIdIn < aivSize), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "queueID (%u) must be less than msgQueueSize(%u)", queueIdIn, aivSize));
+    ASCENDC_DEBUG_ASSERT(
+        (queueIdIn < aivSize),
+        KERNEL_LOG_INTERNAL(KERNEL_ERROR, "queueID (%u) must be less than msgQueueSize(%u)", queueIdIn, aivSize));
     if ASCEND_IS_AIV {
         uint8_t aicSubgroupID = queueIdIn / aivPerAic;
         uint8_t aivSubgroupID = queueIdIn % aivPerAic;
         queueId = queueIdIn;
         ASCENDC_DEBUG_ASSERT(
-            (aicSubgroupID < aicSize), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "aicSubgroupID (%u) must be less than aicSize (%u)", aicSubgroupID, aicSize));
+            (aicSubgroupID < aicSize),
+            KERNEL_LOG_INTERNAL(
+                KERNEL_ERROR, "aicSubgroupID (%u) must be less than aicSize (%u)", aicSubgroupID, aicSize));
         if (aicSubgroupID != aicSize - 1) {
             aivNumForCurAic = aivPerAic;
-        } else {  // if last aic, aiv num = total - sum(aivs for previous aics)
+        } else { // if last aic, aiv num = total - sum(aivs for previous aics)
             aivNumForCurAic = aivSize - (aicSize - 1) * aivPerAic;
         }
-        ASCENDC_DEBUG_ASSERT((aivSubgroupID < aivNumForCurAic), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
-            "aivSubgroupID (%u) must be less than aivNumForCurAic (%u)",
-            aivSubgroupID,
-            aivNumForCurAic));
-        msgHead += aicSubgroupID * aivPerAic * MAX_MSG_PER_AIV + aivSubgroupID;  // set msgHead and no more changes
+        ASCENDC_DEBUG_ASSERT(
+            (aivSubgroupID < aivNumForCurAic),
+            KERNEL_LOG_INTERNAL(
+                KERNEL_ERROR, "aivSubgroupID (%u) must be less than aivNumForCurAic (%u)", aivSubgroupID,
+                aivNumForCurAic));
+        msgHead += aicSubgroupID * aivPerAic * MAX_MSG_PER_AIV + aivSubgroupID; // set msgHead and no more changes
         msgCurrent = msgHead;
     }
 }
@@ -116,20 +116,19 @@ __aicore__ inline void CubeResGroupHandle<T>::AssignQueue(uint8_t queueIdIn)
 // to guarantee the order, not allowed to skip, must wait until msgState is updated to FREE
 template <typename T>
 template <PipeMode pipeMode>
-__aicore__ inline __gm__ T *CubeResGroupHandle<T>::AllocMessage()
+__aicore__ inline __gm__ T* CubeResGroupHandle<T>::AllocMessage()
 {
     if ASCEND_IS_AIV {
         if constexpr (pipeMode == PipeMode::MTE3_MODE) {
             WaitFlag<HardEvent::MTE3_S>((event_t)eventID);
         }
-        dcci(
-            reinterpret_cast<__gm__ int64_t *>(msgCurrent), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
+        dcci(reinterpret_cast<__gm__ int64_t*>(msgCurrent), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
         while ((msgCurrent->head).msgState != CubeMsgState::FREE) {
-            dcci(reinterpret_cast<__gm__ int64_t *>(msgCurrent),
-                cache_line_t::SINGLE_CACHE_LINE,
+            dcci(
+                reinterpret_cast<__gm__ int64_t*>(msgCurrent), cache_line_t::SINGLE_CACHE_LINE,
                 dcci_dst_t::CACHELINE_OUT);
         }
-        __gm__ T *msgReturn = msgCurrent;
+        __gm__ T* msgReturn = msgCurrent;
         __AivUpdateMsgCurrent();
         return msgReturn;
     }
@@ -139,7 +138,7 @@ __aicore__ inline __gm__ T *CubeResGroupHandle<T>::AllocMessage()
 // aiv call: use dcci to send msg. return offset, the msg position is msgHead + offset
 template <typename T>
 template <PipeMode pipeMode>
-__aicore__ inline uint16_t CubeResGroupHandle<T>::PostMessage(__gm__ T *msg, T &msgInput)
+__aicore__ inline uint16_t CubeResGroupHandle<T>::PostMessage(__gm__ T* msg, T& msgInput)
 {
     if ASCEND_IS_AIV {
         if constexpr (pipeMode == PipeMode::SCALAR_MODE) {
@@ -149,7 +148,8 @@ __aicore__ inline uint16_t CubeResGroupHandle<T>::PostMessage(__gm__ T *msg, T &
             __WriteGmCubeMsgByDatacopy(msg, msgInput);
             SetFlag<HardEvent::MTE3_S>((event_t)eventID);
         } else {
-            ASCENDC_DEBUG_ASSERT(false, KERNEL_LOG_INTERNAL(KERNEL_ERROR, "PostMessage Mode only support SCALAR_MODE or MTE3_MODE"));
+            ASCENDC_DEBUG_ASSERT(
+                false, KERNEL_LOG_INTERNAL(KERNEL_ERROR, "PostMessage Mode only support SCALAR_MODE or MTE3_MODE"));
         }
     }
     return msg - msgHead;
@@ -157,7 +157,7 @@ __aicore__ inline uint16_t CubeResGroupHandle<T>::PostMessage(__gm__ T *msg, T &
 
 // aic call: set msgState to FREE without waiting
 template <typename T>
-__aicore__ inline uint16_t CubeResGroupHandle<T>::FreeMessage(__gm__ T *msg)
+__aicore__ inline uint16_t CubeResGroupHandle<T>::FreeMessage(__gm__ T* msg)
 {
     if ASCEND_IS_AIC {
         __WriteGmStateByScalar(msg, CubeMsgState::FREE);
@@ -167,12 +167,12 @@ __aicore__ inline uint16_t CubeResGroupHandle<T>::FreeMessage(__gm__ T *msg)
 
 // aic call: wait until aiv update msgState to waitState, then aic set state to FREE. Used in FAKE msg.
 template <typename T>
-__aicore__ inline uint16_t CubeResGroupHandle<T>::FreeMessage(__gm__ T *msg, CubeMsgState waitState)
+__aicore__ inline uint16_t CubeResGroupHandle<T>::FreeMessage(__gm__ T* msg, CubeMsgState waitState)
 {
     if ASCEND_IS_AIC {
-        dcci(reinterpret_cast<__gm__ int64_t *>(msg), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
+        dcci(reinterpret_cast<__gm__ int64_t*>(msg), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
         while ((msg->head).msgState != waitState) {
-            dcci(reinterpret_cast<__gm__ int64_t *>(msg), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
+            dcci(reinterpret_cast<__gm__ int64_t*>(msg), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
         }
         __WriteGmStateByScalar(msg, CubeMsgState::FREE);
     }
@@ -181,7 +181,7 @@ __aicore__ inline uint16_t CubeResGroupHandle<T>::FreeMessage(__gm__ T *msg, Cub
 
 // aiv call: set msgState to FAKE. Then aic can tell status by updating msgState
 template <typename T>
-__aicore__ inline uint16_t CubeResGroupHandle<T>::PostFakeMsg(__gm__ T *msg)
+__aicore__ inline uint16_t CubeResGroupHandle<T>::PostFakeMsg(__gm__ T* msg)
 {
     if ASCEND_IS_AIV {
         __WriteGmStateByScalar(msg, CubeMsgState::FAKE);
@@ -191,14 +191,15 @@ __aicore__ inline uint16_t CubeResGroupHandle<T>::PostFakeMsg(__gm__ T *msg)
 
 // aiv call: send msg to tell aic to update aivWorkState cause one aiv ends service
 template <typename T>
-__aicore__ inline void CubeResGroupHandle<T>::SetQuit(__gm__ T *msg)
+__aicore__ inline void CubeResGroupHandle<T>::SetQuit(__gm__ T* msg)
 {
     uint8_t aivID = queueId % aivPerAic;
     if ASCEND_IS_AIV {
-        ASCENDC_DEBUG_ASSERT((aivID < aivNumForCurAic),
-            KERNEL_LOG_INTERNAL(KERNEL_ERROR, "In SendQuitMsg, aivID (%u) should not be larger than aivNumForCurAic (%u)",
-            aivID,
-            aivNumForCurAic));
+        ASCENDC_DEBUG_ASSERT(
+            (aivID < aivNumForCurAic),
+            KERNEL_LOG_INTERNAL(
+                KERNEL_ERROR, "In SendQuitMsg, aivID (%u) should not be larger than aivNumForCurAic (%u)", aivID,
+                aivNumForCurAic));
         (msg->head).aivID = aivID;
         __WriteGmStateByScalar(msg, CubeMsgState::QUIT);
     }
@@ -211,11 +212,11 @@ __aicore__ inline void CubeResGroupHandle<T>::SetSkipMsg(uint8_t skipCnt)
 {
     if ASCEND_IS_AIC {
         aivWork += skipCnt;
-        ASCENDC_DEBUG_ASSERT((aivWork < aivNumForCurAic), KERNEL_LOG_INTERNAL(KERNEL_ERROR,
-            "aivWork + skipCnt(%u) is %u, it cannot be larger than aivNumForCurAic (%u)",
-            skipCnt,
-            aivWork,
-            aivNumForCurAic));
+        ASCENDC_DEBUG_ASSERT(
+            (aivWork < aivNumForCurAic),
+            KERNEL_LOG_INTERNAL(
+                KERNEL_ERROR, "aivWork + skipCnt(%u) is %u, it cannot be larger than aivNumForCurAic (%u)", skipCnt,
+                aivWork, aivNumForCurAic));
         msgPos += skipCnt;
     }
 }
@@ -227,13 +228,12 @@ template <bool sync>
 __aicore__ inline bool CubeResGroupHandle<T>::Wait(uint16_t offset)
 {
     if ASCEND_IS_AIV {
-        __gm__ T *cubeMsgCur = msgHead + offset;
-        dcci(
-            reinterpret_cast<__gm__ int64_t *>(cubeMsgCur), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
+        __gm__ T* cubeMsgCur = msgHead + offset;
+        dcci(reinterpret_cast<__gm__ int64_t*>(cubeMsgCur), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
         if constexpr (sync) {
             while ((cubeMsgCur->head).msgState != CubeMsgState::FREE) {
-                dcci(reinterpret_cast<__gm__ int64_t *>(cubeMsgCur),
-                    cache_line_t::SINGLE_CACHE_LINE,
+                dcci(
+                    reinterpret_cast<__gm__ int64_t*>(cubeMsgCur), cache_line_t::SINGLE_CACHE_LINE,
                     dcci_dst_t::CACHELINE_OUT);
             }
             return true;
@@ -261,7 +261,7 @@ __aicore__ inline uint32_t __GetMsgAreaLen(T handle, uint32_t sizeOfCubeMsgStruc
 
 // aic call: set index aivID in aivWorkState to 0
 template <typename T>
-__aicore__ inline void __SetAivQuit(T *handle, uint8_t aivID)
+__aicore__ inline void __SetAivQuit(T* handle, uint8_t aivID)
 {
     if ASCEND_IS_AIC {
         uint64_t mask = ~(static_cast<uint64_t>(1) << aivID);
@@ -271,29 +271,29 @@ __aicore__ inline void __SetAivQuit(T *handle, uint8_t aivID)
 
 // aic call: update msgCurrent to next available pos(skipCnt + not quit)
 template <typename T>
-__aicore__ inline void __ReleaseMessage(T *handle)
+__aicore__ inline void __ReleaseMessage(T* handle)
 {
     if ASCEND_IS_AIC {
-        if (handle->aivWork + 1 >= handle->aivNumForCurAic) {  // to next loop, which starts from aiv0
+        if (handle->aivWork + 1 >= handle->aivNumForCurAic) { // to next loop, which starts from aiv0
             uint8_t lineCnt = handle->msgPos / handle->aivPerAic;
-            handle->msgPos = (lineCnt == MAX_MSG_PER_AIV - 1)
-                                 ? 0
-                                 : handle->msgPos + (handle->aivPerAic - handle->aivNumForCurAic) + 1;
+            handle->msgPos = (lineCnt == MAX_MSG_PER_AIV - 1) ?
+                                 0 :
+                                 handle->msgPos + (handle->aivPerAic - handle->aivNumForCurAic) + 1;
             handle->aivWork = 0;
         } else {
             handle->msgPos += 1;
             handle->aivWork += 1;
         }
         handle->msgCurrent = handle->msgHead + handle->msgPos;
-        if (handle->aivWorkState == 0) {  // if all aiv end service, aic quit
+        if (handle->aivWorkState == 0) { // if all aiv end service, aic quit
             return;
         }
         while (!(handle->aivWorkState & (static_cast<uint64_t>(1) << handle->aivWork))) {
             if (handle->aivWork + 1 >= handle->aivNumForCurAic) {
                 uint8_t lineCnt = handle->msgPos / handle->aivPerAic;
-                handle->msgPos = (lineCnt == MAX_MSG_PER_AIV - 1)
-                                     ? 0
-                                     : handle->msgPos + (handle->aivPerAic - handle->aivNumForCurAic) + 1;
+                handle->msgPos = (lineCnt == MAX_MSG_PER_AIV - 1) ?
+                                     0 :
+                                     handle->msgPos + (handle->aivPerAic - handle->aivNumForCurAic) + 1;
                 handle->aivWork = 0;
             } else {
                 handle->msgPos += 1;
@@ -305,15 +305,15 @@ __aicore__ inline void __ReleaseMessage(T *handle)
 }
 
 template <typename T>
-__aicore__ inline __gm__ T *__RcvMessage(CubeResGroupHandle<T> handle)
+__aicore__ inline __gm__ T* __RcvMessage(CubeResGroupHandle<T> handle)
 {
     if ASCEND_IS_AIC {
-        dcci(reinterpret_cast<__gm__ int64_t *>(handle.msgCurrent),
-            cache_line_t::SINGLE_CACHE_LINE,
+        dcci(
+            reinterpret_cast<__gm__ int64_t*>(handle.msgCurrent), cache_line_t::SINGLE_CACHE_LINE,
             dcci_dst_t::CACHELINE_OUT);
         while ((handle.msgCurrent->head).msgState == CubeMsgState::FREE) {
-            dcci(reinterpret_cast<__gm__ int64_t *>(handle.msgCurrent),
-                cache_line_t::SINGLE_CACHE_LINE,
+            dcci(
+                reinterpret_cast<__gm__ int64_t*>(handle.msgCurrent), cache_line_t::SINGLE_CACHE_LINE,
                 dcci_dst_t::CACHELINE_OUT);
         }
     }
@@ -327,7 +327,7 @@ __aicore__ inline GM_ADDR CubeResGroupHandle<T>::__GetAicMsgHead(
 {
     if ASCEND_IS_AIC {
         uint8_t aicIndex = GetBlockIdxImpl() - aicStart;
-        auto ptr = reinterpret_cast<__gm__ T *>(workspace);
+        auto ptr = reinterpret_cast<__gm__ T*>(workspace);
         return reinterpret_cast<GM_ADDR>(&ptr[aicIndex * msgSizePerAic]);
     }
     return workspace;
@@ -337,7 +337,7 @@ __aicore__ inline GM_ADDR CubeResGroupHandle<T>::__GetAicMsgHead(
 template <typename T>
 __aicore__ inline void CubeResGroupHandle<T>::__AivUpdateMsgCurrent()
 {
-    msgPos = (msgPos == 3) ? 0 : msgPos + 1;  // = 3 means reach end of column, need jump to head
+    msgPos = (msgPos == 3) ? 0 : msgPos + 1; // = 3 means reach end of column, need jump to head
     msgCurrent = msgHead + msgPos * aivPerAic;
 }
 
@@ -345,7 +345,7 @@ __aicore__ inline void CubeResGroupHandle<T>::__AivUpdateMsgCurrent()
 template <typename T>
 __aicore__ inline void CubeResGroupHandle<T>::__AicUpdateMsgCurrent()
 {
-    if (aivWork + 1 >= aivNumForCurAic) {  // to next loop, which starts from aiv0
+    if (aivWork + 1 >= aivNumForCurAic) { // to next loop, which starts from aiv0
         uint8_t lineCnt = msgPos / aivPerAic;
         msgPos = (lineCnt == MAX_MSG_PER_AIV - 1) ? 0 : msgPos + (aivPerAic - aivNumForCurAic) + 1;
         aivWork = 0;
@@ -365,35 +365,37 @@ __aicore__ inline bool CubeResGroupHandle<T>::__AivIsRun(uint8_t aivID)
 
 // msg data has been prepared. Refresh Scalar of whole CubeMsgType
 template <typename T>
-__aicore__ inline void CubeResGroupHandle<T>::__WriteGmCubeMsgByScalar(__gm__ T *msg)
+__aicore__ inline void CubeResGroupHandle<T>::__WriteGmCubeMsgByScalar(__gm__ T* msg)
 {
-    ASCENDC_DEBUG_ASSERT((msg != nullptr), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "In __WriteGmStateByScalar, msg can not be nullptr"));
+    ASCENDC_DEBUG_ASSERT(
+        (msg != nullptr), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "In __WriteGmStateByScalar, msg can not be nullptr"));
     // Note: must first refresh last (n-1) * 64B msg content, then refresh first 64B of msgState
     for (uint32_t i = 1; i < sizeof(T) / sizeof(int64_t); i++) {
-        dcci(reinterpret_cast<__gm__ int64_t *>(msg) + sizeof(int64_t) * i,
-            cache_line_t::SINGLE_CACHE_LINE,
+        dcci(
+            reinterpret_cast<__gm__ int64_t*>(msg) + sizeof(int64_t) * i, cache_line_t::SINGLE_CACHE_LINE,
             dcci_dst_t::CACHELINE_OUT);
     }
-    dcci(reinterpret_cast<__gm__ int64_t *>(msg), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
+    dcci(reinterpret_cast<__gm__ int64_t*>(msg), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
 }
 
 // set msgState to newState by Scalar
 template <typename T>
-__aicore__ inline void CubeResGroupHandle<T>::__WriteGmStateByScalar(
-    __gm__ T *msg, CubeMsgState newState)
+__aicore__ inline void CubeResGroupHandle<T>::__WriteGmStateByScalar(__gm__ T* msg, CubeMsgState newState)
 {
-    ASCENDC_DEBUG_ASSERT((msg != nullptr), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "In __WriteGmStateByScalar, msg can not be nullptr"));
+    ASCENDC_DEBUG_ASSERT(
+        (msg != nullptr), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "In __WriteGmStateByScalar, msg can not be nullptr"));
     (msg->head).msgState = newState;
-    dcci(reinterpret_cast<__gm__ int64_t *>(msg), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
+    dcci(reinterpret_cast<__gm__ int64_t*>(msg), cache_line_t::SINGLE_CACHE_LINE, dcci_dst_t::CACHELINE_OUT);
 }
 
 template <typename T>
-__aicore__ inline void CubeResGroupHandle<T>::__WriteGmCubeMsgByDatacopy(
-    __gm__ T *msgPtr, T &cubeMsgInput)
+__aicore__ inline void CubeResGroupHandle<T>::__WriteGmCubeMsgByDatacopy(__gm__ T* msgPtr, T& cubeMsgInput)
 {
-    ASCENDC_DEBUG_ASSERT((msgPtr != nullptr), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "In __WriteGmCubeMsgByDatacopy, msg can not be nullptr"));
-    auto ubData = reinterpret_cast<__ubuf__ uint64_t *>(ubMsg);
-    auto msgData = reinterpret_cast<uint64_t *>(&cubeMsgInput);
+    ASCENDC_DEBUG_ASSERT(
+        (msgPtr != nullptr),
+        KERNEL_LOG_INTERNAL(KERNEL_ERROR, "In __WriteGmCubeMsgByDatacopy, msg can not be nullptr"));
+    auto ubData = reinterpret_cast<__ubuf__ uint64_t*>(ubMsg);
+    auto msgData = reinterpret_cast<uint64_t*>(&cubeMsgInput);
     for (uint32_t i = 0; i < sizeof(T) / sizeof(uint64_t); i++, ubData++, msgData++) {
         *ubData = *msgData;
     }
@@ -401,15 +403,15 @@ __aicore__ inline void CubeResGroupHandle<T>::__WriteGmCubeMsgByDatacopy(
     SetFlag<HardEvent::S_MTE3>(evtID);
     WaitFlag<HardEvent::S_MTE3>(evtID);
     PipeBarrier<PIPE_MTE3>();
-    copy_ubuf_to_gm((__gm__ void *)msgPtr, (__ubuf__ void *)ubMsg, 0, 1, sizeof(T) / ONE_BLK_SIZE, 0, 0);
+    copy_ubuf_to_gm((__gm__ void*)msgPtr, (__ubuf__ void*)ubMsg, 0, 1, sizeof(T) / ONE_BLK_SIZE, 0, 0);
 }
 
 // copy msgInput to GM
 template <typename T>
-__aicore__ inline void CubeResGroupHandle<T>::__CopyCubeMsg(__gm__ T *msg, T &msgInput)
+__aicore__ inline void CubeResGroupHandle<T>::__CopyCubeMsg(__gm__ T* msg, T& msgInput)
 {
-    auto gmPtr = reinterpret_cast<__gm__ uint64_t *>(msg);
-    auto msgDataPtr = reinterpret_cast<uint64_t *>(&msgInput);
+    auto gmPtr = reinterpret_cast<__gm__ uint64_t*>(msg);
+    auto msgDataPtr = reinterpret_cast<uint64_t*>(&msgInput);
     for (uint32_t i = 0; i < sizeof(T) / sizeof(int64_t); i++, gmPtr++, msgDataPtr++) {
         *gmPtr = *msgDataPtr;
     }
@@ -417,10 +419,11 @@ __aicore__ inline void CubeResGroupHandle<T>::__CopyCubeMsg(__gm__ T *msg, T &ms
 
 template <int groupID, class MatmulApiType, template <class, class> class CallBack, typename T>
 __aicore__ inline CubeResGroupHandle<T> CreateCubeResGroup(
-    KfcWorkspace &desc, uint8_t blockStart, uint8_t blockSize, uint8_t msgQueueSize, GM_ADDR tiling)
+    KfcWorkspace& desc, uint8_t blockStart, uint8_t blockSize, uint8_t msgQueueSize, GM_ADDR tiling)
 {
     ASCENDC_DEBUG_ASSERT(
-        (sizeof(T) % 64 == 0), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "CubeMsgType Size is %u must be aligned to 64B.", sizeof(T)));
+        (sizeof(T) % 64 == 0),
+        KERNEL_LOG_INTERNAL(KERNEL_ERROR, "CubeMsgType Size is %u must be aligned to 64B.", sizeof(T)));
     CubeResGroupHandle handle =
         CubeResGroupHandle<T>(desc.GetKfcWorkspace(), blockStart, blockSize, msgQueueSize, GetEventId(desc));
     desc.UpdateKfcWorkspace(__GetMsgAreaLen(handle, sizeof(T)));
@@ -449,7 +452,7 @@ __aicore__ inline CubeResGroupHandle<T> CreateCubeResGroup(
     return handle;
 }
 
-}  // namespace AscendC
+} // namespace AscendC
 #endif
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_CUBE_GROUP_H__ANDLE_IMPL_H)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__

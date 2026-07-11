@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_common_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_c220/kernel_operator_common_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_c220/kernel_operator_common_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_COMMON_IMPL_H__
 #endif
@@ -26,13 +27,11 @@
 #include "../../../include/basic_api/kernel_base_types.h"
 namespace AscendC {
 
-[[deprecated(
-    "NOTICE: SetSysWorkSpace has been deprecated and will be removed in the next version.")]]
+[[deprecated("NOTICE: SetSysWorkSpace has been deprecated and will be removed in the next version.")]]
 __aicore__ inline void SetSysWorkspace(GM_ADDR workspace)
 {
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    ASCENDC_ASSERT((workspace != nullptr),
-        { KERNEL_LOG(KERNEL_ERROR, "workspace can not be nullptr"); });
+    ASCENDC_ASSERT((workspace != nullptr), { KERNEL_LOG(KERNEL_ERROR, "workspace can not be nullptr"); });
 #else
     if (g_sysWorkspaceReserved == nullptr) {
         g_sysWorkspaceReserved = workspace;
@@ -43,8 +42,7 @@ __aicore__ inline void SetSysWorkspace(GM_ADDR workspace)
 __aicore__ inline void SetSysWorkspaceForce(GM_ADDR workspace)
 {
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    ASCENDC_ASSERT((workspace != nullptr),
-        { KERNEL_LOG(KERNEL_ERROR, "workspace can not be nullptr"); });
+    ASCENDC_ASSERT((workspace != nullptr), { KERNEL_LOG(KERNEL_ERROR, "workspace can not be nullptr"); });
 #else
 #if defined(__NPU_DEVICE__)
     __set_kfc_workspace_addr(workspace);
@@ -57,8 +55,7 @@ __aicore__ inline void SetSysWorkspaceForce(GM_ADDR workspace)
 __aicore__ inline GM_ADDR GetUserWorkspace(GM_ADDR workspace)
 {
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
-    ASCENDC_ASSERT((workspace != nullptr),
-        { KERNEL_LOG(KERNEL_ERROR, "workspace can not be nullptr"); });
+    ASCENDC_ASSERT((workspace != nullptr), { KERNEL_LOG(KERNEL_ERROR, "workspace can not be nullptr"); });
     return workspace;
 #else
     (void)(workspace);
@@ -76,12 +73,9 @@ __aicore__ inline void SetStoreAtomicConfigImpl()
     set_st_atomic_cfg(type, op);
 }
 
-__aicore__ inline int64_t GetStoreAtomicConfigImpl()
-{
-    return get_st_atomic_cfg();
-}
+__aicore__ inline int64_t GetStoreAtomicConfigImpl() { return get_st_atomic_cfg(); }
 
-__aicore__ inline void GetStoreAtomicConfigImpl(uint16_t &atomicType, uint16_t &atomicOp)
+__aicore__ inline void GetStoreAtomicConfigImpl(uint16_t& atomicType, uint16_t& atomicOp)
 {
     int64_t stAtomic = get_st_atomic_cfg();
     constexpr uint64_t typeMask = 0x7;

@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_brcb_intf_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_operator_vec_brcb_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_vec_brcb_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_operator_vec_brcb_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_vec_brcb_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_BRCB_INTF_IMPL_H__
 #endif
@@ -24,7 +25,6 @@
 #include "../../include/basic_api/kernel_struct_brcb.h"
 #include "mstx_local_tensor_info.h"
 #include "kernel_npu_debug.h"
-
 
 #if __NPU_ARCH__ == 1001
 #include "dav_c100/kernel_operator_vec_brcb_impl.h"
@@ -57,18 +57,29 @@ namespace AscendC {
  * @param [in] repeatParams.dstRepStride dst repeat stride
  */
 template <typename T>
-__aicore__ inline void Brcb(const LocalTensor<T>& dst, const LocalTensor<T>& src0, const uint8_t repeatTime,
+__aicore__ inline void Brcb(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src0, const uint8_t repeatTime,
     const BrcbRepeatParams& repeatParams)
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckVectorTensor("Brcb", NamedTensor(dst, "dst"), NamedTensor(src0, "src0"));
-    ASCENDC_DEBUG_ASSERT((src0.GetSize() >= 8 * repeatTime), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Failed to check src0 "
-        "tensor size in Brcb, it must be src0.GetSize() >= 8 * repeatTime, current src0.GetSize() is %u, repeatTime is "
-        "%u.\n", src0.GetSize(), repeatTime));
-    ASCENDC_DEBUG_ASSERT((src0.GetPhyAddr() != dst.GetPhyAddr()), KERNEL_LOG_INTERNAL(KERNEL_ERROR, "Brcb does not "
-        "support src0 tensor and dst tensor having same addr.\n"));
-    ASCENDC_DEBUG_WARNING((repeatParams.dstBlkStride != 0), KERNEL_LOG_INTERNAL(KERNEL_WARN, "dstBlkStride = 0 in Brcb "
-        "is equivalent to dstBlkStride = 1.\n"));
+    ASCENDC_DEBUG_ASSERT(
+        (src0.GetSize() >= 8 * repeatTime), KERNEL_LOG_INTERNAL(
+                                                KERNEL_ERROR,
+                                                "Failed to check src0 "
+                                                "tensor size in Brcb, it must be src0.GetSize() >= 8 * repeatTime, "
+                                                "current src0.GetSize() is %u, repeatTime is "
+                                                "%u.\n",
+                                                src0.GetSize(), repeatTime));
+    ASCENDC_DEBUG_ASSERT(
+        (src0.GetPhyAddr() != dst.GetPhyAddr()),
+        KERNEL_LOG_INTERNAL(
+            KERNEL_ERROR, "Brcb does not "
+                          "support src0 tensor and dst tensor having same addr.\n"));
+    ASCENDC_DEBUG_WARNING(
+        (repeatParams.dstBlkStride != 0), KERNEL_LOG_INTERNAL(
+                                              KERNEL_WARN, "dstBlkStride = 0 in Brcb "
+                                                           "is equivalent to dstBlkStride = 1.\n"));
 #endif
 #ifdef __MSTX_DFX_REPORT__
     MstxTensor::GetMstxVecBrcbInfo(dst, src0, repeatTime, repeatParams, "Brcb");

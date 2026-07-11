@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_common_intf_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_operator_common_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_common_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_operator_common_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_common_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_COMMON_INTF_IMPL_H__
 #endif
@@ -93,7 +94,7 @@ namespace AscendC {
  * @ingroup：SetNextTaskStart, WaitPreTaskEnd
  * @brief：In SuperKernel fusion mode, set wait flag between two operators
  */
-template<pipe_t AIV_PIPE, pipe_t AIC_PIPE, bool FORCE>
+template <pipe_t AIV_PIPE, pipe_t AIC_PIPE, bool FORCE>
 __aicore__ inline void SetNextTaskStart()
 {
 #ifdef __ASCENDC_ENABLE_SET_NEXT_TASK_START
@@ -105,7 +106,7 @@ __aicore__ inline void SetNextTaskStart()
 #endif
 }
 
-template<bool FORCE>
+template <bool FORCE>
 __aicore__ inline void WaitPreTaskEnd()
 {
 #ifdef __ASCENDC_ENABLE_WAIT_PRE_TASK_END
@@ -117,10 +118,7 @@ __aicore__ inline void WaitPreTaskEnd()
 #endif
 }
 
-__aicore__ inline void InitSocState()
-{
-    AscendCUtils::InitSocStateImpl();
-}
+__aicore__ inline void InitSocState() { AscendCUtils::InitSocStateImpl(); }
 
 // NOTICE: InitOutput has been deprecated and will be removed in the next version. Please use Fill instead!
 template <typename T>
@@ -147,20 +145,18 @@ __aicore__ inline __in_pipe__(V)
     struct DataCopyExtParams repeatParams;
     uint32_t comOffset = 0;
     // compute the main block
-    repeatParams = { 1, static_cast<uint32_t>(roundSize * sizeof(T)), 0, 0, 0 };
+    repeatParams = {1, static_cast<uint32_t>(roundSize * sizeof(T)), 0, 0, 0};
     for (int index = 0; index < round; ++index) {
-        DataCopyPadUB2GMImpl((__gm__ T*)gmWorkspaceAddr.GetPhyAddr() + comOffset,
-            (__ubuf__ T*)popBuffer.GetPhyAddr(),
-            repeatParams);
+        DataCopyPadUB2GMImpl(
+            (__gm__ T*)gmWorkspaceAddr.GetPhyAddr() + comOffset, (__ubuf__ T*)popBuffer.GetPhyAddr(), repeatParams);
         comOffset += roundSize;
     }
     // compute the tail block
     repeatParams = {1, static_cast<uint32_t>(tail * sizeof(T)), 0, 0, 0};
     if (tail != 0) {
         comOffset = round * roundSize;
-        DataCopyPadUB2GMImpl((__gm__ T*)gmWorkspaceAddr.GetPhyAddr() + comOffset,
-            (__ubuf__ T*)popBuffer.GetPhyAddr(),
-            repeatParams);
+        DataCopyPadUB2GMImpl(
+            (__gm__ T*)gmWorkspaceAddr.GetPhyAddr() + comOffset, (__ubuf__ T*)popBuffer.GetPhyAddr(), repeatParams);
     }
 #endif
 }
@@ -171,12 +167,9 @@ __aicore__ inline void SetStoreAtomicConfig()
     SetStoreAtomicConfigImpl<static_cast<atomic_type_t>(type), static_cast<atomic_op_t>(op)>();
 }
 
-__aicore__ inline int64_t GetStoreAtomicConfig()
-{
-    return GetStoreAtomicConfigImpl();
-}
+__aicore__ inline int64_t GetStoreAtomicConfig() { return GetStoreAtomicConfigImpl(); }
 
-__aicore__ inline void GetStoreAtomicConfig(uint16_t &atomicType, uint16_t &atomicOp)
+__aicore__ inline void GetStoreAtomicConfig(uint16_t& atomicType, uint16_t& atomicOp)
 {
     GetStoreAtomicConfigImpl(atomicType, atomicOp);
 }
@@ -186,8 +179,10 @@ __aicore__ inline void CheckLocalMemoryIA(const CheckLocalMemoryIAParam& checkPa
     CheckLocalMemoryIAImpl(checkParams);
 }
 
-#if (__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3102) || (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
-template <HardEvent event, MemoryT memT, bool isVirtual> __aicore__ inline void HSetFlag(int32_t eventID)
+#if (__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3102) || (__NPU_ARCH__ == 3510) || \
+    (__NPU_ARCH__ == 5102)
+template <HardEvent event, MemoryT memT, bool isVirtual>
+__aicore__ inline void HSetFlag(int32_t eventID)
 {
     if (g_coreType == AIV) {
         return;
@@ -195,7 +190,8 @@ template <HardEvent event, MemoryT memT, bool isVirtual> __aicore__ inline void 
     HSetFlagImpl<event, memT, isVirtual>(eventID);
 }
 
-template <HardEvent event, MemoryT memT, bool isVirtual> __aicore__ inline void HWaitFlag(int32_t eventID)
+template <HardEvent event, MemoryT memT, bool isVirtual>
+__aicore__ inline void HWaitFlag(int32_t eventID)
 {
     if (g_coreType == AIV) {
         return;
@@ -204,20 +200,24 @@ template <HardEvent event, MemoryT memT, bool isVirtual> __aicore__ inline void 
 }
 #endif
 
-#if (__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113)
+#if (__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || \
+    (__NPU_ARCH__ == 3113)
 template <int8_t startBit, int8_t endBit>
-__aicore__ static inline void SetCtrlSpr(int64_t value){
+__aicore__ static inline void SetCtrlSpr(int64_t value)
+{
     SetCtrlSprImpl<startBit, endBit>(value);
 }
 
 template <int8_t startBit, int8_t endBit>
-__aicore__ static inline int64_t GetCtrlSpr(){
+__aicore__ static inline int64_t GetCtrlSpr()
+{
     return GetCtrlSprImpl<startBit, endBit>();
 }
 
 #if (__NPU_ARCH__ != 2201)
 template <int8_t startBit, int8_t endBit>
-__aicore__ static inline void ResetCtrlSpr(){
+__aicore__ static inline void ResetCtrlSpr()
+{
     ResetCtrlSprImpl<startBit, endBit>();
 }
 #endif
@@ -229,11 +229,11 @@ template <SaturationMode mode>
 __aicore__ inline constexpr int8_t GetSaturationModeBit()
 {
     static_assert(IsSupportedSaturationMode<mode>(), "SaturationMode is not supported on current platform!");
-    if constexpr(mode == SaturationMode::FLOAT) {
+    if constexpr (mode == SaturationMode::FLOAT) {
         return 48; // 0 => sat, 1 => no sat
-    } else if constexpr(mode == SaturationMode::FLOAT8) {
+    } else if constexpr (mode == SaturationMode::FLOAT8) {
         return 50; // 0 => sat, 1 => no sat
-    } else if constexpr(mode == SaturationMode::INT) {
+    } else if constexpr (mode == SaturationMode::INT) {
         return 53; // 0 => truncation, 1 => saturation
     } else {
         return 59; // 0 => saturation, 1 => truncation
@@ -299,12 +299,14 @@ __aicore__ inline OverrideStrategy GetSaturationStrategy()
 }
 
 template <CacheRwMode rwMode, CacheMode cacheMode>
-__aicore__ inline void SetScalarCacheMode(){
+__aicore__ inline void SetScalarCacheMode()
+{
     SetScalarCacheModeImpl<rwMode, cacheMode>();
 }
 
 template <CacheRwMode rwMode>
-__aicore__ inline CacheMode GetScalarCacheMode(){
+__aicore__ inline CacheMode GetScalarCacheMode()
+{
     return GetScalarCacheModeImpl<rwMode>();
 }
 #endif

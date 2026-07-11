@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_gather_mask_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/dav_3510/kernel_operator_vec_gather_mask_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_vec_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/dav_3510/kernel_operator_vec_gather_mask_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_vec_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_VEC_GATHER_MASK_IMPL_H__
 #endif
@@ -33,7 +34,8 @@ __aicore__ inline int64_t GetGatherMaskRemainCountImpl()
 
 template <typename T>
 __simd_vf__ inline void GatherMaskAllNormalElePerVec(
-    __ubuf__ T *dst, __ubuf__ T *src0, const GatherMaskParams reducev2Params, uint32_t ElePerVec) {
+    __ubuf__ T* dst, __ubuf__ T* src0, const GatherMaskParams reducev2Params, uint32_t ElePerVec)
+{
     Reg::RegTensor<T> srcReg;
     Reg::MaskReg loadMask = Reg::CreateMask<T, Reg::MaskPattern::ALL>();
     Reg::UnalignReg ureg;
@@ -47,7 +49,7 @@ __simd_vf__ inline void GatherMaskAllNormalElePerVec(
 
 template <typename T>
 __aicore__ inline void GatherMaskAllNormal(
-    __ubuf__ T *dst, __ubuf__ T *src0, const GatherMaskParams &reducev2Params, uint64_t &rsvdCnt)
+    __ubuf__ T* dst, __ubuf__ T* src0, const GatherMaskParams& reducev2Params, uint64_t& rsvdCnt)
 {
     constexpr uint32_t ElePerVec = GetVecLen() / sizeof(T);
     GatherMaskAllNormalElePerVec<T>(dst, src0, reducev2Params, ElePerVec);
@@ -55,8 +57,9 @@ __aicore__ inline void GatherMaskAllNormal(
 }
 
 template <typename T>
-__simd_vf__ inline void GatherMaskAllReduceElePerVec(__ubuf__ T *dst, __ubuf__ T *src0,
-    const uint32_t mask, const GatherMaskParams reducev2Params, uint16_t innerRepeatTimes, uint8_t ElePerBlkT)
+__simd_vf__ inline void GatherMaskAllReduceElePerVec(
+    __ubuf__ T* dst, __ubuf__ T* src0, const uint32_t mask, const GatherMaskParams reducev2Params,
+    uint16_t innerRepeatTimes, uint8_t ElePerBlkT)
 {
     Reg::RegTensor<T> srcReg;
     Reg::RegTensor<T> dstReg;
@@ -68,14 +71,14 @@ __simd_vf__ inline void GatherMaskAllReduceElePerVec(__ubuf__ T *dst, __ubuf__ T
         maskValue = mask;
         for (uint16_t j = 0; j < innerRepeatTimes; ++j) {
             loadMask = Reg::UpdateMask<T>(maskValue);
-            Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg,
+            Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                srcReg,
                 src0 + i * reducev2Params.src0RepeatStride * ElePerBlkT +
                     j * 8 * reducev2Params.src0BlockStride * ElePerBlkT,
-                reducev2Params.src0BlockStride,
-                loadMask);
+                reducev2Params.src0BlockStride, loadMask);
             if constexpr (SupportType<T, bfloat16_t>()) {
                 Reg::GatherMask<uint16_t, Reg::GatherMaskMode::STORE_REG>(
-                    (Reg::RegTensor<uint16_t> &)dstReg, (Reg::RegTensor<uint16_t> &)srcReg, loadMask);
+                    (Reg::RegTensor<uint16_t>&)dstReg, (Reg::RegTensor<uint16_t>&)srcReg, loadMask);
             } else {
                 Reg::GatherMask<T, Reg::GatherMaskMode::STORE_REG>(dstReg, srcReg, loadMask);
             }
@@ -87,7 +90,7 @@ __simd_vf__ inline void GatherMaskAllReduceElePerVec(__ubuf__ T *dst, __ubuf__ T
 
 template <typename T>
 __aicore__ inline void GatherMaskAllReduce(
-    __ubuf__ T *dst, __ubuf__ T *src0, const uint32_t mask, const GatherMaskParams &reducev2Params, uint64_t &rsvdCnt)
+    __ubuf__ T* dst, __ubuf__ T* src0, const uint32_t mask, const GatherMaskParams& reducev2Params, uint64_t& rsvdCnt)
 {
     constexpr uint8_t ElePerBlkT = GetDataBlockSizeInBytes() / sizeof(T);
     constexpr uint32_t ElePerVec = GetVecLen() / sizeof(T);
@@ -98,7 +101,7 @@ __aicore__ inline void GatherMaskAllReduce(
 
 template <typename T, uint8_t solidPattern>
 __simd_vf__ inline void GatherMaskSqueezeNormalTmpBuffer(
-    __ubuf__ T *dst, __ubuf__ T *src0, __ubuf__ uint8_t *tempBuf, const GatherMaskParams reducev2Params)
+    __ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ uint8_t* tempBuf, const GatherMaskParams reducev2Params)
 {
     Reg::RegTensor<T> dstReg;
     Reg::RegTensor<T> srcReg;
@@ -134,7 +137,7 @@ __simd_vf__ inline void GatherMaskSqueezeNormalTmpBuffer(
             srcReg, src0, reducev2Params.src0BlockStride, reducev2Params.src0RepeatStride, loadMask);
         if constexpr (SupportType<T, bfloat16_t>()) {
             Reg::GatherMask<uint16_t, Reg::GatherMaskMode::STORE_REG>(
-                (Reg::RegTensor<uint16_t> &)dstReg, (Reg::RegTensor<uint16_t> &)srcReg, patternMask);
+                (Reg::RegTensor<uint16_t>&)dstReg, (Reg::RegTensor<uint16_t>&)srcReg, patternMask);
         } else {
             Reg::GatherMask<T, Reg::GatherMaskMode::STORE_REG>(dstReg, srcReg, patternMask);
         }
@@ -181,18 +184,19 @@ __aicore__ inline void SetVectorMaskForGatherMaskSqueeze()
 
 template <typename T, uint8_t solidPattern>
 __aicore__ inline void GatherMaskSqueezeNormal(
-    __ubuf__ T *dst, __ubuf__ T *src0, const GatherMaskParams &reducev2Params, uint64_t &rsvdCnt)
+    __ubuf__ T* dst, __ubuf__ T* src0, const GatherMaskParams& reducev2Params, uint64_t& rsvdCnt)
 {
     SetVectorMaskForGatherMaskSqueeze<T, solidPattern>();
-    __ubuf__ uint8_t *tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(GetRuntimeUBSize(), 32);
+    __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(GetRuntimeUBSize(), 32);
     GatherMaskSqueezeNormalTmpBuffer<T, solidPattern>(dst, src0, tempBuf, reducev2Params);
     rsvdCnt = GetSpr<SpecialPurposeReg::AR>() / sizeof(T);
     AscendCUtils::FreeTemporaryBuffer<uint8_t>(tempBuf);
 }
 
 template <typename T, uint8_t solidPattern>
-__simd_vf__ inline void GatherMaskSqueezeReduceTmpBuffer(__ubuf__ T *dst, __ubuf__ T *src0, __ubuf__ uint8_t *tempBuf,
-    const uint32_t mask, const GatherMaskParams reducev2Params, uint8_t ElePerBlkT,uint16_t innerRepeatTimes)
+__simd_vf__ inline void GatherMaskSqueezeReduceTmpBuffer(
+    __ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ uint8_t* tempBuf, const uint32_t mask,
+    const GatherMaskParams reducev2Params, uint8_t ElePerBlkT, uint16_t innerRepeatTimes)
 {
     uint32_t maskValue = mask;
     Reg::RegTensor<T> dstReg;
@@ -228,15 +232,15 @@ __simd_vf__ inline void GatherMaskSqueezeReduceTmpBuffer(__ubuf__ T *dst, __ubuf
         maskValue = mask;
         for (uint16_t j = 0; j < innerRepeatTimes; ++j) {
             loadMask = Reg::UpdateMask<T>(maskValue);
-            Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg,
+            Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                srcReg,
                 src0 + i * reducev2Params.src0RepeatStride * ElePerBlkT +
                     j * 8 * reducev2Params.src0BlockStride * ElePerBlkT,
-                reducev2Params.src0BlockStride,
-                loadMask);
+                reducev2Params.src0BlockStride, loadMask);
             Reg::MaskAnd(executeMask, patternMask, loadMask, loadMask);
             if constexpr (SupportType<T, bfloat16_t>()) {
                 Reg::GatherMask<uint16_t, Reg::GatherMaskMode::STORE_REG>(
-                    (Reg::RegTensor<uint16_t> &)dstReg, (Reg::RegTensor<uint16_t> &)srcReg, executeMask);
+                    (Reg::RegTensor<uint16_t>&)dstReg, (Reg::RegTensor<uint16_t>&)srcReg, executeMask);
             } else {
                 Reg::GatherMask<T, Reg::GatherMaskMode::STORE_REG>(dstReg, srcReg, executeMask);
             }
@@ -248,22 +252,23 @@ __simd_vf__ inline void GatherMaskSqueezeReduceTmpBuffer(__ubuf__ T *dst, __ubuf
 
 template <typename T, uint8_t solidPattern>
 __aicore__ inline void GatherMaskSqueezeReduce(
-    __ubuf__ T *dst, __ubuf__ T *src0, const uint32_t mask, const GatherMaskParams &reducev2Params, uint64_t &rsvdCnt)
+    __ubuf__ T* dst, __ubuf__ T* src0, const uint32_t mask, const GatherMaskParams& reducev2Params, uint64_t& rsvdCnt)
 {
     SetVectorMaskForGatherMaskSqueeze<T, solidPattern>();
-    __ubuf__ uint8_t *tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(GetRuntimeUBSize(), 32);
+    __ubuf__ uint8_t* tempBuf = AscendCUtils::GetTemporaryBufferAddr<uint8_t>(GetRuntimeUBSize(), 32);
     constexpr uint8_t ElePerBlkT = GetDataBlockSizeInBytes() / sizeof(T);
     constexpr uint32_t ElePerVec = GetVecLen() / sizeof(T);
     uint16_t innerRepeatTimes = CeilDivision(mask, ElePerVec);
-    GatherMaskSqueezeReduceTmpBuffer<T, solidPattern>(dst, src0, tempBuf, mask,
-        reducev2Params, ElePerBlkT, innerRepeatTimes);
+    GatherMaskSqueezeReduceTmpBuffer<T, solidPattern>(
+        dst, src0, tempBuf, mask, reducev2Params, ElePerBlkT, innerRepeatTimes);
     rsvdCnt = GetSpr<SpecialPurposeReg::AR>() / sizeof(T);
     AscendCUtils::FreeTemporaryBuffer<uint8_t>(tempBuf);
 }
 
 template <typename T>
-__aicore__ inline void GatherMaskAll(__ubuf__ T *dst, __ubuf__ T *src0, const bool reduceMode,
-    const uint32_t mask, const GatherMaskParams &reducev2Params, uint64_t &rsvdCnt)
+__aicore__ inline void GatherMaskAll(
+    __ubuf__ T* dst, __ubuf__ T* src0, const bool reduceMode, const uint32_t mask,
+    const GatherMaskParams& reducev2Params, uint64_t& rsvdCnt)
 {
     if (reduceMode) {
         GatherMaskAllReduce(dst, src0, mask, reducev2Params, rsvdCnt);
@@ -273,8 +278,9 @@ __aicore__ inline void GatherMaskAll(__ubuf__ T *dst, __ubuf__ T *src0, const bo
 }
 
 template <typename T, uint8_t solidPattern>
-__aicore__ inline void GatherMaskSqueeze(__ubuf__ T *dst, __ubuf__ T *src0, const bool reduceMode,
-    const uint32_t mask, const GatherMaskParams &reducev2Params, uint64_t &rsvdCnt)
+__aicore__ inline void GatherMaskSqueeze(
+    __ubuf__ T* dst, __ubuf__ T* src0, const bool reduceMode, const uint32_t mask,
+    const GatherMaskParams& reducev2Params, uint64_t& rsvdCnt)
 {
     if (reduceMode) {
         GatherMaskSqueezeReduce<T, solidPattern>(dst, src0, mask, reducev2Params, rsvdCnt);
@@ -284,8 +290,9 @@ __aicore__ inline void GatherMaskSqueeze(__ubuf__ T *dst, __ubuf__ T *src0, cons
 }
 
 template <typename T>
-__aicore__ inline void GatherMaskCal(__ubuf__ T *dst, __ubuf__ T *src0, const uint8_t src1Pattern,
-    const bool reduceMode, const uint32_t mask, const GatherMaskParams &reducev2Params, uint64_t &rsvdCnt)
+__aicore__ inline void GatherMaskCal(
+    __ubuf__ T* dst, __ubuf__ T* src0, const uint8_t src1Pattern, const bool reduceMode, const uint32_t mask,
+    const GatherMaskParams& reducev2Params, uint64_t& rsvdCnt)
 {
     if (src1Pattern == 1) {
         GatherMaskSqueeze<T, 1>(dst, src0, reduceMode, mask, reducev2Params, rsvdCnt);
@@ -307,8 +314,9 @@ __aicore__ inline void GatherMaskCal(__ubuf__ T *dst, __ubuf__ T *src0, const ui
 }
 
 template <typename T, typename U>
-__simd_vf__ inline void GatherMaskReduceElePerVec(__ubuf__ T *dst, __ubuf__ T *src0, __ubuf__ U* src1,
-    const uint32_t mask, const GatherMaskParams reducev2Params, uint16_t innerRepeatTimes)
+__simd_vf__ inline void GatherMaskReduceElePerVec(
+    __ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ U* src1, const uint32_t mask, const GatherMaskParams reducev2Params,
+    uint16_t innerRepeatTimes)
 {
     constexpr uint8_t ElePerBlkT = GetDataBlockSizeInBytes() / sizeof(T);
     constexpr uint8_t ElePerBlkU = GetDataBlockSizeInBytes() / sizeof(U);
@@ -326,14 +334,16 @@ __simd_vf__ inline void GatherMaskReduceElePerVec(__ubuf__ T *dst, __ubuf__ T *s
         maskValue = mask;
         for (uint16_t j = 0; j < innerRepeatTimes; ++j) {
             loadMask = Reg::UpdateMask<T>(maskValue);
-            Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg,
-                src0 + i * reducev2Params.src0RepeatStride * ElePerBlkT + j * 8 * reducev2Params.src0BlockStride * ElePerBlkT,
-                reducev2Params.src0BlockStride,
-                loadMask);
+            Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+                srcReg,
+                src0 + i * reducev2Params.src0RepeatStride * ElePerBlkT +
+                    j * 8 * reducev2Params.src0BlockStride * ElePerBlkT,
+                reducev2Params.src0BlockStride, loadMask);
             if constexpr (sizeof(T) == 1) { // 1bit in ub, 1bit in register
                 Reg::LoadAlign(patternMask, src1 + i * oneRepMaskOffset + j * ElePerBlkU);
             } else if constexpr (sizeof(T) == 2) { // 1bit in ub, us to 2bit in register
-                Reg::LoadAlign<U, Reg::MaskDist::DIST_US>(patternMask, src1 + i * oneRepMaskOffset + j * ElePerBlkU / sizeof(T));
+                Reg::LoadAlign<U, Reg::MaskDist::DIST_US>(
+                    patternMask, src1 + i * oneRepMaskOffset + j * ElePerBlkU / sizeof(T));
             } else if constexpr (sizeof(T) == 4) { // 1bit in ub, us to 4bit in register
                 Reg::LoadUnAlignPre(maskUreg, src1 + i * oneRepMaskOffset + j * ElePerBlkU / sizeof(T));
                 Reg::LoadUnAlign(patternReg, maskUreg, src1 + i * oneRepMaskOffset + j * ElePerBlkU / sizeof(T));
@@ -342,7 +352,7 @@ __simd_vf__ inline void GatherMaskReduceElePerVec(__ubuf__ T *dst, __ubuf__ T *s
             Reg::MaskAnd(patternMask, patternMask, loadMask, loadMask);
             if constexpr (SupportType<T, bfloat16_t>()) {
                 Reg::GatherMask<uint16_t, Reg::GatherMaskMode::STORE_REG>(
-                    (Reg::RegTensor<uint16_t> &)dstReg, (Reg::RegTensor<uint16_t> &)srcReg, patternMask);
+                    (Reg::RegTensor<uint16_t>&)dstReg, (Reg::RegTensor<uint16_t>&)srcReg, patternMask);
             } else {
                 Reg::GatherMask<T, Reg::GatherMaskMode::STORE_REG>(dstReg, srcReg, patternMask);
             }
@@ -353,8 +363,9 @@ __simd_vf__ inline void GatherMaskReduceElePerVec(__ubuf__ T *dst, __ubuf__ T *s
 }
 
 template <typename T, typename U>
-__aicore__ inline void GatherMaskReduce(__ubuf__ T *dst, __ubuf__ T *src0, __ubuf__ U* src1,
-    const uint32_t mask, const GatherMaskParams &reducev2Params, uint64_t &rsvdCnt)
+__aicore__ inline void GatherMaskReduce(
+    __ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ U* src1, const uint32_t mask, const GatherMaskParams& reducev2Params,
+    uint64_t& rsvdCnt)
 {
     constexpr uint32_t ElePerVec = GetVecLen() / sizeof(T);
     uint16_t innerRepeatTimes = CeilDivision(mask, ElePerVec);
@@ -363,8 +374,9 @@ __aicore__ inline void GatherMaskReduce(__ubuf__ T *dst, __ubuf__ T *src0, __ubu
 }
 
 template <typename T, typename U>
-__simd_vf__ inline void GatherMaskCalOneRepMask(__ubuf__ T *dst, __ubuf__ T *src0, __ubuf__ U* src1,
-    const GatherMaskParams reducev2Params, uint32_t oneRepMaskOffset)
+__simd_vf__ inline void GatherMaskCalOneRepMask(
+    __ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ U* src1, const GatherMaskParams reducev2Params,
+    uint32_t oneRepMaskOffset)
 {
     Reg::RegTensor<T> dstReg;
     Reg::RegTensor<T> srcReg;
@@ -376,8 +388,8 @@ __simd_vf__ inline void GatherMaskCalOneRepMask(__ubuf__ T *dst, __ubuf__ T *src
     Reg::ClearSpr<SpecialPurposeReg::AR>();
     constexpr uint8_t ElePerBlk = GetDataBlockSizeInBytes() / sizeof(T);
     for (uint16_t i = 0; i < reducev2Params.repeatTimes; ++i) {
-        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(srcReg,
-            src0 + i * reducev2Params.src0RepeatStride * ElePerBlk, reducev2Params.src0BlockStride, loadMask);
+        Reg::LoadAlign<T, Reg::DataCopyMode::DATA_BLOCK_COPY>(
+            srcReg, src0 + i * reducev2Params.src0RepeatStride * ElePerBlk, reducev2Params.src0BlockStride, loadMask);
         if constexpr (sizeof(T) == 1) {
             Reg::LoadAlign(patternMask, src1 + i * oneRepMaskOffset);
         } else if constexpr (sizeof(T) == 2) {
@@ -390,7 +402,7 @@ __simd_vf__ inline void GatherMaskCalOneRepMask(__ubuf__ T *dst, __ubuf__ T *src
         Reg::MaskAnd(patternMask, patternMask, loadMask, loadMask);
         if constexpr (SupportType<T, bfloat16_t>()) {
             Reg::GatherMask<uint16_t, Reg::GatherMaskMode::STORE_REG>(
-                (Reg::RegTensor<uint16_t> &)dstReg, (Reg::RegTensor<uint16_t> &)srcReg, patternMask);
+                (Reg::RegTensor<uint16_t>&)dstReg, (Reg::RegTensor<uint16_t>&)srcReg, patternMask);
         } else {
             Reg::GatherMask<T, Reg::GatherMaskMode::STORE_REG>(dstReg, srcReg, patternMask);
         }
@@ -400,16 +412,20 @@ __simd_vf__ inline void GatherMaskCalOneRepMask(__ubuf__ T *dst, __ubuf__ T *src
 }
 
 template <typename T, typename U>
-__aicore__ inline void GatherMaskCal(__ubuf__ T *dst, __ubuf__ T *src0, __ubuf__ U* src1,
-    const bool reduceMode, const uint32_t mask, const GatherMaskParams &reducev2Params, uint64_t &rsvdCnt)
+__aicore__ inline void GatherMaskCal(
+    __ubuf__ T* dst, __ubuf__ T* src0, __ubuf__ U* src1, const bool reduceMode, const uint32_t mask,
+    const GatherMaskParams& reducev2Params, uint64_t& rsvdCnt)
 {
-    static_assert(SupportType<T, half, int16_t, uint16_t, int32_t, uint32_t, float, uint8_t, int8_t, bfloat16_t>(),
+    static_assert(
+        SupportType<T, half, int16_t, uint16_t, int32_t, uint32_t, float, uint8_t, int8_t, bfloat16_t>(),
         "GatherMask only support half/int16_t/uint16_t/int32_t/uint32_t/float/bfloat16_t/int8_t/uint8_t"
         "data type on current device");
-    static_assert(SupportType<U, uint8_t, uint16_t, uint32_t>(),
+    static_assert(
+        SupportType<U, uint8_t, uint16_t, uint32_t>(),
         "GatherMask only support uint8_t/uint16_t/uint32_t pattern type on current device");
-    static_assert((sizeof(T) == 1 && IsSameType<U, uint8_t>::value) || (sizeof(T) == 2 && IsSameType<U, uint16_t>::value) ||
-        (sizeof(T) == 4 && IsSameType<U, uint32_t>::value),
+    static_assert(
+        (sizeof(T) == 1 && IsSameType<U, uint8_t>::value) || (sizeof(T) == 2 && IsSameType<U, uint16_t>::value) ||
+            (sizeof(T) == 4 && IsSameType<U, uint32_t>::value),
         "GatherMask only support int8_t/uint8_t data type with uint8_t pattern type, or"
         "GatherMask only support half/int16_t/uint16_t/bfloat16_t data type with uint16_t pattern type, or"
         "int32_t/uint32_t/float data type with uint32_t pattern type on current device");
@@ -418,13 +434,13 @@ __aicore__ inline void GatherMaskCal(__ubuf__ T *dst, __ubuf__ T *src0, __ubuf__
         return;
     }
     uint32_t oneRepMaskOffset = reducev2Params.src1RepeatStride * GetDataBlockSizeInBytes() / sizeof(T);
-    GatherMaskCalOneRepMask<T, U>(dst, src0,  src1, reducev2Params, oneRepMaskOffset);
+    GatherMaskCalOneRepMask<T, U>(dst, src0, src1, reducev2Params, oneRepMaskOffset);
     rsvdCnt = GetSpr<SpecialPurposeReg::AR>() / sizeof(T);
 }
 
 template <typename T>
-__simd_vf__ inline void ExtractVf(__ubuf__ T* dstValueLocal, __ubuf__ uint32_t* dstIndexLocal,
-    __ubuf__ T* sortedLocal, const int32_t repeatTime)
+__simd_vf__ inline void ExtractVf(
+    __ubuf__ T* dstValueLocal, __ubuf__ uint32_t* dstIndexLocal, __ubuf__ T* sortedLocal, const int32_t repeatTime)
 {
     uint16_t loopTimes = static_cast<uint16_t>(repeatTime / 2);
     uint16_t tail = repeatTime % 2;
@@ -434,10 +450,9 @@ __simd_vf__ inline void ExtractVf(__ubuf__ T* dstValueLocal, __ubuf__ uint32_t* 
         Reg::MaskReg preg = Reg::CreateMask<float>();
         uint32_t repeatElm = GetVecLen() / sizeof(float);
         for (uint16_t i = 0; i < loopTimes; ++i) {
-            Reg::LoadAlign<float, Reg::LoadDist::DIST_DINTLV_B32>(
-                vreg0, vreg1, sortedLocal + i * repeatElm * 2);
+            Reg::LoadAlign<float, Reg::LoadDist::DIST_DINTLV_B32>(vreg0, vreg1, sortedLocal + i * repeatElm * 2);
             Reg::StoreAlign(dstValueLocal + i * repeatElm, vreg0, preg);
-            Reg::StoreAlign(dstIndexLocal + i * repeatElm, (Reg::RegTensor<uint32_t> &)vreg1, preg);
+            Reg::StoreAlign(dstIndexLocal + i * repeatElm, (Reg::RegTensor<uint32_t>&)vreg1, preg);
         }
         for (uint16_t i = 0; i < tail; ++i) {
             Reg::LoadAlign(vreg0, sortedLocal + repeatTime / 2 * repeatElm * 2);
@@ -445,8 +460,7 @@ __simd_vf__ inline void ExtractVf(__ubuf__ T* dstValueLocal, __ubuf__ uint32_t* 
             Reg::DeInterleave(vreg0, vreg1, vreg0, vreg1);
             preg = Reg::CreateMask<float, Reg::MaskPattern::H>();
             Reg::StoreAlign(dstValueLocal + repeatTime / 2 * repeatElm, vreg0, preg);
-            Reg::StoreAlign(
-                dstIndexLocal + repeatTime / 2 * repeatElm, (Reg::RegTensor<uint32_t> &)vreg1, preg);
+            Reg::StoreAlign(dstIndexLocal + repeatTime / 2 * repeatElm, (Reg::RegTensor<uint32_t>&)vreg1, preg);
         }
     } else if constexpr (SupportType<T, half>()) {
         Reg::RegTensor<float> vreg0;
@@ -457,28 +471,27 @@ __simd_vf__ inline void ExtractVf(__ubuf__ T* dstValueLocal, __ubuf__ uint32_t* 
         uint32_t repeatElm = GetVecLen() / sizeof(float);
         for (uint16_t i = 0; i < loopTimes; ++i) {
             Reg::LoadAlign<float, Reg::LoadDist::DIST_DINTLV_B32>(
-                vreg0, vreg1, (__ubuf__ float *)sortedLocal + i * repeatElm * 2);
-            Reg::Squeeze<half, Reg::GatherMaskMode::NO_STORE_REG>(vreg2, (Reg::RegTensor<half> &)vreg0, indexPreg);
+                vreg0, vreg1, (__ubuf__ float*)sortedLocal + i * repeatElm * 2);
+            Reg::Squeeze<half, Reg::GatherMaskMode::NO_STORE_REG>(vreg2, (Reg::RegTensor<half>&)vreg0, indexPreg);
             Reg::StoreAlign(dstValueLocal + i * repeatElm, vreg2, preg1);
-            Reg::StoreAlign(dstIndexLocal + i * repeatElm, (Reg::RegTensor<uint32_t> &)vreg1, indexPreg);
+            Reg::StoreAlign(dstIndexLocal + i * repeatElm, (Reg::RegTensor<uint32_t>&)vreg1, indexPreg);
         }
         for (uint16_t i = 0; i < tail; ++i) {
-            Reg::LoadAlign(vreg0, (__ubuf__ float *)sortedLocal + repeatTime / 2 * repeatElm * 2);
-            Reg::LoadAlign(vreg1, (__ubuf__ float *)sortedLocal + repeatTime / 2 * repeatElm * 2);
+            Reg::LoadAlign(vreg0, (__ubuf__ float*)sortedLocal + repeatTime / 2 * repeatElm * 2);
+            Reg::LoadAlign(vreg1, (__ubuf__ float*)sortedLocal + repeatTime / 2 * repeatElm * 2);
             Reg::DeInterleave(vreg0, vreg1, vreg0, vreg1);
-            Reg::Squeeze<half, Reg::GatherMaskMode::NO_STORE_REG>(vreg2, (Reg::RegTensor<half> &)vreg0, indexPreg);
+            Reg::Squeeze<half, Reg::GatherMaskMode::NO_STORE_REG>(vreg2, (Reg::RegTensor<half>&)vreg0, indexPreg);
             Reg::MaskReg preg2 = Reg::CreateMask<half, Reg::MaskPattern::Q>();
             Reg::StoreAlign(dstValueLocal + repeatTime / 2 * repeatElm, vreg2, preg2);
             preg2 = Reg::CreateMask<uint32_t, Reg::MaskPattern::H>();
-            Reg::StoreAlign(
-                dstIndexLocal + repeatTime / 2 * repeatElm, (Reg::RegTensor<uint32_t> &)vreg1, preg2);
+            Reg::StoreAlign(dstIndexLocal + repeatTime / 2 * repeatElm, (Reg::RegTensor<uint32_t>&)vreg1, preg2);
         }
     }
 }
 
 template <typename T>
-__aicore__ inline void ExtractImpl(__ubuf__ T* dstValueLocal, __ubuf__ uint32_t* dstIndexLocal,
-    __ubuf__ T* sortedLocal, const int32_t repeatTime)
+__aicore__ inline void ExtractImpl(
+    __ubuf__ T* dstValueLocal, __ubuf__ uint32_t* dstIndexLocal, __ubuf__ T* sortedLocal, const int32_t repeatTime)
 {
     ExtractVf<T>(dstValueLocal, dstIndexLocal, sortedLocal, repeatTime);
 }

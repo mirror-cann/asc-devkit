@@ -337,7 +337,8 @@ __aicore__ inline void LoadDataWithTranspose(
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckLoadDataWithTranspose(dst, src, "LoadDataWithTranspose with LoadData2dTransposeParams");
-    ReportNopWarning<uint8_t>(loadDataParams.repeatTimes, "loadDataParams.repeatTimes",
+    ReportNopWarning<uint8_t>(
+        loadDataParams.repeatTimes, "loadDataParams.repeatTimes",
         "LoadDataWithTranspose with LoadData2dTransposeParams");
 #endif
     LoadDataWithTransposeImpl(dst, src, loadDataParams);
@@ -362,7 +363,8 @@ __aicore__ inline void LoadDataWithTranspose(
 {
 #if defined(ASCENDC_DEBUG) || defined(ASCENDC_CPU_DEBUG)
     CheckLoadDataWithTranspose(dst, src, "LoadDataWithTranspose with LoadData2dTransposeParamsV2");
-    ReportNopWarning<uint8_t>(loadDataParams.repeatTimes, "loadDataParams.repeatTimes",
+    ReportNopWarning<uint8_t>(
+        loadDataParams.repeatTimes, "loadDataParams.repeatTimes",
         "LoadDataWithTranspose with LoadData2dTransposeParamsV2");
 #endif
     LoadDataWithTransposeImpl(dst, src, loadDataParams);

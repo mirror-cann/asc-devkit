@@ -1,19 +1,20 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_block_sync_intf_impl.h
  * \brief
  */
 #if !defined(__ASCENDC_INCLUDE_INTERNAL_HEADERS__)
-#pragma message("impl/basic_api/kernel_operator_block_sync_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_block_sync_intf.h\"\" and use public functions or variables defined in interface headers files.")
+#pragma message( \
+    "impl/basic_api/kernel_operator_block_sync_intf_impl.h is an internal header file and must not be used directly. Functions or variables defined in this file may be removed in the future. Please use \"#include \"basic_api/kernel_operator_block_sync_intf.h\"\" and use public functions or variables defined in interface headers files.")
 #define __ASCENDC_INCLUDE_INTERNAL_HEADERS__
 #define __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_BLOCK_SYNC_INTF_IMPL_H__
 #endif
@@ -61,21 +62,22 @@ template <HardEvent event>
 __aicore__ inline void SetFlag(int32_t eventID)
 {
     if ASCEND_IS_AIC {
-        if constexpr (event == HardEvent::MTE2_V || event == HardEvent::V_MTE2 || event == HardEvent::MTE3_V
-                      || event == HardEvent::V_MTE3 || event == HardEvent::V_V || event == HardEvent::S_V ||
+        if constexpr (
+            event == HardEvent::MTE2_V || event == HardEvent::V_MTE2 || event == HardEvent::MTE3_V ||
+            event == HardEvent::V_MTE3 || event == HardEvent::V_V || event == HardEvent::S_V ||
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
-                      event == HardEvent::V_S || event == HardEvent::MTE2_MTE3 || event == HardEvent::MTE3_MTE2
-                      || event == HardEvent::MTE3_S || event == HardEvent::S_MTE3) {
+            event == HardEvent::V_S || event == HardEvent::MTE2_MTE3 || event == HardEvent::MTE3_MTE2 ||
+            event == HardEvent::MTE3_S || event == HardEvent::S_MTE3) {
 #else
-                      event == HardEvent::V_S) {
+            event == HardEvent::V_S) {
 #endif
             return;
         }
     }
     if ASCEND_IS_AIV {
-        if constexpr ((event == HardEvent::MTE2_MTE1) || (event == HardEvent::MTE1_MTE2) ||
-                      (event == HardEvent::MTE1_M) || (event == HardEvent::M_MTE1) || (event == HardEvent::M_FIX) ||
-                      (event == HardEvent::FIX_M)) {
+        if constexpr (
+            (event == HardEvent::MTE2_MTE1) || (event == HardEvent::MTE1_MTE2) || (event == HardEvent::MTE1_M) ||
+            (event == HardEvent::M_MTE1) || (event == HardEvent::M_FIX) || (event == HardEvent::FIX_M)) {
             return;
         }
     }
@@ -86,21 +88,22 @@ template <HardEvent event>
 __aicore__ inline void WaitFlag(int32_t eventID)
 {
     if ASCEND_IS_AIC {
-        if constexpr (event == HardEvent::MTE2_V || event == HardEvent::V_MTE2 || event == HardEvent::MTE3_V
-                      || event == HardEvent::V_MTE3 || event == HardEvent::V_V || event == HardEvent::S_V ||
+        if constexpr (
+            event == HardEvent::MTE2_V || event == HardEvent::V_MTE2 || event == HardEvent::MTE3_V ||
+            event == HardEvent::V_MTE3 || event == HardEvent::V_V || event == HardEvent::S_V ||
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
-                      event == HardEvent::V_S || event == HardEvent::MTE2_MTE3 || event == HardEvent::MTE3_MTE2
-                      || event == HardEvent::MTE3_S || event == HardEvent::S_MTE3) {
+            event == HardEvent::V_S || event == HardEvent::MTE2_MTE3 || event == HardEvent::MTE3_MTE2 ||
+            event == HardEvent::MTE3_S || event == HardEvent::S_MTE3) {
 #else
-                      event == HardEvent::V_S) {
+            event == HardEvent::V_S) {
 #endif
             return;
         }
     }
     if ASCEND_IS_AIV {
-        if constexpr ((event == HardEvent::MTE2_MTE1) || (event == HardEvent::MTE1_MTE2) ||
-                      (event == HardEvent::MTE1_M) || (event == HardEvent::M_MTE1) || (event == HardEvent::M_FIX) ||
-                      (event == HardEvent::FIX_M)) {
+        if constexpr (
+            (event == HardEvent::MTE2_MTE1) || (event == HardEvent::MTE1_MTE2) || (event == HardEvent::MTE1_M) ||
+            (event == HardEvent::M_MTE1) || (event == HardEvent::M_FIX) || (event == HardEvent::FIX_M)) {
             return;
         }
     }
@@ -113,10 +116,9 @@ __aicore__ inline void PipeBarrier()
     PipeBarrierImpl<pipe>();
 }
 
-#if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3002) ||       \
-    (__NPU_ARCH__ == 3102) || (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) ||       \
-    (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3103) ||                                 \
-    (__NPU_ARCH__ == 3113))
+#if defined(__NPU_ARCH__) &&                                                                                 \
+    ((__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3002) || (__NPU_ARCH__ == 3102) || (__NPU_ARCH__ == 3510) || \
+     (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3103) || (__NPU_ARCH__ == 3113))
 template <MemDsbT arg0>
 __aicore__ inline void DataSyncBarrier()
 {
@@ -133,8 +135,9 @@ __aicore__ inline void DataSyncBarrier()
  * @param [in] eventID Set and wait events
  */
 template <bool isAIVOnly>
-__aicore__ inline void IBSet(const GlobalTensor<int32_t> &gmWorkspace,
-    const LocalTensor<int32_t> &ubWorkspace, int32_t blockIdx, int32_t eventID)
+__aicore__ inline void IBSet(
+    const GlobalTensor<int32_t>& gmWorkspace, const LocalTensor<int32_t>& ubWorkspace, int32_t blockIdx,
+    int32_t eventID)
 {
     int32_t blockNum = GetBlockNum();
 #if (__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
@@ -174,8 +177,9 @@ __aicore__ inline void IBSet(const GlobalTensor<int32_t> &gmWorkspace,
 }
 
 template <bool isAIVOnly>
-__aicore__ inline void IBWait(const GlobalTensor<int32_t> &gmWorkspace,
-    const LocalTensor<int32_t> &ubWorkspace, int32_t blockIdx, int32_t eventID)
+__aicore__ inline void IBWait(
+    const GlobalTensor<int32_t>& gmWorkspace, const LocalTensor<int32_t>& ubWorkspace, int32_t blockIdx,
+    int32_t eventID)
 {
     int32_t blockNum = GetBlockNum();
 #if (__NPU_ARCH__ == 2201) || (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
@@ -221,33 +225,33 @@ __aicore__ inline void IBWait(const GlobalTensor<int32_t> &gmWorkspace,
  * @param [in] ubWorkspce LocalTensor for current core
  */
 template <bool isAIVOnly>
-__aicore__ inline void SyncAll(const GlobalTensor<int32_t> &gmWorkspace,
-    const LocalTensor<int32_t> &ubWorkspace, const int usedCores)
+__aicore__ inline void SyncAll(
+    const GlobalTensor<int32_t>& gmWorkspace, const LocalTensor<int32_t>& ubWorkspace, const int usedCores)
 {
 #if ASCENDC_CPU_DEBUG
-    SoftSyncAllImpl<false>((__gm__ int32_t*)gmWorkspace.GetPhyAddr(),
-        (__ubuf__ int32_t*)ubWorkspace.GetPhyAddr(), usedCores);
+    SoftSyncAllImpl<false>(
+        (__gm__ int32_t*)gmWorkspace.GetPhyAddr(), (__ubuf__ int32_t*)ubWorkspace.GetPhyAddr(), usedCores);
 #else
-    SoftSyncAllImpl<isAIVOnly>((__gm__ int32_t*)gmWorkspace.GetPhyAddr(),
-        (__ubuf__ int32_t*)ubWorkspace.GetPhyAddr(), usedCores);
+    SoftSyncAllImpl<isAIVOnly>(
+        (__gm__ int32_t*)gmWorkspace.GetPhyAddr(), (__ubuf__ int32_t*)ubWorkspace.GetPhyAddr(), usedCores);
 #endif
 }
 
 #if (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
-template<bool isAIVOnly, const SyncAllConfig& config>
+template <bool isAIVOnly, const SyncAllConfig& config>
 __aicore__ inline void SyncAll()
 {
     SyncAllImpl<isAIVOnly, config.triggerPipe, config.waitPipe>();
 }
 #else
-template<bool isAIVOnly>
+template <bool isAIVOnly>
 __aicore__ inline void SyncAll()
 {
     SyncAllImpl<isAIVOnly>();
 }
 #endif
 
-template<uint8_t modeId, pipe_t pipe>
+template <uint8_t modeId, pipe_t pipe>
 __aicore__ inline void CrossCoreSetFlag(uint16_t flagId)
 {
     NotifyEventImpl<modeId, pipe>(flagId);
@@ -266,7 +270,7 @@ __aicore__ inline void NotifyEvent(uint16_t flagId)
     NotifyEventImpl<subBlockSyncMode, pipe>(flagId);
 }
 
-template <pipe_t pipe=PIPE_S, uint8_t mode = 0>
+template <pipe_t pipe = PIPE_S, uint8_t mode = 0>
 __aicore__ inline void WaitEvent(uint16_t flagId)
 {
     WaitEventImpl<mode, pipe>(flagId);
@@ -279,7 +283,7 @@ __aicore__ inline void NotifyEvent(uint16_t flagId)
     NotifyEventImpl<subBlockSyncMode, pipe>(flagId);
 }
 
-template <pipe_t pipe=PIPE_S>
+template <pipe_t pipe = PIPE_S>
 __aicore__ inline void WaitEvent(uint16_t flagId)
 {
     constexpr uint8_t mode = 0;
