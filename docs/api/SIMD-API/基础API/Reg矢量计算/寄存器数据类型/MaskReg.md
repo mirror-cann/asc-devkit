@@ -289,7 +289,7 @@ __simd_callee__ inline void Add(U& dstReg, U& srcReg0, U& srcReg1, MaskReg& mask
 
 ```cpp
 AscendC::Reg::RegTensor<uint32_t> srcReg;
-AscendC::Reg::MaskReg mask0 = AscendC::Reg::CreateMask<uint32_t,AscendC::Reg:: MaskPattern::ALL >();
+AscendC::Reg::MaskReg mask0 = AscendC::Reg::CreateMask<uint32_t, AscendC::Reg::MaskPattern::ALL>();
 AscendC::Reg::MaskReg mask1;
 uint32_t scalarValue = 127;
 for (uint16_t i = 0; i < 2; i++) {

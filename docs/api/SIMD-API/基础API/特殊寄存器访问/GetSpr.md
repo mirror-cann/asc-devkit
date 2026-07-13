@@ -100,12 +100,14 @@ __aicore__ inline void Process()
     uint16_t repeatTimes = DivCeil(256, oneRepeatSize);
 
     asc_vf_call<SqueezeVF<float>>(xAddr, yAddr, repeatTimes, oneRepeatSize);
+    AscendC::SetFlag<AscendC::HardEvent::V_S>(EVENT_ID0);
+ 	AscendC::WaitFlag<AscendC::HardEvent::V_S>(EVENT_ID0);
     int64_t arNum = AscendC::GetSpr<AscendC::SpecialPurposeReg::AR>();
     // 可通过printf打印
     AscendC::printf("arNum的值为:%lld\n", arNum);
 
-    AscendC::SetFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
-    AscendC::WaitFlag<AscendC::HardEvent::V_MTE3>(EVENT_ID0);
+    AscendC::SetFlag<AscendC::HardEvent::S_MTE3>(EVENT_ID0);
+    AscendC::WaitFlag<AscendC::HardEvent::S_MTE3>(EVENT_ID0);
     AscendC::DataCopy(yGm, yLocal, 64);
 }
 ```
