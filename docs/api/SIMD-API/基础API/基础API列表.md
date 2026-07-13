@@ -32,6 +32,7 @@
 | [LoadData（BitMode 2D矩阵搬运）](矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D_BitMode.md) | LoadData（BitMode 2D矩阵搬运）是LoadData（2D矩阵搬运V2）的bit模式变体，通过联合体结构传入参数，支持按位操作的数据搬运。 |
 | [LoadData（卷积数据搬运）](矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_3D.md) | LoadData（卷积数据搬运）本质上是用于将NC1HWC0格式的Feature Map完成Image to Column展开，然后再从展开后的二维矩阵中选取指定数据块搬入对应内存位置。 |
 | [LoadData（BitMode卷积数据搬运）](矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_3D_BitMode.md) | LoadData（BitMode卷积数据搬运）用于完成image to column操作，将多维feature map转为二维矩阵，是LoadData（卷积数据搬运）的bit模式变体。 |
+| [LoadDataWithStride](矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadDataWithStride.md) | LoadDataWithStride本质上是用于将NC1HWC0格式的Feature Map完成Image to Column展开，然后再从展开后的二维矩阵中选取指定数据块搬入对应内存位置，支持配置输出矩阵K轴方向偏移量。 |
 | [LoadDataWithTranspose](矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadDataWithTranspose.md) | LoadDataWithTranspose负责完成普通矩阵计算所需的2D格式的数据的搬运，搬运过程中会伴随转置操作，参考特性分形转置。 |
 | [LoadDataWithSparse](矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadDataWithSparse.md) | 用于从L1 Buffer中搬运以512字节为单位存放的稠密权重矩阵到L0B Buffer里，同时搬运以128字节为单位的索引矩阵到内置的专用buffer空间（用于后续MmadWithSparse接口进行读取）。 |
 | [BroadCastVecToMM(ISASI)](矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/BroadCastVecToMM(ISASI).md) | 将矢量数据广播到矩阵中，每个数据块中的每16个元素会被连续复制16次，支持Unified Buffer到L0C Buffer的数据传输通路。 |
@@ -62,6 +63,7 @@
 | [SetFmatrix](矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetFmatrix.md) | 用于调用LoadData（卷积数据搬运）时设置FeatureMap的属性描述。LoadData（卷积数据搬运）的模板参数isSetFMatrix设置为false时，表示LoadData（卷积数据搬运）传入的FeatureMap的属性将不生效，开发者需要通过该接口进行设置。 |
 | [SetLoadDataBoundary](矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetLoadDataBoundary.md) | 设置LoadData（卷积数据搬运）接口所需的L1 Buffer（TPosition: A1/B1）边界值。 |
 | [SetLoadDataRepeat](矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetLoadDataRepeat.md) | 用于设置LoadData（卷积数据搬运）接口的repeat参数。设置repeat参数后，可以通过调用一次LoadData（卷积数据搬运）接口完成多个迭代的数据搬运。 |
+| [SetLoadDataRepeatWithStride](矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetLoadDataRepeatWithStride.md) | 用于设置LoadDataWithStride接口的repeat参数。设置repeat参数后，可以通过调用一次LoadData（卷积数据搬运）接口完成多个迭代的数据搬运，且必须配置输出矩阵K轴方向偏移量参数dstStride。 |
 | [SetLoadDataPaddingValue](矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/SetLoadDataPaddingValue.md) | 用于调用LoadData（卷积数据搬运）接口时设置Pad填充的数值。LoadData（卷积数据搬运）的模板参数isSetPadding设置为false时，用户需要通过本接口设置Pad填充的数值，设置为true时，本接口设置的填充值不生效。 |
 | [LoadDataUnzip](矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/LoadDataUnzip.md) | 将GM上的数据解压并搬运到A1/B1/B2上。执行该API前需要执行LoadUnzipIndex加载压缩索引表。 |
 | [LoadImageToLocal](矩阵计算（ISASI）/矩阵计算的搬入/辅助配置接口/LoadImageToLocal.md) | 将图像数据从Global Memory搬运到Local Memory。搬运过程中可以完成图像预处理操作：包括图像翻转，改变图像尺寸（抠图，裁边，缩放，伸展），以及色域转换，类型转换等。图像预处理的相关参数通过SetAippFunctions进行配置。 |

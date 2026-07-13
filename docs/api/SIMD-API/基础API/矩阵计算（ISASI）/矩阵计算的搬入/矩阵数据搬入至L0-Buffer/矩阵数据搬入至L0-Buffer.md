@@ -16,6 +16,8 @@
 
 - **[LoadDataWithSparse](LoadDataWithSparse.md)**
 
+- **[LoadDataWithStride](LoadDataWithStride.md)**
+
 - **[BroadCastVecToMM(ISASI)](BroadCastVecToMM(ISASI).md)**
 
 - **[L1ToBiasTable-Buffer数据搬运（DataCopy）](L1ToBiasTable-Buffer数据搬运（DataCopy）.md)**
