@@ -83,5 +83,5 @@ AscendC::Prelu(dstLocal, src0Local, src1Local, 512);
 ```bash
 输入数据src0Local：[1 -2 -3 ... -512]
 输入数据src1Local：[513 -514 515 ... 1]
-输出数据dstLocal：[1 1024 -1045 ... -512]
+输出数据dstLocal：[1 1028 -1045 ... -512]
 ```

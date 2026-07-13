@@ -99,9 +99,11 @@
 ## 调用示例<a name="section17531157161314"></a>
 
 ```cpp
-AscendC::LocalTensor<T> xLocal = inQueueX.DeQue<T>();
-AscendC::LocalTensor<T> yLocal = outQueueY.AllocTensor<T>();
-// 调用GetPhyAddr()返回LocalTensor地址，CPU上返回的是指针类型(T*)，NPU上返回的是物理存储的地址(uint64_t)
-__ubuf__ T* srcAddr = reinterpret_cast<__ubuf__ T*>(xLocal.GetPhyAddr());
-__ubuf__ T* dstAddr = reinterpret_cast<__ubuf__ T*>(yLocal.GetPhyAddr());
+template <typename T>
+__aicore__ inline void CopyIn(const AscendC::GlobalTensor<T>& input)
+{
+    AscendC::GlobalTensor<T> output;
+    output.SetGlobalBuffer(input.GetPhyAddr(0), input.GetSize());
+    // ...
+}
 ```
