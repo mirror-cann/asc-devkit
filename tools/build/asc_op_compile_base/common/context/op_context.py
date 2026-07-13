@@ -12,7 +12,6 @@
 """
 op context
 """
-
 import functools
 import threading
 from typing import Any
@@ -66,7 +65,7 @@ class OpContext:
         # workspace info of operator
         ## element in list: (name, size, type)
         ### type in tuple: 0-DDR, 1-L1
-        self._workspaces = []  # type: List[Tuple[str, int, int]]
+        self._workspaces = [] # type: List[Tuple[str, int, int]]
 
         self._additional_params = {}  # type: Dict[str, Any]
 

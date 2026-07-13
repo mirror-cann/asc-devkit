@@ -24,7 +24,7 @@ class AscPlatform:
             ctypes.c_char_p,  # str1
             ctypes.c_char_p,  # str2
             ctypes.c_char_p,  # str3
-            ctypes.c_char_p,  # str4
+            ctypes.c_char_p   # str4
         ]
         AscPlatform._lib.ASCInitSocSpec.restype = ctypes.c_int
 
@@ -32,7 +32,7 @@ class AscPlatform:
             ctypes.c_char_p,  # str1
             ctypes.c_char_p,  # str2
             ctypes.c_char_p,  # str3
-            ctypes.c_char_p,  # str4
+            ctypes.c_char_p   # str4
         ]
         AscPlatform._lib.ASCTeUpdateVersion.restype = ctypes.c_int
 
@@ -58,7 +58,9 @@ class AscPlatform:
         ]
         AscPlatform._lib.MapInsert.restype = None
 
-        AscPlatform._lib.MapDelete.argtypes = [ctypes.c_void_p]
+        AscPlatform._lib.MapDelete.argtypes = [
+            ctypes.c_void_p
+        ]
         AscPlatform._lib.MapDelete.restype = None
 
         AscPlatform._lib.ASCSetPlatformInfoRes.argtypes = [
@@ -67,8 +69,11 @@ class AscPlatform:
         ]
         AscPlatform._lib.ASCSetPlatformInfoRes.restype = ctypes.c_bool
 
-        AscPlatform._lib.ASCSetCoreNumByCoreType.argtypes = [ctypes.c_char_p]
+        AscPlatform._lib.ASCSetCoreNumByCoreType.argtypes = [
+            ctypes.c_char_p
+        ]
         AscPlatform._lib.ASCSetCoreNumByCoreType.restype = ctypes.c_bool
+
 
     @staticmethod
     def get_lib():
@@ -86,60 +91,44 @@ def _init_soc_spec(soc_version, core_type, aicore_num=None, l1_fusion_flag=None)
     if not l1_fusion_flag:
         l1_fusion_flag = ""
 
-    b_soc_version = (
-        soc_version.encode("utf-8") if isinstance(soc_version, str) else soc_version
-    )
-    b_core_type = core_type.encode("utf-8") if isinstance(core_type, str) else core_type
-    b_aicore_num = (
-        aicore_num.encode("utf-8") if isinstance(aicore_num, str) else aicore_num
-    )
-    b_l1_fusion_flag = (
-        l1_fusion_flag.encode("utf-8")
-        if isinstance(l1_fusion_flag, str)
-        else l1_fusion_flag
-    )
+    b_soc_version = soc_version.encode('utf-8') if isinstance(soc_version, str) else soc_version
+    b_core_type = core_type.encode('utf-8') if isinstance(core_type, str) else core_type
+    b_aicore_num = aicore_num.encode('utf-8') if isinstance(aicore_num, str) else aicore_num
+    b_l1_fusion_flag = l1_fusion_flag.encode('utf-8') if isinstance(l1_fusion_flag, str) else l1_fusion_flag
 
-    res = g_lib.ASCInitSocSpec(
-        b_soc_version, b_core_type, b_aicore_num, b_l1_fusion_flag
-    )
+    res = g_lib.ASCInitSocSpec(b_soc_version, b_core_type, b_aicore_num, b_l1_fusion_flag)
     return "success" if res == 0 else "error"
 
 
 def _te_update_version(soc_version, core_type, aicore_num, l1_fusion):
     g_lib = AscPlatform.get_lib()
-    b_soc_version = (
-        soc_version.encode("utf-8") if isinstance(soc_version, str) else soc_version
-    )
-    b_core_type = core_type.encode("utf-8") if isinstance(core_type, str) else core_type
-    b_aicore_num = (
-        aicore_num.encode("utf-8") if isinstance(aicore_num, str) else aicore_num
-    )
-    b_l1_fusion = l1_fusion.encode("utf-8") if isinstance(l1_fusion, str) else l1_fusion
+    b_soc_version = soc_version.encode('utf-8') if isinstance(soc_version, str) else soc_version
+    b_core_type = core_type.encode('utf-8') if isinstance(core_type, str) else core_type
+    b_aicore_num = aicore_num.encode('utf-8') if isinstance(aicore_num, str) else aicore_num
+    b_l1_fusion = l1_fusion.encode('utf-8') if isinstance(l1_fusion, str) else l1_fusion
 
-    res = g_lib.ASCTeUpdateVersion(
-        b_soc_version, b_core_type, b_aicore_num, b_l1_fusion
-    )
+    res = g_lib.ASCTeUpdateVersion(b_soc_version, b_core_type, b_aicore_num, b_l1_fusion)
     return "success" if res == 0 else "error"
 
 
 def _get_soc_spec(spec):
     g_lib = AscPlatform.get_lib()
     buffer_size = 100
-    buffer = ctypes.create_string_buffer(b"", buffer_size)
+    buffer = ctypes.create_string_buffer(b'', buffer_size)
 
-    b_str1 = spec.encode("utf-8")
+    b_str1 = spec.encode('utf-8')
     g_lib.ASCGetSocSpec(ctypes.c_char_p(b_str1), buffer, buffer_size)
-    if buffer.value == b"":
+    if buffer.value == b'':
         return ""
 
-    res_str = ctypes.string_at(buffer).decode("utf-8")
+    res_str = ctypes.string_at(buffer).decode('utf-8')
 
     return res_str
 
 
 def _set_soc_spec(spec):
     g_lib = AscPlatform.get_lib()
-    b_str1 = spec.encode("utf-8")
+    b_str1 = spec.encode('utf-8')
     res = g_lib.ASCSetSocSpec(ctypes.c_char_p(b_str1))
     return "success" if res == 0 else "error"
 
@@ -148,7 +137,7 @@ def _set_platform_info_res(device_id, res):
     g_lib = AscPlatform.get_lib()
     m = g_lib.CreateStrStrMap()
     for key, value in res.items():
-        g_lib.MapInsert(m, key.encode("utf-8"), value.encode("utf-8"))
+        g_lib.MapInsert(m, key.encode('utf-8'), value.encode('utf-8'))
     ret = g_lib.ASCSetPlatformInfoRes(device_id, m)
     g_lib.MapDelete(m)
     return ret
@@ -156,4 +145,4 @@ def _set_platform_info_res(device_id, res):
 
 def _set_core_num_by_core_type(core_type):
     g_lib = AscPlatform.get_lib()
-    return g_lib.ASCSetCoreNumByCoreType(core_type.encode("utf-8"))
+    return g_lib.ASCSetCoreNumByCoreType(core_type.encode('utf-8'))

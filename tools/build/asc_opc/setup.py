@@ -12,7 +12,6 @@
 """
 Setup opc package
 """
-
 import sys
 
 from setuptools import find_packages
@@ -26,16 +25,14 @@ else:
     from setuptools.extension import Extension
 
 
-setup(
-    name="asc_opc_tool",
-    version="0.1.0",
-    description="asc_opc_tool: asc op complication tool",
-    zip_safe=False,
-    install_requires=[
-        "numpy",
-        "decorator",
-        "attrs",
-        "psutil",
-    ],
-    packages=find_packages(),
-)
+setup(name='asc_opc_tool',
+      version='0.1.0',
+      description="asc_opc_tool: asc op complication tool",
+      zip_safe=False,
+      install_requires=[
+        'numpy',
+        'decorator',
+        'attrs',
+        'psutil',
+        ],
+      packages=find_packages())

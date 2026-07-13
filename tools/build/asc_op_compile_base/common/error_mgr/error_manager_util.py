@@ -12,7 +12,6 @@
 """
 error manager util
 """
-
 import json
 import os
 
@@ -30,7 +29,7 @@ def get_error_message(args):
         data = json.load(file_content)
         error_dict = {}
         for error_message in data:
-            error_dict[error_message["errCode"]] = error_message
+            error_dict[error_message['errCode']] = error_message
         error_json = error_dict
     error_stmt = error_json.get(error_code)
     if error_stmt is None:
@@ -52,4 +51,5 @@ def raise_runtime_error(dict_args):
     raise runtime error
     :param dict_args: error message dict
     """
-    raise RuntimeError(dict_args, get_error_message(dict_args))
+    raise RuntimeError(dict_args,
+                       get_error_message(dict_args))

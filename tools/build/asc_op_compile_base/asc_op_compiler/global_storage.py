@@ -16,7 +16,6 @@ AscendC global var storage class
 import threading
 from asc_op_compile_base.common.platform.platform_info import get_soc_spec
 
-
 class GlobalStorageSingleton:
     _instance = None
     _lock = threading.Lock()
@@ -24,9 +23,7 @@ class GlobalStorageSingleton:
     def __new__(cls, *args, **kwargs):
         with cls._lock:
             if not cls._instance:
-                cls._instance = super(GlobalStorageSingleton, cls).__new__(
-                    cls, *args, **kwargs
-                )
+                cls._instance = super(GlobalStorageSingleton, cls).__new__(cls, *args, **kwargs)
         return cls._instance
 
     def __init__(self):
@@ -66,6 +63,7 @@ class GlobalStorageSingleton:
         self.ascendc_sk_sub_combine_norm_workflow = False
         self.ascendc_tiling_const_propagation = False
 
+
     def global_storage_reset(self):
         self.ascendc_short_soc_version = get_soc_spec("SHORT_SOC_VERSION")
         self.ascendc_compile_debug_config = False
@@ -102,17 +100,18 @@ class GlobalStorageSingleton:
         self.ascendc_sk_sub_combine_norm_workflow = False
         self.ascendc_tiling_const_propagation = False
 
+
     def set_variable(self, name, value):
         if hasattr(self, name):
             setattr(self, name, value)
         else:
-            raise Exception(f"current varibale not exists, variable name: {name}")
+            raise Exception(f'current varibale not exists, variable name: {name}')
 
     def get_variable(self, name):
         if hasattr(self, name):
             return getattr(self, name, None)
         else:
-            raise Exception(f"current varibale not exists, variable name: {name}")
+            raise Exception(f'current varibale not exists, variable name: {name}')
 
 
 global_var_storage = GlobalStorageSingleton()

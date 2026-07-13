@@ -12,11 +12,10 @@
 
 
 # 'pylint: disable=too-few-public-methods
-class GlobalInfoContainer:
+class GlobalInfoContainer():
     """Manage L1 buffer
     Save and call L1 buffer function
     """
-
     global_info = {
         "op_L1_space": -1,
         "op_L1_fusion_type": -1,
@@ -29,9 +28,7 @@ class GlobalInfoContainer:
     }
 
 
-NameDict = {
-    "op_L1_fusion_type": "tir.op_L1_fusion_type",
-    "L1_fusion_enabled": "tir.enable_L1_fusion",
-    "L2_fusion_enabled": "tir.enable_L2_fusion",
-    "L2_mode": "tir.l2_mode",
-}
+NameDict = {"op_L1_fusion_type": "tir.op_L1_fusion_type",
+            "L1_fusion_enabled": "tir.enable_L1_fusion",
+            "L2_fusion_enabled": "tir.enable_L2_fusion",
+            "L2_mode": "tir.l2_mode"}

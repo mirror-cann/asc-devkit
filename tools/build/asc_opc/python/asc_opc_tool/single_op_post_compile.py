@@ -13,27 +13,22 @@
 """
 single_op_post_compile
 """
-
 import json
 import copy
 
 from asc_op_compile_base.common.utils import log as logger
-from opc_common import str_to_sha256_hash, opc_log_full, LogLevel
-from opc_common import read_json_file, update_json_file
+from opc_common import (str_to_sha256_hash, opc_log_full, LogLevel)
+from opc_common import (read_json_file, update_json_file)
 from simplified_key_utils import generate_simplified_key
-from constant import (
-    CompileParam,
-    SupportInfo,
-    OpcOptions,
-    OptionalInOutMode,
-    GraphDtype,
-    OpcCompileMode,
-)
+from constant import (CompileParam, SupportInfo, OpcOptions, OptionalInOutMode, GraphDtype,
+                      OpcCompileMode)
 from post_compile_base import PostCompilation
 
 
 class SingleOpPostCompile(PostCompilation):
+
     def update_info_to_json_file(self, op, op_info, json_file_path):
+
         """
         single op after compile, write support info and compile info to json file
         """
@@ -41,35 +36,32 @@ class SingleOpPostCompile(PostCompilation):
         support_info = self.__generate_op_support_info(op, op_info, json_file_path)
         update_json_file("supportInfo", support_info, json_file_path)
 
+
     @staticmethod
     def parse_deterministic_from_json(compiled_json):
         deterministic = None
-        if "kernelList" not in compiled_json:
+        if 'kernelList' not in compiled_json:
             deterministic = compiled_json.get("deterministic")
-        else:  # kernelList in compiled_json
+        else: # kernelList in compiled_json
             kernels_deterministic = list(
-                map(
-                    lambda kernel: kernel.get("deterministic"),
-                    compiled_json.get("kernelList"),
-                )
-            )
-            has_true = "true" in kernels_deterministic
-            has_false = "false" in kernels_deterministic
+                    map(lambda kernel: kernel.get("deterministic"),
+                        compiled_json.get("kernelList")))
+            has_true = 'true' in kernels_deterministic
+            has_false = 'false' in kernels_deterministic
             if has_true and has_false:
-                logger.error(
-                    "Both deterministic and non-deterministic results exist in the file kernel list (%s).",
-                    compiled_json,
-                )
+                logger.error("Both deterministic and non-deterministic results exist in the file kernel list (%s).",
+                             compiled_json)
                 return None
 
             if has_true:
-                deterministic = "true"
+                deterministic = 'true'
             elif has_false:
-                deterministic = "false"
+                deterministic = 'false'
             else:
-                deterministic = "ignore"
+                deterministic = 'ignore'
 
         return deterministic
+
 
     @staticmethod
     def parse_info_from_compiled_json(compiled_json_path):
@@ -78,13 +70,9 @@ class SingleOpPostCompile(PostCompilation):
         optional_input_mode = compiled_json.get(SupportInfo.OPTIONAL_INPUT_MODE)
         optional_output_mode = compiled_json.get(SupportInfo.OPTIONAL_OUTPUT_MODE)
         dynamic_param_mode = compiled_json.get(SupportInfo.DYNAMIC_PARAM_MODE)
-        res_tuple = (
-            deterministic,
-            optional_input_mode,
-            optional_output_mode,
-            dynamic_param_mode,
-        )
+        res_tuple = (deterministic, optional_input_mode, optional_output_mode, dynamic_param_mode)
         return res_tuple
+
 
     @staticmethod
     def __generate_op_attrs_static_key(op_info, op_compile_mode):
@@ -202,7 +190,6 @@ class SingleOpPostCompile(PostCompilation):
         """
         generate single op inputs or outputs supportinfo
         """
-
         def _get_tensor_info(tensor, is_support, inputs_or_output):
             index = ""
             info = self.__generate_single_tensor_supportinfo(index, tensor, is_support)
@@ -229,13 +216,8 @@ class SingleOpPostCompile(PostCompilation):
     def __generate_optional_input_palceholder(op, op_type, inputs):
         inputs_info = op.get("inputs")
         if len(inputs_info) != len(inputs):
-            logger.error(
-                "Generate op[Binfilename=%s] support info fail, the lenth of inputs_info[%d] should be \
-                         equal to len inputs[%d]",
-                op.get(OpcOptions.BIN_FILENAME),
-                len(inputs_info),
-                len(inputs),
-            )
+            logger.error("Generate op[Binfilename=%s] support info fail, the lenth of inputs_info[%d] should be \
+                         equal to len inputs[%d]", op.get(OpcOptions.BIN_FILENAME), len(inputs_info), len(inputs))
             return
 
         for i, input_i in enumerate(inputs_info):
@@ -258,38 +240,28 @@ class SingleOpPostCompile(PostCompilation):
         """
         static_key_json = {}
         # should be in alphabetical order to add in static_key_json, because reuse json is in this order
-        attrs = self.__generate_op_attrs_static_key(
-            op_info, self._opc_compile_args.get(OpcOptions.OP_COMPILE_MODE)
-        )
+        attrs = self.__generate_op_attrs_static_key(op_info, self._opc_compile_args.get(OpcOptions.OP_COMPILE_MODE))
         super().gen_notnone_param(static_key_json, "attrs", attrs)
 
         build_options = self.__generate_op_build_options(op_info, impl_mode)
         super().gen_notnone_param(static_key_json, "buildOptions", build_options)
 
-        inputs = self.__get_op_inputs_or_outputs_supportinfo(
-            op_info.get(CompileParam.INPUTS), False
-        )
+        inputs = self.__get_op_inputs_or_outputs_supportinfo(op_info.get(CompileParam.INPUTS), False)
         opt_input_mode = self._opc_compile_args.get(OpcOptions.OPTIONAL_INPUT_MODE)
         if opt_input_mode == OptionalInOutMode.GEN_PLACEHOLDER:
             op_type = op_info.get(CompileParam.OP_TYPE)
             self.__generate_optional_input_palceholder(op, op_type, inputs)
         super().gen_notnone_param(static_key_json, "inputs", inputs)
 
-        outputs = self.__get_op_inputs_or_outputs_supportinfo(
-            op_info.get(CompileParam.OUTPUTS), False
-        )
+        outputs = self.__get_op_inputs_or_outputs_supportinfo(op_info.get(CompileParam.OUTPUTS), False)
         super().gen_notnone_param(static_key_json, "outputs", outputs)
 
         # remove extra space in dict to json
-        static_key_json_str = json.dumps(static_key_json, separators=(",", ":"))
+        static_key_json_str = json.dumps(static_key_json, separators=(',', ':'))
 
         static_key = str_to_sha256_hash(static_key_json_str)
-        logger.info(
-            "Generate op(Binfilename=%s) static key is [%s]. Static key json is [%s]",
-            op_info.get(OpcOptions.BIN_FILENAME),
-            str(static_key),
-            str(static_key_json_str),
-        )
+        logger.info("Generate op(Binfilename=%s) static key is [%s]. Static key json is [%s]",
+                    op_info.get(OpcOptions.BIN_FILENAME), str(static_key), str(static_key_json_str))
         return static_key
 
     def __generate_static_key(self, op, op_info):
@@ -302,11 +274,9 @@ class SingleOpPostCompile(PostCompilation):
             static_key = self.__generate_single_op_static_key(op, op_info, None)
             return static_key
         else:
-            impl_mode_list = impl_mode_str.split(",", -1)
+            impl_mode_list = impl_mode_str.split(',', -1)
             for impl_mode in impl_mode_list:
-                static_key_impl_mode = self.__generate_single_op_static_key(
-                    op, op_info, impl_mode
-                )
+                static_key_impl_mode = self.__generate_single_op_static_key(op, op_info, impl_mode)
                 if len(static_key) == 0:
                     static_key = static_key_impl_mode
                 else:
@@ -316,26 +286,18 @@ class SingleOpPostCompile(PostCompilation):
         return static_key
 
     def __generate_simplified_key(self, op, op_info, deterministic):
-        simplified_key, simplified_key_mode = generate_simplified_key(
-            self._opc_compile_args,
-            op,
-            op_info,
-            deterministic,
-            self._simplified_key_mode,
-        )
+        simplified_key, simplified_key_mode = generate_simplified_key(self._opc_compile_args, op,
+                                                                      op_info, deterministic,
+                                                                      self._simplified_key_mode)
         self._simplified_key_mode = simplified_key_mode
         return simplified_key
 
     def __change_inoroutputs(self, inputoutput):
         def _range_correct(tensor):
             if tensor.get(CompileParam.RANGE) is not None:
-                tensor[CompileParam.RANGE] = self.__adjust_null_range(
-                    tensor[CompileParam.RANGE]
-                )
+                tensor[CompileParam.RANGE] = self.__adjust_null_range(tensor[CompileParam.RANGE])
             if tensor.get(CompileParam.ORI_RANGE) is not None:
-                tensor[CompileParam.ORI_RANGE] = self.__adjust_null_range(
-                    tensor[CompileParam.ORI_RANGE]
-                )
+                tensor[CompileParam.ORI_RANGE] = self.__adjust_null_range(tensor[CompileParam.ORI_RANGE])
 
         if inputoutput is None:
             return inputoutput
@@ -377,12 +339,8 @@ class SingleOpPostCompile(PostCompilation):
         creat support info from op info
         """
         support_info = {}
-        super().gen_notnone_param(
-            support_info, "implMode", op_info.get(OpcOptions.IMPL_MODE)
-        )
-        super().gen_notnone_param(
-            support_info, "int64Mode", op_info.get(OpcOptions.INT64_MODE)
-        )
+        super().gen_notnone_param(support_info, "implMode", op_info.get(OpcOptions.IMPL_MODE))
+        super().gen_notnone_param(support_info, "int64Mode", op_info.get(OpcOptions.INT64_MODE))
         # Whether the operator supports determinism is identified in the pass,
         # and then sets the output deterministic field.
         # Therefore, even if deterministic is set to true for CompileArgs,
@@ -390,26 +348,18 @@ class SingleOpPostCompile(PostCompilation):
         static_key = self.__generate_static_key(op, op_info)
         opt_impl_mode_flag = op_info.get("optional_impl_mode_flag", False)
         if opt_impl_mode_flag:
-            static_key_impl_mode_optional = self.__generate_single_op_static_key(
-                op, op_info, None
-            )
+            static_key_impl_mode_optional = self.__generate_single_op_static_key(op, op_info, None)
             static_key = static_key + "," + static_key_impl_mode_optional
         logger.info("Final static_key %s.", static_key)
 
-        deterministic, optional_input_mode, optional_output_mode, dynamic_param_mode = (
-            self.parse_info_from_compiled_json(json_file_path)
-        )
+        deterministic, optional_input_mode, optional_output_mode, \
+            dynamic_param_mode = self.parse_info_from_compiled_json(json_file_path)
         simplified_key = self.__generate_simplified_key(op, op_info, deterministic)
         if self._simplified_key_mode is not None and len(simplified_key) > 0:
-            super().gen_notnone_param(
-                support_info, "simplifiedKeyMode", self._simplified_key_mode
-            )
+            super().gen_notnone_param(support_info, "simplifiedKeyMode", self._simplified_key_mode)
             super().gen_notnone_param(support_info, "simplifiedKey", simplified_key)
-            logger.info(
-                "Op's simplified_key_mode is %d, simplified_key is [%s].",
-                self._simplified_key_mode,
-                simplified_key,
-            )
+            logger.info("Op's simplified_key_mode is %d, simplified_key is [%s].",
+                        self._simplified_key_mode, simplified_key)
 
         if dynamic_param_mode is not None:
             support_info[SupportInfo.DYNAMIC_PARAM_MODE] = dynamic_param_mode
@@ -430,21 +380,15 @@ class SingleOpPostCompile(PostCompilation):
         self.adjust_support_info_inputoutput(support_info.get(SupportInfo.OUTPUTS))
         attrs = copy.deepcopy(op.get(CompileParam.ATTRS))
         super().gen_notnone_param(support_info, "attrs", attrs)
-        super().gen_notnone_param(
-            support_info, "opMode", self._opc_compile_args.get(OpcOptions.OP_MODE, None)
-        )
+        super().gen_notnone_param(support_info, "opMode", self._opc_compile_args.get(OpcOptions.OP_MODE, None))
         if self._simplified_key_mode == 1:
             self.__add_mode_in_attrs(support_info)
-        super().gen_notnone_param(
-            support_info,
-            "tilingKey",
-            self._opc_compile_args.get(OpcOptions.TILING_KEY, None),
-        )
-        if deterministic is not None:
-            support_info["deterministic"] = deterministic
+        super().gen_notnone_param(support_info, "tilingKey", self._opc_compile_args.get(OpcOptions.TILING_KEY, None))
+        if (deterministic is not None):
+            support_info['deterministic'] = deterministic
         op_debug_config = self._opc_compile_args.get(OpcOptions.OP_DEBUG_CONFIG)
         if op_debug_config != "":
-            support_info["op_debug_config"] = op_debug_config
+            support_info['op_debug_config'] = op_debug_config
 
         opc_log_full(LogLevel.DEBUG, "Generate op supportInfo is %s", str(support_info))
         return support_info

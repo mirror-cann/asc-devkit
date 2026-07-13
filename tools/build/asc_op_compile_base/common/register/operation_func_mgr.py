@@ -12,7 +12,6 @@
 """
 operation function manager
 """
-
 import functools
 
 from .class_manager import Operator, OpCompute
@@ -50,15 +49,12 @@ def register_operator(op_type, pattern=None, trans_bool_to_s8=True):
     if not trans_bool_to_s8:
         _op_no_trans_bool_to_s8[op_type] = "True"
     global _operators
-
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
-
         _operators[op_type] = Operator(pattern, wrapper)
         return wrapper
-
     return decorator
 
 
@@ -88,7 +84,6 @@ def register_op_compute(op_type, op_mode="dynamic", support_fusion=True):
         raise RuntimeError("register op compute failed, op_type is none")
     global _op_computes
     global _op_register_pattern
-
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -97,7 +92,6 @@ def register_op_compute(op_type, op_mode="dynamic", support_fusion=True):
         _op_register_pattern.pop(op_type)
         _op_computes[(op_type, op_mode)] = OpCompute(support_fusion, wrapper)
         return wrapper
-
     return decorator
 
 
@@ -136,7 +130,6 @@ def register_param_generalization(op_type):
     if op_type is None:
         raise RuntimeError("register generalization func failed, op_type is none")
     global _generalization
-
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -144,7 +137,6 @@ def register_param_generalization(op_type):
 
         _generalization[op_type] = wrapper
         return wrapper
-
     return decorator
 
 

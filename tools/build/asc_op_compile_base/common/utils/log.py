@@ -12,7 +12,6 @@
 """
 tbe log
 """
-
 import inspect
 import logging
 import os
@@ -23,7 +22,6 @@ LOG_DEFAULT_LEVEL = logging.INFO
 IS_USE_SLOG = True
 try:
     from .AscendLog import AscendLog
-
     S_LOGGER = AscendLog()
 except BaseException:
     IS_USE_SLOG = False
@@ -50,7 +48,7 @@ def info(log_msg, *log_paras):
     funcname = inspect.currentframe().f_back.f_code.co_name
     co_filename = inspect.currentframe().f_back.f_code.co_filename
     filename = os.path.basename(co_filename)
-    log_str = "[%s:%d][%s] " % (filename, line_no, funcname)
+    log_str = '[%s:%d][%s] ' % (filename, line_no, funcname)
     if log_paras:
         log_msg = log_msg % log_paras
     log_all_msg = log_str + log_msg
@@ -71,7 +69,7 @@ def debug(log_msg, *log_paras):
     funcname = inspect.currentframe().f_back.f_code.co_name
     co_filename = inspect.currentframe().f_back.f_code.co_filename
     filename = os.path.basename(co_filename)
-    log_str = "[%s:%d][%s] " % (filename, line_no, funcname)
+    log_str = '[%s:%d][%s] ' % (filename, line_no, funcname)
     if log_paras:
         log_msg = log_msg % log_paras
     log_all_msg = log_str + log_msg
@@ -92,7 +90,7 @@ def warn(log_msg, *log_paras):
     funcname = inspect.currentframe().f_back.f_code.co_name
     co_filename = inspect.currentframe().f_back.f_code.co_filename
     filename = os.path.basename(co_filename)
-    log_str = "[%s:%d][%s] " % (filename, line_no, funcname)
+    log_str = '[%s:%d][%s] ' % (filename, line_no, funcname)
     if log_paras:
         log_msg = log_msg % log_paras
     log_all_msg = log_str + log_msg
@@ -113,7 +111,7 @@ def error(log_msg, *log_paras):
     funcname = inspect.currentframe().f_back.f_code.co_name
     co_filename = inspect.currentframe().f_back.f_code.co_filename
     filename = os.path.basename(co_filename)
-    log_str = "[%s:%d][%s] " % (filename, line_no, funcname)
+    log_str = '[%s:%d][%s] ' % (filename, line_no, funcname)
     if log_paras:
         log_msg = log_msg % log_paras
     log_all_msg = log_str + log_msg
@@ -134,7 +132,7 @@ def event(log_msg, *log_paras):
     funcname = inspect.currentframe().f_back.f_code.co_name
     co_filename = inspect.currentframe().f_back.f_code.co_filename
     filename = os.path.basename(co_filename)
-    log_str = "[%s:%d][%s] " % (filename, line_no, funcname)
+    log_str = '[%s:%d][%s] ' % (filename, line_no, funcname)
     if log_paras:
         log_msg = log_msg % log_paras
     log_all_msg = log_str + log_msg

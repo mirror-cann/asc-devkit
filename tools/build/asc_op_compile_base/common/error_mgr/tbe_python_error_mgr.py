@@ -17,16 +17,10 @@ class TBEPythonError(RuntimeError):
     """
     Create new Error CompileError when cce compile error
     """
-
     def __init__(self, errorinfo):
         super().__init__()
-        self.args = (
-            errorinfo["errCode"],
-            errorinfo["errClass"],
-            errorinfo["errPcause"],
-            errorinfo["errSolution"],
-            (errorinfo["message"]),
-        )
+        self.args = (errorinfo["errCode"], errorinfo["errClass"],
+                     errorinfo["errPcause"], errorinfo["errSolution"], (errorinfo["message"]))
         self.errorinfo = errorinfo
 
     def __str__(self):

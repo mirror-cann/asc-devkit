@@ -13,12 +13,13 @@
 Paser op json info and generate kernel name
 """
 
+
 import json
 import hashlib
 import asc_op_compile_base.common.utils.log as logger
 from opc_common import LogLevel
 from opc_common import opc_log_full
-from constant import CompileParam, OpcOptions, OpParamType
+from constant import (CompileParam, OpcOptions, OpParamType)
 from op_manager import get_attr_info_from_opstore
 
 
@@ -26,31 +27,10 @@ class TensorData:
     """
     class for input or output tensor, def tensor data and process
     """
-
-    def __init__(
-        self,
-        shape,
-        ori_shape,
-        cur_format,
-        sub_format,
-        ori_format,
-        dtype,
-        cur_range,
-        ori_range,
-        addr_type,
-        const_value,
-        use_l1_workspace,
-        l1_addr_flag,
-        l1_fusion_type,
-        split_index,
-        l1_workspace_size,
-        l1_addr_offset,
-        l1_valid_size,
-        is_first_layer,
-        slice_offset,
-        valid_shape,
-        total_shape,
-    ):
+    def __init__(self, shape, ori_shape, cur_format, sub_format, ori_format, dtype, cur_range, ori_range,
+                 addr_type, const_value, use_l1_workspace, l1_addr_flag, l1_fusion_type, split_index,
+                 l1_workspace_size, l1_addr_offset, l1_valid_size, is_first_layer, slice_offset,
+                 valid_shape, total_shape):
         """
         init
         :param shape: shape value
@@ -122,28 +102,14 @@ class TensorData:
         """
         check tensor data is all none
         """
-        return (
-            self.__shape is None
-            and self.__ori_shape is None
-            and self.__format is None
-            and self.__sub_format is None
-            and self.__ori_format is None
-            and self.__dtype is None
-            and self.__range is None
-            and self.__ori_range is None
-            and self.__addr_type is None
-            and self.__use_l1_workspace is None
-            and self.__l1_addr_flag is None
-            and self.__l1_fusion_type is None
-            and self.__split_index is None
-            and self.__l1_workspace_size is None
-            and self.__l1_addr_offset is None
-            and self.__l1_valid_size is None
-            and self.__is_first_layer is None
-            and self.__slice_offset is None
-            and self.__valid_shape is None
-            and self.__total_shape is None
-        ) or (self.__format == "FORMAT_RESERVED" or self.__dtype == "undefined")
+        return (self.__shape is None and self.__ori_shape is None and self.__format is None
+            and self.__sub_format is None and self.__ori_format is None \
+            and self.__dtype is None and self.__range is None \
+            and self.__ori_range is None and self.__addr_type is None and self.__use_l1_workspace is None \
+            and self.__l1_addr_flag is None and self.__l1_fusion_type is None and self.__split_index is None \
+            and self.__l1_workspace_size is None and self.__l1_addr_offset is None and self.__l1_valid_size is None \
+            and self.__is_first_layer is None and self.__slice_offset is None and self.__valid_shape is None \
+            and self.__total_shape is None) or (self.__format == "FORMAT_RESERVED" or self.__dtype == "undefined")
 
     def set_tensor_field_default(self):
         """
@@ -192,31 +158,15 @@ class TensorData:
         self.set_tensor_dict(tensor_dict, CompileParam.ORI_RANGE, self.__ori_range)
         self.set_tensor_dict(tensor_dict, CompileParam.ADDR_TYPE, self.__addr_type)
         self.set_tensor_dict(tensor_dict, CompileParam.CONST_VALUE, self.__const_value)
-        self.set_tensor_dict(
-            tensor_dict, CompileParam.USE_L1_WORKSPACE, self.__use_l1_workspace
-        )
-        self.set_tensor_dict(
-            tensor_dict, CompileParam.L1_ADDR_FLAG, self.__l1_addr_flag
-        )
-        self.set_tensor_dict(
-            tensor_dict, CompileParam.L1_FUSION_TYPE, self.__l1_fusion_type
-        )
+        self.set_tensor_dict(tensor_dict, CompileParam.USE_L1_WORKSPACE, self.__use_l1_workspace)
+        self.set_tensor_dict(tensor_dict, CompileParam.L1_ADDR_FLAG, self.__l1_addr_flag)
+        self.set_tensor_dict(tensor_dict, CompileParam.L1_FUSION_TYPE, self.__l1_fusion_type)
         self.set_tensor_dict(tensor_dict, CompileParam.SPLIT_INDEX, self.__split_index)
-        self.set_tensor_dict(
-            tensor_dict, CompileParam.L1_WORKSPACE_SIZE, self.__l1_workspace_size
-        )
-        self.set_tensor_dict(
-            tensor_dict, CompileParam.L1_ADDR_OFFSET, self.__l1_addr_offset
-        )
-        self.set_tensor_dict(
-            tensor_dict, CompileParam.L1_VALID_SIZE, self.__l1_valid_size
-        )
-        self.set_tensor_dict(
-            tensor_dict, CompileParam.IS_FIRST_LAYER, self.__is_first_layer
-        )
-        self.set_tensor_dict(
-            tensor_dict, CompileParam.SLICE_OFFSET, self.__slice_offset
-        )
+        self.set_tensor_dict(tensor_dict, CompileParam.L1_WORKSPACE_SIZE, self.__l1_workspace_size)
+        self.set_tensor_dict(tensor_dict, CompileParam.L1_ADDR_OFFSET, self.__l1_addr_offset)
+        self.set_tensor_dict(tensor_dict, CompileParam.L1_VALID_SIZE, self.__l1_valid_size)
+        self.set_tensor_dict(tensor_dict, CompileParam.IS_FIRST_LAYER, self.__is_first_layer)
+        self.set_tensor_dict(tensor_dict, CompileParam.SLICE_OFFSET, self.__slice_offset)
         self.set_tensor_dict(tensor_dict, CompileParam.VALID_SHAPE, self.__valid_shape)
         self.set_tensor_dict(tensor_dict, CompileParam.TOTAL_SHAPE, self.__total_shape)
         logger.debug("tensor_dict is %s.", str(tensor_dict))
@@ -243,32 +193,19 @@ class OpInfoParser:
         """
         resolve op info input or output from json op
         """
-
         def _resolve_tensor(tensor):
             # reslove field
-            tensor_data = TensorData(
-                tensor.get(CompileParam.SHAPE),
-                tensor.get(CompileParam.ORI_SHAPE),
-                tensor.get(CompileParam.FORMAT),
-                tensor.get(CompileParam.SUB_FORMAT),
-                tensor.get(CompileParam.ORI_FORMAT),
-                tensor.get(CompileParam.DTYPE),
-                tensor.get(CompileParam.RANGE),
-                tensor.get(CompileParam.ORI_RANGE),
-                tensor.get(CompileParam.ADDR_TYPE),
-                tensor.get(CompileParam.CONST_VALUE),
+            tensor_data = TensorData(tensor.get(CompileParam.SHAPE), tensor.get(CompileParam.ORI_SHAPE),
+                tensor.get(CompileParam.FORMAT), tensor.get(CompileParam.SUB_FORMAT),
+                tensor.get(CompileParam.ORI_FORMAT), tensor.get(CompileParam.DTYPE),
+                tensor.get(CompileParam.RANGE), tensor.get(CompileParam.ORI_RANGE),
+                tensor.get(CompileParam.ADDR_TYPE), tensor.get(CompileParam.CONST_VALUE),
                 tensor.get(CompileParam.USE_L1_WORKSPACE),
-                tensor.get(CompileParam.L1_ADDR_FLAG),
-                tensor.get(CompileParam.L1_FUSION_TYPE),
-                tensor.get(CompileParam.SPLIT_INDEX),
-                tensor.get(CompileParam.L1_WORKSPACE_SIZE),
-                tensor.get(CompileParam.L1_ADDR_OFFSET),
-                tensor.get(CompileParam.L1_VALID_SIZE),
-                tensor.get(CompileParam.IS_FIRST_LAYER),
-                tensor.get(CompileParam.SLICE_OFFSET),
-                tensor.get(CompileParam.VALID_SHAPE),
-                tensor.get(CompileParam.TOTAL_SHAPE),
-            )
+                tensor.get(CompileParam.L1_ADDR_FLAG), tensor.get(CompileParam.L1_FUSION_TYPE),
+                tensor.get(CompileParam.SPLIT_INDEX), tensor.get(CompileParam.L1_WORKSPACE_SIZE),
+                tensor.get(CompileParam.L1_ADDR_OFFSET), tensor.get(CompileParam.L1_VALID_SIZE),
+                tensor.get(CompileParam.IS_FIRST_LAYER), tensor.get(CompileParam.SLICE_OFFSET),
+                tensor.get(CompileParam.VALID_SHAPE), tensor.get(CompileParam.TOTAL_SHAPE))
 
             if tensor_data.check_tensor_null():
                 logger.debug("Tensor is null.")
@@ -284,22 +221,19 @@ class OpInfoParser:
             for tensors in self.__op.get(res_type):
                 if tensors is None:
                     logger.debug("Tensor is null.")
-                    input_output_tuple += (None,)  # null tensor set None
+                    input_output_tuple += (None, ) # null tensor set None
                     continue
                 if isinstance(tensors, list):
                     tensor_list = []
                     for item in tensors:
                         tensor_list.append(_resolve_tensor(item))
-                    input_output_tuple += (tensor_list,)
+                    input_output_tuple += (tensor_list, )
                 else:
-                    input_output_tuple += (_resolve_tensor(tensors),)
+                    input_output_tuple += (_resolve_tensor(tensors), )
 
             return input_output_tuple
         except Exception as e:
-            raise RuntimeError(
-                "Exception: Failed to resolve op json %s, exception is %s."
-                % (res_type, str(e))
-            ) from e
+            raise RuntimeError("Exception: Failed to resolve op json %s, exception is %s." % (res_type, str(e))) from e
         finally:
             pass
 
@@ -313,9 +247,7 @@ class OpInfoParser:
             if range_mode:
                 attr_dict[CompileParam.RANGE_MODE] = range_mode
             else:
-                raise RuntimeError(
-                    "Attr key:[value_range] exist but [range_mode] not exist in json."
-                )
+                raise RuntimeError("Attr key:[value_range] exist but [range_mode] not exist in json.")
             return
 
         if value_list:
@@ -335,11 +267,9 @@ class OpInfoParser:
                 if op_attr[CompileParam.NAME] == attr[CompileParam.NAME]:
                     op_attr_find = True
             if not op_attr_find:
-                logger.warn(
-                    "%s delete input attr [%s]. op info store does not have this attr.",
-                    op_type,
-                    op_attr[CompileParam.NAME],
-                )
+                logger.warn("%s delete input attr [%s]. op info store does not have this attr.",
+                            op_type, op_attr[CompileParam.NAME])
+
 
     def __get_attr_based_on_op_info(self, op_type):
         """
@@ -370,9 +300,7 @@ class OpInfoParser:
                     curr_attr[CompileParam.DTYPE] = attr_info.type
                     if attr_info.default_value is not None:
                         curr_attr[CompileParam.VALUE] = attr_info.default_value
-                    logger.warn(
-                        "%s and attr %s by op info store.", op_type, str(attr_info.name)
-                    )
+                    logger.warn("%s and attr %s by op info store.", op_type, str(attr_info.name))
 
             attrs_list.append(curr_attr)
             logger.debug("Dict attr curr_attr: %s.", str(curr_attr))
@@ -397,10 +325,7 @@ class OpInfoParser:
         logger.debug("Start to resolve json attr.")
         attrs = self.__op.get(CompileParam.ATTRS)
         attrs_list = []
-        simplified_key_configured = self.__op.get(OpcOptions.SIMPLE_KEY) not in (
-            None,
-            "",
-        )
+        simplified_key_configured = (self.__op.get(OpcOptions.SIMPLE_KEY) not in (None, ""))
         for attr in attrs:
             if attr is None:
                 logger.debug("Attr is none. Add none to attrs.")
@@ -416,8 +341,7 @@ class OpInfoParser:
             valid_cnt = self.__calculate_valid_cnt(attr)
             if valid_cnt != 1:
                 raise KeyError(
-                    "Only support one of [value,value_range,value_list] in attr dict, please check input param."
-                )
+                    "Only support one of [value,value_range,value_list] in attr dict, please check input param.")
 
             value = attr.get(CompileParam.VALUE)
             value_list = attr.get(CompileParam.VALUE_LIST)
@@ -429,12 +353,9 @@ class OpInfoParser:
             attr_dict[CompileParam.NAME] = name
             attr_dict[CompileParam.DTYPE] = dtype
             self.create_attr_dict(attr_dict, value, value_list, value_range, range_mode)
-            if (
-                CompileParam.VALUE_RANGE in attr or CompileParam.VALUE_LIST in attr
-            ) and not simplified_key_configured:
+            if (CompileParam.VALUE_RANGE in attr or CompileParam.VALUE_LIST in attr) and not simplified_key_configured:
                 raise ValueError(
-                    "When configuring [value_range,value_list] in attr dict, simplified_key need be configured."
-                )
+                    "When configuring [value_range,value_list] in attr dict, simplified_key need be configured.")
             logger.debug("Dict attr attr_dict: %s.", str(attr_dict))
             # create attr list
             attrs_list.append(attr_dict)
@@ -452,10 +373,7 @@ class OpInfoParser:
 
             self.__op_info_dict[key] = self.__op.get(key)
         except Exception as e:
-            raise RuntimeError(
-                "Exception: Failed to resolve op json by key %s, reason:%s."
-                % (key, str(e))
-            ) from e
+            raise RuntimeError("Exception: Failed to resolve op json by key %s, reason:%s." % (key, str(e))) from e
         finally:
             pass
 
@@ -470,23 +388,16 @@ class OpInfoParser:
             for tensor in inputoutputs:
                 if tensor is None:
                     logger.debug("Tensor is none.")
-                    tensor_tuple += (None,)
+                    tensor_tuple += (None, )
                     continue
-                tensor_dict = {
-                    CompileParam.SHAPE: tensor.get(CompileParam.SHAPE),
-                    CompileParam.DTYPE: tensor.get(CompileParam.DTYPE),
-                    CompileParam.FORMAT: tensor.get(CompileParam.FORMAT),
-                }
-                logger.debug(
-                    "Generate kernel name %s desc %s.", res_type, str(tensor_dict)
-                )
-                tensor_tuple += (tensor_dict,)
+                tensor_dict = {CompileParam.SHAPE: tensor.get(CompileParam.SHAPE),
+                               CompileParam.DTYPE: tensor.get(CompileParam.DTYPE),
+                               CompileParam.FORMAT: tensor.get(CompileParam.FORMAT)}
+                logger.debug("Generate kernel name %s desc %s.", res_type, str(tensor_dict))
+                tensor_tuple += (tensor_dict, )
             return tensor_tuple
         except Exception as e:
-            raise RuntimeError(
-                "Failed to generate kernel name %s, exception is %s."
-                % (res_type, str(e))
-            ) from e
+            raise RuntimeError("Failed to generate kernel name %s, exception is %s." % (res_type, str(e))) from e
         finally:
             pass
 
@@ -501,24 +412,20 @@ class OpInfoParser:
             for attr in attrs:
                 if attr is None:
                     logger.debug("Attr is none.")
-                    tensor_tuple += (None,)
+                    tensor_tuple += (None, )
                     continue
                 if attr.get(CompileParam.VALUE) is None:
                     logger.debug("Generate kernel name attr, value is none.")
                     continue
-                tensor_dict = {
-                    CompileParam.NAME: attr.get(CompileParam.NAME),
-                    CompileParam.DTYPE: attr.get(CompileParam.DTYPE),
-                    CompileParam.VALUE: attr.get(CompileParam.VALUE),
-                }
+                tensor_dict = {CompileParam.NAME: attr.get(CompileParam.NAME),
+                               CompileParam.DTYPE: attr.get(CompileParam.DTYPE),
+                               CompileParam.VALUE: attr.get(CompileParam.VALUE)}
 
                 logger.debug("Generate kernel name attr desc %s.", str(tensor_dict))
-                tensor_tuple += (tensor_dict,)
+                tensor_tuple += (tensor_dict, )
             return tensor_tuple
         except Exception as e:
-            raise RuntimeError(
-                "Exception: Failed to generate kernel name attr, reason:%s." % (str(e))
-            ) from e
+            raise RuntimeError("Exception: Failed to generate kernel name attr, reason:%s." % (str(e))) from e
         finally:
             pass
 
@@ -528,10 +435,8 @@ class OpInfoParser:
         """
         if OpcOptions.IMPL_MODE in self.__opc_compile_args_dict:
             return self.__opc_compile_args_dict.get(OpcOptions.IMPL_MODE)
-        logger.debug(
-            "No impl_mode in _opc_compile_args_dict, set default value high_performance."
-        )
-        return "high_performance"  # set default value
+        logger.debug("No impl_mode in _opc_compile_args_dict, set default value high_performance.")
+        return "high_performance" # set default value
 
     @staticmethod
     def get_param_hash(param_tuple):
@@ -539,7 +444,7 @@ class OpInfoParser:
         get param hash
         """
         sha256_hash = hashlib.sha256()
-        sha256_hash.update((json.dumps(param_tuple)).encode("utf-8"))
+        sha256_hash.update((json.dumps(param_tuple)).encode('utf-8'))
         return sha256_hash.hexdigest()
 
     def get_op_info(self, op_type):
@@ -549,82 +454,50 @@ class OpInfoParser:
         logger.debug("Start to resolve op json: ")
         opc_log_full(LogLevel.DEBUG, "op = %s", str(self.__op))
         if self.__op.get(CompileParam.INPUTS) is not None:
-            self.__op_info_dict[CompileParam.INPUTS] = self.__resolve_json_inputoutput(
-                CompileParam.INPUTS
-            )
+            self.__op_info_dict[CompileParam.INPUTS] = self.__resolve_json_inputoutput(CompileParam.INPUTS)
 
         if self.__op.get(CompileParam.OUTPUTS) is not None:
-            self.__op_info_dict[CompileParam.OUTPUTS] = self.__resolve_json_inputoutput(
-                CompileParam.OUTPUTS
-            )
+            self.__op_info_dict[CompileParam.OUTPUTS] = self.__resolve_json_inputoutput(CompileParam.OUTPUTS)
 
         if self.__op.get(CompileParam.ATTRS) is not None:
-            self.__op_info_dict[CompileParam.ATTRS] = self.__get_attr_based_on_op_info(
-                op_type
-            )
+            self.__op_info_dict[CompileParam.ATTRS] = self.__get_attr_based_on_op_info(op_type)
 
         self.__resolve_json_by_key(OpcOptions.BIN_FILENAME)
         self.__resolve_json_by_key(OpcOptions.SIMPLE_KEY)
 
-        logger.debug(
-            "Resolve json to dict, input: %s.",
-            str(self.__op_info_dict.get(CompileParam.INPUTS)),
-        )
-        logger.debug(
-            "Resolve json to dict, output: %s.",
-            str(self.__op_info_dict.get(CompileParam.OUTPUTS)),
-        )
-        logger.debug(
-            "Resolve json to dict, attr: %s, bin_filename %s, simplified_key %s.",
-            str(self.__op_info_dict.get(CompileParam.ATTRS)),
-            str(self.__op_info_dict.get(OpcOptions.BIN_FILENAME)),
-            str(self.__op_info_dict.get(OpcOptions.SIMPLE_KEY, "")),
-        )
+        logger.debug("Resolve json to dict, input: %s.", str(self.__op_info_dict.get(CompileParam.INPUTS)))
+        logger.debug("Resolve json to dict, output: %s.", str(self.__op_info_dict.get(CompileParam.OUTPUTS)))
+        logger.debug("Resolve json to dict, attr: %s, bin_filename %s, simplified_key %s.",
+            str(self.__op_info_dict.get(CompileParam.ATTRS)), str(self.__op_info_dict.get(OpcOptions.BIN_FILENAME)),
+            str(self.__op_info_dict.get(OpcOptions.SIMPLE_KEY, "")))
+
 
     def generate_kernel_name(self):
         """
         generate kernel name
         """
-        opc_log_full(
-            LogLevel.DEBUG,
-            "Start to generate kernel name, op_info_dict is %s.",
-            str(self.__op_info_dict),
-        )
+        opc_log_full(LogLevel.DEBUG, "Start to generate kernel name, op_info_dict is %s.", str(self.__op_info_dict))
         try:
             bin_filename = self.__op_info_dict.get(OpcOptions.BIN_FILENAME)
             if bin_filename is not None:
-                logger.debug(
-                    "Bin_filename is not none, use it as kernel name: %s.", bin_filename
-                )
+                logger.debug("Bin_filename is not none, use it as kernel name: %s.", bin_filename)
                 return bin_filename
 
-            soc_info_dict = {
-                "coreType": self.__opc_compile_args_dict.get(OpcOptions.CORE_TYPE),
-                "coreNum": self.__opc_compile_args_dict.get(OpcOptions.AICORE_NUM),
-                "implMode": self.__get_impl_mode(),
-            }
+            soc_info_dict = {"coreType": self.__opc_compile_args_dict.get(OpcOptions.CORE_TYPE),
+                             "coreNum": self.__opc_compile_args_dict.get(OpcOptions.AICORE_NUM),
+                             "implMode": self.__get_impl_mode()}
 
-            param_tuple = (soc_info_dict,)
-            param_tuple += self.__generate_kernel_name_inputoutput(
-                CompileParam.INPUTS, "input_desc"
-            )
-            param_tuple += self.__generate_kernel_name_inputoutput(
-                CompileParam.OUTPUTS, "output_desc"
-            )
+            param_tuple = (soc_info_dict, )
+            param_tuple += self.__generate_kernel_name_inputoutput(CompileParam.INPUTS, "input_desc")
+            param_tuple += self.__generate_kernel_name_inputoutput(CompileParam.OUTPUTS, "output_desc")
             param_tuple += self.__generate_kernel_name_attr()
 
             logger.debug("Generate kernel name tuple %s.", str(param_tuple))
 
-            kernel_name = (
-                self.__op_info_dict.get("op_type")
-                + "_"
-                + self.get_param_hash(param_tuple)
-            )
+            kernel_name = self.__op_info_dict.get("op_type") + "_" + self.get_param_hash(param_tuple)
             logger.debug("Generate kernel name %s.", kernel_name)
             return kernel_name
         except Exception as e:
-            raise RuntimeError(
-                "Exception: Failed to generate kernel name, reason:%s" % (str(e))
-            ) from e
+            raise RuntimeError("Exception: Failed to generate kernel name, reason:%s" % (str(e))) from e
         finally:
             pass

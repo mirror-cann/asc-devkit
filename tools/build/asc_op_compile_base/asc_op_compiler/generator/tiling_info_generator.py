@@ -13,8 +13,7 @@ from ..get_op_tiling import OpInfo
 
 
 class TilingInfoGeneratorConfig:
-    def __init__(
-        self,
+    def __init__(self,
         enable_vd: bool,
         with_time_stamp_dynamic: bool,
         with_time_stamp_static: bool,
@@ -36,9 +35,7 @@ class TilingInfoGeneratorParams:
 
 
 class TilingInfoGenerator(object):
-    def __init__(
-        self, params: TilingInfoGeneratorParams, config: TilingInfoGeneratorConfig
-    ):
+    def __init__(self, params: TilingInfoGeneratorParams, config: TilingInfoGeneratorConfig):
         pass
 
     def parse(self):

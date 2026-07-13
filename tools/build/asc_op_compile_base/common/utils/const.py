@@ -12,7 +12,6 @@
 """
 utils const
 """
-
 from enum import Enum
 
 
@@ -25,7 +24,7 @@ class SplitAxisMode(Enum):
 
 
 class ComputeFlow(Enum):
-    tacit = 0  # means no special process for inputs, contrains Nz input and ND input except milan
-    on_the_fly = 1  # trans nd2nz by gm2l1
-    mix_l2 = 2  # trans nd2nz by mixL2
-    weight_nz = 3  # fmap nd, weight nz
+    tacit = 0 # means no special process for inputs, contrains Nz input and ND input except milan
+    on_the_fly = 1 # trans nd2nz by gm2l1
+    mix_l2 = 2 # trans nd2nz by mixL2
+    weight_nz = 3 # fmap nd, weight nz

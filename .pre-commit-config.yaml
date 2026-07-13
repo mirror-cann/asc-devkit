@@ -47,9 +47,9 @@ repos:
           - "github"
           - "--fix"
           - "--extend-ignore"
-          - "E402,E711,E712,E721,F401,F403,F405,F811,F821,F841,F523"
+          - "E402,E711,E712,E721,F401,F403,F405,F811,F821,F841"
         types: [python]
-        files: ^(cmake|docs|impl|scripts|tests|tools)/
+        files: ^(cmake|docs|impl|scripts|tests)/
         exclude: &ruff_exclude |
           (?x)^(
             \.agent/|
@@ -69,7 +69,7 @@ repos:
           )$
       - id: ruff-format
         types: [python]
-        files: ^(cmake|docs|impl|scripts|tests|tools)/
+        files: ^(cmake|docs|impl|scripts|tests)/
         exclude: *ruff_exclude
 
   # OAT 合规性检查 (Open Source Audit Tool)

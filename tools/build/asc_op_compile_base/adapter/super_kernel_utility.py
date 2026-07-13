@@ -31,9 +31,7 @@ def get_op_debug_config():
 
 def run_local_cmd(cmds, compile_log_path=None):
     output, ret_code = CommonUtility.run_cmd_ascendc(cmds, "compile")
-    CommonUtility.dump_build_log(
-        output.decode(), cmds, CompileStage.SPLIT_SUB_OBJS, ret_code
-    )
+    CommonUtility.dump_build_log(output.decode(), cmds, CompileStage.SPLIT_SUB_OBJS, ret_code)
     CommonUtility.dump_compile_log(cmds, CompileStage.SPLIT_SUB_OBJS, compile_log_path)
 
 
@@ -45,12 +43,12 @@ def get_wait_flag_for_chip(flag_id):
 
 def check_exist_forbidden_symbols(dst_i_file, forbidden_symbols, allow_path):
     need_check: bool = True
-    block_file_path = ""
-    err_str = ""
+    block_file_path = ''
+    err_str = ''
     result_symbol_list = []
     path_list = []
     line_result = []
-    with open(dst_i_file, "r") as f:
+    with open(dst_i_file, 'r') as f:
         lines = f.readlines()
         for line in lines:
             if line.startswith("#"):
@@ -71,48 +69,32 @@ def check_exist_forbidden_symbols(dst_i_file, forbidden_symbols, allow_path):
 
 
 _FORBIDDEN_API_REPLACEMENT = {
-    "get_block_idx": "AscendC::GetBlockIdx()",
-    "get_block_num": "AscendC::GetBlockNum()",
-    "get_task_ration": "AscendC::GetTaskRatio()",
-    "block_idx": "AscendC::GetBlockIdx()",
+    'get_block_idx': 'AscendC::GetBlockIdx()',
+    'get_block_num': 'AscendC::GetBlockNum()',
+    'get_task_ration': 'AscendC::GetTaskRatio()',
+    'block_idx': 'AscendC::GetBlockIdx()',
 }
 
 
 def check_exist_instrinsic_when_super_kernel(dst_i_file):
     forbidden_apis = list(_FORBIDDEN_API_REPLACEMENT.keys())
-    allow_path_mark = [
-        "bisheng_compiler",
-        "ccec_compiler",
-        "tikcpp/tikcfw",
-        "asc/impl",
-        "impl/basic_api",
-        "impl/c_api",
-    ]
-    result_symbol_list, path_list, line_result = check_exist_forbidden_symbols(
-        dst_i_file, forbidden_apis, allow_path_mark
-    )
-    result_str = ""
+    allow_path_mark = ['bisheng_compiler', 'ccec_compiler', 'tikcpp/tikcfw', 'asc/impl', 'impl/basic_api', 'impl/c_api']
+    result_symbol_list, path_list, line_result =\
+        check_exist_forbidden_symbols(dst_i_file, forbidden_apis, allow_path_mark)
+    result_str = ''
     len_result_symbol_list = len(result_symbol_list)
     if len_result_symbol_list != 0:
-        result_str += f"ERROR({len_result_symbol_list}): "
+        result_str += f'ERROR({len_result_symbol_list}): '
         for i, result in enumerate(result_symbol_list):
-            apis = list(dict.fromkeys([a.strip() for a in result.split(",")]))
-            replacements = list(
-                dict.fromkeys(
-                    [
-                        _FORBIDDEN_API_REPLACEMENT.get(api, "")
-                        for api in apis
-                        if _FORBIDDEN_API_REPLACEMENT.get(api, "")
-                    ]
-                )
-            )
-            apis_str = " or ".join(apis)
-            replacements_str = " and ".join(replacements)
-            result_str += (
-                f"Use of {apis_str} {'are' if len(apis) > 1 else 'is'} not allowed in SuperKernel"
-                f", please use {replacements_str} instead (op: {path_list[i]}"
-                f", line: {line_result[i]})"
-            )
+            apis = list(dict.fromkeys([a.strip() for a in result.split(',')]))
+            replacements = list(dict.fromkeys(
+                [_FORBIDDEN_API_REPLACEMENT.get(api, '') for api in apis if _FORBIDDEN_API_REPLACEMENT.get(api, '')]
+            ))
+            apis_str = ' or '.join(apis)
+            replacements_str = ' and '.join(replacements)
+            result_str += f"Use of {apis_str} {'are' if len(apis) > 1 else 'is'} not allowed in SuperKernel"\
+                          f", please use {replacements_str} instead (op: {path_list[i]}"\
+                          f", line: {line_result[i]})"
             if i != len_result_symbol_list - 1:
-                result_str += "\n"
+                result_str += '\n'
         CommonUtility().ascendc_raise_python_err(ERR_CODE, result_str)
