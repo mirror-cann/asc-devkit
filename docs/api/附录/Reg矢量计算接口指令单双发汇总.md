@@ -1,7 +1,7 @@
 # Reg矢量计算接口指令单双发汇总<a name="reg-vector-dual-issue"></a>
 
 本节汇总介绍了Reg矢量计算接口指令单双发的情况，指令单发指1个Cycle能够执行一条指令，指令双发指1个Cycle能够执行两条指令。
-<br>针对寄存器：1个Cycle只能写两个Reg寄存器；针对UB：1个Cycle只能读两个VL（一个VL为256B），或者1个Cycle读一个VL和写一个VL。
+<br>**针对寄存器：1个Cycle只能写两个Reg寄存器；针对UB：1个Cycle只能读两个VL（一个VL为256B），或者1个Cycle读一个VL和写一个VL。**
 
 本节内容不包含软仿类接口，仅针对如下型号生效：
 
@@ -13,7 +13,7 @@ Ascend 950PR/Ascend 950DT
 | --- | --- | --- |
 | 寄存器数据类型 | PSET | CreateMask |
 | 寄存器数据类型 | PLT | UpdateMask |
-| Reg数据搬入 | VLDS/VLD | 连续对齐搬入（LoadAlign）：<br>单搬入（除了DIST_DS_B8、DIST_DS_B16分布模式） |
+| Reg数据搬入 | VLDS/VLD | 连续对齐搬入（LoadAlign）：<br>单搬入模式（除了DIST_DS_B8、DIST_DS_B16分布模式） |
 | Reg数据搬入 | VLDAS/VLDA | 连续非对齐搬入初始化（LoadUnAlignPre） |
 | Reg数据搬入 | VLDUS/VLDU | 连续非对齐搬入（LoadUnAlign） |
 | Reg数据搬入 | PLDS/PLD | MaskReg搬入（LoadAlign） |
@@ -70,7 +70,8 @@ Ascend 950PR/Ascend 950DT
 | 接口类型 | 硬件指令名称 | 对应接口名称 |
 | --- | --- | --- |
 | Reg数据搬入 | VSLDB | 非连续对齐搬入（LoadAlign） |
-| Reg数据搬入 | VLDS/VLD | 连续对齐搬入（LoadAlign）：<br>双搬入和单搬入的DIST_DS_B8、DIST_DS_B16分布模式 |
+| Reg数据搬入 | VLDS/VLD | 连续对齐搬入（LoadAlign）：<br>双搬入模式和单搬入模式的DIST_DS_B8、DIST_DS_B16分布模式 |
+| Reg数据搬入 | MOVVP | MaskGenWithRegTensor |
 | Reg数据搬入 | VGATHER2 | Gather |
 | Reg数据搬入 | VGATHERB | GatherB |
 | Reg数据搬出 | VSSTB | 非连续对齐搬出（StoreAlign）|
