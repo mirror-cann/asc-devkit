@@ -43,12 +43,60 @@ from pathlib import Path
 # 峰值带宽(Byte/cycle) = parallel * dsize * dual_factor
 SCENARIO_CONFIG = {
     # scenario: {parallel, dsize, head, freq, dst_type, dual_factor, desc}
-    1:  {'parallel': 64, 'dsize': 2, 'head': 20, 'freq': 1800, 'dst_type': 'half',   'dual_factor': 1, 'desc': 'L0C->L1 float->half'},
-    2:  {'parallel': 64, 'dsize': 1, 'head': 20, 'freq': 1800, 'dst_type': 'int8_t', 'dual_factor': 1, 'desc': 'L0C->L1 float->int8_t'},
-    11: {'parallel': 64, 'dsize': 2, 'head': 26, 'freq': 1650, 'dst_type': 'half',   'dual_factor': 1, 'desc': 'L0C->L1 float->half'},
-    12: {'parallel': 64, 'dsize': 1, 'head': 26, 'freq': 1650, 'dst_type': 'int8_t', 'dual_factor': 1, 'desc': 'L0C->L1 float->int8_t'},
-    13: {'parallel': 32, 'dsize': 4, 'head': 26, 'freq': 1650, 'dst_type': 'float',  'dual_factor': 1, 'desc': 'L0C->UB float->float single-dst'},
-    14: {'parallel': 32, 'dsize': 4, 'head': 26, 'freq': 1650, 'dst_type': 'float',  'dual_factor': 2, 'desc': 'L0C->UB float->float dual-dst(split-M)'},
+    1: {
+        "parallel": 64,
+        "dsize": 2,
+        "head": 20,
+        "freq": 1800,
+        "dst_type": "half",
+        "dual_factor": 1,
+        "desc": "L0C->L1 float->half",
+    },
+    2: {
+        "parallel": 64,
+        "dsize": 1,
+        "head": 20,
+        "freq": 1800,
+        "dst_type": "int8_t",
+        "dual_factor": 1,
+        "desc": "L0C->L1 float->int8_t",
+    },
+    11: {
+        "parallel": 64,
+        "dsize": 2,
+        "head": 26,
+        "freq": 1650,
+        "dst_type": "half",
+        "dual_factor": 1,
+        "desc": "L0C->L1 float->half",
+    },
+    12: {
+        "parallel": 64,
+        "dsize": 1,
+        "head": 26,
+        "freq": 1650,
+        "dst_type": "int8_t",
+        "dual_factor": 1,
+        "desc": "L0C->L1 float->int8_t",
+    },
+    13: {
+        "parallel": 32,
+        "dsize": 4,
+        "head": 26,
+        "freq": 1650,
+        "dst_type": "float",
+        "dual_factor": 1,
+        "desc": "L0C->UB float->float single-dst",
+    },
+    14: {
+        "parallel": 32,
+        "dsize": 4,
+        "head": 26,
+        "freq": 1650,
+        "dst_type": "float",
+        "dual_factor": 2,
+        "desc": "L0C->UB float->float dual-dst(split-M)",
+    },
 }
 
 
@@ -56,7 +104,7 @@ def get_scenario_from_csv(csv_file):
     """从 CSV 文件名或父目录名中解析场景编号。"""
     csv_path = Path(csv_file)
     for text in (csv_path.name, csv_path.parent.name):
-        match = re.search(r'scenario(\d+)', text)
+        match = re.search(r"scenario(\d+)", text)
         if match:
             return int(match.group(1))
     return None
@@ -65,41 +113,47 @@ def get_scenario_from_csv(csv_file):
 def read_csv_data(csv_file, freq_mhz, dsize):
     """读取 perf.sh 生成的 CSV，并过滤无效测试行。"""
     data = []
-    with open(csv_file, 'r') as f:
+    with open(csv_file, "r") as f:
         reader = csv.DictReader(f)
         time_column = None
         if reader.fieldnames:
-            for column in ('AIC_FixPipe_Time(us)', 'AIC_FixPipe_Time', 'aic_fixpipe_time(us)'):
+            for column in (
+                "AIC_FixPipe_Time(us)",
+                "AIC_FixPipe_Time",
+                "aic_fixpipe_time(us)",
+            ):
                 if column in reader.fieldnames:
                     time_column = column
                     break
         if time_column is None:
-            raise ValueError('CSV 文件缺少 AIC_FixPipe_Time(us) 列')
+            raise ValueError("CSV 文件缺少 AIC_FixPipe_Time(us) 列")
 
         for row in reader:
             time_val = row[time_column]
-            if time_val in ('N/A', 'NA', 'ERROR', ''):
+            if time_val in ("N/A", "NA", "ERROR", ""):
                 continue
             time_us = float(time_val)
-            m = int(row['M'])
-            k = int(row['K'])
-            n = int(row['N'])
+            m = int(row["M"])
+            k = int(row["K"])
+            n = int(row["N"])
             data_size = float(m) * n * dsize  # 搬出字节数
             measured_cycles = time_us * freq_mhz
             measured_bw = data_size / time_us / 1e3 if time_us > 0 else 0.0  # GB/s
 
-            data.append({
-                'test_id': int(row['Test_ID']),
-                'm': m,
-                'k': k,
-                'n': n,
-                'shape': row.get('Shape', f'{m}_{k}_{n}'),
-                'time_us': time_us,
-                'measured_cycles': measured_cycles,
-                'data_size': data_size,
-                'data_size_kb': data_size / 1024,
-                'measured_bw': measured_bw,
-            })
+            data.append(
+                {
+                    "test_id": int(row["Test_ID"]),
+                    "m": m,
+                    "k": k,
+                    "n": n,
+                    "shape": row.get("Shape", f"{m}_{k}_{n}"),
+                    "time_us": time_us,
+                    "measured_cycles": measured_cycles,
+                    "data_size": data_size,
+                    "data_size_kb": data_size / 1024,
+                    "measured_bw": measured_bw,
+                }
+            )
     return data
 
 
@@ -114,12 +168,17 @@ def calc_theory_bandwidth(data_size, peak_bw_bytes_per_cycle, head_overhead, fre
 
 def generate_roofline(data, output_file, cfg):
     """生成 ASCII 版本 Fixpipe 搬出带宽 Roofline 报告。"""
-    parallel, dsize, head, freq = cfg['parallel'], cfg['dsize'], cfg['head'], cfg['freq']
-    dual_factor = cfg.get('dual_factor', 1)
+    parallel, dsize, head, freq = (
+        cfg["parallel"],
+        cfg["dsize"],
+        cfg["head"],
+        cfg["freq"],
+    )
+    dual_factor = cfg.get("dual_factor", 1)
     peak_bw_bpc = parallel * dsize * dual_factor  # 峰值带宽 Byte/cycle
     peak_bw_gbps = peak_bw_bpc * freq / 1e3  # 峰值带宽 GB/s
 
-    max_kb = max(item['data_size_kb'] for item in data)
+    max_kb = max(item["data_size_kb"] for item in data)
     min_kb = 0.01
 
     theory_kb = []
@@ -139,10 +198,13 @@ def generate_roofline(data, output_file, cfg):
     lines.append("搬出带宽与模型参数：")
     lines.append(f"  通路: {cfg['desc']}")
     lines.append(f"  目的类型: {cfg['dst_type']}（{dsize} 字节）")
-    lines.append(f"  并行度: {parallel} out elem/cycle" + (f" x {dual_factor}（双目标）" if dual_factor > 1 else ""))
+    lines.append(
+        f"  并行度: {parallel} out elem/cycle"
+        + (f" x {dual_factor}（双目标）" if dual_factor > 1 else "")
+    )
     lines.append(f"  峰值带宽: {peak_bw_bpc} Byte/cycle = {peak_bw_gbps:.2f} GB/s")
     lines.append(f"  主频: {freq} MHz")
-    lines.append(f"  头开销（固定延迟）: {head} cycles = {head/freq:.4f} us")
+    lines.append(f"  头开销（固定延迟）: {head} cycles = {head / freq:.4f} us")
     lines.append("")
     lines.append("理论公式：")
     lines.append(f"  DataSize(bytes) = M * N * {dsize}")
@@ -160,32 +222,34 @@ def generate_roofline(data, output_file, cfg):
 
     chart_width = 70
     chart_height = 25
-    max_bw = max(max(theory_bw), max(item['measured_bw'] for item in data), peak_bw_gbps)
+    max_bw = max(
+        max(theory_bw), max(item["measured_bw"] for item in data), peak_bw_gbps
+    )
     bw_per_line = max_bw / chart_height
     kb_per_char = max_kb / chart_width if max_kb > 0 else 1.0
 
-    grid = [[' ' for _ in range(chart_width)] for _ in range(chart_height)]
+    grid = [[" " for _ in range(chart_width)] for _ in range(chart_height)]
 
     peak_y = int(chart_height - peak_bw_gbps / bw_per_line)
     if 0 <= peak_y < chart_height:
         for x in range(chart_width):
             if x % 3 == 0:
-                grid[peak_y][x] = ':'
+                grid[peak_y][x] = ":"
 
     for i in range(len(theory_kb)):
         x_pos = int(theory_kb[i] / kb_per_char)
         y_pos = int(chart_height - theory_bw[i] / bw_per_line)
         x_pos = max(0, min(chart_width - 1, x_pos))
         y_pos = max(0, min(chart_height - 1, y_pos))
-        if grid[y_pos][x_pos] == ' ':
-            grid[y_pos][x_pos] = '-'
+        if grid[y_pos][x_pos] == " ":
+            grid[y_pos][x_pos] = "-"
 
     for item in data:
-        x_pos = int(item['data_size_kb'] / kb_per_char)
-        y_pos = int(chart_height - item['measured_bw'] / bw_per_line)
+        x_pos = int(item["data_size_kb"] / kb_per_char)
+        y_pos = int(chart_height - item["measured_bw"] / bw_per_line)
         x_pos = max(0, min(chart_width - 1, x_pos))
         y_pos = max(0, min(chart_height - 1, y_pos))
-        grid[y_pos][x_pos] = '*'
+        grid[y_pos][x_pos] = "*"
 
     lines.append("Bandwidth (GB/s)")
     for i, row in enumerate(grid):
@@ -196,7 +260,7 @@ def generate_roofline(data, output_file, cfg):
             label = f"{bw_value:7.1f} |"
         else:
             label = "        |"
-        lines.append(label + ''.join(row))
+        lines.append(label + "".join(row))
 
     lines.append("        +" + "-" * chart_width)
     lines.append("         Dst Data Size (KB)")
@@ -205,7 +269,7 @@ def generate_roofline(data, output_file, cfg):
     for i in range(0, chart_width + 1, 14):
         kb = i * kb_per_char
         x_labels.append(f"{kb:6.1f}")
-    lines.append("        " + ' '.join(x_labels))
+    lines.append("        " + " ".join(x_labels))
     lines.append("")
 
     lines.append("图例说明：")
@@ -219,21 +283,30 @@ def generate_roofline(data, output_file, cfg):
     lines.append("=" * 80)
 
     for item in data:
-        m, n = item['m'], item['n']
+        m, n = item["m"], item["n"]
         theory_bw_v, theory_time_us, theory_total_cycles = calc_theory_bandwidth(
-            item['data_size'], peak_bw_bpc, head, freq)
-        utilization = item['measured_bw'] / theory_bw_v * 100 if theory_bw_v > 0 else 0.0
+            item["data_size"], peak_bw_bpc, head, freq
+        )
+        utilization = (
+            item["measured_bw"] / theory_bw_v * 100 if theory_bw_v > 0 else 0.0
+        )
 
         lines.append(f"\nTest {item['test_id']}: Shape [{m}, {item['k']}, {n}]")
         lines.append("-" * 80)
-        lines.append(f"  搬出量: {item['data_size_kb']:.3f} KB ({item['data_size']:.0f} bytes)")
+        lines.append(
+            f"  搬出量: {item['data_size_kb']:.3f} KB ({item['data_size']:.0f} bytes)"
+        )
         lines.append("")
         lines.append("  实际测量:")
-        lines.append(f"    时间: {item['time_us']:.4f} us = {item['measured_cycles']:.2f} cycles")
+        lines.append(
+            f"    时间: {item['time_us']:.4f} us = {item['measured_cycles']:.2f} cycles"
+        )
         lines.append(f"    带宽: {item['measured_bw']:.3f} GB/s")
         lines.append("")
         lines.append("  理论计算:")
-        lines.append(f"    理论总cycle: {head} + {item['data_size']:.0f}/{peak_bw_bpc} = {theory_total_cycles:.2f}")
+        lines.append(
+            f"    理论总cycle: {head} + {item['data_size']:.0f}/{peak_bw_bpc} = {theory_total_cycles:.2f}"
+        )
         lines.append(f"    理论耗时: {theory_time_us:.4f} us")
         lines.append(f"    理论带宽: {theory_bw_v:.3f} GB/s")
         lines.append("")
@@ -247,21 +320,23 @@ def generate_roofline(data, output_file, cfg):
     avg_util = 0.0
     cnt = 0
     for item in data:
-        theory_bw_v, _, _ = calc_theory_bandwidth(item['data_size'], peak_bw_bpc, head, freq)
+        theory_bw_v, _, _ = calc_theory_bandwidth(
+            item["data_size"], peak_bw_bpc, head, freq
+        )
         if theory_bw_v > 0:
-            avg_util += item['measured_bw'] / theory_bw_v * 100
+            avg_util += item["measured_bw"] / theory_bw_v * 100
             cnt += 1
     avg_util = avg_util / cnt if cnt > 0 else 0.0
-    avg_bw = sum(item['measured_bw'] for item in data) / len(data)
+    avg_bw = sum(item["measured_bw"] for item in data) / len(data)
     lines.append(f"  峰值带宽: {peak_bw_gbps:.1f} GB/s")
     lines.append(f"  平均实测带宽: {avg_bw:.3f} GB/s")
     lines.append(f"  平均带宽利用率: {avg_util:.1f}%")
     lines.append("")
     lines.append("=" * 80)
 
-    with open(output_file, 'w') as f:
-        f.write('\n'.join(lines))
-    return '\n'.join(lines)
+    with open(output_file, "w") as f:
+        f.write("\n".join(lines))
+    return "\n".join(lines)
 
 
 def generate_matplotlib_roofline(data, output_file, cfg):
@@ -270,41 +345,80 @@ def generate_matplotlib_roofline(data, output_file, cfg):
         import matplotlib.pyplot as plt
         import numpy as np
 
-        parallel, dsize, head, freq = cfg['parallel'], cfg['dsize'], cfg['head'], cfg['freq']
-        dual_factor = cfg.get('dual_factor', 1)
+        parallel, dsize, head, freq = (
+            cfg["parallel"],
+            cfg["dsize"],
+            cfg["head"],
+            cfg["freq"],
+        )
+        dual_factor = cfg.get("dual_factor", 1)
         peak_bw_bpc = parallel * dsize * dual_factor
         peak_bw_gbps = peak_bw_bpc * freq / 1e3
 
-        max_kb = max(item['data_size_kb'] for item in data)
+        max_kb = max(item["data_size_kb"] for item in data)
         theory_sizes = np.linspace(0.01 * 1024, max_kb * 1.1 * 1024, 100)
-        theory_bw = [calc_theory_bandwidth(s, peak_bw_bpc, head, freq)[0] for s in theory_sizes]
+        theory_bw = [
+            calc_theory_bandwidth(s, peak_bw_bpc, head, freq)[0] for s in theory_sizes
+        ]
         theory_kb = theory_sizes / 1024
 
         fig, ax1 = plt.subplots(figsize=(11, 7.5))
-        ax1.axhline(y=peak_bw_gbps, color='red', linestyle='--', linewidth=2,
-                    label=f'Peak BW (no latency): {peak_bw_gbps:.1f} GB/s')
-        ax1.plot(theory_kb, theory_bw, 'b-', linewidth=3,
-                 label=f'Theoretical BW (with {head}c head overhead)')
+        ax1.axhline(
+            y=peak_bw_gbps,
+            color="red",
+            linestyle="--",
+            linewidth=2,
+            label=f"Peak BW (no latency): {peak_bw_gbps:.1f} GB/s",
+        )
+        ax1.plot(
+            theory_kb,
+            theory_bw,
+            "b-",
+            linewidth=3,
+            label=f"Theoretical BW (with {head}c head overhead)",
+        )
 
-        colors = ['#2ecc71', '#f39c12', '#e74c3c', '#9b59b6', '#3498db', '#1abc9c', '#e67e22']
-        markers = ['o', 's', 'D', '^', 'v', '<', '>']
+        colors = [
+            "#2ecc71",
+            "#f39c12",
+            "#e74c3c",
+            "#9b59b6",
+            "#3498db",
+            "#1abc9c",
+            "#e67e22",
+        ]
+        markers = ["o", "s", "D", "^", "v", "<", ">"]
         for i, item in enumerate(data):
-            ax1.scatter(item['data_size_kb'], item['measured_bw'],
-                        c=colors[i % len(colors)], marker=markers[i % len(markers)], s=250,
-                        edgecolors='black', linewidths=2.5, zorder=5,
-                        label=f'Shape [{item["m"]},{item["k"]},{item["n"]}]')
-            ax1.annotate(f'{item["measured_bw"]:.1f} GB/s',
-                         xy=(item['data_size_kb'], item['measured_bw']),
-                         xytext=(15, 15), textcoords='offset points',
-                         fontsize=11, fontweight='bold',
-                         bbox=dict(boxstyle='round,pad=0.5', facecolor='yellow', alpha=0.7))
+            ax1.scatter(
+                item["data_size_kb"],
+                item["measured_bw"],
+                c=colors[i % len(colors)],
+                marker=markers[i % len(markers)],
+                s=250,
+                edgecolors="black",
+                linewidths=2.5,
+                zorder=5,
+                label=f"Shape [{item['m']},{item['k']},{item['n']}]",
+            )
+            ax1.annotate(
+                f"{item['measured_bw']:.1f} GB/s",
+                xy=(item["data_size_kb"], item["measured_bw"]),
+                xytext=(15, 15),
+                textcoords="offset points",
+                fontsize=11,
+                fontweight="bold",
+                bbox=dict(boxstyle="round,pad=0.5", facecolor="yellow", alpha=0.7),
+            )
 
-        ax1.set_xlabel('Dst Data Size (KB)', fontsize=14, fontweight='bold')
-        ax1.set_ylabel('Bandwidth (GB/s)', fontsize=14, fontweight='bold')
-        ax1.set_title(f'Fixpipe Bandwidth Roofline Model\n({cfg["desc"]}, peak {peak_bw_bpc} Byte/cycle, {freq} MHz)',
-                      fontsize=14, fontweight='bold')
-        ax1.grid(True, linestyle='--', alpha=0.4)
-        ax1.legend(loc='center left', bbox_to_anchor=(1.02, 0.5), fontsize=10)
+        ax1.set_xlabel("Dst Data Size (KB)", fontsize=14, fontweight="bold")
+        ax1.set_ylabel("Bandwidth (GB/s)", fontsize=14, fontweight="bold")
+        ax1.set_title(
+            f"Fixpipe Bandwidth Roofline Model\n({cfg['desc']}, peak {peak_bw_bpc} Byte/cycle, {freq} MHz)",
+            fontsize=14,
+            fontweight="bold",
+        )
+        ax1.grid(True, linestyle="--", alpha=0.4)
+        ax1.legend(loc="center left", bbox_to_anchor=(1.02, 0.5), fontsize=10)
         ax1.set_xlim(0, max_kb * 1.15)
         ax1.set_ylim(0, peak_bw_gbps * 1.2)
 
@@ -314,14 +428,23 @@ def generate_matplotlib_roofline(data, output_file, cfg):
             f"Head Overhead: {head} cycles\n"
             f"Formula: Cycles = {head} + DataSize / {peak_bw_bpc}; Bandwidth = DataSize / Time(us) / 1e3"
         )
-        fig.text(0.5, 0.04, formula_text, ha='center', va='bottom', fontsize=11,
-                 bbox=dict(boxstyle='round,pad=0.6', facecolor='wheat', edgecolor='gray', alpha=0.9))
+        fig.text(
+            0.5,
+            0.04,
+            formula_text,
+            ha="center",
+            va="bottom",
+            fontsize=11,
+            bbox=dict(
+                boxstyle="round,pad=0.6", facecolor="wheat", edgecolor="gray", alpha=0.9
+            ),
+        )
         fig.subplots_adjust(left=0.10, right=0.72, bottom=0.24, top=0.86)
 
-        plt.savefig(output_file, dpi=300, bbox_inches='tight')
+        plt.savefig(output_file, dpi=300, bbox_inches="tight")
         print(f"Matplotlib 图表已保存: {output_file}")
-        png_file = output_file.replace('.pdf', '.png')
-        plt.savefig(png_file, dpi=300, bbox_inches='tight')
+        png_file = output_file.replace(".pdf", ".png")
+        plt.savefig(png_file, dpi=300, bbox_inches="tight")
         print(f"PNG 版本已保存: {png_file}")
         plt.close(fig)
         return True
@@ -335,9 +458,9 @@ def generate_matplotlib_roofline(data, output_file, cfg):
 
 def find_latest_perf_data():
     """查找最新的 perf_data 目录中的 CSV 文件。"""
-    perf_dirs = sorted(Path('.').glob('perf_data_*'), reverse=True)
+    perf_dirs = sorted(Path(".").glob("perf_data_*"), reverse=True)
     for perf_dir in perf_dirs:
-        csv_files = sorted(perf_dir.glob('perf_result_scenario*.csv'), reverse=True)
+        csv_files = sorted(perf_dir.glob("perf_result_scenario*.csv"), reverse=True)
         if csv_files:
             return str(csv_files[0])
     return None
@@ -345,7 +468,7 @@ def find_latest_perf_data():
 
 def main():
     parser = argparse.ArgumentParser(
-        description='生成 Fixpipe 搬出带宽 Roofline 图（固定延迟模型，理论由搬出并行度推导）',
+        description="生成 Fixpipe 搬出带宽 Roofline 图（固定延迟模型，理论由搬出并行度推导）",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""示例用法:
   python3 generate_roofline.py --csv perf_data_xxx_scenario1/perf_result_scenario1.csv
@@ -354,12 +477,27 @@ def main():
 说明:
   理论峰值带宽 = 搬出并行度 * 目的类型字节数（双目标翻倍），由场景直接得出，无需手工传入；
   头开销取固定延迟（dav-2201=20、dav-3510=26），可用 --head-overhead 覆盖。
-""")
-    parser.add_argument('--csv', '-c', type=str, help='CSV 文件路径（不指定则自动查找最新数据）')
-    parser.add_argument('--head-overhead', type=int, default=None, help='头开销（cycles），默认按场景取（2201=20、3510=26）')
-    parser.add_argument('--scenario', type=int, default=None, help='场景编号（不指定则从 CSV 文件名解析）')
-    parser.add_argument('--output', '-o', type=str, help='输出文件前缀，默认按 perf_data 目录名')
-    parser.add_argument('csv_path', nargs='?', help='CSV 文件路径，等价于 --csv')
+""",
+    )
+    parser.add_argument(
+        "--csv", "-c", type=str, help="CSV 文件路径（不指定则自动查找最新数据）"
+    )
+    parser.add_argument(
+        "--head-overhead",
+        type=int,
+        default=None,
+        help="头开销（cycles），默认按场景取（2201=20、3510=26）",
+    )
+    parser.add_argument(
+        "--scenario",
+        type=int,
+        default=None,
+        help="场景编号（不指定则从 CSV 文件名解析）",
+    )
+    parser.add_argument(
+        "--output", "-o", type=str, help="输出文件前缀，默认按 perf_data 目录名"
+    )
+    parser.add_argument("csv_path", nargs="?", help="CSV 文件路径，等价于 --csv")
 
     args = parser.parse_args()
     csv_file = args.csv or args.csv_path
@@ -375,7 +513,9 @@ def main():
         print(f"错误: CSV 文件不存在: {csv_file}")
         sys.exit(1)
 
-    scenario = args.scenario if args.scenario is not None else get_scenario_from_csv(csv_file)
+    scenario = (
+        args.scenario if args.scenario is not None else get_scenario_from_csv(csv_file)
+    )
     if scenario not in SCENARIO_CONFIG:
         print(f"错误: 无法识别场景编号 {scenario}，无法确定搬出并行度")
         print(f"支持的场景: {sorted(SCENARIO_CONFIG.keys())}")
@@ -383,7 +523,7 @@ def main():
 
     cfg = dict(SCENARIO_CONFIG[scenario])
     if args.head_overhead is not None:
-        cfg['head'] = args.head_overhead
+        cfg["head"] = args.head_overhead
 
     if args.output:
         output_prefix = args.output
@@ -391,14 +531,14 @@ def main():
         output_prefix = f"{Path(csv_file).parent.name}_fixpipe_roofline"
 
     print(f"读取数据: {csv_file}")
-    data = read_csv_data(csv_file, cfg['freq'], cfg['dsize'])
+    data = read_csv_data(csv_file, cfg["freq"], cfg["dsize"])
     if not data:
         print(f"错误: CSV 文件没有可用于绘图的有效性能数据: {csv_file}")
         sys.exit(1)
     print(f"找到 {len(data)} 条测试数据")
     print()
 
-    _peak_bpc = cfg['parallel'] * cfg['dsize'] * cfg.get('dual_factor', 1)
+    _peak_bpc = cfg["parallel"] * cfg["dsize"] * cfg.get("dual_factor", 1)
     print("=" * 80)
     print("Roofline 模型参数")
     print("=" * 80)

@@ -12,6 +12,7 @@
 """
 tbe register
 """
+
 from .register_api import register_operator
 from .register_api import get_operator
 from .register_api import get_op_compute

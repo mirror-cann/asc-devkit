@@ -13,15 +13,25 @@ from ..ascendc_constants import CompileOptionTuple
 
 
 class InitializerConfig:
-    def __init__(self, support_impl_mode: bool, is_support_dfx: bool, support_super_kernel: bool):
+    def __init__(
+        self, support_impl_mode: bool, is_support_dfx: bool, support_super_kernel: bool
+    ):
         self.support_impl_mode = support_impl_mode
         self.is_support_dfx = is_support_dfx
         self.support_super_kernel = support_super_kernel
 
 
 class InitializerParams:
-    def __init__(self, kernel_file, origin_func_name, op_info, compile_option_tuple, code_channel,
-                 op_compile_option, extend_options):
+    def __init__(
+        self,
+        kernel_file,
+        origin_func_name,
+        op_info,
+        compile_option_tuple,
+        code_channel,
+        op_compile_option,
+        extend_options,
+    ):
         pass
 
 

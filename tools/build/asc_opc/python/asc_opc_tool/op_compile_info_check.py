@@ -14,7 +14,7 @@
 import json
 from asc_op_compile_base.common.utils import log as logger
 from op_manager import get_inout_info_from_opstore
-from constant import (CompileParam, OpcOptions, OptionalInOutMode, OpParamType)
+from constant import CompileParam, OpcOptions, OptionalInOutMode, OpParamType
 
 
 def check_and_feed_optional_param(inout_infos, inouts):
@@ -35,18 +35,28 @@ def check_op_optional_paramtype(json_dict, opc_compile_args):
         return True
     inputs_infos, output_infos = get_inout_info_from_opstore(json_dict.get("op_type"))
     if inputs_infos is None or output_infos is None:
-        logger.warn("get inputs_infos or output_infos from op_store is None, will not check by ops info store.")
+        logger.warn(
+            "get inputs_infos or output_infos from op_store is None, will not check by ops info store."
+        )
         return True
     op_list = json_dict.get("op_list")
     inputs = op_list[0].get("inputs")
     outputs = op_list[0].get("outputs")
     if not check_and_feed_optional_param(inputs_infos, inputs):
-        logger.error("Op[type=%s] invalid input nums[%d], which should be equal to input nums[%d] in op store.",
-                        str(json_dict.get("op_type")), len(inputs), len(inputs_infos))
+        logger.error(
+            "Op[type=%s] invalid input nums[%d], which should be equal to input nums[%d] in op store.",
+            str(json_dict.get("op_type")),
+            len(inputs),
+            len(inputs_infos),
+        )
         return False
     if not check_and_feed_optional_param(output_infos, outputs):
-        logger.error("Op[type=%s] invalid output nums[%d], which should be equal to output nums[%d] in op store.",
-                        str(json_dict.get("op_type")), len(outputs), len(output_infos))
+        logger.error(
+            "Op[type=%s] invalid output nums[%d], which should be equal to output nums[%d] in op store.",
+            str(json_dict.get("op_type")),
+            len(outputs),
+            len(output_infos),
+        )
         return False
     op_list[0]["inputs"] = inputs
     op_list[0]["outputs"] = outputs

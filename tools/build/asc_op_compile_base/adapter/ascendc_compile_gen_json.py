@@ -12,6 +12,7 @@
 """
 ascendc compile gen json
 """
+
 import os
 import stat
 import json
@@ -84,133 +85,197 @@ def _get_kernel_type_dict(compile_info: CompileInfo, tiling_key: int):
     return tiling_key_dict
 
 
-def _gen_mix_json_from_seperate_json(kernel_name: str, task_ration_str: str, core_type: int, no_set_kernel_type: bool):
+def _gen_mix_json_from_seperate_json(
+    kernel_name: str, task_ration_str: str, core_type: int, no_set_kernel_type: bool
+):
     kernel_meta_path = CommonUtility.get_kernel_meta_dir()
     core_type_marker = "_mix_aic" if core_type == CORE_TYPE_CUBE else "_mix_aiv"
-    seperate_json_path = os.path.join(kernel_meta_path, kernel_name + f'{core_type_marker}.json')
-    mix_json_path = os.path.join(kernel_meta_path, kernel_name + '.json')
+    seperate_json_path = os.path.join(
+        kernel_meta_path, kernel_name + f"{core_type_marker}.json"
+    )
+    mix_json_path = os.path.join(kernel_meta_path, kernel_name + ".json")
     os.rename(seperate_json_path, mix_json_path)
     try:
-        with open(mix_json_path, 'r') as fd:
+        with open(mix_json_path, "r") as fd:
             js = json.load(fd)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err))
-    js['binFileName'] = kernel_name
-    js['kernelName'] = kernel_name
-    js['coreType'] = 'MIX'
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err)
+        )
+    js["binFileName"] = kernel_name
+    js["kernelName"] = kernel_name
+    js["coreType"] = "MIX"
     if no_set_kernel_type is True:
-        js['taskRation'] = task_ration_str
+        js["taskRation"] = task_ration_str
     try:
-        with open(mix_json_path, 'w') as fd_write:
+        with open(mix_json_path, "w") as fd_write:
             os.chmod(mix_json_path, stat.S_IRUSR + stat.S_IWUSR)
             json.dump(js, fd_write, indent=2)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err))
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err)
+        )
 
 
-def _gen_mix_json_from_seperate_json_for_kernel_type(kernel_name: str, task_ration_str: str, \
-    core_type: int, no_set_kernel_type: bool):
+def _gen_mix_json_from_seperate_json_for_kernel_type(
+    kernel_name: str, task_ration_str: str, core_type: int, no_set_kernel_type: bool
+):
     kernel_meta_path = CommonUtility.get_kernel_meta_dir()
-    json_path = os.path.join(kernel_meta_path, kernel_name + '.json')
+    json_path = os.path.join(kernel_meta_path, kernel_name + ".json")
     try:
-        with open(json_path, 'r') as fd:
+        with open(json_path, "r") as fd:
             js = json.load(fd)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err))
-    js['binFileName'] = kernel_name
-    js['kernelName'] = kernel_name
-    js['coreType'] = 'MIX'
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err)
+        )
+    js["binFileName"] = kernel_name
+    js["kernelName"] = kernel_name
+    js["coreType"] = "MIX"
     if no_set_kernel_type is True:
-        js['taskRation'] = task_ration_str
+        js["taskRation"] = task_ration_str
     try:
-        with open(json_path, 'w') as fd_write:
+        with open(json_path, "w") as fd_write:
             os.chmod(json_path, stat.S_IRUSR + stat.S_IWUSR)
             json.dump(js, fd_write, indent=2)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err))
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err)
+        )
 
 
-def _dynamic_kernel_list_to_json(kernel_name: str, tiling_key_list: list, \
-    enable_deterministic: bool, tiling_key_deterministic: dict):
+def _dynamic_kernel_list_to_json(
+    kernel_name: str,
+    tiling_key_list: list,
+    enable_deterministic: bool,
+    tiling_key_deterministic: dict,
+):
     kernel_meta_path = CommonUtility.get_kernel_meta_dir()
-    dynamic_kernel_json_path = os.path.join(kernel_meta_path, kernel_name + '.json')
+    dynamic_kernel_json_path = os.path.join(kernel_meta_path, kernel_name + ".json")
     try:
-        with open(dynamic_kernel_json_path, 'r') as fd:
+        with open(dynamic_kernel_json_path, "r") as fd:
             js = json.load(fd)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err))
-    js['kernelName'] = kernel_name
-    js['kernelList'] = []
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err)
+        )
+    js["kernelName"] = kernel_name
+    js["kernelList"] = []
     for tiling_key in tiling_key_list:
         if tiling_key in tiling_key_deterministic:
-            js['kernelList'].append({"deterministic": tiling_key_deterministic[tiling_key], \
-                "kernelName": kernel_name + "_" + tiling_key})
+            js["kernelList"].append(
+                {
+                    "deterministic": tiling_key_deterministic[tiling_key],
+                    "kernelName": kernel_name + "_" + tiling_key,
+                }
+            )
         elif enable_deterministic:
             if get_current_build_config("enable_deterministic_mode") == 1:
-                js['kernelList'].append({"deterministic": "true", "kernelName" : kernel_name + '_' + tiling_key})
+                js["kernelList"].append(
+                    {
+                        "deterministic": "true",
+                        "kernelName": kernel_name + "_" + tiling_key,
+                    }
+                )
             else:
-                js['kernelList'].append({"deterministic": "false", "kernelName" : kernel_name + '_' + tiling_key})
+                js["kernelList"].append(
+                    {
+                        "deterministic": "false",
+                        "kernelName": kernel_name + "_" + tiling_key,
+                    }
+                )
         else:
-            js['kernelList'].append({"kernelName" : kernel_name + '_' + tiling_key})
+            js["kernelList"].append({"kernelName": kernel_name + "_" + tiling_key})
     try:
-        with open(dynamic_kernel_json_path, 'w') as fd_write:
+        with open(dynamic_kernel_json_path, "w") as fd_write:
             os.chmod(dynamic_kernel_json_path, stat.S_IRUSR + stat.S_IWUSR)
             json.dump(js, fd_write, indent=2)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err))
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err)
+        )
 
 
-def _dynamic_regbase_kernel_list_to_json(kernel_name: str, tiling_key_list: list, enable_deterministic: bool, \
-    enable_mix_for_profiling: bool, tiling_key_deterministic: dict):
+def _dynamic_regbase_kernel_list_to_json(
+    kernel_name: str,
+    tiling_key_list: list,
+    enable_deterministic: bool,
+    enable_mix_for_profiling: bool,
+    tiling_key_deterministic: dict,
+):
     kernel_meta_path = CommonUtility.get_kernel_meta_dir()
-    dynamic_kernel_json_path = os.path.join(kernel_meta_path, kernel_name + '.json')
+    dynamic_kernel_json_path = os.path.join(kernel_meta_path, kernel_name + ".json")
     try:
-        with open(dynamic_kernel_json_path, 'r') as fd:
+        with open(dynamic_kernel_json_path, "r") as fd:
             js = json.load(fd)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err))
-    js['kernelName'] = kernel_name
-    js['kernelList'] = []
-    js['magic'] = "RT_DEV_BINARY_MAGIC_ELF"
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err)
+        )
+    js["kernelName"] = kernel_name
+    js["kernelList"] = []
+    js["magic"] = "RT_DEV_BINARY_MAGIC_ELF"
     if enable_mix_for_profiling:
-        js['magic'] = "RT_DEV_BINARY_MAGIC_ELF"
+        js["magic"] = "RT_DEV_BINARY_MAGIC_ELF"
     for tiling_key in tiling_key_list:
         if tiling_key in tiling_key_deterministic:
-            js['kernelList'].append({"deterministic": tiling_key_deterministic[tiling_key], \
-                "kernelName" : kernel_name + '_' + tiling_key})
+            js["kernelList"].append(
+                {
+                    "deterministic": tiling_key_deterministic[tiling_key],
+                    "kernelName": kernel_name + "_" + tiling_key,
+                }
+            )
         elif enable_deterministic:
             if get_current_build_config("enable_deterministic_mode") == 1:
-                js['kernelList'].append({"deterministic": "true", "kernelName" : kernel_name + '_' + tiling_key})
+                js["kernelList"].append(
+                    {
+                        "deterministic": "true",
+                        "kernelName": kernel_name + "_" + tiling_key,
+                    }
+                )
             else:
-                js['kernelList'].append({"deterministic": "false", "kernelName" : kernel_name + '_' + tiling_key})
+                js["kernelList"].append(
+                    {
+                        "deterministic": "false",
+                        "kernelName": kernel_name + "_" + tiling_key,
+                    }
+                )
         else:
-            js['kernelList'].append({"kernelName" : kernel_name + '_' + tiling_key})
+            js["kernelList"].append({"kernelName": kernel_name + "_" + tiling_key})
     try:
-        with open(dynamic_kernel_json_path, 'w') as fd_write:
+        with open(dynamic_kernel_json_path, "w") as fd_write:
             os.chmod(dynamic_kernel_json_path, stat.S_IRUSR + stat.S_IWUSR)
             json.dump(js, fd_write, indent=2)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err))
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err)
+        )
 
 
 def _static_regbase_kernel_list_to_json(kernel_name: str):
     kernel_meta_path = CommonUtility.get_kernel_meta_dir()
-    kernel_json_path = os.path.join(kernel_meta_path, kernel_name + '.json')
+    kernel_json_path = os.path.join(kernel_meta_path, kernel_name + ".json")
     try:
-        with open(kernel_json_path, 'r') as fd:
+        with open(kernel_json_path, "r") as fd:
             js = json.load(fd)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err))
-    js['magic'] = "RT_DEV_BINARY_MAGIC_ELF"
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err)
+        )
+    js["magic"] = "RT_DEV_BINARY_MAGIC_ELF"
     try:
-        with open(kernel_json_path, 'w') as fd_write:
+        with open(kernel_json_path, "w") as fd_write:
             os.chmod(kernel_json_path, stat.S_IRUSR + stat.S_IWUSR)
             json.dump(js, fd_write, indent=2)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err))
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err)
+        )
 
 
-def _gen_mix_sub_json(compile_info: CompileInfo, tiling_info: TilingInfo, core_type: int = CORE_TYPE_CUBE):
+def _gen_mix_sub_json(
+    compile_info: CompileInfo, tiling_info: TilingInfo, core_type: int = CORE_TYPE_CUBE
+):
     """generate cube/vector json file in code_channel_mix
 
     Args:
@@ -235,28 +300,48 @@ def _gen_mix_sub_json(compile_info: CompileInfo, tiling_info: TilingInfo, core_t
     # AscendC only support cube:vector = 1:1 or 1:2, so mix_type should be kAicMix
     mix: str = "MIX"
     mix_type_info: str = "aic_mix" if core_type == CORE_TYPE_CUBE else "aiv_mix"
-    tvm_callback_cce_postproc(target, compile_info.kernel_name, tiling_info.block_num,
-                              0,
-                              atomic_args,
-                              json_info, json_info_tuple,
-                              core_type_info, kernel_list, kernel_list_deterministic, is_ffts_id_needed,
-                              subblocknum, mix, mix_type_info)
+    tvm_callback_cce_postproc(
+        target,
+        compile_info.kernel_name,
+        tiling_info.block_num,
+        0,
+        atomic_args,
+        json_info,
+        json_info_tuple,
+        core_type_info,
+        kernel_list,
+        kernel_list_deterministic,
+        is_ffts_id_needed,
+        subblocknum,
+        mix,
+        mix_type_info,
+    )
 
 
-def _gen_static_json_for_no_mix_v200(compile_info: CompileInfo, tiling_info: TilingInfo, kernel_type):
+def _gen_static_json_for_no_mix_v200(
+    compile_info: CompileInfo, tiling_info: TilingInfo, kernel_type
+):
     target = "cce_core"
     tvm_callback_cce_postproc(target, compile_info.kernel_name, tiling_info.block_num)
     # if enable_vector_core, json has _mix_aic suffix
     if get_current_build_config(enable_vector_core):
         kernel_meta_path = CommonUtility.get_kernel_meta_dir()
         kernel_name = compile_info.kernel_name
-        kernel_json_path = os.path.join(kernel_meta_path, kernel_name + '.json')
-        core_type_marker = "_mix_aic" if kernel_type is KernelMetaType.KERNEL_TYPE_AICORE else "_mix_aiv"
-        seperate_json_path = os.path.join(kernel_meta_path, kernel_name + f'{core_type_marker}.json')
+        kernel_json_path = os.path.join(kernel_meta_path, kernel_name + ".json")
+        core_type_marker = (
+            "_mix_aic"
+            if kernel_type is KernelMetaType.KERNEL_TYPE_AICORE
+            else "_mix_aiv"
+        )
+        seperate_json_path = os.path.join(
+            kernel_meta_path, kernel_name + f"{core_type_marker}.json"
+        )
         os.rename(seperate_json_path, kernel_json_path)
 
 
-def _gen_non_mix_sub_json(compile_info: CompileInfo, tiling_info: TilingInfo, sub_core_type: str):
+def _gen_non_mix_sub_json(
+    compile_info: CompileInfo, tiling_info: TilingInfo, sub_core_type: str
+):
     """generate json file if operator code only has cube or vector code in v220
 
     Args:
@@ -280,100 +365,150 @@ def _gen_non_mix_sub_json(compile_info: CompileInfo, tiling_info: TilingInfo, su
     # AscendC only support cube:vector = 1:1 or 1:2, so mix_type should be kAicMix
     mix: str = ""
     mix_type_info: str = ""
-    tvm_callback_cce_postproc(target, compile_info.kernel_name, tiling_info.block_num, 0,
-                              atomic_args, json_info, json_info_tuple,
-                              core_type_info, kernel_list, kernel_list_deterministic, is_ffts_id_needed,
-                              subblocknum, mix, mix_type_info)
+    tvm_callback_cce_postproc(
+        target,
+        compile_info.kernel_name,
+        tiling_info.block_num,
+        0,
+        atomic_args,
+        json_info,
+        json_info_tuple,
+        core_type_info,
+        kernel_list,
+        kernel_list_deterministic,
+        is_ffts_id_needed,
+        subblocknum,
+        mix,
+        mix_type_info,
+    )
 
 
-def _gen_static_json_for_mix_v200(compile_info: CompileInfo, tiling_info: TilingInfo, kernel_type):
+def _gen_static_json_for_mix_v200(
+    compile_info: CompileInfo, tiling_info: TilingInfo, kernel_type
+):
     set_soc_spec("AiCore")
     target = "cce_core"
     tvm_callback_cce_postproc(target, compile_info.kernel_name, tiling_info.block_num)
 
     kernel_meta_path = CommonUtility.get_kernel_meta_dir()
     kernel_name = compile_info.kernel_name
-    kernel_json_path = os.path.join(kernel_meta_path, kernel_name + '.json')
+    kernel_json_path = os.path.join(kernel_meta_path, kernel_name + ".json")
 
     # if enable_vector_core, json has _mix_aic suffix
     if get_current_build_config(enable_vector_core):
         core_type_marker = "_mix_aic"
-        seperate_json_path = os.path.join(kernel_meta_path, kernel_name + f'{core_type_marker}.json')
+        seperate_json_path = os.path.join(
+            kernel_meta_path, kernel_name + f"{core_type_marker}.json"
+        )
         os.rename(seperate_json_path, kernel_json_path)
 
     try:
-        with open(kernel_json_path, 'r') as fd:
+        with open(kernel_json_path, "r") as fd:
             js = json.load(fd)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err))
-    js['binFileName'] = kernel_name
-    js['kernelName'] = kernel_name
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err)
+        )
+    js["binFileName"] = kernel_name
+    js["kernelName"] = kernel_name
     if kernel_type is KernelMetaType.KERNEL_TYPE_MIX_AICORE:
-        js['coreType'] = 'MIX_AICORE'
+        js["coreType"] = "MIX_AICORE"
     elif kernel_type is KernelMetaType.KERNEL_TYPE_MIX_VECTOR_CORE:
-        js['coreType'] = 'MIX_VECTOR_CORE'
+        js["coreType"] = "MIX_VECTOR_CORE"
     else:
-        raise Exception(f'kernel_type is not support')
+        raise Exception("kernel_type is not support")
     try:
-        with open(kernel_json_path, 'w') as fd_write:
+        with open(kernel_json_path, "w") as fd_write:
             json.dump(js, fd_write, indent=2)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err))
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err)
+        )
 
 
-def _dynamic_kernel_list_to_json_for_kernel_type_one(compile_info: CompileInfo, \
-    kernel_name: str, tiling_key: str, enable_deterministic: bool, final_kernel_type: int):
+def _dynamic_kernel_list_to_json_for_kernel_type_one(
+    compile_info: CompileInfo,
+    kernel_name: str,
+    tiling_key: str,
+    enable_deterministic: bool,
+    final_kernel_type: int,
+):
     tiling_key_dict = {}
     if final_kernel_type != 0x1 and final_kernel_type != 0x2:
         tiling_key_dict = _get_kernel_type_dict(compile_info, tiling_key)
     if tiling_key in compile_info.tiling_key_deterministic:
-        tiling_key_dict["deterministic"] = compile_info.tiling_key_deterministic[tiling_key]
-        tiling_key_dict["kernelName"] = kernel_name + '_' + tiling_key
+        tiling_key_dict["deterministic"] = compile_info.tiling_key_deterministic[
+            tiling_key
+        ]
+        tiling_key_dict["kernelName"] = kernel_name + "_" + tiling_key
     elif enable_deterministic:
         if get_current_build_config("enable_deterministic_mode") == 1:
             tiling_key_dict["deterministic"] = "true"
-            tiling_key_dict["kernelName"] = kernel_name + '_' + tiling_key
+            tiling_key_dict["kernelName"] = kernel_name + "_" + tiling_key
         else:
             tiling_key_dict["deterministic"] = "false"
-            tiling_key_dict["kernelName"] = kernel_name + '_' + tiling_key
+            tiling_key_dict["kernelName"] = kernel_name + "_" + tiling_key
     else:
-        tiling_key_dict["kernelName"] = kernel_name + '_' + tiling_key
+        tiling_key_dict["kernelName"] = kernel_name + "_" + tiling_key
     return tiling_key_dict
 
 
-def _dynamic_kernel_list_to_json_for_kernel_type(compile_info: CompileInfo, \
-    kernel_name: str, tiling_key_list: list, enable_deterministic: bool, final_kernel_type: int):
+def _dynamic_kernel_list_to_json_for_kernel_type(
+    compile_info: CompileInfo,
+    kernel_name: str,
+    tiling_key_list: list,
+    enable_deterministic: bool,
+    final_kernel_type: int,
+):
     kernel_meta_path = CommonUtility.get_kernel_meta_dir()
-    dynamic_kernel_json_path = os.path.join(kernel_meta_path, kernel_name + '.json')
+    dynamic_kernel_json_path = os.path.join(kernel_meta_path, kernel_name + ".json")
     try:
-        with open(dynamic_kernel_json_path, 'r') as fd:
+        with open(dynamic_kernel_json_path, "r") as fd:
             js = json.load(fd)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err))
-    js['kernelName'] = kernel_name
-    js['kernelList'] = []
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err)
+        )
+    js["kernelName"] = kernel_name
+    js["kernelList"] = []
     if final_kernel_type != 0x1 and final_kernel_type != 0x2:
-        js['taskRation'] = "tilingKey"
+        js["taskRation"] = "tilingKey"
     for tiling_key in tiling_key_list:
-        tiling_key_dict = _dynamic_kernel_list_to_json_for_kernel_type_one(compile_info, \
-            kernel_name, tiling_key, enable_deterministic, final_kernel_type)
-        js['kernelList'].append(tiling_key_dict)
+        tiling_key_dict = _dynamic_kernel_list_to_json_for_kernel_type_one(
+            compile_info,
+            kernel_name,
+            tiling_key,
+            enable_deterministic,
+            final_kernel_type,
+        )
+        js["kernelList"].append(tiling_key_dict)
         if compile_info.tiling_key_group_map is not None:
             if tiling_key in compile_info.tiling_key_group_map.keys():
                 for tiling_key_slave in compile_info.tiling_key_group_map[tiling_key]:
-                    tiling_key_dict_slave = _dynamic_kernel_list_to_json_for_kernel_type_one(compile_info, \
-                        kernel_name, tiling_key_slave, enable_deterministic, final_kernel_type)
-                    js['kernelList'].append(tiling_key_dict_slave)
+                    tiling_key_dict_slave = (
+                        _dynamic_kernel_list_to_json_for_kernel_type_one(
+                            compile_info,
+                            kernel_name,
+                            tiling_key_slave,
+                            enable_deterministic,
+                            final_kernel_type,
+                        )
+                    )
+                    js["kernelList"].append(tiling_key_dict_slave)
 
     try:
-        with open(dynamic_kernel_json_path, 'w') as fd_write:
+        with open(dynamic_kernel_json_path, "w") as fd_write:
             os.chmod(dynamic_kernel_json_path, stat.S_IRUSR + stat.S_IWUSR)
             json.dump(js, fd_write, indent=2)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err))
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err)
+        )
 
 
-def _gen_dynamic_json_for_v200(compile_info: CompileInfo, tiling_info: TilingInfo, final_kernel_type: str):
+def _gen_dynamic_json_for_v200(
+    compile_info: CompileInfo, tiling_info: TilingInfo, final_kernel_type: str
+):
     """according to the kernel type of each tiling key, get the finel kernel type
     Args:
         compile_info (CompileInfo): compile info for generate .o and .json
@@ -387,31 +522,42 @@ def _gen_dynamic_json_for_v200(compile_info: CompileInfo, tiling_info: TilingInf
     tvm_callback_cce_postproc(target, compile_info.kernel_name, tiling_info.block_num)
     kernel_meta_path = CommonUtility.get_kernel_meta_dir()
     kernel_name = compile_info.kernel_name
-    kernel_json_path = os.path.join(kernel_meta_path, kernel_name + '.json')
+    kernel_json_path = os.path.join(kernel_meta_path, kernel_name + ".json")
 
     # if enable_vector_core, json has _mix_aic suffix
     if get_current_build_config(enable_vector_core):
         core_type_marker = "_mix_aic"
-        seperate_json_path = os.path.join(kernel_meta_path, kernel_name + f'{core_type_marker}.json')
+        seperate_json_path = os.path.join(
+            kernel_meta_path, kernel_name + f"{core_type_marker}.json"
+        )
         os.rename(seperate_json_path, kernel_json_path)
     try:
-        with open(kernel_json_path, 'r') as fd:
+        with open(kernel_json_path, "r") as fd:
             js = json.load(fd)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err))
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("read json file failed, reason is:", err)
+        )
 
-    js['binFileName'] = kernel_name
-    js['kernelName'] = kernel_name
-    js['coreType'] = final_kernel_type
+    js["binFileName"] = kernel_name
+    js["kernelName"] = kernel_name
+    js["coreType"] = final_kernel_type
 
     try:
-        with open(kernel_json_path, 'w') as fd_write:
+        with open(kernel_json_path, "w") as fd_write:
             json.dump(js, fd_write, indent=2)
     except Exception as err:
-        raise_tbe_python_err(TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err))
+        raise_tbe_python_err(
+            TBE_DEFAULT_PYTHON_ERROR_CODE, ("write json file failed, reason is:", err)
+        )
 
-    _dynamic_kernel_list_to_json_for_kernel_type(compile_info, compile_info.kernel_name, \
-            compile_info.tiling_key_list, compile_info.enable_deterministic, final_kernel_type)
+    _dynamic_kernel_list_to_json_for_kernel_type(
+        compile_info,
+        compile_info.kernel_name,
+        compile_info.tiling_key_list,
+        compile_info.enable_deterministic,
+        final_kernel_type,
+    )
 
 
 def _generate_final_json(compile_info: CompileInfo, tiling_info: TilingInfo):
@@ -427,8 +573,10 @@ def _generate_final_json(compile_info: CompileInfo, tiling_info: TilingInfo):
             final_kernel_type = final_kernel_type | 0x1
         elif kernel_type == KernelMetaType.KERNEL_TYPE_AIC_ONLY:
             final_kernel_type = final_kernel_type | 0x2
-        elif kernel_type == KernelMetaType.KERNEL_TYPE_MIX_AIV_HARD_SYNC or \
-            kernel_type == KernelMetaType.KERNEL_TYPE_MIX_AIV_1_0:
+        elif (
+            kernel_type == KernelMetaType.KERNEL_TYPE_MIX_AIV_HARD_SYNC
+            or kernel_type == KernelMetaType.KERNEL_TYPE_MIX_AIV_1_0
+        ):
             final_kernel_type = final_kernel_type | 0x4
         else:
             final_kernel_type = final_kernel_type | 0x8
@@ -447,32 +595,49 @@ def _generate_final_json(compile_info: CompileInfo, tiling_info: TilingInfo):
     elif final_kernel_type == 0x4 or final_kernel_type == 0x5:
         set_soc_spec("AiCore")
         _gen_mix_sub_json(compile_info, tiling_info, CORE_TYPE_VEC)
-        task_ration_str = f"0:1"
-        _gen_mix_json_from_seperate_json_for_kernel_type(compile_info.kernel_name, \
-            task_ration_str, CORE_TYPE_VEC, False)
+        task_ration_str = "0:1"
+        _gen_mix_json_from_seperate_json_for_kernel_type(
+            compile_info.kernel_name, task_ration_str, CORE_TYPE_VEC, False
+        )
         save_kernel_type("KERNEL_TYPE_MIX_AIC_1_2")
     else:
         set_soc_spec("AiCore")
         _gen_mix_sub_json(compile_info, tiling_info, CORE_TYPE_CUBE)
-        task_ration_str = f"1:0"
-        _gen_mix_json_from_seperate_json_for_kernel_type(compile_info.kernel_name, \
-            task_ration_str, CORE_TYPE_CUBE, False)
+        task_ration_str = "1:0"
+        _gen_mix_json_from_seperate_json_for_kernel_type(
+            compile_info.kernel_name, task_ration_str, CORE_TYPE_CUBE, False
+        )
         save_kernel_type("KERNEL_TYPE_MIX_AIC_1_2")
     if not tiling_info.static_shape_flag:
-        _dynamic_kernel_list_to_json_for_kernel_type(compile_info, compile_info.kernel_name, \
-            compile_info.tiling_key_list, compile_info.enable_deterministic, final_kernel_type)
+        _dynamic_kernel_list_to_json_for_kernel_type(
+            compile_info,
+            compile_info.kernel_name,
+            compile_info.tiling_key_list,
+            compile_info.enable_deterministic,
+            final_kernel_type,
+        )
 
 
-def _get_simt_type_in_staic(tiling_info: TilingInfo, compile_info: CompileInfo, obj_path):
+def _get_simt_type_in_staic(
+    tiling_info: TilingInfo, compile_info: CompileInfo, obj_path
+):
     if global_var_storage.get_variable("ascendc_enable_super_kernel") is True:
         return False
     if tiling_info.static_shape_flag is False:
-        LogUtil.print_compile_log(compile_info.kernel_name, f"non static scenarios \
-not support detecting SIMT type", AscendCLogLevel.LOG_INFO)
+        LogUtil.print_compile_log(
+            compile_info.kernel_name,
+            "non static scenarios \
+not support detecting SIMT type",
+            AscendCLogLevel.LOG_INFO,
+        )
         return False
     if compile_info.kernel_name.startswith("te_superkernel"):
-        LogUtil.print_compile_log(compile_info.kernel_name, f"current op is superkernel, \
-no need to detect SIMT type", AscendCLogLevel.LOG_INFO)
+        LogUtil.print_compile_log(
+            compile_info.kernel_name,
+            "current op is superkernel, \
+no need to detect SIMT type",
+            AscendCLogLevel.LOG_INFO,
+        )
         return False
     vec_marker = "_mix_aiv"
     if compile_info.no_set_kernel_type is False:
@@ -480,8 +645,10 @@ no need to detect SIMT type", AscendCLogLevel.LOG_INFO)
         if kernel_type in [KernelMetaType.KERNEL_TYPE_AIV_ONLY]:
             kernel_name = compile_info.get_kernel_func_name()
             return check_op_type_is_simt(obj_path, kernel_name)
-        elif kernel_type in [KernelMetaType.KERNEL_TYPE_MIX_AIC_1_1, \
-            KernelMetaType.KERNEL_TYPE_MIX_AIC_1_2]:
+        elif kernel_type in [
+            KernelMetaType.KERNEL_TYPE_MIX_AIC_1_1,
+            KernelMetaType.KERNEL_TYPE_MIX_AIC_1_2,
+        ]:
             kernel_name = compile_info.kernel_name + vec_marker
             return check_op_type_is_simt(obj_path, kernel_name)
     else:

@@ -13,9 +13,18 @@ from ..ascendc_constants import InferChannelParams
 
 
 class CompileInfoGeneratorConfig:
-    def __init__(self, pre_compile_type, set_default_code_channel, need_find_kernel_type, \
-                 enable_kernel_type_mix_n, enable_kernel_type_mix, enable_simt, dump_size_multiples, \
-                 chip_version, decode_mode_v310):
+    def __init__(
+        self,
+        pre_compile_type,
+        set_default_code_channel,
+        need_find_kernel_type,
+        enable_kernel_type_mix_n,
+        enable_kernel_type_mix,
+        enable_simt,
+        dump_size_multiples,
+        chip_version,
+        decode_mode_v310,
+    ):
         self.pre_compile_type = pre_compile_type
         self.set_default_code_channel = set_default_code_channel
         self.need_find_kernel_type = need_find_kernel_type
@@ -28,22 +37,23 @@ class CompileInfoGeneratorConfig:
 
 
 class CompileInfoGeneratorParams:
-    def __init__(self, kernel_file, kernel_func_name, op_info, compile_option_tuple, cmd_compiler):
+    def __init__(
+        self, kernel_file, kernel_func_name, op_info, compile_option_tuple, cmd_compiler
+    ):
         pass
 
 
 class CompileInfoGenerator(object):
-    def __init__(self, params: CompileInfoGeneratorParams, config: CompileInfoGeneratorConfig):
+    def __init__(
+        self, params: CompileInfoGeneratorParams, config: CompileInfoGeneratorConfig
+    ):
         pass
-
 
     def collect_by_precompile(self):
         pass
 
-
     def get_compile_info(self):
         pass
-
 
     def collect_by_tiling_compile(self, configuration, tiling_info):
         pass

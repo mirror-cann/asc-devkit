@@ -12,29 +12,46 @@
 """
 This module provides the functions about build_config.
 """
+
 import warnings
 import contextvars
 
-from .buildcfg_mapping import dynamic_shape, disable_vectorize, instrument_bound_checkers, \
-    ub_fusion_tensors, ub_fusion_buffers
+from .buildcfg_mapping import (
+    dynamic_shape,
+    disable_vectorize,
+    instrument_bound_checkers,
+    ub_fusion_tensors,
+    ub_fusion_buffers,
+)
 from .default_buildcfg import cce_default_static_build_config
 from .global_info import GlobalInfoContainer
 
-_build_cfg = contextvars.ContextVar("_build_cfg", default=cce_default_static_build_config.copy())
+_build_cfg = contextvars.ContextVar(
+    "_build_cfg", default=cce_default_static_build_config.copy()
+)
 
 
 def _check_kwargs(kwargs):
     if "tbe_debug_level" in kwargs.keys():
         if kwargs["tbe_debug_level"] not in (0, 1, 2):
-            raise (Exception("Unsupported tbe_debug_level: %s, it must be \
+            raise (
+                Exception(
+                    "Unsupported tbe_debug_level: %s, it must be \
                                one of (0, 1, 2) and the data type \
-                               must be int " % kwargs["tbe_debug_level"]))
+                               must be int "
+                    % kwargs["tbe_debug_level"]
+                )
+            )
 
     if "vector_fp_ceiling" in kwargs.keys():
         if kwargs["vector_fp_ceiling"] not in (0, 1, 2):
-            raise (Exception("Unsupported vector_fp_ceiling. it must be \
+            raise (
+                Exception(
+                    "Unsupported vector_fp_ceiling. it must be \
                                one of (0, 1, 2) and the data type \
-                               must be int."))
+                               must be int."
+                )
+            )
 
     if "compatible" in kwargs:
         if not isinstance(kwargs["compatible"], bool):
@@ -104,7 +121,7 @@ def _get_config_dict_without_tir(config_dict):
         value = config_dict.get(key)
 
         if key.startswith("tir."):
-            res[key[len("tir."):]] = value
+            res[key[len("tir.") :]] = value
 
     return res
 
@@ -140,7 +157,7 @@ def set_current_build_config(key, value):
     elif key in _build_cfg.get():
         _build_cfg.get()[key] = value
     elif ("tir." + key) in _build_cfg.get():
-        _build_cfg.get()['tir.' + key] = value
+        _build_cfg.get()["tir." + key] = value
 
     if key in GlobalInfoContainer.global_info:
         GlobalInfoContainer.global_info[key] = value

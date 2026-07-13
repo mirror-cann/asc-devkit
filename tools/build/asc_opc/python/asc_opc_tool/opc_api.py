@@ -12,12 +12,13 @@
 """
 opc api
 """
+
 import sys
 from asc_op_compile_base.common.utils import log as logger
 from opc import OpcOptionParser
 from op_compilation import OpCompilation
 from op_info_store import load_op_info_store
-from constant import (OpcOptions, OpcCompileMode)
+from constant import OpcOptions, OpcCompileMode
 
 
 def compile_op(op_params, build_options):
@@ -28,7 +29,9 @@ def compile_op(op_params, build_options):
     res = opt_parser.parse_build_options(build_options)
     if not res:
         logger.error("parse_build_options is failed.")
-    opt_parser.set_option(OpcOptions.OP_COMPILE_MODE, OpcCompileMode.SINGLE_OP_DICT_MODE)
+    opt_parser.set_option(
+        OpcOptions.OP_COMPILE_MODE, OpcCompileMode.SINGLE_OP_DICT_MODE
+    )
 
     if not opt_parser.check_input_params():
         logger.error("Opc tool compile failed.")

@@ -16,6 +16,7 @@ fusion build config manager
 # fusion build config dict
 _fusion_build_configs = {}
 
+
 def set_fusion_buildcfg(op_type, build_config):
     """
     set fusion build config
