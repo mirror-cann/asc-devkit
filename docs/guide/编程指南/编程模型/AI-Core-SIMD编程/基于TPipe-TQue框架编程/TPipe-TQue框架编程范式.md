@@ -50,7 +50,7 @@ for-loop {
     // CopyIn阶段
     {
         auto tensor = queIn.AllocTensor<half>();   // 从队列申请资源，长度1024
-        AscendC::DataCopy(tensor, gm, 1024);       // 将数据从GM搬运至VECIN
+        AscendC::DataCopy(tensor, gm, 1024);       // 将数据从GM搬运至UB（VECIN）
         queIn.EnQue(tensor);
     }
     // Compute阶段
@@ -64,7 +64,7 @@ for-loop {
     // CopyOut阶段
     {
         auto tensor = queOut.DeQue<half>();
-        AscendC::DataCopy(gmOut, tensor, 1024);   // 将数据从VECOUT搬运至GM
+        AscendC::DataCopy(gmOut, tensor, 1024);   // 将数据从UB（VECOUT）搬运至GM
         queOut.FreeTensor(tensor);                // 释放资源
     }
 }

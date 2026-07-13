@@ -2,7 +2,7 @@
 
 【优先级】高
 
-【描述】纯搬运类算子在执行时并不涉及实际vector计算，若存在冗余的vector指令，会导致算子整体执行时间变长。这种场景可以使用Ascend C针对纯搬运类算子提供的TQueBind接口，该接口可以将VECIN与VECOUT绑定，省略将数据从VECIN拷贝到VECOUT的步骤，从而避免vector的无谓消耗。
+【描述】纯搬运类算子在执行时并不涉及实际vector计算，若存在冗余的vector指令，会导致算子整体执行时间变长。这种场景可以使用Ascend C针对纯搬运类算子提供的TQueBind接口，该接口可以将UB（VECIN）与UB（VECOUT）绑定，省略将数据从UB（VECIN）拷贝到UB（VECOUT）的步骤，从而避免vector的无谓消耗。
 
 【反例】
 
@@ -23,7 +23,7 @@ template <typename ComputeT> class KernelExample {
              for (int j = 0; j < jLen; ++j) { 
                  ...
                  auto oLocal = QueO.AllocTensor<ComputeT>();
-                 DataCopy(oLocal, iLocal, size); // LocalTensor -> LocalTensor的DataCopy指令,以实现数据从VECIN到VECOUT的搬运
+                 DataCopy(oLocal, iLocal, size); // LocalTensor -> LocalTensor的DataCopy指令,以实现数据从UB（VECIN）到UB（VECOUT）的搬运
                  QueO.EnQue(oLocal);
 
                  auto oLocal = QueO.DeQue<ComputeT>();
@@ -50,7 +50,7 @@ template <typename ComputeT> class KernelExample {
 
 【正例】
 
-将LocalTensor -\> LocalTensor的DataCopy指令替换为TQueBind接口，减少将VECIN拷贝到VECOUT的步骤，从而避免了冗余拷贝。
+将LocalTensor -\> LocalTensor的DataCopy指令替换为TQueBind接口，减少将UB（VECIN）拷贝到UB（VECOUT）的步骤，从而避免了冗余拷贝。
 
 ```
 template <typename ComputeT> class KernelExample {
@@ -91,4 +91,4 @@ template <typename ComputeT> class KernelExample {
 
 ![](../../../figures/1.png)
 
-如上图所示，将反例中DataCopy指令替换为TQueBind之后有明显优化。由于省略了数据从VECIN拷贝到VECOUT的步骤，aiv\_vec\_time几乎缩减为0。
+如上图所示，将反例中DataCopy指令替换为TQueBind之后有明显优化。由于省略了数据从UB（VECIN）拷贝到UB（VECOUT）的步骤，aiv\_vec\_time几乎缩减为0。

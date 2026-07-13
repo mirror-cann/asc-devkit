@@ -10,7 +10,7 @@
 
 -   开启UnitFlag的约束条件
     -   UnitFlag功能仅支持Norm、IBShare、MDL三个模板。
-    -   开启UnitFlag功能时，不支持算子内同时存在CO1\(L0C\)搬出到Global Memory和A1\(L1\)搬出到Global Memory的两种流水。
+    -   开启UnitFlag功能时，不支持算子内同时存在L0C Buffer（CO1）搬出到Global Memory和L1 Buffer（A1）搬出到Global Memory的两种流水。
     -   开启UnitFlag功能时，若同时开启[L0C累加](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/Iterate.md)功能，不支持多次[Iterate](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/Iterate.md)计算、一次[GetTensorC](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/GetTensorC.md)输出。
 
 本案例的算子规格如下：

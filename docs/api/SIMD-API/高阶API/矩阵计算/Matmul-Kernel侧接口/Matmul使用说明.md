@@ -142,7 +142,7 @@ Kernel侧实现Matmul矩阵乘运算的步骤概括为：
 
     <a id="user-managed-co1"></a>
     
-    -   用户申请用于存放矩阵乘结果的逻辑位置CO1内存，调用一次或多次[Iterate](Iterate.md#li4843165185812)完成单次或多次迭代计算，在需要搬出计算结果时，调用[Fixpipe](../../../基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md)接口完成CO1上计算结果的搬运，然后释放申请的CO1内存。该方式下，用户可以灵活控制计算和搬运的节奏，根据实际需要，一次计算对应一次结果的搬出，或者将多次计算结果缓存在CO1内存中，再一次性搬出计算结果。
+    -   用户申请用于存放矩阵乘结果的L0C Buffer（CO1）内存，调用一次或多次[Iterate](Iterate.md#li4843165185812)完成单次或多次迭代计算，在需要搬出计算结果时，调用[Fixpipe](../../../基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md)接口完成L0C Buffer（CO1）上计算结果的搬运，然后释放申请的L0C Buffer（CO1）内存。该方式下，用户可以灵活控制计算和搬运的节奏，根据实际需要，一次计算对应一次结果的搬出，或者将多次计算结果缓存在L0C Buffer（CO1）内存中，再一次性搬出计算结果。
 
         在此种调用方式下，创建Matmul对象时，必须定义C矩阵的内存逻辑位置为TPosition::CO1、数据排布格式为CubeFormat::NZ、数据类型为float或int32\_t。
 
@@ -162,9 +162,9 @@ Kernel侧实现Matmul矩阵乘运算的步骤概括为：
         // 创建Matmul对象
         AscendC::Matmul<aType, bType, cType, biasType> mm;
 
-        // 用户提前申请CO1的内存l0cTensor
+        // 用户提前申请L0C Buffer（CO1）的内存l0cTensor
         TQue<TPosition::CO1, 1> CO1_;
-        // 128 * 1024为申请的CO1内存大小
+        // 128 * 1024为申请的L0C Buffer（CO1）内存大小
         GetTPipePtr()->InitBuffer(CO1_, 1, 128 * 1024);
         // L0cT为C矩阵的数据类型。
         // A矩阵数据类型是int8_t或int4b_t时，C矩阵的数据类型是int32_t。
@@ -174,7 +174,7 @@ Kernel侧实现Matmul矩阵乘运算的步骤概括为：
         // 将l0cTensor作为入参传入Iterate，矩阵乘结果输出到用户申请的l0cTensor上
         mm.Iterate(false, l0cTensor);
 
-        // 调用Fixpipe接口将CO1上的计算结果搬运到GM
+        // 调用Fixpipe接口将L0C Buffer（CO1）上的计算结果搬运到GM
         FixpipeParamsV220 params;
         params.nSize = nSize;
         params.mSize = mSize;
@@ -184,7 +184,7 @@ Kernel侧实现Matmul矩阵乘运算的步骤概括为：
         CO1_.template DeQue<L0cT>();
         Fixpipe<cType, L0cT, CFG_ROW_MAJOR>(gm[dstOffset], l0cTensor, params);
 
-        // 释放CO1内存
+        // 释放L0C Buffer（CO1）内存
         CO1_.FreeTensor(l0cTensor);
         ```
 
@@ -224,8 +224,8 @@ Kernel侧实现Matmul矩阵乘运算的步骤概括为：
 
 计算过程分为如下几步：
 
-1.  数据从GM搬到A1：DataCopy每次从矩阵A，搬出一个stepM\*baseM\*stepKa\*baseK的矩阵块a1，循环多次完成矩阵A的搬运；数据从GM搬到B1：DataCopy每次从矩阵B，搬出一个stepKb\*baseK\*stepN\*baseN的矩阵块b1，循环多次完成矩阵B的搬运；
-2.  数据从A1搬到A2：LoadData每次从矩阵块a1，搬出一个baseM \* baseK的矩阵块a0；数据从B1搬到B2，并完成转置：LoadData每次从矩阵块b1，搬出一个baseK \* baseN的矩阵块，并将其转置为baseN \* baseK的矩阵块b0；
+1.  数据从GM搬到L1 Buffer（A1）：DataCopy每次从矩阵A中搬出一个stepM\*baseM\*stepKa\*baseK的矩阵块a1，循环多次完成矩阵A的搬运；数据从GM搬到L1 Buffer（B1）：DataCopy每次从矩阵B中搬出一个stepKb\*baseK\*stepN\*baseN的矩阵块b1，循环多次完成矩阵B的搬运；
+2.  数据从L1 Buffer（A1）搬到L0A Buffer（A2）：LoadData每次从矩阵块a1，搬出一个baseM \* baseK的矩阵块a0；数据从L1 Buffer（B1）搬到L0B Buffer（B2），并完成转置：LoadData每次从矩阵块b1，搬出一个baseK \* baseN的矩阵块，并将其转置为baseN \* baseK的矩阵块b0；
 3.  矩阵乘：每次完成一个矩阵块a0 \* b0的计算，得到baseM \* baseN的矩阵块co1；
 4.  数据从矩阵块co1搬到矩阵块co2:DataCopy每次搬运一块baseM \* baseN的矩阵块co1到singleCoreM \* singleCoreN的矩阵块co2中；
 5.  重复2-4步骤，完成矩阵块a1 \* b1的计算；

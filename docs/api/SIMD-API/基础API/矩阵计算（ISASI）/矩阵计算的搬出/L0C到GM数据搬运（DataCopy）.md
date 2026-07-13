@@ -198,14 +198,14 @@ DataCopy矩阵搬出接口支持多种随路能力的组合，需要设置不同
     {
         return (numerator + denominator - 1) / denominator * denominator;
     }
-    // 将GM中的量化数据(quantAlphaGM)拷贝到C1（quantAlphaTensor）
+    // 将GM中的量化数据(quantAlphaGM)拷贝到L1 Buffer（C1）中的quantAlphaTensor
     uint16_t burstLen = CeilAlign(n * sizeof(uint64_t), 128) / AscendC::ONE_BLK_SIZE;
     AscendC::DataCopyParams intriParams{ 1, burstLen, 0, 0 };
     AscendC::DataCopy(quantAlphaTensor, quantAlphaGM, intriParams);
-    // 设置同步，确保量化数据拷贝到C1后，执行后续DataCopy指令
+    // 设置同步，确保量化数据拷贝到L1 Buffer（C1）后，执行后续DataCopy指令
     AscendC::SetFlag<AscendC::HardEvent::MTE2_FIX>(EVENT_ID0);
     AscendC::WaitFlag<AscendC::HardEvent::MTE2_FIX>(EVENT_ID0);
-    // 将C1中的量化数据（quantAlphaTensor）拷贝到C2PIPE2GM（fbTensor）
+    // 将L1 Buffer（C1）中的量化数据（quantAlphaTensor）拷贝到Fixpipe Buffer（C2PIPE2GM）中的fbTensor
     uint16_t fbufBurstLen = CeilAlign(deqDataSize, 128) / 128;
     AscendC::DataCopyParams dataCopyParams(1, fbufBurstLen, 0, 0);
     AscendC::DataCopy(fbTensor, quantAlphaTensor, dataCopyParams);

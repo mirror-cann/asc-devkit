@@ -48,7 +48,7 @@ private:
     __aicore__ inline void CopyInA1(uint32_t i)
     {
         LocalTensor<half> a1Local = inQueueA1.AllocTensor<half>();
-        // 左矩阵a1/a2分块载入A1
+        // 左矩阵a1/a2分块载入L1 Buffer（A1）
         Nd2NzParams dataCopyA1Params;
         dataCopyA1Params.ndNum = 1;
         dataCopyA1Params.nValue = baseM;
@@ -65,7 +65,7 @@ private:
     {
         LocalTensor<half> a1Local = inQueueA1.DeQue<half>();
         LocalTensor<half> a2Local = inQueueA2.AllocTensor<half>();
-        // 左矩阵a1/a2分块从A1->A2
+        // 左矩阵a1/a2分块从L1 Buffer（A1）搬运到L0A Buffer（A2）
         LoadData2dParams loadL0AParams;
         loadL0AParams.repeatTimes = baseM * baseK * sizeof(half) / 512;
         loadL0AParams.srcStride = 1;
@@ -77,7 +77,7 @@ private:
     __aicore__ inline void CopyInB1(uint32_t j)
     {
         LocalTensor<half> b1Local = inQueueB1.AllocTensor<half>();
-        // 右矩阵分块b1/b2载入B1
+        // 右矩阵分块b1/b2载入L1 Buffer（B1）
         Nd2NzParams dataCopyB1Params;
         dataCopyB1Params.ndNum = 1;
         dataCopyB1Params.nValue = baseK;
@@ -94,7 +94,7 @@ private:
     {
         LocalTensor<half> b1Local = inQueueB1.DeQue<half>();
         LocalTensor<half> b2Local = inQueueB2.AllocTensor<half>();
-        // 右矩阵分块b1/b2从B1->B2
+        // 右矩阵分块b1/b2从L1 Buffer（B1）搬运到L0B Buffer（B2）
         LoadData2dTransposeParams loadL0BParams;
         loadL0BParams.startIndex = 0;
         loadL0BParams.repeatTimes = baseK / nBlockSize;
@@ -198,7 +198,7 @@ private:
     {
         LocalTensor<half> b1Local = inQueueB1.DeQue<half>();
         LocalTensor<half> b2Local = inQueueB2.AllocTensor<half>();
-        // 右矩阵全部从B1->B2
+        // 右矩阵全部从L1 Buffer（B1）搬运到L0B Buffer（B2）
         LoadData2dTransposeParams loadL0BParams;
         loadL0BParams.startIndex = 0;
         loadL0BParams.repeatTimes = baseK / nBlockSize;
@@ -213,7 +213,7 @@ private:
     __aicore__ inline void CopyInA1(uint32_t i)
     {
         LocalTensor<half> a1Local = inQueueA1.AllocTensor<half>();
-        // 左矩阵a1/a2分块载入A1
+        // 左矩阵a1/a2分块载入L1 Buffer（A1）
         Nd2NzParams dataCopyA1Params;
         dataCopyA1Params.ndNum = 1;
         dataCopyA1Params.nValue = baseM;
@@ -230,7 +230,7 @@ private:
     {
         LocalTensor<half> a1Local = inQueueA1.DeQue<half>();
         LocalTensor<half> a2Local = inQueueA2.AllocTensor<half>();
-        // 左矩阵a1/a2分块从A1->A2
+        // 左矩阵a1/a2分块从L1 Buffer（A1）搬运到L0A Buffer（A2）
         LoadData2dParams loadL0AParams;
         loadL0AParams.repeatTimes = baseM * baseK * sizeof(half) / 512;
         loadL0AParams.srcStride = 1;

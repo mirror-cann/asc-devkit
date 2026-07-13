@@ -262,7 +262,7 @@ __aicore__ inline void LoadData(const LocalTensor<T>& dst, const LocalTensor<T>&
 - 当filterW为0且filterSizeW为false或者当filterH为0且filterSizeH为false时，该指令不会被执行。
 - 当目的地址位于L0A Buffer/L0B Buffer时，地址必须512字节对齐。当源地址位于L1 Buffer时，地址必须32字节对齐。指令执行占用的流水为PIPE_MTE1。
 <!-- npu="910,310p" id33 -->
-- LoadData3DParamsV1 cSize特性的开启，需要保证A1/B1中的feature map为4 channel对齐。
+- LoadData3DParamsV1 cSize特性的开启，需要保证L1 Buffer（A1/B1）中的feature map为4 channel对齐。
 <!-- end id33 -->
 
 - 数据连续排列顺序由目的操作数所在物理存储位置决定，具体约束如下：<a id="zh-cn_topic_0000002512171652_dst_layout"></a>
@@ -464,7 +464,7 @@ isSetPadding配置为true，表示在接口内部设置Pad属性描述（即padV
 
 要求输入的feature map和filter的格式是[NC1HWC0](../../矩阵计算分形介绍/关键分形格式详解.md#zh-cn_topic_0000002545089965_section217615301084)，其中C0是最低维度而且C0是固定值为16（对于u8/s8类型为32），C1=C/C0。
 
-为了简化场景，以下场景假设输入的feature map的channel为4，即Ci=4。输入feature maps在A1中的形状为（Hi,Wi,Ci），经过LoadData处理后在A2的数据形状为（Wo\*Ho, Hk\*Wk\*Ci）。其中Wo和Ho是卷积后输出的shape，Hk和Wk是filter的shape。
+为了简化场景，以下场景假设输入的feature map的channel为4，即Ci=4。输入feature maps在L1 Buffer（A1）中的形状为（Hi,Wi,Ci），经过LoadData处理后在L0A Buffer（A2）的数据形状为（Wo\*Ho, Hk\*Wk\*Ci）。其中Wo和Ho是卷积后输出的shape，Hk和Wk是filter的shape。
 
 直观地来看，img2col的过程就是filter在feature map上扫过，将对应feature map的数据展开成输出数据的每一行的过程。filter首先在W方向上滑动Wo步，然后在H方向上走一步然后重复以上过程，最终输出Wo\*Ho行数据。下图中红色和黄色的数据分别代表第一行和第二行。数字表示原始输入数据，filter和输出数据三者之间的关联关系。可以看到，LoadData首先在输入数据的Ci维度搬运对应于00的4个数，然后搬运对应于01的四个数，最终这一行的大小为Hk\*Wk\*Ci即3\*3\*4=36个数。
 
@@ -488,7 +488,7 @@ isSetPadding配置为true，表示在接口内部设置Pad属性描述（即padV
 
 ![](../../../../../figures/卷积计算分块.png "卷积计算分块")
 
-对于A2的feature map来说有两种方案，水平分块和垂直分块。分别对应参数中repeatMode的0和1。
+对于L0A Buffer（A2）中的feature map来说有两种方案，水平分块和垂直分块。分别对应参数中repeatMode的0和1。
 
 注：下图中的分形矩阵大小为4x4，实际应该为16x16（对于u8/s8类型为16x32）
 

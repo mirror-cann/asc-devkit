@@ -151,7 +151,7 @@ C API文档目录，整体使用时可以引入asc_simd.h，C API列表如下：
 | [asc_copy_l12l0b_sparse](cube_datamove/asc_copy_l12l0b_sparse.md)                                                           | 用于搬运存放在L1 Buffer里的512B大小的稠密权重矩阵到L0B Buffer里，同时读取128B大小的索引矩阵用于稠密矩阵的稀疏化。 |
 | [asc_copy_l12l0b_trans](cube_datamove/asc_copy_l12l0b_trans/asc_copy_l12l0b_trans.md)                                                                | 该接口实现带转置的2D格式数据从L1 Buffer到L0B Buffer的加载。 |
 | [asc_copy_l12l0a_trans](cube_datamove/asc_copy_l12l0a_trans.md)                                                             | 该接口实现带转置的2D格式数据从L1 Buffer到L0A Buffer的加载。 |
-| [asc_set_l0c_copy_params](cube_datamove/asc_set_l0c_copy_params.md)                                                         | DataCopy（CO1->GM、CO1->A1）过程中进行随路格式转换（NZ格式转换为ND格式）时，通过调用该接口设置格式转换的相关配置。 |
+| [asc_set_l0c_copy_params](cube_datamove/asc_set_l0c_copy_params.md)                                                         | DataCopy从L0C Buffer搬运到Global Memory或L1 Buffer过程中进行随路格式转换（NZ格式转换为ND格式）时，通过调用该接口设置格式转换的相关配置。 |
 | [asc_set_l0c_copy_prequant](cube_datamove/asc_set_l0c_copy_prequant.md)                                                     | 数据搬运过程中进行随路量化时，通过调用该接口设置量化流程中的标量量化参数。 |
 | <cann-filter npu_type = "950"> [asc_copy_l12l0a_mx](cube_datamove/asc_copy_l12l0a_mx.md)                                    | 将Mx scale矩阵从L1 Buffer搬运到L0A Buffer。</cann-filter> |
 | <cann-filter npu_type = "950"> [asc_copy_l12l0b_mx](cube_datamove/asc_copy_l12l0b_mx.md)                                    | 将Mx scale矩阵从L1 Buffer搬运到L0B Buffer。</cann-filter> |

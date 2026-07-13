@@ -36,8 +36,8 @@
 | singleCoreM | 单核内M轴shape大小，以元素为单位。 | SpecialBasicBlock |
 | singleCoreN | 单核内N轴shape大小，以元素为单位。 | SpecialBasicBlock |
 | singleCoreK | 单核内K轴shape大小，以元素为单位。 | SpecialBasicBlock |
-| stepM | 左矩阵在A1中缓存的bufferM方向上baseM的倍数。 | SpecialBasicBlock |
-| stepN | 右矩阵在B1中缓存的bufferN方向上baseN的倍数。 | SpecialBasicBlock |
+| stepM | 左矩阵在L1 Buffer（A1）中缓存的bufferM方向上baseM的倍数。 | SpecialBasicBlock |
+| stepN | 右矩阵在L1 Buffer（B1）中缓存的bufferN方向上baseN的倍数。 | SpecialBasicBlock |
 | baseMN | baseM*baseN的大小。 | SpecialBasicBlock |
 | singleCoreMN | singleCoreM*singleCoreN的大小。 | SpecialBasicBlock |
 | enUnitFlag | 开启UnitFlag功能，使计算与搬运流水并行，提高性能。Norm, IBShare下默认开启，MDL下默认不开启。参数取值如下：<br>false：不开启UnitFlag功能。<br>true：开启UnitFlag功能。<!-- npu="950" id64 --><br><br>注意：对于Ascend 950PR/Ascend 950DT的MxMatmul场景，仅在NORM/MDL模板、A和scaleA不转置、 B和scaleB转置、C为ND格式，输出到GM场景下，开启UnitFlag功能有性能收益。<!-- end id64 --><!-- npu="9030" id8 --><br><br>Kirin 9030仅支持false。<!-- end id8 --> | MDL、Norm、IBShare |

@@ -68,7 +68,7 @@ que.FreeTensor(a2);</pre>
 >    -   支持AllocTensor/EnQue/DeQue/FreeTensor接口。必须严格按照AllocTensor-\>EnQue-\>DeQue-\>FreeTensor的操作执行完整的生命周期，且配对使用。
 >    -   但TSCM并不需要支持TQueBind的所有接口。不支持VacantInQue/HasTensorInQue/GetTensorCountInQue/HasIdleBuffer。
 >-   由于TSCM分配的Buffer中存储着同步事件eventID，且该结构伴随着与Cube类高阶API如（Matmul高阶API，宏函数调用方式\)共同使用，故同一个TPosition上TSCM Buffer的数量与硬件的同步事件eventID以及Matmul对象数量有关。
->    **TSCM从VECIN发起的Buffer块数量与Matmul对象数量之和最大为10个。**
+>    **L1 Buffer（TSCM）从UB（VECIN）发起的Buffer块数量与Matmul对象数量之和最大为10个。**
 >    **不允许申请的TSCM Buffer超出规格限制，超出规格可能会引起未定义行为。**
 
 如下是一个简单的使用示例：
@@ -76,8 +76,8 @@ que.FreeTensor(a2);</pre>
 ```cpp
 TSCM<TPosition::VECIN, 1> tscm;
 for () {
-    auto scmTensor = tscm.AllocTensor<float>(); // 在搬运数据从UB->TSCM前分配Buffer
-    DataCopy(scmTensor, ubLocal, 1024); // 将UB数据搬运至TSCM，准备用于Matmul计算
+    auto scmTensor = tscm.AllocTensor<float>(); // 在搬运数据从UB->L1 Buffer（TSCM）前分配Buffer
+    DataCopy(scmTensor, ubLocal, 1024); // 将UB数据搬运至L1 Buffer（TSCM），准备用于Matmul计算
     tscm.EnQue(scmTensor); //搬运完成在Matmul计算前，EnQue/DeQue
     LocalTensor<float> scmLocal = tscm.DeQue<float>();
     mm.SetTensorA(scmLocal);

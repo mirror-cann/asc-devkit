@@ -2,7 +2,7 @@
 
 【优先级】高
 
-【描述】算子实现中对矩阵乘结果进行量化计算时，可将量化参数搬运到C2PIPE2GM（Fixpipe Buffer）上，调用一次Fixpipe接口实现矩阵乘结果的量化计算。相比于将矩阵乘的结果从CO1（L0C）搬运到GM，再从GM搬运到UB，在UB进行量化计算的过程，数据搬运的次数更少，内存使用效率更高。
+【描述】算子实现中对矩阵乘结果进行量化计算时，可将量化参数搬运到Fixpipe Buffer（C2PIPE2GM）上，调用一次Fixpipe接口实现矩阵乘结果的量化计算。相比于将矩阵乘的结果从L0C Buffer（CO1）搬运到GM，再从GM搬运到UB，在UB进行量化计算的过程，数据搬运的次数更少，内存使用效率更高。
 
 >[!NOTE]说明 
 >本性能优化手段仅针对Atlas A2 训练系列产品/Atlas A2 推理系列产品生效。
@@ -17,12 +17,12 @@
 
 对矩阵乘结果进行量化计算的过程如下：
 
--   将矩阵乘的结果从CO1搬运到workspace上；
+-   将矩阵乘的结果从L0C Buffer（CO1）搬运到workspace上；
 -   再从workspace搬运到UB上；
 -   将量化参数搬运到UB上，和矩阵乘的结果一起在UB上进行一系列量化计算；
 -   将最终量化结果从UB搬运到GM上。
 
-相比于正确示例多增加了CO1-\>workspace、workspace-\>UB的搬运过程和量化的vector计算。
+相比于正确示例多增加了L0C Buffer（CO1）-\>workspace、workspace-\>UB的搬运过程和量化的vector计算。
 
 ```
 ...
@@ -132,7 +132,7 @@ private:
         fixpipeParams.ndNum = 1;
         fixpipeParams.srcNdStride = 0;
         fixpipeParams.dstNdStride = 0;
-        // 将矩阵乘的计算结果从CO1搬运到workspace
+        // 将矩阵乘的计算结果从L0C Buffer（CO1）搬运到workspace
         Fixpipe(xGm, c1Local, fixpipeParams);
         outQueueCO1.FreeTensor(c1Local);
     }

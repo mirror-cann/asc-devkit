@@ -399,12 +399,12 @@
 </td>
 <td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p34761253144318"><a name="p34761253144318"></a><a name="p34761253144318"></a>基础数据搬运</p>
 </td>
-<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p19476205324319"><a name="p19476205324319"></a><a name="p19476205324319"></a>不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p19476205324319"><a name="p19476205324319"></a><a name="p19476205324319"></a>不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row154764536438"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p16476353104318"><a name="p16476353104318"></a><a name="p16476353104318"></a>增强数据搬运</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p9476165310436"><a name="p9476165310436"></a><a name="p9476165310436"></a>不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p9476165310436"><a name="p9476165310436"></a><a name="p9476165310436"></a>不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row2476185317437"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p4476253144320"><a name="p4476253144320"></a><a name="p4476253144320"></a>切片数据搬运</p>
@@ -416,14 +416,14 @@
 <p id="p5975136163216"><a name="p5975136163216"></a><a name="p5975136163216"></a>随路转换NZ2ND搬运</p>
 <p id="p1397583616325"><a name="p1397583616325"></a><a name="p1397583616325"></a>随路量化激活搬运</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1047612538437"><a name="p1047612538437"></a><a name="p1047612538437"></a>随路转换ND2NZ搬运不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1047612538437"><a name="p1047612538437"></a><a name="p1047612538437"></a>随路转换ND2NZ搬运不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row747635344315"><td class="cellrowborder" valign="top" width="29.9%" headers="mcps1.2.4.1.1 "><p id="p547665354313"><a name="p547665354313"></a><a name="p547665354313"></a>基础API &gt; 数据搬运</p>
 </td>
 <td class="cellrowborder" valign="top" width="44.25%" headers="mcps1.2.4.1.2 "><p id="p4476135364311"><a name="p4476135364311"></a><a name="p4476135364311"></a>Copy、DataCopyPad、SetPadValue</p>
 </td>
-<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p8476165374314"><a name="p8476165374314"></a><a name="p8476165374314"></a>DataCopyPad不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p8476165374314"><a name="p8476165374314"></a><a name="p8476165374314"></a>DataCopyPad不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row114761053204315"><td class="cellrowborder" valign="top" width="29.9%" headers="mcps1.2.4.1.1 "><p id="p2047615394311"><a name="p2047615394311"></a><a name="p2047615394311"></a>基础API &gt; 同步控制 &gt; 核内同步</p>
@@ -599,14 +599,14 @@
 </td>
 <td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p183725521010"><a name="p183725521010"></a><a name="p183725521010"></a>基础数据搬运</p>
 </td>
-<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p337175521010"><a name="p337175521010"></a><a name="p337175521010"></a>不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p337175521010"><a name="p337175521010"></a><a name="p337175521010"></a>不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row7708104819220"><td class="cellrowborder" rowspan="4" valign="top" width="29.630000000000003%" headers="mcps1.2.4.1.1 "><p id="p5381155151015"><a name="p5381155151015"></a><a name="p5381155151015"></a>基础API &gt; 数据搬运</p>
 </td>
 <td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p137125510109"><a name="p137125510109"></a><a name="p137125510109"></a>增强数据搬运</p>
 </td>
-<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p19371551101"><a name="p19371551101"></a><a name="p19371551101"></a>不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p19371551101"><a name="p19371551101"></a><a name="p19371551101"></a>不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row7708948725"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p637175591011"><a name="p637175591011"></a><a name="p637175591011"></a>切片数据搬运</p>
@@ -618,12 +618,12 @@
 <p id="p9371855171017"><a name="p9371855171017"></a><a name="p9371855171017"></a>随路转换NZ2ND搬运</p>
 <p id="p13381755131011"><a name="p13381755131011"></a><a name="p13381755131011"></a>随路量化激活搬运</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p938195512100"><a name="p938195512100"></a><a name="p938195512100"></a>随路转换ND2NZ搬运不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p938195512100"><a name="p938195512100"></a><a name="p938195512100"></a>随路转换ND2NZ搬运不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row370817486213"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p103895521010"><a name="p103895521010"></a><a name="p103895521010"></a>Copy、DataCopyPad、SetPadValue</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1338185515107"><a name="p1338185515107"></a><a name="p1338185515107"></a>DataCopyPad不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1338185515107"><a name="p1338185515107"></a><a name="p1338185515107"></a>DataCopyPad不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row177081648422"><td class="cellrowborder" valign="top" width="29.630000000000003%" headers="mcps1.2.4.1.1 "><p id="p113885518108"><a name="p113885518108"></a><a name="p113885518108"></a>基础API &gt; 同步控制 &gt; 核内同步</p>
@@ -820,12 +820,12 @@
 </td>
 <td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p398811358414"><a name="p398811358414"></a><a name="p398811358414"></a>基础数据搬运</p>
 </td>
-<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p11988335184112"><a name="p11988335184112"></a><a name="p11988335184112"></a>不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p11988335184112"><a name="p11988335184112"></a><a name="p11988335184112"></a>不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row19881535134113"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1995517203185"><a name="p1995517203185"></a><a name="p1995517203185"></a>增强数据搬运</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p172481414205"><a name="p172481414205"></a><a name="p172481414205"></a>不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p172481414205"><a name="p172481414205"></a><a name="p172481414205"></a>不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row831243535112"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1095612051813"><a name="p1095612051813"></a><a name="p1095612051813"></a>切片数据搬运</p>
@@ -835,7 +835,7 @@
 </tr>
 <tr id="row49881535124115"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p179561920111815"><a name="p179561920111815"></a><a name="p179561920111815"></a>随路转换ND2NZ搬运</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p595642041818"><a name="p595642041818"></a><a name="p595642041818"></a>不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p595642041818"><a name="p595642041818"></a><a name="p595642041818"></a>不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row76231552182019"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p11956102019184"><a name="p11956102019184"></a><a name="p11956102019184"></a>随路转换NZ2ND搬运</p>
@@ -852,7 +852,7 @@
 </td>
 <td class="cellrowborder" valign="top" width="44.519999999999996%" headers="mcps1.2.4.1.2 "><p id="p16956102014187"><a name="p16956102014187"></a><a name="p16956102014187"></a>Copy、DataCopyPad、SetPadValue</p>
 </td>
-<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p2702434251"><a name="p2702434251"></a><a name="p2702434251"></a>DataCopyPad不支持VECIN/VECCALC/VECOUT -&gt; TSCM通路的数据搬运。</p>
+<td class="cellrowborder" valign="top" width="25.85%" headers="mcps1.2.4.1.3 "><p id="p2702434251"><a name="p2702434251"></a><a name="p2702434251"></a>DataCopyPad不支持UB（VECIN/VECCALC/VECOUT）-&gt;L1 Buffer（TSCM）通路的数据搬运。</p>
 </td>
 </tr>
 <tr id="row6778713162710"><td class="cellrowborder" valign="top" width="29.630000000000003%" headers="mcps1.2.4.1.1 "><p id="p20882139162713"><a name="p20882139162713"></a><a name="p20882139162713"></a>基础API &gt; 同步控制 &gt; 核内同步</p>

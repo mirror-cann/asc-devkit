@@ -356,7 +356,7 @@ For Ascend 950PR/DT products:
 **Format**: Two layers. Single-parameter constraints are described inline in the parameter table (e.g., alignment, value range); multi-parameter constraints and multi-interface combination constraints in a separate "Constraints" paragraph.
 
 **Requirements**:
-- **Location constraints** must specify TPosition enum value, with parenthetical explanation of physical location
+- **Location constraints** must prioritize the physical storage location, followed by the TPosition enum value in parentheses
 - **NOP constraints** must specify avoidance scenarios and performance impact
 - **Fractal granularity** must specify minimum computation block size and invalid data layout rules
 - **Synchronization constraints** must provide explicit threshold formula and code snippet

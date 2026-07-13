@@ -30,7 +30,7 @@
 
 设置[LoadData（卷积数据搬运）](../矩阵数据搬入至L0-Buffer/LoadData_3D.md)接口所需的L1 Buffer（TPosition: A1/B1）边界值。
 
-如果[LoadData（卷积数据搬运）](../矩阵数据搬入至L0-Buffer/LoadData_3D.md)指令在处理源操作数时，源操作数在A1/B1上的地址超出设置的边界，则会从A1/B1起始地址开始读取数据。
+如果[LoadData（卷积数据搬运）](../矩阵数据搬入至L0-Buffer/LoadData_3D.md)指令在处理源操作数时，源操作数在L1 Buffer（A1/B1）上的地址超出设置的边界，则会从L1 Buffer（A1/B1）起始地址开始读取数据。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 

@@ -2,7 +2,7 @@
 
 【优先级】高  __
 
-【描述】算子实现中对矩阵乘的结果进行累加时（比如矩阵A1 \* B1 + A2 \* B2...结果的累加），可将前一次矩阵乘的结果暂存在CO1（L0C）上，调用Mmad接口实现矩阵乘结果累加。相比于每次矩阵乘的结果从CO1搬运到GM上，再搬运到UB上进行累加计算，可减少数据搬运的次数，提升内存使用效率。
+【描述】算子实现中对矩阵乘的结果进行累加时（比如矩阵A1 \* B1 + A2 \* B2...结果的累加），可将前一次矩阵乘的结果暂存在L0C Buffer（CO1）上，调用Mmad接口实现矩阵乘结果累加。相比于每次矩阵乘的结果从L0C Buffer（CO1）搬运到GM上，再搬运到UB上进行累加计算，可减少数据搬运的次数，提升内存使用效率。
 
 **图1**  反例数据流图<a name="fig1739115131882"></a>  
 ![](../../../figures/反例数据流图-80.png "反例数据流图-80")
@@ -14,11 +14,11 @@
 
 优化前，算子进行2次矩阵乘结果累加的过程如下：
 
--   将前一次矩阵乘的计算结果从CO1搬运到workspace上，再从workspace搬运到UB上；
+-   将前一次矩阵乘的计算结果从L0C Buffer（CO1）搬运到workspace上，再从workspace搬运到UB上；
 -   下一次矩阵乘计算重复完成上述步骤将结果搬运到UB上；
 -   在UB上将2次矩阵乘的结果相加。
 
-当需要累加n次矩阵乘时，分别增加了n次CO1-\>workspace、workspace-\>UB搬运以及n次Add运算。
+当需要累加n次矩阵乘时，分别增加了n次L0C Buffer（CO1）-\>workspace、workspace-\>UB搬运以及n次Add运算。
 
 ```
 ...
@@ -133,7 +133,7 @@ private:
         fixpipeParams.ndNum = 1;
         fixpipeParams.srcNdStride = 0;
         fixpipeParams.dstNdStride = 0;
-        // 将矩阵乘的计算结果从CO1搬运到workspace
+        // 将矩阵乘的计算结果从L0C Buffer（CO1）搬运到workspace
         Fixpipe(xGm, c1Local, fixpipeParams);
         outQueueCO1.EnQue<float>(c1Local);
     }
@@ -170,7 +170,7 @@ private:
         fixpipeParams.ndNum = 1;
         fixpipeParams.srcNdStride = 0;
         fixpipeParams.dstNdStride = 0;
-        // 将矩阵乘的计算结果从CO1搬运到workspace
+        // 将矩阵乘的计算结果从L0C Buffer（CO1）搬运到workspace
         Fixpipe(xGm, c1Local, fixpipeParams);
         outQueueCO1.FreeTensor(c1Local);
     }

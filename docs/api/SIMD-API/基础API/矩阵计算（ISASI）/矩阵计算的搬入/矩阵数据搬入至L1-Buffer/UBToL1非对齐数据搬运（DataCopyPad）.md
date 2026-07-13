@@ -143,7 +143,7 @@ AscendC::LocalTensor<half> srcLocal(AscendC::TPosition::VECIN, ubAddr, srcElemCo
 AscendC::LocalTensor<half> dstLocal(AscendC::TPosition::TSCM, tscmAddr, dstElemCount);
 
 AscendC::DataCopyExtParams copyParams;
-// VECIN->GM阶段搬运3个连续传输数据块。
+// UB（VECIN）->GM阶段搬运3个连续传输数据块。
 copyParams.blockCount = 3;
 // 每个连续传输数据块包含6个DataBlock。
 copyParams.blockLen = 6 * 32;
