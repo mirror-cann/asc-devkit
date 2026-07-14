@@ -2,10 +2,9 @@
 
 ## Overview
 
-This example introduces the usage of reduction interfaces in multiple scenarios, including `ReduceRepeat` and `ReduceRepeat<MIN>` combined with `GetReduceRepeatMaxMinSpr` to obtain the global minimum value and its index. These interfaces perform reduction operations (find maximum, minimum, or sum) on all elements within each repeat of a LocalTensor, with reduction results stored in the destination LocalTensor.
+This example introduces the usage of reduction interfaces  `ReduceRepeat` in multiple scenarios. These interfaces perform reduction operations (find maximum, minimum, or sum) on all elements within each repeat of a LocalTensor, with reduction results stored in the destination LocalTensor.
 
 Note: `ReduceRepeat` is the renamed API after CANN 9.1.0. For CANN 9.0.0 and earlier versions, use `WholeReduceMax`, `WholeReduceMin`, `WholeReduceSum`.
-Note: `GetReduceRepeatMaxMinSpr` is the renamed API after CANN 9.0.0. For CANN 8.5.0 and earlier versions, use `GetReduceMaxMinCount`.
 
 ## Supported Products and CANN Versions
 
@@ -53,14 +52,7 @@ This example selects different reduction scenarios through the compilation param
 - Implementation: `ReduceRepeat<ReduceType::SUM, float>(dstLocal, srcLocal, mask=64, repeat=32, 1, 1, 8)`
 - Description: Each repeat independently sums, outputting 32 sum results total
 
-**Scenario 4: `ReduceRepeat<MIN>` + `GetReduceRepeatMaxMinSpr`**
-
-- Input: [1, 1024] half elements, mask per-bit mode (uint64_t[2] all ones), repeat=8 (1024/128)
-- Output: [1, 16] half elements (only first 2 elements valid: global minimum + global minimum index)
-- Implementation: First call `ReduceRepeat<ReduceType::MIN, half>(dstLocal, srcLocal, mask=uint64_t[2]{-1,-1}, repeat=8, 1, 1, 8)`, then call `GetReduceRepeatMaxMinSpr<half>(val, idx)` to obtain the global minimum and its index, synchronize vector to scalar computation through `SetFlag<HardEvent::V_S>` / `WaitFlag<HardEvent::V_S>`
-- Description: `ReduceRepeat<MIN>` computes local minimums for 8 repeats separately, `GetReduceRepeatMaxMinSpr` reads the global minimum across all repeats and its index position in the source data from hardware registers, writing results to the first two elements of dstLocal
-
-**Scenario 5: `ReduceRepeat<SUM>` unaligned scenario**
+**Scenario 4: `ReduceRepeat<SUM>` unaligned scenario**
 
 - Input: [13, 57] float elements (13 rows x 57 columns, column count 57x4 bytes=228 bytes, not 32-byte aligned)
 - Output: [1, 13] float elements (sum result for each row)
@@ -79,7 +71,7 @@ This example selects different reduction scenarios through the compilation param
 </table>
 
 <table border="2">
-<caption>Table 2: Example Input/Output Specifications (Scenario 2/4)</caption>
+<caption>Table 2: Example Input/Output Specifications (Scenario 2)</caption>
 <tr><td rowspan="2" align="center">Example Input</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
 <tr><td align="center">x</td><td align="center">[1, 1024]</td><td align="center">half</td><td align="center">ND</td></tr>
 <tr><td rowspan="2" align="center">Example Output</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
@@ -97,7 +89,7 @@ This example selects different reduction scenarios through the compilation param
 </table>
 
 <table border="2">
-<caption>Table 4: Example Input/Output Specifications (Scenario 5)</caption>
+<caption>Table 4: Example Input/Output Specifications (Scenario 4)</caption>
 <tr><td rowspan="2" align="center">Example Input</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
 <tr><td align="center">x</td><td align="center">[13, 57]</td><td align="center">float</td><td align="center">ND</td></tr>
 <tr><td rowspan="2" align="center">Example Output</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
@@ -148,7 +140,7 @@ Run the following steps in the root directory of this example to build and run t
   |--------|--------|-------------|
   | `CMAKE_ASC_RUN_MODE` | `npu` (default), `cpu`, `sim` | Run mode: NPU execution, CPU debug, NPU simulation |
   | `CMAKE_ASC_ARCHITECTURES` | `dav-2201` (default), `dav-3510` | NPU architecture: dav-2201 corresponds to Atlas A2 Training Series Products/Atlas A2 Inference Series Products and Atlas A3 Training Series Products/Atlas A3 Inference Series Products, dav-3510 corresponds to Ascend 950PR/Ascend 950DT |
-  | `SCENARIO_NUM` | `1` (default), `2`, `3`, `4`, `5` | Scenario number: 1 (`ReduceRepeat<MAX>`), 2 (`ReduceRepeat<MIN>`), 3 (`ReduceRepeat<SUM>`), 4 (`ReduceRepeat<MIN>`+`GetReduceRepeatMaxMinSpr`), 5 (unaligned `ReduceRepeat<SUM>`) |
+  | `SCENARIO_NUM` | `1` (default), `2`, `3`, `4` | Scenario number: 1 (`ReduceRepeat<MAX>`), 2 (`ReduceRepeat<MIN>`), 3 (`ReduceRepeat<SUM>`), 4 (unaligned `ReduceRepeat<SUM>`) |
 
 - Execution result
 
