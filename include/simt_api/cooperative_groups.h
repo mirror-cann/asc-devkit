@@ -163,17 +163,17 @@ struct _tile_helpers {
 template <unsigned int>
 struct tile_helpers;
 template <>
-struct tile_helpers<32> : public _tile_helpers<1, 0xFFFFFFFF, 0x1F, 5> {};  // thread_block_tile<32> config
+struct tile_helpers<32> : public _tile_helpers<1, 0xFFFFFFFF, 0x1F, 5> {}; // thread_block_tile<32> config
 template <>
-struct tile_helpers<16> : public _tile_helpers<2, 0x0000FFFF, 0x0F, 4> {};  // thread_block_tile<16> config
+struct tile_helpers<16> : public _tile_helpers<2, 0x0000FFFF, 0x0F, 4> {}; // thread_block_tile<16> config
 template <>
-struct tile_helpers<8> : public _tile_helpers<4, 0x000000FF, 0x07, 3> {};   // thread_block_tile<8> config
+struct tile_helpers<8> : public _tile_helpers<4, 0x000000FF, 0x07, 3> {}; // thread_block_tile<8> config
 template <>
-struct tile_helpers<4> : public _tile_helpers<8, 0x0000000F, 0x03, 2> {};   // thread_block_tile<4> config
+struct tile_helpers<4> : public _tile_helpers<8, 0x0000000F, 0x03, 2> {}; // thread_block_tile<4> config
 template <>
-struct tile_helpers<2> : public _tile_helpers<16, 0x00000003, 0x01, 1> {};  // thread_block_tile<2> config
+struct tile_helpers<2> : public _tile_helpers<16, 0x00000003, 0x01, 1> {}; // thread_block_tile<2> config
 template <>
-struct tile_helpers<1> : public _tile_helpers<32, 0x00000001, 0x00, 0> {};  // thread_block_tile<1> config
+struct tile_helpers<1> : public _tile_helpers<32, 0x00000001, 0x00, 0> {}; // thread_block_tile<1> config
 
 template <unsigned int Size>
 struct _is_valid_thread_block_tile_size {

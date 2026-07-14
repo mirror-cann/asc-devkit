@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #ifndef INCLUDE_SIMT_API_ASC_BF16_H
 #define INCLUDE_SIMT_API_ASC_BF16_H
@@ -298,41 +298,43 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t __lows2bfloat162(const bfloat
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float2 __bfloat1622float2(const bfloat16x2_t x);
 
 #ifndef __NPU_COMPILER_INTERNAL_PURE_SIMT__
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_add(__ubuf__ bfloat16_t *address, bfloat16_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_add(__ubuf__ bfloat16_t* address, bfloat16_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_add(__ubuf__ bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_add(__ubuf__ bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_add(__gm__ bfloat16_t *address, bfloat16_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_add(__gm__ bfloat16_t* address, bfloat16_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_add(__gm__ bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_add(__gm__ bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_sub(__ubuf__ bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_sub(__ubuf__ bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_sub(__gm__ bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_sub(__gm__ bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_exch(__ubuf__ bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_exch(__ubuf__ bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_exch(__gm__ bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_exch(__gm__ bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_max(__ubuf__ bfloat16_t *address, bfloat16_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_max(__ubuf__ bfloat16_t* address, bfloat16_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_max(__ubuf__ bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_max(__ubuf__ bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_max(__gm__ bfloat16_t *address, bfloat16_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_max(__gm__ bfloat16_t* address, bfloat16_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_max(__gm__ bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_max(__gm__ bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_min(__ubuf__ bfloat16_t *address, bfloat16_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_min(__ubuf__ bfloat16_t* address, bfloat16_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_min(__ubuf__ bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_min(__ubuf__ bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_min(__gm__ bfloat16_t *address, bfloat16_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_min(__gm__ bfloat16_t* address, bfloat16_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_min(__gm__ bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_min(__gm__ bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_cas(__ubuf__ bfloat16x2_t *address, bfloat16x2_t compare, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_cas(
+    __ubuf__ bfloat16x2_t* address, bfloat16x2_t compare, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_cas(__gm__ bfloat16x2_t *address, bfloat16x2_t compare, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_cas(
+    __gm__ bfloat16x2_t* address, bfloat16x2_t compare, bfloat16x2_t val);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_ldcg(__gm__ bfloat16_t* address);
 
@@ -352,23 +354,24 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_stwt(__gm__ bfloat16x2_t* address
 
 #else
 #ifndef ASCENDC_CPU_DEBUG
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_add(bfloat16_t *address, bfloat16_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_add(bfloat16_t* address, bfloat16_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_add(bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_add(bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_sub(bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_sub(bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_exch(bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_exch(bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_max(bfloat16_t *address, bfloat16_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_max(bfloat16_t* address, bfloat16_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_max(bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_max(bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_min(bfloat16_t *address, bfloat16_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_atomic_min(bfloat16_t* address, bfloat16_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_min(bfloat16x2_t *address, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_min(bfloat16x2_t* address, bfloat16x2_t val);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_cas(bfloat16x2_t *address, bfloat16x2_t compare, bfloat16x2_t val);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_atomic_cas(
+    bfloat16x2_t* address, bfloat16x2_t compare, bfloat16x2_t val);
 #endif
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_ldcg(bfloat16_t* address);
@@ -390,19 +393,25 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void asc_stwt(bfloat16x2_t* address, bfloa
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_shfl(bfloat16_t var, int32_t src_lane, int32_t width = warpSize);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl(bfloat16x2_t var, int32_t src_lane, int32_t width = warpSize);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl(
+    bfloat16x2_t var, int32_t src_lane, int32_t width = warpSize);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_shfl_up(bfloat16_t var, uint32_t delta, int32_t width = warpSize);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl_up(bfloat16x2_t var, uint32_t delta, int32_t width = warpSize);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl_up(
+    bfloat16x2_t var, uint32_t delta, int32_t width = warpSize);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_shfl_down(bfloat16_t var, uint32_t delta, int32_t width = warpSize);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_shfl_down(
+    bfloat16_t var, uint32_t delta, int32_t width = warpSize);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl_down(bfloat16x2_t var, uint32_t delta, int32_t width = warpSize);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl_down(
+    bfloat16x2_t var, uint32_t delta, int32_t width = warpSize);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_shfl_xor(bfloat16_t var, int32_t lane_mask, int32_t width = warpSize);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16_t asc_shfl_xor(
+    bfloat16_t var, int32_t lane_mask, int32_t width = warpSize);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl_xor(bfloat16x2_t var, int32_t lane_mask, int32_t width = warpSize);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t asc_shfl_xor(
+    bfloat16x2_t var, int32_t lane_mask, int32_t width = warpSize);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline bfloat16x2_t make_bfloat162(bfloat16_t x, bfloat16_t y);
 
@@ -516,7 +525,8 @@ static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t __hdivx2(const bfloat16x2_t x
 
 static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t __habsx2(const bfloat16x2_t x);
 
-static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t __hfmax2(const bfloat16x2_t x, const bfloat16x2_t y, const bfloat16x2_t z);
+static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t
+__hfmax2(const bfloat16x2_t x, const bfloat16x2_t y, const bfloat16x2_t z);
 
 static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t __hnegx2(const bfloat16x2_t x);
 
@@ -534,7 +544,8 @@ static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16_t __hmax_nan(const bfloat16_t x, 
 
 static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16_t __hmin_nan(const bfloat16_t x, const bfloat16_t y);
 
-static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16_t __hfma_relu(const bfloat16_t x, const bfloat16_t y, const bfloat16_t z);
+static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16_t
+__hfma_relu(const bfloat16_t x, const bfloat16_t y, const bfloat16_t z);
 
 static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t __hmaxx2(const bfloat16x2_t x, const bfloat16x2_t y);
 
@@ -544,9 +555,11 @@ static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t __hmaxx2_nan(const bfloat16x2
 
 static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t __hminx2_nan(const bfloat16x2_t x, const bfloat16x2_t y);
 
-static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t __hfmax2_relu(const bfloat16x2_t x, const bfloat16x2_t y, const bfloat16x2_t z);
+static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t
+__hfmax2_relu(const bfloat16x2_t x, const bfloat16x2_t y, const bfloat16x2_t z);
 
-static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t __hcmadd(const bfloat16x2_t x, const bfloat16x2_t y, const bfloat16x2_t z);
+static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t
+__hcmadd(const bfloat16x2_t x, const bfloat16x2_t y, const bfloat16x2_t z);
 
 #include "impl/simt_api/asc_bf16_impl.h"
 
@@ -557,4 +570,4 @@ static __SIMT_DEVICE_FUNCTIONS_DECL__ bfloat16x2_t __hcmadd(const bfloat16x2_t x
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_ASC_BF16_H__
 #endif
 
-#endif  // INCLUDE_SIMT_API_ASC_BF16_H
+#endif // INCLUDE_SIMT_API_ASC_BF16_H

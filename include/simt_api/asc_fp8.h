@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #ifndef INCLUDE_SIMT_API_ASC_FP8_H
 #define INCLUDE_SIMT_API_ASC_FP8_H
@@ -57,9 +57,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float2 __e4m3x22float2(const float8_e4m3x2
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float2 __e5m2x22float2(const float8_e5m2x2_t x);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline __asc_fp8x2_storage_t
-__asc_cvt_float2_to_fp8x2(const float2 x, const __asc_saturation_t saturate,
-                          const __asc_fp8_interpretation_t fp8_interpretation);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline __asc_fp8x2_storage_t __asc_cvt_float2_to_fp8x2(
+    const float2 x, const __asc_saturation_t saturate, const __asc_fp8_interpretation_t fp8_interpretation);
 
 #ifndef __NPU_COMPILER_INTERNAL_PURE_SIMT__
 #include "impl/simt_api/asc_fp8_impl.h"
@@ -72,4 +71,4 @@ __asc_cvt_float2_to_fp8x2(const float2 x, const __asc_saturation_t saturate,
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_ASC_FP8_H__
 #endif
 
-#endif  // INCLUDE_SIMT_API_ASC_FP8_H
+#endif // INCLUDE_SIMT_API_ASC_FP8_H

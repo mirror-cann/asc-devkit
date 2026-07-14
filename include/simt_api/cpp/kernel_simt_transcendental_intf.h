@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #ifndef ASCENDC_MODULE_SIMT_TRANSCENDENTAL_INTERFACE_H
 #define ASCENDC_MODULE_SIMT_TRANSCENDENTAL_INTERFACE_H
@@ -101,7 +101,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Asinh(T x);
  *         c the cosine of the x.
  */
 template <typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sincos(T x, T &s, T &c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sincos(T x, T& s, T& c);
 
 /**
  * The trigonometric sine,cosine of an angle*pi
@@ -110,7 +110,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sincos(T x, T &s, T &c);
  *         c the cosine of the x*pi.
  */
 template <typename T>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sincospi(T x, T &s, T &c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void Sincospi(T x, T& s, T& c);
 
 template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Exp(T x);
@@ -149,7 +149,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Rsqrt(T x);
  *         exp: the exponent of the x
  */
 template <typename T, typename U>
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline T Frexp(T x, U &exp);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline T Frexp(T x, U& exp);
 
 /**
  * The value of x multiplied by 2 exp.
@@ -169,12 +169,12 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Ldexp(T x, U exp);
 template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Hypot(T x, T y);
 
- /**
-  * The reciprocal of square root of (x^2+y^2)
-  * @param   x  a float value.
-  *          y  a float value.
-  * @return The reciprocal of square root of (x^2+y^2)
-  */
+/**
+ * The reciprocal of square root of (x^2+y^2)
+ * @param   x  a float value.
+ *          y  a float value.
+ * @return The reciprocal of square root of (x^2+y^2)
+ */
 template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Rhypot(T x, T y);
 
@@ -369,7 +369,6 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Erfinv(T x);
 template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Erfcinv(T x);
 
-
 /**
  * Calculate the scaled complementary error function of the input x.
  * @param x a value
@@ -392,7 +391,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Erfcx(T x);
  *      if x is Inf, return Inf;
  *      if x is -Inf, return Nan;
  */
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Tgamma(T x);
 
 /**
@@ -405,7 +404,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Tgamma(T x);
  *      if x is Inf, return Inf;
  *      if x is -Inf, return Inf;
  */
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Lgamma(T x);
 
 /**
@@ -418,7 +417,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Lgamma(T x);
  *      if x is Inf, return Inf;
  *      if x is -Inf, return Inf;
  */
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CylBesselI0(T x);
 
 /**
@@ -431,7 +430,7 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CylBesselI0(T x);
  *      if x is Inf, return Inf;
  *      if x is -Inf, return -Inf;
  */
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CylBesselI1(T x);
 
 /**
@@ -443,11 +442,11 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline T CylBesselI1(T x);
  *      if x is Inf, return 1;
  *      if x is -Inf, return 0;
  */
-template<typename T>
+template <typename T>
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline T Normcdf(T x);
 
-}  // namespace Simt
-}  // namespace AscendC
+} // namespace Simt
+} // namespace AscendC
 
 #include "impl/simt_api/cpp/kernel_simt_transcendental_intf_impl.h"
-#endif  // ASCENDC_MODULE_SIMT_TRANSCENDENTAL_INTERFACE_H
+#endif // ASCENDC_MODULE_SIMT_TRANSCENDENTAL_INTERFACE_H

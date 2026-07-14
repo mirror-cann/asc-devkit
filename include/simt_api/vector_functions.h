@@ -30,8 +30,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline ushort2 make_ushort2(unsigned short x, uns
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline ushort3 make_ushort3(unsigned short x, unsigned short y, unsigned short z);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline ushort4 make_ushort4(unsigned short x, unsigned short y, unsigned short z,
-                                                           unsigned short w);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline ushort4 make_ushort4(
+    unsigned short x, unsigned short y, unsigned short z, unsigned short w);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline char2 make_char2(signed char x, signed char y);
 
@@ -43,8 +43,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline uchar2 make_uchar2(unsigned char x, unsign
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline uchar3 make_uchar3(unsigned char x, unsigned char y, unsigned char z);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline uchar4 make_uchar4(unsigned char x, unsigned char y, unsigned char z,
-                                                         unsigned char w);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline uchar4 make_uchar4(
+    unsigned char x, unsigned char y, unsigned char z, unsigned char w);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float2 make_float2(float x, float y);
 
@@ -62,23 +62,23 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline ulong2 make_ulong2(unsigned long int x, un
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline ulong3 make_ulong3(unsigned long int x, unsigned long int y, unsigned long int z);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulong4 make_ulong4(unsigned long int x, unsigned long int y, unsigned long int z,
-                                                         unsigned long int w);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulong4 make_ulong4(
+    unsigned long int x, unsigned long int y, unsigned long int z, unsigned long int w);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline longlong2 make_longlong2(long long int x, long long int y);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline longlong3 make_longlong3(long long int x, long long int y, long long int z);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline longlong4 make_longlong4(long long int x, long long int y, long long int z,
-                                                               long long int w);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline longlong4 make_longlong4(
+    long long int x, long long int y, long long int z, long long int w);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong2 make_ulonglong2(unsigned long long int x, unsigned long long int y);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong3 make_ulonglong3(unsigned long long int x, unsigned long long int y,
-                                                                 unsigned long long int z);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong3 make_ulonglong3(
+    unsigned long long int x, unsigned long long int y, unsigned long long int z);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong4 make_ulonglong4(unsigned long long int x, unsigned long long int y,
-                                                                 unsigned long long int z, unsigned long long int w);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline ulonglong4 make_ulonglong4(
+    unsigned long long int x, unsigned long long int y, unsigned long long int z, unsigned long long int w);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline int2 make_int2(int x, int y);
 

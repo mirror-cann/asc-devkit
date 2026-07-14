@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #ifndef INCLUDE_SIMT_API_MATH_FUNCTIONS_H
 #define INCLUDE_SIMT_API_MATH_FUNCTIONS_H
@@ -53,10 +53,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float fabsf(float x);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float normcdfinvf(float x);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float modff(float x, float *n);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float modff(float x, float* n);
 #ifndef __NPU_COMPILER_INTERNAL_PURE_SIMT__
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float modff(float x, __ubuf__ float *n);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float modff(float x, __gm__ float *n);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float modff(float x, __ubuf__ float* n);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float modff(float x, __gm__ float* n);
 #endif
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline bool isfinite(float x);
@@ -67,10 +67,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline bool isinf(float x);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float fdimf(float x, float y);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float remquof(float x, float y, int *quo);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float remquof(float x, float y, int* quo);
 #ifndef __NPU_COMPILER_INTERNAL_PURE_SIMT__
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float remquof(float x, float y, __ubuf__ int *quo);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float remquof(float x, float y, __gm__ int *quo);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float remquof(float x, float y, __ubuf__ int* quo);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float remquof(float x, float y, __gm__ int* quo);
 #endif
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float fmodf(float x, float y);
@@ -123,28 +123,28 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float sinpif(float x);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float asinhf(float x);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, float *s, float *c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, float* s, float* c);
 #ifndef __NPU_COMPILER_INTERNAL_PURE_SIMT__
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, float *s, __ubuf__ float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, float *s, __gm__ float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __ubuf__ float *s, float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __ubuf__ float *s, __ubuf__ float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __ubuf__ float *s, __gm__ float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __gm__ float *s, float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __gm__ float *s, __ubuf__ float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __gm__ float *s, __gm__  float *c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, float* s, __ubuf__ float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, float* s, __gm__ float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __ubuf__ float* s, float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __ubuf__ float* s, __ubuf__ float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __ubuf__ float* s, __gm__ float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __gm__ float* s, float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __gm__ float* s, __ubuf__ float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincosf(float x, __gm__ float* s, __gm__ float* c);
 #endif
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, float *s, float *c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, float* s, float* c);
 #ifndef __NPU_COMPILER_INTERNAL_PURE_SIMT__
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, float *s, __ubuf__ float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, float *s, __gm__ float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __ubuf__ float *s, float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __ubuf__ float *s, __ubuf__ float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __ubuf__ float *s, __gm__ float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __gm__ float *s, float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __gm__ float *s, __ubuf__ float *c);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __gm__ float *s, __gm__ float *c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, float* s, __ubuf__ float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, float* s, __gm__ float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __ubuf__ float* s, float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __ubuf__ float* s, __ubuf__ float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __ubuf__ float* s, __gm__ float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __gm__ float* s, float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __gm__ float* s, __ubuf__ float* c);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline void sincospif(float x, __gm__ float* s, __gm__ float* c);
 #endif
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float exp2f(float x);
@@ -153,10 +153,10 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float exp10f(float x);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float expm1f(float x);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float frexpf(float x, int *exp);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float frexpf(float x, int* exp);
 #ifndef __NPU_COMPILER_INTERNAL_PURE_SIMT__
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float frexpf(float x, __ubuf__ int *exp);
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline float frexpf(float x, __gm__ int *exp);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float frexpf(float x, __ubuf__ int* exp);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline float frexpf(float x, __gm__ int* exp);
 #endif
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline float ldexpf(float x, int exp);
@@ -237,13 +237,15 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline long long int llabs(long long int x);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline long long int llmax(const long long int x, const long long int y);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long int ullmax(const unsigned long long int x, const unsigned long long int y);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long int ullmax(
+    const unsigned long long int x, const unsigned long long int y);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int umax(const unsigned int x, const unsigned int y);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline long long int llmin(const long long int x, const long long int y);
 
-__SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long int ullmin(const unsigned long long int x, const unsigned long long int y);
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned long long int ullmin(
+    const unsigned long long int x, const unsigned long long int y);
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int umin(const unsigned int x, const unsigned int y);
 
@@ -343,4 +345,4 @@ static __SIMT_DEVICE_FUNCTIONS_DECL__ unsigned char min(unsigned char x, unsigne
 #undef __UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_MATH_FUNCTIONS_H__
 #endif
 
-#endif  // INCLUDE_SIMT_API_MATH_FUNCTIONS_H
+#endif // INCLUDE_SIMT_API_MATH_FUNCTIONS_H

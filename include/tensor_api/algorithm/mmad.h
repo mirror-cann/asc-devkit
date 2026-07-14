@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 #if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
 #error "mmad.h cannot be used with compile flag --enable-simt enabled."
@@ -18,9 +18,9 @@
 #endif
 
 /*!
-* \file mmad.h
-* \brief
-*/
+ * \file mmad.h
+ * \brief
+ */
 #ifndef INCLUDE_TENSOR_API_ALGORITHM_MMAD_H
 #define INCLUDE_TENSOR_API_ALGORITHM_MMAD_H
 
@@ -48,7 +48,8 @@ __aicore__ inline void Mmad(
  * @param filter : Right input tensor.
  * @param bias : Bias tensor.
  */
-template <typename AtomType, typename DstTensor, typename FmTensor, typename FilterTensor, typename BiasTensor,
+template <
+    typename AtomType, typename DstTensor, typename FmTensor, typename FilterTensor, typename BiasTensor,
     Std::enable_if_t<IsAttrTensorV<BiasTensor>, int> Enable>
 __aicore__ inline void Mmad(
     const MmadAtom<AtomType>& atomMmad, const DstTensor& dst, const FmTensor& fm, const FilterTensor& filter,
@@ -69,8 +70,8 @@ __aicore__ inline constexpr auto MakeMmad(const MmadOperationType& mmadOperation
 template <typename MmadOperationType, typename MmadTraitType>
 __aicore__ inline constexpr auto MakeMmad(const MmadOperationType& mmadOperation, const MmadTraitType& mmadTrait);
 
-}
-}
+} // namespace Te
+} // namespace AscendC
 
 #endif // INCLUDE_TENSOR_API_ALGORITHM_MMAD_H
 
