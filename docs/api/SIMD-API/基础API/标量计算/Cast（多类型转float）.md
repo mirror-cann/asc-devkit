@@ -2,15 +2,27 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-| 产品 | 是否支持 |
-| ---- | -------- |
-| <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT | √</cann-filter> |
-| <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √</cann-filter> |
-| <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √</cann-filter> |
-| <cann-filter npu-type = "310b">Atlas 200I/500 A2 推理产品 | x</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品AI Core | x</cann-filter> |
-| <cann-filter npu-type = "310p">Atlas 推理系列产品Vector Core | x</cann-filter> |
-| <cann-filter npu-type = "910">Atlas 训练系列产品 | x</cann-filter> |
+<!-- npu="950" id17 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id17 -->
+<!-- npu="A3" id18 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id18 -->
+<!-- npu="910b" id19 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id19 -->
+<!-- npu="310b" id20 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id20 -->
+<!-- npu="310p" id21 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id21 -->
+<!-- npu="310p" id22 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id22 -->
+<!-- npu="910" id23 -->
+- Atlas 训练系列产品：不支持
+<!-- end id23 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -20,30 +32,25 @@
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
-<cann-filter npu-type = "910b,A3">
+<!-- npu="910b,A3" id9 -->
 以下函数原型仅支持：
 
-<cann-filter npu-type = "910b">
- 
+<!-- npu="910b" id1 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+<!-- end id1 -->
  
-</cann-filter>
- 
-<cann-filter npu-type = "A3">
- 
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品
- 
-</cann-filter>
+<!-- end id2 -->
 
 bfloat16\_t类型转换为float类型：
 
 ```cpp
 __aicore__ inline float Cast(const bfloat16_t& bVal)
 ```
+<!-- end id9 -->
 
-</cann-filter>
-
-<cann-filter npu-type = "950">
+<!-- npu="950" id3 -->
 以下函数原型仅支持Ascend 950PR/Ascend 950DT：
 
 支持多种数据类型转换为float类型：
@@ -57,21 +64,18 @@ template <typename T, typename U = float,
         void>>
 __aicore__ constexpr inline U Cast(T bVal)
 ```
-
-</cann-filter>
+<!-- end id3 -->
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
-<cann-filter npu-type = "950">
-
+<!-- npu="950" id4 -->
 **表1**  模板参数说明
 
 | 参数名 | 描述 |
 | ------ | ------ |
 | T | 操作数数据类型。 |
 | U | 返回值数据类型。 |
-
-</cann-filter>
+<!-- end id4 -->
 
 **表2**  接口参数说明
 
@@ -83,11 +87,19 @@ __aicore__ constexpr inline U Cast(T bVal)
 
 - 支持的操作数数据类型如下：
 
-  - <cann-filter npu-type = "950">Ascend 950PR/Ascend 950DT，支持fp4x2_e2m1_t、fp4x2_e1m2_t、hifloat8_t、fp8_e5m2_t、fp8_e4m3fn_t、bfloat16_t。</cann-filter>
-  - <cann-filter npu-type = "A3">Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持bfloat16_t。</cann-filter>
-  - <cann-filter npu-type = "910b">Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持bfloat16_t。</cann-filter>
+  <!-- npu="950" id5 -->
+  - Ascend 950PR/Ascend 950DT，支持fp4x2_e2m1_t、fp4x2_e1m2_t、hifloat8_t、fp8_e5m2_t、fp8_e4m3fn_t、bfloat16_t。
+  <!-- end id5 -->
+  <!-- npu="A3" id6 -->
+  - Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持bfloat16_t。
+  <!-- end id6 -->
+  <!-- npu="910b" id7 -->
+  - Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持bfloat16_t。
+  <!-- end id7 -->
 
-- <cann-filter npu-type = "950">fp4x2_e1m2_t和fp4x2_e2m1_t类型为了满足1byte数据大小，构造时由两个四位标量数据拼接生成。转换时，被转换的是fp4x2_e1m2_t和fp4x2_e2m1_t标量数据中低位4bit的值，即[0:3]位。</cann-filter>
+<!-- npu="950" id8 -->
+- fp4x2_e1m2_t和fp4x2_e2m1_t类型为了满足1byte数据大小，构造时由两个四位标量数据拼接生成。转换时，被转换的是fp4x2_e1m2_t和fp4x2_e2m1_t标量数据中低位4bit的值，即[0:3]位。
+<!-- end id8 -->
 
 - 支持的返回值数据类型为float。
 
