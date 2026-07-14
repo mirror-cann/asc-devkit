@@ -21,7 +21,9 @@
 #ifndef IMPL_TENSOR_API_ARCH_VECTOR_UB_TO_GM_ROUTING_H
 #define IMPL_TENSOR_API_ARCH_VECTOR_UB_TO_GM_ROUTING_H
 
-#include "impl/tensor_api/arch/vector/ub_to_gm/copy_impl/data_copy.h"
+#include "impl/tensor_api/arch/vector/ub_to_gm/copy_impl/dn2dn.h"
+#include "impl/tensor_api/arch/vector/ub_to_gm/copy_impl/nd2nd.h"
+#include "impl/tensor_api/arch/vector/ub_to_gm/copy_impl/nz2nz.h"
 
 namespace AscendC {
 namespace Te {
@@ -41,17 +43,17 @@ struct CopyUB2GMRouting {
 
 template <uint32_t Version>
 struct CopyUB2GMRouting<Version, NDExtLayoutPtn, NDExtLayoutPtn> {
-    using type = DataCopyUB2GM;
+    using type = CopyUbufToGmAlignV2ND;
 };
 
 template <uint32_t Version>
 struct CopyUB2GMRouting<Version, DNExtLayoutPtn, DNExtLayoutPtn> {
-    using type = DataCopyUB2GM;
+    using type = CopyUbufToGmAlignV2DN;
 };
 
 template <uint32_t Version>
 struct CopyUB2GMRouting<Version, NZLayoutPtn, NZLayoutPtn> {
-    using type = DataCopyUB2GM;
+    using type = CopyUbufToGmAlignV2NZ;
 };
 
 } // namespace Te

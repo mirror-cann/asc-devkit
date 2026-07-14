@@ -237,6 +237,83 @@ public:
 #endif
     }
 
+    template <typename T, typename U>
+    __aicore__ inline static constexpr void CheckGm2UBDataType()
+    {
+        using srcDataType = typename U::elementType;
+        using dstDataType = typename T::elementType;
+
+#if defined(__NPU_ARCH__) && __NPU_ARCH__ == 3510
+        static_assert(Std::is_one_of_v<
+                          Std::tuple<dstDataType, srcDataType>, Std::tuple<__ubuf__ half, __gm__ half>,
+                          Std::tuple<__ubuf__ bfloat16_t, __gm__ bfloat16_t>, Std::tuple<__ubuf__ float, __gm__ float>,
+                          Std::tuple<__ubuf__ int8_t, __gm__ int8_t>, Std::tuple<__ubuf__ uint8_t, __gm__ uint8_t>,
+                          Std::tuple<__ubuf__ int16_t, __gm__ int16_t>, Std::tuple<__ubuf__ uint16_t, __gm__ uint16_t>,
+                          Std::tuple<__ubuf__ int32_t, __gm__ int32_t>, Std::tuple<__ubuf__ uint32_t, __gm__ uint32_t>,
+                          Std::tuple<__ubuf__ int64_t, __gm__ int64_t>, Std::tuple<__ubuf__ uint64_t, __gm__ uint64_t>,
+                          Std::tuple<__ubuf__ fp4x2_e1m2_t, __gm__ fp4x2_e1m2_t>,
+                          Std::tuple<__ubuf__ fp4x2_e2m1_t, __gm__ fp4x2_e2m1_t>,
+                          Std::tuple<__ubuf__ fp8_e5m2_t, __gm__ fp8_e5m2_t>,
+                          Std::tuple<__ubuf__ fp8_e4m3fn_t, __gm__ fp8_e4m3fn_t>,
+                          Std::tuple<__ubuf__ hifloat8_t, __gm__ hifloat8_t>
+                          >,
+                      "The data type is not supported.");
+#endif
+    }
+
+    template <typename T, typename U>
+    __aicore__ inline static constexpr void CheckUB2GMDataType()
+    {
+        using srcDataType = typename U::elementType;
+        using dstDataType = typename T::elementType;
+
+#if defined(__NPU_ARCH__) && __NPU_ARCH__ == 3510
+        static_assert(Std::is_one_of_v<
+                          Std::tuple<dstDataType, srcDataType>, Std::tuple<__gm__ half, __ubuf__ half>,
+                          Std::tuple<__gm__ bfloat16_t, __ubuf__ bfloat16_t>, Std::tuple<__gm__ float, __ubuf__ float>,
+                          Std::tuple<__gm__ int8_t, __ubuf__ int8_t>, Std::tuple<__gm__ uint8_t, __ubuf__ uint8_t>,
+                          Std::tuple<__gm__ int16_t, __ubuf__ int16_t>, Std::tuple<__gm__ uint16_t, __ubuf__ uint16_t>,
+                          Std::tuple<__gm__ int32_t, __ubuf__ int32_t>, Std::tuple<__gm__ uint32_t, __ubuf__ uint32_t>,
+                          Std::tuple<__gm__ int64_t, __ubuf__ int64_t>, Std::tuple<__gm__ uint64_t, __ubuf__ uint64_t>,
+                          Std::tuple<__gm__ fp4x2_e1m2_t, __ubuf__ fp4x2_e1m2_t>,
+                          Std::tuple<__gm__ fp4x2_e2m1_t, __ubuf__ fp4x2_e2m1_t>,
+                          Std::tuple<__gm__ fp8_e5m2_t, __ubuf__ fp8_e5m2_t>,
+                          Std::tuple<__gm__ fp8_e4m3fn_t, __ubuf__ fp8_e4m3fn_t>,
+                          Std::tuple<__gm__ hifloat8_t, __ubuf__ hifloat8_t>
+                          >,
+                      "The data type is not supported.");
+#endif
+    }
+
+    template <typename T, typename U>
+    __aicore__ inline static constexpr void CheckUB2L1DataType()
+    {
+        using srcDataType = typename U::elementType;
+        using dstDataType = typename T::elementType;
+
+#if defined(__NPU_ARCH__) && __NPU_ARCH__ == 3510
+        static_assert(Std::is_one_of_v<
+                          Std::tuple<dstDataType, srcDataType>, Std::tuple<__cbuf__ half, __ubuf__ half>,
+                          Std::tuple<__cbuf__ bfloat16_t, __ubuf__ bfloat16_t>,
+                          Std::tuple<__cbuf__ float, __ubuf__ float>,
+                          Std::tuple<__cbuf__ int8_t, __ubuf__ int8_t>,
+                          Std::tuple<__cbuf__ uint8_t, __ubuf__ uint8_t>,
+                          Std::tuple<__cbuf__ int16_t, __ubuf__ int16_t>,
+                          Std::tuple<__cbuf__ uint16_t, __ubuf__ uint16_t>,
+                          Std::tuple<__cbuf__ int32_t, __ubuf__ int32_t>,
+                          Std::tuple<__cbuf__ uint32_t, __ubuf__ uint32_t>,
+                          Std::tuple<__cbuf__ int64_t, __ubuf__ int64_t>,
+                          Std::tuple<__cbuf__ uint64_t, __ubuf__ uint64_t>,
+                          Std::tuple<__cbuf__ fp4x2_e1m2_t, __ubuf__ fp4x2_e1m2_t>,
+                          Std::tuple<__cbuf__ fp4x2_e2m1_t, __ubuf__ fp4x2_e2m1_t>,
+                          Std::tuple<__cbuf__ fp8_e5m2_t, __ubuf__ fp8_e5m2_t>,
+                          Std::tuple<__cbuf__ fp8_e4m3fn_t, __ubuf__ fp8_e4m3fn_t>,
+                          Std::tuple<__cbuf__ hifloat8_t, __ubuf__ hifloat8_t>
+                          >,
+                      "The data type is not supported.");
+#endif
+    }
+
     template <typename U>
     __aicore__ inline static constexpr void CheckGm2L1ND2NDSrcOneDim()
     {

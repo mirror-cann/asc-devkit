@@ -30,78 +30,29 @@ namespace Te {
 
 struct CopyGM2UBTrait {};
 
-class DataCopyGM2UB {
-public:
-    template <const CopyGM2UBTrait& trait, typename T, typename U>
-    __aicore__ inline static void Run(const T& dst, const U& src)
-    { Execute<trait>(dst, src); }
-
-private:
-    template <const CopyGM2UBTrait& trait, typename T, typename U>
-    __aicore__ inline static void Execute(const T& dst, const U& src)
+class CopyGmToUbufAlignV2Common {
+protected:
+    template <typename T, typename U>
+    __aicore__ inline static void EmitCopy(const T& dst, const U& src, uint16_t blockCount, uint32_t blockLen,
+                                           int64_t srcStride, int64_t dstStride)
     {
-        using SRC_TYPE = typename U::elementType;
-        using DST_TYPE = typename T::elementType;
+        using SrcType = typename U::elementType;
+        using DstType = typename T::elementType;
 
-        auto dstLayout = dst.Layout();
-        auto srcLayout = src.Layout();
-
-        uint8_t cacheMode = src.Engine().GetCacheMode();
-        constexpr uint8_t leftPaddingCnt = 0;
-        constexpr uint8_t rightPaddingCnt = 0;
-
-        uint16_t blockCount = 0;
-        uint32_t blockLen = 0;
-        int64_t srcStride = 0;
-        int64_t dstStride = 0;
-
-        if constexpr (IsSatisfiedPtnFormatV<U, NDExtLayoutPtn> && IsSatisfiedPtnFormatV<T, NDExtLayoutPtn>) {
-            blockCount = GetTotalRowShape(srcLayout);
-            blockLen = GetTotalColumnShape(srcLayout) * sizeof(SRC_TYPE);
-
-            srcStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout) * sizeof(SRC_TYPE);
-            dstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstLayout) * sizeof(DST_TYPE);
-
-        } else if constexpr (IsSatisfiedPtnFormatV<U, DNExtLayoutPtn> && IsSatisfiedPtnFormatV<T, DNExtLayoutPtn>) {
-            blockCount = GetTotalColumnShape(srcLayout);
-            blockLen = GetTotalRowShape(srcLayout) * sizeof(SRC_TYPE);
-
-            srcStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout) * sizeof(SRC_TYPE);
-            dstStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstLayout) * sizeof(DST_TYPE);
-
-        } else if constexpr (IsSatisfiedPtnFormatV<U, NZLayoutPtn> && IsSatisfiedPtnFormatV<T, NZLayoutPtn>) { // NZ format
-            blockCount = GetElement<AttrInfo::Shape, AttrInfo::Column, 1>(srcLayout);
-            blockLen = GetTotalRowShape(srcLayout) * GetElement<AttrInfo::Shape, AttrInfo::Column, 0>(srcLayout) * sizeof(SRC_TYPE);
-
-            srcStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(srcLayout) * sizeof(SRC_TYPE);
-            dstStride = GetElement<AttrInfo::Stride, AttrInfo::Column, 1>(dstLayout) * sizeof(DST_TYPE);
-        } else if constexpr (IsSatisfiedPtnFormatV<U, ZNLayoutPtn> && IsSatisfiedPtnFormatV<T, ZNLayoutPtn>) { // ZN format
-            blockCount = GetElement<AttrInfo::Shape, AttrInfo::Row, 1>(srcLayout);
-            blockLen = GetTotalColumnShape(srcLayout) * GetElement<AttrInfo::Shape, AttrInfo::Row, 0>(srcLayout) * sizeof(SRC_TYPE);
-
-            srcStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(srcLayout) * sizeof(SRC_TYPE);
-            dstStride = GetElement<AttrInfo::Stride, AttrInfo::Row, 1>(dstLayout) * sizeof(DST_TYPE);
-        } else {
-            static_assert((IsSatisfiedPtnFormatV<U, NDExtLayoutPtn> && IsSatisfiedPtnFormatV<T, NDExtLayoutPtn>) ||
-                          (IsSatisfiedPtnFormatV<U, DNExtLayoutPtn> && IsSatisfiedPtnFormatV<T, DNExtLayoutPtn>) ||
-                          (IsSatisfiedPtnFormatV<U, NZLayoutPtn> && IsSatisfiedPtnFormatV<T, NZLayoutPtn>) ||
-                          (IsSatisfiedPtnFormatV<U, ZNLayoutPtn> && IsSatisfiedPtnFormatV<T, ZNLayoutPtn>),
-                          "Unsupported layout type combination for DataCopyGM2UB");
-        }
-
-        if constexpr (IsB4Type<SRC_TYPE>) {
-            // move fp4 as b8, need to be divided by 2
+        if constexpr (IsB4Type<SrcType>) {
             blockLen = blockLen >> 1;
             srcStride = srcStride >> 1;
         }
 
-        if constexpr (IsB4Type<DST_TYPE>) {
+        if constexpr (IsB4Type<DstType>) {
             dstStride = dstStride >> 1;
         }
 
+        constexpr uint8_t leftPaddingCnt = 0;
+        constexpr uint8_t rightPaddingCnt = 0;
+        uint8_t cacheMode = src.Engine().GetCacheMode();
         CopyGmToUbufAlignV2Instr::DataCopy(dst, src, blockCount, blockLen, leftPaddingCnt, rightPaddingCnt, srcStride,
                                            dstStride, cacheMode);
-        // ND和DN场景，需要保证UB上申请的空间和tensor的stride满足32字节对齐，否则CopyGmToUbufAlignV2会有问题，无法正确加载数据，导致数据错误
     }
 };
 
