@@ -2,8 +2,6 @@
 
 -   **[寄存器数据类型](reg_data_types/reg_data_types.md)**
 
--   **[addr_reg计算](addr_reg_compute/addr_reg_compute.md)**
-
 -   **[reg数据搬入](reg_load/reg_load.md)**
 
 -   **[reg数据搬出](reg_store/reg_store.md)**
