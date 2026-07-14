@@ -29,7 +29,11 @@ class CMPMODE(Enum):
 
 def get_range_by_dtype(input_type):
     try:
-        if input_type == np.float16 or input_type == np.float32 or input_type == np.float64:
+        if (
+            input_type == np.float16
+            or input_type == np.float32
+            or input_type == np.float64
+        ):
             return np.finfo(input_type).min, np.finfo(input_type).max
         else:
             return np.iinfo(input_type).min, np.iinfo(input_type).max
@@ -62,7 +66,7 @@ def compare(input_x, input_y, input_size, output_size):
             byte_val = 0
             for k in range(8):
                 if bits[k] == 1:
-                    byte_val |= (1<<k)
+                    byte_val |= 1 << k
             golden[i, j] = byte_val
 
     os.makedirs("output", exist_ok=True)
@@ -95,7 +99,7 @@ def gen_golden_data(scenario_num, input_size, input_y_size, output_size):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenario_num', type=int, default=1, choices=range(1, 5))
+    parser.add_argument("-scenario_num", type=int, default=1, choices=range(1, 5))
     args = parser.parse_args()
     scenario_num = args.scenario_num
     if scenario_num == 1:

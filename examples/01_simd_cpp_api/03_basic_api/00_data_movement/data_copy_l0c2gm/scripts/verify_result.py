@@ -27,19 +27,18 @@ def verify_result(scenarioNum, output, golden):
         output_type = np.int8
     output = np.fromfile(output, dtype=output_type).reshape(-1)
     golden = np.fromfile(golden, dtype=output_type).reshape(-1)
-    different_element_results = np.isclose(output,
-                                           golden,
-                                           rtol=RELATIVE_TOL,
-                                           atol=ABSOLUTE_TOL,
-                                           equal_nan=True)
+    different_element_results = np.isclose(
+        output, golden, rtol=RELATIVE_TOL, atol=ABSOLUTE_TOL, equal_nan=True
+    )
     different_element_indexes = np.where(different_element_results == False)[0]
     for index in range(len(different_element_indexes)):
         real_index = different_element_indexes[index]
         golden_data = golden[real_index]
         output_data = output[real_index]
         print(
-            "data index: %06d, expected: %-.9f, actual: %-.9f" %
-            (real_index, golden_data, output_data))
+            "data index: %06d, expected: %-.9f, actual: %-.9f"
+            % (real_index, golden_data, output_data)
+        )
         if index == 100:
             break
     error_ratio = float(different_element_indexes.size) / golden.size
@@ -47,11 +46,11 @@ def verify_result(scenarioNum, output, golden):
     return error_ratio <= ERROR_TOL
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=range(1, 7))
-    parser.add_argument('output', type=str)
-    parser.add_argument('golden', type=str)
+    parser.add_argument("-scenarioNum", type=int, default=1, choices=range(1, 7))
+    parser.add_argument("output", type=str)
+    parser.add_argument("golden", type=str)
     args = parser.parse_args()
     try:
         res = verify_result(args.scenarioNum, args.output, args.golden)

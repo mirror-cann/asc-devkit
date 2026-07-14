@@ -18,12 +18,17 @@ import numpy as np
 
 def get_range_by_dtype(input_type):
     try:
-        if input_type == np.float16 or input_type == np.float32 or input_type == np.float64:
+        if (
+            input_type == np.float16
+            or input_type == np.float32
+            or input_type == np.float64
+        ):
             return np.finfo(input_type).min, np.finfo(input_type).max
         else:
             return np.iinfo(input_type).min, np.iinfo(input_type).max
     except ValueError:
         print(f"Unsupported data type:{input_type}")
+
 
 def gen_golden_data_simple():
     input_type = np.float16
@@ -33,7 +38,7 @@ def gen_golden_data_simple():
     input_shape = [block_length]
     output_shape = [block_length]
 
-    duplicate_scalar_value = 18 # 数值必须与Duplicate接口保持一致
+    duplicate_scalar_value = 18  # 数值必须与Duplicate接口保持一致
     input_x = np.random.uniform(min_val, max_val, input_shape).astype(input_type)
     golden = duplicate_scalar_value * np.ones(output_shape).astype(output_type)
     os.makedirs("input", exist_ok=True)

@@ -17,8 +17,10 @@ from typing import Union
 DTYPE_SIZE_B16 = 2  # b16数据类型字节数
 DTYPE_SIZE_B32 = 4  # b32数据类型字节数
 
+
 class GlobalFMatrixConfig:
     """FMatrix全局配置管理器"""
+
     def __init__(self):
         self.left_l1h = 0
         self.left_l1w = 0
@@ -28,7 +30,9 @@ class GlobalFMatrixConfig:
         self.right_pad_list = [0, 0, 0, 0]
         self.pad_value = 0
 
+
 global_fmatrix_config = GlobalFMatrixConfig()
+
 
 def pad_to_16(length: int) -> int:
     """
@@ -44,6 +48,7 @@ def pad_to_16(length: int) -> int:
         raise ValueError(f"长度必须是非负整数, 当前输入: {length}")
     remainder = length % 16
     return 0 if remainder == 0 else 16 - remainder
+
 
 def ceil_aligned_to_16(length: int) -> int:
     """
@@ -79,6 +84,7 @@ def set_fmatrix(l1h: int, l1w: int, pad_list: list, fmatrix_mode: int) -> None:
         global_fmatrix_config.right_l1w = l1w
         global_fmatrix_config.right_pad_list = pad_list
 
+
 def set_load_data_padding_value(pad_value: Union[np.int8, np.int16, np.int32]) -> None:
     """
     设置填充值
@@ -103,7 +109,7 @@ def nc1hwc0_im2col(
     dilation_filter_h: int,
     dilation_filter_w: int,
     filter_size_w: bool,
-    filter_size_h: bool
+    filter_size_h: bool,
 ) -> np.ndarray:
     """
     NC1HWC0 格式张量的 im2col 展开(卷积窗口提取)
@@ -140,9 +146,7 @@ def nc1hwc0_im2col(
             f"传入的L1尺寸({l1h},{l1w})与张量原始尺寸({h_ori},{w_ori})不匹配！"
         )
     if c1 * c0 != channel_size:
-        raise ValueError(
-            f"通道数不匹配: C1*C0={c1*c0} ≠ channel_size={channel_size}"
-        )
+        raise ValueError(f"通道数不匹配: C1*C0={c1 * c0} ≠ channel_size={channel_size}")
 
     # 2. 卷积核参数处理
     filter_h = filter_h + 256 if filter_size_h else filter_h
@@ -171,8 +175,7 @@ def nc1hwc0_im2col(
 
     # 6. 初始化结果
     im2col_result = np.zeros(
-        (n, c1, kernel_flat_dim, hw_out, c0),
-        dtype=nc1hwc0_input.dtype
+        (n, c1, kernel_flat_dim, hw_out, c0), dtype=nc1hwc0_input.dtype
     )
 
     # 7. 向量化提取卷积窗口
@@ -206,7 +209,7 @@ def _prepare_src_slice(
     k_start_pt: int,
     m_extension: int,
     k_extension: int,
-    c0: int
+    c0: int,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
     预处理: 从im2col结果中提取切片并重塑为分形格式
@@ -233,20 +236,17 @@ def _prepare_src_slice(
         :,
         k_start_pt // c0 : (k_start_pt + k_extension) // c0,
         m_start_pt : m_start_pt + m_extension,
-        :
+        :,
     ]
 
     # 重塑为分形格式
     m_aligned = ceil_aligned_to_16(src_slice.shape[2])
     src_fractal_z = src_slice.reshape(
-        src_slice.shape[0],
-        src_slice.shape[1],
-        m_aligned // 16,
-        16,
-        c0
+        src_slice.shape[0], src_slice.shape[1], m_aligned // 16, 16, c0
     )
 
     return src_slice, src_fractal_z
+
 
 def _process_b32_transpose(src_fractal_z: np.ndarray) -> np.ndarray:
     """
@@ -270,7 +270,7 @@ def _process_b32_transpose(src_fractal_z: np.ndarray) -> np.ndarray:
     src_fractal_z_padded = np.pad(
         src_fractal_z_transposed,
         pad_width=((0, 0), (0, 0), (0, 0), (0, pad_dim3)),
-        mode="constant"
+        mode="constant",
     )
 
     # 维度拆分: 16 -> 2×8
@@ -279,13 +279,14 @@ def _process_b32_transpose(src_fractal_z: np.ndarray) -> np.ndarray:
         src_fractal_z_padded.shape[1],
         src_fractal_z_padded.shape[2] // 8,
         8,
-        src_fractal_z_padded.shape[3]
+        src_fractal_z_padded.shape[3],
     )
 
     # 维度重排: [N, Wout_Hout//16, 2, 8, C1*Hk*Wk*C0] -> [N, Wout_Hout//16, 2, C1*Hk*Wk*C0, 8]
     src_transposed = tmp_shape.transpose(0, 1, 2, 4, 3)
 
     return src_transposed, dim3, pad_dim3
+
 
 def move_to_l0a(
     dst: np.ndarray,
@@ -294,7 +295,7 @@ def move_to_l0a(
     k_start_pt: int,
     m_extension: int,
     k_extension: int,
-    en_transpose: bool
+    en_transpose: bool,
 ) -> np.ndarray:
     """
     数据搬运到L0A
@@ -332,7 +333,7 @@ def move_to_l0a(
                 src_transposed.shape[2],
                 src_transposed.shape[3] // 16,
                 16,
-                8
+                8,
             )
             dst_tmp = src_reshape.transpose(0, 3, 1, 2, 4, 5)
 
@@ -347,6 +348,7 @@ def move_to_l0a(
 
     return dst
 
+
 def move_to_l0b(
     dst: np.ndarray,
     im2col_out: np.ndarray,
@@ -354,7 +356,7 @@ def move_to_l0b(
     k_start_pt: int,
     m_extension: int,
     k_extension: int,
-    en_transpose: bool
+    en_transpose: bool,
 ) -> np.ndarray:
     """
     数据搬运到L0B
@@ -417,7 +419,7 @@ def load3d_to_l0a(
     en_transpose: bool,
     fmatrix_ctrl: bool,
     is_set_fmatrix: bool,
-    is_set_padding: bool
+    is_set_padding: bool,
 ) -> np.ndarray:
     """
     3D数据从L1加载到L0A
@@ -466,17 +468,28 @@ def load3d_to_l0a(
 
     # 执行im2col + 搬运
     im2col_out = nc1hwc0_im2col(
-        nc1hwc0_input, pad_list, pad_value, l1h, l1w, channel_size,
-        stride_h, stride_w, filter_h, filter_w, dilation_filter_h,
-        dilation_filter_w, filter_size_w, filter_size_h
+        nc1hwc0_input,
+        pad_list,
+        pad_value,
+        l1h,
+        l1w,
+        channel_size,
+        stride_h,
+        stride_w,
+        filter_h,
+        filter_w,
+        dilation_filter_h,
+        dilation_filter_w,
+        filter_size_w,
+        filter_size_h,
     )
     print(f"im2col输出shape: {im2col_out.shape}")
-    print("im2col_out:",im2col_out)
+    print("im2col_out:", im2col_out)
     dst = move_to_l0a(
-        dst, im2col_out, m_start_pt, k_start_pt, m_extension,
-        k_extension, en_transpose
+        dst, im2col_out, m_start_pt, k_start_pt, m_extension, k_extension, en_transpose
     )
     return dst
+
 
 def load3d_to_l0b(
     nc1hwc0_input: np.ndarray,
@@ -501,7 +514,7 @@ def load3d_to_l0b(
     en_transpose: bool,
     fmatrix_ctrl: bool,
     is_set_fmatrix: bool,
-    is_set_padding: bool
+    is_set_padding: bool,
 ) -> np.ndarray:
     """
     3D数据从L1加载到L0B(参数同load3d_to_l0a)
@@ -522,15 +535,25 @@ def load3d_to_l0b(
 
     # 执行im2col + 搬运
     im2col_out = nc1hwc0_im2col(
-        nc1hwc0_input, pad_list, pad_value, l1h, l1w, channel_size,
-        stride_h, stride_w, filter_h, filter_w, dilation_filter_h,
-        dilation_filter_w, filter_size_w, filter_size_h
+        nc1hwc0_input,
+        pad_list,
+        pad_value,
+        l1h,
+        l1w,
+        channel_size,
+        stride_h,
+        stride_w,
+        filter_h,
+        filter_w,
+        dilation_filter_h,
+        dilation_filter_w,
+        filter_size_w,
+        filter_size_h,
     )
     print(f"im2col输出shape: {im2col_out.shape}")
-    print("im2col输出",im2col_out)
+    print("im2col输出", im2col_out)
     dst = move_to_l0b(
-        dst, im2col_out, m_start_pt, k_start_pt, m_extension,
-        k_extension, en_transpose
+        dst, im2col_out, m_start_pt, k_start_pt, m_extension, k_extension, en_transpose
     )
     return dst
 
@@ -540,9 +563,7 @@ def test_load3d_l1_to_l0a_b8_no_transpose():
     # 配置参数
     n, c1, h, w, c0 = 1, 3, 8, 8, 32
     input_dtype = np.int8
-    nc1hwc0_input = np.random.randint(
-        1, 10, size=(n, c1, h, w, c0)
-    ).astype(input_dtype)
+    nc1hwc0_input = np.random.randint(1, 10, size=(n, c1, h, w, c0)).astype(input_dtype)
 
     pad_list = (0, 0, 0, 0)
     pad_value = 0
@@ -558,32 +579,52 @@ def test_load3d_l1_to_l0a_b8_no_transpose():
 
     # 初始化目标数组
     dst = np.random.randint(
-        1, 2, size=(
+        1,
+        2,
+        size=(
             ceil_aligned_to_16(m_extension) // 16,
             ceil_aligned_to_16(k_extension) // c0,
             16,
-            c0
-        )
+            c0,
+        ),
     ).astype(input_dtype)
 
     # 执行加载
     dst = load3d_to_l0a(
-        nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
-        m_start_pt, k_start_pt, m_extension, k_extension, stride_h, stride_w,
-        filter_h, filter_w, dilation_filter_h, dilation_filter_w, filter_size_w,
-        filter_size_h, en_transpose, fmatrix_ctrl, is_set_fmatrix, is_set_padding
+        nc1hwc0_input,
+        dst,
+        pad_list,
+        pad_value,
+        l1h,
+        l1w,
+        channel_size,
+        m_start_pt,
+        k_start_pt,
+        m_extension,
+        k_extension,
+        stride_h,
+        stride_w,
+        filter_h,
+        filter_w,
+        dilation_filter_h,
+        dilation_filter_w,
+        filter_size_w,
+        filter_size_h,
+        en_transpose,
+        fmatrix_ctrl,
+        is_set_fmatrix,
+        is_set_padding,
     )
     print(f"测试L1->L0A B8不带转置完成, 目标数组shape: {dst.shape}")
-    print("目标结果: ",dst)
+    print("目标结果: ", dst)
+
 
 def test_load3d_l1_to_l0a_b16_no_transpose():
     """测试L1->L0A B16不带转置场景"""
     # 配置参数
     n, c1, h, w, c0 = 1, 3, 8, 8, 16
     input_dtype = np.int16
-    nc1hwc0_input = np.random.randint(
-        1, 10, size=(n, c1, h, w, c0)
-    ).astype(input_dtype)
+    nc1hwc0_input = np.random.randint(1, 10, size=(n, c1, h, w, c0)).astype(input_dtype)
 
     pad_list = (0, 0, 0, 0)
     pad_value = 0
@@ -599,32 +640,52 @@ def test_load3d_l1_to_l0a_b16_no_transpose():
 
     # 初始化目标数组
     dst = np.random.randint(
-        1, 2, size=(
+        1,
+        2,
+        size=(
             ceil_aligned_to_16(m_extension) // 16,
             ceil_aligned_to_16(k_extension) // c0,
             16,
-            c0
-        )
+            c0,
+        ),
     ).astype(input_dtype)
 
     # 执行加载
     dst = load3d_to_l0a(
-        nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
-        m_start_pt, k_start_pt, m_extension, k_extension, stride_h, stride_w,
-        filter_h, filter_w, dilation_filter_h, dilation_filter_w, filter_size_w,
-        filter_size_h, en_transpose, fmatrix_ctrl, is_set_fmatrix, is_set_padding
+        nc1hwc0_input,
+        dst,
+        pad_list,
+        pad_value,
+        l1h,
+        l1w,
+        channel_size,
+        m_start_pt,
+        k_start_pt,
+        m_extension,
+        k_extension,
+        stride_h,
+        stride_w,
+        filter_h,
+        filter_w,
+        dilation_filter_h,
+        dilation_filter_w,
+        filter_size_w,
+        filter_size_h,
+        en_transpose,
+        fmatrix_ctrl,
+        is_set_fmatrix,
+        is_set_padding,
     )
     print(f"测试L1->L0A B16不带转置完成, 目标数组shape: {dst.shape}")
-    print("目标结果: ",dst)
+    print("目标结果: ", dst)
+
 
 def test_load3d_l1_to_l0a_b16_with_transpose():
     """测试L1->L0A B16带转置场景"""
     # 配置参数
     n, c1, h, w, c0 = 1, 3, 8, 8, 16
     input_dtype = np.int16
-    nc1hwc0_input = np.random.randint(
-        1, 10, size=(n, c1, h, w, c0)
-    ).astype(input_dtype)
+    nc1hwc0_input = np.random.randint(1, 10, size=(n, c1, h, w, c0)).astype(input_dtype)
 
     pad_list = (0, 0, 0, 0)
     pad_value = 0
@@ -640,32 +701,52 @@ def test_load3d_l1_to_l0a_b16_with_transpose():
 
     # 初始化目标数组
     dst = np.random.randint(
-        1, 2, size=(
+        1,
+        2,
+        size=(
             ceil_aligned_to_16(m_extension) // 16,
             ceil_aligned_to_16(k_extension) // c0,
             16,
-            c0
-        )
+            c0,
+        ),
     ).astype(input_dtype)
 
     # 执行加载
     dst = load3d_to_l0a(
-        nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
-        m_start_pt, k_start_pt, m_extension, k_extension, stride_h, stride_w,
-        filter_h, filter_w, dilation_filter_h, dilation_filter_w, filter_size_w,
-        filter_size_h, en_transpose, fmatrix_ctrl, is_set_fmatrix, is_set_padding
+        nc1hwc0_input,
+        dst,
+        pad_list,
+        pad_value,
+        l1h,
+        l1w,
+        channel_size,
+        m_start_pt,
+        k_start_pt,
+        m_extension,
+        k_extension,
+        stride_h,
+        stride_w,
+        filter_h,
+        filter_w,
+        dilation_filter_h,
+        dilation_filter_w,
+        filter_size_w,
+        filter_size_h,
+        en_transpose,
+        fmatrix_ctrl,
+        is_set_fmatrix,
+        is_set_padding,
     )
     print(f"测试L1->L0A B16带转置完成, 目标数组shape: {dst.shape}")
-    print("目标结果: ",dst)
+    print("目标结果: ", dst)
+
 
 def test_load3d_l1_to_l0a_b32_no_transpose():
     """测试L1->L0A B32不带转置场景"""
     # 配置参数
     n, c1, h, w, c0 = 1, 3, 8, 8, 8
     input_dtype = np.int32
-    nc1hwc0_input = np.random.randint(
-        1, 10, size=(n, c1, h, w, c0)
-    ).astype(input_dtype)
+    nc1hwc0_input = np.random.randint(1, 10, size=(n, c1, h, w, c0)).astype(input_dtype)
 
     pad_list = (0, 0, 0, 0)
     pad_value = 0
@@ -681,32 +762,52 @@ def test_load3d_l1_to_l0a_b32_no_transpose():
 
     # 初始化目标数组
     dst = np.random.randint(
-        1, 2, size=(
+        1,
+        2,
+        size=(
             ceil_aligned_to_16(m_extension) // 16,
             ceil_aligned_to_16(k_extension) // c0,
             16,
-            c0
-        )
+            c0,
+        ),
     ).astype(input_dtype)
 
     # 执行加载
     dst = load3d_to_l0a(
-        nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
-        m_start_pt, k_start_pt, m_extension, k_extension, stride_h, stride_w,
-        filter_h, filter_w, dilation_filter_h, dilation_filter_w, filter_size_w,
-        filter_size_h, en_transpose, fmatrix_ctrl, is_set_fmatrix, is_set_padding
+        nc1hwc0_input,
+        dst,
+        pad_list,
+        pad_value,
+        l1h,
+        l1w,
+        channel_size,
+        m_start_pt,
+        k_start_pt,
+        m_extension,
+        k_extension,
+        stride_h,
+        stride_w,
+        filter_h,
+        filter_w,
+        dilation_filter_h,
+        dilation_filter_w,
+        filter_size_w,
+        filter_size_h,
+        en_transpose,
+        fmatrix_ctrl,
+        is_set_fmatrix,
+        is_set_padding,
     )
     print(f"测试L1->L0A B32不带转置完成, 目标数组shape: {dst.shape}")
-    print("目标结果: ",dst)
+    print("目标结果: ", dst)
+
 
 def test_load3d_l1_to_l0a_b32_with_transpose():
     """测试L1->L0A B32带转置场景"""
     # 配置参数
     n, c1, h, w, c0 = 1, 3, 8, 8, 8
     input_dtype = np.int32
-    nc1hwc0_input = np.random.randint(
-        1, 10, size=(n, c1, h, w, c0)
-    ).astype(input_dtype)
+    nc1hwc0_input = np.random.randint(1, 10, size=(n, c1, h, w, c0)).astype(input_dtype)
 
     pad_list = (0, 0, 0, 0)
     pad_value = 0
@@ -722,32 +823,52 @@ def test_load3d_l1_to_l0a_b32_with_transpose():
 
     # 初始化目标数组
     dst = np.random.randint(
-        1, 2, size=(
+        1,
+        2,
+        size=(
             ceil_aligned_to_16(m_extension) // 16,
             ceil_aligned_to_16(k_extension) // c0,
             16,
-            c0
-        )
+            c0,
+        ),
     ).astype(input_dtype)
 
     # 执行加载
     dst = load3d_to_l0a(
-        nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
-        m_start_pt, k_start_pt, m_extension, k_extension, stride_h, stride_w,
-        filter_h, filter_w, dilation_filter_h, dilation_filter_w, filter_size_w,
-        filter_size_h, en_transpose, fmatrix_ctrl, is_set_fmatrix, is_set_padding
+        nc1hwc0_input,
+        dst,
+        pad_list,
+        pad_value,
+        l1h,
+        l1w,
+        channel_size,
+        m_start_pt,
+        k_start_pt,
+        m_extension,
+        k_extension,
+        stride_h,
+        stride_w,
+        filter_h,
+        filter_w,
+        dilation_filter_h,
+        dilation_filter_w,
+        filter_size_w,
+        filter_size_h,
+        en_transpose,
+        fmatrix_ctrl,
+        is_set_fmatrix,
+        is_set_padding,
     )
     print(f"测试L1->L0A B32带转置完成, 目标数组shape: {dst.shape}")
-    print("目标结果: ",dst)
+    print("目标结果: ", dst)
+
 
 def test_load3d_l1_to_l0b_b16_with_transpose():
     """测试L1->L0B B16带转置场景"""
     # 配置参数
     n, c1, h, w, c0 = 1, 3, 8, 8, 16
     input_dtype = np.int16
-    nc1hwc0_input = np.random.randint(
-        1, 10, size=(n, c1, h, w, c0)
-    ).astype(input_dtype)
+    nc1hwc0_input = np.random.randint(1, 10, size=(n, c1, h, w, c0)).astype(input_dtype)
 
     pad_list = (0, 0, 0, 0)
     pad_value = 0
@@ -763,32 +884,52 @@ def test_load3d_l1_to_l0b_b16_with_transpose():
 
     # 初始化目标数组
     dst = np.random.randint(
-        1, 2, size=(
+        1,
+        2,
+        size=(
             ceil_aligned_to_16(m_extension) // 16,
             ceil_aligned_to_16(k_extension) // c0,
             16,
-            c0
-        )
+            c0,
+        ),
     ).astype(input_dtype)
 
     # 执行加载
     dst = load3d_to_l0b(
-        nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
-        m_start_pt, k_start_pt, m_extension, k_extension, stride_h, stride_w,
-        filter_h, filter_w, dilation_filter_h, dilation_filter_w, filter_size_w,
-        filter_size_h, en_transpose, fmatrix_ctrl, is_set_fmatrix, is_set_padding
+        nc1hwc0_input,
+        dst,
+        pad_list,
+        pad_value,
+        l1h,
+        l1w,
+        channel_size,
+        m_start_pt,
+        k_start_pt,
+        m_extension,
+        k_extension,
+        stride_h,
+        stride_w,
+        filter_h,
+        filter_w,
+        dilation_filter_h,
+        dilation_filter_w,
+        filter_size_w,
+        filter_size_h,
+        en_transpose,
+        fmatrix_ctrl,
+        is_set_fmatrix,
+        is_set_padding,
     )
     print(f"测试L1->L0B B16带转置完成, 目标数组shape: {dst.shape}")
-    print("目标结果: ",dst)
+    print("目标结果: ", dst)
+
 
 def test_load3d_l1_to_l0b_b32_with_transpose():
     """测试L1->L0B B32带转置场景"""
     # 配置参数
     n, c1, h, w, c0 = 1, 3, 8, 8, 8
     input_dtype = np.int32
-    nc1hwc0_input = np.random.randint(
-        1, 10, size=(n, c1, h, w, c0)
-    ).astype(input_dtype)
+    nc1hwc0_input = np.random.randint(1, 10, size=(n, c1, h, w, c0)).astype(input_dtype)
 
     pad_list = (0, 0, 0, 0)
     pad_value = 0
@@ -804,23 +945,44 @@ def test_load3d_l1_to_l0b_b32_with_transpose():
 
     # 初始化目标数组
     dst = np.random.randint(
-        1, 2, size=(
+        1,
+        2,
+        size=(
             ceil_aligned_to_16(m_extension) // 16,
             ceil_aligned_to_16(k_extension) // c0,
             16,
-            c0
-        )
+            c0,
+        ),
     ).astype(input_dtype)
 
     # 执行加载
     dst = load3d_to_l0b(
-        nc1hwc0_input, dst, pad_list, pad_value, l1h, l1w, channel_size,
-        m_start_pt, k_start_pt, m_extension, k_extension, stride_h, stride_w,
-        filter_h, filter_w, dilation_filter_h, dilation_filter_w, filter_size_w,
-        filter_size_h, en_transpose, fmatrix_ctrl, is_set_fmatrix, is_set_padding
+        nc1hwc0_input,
+        dst,
+        pad_list,
+        pad_value,
+        l1h,
+        l1w,
+        channel_size,
+        m_start_pt,
+        k_start_pt,
+        m_extension,
+        k_extension,
+        stride_h,
+        stride_w,
+        filter_h,
+        filter_w,
+        dilation_filter_h,
+        dilation_filter_w,
+        filter_size_w,
+        filter_size_h,
+        en_transpose,
+        fmatrix_ctrl,
+        is_set_fmatrix,
+        is_set_padding,
     )
     print(f"测试L1->L0B B32带转置完成, 目标数组shape: {dst.shape}")
-    print("目标结果: ",dst)
+    print("目标结果: ", dst)
 
 
 if __name__ == "__main__":

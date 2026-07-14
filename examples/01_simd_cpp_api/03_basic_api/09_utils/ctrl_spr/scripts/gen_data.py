@@ -36,18 +36,18 @@ def gen_golden_data():
     os.makedirs("output", exist_ok=True)
 
     src_data = np.zeros(DATA_SIZE, dtype=np.float16)
-    src_data[:DATA_SIZE//2] = np.arange(DATA_SIZE//2, dtype=np.float16)
-    src_data[DATA_SIZE//2:] = np.inf
+    src_data[: DATA_SIZE // 2] = np.arange(DATA_SIZE // 2, dtype=np.float16)
+    src_data[DATA_SIZE // 2 :] = np.inf
     src_data.tofile("./input/input.bin")
 
     golden_ctrl = np.zeros(CTRL_SIZE, dtype=np.int64)
-    golden_ctrl[:CTRL_SIZE//2] = 1
-    golden_ctrl[CTRL_SIZE//2:] = 0
+    golden_ctrl[: CTRL_SIZE // 2] = 1
+    golden_ctrl[CTRL_SIZE // 2 :] = 0
     golden_ctrl.tofile("./output/golden_ctrl.bin")
 
     golden_sat = np.zeros(DATA_SIZE, dtype=np.float16)
-    golden_sat[:DATA_SIZE//2] = np.arange(DATA_SIZE//2, dtype=np.float16) + 1
-    golden_sat[DATA_SIZE//2:] = np.inf
+    golden_sat[: DATA_SIZE // 2] = np.arange(DATA_SIZE // 2, dtype=np.float16) + 1
+    golden_sat[DATA_SIZE // 2 :] = np.inf
     golden_sat.tofile("./output/golden_sat.bin")
 
 

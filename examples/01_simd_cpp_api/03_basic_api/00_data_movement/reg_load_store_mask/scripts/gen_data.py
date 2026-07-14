@@ -24,7 +24,7 @@ def gen_data_1():
     dst = np.zeros(1024, dtype=np.uint8)
     dst[0] = 2
     dst[248] = 2
-    dst[256:256 + 32] = 255
+    dst[256 : 256 + 32] = 255
     return src, dst
 
 
@@ -57,19 +57,24 @@ def gen_golden_data(scenario_num):
     os.makedirs("output", exist_ok=True)
     if scenario_num == 1:
         src, golden = gen_data_1()
-        src.tofile('./input/input.bin')
-        golden.tofile('./output/golden.bin')
+        src.tofile("./input/input.bin")
+        golden.tofile("./output/golden.bin")
     elif scenario_num == 2:
         x, y, mask, golden = gen_data_2()
-        x.tofile('./input/input_x.bin')
-        y.tofile('./input/input_y.bin')
-        mask.tofile('./input/input_mask.bin')
-        golden.tofile('./output/golden.bin')
+        x.tofile("./input/input_x.bin")
+        y.tofile("./input/input_y.bin")
+        mask.tofile("./input/input_mask.bin")
+        golden.tofile("./output/golden.bin")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=[1, 2, 3, 4, 5, 6],
-                        help='Scenario number: 1-6')
+    parser.add_argument(
+        "-scenarioNum",
+        type=int,
+        default=1,
+        choices=[1, 2, 3, 4, 5, 6],
+        help="Scenario number: 1-6",
+    )
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

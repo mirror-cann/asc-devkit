@@ -17,6 +17,7 @@ import tensorflow as tf
 import numpy as np
 import npu_device
 from npu_device.compat.v1.npu_init import RewriterConfig
+
 npu_device.compat.enable_v1()
 tf.compat.v1.enable_resource_variables()
 
@@ -27,7 +28,9 @@ RTOL = 0.001
 
 def main(unused_argv):
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    custom_op_lib = tf.load_op_library(os.path.join(base_dir, "outputs", "libcustom_ops.so"))
+    custom_op_lib = tf.load_op_library(
+        os.path.join(base_dir, "outputs", "libcustom_ops.so")
+    )
 
     shape_params = (8, 2048)
     dtype_params = np.float16
@@ -65,5 +68,5 @@ def main(unused_argv):
         print("test failed")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     tf.compat.v1.app.run()

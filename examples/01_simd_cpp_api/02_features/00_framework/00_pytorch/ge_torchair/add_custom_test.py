@@ -28,7 +28,9 @@ torch.ops.load_library(LIB_PATH)
 
 # 注册TorchAir converter：torch.compile捕获到ascendc_add节点后，由该函数转换成GE AddCustom节点
 @torchair.register_fx_node_ge_converter(torch.ops.ascendc_ops.ascendc_add.default)
-def convert_ascendc_add(x: Tensor, y: Tensor, z: Tensor = None, meta_outputs: Any = None):
+def convert_ascendc_add(
+    x: Tensor, y: Tensor, z: Tensor = None, meta_outputs: Any = None
+):
     return torchair.ge.custom_op(
         "AddCustom",
         inputs={
@@ -57,7 +59,9 @@ class TestGeTorchairAdd(TestCase):
         config = torchair.CompilerConfig()
         npu_backend = torchair.get_npu_backend(compiler_config=config)
         # 使用TorchAir后端编译模型，fullgraph=True确保forward中的ascendc_add被整图捕获
-        opt_model = torch.compile(model, fullgraph=True, backend=npu_backend, dynamic=False)
+        opt_model = torch.compile(
+            model, fullgraph=True, backend=npu_backend, dynamic=False
+        )
 
         # 在NPU上执行编译后的图，执行链路会经过TorchAir转换出的GE AddCustom节点
         output = opt_model(x_cpu.npu(), y_cpu.npu()).cpu()

@@ -15,6 +15,7 @@
 import os
 import numpy as np
 
+
 def gen_golden_data_simple():
     input_type = np.float32
     work_type = input_type

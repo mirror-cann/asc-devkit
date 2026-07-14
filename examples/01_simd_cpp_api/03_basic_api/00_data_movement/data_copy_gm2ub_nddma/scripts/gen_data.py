@@ -34,7 +34,7 @@ def gen_golden_data(scenarioNum=1):
 
         input_x = np.arange(1, 16 * 32 + 1, 1, data_type).reshape(input_shape)
         padding = ((13, 3), (15, 17))
-        golden = np.pad(input_x, padding, mode='constant', constant_values=0)
+        golden = np.pad(input_x, padding, mode="constant", constant_values=0)
 
     elif scenarioNum == 2:
         input_shape = [28, 15]
@@ -63,7 +63,7 @@ def gen_golden_data(scenarioNum=1):
         input_shape = [16, 64]
         output_shape = [64, 16]
 
-        input_x = np.arange(1, 16 *64 + 1, 1, data_type).reshape(input_shape)
+        input_x = np.arange(1, 16 * 64 + 1, 1, data_type).reshape(input_shape)
         golden = np.zeros(output_shape, data_type)
 
         for i in range(output_shape[0]):
@@ -98,6 +98,6 @@ def gen_golden_data(scenarioNum=1):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=[1, 2, 3, 4, 5])
+    parser.add_argument("-scenarioNum", type=int, default=1, choices=[1, 2, 3, 4, 5])
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

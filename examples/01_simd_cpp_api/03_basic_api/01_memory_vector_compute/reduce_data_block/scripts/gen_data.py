@@ -15,6 +15,7 @@
 import os
 import argparse
 import numpy as np
+
 np.random.seed(9)
 
 
@@ -45,7 +46,9 @@ def gen_golden_data(scenarioNum=1):
     golden = np.zeros([1, dst_length]).astype(input_type)
 
     for i in range(block_num):
-        block_data = input_x[0, i * one_data_block_items:(i + 1) * one_data_block_items]
+        block_data = input_x[
+            0, i * one_data_block_items : (i + 1) * one_data_block_items
+        ]
         if scenarioNum == 1:
             golden[0, i] = np.max(block_data)
         elif scenarioNum == 2:
@@ -61,6 +64,6 @@ def gen_golden_data(scenarioNum=1):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=range(1, 4))
+    parser.add_argument("-scenarioNum", type=int, default=1, choices=range(1, 4))
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

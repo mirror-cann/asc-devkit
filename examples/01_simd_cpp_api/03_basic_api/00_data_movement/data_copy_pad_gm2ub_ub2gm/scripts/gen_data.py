@@ -15,6 +15,7 @@
 import os
 import argparse
 import numpy as np
+
 np.random.seed(9)
 
 
@@ -47,12 +48,12 @@ def gen_golden_data(scenarioNum=1):
     elif scenarioNum == 4:
         src_rows = 1
         src_cols = 320
-        dst_cols = 576 # Compact模式：320B数据 + 64B填充 + 192B随机值
+        dst_cols = 576  # Compact模式：320B数据 + 64B填充 + 192B随机值
         data_type = np.int8
     elif scenarioNum == 5:
         src_rows = 1
         src_cols = 320
-        dst_cols = 576 # Normal模式：320B数据 + 192B填充 + 32B外层循环间隔 + 32B未使用
+        dst_cols = 576  # Normal模式：320B数据 + 192B填充 + 32B外层循环间隔 + 32B未使用
         data_type = np.int8
     elif scenarioNum == 6:
         # 场景6：GM五维 [2, 4, 3, 128, 126]int8
@@ -101,7 +102,9 @@ def gen_golden_data(scenarioNum=1):
                 data_src_start = outer // 288 * 160 + inner * 80
                 data_src_end = data_src_start + 80
 
-                golden[dst_start:dst_data_end] = input_flatten[data_src_start:data_src_end]
+                golden[dst_start:dst_data_end] = input_flatten[
+                    data_src_start:data_src_end
+                ]
                 golden[dst_data_end:dst_fill_end] = -1
         golden = golden.reshape(1, dst_cols)
     elif scenarioNum == 5:
@@ -126,8 +129,10 @@ def gen_golden_data(scenarioNum=1):
                     block_dst_start = dst_base + dst_offset + block_idx * 64
                     block_src_start = src_base + src_offset + block_idx * 40
 
-                    golden[block_dst_start:block_dst_start+40] = input_flatten[block_src_start:block_src_start+40]
-                    golden[block_dst_start+40:block_dst_start+64] = -1
+                    golden[block_dst_start : block_dst_start + 40] = input_flatten[
+                        block_src_start : block_src_start + 40
+                    ]
+                    golden[block_dst_start + 40 : block_dst_start + 64] = -1
 
         golden = golden.reshape(1, dst_cols)
 
@@ -155,7 +160,9 @@ def gen_golden_data(scenarioNum=1):
                 for dim2 in range(2):  # 第2维，搬运2次（loop1）
                     for dim3 in range(64):  # 第3维，搬运64次（从128中选择前64个）
                         # 从第3维的128个中选择第dim3个，搬运第4维的126个数据
-                        golden[golden_row_idx, :126] = input_5d[dim0, dim1, dim2, dim3, :]
+                        golden[golden_row_idx, :126] = input_5d[
+                            dim0, dim1, dim2, dim3, :
+                        ]
                         # 补2个0
                         golden[golden_row_idx, 126:128] = 0
                         golden_row_idx += 1
@@ -170,6 +177,6 @@ def gen_golden_data(scenarioNum=1):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=[1, 2, 3, 4, 5, 6])
+    parser.add_argument("-scenarioNum", type=int, default=1, choices=[1, 2, 3, 4, 5, 6])
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

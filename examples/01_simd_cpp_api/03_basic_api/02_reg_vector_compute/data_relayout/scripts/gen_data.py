@@ -37,10 +37,10 @@ def gen_golden_data_interleave():
     dst1[1::2] = y_flat[64:]
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    x.tofile('./input/input_x.bin')
-    y.tofile('./input/input_y.bin')
-    dst0.tofile('./output/golden_dst0.bin')
-    dst1.tofile('./output/golden_dst1.bin')
+    x.tofile("./input/input_x.bin")
+    y.tofile("./input/input_y.bin")
+    dst0.tofile("./output/golden_dst0.bin")
+    dst1.tofile("./output/golden_dst1.bin")
 
 
 def gen_golden_data_pack():
@@ -54,14 +54,20 @@ def gen_golden_data_pack():
     golden = (x & 0xFFFF).astype(data_type_16).flatten()
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    x.tofile('./input/input_x.bin')
-    golden.tofile('./output/golden.bin')
+    x.tofile("./input/input_x.bin")
+    golden.tofile("./output/golden.bin")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Generate golden data for data_relayout sample')
-    parser.add_argument('-scenarioNum', type=int, default=1,
-                        help='Scenario number: 1=Interleave, 2=Pack')
+    parser = argparse.ArgumentParser(
+        description="Generate golden data for data_relayout sample"
+    )
+    parser.add_argument(
+        "-scenarioNum",
+        type=int,
+        default=1,
+        help="Scenario number: 1=Interleave, 2=Pack",
+    )
     args = parser.parse_args()
     if args.scenarioNum == 1:
         gen_golden_data_interleave()

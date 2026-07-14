@@ -26,7 +26,7 @@ def gen_golden_data():
     # Bias: [N], float
     quant = np.random.uniform(-2, 2, [N]).astype(np.float32)
     uint32_quant = np.frombuffer(quant, np.uint32)
-    uint32_quant &= 0XFFFFE000
+    uint32_quant &= 0xFFFFE000
     quant_tensor = uint32_quant.astype(np.uint64)
     quant_tensor |= 1 << 46
 

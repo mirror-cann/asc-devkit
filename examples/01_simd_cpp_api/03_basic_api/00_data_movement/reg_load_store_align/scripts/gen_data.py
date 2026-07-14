@@ -16,6 +16,7 @@ import os
 import argparse
 import numpy as np
 
+
 def gen_golden_data(scenario_num):
     input_length = 1024
     data_type = np.float16  # half类型
@@ -29,8 +30,8 @@ def gen_golden_data(scenario_num):
     os.makedirs("output", exist_ok=True)
 
     # 保存输入数据
-    input_x.tofile('./input/input_x.bin')
-    input_y.tofile('./input/input_y.bin')
+    input_x.tofile("./input/input_x.bin")
+    input_y.tofile("./input/input_y.bin")
 
     # 根据场景计算golden数据和输出长度（z = x + y）
     output_length = 1024
@@ -40,7 +41,7 @@ def gen_golden_data(scenario_num):
         # 场景1：使用开发者自定义的迭代间偏移，计算1021个元素，不足1024的置零
         output_length = 1024
         golden = z[0, :output_length].reshape(1, output_length)
-        golden[0, output_length-3 : output_length] = 0
+        golden[0, output_length - 3 : output_length] = 0
     elif scenario_num == 2:
         # 场景2：使用PostUpdate模式表示迭代间偏移，全量搬出
         output_length = 1024
@@ -67,12 +68,18 @@ def gen_golden_data(scenario_num):
         raise ValueError(f"不支持的场景编号: {scenario_num}")
 
     # 保存golden数据
-    golden.tofile('./output/golden.bin')
+    golden.tofile("./output/golden.bin")
     print(f"生成完成: input_length={input_length}, output_length={output_length}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=[1, 2, 3, 4, 5, 6],
-                        help='Scenario number: 1-6')
+    parser.add_argument(
+        "-scenarioNum",
+        type=int,
+        default=1,
+        choices=[1, 2, 3, 4, 5, 6],
+        help="Scenario number: 1-6",
+    )
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

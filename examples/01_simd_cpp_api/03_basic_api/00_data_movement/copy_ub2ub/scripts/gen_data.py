@@ -15,6 +15,7 @@
 import os
 import argparse
 import numpy as np
+
 np.random.seed(9)
 
 
@@ -60,6 +61,6 @@ def gen_golden_data(scenarioNum=1):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=[1, 2, 3])
+    parser.add_argument("-scenarioNum", type=int, default=1, choices=[1, 2, 3])
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

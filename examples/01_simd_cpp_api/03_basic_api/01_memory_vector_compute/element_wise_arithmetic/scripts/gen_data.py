@@ -18,7 +18,7 @@ import numpy as np
 
 def gen_golden_data_simple():
     input_x = np.random.uniform(-100, 100, [4 * 128]).astype(np.float16)
-    value  = 0.01
+    value = 0.01
     golden = (np.maximum(value * input_x, input_x)).astype(np.float16)
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)

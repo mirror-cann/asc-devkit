@@ -19,7 +19,11 @@ import argparse
 
 def get_range_by_dtype(input_type_type):
     try:
-        if input_type_type == np.float16 or input_type_type == np.float32 or input_type_type == np.float64:
+        if (
+            input_type_type == np.float16
+            or input_type_type == np.float32
+            or input_type_type == np.float64
+        ):
             finfo = np.finfo(input_type_type)
             return finfo.min, finfo.max
         else:
@@ -51,7 +55,9 @@ def gen_golden_data(scenario_num):
     input_y_shape = [input_y_size]
 
     min_val, max_val = get_range_by_dtype(input_sel_type)
-    input_sel = np.random.uniform(min_val, max_val, input_sel_shape).astype(input_sel_type)
+    input_sel = np.random.uniform(min_val, max_val, input_sel_shape).astype(
+        input_sel_type
+    )
 
     min_val, max_val = get_range_by_dtype(input_type)
     input_x = np.random.uniform(min_val, max_val, input_shape).astype(input_type)
@@ -67,10 +73,12 @@ def gen_golden_data(scenario_num):
         else:
             byte_idx = i // 8
             bit_idx = i % 8
-        if(input_sel[byte_idx] >> bit_idx) & 1:
+        if (input_sel[byte_idx] >> bit_idx) & 1:
             golden[i] = input_x[i]
         else:
-            golden[i] = input_y[i] if (scenario_num == 1 or scenario_num == 3) else input_y[0]
+            golden[i] = (
+                input_y[i] if (scenario_num == 1 or scenario_num == 3) else input_y[0]
+            )
 
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
@@ -80,9 +88,8 @@ def gen_golden_data(scenario_num):
     golden.tofile("./output/golden.bin")
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenario_num', type=int, default=1, choices=range(1, 5))
+    parser.add_argument("-scenario_num", type=int, default=1, choices=range(1, 5))
     args = parser.parse_args()
     gen_golden_data(args.scenario_num)

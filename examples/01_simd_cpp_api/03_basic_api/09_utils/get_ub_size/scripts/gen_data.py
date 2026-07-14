@@ -19,7 +19,11 @@ import numpy as np
 
 def get_range_by_dtype(input_type):
     try:
-        if input_type == np.float16 or input_type == np.float32 or input_type == np.float64:
+        if (
+            input_type == np.float16
+            or input_type == np.float32
+            or input_type == np.float64
+        ):
             return np.finfo(input_type).min, np.finfo(input_type).max
         else:
             return np.iinfo(input_type).min, np.iinfo(input_type).max
@@ -59,6 +63,6 @@ def gen_golden_data(scenarioNum):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=range(1, 3))
+    parser.add_argument("-scenarioNum", type=int, default=1, choices=range(1, 3))
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

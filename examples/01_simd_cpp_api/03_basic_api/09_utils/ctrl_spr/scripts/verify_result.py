@@ -48,7 +48,7 @@ def verify_sat(real_result, golden):
     return True
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ctrl_pass = verify_ctrl("./output/output_ctrl.bin", "./output/golden_ctrl.bin")
     if not ctrl_pass:
         print("[ERROR] output_ctrl.bin failed")

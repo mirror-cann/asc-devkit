@@ -15,6 +15,7 @@
 import os
 import numpy as np
 
+
 def gen_golden_data():
     """AuxScalar样例：从UB读取4个标量，每个scalar参与128个元素的Adds计算"""
     total_length = 512
@@ -30,12 +31,15 @@ def gen_golden_data():
     # 计算真值：z[i*128..(i+1)*128-1] = x[i*128..(i+1)*128-1] + scalar[i]
     golden = np.zeros_like(x)
     for i in range(4):
-        golden[0, i*block_size:(i+1)*block_size] = x[0, i*block_size:(i+1)*block_size] + scalar_values[i]
+        golden[0, i * block_size : (i + 1) * block_size] = (
+            x[0, i * block_size : (i + 1) * block_size] + scalar_values[i]
+        )
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    x.tofile('./input/input_x.bin')
-    scalar.tofile('./input/input_y.bin')
-    golden.tofile('./output/golden.bin')
+    x.tofile("./input/input_x.bin")
+    scalar.tofile("./input/input_y.bin")
+    golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data()

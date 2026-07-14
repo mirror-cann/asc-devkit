@@ -49,10 +49,10 @@ repos:
           - "--extend-ignore"
           - "E402,E711,E712,E721,F401,F403,F405,F811,F821,F841,F523,E741,F601"
         types: [python]
-        files: ^(cmake|docs|impl|scripts|tests|tools)/
+        files: &ruff_files ^(cmake|docs|impl|scripts|tests|tools|examples/01_simd_cpp_api/(00_introduction|01_utilities|02_features|03_basic_api))/
       - id: ruff-format
         types: [python]
-        files: ^(cmake|docs|impl|scripts|tests|tools)/
+        files: *ruff_files
 
   # OAT 合规性检查 (Open Source Audit Tool)
   - repo: local

@@ -16,8 +16,10 @@ import os
 import argparse
 import numpy as np
 
+
 def get_saturation(data, data_type):
     return np.clip(data, np.iinfo(data_type).min, np.iinfo(data_type).max)
+
 
 def gen_golden_data_simple(scenario_num):
     total_length = 256
@@ -33,12 +35,18 @@ def gen_golden_data_simple(scenario_num):
         golden = get_saturation(np.round(x), dst_data_type).astype(dst_data_type)
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    x.tofile('./input/input_x.bin')
-    golden.tofile('./output/golden.bin')
+    x.tofile("./input/input_x.bin")
+    golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=[1, 2],
-                        help='Scenario number: 1=float16->int32, 2=float32->int16')
+    parser.add_argument(
+        "-scenarioNum",
+        type=int,
+        default=1,
+        choices=[1, 2],
+        help="Scenario number: 1=float16->int32, 2=float32->int16",
+    )
     args = parser.parse_args()
     gen_golden_data_simple(args.scenarioNum)

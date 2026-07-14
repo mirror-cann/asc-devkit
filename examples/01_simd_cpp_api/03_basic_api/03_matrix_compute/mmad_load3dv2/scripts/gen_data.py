@@ -14,35 +14,47 @@
 import os
 import argparse
 import numpy as np
+
 np.random.seed(9)
 
 M = 30
 K = 40
 N = 70
 
+
 def gen_golden_data(scenarioNum=1):
     if scenarioNum == 1:
         x1_gm = np.random.uniform(1, 10, [M, K]).astype(np.float16)
         x2_gm = np.random.uniform(1, 10, [K, N]).astype(np.float16)
-        golden = (np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32))).astype(np.float32)
+        golden = (np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32))).astype(
+            np.float32
+        )
     elif scenarioNum == 2:
         x1_gm = np.random.uniform(1, 10, [M, K]).astype(np.float16)
         x2_gm = np.random.uniform(1, 10, [K, N]).astype(np.float16)
-        golden = (np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32))).astype(np.float32)
+        golden = (np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32))).astype(
+            np.float32
+        )
         x1_gm = x1_gm.transpose()
     elif scenarioNum == 3:
         x1_gm = np.random.uniform(1, 10, [M, K]).astype(np.float32)
         x2_gm = np.random.uniform(1, 10, [K, N]).astype(np.float32)
-        golden = (np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32))).astype(np.float32)
+        golden = (np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32))).astype(
+            np.float32
+        )
     elif scenarioNum == 4:
         x1_gm = np.random.uniform(1, 10, [M, K]).astype(np.float32)
         x2_gm = np.random.uniform(1, 10, [K, N]).astype(np.float32)
-        golden = (np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32))).astype(np.float32)
+        golden = (np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32))).astype(
+            np.float32
+        )
         x1_gm = x1_gm.transpose()
     elif scenarioNum == 5:
         x1_gm = np.random.uniform(1, 10, [M, K]).astype(np.int8)
         x2_gm = np.random.uniform(1, 10, [K, N]).astype(np.int8)
-        golden = (np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32))).astype(np.int32)
+        golden = (np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32))).astype(
+            np.int32
+        )
         x2_gm = x2_gm.transpose()
     if scenarioNum <= 4:
         golden = golden.astype(np.float32)
@@ -57,6 +69,6 @@ def gen_golden_data(scenarioNum=1):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=range(1,6))
+    parser.add_argument("-scenarioNum", type=int, default=1, choices=range(1, 6))
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

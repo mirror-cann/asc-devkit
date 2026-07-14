@@ -16,17 +16,22 @@ import argparse
 import copy
 import struct
 import numpy as np
+
 np.random.seed(9)
 
 
 def extract_relu_params(relu_pre):
     relu_pre = int(relu_pre)
-    relu_alpha_bits = (relu_pre >> 13) & 0xFFFFF  # 提取M2的20位[31:13]，0xFFFFF是20位掩码
+    relu_alpha_bits = (
+        relu_pre >> 13
+    ) & 0xFFFFF  # 提取M2的20位[31:13]，0xFFFFF是20位掩码
     sign_bit = (relu_alpha_bits >> 18) & 0x1
     exponent = (relu_alpha_bits >> 10) & 0xFF
     mantissa = relu_alpha_bits & 0x3FF
-    exponent_bias = 127 # 假设指数偏倚量为127，与float32一致
-    relu_alpha = (-1) ** sign_bit * (1 + mantissa / 1024) * (2 ** (exponent - exponent_bias))
+    exponent_bias = 127  # 假设指数偏倚量为127，与float32一致
+    relu_alpha = (
+        (-1) ** sign_bit * (1 + mantissa / 1024) * (2 ** (exponent - exponent_bias))
+    )
     return relu_alpha
 
 
@@ -41,17 +46,23 @@ def extract_quant_params(quant_pre):
         sign:1位布尔值(0或1)
     """
     quant_pre = int(quant_pre)
-    quant_alpha_bits = (quant_pre >> 13) & 0xFFFFF  # 提取M1的20位[31:13]，0xFFFFF是20位掩码
-    mode_control_bit = (quant_pre >> 36) & 0x1  # 提取mode_ctrl bit的一位[36]，0x1是1位掩码
-    offset = (quant_pre >> 37) & 0x1FF # 提取offset的9位[45:37]，0x1FF是9位掩码
+    quant_alpha_bits = (
+        quant_pre >> 13
+    ) & 0xFFFFF  # 提取M1的20位[31:13]，0xFFFFF是20位掩码
+    mode_control_bit = (
+        quant_pre >> 36
+    ) & 0x1  # 提取mode_ctrl bit的一位[36]，0x1是1位掩码
+    offset = (quant_pre >> 37) & 0x1FF  # 提取offset的9位[45:37]，0x1FF是9位掩码
     sign = (quant_pre >> 46) & 0x1  # 提取sign的一位[46]，0x1是1位掩码
     n = (quant_pre >> 32) & 0xF
     # 解析M1为(1,8,10)格式的浮点数
     sign_bit = (quant_alpha_bits >> 18) & 0x1
     exponent = (quant_alpha_bits >> 10) & 0xFF
     mantissa = quant_alpha_bits & 0x3FF
-    exponent_bias = 127 # 假设指数偏倚量为127，与float32一致
-    quant_alpha = (-1) ** sign_bit * (1 + mantissa / 1024) * (2 ** (exponent - exponent_bias))
+    exponent_bias = 127  # 假设指数偏倚量为127，与float32一致
+    quant_alpha = (
+        (-1) ** sign_bit * (1 + mantissa / 1024) * (2 ** (exponent - exponent_bias))
+    )
     return quant_alpha, offset, sign, n, mode_control_bit
 
 
@@ -67,11 +78,13 @@ def qf322b8_pre(data, quant_pre, relu_pre):
     """
     float32 -> int8/uint8
     """
-    quant_alpha, offset, sign, n_shift, mode_control_bit = extract_quant_params(quant_pre)
+    quant_alpha, offset, sign, n_shift, mode_control_bit = extract_quant_params(
+        quant_pre
+    )
     # sign = 0
     relu_alpha = extract_relu_params(relu_pre)
     if mode_control_bit == 1:
-        data = data / (2 ** n_shift)
+        data = data / (2**n_shift)
         data = saturation(data, -32768, 32767, np.int16)
     data = data.astype(np.float32)
     if data >= 0:
@@ -94,16 +107,22 @@ def pre_quant_relu(golden, dst_type, m, n, pre_quant_mode, pre_relu_mode):
         relu_alpha = quant_scalar
     elif pre_relu_mode == 1:
         relu_alpha = norm_relu_alpha
-    relu_alpha = struct.unpack('!I', struct.pack('!f', relu_alpha))[0]
+    relu_alpha = struct.unpack("!I", struct.pack("!f", relu_alpha))[0]
 
     # 1 * n 量化系数为全为quant scalar的量化tensor
-    temp_quant_tensor = ((quant_scalar * np.ones((1, n), dtype=np.float32)).astype(np.float32))[0]
+    temp_quant_tensor = (
+        (quant_scalar * np.ones((1, n), dtype=np.float32)).astype(np.float32)
+    )[0]
     temp_quant_tensor_api = copy.deepcopy(temp_quant_tensor).astype(np.uint64)
     for i, _ in enumerate(temp_quant_tensor_api):
-        temp_quant_tensor_api[i] = struct.unpack('!I', struct.pack('!f', temp_quant_tensor[i]))[0]
+        temp_quant_tensor_api[i] = struct.unpack(
+            "!I", struct.pack("!f", temp_quant_tensor[i])
+        )[0]
         if dst_type == np.int8:
             # np.int8 sign is true
-            temp_quant_tensor_api[i] = temp_quant_tensor_api[i] | np.uint64(0x400000000000)
+            temp_quant_tensor_api[i] = temp_quant_tensor_api[i] | np.uint64(
+                0x400000000000
+            )
     quant_tensor = np.frombuffer(temp_quant_tensor_api, np.uint64)
     quant_tensor = quant_tensor.astype(np.uint64)
     if pre_quant_mode == 2:
@@ -119,12 +138,14 @@ def gen_golden_data(scenarioNum=1):
     M = 128
     K = 128
     N = 128
-    kRound = 2 #沿着K轴切分为两块
+    kRound = 2  # 沿着K轴切分为两块
 
     input_type = np.dtype("float16")
     x1_gm = np.random.uniform(-2, 2, [M, K]).astype(input_type)
     x2_gm = np.random.uniform(-2, 2, [K, N]).astype(input_type)
-    golden = np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32)).astype(np.float32)
+    golden = np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32)).astype(
+        np.float32
+    )
 
     l1_input_type_half = np.dtype("float16")
     x3_gm_half = np.eye(N, dtype=l1_input_type_half)
@@ -140,11 +161,11 @@ def gen_golden_data(scenarioNum=1):
 
     elif scenarioNum == 2:
         l1_output_type = np.dtype("int8")
-        golden = pre_quant_relu(golden, l1_output_type, M, N, 1, 0) #scalar
+        golden = pre_quant_relu(golden, l1_output_type, M, N, 1, 0)  # scalar
 
     elif scenarioNum == 3:
         l1_output_type = np.dtype("int8")
-        golden = pre_quant_relu(golden, l1_output_type, M, N, 2, 0) #vector
+        golden = pre_quant_relu(golden, l1_output_type, M, N, 2, 0)  # vector
 
     elif scenarioNum == 4:
         l1_output_type = np.dtype("float16")
@@ -153,7 +174,7 @@ def gen_golden_data(scenarioNum=1):
 
     if kRound > 1:
         # 将K轴外移
-        x1_gm = x1_gm.reshape(M, kRound, K//kRound).transpose(1, 0, 2)
+        x1_gm = x1_gm.reshape(M, kRound, K // kRound).transpose(1, 0, 2)
     x1_gm.astype(input_type).tofile("./input/x1_gm.bin")
     x2_gm.astype(input_type).tofile("./input/x2_gm.bin")
     x3_gm_half.astype(l1_input_type_half).tofile("./input/x3_gm_half.bin")
@@ -163,6 +184,6 @@ def gen_golden_data(scenarioNum=1):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=range(1, 5))
+    parser.add_argument("-scenarioNum", type=int, default=1, choices=range(1, 5))
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

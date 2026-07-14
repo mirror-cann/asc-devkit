@@ -19,12 +19,17 @@ import argparse
 
 def get_range_by_dtype(input_type):
     try:
-        if input_type == np.float16 or input_type == np.float32 or input_type == np.float64:
+        if (
+            input_type == np.float16
+            or input_type == np.float32
+            or input_type == np.float64
+        ):
             return np.finfo(input_type).min, np.finfo(input_type).max
         else:
             return np.iinfo(input_type).min, np.iinfo(input_type).max
     except ValueError:
         print(f"Unsupported data type:{input_type}")
+
 
 def gen_golden_data_simple():
     input_type = np.float16
@@ -36,7 +41,7 @@ def gen_golden_data_simple():
     input_x = np.random.uniform(min_val, max_val, input_shape).astype(input_type)
     min_val, max_val = get_range_by_dtype(output_type)
     golden = np.clip(input_x, min_val, max_val)
-    #AscendC::RoundMode::CAST_CEIL
+    # AscendC::RoundMode::CAST_CEIL
     golden = np.ceil(golden)
     golden = golden.astype(output_type)
     os.makedirs("input", exist_ok=True)
@@ -54,15 +59,16 @@ def gen_golden_data_simple_int4b():
     output_shape = [block_length // 2]
     input_x = np.random.uniform(-9, 8, input_shape).astype(input_type)
     output_ceil = np.ceil(input_x).astype(output_type)
-    output = 0xf & np.clip(output_ceil, -8, 7).astype(output_type)
+    output = 0xF & np.clip(output_ceil, -8, 7).astype(output_type)
     golden = (output[::2] | (output[1::2] << 4)).astype(output_type)
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
     input_x.tofile("./input/input_x.bin")
     golden.tofile("./output/golden.bin")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, choices=(0, 1), help='选择场景')
+    parser.add_argument("-scenarioNum", type=int, choices=(0, 1), help="选择场景")
     args = parser.parse_args()
     gen_golden_data_simple() if args.scenarioNum else gen_golden_data_simple_int4b()

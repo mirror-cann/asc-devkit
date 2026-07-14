@@ -24,7 +24,7 @@ COEFF_CUBIC = -0.071405
 
 def gen_golden_data_simple():
     input_x = np.random.uniform(-10, 10, [TOTAL_M, TOTAL_N]).astype(np.float32)
-    exponent = COEFF_LINEAR * input_x + COEFF_CUBIC * (input_x ** 3)
+    exponent = COEFF_LINEAR * input_x + COEFF_CUBIC * (input_x**3)
     golden = input_x / (1 + np.exp(exponent))
 
     os.makedirs("input", exist_ok=True)

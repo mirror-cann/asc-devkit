@@ -15,6 +15,7 @@
 import os
 import numpy as np
 
+
 def gen_golden_data_simple():
     """
     生成ReducePairElem样例的测试数据和golden数据

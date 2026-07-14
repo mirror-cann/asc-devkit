@@ -15,6 +15,7 @@ import os
 import argparse
 import numpy as np
 
+
 def gen_golden_data(scenarioNum):
     """
     生成测试输入数据和真值数据
@@ -49,8 +50,9 @@ def gen_golden_data(scenarioNum):
     y.tofile("./input/input_y.bin")
     golden.tofile("./output/golden.bin")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=range(1, 4))
+    parser.add_argument("-scenarioNum", type=int, default=1, choices=range(1, 4))
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

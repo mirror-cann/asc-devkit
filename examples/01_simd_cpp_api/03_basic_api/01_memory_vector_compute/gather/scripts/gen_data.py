@@ -19,7 +19,11 @@ import numpy as np
 
 def get_range_by_dtype(input_type):
     try:
-        if input_type == np.float16 or input_type == np.float32 or input_type == np.float64:
+        if (
+            input_type == np.float16
+            or input_type == np.float32
+            or input_type == np.float64
+        ):
             return np.finfo(input_type).min, np.finfo(input_type).max
         else:
             return np.iinfo(input_type).min, np.iinfo(input_type).max
@@ -71,8 +75,8 @@ def gen_golden_data(scenario_num):
         golden = np.zeros(128).astype(np.uint16)
         count = 0
         for i in range(8):
-            for j in range(int(32/data_size)):
-                golden[count] = input_x[int(input_y[i] / data_size +j)]
+            for j in range(int(32 / data_size)):
+                golden[count] = input_x[int(input_y[i] / data_size + j)]
                 count += 1
         save_data(input_x, input_y, golden)
 
@@ -98,7 +102,7 @@ def gen_golden_data_custom():
     input_y_shape = [block_length // 8]
     input_x = np.random.uniform(min_val, max_val, input_x_shape).astype(input_type)
     input_y = 0x7E7C00A5 * np.ones(input_y_shape).astype(input_type)
-    input_mask = np.unpackbits(input_y.view(np.uint8), bitorder='little').astype(bool)
+    input_mask = np.unpackbits(input_y.view(np.uint8), bitorder="little").astype(bool)
     golden = np.zeros(input_x_shape).astype(input_type)
     for i in range(repeat_times):
         base = i * (src0_repeat_stride // src0_block_stride) * one_data_block_items
@@ -113,6 +117,6 @@ def gen_golden_data_custom():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenario_num', type=int, default=1, choices=range(1, 5))
+    parser.add_argument("-scenario_num", type=int, default=1, choices=range(1, 5))
     args = parser.parse_args()
     gen_golden_data(args.scenario_num)

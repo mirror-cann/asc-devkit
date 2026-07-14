@@ -27,7 +27,9 @@ def verify_result(output, golden):
     output = np.fromfile(output, dtype=output_type).reshape(-1)
     golden = np.fromfile(golden, dtype=output_type).reshape(-1)
 
-    different = np.isclose(output, golden, rtol=RELATIVE_TOL, atol=ABSOLUTE_TOL, equal_nan=True)
+    different = np.isclose(
+        output, golden, rtol=RELATIVE_TOL, atol=ABSOLUTE_TOL, equal_nan=True
+    )
 
     diff_idx = np.where(different == False)[0]
 
@@ -39,10 +41,10 @@ def verify_result(output, golden):
     return error_ratio <= ERROR_TOL
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('output_file', help='Output file path')
-    parser.add_argument('golden_file', help='Golden file path')
+    parser.add_argument("output_file", help="Output file path")
+    parser.add_argument("golden_file", help="Golden file path")
     args = parser.parse_args()
 
     try:

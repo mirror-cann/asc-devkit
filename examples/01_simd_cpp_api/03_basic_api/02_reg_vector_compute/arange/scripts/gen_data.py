@@ -13,6 +13,7 @@
 import os
 import numpy as np
 
+
 def gen_golden_data_simple():
     total_length = 256
     data_type = np.float32
@@ -20,7 +21,8 @@ def gen_golden_data_simple():
     # golden = {0, 1, 2, 3, ..., 255}
     golden = np.arange(0, total_length, 1).astype(data_type)
     os.makedirs("output", exist_ok=True)
-    golden.tofile('./output/golden.bin')
+    golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

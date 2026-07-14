@@ -20,12 +20,17 @@ import sys
 
 def get_range_by_dtype(input_type):
     try:
-        if input_type == np.float16 or input_type == np.float32 or input_type == np.float64:
+        if (
+            input_type == np.float16
+            or input_type == np.float32
+            or input_type == np.float64
+        ):
             return np.finfo(input_type).min, np.finfo(input_type).max
         else:
             return np.iinfo(input_type).min, np.iinfo(input_type).max
     except ValueError:
         print(f"Unsupported data type:{input_type}")
+
 
 def gen_golden_data(scenario_num):
     input_type = np.float16
@@ -63,7 +68,11 @@ def gen_golden_data(scenario_num):
         input = input_x
         golden = input_x.reshape(2, 2, 16, 16, 16).transpose(0, 1, 3, 4, 2)
     else:
-        print("Invalid scenario number: {}. Supported scenarios: 1 (common), 2 (enhanced), 3 (5hd)".format(scenario_num))
+        print(
+            "Invalid scenario number: {}. Supported scenarios: 1 (common), 2 (enhanced), 3 (5hd)".format(
+                scenario_num
+            )
+        )
         sys.exit(1)
 
     os.makedirs("input", exist_ok=True)
@@ -74,6 +83,6 @@ def gen_golden_data(scenario_num):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenario_num', type=int, default=1, choices=range(1, 4))
+    parser.add_argument("-scenario_num", type=int, default=1, choices=range(1, 4))
     args = parser.parse_args()
     gen_golden_data(args.scenario_num)

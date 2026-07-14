@@ -27,9 +27,9 @@ def gen_golden_data_gather_scenario1():
     golden = x.flatten()[index.flatten()]
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    x.tofile('./input/input_x.bin')
-    index.tofile('./input/input_y.bin')
-    golden.tofile('./output/golden.bin')
+    x.tofile("./input/input_x.bin")
+    index.tofile("./input/input_y.bin")
+    golden.tofile("./output/golden.bin")
 
 
 def gen_golden_data_gatherb_scenario2():
@@ -41,23 +41,27 @@ def gen_golden_data_gatherb_scenario2():
     num_output_blocks = total_length // elements_per_block
     num_src_blocks = src_length // elements_per_block
     x = np.random.uniform(0, 1, [1, src_length]).astype(data_type)
-    block_indices = np.random.randint(0, num_src_blocks, num_output_blocks).astype(np.uint32)
+    block_indices = np.random.randint(0, num_src_blocks, num_output_blocks).astype(
+        np.uint32
+    )
     index = block_indices * 32
     x_flat = x.flatten()
     golden = np.zeros(total_length, dtype=data_type)
     for i, block_idx in enumerate(block_indices):
         start = block_idx * elements_per_block
-        golden[i * elements_per_block:(i + 1) * elements_per_block] = x_flat[start:start + elements_per_block]
+        golden[i * elements_per_block : (i + 1) * elements_per_block] = x_flat[
+            start : start + elements_per_block
+        ]
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    x.tofile('./input/input_x.bin')
-    index.tofile('./input/input_y.bin')
-    golden.tofile('./output/golden.bin')
+    x.tofile("./input/input_x.bin")
+    index.tofile("./input/input_y.bin")
+    golden.tofile("./output/golden.bin")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1)
+    parser.add_argument("-scenarioNum", type=int, default=1)
     args = parser.parse_args()
     if args.scenarioNum == 1:
         gen_golden_data_gather_scenario1()

@@ -15,14 +15,20 @@ import os
 import numpy as np
 import argparse
 
+
 def get_range_by_dtype(input_type):
     try:
-        if input_type == np.float16 or input_type == np.float32 or input_type == np.float64:
+        if (
+            input_type == np.float16
+            or input_type == np.float32
+            or input_type == np.float64
+        ):
             return np.finfo(input_type).min, np.finfo(input_type).max
         else:
             return np.iinfo(input_type).min, np.iinfo(input_type).max
     except ValueError:
         print(f"Unsupported data type:{input_type}")
+
 
 def gen_golden_data(scenarioNum):
     """
@@ -32,7 +38,7 @@ def gen_golden_data(scenarioNum):
     """
     input_type = np.float16
     output_type = input_type
-    #与half对应
+    # 与half对应
     max_index_type = np.uint16
     min_index_type = np.uint16
 
@@ -105,8 +111,9 @@ def gen_golden_data(scenarioNum):
     input_x.tofile("./input/input_x.bin")
     golden.tofile("./output/golden.bin")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=range(1, 7))
+    parser.add_argument("-scenarioNum", type=int, default=1, choices=range(1, 7))
     args = parser.parse_args()
     gen_golden_data(args.scenarioNum)

@@ -35,11 +35,13 @@ def verify_result(output, golden, scenarioNum=1):
     output = np.fromfile(output, dtype=output_type).reshape(-1)
     golden = np.fromfile(golden, dtype=output_type).reshape(-1)
 
-    different_element_results = np.isclose(output.flatten(),
-                                           golden.flatten(),
-                                           rtol=RELATIVE_TOL,
-                                           atol=ABSOLUTE_TOL,
-                                           equal_nan=True)
+    different_element_results = np.isclose(
+        output.flatten(),
+        golden.flatten(),
+        rtol=RELATIVE_TOL,
+        atol=ABSOLUTE_TOL,
+        equal_nan=True,
+    )
     different_element_indexes = np.where(different_element_results == False)[0]
 
     for index in range(len(different_element_indexes)):
@@ -47,8 +49,9 @@ def verify_result(output, golden, scenarioNum=1):
         golden_data = golden.flatten()[real_index]
         output_data = output.flatten()[real_index]
         print(
-            "data index: %06d, expected: %-.9f, actual: %-.9f" %
-            (real_index, golden_data, output_data))
+            "data index: %06d, expected: %-.9f, actual: %-.9f"
+            % (real_index, golden_data, output_data)
+        )
         if index == 100:
             break
 
@@ -57,11 +60,17 @@ def verify_result(output, golden, scenarioNum=1):
     return error_ratio <= ERROR_TOL
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('output_file', help='Output file path')
-    parser.add_argument('golden_file', help='Golden file path')
-    parser.add_argument('-scenarioNum', type=int, default=1, choices=[1, 2, 3, 4, 5, 6], help='Scenario number')
+    parser.add_argument("output_file", help="Output file path")
+    parser.add_argument("golden_file", help="Golden file path")
+    parser.add_argument(
+        "-scenarioNum",
+        type=int,
+        default=1,
+        choices=[1, 2, 3, 4, 5, 6],
+        help="Scenario number",
+    )
     args = parser.parse_args()
 
     try:

@@ -15,6 +15,7 @@
 import os
 import numpy as np
 
+
 def gen_golden_data_simple():
     inner = 256
     outter = 256
@@ -24,8 +25,9 @@ def gen_golden_data_simple():
     golden = golden + src
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    src.tofile('./input/input_x.bin')
-    golden.tofile('./output/golden.bin')
+    src.tofile("./input/input_x.bin")
+    golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

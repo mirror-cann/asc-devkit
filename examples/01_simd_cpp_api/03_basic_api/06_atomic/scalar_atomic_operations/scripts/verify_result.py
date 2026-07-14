@@ -34,7 +34,10 @@ def verify_result(output, golden, scenario_num):
         real_index = different_element_indexes[index]
         golden_data = golden[real_index]
         output_data = output[real_index]
-        print("data index: %06d, expected: %d, actual: %d" % (real_index, golden_data, output_data))
+        print(
+            "data index: %06d, expected: %d, actual: %d"
+            % (real_index, golden_data, output_data)
+        )
         if index == 100:
             break
 
@@ -43,11 +46,11 @@ def verify_result(output, golden, scenario_num):
     return error_ratio <= ERROR_TOL
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('output', type=str, help='output file path')
-    parser.add_argument('golden', type=str, help='golden file path')
-    parser.add_argument('-scenarioNum', type=int, default=1, help='scenario number')
+    parser.add_argument("output", type=str, help="output file path")
+    parser.add_argument("golden", type=str, help="golden file path")
+    parser.add_argument("-scenarioNum", type=int, default=1, help="scenario number")
     args = parser.parse_args()
 
     try:

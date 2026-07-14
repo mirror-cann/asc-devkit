@@ -15,6 +15,7 @@
 import os
 import numpy as np
 
+
 def gen_golden_data_simple():
     total_length = 256
     data_type = np.float32
@@ -25,11 +26,12 @@ def gen_golden_data_simple():
     num_blocks = total_length // 8
     golden = np.zeros(num_blocks, dtype=data_type)
     for i in range(num_blocks):
-        golden[i] = np.sum(x[0, i*8:(i+1)*8])
+        golden[i] = np.sum(x[0, i * 8 : (i + 1) * 8])
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
-    x.tofile('./input/input_x.bin')
-    golden.tofile('./output/golden.bin')
+    x.tofile("./input/input_x.bin")
+    golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()
