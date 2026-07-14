@@ -11,7 +11,7 @@
 #include <gtest/gtest.h>
 
 #define __ASC_DISABLE_RESERVED_UBUF__
-#define __ASC_DISABLE_VF_STACK_RESERVD_UBUF_SIZE
+#define __ASC_DISABLE_VF_STACK_RESERVED__
 
 #include "utils/base/sys_constants.h"
 

@@ -71,6 +71,8 @@ file(GLOB ASCENDC_TEST_ascend310p_CASE_SRC_FILES
 # ascend910B1 aiv test cases
 file(GLOB ASCENDC_TEST_ascend910B1_AIV_CASE_SRC_FILES
     ascendc_case_common/test_data_copy_slice.cpp
+    ascendc_case_common/test_disabled_mode_sys_constants.cpp
+    ascendc_case_common/test_sys_constants.cpp
     ascendc_case_common/test_tscm_data.cpp
     ascendc_case_ascend910b1/ascendc_case_ascend910b1_aiv/*.cpp
 )
@@ -99,6 +101,8 @@ file(GLOB ASCENDC_TEST_ascend610Lite_CASE_SRC_FILES
 
 # ascend950pr_9599 basic test cases
 file(GLOB ASCENDC_TEST_ascend950pr_9599_AIV_BASIC_CASE_SRC_FILES
+    ascendc_case_common/test_disabled_mode_sys_constants.cpp
+    ascendc_case_common/test_sys_constants.cpp
     ascendc_case_common/test_kernel_pop_stack_buffer.cpp
     ascendc_case_common/test_kernel_tensor.cpp
     ascendc_case_common/test_type_check.cpp
