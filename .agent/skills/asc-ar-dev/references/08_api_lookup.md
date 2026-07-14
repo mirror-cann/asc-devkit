@@ -42,8 +42,8 @@ Within one task, a verified API/overload combination may be reused without repea
 ## API Documentation Lookup Order
 
 1. Resolve `DEVKIT_PATH` and confirm that `${DEVKIT_PATH}/docs/api` exists.
-2. Start from `${DEVKIT_PATH}/docs/api/README.md` to understand the documentation hierarchy.
-3. Use `${DEVKIT_PATH}/docs/api/Ascend-C-API列表.md` to select the correct API family:
+2. Start from `${DEVKIT_PATH}/docs/zh/api/README.md` to understand the documentation hierarchy.
+3. Use `${DEVKIT_PATH}/docs/zh/api/Ascend-C-API列表.md` to select the correct API family:
    - SIMD basic API;
    - SIMD high-level API;
    - SIMD C API;
@@ -90,7 +90,7 @@ Keep this compact table in working notes before code generation or editing:
 
 | API | Documentation | Declaration | Selected overload | Target | Key constraints |
 |-----|---------------|-------------|-------------------|--------|-----------------|
-| `AscendC::ApiName` | `docs/api/.../ApiName.md` | `include/..._intf.h` | exact prototype or overload description | SoC, core, dtype, tensor/TPosition | alignment, count/repeat, buffer, synchronization |
+| `AscendC::ApiName` | `docs/zh/api/.../ApiName.md` | `include/..._intf.h` | exact prototype or overload description | SoC, core, dtype, tensor/TPosition | alignment, count/repeat, buffer, synchronization |
 
 For APIs with multiple data paths or overloads, create one row per selected form. The evidence log may stay in working notes unless the user requests it in the final report, but the final implementation summary should name the documentation paths consulted for newly introduced APIs.
 

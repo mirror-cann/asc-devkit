@@ -8,4 +8,4 @@
 
 |  目录名称                                                   |  功能描述                                              |
 | ------------------------------------------------------------ | ---------------------------------------------------- |
-| [histogram](./histogram) | 基于SIMT编程方式实现Histogram样例，展示[`asc_atomic_add()`](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMT-API/原子操作/asc_atomic_add.md)接口的使用方法。|
+| [histogram](./histogram) | 基于SIMT编程方式实现Histogram样例，展示[`asc_atomic_add()`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMT-API/原子操作/asc_atomic_add.md)接口的使用方法。|

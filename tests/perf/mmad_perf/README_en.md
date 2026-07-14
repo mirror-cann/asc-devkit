@@ -61,7 +61,7 @@ Run the following steps from the root directory of this example to build and run
 
 ### Configure Environment Variables
 
-Configure environment variables based on the [installation method](../../../docs/quick_start.md#prepare&install) of the CANN development kit on your system.
+Configure environment variables based on the [installation method](../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit on your system.
 
 ```bash
 source ${install_path}/cann/set_env.sh

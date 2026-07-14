@@ -12,10 +12,10 @@
 - Case 4 → Case 5：主尾块模式 + 外层循环展开 + ExpSub融合指令
 
 **前置阅读**：开始阅读前，建议对以下背景知识有初步了解，为后续各Case的优化策略提供理论支持：
-- **[Reg矢量计算编程](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编程模型/AI-Core-SIMD编程/基于Tensor的CPP编程/Reg矢量计算编程.md)**：
-- **[指令双发优化](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/指令双发优化.md)**：
-- **[VF融合优化](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/VF融合优化.md)**：
-- **[VF循环优化](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/VF循环优化.md)**：
+- **[Reg矢量计算编程](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/基于Tensor的CPP编程/Reg矢量计算编程.md)**：
+- **[指令双发优化](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/指令双发优化.md)**：
+- **[VF融合优化](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/VF融合优化.md)**：
+- **[VF循环优化](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/VF循环优化.md)**：
 
 ## 本样例支持的产品及CANN软件版本
 

@@ -46,7 +46,7 @@ for file in "$SKILL_FILE" "$REFERENCE_FILE"; do
     expect_fixed "$file" "bfloat16_t" "bfloat16_t dtype"
     expect_fixed "$file" "int8_t" "int8_t dtype"
     expect_fixed "$file" "uint32_t" "uint32_t dtype"
-    expect_fixed "$file" "docs/api/context/内置数据类型.md" "builtin dtype source"
+    expect_fixed "$file" "docs/zh/api/context/内置数据类型.md" "builtin dtype source"
     expect_fixed "$file" "立即数赋值和初始化" "immediate assignment rule"
     expect_fixed "$file" "fp8_e8m0_t" "fp8_e8m0_t dtype"
     expect_fixed "$file" "complex64" "complex64 dtype"
@@ -109,7 +109,7 @@ for dtype in [
 ]:
     assert data["dtypes"][dtype]["generic_ut_generation"] is False, dtype
 
-assert data["dtype_source"] == "docs/api/context/内置数据类型.md"
+assert data["dtype_source"] == "docs/zh/api/context/内置数据类型.md"
 assert data["dtype_shorthands"]["S4"]["storage_type"] == "int4x2_t"
 assert "fp8_e8m0_t" in data["dtype_product_support"]["ascend950"]["dtypes"]
 assert "double" in data["dtype_product_support"]["atlas_a2_a3"]["dtypes"]

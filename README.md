@@ -74,7 +74,7 @@ Ascend C提供三类接口，均可实现底层的完备编程能力：
 
 其总体逻辑架构图如下所示：
 
-<img src="docs/guide/figures/architecture_ascendc.png" alt="架构图"  width="1000px">
+<img src="docs/zh/guide/figures/architecture_ascendc.png" alt="架构图"  width="1000px">
 
 - **语言扩展层C API**：纯C接口，支持数组分配内存、基于指针的计算接口，提供与业界一致的C语言编程体验，并开放芯片完备编程能力。Atlas A2/A3支持SIMD的纯C接口；Ascend 950PR/Ascend 950DT将支持与业界类似的SIMT编程能力、SIMD/SIMT混合编程能力；
 - **基础API**：单指令抽象的C++类库API，一般基于Tensor编程；逐步基于Layout完善Tensor编程能力；
@@ -83,7 +83,7 @@ Ascend C提供三类接口，均可实现底层的完备编程能力：
 - **Python前端PyAsc**：PyAsc基于Python前端，提供芯片底层完备编程能力，并将逐步基于Layout完善Tensor编程能力，新增SIMT编程等能力，实现基于Python接口开发高性能算子；
 
 ### 如何选择多层级API进行算子开发
-- **基于C/C++语言开发**：详细请参考[Ascend C多级API选择指南](./docs/asc_how_to_choose_api.md)
+- **基于C/C++语言开发**：详细请参考[Ascend C多级API选择指南](./docs/zh/asc_how_to_choose_api.md)
 - **基于Python语言开发，支撑完备编程能力，实现极致性能**：推荐选用Ascend C Python前端[PyAsc](https://gitcode.com/cann/pyasc)
 - **基于Python语言开发，快速开发验证，易用性优先**：推荐选用 [PyPTO](https://gitcode.com/cann/pypto)
 
@@ -120,7 +120,7 @@ Ascend C提供三类接口，均可实现底层的完备编程能力：
 
 若您希望快速体验项目的构建和算子样例的执行，请访问如下文档获取简易教程。
 
-- [编译构建](docs/quick_start.md)：介绍搭建环境、编译执行、本地验证等操作。
+- [编译构建](docs/zh/quick_start.md)：介绍搭建环境、编译执行、本地验证等操作。
 - [样例执行](examples/README.md)：提供算子开发样例，介绍端到端执行样例的方式。
 
 ## 🧰clangd/IDE 支持

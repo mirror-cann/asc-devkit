@@ -32,4 +32,4 @@ build_device/
 .claude/
 .cursor/
 .opencode/
-docs/vitepress/docs/.vitepress/theme/outline-index.json
+docs/zh/vitepress/docs/.vitepress/theme/outline-index.json

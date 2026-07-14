@@ -31,7 +31,7 @@ By transferring multiple Matmul input data in a single transfer, the number of t
 - Example Function:  
   Call the Matmul high-level API to batch process 3 sets of Matmul computations, performing matrix multiplication and adding bias on A and B matrices in BSNGD format for each set.
 
-  For details about the BSNGD format, refer to the data layout description in [IterateBatch](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/IterateBatch.md).
+  For details about the BSNGD format, refer to the data layout description in [IterateBatch](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/IterateBatch.md).
 
 - Example Specifications:   
   <table>
@@ -67,7 +67,7 @@ By transferring multiple Matmul input data in a single transfer, the number of t
 Run the following steps in the root directory of this example to build and run the example.
 
 - Configure Environment Variables  
-  Configure environment variables based on the [installation method](../../../../../docs/quick_start.md#prepare&install) of the CANN development kit in the current environment.
+  Configure environment variables based on the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit in the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

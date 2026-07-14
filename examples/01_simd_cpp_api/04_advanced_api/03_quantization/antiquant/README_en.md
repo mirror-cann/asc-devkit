@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example uses the [AscendAntiQuant](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/量化操作/AscendAntiQuant.md) high-level API in a model quantization inference scenario to implement dequantization computation, which restores quantized low-precision data to high-precision data. The example demonstrates the PER_CHANNEL scenario (per-channel quantization), where int8_t type input data is added with an offset, multiplied by a scale factor, and converted to half type output. On the 950 series, while the AscendAntiQuant API is compatible, it is recommended to prefer the [AntiQuantize](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/量化操作/AntiQuantize.md) API, which adapts to various quantization scenarios through a unified struct configuration.
+This example uses the [AscendAntiQuant](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/量化操作/AscendAntiQuant.md) high-level API in a model quantization inference scenario to implement dequantization computation, which restores quantized low-precision data to high-precision data. The example demonstrates the PER_CHANNEL scenario (per-channel quantization), where int8_t type input data is added with an offset, multiplied by a scale factor, and converted to half type output. On the 950 series, while the AscendAntiQuant API is compatible, it is recommended to prefer the [AntiQuantize](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/量化操作/AntiQuantize.md) API, which adapts to various quantization scenarios through a unified struct configuration.
 
 ## Supported Products and CANN Software Versions
 
@@ -59,7 +59,7 @@ This example uses the [AscendAntiQuant](https://gitcode.com/cann/asc-devkit/blob
 
 Run the following steps in the root directory of this example to build and run the example.
 - Configure environment variables  
-  Configure environment variables based on the [installation method](../../../../../docs/quick_start.md#prepare&install) of the CANN development kit in the current environment.
+  Configure environment variables based on the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit in the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

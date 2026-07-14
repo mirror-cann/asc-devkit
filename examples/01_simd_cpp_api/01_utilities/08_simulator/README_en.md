@@ -55,7 +55,7 @@ This example uses MatmulLeakyRelu fused computation as the carrier to demonstrat
 Run the following steps in the root directory of this example to build and run the program.
 
 - Configure environment variables
-  Configure environment variables based on the [installation method](../../../../docs/quick_start.md#prepare&install) of the CANN development kit on the current environment.
+  Configure environment variables based on the [installation method](../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit on the current environment.
 
   > To use the msOpProf tool, install CANN commercial/community edition. For details, refer to [msOpProf Tool Installation Guide](https://www.hiascend.com/document/detail/zh/canncommercial/900/devaids/optool/docs/zh/install_guide/msopprof_install_guide.md).
 

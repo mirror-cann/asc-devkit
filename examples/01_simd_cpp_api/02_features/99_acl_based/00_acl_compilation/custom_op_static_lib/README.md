@@ -32,7 +32,7 @@ AddCustom算子介绍等内容可参考[算子描述](../custom_op/README.md)。
 
 - 配置环境变量
 
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../../docs/quick_start.md#prepare&install)，配置环境变量。需确保`ASCEND_HOME_PATH`指向CANN安装根路径，以便头文件与库路径生效。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../../docs/zh/quick_start.md#prepare&install)，配置环境变量。需确保`ASCEND_HOME_PATH`指向CANN安装根路径，以便头文件与库路径生效。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

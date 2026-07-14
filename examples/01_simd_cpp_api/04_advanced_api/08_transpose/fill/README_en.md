@@ -46,7 +46,7 @@ This example uses the Fill high-level API to initialize data in Global Memory to
   </table>
 
 - Example implementation:  
-  This example implements a fill example with a fixed shape of input input_x[1, 256], input_y[1, 256], and output output_z[1, 256]. For detailed API information, refer to the [Fill API documentation](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/张量变换/Fill-97.md).
+  This example implements a fill example with a fixed shape of input input_x[1, 256], input_y[1, 256], and output output_z[1, 256]. For detailed API information, refer to the [Fill API documentation](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/张量变换/Fill-97.md).
 
   - Kernel implementation  
     The computation logic includes the following steps:
@@ -65,7 +65,7 @@ This example uses the Fill high-level API to initialize data in Global Memory to
 Run the following steps in the root directory of this example to build and run the example.
 
 - Configure environment variables  
-  Configure environment variables based on the [installation method](../../../../../docs/quick_start.md#prepare&install) of the CANN development kit in the current environment.
+  Configure environment variables based on the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit in the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

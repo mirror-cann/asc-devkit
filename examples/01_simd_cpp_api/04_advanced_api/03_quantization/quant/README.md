@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例基于[AscendQuant](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/量化操作/AscendQuant.md)高阶API实现量化计算，用于将高精度数据转换为低精度数据以减少存储和计算开销。样例展示了将float类型输入数据通过scale缩放和offset偏移，量化为int8_t类型输出的过程。在950上兼容AscendQuant接口的前提下，推荐优先使用[Quantize](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/量化操作/Quantize.md)接口，该接口可通过统一的结构体配置，适配各类量化场景。
+本样例基于[AscendQuant](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/量化操作/AscendQuant.md)高阶API实现量化计算，用于将高精度数据转换为低精度数据以减少存储和计算开销。样例展示了将float类型输入数据通过scale缩放和offset偏移，量化为int8_t类型输出的过程。在950上兼容AscendQuant接口的前提下，推荐优先使用[Quantize](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/量化操作/Quantize.md)接口，该接口可通过统一的结构体配置，适配各类量化场景。
 
 ## 本样例支持的产品及CANN软件版本
 
@@ -64,7 +64,7 @@
 
 在本样例根目录下执行如下步骤，编译并执行算子。
 - 配置环境变量  
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/zh/quick_start.md#prepare&install)，配置环境变量。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

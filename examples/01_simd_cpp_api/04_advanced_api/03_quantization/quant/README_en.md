@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example uses the [AscendQuant](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/量化操作/AscendQuant.md) high-level API to implement quantization computation, which converts high-precision data to low-precision data to reduce storage and computation overhead. The example demonstrates the process of quantizing float type input data to int8_t type output through scale and offset. On the 950 series, while the AscendQuant API is compatible, it is recommended to prefer the [Quantize](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/量化操作/Quantize.md) API, which adapts to various quantization scenarios through a unified struct configuration.
+This example uses the [AscendQuant](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/量化操作/AscendQuant.md) high-level API to implement quantization computation, which converts high-precision data to low-precision data to reduce storage and computation overhead. The example demonstrates the process of quantizing float type input data to int8_t type output through scale and offset. On the 950 series, while the AscendQuant API is compatible, it is recommended to prefer the [Quantize](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/量化操作/Quantize.md) API, which adapts to various quantization scenarios through a unified struct configuration.
 
 ## Supported Products and CANN Software Versions
 
@@ -64,7 +64,7 @@ This example uses the [AscendQuant](https://gitcode.com/cann/asc-devkit/blob/mas
 
 Run the following steps in the root directory of this example to build and run the operator.
 - Configure environment variables  
-  Configure environment variables based on the [installation method](../../../../../docs/quick_start.md#prepare&install) of the CANN development kit in the current environment.
+  Configure environment variables based on the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit in the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

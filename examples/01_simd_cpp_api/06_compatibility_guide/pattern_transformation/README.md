@@ -228,7 +228,7 @@ AscendC::Fixpipe(cGM[M * N / 2], co1Local[M * N / 2], fixpipeParams);
 
 - 配置环境变量
 
-  请根据当前环境上 CANN 开发套件包的[安装方式](../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  请根据当前环境上 CANN 开发套件包的[安装方式](../../../../docs/zh/quick_start.md#prepare&install)，配置环境变量。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

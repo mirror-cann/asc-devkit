@@ -46,7 +46,7 @@
   </table>
 
 - 样例实现：  
-  本样例中实现的是固定shape为输入input_x[1, 256]，input_y[1, 256]，输出output_z[1, 256]的fill样例，所用API详细介绍请参考[Fill API文档](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/张量变换/Fill-97.md)。
+  本样例中实现的是固定shape为输入input_x[1, 256]，input_y[1, 256]，输出output_z[1, 256]的fill样例，所用API详细介绍请参考[Fill API文档](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/张量变换/Fill-97.md)。
 
   - Kernel实现  
     计算逻辑包含以下步骤：
@@ -65,7 +65,7 @@
 在本样例根目录下执行如下步骤，编译并执行样例。
 
 - 配置环境变量  
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/zh/quick_start.md#prepare&install)，配置环境变量。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

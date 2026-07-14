@@ -74,7 +74,7 @@ Additionally, Ascend C provides high-level APIs and operator template libraries 
 
 The overall logical architecture diagram is shown below:
 
-<img src="docs/guide/figures/architecture_ascendc.png" alt="Architecture Diagram"  width="1000px">
+<img src="docs/zh/guide/figures/architecture_ascendc.png" alt="Architecture Diagram"  width="1000px">
 
 - **Language Extension Layer C API**: Pure C interfaces, supporting array memory allocation and pointer-based calculation interfaces, providing a C programming experience consistent with industry standards and opening complete chip programming capabilities. Atlas A2/A3 supports SIMD pure C interfaces; Ascend 950PR/Ascend 950DT will support SIMT programming capabilities similar to industry standards and SIMD/SIMT hybrid programming capabilities.
 - **Basic API**: Single-instruction abstracted C++ class library API, generally based on Tensor programming; gradually improving Tensor programming capabilities based on Layout.

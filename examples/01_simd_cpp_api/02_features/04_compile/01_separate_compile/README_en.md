@@ -55,9 +55,9 @@ bisheng -c main.cpp -o main.o -I${ASCEND_HOME_PATH}/include
 bisheng add_compute.o add_kernel.o main.o -o demo
 ```
 
-Where `--npu-arch` specifies the AI processor architecture at compile time. This example supports `dav-2201` and `dav-3510`. For the architecture version number corresponding to each product model, refer to the [mapping table](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114).
+Where `--npu-arch` specifies the AI processor architecture at compile time. This example supports `dav-2201` and `dav-3510`. For the architecture version number corresponding to each product model, refer to the [mapping table](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114).
 
-For more bisheng compilation options and usage, refer to [Basic Usage of AI Core Operator Compilation](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编译与运行/算子编译/AI-Core算子编译基本用法.md).
+For more bisheng compilation options and usage, refer to [Basic Usage of AI Core Operator Compilation](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编译与运行/算子编译/AI-Core算子编译基本用法.md).
 
 ### CMake Compilation
 
@@ -94,7 +94,7 @@ target_compile_options(demo PRIVATE
 Run the following steps in the root directory of this example to build and run the operator.
 
 - Configure environment variables  
-  Configure environment variables according to the [installation method](../../../../../docs/quick_start.md#prepare&install) of the CANN development kit in the current environment.
+  Configure environment variables according to the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit in the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

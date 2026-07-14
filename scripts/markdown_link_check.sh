@@ -758,9 +758,9 @@ def markdown_inline_link_targets(text):
 
 
 def source_area(path):
-    if path.startswith("docs/api/"):
+    if path.startswith("docs/zh/api/"):
         return "api"
-    if path.startswith("docs/guide/"):
+    if path.startswith("docs/zh/guide/"):
         return "guide"
     if path.startswith("examples/"):
         return "examples"

@@ -57,11 +57,11 @@ Resolve `CANN_PATH` at task time:
 ## Useful Repository Documentation
 
 - DumpTensor API:
-  `${DEVKIT_PATH}/docs/api/context/DumpTensor.md`
+  `${DEVKIT_PATH}/docs/zh/api/context/DumpTensor.md`
 - NPU board debugging guide:
-  `${DEVKIT_PATH}/docs/guide/编程指南/调试调优/功能调试/NPU域上板调试.md`
+  `${DEVKIT_PATH}/docs/zh/guide/编程指南/调试调优/功能调试/NPU域上板调试.md`
 - `show_kernel_debug_data` guide:
-  `${DEVKIT_PATH}/docs/guide/编程指南/附录/show_kernel_debug_data工具.md`
+  `${DEVKIT_PATH}/docs/zh/guide/编程指南/附录/show_kernel_debug_data工具.md`
 
 ## Build Shortcut
 

@@ -65,7 +65,7 @@ This example implements reduction computation based on ReduceMax/ReduceMin/Reduc
 ## Example Description
 
 - Example function:  
-  This example implements reduction computation based on ReduceMax/ReduceMin/ReduceSum interfaces, including first-n data computation and tensor high-dimensional split computation interfaces. Refer to [ReduceMax](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/%E5%9F%BA%E7%A1%80API/Memory%E7%9F%A2%E9%87%8F%E8%AE%A1%E7%AE%97/%E5%BD%92%E7%BA%A6%E8%AE%A1%E7%AE%97/ReduceMax.md)/[ReduceMin](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/%E5%9F%BA%E7%A1%80API/Memory%E7%9F%A2%E9%87%8F%E8%AE%A1%E7%AE%97/%E5%BD%92%E7%BA%A6%E8%AE%A1%E7%AE%97/ReduceMin.md)/[ReduceSum](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/%E5%9F%BA%E7%A1%80API/Memory%E7%9F%A2%E9%87%8F%E8%AE%A1%E7%AE%97/%E5%BD%92%E7%BA%A6%E8%AE%A1%E7%AE%97/ReduceSum.md) for interface documentation.
+  This example implements reduction computation based on ReduceMax/ReduceMin/ReduceSum interfaces, including first-n data computation and tensor high-dimensional split computation interfaces. Refer to [ReduceMax](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/%E5%9F%BA%E7%A1%80API/Memory%E7%9F%A2%E9%87%8F%E8%AE%A1%E7%AE%97/%E5%BD%92%E7%BA%A6%E8%AE%A1%E7%AE%97/ReduceMax.md)/[ReduceMin](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/%E5%9F%BA%E7%A1%80API/Memory%E7%9F%A2%E9%87%8F%E8%AE%A1%E7%AE%97/%E5%BD%92%E7%BA%A6%E8%AE%A1%E7%AE%97/ReduceMin.md)/[ReduceSum](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/%E5%9F%BA%E7%A1%80API/Memory%E7%9F%A2%E9%87%8F%E8%AE%A1%E7%AE%97/%E5%BD%92%E7%BA%A6%E8%AE%A1%E7%AE%97/ReduceSum.md) for interface documentation.
 
 - Example specifications:  
   The input/output specifications for different scenarios are shown in the table below:
@@ -148,7 +148,7 @@ This example implements reduction computation based on ReduceMax/ReduceMin/Reduc
   - Kernel implementation
     - Call the DataCopy basic API to transfer data from GM (Global Memory) to UB (Unified Buffer), and transfer data after reduction computation out to GM (Global Memory).
     - Call ReduceMax/ReduceMin/ReduceSum interfaces to complete reduction computation.
-    - In the ReduceSum first-n data computation scenario, call [GetReduceRepeatSumSpr](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/%E5%9F%BA%E7%A1%80API/Memory%E7%9F%A2%E9%87%8F%E8%AE%A1%E7%AE%97/%E5%BD%92%E7%BA%A6%E8%AE%A1%E7%AE%97/%E5%AF%84%E5%AD%98%E5%99%A8%E8%BE%85%E5%8A%A9%E6%8E%A5%E5%8F%A3/GetReduceRepeatSumSpr(ISASI).md) to obtain computation results.
+    - In the ReduceSum first-n data computation scenario, call [GetReduceRepeatSumSpr](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/%E5%9F%BA%E7%A1%80API/Memory%E7%9F%A2%E9%87%8F%E8%AE%A1%E7%AE%97/%E5%BD%92%E7%BA%A6%E8%AE%A1%E7%AE%97/%E5%AF%84%E5%AD%98%E5%99%A8%E8%BE%85%E5%8A%A9%E6%8E%A5%E5%8F%A3/GetReduceRepeatSumSpr(ISASI).md) to obtain computation results.
 
 - Invocation implementation  
   Use the kernel invocation operator `<<<>>>` to call the kernel function.
@@ -157,7 +157,7 @@ This example implements reduction computation based on ReduceMax/ReduceMin/Reduc
 
 Run the following steps in the root directory of this example to build and run the example.
 - Configure environment variables  
-  Configure environment variables according to the [installation method](../../../../../docs/quick_start.md#prepare&install) of the CANN development kit in the current environment.
+  Configure environment variables according to the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit in the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

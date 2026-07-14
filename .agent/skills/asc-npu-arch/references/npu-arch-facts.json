@@ -1,7 +1,7 @@
 {
   "version": 2,
   "source": "asc-npu-arch/references/npu-arch-guide.md",
-  "dtype_source": "docs/api/context/内置数据类型.md",
+  "dtype_source": "docs/zh/api/context/内置数据类型.md",
   "chips": {
     "ascend910": {
       "enum_name": "ASCEND910",

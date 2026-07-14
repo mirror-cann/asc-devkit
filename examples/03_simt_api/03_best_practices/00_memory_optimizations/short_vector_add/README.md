@@ -196,15 +196,15 @@ SIMT编程模式下，L2 Cache是以Cache Line=128字节为单位进行访问。
 
 | 优化手段 | 核心原理              | 适用场景                                                                                                                                                                                                                                                                                                                                               |
 |:-----|:------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 短向量  | 底层指令支持一次完成两个数据的计算 | 1、half/bfloat16_t类型元素进行[基本运算](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/语言扩展层/SIMT-BuiltIn关键字.md#运算符)，更多短向量类型参见[完整类型列表](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMT-API/SIMT编程简介/扩展语法/内置数据类型-139.md#短向量类型) |
+| 短向量  | 底层指令支持一次完成两个数据的计算 | 1、half/bfloat16_t类型元素进行[基本运算](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/语言扩展层/SIMT-BuiltIn关键字.md#运算符)，更多短向量类型参见[完整类型列表](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMT-API/SIMT编程简介/扩展语法/内置数据类型-139.md#短向量类型) |
 
 ---
 
 ## 编译运行
 
 在本样例根目录下执行如下步骤，编译并执行样例。
-- 配置环境变量
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+- 配置环境变量  
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/zh/quick_start.md#prepare&install)，配置环境变量。
 
   ```bash
   source ${install_path}/cann/set_env.sh

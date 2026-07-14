@@ -35,7 +35,7 @@
   | 连续搬运 | 1 | `DataCopy(dst, src, DataCopyParams)` | NZ | UB→L1 数据内容不变，输入需预先转为NZ格式 |
   | 随路ND2NZ搬运 | 2 | `DataCopy(ubDst, ubSrc, DataCopyParams)` + `DataCopy(l1Dst, ubNZ, DataCopyParams)` | ND | 先在UB内逐C0列块搬运完成ND→NZ转换，再连续搬运至L1 |
 
-  接口资料参考[UBToL1连续数据搬运](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1连续数据搬运（DataCopy）.md)和[UBToL1随路转换-ND2NZ搬运](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1随路转换-ND2NZ搬运（DataCopy）.md)。
+  接口资料参考[UBToL1连续数据搬运](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1连续数据搬运（DataCopy）.md)和[UBToL1随路转换-ND2NZ搬运](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1随路转换-ND2NZ搬运（DataCopy）.md)。
 
 - 关于场景2实现方案的说明：
   
@@ -71,7 +71,7 @@
 
 在本样例根目录下执行如下步骤，编译并执行样例。
 - 配置环境变量
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/zh/quick_start.md#prepare&install)，配置环境变量。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

@@ -12,10 +12,10 @@ This example uses single-core Softmax as a case study to demonstrate a complete 
 - Case 4 → Case 5: Main-tail block mode + Outer loop unrolling + ExpSub fused instruction
 
 **Prerequisites**: Before reading, a basic understanding of the following background topics is recommended to provide theoretical support for the optimization strategies of each Case:
-- **[Reg Vector Computation Programming](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/编程指南/编程模型/AI-Core-SIMD编程/基于Tensor的CPP编程/Reg矢量计算编程.md)**
-- **[Instruction Dual-Issue Optimization](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/指令双发优化.md)**
-- **[VF Fusion Optimization](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/VF融合优化.md)**
-- **[VF Loop Optimization](https://gitcode.com/cann/asc-devkit/blob/master/docs/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/VF循环优化.md)**
+- **[Reg Vector Computation Programming](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/基于Tensor的CPP编程/Reg矢量计算编程.md)**
+- **[Instruction Dual-Issue Optimization](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/指令双发优化.md)**
+- **[VF Fusion Optimization](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/VF融合优化.md)**
+- **[VF Loop Optimization](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/算子实践参考/SIMD算子性能优化/矢量计算/VF性能优化/VF循环优化.md)**
 
 ## Supported Products and CANN Software Versions
 

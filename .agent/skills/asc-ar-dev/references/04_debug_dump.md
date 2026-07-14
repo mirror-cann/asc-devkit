@@ -13,7 +13,7 @@ Use this file when the task mentions `printf`, `DumpTensor`, dump-data parsing, 
 
 - `DumpTensor` is a standard SIMD-side debug path, but support still depends on storage position, architecture, and active dump mode.
 - From repository docs, stock `DumpTensor` is not a safe default for every L1-related requirement.
-- For Ascend 950PR and Ascend 950DT, check `docs/api/context/DumpTensor.md` before claiming L1 Buffer support.
+- For Ascend 950PR and Ascend 950DT, check `docs/zh/api/context/DumpTensor.md` before claiming L1 Buffer support.
 - For ordinary AICore `printf` missing-output or large-print wraparound issues, use the [AICore printf ring-buffer review notes](#aicore-printf-ring-buffer-review-notes) in this file.
 - For requests involving L1, L0A, or L0B, first determine whether the requirement is:
   - a supported dump through existing APIs;
@@ -59,7 +59,7 @@ Resolved tool locations:
 
 Repository reference doc:
 
-- `${DEVKIT_PATH}/docs/guide/编程指南/附录/show_kernel_debug_data工具.md`
+- `${DEVKIT_PATH}/docs/zh/guide/编程指南/附录/show_kernel_debug_data工具.md`
 
 Basic usage:
 

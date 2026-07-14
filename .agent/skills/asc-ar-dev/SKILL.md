@@ -83,7 +83,7 @@ Before writing or editing kernel code, identify every newly introduced AscendC A
 
 For each such API:
 
-1. Start from `${DEVKIT_PATH}/docs/api/README.md` and `${DEVKIT_PATH}/docs/api/Ascend-C-API列表.md`, then locate the exact SIMD basic/high-level API, C API, SIMT API, AI CPU API, or Utils API document.
+1. Start from `${DEVKIT_PATH}/docs/zh/api/README.md` and `${DEVKIT_PATH}/docs/zh/api/Ascend-C-API列表.md`, then locate the exact SIMD basic/high-level API, C API, SIMT API, AI CPU API, or Utils API document.
 2. Read the API document sections for product support, header path, function prototype, parameters, supported data types, constraints, synchronization requirements, and calling examples.
 3. Cross-check the public declaration under `${DEVKIT_PATH}/include`, the implementation under `${DEVKIT_PATH}/impl`, and relevant tests or examples. Documentation selects the supported usage; source inspection confirms the exact repository revision and overload.
 4. Keep a compact API evidence log in the working notes: `API -> documentation path -> declaration path -> selected overload -> target SoC/dtype/TPosition -> key constraints`.

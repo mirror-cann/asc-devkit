@@ -39,17 +39,17 @@ $$
 
 Add算子的计算逻辑遵循"搬入-计算-搬出"三段式流水结构：
 
-1. 将输入数据x和y从[GM](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)（Global Memory，芯片外部全局内存）搬运到[UB](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)（Unified Buffer，向量计算专用片上缓存）；
+1. 将输入数据x和y从[GM](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)（Global Memory，芯片外部全局内存）搬运到[UB](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)（Unified Buffer，向量计算专用片上缓存）；
 2. 在UB上对xLocal、yLocal执行向量加法操作，计算结果存储在zLocal中；
 3. 将计算结果从UB搬运回GM。
 
 **前置说明**：
 
-- [GM（Global Memory）](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)：AI Core外部的全局存储，数据通过[GlobalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)访问，容量大但访问速度较慢。
-- [UB（Unified Buffer）](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)：AI Core内部的向量计算专用缓存，数据通过[LocalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)访问，容量有限但访问速度快。
-- [DataCopy](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GM与UB连续数据搬运(DataCopy).md)：用于在GM和UB之间搬运数据的API，搬运方向由参数顺序决定。
-- [PipeBarrier](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/同步控制/核内同步/PipeBarrier(ISASI).md)：流水线同步屏障，确保数据搬运完成后再执行后续操作，避免读写冲突。
-- `block_idx`：通过[GetBlockIdx()](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/工具接口/系统资源与变量/GetBlockIdx.md)获取当前核的编号，用于多核并行时的数据分片计算。
+- [GM（Global Memory）](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)：AI Core外部的全局存储，数据通过[GlobalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)访问，容量大但访问速度较慢。
+- [UB（Unified Buffer）](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)：AI Core内部的向量计算专用缓存，数据通过[LocalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)访问，容量有限但访问速度快。
+- [DataCopy](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GM与UB连续数据搬运(DataCopy).md)：用于在GM和UB之间搬运数据的API，搬运方向由参数顺序决定。
+- [PipeBarrier](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/同步控制/核内同步/PipeBarrier(ISASI).md)：流水线同步屏障，确保数据搬运完成后再执行后续操作，避免读写冲突。
+- `block_idx`：通过[GetBlockIdx()](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/工具接口/系统资源与变量/GetBlockIdx.md)获取当前核的编号，用于多核并行时的数据分片计算。
 
 核心代码如下：
 
@@ -119,7 +119,7 @@ __vector__ __global__ void add_custom(__gm__ float* x, __gm__ float* y, __gm__ f
 
 该接口提供CPU域/NPU域调试场景下的格式化输出功能。
 
-在算子kernel侧实现代码中需要输出日志信息的地方调用[printf](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/调试接口/上板打印/printf.md)接口打印相关内容。
+在算子kernel侧实现代码中需要输出日志信息的地方调用[printf](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/调试接口/上板打印/printf.md)接口打印相关内容。
 
 示例如下：
 
@@ -131,9 +131,9 @@ AscendC::printf("add blockIdx=%d\n", AscendC::GetBlockIdx());
 
 ### DumpTensor
 
-基于算子工程开发的算子，可以使用该接口Dump指定[LocalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)的内容。同时支持打印自定义的附加信息（仅支持uint32\_t数据类型的信息），比如打印当前行号等。
+基于算子工程开发的算子，可以使用该接口Dump指定[LocalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)的内容。同时支持打印自定义的附加信息（仅支持uint32\_t数据类型的信息），比如打印当前行号等。
 
-在算子kernel侧实现代码中需要打印Tensor数据的地方调用[DumpTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/调试接口/上板打印/DumpTensor.md)接口打印相关内容。样例如下：
+在算子kernel侧实现代码中需要打印Tensor数据的地方调用[DumpTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/调试接口/上板打印/DumpTensor.md)接口打印相关内容。样例如下：
 
 ```cpp
 // 向量计算: z = x + y
@@ -187,7 +187,7 @@ cat ./OPPROF_*/PipeUtilization.csv
 在本样例根目录下执行如下步骤，编译并执行样例。
 
 - 配置环境变量
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/zh/quick_start.md#prepare&install)，配置环境变量。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

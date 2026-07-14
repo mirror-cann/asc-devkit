@@ -189,7 +189,7 @@ nd2nzParams.dValue = baseK * stepKa;  // Large packet contains stepKa baseM * ba
 
 #### 6. LoadData3D Replacing LoadData2D — Reducing Instruction Queue Usage
 
-On Atlas A2/A3 architecture, this example uses [`LoadData3DParamsV2`](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_3D.md) (that is, LoadData3D) to replace [`LoadData2DParams`](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md) (that is, LoadData2D) for L1→L0 data transfer. This is a key instruction queue optimization.
+On Atlas A2/A3 architecture, this example uses [`LoadData3DParamsV2`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_3D.md) (that is, LoadData3D) to replace [`LoadData2DParams`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md) (that is, LoadData2D) for L1→L0 data transfer. This is a key instruction queue optimization.
 
 **Problem Background**: MTE1 instruction queue depth is 32. When using LoadData2D, due to limited single instruction transfer granularity, transferring one baseM×baseK slice requires a for loop to dispatch multiple LoadData2D instructions. For example, with baseM=128 and baseK=64, at least `baseK/16 = 4` LoadData2D instructions need to be dispatched.
 
@@ -386,7 +386,7 @@ Run the following steps in the root directory of this example to build and run t
 
 - Configure environment variables
 
-  Configure environment variables based on the [installation method](../../../../../docs/quick_start.md#prepare&install) of the CANN development kit in the current environment.
+  Configure environment variables based on the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit in the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

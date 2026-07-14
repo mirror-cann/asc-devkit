@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例基于[AscendDequant](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/量化操作/AscendDequant.md)高阶API实现反量化计算，用于将量化后的低精度数据恢复为高精度数据。样例展示了PER_CHANNEL场景（按通道量化）下，将int32_t类型输入数据乘以scale缩放因子，转换为float类型输出的过程。在950系列上兼容AscendDequant接口的前提下，推荐优先使用[Dequantize](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/SIMD-API/高阶API/量化操作/Dequantize.md)接口，该接口可通过统一的结构体配置，适配各类量化场景。
+本样例基于[AscendDequant](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/量化操作/AscendDequant.md)高阶API实现反量化计算，用于将量化后的低精度数据恢复为高精度数据。样例展示了PER_CHANNEL场景（按通道量化）下，将int32_t类型输入数据乘以scale缩放因子，转换为float类型输出的过程。在950系列上兼容AscendDequant接口的前提下，推荐优先使用[Dequantize](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/量化操作/Dequantize.md)接口，该接口可通过统一的结构体配置，适配各类量化场景。
 
 ## 本样例支持的产品及CANN软件版本
 
@@ -64,7 +64,7 @@
 
 在本样例根目录下执行如下步骤，编译并执行样例。
 - 配置环境变量  
-  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/quick_start.md#prepare&install)，配置环境变量。
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../docs/zh/quick_start.md#prepare&install)，配置环境变量。
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

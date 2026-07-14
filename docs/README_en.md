@@ -3,17 +3,20 @@
 ## Directory Description
 Key directory structure is as follows:
 ```
-├── api                            # API documentation directory
-│   ├── context                    # Documentation for each API
-│   └── README.md                  # Ascend C API list
-├── figures                        # Image directory
-├── asc_adv_api_contributing.md    # Ascend C high-level API contribution guide
-├── asc_basic_api_contributing.md  # Ascend C basic API contribution guide
-├── asc_c_api_contributing.md      # Ascend C C API contribution guide
-├── asc_doc_contributing.md        # Ascend C documentation contribution guide
-├── asc_doc_design_rules.md        # Ascend C documentation design rules
-├── asc_950_feature_guide.md       # Ascend 950PR/Ascend 950DT new feature guide
-├── quick_start.md                 # Quick start documentation
+├── zh                             # Chinese documentation directory
+│   ├── api                        # API documentation directory
+│   ├── figures                    # Image directory
+│   ├── guide                      # Ascend C operator develop guide
+│   ├── vitepress                      # docs build directory
+│   ├── asc_adv_api_contributing.md    # Ascend C high-level API contribution guide
+│   ├── asc_basic_api_contributing.md  # Ascend C basic API contribution guide
+│   ├── asc_c_api_contributing.md      # Ascend C C API contribution guide
+│   ├── asc_doc_contributing.md        # Ascend C documentation contribution guide
+│   ├── asc_doc_design_rules.md        # Ascend C documentation design rules
+│   ├── asc_950_feature_guide.md       # Ascend 950PR/Ascend 950DT new feature guide
+│   ├── asc_hwo_to_choose_api.md       # Ascend C Multi-Level Programming Interface Selection Guide
+│   └── quick_start.md                 # Quick start documentation
+├── README_en.md
 └── README.md
 ```
 
@@ -22,7 +25,7 @@ To help developers quickly familiarize with this project, corresponding document
 
 | Document | Target Audience | Content Introduction |
 |---|---|---|
-| [API List](./api/README.md) | Users developing customized APIs or operators based on Ascend C open source repository. | Introduces all APIs included in the project. |
+| [API List](./zh/api/README.md) | Users developing customized APIs or operators based on Ascend C open source repository. | Introduces all APIs included in the project. |
 | [High-level API Contribution Guide](./en/asc_adv_api_contributing.md) | Users developing customized APIs based on Ascend C open source repository. | Introduces how to extend or develop Ascend C high-level API. High-level API abstracts and encapsulates common algorithms based on single-core, implementing commonly used computational algorithms to improve operator development efficiency. |
 | [Basic API Contribution Guide](./en/asc_basic_api_contributing.md) | Users developing customized APIs based on Ascend C open source repository. | Introduces how to extend or develop Ascend C basic API. Basic API implements abstraction of hardware capabilities, opening chip capabilities, ensuring completeness and compatibility. |
 | [C API Contribution Guide](./en/asc_c_api_contributing.md) | Users developing customized APIs based on Ascend C open source repository. | Introduces how to extend or develop Ascend C C API. C API provides pure C style interfaces, conforming to C language operator development habits, opening complete chip programming capabilities. |
