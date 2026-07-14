@@ -23,15 +23,16 @@ ERROR_TOL = 1e-3
 def verify_result(output, golden):
     output = np.fromfile(output, dtype=data_type).reshape(-1)
     golden = np.fromfile(golden, dtype=data_type).reshape(-1)
-    different_element_results = (output != golden)
+    different_element_results = output != golden
     different_element_indexes = np.where(different_element_results == True)[0]
     for index in range(len(different_element_indexes)):
         real_index = different_element_indexes[index]
         golden_data = golden[real_index]
         output_data = output[real_index]
         print(
-            "data index: %06d, expected: %d, actual: %d, diff: %d" %
-            (real_index, golden_data, output_data, output_data - golden_data))
+            "data index: %06d, expected: %d, actual: %d, diff: %d"
+            % (real_index, golden_data, output_data, output_data - golden_data)
+        )
         if index == 100:
             break
     print("golden_data : ", golden)
@@ -41,7 +42,7 @@ def verify_result(output, golden):
     return error_ratio <= ERROR_TOL
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         res = verify_result(sys.argv[1], sys.argv[2])
         if not res:

@@ -16,6 +16,7 @@ import os
 import numpy as np
 import argparse
 
+
 def gen_golden_data_simple(scenario):
     dtype = np.float32
     np.random.seed(123321)
@@ -39,8 +40,11 @@ def gen_golden_data_simple(scenario):
     os.makedirs("output", exist_ok=True)
     golden.tofile("./output/golden.bin")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--scenario', type=int, choices=range(3), default=0, help='指定场景，取值0~2')
+    parser.add_argument(
+        "--scenario", type=int, choices=range(3), default=0, help="指定场景，取值0~2"
+    )
     args = parser.parse_args()
     gen_golden_data_simple(args.scenario)

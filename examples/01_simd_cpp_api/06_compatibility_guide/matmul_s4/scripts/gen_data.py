@@ -20,8 +20,12 @@ def split_and_reorder(data):
     data_uint8 = data.astype(np.uint8)
     low_bits_unsigned = data_uint8 & 0x0F
     high_bits_unsigned = (data_uint8 >> 4) & 0x0F
-    low_bits_signed = np.where(low_bits_unsigned > 7, low_bits_unsigned - 16, low_bits_unsigned)
-    high_bits_signed = np.where(high_bits_unsigned > 7, high_bits_unsigned - 16, high_bits_unsigned)
+    low_bits_signed = np.where(
+        low_bits_unsigned > 7, low_bits_unsigned - 16, low_bits_unsigned
+    )
+    high_bits_signed = np.where(
+        high_bits_unsigned > 7, high_bits_unsigned - 16, high_bits_unsigned
+    )
     result = np.empty(len(data) * 2, dtype=np.int8)
     result[0::2] = low_bits_signed
     result[1::2] = high_bits_signed
@@ -74,14 +78,44 @@ def gen_golden_data_simple():
     ub_size += iterate_size * trans_length
     ub_size += trans_length
     ub_size += base_n * base_m * np.dtype(l0c_type).itemsize
-    tiling[0:32] = [used_core_num, m, n, k, k,
-                    single_core_m, single_core_n,
-                    single_core_k, base_m, base_n,
-                    base_k, depth_a1, depth_b1, step_m, step_n,
-                    0, trans_length, iterate_order, 0, l1_size,
-                    l0c_size, ub_size, 1, 1, 1, 1, step_ka, step_kb, 1, 1, 1, 0]
+    tiling[0:32] = [
+        used_core_num,
+        m,
+        n,
+        k,
+        k,
+        single_core_m,
+        single_core_n,
+        single_core_k,
+        base_m,
+        base_n,
+        base_k,
+        depth_a1,
+        depth_b1,
+        step_m,
+        step_n,
+        0,
+        trans_length,
+        iterate_order,
+        0,
+        l1_size,
+        l0c_size,
+        ub_size,
+        1,
+        1,
+        1,
+        1,
+        step_ka,
+        step_kb,
+        1,
+        1,
+        1,
+        0,
+    ]
 
-    golden = np.matmul(x1_gm_unzipped.astype(np.int32), x2_gm_unzipped.astype(np.int32)).astype(l0c_type)
+    golden = np.matmul(
+        x1_gm_unzipped.astype(np.int32), x2_gm_unzipped.astype(np.int32)
+    ).astype(l0c_type)
 
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)

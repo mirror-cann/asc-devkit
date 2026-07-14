@@ -18,6 +18,7 @@ import numpy as np
 
 SIZE = 256
 
+
 def gen_golden_data_simple():
     x = np.random.uniform(-60000, 60000, [SIZE]).astype(np.float32)
     y = np.random.uniform(-60000, 60000, [SIZE]).astype(np.float32)
@@ -29,6 +30,7 @@ def gen_golden_data_simple():
 
     os.makedirs("output", exist_ok=True)
     z.tofile("./output/golden_z.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

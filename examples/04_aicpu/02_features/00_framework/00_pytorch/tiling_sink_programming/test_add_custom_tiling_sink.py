@@ -37,11 +37,15 @@ def add_custom_tiling_sink_impl(x, y):
 
 
 torch.library.impl(m, "add_custom_tiling_sink", "CPU")(add_custom_tiling_sink_impl)
-torch.library.impl(m, "add_custom_tiling_sink", "PrivateUse1")(add_custom_tiling_sink_impl)
+torch.library.impl(m, "add_custom_tiling_sink", "PrivateUse1")(
+    add_custom_tiling_sink_impl
+)
 
 
 # Map the Torch op to GE so torchair can lower it.
-@torchair.register_fx_node_ge_converter(torch.ops.ascendc_ops.add_custom_tiling_sink.default)
+@torchair.register_fx_node_ge_converter(
+    torch.ops.ascendc_ops.add_custom_tiling_sink.default
+)
 def convert_npu_add_custom(
     x: Tensor, y: Tensor, z: Tensor = None, meta_outputs: Any = None
 ):

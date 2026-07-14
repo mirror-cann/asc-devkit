@@ -22,7 +22,7 @@ def gen_golden_data_simple():
     # GELU(x) ≈ x / (1 + e^(-2 · √(2/π) · (x + 0.044715 · x³)))
     # 其中，-2 · √(2/π) ≈ -1.595769
     coeff = -1.595769
-    exponent = coeff * (input_x + 0.044715 * (input_x ** 3))
+    exponent = coeff * (input_x + 0.044715 * (input_x**3))
     gelu = input_x / (1 + np.exp(exponent))
     # Element-wise计算
     golden = np.exp(-0.5 * (gelu + 1) * (gelu + 1) + 2)

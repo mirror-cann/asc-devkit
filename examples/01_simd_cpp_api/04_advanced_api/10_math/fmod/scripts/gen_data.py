@@ -18,7 +18,9 @@ import numpy as np
 
 def numpy_fmod(src0_gm, src1_gm):
     new_dtype = np.float32
-    golden = np.fmod(src0_gm.astype(new_dtype), src1_gm.astype(new_dtype)).astype(src0_gm.dtype)
+    golden = np.fmod(src0_gm.astype(new_dtype), src1_gm.astype(new_dtype)).astype(
+        src0_gm.dtype
+    )
     return golden
 
 
@@ -33,6 +35,7 @@ def generate_random_data(min_range, max_range, shape, dtype):
     if min_range == max_range:
         return np.full(shape, min_range, dtype=dtype)
     return np.random.uniform(min_range, max_range, shape).astype(dtype)
+
 
 def gen_golden_data_simple():
     dtype = np.float32
@@ -50,6 +53,7 @@ def gen_golden_data_simple():
     src1.tofile("./input/input_src1.bin")
     os.makedirs("output", exist_ok=True)
     golden_gm.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

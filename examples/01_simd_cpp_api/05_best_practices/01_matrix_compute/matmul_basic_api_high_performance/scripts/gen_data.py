@@ -15,6 +15,7 @@
 import os
 import numpy as np
 
+
 def gen_golden_data():
     m, n, k, is_bias = 8192, 8192, 8192, False
 
@@ -25,10 +26,17 @@ def gen_golden_data():
     x2_gm = np.random.uniform(-1, 1, [k, n]).astype(np.float16)
     if is_bias:
         bias_gm = np.random.uniform(-10, 10, [n]).reshape([n]).astype(np.float16)
-        golden = np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32)).astype(np.float32) + bias_gm
+        golden = (
+            np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32)).astype(
+                np.float32
+            )
+            + bias_gm
+        )
         bias_gm.tofile("./input/bias_gm.bin")
     else:
-        golden = np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32)).astype(np.float32)
+        golden = np.matmul(x1_gm.astype(np.float32), x2_gm.astype(np.float32)).astype(
+            np.float32
+        )
     golden = golden.astype(np.float16)
     x1_gm.tofile("./input/x1_gm.bin")
     # x2_gm transpose to match B matrix transpose

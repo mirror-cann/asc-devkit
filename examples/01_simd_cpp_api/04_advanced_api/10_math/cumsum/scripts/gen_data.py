@@ -34,7 +34,7 @@ def binary_cumsum(src_gm):
                 line1 = line0 + j
                 if line1 > colume_origin - 1:
                     break
-                dst[line1, ] = dst[line0, ] + dst[line1, ]
+                dst[line1,] = dst[line0,] + dst[line1,]
             round_cumsum = int(round_cumsum / 2)
             cur_round += 1
     if src_gm.dtype == np.float16:
@@ -94,6 +94,7 @@ def gen_golden_data_simple():
     golden_last_row_gm = golden[-1, :]
     golden.reshape(-1).tofile("./output/golden_output_result.bin")
     golden_last_row_gm.tofile("./output/golden_output_last_row.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

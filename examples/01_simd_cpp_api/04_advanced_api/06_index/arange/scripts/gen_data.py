@@ -17,7 +17,6 @@ import numpy as np
 
 
 def gen_golden_data_simple():
-
     start = np.float32(1.234)
     difference = np.float32(5.678)
     length = np.uint32((100 + 8 - 1) // 8 * 8)

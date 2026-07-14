@@ -48,8 +48,8 @@ def gen_golden_data():
     x2_scale_gm = np.random.randint(127, 130, [sk, n]).astype(np.uint8)
 
     ###################### compute ########################
-    x1_mx = 2**(x1_scale_gm.astype(np.float64) - 127)
-    x2_mx = 2**(x2_scale_gm.astype(np.float64) - 127)
+    x1_mx = 2 ** (x1_scale_gm.astype(np.float64) - 127)
+    x2_mx = 2 ** (x2_scale_gm.astype(np.float64) - 127)
     x1_full = np.zeros([m, k], dtype=np.float64)
     x2_full = np.zeros([k, n], dtype=np.float64)
 
@@ -57,7 +57,9 @@ def gen_golden_data():
         x1_full[:, i] = x1_gm[:, i] * x1_mx[:, i // 32]
         x2_full[i, :] = x2_gm[i, :] * x2_mx[i // 32, :]
 
-    golden = np.matmul(x1_full.astype(np.float64), x2_full.astype(np.float64)).astype(bfloat16)
+    golden = np.matmul(x1_full.astype(np.float64), x2_full.astype(np.float64)).astype(
+        bfloat16
+    )
 
     x2_gm = x2_gm.transpose()
     x2_scale_gm = x2_scale_gm.transpose()

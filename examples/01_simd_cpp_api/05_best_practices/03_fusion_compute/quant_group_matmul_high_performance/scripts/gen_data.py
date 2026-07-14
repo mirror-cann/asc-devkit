@@ -15,11 +15,13 @@
 import os
 import numpy as np
 
+
 def FastGelu(x):
     abs_x = np.abs(x)
     x2 = np.exp(0.851 * (x - abs_x))
     x3 = 1 + np.exp(-1.702 * abs_x)
     return x * x2 / x3
+
 
 def gen_golden_data():
     groupNum = 8
@@ -57,12 +59,15 @@ def gen_golden_data():
     os.makedirs("output", exist_ok=True)
 
     x.tofile("./input/x.bin")
-    weight_nz = weight.reshape([groupNum, k // 16, 16, n // 32, 32]).transpose([0, 3, 1, 2, 4])
+    weight_nz = weight.reshape([groupNum, k // 16, 16, n // 32, 32]).transpose(
+        [0, 3, 1, 2, 4]
+    )
     weight_nz.tofile("./input/weight.bin")
     groupList.tofile("./input/groupList.bin")
     scale.tofile("./input/scale.bin")
     perTokenScale.tofile("./input/perTokenScale.bin")
     golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data()

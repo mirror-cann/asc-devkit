@@ -37,5 +37,6 @@ def gen_golden_data_simple():
     os.makedirs("output", exist_ok=True)
     golden.tofile("./output/golden.bin")
 
+
 if __name__ == "__main__":
     gen_golden_data_simple()

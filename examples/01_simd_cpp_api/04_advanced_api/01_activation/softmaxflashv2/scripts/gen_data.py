@@ -34,9 +34,10 @@ def softmax_py_float(x):
     out = np.reshape(x_div, [orig_shape[0], orig_shape[1]])
     return x_max, x_sum
 
+
 def gen_golden_data_simple():
     x_shape = (960, 960)
-    workspace_shape = (1024)
+    workspace_shape = 1024
     x = np.random.uniform(-1, 1, x_shape).astype(np.float32)
     golden_max = np.zeros([x_shape[0], 8], dtype=np.float32)
     golden_sum = np.zeros([x_shape[0], 8], dtype=np.float32)
@@ -52,6 +53,7 @@ def gen_golden_data_simple():
     workspace.tofile("./input/workspace.bin")
     golden_max.tofile("./output/golden_max.bin")
     golden_sum.tofile("./output/golden_sum.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

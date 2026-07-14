@@ -14,13 +14,14 @@
 import torch
 import torch_npu
 from torch_npu.testing.testcase import TestCase, run_tests
+
 torch.ops.load_library("libascendc_roll.so")
 
 
 class TestCustomRoll(TestCase):
     def test_roll_custom_ops(self):
         length = [8, 2048]
-        input = torch.rand(length, device='cpu', dtype=torch.float32)
+        input = torch.rand(length, device="cpu", dtype=torch.float32)
         output = torch.ops.ascendc_ops.ascendc_roll(input.npu(), [1], [0]).cpu()
         expected = torch.roll(input, [1], [0])
         self.assertRtolEqual(output, expected)

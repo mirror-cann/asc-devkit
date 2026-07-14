@@ -44,7 +44,9 @@ def main():
     input_x.tofile("./input/input.bin")
     golden = build_golden(input_x)
     golden.tofile("./output/golden.bin")
-    print(f"generate random input: seed={RANDOM_SEED}, range=[{RANDOM_LOW}, {RANDOM_HIGH}]")
+    print(
+        f"generate random input: seed={RANDOM_SEED}, range=[{RANDOM_LOW}, {RANDOM_HIGH}]"
+    )
     print(f"input sample: {input_x.reshape(-1)[:16]}")
 
 

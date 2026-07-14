@@ -35,6 +35,7 @@ def generate_random_data(min_range, max_range, shape, dtype):
 def rms(x, epsilon=1e-8, axis=-1):
     def rms1(v, epsilon, axis=None):
         return np.sqrt(np.mean(np.square(v), axis, keepdims=True) + epsilon)
+
     return rms1(x, epsilon, axis)
 
 

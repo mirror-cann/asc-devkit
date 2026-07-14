@@ -50,12 +50,13 @@ def gen_golden_data_simple():
         golden1 = np.concatenate((golden1, golendiff2), axis=1).astype(np.int32)
 
     for i in range(OUTTER):
-        if (finishlocal[i] == True):
+        if finishlocal[i] == True:
             golden1[i, :K] = N
 
     os.makedirs("output", exist_ok=True)
     golden0.tofile("./output/golden_dstGmValue.bin")
     golden1.tofile("./output/golden_dstGmIndex.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

@@ -24,19 +24,22 @@ def gen_golden_data():
     x1_gm = np.random.uniform(-5, 5, [m, k]).astype(np.int8)
     x2_gm = np.random.uniform(-5, 5, [k, n]).astype(np.int8)
     bias_gm = np.random.uniform(-5, 5, [n]).reshape([n]).astype(np.int32)
-    golden = np.matmul(x1_gm.astype(np.int32), x2_gm.astype(np.int32)).astype(np.int32) + bias_gm
+    golden = (
+        np.matmul(x1_gm.astype(np.int32), x2_gm.astype(np.int32)).astype(np.int32)
+        + bias_gm
+    )
 
     x1_gm_int4 = np.zeros(shape=[m, k // 2]).astype(np.int8)
     for i in range(m):
         for j in range(k):
             if j % 2 == 0:
-                x1_gm_int4[i][j // 2] = (x1_gm[i][j + 1] << 4) + (x1_gm[i][j] & 0x0f)
+                x1_gm_int4[i][j // 2] = (x1_gm[i][j + 1] << 4) + (x1_gm[i][j] & 0x0F)
 
     x2_gm_int4 = np.zeros(shape=[k, n // 2]).astype(np.int8)
     for i in range(k):
         for j in range(n):
             if j % 2 == 0:
-                x2_gm_int4[i][j // 2] = (x2_gm[i][j + 1] << 4) + (x2_gm[i][j] & 0x0f)
+                x2_gm_int4[i][j // 2] = (x2_gm[i][j + 1] << 4) + (x2_gm[i][j] & 0x0F)
 
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)

@@ -18,14 +18,16 @@ import tensorflow as tf
 is_bias = True
 is_trans_a = False
 is_trans_b = False
-a_format="COLUMN_MAJOR"
-b_format="COLUMN_MAJOR"
-c_format="COLUMN_MAJOR"
+a_format = "COLUMN_MAJOR"
+b_format = "COLUMN_MAJOR"
+c_format = "COLUMN_MAJOR"
+
 
 def due_overflow(data):
     data = np.maximum(data, -65504)
     data = np.minimum(data, 65504)
     return data
+
 
 def tf_matmul(x1_gm_fp32, x2_gm_fp32, bias_gm_fp32=None):
     tf.compat.v1.disable_eager_execution()
@@ -46,6 +48,7 @@ def tf_matmul(x1_gm_fp32, x2_gm_fp32, bias_gm_fp32=None):
         res_tf = sess.run(res_tf, feed_dict=feed_dict)
     y_gm_fp32 = due_overflow(res_tf)
     return y_gm_fp32
+
 
 def gen_golden_data(dst_type=np.float32):
     m = 428

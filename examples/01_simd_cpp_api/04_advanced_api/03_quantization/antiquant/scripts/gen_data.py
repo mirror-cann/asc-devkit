@@ -57,6 +57,7 @@ def gen_golden_data_simple(npu_arch):
     os.makedirs("output", exist_ok=True)
     dst.tofile("./output/golden.bin")
 
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("用法: python3 gen_data.py -DCMAKE_ASC_ARCHITECTURES=dav-2201")

@@ -46,8 +46,20 @@ def gen_golden_data():
     # a no_transpose, b transpose
     a_t = np.transpose(a, axes=(0, 2, 3, 1, 4))
     b_t = np.transpose(b, axes=(0, 2, 3, 4, 1))
-    a_broadcast_shape = [max(aLayoutInfoB, bLayoutInfoB), max(aLayoutInfoN, bLayoutInfoN), max(aLayoutInfoG, bLayoutInfoG), aLayoutInfoS, aLayoutInfoD]
-    b_broadcast_shape = [max(aLayoutInfoB, bLayoutInfoB), max(aLayoutInfoN, bLayoutInfoN), max(aLayoutInfoG, bLayoutInfoG), bLayoutInfoD, bLayoutInfoS]
+    a_broadcast_shape = [
+        max(aLayoutInfoB, bLayoutInfoB),
+        max(aLayoutInfoN, bLayoutInfoN),
+        max(aLayoutInfoG, bLayoutInfoG),
+        aLayoutInfoS,
+        aLayoutInfoD,
+    ]
+    b_broadcast_shape = [
+        max(aLayoutInfoB, bLayoutInfoB),
+        max(aLayoutInfoN, bLayoutInfoN),
+        max(aLayoutInfoG, bLayoutInfoG),
+        bLayoutInfoD,
+        bLayoutInfoS,
+    ]
     a_broadcast = np.broadcast_to(a_t, a_broadcast_shape)
     b_broadcast = np.broadcast_to(b_t, b_broadcast_shape)
     golden = np.matmul(a_broadcast, b_broadcast).astype(np.float32)

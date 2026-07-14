@@ -39,12 +39,23 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
 
 from ut_generator import (
-    ApiType, ChipArch, TestCase, UTConfig,
-    create_generator, DTYPE_MAP, GENERATOR_DTYPE_MAP, ARCH_DIR_MAP, NPU_ARCH_MAP,
-    API_TYPE_MAP, API_TYPE_CHOICES, API_RESTRICTIONS,
+    ApiType,
+    ChipArch,
+    TestCase,
+    UTConfig,
+    create_generator,
+    DTYPE_MAP,
+    GENERATOR_DTYPE_MAP,
+    ARCH_DIR_MAP,
+    NPU_ARCH_MAP,
+    API_TYPE_MAP,
+    API_TYPE_CHOICES,
+    API_RESTRICTIONS,
     AIV_GENERIC_SCALAR_TENSOR_DISPATCH_APIS,
-    CHIP_ARCH_BY_NAME, REFERENCE_CONSTRAINT_FILES, ensure_reference_constraints_loaded,
-    get_adv_profile_output_path
+    CHIP_ARCH_BY_NAME,
+    REFERENCE_CONSTRAINT_FILES,
+    ensure_reference_constraints_loaded,
+    get_adv_profile_output_path,
 )
 
 
@@ -62,7 +73,7 @@ def parse_coverage_report(report_path: Optional[str]) -> Dict[str, Any]:
             "lines": None,
             "functions": None,
             "source": None,
-            "reason": "未提供 coverage report 路径"
+            "reason": "未提供 coverage report 路径",
         }
 
     if not os.path.exists(report_path):
@@ -71,7 +82,7 @@ def parse_coverage_report(report_path: Optional[str]) -> Dict[str, Any]:
             "lines": None,
             "functions": None,
             "source": report_path,
-            "reason": f"coverage report 不存在: {report_path}"
+            "reason": f"coverage report 不存在: {report_path}",
         }
 
     with open(report_path, "r", encoding="utf-8", errors="ignore") as f:
@@ -85,16 +96,18 @@ def parse_coverage_report(report_path: Optional[str]) -> Dict[str, Any]:
         label_re = re.escape(label)
         header_pattern = re.compile(
             rf'<td\b(?=[^>]*class=["\'][^"\']*\bheaderItem\b[^"\']*["\'])[^>]*>'
-            rf'\s*{label_re}:?\s*</td>\s*'
+            rf"\s*{label_re}:?\s*</td>\s*"
             rf'<td\b(?=[^>]*class=["\'][^"\']*\bheaderCovTableEntry(?:Lo|Med|Hi)?\b[^"\']*["\'])[^>]*>'
-            rf'\s*([0-9]+(?:\.[0-9]+)?)\s*%',
+            rf"\s*([0-9]+(?:\.[0-9]+)?)\s*%",
             re.IGNORECASE | re.DOTALL,
         )
         match = header_pattern.search(content)
         if match:
             return float(match.group(1))
 
-        for row in re.findall(r"<tr\b[^>]*>.*?</tr>", content, re.IGNORECASE | re.DOTALL):
+        for row in re.findall(
+            r"<tr\b[^>]*>.*?</tr>", content, re.IGNORECASE | re.DOTALL
+        ):
             row_text = normalize_html_text(row)
             if not re.search(rf"(?:^|\s){label_re}\s*:", row_text, re.IGNORECASE):
                 continue
@@ -112,7 +125,7 @@ def parse_coverage_report(report_path: Optional[str]) -> Dict[str, Any]:
             "lines": None,
             "functions": None,
             "source": report_path,
-            "reason": "未在 coverage report 中解析到 Lines / Functions 百分比"
+            "reason": "未在 coverage report 中解析到 Lines / Functions 百分比",
         }
 
     return {
@@ -120,7 +133,7 @@ def parse_coverage_report(report_path: Optional[str]) -> Dict[str, Any]:
         "lines": lines,
         "functions": functions,
         "source": report_path,
-        "reason": None
+        "reason": None,
     }
 
 
@@ -129,10 +142,16 @@ def get_token_usage(args: argparse.Namespace) -> Dict[str, Any]:
     prompt = args.prompt_tokens
     completion = args.completion_tokens
     total = args.total_tokens
-    source = "cli_args" if any(value is not None for value in [prompt, completion, total]) else None
+    source = (
+        "cli_args"
+        if any(value is not None for value in [prompt, completion, total])
+        else None
+    )
     reason = None
 
-    def parse_env_int(value: Optional[str], name: str, invalid: List[str]) -> Optional[int]:
+    def parse_env_int(
+        value: Optional[str], name: str, invalid: List[str]
+    ) -> Optional[int]:
         if value is None:
             return None
 
@@ -154,7 +173,9 @@ def get_token_usage(args: argparse.Namespace) -> Dict[str, Any]:
             source = "env"
             invalid_env = []
             prompt = parse_env_int(env_prompt, "ASC_API_UT_PROMPT_TOKENS", invalid_env)
-            completion = parse_env_int(env_completion, "ASC_API_UT_COMPLETION_TOKENS", invalid_env)
+            completion = parse_env_int(
+                env_completion, "ASC_API_UT_COMPLETION_TOKENS", invalid_env
+            )
             total = parse_env_int(env_total, "ASC_API_UT_TOTAL_TOKENS", invalid_env)
             if invalid_env:
                 reason = "忽略非法 token 环境变量: " + ", ".join(invalid_env)
@@ -168,7 +189,7 @@ def get_token_usage(args: argparse.Namespace) -> Dict[str, Any]:
             "completion_tokens": None,
             "total_tokens": None,
             "source": "not_provided",
-            "reason": "本地 CLI 生成不消耗 LLM token，调用环境也未提供 token usage"
+            "reason": "本地 CLI 生成不消耗 LLM token，调用环境也未提供 token usage",
         }
 
     return {
@@ -176,7 +197,7 @@ def get_token_usage(args: argparse.Namespace) -> Dict[str, Any]:
         "completion_tokens": completion,
         "total_tokens": total,
         "source": source,
-        "reason": reason
+        "reason": reason,
     }
 
 
@@ -232,7 +253,7 @@ def create_default_config() -> Dict[str, Any]:
                 "dtype": "half",
                 "input_count": 2,
                 "has_mask": False,
-                "additional_params": {}
+                "additional_params": {},
             },
             {
                 "name": "Add_float_256",
@@ -240,12 +261,12 @@ def create_default_config() -> Dict[str, Any]:
                 "dtype": "float",
                 "input_count": 2,
                 "has_mask": False,
-                "additional_params": {}
-            }
+                "additional_params": {},
+            },
         ],
         "kernel_params": {},
         "custom_includes": [],
-        "output_dir": None
+        "output_dir": None,
     }
 
 
@@ -258,7 +279,10 @@ def default_kernel_params(api_type: str) -> Dict[str, int]:
 
 def default_input_count(api_type: str, api_name: str) -> int:
     """Return the safest CLI default input count for generic templates."""
-    if api_type == ApiType.AIV.value and api_name.lower() in AIV_GENERIC_SCALAR_TENSOR_DISPATCH_APIS:
+    if (
+        api_type == ApiType.AIV.value
+        and api_name.lower() in AIV_GENERIC_SCALAR_TENSOR_DISPATCH_APIS
+    ):
         return 1
     return 2
 
@@ -269,35 +293,34 @@ def validate_config(config: Dict[str, Any]) -> List[str]:
 
     # 验证 API 类型
     valid_types = API_TYPE_CHOICES
-    if config.get('api_type') not in valid_types:
-        errors.append(f"无效的 api_type: {config.get('api_type')}, 有效值: {valid_types}")
+    if config.get("api_type") not in valid_types:
+        errors.append(
+            f"无效的 api_type: {config.get('api_type')}, 有效值: {valid_types}"
+        )
 
     # 验证芯片架构
     valid_chips = list(CHIP_ARCH_BY_NAME.keys())
-    if config.get('chip') not in valid_chips:
+    if config.get("chip") not in valid_chips:
         errors.append(f"无效的 chip: {config.get('chip')}, 有效值: {valid_chips}")
 
     # 验证 API 名称
-    if not config.get('api_name'):
+    if not config.get("api_name"):
         errors.append("api_name 不能为空")
 
     # 验证架构限制
-    chip = config.get('chip')
-    api_type = config.get('api_type')
+    chip = config.get("chip")
+    api_type = config.get("api_type")
 
     restriction = API_RESTRICTIONS.get(api_type, {})
-    allowed_chips = restriction.get('allowed_chips', [])
+    allowed_chips = restriction.get("allowed_chips", [])
     if allowed_chips and chip not in allowed_chips:
-        message = restriction.get(
-            'message',
-            f"{api_type} API 不支持当前芯片: {{chip}}"
-        )
+        message = restriction.get("message", f"{api_type} API 不支持当前芯片: {{chip}}")
         errors.append(message.format(chip=chip))
 
     # 验证数据类型
     valid_dtypes = list(GENERATOR_DTYPE_MAP.keys())
-    for tc in config.get('test_cases', []):
-        if tc.get('dtype') not in valid_dtypes:
+    for tc in config.get("test_cases", []):
+        if tc.get("dtype") not in valid_dtypes:
             errors.append(
                 f"当前通用生成器不支持直接生成 dtype: {tc.get('dtype')}, "
                 f"可直接生成值: {valid_dtypes}; 其他内置类型需按目标 API 自定义初始化"
@@ -309,24 +332,26 @@ def validate_config(config: Dict[str, Any]) -> List[str]:
 def parse_config(config: Dict[str, Any]) -> UTConfig:
     """解析配置文件，创建 UTConfig 对象"""
     test_cases = []
-    for tc in config.get('test_cases', []):
-        test_cases.append(TestCase(
-            name=tc.get('name', f"{config['api_name']}_case"),
-            data_size=tc.get('data_size', 256),
-            dtype=tc.get('dtype', 'half'),
-            input_count=tc.get('input_count', 2),
-            has_mask=tc.get('has_mask', False),
-            additional_params=tc.get('additional_params', {})
-        ))
+    for tc in config.get("test_cases", []):
+        test_cases.append(
+            TestCase(
+                name=tc.get("name", f"{config['api_name']}_case"),
+                data_size=tc.get("data_size", 256),
+                dtype=tc.get("dtype", "half"),
+                input_count=tc.get("input_count", 2),
+                has_mask=tc.get("has_mask", False),
+                additional_params=tc.get("additional_params", {}),
+            )
+        )
 
     return UTConfig(
-        api_type=API_TYPE_MAP[config['api_type']],
-        api_name=config['api_name'],
-        chip=CHIP_ARCH_BY_NAME[config['chip']],
+        api_type=API_TYPE_MAP[config["api_type"]],
+        api_name=config["api_name"],
+        chip=CHIP_ARCH_BY_NAME[config["chip"]],
         test_cases=test_cases,
-        kernel_params=config.get('kernel_params', {}),
-        custom_includes=config.get('custom_includes', []),
-        output_dir=config.get('output_dir')
+        kernel_params=config.get("kernel_params", {}),
+        custom_includes=config.get("custom_includes", []),
+        output_dir=config.get("output_dir"),
     )
 
 
@@ -346,7 +371,9 @@ def get_output_path(config: UTConfig) -> str:
         npu_arch = NPU_ARCH_MAP[config.chip]
         return f"tests/api/c_api/npu_arch_{npu_arch}/vector_compute/test_{config.api_name.lower()}.cpp"
     elif config.api_type == ApiType.ADV:
-        profile_output = get_adv_profile_output_path(config.api_name, config.kernel_params)
+        profile_output = get_adv_profile_output_path(
+            config.api_name, config.kernel_params
+        )
         if profile_output:
             return profile_output
         return f"tests/api/adv_api/{config.api_name.lower()}/test_operator_{config.api_name.lower()}.cpp"
@@ -364,9 +391,9 @@ def main():
     """主函数"""
     start_time = time.monotonic()
     parser = argparse.ArgumentParser(
-        description='AscendC API UT 代码生成器 CLI',
+        description="AscendC API UT 代码生成器 CLI",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='''
+        epilog="""
 示例:
   # 从配置文件生成
   %(prog)s --config ut_config.json
@@ -379,60 +406,86 @@ def main():
 
   # 列出支持的配置
   %(prog)s --list-supported
-        '''
+        """,
     )
 
-    parser.add_argument('--config', '-c', type=str,
-                       help='配置文件路径 (JSON 格式)')
+    parser.add_argument("--config", "-c", type=str, help="配置文件路径 (JSON 格式)")
 
-    parser.add_argument('--type', '-t', choices=API_TYPE_CHOICES,
-                       help='API 类型')
+    parser.add_argument("--type", "-t", choices=API_TYPE_CHOICES, help="API 类型")
 
-    parser.add_argument('--api', '-a', type=str,
-                       help='API 名称 (如: Add, Mmad, asc_add)')
+    parser.add_argument(
+        "--api", "-a", type=str, help="API 名称 (如: Add, Mmad, asc_add)"
+    )
 
-    parser.add_argument('--chip', choices=list(CHIP_ARCH_BY_NAME.keys()),
-                       help='目标芯片架构')
+    parser.add_argument(
+        "--chip", choices=list(CHIP_ARCH_BY_NAME.keys()), help="目标芯片架构"
+    )
 
-    parser.add_argument('--output', '-o', type=str, default=None,
-                       help='输出文件路径')
+    parser.add_argument("--output", "-o", type=str, default=None, help="输出文件路径")
 
-    parser.add_argument('--output-dir', type=str, default=None,
-                       help='输出目录（自动生成文件名）')
+    parser.add_argument(
+        "--output-dir", type=str, default=None, help="输出目录（自动生成文件名）"
+    )
 
-    parser.add_argument('--data-size', '-d', type=int, default=256,
-                       help='测试数据大小 (默认: 256)')
+    parser.add_argument(
+        "--data-size", "-d", type=int, default=256, help="测试数据大小 (默认: 256)"
+    )
 
-    parser.add_argument('--dtype', type=str, default='half',
-                       choices=list(GENERATOR_DTYPE_MAP.keys()),
-                       help='通用模板可直接初始化的数据类型 (默认: half)')
+    parser.add_argument(
+        "--dtype",
+        type=str,
+        default="half",
+        choices=list(GENERATOR_DTYPE_MAP.keys()),
+        help="通用模板可直接初始化的数据类型 (默认: half)",
+    )
 
-    parser.add_argument('--test-count', type=int, default=3,
-                       help='生成测试用例数量 (默认: 3)')
+    parser.add_argument(
+        "--test-count", type=int, default=3, help="生成测试用例数量 (默认: 3)"
+    )
 
-    parser.add_argument('--template-config', action='store_true',
-                       help='输出配置文件模板并退出')
+    parser.add_argument(
+        "--template-config", action="store_true", help="输出配置文件模板并退出"
+    )
 
-    parser.add_argument('--list-supported', action='store_true',
-                       help='列出支持的配置选项')
+    parser.add_argument(
+        "--list-supported", action="store_true", help="列出支持的配置选项"
+    )
 
-    parser.add_argument('--validate', action='store_true',
-                       help='仅验证配置，不生成代码')
+    parser.add_argument(
+        "--validate", action="store_true", help="仅验证配置，不生成代码"
+    )
 
-    parser.add_argument('--coverage-report', type=str, default=None,
-                       help='当前覆盖率报告 HTML 路径，用于报告 Lines / Functions 覆盖率')
+    parser.add_argument(
+        "--coverage-report",
+        type=str,
+        default=None,
+        help="当前覆盖率报告 HTML 路径，用于报告 Lines / Functions 覆盖率",
+    )
 
-    parser.add_argument('--prompt-tokens', type=int, default=None,
-                       help='外部调用环境记录的 prompt token 数')
+    parser.add_argument(
+        "--prompt-tokens",
+        type=int,
+        default=None,
+        help="外部调用环境记录的 prompt token 数",
+    )
 
-    parser.add_argument('--completion-tokens', type=int, default=None,
-                       help='外部调用环境记录的 completion token 数')
+    parser.add_argument(
+        "--completion-tokens",
+        type=int,
+        default=None,
+        help="外部调用环境记录的 completion token 数",
+    )
 
-    parser.add_argument('--total-tokens', type=int, default=None,
-                       help='外部调用环境记录的 total token 数')
+    parser.add_argument(
+        "--total-tokens",
+        type=int,
+        default=None,
+        help="外部调用环境记录的 total token 数",
+    )
 
-    parser.add_argument('--report-json', type=str, default=None,
-                       help='将生成报告写入指定 JSON 文件')
+    parser.add_argument(
+        "--report-json", type=str, default=None, help="将生成报告写入指定 JSON 文件"
+    )
 
     args = parser.parse_args()
 
@@ -465,8 +518,14 @@ def main():
 
         write_line("\n=== 文档内置数据类型 ===")
         for dtype, info in DTYPE_MAP.items():
-            init = "generic-init" if info.get("generic_ut_generation", False) else "api-specific-init"
-            write_line(f"  - {dtype}: size={info['size']}, bits={info.get('bit_width', 'unknown')}, {init}")
+            init = (
+                "generic-init"
+                if info.get("generic_ut_generation", False)
+                else "api-specific-init"
+            )
+            write_line(
+                f"  - {dtype}: size={info['size']}, bits={info.get('bit_width', 'unknown')}, {init}"
+            )
 
         write_line("\n=== 通用 UT 生成可直接初始化的数据类型 ===")
         for dtype, info in GENERATOR_DTYPE_MAP.items():
@@ -474,14 +533,14 @@ def main():
 
         write_line("\n=== 架构限制 ===")
         for api_type, restriction in API_RESTRICTIONS.items():
-            allowed = ", ".join(restriction.get('allowed_chips', []))
+            allowed = ", ".join(restriction.get("allowed_chips", []))
             write_line(f"  - {api_type}: {allowed}")
 
         return 0
 
     # 从配置文件或命令行参数创建配置
     if args.config:
-        with open(args.config, 'r', encoding='utf-8') as f:
+        with open(args.config, "r", encoding="utf-8") as f:
             config_dict = json.load(f)
     elif args.type and args.api and args.chip:
         # 从命令行参数构建配置
@@ -489,18 +548,20 @@ def main():
         dtypes = [args.dtype]
 
         # 如果是 half，额外生成 float 测试
-        if args.dtype == 'half' and args.test_count > 1:
-            dtypes.append('float')
+        if args.dtype == "half" and args.test_count > 1:
+            dtypes.append("float")
 
-        for i, dtype in enumerate(dtypes[:args.test_count]):
-            test_cases.append({
-                "name": f"{args.api}_{dtype}_{args.data_size * (i + 1)}",
-                "data_size": args.data_size * (i + 1),
-                "dtype": dtype,
-                "input_count": default_input_count(args.type, args.api),
-                "has_mask": False,
-                "additional_params": {}
-            })
+        for i, dtype in enumerate(dtypes[: args.test_count]):
+            test_cases.append(
+                {
+                    "name": f"{args.api}_{dtype}_{args.data_size * (i + 1)}",
+                    "data_size": args.data_size * (i + 1),
+                    "dtype": dtype,
+                    "input_count": default_input_count(args.type, args.api),
+                    "has_mask": False,
+                    "additional_params": {},
+                }
+            )
 
         config_dict = {
             "api_type": args.type,
@@ -509,7 +570,7 @@ def main():
             "test_cases": test_cases,
             "kernel_params": default_kernel_params(args.type),
             "custom_includes": [],
-            "output_dir": args.output_dir
+            "output_dir": args.output_dir,
         }
     else:
         parser.error("必须提供 --config 或 (--type, --api, --chip)")
@@ -544,12 +605,12 @@ def main():
     # 输出结果
     output_path = args.output or get_output_path(config)
 
-    if output_path == '-' or output_path is None:
+    if output_path == "-" or output_path is None:
         write_line(code)
         report_stream = sys.stderr
     else:
         ensure_parent_dir(output_path)
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             f.write(code)
         write_line(f"UT 文件已生成: {output_path}")
         report_stream = sys.stdout
@@ -568,11 +629,11 @@ def main():
 
     if args.report_json:
         ensure_parent_dir(args.report_json)
-        with open(args.report_json, 'w', encoding='utf-8') as f:
+        with open(args.report_json, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

@@ -45,7 +45,10 @@ def gen_golden_data_simple(mode):
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)
 
-    if mode == TransDataMode.NCDHW_FractalZ3D.value or mode == TransDataMode.NCDHW_NDC1HWC0.value:
+    if (
+        mode == TransDataMode.NCDHW_FractalZ3D.value
+        or mode == TransDataMode.NCDHW_NDC1HWC0.value
+    ):
         total_elements = n * c * d * h * w
         # 生成 NCDHW 格式的数组
         ncdhw_array = np.arange(total_elements).reshape(n, c, d, h, w).astype(dtype)
@@ -54,8 +57,12 @@ def gen_golden_data_simple(mode):
         N_pad = n1 * n0 - n if mode == 1 else 0
         C_pad = c1 * c0 - c
         # 使用 np.pad 补齐 N 轴和 C 轴
-        padded_array = np.pad(ncdhw_array, ((0, N_pad), (0, C_pad), (0, 0), (0, 0), (0, 0)), mode='constant',
-                              constant_values=0)
+        padded_array = np.pad(
+            ncdhw_array,
+            ((0, N_pad), (0, C_pad), (0, 0), (0, 0), (0, 0)),
+            mode="constant",
+            constant_values=0,
+        )
         if mode == TransDataMode.NCDHW_FractalZ3D.value:
             # 调整数组形状
             reshaped_array = padded_array.reshape(n1, n0, c1, c0, d, h, w)
@@ -92,7 +99,12 @@ def gen_golden_data_simple(mode):
         # n1n0, c1c0, d hw -> n, c, d, hw
         diff_n = n - n1 * n0
         diff_c = c - c1 * c0
-        golden = golden[:(diff_n if diff_n != 0 else None), :(diff_c if diff_c != 0 else None), :, :]
+        golden = golden[
+            : (diff_n if diff_n != 0 else None),
+            : (diff_c if diff_c != 0 else None),
+            :,
+            :,
+        ]
         src.flatten().tofile("./input/input_src.bin")
         golden.flatten().tofile("./output/golden.bin")
     elif mode == TransDataMode.NDC1HWC0_NCDHW.value:
@@ -100,8 +112,12 @@ def gen_golden_data_simple(mode):
         ncdhw_array = np.arange(total_elements).reshape(n, c, d, h, w).astype(dtype)
         n_pad = 0
         c_pad = c1 * c0 - c
-        padded_array = np.pad(ncdhw_array, ((0, n_pad), (0, c_pad), (0, 0), (0, 0), (0, 0)), mode='constant',
-                              constant_values=0)
+        padded_array = np.pad(
+            ncdhw_array,
+            ((0, n_pad), (0, c_pad), (0, 0), (0, 0), (0, 0)),
+            mode="constant",
+            constant_values=0,
+        )
         reshaped_array = padded_array.reshape(n, c1, c0, d, h, w)
         transposed_array = reshaped_array.transpose(0, 1, 3, 4, 5, 2)
         transposed_array = transposed_array.transpose(0, 2, 1, 3, 4, 5)
@@ -114,7 +130,9 @@ def gen_golden_data_simple(mode):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mode', type=int, choices=range(1,5), help='指定数据转换的场景，取值1~4')
+    parser.add_argument(
+        "--mode", type=int, choices=range(1, 5), help="指定数据转换的场景，取值1~4"
+    )
     args = parser.parse_args()
     mode = args.mode if args.mode else 1
     gen_golden_data_simple(mode)

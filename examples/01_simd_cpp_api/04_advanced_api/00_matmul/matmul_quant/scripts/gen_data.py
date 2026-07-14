@@ -51,9 +51,8 @@ def gen_golden_data(quant_mode=0):
     golden.tofile("./output/golden.bin")
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-m', type=int, default=0, choices=[0, 1])
+    parser.add_argument("-m", type=int, default=0, choices=[0, 1])
     args = parser.parse_args()
     gen_golden_data(args.m)

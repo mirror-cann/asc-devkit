@@ -33,6 +33,7 @@ def random_set_boundary(src_seq):
             seq[i] = np.nan
     return
 
+
 def gen_golden_data_simple():
     dtype = np.float32
     count = int(128)
@@ -61,6 +62,7 @@ def gen_golden_data_simple():
     src2.tofile("./input/input_src2.bin")
     os.makedirs("output", exist_ok=True)
     golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

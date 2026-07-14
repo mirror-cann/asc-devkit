@@ -18,7 +18,14 @@ import tensorflow as tf
 
 
 bfloat16 = tf.bfloat16.as_numpy_dtype
-dtype_emu = {bfloat16: 0, np.float16: 1, np.float32: 2, np.int8: 3, np.int16: 4, np.int32: 5}
+dtype_emu = {
+    bfloat16: 0,
+    np.float16: 1,
+    np.float32: 2,
+    np.int8: 3,
+    np.int16: 4,
+    np.int32: 5,
+}
 
 
 def gen_golden_data_simple():
@@ -43,12 +50,16 @@ def gen_golden_data_simple():
         elif input_shape_x[1] == 1:
             axis = 1
             coef = np.size(input_y) / np.size(input_x)
-    tiling = np.array([input_shape_x[0] * input_shape_x[1],
-                       input_shape_y[0] * input_shape_y[1],
-                       coef,
-                       axis,
-                       dtype_emu[dtype]],
-                       dtype=np.uint32)
+    tiling = np.array(
+        [
+            input_shape_x[0] * input_shape_x[1],
+            input_shape_y[0] * input_shape_y[1],
+            coef,
+            axis,
+            dtype_emu[dtype],
+        ],
+        dtype=np.uint32,
+    )
 
     os.makedirs("input", exist_ok=True)
     os.makedirs("output", exist_ok=True)

@@ -63,7 +63,9 @@ def gen_golden_data_simple():
         random_set_boundary([src])
     golden = np.zeros([128]).astype(dtype)
     if scalar_type == ScalarType.BOTH_TENSOR.value:
-        golden[:count] = np.clip(src[:count], src_min[:count], src_max[:count]).astype(dtype)
+        golden[:count] = np.clip(src[:count], src_min[:count], src_max[:count]).astype(
+            dtype
+        )
     elif scalar_type == ScalarType.TENSOR_SCALAR.value:
         golden[:count] = np.clip(src[:count], src_min[:count], src_max[0]).astype(dtype)
     elif scalar_type == ScalarType.SCALAR_TENSOR.value:
@@ -78,6 +80,7 @@ def gen_golden_data_simple():
     tiling.tofile("./input/input_tiling.bin")
     os.makedirs("output", exist_ok=True)
     golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

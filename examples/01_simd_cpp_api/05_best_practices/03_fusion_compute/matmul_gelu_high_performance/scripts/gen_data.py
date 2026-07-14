@@ -31,11 +31,13 @@ def gen_golden_data():
     # Use float64 for intermediate computation to avoid overflow in x³ and exp()
     matmul_f64 = matmul_result.astype(np.float64)
     coeff = -1.595769
-    exponent = coeff * (matmul_f64 + 0.044715 * (matmul_f64 ** 3))
+    exponent = coeff * (matmul_f64 + 0.044715 * (matmul_f64**3))
     # Clip exponent to [-88, 88] to avoid exp() overflow in float64
     # For exponent > 88: exp()→∞, GELU(x)→0 (x is large negative)
     # For exponent < -88: exp()→0, GELU(x)→x (x is large positive)
-    golden = (matmul_f64 / (1.0 + np.exp(np.clip(exponent, -88.0, 88.0)))).astype(np.float32)
+    golden = (matmul_f64 / (1.0 + np.exp(np.clip(exponent, -88.0, 88.0)))).astype(
+        np.float32
+    )
 
     x1_gm.tofile("./input/x1_gm.bin")
     # x2_gm transpose to match B matrix transpose

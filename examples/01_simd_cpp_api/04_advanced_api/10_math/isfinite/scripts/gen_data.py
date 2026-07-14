@@ -18,10 +18,10 @@ import random
 import numpy as np
 
 
-def random_num_spec_range(max_val, min_val, size, dtype, range_ls=None, range_ratio=None):
-    """
-
-    """
+def random_num_spec_range(
+    max_val, min_val, size, dtype, range_ls=None, range_ratio=None
+):
+    """ """
     x = np.random.uniform(min_val, max_val, size=(size,)).astype(dtype)
 
     offset = 0
@@ -29,7 +29,7 @@ def random_num_spec_range(max_val, min_val, size, dtype, range_ls=None, range_ra
     for (low, high), ratio in zip(range_ls, range_ratio):
         sub_len = math.ceil(size * ratio)
         tmp_arr = np.random.uniform(low, high, sub_len).astype(dtype)
-        x[offset:offset + sub_len] = tmp_arr[:]
+        x[offset : offset + sub_len] = tmp_arr[:]
         count_ratio += ratio
         offset += sub_len
     return x
@@ -44,8 +44,12 @@ def random_set_inf(src_seq, src_cpp_type):
             elif "half" in str(src_cpp_type):
                 seq[i] = sign * np.inf
             elif "bfloat16_t" in str(src_cpp_type):
+
                 def to_bfloat16(x):
-                    return np.frombuffer(np.array(x, dtype=np.float32).tobytes()[::2], dtype=np.uint16)
+                    return np.frombuffer(
+                        np.array(x, dtype=np.float32).tobytes()[::2], dtype=np.uint16
+                    )
+
     return
 
 
@@ -69,7 +73,9 @@ def gen_golden_data_simple():
     max_val = 65504
     min_val = -65504
 
-    src = random_num_spec_range(max_val, min_val, data_size, dtype, range_ls=[(-10, 10)], range_ratio=[0.2])
+    src = random_num_spec_range(
+        max_val, min_val, data_size, dtype, range_ls=[(-10, 10)], range_ratio=[0.2]
+    )
     random_set_inf([src], src_type)
     random_set_nan([src], src_type, dst_type)
     golden = np.zeros(data_size).astype(dst_type)
@@ -80,6 +86,7 @@ def gen_golden_data_simple():
     src.tofile("./input/input_x.bin")
     os.makedirs("output", exist_ok=True)
     golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

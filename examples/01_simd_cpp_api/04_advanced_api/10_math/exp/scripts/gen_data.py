@@ -15,15 +15,17 @@
 import os
 import numpy as np
 
+
 def taylor_exp(src, n):
     if n < 1:
         raise
     item = np.ones_like(src).astype(np.float32)
     result = np.ones_like(src).astype(np.float32)
     for i in range(n):
-        item *= src/(i+1)
+        item *= src / (i + 1)
         result += item
     return result
+
 
 def gen_golden_data_simple(item_num=10):
     dtype = np.float32
@@ -51,6 +53,7 @@ def gen_golden_data_simple(item_num=10):
     src.tofile("./input/input_x.bin")
     os.makedirs("output", exist_ok=True)
     golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

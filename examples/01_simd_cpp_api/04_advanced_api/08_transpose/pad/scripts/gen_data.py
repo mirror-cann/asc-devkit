@@ -21,8 +21,12 @@ def gen_golden_data_simple():
     output_dtype = np.float32
     input_shape = [16, 31]
     output_shape = [16, 32]
-    input_x = np.arange(0, input_shape[0] * input_shape[1], 1, input_dtype).reshape(input_shape[0], input_shape[1])
-    golden = np.arange(0, output_shape[0] * output_shape[1], 1, output_dtype).reshape(output_shape[0], output_shape[1])
+    input_x = np.arange(0, input_shape[0] * input_shape[1], 1, input_dtype).reshape(
+        input_shape[0], input_shape[1]
+    )
+    golden = np.arange(0, output_shape[0] * output_shape[1], 1, output_dtype).reshape(
+        output_shape[0], output_shape[1]
+    )
 
     height = input_shape[0]
     width = input_shape[1]
@@ -41,7 +45,7 @@ def gen_golden_data_simple():
                     else:
                         golden[i][j] = input_x[i][j]
     else:
-        golden = np.zeros((output_shape[0], output_shape[1]), dtype = input_dtype)
+        golden = np.zeros((output_shape[0], output_shape[1]), dtype=input_dtype)
         for i in range(0, height):
             for j in range(0, width + left_pad + right_pad):
                 if j <= left_pad - 1 or j >= width + left_pad:
@@ -54,6 +58,7 @@ def gen_golden_data_simple():
 
     os.makedirs("output", exist_ok=True)
     golden.tofile("./output/golden.bin")
+
 
 if __name__ == "__main__":
     gen_golden_data_simple()

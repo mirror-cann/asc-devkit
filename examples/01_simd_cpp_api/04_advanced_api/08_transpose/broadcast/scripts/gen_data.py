@@ -30,9 +30,10 @@ def gen_golden_data_simple(testcase):
     x.tofile("./input/input.bin")
     y.tofile("./output/golden.bin")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--testcase', type=int, help='testcase,目前只有case 0 与 1')
+    parser.add_argument("--testcase", type=int, help="testcase,目前只有case 0 与 1")
     args = parser.parse_args()
     testcase = 0
     if args.testcase:
