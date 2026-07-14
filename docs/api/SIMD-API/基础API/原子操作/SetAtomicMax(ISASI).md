@@ -2,15 +2,27 @@
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
-| 产品 | 是否支持 |
-|------|----------|
-| <cann-filter npu-type="950"><term>Ascend 950PR/Ascend 950DT</term> | √</cann-filter> |
-| <cann-filter npu-type="A3"><term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> | √</cann-filter> |
-| <cann-filter npu-type="910b"><term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> | √</cann-filter> |
-| <cann-filter npu-type="310b"><term>Atlas 200I/500 A2 推理产品</term> | x</cann-filter> |
-| <cann-filter npu-type="310p"><term>Atlas 推理系列产品AI Core</term> | x</cann-filter> |
-| <cann-filter npu-type="310p"><term>Atlas 推理系列产品Vector Core</term> | x</cann-filter> |
-| <cann-filter npu-type="910"><term>Atlas 训练系列产品</term> | x</cann-filter> |
+<!-- npu="950" id11 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id11 -->
+<!-- npu="A3" id12 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id12 -->
+<!-- npu="910b" id13 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id13 -->
+<!-- npu="310b" id14 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id14 -->
+<!-- npu="310p" id15 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id15 -->
+<!-- npu="310p" id16 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id16 -->
+<!-- npu="910" id17 -->
+- Atlas 训练系列产品：不支持
+<!-- end id17 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -43,23 +55,17 @@ __aicore__ inline void SetAtomicMax()
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-<cann-filter npu-type="950">
-
+<!-- npu="950" id1 -->
 - Ascend 950PR/Ascend 950DT，支持的数据通路为UB/L0C Buffer->GM。
+<!-- end id1 -->
 
-</cann-filter>
-
-<cann-filter npu-type="A3">
-
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的数据通路为UB/L0C Buffer/L1 Buffer->GM。
+<!-- end id2 -->
 
-</cann-filter>
-
-<cann-filter npu-type="910b">
-
+<!-- npu="910b" id3 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的数据通路为UB/L0C Buffer/L1 Buffer->GM。
-
-</cann-filter>
+<!-- end id3 -->
 
 - 使用完后，建议通过[DisableDmaAtomic](DisableDmaAtomic.md)关闭原子最大操作，以免影响后续相关功能。
 - 该接口执行前不会自动清零GM数据。开发者需根据算子逻辑判断是否清零，如需清零，请在执行前手动完成。

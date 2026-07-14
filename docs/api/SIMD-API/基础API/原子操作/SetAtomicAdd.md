@@ -1,14 +1,28 @@
 # SetAtomicAdd<a name="ZH-CN_TOPIC_0000001487536650"></a>
 
-| 产品 | 是否支持 |
-|------|----------|
-| <cann-filter npu-type="950"><term>Ascend 950PR/Ascend 950DT</term> | √</cann-filter> |
-| <cann-filter npu-type="A3"><term>Atlas A3 训练系列产品/Atlas A3 推理系列产品</term> | √</cann-filter> |
-| <cann-filter npu-type="910b"><term>Atlas A2 训练系列产品/Atlas A2 推理系列产品</term> | √</cann-filter> |
-| <cann-filter npu-type="310b"><term>Atlas 200I/500 A2 推理产品</term> | √</cann-filter> |
-| <cann-filter npu-type="310p"><term>Atlas 推理系列产品AI Core</term> | √</cann-filter> |
-| <cann-filter npu-type="310p"><term>Atlas 推理系列产品Vector Core</term> | x</cann-filter> |
-| <cann-filter npu-type="910"><term>Atlas 训练系列产品</term> | √</cann-filter> |
+## 产品支持情况
+
+<!-- npu="950" id13 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id13 -->
+<!-- npu="A3" id14 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id14 -->
+<!-- npu="910b" id15 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id15 -->
+<!-- npu="310b" id16 -->
+- Atlas 200I/500 A2 推理产品：支持
+<!-- end id16 -->
+<!-- npu="310p" id17 -->
+- Atlas 推理系列产品AI Core：支持
+<!-- end id17 -->
+<!-- npu="310p" id18 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id18 -->
+<!-- npu="910" id19 -->
+- Atlas 训练系列产品：支持
+<!-- end id19 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -33,41 +47,29 @@ __aicore__ inline void SetAtomicAdd()
 
 ## 数据类型
 
-<cann-filter npu-type="950">
-
+<!-- npu="950" id1 -->
 - Ascend 950PR/Ascend 950DT，支持的数据类型为int8_t、int16_t、half、bfloat16_t、int32_t、float。
+<!-- end id1 -->
 
-</cann-filter>
-
-<cann-filter npu-type="A3">
-
+<!-- npu="A3" id2 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的数据类型为int8_t、int16_t、half、bfloat16_t、int32_t、float。
+<!-- end id2 -->
 
-</cann-filter>
-
-<cann-filter npu-type="910b">
-
+<!-- npu="910b" id3 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的数据类型为int8_t、int16_t、half、bfloat16_t、int32_t、float。
+<!-- end id3 -->
 
-</cann-filter>
-
-<cann-filter npu-type="310b">
-
+<!-- npu="310b" id4 -->
 - Atlas 200I/500 A2 推理产品，支持的数据类型为int16_t、half、int32_t、float。
+<!-- end id4 -->
 
-</cann-filter>
-
-<cann-filter npu-type="310p">
-
+<!-- npu="310p" id5 -->
 - Atlas 推理系列产品AI Core，支持的数据类型为int16_t、half、float。
+<!-- end id5 -->
 
-</cann-filter>
-
-<cann-filter npu-type="910">
-
+<!-- npu="910" id6 -->
 - Atlas 训练系列产品，支持的数据类型为float。
-
-</cann-filter>
+<!-- end id6 -->
 
 ## 返回值说明<a name="section640mcpsimp"></a>
 
@@ -75,41 +77,29 @@ __aicore__ inline void SetAtomicAdd()
 
 ## 约束说明<a name="section633mcpsimp"></a>
 
-<cann-filter npu-type="950">
-
+<!-- npu="950" id7 -->
 - Ascend 950PR/Ascend 950DT，支持的数据通路为UB/L0C Buffer-\>GM。
- 
-</cann-filter>
+<!-- end id7 -->
 
-<cann-filter npu-type="A3">
-
+<!-- npu="A3" id8 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的数据通路为UB/L0C Buffer/L1 Buffer-\>GM。
- 
-</cann-filter>
+<!-- end id8 -->
 
-<cann-filter npu-type="910b">
-
+<!-- npu="910b" id9 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的数据通路为UB/L0C Buffer/L1 Buffer-\>GM。
- 
-</cann-filter>
+<!-- end id9 -->
 
-<cann-filter npu-type="310b">
-
+<!-- npu="310b" id10 -->
 - Atlas 200I/500 A2 推理产品，支持的数据通路为UB/L0C Buffer/L1 Buffer-\>GM。
- 
-</cann-filter>
+<!-- end id10 -->
 
-<cann-filter npu-type="310p">
-
+<!-- npu="310p" id11 -->
 - Atlas 推理系列产品AI Core，支持的数据通路为UB-\>GM。
- 
-</cann-filter>
+<!-- end id11 -->
 
-<cann-filter npu-type="910">
-
+<!-- npu="910" id12 -->
 - Atlas 训练系列产品，支持的数据通路为UB-\>GM。
- 
-</cann-filter>
+<!-- end id12 -->
 
 - 累加操作完成后，建议通过[DisableDmaAtomic](DisableDmaAtomic.md)关闭原子累加，以免影响后续相关指令功能。
 - 该接口执行前不会自动清零GM数据。开发者需根据算子逻辑判断是否清零，如需清零，请在执行前手动完成。
