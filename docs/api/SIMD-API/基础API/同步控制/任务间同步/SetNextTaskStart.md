@@ -5,15 +5,27 @@
 
 ## 产品支持情况<a name="section17196114513104"></a>
 
-| 产品 | 是否支持 | 备注 |
-| --- | --- | --- |
-| <cann-filter npu-type="950"> Ascend 950PR/Ascend 950DT | √ | 该接口生效</cann-filter> |
-| <cann-filter npu-type="A3"> Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √ | 该接口生效</cann-filter> |
-| <cann-filter npu-type="910b"> Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √ | 仅保证编译兼容，实际功能不生效。</cann-filter> |
-| <cann-filter npu-type="310b"> Atlas 200I/500 A2 推理产品 | √ | 仅保证编译兼容，实际功能不生效。</cann-filter> |
-| <cann-filter npu-type="310p"> Atlas 推理系列产品AI Core | √ | 仅保证编译兼容，实际功能不生效。</cann-filter> |
-| <cann-filter npu-type="310p"> Atlas 推理系列产品Vector Core | √ | 仅保证编译兼容，实际功能不生效。</cann-filter> |
-| <cann-filter npu-type="910"> Atlas 训练系列产品 | √ | 仅保证编译兼容，实际功能不生效。</cann-filter> |
+<!-- npu="950" id17 -->
+- Ascend 950PR/Ascend 950DT：支持，该接口生效
+<!-- end id17 -->
+<!-- npu="A3" id18 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持，该接口生效
+<!-- end id18 -->
+<!-- npu="910b" id19 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持，仅保证编译兼容，实际功能不生效
+<!-- end id19 -->
+<!-- npu="310b" id20 -->
+- Atlas 200I/500 A2 推理产品：支持，仅保证编译兼容，实际功能不生效
+<!-- end id20 -->
+<!-- npu="310p" id21 -->
+- Atlas 推理系列产品AI Core：支持，仅保证编译兼容，实际功能不生效
+<!-- end id21 -->
+<!-- npu="310p" id22 -->
+- Atlas 推理系列产品Vector Core：支持，仅保证编译兼容，实际功能不生效
+<!-- end id22 -->
+<!-- npu="910" id23 -->
+- Atlas 训练系列产品：支持，仅保证编译兼容，实际功能不生效
+<!-- end id23 -->
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
@@ -32,43 +44,51 @@ SuperKernel是一种算子的二进制融合技术，与源码融合不同，它
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
-<cann-filter npu-type="950,A3,910b,310b">
-
+<!-- npu="950,A3,910b,310b" id8 -->
 - 该原型支持如下产品型号：
 
-    <cann-filter npu-type="950"> Ascend 950PR/Ascend 950DT </cann-filter>
+    <!-- npu="950" id1 -->
+    - Ascend 950PR/Ascend 950DT
+    <!-- end id1 -->
 
-    <cann-filter npu-type="A3"> Atlas A3 训练系列产品/Atlas A3 推理系列产品 </cann-filter>
+    <!-- npu="A3" id2 -->
+    - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+    <!-- end id2 -->
 
-    <cann-filter npu-type="910b"> Atlas A2 训练系列产品/Atlas A2 推理系列产品 </cann-filter>
+    <!-- npu="910b" id3 -->
+    - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+    <!-- end id3 -->
 
-    <cann-filter npu-type="310b"> Atlas 200I/500 A2 推理产品 </cann-filter>
-
-
+    <!-- npu="310b" id4 -->
+    - Atlas 200I/500 A2 推理产品
+    <!-- end id4 -->
 
     ```cpp
     template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
     __aicore__ inline void SetNextTaskStart()
     ```
+<!-- end id8 -->
 
-</cann-filter>
-
-<cann-filter npu-type="310p,910">
-
+<!-- npu="310p,910" id9 -->
 - 该原型支持如下产品型号：
 
-    <cann-filter npu-type="310p"> Atlas 推理系列产品AI Core </cann-filter>
+    <!-- npu="310p" id5 -->
+    - Atlas 推理系列产品AI Core
+    <!-- end id5 -->
 
-    <cann-filter npu-type="310p"> Atlas 推理系列产品Vector Core </cann-filter>
+    <!-- npu="310p" id6 -->
+    - Atlas 推理系列产品Vector Core
+    <!-- end id6 -->
 
-    <cann-filter npu-type="910"> Atlas 训练系列产品 </cann-filter>
+    <!-- npu="910" id7 -->
+    - Atlas 训练系列产品
+    <!-- end id7 -->
 
     ```cpp
     template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3, bool FORCE = false>
     __aicore__ inline void SetNextTaskStart()
     ```
-
-</cann-filter>
+<!-- end id9 -->
 
 ## 参数说明<a name="section622mcpsimp"></a>
 
