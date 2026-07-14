@@ -40,13 +40,13 @@ Note: `ReducePairElem` is the renamed API after CANN 9.1.0. For CANN 9.0.0 and e
   <tr><td rowspan="2" align="center">Example Input</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
   <tr><td align="center">x</td><td align="center">[1, 128]</td><td align="center">half</td><td align="center">ND</td></tr>
    <tr><td rowspan="2" align="center">Example Output</td></tr>
-   <tr><td align="center">y</td><td align="center">[1, 64]</td><td align="center">half</td><td align="center">ND</td></tr>
+   <tr><td align="center">z</td><td align="center">[1, 64]</td><td align="center">half</td><td align="center">ND</td></tr>
 
   <tr><td rowspan="1" align="center">Kernel Function Name</td><td colspan="4" align="center">reduce_pair_elem_custom</td></tr>
   </table>
 
 - Example implementation:  
-  This example implements a `ReducePairElem<SUM>` example with fixed input shape x[1, 128] and output shape y[1, 64].
+  This example implements a `ReducePairElem<SUM>` example with fixed input shape x[1, 128] and output shape z[1, 64].
 
   In the kernel, `ReducePairElem<SUM>` sums each pair of adjacent elements (even index and odd index) in `srcLocal` and stores the results in `dstLocal`.
 

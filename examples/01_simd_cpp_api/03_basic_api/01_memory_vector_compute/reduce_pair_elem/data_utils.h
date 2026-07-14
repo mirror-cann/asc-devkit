@@ -10,7 +10,7 @@
 
 /* !
  * \file data_utils.h
- * \brief 短向量Add样例的输入输出数据读写辅助工具，提供文件读取、写入功能
+ * \brief
  */
 
 #ifndef DATA_UTILS_H
