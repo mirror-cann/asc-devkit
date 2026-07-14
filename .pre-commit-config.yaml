@@ -46,10 +46,12 @@ repos:
           - "--output-format"
           - "github"
           - "--fix"
+          - "--target-version"
+          - "py37"
           - "--extend-ignore"
-          - "E402,E711,E712,E721,F401,F403,F405,F811,F821,F841"
+          - "E402,E711,E712,E721,F401,F403,F405,F811,F821,F841,F523"
         types: [python]
-        files: ^(cmake|docs|impl|scripts|tests)/
+        files: ^(cmake|docs|impl|scripts|tests|tools)/
         exclude: &ruff_exclude |
           (?x)^(
             \.agent/|
@@ -68,8 +70,11 @@ repos:
             tools/build/asc_op_compile_base/asc_op_compiler/compile_op\.py
           )$
       - id: ruff-format
+        args:
+          - "--target-version"
+          - "py37"
         types: [python]
-        files: ^(cmake|docs|impl|scripts|tests)/
+        files: ^(cmake|docs|impl|scripts|tests|tools)/
         exclude: *ruff_exclude
 
   # OAT 合规性检查 (Open Source Audit Tool)

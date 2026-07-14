@@ -11,8 +11,14 @@
 # ----------------------------------------------------------------------------------------------------------
 import functools
 
-from asc_op_compile_base.c_api import _get_soc_spec, _set_soc_spec, _init_soc_spec, _te_update_version, \
-    _set_platform_info_res, _set_core_num_by_core_type
+from asc_op_compile_base.c_api import (
+    _get_soc_spec,
+    _set_soc_spec,
+    _init_soc_spec,
+    _te_update_version,
+    _set_platform_info_res,
+    _set_core_num_by_core_type,
+)
 
 # def the cce vector intrinsic params
 VECTOR_INST_BLOCK_WIDTH = 256
@@ -126,9 +132,30 @@ def get_soc_spec(key):
     if value == "":
         raise RuntimeError("Unsupported Key Value of get_soc_spec(): %s" % key)
 
-    str2int_list = (CORE_NUM, UB_SIZE, L2_SIZE, L1_SIZE, L0A_SIZE, L0B_SIZE, L0C_SIZE, SMASK_SIZE, VREG_SIZE, WREG_SIZE,
-                    WIDE_REG_WIDTH, AREG_SIZE, PREG_SIZE, UREG_SIZE, CUBE_VECTOR_SPLIT, FB_SIZE, FB0_SIZE, FB1_SIZE,
-                    FB2_SIZE, FB3_SIZE, BT_SIZE, UB_BLOCK_SIZE)
+    str2int_list = (
+        CORE_NUM,
+        UB_SIZE,
+        L2_SIZE,
+        L1_SIZE,
+        L0A_SIZE,
+        L0B_SIZE,
+        L0C_SIZE,
+        SMASK_SIZE,
+        VREG_SIZE,
+        WREG_SIZE,
+        WIDE_REG_WIDTH,
+        AREG_SIZE,
+        PREG_SIZE,
+        UREG_SIZE,
+        CUBE_VECTOR_SPLIT,
+        FB_SIZE,
+        FB0_SIZE,
+        FB1_SIZE,
+        FB2_SIZE,
+        FB3_SIZE,
+        BT_SIZE,
+        UB_BLOCK_SIZE,
+    )
 
     str2bool_list = (L0A_LAYOUT_IS_zN,)
 
@@ -153,16 +180,19 @@ def get_soc_spec(key):
         try:
             # "0" stands for False, "1" stands for True
             int_value = int(value)
-            assert (0 <= int_value <= 1)
+            assert 0 <= int_value <= 1
             value = int_value == 1
         except Exception as casting_error:
-            raise RuntimeError("return value %s cannot be interpret "
-                               "as 'bool' type" % value) from casting_error
+            raise RuntimeError(
+                "return value %s cannot be interpret as 'bool' type" % value
+            ) from casting_error
     return value
 
 
 # Example: pylint: disable=unused-argument
-def set_current_compile_soc_info(soc_version, core_type="AiCore", aicore_num=None, l1_fusion=None):
+def set_current_compile_soc_info(
+    soc_version, core_type="AiCore", aicore_num=None, l1_fusion=None
+):
     """
     set version info
 
@@ -224,11 +254,12 @@ def set_soc_spec(key):
     return value
 
 
-class KernelName():
+class KernelName:
     """
     store kernel name, to across python > c++ > python
     """
-    kernel_name = ''
+
+    kernel_name = ""
 
     @classmethod
     def set_kernel_name(cls, kernel_name):
@@ -252,9 +283,15 @@ def get_block_size():
     return get_soc_spec(UB_BLOCK_SIZE)
 
 
-def te_update_version(soc_version=None, core_type=None,
-                      aicore_num=None, l1_fusion=None,
-                      l2_mode=None, l2_fusion=None, kwargs=None):
+def te_update_version(
+    soc_version=None,
+    core_type=None,
+    aicore_num=None,
+    l1_fusion=None,
+    l2_mode=None,
+    l2_fusion=None,
+    kwargs=None,
+):
     """
     set version info
 

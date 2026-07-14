@@ -12,6 +12,7 @@
 """
 Op Info
 """
+
 from typing import List
 from typing import Optional
 
@@ -33,10 +34,10 @@ class OpInfo:
         self._inputs = []  # type: List[dict]
         self._outputs = []  # type: List[dict]
         self._attrs = {}  # type: dict
-        self._private_attrs = {} # type: dict
+        self._private_attrs = {}  # type: dict
         self._kernel_name = None  # type: Optional[str]
         self._extra_params = {}  # type: dict
-        self._precision_mode = None # type: Optional[str]
+        self._precision_mode = None  # type: Optional[str]
 
     @property
     def op_name(self):

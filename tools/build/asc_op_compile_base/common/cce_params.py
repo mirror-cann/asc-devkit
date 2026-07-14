@@ -12,6 +12,7 @@
 """
 CCE configuration constants
 """
+
 from __future__ import absolute_import as _abs
 
 import threading
@@ -23,6 +24,7 @@ class OUTPUT_PATH_CLASS(object):
     """
     cce output path
     """
+
     output_path = "kernel_meta"
 
 
@@ -31,6 +33,7 @@ class GM_NAME_MAP_CLASS(object):
     """
     get gm_name map
     """
+
     gm_name_map = {}
 
 
@@ -45,6 +48,7 @@ class conv_buffer_ex(object):
     """
     conv buffer
     """
+
     offsetPad = None
 
 

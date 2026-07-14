@@ -12,20 +12,23 @@
 """
 ascendc super kernel
 """
+
 from .super_kernel import compile
 
 
-def ascendc_super_kernel_plus(kernel_infos, called_kernel_name="ascendc_super_kernel_plus", impl_mode=""):
-    """ entry of super kernel compile
+def ascendc_super_kernel_plus(
+    kernel_infos, called_kernel_name="ascendc_super_kernel_plus", impl_mode=""
+):
+    """entry of super kernel compile
 
-        Args:
-            kernel_infos: infos of sub kernel
-                {
-                    "op_list":
-                        [{"op1": {"bin_path": "", "json_path": ""}, "op2": {xxx}}],
-                    "super_kernel_options": compile_option
-                }
-            called_kernel_name: super kernel name
+    Args:
+        kernel_infos: infos of sub kernel
+            {
+                "op_list":
+                    [{"op1": {"bin_path": "", "json_path": ""}, "op2": {xxx}}],
+                "super_kernel_options": compile_option
+            }
+        called_kernel_name: super kernel name
     """
     compile(kernel_infos, called_kernel_name, impl_mode)
     return

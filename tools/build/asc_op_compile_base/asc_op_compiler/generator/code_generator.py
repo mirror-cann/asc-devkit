@@ -12,10 +12,24 @@
 
 
 class CodeGeneratorConfig:
-    def __init__(self, transform_kernel_type, dfx_gen_meta_info, dfx_param_byte_unit, \
-                 need_clear_workspace, gen_code_for_l2_cache, write_back_overflow, needs_ffts, \
-                 support_dci, support_raw_aic_only_dump_tensor, support_mix, dci_macro, \
-                 gen_isolation_macro_type, cube_core_type_macro, vec_core_type_macro, support_workspace_offset):
+    def __init__(
+        self,
+        transform_kernel_type,
+        dfx_gen_meta_info,
+        dfx_param_byte_unit,
+        need_clear_workspace,
+        gen_code_for_l2_cache,
+        write_back_overflow,
+        needs_ffts,
+        support_dci,
+        support_raw_aic_only_dump_tensor,
+        support_mix,
+        dci_macro,
+        gen_isolation_macro_type,
+        cube_core_type_macro,
+        vec_core_type_macro,
+        support_workspace_offset,
+    ):
         self.transform_kernel_type = transform_kernel_type
         self.dfx_gen_meta_info = dfx_gen_meta_info
         self.dfx_param_byte_unit = dfx_param_byte_unit
@@ -34,7 +48,15 @@ class CodeGeneratorConfig:
 
 
 class CodeGeneratorParams:
-    def __init__(self, compile_info, op_info, compile_option_tuple, tiling_info, configuration, kernel_func_name):
+    def __init__(
+        self,
+        compile_info,
+        op_info,
+        compile_option_tuple,
+        tiling_info,
+        configuration,
+        kernel_func_name,
+    ):
         pass
 
 

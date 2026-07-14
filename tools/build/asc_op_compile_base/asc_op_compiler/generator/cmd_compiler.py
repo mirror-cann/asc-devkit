@@ -10,9 +10,18 @@
 # See LICENSE in the root of the software repository for the full text of the License.
 # ----------------------------------------------------------------------------------------------------------
 
+
 class CmdCompilerConfig:
-    def __init__(self, compiler_path_o_level, self_defined_options, enable_sanitizer, enable_jump_expand, \
-        self_defined_debug_config, meta_info_options, gen_assembel):
+    def __init__(
+        self,
+        compiler_path_o_level,
+        self_defined_options,
+        enable_sanitizer,
+        enable_jump_expand,
+        self_defined_debug_config,
+        meta_info_options,
+        gen_assembel,
+    ):
         self.compiler_path_o_level = compiler_path_o_level
         self.self_defined_options = self_defined_options
         self.enable_sanitizer = enable_sanitizer

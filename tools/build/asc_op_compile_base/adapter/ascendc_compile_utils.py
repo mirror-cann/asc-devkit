@@ -13,7 +13,6 @@
 compile check
 """
 
-
 from typing import List
 from tbe.common.buildcfg import get_current_build_config
 from tbe.common.context import get_context
@@ -23,7 +22,7 @@ from .log_utils import AscendCLogLevel
 from .ascendc_common_utility import CommonUtility
 from .ascendc_constants import KernelMetaType
 
-GEN_PLACE_HOLDER_STR = 'gen_placeholder'
+GEN_PLACE_HOLDER_STR = "gen_placeholder"
 
 
 def get_kernel_meta_type(value):
@@ -35,19 +34,22 @@ def get_kernel_meta_type(value):
 
 def check_custom_dcci_end_false(compile_option_tuple):
     has_dcci_end_false: bool = False
-    for option_list in [compile_option_tuple.mllvm_options, compile_option_tuple.compile_options]:
+    for option_list in [
+        compile_option_tuple.mllvm_options,
+        compile_option_tuple.compile_options,
+    ]:
         del_ids = []
         for opt_id, option in enumerate(option_list):
-            if not option.startswith('-cce-aicore-dcci-before-kernel-end=false'):
+            if not option.startswith("-cce-aicore-dcci-before-kernel-end=false"):
                 continue
             has_dcci_end_false = True
-            if opt_id != 0 and option_list[opt_id - 1] == '-mllvm':
+            if opt_id != 0 and option_list[opt_id - 1] == "-mllvm":
                 del_ids.append(opt_id - 1)
             del_ids.append(opt_id)
         for i in reversed(del_ids):
             del option_list[i]
     if has_dcci_end_false:
-        compile_option_tuple.compile_options.append('--cce-no-dcache-flush')
+        compile_option_tuple.compile_options.append("--cce-no-dcache-flush")
 
 
 def check_if_gen_placehoder(op_info: OpInfo, is_input: bool) -> bool:
@@ -63,9 +65,13 @@ def check_if_gen_placehoder(op_info: OpInfo, is_input: bool) -> bool:
         return False
     for param in input_output_info:
         if param is None:
-            err_msg = f"[ERROR] : context is {GEN_PLACE_HOLDER_STR}, but have null input, " \
-                            f"params are not full, inputs is: {input_output_info}"
-            CommonUtility.print_compile_log(op_info.kernel_name, err_msg, AscendCLogLevel.LOG_ERROR)
+            err_msg = (
+                f"[ERROR] : context is {GEN_PLACE_HOLDER_STR}, but have null input, "
+                f"params are not full, inputs is: {input_output_info}"
+            )
+            CommonUtility.print_compile_log(
+                op_info.kernel_name, err_msg, AscendCLogLevel.LOG_ERROR
+            )
             raise Exception(err_msg)
     return True
 
@@ -78,9 +84,7 @@ def tpl_tilingkey_kernel_type_check(
         internal_dict = decode_tiling_result[k]
         if "kernelType" in internal_dict:
             tpl_set_kernel_type_cnt += 1
-            tpl_kernel_type = get_kernel_meta_type(
-                internal_dict["kernelType"]
-            )
+            tpl_kernel_type = get_kernel_meta_type(internal_dict["kernelType"])
             if tpl_kernel_type is not None:
                 tiling_key_kernel_type[str(k)] = tpl_kernel_type
             else:
@@ -102,9 +106,7 @@ def tpl_tilingkey_kernel_type_check(
 
 
 def tpl_tilingkey_deterministic_extract(
-    tiling_key_list,
-    decode_tiling_result,
-    tiling_key_deterministic
+    tiling_key_list, decode_tiling_result, tiling_key_deterministic
 ):
     expect_tilingkey_set = set()
     cur_deterministic_flag = get_current_build_config("enable_deterministic_mode") == 1
