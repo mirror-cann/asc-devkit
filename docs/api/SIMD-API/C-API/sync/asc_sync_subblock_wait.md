@@ -3,15 +3,27 @@
 ## 产品支持情况
 
 
-<!-- npu="950" id2 -->
+<!-- npu="950" id13 -->
 - Ascend 950PR/Ascend 950DT: 支持
-<!-- end id2 -->
-<!-- npu="A3" id3 -->
+<!-- end id13 -->
+<!-- npu="A3" id14 -->
 - Atlas A3 训练系列产品/Atlas A3 推理系列产品: 支持
-<!-- end id3 -->
-<!-- npu="910b" id4 -->
+<!-- end id14 -->
+<!-- npu="910b" id15 -->
 - Atlas A2 训练系列产品/Atlas A2 推理系列产品: 支持
-<!-- end id4 -->
+<!-- end id15 -->
+<!-- npu="310b" id16 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id16 -->
+<!-- npu="310p" id17 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id17 -->
+<!-- npu="310p" id18 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id18 -->
+<!-- npu="910" id19 -->
+- Atlas 训练系列产品：不支持
+<!-- end id19 -->
 
 ## 功能说明
 
@@ -49,14 +61,14 @@ PIPE_S
 
 ## 调用示例
 
-<!-- npu="A3,910b" id1 -->
+<!-- npu="A3,910b" id9 -->
 - 以下示例支持如下产品型号：
-  <!-- npu="A3" id5 -->
+  <!-- npu="A3" id10 -->
   - Atlas A3 训练系列产品/Atlas A3 推理系列产品
-  <!-- end id5 -->
-  <!-- npu="910b" id7 -->
+  <!-- end id10 -->
+  <!-- npu="910b" id12 -->
   - Atlas A2 训练系列产品/Atlas A2 推理系列产品
-  <!-- end id7 -->
+  <!-- end id12 -->
   ```cpp
   // Host侧调用接口aclrtGetHardwareSyncAddr获取核间同步基地址ffts_addr
   uint64_t config = *(__gm__ uint64_t*)ffts_addr;
@@ -65,9 +77,9 @@ PIPE_S
   asc_sync_subblock_arrive(PIPE_S, flag_id);
   asc_sync_subblock_wait(PIPE_S, flag_id);  
   ```
-<!-- end id1 -->
+<!-- end id9 -->
 
-<!-- npu="950" id6 -->
+<!-- npu="950" id11 -->
 - 以下示例支持如下产品型号：
   <!-- npu="950" id8 -->
   - Ascend 950PR/Ascend 950DT
@@ -78,4 +90,4 @@ PIPE_S
   asc_sync_subblock_arrive(PIPE_S, flag_id);
   asc_sync_subblock_wait(PIPE_S, flag_id);  
   ```
-<!-- end id6 -->
+<!-- end id11 -->

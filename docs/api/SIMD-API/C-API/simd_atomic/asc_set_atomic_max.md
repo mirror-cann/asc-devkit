@@ -2,20 +2,36 @@
 
 ## 产品支持情况
 
-|产品   | 是否支持 |
-| :------------|:----:|
-| <cann-filter npu_type="950">Ascend 950PR/Ascend 950DT | √    </cann-filter>|
-| Atlas A3 训练系列产品/Atlas A3 推理系列产品 | √    |
-| Atlas A2 训练系列产品/Atlas A2 推理系列产品 | √    |
+<!-- npu="950" id1 -->
+- Ascend 950PR/Ascend 950DT：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 训练系列产品/Atlas A3 推理系列产品：支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 训练系列产品/Atlas A2 推理系列产品：支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas 推理系列产品AI Core：不支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas 推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas 训练系列产品：不支持
+<!-- end id7 -->
 
 ## 功能说明
 
 头文件路径：`"c_api/atomic/atomic.h"`。
 
 设置对后续的从Unified Buffer/L0C Buffer/L1 Buffer到Global Memory的数据传输开启原子比较取大操作。数据类型支持int8_t、int16_t、int32_t、bfloat16_t、half、float。
-<!-- npu="950" id1 -->
+<!-- npu="950" id8 -->
 特别地，针对Ascend 950PR/Ascend 950DT，不支持L1 Buffer到Global Memory的通路。
-<!-- end id1 -->
+<!-- end id8 -->
 
 ## 函数原型
 
@@ -43,9 +59,9 @@ PIPE_S
 ## 约束说明
 
 - 使用结束后，建议通过[asc_set_atomic_none](./asc_set_atomic_none.md)关闭原子最大操作，以免影响后续相关指令功能。
-<!-- npu="950" id2 -->
+<!-- npu="950" id9 -->
 - 针对Ascend 950PR/Ascend 950DT，不支持L1 Buffer到Global Memory的通路。
-<!-- end id2 -->
+<!-- end id9 -->
 
 ## 调用示例
 
