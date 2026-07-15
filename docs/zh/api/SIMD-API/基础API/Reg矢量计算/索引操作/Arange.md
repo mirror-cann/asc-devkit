@@ -33,7 +33,7 @@
 
 **图 1**  Arange递增示意图
 
-![Arange示意图](../../../../figures/reg_arange.png)
+![Arange示意图](../../../../figures/reg_arange_in.png)
 
 **图 2**  Arange递减示意图
 
