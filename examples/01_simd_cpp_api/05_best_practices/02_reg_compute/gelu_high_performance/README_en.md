@@ -4,7 +4,7 @@
 
 This example uses Gelu computation to introduce RegBase vector performance tuning methods. The example demonstrates performance benefits from enabling VF fusion and loop unrolling.
 
-> **Prerequisite Reading**: [Gelu Operator Introduction Example](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/00_introduction/04_reg_compute/gelu/README.md). This example performs performance optimization based on the introduction example. It is recommended to read the introduction example first to understand basic concepts.
+> **Prerequisite Reading**: [Gelu Operator Introduction Example](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/00_introduction/04_reg_compute/gelu/README_en.md). This example performs performance optimization based on the introduction example. It is recommended to read the introduction example first to understand basic concepts.
 
 **Optimization Path**:
 - Case 0: Gelu without VF fusion enabled (baseline)
@@ -700,8 +700,8 @@ Run the following steps in the root directory of this example to build and run t
     ```
     msopprof ./demo
     ```
+    - Performance data description
 
-    - Performance data description  
       After the command completes, a folder named "OPPROF_{timestamp}_XXX" will be generated in the default directory. The performance data folder structure is as follows:
 
       ```bash
