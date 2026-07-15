@@ -27,7 +27,15 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-该函数以传入的scalar的值为起始值，生成递增/递减的索引，并将索引保存在dstReg中。
+递增模式时，该函数以传入的scalarValue的值为起始值，生成递增的索引；递减模式时，该函数以传入的scalarValue的值为终止值，生成递减的索引，并将索引保存在dstReg中。
+
+**图 1**  Arange递增示意图
+ 	 
+![Arange示意图](../../../../figures/reg_arange_in.png)
+
+**图 2**  Arange递减示意图
+
+![Arange示意图](../../../../figures/reg_arange_de.png)
 
 ## 函数原型<a name="section520771712327"></a>
 
@@ -117,4 +125,3 @@ __simd_vf__ inline void ArangeVF(__ubuf__ T* dstAddr, T scalarValue, uint32_t on
     }
 }
 ```
-
