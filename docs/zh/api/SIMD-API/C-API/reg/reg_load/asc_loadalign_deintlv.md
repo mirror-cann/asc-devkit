@@ -88,7 +88,7 @@ __simd_callee__ inline void asc_loadalign_deintlv(vector_int4x2_t& dst0, vector_
 
 ### 地址寄存器偏移寻址接口<a name="base-register-indexed-api"></a>
 
-该类接口通过地址寄存器`addr_reg offset`生成实际访问地址。地址寄存器通常在循环场景中使用，需配合[`asc_create_addr_reg`](../reg_data_types/asc_create_addr_reg.md)完成初始化。实际访问地址必须满足32B对齐要求。
+该类接口通过地址寄存器`addr_reg offset`生成实际访问地址。地址寄存器通常在循环场景中使用，需配合[`asc_update_addr_reg`](../reg_data_types/asc_update_addr_reg.md)完成初始化。实际访问地址必须满足32B对齐要求。
 
 ```cpp
 __simd_callee__ inline void asc_loadalign_deintlv(vector_fp4x2_e1m2_t& dst0, vector_fp4x2_e1m2_t& dst1, __ubuf__ fp4x2_e1m2_t* src, addr_reg offset)
@@ -155,7 +155,7 @@ __simd_callee__ inline void asc_loadalign_deintlv(vector_int4x2_t& dst0, vector_
 
 - 对于[基址寻址接口](#base-addressing-api)，`src`必须为32B对齐地址，且访问范围不能超过UB有效地址上界减去`2 x VL`。
 - 对于[标量偏移寻址接口](#base-scalar-offset-api)和[地址寄存器偏移寻址接口](#base-register-indexed-api)，实际访问地址必须为32B对齐，且访问范围不能超过UB有效地址上界减去`2 x VL`。
-- 使用地址寄存器偏移寻址接口时，需要先通过[`asc_create_addr_reg`](../reg_data_types/asc_create_addr_reg.md)完成地址寄存器初始化。
+- 使用地址寄存器偏移寻址接口时，需要先通过[`asc_update_addr_reg`](../reg_data_types/asc_update_addr_reg.md)完成地址寄存器初始化。
 
 ## 调用示例
 
@@ -190,7 +190,7 @@ for (uint16_t i = 0; i < repeat_times; i++) {
 
 ```cpp
 for (uint16_t i = 0; i < repeat_times; i++) {
-    addr_reg addr_reg = asc_create_addr_reg_b32(one_repeat_size);
+    addr_reg addr_reg = asc_update_addr_reg_b32(one_repeat_size);
     asc_loadalign_deintlv(reg0, reg1, src, addr_reg);
     ...
 }

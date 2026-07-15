@@ -1,4 +1,4 @@
-# asc_create_addr_reg
+# asc_update_addr_reg
 
 ## 产品支持情况
 
@@ -33,18 +33,18 @@
 ## 函数原型
 
   ```cpp
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b32(uint32_t offset)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b16(uint32_t offset)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b8(uint32_t offset)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b32(uint32_t offset0, uint32_t offset1)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b16(uint32_t offset0, uint32_t offset1)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b8(uint32_t offset0, uint32_t offset1)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b32(uint32_t offset0, uint32_t offset1, uint32_t offset2)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b16(uint32_t offset0, uint32_t offset1, uint32_t offset2)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b8(uint32_t offset0, uint32_t offset1, uint32_t offset2)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b32(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b16(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3)
-  __simd_callee__ inline addr_reg asc_create_addr_reg_b8(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b32(uint32_t offset)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b16(uint32_t offset)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b8(uint32_t offset)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b32(uint32_t offset0, uint32_t offset1)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b16(uint32_t offset0, uint32_t offset1)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b8(uint32_t offset0, uint32_t offset1)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b32(uint32_t offset0, uint32_t offset1, uint32_t offset2)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b16(uint32_t offset0, uint32_t offset1, uint32_t offset2)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b8(uint32_t offset0, uint32_t offset1, uint32_t offset2)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b32(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b16(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3)
+  __simd_callee__ inline addr_reg asc_update_addr_reg_b8(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3)
   ```
 
 ## 参数说明

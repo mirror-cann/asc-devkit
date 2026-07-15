@@ -71,7 +71,7 @@ __simd_vf__ inline void neg_vf(__ubuf__ int8_t* dst_addr, __ubuf__ int8_t* src_a
 
 ## 地址寄存器
 
-地址寄存器的数据类型为addr_reg，用于存储地址偏移量。addr_reg通过asc_create_addr_reg初始化，然后在循环之中使用addr_reg存储地址偏移量。addr_reg在每层循环中根据所设置的步长进行自增。
+地址寄存器的数据类型为addr_reg，用于存储地址偏移量。addr_reg通过asc_update_addr_reg初始化，然后在循环之中使用addr_reg存储地址偏移量。addr_reg在每层循环中根据所设置的步长进行自增。
 
 ### 调用示例<a name="调用示例-4"></a>
 
@@ -89,7 +89,7 @@ __simd_vf__ inline void add_vf(__ubuf__ int8_t* dst_addr, __ubuf__ int8_t* src0_
     vector_bool mask;
     addr_reg addr_reg;
     for (uint16_t i = 0; i < repeat_time; ++i) {
-        addr_reg = asc_create_addr_reg_b8(one_repeat_size); // 通过初始化addr_reg，每一次循环，地址偏移one_repeat_size
+        addr_reg = asc_update_addr_reg_b8(one_repeat_size); // 通过初始化addr_reg，每一次循环，地址偏移one_repeat_size
         mask = asc_update_mask_b8(count);
         asc_loadalign(src0, src0_addr, addr_reg);
         asc_loadalign(src1, src1_addr, addr_reg);
@@ -117,7 +117,7 @@ __simd_vf__ inline void add_4d_vf(
         for (uint16_t c = 0; c < C; c++) {       
             for (uint16_t h = 0; h < H; h++) {    
                 for (uint16_t w = 0; w < W; w++) {  
-                    a_reg = asc_create_addr_reg_b32(n_stride, c_stride, h_stride, w_stride);
+                    a_reg = asc_update_addr_reg_b32(n_stride, c_stride, h_stride, w_stride);
                     asc_loadalign(src_reg, src_addr, a_reg);
                     asc_add(dst_reg, src_reg, src_reg, mask);
                     asc_storealign(dst_addr, dst_reg, a_reg, mask);

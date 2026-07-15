@@ -193,7 +193,7 @@ PIPE_V
     vector_uint32_t src;
     uint32_t repeat = 2;
     for (uint32_t i = 0; i < repeat; i++) {
-        addr_reg count = asc_create_addr_reg_b32(64);
+        addr_reg count = asc_update_addr_reg_b32(64);
         // 其他reg操作
 
         // 第一次：src[0:62] 写入dst[0:62]（即UB[8:256]）；同时src[62:64] 写入ureg[0:2]；同时dst自增为dst[64]（即UB[264]）
@@ -201,7 +201,7 @@ PIPE_V
         asc_storeunalign_postupdate(dst, ureg, src, count);
     }
     // dst结束地址为520，但此时dst已经自增到了520，所以offset要配置为0 
-    addr_reg offset = asc_create_addr_reg_b32(0);
+    addr_reg offset = asc_update_addr_reg_b32(0);
     // ureg[0:2] 写入dst[-2:0]（即UB[512:520]）
     asc_storeunalign_post(dst, ureg, offset);
     ```

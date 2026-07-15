@@ -83,6 +83,6 @@ PIPE_V
 constexpr uint64_t total_length = 256;
 vector_bool dst = asc_create_mask_b16(PAT_ALL);
 __ubuf__ uint32_t src[total_length];
-addr_reg offset = asc_create_addr_reg_b32(64);
+addr_reg offset = asc_update_addr_reg_b32(64);
 asc_loadalign(dst, src, offset);
 ```

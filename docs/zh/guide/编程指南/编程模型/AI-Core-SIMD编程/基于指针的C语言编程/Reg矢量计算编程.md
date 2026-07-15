@@ -241,7 +241,7 @@ asc_and(dst_mask_reg, src0_mask_reg, src1_mask_reg, mask_reg);
 
 #### 地址迭代寄存器
 
-`addr_reg`用于保存UB访问的地址偏移量。它把原本需要在循环体内反复执行的标量地址计算转化为寄存器化的地址管理，最多支持四维偏移叠加。`AddrReg`通过`asc_create_addr_reg_b*`初始化，偏移量计算公式为：`offset = index0*stride0 + index1*stride1 + ...`。
+`addr_reg`用于保存UB访问的地址偏移量。它把原本需要在循环体内反复执行的标量地址计算转化为寄存器化的地址管理，最多支持四维偏移叠加。`AddrReg`通过`asc_update_addr_reg_b*`初始化，偏移量计算公式为：`offset = index0*stride0 + index1*stride1 + ...`。
 
 ```cpp
 // Allocate address iteration register
@@ -249,7 +249,7 @@ addr_reg a_reg;
 // Use as 2D offset accumulation for b32 elements
 for(uint16_t i = 0;i < extent1; i++){
     for(uint16_t j = 0;j < extent2; j++){
-        a_reg = asc_create_addr_reg_b32(i, stride0, j, stride1);
+        a_reg = asc_update_addr_reg_b32(i, stride0, j, stride1);
         asc_loadalign(src_reg, src_addr, a_reg);
     }
 }
@@ -502,7 +502,7 @@ PostUpdate的优势在于：
 addr_reg a_reg;
 for (uint16_t i = 0; i < extent1; ++i) {
     for (uint16_t j = 0; j < extent2; ++j) {
-        a_reg = asc_create_addr_reg_b32(i, stride0, j, stride1);
+        a_reg = asc_update_addr_reg_b32(i, stride0, j, stride1);
         asc_loadalign(src_reg, src_addr, a_reg);
     }
 }

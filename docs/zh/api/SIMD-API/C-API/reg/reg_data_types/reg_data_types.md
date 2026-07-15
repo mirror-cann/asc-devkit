@@ -2,7 +2,7 @@
 
 -   **[reg数据类型定义](data_type_definition.md)**
 
--   **[asc_create_addr_reg](asc_create_addr_reg.md)**
+-   **[asc_update_addr_reg](asc_update_addr_reg.md)**
 
 -   **[asc_create_iter_reg（废弃）](asc_create_iter_reg_deprecated.md)**
 

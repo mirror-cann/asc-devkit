@@ -1008,7 +1008,7 @@
         -   [Reg矢量计算](SIMD-API/C-API/reg/reg.md)
             -   [寄存器数据类型](SIMD-API/C-API/reg/reg_data_types/reg_data_types.md)
                 -   [reg数据类型定义](SIMD-API/C-API/reg/reg_data_types/data_type_definition.md)
-                -   [asc_create_addr_reg](SIMD-API/C-API/reg/reg_data_types/asc_create_addr_reg.md)
+                -   [asc_update_addr_reg](SIMD-API/C-API/reg/reg_data_types/asc_update_addr_reg.md)
                 -   [asc_create_iter_reg（废弃）](SIMD-API/C-API/reg/reg_data_types/asc_create_iter_reg_deprecated.md)
                 -   [asc_create_mask](SIMD-API/C-API/reg/reg_data_types/asc_create_mask.md)
                 -   [asc_get_mask_spr](SIMD-API/C-API/reg/reg_data_types/asc_get_mask_spr.md)

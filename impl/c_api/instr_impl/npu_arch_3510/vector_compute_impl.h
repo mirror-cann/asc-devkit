@@ -13,7 +13,7 @@
 
 #include "impl/c_api/instr_impl/npu_arch_3510/utils_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_relu_impl.h"
-#include "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_create_addr_reg_impl.h"
+#include "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_update_addr_reg_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_sub_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_subc_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_and_impl.h"
@@ -212,58 +212,58 @@
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_transto5hd_impl.h"
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_compute_impl/asc_set_va_reg_impl.h"
 
-// ==========asc_create_addr_reg(b8/b16/b32)=========
-#define ASC_DEFINE_ADDR_REG_API(bxx)                                                                                \
-    __simd_callee__ inline addr_reg asc_create_addr_reg_##bxx(uint32_t offset)                                      \
+// ==========asc_update_addr_reg(b8/b16/b32)=========
+#define ASC_DEFINE_UPDATE_ADDR_REG_API(bxx)                                                                         \
+    __simd_callee__ inline addr_reg asc_update_addr_reg_##bxx(uint32_t offset)                                      \
     {                                                                                                               \
-        return asc_create_addr_reg_##bxx##_impl(offset);                                                            \
+        return asc_update_addr_reg_##bxx##_impl(offset);                                                            \
     }                                                                                                               \
-    __simd_callee__ inline addr_reg asc_create_addr_reg_##bxx(uint32_t offset0, uint32_t offset1)                   \
+    __simd_callee__ inline addr_reg asc_update_addr_reg_##bxx(uint32_t offset0, uint32_t offset1)                   \
     {                                                                                                               \
-        return asc_create_addr_reg_##bxx##_impl(offset0, offset1);                                                  \
+        return asc_update_addr_reg_##bxx##_impl(offset0, offset1);                                                  \
     }                                                                                                               \
-    __simd_callee__ inline addr_reg asc_create_addr_reg_##bxx(uint32_t offset0, uint32_t offset1, uint32_t offset2) \
+    __simd_callee__ inline addr_reg asc_update_addr_reg_##bxx(uint32_t offset0, uint32_t offset1, uint32_t offset2) \
     {                                                                                                               \
-        return asc_create_addr_reg_##bxx##_impl(offset0, offset1, offset2);                                         \
+        return asc_update_addr_reg_##bxx##_impl(offset0, offset1, offset2);                                         \
     }                                                                                                               \
-    __simd_callee__ inline addr_reg asc_create_addr_reg_##bxx(                                                      \
+    __simd_callee__ inline addr_reg asc_update_addr_reg_##bxx(                                                      \
         uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3)                                     \
     {                                                                                                               \
-        return asc_create_addr_reg_##bxx##_impl(offset0, offset1, offset2, offset3);                                \
+        return asc_update_addr_reg_##bxx##_impl(offset0, offset1, offset2, offset3);                                \
     }
 
-ASC_DEFINE_ADDR_REG_API(b32)
-ASC_DEFINE_ADDR_REG_API(b16)
-ASC_DEFINE_ADDR_REG_API(b8)
+ASC_DEFINE_UPDATE_ADDR_REG_API(b32)
+ASC_DEFINE_UPDATE_ADDR_REG_API(b16)
+ASC_DEFINE_UPDATE_ADDR_REG_API(b8)
 
-#undef ASC_DEFINE_ADDR_REG_API
+#undef ASC_DEFINE_UPDATE_ADDR_REG_API
 
-// ==========asc_create_iter_reg (deprecated, please use asc_create_addr_reg instead)=========
+// ==========asc_create_iter_reg (deprecated, please use asc_update_addr_reg instead)=========
 #define ASC_DEFINE_ITER_REG_DEPRECATED_API(bxx)                                                                      \
     [[deprecated("NOTICE: asc_create_iter_reg_" #bxx " is deprecated. "                                              \
-                 "Please use asc_create_addr_reg_" #bxx                                                              \
+                 "Please use asc_update_addr_reg_" #bxx                                                              \
                  " instead.")]] __simd_callee__ inline addr_reg asc_create_iter_reg_##bxx(uint32_t offset)           \
     {                                                                                                                \
-        return asc_create_addr_reg_##bxx(offset);                                                                    \
+        return asc_update_addr_reg_##bxx(offset);                                                                    \
     }                                                                                                                \
     [[deprecated(                                                                                                    \
         "NOTICE: asc_create_iter_reg_" #bxx " is deprecated. "                                                       \
-        "Please use asc_create_addr_reg_" #bxx                                                                       \
+        "Please use asc_update_addr_reg_" #bxx                                                                       \
         " instead.")]] __simd_callee__ inline addr_reg asc_create_iter_reg_##bxx(uint32_t offset0, uint32_t offset1) \
     {                                                                                                                \
-        return asc_create_addr_reg_##bxx(offset0, offset1);                                                          \
+        return asc_update_addr_reg_##bxx(offset0, offset1);                                                          \
     }                                                                                                                \
     [[deprecated("NOTICE: asc_create_iter_reg_" #bxx " is deprecated. "                                              \
-                 "Please use asc_create_addr_reg_" #bxx " instead.")]] __simd_callee__ inline addr_reg               \
+                 "Please use asc_update_addr_reg_" #bxx " instead.")]] __simd_callee__ inline addr_reg               \
         asc_create_iter_reg_##bxx(uint32_t offset0, uint32_t offset1, uint32_t offset2)                              \
     {                                                                                                                \
-        return asc_create_addr_reg_##bxx(offset0, offset1, offset2);                                                 \
+        return asc_update_addr_reg_##bxx(offset0, offset1, offset2);                                                 \
     }                                                                                                                \
     [[deprecated("NOTICE: asc_create_iter_reg_" #bxx " is deprecated. "                                              \
-                 "Please use asc_create_addr_reg_" #bxx " instead.")]] __simd_callee__ inline addr_reg               \
+                 "Please use asc_update_addr_reg_" #bxx " instead.")]] __simd_callee__ inline addr_reg               \
         asc_create_iter_reg_##bxx(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3)            \
     {                                                                                                                \
-        return asc_create_addr_reg_##bxx(offset0, offset1, offset2, offset3);                                        \
+        return asc_update_addr_reg_##bxx(offset0, offset1, offset2, offset3);                                        \
     }
 
 ASC_DEFINE_ITER_REG_DEPRECATED_API(b32)

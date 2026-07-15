@@ -44,7 +44,7 @@ Reg矢量编程的硬件原理、内存层级、VF函数执行域、流水线同
 | --- | --- | --- |
 | 创建全量mask | `CreateMask<T, MaskPattern::ALL>()` | `asc_create_mask_b*()` |
 | 更新尾块mask | `UpdateMask<T>(count)` | `asc_update_mask_b*()` |
-| 创建地址寄存器 | `CreateAddrReg<T>(...)` | `asc_create_addr_reg_b*()` |
+| 创建地址寄存器 | `CreateAddrReg<T>(...)` | `asc_update_addr_reg_b*()` |
 | 通用搬入/搬出 | `Load` / `Store` | `asc_load` / `asc_store` |
 | 对齐搬入/搬出 | `LoadAlign` / `StoreAlign` | `asc_loadalign` / `asc_storealign` |
 | 非对齐搬入 | `LoadUnAlignPre` + `LoadUnAlign` | `asc_loadunalign_pre` + `asc_loadunalign` |
