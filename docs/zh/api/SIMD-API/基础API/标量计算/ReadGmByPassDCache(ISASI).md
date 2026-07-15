@@ -28,10 +28,7 @@
 
 头文件路径为：`"basic_api/kernel_operator_scalar_intf.h"`。
 
-不经过DCache从GM地址上读数据。使用场景：
-
-- 当多个核写入的数据落在同一条Cache Line内时，经过DCache的读写将以64B为粒度，可能引发多核数据随机覆盖问题（参考[DataCacheCleanAndInvalid调用示例3](../缓存控制/DataCacheCleanAndInvalid.md#example3_multi_core)）。使用该接口不经过DCache直接按操作数大小读GM，可避免此问题。
-- 经过DCache写GM时可能导致多核间的数据不一致问题（详细原因请参考[Cache写策略与Cache一致性问题](../缓存控制/系统缓存概述.md#zh-cn_topic_0000002583420201_section053731716357)），使用该接口不经过DCache直接向GM写数据，可避免此问题。
+不经过DCache从GM地址上读数据。
 
 ## 函数原型<a name="section620mcpsimp"></a>
 
@@ -69,12 +66,28 @@ __aicore__ inline T ReadGmByPassDCache(__gm__ T* addr)
 ## 调用示例<a name="section6191129670"></a>
 
 ```cpp
-__gm__ T* srcAddr = const_cast<__gm__ T*>(srcGlobal.GetPhyAddr());
-T value = AscendC::ReadGmByPassDCache<T>(srcAddr);
-// 同步指令：用于阻塞后续的指令执行，直到所有之前的内存访问指令（需要等待的内存位置可通过参数控制）执行结束
-AscendC::DataSyncBarrier<AscendC::MemDsbT::DDR>(); // DDR，等待GM访问指令
-__gm__ T* dstAddr = const_cast<__gm__ T*>(dstGlobal.GetPhyAddr());
-AscendC::WriteGmByPassDCache<T>(dstAddr, value + ADD_VALUE);
+if (blockIdx == 0) {
+    // 先写入被依赖数据，再通过DataSyncBarrier等待DDR访问完成。
+    AscendC::WriteGmByPassDCache<T>(reinterpret_cast<__gm__ T *>(srcGm) + 1, DATA_VALUE);
+    // DataSyncBarrier<DDR>阻塞后续GM写，确保上一条GM写对其他核可见。
+    AscendC::DataSyncBarrier<AscendC::MemDsbT::DDR>();
+    // 最后写入同步标记，block 1读到该标记后即可安全读取srcGm[1]。
+    AscendC::WriteGmByPassDCache<T>(reinterpret_cast<__gm__ T *>(srcGm), SYNC_FLAG);
+}
+
+if (blockIdx == 1) {
+    while (true) {
+        __gm__ T *addr = const_cast<__gm__ T *>(srcGlobal.GetPhyAddr());
+        // 轮询GM第0个元素，等待block 0写入同步标记。
+        T flagValue = AscendC::ReadGmByPassDCache<T>(addr);
+        if (flagValue == SYNC_FLAG) {
+            // DataSyncBarrier保证同步标记之前的srcGm[1]写入已完成。
+            T dataValue = AscendC::ReadGmByPassDCache<T>(addr + 1);
+            AscendC::WriteGmByPassDCache<T>(reinterpret_cast<__gm__ T *>(dstGm), 2 * dataValue);
+            return;
+        }
+    }
+}
 ```
 
-完整样例请参考[GmByPassDCache类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/09_utils/gm_by_pass_dcache)。
+完整样例请参考[DataSyncBarrier样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/05_sync_control/data_sync_barrier)。
