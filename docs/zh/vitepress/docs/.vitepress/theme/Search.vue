@@ -259,11 +259,12 @@ function stripExt(url: string) {
 }
 
 function breadcrumb(url: string) {
-  const segments = stripExt(url).replace(/\/$/, '').split('/').filter(Boolean).map(decodeURIComponent)
+  const pathPart = url.split('#')[0]
+  const segments = stripExt(pathPart).replace(/\/$/, '').split('/').filter(Boolean).map(decodeURIComponent)
   if (segments.length <= 1) return ''
   const topLevels = ['api', 'guide', 'zh', 'en']
   let start = topLevels.includes(segments[0]) ? 1 : 0
-  return segments.slice(start, -1)
+  return segments.slice(start)
 }
 
 function dirLabel(url: string) {

@@ -13,7 +13,7 @@ const path = require('path')
 const crypto = require('crypto')
 
 const root = path.resolve(__dirname, '..')
-const repoRoot = path.resolve(root, '..', '..')
+const repoRoot = path.resolve(root, '..', '..', '..')
 const apiDir = path.resolve(repoRoot, 'docs', 'zh', 'api')
 const outDir = path.resolve(root, 'docs', 'public', 'api-source')
 

@@ -15,7 +15,7 @@ const { cpSync, existsSync } = require('node:fs')
 
 const scriptsDir = resolve(__dirname)
 const root = resolve(scriptsDir, '..')
-const repoRoot = resolve(root, '..', '..')
+const repoRoot = resolve(root, '..', '..', '..')
 
 function runMdparser(inputDir, outputDir, label) {
   console.log(`Converting ${label}...`)

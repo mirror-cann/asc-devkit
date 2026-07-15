@@ -19,11 +19,12 @@ const showResults = ref(false)
 const selectedIndex = ref(-1)
 
 function getDirInfo(url) {
-  const parts = url.replace(/\/$/, '').split('/').filter(Boolean).map(decodeURIComponent)
+  const pathPart = url.split('#')[0].replace(/\.html?$/, '')
+  const parts = pathPart.replace(/\/$/, '').split('/').filter(Boolean).map(decodeURIComponent)
   if (parts.length <= 1) return []
   const routePrefixes = ['api', 'guide']
   let start = routePrefixes.includes(parts[0]) ? 1 : 0
-  return parts.slice(start, -1).slice(-3)
+  return parts.slice(start).slice(-4)
 }
 
 let pagefindReady = false

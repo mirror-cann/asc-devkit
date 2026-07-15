@@ -15,7 +15,10 @@ import { useData } from 'vitepress'
 const { page } = useData()
 const editUrl = computed(() => {
   const path = page.value.relativePath || ''
-  return `https://gitcode.com/cann/asc-devkit/blob/master/docs/${path}`
+  if (path.startsWith('en/')) {
+    return `https://gitcode.com/cann/asc-devkit/blob/master/docs/en/${path.slice(3)}`
+  }
+  return `https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/${path}`
 })
 </script>
 
