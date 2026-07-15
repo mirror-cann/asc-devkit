@@ -23,8 +23,8 @@ This example is based on the Gather operator and demonstrates how to collect on-
 ## Operator Description
   The gather operator implements the function of obtaining 12288 rows of data at specified indices from a 2D vector with shape [100000,128]. For detailed function description, refer to the [Gather Operator Details](../../../00_introduction/01_gather/basic_gather/gather_2d/README.md) section.
 
-## msProf Tool Introduction
-The msProf tool is a single-operator performance analysis tool. It includes two usage modes: msopprof and msopprof simulator. This tool helps users identify anomalies in operator memory, operator code, and operator instructions, enabling comprehensive operator tuning. It currently supports performance data collection and automatic parsing based on different run modes (on-board or simulation) and different file formats (executable files or operator binary .o files).
+## msOpProf Tool Introduction
+The msOpProf tool is a single-operator performance analysis tool. It includes two usage modes: msopprof and msopprof simulator. This tool helps users identify anomalies in operator memory, operator code, and operator instructions, enabling comprehensive operator tuning. It currently supports performance data collection and automatic parsing based on different run modes (on-board or simulation) and different file formats (executable files or operator binary .o files).
 
 - On-board Performance Collection
 
@@ -53,7 +53,7 @@ The msProf tool is a single-operator performance analysis tool. It includes two 
       └──visualize_data.bin         # MindStudio Insight presentation file
       ```
 
-Users can open the `visualize_data.bin` file with MindStudio Insight to visually view operator information, including operator basic information, inter-core load analysis, computation workload analysis, memory load analysis, and more. For more msProf tool usage, refer to the "Operator Tuning msOpProf" content in [Operator Development Tools](https://www.hiascend.com/document/redirect/CannCommercialToolOpDev).
+Users can open the `visualize_data.bin` file with MindStudio Insight to visually view operator information, including operator basic information, inter-core load analysis, computation workload analysis, memory load analysis, and more. For more msOpProf tool usage, refer to the "Operator Tuning msOpProf" content in [Operator Development Tools](https://www.hiascend.com/document/redirect/CannCommercialToolOpDev).
 
 
 ## Build and Run

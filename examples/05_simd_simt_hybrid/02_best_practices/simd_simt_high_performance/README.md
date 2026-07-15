@@ -1,5 +1,6 @@
 # SIMD与SIMT混合编程高性能优化样例
 
+
 ## 概述
 
 本样例以FloorMod计算为例，介绍SIMD与SIMT混合编程场景下的性能调优方法。样例展示直接使用SIMT访问GM、使用SIMD RegBase计算、使用SIMT访问UB但线程映射不连续，以及调整线程映射使Warp内相邻线程连续访问UB后的性能差异。

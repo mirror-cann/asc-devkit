@@ -28,7 +28,7 @@ This example demonstrates data transfer practices from Global Memory to UB and f
 
 ## Example Description
 
-The input for this example is a half-type 2D matrix in ND format. The aligned scenario input shape is [12288, 12288], and the unaligned scenario input shape is [12287, 12287]. The destination storage location is selected through the build option `COPY_DST`, and different transfer scenarios are selected through `SCENARIO_NUM`.
+The input for this example is a half-type 2D matrix in ND format. The aligned scenario input shape is [12288, 12288], and the unaligned scenario input shape is [12288, 12287]. The destination storage location is selected through the build option `COPY_DST`, and different transfer scenarios are selected through `SCENARIO_NUM`.
 
 - `COPY_DST=UB`: Uses AIV cores to perform GM to UB transfer. Kernel name is `kernel_data_copy_pad_gm2ub`
 - `COPY_DST=L1`: Uses AIC cores to perform GM to L1 transfer. Kernel name is `kernel_data_copy_gm2l1`
@@ -424,7 +424,7 @@ Run the following steps in the root directory of this example to build and run t
   Example:
 
   ```bash
-  cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..
+  cmake -DSCENARIO_NUM=$SCENARIO_NUM -DCOPY_DST=$COPY_DST -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..
   make -j
   ```
 
@@ -468,5 +468,5 @@ Run the following steps in the root directory of this example to build and run t
 
   ```bash
   # View Task Duration and various data
-  cat ./OPPROF_*/PipeUtilization*.csv
+  cat ./OPPROF_*/PipeUtilization.csv
   ```

@@ -81,7 +81,7 @@ msOpProf工具是单算子性能分析工具，包含`msopprof`和`msopprof simu
 - 样例执行
 
   在本样例目录下执行如下命令。
-  ```bashs
+  ```bash
   mkdir -p build && cd build;           # 创建并进入build目录
   cmake -DCMAKE_ASC_ARCHITECTURES=dav-2201 ..;make -j;   # 编译工程
   msopprof ./demo                      # 基于可执行文件demo通过msopprof执行性能调优

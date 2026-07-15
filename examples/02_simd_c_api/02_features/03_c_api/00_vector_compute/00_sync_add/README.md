@@ -8,7 +8,7 @@
 ```
 ├── 00_sync_add
 │   ├── CMakeLists.txt         // cmake编译文件
-|   └── c_api_add.asc          // 算子实现 & 调用样例
+│   └── c_api_add.asc          // 算子实现 & 调用样例
 ```
 
 ## 算子描述

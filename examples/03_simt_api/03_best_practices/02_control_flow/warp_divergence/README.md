@@ -123,7 +123,7 @@ y[row] = sum;
 
 **性能数据分析**：
 
-- Warp Divergence是指Warp内所有线程执行相同指令时，因控制流的差异导致只有部分线程进入某一分支，此时进入该分支的线程会继续执行，而未进入该分支的线程则被掩码屏蔽等待。Warp Divergence会导致执行效率下降，更多说明请参考[Warp执行机制](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编程模型/AI-Core-SIMT编程/线程架构.md#warp执行机制)。在本实现中，不同行的非零元素数量不同（1~64个）。同一Warp内的32个线程各自处理不同行数据，各线程的循环次数不同，退出循环的时间不一致，产生严重的Warp Divergence。假设一个Warp中线程0处理的行非零元素个数为3，线程1处理的行非零元素个数为64。线程0在3次循环后进入空闲等待，而线程1需要执行64次循环。这种等待在每个Warp中都会发生，造成大量计算资源浪费。
+- Warp Divergence是指Warp内所有线程执行相同指令时，因控制流的差异导致只有部分线程进入某一分支，此时进入该分支的线程会继续执行，而未进入该分支的线程则被掩码屏蔽等待。Warp Divergence会导致执行效率下降，更多说明请参考[Warp执行机制](../../../../../docs/zh/guide/编程指南/编程模型/AI-Core-SIMT编程/线程架构.md#warp执行机制)。在本实现中，不同行的非零元素数量不同（1~64个）。同一Warp内的32个线程各自处理不同行数据，各线程的循环次数不同，退出循环的时间不一致，产生严重的Warp Divergence。假设一个Warp中线程0处理的行非零元素个数为3，线程1处理的行非零元素个数为64。线程0在3次循环后进入空闲等待，而线程1需要执行64次循环。这种等待在每个Warp中都会发生，造成大量计算资源浪费。
 
 **优化建议**：
 
@@ -133,7 +133,7 @@ y[row] = sum;
 
 ### Case 2: 一个Warp协作处理一行数据
 
-**实现方式**：一个Warp的32个线程协作处理同一行数据，各线程以`warpSize`为步长访问该行的非零元素，循环次数基本相同。使用[asc_reduce_add()](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMT-API/Warp函数/Warp-Reduce类函数/asc_reduce_add.md)对Warp内各线程的部分和进行规约，由线程0写出最终结果。
+**实现方式**：一个Warp的32个线程协作处理同一行数据，各线程以`warpSize`为步长访问该行的非零元素，循环次数基本相同。使用[asc_reduce_add()](../../../../../docs/zh/api/SIMT-API/Warp函数/Warp-Reduce类函数/asc_reduce_add.md)对Warp内各线程的部分和进行规约，由线程0写出最终结果。
 
 **关键代码**：
 

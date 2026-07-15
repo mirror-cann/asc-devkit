@@ -17,7 +17,7 @@
 ```text
 ├── 02_clock
 │   ├── CMakeLists.txt         // cmake编译文件
-│   ├── clock.asc             // Ascend C算子实现加clock打点的调用样例
+│   ├── clock.asc              // Ascend C算子实现加clock打点的调用样例
 │   └── README.md
 ```
 

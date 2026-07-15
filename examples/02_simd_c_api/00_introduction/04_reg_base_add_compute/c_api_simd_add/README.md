@@ -13,7 +13,7 @@
 ```
 ├── c_api_simd_add
 │   ├── CMakeLists.txt          // 编译工程文件
-│   ├── c_api_add.asc          // Ascend C 算子实现 & 调用样例
+│   ├── c_api_add.asc           // Ascend C 算子实现 & 调用样例
 │   └── README.md
 ```
 

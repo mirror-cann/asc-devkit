@@ -123,7 +123,7 @@ y[row] = sum;
 
 **Performance Data Analysis**:
 
-- Warp Divergence occurs when all threads within a Warp execute the same instruction, but due to differences in control flow, only some threads enter a particular branch. The threads that enter the branch continue executing, while the threads that do not enter the branch are masked and wait. Warp Divergence causes execution efficiency to decrease. For more details, refer to [Warp Execution Mechanism](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编程模型/AI-Core-SIMT编程/线程架构.md#warp执行机制). In this implementation, different rows have different numbers of non-zero elements (1 to 64). The 32 threads within the same Warp each process different rows, resulting in inconsistent loop iterations and inconsistent loop exit times, causing severe Warp Divergence. Suppose thread 0 in a Warp processes a row with 3 non-zero elements, and thread 1 processes a row with 64 non-zero elements. Thread 0 becomes idle after 3 loop iterations, while thread 1 needs to execute 64 loop iterations. This waiting occurs in every Warp, resulting in significant waste of computing resources.
+- Warp Divergence occurs when all threads within a Warp execute the same instruction, but due to differences in control flow, only some threads enter a particular branch. The threads that enter the branch continue executing, while the threads that do not enter the branch are masked and wait. Warp Divergence causes execution efficiency to decrease. For more details, refer to [Warp Execution Mechanism](../../../../../docs/zh/guide/编程指南/编程模型/AI-Core-SIMT编程/线程架构.md#warp执行机制). In this implementation, different rows have different numbers of non-zero elements (1 to 64). The 32 threads within the same Warp each process different rows, resulting in inconsistent loop iterations and inconsistent loop exit times, causing severe Warp Divergence. Suppose thread 0 in a Warp processes a row with 3 non-zero elements, and thread 1 processes a row with 64 non-zero elements. Thread 0 becomes idle after 3 loop iterations, while thread 1 needs to execute 64 loop iterations. This waiting occurs in every Warp, resulting in significant waste of computing resources.
 
 **Optimization Suggestion**:
 
@@ -133,7 +133,7 @@ y[row] = sum;
 
 ### Case 2: One Warp Cooperatively Processes One Row of Data
 
-**Implementation**: The 32 threads of one Warp cooperatively process the same row of data. Each thread accesses the non-zero elements of that row with a step size of `warpSize`, resulting in basically the same loop iterations. Use [asc_reduce_add()](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMT-API/Warp函数/Warp-Reduce类函数/asc_reduce_add.md) to reduce the partial sums of all threads within the Warp, and thread 0 writes the final result.
+**Implementation**: The 32 threads of one Warp cooperatively process the same row of data. Each thread accesses the non-zero elements of that row with a step size of `warpSize`, resulting in basically the same loop iterations. Use [asc_reduce_add()](../../../../../docs/zh/api/SIMT-API/Warp函数/Warp-Reduce类函数/asc_reduce_add.md) to reduce the partial sums of all threads within the Warp, and thread 0 writes the final result.
 
 **Key Code**:
 

@@ -268,10 +268,23 @@ Use the `msOpProf` tool to collect performance data for Case 0. Key metrics:
 
 > **Selection Recommendation**: When computation steps are numerous (≥3 steps) and intermediate results do not need to be written back to UB, prioritize RegBase + VF fusion to significantly reduce UB read/write count and utilize dual-issue feature to improve IPC.
 
+**Key RegBase API Concepts**:
+
+| Keyword/Concept | Meaning | Detailed Documentation |
+|:---|:---|:---|
+| `__simd_vf__` | VF function declaration modifier, indicating that the function runs in the VF (Vector Function) execution domain | [asc_vf_call](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/VF调用/asc_vf_call.md) |
+| `__ubuf__` | UB address-space qualifier, indicating that the pointer points to a UB memory region | [asc_vf_call](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/VF调用/asc_vf_call.md) |
+| `RegTensor<T>` | Register-level Tensor object whose data resides in vector registers (unlike `LocalTensor`, whose data resides in UB) | [RegTensor](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/寄存器数据类型/RegTensor.md) |
+| `MaskReg` | Vector mask register that controls the number of elements participating in each computation | [MaskReg](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/寄存器数据类型/MaskReg.md) |
+| `LoadAlign` | Contiguous aligned transfer that loads data from UB into registers | [Contiguous Aligned Load](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/Reg数据搬入/连续对齐搬入（LoadAlign）.md) |
+| `StoreAlign` | Contiguous aligned transfer that writes data from registers back to UB | [Contiguous Aligned Store](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/Reg数据搬出/连续对齐搬出（StoreAlign）.md) |
+| `asc_vf_call` | VF function call entry point used to invoke a VF function from a kernel function | [asc_vf_call](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/VF调用/asc_vf_call.md) |
+| `UpdateMask` | Updates the mask register based on the number of remaining elements | [UpdateMask](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/寄存器数据类型/MaskReg.md) |
+
 **Principle Analysis**:
 
-RegBase API provides register-level vector computation interfaces. Combined with [asc_vf_call](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/Reg矢量计算/VF调用/asc_vf_call.md) to call VF functions, VF fusion can be achieved. Core advantages of VF fusion:
-- Within a VF function, after data is loaded from UB to registers, all intermediate computations are completed within registers, requiring only one [LoadAlign](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/Reg矢量计算/Reg数据搬入/连续对齐搬入（LoadAlign）.md) and one [StoreAlign](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/Reg矢量计算/Reg数据搬出/连续对齐搬出（StoreAlign）.md), eliminating Load/Store overhead for intermediate results
+RegBase API provides register-level vector computation interfaces. Combined with [asc_vf_call](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/VF调用/asc_vf_call.md) to call VF functions, VF fusion can be achieved. Core advantages of VF fusion:
+- Within a VF function, after data is loaded from UB to registers, all intermediate computations are completed within registers, requiring only one [LoadAlign](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/Reg数据搬入/连续对齐搬入（LoadAlign）.md) and one [StoreAlign](../../../../../docs/zh/api/SIMD-API/基础API/Reg矢量计算/Reg数据搬出/连续对齐搬出（StoreAlign）.md), eliminating Load/Store overhead for intermediate results
 - Supports VF dual-issue feature, standard computation instruction parallelism can reach 512 bytes/cycle, instruction dispatch efficiency (IPC) is significantly improved
 
 ```
@@ -543,17 +556,30 @@ $$
 N_{\text{instr}} = N_{\text{VF}} \times N_{\text{loop}} \times N_{\text{op}} = 128 \times 128 \times 8 = 131072
 $$
 
+Where:
+- $N_{\text{VF}} = 128$: Number of VF function calls
+- $N_{\text{loop}} = 128$: Number of loops within VF
+- $N_{\text{op}} = 8$: Number of computation instructions in VF (Mul×2, Muls×2, Add×1, Adds×1, Exp×1, Div×1)
+
 Vector computation cycle count:
 
 $$
 Cycles_{\text{vec}} = T_{\text{vec}} \times f = 66.277 \text{ μs} \times 1650 \text{ MHz} = 109357
 $$
 
+Where:
+- $T_{\text{vec}} = 66.277 \text{ μs}$: Measured vector computation duration
+- $f = 1650 \text{ MHz}$: Hardware clock frequency
+
 IPC:
 
 $$
 IPC = \frac{N_{\text{instr}}}{Cycles_{\text{vec}}} = \frac{131072}{109357} \approx 1.20
 $$
+
+Where:
+- $N_{\text{instr}} = 131072$: Single core vector computation instruction count
+- $Cycles_{\text{vec}} = 109357$: Vector computation cycle count
 
 IPC is better when higher, theoretical limit approaches 2.
 
@@ -564,6 +590,8 @@ For Case 2 scenario, with loop unrolling optimization added on top of VF fusion,
 $$
 N_{\text{instr}} = N_{\text{VF}} \times N_{\text{loop}} \times N_{\text{op}} = 128 \times 128 \times 8 = 131072
 $$
+
+The parameters in the formula have the same meanings as in Case 1. Loop unrolling does not affect the total instruction count.
 
 Vector computation cycle count:
 
@@ -611,7 +639,7 @@ Run the following steps in the root directory of this example to build and run t
 
 - Configure environment variables
 
-  Configure environment variables based on the [installation method](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/quick_start.md#prepare&install) of the CANN development kit in the current environment.
+  Configure environment variables based on the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit in the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```
@@ -659,30 +687,38 @@ Run the following steps in the root directory of this example to build and run t
 
 ### Performance Analysis
 
-Use the `msOpProf` tool to obtain detailed performance data:
+### Introduction to the msOpProf Tool
 
-```bash
-msopprof ./demo   # Analyze performance
-```
+`msOpProf` is a single-operator performance analysis tool. It offers two usage methods: `msopprof` and `msopprof simulator`. The tool helps users identify anomalies in operator memory, operator code, and operator instructions, enabling comprehensive operator tuning. It currently supports performance data collection and automatic parsing for different run modes (on-device or simulation) and different file types (executables or operator binary `.o` files).
+
+- On-device performance collection
+
+    On-device performance collection directly measures the execution time of an operator on an Ascend AI Processor. This method is suitable for quickly locating operator performance issues in an on-device environment.
+
+    Run operator tuning on the executable demo with `msopprof`:
+
+    ```
+    msopprof ./demo
+    ```
 
     - Performance data description  
       After the command completes, a folder named "OPPROF_{timestamp}_XXX" will be generated in the default directory. The performance data folder structure is as follows:
 
       ```bash
-      ├──dump                       # Raw performance data, no user attention needed
-      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle ratio
-      ├──L2Cache.csv                # L2 Cache hit rate, affects MTE2, suggests reasonable data transfer logic to increase hit rate
-      ├──Memory.csv                 # UB, L1 and main memory read/write bandwidth rate
-      ├──MemoryL0.csv               # L0A, L0B, and L0C read/write bandwidth rate
-      ├──MemoryUB.csv               # Vector and Scalar to UB read/write bandwidth rate
-      ├──OpBasicInfo.csv            # Operator basic information
-      ├──PipeUtilization.csv        # Computation unit and transfer unit time and ratio
-      ├──ResourceConflictRatio.csv  # Bank group, bank conflict and resource conflict ratio on UB in all instructions
+      ├──dump                       # Raw performance data; users do not need to inspect it
+      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle proportions
+      ├──L2Cache.csv                # L2 Cache hit rate; affects MTE2. Plan data transfer logic properly to increase the hit rate
+      ├──Memory.csv                 # Read/write bandwidth rates of UB, L1, and main memory
+      ├──MemoryL0.csv               # Read/write bandwidth rates of L0A, L0B, and L0C
+      ├──MemoryUB.csv               # Read/write bandwidth rates from Vector and Scalar to UB
+      ├──OpBasicInfo.csv            # Basic operator information
+      ├──PipeUtilization.csv        # Durations and proportions of computation and data transfer units
+      ├──ResourceConflictRatio.csv  # Proportions of UB bank groups, bank conflicts, and resource conflicts among all instructions
       └──visualize_data.bin         # MindStudio Insight presentation file
       ```
 
 View the specific performance analysis results:
 ```bash
 # View Task Duration and various data
-cat ./OPPROF_*/PipeUtilization*.csv
+cat ./OPPROF_*/PipeUtilization.csv
 ```

@@ -21,8 +21,8 @@ This example introduces the usage of the asc_dump_xxx series APIs to enable tens
 │   │   └── verify_result.py    // Script for verifying output data against ground truth data
 │   ├── CMakeLists.txt          // Build project file
 │   ├── data_utils.h            // Data read/write functions
-│   ├── dump.asc               // Ascend C example implementation & invocation example
-│   └── README.md              // Example description document
+│   ├── dump.asc                // Ascend C example implementation & invocation example
+│   └── README.md               // Example description document
 ```
 
 ## Example Description

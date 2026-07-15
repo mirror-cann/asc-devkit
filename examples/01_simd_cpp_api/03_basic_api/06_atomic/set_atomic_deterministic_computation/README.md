@@ -23,7 +23,7 @@
 │   ├── set_atomic_add_multi_aiv.h                // 多AIV核同步实现
 │   ├── set_atomic_add_single_aiv.h               // 单AIV核同步实现
 │   ├── set_atomic_deterministic_computation.asc  // Ascend C样例实现 & 调用样例
-│   └── README.md                                    // 样例说明文档
+│   └── README.md                                 // 样例说明文档
 ```
 
 ## 1. 确定性计算

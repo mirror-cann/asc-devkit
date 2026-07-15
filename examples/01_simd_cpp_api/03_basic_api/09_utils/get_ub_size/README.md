@@ -1,5 +1,6 @@
 # GetUBSize样例
 
+
 ## 概述
 
 本样例展示GetUBSizeInBytes和GetRuntimeUBSize接口使用方法，用于获取用户最大可使用的UB（Unified Buffer）大小（单位为Byte）。本样例给出了2种不同的测试场景（scenario）。

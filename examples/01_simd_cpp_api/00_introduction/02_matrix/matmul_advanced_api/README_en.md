@@ -21,7 +21,7 @@ This sample uses the Matmul high-level API to implement matrix multiplication.
 │   │   └── verify_result.py    // Golden value comparison file
 │   ├── CMakeLists.txt          // Build project file
 │   ├── data_utils.h            // Data read and write functions
-│   ├── matmul_advanced_api.asc  // Ascend C sample implementation & invocation sample
+│   ├── matmul_advanced_api.asc // Ascend C sample implementation & invocation sample
 │   └── README.md               // Sample documentation
 ```
 

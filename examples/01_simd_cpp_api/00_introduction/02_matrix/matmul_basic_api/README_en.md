@@ -28,14 +28,14 @@ This sample implements multi-core matrix multiplication computation based on the
 ## Sample Description
 
 - Sample Functionality:  
-  This sample uses Ascend C basic API to implement a basic matrix multiplication (Matmul) [kernel function](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/核函数.md). The matrix multiplication formula is as follows:
+  This sample uses Ascend C basic API to implement a basic matrix multiplication (Matmul) [kernel function](../../../../../docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/核函数.md). The matrix multiplication formula is as follows:
   $$
   C = A * B
   $$
   Where matrix A has shape `[M, K]`, matrix B has shape `[K, N]`, and output matrix C has shape `[M, N]`. For each element `C[m, n]` in the output matrix C, the product of row `m` of matrix A and column `n` of matrix B along the K axis accumulates. In matrix multiplication, **M direction** refers to the row direction of matrix C, **N direction** refers to the column direction of matrix C, and **K direction** refers to the inner dimension (accumulation dimension) of matrix C multiplication.
 
 - Sample Specifications:  
-  This sample uses parameters `M = 256, N = 256, K = 64`, with both input and output in `half` type and [`ND`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/技术附录/概念原理和术语/神经网络和算子/数据排布格式.md) format. The sample launches 2 cores to complete the computation, with each core responsible for 128 rows in the M axis direction and all 256 columns in the N axis direction of the output matrix C:
+  This sample uses parameters `M = 256, N = 256, K = 64`, with both input and output in `half` type and [`ND`](../../../../../docs/zh/guide/技术附录/概念原理和术语/神经网络和算子/数据排布格式.md) format. The sample launches 2 cores to complete the computation, with each core responsible for 128 rows in the M axis direction and all 256 columns in the N axis direction of the output matrix C:
   - Core 0 computes rows `0~127` of matrix C.
   - Core 1 computes rows `128~255` of matrix C.
 
@@ -51,40 +51,40 @@ This sample implements multi-core matrix multiplication computation based on the
 
 - Sample Implementation:
   - Kernel-side Overall Approach
-    - `mmad_custom` is a [`__global__`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md) [`__cube__`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md) kernel function, which indicates that this function runs on the [Cube](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/技术附录/概念原理和术语/术语表.md) computation unit of [AI Core](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/技术附录/概念原理和术语/术语表.md), primarily used for matrix computation.
-    - The sample uses the [static Tensor programming method](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/基于Tensor的CPP编程/静态Tensor编程.md) and creates [`LocalTensor`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md) through [`LocalMemAllocator`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/资源管理/内存管理/LocalMemAllocator/LocalMemAllocator简介.md).
-    - `CUBE_BLOCK = 16` indicates that the half data type fractal is `16 x 16`, and the code performs [`LoadData`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md) transfers in units of `16 x 16` fractals.
+    - `mmad_custom` is a [`__global__`](../../../../../docs/zh/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md) [`__cube__`](../../../../../docs/zh/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md) kernel function, which indicates that this function runs on the [Cube](../../../../../docs/zh/guide/技术附录/概念原理和术语/术语表.md) computation unit of [AI Core](../../../../../docs/zh/guide/技术附录/概念原理和术语/术语表.md), primarily used for matrix computation.
+    - The sample uses the [static Tensor programming method](../../../../../docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/基于Tensor的CPP编程/静态Tensor编程.md) and creates [`LocalTensor`](../../../../../docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md) through [`LocalMemAllocator`](../../../../../docs/zh/api/SIMD-API/基础API/资源管理/内存管理/LocalMemAllocator/LocalMemAllocator简介.md).
+    - `CUBE_BLOCK = 16` indicates that the half data type fractal is `16 x 16`, and the code performs [`LoadData`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md) transfers in units of `16 x 16` fractals.
 
   - Kernel-side Detailed Process
-    - Create [`GlobalTensor`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)`<half>` objects `aGM`, `bGM`, `cGM`, representing matrices A, B, C in [GM (Global Memory)](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/高级编程/硬件实现/基本架构.md).
-    - Obtain the current core ID through [AscendC::GetBlockIdx()](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/工具接口/系统资源与变量/GetBlockIdx.md) and calculate `mIterIdx`. This sample only splits tasks along the M axis, so each core only needs to process its own M-axis slice of matrix A and matrix C.
+    - Create [`GlobalTensor`](../../../../../docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor简介.md)`<half>` objects `aGM`, `bGM`, `cGM`, representing matrices A, B, C in [GM (Global Memory)](../../../../../docs/zh/guide/编程指南/高级编程/硬件实现/基本架构.md).
+    - Obtain the current core ID through [AscendC::GetBlockIdx()](../../../../../docs/zh/api/SIMD-API/基础API/工具接口/系统资源与变量/GetBlockIdx.md) and calculate `mIterIdx`. This sample only splits tasks along the M axis, so each core only needs to process its own M-axis slice of matrix A and matrix C.
     - Set GM address offsets:
       - `aGM` offset by `mIterIdx * singleCoreM * K`, enabling the current core to read its assigned row block of matrix A.
       - `bGM` has no offset, as each core needs to read the complete matrix B.
       - `cGM` offset by `mIterIdx * singleCoreM * N`, enabling the current core to write results back to its assigned row block of matrix C.
     - Create static `LocalTensor` through `LocalMemAllocator`:
       - `a1Local`: Temporary storage of matrix A in L1.
-      - `a2Local`: Temporary storage of matrix A in L0A, for [`Mmad`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md) to read.
+      - `a2Local`: Temporary storage of matrix A in L0A, for [`Mmad`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md) to read.
       - `b1Local`: Temporary storage of matrix B in L1. `a1Local` and `b1Local` use the same L1 allocator and are allocated in order, avoiding manual L1 address offset maintenance.
       - `b2Local`: Temporary storage of matrix B in L0B, for `Mmad` to read.
       - `cLocal`: Temporary storage of matrix multiplication result in L0C.
-    - Call [`DataCopy`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GMToUB随路转换ND2NZ搬运(DataCopy).md) to transfer matrices A and B from GM to L1. Use [`Nd2NzParams`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GMToUB随路转换ND2NZ搬运(DataCopy).md) parameters to convert the input [ND](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/技术附录/概念原理和术语/神经网络和算子/数据排布格式.md) format data to [Nz](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/技术附录/概念原理和术语/神经网络和算子/数据排布格式.md) format required by Cube computation during the transfer.
-    - Call [`SetFlag<HardEvent::MTE2_MTE1>`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) and [`WaitFlag<HardEvent::MTE2_MTE1>`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) for synchronization. `DataCopy` belongs to the MTE2 pipeline, and the subsequent `LoadData` belongs to the [MTE1](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/技术附录/概念原理和术语/术语表.md) pipeline. [MTE1](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/技术附录/概念原理和术语/术语表.md) must wait for [MTE2](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/技术附录/概念原理和术语/术语表.md) to complete, to avoid reading L1 data that has not finished transferring.
+    - Call [`DataCopy`](../../../../../docs/zh/api/SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GMToUB随路转换ND2NZ搬运(DataCopy).md) to transfer matrices A and B from GM to L1. Use [`Nd2NzParams`](../../../../../docs/zh/api/SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GMToUB随路转换ND2NZ搬运(DataCopy).md) parameters to convert the input [ND](../../../../../docs/zh/guide/技术附录/概念原理和术语/神经网络和算子/数据排布格式.md) format data to [Nz](../../../../../docs/zh/guide/技术附录/概念原理和术语/神经网络和算子/数据排布格式.md) format required by Cube computation during the transfer.
+    - Call [`SetFlag<HardEvent::MTE2_MTE1>`](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) and [`WaitFlag<HardEvent::MTE2_MTE1>`](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) for synchronization. `DataCopy` belongs to the MTE2 pipeline, and the subsequent `LoadData` belongs to the [MTE1](../../../../../docs/zh/guide/技术附录/概念原理和术语/术语表.md) pipeline. [MTE1](../../../../../docs/zh/guide/技术附录/概念原理和术语/术语表.md) must wait for [MTE2](../../../../../docs/zh/guide/技术附录/概念原理和术语/术语表.md) to complete, to avoid reading L1 data that has not finished transferring.
     - Call `LoadData` to transfer matrix A from L1 to L0A, and matrix B from L1 to L0B. L0A and L0B are input buffers that the Cube matrix computation unit reads directly.
-    - Call [`SetFlag<HardEvent::MTE1_M>`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) and [`WaitFlag<HardEvent::MTE1_M>`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) for synchronization. `LoadData` belongs to the MTE1 pipeline, and the subsequent `Mmad` belongs to the M pipeline. The M pipeline must wait for MTE1 to complete, to avoid reading L0A/L0B data that has not finished transferring.
-    - Call [`Mmad`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md)`(cLocal, a2Local, b2Local, {baseM, baseN, baseK, 0, false, true})` to execute matrix multiplication. Here `baseM = 128`, `baseN = 256`, `baseK = 64`, corresponding to the matrix block size computed by a single core at one time.
-    - Call [`SetFlag<HardEvent::M_FIX>`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) and [`WaitFlag<HardEvent::M_FIX>`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) for synchronization. [`Mmad`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md) belongs to the M pipeline, and the subsequent [`Fixpipe`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) belongs to the FIX pipeline. The FIX pipeline must wait for the M pipeline to complete, to avoid reading L0C results that have not finished computing.
-    - Call [`Fixpipe`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) to convert the `float` accumulation result in L0C to `half` and transfer it back to the matrix C output location in GM.
-    - Finally, call [`PipeBarrier`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/同步控制/核内同步/PipeBarrier(ISASI).md)`<PIPE_ALL>()` to ensure that related pipeline tasks within the current core complete.
+    - Call [`SetFlag<HardEvent::MTE1_M>`](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) and [`WaitFlag<HardEvent::MTE1_M>`](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) for synchronization. `LoadData` belongs to the MTE1 pipeline, and the subsequent `Mmad` belongs to the M pipeline. The M pipeline must wait for MTE1 to complete, to avoid reading L0A/L0B data that has not finished transferring.
+    - Call [`Mmad`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md)`(cLocal, a2Local, b2Local, {baseM, baseN, baseK, 0, false, true})` to execute matrix multiplication. Here `baseM = 128`, `baseN = 256`, `baseK = 64`, corresponding to the matrix block size computed by a single core at one time.
+    - Call [`SetFlag<HardEvent::M_FIX>`](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) and [`WaitFlag<HardEvent::M_FIX>`](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) for synchronization. [`Mmad`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md) belongs to the M pipeline, and the subsequent [`Fixpipe`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) belongs to the FIX pipeline. The FIX pipeline must wait for the M pipeline to complete, to avoid reading L0C results that have not finished computing.
+    - Call [`Fixpipe`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) to convert the `float` accumulation result in L0C to `half` and transfer it back to the matrix C output location in GM.
+    - Finally, call [`PipeBarrier`](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/PipeBarrier(ISASI).md)`<PIPE_ALL>()` to ensure that related pipeline tasks within the current core complete.
 
   - Invocation Implementation  
-    Use the [kernel invocation operator](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/核函数.md)`<<<>>>` to invoke the [kernel function](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/核函数.md). When invoking, pass matrix specifications, single-core computation amount, and basic tile size as template parameters, and pass Device-side A, B, C matrix addresses as runtime parameters.
+    Use the [kernel invocation operator](../../../../../docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/核函数.md)`<<<>>>` to invoke the [kernel function](../../../../../docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/核函数.md). When invoking, pass matrix specifications, single-core computation amount, and basic tile size as template parameters, and pass Device-side A, B, C matrix addresses as runtime parameters.
 
 - API Parameter Description:
 
   The following structures all use curly braces `{}` for parameter passing. The meaning of each field is as follows (field order is consistent with API documentation; actual struct declarations may have different field orders):
 
-  **[`AscendC::Nd2NzParams`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GMToUB随路转换ND2NZ搬运(DataCopy).md)** — Used by [`DataCopy`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GMToUB随路转换ND2NZ搬运(DataCopy).md) interface, describes ND→Nz format conversion parameters:
+  **[`AscendC::Nd2NzParams`](../../../../../docs/zh/api/SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GMToUB随路转换ND2NZ搬运(DataCopy).md)** — Used by [`DataCopy`](../../../../../docs/zh/api/SIMD-API/基础API/Memory矢量计算/数据搬运/GM与UB数据搬运/GMToUB随路转换ND2NZ搬运(DataCopy).md) interface, describes ND→Nz format conversion parameters:
   ```cpp
   struct Nd2NzParams {
       int32_t  ndNum;              // Number of ND matrices to transfer, [0, 4095]
@@ -99,7 +99,7 @@ This sample implements multi-core matrix multiplication computation based on the
   ```
   For example, when transferring matrix A, `{1, baseM, baseK, 0, K, baseM, 1, 0}` converts baseM×baseK ND data to Nz format.
 
-  **[`AscendC::LoadData2DParams`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md)** — Used by [`LoadData`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md) interface, describes data transfer parameters for matrix A L1 to L0A and matrix B L1 to L0B in Atlas A2 Training Series Products/Atlas A2 Inference Series Products, Atlas A3 Training Series Products/Atlas A3 Inference Series Products:
+  **[`AscendC::LoadData2DParams`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md)** — Used by [`LoadData`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md) interface, describes data transfer parameters for matrix A L1 to L0A and matrix B L1 to L0B in Atlas A2 Training Series Products/Atlas A2 Inference Series Products, Atlas A3 Training Series Products/Atlas A3 Inference Series Products:
 
   ```cpp
   struct LoadData2DParams {
@@ -115,7 +115,7 @@ This sample implements multi-core matrix multiplication computation based on the
   For example: In Atlas A2 Training Series Products/Atlas A2 Inference Series Products, Atlas A3 Training Series Products/Atlas A3 Inference Series Products, the layout format on L0A is Zz. When transferring matrix A, use `{0, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, 0, 0, false, 0}`; <br>
   When transferring matrix B, set `ifTranspose=true` to complete Nz to Zn transpose transfer.
 
-  **[`AscendC::LoadData2DParamsV2`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md)** — Used by [`LoadData`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md) interface, describes data transfer parameters for matrix A L1 to L0A and matrix B L1 to L0B in Ascend 950PR/Ascend 950DT products:
+  **[`AscendC::LoadData2DParamsV2`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md)** — Used by [`LoadData`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md) interface, describes data transfer parameters for matrix A L1 to L0A and matrix B L1 to L0B in Ascend 950PR/Ascend 950DT products:
   ```cpp
   struct LoadData2DParamsV2 {
       uint32_t mStartPosition;  // M direction start position, unit: 512B
@@ -130,7 +130,7 @@ This sample implements multi-core matrix multiplication computation based on the
   ```
   In Ascend 950PR/Ascend 950DT products, the layout format on L0A is Nz. When transferring matrix A, use `{0, 0, baseM / CUBE_BLOCK, baseK / CUBE_BLOCK, baseM / CUBE_BLOCK, baseM / CUBE_BLOCK, false, 0}` to complete A matrix Nz to Nz transfer in one operation; when transferring matrix B, use `{0, 0, baseK / CUBE_BLOCK, baseN / CUBE_BLOCK, baseK / CUBE_BLOCK, baseN / CUBE_BLOCK, true, 0}` to complete B matrix Nz to Zn transfer in one operation.
 
-  **[`AscendC::MmadParams`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md)** — Used by [`Mmad`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md) interface, describes matrix multiplication parameters:
+  **[`AscendC::MmadParams`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md)** — Used by [`Mmad`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md) interface, describes matrix multiplication parameters:
 
   ```cpp
   struct MmadParams {
@@ -144,7 +144,7 @@ This sample implements multi-core matrix multiplication computation based on the
   ```
   For example, `{baseM, baseN, baseK, 0, false, true}` computes a baseM×baseN output block and accumulates baseK length in the K direction.
 
-  **[`AscendC::FixpipeParamsV220`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md)** — Used by [`Fixpipe`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) interface, describes L0C to GM data transfer and precision conversion parameters:
+  **[`AscendC::FixpipeParamsV220`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md)** — Used by [`Fixpipe`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) interface, describes L0C to GM data transfer and precision conversion parameters:
   ```cpp
   struct FixpipeParamsV220 {
       int32_t     nSize;        // Source Nz matrix N direction size, [1, 4095]
@@ -212,7 +212,7 @@ Execute the following steps in the root directory of this sample to compile and 
 
 This interface provides formatted output functionality for CPU domain or NPU domain debugging scenarios.
 
-Call the [printf](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/调试接口/上板打印/printf.md) interface in the operator kernel-side implementation code where log information needs to be output to print relevant content.
+Call the [printf](../../../../../docs/zh/api/SIMD-API/基础API/调试接口/上板打印/printf.md) interface in the operator kernel-side implementation code where log information needs to be output to print relevant content.
 
 Example:
 
@@ -225,7 +225,7 @@ AscendC::printf("matmul blockIdx=%d\n", AscendC::GetBlockIdx());
 
 ### DumpTensor
 
-For operators developed based on operator projects, you can use the [DumpTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/调试接口/上板打印/DumpTensor.md) interface to dump the content of a specified Tensor. It also supports printing custom additional information (only uint32_t data type information is supported), such as printing the current line number.
+For operators developed based on operator projects, you can use the [DumpTensor](../../../../../docs/zh/api/SIMD-API/基础API/调试接口/上板打印/DumpTensor.md) interface to dump the content of a specified Tensor. It also supports printing custom additional information (only uint32_t data type information is supported), such as printing the current line number.
 
 Call the DumpTensor interface in the operator kernel-side implementation code where Tensor data needs to be printed. Example:
 
@@ -238,26 +238,31 @@ AscendC::DumpTensor(cLocal, baseM * baseN);
 
 ## Performance Debugging
 
-### msOpProf Tool Introduction
+### Introduction to the msOpProf Tool
 
-Use the `msOpProf` tool to obtain detailed performance data:
+msOpProf is a single-operator performance analysis tool with two usage modes: `msopprof` and `msopprof simulator`. It helps users identify anomalies in operator memory, code, and instructions for comprehensive operator tuning. It currently supports performance data collection and automatic parsing for different run modes (on-device or simulation) and file types (executables or operator binary `.o` files).
 
-```bash
-msopprof ./demo   # Analyze sample performance
-```
+- On-device performance collection
+
+    On-device performance collection directly measures the operator's execution time on the Ascend AI Processor. This method is suitable for quickly locating operator performance issues in an on-device environment.
+
+    Run msopprof on the `demo` executable for operator tuning:
+    ```
+    msopprof ./demo
+    ```
 
     - Performance data description  
       After the command completes, a folder named "OPPROF_{timestamp}_XXX" will be generated in the default directory. The performance data folder structure is as follows:
 
       ```bash
-      ├──dump                       # Raw performance data, no user attention needed
-      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle ratio
-      ├──L2Cache.csv                # L2 Cache hit rate, affects MTE2, suggests reasonable data transfer logic to increase hit rate
-      ├──Memory.csv                 # UB, L1 and main memory read/write bandwidth rate
-      ├──MemoryL0.csv               # L0A, L0B, and L0C read/write bandwidth rate
-      ├──MemoryUB.csv               # Vector and Scalar to UB read/write bandwidth rate
-      ├──OpBasicInfo.csv            # Operator basic information
-      ├──PipeUtilization.csv        # Computation unit and transfer unit time and ratio
-      ├──ResourceConflictRatio.csv  # Bank group, bank conflict and resource conflict ratio on UB in all instructions
+      ├──dump                       # Raw performance data; users do not need to inspect it
+      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle proportions
+      ├──L2Cache.csv                # L2 Cache hit rate; affects MTE2. Plan data transfer logic properly to increase the hit rate
+      ├──Memory.csv                 # Read/write bandwidth rates of UB, L1, and main memory
+      ├──MemoryL0.csv               # Read/write bandwidth rates of L0A, L0B, and L0C
+      ├──MemoryUB.csv               # Read/write bandwidth rates from Vector and Scalar to UB
+      ├──OpBasicInfo.csv            # Basic operator information
+      ├──PipeUtilization.csv        # Durations and proportions of computation and data transfer units
+      ├──ResourceConflictRatio.csv  # Proportions of UB bank groups, bank conflicts, and resource conflicts among all instructions
       └──visualize_data.bin         # MindStudio Insight presentation file
       ```

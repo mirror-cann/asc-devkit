@@ -1,5 +1,6 @@
 # QuantGroupMatmul最佳实践样例
 
+
 ## 概述
 
 本样例实现了per-token量化的分组矩阵乘法（QuantGroupMatmul），展示CV融合时Vector bound场景下的性能调优方法。

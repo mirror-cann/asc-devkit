@@ -324,7 +324,7 @@ output[index_out] = tile[threadIdx.x][threadIdx.y];
 1. **Establish a copy baseline first**: When analyzing the performance of memory-access operators, measure the copy scenario latency first, then compare the actual operator performance against it.
 2. **Prioritize GM memory access contiguity**: Matrix transpose computation is minimal; end-to-end latency is primarily affected by the read/write memory access pattern.
 3. **Use UB staging to improve write-back patterns**: When direct transpose causes non-contiguous GM writes, transfer non-contiguous access to the UB side in exchange for contiguous GM read/write.
-4. **Continue analyzing UB Bank conflicts**: After GM memory coalescing, UB bank conflicts during the transpose read phase may become the next bottleneck. Adjust the UB physical layout through padding, adjusting the row stride, or reordering data to avoid bank conflicts.
+4. **Continue analyzing UB Bank conflicts**: After GM memory coalescing, UB bank conflicts during the transpose read phase may become the next bottleneck. Adjust the physical UB layout through padding or similar methods to prevent concurrent threads in the same Warp from concentrating their accesses on the same bank resources.
 
 ## Build and Run
 

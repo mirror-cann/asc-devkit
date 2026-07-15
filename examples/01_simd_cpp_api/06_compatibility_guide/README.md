@@ -1,5 +1,6 @@
 # Compatibility Guide样例介绍
 
+
 ## 概述
 
 针对Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas A3 训练系列产品/Atlas A3 推理系列产品与Ascend 950PR/Ascend 950DT之间存在兼容性差异的部分特性，本小节提供了若干样例，用户可以根据样例进行迁移适配。

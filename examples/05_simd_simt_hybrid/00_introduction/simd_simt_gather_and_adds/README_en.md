@@ -118,5 +118,5 @@ Execute the following steps in the root directory of this sample to compile and 
 - Execution Result  
   The execution result is as follows, indicating that the precision comparison is successful.
   ```
-  [Success] Case accuracy is verification passed.
+  test pass!
   ```

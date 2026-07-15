@@ -30,15 +30,15 @@
 - 样例功能：
   本样例实现了带Bias的动态Shape多核Matmul功能，通过Copy接口完成L0C到GM或L0C到UB的数据搬运，通过Mmad接口完成矩阵乘加计算。
 
-  1、动态Matmul功能
+  1. 动态Matmul功能
 
   本样例实现了多核Matmul功能。Shape参数（M、N、K、singleCoreM、singleCoreN、singleCoreK）通过`MatmulTiling`结构体在运行时动态传入kernel。`BASE_M`、`BASE_N`、`BASE_K`和`STEP_M`、`STEP_N`、`STEP_K`作为编译期模板参数，决定了L0/L1级buffer的分配大小。
 
-  2、Bias功能
+  2. Bias功能
 
   本样例在Matmul计算的首次迭代中通过Mmad接口将Bias向量加到矩阵乘结果上，Bias为float类型的一维向量，长度为N。
 
-  3、多场景支持
+  3. 多场景支持
 
   通过编译时宏参数`SCENARIO_NUM`选择不同的回写模式：
 
@@ -54,7 +54,7 @@
 
   注：A/B矩阵在所有场景下数据类型均为half，C矩阵和Bias在所有场景下数据类型均为float。
 
-  4、MatmulTiling结构体定义
+  4. MatmulTiling结构体定义
 
   ```cpp
   struct MatmulTiling {

@@ -656,7 +656,7 @@ Ascend 950系列未达到理论vector耗时峰值的原因如下：
 
 该接口提供CPU域/NPU域调试场景下的格式化输出功能。
 
-在算子kernel侧实现代码中需要输出日志信息的地方调用[printf](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/调试接口/上板打印/printf.md)接口打印相关内容。
+在算子kernel侧实现代码中需要输出日志信息的地方调用[printf](../../../../../docs/zh/api/SIMD-API/基础API/调试接口/上板打印/printf.md)接口打印相关内容。
 
 示例如下：
 
@@ -668,9 +668,9 @@ AscendC::printf("add blockIdx=%d\n", AscendC::GetBlockIdx());
 
 ### DumpTensor
 
-基于算子工程开发的算子，可以使用该接口Dump指定[LocalTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)的内容。同时支持打印自定义的附加信息（仅支持uint32\_t数据类型的信息），比如打印当前行号等。
+基于算子工程开发的算子，可以使用该接口Dump指定[LocalTensor](../../../../../docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md)的内容。同时支持打印自定义的附加信息（仅支持uint32\_t数据类型的信息），比如打印当前行号等。
 
-在算子kernel侧实现代码中需要打印Tensor数据的地方调用[DumpTensor](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/调试接口/上板打印/DumpTensor.md)接口打印相关内容。样例如下：
+在算子kernel侧实现代码中需要打印Tensor数据的地方调用[DumpTensor](../../../../../docs/zh/api/SIMD-API/基础API/调试接口/上板打印/DumpTensor.md)接口打印相关内容。样例如下：
 
 ```cpp
 // 向量计算: z = x + y

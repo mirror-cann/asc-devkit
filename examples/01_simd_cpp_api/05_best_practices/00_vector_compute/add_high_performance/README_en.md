@@ -114,6 +114,8 @@ for (uint32_t i = 0; i < curLen; i++) {
 
 ---
 
+## Intermediate Performance Optimization
+
 ### Case 1: Single-Core Vector Version
 
 **Implementation**: Refer to `KernelAdd::ProcessSingle()` function implementation
@@ -350,6 +352,8 @@ UB Memory Allocation (Double Buffer):
 - Can try L2 Cache optimization to improve transfer efficiency
 ---
 
+## Advanced Performance Refinement
+
 ### Case 5: Double Buffer + L2 Cache Bypass
 
 **Implementation**: Refer to `KernelAdd::ProcessDoubleBufferL2Bypass()` function implementation (within this function, first set `SetL2CacheHint(CACHE_MODE_DISABLE)`, then call `ProcessDoubleBuffer()`)
@@ -417,7 +421,7 @@ yGm.SetL2CacheHint(AscendC::CacheMode::CACHE_MODE_DISABLE);
 
 // Optimized address layout (Bank Conflict avoidance)
 static constexpr uint32_t xAddrPingBC = 0;
-static constexpr uint32_t yAddrPingBC = BANK_CONFLICT_DATA_COPY_LEN * sizeof(half);
+static constexpr uint32_t yAddrPingBC = BANK_CONFLICT_DATA_COPY_LEN * sizeof(half);  // Offset by 256B; note: sizeof(half)=2B. Use sizeof(float) for float scenarios.
 static constexpr uint32_t xAddrPongBC = MAX_DATA_COPY_LEN * sizeof(half) * 2;
 static constexpr uint32_t yAddrPongBC = xAddrPongBC + BANK_CONFLICT_DATA_COPY_LEN * sizeof(half);
 static constexpr uint32_t zAddrPingBC = MAX_DATA_COPY_LEN * sizeof(half) * 4;
@@ -479,8 +483,8 @@ Since vec instructions read 256B of data per beat (that is, simultaneously readi
 > 3. Bank Conflict optimization provides obvious benefits for vector-bound scenarios
 
 **Final Performance Summary**:
-- Compared to baseline Case 0: Performance improved **6711x** (1239689.1μs → 184.52μs)
-- Compared to single-core vector Case 1: Performance improved **37.3x** (6909.6μs → 184.52μs)
+- Compared to baseline Case 0: Performance improved **6718.5x** (1239689.1μs → 184.52μs)
+- Compared to single-core vector Case 1: Performance improved **37.4x** (6909.6μs → 184.52μs)
 
 
 ---
@@ -497,8 +501,8 @@ The table below shows performance data comparison for this example running on At
 | 2 | Multi-core even splitting | 48 | 4096 | 306.58 | 15.885 | 5.904 | 1.2457 | NA | 4043.6x |
 | 3 | Increase transfer granularity | 48 | 16384 | 268.5 | 12.845 | 5.904 | 1.4560 | NA | 4617.1x |
 | 4 | Double buffer | 48 | 16384 | 264.02 | 12.846 | 5.904 | NA | 1.6072 | 4695.4x |
-| 5 | L2 Cache bypass | 48 | 16384 | 187.68 | 12.846 | 5.904 | NA | 2.2755 | 6612.2x |
-| 6 | Bank Conflict optimization | 48 | 16256 | 184.52 | 6.954 | 5.904 | NA | 2.3456 | 6710.7x |
+| 5 | L2 Cache bypass | 48 | 16384 | 187.68 | 12.846 | 5.904 | NA | 2.2755 | 6605.3x |
+| 6 | Bank Conflict optimization | 48 | 16256 | 184.52 | 6.954 | 5.904 | NA | 2.3456 | 6718.5x |
 
 The "theoretical vector duration" in the table represents the theoretical execution time considering only Vector computation itself under the current core count configuration. The performance data of this example was obtained running on Atlas A2 Training Series Products. This processor processes 128 half data per cycle, with clock frequency 1.85GHz. The theoretical vector duration formula is:
 $$
@@ -528,6 +532,18 @@ Where:
 - $T_{mte2}$ is aiv_mte2_time (GM→UB transfer duration, μs)
 - After enabling double buffer, mte2 and mte3 pipeline in parallel; from this example data, Case 4-6 mte2 utilization rates are 97.3%, 95.1%, 96.1% respectively, so $T_{mte2}$ is used as the main path time for estimation here
 
+Taking Case 3 as an example ($M=N=8192$, $T_{mte2}=184.369\mu s$):
+$$
+BW_{read} = \frac{8192 \times 8192 \times 2 \times 2}{184.369 \times 10^{-6}} = \frac{268435456}{184.369 \times 10^{-6}} \approx 1.4560 \times 10^{12} \text{ B/s} \approx 1.4560 \text{ TB/s}
+$$
+
+Taking Case 6 as an example ($T_{mte2}=171.611\mu s$):
+$$
+BW_{rw} = \frac{8192 \times 8192 \times (2+1) \times 2}{171.611 \times 10^{-6}} = \frac{402653184}{171.611 \times 10^{-6}} \approx 2.3456 \times 10^{12} \text{ B/s} \approx 2.3456 \text{ TB/s}
+$$
+
+The read-write mixed bandwidth is higher than 1.8 TB/s because this metric is not pure read bandwidth, but combined read and write bandwidth. After double buffer is enabled, the read and write pipelines run in parallel. In addition, z writes hit the L2 Cache, which provides high bandwidth. Therefore, when mte2 is used as the mixed read-write time, the numerator includes the total amount of data read and written, so the resulting mixed bandwidth can exceed 1.8 TB/s.
+
 ### Ascend 950 Series Performance Comparison
 
 The table below shows performance data comparison for this example running on Ascend 950 Series Products:
@@ -552,6 +568,11 @@ On Ascend 950 Series Products, BANK arrangement is different. This example does 
 $$
 T_{\text{theory}} = \frac{8192 \times 8192}{128 \times 1.65 \times 10^9 \times 64} = \frac{67108864}{1.35168 \times 10^{13}} \approx 4.965 \times 10^{-6} \text{ s} = 4.965 \text{ μs}
 $$
+
+The reasons why the Ascend 950 Series does not reach the theoretical vector duration peak are as follows:
+
+- The theoretical value covers only pure Vector computation and excludes data transfer, event synchronization, pipeline scheduling, and other overhead. In the measured Case 5, `aiv_vec_time=10.997μs`, Task Duration is `182.04μs`, and `aiv_mte2_ratio` reaches 98.3%. This indicates that the end-to-end bottleneck is bandwidth rather than pure computation.
+- The main benefits of RegBase on the Ascend 950 Series come from reducing redundant Load/Store operations, reusing registers, and increasing the proportion of independent instructions that can execute concurrently. The core computation in this Add example is essentially a single Add instruction, with a short computation chain and limited opportunities for fusion or dual issue, so it cannot fully realize the benefits of RegBase.
 
 ### Optimization Summary
 
@@ -629,32 +650,71 @@ $$
   test pass!
   ```
 
-## Performance Analysis
 
-Use the `msOpProf` tool to obtain detailed performance data:
+## Function debugging
 
-```bash
-msopprof ./demo   # Analyze performance
+### printf
+
+This interface provides formatted output function in CPU domain/NPU domain debugging scenarios.
+
+In the implementation code on the operator kernel side, call the [printf](../../../../../docs/zh/api/SIMD-API/基础API/调试接口/上板打印/printf.md) interface to print relevant content.
+
+Examples are as follows:
+
+```cpp
+AscendC::printf("add blockIdx=%d\n", AscendC::GetBlockIdx());
 ```
+
+> **Note:** The printing function of the printf (PRINTF) interface will have a certain impact on the actual performance of the operator and is usually used during the debugging phase. Developers can turn off the printing function as needed by setting `ASCENDC_DUMP=0`.
+
+### DumpTensor
+
+For operators developed based on the operator project, you can use this interface Dump to specify the contents of [LocalTensor](../../../../../docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor简介.md). It also supports printing of customized additional information (only uint32\_t data type information is supported), such as printing the current line number, etc.
+
+In the operator kernel side implementation code, where Tensor data needs to be printed, call the [DumpTensor](../../../../../docs/zh/api/SIMD-API/基础API/调试接口/上板打印/DumpTensor.md) interface to print relevant content. An example is as follows:
+
+```cpp
+// Vector calculation: z = x + y
+AscendC::Add(zLocal, xLocal, yLocal, blockLength);
+AscendC::DumpTensor(zLocal, 1, 32);
+```
+
+> **Note:** The printing function of the DumpTensor interface will have a certain impact on the actual performance of the operator and is usually used during the debugging phase. Developers can turn off the printing function by setting `ASCENDC_DUMP=0` as needed.
+
+## Performance Debugging
+
+### Introduction to the msOpProf Tool
+
+msOpProf is a single-operator performance analysis tool with two usage modes: `msopprof` and `msopprof simulator`. It helps users identify anomalies in operator memory, code, and instructions for comprehensive operator tuning. It currently supports performance data collection and automatic parsing for different run modes (on-device or simulation) and file types (executables or operator binary `.o` files).
+
+- On-device performance collection
+
+    On-device performance collection directly measures the operator's execution time on the Ascend AI Processor. This method is suitable for quickly locating operator performance issues in an on-device environment.
+
+    Run msopprof on the `demo` executable for operator tuning:
+    ```
+    msopprof ./demo
+    ```
 
     - Performance data description  
       After the command completes, a folder named "OPPROF_{timestamp}_XXX" will be generated in the default directory. The performance data folder structure is as follows:
 
       ```bash
-      ├──dump                       # Raw performance data, no user attention needed
-      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle ratio
-      ├──L2Cache.csv                # L2 Cache hit rate, affects MTE2, suggests reasonable data transfer logic to increase hit rate
-      ├──Memory.csv                 # UB, L1 and main memory read/write bandwidth rate
-      ├──MemoryL0.csv               # L0A, L0B, and L0C read/write bandwidth rate
-      ├──MemoryUB.csv               # Vector and Scalar to UB read/write bandwidth rate
-      ├──OpBasicInfo.csv            # Operator basic information
-      ├──PipeUtilization.csv        # Computation unit and transfer unit time and ratio
-      ├──ResourceConflictRatio.csv  # Bank group, bank conflict and resource conflict ratio on UB in all instructions
+      ├──dump                       # Raw performance data; users do not need to inspect it
+      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle proportions
+      ├──L2Cache.csv                # L2 Cache hit rate; affects MTE2. Plan data transfer logic properly to increase the hit rate
+      ├──Memory.csv                 # Read/write bandwidth rates of UB, L1, and main memory
+      ├──MemoryL0.csv               # Read/write bandwidth rates of L0A, L0B, and L0C
+      ├──MemoryUB.csv               # Read/write bandwidth rates from Vector and Scalar to UB
+      ├──OpBasicInfo.csv            # Basic operator information
+      ├──PipeUtilization.csv        # Durations and proportions of computation and data transfer units
+      ├──ResourceConflictRatio.csv  # Proportions of UB bank groups, bank conflicts, and resource conflicts among all instructions
       └──visualize_data.bin         # MindStudio Insight presentation file
       ```
-View the specific performance analysis results:
+
+View the detailed performance analysis results:
 
 ```bash
-# View Task Duration and various data
-cat ./OPPROF_*/PipeUtilization*.csv
+# View Task Duration and other metrics
+cat ./OPPROF_*/PipeUtilization.csv
 ```

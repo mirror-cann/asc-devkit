@@ -20,7 +20,7 @@ This example introduces how to use the multi-dimensional data transfer API to im
 │   ├── CMakeLists.txt                          // Build configuration file
 │   ├── data_utils.h                            // Data read/write functions
 │   ├── multidimensional_data_movement.asc      // Ascend C example implementation & invocation example
-│   └── README.md                                // Example description document
+│   └── README.md                               // Example description document
 ```
 
 ## Scenario Description

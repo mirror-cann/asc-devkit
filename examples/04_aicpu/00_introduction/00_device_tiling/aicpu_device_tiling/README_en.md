@@ -21,7 +21,7 @@ This sample demonstrates tiling offload computation using AI CPU operators.
 │   ├── kernel_args.h                      // Tiling struct header file
 │   ├── main.asc                           // AI CPU and AI Core operator calls
 │   ├── aicpu_tiling.aicpu                 // AI CPU operator implementation
-│   └── README.md                           // Sample documentation
+│   └── README.md                          // Sample documentation
 ```
 
 ## Sample Description

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example, based on the Gather operator, demonstrates the separate compilation flow where Device code in a Host + Device mixed .asc file is split into **multiple .asc files**. The separate compilation code structure and call relationship are shown in Figure 1 below, where `func.asc` is the **Device-side execution function** (defines the `func_a` function and exposes it through extern for cross-file invocation), `kernel.asc` is the **Host + Device mixed file** (containing Kernel definition and <<<>>> kernel invocation, calls the Device-side execution function in func.asc through extern), and `.cpp` is pure Host-side code (calls the <<<>>> kernel launch function exposed by kernel.asc through extern).
+This example, based on the Gather operator, demonstrates the separate compilation flow where Device code in a Host + Device mixed .asc file is split into **multiple .asc files**. The separate compilation code structure and call relationship are shown in Figure 1 below, where `gather_compute.asc` is the **Device-side execution function** (defines the `gather_element` function and exposes it through extern for cross-file invocation), `gather_kernel.asc` is the **Host + Device mixed file** (containing the Kernel definition and <<<>>> kernel invocation, and calling the Device-side execution function in gather_compute.asc through extern), and `main.cpp` is pure Host-side code (calling the <<<>>> kernel launch function exposed by gather_kernel.asc through extern).
 
 <p align="center">
   <img src="./figures/separate_compile.png" width="50%">
@@ -48,15 +48,15 @@ Separate compilation has the following considerations:
 This example has cross-file device function calls and requires the `-dc` option to compile each `.asc` file and Host-side `.cpp` into `.o` object files separately, then link to generate the executable binary. The specific compilation commands are as follows:
 
 ```shell
-bisheng -dc func.asc -o func.o --npu-arch=dav-3510 --enable-simt
-bisheng -dc kernel.asc -o kernel.o --npu-arch=dav-3510 --enable-simt
-bisheng -c host.cpp -o host.o -I${ASCEND_HOME_PATH}/include
-bisheng func.o kernel.o host.o -o demo
+bisheng -dc gather_compute.asc -o gather_compute.o --npu-arch=dav-3510 --enable-simt
+bisheng -dc gather_kernel.asc -o gather_kernel.o --npu-arch=dav-3510 --enable-simt
+bisheng -c main.cpp -o main.o -I${ASCEND_HOME_PATH}/include
+bisheng gather_compute.o gather_kernel.o main.o -o demo
 ```
 
-Where `--npu-arch` specifies the AI processor architecture at compile time. This example only supports `dav-3510`. For the architecture version corresponding to each product model, refer to the [correspondence table](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114). `--enable-simt` is used to specify SIMT compilation mode.
+Where `--npu-arch` specifies the AI processor architecture at compile time. This example only supports `dav-3510`. For the architecture version corresponding to each product model, refer to the [correspondence table](../../../../../docs/zh/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114). `--enable-simt` is used to specify SIMT compilation mode.
 
-For more bisheng compilation options and usage, refer to [AI-Core Operator Compilation Basic Usage](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编译与运行/算子编译/AI-Core算子编译基本用法.md).
+For more bisheng compilation options and usage, refer to [AI-Core Operator Compilation Basic Usage](../../../../../docs/zh/guide/编程指南/编译与运行/算子编译/AI-Core算子编译基本用法.md).
 
 ### CMake Compilation
 

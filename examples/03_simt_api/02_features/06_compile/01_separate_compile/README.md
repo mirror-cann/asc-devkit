@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例基于Gather算子，演示了将Host + Device混合.asc文件中的Device代码拆分到**多个.asc文件**的单独编译流程。单独编译的代码结构与调用关系如下图1所示，其中 `func.asc` 为**Device侧执行函数**（定义 `func_a` 函数并通过 extern 暴露供跨文件调用），`kernel.asc` 为**Host + Device混合文件**（含Kernel定义、<<<>>>内核调用，通过extern调用func.asc中的Device侧执行函数），`.cpp` 为纯Host侧代码（通过extern调用kernel.asc暴露的 <<<>>> 内核启动函数）。
+本样例基于Gather算子，演示了将Host + Device混合.asc文件中的Device代码拆分到**多个.asc文件**的单独编译流程。单独编译的代码结构与调用关系如下图1所示，其中 `gather_compute.asc` 为**Device侧执行函数**（定义 `gather_element` 函数并通过 extern 暴露供跨文件调用），`gather_kernel.asc` 为**Host + Device混合文件**（含Kernel定义、<<<>>>内核调用，通过extern调用gather_compute.asc中的Device侧执行函数），`main.cpp` 为纯Host侧代码（通过extern调用gather_kernel.asc暴露的 <<<>>> 内核启动函数）。
 
 <p align="center">
   <img src="./figures/separate_compile.png" width="50%">
@@ -48,15 +48,15 @@ bisheng默认采用**全程序编译**模式，该模式要求单个源文件 `X
 本样例存在跨文件的设备函数调用，需要使用 `-dc` 选项分别将各 `.asc` 文件与Host侧 `.cpp` 编译为 `.o` 目标文件，再链接生成可执行二进制。具体编译命令如下：
 
 ```shell
-bisheng -dc func.asc -o func.o --npu-arch=dav-3510 --enable-simt
-bisheng -dc kernel.asc -o kernel.o --npu-arch=dav-3510 --enable-simt
-bisheng -c host.cpp -o host.o -I${ASCEND_HOME_PATH}/include
-bisheng func.o kernel.o host.o -o demo
+bisheng -dc gather_compute.asc -o gather_compute.o --npu-arch=dav-3510 --enable-simt
+bisheng -dc gather_kernel.asc -o gather_kernel.o --npu-arch=dav-3510 --enable-simt
+bisheng -c main.cpp -o main.o -I${ASCEND_HOME_PATH}/include
+bisheng gather_compute.o gather_kernel.o main.o -o demo
 ```
 
-其中，`--npu-arch` 为编译时指定的AI处理器架构，本样例仅支持 `dav-3510`，各产品型号对应的架构版本号请通过[对应关系表](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)进行查询。`--enable-simt` 用于指定 SIMT 方式编译。
+其中，`--npu-arch` 为编译时指定的AI处理器架构，本样例仅支持 `dav-3510`，各产品型号对应的架构版本号请通过[对应关系表](../../../../../docs/zh/guide/编程指南/语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)进行查询。`--enable-simt` 用于指定 SIMT 方式编译。
 
-更多bisheng编译选项及用法说明，请参考[AI-Core算子编译基本用法](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/guide/编程指南/编译与运行/算子编译/AI-Core算子编译基本用法.md)。
+更多bisheng编译选项及用法说明，请参考[AI-Core算子编译基本用法](../../../../../docs/zh/guide/编程指南/编译与运行/算子编译/AI-Core算子编译基本用法.md)。
 
 ### CMake方式编译
 
@@ -75,9 +75,9 @@ project(kernel LANGUAGES ASC CXX)
 
 # 4、使用CMake接口编译可执行文件
 add_executable(demo
-    func.asc
-    kernel.asc
-    host.cpp)
+    gather_compute.asc
+    gather_kernel.asc
+    main.cpp)
 
 # 5、设置链接器语言为ASC
 set_target_properties(demo PROPERTIES LINKER_LANGUAGE ASC)

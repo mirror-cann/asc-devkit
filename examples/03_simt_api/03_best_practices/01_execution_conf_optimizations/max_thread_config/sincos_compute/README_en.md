@@ -1,5 +1,6 @@
 # SinCosCompute Performance Tuning Example
 
+
 ## Overview
 
 This example uses sincos computation to demonstrate thread configuration optimization strategies in the Ascend C SIMT programming model. The example includes 1 baseline version and 1 optimized version. In the baseline version, `__launch_bounds__` is not set, and the compiler allocates resources based on the default value of 1024 (that is, 1024 threads per Block), causing register spill. The optimized version configures `__launch_bounds__(512)` to inform the compiler that the maximum number of threads per Block is 512, allowing the compiler to fully utilize hardware resources during compilation and avoid register spill, demonstrating the tuning path of optimizing performance through proper thread count configuration in the SIMT programming model.

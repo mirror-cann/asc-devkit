@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example introduces the usage of the asc_dump series APIs on the simd_vf side. In vector functions, APIs such as `asc_dump_ubuf`, `asc_dump_reg`, and `asc_dump` enable visual printing of UB and register data. The kernel function reads input data from a binary file, performs Adds computation, writes output data, and verifies by comparing the output against ground truth.
+This example introduces the usage of the asc_dump series APIs on the simd_vf side. In vector functions, APIs such as `asc_dump_ubuf`, `asc_dump_reg`, and `asc_dump` enable visual printing of UB and register data. On the host side, `ReadFile` and `WriteFile` read and write binary data. The kernel reads input data from GM, performs Adds computation, and writes the result back to GM. The result is then verified by comparing the output against the ground truth.
 
 ## Supported Products and CANN Software Versions
 

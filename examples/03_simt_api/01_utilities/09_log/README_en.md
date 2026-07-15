@@ -20,7 +20,7 @@ For more log function details, refer to: [Ascend Log Function Reference](https:/
 ├── 09_log
 │   ├── CMakeLists.txt         // CMake build file
 │   ├── log.asc                // SIMT Kernel example code
-|   └── README.md
+│   └── README.md
 ```
 
 ## Example Description  

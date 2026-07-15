@@ -29,7 +29,8 @@ This example introduces the usage scenarios and methods of the LoadDataWithStrid
 The transpose capabilities and supported data types of the LoadDataWithStride instruction for 2D matrices are as follows:
 
 - Supported data types: int8_t/uint8_t/hifloat8_t/fp8_e5m2_t/fp8_e4m3fn_t/half/bfloat16_t/int32_t/uint32_t/float.
-- The enTranspose parameter takes effect only when the destination address is on L0A and the data type is B8/B16/B32, determining whether to enable the transpose function. When the destination address is on L0B, transpose is performed automatically and the enTranspose parameter is ignored.
+- The enTranspose parameter takes effect only when the destination address is on L0A and the data type is B8/B16/B32, determining whether to enable the transpose function.
+  When the destination address is on L0B, transpose is performed automatically and the enTranspose parameter is ignored.
 
 Since this example does not currently support the int4b_t input data type, it demonstrates the following six LoadDataWithStride usage scenarios in matrix multiplication:
 
@@ -47,7 +48,6 @@ Since this example does not currently support the int4b_t input data type, it de
 ### Using LoadDataWithStride to Transfer 2D Format Data for Matrix Computation
 
 LoadDataWithStride is essentially used to perform Image to Column expansion on Feature Maps in NC1HWC0 format, and then select specified data blocks from the expanded 2D matrix and transfer them to the corresponding memory locations.
-
 Based on the img2col process performed by the `LoadDataWithStride` instruction, it can be seen that when N=1, filterW/H=1, padding=0, strideW/H=1, and dilation=1, it can be used for 2D matrix transfer. The diagram is shown below:
 
 <div align="center">

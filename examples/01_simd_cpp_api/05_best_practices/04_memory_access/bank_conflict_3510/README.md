@@ -144,7 +144,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | src0 | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | src1 | `0x5000` | `000101000 0 000 00000` | 0 | 0 |
@@ -170,7 +170,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | src0 | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | src1 | `0x5100` | `000101000 1 000 00000` | 1 | 0 |
@@ -196,7 +196,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | src0 | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | src1 | `0x5100` | `000101000 1 000 00000` | 1 | 0 |
@@ -222,7 +222,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | src0 | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | src1 | `0x5100` | `000101000 1 000 00000` | 1 | 0 |
@@ -246,7 +246,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | src0 | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | src1 | `0x5100` | `000101000 1 000 00000` | 1 | 0 |
@@ -272,7 +272,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | src0 | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | src1 | `0x5000` | `000101000 0 000 00000` | 0 | 0 |
@@ -338,7 +338,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | index (src0) | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | data (src1) | `0x0400` | `000001000 0 000 00000` | 0 | 0 |
@@ -364,7 +364,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | index (src0) | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | data (src1) | `0x0400` | `000001000 0 000 00000` | 0 | 0 |
@@ -390,7 +390,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | src0 | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | dst | `0x4100` | `000100000 1 000 00000` | 1 | 0 |
@@ -414,7 +414,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | src0 | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | dst | `0x4100` | `000100000 1 000 00000` | 1 | 0 |
@@ -438,7 +438,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | src0 | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | dst | `0x4100` | `000100000 1 000 00000` | 1 | 0 |
@@ -462,7 +462,7 @@ Ascend 950PR/Ascend 950DT的UB 18位地址采用**低位交织**编码规则：
 
 ### 地址解码
 
-| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id
+| 操作数 | 首地址 | 18位二进制（DEPTH BANK BG WIDTH） | bank_id | bank_group_id |
 | --- | --- | --- | --- | --- |
 | src0 | `0x0000` | `000000000 0 000 00000` | 0 | 0 |
 | dst | `0x4100` | `000100000 1 000 00000` | 1 | 0 |

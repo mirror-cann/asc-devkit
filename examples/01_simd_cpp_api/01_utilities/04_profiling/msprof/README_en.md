@@ -33,9 +33,9 @@ This example uses Add computation as the carrier to demonstrate how to collect o
 
 The shapes of inputs `x`, `y` and output `z` are all `[8, 2048]`. The host side constructs input data and golden data directly, copies the input data to the device side, launches the `add_custom` Kernel, which splits data by `blockNum = 8` and performs Add computation, and finally copies the result back to the host side for accuracy comparison.
 
-## msProf Tool Introduction
+## msOpProf Tool Introduction
 
-The msProf tool is a single-operator performance analysis tool that includes two usage modes: `msopprof` and `msopprof simulator`. This tool collects performance data such as operator execution time, pipeline utilization, and memory access to help analyze operator performance bottlenecks.
+The msOpProf tool is a single-operator performance analysis tool that includes two usage modes: `msopprof` and `msopprof simulator`. This tool collects performance data such as operator execution time, pipeline utilization, and memory access to help analyze operator performance bottlenecks.
 
 - On-board performance collection
 
@@ -60,7 +60,7 @@ The msProf tool is a single-operator performance analysis tool that includes two
   └── visualize_data.bin         # MindStudio Insight visualization file
   ```
 
-For more msProf tool usage, refer to [MindStudio Tools](https://www.hiascend.com/document/redirect/CannCommercialToolOpDev) Operator Tuning (msProf).
+For more msOpProf tool usage, refer to [MindStudio Tools](https://www.hiascend.com/document/redirect/CannCommercialToolOpDev) Operator Tuning (msOpProf).
 
 ## Build and Run
 

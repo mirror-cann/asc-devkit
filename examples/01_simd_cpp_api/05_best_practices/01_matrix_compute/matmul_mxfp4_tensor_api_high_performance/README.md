@@ -154,7 +154,7 @@ MxMatmul 的输入不是两路，而是四路：A、B、ScaleA、ScaleB。因此
 | A | `Copy` | `[singleCoreM, singleCoreK]` | `[baseM, stepK * baseK]` |
 | B | `Copy` | `[singleCoreN, singleCoreK]` | `[baseN, stepK * baseK]` |
 | ScaleA | `Copy` | `[singleCoreM, singleCoreSK]` | `[baseM, scaleFactorK * stepK * baseSK]` |
-| ScaleB | `Copy` | `[singleCoreN, singleCoreSK]` | `[baseN, scaleFactorK * stepK * baseK]` |
+| ScaleB | `Copy` | `[singleCoreN, singleCoreSK]` | `[baseN, scaleFactorK * stepK * baseSK]` |
 
 通过 `stepK=2` 一次搬入 `stepK * baseM * baseK` 的 A 矩阵数据 和 `stepK * baseN * baseK` 的 B 矩阵数据，减少搬运指令数量，提高 GM 到 L1 的搬运效率。
 

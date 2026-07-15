@@ -39,6 +39,8 @@ This example demonstrates how to use the Fill interface to initialize the L0A Bu
 <tr><td rowspan="1" align="center">Kernel Function Name</td><td colspan="4" align="center">fill</td></tr>
 </table>
 
+> **Note:** In the specification table, x and y are placeholders used only in the end-to-end process (to generate the input files and golden data). The kernel does not actually read these two GM inputs. Instead, it uses the `Fill` interface to construct all-ones matrices for the `Mmad` computation. Therefore, the values of x and y do not affect the computation result.
+
 ### Example Implementation
 
    1. First, initialize the L0A Buffer and L0B Buffer. Different hardware architectures use different methods:

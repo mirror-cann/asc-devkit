@@ -1,5 +1,6 @@
 # MxFP4 Matmul 基础 API 高性能样例
 
+
 ## 概述
 
 本样例介绍如何基于 Ascend C 基础 API 和静态 Tensor 编程方式，通过 L1/L0 双缓冲机制、大包搬运、细粒度流水同步等多种优化手段，实现一个高性能的 MxFP4 Matmul kernel。

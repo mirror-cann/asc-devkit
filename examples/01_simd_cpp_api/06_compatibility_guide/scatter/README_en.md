@@ -36,7 +36,7 @@ Different hardware implementations are isolated through compile-time macros:
 <tr><td rowspan="1" align="center">Category</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
 <tr><td rowspan="2" align="center">Example Input</td>
 <td align="center">src</td><td align="center">[1, 128]</td><td align="center">half</td><td align="center">ND</td></tr>
-<tr><td align="center">dst_offset</td><td align="center">[1, 128]</td><td align="center">uint32</td><td align="center">ND</td></tr>
+<tr><td align="center">dst_offset</td><td align="center">[1, 128]</td><td align="center">uint32_t</td><td align="center">ND</td></tr>
 <tr><td rowspan="1" align="center">Example Output</td><td align="center">dst</td><td align="center">[1, 128]</td><td align="center">half</td><td align="center">ND</td></tr>
 <tr><td rowspan="1" align="center">Kernel Function Name</td><td colspan="4" align="center">scatter_custom</td></tr>
 </table>

@@ -16,7 +16,7 @@ This example demonstrates how to display operator input/output Shape, data type,
 
 ```
 ├── torch_library_report_tensor
-│   ├── CMakeLists.txt           // Build project file
+│   ├── CMakeLists.txt                   // Build project file
 │   ├── torch_library_report_tensor.py   // PyTorch invocation script
 │   ├── torch_library_report_tensor.asc  // torch.library operator registration, Profiling reporting, and Add Kernel implementation
 │   └── README.md                        // Example description document

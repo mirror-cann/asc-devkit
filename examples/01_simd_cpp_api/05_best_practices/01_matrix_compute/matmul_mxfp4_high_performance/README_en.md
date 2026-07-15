@@ -176,7 +176,7 @@ The difference between Case 1/Case 2 on the scale side is mainly reflected in "s
 | Case 1 | 750.219 | 32 | 749.13 | 660.15 | 0.881 | 258.354 | 0.345 | 437.64 | 0.584 | 753.906 | 0.982 | 33.257 | 0.044 |
 | Case 2 | 693.283 | 32 | 692.34 | 641.444 | 0.926 | 241.563 | 0.349 | 428.914 | 0.62 | 612.536 | 0.885 | 33.965 | 0.049 |
 
-It can be seen that Case 2 has reached `92.6%` of theoretical peak performance (that is, `aic_mac_ratio` in the table).
+In Case 2, the Cube computation time ratio reaches `92.6%` (that is, `aic_mac_ratio` in the table).
 
 ### Case 2 Benefits (Relative to Case 1)
 
@@ -184,8 +184,8 @@ Both scenarios use constant tiling + template constants. Case 2 benefits relativ
 
 - End-to-end latency: `750.219 -> 693.283 μs`, reduced by `56.936 μs`, benefit `7.59%`.
 - MTE2 absolute duration: `753.906 -> 612.536 μs`, reduced by `141.370 μs`, benefit `18.75%`.
-- MTE2 ratio: `0.982 -> 0.885`, decreased by `9.7%`.
-- MAC ratio: `0.881 -> 0.926`, improved by `4.5%`.
+- MTE2 ratio: `0.982 -> 0.885`, decreased by `9.7` percentage points.
+- MAC ratio: `0.881 -> 0.926`, improved by `4.5` percentage points.
 
 **Tuning Tips**:
 > The key difference of MX Matmul is that `scale` transfer can be decoupled from A/B; when `aic_mte2_ratio` is high, prioritize adjusting `scale` transfer ratio through `mxTypePara` to improve L1 reuse and reduce repeated GM->L1 transfers.
@@ -256,31 +256,38 @@ Run the following steps in the root directory of this example to build and run t
 
 ## Performance Analysis
 
-Use the `msOpProf` tool to obtain detailed performance data:
+### Introduction to the msOpProf Tool
 
-```bash
-msopprof ./demo   # Analyze performance
-```
+msOpProf is a single-operator performance analysis tool with two usage modes: `msopprof` and `msopprof simulator`. It helps users identify anomalies in operator memory, code, and instructions for comprehensive operator tuning. It currently supports performance data collection and automatic parsing for different run modes (on-device or simulation) and file types (executables or operator binary `.o` files).
+
+- On-device performance collection
+
+    On-device performance collection directly measures the operator's execution time on the Ascend AI Processor. This method is suitable for quickly locating operator performance issues in an on-device environment.
+
+    Run msopprof on the `demo` executable for operator tuning:
+    ```
+    msopprof ./demo
+    ```
 
     - Performance data description  
       After the command completes, a folder named "OPPROF_{timestamp}_XXX" will be generated in the default directory. The performance data folder structure is as follows:
 
       ```bash
-      ├──dump                       # Raw performance data, no user attention needed
-      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle ratio
-      ├──L2Cache.csv                # L2 Cache hit rate, affects MTE2, suggests reasonable data transfer logic to increase hit rate
-      ├──Memory.csv                 # UB, L1 and main memory read/write bandwidth rate
-      ├──MemoryL0.csv               # L0A, L0B, and L0C read/write bandwidth rate
-      ├──MemoryUB.csv               # Vector and Scalar to UB read/write bandwidth rate
-      ├──OpBasicInfo.csv            # Operator basic information
-      ├──PipeUtilization.csv        # Computation unit and transfer unit time and ratio
-      ├──ResourceConflictRatio.csv  # Bank group, bank conflict and resource conflict ratio on UB in all instructions
+      ├──dump                       # Raw performance data; users do not need to inspect it
+      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle proportions
+      ├──L2Cache.csv                # L2 Cache hit rate; affects MTE2. Plan data transfer logic properly to increase the hit rate
+      ├──Memory.csv                 # Read/write bandwidth rates of UB, L1, and main memory
+      ├──MemoryL0.csv               # Read/write bandwidth rates of L0A, L0B, and L0C
+      ├──MemoryUB.csv               # Read/write bandwidth rates from Vector and Scalar to UB
+      ├──OpBasicInfo.csv            # Basic operator information
+      ├──PipeUtilization.csv        # Durations and proportions of computation and data transfer units
+      ├──ResourceConflictRatio.csv  # Proportions of UB bank groups, bank conflicts, and resource conflicts among all instructions
       └──visualize_data.bin         # MindStudio Insight presentation file
       ```
 
-View the specific performance analysis results:
+View the detailed performance analysis results:
 
 ```bash
-# View Task Duration and various data
-cat ./OPPROF_*/PipeUtilization*.csv
+# View Task Duration and other metrics
+cat ./OPPROF_*/PipeUtilization.csv
 ```

@@ -31,7 +31,7 @@ The example supports switching between different scenarios through compilation p
 This example switches between different scenarios through the compilation parameter `SCENARIO_NUM`:
 
 **Scenario 1: Compare**
-- Description: Element-wise comparison of `src0Local` and `src1Local` tensor sizes
+- Description: Element-wise comparison of the values in `src0Local` and `src1Local`
 - Input: src0Local=[1, 256], src1Local=[1, 256]
 - Input data type: float
 - Output: dstLocal=[1, 32]
@@ -43,7 +43,7 @@ This example switches between different scenarios through the compilation parame
 - Parameters: cmpMode=AscendC::CMPMODE::LT, srcDataSize=256
 
 **Scenario 2: Compare (Result Stored in Register)**
-- Description: Element-wise comparison of `src0Local` and `src1Local` tensor sizes, storing results in the cmpMask register
+- Description: Element-wise comparison of the values in `src0Local` and `src1Local`, storing the results in the cmpMask register
 - Input: src0Local=[1, 64], src1Local=[1, 64] 
 - Input data type: float
 - Output: [1, 32] 
@@ -62,6 +62,7 @@ This example switches between different scenarios through the compilation parame
 - Input data type: float
 - Output: dstLocal=[1, 32]
 - Output data type: uint8_t
+- Data type: float
 - Implementation:
     ```cpp
     AscendC::Compares(dstLocal, src0Local, src1Scalar, cmpMode, srcDataSize);

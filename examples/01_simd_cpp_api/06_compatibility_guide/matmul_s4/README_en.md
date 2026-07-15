@@ -35,7 +35,7 @@ This example demonstrates the end-to-end implementation of int4 matrix multiplic
   <tr><td rowspan="4" align="center">Example Input</td></tr>
   <tr><td align="center">x4</td><td align="center">[256, 256]</td><td align="center">int4b_t</td><td align="center">ND</td></tr>
   <tr><td align="center">y4</td><td align="center">[256, 256]</td><td align="center">int4b_t</td><td align="center">ND</td></tr>
-  <tr><td align="center">tiling</td><td align="center">[1, 64]</td><td align="center">int32_t</td><td align="center">ND</td></tr>
+  <tr><td align="center">tiling</td><td align="center">[1, 32]</td><td align="center">int32_t</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">Example Output</td><td align="center">z</td><td align="center">[256, 256]</td><td align="center">int32_t</td><td align="center">ND</td></tr>
   <tr><td rowspan="1" align="center">Kernel Function Name</td><td colspan="4" align="center">matmul_s4</td></tr>
   </table>

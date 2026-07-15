@@ -58,10 +58,10 @@ This example is based on the static Tensor programming paradigm, implementing hi
 | aic_mac_ratio | Cube computation unit time ratio, reflecting computation unit utilization |
 | aic_mte1_time(μs) | MTE1 (L1 to L0A/L0B transfer) execution time |
 | aic_mte1_ratio | MTE1 time ratio, reflecting L1 to L0 data transfer pressure |
-| aic_mte2_time(μs) | MTE2 (GM (Global Memory) to L1 transfer) execution time |
+| aic_mte2_time(μs) | MTE2 ([GM](../../../../../docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/抽象硬件架构.md) (Global Memory) to L1 transfer) execution time |
 | aic_mte2_ratio | MTE2 time ratio, reflecting GM to L1 data loading pressure |
-| aic_fixpipe_time(μs) | Fixpipe (L0C to GM transfer) execution time |
-| aic_fixpipe_ratio | Fixpipe time ratio, reflecting result write-back memory access pressure |
+| aic_fixpipe_time(μs) | [Fixpipe](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) (L0C to GM transfer) execution time |
+| aic_fixpipe_ratio | [Fixpipe](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) time ratio, reflecting result write-back memory access pressure |
 
 
 ### Data Flow Path:
@@ -121,12 +121,12 @@ Four types of hardware event flags are used to implement precise pipeline synchr
 
 | Event Type | Direction | Purpose | Flag Number |
 |---------|------|------|----------|
-| MTE2_MTE1 | Forward | L1 data readiness notification, DataCopyIn notifies DataLoad that data can be read | 0/1: A1 Ping/Pong; 2/3: B1 Ping/Pong |
-| MTE1_MTE2 | Reverse | L1 buffer release notification, DataLoad notifies DataCopyIn that buffer can be written | Same as above |
-| MTE1_M | Forward | L0 data readiness notification, DataLoad notifies Compute that computation can start | mte1DBFlag (0/1 alternating) |
-| M_MTE1 | Reverse | L0 buffer release notification, Compute notifies DataLoad that buffer can be written | mte1DBFlag (0/1 alternating) |
+| [MTE2_MTE1](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) | Forward | L1 data readiness notification, DataCopyIn notifies DataLoad that data can be read | 0/1: A1 Ping/Pong; 2/3: B1 Ping/Pong |
+| [MTE1_MTE2](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) | Reverse | L1 buffer release notification, DataLoad notifies DataCopyIn that buffer can be written | Same as above |
+| [MTE1_M](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) | Forward | L0 data readiness notification, DataLoad notifies Compute that computation can start | mte1DBFlag (0/1 alternating) |
+| [M_MTE1](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) | Reverse | L0 buffer release notification, Compute notifies DataLoad that buffer can be written | mte1DBFlag (0/1 alternating) |
 
-**Reverse synchronization must be preset**: Since reverse synchronization is "consumer SetFlag → producer WaitFlag", SetFlag must be preset before first use, otherwise the first WaitFlag will deadlock:
+**Reverse synchronization must be preset**: Since reverse synchronization is "consumer [SetFlag](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md) → producer [WaitFlag](../../../../../docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md)", SetFlag must be preset before first use, otherwise the first WaitFlag will deadlock:
 
 ```cpp
 // Initialization: Preset reverse synchronization flags to prevent first WaitFlag deadlock
@@ -153,7 +153,7 @@ if ((kOffsetInChunkA + 1) == stepKa) {
 
 #### 3. Multi-Core Parallel Splitting
 
-Split the matrix evenly along M/N directions to multiple cores for parallel computation. The 4×6 splitting strategy (4 blocks in M direction, 6 blocks in N direction, 24 cores total) satisfies 512B address alignment and reduces same-address access conflicts:
+Split the matrix evenly along the M/N directions for parallel computation across multiple cores. On Atlas A2/A3 (`dav-2201`), use a 4×6 splitting strategy (4 blocks in the M direction and 6 blocks in the N direction, 24 cores in total) to satisfy 512B address alignment and reduce same-address access conflicts. On Ascend 950PR/Ascend 950DT (`dav-3510`), use a 32-core split (see the performance data section below):
 
 ```cpp
 constexpr uint32_t mIter = DivCeil(M, singleCoreM);
@@ -189,7 +189,7 @@ nd2nzParams.dValue = baseK * stepKa;  // Large packet contains stepKa baseM * ba
 
 #### 6. LoadData3D Replacing LoadData2D — Reducing Instruction Queue Usage
 
-On Atlas A2/A3 architecture, this example uses [`LoadData3DParamsV2`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_3D.md) (that is, LoadData3D) to replace [`LoadData2DParams`](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md) (that is, LoadData2D) for L1→L0 data transfer. This is a key instruction queue optimization.
+On Atlas A2/A3 architecture, this example uses [`LoadData3DParamsV2`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_3D.md) (that is, [LoadData3D](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_3D.md)) to replace [`LoadData2DParams`](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L0-Buffer/LoadData_2D.md) (that is, LoadData2D) for L1→L0 data transfer. This is a key instruction queue optimization.
 
 **Problem Background**: MTE1 instruction queue depth is 32. When using LoadData2D, due to limited single instruction transfer granularity, transferring one baseM×baseK slice requires a for loop to dispatch multiple LoadData2D instructions. For example, with baseM=128 and baseK=64, at least `baseK/16 = 4` LoadData2D instructions need to be dispatched.
 
@@ -235,7 +235,7 @@ class KernelMmad { ... };
 
 #### 8. UnitFlag Optimization
 
-After enabling UnitFlag, MMAD and FIXPIPE achieve fine-grained (512B) pipeline parallelism instead of instruction-level synchronization. Whenever Cube completes computation of one 512B data result, FIXPIPE immediately transfers that data, with Cube computation and result write-back pipeline overlapping:
+After enabling UnitFlag, [MMAD](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/Mmad计算/Mmad.md) and [FIXPIPE](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬出/L0C到GM数据搬运（Fixpipe）.md) achieve fine-grained (512B) pipeline parallelism instead of instruction-level synchronization. Whenever Cube completes computation of one 512B data result, FIXPIPE immediately transfers that data, with Cube computation and result write-back pipeline overlapping:
 
 ```cpp
 mmadParams.unitFlag = (kBlockIdx != kLoopCount - 1) ? 2 : 3;  // Enable UnitFlag
@@ -312,6 +312,24 @@ K loop kBlockIdx = 0, 1, ..., kLoopCount-1:
   └─
 ```
 
+**Timing example** (`stepKa=8`, `stepKb=4`):
+
+```
+Prefetch: DataCopyIn(A1 Ping) + DataCopyIn(B1 Ping)                    <- before the K loop
+
+k=0:  WaitFlag(A1Ping, B1Ping) -> DataLoad -> Compute -> DataCopyIn(B1Pong) -> DataCopyIn(A1Pong)
+k=1:  DataLoad -> Compute
+k=2:  DataLoad -> Compute
+k=3:  DataLoad(release B1Ping) -> Compute -> DataCopyIn(load B1Ping)
+
+k=4:  WaitFlag(B1Pong) -> DataLoad(B1Pong) -> Compute
+k=5:  DataLoad -> Compute
+k=6:  DataLoad -> Compute
+k=7:  DataLoad(release A1Ping and B1Pong) -> Compute -> DataCopyIn(B1Pong) -> DataCopyIn(A1Ping)
+k=8:  WaitFlag(A1Pong ready) -> WaitFlag(B1Ping ready) -> DataLoad -> Compute
+...
+```
+
 ### Performance Data Analysis
 
 #### Atlas A2 Training Series Chip Performance Data
@@ -374,6 +392,30 @@ Ascend 950PR Chip (baseM=256, baseN=256):
 
 $$Total Read Data = \left(\frac{N}{baseN} \times M \times K + \frac{M}{baseM} \times K \times N\right) \times sizeof(half) = (32 \times 8192 \times 8192 + 32 \times 8192 \times 8192) \times 2B = 8GB$$
 
+**Theoretical MTE2 Duration**:
+
+Atlas A2 Training Series Chip: The peak L2 Cache bandwidth is approximately 5 TB/s, and the HBM bandwidth is approximately 1.8 TB/s. Data is first read from HBM and subsequently read from the L2 Cache.
+
+$$Total\ Data\ First\ Read\ from\ HBM = M \times K \times sizeof(half) + K \times N \times sizeof(half) = 256MB$$
+
+$$Theoretical\ MTE2\ Duration = \frac{Data\ Read\ from\ HBM}{1.8TB/s} + \frac{Data\ Read\ from\ L2Cache}{5TB/s}$$
+
+MTE2 duration error:
+
+$$MTE2\ Duration\ Error = \frac{3487.068 - 2672.44}{2672.44} = 30.48\%$$
+
+The current MTE2 duration differs significantly from the theoretical value because the actual chip has only 192 MB of L2 Cache and the current L2 Cache splitting strategy is relatively simple. In addition, when MTE2 performs an ND2NZ transfer, where GM data uses the ND layout and must be converted from ND to NZ while being transferred to L1, the L2 Cache bandwidth decreases. Users can further optimize the L2 Cache splitting strategy to improve MTE2 bandwidth.
+
+Ascend 950PR Chip: The peak L2 Cache bandwidth is approximately 5 TB/s, and the HBM bandwidth is approximately 1.6 TB/s.
+
+$$Theoretical\ MTE2\ Duration = \frac{Data\ Read\ from\ HBM}{1.6TB/s} + \frac{Data\ Read\ from\ L2Cache}{5TB/s}$$
+
+MTE2 duration error:
+
+$$MTE2\ Duration\ Error = \frac{1874.267 - 1832.10}{1832.10} = 2.30\%$$
+
+Compared with the Atlas A2 Training Series Chip, the Ascend 950PR Chip transfers data more efficiently and achieves higher MTE2 bandwidth utilization.
+
 ## Build and Run
 
 Run the following steps in the root directory of this example to build and run the example.
@@ -419,7 +461,7 @@ Run the following steps in the root directory of this example to build and run t
   | Option | Values | Description |
   |------|--------|------|
   | `CMAKE_ASC_RUN_MODE` | `npu` (default), `sim` | Run mode: NPU execution, NPU simulation |
-  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`, `dav-3510` | NPU hardware architecture: dav-2201 corresponds to A2/A3, dav-3510 corresponds to Ascend 950PR |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201`, `dav-3510` | NPU hardware architecture: dav-2201 corresponds to A2/A3, dav-3510 corresponds to Ascend 950PR/Ascend 950DT |
   | `SCENARIO_NUM` | `1`, `2` | Scenario number: 1=L2Cache splitting disabled, 2=L2Cache splitting enabled |
 
 - Execution results
@@ -459,26 +501,31 @@ AscendC::DumpTensor(cLocal, baseM * baseN);
 
 ## Performance Debugging
 
-### msOpProf Tool Introduction
+### Introduction to the msOpProf Tool
 
-Use the `msOpProf` tool to obtain detailed performance data:
+msOpProf is a single-operator performance analysis tool with two usage modes: `msopprof` and `msopprof simulator`. It helps users identify anomalies in operator memory, code, and instructions for comprehensive operator tuning. It currently supports performance data collection and automatic parsing for different run modes (on-device or simulation) and file types (executables or operator binary `.o` files).
 
-```bash
-msopprof ./demo   # Analyze example performance
-```
+- On-device performance collection
+
+    On-device performance collection directly measures the operator's execution time on the Ascend AI Processor. This method is suitable for quickly locating operator performance issues in an on-device environment.
+
+    Run msopprof on the `demo` executable for operator tuning:
+    ```
+    msopprof ./demo
+    ```
 
     - Performance data description
       After the command completes, a folder named "OPPROF_{timestamp}_XXX" will be generated in the default directory. The performance data folder structure is as follows:
 
       ```bash
-      ├──dump                       # Raw performance data, no user attention needed
-      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle ratio
-      ├──L2Cache.csv                # L2 Cache hit rate, affects MTE2, suggests reasonable data transfer logic to increase hit rate
-      ├──Memory.csv                 # UB, L1 and main memory read/write bandwidth rate
-      ├──MemoryL0.csv               # L0A, L0B, and L0C read/write bandwidth rate
-      ├──MemoryUB.csv               # Vector and Scalar to UB read/write bandwidth rate
-      ├──OpBasicInfo.csv            # Operator basic information
-      ├──PipeUtilization.csv        # Computation unit and transfer unit time and ratio
-      ├──ResourceConflictRatio.csv  # Bank group, bank conflict and resource conflict ratio on UB in all instructions
+      ├──dump                       # Raw performance data; users do not need to inspect it
+      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle proportions
+      ├──L2Cache.csv                # L2 Cache hit rate; affects MTE2. Plan data transfer logic properly to increase the hit rate
+      ├──Memory.csv                 # Read/write bandwidth rates of UB, L1, and main memory
+      ├──MemoryL0.csv               # Read/write bandwidth rates of L0A, L0B, and L0C
+      ├──MemoryUB.csv               # Read/write bandwidth rates from Vector and Scalar to UB
+      ├──OpBasicInfo.csv            # Basic operator information
+      ├──PipeUtilization.csv        # Durations and proportions of computation and data transfer units
+      ├──ResourceConflictRatio.csv  # Proportions of UB bank groups, bank conflicts, and resource conflicts among all instructions
       └──visualize_data.bin         # MindStudio Insight presentation file
       ```

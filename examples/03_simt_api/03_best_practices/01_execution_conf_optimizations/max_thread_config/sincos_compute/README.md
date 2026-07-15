@@ -104,6 +104,7 @@ __global__ void sincos_thread_1024(float* input, float* output_sin,
 {
     int32_t blk_start_idx = blockIdx.x * THREADS_PER_BLOCK * PER_THREAD_LOOP;
     
+    // 每个核计算 PER_THREAD_LOOP * THREADS_PER_BLOCK 次运算
     for (int i = 0; i < PER_THREAD_LOOP; i++) {
         int idx = blk_start_idx + i * THREADS_PER_BLOCK + threadIdx.x;
         sincosf(input[idx], output_sin + idx, output_cos + idx);
@@ -156,6 +157,7 @@ __global__ __launch_bounds__(512) void sincos_thread_512(float* input,
 {
     int32_t blk_start_idx = blockIdx.x * THREADS_PER_BLOCK * PER_THREAD_LOOP;
     
+    // 每个核计算 PER_THREAD_LOOP * THREADS_PER_BLOCK 次运算
     for (int i = 0; i < PER_THREAD_LOOP; i++) {
         int idx = blk_start_idx + i * THREADS_PER_BLOCK + threadIdx.x;
         sincosf(input[idx], output_sin + idx, output_cos + idx);

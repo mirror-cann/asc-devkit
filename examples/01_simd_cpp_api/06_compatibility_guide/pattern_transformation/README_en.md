@@ -99,7 +99,7 @@ for (uint32_t i = 0; i < mBlocks; ++i) {
     int srcOffset = 0;
     int dstOffset = 0;
     for (uint32_t i = 0; i < mBlocks; ++i) {
-        AscendC::Load2DParams loadDataParams;
+        AscendC::LoadData2DParams loadDataParams;
         loadDataParams.repeatTimes = kBlocks;
         loadDataParams.srcStride = mBlocks;
         loadDataParams.ifTranspose = false;
@@ -118,7 +118,7 @@ constexpr uint32_t kBlocks = K / CUBE_BLOCK;
 int srcOffset = 0;
 int dstOffset = 0;
 for (uint32_t i = 0; i < kBlocks; ++i) {
-    AscendC::Load2DParams loadDataParams;
+    AscendC::LoadData2DParams loadDataParams;
     loadDataParams.repeatTimes = mBlocks;
     loadDataParams.srcStride = 1;
     loadDataParams.ifTranspose = false;
@@ -190,6 +190,11 @@ AscendC::Mmad(co1Local, a2, b2, mmadParams);
 - `SCENARIO_NUM=2` (L0A reuse): Split the A matrix by the M axis into upper and lower halves, computing C1=A1×B and C2=A2×B respectively.
 
 ```cpp
+mmadParams.m = M / 2;  // Split the M axis into upper and lower halves; compute half of M each time
+mmadParams.n = N;
+mmadParams.k = K;
+mmadParams.cmatrixInitVal = true;
+mmadParams.isBias = false;
 AscendC::Mmad(co1Local, a2, b2, mmadParams);
 AscendC::Mmad(co1Local[M * N / 2], a2[M * K / 2], b2, mmadParams);  // Lower half A2[32, 64]
 ```

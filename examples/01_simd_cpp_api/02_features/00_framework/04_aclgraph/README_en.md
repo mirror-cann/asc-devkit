@@ -20,12 +20,12 @@ This example uses the Add operator to show how to capture Ascend C `<<<>>>` kern
 
 ```text
 ├── 04_aclgraph
-│   ├── figures                 // Diagrams
+│   ├── figures                        // Diagrams
 │   │   ├── single_stream_capture.png  // Single-stream capture flowchart
 │   │   └── double_stream_capture.png  // Double-stream capture flowchart
-│   ├── CMakeLists.txt          // Build project
-│   ├── add.asc                 // Ascend C kernel implementation and ACLGraph capture invocation example
-│   └── README.md               // Example documentation
+│   ├── CMakeLists.txt                 // Build project
+│   ├── add.asc                        // Ascend C kernel implementation and ACLGraph capture invocation example
+│   └── README.md                      // Example documentation
 ```
 
 ## Scenario Details

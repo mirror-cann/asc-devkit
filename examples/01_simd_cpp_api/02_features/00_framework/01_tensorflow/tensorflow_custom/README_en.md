@@ -53,7 +53,7 @@ Run the following steps in the root directory of this example to build and execu
     > [!NOTE] Notice
     > The plugin code needs to be adapted. The path is: `examples/01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op/framework/tf_plugin/tensorflow_add_custom_plugin.cc`. Modify the TensorFlow invocation operator name OriginOpType in the plugin code to "AddCustom" as shown below:
     >
-    > ```cc
+    > ```cpp
     > REGISTER_CUSTOM_OP("AddCustom")
     >   .FrameworkType(TENSORFLOW)      // type: TENSORFLOW
     >   .OriginOpType("AddCustom")      // name in tf module

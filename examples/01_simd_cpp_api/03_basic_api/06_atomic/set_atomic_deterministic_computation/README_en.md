@@ -23,7 +23,7 @@ This example first introduces the necessity and specific implementation scheme o
 │   ├── set_atomic_add_multi_aiv.h                // Multi-AIV core synchronization implementation
 │   ├── set_atomic_add_single_aiv.h               // Single-AIV core synchronization implementation
 │   ├── set_atomic_deterministic_computation.asc  // Ascend C example implementation & invocation example
-│   └── README.md                                    // Example description document
+│   └── README.md                                 // Example description document
 ```
 
 ## 1. Deterministic Computation

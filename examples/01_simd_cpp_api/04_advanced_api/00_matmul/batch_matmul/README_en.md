@@ -31,7 +31,7 @@ By transferring multiple Matmul input data in a single transfer, the number of t
 - Example Function:  
   Call the Matmul high-level API to batch process 3 sets of Matmul computations, performing matrix multiplication and adding bias on A and B matrices in BSNGD format for each set.
 
-  For details about the BSNGD format, refer to the data layout description in [IterateBatch](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/IterateBatch.md).
+  For details about the BSNGD format, refer to the data layout description in [IterateBatch](../../../../../docs/zh/api/SIMD-API/高阶API/矩阵计算/Matmul-Kernel侧接口/IterateBatch.md).
 
 - Example Specifications:   
   <table>

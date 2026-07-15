@@ -1,5 +1,6 @@
 # SimdVF Dump接口功能说明
 
+
 ## 概述
 
 本样例介绍simd_vf侧asc_dump系列接口使用方法，在vector函数中通过`asc_dump_ubuf`、`asc_dump_reg`、`asc_dump`等接口实现UB和寄存器数据的可视化打印。Host侧通过`ReadFile`/`WriteFile`完成二进制数据的读写，核函数从GM读取输入数据，执行Adds计算后将结果写回GM，通过比较输出与真值进行校验。

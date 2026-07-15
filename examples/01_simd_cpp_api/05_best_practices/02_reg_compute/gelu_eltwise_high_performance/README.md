@@ -1,5 +1,6 @@
 # Gelu+Element-wise高性能优化样例
 
+
 ## 概述
 
 本样例以Gelu+Element-wise计算为例（在Gelu后面再引入一系列的Element-wise计算操作，增加计算深度），介绍RegBase的向量性能调优方法，样例展示并行度调整、循环拆分和循环展开之后的性能收益情况。

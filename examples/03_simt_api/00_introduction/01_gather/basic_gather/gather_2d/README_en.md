@@ -18,7 +18,7 @@ This sample implements a simple scenario (fixed shape) 2D Gather operator using 
 ├── gather_2d
 │   ├── CMakeLists.txt            # cmake build file
 │   ├── gather_2d.asc             # SIMT implementation of 2D gather call sample
-|   └── README.md
+│   └── README.md
 ```
 
 ## Operator Description

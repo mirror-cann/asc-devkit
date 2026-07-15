@@ -16,13 +16,13 @@ This example uses high-level APIs to implement fused computation of Matmul and L
 
 ```
 ├── matmul_leakyrelu_advanced_api
-│   ├── CMakeLists.txt          // Build project file
-│   ├── data_utils.h            // Data read and write functions
+│   ├── CMakeLists.txt                    // Build project file
+│   ├── data_utils.h                      // Data read and write functions
 │   ├── matmul_leakyrelu_advanced_api.asc // Ascend C example implementation & invocation example
 │   ├── scripts
-│   │   ├── gen_data.py         // Input data and golden data generation script
-│   │   └── verify_result.py    // Golden data comparison file
-│   └── README.md               // Example documentation
+│   │   ├── gen_data.py                   // Input data and golden data generation script
+│   │   └── verify_result.py              // Golden data comparison file
+│   └── README.md                         // Example documentation
 ```
 
 ## Example Description

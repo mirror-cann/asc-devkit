@@ -21,8 +21,8 @@ This example introduces batched matrix multiplication with float data type input
 │   │   └── verify_result.py        // Script for verifying whether output data matches ground truth data
 │   ├── CMakeLists.txt              // Build project file
 │   ├── data_utils.h                // Data read/write functions
-│   ├── batch_matmul.asc              // Ascend C example implementation & invocation example
-│   └── README.md                     // Example documentation
+│   ├── batch_matmul.asc            // Ascend C example implementation & invocation example
+│   └── README.md                   // Example documentation
 ```
 
 ## Example Description

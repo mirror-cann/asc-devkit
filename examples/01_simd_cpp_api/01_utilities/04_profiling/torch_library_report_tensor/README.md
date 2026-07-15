@@ -16,7 +16,7 @@
 
 ```
 ├── torch_library_report_tensor
-│   ├── CMakeLists.txt           // 编译工程文件
+│   ├── CMakeLists.txt                   // 编译工程文件
 │   ├── torch_library_report_tensor.py   // PyTorch调用脚本
 │   ├── torch_library_report_tensor.asc  // torch.library算子注册、Profiling上报和Add Kernel实现
 │   └── README.md                        // 样例说明文档

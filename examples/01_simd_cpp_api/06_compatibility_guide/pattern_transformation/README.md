@@ -1,5 +1,6 @@
 # pattern_transformation 兼容性样例
 
+
 ## 概述
 
 本样例基于基础的mmad样例，演示了 L1 Buffer -> L0A Buffer 通路的分形转换逻辑，通过编译时宏 `__NPU_ARCH__` 隔离不同硬件实现。

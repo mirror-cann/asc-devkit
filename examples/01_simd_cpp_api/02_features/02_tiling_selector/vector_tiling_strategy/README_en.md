@@ -19,12 +19,12 @@ The sample uses 8 AI Cores. The main tile data volume in each core is 3200 `half
 ```text
 ├── vector_tiling_strategy
 │   ├── scripts
-│   │   ├── gen_data.py          // Generates input data and golden data.
-│   │   └── verify_result.py     // Verifies the output result.
-│   ├── CMakeLists.txt           // Build project file.
+│   │   ├── gen_data.py            // Generates input data and golden data.
+│   │   └── verify_result.py       // Verifies the output result.
+│   ├── CMakeLists.txt             // Build project file.
 │   ├── vector_tiling_strategy.asc // Ascend C sample implementation and invocation sample.
-│   ├── data_utils.h             // Data read and write functions.
-│   └── README.md                // Sample description document.
+│   ├── data_utils.h               // Data read and write functions.
+│   └── README.md                  // Sample description document.
 ```
 
 ## Scenario Details
@@ -155,7 +155,7 @@ The Tiling calculation process of this sample is as follows. The host side recei
 In the sample root directory, perform the following steps to build and run the sample.
 
 - Configure environment variables.
-  Configure environment variables based on the [installation method](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/quick_start.md#prepare&install) of the CANN development kit package in the current environment.
+  Configure environment variables based on the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit package in the current environment.
 
   ```bash
   source ${install_path}/cann/set_env.sh

@@ -13,7 +13,7 @@ This sample implements the Add operator using the C_API interface. It is based o
 ```
 ├── c_api_simd_add
 │   ├── CMakeLists.txt          // Build project file
-│   ├── c_api_add.asc          // Ascend C operator implementation and invocation sample
+│   ├── c_api_add.asc           // Ascend C operator implementation and invocation sample
 │   └── README.md
 ```
 

@@ -489,7 +489,7 @@ In Case 1, because V itself is stretched to 8 beats for writing, interference be
 The current implementation selects `144×128`. S2 shows a significant decrease in Vec time, but the current end-to-end performance is primarily limited by MTE2/MTE3, so Task Duration only decreases from `141.691μs` to `140.403μs`.
 
 | Tile | Case | dstNzC0Stride | Task Duration(μs) | Block Num  | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio | aiv_mte2_time(μs) | aiv_mte2_ratio | aiv_mte3_time(μs) | aiv_mte3_ratio | aiv_icache_miss_rate |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 144×128 | S1 | 144 | 141.691 | 64  | 140.89 | 14125772 | **45.25** | 0.321 | 2.638 | 0.019 | 134.915 | 0.958 | 104.571 | 0.742 | 0.006 |
 | 144×128 | S2 | 145 | **140.403** | 64  | 139.68 | 14094639 | **9.14** | 0.065 | 2.765 | 0.020 | 135.115 | 0.967 | 116.921 | 0.837 | 0.006 |
 
@@ -503,7 +503,7 @@ T_{\text{base}} = \frac{M \times N}{128 \times 1.65 \times 10^9 \times 64}
                 \approx 4.965\mu s
 $$
 
-The measured `aiv_vec_time` is `9.14μs`. The gap from the 4.965μs theoretical value comes from two叠加 factors: (1) V_STORE stride=145 increments the starting bank by +1 each time, and after multiple loop iterations it still lands on the same bank as V_LOAD, which cannot be perfectly staggered row by row with buffer offset alone; (2) vloop dual-issue, where the issue slots cannot always form the ideal "current round store + next round load" combination every cycle, causing conflicts. This example primarily demonstrates how to solve NZ write-write conflicts. The end-to-end Task Duration is already dominated by MTE2/MTE3 (`aiv_mte2_ratio` as high as 96.7%), with vec time not on the critical path.
+The measured `aiv_vec_time` is `9.14μs`. The gap from the 4.965μs theoretical value comes from two combined factors: (1) V_STORE stride=145 increments the starting bank by +1 each time, and after multiple loop iterations it still lands on the same bank as V_LOAD, which cannot be perfectly staggered row by row with buffer offset alone; (2) vloop dual-issue, where the issue slots cannot always form the ideal "current round store + next round load" combination every cycle, causing conflicts. This example primarily demonstrates how to solve NZ write-write conflicts. The end-to-end Task Duration is already dominated by MTE2/MTE3 (`aiv_mte2_ratio` as high as 96.7%), with vec time not on the critical path.
 
 ### Optimization Summary
 
@@ -560,30 +560,38 @@ The measured `aiv_vec_time` is `9.14μs`. The gap from the 4.965μs theoretical 
 
 ## Performance Analysis
 
-Use the `msOpProf` tool to obtain detailed performance data:
+### Introduction to the msOpProf Tool
 
-```bash
-msopprof ./demo
-```
+`msOpProf` is a single-operator performance analysis tool. It offers two usage methods: `msopprof` and `msopprof simulator`. The tool helps users identify anomalies in operator memory, operator code, and operator instructions, enabling comprehensive operator tuning. It currently supports performance data collection and automatic parsing for different run modes (on-device or simulation) and different file types (executables or operator binary `.o` files).
+
+- On-device performance collection
+
+    On-device performance collection directly measures the execution time of an operator on an Ascend AI Processor. This method is suitable for quickly locating operator performance issues in an on-device environment.
+
+    Run operator tuning on the executable demo with `msopprof`:
+
+    ```
+    msopprof ./demo
+    ```
 
     - Performance data description  
       After the command completes, a folder named "OPPROF_{timestamp}_XXX" will be generated in the default directory. The performance data folder structure is as follows:
 
       ```bash
-      ├──dump                       # Raw performance data, no user attention needed
-      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle ratio
-      ├──L2Cache.csv                # L2 Cache hit rate, affects MTE2, suggests reasonable data transfer logic to increase hit rate
-      ├──Memory.csv                 # UB, L1 and main memory read/write bandwidth rate
-      ├──MemoryL0.csv               # L0A, L0B, and L0C read/write bandwidth rate
-      ├──MemoryUB.csv               # Vector and Scalar to UB read/write bandwidth rate
-      ├──OpBasicInfo.csv            # Operator basic information
-      ├──PipeUtilization.csv        # Computation unit and transfer unit time and ratio
-      ├──ResourceConflictRatio.csv  # Bank group, bank conflict and resource conflict ratio on UB in all instructions
+      ├──dump                       # Raw performance data; users do not need to inspect it
+      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle proportions
+      ├──L2Cache.csv                # L2 Cache hit rate; affects MTE2. Plan data transfer logic properly to increase the hit rate
+      ├──Memory.csv                 # Read/write bandwidth rates of UB, L1, and main memory
+      ├──MemoryL0.csv               # Read/write bandwidth rates of L0A, L0B, and L0C
+      ├──MemoryUB.csv               # Read/write bandwidth rates from Vector and Scalar to UB
+      ├──OpBasicInfo.csv            # Basic operator information
+      ├──PipeUtilization.csv        # Durations and proportions of computation and data transfer units
+      ├──ResourceConflictRatio.csv  # Proportions of UB bank groups, bank conflicts, and resource conflicts among all instructions
       └──visualize_data.bin         # MindStudio Insight presentation file
       ```
 
 View the specific performance analysis results:
 
 ```bash
-cat ./OPPROF_*/PipeUtilization*.csv
+cat ./OPPROF_*/PipeUtilization.csv
 ```

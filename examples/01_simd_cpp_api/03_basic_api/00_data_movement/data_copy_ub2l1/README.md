@@ -35,7 +35,7 @@
   | 连续搬运 | 1 | `DataCopy(dst, src, DataCopyParams)` | NZ | UB→L1 数据内容不变，输入需预先转为NZ格式 |
   | 随路ND2NZ搬运 | 2 | `DataCopy(ubDst, ubSrc, DataCopyParams)` + `DataCopy(l1Dst, ubNZ, DataCopyParams)` | ND | 先在UB内逐C0列块搬运完成ND→NZ转换，再连续搬运至L1 |
 
-  接口资料参考[UBToL1连续数据搬运](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1连续数据搬运（DataCopy）.md)和[UBToL1随路转换-ND2NZ搬运](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1随路转换-ND2NZ搬运（DataCopy）.md)。
+  接口资料参考[UBToL1连续数据搬运](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1连续数据搬运（DataCopy）.md)和[UBToL1随路转换-ND2NZ搬运](../../../../../docs/zh/api/SIMD-API/基础API/矩阵计算（ISASI）/矩阵计算的搬入/矩阵数据搬入至L1-Buffer/UBToL1随路转换-ND2NZ搬运（DataCopy）.md)。
 
 - 关于场景2实现方案的说明：
   
@@ -83,8 +83,8 @@
   在本样例目录下执行如下命令。
   ```bash
   mkdir -p build && cd build;                                               # 创建并进入build目录
-  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSCENARIO_NUM=2 ..;make -j;     # 编译工程，默认npu模式，场景1
-  python3 ../scripts/gen_data.py --scenarioNum=2                            # 生成测试输入数据（场景需与编译一致）
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSCENARIO_NUM=1 ..;make -j;     # 编译工程，默认npu模式，场景1
+  python3 ../scripts/gen_data.py --scenarioNum=1                            # 生成测试输入数据（场景需与编译一致）
   ./demo                                                                    # 执行编译生成的可执行程序，执行样例
   ```
 

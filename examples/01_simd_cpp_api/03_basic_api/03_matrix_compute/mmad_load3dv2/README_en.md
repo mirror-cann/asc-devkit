@@ -70,22 +70,32 @@ Run the following steps in the root directory of this example to build and run t
 
   Run the following commands in the example directory.
   ```bash
-  SCENARIO_NUM=4 M=30 K=40 N=70
+  SCENARIO_NUM=4
   mkdir -p build && cd build;      # Create and enter the build directory
-  cmake .. -DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=$SCENARIO_NUM -DM_SIZE=$M -DK_SIZE=$K -DN_SIZE=$N;make -j;    # Build the project
-  python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM -m=$M -k=$K -n=$N   # Generate test input data
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j;    # Build the project in NPU mode by default
+  python3 ../scripts/gen_data.py -scenarioNum=$SCENARIO_NUM   # Generate test input data
   ./demo                           # Run the compiled executable to execute the example
   python3 ../scripts/verify_result.py -scenarioNum=$SCENARIO_NUM output/output.bin output/golden.bin   # Verify whether the output result is correct and confirm algorithm logic is correct
   ```
+
+  To use CPU debug or NPU simulation mode, add the `-DCMAKE_ASC_RUN_MODE=cpu` or `-DCMAKE_ASC_RUN_MODE=sim` option.
+
+  Examples:
+
+  ```bash
+  cmake -DCMAKE_ASC_RUN_MODE=cpu -DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j; # CPU debug mode
+  cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-2201 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j; # NPU simulation mode
+  ```
+
+  > **Notice:** Clear the CMake cache before switching build modes. Run `rm CMakeCache.txt` in the build directory and then rerun CMake.
+
 - Build option description
 
   | Option | Values | Description |
   |--------|--------|-------------|
-  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201` (default), `dav-3510` | NPU architecture |
+  | `CMAKE_ASC_RUN_MODE` | `npu` (default), `sim`, `cpu` | Run mode: NPU execution, NPU simulation, CPU debug |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-2201` (default), `dav-3510` | NPU architecture: dav-2201 corresponds to Atlas A2/A3 training and inference products; dav-3510 corresponds to Ascend 950PR/Ascend 950DT |
   | `SCENARIO_NUM` | `1`, `2`, `3`, `4` (default), `5` | Scenario number |
-  | `M_SIZE` | `30` (default) | Number of elements on M axis |
-  | `K_SIZE` | `40` (default) | Number of elements on K axis |
-  | `N_SIZE` | `70` (default) | Number of elements on N axis |
 
 - Execution result
 

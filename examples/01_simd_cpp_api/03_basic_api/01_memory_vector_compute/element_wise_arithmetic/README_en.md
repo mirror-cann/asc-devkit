@@ -17,10 +17,10 @@ This example demonstrates the usage of basic arithmetic interfaces based on Leak
 ```text
 ├── element_wise_arithmetic
 │   ├── scripts
-│   │   ├── gen_data.py         // Script for generating input data and ground truth data
-│   │   └── verify_result.py    // Script for verifying whether output data matches ground truth data
-│   ├── CMakeLists.txt          // Build project file
-│   ├── data_utils.h            // Data read/write functions
+│   │   ├── gen_data.py             // Script for generating input data and ground truth data
+│   │   └── verify_result.py        // Script for verifying whether output data matches ground truth data
+│   ├── CMakeLists.txt              // Build project file
+│   ├── data_utils.h                // Data read/write functions
 │   ├── element_wise_arithmetic.asc // Ascend C example implementation & invocation example
 │   └── README.md                   // Example documentation
 ```

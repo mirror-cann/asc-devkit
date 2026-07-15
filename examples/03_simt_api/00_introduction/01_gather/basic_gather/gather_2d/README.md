@@ -18,7 +18,7 @@
 ├── gather_2d
 │   ├── CMakeLists.txt            # cmake编译文件
 │   ├── gather_2d.asc             # SIMT实现二维gather调用样例
-|   └── README.md
+│   └── README.md
 ```
 
 ## 算子描述

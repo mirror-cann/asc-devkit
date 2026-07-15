@@ -32,8 +32,7 @@ Atlas A2/A3 Series Products set the L1 Buffer boundary value through the `SetLoa
 <table>
 <caption>Example Specification Table</caption>
 <tr><td rowspan="1" align="center">Category</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
-<tr><td rowspan="3" align="center">Example Input</td></tr>
-<tr><td align="center">x</td><td align="center">[32, 32]</td><td align="center">half</td><td align="center">ND</td></tr>
+<tr><td rowspan="2" align="center">Example Input</td><td align="center">x</td><td align="center">[32, 32]</td><td align="center">half</td><td align="center">ND</td></tr>
 <tr><td align="center">y</td><td align="center">[32, 32]</td><td align="center">half</td><td align="center">ND</td></tr>
 <tr><td rowspan="1" align="center">Example Output</td><td align="center">z</td><td align="center">[32, 32]</td><td align="center">float</td><td align="center">ND</td></tr>
 <tr><td rowspan="1" align="center">Kernel Function Name</td><td colspan="4" align="center">set_loaddata_boundary</td></tr>

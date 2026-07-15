@@ -8,7 +8,7 @@ This example demonstrates the Add operator using C_API interfaces, implemented b
 ```
 ├── 00_sync_add
 │   ├── CMakeLists.txt         // CMake build file
-|   └── c_api_add.asc          // Operator implementation & invocation example
+│   └── c_api_add.asc          // Operator implementation & invocation example
 ```
 
 ## Operator Description

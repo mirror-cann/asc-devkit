@@ -22,6 +22,7 @@
 │   ├── CMakeLists.txt                     // 编译工程文件
 │   ├── data_utils.h                       // 数据读入写出函数
 │   ├── copy_in_tensor_api.asc             // Ascend C样例实现 & 调用样例
+│   ├── README_en.md                       // 样例说明文档（英文）
 │   └── README.md                          // 样例说明文档
 ```
 
@@ -30,15 +31,15 @@
 - 样例功能：
   本样例实现了带Bias的动态Shape多核Matmul功能，通过Copy接口完成GM到L1，L1到L0的数据搬运，通过Mmad接口完成矩阵乘加计算。
 
-  1、动态Matmul功能
+  1. 动态Matmul功能
 
   本样例实现了多核Matmul功能。Shape参数（M、N、K、singleCoreM、singleCoreN、singleCoreK）通过MatmulTiling结构体在运行时动态传入kernel。baseM、baseN、baseK和stepM、stepN、stepK作为编译期模板参数，决定了L0/L1级buffer的分配大小。
 
-  2、Bias功能
+  2. Bias功能
 
   本样例在Matmul计算的首次迭代中通过Mmad接口将Bias向量加到矩阵乘结果上，Bias为float类型的一维向量，长度为N。
 
-  3、多场景支持
+  3. 多场景支持
 
   通过编译时宏参数SCENARIO_NUM选择不同的转置模式和数据类型组合：
 
@@ -54,7 +55,7 @@
 
   注：C矩阵和Bias在所有场景下数据类型均为float。
 
-  4、MatmulTiling结构体定义
+  4. MatmulTiling结构体定义
 
   ```cpp
   struct MatmulTiling {

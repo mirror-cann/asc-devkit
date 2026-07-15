@@ -2,15 +2,15 @@
 
 ## Overview
 
-When MTE2 moves data from Global Memory (GM) to Unified Buffer (UB), the `l2_cache_mode` parameter of the `asc_copy_gm2ub_align` interface (this sample uses [pointer-based C programming](https://gitcode.com/cann/asc-devkit/tree/master/docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/基于指针的C语言编程)) can explicitly configure the L2 Cache management strategy. This sample describes how to select the appropriate L2 Cache mode to optimize MTE2 data movement performance for **reuse data** and **streaming data** scenarios, and how to improve the L2 Cache hit rate through tiling strategies when L2 Cache is enabled.
+When MTE2 moves data from Global Memory (GM) to Unified Buffer (UB), the `l2_cache_mode` parameter of the `asc_copy_gm2ub_align` interface (this sample uses [pointer-based C programming](../../../../../../docs/zh/guide/编程指南/编程模型/AI-Core-SIMD编程/基于指针的C语言编程)) can explicitly configure the L2 Cache management strategy. This sample describes how to select the appropriate L2 Cache mode to optimize MTE2 data movement performance for **reuse data** and **streaming data** scenarios, and how to improve the L2 Cache hit rate through tiling strategies when L2 Cache is enabled.
 
 - **Reuse Data Scenario (data needs to be read multiple times)**
-  - Case1: Repeat the entire block 4 times, `l2_cache_mode=0` (NORMAL) — the entire block far exceeds the L2 capacity, hit rate is extremely low, demonstrating the performance bottleneck without tiling.
-  - Case2: Split into 4 tiles along the N direction, repeat each tile 4 times, `l2_cache_mode=0` (NORMAL) — after tiling, the working set per tile fits within the L2 capacity, improving the hit rate.
+  Case1: Repeat the entire block 4 times, `l2_cache_mode=0` (NORMAL) — the entire block far exceeds the L2 capacity, hit rate is extremely low, demonstrating the performance bottleneck without tiling.
+  Case2: Split into 4 tiles along the N direction, repeat each tile 4 times, `l2_cache_mode=0` (NORMAL) — after tiling, the working set per tile fits within the L2 capacity, improving the hit rate.
 
 - **Streaming Data Scenario (data is read only once)**
-  - Case3: Add + double buffer, `l2_cache_mode=0` (NORMAL) (baseline).
-  - Case4: Same as Case3, but set `l2_cache_mode` to 4 (DISABLE), bypassing L2 Cache — compare with Case3.
+  Case3: Add + double buffer, `l2_cache_mode=0` (NORMAL) (baseline).
+  Case4: Same as Case3, but set `l2_cache_mode` to 4 (DISABLE), bypassing L2 Cache — compare with Case3.
 
 ## Supported Products and CANN Software Versions
 
@@ -34,7 +34,7 @@ When MTE2 moves data from Global Memory (GM) to Unified Buffer (UB), the `l2_cac
 
 ## Sample Description
 
-The C-API GM→UB data movement interface uses the `l2_cache_mode` parameter to control how the data being moved is managed in the L2 Cache. For details on the values and their meanings, see the [asc_copy_gm2ub_align](https://gitcode.com/cann/asc-devkit/tree/master/docs/zh/api/SIMD-API/C-API/vector_datamove/asc_copy_gm2ub_align/asc_copy_gm2ub_align_arch_3510.md) interface documentation.
+The C-API GM→UB data movement interface uses the `l2_cache_mode` parameter to control how the data being moved is managed in the L2 Cache. For details on the values and their meanings, see the [asc_copy_gm2ub_align](../../../../../../docs/zh/api/SIMD-API/C-API/vector_datamove/asc_copy_gm2ub_align/asc_copy_gm2ub_align_arch_3510.md) interface documentation.
 
 Based on the two scenarios described above, this sample designs 4 Cases for comparison and verification:
 
@@ -99,8 +99,7 @@ Round 1: All cores read the entire matrix from GM to UB
 Round 2: All cores read the entire matrix again to UB
 Round 3: All cores read the entire matrix again to UB
 Round 4: All cores read the entire matrix again to UB
-Note: The working set in each round is the entire matrix,
-      making it difficult for L2 Cache to retain data from the previous round.
+Note: The working set in each round is the entire matrix, making it difficult for L2 Cache to retain data from the previous round.
 ```
 
 **Case2: Split into 4 tiles along the N direction, repeat each tile 4 times**
@@ -116,8 +115,7 @@ Tile 0: Round 1 reads from GM, Rounds 2-4 preferentially read from L2 Cache
 Tile 1: Round 1 reads from GM, Rounds 2-4 preferentially read from L2 Cache
 Tile 2: Round 1 reads from GM, Rounds 2-4 preferentially read from L2 Cache
 Tile 3: Round 1 reads from GM, Rounds 2-4 preferentially read from L2 Cache
-Note: The working set per tile is smaller, making it easier to retain in L2 Cache
-      during consecutive repeated accesses.
+Note: The working set per tile is smaller, making it easier to retain in L2 Cache during consecutive repeated accesses.
 ```
 
 ### Case1: Repeat the entire matrix 4 times + `l2_cache_mode=0` (NORMAL)

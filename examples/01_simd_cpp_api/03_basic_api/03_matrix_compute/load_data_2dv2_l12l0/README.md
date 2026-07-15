@@ -189,11 +189,11 @@ GM(ND) -> L1(Nz) -> L0A(Nz)/L0B(Zn) -> L0C(Nz) -> GM(ND)
 
 - `CeilAlign`：向上对齐操作。例如`m = 30`时，`CeilAlign(30, 16) = 32`，表示将m轴向16对齐，对齐后m轴长度为32。
 
-```cpp
-__aicore__ inline uint16_t CeilAlign(uint16_t size, uint16_t alignValue) {
-    return (size + alignValue - 1) / alignValue * alignValue;
-}
-```
+  ```cpp
+  __aicore__ inline uint16_t CeilAlign(uint16_t size, uint16_t alignValue) {
+      return (size + alignValue - 1) / alignValue * alignValue;
+  }
+  ```
 
 - `CeilDivision`：向上取整除法，一般用于求解向上对齐后的循环次数。
 - `mAlignValue`：m轴向`mAlignValue`对齐。例如`mAlignValue = 32`，代表m轴对齐到32；依次类推还有`nAlignValue`、`kaAlignValue`、`kbAlignValue`。

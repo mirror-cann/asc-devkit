@@ -98,7 +98,9 @@ __simd_vf__ inline static void GeluEltwiseBasic(
     AscendC::Reg::RegTensor<float> xReg, yReg;
 
     for (uint16_t i = 0; i < loopNum; ++i) {
-        mask = AscendC::Reg::UpdateMask<float>(n);
+        // Case 0 (scenarioNum == 0) uses a fixed VL32 mask (32 float elements, 128-byte parallelism);
+        // only non-Case 0 uses UpdateMask<float>(n) to update the mask based on the remaining element count
+        mask = AscendC::Reg::CreateMask<float, AscendC::Reg::MaskPattern::VL32>();
         // Gelu computation
         AscendC::Reg::LoadAlign(xReg, xAddr + i * oneRepeatSize);
         AscendC::Reg::Mul(yReg, xReg, xReg, mask);
@@ -414,6 +416,11 @@ $$
 N_{\text{instr}} = N_{\text{VF}} \times N_{\text{loop}} \times N_{\text{op}} = 128 \times 256 \times 13 = 425984
 $$
 
+Where:
+- $N_{\text{VF}} = 128$: Number of VF function calls (outer Process loop)
+- $N_{\text{loop}} = 256$: Number of loops within VF (when oneRepeatSize=32)
+- $N_{\text{op}} = 13$: Number of computation instructions in VF (Gelu×8 + Element-wise×5)
+
 Vector computation cycle count:
 
 $$
@@ -435,6 +442,11 @@ Single core vector computation instruction count:
 $$
 N_{\text{instr}} = N_{\text{VF}} \times N_{\text{loop}} \times N_{\text{op}} = 128 \times 128 \times 13 = 212992
 $$
+
+Where:
+- $N_{\text{VF}} = 128$: Number of VF function calls
+- $N_{\text{loop}} = 128$: Number of loops within VF (when oneRepeatSize=64)
+- $N_{\text{op}} = 13$: Number of computation instructions in VF
 
 Vector computation cycle count:
 
@@ -460,6 +472,8 @@ $$
 N_{\text{instr}} = N_{\text{VF}} \times N_{\text{loop}} \times N_{\text{op}} = 128 \times 128 \times 13 = 212992
 $$
 
+The parameters in the formula are the same as those in Case 1. Splitting the loop does not change the total instruction count.
+
 Vector computation cycle count:
 
 $$
@@ -483,6 +497,8 @@ Single core vector computation instruction count remains unchanged:
 $$
 N_{\text{instr}} = N_{\text{VF}} \times N_{\text{loop}} \times N_{\text{op}} = 128 \times 128 \times 13 = 212992
 $$
+
+The parameters in the formula are the same as those in Case 2. Loop unrolling does not change the total instruction count.
 
 Vector computation cycle count:
 
@@ -576,30 +592,38 @@ Run the following steps in the root directory of this example to build and run t
 
 ### Performance Analysis
 
-Use the `msOpProf` tool to obtain detailed performance data:
+### Introduction to the msOpProf Tool
 
-```bash
-msopprof ./demo   # Analyze performance
-```
+`msOpProf` is a single-operator performance analysis tool. It offers two usage methods: `msopprof` and `msopprof simulator`. The tool helps users identify anomalies in operator memory, operator code, and operator instructions, enabling comprehensive operator tuning. It currently supports performance data collection and automatic parsing for different run modes (on-device or simulation) and different file types (executables or operator binary `.o` files).
+
+- On-device performance collection
+
+    On-device performance collection directly measures the execution time of an operator on an Ascend AI Processor. This method is suitable for quickly locating operator performance issues in an on-device environment.
+
+    Run operator tuning on the executable demo with `msopprof`:
+
+    ```
+    msopprof ./demo
+    ```
 
     - Performance data description  
       After the command completes, a folder named "OPPROF_{timestamp}_XXX" will be generated in the default directory. The performance data folder structure is as follows:
 
       ```bash
-      ├──dump                       # Raw performance data, no user attention needed
-      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle ratio
-      ├──L2Cache.csv                # L2 Cache hit rate, affects MTE2, suggests reasonable data transfer logic to increase hit rate
-      ├──Memory.csv                 # UB, L1 and main memory read/write bandwidth rate
-      ├──MemoryL0.csv               # L0A, L0B, and L0C read/write bandwidth rate
-      ├──MemoryUB.csv               # Vector and Scalar to UB read/write bandwidth rate
-      ├──OpBasicInfo.csv            # Operator basic information
-      ├──PipeUtilization.csv        # Computation unit and transfer unit time and ratio
-      ├──ResourceConflictRatio.csv  # Bank group, bank conflict and resource conflict ratio on UB in all instructions
+      ├──dump                       # Raw performance data; users do not need to inspect it
+      ├──ArithmeticUtilization.csv  # Cube/Vector instruction cycle proportions
+      ├──L2Cache.csv                # L2 Cache hit rate; affects MTE2. Plan data transfer logic properly to increase the hit rate
+      ├──Memory.csv                 # Read/write bandwidth rates of UB, L1, and main memory
+      ├──MemoryL0.csv               # Read/write bandwidth rates of L0A, L0B, and L0C
+      ├──MemoryUB.csv               # Read/write bandwidth rates from Vector and Scalar to UB
+      ├──OpBasicInfo.csv            # Basic operator information
+      ├──PipeUtilization.csv        # Durations and proportions of computation and data transfer units
+      ├──ResourceConflictRatio.csv  # Proportions of UB bank groups, bank conflicts, and resource conflicts among all instructions
       └──visualize_data.bin         # MindStudio Insight presentation file
       ```
 
 View the specific performance analysis results:
 ```bash
 # View Task Duration and various data
-cat ./OPPROF_*/PipeUtilization*.csv
+cat ./OPPROF_*/PipeUtilization.csv
 ```

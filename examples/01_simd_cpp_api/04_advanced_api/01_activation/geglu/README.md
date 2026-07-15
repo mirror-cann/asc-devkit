@@ -60,7 +60,7 @@
 </div>
 
 - 样例实现：  
-  本样例中实现的是固定shape为输入src[1,1024]、src1[1,1024]，输出dst[1,024]的geglu_custom样例。
+  本样例中实现的是固定shape为输入src[1,1024]、src1[1,1024]，输出dst[1,1024]的geglu_custom样例。
 
   - Kernel实现  
     核心计算步骤：将输入数据搬入后，调用 `AscendC::GeGLU` 完成GeGLU门控激活计算，再将结果搬出。

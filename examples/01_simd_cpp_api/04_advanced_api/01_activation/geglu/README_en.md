@@ -1,5 +1,6 @@
 # GeGLU Example
 
+
 ## Overview
 
 This example uses the GeGLU high-level API in a GLU (Gated Linear Unit) gated activation function scenario to implement GLU variant activation computation. GeGLU uses GELU as the activation function, with the computation pattern `dst = src0 * GELU(src1)`. This example uses float data type with an input tensor of 1024 elements to complete Geglu example computation.

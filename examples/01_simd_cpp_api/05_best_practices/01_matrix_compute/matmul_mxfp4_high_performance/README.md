@@ -1,5 +1,6 @@
 # MxFP4 Matmul 性能调优样例
 
+
 ## 概述
 
 本样例以 MxFP4 矩阵乘法为例，介绍基于 Ascend C `Matmul` 高阶 API 的 MxMatmul 性能调优方法。样例包含两个场景（Case 1-2），均采用常量化 tiling，使用模板常量化 `MatmulApiStaticTiling`（静态 tiling）替代 runtime tiling 拷贝与计算。

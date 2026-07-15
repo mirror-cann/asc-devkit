@@ -13,7 +13,7 @@ This example uses C_API interfaces to implement the Add operator example, based 
 ```
 ├── c_api_sync_add
 │   ├── CMakeLists.txt         // cmake build file
-|   └── c_api_add.asc          // operator implementation & invocation example
+│   └── c_api_add.asc          // operator implementation & invocation example
 ```
 
 ## Operator Description
