@@ -50,6 +50,12 @@ using _1024 = Std::Int<1024>;
 using _2048 = Std::Int<2048>;
 using _4096 = Std::Int<4096>;
 
+// Squeeze pattern mark: positions marked with `_` are kept (only `_1` marks a squeeze).
+struct KeepMark {
+    __aicore__ inline constexpr KeepMark() = default;
+};
+inline constexpr KeepMark _{};
+
 constexpr size_t TWO_DIM_DATA = 2;
 constexpr size_t THREE_DIM_DATA = 3;
 constexpr size_t FOUR_DIM_DATA = 4;

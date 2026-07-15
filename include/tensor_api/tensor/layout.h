@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2026 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2026 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 
 #if !defined(ASCENDC_TENSOR_API_INCLUDE_COMPILER_INTERNAL_HEADERS)
@@ -34,7 +34,7 @@ template <typename... Ts>
 __aicore__ inline constexpr Stride<Ts...> MakeStride(const Ts&... t);
 
 template <typename... Ts>
-__aicore__ inline constexpr Tile<Ts...>  MakeTile(const Ts&... t);
+__aicore__ inline constexpr Tile<Ts...> MakeTile(const Ts&... t);
 
 template <typename... Ts>
 __aicore__ inline constexpr Coord<Ts...> MakeCoord(const Ts&... t);
@@ -77,6 +77,18 @@ __aicore__ inline constexpr auto Capacity(const LayoutType& layout);
 
 template <typename Tensor, typename Coord, typename Info>
 __aicore__ inline constexpr decltype(auto) Slice(Tensor&& tensor, const Coord& coord, const Info& info);
+
+template <typename LayoutPattern, typename TraitType, typename... Args>
+__aicore__ inline constexpr decltype(auto) MakeFrameLayout(const Args&... args);
+
+template <typename LayoutPattern, size_t C0Element, typename... Args>
+__aicore__ inline constexpr decltype(auto) MakeFrameLayout(const Args&... args);
+
+template <size_t... SqueezeDims, typename T, typename Enable>
+__aicore__ inline constexpr auto Squeeze(const T& x);
+
+template <typename Pattern, typename T, typename Enable>
+__aicore__ inline constexpr auto Squeeze(const T& x, const Pattern& pattern);
 
 } // namespace Te
 } // namespace AscendC

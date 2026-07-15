@@ -235,6 +235,85 @@ __aicore__ inline constexpr auto GetCapacity(const Shape& shape, const Stride& s
     }
 }
 
+// ===== Squeeze helpers =====
+
+// PrependIndex: prepend a size_t to an index_sequence.
+template <size_t Idx, typename Seq>
+struct PrependIndex;
+template <size_t Idx, size_t... Is>
+struct PrependIndex<Idx, Std::index_sequence<Is...>> {
+    using type = Std::index_sequence<Idx, Is...>;
+};
+
+// KeepIndexSeq: produce the index_sequence of positions whose bool mask is true.
+template <size_t Idx, bool... Mask>
+struct KeepIndexSeq {
+    using type = Std::index_sequence<>;
+};
+template <size_t Idx, bool Head, bool... Tail>
+struct KeepIndexSeq<Idx, Head, Tail...> {
+    using rest = typename KeepIndexSeq<Idx + 1, Tail...>::type;
+    using type = Std::conditional_t<Head, typename PrependIndex<Idx, rest>::type, rest>;
+};
+template <bool... Mask>
+using KeepIndexSeqT = typename KeepIndexSeq<0, Mask...>::type;
+
+// KeepIndexSeqFromSeq: same as KeepIndexSeqT but the bool mask is carried by an IntegerSequence.
+template <typename BoolSeq>
+struct KeepIndexSeqFromSeq;
+template <bool... Bs>
+struct KeepIndexSeqFromSeq<Std::IntegerSequence<bool, Bs...>> {
+    using type = typename KeepIndexSeqT<Bs...>::type;
+};
+
+// SelectBySeq: pick tuple elements at the indices carried by an index_sequence.
+template <typename Tuple, size_t... Is>
+__aicore__ inline constexpr auto SelectBySeqImpl(const Tuple& t, Std::index_sequence<Is...>)
+{
+    return Std::make_tuple(Std::get<Is>(t)...);
+}
+template <typename Seq, typename Tuple>
+__aicore__ inline constexpr auto SelectBySeq(const Tuple& t)
+{
+    return SelectBySeqImpl(t, Seq{});
+}
+
+// IsSameStructure: two types share the same tuple nesting structure (same depth, same size per level).
+template <typename T, typename U, typename = void>
+struct IsSameStructure;
+
+template <typename T, typename U, typename Seq>
+struct AllChildrenSame;
+
+template <typename T, typename U, size_t... Is>
+struct AllChildrenSame<T, U, Std::index_sequence<Is...>>
+    : Std::bool_constant<(
+          IsSameStructure<
+              typename Std::tuple_element<Is, Std::remove_cvref_t<T>>::type,
+              typename Std::tuple_element<Is, Std::remove_cvref_t<U>>::type>::value &&
+          ...)> {};
+
+template <typename T, typename U, typename>
+struct IsSameStructure : Std::false_type {};
+
+template <typename T, typename U>
+struct IsSameStructure<
+    T, U, Std::enable_if_t<Std::is_tuple_v<Std::remove_cvref_t<T>> && Std::is_tuple_v<Std::remove_cvref_t<U>>>>
+    : Std::conditional_t<
+          Std::tuple_size_v<Std::remove_cvref_t<T>> == Std::tuple_size_v<Std::remove_cvref_t<U>>,
+          AllChildrenSame<
+              Std::remove_cvref_t<T>, Std::remove_cvref_t<U>,
+              Std::make_index_sequence<Std::tuple_size_v<Std::remove_cvref_t<T>>>>,
+          Std::false_type> {};
+
+template <typename T, typename U>
+struct IsSameStructure<
+    T, U, Std::enable_if_t<!Std::is_tuple_v<Std::remove_cvref_t<T>> && !Std::is_tuple_v<Std::remove_cvref_t<U>>>>
+    : Std::true_type {};
+
+template <typename T, typename U>
+constexpr bool IsSameStructureV = IsSameStructure<Std::remove_cvref_t<T>, Std::remove_cvref_t<U>>::value;
+
 } // namespace Te
 } // namespace AscendC
 

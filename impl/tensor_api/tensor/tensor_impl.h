@@ -222,6 +222,46 @@ __aicore__ inline constexpr auto MakeSingleBatchSubTensor(const Tensor& t, uint3
     return NewTensor{subEngine, subLayout};
 }
 
+// Squeeze (mode 1): drop axes (by index) whose compile-time size is 1; non-one axes are kept (no error).
+// Accepts either a Layout (returns a new Layout) or a Tensor (returns a new Tensor over the same engine).
+template <
+    size_t... SqueezeDims, typename T,
+    typename = Std::enable_if_t<(IsLayoutV<T> || IsAttrTensorV<T>) && (sizeof...(SqueezeDims) > 0)>>
+__aicore__ inline constexpr auto Squeeze(const T& x)
+{
+    if constexpr (IsAttrTensorV<T>) {
+        auto newLayout = SqueezeLayout<SqueezeDims...>(x.Layout());
+        using NewLayout = Std::remove_cvref_t<decltype(newLayout)>;
+        using NewEngine = typename T::engineType;
+        using Location = GetMemLocation<NewEngine>;
+        using NewTensor = typename MakeTensorResult<Location, NewEngine, NewLayout>::type;
+        return NewTensor{x.Engine(), newLayout};
+    } else {
+        static_assert(IsLayoutV<T>, "Squeeze input must be a Layout or Tensor");
+        return SqueezeLayout<SqueezeDims...>(x);
+    }
+}
+
+// Squeeze (mode 2): drop positions marked _1 in an isomorphic pattern tuple, when size is 1.
+// Accepts either a Layout or a Tensor.
+template <
+    typename Pattern, typename T,
+    typename = Std::enable_if_t<(IsLayoutV<T> || IsAttrTensorV<T>) && Std::is_tuple_v<Std::remove_cvref_t<Pattern>>>>
+__aicore__ inline constexpr auto Squeeze(const T& x, const Pattern& pattern)
+{
+    if constexpr (IsAttrTensorV<T>) {
+        auto newLayout = SqueezeLayout(x.Layout(), pattern);
+        using NewLayout = Std::remove_cvref_t<decltype(newLayout)>;
+        using NewEngine = typename T::engineType;
+        using Location = GetMemLocation<NewEngine>;
+        using NewTensor = typename MakeTensorResult<Location, NewEngine, NewLayout>::type;
+        return NewTensor{x.Engine(), newLayout};
+    } else {
+        static_assert(IsLayoutV<T>, "Squeeze input must be a Layout or Tensor");
+        return SqueezeLayout(x, pattern);
+    }
+}
+
 } // namespace Te
 
 template <typename EngineType, typename LayoutType>
