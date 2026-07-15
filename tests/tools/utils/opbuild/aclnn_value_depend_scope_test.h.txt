@@ -1,6 +1,6 @@
 
 /*
- * calution: this file was generated automaticlly donot change it.
+ * calution: this file was generated automatically do not change it.
 */
 
 #ifndef ACLNN_VALUE_DEPEND_SCOPE_TEST_H_
@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-/* funtion: aclnnValueDependScopeTestGetWorkspaceSize
+/* function: aclnnValueDependScopeTestGetWorkspaceSize
  * parameters :
  * x1 : required
  * x2 : required
@@ -39,7 +39,7 @@ aclnnStatus aclnnValueDependScopeTestTensorGetWorkspaceSize(
     uint64_t *workspaceSize,
     aclOpExecutor **executor);
 
-/* funtion: aclnnValueDependScopeTest
+/* function: aclnnValueDependScopeTest
  * parameters :
  * workspace : workspace memory addr(input).
  * workspaceSize : size of workspace(input).

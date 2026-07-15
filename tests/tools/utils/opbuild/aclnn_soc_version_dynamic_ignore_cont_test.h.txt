@@ -1,6 +1,6 @@
 
 /*
- * calution: this file was generated automaticlly donot change it.
+ * calution: this file was generated automatically do not change it.
 */
 
 #ifndef ACLNN_SOC_VERSION_DYNAMIC_IGNORE_CONT_TEST_H_
@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-/* funtion: aclnnSocVersionDynamicIgnoreContTestGetWorkspaceSize
+/* function: aclnnSocVersionDynamicIgnoreContTestGetWorkspaceSize
  * parameters :
  * x1 : required
  * x2 : dynamic
@@ -34,7 +34,7 @@ aclnnStatus aclnnSocVersionDynamicIgnoreContTestGetWorkspaceSize(
     uint64_t *workspaceSize,
     aclOpExecutor **executor);
 
-/* funtion: aclnnSocVersionDynamicIgnoreContTest
+/* function: aclnnSocVersionDynamicIgnoreContTest
  * parameters :
  * workspace : workspace memory addr(input).
  * workspaceSize : size of workspace(input).

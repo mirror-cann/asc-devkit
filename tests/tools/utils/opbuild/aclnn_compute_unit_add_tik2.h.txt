@@ -1,6 +1,6 @@
 
 /*
- * calution: this file was generated automaticlly donot change it.
+ * calution: this file was generated automatically do not change it.
 */
 
 #ifndef ACLNN_COMPUTE_UNIT_ADD_TIK2_H_
@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-/* funtion: aclnnAddTik2GetWorkspaceSize
+/* function: aclnnAddTik2GetWorkspaceSize
  * parameters :
  * x1Optional : optional
  * x2 : dynamic
@@ -58,7 +58,7 @@ aclnnStatus aclnnAddTik2GetWorkspaceSize(
     uint64_t *workspaceSize,
     aclOpExecutor **executor);
 
-/* funtion: aclnnAddTik2
+/* function: aclnnAddTik2
  * parameters :
  * workspace : workspace memory addr(input).
  * workspaceSize : size of workspace(input).

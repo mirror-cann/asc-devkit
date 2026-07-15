@@ -11,7 +11,7 @@
 # CMakeDetermineASCCompiler.cmake is used to initialize ASC-related variables.
 # And this file will not be triggered again during incremental compilation.
 # 1. Find compiler for ASC extension
-message(STATUS "System processer: ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "System processor: ${CMAKE_SYSTEM_PROCESSOR}")
 if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
     set(ASCEND_CANN_PACKAGE_LINUX_PATH $ENV{ASCEND_HOME_PATH}/x86_64-linux)
     set(CMAKE_ASC_COMPILER_ARCHITECTURE_ID "x86_64")

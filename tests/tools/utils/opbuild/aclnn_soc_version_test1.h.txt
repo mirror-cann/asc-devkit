@@ -1,6 +1,6 @@
 
 /*
- * calution: this file was generated automaticlly donot change it.
+ * calution: this file was generated automatically do not change it.
 */
 
 #ifndef ACLNN_SOC_VERSION_TEST1_H_
@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-/* funtion: aclnnSocVersionTest1GetWorkspaceSize
+/* function: aclnnSocVersionTest1GetWorkspaceSize
  * parameters :
  * x1 : required
  * x2 : required
@@ -30,7 +30,7 @@ aclnnStatus aclnnSocVersionTest1GetWorkspaceSize(
     uint64_t *workspaceSize,
     aclOpExecutor **executor);
 
-/* funtion: aclnnSocVersionTest1
+/* function: aclnnSocVersionTest1
  * parameters :
  * workspace : workspace memory addr(input).
  * workspaceSize : size of workspace(input).

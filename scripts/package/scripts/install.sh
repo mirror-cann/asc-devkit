@@ -380,7 +380,7 @@ is_valid_path() {
                     exit 1
                 fi
                 if [ "${ret}" -ne 0 ]; then
-                    log "WARNING" "You are going to put run-files on a unsecure install-path, do you want to continue? [y/n]"
+                    log "WARNING" "You are going to put run-files on an insecure install-path, do you want to continue? [y/n]"
                     while true
                     do
                         read yn
@@ -1213,7 +1213,7 @@ if [ "$(get_pkg_toolchain)" != "llvm" ] && [ "$input_install_for_all" = "n" ]; t
             usergroup_base=$(grep -i usergroup= "${install_info_old}" | cut -d"=" -f2-)
             check_group "${usergroup_base}" "${username}"
             if [ $? -ne 0 ]; then
-                log "ERROR" "ERR_NO:0x0093;ERR_DES:User is not belong to the dirver or firmware's installed usergroup! Please add the user (${username}) to the group (${usergroup_base})."
+                log "ERROR" "ERR_NO:0x0093;ERR_DES:User is not belong to the driver or firmware's installed usergroup! Please add the user (${username}) to the group (${usergroup_base})."
                 confirm=y
                 exit_install_log 1
             fi

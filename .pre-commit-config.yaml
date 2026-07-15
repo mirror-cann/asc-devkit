@@ -41,7 +41,6 @@ repos:
     rev: v0.14.14
     hooks:
       - id: ruff-check
-        # 临时忽略存量问题，按目录治理后逐项移除。
         args:
           - "--output-format"
           - "github"
@@ -51,6 +50,18 @@ repos:
         types: [python]
       - id: ruff-format
         types: [python]
+
+  # 拼写检查
+  - repo: https://gitcode.com/gh_mirrors/co/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        args: [
+            "-L",
+            "CANN,cann,NNAL,nnal,ASCEND,ascend,EnQue,CopyIn,ArchType,AND,ND,tbe,copyin,alog,Collet,Enque,Normale,OUTTER,OffsetT,REGIST,Te,ThirdParty,VOR,abl,ans,catched,commiter,devlop,dout,enque,ges,nIn,nd,outter,padd,parm,subtile",
+            "--skip",
+            "*.py,*.cpp,*.hpp,*.c,*.h,*.asc,*.cc",
+          ]
 
   # OAT 合规性检查 (Open Source Audit Tool)
   - repo: local

@@ -34,7 +34,7 @@ function findPip() {
   return null
 }
 
-// ── Node depdencies ──────────────────────────────────────────
+// ── Node dependencies ──────────────────────────────────────────
 if (!existsSync(resolve(root, 'node_modules'))) {
   console.log('[install-deps] Installing Node dependencies...')
   execSync('npm install --legacy-peer-deps', { cwd: root, stdio: 'inherit' })
@@ -43,7 +43,7 @@ if (!existsSync(resolve(root, 'node_modules'))) {
   console.log('[install-deps] Node dependencies: OK')
 }
 
-// ── Python depdencies ────────────────────────────────────────
+// ── Python dependencies ────────────────────────────────────────
 const missing = []
 if (!hasPythonModule('cmarkgfm')) missing.push('cmarkgfm')
 if (!hasPythonModule('pygments')) missing.push('pygments')

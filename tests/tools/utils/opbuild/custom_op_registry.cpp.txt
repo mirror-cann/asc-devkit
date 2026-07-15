@@ -117,14 +117,14 @@ bool CreateDirectory(const std::string& path)
             int status = mkdir(p, S_IRWXU | S_IRWXG);
             *slash = '/';
             if (status == -1 && errno != EEXIST) {
-                LOG_ERROR("Error create diectory failed");
+                LOG_ERROR("Error create directory failed");
                 return false;
             }
             slash = strchr(slash + 1, '/');
         }
         int status = mkdir(p, S_IRWXU | S_IRWXG);
         if (status == -1 && errno != EEXIST) {
-            LOG_ERROR("Error create diectory failed, path: %s", path.c_str());
+            LOG_ERROR("Error create directory failed, path: %s", path.c_str());
             return false;
         }
         return true;

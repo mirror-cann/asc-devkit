@@ -195,7 +195,7 @@ __aicore__ inline void CopyTiling(TCubeTiling *tiling, GM_ADDR tilingGM)
     for (uint32_t i = 0; i < sizeof(TCubeTiling) / sizeof(uint32_t); ++i, ++ptr) {
         *ptr = *(tiling32 + i);
     }
-    AscendC::printf("printf pinter %p\n", ptr);
+    AscendC::printf("printf pointer %p\n", ptr);
 }
 
 __aicore__ inline void DumpExample(AscendC::GlobalTensor<half> &aGM,

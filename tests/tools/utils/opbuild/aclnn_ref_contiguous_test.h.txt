@@ -1,6 +1,6 @@
 
 /*
- * calution: this file was generated automaticlly donot change it.
+ * calution: this file was generated automatically do not change it.
 */
 
 #ifndef ACLNN_REF_CONTIGUOUS_TEST_H_
@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-/* funtion: aclnnRefContiguousTestGetWorkspaceSize
+/* function: aclnnRefContiguousTestGetWorkspaceSize
  * parameters :
  * selfRef : required
  * x : required
@@ -27,7 +27,7 @@ aclnnStatus aclnnRefContiguousTestGetWorkspaceSize(
     uint64_t *workspaceSize,
     aclOpExecutor **executor);
 
-/* funtion: aclnnRefContiguousTest
+/* function: aclnnRefContiguousTest
  * parameters :
  * workspace : workspace memory addr(input).
  * workspaceSize : size of workspace(input).

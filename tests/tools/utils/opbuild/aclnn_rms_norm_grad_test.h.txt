@@ -1,6 +1,6 @@
 
 /*
- * calution: this file was generated automaticlly donot change it.
+ * calution: this file was generated automatically do not change it.
 */
 
 #ifndef ACLNN_RMS_NORM_GRAD_TEST_H_
@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-/* funtion: aclnnRmsNormGradTestGetWorkspaceSize
+/* function: aclnnRmsNormGradTestGetWorkspaceSize
  * parameters :
  * dy : required
  * x : required
@@ -34,7 +34,7 @@ aclnnStatus aclnnRmsNormGradTestGetWorkspaceSize(
     uint64_t *workspaceSize,
     aclOpExecutor **executor);
 
-/* funtion: aclnnRmsNormGradTest
+/* function: aclnnRmsNormGradTest
  * parameters :
  * workspace : workspace memory addr(input).
  * workspaceSize : size of workspace(input).

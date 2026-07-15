@@ -220,7 +220,7 @@ validate_so_glibc() {
     fi
 
     if version_gt "${required_glibc}" "${env_glibc}"; then
-        log "[ERROR] The shared library '${so_name}' was linked against a newer version of the GNU C Library (glibc). The current runtime enviroment has an older version of glibs, which does not provide the required symbols."
+        log "[ERROR] The shared library '${so_name}' was linked against a newer version of the GNU C Library (glibc). The current runtime environment has an older version of glibs, which does not provide the required symbols."
         return 1
     fi
     return 0

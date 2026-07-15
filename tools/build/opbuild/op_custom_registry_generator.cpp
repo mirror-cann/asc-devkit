@@ -163,14 +163,14 @@ void OpCustomGenerator::OpCustomGenWirteFileFunc(std::ofstream& outfile) const
     outfile << "            int status = mkdir(p, S_IRWXU | S_IRWXG);\n";
     outfile << "            *slash = '/';\n";
     outfile << "            if (status == -1 && errno != EEXIST) {\n";
-    outfile << "                LOG_ERROR(\"Error create diectory failed\");\n";
+    outfile << "                LOG_ERROR(\"Error create directory failed\");\n";
     outfile << "                return false;\n";
     outfile << "            }\n";
     outfile << "            slash = strchr(slash + 1, '/');\n";
     outfile << "        }\n";
     outfile << "        int status = mkdir(p, S_IRWXU | S_IRWXG);\n";
     outfile << "        if (status == -1 && errno != EEXIST) {\n";
-    outfile << "            LOG_ERROR(\"Error create diectory failed, path: %s\", path.c_str());\n";
+    outfile << "            LOG_ERROR(\"Error create directory failed, path: %s\", path.c_str());\n";
     outfile << "            return false;\n";
     outfile << "        }\n";
     outfile << "        return true;\n";
