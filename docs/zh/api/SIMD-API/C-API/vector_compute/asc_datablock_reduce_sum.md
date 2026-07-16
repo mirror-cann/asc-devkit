@@ -92,6 +92,11 @@ constexpr uint32_t src_length = 256;
 constexpr uint32_t dst_length = 16;
 __ubuf__ half src[src_length];
 __ubuf__ half dst[dst_length];
+
+// 使用高维切分计算接口，需设置mask
+asc_set_mask_norm();
+asc_set_vector_mask(0xffffffffffffffff, 0xffffffffffffffff);    // 设置每个迭代内所有元素均参与计算。
+
 // 每次repeat256B，2次repeat，无间隔
 asc_datablock_reduce_sum(dst, src, 2, 1, 1, 8);
 ```
