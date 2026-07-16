@@ -27,6 +27,8 @@ BUILD_TYPE="Release"
 ENABLE_BUILD_DEVICE=ON
 USE_CXX11_ABI=0
 CMAKE_TOOLCHAIN_FILE_VAL=""
+UTILS_SOURCE_REPO=${ASC_DEVKIT_UTILS_REPO:-"https://gitcode.com/cann/asc-devkit.git"}
+UTILS_SOURCE_BRANCH=${ASC_DEVKIT_UTILS_BRANCH:-"9.0.0"}
 
 dotted_line="----------------------------------------------------------------"
 
@@ -441,6 +443,43 @@ set_env() {
 
 }
 
+function sync_utils_from_asc_devkit()
+(
+  if ! command -v git >/dev/null 2>&1; then
+    log "Error: git is required to sync impl/utils and include/utils."
+    exit 1
+  fi
+
+  local tmp_dir
+  tmp_dir=$(mktemp -d)
+  trap 'rm -rf "${tmp_dir}"' EXIT
+
+  log "Info: Sync utils from ${UTILS_SOURCE_REPO}, branch ${UTILS_SOURCE_BRANCH}."
+  if ! GIT_TERMINAL_PROMPT=0 git clone --depth 1 --branch "${UTILS_SOURCE_BRANCH}" --single-branch --filter=blob:none --sparse "${UTILS_SOURCE_REPO}" "${tmp_dir}"; then
+    log "Warn: Sparse clone failed, retrying with normal shallow clone."
+    rm -rf "${tmp_dir}"
+    tmp_dir=$(mktemp -d)
+    GIT_TERMINAL_PROMPT=0 git clone --depth 1 --branch "${UTILS_SOURCE_BRANCH}" --single-branch "${UTILS_SOURCE_REPO}" "${tmp_dir}"
+  else
+    git -C "${tmp_dir}" sparse-checkout set impl/utils include/utils
+  fi
+
+  if [[ ! -d "${tmp_dir}/impl/utils" || ! -d "${tmp_dir}/include/utils" ]]; then
+    log "Error: utils directories were not found in ${UTILS_SOURCE_REPO} branch ${UTILS_SOURCE_BRANCH}."
+    exit 1
+  fi
+
+  rm -rf "${CURRENT_DIR}/impl/utils" "${CURRENT_DIR}/include/utils"
+  mkdir -p "${CURRENT_DIR}/impl" "${CURRENT_DIR}/include"
+  cp -a "${tmp_dir}/impl/utils" "${CURRENT_DIR}/impl/"
+  cp -a "${tmp_dir}/include/utils" "${CURRENT_DIR}/include/"
+
+  local utils_cmake="${CURRENT_DIR}/impl/utils/CMakeLists.txt"
+  if [[ -f "${utils_cmake}" ]]; then
+    sed -i '/add_dependencies(kernel_tiling_headers template_argument tiling_log_target)/,+3d' "${utils_cmake}"
+  fi
+)
+
 function clean()
 {
   if [ -n "${BUILD_DIR}" ];then
@@ -511,6 +550,7 @@ main() {
   set_options "$@"
 
   set_env
+  sync_utils_from_asc_devkit
 
   CUSTOM_OPTION="${CUSTOM_OPTION} -DCUSTOM_ASCEND_CANN_PACKAGE_PATH=${ASCEND_CANN_PACKAGE_PATH}"
 
