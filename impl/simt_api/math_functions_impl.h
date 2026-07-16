@@ -1377,8 +1377,8 @@ __SIMT_DEVICE_FUNCTIONS_DECL__ inline float cbrtf(float x)
     // adjust the exponent of y by k
     uint32_t y_bits = *reinterpret_cast<uint32_t*>(&y);
     int32_t yexp_bits = ((y_bits >> 23) & 0xFF) + k;
-    y_bits = (y_bits & 0x807FFFFF) | ((yexp_bits & 0xFF) << 23) |
-             (x_bits & 0x80000000); // 23:the number of bits to shift left
+    y_bits = (y_bits & 0x807FFFFF) | ((yexp_bits & 0xFF) << 23) | // 23:the number of bits to shift left
+             (x_bits & 0x80000000);
     return *reinterpret_cast<float*>(&y_bits);
 }
 
