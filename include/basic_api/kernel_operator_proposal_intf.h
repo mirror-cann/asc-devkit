@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_proposal_intf.h
@@ -49,8 +49,7 @@ namespace AscendC {
  * @param [in] Params.repeatTimes repeat times
  */
 template <typename T>
-__aicore__ inline void MrgSort4(const LocalTensor<T>& dst, const MrgSortSrcList<T>& src,
-    const MrgSort4Info& params);
+__aicore__ inline void MrgSort4(const LocalTensor<T>& dst, const MrgSortSrcList<T>& src, const MrgSort4Info& params);
 
 /* **************************************** RpSort16 ****************************************** */
 /*
@@ -61,8 +60,7 @@ __aicore__ inline void MrgSort4(const LocalTensor<T>& dst, const MrgSortSrcList<
  * @param [in] repeatTime repeat times
  */
 template <typename T>
-__aicore__ inline void RpSort16(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const int32_t repeatTime);
+__aicore__ inline void RpSort16(const LocalTensor<T>& dst, const LocalTensor<T>& src, const int32_t repeatTime);
 
 /* **************************************** MrgSort ****************************************** */
 /*
@@ -77,8 +75,7 @@ __aicore__ inline void RpSort16(const LocalTensor<T>& dst, const LocalTensor<T>&
  * @param [in] Params.repeatTimes repeat times
  */
 template <typename T>
-__aicore__ inline void MrgSort(const LocalTensor<T>& dst, const MrgSortSrcList<T>& src,
-    const MrgSort4Info& params);
+__aicore__ inline void MrgSort(const LocalTensor<T>& dst, const MrgSortSrcList<T>& src, const MrgSort4Info& params);
 
 /* **************************************** Sort32 ****************************************** */
 /*
@@ -90,9 +87,8 @@ __aicore__ inline void MrgSort(const LocalTensor<T>& dst, const MrgSortSrcList<T
  * @param [in] repeatTime repeat times
  */
 template <typename T>
-__aicore__ inline void Sort32(const LocalTensor<T>& dst, const LocalTensor<T>& src0,
-    const LocalTensor<uint32_t>& src1, const int32_t repeatTime);
-
+__aicore__ inline void Sort32(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src0, const LocalTensor<uint32_t>& src1, const int32_t repeatTime);
 
 /* **************************************** ProposalConcat ****************************************** */
 /*
@@ -104,8 +100,8 @@ __aicore__ inline void Sort32(const LocalTensor<T>& dst, const LocalTensor<T>& s
  * @param [in] modeNumbe Position parameter
  */
 template <typename T>
-__aicore__ inline void ProposalConcat(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const int32_t repeatTime, const int32_t modeNumber);
+__aicore__ inline void ProposalConcat(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const int32_t repeatTime, const int32_t modeNumber);
 
 /* **************************************** ProposalExtract ****************************************** */
 /*
@@ -117,8 +113,8 @@ __aicore__ inline void ProposalConcat(const LocalTensor<T>& dst, const LocalTens
  * @param [in] modeNumbe Position parameter
  */
 template <typename T>
-__aicore__ inline void ProposalExtract(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const int32_t repeatTime, const int32_t modeNumber);
+__aicore__ inline void ProposalExtract(
+    const LocalTensor<T>& dst, const LocalTensor<T>& src, const int32_t repeatTime, const int32_t modeNumber);
 
 /* **************************************** Concat ****************************************** */
 /*
@@ -130,8 +126,8 @@ __aicore__ inline void ProposalExtract(const LocalTensor<T>& dst, const LocalTen
  * @param [in] repeatTime repeat times
  */
 template <typename T>
-__aicore__ inline void Concat(LocalTensor<T> &concat, const LocalTensor<T> &src,
-    const LocalTensor<T> &tmp, const int32_t repeatTime);
+__aicore__ inline void Concat(
+    LocalTensor<T>& concat, const LocalTensor<T>& src, const LocalTensor<T>& tmp, const int32_t repeatTime);
 
 /* **************************************** Extract ****************************************** */
 /*
@@ -143,8 +139,9 @@ __aicore__ inline void Concat(LocalTensor<T> &concat, const LocalTensor<T> &src,
  * @param [in] repeatTime repeat times
  */
 template <typename T>
-__aicore__ inline void Extract(const LocalTensor<T> &dstValue, const LocalTensor<uint32_t> &dstIndex,
-    const LocalTensor<T> &sorted, const int32_t repeatTime);
+__aicore__ inline void Extract(
+    const LocalTensor<T>& dstValue, const LocalTensor<uint32_t>& dstIndex, const LocalTensor<T>& sorted,
+    const int32_t repeatTime);
 
 /* **************************************** MrgSort ****************************************** */
 /*
@@ -158,8 +155,9 @@ __aicore__ inline void Extract(const LocalTensor<T> &dstValue, const LocalTensor
  * @param [in] repeatTime repeat times
  */
 template <typename T, bool isExhaustedSuspension = false>
-__aicore__ inline void MrgSort(const LocalTensor<T> &dst, const MrgSortSrcList<T> &sortList,
-    const uint16_t elementCountList[4], uint32_t sortedNum[4], uint16_t validBit, const int32_t repeatTime);
+__aicore__ inline void MrgSort(
+    const LocalTensor<T>& dst, const MrgSortSrcList<T>& sortList, const uint16_t elementCountList[4],
+    uint32_t sortedNum[4], uint16_t validBit, const int32_t repeatTime);
 
 /* ***************************************** Sort ****************************************** */
 /*
@@ -172,8 +170,9 @@ __aicore__ inline void MrgSort(const LocalTensor<T> &dst, const MrgSortSrcList<T
  * @param [in] repeatTime repeat times
  */
 template <typename T, bool isFullSort>
-__aicore__ inline void Sort(const LocalTensor<T> &dst, const LocalTensor<T> &concat,
-    const LocalTensor<uint32_t> &index, LocalTensor<T> &tmp, const int32_t repeatTime);
+__aicore__ inline void Sort(
+    const LocalTensor<T>& dst, const LocalTensor<T>& concat, const LocalTensor<uint32_t>& index, LocalTensor<T>& tmp,
+    const int32_t repeatTime);
 
 /* **************************************** GetSortOffset ****************************************** */
 /*
@@ -194,7 +193,7 @@ template <typename T>
 __aicore__ inline uint32_t GetSortLen(const uint32_t elemCount);
 #pragma end_pipe
 __aicore__ inline __inout_pipe__(S) void GetMrgSortResult(
-    uint16_t &mrgSortList1, uint16_t &mrgSortList2, uint16_t &mrgSortList3, uint16_t &mrgSortList4);
+    uint16_t& mrgSortList1, uint16_t& mrgSortList2, uint16_t& mrgSortList3, uint16_t& mrgSortList4);
 } // namespace AscendC
 
 #if defined(__NPU_ARCH__)

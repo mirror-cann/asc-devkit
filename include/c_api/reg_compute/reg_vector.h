@@ -103,53 +103,44 @@ __simd_callee__ inline addr_reg asc_update_addr_reg_b8(
     uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3);
 
 // ==========asc_create_iter_reg (deprecated, please use asc_update_addr_reg instead)=========
-[[deprecated("NOTICE: asc_create_iter_reg_b32 is deprecated. Please use asc_update_addr_reg_b32 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b32(uint32_t offset);
+[[deprecated("NOTICE: asc_create_iter_reg_b32 is deprecated. Please use asc_update_addr_reg_b32 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b32(uint32_t offset);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b16 is deprecated. Please use asc_update_addr_reg_b16 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b16(uint32_t offset);
+[[deprecated("NOTICE: asc_create_iter_reg_b16 is deprecated. Please use asc_update_addr_reg_b16 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b16(uint32_t offset);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b8 is deprecated. Please use asc_update_addr_reg_b8 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b8(uint32_t offset);
+[[deprecated("NOTICE: asc_create_iter_reg_b8 is deprecated. Please use asc_update_addr_reg_b8 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b8(uint32_t offset);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b32 is deprecated. Please use asc_update_addr_reg_b32 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b32(uint32_t offset0, uint32_t offset1);
+[[deprecated("NOTICE: asc_create_iter_reg_b32 is deprecated. Please use asc_update_addr_reg_b32 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b32(uint32_t offset0, uint32_t offset1);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b16 is deprecated. Please use asc_update_addr_reg_b16 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b16(uint32_t offset0, uint32_t offset1);
+[[deprecated("NOTICE: asc_create_iter_reg_b16 is deprecated. Please use asc_update_addr_reg_b16 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b16(uint32_t offset0, uint32_t offset1);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b8 is deprecated. Please use asc_update_addr_reg_b8 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b8(uint32_t offset0, uint32_t offset1);
+[[deprecated("NOTICE: asc_create_iter_reg_b8 is deprecated. Please use asc_update_addr_reg_b8 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b8(uint32_t offset0, uint32_t offset1);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b32 is deprecated. Please use asc_update_addr_reg_b32 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b32(uint32_t offset0, uint32_t offset1, uint32_t offset2);
+[[deprecated("NOTICE: asc_create_iter_reg_b32 is deprecated. Please use asc_update_addr_reg_b32 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b32(uint32_t offset0, uint32_t offset1, uint32_t offset2);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b16 is deprecated. Please use asc_update_addr_reg_b16 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b16(uint32_t offset0, uint32_t offset1, uint32_t offset2);
+[[deprecated("NOTICE: asc_create_iter_reg_b16 is deprecated. Please use asc_update_addr_reg_b16 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b16(uint32_t offset0, uint32_t offset1, uint32_t offset2);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b8 is deprecated. Please use asc_update_addr_reg_b8 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b8(uint32_t offset0, uint32_t offset1, uint32_t offset2);
+[[deprecated("NOTICE: asc_create_iter_reg_b8 is deprecated. Please use asc_update_addr_reg_b8 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b8(uint32_t offset0, uint32_t offset1, uint32_t offset2);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b32 is deprecated. Please use asc_update_addr_reg_b32 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b32(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3);
+[[deprecated("NOTICE: asc_create_iter_reg_b32 is deprecated. Please use asc_update_addr_reg_b32 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b32(
+    uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b16 is deprecated. Please use asc_update_addr_reg_b16 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b16(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3);
+[[deprecated("NOTICE: asc_create_iter_reg_b16 is deprecated. Please use asc_update_addr_reg_b16 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b16(
+    uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3);
 
-[[deprecated("NOTICE: asc_create_iter_reg_b8 is deprecated. Please use asc_update_addr_reg_b8 "
-             "instead.")]] __simd_callee__ inline addr_reg
-asc_create_iter_reg_b8(uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3);
+[[deprecated("NOTICE: asc_create_iter_reg_b8 is deprecated. Please use asc_update_addr_reg_b8 instead.")]]
+__simd_callee__ inline addr_reg asc_create_iter_reg_b8(
+    uint32_t offset0, uint32_t offset1, uint32_t offset2, uint32_t offset3);
 
 // ==========asc_relu(half/int32_t/float)==========
 __simd_callee__ inline void asc_relu(vector_half& dst, vector_half src, vector_bool mask);
@@ -563,57 +554,44 @@ __simd_callee__ inline void asc_squeeze(vector_fp8_e5m2_t& dst, vector_fp8_e5m2_
 
 __simd_callee__ inline void asc_squeeze(vector_fp8_e8m0_t& dst, vector_fp8_e8m0_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_uint8_t& dst, vector_uint8_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_uint8_t& dst, vector_uint8_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_int8_t& dst, vector_int8_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_int8_t& dst, vector_int8_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_uint16_t& dst, vector_uint16_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_uint16_t& dst, vector_uint16_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_int16_t& dst, vector_int16_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_int16_t& dst, vector_int16_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_uint32_t& dst, vector_uint32_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_uint32_t& dst, vector_uint32_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_int32_t& dst, vector_int32_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_int32_t& dst, vector_int32_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_half& dst, vector_half src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_half& dst, vector_half src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_float& dst, vector_float src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_float& dst, vector_float src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_bfloat16_t& dst, vector_bfloat16_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_bfloat16_t& dst, vector_bfloat16_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_hifloat8_t& dst, vector_hifloat8_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_hifloat8_t& dst, vector_hifloat8_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_fp8_e4m3fn_t& dst, vector_fp8_e4m3fn_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_fp8_e4m3fn_t& dst, vector_fp8_e4m3fn_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_fp8_e5m2_t& dst, vector_fp8_e5m2_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_fp8_e5m2_t& dst, vector_fp8_e5m2_t src, vector_bool mask);
 
-[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. "
-             "Please use asc_squeeze_with_status instead.")]] __simd_callee__ inline void
-asc_squeeze_v2(vector_fp8_e8m0_t& dst, vector_fp8_e8m0_t src, vector_bool mask);
+[[deprecated("NOTICE: asc_squeeze_v2 is deprecated. Please use asc_squeeze_with_status instead.")]]
+__simd_callee__ inline void asc_squeeze_v2(vector_fp8_e8m0_t& dst, vector_fp8_e8m0_t src, vector_bool mask);
 
 __simd_callee__ inline void asc_squeeze_with_status(vector_uint8_t& dst, vector_uint8_t src, vector_bool mask);
 
@@ -1115,9 +1093,8 @@ __simd_callee__ inline void asc_exp_sub(vector_float& dst, vector_float src0, ve
 
 __simd_callee__ inline void asc_exp_sub_v2(vector_float& dst, vector_half src0, vector_half src1, vector_bool mask);
 
-[[deprecated("NOTICE: asc_exp_sub_v2 in this parameter list is deprecated. "
-             "Please use asc_exp_sub instead.")]] __simd_callee__ inline void
-asc_exp_sub_v2(vector_float& dst, vector_float src0, vector_float src1, vector_bool mask);
+[[deprecated("NOTICE: asc_exp_sub_v2 in this parameter list is deprecated.  Please use asc_exp_sub instead.")]]
+__simd_callee__ inline void asc_exp_sub_v2(vector_float& dst, vector_float src0, vector_float src1, vector_bool mask);
 
 // ==========asc_ln(half/float)==========
 __simd_callee__ inline void asc_ln(vector_half& dst, vector_half src, vector_bool mask);

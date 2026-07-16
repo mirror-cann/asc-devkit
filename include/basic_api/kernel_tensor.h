@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_tensor.h
@@ -54,14 +54,15 @@ namespace AscendC {
 struct ShapeInfo {
 public:
     __aicore__ inline ShapeInfo() {}
-    __aicore__ inline ShapeInfo(const uint8_t inputShapeDim, const uint32_t inputShape[],
-        const uint8_t inputOriginalShapeDim, const uint32_t inputOriginalShape[], const DataFormat inputFormat)
+    __aicore__ inline ShapeInfo(
+        const uint8_t inputShapeDim, const uint32_t inputShape[], const uint8_t inputOriginalShapeDim,
+        const uint32_t inputOriginalShape[], const DataFormat inputFormat)
         : shapeDim(inputShapeDim), originalShapeDim(inputOriginalShapeDim), dataFormat(inputFormat)
     {
         ASCENDC_ASSERT((inputShapeDim <= K_MAX_SHAPE_DIM && inputOriginalShapeDim <= K_MAX_SHAPE_DIM), {
-            KERNEL_LOG(KERNEL_ERROR,
-                "inputShapeDim is %d, inputOriginalShapeDim is %d, which should be less than %d both", inputShapeDim,
-                inputOriginalShapeDim, K_MAX_SHAPE_DIM);
+            KERNEL_LOG(
+                KERNEL_ERROR, "inputShapeDim is %d, inputOriginalShapeDim is %d, which should be less than %d both",
+                inputShapeDim, inputOriginalShapeDim, K_MAX_SHAPE_DIM);
         });
         for (int index = 0; index < shapeDim; ++index) {
             shape[index] = inputShape[index];
@@ -74,8 +75,8 @@ public:
         : shapeDim(inputShapeDim), originalShapeDim(inputShapeDim), dataFormat(inputFormat)
     {
         ASCENDC_ASSERT((inputShapeDim <= K_MAX_SHAPE_DIM), {
-            KERNEL_LOG(KERNEL_ERROR, "inputShapeDim is %u, which should be less than %d",
-                                                             inputShapeDim, K_MAX_SHAPE_DIM);
+            KERNEL_LOG(
+                KERNEL_ERROR, "inputShapeDim is %u, which should be less than %d", inputShapeDim, K_MAX_SHAPE_DIM);
         });
         for (int index = 0; index < shapeDim; ++index) {
             shape[index] = inputShape[index];
@@ -87,8 +88,8 @@ public:
         : shapeDim(inputShapeDim), originalShapeDim(inputShapeDim), dataFormat(DataFormat::ND)
     {
         ASCENDC_ASSERT((inputShapeDim <= K_MAX_SHAPE_DIM), {
-            KERNEL_LOG(KERNEL_ERROR, "inputShapeDim is %d, which should be less than %d",
-                                                             inputShapeDim, K_MAX_SHAPE_DIM);
+            KERNEL_LOG(
+                KERNEL_ERROR, "inputShapeDim is %d, which should be less than %d", inputShapeDim, K_MAX_SHAPE_DIM);
         });
         for (int index = 0; index < shapeDim; ++index) {
             shape[index] = inputShape[index];
@@ -127,34 +128,45 @@ __aicore__ inline uint64_t GetShapeSize(const ShapeInfo& shapeInfo)
     return shapeSize;
 }
 
-template <typename T> class SymbolOverrideAdd;
-template <typename T> class SymbolOverrideSub;
-template <typename T> class SymbolOverrideDiv;
-template <typename T> class SymbolOverrideMul;
-template <typename T> class SymbolOverrideOr;
-template <typename T> class SymbolOverrideAnd;
-template <typename T> class SymbolOverrideCompare;
+template <typename T>
+class SymbolOverrideAdd;
+template <typename T>
+class SymbolOverrideSub;
+template <typename T>
+class SymbolOverrideDiv;
+template <typename T>
+class SymbolOverrideMul;
+template <typename T>
+class SymbolOverrideOr;
+template <typename T>
+class SymbolOverrideAnd;
+template <typename T>
+class SymbolOverrideCompare;
 
-template <typename T> class LocalTensor : public BaseLocalTensor<T>, public BaseTensorTraitTensor<T> {
+template <typename T>
+class LocalTensor : public BaseLocalTensor<T>, public BaseTensorTraitTensor<T> {
 public:
     using PrimType = PrimT<T>;
-    __aicore__ inline LocalTensor<T>() {};
+    __aicore__ inline LocalTensor<T>(){};
 #if defined(ASCENDC_CPU_DEBUG) && ASCENDC_CPU_DEBUG == 1
     ~LocalTensor();
     explicit LocalTensor<T>(TBuffAddr& address);
     LocalTensor<T>(const LocalTensor<T>& other);
-    LocalTensor<T> operator = (const LocalTensor<T>& other);
+    LocalTensor<T> operator=(const LocalTensor<T>& other);
 
     PrimType* GetPhyAddr(const uint32_t offset) const;
     PrimType* GetPhyAddr() const;
     __inout_pipe__(S) PrimType GetValue(const uint32_t offset) const;
     __inout_pipe__(S) PrimType& operator()(const uint32_t offset) const;
 
-    template <typename U> __aicore__ inline LocalTensor<U> ReinterpretCast() const;
-    template <typename S> __inout_pipe__(S) void SetValue(const uint32_t index, const S value) const;
+    template <typename U>
+    __aicore__ inline LocalTensor<U> ReinterpretCast() const;
+    template <typename S>
+    __inout_pipe__(S) void SetValue(const uint32_t index, const S value) const;
     LocalTensor operator[](const uint32_t offset) const;
 
-    template <typename S> void SetAddrWithOffset(LocalTensor<S> &src, uint32_t offset);
+    template <typename S>
+    void SetAddrWithOffset(LocalTensor<S>& src, uint32_t offset);
     inline void Print();
     inline void Print(uint32_t len);
     int32_t ToFile(const std::string& fileName) const;
@@ -163,15 +175,16 @@ public:
     __aicore__ inline uint64_t GetPhyAddr(const uint32_t offset) const;
     __aicore__ inline __inout_pipe__(S) PrimType GetValue(const uint32_t index) const;
     __aicore__ inline __inout_pipe__(S) __ubuf__ PrimType& operator()(const uint32_t offset) const;
-    template <typename U> __aicore__ inline LocalTensor<U> ReinterpretCast() const;
-    template <typename S> __aicore__ inline __inout_pipe__(S)
-        void SetValue(const uint32_t index, const S value) const;
+    template <typename U>
+    __aicore__ inline LocalTensor<U> ReinterpretCast() const;
+    template <typename S>
+    __aicore__ inline __inout_pipe__(S) void SetValue(const uint32_t index, const S value) const;
     __aicore__ inline LocalTensor operator[](const uint32_t offset) const;
 
     template <typename S>
     [[deprecated("NOTICE: SetAddrWithOffset has been deprecated and will be removed in the next version. "
-        "Please do not use it!")]]
-    __aicore__ inline void SetAddrWithOffset(LocalTensor<S> &src, uint32_t offset);
+                 "Please do not use it!")]] __aicore__ inline void
+    SetAddrWithOffset(LocalTensor<S>& src, uint32_t offset);
 #endif
     __aicore__ inline LocalTensor<T>(TPosition pos, uint32_t addr, uint32_t tileSize);
     template <typename U>
@@ -182,37 +195,38 @@ public:
     __aicore__ inline uint32_t GetSize() const;
 
     [[deprecated("NOTICE: GetLength has been deprecated and will be removed in the next version. Please do not use "
-                 "it!")]]
-    __aicore__ inline uint32_t GetLength() const;
+                 "it!")]] __aicore__ inline uint32_t
+    GetLength() const;
 
     __aicore__ inline void SetBufferLen(uint32_t dataLen);
     __aicore__ inline void SetUserTag(const TTagType tag);
     __aicore__ inline TTagType GetUserTag() const;
     // symbol override
-    __aicore__ inline void operator = (const SymbolOverrideAdd<T>& symbolOverride);
-    __aicore__ inline void operator = (const SymbolOverrideSub<T>& symbolOverride);
-    __aicore__ inline void operator = (const SymbolOverrideMul<T>& symbolOverride);
-    __aicore__ inline void operator = (const SymbolOverrideDiv<T>& symbolOverride);
-    __aicore__ inline void operator = (const SymbolOverrideOr<T>& symbolOverride);
-    __aicore__ inline void operator = (const SymbolOverrideAnd<T>& symbolOverride);
+    __aicore__ inline void operator=(const SymbolOverrideAdd<T>& symbolOverride);
+    __aicore__ inline void operator=(const SymbolOverrideSub<T>& symbolOverride);
+    __aicore__ inline void operator=(const SymbolOverrideMul<T>& symbolOverride);
+    __aicore__ inline void operator=(const SymbolOverrideDiv<T>& symbolOverride);
+    __aicore__ inline void operator=(const SymbolOverrideOr<T>& symbolOverride);
+    __aicore__ inline void operator=(const SymbolOverrideAnd<T>& symbolOverride);
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-    template <typename U> __aicore__ inline void operator = (const SymbolOverrideCompare<U>& symbolOverride);
+    template <typename U>
+    __aicore__ inline void operator=(const SymbolOverrideCompare<U>& symbolOverride);
 #else
-    __aicore__ inline void operator = (const SymbolOverrideCompare<float>& symbolOverride);
-    __aicore__ inline void operator = (const SymbolOverrideCompare<half>& symbolOverride);
+    __aicore__ inline void operator=(const SymbolOverrideCompare<float>& symbolOverride);
+    __aicore__ inline void operator=(const SymbolOverrideCompare<half>& symbolOverride);
 #endif
-    __aicore__ inline SymbolOverrideAdd<T> operator + (const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideSub<T> operator - (const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideMul<T> operator *(const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideDiv<T> operator / (const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideOr<T> operator | (const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideAnd<T> operator & (const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideCompare<T> operator < (const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideCompare<T> operator > (const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideCompare<T> operator != (const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideCompare<T> operator == (const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideCompare<T> operator <= (const LocalTensor<T>& src1) const;
-    __aicore__ inline SymbolOverrideCompare<T> operator >= (const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideAdd<T> operator+(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideSub<T> operator-(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideMul<T> operator*(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideDiv<T> operator/(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideOr<T> operator|(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideAnd<T> operator&(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideCompare<T> operator<(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideCompare<T> operator>(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideCompare<T> operator!=(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideCompare<T> operator==(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideCompare<T> operator<=(const LocalTensor<T>& src1) const;
+    __aicore__ inline SymbolOverrideCompare<T> operator>=(const LocalTensor<T>& src1) const;
     __aicore__ inline void SetShapeInfo(const ShapeInfo& shapeInfo);
     __aicore__ inline ShapeInfo GetShapeInfo() const;
 
@@ -236,13 +250,14 @@ private:
 #endif
 };
 
-template <typename T> class GlobalTensor : public BaseGlobalTensor<T>, public BaseTensorTraitTensor<T> {
+template <typename T>
+class GlobalTensor : public BaseGlobalTensor<T>, public BaseTensorTraitTensor<T> {
 public:
     using PrimType = PrimT<T>;
 #if defined(__NPU_ARCH__)
     __aicore__ inline GlobalTensor<T>();
 #else
-    __aicore__ inline GlobalTensor<T>(){}
+    __aicore__ inline GlobalTensor<T>() {}
 #endif
 #ifdef __ASCENDC_SUPER_KERNEL_ENABLE_GM_GET_SET_VALUE_DCCI__
     __aicore__ inline ~GlobalTensor<T>();
@@ -264,10 +279,11 @@ public:
     __aicore__ inline GlobalTensor operator[](const uint64_t offset) const;
     __aicore__ inline void SetShapeInfo(const ShapeInfo& shapeInfo);
     __aicore__ inline ShapeInfo GetShapeInfo() const;
-    template<CacheRwMode rwMode = CacheRwMode::RW>
+    template <CacheRwMode rwMode = CacheRwMode::RW>
     __aicore__ inline void SetL2CacheHint(CacheMode mode);
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-    template <typename U> __aicore__ inline GlobalTensor<U> ReinterpretCast() const;
+    template <typename U>
+    __aicore__ inline GlobalTensor<U> ReinterpretCast() const;
 #endif
 
 public:
@@ -283,23 +299,29 @@ public:
 #endif
 private:
 #ifdef __ASCENDC_SUPER_KERNEL_ENABLE_GM_GET_SET_VALUE_DCCI__
-    template<typename U>
+    template <typename U>
     __aicore__ inline uintptr_t AlignPtr(__gm__ U* buffer) const;
 #endif
 };
 
-template<Hardware hard = Hardware::UB>
+template <Hardware hard = Hardware::UB>
 class LocalMemAllocator {
 public:
     __aicore__ inline LocalMemAllocator();
     __aicore__ inline uint32_t GetCurAddr() const;
-    template <TPosition pos, class DataType, uint32_t tileSize> __aicore__ inline LocalTensor<DataType> Alloc();
-    template <TPosition pos, class DataType> LocalTensor<DataType> __aicore__ inline Alloc(uint32_t tileSize);
-    template <class DataType, uint32_t tileSize> LocalTensor<DataType> __aicore__ inline Alloc();
-    template <class DataType> LocalTensor<DataType> __aicore__ inline Alloc(uint32_t tileSize);
-    template <class DataType> LocalTensor<DataType> __aicore__ inline Alloc();
-    template <class DataType, typename LayoutType> typename Std::enable_if<is_layout_v<LayoutType>, LocalTensor<DataType>>::type
-    __aicore__ inline Alloc(const LayoutType& layout);
+    template <TPosition pos, class DataType, uint32_t tileSize>
+    __aicore__ inline LocalTensor<DataType> Alloc();
+    template <TPosition pos, class DataType>
+    LocalTensor<DataType> __aicore__ inline Alloc(uint32_t tileSize);
+    template <class DataType, uint32_t tileSize>
+    LocalTensor<DataType> __aicore__ inline Alloc();
+    template <class DataType>
+    LocalTensor<DataType> __aicore__ inline Alloc(uint32_t tileSize);
+    template <class DataType>
+    LocalTensor<DataType> __aicore__ inline Alloc();
+    template <class DataType, typename LayoutType>
+    typename Std::enable_if<is_layout_v<LayoutType>, LocalTensor<DataType>>::type
+        __aicore__ inline Alloc(const LayoutType& layout);
 
 private:
     uint32_t head_ = 0;

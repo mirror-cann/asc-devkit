@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_vec_duplicate_intf.h
@@ -50,13 +50,15 @@ namespace AscendC {
  */
 template <typename T, bool isSetMask = true>
 __ASC_USE_RESERVED_UBUF__(3510, "Duplicate is forbidden when compile option --cce-disable-asc-reserved-ubuf is enabled")
-__aicore__ inline void Duplicate(const LocalTensor<T>& dst, const T& scalarValue, uint64_t mask,
-    const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride);
+__aicore__ inline void Duplicate(
+    const LocalTensor<T>& dst, const T& scalarValue, uint64_t mask, const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride);
 
 template <typename T, bool isSetMask = true>
 __ASC_USE_RESERVED_UBUF__(3510, "Duplicate is forbidden when compile option --cce-disable-asc-reserved-ubuf is enabled")
-__aicore__ inline void Duplicate(const LocalTensor<T>& dst, const T& scalarValue, uint64_t mask[],
-    const uint8_t repeatTime, const uint16_t dstBlockStride, const uint8_t dstRepeatStride);
+__aicore__ inline void Duplicate(
+    const LocalTensor<T>& dst, const T& scalarValue, uint64_t mask[], const uint8_t repeatTime,
+    const uint16_t dstBlockStride, const uint8_t dstRepeatStride);
 
 /*
  * @ingroup Duplicate Level 2
@@ -77,8 +79,7 @@ __aicore__ inline void Duplicate(const LocalTensor<T>& dst, const T& scalarValue
  * @param [in] count number Number of data involved in calculation
  */
 template <typename T>
-__aicore__ inline void Duplicate(const LocalTensor<T>& dst, const LocalTensor<T>& src,
-    const int32_t& count);
+__aicore__ inline void Duplicate(const LocalTensor<T>& dst, const LocalTensor<T>& src, const int32_t& count);
 #endif
 
 /* **************************************************************************************************
@@ -94,8 +95,9 @@ __aicore__ inline void Duplicate(const LocalTensor<T>& dst, const LocalTensor<T>
  * @param [count] count number of data calculation, must be even number
  */
 template <typename T>
-__aicore__ inline void Interleave(const LocalTensor<T>& dst0, const LocalTensor<T>& dst1,
-    const LocalTensor<T>& src0, const LocalTensor<T>& src1, const int32_t count);
+__aicore__ inline void Interleave(
+    const LocalTensor<T>& dst0, const LocalTensor<T>& dst1, const LocalTensor<T>& src0, const LocalTensor<T>& src1,
+    const int32_t count);
 
 /* **************************************************************************************************
  * DeInterleave                                            *
@@ -110,8 +112,9 @@ __aicore__ inline void Interleave(const LocalTensor<T>& dst0, const LocalTensor<
  * @param [count] count number of data calculation, must be even number
  */
 template <typename T>
-__aicore__ inline void DeInterleave(const LocalTensor<T>& dst0, const LocalTensor<T>& dst1,
-    const LocalTensor<T>& src0, const LocalTensor<T>& src1, const int32_t count);
+__aicore__ inline void DeInterleave(
+    const LocalTensor<T>& dst0, const LocalTensor<T>& dst1, const LocalTensor<T>& src0, const LocalTensor<T>& src1,
+    const int32_t count);
 
 /*
  * @ingroup DeInterleave Level 2
@@ -122,8 +125,8 @@ __aicore__ inline void DeInterleave(const LocalTensor<T>& dst0, const LocalTenso
  * @param [srcCount] srcCount number of data calculation, must be even number
  */
 template <typename T>
-__aicore__ inline void DeInterleave(const LocalTensor<T>& dst0, const LocalTensor<T>& dst1,
-    const LocalTensor<T>& src, const int32_t srcCount);
+__aicore__ inline void DeInterleave(
+    const LocalTensor<T>& dst0, const LocalTensor<T>& dst1, const LocalTensor<T>& src, const int32_t srcCount);
 } // namespace AscendC
 #pragma end_pipe
 #if defined(__NPU_ARCH__)

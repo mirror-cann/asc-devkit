@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_struct_data_copy.h
@@ -53,12 +53,9 @@ enum class DataFormat : uint8_t {
 struct DataCopyParams {
     __aicore__ DataCopyParams() {}
 
-    __aicore__ DataCopyParams(const uint16_t count, const uint16_t len, const uint16_t srcStrideIn,
-        const uint16_t dstStrideIn)
-        : blockCount(count),
-          blockLen(len),
-          srcStride(srcStrideIn),
-          dstStride(dstStrideIn)
+    __aicore__ DataCopyParams(
+        const uint16_t count, const uint16_t len, const uint16_t srcStrideIn, const uint16_t dstStrideIn)
+        : blockCount(count), blockLen(len), srcStride(srcStrideIn), dstStride(dstStrideIn)
     {}
 
     uint16_t blockCount = DEFAULT_DATA_COPY_NBURST;
@@ -89,29 +86,28 @@ struct NdDmaConfig {
     uint16_t loopRpSize = unsetPad; // Right padding size of all dimensions, must be less than 256.
     bool ascOptimize = false;       // used for AscendC optimization on special senario.
 };
-using MultiCopyConfig = NdDmaConfig;  // reserve old name
-constexpr NdDmaConfig kDefaultNdDmaConfig = { false, NdDmaConfig::unsetPad, NdDmaConfig::unsetPad,
-    false };
-constexpr NdDmaConfig kDefaultMultiCopyConfig = { false, NdDmaConfig::unsetPad, NdDmaConfig::unsetPad,
-    false };  // reserve old name
+using MultiCopyConfig = NdDmaConfig; // reserve old name
+constexpr NdDmaConfig kDefaultNdDmaConfig = {false, NdDmaConfig::unsetPad, NdDmaConfig::unsetPad, false};
+constexpr NdDmaConfig kDefaultMultiCopyConfig = {
+    false, NdDmaConfig::unsetPad, NdDmaConfig::unsetPad, false}; // reserve old name
 
 template <uint8_t dim>
-struct MultiCopyLoopInfo  {
+struct MultiCopyLoopInfo {
     static_assert(dim >= 1 && dim <= 5, "MultiCopy Dims must be between 1 and 5.");
 
     // Index [0, dim) represents lowerest dimension to highest dimension accordingly.
     uint64_t loopSrcStride[dim] = {0}; // src stride info per loop.
     uint32_t loopDstStride[dim] = {0}; // dst stride info per loop.
-    uint32_t loopSize[dim] = {0}; // Loop size per loop.
-    uint8_t loopLpSize[dim] = {0}; // Left padding size per loop.
-    uint8_t loopRpSize[dim] = {0}; // Right padding size per loop.
+    uint32_t loopSize[dim] = {0};      // Loop size per loop.
+    uint8_t loopLpSize[dim] = {0};     // Left padding size per loop.
+    uint8_t loopRpSize[dim] = {0};     // Right padding size per loop.
 };
 
-template<uint8_t dim>
+template <uint8_t dim>
 using NdDmaLoopInfo = MultiCopyLoopInfo<dim>;
 
 template <typename T, uint8_t dim>
-struct MultiCopyParams  {
+struct MultiCopyParams {
     MultiCopyLoopInfo<dim> loopInfo;
     T constantValue;
 };
@@ -122,8 +118,9 @@ using NdDmaParams = MultiCopyParams<T, dim>;
 struct DataCopyEnhancedParams {
     __aicore__ DataCopyEnhancedParams() {}
 
-    __aicore__ DataCopyEnhancedParams(const BlockMode blockModeIn, const DeqScale deqScaleIn, const uint64_t deqValueIn,
-        const uint8_t sidStoreModeIn, const bool isReluIn, const pad_t padModeIn, const uint64_t padValueIn)
+    __aicore__ DataCopyEnhancedParams(
+        const BlockMode blockModeIn, const DeqScale deqScaleIn, const uint64_t deqValueIn, const uint8_t sidStoreModeIn,
+        const bool isReluIn, const pad_t padModeIn, const uint64_t padValueIn)
         : blockMode(blockModeIn),
           deqScale(deqScaleIn),
           deqValue(deqValueIn),
@@ -146,9 +143,9 @@ struct DataCopyEnhancedParams {
 struct DataCopyCO12DstParams {
     __aicore__ DataCopyCO12DstParams() {}
 
-    __aicore__ DataCopyCO12DstParams(const uint16_t nSizeIn, const uint16_t mSizeIn, const uint32_t dstStrideIn,
-        const uint16_t srcStrideIn, const QuantMode_t quantPreIn, const uint8_t reluPreIn, const bool channelSplitIn,
-        const bool nz2ndEnIn)
+    __aicore__ DataCopyCO12DstParams(
+        const uint16_t nSizeIn, const uint16_t mSizeIn, const uint32_t dstStrideIn, const uint16_t srcStrideIn,
+        const QuantMode_t quantPreIn, const uint8_t reluPreIn, const bool channelSplitIn, const bool nz2ndEnIn)
         : nSize(nSizeIn),
           mSize(mSizeIn),
           dstStride(dstStrideIn),
@@ -176,12 +173,9 @@ struct DataCopyCO12DstParams {
 struct DataCopyPadParams {
     __aicore__ DataCopyPadParams() {}
 
-    __aicore__ DataCopyPadParams(const bool isPadValue, const uint8_t leftPadValue, const uint8_t rightPadValue,
-        const uint64_t padValue)
-        : isPad(isPadValue),
-          leftPadding(leftPadValue),
-          rightPadding(rightPadValue),
-          paddingValue(padValue)
+    __aicore__ DataCopyPadParams(
+        const bool isPadValue, const uint8_t leftPadValue, const uint8_t rightPadValue, const uint64_t padValue)
+        : isPad(isPadValue), leftPadding(leftPadValue), rightPadding(rightPadValue), paddingValue(padValue)
     {}
 
     bool isPad = false;
@@ -194,17 +188,15 @@ struct DataCopyExtParams {
     __aicore__ DataCopyExtParams() {}
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-    __aicore__ DataCopyExtParams(const uint16_t count, const uint32_t len, const int64_t srcStrideIn,
-        const int64_t dstStrideIn, const uint32_t rsvIn)
+    __aicore__ DataCopyExtParams(
+        const uint16_t count, const uint32_t len, const int64_t srcStrideIn, const int64_t dstStrideIn,
+        const uint32_t rsvIn)
 #else
-    __aicore__ DataCopyExtParams(const uint16_t count, const uint32_t len, const uint32_t srcStrideIn,
-    const uint32_t dstStrideIn, const uint32_t rsvIn)
+    __aicore__ DataCopyExtParams(
+        const uint16_t count, const uint32_t len, const uint32_t srcStrideIn, const uint32_t dstStrideIn,
+        const uint32_t rsvIn)
 #endif
-        : blockCount(count),
-          blockLen(len),
-          srcStride(srcStrideIn),
-          dstStride(dstStrideIn),
-          rsv(rsvIn)
+        : blockCount(count), blockLen(len), srcStride(srcStrideIn), dstStride(dstStrideIn), rsv(rsvIn)
     {}
 
     uint16_t blockCount = DEFAULT_DATA_COPY_NBURST;
@@ -219,7 +211,8 @@ struct DataCopyExtParams {
     uint32_t rsv = 0; // reserved information
 };
 
-template <typename T> struct DataCopyPadExtParams {
+template <typename T>
+struct DataCopyPadExtParams {
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
     using TYPE = typename GetPadValueType<T>::Type;
     __aicore__ DataCopyPadExtParams()
@@ -229,13 +222,13 @@ template <typename T> struct DataCopyPadExtParams {
         rightPadding = 0;
         paddingValue = 0;
     }
-    __aicore__ DataCopyPadExtParams(const bool isPadValue, const uint8_t leftPadValue, const uint8_t rightPadValue,
-        T padValue)
+    __aicore__ DataCopyPadExtParams(
+        const bool isPadValue, const uint8_t leftPadValue, const uint8_t rightPadValue, T padValue)
     {
         isPad = isPadValue;
         leftPadding = leftPadValue;
         rightPadding = rightPadValue;
-        paddingValue = *(reinterpret_cast<TYPE *>(&padValue));
+        paddingValue = *(reinterpret_cast<TYPE*>(&padValue));
     }
     bool isPad = false;
     uint8_t leftPadding = 0;
@@ -244,12 +237,9 @@ template <typename T> struct DataCopyPadExtParams {
 #else
     __aicore__ DataCopyPadExtParams() {}
 
-    __aicore__ DataCopyPadExtParams(const bool isPadValue, const uint8_t leftPadValue, const uint8_t rightPadValue,
-        T padValue)
-        : isPad(isPadValue),
-          leftPadding(leftPadValue),
-          rightPadding(rightPadValue),
-          paddingValue(padValue)
+    __aicore__ DataCopyPadExtParams(
+        const bool isPadValue, const uint8_t leftPadValue, const uint8_t rightPadValue, T padValue)
+        : isPad(isPadValue), leftPadding(leftPadValue), rightPadding(rightPadValue), paddingValue(padValue)
     {}
 
     bool isPad = false;
@@ -263,9 +253,10 @@ struct Nd2NzParams {
     __aicore__ Nd2NzParams() {}
 
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-    __aicore__ Nd2NzParams(const uint16_t ndNumIn, const uint16_t nValueIn, const uint32_t dValueIn,
-        const uint64_t srcNdMatrixStrideIn, const uint64_t srcDValueIn, const uint16_t dstNzC0StrideIn,
-        const uint16_t dstNzNStrideIn, const uint32_t dstNzMatrixStrideIn)
+    __aicore__ Nd2NzParams(
+        const uint16_t ndNumIn, const uint16_t nValueIn, const uint32_t dValueIn, const uint64_t srcNdMatrixStrideIn,
+        const uint64_t srcDValueIn, const uint16_t dstNzC0StrideIn, const uint16_t dstNzNStrideIn,
+        const uint32_t dstNzMatrixStrideIn)
         : ndNum(ndNumIn),
           nValue(nValueIn),
           dValue(dValueIn),
@@ -285,9 +276,10 @@ struct Nd2NzParams {
     uint16_t dstNzNStride = 0;
     uint32_t dstNzMatrixStride = 0;
 #else
-    __aicore__ Nd2NzParams(const uint16_t ndNumIn, const uint16_t nValueIn, const uint16_t dValueIn,
-        const uint16_t srcNdMatrixStrideIn, const uint16_t srcDValueIn, const uint16_t dstNzC0StrideIn,
-        const uint16_t dstNzNStrideIn, const uint16_t dstNzMatrixStrideIn)
+    __aicore__ Nd2NzParams(
+        const uint16_t ndNumIn, const uint16_t nValueIn, const uint16_t dValueIn, const uint16_t srcNdMatrixStrideIn,
+        const uint16_t srcDValueIn, const uint16_t dstNzC0StrideIn, const uint16_t dstNzNStrideIn,
+        const uint16_t dstNzMatrixStrideIn)
         : ndNum(ndNumIn),
           nValue(nValueIn),
           dValue(dValueIn),
@@ -309,13 +301,12 @@ struct Nd2NzParams {
 #endif
 };
 
-
 struct Nz2NdParamsFull {
     __aicore__ Nz2NdParamsFull() {}
 
-    __aicore__ Nz2NdParamsFull(const uint16_t ndNumIn, const uint16_t nValueIn, const uint16_t dValueIn,
-        const uint16_t srcNdMatrixStrideIn, const uint16_t srcNStrideIn, const uint16_t dstDStrideIn,
-        const uint16_t dstNdMatrixStrideIn)
+    __aicore__ Nz2NdParamsFull(
+        const uint16_t ndNumIn, const uint16_t nValueIn, const uint16_t dValueIn, const uint16_t srcNdMatrixStrideIn,
+        const uint16_t srcNStrideIn, const uint16_t dstDStrideIn, const uint16_t dstNdMatrixStrideIn)
         : ndNum(ndNumIn),
           nValue(nValueIn),
           dValue(dValueIn),
@@ -337,9 +328,10 @@ struct Nz2NdParamsFull {
 struct Dn2NzParams {
     __aicore__ Dn2NzParams() {}
 
-    __aicore__ Dn2NzParams(const uint16_t dnNumIn, const uint16_t nValueIn, const uint32_t dValueIn,
-        const uint64_t srcDnMatrixStrideIn, const uint64_t srcDValueIn, const uint16_t dstNzC0StrideIn,
-        const uint16_t dstNzNStrideIn, const uint32_t dstNzMatrixStrideIn)
+    __aicore__ Dn2NzParams(
+        const uint16_t dnNumIn, const uint16_t nValueIn, const uint32_t dValueIn, const uint64_t srcDnMatrixStrideIn,
+        const uint64_t srcDValueIn, const uint16_t dstNzC0StrideIn, const uint16_t dstNzNStrideIn,
+        const uint32_t dstNzMatrixStrideIn)
     {
         dnNum = dnNumIn;
         nValue = nValueIn;
@@ -372,8 +364,9 @@ struct LoopModeParams {
         loop2DstStride = 0;
     }
 
-    __aicore__ LoopModeParams(const uint32_t loop1SizeIn, const uint32_t loop2SizeIn, const uint64_t loop1SrcStrideIn,
-    const uint64_t loop1DstStrideIn, const uint64_t loop2SrcStrideIn, const uint64_t loop2DstStrideIn)
+    __aicore__ LoopModeParams(
+        const uint32_t loop1SizeIn, const uint32_t loop2SizeIn, const uint64_t loop1SrcStrideIn,
+        const uint64_t loop1DstStrideIn, const uint64_t loop2SrcStrideIn, const uint64_t loop2DstStrideIn)
     {
         loop1Size = loop1SizeIn;
         loop2Size = loop2SizeIn;
@@ -394,8 +387,9 @@ struct LoopModeParams {
 struct SliceInfo {
     __aicore__ SliceInfo() {}
 
-    __aicore__ SliceInfo(const uint32_t startIndexIn, const uint32_t endIndexIn, const uint32_t strideIn,
-        const uint32_t burstLenIn, const uint32_t shapeValueIn = 0)
+    __aicore__ SliceInfo(
+        const uint32_t startIndexIn, const uint32_t endIndexIn, const uint32_t strideIn, const uint32_t burstLenIn,
+        const uint32_t shapeValueIn = 0)
         : startIndex(startIndexIn),
           endIndex(endIndexIn),
           stride(strideIn),
@@ -413,12 +407,9 @@ struct SliceInfo {
 struct CopyRepeatParams {
     __aicore__ CopyRepeatParams() {}
 
-    __aicore__ CopyRepeatParams(const uint16_t dstStrideIn, const uint16_t srcStrideIn, uint16_t dstRepeatSizeIn,
-        uint16_t srcRepeatSizeIn)
-        : dstStride(dstStrideIn),
-          srcStride(srcStrideIn),
-          dstRepeatSize(dstRepeatSizeIn),
-          srcRepeatSize(srcRepeatSizeIn)
+    __aicore__ CopyRepeatParams(
+        const uint16_t dstStrideIn, const uint16_t srcStrideIn, uint16_t dstRepeatSizeIn, uint16_t srcRepeatSizeIn)
+        : dstStride(dstStrideIn), srcStride(srcStrideIn), dstRepeatSize(dstRepeatSizeIn), srcRepeatSize(srcRepeatSizeIn)
     {}
 
     uint16_t dstStride = DEFAULT_DATA_COPY_STRIDE;

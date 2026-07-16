@@ -171,7 +171,7 @@ private:
     };
 #endif
 };
-}  // namespace AscendC
+} // namespace AscendC
 #if defined(__NPU_ARCH__)
 #include "../../impl/basic_api/kernel_operator_mm_bitmode_intf_impl.h"
 #endif

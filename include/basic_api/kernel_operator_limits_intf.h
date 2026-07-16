@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /* !
  * \file kernel_operator_limits_intf.h
@@ -37,7 +37,6 @@
 #include "kernel_bf16.h"
 #endif
 
-
 namespace AscendC {
 template <typename T>
 struct NumericLimits {
@@ -45,10 +44,12 @@ public:
     constexpr __aicore__ static inline T Max()
     {
 #if (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
-        static_assert(SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float, bfloat16_t>(),
+        static_assert(
+            SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float, bfloat16_t>(),
             "current data type is not supported on current device!");
 #else
-        static_assert(SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float>(),
+        static_assert(
+            SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float>(),
             "current data type is not supported on current device!");
 #endif
         if constexpr (AscendC::Std::is_same<T, uint8_t>::value) {
@@ -78,10 +79,12 @@ public:
     constexpr __aicore__ static inline T Lowest()
     {
 #if (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
-        static_assert(SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float, bfloat16_t>(),
+        static_assert(
+            SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float, bfloat16_t>(),
             "current data type is not supported on current device!");
 #else
-        static_assert(SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float>(),
+        static_assert(
+            SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float>(),
             "current data type is not supported on current device!");
 #endif
         if constexpr (AscendC::Std::is_same<T, uint8_t>::value) {
@@ -111,10 +114,12 @@ public:
     constexpr __aicore__ static inline T Min()
     {
 #if (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102)
-        static_assert(SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float, bfloat16_t>(),
+        static_assert(
+            SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float, bfloat16_t>(),
             "current data type is not supported on current device!");
 #else
-        static_assert(SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float>(),
+        static_assert(
+            SupportType<T, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, half, float>(),
             "current data type is not supported on current device!");
 #endif
         if constexpr (AscendC::Std::is_same<T, uint8_t>::value) {
@@ -147,8 +152,7 @@ public:
         static_assert(
             SupportType<T, half, float, bfloat16_t>(), "current data type is not supported on current device!");
 #else
-        static_assert(
-            SupportType<T, half, float>(), "current data type is not supported on current device!");
+        static_assert(SupportType<T, half, float>(), "current data type is not supported on current device!");
 #endif
         if constexpr (AscendC::Std::is_same<T, half>::value) {
             return GetScalarBitcodeValue<uint16_t, T>(0x7C00u);
@@ -168,8 +172,7 @@ public:
         static_assert(
             SupportType<T, half, float, bfloat16_t>(), "current data type is not supported on current device!");
 #else
-        static_assert(
-            SupportType<T, half, float>(), "current data type is not supported on current device!");
+        static_assert(SupportType<T, half, float>(), "current data type is not supported on current device!");
 #endif
         if constexpr (AscendC::Std::is_same<T, half>::value) {
             return GetScalarBitcodeValue<uint16_t, T>(0xFC00u);
@@ -189,8 +192,7 @@ public:
         static_assert(
             SupportType<T, half, float, bfloat16_t>(), "current data type is not supported on current device!");
 #else
-        static_assert(
-            SupportType<T, half, float>(), "current data type is not supported on current device!");
+        static_assert(SupportType<T, half, float>(), "current data type is not supported on current device!");
 #endif
         if constexpr (AscendC::Std::is_same<T, half>::value) {
             return GetScalarBitcodeValue<uint16_t, T>(0x7E00u);
@@ -210,8 +212,7 @@ public:
         static_assert(
             SupportType<T, half, float, bfloat16_t>(), "current data type is not supported on current device!");
 #else
-        static_assert(
-            SupportType<T, half, float>(), "current data type is not supported on current device!");
+        static_assert(SupportType<T, half, float>(), "current data type is not supported on current device!");
 #endif
         if constexpr (AscendC::Std::is_same<T, half>::value) {
             return GetScalarBitcodeValue<uint16_t, T>(0x7D00u);
@@ -231,8 +232,7 @@ public:
         static_assert(
             SupportType<T, half, float, bfloat16_t>(), "current data type is not supported on current device!");
 #else
-        static_assert(
-            SupportType<T, half, float>(), "current data type is not supported on current device!");
+        static_assert(SupportType<T, half, float>(), "current data type is not supported on current device!");
 #endif
         if constexpr (AscendC::Std::is_same<T, half>::value) {
             return GetScalarBitcodeValue<uint16_t, T>(0x0001u);
@@ -246,49 +246,40 @@ public:
         return T();
     }
 
-    __aicore__ static inline void Max(const LocalTensor<T> &dst, uint32_t count)
-    {
-        Duplicate(dst, Max(), count);
-    }
+    __aicore__ static inline void Max(const LocalTensor<T>& dst, uint32_t count) { Duplicate(dst, Max(), count); }
 
-    __aicore__ static inline void Lowest(const LocalTensor<T> &dst, uint32_t count)
-    {
-        Duplicate(dst, Lowest(), count);
-    }
+    __aicore__ static inline void Lowest(const LocalTensor<T>& dst, uint32_t count) { Duplicate(dst, Lowest(), count); }
 
-    __aicore__ static inline void Min(const LocalTensor<T> &dst, uint32_t count)
-    {
-        Duplicate(dst, Min(), count);
-    }
+    __aicore__ static inline void Min(const LocalTensor<T>& dst, uint32_t count) { Duplicate(dst, Min(), count); }
 
-    __aicore__ static inline void Infinity(const LocalTensor<T> &dst, uint32_t count)
+    __aicore__ static inline void Infinity(const LocalTensor<T>& dst, uint32_t count)
     {
         Duplicate(dst, Infinity(), count);
     }
 
-    __aicore__ static inline void NegativeInfinity(const LocalTensor<T> &dst, uint32_t count)
+    __aicore__ static inline void NegativeInfinity(const LocalTensor<T>& dst, uint32_t count)
     {
         Duplicate(dst, NegativeInfinity(), count);
     }
 
-    __aicore__ static inline void QuietNaN(const LocalTensor<T> &dst, uint32_t count)
+    __aicore__ static inline void QuietNaN(const LocalTensor<T>& dst, uint32_t count)
     {
         Duplicate(dst, QuietNaN(), count);
     }
 
-    __aicore__ static inline void SignalingNaN(const LocalTensor<T> &dst, uint32_t count)
+    __aicore__ static inline void SignalingNaN(const LocalTensor<T>& dst, uint32_t count)
     {
         Duplicate(dst, SignalingNaN(), count);
     }
 
-    __aicore__ static inline void DeNormMin(const LocalTensor<T> &dst, uint32_t count)
+    __aicore__ static inline void DeNormMin(const LocalTensor<T>& dst, uint32_t count)
     {
         Duplicate(dst, DeNormMin(), count);
     }
 };
-}  // namespace AscendC
+} // namespace AscendC
 
-#endif  // ASCENDC_KERNEL_OPERATOR_LIMITS_INTF_H
+#endif // ASCENDC_KERNEL_OPERATOR_LIMITS_INTF_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_LIMITS_INTF_H__)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_operator_common_intf.h
@@ -47,13 +47,13 @@ namespace AscendC {
  * @brief：In SuperKernel fusion mode, set wait flag between two operators
  */
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ != 1001) && (__NPU_ARCH__ != 2002)
-template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
+template <pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_FIX, bool FORCE = false>
 #else
-template<pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3, bool FORCE = false>
+template <pipe_t AIV_PIPE = PIPE_MTE3, pipe_t AIC_PIPE = PIPE_MTE3, bool FORCE = false>
 #endif
 __aicore__ inline void SetNextTaskStart();
 
-template<bool FORCE = false>
+template <bool FORCE = false>
 __aicore__ inline void WaitPreTaskEnd();
 
 __aicore__ inline void InitSocState();
@@ -101,12 +101,12 @@ __aicore__ inline void SetScalarCacheMode();
 template <CacheRwMode rwMode>
 __aicore__ inline CacheMode GetScalarCacheMode();
 #endif
-}  // namespace AscendC
+} // namespace AscendC
 
 #if defined(__NPU_ARCH__)
 #include "../../impl/basic_api/kernel_operator_common_intf_impl.h"
 #endif
-#endif  // ASCENDC_MODULE_OPERATOR_COMMON_INTERFACE_H
+#endif // ASCENDC_MODULE_OPERATOR_COMMON_INTERFACE_H
 
 #if defined(__UNDEF_ASCENDC_INCLUDE_INTERNAL_HEADERS_KERNEL_OPERATOR_COMMON_INTF_H__)
 #undef __ASCENDC_INCLUDE_INTERNAL_HEADERS__

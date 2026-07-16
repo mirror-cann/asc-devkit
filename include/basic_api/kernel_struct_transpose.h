@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_struct_transpose.h
@@ -53,20 +53,21 @@ enum class TransposeType : uint8_t {
     TRANSPOSE_GRAD_ND_UB_GM, //  [B, S, H] -> [B, N, S, H/N]
     TRANSPOSE_ND2ND_B16,     // { shape:[16, 16], format:"ND", dataType: B16} -->{ shape:[16, 16], format:"ND"}
     TRANSPOSE_NCHW2NHWC,     // [ N, C, H, W] -> [N, H, W, C]
-    TRANSPOSE_NHWC2NCHW,      // [ N, H, W, C] -> [N, C, H, W]
+    TRANSPOSE_NHWC2NCHW,     // [ N, H, W, C] -> [N, C, H, W]
 #if defined(__NPU_ARCH__) && ((__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102))
-    TRANSPOSE_ND2ND_021,     // [H, W]->[W, H], [N, H, W]->[N, W, H]
-    TRANSPOSE_ND2ND_102,     // [N, H, W]->[H, N, W]
-    TRANSPOSE_ND2ND_210,      // [N, H, W]->[W, H, N]
-    TRANSPOSE_ND2NZ_WITH_INTLV  // [N, D] -> [N, Z]
+    TRANSPOSE_ND2ND_021,       // [H, W]->[W, H], [N, H, W]->[N, W, H]
+    TRANSPOSE_ND2ND_102,       // [N, H, W]->[H, N, W]
+    TRANSPOSE_ND2ND_210,       // [N, H, W]->[W, H, N]
+    TRANSPOSE_ND2NZ_WITH_INTLV // [N, D] -> [N, Z]
 #endif
 };
 
 struct TransDataTo5HDParams {
     constexpr __aicore__ TransDataTo5HDParams() = default;
 
-    constexpr __aicore__ TransDataTo5HDParams(const bool dstHighHalfIn, const bool srcHighHalfIn, const uint8_t repeatTimesIn,
-        const uint16_t dstRepStrideIn, const uint16_t srcRepStrideIn)
+    constexpr __aicore__ TransDataTo5HDParams(
+        const bool dstHighHalfIn, const bool srcHighHalfIn, const uint8_t repeatTimesIn, const uint16_t dstRepStrideIn,
+        const uint16_t srcRepStrideIn)
         : dstHighHalf(dstHighHalfIn),
           srcHighHalf(srcHighHalfIn),
           repeatTimes(repeatTimesIn),
@@ -84,13 +85,10 @@ struct TransDataTo5HDParams {
 struct TransposeParamsExt {
     constexpr __aicore__ TransposeParamsExt() = default;
 
-    constexpr __aicore__ TransposeParamsExt(const uint16_t nSizeIn, const uint16_t cSizeIn, const uint16_t hSizeIn,
-        const uint16_t wSizeIn, const TransposeType transposeTypeIn)
-        : nSize(nSizeIn),
-          cSize(cSizeIn),
-          hSize(hSizeIn),
-          wSize(wSizeIn),
-          transposeType(transposeTypeIn)
+    constexpr __aicore__ TransposeParamsExt(
+        const uint16_t nSizeIn, const uint16_t cSizeIn, const uint16_t hSizeIn, const uint16_t wSizeIn,
+        const TransposeType transposeTypeIn)
+        : nSize(nSizeIn), cSize(cSizeIn), hSize(hSizeIn), wSize(wSizeIn), transposeType(transposeTypeIn)
     {}
 
     uint16_t nSize = 0;

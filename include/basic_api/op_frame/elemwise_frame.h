@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file elemwise_frame.h
@@ -26,8 +26,7 @@
 #define ASCENDC_KERNEL_FRAME_H
 #include "kernel_operator.h"
 
-[[deprecated(__FILE__ " is deprecated, please do not use!")]]
-typedef void ElemwiseFrameHeader;
+[[deprecated(__FILE__ " is deprecated, please do not use!")]] typedef void ElemwiseFrameHeader;
 
 namespace AscendC {
 #define QUE_MAX_DEPTH 2
@@ -70,7 +69,8 @@ protected:
     };
 };
 
-template <class Op> class ElemwiseFrame : public Op {
+template <class Op>
+class ElemwiseFrame : public Op {
 public:
     __aicore__ ElemwiseFrame() {}
     __aicore__ inline bool CopyIn(int32_t progress);
@@ -79,7 +79,8 @@ public:
     __aicore__ inline bool RunStagePieces(int32_t curStage, int32_t progress);
     __aicore__ inline void Process();
 };
-template <class Op> __aicore__ inline void ElemwiseFrame<Op>::Process()
+template <class Op>
+__aicore__ inline void ElemwiseFrame<Op>::Process()
 {
     int32_t done = 0;
     while (done < STAGE_NUM) {
@@ -96,7 +97,8 @@ template <class Op> __aicore__ inline void ElemwiseFrame<Op>::Process()
     }
 };
 
-template <class Op> __aicore__ inline bool ElemwiseFrame<Op>::RunStagePieces(int32_t curStage, int32_t progress)
+template <class Op>
+__aicore__ inline bool ElemwiseFrame<Op>::RunStagePieces(int32_t curStage, int32_t progress)
 {
     switch (curStage) {
         case 0:
@@ -112,7 +114,8 @@ template <class Op> __aicore__ inline bool ElemwiseFrame<Op>::RunStagePieces(int
     return true;
 }
 
-template <class Op> __aicore__ inline bool ElemwiseFrame<Op>::CopyIn(int32_t progress)
+template <class Op>
+__aicore__ inline bool ElemwiseFrame<Op>::CopyIn(int32_t progress)
 {
     if (!Op::inQueue.VacantInQue()) {
         return false;
@@ -123,7 +126,8 @@ template <class Op> __aicore__ inline bool ElemwiseFrame<Op>::CopyIn(int32_t pro
     return true;
 }
 
-template <class Op> __aicore__ inline bool ElemwiseFrame<Op>::Compute(int32_t progress)
+template <class Op>
+__aicore__ inline bool ElemwiseFrame<Op>::Compute(int32_t progress)
 {
     if (!Op::outQueue.VacantInQue()) {
         return false;
@@ -141,7 +145,8 @@ template <class Op> __aicore__ inline bool ElemwiseFrame<Op>::Compute(int32_t pr
     return true;
 }
 
-template <class Op> __aicore__ inline bool ElemwiseFrame<Op>::CopyOut(int32_t progress)
+template <class Op>
+__aicore__ inline bool ElemwiseFrame<Op>::CopyOut(int32_t progress)
 {
     if (Op::outQueue.GetTensorCountInQue() == 0) {
         return false;

@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /*!
  * \file kernel_struct_fixpipe.h
@@ -37,7 +37,7 @@
 namespace AscendC {
 enum class CO2Layout : uint8_t {
     NZ = 0,
-    ROW_MAJOR, // ND Row
+    ROW_MAJOR,   // ND Row
     COLUMN_MAJOR // ND Column
 };
 
@@ -50,28 +50,37 @@ struct FixpipeConfig {
     bool enableFixVal = false;
 #endif
 
-    __aicore__ constexpr inline FixpipeConfig(CO2Layout format_) : format(format_)
+    __aicore__ constexpr inline FixpipeConfig(CO2Layout format_)
+        : format(format_)
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
-    , isToUB(false)
+          ,
+          isToUB(false)
 #endif
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 5102)
-    , enableFixVal(false)
+          ,
+          enableFixVal(false)
 #endif
     {}
-    __aicore__ constexpr inline FixpipeConfig(CO2Layout format_, bool isToUB_) : format(format_)
+    __aicore__ constexpr inline FixpipeConfig(CO2Layout format_, bool isToUB_)
+        : format(format_)
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
-    , isToUB(isToUB_)
+          ,
+          isToUB(isToUB_)
 #endif
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 5102)
-    , enableFixVal(false)
+          ,
+          enableFixVal(false)
 #endif
     {}
-    __aicore__ constexpr inline FixpipeConfig(CO2Layout format_, bool isToUB_, bool enableFixVal_) : format(format_)
+    __aicore__ constexpr inline FixpipeConfig(CO2Layout format_, bool isToUB_, bool enableFixVal_)
+        : format(format_)
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510 || __NPU_ARCH__ == 5102)
-    , isToUB(isToUB_)
+          ,
+          isToUB(isToUB_)
 #endif
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 5102)
-    , enableFixVal(enableFixVal_)
+          ,
+          enableFixVal(enableFixVal_)
 #endif
     {}
 };
@@ -93,18 +102,16 @@ constexpr FixpipeConfig CFG_COLUMN_MAJOR = {CO2Layout::COLUMN_MAJOR};
 struct FixpipeParamsV220 {
     __aicore__ FixpipeParamsV220() {}
 
-    __aicore__ FixpipeParamsV220(const uint16_t nSizeIn, const uint16_t mSizeIn, const uint16_t srcStrideIn,
-        const uint32_t dstStrideIn, const bool reluEnIn)
-        : nSize(nSizeIn),
-          mSize(mSizeIn),
-          srcStride(srcStrideIn),
-          dstStride(dstStrideIn),
-          reluEn(reluEnIn)
+    __aicore__ FixpipeParamsV220(
+        const uint16_t nSizeIn, const uint16_t mSizeIn, const uint16_t srcStrideIn, const uint32_t dstStrideIn,
+        const bool reluEnIn)
+        : nSize(nSizeIn), mSize(mSizeIn), srcStride(srcStrideIn), dstStride(dstStrideIn), reluEn(reluEnIn)
     {}
 
-    __aicore__ FixpipeParamsV220(const uint16_t nSizeIn, const uint16_t mSizeIn, const uint16_t srcStrideIn,
-        const uint32_t dstStrideIn, const bool reluEnIn, const QuantMode_t quantPreIn, const int64_t deqScalarIn,
-        const uint16_t ndNumIn, const uint16_t srcNdStrideIn, const uint16_t dstNdStrideIn, const uint8_t unitFlagIn)
+    __aicore__ FixpipeParamsV220(
+        const uint16_t nSizeIn, const uint16_t mSizeIn, const uint16_t srcStrideIn, const uint32_t dstStrideIn,
+        const bool reluEnIn, const QuantMode_t quantPreIn, const int64_t deqScalarIn, const uint16_t ndNumIn,
+        const uint16_t srcNdStrideIn, const uint16_t dstNdStrideIn, const uint8_t unitFlagIn)
         : nSize(nSizeIn),
           mSize(mSizeIn),
           srcStride(srcStrideIn),
@@ -118,9 +125,10 @@ struct FixpipeParamsV220 {
           unitFlag(unitFlagIn)
     {}
 
-    __aicore__ FixpipeParamsV220(const uint16_t nSizeIn, const uint16_t mSizeIn, const uint16_t srcStrideIn,
-        const uint32_t dstStrideIn, const bool reluEnIn, const QuantMode_t quantPreIn, const int64_t deqScalarIn,
-        const uint16_t ndNumIn, const uint16_t srcNdStrideIn, const uint16_t dstNdStrideIn, const uint8_t unitFlagIn,
+    __aicore__ FixpipeParamsV220(
+        const uint16_t nSizeIn, const uint16_t mSizeIn, const uint16_t srcStrideIn, const uint32_t dstStrideIn,
+        const bool reluEnIn, const QuantMode_t quantPreIn, const int64_t deqScalarIn, const uint16_t ndNumIn,
+        const uint16_t srcNdStrideIn, const uint16_t dstNdStrideIn, const uint8_t unitFlagIn,
         const bool isChannelSplitIn)
         : nSize(nSizeIn),
           mSize(mSizeIn),
@@ -137,7 +145,7 @@ struct FixpipeParamsV220 {
     {}
 
     uint16_t nSize = 0;
-    uint16_t mSize = 0;  // M-DirectionSize
+    uint16_t mSize = 0; // M-DirectionSize
     uint16_t srcStride = 0;
     uint32_t dstStride = 0;
     // Params: used for Quant
@@ -178,8 +186,8 @@ template <CO2Layout format = CO2Layout::ROW_MAJOR>
 struct FixpipeParamsArch3510 {
     __aicore__ FixpipeParamsArch3510() {}
 
-    __aicore__ FixpipeParamsArch3510(const uint16_t nSizeIn, const uint16_t mSizeIn, const uint16_t srcStrideIn,
-        const uint32_t dstStrideIn)
+    __aicore__ FixpipeParamsArch3510(
+        const uint16_t nSizeIn, const uint16_t mSizeIn, const uint16_t srcStrideIn, const uint32_t dstStrideIn)
     {
         nSize = nSizeIn;
         mSize = mSizeIn;
@@ -191,7 +199,7 @@ struct FixpipeParamsArch3510 {
     uint64_t reluScalar;
     uint64_t vectorRelu;
     uint16_t nSize = 0;
-    uint16_t mSize = 0;  // M-DirectionSize
+    uint16_t mSize = 0; // M-DirectionSize
     uint16_t srcStride = 0;
     uint32_t dstStride = 0;
     // Params: used for Quant
@@ -210,9 +218,10 @@ template <CO2Layout format = CO2Layout::ROW_MAJOR>
 struct FixpipeParamsC310 : FixpipeParamsArch3510<format> {
     __aicore__ FixpipeParamsC310() : FixpipeParamsArch3510<format>() {}
 
-    __aicore__ FixpipeParamsC310(const uint16_t nSizeIn, const uint16_t mSizeIn,
-                                const uint16_t srcStrideIn, const uint32_t dstStrideIn)
-        : FixpipeParamsArch3510<format>(nSizeIn, mSizeIn, srcStrideIn, dstStrideIn) {}
+    __aicore__ FixpipeParamsC310(
+        const uint16_t nSizeIn, const uint16_t mSizeIn, const uint16_t srcStrideIn, const uint32_t dstStrideIn)
+        : FixpipeParamsArch3510<format>(nSizeIn, mSizeIn, srcStrideIn, dstStrideIn)
+    {}
 };
 
 using FixpipeParamsM300 = FixpipeParamsV220;

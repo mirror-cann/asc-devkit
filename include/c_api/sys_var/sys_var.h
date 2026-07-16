@@ -21,13 +21,9 @@
 #define INCLUDE_C_API_SYS_VAR_SYS_VAR_H
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201)
-
 #include "impl/c_api/instr_impl/npu_arch_2201/sys_var_impl.h"
-
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
-
 #include "impl/c_api/instr_impl/npu_arch_3510/sys_var_impl.h"
-
 #endif
 
 __aicore__ inline int64_t asc_get_smmu_tag_version();
@@ -81,9 +77,8 @@ __aicore__ inline int64_t asc_get_program_counter();
 
 __aicore__ inline void asc_get_arch_ver(uint32_t& core_version);
 
-[[deprecated("NOTICE: asc_get_ar_spr is deprecated. "
-             "Please use asc_get_squeeze_status instead.")]] __aicore__ inline int64_t
-asc_get_ar_spr();
+[[deprecated("NOTICE: asc_get_ar_spr is deprecated. Please use asc_get_squeeze_status instead.")]]
+__aicore__ inline int64_t asc_get_ar_spr();
 
 __aicore__ inline void asc_set_ffts_base_addr(uint64_t config);
 

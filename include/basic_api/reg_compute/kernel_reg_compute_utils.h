@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2025 Huawei Technologies Co., Ltd.
-* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
-* CANN Open Software License Agreement Version 2.0 (the "License").
-* Please refer to the License for details. You may not use this file except in compliance with the License.
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-* See LICENSE in the root of the software repository for the full text of the License.
-*/
+ * Copyright (c) 2025 Huawei Technologies Co., Ltd.
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+ * CANN Open Software License Agreement Version 2.0 (the "License").
+ * Please refer to the License for details. You may not use this file except in compliance with the License.
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ * See LICENSE in the root of the software repository for the full text of the License.
+ */
 
 /* !
  * \file kernel_reg_compute_utils.h
@@ -135,74 +135,23 @@ struct RsqrtConfig {
 constexpr RsqrtConfig DEFAULT_RSQRT_CONFIG = {RsqrtAlgo::INTRINSIC};
 
 namespace Reg {
-enum class RegLayout {
-    UNKNOWN = -1,
-    ZERO,
-    ONE,
-    TWO,
-    THREE
-};
+enum class RegLayout { UNKNOWN = -1, ZERO, ONE, TWO, THREE };
 
-enum class SatMode {
-    UNKNOWN = -1,
-    NO_SAT,
-    SAT
-};
+enum class SatMode { UNKNOWN = -1, NO_SAT, SAT };
 
-enum class IndexOrder {
-    INCREASE_ORDER,
-    DECREASE_ORDER
-};
+enum class IndexOrder { INCREASE_ORDER, DECREASE_ORDER };
 
-enum class MaskMergeMode {
-    UNKNOWN,
-    MERGING,
-    ZEROING
-};
+enum class MaskMergeMode { UNKNOWN, MERGING, ZEROING };
 
-enum class HistogramsBinType {
-    BIN0 = 0,
-    BIN1,
-    BIN2,
-    BIN3,
-    BIN4,
-    BIN5,
-    BIN6,
-    BIN7
-};
+enum class HistogramsBinType { BIN0 = 0, BIN1, BIN2, BIN3, BIN4, BIN5, BIN6, BIN7 };
 
-enum class HistogramsType {
-    FREQUENCY = 0,
-    ACCUMULATE
-};
+enum class HistogramsType { FREQUENCY = 0, ACCUMULATE };
 
-enum class HighLowPart {
-    LOWEST,
-    HIGHEST
-};
+enum class HighLowPart { LOWEST, HIGHEST };
 
-enum class PostLiteral {
-    POST_MODE_NORMAL,
-    POST_MODE_UPDATE
-};
+enum class PostLiteral { POST_MODE_NORMAL, POST_MODE_UPDATE };
 
-enum class MaskPattern {
-    ALL,
-    VL1,
-    VL2,
-    VL3,
-    VL4,
-    VL8,
-    VL16,
-    VL32,
-    VL64,
-    VL128,
-    M3,
-    M4,
-    H,
-    Q,
-    ALLF = 15
-};
+enum class MaskPattern { ALL, VL1, VL2, VL3, VL4, VL8, VL16, VL32, VL64, VL128, M3, M4, H, Q, ALLF = 15 };
 
 enum class LoadDist {
     DIST_NORM,
@@ -229,12 +178,7 @@ enum class LoadDist {
     DIST_SPLT2CHN_B16,
 };
 
-enum class MaskDist {
-    DIST_NORM,
-    DIST_US = 1,
-    DIST_DS = 2,
-    DIST_PACK = 1
-};
+enum class MaskDist { DIST_NORM, DIST_US = 1, DIST_DS = 2, DIST_PACK = 1 };
 
 enum class StoreDist {
     DIST_NORM_B8,
@@ -256,14 +200,7 @@ enum class StoreDist {
     DIST_NORM
 };
 
-enum class MemType {
-    VEC_STORE,
-    VEC_LOAD,
-    SCALAR_STORE,
-    SCALAR_LOAD,
-    VEC_ALL,
-    SCALAR_ALL
-};
+enum class MemType { VEC_STORE, VEC_LOAD, SCALAR_STORE, SCALAR_LOAD, VEC_ALL, SCALAR_ALL };
 
 struct DefaultType {};
 
@@ -278,7 +215,8 @@ enum class DataCopyMode {
     DATA_BLOCK_COPY,
 };
 
-#if (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113) || defined(__ASC_NPU_HOST__)
+#if (__NPU_ARCH__ == 3510) || (__NPU_ARCH__ == 5102) || (__NPU_ARCH__ == 3003) || (__NPU_ARCH__ == 3113) || \
+    defined(__ASC_NPU_HOST__)
 struct ExpSpecificMode {
     MaskMergeMode mrgMode = MaskMergeMode::ZEROING;
     ExpAlgo algo = ExpAlgo::INTRINSIC;
@@ -354,20 +292,14 @@ struct SqrtSpecificMode {
 
 constexpr CastTrait castTrait = {RegLayout::UNKNOWN, SatMode::UNKNOWN, MaskMergeMode::UNKNOWN, RoundMode::UNKNOWN};
 
-enum class GatherMaskMode {
-    NO_STORE_REG,
-    STORE_REG
-};
+enum class GatherMaskMode { NO_STORE_REG, STORE_REG };
 
 enum class StoreMode {
     NOSTORED = 0,
     STORED,
 };
 
-enum class RoundControl {
-    NO_ROUND,
-    ROUND
-};
+enum class RoundControl { NO_ROUND, ROUND };
 
 using ReduceType = AscendC::ReduceType;
 

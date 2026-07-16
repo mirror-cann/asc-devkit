@@ -21,13 +21,9 @@
 #define INCLUDE_C_API_VECTOR_DATAMOVE_VECTOR_DATAMOVE_H
 
 #if defined(__NPU_ARCH__) && (__NPU_ARCH__ == 2201)
-
 #include "impl/c_api/instr_impl/npu_arch_2201/vector_datamove_impl.h"
-
 #elif defined(__NPU_ARCH__) && (__NPU_ARCH__ == 3510)
-
 #include "impl/c_api/instr_impl/npu_arch_3510/vector_datamove_impl.h"
-
 #endif
 
 //===========asc_set_copy_pad_val(int8/uint8/int16/uint16/half/bfloat16/int32/uint32/float)===========
@@ -558,9 +554,8 @@ __aicore__ inline void asc_copy_ub2ub(__ubuf__ void* dst, __ubuf__ void* src, ui
 __aicore__ inline void asc_copy_ub2ub_sync(__ubuf__ void* dst, __ubuf__ void* src, uint32_t size);
 
 //======asc_set_gm2ub_pad=======
-[[deprecated("NOTICE: asc_set_gm2ub_pad is deprecated. "
-             "Please use asc_set_copy_pad_val instead for pad value setting")]] __aicore__ inline void
-asc_set_gm2ub_pad(uint32_t pad_val);
+[[deprecated("NOTICE: asc_set_gm2ub_pad is deprecated. Please use asc_set_copy_pad_val instead for pad value setting")]]
+__aicore__ inline void asc_set_gm2ub_pad(uint32_t pad_val);
 
 #endif
 
