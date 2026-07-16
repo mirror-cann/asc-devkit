@@ -48,11 +48,8 @@ def gen_golden_gather(case, repeat=1):
         indices[1::2] = 128
 
     golden = y.copy()
-    one_rep = 64
-    for b in range(N // one_rep):
-        batch_idx = indices[b * one_rep : (b + 1) * one_rep]
-        for pos in np.unique(batch_idx):
-            golden[pos] += float(repeat)
+    for pos in np.unique(indices):
+        golden[pos] += float(repeat)
     return indices, y, golden
 
 
