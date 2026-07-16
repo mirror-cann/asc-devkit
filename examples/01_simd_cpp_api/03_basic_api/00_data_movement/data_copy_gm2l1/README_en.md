@@ -23,7 +23,8 @@ This example introduces how to use DataCopy to transfer input data from GM (Glob
 │   ├── data_utils.h                   // Data read/write functions
 │   ├── CMakeLists.txt                 // cmake build file
 │   ├── data_copy_gm2l1.asc            // Ascend C example implementation & invocation example
-│   └── README.md                      // Example description document
+│   ├── README.md                      // Chinese example documentation
+│   └── README_en.md                   // English example documentation
 ```
 
 ## Detailed Scenario Description
@@ -84,7 +85,7 @@ This example selects different input scenarios through the build parameter `SCEN
 
 Run the following steps in the root directory of this example to build and run it.
 - Configure environment variables
-  Configure environment variables based on the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit on the current environment.
+  Configure environment variables based on the [installation method](../../../../../docs/en/quick_start.md#prepare&install) of the CANN development kit on the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```
