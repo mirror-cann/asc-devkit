@@ -14,10 +14,10 @@ set(CMAKE_ASC_ARCHITECTURES "dav-3510" CACHE STRING "NPU architecture: dav-3510"
 
 find_package(ASC REQUIRED)
 
-project(special_buffer_dump LANGUAGES ASC CXX)
+project(cube_buffer_dump LANGUAGES ASC CXX)
 
 add_executable(demo
-    special_buffer_dump.asc
+    cube_buffer_dump.asc
 )
 
 target_compile_options(demo PRIVATE

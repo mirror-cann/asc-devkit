@@ -1,9 +1,9 @@
-# HiFloat8量化矩阵乘算子样例
+# Cube Buffer DumpTensor接口功能说明
 
 ## 概述
 
-本样例使用Cube编程模式实现`QuantMatmulHifp8`算子，并通过`DumpTensor`打印HiFloat8矩阵A、Bias和
-scale在L1 Buffer、Bias Table Buffer和Fixpipe Buffer中的数据，展示dav-3510特殊Buffer的数据打印方法。
+本样例以Cube编程模式的`QuantMatmulHifp8`计算为背景，通过`DumpTensor`打印HiFloat8矩阵A、Bias和
+scale在L1 Buffer、Bias Table Buffer和Fixpipe Buffer中的数据，展示dav-3510 Cube Buffer的数据打印方法。
 
 ## 本样例支持的产品及CANN软件版本
 
@@ -14,13 +14,13 @@ scale在L1 Buffer、Bias Table Buffer和Fixpipe Buffer中的数据，展示dav-3
 ## 目录结构介绍
 
 ```text
-├── special_buffer_dump
+├── cube_buffer_dump
 │   ├── scripts
 │   │   ├── gen_data.py          // 生成输入数据和golden数据
-│   │   └── verify_result.py     // 校验算子输出和dump日志
+│   │   └── verify_result.py     // 校验计算输出和dump日志
 │   ├── CMakeLists.txt           // 编译工程文件
 │   ├── data_utils.h             // 二进制文件读写函数
-│   ├── special_buffer_dump.asc  // 量化MatMul实现、DumpTensor调用和Host调用
+│   ├── cube_buffer_dump.asc     // 量化MatMul计算、DumpTensor调用和Host调用
 │   ├── README.md                // 中文样例说明文档
 │   └── README_en.md             // 英文样例说明文档
 ```
@@ -29,7 +29,7 @@ scale在L1 Buffer、Bias Table Buffer和Fixpipe Buffer中的数据，展示dav-3
 
 - 样例功能：
 
-  使用Cube编程模式实现带Bias和per-channel scale的HiFloat8量化矩阵乘。对于输出矩阵中的元素
+  以带Bias和per-channel scale的HiFloat8量化矩阵乘为背景。对于输出矩阵中的元素
   `C[m, n]`，计算过程如下：
 
   ```text
@@ -54,9 +54,9 @@ scale在L1 Buffer、Bias Table Buffer和Fixpipe Buffer中的数据，展示dav-3
   <tr><td rowspan="1" align="center">核函数名</td><td colspan="4" align="center">QuantMatmulHifp8</td></tr>
   </table>
 
-- 算子实现：
+- 计算流程：
 
-  算子由单个AI Core执行，处理流程如下：
+  计算由单个AI Core执行，处理流程如下：
 
   1. 将HiFloat8矩阵A、B从Global Memory搬入L1，再搬入L0A、L0B。
   2. 将float Bias从Global Memory搬入L1，再搬入Bias Table Buffer。MMAD使用Bias Table Buffer
@@ -71,7 +71,7 @@ scale在L1 Buffer、Bias Table Buffer和Fixpipe Buffer中的数据，展示dav-3
 
   本样例打印以下数据：
 
-  | desc | 数据位置 | 算子中的用途 |
+  | desc | 数据位置 | 计算中的用途 |
   |------|----------|--------------|
   | 100 | L1 Buffer | HiFloat8矩阵A的前32个元素 |
   | 101 | L1 Buffer | 搬入Bias Table Buffer前的float Bias |
@@ -79,7 +79,7 @@ scale在L1 Buffer、Bias Table Buffer和Fixpipe Buffer中的数据，展示dav-3
   | 201 | Bias Table Buffer | MMAD用于初始化C矩阵的float Bias |
   | 301 | Fixpipe Buffer | Fixpipe量化实际读取的`uint64_t` scale |
 
-  `scripts/verify_result.py`校验算子输出和五组`DumpTensor`日志。
+  `scripts/verify_result.py`校验计算输出和五组`DumpTensor`日志。
 
 ## Fixpipe Buffer打印特性
 

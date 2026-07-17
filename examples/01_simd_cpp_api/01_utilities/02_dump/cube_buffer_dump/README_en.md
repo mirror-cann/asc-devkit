@@ -1,10 +1,10 @@
-# HiFloat8 Quantized Matrix Multiplication Sample
+# Cube Buffer DumpTensor API Description
 
 ## Overview
 
-This sample uses Cube programming to implement the `QuantMatmulHifp8` operator. It uses `DumpTensor` to print
+This sample uses the Cube-programmed `QuantMatmulHifp8` computation as context. It uses `DumpTensor` to print
 the HiFloat8 matrix A, bias, and scale from L1 Buffer, Bias Table Buffer, and Fixpipe Buffer, demonstrating
-special-buffer data printing on dav-3510.
+Cube Buffer data printing on dav-3510.
 
 ## Supported Products and CANN Software Versions
 
@@ -15,13 +15,13 @@ special-buffer data printing on dav-3510.
 ## Directory Structure
 
 ```text
-├── special_buffer_dump
+├── cube_buffer_dump
 │   ├── scripts
 │   │   ├── gen_data.py          // Generates input and golden data
-│   │   └── verify_result.py     // Verifies operator output and dump records
+│   │   └── verify_result.py     // Verifies computation output and dump records
 │   ├── CMakeLists.txt           // Build project file
 │   ├── data_utils.h             // Binary file read and write helpers
-│   ├── special_buffer_dump.asc  // Quantized MatMul, DumpTensor calls, and host launch
+│   ├── cube_buffer_dump.asc     // Quantized MatMul, DumpTensor calls, and host launch
 │   ├── README.md                // Chinese sample document
 │   └── README_en.md             // English sample document
 ```
@@ -30,8 +30,8 @@ special-buffer data printing on dav-3510.
 
 - Function:
 
-  The sample uses Cube programming to implement HiFloat8 quantized matrix multiplication with a bias and a
-  per-channel scale. Each output element `C[m, n]` is calculated as follows:
+  The sample uses HiFloat8 quantized matrix multiplication with a bias and a per-channel scale as context.
+  Each output element `C[m, n]` is calculated as follows:
 
   ```text
   C[m, n] = (sum(A[m, k] * B[k, n]) + bias[n]) * scale[n]
@@ -57,7 +57,7 @@ special-buffer data printing on dav-3510.
 
 - Implementation:
 
-  One AI Core executes the operator as follows:
+  One AI Core executes the computation as follows:
 
   1. Move HiFloat8 matrices A and B from Global Memory to L1, then to L0A and L0B.
   2. Move the float bias from Global Memory to L1, then to Bias Table Buffer. MMAD uses Bias Table Buffer as
@@ -73,7 +73,7 @@ special-buffer data printing on dav-3510.
 
   The sample prints the following data:
 
-  | desc | Position | Operator usage |
+  | desc | Position | Purpose |
   |------|----------|----------------|
   | 100 | L1 Buffer | First 32 elements of HiFloat8 matrix A |
   | 101 | L1 Buffer | Float bias before it is moved to Bias Table Buffer |
@@ -81,7 +81,7 @@ special-buffer data printing on dav-3510.
   | 201 | Bias Table Buffer | Float bias used by MMAD to initialize the C matrix |
   | 301 | Fixpipe Buffer | `uint64_t` scale read by Fixpipe during output quantization |
 
-  `scripts/verify_result.py` verifies the operator output and all five `DumpTensor` records.
+  `scripts/verify_result.py` verifies the computation output and all five `DumpTensor` records.
 
 ## Fixpipe Buffer Dump Characteristics
 
