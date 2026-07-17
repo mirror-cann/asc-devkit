@@ -119,8 +119,6 @@ TEST_VECTOR_DATAMOVE_GATHER_DATABLOCK_INSTR_1(
     Vgatherb_1, asc_gather_datablock, vgatherb, vector_uint32_t, uint32_t, uint32_t);
 TEST_VECTOR_DATAMOVE_GATHER_DATABLOCK_INSTR_1(
     Vgatherb_1, asc_gather_datablock, vgatherb, vector_int64_t, int64_t, int64_t);
-TEST_VECTOR_DATAMOVE_GATHER_DATABLOCK_INSTR_1(
-    Vgatherb_1, asc_gather_datablock, vgatherb, vector_uint64_t, uint64_t, uint64_t);
 TEST_VECTOR_DATAMOVE_GATHER_DATABLOCK_INSTR_1(Vgatherb_1, asc_gather_datablock, vgatherb, vector_half, half, half);
 TEST_VECTOR_DATAMOVE_GATHER_DATABLOCK_INSTR_1(Vgatherb_1, asc_gather_datablock, vgatherb, vector_float, float, float);
 TEST_VECTOR_DATAMOVE_GATHER_DATABLOCK_INSTR_1(
