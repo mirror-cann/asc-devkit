@@ -6,9 +6,15 @@
 >- 基于新版本CANN包（支持Tiling下沉特性）编译生成的Tiling下沉算子，不兼容旧版CANN（不支持Tiling下沉特性）运行环境。
 >- 当前仅融合算子（矢量计算和矩阵计算融合）支持进行Tiling下沉。
 >- Tiling下沉功能仅支持如下产品型号：
+>    <!-- npu="A3" id1 -->
 >    - Atlas A3 训练系列产品/Atlas A3 推理系列产品
+>    <!-- end id1 -->
+>    <!-- npu="910b" id2 -->
 >    - Atlas A2 训练系列产品/Atlas A2 推理系列产品
+>    <!-- end id2 -->
+>    <!-- npu="950" id3 -->
 >    - Ascend 950PR/Ascend 950DT，暂不支持
+>    <!-- end id3 -->
 
 自定义算子开启Tiling下沉的步骤如下，完整样例请参考[Tiling下沉算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/99_acl_based/00_acl_compilation/custom_op)。
 

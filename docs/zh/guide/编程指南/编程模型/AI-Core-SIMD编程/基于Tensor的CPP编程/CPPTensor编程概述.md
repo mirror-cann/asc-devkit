@@ -395,6 +395,7 @@ __global__ __mix__ void mix_kernel(__gm__ float* x, __gm__ float* y, __gm__ floa
 
 ## 支持的API范围<a name="section2633193623711"></a>
 
+<!-- npu="310p" id1 -->
 **表1**  针对Atlas 推理系列产品AI Core，支持的API范围
 
 <a name="table56285428438"></a>
@@ -502,7 +503,9 @@ __global__ __mix__ void mix_kernel(__gm__ float* x, __gm__ float* y, __gm__ floa
 </tr>
 </tbody>
 </table>
+<!-- end id1 -->
 
+<!-- npu="910b" id2 -->
 **表2**  针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的API范围
 
 <a name="table1842818536431"></a>
@@ -703,7 +706,9 @@ __global__ __mix__ void mix_kernel(__gm__ float* x, __gm__ float* y, __gm__ floa
 </tr>
 </tbody>
 </table>
+<!-- end id2 -->
 
+<!-- npu="A3" id3 -->
 **表3**  针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的API范围
 
 <a name="table167051848128"></a>
@@ -917,7 +922,9 @@ __global__ __mix__ void mix_kernel(__gm__ float* x, __gm__ float* y, __gm__ floa
 </tr>
 </tbody>
 </table>
+<!-- end id3 -->
 
+<!-- npu="950" id4 -->
 **表4**  针对Ascend 950PR/Ascend 950DT，支持的API范围
 
 <a name="table1798673512413"></a>
@@ -1131,6 +1138,7 @@ __global__ __mix__ void mix_kernel(__gm__ float* x, __gm__ float* y, __gm__ floa
 </tr>
 </tbody>
 </table>
+<!-- end id4 -->
 
 
 ## 使用预留UB空间的API范围<a name="section_reserved_ubuf_api"></a>
@@ -1140,17 +1148,17 @@ __global__ __mix__ void mix_kernel(__gm__ float* x, __gm__ float* y, __gm__ floa
 >[!CAUTION]注意
 > 同一接口若提供多个重载原型，可能只有部分原型会使用UB预留空间。
 
-<!-- npu="A3,910b" id1 -->
-**表5**  针对 [NPU架构版本2201](../../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)，使用预留UB空间的API范围
+<!-- npu="A3,910b" id5 -->
+**表5**  针对 [NPU架构版本2201](../../../语言扩展层/SIMD-BuiltIn关键字.md#npu-arch)，使用预留UB空间的API范围
 
 | API类别 | API名 |
 | --- | --- |
 | 基础API | AddDeqRelu、Select |
 | 高阶API | Digamma、Lgamma、Power、Sign、LayerNorm、DropOut、SelectWithBytesMask |
-<!-- end id1 -->
+<!-- end id5 -->
 
-<!-- npu="950" id2 -->
-**表6**  针对 [NPU架构版本3510](../../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)，使用预留UB空间的API范围
+<!-- npu="950" id6 -->
+**表6**  针对 [NPU架构版本3510](../../../语言扩展层/SIMD-BuiltIn关键字.md#npu-arch)，使用预留UB空间的API范围
 
 | API类别 | API名 |
 | --- | --- |
@@ -1165,4 +1173,4 @@ __global__ __mix__ void mix_kernel(__gm__ float* x, __gm__ float* y, __gm__ floa
 | 基础API > Kernel-Tiling | GET_TILING_DATA、GET_TILING_DATA_WITH_STRUCT、GET_TILING_DATA_MEMBER |
 | Utils API > 调测接口（SIMD VF） | printf、asc_dump_reg、asc_dump、asc_dump_ubuf |
 | 高阶API | AscendAntiQuant、AdjustSoftMaxRes、TopK |
-<!-- end id2 -->
+<!-- end id6 -->

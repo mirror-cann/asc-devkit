@@ -176,7 +176,7 @@
 
 -   开发者不能使用TPipe/TQue/TQueBind/TBufPool等框架接口，和上述框架接口混用可能会出现未定义行为。
 -   只能使用部分API。具体支持的API列表见[支持的API范围](#section2633193623711)。因为不在列表范围内的API内部依赖TPipe分配事件ID，可能会和开发者定义的事件ID产生冲突。
--   对于支持的API，仍需关注其内部是否依赖Ascend C预留的UB空间（针对 [NPU架构版本2201](../../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)，Select等API内部使用了8KB的预留UB空间，用于存储中间数据；针对 [NPU架构版本3510](../../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)，Exp等API内部使用了2KB的预留UB空间，用于指令兼容或存储中间数据）。若开启[--cce-disable-asc-reserved-ubuf](../../../编译与运行/算子编译/AI-Core算子编译基本用法.md#常用的编译选项)编译选项，在对应产品版本下调用相关API会触发编译期报错。具体API范围见[使用预留UB空间的API列表](#section_reserved_ubuf_api)。
+-   对于支持的API，仍需关注其内部是否依赖Ascend C预留的UB空间（针对 [NPU架构版本2201](../../../语言扩展层/SIMD-BuiltIn关键字.md#npu-arch)，Select等API内部使用了8KB的预留UB空间，用于存储中间数据；针对 [NPU架构版本3510](../../../语言扩展层/SIMD-BuiltIn关键字.md#npu-arch)，Exp等API内部使用了2KB的预留UB空间，用于指令兼容或存储中间数据）。若开启[--cce-disable-asc-reserved-ubuf](../../../编译与运行/算子编译/AI-Core算子编译基本用法.md#常用的编译选项)编译选项，在对应产品版本下调用相关API会触发编译期报错。具体API范围见[使用预留UB空间的API列表](#section_reserved_ubuf_api)。
 -   同步事件需要由开发者使用[SetFlag/WaitFlag\(ISASI\)](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/同步控制/核内同步/SetFlag-WaitFlag(ISASI).md)和[PipeBarrier\(ISASI\)](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/同步控制/核内同步/PipeBarrier(ISASI).md)手动插入，事件的类型和事件ID由开发者自行管理，但需要注意事件ID不能使用6和7（可能与内部使用的事件ID出现冲突，进而出现未定义行为）。
 -   由于需要使用SetFlag/WaitFlag/PipeBarrier底层同步接口（属于ISASI硬件体系结构相关的接口），无法保证算子跨硬件版本兼容。
 -   Kernel入口处需要开发者手动调用[InitSocState](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/工具接口/系统初始化/InitSocState.md)接口用来初始化全局状态寄存器。因为全局状态寄存器处于不确定状态，如果不调用该接口，可能导致算子执行过程中出现未定义行为。在TPipe框架编程中，初始化过程由TPipe完成，无需开发者关注。
@@ -184,6 +184,7 @@
 
 ## 支持的API范围<a name="section2633193623711"></a>
 
+<!-- npu="310p" id1 -->
 **表1**  针对Atlas 推理系列产品AI Core，支持的API范围
 
 <a name="table56285428438"></a>
@@ -291,7 +292,9 @@
 </tr>
 </tbody>
 </table>
+<!-- end id1 -->
 
+<!-- npu="910b" id2 -->
 **表2**  针对Atlas A2 训练系列产品/Atlas A2 推理系列产品，支持的API范围
 
 <a name="table1842818536431"></a>
@@ -492,7 +495,9 @@
 </tr>
 </tbody>
 </table>
+<!-- end id2 -->
 
+<!-- npu="A3" id3 -->
 **表3**  针对Atlas A3 训练系列产品/Atlas A3 推理系列产品，支持的API范围
 
 <a name="table167051848128"></a>
@@ -706,7 +711,9 @@
 </tr>
 </tbody>
 </table>
+<!-- end id3 -->
 
+<!-- npu="950" id4 -->
 **表4**  针对Ascend 950PR/Ascend 950DT，支持的API范围
 
 <a name="table1798673512413"></a>
@@ -920,6 +927,7 @@
 </tr>
 </tbody>
 </table>
+<!-- end id4 -->
 
 ## 使用预留UB空间的API范围<a name="section_reserved_ubuf_api"></a>
 
@@ -928,17 +936,17 @@
 >[!CAUTION]注意
 > 同一接口若提供多个重载原型，可能只有部分原型会使用UB预留空间。
 
-<!-- npu="A3,910b" id1 -->
-**表5**  针对 [NPU架构版本2201](../../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)，使用预留UB空间的API范围
+<!-- npu="A3,910b" id5 -->
+**表5**  针对 [NPU架构版本2201](../../../语言扩展层/SIMD-BuiltIn关键字.md#npu-arch)，使用预留UB空间的API范围
 
 | API类别 | API名 |
 | --- | --- |
 | 基础API | AddDeqRelu、Select |
 | 高阶API | Digamma、Lgamma、Power、Sign、LayerNorm、DropOut、SelectWithBytesMask |
-<!-- end id1 -->
+<!-- end id5 -->
 
-<!-- npu="950" id2 -->
-**表6**  针对 [NPU架构版本3510](../../../语言扩展层/SIMD-BuiltIn关键字.md#table65291052154114)，使用预留UB空间的API范围
+<!-- npu="950" id6 -->
+**表6**  针对 [NPU架构版本3510](../../../语言扩展层/SIMD-BuiltIn关键字.md#npu-arch)，使用预留UB空间的API范围
 
 | API类别 | API名 |
 | --- | --- |
@@ -953,4 +961,4 @@
 | 基础API > Kernel-Tiling | GET_TILING_DATA、GET_TILING_DATA_WITH_STRUCT、GET_TILING_DATA_MEMBER |
 | Utils API > 调测接口（SIMD VF） | printf、asc_dump_reg、asc_dump、asc_dump_ubuf |
 | 高阶API | AscendAntiQuant、AdjustSoftMaxRes、TopK |
-<!-- end id2 -->
+<!-- end id6 -->
