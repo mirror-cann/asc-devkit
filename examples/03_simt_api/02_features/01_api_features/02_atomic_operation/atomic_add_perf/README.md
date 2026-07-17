@@ -1,0 +1,488 @@
+# asc_atomic_add接口性能对比样例
+
+## 概述
+
+本样例以[asc_atomic_add()](../../../../../../docs/zh/api/SIMT-API/原子操作/asc_atomic_add.md)接口为例，通过五组对照实验，展示不同内存空间（Global Memory / Unified Buffer）、不同原子累加组织方式（直接原子加 / 线程块内先累加再写回GM）、是否使用返回值、同一地址上的竞争强度，以及数据类型（int32 / int64）等不同使用场景下的接口性能差异，并给出相应的优化指导。
+
+## 支持的产品
+
+- Ascend 950PR/Ascend 950DT
+
+## 支持的CANN软件版本
+
+- \>= CANN 9.1.0
+
+## 目录结构介绍
+
+```text
+├── atomic_add_perf
+│   ├── figures                // README中的图片资源
+│   ├── CMakeLists.txt         // 样例构建脚本
+│   ├── atomic_add_perf.asc    // 样例代码
+│   ├── README.md
+│   └── README_en.md
+```
+
+## 样例描述
+
+本样例总共包含20个场景，分别测试`asc_atomic_add()`接口在下列使用场景中的性能表现：
+
+- 不同内存空间（Global Memory、Unified Buffer）。
+- 不同原子累加组织方式（直接原子加、线程块内先在UB累加再写回GM）。
+- 是否使用返回值。
+- 同一地址上的竞争强度。
+- 数据类型（int32、int64）。
+
+20个场景归为5组对照实验（Case 1~5）进行性能对比，最终给出`asc_atomic_add()`接口的性能特性说明。样例通过`SCENARIO_NUM`选择一个待测场景，每次运行仅启动一个目标Kernel。
+
+**5组对照**：
+
+| 对照Case | 对照维度 | 参与场景 |
+|:---:|---|---|
+| Case 1 | 启动1个线程块时的内存位置：Global Memory → Unified Buffer | 场景1 ↔ 场景2 |
+| Case 2 | 多线程块下的内存位置：Global Memory → Unified Buffer | 场景3 ↔ 场景4 |
+| Case 3 | 是否使用返回值：使用返回值 → 不使用返回值 | 场景5 ↔ 场景6（GM）<br>场景7 ↔ 场景8（UB） |
+| Case 4 | 同一地址上的竞争强度：target_count 12288→1024→32→1（竞争由弱到强） | 场景9→10→11→12（int32）<br>场景13→14→15→16（int64） |
+| Case 5 | 数据类型的取舍：int32_t → int64_t | 场景17 ↔ 场景18（无返回值）<br>场景19 ↔ 场景20（有返回值） |
+
+## 样例实现
+
+本节以五组对照（Case 1~5）逐一分析内存层级、原子组织方式、返回值、同一地址上的竞争强度、数据类型的取舍对原子加性能的影响。每组对照只改变一个属性、其余保持一致，并给出对应的`msopprof`实测数据与性能表现根因分析。
+
+### 性能指标说明
+
+| 指标 | 说明 |
+| --- | --- |
+| Task Duration（μs） | Task整体耗时，包含调度到加速器的时间、加速器上的执行时间以及响应结束时间 |
+
+
+---
+
+### Case 1：不同内存空间性能差异（单线程块场景）
+
+**样例目标**：在所有线程竞争同一个地址的场景下，对比原子加落在Global Memory与Unified Buffer上的性能差异。
+
+**场景配置**：
+
+| 场景 | 内存位置 | 数据类型 | 返回值 | 规模（Block×Thread） | 原子加目标地址数 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 1 | Global Memory | int32_t | 否 | 1×1024 | 1 |
+| 2 | Unified Buffer | int32_t | 否 | 1×1024 | 1 |
+
+**核心实现**：启动1个线程块，每个线程块包含1024个线程。GM场景下1024个线程对同一个GM地址执行原子加；UB场景下1024个线程对同一个UB地址执行原子加。Case 1只对比接口访问GM和访问UB的开销，UB场景不做正确性校验。
+
+```cpp
+// 场景1：GM单地址，所有线程竞争同一个GM计数器
+__global__ void atomic_add_gm_single_no_return(int32_t* counter)
+{
+    asc_atomic_add(counter, 1);  // 1024个线程访问同一GM地址
+}
+
+// 场景2：UB单地址，所有线程调用同一个UB地址上的原子加接口
+__global__ void atomic_add_ub_local_no_return()
+{
+    __ubuf__ int32_t local[1];
+    asc_atomic_add(&local[0], 1);  // 1024个线程访问同一UB地址
+}
+```
+
+**性能数据**：
+
+| 场景 | 内存 | Task Duration（μs） |
+|:---:|:---:|---:|
+| 1 | Global Memory | 87.60 |
+| 2 | Unified Buffer | 1.84 |
+
+**分析**：
+
+性能数据呈现出一个现象：
+
+**UB上的原子操作显著快于GM。** 同样是1024个线程竞争同一个地址，GM场景约87.60μs，UB场景约1.84μs，相差约**48倍**。
+
+两个场景的线程数、数据类型、是否使用返回值和目标地址数均相同，唯一变化是原子加的内存位置。要解释这一现象，需先了解原子加的原理与GM、UB的存储位置。
+
+**原理一：同一地址上的原子操作只能串行排队，无法并行执行。**
+
+原子加需完成“读出旧值 → 计算新值 → 写回新值”三个步骤。若多个线程同时更新同一地址且缺乏保护，可能出现多个线程读到相同旧值、后写回的结果覆盖先写回的结果，导致部分加法丢失。原子操作为避免此类丢失，保证“读—算—写”三步作为一个不可分割的整体完成。因此，同一地址上的多个原子操作无法并行执行，只能串行执行。
+
+**原理二：GM与UB的原子访问路径和处理开销不同。**
+
+GM是位于AI Core外部的设备全局内存，访问路径较长；UB是位于AI Core内部的共享内存，访问路径更短、延迟更低，因此UB上的单次原子操作处理开销低于GM。
+在本组同地址竞争场景中，GM与UB上的1024次原子操作均需串行执行，处理开销的差异会随串行执行不断叠加，最终使GM的总耗时显著高于UB。
+
+**结论**：可在UB完成的原子累加，不宜在GM上执行。
+
+---
+
+### Case 2：不同内存空间性能差异（多线程块场景）
+
+**样例目标**：在多个线程块同时竞争一个GM地址的场景下，对比“所有线程直接原子加到同一个GM地址”与“先在各线程块自己的UB中累加、再由每个线程块写回GM”两种方式的性能差异。
+
+**场景配置**：
+
+| 场景 | 内存位置 | 数据类型 | 返回值 | 规模（Block×Thread） | 原子加目标地址数 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 3 | Global Memory | int32_t | 否 | 8×1024 | 1 |
+| 4 | Unified Buffer | int32_t | 否 | 8×1024 | 1 |
+
+**核心实现**：启动8个线程块、每个线程块1024个线程（共8192个线程）。GM场景下8192个线程直接对同一个GM地址执行原子加；UB场景下每个线程块先在自己的UB数组`local[1]`上累加，再由每个线程块各做一次GM原子加写回。
+
+```cpp
+// 场景3：GM单地址，8192个线程都直接竞争同一个GM计数器
+__global__ void atomic_add_gm_single_no_return(int32_t* counter)
+{
+    asc_atomic_add(counter, 1);
+}
+
+// 场景4：每个线程块先在自己的UB中累加，再由线程0写回GM
+__global__ void atomic_add_ub_block_accum_no_return(int32_t* gm_result)
+{
+    __ubuf__ int32_t local[1];
+    if (threadIdx.x == 0) {
+        local[0] = 0;
+    }
+    asc_syncthreads();
+
+    asc_atomic_add(&local[0], 1);  // 1024个线程访问本线程块的UB地址
+    asc_syncthreads();
+
+    if (threadIdx.x == 0) {
+        asc_atomic_add(gm_result, local[0]);  // 每个线程块仅1次GM原子加
+    }
+}
+```
+
+**性能数据**：
+
+| 场景 | 组织方式 | Task Duration（μs） |
+|:---:|:---:|---:|
+| 3 | GM直接原子加 | 351.47 |
+| 4 | UB块内累加后写回GM | 2.25 |
+
+**分析**：
+
+两种方式的原子加总数相同，耗时却相差约**156倍**（351.47μs vs 2.25μs）。差距来自两个叠加因素：
+
+- **并行 vs 串行。** 落在同一地址上的原子操作只能串行执行（原理见Case 1）。GM是所有线程块的线程都可以直接访问的内存，场景3中8192个原子加集中在唯一的GM地址上，只能串行执行；UB只有当前线程块内部的线程可以访问，不同线程块使用各自的UB。场景4中各线程块先在UB上累加，同一地址上的原子操作仅限于同一线程块内的1024个线程，并且8个线程块之间的UB原子操作互不竞争、可真正并行，仅最后8次GM写回需串行执行。
+- **UB上的原子操作性能优于GM。** UB上原子加延迟远低于GM（见Case 1）。因此场景4虽多了UB初始化、`asc_syncthreads`同步和GM写回等操作，但绝大部分原子加都在UB上完成、仅8次落在GM。
+
+这两个因素共同作用：绝大部分原子加不仅转移到了更快的UB上，还被拆分到各线程块并行执行，二者带来的收益远大于UB初始化、同步、GM写回等额外操作的开销，因此场景4整体仍大幅快于场景3。
+
+**结论**：当多个线程块要进行同地址原子累加时，不建议让每个线程都直接对GM做原子加——这会让所有线程在同一个GM地址上串行排队。更推荐先在每个线程块的UB中并行完成块内累加，再由每个线程块向GM写回一次，既将大部分GM上的原子操作转移到性能更优的UB上、又把它们拆分为可并行执行的任务。
+
+---
+
+### Case 3：返回值开销
+
+**样例目标**：分别在GM和UB上，对比`asc_atomic_add()`使用返回值与不使用返回值的性能差异。
+
+**场景配置**：
+
+| 场景 | 内存位置 | 数据类型 | 返回值 | 规模（Block×Thread） | 原子加目标地址数 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 5 | Global Memory | int32_t | 是 | 1×2048 | 1 |
+| 6 | Global Memory | int32_t | 否 | 1×2048 | 1 |
+| 7 | Unified Buffer | int32_t | 是 | 1×2048 | 1 |
+| 8 | Unified Buffer | int32_t | 否 | 1×2048 | 1 |
+
+**核心实现**：启动1个线程块，每个线程块包含2048个线程，分别在GM和UB上测试使用返回值与不使用返回值的场景，除是否使用返回值外，其余条件保持一致。使用返回值的场景将旧值写入线程本地`volatile`变量，避免返回值路径被编译器优化消除。
+
+```cpp
+// 场景5：GM单地址，使用返回值
+__global__ void atomic_add_gm_single_return(int32_t* counter)
+{
+    volatile int32_t old_value_sink = asc_atomic_add(counter, 1);
+    (void)old_value_sink;
+}
+
+// 场景6：GM单地址，不使用返回值
+__global__ void atomic_add_gm_single_no_return(int32_t* counter)
+{
+    asc_atomic_add(counter, 1);
+}
+
+// 场景7：UB单地址，使用返回值
+__global__ void atomic_add_ub_local_return()
+{
+    __ubuf__ int32_t local[1];
+    volatile int32_t old_value_sink = asc_atomic_add(&local[0], 1);
+    (void)old_value_sink;
+}
+
+// 场景8：UB单地址，不使用返回值
+__global__ void atomic_add_ub_local_no_return()
+{
+    __ubuf__ int32_t local[1];
+    asc_atomic_add(&local[0], 1);
+}
+```
+
+**性能数据**：
+
+| 内存 | 使用返回值（μs） | 不使用返回值（μs） | 耗时比值 |
+|:---:|---:|---:|:---:|
+| GM int32（场景5 vs 6） | 421.59 | 159.88 | 2.64× |
+| UB int32（场景7 vs 8） | 3.17 | 2.76 | 1.15× |
+
+**分析**：
+
+是否使用返回值对性能的影响在GM与UB上差异明显：
+
+- **GM int32**：不使用返回值时约159.88μs，使用返回值时约421.59μs，相差约**2.6倍**。
+- **UB int32**：不使用返回值时约2.76μs，使用返回值时约3.17μs，仅相差约**1.15倍**。
+
+产生该差异的原因是：`asc_atomic_add()`接口是否使用返回值，会让编译器生成**两条不同的原子加指令**——不使用返回值时，编译器会选择性能更优的指令；使用返回值时生成的指令性能开销更高。这一指令性能差异在GM上被显著放大，在UB上差距较小，因此GM上是否使用返回值对耗时的影响远大于UB。
+
+**结论**：建议在业务允许的条件下优先选择不使用返回值的方式。
+
+---
+
+### Case 4：同一地址上的竞争强度
+
+**样例目标**：对比同一个GM地址上竞争强度由弱到强时，对原子加性能的影响。
+
+**场景配置**：
+
+| 场景 | 内存位置 | 数据类型 | 返回值 | 规模（Block×Thread） | 原子加目标地址数 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 9 | Global Memory | int32_t | 是 | 48×256 | 12288 |
+| 10 | Global Memory | int32_t | 是 | 48×256 | 1024 |
+| 11 | Global Memory | int32_t | 是 | 48×256 | 32 |
+| 12 | Global Memory | int32_t | 是 | 48×256 | 1 |
+| 13 | Global Memory | int64_t | 是 | 48×256 | 12288 |
+| 14 | Global Memory | int64_t | 是 | 48×256 | 1024 |
+| 15 | Global Memory | int64_t | 是 | 48×256 | 32 |
+| 16 | Global Memory | int64_t | 是 | 48×256 | 1 |
+
+**核心实现**：启动48个线程块、每个线程块256个线程（共12288个线程），每个线程执行1次原子加1操作，原子加结果写入GM中由若干连续地址组成的内存区域。通过`target_count`控制GM中参与原子加的目标地址数，以构造不同程度的地址竞争。`target_count`设置为12288、1024、32、1四档；`target_count`越小，竞争同一地址的线程越多，因此竞争越强。`int32_t`和`int64_t`均覆盖上述四档配置。
+
+
+> [!NOTE]说明
+>本组场景统一使用返回值：由Case 3可知，不使用返回值时int32会触发指令优化，其耗时主要由该优化决定，会掩盖竞争强度和CacheLine排队本身带来的影响；统一使用返回值可屏蔽该优化，使int32与int64的耗时差异仅反映竞争强度与CacheLine排队机制。
+```cpp
+// 固定线程规模，仅改变target_count；target_count越小，落到同一地址的线程越多，竞争越强
+__global__ void atomic_add_gm_dense_i32_return(int32_t* counters, uint64_t target_count)
+{
+    volatile int32_t old_value_sink =
+        asc_atomic_add(counters + ((blockIdx.x * blockDim.x + threadIdx.x) % target_count), 1);
+    (void)old_value_sink;
+}
+```
+
+**性能数据**：
+
+| 数据类型 | target_count | 竞争同一地址的线程数 | Task Duration（μs） |
+|:---:|:---:|:---:|---:|
+| int32（场景9） | 12288 | 1（无同地址竞争） | 15.54 |
+| int32（场景10） | 1024 | 12 | 111.30 |
+| int32（场景11） | 32 | 384 | 2233.62 |
+| int32（场景12） | 1 | 12288 | 2136.16 |
+| int64（场景13） | 12288 | 1（无同地址竞争） | 9.29 |
+| int64（场景14） | 1024 | 12 | 61.10 |
+| int64（场景15） | 32 | 384 | 1120.19 |
+| int64（场景16） | 1 | 12288 | 2135.92 |
+
+int32与int64在四档竞争强度下的耗时对比如下图（纵轴为耗时，横轴从左到右竞争由强到弱）：
+
+<img src="figures/case4_1.png" alt="Case4 int32 vs int64 竞争强度对比" style="width: 70%; height: auto;">
+
+**分析**：
+
+性能数据呈现出四个现象：
+
+1. **竞争越强，耗时越高**。以int32为例，每个地址上的竞争线程数从1（无竞争）增加到12、再到384，耗时从15.54μs上升至111.30μs、再至2233.62μs，耗时随竞争强度大幅增长。
+2. **竞争增强到一定程度后，耗时不再上升，而是趋于饱和**。int32在`target_count = 32`（384线程/地址）与`target_count = 1`（12288线程/地址）时耗时接近（2233.62μs 与 2136.16μs），竞争线程数虽增大32倍，耗时几乎不变。
+3. **相同竞争强度下，位宽更大的int64反而更快**。`target_count = 32`时，int64耗时1120.19μs，约为int32（2233.62μs）的一半——这与“数据类型位宽越小、性能越优”的直觉相反。
+4. **竞争最强（`target_count = 1`）时，int32与int64耗时基本一致**。场景12（int32）为2136.16μs、场景16（int64）为2135.92μs，两者几乎相等，现象3中int64更快的优势在此消失。
+
+如Case 1所述，同一地址上的原子操作只能串行排队。`target_count`越小，每个地址上的竞争线程数越多，排队等待越久，因此耗时越高，这解释了现象1。但同一地址上的竞争无法解释耗时趋于饱和以及int32与int64之间的性能差异。要解释现象2～4，还需进一步了解原子操作在CacheLine层级的排队机制。
+
+**原理：排队并非以单个地址为单位，而是以CacheLine（128B）为单位。**
+
+原子加访问GM地址时，会经过L2缓存层级，由L2侧的原子处理单元完成“读—算—写”。L2并非按单个int32或int64独立处理，而是以一段连续内存作为缓存和访问的基本单位，这段连续内存称为CacheLine，大小为128B。L2对**同一条CacheLine上**的原子操作统一排队串行：即使各线程修改的是相互独立、互不重叠的地址，只要它们同属一条CacheLine，仍需排队；只有落在不同CacheLine上的原子操作才能真正并行。
+
+这一机制解释了现象2：以int32为例：一条128B的CacheLine可容纳32个int32地址（32 × 4B = 128B）。`target_count = 32`时，32个地址恰好全部落在同一条CacheLine上；`target_count = 1`时，所有线程更是集中到唯一一个地址、同样在一条CacheLine上。两种情形下，全部12288次原子操作都挤在同一条CacheLine上串行排队，因此从`target_count = 32`到`target_count = 1`耗时不再上升，而是趋于饱和（2233.62μs 与 2136.16μs 基本持平）。
+
+在这一机制的基础上进一步看数据类型的影响：**相同的地址数量下，int64占用的CacheLine更多，从而减少了每条CacheLine上的排队数量。**
+
+一条128B的CacheLine可容纳的地址数量，取决于单个地址的位宽：
+
+| 数据类型 | 单个地址大小 | 每128B CacheLine容纳地址数 |
+|:---:|:---:|:---:|
+| int32 | 4B | 128B / 4B = 32 |
+| int64 | 8B | 128B / 8B = 16 |
+
+同一CacheLine上的原子操作排队示意图如下：
+
+<img src="figures/case4_2.png" alt="local_his" style="width: 70%; height: auto;">
+
+这一机制解释了现象3与现象4：
+
+- **现象3（`target_count = 32`时int64更快）**：32个int32地址恰好落在同一条CacheLine内，全部原子操作在这一条CacheLine上串行排队；而同样32个int64地址需占用2条CacheLine，操作被分摊到2条CacheLine上分别排队，每条CacheLine上的排队长度减半，因此int64更快。
+- **现象4（`target_count = 1`时两者一致）**：所有线程访问同一个地址，无论int32还是int64，该地址都只落在一条CacheLine上，两种类型都退化为在同一条CacheLine、同一地址上的排队，因此两者耗时基本相等（2136.16μs 与 2135.92μs）。
+
+由此可见，此处的性能差异与数据类型位宽本身无关，仅取决于原子操作地址在CacheLine上的分布密度。
+
+
+**结论**：原子加性能对同一地址上的竞争强度高度敏感，竞争越强、同一地址（及同一条CacheLine）上排队串行的原子操作越多、耗时越高。应尽量分散原子更新的目标地址。
+
+---
+
+### Case 5：数据类型的取舍
+
+**样例目标**：在GM上、存在真实同地址竞争的场景下，对比int32与int64原子加的性能，说明数据类型的取舍取决于是否使用返回值——不能仅凭“数据类型位宽越小、性能越优”的直觉选择。
+
+**场景配置**：
+
+| 场景 | 内存位置 | 数据类型 | 返回值 | 规模（Block×Thread） | 原子加目标地址数 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 17 | Global Memory | int32_t | 否 | 48×256 | 1024 |
+| 18 | Global Memory | int64_t | 否 | 48×256 | 1024 |
+| 19 | Global Memory | int32_t | 是 | 48×256 | 1024 |
+| 20 | Global Memory | int64_t | 是 | 48×256 | 1024 |
+
+> [!NOTE]说明
+> 由于int64原子加仅支持GM，本样例的数据类型对照仅在GM场景下进行。
+
+**核心实现**：启动48个线程块、每个线程块256个线程（共12288个线程），每个线程执行1次原子加1操作，原子加结果写入GM中由若干连续地址组成的内存区域。通过`target_count`控制GM中参与原子加的目标地址数，本组固定`target_count = 1024`，即12个线程竞争同一个地址。在相同的地址竞争程度下，分别测试`int32_t`和`int64_t`使用返回值与不使用返回值的四种组合。
+
+```cpp
+// 不使用返回值
+__global__ void atomic_add_gm_dense_i32_no_return(int32_t* counters, uint64_t target_count)
+{
+    asc_atomic_add(counters + ((blockIdx.x * blockDim.x + threadIdx.x) % target_count), 1);
+}
+
+// 使用返回值
+__global__ void atomic_add_gm_dense_i32_return(int32_t* counters, uint64_t target_count)
+{
+    volatile int32_t old_value_sink =
+        asc_atomic_add(counters + ((blockIdx.x * blockDim.x + threadIdx.x) % target_count), 1);
+    (void)old_value_sink;
+}
+```
+
+**性能数据**：
+
+| 是否使用返回值 | int32（μs） | int64（μs） | 性能对比 |
+|:---:|---:|---:|:---:|
+| 不使用返回值（场景17、18） | 1.89 | 58.46 | int32 更快，约为int64的31倍 |
+| 使用返回值（场景19、20） | 110.95 | 54.28 | int32 更慢，耗时约为int64的2倍 |
+
+**分析**：
+
+同为int32与int64的对比，两种情形下的快慢关系正好相反：不使用返回值时int32远快于int64（1.89μs vs 58.46μs，约31倍），使用返回值时int32却慢于int64（110.95μs vs 54.28μs，约2倍）。两种情形分别由不同机制主导：
+
+- **不使用返回值时**，int32原子加会执行优化后的指令，即使约12个线程竞争同一地址，耗时仍低至1.89μs；int64不具备该优化，同等竞争下耗时高达58.46μs，因此int32远快于int64。
+- **使用返回值时**，int32无法触发上述优化，性能转而受同一CacheLine上的排队主导：一条128B的CacheLine可容纳32个int32地址、但只容纳16个int64地址，相同地址数下int32每条CacheLine上排队串行的原子操作约为int64的2倍，耗时也近似翻倍，因此int32反而慢于int64。CacheLine排队机制的详细说明见Case 4。
+
+可见，int32相对int64的快慢并非由类型位宽单方面决定，而取决于是否使用返回值。
+
+**结论**：数据类型的取舍取决于是否使用返回值，不能一概而论。纯计数等不使用返回值的场景，优先选择int32（会执行指令优化）；而在使用返回值、且目标地址紧密排布的场景下，int32因每条CacheLine容纳更多地址、排队更重，反而慢于int64，此时可通过padding或结构体对齐降低同一CacheLine上的排队开销。
+
+---
+
+## 性能对比总结
+
+**全场景Task Duration汇总**：
+
+| 场景 | 对照Case编号 | 内存 | 数据类型 | 返回值 | 规模 | 原子加目标地址数 | Task Duration（μs） |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|---:|
+| 1 | Case 1 | GM |   int32 | 否 | 1×1024 | 1 | 87.60 |
+| 2 | Case 1 | UB |  int32 | 否 | 1×1024 | 1 | 1.84 |
+| 3 | Case 2 | GM |   int32 | 否 | 8×1024 | 1 | 351.47 |
+| 4 | Case 2 | UB |  int32 | 否 | 8×1024 | 1 | 2.25 |
+| 5 | Case 3 | GM |   int32 | 是 | 1×2048 | 1 | 421.59 |
+| 6 | Case 3 | GM |   int32 | 否 | 1×2048 | 1 | 159.88 |
+| 7 | Case 3 | UB |  int32 | 是 | 1×2048 | 1 | 3.17 |
+| 8 | Case 3 | UB |  int32 | 否 | 1×2048 | 1 | 2.76 |
+| 9 | Case 4 | GM |   int32 | 是 | 48×256 | 12288 | 15.54 |
+| 10 | Case 4 | GM |   int32 | 是 | 48×256 | 1024 | 111.30 |
+| 11 | Case 4 | GM |   int32 | 是 | 48×256 | 32 | 2233.62 |
+| 12 | Case 4 | GM |   int32 | 是 | 48×256 | 1 | 2136.16 |
+| 13 | Case 4 | GM |   int64 | 是 | 48×256 | 12288 | 9.29 |
+| 14 | Case 4 | GM |   int64 | 是 | 48×256 | 1024 | 61.10 |
+| 15 | Case 4 | GM |   int64 | 是 | 48×256 | 32 | 1120.19 |
+| 16 | Case 4 | GM |   int64 | 是 | 48×256 | 1 | 2135.92 |
+| 17 | Case 5 | GM |   int32 | 否 | 48×256 | 1024 | 1.89 |
+| 18 | Case 5 | GM |   int64 | 否 | 48×256 | 1024 | 58.46 |
+| 19 | Case 5 | GM |   int32 | 是 | 48×256 | 1024 | 110.95 |
+| 20 | Case 5 | GM |  int64 | 是 | 48×256 | 1024 | 54.28 |
+
+
+## 调优建议
+
+1. **优先使用UB而非GM完成原子累加**：能在UB完成的原子累加应避免放到GM上执行；多线程块累加同一地址时，应先在各线程块的UB中完成累加，再由每个线程块写回GM一次，而非所有线程直接对GM执行原子加。
+2. **分散原子操作的目标地址**：同一地址或同一条CacheLine（128B）上的原子操作只能串行排队，竞争强度越高耗时越长，应尽量使不同线程访问不同地址、不同CacheLine。
+3. **非必要不使用返回值**：不使用返回值时编译器会生成性能更优的指令；纯计数场景应优先选择int32（不使用返回值时具备指令优化），若业务要求使用返回值且目标地址分布密集，可选用int64或对int32进行padding。
+
+## 编译运行
+
+在本样例根目录下执行如下步骤，编译并执行样例。
+
+- 配置环境变量
+
+  请根据当前环境上CANN开发套件包的[安装方式](../../../../../../docs/zh/quick_start.md#prepare&install)，配置环境变量。
+
+  ```bash
+  source ${install_path}/cann/set_env.sh
+  ```
+
+  > **说明：** `${install_path}`为CANN包安装目录，未指定安装目录时默认安装至`/usr/local/Ascend`下。
+
+- 样例执行
+
+  编译并运行场景1：
+
+  ```bash
+  mkdir -p build && cd build
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSCENARIO_NUM=1 ..
+  make -j
+  ./atomic_add_perf
+  ```
+
+  编译选项说明：
+
+  | 选项 | 可选值 | 说明 |
+  |------|--------|------|
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU架构：本样例仅支持dav-3510（Ascend 950PR/Ascend 950DT） |
+  | `SCENARIO_NUM` | `1`-`20` | 待测场景编号。每个场景的规模（Block×Thread）、数据类型、是否使用返回值、`target_count`等均由源码中`get_scenario_config()`统一配置 |
+  | `SKIP_VALIDATION` | `ON`/`OFF` | 是否跳过结果校验，默认`OFF`。Case 1/3的UB-only场景没有GM结果，会自动跳过校验；使用`msopprof`采集GM写回场景时建议设为`ON` |
+
+  执行结果如下，说明正确性校验通过。
+
+  ```text
+  Scenario 1: Case1 GM int32 single-address, no return value
+  Workload: blocks=1 threads_per_block=1024 total_atomic_adds=1024
+  Validation passed
+  ```
+
+## 性能分析
+
+使用`msopprof`工具获取详细性能数据：
+
+```bash
+msprof op ./atomic_add_perf
+```
+
+命令完成后，会在默认目录下生成以“OPPROF_{timestamp}_XXX”命名的文件夹，性能数据文件夹结构示例如下：
+
+```text
+├──dump                       # 原始的性能数据，用户无需关注
+├──ArithmeticUtilization.csv  # cube/vector指令cycle占比
+├──L2Cache.csv                # L2 Cache命中率
+├──Memory.csv                 # UB，L1和主存储器读写带宽速率
+├──MemoryL0.csv               # L0A，L0B，和L0C读写带宽速率
+├──MemoryUB.csv               # Vector和Scalar到UB的读写带宽速率
+├──OpBasicInfo.csv            # 算子基础信息
+├──PipeUtilization.csv        # 采集计算单元和搬运单元耗时和占比
+├──ResourceConflictRatio.csv  # UB上的bank group、bank conflict和资源冲突率在所有指令中的占比
+└──visualize_data.bin         # MindStudio Insight呈现文件
+```
+
+> [!NOTE]说明
+> **关于性能采集时的Validation failed：** 除Case 1/3的UB-only场景外，样例场景的最终累加结果会写回GM计数器，该计数器仅在host侧分配时清零一次，kernel仅累加、不在入口清零。`msopprof`的warmup+replay会在同一块GM内存上重复执行kernel，计数器被累加多次，因此严格校验模式下会报`Validation failed`（计数为期望值的整数倍）。
+>
+> Case 2的UB块内累加场景虽然UB上的中间累加器在kernel入口清零、对replay幂等，但最终仍通过`asc_atomic_add`写回GM计数器，该GM计数器在replay下同样被多次累加，因此校验同样会失败。
+>
+> 该现象是replay机制与校验逻辑的固有冲突。采集所有场景时均建议通过`-DSKIP_VALIDATION=ON`跳过校验。

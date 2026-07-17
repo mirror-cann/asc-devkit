@@ -9,3 +9,4 @@
 |  目录名称                                                   |  功能描述                                              |
 | ------------------------------------------------------------ | ---------------------------------------------------- |
 | [histogram](./histogram) | 基于SIMT编程方式实现Histogram样例，展示[`asc_atomic_add()`](../../../../../docs/zh/api/SIMT-API/原子操作/asc_atomic_add.md)接口的使用方法。|
+| [atomic_add_perf](./atomic_add_perf) | 以[`asc_atomic_add()`](../../../../../docs/zh/api/SIMT-API/原子操作/asc_atomic_add.md)为例，通过五组对照实验展示内存层级、原子操作组织方式、是否使用返回值、数据类型对原子加性能的影响，并给出优化指导。|
