@@ -36,6 +36,8 @@ struct CopyL0C2GM;
 struct CopyL0C2GMWith;
 struct CopyL0C2UB;
 struct CopyL0C2UBWith;
+struct CopyL0C2L1;
+struct CopyL0C2L1With;
 
 } // namespace Te
 } // namespace AscendC

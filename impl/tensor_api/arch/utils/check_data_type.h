@@ -374,6 +374,25 @@ public:
     }
 
     template <QuantMode_t quantPre, typename T, typename U>
+    __aicore__ inline static constexpr void CheckL0C2L1DataType()
+    {
+        using srcType = typename U::elementType;
+        using dstType = typename T::elementType;
+#if defined(__NPU_ARCH__) && __NPU_ARCH__ == 3510
+        static_assert(
+            (quantPre == QuantMode_t::NoQuant &&
+             Std::is_one_of_v<
+                 Std::tuple<dstType, srcType>, Std::tuple<__cbuf__ float, __cc__ float>,
+                 Std::tuple<__cbuf__ int32_t, __cc__ int32_t>>) ||
+                (quantPre == QuantMode_t::F322F16 &&
+                 Std::is_one_of_v<Std::tuple<dstType, srcType>, Std::tuple<__cbuf__ half, __cc__ float>>) ||
+                (quantPre == QuantMode_t::F322BF16 &&
+                 Std::is_one_of_v<Std::tuple<dstType, srcType>, Std::tuple<__cbuf__ bfloat16_t, __cc__ float>>),
+            "The data type is not supported.");
+#endif
+    }
+
+    template <QuantMode_t quantPre, typename T, typename U>
     __aicore__ inline static constexpr void CheckL0C2UbDataType()
     {
         using srcType = typename U::elementType;
