@@ -7,7 +7,7 @@ SIMD与SIMT混合编程中涉及的函数类型如下表所示：
 <a name="zh-cn_topic_0000002571578013_table1818191292017"></a>
 | 修饰符 | 函数功能 | 调用方式 |
 | --- | --- | --- |
-| `__global__ __aicore__` | 算子入口，协调VF执行。若只有在AIV核内执行的SIMD与SIMT混合编程场景，可使用__global__ __vector__来标识只启动AIV核。 | Host侧通过`<<<...>>>`调用 |
+| `__global__ __aicore__` | 算子入口，协调VF执行。若只有在AIV核内执行的SIMD与SIMT混合编程场景，可使用`__global__ __vector__`来标识只启动AIV核。 | Host侧通过`<<<...>>>`调用 |
 | `__aicore__` | Device侧辅助函数 | 核函数或同级函数调用 |
 | `__simt_vf__` | 线程级并行计算任务 | 通过SIMT提供的`asc_vf_call`接口调用 |
 | `__simd_vf__` | 向量级并行计算任务 | 通过SIMD提供的`asc_vf_call`接口调用 |
@@ -24,7 +24,7 @@ SIMD与SIMT混合编程中涉及的函数类型如下表所示：
 - `__callee__`公共函数：可供VF内部调用的公共子函数。`__callee__`函数内只能调用`__callee__`函数。
 
 **图1** SIMD与SIMT混合编程函数调用层级  
-<img src="../../../../figures/SIMT_混合_函数调用层级.png" title="SIMD与SIMT混合编程函数调用层级">
+<img src="../../../../figures/SIMT_混合_函数调用层级.png" title="SIMD与SIMT混合编程函数调用层级" width="70%"/>
 
 ## 核函数的定义与执行配置<a name="zh-cn_topic_0000002571578013_section156822920311"></a>
 

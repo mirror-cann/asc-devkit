@@ -9,4 +9,4 @@
 | 目录名称                                               | 功能描述                                                                                        |
 | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
 | [00_memory_optimizations](./00_memory_optimizations)   | 介绍SIMT编程方式下全局访存合并、片上缓存中转复用、bank冲突规避及短向量调优等访存优化方法。 |
-| [01_execution_conf_optimizations](./01_execution_conf_optimizations)   | 介绍SIMT编程方式下执行配置最大线程束设置的优化方法。 |
+| [01_execution_conf_optimizations](./01_execution_conf_optimizations)   | 介绍SIMT编程方式下执行配置最大线程块设置的优化方法。 |
