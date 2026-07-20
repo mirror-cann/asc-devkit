@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example uses matrix transpose to demonstrate memory access optimization strategies in the Ascend C SIMT programming model. First, it establishes a GM contiguous read/write baseline with 1D contiguous copy and uses direct global memory transpose to expose the main cost of non-contiguous writes. Then, it introduces UB staging and 32x32 tiling to move the non-contiguous GM write into a transpose-direction UB access. Next, it compares launching Thread Blocks per tile group with fixing the Thread Block count to the hardware vector core count, and analyzes thread count selection through register spill under the 2048-thread configuration. After that, it eliminates bank conflicts during the transpose read phase through UB padding. Finally, it uses double buffering to remove the trailing synchronization in the loop, presenting the complete tuning path for SIMT matrix transpose.
+This example uses matrix transpose to demonstrate memory access optimization strategies in the Ascend C SIMT programming model. First, it establishes a GM contiguous read/write baseline with 1D contiguous copy and uses direct global memory transpose to expose the main cost of non-contiguous writes. Then, it introduces UB staging and 32x32 tiling to move the non-contiguous GM write into a transpose-direction UB access. Next, it compares launching Thread Blocks per tile group with fixing the Thread Block count to the hardware vector core count, and analyzes thread count selection through register spill under the 2048-thread configuration. After that, it eliminates bank conflicts during the transpose read phase through UB padding. Finally, it uses double buffering (Double Buffer) to remove the trailing synchronization in the loop, presenting the complete tuning path for SIMT matrix transpose.
 
 ## Supported Products
 
@@ -57,10 +57,10 @@ This example constructs an optimization path through 8 cases. The kernel, thread
 | 1 | `copy_kernel` | `core` | 1024 | Only reduce the thread count, matching the launch configuration of Case 5, Case 6, and Case 7 |
 | 2 | `transpose_naive_kernel` | `core` | 2048 | Directly perform transpose in GM |
 | 3 | `transpose_ub_2tile_naive_kernel` | `ceil(tiles / 2)` | 2048 | Introduce UB and 32x32 tile-based tiling, setting the thread block count according to the number of partitioned tiles |
-| 4 | `transpose_ub_2tile_kernel` | `core` | 2048 | Thread block count fixed to the hardware vector core count, with each thread block looping over multiple tile groups |
-| 5 | `transpose_ub_kernel` | `core` | 1024 | Switch to 1024 threads, with each thread block looping over multiple 32x32 tiles |
-| 6 | `transpose_ub_pad_kernel` | `core` | 1024 | Add 2 columns of padding to the UB tile, eliminating bank conflicts during the transpose read phase |
-| 7 | `transpose_ub_pad_db_kernel` | `core` | 1024 | Double buffer rotation, removing the trailing synchronization in the loop |
+| 4 | `transpose_ub_2tile_kernel` | `core` | 2048 | Limit the launched core count to the physical core count, with each thread block looping over multiple tile groups |
+| 5 | `transpose_ub_kernel` | `core` | 1024 | Reduce the thread count to avoid register spilling, with each thread block looping over multiple 32x32 tiles |
+| 6 | `transpose_ub_pad_kernel` | `core` | 1024 | Use UB padding to reduce bank conflicts during the transpose read phase |
+| 7 | `transpose_ub_pad_db_kernel` | `core` | 1024 | Use double buffering to reduce trailing synchronization in the loop |
 
 Here `core` is the hardware vector core count, queried at runtime via `aclrtGetDeviceInfo(ACL_DEV_ATTR_VECTOR_CORE_NUM)`. `tiles` is the total tile count `(W/32) x (H/32)`, which is 1024 for a 1024x1024 matrix.
 
@@ -213,7 +213,7 @@ Case 3 converts the non-contiguous GM write into a UB-internal transpose read th
 
 ---
 
-### Case 4: UB Staging Transpose, Fixed Thread Block Count, Two 32x32 Tiles per Iteration
+### Case 4: Limit the Launched Core Count to the Physical Core Count
 
 **Optimization Goal**: Change the thread block count of Case 3 from the tile group count after partitioning to the hardware vector core count, with each thread block processing multiple tile groups in a loop, and observe register usage under the 2048-thread configuration.
 
@@ -246,7 +246,7 @@ This output indicates that Case 4 already has register spill. Both Case 4 and Ca
 
 ---
 
-### Case 5: UB Staging Transpose, Fixed Thread Block Count
+### Case 5: Reduce the Thread Count to Avoid Register Spilling
 
 **Optimization Goal**: Switch to 1024 threads, adjusting the per-iteration granularity to one 32x32 tile, establishing the baseline configuration for subsequent optimizations.
 
@@ -275,7 +275,7 @@ In the current configuration, register spill has been eliminated and thread bloc
 
 ---
 
-### Case 6: UB Staging Transpose + Padding
+### Case 6: Add UB Padding to Reduce UB Bank Conflicts
 
 **Optimization Goal**: Based on Case 5, eliminate bank conflicts during the transpose read phase through UB padding.
 
@@ -336,7 +336,7 @@ Compared to 23.912μs in Case 5, padding reduces Task Duration to 15.152μs, a d
 
 ---
 
-### Case 7: UB Staging Transpose + Padding + Double Buffering, Removing Trailing Synchronization (1024 Threads)
+### Case 7: Use Double Buffering to Reduce Synchronization Overhead
 
 **Optimization Goal**: Remove the `asc_syncthreads()` at the end of each loop iteration in Case 6, reducing synchronization overhead.
 

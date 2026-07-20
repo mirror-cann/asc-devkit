@@ -1,204 +1,339 @@
-# MatrixTranspose Example
+# SIMD and SIMT Hybrid Programming Matrix Transpose Performance Tuning Sample
 
 ## Overview
 
-This example uses matrix transpose to demonstrate memory access coalescing optimization in Ascend C SIMD and SIMT hybrid programming scenarios. The example includes 2 case versions, starting from direct index transpose, then adjusting the data write-back method through UB intermediary to make GM reads and writes closer to contiguous access, showcasing global memory access optimization methods for matrix transpose in hybrid programming.
+Based on the [matrix_transpose_practice sample](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/03_best_practices/00_memory_optimizations/matrix_transpose_practice) in SIMT scenarios, this sample further optimizes the custom transpose operator by using SIMD and SIMT hybrid programming. It improves matrix transpose performance by running MTE movement and SIMT computation in parallel in hybrid programming. To show the step-by-step optimization process, this sample starts from direct global memory (GM) transpose. It then introduces Memory Transfer Engine (MTE) movement, Unified Buffer (UB) staging, and 32x32 tiling. It compares two Thread Block mapping methods: launching Thread Blocks by tile groups and fixing the Thread Block count. It reduces bank conflicts by using UB padding. Finally, it uses double buffering (Double Buffer) to run the MTE2 load, SIMT Vector Function (VF) transpose, and MTE3 store pipelines in parallel. This path shows the tuning process for SIMD and SIMT hybrid matrix transpose.
 
-## Supported Products and CANN Versions
+## Supported Products
 
-| Product | CANN Version |
-|------|-------------|
-| Ascend 950PR/Ascend 950DT | >= CANN 9.1.0 |
+- Ascend 950PR/Ascend 950DT
+
+## Supported CANN Version
+
+- CANN >= 9.1.0
 
 ## Directory Structure
 
 ```text
 ├── simd_simt_matrix_transpose
-│   ├── CMakeLists.txt         // Build project file
-│   ├── matrix_transpose.asc   // Matrix transpose example implementation
-│   ├── figures                // Image resources for README
-│   └── README.md
+│   ├── figures                     // Image resources for README
+│   ├── CMakeLists.txt              // Build project file
+│   ├── matrix_transpose.asc        // SIMD and SIMT hybrid matrix transpose optimization path implementation
+│   ├── README.md                   // Sample documentation
+│   └── README_en.md                // English sample documentation
 ```
 
-## Example Description
+## Sample Description
 
 - Computation formula:
 
-  $$
+  ```text
   output(x, y) = input(y, x)
-  $$
+  ```
 
-  - input is the input matrix with shape [H,W] and data type float
-  - output is the output matrix with shape [W,H] and data type float
-- Example specifications:
+  - input is the input matrix. Its shape is [H, W], and its data type is float.
+  - output is the output matrix. Its shape is [W, H], and its data type is float.
+
+- Sample specifications:
+
   <table>
-  <tr><td rowspan="1" align="center">Example Type (OpType)</td><td colspan="4" align="center">MatrixTranspose</td></tr>
-  <tr><td rowspan="2" align="center">Example Input</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
+  <tr><td rowspan="1" align="center">Sample Type (OpType)</td><td colspan="4" align="center">MatrixTranspose</td></tr>
+  <tr><td rowspan="2" align="center">Sample Input</td><td align="center">name</td><td align="center">shape</td><td align="center">data type</td><td align="center">format</td></tr>
   <tr><td align="center">input</td><td align="center">[1024,1024]</td><td align="center">float</td><td align="center">ND</td></tr>
-  <tr><td rowspan="1" align="center">Example Output</td><td align="center">output</td><td align="center">[1024,1024]</td><td align="center">float</td><td align="center">ND</td></tr>
-  <tr><td rowspan="1" align="center">Kernel Function Name</td><td colspan="4" align="center">transpose_kernel</td></tr>
+  <tr><td rowspan="1" align="center">Sample Output</td><td align="center">output</td><td align="center">[1024,1024]</td><td align="center">float</td><td align="center">ND</td></tr>
+  <tr><td rowspan="1" align="center">Kernel Function Name</td><td colspan="4" align="center">transpose_naive_kernel / transpose_ub_2tile_static_kernel / transpose_ub_2tile_loop_kernel / transpose_ub_pad_loop_kernel / transpose_ub_pad_db_kernel</td></tr>
   </table>
 
-## Example Implementation
+## Sample Implementation
 
 ### Case Implementation Description
 
-This example implements different memory access strategies by calling different SIMT VF functions. Each SIMT VF function corresponds to a specific case version.
+This sample constructs an optimization path through five cases. The kernel, Thread Block count, threads per Thread Block, and the main change introduced in each case are shown in the following table.
 
-| Case   | Implementation Characteristics                                           | SIMT VF Function Called               | Optimization Feature              |
-| ------ | -------------------------------------------------- | -------------------------- | --------------------- |
-| Case 0 | Directly compute output coordinates according to the transpose formula. GM contiguous read, non-contiguous write   | simt_transpose_naive     | Direct index transpose version      |
-| Case 1 | Transfer tiles through UB and swap read/write directions. GM reads and writes are closer to contiguous access | simt_transpose_coalesced | UB intermediary + global memory access coalescing |
+| Case | Kernel | Thread Block Count | Threads per Thread Block | Change Introduced in This Step |
+| ---- | ------ | ------------------ | ------------------------ | ------------------------------- |
+| 0 | `transpose_naive_kernel` | `core` | 2048 | Directly perform transpose in GM |
+| 1 | `transpose_ub_2tile_static_kernel` | `ceil(tiles / 2)` | 2048 | Introduce MTE movement, UB staging, and 32x32 tiling. Set the Thread Block count by tile groups |
+| 2 | `transpose_ub_2tile_loop_kernel` | `core` | 2048 | Limit the launched core count to the physical core count. One Thread Block loops over multiple tile groups |
+| 3 | `transpose_ub_pad_loop_kernel` | `core` | 2048 | Use UB padding to reduce bank conflicts during the SIMT VF transpose access phase |
+| 4 | `transpose_ub_pad_db_kernel` | `core` | 2048 | Use double buffering to run the MTE2 load, SIMT VF transpose, and MTE3 store pipelines in parallel |
 
-#### Thread Block Layout
+Here, `core` is the hardware vector core count. The runtime queries this value by using `aclrtGetDeviceInfo(ACL_DEV_ATTR_VECTOR_CORE_NUM)`. The performance data in this sample was collected in a test environment where `core=64`. `tiles` is the total tile count `(W/32) x (H/32)`. When processing a 1024x1024 matrix, the matrix is divided into 32x32 tiles, so `tiles=1024`.
 
-This example uses SIMD and SIMT hybrid programming. The kernel function calls `__simt_vf__` functions via `asc_vf_call`. To facilitate performance comparison across versions, this example only supports square matrices, and the matrix width and height must be integer multiples of 32. All cases use an identical thread block layout:
+### Performance Metrics
 
-- This example flattens 2D tile coordinates into 1D `blockIdx.x` and flattens the 32x32 elements within a tile into 1D `threadIdx.x`.
-- Each tile is 32x32, and one block processes one tile. The block count is `bn = grid_x * grid_y`, where `grid_x = matrix_width / TILE_DIM` and `grid_y = matrix_height / TILE_DIM`.
+| Metric | Description |
+| ------ | ----------- |
+| Task Duration(μs) | Total task duration, including scheduling time to the accelerator, execution time on the accelerator, and response completion time |
+| aiv_time(μs) | Theoretical execution time of the task on the AI Vector Core, in μs |
+| aiv_total_cycles | Total execution cycles on each AI Vector Core compute unit after the task is assigned |
+| aiv_vec_time(μs) | Duration of vec-type instructions, in μs |
+| aiv_vec_ratio | Ratio of vec-type instruction cycles to total cycles |
+| aiv_scalar_time(μs) | Duration of scalar-type instructions, in μs |
+| aiv_scalar_ratio | Ratio of scalar-type instruction cycles to total cycles |
+| aiv_mte2_time(μs) | Duration of MTE2 load instructions, in μs |
+| aiv_mte3_time(μs) | Duration of MTE3 store instructions, in μs |
 
-Based on the above partitioning, `blockIdx.x` represents the flattened 1D tile index. By dividing and taking modulo with `grid_width`, the 2D tile coordinates `(block_row, block_col)` for the current block can be restored. `threadIdx.x` represents the flattened 1D element index within the tile. By dividing and taking modulo with `TILE_DIM`, the local coordinates `(tile_row, tile_col)` of the element processed by the thread within the tile can be restored.
+Except for Task Duration, all other metrics are averages across all Thread Blocks.
 
-```cpp
-int block_row = blockIdx.x / grid_width;
-int block_col = blockIdx.x % grid_width;
+### Case 0: Direct Global Memory Transpose
 
-int tile_row = threadIdx.x / TILE_DIM;
-int tile_col = threadIdx.x % TILE_DIM;
-```
+**Optimization Goal**: Directly perform coordinate transformation in GM.
 
-The following figure provides a more intuitive mapping illustration. The left side shows the 1024x1024 matrix divided into 32x32 tiles. The right side shows one tile that a block needs to process, with a size of 32x32.
-
-<img src="./figures/blockMapping.png" width="60%">
-
-Taking the green element in the figure as an example, its input coordinates in GM can be directly derived using the built-in variables in the kernel.
-
-- The tile coordinates are (2,1), corresponding to:
-  - block_row = 2
-  - block_col = 1
-  - blockIdx.x = block_row x grid_width + block_col = 2 x 32 + 1 = 65
-- The local coordinates of the element within the tile are (2,29), corresponding to:
-  - threadIdx.x = tile_row x TILE_DIM + tile_col = 2 x 32 + 29 = 93
-
-Combined with the index computation in the code:
+**Core Implementation**: The SIMT VF reads `input(row, col)` and directly writes to the transposed position `output(col, row)`. The GM read is contiguous, while the write address strides across rows by column, making the write non-contiguous.
 
 ```cpp
-int input_row = block_row * TILE_DIM + tile_row;
-int input_col = block_col * TILE_DIM + tile_col;
-int index_in = input_col + width * input_row;
-```
-
-Substituting the variable values in this example:
-
-- block_row = 65 / 32 = 2
-- block_col = 65 % 32 = 1
-- tile_row = 93 / 32 = 2
-- tile_col = 93 % 32 = 29
-- input_row = block_row x TILE_DIM + tile_row = 2 x 32 + 2 = 66
-- input_col = block_col x TILE_DIM + tile_col = 1 x 32 + 29 = 61
-
-Therefore, the input element coordinates processed by this thread in GM are:
-
-- input[input_row,input_col] = input[66,61]
-
-Substituting the 1D address formula:
-
-- index_in = input_col + width x input_row = 61 + 1024 x 66
-
-### Performance Metric Description
-
-| Metric                | Description                                                                                      |
-| ------------------- | ----------------------------------------------------------------------------------------- |
-| Task Duration(μs)|Total task latency, including scheduling time to the accelerator, execution time on the accelerator, and response completion time.|
-| aiv_time|Theoretical task execution time on the AI Vector Core, in μs.|
-| aiv_vec_time(μs) | vec-type instruction (vector operation instruction) latency, in μs. |
-| aiv_vec_ratio | Ratio of vec-type instruction (vector operation instruction) cycles to total cycles. |
-| aiv_scalar_time(μs) | scalar-type instruction (scalar operation instruction) latency, in μs. |
-| aiv_scalar_ratio | Ratio of scalar-type instruction (scalar operation instruction) cycles to total cycles. |
-| aiv_mte2_time(μs) | mte2-type instruction (GM->UB transfer instruction) latency, in μs. |
-| aiv_mte2_ratio | Ratio of mte2-type instruction (GM->UB transfer instruction) cycles to total cycles. |
-| aiv_mte3_time(μs) | mte3-type instruction (UB->GM transfer instruction) latency, in μs. |
-| aiv_mte3_ratio | Ratio of mte3-type instruction (UB->GM transfer instruction) cycles to total cycles. |
-
-### Case 0: Direct Index Transpose Version
-
-**Example Objective**: Implement basic matrix transpose functionality as a latency comparison baseline for subsequent optimized versions.
-
-**Core Implementation**:
-
-- Each block processes one 32x32 tile.
-- Each SIMT thread processes 1 element within the tile.
-- The thread first reads the input element from GM using the original coordinates, then computes the transposed output position, and writes the data directly to the transposed GM address.
-- GM read direction is contiguous; GM write-back direction is non-contiguous.
-
-The following figure shows the data flow of Case 0, with red highlighting the elements processed by one Warp when reading from and writing to GM. Threads in the same Warp read one row of elements from the input tile in GM and write them back to one column of the output tile in GM. When reading the GM input, adjacent threads access contiguous element addresses, which is contiguous reading. When writing back to the output, adjacent threads are scattered across different rows of the output matrix, which is non-contiguous writing. Therefore, the core issue of this version is that the transposed write-back addresses are no longer contiguous, which typically significantly affects overall throughput.
-
-<img src="./figures/case0.png" width="60%">
-
-**Key Code**:
-
-```cpp
-int index_in = input_col + width * input_row;
-int index_out = input_row + height * input_col;
-
-output[index_out] = input[index_in];
+uint32_t row = i / width;
+uint32_t col = i - row * width;
+// Write directly to the transposed GM address. The write direction is strided across rows.
+output[col * height + row] = input[i];
 ```
 
 **Performance Data**:
 
-| Task Duration(μs) | aiv_time(μs) | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio | aiv_mte2_time(μs) | aiv_mte2_ratio | aiv_mte3_time(μs) | aiv_mte3_ratio |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 63.731 | 62.810 | 58.143 | 0.926 | 2.439 | 0.039 | 0.059 | 0.001 | 0.02 | 0.0 |
+| Task Duration(μs) | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio |
+| :---------------: | :----------: | :--------------: | :--------------: | :-----------: | :-----------------: | :--------------: |
+|      36.263       |    33.620    |     55473.1      |      33.209      |     0.988     |        0.399        |      0.012       |
 
 **Analysis**:
 
-- Case 0's Task Duration is 63.731μs. As the direct index transpose version, it serves as the comparison baseline for subsequent optimized versions.
-- In this version, GM reads are still contiguous, but GM write-back is cross-row and non-contiguous. Write requests from the same Warp are difficult to coalesce efficiently, so the overall latency is primarily limited by the write-back memory access pattern.
+Case 0 keeps GM reads contiguous and writes data directly to the transposed output position. As a result, write addresses of adjacent threads in the same Warp are distributed across different rows of the output matrix. Matrix transpose involves little computation, so the main bottleneck of this version is non-contiguous GM writes. Later optimizations move the non-contiguous access from GM to UB, so that GM reads and writes become contiguous access patterns.
 
 ---
 
-### Case 1: UB Intermediary + Global Memory Access Coalescing Transpose Version
+### Case 1: MTE Moves Data to UB Before Transpose Write-Back, and Each Thread Block Processes Two 32x32 Tiles
 
-**Optimization Objective**: Adjust the transpose write-back method through UB intermediary to make GM reads and writes closer to contiguous access, reducing end-to-end latency.
+**Optimization Goal**: Introduce MTE movement, UB staging, and 32x32 tiling. This converts the non-contiguous global memory write in Case 0 into UB access and makes GM reads and writes as contiguous as possible. This case sets the Thread Block count by tile groups. Each Thread Block processes two 32x32 tiles.
 
-**Core Implementation**:
-
-- Transfer the input data tile from GM to UB.
-- Each thread reads from UB. One Warp reads one column of elements from the tile in UB.
-- Write the read values back to the transposed positions in GM. One Warp writes one column of elements read from UB to one row of the output tile in GM.
-
-The following figure shows the data flow of Case 1, with red and yellow highlighting the elements processed by one Warp's threads when reading from and writing to GM. When reading the GM input, the entire tile is transferred to UB following the GM layout. When writing to the GM output, one Warp's threads read one column of elements from UB and write them back to their corresponding transposed positions.
-
-<img src="./figures/case1.png" width="60%">
-
-Unlike Case 0, where threads "directly write input elements to the transposed GM position" causing adjacent threads to be scattered across different rows of the output matrix, Case 1 first transfers the input tile to UB following the GM layout via `asc_copy_gm2ub_align`, then SIMT threads read from UB in the transposed direction and write back to GM. Therefore, the core benefit of this version is: transferring the originally non-contiguous GM write-back to transposed reads on the UB side, achieving a "contiguous read, contiguous write" access pattern on the GM side, with significantly lower overall latency than Case 0.
-
-**Key Code**:
+**Core Implementation**: The matrix is divided into 32x32 tiles. The total tile count is `tiles=(W/32) x (H/32)`. In this case, each Thread Block launches 2048 threads and can process two tiles at the same time. Therefore, the Thread Block count is set to `ceil(tiles / 2)`. The data path is as follows: MTE2 moves GM data to the UB input buffer, the SIMT VF performs transpose in UB and writes the UB output buffer, and then MTE3 continuously stores the UB output buffer back to GM.
 
 ```cpp
-uint32_t tile_row = threadIdx.x / TILE_DIM;
-uint32_t tile_col = threadIdx.x % TILE_DIM;
+__ubuf__ float in_tile[TILES_PER_BLOCK][TILE_DIM][TILE_DIM];
+__ubuf__ float out_tile[TILES_PER_BLOCK][TILE_DIM][TILE_DIM];
+uint32_t loop_start = block_idx * TILES_PER_BLOCK;
+uint32_t loop_step = block_num * TILES_PER_BLOCK;
+uint32_t loop_end = loop_start + TILES_PER_BLOCK;
 
-output_tile[tile_col + tile_row * height] = input_tile[tile_col * TILE_DIM + tile_row];
+// Case 1 launches Thread Blocks by tile group. Each Thread Block processes only its two assigned tiles.
+for (uint32_t tile_base = loop_start; tile_base < loop_end && tile_base < total_tiles; tile_base += loop_step) {
+    asc_lock(PIPE_MTE2, SINGLE_BUFFER_MUTEX);
+    copy_gm_2tile_to_ub(&in_tile[0][0][0], input, width, tiles_x, tile_base, total_tiles);
+    asc_unlock(PIPE_MTE2, SINGLE_BUFFER_MUTEX);
+
+    // After MTE2 load is complete, the SIMT VF reads the UB input buffer.
+    asc_lock(PIPE_V, SINGLE_BUFFER_MUTEX);
+    asc_vf_call<simt_transpose_2tile>(
+        dim3(TILE_DIM, TILE_DIM * TILES_PER_BLOCK, 1), &out_tile[0][0][0], &in_tile[0][0][0], tile_base,
+        total_tiles);
+    asc_unlock(PIPE_V, SINGLE_BUFFER_MUTEX);
+
+    // After the SIMT VF writes the output buffer, MTE3 stores the result back to GM.
+    asc_lock(PIPE_MTE3, SINGLE_BUFFER_MUTEX);
+    copy_ub_2tile_to_gm(output, &out_tile[0][0][0], height, tiles_x, tile_base, total_tiles);
+    asc_unlock(PIPE_MTE3, SINGLE_BUFFER_MUTEX);
+}
 ```
-
-**Optimization Methods**:
-
-- Use UB as a tile intermediary area, converting the non-contiguous GM writes in Case 0 to transposed reads on the UB side.
-- Adjust the block coordinates of the output tile so that when writing back to GM, the same Warp writes more closely in row-contiguous fashion.
-- Use `asc_sync_notify()` / `asc_sync_wait()` to ensure that the GM-to-UB transfer is complete before launching SIMT VF processing.
 
 **Performance Data**:
 
-| Task Duration(μs) | aiv_time(μs) | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio | aiv_mte2_time(μs) | aiv_mte2_ratio | aiv_mte3_time(μs) | aiv_mte3_ratio |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 30.602 | 29.6 | 16.942 | 0.572 | 3.404 | 0.115 | 6.912 | 0.234 | 0.022 | 0.001 |
+| Task Duration(μs) | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio |
+| :---------------: | :----------: | :--------------: | :--------------: | :-----------: | :-----------------: | :--------------: |
+|      23.732       |    2.286     |      3772.6      |      1.454       |     0.638     |        0.198        |      0.085       |
 
 **Analysis**:
 
-- Compared with the direct index transpose version in Case 0, Case 1's Task Duration decreases from 63.731μs to 30.602μs, a latency reduction of approximately 52.0%.
-- In terms of Task Duration, Case 1 achieves approximately 2.08x the performance of Case 0, indicating that improving GM write-back contiguity through UB intermediary results in significant end-to-end latency improvement.
-- Case 1 reduces the costly non-contiguous GM write-back overhead from Case 0, but the code still includes tile transfer from GM to UB, pipeline synchronization, and transposed-direction UB reads by SIMT threads. Therefore, the optimized Task Duration will not be equivalent to the ideal latency of purely contiguous GM reads and writes.
+Case 1 uses UB staging to convert non-contiguous GM writes into transpose access inside UB. Task Duration decreases from 36.263μs in Case 0 to 23.732μs, a latency reduction of about 34.6%. This version launches Thread Blocks by tile groups. A 1024x1024 matrix contains 1024 tiles, which correspond to 512 Thread Blocks. This count is much larger than the hardware vector core count. Extra Thread Block launch and scheduling overhead is reflected in Task Duration. Therefore, the next step optimizes the mapping from Thread Blocks to tiles.
+
+---
+
+### Case 2: Limit the Launched Core Count to the Physical Core Count
+
+**Optimization Goal**: Change the Thread Block count in Case 1 from the tile group count to the hardware vector core count. Each Thread Block loops over multiple tile groups, which reduces Thread Block launch and scheduling overhead.
+
+**Core Implementation**: Each Thread Block launches 2048 threads with the configuration `dim3(32,64,1)`. Each loop iteration processes two contiguous 32x32 tiles at the same time. Threads with `threadIdx.y=0..31` process the first tile, and threads with `threadIdx.y=32..63` process the second tile. The next iteration jumps to the subsequent tile group by `gridDim.x * 2`.
+
+```cpp
+uint32_t loop_start = block_idx * TILES_PER_BLOCK;
+uint32_t loop_step = block_num * TILES_PER_BLOCK;
+
+// Case 2 fixes the Thread Block count. Each Thread Block loops over multiple tile groups by gridDim.x.
+for (uint32_t tile_base = loop_start; tile_base < total_tiles; tile_base += loop_step) {
+    asc_lock(PIPE_MTE2, SINGLE_BUFFER_MUTEX);
+    copy_gm_2tile_to_ub(&in_tile[0][0][0], input, width, tiles_x, tile_base, total_tiles);
+    asc_unlock(PIPE_MTE2, SINGLE_BUFFER_MUTEX);
+
+    // After MTE2 load is complete, the SIMT VF reads the UB input buffer.
+    asc_lock(PIPE_V, SINGLE_BUFFER_MUTEX);
+    asc_vf_call<simt_transpose_2tile>(
+        dim3(TILE_DIM, TILE_DIM * TILES_PER_BLOCK, 1), &out_tile[0][0][0], &in_tile[0][0][0], tile_base,
+        total_tiles);
+    asc_unlock(PIPE_V, SINGLE_BUFFER_MUTEX);
+
+    // After the SIMT VF writes the output buffer, MTE3 stores the result back to GM.
+    asc_lock(PIPE_MTE3, SINGLE_BUFFER_MUTEX);
+    copy_ub_2tile_to_gm(output, &out_tile[0][0][0], height, tiles_x, tile_base, total_tiles);
+    asc_unlock(PIPE_MTE3, SINGLE_BUFFER_MUTEX);
+}
+```
+
+**Performance Data**:
+
+| Task Duration(μs) | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio |
+| :---------------: | :----------: | :--------------: | :--------------: | :-----------: | :-----------------: | :--------------: |
+|      18.697       |    17.484    |     28849.4      |      11.559      |     0.661     |        0.846        |      0.048       |
+
+**Analysis**:
+
+Case 2 fixes the Thread Block count to the hardware vector core count. Compared with Case 1, which launches 512 Thread Blocks by tile groups, Case 2 launches and schedules fewer Thread Blocks. Task Duration decreases from 23.732μs to 18.697μs, a latency reduction of about 21.2%.
+
+Compared with the matrix_transpose_practice sample in the SIMT scenario, SIMD and SIMT hybrid programming uses the MTE pipeline to handle data movement between GM and UB, while the SIMT VF only handles transpose access inside UB and writes to the output buffer. This keeps the processing logic inside the SIMT VF more focused. This case uses 2048 threads and two tiles per iteration without observed register spilling. In contrast, the matrix_transpose_practice sample uses the same fixed Thread Block count and 2048 threads in Case 4, but register spilling leads to a Task Duration of 27.113μs. After switching to 1024 threads, Case 5 of that sample is 23.912μs. The Task Duration of this case is 18.697μs, reflecting the advantages of hybrid programming in MTE movement and SIMT thread parallelism. Later versions continue to use 2048 threads and two tiles per iteration. The optimization focus then moves to UB access overhead.
+
+---
+
+### Case 3: Add UB Padding to Reduce UB Bank Conflicts
+
+**Optimization Goal**: Reduce bank conflicts during the SIMT VF transpose access phase by adding UB padding on top of Case 2.
+
+**Core Implementation**:
+
+- The Thread Block layout and tile mapping are the same as those in Case 2.
+- Each Thread Block still processes two 32x32 tiles per iteration.
+- The physical layout of `in_tile` changes from 32x32 to 32x40.
+- `out_tile` still uses a contiguous 32x32 layout. The SIMT VF writes it continuously along the output tile row direction, and MTE3 then stores it continuously to GM.
+- The SIMT VF still processes only the valid 32x32 data.
+
+On Ascend 950PR/Ascend 950DT, UB is divided into 16 banks and organized as 8 bank groups. Each bank is further divided into 4 subbanks. If multiple threads in the same Warp access subbanks with the same subbank ID in the same bank group in one UB access instruction inside the SIMT VF, the hardware queues the requests. This causes a subbank conflict and increases access latency.
+
+**Figure 1: UB bank structure**
+
+<img src="./figures/bank结构示意图.png">
+
+When the SIMT VF accesses UB, bank conflicts are finer-grained subbank conflicts. This sample mainly involves the following two types of subbank conflicts:
+
+- **Write-write conflict**: Multiple write operations access subbanks with the same subbank ID in the same bank group at the same time.
+- **Read-read conflict**: Multiple read operations access subbanks with the same subbank ID in the same bank group at the same time.
+
+For detailed address low-bit interleaving rules and conflict scenarios, see the [bank_conflict sample](https://gitcode.com/cann/asc-devkit/blob/master/examples/03_simt_api/02_features/01_api_features/00_memory_access/bank_conflict/README.md).
+
+In Case 2, the UB `in_tile` array is stored in row-major order. According to the low-bit interleaving rule, the first row of `in_tile` covers bank0 through bank3, the second row covers bank4 through bank7, the third row covers bank8 through bank11, and the remaining rows follow the same pattern. Each row has 32 float elements and exactly spans 4 banks. As shown in Figure 3, the figure shows how the first 12 rows of the tile array are placed in UB. The first element of each row is marked in blue. During SIMT VF transpose, threads in one Warp read one column of `in_tile`. During the UB access, 32 threads are concentrated on subbank0 in two bank groups, which is a read-read conflict. `out_tile` is written continuously along the output tile row direction, so memory access merging can reduce write overhead. Therefore, `out_tile` does not need padding.
+
+**Figure 3: Case 2 tile layout in UB**
+
+<img src="./figures/case2_bank.png">
+
+In SIMT scenarios, a common way to handle bank conflicts during transpose access to UB is to add padding in the column direction of the tile. This padding makes elements in the same column staggered in the physical UB address space. For a 32x32 float tile, adding one subbank width, that is, 2 columns of padding, forms a 32x34 UB layout and avoids subbank conflicts.
+
+In SIMD and SIMT hybrid programming, MTE moves data into UB. When MTE moves a padded two-dimensional array, the address stride between adjacent rows in UB also needs to meet the alignment requirement. The row stride of a 32x34 layout is `34 * sizeof(float) = 136B`, which does not meet the 32B alignment requirement. Therefore, this sample sets the padding column count to 8 and uses a 32x40 layout. The row stride is `40 * sizeof(float) = 160B`, which staggers UB bank accesses and meets the row stride alignment requirement for MTE movement.
+
+As shown in Figure 4, Case 3 adds 8 columns of padding to the UB tile array, changing each row from 32 elements to 40 elements. The row stride of 40 float elements is 160B, which corresponds to 20 subbanks. When the same column is accessed in the transpose direction, elements in adjacent rows are staggered by a stride of 20 subbanks in the physical UB address space. The accesses of 32 threads are no longer concentrated on subbanks with the same subbank ID in the same bank group, which reduces subbank conflicts during the SIMT VF transpose access phase.
+
+Note that the 32x40 layout is a tradeoff for SIMD and SIMT hybrid programming after considering the alignment requirements of MTE movement. Unlike the 32x34 layout formed by adding 2 columns of padding in a SIMT scenario, the 32x40 layout may still have a small number of subbank conflicts. However, its conflict intensity is much lower than that of the 32x32 layout without padding.
+
+**Figure 4: Case 3 tile layout in UB**
+
+<img src="./figures/case3_bank.png">
+
+```cpp
+constexpr int TILE_PAD = 8; // The hybrid MTE movement requires 32B alignment, so a 32x40 UB layout is used.
+constexpr int TILE_PAD_STRIDE = TILE_DIM + TILE_PAD;
+__ubuf__ float in_tile[TILES_PER_BLOCK][TILE_DIM][TILE_PAD_STRIDE];
+__ubuf__ float out_tile[TILES_PER_BLOCK][TILE_DIM][TILE_DIM];
+uint32_t loop_start = block_idx * TILES_PER_BLOCK;
+uint32_t loop_step = block_num * TILES_PER_BLOCK;
+
+// Case 3 keeps the fixed Thread Block count and loop mapping. It only changes the input tile to a 32x40 padded layout.
+for (uint32_t tile_base = loop_start; tile_base < total_tiles; tile_base += loop_step) {
+    asc_lock(PIPE_MTE2, SINGLE_BUFFER_MUTEX);
+    copy_gm_2tile_to_padded_ub(&in_tile[0][0][0], input, width, tiles_x, tile_base, total_tiles);
+    asc_unlock(PIPE_MTE2, SINGLE_BUFFER_MUTEX);
+
+    // After MTE2 load is complete, the SIMT VF reads the UB input buffer in the 32x40 padded layout.
+    asc_lock(PIPE_V, SINGLE_BUFFER_MUTEX);
+    asc_vf_call<simt_transpose_2tile_pad>(
+        dim3(TILE_DIM, TILE_DIM * TILES_PER_BLOCK, 1), &out_tile[0][0][0], &in_tile[0][0][0], tile_base,
+        total_tiles);
+    asc_unlock(PIPE_V, SINGLE_BUFFER_MUTEX);
+
+    // The output buffer uses a contiguous 32x32 layout. MTE3 stores it back to GM along the output matrix row direction.
+    asc_lock(PIPE_MTE3, SINGLE_BUFFER_MUTEX);
+    copy_ub_2tile_to_gm(output, &out_tile[0][0][0], height, tiles_x, tile_base, total_tiles);
+    asc_unlock(PIPE_MTE3, SINGLE_BUFFER_MUTEX);
+}
+```
+
+**Performance Data**:
+
+| Task Duration(μs) | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio |
+| :---------------: | :----------: | :--------------: | :--------------: | :-----------: | :-----------------: | :--------------: |
+|      11.596       |    10.459    |     17258.2      |      4.465       |     0.427     |        0.853        |      0.081       |
+
+**Analysis**:
+
+Case 3 changes only the physical UB layout based on Case 2. It does not change GM read/write coordinates or the mapping from Thread Blocks to tiles. Compared with Case 2, Task Duration decreases from 18.697μs to 11.596μs, a latency reduction of about 38.0%. This result shows that after GM accesses become contiguous and the Thread Block count is fixed, bank conflicts during SIMT VF transpose access to UB become one of the main bottlenecks.
+
+---
+
+### Case 4: Use Double Buffering to Implement Pipeline Parallelism
+
+**Optimization Goal**: Use two UB input/output buffers and multiple mutex IDs on top of Case 3, so that the MTE2 load, SIMT VF transpose, and MTE3 store pipelines run in parallel.
+
+**Core Implementation**:
+
+- Use two input buffers and two output buffers. Each input buffer contains two 32x40 padded tiles, and each output buffer contains two contiguous 32x32 tiles.
+- Use different `mutex_id` values to manage the lifecycles of the input buffers and output buffers.
+- The SIMT VF waits for the current input buffer to be loaded. Before an output buffer is reused, the SIMT VF waits for the previous MTE3 store on that output buffer to complete.
+
+```cpp
+__ubuf__ float in_tile[2][TILES_PER_BLOCK][TILE_DIM][TILE_PAD_STRIDE];
+__ubuf__ float out_tile[2][TILES_PER_BLOCK][TILE_DIM][TILE_DIM];
+uint32_t loop_count = 0;
+
+for (uint32_t tile_base = curr_tile_base; tile_base < total_tiles; tile_base += loop_step) {
+    uint32_t curr_buffer = loop_count & 1;
+    uint8_t input_mutex = DB_INPUT_MUTEX_BASE + static_cast<uint8_t>(curr_buffer);
+    uint8_t output_mutex = DB_OUTPUT_MUTEX_BASE + static_cast<uint8_t>(curr_buffer);
+
+    asc_lock(PIPE_MTE2, input_mutex);
+    copy_gm_2tile_to_padded_ub(&in_tile[curr_buffer][0][0][0], input, width, tiles_x, tile_base, total_tiles);
+    asc_unlock(PIPE_MTE2, input_mutex);
+
+    // The SIMT VF waits for the current input buffer. It also waits before reusing an output buffer.
+    asc_lock(PIPE_V, input_mutex);
+    asc_lock(PIPE_V, output_mutex);
+    asc_vf_call<simt_transpose_2tile_pad>(
+        dim3(TILE_DIM, TILE_DIM * TILES_PER_BLOCK, 1), &out_tile[curr_buffer][0][0][0],
+        &in_tile[curr_buffer][0][0][0], tile_base, total_tiles);
+    asc_unlock(PIPE_V, input_mutex);
+    asc_unlock(PIPE_V, output_mutex);
+
+    asc_lock(PIPE_MTE3, output_mutex);
+    copy_ub_2tile_to_gm(output, &out_tile[curr_buffer][0][0][0], height, tiles_x, tile_base, total_tiles);
+    asc_unlock(PIPE_MTE3, output_mutex);
+    ++loop_count;
+}
+```
+
+**Performance Data**:
+
+| Task Duration(μs) | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio |
+| :---------------: | :----------: | :--------------: | :--------------: | :-----------: | :-----------------: | :--------------: |
+|       6.831       |    5.679     |      9369.6      |      4.334       |     0.764     |        0.904        |      0.159       |
+
+**Analysis**:
+
+Case 4 uses double buffering to provide physical isolation. This avoids MTE2 writes overwriting the input buffer that the SIMT VF is reading. It also avoids SIMT VF writes overwriting the output buffer that MTE3 is storing. Multiple mutex IDs manage the lifecycles of the two input/output buffer groups separately. The single-buffer serial barrier sequence of MTE2 load, SIMT VF transpose, and MTE3 store is changed into pipeline overlap between adjacent iterations. Compared with Case 3, Task Duration decreases from 11.596μs to 6.831μs, a latency reduction of about 41.1%. Compared with direct GM transpose in Case 0, Task Duration decreases from 36.263μs to 6.831μs, improving overall performance by about 5.31x.
+
+Figure 5 and Figure 6 show the simulated instruction timelines of Case 3 and Case 4. Figure 5 shows that Case 3 uses a single buffer to process each tile group serially. After the MTE2 load is complete, the SIMT VF must wait until the input buffer is readable. After the SIMT VF finishes, MTE3 can store the output buffer. Only after MTE3 completes can the same UB buffer be reused by the next MTE2 load. Therefore, the MTE2, SIMT VF, and MTE3 pipelines have clear serial waits. The gaps between SIMT VF executions mainly come from data movement and synchronization.
+
+Figure 6 shows that Case 4 uses double buffering to overlap adjacent iterations. While the current buffer is processed by the SIMT VF and MTE3, the other buffer can start the next MTE2 load in advance. MTE2, SIMT VF, and MTE3 overlap across adjacent iterations. Therefore, Case 4 hides part of the MTE movement and synchronization overhead, further reducing Task Duration. The remaining waits mainly protect buffer reuse and cross-pipeline data dependencies.
+
+**Figure 5: Simulated instruction timeline of Case 3**
+
+<img src="./figures/case3_trace.png">
+
+**Figure 6: Simulated instruction timeline of Case 4**
+
+<img src="./figures/case4_trace.png">
 
 ---
 
@@ -206,57 +341,76 @@ output_tile[tile_col + tile_row * height] = input_tile[tile_col * TILE_DIM + til
 
 ### Ascend 950PR Performance Data
 
-**Overall Optimization Effect**:
+The following table shows the performance data of each case when processing a 1024x1024 float matrix on Ascend 950PR.
 
-- Through the memory access coalescing optimization from Case 0 to Case 1, the example Task Duration decreases from 63.731μs to 30.602μs, a latency reduction of approximately 52.0%.
-- Case 1 achieves approximately 2.08x performance improvement relative to Case 0, indicating that improving GM write-back contiguity through UB intermediary yields significant end-to-end latency benefits.
+| Case | Task Duration(μs) | aiv_time(μs) | aiv_total_cycles | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio |
+| ---- | :---------------: | :----------: | :--------------: | :--------------: | :-----------: | :-----------------: | :--------------: |
+| 0    |      36.263       |    33.620    |     55473.1      |      33.209      |     0.988     |        0.399        |      0.012       |
+| 1    |      23.732       |    2.286     |      3772.6      |      1.454       |     0.638     |        0.198        |      0.085       |
+| 2    |      18.697       |    17.484    |     28849.4      |      11.559      |     0.661     |        0.846        |      0.048       |
+| 3    |      11.596       |    10.459    |     17258.2      |      4.465       |     0.427     |        0.853        |      0.081       |
+| 4    |       6.831       |    5.679     |      9369.6      |      4.334       |     0.764     |        0.904        |      0.159       |
 
-| Case version | Task Duration(μs) | End-to-End Performance Relative to Case 0 | Optimization Point                           |
-| ------------ | ----------------- | -------------------- | -------------------------------- |
-| Case 0       | 63.731            | **1x**         | Direct index transpose, GM contiguous read, non-contiguous write |
-| Case 1       | 30.602            | **2.08x**      | UB intermediary, global memory access coalescing             |
+The main transpose path is Case 0 -> Case 1 -> Case 2 -> Case 3 -> Case 4. Task Duration decreases from 36.263μs to 23.732μs, 18.697μs, 11.596μs, and 6.831μs. Compared with direct GM transpose in Case 0, Case 4 improves performance by about 5.31x.
+
+Matrix transpose needs to read the complete input matrix from GM and write the complete output matrix back to GM. For a 1024x1024 float matrix, the ideal total GM read/write data volume is:
+
+$$
+D = 1024 \times 1024 \times 4B \times 2 = 8.39MB
+$$
+
+If the estimate uses the 1.6TB/s GM peak bandwidth of Ascend 950PR, the theoretical lower bound is:
+
+$$
+T_{theory} = \frac{8.39MB}{1.6TB/s} \approx 5.243μs
+$$
+
+Case 0 is far from the theoretical lower bound. The main reason is that transpose write-back makes write addresses of adjacent threads in the same Warp stride across rows, so GM writes cannot form ideal contiguous accesses. Case 1 uses UB staging to move non-contiguous access into UB, improving access continuity on the GM side. However, it launches 512 Thread Blocks by tile groups, which causes high scheduling overhead. Case 2 fixes the Thread Block count and reduces launch and scheduling overhead, but SIMT VF transpose access to UB still has bank conflicts. Case 3 uses 32x40 UB padding to reduce bank conflicts, so latency decreases significantly. Case 4 further uses double buffering to run the MTE2 load, SIMT VF transpose, and MTE3 store pipelines in parallel. Task Duration decreases to 6.831μs, corresponding to an equivalent GM read/write bandwidth of about 1.23TB/s, or about 76.8% of the 1.6TB/s theoretical GM peak bandwidth of Ascend 950PR. This result is close to the theoretical bandwidth limit, but still higher than the theoretical latency lower bound of 5.243μs. The remaining gap mainly comes from non-GM-bandwidth overheads, including UB reads and writes, synchronization between MTE and V, `asc_vf_call` overhead, address calculation, and incomplete pipeline parallelism. These overheads currently have no clear further optimization method in this implementation path.
 
 ## Tuning Recommendations
 
-1. **Prioritize GM memory access contiguity**: Matrix transpose has very low computation volume. End-to-end latency is primarily affected by read/write memory access patterns.
-2. **Use UB intermediary to improve write-back patterns**: When direct transpose causes non-contiguous GM writes, transfer the non-contiguous access to the UB side in exchange for contiguous reads and writes on the GM side.
-3. **Pay attention to transfer and pipeline synchronization overhead**: UB intermediary requires transferring from GM to UB and ensuring tile data is available to SIMT threads through pipeline synchronization. When optimizing, balance the GM memory access benefits against UB transposed read and pipeline synchronization overhead.
+When tuning memory access operators, first use the most direct implementation to expose the main gap. Then use the theoretical bandwidth limit to estimate the available optimization space. In this sample, the gap between direct transpose and the theoretical lower bound mainly comes from non-contiguous GM writes. Therefore, the optimization direction is not to increase compute parallelism, but to reorder memory accesses. In SIMD and SIMT hybrid scenarios, use 32x32 tiles as the granularity. Use MTE to continuously move each tile into the UB input buffer, access it in the transpose direction inside UB, write the UB output buffer, and use MTE3 to continuously store it to GM along the row direction of the output matrix.
+
+After tiling, determine the mapping from Thread Blocks to tiles. Launching Thread Blocks by tile groups is simple. However, when the tile count is much larger than the hardware vector core count, this method introduces extra launch and scheduling overhead. Fixing the Thread Block count to the hardware vector core count and processing multiple tile groups in a loop inside the kernel can reduce this overhead. The thread count and the number of tiles processed by each Thread Block need to be evaluated together with register usage, stack usage, and measured latency.
+
+After GM accesses become contiguous, the bottleneck moves to UB access and pipeline synchronization. When a 32x32 input tile is accessed by column during transpose access to UB, bank conflicts can occur. Padding can change the physical UB layout. In SIMD and SIMT hybrid programming, the layout also needs to meet the alignment requirements of MTE movement. Therefore, the input buffer in this sample uses a 32x40 padded tile. The output buffer is written continuously along the output tile row direction, so a contiguous 32x32 layout is sufficient. On this basis, double buffering rotates two UB input/output buffer groups. When the current buffer group enters the SIMT VF transpose and MTE3 store pipelines, the MTE2 pipeline can load the next batch of data into the other buffer group. This runs the MTE2 load, SIMT VF transpose, and MTE3 store pipelines in parallel and hides part of the movement overhead.
 
 ## Build and Run
 
-Run the following steps in the root directory of this example to build and run the example.
+In the sample root directory, perform the following steps to build and run the sample.
 
-- Configure environment variables
-  Configure environment variables based on the [installation method](../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit on the current environment.
+- Configure environment variables.
+
+  Configure environment variables for the CANN development kit package in the current environment by referring to [Environment Variable Configuration](../../../../docs/en/quick_start.md#cann-env-setup).
+
   ```bash
   source ${install_path}/cann/set_env.sh
   ```
 
-  > **Note:** `${install_path}` is the CANN package installation directory. When no installation directory is specified, the default installation path is `/usr/local/Ascend`.
+  > **Description:** `${install_path}` is the CANN package installation directory. If no installation directory is specified, the default installation directory is `/usr/local/Ascend`.
 
-- Run the example
+- Run the sample.
 
-  Run the following commands in the example directory.
+  Run the following commands in the sample directory.
+
   ```bash
-  SCENARIO_NUM=0                       # Select the execution scenario, options: 0-1
-  mkdir -p build && cd build;          # Create and enter the build directory
-  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j;  # Build the project
-  ./demo                               # Run the example
+  SCENARIO_NUM=4                                                                     # Select a scenario. Valid values are 0-4.
+  mkdir -p build && cd build;                                                        # Create and enter the build directory.
+  cmake -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSCENARIO_NUM=$SCENARIO_NUM ..;make -j;  # Build the project.
+  ./matrix_transpose                                                                 # Run the sample.
   ```
 
-- Build option description
+- Build options
 
-  | Option             | Values      | Description              |
-  | ---------------- | ----------- | ----------------- |
-  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU architecture: this example only supports dav-3510 (Ascend 950PR/Ascend 950DT) |
-  | `SCENARIO_NUM` | `0`-`1` | Example type, default is 0 |
+  | Option | Value | Description |
+  | ------ | ----- | ----------- |
+  | `CMAKE_ASC_ARCHITECTURES` | `dav-3510` | NPU architecture. This sample supports only dav-3510 (Ascend 950PR/Ascend 950DT). |
+  | `SCENARIO_NUM` | `0`-`4` | Sample type. The default value is 4. |
 
-- Execution result
-
-  The following execution result indicates that the accuracy comparison is successful.
+  The following output indicates that the accuracy comparison is successful.
 
   ```text
-  [Success] Case accuracy is verification passed.
+  [Success] Case accuracy verification passed.
   ```
 
 ## Performance Analysis
@@ -275,7 +429,7 @@ Run the following steps in the root directory of this example to build and run t
     msopprof ./demo
     ```
 
-    - Performance data description  
+    - Performance data description
       After the command completes, a folder named "OPPROF_{timestamp}_XXX" will be generated in the default directory. The performance data folder structure is as follows:
 
       ```bash
