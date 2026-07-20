@@ -63,12 +63,13 @@
   local_output[threadIdx.x] = input[gather_idx];
   ```
 
-  （2）simd_adds将UB（Unified Buffer）中数据做加1操作。调用Reg::LoadAlign将数据从UB（Unified Buffer）搬运到寄存器上，调用Reg::Adds完成加1运算并输出到目标寄存器，最后调用Reg::StoreAlign将数据从寄存器搬运到UB。重复上述操作即可完成1024个数据元素的加1运算。
+  （2）simd_adds将UB（Unified Buffer）中数据做加1操作。调用asc_loadalign将数据从UB（Unified Buffer）搬运到寄存器上，调用asc_add_scalar完成加1运算并输出到目标寄存器，最后调用asc_storealign将数据从寄存器搬运到UB。重复上述操作即可完成1024个数据元素的加1运算。
   ```
   for (uint16_t i = 0; i < repeat_times; i++) {
-      AscendC::Reg::LoadAlign(src_reg0, input + i * one_repeat_size);
-      AscendC::Reg::Adds(dst_reg0, src_reg0, ADDS_ADDEND, mask_reg);
-      AscendC::Reg::StoreAlign(output + i * one_repeat_size, dst_reg0, mask_reg);
+      mask_reg = asc_update_mask_b32(count);
+      asc_loadalign(src_reg0, input + i * one_repeat_size);
+      asc_add_scalar(dst_reg0, src_reg0, ADDS_ADDEND, mask_reg);
+      asc_storealign(output + i * one_repeat_size, dst_reg0, mask_reg);
   }
   ```
 

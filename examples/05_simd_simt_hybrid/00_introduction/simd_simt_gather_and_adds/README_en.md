@@ -62,12 +62,13 @@ This sample implements gather and adds computation based on SIMD and SIMT hybrid
   local_output[threadIdx.x] = input[gather_idx];
   ```
 
-  (2) simd_adds performs the add 1 operation on the data in UB (Unified Buffer). Call Reg::LoadAlign to move data from UB (Unified Buffer) to the register, call Reg::Adds to complete the add 1 operation and output to the destination register, and finally call Reg::StoreAlign to move data from the register to UB. Repeat the above operation to complete the add 1 operation on 1024 data elements.
+  (2) simd_adds performs the add 1 operation on the data in UB (Unified Buffer). Call asc_loadalign to move data from UB (Unified Buffer) to the register, call asc_add_scalar to complete the add 1 operation and output to the destination register, and finally call asc_storealign to move data from the register to UB. Repeat the above operation to complete the add 1 operation on 1024 data elements.
   ```
   for (uint16_t i = 0; i < repeat_times; i++) {
-      AscendC::Reg::LoadAlign(src_reg0, input + i * one_repeat_size);
-      AscendC::Reg::Adds(dst_reg0, src_reg0, ADDS_ADDEND, mask_reg);
-      AscendC::Reg::StoreAlign(output + i * one_repeat_size, dst_reg0, mask_reg);
+      mask_reg = asc_update_mask_b32(count);
+      asc_loadalign(src_reg0, input + i * one_repeat_size);
+      asc_add_scalar(dst_reg0, src_reg0, ADDS_ADDEND, mask_reg);
+      asc_storealign(output + i * one_repeat_size, dst_reg0, mask_reg);
   }
   ```
 
