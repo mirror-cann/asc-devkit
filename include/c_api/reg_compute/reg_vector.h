@@ -1101,10 +1101,18 @@ __simd_callee__ inline void asc_ln(vector_half& dst, vector_half src, vector_boo
 
 __simd_callee__ inline void asc_ln(vector_float& dst, vector_float src, vector_bool mask);
 
-// ==========asc_div(half/float)==========
+// ==========asc_div(half/float/int16_t/uint16_t/int32_t/uint32_t)==========
 __simd_callee__ inline void asc_div(vector_half& dst, vector_half src0, vector_half src1, vector_bool mask);
 
 __simd_callee__ inline void asc_div(vector_float& dst, vector_float src0, vector_float src1, vector_bool mask);
+
+__simd_callee__ inline void asc_div(vector_int16_t& dst, vector_int16_t src0, vector_int16_t src1, vector_bool mask);
+
+__simd_callee__ inline void asc_div(vector_uint16_t& dst, vector_uint16_t src0, vector_uint16_t src1, vector_bool mask);
+
+__simd_callee__ inline void asc_div(vector_int32_t& dst, vector_int32_t src0, vector_int32_t src1, vector_bool mask);
+
+__simd_callee__ inline void asc_div(vector_uint32_t& dst, vector_uint32_t src0, vector_uint32_t src1, vector_bool mask);
 
 // ==========asc_max_scalar(int8_t/int16_t/int32_t/uint8_t/uint16_t/uint32_t/half/float/bfloat16_t)==========
 __simd_callee__ inline void asc_max_scalar(vector_int8_t& dst, vector_int8_t src, int8_t value, vector_bool mask);
