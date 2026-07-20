@@ -73,7 +73,8 @@ This example implements inline quantization activation data transfer based on Da
 │   ├── CMakeLists.txt          // Build configuration file
 │   ├── data_utils.h            // Data read/write functions
 │   ├── data_copy_l0c2gm.asc    // Ascend C example implementation & invocation example
-│   └── README.md               // Example description document
+│   ├── README.md               // Chinese example documentation
+│   └── README_en.md            // English example documentation
 ```
 
 ## Example Description
@@ -171,7 +172,7 @@ This example implements inline quantization activation data transfer based on Da
 
 Run the following steps in the root directory of this example to build and run it.
 - Configure environment variables
-  Configure environment variables based on the [installation method](../../../../../docs/zh/quick_start.md#prepare&install) of the CANN development kit on the current environment.
+  Configure environment variables based on the [installation method](../../../../../docs/en/quick_start.md#prepare&install) of the CANN development kit on the current environment.
   ```bash
   source ${install_path}/cann/set_env.sh
   ```

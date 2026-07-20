@@ -15,7 +15,7 @@ set(CMAKE_ASC_ARCHITECTURES "dav-3510" CACHE STRING "NPU architecture: dav-3510"
 
 find_package(ASC REQUIRED)
 
-project(c_api_asc_copy_gm2l1 LANGUAGES ASC CXX)
+project(c_api_data_copy_gm2l1 LANGUAGES ASC CXX)
 
 if(NOT CMAKE_ASC_ARCHITECTURES STREQUAL "dav-3510")
     message(FATAL_ERROR "This C API sample only supports CMAKE_ASC_ARCHITECTURES=dav-3510.")
@@ -27,7 +27,7 @@ endif()
 
 # 场景参数（通过命令行传入）
 # SCENARIO_NUM: 场景编号
-#   1 - 输入格式NZ，输入数据类型half
+#   1 - 输入格式Nz，输入数据类型half
 #   2 - 输入格式ND，输入数据类型half
 #   3 - 输入格式DN，输入数据类型half
 #   4 - 输入格式ND，输入数据类型half，使能Vector量化
@@ -36,7 +36,7 @@ if(NOT SCENARIO_NUM MATCHES "^[1-4]$")
     message(FATAL_ERROR "SCENARIO_NUM must be 1, 2, 3, or 4, but got ${SCENARIO_NUM}")
 endif()
 
-add_executable(demo asc_copy_gm2l1.asc)
+add_executable(demo data_copy_gm2l1.asc)
 
 add_definitions(-DSCENARIO_NUM=${SCENARIO_NUM})
 target_compile_options(demo PRIVATE

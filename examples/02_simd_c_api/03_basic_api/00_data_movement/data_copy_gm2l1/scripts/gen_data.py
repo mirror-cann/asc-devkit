@@ -94,7 +94,7 @@ def gen_golden_data(scenario_num=1):
     os.makedirs("output", exist_ok=True)
 
     if scenario_num == 1:
-        # Store both inputs in NZ before they are copied to L1.
+        # Store both inputs in Nz before they are copied to L1.
         x1_gm = x1_gm.reshape(M // 16, 16, K // 16, 16).transpose(2, 0, 1, 3)
         x2_gm = x2_gm.reshape(K // 16, 16, N // 16, 16).transpose(2, 0, 1, 3)
     elif scenario_num == 3:
