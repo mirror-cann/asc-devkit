@@ -153,7 +153,7 @@ function parseSubResult(sub: SubResult, anchors: Anchor[], result: PagefindResul
     prev.unshift(curr)
     return prev
   }, [] as Anchor[])
-  const title = filteredAnchors.length ? filteredAnchors.map(t => t.text.trim()).filter(v => !!v).join(' > ') : result.meta.title
+  const title = filteredAnchors.length ? filteredAnchors.map(t => t.text.trim()).filter(v => !!v).join(' > ') : (result.meta.title || '').replace(/___PAGEFIND_ANCHOR___\S*/g, '').trim()
 
   const { base64, date, ...otherMeta } = result.meta
   return {

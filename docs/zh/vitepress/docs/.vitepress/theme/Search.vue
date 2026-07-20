@@ -29,8 +29,203 @@ if (typeof window !== 'undefined' && !window.__pagefind__) {
   }).catch(() => {})
 }
 
-const searchResult = ref<{ route: string; meta: Record<string, any> }[]>([])
+const searchResult = ref<{ route: string; meta: Record<string, any>; score: number }[]>([])
 const searchConfig: SearchConfig = _searchConfig
+
+type SubIndexEntry = [string, string, string, [number, string][]]
+let subIndex: SubIndexEntry[] | null = null
+let subIndexLoading = false
+let subIndexLoaded = false
+
+function loadSubIndex() {
+  if (subIndexLoaded || subIndexLoading) return
+  subIndexLoading = true
+  fetch('/search-cjk-index.json')
+    .then(r => r.json())
+    .then((data: SubIndexEntry[]) => {
+      subIndex = data
+      subIndexLoaded = true
+    })
+    .catch(() => {
+      subIndex = null
+      subIndexLoaded = true
+    })
+    .finally(() => {
+      subIndexLoading = false
+    })
+}
+
+const CJK_REGEX = /[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/
+
+function generateSubPhrases(phrase: string): string[] {
+  const result: string[] = []
+  for (let len = phrase.length; len >= 2; len--) {
+    for (let i = 0; i <= phrase.length - len; i++) {
+      result.push(phrase.substring(i, i + len))
+    }
+  }
+  return result
+}
+
+function findLongestMatch(subPhrases: string[], content: string): { longestLen: number; totalLen: number } {
+  let longestLen = 0
+  let totalLen = 0
+  const matched = new Set<number>()
+  for (const sp of subPhrases) {
+    if (content.includes(sp)) {
+      const len = sp.length
+      if (!matched.has(len)) {
+        matched.add(len)
+        totalLen += len
+      }
+      if (len > longestLen) {
+        longestLen = len
+      }
+    }
+  }
+  return { longestLen, totalLen }
+}
+
+function findBestPosition(query: string, subPhrases: string[], title: string, headings: [number, string][], text: string): number {
+  const POSITION_BONUS: Record<number, number> = { 1: 600, 2: 500, 3: 400, 4: 300, 5: 200, 6: 100 }
+
+  if (title === query) return POSITION_BONUS[1] + 50
+  if (title.includes(query)) return POSITION_BONUS[1]
+
+  for (const [level, headingText] of headings) {
+    if (headingText === query) return (POSITION_BONUS[level] || 0) + 50
+    for (const sp of subPhrases) {
+      if (headingText.includes(sp)) {
+        return POSITION_BONUS[level] || 0
+      }
+    }
+  }
+
+  if (text.includes(query)) return 0
+
+  for (const sp of subPhrases) {
+    if (text.includes(sp)) return 0
+  }
+
+  return 0
+}
+
+interface SubSearchResult {
+  route: string
+  meta: Record<string, any>
+  score: number
+}
+
+function searchSubIndex(query: string): SubSearchResult[] {
+  if (!subIndex || !query) return []
+
+  const cjkPhrases = query.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]{2,}/g) || []
+  const englishParts = query.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]+/g, ' ').trim().split(/\s+/).filter((s: string) => s.length >= 2)
+
+  if (cjkPhrases.length === 0 && englishParts.length === 0) return []
+
+  const allSubPhrases: string[][] = cjkPhrases.map(p => generateSubPhrases(p))
+
+  const results: SubSearchResult[] = []
+
+  for (const [url, title, text, headings] of subIndex) {
+    let pageScore = 0
+    let allMatch = true
+    let bestMatchPhrase = ''
+
+    if (cjkPhrases.length > 0) {
+      for (let pi = 0; pi < cjkPhrases.length; pi++) {
+        const phrase = cjkPhrases[pi]
+        const subs = allSubPhrases[pi]
+        const titleMatch = findLongestMatch(subs, title)
+        const textMatch = findLongestMatch(subs, text)
+        const bestLongest = Math.max(titleMatch.longestLen, textMatch.longestLen)
+        const bestTotal = titleMatch.totalLen + textMatch.totalLen
+
+        if (bestLongest === 0) {
+          allMatch = false
+          break
+        }
+
+        const phraseScore = bestLongest * 10000 + bestTotal * 100
+        if (phraseScore > pageScore || pageScore === 0) {
+          pageScore = phraseScore
+        }
+        if (bestLongest === phrase.length && !bestMatchPhrase) {
+          bestMatchPhrase = phrase
+        }
+      }
+    }
+
+    if (!allMatch) continue
+
+    if (englishParts.length > 0) {
+      let engAllMatch = true
+      let engLongest = 0
+      let engTotal = 0
+      for (const ep of englishParts) {
+        const inTitle = title.includes(ep)
+        const inText = text.includes(ep)
+        if (!inTitle && !inText) {
+          engAllMatch = false
+          break
+        }
+        engLongest = Math.max(engLongest, ep.length)
+        engTotal += ep.length
+      }
+      if (!engAllMatch) continue
+
+      const engScore = engLongest * 10000 + engTotal * 100
+      if (engScore > pageScore || (cjkPhrases.length === 0 && pageScore === 0)) {
+        pageScore = engScore
+      }
+      if (!bestMatchPhrase && englishParts.length > 0) {
+        bestMatchPhrase = englishParts[0]
+      }
+    }
+
+    let positionBonus = 0
+    if (cjkPhrases.length > 0) {
+      for (let pi = 0; pi < cjkPhrases.length; pi++) {
+        const pos = findBestPosition(cjkPhrases[pi], allSubPhrases[pi], title, headings, text)
+        if (pos > positionBonus) positionBonus = pos
+      }
+    }
+    if (englishParts.length > 0) {
+      for (const ep of englishParts) {
+        const pos = findBestPosition(ep, [ep], title, headings, text)
+        if (pos > positionBonus) positionBonus = pos
+      }
+    }
+
+    const finalScore = pageScore + positionBonus
+    const excerpt = extractExcerpt(text, bestMatchPhrase || query, 60)
+
+    results.push({
+      route: url,
+      meta: {
+        title: title || url,
+        description: excerpt,
+      },
+      score: finalScore,
+    })
+  }
+
+  results.sort((a, b) => b.score - a.score)
+  return results.slice(0, 20)
+}
+
+function extractExcerpt(text: string, phrase: string, contextLen: number): string {
+  const idx = text.indexOf(phrase)
+  if (idx === -1) return text.substring(0, contextLen * 2) + '...'
+  const start = Math.max(0, idx - contextLen)
+  const end = Math.min(text.length, idx + phrase.length + contextLen)
+  let excerpt = ''
+  if (start > 0) excerpt += '...'
+  excerpt += text.substring(start, end)
+  if (end < text.length) excerpt += '...'
+  return excerpt
+}
 
 const { localeIndex, site, lang } = useData()
 
@@ -107,13 +302,9 @@ function inlineSearch() {
     meta: {
       title: 'Only works after build',
       description: '<mark>only support after build</mark>, only support after build'
-    }
+    },
+    score: 0,
   }]
-}
-
-const chineseRegex = /[\u4E00-\u9FA5]/g
-function chineseSearchOptimize(input: string) {
-  return input.replace(chineseRegex, '\u200A$&\u200A').replace(/\s+/g, '\u200A').trim()
 }
 
 const searchDelayTime = computed(() => finalSearchConfig.value?.delay ?? 300)
@@ -137,7 +328,7 @@ watch(
     const searchText
       = typeof finalSearchConfig.value.customSearchQuery === 'function'
         ? finalSearchConfig.value.customSearchQuery(searchWords.value)
-        : (/[\u4E00-\u9FA5]/.test(searchWords.value) ? chineseSearchOptimize(searchWords.value) : searchWords.value)
+        : searchWords.value
 
     try {
       const pagefindSearchResult: any = await window?.__pagefind__
@@ -164,10 +355,45 @@ watch(
           return ignorePublish.value || v.meta.publish !== false
         })
 
-      if (finalSearchConfig.value.sort) {
-        formattedResults.sort(finalSearchConfig.value.sort)
+      const subResults = searchSubIndex(searchWords.value)
+      const subResultMap = new Map<string, SubSearchResult>()
+      for (const r of subResults) {
+        subResultMap.set(normalizeRoute(r.route), r)
       }
-      searchResult.value = formattedResults.filter(
+
+      const allResults: { route: string; meta: Record<string, any>; score: number }[] = []
+      const seen = new Set<string>()
+
+      for (const sr of subResults) {
+        const nr = normalizeRoute(sr.route)
+        if (seen.has(nr)) continue
+        seen.add(nr)
+
+        const pfMatch = formattedResults.find(r => normalizeRoute(r.route) === nr)
+        if (pfMatch) {
+          allResults.push({ route: pfMatch.route, meta: pfMatch.meta, score: sr.score })
+        } else {
+          allResults.push({
+            route: sr.route.startsWith(site.value.base) ? sr.route : withBase(sr.route),
+            meta: sr.meta,
+            score: sr.score,
+          })
+        }
+      }
+
+      for (const pf of formattedResults) {
+        const nr = normalizeRoute(pf.route)
+        if (seen.has(nr)) continue
+        seen.add(nr)
+        allResults.push({ route: pf.route, meta: pf.meta, score: 1 })
+      }
+
+      allResults.sort((a, b) => b.score - a.score)
+
+      if (finalSearchConfig.value.sort) {
+        allResults.sort(finalSearchConfig.value.sort)
+      }
+      searchResult.value = allResults.filter(
         finalSearchConfig.value.filter ?? (() => true)
       )
     }
@@ -193,6 +419,7 @@ watch(
   (newValue) => {
     if (newValue) {
       document.body.style.overflow = 'hidden'
+      loadSubIndex()
       nextTick(() => {
         document
           .querySelector('div[command-dialog-mask]')
@@ -203,7 +430,7 @@ watch(
       document.body.style.overflow = ''
       document
         .querySelector('div[command-dialog-mask]')
-        ?.removeEventListener('click', handleClickMask)
+          ?.removeEventListener('click', handleClickMask)
     }
   }
 )
@@ -256,6 +483,15 @@ function handleToggleDetail() {
 
 function stripExt(url: string) {
   return url.replace(/\.html?$/, '')
+}
+
+function normalizeRoute(url: string) {
+  let r = url.split('#')[0].split('?')[0]
+  r = r.replace(/\.html?$/, '')
+  r = r.replace(/\/index$/, '/')
+  r = r.replace(/\/$/, '')
+  if (!r.startsWith('/')) r = '/' + r
+  return r
 }
 
 function breadcrumb(url: string) {
@@ -514,14 +750,12 @@ const pageResultCount = computed(() => finalSearchConfig.value.pageResultCount |
   }
 }
 
-/* breadcrumb row */
 .breadcrumb-row {
   font-size: 12px;
   color: var(--vp-c-text-2);
   line-height: 1.4;
 }
 
-/* single line excerpt */
 .link .des {
   white-space: nowrap;
   overflow: hidden;
