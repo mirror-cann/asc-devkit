@@ -72,8 +72,6 @@
 | Mins | int32_t | 64 |
 | Mins | float | 64 |
 | LeakyRelu | half | 128 |
-| LeakyRelu | int16_t | 128 |
-| LeakyRelu | int32_t | 64 |
 | LeakyRelu | float | 64 |
 
 **表2**  逻辑计算类指令理论性能汇总

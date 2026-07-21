@@ -208,14 +208,14 @@ $dst_i = \frac{1}{src_i}$
     AscendC::Reciprocal(dstLocal, srcLocal, 512);
     ```
 
-<!-- npu="950" id32 -->
-以下示例仅支持Ascend 950PR/Ascend 950DT
+    <!-- npu="950" id32 -->
+    以下示例仅支持Ascend 950PR/Ascend 950DT
 
-```cpp
-static constexpr ReciprocalConfig config = { ReciprocalAlgo::PRECISION_1ULP_FTZ_FALSE };
-AscendC::Reciprocal<T, config>(dstLocal, srcLocal, 512);
-```
-<!-- end id32 -->
+    ```cpp
+    static constexpr ReciprocalConfig config = { ReciprocalAlgo::PRECISION_1ULP_FTZ_FALSE };
+    AscendC::Reciprocal<T, config>(dstLocal, srcLocal, 512);
+    ```
+    <!-- end id32 -->
 
 结果示例如下：
 

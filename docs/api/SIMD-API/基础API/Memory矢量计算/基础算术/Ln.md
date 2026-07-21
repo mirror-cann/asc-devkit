@@ -210,14 +210,14 @@ FTZ（Flush To Zero）：一种浮点运算模式，当结果为[Subnormal](../.
     AscendC::Ln(dstLocal, srcLocal, 512);
     ```
 
-<!-- npu="950" id25 -->
-以下示例仅支持Ascend 950PR/Ascend 950DT
+    <!-- npu="950" id25 -->
+    以下示例仅支持Ascend 950PR/Ascend 950DT
 
-```cpp
-static constexpr LnConfig config = { LnAlgo::PRECISION_1ULP_FTZ_FALSE };
-AscendC::Ln<T, config>(dstLocal, srcLocal, 512);
+    ```cpp
+    static constexpr LnConfig config = { LnAlgo::PRECISION_1ULP_FTZ_FALSE };
+    AscendC::Ln<T, config>(dstLocal, srcLocal, 512);
     ```
-<!-- end id25 -->
+    <!-- end id25 -->
 
 结果示例如下：
 
