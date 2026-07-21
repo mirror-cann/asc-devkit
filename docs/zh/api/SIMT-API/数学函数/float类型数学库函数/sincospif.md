@@ -51,7 +51,7 @@ inline void sincospif(float x, float *s, float *c)
 
 ## 约束说明
 
-使用本接口时，线程配置最大不超过1024，否则有栈溢出风险。
+无
 
 ## 需要包含的头文件
 
