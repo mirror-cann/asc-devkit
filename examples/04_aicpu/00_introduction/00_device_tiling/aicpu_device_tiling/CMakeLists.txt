@@ -33,5 +33,6 @@ target_link_libraries(demo PRIVATE
 
 target_compile_options(demo PRIVATE
     $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES}>
+    # Experimental option. Future compatibility and support are not guaranteed.
     --cce-aicpu-launch-with-interface
 )

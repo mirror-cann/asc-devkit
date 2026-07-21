@@ -406,15 +406,29 @@ typedef struct {
 } AscendCFunMetaKTypeUt;
 
 typedef struct {
+    unsigned int crossType;
+} AscendCFunMetaCrossTypeUt;
+
+typedef struct {
     unsigned short taskRation0;
     unsigned short taskRation1;
 } AscendCFunMetaMixCoreTypeUt;
+
+struct ProfKernelTypeCase {
+    unsigned int kernelType;
+    unsigned int crossType;
+    uint32_t expectedTaskType;
+};
 
 rtError_t RtFunctionGetMetaInfoSuccessStub(
     const rtFuncHandle funcHandle, const rtFunctionMetaType type, void* data, const uint32_t length)
 {
     if (type == RT_FUNCTION_TYPE_KERNEL_TYPE) {
         reinterpret_cast<AscendCFunMetaKTypeUt*>(data)->ktype = K_TYPE_AIV;
+        return 0;
+    }
+    if (type == RT_FUNCTION_TYPE_CROSS_CORE) {
+        reinterpret_cast<AscendCFunMetaCrossTypeUt*>(data)->crossType = 1;
         return 0;
     }
     if (type == RT_FUNCTION_TYPE_MIX_TASK_RATION) {
@@ -428,27 +442,21 @@ rtError_t RtFunctionGetMetaInfoSuccessStub(
 
 aclError AclrtMallocHostFailedStub(void** hostPtr, size_t size) { return 1; }
 
+aclError AclrtFreeHostSuccessStub(void* hostPtr)
+{
+    std::free(hostPtr);
+    return ACL_SUCCESS;
+}
+
 rtError_t RtFunctionGetMetaInfoSizeFailedStub(
     const rtFuncHandle funcHandle, const rtFunctionMetaType type, size_t* size)
 {
     return 1;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKtypeStubMax(void* funcHandle, unsigned int* curKernelType)
-{
-    *curKernelType = K_TYPE_MAX;
-    return 0;
-}
-
 uint32_t AscendCFunctionGetMetaInfoKtypeStubAicore(void* funcHandle, unsigned int* curKernelType)
 {
     *curKernelType = K_TYPE_AICORE;
-    return 0;
-}
-
-uint32_t AscendCFunctionGetMetaInfoKtypeStubAic(void* funcHandle, unsigned int* curKernelType)
-{
-    *curKernelType = K_TYPE_AIC;
     return 0;
 }
 
@@ -464,17 +472,23 @@ uint32_t AscendCFunctionGetMetaInfoKtypeStubMixAic(void* funcHandle, unsigned in
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKtypeStubMixAiv(void* funcHandle, unsigned int* curKernelType)
+uint32_t AscendCFunctionGetMetaInfoCrossCoreTypeStub0(void* funcHandle, unsigned int* crossType)
 {
-    *curKernelType = K_TYPE_MIX_AIV_MAIN;
+    *crossType = 0;
     return 0;
 }
 
-uint32_t AscendCFunctionGetMetaInfoKCoreRation0_1(
-    void* funcHandle, unsigned short* coreAicRation, unsigned short* coreAivRation)
+uint32_t AscendCFunctionGetMetaInfoCrossCoreTypeFailedStub(void* funcHandle, unsigned int* crossType) { return 1; }
+
+uint32_t AscendCFunctionGetMetaInfoKtypeFromCase(void* funcHandle, unsigned int* curKernelType)
 {
-    *coreAicRation = 0;
-    *coreAivRation = 1;
+    *curKernelType = static_cast<ProfKernelTypeCase*>(funcHandle)->kernelType;
+    return 0;
+}
+
+uint32_t AscendCFunctionGetMetaInfoCrossCoreTypeFromCase(void* funcHandle, unsigned int* crossType)
+{
+    *crossType = static_cast<ProfKernelTypeCase*>(funcHandle)->crossType;
     return 0;
 }
 
@@ -667,6 +681,17 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRation)
     EXPECT_EQ(aivRation, 2);
 }
 
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCrossCoreType)
+{
+    void* funcHandle = nullptr;
+    unsigned int crossType = 0;
+    MOCKER(rtFunctionGetMetaInfo).stubs().will(invoke(RtFunctionGetMetaInfoSuccessStub));
+    MOCKER(aclrtFreeHost).expects(once()).will(invoke(AclrtFreeHostSuccessStub));
+    uint32_t ret = AscendCFunctionGetMetaInfoCrossCoreType(funcHandle, &crossType);
+    EXPECT_EQ(ret, 0);
+    EXPECT_EQ(crossType, 1);
+}
+
 TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeSizeFailed)
 {
     void* funcHandle = nullptr;
@@ -683,6 +708,16 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationSizeFailed)
     unsigned short aivRation;
     MOCKER(rtFunctionGetMetaInfoSize).stubs().will(invoke(RtFunctionGetMetaInfoSizeFailedStub));
     uint32_t ret = AscendCFunctionGetMetaInfoCoreRation(funcHandle, &aicRation, &aivRation);
+    EXPECT_EQ(ret, 1);
+}
+
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCrossCoreTypeSizeFailed)
+{
+    void* funcHandle = nullptr;
+    unsigned int crossType = 0;
+    MOCKER(rtFunctionGetMetaInfoSize).stubs().will(invoke(RtFunctionGetMetaInfoSizeFailedStub));
+    MOCKER(aclrtFreeHost).expects(never());
+    uint32_t ret = AscendCFunctionGetMetaInfoCrossCoreType(funcHandle, &crossType);
     EXPECT_EQ(ret, 1);
 }
 
@@ -705,6 +740,16 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationMallocHostFaile
     EXPECT_EQ(ret, 1);
 }
 
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCrossCoreTypeMallocHostFailed)
+{
+    void* funcHandle = nullptr;
+    unsigned int crossType = 0;
+    MOCKER(aclrtMallocHost).stubs().will(invoke(AclrtMallocHostFailedStub));
+    MOCKER(aclrtFreeHost).expects(never());
+    uint32_t ret = AscendCFunctionGetMetaInfoCrossCoreType(funcHandle, &crossType);
+    EXPECT_EQ(ret, 1);
+}
+
 TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoKtypeFailed)
 {
     void* funcHandle = nullptr;
@@ -724,6 +769,16 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCoreRationFailed)
     EXPECT_EQ(ret, 1);
 }
 
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCFunctionGetMetaInfoCrossCoreTypeFailed)
+{
+    void* funcHandle = nullptr;
+    unsigned int crossType = 0;
+    MOCKER(rtFunctionGetMetaInfo).stubs().will(returnValue(1));
+    MOCKER(aclrtFreeHost).expects(once()).will(invoke(AclrtFreeHostSuccessStub));
+    uint32_t ret = AscendCFunctionGetMetaInfoCrossCoreType(funcHandle, &crossType);
+    EXPECT_EQ(ret, 1);
+}
+
 TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplGetKtypeFailed)
 {
     void* funcHandle = nullptr;
@@ -736,33 +791,27 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplGetCoreRationFailed)
 {
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMixAic));
+    MOCKER(AscendCFunctionGetMetaInfoCrossCoreType).stubs().will(invoke(AscendCFunctionGetMetaInfoCrossCoreTypeStub0));
     MOCKER(AscendCFunctionGetMetaInfoCoreRation).stubs().will(returnValue(1));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
     EXPECT_EQ(ret, 5);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAiv1_0)
-{
-    void* funcHandle = nullptr;
-    MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMixAiv));
-    MOCKER(AscendCFunctionGetMetaInfoCoreRation).stubs().will(invoke(AscendCFunctionGetMetaInfoKCoreRation0_1));
-    uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
-    EXPECT_EQ(ret, 7);
-}
-
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_0)
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_0Unsupported)
 {
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMixAic));
+    MOCKER(AscendCFunctionGetMetaInfoCrossCoreType).stubs().will(invoke(AscendCFunctionGetMetaInfoCrossCoreTypeStub0));
     MOCKER(AscendCFunctionGetMetaInfoCoreRation).stubs().will(invoke(AscendCFunctionGetMetaInfoKCoreRation1_0));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
-    EXPECT_EQ(ret, 8);
+    EXPECT_EQ(ret, 5);
 }
 
 TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_1)
 {
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMixAic));
+    MOCKER(AscendCFunctionGetMetaInfoCrossCoreType).stubs().will(invoke(AscendCFunctionGetMetaInfoCrossCoreTypeStub0));
     MOCKER(AscendCFunctionGetMetaInfoCoreRation).stubs().will(invoke(AscendCFunctionGetMetaInfoKCoreRation1_1));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
     EXPECT_EQ(ret, 9);
@@ -772,67 +821,39 @@ TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMixAic1_2)
 {
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMixAic));
+    MOCKER(AscendCFunctionGetMetaInfoCrossCoreType).stubs().will(invoke(AscendCFunctionGetMetaInfoCrossCoreTypeStub0));
     MOCKER(AscendCFunctionGetMetaInfoCoreRation).stubs().will(invoke(AscendCFunctionGetMetaInfoKCoreRation1_2));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
     EXPECT_EQ(ret, 10);
 }
 
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAic)
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplMapsKernelAndCrossCoreTypes)
 {
-    void* funcHandle = nullptr;
-    MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAic));
-    uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
-    EXPECT_EQ(ret, 6);
+    ProfKernelTypeCase testCases[] = {
+        {K_TYPE_AIC, 0, 6},          {K_TYPE_AIC, 1, 8},          {K_TYPE_AIV, 0, 5},
+        {K_TYPE_AIV, 1, 7},          {K_TYPE_AIC_ROLLBACK, 0, 6}, {K_TYPE_AIC_ROLLBACK, 1, 8},
+        {K_TYPE_AIV_ROLLBACK, 0, 5}, {K_TYPE_AIV_ROLLBACK, 1, 7}, {K_TYPE_AICORE, 0, 2},
+        {K_TYPE_MAX, 0, 5},
+    };
+
+    MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeFromCase));
+    MOCKER(AscendCFunctionGetMetaInfoCrossCoreType)
+        .stubs()
+        .will(invoke(AscendCFunctionGetMetaInfoCrossCoreTypeFromCase));
+    for (auto& testCase : testCases) {
+        SCOPED_TRACE(
+            testing::Message() << "kernelType=" << testCase.kernelType << ", crossType=" << testCase.crossType);
+        EXPECT_EQ(AscendCGetProfkTypeImpl(&testCase), testCase.expectedTaskType);
+    }
 }
 
-uint32_t AscendCFunctionGetMetaInfoKtypeStubAicRollback(void* funcHandle, unsigned int* curKernelType)
-{
-    *curKernelType = K_TYPE_AIC_ROLLBACK;
-    return 0;
-}
-
-uint32_t AscendCFunctionGetMetaInfoKtypeStubAivRollback(void* funcHandle, unsigned int* curKernelType)
-{
-    *curKernelType = K_TYPE_AIV_ROLLBACK;
-    return 0;
-}
-
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAiv)
+TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplCrossCoreFailedFallsBackToAiv)
 {
     void* funcHandle = nullptr;
     MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAiv));
-    uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
-    EXPECT_EQ(ret, 5);
-}
-
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAicRollback)
-{
-    void* funcHandle = nullptr;
-    MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAicRollback));
-    uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
-    EXPECT_EQ(ret, 6);
-}
-
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAivRollback)
-{
-    void* funcHandle = nullptr;
-    MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAivRollback));
-    uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
-    EXPECT_EQ(ret, 5);
-}
-
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplAicore)
-{
-    void* funcHandle = nullptr;
-    MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubAicore));
-    uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
-    EXPECT_EQ(ret, 2);
-}
-
-TEST_F(TEST_ASCENDC_RUNTIME, AscendCGetProfkTypeImplothers)
-{
-    void* funcHandle = nullptr;
-    MOCKER(AscendCFunctionGetMetaInfoKtype).stubs().will(invoke(AscendCFunctionGetMetaInfoKtypeStubMax));
+    MOCKER(AscendCFunctionGetMetaInfoCrossCoreType)
+        .stubs()
+        .will(invoke(AscendCFunctionGetMetaInfoCrossCoreTypeFailedStub));
     uint32_t ret = AscendCGetProfkTypeImpl(funcHandle);
     EXPECT_EQ(ret, 5);
 }
