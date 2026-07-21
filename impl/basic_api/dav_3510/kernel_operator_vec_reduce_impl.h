@@ -286,7 +286,7 @@ __aicore__ inline void PairReduceSumImpl(
     __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const int32_t mask, const int32_t dstRepStride,
     const int32_t srcBlkStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, half, float>()), "PairReduceSum current data type is not supported!");
+    static_assert((SupportType<T, half, float>()), "The data type is not supported by ReducePairElem<SUM>.");
     constexpr uint32_t oneRepOffset = (ONE_REPEAT_BYTE_SIZE / sizeof(T)) / HALF_FACTOR;
     uint32_t maskReg = static_cast<uint32_t>(mask);
     PairReduceTemplate<isSetMask, false, Reg::PairReduceSum<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>>(
@@ -298,7 +298,7 @@ __aicore__ inline void PairReduceSumImpl(
     __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const uint64_t mask[], const int32_t dstRepStride,
     const int32_t srcBlkStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, half, float>()), "PairReduceSum current data type is not supported!");
+    static_assert((SupportType<T, half, float>()), "The data type is not supported by ReducePairElem<SUM>.");
     constexpr uint32_t oneRepOffset = (ONE_REPEAT_BYTE_SIZE / sizeof(T)) / HALF_FACTOR;
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
@@ -313,7 +313,7 @@ __aicore__ inline void BlockReduceSumImpl(
     __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const uint64_t mask[], const int32_t dstRepStride,
     const int32_t srcBlkStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, half, float>()), "BlockReduceSum not support current datatype!");
+    static_assert((SupportType<T, half, float>()), "The data type is not supported by ReduceDataBlock<SUM>.");
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
     }
@@ -326,7 +326,7 @@ __aicore__ inline void BlockReduceSumImpl(
     __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const int32_t mask, const int32_t dstRepStride,
     const int32_t srcBlkStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, half, float>()), "BlockReduceSum not support current datatype!");
+    static_assert((SupportType<T, half, float>()), "The data type is not supported by ReduceDataBlock<SUM>.");
     uint32_t maskReg = static_cast<uint32_t>(mask);
     ReduceTemplate<isSetMask, false, Reg::ReduceSumWithDataBlock<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>>(
         dst, src, repeat, dstRepStride, DEFAULT_BLK_NUM, srcBlkStride, srcRepStride, maskReg);
@@ -337,7 +337,7 @@ __aicore__ inline void BlockReduceMaxImpl(
     __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const uint64_t mask[], const int32_t dstRepStride,
     const int32_t srcBlkStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, half, float>()), "BlockReduceMax current data type is not supported!");
+    static_assert((SupportType<T, half, float>()), "The data type is not supported by ReduceDataBlock<MAX>.");
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
     }
@@ -350,7 +350,7 @@ __aicore__ inline void BlockReduceMaxImpl(
     __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const int32_t mask, const int32_t dstRepStride,
     const int32_t srcBlkStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, half, float>()), "BlockReduceMax current data type is not supported!");
+    static_assert((SupportType<T, half, float>()), "The data type is not supported by ReduceDataBlock<MAX>.");
     uint32_t maskReg = static_cast<uint32_t>(mask);
     ReduceTemplate<isSetMask, false, Reg::ReduceMaxWithDataBlock<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>>(
         dst, src, repeat, dstRepStride, DEFAULT_BLK_NUM, srcBlkStride, srcRepStride, maskReg);
@@ -361,7 +361,7 @@ __aicore__ inline void BlockReduceMinImpl(
     __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const uint64_t mask[], const int32_t dstRepStride,
     const int32_t srcBlkStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, half, float>()), "BlockReduceMin not support current datatype!");
+    static_assert((SupportType<T, half, float>()), "The data type is not supported by ReduceDataBlock<MIN>.");
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
     }
@@ -374,7 +374,7 @@ __aicore__ inline void BlockReduceMinImpl(
     __ubuf__ T* dst, __ubuf__ T* src, const int32_t repeat, const int32_t mask, const int32_t dstRepStride,
     const int32_t srcBlkStride, const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, half, float>()), "BlockReduceMin not support current datatype!");
+    static_assert((SupportType<T, half, float>()), "The data type is not supported by ReduceDataBlock<MIN>.");
     uint32_t maskReg = static_cast<uint32_t>(mask);
     ReduceTemplate<isSetMask, false, Reg::ReduceMinWithDataBlock<T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<T>>>(
         dst, src, repeat, dstRepStride, DEFAULT_BLK_NUM, srcBlkStride, srcRepStride, maskReg);
@@ -387,9 +387,10 @@ __aicore__ inline void RepeatReduceSumImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "RepeatReduceSum current data type is not supported!");
+        "The source data type is not supported by ReduceRepeat<SUM>.");
     static_assert(
-        (SupportType<U, int32_t, uint32_t, half, float>()), "RepeatReduceSum current data type is not supported!");
+        (SupportType<U, int32_t, uint32_t, half, float>()),
+        "The destination data type is not supported by ReduceRepeat<SUM>.");
     uint32_t maskReg = static_cast<uint32_t>(elemsInOneRepeat);
     ReduceTemplate<
         isSetMask, false, Reg::ReduceSum<U, T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<U>, Reg::RegTensor<T>>, T,
@@ -404,7 +405,7 @@ __aicore__ inline void WholeReduceMaxImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "WholeReduceMax current data type is not supported!");
+        "The data type is not supported by ReduceRepeat<MAX>.");
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
     }
@@ -425,7 +426,7 @@ __aicore__ inline void WholeReduceMaxImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "WholeReduceMax current data type is not supported!");
+        "The data type is not supported by ReduceRepeat<MAX>.");
 
     uint32_t maskReg = static_cast<uint32_t>(mask);
     uint32_t oneRepOffset =
@@ -445,7 +446,7 @@ __aicore__ inline void WholeReduceMinImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "WholeReduceMin current data type is not supported!");
+        "The data type is not supported by ReduceRepeat<MIN>.");
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
     }
@@ -466,7 +467,7 @@ __aicore__ inline void WholeReduceMinImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "WholeReduceMin current data type is not supported!");
+        "The data type is not supported by ReduceRepeat<MIN>.");
     uint32_t maskReg = static_cast<uint32_t>(mask);
     uint32_t oneRepOffset =
         (order == ReduceOrder::ORDER_VALUE_INDEX || order == ReduceOrder::ORDER_INDEX_VALUE) ? 2 : 1;
@@ -485,9 +486,10 @@ __aicore__ inline void WholeReduceSumImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "WholeReduceSum current data type is not supported!");
+        "The source data type is not supported by ReduceRepeat<SUM>.");
     static_assert(
-        (SupportType<U, int32_t, uint32_t, half, float>()), "WholeReduceSum current data type is not supported!");
+        (SupportType<U, int32_t, uint32_t, half, float>()),
+        "The destination data type is not supported by ReduceRepeat<SUM>.");
     if constexpr (isSetMask) {
         SetVectorMask<T>(mask[1], mask[0]);
     }
@@ -503,9 +505,10 @@ __aicore__ inline void WholeReduceSumImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "WholeReduceSum current data type is not supported!");
+        "The source data type is not supported by ReduceRepeat<SUM>.");
     static_assert(
-        (SupportType<U, int32_t, uint32_t, half, float>()), "WholeReduceSum current data type is not supported!");
+        (SupportType<U, int32_t, uint32_t, half, float>()),
+        "The destination data type is not supported by ReduceRepeat<SUM>.");
     uint32_t maskReg = static_cast<uint32_t>(mask);
     ReduceTemplate<
         isSetMask, false, Reg::ReduceSum<U, T, Reg::MaskMergeMode::ZEROING, Reg::RegTensor<U>, Reg::RegTensor<T>>, T,
@@ -661,7 +664,7 @@ __aicore__ inline void ReduceSumImpl(
     __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, const uint64_t mask[], const int32_t repeat,
     const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, half, float>()), "ReduceSum current data type is not supported!");
+    static_assert((SupportType<T, half, float>()), "The data type is not supported by ReduceSum.");
     constexpr uint32_t oneRepSize = GetVecLen() / sizeof(T);
     bool isCounterMode = Internal::IsCounterMode();
     if (isCounterMode) {
@@ -684,7 +687,7 @@ __aicore__ inline void ReduceSumImpl(
     __ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, const int32_t mask, const int32_t repeat,
     const int32_t srcRepStride)
 {
-    static_assert((SupportType<T, half, float>()), "ReduceSum current data type is not supported!");
+    static_assert((SupportType<T, half, float>()), "The data type is not supported by ReduceSum.");
     constexpr uint32_t oneRepSize = GetVecLen() / sizeof(T);
     bool isCounterMode = Internal::IsCounterMode();
     if (isCounterMode) {
@@ -730,7 +733,7 @@ __simd_vf__ inline void ReduceB64SumImpl(
 template <typename T>
 __aicore__ inline void ReduceSumImpl(__ubuf__ T* dstLocal, __ubuf__ T* srcLocal, __ubuf__ T* workLocal, uint32_t count)
 {
-    static_assert((SupportType<T, half, float, uint64_t, int64_t>()), "ReduceSum current data type is not supported!");
+    static_assert((SupportType<T, half, float, uint64_t, int64_t>()), "The data type is not supported by ReduceSum.");
     if constexpr (SupportType<T, uint64_t, int64_t>()) {
         ReduceB64SumImpl<T>(dstLocal, srcLocal, workLocal, count);
     } else {
@@ -1074,7 +1077,7 @@ __aicore__ inline void ReduceMaxImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float, uint64_t, int64_t>()),
-        "ReduceMax current data type is not supported!");
+        "The data type is not supported by ReduceMax.");
     T initValue = GetMinValue<T>();
     if constexpr (sizeof(T) == 8) {
         if (calIndex) {
@@ -1109,7 +1112,7 @@ __aicore__ inline void ReduceMaxImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "ReduceMax current data type is not supported!");
+        "The data type is not supported by ReduceMax.");
     T initValue = GetMinValue<T>();
     uint32_t count = static_cast<uint32_t>(mask[0]);
     bool isCounterMode = Internal::IsCounterMode();
@@ -1160,7 +1163,7 @@ __aicore__ inline void ReduceMaxImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "ReduceMax current data type is not supported!");
+        "The data type is not supported by ReduceMax.");
     T initValue = GetMinValue<T>();
     uint32_t maskReg = static_cast<uint32_t>(mask);
     bool isCounterMode = Internal::IsCounterMode();
@@ -1209,7 +1212,7 @@ __aicore__ inline void ReduceMinImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float, uint64_t, int64_t>()),
-        "ReduceMin current data type is not supported!");
+        "The data type is not supported by ReduceMin.");
     T initValue = GetMaxValue<T>();
     if constexpr (sizeof(T) == 8) {
         if (calIndex) {
@@ -1244,7 +1247,7 @@ __aicore__ inline void ReduceMinImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "ReduceMin current data type is not supported!");
+        "The data type is not supported by ReduceMin.");
     T initValue = GetMaxValue<T>();
     uint32_t count = static_cast<uint32_t>(mask[0]);
     bool isCounterMode = Internal::IsCounterMode();
@@ -1295,7 +1298,7 @@ __aicore__ inline void ReduceMinImpl(
 {
     static_assert(
         (SupportType<T, int16_t, uint16_t, int32_t, uint32_t, half, float>()),
-        "ReduceMin current data type is not supported!");
+        "The data type is not supported by ReduceMin.");
     T initValue = GetMaxValue<T>();
     uint32_t maskReg = static_cast<uint32_t>(mask);
     bool isCounterMode = Internal::IsCounterMode();
