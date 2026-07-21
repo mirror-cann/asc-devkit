@@ -25,7 +25,7 @@ __aicore__ inline void asc_copy_gm2l1_impl(
     uint64_t src_stride, uint32_t dst_stride)
 {
     if ASC_IS_AIC {
-        copy_gm_to_cbuf_v2(dst, src, 0, n_burst, len_burst, pad_func_mode, src_stride, dst_stride);
+        copy_gm_to_cbuf_v2(dst, src, 0, n_burst, len_burst, pad_func_mode, 0, src_stride, dst_stride);
     }
 }
 
