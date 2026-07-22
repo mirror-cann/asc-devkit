@@ -758,9 +758,9 @@ def markdown_inline_link_targets(text):
 
 
 def source_area(path):
-    if path.startswith("docs/zh/api/"):
+    if path == "docs/zh/api" or path.startswith("docs/zh/api/"):
         return "api"
-    if path.startswith("docs/zh/guide/"):
+    if path == "docs/zh/guide" or path.startswith("docs/zh/guide/"):
         return "guide"
     if path.startswith("examples/"):
         return "examples"
@@ -874,6 +874,10 @@ for source in scan_files:
                 continue
 
             target_path, suffix = normalized
+            target_kind = source_area(target_path)
+            if {source_kind, target_kind} == {"api", "guide"}:
+                continue
+
             if (repo_root / target_path).is_dir():
                 if source_kind == "examples":
                     if "#" in suffix:
@@ -888,17 +892,11 @@ for source in scan_files:
                     )
                 continue
 
-            target_kind = source_area(target_path)
-            if target_kind is None or target_kind == source_kind:
-                continue
-
-            if source_kind == "examples" and target_kind in ("api", "guide"):
-                continue
-
-            errors.append(
-                f"{source}:{line_number}: docs/examples cross-area link must use HTTPS: "
-                f"{target} -> {gitcode_url(target_path, suffix)}"
-            )
+            if source_kind in ("api", "guide") and target_kind == "examples":
+                errors.append(
+                    f"{source}:{line_number}: docs link to examples must use HTTPS: "
+                    f"{target} -> {gitcode_url(target_path, suffix)}"
+                )
 
 with output_file.open("w", encoding="utf-8") as handle:
     if errors:

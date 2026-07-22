@@ -7,7 +7,7 @@
 1.  <a name="li1949014102516"></a>在[自定义算子工程](../../Aclnn算子工程化开发/概述.md)的op\_kernel目录下，新增定义模板参数和模板参数组合的头文件，本示例中头文件命名为tiling\_key\_add\_custom\_template.h。
 
     -   该头文件中需要包含模板头文件ascendc/host\_api/tiling/template\_argument.h。
-    -   定义模板参数ASCENDC\_TPL\_ARGS\_DECL和模板参数组合ASCENDC\_TPL\_ARGS\_SEL（即可使用的模板）。具体API参考见[模板参数定义](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/Utils-API/Tiling模板编程/模板参数定义.md)。
+    -   定义模板参数ASCENDC\_TPL\_ARGS\_DECL和模板参数组合ASCENDC\_TPL\_ARGS\_SEL（即可使用的模板）。具体API参考见[模板参数定义](../../../../../api/Utils-API/Tiling模板编程/模板参数定义.md)。
 
     ```
     #include "ascendc/host_api/tiling/template_argument.h"

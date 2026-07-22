@@ -12,8 +12,8 @@ Ascend C编程模型的核心架构，深度承袭了传统C/C++并发编程中*
 
 **TPipe**与**TQue**是支撑多Stage流水线并行运行的两大基础组件，二者职责分明、紧密协同：
 
-- **[TPipe](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TPipe/TPipe.md)** 作为资源管理器，统一管理系统内存资源及用于同步的事件等；
-- **[TQue](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/SIMD-API/基础API/资源管理/Pipe和Que框架/TQue/TQue.md)** 作为队列，负责完成Stage任务间的同步与通信。
+- **[TPipe](../../../../../api/SIMD-API/基础API/资源管理/Pipe和Que框架/TPipe/TPipe.md)** 作为资源管理器，统一管理系统内存资源及用于同步的事件等；
+- **[TQue](../../../../../api/SIMD-API/基础API/资源管理/Pipe和Que框架/TQue/TQue.md)** 作为队列，负责完成Stage任务间的同步与通信。
 
 在TPipe-TQue模型下，完整的算子计算流程被拆分为若干独立、可并行调度的Stage，每个Stage都遵循一套标准化的四步编程范式：
 
@@ -35,7 +35,7 @@ Ascend C编程模型的核心架构，深度承袭了传统C/C++并发编程中*
 
 在这种异步并行架构下，多单元、多Stage的并发执行会引入复杂的数据依赖，而这正是异构编程的核心难点。Ascend C通过两组成对的API，在底层精准植入`Set`/`Wait`硬件同步指令，以极低的性能代价解决了这一问题。
 
-## 数据依赖与同步机制：双API的协同工作
+## 数据依赖与同步机制：双API的协同工作<a name="data-dependency-sync"></a>
 
 异步并行计算中的核心数据依赖可归纳为两类：**写后读（WAR，Write‑After‑Read）**和**读后写（RAW，Read‑After‑Write）**。Ascend C针对性地提供了两套配对接口，构建起完整的并行同步闭环。
 
