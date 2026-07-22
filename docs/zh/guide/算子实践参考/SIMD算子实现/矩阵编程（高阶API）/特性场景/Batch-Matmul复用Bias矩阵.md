@@ -22,7 +22,7 @@ A、B、C矩阵的Layout类型都为NORMAL时，不支持[batchMode](../../../..
 
 ## 调用示例<a name="zh-cn_topic_0000002373911153_section18018102212"></a>
 
-完整的算子样例请参考[BatchMatmul复用Bias算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/batch_matmul_bias_reuse)。
+完整的算子样例请参考[BatchMatmul复用Bias算子样例](../../../../../../../examples/01_simd_cpp_api/04_advanced_api/00_matmul/batch_matmul_bias_reuse)。
 
 ```
 // 自定义MatmulConfig参数，将其中的isBiasBatch参数设置为false，开启BatchMatmul的Bias复用功能。

@@ -50,4 +50,4 @@ M方向切分：
 
 ![](../../../../../figures/nz2nd_l0c2ub_dual_dst.png)
 
-完整样例可参考[fixpipe\_l0c2ub](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2ub)。
+完整样例可参考[fixpipe\_l0c2ub](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2ub)。

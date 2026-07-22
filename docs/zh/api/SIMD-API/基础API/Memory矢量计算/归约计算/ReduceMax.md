@@ -224,7 +224,7 @@
 
 ## 调用示例<a name="section107745237168"></a>
 
-详细示例请参考[ReduceMax样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce_computation)。
+详细示例请参考[ReduceMax样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce_computation)。
 
 - tensor高维切分计算样例-`mask`连续模式：
 

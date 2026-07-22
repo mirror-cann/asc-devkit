@@ -117,7 +117,7 @@ struct SelectWithBytesMaskShapeInfo {
 
 ## 调用示例
 
-完整示例可以参考[Select样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/04_advanced_api/07_filter/select)。
+完整示例可以参考[Select样例](../../../../../../examples/01_simd_cpp_api/04_advanced_api/07_filter/select)。
 
 ```
 // dstLocal：结果数据

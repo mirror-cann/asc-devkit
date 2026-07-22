@@ -189,7 +189,7 @@
 
 本样例中，源操作数src0Local存储了256个float类型的数据。样例实现的功能为，对src0Local中的元素和src1Local.GetValue\(0\)中的数据进行比较，如果src0Local中的元素小于src1Local.GetValue\(0\)中的元素，dstLocal结果中对应的比特位置1；反之，则置0。dst结果使用uint8\_t类型数据存储。
 
-完整的调用样例可参考[Compare类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/compare)场景三。
+完整的调用样例可参考[Compare类样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/compare)场景三。
 
 - tensor前n个数据计算接口样例
 

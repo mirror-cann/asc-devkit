@@ -92,4 +92,4 @@ AscendC::WaitFlag<AscendC::HardEvent::MTE2_V>(EVENT_ID0);
 AscendC::Add(dstLocal, src0Local, src1Local, TOTAL_LENGTH);
 ```
 
-完整样例请参考[TaskSync样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/05_sync_control/task_sync)。
+完整样例请参考[TaskSync样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/05_sync_control/task_sync)。

@@ -95,7 +95,7 @@ struct RintConfig {
 
 ## 调用示例
 
-完整样例请参考[Rint算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/10_math/rint)。
+完整样例请参考[Rint算子样例](../../../../../../../examples/01_simd_cpp_api/04_advanced_api/10_math/rint)。
 
 -   通过sharedTmpBuffer入参传入
 

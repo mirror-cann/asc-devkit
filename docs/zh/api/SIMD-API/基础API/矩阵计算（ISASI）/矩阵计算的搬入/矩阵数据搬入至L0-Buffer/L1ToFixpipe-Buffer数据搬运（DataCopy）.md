@@ -124,4 +124,4 @@ AscendC::DataCopy(fbTensor, quantAlphaTensor, dataCopyParams);
 AscendC::SetFixPipeConfig(fbTensor);
 ```
 
-完整示例请参考[L1->Fixpipe Buffer数据搬运(DataCopy)](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_l0c2gm)中场景2、4、6。
+完整示例请参考[L1->Fixpipe Buffer数据搬运(DataCopy)](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_l0c2gm)中场景2、4、6。

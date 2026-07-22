@@ -99,7 +99,7 @@ __aicore__ inline void Sort32(const LocalTensor<T>& dst, const LocalTensor<T>& s
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-完整示例请参考[Sort32样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/mrg_sort)。
+完整示例请参考[Sort32样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/mrg_sort)。
 
 ```cpp
 AscendC::LocalTensor<float> srcLocal0 = inQueueSrc0.DeQue<float>();

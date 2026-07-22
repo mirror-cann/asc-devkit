@@ -93,7 +93,7 @@ __aicore__ inline void MrgSort(const LocalTensor<T>& dst, const MrgSortSrcList<T
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-完整示例请参考[MrgSort样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/mrg_sort)。
+完整示例请参考[MrgSort样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/mrg_sort)。
 
 ```cpp
 // 对8个已排好序的队列进行合并排序，repeatTimes = 2，数据连续存放

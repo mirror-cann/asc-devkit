@@ -381,7 +381,7 @@ __global__ __cube__ void matmul_kernel(__gm__ float* x, __gm__ float* y, __gm__ 
 
 ### 基于基础Tensor的矩阵计算编程示例
 
-结合上述矩阵计算的搬运与计算能力，开发者可基于C++ Tensor编程实现矩阵类算子。具体开发实践可参考[matmul实现样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/00_introduction/02_matrix/matmul_basic_api/README.md)。
+结合上述矩阵计算的搬运与计算能力，开发者可基于C++ Tensor编程实现矩阵类算子。具体开发实践可参考[matmul实现样例](../../../../../../../examples/01_simd_cpp_api/00_introduction/02_matrix/matmul_basic_api/README.md)。
 
 ## 扩展Tensor编程范式
 
@@ -506,4 +506,4 @@ AscendC::Te::Copy(CopyAtom<CopyTraits<CopyL0C2GM, FixpipeTraitDefault>>{}, globa
 
 ### 基于扩展Tensor的矩阵计算示例
 
-结合上述矩阵计算的搬运与计算能力，开发者可基于C++ Tensor编程实现矩阵类算子。具体开发实践可参考[matmul实现样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/00_introduction/02_matrix/matmul_tensor_api/README.md)。
+结合上述矩阵计算的搬运与计算能力，开发者可基于C++ Tensor编程实现矩阵类算子。具体开发实践可参考[matmul实现样例](../../../../../../../examples/01_simd_cpp_api/00_introduction/02_matrix/matmul_tensor_api/README.md)。

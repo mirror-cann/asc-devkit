@@ -76,7 +76,7 @@ quantPre和reluPre必须是Fixpipe Buffer上的tensor。
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-完整示例可参考[data_copy_l0c2gm](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_l0c2gm)。
+完整示例可参考[data_copy_l0c2gm](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_l0c2gm)。
 
 ```cpp
 __aicore__ inline void SetFPC(const LocalTensor <int32_t>& reluPreTensor, const LocalTensor <int32_t>& quantPreTensor)

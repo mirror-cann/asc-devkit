@@ -84,7 +84,7 @@ __aicore__ inline void IsFinite(const LocalTensor<U>& dst, const LocalTensor<T>&
 
 ## 调用示例
 
-完整算子样例请参考[isfinite算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/10_math/isfinite)。
+完整算子样例请参考[isfinite算子样例](../../../../../../../examples/01_simd_cpp_api/04_advanced_api/10_math/isfinite)。
 
 ```
 // dstLocal: 存放IsFinite计算结果的Tensor

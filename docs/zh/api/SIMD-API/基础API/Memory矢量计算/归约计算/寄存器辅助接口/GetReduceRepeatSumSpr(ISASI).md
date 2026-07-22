@@ -59,7 +59,7 @@ __aicore__ inline T GetReduceRepeatSumSpr()
 
 ## 调用示例
 
-具体可参考[GetReduceRepeatSumSpr样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce_computation)。
+具体可参考[GetReduceRepeatSumSpr样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce_computation)。
 
 ```cpp
 AscendC::LocalTensor<float> src;

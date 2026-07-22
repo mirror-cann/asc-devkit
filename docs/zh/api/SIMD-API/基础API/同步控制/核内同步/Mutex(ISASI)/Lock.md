@@ -140,4 +140,4 @@ AscendC::ReleaseMutexID(mutexId0);
 AscendC::ReleaseMutexID(mutexId1);
 ```
 
-完整样例请参考：[Mutex样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/05_sync_control/mutex)。
+完整样例请参考：[Mutex样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/05_sync_control/mutex)。

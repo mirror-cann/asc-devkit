@@ -102,7 +102,7 @@ EXTERN\_IMPL\_BUFPOOL宏内部定义的函数Reset、Init、GetBufHandle、SetCu
 
 ## 调用示例<a name="section1234017553610"></a>
 
-详细示例请参考[tbufpool\_management样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/04_memory_management/tbufpool_management)。
+详细示例请参考[tbufpool\_management样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/04_memory_management/tbufpool_management)。
 
 如下示例中，为tbufPool0划分65536 \* 3大小的内存，然后自定义MyBufPool的InitBuffer函数，实现TQue和Tbuf的内存分配。
 

@@ -117,7 +117,7 @@ struct ErfConfig {
 
 ## 调用示例
 
-完整的调用样例请参考[Erf样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/10_math/erf)。
+完整的调用样例请参考[Erf样例](../../../../../../../examples/01_simd_cpp_api/04_advanced_api/10_math/erf)。
 
 ```
 // dstLocal: 存放计算结果的Tensor

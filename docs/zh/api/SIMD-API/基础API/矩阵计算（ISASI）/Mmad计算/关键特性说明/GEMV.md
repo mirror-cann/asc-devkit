@@ -56,7 +56,7 @@ C矩阵为1\* 256的向量，共可以划分为16个1 \* 16的子向量，占用
 
 ![GEMV模式-矩阵乘示意图-demo](../../../../../figures/mmad_gemv_demo.png "GEMV模式-矩阵乘示意图-demo")
 
-GEMV功能的完整示例：[GEMV样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_gemv)。
+GEMV功能的完整示例：[GEMV样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_gemv)。
 
 ```cpp
 AscendC::MmadParams mmadParams;

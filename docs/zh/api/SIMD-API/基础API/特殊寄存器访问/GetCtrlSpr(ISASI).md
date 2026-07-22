@@ -68,4 +68,4 @@ CTRL寄存器对应比特位上的值。
 int64_t valueCtrlAfterSet = AscendC::GetCtrlSpr<48, 48>();
 ```
 
-更多示例请参考[CtrlSpr样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/09_utils/ctrl_spr)。
+更多示例请参考[CtrlSpr样例](../../../../../../examples/01_simd_cpp_api/03_basic_api/09_utils/ctrl_spr)。

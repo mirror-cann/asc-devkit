@@ -219,4 +219,4 @@
     }
 ```
 
-完整样例请参考[Copy样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/00_data_movement/copy_ub2ub)。
+完整样例请参考[Copy样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/00_data_movement/copy_ub2ub)。

@@ -152,7 +152,7 @@ Load2DBitModeConfig1结构体参数的含义与LoadData2DParamsV2结构体中的
 
 ## 调用示例<a id="section6461234123118"></a>
 
-完整搬运流程请参考[LoadData（2D矩阵搬运V2）样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_2dv2_l12l0)。LoadData（BitMode 2D矩阵搬运）的使用可以参考下面的调用示例，L1上为NZ数据排布、shape为[M,K]的A矩阵，调用LoadData指令完成L1 Buffer->L0A Buffer的Nz2Nz搬运。
+完整搬运流程请参考[LoadData（2D矩阵搬运V2）样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_2dv2_l12l0)。LoadData（BitMode 2D矩阵搬运）的使用可以参考下面的调用示例，L1上为NZ数据排布、shape为[M,K]的A矩阵，调用LoadData指令完成L1 Buffer->L0A Buffer的Nz2Nz搬运。
 
 - 示例一：使用LoadData2DParamsV2构造Load2DBitModeParam
 

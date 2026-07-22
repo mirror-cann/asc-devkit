@@ -196,7 +196,7 @@
 
 ## 调用示例
 
-本样例中只展示`Compute`流程中的部分代码。更多样例可参考[ReduceDataBlock系列归约指令样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce_data_block)。
+本样例中只展示`Compute`流程中的部分代码。更多样例可参考[ReduceDataBlock系列归约指令样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/reduce_data_block)。
 
 - `ReduceDataBlock<ReduceType::MAX>`-tensor高维切分计算样例-`mask`连续模式：
 

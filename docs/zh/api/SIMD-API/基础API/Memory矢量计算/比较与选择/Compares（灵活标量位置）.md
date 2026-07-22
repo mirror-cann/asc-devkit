@@ -120,7 +120,7 @@ Ascend 950PR/Ascend 950DT，目的操作数dst支持的数据类型为：uint8_t
 
 对于灵活标量位置接口，支持直接传入立即数或单点LocalTensor作为标量，并且支持标量在前和在后两种调用方式。
 
-完整的调用样例可参考[Compare类样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/compare)场景四。
+完整的调用样例可参考[Compare类样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/compare)场景四。
 
 -   tensor前n个数据计算接口样例
 

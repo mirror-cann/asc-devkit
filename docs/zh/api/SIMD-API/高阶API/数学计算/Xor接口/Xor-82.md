@@ -112,7 +112,7 @@
 
 ## 调用示例
 
-完整的调用样例可参考[Xor样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/10_math/xor)。
+完整的调用样例可参考[Xor样例](../../../../../../../examples/01_simd_cpp_api/04_advanced_api/10_math/xor)。
 
 ```
 // dstLocal: 存放计算结果的Tensor

@@ -65,7 +65,7 @@ __aicore__ inline void SetFmatrix(uint16_t l1H, uint16_t l1W, const uint8_t padL
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-完整调用示例参考[SetLoadDataBoundary样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/06_compatibility_guide/set_loaddata_boundary)，以下为样例中的关键代码片段示例：
+完整调用示例参考[SetLoadDataBoundary样例](../../../../../../../../examples/01_simd_cpp_api/06_compatibility_guide/set_loaddata_boundary)，以下为样例中的关键代码片段示例：
 
 ```cpp
     AscendC::LoadData3DParamsV2<U> loadData3dParams;

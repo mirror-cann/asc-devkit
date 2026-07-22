@@ -70,4 +70,4 @@ AscendC::SetCtrlSpr<48, 48>(1);
 AscendC::ResetCtrlSpr<48, 48>();
 ```
 
-更多示例请参考[CtrlSpr样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/09_utils/ctrl_spr)。
+更多示例请参考[CtrlSpr样例](../../../../../../examples/01_simd_cpp_api/03_basic_api/09_utils/ctrl_spr)。

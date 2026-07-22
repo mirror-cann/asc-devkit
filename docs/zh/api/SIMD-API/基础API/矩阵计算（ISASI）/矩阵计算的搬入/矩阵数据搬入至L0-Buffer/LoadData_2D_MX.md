@@ -127,4 +127,4 @@ $$startAddr = srcAddr + (xStartPosition \times \lvert srcStride \rvert + yStartP
 
 ## 调用示例
 
-完整调用示例请参考[LoadData（MX矩阵搬运）样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_2dmx_l12l0)。
+完整调用示例请参考[LoadData（MX矩阵搬运）样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_2dmx_l12l0)。

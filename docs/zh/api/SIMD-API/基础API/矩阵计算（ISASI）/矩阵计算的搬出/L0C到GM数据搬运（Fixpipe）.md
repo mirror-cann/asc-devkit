@@ -292,7 +292,7 @@
 ## 调用示例<a id="zh-cn_topic_0000002542828493_section088124295117"></a>
 
 <!-- npu="950,A3,910b" id30 -->
-Fixpipe完整样例请参考[fixpipe\_l0c2gm样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2gm)。
+Fixpipe完整样例请参考[fixpipe\_l0c2gm样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2gm)。
 
 - 示例：通路L0C Buffer-\>GM。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为float，配置开启NZ2ND的格式转换。
 

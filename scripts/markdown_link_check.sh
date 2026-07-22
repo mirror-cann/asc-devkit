@@ -718,7 +718,6 @@ repo_root = Path(sys.argv[1])
 scan_set_file = Path(sys.argv[2])
 output_file = Path(sys.argv[3])
 duration = sys.argv[4]
-repo_url = "https://gitcode.com/cann/asc-devkit"
 
 reference_pattern = re.compile(r"(?m)^(\s*\[[^\]]+\]:\s*)(\S+)")
 html_href_pattern = re.compile(r"""(?i)(\bhref\s*=\s*["'])([^"']+)(["'])""")
@@ -762,7 +761,7 @@ def source_area(path):
         return "api"
     if path == "docs/zh/guide" or path.startswith("docs/zh/guide/"):
         return "guide"
-    if path.startswith("examples/"):
+    if path == "examples" or path.startswith("examples/"):
         return "examples"
     return None
 
@@ -798,11 +797,6 @@ def normalize_target(source_file, target):
     else:
         normalized = posixpath.normpath(posixpath.join(posixpath.dirname(source_file), decoded))
     return normalized, suffix
-
-
-def gitcode_url(target_path, suffix):
-    view = "tree" if (repo_root / target_path).is_dir() else "blob"
-    return f"{repo_url}/{view}/master/{target_path}{suffix}"
 
 
 def file_url(target_path, suffix):
@@ -877,6 +871,8 @@ for source in scan_files:
             target_kind = source_area(target_path)
             if {source_kind, target_kind} == {"api", "guide"}:
                 continue
+            if target_kind == "examples" and source_kind in ("api", "guide"):
+                continue
 
             if (repo_root / target_path).is_dir():
                 if source_kind == "examples":
@@ -891,12 +887,6 @@ for source in scan_files:
                         f"not a directory: {target} -> {file_url(target_path, suffix)}"
                     )
                 continue
-
-            if source_kind in ("api", "guide") and target_kind == "examples":
-                errors.append(
-                    f"{source}:{line_number}: docs link to examples must use HTTPS: "
-                    f"{target} -> {gitcode_url(target_path, suffix)}"
-                )
 
 with output_file.open("w", encoding="utf-8") as handle:
     if errors:
@@ -1217,6 +1207,27 @@ def asc_devkit_gitcode_target(target):
     return branch, path
 
 
+def source_area(path):
+    if path == "docs/zh/api" or path.startswith("docs/zh/api/"):
+        return "api"
+    if path == "docs/zh/guide" or path.startswith("docs/zh/guide/"):
+        return "guide"
+    if path == "docs" or path.startswith("docs/"):
+        return "docs"
+    if path == "examples" or path.startswith("examples/"):
+        return "examples"
+    return None
+
+
+def relative_url(source, target, target_path):
+    parsed = urlparse(target.strip().strip("<>").strip("\"'"))
+    suffix = (f"?{parsed.query}" if parsed.query else "") + (
+        f"#{parsed.fragment}" if parsed.fragment else ""
+    )
+    relative = posixpath.relpath(target_path, posixpath.dirname(source))
+    return f"{relative}{suffix}"
+
+
 scan_files = []
 full_scan = False
 for raw_line in scan_set_file.read_text(encoding="utf-8").splitlines():
@@ -1255,15 +1266,20 @@ for source in scan_files:
                 continue
 
             branch, target_path = parsed
-            if source.startswith("examples/") and target_path.startswith("docs/"):
-                parsed_url = urlparse(target.strip().strip("<>").strip("\"'"))
-                suffix = f"?{parsed_url.query}" if parsed_url.query else ""
-                if parsed_url.fragment:
-                    suffix += f"#{parsed_url.fragment}"
-                relative_target = posixpath.relpath(target_path, posixpath.dirname(source))
+            source_kind = source_area(source)
+            target_kind = source_area(target_path)
+            policy_error = None
+            if source_kind == "examples" and target_kind in ("docs", "api", "guide"):
+                policy_error = "examples link to same-repository docs must use a relative path"
+            elif source_kind in ("docs", "api", "guide") and target_kind == "examples":
+                policy_error = "docs link to examples must use a relative path"
+            elif {source_kind, target_kind} == {"api", "guide"}:
+                policy_error = "API and guide cross-reference must use a relative path"
+
+            if policy_error is not None:
                 errors.append(
-                    f"{source}:{line_number}: examples link to same-repository docs must use a relative path: "
-                    f"{target} -> {relative_target}{suffix}"
+                    f"{source}:{line_number}: {policy_error}: "
+                    f"{target} -> {relative_url(source, target, target_path)}"
                 )
                 continue
 

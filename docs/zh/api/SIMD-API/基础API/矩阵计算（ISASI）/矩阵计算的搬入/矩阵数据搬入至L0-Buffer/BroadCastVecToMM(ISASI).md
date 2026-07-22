@@ -75,7 +75,7 @@ Atlas 推理系列产品AI Core，支持的数据类型为：half、int32_t、fl
 
 ![](../../../../../figures/调用示例图.png "调用示例图")
 
-本示例仅展示样例中的部分代码。如需运行，请参考[BroadCastVecToMM样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/00_data_movement/broadcast_ub2l0c)实现完整的代码。
+本示例仅展示样例中的部分代码。如需运行，请参考[BroadCastVecToMM样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/00_data_movement/broadcast_ub2l0c)实现完整的代码。
 
 ```cpp
 // brcLocal为TPosition::CO1上的float类型的LocalTensor，srcLocal为TPosition::VECIN上的float类型的LocalTensor

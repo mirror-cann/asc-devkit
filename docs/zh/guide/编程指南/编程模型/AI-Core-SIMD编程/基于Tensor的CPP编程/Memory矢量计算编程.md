@@ -304,4 +304,4 @@ __global__ __vector__ void add_kernel(__gm__ float* x, __gm__ float* y, __gm__ f
 
 ## Memory矢量计算示例
 
-结合上文介绍的Memory矢量数据搬运与计算能力，开发者可基于C++ Tensor编程接口实现完整的Memory矢量计算算子。具体开发流程与代码示例可参考[cpp_api_add样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/00_introduction/01_add/add/README.md)，该样例完整展示了矢量加法算子的开发、编译与验证流程。
+结合上文介绍的Memory矢量数据搬运与计算能力，开发者可基于C++ Tensor编程接口实现完整的Memory矢量计算算子。具体开发流程与代码示例可参考[cpp_api_add样例](../../../../../../../examples/01_simd_cpp_api/00_introduction/01_add/add/README.md)，该样例完整展示了矢量加法算子的开发、编译与验证流程。

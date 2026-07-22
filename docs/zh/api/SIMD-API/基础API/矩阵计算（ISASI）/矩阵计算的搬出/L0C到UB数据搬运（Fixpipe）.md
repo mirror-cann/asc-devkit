@@ -328,9 +328,9 @@ M方向切分：
 ## 调用示例<a name="zh-cn_topic_0000002549846732_section088124295117"></a>
 
 <!-- npu="950" id19 -->
-完整样例请参考[fixpipe\_l0c2ub样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2ub)。
+完整样例请参考[fixpipe\_l0c2ub样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2ub)。
 
-- 示例：通路L0C Buffer-\>UB。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为float，默认配置开启Nz2Nd的格式转换。完整样例可以参考[样例链接](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2ub)。
+- 示例：通路L0C Buffer-\>UB。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为float，默认配置开启Nz2Nd的格式转换。完整样例可以参考[样例链接](../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2ub)。
 
     ```cpp
     // L0C Buffer->UB 搬运，目的位置为UB，需将FixpipeConfig的isToUB配置为true。

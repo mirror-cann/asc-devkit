@@ -191,4 +191,4 @@ Ascend 950PR/Ascend 950DT支持的数据类型为：bool、int8_t、uint8_t、in
     AscendC::DataCopy<T, 2, dmaConfig>(xLocal, xGm, params);
     ```
 
-完整样例请参考：[多维数据搬运样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_gm2ub_nddma)。
+完整样例请参考：[多维数据搬运样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_gm2ub_nddma)。

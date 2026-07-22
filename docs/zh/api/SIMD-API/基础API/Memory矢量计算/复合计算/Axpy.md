@@ -224,7 +224,7 @@ PAR列表示矢量计算单元一个迭代能够处理的元素个数。
 
 ## 调用示例<a name="section642mcpsimp"></a>
 
-本样中只展示部分关键代码。如果您需要运行样例代码，请参考完整样例[复合计算样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/element_wise_compound_compute)。
+本样中只展示部分关键代码。如果您需要运行样例代码，请参考完整样例[复合计算样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/element_wise_compound_compute)。
 
 - tensor高维切分计算样例-mask连续模式。
 

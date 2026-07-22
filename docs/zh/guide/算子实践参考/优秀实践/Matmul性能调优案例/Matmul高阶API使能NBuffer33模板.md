@@ -73,7 +73,7 @@
 
 ## 设计优化方案<a name="section33901368431"></a>
 
-开启NBuffer33模板：在GetTiling接口前，调用SetMatmulConfigParams接口开启NBuffer33模式，使获取的Tiling满足要求；Kernel侧在创建Matmul对象时开启NBuffer33模板。开启NBuffer33模板的完整样例请参考[开启NBuffer33模板策略的样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_nbuffer33)。具体步骤如下：
+开启NBuffer33模板：在GetTiling接口前，调用SetMatmulConfigParams接口开启NBuffer33模式，使获取的Tiling满足要求；Kernel侧在创建Matmul对象时开启NBuffer33模板。开启NBuffer33模板的完整样例请参考[开启NBuffer33模板策略的样例](../../../../../../examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_nbuffer33)。具体步骤如下：
 
 -   Tiling实现
 

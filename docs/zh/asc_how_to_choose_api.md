@@ -85,7 +85,7 @@ graph TD
 **示例**
 - [SIMD Add 算子示例（带同步计算接口）](../../examples/02_simd_c_api/00_introduction/01_add/c_api_sync_add/c_api_add.asc)
 - [SIMT Gather 算子示例（匹配业界习惯）](../../examples/03_simt_api/00_introduction/01_gather/basic_gather/gather_1d/gather_1d.asc)
-- 更多样例请参考 [examples 目录](https://gitcode.com/cann/asc-devkit/tree/master/examples)
+- 更多样例请参考 [examples 目录](../../examples)
 
 ---
 

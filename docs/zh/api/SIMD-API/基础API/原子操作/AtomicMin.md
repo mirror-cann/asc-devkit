@@ -88,4 +88,4 @@ AscendC::WaitFlag<AscendC::HardEvent::S_MTE2>(EVENT_ID0);
 AscendC::DataCopy(yLocal, yGlobal, DATA_SIZE);
 ```
 
-完整样例请参考[scalar_atomic_operations样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/06_atomic/scalar_atomic_operations)。
+完整样例请参考[scalar_atomic_operations样例](../../../../../../examples/01_simd_cpp_api/03_basic_api/06_atomic/scalar_atomic_operations)。

@@ -72,7 +72,7 @@ LoadData（卷积数据搬运）本质上是用于将NC1HWC0格式的Feature Map
 
 LoadData（卷积数据搬运）仅支持如下数据通路：L1 Buffer->L0A Buffer、L1 Buffer->L0B Buffer。
 
-实现原理可参考伪代码：[LoadData（卷积数据搬运）伪代码](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_l12l0/scripts/load3d.py)。
+实现原理可参考伪代码：[LoadData（卷积数据搬运）伪代码](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_l12l0/scripts/load3d.py)。
 
 **图1** LoadData to L0A Buffer功能示意图<a id="zh-cn_topic_0000002512171652_fig54450833715"></a>  
 
@@ -512,7 +512,7 @@ repeatMode =1的时候filter窗口中读取数据的位置保持不变，每个r
 
 此时可以调用LoadData（卷积数据搬运）接口实现A矩阵转置。调用LoadData（卷积数据搬运） v2接口时，在写入L0A Buffer之前会先分别将A矩阵高度和宽度轴向16、8对齐，接着该指令会将整个A矩阵进行转置并且每一个分形也转置，最终写入到L0A Buffer的A矩阵是ZZ排布
 
-示例代码片段如下，仅展示样例中的部分代码，完整示例请参考：[load_data_l12l0样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_l12l0)。
+示例代码片段如下，仅展示样例中的部分代码，完整示例请参考：[load_data_l12l0样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_l12l0)。
 
 ```cpp
 // LoadData（卷积数据搬运） v2接口完成img2col的过程，可知img2col后A矩阵高度为ho * wo，根据ho和wo的计算公式，代入卷积核宽度、卷积核滑动步长、卷积核膨胀系数等参数可知：A矩阵的高度为CeilAlign(k, fractalShape[0])；img2col后A矩阵宽度为ci * kh * kw，代入kh=1，kw=1，可知A矩阵的宽度为CeilAlign(m, fractalShape[1])。最后，配置loadDataParams.enTranspose = true，将整个A矩阵转置并且将其中每一个分形转置
@@ -549,4 +549,4 @@ loadDataParams.fMatrixCtrl = false;
 AscendC::LoadData(a2Local, a1Local, loadDataParams);
 ```
 
-关于如何使用LoadData（卷积数据搬运）进行2D数据搬运，请参考：[load_data_l12l0样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_l12l0)中的对应场景。
+关于如何使用LoadData（卷积数据搬运）进行2D数据搬运，请参考：[load_data_l12l0样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/load_data_l12l0)中的对应场景。

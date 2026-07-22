@@ -97,4 +97,4 @@ AscendC::SetPadValue((T)1);
 AscendC::DataCopyPad(srcLocal, srcGlobal, copyParams, padParams);
 ```
 
-完整样例请参考[DataCopyPad样例场景1](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_pad_gm2ub_ub2gm)。
+完整样例请参考[DataCopyPad样例场景1](../../../../../../../../../examples/01_simd_cpp_api/03_basic_api/00_data_movement/data_copy_pad_gm2ub_ub2gm)。

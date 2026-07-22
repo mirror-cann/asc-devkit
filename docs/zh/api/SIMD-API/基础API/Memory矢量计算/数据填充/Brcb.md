@@ -169,7 +169,7 @@ dstRepStride为16：说明相邻迭代间目的操作数中首尾DataBlock地址
 
 ## 调用示例<a name="section11276201527"></a>
 
-本调用示例中只展示完整样例中的接口部分代码。如果您需要运行示例代码，请直接参考完整样例[Brcb样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/brcb)进行编译执行。
+本调用示例中只展示完整样例中的接口部分代码。如果您需要运行示例代码，请直接参考完整样例[Brcb样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/01_memory_vector_compute/brcb)进行编译执行。
 
 ```cpp
 // repeatTime = 2, 128 elements one repeat, 256 elements total

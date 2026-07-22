@@ -38,7 +38,7 @@ $$
 C = A \times B + C
 $$
 
-完整示例请参考：[MmadWithSparse样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_with_sparse)。
+完整示例请参考：[MmadWithSparse样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_with_sparse)。
 
 **表1** Sparse矩阵计算矩阵A、B、C解释说明
 
@@ -152,7 +152,7 @@ __aicore__ inline void MmadWithSparse(const LocalTensor<T>& dst, const LocalTens
 
 ## 调用示例
 
-完整使用样例请参见[MmadWithSparse样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_with_sparse)。
+完整使用样例请参见[MmadWithSparse样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_with_sparse)。
 
 ```cpp
 AscendC::LocalTensor<int8_t> a1Local(AscendC::TPosition::A1, a1Addr, aSize);

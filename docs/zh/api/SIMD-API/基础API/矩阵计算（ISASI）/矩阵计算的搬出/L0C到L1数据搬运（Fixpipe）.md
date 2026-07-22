@@ -249,7 +249,7 @@
 ## 调用示例<a id="zh-cn_topic_0000002511188540_section088124295117"></a>
 
 <!-- npu="950,A3,910b" id32 -->
-Fixpipe完整样例请参考[fixpipe\_l0c2l1样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2l1)。
+Fixpipe完整样例请参考[fixpipe\_l0c2l1样例](../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/fixpipe_l0c2l1)。
 
 - 示例：通路L0C Buffer->L1 Buffer。输入A矩阵和B矩阵的数据类型为half，输出C矩阵为int8_t，不开启NZ2ND的格式转换，开启scalar量化。
 

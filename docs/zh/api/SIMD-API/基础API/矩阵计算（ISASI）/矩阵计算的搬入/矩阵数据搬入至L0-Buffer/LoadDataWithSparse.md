@@ -89,4 +89,4 @@ __aicore__ inline void LoadDataWithSparse(const LocalTensor<T>& dst, const Local
 
 ## 调用示例<a name="zh-cn_topic_0000002512171654_section088124295117"></a>
 
-本接口用于配合Sparse Mmad使用，完整示例请参考：[MmadWithSparse调用样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_with_sparse)。
+本接口用于配合Sparse Mmad使用，完整示例请参考：[MmadWithSparse调用样例](../../../../../../../../examples/01_simd_cpp_api/03_basic_api/03_matrix_compute/mmad_with_sparse)。

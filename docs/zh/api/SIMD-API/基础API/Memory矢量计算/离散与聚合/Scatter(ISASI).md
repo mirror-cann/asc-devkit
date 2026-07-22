@@ -27,7 +27,7 @@
 <!-- npu="A3,910b" id8 -->
 >[!NOTE]说明
 >
->该API不支持Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas A3 训练系列产品/Atlas A3 推理系列产品，如果需要在上述AI处理器实现数据离散功能，建议参考[Scatter兼容样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/06_compatibility_guide/scatter)进行适配。
+>该API不支持Atlas A2 训练系列产品/Atlas A2 推理系列产品、Atlas A3 训练系列产品/Atlas A3 推理系列产品，如果需要在上述AI处理器实现数据离散功能，建议参考[Scatter兼容样例](../../../../../../../examples/01_simd_cpp_api/06_compatibility_guide/scatter)进行适配。
 <!-- end id8 -->
 
 ## 功能说明<a name="section17600329101418"></a>
@@ -147,7 +147,7 @@ Atlas 推理系列产品AI Core，支持的数据类型为：uint16_t、half、u
 
 ## 调用示例<a name="section11276201527"></a>
 
-完整使用样例请参见[Scatter兼容性样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/06_compatibility_guide/scatter)。
+完整使用样例请参见[Scatter兼容性样例](../../../../../../../examples/01_simd_cpp_api/06_compatibility_guide/scatter)。
 
 ```cpp
 uint32_t COUNT = 128;

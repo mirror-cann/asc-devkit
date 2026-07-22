@@ -27,7 +27,7 @@
 3.  [算子入图（GE图）开发](../算子入图开发/基本开发流程.md)。算子入图场景下，需要提供shape推导等算子入图适配函数的实现。
 4.  TensorFlow框架适配插件开发。详细说明见[适配插件开发](#section1820291291414)。
 5.  编译部署。通过工程编译脚本完成算子的编译部署，分为[算子包编译](../Aclnn算子工程化开发/算子包编译/算子工程编译.md)和[算子动态库编译](../Aclnn算子工程化开发/算子动态库和静态库编译.md)两种方式。
-6.  TensorFlow框架算子调用。详细说明见[TensorFlow原生算子映射到CANN算子](#section6342138121512)和[TensorFlow自定义算子开发并映射到CANN算子](#section18276103563719)。完整样例请参考[LINK](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/02_features/00_framework/02_onnx)。
+6.  TensorFlow框架算子调用。详细说明见[TensorFlow原生算子映射到CANN算子](#section6342138121512)和[TensorFlow自定义算子开发并映射到CANN算子](#section18276103563719)。完整样例请参考[LINK](../../../../../../examples/01_simd_cpp_api/02_features/00_framework/02_onnx)。
 
 ## 适配插件开发<a name="section1820291291414"></a>
 

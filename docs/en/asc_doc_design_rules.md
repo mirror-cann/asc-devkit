@@ -83,7 +83,7 @@ The five core documents are connected through links to form a navigable network.
 - Concept references in API pages use inline links near the reference (not centralized at page bottom)
 - **Note direction**: Operator Practice Reference → API Reference Manual (to look up interface details); the API Reference Manual does not need reverse links to Operator Practice Reference
 - The Cross-generation Migration Guide is both a link initiator and receiver: it links out to the Programming Guide (concept changes) and API Reference Manual (new API details); it receives links from other documents when they involve version differences
-- All complete code examples in the documentation reference the sample repository at: https://gitcode.com/cann/asc-devkit/tree/master/examples
+- All complete code examples in the documentation reference the [sample repository](../../examples)
 
 ### Unified Terminology Entry
 

@@ -14,7 +14,7 @@ TSCM表示L1 Buffer空间对应的逻辑内存，L1 Buffer相关内容见[存储
 
 ## 调用示例<a name="zh-cn_topic_0000002298654821_section15486294368"></a>
 
-完整的算子样例请参考[自定义数据来源为GM的TSCM输入的Matmul算子样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_tscm)。
+完整的算子样例请参考[自定义数据来源为GM的TSCM输入的Matmul算子样例](../../../../../../../examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_tscm)。
 
 ```
 TQue<TPosition::A1, 1> scm; // 队列逻辑位置A1，队列深度为1

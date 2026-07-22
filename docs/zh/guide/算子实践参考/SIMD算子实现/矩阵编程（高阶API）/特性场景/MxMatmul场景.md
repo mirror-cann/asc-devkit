@@ -200,7 +200,7 @@ Kernel侧的关键步骤介绍如下：
     mm.End();
     ```
 
-更多完整的算子样例请参考[MxMatmul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_mx)、[自定义输入来源的MxMatmul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_mx_ub_tscm_nz)、[scale多倍缓存的MxMatmul样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_mx_scale_cache)。
+更多完整的算子样例请参考[MxMatmul样例](../../../../../../../examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_mx)、[自定义输入来源的MxMatmul样例](../../../../../../../examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_mx_ub_tscm_nz)、[scale多倍缓存的MxMatmul样例](../../../../../../../examples/01_simd_cpp_api/04_advanced_api/00_matmul/matmul_mx_scale_cache)。
 
 ## 参数说明
 
