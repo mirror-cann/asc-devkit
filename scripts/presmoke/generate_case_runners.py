@@ -139,6 +139,11 @@ SKIP_CONFIG = {
         modes=["cpu"],
         archs=["dav-3510"],
     ),
+    "01_simd_cpp_api/05_best_practices/04_memory_access/bank_conflict_nd2nz": SkipConfig(
+        reason=LONG_TIME_REASON,
+        modes=["cpu"],
+        archs=["dav-3510"],
+    ),
 }
 
 ARCH_OVERRIDES: dict[str, List[str]] = {}

@@ -12112,8 +12112,13 @@
     ],
     "target_runnable": true,
     "skip": false,
-    "skip_reason": "",
-    "skip_modes": [],
+    "skip_reason": "long execution time in cpu mode; cpu mode skipped by presmoke",
+    "skip_modes": [
+      "cpu"
+    ],
+    "skip_archs": [
+      "dav-3510"
+    ],
     "reasons": [],
     "commands": [
       "cmake -DSCENARIO_NUM=1 .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",
@@ -12140,8 +12145,13 @@
     ],
     "target_runnable": true,
     "skip": false,
-    "skip_reason": "",
-    "skip_modes": [],
+    "skip_reason": "long execution time in cpu mode; cpu mode skipped by presmoke",
+    "skip_modes": [
+      "cpu"
+    ],
+    "skip_archs": [
+      "dav-3510"
+    ],
     "reasons": [],
     "commands": [
       "cmake -DSCENARIO_NUM=2 .. -DCMAKE_ASC_ARCHITECTURES=dav-2201",

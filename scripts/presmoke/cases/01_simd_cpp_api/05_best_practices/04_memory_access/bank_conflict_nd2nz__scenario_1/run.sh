@@ -12,6 +12,10 @@
 set -euo pipefail
 
 CASE_REL=01_simd_cpp_api/05_best_practices/04_memory_access/bank_conflict_nd2nz
+SKIP_REASON='long execution time in cpu mode; cpu mode skipped by presmoke'
+
+SKIP_MODES=(cpu)
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../../../_case_entry.sh"
 presmoke_case_init "$CASE_REL"
