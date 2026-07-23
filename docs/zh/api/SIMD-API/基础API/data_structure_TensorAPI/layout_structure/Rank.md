@@ -1,4 +1,4 @@
-# Select
+# Rank
 
 ## 产品支持情况
 
@@ -26,18 +26,19 @@
 
 ## 功能说明
 
-选择Layout的shape和stride指定维度组成新的layout对象并返回。
+用于返回Layout的秩。
 
 ## 函数原型
 
 ```cpp
 template <size_t... Is, typename Shape, typename Stride>
-__aicore__ inline constexpr auto Select(const Layout<Shape, Stride>& layout)
+__aicore__ inline constexpr auto Rank(const Layout<Shape, Stride>& layout);
 ```
 
-## 参数说明
+### 参数说明
 
 **表1** 模板参数说明
+
   | 参数名 | 类型 | 描述 |
 |--------|------|------|
 | Shape | 输入 | 组成Layout的shape的类型，即元组（tuple）类型。 |
@@ -45,26 +46,21 @@ __aicore__ inline constexpr auto Select(const Layout<Shape, Stride>& layout)
 | Is... | size_t | 索引序列，用于编译时递归选择shape和stride的子结构。 |
 
 **表2** 参数说明
+
   | 参数名 | 类型 | 描述 |
 |--------|------|------|
 | layout | 输入 | Layout用于描述张量的布局。 |
 
-## 返回值说明
+### 返回值
 
-返回子Layout对象。
+返回Layout的秩，即返回Layout布局的Shape或其子结构的元组（tuple）维度的个数。
 
-## 约束说明
+### 示例代码
 
-索引Is...必须在有效范围内。
-
-## 调用示例
-
-```cpp
-using namespace AscendC::Te;
-
-auto shape = MakeShape(10, 20, 30);
-auto layout = MakeLayout(shape);
-
-// 选择第0和第1维度
-auto subLayout = Select<0, 1>(layout);
-```
+   ```cpp
+  using namespace AscendC::Te;
+  auto layout = MakeLayout(MakeShape(10, 20), MakeStride(1, 100));
+  auto rank1 = Rank(layout); //rank1 = 2
+  auto rank2 = Rank<0>(layout); //rank2 = 1
+  ```
+  

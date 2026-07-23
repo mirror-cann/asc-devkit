@@ -6,9 +6,9 @@
 | --- | --- |
 | [LocalTensor](数据结构/LocalTensor和GlobalTensor定义/LocalTensor/LocalTensor.md) | LocalTensor用于存放AI Core中Local Memory（内部存储）的数据，支持逻辑位置TPosition为VECIN、VECOUT、VECCALC、A1、A2、B1、B2、CO1、CO2。 |
 | [GlobalTensor](数据结构/LocalTensor和GlobalTensor定义/GlobalTensor/GlobalTensor.md) | GlobalTensor用来存放Global Memory（外部存储）的全局数据。 |
-| [layout_structure](数据结构/TensorAPI-BasicStructure/TensorAPI-BasicStructure.md) | Tensor API基础数据结构中Layout相关基础数据结构。 |
-| [tensor_structure](数据结构/TensorAPI-BasicStructure/TensorAPI-BasicStructure.md) | Tensor API基础数据结构中Tensor相关数据结构。 |
-| [GetLayoutPattern](数据结构/TensorAPI-BasicStructure/utils/GetLayoutPattern.md) | GetLayoutPattern用于从Layout类型中提取其LayoutPattern类型信息。 |
+| [layout_structure](data_structure_TensorAPI/data_structure_TensorAPI.md) | Tensor API基础数据结构中Layout相关基础数据结构。 |
+| [tensor_structure](data_structure_TensorAPI/data_structure_TensorAPI.md) | Tensor API基础数据结构中Tensor相关数据结构。 |
+| [GetLayoutPattern](data_structure_TensorAPI/utils/GetLayoutPattern.md) | GetLayoutPattern用于从Layout类型中提取其LayoutPattern类型信息。 |
 | [Coordinate](数据结构/辅助数据结构/Coordinate/Coordinate.md) | Coordinate本质上是一个元组（tuple），用于表示张量在不同维度的位置信息，即坐标值。 |
 | [Layout](数据结构/辅助数据结构/Layout/Layout.md) | Layout数据结构是描述多维张量内存布局的基础模板类，通过编译时的形状（Shape）和步长（Stride）信息，实现逻辑坐标空间到一维内存地址空间的映射。 |
 | [TensorTrait](数据结构/辅助数据结构/TensorTrait/TensorTrait.md) | TensorTrait数据结构是描述Tensor相关信息的基础模板类，包含Tensor的数据类型、逻辑位置和Layout内存布局。 |

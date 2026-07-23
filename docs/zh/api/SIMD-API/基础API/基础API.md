@@ -2,6 +2,8 @@
 
 - **[数据结构](数据结构/数据结构.md)**  
 
+- **[数据结构(TensorAPI)](data_structure_TensorAPI/data_structure_TensorAPI.md)**  
+
 - **[数据搬运导览](数据搬运导览/数据搬运导览.md)**  
 
 - **[矩阵计算（ISASI）](矩阵计算（ISASI）/矩阵计算（ISASI）.md)**  

@@ -54,21 +54,25 @@ auto batchLayout = MakeFrameLayout<LayoutPattern, TraitType>(batch, m, n);
 LayoutTrait用于指定C0维度基数。MakeFrameLayout支持以下四种传递方式：
 
 1. **LayoutTraitDefault<T>**：根据数据类型T自动计算C0。T仅参与C0推导，不作为LayoutTrait中的数据类型信息保存。
+
    ```cpp
    MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float>>(m, n)
    ```
 
-2. **C0常量类型**：直接指定C0维度的元素个数。`_8`、`_16`等类型是[Std::Int](../../../../../Utils-API/CPP标准库/类型特性/integral_constant.md)的简写形式，例如`_16`表示`Std::Int<16>`。
+2. **C0常量类型**：直接指定C0维度的元素个数。`_8`、`_16`等类型是[Std::Int](../../../../Utils-API/CPP标准库/类型特性/integral_constant.md)的简写形式，例如`_16`表示`Std::Int<16>`。
+
    ```cpp
    MakeFrameLayout<NZLayoutPtn, _16>(m, n)
    ```
 
 3. **省略第二个模板参数**：在分形构造不需要用户指定C0，或C0由布局模式固定的场景下，可以只传入LayoutPattern。此时接口会根据LayoutPattern使用内置的C0取值。这样的分形有NDLayoutPtn、DNLayoutPtn、DNExtLayoutPtn、NDExtLayoutPtn、ScaleANDLayoutPtn、ScaleADNLayoutPtn、ScaleBNDLayoutPtn、ScaleBDNLayoutPtn。
+
    ```cpp
    MakeFrameLayout<NDLayoutPtn>(m, n)
    ```
 
 4. **自定义Trait类型**：当根据数据类型推导C0、直接传入C0常量类型、省略第二个模板参数这三种方式都无法表达目标布局时，可以传入自定义Trait类型。自定义Trait需要提供`C0_ELEMENT`成员，用于表示C0维度的元素个数。
+
    ```cpp
    struct MyLayoutTrait {
        static constexpr auto C0_ELEMENT = Std::Int<16>{};

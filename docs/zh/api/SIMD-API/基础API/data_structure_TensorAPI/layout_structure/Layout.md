@@ -94,6 +94,7 @@ struct Layout : private Std::tuple<T, U>
     构造Layout对象，使用给定的Shape和Stride初始化布局信息。
 
 - 函数原型
+
 ```cpp
   __aicore__ inline constexpr Layout(const T& shape = {}, const U& stride = {})
 ```
@@ -120,6 +121,7 @@ struct Layout : private Std::tuple<T, U>
     传入模板参数I...时，会先选取指定子维度，再计算对应子布局的容量。
 
 - 函数原型
+
   ```cpp
   template <size_t... I>
   __aicore__ inline constexpr decltype(auto) Capacity() const
@@ -138,6 +140,7 @@ struct Layout : private Std::tuple<T, U>
     获取Layout对象自身，用于统一接口中返回Layout布局实例。
 
 - 函数原型
+
   ```cpp
   __aicore__ inline constexpr decltype(auto) layout()
   __aicore__ inline constexpr decltype(auto) layout() const
@@ -158,6 +161,7 @@ struct Layout : private Std::tuple<T, U>
     不指定模板参数I...时返回完整Shape；传入I...时返回指定子维度对应的子结构。
 
 - 函数原型
+
   ```cpp
   template <size_t... I>
   __aicore__ inline constexpr decltype(auto) Shape()
@@ -181,6 +185,7 @@ struct Layout : private Std::tuple<T, U>
     不指定模板参数I...时返回完整Stride；传入I...时返回指定子维度对应的子结构。
 
 - 函数原型
+
   ```cpp
   template <size_t... I>
   __aicore__ inline constexpr decltype(auto) Stride()
@@ -201,9 +206,10 @@ struct Layout : private Std::tuple<T, U>
 
     将多维逻辑坐标映射为一维线性索引。
 
-    该接口内部调用[Crd2Idx](../../辅助数据结构/Coordinate/Crd2Idx.md)，根据当前Layout的Shape和Stride计算坐标在内存中的线性位置。
+    该接口内部调用[Crd2Idx](../../数据结构/辅助数据结构/Coordinate/Crd2Idx.md)，根据当前Layout的Shape和Stride计算坐标在内存中的线性位置。
 
 - 函数原型
+
   ```cpp
   template <typename S>
   __aicore__ inline constexpr auto operator()(const S& coord) const
@@ -230,6 +236,7 @@ struct Layout : private Std::tuple<T, U>
     不指定模板参数I...时返回完整Layout的秩；传入I...时返回指定子维度的秩。
 
 - 函数原型
+
   ```cpp
   template <size_t... I>
   __aicore__ inline constexpr decltype(auto) Rank() const
@@ -250,6 +257,7 @@ struct Layout : private Std::tuple<T, U>
     不指定模板参数I...时返回完整Shape对应的元素总数；传入I...时返回指定子维度下的元素总数。
 
 - 函数原型
+
   ```cpp
   template <size_t... I>
   __aicore__ inline constexpr decltype(auto) Size() const
@@ -270,6 +278,7 @@ struct Layout : private Std::tuple<T, U>
     位置0对应Shape，位置1对应Stride；配合模板参数I...可进一步提取子tuple中的元素。
 
 - 函数原型
+
   ```cpp
   template <size_t... I>
   __aicore__ inline constexpr decltype(auto) Get()

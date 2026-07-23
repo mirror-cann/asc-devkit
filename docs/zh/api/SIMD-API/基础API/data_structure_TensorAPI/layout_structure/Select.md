@@ -1,4 +1,4 @@
-# Coshape
+# Select
 
 ## 产品支持情况
 
@@ -26,19 +26,13 @@
 
 ## 功能说明
 
-需要包含的头文件为：#include "tensor_api/tensor.h"。
-
-Coshape表示Layout陪域（codomain）区间的标量大小，即逻辑坐标映射到一维索引后，所有可能的索引值构成的区间大小。其计算公式为：
-
-```
-Coshape = Σ( (shape[i] - 1) × stride[i] ) + 1
-```
+选择Layout的shape和stride指定维度组成新的layout对象并返回。
 
 ## 函数原型
 
 ```cpp
 template <size_t... Is, typename Shape, typename Stride>
-__aicore__ inline constexpr auto Coshape(const Layout<Shape, Stride>& layout)
+__aicore__ inline constexpr auto Select(const Layout<Shape, Stride>& layout)
 ```
 
 ## 参数说明
@@ -49,7 +43,7 @@ __aicore__ inline constexpr auto Coshape(const Layout<Shape, Stride>& layout)
 |--------|------|------|
 | Shape | 输入 | 组成Layout的shape的类型，即元组（tuple）类型。 |
 | Stride | 输入 | 组成Layout的stride的类型，即元组（tuple）类型。 |
-| Is... | size_t... | 索引序列，指定子维度范围，仅对选定维度进行计算。 |
+| Is... | size_t | 索引序列，用于编译时递归选择shape和stride的子结构。 |
 
 **表2** 参数说明
 
@@ -59,26 +53,20 @@ __aicore__ inline constexpr auto Coshape(const Layout<Shape, Stride>& layout)
 
 ## 返回值说明
 
-返回Layout的陪域（codomain）的形状。
+返回子Layout对象。
 
 ## 约束说明
 
-Is...必须为有效范围内的索引。
+索引Is...必须在有效范围内。
 
 ## 调用示例
 
 ```cpp
 using namespace AscendC::Te;
 
-// 示例1：基础计算
-auto layout = MakeLayout(MakeShape(10, 20), MakeStride(1, 100));
-auto coshape = Coshape(layout);
-// (10-1)*1 + (20-1)*100 + 1 = 9 + 1900 + 1 = 1910
+auto shape = MakeShape(10, 20, 30);
+auto layout = MakeLayout(shape);
 
-// 示例2：指定子维度
-auto coshape0 = Coshape<0>(layout);
-// (10-1)*1 + 1 = 9 + 1 = 10
-
-auto coshape1 = Coshape<1>(layout);
-// (20-1)*100 + 1 = 1900 + 1 = 1901
+// 选择第0和第1维度
+auto subLayout = Select<0, 1>(layout);
 ```
