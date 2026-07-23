@@ -30,7 +30,7 @@
 
 ## 功能说明
 
-本接口在SIMD、SIMD与SIMT混合和SIMT调试场景中提供Clock时间戳功能，用于记录从程序启动到接口调用时刻所经历的时钟周期数（Cycle Count），便于精确分析执行延迟和性能瓶颈。
+本接口在SIMD和SIMT调试场景中提供Clock时间戳功能，用于记录从程序启动到接口调用时刻所经历的时钟周期数（Cycle Count），便于精确分析执行延迟和性能瓶颈。
 
 ## 函数原型
 
@@ -39,10 +39,10 @@ __aicore__ inline uint64_t clock(void)
 ```
 
 <!-- npu="950" id9 -->
-以下接口为SIMT VF中所使用的clock接口，仅支持Ascend 950PR/Ascend 950DT。
+以下接口为SIMT中所使用的clock接口，仅支持Ascend 950PR/Ascend 950DT。
 
 ```
-__simt_callee__ inline uint64_t clock(void)
+inline uint64_t clock(void)
 ```
 <!-- end id9 -->
 
@@ -56,7 +56,18 @@ __simt_callee__ inline uint64_t clock(void)
 
 ## 约束说明
 
-无
+<!-- npu="950,A3,910b" id13 -->
+-   SIMT场景的支持情况如下：
+      <!-- npu="950" id10 -->
+    - Ascend 950PR/Ascend 950DT：支持。
+      <!-- end id10 -->
+      <!-- npu="A3" id11 -->
+    - Atlas A3 训练系列产品/Atlas A3 推理系列产品：不支持。
+      <!-- end id11 -->
+      <!-- npu="910b" id12 -->
+    - Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持。
+      <!-- end id12 -->
+<!-- end id13 -->
 
 ## 需要包含的头文件
 

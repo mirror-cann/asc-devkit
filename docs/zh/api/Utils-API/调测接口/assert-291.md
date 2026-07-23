@@ -30,7 +30,7 @@
 
 ## 功能说明
 
-本接口在SIMD和SIMT VF调试场景下提供assert断言功能。在算子Kernel侧的实现代码中，如果assert的内部条件判断不为真，则会输出assert条件，并将输入的信息格式化打印在屏幕上，同时算子运行失败。
+本接口在SIMD和SIMT调试场景下提供assert断言功能。在算子Kernel侧的实现代码中，如果assert的内部条件判断不为真，则会输出assert条件，并将输入的信息格式化打印在屏幕上，同时算子运行失败。
 
 在算子Kernel侧代码的适当位置使用assert进行断言检查，并格式化输出一些调试信息。示例如下：
 
@@ -68,7 +68,8 @@ assert(expr)
 
 -   该接口当前仅支持融合编译场景。
 -   SIMD场景，如果开发者需要包含标准库头文件<cassert\>，请在"utils/debug/asc\_assert.h"头文件之前包含，避免assert符号冲突。
--   SIMT VF调试场景的支持情况如下：
+<!-- npu="950,A3,910b" id13 -->
+-   SIMT场景的支持情况如下：
       <!-- npu="950" id10 -->
     - Ascend 950PR/Ascend 950DT：支持。
       <!-- end id10 -->
@@ -78,8 +79,7 @@ assert(expr)
       <!-- npu="910b" id12 -->
     - Atlas A2 训练系列产品/Atlas A2 推理系列产品：不支持。
       <!-- end id12 -->
-
-
+<!-- end id13 -->
 
 ## 需要包含的头文件
 
@@ -108,18 +108,34 @@ __global__ __cube__ void simp_test_equal(int a)
 
 ## SIMT调用示例
 
-```
-//SIMT VF
-__simt_vf__ __launch_bounds__(1024) inline void AddCustom(__gm__ bool* dst, __gm__ float* x)
-{
-    int idx = threadIdx.x + blockIdx.x * blockDim.x;
-    assert(!isnan(x[idx]));
-    dst[idx] = x[idx];
-}
-```
+-   SIMT编程场景：
 
-程序运行时会触发assert，打印效果如下：
+    ```c++
+    __global__ __launch_bounds__(1024) inline void simt_kernel(float* x)
+    {
+        int idx = threadIdx.x + blockIdx.x * blockDim.x;
+        assert(!isnan(x[idx]));
+    }
+    ```
 
-```
-[ASSERT] /home/.../add_custom.cpp:44: : Assertion `!isnan(x[idx])' failed.
-```
+    程序运行时会触发assert，打印效果如下：
+
+    ```
+    [ASSERT] /home/.../simt_kernel.asc:44: void simt_kernel(float *): Assertion `!isnan(x[idx])' failed.
+    ```
+
+-   SIMD与SIMT混合编程场景：
+
+    ```c++
+    __simt_vf__ __launch_bounds__(1024) inline void simt_kernel(__gm__ float* x)
+    {
+        int idx = threadIdx.x + blockIdx.x * blockDim.x;
+        assert(!isnan(x[idx]));
+    }
+    ```
+
+    程序运行时会触发assert，打印效果如下：
+
+    ```
+    [ASSERT] /home/.../simt_kernel.asc:44: void simt_kernel(__gm__ float *): Assertion `!isnan(x[idx])' failed.
+    ```
