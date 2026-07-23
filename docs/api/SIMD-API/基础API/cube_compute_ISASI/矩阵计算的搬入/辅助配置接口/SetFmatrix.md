@@ -1,4 +1,4 @@
-﻿# SetFmatrix<a name="ZH-CN_TOPIC_0000001834660673"></a>
+# SetFmatrix<a name="ZH-CN_TOPIC_0000001834660673"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
@@ -25,7 +25,7 @@
 <!-- end id7 -->
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为：basic_api/kernel_operator_mm_intf.h。
+头文件路径为：`"basic_api/kernel_operator_mm_intf.h"`。
 
 用于调用[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)时设置FeatureMap的属性描述。Load3D的模板参数isSetFMatrix设置为false时，表示Load3D传入的FeatureMap的属性（包括l1H、l1W、padList，参数介绍参考[表3 LoadData3DParamsV1结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table679014222918)、[表4 LoadData3DParamsV2结构体内参数说明](../矩阵数据搬入至L0-Buffer/Load3D.md#zh-cn_topic_0000002512171652_table193501032193419)）将不生效，开发者需要通过该接口进行设置。
 

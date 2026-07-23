@@ -27,7 +27,7 @@
 
 ## 功能说明<a name="zh-cn_topic_0000002563051145_section748346451"></a>
 
-头文件路径为："kernel\_operator\_vec\_vconv\_intf.h"。
+头文件路径为：`"kernel_operator_vec_vconv_intf.h"`。
 
 本接口用于设置DEQSCALE寄存器的值，DEQSCALE寄存器位宽为64bit，用于Vector计算单元上的量化计算，寄存器中存放的参数在不同场景下的含义不同：
 

@@ -27,7 +27,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为："basic_api/kernel_operator_vec_vconv_intf.h"。
+头文件路径为：`"basic_api/kernel_operator_vec_vconv_intf.h"`。
 
 对输入做量化并进行精度转换，对输出结果的溢出采用饱和处理。本接口需要与[SetDeqScale](../类型转换/寄存器配置说明/SetDeqScale.md)接口配合使用。
 

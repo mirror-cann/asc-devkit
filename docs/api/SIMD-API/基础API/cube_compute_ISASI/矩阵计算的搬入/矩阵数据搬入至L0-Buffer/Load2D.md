@@ -25,7 +25,7 @@
 <!-- end id7 -->
 ## 功能说明
 
-头文件路径为：basic_api/kernel_operator_mm_intf.h。
+头文件路径为：`"basic_api/kernel_operator_mm_intf.h"`。
 
 负责完成普通矩阵计算所需的2D格式数据的搬运，以大小为512字节的数据分形为单位进行搬运，支持如下数据通路的搬运：
 

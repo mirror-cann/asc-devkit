@@ -27,7 +27,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为："basic_api/kernel_operator_vec_vconv_intf.h"。
+头文件路径为：`"basic_api/kernel_operator_vec_vconv_intf.h"`。
 
 按元素求差，再进行Relu计算（结果和0对比取较大值），并根据源操作数和目的操作数Tensor的数据类型进行精度转换。计算公式如下：
 

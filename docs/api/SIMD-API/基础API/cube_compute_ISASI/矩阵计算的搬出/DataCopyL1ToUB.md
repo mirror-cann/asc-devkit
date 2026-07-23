@@ -1,4 +1,4 @@
-﻿# L1到UB数据搬运（DataCopyL1ToUB）
+# L1到UB数据搬运（DataCopyL1ToUB）
 
 ## 产品支持情况
 

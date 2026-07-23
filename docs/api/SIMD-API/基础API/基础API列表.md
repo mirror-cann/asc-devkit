@@ -371,12 +371,12 @@
 ### 逻辑计算
 | 接口名 | 功能描述 |
 | --- | --- |
-| (Reg矢量计算/逻辑计算/Not-32.md) | 本节介绍两种接口，分别用于对RegTensor和MaskReg进行有效bit进行取反运算得到结果并保存。 |
-| (Reg矢量计算/逻辑计算/And-33.md) | 本节介绍两种接口，分别用于对RegTensor和MaskReg进行有效bit进行逻辑与运算得到结果并保存。 |
-| (Reg矢量计算/逻辑计算/Or-34.md) | 本节介绍两种接口，分别用于对RegTensor和MaskReg进行有效bit进行逻辑或运算得到结果并保存。 |
+| [Not](Reg矢量计算/逻辑计算/Not-32.md) | 本节介绍两种接口，分别用于对RegTensor和MaskReg进行有效bit进行取反运算得到结果并保存。 |
+| [And](Reg矢量计算/逻辑计算/And-33.md) | 本节介绍两种接口，分别用于对RegTensor和MaskReg进行有效bit进行逻辑与运算得到结果并保存。 |
+| [Or](Reg矢量计算/逻辑计算/Or-34.md) | 本节介绍两种接口，分别用于对RegTensor和MaskReg进行有效bit进行逻辑或运算得到结果并保存。 |
 | [Xor](Reg矢量计算/逻辑计算/Xor.md) | 本节介绍两种接口，分别用于对RegTensor和MaskReg进行有效bit进行按位异或运算得到结果并保存。 |
-| (Reg矢量计算/逻辑计算/ShiftLeft-35.md) | 根据mask，对输入数据srcReg0，按照srcReg1对应元素进行左移操作，并将结果写入dstReg。 |
-| (Reg矢量计算/逻辑计算/ShiftRight-36.md) | 根据mask，对输入数据srcReg0按照srcReg1对应元素进行右移操作，将结果写入dstReg。 |
+| [ShiftLeft](Reg矢量计算/逻辑计算/ShiftLeft-35.md) | 根据mask，对输入数据srcReg0，按照srcReg1对应元素进行左移操作，并将结果写入dstReg。 |
+| [ShiftRight](Reg矢量计算/逻辑计算/ShiftRight-36.md) | 根据mask，对输入数据srcReg0按照srcReg1对应元素进行右移操作，将结果写入dstReg。 |
 | [ShiftLefts](Reg矢量计算/逻辑计算/ShiftLefts.md) | 源操作数内每个元素做逻辑左移，逻辑左移的位数由输入参数scalarValue决定。 |
 | [ShiftRights](Reg矢量计算/逻辑计算/ShiftRights.md) | 源操作数内每个元素做右移，右移的位数由输入参数scalarValue决定。 |
 

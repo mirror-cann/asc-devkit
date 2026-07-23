@@ -210,8 +210,8 @@ constexpr BinaryConfig DEFAULT_BINARY_CONFIG = {1};</pre>
 -   调用灵活标量位置接口且源操作数为LocalTensor单点元素的场景，不支持源操作数和目的操作数地址重叠。
 
 -   dst按照小端顺序排序成二进制结果，对应src中相应位置的数据比较结果。
--   **使用tensor前n个数据参与计算的接口，设置count时，需要保证count个元素所占空间256字节对齐。**
--   针对Ascend 950PR/Ascend 950DT，int8\_t/uint8\_t/uint64\_t/int64\_t/double数据类型仅支持tensor前n个数据计算接口，double只支持CMPMODE::EQ。
+-   使用tensor前n个数据参与计算的接口，设置count时，需要保证count个元素所占空间256字节对齐。
+-   针对Ascend 950PR/Ascend 950DT，int8\_t、uint8\_t、int64\_t、uint64\_t、double数据类型仅支持tensor前n个数据计算接口，double只支持CMPMODE::EQ。
 -   左操作数及右操作数中，必须有一个为矢量；当前不支持左右操作数同时为标量。
 -   本接口传入LocalTensor单点数据作为标量时，idx参数需要传入编译期已知的常量，传入变量时需要声明为constexpr。
 

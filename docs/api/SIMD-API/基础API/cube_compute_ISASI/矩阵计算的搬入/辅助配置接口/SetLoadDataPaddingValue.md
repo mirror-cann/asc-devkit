@@ -1,4 +1,4 @@
-﻿# SetLoadDataPaddingValue<a name="ZH-CN_TOPIC_0000001834740625"></a>
+# SetLoadDataPaddingValue<a name="ZH-CN_TOPIC_0000001834740625"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
@@ -25,7 +25,7 @@
 <!-- end id7 -->
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为：basic_api/kernel_operator_mm_intf.h。
+头文件路径为：`"basic_api/kernel_operator_mm_intf.h"`。
 
 用于调用[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)接口时设置Pad填充的数值。Load3D的模板参数isSetPadding设置为true时，用户需要通过本接口设置Pad填充的数值，设置为false时，本接口设置的填充值不生效。
 

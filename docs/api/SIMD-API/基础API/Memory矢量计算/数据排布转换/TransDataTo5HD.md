@@ -27,7 +27,7 @@
 
 ## 功能说明<a name="zh-cn_topic_0000001521260417_section618mcpsimp"></a>
 
-头文件路径为："basic\_api/kernel\_operator\_vec\_transpose\_intf.h"。
+头文件路径为：`"basic_api/kernel_operator_vec_transpose_intf.h"`。
 
 TransDataTo5HD接口数据格式转换，一般用于将NCHW格式转换成[NC1HWC0格式](../../cube_compute_ISASI/矩阵计算分形介绍/关键分形格式详解.md#nc1hwc0格式)。特别的，也可以用于二维矩阵数据块的转置。完成转置功能时，相比于Transpose接口，Transpose仅支持16\*16大小的矩阵转置；本接口单次repeat内可处理512Byte的数据（16个DataBlock），根据数据类型不同，支持不同shape的矩阵转置，同时还可以支持多次repeat操作。
 

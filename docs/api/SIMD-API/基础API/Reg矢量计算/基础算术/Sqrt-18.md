@@ -70,8 +70,8 @@ struct SqrtSpecificMode {
     bool precisionMode = false;
     SqrtAlgo algo = SqrtAlgo::INTRINSIC;
 };</pre>
-<a name="ul196783155815"></a><a name="ul196783155815"></a><ul id="ul196783155815"><li>mrgMode：选择MERGING模式或ZEROING模式。</li><li>precisionMode：用于配置精度模式。<p id="p18465738103612"><a name="p18465738103612"></a><a name="p18465738103612"></a>当precisionMode为true时，开启更高精度的Sqrt计算，使用快速求逆算法得出结果。适用于输入值在[0, 85070596800837026223494223584045301760]范围内的计算。在该范围内，算法保证输出的最大精度误差为0 ulp；当输入值大于85070596800837026223494223584045301760时，输出为0。该算法目前只针对float数据类型生效。</p>
-</li><li>algo：用于配置Subnormal模式。<a name="ul111801915217"></a><a name="ul111801915217"></a><ul id="ul111801915217"><li>SqrtAlgo::INTRINSIC、SqrtAlgo::PRECISION_1ULP_FTZ_TRUE，使用单指令计算得出结果，最大精度误差为1 ulp。</li><li>SqrtAlgo::FAST_INVERSE、SqrtAlgo::PRECISION_0ULP_FTZ_FALSE，使用快速求逆算法得出结果。适用于输入值在[0, 85070596800837026223494223584045301760]范围内的计算。在该范围内，算法保证输出的最大精度误差为0 ulp；当输入值大于85070596800837026223494223584045301760时，输出为0。目前，该算法仅支持float数据类型，并在该模式下支持Subnormal数据计算。</li><li>SqrtAlgo::PRECISION_1ULP_FTZ_FALSE，仅支持half类型的Subnormal数据计算，此时最大精度误差为1 ulp。</li></ul>
+<a name="ul196783155815"></a><a name="ul196783155815"></a><ul id="ul196783155815"><li>mrgMode：选择MERGING模式或ZEROING模式。</li><li>precisionMode：用于配置精度模式。<p id="p18465738103612"><a name="p18465738103612"></a><a name="p18465738103612"></a>当precisionMode为true时，开启更高精度的Sqrt计算，使用快速求逆算法得出结果。该算法目前只针对float数据类型生效。</p>
+</li><li>algo：用于配置Subnormal模式。<a name="ul111801915217"></a><a name="ul111801915217"></a><ul id="ul111801915217"><li>SqrtAlgo::INTRINSIC、SqrtAlgo::PRECISION_1ULP_FTZ_TRUE，使用单指令计算得出结果，最大精度误差为1 ulp。</li><li>SqrtAlgo::FAST_INVERSE、SqrtAlgo::PRECISION_0ULP_FTZ_FALSE，使用快速求逆算法得出结果。目前，该算法仅支持float数据类型，并在该模式下支持Subnormal数据计算。</li><li>SqrtAlgo::PRECISION_1ULP_FTZ_FALSE，仅支持half类型的Subnormal数据计算，此时最大精度误差为1 ulp。</li></ul>
 </li></ul>
 </li></ul>
 </div>
@@ -155,4 +155,3 @@ __simd_vf__ inline void SqrtVF(__ubuf__ T* dstAddr, __ubuf__ T* srcAddr, uint32_
     }
 }
 ```
-

@@ -1,4 +1,4 @@
-﻿# SetLoadDataBoundary<a name="ZH-CN_TOPIC_0000001787861430"></a>
+# SetLoadDataBoundary<a name="ZH-CN_TOPIC_0000001787861430"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 
@@ -26,7 +26,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为：basic_api/kernel_operator_mm_intf.h。
+头文件路径为：`"basic_api/kernel_operator_mm_intf.h"`。
 
 设置[Load3D](../矩阵数据搬入至L0-Buffer/Load3D.md)接口所需的L1 Buffer（TPosition: A1/B1）边界值。
 

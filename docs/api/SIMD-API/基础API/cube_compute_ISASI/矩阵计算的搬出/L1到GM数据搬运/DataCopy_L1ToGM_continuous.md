@@ -25,7 +25,7 @@
 <!-- end id7 -->
 ## 功能说明<a name="zh-cn_topic_0000002540198372_section106841136114319"></a>
 
-头文件路径为：basic_api/kernel_operator_data_copy_intf.h。
+头文件路径为：`"basic_api/kernel_operator_data_copy_intf.h"`。
 
 该接口能够将矩阵从L1 Buffer连续搬运至Global Memory，数据搬运时格式和内容保持不变。
 

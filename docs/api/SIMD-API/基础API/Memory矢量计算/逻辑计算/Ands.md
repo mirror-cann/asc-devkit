@@ -29,7 +29,13 @@
 
 矢量内每个元素和标量间做与操作，支持标量在前和标量在后两种场景，其中标量输入支持配置LocalTensor单点元素。计算公式如下，idx表示LocalTensor单点元素的位置系数。
 
-![](../../../../figures/zh-cn_formulaimage_0000002392077561.png)
+$dst_i = src_i \& scalar$
+
+$dst_i = scalar \& src_i$
+
+$dst_i = src_i \& scalar_{idx}$
+
+$dst_i = scalar_{idx} \& src_i$
 
 ## 函数原型<a name="section620mcpsimp"></a>
 

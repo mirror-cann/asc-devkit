@@ -26,7 +26,7 @@
 
 ## 功能说明<a id="zh-cn_topic_0000002543851571_section106841136114319"></a>
 
-头文件路径为：basic_api/kernel_operator_mm_intf.h。
+头文件路径为：`"basic_api/kernel_operator_mm_intf.h"`。
 
 LoadDataWithTranspose负责完成普通矩阵计算所需的2D格式的数据的搬运，搬运过程中会伴随转置操作，参考特性[分形转置](#zh-cn_topic_0000002543851571_section10110103802915)。以512字节的数据分形为单位进行搬运，支持如下数据通路的搬运：
 

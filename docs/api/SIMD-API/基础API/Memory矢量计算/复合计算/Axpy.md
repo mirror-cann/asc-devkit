@@ -27,7 +27,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为："basic_api/kernel_operator_vec_ternary_scalar_intf.h"。
+头文件路径为：`"basic_api/kernel_operator_vec_ternary_scalar_intf.h"`。
 
 向量和标量的乘积，并将乘积结果逐元素加到的输出向量上。计算公式如下：
 
