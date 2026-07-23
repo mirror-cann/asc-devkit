@@ -26,7 +26,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为：basic_api/reg_compute/kernel_reg_compute_maskreg_intf.h。
+头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_maskreg_intf.h"`。
 
 根据所选的低位模式或高位模式，将源操作数src的偶数位bit，提取到目的操作数dst的低半部分或高半部分。
 

@@ -1,4 +1,4 @@
-﻿# NZ2ND<a name="ZH-CN_TOPIC_0000002568950981"></a>
+# NZ2ND<a name="ZH-CN_TOPIC_0000002568950981"></a>
 
 ## 特性说明
 

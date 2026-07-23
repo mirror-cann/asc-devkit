@@ -1,4 +1,4 @@
-﻿# GMToL1非对齐数据搬运（DataCopyPad）
+# GMToL1非对齐数据搬运（DataCopyPad）
 
 ## 产品支持情况<a name="section1550532418810"></a>
 

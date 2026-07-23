@@ -26,7 +26,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为：basic_api/reg_compute/kernel_reg_compute_vec_reduce_intf.h。
+头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_vec_reduce_intf.h"`。
 
 归约指令根据ReduceType，将数据集合简化为单一值或者更小的集合。
 

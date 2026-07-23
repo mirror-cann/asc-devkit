@@ -1,4 +1,4 @@
-﻿# Int8 Channel Merge<a name="ZH-CN_TOPIC_0000002538071280"></a>
+# Int8 Channel Merge<a name="ZH-CN_TOPIC_0000002538071280"></a>
 
 ## 特性说明
 

@@ -1,4 +1,4 @@
-﻿# L1ToBiasTable Buffer数据搬运<a id="ZH-CN_TOPIC_0000002538071240"></a>
+# L1ToBiasTable Buffer数据搬运<a id="ZH-CN_TOPIC_0000002538071240"></a>
 
 ## 产品支持情况<a id="zh-cn_topic_0000002566886667_section796754519912"></a>
 
@@ -32,7 +32,7 @@
 
 ## 功能说明<a id="zh-cn_topic_0000002566886667_section106841136114319"></a>
 
-头文件路径为：basic_api/kernel_operator_data_copy_intf.h。
+头文件路径为：`"basic_api/kernel_operator_data_copy_intf.h"`。
 
 DataCopy数据搬运支持将矩阵计算用到的Bias参数从L1 Buffer移动到BiasTable Buffer。
 

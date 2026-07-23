@@ -1,4 +1,4 @@
-﻿# GMToL1-2D矩阵搬运V2（LoadData）<a id="ZH-CN_TOPIC_0000002594327301"></a>
+# GMToL1-2D矩阵搬运V2（LoadData）<a id="ZH-CN_TOPIC_0000002594327301"></a>
 
 ## 产品支持情况<a id="section1550532418810"></a>
 
@@ -32,7 +32,7 @@
 
 ## 功能说明<a id="section618mcpsimp"></a>
 
-头文件路径为：basic_api/kernel_operator_mm_intf.h。
+头文件路径为：`"basic_api/kernel_operator_mm_intf.h"`。
 
 负责完成普通矩阵计算所需的2D格式数据的搬运，以大小为512字节的数据分形为单位从Global Memory搬运至L1 Buffer（TPosition为A1/B1）。
 

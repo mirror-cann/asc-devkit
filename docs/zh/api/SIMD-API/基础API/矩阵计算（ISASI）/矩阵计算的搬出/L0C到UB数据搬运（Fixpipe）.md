@@ -32,7 +32,7 @@
 
 ## 功能说明<a name="zh-cn_topic_0000002549846732_section106841136114319"></a>
 
-头文件路径为：basic_api/kernel_operator_fixpipe_intf.h。
+头文件路径为：`"basic_api/kernel_operator_fixpipe_intf.h"`。
 
 矩阵计算的结果存放在L0C Buffer，Fixpipe接口用于将结果搬运至Unified Buffer（UB）中，并且在搬运过程中支持随路格式转换等操作。
 

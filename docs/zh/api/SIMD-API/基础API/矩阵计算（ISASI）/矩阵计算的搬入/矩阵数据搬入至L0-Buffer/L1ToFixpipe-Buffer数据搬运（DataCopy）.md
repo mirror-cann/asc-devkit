@@ -1,4 +1,4 @@
-﻿# L1ToFixpipe-Buffer数据搬运<a id="ZH-CN_TOPIC_0000002569070951"></a>
+# L1ToFixpipe-Buffer数据搬运<a id="ZH-CN_TOPIC_0000002569070951"></a>
 
 ## 产品支持情况<a id="zh-cn_topic_0000002538001510_section18204144912492"></a>
 
@@ -32,7 +32,7 @@
 
 ## 功能说明<a id="zh-cn_topic_0000002538001510_section618mcpsimp"></a>
 
-头文件路径为：basic_api/kernel_operator_data_copy_intf.h。
+头文件路径为：`"basic_api/kernel_operator_data_copy_intf.h"`。
 
 DataCopy数据搬运支持将随路量化参数从L1 Buffer移动到Fixpipe Buffer。Fixpipe Buffer包含两种参数：pre_stage的量化参数，这些参数各自独立存储，并拥有独立的地址空间。量化参数和ReLU参数通过dst地址的高16位（dst[31:16]）进行区分，具体如下：
 

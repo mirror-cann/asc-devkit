@@ -1,4 +1,4 @@
-﻿# MmadMx<a name="ZH-CN_TOPIC_000000253823118102"></a>
+# MmadMx<a name="ZH-CN_TOPIC_000000253823118102"></a>
 
 ## 产品支持情况
 
@@ -64,7 +64,7 @@
 
 ## 功能说明
 
-头文件路径为：basic_api/kernel_operator_mm_intf.h。
+头文件路径为：`"basic_api/kernel_operator_mm_intf.h"`。
 
 MmadMx（全称Microscaling Mmad）为带有量化系数的矩阵乘法，即左矩阵和右矩阵均有对应的量化系数矩阵，左量化系数矩阵scaleA和右量化系数矩阵scaleB。MmadMx场景中，左量化系数矩阵与左矩阵乘积，右量化系数矩阵与右矩阵乘积，对两个乘积的结果做矩阵乘法。
 

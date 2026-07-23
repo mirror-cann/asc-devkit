@@ -1,4 +1,4 @@
-﻿# LoadDataWithSparse<a name="ZH-CN_TOPIC_0000002568950935"></a>
+# LoadDataWithSparse<a name="ZH-CN_TOPIC_0000002568950935"></a>
 
 ## 产品支持情况<a name="zh-cn_topic_0000002512171654_section796754519912"></a>
 
@@ -32,7 +32,7 @@
 
 ## 功能说明<a name="zh-cn_topic_0000002512171654_section106841136114319"></a>
 
-头文件路径为：basic_api/kernel_operator_mm_intf.h。
+头文件路径为：`"basic_api/kernel_operator_mm_intf.h"`。
 
 用于从L1 Buffer中搬运以512字节为单位存放的稠密权重矩阵到L0B Buffer里，同时搬运以128字节为单位的索引矩阵到内置的专用buffer空间（用于后续MmadWithSparse接口进行读取）。
 

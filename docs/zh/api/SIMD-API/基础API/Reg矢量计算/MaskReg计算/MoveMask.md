@@ -26,7 +26,7 @@
 
 ## 功能说明<a name="section618mcpsimp"></a>
 
-头文件路径为：basic_api/reg_compute/kernel_reg_compute_maskreg_intf.h。
+头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_maskreg_intf.h"`。
 
 从[SetVectorMask](../../Memory矢量计算/掩码操作/SetVectorMask.md)设置的掩码寄存器{MASK1, MASK0}中读取Mask值，并按模板参数T对应的数据格式转换后写入返回值MaskReg。具体实现方式如下：
 

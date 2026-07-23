@@ -1,4 +1,4 @@
-﻿# LoadData（卷积数据搬运）<a id="ZH-CN_TOPIC_0000002538071224"></a>
+# LoadData（卷积数据搬运）<a id="ZH-CN_TOPIC_0000002538071224"></a>
 
 ## 产品支持情况<a id="zh-cn_topic_0000002512171652_section796754519912"></a>
 
@@ -64,7 +64,7 @@
 
 ## 功能说明<a id="zh-cn_topic_0000002512171652_section106841136114319"></a>
 
-头文件路径为：basic_api/kernel_operator_mm_intf.h。
+头文件路径为：`"basic_api/kernel_operator_mm_intf.h"`。
 
 LoadData（卷积数据搬运）本质上是用于将NC1HWC0格式的Feature Map完成Image to Column展开，然后再从展开后的二维矩阵中选取指定数据块搬入对应内存位置。见图1。
 

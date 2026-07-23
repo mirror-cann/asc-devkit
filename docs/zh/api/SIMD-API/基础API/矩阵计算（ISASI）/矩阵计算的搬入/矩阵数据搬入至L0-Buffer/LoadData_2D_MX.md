@@ -1,4 +1,4 @@
-﻿# LoadData（MX矩阵搬运）<a id="ZH-CN_TOPIC_0000002517258774"></a>
+# LoadData（MX矩阵搬运）<a id="ZH-CN_TOPIC_0000002517258774"></a>
 
 ## 产品支持情况<a id="section1550532418810"></a>
 
@@ -32,7 +32,7 @@
 
 ## 功能说明<a id="section618mcpsimp"></a>
 
-头文件路径为：basic_api/kernel_operator_mm_intf.h。
+头文件路径为：`"basic_api/kernel_operator_mm_intf.h"`。
 
 负责完成矩阵计算所需的左右矩阵数据和对应的左右量化系数矩阵数据的搬运。其中左右矩阵数据以大小为512字节的数据分形为单位进行搬运，左右量化系数矩阵以32字节的数据分形为单位进行搬运。支持的数据通路如下：
 

@@ -1,4 +1,4 @@
-﻿# SetFmatrixBitMode<a name="ZH-CN_TOPIC_0000002517448448"></a>
+# SetFmatrixBitMode<a name="ZH-CN_TOPIC_0000002517448448"></a>
 
 ## 产品支持情况<a name="section1550532418810"></a>
 

@@ -1,4 +1,4 @@
-﻿# LoadData（BitMode 2D矩阵搬运）<a id="ZH-CN_TOPIC_0000002517418694"></a>
+# LoadData（BitMode 2D矩阵搬运）<a id="ZH-CN_TOPIC_0000002517418694"></a>
 
 ## 产品支持情况<a id="section1550532418810"></a>
 

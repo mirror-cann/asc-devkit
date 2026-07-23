@@ -1,4 +1,4 @@
-﻿# SetFixpipePreQuantFlag<a name="ZH-CN_TOPIC_0000002538071284"></a>
+# SetFixpipePreQuantFlag<a name="ZH-CN_TOPIC_0000002538071284"></a>
 
 ## 产品支持情况<a name="zh-cn_topic_0000002516049318_section18204144912492"></a>
 
