@@ -1,7 +1,11 @@
-# Tensor API基础数据结构
+# 数据结构(TensorAPI)
+
+- **[内置数据类型](../数据结构/内置数据类型.md)**
+
+- **[精度转换](../数据结构/precision_conversion.md)**
 
 - **Layout相关基础数据结构**
-    - **[Layout和层次化表述法](<layout_structure/Layout和层次化表述法.md>)**
+    - **[Layout和层次化表述法](layout_structure/Layout和层次化表述法.md)**
     - **[Layout](layout_structure/Layout.md)**
     - **[Shape](layout_structure/Shape.md)**
     - **[Stride](layout_structure/Stride.md)**
@@ -33,8 +37,3 @@
 
 - **工具接口**
     - **[GetLayoutPattern](utils/GetLayoutPattern.md)**
-    - **[GetLayoutTrait](utils/GetLayoutTrait.md)**
-    - **[IsAttrTensorV](utils/IsAttrTensorV.md)**
-    - **[IsHardwareV](utils/IsHardwareV.md)**
-    - **[IsIntegralConstantV](utils/IsIntegralConstantV.md)**
-    - **[IsLayoutV](utils/IsLayoutV.md)**

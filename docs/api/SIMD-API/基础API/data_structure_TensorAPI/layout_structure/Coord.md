@@ -23,4 +23,4 @@ using Coord = Std::tuple<Coords...>;
 
 ## API映射关系
 
-Coord通过[MakeCoord](MakeCoord.md)函数创建，可通过[Crd2Idx](../../辅助数据结构/Coordinate/Crd2Idx.md)函数进行多维坐标到线性坐标的转换，可作为参数传入到Layout的[operator()](Layout.md)成员函数，Tensor的[Slice](../tensor_structure/Tensor.md)成员函数以及[Slice](../tensor_structure/Slice.md)接口中进行张量的偏移以及切片操作。
+Coord通过[MakeCoord](MakeCoord.md)函数创建，可通过[Crd2Idx](../../数据结构/辅助数据结构/Coordinate/Crd2Idx.md)函数进行多维坐标到线性坐标的转换，可作为参数传入到Layout的[operator()](Layout.md)成员函数，Tensor的[Slice](../tensor_structure/Tensor.md)成员函数以及[Slice](../tensor_structure/Slice.md)接口中进行张量的偏移以及切片操作。

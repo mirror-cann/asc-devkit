@@ -13,11 +13,11 @@ Shape用于表达Tensor形状，Stride则用于区分不同的排布方式。
 
 **图1** 行优先排布
 
-![行优先排布](../../../../../figures/行优先排布.png)
+![行优先排布](../../../../figures/行优先排布.png)
 
 **图2** 列优先排布
 
-![列优先排布](../../../../../figures/列优先排布.png)
+![列优先排布](../../../../figures/列优先排布.png)
 
 ## 层次化表述法
 
@@ -30,7 +30,7 @@ Shape用于表达Tensor形状，Stride则用于区分不同的排布方式。
 
 **图3** 层次化表述法
 
-![层次化表述法](../../../../../figures/层次化表述法.png "层次化表述法")
+![层次化表述法](../../../../figures/层次化表述法.png "层次化表述法")
 
 图中展示了两层矩阵：内层矩阵为内部用灰色线包裹的矩阵，外层矩阵为将内层矩阵视为一个元素时，用黑色线包裹的矩阵。
 
@@ -59,10 +59,11 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
     // StrideColumn1应满足：
     // StrideColumn1 % (ShapeRow0 * ShapeColumn0) == 0
     ```
+
     **图4** NZ Layout  
-    ![NZ-格式](../../../../../figures/Nz-格式.png)
+    ![NZ-格式](../../../../figures/Nz-格式.png)
     
-    下面是一个连续的NZ Layout示例，其中C0_ELEMENT = _32{} / sizeof(T)。
+    下面是一个连续的NZ Layout示例，其中C0_ELEMENT =_32{} / sizeof(T)。
 
     ```cpp
     Layout = ((Shape) : (Stride))
@@ -83,9 +84,9 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
     ```
 
     **图5** ZN Layout  
-    ![ZN-格式](../../../../../figures/Zn-格式(以half类型为例).png)
+    ![ZN-格式](../../../../figures/Zn-格式(以half类型为例).png)
 
-    下面是一个连续的ZN Layout示例，其中C0_ELEMENT = _32{} / sizeof(T)。
+    下面是一个连续的ZN Layout示例，其中C0_ELEMENT =_32{} / sizeof(T)。
 
     ```cpp
     Layout = ((Shape) : (Stride))
@@ -104,7 +105,7 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
     ```
 
     **图6** DNExt Layout
-    ![DNExt Layout](../../../../../figures/列优先排布.png)
+    ![DNExt Layout](../../../../figures/列优先排布.png)
 
     下面是一个连续的DNExt Layout示例。
 
@@ -125,7 +126,7 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
     ```
 
     **图7** NDExt Layout
-    ![NDExt Layout](../../../../../figures/行优先排布.png)
+    ![NDExt Layout](../../../../figures/行优先排布.png)
 
     下面是一个连续的NDExt Layout示例。
 
@@ -181,7 +182,7 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
     Stride = ((C0_ELEMENT, StrideRow1), (_1{}, C0_ELEMENT * _16{}))
     ```
 
-    下面是一个连续的ZZ Layout示例，其中C0_ELEMENT = _32{} / sizeof(T)。
+    下面是一个连续的ZZ Layout示例，其中C0_ELEMENT =_32{} / sizeof(T)。
 
     ```cpp
     Layout = ((Shape) : (Stride))
@@ -282,28 +283,28 @@ Stride = ((StrideRow0, StrideRow1), (StrideColumn0, StrideColumn1))
 MX scaleA要求在矩阵GM上按照ScaleAND Layout或ScaleADN Layout格式排布，在L1上需满足按行读取需求，即按照ZZ Layout格式排布。如下图所示，若GM上scaleA矩阵为ScaleAND或者ScaleADN分形排布，搬运到L1后分形为ZZ排布。
 
 **图8** scaleA矩阵在不同位置上的排布格式
-![scaleA矩阵在不同位置上的排布格式](../../../../../figures/scaleA矩阵在不同位置上的排布格式.png)
+![scaleA矩阵在不同位置上的排布格式](../../../../figures/scaleA矩阵在不同位置上的排布格式.png)
 
 MX scaleB要求在矩阵GM上按照ScaleBND Layout或ScaleBDN Layout格式排布，在L1上需满足按列读取需求，即按照NN Layout格式排布。如下图所示，若GM上scaleB矩阵为ScaleBND或者ScaleBDN分形排布，搬运到L1后分形为NN排布。
 
 **图9** scaleB矩阵在不同位置上的排布格式
-![scaleB矩阵在不同位置上的排布格式](../../../../../figures/scaleB矩阵在不同位置上的排布格式.png)
+![scaleB矩阵在不同位置上的排布格式](../../../../figures/scaleB矩阵在不同位置上的排布格式.png)
 
 ## Layout分形结构数据表
 
-每种分形对应的Layout格式如下表所示，其中T指的是支持的数据类型中除fp8_e8m0_t之外的数据类型，C0_ELEMENT = _32{} / sizeof(T)；特殊情况下当T为fp4x2_e2m1_t或fp4x2_e1m2_t时，C0_ELEMENT = _64{}。
+每种分形对应的Layout格式如下表所示，其中T指的是支持的数据类型中除fp8_e8m0_t之外的数据类型，C0_ELEMENT =_32{} / sizeof(T)；特殊情况下当T为fp4x2_e2m1_t或fp4x2_e1m2_t时，C0_ELEMENT =_64{}。
 
 | LayoutFormatPattern | 类型 | ShapeRow0 | ShapeRow1 | ShapeColumn0 | ShapeColumn1 | StrideRow0 | StrideRow1 | StrideColumn0 | StrideColumn1 |
 |-------------|------|-----------|-----------|--------------|--------------|------------|------------|---------------|---------------|
-| NZLayoutPtn | T | _16{} | ceil_div(row, _16{}) | C0_ELEMENT | ceil_div(column, C0_ELEMENT) | C0_ELEMENT | C0_ELEMENT * _16{} | _1{} | C0_ELEMENT * ceil_align(row, _16{}) |
-| ZNLayoutPtn | T | C0_ELEMENT | ceil_div(row, C0_ELEMENT) | _16{} | ceil_div(column, _16{}) | _1{} | C0_ELEMENT * ceil_align(column, _16{}) | C0_ELEMENT | C0_ELEMENT * _16{} |
+| NZLayoutPtn | T | _16{} | ceil_div(row,_16{}) | C0_ELEMENT | ceil_div(column, C0_ELEMENT) | C0_ELEMENT | C0_ELEMENT *_16{} | _1{} | C0_ELEMENT * ceil_align(row, _16{}) |
+| ZNLayoutPtn | T | C0_ELEMENT | ceil_div(row, C0_ELEMENT) | _16{} | ceil_div(column,_16{}) | _1{} | C0_ELEMENT * ceil_align(column, _16{}) | C0_ELEMENT | C0_ELEMENT *_16{} |
 | DNExtLayoutPtn | T | _1{} | row | _1{} | column | _0{} | _1{} | _0{} | row |
 | NDExtLayoutPtn | T | _1{} | row | _1{} | column | _0{} | column | _0{} | _1{} |
 | DNLayoutPtn | T | row | - | column | - | _1{} | - | row | - |
 | NDLayoutPtn | T | row | - | column | - | column | - | _1{} | - |
-| ZZLayoutPtn | T | _16{} | ceil_div(row, _16{}) | C0_ELEMENT | ceil_div(column, C0_ELEMENT) | C0_ELEMENT | _16{} * ceil_align(column, C0_ELEMENT) | _1{} | C0_ELEMENT * _16{} |
-| ZZLayoutPtn | fp8_e8m0_t | _16{} | ceil_div(row, _16{}) | _2{} | column / _2{} | _2{} | column * _16{} | _1{} | _32{} |
-| NNLayoutPtn | fp8_e8m0_t | _2{} | row / _2{} | _16{} | ceil_div(column, _16{}) | _1{} | _32{} | _2{} | row * _16{} |
+| ZZLayoutPtn | T | _16{} | ceil_div(row,_16{}) | C0_ELEMENT | ceil_div(column, C0_ELEMENT) | C0_ELEMENT | _16{} * ceil_align(column, C0_ELEMENT) | _1{} | C0_ELEMENT *_16{} |
+| ZZLayoutPtn | fp8_e8m0_t | _16{} | ceil_div(row,_16{}) | _2{} | column / _2{} | _2{} | column * _16{} | _1{} | _32{} |
+| NNLayoutPtn | fp8_e8m0_t | _2{} | row / _2{} | _16{} | ceil_div(column,_16{}) | _1{} | _32{} | _2{} | row * _16{} |
 | ScaleANDLayoutPtn | fp8_e8m0_t | _1{} | row | _1{} | column | _0{} | column | _0{} | _1{} |
 | ScaleADNLayoutPtn | fp8_e8m0_t | _1{} | row | _2{} | column / _2{} | _0{} | _2{} | _1{} | _2{} * row |
 | ScaleBNDLayoutPtn | fp8_e8m0_t | _2{} | row / _2{} | _1{} | column | _1{} | _2{} * column | _0{} | _2{} |

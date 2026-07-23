@@ -54,21 +54,25 @@ auto batchLayout = MakeFrameLayout<LayoutPattern, TraitType>(batch, m, n);
 LayoutTrait用于指定数据类型和C0维度基数。MakeFrameLayout支持以下四种传递方式：
 
 1. **LayoutTraitDefault<T>**：指定数据类型T，C0自动计算。
+
    ```cpp
    MakeFrameLayout<NZLayoutPtn, LayoutTraitDefault<float>>(m, n)
    ```
 
-2. **_C0**：直接指定C0维度的元素个数，数据类型为[Int](../../../../../Utils-API/CPP标准库/类型特性/Int.md)。_C0是Std::Int<C0>的简写形式。
+2. **_C0**：直接指定C0维度的元素个数，数据类型为[Std::Int](../../../../Utils-API/CPP标准库/类型特性/integral_constant.md)。_C0是Std::Int<C0>的简写形式。
+
    ```cpp
    MakeFrameLayout<NZLayoutPtn, _16>(m, n)
    ```
 
 3. **不传入Trait**：在分形构造和Trait无关，或Trait值固定的场景下，不传入Trait，内部根据LayoutPattern查找对应的默认Trait。这样的分形有NDLayoutPtn、DNLayoutPtn、DNExtLayoutPtn、NDExtLayoutPtn、ScaleANDLayoutPtn、ScaleADNLayoutPtn、ScaleBNDLayoutPtn、ScaleBDNLayoutPtn。
+
    ```cpp
    MakeFrameLayout<NDLayoutPtn>(m, n)
    ```
 
 4. **自定义Trait传入**：传入一个自定义的Trait类型。适用于需要显式描述数据类型、C0大小或其他布局特征，且现有默认Trait、_C0或固定默认Trait都无法满足需求的场景。自定义Trait需要满足底层布局推导所要求的类型约定。
+
    ```cpp
    struct MyLayoutTrait {
        using type = float;
