@@ -28,34 +28,42 @@
 
 头文件路径：`"c_api/reg_compute/reg_vector.h"`。
 
-根据mask对源操作数src执行左移，左移的位数由输入参数value决定，将结果写入目的操作数dst。
-对所有数据类型执行逻辑左移，去掉高位，低位填充为0。
+根据mask对源操作数src执行左移，左移的位数由输入参数value决定，将结果写入目的操作数dst。根据源操作数的数据类型，左移操作分为以下两种情况：
+    
+- **数据类型为无符号类型：执行逻辑左移。**
+
+逻辑左移会将二进制数整体向左移动指定的位数，最高位被丢弃，最低位用0填充。例如，二进制数1010101010101010（uint16\_t类型）逻辑左移1位后，结果为0101010101010100。
+- **数据类型为有符号类型：执行算术左移。**
+
+算术左移会将二进制数整体向左移动指定的位数，次高位被丢弃，最低位用0填充。例如，二进制数1010101010101010（int16\_t类型）算术左移1位后，结果为1101010101010100；算术左移3位后，结果为1101010101010000。
 
 计算公式如下：
 
 $$
-dst_i = src_i << value
+dst_i = src_i \ll value
 $$
 
 ## 函数原型
 
 ```cpp
-__simd_callee__ inline void asc_shiftleft_scalar(vector_uint8_t& dst, vector_uint8_t src, int16_t value, vector_bool mask)
 __simd_callee__ inline void asc_shiftleft_scalar(vector_int8_t& dst, vector_int8_t src, int16_t value, vector_bool mask)
-__simd_callee__ inline void asc_shiftleft_scalar(vector_uint16_t& dst, vector_uint16_t src, int16_t value, vector_bool mask)
+__simd_callee__ inline void asc_shiftleft_scalar(vector_uint8_t& dst, vector_uint8_t src, int16_t value, vector_bool mask)
 __simd_callee__ inline void asc_shiftleft_scalar(vector_int16_t& dst, vector_int16_t src, int16_t value, vector_bool mask)
-__simd_callee__ inline void asc_shiftleft_scalar(vector_uint32_t& dst, vector_uint32_t src, int16_t value, vector_bool mask)
+__simd_callee__ inline void asc_shiftleft_scalar(vector_uint16_t& dst, vector_uint16_t src, int16_t value, vector_bool mask)
 __simd_callee__ inline void asc_shiftleft_scalar(vector_int32_t& dst, vector_int32_t src, int16_t value, vector_bool mask)
+__simd_callee__ inline void asc_shiftleft_scalar(vector_uint32_t& dst, vector_uint32_t src, int16_t value, vector_bool mask)
 ```
 
 ## 参数说明
 
-| 参数名  | 输入/输出 | 描述 |
-| :----- | :------- | :------- |
-| dst | 输出 | 目的操作数（矢量数据寄存器）。 |
-| src | 输入 | 源操作数（矢量数据寄存器）。 |
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| dst | 输出 | 目的操作数（矢量数据寄存器）。|
+| src | 输入 | 源操作数（矢量数据寄存器）。|
 | value | 输入 | 源操作数（标量）。不支持设置为负数。 |
-| mask | 输入 | 源操作数掩码（掩码寄存器）。用于指示在计算过程中哪些元素参与计算。对应位置为1时参与计算，为0时不参与计算。mask未筛选的元素在输出中置零。 |
+| mask | 输入 | 源操作数掩码（掩码寄存器），用于指示在计算过程中哪些元素参与计算。对应位置为1时参与计算，为0时不参与计算。mask未筛选的元素在输出中置零。 |
 
 矢量数据寄存器和掩码寄存器的详细说明请参见[data_type_definition.md](../reg_data_types/data_type_definition.md)。
 
@@ -63,13 +71,11 @@ __simd_callee__ inline void asc_shiftleft_scalar(vector_int32_t& dst, vector_int
 
 无
 
-## 流水类型
-
-PIPE_V
-
 ## 约束说明
 
-- value不支持设置为负数。
+- 对于逻辑位移（无符号数据类型），如果位移量（value）大于数据类型位宽，则输出为0。
+- 对于算术位移（有符号数据类型），如果位移量（value）大于数据类型位宽，则输出为0。
+- value不支持设置为负，负数行为未定义。
 
 ## 调用示例
 

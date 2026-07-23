@@ -28,9 +28,9 @@
 
 头文件路径：`"c_api/reg_compute/reg_convert.h"`。
 
-将float类型转化为int32_t类型，并支持多种舍入模式，饱和/非饱和模式。
+将float类型数据转化为int32_t类型，并支持多种舍入模式，饱和/非饱和模式。
 
-关于舍入模式和饱和/非饱和模式的详细说明，请参见[舍入模式](../data_type_convert/rounding_mode.md)。
+关于舍入模式和饱和/非饱和模式的详细说明，请参见[舍入模式与饱和模式](rounding_mode.md)。
 
 ## 函数原型
 
@@ -59,10 +59,12 @@ __simd_callee__ inline void asc_float2int32_rz_sat(vector_int32_t& dst, vector_f
 
 ## 参数说明
 
-| 参数名  | 输入/输出 | 描述 |
-| :----- | :------- | :------- |
-| dst | 输出 | 目的操作数（矢量数据寄存器）。 |
-| src | 输入 | 源操作数（矢量数据寄存器）。 |
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| dst | 输出 | 目的操作数（矢量数据寄存器）。|
+| src | 输入 | 源操作数（矢量数据寄存器）。|
 | mask | 输入 | 源操作数掩码（掩码寄存器），用于指示在计算过程中哪些元素参与计算。对应位置为1时参与计算，为0时不参与计算。mask未筛选的元素在输出中置零。 |
 
 矢量数据寄存器和掩码寄存器的详细说明请参见[data_type_definition.md](../reg_data_types/data_type_definition.md)。
@@ -71,12 +73,9 @@ __simd_callee__ inline void asc_float2int32_rz_sat(vector_int32_t& dst, vector_f
 
 无
 
-## 流水类型
-
-PIPE_V
-
 ## 约束说明
 
+- mask控制源操作数是否参与计算，源操作数不参与计算的元素在输出对应位置置零。
 - 开启饱和模式和非饱和模式时，需配置ctrl寄存器，ctrl寄存器的详细说明请参见[asc_set_ctrl.md](../../sys_var/asc_set_ctrl.md)。
 
 ## 调用示例

@@ -28,26 +28,28 @@
 
 头文件路径：`"c_api/reg_compute/reg_convert.h"`。
 
-将vector_uint8_t类型的源操作数以256B为单位分为两部分，读取其中一部分元素，将其转换成vector_uint16_t类型并写入目的操作数。
+将uint8_t类型数据转为uint16_t类型。
 
-由于源操作数与目的操作数类型位宽比为1:2，读取数据时需要将一个VL大小的数据分为两部分，根据不同接口选取索引0或者索引1。
+由于源操作数与目的操作数类型位宽比为1:2，读取数据时需要将一个VL大小的数据分为两部分，根据不同接口选择输入数据索引为奇数的位置或偶数的位置。
 
 ## 函数原型
 
 ```cpp
-// 选取索引0的位置
+// 数据读取索引为偶数的位置
 __simd_callee__ inline void asc_uint82uint16(vector_uint16_t& dst, vector_uint8_t src, vector_bool mask)
-// 选取索引1的位置
+// 数据读取索引为奇数的位置
 __simd_callee__ inline void asc_uint82uint16_v2(vector_uint16_t& dst, vector_uint8_t src, vector_bool mask)
 ```
 
 ## 参数说明
 
-| 参数名       | 输入/输出 | 描述               |
-| --------- | ----- | ---------------- |
-| dst       | 输出    | 目的操作数（矢量数据寄存器）。            |
-| src | 输入    | 源操作数（矢量数据寄存器）。            |
-| mask     | 输入    | 源操作数掩码（掩码寄存器），用于指示在计算过程中哪些元素参与计算。对应位置为1时参与计算，为0时不参与计算。mask未筛选的元素在输出中置零。        |
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| dst | 输出 | 目的操作数（矢量数据寄存器）。|
+| src | 输入 | 源操作数（矢量数据寄存器）。|
+| mask | 输入 | 源操作数掩码（掩码寄存器），用于指示在计算过程中哪些元素参与计算。对应位置为1时参与计算，为0时不参与计算。mask未筛选的元素在输出中置零。 |
 
 矢量数据寄存器和掩码寄存器的详细说明请参见[data_type_definition.md](../reg_data_types/data_type_definition.md)。
 
@@ -55,13 +57,9 @@ __simd_callee__ inline void asc_uint82uint16_v2(vector_uint16_t& dst, vector_uin
 
 无
 
-## 流水类型
-
-PIPE_V
-
 ## 约束说明
 
-无
+- mask控制源操作数是否参与计算，源操作数不参与计算的元素在输出对应位置置零。
 
 ## 调用示例
 

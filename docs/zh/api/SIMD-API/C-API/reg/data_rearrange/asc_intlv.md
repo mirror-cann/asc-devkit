@@ -28,9 +28,15 @@
 
 头文件路径：`"c_api/reg_compute/reg_vector.h"`。
 
-将源操作数src0和src1中的元素交织存入目的操作数dst0和dst1中。操作数为掩码寄存器时，不同数据类型的接口决定了交织的位宽大小，例如对于b32类型，交织时以4bit为一组。
+将源操作数src0和src1中的元素交织存入目的操作数dst0和dst1中。按照操作数类型划分，可以分以下场景：
 
-![asc_intlf示例](../../figures/asc_intlf示例.png)
+**操作数为掩码寄存器**
+- 不同数据类型的接口决定了交织的位宽大小，例如对于b32类型，交织时以4bit为一组，对于b16类型，交织时以2bit为一组。
+
+**操作数为矢量数据寄存器**
+- 以元素为单位进行交织。以int8_t矢量数据寄存器为例，交织过程如下图所示。
+
+![asc_intlv示例](../../figures/asc_intlv.png)
 
 ## 函数原型
 
@@ -42,10 +48,10 @@
   // 操作数为矢量数据寄存器
   __simd_callee__ inline void asc_intlv(vector_int8_t& dst0, vector_int8_t& dst1, vector_int8_t src0, vector_int8_t src1)
   __simd_callee__ inline void asc_intlv(vector_uint8_t& dst0, vector_uint8_t& dst1, vector_uint8_t src0, vector_uint8_t src1)
-  __simd_callee__ inline void asc_intlv(vector_fp8_e5m2_t& dst0, vector_fp8_e5m2_t& dst1, vector_fp8_e5m2_t src0, vector_fp8_e5m2_t src1)
-  __simd_callee__ inline void asc_intlv(vector_fp8_e4m3fn_t& dst0, vector_fp8_e4m3fn_t& dst1, vector_fp8_e4m3fn_t src0, vector_fp8_e4m3fn_t src1)
   __simd_callee__ inline void asc_intlv(vector_hifloat8_t& dst0, vector_hifloat8_t& dst1, vector_hifloat8_t src0, vector_hifloat8_t src1)
   __simd_callee__ inline void asc_intlv(vector_fp8_e8m0_t& dst0, vector_fp8_e8m0_t& dst1, vector_fp8_e8m0_t src0, vector_fp8_e8m0_t src1)
+  __simd_callee__ inline void asc_intlv(vector_fp8_e5m2_t& dst0, vector_fp8_e5m2_t& dst1, vector_fp8_e5m2_t src0, vector_fp8_e5m2_t src1)
+  __simd_callee__ inline void asc_intlv(vector_fp8_e4m3fn_t& dst0, vector_fp8_e4m3fn_t& dst1, vector_fp8_e4m3fn_t src0, vector_fp8_e4m3fn_t src1)
   __simd_callee__ inline void asc_intlv(vector_int16_t& dst0, vector_int16_t& dst1, vector_int16_t src0, vector_int16_t src1)
   __simd_callee__ inline void asc_intlv(vector_uint16_t& dst0, vector_uint16_t& dst1, vector_uint16_t src0, vector_uint16_t src1)
   __simd_callee__ inline void asc_intlv(vector_half& dst0, vector_half& dst1, vector_half src0, vector_half src1)
@@ -57,12 +63,14 @@
 
 ## 参数说明
 
-| 参数名       | 输入/输出 | 描述                |
-| --------- | ----- | ----------------- |
-| dst0       | 输出    | 目的操作数（矢量数据寄存器或掩码寄存器）。 |
-| dst1       | 输出    | 目的操作数（矢量数据寄存器或掩码寄存器）。 |
-| src0       | 输入    | 源操作数（矢量数据寄存器）。 |
-| src1       | 输入    | 源操作数（矢量数据寄存器）。 |
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| dst0 | 输出 | 目的操作数（矢量数据寄存器或掩码寄存器）。|
+| dst1 | 输出 | 目的操作数（矢量数据寄存器或掩码寄存器）。|
+| src0 | 输入 | 源操作数（矢量数据寄存器或掩码寄存器）。|
+| src1 | 输入 | 源操作数（矢量数据寄存器或掩码寄存器）。|
 
 矢量数据寄存器和掩码寄存器的详细说明请参见[data_type_definition.md](../reg_data_types/data_type_definition.md)。
 
@@ -70,13 +78,12 @@
 
 无
 
-## 流水类型
-
-PIPE_V
-
 ## 约束说明
 
-无
+- src0、src1、dst0、dst1的数据类型需要保持一致。
+- src0和src1可以为同一个矢量数据寄存器或掩码寄存器。
+- dst0和dst1不能为同一个矢量数据寄存器或掩码寄存器。
+- 允许源操作数和目的操作数为同一个矢量数据寄存器或掩码寄存器，例如asc_intlv(src0, src1, src0, src1)。
 
 ## 调用示例
 

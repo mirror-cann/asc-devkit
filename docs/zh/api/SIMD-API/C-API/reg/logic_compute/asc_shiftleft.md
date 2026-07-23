@@ -28,23 +28,36 @@
 
 头文件路径：`"c_api/reg_compute/reg_vector.h"`。
 
-根据掩码mask对输入数据src0，按照src1对应元素进行左移操作，完成后将结果写入dst中。
+根据掩码mask对输入数据src0，按照src1对应元素进行左移操作，完成后将结果写入dst中。根据源操作数的数据类型，左移操作分为以下两种情况：
+ 	 
+- **数据类型为无符号类型：执行逻辑左移。**
+
+逻辑左移会将二进制数整体向左移动指定的位数，最高位被丢弃，最低位用0填充。例如，二进制数1010101010101010（uint16\_t类型）逻辑左移1位后，结果为0101010101010100。
+- **数据类型为有符号类型：执行算术左移。**
+
+算术左移会将二进制数整体向左移动指定的位数，次高位被丢弃，最低位用0填充。例如，二进制数1010101010101010（int16\_t类型）算术左移1位后，结果为1101010101010100；算术左移3位后，结果为1101010101010000。
+
+$$
+dst_i = src0_i \ll src1_i
+$$
 
 ## 函数原型
 
 ```cpp
-__simd_callee__ inline void asc_shiftleft(vector_uint8_t& dst, vector_uint8_t src0, vector_int8_t src1, vector_bool mask)
 __simd_callee__ inline void asc_shiftleft(vector_int8_t& dst, vector_int8_t src0, vector_int8_t src1, vector_bool mask)
-__simd_callee__ inline void asc_shiftleft(vector_uint16_t& dst, vector_uint16_t src0, vector_int16_t src1, vector_bool mask)
+__simd_callee__ inline void asc_shiftleft(vector_uint8_t& dst, vector_uint8_t src0, vector_int8_t src1, vector_bool mask)
 __simd_callee__ inline void asc_shiftleft(vector_int16_t& dst, vector_int16_t src0, vector_int16_t src1, vector_bool mask)
-__simd_callee__ inline void asc_shiftleft(vector_uint32_t& dst, vector_uint32_t src0, vector_int32_t src1, vector_bool mask)
+__simd_callee__ inline void asc_shiftleft(vector_uint16_t& dst, vector_uint16_t src0, vector_int16_t src1, vector_bool mask)
 __simd_callee__ inline void asc_shiftleft(vector_int32_t& dst, vector_int32_t src0, vector_int32_t src1, vector_bool mask)
+__simd_callee__ inline void asc_shiftleft(vector_uint32_t& dst, vector_uint32_t src0, vector_int32_t src1, vector_bool mask)
 ```
 
 ## 参数说明
 
-| 参数名  | 输入/输出 | 描述 |
-| :----- | :------- | :------- |
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
 | dst | 输出 | 目的操作数（矢量数据寄存器）。|
 | src0 | 输入 | 源操作数（矢量数据寄存器）。|
 | src1 | 输入 | 源操作数（矢量数据寄存器）。|
@@ -56,17 +69,11 @@ __simd_callee__ inline void asc_shiftleft(vector_int32_t& dst, vector_int32_t sr
 
 无
 
-## 流水类型
-
-PIPE_V
-
 ## 约束说明
 
-- 数据类型为无符号类型：执行逻辑左移。逻辑左移会将二进制数整体向左移动指定的位数，最高位被丢弃，最低位用0填充。
-- 对于逻辑移位（无符号数据类型），如果位移量大于等于数据类型位宽，则输出为0。
-- 数据类型为有符号类型：执行算术左移。算术左移会将二进制数整体向左移动指定的位数，最高位用原符号位填充，次高位被丢弃，最低位用0填充。
-- 对于算术移位（有符号数据类型），如果src0小于0，src1小于0，且src1的位移量大于数据类型位宽，则输出为-1。
-- 对于算术移位（有符号数据类型），如果src0大于0，且src1的位移量大于数据类型位宽，则输出为0。
+- 对于逻辑位移（无符号数据类型），如果位移量大于数据类型位宽，则输出为0。
+- 对于算术位移（有符号数据类型），如果位移量大于数据类型位宽，则输出为0。
+- src1内元素不支持设置为负数，负数行为未定义。
 
 ## 调用示例
 
