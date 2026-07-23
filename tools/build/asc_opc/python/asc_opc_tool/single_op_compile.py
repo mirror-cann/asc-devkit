@@ -341,6 +341,7 @@ class SingleOpCompile:
         enable_vector_core = self.__op_info.get(CompileParam.ENABLE_VECTOR_CORE)
         enable_vector_core = False if enable_vector_core is None else enable_vector_core
         deterministic = self.__op_info.get(OpcOptions.DETERMINISTIC) == "true"
+        deterministic_level = self.__op_info.get(OpcOptions.DETERMINISTIC_LEVEL, "")
         jit_compile_mode = self.__op_info.get(OpcOptions.JIT_COMPILE_MODE)
         op_relocatable_bin = self.__opc_compile_args.get(
             OpcOptions.RELOCATABLE_BIN, False
@@ -351,22 +352,28 @@ class SingleOpCompile:
             )
         )
 
-        with build_config(
-            tbe_debug_level=tbe_debug_level_value,
-            op_debug_config=debug_config,
-            kernel_meta_parent_dir=self.__op_info.get(
+        build_config_kwargs = {
+            "tbe_debug_level": tbe_debug_level_value,
+            "op_debug_config": debug_config,
+            "kernel_meta_parent_dir": self.__op_info.get(
                 OpcOptions.KERNEL_META_PATH, "./"
             ),
-            compatible=True,
-            enable_op_prebuild=False,
-            save_temp_cce_file=dump_cce_switch,
-            random_cce_file_location=False,
-            status_check=status_check,
-            enable_deterministic_mode=deterministic,
-            jit_compile_mode=jit_compile_mode,
-            enable_vector_core=enable_vector_core,
-            enable_super_kernel=op_relocatable_bin,
-        ):
+            "compatible": True,
+            "enable_op_prebuild": False,
+            "save_temp_cce_file": dump_cce_switch,
+            "random_cce_file_location": False,
+            "status_check": status_check,
+            "enable_deterministic_mode": deterministic,
+            "jit_compile_mode": jit_compile_mode,
+            "enable_vector_core": enable_vector_core,
+            "enable_super_kernel": op_relocatable_bin,
+        }
+
+        if deterministic_level != "":
+            build_config_kwargs["deterministic_level"] = deterministic_level
+            logger.debug("deterministic_level is {}".format(deterministic_level))
+
+        with build_config(**build_config_kwargs):
             json_file_path = self.__call_op()
 
             return json_file_path

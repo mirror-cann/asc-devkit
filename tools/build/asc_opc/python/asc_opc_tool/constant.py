@@ -103,6 +103,7 @@ class OpcOptions:
     RELOCATABLE_BIN = "op_relocatable_kernel_binary"
     SPK_OPT = "op_super_kernel_options"
     KERNEL_TEMPLATE_INPUT = "kernel-template-input"
+    DETERMINISTIC_LEVEL = "deterministic_level"
 
     OpcOptionDefaultValueDict = {
         OUTPUT: "",

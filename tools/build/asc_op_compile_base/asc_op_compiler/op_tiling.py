@@ -368,8 +368,25 @@ def do_op_tiling(
         op_name = op_context.get_context().get_graph_op_info().op_name
     else:
         op_name = ""
+
+    def _safe_int_conversion(value, default=-1):
+        if value is None:
+            return default
+        clean_value = str(value).strip()
+        try:
+            return int(clean_value)
+        except (ValueError, TypeError):
+            return default
+
     enable_deterministic = get_current_build_config("enable_deterministic_mode")
     extra_params = {"op_name": op_name, "deterministic": enable_deterministic}
+
+    deterministic_level = _safe_int_conversion(
+        get_current_build_config("deterministic_level")
+    )
+    if deterministic_level != -1:
+        extra_params["deterministic_level"] = deterministic_level
+
     if isinstance(op_context.get_context(), OpContext):
         aicore_num = op_context.get_context().get_addition("_op_aicore_num")
         vectorcore_num = op_context.get_context().get_addition("_op_vectorcore_num")
