@@ -33,7 +33,7 @@ CHANGED_FILES=""
 CI_MODE=FALSE
 ENABLE_SIGN="false"
 VERSION_INFO="8.5.0"
-CUSTOM_SIGN_SCRIPT="${CURRENT_DIR}/impl/adv_api/detail/hccl/cc/scripts/sign/community_sign_build.py"
+CUSTOM_SIGN_SCRIPT=""
 
 dotted_line="----------------------------------------------------------------"
 
