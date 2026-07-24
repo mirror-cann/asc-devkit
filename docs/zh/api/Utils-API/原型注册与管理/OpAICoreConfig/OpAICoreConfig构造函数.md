@@ -9,28 +9,17 @@ OpAICoreConfig构造函数。
 ```
 OpAICoreConfig()
 OpAICoreConfig(const char *soc)
+OpAICoreConfig(const OpAICoreConfig &aicore_config)
 ```
 
 ## 参数说明<a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_section75395119104"></a>
 
 <a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_table111938719446"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_row6223476444"><th class="cellrowborder" valign="top" width="17.22%" id="mcps1.1.4.1.1"><p id="p1085176175119"><a name="p1085176175119"></a><a name="p1085176175119"></a>参数名</p>
-</th>
-<th class="cellrowborder" valign="top" width="15.340000000000002%" id="mcps1.1.4.1.2"><p id="p1851763519"><a name="p1851763519"></a><a name="p1851763519"></a>输入/输出</p>
-</th>
-<th class="cellrowborder" valign="top" width="67.44%" id="mcps1.1.4.1.3"><p id="p148519610515"><a name="p148519610515"></a><a name="p148519610515"></a>描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_row152234713443"><td class="cellrowborder" valign="top" width="17.22%" headers="mcps1.1.4.1.1 "><p id="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_p8563195616313"><a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_p8563195616313"></a><a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_p8563195616313"></a>soc</p>
-</td>
-<td class="cellrowborder" valign="top" width="15.340000000000002%" headers="mcps1.1.4.1.2 "><p id="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_p15663137127"><a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_p15663137127"></a><a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_p15663137127"></a>输入</p>
-</td>
-<td class="cellrowborder" valign="top" width="67.44%" headers="mcps1.1.4.1.3 "><p id="p823866165711"><a name="p823866165711"></a><a name="p823866165711"></a>AI处理器型号。</p>
-</td>
-</tr>
-</tbody>
-</table>
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| soc | 输入 | AI处理器型号。 |
+| aicore_config | 输入 | 已构造完成的OpAICoreConfig，用于拷贝构造OpAICoreConfig。 |
 
 ## 返回值说明<a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_section25791320141317"></a>
 
@@ -96,6 +85,8 @@ OpAICoreConfig(const char *soc)
 
 无入参的默认构造函数不会初始化上述参数。
 
+拷贝构造函数会复制被拷贝对象中已配置的输入、输出和配置项信息。
+
 ## 调用示例<a name="zh-cn_topic_0000002078486173_zh-cn_topic_0000001576727153_zh-cn_topic_0000001389787297_section320753512363"></a>
 
 ```
@@ -116,9 +107,15 @@ public:
             .ParamType(REQUIRED)
             .DataType({ ge::DT_INT32 })
             .Format({ ge::FORMAT_ND });
+        // 使用拷贝构造函数
+        OpAICoreConfig aicConfig3(aicConfig1);
+        aicConfig3.Input("x")
+            .ParamType(REQUIRED)
+            .DataType({ ge::DT_FLOAT16 })
+            .Format({ ge::FORMAT_ND });
         this->AICore().AddConfig("ascendxxx1", aicConfig1);
         this->AICore().AddConfig("ascendxxx2", aicConfig2);
+        this->AICore().AddConfig("ascendxxx3", aicConfig3);
     }
 };
 ```
-
