@@ -81,7 +81,7 @@
 
 | 接口名 | 功能描述 |
 | --- | --- |
-| [printf](调测接口/printf-290.md) | 在算子Kernel侧的实现代码中，需要输出日志信息时，调用printf接口打印相关内容。 |
+| [printf](调测接口/printf.md) | 在算子Kernel侧的实现代码中，需要输出日志信息时，调用printf接口打印相关内容。 |
 | [assert](调测接口/assert-291.md) | 本接口在SIMT VF调试场景下提供assert断言功能。在算子Kernel侧的SIMT VF实现代码中，如果assert的内部条件判断不为真，则会输出assert条件，并将输入的信息格式化打印在屏幕上。 |
 | [__trap](调测接口/__trap.md) | 在SIMT VF实现代码中调用此接口会中断算子的运行。 |
 | [clock](调测接口/clock.md) | 本接口在SIMT VF调试场景中提供Clock时间戳功能，用于记录从程序启动到接口调用时刻所经历的时钟周期数（Cycle Count），便于精确分析执行延迟和性能瓶颈。 |

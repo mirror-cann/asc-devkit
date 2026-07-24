@@ -657,7 +657,7 @@ The reasons why the Ascend 950 Series does not reach the theoretical vector dura
 
 This interface provides formatted output function in CPU domain/NPU domain debugging scenarios.
 
-In the implementation code on the operator kernel side, call the [printf](../../../../../docs/zh/api/SIMD-API/基础API/调试接口/上板打印/printf.md) interface to print relevant content.
+In the implementation code on the operator kernel side, call the [printf](../../../../../docs/zh/api/Utils-API/调测接口/printf.md) interface to print relevant content.
 
 Examples are as follows:
 

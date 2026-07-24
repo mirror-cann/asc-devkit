@@ -545,7 +545,6 @@
 | 接口名 | 功能描述 |
 | --- | --- |
 | [DumpTensor](调试接口/上板打印/DumpTensor.md) | 该接口可以打印Tensor的内容，同时支持打印自定义的标签（仅支持uint32_t数据类型的信息），比如打印当前行号等。 |
-| [printf](调试接口/上板打印/printf.md) | 该接口提供CPU域/NPU域调试场景下的格式化输出功能。 |
 | [DumpAccChkPoint](调试接口/上板打印/DumpAccChkPoint.md) | 该接口Dump指定Tensor的内容。同时支持打印自定义的标签（仅支持uint32_t数据类型的信息），比如打印当前行号等。区别于DumpTensor，使用该接口可以支持指定偏移位置的Tensor打印。 |
 | [PrintTimeStamp](调试接口/上板打印/PrintTimeStamp.md) | 提供时间戳打点功能，用于在算子Kernel代码中标记关键执行点。 |
 | [ascendc_assert](调试接口/异常检测/ascendc_assert.md) | ascendc_assert提供了一种在CPU/NPU域实现断言功能的接口。当断言条件不满足时，系统会输出断言信息并格式化打印在屏幕上。 |

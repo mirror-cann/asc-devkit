@@ -735,7 +735,6 @@
         -   [调试接口](SIMD-API/基础API/调试接口/调试接口.md)
             -   [上板打印](SIMD-API/基础API/调试接口/上板打印/上板打印.md)
                 -   [DumpTensor](SIMD-API/基础API/调试接口/上板打印/DumpTensor.md)
-                -   [printf](SIMD-API/基础API/调试接口/上板打印/printf.md)
                 -   [DumpAccChkPoint](SIMD-API/基础API/调试接口/上板打印/DumpAccChkPoint.md)
                 -   [PrintTimeStamp](SIMD-API/基础API/调试接口/上板打印/PrintTimeStamp.md)
 
@@ -2975,7 +2974,7 @@
         -   [ASC\_CPU\_LOG](Utils-API/log/ASC_CPU_LOG.md)
 
     -   [调测接口](Utils-API/调测接口/调测接口.md)
-        -   [printf](Utils-API/调测接口/printf-290.md)
+        -   [printf](Utils-API/调测接口/printf.md)
         -   [assert](Utils-API/调测接口/assert-291.md)
         -   [\_\_trap](Utils-API/调测接口/__trap.md)
         -   [asc\_dump](Utils-API/调测接口/asc_dump.md)
