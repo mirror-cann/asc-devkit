@@ -9,24 +9,24 @@
 -   获取Kernel接口计算所需最小/最大临时空间的接口
 
     ```
-    uint32_t GetSoftMaxGradMaxTmpSize(const ge::Shape& srcShape, const uint32_t dataTypeSize, const bool isFront, const bool isReuseSource)
+    uint32_t GetSoftMaxGradMaxTmpSize(const AscendC::TensorShape& srcShape, const uint32_t dataTypeSize, const bool isFront, const bool isReuseSource)
     ```
 
     ```
-    uint32_t GetSoftMaxGradMinTmpSize(const ge::Shape& srcShape, const uint32_t dataTypeSize, const bool isFront, const bool isReuseSource)
+    uint32_t GetSoftMaxGradMinTmpSize(const AscendC::TensorShape& srcShape, const uint32_t dataTypeSize, const bool isFront, const bool isReuseSource)
     ```
 
 -   Tiling计算接口
     -   AscendC::optiling命名空间下的计算接口
 
         ```
-        void SoftMaxGradTilingFunc(const ge::Shape& srcShape, const uint32_t dataTypeSize, const uint32_t localWorkSpaceSize, optiling::SoftMaxTiling& softmaxGradTiling, const bool isFront = false)
+        void SoftMaxGradTilingFunc(const AscendC::TensorShape& srcShape, const uint32_t dataTypeSize, const uint32_t localWorkSpaceSize, optiling::SoftMaxTiling& softmaxGradTiling, const bool isFront = false)
         ```
 
     -   AscendC命名空间下的计算接口
 
         ```
-        void SoftMaxGradTilingFunc(const ge::Shape& srcShape, const uint32_t dataTypeSize, const uint32_t localWorkSpaceSize, AscendC::tiling::SoftMaxTiling& softmaxGradTiling, const bool isFront = false)
+        void SoftMaxGradTilingFunc(const AscendC::TensorShape& srcShape, const uint32_t dataTypeSize, const uint32_t localWorkSpaceSize, AscendC::tiling::SoftMaxTiling& softmaxGradTiling, const bool isFront = false)
         ```
 
 ## 参数说明
@@ -35,7 +35,7 @@
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入srcTensor的shape信息。 |
+| srcShape | 输入 | 输入srcTensor的shape信息，参数类型为[AscendC::TensorShape](../../数据结构/TensorShape.md)。 |
 | dataTypeSize | 输入 | 计算的数据类型，比如half=2。 |
 | isFront | 输入 | 是否只计算![](../../../../figures/zh-cn_formulaimage_0000001722356465.png)，和kernel侧的SoftmaxGrad接口一致，默认false。 |
 | isReuseSource | 输入 | 与kernel侧接口配置保持一致。 |
@@ -44,7 +44,7 @@
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入srcTensor的shape信息。 |
+| srcShape | 输入 | 输入srcTensor的shape信息，参数类型为[AscendC::TensorShape](../../数据结构/TensorShape.md)。 |
 | localWorkSpaceSize | 输入 | 剩余的可供SoftmaxGrad接口计算的临时空间大小，单位为Byte。localWorkSpaceSize的取值必须大于GetSoftMaxGradMinTmpSize接口返回的计算所需的最小临时空间大小。 |
 | dataTypeSize | 输入 | 计算的数据类型，比如half=2。 |
 | isFront | 输入 | 是否只计算![](../../../../figures/zh-cn_formulaimage_0000001723260621.png)，和kernel侧的SoftmaxGrad接口一致，默认false。 |

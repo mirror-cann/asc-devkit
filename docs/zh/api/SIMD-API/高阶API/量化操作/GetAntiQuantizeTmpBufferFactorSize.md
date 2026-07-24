@@ -23,7 +23,7 @@
 ## 函数原型
 
 ```
-void GetAntiQuantizeTmpBufferFactorSize(const ge::Shape& srcShape, const ge::Shape& scaleShape, ge::DataType inputDataType, ge::DataType outputDataType, uint32_t& maxLiveNodeCount, uint32_t& extraBuf)
+void GetAntiQuantizeTmpBufferFactorSize(const AscendC::TensorShape& srcShape, const AscendC::TensorShape& scaleShape, AscendC::TensorDataType inputDataType, AscendC::TensorDataType outputDataType, uint32_t& maxLiveNodeCount, uint32_t& extraBuf)
 ```
 
 ## 参数说明
@@ -32,10 +32,10 @@ void GetAntiQuantizeTmpBufferFactorSize(const ge::Shape& srcShape, const ge::Sha
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入srcTensor的shape信息。 |
-| scaleShape | 输入 | 输入scale的shape信息。 |
-| inputDataType | 输入 | 输入数据类型。ge::DataType类型。 |
-| outputDataType | 输入 | 输出数据类型。ge::DataType类型。 |
+| srcShape | 输入 | 输入srcTensor的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)。 |
+| scaleShape | 输入 | 输入scale的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)。 |
+| inputDataType | 输入 | 输入数据类型，参数类型为[AscendC::TensorDataType](../数据结构/TensorDataType.md)。 |
+| outputDataType | 输入 | 输出数据类型，参数类型为[AscendC::TensorDataType](../数据结构/TensorDataType.md)。 |
 | maxLiveNodeCount | 输出 | 最大存活节点数，表示临时空间是单次计算数据量所占空间的多少倍。 |
 | extraBuf | 输出 | 使用的额外临时空间大小，单位为字节。 |
 
@@ -53,9 +53,9 @@ void GetAntiQuantizeTmpBufferFactorSize(const ge::Shape& srcShape, const ge::Sha
 uint32_t maxLiveNodeCount = 0;
 uint32_t extraBuf = 0;
 std::vector<int64_t> srcDims = {64, 512};
-auto srcShape = ge::Shape(srcDims);
+auto srcShape = AscendC::TensorShape(srcDims);
 std::vector<int64_t> scaleDims = {1, 512};
-auto scaleShape = ge::Shape(scaleDims);
+auto scaleShape = AscendC::TensorShape(scaleDims);
 bool isTranspose = false;
-AscendC::GetAntiQuantizeTmpBufferFactorSize(srcShape, scaleShape, ge::DT_INT8, ge::DT_BF16, maxLiveNodeCount, extraBuf);
+AscendC::GetAntiQuantizeTmpBufferFactorSize(srcShape, scaleShape, AscendC::TensorDataType::DT_INT8, AscendC::TensorDataType::DT_BF16, maxLiveNodeCount, extraBuf);
 ```

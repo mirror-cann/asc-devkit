@@ -7,15 +7,15 @@
 ## 函数原型
 
 ```
-void GetPadMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, uint32_t& maxValue, uint32_t& minValue)
+void GetPadMaxMinTmpSize(const AscendC::TensorShape& srcShape, const uint32_t typeSize, uint32_t& maxValue, uint32_t& minValue)
 ```
 
 ```
-void PadTilingFunc(const ge::Shape srcShape, const ge::Shape oriSrcShape, const uint32_t stackBufferSize, const uint32_t typeSize, optiling::PadTiling& tiling)
+void PadTilingFunc(const AscendC::TensorShape srcShape, const AscendC::TensorShape oriSrcShape, const uint32_t stackBufferSize, const uint32_t typeSize, optiling::PadTiling& tiling)
 ```
 
 ```
-void PadTilingFunc(const ge::Shape srcShape, const ge::Shape oriSrcShape, const uint32_t stackBufferSize, const uint32_t typeSize, AscendC::tiling::PadTiling& tiling)
+void PadTilingFunc(const AscendC::TensorShape srcShape, const AscendC::TensorShape oriSrcShape, const uint32_t stackBufferSize, const uint32_t typeSize, AscendC::tiling::PadTiling& tiling)
 ```
 
 ## 参数说明
@@ -24,7 +24,7 @@ void PadTilingFunc(const ge::Shape srcShape, const ge::Shape oriSrcShape, const 
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入Tensor的shape信息，shape为二维。 |
+| srcShape | 输入 | 输入Tensor的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)，shape为二维。 |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | maxValue | 输出 | Pad接口能完成计算所需的最大临时空间大小，超出该值的空间不会被该接口使用。在最小临时空间-最大临时空间范围内，随着临时空间增大，kernel侧接口计算性能会有一定程度的优化提升。为了达到更好的性能，开发者可以根据实际的内存使用情况进行空间预留/申请。<br>maxValue仅作为参考值，有可能大于Unified Buffer剩余空间的大小，该场景下，开发者需要根据Unified Buffer剩余空间的大小来选取合适的临时空间大小。 |
 | minValue | 输出 | Pad接口能完成计算所需最小临时空间大小。为保证功能正确，接口计算时预留/申请的临时空间不能小于该数值。 |
@@ -33,8 +33,8 @@ void PadTilingFunc(const ge::Shape srcShape, const ge::Shape oriSrcShape, const 
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入Tensor的shape信息，shape为二维。（有效数据+冗余数据） |
-| oriSrcShape | 输入 | 输入Tensor的原始shape信息，shape为二维。（有效数据） |
+| srcShape | 输入 | 输入Tensor的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)，shape为二维。（有效数据+冗余数据） |
+| oriSrcShape | 输入 | 输入Tensor的原始shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)，shape为二维。（有效数据） |
 | stackBufferSize | 输入 | 可供Pad接口计算的临时空间大小，单位为Byte。 |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | tiling | 输出 | 输出Pad接口所需的tiling信息。 |
@@ -78,9 +78,9 @@ void PadTilingFunc(const ge::Shape srcShape, const ge::Shape oriSrcShape, const 
         // 设置其他Tiling参数
         ...
         std::vector<int64_t> shapeVec = {320, 63};
-        ge::Shape srcShape(shapeVec);
+        AscendC::TensorShape srcShape(shapeVec);
         std::vector<int64_t> oriShapeVec = {320, 63};
-        ge::Shape oriSrcShape(oriShapeVec);
+        AscendC::TensorShape oriSrcShape(oriShapeVec);
 
         uint32_t maxValue = 0;
         uint32_t minValue = 0;

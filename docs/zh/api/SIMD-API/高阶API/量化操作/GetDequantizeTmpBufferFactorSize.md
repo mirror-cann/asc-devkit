@@ -23,7 +23,7 @@
 ## 函数原型
 
 ```
-void GetDequantizeTmpBufferFactorSize(const ge::Shape& srcShape, uint32_t& maxLiveNodeCnt, uint32_t& extraBuf)
+void GetDequantizeTmpBufferFactorSize(const AscendC::TensorShape& srcShape, uint32_t& maxLiveNodeCnt, uint32_t& extraBuf)
 ```
 
 ## 参数说明
@@ -32,7 +32,7 @@ void GetDequantizeTmpBufferFactorSize(const ge::Shape& srcShape, uint32_t& maxLi
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入srcTensor的shape信息。 |
+| srcShape | 输入 | 输入srcTensor的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)。 |
 | maxLiveNodeCount | 输出 | 最大存活节点数，表示临时空间是单次计算数据量所占空间的多少倍。 |
 | extraBuf | 输出 | 使用的额外临时空间大小，单位为字节。 |
 
@@ -48,7 +48,7 @@ void GetDequantizeTmpBufferFactorSize(const ge::Shape& srcShape, uint32_t& maxLi
 
 ```
 std::vector<int64_t> shapeVec = {2, 1024};
-ge::Shape srcShape(shapeVec);
+AscendC::TensorShape srcShape(shapeVec);
 uint32_t maxLiveNodeCount = 0;
 uint32_t extraBuf = 0;
 AscendC::GetDequantizeTmpBufferFactorSize(srcShape, maxLiveNodeCount, extraBuf);

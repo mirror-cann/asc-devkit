@@ -7,15 +7,15 @@
 ## 函数原型
 
 ```
-uint32_t GetDropOutMaxTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, const bool isReuseSource)
+uint32_t GetDropOutMaxTmpSize(const AscendC::TensorShape& srcShape, const uint32_t typeSize, const bool isReuseSource)
 ```
 
 ```
-uint32_t GetDropOutMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, const bool isReuseSource)
+uint32_t GetDropOutMinTmpSize(const AscendC::TensorShape& srcShape, const uint32_t typeSize, const bool isReuseSource)
 ```
 
 ```
-void GetDropOutMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, const bool isReuseSource, uint32_t& maxValue, uint32_t& minValue)
+void GetDropOutMaxMinTmpSize(const AscendC::TensorShape& srcShape, const uint32_t typeSize, const bool isReuseSource, uint32_t& maxValue, uint32_t& minValue)
 ```
 
 ## 参数说明
@@ -24,7 +24,7 @@ void GetDropOutMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize,
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入的shape信息。 |
+| srcShape | 输入 | 输入的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)。 |
 | typeSize | 输入 | 计算的数据类型大小，half=2，float=4。 |
 | isReuseSource | 输入 | 预留参数，暂未启用，保持默认值false即可。 |
 | maxValue | 输出 | 输出DropOut接口所需的tiling信息（最大临时空间大小）。<br> 说明：maxValue仅作为参考值，有可能大于Unified Buffer剩余空间的大小，该场景下，开发者需要根据Unified Buffer剩余空间的大小来选取合适的临时空间大小。 |
@@ -72,7 +72,7 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context)
     std::vector<int64_t> srcDims = {firstAxis, srcLastAxis, maskLastAxis};
 
     uint32_t typeSize = 2;
-    ge::Shape shape(srcDims);
+    AscendC::TensorShape shape(srcDims);
     uint32_t minValue = 0;
     uint32_t maxValue = 0;
     AscendC::GetDropOutMaxMinTmpSize(shape, typeSize, false, maxValue, minValue);

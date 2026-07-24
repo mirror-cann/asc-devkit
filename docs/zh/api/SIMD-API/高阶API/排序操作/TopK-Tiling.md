@@ -57,7 +57,7 @@ bool GetTopKMaxMinTmpSize(const platform_ascendc::PlatformAscendC& ascendcPlatfo
 ```
 
 ```
-bool GetTopKMaxMinTmpSize(const int32_t inner, const int32_t outter, const int32_t k, const bool isReuseSource, const bool isInitIndex, enum TopKMode mode, const bool isLargest, ge::DataType dataType, const TopKConfig& config, uint32_t& maxValue, uint32_t& minValue)
+bool GetTopKMaxMinTmpSize(const int32_t inner, const int32_t outter, const int32_t k, const bool isReuseSource, const bool isInitIndex, enum TopKMode mode, const bool isLargest, AscendC::TensorDataType dataType, const TopKConfig& config, uint32_t& maxValue, uint32_t& minValue)
 ```
 
 ```
@@ -82,7 +82,7 @@ bool TopKTilingFunc(const platform_ascendc::PlatformAscendC& ascendcPlatform, co
 | isInitIndex | 输入 | 是否传入输入数据对应的索引，与kernel侧接口一致。 |
 | mode | 输入 | 选择TopKMode::TOPK_NORMAL模式或者TopKMode::TOPK_NSMALL模式，与kernel侧接口一致。 |
 | isLargest | 输入 | 表示降序/升序，true表示降序，false表示升序。与kernel侧接口一致。 |
-| dataType | 输入 | 表示待排序数据的数据类型。该参数的取值与Kernel接口参数srcLocal的数据类型保持一致。 |
+| dataType | 输入 | 表示待排序数据的数据类型，参数类型为[AscendC::TensorDataType](../数据结构/TensorDataType.md)。该参数的取值与Kernel接口参数srcLocal的数据类型保持一致。 |
 | config | 输入 | TopK计算的相关配置，TopKConfig类型定义如下方代码所示，包括算法选择、取最大值或最小值、是否对结果排序。该参数的配置需要与TopK Kernel接口模板参数的配置保持一致。<br>algo：选择的排序算法。默认为MERGE_SORT算法，当前仅支持RADIX_SELECT算法，用户需要显式指定algo为TopKAlgo::RADIX_SELECT。<br>order：表示获取前k个最大值或者获取前k个最小值，取值如下：UNSET：默认值，按照函数参数isLargest的配置实现。isLargest为true时，取前k个最大值及其对应的索引，isLargest为false，取前k个最小值及其对应的索引。LARGEST：表示取前k个最大值及其对应的索引。取值为LARGEST时，函数参数isLargest的配置不生效。SMALLEST：表示取前k个最小值及其对应的索引。取值为SMALLEST时，函数参数isLargest的配置不生效。<br>sorted：表示是否对输出结果进行排序。取值为true，对输出结果进行排序；取值为false，不对输出结果进行排序。 |
 | dataTypeSize | 输入 | 参与计算的srcLocal数据类型的大小，比如half=2， float=4 |
 | maxValue | 输出 | TopK接口内部完成计算需要的最大临时空间大小，单位是Byte。<br> 说明：maxValue仅作为参考值，有可能大于Unified Buffer剩余空间的大小，该场景下，开发者需要根据Unified Buffer剩余空间的大小来选取合适的临时空间大小。 |
@@ -207,7 +207,7 @@ TopKTilingFunc返回值为true/false，true表示成功拿到TopK的Tiling各项
     namespace optiling {
     static ge::graphStatus TilingFunc(gert::TilingContext* context)
     {
-        std::map<ge::DataType, uint32_t> dtypeSizes = {{ge::DataType::DT_UINT32, 4}, {ge::DataType::DT_INT32, 4}};
+        std::map<AscendC::TensorDataType, uint32_t> dtypeSizes = {{AscendC::TensorDataType::DT_UINT32, 4}, {AscendC::TensorDataType::DT_INT32, 4}};
         RadixtopkCustomTilingData tiling;
         const gert::RuntimeAttrs* attrs = context->GetAttrs();
         const uint32_t is_init_index = *(attrs->GetAttrPointer<uint32_t>(0));

@@ -10,7 +10,7 @@ Kernel侧LogicalXor接口的计算需要开发者预留/申请临时空间，本
 ## 函数原型
 
 ```
-void GetLogicalXorMaxMinTmpSize(const platform_ascendc::PlatformAscendC& ascendcPlatform, const ge::Shape& srcShape, const uint32_t typeSize, const bool isReuseSource, uint32_t& maxValue, uint32_t& minValue)
+void GetLogicalXorMaxMinTmpSize(const platform_ascendc::PlatformAscendC& ascendcPlatform, const AscendC::TensorShape& srcShape, const uint32_t typeSize, const bool isReuseSource, uint32_t& maxValue, uint32_t& minValue)
 ```
 
 ## 参数说明
@@ -20,7 +20,7 @@ void GetLogicalXorMaxMinTmpSize(const platform_ascendc::PlatformAscendC& ascendc
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
 | ascendcPlatform | 输入 | 输入的平台信息。PlatformAscendC的定义请参见[构造及析构函数](../../../../Utils-API/平台信息获取/PlatformAscendC/构造及析构函数.md)。 |
-| srcShape | 输入 | 输入的shape信息。 |
+| srcShape | 输入 | 输入的shape信息，参数类型为[AscendC::TensorShape](../../数据结构/TensorShape.md)。 |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | isReuseSource | 输入 | 该参数预留，传入默认值false即可。 |
 | maxValue | 输出 | LogicalXor接口能完成计算所需的最大临时空间大小，超出该值的空间不会被该接口使用。在最小临时空间-最大临时空间范围内，随着临时空间增大，Kernel侧接口计算性能会有一定程度的优化提升。为了达到更好的性能，开发者可以根据实际的内存使用情况进行空间预留/申请。最大空间大小为0表示计算不需要临时空间。<br><br>请注意，maxValue仅作为参考值，有可能大于Unified Buffer剩余空间的大小，该场景下，开发者需要根据Unified Buffer剩余空间的大小来选取合适的临时空间大小。 |
@@ -41,7 +41,7 @@ void GetLogicalXorMaxMinTmpSize(const platform_ascendc::PlatformAscendC& ascendc
 ```
 // 输入shape信息为1024;算子输入的数据类型为half;不允许修改源操作数
 std::vector<int64_t> shape_vec = {1024};
-ge::Shape shape(shape_vec);
+AscendC::TensorShape shape(shape_vec);
 uint32_t maxValue = 0;
 uint32_t minValue = 0;
 auto plat = platform_ascendc::PlatformAscendC(context->GetPlatformInfo());

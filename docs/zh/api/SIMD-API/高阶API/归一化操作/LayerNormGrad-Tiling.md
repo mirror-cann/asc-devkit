@@ -53,15 +53,15 @@ LayerNormGrad Tiling的功能如下：
 ## 函数原型
 
 ```
-void GetLayerNormGradMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, const bool isReuseSource, uint32_t& maxValue, uint32_t& minValue)
+void GetLayerNormGradMaxMinTmpSize(const AscendC::TensorShape& srcShape, const uint32_t typeSize, const bool isReuseSource, uint32_t& maxValue, uint32_t& minValue)
 ```
 
 ```
-void GetLayerNormGradNDTilingInfo(const ge::Shape srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const bool isReuseSource, optiling::LayerNormGradTiling& tiling)
+void GetLayerNormGradNDTilingInfo(const AscendC::TensorShape srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const bool isReuseSource, optiling::LayerNormGradTiling& tiling)
 ```
 
 ```
-void GetLayerNormGradNDTilingInfo(const ge::Shape srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const bool isReuseSource, AscendC::tiling::LayerNormGradTiling& tiling)
+void GetLayerNormGradNDTilingInfo(const AscendC::TensorShape srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const bool isReuseSource, AscendC::tiling::LayerNormGradTiling& tiling)
 ```
 
 ## 参数说明
@@ -70,7 +70,7 @@ void GetLayerNormGradNDTilingInfo(const ge::Shape srcShape, const uint32_t stack
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入数据inputDy的shape信息{B, S, storageHLength, originHLength}，包括当前输入的inputDy的shape信息，以及地址对齐前（如存在H轴补齐操作）的原有shape信息。<br><br>在API支持的场景下，storageHLength和originHLength保持一致。 |
+| srcShape | 输入 | 输入数据inputDy的shape信息{B, S, storageHLength, originHLength}，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)，包括当前输入的inputDy的shape信息，以及地址对齐前（如存在H轴补齐操作）的原有shape信息。<br><br>在API支持的场景下，storageHLength和originHLength保持一致。 |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | isReuseSource | 输入 | 是否复用源操作数的内存空间，与[LayerNorm](LayerNorm.md)接口一致。 |
 | maxValue | 输出 | LayerNormGrad接口能完成计算所需的最大临时空间大小，超出该值的空间不会被该接口使用。在最小临时空间-最大临时空间范围内，随着临时空间增大，kernel侧接口计算性能会有一定程度的优化提升。为了达到更好的性能，开发者可以根据实际的内存使用情况进行空间预留/申请。最大空间大小为0表示计算不需要临时空间。<br>maxValue仅作为参考值，有可能大于Unified Buffer剩余空间的大小，该场景下，开发者需要根据Unified Buffer剩余空间的大小来选取合适的临时空间大小。 |
@@ -80,7 +80,7 @@ void GetLayerNormGradNDTilingInfo(const ge::Shape srcShape, const uint32_t stack
 
 | 参数名称 | 输入/输出 | 含义 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入数据inputDy的shape信息，包括当前输入的shape信息，以及地址对齐前的原有shape信息。 |
+| srcShape | 输入 | 输入数据inputDy的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)，包括当前输入的shape信息，以及地址对齐前的原有shape信息。 |
 | stackBufferSize | 输入 | 可供接口使用的空间大小，单位元素个数。 |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | isReuseSource | 输入 | 是否可以复用inputX和inputDy的内存空间。 |
@@ -127,7 +127,7 @@ void GetLayerNormGradNDTilingInfo(const ge::Shape srcShape, const uint32_t stack
         ...
         // {B, S, storageHLength, originHLength}
         std::vector<int64_t> shapeVec = {2, 16, 64, 64};
-        ge::Shape srcShape(shapeVec);
+        AscendC::TensorShape srcShape(shapeVec);
         // 本样例中仅作为样例说明，通过GetLayerNormGradMaxMinTmpSize获取最小值并传入，来保证功能正确，开发者可以根据需要传入合适的空间大小
         uint32_t max;
         uint32_t min;

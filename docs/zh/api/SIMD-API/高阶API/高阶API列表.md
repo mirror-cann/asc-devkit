@@ -1,5 +1,12 @@
 # 高阶API列表
 
+## 数据结构
+
+| 类型 | 功能描述 |
+| --- | --- |
+| [TensorShape](数据结构/TensorShape.md) | 描述高阶API的Host侧Tiling接口使用的Tensor形状。 |
+| [TensorDataType](数据结构/TensorDataType.md) | 描述高阶API的Host侧Tiling接口使用的Tensor数据类型。 |
+
 ## 数学计算
 
 | 接口名 | 功能描述 |

@@ -1316,6 +1316,10 @@
 
     -   [高阶API](SIMD-API/高阶API/高阶API.md)
         -   [高阶API列表](SIMD-API/高阶API/高阶API列表.md)
+        -   [数据结构](SIMD-API/高阶API/数据结构/数据结构.md)
+            -   [TensorShape](SIMD-API/高阶API/数据结构/TensorShape.md)
+            -   [TensorDataType](SIMD-API/高阶API/数据结构/TensorDataType.md)
+
         -   [数学计算](SIMD-API/高阶API/数学计算/数学计算.md)
             -   [Tanh接口](SIMD-API/高阶API/数学计算/Tanh接口/Tanh接口.md)
                 -   [Tanh](SIMD-API/高阶API/数学计算/Tanh接口/Tanh.md)

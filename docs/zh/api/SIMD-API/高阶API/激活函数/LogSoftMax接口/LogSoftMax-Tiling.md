@@ -12,21 +12,21 @@ kernel侧LogSoftMax接口的计算需要开发者预留/申请临时空间，以
 -   获取Kernel接口计算所需最大/最小临时空间的接口
 
     ```
-    uint32_t GetLogSoftMaxMaxTmpSize(const ge::Shape srcShape, const uint32_t dataTypeSize, const bool isReuseSource)
+    uint32_t GetLogSoftMaxMaxTmpSize(const AscendC::TensorShape srcShape, const uint32_t dataTypeSize, const bool isReuseSource)
     ```
 
     ```
-    uint32_t GetLogSoftMaxMinTmpSize(const ge::Shape srcShape, const uint32_t dataTypeSize, const bool isReuseSource)
+    uint32_t GetLogSoftMaxMinTmpSize(const AscendC::TensorShape srcShape, const uint32_t dataTypeSize, const bool isReuseSource)
     ```
 
 -   Tiling计算接口
 
     ```
-    void LogSoftMaxTilingFunc(const ge::Shape srcShape, const uint32_t dataTypeSize, const uint32_t localWorkSpaceSize, optiling::LogSoftMaxTiling& softmaxTiling)
+    void LogSoftMaxTilingFunc(const AscendC::TensorShape srcShape, const uint32_t dataTypeSize, const uint32_t localWorkSpaceSize, optiling::LogSoftMaxTiling& softmaxTiling)
     ```
 
     ```
-    void LogSoftMaxTilingFunc(const ge::Shape srcShape, const uint32_t dataTypeSize, const uint32_t localWorkSpaceSize, AscendC::tiling::LogSoftMaxTiling& softmaxTiling)
+    void LogSoftMaxTilingFunc(const AscendC::TensorShape srcShape, const uint32_t dataTypeSize, const uint32_t localWorkSpaceSize, AscendC::tiling::LogSoftMaxTiling& softmaxTiling)
     ```
 
 ## 参数说明
@@ -35,7 +35,7 @@ kernel侧LogSoftMax接口的计算需要开发者预留/申请临时空间，以
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入的shape信息。 |
+| srcShape | 输入 | 输入的shape信息，参数类型为[AscendC::TensorShape](../../数据结构/TensorShape.md)。 |
 | dataTypeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | isReuseSource | 输入 | 是否复用源操作数输入的空间，与LogSoftMax接口一致。 |
 
@@ -43,7 +43,7 @@ kernel侧LogSoftMax接口的计算需要开发者预留/申请临时空间，以
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入的shape信息。 |
+| srcShape | 输入 | 输入的shape信息，参数类型为[AscendC::TensorShape](../../数据结构/TensorShape.md)。 |
 | dataTypeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | localWorkSpaceSize | 输入 | 输入的临时空间大小。 |
 | softmaxTiling | 输出 | 传递到kernel侧使用的Tiling参数。 |

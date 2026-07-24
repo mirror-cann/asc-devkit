@@ -23,7 +23,7 @@
 ## 函数原型
 
 ```
-void GetAscendAntiQuantTmpBufferFactorSize(const ge::Shape& srcShape, const ge::Shape& scaleShape, bool isTranspose, ge::DataType inputDataType, ge::DataType outputDataType, uint32_t& maxLiveNodeCount, uint32_t& extraBuf)
+void GetAscendAntiQuantTmpBufferFactorSize(const AscendC::TensorShape& srcShape, const AscendC::TensorShape& scaleShape, bool isTranspose, AscendC::TensorDataType inputDataType, AscendC::TensorDataType outputDataType, uint32_t& maxLiveNodeCount, uint32_t& extraBuf)
 ```
 
 ## 参数说明
@@ -32,11 +32,11 @@ void GetAscendAntiQuantTmpBufferFactorSize(const ge::Shape& srcShape, const ge::
 
 | 参数名 | 输入/输出 | 功能 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入srcTensor的shape信息。 |
-| scaleShape | 输入 | 输入scale的shape信息。 |
+| srcShape | 输入 | 输入srcTensor的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)。 |
+| scaleShape | 输入 | 输入scale的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)。 |
 | isTranspose | 输入 | 是否转置。 |
-| inputDataType | 输入 | 输入数据类型。ge::DataType类型。 |
-| outputDataType | 输入 | 输出数据类型。ge::DataType类型。 |
+| inputDataType | 输入 | 输入数据类型，参数类型为[AscendC::TensorDataType](../数据结构/TensorDataType.md)。 |
+| outputDataType | 输入 | 输出数据类型，参数类型为[AscendC::TensorDataType](../数据结构/TensorDataType.md)。 |
 | maxLiveNodeCount | 输出 | 最大存活节点数，表示临时空间是单次计算数据量所占空间的多少倍。 |
 | extraBuf | 输出 | 使用的额外临时空间大小，单位为字节。 |
 
@@ -52,12 +52,12 @@ void GetAscendAntiQuantTmpBufferFactorSize(const ge::Shape& srcShape, const ge::
 
 ```
 std::vector<int64_t> srcDims = {64, 512};
-auto srcShape = ge::Shape(srcDims);
+auto srcShape = AscendC::TensorShape(srcDims);
 std::vector<int64_t> scaleDims = {1, 512};
-auto scaleShape = ge::Shape(scaleDims);
+auto scaleShape = AscendC::TensorShape(scaleDims);
 bool isTranspose = false;
 uint32_t maxLiveNodeCount = 0;
 uint32_t extraBuf = 0;
 AscendC::GetAscendAntiQuantTmpBufferFactorSize(
-    srcShape, scaleShape, isTranspose, ge::DT_INT8, ge::DT_BF16, maxLiveNodeCount, extraBuf);
+    srcShape, scaleShape, isTranspose, AscendC::TensorDataType::DT_INT8, AscendC::TensorDataType::DT_BF16, maxLiveNodeCount, extraBuf);
 ```

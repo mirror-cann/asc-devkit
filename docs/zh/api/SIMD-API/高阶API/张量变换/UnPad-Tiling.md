@@ -7,15 +7,15 @@
 ## 函数原型
 
 ```
-void GetUnPadMaxMinTmpSize(const platform_ascendc::PlatformAscendC& ascendcPlatform, const ge::Shape& srcShape, const uint32_t typeSize, uint32_t& maxValue, uint32_t& minValue)
+void GetUnPadMaxMinTmpSize(const platform_ascendc::PlatformAscendC& ascendcPlatform, const AscendC::TensorShape& srcShape, const uint32_t typeSize, uint32_t& maxValue, uint32_t& minValue)
 ```
 
 ```
-void UnPadTilingFunc(const ge::Shape srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, optiling::UnPadTiling& tiling)
+void UnPadTilingFunc(const AscendC::TensorShape srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, optiling::UnPadTiling& tiling)
 ```
 
 ```
-void UnPadTilingFunc(const ge::Shape srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, AscendC::tiling::UnPadTiling& tiling)
+void UnPadTilingFunc(const AscendC::TensorShape srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, AscendC::tiling::UnPadTiling& tiling)
 ```
 
 ## 参数说明
@@ -25,7 +25,7 @@ void UnPadTilingFunc(const ge::Shape srcShape, const uint32_t stackBufferSize, c
 | 参数名 | 输入/输出 | 含义 |
 | --- | --- | --- |
 | ascendcPlatform | 输入 | 传入硬件平台的信息，PlatformAscendC定义请参见[构造及析构函数](../../../Utils-API/平台信息获取/PlatformAscendC/构造及析构函数.md)。 |
-| srcShape | 输入 | 输入Tensor的shape信息，shape为二维。 |
+| srcShape | 输入 | 输入Tensor的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)，shape为二维。 |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | maxValue | 输出 | UnPad接口能完成计算所需的最大临时空间大小，超出该值的空间不会被该接口使用。在最小临时空间-最大临时空间范围内，随着临时空间增大，kernel侧接口计算性能会有一定程度的优化提升。为了达到更好的性能，开发者可以根据实际的内存使用情况进行空间预留/申请。最大空间大小为0表示计算不需要临时空间。<br>maxValue仅作为参考值，有可能大于Unified Buffer剩余空间的大小，该场景下，开发者需要根据Unified Buffer剩余空间的大小来选取合适的临时空间大小。 |
 | minValue | 输出 | UnPad接口能完成计算所需最小临时空间大小。为保证功能正确，接口计算时预留/申请的临时空间不能小于该数值。最小空间大小为0表示计算不需要临时空间。 |
@@ -34,7 +34,7 @@ void UnPadTilingFunc(const ge::Shape srcShape, const uint32_t stackBufferSize, c
 
 | 参数名 | 输入/输出 | 含义 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入Tensor的shape信息，shape为二维。 |
+| srcShape | 输入 | 输入Tensor的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)，shape为二维。 |
 | stackBufferSize | 输入 | 可供UnPad接口计算的临时空间大小，单位为Byte。 |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | tiling | 输出 | 输出UnPad接口所需的tiling信息。 |
@@ -78,7 +78,7 @@ void UnPadTilingFunc(const ge::Shape srcShape, const uint32_t stackBufferSize, c
         // 设置其他Tiling参数
         ...
         std::vector<int64_t> shapeVec = {320, 64};
-        ge::Shape srcShape(shapeVec);
+        AscendC::TensorShape srcShape(shapeVec);
         uint32_t maxValue = 0;
         uint32_t minValue = 0;
         auto platformInfo = context->GetPlatformInfo();

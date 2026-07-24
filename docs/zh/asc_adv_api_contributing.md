@@ -53,9 +53,9 @@ $$dstTensor_i = srcTensor_i \times scalarValue+dstTensor_i$$
     | calCount   | 输入 | 参与计算的元素个数。     | 
 - Tiling侧
 
-    Kernel侧接口的计算需要开发者预留/申请临时空间，该临时空间的大小需要在Tiling侧根据获取到的源操作数shape大小，计算高阶API所需的最大(maxValue)临时空间和最小临时空间(minValue)的大小。因此在Tiling侧提供一个用于计算maxValue和minValue的接口。接口的输入参数包括源操作数Tensor的shape大小和源操作数数据类型所占字节数，shape大小的参数使用ge::Shape类型，数据类型所占的字节数使用`uint32_t`类型，输出参数包括minValue和maxValue。与Axpy接口中的isReuseSource参数系统，Tiling接口中的isReuseSource为预留参数。
+    Kernel侧接口的计算需要开发者预留/申请临时空间，该临时空间的大小需要在Tiling侧根据获取到的源操作数shape大小，计算高阶API所需的最大(maxValue)临时空间和最小临时空间(minValue)的大小。因此在Tiling侧提供一个用于计算maxValue和minValue的接口。接口的输入参数包括源操作数Tensor的shape大小和源操作数数据类型所占字节数，shape大小的参数使用AscendC::TensorShape类型，数据类型所占的字节数使用`uint32_t`类型，输出参数包括minValue和maxValue。与Axpy接口中的isReuseSource参数系统，Tiling接口中的isReuseSource为预留参数。
     ```c++
-    void GetAxpyMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, const bool isReuseSource, uint32_t& maxValue, uint32_t& minValue);
+    void GetAxpyMaxMinTmpSize(const AscendC::TensorShape& srcShape, const uint32_t typeSize, const bool isReuseSource, uint32_t& maxValue, uint32_t& minValue);
     ```
     接口参数说明
     | 参数名      | 输入/输出 |  描述   |
@@ -82,7 +82,9 @@ $$dstTensor_i = srcTensor_i \times scalarValue+dstTensor_i$$
     
     在`include/adv_api/`对应分类的目录下，新增[axpy_tiling.h](../../include/adv_api/math/axpy_tiling.h)文件。根据上述分析设计的Tiling侧接口，编写函数声明。
     ```c++
-    void GetAxpyMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, const bool isReuseSource, uint32_t& maxValue, uint32_t& minValue);
+    #include "../utils/types.h"
+
+    void GetAxpyMaxMinTmpSize(const AscendC::TensorShape& srcShape, const uint32_t typeSize, const bool isReuseSource, uint32_t& maxValue, uint32_t& minValue);
     ```
 - 在公共文件中引入头文件。
 
@@ -207,7 +209,6 @@ $$dstTensor_i = srcTensor_i \times scalarValue+dstTensor_i$$
     ```c++
     #include "lib/math/axpy_tiling.h"  // Tiling接口头文件
     #include <cstdint>  // 类型库
-    #include "graph/tensor.h" // ge::Shape使用此库
     #include "impl/host_log.h" // 日志库
     ```
     定义Tiling计算中需要使用的常量。
@@ -219,7 +220,7 @@ $$dstTensor_i = srcTensor_i \times scalarValue+dstTensor_i$$
     在`GetAxpyMaxMinTmpSize`接口中，调用`GetAxpyMaxTmpSize`接口获取所需临时空间最大值，调用`GetAxpyMinTmpSize`接口获取所需临时空间最小值。
    
     ```c++
-    void GetAxpyMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, const bool isReuseSource,
+    void GetAxpyMaxMinTmpSize(const AscendC::TensorShape& srcShape, const uint32_t typeSize, const bool isReuseSource,
     uint32_t& maxValue, uint32_t& minValue)
     {
         (void)isReuseSource;
@@ -397,10 +398,10 @@ TEST_F(TestTiling, TestAxpyTiling)
 {
     uint32_t maxVal = 0;
     uint32_t minVal = 0;
-    GetAxpyMaxMinTmpSize(ge::Shape({128}), 4, false, maxVal, minVal);
+    GetAxpyMaxMinTmpSize(AscendC::TensorShape({128}), 4, false, maxVal, minVal);
     EXPECT_EQ(maxVal, 0);
     EXPECT_EQ(minVal, 0);
-    GetAxpyMaxMinTmpSize(ge::Shape({256}), 2, false, maxVal, minVal);
+    GetAxpyMaxMinTmpSize(AscendC::TensorShape({256}), 2, false, maxVal, minVal);
     EXPECT_EQ(maxVal, 256 * 4 * 2);
     EXPECT_EQ(minVal, 256 * 4);
 }

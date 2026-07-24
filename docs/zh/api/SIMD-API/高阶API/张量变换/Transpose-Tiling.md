@@ -12,37 +12,37 @@
 -   获取最小临时空间大小
 
     ```
-    void GetTransposeMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, const uint32_t transposeTypeIn, uint32_t& maxValue, uint32_t& minValue)
+    void GetTransposeMaxMinTmpSize(const AscendC::TensorShape& srcShape, const uint32_t typeSize, const uint32_t transposeTypeIn, uint32_t& maxValue, uint32_t& minValue)
     ```
 
     ```
-    void GetConfusionTransposeMaxMinTmpSize(const ge::Shape& srcShape, const uint32_t typeSize, const uint32_t transposeTypeIn, uint32_t& maxValue, uint32_t& minValue)
+    void GetConfusionTransposeMaxMinTmpSize(const AscendC::TensorShape& srcShape, const uint32_t typeSize, const uint32_t transposeTypeIn, uint32_t& maxValue, uint32_t& minValue)
     ```
 
 -   获取Transpose Tiling
 
     ```
-    void GetTransposeTilingInfo(const ge::Shape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const uint32_t transposeTypeIn, optiling::ConfusionTransposeTiling& tiling)
+    void GetTransposeTilingInfo(const AscendC::TensorShape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const uint32_t transposeTypeIn, optiling::ConfusionTransposeTiling& tiling)
     ```
 
     ```
-    void GetTransposeTilingInfo(const ge::Shape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const uint32_t transposeTypeIn, AscendC::tiling::ConfusionTransposeTiling& tiling)
+    void GetTransposeTilingInfo(const AscendC::TensorShape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const uint32_t transposeTypeIn, AscendC::tiling::ConfusionTransposeTiling& tiling)
     ```
 
     ```
-    void GetConfusionTransposeOnlyTilingInfo(const ge::Shape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, optiling::ConfusionTransposeTiling& tiling)
+    void GetConfusionTransposeOnlyTilingInfo(const AscendC::TensorShape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, optiling::ConfusionTransposeTiling& tiling)
     ```
 
     ```
-    void GetConfusionTransposeOnlyTilingInfo(const ge::Shape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, AscendC::tiling::ConfusionTransposeTiling& tiling)
+    void GetConfusionTransposeOnlyTilingInfo(const AscendC::TensorShape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, AscendC::tiling::ConfusionTransposeTiling& tiling)
     ```
 
     ```
-    void GetConfusionTransposeTilingInfo(const ge::Shape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const uint32_t transposeTypeIn, optiling::ConfusionTransposeTiling& tiling)
+    void GetConfusionTransposeTilingInfo(const AscendC::TensorShape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const uint32_t transposeTypeIn, optiling::ConfusionTransposeTiling& tiling)
     ```
 
     ```
-    void GetConfusionTransposeTilingInfo(const ge::Shape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const uint32_t transposeTypeIn, AscendC::tiling::ConfusionTransposeTiling& tiling)
+    void GetConfusionTransposeTilingInfo(const AscendC::TensorShape& srcShape, const uint32_t stackBufferSize, const uint32_t typeSize, const uint32_t transposeTypeIn, AscendC::tiling::ConfusionTransposeTiling& tiling)
     ```
 
 ## 参数说明
@@ -51,7 +51,7 @@
 
 | 参数名 | 输入/输出 | 含义 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入Tensor的shape信息，具体srcShape传入格式为：<br><br>场景1：[B, N, S, H/N]<br><br>场景2：[B, N, S, H/N]<br><br>场景3：[B, N, S, H/N]<br><br>场景4：[B, N, S, H/N]<br><br>场景5：[B, N, S, H/N]<br><br>场景6：[B, N, S, H/N]<br><br>场景7：[H, W]<!-- npu="950" id1 --><br><br>场景13：[H, W]或者[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景14：[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景15：[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景16：[H, W]，仅支持Ascend 950PR/Ascend 950DT。<!-- end id1 --> |
+| srcShape | 输入 | 输入Tensor的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)，具体srcShape传入格式为：<br><br>场景1：[B, N, S, H/N]<br><br>场景2：[B, N, S, H/N]<br><br>场景3：[B, N, S, H/N]<br><br>场景4：[B, N, S, H/N]<br><br>场景5：[B, N, S, H/N]<br><br>场景6：[B, N, S, H/N]<br><br>场景7：[H, W]<!-- npu="950" id1 --><br><br>场景13：[H, W]或者[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景14：[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景15：[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景16：[H, W]，仅支持Ascend 950PR/Ascend 950DT。<!-- end id1 --> |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | transposeTypeIn | 输入 | 选择数据排布及reshape的类型，根据输入数字选择对应的场景，参数范围为[1,7]。<!-- npu="950" id2 -->针对Ascend 950PR/Ascend 950DT，该参数取值范围为[1, 7]和[13, 16]。<!-- end id2 --><br><br>场景1（NZ2ND，1、2轴互换）：1<br><br>场景2（NZ2NZ，1、2轴互换）：2<br><br>场景3（NZ2NZ，尾轴切分）：3<br><br>场景4（NZ2ND，尾轴切分）：4<br><br>场景5（NZ2ND，尾轴合并）：5<br><br>场景6（NZ2NZ，尾轴合并）：6<br><br>场景7（二维转置）：7<!-- npu="950" id5 --><br><br>场景13 （二维转置或者三维转置中后两维转置）：13，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景14 （三维转置中第一维和第二维互换）：14，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景15 （三维转置中第一维和第三维互换）：15，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景16 （使用交织指令进行两维ND2NZ转置）：16，仅支持Ascend 950PR/Ascend 950DT。<!-- end id5 --> |
 | maxValue | 输出 | Transpose接口能完成计算所需的最大临时空间大小，超出该值的空间不会被该接口使用。在最小临时空间-最大临时空间范围内，随着临时空间增大，kernel侧接口计算性能会有一定程度的优化提升。为了达到更好的性能，开发者可以根据实际的内存使用情况进行空间预留/申请。<br>maxValue仅作为参考值，有可能大于Unified Buffer剩余空间的大小，该场景下，开发者需要根据Unified Buffer剩余空间的大小来选取合适的临时空间大小。 |
@@ -61,7 +61,7 @@
 
 | 参数名 | 输入/输出 | 含义 |
 | --- | --- | --- |
-| srcShape | 输入 | 输入的shape信息，具体srcShape传入格式为：<br><br>场景1：[B, N, S, H/N]<br><br>场景2：[B, N, S, H/N]<br><br>场景3：[B, N, S, H/N]<br><br>场景4：[B, N, S, H/N]<br><br>场景5：[B, N, S, H/N]<br><br>场景6：[B, N, S, H/N]<br><br>场景7：[H, W]<!-- npu="950" id3 --><br><br>场景13：[H, W]或者[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景14：[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景15：[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景16 ：[H, W]，仅支持Ascend 950PR/Ascend 950DT。<!-- end id3 --> |
+| srcShape | 输入 | 输入的shape信息，参数类型为[AscendC::TensorShape](../数据结构/TensorShape.md)，具体srcShape传入格式为：<br><br>场景1：[B, N, S, H/N]<br><br>场景2：[B, N, S, H/N]<br><br>场景3：[B, N, S, H/N]<br><br>场景4：[B, N, S, H/N]<br><br>场景5：[B, N, S, H/N]<br><br>场景6：[B, N, S, H/N]<br><br>场景7：[H, W]<!-- npu="950" id3 --><br><br>场景13：[H, W]或者[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景14：[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景15：[N, H, W]，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景16 ：[H, W]，仅支持Ascend 950PR/Ascend 950DT。<!-- end id3 --> |
 | stackBufferSize | 输入 | 可供Transpose接口计算的空间大小，单位Byte。 |
 | typeSize | 输入 | 输入的数据类型大小，单位为字节。比如输入的数据类型为half，此处应传入2。 |
 | transposeTypeIn | 输入 | 选择数据排布及reshape的类型，根据输入数字选择对应的场景，参数范围为[1,7]。<!-- npu="950" id4 --><br>Ascend 950PR/Ascend 950DT，该参数取值范围为[1, 7]和[13, 16]。<!-- end id4 --><br><br>场景1（NZ2ND，1、2轴互换）：1<br><br>场景2（NZ2NZ，1、2轴互换）：2<br><br>场景3（NZ2NZ，尾轴切分）：3<br><br>场景4（NZ2ND，尾轴切分）：4<br><br>场景5（NZ2ND，尾轴合并）：5<br><br>场景6（NZ2NZ，尾轴合并）：6<br><br>场景7（二维转置）：7<!-- npu="950" id6 --><br><br>场景13 （二维转置或者三维转置中后两维转置）：13，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景14 （三维转置中第一维和第二维互换）：14，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景15 （三维转置中第一维和第三维互换）：15，仅支持Ascend 950PR/Ascend 950DT。<br><br>场景16（使用交织指令进行两维ND2NZ转置）：16，仅支持Ascend 950PR/Ascend 950DT。<!-- end id6 --> |
@@ -106,7 +106,7 @@
         // 设置其他Tiling参数
         ...
         std::vector<int64_t> shapeVec = {1, 2, 64, 32};
-        ge::Shape srcShape(shapeVec);
+        AscendC::TensorShape srcShape(shapeVec);
 
         uint32_t transposeTypeIn = 1;
         uint32_t maxValue = 0;
